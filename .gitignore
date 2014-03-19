@@ -8,3 +8,11 @@
 Debug
 allegro
 dx70_min
+
+# Incursion specific temporary files.
+lib/dispatch.h
+lib/program.i
+mod/Incursion.Mod
+save/*.sav
+save/*.sav.backup
+*.dat
