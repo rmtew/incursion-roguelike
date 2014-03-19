@@ -3,6 +3,8 @@ Incursion
 
 Incursion is a roguelike developed by Julian Mensch.  He has kindly released the source he has for some of the later versions.
 
+![Title screen](https://raw.github.com/rmtew/incursion-roguelike/screenshots/0.9.6H/title-screen.png)
+
 At this time building is only supported on Windows, using Visual Studio 2008.
 
 Windows build instructions
