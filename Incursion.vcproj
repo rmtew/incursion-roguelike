@@ -71,7 +71,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="alleg_s.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib ole32.lib dinput8.lib ddraw.lib dxguid.lib winmm.lib dsound.lib"
+				AdditionalDependencies="alleg_s.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib ole32.lib dinput.lib ddraw.lib dxguid.lib winmm.lib dsound.lib"
 				OutputFile=".\Release/Incursion.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
