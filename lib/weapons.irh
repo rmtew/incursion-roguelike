@@ -1,0 +1,1425 @@
+
+/************************************************************************\
+ *                                 FLAILS                               *
+\************************************************************************/
+
+Item "dire flail" : T_WEAPON
+  { Image: bright blue GLYPH_WEAPON; Group: WG_FLAILS | WG_EXOTIC;    
+    Mat: MAT_IRON; Size: SZ_LARGE; Weight: 200; Cost: OPT_COST(45,15) GOLD;
+    Parry: 4; SDmg: 1d8; LDmg: 1d6; Acc: +4; Crit: x3; Threat: 1; Spd: 100%;
+    Flags: WT_BLUNT, WT_FUMBLE2, WT_REACH, WT_STRIKE_NEAR, WT_TWO_HANDED, 
+      WT_DOUBLE, WT_STUNNING, WT_STR1; }
+
+Item "heavy flail" : T_WEAPON
+  { Image: blue GLYPH_WEAPON; Group: WG_FLAILS; Parry: 5; 
+    Mat: MAT_IRON; Size: SZ_LARGE; Weight: 200; Cost: OPT_COST(44,12) GOLD;
+    SDmg: 1d12; LDmg: 1d8; Acc: +4; Crit: x3; Threat: 3; Spd: 70%;
+    Flags: WT_BLUNT, WT_STUNNING; }
+
+Item "light flail" : T_WEAPON
+  { Image: blue GLYPH_WEAPON; Group: WG_FLEXIBLE|WG_LIGHT; Parry: 5; 
+    Mat: MAT_IRON; Size: SZ_MEDIUM; Weight: 50; Cost: OPT_COST(40,7) GOLD;
+    SDmg: 1d9; LDmg: 1d7; Acc: +4; Crit: x2; Threat: 2; Spd: 90%;
+    Flags: WT_BLUNT, WT_STUNNING; }
+
+/************************************************************************\
+ *                                   AXES                               *
+\************************************************************************/
+
+Item "handaxe" : T_WEAPON
+  { Image: red GLYPH_WEAPON; Group: WG_AXES | WG_THROWN | WG_LIGHT; Range: 1;
+    Mat: MAT_IRON; Size: SZ_SMALL; Weight: 40; Cost: OPT_COST(89,8) GOLD;
+    SDmg: 1d6; LDmg: 1d6; Acc: -1; Crit: x2; Threat: 1; Spd: 120%;
+    Flags: WT_PENETRATING, WT_SLASHING; Parry: 1; 
+    Desc: "This short axe can be used as a melee weapon, but its
+      primary purpose is throwing."; }
+
+Item "greataxe" : T_WEAPON
+  { Image: red GLYPH_WEAPON; Group: WG_AXES; Parry: 2; 
+    Mat: MAT_IRON; Size: SZ_LARGE; Weight: 200; Cost: OPT_COST(40,13) GOLD;
+    SDmg: 2d8; LDmg: 2d10; Acc: +1; Crit: x3; Threat: 2; Spd: 80%;
+    Flags: WT_PENETRATING, WT_SLASHING, WT_STR2, WT_STR1; }
+
+Item "orc double axe" : T_WEAPON
+  { Image: bright red GLYPH_WEAPON; Group: WG_AXES | WG_EXOTIC;
+    Mat: MAT_IRON; Size: SZ_LARGE; Weight: 250; Cost: OPT_COST(52,16) GOLD;
+    Parry: 3; SDmg: 1d10; LDmg: 1d12; Acc: +1; Crit: x3; Threat: 2; Spd: 80%;
+    Flags: WT_PENETRATING, WT_SLASHING, WT_DOUBLE, WT_TWO_HANDED, 
+      IT_RARE, WT_RACIAL; }
+
+Item "battleaxe" : T_WEAPON
+  { Image: red GLYPH_WEAPON; Group: WG_AXES;
+    Mat: MAT_IRON; Size: SZ_MEDIUM; Weight: 70; Cost: OPT_COST(28,9) GOLD;
+    SDmg: 1d10; LDmg: 1d12; Acc: +1; Crit: x3; Threat: 2; Spd: 70%; Parry: 2;
+    Flags: WT_PENETRATING, WT_SLASHING; }
+
+Item "dwarven waraxe" : T_WEAPON
+  { Image: bright red GLYPH_WEAPON; Group: WG_AXES | WG_EXOTIC;
+    Mat: MAT_IRON; Size: SZ_MEDIUM; Weight: 150; Cost: OPT_COST(33,12) GOLD;
+    Parry: 2; SDmg: 2d6; LDmg: 3d6; Acc: +2; Crit: x3; Threat: 2; Spd: 90%;
+    Flags: WT_PENETRATING, WT_SLASHING, WT_RACIAL; }
+
+/************************************************************************\
+ *                            SPEARS & LANCES                           *
+\************************************************************************/
+
+Item "halfspear" : T_WEAPON
+  { Image: brown GLYPH_WEAPON; Group: WG_SPEARS | WG_LIGHT; Range: 2;
+    Mat: MAT_IRON; Size: SZ_MEDIUM; Weight: 30; Cost: OPT_COST(66,8) GOLD;
+    SDmg: 1d6; LDmg: 1d6; Acc: +0; Crit: x3; Threat: 1; Spd: 100%;
+    Flags: WT_CHARGE, WT_PIERCING, WT_WOOD_PARTS, IT_THROWABLE; Parry: 3; 
+    Desc: "The smaller cousin of the shortspear, halfspears are
+      3-4 feet long and are frequently used by halfling hunters
+      and the goblinoid peoples."; }
+
+Item "shortspear" : T_WEAPON
+  { Image: brown GLYPH_WEAPON; Group: WG_SPEARS; Range: 2;
+    Mat: MAT_IRON; Size: SZ_LARGE; Weight: 50; Cost: OPT_COST(71,9) GOLD;
+    SDmg: 1d8; LDmg: 1d8; Acc: +0; Crit: x3; Threat: 1; Spd: 100%;
+    Flags: WT_CHARGE, WT_PIERCING, WT_WOOD_PARTS, IT_THROWABLE; Parry: 4; 
+    Desc: "The shortspear has a wooden haft about five feet long,
+      with a sharp steel blade mounted at the end."; }
+
+Item "trident" : T_WEAPON
+  { Image: brown GLYPH_WEAPON; Group: WG_SPEARS; Range: 1; Parry: +4;
+    Mat: MAT_IRON; Size: SZ_LARGE; Weight: 60; Cost: OPT_COST(71,9) GOLD;
+    SDmg: 1d8; LDmg: 1d8; Acc: +0; Crit: x2; Threat: 1; Spd: 110%;
+    Flags: WT_PIERCING, WT_CHARGE;
+    Desc: "The trident is a three-pronged spear which is often
+      favored by seafaring races and cultures."; }
+
+Item "longspear" : T_WEAPON
+  { Image: bright brown GLYPH_WEAPON; Group: WG_SPEARS | WG_POLEARMS; Range: 1;
+    Mat: MAT_IRON; Size: SZ_LARGE; Weight: 90; Cost: OPT_COST(75,12) GOLD;
+    SDmg: 1d8; LDmg: 1d8; Acc: +0; Crit: x3; Threat: 1; Spd: 100%;
+    Flags: WT_CHARGE, WT_PIERCING, WT_WOOD_PARTS, WT_REACH, IT_THROWABLE; Parry: 1; 
+    Desc: "Essentially a polearm, the longspear is over ten feet in
+      length and cannot be used to strike at enemies who have closed
+      with the wielder."; }
+
+Item "light lance" : T_WEAPON
+  { Image: brown GLYPH_WEAPON; Group: WG_LANCES; 
+    Mat: MAT_WOOD; Size: SZ_MEDIUM; Weight: 50; Cost: OPT_COST(65,10) GOLD;
+    SDmg: 1d6; LDmg: 1d10; Acc: +0; Crit: x3; Threat: 1; Spd: 70%;
+    Flags: WT_CHARGE, WT_PIERCING, WT_KNOCKDOWN; Parry: 0; 
+    Desc: "The light lance can be used effectively by a horseman
+      or footman, though it is obviously intended to be a rider's
+      weapon."; }
+
+Item "heavy lance" : T_WEAPON
+  { Image: brown GLYPH_WEAPON; Group: WG_LANCES; 
+    Mat: MAT_WOOD; Size: SZ_LARGE; Weight: 100; Cost: OPT_COST(68,12) GOLD;
+    SDmg: 1d8; LDmg: 1d12; Acc: +0; Crit: x3; Threat: 1; Spd: 70%;
+    Flags: WT_CHARGE, WT_PIERCING, WT_KNOCKDOWN, WT_MOUNTED_ONLY; Parry: 0; 
+    Desc: "The classical weapon of the knight, the heavy lance's
+      construction makes it awkward to use when not mounted."; }
+
+Item "great lance" : T_WEAPON
+  { Image: bright brown GLYPH_WEAPON; Group: WG_LANCES | WG_EXOTIC; 
+    Parry: 0; 
+    Mat: MAT_ADAMANT; Size: SZ_LARGE; Weight: 500; Cost: OPT_COST(77,90) GOLD;
+    SDmg: 1d10; LDmg: 1d20; Acc: +0; Crit: x3; Threat: 1; Spd: 70%;
+    Flags: WT_REACH, WT_CHARGE, WT_KNOCKDOWN, WT_STR1, WT_STR2, WT_MOUNTED_ONLY;
+    Desc: "The great lance is a monsterous weapon usually associated with
+      demonic hordes and mythic tales of knights riding dragons. The
+      typical great lance is as long as a pike but non-trivially thicker:
+      it is the fullblade of the lance world.  In order to survive the
+      strain of repeated charges (and to help it bear up under its own
+      non-trivial weight and torque), the great lance is traditionally cast
+      from adamant.  Only the strongest can hope to use such a powerful
+      weapon."; } 
+
+/************************************************************************\
+ *                               POLEARMS                               *
+\************************************************************************/
+
+/* The special polearm rules are thus: a polearm with reach cannot be
+ * used on adjacent targets. To close with a character that is wielding
+ * a polearm with reach, the enemy must make a successful Reflex save
+ * against DC 10 + (1/2 BAB) + Spec. Failure wastes (10 - Dex mod) phases
+ * of the enemy's time, and he doesn't move, and if you have the right
+ * feat, you get an AoO. Smaller enemies get a bonus to this roll, those
+ * one catagory larger get a penalty, and those two or more catagories
+ * larger are unaffected.
+ */ 
+
+Item "halberd" : T_WEAPON
+  { Image: brown GLYPH_WEAPON; Group: WG_POLEARMS | WG_AXES;
+    Mat: MAT_IRON; Size: SZ_LARGE; Weight: 150; Cost: OPT_COST(70,12) GOLD;
+    SDmg: 1d10; LDmg: 1d12; Acc: +1; Crit: x3; Threat: 1; Spd: 70%;
+    Parry: 4; 
+    Flags: WT_CHARGE, WT_SLASHING, WT_PIERCING, WT_CHARGE, WT_SUPER_TRIP,
+      WT_STR2, WT_WOOD_PARTS;
+    Desc: "The shortest and heaviest common polearm, a halberd 
+      is a very effective weapon for a lone fighter, and many 
+      specialized styles of combat have developed around it. The 
+      halberd has a heavy axe-pike head capable of delivering
+      blows with great force."; }
+
+Item "ranseur" : T_WEAPON
+  { Image: bright brown GLYPH_WEAPON; Group: WG_POLEARMS;
+    Mat: MAT_IRON; Size: SZ_LARGE; Weight: 150; Cost: OPT_COST(73,13) GOLD;
+    SDmg: 2d4; LDmg: 2d4; Acc: +1; Crit: x3; Threat: 1; Spd: 80%;
+    Parry: 1; 
+    Flags: WT_PIERCING, WT_SUPER_DISARM, WT_REACH, WT_WOOD_PARTS,
+      WT_CHARGE;
+    Desc: "The ranseur is a long, sharp spear-like polearm, with
+      side blades on the head useful for disarming opponents."; }
+
+Item "lucern hammer" : T_WEAPON
+  { Image: bright brown GLYPH_WEAPON; Group: WG_POLEARMS;
+    Mat: MAT_IRON; Size: SZ_LARGE; Weight: 150; Cost: OPT_COST(75,15) GOLD;
+    SDmg: 2d4; LDmg: 1d6; Acc: -1; Crit: x3; Threat: 1; Spd: 70%;
+    Parry: 1; 
+    Flags: WT_PIERCING, WT_BLUNT, WT_CHARGE, 
+      WT_WOOD_PARTS, WT_REACH, WT_PENETRATING; 
+    Desc: "This 15' polearm has a claw-shaped hammer head designed
+      to puncture plate mail."; }
+
+Item "two-bladed halberd" : T_WEAPON
+  { Image: bright purple GLYPH_WEAPON; 
+    Group: WG_POLEARMS | WG_EXOTIC; 
+    Parry: 4; Mat: MAT_IRON; 
+    Size: SZ_LARGE; Weight: 300; Cost: OPT_COST(53,20) GOLD;
+    SDmg: 1d10; LDmg: 1d10; Acc: +2; Crit: x3; Threat: 1; Spd: 70%;
+    Flags: WT_CHARGE, WT_SLASHING, WT_PIERCING, WT_SUPER_TRIP, WT_DOUBLE,
+      WT_STR3, WT_STR1, WT_WOOD_PARTS; 
+    Desc: "This uncommon variant on the popular halberd is known as a
+    lajatang among some monkish orders. It is essentially a heavy pole
+    with axe-pikes at both ends."; 
+  }
+
+Item "glaive" : T_WEAPON
+  { Image: green GLYPH_WEAPON; Group: WG_POLEARMS; 
+    Mat: MAT_IRON; Size: SZ_LARGE; Weight: 150; Cost: OPT_COST(11,13) GOLD;
+    SDmg: 1d8; LDmg: 1d8; Acc: +1; Crit: x3; Threat: 1; Spd: 75%; Parry: 1;
+    Flags: WT_CHARGE, WT_SLASHING, WT_PIERCING, WT_REACH, WT_WOOD_PARTS; 
+    Desc: "A long-range weapon with a simple spear-blade head,
+      the glaive can be used either to slash or impale. It is
+      one of the most common polearms."; }
+
+Item "guisarme" : T_WEAPON
+  { Image: green GLYPH_WEAPON; Group: WG_POLEARMS;
+    Mat: MAT_IRON; Size: SZ_LARGE; Weight: 150; Cost: OPT_COST(4,13) GOLD;
+    SDmg: 2d4; LDmg: 1d6; Acc: 0; Crit: x3; Threat: 1; Spd: 90%; Parry: 1;
+    Flags: WT_SLASHING, WT_REACH, WT_STR1, WT_SUPER_TRIP,
+      WT_WOOD_PARTS, WT_TWO_HANDED; 
+    Desc: "A polearm with a hooked blade-head, the guisarme
+      can be used to slash or trip opponents."; }
+
+Item "voulge" : T_WEAPON
+  { Image: green GLYPH_WEAPON; Group: WG_POLEARMS;
+    Mat: MAT_IRON; Size: SZ_LARGE; Weight: 120; Cost: OPT_COST(40,13) GOLD;
+    Parry: 1; 
+    SDmg: 2d6; LDmg: 2d6; Acc: -1; Crit: x3; Threat: 1; Spd: 70%;
+    Flags: WT_SLASHING, WT_PENETRATING, WT_WOOD_PARTS;
+    Desc: "It's an axe on a stick! The voulge is essentially a longaxe,
+      and is useful for hacking through plate armors."; }
+
+
+Item "saw-toothed glaive" : T_WEAPON
+  { Image: bright purple GLYPH_WEAPON; Group: WG_POLEARMS | WG_EXOTIC; 
+    Mat: MAT_IRON; Size: SZ_LARGE; Weight: 150; Cost: OPT_COST(73,70) GOLD;
+    SDmg: 2d8; LDmg: 2d8; Acc: +1; Crit: x3; Threat: 1; Spd: 80%;
+    Flags: WT_SLASHING, WT_PIERCING, WT_REACH, WT_CHARGE, WT_WOOD_PARTS,
+          IT_NOGEN; 
+    Desc: "These glaives are the signature weapons of the barbazu devils,
+      with saw-like teeth created to inflict exceptional pain as well as
+      ravage an opponent's flesh."; }    
+
+
+/************************************************************************\
+ *                                IMPACT                                *
+\************************************************************************/
+
+Item "club" : T_WEAPON
+  { Image: cyan GLYPH_WEAPON; Group: WG_IMPACT | WG_SIMPLE;
+    Mat: MAT_WOOD; Size: SZ_MEDIUM; Weight: 30; Cost: OPT_COST(27,7) GOLD;
+    SDmg: 1d6; LDmg: 1d4; Acc: +2; Crit: x2; Threat: 1; Spd: 90%;
+    Parry: 1; 
+    Flags: WT_BLUNT, WT_STUNNING, WT_SUBDUAL; }
+
+Item "large club" : T_WEAPON
+  { Image: cyan GLYPH_WEAPON; Group: WG_IMPACT;
+    Mat: MAT_WOOD; Size: SZ_LARGE; Weight: 150; Cost: OPT_COST(38,8) GOLD;
+    SDmg: 1d10; LDmg: 1d6; Acc: +4; Crit: x2; Threat: 1; Spd: 70%;
+    Parry: 2; 
+    Flags: WT_BLUNT, WT_STR2, WT_SUBDUAL, WT_STUNNING; }
+
+Item "huge club" : T_WEAPON
+  { Image: bright cyan GLYPH_WEAPON; Group: WG_IMPACT;
+    Mat: MAT_WOOD; Size: SZ_HUGE; Weight: 500; Cost: OPT_COST(42,14) GOLD;
+    SDmg: 2d8; LDmg: 2d6; Acc: +4; Crit: x2; Threat: 1; Spd: 60%;
+    Parry: 3; 
+    Flags: WT_BLUNT, WT_STR2, WT_STR1, WT_SUBDUAL, 
+      IT_NOGEN, WT_STUNNING, WT_REACH, WT_STRIKE_NEAR; }
+
+Item "quarterstaff" : T_WEAPON
+	{ Image: bright cyan '|'; Group: WG_SIMPLE | WG_STAVES | WG_MARTIAL | WG_LIGHT;
+  Mat:MAT_WOOD; Size: SZ_LARGE; Weight: 7; Cost: OPT_COST(28,13) GOLD; 
+  Parry: 8;
+  SDmg:1d8; LDmg:1d6; Acc: +4; Crit: x2; Threat: 1; Spd: 100%;
+    Flags: WT_SUPER_TRIP, WT_BLUNT, WT_TWO_HANDED, WT_NO_STRENGTH; 
+    Desc: "A long stout staff used as a weapon and wielded with one hand in
+    the middle and the other between the middle and the end.";
+	}
+
+Item "force construct staff" : T_WEAPON
+  {
+		Image: bright cyan '|';
+		Mat:MAT_FORCE;
+		SDmg:1d10; LDmg:1d8;
+    Cost: OPT_COST(42,0);
+    Crit: x3; Threat: 4; Spd: 125%;
+    Weight: 0; Group: WG_STAVES | WG_SIMPLE | WG_MARTIAL;
+    Size: SZ_MEDIUM; Parry: +8; Acc: +5; 
+    Flags: WT_SUPER_TRIP, WT_BLUNT, WT_TWO_HANDED, IT_NOGEN,
+           WT_NO_STRENGTH; 
+    Desc: "The decastave is a shimmering, translucent construct in the 
+      form of a 10' long pole. It can be wielded like a quarterstaff,
+      and often strikes foes with the devastating power of thunder itself.
+      Its weightlessness allows it to strike quite rapidly.";
+    On Event PRE(EV_DROP), PRE(EV_REMOVE) {
+      EActor->IPrint("You dispel the conjured staff.");
+      EItem->Remove(true);
+      return DONE;
+      },
+    EV_TURN {
+      if (EActor->isType(T_ITEM) && 
+           GetHandle(EActor->m) != NULL_OBJ)
+        {
+          EActor->IDPrint("","The conjured staff vanishes.");
+          EActor->Remove(true);
+          return DONE;
+        }
+      return NOTHING;
+      },
+    PRE(EV_LOSEITEM) {
+      EItem->Remove(true);
+      return DONE;
+      },
+    PRE(EV_INSERT) {
+      EActor->IPrint("You can't put a force construct in a container.");
+      return ABORT;
+      },
+    PRE(EV_WIELD) {
+      if (e.EParam != SL_READY && e.EParam != SL_WEAPON) {
+        EActor->IPrint("You need to hold the decastave in your hands, else it will disperse.");
+        return ABORT;
+        }
+      return NOTHING;
+      },
+    EV_GETNAME {
+      e.nCursed = "";
+      e.nAppend += XPrint(" (<Num> turn<hText>)",
+         EActor->GetStatiDur(SUMMONED), EActor->GetStatiDur(SUMMONED) == 1 ? "" : "s");
+      return NOTHING;
+      };
+	}
+
+Item "maul" : T_WEAPON
+  { Image: bright cyan GLYPH_WEAPON; Group: WG_IMPACT;
+    Mat:MAT_IRON; Size: SZ_LARGE; Weight: 700; Cost: OPT_COST(75,18) GOLD; Parry: 3;
+    SDmg:2d8; LDmg:2d8; Acc: +2; Crit: x4; Threat: 2; Spd: 70%;
+    Desc: "A maul is heavy (often wooden-headed) hammer used
+    especially for driving wedges. It can be thought of as a sledgehammer
+    with one wedge-shaped end and is often used to split wood."; 
+    Flags: WT_FUMBLE1, WT_BLUNT, WT_STUNNING, WT_KNOCKDOWN, WT_WOOD_PARTS,
+           WT_STR3;     
+  }
+
+Item "great maul" : T_WEAPON
+  { Image: bright cyan GLYPH_WEAPON; Group: WG_IMPACT;
+    Mat:MAT_IRON; Size: SZ_HUGE; Weight: 700; Cost: OPT_COST(75,18) GOLD; Parry: 3;
+    SDmg:2d12; LDmg:2d12; Acc: +2; Crit: x4; Threat: 2; Spd: 70%;
+    Desc: "A maul is heavy (often wooden-headed) hammer used
+      especially for driving wedges. It can be thought of as a sledgehammer
+      with one wedge-shaped end and is often used to split wood. Great
+      mauls are used by giants or by creatures able to magically grow
+      larger."; 
+    Flags: WT_FUMBLE1, WT_BLUNT, WT_STUNNING, WT_KNOCKDOWN, WT_WOOD_PARTS,
+           WT_STR3, WT_STR2, WT_STR1;     
+  }
+
+Item "light mace" : T_WEAPON
+  { Image: cyan GLYPH_WEAPON; Group WG_SIMPLE | WG_IMPACT | WG_LIGHT;
+    Mat: MAT_IRON; Size: SZ_SMALL; Weight: 60; Cost: OPT_COST(29,5) GOLD; Parry: 4;
+    SDmg: 1d6; LDmg: 1d6; Acc: +2; Crit: x2; Threat: 1; Spd: 110%;
+    Flags: WT_BLUNT, WT_STUNNING;
+    Desc: "Maces are traditionally considered to be the weapons of
+      the clergy on Therya, but many warriors also use them. The
+      light mace is most commonly used by mounted warriors, and by
+      those who lack the strength to use the heavier variant."; }
+
+Item "heavy mace" : T_WEAPON
+  { Image: cyan GLYPH_WEAPON; Group: WG_IMPACT;
+    Mat: MAT_IRON; Size: SZ_MEDIUM; Weight: 120; Cost: OPT_COST(36,12) GOLD; Parry: 3;
+    SDmg: 1d10; LDmg: 1d8; Acc: +2; Crit: x2; Threat: 1; Spd: 80%;
+    Flags: WT_BLUNT, WT_STR2, WT_STUNNING;
+    Desc: "The heavy mace is the symbol of militant clergy on Therya.
+      It requires great strength to use, and the lead-filled head
+      strikes its victims with tremendous impact."; }
+
+Item "morningstar" : T_WEAPON
+  { Image: cyan GLYPH_WEAPON; Group: WG_IMPACT;
+    Mat: MAT_IRON; Size: SZ_MEDIUM; Weight: 120; Cost: OPT_COST(27,12) GOLD; Parry: 3;
+    SDmg: 1d8; LDmg: 1d8; Acc: +3; Crit: x2; Threat: 1; Spd: 80%;
+    Flags: WT_BLUNT, WT_STR2, WT_PIERCING, WT_STUNNING;
+    Desc: "Satirically called the 'holy water sprinkler', the
+      morningstar is essentially a heavy mace with spikes added
+      to its head, thus inflicting both blunt trauma and piercing
+      wounds."; }
+
+Item "huge morningstar" : T_WEAPON
+  { Image: cyan GLYPH_WEAPON; Group: WG_IMPACT;
+    Mat: MAT_IRON; Size: SZ_HUGE; Weight: 120; Cost: OPT_COST(27,12) GOLD; Parry: 3;
+    SDmg: 3d8; LDmg: 3d8; Acc: +1; Crit: x2; Threat: 1; Spd: 80%;
+    Flags: WT_BLUNT, WT_STR2, WT_PIERCING, WT_STUNNING;
+    Desc: "Satirically called the 'holy water sprinkler', the
+      morningstar is essentially a heavy mace with spikes added
+      to its head, thus inflicting both blunt trauma and piercing
+      wounds. This morningstar is humongous -- larger than a human
+      could ever wield -- and is obviously sized for a giant or
+      similar creature."; }
+
+Item "warhammer" : T_WEAPON
+  { Image: red GLYPH_WEAPON; Group: WG_IMPACT;
+    Mat: MAT_IRON; Size: SZ_MEDIUM; Weight: 120; Cost: 
+    OPT_COST(40,14) GOLD; Parry: 3;
+    SDmg: 1d8; LDmg: 1d8; Acc: 0; Crit: x3; Threat: 1; Spd: 80%;
+    Flags: WT_BLUNT, WT_STR2, WT_STUNNING, WT_PENETRATING;
+    Desc: "The warhammer is a blunt weapon designed specifically to
+      punch through plate armors. Its blows carry terrible force
+      with them."; }
+
+
+/************************************************************************\
+ *                           SWORDS & DAGGERS                           *
+\************************************************************************/
+
+Item "short sword" : T_WEAPON
+  { Image: gray GLYPH_SWORD; Group: WG_SBLADES | WG_LIGHT;
+    Mat:MAT_IRON; Size: SZ_SMALL; Weight: 30; 
+    Cost: OPT_COST(31,9) GOLD; Parry: 4;
+    SDmg:1d6; LDmg:1d6+1; Acc: +1; Crit: x2; Threat: 2; Spd: 140%;
+    Flags: WT_SUPER_SNEAK, WT_SLASHING, WT_PIERCING;
+  }
+
+Item "scimitar" : T_WEAPON
+  { Image: gray GLYPH_SWORD; Group: WG_LBLADES | WG_LIGHT; Parry: 5;
+    Mat: MAT_IRON; Size: SZ_MEDIUM; Weight:40; Cost: OPT_COST(30,10) GOLD;
+    SDmg: 1d8; LDmg: 1d8; Acc: +2; Crit: x2; Threat: 3; Spd: 115%;
+    Flags: WT_SLASHING, WT_PIERCING; }
+
+Item "falchion" : T_WEAPON
+  { Image: cyan GLYPH_SWORD; Group: WG_SBLADES; Parry: +3;
+    Mat: MAT_IRON; Size: SZ_LARGE; Weight: 160; Cost: OPT_COST(34,11) GOLD;
+    SDmg: 2d4; LDmg: 2d6; Acc: +1; Crit: x2; Threat: 3; Spd: 120%;
+    Flags: WT_SLASHING; }
+
+Item "broadsword" : T_WEAPON
+  { Image: green GLYPH_SWORD; Group: WG_LBLADES; Parry: 2;
+    Mat: MAT_IRON; Size: SZ_MEDIUM; Weight: 70; Cost: OPT_COST(33,11) GOLD; 
+    SDmg: 2d4; LDmg: 2d5; Acc: 0; Crit: x2; Threat 2; Spd: 110%;
+    Flags: WT_SLASHING, WT_STR2;
+    Desc: "Smaller than a bastard sword, but heavier than a long sword,
+      the broadsword is something of a tactical midpoint between the
+      two weapons. The name derives from the fact that its blade is
+      wider than either of the two swords or originated from. The
+      broadsword is the heaviest weapon a human can wield in one hand
+      without special training."; }
+
+
+Item "flame blade;weapon" : T_WEAPON
+  {
+    Image: bright red GLYPH_SWORD; Group: WG_LBLADES | WG_LIGHT; Parry: 0;
+    Mat: MAT_FORCE; Size: SZ_MEDIUM; Weight:10; 
+    Flags: WT_SLASHING, WT_PIERCING, WT_NO_STRENGTH, IT_NOGEN;
+    SDmg: 3d8; LDmg: 3d8; Acc: +2; Crit: x2; Threat: 2; Spd: 115%;
+    Desc: "A flame blade is a brilliantly-hot blade composed of
+      solidified flame wielded by a skilled druid.";
+    On Event PRE(EV_DROP), PRE(EV_REMOVE) {
+      EActor->IPrint("You dispel the conjured flame-sword.");
+      EItem->Remove(true);
+      return DONE;
+      },
+    EV_TURN {
+      if (EActor->isType(T_ITEM) && 
+           GetHandle(EActor->m) != NULL_OBJ)
+        {
+          EActor->IDPrint("","The conjured flame-sword vanishes.");
+          EActor->Remove(true);
+          return DONE;
+        }
+      return NOTHING;
+      },
+    PRE(EV_LOSEITEM) {
+      EItem->Remove(true);
+      return DONE;
+      },
+    PRE(EV_DAMAGE) {
+      if (GetHandle(EItem) != NULL_OBJ)
+        if (EItem->iID == $"flame blade;weapon")
+          e.DType = AD_FIRE;
+      },
+    PRE(EV_INSERT) {
+      EActor->IPrint("You can't put a flame blade in a container.");
+      return ABORT;
+      },
+    PRE(EV_WIELD) {
+      if (e.EParam != SL_READY && e.EParam != SL_WEAPON) {
+        EActor->IPrint("You need to hold the flame blade in your hands, else it will disperse.");
+        return ABORT;
+        }
+      return NOTHING;
+      },
+    EV_GETNAME {
+      e.nCursed = "";
+      e.nAppend += XPrint(" (<Num> turn<hText>)",
+         EActor->GetStatiDur(SUMMONED), EActor->GetStatiDur(SUMMONED) == 1 ? "" : "s");
+      return NOTHING;
+      };
+	}
+
+
+Item "long sword" : T_WEAPON
+  { Image: gray GLYPH_SWORD; Group: WG_LBLADES | WG_LIGHT;
+    Mat:MAT_IRON; Size: SZ_MEDIUM; Weight: 40; 
+    Cost: OPT_COST(33,10) GOLD; Parry: 3;
+    SDmg:1d8; LDmg:1d8+1; Acc: +2; Crit: x2; Threat: 2; Spd: 115%;
+    Flags: WT_SLASHING;
+  Desc: "A long sword consists of a blade, a cross-guard, a handle  and a
+  pommel.  The blade comes in two basic styles, a straight cutting blade and
+  a tapered thrusting blade, though both styles can cut and thrust.  The
+  cross-guard is generally straight, but it can be curved and it's ends may
+  be rounded, spiked or ornate.  A long sword handle has enough space for two
+  handed use; it can be waisted and has an oval cross- section.  The pommel
+  is a counter weight to the blade and comes in many shapes and sizes.
+  Because of this, it can be a formidable weapon in it's own right, when used
+  to strike hammer-like blows.";
+  }
+
+Item "small long sword" : T_WEAPON
+  { Image: gray GLYPH_SWORD; Group: WG_LBLADES | WG_LIGHT;
+    Mat:MAT_IRON; Size: SZ_SMALL; Weight: 20; 
+    Cost: OPT_COST(33,10) GOLD; Parry: 3;
+    SDmg:1d6; LDmg:1d6+1; Acc: +2; Crit: x2; Threat: 2; Spd: 115%;
+    Flags: WT_SLASHING;
+  Desc: "A long sword consists of a blade, a cross-guard, a handle  and a
+  pommel.  The blade comes in two basic styles, a straight cutting blade and
+  a tapered thrusting blade, though both styles can cut and thrust.  The
+  cross-guard is generally straight, but it can be curved and it's ends may
+  be rounded, spiked or ornate.  A long sword handle has enough space for two
+  handed use; it can be waisted and has an oval cross- section.  The pommel
+  is a counter weight to the blade and comes in many shapes and sizes.
+  Because of this, it can be a formidable weapon in it's own right, when used
+  to strike hammer-like blows.\n
+  __This long sword has been made specifically for members of Small races
+  to wield -- it is about the size of a short sword, but is balanced to be
+  a slashing, rather than a thrusting, weapon.";
+  }
+
+Item "two-bladed sword" : T_WEAPON
+  { Image: bright gray GLYPH_SWORD; Group: WG_LBLADES | WG_EXOTIC; Parry: 4;
+    Mat: MAT_IRON; Size: SZ_LARGE; Weight: 300; Cost: OPT_COST(53,20) GOLD;
+    SDmg: 1d8; LDmg: 1d8; Acc: +1; Crit: x2; Threat: 2; Spd: 120%;
+    Flags: WT_SLASHING, WT_PIERCING, WT_DOUBLE; }
+
+Item "bastard sword" : T_WEAPON
+  { Image: gray GLYPH_SWORD; Group: WG_LBLADES;
+    Mat:MAT_IRON; Size: SZ_MEDIUM; Weight: 100; 
+    Cost: OPT_COST(32,13) GOLD; Parry: 3;
+    SDmg:1d10; LDmg:1d12; Acc: +2; Crit: x2; Threat: 2; Spd: 100%;
+    Flags: WT_EXOTIC_1H, WT_SLASHING;
+  }
+
+Item "greatsword" : T_WEAPON
+  { Image: gray GLYPH_SWORD; Group: WG_LBLADES; Parry: +2;
+    Mat: MAT_IRON; Size: SZ_LARGE; Weight: 150; Cost: OPT_COST(42,17) GOLD;
+    SDmg: 3d4; LDmg: 3d6; Acc: +0; Crit: x2; Threat: 2; Spd: 80%;
+    Flags: WT_SLASHING, WT_STR2, WT_STR1; 
+    Desc: "Greatswords were only used by infantrymen and were used against
+    pole-arms and axes. To protect the hands from opposing weapons, it
+    features a large guard with side rings plus integral parrying hooks
+    that allow the blade to be shortened for close range slashing and
+    stabbing attacks. The handle is covered with leather
+    and is extra long to afford a full two-handed grip."; 
+    }
+
+
+/* weimer: I'm not sure what the rulebooks say, but the Fullblade should be
+ * at least as good as the Great Maul. The Maul is "simple", so anyone with
+ * Enlarge can pick it up and do 2d12 points of damage. The fullblade
+ * requires an entire feat just to use it, and it's pathetic by comparison. 
+ * In fact, at 1d12 the small damage is strictly inferior to the
+ * greatsword! This thing was just bad all around.
+ * FJM: The point of the fullblade is 'the largest weapon a human can wield
+ * without being Large-sized -- so yes, of course the great maul does more
+ * damage, being essentially a larger fullblade -- large enough that a human
+ * CANNOT wield it without magic!
+ * I've added some weaknesses to Enlarge based on this comment, such as the
+ * small corridors.
+ */
+Item "fullblade" : T_WEAPON
+  { Image: bright gray GLYPH_SWORD; Group: WG_LBLADES | WG_EXOTIC; Parry: 2;
+    Mat: MAT_IRON; Size: SZ_LARGE; Weight: 250; Cost: OPT_COST(54,20) GOLD;
+    SDmg: 3d6; LDmg: 3d8; Acc: 0; Crit: x2; Threat: 2; Spd: 75%;
+    Flags: WT_SLASHING, WT_STR1, WT_STR2;
+    Desc: "Originally forged by ogres and hill giants, fullblades are
+      a foot and a half longer than even greatswords, and are simply
+      too large and heavy to be used by human-sized creatures without
+      special training. They have little military or civil application,
+      and are rarely seen outside of the adventuring community, where
+      heroes continually search for weapons with greater and greater
+      killing power to use against primordial horrors."; } 
+
+Item "rapier" : T_WEAPON
+	{ Image: gray GLYPH_SWORD; Group: WG_SBLADES | WG_LIGHT;
+    Mat:MAT_IRON; Size: SZ_MEDIUM; Weight: 15; 
+    Cost: OPT_COST(30,10) GOLD; Parry: 6;
+    SDmg:1d12; LDmg:1d10; Acc: -1; Crit: x2; Threat: 3; Spd: 150%;
+    Flags: WT_PIERCING, WT_SUPER_DISARM, WT_SUPER_SNEAK, WT_NO_STRENGTH; 
+    Desc: "The weapon of choice for nobles, duelests and swashbucklers,
+      the rapier is a newer sword with a thin, strong blade that focuses
+      on piercing thrusts rather than slashing swings."; }
+
+Item "elven thinblade" : T_WEAPON
+	{ Image: bright grey GLYPH_SWORD; Group: WG_SBLADES | WG_EXOTIC | WG_LIGHT;
+    Mat: MAT_MITHRIL; Size: SZ_MEDIUM; Weight: 5; 
+    Cost: OPT_COST(34,18) GOLD; Parry: 6;   
+		SDmg: 1d12; LDmg: 1d10; Acc: -1; Crit: x2; Threat: 3; Spd: 160%;
+    Flags: WT_PIERCING, WT_SUPER_DISARM, WT_PENETRATING, WT_RACIAL,
+           WT_NO_STRENGTH; 
+    /* LOW HARDNESS LATER */
+    Desc: "The natural evolution of the rapier given the existance of
+      extremely strong and light metals like mithril, the elven thinblade
+      is a long, needle-like sword that weighs almost nothing, can pass
+      through the links of crude chain armor and swings with terrible
+      speed. These weapons are uncommon outside the elven
+      courts, as they don't tend to stand up well to wear and tear, are
+      tremendously expensive and fare poorly against the natural armors
+      of creatures that adventurers usually fight."; }
+
+Item "mercurial broadsword" : T_WEAPON
+  { Image: bright gray GLYPH_SWORD; Group: WG_LBLADES|WG_EXOTIC; Parry: +3;
+    Mat: MAT_IRON; Size: SZ_MEDIUM; Weight: 120; Cost: OPT_COST(43,13) GOLD;
+    SDmg: 3d4; LDmg: 3d6; Acc: +2; Crit: x3; Threat: 2; Spd: 80%;
+    Flags: WT_SLASHING, WT_BLUNT, WT_STUNNING, WT_STR1, WT_STR3,
+           WT_TWO_HANDED; 
+    Desc: "This weapon was originally developed by gnomes to counter the edge
+      that human weapons like the greatsword grant to Medium-sized
+      creatures. It is similar in shape to a broadsword,
+      but contains a hollow channel within the blade through which
+      mercury can flow from a globe mounted in the handle. The
+      momentum of the mercury gives it extra force of impact, which
+      allows it to approximate the damage of a greatsword, but its
+      strange balance makes it an exotic weapon and requires that it
+      be wielded two-handed, regardless of the wielder's size.";
+  }
+
+/************************************************************************\
+ *                           KNIVES & DAGGERS                           *
+\************************************************************************/
+
+Item "dagger" : T_WEAPON
+  { Image: grey GLYPH_SWORD; Group: WG_DAGGERS | WG_SIMPLE | WG_THROWN | WG_LIGHT;
+    Mat: MAT_IRON; Size: SZ_TINY; Weight: 10; 
+    Cost: OPT_COST(88,2) GOLD; Parry: 4; Range: 3;
+    SDmg: 1d4; LDmg: 1d3; Acc: 0; Crit: x2; Threat: 2; Spd: 135%;
+    Flags: WT_PIERCING, WT_SLASHING, WT_SUPER_SNEAK, IT_GROUP; 
+    Desc: "One of the most common weapons in existance. The dagger's
+      foot-long blade can be used to slash or pierce, and its easy
+      concealability makes it popular with rogues and diplomats."; }
+
+Item "stiletto" : T_WEAPON
+  { Image: grey GLYPH_SWORD; Group: WG_DAGGERS | WG_THROWN | WG_LIGHT;
+    Mat: MAT_IRON; Size: SZ_TINY; Weight: 30; 
+    Cost: OPT_COST(24,1) GOLD; Parry: 3;
+    SDmg: 1d6; LDmg: 1d3; Acc: 0; Crit: x3; Threat: 1; Spd: 170%;
+    Flags: WT_PIERCING, WT_SUPER_SNEAK, WT_PENETRATING, WT_NO_STRENGTH; 
+    Desc: "This exceedingly thin blade is most famous for its ability
+      to cut through chain armors."; }
+
+Item "main gauche" : T_WEAPON
+  { Image: grey GLYPH_SWORD; Group: WG_DAGGERS | WG_LIGHT;
+    Mat: MAT_IRON; Size: SZ_TINY; Weight: 15; 
+    Cost: OPT_COST(21,4) GOLD; Parry: 5;
+    SDmg: 1d4; LDmg: 1d3; Acc: 0; Crit: x2; Threat: 2; Spd: 130%;
+    Flags: WT_PIERCING, WT_SLASHING, WT_SUPER_SNEAK, WT_SUPER_DISARM; 
+    Desc: "This dagger is designed as an off-hand weapon for a fencer.
+      Its special guard and grip make it excelent for parrying and
+      disarming."; }
+
+Item "knife" : T_WEAPON
+  { Image: grey GLYPH_SWORD; Group: WG_DAGGERS | WG_SIMPLE | WG_LIGHT | WG_THROWN;
+    Mat: MAT_IRON; Size: SZ_TINY; Weight: 5; Cost: OPT_COST(90,1) GOLD; Parry: 0;
+    SDmg: 1d3; LDmg: 1d3; Acc: +1; Crit: x2; Threat: 2; Spd: 140%;
+    Flags: WT_SLASHING, WT_SUPER_SNEAK; 
+    Desc: "A utilitarian weapon, the common war knife is useful for
+      many purposes outside of combat."; }
+
+Item "punching dagger" : T_WEAPON
+  { Image: grey GLYPH_SWORD; Group: WG_DAGGERS | WG_LIGHT | WG_EXOTIC;
+    Mat: MAT_IRON; Size: SZ_TINY; Weight: 12; 
+    Cost: OPT_COST(23,3) GOLD; Parry: 2;
+    SDmg: 1d6; LDmg: 1d4; Acc: -1; Crit: x3; Threat: 3; Spd: 140%;
+    Flags: WT_PIERCING, WT_SUPER_SNEAK; 
+    Desc: "This dagger is gripped with a closed fist around its H-shaped
+      handle and thrust forward. Like the kukri, it originates in far-
+      Northern lands, and has only recently become commonly used in the
+      Kinlands areas."; }
+
+Item "kukri" : T_WEAPON
+  { Image: grey GLYPH_SWORD; Group: WG_DAGGERS | WG_LIGHT | WG_EXOTIC;
+    Mat: MAT_IRON; Size: SZ_TINY; Weight: 30; Cost: OPT_COST(23,3) GOLD; Parry: 3;
+    SDmg: 1d3; LDmg: 1d2; Acc: +2; Crit: x2; Threat: 3; Spd: 160%;
+    Flags: WT_SLASHING, WT_SUPER_SNEAK; 
+    Desc: "This weapon hails from exotic Northern lands, and features
+      a blade that slants upward into a large, flat cutting surface.
+      It is often used by assasins."; }
+
+
+/************************************************************************\
+ *                             WEIRD WEAPONS                            *
+\************************************************************************/
+
+Item "spiked chain" : T_WEAPON
+  { Image: bright blue '{'; Group: WG_EXOTIC|WG_FLEXIBLE;
+    Mat:MAT_IRON; Size: SZ_MEDIUM; Weight:30; Cost: OPT_COST(30,20) GOLD; 
+    Parry: 7; SDmg:2d4; LDmg:2d6; Acc: +3; Crit: x2; Threat: 1; Spd: 100%;
+    Flags: WT_REACH, WT_SUPER_TRIP, WT_SLASHING, WT_ENTANGLE,
+      WT_FUMBLE2, WT_FUMBLE1, WT_STRIKE_NEAR, WT_TWO_HANDED;
+    Desc: "A length of chain studded with large, wicked blades, 
+      the spiked chain is exceedingly lethal -- both to its
+      victims and to anyone who has not mastered its use fully.";
+	}
+
+Item "scourge" : T_WEAPON
+  { Image: blue '{'; Group: WG_FLEXIBLE | WG_EXOTIC; 
+    Mat: MAT_LEATHER; Size: SZ_MEDIUM; Weight: 40; Cost: OPT_COST(30,7) GOLD; 
+    Parry: 5;
+    SDmg: 1d6; LDmg: 1d6; Acc: +3; Crit: x2; Threat: 1; Spd: 85%;
+    Flags: WT_ENTANGLE, WT_SUPER_DISARM, WT_SUPER_TRIP, 
+           WT_SLASHING, WT_SUPER_SNEAK;
+    Desc: "The scourge, or cat o' nine tails, in a multi-headed whip
+      with hooks or blades mounted along each tail's length. While it
+      is commonly viewed as a torturer's weapon, it can also be useful
+      on a battlefield. Many demons, such as the dread balors, favor
+      this weapon."; }
+
+Item "whip" : T_WEAPON
+  { Image: bright blue '{'; Group: WG_FLEXIBLE | WG_EXOTIC;
+    Mat:MAT_LEATHER; Size: SZ_SMALL; Weight: 20; Cost: OPT_COST(13,6) GOLD; 
+    Parry: 5; SDmg:1d4; LDmg:1d1; Acc: +1; Crit: x2; Threat: 1; Spd: 130%;
+    Flags: WT_REACH, WT_SUBDUAL, WT_STUNNING, WT_SLASHING,
+           WT_SUPER_TRIP, WT_SUPER_DISARM, WT_SUPER_SNEAK;
+    Desc: "This weapon is noted primarily for its ability to cause
+      intense pain, and is thus primarily a tool of intimidation...
+      but adventurers also find good use from the many tricks that
+      can be performed with it."; }
+
+Item "scythe" : T_WEAPON
+  { Image: purple GLYPH_WEAPON; Group: WG_LBLADES | WG_EXOTIC;
+    Mat: MAT_IRON; Size: SZ_LARGE; Weight: 120; Cost: OPT_COST(34,8) GOLD; 
+    Parry: 4;
+    SDmg: 2d6; LDmg: 1d8; Acc: -2; Crit: x4; Threat: 3; Spd: 80%;
+    Flags: WT_SLASHING, WT_FUMBLE1, WT_WOOD_PARTS, WT_SUPER_TRIP, 
+           WT_KNOCKDOWN;
+    Desc: "Originally an agricultural implement, the scythe can also be
+      a terrifying instrument of war. It is difficult to use effectively,
+      but devastating in skilled hands. Druids, and those who kill in
+      their service, often favor this weapon."; }
+
+Item "great scythe" : T_WEAPON
+  { Image: bright purple GLYPH_WEAPON; Group: WG_LBLADES | WG_EXOTIC;
+    Mat: MAT_IRON; Size: SZ_HUGE; Weight: 240; Cost: OPT_COST(33,36); Parry: 5;
+    SDmg: 2d8; LDmg: 2d8; Acc: 0; Crit: x4; Threat: 2; Spd: 70%;
+    Flags: IT_NOGEN, WT_PIERCING, WT_SLASHING, WT_FUMBLE1, WT_WOOD_PARTS,
+           WT_SUPER_TRIP, WT_REACH, WT_STRIKE_NEAR, WT_KNOCKDOWN;
+    Desc: "Originally an agricultural implement, the scythe can also be
+      a terrifying instrument of war. It is difficult to use effectively,
+      but devastating in skilled hands. This particular scythe is 
+      unnaturally large."; } 
+      
+Item "sickle" : T_WEAPON
+  { Image: purple GLYPH_WEAPON; Group: WG_SIMPLE | WG_LIGHT;
+    Mat: MAT_IRON; Size: SZ_SMALL; Weight: 30; Cost: OPT_COST(25,5) GOLD; 
+    Parry: 3;
+    SDmg: 1d6; LDmg: 1d3; Acc: +1; Crit: x2; Threat: 1; Spd: 110%;
+    Flags: WT_SLASHING, WT_WOOD_PARTS;
+    Desc: "Peasants forced to defend themselves often wield sickles,
+      because the tool's importance to farming meant that most such
+      families owned one. The weapon also has secret symbolic import
+      to the druidic hierarchy."; }
+
+Item "bolas" : T_WEAPON
+  { Image: purple GLYPH_WEAPON; Group: WG_EXOTIC | WG_THROWN; 
+    Mat: MAT_IRON; Size: SZ_SMALL; Weight: 50; Cost: OPT_COST(88,8) GOLD; 
+    Range: 3; SDmg: 1d6; LDmg: 1d4; Acc: +1; Crit: x2; Threat: 2; Spd: 70%;
+    Parry: 0; 
+    Flags: WT_ENTANGLE, WT_SLASHING, WT_BLUNT, IT_PLURAL,
+           WT_KNOCKDOWN, WT_NO_MELEE;
+    Desc: "Bolas are sets of three weighted balls tied together with a
+      thin, strong, sharp steel wire. Thrown proficiently, they can
+      ensnare an opponent in their coils, effectively taking him out
+      of the fight."; }
+
+Item "shotput" : T_WEAPON
+  { Image: purple GLYPH_WEAPON; Group: WG_THROWN | WG_EXOTIC; 
+    Mat: MAT_IRON; Size: SZ_SMALL; Weight: 60; Cost: OPT_COST(80,11) GOLD; 
+    Range: 2; Parry: 0; 
+    SDmg: 1d10; LDmg: 1d8; Acc: 0; Crit: x3; Threat: 2; Spd: 70%;
+    Flags: WT_BLUNT, WT_KNOCKDOWN, WT_STUNNING, WT_STR1, WT_STR2,
+           IT_GROUP;
+    Desc: "Nothing more then a steel globe the size of a cantelope,
+      the shotput is nonetheless a terrifying weapon; in the
+      hands of a proficient user, a solid throw can crush flesh and
+      bone alike into a fine paste -- its weight puts a terrible
+      force behind its impact. Because of the great strength needed
+      to throw it effectively, its also gained something of a mystique
+      as a legendary hero's weapon in orcish subcultures."; }
+
+Item "fighting stick" : T_WEAPON
+  { Image: purple '|'; Group: WG_MARTIAL;
+    Mat: MAT_WOOD; Size: SZ_SMALL; Weight: 5; Cost: OPT_COST(23,8) GOLD; 
+    Parry: +7; SDmg: 1d6; LDmg: 1d4; Acc: +1; Crit: x2; Threat 1; Spd: 130%;
+    Flags: WT_SUPER_DISARM, WT_STUNNING, WT_BLUNT; // ww: forgot blunt!
+    Desc: "Traditionally dual-wielded in pairs of two, the fighting
+      sticks are signature weapons of the monk tradition. They are
+      short and thin -- about a foot and a half long each -- and
+      seem deceptively harmless to those not trained in their use."; }
+
+Item "nunchaku" : T_WEAPON
+  { Image: purple GLYPH_WEAPON; Group: WG_MARTIAL;
+    Mat: MAT_WOOD; Size: SZ_SMALL; Weight: 20; Cost: OPT_COST(28,10) GOLD; 
+    Parry: +5; SDmg: 1d6; LDmg: 1d4; Acc: +1; Crit: x2; Threat: 2; Spd: 160%;
+    Flags: WT_BLUNT, WT_SUPER_DISARM;
+    Desc: "Two short wooden sticks connected by a chain or rope, the
+      nunchaku are a weapon favored by some monkish orders, and almost
+      nobody else."; }
+
+Item "chakram" : T_WEAPON
+  { Image: purple GLYPH_WEAPON; Group: WG_THROWN | WG_MARTIAL;
+    Mat: MAT_IRON; Size: SZ_SMALL; Weight: 30; Cost: OPT_COST(90,13) GOLD; 
+    Range: 3; Parry: 1; 
+    SDmg: 1d8; LDmg: 1d6; Acc: 0; Crit: x3; Threat: 2; Spd: 115%;
+    Flags: WT_SLASHING, WT_RETURNING, WT_FUMBLE1, WT_NO_MELEE;
+    Desc: "The chakram is a hollow circular disc with a bladed edge,
+      often with a stylized grip bar running through the center. It
+      is used by certain monk groups, tribes in Ahavdi Dih and many
+      assasins' guilds."; }
+
+Item "boomerang" : T_WEAPON
+  { Image: brown GLYPH_WEAPON; Group: WG_THROWN | WG_EXOTIC;
+    Mat: MAT_WOOD; Size: SZ_SMALL; Weight: 15; Cost: 2 GOLD; 
+    Range: 6; Parry: 0; 
+    SDmg: 1d6; LDmg: 1d4; Acc: +2; Crit: x2; Threat: 2; Spd: 100%;
+    Flags: WT_BLUNT, WT_RETURNING, WT_NO_MELEE;
+    Desc: "The boomerang is a curved wooden throwing instrument
+      designed for blunt impact; the lizardfolk are known to
+      favor their use."; }
+
+Item "sap" : T_WEAPON
+  { Image: brown GLYPH_WEAPON; Group: WG_EXOTIC | WG_SIMPLE | WG_LIGHT;
+    Mat: MAT_WOOD; Size: SZ_TINY; Weight: 20; Cost: OPT_COST(36,6) GOLD; 
+    Parry: 2;
+    SDmg: 1d4; LDmg: 1d2; Acc: -2; Crit: x2; Threat: 1; Spd: 60%;
+    Flags: WT_BLUNT;
+    Desc: "A tiny weighted bag or shaped piece of wood, the sap is
+      intended for attacking from surprise, and has the potential
+      to render a humanoid target unconscious in a single shot.
+      (The victim must make a Fortitude save to resist being knocked
+      out is attacked by surprise or while flat-footed.)";
+    On Event POST(EV_HIT) {
+      int16 SaveDC;
+      if (EVictim->HasMFlag(M_HUMANOID) && EVictim->isMType(MA_NLIVING))
+        if (EActor->WepSkill($"sap") >= WS_PROFICIENT)
+          if ((e.isFlanking || e.isFlatFoot || e.isSurprise) && !e.Died)
+            {
+              SaveDC = 15 + EActor->GetBAB(S_MELEE) + EActor->Mod(A_STR);
+              if (EVictim->SavingThrow(FORT,SaveDC,SA_PARA))
+                return NOTHING;
+              VPrint(e,"The world reels...",
+                       "The <EVictim> collapses unconscious!");
+
+              EVictim->GainTempStati(ASLEEP, NULL,4d8,SS_MISC,SLEEP_DEEP);
+            }
+      return NOTHING;
+      };
+  }
+
+Item "hunga-munga" : T_WEAPON
+  { Image: purple GLYPH_WEAPON; Group: WG_THROWN | WG_MARTIAL; 
+    Mat: MAT_IRON; Size: SZ_MEDIUM; Weight: 60; Cost: OPT_COST(87,10) GOLD; 
+    Range: 2; Parry: 2; 
+    SDmg: 1d10; LDmg: 1d8; Acc: +2; Crit: x2; Threat: 2; Spd: 95%;
+    Flags: WT_SLASHING, WT_PIERCING, WT_STR1;
+    Desc: "This triple-pronged throwing knife resembles a giant
+      shuriken, with parallel blades around a balanced center.
+      It originated in Angla Maua as a hunting weapon, but it has
+      since found popularity with several monkish orders in the
+      Kinlands."; }
+
+Item "siangham" : T_WEAPON
+  { Image: purple GLYPH_WEAPON; Group: WG_MARTIAL | WG_LIGHT;
+    Mat: MAT_IRON; Size: SZ_SMALL; Weight: 10; Cost: OPT_COST(18,6) GOLD; 
+    Parry: +3;
+    SDmg: 1d6; LDmg: 1d4; Acc: +2; Crit: x2; Threat: 1; Spd: 120%;
+    Flags: WT_PIERCING, WT_SUPER_DISARM; }
+
+Item "shuriken" : T_WEAPON
+  { Image: purple GLYPH_WEAPON; Group: WG_THROWN | WG_MARTIAL;
+    Mat: MAT_IRON; Size: SZ_TINY; Weight: 1; Cost: OPT_COST(79,4) GOLD; 
+    Range: 4; Parry: 0; 
+    SDmg: 1d2; LDmg: 1d1; Acc: -1; Crit: x3; Threat: 3; Spd: 175%;
+    Flags: WT_PIERCING, WT_NO_STRENGTH, WT_SUPER_SNEAK, WT_FUMBLE1,
+           IT_BGROUP, WT_NO_MELEE;
+    Desc: "Shuriken, or throwing stars, are tiny, symmetical bladed
+      stars or discs that can be thrown extremely rapidly. Because
+      they are so light, they have little force of impact and do not
+      carry through the power of the thrower's strength; however, they
+      are an ideal method for delivering poison, due to their speed.
+      Shuriken thus have a cultural association with assasins and
+      assasination."; }
+
+Item "tiger claws" : T_WEAPON
+  { Image: purple GLYPH_WEAPON; Group: WG_SIMPLE | WG_MARTIAL | WG_LIGHT;
+    Mat: MAT_IRON; Size: SZ_TINY; Weight: 4; Cost: OPT_COST(26,6) GOLD; 
+    Parry: 1;
+    SDmg: 1d6; LDmg: 1d3; Acc: +1; Crit: x2; Threat: 2; Spd: 120%;
+    Flags: WT_SLASHING, WT_SUPER_SNEAK, IT_PLURAL; 
+    Desc: "Similar in make to contemporary brass knuckles, but
+      with inch-long curved blades sprouting from each 'knuckle',
+      these weapons are favored by theieves and assasins because
+      their small size makes it easy to get them into places
+      where weapons aren't supposed to be."; }
+
+Item "rock" : T_WEAPON
+  { Image: brown '*'; Group: WG_SIMPLE | WG_THROWN; Range: 1;
+    Mat: MAT_GRANITE; Size: SZ_TINY; Weight: 1; Cost: OPT_COST(79,0); Parry: 1; 
+    SDmg: 1d6; LDmg: 1d2; Acc: -1; Crit: x2; Threat: 2; Spd: 90%;
+    Flags: WT_BLUNT, IT_BGROUP;
+    Desc: "A chunk of unworked rock.";
+  }
+
+
+/************************************************************************\
+ *                            RANGED WEAPONS                            *
+\************************************************************************/
+
+
+Item "long bow" : T_BOW
+  {
+    Image: green ')';
+    Mat: MAT_WOOD;
+    SDmg: 1d8;
+    LDmg: 1d4;
+    Range: 10; Speed: 150%;
+    Crit: x3; Threat: 3;
+    Weight: 30; Group: WG_ARCHERY;
+    Fires: $"sheaf arrow", $"flight arrow";
+    Size: SZ_LARGE;
+    Flags: WT_TWO_HANDED, WT_NO_STRENGTH, WT_PIERCING, WT_WOOD_PARTS,
+           WT_NO_MELEE, WT_PIERCING;
+    Desc: "The long bow is favored by elven warriors for its simplicity,
+      power and easy creation. It is also the staple of many of the less
+      funded units of the Great Empire's armies.";/* However, among adventurers
+      and the modern military, its use has largely been superceded by the
+      composite long bow.";*/
+  }
+
+Item "short bow" : T_BOW
+  {
+    Image: green ')';
+    Mat: MAT_WOOD;
+    SDmg: 1d6;
+    LDmg: 1d3;
+    Range: 7; Speed: 165%;
+    Crit: x3; Threat: 3;
+    Weight: 20; Group: WG_ARCHERY;
+    Fires: $"sheaf arrow", $"flight arrow";
+    Size: SZ_MEDIUM;
+    Flags: WT_TWO_HANDED, WT_NO_STRENGTH, WT_NO_MELEE, WT_PIERCING;
+    Desc: "The short bow is lighter and slightly faster then the long bow,
+      but not nearly as powerful. However, its primary advantage is that
+      it is maneuverable enough to use effectively while mounted. It is
+      thus also known as the cavalry bow or horseman's bow.";
+  }
+
+
+Item "sheaf arrow" : T_MISSILE
+  {
+    Image: green GLYPH_ARROW; Group: WG_ARCHERY; 
+    Mat: MAT_WOOD; Size: SZ_SMALL; Weight: 0; Cost: 5 COPPER;
+    SDmg: 0d0+1; LDmg: 0d0+1; Acc: -1; Range: -2;
+    Flags: IT_BGROUP, WT_PIERCING;
+    Desc: "These arrows have sharp, barbed heads. Their range and
+      accuracy is not as good as that of flight arrows, but they
+      increase damage inflicted by +1.";
+  }
+
+Item "flight arrow" : T_MISSILE
+  {
+    Image: green GLYPH_ARROW; Group: WG_ARCHERY; 
+    Mat: MAT_WOOD; Size: SZ_SMALL; Weight: 0; Cost: 3 COPPER;
+    SDmg: 0d0; LDmg: 0d0; Acc: 0; Range: 0;
+    Flags: IT_BGROUP, WT_PIERCING;
+    Desc: "These arrows are longer, thinner and more aerodynamic. 
+      Their range and accuracy is greater than that of a sheaf
+      arrow.";
+  }
+
+Item "arbalest" : T_BOW
+  {
+    Image: green ')'; Group: WG_SIMPLE | WG_ARCHERY; Range: 12;
+    Mat: MAT_WOOD; Size: SZ_MEDIUM; Weight: 20; Cost: 35;
+    SDmg: 1d10; LDmg: 1d4; Acc: +4; Crit: x5; Threat: 3; Spd: 135%;
+    Flags: WT_TWO_HANDED, WT_CROSSBOW, WT_PENETRATING, WT_NO_STRENGTH,
+           WT_NO_MELEE, WT_PIERCING;
+    Fires: $"crossbow bolt";
+    Desc: "The arbalest, or light crossbow, is the favoured weapon of city
+      militia everywhere -- it's accurate, easy to use and among the most
+      lethal weapons known. Skilled adventurers, however, often favour the
+      more conventional bows, because the slow reload time that crossbows
+      have can be a great weakness in a dungeon setting. Dwarves and gnomes
+      tend to favour these weapons, while elves cleave to more traditional
+      archery and look on crossbows with distaste.";
+  }
+
+Item "cranquin" : T_BOW
+  {
+    Image: bright green ')'; Group: WG_EXOTIC; Range: 14;
+    Mat: MAT_WOOD; Size: SZ_MEDIUM; Weight: 40; Cost: 35;
+    SDmg: 1d12; LDmg: 1d8; Acc: +5; Crit: x5; Threat: 3; Spd: 135%;
+    Flags: WT_TWO_HANDED, WT_CROSSBOW, WT_PENETRATING, WT_NO_STRENGTH,
+           WT_NO_MELEE, WT_PIERCING, WT_STUNNING;
+    Fires: $"crossbow bolt";
+    Desc: "The cranquin, or heavy crossbow, is a crank-operated miniature
+      ballista favored by dwarven and orcish militaries. It is rather
+      difficult for a single person to reload, and is a large and awkward
+      weapon in general, which explains why it is considered an exotic
+      weapon. Skilled adventurers often favour the more conventional bows, 
+      because the slow reload time that crossbows have can be a great weakness 
+      in a dungeon setting. Dwarves and gnomes tend to favour these weapons, 
+      while elves cleave to more traditional archery and look on crossbows 
+      with distaste.";
+  }
+
+Item "hand crossbow" : T_BOW
+  {
+    Image: bright purple ')'; Group: WG_EXOTIC; Range: 8;
+    Mat: MAT_MITHRIL; Size: SZ_TINY; Weight: 10; Cost: 1000;
+    SDmg: 1d6; LDmg: 1d3; Acc: +5; Crit: x3; Threat: 3; Spd: 135%;
+    Flags: WT_RACIAL, WT_CROSSBOW, WT_PENETRATING, WT_NO_STRENGTH,
+     WT_WOOD_PARTS, WT_NO_MELEE, WT_PIERCING, WT_SUPER_SNEAK;
+    Fires: $"hand crossbow dart";
+    Desc: "This weapon was created by the drow, and is only superficially
+      similar to the human crossbows. It is an intricate mechanism that
+      projects a tiny metal dart at high speeds; as an assasin's weapon,
+      it lacks the power of normal crossbows, but its bolts are often
+      coated with drow sleep poison. Because it has many precision parts
+      that must stand up under stress, it must be made from mithril,
+      making it a terribly expensive weapon.";
+  }
+
+Item "hand crossbow dart" : T_MISSILE
+  {
+    Image: bright purple GLYPH_ARROW; Group: WG_SIMPLE;
+    Mat: MAT_IRON; Size: SZ_TINY; Weight: 0; Cost: 1 SILVER;
+    SDmg: 0d0; LDmg: 0d0; Acc: 0; Range: 0;
+    Flags: IT_BGROUP, WT_RACIAL, WT_PIERCING, IT_NOGEN;
+    Desc: "This bolt is thin, sharp and not longer then three inches. It
+      is often coated with some type of poison.";
+  }
+
+
+Item "crossbow bolt" : T_MISSILE
+  {
+    Image: green GLYPH_ARROW; Group: WG_SIMPLE;
+    Mat: MAT_IRON; Size: SZ_TINY; Weight: 0; Cost: 1 SILVER;
+    SDmg: 0d0; LDmg: 0d0; Acc: 0; Range: 0;
+    Flags: IT_BGROUP, WT_PIERCING;
+    Desc: "A simple, pointed metal shaft. It can be fired from either a
+      arbalest (light crossbow) or cranquin (heavy crossbow).";
+  }
+
+Item "javelin" : T_WEAPON
+  { Image: green GLYPH_WEAPON; Group: WG_THROWN|WG_SPEARS; Range: 3;
+    Mat: MAT_IRON; Size: SZ_LARGE; Weight: 5; Cost: OPT_COST(80,1) GOLD;
+    SDmg: 1d6; LDmg: 1d6; Acc: -1; Crit: x2; Threat: 2; Spd: 90%;
+    Flags: WT_PIERCING, WT_WOOD_PARTS, WT_NO_MELEE, IT_GROUP;
+    Desc: "The javelin is a light spear designed purely for throwing.
+      It cannot be used effectively as a melee weapon."; }
+
+Item "blowpipe" : T_BOW
+  {
+    Image: green ')';
+    Mat: MAT_WOOD;
+    SDmg: 0d0+3;
+    LDmg: 0d0+3;
+    Range: 5; Speed: 200%; Acc: +2; 
+    Crit: x2; Threat: 2;
+    Weight: 10; Group: WG_ARCHERY;
+    Fires: $"dart";
+    Size: SZ_SMALL;
+    Flags: WT_NO_STRENGTH, WT_PIERCING, WT_WOOD_PARTS, WT_NO_MELEE;
+    Desc: "The blowpipe provides a method of rapidly delivering darts at a
+      longer range. It is favored in Angla Maua, especially in conjunction
+      with poisoned darts, but is often rejected in favor of the bow or
+      arbalest in the rest of Therya.";  
+  }
+
+Item "dart" : T_MISSILE
+  { Image: green GLYPH_ARROW; Group: WG_SIMPLE | WG_THROWN; Range: 2;
+    Mat: MAT_IRON; Size: SZ_TINY; Weight: 0; Cost: 0;
+    SDmg: 1d3; LDmg: 1d4; Acc: 0; Crit: x2; Threat: 2; Spd: 150%;
+    Flags: WT_PIERCING, WT_NO_MELEE, IT_BGROUP;
+    Desc: "The dart is a simple missile weapon. It may be thrown or
+    launched with a blowpipe."; 
+  }
+
+Item "boulder" : T_WEAPON
+  { Image: brown '*'; Group: WG_SIMPLE | WG_THROWN; Range: 2;
+    Mat: MAT_GRANITE; Size: SZ_LARGE; Weight: 4000; 
+    Cost: OPT_COST(77,0); Parry: 1; 
+    SDmg: 2d10; LDmg: 2d8; Acc: 0; Crit: x3; Threat: 2; Spd: 70%;
+    Flags: WT_BLUNT, WT_KNOCKDOWN, WT_STUNNING, WT_STR1, WT_STR2, IT_NOGEN;
+    Desc: "A huge stone boulder.";
+  }
+
+Item "sling" : T_BOW
+  {
+    Image: green ')';
+    Mat: MAT_WOOD;
+    SDmg: 1d6;
+    LDmg: 1d2;
+    Range: 5;
+    Crit: x3; Threat: 1;
+    Weight: 2; Group: WG_THROWN, WG_SIMPLE;
+    Fires: $"sling stone";
+    Size: SZ_SMALL;
+    Flags: WT_STUNNING, WT_SUBDUAL, WT_NO_MELEE;
+    Desc: "Slings are often associated with peasants and halflings,
+      but despite their mundanity they can be deadly weapons in the
+      hands of a crack shooter.";
+  }
+
+Item "sling stone" : T_MISSILE
+  {
+    Image: green '*'; Group: WG_THROWN; 
+    Mat: MAT_GRANITE; Size: SZ_MINISCULE; Weight: 0; Cost: 5 COPPER;
+    Flags: IT_BGROUP;
+    Desc: "This tiny rock has a surprising weight for its size, and
+      has been carefully smoothed down to fly straight.";
+  }
+
+
+/************************************************************************\
+ *                                ARMOR                                 *
+\************************************************************************/
+
+Item "padded armor" : T_ARMOR
+  {
+    Image: white GLYPH_LARMOR; Cost: 5;
+    Mat: MAT_CLOTH; Weight: 100;
+    Arm: Slash 2, Pierce 1, Blunt 3;
+    Coverage: 8; Penalty: -1;
+    Group: WG_LARMOR; Flags: IT_PLURAL;
+  }
+
+Item "cord armor" : T_ARMOR
+  {
+    Image: blue GLYPH_LARMOR; Cost: 7;
+    Mat: MAT_LEATHER; Weight: 120;
+    Arm: Slash 3, Pierce 1, Blunt 2;
+    Coverage: 6; Penalty: -2;
+    Group: WG_LARMOR; Flags: IT_PLURAL;
+  }
+
+Item "bonemail armor" : T_ARMOR
+  {
+    Image: white GLYPH_LARMOR; Cost: 9;
+    Mat: MAT_BONE; Weight: 150;
+    Arm: Slash 3, Pierce 2, Blunt 1;
+    Coverage: 8; Penalty: -1;
+    Group: WG_LARMOR; Flags: IT_PLURAL;
+  }
+
+Item "leather armor" : T_ARMOR
+  {
+    Image: brown GLYPH_LARMOR; Cost: 10;
+    Mat: MAT_LEATHER; Weight: 150;
+    Arm: Slash 3, Pierce 1, Blunt 3;
+    Coverage: 8; Penalty: -2;
+    Group: WG_LARMOR; Flags: IT_PLURAL;
+  }
+
+Item "bark armor" : T_ARMOR
+  {
+    Image: green GLYPH_LARMOR; Cost: 5;
+    Mat: MAT_WOOD; Weight: 150;
+    Arm: Slash 3, Pierce 3, Blunt 3;
+    Coverage: 9; Penalty: -4;
+    Group: WG_LARMOR; Flags: IT_PLURAL;
+  }
+
+Item "studded leather" : T_ARMOR
+  {
+    Image: brown GLYPH_LARMOR; Cost: 25;
+    Mat: MAT_LEATHER; Weight: 200;
+    Arm: Slash 3, Pierce 4, Blunt 4;
+    Coverage: 8; Penalty: -4;
+    Group: WG_LARMOR; Flags: IT_PLURAL;
+  }
+
+Item "coat of plates" : T_ARMOR
+  {
+    Image: cyan GLYPH_LARMOR; Cost: 35;
+    Mat: MAT_IRON; Weight: 250;
+    Arm: Slash 5, Pierce 2, Blunt 2;
+    Coverage: 7; Penalty: -1;
+    Group: WG_LARMOR;
+  }
+
+Item "chainmail shirt" : T_ARMOR
+  {
+    Image: cyan GLYPH_LARMOR; Cost: 100;
+    Mat: MAT_IRON; Weight: 250;
+    Arm: Slash 7, Pierce 5, Blunt 3;
+    Coverage: 5; Penalty: -5;
+    Group: WG_LARMOR; 
+  }
+
+Item "hide armor" : T_ARMOR
+  {
+    Image: blue GLYPH_MARMOR; Cost: 15;
+    Mat: MAT_LEATHER; Weight: 250;
+    Arm: Slash 4, Pierce 5, Blunt 5;
+    Coverage: 8; Penalty: -5;
+    Group: WG_MARMOR; Flags: IT_PLURAL;
+  }
+
+Item "ring mail" : T_ARMOR
+  {
+    Image: red GLYPH_MARMOR; Cost: 40;
+    Mat: MAT_IRON; Weight: 250;
+    Arm: Slash 4, Pierce 4, Blunt 2;
+    Coverage: 9; Penalty: -3;
+    Group: WG_MARMOR; Flags: IT_PLURAL;
+  }
+
+Item "scale mail" : T_ARMOR
+  {
+    Image: red GLYPH_MARMOR; Cost: 50;
+    Mat: MAT_IRON; Weight: 300;
+    Arm: Slash 4, Pierce 5, Blunt 4;
+    Coverage: 10; Penalty: -4;
+    Group: WG_MARMOR; Flags: IT_PLURAL;
+  }
+
+Item "brigandine" : T_ARMOR
+  {
+    Image: red GLYPH_MARMOR; Cost: 60;
+    Mat: MAT_IRON; Weight: 300;
+    Arm: Slash 5, Pierce 5, Blunt 3;
+    Coverage: 10; Penalty: -6;
+    Group: WG_MARMOR; Flags: IT_PLURAL;
+  }
+
+Item "chainmail" : T_ARMOR
+  {
+    Image: cyan GLYPH_MARMOR; Cost: 150;
+    Mat: MAT_IRON; Weight: 400;
+    Arm: Slash 7, Pierce 5, Blunt 3;
+    Coverage: 10; Penalty: -7;
+    Group: WG_MARMOR; Flags: IT_PLURAL;
+  }
+
+Item "chainmail hauberk" : T_ARMOR
+  {
+    Image: cyan GLYPH_MARMOR; Cost: 125;
+    Mat: MAT_IRON; Weight: 400;
+    Arm: Slash 7, Pierce 5, Blunt 3;
+    Coverage: 7; Penalty: -3;
+    Group: WG_MARMOR;
+  }
+
+
+Item "breastplate" : T_ARMOR
+  {
+    Image: purple GLYPH_MARMOR; Cost: 200;
+    Mat: MAT_IRON; Weight: 300;
+    Arm: Slash 12, Pierce 8, Blunt 6;
+    Coverage: 5; Penalty: -6;
+    Group: WG_MARMOR;
+  }
+
+Item "augmented mail" : T_ARMOR
+  {
+    Image: red GLYPH_MARMOR; Cost: 250;
+    Mat: MAT_IRON; Weight: 500;
+    Arm: Slash 9, Pierce 6, Blunt 5;
+    Coverage: 10; Penalty: -6;
+    Group: WG_MARMOR; Flags: IT_PLURAL;
+  }                         
+
+/* Double Mail */
+
+Item "splint mail" : T_ARMOR
+  {
+    Image: red GLYPH_HARMOR; Cost: 200;
+    Mat: MAT_IRON; Weight: 450;
+    Arm: Slash 6, Pierce 7, Blunt 9;
+    Coverage: 10; Penalty: -7;
+    Group: WG_HARMOR; Flags: IT_PLURAL;
+  }
+
+Item "banded mail" : T_ARMOR
+  {
+    Image: red GLYPH_HARMOR; Cost: 200;
+    Mat: MAT_IRON; Weight: 350;
+    Arm: Slash 11, Pierce 7, Blunt 9;
+    Coverage: 10; Penalty: -8;
+    Group: WG_HARMOR; Flags: IT_PLURAL;
+  }
+
+Item "plate mail" : T_ARMOR
+  {
+    Image: purple GLYPH_HARMOR; Cost: 600;
+    Level: 3; 
+    Mat: MAT_IRON; Weight: 450;
+    Arm: Slash 12, Pierce 8, Blunt 8;
+    Coverage: 10; Penalty: -7;
+    Group: WG_HARMOR; Flags: IT_PLURAL;
+  }
+
+Item "field plate armor" : T_ARMOR
+  {
+    Level: 4; 
+    Image: bright purple GLYPH_HARMOR; Cost: 1500;
+    Mat: MAT_IRON; Weight: 500;
+    Arm: Slash 13, Pierce 9, Blunt 8;
+    Coverage: 10; Penalty: -9;
+    Group: WG_HARMOR; Flags: IT_PLURAL;
+  }
+
+Item "full plate armor" : T_ARMOR
+  {
+    Level: 5; 
+    Image: bright purple GLYPH_HARMOR; Cost: 5000;
+    Mat: MAT_IRON; Weight: 600;
+    Arm: Slash 15, Pierce 13, Blunt 8;
+    Coverage: 10; Penalty: -8;
+    Group: WG_HARMOR; Flags: IT_PLURAL;
+  }
+
+Item "lamellar armor" : T_ARMOR
+  {
+    Image: brown ']';
+    Mat: MAT_IRON; Weight: 250;
+    Arm: Slash 5, Pierce 6, Blunt 7;
+    Coverage: 10; Penalty: -6;
+    Group: WG_HARMOR; Flags: IT_PLURAL;
+  }
+
+Item "hard steel cap" : T_HELMET
+  {
+    Image: yellow GLYPH_HELMET;
+    Mat: MAT_IRON; Weight: 30;
+    Coverage: 2; Penalty: -2;
+    Group: WG_MARMOR;
+  }
+
+Item "cured leather boots" : T_BOOTS
+  {
+    Image: white GLYPH_BOOTS;
+    Mat: MAT_LEATHER; Weight: 10;
+    Coverage: 1; Group: WG_LARMOR;
+    Flags: IT_PLURAL;
+  }
+
+// WW: A shield's cover and defense depend on its size relative to you. 
+// A human with a medium shield and a halfling with a small shield get the
+// same benefit. 
+// 
+// A shield one size larger than you are (e.g., a human with
+// a tower shield) provides portable cover. 
+
+/* Shield is X Bigger:          +10 +8  (and cover)
+ * Shield is 0 Bigger:          +8  +6
+ * Shield is 1 Smaller:         +4  +4
+ * Shield is 2 Smaller:         +2  +2
+ * Shiels is X Smaller:         +1  +1
+ */
+
+Item "giant shield" : T_SHIELD
+  {
+    Image: pink ']'; Group: WG_SHIELDS | WG_EXOTIC;
+    Mat: MAT_IRON; Weight: 1000; Size: SZ_HUGE;
+    Flags: IT_NOGEN; 
+    Desc: "This huge shield is essentially a tower shield for giantkin. 
+      Human-sized creatures cannot hope to wield it effectively.
+      Its surface is often 
+      emblazoned with a knight's crest or a god's holy symbol.";
+  }
+
+Item "tower shield" : T_SHIELD
+  { 
+    Image: red ']'; Mat: MAT_IRON; Weight: 400; Size: SZ_LARGE;
+    Group: WG_SHIELDS;
+    Desc: "This large shield is essentially portable hard cover for
+      human-sized creatures. It is large enough to fully obscure a
+      human-sized being and completely negate many attacks, but its size
+      can be quite a burden.
+      Its surface is often 
+      emblazoned with a knight's crest or a god's holy symbol.";
+  }
+
+Item "kite shield" : T_SHIELD
+  { 
+    Image: cyan ']'; 
+    Mat: MAT_IRON; Weight: 150; Size: SZ_MEDIUM;
+    Group: WG_SHIELDS; 
+    Desc: "The kite shield is what most people envision when
+      they think of a medieval knight's shield: a large square
+      that slopes to a point at the bottom, about three feet
+      long and a foot and a half wide. 
+      Its surface is often 
+      emblazoned with a knight's crest or a god's holy symbol.";
+  }
+
+Item "small shield" : T_SHIELD
+  { 
+    Image: white ']'; 
+    Mat: MAT_IRON; Weight: 50; Size: SZ_SMALL; 
+    Group: WG_SHIELDS;
+    Desc: "The common small shield is larger than a buckler but
+           smaller than a kite shield. 
+      Its surface is often 
+      emblazoned with a knight's crest or a god's holy symbol.";
+  }
+
+Item "buckler;leather" : T_SHIELD
+  { 
+    Image: brown ']'; 
+    Mat: MAT_LEATHER; Weight: 5; Size: SZ_TINY;
+    Group: WG_SHIELDS|WG_SIMPLE;
+    Desc: "The buckler is the smallest possible shield, and is
+      usually worn strapped to one arm. It's only about a foot
+      in diameter, and is made of wood or cured leather.
+      Its surface is often 
+      emblazoned with a knight's crest or a god's holy symbol.";
+  }
+
+Item "buckler;wooden" : T_SHIELD
+  { 
+    Image: green ']'; 
+    Mat: MAT_WOOD; Weight: 5; Size: SZ_TINY;
+    Group: WG_SHIELDS|WG_SIMPLE;
+    Desc: "The buckler is the smallest possible shield, and is
+      usually worn strapped to one arm. It's only about a foot
+      in diameter, and is made of wood or cured leather.
+      Its surface is often 
+      emblazoned with a knight's crest or a god's holy symbol.";
+  }
+  

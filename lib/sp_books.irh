@@ -1,0 +1,546 @@
+#ifdef WEIMER
+/* Wes' Standardized Spellbooks */
+#include "westley.irh"
+
+#else
+
+Item "blank spellbook" : T_BOOK
+  {
+    Image: red GLYPH_BOOK;
+    Mat:MAT_PAPER; Level: 0;
+    Weight: 40; Flags: IT_NOGEN;
+  }
+
+Item "spellbook [Fundamentals of Magick]" : T_BOOK
+  {
+    Image: bright red GLYPH_BOOK;
+    Mat:MAT_PAPER; Level: 0;
+    Weight: 40;
+    Spells: $"Magic Missile", $"Monster Summoning I", /*$"Unseen Servant",*/
+      $"Wizard Lock", $"Levitation", $"Identify", $"Dispel Magic",
+      $"Phase Door", $"Read Magic", $"Copy";
+    On Event MSG_STATINAME "FundMagick";
+  }
+
+Item "spellbook [Adventurers' Arts]" : T_BOOK
+  {
+    Image: bright red GLYPH_BOOK;
+    Mat:MAT_PAPER; Level: 0;
+    Weight: 40;
+    Spells: $"Magic Missile", $"Expeditious Retreat", $"Alarm",
+      $"Mage Armor", $"Resist Fire", $"Detect Monsters", $"Mount",
+      $"Phase Door", $"Infravision", $"Resist Water", $"Jump;spell",
+      $"spider climb", $"Passwall", $"Knock", $"mending", $"shield",
+      $"see invisibility", $"floating disc", $"minor light";
+    On Event MSG_STATINAME "AdventArts";
+  }
+
+Item "spellbook [Mystic Aegis]" : T_BOOK
+  {
+    Image: bright blue GLYPH_BOOK;
+    Mat:MAT_PAPER; Level: 0;
+    Weight: 40;
+    Spells:  $"erase", $"feather fall", $"Endure Fire", $"Endure Cold", $"Endure Lightning",
+      $"Protection from Evil", $"Mage Armor", $"Shield", $"Gaze Reflection", 
+      $"Protection from Arrows", $"Protection from Undead", $"Spiritwrack",
+      $"Iron Mind", $"Resist Fire", $"Resist Acid";
+    On Event MSG_STATINAME "MystAegis";
+  }
+
+Item "spellbook [Tome of Magic]" : T_BOOK
+  {
+    Image: bright blue GLYPH_BOOK;
+    Mat:MAT_PAPER; Level: 0;
+    Weight: 40;
+    Spells: $"dancing lights", $"Grease", $"Knock", /*$"Unseen Servant",*/
+      $"Wall of Fog", $"Wizard Lock", $"Glitterdust", $"Web", $"Passwall", 
+      $"Wind Wall", $"Mending", $"animate rope", $"nystrom's magical aura";
+    On Event MSG_STATINAME "TomeMagic";
+  }
+
+Item "spellbook [Practical Divinings]" : T_BOOK
+  {
+    Image: bright blue GLYPH_BOOK;
+    Mat:MAT_PAPER; Level: 0;
+    Weight: 40;
+    Spells: $"detect monsters", $"detect stairs", $"know alignment",
+      $"true strike", $"see invisibility", $"arrow mind", $"detect undead",
+      $"detect objects", $"detect secret doors", $"anyspell", $"daggerspell";
+    On Event MSG_STATINAME "PracDiv";
+  }
+
+Item "spellbook [Book of Glamour]" : T_BOOK
+  {
+    Image: bright green GLYPH_BOOK;
+    Mat:MAT_PAPER; Level: 0;
+    Weight: 40;
+    Spells: $"cause fear", $"charm person", $"friends", $"sleep",
+      $"magic weapon", $"convulsion", $"hypnotism", $"suggestion", 
+      $"enthrall", $"dire charm", $"invisibility", $"spook",
+      $"nystrom's magical aura", $"eagle's splendour";
+    On Event MSG_STATINAME "BookGlamour";
+  }
+
+Item "spellbook [Energy Magicks]" : T_BOOK
+  {
+    Image: bright red GLYPH_BOOK;
+    Mat:MAT_PAPER; Level: 0;
+    Weight: 40;
+    Spells: $"force bolt", $"magic missile", $"shield", $"shocking grasp",
+      $"burning hands", $"endure fire", $"resist lightning", $"scorcher";
+    On Event MSG_STATINAME "EnergyMag";
+  }
+    
+Item "spellbook [Magician's Manual]" : T_BOOK
+  {
+    Image: bright red GLYPH_BOOK;
+    Mat:MAT_PAPER; Level: 0;
+    Weight: 40;
+    Spells: $"Phantasmal Force", $"Color Spray", $"Chromatic Orb",
+      $"change self", $"dancing lights", $"invisibility", 
+      $"Spook", $"Reduce", $"Invisibility", $"Hypnotic Pattern",
+      $"globe of shadow", $"phase door", $"ventriloquism",
+      $"mirror image", $"pyrotechnics", $"animate rope";
+    On Event MSG_STATINAME "MagManual";
+  }
+
+Item "spellbook [Ars Mortis]" : T_BOOK
+  {
+    Image: grey GLYPH_BOOK;
+    Mat:MAT_PAPER; Level: 0;
+    Weight: 40;
+    /* Note that False Life is not here for a reason! Necromancers should
+       not encourage the same play style as thaumaturges in the very early
+       game. */
+    Spells: $"chill touch", $"halt undead", $"rigor mortis", $"detect undead",
+      $"protection from undead", $"bladethirst", $"ghoul touch", $"visage of death",
+      $"animate dead", $"magic circle vs. undead", $"scare", $"minor drain",
+      $"spectral hand";
+    On Event MSG_STATINAME "ArsMortis";
+  }
+
+Item "spellbook [Mortal Coil]" : T_BOOK
+  {
+    Image: red GLYPH_BOOK;
+    Mat:MAT_PAPER; Level: 0;
+    Weight: 40;
+    Spells: $"enlarge", $"reduce", $"expeditious retreat", $"slow",
+            $"bull's strength", $"cat's grace", $"bear's endurance",
+            $"false life", $"convulsion", $"jump;spell", $"magic weapon",
+            $"bladethirst"; 
+    On Event MSG_STATINAME "MortalCoil";
+  }
+    
+Item "spellbook [Place and Time]" : T_BOOK
+  {
+    Image: purple GLYPH_BOOK;
+    Mat:MAT_PAPER; Level: 0;
+    Weight: 40;
+    Spells: $"alarm", $"phase door", $"rope trick", $"spiritwrack", $"monster summoning II",
+      $"blink", $"dimension door", $"haste", $"slow", $"displacement",
+      $"distance distortion", $"passwall", $"call companions", $"transposition",
+      $"rope trick", $"mana theft", $"apportation";
+    On Event MSG_STATINAME "PlaceTime";
+  }
+
+Item "spellbook [Venom and Curses]" : T_BOOK
+  {
+    Image: red GLYPH_BOOK;
+    Mat:MAT_PAPER; Level: 0;
+    Weight: 40; Level: 4;
+    Spells: $"contagion", $"slow", $"choke", $"hideous laughter",
+      $"dire charm", $"polymorph other", $"summon swarm",
+      $"sleep", $"phantasmal killer", $"stinking cloud",
+      $"confusion", $"minor malison", $"scare",
+      $"baleful polymorph", $"mana theft";
+    On Event MSG_STATINAME "Venom&Curses";
+  }
+
+Item "spellbook [Ars Bellicus]" : T_BOOK
+  {            
+    Image: pink GLYPH_BOOK;
+    Mat:MAT_PAPER; Level: 0;
+    Weight: 40; Level: 5;
+    Spells: $"expeditious retreat", $"wall of fog", $"shield",
+      $"bull's strength", $"cat's grace", $"spirit armor", $"keen edge",
+      $"lightning bolt", $"blackmantle", $"haste", $"decastave",
+      $"protection from arrows", $"phantom steed", $"magic weapon",
+      $"greater magic weapon";
+    On Event MSG_STATINAME "ArsBell";
+  }
+
+Item "spellbook [Elemental Covenant]" : T_BOOK
+  {
+    Image: bright green GLYPH_BOOK;
+    Mat:MAT_PAPER; Level: 0;
+    Weight: 40; Level: 5;
+    Spells: $"burning hands", $"shocking grasp", $"endure cold",
+      $"resist lightning", $"resist fire", $"protection from fire",
+      $"protection from cold", $"scorcher", $"gust of wind",
+      $"fireball", $"lightning bolt", $"ice storm", $"fire shield",
+      $"wall of fire", $"wall of ice", $"gaseous form", $"tremor",
+      $"transmute rock to mud", $"stoneskin";
+    On Event MSG_STATINAME "ElemCov";
+  }
+
+Item "spellbook [Libram of Silver Magic]" : T_BOOK
+  {
+    Image: white GLYPH_BOOK;
+    Mat:MAT_PAPER; Level: 0;
+    Weight: 40; Level: 4;
+    Spells: $"protection from evil", $"protection from undead",
+      $"magic circle vs. evil", $"wandwierd", $"dismissal", $"blur",
+      $"dimension door", $"clairvoyance", $"magic mapping",
+      $"levitation", $"hold person", $"ESP", $"mooncloak",
+      $"minor globe of invulnerability", $"premonition",
+      $"magic circle vs. undead", $"deep slumber", $"abjure";
+    On Event MSG_STATINAME "SilverMag";
+  }
+  
+Item "spellbook [Secrets of Abjuration]" : T_BOOK
+  {
+    Image: yellow GLYPH_BOOK; Weight: 40; 
+    Mat: MAT_PAPER; Level: 5;
+    Desc: "This unusual spellbook has utility only to Abjurers -- no
+      other mage can make use of the spells contained within. It holds
+      a small collection of (normally) divine castings that Abjurers
+      are able to make use of as if it were arcane magic.";
+    Spells: $"sanctuary", $"detect evil", $"shield other", 
+      $"glyph of warding", $"remove curse", $"negative plane protection",
+      $"death ward", $"free action;spell", $"spell immunity", $"magic resistance", 
+      $"dispel evil", $"antilife shell", $"glyph of warding, greater";
+  }
+
+    
+
+Item "spellbook [Conjurations and Summonings]" : T_BOOK
+  {
+    Image: brown GLYPH_BOOK;
+    Mat:MAT_PAPER; Level: 0;
+    Weight: 40; Level: 2;
+    Spells: $"Monster Summoning I", $"Monster Summoning II",
+      $"Monster Summoning III", $"Monster Summoning IV",
+      $"monster Summoning V", $"Monster Summoning VI", $"conjure vortex",
+      $"Magic Circle vs. Evil", $"Dismissal", $"Explosive Runes",
+      $"Force Shapechange", $"phantasmal force", $"spectral force",
+      $"vitriolic sphere", $"track monster", $"evard's black tentacles",
+      $"lesser planar conjuration", $"abjure";
+    On Event MSG_STATINAME "ConSumm";
+  }
+  
+Item "spellbook [Artificer's Handbook]" : T_BOOK
+  {
+    Image: yellow GLYPH_BOOK;
+    Mat:MAT_PAPER; 
+    Weight: 40; Level: 3;
+    Spells: $"Alisdair's Fundamental Breakdown", $"Minor Creation",
+      $"Major Creation", $"Wall of Stone", $"Keen Edge", $"Lorecall",
+      $"Spirit Armor", $"Skull Trap", $"Apportation", $"force missiles",
+      $"shield", $"mending", $"fabricate", $"magic weapon",
+      $"greater magic weapon";
+    On Event MSG_STATINAME "Artificer's" / "AH";
+  }
+
+Item "spellbook [Tricks and Traps]" : T_BOOK
+  {
+    Image: brown GLYPH_BOOK;
+    Mat:MAT_PAPER; Weight: 40; Level: 4;
+    Spells: $"chromatic orb", $"shocking grasp", $"feather fall",
+      $"charm person", $"friends", $"charm monster", $"displacement",
+      $"vampiric touch", $"polymorph self", $"explosive runes", 
+      $"minor globe of invulnerability", $"track monster", $"fly",
+      $"force shapechange", $"charm monster", $"improved invisibility",
+      $"enervation", $"shout", $"mirror image", $"wall of doors",
+      $"pyrotechnics", $"sign of discord", $"adamant facade",
+      $"aura of abjuration", $"steal magic";
+    On Event MSG_STATINAME "Trick&Trap";
+  }
+
+Item "spellbook [Magnus Ollam]" : T_BOOK
+  {
+    Image: pink GLYPH_BOOK;
+    Mat:MAT_PAPER; Level: 1;
+    Weight: 40; Level: 4;
+    Spells: $"endure sound", $"resist sound", $"protection from sound",
+            $"shatter", $"shout", $"emotion", $"heroism", $"hideous laughter",
+            $"hypnotism", $"thunderlance", $"deep slumber", $"lorecall",
+            $"insightful stroke", $"immortal grandeur";
+    On Event MSG_STATINAME "MagOll";  }
+
+Item "spellbook [Lore of Murder I]" : T_BOOK
+  {
+    Image: grey GLYPH_BOOK;
+    Mat:MAT_PAPER; 
+    Weight: 40; Level: 3;
+    Spells: $"change self", $"convulsion", $"expeditious retreat", $"magic weapon",
+      $"obscurement", $"passwall", $"read magic", $"shield", $"sleep", 
+      $"spider climb", $"true strike", $"ventriloquism", $"choke", $"ESP",
+      $"globe of shadow", $"hypnotic pattern", $"infravision", $"invisibility",
+      $"pass without trace", $"levitation", $"bladethirst", $"rope trick", 
+      $"web";
+    On Event MSG_STATINAME "Murder2";
+  }
+
+Item "spellbook [Lore of Murder II]" : T_BOOK
+  {
+    Image: grey GLYPH_BOOK;
+    Mat:MAT_PAPER; 
+    Weight: 40; Level: 7;
+    Spells: $"deeper darkness", $"nondetection", $"displacement",
+      $"animate shadows", $"illusory stance", $"blink", $"clairvoyance",
+      $"deep slumber", $"gaseous form", $"greater magic weapon",
+      $"improved invisibility", $"free action;spell", $"phantasmal killer",
+      $"enervation", $"premonition", $"track monster", $"dream",
+      $"lower resistance", $"misdirection", $"power word: stop",
+      $"cloudkill", $"telekinesis", $"wizard sight", $"disintegrate",
+      $"power word: stun"; 
+    On Event MSG_STATINAME "Murder2";  }
+  
+  
+Item "spellbook [Twin Axis Defense Sutra]" : T_BOOK
+  {
+    Image: white GLYPH_BOOK; Level: 3;
+    Mat: MAT_PAPER; Weight: 40; 
+    Spells: $"protection from good", $"protection from evil",
+            $"protection from law", $"protection from chaos",
+            $"magic circle vs. good", $"magic circle vs. evil",
+            $"magic circle vs. law", $"magic circle vs. chaos",
+            $"know alignment";
+    On Event MSG_STATINAME "TwinAxis";
+  }
+
+Item "spellbook [Book of Shadows]" : T_BOOK
+  {
+    Image: white GLYPH_BOOK; Level: 2;
+    Mat: MAT_PAPER; Weight: 40; 
+    Spells: $"charm person", $"globe of shadow", $"resist cold",
+            $"change self", $"friends", $"magic weapon", $"minor drain",
+            $"sleep", $"phantasmal force", $"wall of fog", $"blur",
+            $"ESP", $"False Life", $"hypnotism", $"bladethirst",
+            $"make whole", $"ray of enfeeblement", $"touch of idiocy",
+            $"gaseous form", $"nondetection", $"ethereal blade";
+    On Event MSG_STATINAME "BookShadows";
+
+  }
+
+Item "spellbook [Heart of Flame]" : T_BOOK
+  {
+    Image: red GLYPH_BOOK; Level: 4;
+    Mat: MAT_PAPER; Weight: 40; 
+    Spells: $"burning hands", $"endure fire", $"minor light",
+            $"flame blade", $"flaming sphere", $"resist fire",
+            $"scorcher", $"fireball", $"flame arrow", $"pyrotechnics",
+            $"mystic lantern", $"burning blood", $"fire shield",
+            $"fire lotus", $"protection from fire", $"wall of fire",
+            $"fire charm";
+    On Event MSG_STATINAME "HeartFlame";
+  }
+  
+Item "spellbook [Shadowcraft]" : T_BOOK
+  {
+    Image: black GLYPH_BOOK; Level: 6;
+    Mat: MAT_PAPER; Weight: 40; 
+    Spells: $"shadow monsters", $"demi-shadow monsters", $"shades",
+            $"shadow magic", $"demi-shadow magic", $"summon shadows",
+            $"globe of shadow", $"deeper darkness", $"spook",
+            $"eldritch bolt", $"phantom steed", $"disintegrate",
+            $"demi-shadow monsters", $"demi-shadow magic";
+    On Event MSG_STATINAME "Shadow";
+  }
+            
+Item "spellbook [Lordship over Air]" : T_BOOK
+  {
+    Image: white GLYPH_BOOK; Level: 4;
+    Mat: MAT_PAPER; Weight: 40; 
+    Spells: $"feather fall", $"jump;spell", $"obscurement",
+            $"wall of fog", $"ventriloquism", $"blur",
+            $"choke", $"stinking cloud", $"cloudkill",
+            $"glitterdust", $"levitation", $"fly",
+            $"gaseous form", $"wind wall", $"gust of wind",
+            $"lightning bolt", $"electric loop", $"thunderlance",
+            $"solid fog", $"shocking grasp", $"floating disc";
+    On Event MSG_STATINAME "LordAir";
+  } 
+
+Item "spellbook [Water Authority]" : T_BOOK
+  {
+    Image: blue GLYPH_BOOK; Level: 4;
+    Mat: MAT_PAPER; Weight: 40; 
+    Spells: $"obscurement", $"wall of fog", $"stinking cloud", 
+            $"cloudkill", $"chill touch", $"endure cold",
+            $"resist cold", $"protection from cold", $"grease",
+            $"endure acid", $"resist acid", $"protection from acid",
+            $"acid arrow", $"icelance", $"ice storm", $"wall of ice", 
+            $"solid fog", $"cone of cold", $"transmute rock to mud", 
+            $"water walking", $"watery double";
+    On Event MSG_STATINAME "WaterAuth";
+  } 
+
+Item "spellbook [Earthsong]" : T_BOOK
+  {
+    Image: brown GLYPH_BOOK; Level: 4;
+    Mat: MAT_PAPER; Weight: 40; 
+    Spells: $"magic weapon", $"bull's strength", $"bear's endurance",
+            $"passwall", $"shatter", $"explosive runes", $"bladethirst",
+            $"greater magic weapon", $"stoneskin", $"wall of stone",
+            $"transmute rock to mud";
+    On Event MSG_STATINAME "EarthSong";
+  } 
+
+Item "spellbook [Celestial Lion Sutra]" : T_BOOK
+  {
+    Image: yellow GLYPH_BOOK; Level: 6;
+    Mat: MAT_PAPER; Weight: 40;
+    Spells: $"bull's strength", $"cat's grace", $"bear's endurance",
+            $"protection from evil", $"dispel magic", $"shout",
+            $"scorcher", $"lightning bolt", $"tremor", $"flame blade",
+            $"crushing despair", $"keen edge", $"force bolt", $"ethereal blade",
+            $"banishment", $"shield", $"lightning bolt", $"fire lotus",
+            $"spirit armor", $"enlarge",  $"hold person",
+            $"open the third eye", $"lower resistance", $"adamant facade",
+            $"aura of abjuration", $"undeath to death";
+    On Event MSG_STATINAME "CelLion";
+  } 
+  
+Item "spellbook [Crystal Mind]" : T_BOOK
+  {
+    Image: bright cyan GLYPH_BOOK; Level: 6;
+    Mat: MAT_PAPER; Weight: 40;
+    Spells: $"copy", $"detect secret doors", $"detect magic", 
+            $"read magic", $"iron mind", $"Telekinesis", $"apportation",
+            $"ESP", $"Mord's Lucubration", $"dominate person",
+            $"Revealed Lore", $"Wizard Sight", $"warning",
+            $"insightful stroke", $"anyspell", $"true seeing";
+    On Event MSG_STATINAME "CrysMind";
+  }
+  
+Item "spellbook [Elemental Endurance]" : T_BOOK
+  {
+    Image: bright red GLYPH_BOOK; Level: 6;
+    Mat: MAT_PAPER; Weight: 40;
+    Spells: $"endure the elements", $"resist the elements",
+            $"protection from elements", $"energy buffer",
+            $"protection from lightning", $"resist water",
+            $"resist sound";
+    On Event MSG_STATINAME "ElemEndur";
+  }
+
+Item "spellbook [Words of Power]" : T_BOOK
+  {
+    Image: white GLYPH_BOOK; Level: 7;
+    Mat: MAT_PAPER; Weight: 40;
+    Spells: $"Read Magic", $"Detect Magic", $"Revealed Lore",
+            $"anyspell",
+            $"Power Word: Stop", $"Power Word: Stun",
+            $"lesser symbol", ;
+         /* $"Power Word: Blind", $"Power Word: Kill" */
+    On Event MSG_STATINAME "WordsPow" / "WoP";
+  }
+
+Item "spellbook [Grey Ashes Manuscript]" : T_BOOK
+  {
+    Image: grey GLYPH_BOOK; Level: 4;
+    Mat: MAT_PAPER; Weight: 40;
+    Spells: $"crushing despair", $"shatter", $"cause fear", $"minor drain",
+            $"major drain", $"waves of weariness", $"lesser symbol", 
+            $"eldritch bolt", $"rigor mortis", /*erase,*/ $"cloudkill",
+            $"choke", $"visage of death", $"vitriolic sphere", $"nightmare;spell",
+            $"ghoul touch", $"bull's strength", $"spirit net", $"nemesis spell",
+            $"evard's black tentacles", $"disintegrate", $"Steal Magic";
+    On Event MSG_STATINAME "GreyAsh";
+  } 
+  
+Item "spellbook [Tome of Storms]" : T_BOOK
+  {
+    Image: yellow GLYPH_BOOK; Level: 5;
+    Mat: MAT_PAPER; Weight: 40;
+    Spells: $"Lightning Bolt", $"Gust of Wind", $"Protection from Lightning",
+            $"Fly", $"Ice Storm", $"Force Missiles", $"Chain Lightning", 
+            $"Cone of Cold", $"Shatter", $"electric loop",
+            $"thunderlance", $"chill shield";
+    On Event MSG_STATINAME "TStorms";
+  }
+  
+/* Mostly Not Implemented Yet */
+Item "spellbook [Smoke and Mirrors]" : T_BOOK
+  { 
+    Image: cyan GLYPH_BOOK; Level: 5;
+    Mat: MAT_PAPER; Weight: 40; Flags: IT_NOGEN;
+    Spells: $"Phantasmal Force", $"Improved Phantasmal Force",
+            $"Spectral Force", $"Improved Spectral Force",
+            $"Advanced Illusion", $"Persistant Illusion",
+            $"Color Burst", $"Illusory Stance", $"Misdirection",
+            $"Phantasmagoria", $"Hallucinatory Terrain",
+            $"Mirage Arcana", $"mana theft", $"etherealness";
+  }
+  
+Item "spellbook [Evelyn's Tactical Codex]" : T_BOOK
+  {
+    Image: bright red GLYPH_BOOK; Level: 6;
+    Mat: MAT_PAPER; Weight: 40;
+    Spells: $"Lightning Bolt", $"Deeper Darkness", $"Phantom Steed",
+            $"Tevlar's Transformation", $"lower resistance",
+            $"Hold Monster", $"fear", $"group invisibility",
+            $"animate dead", $"dimensional anchor", $"teleport",
+            $"hold monster", $"fireball", $"premonition",
+            $"insightful stroke", $"aura of abjuration",
+            $"true seeing", $"shift level", $"ethereal jaunt";
+    On Event MSG_STATINAME "ETCodex";
+  }
+  
+Item "spellbook [Planar Bindings]" : T_BOOK
+  {
+    Image: bright blue GLYPH_BOOK; Level: 6;
+    Mat: MAT_PAPER; Weight: 40;
+    Spells: $"Lesser Planar Conjuration", 
+            $"Conjure Earth Elemental", $"Lower Resistance", 
+            $"Spiritwrack", 
+            $"Protection from Evil", 
+            $"Create Spectral Undead",
+            $"Fiendform";
+            
+            /*$"Binding", $"Gate"*/
+            /*$"Ritual Magic",*/ 
+            /*$"Cacodemon",*/
+            /*$"Planar Conjuration",*/
+  }
+
+Item "spellbook [Mastery over Death]" : T_BOOK
+  { Image: black GLYPH_BOOK;
+    Mat:MAT_PAPER; Weight: 20; Level: 5;
+    Spells: $"protection from undead", $"blackmantle", $"revenance",
+      $"animate dead", $"burning blood", $"summon shadows",
+      $"skeletal spikes", $"skull trap", $"create corporeal undead",
+      $"create spectral undead", $"necrosynthesis";
+    On Event MSG_STATINAME "MasDeath";
+  }
+  
+Item "spellbook [Gift of Death]" : T_BOOK
+  {
+    Image: black GLYPH_BOOK;
+    Mat:MAT_PAPER; Weight: 20; Level: 5;
+    Spells: $"thornwrack", $"disintegrate", $"aura of death", $"contagion",
+            $"convulsion", $"phantasmal killer", $"spirit net";
+    On Event MSG_STATINAME "GiftDeath";
+  }
+
+Item "spellbook [Crimson Rites]" : T_BOOK
+  {
+    Image: bright shadow GLYPH_BOOK;
+    Mat:MAT_PAPER; Level: 5;
+    Flags: IT_NOGEN;
+    Weight: 20;
+    Spells: 
+      $"chill blood",
+      $"sanguine touch",
+      $"detect blood",
+      $"Bladethirst",
+      $"caustic vitae",
+      $"burning blood",
+      $"infernal blood";
+    Desc: "This rare spellbook is strongly associated with the Black Orcs
+    and their arcane blood rituals."; 
+  }
+
+
+#endif

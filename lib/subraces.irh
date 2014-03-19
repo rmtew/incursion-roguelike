@@ -1,0 +1,858 @@
+#if 0
+
+/***********************************************************************
+ *                              DEEP GNOMES
+ ***********************************************************************/
+
+Monster "gnome, deep;temp" : MA_ADVENTURER
+{                        
+    Image: pink GLYPH_PLAYER; Size: SZ_SMALL; Mana: 10;
+    CR: 0; HD: 1; Hit: +0; Def: 14; Mov: 75%; Speed: 100%;
+    Attk: A_PUNC for 1d2 AD_BLUNT;
+
+	ABILITY(CA_INFRAVISION,12);
+	RACIAL_SKILL(SK_CRAFT,2);
+	RACIAL_SKILL(SK_LISTEN,2);
+	RACIAL_SKILL(SK_HIDE,4);
+	MAGIC_RES(55);
+
+    Stati[NONDETECTION,
+        (PER_DETECT|PER_SCENT|PER_TREMOR|PER_TELE|PER_BLIND)];
+    Flags: M_CARNI, M_HERBI, M_HUMANOID, M_NOGEN, M_NOPOLY;
+    Desc: "Gnome, Deep Player Race"; 
+}
+
+Race "Gnome, Deep;race" : $"gnome;race"
+  {
+    Str -2, Dex +2, Con 0, Int 0, Wis +2, Cha -4, Luc 0;
+    Monster: $"gnome, deep;temp"; Favored: $"priest", $"rogue";
+    Skills: 
+      SK_CRAFT, SK_HANDLE_DEV, SK_MINING,
+      SK_LISTEN, SK_HIDE;
+    Grants:
+      Stati[ADJUST_NAT,A_SAV,+2] at 1st level,
+      Ability[CA_STONEWORK_SENSE,+2] at 1st level,
+      Stati[ADJUST_INH,A_MR,5] at every level starting at 1nd,
+
+      Ability[CA_FAV_ENEMY,MA_GOBLINOID] at every 2nd level starting at 1st,
+      
+      Ability[CA_INNATE_SPELL,$"blur"] at 1st,
+      Ability[CA_INNATE_SPELL,$"camouflage"] at 1st,
+      Ability[CA_INNATE_SPELL,$"cause blindness"] at 3rd,
+      Ability[CA_INNATE_SPELL,$"passwall"] at 3rd,
+      Ability[CA_INNATE_SPELL,$"stone tell"] at 5th,
+      Ability[CA_INNATE_SPELL,$"confusion"] at 7th;
+
+    Desc: "<15>Str:<1>-2 <15>Dex:<1>+2 <15>Con:<1>-- <15>Int:<1>-- <15>Wis:<1>+2 <15>Cha:<1>-4 <15>Luc:<1>--
+      \n<15>Favored Classes:<2> Priest, Rogue
+      \n<12>Experimental:<2> Deep Gnomes are not a Core Incursion race.
+      \n
+      \nDeep gnomes have been altered somewhat by having lived so
+      long in the depths of the Underdark. They have no affinity for
+      illusions, and they were not around to recieve Essiah's
+      blessing, but they have highly diverse innate spell-like
+      abilities, and like many Underdark creatures are also highly
+      resistant to magic.
+      \nUnlike their surface brothers, Deep Gnomes eschew tinkering with
+      magical devices and arcane spells in favor of a more traditional
+      approach based on stealth and faith. Deep Gnomes are typically quite
+      devout but usually feel no particular allegiance to Essiah.
+      \n__Deep Gnomes are a Gnomish subrace, and share all Gnomish traits,
+      except as noted below.\n 
+      \n<10>DEEP GNOME RACIAL SKILLS<2>\n
+      __In addition to Craft, Handle Device and Mining, Deep
+      Gnomes are adept at Listen and Hide. However, the lack a racial
+      talent for Alchmey or Using Magical Devices. 
+      \n\n
+      <10>DEEP GNOME RACIAL TRAITS<2>\n
+      __*_<7>Racial Attributes<2> -- Deep Gnomes are not as clever,
+      innovative or soulful as their surface brothers. They are smaller, 
+      weaker, quicker and decidedly less forceful of personality.\n
+      __*_<7>Magic Resistance<2> -- Deep Gnomes have an inherant 55~
+      resistance to magic and gain an additional 5~ per level. They also
+      have a natural +2 bonus to all saving throws.\n
+      __*_<7>Racially Skilled<2> -- Deep Gnomes gain a +2 racial bonus to
+      Craft and Listen checks.\n
+      __*_<7>Hiding<2> -- Deep Gnomes also gain a +4 racial bonus
+      to Hide checks. This bonus stacks with the Hide bonus they receive
+      for their small size. In addition, Deep Gnome bodies have an innate
+      nondetection that prevents them from being detected by scent,
+      tremorsense, blindsight, telepathy, or magical detection. \n
+      __*_<7>Infravision<2> -- Like many who live far underground, Deep
+      Gnomes have excellent infravision and are able to see 120 feet (12
+      squares) in the dark.\n
+      __*_<7>Magical Abilities<2> -- All Deep Gnomes possess powerful and
+      varied innate magical abilities. They can cast 
+      <9>blur<2> and <9>camouflage<2> at 1st level,
+      <9>cause blindness<2> and <9>passwall<2> upon reaching 3rd,
+      <9>stone tell<2> at 5th
+      and <9>confusion<2> at 7th.\n
+      __*_<7>Goblinoid Slayer<2> -- In addition to wars against kobolds,
+      Deep Gnomes have a natural hatred for goblins, orcs and their ilk. \n
+      __*_<7>Racial Weapons<2> -- Deep Gnomes are lack their cousins'
+      affinity for gadgets. They are not particularlly adept at reloading
+      crossbows and have not made extensive use of the mercurial
+      broadsword. Deep Gnomes spend enough time mining that they can use
+      the pickaxe as a weapon in a pinch, provided that they are already
+      proficient with the Axes weapon group. In addition, Deep Gnomes are
+      expert at dodging,  and gain a +4 natural bonus to their defense
+      class. \n
+      __*_<7>Illusioncraft<2> -- Deep Gnomes have no particular ties to
+      illusion and phantasm.\n
+      __*_<7>Arcane Trickery<2> -- Deep Gnomes lack this ability and tend to
+      prefer prayer to sorcery. \n
+      __*_<7>Burrow Kinship<2> -- Deep Gnomes dwell too far under the
+      surface to be concerned with foxes and badgers. They lack this
+      ability.\n
+      __*_<7>Freedom of Movement<2> -- Deep Gnomes were not present to
+      receive Essiah's blessing and lack this boon. Given the many
+      paralyzing horrors of the Underdark, almost every Deep Gnome family
+      has felt the lack of this ability in very visceral terms. Many end up
+      resenting Essiah because of this.\n
+      __*_<7>Scent<2> -- Deep Gnomes lack the highly-developed sense of
+      smell present in their surface cousins. 
+      \n__*_<7>Starting Equipment<2> -- Gnomes start with a gnomish
+      backpack, food rations, and a pickaxe.";
+    MALE_NAMES: "Brundner/Bofi/Ferris/Boddynock/Dimble/Fonkin/Gerbo/
+      Jebeddo/Namfoodle/Roondar/Seebo/Zook";
+    FEMALE_NAMES: "Bimpnottin/Caramip/Duvamil/Ellywick/Ellyjobell/Loopmottin/
+      Mardnab/Roywin/Shamil/Waywocket";
+    FAMILY_NAMES: "Baren/Daergal/Folkor/Garrick/Nackle/Murnig/Ningel/Raulnor/
+      Scheppen/Turen/Aleslosh/Ashhearth/Badger/Cloak/Doublelock/Filchbatter/
+      Fnipper/Oneshoe/Sparklegem/Stumbleduck";
+    Gear:
+      $"gnomish backpack",
+      3d2 $"food ration", // 75 - 150 nut points
+      $"pickaxe";
+    On Event EV_ADVANCE {
+      if (EActor->Proficiencies & WG_AXES)
+        if (EActor->WepSkill($"pickaxe") == WS_NOT_PROF)
+          EActor->GainPermStati(WEP_SKILL,NULL,SS_RACE,WS_PROFICIENT,
+                                  0, $"pickaxe", 0);
+      return NOTHING;
+      };
+  }
+
+/***********************************************************************
+ *                              GREY DWARVES
+ ***********************************************************************/
+
+
+Monster "Dwarf, Gray;temp" : MA_DWARF, MA_ADVENTURER
+	{                        
+        Image: red GLYPH_PLAYER; Size: SZ_MEDIUM; Mana: 10;
+        CR: 0; HD: 1; Hit: +0; Def: 10; Mov: 75%; Speed: 100%;
+        Attk:A_PUNC for 1d2 AD_BLUNT;
+
+	RACIAL_SKILL(SK_MINING,2);
+	RACIAL_SKILL(SK_CRAFT,2);
+	RACIAL_SKILL(SK_SEARCH,2);
+	RACIAL_SKILL(SK_MOVE_SIL,4);
+	RACIAL_SKILL(SK_LISTEN,1);
+	RACIAL_SKILL(SK_SPOT,1);
+	ABILITY(CA_FATIGUE_REGEN,1);
+	ABILITY(CA_INFRAVISION,12);
+
+        Flags: M_CARNI, M_HERBI, M_HUMANOID, M_NOGEN, M_NOPOLY;
+        Feats: FT_TOUGHNESS, FT_LOADBEARER, FT_ARMOR_OPTIMIZATION; 
+        Immune: DF_POIS, DF_PLYS;
+        Desc: "Dwarf, Gray Player Race"; 
+      Stati[SAVE_BONUS,SN_MAGIC,+2];
+      Stati[SAVE_BONUS,SN_TRAPS,+2];
+	}
+
+
+Race "Dwarf, Gray;race" : $"dwarf;race"
+  {
+    Str 0, Dex +2, Con +2, Int -2, Wis -2, Cha -4, Luc 0;
+    Monster: $"dwarf, gray;temp"; Favored: $"warrior", $"rogue";
+    Skills: SK_MINING, SK_CRAFT, SK_MOVE_SIL;
+    Grants:
+      Ability[CA_INNATE_SPELL,$"enlarge"] at 1st,
+      Ability[CA_INNATE_SPELL,$"invisibility"] at 1st,
+      Ability[CA_GIANT_KILLER] at 1st level,
+      Ability[CA_STONEWORK_SENSE,+2] at 1st level,
+      Feat[FT_CRAFT_ARMOR] at 7th level,
+      Feat[FT_CRAFT_WEAPON] at 7th level,
+      Stati[SAVE_BONUS,SN_MAGIC,+1] at every 6th level starting at 6th level,
+      Stati[SAVE_BONUS,SN_KNOCKDOWN,+4] at every level;
+    On Event EV_STARTING_ITEM {
+        if (EItem->QualityOK(IQ_DWARVEN))
+          EItem->AddQuality(IQ_DWARVEN);
+        if (EItem->QualityOK(IQ_ADAMANT))
+          EItem->AddQuality(IQ_ADAMANT);
+    };
+    Desc: "<15>Str:<1>-- <15>Dex:<1>+2 <15>Con:<1>+2 <15>Int:<1>-2 <15>Wis:<1>-2 <15>Cha:<1>-4 <15>Luc:<1>--
+      \n<15>Favored Classes:<2> Warrior, Rogue 
+      \n<12>Experimental:<2> Gray Dwarves are not a Core Incursion race.
+      \n
+      \n__Gray dwarves are a degenerate and evil dwarven subrace, with a very
+      limited intelligence and no concept of honor or nobility. They tend to
+      dwell deep in the Underdark and possess potent innate magics. Gray dwarves
+      are psychologically weak and craven, and it is said that they compose
+      the portion of the dwarven race that did not have the strength of
+      spirit to resist diabolical corruption in the primevil birth of the
+      dwarven race. 
+      \n__Gray dwarves are a dwarven subrace, and share all Dwarven traits,
+      except as noted below.\n 
+      \n<10>GRAY DWARF RACIAL SKILLS<2>\n
+      __In addition to Craft and Mining, Gray Dwarves treat Move
+      Silently as a racial skill. 
+      \n\n
+      <10>GRAY DWARF RACIAL TRAITS<2>\n
+      __*_<7>Dwarven Focus<2> -- Gray Dwarves lack the strength of will
+      normally associated with dwarves, and as a result do not possess this
+      ability.\n
+      __*_<7>Infravision<2> -- Gray Dwarves have infravision to 120 feet
+      (12 squares). In addition, Gray Dwarves gain a +1 racial bonus to
+      Listen and Spot checks and a +4 racial bonus to Move Silently checks.
+      \n
+      __*_<7>Orc Slayer<2> -- Gray Dwarves have quite a bit to worry about
+      in the Underdark, and have not developed a culture of hatred and war
+      with Orcs. Gray Dwarves have no racial enemies. \n
+      __*_<7>Racial Weapons<2> -- Gray Dwarves treat the battleaxe and
+      warhammer as Simple weapons, and gain proficiency with the (normally
+      exotic) dwarven waraxe and pickaxe if they are proficient with
+      the Axes group.\n
+      __*_<7>Underdark Toughness<2> -- Gray Dwarves have adapted to the
+      stunning horrors of the Underdark and the venom-using Drow and
+      Kobolds. They are immune to paralysis (but not entangling) and
+      poison. The recover fatigue just as normal dwarves do.\n
+      __*_<7>Magical Nature<2> -- Gray Dwarves can use <9>enlarge<2> and
+      <9>invisibility<2> as innate spell-like abilities.
+      \n__*_<7>Starting Equipment<2> -- Gray Dwarves start with a medium
+      backpack, food rations, some poison, a battleaxe, warhammer and
+      pickaxe. All initial armor and weapons are assumed to be
+      dwarven-forged (hard, heavy and protective). All metal items are assumed
+      to be forged from adamnt (very hard and protective). Gray Dwarf
+      starting armor and shields are the strongest in the game.\n";
+    MALE_NAMES: "Barendd/Brottor/Eberk/Einkil/Oskar/Rurik/Taklinn/Traubon/
+      Ulfgar/Veit/Balderk/Dankil/Gorunn/Holderhek/Loderr/Lutgehr/Ungart";
+    FEMALE_NAMES: "Artin/Audhild/Dagnal/Diesa/Gunnloda/Hlin/Ilde/Liftrasa/Sannl/
+      Torgga/Rumnahiem/Esgelt/Sansi/Terra/Relnan/Raelin/Wousgol/Visi";
+    FAMILY_NAMES: "Battleclan/Forgehammer/Stonedriver/Stonebrother/Ironcleft/
+      Axekeeper/Ashrager/Mountainfury/Skyforge/Windbreaker/Brightaxe/Steelblade/
+      Trueshield/Oakenstrike/Bloodaxe/Ironhammer/Deepriver/Understone";
+    Gear:
+      $"medium backpack",
+      4d2 $"food ration", // 100 - 200 nut points
+      $"small glass vial" of random 1 to 3,
+      $"battleaxe",
+      $"warhammer",
+      $"pickaxe";
+  }
+
+/***********************************************************************
+ *                              GREY ELVES
+ ***********************************************************************/
+
+
+Monster "elf, gray;temp" : MA_ELF, MA_ADVENTURER
+	{                        
+		Image: bright cyan GLYPH_PLAYER; Size: SZ_MEDIUM; Mana: 10;
+    CR: 0; HD: 1; Hit: +0; Def: 10; Mov: 100%; Speed: 100%;
+    Attk:A_PUNC for 1d2 AD_BLUNT;
+
+	ABILITY(CA_LOWLIGHT,2);
+	ABILITY(CA_SHARP_SENSES,1);
+	MAGIC_RES(25);
+
+    Flags: M_CARNI, M_HERBI, M_HUMANOID, M_NOGEN, M_NOPOLY;
+    Immune: DF_SLEE; 
+    Desc: "Elf, Gray Player Race"; 
+      Stati[SAVE_BONUS,SN_DEATH,+2];
+      Stati[SAVE_BONUS,SN_ENCH,+2];
+      Stati[RESIST,AD_FIRE,2];
+      Stati[RESIST,AD_COLD,2];
+	}
+Race "Elf, Gray;race" : $"elf;race"
+  {
+    Str -3, Dex +3, Con -3, Int +3, Wis +4, Cha +2, Luc 0;
+    Monster: $"elf, gray;temp"; Favored: $"priest", $"mage";
+    Desc: "<15>Str:<1>-3 <15>Dex:<1>+3 <15>Con:<1>-3 <15>Int:<1>+3 <15>Wis:<1>+4 <15>Cha:<1>+2 <15>Luc:<1>--
+      \n<15>Favored Classes:<2> Mage, Priest
+      \n<12>Experimental:<2> Gray Elves are not a Core Incursion race.
+      \n\n
+      __Gray elves are reclusive and frail, physically weak but possessed of
+      incredible mystical and intellectual potency. Not a true ethnicity,
+      they are instead a metamorphosed form of normal elves, having survived
+      for over a millenia and attained true immortality through spiritual
+      kinship to the realm of Faerie. Gray elves are terribly wise creatures,
+      but also filled with grief, for their race's bondage to Maeve strikes
+      them more deeply then any other elves.\n
+      __Gray Elves are an Elven subrace, and share all Elven traits,
+      except as noted below.\n 
+      \n 
+      <10>GRAY ELVEN RACIAL SKILLS<2>\n
+      __The Gray Elf racial skill list represents the true depth of 
+      their knowledge and the unending centuries they have had to
+      acquire such skills. Their racial skillset includes
+      Animal Empathy, Concentration, Decipher Script, Intuition,
+      Knowledge, Metamagic, Mythlore, Spellcraft, Use Magic Device and
+      Wilderness Lore. In addition, they gain a racial bonus to each
+      of those skills equal to their level as their experience adventuring
+      teaches them how to apply the vast storehouse of facts they hold
+      in their minds. 
+      \n\n
+      <10>GRAY ELVEN RACIAL TRAITS<2>\n
+      __*_<7>Racial Attributes<2> -- Gray Elves are weaker and frailer
+      than their cousins. In fact, they are weaker than all other
+      human-sized inhabitants of Therya. However, their wisdom and 
+      erudition are unparalleled. Grey elves also have an awesome presence
+      and force of personality, much of it coming from their connection to
+      the realm of Faerie.\n
+      __*_<7>Atrophy<2> -- The physical bodies of Gray Elves are in
+      a somewhat active decline even as their mental prowess reaches
+      new heights. The more time they spend contemplating the Faerie realm
+      the less they are actually of this world ... until their bodies are
+      but frail husks. Gray Elves lose a point of Constitution at every
+      even level and a point of Strength at every odd level (starting at
+      3rd). Starting at 10th level they lose a point of each with every
+      advancement. This loss is an inherant penalty and can only be
+      addressed directly by magical tomes or other truly supernatural
+      powers.\n
+      __*_<7>Magical Nature<2> -- Representing the pinnacle of magical
+      power in an already eldritch race, Gray Elves start with an extra 10
+      mana points and gain three points for every level they achieve above
+      1st. \n
+      __*_<7>Racial Weapons<2> -- Gray elves are familiar with the use
+      of the short bow and thinblade in the same
+      sense that most humans are familiar with breathing. Scores of
+      decades of an immortal life spent in the pursuit and study 
+      have given them the benefits of Weapon Mastery in these weapons ...
+      even if gray elves would not normally be called warriors. Gray Elves
+      are also merely passingly proficient with all other non-exotic
+      weapons. By the time they are moved to begin adventuring, most gray
+      elves have given up the use of the sword and bow for more magical
+      pursuits, however. In fact, the neglience with which most gray elves
+      treat their marital knowledge often makes them appear arrogant even
+      to other elves. Most gray elves view their martial knowledge through
+      the bitter lense of irony: their razor-sharp minds and reflexes
+      remember the steps, the twists and the turns ... but their frail
+      bodies mean they are easily defeated by younger, unskilled
+      oppponents. If the sword and bow are nothing compared to the wand and
+      spellbook and if they will not save one from Maeve's clutches, what
+      is the point?\n
+      __*_<7>Immortality<2> -- Gray elves are immortal in the sense that
+      they will never be directly conquered by time. Mara and Xel will
+      come with scythe and sickle to cut the cord of life for a gray elf
+      only in cases of extreme bodily trauma. From a human perspective, all
+      gray elves are impossibly old and have had centuries to study. 
+      As a result, gray elves begin with three feats
+      representing choice pieces of learning remembered from their earlier
+      training.\n
+      __*_<7>Manifestation<2> -- Compared to their more mundane
+      cousins, Gray Elves constantly manifest a fraction of their race's
+      magical essence. They gain an enhancement bonus of +4 to their
+      Charisma, a +2 awe bonus to Defense versus foes that are neither
+      blind nor mindless. In addition, they can always strike and be struck
+      by incorporeal creatures. Their radiant grandeur prevents them from
+      hiding in the shadows, however.\n
+      __*_<7>Magic Resistance<2> -- Gray Elves have an innate ability 
+      to shrug off the magic of others. Like the drow, gray elves do
+      not resist magic so much as simple negate adverse effects. Unlike the
+      drow, however, this defense has more to do with willpower and
+      personal experience and less to do with flat, inborn powers. 
+      They have a low 25~ natural magic resistance associated with their
+      gray elven physiology and gain a +5~
+      inherant bonus for every character level gained.\n
+      __*_<7>Inner Grief<2> -- Even more maudlin than normal elves,
+      gray elves feel the touch of Maeve in their daily lives and racial
+      destiny. Her aegis seems inescapable, and gray elves, with their
+      seemingly endless time for personal reflection, invariably come to
+      the conclusion that this is not necessarily such a good thing. Still,
+      they are drawn to her by the magic of their very beings. This
+      inner turmoil results in a -1 Morale penalty to saving throws and
+      attack rolls. This penalty increases by -1 at every third level. \n
+      __*_<7>Starting Equipment<2> -- Gray Elves start with a medium
+      backpack, elven waybread, a bow, a thinblade, and
+      torches. They also start with antitoxins because they are notoriously
+      vulnerable to poisons. Starting weapons and armor are assumed to be
+      of Elven make and thus light, fast and less restrictive than the
+      norm. Starting metal items are made of silver (out of homage to
+      Maeve) when possible.\n"; 
+    Skills: 
+      SK_ANIMAL_EMP, SK_CONCENTRATION, SK_DECIPHER, SK_INTUITION,
+      SK_KNOW_MAGIC, SK_KNOW_GEO, SK_KNOW_PLANES, SK_METAMAGIC, SK_KNOW_MYTH, 
+      SK_SPELLCRAFT, SK_USE_MAGIC,
+      SK_WILD_LORE; 
+    Grants:
+      Stati[SKILL_BONUS,SK_ANIMAL_EMP,+1] at every level starting at 1st,
+      Stati[SKILL_BONUS,SK_CONCENTRATION,+1] at every level starting at 1st,
+      Stati[SKILL_BONUS,SK_DECIPHER,+1] at every level starting at 1st,
+      Stati[SKILL_BONUS,SK_INTUITION,+1] at every level starting at 1st,
+      Stati[SKILL_BONUS,SK_KNOW_MAGIC,+1] at every level starting at 1st,
+      Stati[SKILL_BONUS,SK_METAMAGIC,+1] at every level starting at 1st,
+      Stati[SKILL_BONUS,SK_KNOW_MYTH,+1] at every level starting at 1st,
+      Stati[SKILL_BONUS,SK_SPELLCRAFT,+1] at every level starting at 1st,
+      Stati[SKILL_BONUS,SK_USE_MAGIC,+1] at every level starting at 1st,
+      Stati[SKILL_BONUS,SK_WILD_LORE,+1] at every level starting at 1st,
+      Stati[ADJUST_INH,A_CON,-1] at every 2nd level starting at 2nd,
+      Stati[ADJUST_INH,A_STR,-1] at every 2nd level starting at 3rd,
+      Stati[ADJUST_INH,A_CON,-1] at every 2nd level starting at 11th,
+      Stati[ADJUST_INH,A_STR,-1] at every 2nd level starting at 10th,
+      Stati[MANIFEST,+10] at every 1st level,
+      Ability[CA_MAGICAL_NATURE,+10] at 1st level,
+      Ability[CA_MAGICAL_NATURE,+3] at every level starting at 2nd,
+      Ability[CA_WEAPON_SKILL,+2] at 1st level,
+      Feat[FT_WEAPON_MASTERY,$"elven thinblade"] at 1st level,
+      Feat[FT_WEAPON_MASTERY,$"short bow"] at 1st level,
+      Feat[FT_SHIELD_PROFICIENCY]             at 1st level,
+      Feat[FT_FULL_LIST] at 1st level,
+      Feat[FT_FULL_LIST] at 1st level,
+      Feat[FT_FULL_LIST] at 1st level,
+      Stati[ADJUST_MOR,A_AID,-1] at every 3rd level starting at 1st,
+      Stati[ADJUST_INH,A_MR,5] at every level starting at 2nd,
+      Ability[CA_REVERIE] at 1st level;
+    On Event EV_STARTING_ITEM { 
+        if (EItem->QualityOK(IQ_ELVEN))
+          EItem->AddQuality(IQ_ELVEN);
+        if (EItem->QualityOK(IQ_SILVER))
+          EItem->AddQuality(IQ_SILVER);
+    } ; 
+    On Event EV_BIRTH {
+      EActor->Proficiencies |= (WG_SBLADES | WG_LBLADES | WG_AXES | WG_ARCHERY |
+        WG_STAVES | WG_IMPACT | WG_THROWN | WG_POLEARMS | WG_SPEARS |
+        WG_LANCES | WG_DAGGERS | WG_MARTIAL | WG_FLEXIBLE | WG_FLAILS |
+        WG_LIGHT | WG_LARMOR | WG_MARMOR | WG_HARMOR); 
+      };
+    MALE_NAMES: "Aramil/Aust/Enialis/Heian/Ivellios/Laucian/
+      Quarion/Sethwin/Selasia/Faridhir/Semirathis/Agorna/Disead/
+      Cassius/Lachin/Tesserath/Amakiir/Holimion/Meliamne/Nailo/
+      Siannodel/Ilphukiir";
+    FEMALE_NAMES: "Eoslin/Gosalin/Sephira/Selasia/Anastrianna/
+      Antinua/Drusilia/Felosial/Ielenia/Lia/Qillathe/Silaqui/
+      Valanthe/Xanaphia/Amastacia/Galanodel/Liadon/Xiloscient";
+    FAMILY_NAMES: "Starflower/Gemflower/Moonwhisper/Diamonddew/
+      Silverfrond/Moonchild/Oakenheel/Nightbreeze/Moonbrook/
+      Gemblossom/Goldpetal";
+    Gear:
+      $"medium backpack",
+      6d2 $"piece of elven waybread", // 180 - 360 nut points
+      $"short bow",
+      $"elven thinblade",
+      3d1 $"potion" of $"antitoxin",
+      3d2 $"torch";
+  }
+
+/***********************************************************************
+ *                              WOOD ELVES
+ ***********************************************************************/
+
+Race "Elf, Wood;race" : $"elf;race"
+  {
+    Str +1, Dex +2, Con +1, Int 0, Wis 0, Cha +1, Luc -1;
+    Monster: $"elf;temp"; Favored: $"barbarian", $"ranger", $"druid";
+    Desc: "<15>Str:<1>+1 <15>Dex:<1>+2 <15>Con:<1>+1 <15>Int:<1>-- <15>Wis:<1>-- <15>Cha:<1>+1 <15>Luc:<1>-1
+      \n<15>Favored Classes:<2> Barbarian, Ranger, Druid
+      \n<12>Experimental:<2> Wood Elves are not a Core Incursion race.
+      \n
+      \n__Wood elves are the least civilized of the elven peoples, possessed
+      of great strength, wild cunning and an affinity for sylvan creatures
+      of all kinds. They tend to be xenophobic and conservative, scorning
+      the ways of humanity and blaming mankind for the travails of their
+      race.\n
+      __Wood Elves are an Elven subrace, and share all Elven traits,
+      except as noted below.\n 
+      \n 
+      <10>WOOD ELVEN RACIAL SKILLS<2>\n
+      __The Wood Elf racial skills are Wilderness Lore, Climbing, 
+      Listen, Move Silently and Animal Empathy. 
+      \n\n
+      <10>WOOD ELVEN RACIAL TRAITS<2>\n
+      __*_<7>Racial Attributes<2> -- Wood Elves are stronger, swifter and
+      hardier than their cousins, but lack the patience to take advantage
+      of bookish learning. They live in the now and eschew the 
+      long-term perspective common to most elves. As a result, they repeat
+      the mistakes of the past and fail to take advantage of certian
+      opportunities.\n
+      __*_<7>Racial Weapons<2> -- Wood Elves are familiar with the use
+      of the long bow, short bow, long sword and hand axe.\n
+      __*_<7>Manifestation<2> -- Wood Elves have lost this power. 
+      __*_<7>Sylvan Affinity<2> -- As with druids, sylvan creatures will
+      not strike a wood elf unless he strikes them first. In addition,
+      Wood Elves can see through dense trees and obscuring terrain.
+      \n__*_<7>Starting Equipment<2> -- Wood Elves start with a medium
+      backpack, elven waybread, a bow, a long sword or a handaxe, and
+      torches. Starting weapons and armor are assumed to be of
+      Elven make and thus light, fast and less restrictive than the norm.
+      Starting wooden items are instead made out of deep-forest darkwood,
+      and are thus twice as strong.\n"; 
+    Skills: SK_MOVE_SIL, SK_LISTEN, SK_ANIMAL_EMP, SK_CLIMB, SK_WILD_LORE;
+    Grants:
+      Ability[CA_NATURE_SENSE] at 1st level,
+      Ability[CA_SPECIES_AFFINITY,MA_SYLVAN,+1] at every level starting at 1st,
+      Stati[NEUTRAL_TO,MA_SYLVAN] at 1st level,
+      Feat[FT_WEAPON_PROFICIENCY,$"long sword"] at 1st level,
+      Feat[FT_WEAPON_PROFICIENCY,$"handaxe"] at 1st level,
+      Feat[FT_WEAPON_PROFICIENCY,$"long bow"] at 1st level,
+      Feat[FT_WEAPON_PROFICIENCY,$"short bow"] at 1st level,
+      Ability[CA_REVERIE] at 1st level,
+      Ability[CA_MAGICAL_NATURE,+5] at 1st level,
+      Ability[CA_MAGICAL_NATURE,+1] at every level starting at 2nd;
+    On Event EV_STARTING_ITEM {
+        if (EItem->QualityOK(IQ_ELVEN))
+          EItem->AddQuality(IQ_ELVEN);
+        if (EItem->QualityOK(IQ_DARKWOOD))
+          EItem->AddQuality(IQ_DARKWOOD);
+      };
+    MALE_NAMES: "Aramil/Aust/Enialis/Heian/Ivellios/Laucian/
+      Quarion/Sethwin/Selasia/Faridhir/Semirathis/Agorna/Disead/
+      Cassius/Lachin/Tesserath/Amakiir/Holimion/Meliamne/Nailo/
+      Siannodel/Ilphukiir";
+    FEMALE_NAMES: "Eoslin/Gosalin/Sephira/Selasia/Anastrianna/
+      Antinua/Drusilia/Felosial/Ielenia/Lia/Qillathe/Silaqui/
+      Valanthe/Xanaphia/Amastacia/Galanodel/Liadon/Xiloscient";
+    FAMILY_NAMES: "Starflower/Gemflower/Moonwhisper/Diamonddew/
+      Silverfrond/Moonchild/Oakenheel/Nightbreeze/Moonbrook/
+      Gemblossom/Goldpetal";
+    Gear:
+      $"medium backpack",
+      6d2 $"piece of elven waybread", // 180 - 360 nut points
+      50% $"long bow" else $"short bow",
+      50% $"long sword" else $"handaxe",
+      3d2 $"torch";
+  }
+
+/***********************************************************************
+ *                            DROW (FEMALE)
+ ***********************************************************************/
+
+Race "Drow (female);race" : $"drow;race"
+  {
+    Str +1, Dex +2, Con 0, Int 0, Wis 0, Cha +1, Luc -2;
+    Monster: $"drow;temp"; Favored: $"rogue", $"priest";
+    Skills: SK_MOVE_SIL, SK_BLUFF, SK_POISON_USE, SK_APPRAISE;
+    Grants:
+      /* Light Aversion from template */
+      Feat[FT_WEAPON_PROFICIENCY,$"hand crossbow"] at 1st level,
+      Ability[CA_INNATE_SPELL,$"faerie fire"] at 1st level,
+      Ability[CA_INNATE_SPELL,$"globe of Shadow"] at 2rd level,
+      Ability[CA_INNATE_SPELL,$"levitation"] at 3rd level,
+      Stati[ADJUST_INH,A_MR,2] at every level starting at 2nd;
+    On Event EV_STARTING_ITEM {
+        if (EItem->QualityOK(IQ_ELVEN))
+          EItem->AddQuality(IQ_ELVEN);
+        if (EItem->isType(T_MISSILE))
+          EItem->GainPermStati(POISONED,NULL,SS_MISC,0,5,$"elfshot");
+        else if (EItem->QualityOK(IQ_ADAMANT))
+          EItem->AddQuality(IQ_ADAMANT);
+    } ; 
+    On Event EV_BIRTH {
+      hObj h;
+      h = CreateItem($"small glass vial");
+      if (h) { 
+        h->RemoveStati(POISONED);
+        h->GainPermStati(POISONED,NULL,SS_MISC,0,4d2,$"elfshot");
+        EActor->GainItem(h,true);
+      } 
+    };
+    On Event PRE(EV_ADVANCE) {
+      if (EActor->TotalLevel() <= 1)
+        EActor->GainPermStati(HAS_DOMAIN,EActor,SS_RACE,0,0,$"Spider;domain");
+      },
+      EV_PREREQ {
+        if (!EActor->Opt(OPT_SUBRACES))
+          return ABORT;
+        if (!(EActor->StateFlags & MS_FEMALE))
+          return ABORT;
+        return DONE;
+        };
+  }
+
+/***********************************************************************
+ *                         HALFLING, STOUTHEART
+ ***********************************************************************/
+
+
+Monster "halfling, stoutheart;temp" : MA_HALFLING, MA_ADVENTURER
+	{                        
+  Image: yellow GLYPH_PLAYER; Size: SZ_SMALL; Mana: 10;
+  CR: 0; HD: 1; Hit: +0; Def: 10; Mov: 75%; Speed: 100%;
+  Attk:A_PUNC for 1d2 AD_BLUNT;
+
+	RACIAL_SKILL(SK_HIDE,2);
+	RACIAL_SKILL(SK_RIDE,2);
+
+  Flags: M_CARNI, M_HERBI, M_HUMANOID, M_NOGEN, M_NOPOLY;
+  Feats: FT_SLIPAWAY;
+  Desc: "Halfling, Stoutheart Player Race"; 
+  }
+  
+Race "Halfling, Stoutheart;race" : $"halfling;race"
+  {
+    Str -2, Dex +2, Con 0, Int 0, Wis +2, Cha +2, Luc +2;
+    Monster: $"halfling, stoutheart;temp"; 
+    Favored Class: $"paladin", $"priest";
+    Skills: 
+      SK_KNOW_THEO, SK_APPRAISE, SK_RIDE, SK_INTUITION, SK_HIDE, SK_DIPLOMACY;
+    Grants:      
+      Feat[FT_WEAPON_FINESSE] at 1st level, 
+      Stati[SAVE_BONUS,SN_EVIL,+6] at 1st level,
+      Stati[ADJUST_MOR,A_AID,+1] at every 3rd level starting at 1st,
+      Ability[CA_STRONG_SOUL] at every 3rd level starting at 1st,
+      Ability[CA_UNEARTHLY_LUCK] at 1st level;  
+    Desc: "<15>Str:<1>-2 <15>Dex:<1>+2 <15>Con:<1>-- <15>Int:<1>-- <15>Wis:<1>+2 <15>Cha:<1>+2 <15>Luc:<1>+2
+      \n<15>Favored Classes:<2> Paladin, Priest
+      \n<12>Experimental:<2> Stoutheart Halflings are not a Core Incursion race.
+      \n\n__Stoutheart halflings are the strongest-willed of their race, with a
+      great devotion to the ideals of family and community. They despise
+      corruption in all of its forms, and become adventurers more frequently
+      then other halflings in the interest of rooting out and resolving
+      something that has shaken their sensibilities. They are famed for
+      their resourcefulness and clever planning.\n
+      __Stoutheart Halflings are a Halfling subrace, and share all Halfling
+      traits, except as noted below.\n 
+      \n 
+      <10>STOUTHEART HALFLING RACIAL SKILLS<2>\n
+      __Stoutheart Halflings treat Diplomacy, Hide, Intuition, Ride, 
+      Sense Motive and Theology as racial skills. They gain a +2 racial
+      bonus to Hide and Ride skill checks (the Hide bonus stacks with 
+      their +2 small size bonus). 
+      \n\n
+      <10>STOUTHEART HALFLING RACIAL TRAITS<2>\n
+      __*_<7>Racial Attributes<2> -- Stoutheart Halflings have stronger
+      will than their cousins but are somewhat less phenominally lucky.\n
+      __*_<7>Throwing<2> -- Stoutheart Halflings, being more interested
+      in adventuring, do not favor thrown rocks or slings. 
+      __*_<7>Warcraft<2> -- Stoutheart Halflings begin with the Combat
+      Finesse feat, allowing them to use their Dexterity modifier instead
+      of their Strength modifier in combat. \n
+      __*_<7>Inner Spirit<2> -- Even more than normal halflings,
+      Stouthearts are bouyed by an internal spiritual force. They begin
+      with a +1 Morale bonus to saving throws and attack rolls. This bonus
+      increases by +1 at every third level. Rather than the standard 
+      hafling saving throw bonus against fear and death, they receive
+      a +6 bonus against all evil magics.
+      \n__*_<7>Starting Equipment<2> -- Stoutheart Halflings start with a
+      small backpack, many tasty cottonberry loaves, a sling, a short sword
+      and some torches.";
+    MALE_NAMES: "Alton/Beau/Cade/Eldon/Garret/Lyle/Milo/Osborn/Roscoe/Wellby/
+      Randy/Mitchel/Fairday/Hennit/Fenwell/Bartholemew/Tristan/Geory";
+    FEMALE_NAMES: "Amaryllis/Charmaine/Cora/Euphemia/Jillian/Lavinia/Merla/
+      Portia/Seraphina/Verna";
+    FAMILY_NAMES: "Brushgather/Bushbother/Goodbarrel/Greenbottle/Highhill/
+      Undervalley/Hilltopple/Leagallow/Tealeaf/Thorngage/Tosscobble/
+      Underbough";
+    Gear:
+      $"small backpack",
+      10d2 $"cottonberry loaf", // 300 - 600 nut points
+      $"sling",
+      $"short sword",
+      3d2 $"torch";
+  }
+
+/***********************************************************************
+ *                       LIZARDFOLK, DRAGONKIN
+ ***********************************************************************/
+
+Monster "Dragonkin;temp" : MA_REPTILE, MA_HUMANOID, MA_ADVENTURER
+  { 
+    Image: green GLYPH_PLAYER; Size: SZ_MEDIUM; Mana: 12;
+    CR: 1; HD: 1; Hit: 0; Def: 10; Mov: 100%; Spd: 100%; Arm: 5;
+    Str 10, Dex 10, Con 10, Int 10, Wis 10, Cha 10;
+    Attk: A_CLAW for 1d4+1 AD_SLASH,
+          A_CLAW for 1d4+1 AD_SLASH,
+          A_BITE for 1d4 AD_PIERCE;
+
+	ABILITY(CA_FATIGUE_REGEN,1);
+	ABILITY(CA_BURNING_HUNGER,3);
+	ABILITY(CA_INFRAVISION,6);
+
+    Flags: M_HUMANOID, M_CARNI, M_NOGEN, M_AMPHIB, M_NOPOLY, M_FIRE;  
+    Immune: DF_FIRE, DF_PLYS, DF_SLEE; 
+    Feats: FT_MANTIS_LEAP; 
+    Desc: "Dragonkin Player Race"; 
+    Stati[NEUTRAL_TO,MA_DRAGON];
+  }
+
+Race "Lizardfolk, Dragonkin;race" : $"lizardfolk;race"
+  {
+    Str +2, Dex +2, Con +2, Int -1, Wis 0, Cha -2, Luc -4;
+    Monster: $"Dragonkin;temp"; Favored Class: $"barbarian", $"warrior";
+    Skills: 
+      SK_JUMP,
+      SK_WILD_LORE,
+      SK_ATHLETICS,
+      SK_SWIM;
+    Grants:
+      Ability[CA_BURNING_HUNGER,+1] at every 2st level starting at 3rd,
+      Ability[CA_SPECIES_AFFINITY,MA_DRAGON,+1] at every level starting at 1st,
+      Stati[DETECTING_TYPE,T_CORPSE,25] at 1st level,
+      Stati[SKILL_BONUS,SK_JUMP,+2] at every level starting at 1st level,
+      Ability[CA_DEVOURING] at 1st level;
+    Desc: "<15>Str:<1>+2 <15>Dex:<1>+2 <15>Con:<1>+2 <15>Int:<1>-1 
+      <15>Wis:<1>-- <15>Cha:<1>-2 <15>Luc:<1>-4
+      \n<15>Favored Classes:<2> Barbarian, Warrior
+      \n<12>Experimental:<2> Dragonkin Lizardfolk are not a Core Incursion race.
+      \n\n__The Dragonkin are a line of lizardfolk who have interbred with
+      the dragons over the centuries, gaining certain of the advantages
+      that race possesses but also becoming cursed with a ravenous hunger
+      that makes them greatly feared and viewed as degenerate among their
+      own race.\n
+      __Dragonkin Lizardfolk are a Lizardfolk subrace, and share all
+      Lizardfolk traits, except as noted below. 
+      \n\n 
+      <10>DRAGONKIN LIZARDFOLK RACIAL SKILLS<2>\n
+      __The Dragonkin Lizardfolk racial skills include Food Preservation,
+      Jump, Wilderness Lore, Athletics and Swimming. 
+      \n\n         
+      <10>DRAGONKIN LIZARDFOLK RACIAL TRAITS<2>\n
+      __*_<7>Racial Attributes<2> -- A typical dragonkin lizardfolk is
+      about one-eighth dragon. Compared to standard lizardfolk they are
+      stronger, tougher, and smarter. Unfortunately, their gripping hunger
+      means that they are even less likely to care issues beyond survival
+      and they frequently miss long-term opportunities and rate poorly
+      in social interactions. \n
+      __*_<7>Reptilian Empathy<2> -- Dragonkin Lizardfolk disdain regular
+      reptiles as lesser beings and reserve their attention and 
+      empathy for dragons. For their part, dragons treat Dragonkin
+      Lizardfolk with a cautious neutrality.\n
+      __*_<7>Ancestral Memory<2> -- Dragonkin Lizardfolk lack the true,
+      trance-like racial memory associated with their cousins. \n
+      __*_<7>Draconic Traits<2> -- Dragonkin are, like red dragons, immune
+      to flames, paralysis (but not entangling) and sleep. They have
+      infravision to 60 feet (6 squares). They lack wings and the power of
+      true flight, but their jumping prowess is unequalled: they gain a +2
+      racial bonus to Jump checks with every level and enjoy the benefit of
+      the Mantis Leap feat, allowing them to gain a charge bonus in combat
+      equal to the distance lept. Finally, they suffer 150~ damage from
+      Cold.\n
+      __*_<7>Focused Mind<2>, <7>Oily Secretion<2> -- Dragonkin Lizardfolk
+      have been bred in a different direction and no longer enjoy these
+      benefits.\n 
+      __*_<7>Burning Hunger<2> -- While normal lizardfolk enjoy a slower
+      metabolism than humans, hunger is a constant companion to 
+      Dragonkin. Their powerful bodies digest food at a prodigious rate. To
+      make matters worse, they can only gain nutritional benefit by
+      ingesting the fresh blood of carnivorous creatures -- no
+      other comestibles have any benefit. As they age and gain experience
+      their rate of consumption increases and will even follow them, like a
+      curse, into polymorphed forms. Finally, dragonkin possess a
+      preternatural ability to locate corpses, and can sense fallen bodies
+      within a certain distance even through walls.\n
+      __*_<7>Devouring<2> -- Much like Orcs, Dragonkin Lizardfolk often
+      gain mystical powers as they devour their foes whole. Unfortunately,
+      also like Orcs, Dragonkin are not immune to disease. Their
+      constant quest for warm bodies, when combined with the ravages that
+      they suffer at the hands of infections, lend much credence to their
+      horrible reputation.
+      \n__*_<7>Fatigue Regeneration<2> -- Dragonkin metabolism is so rapid
+      that they can actually recover fatigue without sleeping. Dragonkin
+      that go 100 turns without being involved in combat recover one point
+      of fatigue and then recover an additional point of fatigue every 50
+      turns thereafter. 
+      \n__*_<7>Starting Equipment<2> -- Dragonkin Lizardfolk start with a
+      medium backpack, some potions of cure disease, and a content stomach.";
+    Gear:
+      5d2 $"potion" of $"cure disease", 
+      $"medium backpack";
+    MALE_NAMES: "Tephraon/Raotil/Legroth/Gosaad/Savis/Gusack/Tabrim/Umlathi/
+      Fersas/Feshrish/Yupharin/Asogath/Saglisha/Gorfang/Keskel/Hiiman/Tabasci/
+      Xixrat";
+    FEMALE_NAMES: "Tephraon/Raotil/Legroth/Gosaad/Savis/Gusack/Tabrim/Umlathi/
+      Fersas/Feshrish/Yupharin/Asogath/Saglisha/Gorfang/Keskel/Hiiman/Tabasci/
+      Xixrat";
+    FAMILY_NAMES: "of the Sun/of the River/of the Fire/of the Blood/of the Sand/
+      of the Ashes/of the Eggs/of the Seasons/of the Flesh/of the Sword/of Life/
+      of Death/of the Swamp/of Stone/of Unity/of Survival/of Fertility";
+  }
+
+/***********************************************************************
+ *                               ORC, BLACK
+ ***********************************************************************/
+
+
+Monster "Orc, Black;temp" : MA_ORC, MA_ADVENTURER
+  {
+    Image: brown GLYPH_PLAYER; Size: SZ_MEDIUM; Mana: 5;
+    CR: 0; HD: 1; Hit: 0; Def: 10; Hit: 1; Mov: 100%; Spd: 100%;
+    Str 10, Dex 10, Con 10, Int 10, Wis 10, Cha 10;
+    Attk: A_PUNC for 1d3 AD_BLUNT;
+
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_MAGICAL_NATURE,10);
+	ABILITY(CA_SCENT,3);
+
+    Flags: M_CARNI, M_HUMANOID, M_LIGHT_AVERSE, M_NOGEN, M_NOPOLY;
+    Desc: "Orc, Black Player Race"; 
+  }
+Race "Orc, Black;race" : $"orc;race"
+  {
+    Str 0, Dex 0, Con 0, Int 0, Wis +3, Cha -1, Luc 0; 
+    Monster: $"orc, black;temp"; Favored Class: $"mage", $"priest";
+    Skills: SK_SPELLCRAFT, SK_KNOW_THEO, SK_CONCENTRATION;
+    Grants:
+      Stati[NEUTRAL_TO,MA_UNDEAD] at 1st level,
+      Ability[CA_DEVOURING] at 1st level,
+      Stati[SAVE_BONUS,SN_ENCH,-6] at 1st level,
+      Ability[CA_MAGICAL_NATURE,+1] at every level starting at 2nd;
+    On Event EV_STARTING_ITEM {
+        if (EItem->QualityOK(IQ_ORCISH))
+            EItem->AddQuality(IQ_ORCISH);
+    }; 
+    On Event EV_BIRTH {
+      hObj h;
+      EActor->Proficiencies |= WG_IMPACT | WG_LBLADES | 
+                               WG_SPEARS | WG_POLEARMS;
+    };
+    On Event PRE(EV_ADVANCE) {
+      if (EActor->TotalLevel() <= 1)
+        EActor->GainPermStati(HAS_DOMAIN,EActor,SS_RACE,0,0,$"Blood;domain");
+    } ;
+    Desc: "<15>Str:<1>-- <15>Dex:<1>-- <15>Con:<1>-- <15>Int:<1>-- 
+      <15>Wis:<1>+3 <15>Cha:<1>-1 <15>Luc:<1>--
+      \n<15>Favored Classes:<2> Priest, Mage
+      \n<12>Experimental:<2> Black Orcs are not a Core Incursion race.\n
+      \n__Black orcs were bred and engineered by Azakram the Black millenia
+      ago in his campaign for conquest of the Kinlands during the Mage
+      Wars. They have a heightened affinity for blood magic, a limited
+      empathy with the undead and a small degree of innate mystical power,
+      but are not as strong as their compatriots and suffer from an
+      suceptability towards enchantment spells. In the modern age, the most
+      frequently serve as shamans and other spiritual authorities in an orc
+      tribe.\n
+      \n 
+      <10>BLACK ORC RACIAL SKILLS<2>\n
+      __Black Orcs count Theology, Spellcraft and Concentration as their
+      racial skills. 
+      \n\n
+      <10>ORCS RACIAL TRAITS<2>\n
+      __*_<7>Racial Attributes<2> -- Compared to normal Orcs, Black Orcs
+      are quite weak. They lack the strength and toughness of their
+      counterparts, but enjoy a dramatic force of will and a slightly 
+      more cunning mind. Unfortunately, they have an inbred weakness
+      for enchantment spells and suffer a -6 penalty to saving throws
+      against them.\n
+      __*_<7>Undead Empaty<2> -- Black Orcs have a special affinity for
+      the Undead, inasmuch as it is possible to understand the feelings of
+      creatures that are often mindless and soulless. Most undead are
+      neutral to Black Orcs by default and will not attack unless
+      provoked.\n
+      __*_<7>Blood Magic<2> -- Black Orcs that gain Priest levels 
+      automatically gain access to the <9>Blood<2> domain in addition to
+      their other domains.\n
+      __*_<7>Magical Nature<2> -- Like Elves, Black Orcs have a small
+      amount of innate mystical power when compared to other races. This
+      is represented by a larger mana pool.
+      \n__*_<7>Starting Equipment<2> -- Black Orcs start with a medium
+      backpack, a broadsword or a long sword, a longspear or a ranseur,
+      some cured meat and a knife. Black Orcs also start with a special
+      spellbook allowing them to learn arcane blood rituals if they
+      pursue a career in magecraft.\n";
+    MALE_NAMES: "Dench/Feng/Gell/Henk/Holg/Imsh/Kesh/Ront/Shump/Thokk";
+    FEMALE_NAMES: "Baggi/Engong/Myev/Neega/Ovak/Ownka/Shautha/Vola/Volen";
+    FAMILY_NAMES: "the Slayer/the Elfslayer/the Bloodspiller/the Skullcleaver/
+      the Griefmaker/the Deathbringer/the Harbringer/the Destroyer/the Savage/
+      the Unconquered/the Anathema/the Blooded/the Unbound/the Wise/the Breaker/
+      the Defiler/the Desecrator/the Berzerker/the Warlord/the Avenger";
+    Gear:
+      $"medium backpack",
+      $"spellbook [Crimson Rites]",
+      8d2 $"strip of cured meat",       // 120 - 240 nut
+      50% $"short sword" else $"long sword",
+      50% $"longspear" else $"ranseur",
+      $"dagger";
+  }
+
+#endif

@@ -1,0 +1,1443 @@
+/************************************************************************\
+ *                                DISEASES                              *
+\************************************************************************/
+
+Disease "filth fever" : EA_DRAIN
+  {  
+    Level: 1;
+    /*Iteration*/   cval: 100;
+    /*Save DC*/     sval: 12;
+    /*Persistance*/ lval: 7;
+    xval: AD_DACO; pval: 1d2;
+    Desc: "A horrible affliction spread by squalor and unclean living
+      conditions, filth fever inflicts 1d2 points of Constitution damage
+      and 1d2 points of Dexterity damage every 100 turns. It requires
+      7 successful saving throws against DC 12 to overcome fully.";
+  }
+  and EA_DRAIN
+  { xval: AD_DADX; pval: 1d2; }
+
+Disease "grave rot" : EA_DRAIN
+  {  
+    Level: 1;
+    /*Iteration*/   cval: 200;
+    /*Save DC*/     sval: 15;
+    /*Persistance*/ lval: 3;
+    xval: AD_DACO; pval: 1d6;
+    Desc: "A horrible affliction spread by bone delvers, grave rot
+      inflicts 1d6 points of Strength and Constitution damage
+      every 200 turns. It requires 3 successful saving throws against
+      DC 15 to overcome fully.";
+  }
+  and EA_DRAIN
+  { xval: AD_DAST; pval: 1d6; }
+
+Disease "blinding sickness" : EA_DRAIN
+  {  
+    Level: 2;
+    /*Iteration*/   cval: 100;
+    /*Save DC*/     sval: 16;
+    /*Persistance*/ lval: 6;
+    xval: AD_DAST; pval: 1d4;
+    On Event POST(EV_DAMAGE) {
+      if (EVictim->GetEffStatiMag(ADJUST_DMG,$"blinding sickness") >= 6)
+        if (!EVictim->HasEffStati(BLIND,$"blinding sickness"))
+          EVictim->GainTempStati(BLIND,NULL,-2,SS_MISC,0,0,$"blinding sickness");
+      };
+    Desc: "This painful disease eventually blinds its victim by causing
+      the blood vessels in the eyes to rupture. It inflicts 1d4 points
+      of Strength damage every 100 turns, and requires 6 successful saving
+      throws against DC 16 to overcome fully. Once the victim has lost six
+      or more points of Strength, they are also struck blind.";
+  }
+
+Disease "cackle fever" : EA_DRAIN
+  {  
+    Level: 3;
+    /*Iteration*/   cval: 30;
+    /*Save DC*/     sval: 16;
+    /*Persistance*/ lval: 14;
+    xval: AD_DAWI; pval: 1d1;
+    Desc: "This disease damages the brain, causing a slow spread of erratic
+      behaviour, loss of acuity and eventual insanity. It inflicts 1 point
+      of Wisdom damage every 30 turns, and requires 14 successful saving
+      throws against DC 16 to overcome.";
+  }
+
+Disease "devil chills" : EA_DRAIN
+  {  
+    Level: 7;
+    /*Iteration*/   cval: 400;
+    /*Save DC*/     sval: 18;
+    /*Persistance*/ lval: 3;
+    xval: AD_DAST; pval: 1d2;
+    Flags: EF_LETHAL;
+    Desc: "Originating in the Nine Hells and spread by devils, this disease
+      is almost always fatal to normal people. It is slow to spread, inflicting
+      1d2 points of Strength damage every 400 turns, but requires 3 <11>consecutive<7>
+      successful saving throws against DC 18 to be overcome.";
+  }
+
+Disease "demon fever" : EA_DRAIN
+  {  
+    Level: 7;
+    /*Iteration*/   cval: 30;
+    /*Save DC*/     sval: 18;
+    /*Persistance*/ lval: 9;
+    xval: AD_DACO; pval: 1d4;
+    Desc: "Spread by creatures of the Abyss, this horrible plague eats away
+      the body from within. Progressing rapidly, it inflicts 1d4 points of
+      Constitution damage every 30 turns, and requires 9 successful saving
+      throws against DC 18 to overcome.";
+  }
+
+Disease "mindfire" : EA_DRAIN
+  {  
+    Level: 3;
+    /*Iteration*/   cval: 50;
+    /*Save DC*/     sval: 12;
+    /*Persistance*/ lval: 12;
+    xval: AD_DAIN; pval: 1d1;
+    Desc: "A twisted and painful disease causing nosebleeds, hemmorages
+      in the brain and eventual insanity, aneurism and death, mindfire is
+      believed to have been psionically engineered by the illithids as a
+      weapon against the surface world. It inflicts 1 point of Intelligence
+      damage every 50 turns, and requires 12 successful saves against DC 12
+      to overcome.";
+  }
+
+Disease "mummy rot" : EA_DRAIN
+  {
+    Level: 5;
+    /*Iteration*/   cval: 30;
+    /*Save DC*/     sval: 20;
+    /*Persistance*/ lval: 14;
+    xval: AD_DACO; pval: 1d1;
+    Desc: "Inflicted by the touch of a mummy, this disease causes extreme
+      dehydration in the body, eventually leading to the victim's skin and
+      tissue turning brittle and peeling away. In the end, all that's left
+      is dust. Mummy rot inflicts 1 point of Constitution damage every 30
+      turns, and requires 14 successful saves against DC 20 (!) to overcome.";
+  }
+
+Disease "red ache" : EA_DRAIN
+  {
+    Level: 2;
+    /*Iteration*/   cval: 150;
+    /*Save DC*/     sval: 15;
+    /*Persistance*/ lval: 7;
+    xval: AD_DAST; pval: 1d3;
+    Desc: "This sickness causes joints to become swollen and inflamed,
+      making movement painful. It inflicts 1d3 points of Strength damage
+      every 150 turns, and requires 7 successful saving throws against DC
+      15 to overcome.";
+  }
+
+Disease "the Shakes" : EA_DRAIN
+  {  
+    Level: 2;
+    /*Iteration*/   cval: 70;
+    /*Save DC*/     sval: 13;
+    /*Persistance*/ lval: 7;
+    xval: AD_DADX; pval: 1d3;
+    Desc: "This disease causes uncontrollable trembling and shaking, and
+      as it progresses causes seizures and complete loss of motor control.
+      It inflicts 1d3 points of Dexterity damage every 70 turns, and requires
+      7 successful saving throws against DC 13 to overcome.";
+  }
+
+Disease "slimy doom" : EA_DRAIN
+  {  
+    Level: 5;
+    /*Iteration*/   cval: 200;
+    /*Save DC*/     sval: 19;
+    /*Persistance*/ lval: 12;
+    xval: AD_DACO; pval: 1d2;
+    Desc: "This twisted affliction damages a victim's tissues, eventually
+      causing their skin and body to liquefy. It is accompanied by cysts
+      and lesions forming on the body, as well as the victim's pores exuding
+      a mucus-like substance. Slimy doom inflicts 1d2 points of Constitution
+      damage every 200 turns, and requires 12 successful saving throws versus
+      DC 19 to overcome."; 
+  }
+
+/************************************************************************\
+ *                                POISONS                               *
+\************************************************************************/
+
+Poison "greenblood oil" : EA_DRAIN
+  {
+    Level: 1;
+    /*Iteration*/   cval: 7;
+    /*Save DC*/     sval: 13;
+    /*Persistance*/ lval: 2;
+    xval: AD_DACO; pval: 1d2;
+    Desc: "This mild toxin inflicts <11>1d2<7> points of Constitution
+    damage every <11>7<7> turns, and requires <11>2<7> successful saving throws
+    against <11>DC 13<7> to overcome.";
+  }
+
+Poison "bloodroot" : EA_DRAIN
+  {
+    Level: 1;
+    /*Iteration*/   cval: 20;
+    /*Save DC*/     sval: 12;
+    /*Persistance*/ lval: 3;
+    xval: AD_DACO;  pval: 1d3;
+    Desc: "This poison inflicts <11>1d3<7> points of Constitution damage every 
+      <11>20<7> turns, and requires <11>3<7> saving throws against <11>DC 12<7> 
+      to overcome.";
+  }
+and EA_DRAIN
+  { xval: AD_DAWI;  pval: 1d2; }
+
+Poison "blue whinnis" : EA_DRAIN
+  {
+    Level: 2;
+    /*Iteration*/   cval: 4;
+    /*Save DC*/     sval: 12;
+    /*Persistance*/ lval: 3;
+    xval: AD_DACO;  pval: 1d2;
+    /*
+    On Event POST(EV_DAMAGE) {
+      if (EVictim->GetEffStatiMag(ADJUST_DMG,$"blue whinnis") >= 6)
+        if (!EVictim->HasEffStati(ASLEEP,$"blue whinnis"))
+          EVictim->GainTempStati(ASLEEP,NULL,5d12,SS_MISC,0,0,$"blue whinnis");
+      };
+      */
+    Desc: "This poison inflicts <11>1d2<7> points of Constitution damage every 
+      <11>4<7> turns, and requires <11>3<7> saving throws against <11>DC 12<7> 
+      to overcome.";
+  }
+
+Poison "giant bee venom" : EA_DRAIN
+  {
+    Level: 4;
+    /*Iteration*/   cval: 4;
+    /*Save DC*/     sval: 11;
+    /*Persistance*/ lval: 2;
+    xval: AD_DACO;  pval: 1d4;
+    Desc: "This poison inflicts <11>1d4<7> points of Constitution damage every 
+      <11>4<7> turns, and requires <11>2<7> saving throws against <11>DC 11<7> 
+      to overcome.";
+  }
+
+Poison "giant wasp venom" : EA_DRAIN
+  {
+    Level: 4;
+    /*Iteration*/   cval: 4;
+    /*Save DC*/     sval: 18;
+    /*Persistance*/ lval: 2;
+    xval: AD_DADX;  pval: 1d6;
+    Desc: "This poison inflicts <11>1d6<7> points of Dexterity damage every 
+      <11>4<7> turns, and requires <11>2<7> saving throws against <11>DC 18<7> 
+      to overcome.";
+  }
+
+Poison "shadow essence" : EA_DRAIN
+  {
+    Level: 3;
+    /*Iteration*/   cval: 7;
+    /*Save DC*/     sval: 17;
+    /*Persistance*/ lval: 3;
+    xval: AD_DAST;  pval: 1d4;
+    Desc: "This poison inflicts <11>1d4<7> points of Strength damage every 
+      <11>7<7> turns, and requires <11>3<7> saving throws against <11>DC 17<7> 
+      to overcome.";
+  }
+
+Poison "black adder venom" : EA_DRAIN
+  {
+    Level: 1;
+    /*Iteration*/   cval: 8;
+    /*Save DC*/     sval: 12;
+    /*Persistance*/ lval: 3;
+    xval: AD_DAST;  pval: 1d3;
+    Desc: "This poison inflicts <11>1d3<7> points of Strength damage every 
+      <11>8<7> turns, and requires <11>3<7> saving throws against <11>DC 12<7> 
+      to overcome.";
+  }
+
+Poison "deathblade" : EA_DRAIN
+  {
+    Level: 7;
+    /*Iteration*/   cval: 3;
+    /*Save DC*/     sval: 20;
+    /*Persistance*/ lval: 3;
+    xval: AD_DACO;  pval: 1d6;
+    Desc: "This poison inflicts <11>1d6<7> points of Constitution damage every 
+      <11>3<7> turns, and requires <11>3<7> saving throws against <11>DC 20<7> 
+      to overcome.";
+  }
+
+Poison "malyss root paste" : EA_DRAIN
+  {
+    Level: 2;
+    /*Iteration*/   cval: 5;
+    /*Save DC*/     sval: 13;
+    /*Persistance*/ lval: 3;
+    xval: AD_DADX;  pval: 1d3;
+    Desc: "This poison inflicts <11>1d3<7> points of Dexterity damage every 
+      <11>5<7> turns, and requires <11>3<7> saving throws against <11>DC 13<7> 
+      to overcome.";
+  }
+
+Poison "nitharit" : EA_DRAIN
+  {
+    Level: 3;
+    /*Iteration*/   cval: 2;
+    /*Save DC*/     sval: 13;
+    /*Persistance*/ lval: 2;
+    xval: AD_DACO;  pval: 1d8;
+    Desc: "This poison inflicts <11>1d8<7> points of Constitution damage every 
+      <11>2<7> turns, and requires <11>2<7> saving throws against <11>DC 13<7> 
+      to overcome.";
+  }
+
+Poison "dragon bile" : EA_DRAIN
+  {
+    Level: 7;
+    /*Iteration*/   cval: 7;
+    /*Save DC*/     sval: 26;
+    /*Persistance*/ lval: 2;
+    xval: AD_DAST;  pval: 1d2;
+    Desc: "This poison inflicts <11>1d2<7> points of Strength damage every 
+      <11>7<7> turns, and requires <11>2<7> saving throws against <11>DC 26<7> 
+      to overcome.";
+  }
+
+Poison "sassone leaf residue" : EA_GENERIC
+  {
+    Level: 5;
+    /*Iteration*/   cval: 4;
+    /*Save DC*/     sval: 16;
+    /*Persistance*/ lval: 3;
+    On Event EV_MAGIC_HIT {
+      ThrowDmg(EV_DAMAGE,AD_TOXI,3d6,"sassone leaf residue",EVictim,EVictim);
+      return DONE;
+      };
+    Desc: "This poison inflicts <11>3d6<7> hit points worth of toxic damage every 
+      <11>4<7> turns, and requires <11>3<7> saving throws against <11>DC 16<7> 
+      to overcome.";
+  }
+
+Poison "terinav root" : EA_DRAIN
+  {
+    Level: 4;
+    /*Iteration*/   cval: 4;
+    /*Save DC*/     sval: 16;
+    /*Persistance*/ lval: 3;
+    xval: AD_DADX;  pval: 1d6;
+    Desc: "This poison inflicts <11>1d6<7> points of Dexterity damage every 
+      <11>4<7> turns, and requires <11>3<7> saving throws against <11>DC 16<7> 
+      to overcome.";
+  }
+
+Poison "carrion crawler brain juice" : EA_INFLICT
+  {
+    Level: 8;
+    /*Iteration*/   cval: 20;
+    /*Save DC*/     sval: 18;
+    /*Persistance*/ lval: 1;
+    xval: PARALYSIS;
+    Flags: EF_DLONG;
+    Desc: "This poison causes complete paralysis, with an onset time of <11>20<7> 
+      turns, and requires <11>1<7> saving throw against <11>DC 18<7> to overcome.";
+  }
+
+Poison "black lotus extract" : EA_DRAIN
+  {
+    Level: 7;
+    /*Iteration*/   cval: 3;
+    /*Save DC*/     sval: 20;
+    /*Persistance*/ lval: 3;
+    xval: AD_DACO;  pval: 1d6;
+    Desc: "This poison inflicts <11>1d6<7> points of Constitution damage every 
+      <11>3<7> turns, and requires <11>3<7> saving throws against <11>DC 20<7> 
+      to overcome.";
+  }
+
+Poison "id moss" : EA_DRAIN
+  {
+    Level: 5;
+    /*Iteration*/   cval: 4;
+    /*Save DC*/     sval: 15;
+    /*Persistance*/ lval: 5;
+    xval: AD_DAIN;  pval: 1d4;
+    Desc: "This poison inflicts <11>1d4<7> points of Intelligence damage every 
+      <11>4<7> turns, and requires <11>5<7> saving throws against <11>DC 15<7> 
+      to overcome.";
+  }
+
+Poison "striped toadstool" : EA_DRAIN
+  {
+    Level: 1;
+    /*Iteration*/   cval: 3;
+    /*Save DC*/     sval: 11;
+    /*Persistance*/ lval: 3;
+    xval: AD_DAIN;  pval: 1d3;
+    Desc: "This poison inflicts <11>1d3<7> points of Intelligence damage and
+      <11>1d2<7> points of Wisdom damage every 
+      <11>3<7> turns, and requires <11>3<7> saving throws against <11>DC 11<7> 
+      to overcome.";
+  }
+and EA_DRAIN
+  { xval: AD_DAWI;  pval: 1d2; }
+
+Poison "arsenic" : EA_DRAIN
+  {
+    Level: 2;
+    /*Iteration*/   cval: 4;
+    /*Save DC*/     sval: 13;
+    /*Persistance*/ lval: 3;
+    xval: AD_DACO;  pval: 1d4;
+    Desc: "This poison inflicts <11>1d4<7> points of Constitution damage every 
+      <11>4<7> turns, and requires <11>3<7> saving throws against <11>DC 13<7> 
+      to overcome.";
+  }
+
+Poison "lich dust" : EA_DRAIN
+  {
+    Level: 5;
+    /*Iteration*/   cval: 4;
+    /*Save DC*/     sval: 17;
+    /*Persistance*/ lval: 3;
+    xval: AD_DAST;  pval: 1d6;
+    Desc: "This poison inflicts <11>1d6<7> points of Strength damage every 
+      <11>4<7> turns, and requires <11>3<7> saving throws against <11>DC 17<7> 
+      to overcome.";
+  }
+
+Poison "dark reaver powder" : EA_DRAIN
+  {
+    Level: 8;
+    /*Iteration*/   cval: 6;
+    /*Save DC*/     sval: 18;
+    /*Persistance*/ lval: 6;
+    xval: AD_DACO;  pval: 1d2;
+    Desc: "This poison inflicts <11>1d2<7> points of Constitution damage and
+      <11>1d2-1<7> points of Strength damage every 
+      <11>6<7> turns, and requires <11>6<7> saving throws against <11>DC 18<7> 
+      to overcome.";
+  }
+and EA_DRAIN
+  { xval: AD_DAST;  pval: 1d2 + (-1); }
+
+Poison "ungol dust" : EA_DRAIN
+  {
+    Level: 3;
+    /*Iteration*/   cval: 3;
+    /*Save DC*/     sval: 15;
+    /*Persistance*/ lval: 3;
+    xval: AD_DACH;  pval: 1d3;
+    Desc: "This poison inflicts <11>1d3<7> points of Charisma damage every 
+      <11>3<7> turns, and requires <11>3<7> saving throws against <11>DC 15<7> 
+      to overcome.";
+  }
+
+Poison "karmic venom" : EA_DRAIN
+  {
+    Level: 2;
+    /*Iteration*/   cval: 4;
+    /*Save DC*/     sval: 15;
+    /*Persistance*/ lval: 3;
+    xval: AD_DALU;  pval: 1d3;
+    Desc: "This poison inflicts <11>1d3<7> points of Luck damage every 
+      <11>4<7> turns, and requires <11>3<7> saving throws against <11>DC 15<7> 
+      to overcome.";
+  }
+  
+Poison "burnt othur fumes" : EA_DRAIN
+  {
+    Level: 4;
+    /*Iteration*/   cval: 10;
+    /*Save DC*/     sval: 15;
+    /*Persistance*/ lval: 1;
+    xval: AD_DACO;  pval: 3d6;
+    Desc: "This poison inflicts <11>3d6<7> points of Constitution damage every 
+      <11>10<7> turns, and requires <11>1<7> saving throw against <11>DC 15<7> 
+      to overcome.";
+  }
+
+Poison "insanity mist" : EA_DRAIN
+  {
+    Level: 3;
+    /*Iteration*/   cval: 4;
+    /*Save DC*/     sval: 15;
+    /*Persistance*/ lval: 4;
+    xval: AD_DAWI;  pval: 1d4;
+    Desc: "This poison inflicts <11>1d4<7> points of Wisdom damage every 
+      <11>4<7> turns, and requires <11>4<7> saving throws against <11>DC 15<7> 
+      to overcome.";
+  }
+
+/************************************************************************\
+ *                                  TRAPS                               *
+\************************************************************************/
+
+Feature "trap" : T_TRAP
+  { 
+    Image: grey GLYPH_TRAP;
+    Mat: MAT_GRANITE;
+  }
+
+/* Traps are now color-coded by "general effect":
+ *
+ * poison dart, poison needle, weakening
+ * physical damage
+ * slow / grease / entangle / teleport / hold 
+ * confusion / fear / reduce / light / famine / hold / polymorph / reanimate
+ * elemental damage
+ * necromatic / mana / blackmantle
+ * rust / curse
+ * pits / water
+ */
+#define POISON_C        EMERALD
+#define PHYSICAL_C      AZURE
+#define MOTION_C        YELLOW
+#define MISC_C          MAGENTA
+#define ELEMENTAL_C     PINK
+#define NECRO_C         SHADOW
+#define EQUIP_C         BROWN        
+#define TERRA_C         SKYBLUE
+
+/************* LEVEL 1 TRAPS *****************/
+
+AI_TRAP Effect "bloodroot dart trap" : EA_BLAST
+  { cval: POISON_C; xval: AD_PIERCE; pval: 1d4+1; sval: REF;
+    Flags: /*EF_ATTACK,*/ EF_MUNDANE, EF_REPEAT; Level: 1;
+    On Event MSG_BLASTNAME "dart",
+    EV_MAGIC_STRIKE {
+      hObj it;
+      ThrowDmgEff(EV_DAMAGE,AD_POIS,3d6,"bloodroot dart trap",$"bloodroot",EVictim,EVictim,NULL,NULL);
+      it = CreateItem($"dart");
+      if (it) {
+        it->GainPermStati(POISONED,NULL,SS_MISC,0,1,$"bloodroot");
+        it->PlaceAt(EMap,EVictim->x,EVictim->y);
+      } 
+    };
+    On Event EV_DISARM {
+      hObj it;
+      it = CreateItem($"dart");
+      it->SetQuantity(6d3);
+      it->GainPermStati(POISONED,NULL,SS_MISC,0,2,$"bloodroot");
+      it->PlaceAt(EMap,EVictim->x,EVictim->y);
+    } ;
+  }
+
+AI_TRAP Effect "greenblood needle trap" : EA_GENERIC
+  { cval: POISON_C; Flags: EF_MUNDANE, EF_REPEAT; sval: REF; Level: 5;
+    On Event EV_MAGIC_HIT {
+      VPrint(e,"A tiny needle strikes you!",
+               "A tiny needle strikes the <EVictim>.");
+      ThrowDmgEff(EV_DAMAGE,AD_POIS,3d6,"greenblood needle trap",$"greenblood oil",EVictim,EVictim,NULL,NULL);
+      return DONE;
+      };
+    On Event EV_DISARM {
+      hObj it; 
+      it = CreateItem($"small glass vial");
+      it->GainPermStati(POISONED,NULL,SS_MISC,0,6d3,$"greenblood oil");
+      it->PlaceAt(EMap,EVictim->x,EVictim->y);
+    } ;
+  }
+
+AI_TRAP Effect "razor-wire trap" : EA_BLAST
+  { cval: MOTION_C; xval: AD_SLASH; pval: 2d6; sval: REF;
+    Flags: /*EF_ATTACK,*/ EF_MUNDANE, EF_REPEAT; Level: 1;
+    On Event MSG_BLASTNAME "razor-wire",
+    EV_MAGIC_STRIKE { 
+      ThrowDmg(EV_DAMAGE,AD_TRIP,20,"razor-wire trap",EActor,EActor);
+    } ;
+  }
+
+AI_TRAP Effect "confusion trap" : EA_DRAIN
+  { cval: MISC_C; xval: AD_CONF; Level: 1; pval: 3d12+3; 
+    Flags: EF_MENTAL; sval: WILL; }
+
+AI_TRAP Effect "fear trap" : EA_DRAIN
+  { cval: MISC_C; xval: AD_FEAR; Level: 1; pval: 3d12+3; 
+    Flags: EF_MENTAL, EF_FEAR; sval: WILL; }
+
+AI_TRAP Effect "slow trap" : EA_INFLICT
+  { cval: MOTION_C; sval: REF; Level: 1;
+    xval: ADJUST; yval: A_MOV; pval: -10; 
+    Flags: EF_PERSISTANT; }
+and EA_INFLICT
+  { xval: ADJUST; yval: A_SPD; pval: -10; }
+
+AI_TRAP Effect "stunning trap" : EA_DRAIN
+  { cval: MOTION_C; xval: AD_STUN; 
+    pval: 3d12+3; sval: REF; Level: 1;
+    Flags: EF_DLONG; }
+
+AI_TRAP Effect "bane trap" : EA_INFLICT
+  { cval: MISC_C; xval: ADJUST_MOR; yval: A_AID; pval: -1; 
+    sval: WILL; Flags: EF_MENTAL, EF_PERSISTANT; Level: 1;
+    On Event MSG_CAST
+      "You feel threatened!" /
+      "The <EVictim> feels threatened."; }
+
+AI_TRAP Effect "howling trap" : EA_GENERIC
+  { cval: ELEMENTAL_C; Flags: EF_MUNDANE; sval: REF; Level: 1;
+    On Event EV_MAGIC_HIT {
+      VPrint(e,"A piercing burst of sound strikes you ...",
+               "A piercing wail echoes through the dungeon...");
+      ThrowDmg(EV_DAMAGE,AD_SONI,1d6,"howling trap",EVictim,EVictim);
+      EVictim->MakeNoise(150);
+      return DONE;
+      };
+  }
+
+AI_TRAP Effect "fatigue trap" : EA_GENERIC
+  { cval: PHYSICAL_C; sval: FORT; Level: 1;
+    On Event EV_MAGIC_HIT {
+      EVictim->IPrint("You suddenly feel exhausted!");
+      EVictim->LoseFatigue(2d3,false);
+      return DONE;
+      };
+  }
+
+AI_TRAP Effect "minor dimensional anchor trap" : EA_INFLICT
+  { cval: MOTION_C; xval: ANCHORED; sval: REF; Level: 1; 
+    Flags: EF_PERSISTANT; 
+    On Event EV_MAGIC_HIT
+      "You feel a strange wrenching sensation." /
+      "The <EVictim> suddenly seems more solid, somehow.";
+    Desc: "While dimensionally anchored you cannot teleport."; 
+  }  
+
+AI_TRAP Effect "minor rust trap" : EA_DRAIN
+  { cval: EQUIP_C; xval: AD_RUST; pval: 1d10; sval: REF; Level: 2; qval: Q_EQU;}  
+AI_TRAP Effect "minor decay trap" : EA_DRAIN
+  { cval: EQUIP_C; xval: AD_DCAY; pval: 1d10; sval: REF; Level: 2; qval: Q_EQU;}  
+AI_TRAP Effect "minor soaking trap" : EA_DRAIN
+  { cval: EQUIP_C; xval: AD_SOAK; pval: 1d10; sval: REF; Level: 2; qval: Q_EQU;
+    Flags: EF_MUNDANE; }  
+AI_TRAP Effect "minor disruption trap" : EA_BLAST
+  { cval: EQUIP_C; xval: AD_BLUNT; pval: 1d10; sval: REF;
+    qval: Q_EQU; 
+    Level: 1;
+    On Event MSG_BLASTNAME "blast of rending force"; }
+
+AI_TRAP Effect "grease trap" : EA_TERRAFORM
+  { cval: MOTION_C; Level: 2; sval: REF; Flags: EF_PERMANANT, EF_MUNDANE;
+    xval: TERRA_FLOOR; rval: $"pool of grease"; aval: AR_GLOBE; lval: 3; 
+    On Event MSG_CAST "Grease rises up from the trap!"; 
+  }
+
+AI_TRAP Effect "reduce trap" : EA_INFLICT
+  { cval: MISC_C; Level: 1; sval: REF; Flags: EF_SHOWNAME, EF_PERSISTANT;
+    xval: ADJUST; yval: A_SIZ; pval: -1; 
+    On Event MSG_STATINAME "Reduced"; 
+    On Event MSG_CAST
+      "You suddenly shrink!" /
+      "The <EVictim> looks smaller."; 
+    On Event EV_REMOVED
+    "You return to your normal size." /
+    "The <EActor> grows larger again.";
+    Desc: "A reduce trap shrinks its victim by one size category
+      for a day.";
+  }
+
+AI_TRAP Effect "light trap" : EA_DRAIN
+  { cval: MISC_C; xval: AD_BLND; pval: 3d4; sval: REF; Level: 1;
+    Flags: EF_DLONG;
+    On Event MSG_CAST
+      "A brilliant flash of light blinds you!" / 
+      "A brilliant flash of light blinds the <EVictim>..."; }
+
+AI_TRAP Effect "faerie fire trap" : EA_GENERIC
+  { cval: MISC_C;  Level: 1; sval: FORT; 
+    On Event EV_MAGIC_HIT {
+      RedirectEff(e,$"faerie fire",EV_EFFECT);
+      EVictim->SetEffStatiDur(-1,$"faerie fire",-2);
+    };
+  }
+
+AI_TRAP Effect "stinking cloud trap" : EA_GENERIC
+  { cval: MISC_C;  Level: 1; sval: REF; Flags: EF_MUNDANE;
+    On Event EV_MAGIC_HIT {
+      RedirectEff(e,$"stinking cloud",EV_EFFECT);
+    };
+  }
+
+AI_TRAP Effect "pit trap" : EA_TERRAFORM
+  { cval: TERRA_C; Level: 1; sval: REF; Flags: EF_MUNDANE, EF_PERMANANT; 
+    xval: TERRA_FLOOR; rval: $"pit"; aval: AR_GLOBE; lval: 1; 
+    On Event MSG_CAST 
+      "The ground falls away!" /
+      "The ground falls away beneath the <EActor>!",
+    POST(EV_EFFECT) {
+      hObj cr; int16 x, y;
+      EItem->Remove(true);
+      x = EActor->x; y = EActor->y;
+      return NOTHING;
+      };
+  }
+
+Terrain "pit"
+  { 
+    Image: brown GLYPH_PIT; Mat:MAT_GRANITE; 
+    Flags: TF_WARN, TF_SPECIAL, TF_SHOWNAME, TF_PIT; 
+    On Event EV_ENTER {
+      if (EActor->isAerial())
+        return NOTHING;
+      EActor->IDPrint("You fall into the pit!",
+                      "The <hObj> falls into a pit!", EActor);
+      ThrowDmg(EV_DAMAGE,AD_FALL,2d6,"a pit trap",EActor,EActor);
+      return NOTHING;
+      },
+    PRE(EV_PUSH) {
+      return ABORT;
+      },
+    EV_JUMP_OFF {
+      EActor->IPrint("You cannot jump when stuck in a pit.");
+      return ABORT;
+      },
+    PRE(EV_MOVE) {
+      if (EActor->isAerial())
+        return NOTHING;
+      if (EActor->HasStati(PRONE))
+        return NOTHING;
+      EActor->Timeout += 30;
+      if (!EActor->SkillCheck(SK_CLIMB,20,true)) {
+        EActor->IPrint("You try to climb out of the pit, but fall back in!");
+        ThrowDmg(EV_DAMAGE,AD_FALL,2d6,"failing to climb out of a pit trap",
+          EActor,EActor);
+        return DONE;
+        }
+      EActor->IPrint("You climb out of the pit.");
+      return NOTHING;
+      },
+    EVICTIM(EV_WATTACK), EVICTIM(EV_NATTACK) {
+      /* If you're both in the pit, you can fight. */
+      if (EActor->x == EVictim->x && EActor->y == EVictim->y)
+        return NOTHING;
+      if (EVictim->isAerial())
+        return NOTHING;
+      EActor->IPrint("You can't reach the <hObj> inside the pit!", EVictim);
+      return ABORT;
+      },
+    EV_WATTACK, EV_NATTACK { 
+      /* If you're both in the pit, you can fight. */
+      if (EActor->x == EVictim->x && EActor->y == EVictim->y)
+        return NOTHING;
+      if (EActor->isAerial())
+        return NOTHING;
+      EActor->IPrint("You can't reach the <hObj> while you're inside the pit!", EVictim);
+      return ABORT;
+      },
+    EV_MON_CONSIDER {
+      if (EActor->isAerial())
+        return NOTHING;
+      return ABORT;
+      };
+  } 
+
+/************* LEVEL 2 TRAPS *****************/
+
+AI_TRAP Effect "sunscorch trap" : EA_GENERIC
+  { cval: ELEMENTAL_C; Level: 2; sval: FORT; 
+    On Event EV_MAGIC_HIT {
+      RedirectEff(e,$"sunscorch",EV_EFFECT);
+      };
+  }
+
+AI_TRAP Effect "dimension door trap" : EA_TRAVEL
+  { cval: MOTION_C; xval: TRAVEL_ANYWHERE; 
+    pval: 3d10; sval: WILL; Level: 2; 
+  } and EA_DRAIN {
+    xval: AD_STUN; pval: 2d2; sval: WILL; Flags: EF_MENTAL;
+  } 
+
+AI_TRAP Effect "miscast magic trap" : EA_INFLICT
+  { cval: MISC_C; xval: ADJUST_CIRC; yval: A_MAG; pval: -8;
+    sval: WILL;  level: 2; Flags: EF_PERSISTANT; }
+
+AI_TRAP Effect "cold trap" : EA_BLAST
+  { cval: ELEMENTAL_C; Level: 2; aval: AR_GLOBE; lval: 2; 
+    pval: 3d6; xval: AD_COLD; sval: REF; } 
+
+AI_TRAP Effect "minor falling stone trap" : EA_BLAST
+  { cval: PHYSICAL_C; xval: AD_BLUNT; pval: 2d6;
+    sval: REF; Flags: EF_MUNDANE; Level: 2;
+    On Event MSG_BLASTNAME
+      "falling stone",
+    EV_MAGIC_HIT {
+      hObj h;
+      h = CreateItem($"boulder");
+      h->PlaceAt(EMap,EVictim->x,EVictim->y);
+      return NOTHING;
+      };
+  }
+
+AI_TRAP Effect "inflict light wounds trap" : EA_BLAST
+  { cval: NECRO_C; Level: 2;  
+    pval: 1d8+1; xval: AD_NECR; sval: WILL; } 
+
+AI_TRAP Effect "javelin trap" : EA_BLAST
+  { cval: PHYSICAL_C; xval: AD_PIERCE; pval: 1d6+4; sval: REF;
+    Flags: /*EF_ATTACK,*/ EF_MUNDANE, EF_REPEAT; Level: 2;
+    On Event MSG_BLASTNAME "javelin",
+    EV_MAGIC_STRIKE {
+      hObj it;
+      it = CreateItem($"javelin");
+      if (it) {
+        it->PlaceAt(EMap,EVictim->x,EVictim->y);
+      } 
+    },
+    EV_DISARM {
+      hObj it;
+      it = CreateItem($"javelin");
+      it->SetQuantity(6d3); 
+      it->PlaceAt(EMap,EVictim->x,EVictim->y);
+    } ; 
+  }
+
+AI_TRAP Effect "small trapdoor trap" : EA_TERRAFORM
+  { cval: TERRA_C; Level: 2; sval: REF; Flags: EF_MUNDANE; 
+    xval: TERRA_FLOOR; rval: $"chasm"; aval: AR_GLOBE; lval: 1; 
+    On Event MSG_CAST "The ground falls away!",
+    POST(EV_EFFECT) {
+      EItem->Remove(true);
+      return NOTHING;
+      };
+  }
+
+AI_TRAP Effect "blue whinnis needle trap" : EA_GENERIC
+  { cval: POISON_C; Flags: EF_MUNDANE, EF_REPEAT; sval: REF; Level: 2;
+    On Event EV_MAGIC_HIT {
+      VPrint(e,"A tiny needle strikes you!",
+               "A tiny needle strikes the <EVictim>.");
+      ThrowDmgEff(EV_DAMAGE,AD_POIS,3d6,"blue whinnis needle trap",$"blue whinnis",EVictim,EVictim,NULL,NULL);
+      return DONE;
+      };
+    On Event EV_DISARM {
+      hObj it; 
+      it = CreateItem($"small glass vial");
+      it->GainPermStati(POISONED,NULL,SS_MISC,0,6d3,$"blue whinnis");
+      it->PlaceAt(EMap,EVictim->x,EVictim->y);
+    } ;
+  }
+
+AI_TRAP Effect "arsenic dart trap" : EA_BLAST
+  { cval: POISON_C; xval: AD_PIERCE; pval: 2d4+2; sval: REF;
+    Flags: /*EF_ATTACK,*/ EF_MUNDANE, EF_REPEAT; Level: 2;
+    On Event MSG_BLASTNAME "dart",
+    EV_MAGIC_STRIKE {
+      hObj it;
+      ThrowDmgEff(EV_DAMAGE,AD_POIS,3d6,"arsenic dart trap",$"arsenic",EVictim,EVictim,NULL,NULL);
+      it = CreateItem($"dart");
+      if (it) {
+        it->GainPermStati(POISONED,NULL,SS_MISC,0,1,$"arsenic");
+        it->PlaceAt(EMap,EVictim->x,EVictim->y);
+      } 
+    };
+    On Event EV_DISARM {
+      hObj it;
+      it = CreateItem($"dart");
+      it->SetQuantity(6d3);
+      it->GainPermStati(POISONED,NULL,SS_MISC,0,2,$"arsenic");
+      it->PlaceAt(EMap,EVictim->x,EVictim->y);
+    } ;
+  }
+
+AI_TRAP Effect "tripping chain trap" : EA_BLAST
+  { cval: PHYSICAL_C; xval: AD_SLASH; pval: 2d4+2; sval: REF;
+    Flags: /*EF_ATTACK,*/ EF_MUNDANE; Level: 2;
+    On Event MSG_BLASTNAME
+      "tripping chain",
+    EV_MAGIC_STRIKE { 
+      ThrowDmg(EV_DAMAGE,AD_TRIP,25,"tripping chain trap",EActor,EActor); 
+    } ;
+    On Event EV_DISARM {
+      hObj it; 
+      it = CreateItem($"spiked chain");
+      it->PlaceAt(EMap,EVictim->x,EVictim->y);
+    } ;
+  }
+
+AI_TRAP Effect "caltrop trap" : EA_TERRAFORM
+  { cval: MOTION_C; Level: 2; sval: REF; Flags: EF_PERMANANT;
+    xval: TERRA_FLOOR; rval: $"bed of spikes"; aval: AR_GLOBE; lval: 3; 
+    On Event MSG_CAST "Spikes rises up from the ground!"; 
+    Flags: EF_MUNDANE;
+  }
+
+AI_TRAP Effect "swarm of insects trap" : EA_GENERIC
+  { cval: MISC_C;  Level: 2; sval: FORT; 
+    On Event EV_MAGIC_HIT {
+      RedirectEff(e,$"summon swarm",EV_EFFECT);
+    };
+  }
+
+/************* LEVEL 3 TRAPS *****************/
+
+AI_TRAP Effect "pain trap" : EA_INFLICT
+  { cval: MISC_C; xval: ADJUST_PAIN; yval: A_AID; pval: -3; 
+    sval: WILL;  Level: 1; tval: MA_LIVING; 
+    Flags: EF_DLONG, EF_LIM_MTYPE, EF_SHOWNAME, EF_PERSISTANT;
+    On Event MSG_STATINAME "Pain" / "Pain"; 
+    On Event MSG_CAST
+      "You are wracked with pain!" /
+      "The <EVictim> howls in agony!"; }
+
+AI_TRAP Effect "cold metal trap" : EA_GENERIC
+  { cval: ELEMENTAL_C; Level: 3; sval: REF;
+    On Event EV_MAGIC_HIT {
+      RedirectEff(e,$"chill metal",EV_EFFECT);
+    };
+  } 
+
+AI_TRAP Effect "heat metal trap" : EA_GENERIC
+  { cval: ELEMENTAL_C; Level: 3; sval: REF;
+    On Event EV_MAGIC_HIT {
+      RedirectEff(e,$"heat metal",EV_EFFECT);
+    };
+  } 
+
+AI_TRAP Effect "dispelling trap" : EA_GENERIC
+  { cval: EQUIP_C; Level: 3; sval: WILL; 
+    On Event EV_MAGIC_HIT {
+      RedirectEff(e,$"dispel magic",EV_EFFECT);
+    };
+  }
+AI_TRAP Effect "dispelling trap;2" : EA_GENERIC
+  { cval: EQUIP_C; Level: 3; sval: WILL; 
+    On Event EV_MAGIC_HIT {
+      RedirectEff(e,$"dispel magic",EV_EFFECT);
+    };
+  }
+AI_TRAP Effect "dispelling trap;3" : EA_GENERIC
+  { cval: EQUIP_C; Level: 3; sval: WILL; 
+    On Event EV_MAGIC_HIT {
+      RedirectEff(e,$"dispel magic",EV_EFFECT);
+    };
+  }
+  
+  
+AI_TRAP Effect "dimensional anchor trap" : EA_INFLICT
+  { cval: MOTION_C; xval: ANCHORED; sval: REF; Level: 3;  
+    On Event EV_MAGIC_HIT
+      "You feel a strange wrenching sensation." / 
+      "The <EVictim> suddenly seems more solid, somehow.";
+    Desc: "While dimensionally anchored you cannot teleport."; 
+    On Event EV_CALC_EFFECT {
+      e.vDuration = -3;
+      return NOTHING;
+      };
+
+  }  
+
+AI_TRAP Effect "rust trap" : EA_DRAIN
+  { cval: EQUIP_C; xval: AD_RUST; pval: 3d10; sval: REF; Level: 3; 
+    qval: Q_EQU; } 
+
+AI_TRAP Effect "decay trap" : EA_DRAIN
+  { cval: EQUIP_C; xval: AD_DCAY; pval: 3d10; sval: REF; Level: 3; 
+    qval: Q_EQU; } 
+
+AI_TRAP Effect "soaking trap" : EA_DRAIN
+  { cval: EQUIP_C; xval: AD_SOAK; pval: 3d10; sval: REF; Level: 3; 
+    qval: Q_EQU; Flags: EF_MUNDANE; }  
+
+AI_TRAP Effect "disruption trap" : EA_DRAIN
+  { cval: EQUIP_C; xval: AD_BLUNT; pval: 3d5; sval: REF;
+    qval: Q_EQU; Level: 3;
+    On Event MSG_BLASTNAME "blast of rending force"; }
+
+
+AI_TRAP Effect "inflict moderate wounds trap" : EA_DRAIN
+  { cval: NECRO_C; Level: 3;  
+    pval: 2d8+2; xval: AD_NECR; sval: WILL; } 
+
+AI_TRAP Effect "famine trap" : EA_GENERIC
+  { cval: MISC_C; sval: FORT; Level: 3;
+    On Event EV_MAGIC_HIT {
+      if (!EVictim->HasStati(HUNGER))
+        return DONE;
+      EVictim->IPrint("You suddenly feel pangs of hunger!");
+      EVictim->SetStatiDur(HUNGER,-1,NULL,
+        EVictim->GetStatiDur(HUNGER,-1,NULL) / 5 );
+      return DONE;
+      };
+  }
+
+AI_TRAP Effect "fire trap" : EA_BLAST
+  { cval: ELEMENTAL_C; xval: AD_FIRE; pval: 3d6; sval: REF partial;
+    Level: 3; On Event MSG_BLASTNAME "column of flame"; 
+    Flags: EF_MUNDANE;}
+
+AI_TRAP Effect "entangling spray trap" : EA_BLAST
+  { cval: MOTION_C; xval: AD_STUK; pval: -1; sval: REF; Level: 3;
+    Flags: EF_MUNDANE;
+    On Event MSG_CAST
+      "Sticky threads spray up around you..." / 
+      "Sticky threads spray up around the <EVictim>..."; }
+
+AI_TRAP Effect "teleport trap" : EA_TRAVEL
+  { cval: MOTION_C; xval: TRAVEL_ANYWHERE; 
+    pval: 6d10; sval: WILL; Level: 3; 
+  } and EA_DRAIN {
+    xval: AD_STUN; pval: 4d4; sval: WILL; Flags: EF_MENTAL;
+  } 
+
+AI_TRAP Effect "minor mana trap" : EA_DRAIN
+  { cval: NECRO_C; xval: AD_DRMA; pval: 3d10; sval: WILL; Level: 3; 
+    On Event POST(EV_MAGIC_STRIKE) { 
+      ThrowDmg(EV_DAMAGE,AD_MAGC,e.vDmg,"mana trap",EVictim,EVictim);
+    }; 
+    On Event MSG_CAST
+      "Your mana is drained and redirected to strike you!" /
+      "The <EVictim> is hit by a magical assault!";
+  }  
+
+AI_TRAP Effect "falling stone trap" : EA_BLAST
+  { cval: PHYSICAL_C; xval: AD_BLUNT; pval: 4d6;
+    sval: REF; Flags: EF_MUNDANE; Level: 3;
+    On Event MSG_BLASTNAME
+      "falling stone",
+    EV_MAGIC_HIT {
+      hObj h;
+      h = CreateItem($"boulder");
+      h->PlaceAt(EMap,EVictim->x,EVictim->y);
+      return NOTHING;
+      };
+  }
+
+AI_TRAP Effect "wasp nest trap" : EA_GENERIC
+  { cval: MISC_C;  Level: 3; sval: FORT; Flags: EF_MUNDANE;
+    On Event EV_MAGIC_HIT {
+      RedirectEff(e,$"insect plague",EV_EFFECT);
+    };
+  }
+
+AI_TRAP Effect "idiocy trap" : EA_DRAIN
+  { xval: AD_DAIN; pval: 3d2; sval: FORT; 
+    cval: PHYSICAL_C; Level: 4; } 
+    and EA_DRAIN { xval: AD_DAWI; pval: 3d2; sval: FORT; }
+    and EA_DRAIN { xval: AD_DACH; pval: 3d2; sval: FORT; }
+
+/************* LEVEL 4 TRAPS *****************/
+
+AI_TRAP Effect "major magic trap" : EA_INFLICT
+  { cval: MISC_C; xval: ADJUST_CIRC; yval: A_MAG; pval: -16;
+    sval: WILL;  level: 4; }
+
+AI_TRAP Effect "minor lightning bolt trap" : EA_BLAST
+  { cval: ELEMENTAL_C; xval: AD_ELEC; pval: 5d6; sval: REF partial;
+    Level: 4; On Event MSG_BLASTNAME "lightning bolt"; }
+
+AI_TRAP Effect "blackmantle trap" : EA_GENERIC
+  { cval: NECRO_C; Level: 4; sval: WILL; 
+    On Event EV_MAGIC_HIT {
+      RedirectEff(e,$"blackmantle",EV_EFFECT);
+      ThrowDmg(EV_DAMAGE,AD_NECR,2d8,"blackmantle trap",EVictim,EVictim);
+    };
+  }
+
+AI_TRAP Effect "holding trap" : EA_INFLICT
+  { cval: MOTION_C; Level: 4; sval: WILL; 
+    xval: PARALYSIS; 
+  }
+
+AI_TRAP Effect "inflict serious wounds trap" : EA_BLAST
+  { cval: NECRO_C; Level: 4;  
+    pval: 3d8+3; xval: AD_NECR; sval: WILL; } 
+
+AI_TRAP Effect "cursing trap" : EA_GENERIC
+  { cval: EQUIP_C; Level: 4; sval: WILL; 
+    On Event EV_MAGIC_HIT {
+      RedirectEff(e,$"bestow curse",EV_EFFECT);
+    };
+  }
+
+AI_TRAP Effect "weakening trap" : EA_DRAIN
+  { xval: AD_DAST; pval: 4; sval: REF; cval: PHYSICAL_C; Level: 4;
+    Flags: EF_MUNDANE; 
+    On Event MSG_CAST
+      "Tiny needles pierce your skin... you feel weak." /
+      "Tiny needles pierce the <EVictim>!"; }
+
+AI_TRAP Effect "numbing trap" : EA_DRAIN
+  { xval: AD_DADX; pval: 4; sval: REF; cval: PHYSICAL_C; Level: 4;
+    Flags: EF_MUNDANE; 
+    On Event MSG_CAST
+      "Tiny needles pierce your skin... you feel numb." /
+      "Tiny needles pierce the <EVictim>!"; }
+
+AI_TRAP Effect "withering trap" : EA_DRAIN
+  { xval: AD_DACO; pval: 4; sval: REF; cval: PHYSICAL_C; 
+    Level: 4;
+    Flags: EF_MUNDANE, EF_REPEAT; 
+    On Event MSG_CAST
+      "Tiny needles pierce your skin... you feel frail." /
+      "Tiny needles pierce the <EVictim>!"; }
+
+AI_TRAP Effect "water trap" : EA_TERRAFORM
+  { cval: TERRA_C; Level: 4; sval: REF; Flags: EF_REPEAT, EF_MUNDANE;
+    xval: TERRA_FLOOR; rval: $"deep water"; aval: AR_GLOBE; lval: 4; 
+    On Event MSG_CAST "Water sprays up from the trap!"; 
+  }
+
+AI_TRAP Effect "large trapdoor trap" : EA_TERRAFORM
+  { cval: TERRA_C; Level: 4; sval: REF; Flags: EF_MUNDANE; 
+    xval: TERRA_FLOOR; rval: $"chasm"; aval: AR_GLOBE;
+    lval: 2; 
+    On Event MSG_CAST
+      "The ground falls away!",
+    POST(EV_EFFECT) {
+      EItem->Remove(true);
+      return NOTHING;
+      };
+ 
+  }
+
+AI_TRAP Effect "terinav root dart trap" : EA_BLAST
+  { cval: POISON_C; xval: AD_PIERCE; pval: 4d4+4; sval: REF;
+    Flags: /*EF_ATTACK,*/ EF_MUNDANE, EF_REPEAT; Level: 4;
+    On Event MSG_BLASTNAME "dart",
+    EV_MAGIC_STRIKE {
+      hObj it;
+      ThrowDmgEff(EV_DAMAGE,AD_POIS,3d6,"terinav root dart trap",$"terinav root",EVictim,EVictim,NULL,NULL);
+      it = CreateItem($"dart");
+      if (it) {
+        it->GainPermStati(POISONED,NULL,SS_MISC,0,1,$"terinav root");
+        it->PlaceAt(EMap,EVictim->x,EVictim->y);
+      } 
+    };
+    On Event EV_DISARM {
+      hObj it;
+      it = CreateItem($"dart");
+      it->SetQuantity(6d3);
+      it->GainPermStati(POISONED,NULL,SS_MISC,0,2,$"terinav root");
+      it->PlaceAt(EMap,EVictim->x,EVictim->y);
+    } ;
+  }
+
+AI_TRAP Effect "nitharit scythe trap" : EA_BLAST
+  { cval: POISON_C; xval: AD_SLASH; pval: 3d4+12; sval: REF;
+    Flags: /*EF_ATTACK,*/ EF_MUNDANE, EF_REPEAT; Level: 4;
+    On Event MSG_BLASTNAME
+      "nitharit scythe",
+    EV_MAGIC_STRIKE {
+      ThrowDmgEff(EV_DAMAGE,AD_POIS,3d6,"nitharit scythe trap",$"nitharit",EVictim,EVictim,NULL,NULL);
+    } ;
+    On Event EV_DISARM {
+      hObj it; 
+      it = CreateItem($"scythe");
+      it->GainPermStati(POISONED,NULL,SS_MISC,0,3d3,$"nitharit");
+      it->PlaceAt(EMap,EVictim->x,EVictim->y);
+    } ;
+  }
+
+/************* LEVEL 5 TRAPS *****************/
+
+AI_TRAP Effect "searing light trap" : EA_GENERIC
+  { cval: ELEMENTAL_C; Level: 5; sval: FORT; 
+    On Event EV_MAGIC_HIT {
+      RedirectEff(e,$"searing light",EV_EFFECT);
+    };
+  }
+
+AI_TRAP Effect "major dimensional anchor trap" : EA_INFLICT
+  { cval: MOTION_C; xval: ANCHORED; sval: REF; Level: 5;  
+    Flags: EF_PERMANANT; /* dispel magic still gets rid of it */
+    On Event EV_MAGIC_HIT
+      "You feel a strange wrenching sensation." / 
+      "The <EVictim> suddenly seems more solid, somehow.";
+    Desc: "While dimensionally anchored you cannot teleport. The
+      anchoring from a major dimensional anchor trap lasts until
+      cancelled by <9>dispel magic<7> or a similar effect."; 
+  }  
+
+AI_TRAP Effect "major rust trap" : EA_DRAIN
+  { cval: EQUIP_C; xval: AD_RUST; pval: 4d10; sval: REF; Level: 5; 
+    qval: Q_EQU; } 
+
+AI_TRAP Effect "major decay trap" : EA_DRAIN
+  { cval: EQUIP_C; xval: AD_DCAY; pval: 4d10; sval: REF; Level: 5; 
+    qval: Q_EQU; } 
+
+AI_TRAP Effect "major soaking trap" : EA_DRAIN
+  { cval: EQUIP_C; xval: AD_SOAK; pval: 4d10; sval: REF; Level: 5; 
+    qval: Q_EQU; Flags: EF_MUNDANE; } 
+
+AI_TRAP Effect "major disruption trap" : EA_DRAIN
+  { cval: EQUIP_C; xval: AD_BLUNT; pval: 4d5; sval: REF;
+    qval: Q_EQU; Level: 5;
+    On Event MSG_BLASTNAME "blast of rending force"; }
+
+AI_TRAP Effect "inflict critical wounds trap" : EA_BLAST
+  { cval: NECRO_C; Level: 5;  
+    pval: 4d8+4; xval: AD_NECR; sval: WILL; } 
+
+AI_TRAP Effect "falling boulder trap" : EA_BLAST
+  { cval: PHYSICAL_C; xval: AD_BLUNT; pval: 6d6;
+    aval: AR_GLOBE; lval: 2; 
+    sval: REF; Flags: EF_MUNDANE; Level: 5;
+    On Event MSG_BLASTNAME
+      "falling stone",
+    EV_MAGIC_HIT {
+      hObj h;
+      h = CreateItem($"boulder");
+      h->PlaceAt(EMap,EVictim->x,EVictim->y);
+      return NOTHING;
+      };
+  }
+
+AI_TRAP Effect "thornwall trap" : EA_TERRAFORM
+  { cval: MOTION_C; Level: 5; sval: REF;
+    xval: TERRA_FLOOR; rval: $"thorn wall"; aval: AR_GLOBE; lval: 3; 
+    On Event MSG_CAST "Thorns rises up from the ground!"; 
+  }
+
+AI_TRAP Effect "chill water trap" : EA_TERRAFORM
+  { cval: TERRA_C; Level: 5; sval: REF; 
+    xval: TERRA_FLOOR; rval: $"deep water"; aval: AR_GLOBE; lval: 4; 
+    On Event MSG_CAST "Water rises up from the trap!"; 
+    On Event EV_MAGIC_HIT {
+      ThrowDmg(EV_DAMAGE,AD_COLD,4d6,"chill water trap",EVictim,EVictim);
+    } ; 
+  } 
+
+AI_TRAP Effect "fireball trap" : EA_BLAST
+  { cval: ELEMENTAL_C; Level: 5; aval: AR_GLOBE; lval: 4; 
+    pval: 8d6; xval: AD_FIRE; sval: REF; } 
+
+AI_TRAP Effect "ungol dust cloud trap" : EA_BLAST
+  { cval: POISON_C; Level: 5; 
+    aval: AR_GLOBE; lval: 5; Flags: EF_MUNDANE; 
+    On Event EV_MAGIC_HIT {
+      ThrowDmgEff(EV_DAMAGE,AD_POIS,3d6,"ungol dust cloud trap",$"ungol dust",EVictim,EVictim,NULL,NULL);
+    } ;
+  }
+
+AI_TRAP Effect "acid spray trap" : EA_BLAST
+  { cval: ELEMENTAL_C; xval: AD_ACID; pval: 8d6;
+    sval: REF; Flags: EF_MUNDANE, EF_AFFECTS_ITEMS; Level: 5;
+    On Event MSG_BLASTNAME
+      "spray of acid"; }
+
+AI_TRAP Effect "polymorph trap" : EA_POLYMORPH
+  { cval: MISC_C; sval: FORT; Level: 5; Flags: EF_PERSISTANT; }
+
+AI_TRAP Effect "id moss needle trap" : EA_GENERIC
+  { cval: POISON_C; Flags: EF_MUNDANE, EF_REPEAT; sval: REF; Level: 5;
+    On Event EV_MAGIC_HIT {
+      VPrint(e,"A tiny needle strikes you!",
+               "A tiny needle strikes the <EVictim>.");
+      ThrowDmgEff(EV_DAMAGE,AD_POIS,3d6,"id moss needle trap",$"id moss",EVictim,EVictim,NULL,NULL);
+      return DONE;
+      };
+    On Event EV_DISARM {
+      hObj it; 
+      it = CreateItem($"small glass vial");
+      it->GainPermStati(POISONED,NULL,SS_MISC,0,6d3,$"id moss");
+      it->PlaceAt(EMap,EVictim->x,EVictim->y);
+    } ;
+  }
+     
+AI_TRAP Effect "reanimation trap" : EA_GENERIC
+  { tval: T_CORPSE; cval: MISC_C; Level: 5;
+    Flags: EF_LIM_ITYPE, EF_EVIL, EF_AFFECTS_ITEMS, EF_ITEMS_ONLY; 
+    aval: AR_GLOBE; lval: 6; 
+    On Event POST(EV_EFFECT) {      
+      if (e.isSomething)
+        VPrint(e,"The dead rise!",
+                 "The dead rise!");
+      return NOTHING;
+      },      
+    EV_MAGIC_HIT {
+      rID cmID; hObj zom;
+      if (!ETarget->isType(T_CORPSE))
+        return NOTHING;
+      cmID = ETarget->GetCorpseType();
+      if (!cmID)
+        return NOTHING;
+      /*
+      if (!cmID->HasFlag(M_HUMANOID) || cmID->Siz > SZ_MEDIUM)
+        return NOTHING;
+      */
+      if (ResourceLevel(cmID) > 5)
+        {
+          EActor->IPrint("The <hObj> shifts briefly, but does not move.",ETarget);
+          return NOTHING;
+        }
+      zom = CreateMonster(cmID);
+      if (!zom)
+        return ABORT;
+      
+      zom->AddTemplate($"zombie");
+
+      zom->PartyID = 105;
+
+      if (ETarget->Owner() == EActor)
+        zom->PlaceAt(EMap,EActor->x,EActor->y);
+      else
+        zom->PlaceAt(EMap,ETarget->x,ETarget->y);
+      zom->Initialize();
+      ETarget->Remove(true);
+      e.isSomething = true;
+      return DONE;
+      };
+  }
+
+/************* LEVEL 6 TRAPS *****************/
+
+AI_TRAP Effect "flame strike trap" : EA_BLAST
+  { cval: ELEMENTAL_C; xval: AD_FIRE; pval: 9d6; sval: REF partial;
+    Level: 6; On Event MSG_BLASTNAME "flame strike"; }
+
+AI_TRAP Effect "major lightning bolt trap" : EA_BLAST
+  { cval: ELEMENTAL_C; xval: AD_ELEC; pval: 10d6; sval: REF partial;
+    Level: 6; On Event MSG_BLASTNAME "lightning bolt"; }
+
+AI_TRAP Effect "wyvern venom dart trap" : EA_BLAST
+  { cval: POISON_C; xval: AD_PIERCE; pval: 6d4+6; sval: REF;
+    Flags: /*EF_ATTACK,*/ EF_MUNDANE; Level: 6;
+    On Event MSG_BLASTNAME "dart",
+    EV_MAGIC_STRIKE {
+      hObj it;
+      ThrowDmgEff(EV_DAMAGE,AD_POIS,3d6,"wyvern venom dart trap",$"wyvern venom",EVictim,EVictim,NULL,NULL);
+      it = CreateItem($"dart");
+      if (it) {
+        it->GainPermStati(POISONED,NULL,SS_MISC,0,1,$"wyvern venom");
+        it->PlaceAt(EMap,EVictim->x,EVictim->y);
+      } 
+    };
+    On Event EV_DISARM {
+      hObj it;
+      it = CreateItem($"dart");
+      it->SetQuantity(6d3);
+      it->GainPermStati(POISONED,NULL,SS_MISC,0,2,$"wyvern venom");
+      it->PlaceAt(EMap,EVictim->x,EVictim->y);
+    } ;
+  }
+
+AI_TRAP Effect "major mana trap" : EA_DRAIN
+  { cval: NECRO_C; xval: AD_DRMA; pval: 6d10; sval: WILL; Level: 6; 
+    On Event EV_MAGIC_STRIKE 
+    {  ThrowDmg(EV_DAMAGE,AD_MAGC,6d10,"mana trap",EVictim,EVictim);
+    } ; 
+    On Event MSG_CAST
+      "Your mana is drained and redirected to strike you!" / 
+      "The <EVictim> is hit by a magical assault!";
+  }  
+
+AI_TRAP Effect "hexing trap" : EA_GENERIC
+  { cval: EQUIP_C; Level: 6; sval: WILL; Flags: EF_REPEAT;
+    On Event EV_MAGIC_HIT {
+      RedirectEff(e,$"bestow curse",EV_EFFECT);
+      RedirectEff(e,$"bestow curse",EV_EFFECT);
+      RedirectEff(e,$"bestow curse",EV_EFFECT);
+    };
+  }
+
+/************* LEVEL 7 TRAPS *****************/
+
+AI_TRAP Effect "burnt othur vapor trap" : EA_BLAST
+  { cval: POISON_C; Level: 7; sval: FORT; 
+    aval: AR_GLOBE; lval: 5; Flags: EF_MUNDANE; 
+    On Event EV_MAGIC_HIT {
+      ThrowDmgEff(EV_DAMAGE,AD_POIS,3d6,"burnt othur vapor trap",$"burnt othur fumes",EVictim,EVictim,NULL,NULL);
+    } ;
+    On Event EV_DISARM {
+      hObj it; 
+      it = CreateItem($"small glass vial");
+      it->GainPermStati(POISONED,NULL,SS_MISC,0,6d3,$"burnt othur fumes");
+      it->PlaceAt(EMap,EVictim->x,EVictim->y);
+    } ;
+  }
+
+AI_TRAP Effect "caustic water trap" : EA_TERRAFORM
+  { cval: TERRA_C; Level: 7; sval: REF; Flags: EF_MUNDANE;
+    xval: TERRA_FLOOR; rval: $"deep water"; aval: AR_GLOBE; lval: 5; 
+    On Event MSG_CAST "Water rises up from the trap!"; 
+    On Event EV_MAGIC_HIT {
+      ThrowDmg(EV_DAMAGE,AD_ACID,6d6,"caustic water trap",EVictim,EVictim);
+    } ; 
+  } 
+
+
+/************* LEVEL 8 TRAPS *****************/
+
+AI_TRAP Effect "insanity mist vapor trap" : EA_BLAST
+  { cval: POISON_C; Level: 8; sval: FORT; 
+    aval: AR_GLOBE; lval: 8; Flags: EF_MUNDANE; 
+    On Event EV_MAGIC_HIT {
+      ThrowDmgEff(EV_DAMAGE,AD_POIS,3d6,"insanity mist trap",$"insanity mist",EVictim,EVictim,NULL,NULL);
+    } ;
+    On Event EV_DISARM {
+      hObj it; 
+      it = CreateItem($"small glass vial");
+      it->GainPermStati(POISONED,NULL,SS_MISC,0,6d3,$"insanity mist");
+      it->PlaceAt(EMap,EVictim->x,EVictim->y);
+    } ;
+  }
+
+AI_TRAP Effect "deathblade scythe trap" : EA_BLAST
+  { cval: POISON_C; xval: AD_SLASH; pval: 6d4+24; sval: REF;
+    Flags: /*EF_ATTACK,*/ EF_MUNDANE, EF_REPEAT; Level: 8;
+    On Event MSG_BLASTNAME
+      "deathblade scythe",
+    EV_MAGIC_STRIKE {
+      ThrowDmgEff(EV_DAMAGE,AD_POIS,3d6,"deathblade scythe trap",$"deathblade",EVictim,EVictim,NULL,NULL);
+    } ;
+    On Event EV_DISARM {
+      hObj it; 
+      it = CreateItem($"great scythe");
+      it->GainPermStati(POISONED,NULL,SS_MISC,0,3d3,$"deathblade");
+      it->PlaceAt(EMap,EVictim->x,EVictim->y);
+    } ;
+  }
+
+AI_TRAP Effect "harm trap" : EA_BLAST
+  { 
+    cval: NECRO_C; Level: 8;
+    On Event EV_MAGIC_HIT {
+      RedirectEff(e,$"harm",EV_EFFECT);
+      };
+  } 
+
+
+/************* MAGICAL SYMBOL TRAPS *****************/
+
+AI_TRAP Effect "Symbol of Pain;trap" : EA_BLAST
+  { cval: MISC_C; Level: 10; sval: NOSAVE; 
+    aval: AR_GLOBE; lval: 6; Flags: EF_DLONG, EF_REPEAT; 
+    On Event EV_MAGIC_HIT {
+      EVictim->GainTempStati(ADJUST_PAIN,NULL,60,SS_ATTK,A_AID,-4,$"symbol of pain;trap",5); 
+      EVictim->GainTempStati(ADJUST_PAIN,NULL,60,SS_ATTK,A_DMG,-4,$"symbol of pain;trap",5); 
+      EVictim->GainTempStati(ADJUST_PAIN,NULL,60,SS_ATTK,A_SPD,-4,$"symbol of pain;trap",5); 
+    } ;
+  }
+
+AI_TRAP Effect "Symbol of Sleep;trap" : EA_BLAST
+  { cval: MISC_C; Level: 10; sval: NOSAVE; 
+    aval: AR_GLOBE; lval: 6; Flags: EF_DLONG, EF_REPEAT; 
+    On Event EV_MAGIC_HIT {
+      if (GetHandle(EVictim)) 
+        if (EVictim->isCreature())
+        if (EVictim->ChallengeRating() <= 10 &&
+          !EVictim->SavingThrow(WILL,20,SA_MAGIC|SA_EVIL|SA_ENCH|SA_TRAPS))
+        EVictim->GainTempStati(ASLEEP,NULL,(3d6)*10,SS_ATTK,SLEEP_MAGIC,0,$"symbol of sleep;trap",5); 
+    } ;
+  }
+
+#if 0
+          
+AI_TRAP Effect "summoning trap" /* +2 CR each trigger */
+
+AI_TRAP Effect "negative energy trap" /* AD_DREX */
+
+AI_TRAP Effect "chalk trap" /* choking */
+
+AI_TRAP Effect "darkness trap"
+
+AI_TRAP Effect "wasp's nest" /* insect plague effect */
+
+
+AI_TRAP Effect "explosive trap"
+
+#endif

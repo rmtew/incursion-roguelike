@@ -1,0 +1,287 @@
+Text "Background"
+  {
+    main: lineage youth adventure present;
+
+    lineage: {
+      * father mother 
+      * mother father
+      * parents
+      * orphan };
+
+    father: "Your father was " {
+      * (Arch == INTROSPECTIVE) "a studied scholar"
+      * (ClassID == $"wizard) "a kindly mage" };
+
+  }
+
+class TText : public Resource
+  {
+    int16 Chance;
+    hCode Test;
+    int32 Ident;
+    int32 Components[8];
+  }
+
+
+Feature "cave enterance" : T_PORTAL
+  {
+    Image: bright green GLYPH_USTAIRS; Mat:MAT_EMPTYNESS;
+    Desc: "Warm light and the reassuring clear air of the surface
+      world waft out of this upward egress.";
+    On Event EV_ENTER {
+      if (murgash_killed) {
+        ETerm->Box("You step out of the caves and back into the light
+          of day, content that your mission is complete. The world has
+          not changed much for your absence, but it is new to your
+          eyes -- where you left it as a novice, you re-emerge into it
+          as a hero, having taken the first steps toward becoming like
+          the great adventurer-lords of old.
+          \n\tThe goblin king is dead. His tribes will scatter across
+          the lands, and perhaps that is ultimately for the best. But
+          the shadow of a great and subtle evil still hangs over the
+          land of Therya, and you very much doubt that your ordeals
+          have come to an end on this day.");
+        ETerm->SetWin(WIN_SCREEN);
+        ETerm->Clear();
+        ETerm->Box("<14>*** YOU HAVE WON ***<7>
+          \n__Congradulations! You have successfully slain the goblin
+          king and and lived to tell about it! This is the end of
+          <5>Incursion: Assault on the Halls of the Goblin King<7>,
+          but don't despair; more adventures await! Assault is only the
+          preview teaser-game for the roguelike epic, <5>Incursion:
+          Return of the Forsaken<7>, due out sometime late 2006.");
+        ETerm->Clear();
+        SetSilence();
+        ThrowDmg(EV_VICTORY,0,0,"slew Murgash, the Goblin King",EPlayer); 
+        return DONE;
+        }
+      else {
+        ETerm->Box("You return to the surface world for a brief night
+          of rest and respite, replenishing your magical energies and
+          giving your wounds time to heal. Yet, duty awaits, and you
+          dare not dally too long. Regretfully, you return to the
+          claustrophobic enclaves of the Goblin King.");
+        EPlayer->Rest(REST_SAFE);
+        }
+    };
+  }
+
+Map "The Goblin Encampment"
+  {
+     Floor: $"floor"; Walls: $"unworked stone";
+     Tiles:
+       '~': $"deep water",
+       'S': $"deep water" with $"shark" of $"dire",
+       'D': $"bloodstain" with $"corpse" of $"drow",
+       'H': $"bloodstain" with $"corpse" of $"human",
+       'W': $"bloodstain" with $"corpse" of $"dwarf",
+       'O': $"bloodstain" with $"corpse" of $"cave orc",
+       'G': $"bloodstain" with $"corpse" of $"gnome",
+       'E': $"bloodstain" with $"corpse" of $"halfling;race",
+       'b': $"summoning circle" with $"black abashai" [TILE_GUARDING],
+       'q': $"summoning circle" with $"green abashai" [TILE_GUARDING],
+       'r': $"summoning circle" with $"red abashai" [TILE_GUARDING],
+       'g': $"floor" with $"goblin" of $"skilled",
+       'G': $"floor" with $"goblin" of $"elite",
+       's': $"floor" with $"goblin" of $"shaman",
+       'h': $"floor" with $"hobgoblin" of $"skilled",
+       'B': $"floor" with $"blackguard",
+       'r': $"floor" with $"dark sorceror",
+       'I': $"floor" with $"illithid",
+       'X': $"adamant wall",
+       'F': $"floor" with $"forge",
+       '}': $"floor" with random T_WEAPON,
+       'w': $"floor" with $"worg",
+       '*': $"building wall" as brown 219,
+       '-': $"building wall" as brown 205,
+       '|': $"building wall" as brown 186,
+       ',': $"floor" as blue GLYPH_FLOOR2,
+       'o': $"pillar" as red 15,
+       '1': $"floor" with $"bulette",
+       '2': $"floor" with $"winter wolf",
+       '3': $"floor" with $"thunderbeast",
+       '4': $"floor" with $"aurumvorax",
+       '5': $"floor" with $"wyvern",
+       '6': $"floor" with /* $"peryton" */ $0,
+       '7': $"floor" with $"displacer beast",
+       '8': $"floor" with $"hook horror",
+       '9': $"floor" with $"tentacle stalker",
+       'M': $"floor" with $"Murgash",
+       '=': $"steel fence" as cyan 240;
+     Grid: {:
+       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+       %%%%%%..........%%%%%%%%%.................%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+       %%%%..............%%%%%.......................%%%%%%%%%%%%%%%%%%%%%%%%
+       %%.....................................................%%%%%%%%%%%%%%%
+       %%%..============================o,o============================.%%%%%
+       %%%..=*------*...................,,,.......####################=..%%%%
+       %%%..=|..}..}|...*--*..*--*.*--*.,,,........##w.w.w.w.w.w.w.w.#=....%%
+       %%%..=|.F..F.+...|G.+..|..|.|..+.,,,.........#.w.w.w.w.w.w.w.w#=....%%
+       %%%..=|...}..|...|.G|..|.G|.|.G|.,,,.........#w.w.w.w.w.w.w.w.#=....%%
+       %%%..=|.F..F.|...*--*..*-+*.*--*.,,,.........#................#=....%%
+       %%%..=|.}.}..|...................,,,.........#...g..g...g..g..#=...%%%
+       %%%..=*------*......*--*..*----*.,,,.........#...g..g...g..g..#=...%%%
+       %%...=..............|G.|..|.h.g+.,,,.........+...g..g...g..g.G#=...%%%
+       %%...==.*---------*.|..+..|.G..|.,,,.........+...g..g...g..g.G#=...%%%
+       %%....=.|...wggg..|.|.g|..*----*.,,,.........#...g..g...g..g..#=...%%%
+       %%....=.|..GGG.gg.|.|G.|.........,,,.........#...g..g...g..g..#=...%%%
+       %%%...=.|.w.h.h.h.|.*--*..*----*.,,,.........#................#=...%%%
+       %%%...=.|...w.GG..|.......|..h.|.,,,.........#w.w.w.w.w.w.w.w.#=....%%
+       %%%...=.|..h.h..gg|.*-----*....+.,,,.........#.w.w.w.w.w.w.w.w#=....%%
+       %%%...=.|G....gg..|.|.h.h..h..h|.,,,........##w.w.w.w.w.w.w.w.#=....%%
+       %%%..==.*-------+-*.*----------*.,,,.......####################=....%%
+       %%%..=...........................,,,...........................=....%%
+       %%%%.=o,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,o=.....%
+       %%%%.=...........................,,,...........................=.....%
+       %%%%.=*--*.*--*.*--*..~~~~~~~~~~.,,,..........*-------------+-*=.....%
+       %%%%.=|.G|.|G.|.|G.|.~~S~~~~~~S~.,,,..HOE.DH..|...............|=.....%
+       %%%%.=|..+.+..|.|..|.~~~~~~S~~~~.,,,.HHDHOEEG.|..I........I...|=.....%
+       %%%%%=*--*.*--*.*+-*..~~~~~~~~~~.,,,..DEW.HH..|......I........|=.....%
+       %%%%%=................~~~~~~~S~~.,,,.EEHDWHHE.|...............|=.....%
+       %%%%%=*--*.*--*.*+-*...~~~~~..~~.,,,.HHH.DWWW.|...I........I..|=....%%
+       %%%%%=|G.+.+.g|.|.G|.............,,,..WWDEGG..|........I......|=....%%
+       %%%%%=|.G|.|.G|.|..|.######......,,,.HHDHEDEO.|...............|=...%%%
+       %%%%%=*--*.*--*.*--*.##...##.....,,,..OOOHDO..|....I..........|=...%%%
+       %%%%%=................#.s..##....,,,.DHOHW.EE.|...............|=..%%%%
+       %%%%%=*--*.*--*.*--*..#..b..##...,,,.DHDOWEH..|..........I....|=..%%%%
+       %%%%%=|.G+.+.G|.|..|..#s.s.s##...,,,..OOHHOWW.|...............|=..%%%%
+       %%%%%=|..|.|..|.|.G|..#..sq.##...,,,..WHHHDO..|....I..........|=..%%%%
+       %%%%%=*--*.*--*.*+-*..+.s...##...,,,...W.O..H.|...............|=..%%%%
+       %%%%%=................#...b.##...,,,..DHOGGGH.|.......+...I...|=.%%%%%
+       %%%%%=*--*.*--*.*+-*..#.s.s.##...,,,.GEHHHDO..|..I............|=.%%%%%
+       %%%%%=|.g+.+..|.|hh|..#.rs..##...,,,..W..WWHG.*---------------*=.%%%%%
+       %%%%%=|G.|.|gG|.|hh|..#.s..##....,,,...........................=.%%%%%
+       %%%%%=*--*.*--*.*--*.##..s##.....,,,..=======================..=.%%%%%
+       %%%%%=...............######......,,,..=.1.3.......7......9..=..=.%%%%%
+       %%%%%=...........................,,,..=.....4..6....8.=======..=.%%%%%
+       %%%%%=...........==============..,,,..=..2........=====........=.%%%%%
+       %%%%.=XXXXXX......==.....1...3=..,,,..=.....5.=====......XXXXXX=%%%%%%
+       %%%%.=X...XXXXX....=====...4..=..,,,..=...=====.......XXXXX...X=%%%%%%
+       %%%%.=X..h...XXXXX.....====..7=..,,,..=.===........XXXXX......X=%%%%%%
+       %%%..=X.........XXXXX.....=====..,,,..===.......XXXXX.....h...X=%%%%%%
+       %%%..=X....h...h...XXXXX.........,,,.........XXXXX....h.h.....X=%%%%%%
+       %%%..=X..TTTTTTTTT....XXXXXXXXXXXX+XXXXXXXXXXXX....TTTTTTTTT..X=%%%%%%
+       %%...=X...............+......B...X.X...s..s.r.+...............X=%%%%%%
+       %%...=XXXX+XXXXXXXXXXXX...B......X.X.r........XXXXXXXXXXXX+XXXX=%%%%%%
+       %....=X............G..X.......B..+.X..s..s.s..X...G...........X=%%%%%%
+       %....=X.G...G.........X..........X.X......r.r.X..........G....X=%%%%%%
+       %....=X..........G....X...B......X.X...s..s...X......G........X=%%%%%%
+       %....=X...G..G........X......B...X.X.s......s.X..G........w...X=%%%%%%
+       %%...=X...........G...X..........X.+....s.....X.......s.......X=%%%%%%
+       %%%..=X..G............X....B.....X.X.r..r..s..X...........g...X=%%%%%%
+       %%%%.=X........G......X........B.X.X..s...s...X..g.....w....G.X=%%%%%%
+       %%%%.=X...............X.B........X.X....s.....X...............X=%%%%%%
+       %%%%.=XX+XX...........XXXXXXXXXXXX.XXXXXXXXXXXX......G....XX+XX=%%%%%%
+       %%%%.=X...X....G....G....G....G..X.X...G....G....G........X...X=%%%%%%
+       %%%%.=X...X+XXXXXXXXXXXXXXXXXXXXXX-XXXXXXXXXXXXXXXXXXXXXX+X...X=%%%%%%
+       %%%%.=X...X...............X...G..qG...qG...X..............X...X=%%%%%%
+       %%%%.=X...X...............+....qG.GGG...G..+..............X...X=%%%%%%
+       %%%%%=X...X...............X...G..q.M.q.G.q.X..............X...X=%%%%%%
+       %%%%%=XXSXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXSXX=%%%%%%
+       %%%%%===S===================================================S===%%%%%%
+       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     :}
+  }
+
+int16 murgash_killed;
+
+Monster "Murgash, the Goblin King" : MA_GOBLIN
+	{
+    Image: bright purple 'g'; Size: SZ_SMALL; Mana: 91;
+		CR: 7; HD: 10; Hit: +10; Def: 12; Mov: 50%; Spd: 80%;
+    Str 16, Dex 27, Con 20, Int 16, Wis 16, Cha 14;
+    Attk: A_PUNC for 1d2 damage,
+          A_ABIL for CA_INFRAVISION (Level 6);
+    Feats: FT_DODGE, FT_ALERTNESS, FT_MOBILITY, FT_SPRING_ATTACK,
+           FT_LIGHTNING_REFLEXES, FT_COMBAT_FINESSE, FT_IMPROVED_CRIT,
+           FT_BLIND_FIGHT, SK_HIDE, SK_LISTEN, SK_MOVE_SIL, SK_SPOT,
+           SK_FIND_WEAKNESS, SK_BLUFF, SK_DIPLOMACY, SK_SENESCHAL;
+		Flags: M_CARNI, M_HERBI, M_HUMANOID, M_NOGEN, M_EVIL, M_LAWFUL,
+           M_UNIQUE, M_LIGHT_AVERSE;
+    Gear: 
+      3d6 $"potion" of $"extra-healing",
+      /*$"boots" of $"speed",
+      $"cloak" of $"displacement",
+      $"headband" of $"perfect excellece",
+      $"ring" of $"evasion",
+      $"ring" of $"Protection",
+      2d4 $"potion" of $"super-heroism"*/;
+    On Event EV_BIRTH {
+      hObj it;
+      /* Nasty Faux-Artifact Sword */
+      it = CreateItem($"scimitar");
+      it->AddQuality(WQ_UNHOLY);
+      it->AddQuality(WQ_CORROSIVE);
+      it->AddQuality(WQ_BURST);
+      it->AddQuality(WQ_KEEN);
+      it->AddQuality(WQ_SOULDRINK);
+      it->AddQuality(WQ_WITHERING);
+      it->MakeMagical((rID)0,+5);
+      /* it->Named = "Soulcleaver"; */
+      EActor->GainItem(it,true);
+      it = CreateItem("chainmail shirt");
+      it->MakeMagical((rID)0,+5);
+      EActor->GainItem(it,true);
+      },
+    On Event EV_DEATH {
+      EAcror->IPrint("You have done it! You have slain the king of 
+        the goblins! Now if only you can make your way back to the
+        surface, you will forevermore be known as a great hero (as
+        opposed to a great martyr)!");
+      murgash_killed = true;
+      };
+	}
+
+
+
+Map "Gaping Pit"
+  {
+    Tiles:
+      'X': $"Unbreakable Rock",
+      '%': $"floor" with $"corpse" of $"human",
+      'O': $"floor" with $"pit trap";
+    Grid: {:
+      XXXXXXXXXXXXXXXXXXXX
+      XXXXXX...%.%XXXXXXXX
+      XXX.%..%..O...XXXXXX
+      XX....%..%%.%..XXXXX
+      X..%.O..%..%.%.%.XXX
+      X.%..%..%.%%.O...%XX
+      X....%....%.%..%..XX
+      XX.%..O.%.%..%...XXX
+      XXXX.%.%>XXXXXXXXXXX
+      XXXXXXXXXXXXXXXXXXXX
+      :}
+  }
+
+Map "Dark Sanctum"
+  {
+    Walls: $"obsidian wall";
+    Floor: $"bloodstain";
+    Tiles:
+      '8': $"blood" with $"altar to Demogorgon",
+      'g': $"blood" with $"goblin" of $"veteran",
+      'a': $"blood" with $"black abishai",
+      'G': $"blood" with $"Murgosh";
+    Grid: {:
+      XXXXXXXXXXXXXXXXXXXX
+      XXXXXXXXXXXXXXXXXXXX
+      XXXXXXXXXXXXXXXXXXXX
+      XXXG......8..a...XXX
+      XXX.g..g...g..g..XXX
+      XXX....a......a..XXX
+      XXX..g....g..g.g.XXX
+      XXX....g.........XXX
+      XXX..a....a.g....XXX
+      XXX....g.g.......XXX
+      XXX.g.....g..>...XXX
+      XXXXXXXXXXXXXXXXXXXX
+      XXXXXXXXXXXXXXXXXXXX
+      XXXXXXXXXXXXXXXXXXXX
+      :}
+    /*On Event EV_PRAY {
+      EPlayer->IPrint("Somehow, you feel your prayers never reached the right
+        destination...");
+      ThrowEff(EV_EFFECT,$"summon demons",NULL,EPlayer);
+      };*/
+  }

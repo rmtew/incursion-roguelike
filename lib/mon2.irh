@@ -1,0 +1,5093 @@
+/* Mon1.Irc -- Monsterous Beasts       Mon2.Irc -- Peoples of Therya
+     Dragons and Kin                     Humanoid Races
+     Mythic Hybrids                      Giants and Faeries
+     Magical Beasts                      Monsterous Societies
+     Other Beasts                        Learned Templates
+     Natural Animals                     Townsfolk
+   Mon3.Irc -- The Wierd Stuff         Mon4.Irc -- Planar Creatures
+     Aberrations                         Demons
+     Constructs                          Devils
+     Plants and Fungi                    Elementalkin
+     Oozes and Vermin                    Other Outsiders
+     Undead Creatures                    Planar Templates              */
+
+/********************************************************************************
+ ********************************************************************************
+ ***                               HUMANOID RACES                             ***
+ ********************************************************************************
+ ********************************************************************************/
+
+/*** THE STANDARD PLAYER RACES ***/
+
+Monster "cave orc" : MA_ORC, MA_ADVENTURER
+  {
+    Image: brown 'o'; Size: SZ_MEDIUM; Mana: 5;
+    CR: OPT_CR(0,1/2); HD: 2; Hit: 0; Def: 10; Mov: 100%; Spd: 100%;
+    Str 14, Dex 10, Con 10, Int 6, Wis 14, Cha 8, Luc 10;
+    Attk: A_PUNC for 1d3 AD_BLUNT;
+	ABILITY(CA_INFRAVISION,12);
+	RACIAL_SKILL(SK_CLIMB,4);
+	ABILITY(CA_SCENT,3);
+    Feats: FT_SWARM, FT_TOUGHNESS, SK_HIDE, SK_MOVE_SIL, SK_LISTEN, 
+             SK_SPOT, SK_CLIMB;
+    Flags: M_CARNI, M_HUMANOID, M_CHIEFTAN, M_SHAMAN, M_COMMON,
+      M_EVIL, M_CHAOTIC, M_LIGHT_AVERSE, M_SKIRMISH;
+    Gear: 33% $"greataxe" else 50% $"greatsword" else $"longspear",
+          33% 2d4 $"javelin" else 1d2 $"shotput",
+          25% $"strip of cured meat"; 
+    Desc: "Cave orcs are the most fecund, and most common, of the orc
+    subraces.  Adapted to Underdark life, the cave orcs have superior
+    infravision, a racial aptitude for climbing and the ability to scale
+    even sheer surfaces easily, along with an understanding of swarm
+    tactics and an aptitude for underground survival, but they are even
+    more craven then the majority of the orcish race, and more
+    intellectually stunted."; 
+    On Event EV_INITIALIZE {
+      hObj h;
+      for(h=EActor->FirstInv();h;h=EActor->NextInv()) {
+        if (h->QualityOK(IQ_ORCISH))
+            h->AddQuality(IQ_ORCISH);
+        }
+      };
+  }
+
+Monster "hill orc" : MA_ORC, MA_ADVENTURER
+  {
+    Image: grey 'o'; Size: SZ_MEDIUM; Mana: 5;
+    CR: OPT_CR(0,1/2); HD: 3; Hit: +2; Def: 10; Mov: 100%; Spd: 100%;
+    Str 18, Dex 10, Con 10, Int 8, Wis 14, Cha 8, Luc 10;
+    Attk: A_PUNC for 1d3 AD_BLUNT;
+	  ABILITY(CA_SCENT,3);
+    Feats: FT_TOUGHNESS, FT_POWER_ATTACK, SK_CRAFT, SK_SPOT, SK_ATHLETICS;
+    Flags: M_CARNI, M_HUMANOID, M_CHIEFTAN, M_SHAMAN, M_UNCOMMON,
+      M_EVIL, M_CHAOTIC, M_SKIRMISH;
+    Gear: 33% $"greataxe" else 50% $"greatsword" else $"longspear",
+          33% 2d4 $"javelin" else 1d2 $"shotput",
+          50% $"plate mail" else
+              $"banded mail",
+          25% $"strip of cured meat"; 
+    Desc: "Hill orcs live above ground, in hellish, industrialized cities
+      carved from harsh granite. Possessing a strict military discipline,
+      they are hardier and stronger than cave orcs, and able to withstand
+      sunlight, but lack the stealth and affinity for climbing possessed
+      by their underdwelling bretheran. Hill orcs are skilled craftsmen
+      (by orc standards), and produce most of the weapons used by the orc
+      peoples."; 
+    On Event EV_INITIALIZE {
+      hObj h;
+      for(h=EActor->FirstInv();h;h=EActor->NextInv()) {
+        if (h->QualityOK(IQ_ORCISH))
+            h->AddQuality(IQ_ORCISH);
+      }
+    };
+  }
+
+Monster "black orc" : MA_ORC, MA_ADVENTURER
+  {
+    Image: shadow 'o'; Size: SZ_MEDIUM; Mana: 20;
+    CR: OPT_CR(0,1/2); HD: 3; Hit: +2; Def: 10; Mov: 100%; Spd: 100%;
+    Str 18, Dex 10, Con 10, Int 12, Wis 16, Cha 8, Luc 10;
+    Attk: A_PUNC for 1d3 AD_BLUNT;
+	  ABILITY(CA_SCENT,3);
+    Feats: FT_TOUGHNESS, FT_GUARDED_INVOCATION;
+    Spells: $"chill blood", $"caustic vitae", $"sanguine touch";
+    Flags: M_CARNI, M_HUMANOID, M_CHIEFTAN, M_SHAMAN,
+      M_EVIL, M_CHAOTIC, M_SKIRMISH;
+    Gear: 33% $"greataxe" else 50% $"greatsword" else $"longspear",
+          33% 2d4 $"javelin" else 1d2 $"shotput",
+          25% $"strip of cured meat"; 
+    Desc: "Black orcs are a subspecies of orcs magically altered by
+      Azakram the Black in order to have an inherant magical affinity
+      for blood, and the innate ability to manipulate it."; 
+    On Event EV_INITIALIZE {
+      hObj h;
+      for(h=EActor->FirstInv();h;h=EActor->NextInv()) {
+        if (h->QualityOK(IQ_ORCISH))
+            h->AddQuality(IQ_ORCISH);
+      }
+    };
+  }
+
+Monster "drow" : MA_DROW, MA_ADVENTURER
+  { 
+    Image: blue GLYPH_ELF; Size: SZ_MEDIUM; Mana: 10; Depth: 4;
+    CR: OPT_CR(-2,1/2); HD: 2; Hit:0; Def:10; Mov: 100%; Speed: 100%;
+    Str 8, Dex 14, Con 10, Int 14, Wis 10, Cha 14, Luc 8;
+    Attk:A_PUNC for 1d2 AD_BLUNT;
+	RACIAL_SKILL(SK_MOVE_SIL,2);
+	MAGIC_RES(50);
+	ABILITY(CA_INFRAVISION,12);
+	ABILITY(CA_SHARP_SENSES,1);
+    Flags: M_CARNI, M_HERBI, M_HUMANOID, M_LIGHT_AVERSE,
+           M_EVIL, M_UNCOMMON;
+    Spells: $"faerie fire", $"globe of shadow";
+    Feats: SK_MOVE_SIL, FT_AMBIDEXTERITY;
+    Gear: 
+      25% $"piece of spider bread",
+      $"hand crossbow",
+      4d3 $"hand crossbow dart",
+      50% $"rapier" else $"short sword";
+    Desc: "No race, save perhaps the kobolds, is more widely despised then
+      the drow. Trecherous, decietful, chaotic, power-hungry and supremely
+      skillful, the drow are an offshoot of elves who sought freedom from
+      Maeve through pacts with tanari and other profane powers.";
+    On Event EV_INITIALIZE {
+      hObj h;
+      for(h = EActor->FirstInv(); h ; h = EActor->NextInv())
+        if (h->isType(T_MISSILE))
+          h->GainPermStati(POISONED,NULL,SS_MISC,0,5,$"elfshot");
+        else {
+          if (h->QualityOK(IQ_ADAMANT)) h->AddQuality(IQ_ADAMANT);
+          if (h->QualityOK(IQ_ELVEN)) h->AddQuality(IQ_ELVEN);
+        } 
+      };
+  }
+
+Monster "dwarf" : MA_DWARF, MA_ADVENTURER
+  { 
+    Image: red GLYPH_DWARF; Size: SZ_MEDIUM; Mana: 10;
+    CR: OPT_CR(-2,1/2); HD: 2; Hit:0; Def:10; Mov:75%; Speed: 100%;
+    Str 10, Dex 10, Con 14, Int 10, Wis 10, Cha 8, Luc 10;
+    Attk:A_PUNC for 1d2 AD_BLUNT;
+	RACIAL_SKILL(SK_MINING,2);
+	RACIAL_SKILL(SK_CRAFT,2);
+	RACIAL_SKILL(SK_SEARCH,2);
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_STONEWORK_SENSE,2);
+        ABILITY(CA_GIANT_KILLER,1);
+    Feats: FT_ARMOR_OPTIMIZATION;
+    Flags: M_CARNI, M_HERBI, M_HUMANOID, M_GOOD, M_LAWFUL,
+           M_UNCOMMON;
+    Stati[SAVE_BONUS,SN_POISON,2];
+    Stati[SAVE_BONUS,SN_TRAPS,2];
+    Stati[SAVE_BONUS,SN_MAGIC,2];
+    Gear: 33% $"battleaxe"
+          else 50% $"dwarven waraxe" 
+            else $"warhammer",    
+          25% $"chainmail" else
+            33% $"plate mail" else
+              50% $"splint mail" else
+                $"banded mail",
+          35% $"craftsman's tools",
+          50% $"kite shield",
+          50% $"pickaxe",
+          25% $"food ration"; 
+    Desc: "Stubborn, driven, stoic and devoted -- these are the traits
+      the dwarven people are most known for. A warrior race, dwarves
+      have fought for millenia against the giants, orcs, aberrations
+      and other monsterous threats that plague civilization.";
+    On Event EV_INITIALIZE {
+      hObj h;
+      for(h=EActor->FirstInv();h;h=EActor->NextInv()) {
+        if (h->QualityOK(IQ_DWARVEN))
+          h->AddQuality(IQ_DWARVEN);
+      } 
+    };
+  }
+
+Monster "elf" : MA_ELF, MA_ADVENTURER
+  { 
+    Image: bright cyan GLYPH_ELF; Size: SZ_MEDIUM; Mana: 15;
+    CR: OPT_CR(1,1/2); HD: 2; Hit:0; Def:10; Mov: 100%; Speed: 100%;
+    Str 9, Dex 14, Con 9, Int 12, Wis 10, Cha 14, Luc 10;
+    Attk:A_PUNC for 1d2 AD_BLUNT;
+	ABILITY(CA_LOWLIGHT,2);
+	ABILITY(CA_SHARP_SENSES,1);
+    Flags: M_CARNI, M_HERBI, M_HUMANOID, M_GOOD,
+           M_CHAOTIC;
+    Immune: DF_SLEE; 
+    Stati[SAVE_BONUS,SN_DEATH,2];
+    Stati[SAVE_BONUS,SN_ENCH,2];
+    Resists: DF_COLD, DF_FIRE;
+    Gear: 
+      25% $"piece of elven waybread",
+      50% $"long bow" else $"short bow",
+      2d6 $"sheaf arrow",
+      50% $"long sword" else $"rapier";
+    Desc: "The most secretive of the common races, elves are only very
+      rarely seen in human settlements, and their lack of common presence
+      lends to the race a mystique of nearly mythical proportions.
+      Creatures of pure magic, some have called them, able to hear the
+      heartbeat of the world.";
+    On Event EV_INITIALIZE {
+      hObj h;
+      for(h = EActor->FirstInv(); h ; h = EActor->NextInv())
+        if (h->QualityOK(IQ_ELVEN))
+          h->AddQuality(IQ_ELVEN);
+    };
+  }
+
+Monster "gnome" : MA_GNOME, MA_ADVENTURER
+  { 
+    Image: pink GLYPH_GNOME; Size: SZ_SMALL; Mana: 10;
+    CR: OPT_CR(-2,1/2); HD: 2; Hit:0; Def:10; Mov:75%; Speed: 100%;
+    Str 9, Dex 10, Con 10, Int 14, Wis 8, Cha 12, Luc 10;
+    Attk:A_PUNC for 1d2 AD_BLUNT;
+	ABILITY(CA_SCENT,2);
+    Flags: M_CARNI, M_HERBI, M_HUMANOID, M_GOOD;
+    Spells: $"mirror image";
+    Feats: SK_ALCHEMY, SK_USE_MAGIC, FT_RAPID_RELOAD;
+    Stati[SAVE_BONUS,SN_ILLUS,2];
+    Immune: DF_PLYS, DF_STUK, DF_SLOW; 
+    Gear: 75% $"wand" of random 1 to 4,
+          50% $"mercurial broadsword"
+            else random T_WEAPON,
+          $"arbalest",
+          3d6 $"crossbow bolt",
+          25% $"brass lantern",
+          25% $"alchemy set",
+          35% $"mechanical tools",
+          15% $"craftsman's tools",
+          25% $"food ration"; 
+    Desc: "Gnomes are short, rotund demihumans famous for their
+      skill with illusions.";
+  }
+
+Monster "stoutheart halfling" : MA_HALFLING, MA_ADVENTURER
+  { 
+    Image: yellow GLYPH_HOBBIT; Size: SZ_SMALL; Mana: 10;
+    CR: OPT_CR(-2,1/2); HD: 2; Hit:0; Def:10; Mov: 75%; Speed: 100%;
+    Str 8, Dex 14, Con 10, Int 10, Wis 14, Cha 14, Luc 14;
+    Flags: M_CARNI, M_HERBI, M_HUMANOID, M_LAWFUL, M_GOOD;
+    Attk:  
+      A_PUNC for 1d2 AD_BLUNT,
+      A_SEEM for $"halfling";
+	  RACIAL_SKILL(SK_HIDE,2);
+	  RACIAL_SKILL(SK_TUMBLE,2);
+	  ABILITY(CA_UNEARTHLY_LUCK,1);
+	  ABILITY(CA_STRONG_SOUL,1);
+    Feats: SK_KNOW_THEO, SK_APPRAISE, SK_RIDE, SK_INTUITION, SK_HIDE,
+           SK_DIPLOMACY, 
+           FT_SLIPAWAY, FT_WEAPON_FINESSE;
+    Stati[WEP_SKILL,WS_FOCUSED,0,$"short sword"];
+    Stati[WEP_SKILL,WS_FOCUSED,0,$"sling"];
+    Stati[SAVE_BONUS,SN_EVIL,+4];
+    Stati[ADJUST_MOR,A_AID,+1];
+    Gear: 
+      50% $"cottonberry loaf",
+      10% $"short sword" with [WQ_HOLY] else
+        $"short sword",
+      $"sling",
+      6d3 $"sling stone";
+    Desc: "Stoutheart halflings are the strongest-willed of their race, with a
+      great devotion to the ideals of family and community. They despise
+      corruption in all of its forms, and become adventurers more frequently
+      then other halflings in the interest of rooting out and resolving
+      something that has shaken their sensibilities. They are famed for
+      their resourcefulness and clever planning."; 
+    On Event EV_INITIALIZE {
+      hObj h; 
+      for(h=EActor->FirstInv();h;h=EActor->NextInv()) {
+        if (h->isType(T_ARMOR)) {
+          if (h->QualityOK(AQ_GRACEFUL)) h->AddQuality(AQ_GRACEFUL);
+          if (h->QualityOK(IQ_FEATHERLIGHT)) h->AddQuality(IQ_FEATHERLIGHT);
+        } 
+      } 
+    };
+  }
+
+Monster "halfling" : MA_HALFLING, MA_ADVENTURER
+  { 
+    Image: yellow GLYPH_HOBBIT; Size: SZ_SMALL; Mana: 10;
+    CR: OPT_CR(-6,1/2); HD: 2; Hit:0; Def:10; Mov: 75%; Speed: 100%;
+    Str 8, Dex 14, Con 10, Int 10, Wis 10, Cha 14, Luc 18;
+    Attk:A_PUNC for 1d2 AD_BLUNT;
+    Flags: M_CARNI, M_HERBI, M_HUMANOID, M_GOOD;
+	ABILITY(CA_UNEARTHLY_LUCK,1);
+	RACIAL_SKILL(SK_HIDE,2);
+	RACIAL_SKILL(SK_TUMBLE,2);
+	ABILITY(CA_STRONG_SOUL,1);
+    Feats: SK_HIDE, FT_SLIPAWAY;
+    Stati[SAVE_BONUS,SN_DEATH,+2];
+    Gear: 
+      50% $"cottonberry loaf",
+      $"sling",
+      6d3 $"sling stone";
+    Desc: "Halflings are cute, clever, endearing, friendly, sociable and in 
+      control of approximately a third of the Kinlands' wealth. Opportunistic 
+      and ambitious, the hin have carved out a niche for themselves as the 
+      dominant demihuman race in the civilized lands.";
+  }
+
+Monster "human" : MA_HUMAN, MA_ADVENTURER
+  { 
+    Image: grey GLYPH_HUMAN; Size: SZ_MEDIUM; Mana: 10;
+    CR: OPT_CR(-4,1/2); HD: 2; Hit:0; Def:10; Mov: 100%; Speed: 100%;
+    Str 10, Dex 10, Con 10, Int 10, Wis 10, Cha 10, Luc 10;
+    Attk: A_PUNC for 1d2 AD_BLUNT;
+    Flags: M_CARNI, M_HERBI, M_HUMANOID, M_COMMON;
+    Gear: random T_WEAPON,
+          25% random T_ARMOR,
+          50% random T_TOOL,
+          10% random T_TOOL,
+          25% $"food ration"; 
+    Desc: "Humans are the dominant race on Theyra, being hardy,
+      adaptable generalists with a racial tendancy towards
+      pragmatism and an ambitious, outgoing spirit.";
+  }
+
+Monster "kobold" : MA_KOBOLD, MA_ADVENTURER
+	{
+		Image: green 'k'; Size: SZ_SMALL; Mana: 10; Arm: 2;
+		CR: OPT_CR(-2,0); HD: 2; Hit:0; Def:10; Mov:75%; Speed: 100%;
+    Str 6, Dex 14, Con 10, Int 14, Wis 10, Cha 8, Luc 10;
+    Attk: A_BITE for 1d6 AD_PIERCE damage,
+          A_CLAW for 1d4 AD_SLASH damage,
+         A_CLAW for 1d4 AD_SLASH damage;
+	RACIAL_SKILL(SK_CRAFT,2);
+	RACIAL_SKILL(SK_HANDLE_DEV,4);
+	RACIAL_SKILL(SK_MINING,2);
+	RACIAL_SKILL(SK_SEARCH,2);
+	ABILITY(CA_INFRAVISION,6);
+    Feats: FT_WEAPON_FINESSE, FT_DIRTY_FIGHTING, FT_SWARM, 
+            FT_EXPERTISE, SK_POISON_USE, SK_HIDE, SK_MOVE_SIL,
+            SK_LOCKPICKING, SK_CLIMB, SK_FIND_WEAKNESS, 
+            FT_CLOSE_QUARTERS_FIGHTER;
+    Flags: M_POISON, M_CARNI, M_HERBI, M_HUMANOID, M_EVIL,
+           M_COMMON, M_FOREST, M_SWAMP, M_CHIEFTAN, M_SHAMAN,
+           M_LIGHT_AVERSE, M_COMMON;
+    Immune: DF_POIS; 
+    Gear: 80% $"whip"
+            else random T_WEAPON,
+          75% $"bolas",
+          30% 1d2 $"bag" of $"tanglefoot bag",
+          50% $"small glass vial" of random 1 to 3,
+          25% $"strip of cured meat"; 
+    Desc: "These tiny reptillian humanoids have green scales and facial
+      features crossed between a man and a dog's. They are infamous for
+      their malice, their skill at trapcraft and their love of treachery.";
+    }
+
+Monster "lizardman" : MA_REPTILE, MA_LIZARDFOLK, MA_ADVENTURER
+  { 
+    Image: green 'h'; Size: SZ_MEDIUM; Mana: 10;
+    CR: OPT_CR(0,1/2); HD: 2; Hit: 0; Def: 10; Mov: 100%; Spd: 100%; Arm: 5;
+    Str 14, Dex 10, Con 14, Int 8, Wis 10, Cha 10, Luc 8;
+    Attk: A_CLAW for 1d4+1 AD_SLASH,
+          A_CLAW for 1d4+1 AD_SLASH,
+          A_BITE for 1d4 AD_PIERCE;
+	ABILITY(CA_SLOW_METABOLISM,1);
+	ABILITY(CA_ANCESTRAL_MEMORY,1);
+    Flags: M_HUMANOID, M_AMPHIB, M_CARNI, M_LAWFUL;  
+    Feats: FT_MULTIATTACK, SK_BALANCE, SK_JUMP, SK_SWIM;
+    Resists: DF_FIRE;
+    Stati[SAVE_BONUS,SN_CONF,2];
+    Stati[SAVE_BONUS,SN_GRAB,2];
+    Stati[DETECTING,MA_REPTILE,18];
+    Gear: random T_WEAPON,
+          25% $"strip of cured meat",
+          35% 1d4 blessed $"flask" of $"water"; 
+    Desc: "The lizardfolk are a reclusive, animalistic race of
+      humanoid reptiles that dwell in swamps and subterranian
+      enclaves. Their mindset is very alien, for they care only
+      for breeding, survival, food supply and the security of
+      their tribe. Though they are intelligent, many more
+      'civilized' concerns are simply irrelevant to them.";
+  }
+
+/*** GOBLINKIN ***/
+
+Monster "goblin" : MA_GOBLIN, MA_ADVENTURER
+  {
+    Image: Green 'g'; Size: SZ_SMALL; Mana: 6;
+    CR: OPT_CR(-4,1/4); HD: 1; Hit: +0; Def: 12; Mov: 50%; Spd: 80%;
+    Str 11, Dex 13, Con 12, Int 10, Wis 9, Cha 6;
+    Attk: A_PUNC for 1d2 AD_BLUNT;
+	  ABILITY(CA_INFRAVISION,6);
+    Feats: SK_HIDE, SK_LISTEN, SK_MOVE_SIL, SK_SPOT,
+      FT_ALERTNESS, FT_SWARM;
+		Flags: M_CARNI, M_HERBI, M_HUMANOID, M_CHIEFTAN, M_EVIL, 
+      M_SHAMAN, M_LAWFUL, M_COMMON;
+    Gear: 
+      25% $"short sword" else
+        33% $"dagger" else
+          50% $"club" else
+            $"light mace",
+      25% $"hide armor";
+  }
+
+Monster "blue goblin" : MA_GOBLIN, MA_ADVENTURER
+  {
+    Image: bright blue 'g'; Size: SZ_SMALL; Mana: 6;
+    CR: OPT_CR(-2,1); HD: 1; Hit: +0; Def: 12; Mov: 50%; Spd: 80%;
+    Str 11, Dex 13, Con 12, Int 10, Wis 14, Cha 8;
+    Attk: A_PUNC for 1d2 AD_BLUNT,
+          A_SEEM for $"goblin";
+    ABILITY(CA_INFRAVISION,6);
+    Feats: SK_HIDE, SK_LISTEN, SK_MOVE_SIL, SK_SPOT,
+      FT_TALENTED, SK_CONCENTRATION, FT_SWARM;
+	Flags: M_CARNI, M_HERBI, M_HUMANOID, M_EVIL, M_LAWFUL;
+    Gear: 
+      25% $"short sword" else
+        33% $"dagger" else
+          50% $"club" else
+            $"light mace",
+      5% $"headband" of random 1 to 4;
+    On Event EV_BIRTH {
+      rID wildID;
+      wildID = theGame->GetEffectID(PUR_DUNGEON,0,5,AI_PSIONIC);
+      if (wildID != NULL_ID)
+        EActor->GainPermStati(INNATE_SPELL,NULL,SS_RACE,0,0,wildID);
+      wildID = theGame->GetEffectID(PUR_DUNGEON,0,5,AI_PSIONIC);
+      if (wildID != NULL_ID && !EActor->HasEffStati(INNATE_SPELL,wildID))
+        EActor->GainPermStati(INNATE_SPELL,NULL,SS_RACE,0,0,wildID);
+      return NOTHING;
+      },
+    MSG_SPECABIL
+      "All blue goblins are wild talents and possess two randomly
+        chosen psionic powers.",
+    POST(EV_EFFECT) {
+      if (e.eID->HasSource(AI_PSIONIC))
+        EActor->IdentifyMon();
+      return NOTHING;
+      };
+    Desc: "Sometimes, a goblin is simply born different then the vast
+      majority of his kin. Often delivered on the night of a full moon,
+      during an intense lightning storm or in an area with overwhelming
+      psychic residue, a blue goblin possesses a physical mutation not
+      dissimilar to albinism in humans -- with dusky blue-brown skin,
+      purplish hair and piercing aquamarine eyes, such a creature is
+      ensured a life of perpetual social isolation from the rest of his 
+      people. Blue goblins are hated and feared by the rest of goblin
+      society, and often become introspective, paranoid and withdrawn
+      as a result. They're also more likely to question typical goblin
+      values than a goblin with a different set of life experiences.\n
+      __But it is not merely the physical characteristics which so
+      strongly alienate blues from their kin. Instead, they are known
+      to possess uncanny mental powers that most goblins neither 
+      understand nor can counter. These strange abilities are undeniably
+      useful, and for that reason alone many chieftans and goblin 
+      warlords cultivate blue goblins as allies and advisors. Still
+      others break away from their people and venture out alone,
+      trying to come to terms with their nature, accumulate power and
+      influence or simply survive in a hostile world.";
+  }
+  
+Monster "goblin spider" : MA_GOBLIN, MA_SPIDER, MA_LYCANTHROPE
+  {
+    Image: green 'l'; Size: SZ_SMALL; Mana: 45;
+    CR: 4; HD: 5; Hit: +4; Def: 17; Mov: 150%; Spd: 125%;
+    Str 7, Dex 22, Con 14, Int 13, Wis 14, Cha 7;
+    Attk:
+      A_BITE for 1d6 AD_PIERCE
+             and 0d0 AD_POIS (DC 16),
+      A_CLAW for 1d4 AD_SLASH,
+      A_CLAW for 1d4 AD_SLASH,
+      A_FORM for $"goblin",
+      A_FORM for $"plague of spiders";
+	ABILITY(CA_INFRAVISION,6);
+    ABILITY(CA_EVASION,3);
+    RACIAL_SKILL(SK_CLIMB,+10);
+    Feats: FT_WEAPON_FINESSE, FT_EXPERTISE, FT_SWARM, SK_HIDE, SK_SPOT,
+             SK_MOVE_SIL, SK_LISTEN, SK_USE_MAGIC, SK_CLIMB, SK_DECIPHER;
+    Spells: $"bestow curse", $"read magic", $"chill touch", $"doom";
+    Flags: M_HUMANOID, M_EVIL, M_CARNI, M_LIGHT_AVERSE, M_LAWFUL, 
+           M_SKIRMISH;
+    Gear:
+      50% $"long sword" else
+        50% $"light flail" else
+            $"whip",
+      $"scroll" of random 1 to 4,
+      50% $"scroll" of random 1 to 4,
+      10% $"scroll" of random 1 to 4,
+      5% $"wand" of random 4 to 8,
+      $"chainmail shirt",
+      1d3 $"potion" of $"healing",
+      50% $"potion" of random 2 to 5;
+    Lists:
+      * GROUP_FOLLOWER $"goblin" $"plague of spiders";
+    Desc: "Goblin spiders are a breed of lycanthrope unique to the
+      goblin people -- only goblins can become infected; all other
+      creatures are immune to this specific form of lycanthropy.
+      Goblin spiders are less given to rapid fits of rage than are
+      most lycanthropes, and much more inclined to cunning,
+      manipulation and careful cultivation of their innate magical
+      gifts. The goblinoid tribal religions tend to consider goblin
+      spiders to be sacred beings, and to revere them in an odd form
+      of idol worship including blood sacrifice and orgiastic rites.
+      Goblin spiders thus often end up as the leaders of smaller
+      goblin tribes.\n
+      __In their natural form, a goblin spider appears as a centaur-like
+      creature with the upper body of a goblin and the lower body of a
+      large spider. Their fingers taper to claws, and their shiny
+      emerald eyes glow with an unnatural radience.";
+  }  
+
+Monster "dekanter goblin" : MA_GOBLIN, MA_ADVENTURER
+{
+    Image: red 'g'; Size: SZ_MEDIUM; 
+    CR: OPT_CR(1,1); HD: 2; Hit: +2; Def: 12; Mov: 60%; Spd: 100%; Arm: 2; 
+    Str 17, Dex 12, Con 14, Int 12, Wis 13, Cha 9;
+    Attk: A_GORE for 1d6 AD_PIERCE,
+          A_SEEM for $"hobgoblin";
+	  ABILITY(CA_REGEN,3);
+	  ABILITY(CA_INFRAVISION,6);
+    Resists: DF_COLD; 
+    Feats: 
+      SK_CLIMB, SK_INTIMIDATE, SK_JUMP, SK_LISTEN,
+      SK_APPRAISE, SK_SPOT,
+      FT_POWER_ATTACK, FT_MASTER_BULL_RUSH, FT_IMPROVED_CRIT;
+    Flags: M_CARNI, M_HERBI, M_HUMANOID, M_CHIEFTAN, M_EVIL, 
+      M_SHAMAN, M_CHARGE, M_LAWFUL;
+    Desc: "Bearing little resemblance to the small, cowardly humanoids from
+    which they were created, dekanter goblins are vicious, cunning
+    opponents with large, rhinolike horns."; 
+}
+
+Monster "hobgoblin" : MA_GOBLIN, MA_ADVENTURER
+	{
+    Image: yellow 'g'; Size: SZ_MEDIUM; Mana: 6;
+		CR: OPT_CR(1,1); HD: 2; Hit: +2; Def: 14; Mov: 100%; Spd: 100%;
+    Str 11, Dex 13, Con 13, Int 10, Wis 10, Cha 10;
+    Attk: A_PUNC for 1d2 AD_BLUNT;
+	ABILITY(CA_INFRAVISION,6);
+    Feats: SK_HIDE, SK_LISTEN, SK_MOVE_SIL, SK_SPOT,
+      FT_ALERTNESS, SK_FIND_WEAKNESS;
+		Flags: M_CARNI, M_HERBI, M_HUMANOID, M_CHIEFTAN, M_EVIL, 
+      M_SHAMAN, M_LAWFUL, M_COMMON;
+    Gear: 
+      25% $"long sword" else
+        33% $"halberd" else
+          50% $"large club" else
+            $"heavy mace",
+      33% $"studded leather" else
+         50% $"chainmail" else
+           $"banded mail",
+      $"long bow",
+      3d6 $"sheaf arrow";
+	}
+
+Monster "bugbear" : MA_GOBLIN, MA_ADVENTURER
+	{
+    Image: brown 'g'; Size: SZ_MEDIUM; Mana: 10;
+    CR: OPT_CR(2,2); HD: 3; Hit: +5; Def: 13; Mov: 100%; Spd: 115%;
+    Str 15, Dex 12, Con 13, Int 10, Wis 10, Cha 9;
+    Attk: A_PUNC for 1d2 AD_BLUNT,
+          A_SEEM for $"hobgoblin";
+	  ABILITY(CA_INFRAVISION,6);
+    Feats: SK_HIDE, SK_LISTEN, SK_MOVE_SIL, SK_SPOT,
+      FT_ALERTNESS, FT_WEAPON_FOCUS;
+    Flags: M_CARNI, M_HERBI, M_HUMANOID, M_CHIEFTAN, M_EVIL, 
+      M_SHAMAN, M_LAWFUL;
+    Gear: 
+      $"morningstar",
+      2d3 $"javelin",
+      33% $"studded leather" else
+         50% $"chainmail" else
+           $"banded mail";
+      }
+
+Monster "adlet" : MA_GOBLINOID, MA_ADVENTURER, MA_DOG
+  {
+    Image: grey 'g'; Size: SZ_SMALL; Mana: 6;
+    CR: -2; HD: 1; Hit: +0; Def: 12; Mov: 50%; Spd: 80%;
+    Str 9, Dex 13, Con 7, Int 6, Wis 9, Cha 8;
+    Attk: A_CLAW for 1d3 AD_SLASH,
+          A_CLAW for 1d3 AD_SLASH,
+          A_BITE for 1d4 AD_BLUNT
+                 and     AD_GRAB (DC 13),
+          A_SUCK for 1d2 AD_DACO;
+	  ABILITY(CA_INFRAVISION,6);
+	  ABILITY(CA_SCENT,6);
+	  ABILITY(CA_DEVOURING,1);
+	  
+    Feats: SK_HIDE, SK_LISTEN, SK_MOVE_SIL, SK_SPOT,
+      FT_MULTIATTACK;
+		Flags: M_CARNI, M_HERBI, M_HUMANOID, M_CHIEFTAN, M_EVIL, 
+      M_SHAMAN, M_EXCLUSIVE, M_COLD;
+    Gear: 
+      50% $"halfspear",
+      25% $"hide armor";
+    Desc: "This odd species of goblinoid is said in myth to
+      have been born as the result of misceganation between
+      human women and dogs. Slightly smaller than goblins,
+      adlets have humanoid bodies but faces like a bulldog's.
+      Their species is well-attuned to harsh winters, but
+      suffers a natural proclivity to disease, and a single
+      illness has been known to decimate a tribe. In
+      temperment they are vicious but stupid, even willing
+      to engage in cannibalism and gaining powers from doing
+      so just as orcs do. They particulairly favor drinking
+      the blood of living foes they face in combat, which
+      they can do after a successful grapple attack.";
+    On Event MSG_SPECABIL
+      "It has a -4 racial penalty to save vs. disease. Any
+       weapon it wields is treated as having the <11>frost<7>
+       quality. If it is CR 3 or higher, the weapon gains the
+       <11>burst<7> quality as well.",
+      POST(EV_WIELD) {
+        EItem->RemoveEffStati($"Adlet Frost");
+        if (!(EItem->IFlags & IF_WORN))
+          return NOTHING;
+        EItem->GainPermStati(EXTRA_QUALITY,EActor,
+          SS_MISC,WQ_FROST,0,$"Adlet Frost");
+        if (EActor->ChallengeRating() >= 3)
+          EItem->GainPermStati(EXTRA_QUALITY,EActor,
+            SS_MISC,WQ_BURST,0,$"Adlet Frost");
+        return NOTHING;
+        },
+      EV_LOSEITEM, EV_REMOVE {
+        EItem->RemoveEffStati($"Adlet Frost");
+        };
+  }
+        
+Effect "Adlet Frost" : EA_GENERIC { }
+
+/*** PLANETOUCHED ***/
+
+Monster "aasimar" : MA_PLANETOUCHED, MA_ADVENTURER
+  { 
+    Image: white GLYPH_HUMAN; Size: SZ_MEDIUM; Mana: 10;
+    CR: 1/2; HD: 1; Hit:0; Def:10; Mov: 100%; Speed: 100%;
+    Str 10, Dex 10, Con 10, Int 10, Wis 13, Cha 13, Luc 10;
+    Attk: A_PUNC for 1d2 AD_BLUNT,
+          A_SEEM for $"human";
+    ABILITY(CA_SHARP_SENSES,+2);
+    Flags: M_CARNI, M_HERBI, M_HUMANOID, M_GOOD;
+    Spells: $"call light", $"cure light wounds";
+    Resists: DF_ACID, DF_COLD, DF_ELEC;
+    Feats: SK_KNOW_THEO, SK_KNOW_MAGIC, FT_ALERTNESS;
+    Gear: 25% random T_WEAPON +1 with [WQ_HOLY] else
+            random T_WEAPON,
+          25% $"food ration"; 
+    Desc: "Planetouched are the offspring of human or demihumans
+      and planar creatures. Unlike Half-Fiends and their ilk,
+      planetouched usually inherit their planar blood from several
+      generations back rather than an immediate ancestor. They
+      retain free will from their (demi)human side, but their
+      ancestry gives them strong predilictions as well as some
+      measure of inherant magic and supernatural abilities.\n
+      __Aasimar are descended from humans and celestials. Like
+      one would expect, they tend to be noble, beautiful and wise,
+      but also regal and distant, given to abstractions of ethics
+      and distant contemplation. Many of them take up the path of
+      the paladin.";
+    On Event POST(EV_INVOKE) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };
+  }
+
+Monster "tiefling" : MA_PLANETOUCHED, MA_ADVENTURER
+  { 
+    Image: red GLYPH_HUMAN; Size: SZ_MEDIUM; Mana: 10;
+    CR: 1/2; HD: 1; Hit:0; Def:10; Mov: 100%; Speed: 100%;
+    Str 11, Dex 13, Con 10, Int 13, Wis 10, Cha 8, Luc 8;
+    Attk: A_PUNC for 1d2 AD_BLUNT,
+          A_SEEM for $"human";
+    Flags: M_CARNI, M_HERBI, M_HUMANOID, M_EVIL;
+    Spells: $"deeper darkness", $"inflict light wounds";
+    Feats: FT_SNEAKY, SK_HIDE, SK_MOVE_SIL, SK_BLUFF,
+           SK_FIND_WEAKNESS;
+    Resists: DF_FIRE;
+    Gear: 10% random T_WEAPON +1 with [WQ_UNHOLY] else
+            random T_WEAPON,
+          25% $"food ration"; 
+    Desc: "Planetouched are the offspring of human or demihumans
+      and planar creatures. Unlike Half-Fiends and their ilk,
+      planetouched usually inherit their planar blood from several
+      generations back rather than an immediate ancestor. They
+      retain free will from their (demi)human side, but their
+      ancestry gives them strong predilictions as well as some
+      measure of inherant magic and supernatural abilities.\n
+      __Tieflings are descended from humans and fiends. They tend
+      to be treacherous and opportunistic, but while many are
+      truly depraved many others are not. They do have a collective
+      sense of embitterment over their lot, however, because they
+      face a great deal of prejudice concerning their heritage.";
+    On Event POST(EV_INVOKE) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };  
+  }
+
+Monster "air genasi" : MA_PLANETOUCHED, MA_ADVENTURER
+  { 
+    Image: white GLYPH_HUMAN; Size: SZ_MEDIUM; Mana: 10;
+    CR: 1/2; HD: 1; Hit:0; Def:10; Mov: 100%; Speed: 100%;
+    Str 8, Dex 13, Con 10, Int 13, Wis 8, Cha 10, Luc 10;
+    Attk: A_PUNC for 1d2 AD_BLUNT,
+          A_SEEM for $"human";
+    Flags: M_CARNI, M_HERBI, M_HUMANOID, M_NO_BREATH;
+    Spells: $"fly", $"gust of wind";
+    Feats: FT_ACROBATIC, SK_JUMP, SK_TUMBLE, SK_ESCAPE_ART;
+    Resists: DF_FIRE;
+    Gear: random T_WEAPON,
+          25% $"food ration"; 
+    Desc: "Planetouched are the offspring of human or demihumans
+      and planar creatures. Unlike Half-Fiends and their ilk,
+      planetouched usually inherit their planar blood from several
+      generations back rather than an immediate ancestor. They
+      retain free will from their (demi)human side, but their
+      ancestry gives them strong predilictions as well as some
+      measure of inherant magic and supernatural abilities.\n
+      __Genasi are descended from elemental creatures -- usually
+      genies -- and men or women.";
+    On Event POST(EV_INVOKE) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };  
+  }
+
+Monster "earth genasi" : MA_PLANETOUCHED, MA_ADVENTURER
+  { 
+    Image: brown GLYPH_HUMAN; Size: SZ_MEDIUM; Mana: 10;
+    CR: 1/2; HD: 1; Hit:0; Def:10; Mov: 100%; Speed: 100%;
+    Str 13, Dex 8, Con 13, Int 10, Wis 10, Cha 8, Luc 10;
+    Attk: A_PUNC for 1d2 AD_BLUNT,
+          A_SEEM for $"human";
+    Flags: M_CARNI, M_HERBI, M_HUMANOID;
+    Spells: $"stone tell", $"meld into stone";
+    Stati[IMMUNITY,AD_STON];
+    Feats: FT_POWER_ATTACK, SK_CRAFT;
+    Gear: random T_WEAPON,
+          25% $"food ration"; 
+    Desc: "Planetouched are the offspring of human or demihumans
+      and planar creatures. Unlike Half-Fiends and their ilk,
+      planetouched usually inherit their planar blood from several
+      generations back rather than an immediate ancestor. They
+      retain free will from their (demi)human side, but their
+      ancestry gives them strong predilictions as well as some
+      measure of inherant magic and supernatural abilities.\n
+      __Genasi are descended from elemental creatures -- usually
+      genies -- and men or women.";
+    On Event POST(EV_INVOKE) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };  
+  }
+
+Monster "fire genasi" : MA_PLANETOUCHED, MA_ADVENTURER
+  { 
+    Image: bright red GLYPH_HUMAN; Size: SZ_MEDIUM; Mana: 10;
+    CR: 1/2; HD: 1; Hit:0; Def:10; Mov: 100%; Speed: 100%;
+    Str 10, Dex 10, Con 10, Int 13, Wis 8, Cha 13, Luc 10;
+    Attk: A_PUNC for 1d2 AD_BLUNT,
+          A_SEEM for $"human";
+    Flags: M_CARNI, M_HERBI, M_HUMANOID;
+    Spells: $"produce flame", $"pyrotechnics";
+    Resists: DF_FIRE;
+    Feats: FT_DODGE, SK_BLUFF, SK_INTIMIDATE;
+    Gear: random T_WEAPON,
+          25% $"food ration"; 
+    Desc: "Planetouched are the offspring of human or demihumans
+      and planar creatures. Unlike Half-Fiends and their ilk,
+      planetouched usually inherit their planar blood from several
+      generations back rather than an immediate ancestor. They
+      retain free will from their (demi)human side, but their
+      ancestry gives them strong predilictions as well as some
+      measure of inherant magic and supernatural abilities.\n
+      __Genasi are descended from elemental creatures -- usually
+      genies -- and men or women.";
+    On Event POST(EV_INVOKE) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };  
+  }
+
+Monster "water genasi" : MA_PLANETOUCHED, MA_ADVENTURER
+  { 
+    Image: bright blue GLYPH_HUMAN; Size: SZ_MEDIUM; Mana: 10;
+    CR: 1/2; HD: 1; Hit:0; Def:10; Mov: 100%; Speed: 100%;
+    Str 10, Dex 13, Con 13, Int 8, Wis 10, Cha 10, Luc 10;
+    Attk: A_PUNC for 1d2 AD_BLUNT,
+          A_SEEM for $"human";
+    Flags: M_CARNI, M_HERBI, M_HUMANOID, M_AQUATIC, M_AMPHIB;
+    Spells: $"water walking", $"create water";
+    RACIAL_SKILL(SK_SWIM,+6);
+    Feats: FT_MASTER_THROW, SK_SWIM, SK_KNOW_OCEANS;
+    Gear: random T_WEAPON,
+          25% $"food ration"; 
+    Desc: "Planetouched are the offspring of human or demihumans
+      and planar creatures. Unlike Half-Fiends and their ilk,
+      planetouched usually inherit their planar blood from several
+      generations back rather than an immediate ancestor. They
+      retain free will from their (demi)human side, but their
+      ancestry gives them strong predilictions as well as some
+      measure of inherant magic and supernatural abilities.\n
+      __Genasi are descended from elemental creatures -- usually
+      genies -- and men or women.";
+    On Event POST(EV_INVOKE) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };  
+  }
+
+/*** OTHER HUMANOID RACES ***/
+
+/* gibberling */
+
+Monster "mongrelman" : MA_ABERRATION, MA_ADVENTURER
+  {
+    Image: brown 'h'; Size: SZ_SMALL; Mana: 6;
+    CR: OPT_CR(-4,1/4); HD: 1; Hit: +0; Def: 12; Mov: 50%; Spd: 80%;
+    Str 11, Dex 13, Con 12, Int 10, Wis 9, Cha 6;
+    Attk: A_CLAW for 1d3 AD_SLASH,
+          A_CLAW for 1d3 AD_SLASH,
+          A_TUCH for     AD_STEA (DC 13);
+	  ABILITY(CA_INFRAVISION,6);
+    ABILITY(CA_SCENT,3);
+    ABILITY(CA_TRICK_MAGIC,1);
+    ABILITY(CA_SHARP_SENSES,2);
+    RACIAL_SKILL(SK_CLIMB,+4);
+    Feats: SK_HIDE, SK_LISTEN, SK_MOVE_SIL, SK_SPOT, SK_CLIMB,
+      SK_USE_MAGIC, FT_ENDURANCE;
+    Spells: $"chameleon shifting";
+		Flags: M_CARNI, M_HERBI, M_HUMANOID, M_AMPHIB, M_SKIRMISH;
+    Gear: 
+      25% $"short sword" else
+        33% $"dagger" else
+          50% $"club" else
+            $"light mace",
+      25% $"hide armor",
+      3d6 $"copper piece",
+      25% $"food ration",
+      25% $"wand" of random 1 to 4;
+    Desc: "Mongrelmen are a race of tiny humanoids produced by
+      magical crossbreeding of halflings, animals and many other
+      creatures. Each mongrelman is unique, combining features of fish, 
+      reptiles, mammals and birds into a tiny humanoid frame. 
+      Mongrelmen are neither good nor evil; they simply seek to survive 
+      in a world which despises them and views them as worthless. Their
+      mixed blood allows them to make use of magical items normally
+      reserved for a single race as if they were a member of that
+      race.";
+  }
+
+
+Monster "myconid" : MA_FUNGI, MA_ABERRATION, MA_ADVENTURER
+  {
+    Image: bright purple 'F'; Size: SZ_MEDIUM;
+    CR: -2; HD: 1; Def: 8; Hit: 1; Mov: 75%; Spd: 75%;
+    Str 8, Dex 9, Con 0, Int 8, Wis 15, Cha 7;
+    Attk: A_SLAM for 1d4 AD_BLUNT,
+          A_SPOR for 3d6 AD_STUN (DC 13);
+    RACIAL_SKILL(SK_ALCHEMY,+2);
+    ABILITY(CA_INFRAVISION,+6);
+    Immune: DF_MIND, DF_PLYS, DF_POLY, DF_STUN, DF_SLEE;
+    Feats: FT_ALERTNESS, SK_ALCHEMY, SK_LISTEN, SK_SPOT, 
+           SK_KNOW_NATURE, SK_CRAFT, SK_APPRAISE, 
+           SK_WILD_LORE;
+    Spells: $"cure disease", $"dispel magic";
+    Flags: M_LAWFUL, M_HUMANOID, M_HERBI, M_FRIENDLY,
+           M_CHIEFTAN, M_SHAMAN, M_NEUTER, M_GROUP;
+    Desc: "Myconids are a reclusive, hierarchical race of
+      anthropomorphic mushrooms. Skilled farmers, alchemists
+      and architects, they think in a very alien manner and
+      shun contact with most other humanoid peoples, but are
+      generally peaceful and well-intentioned. Myconids are
+      one of the few elder races to remain loyal to the law
+      of Kysul, and it treasures them greatly as a result.";
+    On Event POST(EV_WATTACK) {
+      ThrowVal(EV_SATTACK,A_SPOR,EActor,EVictim);
+      return NOTHING;
+      };
+    Gear:
+      50% $"club",
+      50% $"potion" of random 1 to 4,
+      50% $"potion" of random 1 to 4,
+      50% $"potion" of random 1 to 4;
+  }
+
+Monster "grimlock" : MA_HUMANOID, MA_ADVENTURER
+  {
+    Image: grey 'h'; Size: SZ_MEDIUM; 
+    CR: OPT_CR(0,1); HD: 1; Def: 14; Hit: 2; Mov: 100%; Spd: 100%;
+    Str 18, Dex 14, Con 14, Int 10, Wis 8, Cha 6;
+    Attk: A_PUNC for 1d3 AD_BLUNT;
+	RACIAL_SKILL(SK_HIDE,10);
+	ABILITY(CA_TRACKING,15);
+	ABILITY(CA_BLINDSIGHT,4);
+	ABILITY(CA_SCENT,4);
+    Feats: 
+      FT_ALERTNESS, FT_BLIND_FIGHT,
+      SK_CLIMB, SK_HIDE, FT_SKILL_FOCUS, SK_LISTEN, SK_SPOT;
+    Flags: M_CARNI, M_HUMANOID, M_CHIEFTAN, M_EVIL, M_BLIND, 
+      M_NEUTER;
+    Gear: 
+      50% $"battleaxe" else random T_WEAPON;
+    Desc: "These primevil, eyeless humanoids dwell deep beneath
+      the earth, venturing close to the surface only to raid. They
+      do not communicate in any conventional language, though they
+      are clearly intelligent, and thus their motives and desires
+      remain inscrutable. Extremely xenophobic, grimlocks rarely
+      deal with other creatures, but have been known to form brief
+      alliances with medusae or illithids.";
+    Lists:
+      * GROUP_ALLY $"medusa" $"mind flayer";
+  } 
+
+#if 0
+Monster "kuo-toa" : MA_HUMANOID, MA_REPTILE
+  {
+    Image: cyan 'h'; Size: SZ_MEDIUM;
+    Attk:
+      A_BITE for 1d4 AD_SLASH,
+      A_ABIL for CA_SHARP_SENSES (Level 4);
+    On Event EV_INITIALIZE {
+      if (EActor->HasAbility(CA_SPELLCASTING))
+        EActor->GainPermStati(INNATE_SPELL,NULL,SS_MISC,0,0,$"lightning bolt");
+      return NOTHING;
+      },
+    EV_INIT_STATI {
+      EActor->GainPermStati(SAVE_BONUS,NULL,SS_RACE,SN_GRAB,6,$"kuo-toa");
+      EActor->GainPermStati(SKILL_BONUS,NULL,SS_RACE,SK_ESCAPE_ART,8,$"kuo-toa");
+      EActor->GainPermStati(TRUE_SIGHT,NULL,SS_RACE,0,0,$"kuo-toa");
+      return NOTHING;
+      },
+    EV_INVOKE {
+      hObj h; cl = 0;
+      if (e.eID == $"lightning bolt")
+        {
+          for(h=EMap->FirstThing();h;h=EMap->NextThing())
+            if (dist(EActor->x,EActor->y,h->x,h->y) <= 18)
+              if (h->isCreature() && h->tmID == $"kuo-toa")
+                if (h->HasAbility(CA_SPELLCASTING))
+                  if (h != GetHandle(EActor))
+                    cl += 2;
+          if (!cl)
+            return ABORT;
+          cl += EActor->CasterLev();
+        }
+      return NOTHING;
+      },
+    PRE(EV_MAGIC_STRIKE) {
+      if (e.eID == $"lightning bolt")
+        e.vCasterLev = cl;
+      return NOTHING;
+      };
+
+
+        }
+    MSG_SPECABIL
+      "Kuo-toa clerics gain the ability to use <1>Lightning Bolt<7> as an
+        innate spell-like ability, in addition to all other clerical powers.
+        It has a +6 racial bonus to saving throws versus being grabbed. It
+        is not constrained by webs. It has a +8 racial bonus to Escape Artist.
+        Its supernaturally keen sight duplicates the effect of <1>True Seeing<7>.";
+
+    /*Lists:
+      * FAVORED_TEMPLATES 50% $"whip" $"rogue";*/
+
+
+
+Template "whip" : TM_CLASS for MA_REPTILE
+  {
+          
+    Desc: "Whips are the clerics of the kuo-toa, well-versed in
+      that species' rituals of diabolism, blood sacrifice and other
+      arcane horrors.";
+
+#endif
+
+Monster "locathah" : MA_HUMANOID, MA_REPTILE
+  { 
+    Image: red 'h'; Size: SZ_MEDIUM; 
+    CR: OPT_CR(0,1/2); HD: 1; Hit: 1; Def: 13; Mov: 160%; Spd: 100%; 
+    Str 13, Dex 10, Con 12, Int 13, Wis 13, Cha 10;
+    Attk: A_PUNC for 1d3 AD_BLUNT;
+    Gear:
+      50% $"longspear" else $"trident",
+      $"arbalest", 3d6 $"crossbow bolt";
+    Feats: FT_BLIND_FIGHT, SK_CRAFT, SK_LISTEN, SK_SPOT, SK_SWIM;
+    Flags: M_HUMANOID, M_AMPHIB, M_TALKABLE, M_AQUATIC, M_CARNI;  
+    Desc: "The locathah are a race of undersea-dwelling fishmen.
+      They are on average seven feet tall, with deep maroon hides
+      that are rough like a shark's, and heavy fins sprouting from
+      their arms, back and in a crown around their head.";
+  }
+
+Monster "minotaur" : MA_HUMANOID, MA_ADVENTURER, MA_MYTHIC
+  { 
+    Image: brown 'h'; Size: SZ_LARGE; Mana: 10;
+    CR: OPT_CR(5,6); HD: 6; Hit: 6; Def: 15; Mov: 100%; Spd: 130%; 
+    Str 19, Dex 10, Con 15, Int 7, Wis 10, Cha 8, Luc 16;
+    Attk: A_GORE for 1d8+2 AD_PIERCE,
+          A_PUNC for 1d3 AD_BLUNT;
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_SCENT,6);
+	RACIAL_SKILL(SK_SEARCH,4);
+	RACIAL_SKILL(SK_SPOT,4);
+	RACIAL_SKILL(SK_LISTEN,4);
+	ABILITY(CA_TRACKING,18);
+	ABILITY(CA_UNCANNY_DODGE,6);
+    Gear:
+      $"greataxe",
+      5% $"girdle" +1 of $"giant strength";
+    Feats: FT_POWER_ATTACK, FT_GREAT_FORTITUDE, 
+        SK_SEARCH, SK_SPOT, SK_LISTEN;
+    Flags: M_HUMANOID, M_EVIL, M_CHAOTIC;
+    Lists:
+      * GROUP_ALLY $"wereboar",
+      * GROUP_FOLLOWER $"wereboar";
+  }
+
+Monster "sahuagin" : MA_HUMANOID, MA_ADVENTURER
+  {
+    Image: green 'h'; Size: SZ_MEDIUM; Mana: 10; 
+    CR: OPT_CR(0,2); HD: 2; Hit: +1; Def: 15; Hit: 2; Mov: 100%; Spd: 120%;
+    Str 14, Dex 13, Con 12, Int 14, Wis 13, Cha 9;
+    Attk: A_CLAW for 1d2 AD_SLASH,
+          A_CLAW for 1d2 AD_SLASH,
+          A_BITE for 1d4 AD_PIERCE;
+	ABILITY(CA_INFRAVISION,6);
+    Feats: SK_HIDE, SK_MOVE_SIL, SK_SPOT, FT_MULTIATTACK;
+    Flags: M_CARNI, M_HUMANOID, M_AMPHIB, M_SHAMAN, M_AQUATIC,
+      M_CHIEFTAN, M_EVIL, M_LAWFUL, M_LIGHT_AVERSE;
+    Gear: 50% $"trident" else $"longspear",
+          25% $"hide armor" else
+            33% $"cord armor";
+    Desc: "The sahuagin, or sea devils, are a bloodthirsty race
+      of aquatic raiders, appearing as a cross between humans an
+      spinefish. They have scaly skin, bulbous eyes and sharp
+      fangs, and are most famous for flying into a berserk rage
+      upon the taste of blood.";
+    On Event POST(EV_HIT) {
+      if (e.vDmg && !EActor->HasStati(RAGING))
+        {
+          DPrint(e,"You fly into a blood rage!",
+                   "The <EActor> flies into a blood rage!");
+          EActor->GainTempStati(RAGING,EActor,3d6,SS_MISC,2,0,(rID)0);
+        }
+      return NOTHING;
+      };            
+  }
+
+Monster "troll" : MA_TROLL
+  {
+    Image: green 'T'; Size: SZ_LARGE; 
+    CR: OPT_CR(6,5); HD: 6; Hit: +4; Def: 15; Hit: 3; Mov: 100%; Spd: 125%;
+    Str 23, Dex 14, Con 23, Int 6, Wis 9, Cha 6;
+    Attk: A_CLAW for 1d6+1 AD_SLASH,
+          A_CLAW for 1d6+1 AD_SLASH,
+          A_BITE for 1d6 AD_PIERCE;
+	ABILITY(CA_INFRAVISION,9);
+	ABILITY(CA_REGEN,5);
+    Feats: FT_ALERTNESS, FT_IRON_WILL, FT_REND, SK_SPOT, SK_LISTEN;
+    Flags: M_CARNI, M_HUMANOID, M_CHIEFTAN, M_CHAOTIC,
+      M_EVIL, M_REACH;
+    Desc: "With spindly limbs and skin like limestone, the
+      trolls are among the most frightening of the humanoid
+      marauders. They have very limited intelligence in the
+      human sense, but possess a primal kind of cunning that,
+      paired with their ability to heal from almost any
+      injury, makes them terrifying foes.";
+  }
+
+Monster "scrag" : MA_TROLL
+  {
+    Image: blue 'T'; Size: SZ_LARGE; 
+    CR: OPT_CR(6,5); HD: 6; Hit: +5; Def: 15; Hit: 3; Mov: 100%; Spd: 125%;
+    Str 23, Dex 14, Con 23, Int 6, Wis 9, Cha 6;
+    Attk: A_CLAW for 1d6+1 AD_SLASH,
+          A_CLAW for 1d6+1 AD_SLASH,
+          A_BITE for 1d6 AD_PIERCE,
+          A_SEEM for $"troll";
+	  ABILITY(CA_INFRAVISION,9);
+	  ABILITY(CA_REGEN,5);
+    Feats: FT_ALERTNESS, FT_IRON_WILL, FT_REND, SK_SPOT, SK_LISTEN,
+      SK_SWIM;
+    Flags: M_CARNI, M_HUMANOID, M_CHIEFTAN, M_CHAOTIC,
+      M_EVIL, M_REACH, M_WATER, M_AQUATIC, M_CLOSEID;
+    Desc: "With spindly limbs and skin like limestone, the
+      trolls are among the most frightening of the humanoid
+      marauders. They have very limited intelligence in the
+      human sense, but possess a primal kind of cunning that,
+      paired with their ability to heal from almost any
+      injury, makes them terrifying foes. Scrags are aquatic
+      trolls.";
+  }
+
+Monster "chitine" : MA_ABERRATION, MA_SPIDER, MA_ADVENTURER
+  {
+    Image: pink 'h'; Size: SZ_SMALL; Mana: 10;
+    CR: OPT_CR(1,1); HD: 2; Hit: +1; Def: 10; Mov: 100%; Spd: 300%;
+    Str 10, Dex 13, Con 12, Int 12, Wis 11, Cha 7;
+    Attk: A_PUNC for 1d2 AD_BLUNT;
+	ABILITY(CA_INFRAVISION,6);
+    Gear: 
+      3d1 $"short sword" of random 0 to 1,
+      $"hide armor" of random 0 to 1,
+      3d3 $"javelin" of random 0 to 1;
+    Stati[IMMUNITY,AD_STUK];
+    Feats: 
+      FT_AMBIDEXTERITY, FT_MASTER_GRAPPLE, FT_MASTER_DISARM,
+      SK_BALANCE, SK_CLIMB, SK_CRAFT, SK_HIDE, SK_JUMP, 
+      SK_MOVE_SIL;
+    Flags: M_CARNI, M_POISON, M_HUMANOID, M_CHAOTIC, M_EVIL, 
+           M_LIGHT_AVERSE;
+    Desc: "Chitine are spiderlike humanoids inadvertently created by
+    the drow as the result of failed experiments."; 
+    Lists:
+      * GROUP_LEADER $"choldrith"; 
+  } 
+
+Monster "choldrith" : MA_ABERRATION, MA_SPIDER, MA_ADVENTURER
+  {
+    Image: red 's'; Size: SZ_LARGE; Mana: 10;
+    CR: OPT_CR(8,4); HD: 4; Hit: +2; Def: 10; Mov: 100%; Spd: 120%;
+    Str 19, Dex 16, Con 17, Int 15, Wis 16, Cha 14; Arm: 7; 
+    Attk: A_BITE for 2d4+6 AD_PIERCE and 0d0 AD_POIS (DC 13),
+          A_SEEM for $"chitine";
+	ABILITY(CA_SPELLCASTING, 4);
+	ABILITY(CA_INFRAVISION,6);
+	RACIAL_SKILL(SK_CLIMB,10);
+	SPELL_RES(13);
+	ABILITY(CA_TURNING,4);
+    Spells: $"web", $"bless";
+    Stati[IMMUNITY,AD_STUK];
+    Feats: 
+      SK_BALANCE, SK_CLIMB, SK_CONCENT, SK_JUMP, /*SK_KNOWLEDGE,*/ 
+      SK_SPELLCRAFT, 
+      FT_COMBAT_CASTING, FT_LIGHTNING_REFLEXES; 
+    Flags: M_CARNI, M_POISON, M_HUMANOID, M_CHAOTIC, M_EVIL, M_IALIGN,
+           M_LIGHT_AVERSE, M_NOPOLY;
+    Desc: "Choldriths are the priest race of the chitines."; 
+    Poison: $"choldrith venom"; 
+    Gear:
+      25% $"scroll" of $"hallow";
+    Lists:
+      * GROUP_FOLLOWER $"chitine"; 
+    On Event POST(EV_INVOKE), POST(EV_CAST) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };  
+    Lists:
+      * SPELL_LIST
+          ALL_SPELLS_FROM_SOURCE(AI_THEURGY);
+  } 
+
+Poison "choldrith venom" : EA_DRAIN
+  {
+    Level: 5;
+    /*Iteration*/   cval: 1;
+    /*Save DC*/     sval: 13;
+    /*Persistance*/ lval: 2;
+    xval: AD_PLYS;  pval: 3d4; 
+    Desc: "This poison has an onset (and recurrance) time of <11>1<7> turn,
+      causing its targets to become paralyzed. It requires <11>2<7> 
+      saving throws against <11>DC 13<7> to overcome the effect fully.";
+  }
+
+
+Monster "kyrie" : MA_SYLVAN, MA_ADVENTURER, MA_BIRD
+  {
+    Image: brown 'b'; Size: SZ_MEDIUM; Mana: 10;
+    CR: 2; HD: 4; Hit: +4; Def: 12; Mov: 250%; Spd: 115%;
+    Str 8, Dex 16, Con 10, Int 10, Wis 13, Cha 10;
+    Attk: A_CLAW for 1d6 AD_SLASH,
+          A_CLAW for 1d6 AD_SLASH;
+	  ABILITY(CA_SPELLCASTING,3);
+	  ABILITY(CA_INFRAVISION,6);
+    Feats: FT_GREAT_FORTITUDE, FT_WEAPON_FINESSE,
+           /*SK_KNOWLEDGE,*/ SK_LISTEN, SK_WILDERNESS, SK_ANIMAL_EMP;
+    Flags: M_CARNI, M_HUMANOID, M_FLYER, M_ALL_MALE, M_MOUNTAIN, M_AIR;
+    Desc: "This creature is a tall male humanoid covered in brown and gold
+    feathers. It has powerful feathered wings instead of arms, with human
+    hands, and its legs end in eagle-like talons. Its face is human, with
+    arched eyebrows, high cheekbones, and feathery sideburns."; 
+    Lists:
+      * SPELL_LIST
+          ALL_SPELLS_FROM_SOURCE(AI_THEURGY);
+  } 
+
+Monster "ursoi" : MA_GIANT, MA_ADVENTURER
+  {
+    Image: white 'H'; Size: SZ_LARGE; Mana: 10;
+    CR: OPT_CR(5,4); HD: 5; Hit: +5; Def: 12; Mov: 100%; Spd: 125%;
+    Str 21, Dex 12, Con 16, Int 9, Wis 13, Cha 7; Arm: 2; 
+    Attk: A_CLAW for 1d6 AD_SLASH,
+          A_CLAW for 1d6 AD_SLASH,
+          A_BITE for 1d8 AD_PIERCE;
+	ABILITY(CA_SCENT,6);
+	RACIAL_SKILL(SK_SWIM,4);
+	RACIAL_SKILL(SK_WILDERNESS,4);
+	ABILITY(CA_INFRAVISION,6);
+    Feats: FT_ALERTNESS, FT_HARDINESS, FT_NATURAL_GRAB, FT_MASTER_GRAPPLE,
+           SK_CLIMB, SK_LISTEN, SK_SPOT, SK_WILDERNESS, SK_SWIM;
+    Flags: M_CARNI, M_HUMANOID, M_FOREST, M_LAWFUL, M_REACH, M_COLD;
+    Gear: 50% $"pickaxe" of random 1 to 2;
+  } 
+  
+Monster "thri-kreen" : MA_VERMIN, MA_HUMANOID, MA_ADVENTURER
+  {
+    Image: yellow 'x'; Size: SZ_MEDIUM; Mana: 15; Arm: 5;
+    CR: 2; HD: 3; Hit: +2; Def: 14; Mov: 125%; Spd: 125%;
+    Str 12, Dex 15, Con 11, Int 8, Wis 12, Cha 7;
+    Attk: A_CLAW for 1d4+1 AD_SLASH,
+          A_CLAW for 1d4+1 AD_SLASH,
+          A_CLAW for 1d4+1 AD_SLASH,
+          A_CLAW for 1d4+1 AD_SLASH,
+          A_BITE for 1d4 AD_PIERCE
+                     and AD_POIS (DC 11),
+          A_SEEM for $"giant praying mantis";
+    ABILITY(CA_INFRAVISION,6);
+    Poison: $"thri-kreen venom";
+    Spells: $"inertial barrier",
+            $"body equilibrium",
+            $"cell adjustment";
+    /*
+    Psionics: $"chameleon coloration", 
+              $"displacement",
+              $"inertial armor",
+              $"metaphysical weapon";
+    Modes: EGO_WHIP, MIND_THRUST / 
+           THOUGHT_SHIELD, EMPTY_MIND;
+    */
+    Spells: $"displacement", $"mage armor",
+            $"magic weapon";
+    RACIAL_SKILL(SK_HIDE,10); /* chameleon coloration */
+    RACIAL_SKILL(SK_JUMP,20);
+    Stati[IMMUNITY,AD_SLEE];
+    Stati[WEP_SKILL,WS_PROFICIENT,0,$"gythka"];
+    Stati[WEP_SKILL,WS_PROFICIENT,0,$"chatkcha"];
+    Stati[EXTRA_FEAT,FT_DEFLECT_ARROWS];
+    /*
+    Stati[EXTRA_SLOT,SL_WEAPON];
+    Stati[EXTRA_SLOT,SL_READY];
+    */
+    Feats: SK_JUMP, SK_HIDE, SK_MOVE_SIL, SK_BALANCE,
+           SK_CLIMB, SK_LISTEN, SK_SPOT, SK_FIND_WEAKNESS,
+           FT_MULTIATTACK, FT_TWO_WEAPON_STYLE;
+    Flags: M_HUMANOID, M_LAYS_EGGS, M_THICK_HIDE, M_CARNI,
+           M_DESERT, M_CHAOTIC, M_CLOSEID;
+    Desc: "Sometimes called mantis warriors, the thri-kreen are
+      intelligent, desert-dwelling humanoids with a strong
+      resemblance to praying mantises. In temprament they are
+      geared to survival above idealism or personal goals, and
+      are very pack-oriented. Their outlook gives them very
+      little in common with humanity or other similar races,
+      but they sometimes ally with the lizardfolk, with whom
+      they have a great deal more in common psychologically but
+      very little common ground in terms of favored terrain.";
+    Gear:
+      60% $"gythka" else
+        25% $"gythka" of random 2 to 5,
+      70% 2d6 $"chatkcha",
+      5% $"ring" of random 1 to 3;
+    On Event POST(EV_INVOKE) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };  
+  }
+    
+Poison "thri-kreen venom" : EA_DRAIN
+  {
+    Level: 2;
+    /*Iteration*/   cval: 7;
+    /*Save DC*/     sval: 13;
+    /*Persistance*/ lval: 5;
+    xval: AD_DAST;  pval: 1d2;
+    Desc: "This poison inflicts <11>1d2<7> points of Strength damage every 
+      <11>7<7> turns, and requires <11>5<7> saving throws against <11>DC 13<7> 
+      to overcome.";
+  }
+
+Item "chatkcha" : T_WEAPON
+  { Image: purple GLYPH_WEAPON; Group: WG_THROWN | WG_EXOTIC; 
+    Mat: MAT_GEMSTONE; Size: SZ_MEDIUM; Weight: 3; 
+    Range: 2; Parry: 1; 
+    SDmg: 1d8; LDmg: 1d6; Acc: +2; Crit: x2; Threat: 1; Spd: 80%;
+    Flags: WT_BLUNT, WT_KNOCKDOWN, IT_NOGEN;
+    Desc: "The chatkcha is a kind of crystalline throwing wedge
+      frequently employed by thri-kreen."; }
+
+Item "gythka" : T_WEAPON
+  { Image: bright purple GLYPH_WEAPON;  Group: WG_POLEARMS | WG_EXOTIC; 
+    Parry: 6; Mat: MAT_IRON; Size: SZ_LARGE; Weight: 250;
+    SDmg: 2d6; LDmg: 2d6; Acc: +3; Crit: x2; Threat: 1; Spd: 125%;
+    Flags: WT_SLASHING, WT_DOUBLE, WT_STR1, WT_WOOD_PARTS, IT_NOGEN; 
+    Desc: "This unusual polearm is a double weapon with a crescent
+      blade at each end, and is used almost exclusively by the
+      thri-kreen."; 
+  }
+
+/*** HAGS ***/
+
+/* fjm: Medusae are hags in Incursion, because we have too many 'h'
+   already and it fits thematically. I also gave them some extra
+   spell-likes, MR and better equipment so they get a higher CR from
+   the system, because their gaze-to-kill is too dangerous for an
+   unprepared player. I met one on DL 1! */
+   
+Monster "medusa" : MA_HAG, MA_ADVENTURER
+  {
+    Image: grey 'u'; Size: SZ_MEDIUM; Mana: 25; Depth: 4; 
+    CR: 5; HD: 6; Hit: +6; Def: 13; Mov: 100%; Spd: 130%;
+    Str 10, Dex 15, Con 12, Int 12, Wis 13, Cha 15;
+    Attk: A_PUNC for 1d2 AD_BLUNT,
+          A_TENT for 1d4 AD_PIERCE and
+                     0d0 AD_POIS (DC 14),
+          A_GAZE for 0d0 AD_STON (DC 15),
+          A_SEEM for $"human";
+	ABILITY(CA_INFRAVISION,6);
+	MAGIC_RES(30);
+    Gear: 
+      $"short bow" of random 1 to 3,
+      1d6+1 $"potion" of $"healing",
+      4d6 $"sheaf arrow",
+      75% $"wand" of RANDOM 1 to 4,
+      25% $"stone" of random 2 to 5,
+      $"dagger" of random 0 to 1;
+    Feats: FT_POINT_BLANK_SHOT, FT_PRECISE_SHOT, FT_WEAPON_FINESSE,
+           SK_BLUFF, SK_DIPLOMACY, SK_INTIMIDATE, SK_MOVE_SIL, SK_SPOT,
+           SK_FIND_WEAKNESS, SK_USE_MAGIC;
+    Flags: M_CARNI, M_AMPHIB, M_ALL_FEMALE, M_POISON, M_CLOSEID,
+           M_SWAMP, M_LAWFUL, M_EVIL, M_EARTH, M_HUMANOID;
+    Spells: $"globe of shadow", $"bestow curse", $"true strike";
+    Desc: "A medusa is indistinguishable from a normal human at distances
+    greater than 30 feet (or closer, if its face is concealed). The
+    creature often wears garments that enhance its body while hiding
+    its face behind a hood or veil.
+    A typical medusa is 5 to 6 feet tall and about the same weight as a
+    human.
+    Medusas speak Common.
+    A medusa tries to disguise its true nature until the intended victim is
+    within range of its petrifying gaze, using subterfuge and bluffing
+    games to convince the target that there is no danger. It uses normal
+    weapons to attack those who avert their eyes or survive its gaze, while
+    its poisonous snakes strike at adjacent opponents.
+    (Remember that Freedom of Movement or Immunity to Paralysis will also
+    make you immune to Petrification.)";
+    Poison: $"medusa venom"; 
+    On Event POST(EV_SATTACK) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };  
+  } 
+ 
+Poison "medusa venom" : EA_DRAIN
+  {
+    Level: 5;
+    /*Iteration*/   cval: 1;
+    /*Save DC*/     sval: 14;
+    /*Persistance*/ lval: 2;
+    xval: AD_DAST; pval: 1d6;
+    Desc: "This poison inflicts <11>1d6<7> points of Strength damage 
+      <11>every<7> turn, and requires <11>2<7> saving throws against 
+      <11>DC 14<7> to overcome.";
+  }
+
+Monster "sea hag" : MA_HAG, MA_ADVENTURER
+  {
+    Image: blue 'u'; Size: SZ_MEDIUM; Mana: 10;
+    CR: 6; HD: 5; Hit: +3; Def: 11; Mov: 100%; Spd: 125%;
+    Str 19, Dex 12, Con 12, Int 10, Wis 13, Cha 14; Arm: 3;
+    Attk: A_GAZE for AD_SPE1,
+          A_CLAW for 1d4 AD_SLASH,
+          A_CLAW for 1d4 AD_SLASH,
+          A_SEEM for $"human";
+    ABILITY(CA_INFRAVISION,6);
+    MAGIC_RES(50);
+    Stati[SKILL_BONUS,SK_SWIM,+8];
+    Feats: FT_ALERTNESS, FT_TOUGHNESS, SK_CRAFT, SK_KNOW_OCEANS,
+           SK_FIND_WEAKNESS, SK_HIDE, SK_LISTEN, SK_SPOT, SK_SWIM;
+    Flags: M_CARNI, M_AMPHIB, M_ALL_FEMALE, M_POISON, M_CLOSEID,
+           M_SWAMP, M_CHAOTIC, M_EVIL, M_WATER, M_HUMANOID;
+    On Event PRE(EV_DAMAGE) {
+      if (e.DType == AD_SPE1)
+        {
+          if (EVictim->HasEffStati(SPEC_TIMEOUT,$"sea hag"))
+            return ABORT;
+          EVictim->GainTempStati(SPEC_TIMEOUT,EActor,-2,
+                     SS_MISC, 0, 0, $"sea hag", 0);
+          if (EVictim->ResistLevel(AD_FEAR) == -1)
+            {
+              e.Immune = true;
+              return DONE;
+            }
+            
+          if (!EVictim->SavingThrow(FORT,19,SA_MAGIC|SA_FEAR|SA_ENCH))
+            EVictim->GainTempStati(NAUSEA,NULL,3d6,SS_ATTK,0,0,$"sea hag");
+            
+          if (EVictim->SavingThrow(WILL,11,SA_MAGIC|SA_FEAR|SA_ENCH))
+            {
+              e.Resist = true;
+              return DONE;
+            }
+          ThrowDmg(EV_DEATH,AD_FEAR,0,"fright",EActor,EVictim);
+          return DONE;
+        }
+      return NOTHING;
+      },
+    EV_TURN
+      {
+        int16 x, y; hObj hTarget;
+        for (x=EActor->x-2;x<=EActor->x+2;x++)
+          for (y=EActor->y-2;y<=EActor->y+2;y++)
+            if (EMap->InBounds(x,y))
+              for (hTarget=EMap->FCreatureAt(x,y);hTarget;hTarget = EMap->NCreatureAt(x,y))
+                {
+                  if (hTarget != GetHandle(EActor))
+                    if (hTarget->Percieves(EActor) && (!hTarget->isBlind()) &&
+                          hTarget->isMType(MA_SAPIENT))
+                    {
+                      #if 0
+                      EActor->IPrint("Your visage weakens the <hObj>!",hTarget);
+                      hTarget->IPrint("You are weakened by the <hObj>'s horrific appearance!",EActor);
+                      ThrowDmg(EV_DAMAGE, AD_DAST, 1d4, 
+                        "a sea hag's horrific appearance", EActor, hTarget);
+                      #endif
+                    }
+                   
+                }
+        return NOTHING;
+      },
+    MSG_SPE1DESC
+      "cause the target to die of fright (DC 11), or, failing that,
+        become nauseated for 3d6 rounds (DC 19)",
+    MSG_SPECABIL
+      "Its appearance is so horrific to cause any thinking creature
+        that is not blind to be weakened, suffering 1d6 point of
+        Strength damage every turn. Its gaze attack only functions
+        once per day per target.",
+    POST(EV_SATTACK) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };  
+
+    Gear:
+      1d4+1 $"potion" of $"healing",
+      25% $"stone" of random 2 to 5 else
+        33% $"amulet" of random 2 to 5,
+      25% $"dagger" else
+        15% $"large club";
+  }
+  
+Monster "green hag" : MA_HAG, MA_ADVENTURER
+  {
+    Image: green 'u'; Size: SZ_MEDIUM; Mana: 50; 
+    CR: 5; HD: 9; Hit: +7; Def: 11; Mov: 100%; Spd: 125%;
+    Str 19, Dex 12, Con 12, Int 13, Wis 13, Cha 14; Arm: 3;
+    Attk: A_CLAW for 1d4 AD_SLASH,
+          A_CLAW for 1d4 AD_SLASH,
+          A_TUCH for 2d4 AD_DAST,
+          A_SEEM for $"human";
+    ABILITY(CA_INFRAVISION,6);
+    MAGIC_RES(35);
+    Stati[SKILL_BONUS,SK_SWIM,+8];
+    Feats: FT_ALERTNESS, FT_BLIND_FIGHT, FT_GUARDED_INVOCATION,
+           FT_GREAT_FORTITUDE, SK_CRAFT, SK_CONCENTRATION,
+           SK_FIND_WEAKNESS, SK_HIDE, SK_LISTEN, SK_SPOT, SK_SWIM;
+    Flags: M_CARNI, M_ALL_FEMALE, M_POISON, M_SWAMP, M_CHAOTIC, 
+           M_EVIL, M_WATER, M_HUMANOID, M_CLOSEID;
+    Spells: $"dancing lights", $"invisibility", $"pass without trace",
+            $"bestow curse", $"read magic", $"water breathing",
+            $"ventriloquism", $"visage of death", $"chill blood",
+            $"sleep";
+    Gear:
+      $"scroll" of random 1 to 4,
+      $"scroll" of random 1 to 4,
+      50% $"scroll" of random 3 to 5,
+      25% $"scroll" of random 4 to 6,
+      1d4+1 $"potion" of $"healing",
+      25% $"stone" of random 2 to 5 else
+        33% $"amulet" of random 2 to 5,
+      25% $"dagger" else
+        15% $"large club";
+    On Event POST(EV_INVOKE) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };  
+  }
+
+Monster "annis" : MA_HAG, MA_ADVENTURER
+  {
+    Image: black 'u'; Size: SZ_MEDIUM; Mana: 15; 
+    CR: 6; HD: 7; Hit: +7; Def: 15; Mov: 100%; Spd: 125%;
+    Str 25, Dex 12, Con 14, Int 13, Wis 13, Cha 10; Arm: 10;
+    Attk: A_CLAW for 1d6 AD_SLASH,
+          A_CLAW for 1d6 AD_SLASH,
+          A_BITE for 1d6 AD_PIERCE,
+          A_SEEM for $"human";
+    MAGIC_RES(20);
+    ABILITY(CA_INFRAVISION,6);
+    Feats: FT_RAKE, FT_REND, FT_NATURAL_GRAB, FT_BLIND_FIGHT,
+           FT_POWER_ATTACK, SK_CRAFT, SK_CONCENTRATION,
+           SK_FIND_WEAKNESS, SK_HIDE, SK_LISTEN, SK_SPOT, SK_SWIM;
+    Flags: M_CARNI, M_ALL_FEMALE, M_POISON, M_SWAMP, M_CHAOTIC, 
+           M_EVIL, M_HUMANOID, M_CLOSEID;
+    Spells: $"fog cloud", $"enlarge";
+    Gear:
+      1d4+1 $"potion" of $"healing",
+      30% 1d2 $"potion" of $"bull's strength",
+      30% 1d2 $"potion" of $"haste",
+      30% 1d3 $"potion" of $"fire breath",
+      25% $"stone" of random 2 to 5 else
+        33% $"amulet" of random 2 to 5,
+      50% $"hide armor";
+    On Event POST(EV_INVOKE), POST(EV_NATTACK) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };  
+  }
+
+Monster "night hag" : MA_HAG, MA_OUTSIDER
+  {
+    Image: purple 'u'; Size: SZ_MEDIUM; Mana: 80; Arm: 11;
+    CR: 9; HD: 8; Hit: +6; Def: 11; Mov: 70%; Spd: 80%;
+    Str 19, Dex 12, Con 18, Int 11, Wis 15, Cha 12;
+    Attk: A_BITE for 2d6 AD_PIERCE
+                 and 0d0 AD_DISE (DC 18),
+          A_GAZE for 0d0 AD_SPE1,
+          A_SEEM for $"human";
+    ABILITY(CA_INFRAVISION,6);
+    ABILITY(CA_WEAPON_IMMUNITY,+1);
+    ABILITY(CA_PHASE,PHASE_ETHERIAL);
+    MAGIC_RES(75);
+    Immune: DF_FIRE, DF_COLD, DF_FEAR, DF_SLEE;
+    Feats: FT_ALERTNESS, FT_BLIND_FIGHT, FT_GUARDED_INVOCATION,
+           FT_GREAT_FORTITUDE, SK_CRAFT, SK_CONCENTRATION,
+           SK_KNOW_MAGIC, SK_SPELLCRAFT, SK_LISTEN, SK_SPOT, SK_SWIM;
+    Flags: M_CARNI, M_ALL_FEMALE, M_POISON, M_SWAMP, M_CHAOTIC, 
+           M_EVIL, M_WATER, M_HUMANOID, M_CLOSEID;
+    Spells: $"detect good", $"magic missile", $"ray of enfeeblement",
+            $"deep slumber", $"rigor mortis";
+    On Event EVICTIM(EV_MAGIC_HIT) {
+      if (e.eID == $"charm person" || e.eID == $"charm monster" ||
+          e.eID == $"fire charm")
+        {
+          e.Immune = true;
+          return DONE;
+        }
+      return NOTHING;
+      },
+    EVICTIM(PRE(EV_DAMAGE)) {
+      if (e.DType == AD_CHRM)
+        {
+          e.Immune = true;
+          return DONE;
+        }
+      return NOTHING;
+      },
+    PRE(EV_DAMAGE) {
+      if (e.DType == AD_SPE1)
+        {
+          if (EVictim->HasEffStati(TRAP_EVENT,$"night hag"))
+            return ABORT;
+          if (EVictim->ResistLevel(AD_FEAR) == -1)
+            {
+              e.Immune = true;
+              return DONE;
+            }
+          if (EVictim->SavingThrow(WILL,24,SA_MAGIC|SA_EVIL|SA_FEAR))
+            {
+              e.Resist = true;
+              return DONE;
+            }
+          EVictim->GainPermStati(TRAP_EVENT,EActor,SS_CURS,
+                     EV_REST,0,$"night hag",12);
+          EVictim->GainPermStati(TRAP_EVENT,EActor,SS_CURS,
+                     POST(EV_REST),0,$"night hag",12);
+          EVictim->IPrint("You feel haunted.");
+          EActor->IPrint("You plant your seed in the <hObj>'s dreams.",EActor);
+          if (EVictim->isPlayer())
+            EActor->GainTempStati(AFRAID,NULL,10d10,SS_MISC,FEAR_SKIRMISH);
+          return DONE;
+        }
+      return NOTHING;
+      },
+    META(EV_REST) {
+      e.EParam |= REST_RESTLESS;
+      return NOTHING;
+      },
+    META(POST(EV_REST)) {
+      EActor->IPrint("Your dreams are haunted by horrific images!");
+      ThrowDmg(EV_DAMAGE,AD_DRCO,1d6+1,"night hag dream-haunting",
+        EActor->GetEffStatiObj(TRAP_EVENT,$"night hag"),EActor);
+      return NOTHING;
+      },
+    EV_PHASE {
+      hObj hHeart;
+      if (EActor->onPlane() == PHASE_ETHERIAL)
+        return NOTHING;
+      for (hHeart=EActor->FirstInv();hHeart;
+              hHeart=EActor->NextInv())
+      if (hHeart->iID == $"stone")
+        if (hHeart->ieID == $"heartstone")
+          return NOTHING;
+      EActor->IPrint("You need your heartstone to invoke the
+        power of etherealness.");
+      return ABORT;
+      },
+    MSG_SPECABIL
+      "It is immune to <9>charm<7> spells. It needs a heartstone to use
+        its <9>etherealness<7> ability.",
+    MSG_SPE1DESC
+      "haunt a victim's dreams, inflicting 1d6 points of Con damage every
+        time the victim rests",
+    POST(EV_SATTACK), POST(EV_INVOKE) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };  
+    Gear:
+      $"stone" of $"heartstone",
+      25% $"hide armor",
+      25% $"amulet" of random 3 to 6,
+      50% 1d3 $"potion" of $"healing";
+  }
+  
+AI_STONE Effect "heartstone" : EA_GRANT
+  { xval: ADJUST_RES; yval: A_SAV; pval: +2; }
+and EA_GRANT
+  { xval: IMMUNITY; yval: AD_DISE; Flags: EF_NOGEN;
+    Desc: "A night hag's most treasured possession is her heartstone,
+      a special magical stone containing a fragment of the night hag's
+      heart. To a night hag, this stone conveys a +2 resistance bonus
+      to saving throws and immunity to disease, as well as being an
+      essential component of their inherant ethereal travel abilities.
+      To any wielder other than a night hag (or a high-level rogue),
+      the stone conveys only the saving throw bonus.";
+    On Event EV_MAGIC_HIT {
+      if (e.efNum == 1 && !EVictim->ItemPrereq($"night hag",0,25))
+        return DONE;
+      return NOTHING;
+      };
+  }
+   
+Monster "sphinx" : MA_MYTHIC, MA_BEAST
+  {
+    Image: brown 'M';
+    Desc: "Sphinxes are enigmatic, solitary and iconoclastic
+      creatures with the bodies of large lions, the faces of
+      men and women and large wings like those of a hawk.
+      Sphinxes are known to hoard knowledge and love puzzles.\n 
+      __They come in various different species, which can be
+      discerned with the Knowledge (Mythology) skill.";
+    Flags: M_NOGEN, M_UNKNOWN;
+  }
+   
+Monster "hieracosphinx" : MA_MYTHIC, MA_BEAST
+  {
+    Image: red 'M'; Size: SZ_LARGE; Mana: 80; Arm: 6;
+    CR: 6; HD: 9; Hit: +8; Def: 10; Mov: 175%; Spd: 125%;
+    Str 21, Dex 14, Con 15, Int 6, Wis 15, Cha 10;
+    Attk: A_BITE for 1d10 AD_SLASH,
+          A_CLAW for 1d6  AD_SLASH,
+          A_CLAW for 1d6  AD_SLASH,
+          A_ROAR for 3d6  AD_STUN (DC 15),
+          A_SEEM for $"sphinx";
+    ABILITY(CA_INFRAVISION,6);
+    ABILITY(CA_SHARP_SENSES,4);
+    MAGIC_RES(75);
+    Feats: FT_RAKE, FT_POUNCE, FT_MULTIATTACK, FT_POWER_ATTACK,
+             FT_FLYBY_ATTACK, FT_CLEAVE,
+           SK_SPOT, SK_LISTEN, SK_BLUFF, SK_FIND_WEAKNESS,
+             SK_INTIMIDATE, SK_JUMP;
+    Flags: M_CARNI, M_ALL_MALE, M_DESERT, M_FLYER, M_MOUNTABLE,
+           M_CHAOTIC, M_EVIL, M_HOSTILE, M_SKIRMISH;
+    Desc: "Sphinxes are enigmatic, solitary and iconoclastic
+      creatures with the bodies of large lions, the faces of
+      men and women and large wings like those of a hawk.
+      Sphinxes are known to hoard knowledge and love puzzles.\n
+      __Hieracosphinxes are the only species of sphinxkind to
+      be truly black-hearted. Vicious and stupid, they seek to
+      decieve travellers, malign the innocent and capture and
+      enslave the female gynosphinxes.";   
+    On Event POST(EV_SATTACK) {
+      if (e.AType == A_ROAR)
+        EActor->IdentifyMon();
+      return NOTHING;
+      },
+    POST(EVICTIM(EV_EFFECT)) {
+      if (!ResourceHasFlag(e.eID,EF_MUNDANE))
+        if (EActor->isPlayer())
+          EVictim->IdentifyMon();
+      return NOTHING;
+      };
+  }
+
+Monster "gynosphinx" : MA_MYTHIC, MA_BEAST
+  {
+    Image: yellow 'M'; Size: SZ_LARGE; Mana: 120; Arm: 4;
+    CR: 7; HD: 8; Hit: +7; Def: 10; Mov: 200%; Spd: 150%;
+    Str 19, Dex 12, Con 13, Int 18, Wis 19, Cha 19;
+    Attk: A_CLAW for 1d6  AD_SLASH,
+          A_CLAW for 1d6  AD_SLASH,
+          A_SEEM for $"sphinx";
+    ABILITY(CA_INFRAVISION,6);
+    Feats: FT_RAKE, FT_GUARDED_INVOCATION, FT_POWER_ATTACK,
+             FT_IRON_WILL,
+           SK_SPOT, SK_LISTEN, SK_BLUFF, SK_DECIPHER, SK_DIPLOMACY,
+             SK_KNOW_MAGIC, SK_KNOW_GEO, SK_KNOW_MYTH,
+             SK_KNOW_NATURE;
+    Spells: $"read magic", $"see invisibility", $"insightful stroke",
+            $"dispel magic", $"remove curse", $"symbol of sleep",
+            $"symbol of pain", $"detect objects", $"detect monsters",
+            $"identify", $"dispel magic";
+    Flags: M_CARNI, M_ALL_FEMALE, M_DESERT, M_FLYER, M_MOUNTABLE;
+    Desc: "Sphinxes are enigmatic, solitary and iconoclastic
+      creatures with the bodies of large lions, the faces of
+      men and women and large wings like those of a hawk.
+      Sphinxes are known to hoard knowledge and love puzzles.\n
+      __Gynosphinxes are female sphinxes of incredible intellectual
+      and magical power. Scholars and seekers of knowledge, they
+      are reclusive and love mental challenges, venturing out rarely
+      to seek out androsphinxes or criosphinxes as mates.";   
+    On Event POST(EV_INVOKE) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };
+    Gear:
+      $"scroll" of random 1 to 8,
+      $"scroll" of random 1 to 8,
+      $"scroll" of random 1 to 8,
+      $"scroll" of random 1 to 8,
+      $"scroll" of random 1 to 8,
+      $"scroll" of random 1 to 8,
+      $"scroll" of random 1 to 8,
+      50% $"scroll" of random 1 to 8,
+      50% $"scroll" of random 1 to 8,
+      50% $"scroll" of random 1 to 8;
+  }
+
+Monster "criosphinx" : MA_MYTHIC, MA_BEAST
+  {
+    Image: grey 'M'; Size: SZ_LARGE; Mana: 40; Arm: 7;
+    CR: 8; HD: 10; Hit: +10; Def: 10; Mov: 150%; Spd: 100%;
+    Str 23, Dex 10, Con 17, Int 10, Wis 11, Cha 11;
+    Attk: A_BUTT for 1d10 AD_BLUNT,
+          A_CLAW for 1d6  AD_SLASH,
+          A_CLAW for 1d6  AD_SLASH,
+          A_ROAR for 2d4  AD_DAST (DC 17),
+          A_SEEM for $"sphinx";
+    ABILITY(CA_INFRAVISION,6);
+    Feats: FT_RAKE, FT_POWER_ATTACK, FT_CLEAVE, FT_GUARDED_INVOCATION,
+             FT_CLEAVE,
+           SK_SPOT, SK_LISTEN, SK_BLUFF, SK_DECIPHER, SK_DIPLOMACY,
+             SK_KNOW_MYTH, SK_JUMP;
+    Spells: $"dimension door";
+    Flags: M_CARNI, M_ALL_MALE, M_DESERT, M_FLYER, M_MOUNTABLE,
+           M_SKIRMISH, M_GREEDY;
+    Desc: "Sphinxes are enigmatic, solitary and iconoclastic
+      creatures with the bodies of large lions, the faces of
+      men and women and large wings like those of a hawk.
+      Sphinxes are known to hoard knowledge and love puzzles.\n
+      __Criosphinxes have the head of a ram instead of that of
+      a person. They are intensely paranoid and covetious, seeking
+      wealth above all else.";   
+    On Event POST(EV_SATTACK) {
+      if (e.AType == A_ROAR)
+        EActor->IdentifyMon();
+      return NOTHING;
+      },
+    POST(EV_INVOKE) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };
+  }   
+
+Monster "androsphinx" : MA_MYTHIC, MA_BEAST
+  {
+    Image: brown 'M'; Size: SZ_LARGE; Mana: 80; Arm: 9;
+    CR: 9; HD: 12; Hit: +12; Def: 10; Mov: 175%; Spd: 150%;
+    Str 25, Dex 10, Con 19, Int 16, Wis 17, Cha 17;
+    Attk: A_CLAW for 1d6  AD_SLASH,
+          A_CLAW for 1d6  AD_SLASH,
+          A_ROAR for 3d10 AD_FEAR (DC 19),
+          A_SEEM for $"sphinx";
+    ABILITY(CA_INFRAVISION,6);
+    Feats: FT_RAKE, FT_TRAMPLE, FT_POWER_ATTACK, FT_CLEAVE, 
+             FT_KNOCK_PRONE, FT_MASTER_BULL_RUSH,
+           SK_SPOT, SK_LISTEN, SK_BLUFF, SK_DECIPHER, SK_DIPLOMACY,
+             SK_KNOW_THEO, SK_KNOW_MAGIC, SK_KNOW_NATURE, SK_JUMP;
+    Flags: M_CARNI, M_ALL_MALE, M_DESERT, M_FLYER, M_MOUNTABLE,
+           M_CHAOTIC, M_GOOD;
+    Desc: "Sphinxes are enigmatic, solitary and iconoclastic
+      creatures with the bodies of large lions, the faces of
+      men and women and large wings like those of a hawk.
+      Sphinxes are known to hoard knowledge and love puzzles.\n
+      __Noble androsphinxes tend toward virtue, being the
+      guardians of ancient places and knowledge. They seek
+      lore as avidly as gynosphinxes, and are only slightly
+      less intelligent.";   
+    On Event POST(EV_SATTACK) {
+      if (e.AType == A_ROAR)
+        EActor->IdentifyMon();
+      return NOTHING;
+      },
+    POST(EV_INVOKE) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };
+  }   
+           
+/********************************************************************************
+ ********************************************************************************
+ ***                             GIANTS AND FAERIES                           ***
+ ********************************************************************************
+ ********************************************************************************/
+
+/*** TRUE GIANTS ***/
+
+Monster "hill giant" : MA_GIANT
+  {
+    Image: brown 'H'; Size: SZ_HUGE;  
+    CR: OPT_CR(8,7); HD: 12; Hit: +6; Def: 19; Mov: 150%; Spd: 135%; 
+    Str 25, Dex 8, Con 19, Int 6, Wis 10, Cha 17;
+    Attk: A_PUNC for 1d8 AD_BLUNT,
+          A_SEEM for $"ogre";
+	ABILITY(CA_LOWLIGHT,6);
+	Stati[WEP_SKILL,WS_FOCUSED,0,$"boulder"];
+    Flags: M_HERBI, M_CARNI, M_HUMANOID, M_EVIL, M_LAWFUL,
+      M_GREEDY, M_PLAINS, M_REACH;
+    Feats: SK_CLIMB, SK_JUMP, SK_LISTEN, SK_SPOT,
+           FT_CLEAVE, FT_POWER_ATTACK, FT_MASTER_BULL_RUSH;
+    Desc: "Brutal, thuggish and stupid, hill giants are the
+      weakest of the true giant races, but are still a terrifying
+      threat to human villages and settlements.";
+    Gear: 50% $"huge club" else
+           50% $"great maul" else
+             random T_WEAPON,
+          random T_ARMOR,
+          2d4 $"boulder";
+    On Event EVICTIM(EV_HIT) {
+      if (e.AType == A_HURL && GetHandle(EItem2) != NULL)
+        if (EItem2->iID == $"rock" || EItem2->iID == $"boulder")
+          if (EVictim->SavingThrow(REF,20))
+            {
+              VPrint(e,"You catch the <EItem2>!",
+                       "The <EActor> catches the <EItem2>!");
+              EVictim->GainItem(EItem2);
+              return DONE;
+            }
+      return NOTHING;
+      },
+    POST(EV_STRIKE) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      },
+    MSG_SPECABIL
+      "It recieves Weapon Focus with thrown boulders as a racial
+        feat. If a boulder or large rock is thrown at it, it can
+        try to catch the rock, negating the attack as a reflexive
+        action, with a Reflex save (DC 20).";
+  }
+
+Monster "stone giant" : MA_GIANT
+  {
+    Image: grey 'H'; Size: SZ_HUGE;  
+    CR: OPT_CR(8,8); HD: 14; Hit: +7; Def: 21; Mov: 150%; Spd: 140%; 
+    Str 27, Dex 15, Con 19, Int 10, Wis 12, Cha 11;
+    Attk: A_PUNC for 1d8 AD_BLUNT;
+	  ABILITY(CA_INFRAVISION,6);
+    ABILITY(CA_EARTHMELD,4);
+    Stati[WEP_SKILL,WS_FOCUSED,0,$"boulder"];
+    Flags: M_HERBI, M_CARNI, M_HUMANOID,
+      M_GREEDY, M_REACH;
+    Feats: SK_CLIMB, SK_JUMP, SK_LISTEN, SK_SPOT,
+           FT_COMBAT_REFLEXES, FT_POINT_BLANK_SHOT, 
+           FT_POWER_ATTACK, FT_IRON_WILL, M_EARTH;
+    Desc: "Stone giants prefer thick leather garments, dyed in shades of
+    brown and gray to match the stone around them. Adults are about 12 feet
+    tall and weigh about 1,500 pounds. Stone giants can live to be 800
+    years old.";
+    Gear: 50% $"fullblade" else
+           50% $"great maul" else
+             random T_WEAPON,
+          random T_ARMOR,
+          2d4 $"boulder";
+    On Event EVICTIM(EV_HIT) {
+      if (e.AType == A_HURL && GetHandle(EItem2) != NULL)
+        if (EItem2->iID == $"rock" || EItem2->iID == $"boulder")
+          if (EVictim->SavingThrow(REF,20))
+            {
+              VPrint(e,"You catch the <EItem2>!",
+                       "The <EActor> catches the <EItem2>!");
+              EVictim->GainItem(EItem2);
+              return DONE;
+            }
+      return NOTHING;
+      },
+    MSG_SPECABIL
+      "It recieves Weapon Focus with thrown boulders as a racial
+        feat. If a boulder or large rock is thrown at it, it can
+        try to catch the rock, negating the attack as a reflexive
+        action, with a Reflex save (DC 20).";
+  }
+
+Monster "frost giant" : MA_GIANT
+  {
+    Image: skyblue 'H'; Size: SZ_HUGE;  
+    CR: OPT_CR(9,9); HD: 14; Hit: +9; Def: 19; Mov: 150%; Spd: 145%; 
+    Str 29, Dex 9, Con 21, Int 10, Wis 14, Cha 11;
+    Attk: A_PUNC for 1d8 AD_BLUNT;
+	ABILITY(CA_LOWLIGHT,6);
+	ABILITY(CA_DEVOURING,6);
+    ABILITY(CA_FEED_UPON_PAIN,6);
+    Stati[WEP_SKILL,WS_FOCUSED,0,$"boulder"];
+    Flags: M_HERBI, M_CARNI, M_HUMANOID, M_EVIL, M_CHAOTIC,
+      M_GREEDY, M_MOUNTAIN, M_REACH, M_COLD;
+    Feats: SK_CLIMB, SK_JUMP, SK_LISTEN, SK_SPOT,
+           FT_CLEAVE, FT_POWER_ATTACK, FT_MASTER_BULL_RUSH,
+           FT_GREAT_CLEAVE, FT_SUNDER;
+    Immune: DF_COLD;
+    Desc: "A frost giant's hair can be light blue or dirty yellow, and its
+    eyes usually match its hair color. Frost giants dress in skins and
+    pelts, along with any jewelry they own. Frost giant warriors add chain
+    shirts and metal helmets decorated with horns or feathers.
+    An adult male is about 15 feet tall and weighs about 2,800 pounds.
+    Females are slightly shorter and lighter, but otherwise identical with
+    males. Frost giants can live to be 250 years old.";
+    Gear: 50% $"greataxe" of random 2 to 4 else
+           50% $"great maul" of random 2 to 4 else
+             random T_WEAPON of random 2 to 4 ,
+          random T_ARMOR of random 2 to 4,
+          15% $"wand" +3 of $"ice",
+          2d4 $"boulder";
+    On Event EVICTIM(EV_HIT) {
+      if (e.AType == A_HURL && GetHandle(EItem2) != NULL)
+        if (EItem2->iID == $"rock" || EItem2->iID == $"boulder")
+          if (EVictim->SavingThrow(REF,20))
+            {
+              VPrint(e,"You catch the <EItem2>!",
+                       "The <EActor> catches the <EItem2>!");
+              EVictim->GainItem(EItem2);
+              return DONE;
+            }
+      return NOTHING;
+      },
+    MSG_SPECABIL
+      "It recieves Weapon Focus with thrown boulders as a racial
+        feat. If a boulder or large rock is thrown at it, it can
+        try to catch the rock, negating the attack as a reflexive
+        action, with a Reflex save (DC 20).";
+    Lists:
+      * GROUP_LEADER $"white dragon",
+      * GROUP_ALLY $"winter wolf" $"white dragon",
+      * GROUP_FOLLOWER $"wolf" $"winter wolf";
+  }
+
+Monster "fire giant" : MA_GIANT
+  {
+    Image: red 'H'; Size: SZ_HUGE;  
+    CR: 10; HD: 15; Hit: +11; Def: 19; Mov: 150%; Spd: 145%; 
+    Str 31, Dex 9, Con 21, Int 10, Wis 14, Cha 11;
+    Attk: A_PUNC for 1d8 AD_BLUNT;
+	ABILITY(CA_LOWLIGHT,6);
+    Stati[WEP_SKILL,WS_FOCUSED,0,$"boulder"];
+    Flags: M_HERBI, M_CARNI, M_HUMANOID, M_EVIL, M_LAWFUL,
+      M_MOUNTAIN, M_REACH, M_FIRE, M_GROUP;
+    Feats: SK_CLIMB, SK_CRAFT, SK_INTIMIDATE, SK_JUMP, SK_SPOT,
+           SK_FIND_WEAKNESS, FT_CLEAVE, FT_POWER_ATTACK, FT_MASTER_BULL_RUSH,
+           FT_IRON_WILL, FT_SUNDER;
+    Immune: DF_FIRE;
+    Gear: 50% $"greataxe" of random 2 to 4 else
+           50% $"great maul" of random 2 to 4 else
+             random T_WEAPON of random 2 to 4 ,
+          random T_ARMOR of random 2 to 4,
+          2d4 $"food ration",
+          2d4 $"boulder";
+    On Event EVICTIM(EV_HIT) {
+      if (e.AType == A_HURL && GetHandle(EItem2) != NULL)
+        if (EItem2->iID == $"rock" || EItem2->iID == $"boulder")
+          if (EVictim->SavingThrow(REF,20))
+            {
+              VPrint(e,"You catch the <EItem2>!",
+                       "The <EActor> catches the <EItem2>!");
+              EVictim->GainItem(EItem2);
+              return DONE;
+            }
+      return NOTHING;
+      },
+    EV_BIRTH {
+      hObj h;
+      for(h=EActor->FirstInv();h;h=EActor->NextInv()) 
+        if (h->isType(T_WEAPON) && h->QualityOK(WQ_FLAMING))
+          h->AddQuality(WQ_FLAMING);         
+      return NOTHING;
+      },
+    MSG_SPECABIL
+      "It recieves Weapon Focus with thrown boulders as a racial
+        feat. If a boulder or large rock is thrown at it, it can
+        try to catch the rock, negating the attack as a reflexive
+        action, with a Reflex save (DC 20).";
+    Desc: "Fire giants are creatures of vast volcanic reaches and
+      overarching ambitions. Being stronger than nearly anything
+      else around them, they believe in strict hierarchy based on
+      strength, and have a militaristic, rigidly ordered society.
+      Fire giants are xenophobic, preferring isolation and periodic
+      conquest as their only forms of interaction with the societies
+      of the 'small folk'. They have warred with the frost giants
+      since the earliest light shone on Theyra.\n
+      __Fire giants have coppery hair, ruddy red skin and squat,
+      almost dwarfish bodies.";
+  }
+
+/*** GIANT-KIN ***/
+
+Monster "ogre" : MA_GIANT, MA_ADVENTURER
+  {
+    Image: grey 'H'; Size: SZ_LARGE; 
+    CR: OPT_CR(2,3); HD: 4; Hit: +2; Def: 10; Hit: 2; Mov: 120%; Spd: 80%;
+    Str 21, Dex 8, Con 15, Int 6, Wis 10, Cha 7;
+    Attk: A_PUNC for 1d6 AD_BLUNT;
+    Feats: FT_POWER_ATTACK, SK_CLIMB;
+    Flags: M_CARNI, M_HERBI, M_HUMANOID, M_CHIEFTAN,
+      M_CHAOTIC, M_EVIL, M_REACH, M_MOUNTABLE;
+    Gear: 50% $"fullblade" else
+           50% $"huge club" else
+            random T_WEAPON,
+          2d4 $"shotput", $"loincloth";
+    Desc: "Huge, stupid beasts, ogres are notorious for their
+      lazyness, fierce tempers and desire for solitude. Ogres are sometimes
+      ridden by goblins with crossbows."; 
+  }
+
+Monster "merrow" : MA_GIANT, MA_ADVENTURER
+  {
+    Image: grey 'H'; Size: SZ_LARGE; 
+    CR: OPT_CR(2,3); HD: 4; Hit: +2; Def: 10; Hit: 2; Mov: 120%; Spd: 80%;
+    Str 21, Dex 8, Con 15, Int 6, Wis 10, Cha 7;
+    Attk: A_PUNC for 1d6 AD_BLUNT,
+          A_SEEM for $"ogre";
+    Feats: FT_POWER_ATTACK, SK_CLIMB;
+    Flags: M_CARNI, M_HERBI, M_HUMANOID, M_CHIEFTAN,
+      M_CHAOTIC, M_EVIL, M_AMPHIB, M_AQUATIC, M_REACH,
+      M_CLOSEID;
+    Gear: 50% $"huge club" else
+           50% $"trident" else
+            random T_WEAPON,
+          2d4 $"shotput", $"loincloth";
+    Desc: "The merrow are an aquatic offshoot of normal ogres,
+      who delight in terrorizing small fishing villages and
+      devouring livestock.";
+  }
+
+Monster "verbeeg" : MA_GIANT, MA_ADVENTURER, MA_SYLVAN
+  {
+    Image: green 'H'; Size: SZ_LARGE; Mana: 10;
+    CR: OPT_CR(6,4); HD: 5; Hit: +3; Def: 13; Hit: 5; Mov: 150%; Spd: 100%;
+    Str 19, Dex 13, Con 16, Int 12, Wis 12, Cha 13;
+    Attk: A_PUNC for 1d6 AD_BLUNT,
+          A_SEEM for $"ogre";
+	ABILITY(CA_INFRAVISION,6);
+    Feats: FT_POWER_ATTACK, FT_FAR_SHOT, FT_POINT_BLANK_SHOT,
+      SK_CRAFT, SK_HIDE, SK_INTIMIDATE, SK_LISTEN, SK_SEARCH,
+      SK_SPOT;
+    Flags: M_CARNI, M_HERBI, M_HUMANOID, M_CHIEFTAN, M_SHAMAN,
+      M_REACH, M_CLOSEID; 
+    Gear: 50% $"studded leather" else 25% $"chainmail shirt" else
+             13% $"hide armor" else $"breastplate",
+          25% $"fullblade" else 33% $"greataxe" else 50% $"great maul"
+            else $"heavy mace",
+          50% 2d2 $"longspear",
+          10% random T_WEAPON of random 1 to 4,
+          50% $"tower shield"; 
+    Desc: "The weakest and smallest of the giantkin, verbeeg most
+      accurately resemble intelligent, tactically prudent ogres.
+      They are a warrior race, and pride themselves on their militant
+      skill, which can lead them to become a danger to humans in the
+      area -- but they lack the brutality and bloodlust of the ogres
+      or hill giants. Verbeeg have an advanced tribal society, with a
+      great emphasis on athletics, competition, fame and personal
+      prowess.";
+  }
+
+Monster "saqualaminoi" : MA_GIANT, MA_ADVENTURER
+  {
+    Image: grey 'H'; Size: SZ_LARGE; 
+    CR: OPT_CR(6,4); HD: 8; Hit: +2; Def: 10; Hit: 2; Mov: 130%; Spd: 140%;
+    Str 23, Dex 11, Con 16, Int 6, Wis 13, Cha 9; Arm: 4; 
+    Attk: A_SLAM for 1d4 AD_BLUNT,
+          A_SLAM for 1d4 AD_BLUNT,
+          A_SEEM for $"ape";
+	RACIAL_SKILL(SK_BALANCE,8);
+	RACIAL_SKILL(SK_HIDE,4);
+    Feats: SK_BALANCE, SK_CLIMB, SK_HIDE, SK_JUMP, SK_LISTEN,
+      SK_WILDERNESS,
+      FT_HARDINESS, FT_POWER_ATTACK, FT_TOUGHNESS;
+    Immune: DF_COLD; 
+    Flags: M_CARNI, M_HERBI, M_HUMANOID, M_CHIEFTAN, M_CLOSEID,
+      M_CHAOTIC, M_EVIL, M_MOUNTAIN, M_REACH, M_COLD;
+    Gear: 90% $"huge club" else random T_WEAPON,
+          $"loincloth";
+    Desc: "This tall apelike humanoid is covered in shaggy gray-white hair.
+    Its features are broad and flat and with deep-set, brown eyes beneath a
+    heavy sloping brow. Immensely strong and hulking in stature, it often
+    carries a makeshift club."; 
+    On Event POST(EV_STRIKE) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };
+  }
+
+/*** THE ELEMENTAL FAE ***/
+
+Monster "slyph" : MA_FAERIE, MA_ELEMENTALKIN, MA_SYLVAN
+  {
+    Image: white 'f'; Size: SZ_SMALL; Mana: 125; 
+    CR: OPT_CR(4,5); HD: 3; Hit: +2; Def: 21; Mov: 175%; Spd: 150%;
+    Str 8, Dex 13, Con 8, Int 15, Wis 16, Cha 17;
+    Attk: A_PUNC for 1d2 AD_BLUNT,
+          A_GATE for 75% MA_AIR (CR 5);
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_NATURE_SENSE,1);
+	MAGIC_RES(50); 
+    Spells: $"invisibility", $"magic missile", $"mirror image",
+            $"gust of wind", $"wind wall", $"shield", $"chromatic orb",
+            /* $"gaseous form", */ $"shocking grasp", $"phase door",
+            $"lightning bolt", $"obscurement", $"charm person", $"slow";
+    Feats: FT_GUARDED_INVOCATION, /*FT_EMPOWER_INNATE_MAGIC,*/
+           FT_WEAPON_FINESSE, SK_ANIMAL_EMP, SK_ESCAPE_ART,
+           SK_HIDE, SK_MOVE_SIL;
+    Flags: M_HUMANOID, M_AIR, M_FRIENDLY, M_FOREST, M_PLAINS,
+           M_ALL_FEMALE;
+    Desc: "Fae creatures tied to the elemental aspect of air, slyphs
+      are playful, curious and insightful. They are generally friendly,
+      especially to males, and love to travel and learn -- but they can
+      be vicious to orcs and other creatures which despoil the natural
+      splendour they so adore. Slyphs appear as small, beautiful women
+      with translucent, brightly colored wings.";
+  }
+
+Monster "nereid" : MA_FAERIE, MA_ELEMENTALKIN
+  {
+    Image: azure 'f'; Size: SZ_MEDIUM; Mana: 64; 
+    CR: OPT_CR(6,5); HD: 4; Hit: +3; Def: 17; Mov: 100%; Spd: 100%;
+    Str 9, Dex 14, Con 8, Int 12, Wis 14, Cha 16;
+    Attk: A_SPIT for 2d6 AD_BLND (DC 18),
+          A_PUNC for 1d3 AD_BLUNT,
+          A_GATE for 75% MA_WATER (CR 5),
+          A_SEEM for $"human";
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_NATURE_SENSE,1);
+	MAGIC_RES(50);
+	ABILITY(CA_EVASION,10);
+    Feats: FT_GUARDED_INVOCATION, FT_ALLURING, SK_DIPLOMACY,
+      SK_BLUFF, SK_ESCAPE_ART, SK_LISTEN, SK_MOVE_SIL;
+    Flags: M_HUMANOID, M_WATER, M_FRIENDLY, M_OCEAN,
+           M_ALL_FEMALE, M_CLOSEID;
+    Spells: $"Kiss of the Nereid", $"Charm Person", $"Waterspout",
+            $"Cure Serious Wounds", $"Create Water", $"Watery Double",
+            $"Obscurement", $"Chill Metal", $"Choke";
+    Desc: "Alluring and unattainable, nereids are fae with ties to
+      elemental water, known for luring sailors to watery deaths.
+      Their kiss supernaturally drowns men (or women), and many
+      delight in this power, being unaware of the suffering that it
+      causes. Nereids store their souls in their shawls, and will
+      do anything to protect these items.";
+    On Event EV_INITIALIZE {
+      hObj h;
+      h = CreateItem($"ornate shawl");
+      h->GainPermStati(MY_CORPSE_IS,EActor,SS_MISC);
+      EActor->GainItem(h);
+      return NOTHING;
+      },
+    EVICTIM(EV_HIT) {
+      if (e.AType == A_FIRE || e.AType == A_HURL ||
+          e.AType == A_SPEL || is_special_attk(e.AType))
+        return NOTHING;
+      if (e.isSurprise || e.isFlatFoot)
+        return NOTHING;
+      if (random(2))
+        {
+          VPrint(e,"You flow like water, evading the attack.",
+                   "The <EVictim> flows like water, evading the attack.");
+          return DONE;
+        }
+      return NOTHING;
+      },
+    EVICTIM(EV_STRIKE) {
+      hObj h2;
+      for(h2=EActor->FirstInv();h2;h2=EActor->NextInv())
+        if (h2->iID == $"ornate shawl")
+          if (GetHandle(EVictim) == h2->GetStatiObj(MY_CORPSE_IS))
+            {
+              e.vHit += 4;
+              e.strHit += "+4 circ";
+            }
+      return NOTHING;
+      },
+    EVICTIM(EV_MAGIC_STRIKE) {
+      hObj h3;
+      for(h3=EActor->FirstInv();h3;h3=EActor->NextInv())
+        if (h3->iID == $"ornate shawl")
+          if (GetHandle(EVictim) == h3->GetStatiObj(MY_CORPSE_IS))
+            e.saveDC += 4;
+      return NOTHING;
+      },
+    MSG_SPECABIL
+      "Its body can morph and flow like water, giving it a 50~ chance
+         to negate any melee attack outright. It stores its soul in a
+         shawl, and if the shawl is destroyed, so is it. Anyone possessing
+         its shawl has a +4 circumstance bonus to attack rolls and spell
+         DCs against it.";
+  }
+
+Item "ornate shawl" : T_CLOTHES
+  {
+    Weight: 2; Mat: MAT_CLOTH;
+ 		Image: light gray GLYPH_CLOTHES;
+    On Event EVICTIM(POST(EV_DAMAGE)) {
+      hObj hNereid;
+      if (EVictim->Flags & F_DELETE)
+        if (EVictim->GetStatiObj(MY_CORPSE_IS))
+          {
+            hNereid->IDPrint("You are slain as your soul-shawl is destroyed!",
+              "The <hObj> melts away to water, destroyed with its shawl!", hNereid);
+            ThrowDmg(EV_DEATH,e.DType,0,"having a soul-shawl destroyed",EActor,hNereid);
+          }                
+      return NOTHING;
+      };
+  }
+
+Effect "Kiss of the Nereid" : EA_GENERIC
+  {
+    sval: FORT; Flags: EF_SPECABIL; Purpose: EP_ATTACK; qval: Q_TAR;
+    On Event EV_ISTARGET {
+      if (EActor->isBeside(EVictim))
+        if (EVictim->isMType(MA_NLIVING))
+          if (!EVictim->HasMFlag(M_NOHEAD))
+            if (!EActor->HasStati(SPEC_TIMEOUT,-1,EVictim))
+              return 1;
+      return -1;
+      },
+    EV_MAGIC_STRIKE {
+      EActor->GainTempStati(SPEC_TIMEOUT,EVictim,2d6,SS_MISC);
+      return NOTHING;
+      },
+    EV_MAGIC_HIT {
+      if (EActor->isBeside(EVictim))
+        if (EVictim->isMType(MA_NLIVING))
+          if (!EVictim->HasMFlag(M_NOHEAD))
+            if (!EActor->HasStati(SPEC_TIMEOUT,-1,EVictim)) {
+              VPrint(e,"You drown...",
+                  "The <EVictim> drowns!");
+              ThrowDmg(EV_DEATH,AD_SOAK,0,"a nereid's kiss",EActor,EVictim);
+              return DONE; 
+            }
+      return ABORT; 
+      },
+    MSG_CAST
+      "You kiss the <EVictim>."
+      "The <EActor> kisses you."
+      "The <EActor> kisses the <EVictim>.";
+    Desc: "Every 2d6 rounds, a nereid can attempt to kiss a victim,
+      causing him (or her) to drown.";
+  }
+
+/* Glome */
+
+/*** OTHER FAERIES ***/
+
+#if 0
+Monster "spriggan" : MA_FAERIE, MA_GNOME, MA_SYLVAN
+  { Image: grey 'f'; Size: SZ_TINY; 
+    CR: OPT_CR(2,5); HD: 6; Hit: 4; Def: 13; Mov: 70%; Spd: 85%;
+    Str 7, Dex 22, Con 12, Int 12, Wis 14, Cha 8;
+    Attk: A_PUNC for 1d3 AD_BLUNT,
+          A_TUCH for 2d4 AD_STEA,
+          A_FORM for $"giant spriggan";
+    Spells: $"shatter", $"cause fear", $"bestow curse",
+      $"color spray";
+    Feats: FT_QUICKEN_INNATE_MAGIC, FT_MASTER_TRIP,
+      FT_TWO_WEAPON_STYLE, SK_PICK_POCKET, SK_HIDE, SK_MOVE_SIL,
+      SK_TUMBLE, SK_BLUFF, SK_SPOT, SK_JUMP;
+    Flags: M_CHAOTIC, M_IALIGN, M_CARNI, M_HERBI, M_HUMANOID,
+      M_FOREST, M_GREEDY, M_COVETOUS;
+    On Event EV_SHIFT {
+      if (e.eID == $"spriggan")
+        DPrint(e,"You shrink.","The <EActor> shrinks.");
+      else
+        {
+          DPrint(e,"You grow huge.", "The <EActor> grows huge.");
+          EActor->StateFlags &= ~MS_INVEN_GOOD;
+        }
+      e.Terse = true;
+      };
+    Desc: "The result of fae interbreeding with gnomes, the spriggans
+      are a powerful, cunning and malicious race. They take great
+      delight in others' misfortune, and use their natural abilities
+      to rob and terrorize the people around them.";
+    Gear:
+      50% $"long sword",
+      50% $"halberd",
+      50% $"short sword",
+      50% $"potion" of random 0 to 3,
+      50% $"wand" of random 0 to 3;
+  }
+
+Monster "giant spriggan" : MA_FAERIE, MA_GNOME
+  { Image: grey 'f'; Size: SZ_HUGE;
+    CR: 5; HD: 6; Hit: 6; Def: 10; Mov: 100%; Spd: 85%;
+    Str 16, Dex 14, Con 12, Int 12, Wis 14, Cha 8;
+    Attk: A_PUNC for 1d8 AD_BLUNT;
+    Flags: M_CARNI, M_HERBI, M_HUMANOID, M_NOGEN;
+  }  
+#endif
+
+Monster "rainbow sprite" : MA_FAERIE, MA_SYLVAN, MA_COUTSIDER
+  {
+    Image: bright red 'f'; Size: SZ_TINY;
+    CR: 1; HD: 1; Hit: 0; Def: 18; Mov: 150%; Spd: 60%; Mana: 45;
+    Str 5, Dex 14, Con 10, Int 8, Wis 12, Cha 14;
+    ABILITY(CA_INFRAVISION, 6);
+    Spells: $"color spray", $"dimension door";
+    Feats: FT_SNEAKY, SK_HIDE, SK_MOVE_SIL, SK_LISTEN, SK_SPOT,
+           SK_ESCAPE_ART, SK_PICK_POCKET, SK_KNOW_NATURE,
+           SK_WILD_LORE;
+    Flags: M_CHAOTIC, M_HUMANOID, M_SKIRMISH, M_HOSTILE,
+           M_FOREST, M_AVOID_MELEE, M_AIR, M_FLYER;
+    On Event EV_TURN {
+      int16 c;
+      switch(1d6)
+        {
+          case 1: c = PINK; break;
+          case 2: c = YELLOW; break;
+          case 3: c = MAGENTA; break;
+          case 4: c = AZURE; break;
+          case 5: c = SKYBLUE; break;
+          case 6: c = EMERALD; break;
+        }
+      if ((EActor->Image & 0x00FF) == 'f')
+        EActor->Image = 'f' + c*256;
+      return NOTHING;
+      };
+    Desc: "Rainbow sprites are tiny, mischevious fae that delight
+      in bedeviling and blinding adventurers, eventually leading
+      them to their death at the hands of more powerful creatures.
+      They appear as miniscule humans with pointed ears and 
+      gossamer wings, ever shifting colors.";
+    Gear:
+      $"sprite bow",
+      3d6 $"tiny arrow";
+  }    
+  
+Monster "bogwart" : MA_FAERIE, MA_COUTSIDER
+  {
+    Image: brown 'f'; Size: SZ_SMALL; Mana: 6;
+    CR: -1; HD: 1; Hit: +0; Def: 12; Mov: 100%; Spd: 80%;
+    Str 7, Dex 16, Con 12, Int 7, Wis 12, Cha 6;
+    Attk: A_TUCH for 0d0 AD_STEA (DC 13)
+                 and 3d8 AD_DCAY (DC 13);
+	  ABILITY(CA_INFRAVISION,6);
+	  RACIAL_SKILL(SK_HIDE,+4);
+    Feats: FT_DODGE, SK_HIDE, SK_LISTEN, SK_MOVE_SIL, SK_SPOT;
+		Flags: M_CARNI, M_HUMANOID, M_CHIEFTAN, M_EVIL, M_SHAMAN, 
+		       M_CHAOTIC, M_IALIGN, M_SKIRMISH, M_WATER;
+    Spells: $"doom";
+    Desc: "Bogwarts are small, malicious swamp-dwelling humanoid fae that
+      seek to confuse and rob travellers. Their touch brings the rot and
+      decay of a humid swamp to bear against those they seek to waylay.";
+  }
+     
+
+Monster "leprechaun" : MA_FAERIE, MA_SYLVAN, MA_COUTSIDER
+  {
+    Image: green 'f'; Size: SZ_SMALL; Depth: 3;
+    CR: 2; HD: 3; Hit:+3; Def: 17; Mov: 150%; Spd: 125%; Mana: 75;
+    Str 7, Dex 16, Con 14, Int 12, Wis 14, Cha 16;
+    Attk: A_TUCH for AD_STEA (DC 18),
+          A_PUNC for 1d1 AD_BLUNT;
+	ABILITY(CA_NATURE_SENSE,1);
+	ABILITY(CA_INFRAVISION,6);
+    Spells: $"invisibility", $"spectral force", $"polymorph self"
+            /* $"polymorph any object", */
+            $"ventriloquism";
+    Feats: FT_IMPROVED_INITIATIVE, FT_SLIPAWAY, SK_HIDE,
+           SK_MOVE_SIL, SK_PICK_POCKET, SK_LISTEN, SK_SPOT,
+           SK_BLUFF, SK_ESCAPE_ART;
+    Flags: M_HUMANOID, M_CHAOTIC, M_SKIRMISH, M_FOREST,
+           M_GREEDY, M_COVETOUS;
+    Desc: "Magical pranksters and thieves, leprechauns are
+      famous for the rumors of their treasure and their duplicity.
+      They treat their own thefts as acts of harmless whimsy, but
+      will viciously betray and slay any who steal from them or
+      endanger their treasure.";
+    Gear:
+      5d100 $"gold piece";
+  }
+
+Monster "nixie" : MA_FAERIE
+  {
+    Image: blue 'f'; Size: SZ_SMALL; Mana: 15;
+    CR: OPT_CR(1,1); HD: 1; Hit: 1; Def: 10; Mov: 100%; Spd: 100%;
+    Str 7, Dex 16, Con 11, Int 12, Wis 13, Cha 18;
+    Arm: 5; 
+    Attk: A_PUNC for 1d2 AD_BLUNT;
+	ABILITY(CA_NATURE_SENSE,1);
+    Feats: 
+      FT_DODGE, FT_WEAPON_FINESSE,
+      SK_HEAL, SK_HIDE, SK_MOVE_SIL, SK_SEARCH, SK_RIDE, SK_APPRAISE,
+      SK_SPOT, SK_CRAFT, SK_ESCAPE_ART, SK_PICK_POCKET;
+    Flags: M_HUMANOID, M_AQUATIC, M_TALKABLE, M_WATER, M_ALL_FEMALE;
+    Gear: 
+      $"short sword" of random 0 to 1,
+      $"arbalest" of random 0 to 1,
+      2d6 $"crossbow bolt";
+    Spells: $"charm person", $"suggestion", $"waterspout"; 
+    Desc: "Most nixies are slim and comely, with lightly scaled, pale green
+    skin and dark green hair. Females often twine shells and pearl strings
+    in their hair and dress in wraps woven from colorful seaweed. Males
+    wear loincloths of the same materials. Nixies prefer not to leave their
+    lakes."; 
+  }
+
+Monster "sprite" : MA_FAERIE, MA_SYLVAN, MA_COUTSIDER
+  {
+    Image: cyan 'f'; Size: SZ_TINY; Mana: 30;
+    CR: OPT_CR(3,4); HD: 1; Hit: 3; Def: 15; Mov: 160%; Spd: 100%;
+    Str 7, Dex 18, Con 11, Int 16, Wis 15, Cha 16;
+    Attk: A_TUCH for 3d6 AD_STEA (DC 22);
+	  ABILITY(CA_NATURE_SENSE,1);
+    Immune: DF_MIND, DF_SLEE, DF_POLY;
+    Feats: FT_POINT_BLANK_SHOT, FT_RAPID_SHOT, FT_DODGE,
+      FT_MOBILITY, FT_WEAPON_FINESSE, SK_HEAL, SK_HIDE,
+      SK_MOVE_SIL, SK_SEARCH, SK_RIDE, SK_APPRAISE,
+      SK_SPOT, SK_CRAFT, SK_ESCAPE_ART, SK_PICK_POCKET;
+    Flags: M_HUMANOID, M_FLYER, M_TALKABLE, M_AIR,
+           M_AVOID_MELEE;
+    Gear: $"dagger", 3d6 $"tiny arrow", $"sprite bow";
+    Stati[INVIS,INV_IMPROVED];
+    Spells: $"confusion", $"ESP", $"dispel magic", 
+      $"spectral force", $"polymorph self", $"faerie fire";
+    Desc: "Tiny fey with a malicious and inscrutable sense of
+      humor, the sprites are naturally invisible. When they
+      are seen by magical means, they appear as tiny elves with
+      gossamer wings and a faint glowing aura.";
+    On Event MSG_ABILITY "It is naturally invisible. ";
+  }
+
+Item "sprite bow" : T_BOW
+  {
+    Image: brown ')';
+    Mat: MAT_WOOD;
+    SDmg: 1d4;
+    LDmg: 1d1;
+    Range: 10;
+    Crit: x3; Threat: 3;
+    Weight: 3; Group: WG_ARCHERY;
+    Fires: $"tiny arrow";
+    Size: SZ_SMALL;
+    Flags: IT_NOGEN, WT_NO_STRENGTH, WT_TWO_HANDED, WT_NO_MELEE;
+    Desc: "This tiny bow has been crafted by sprites. It's far too small
+      for other creatures to use effectively.";
+    On Event EV_WIELD {
+      if (EActor->GetAttr(A_SIZ) > SZ_TINY)
+        {
+          EActor->IPrint("The sprite bow is far too tiny for you to wield!");
+          return ABORT;
+        }
+      };
+  }
+
+Item "tiny arrow" : T_MISSILE
+  {
+    Image: grey GLYPH_ARROW; Group: WG_ARCHERY; 
+    Mat: MAT_WOOD; Size: SZ_TINY; Weight: 1; Cost: 5 COPPER;
+    SDmg: 0d0+1; LDmg: 0d0+1; Acc: -1; Range: -2;
+    Flags: IT_BGROUP, IT_NOGEN;
+    Desc: "These arrows are barely longer then your middle finger, but
+      they're no toy -- the tip is as razor-sharp as any full-sized
+      arrow.";
+  }
+
+Poison "elfshot" : EA_DRAIN
+  {
+    Level: 5;
+    /*Iteration*/   cval: 2;
+    /*Save DC*/     sval: 15;
+    /*Persistance*/ lval: 4;
+    xval: AD_SLEE;  pval: 3d4; 
+    Desc: "This poison has an onset (and recurrance) time of <11>2<7> turns,
+      causing its targets to fall into a deep slumber. It requires <11>4<7> 
+      saving throws against <11>DC 15<7> to overcome the effect fully.";
+  }
+
+Monster "winterwier" : MA_FAERIE, MA_COUTSIDER
+  {
+    Image: bright cyan 'f'; Size: SZ_TINY; 
+    CR: OPT_CR(7,4); HD: 3; Hit: +1; Def: 17; Mov: 150%; Spd: 100%;
+    Str 4, Dex 16, Con 11, Int 9, Wis 14, Cha 14;
+    Attk: A_TUCH for 3d6 AD_COLD
+                 and 3d20 AD_SLOW (DC 17);
+	MAGIC_RES(50);
+	ABILITY(CA_NATURE_SENSE,1);
+	ABILITY(CA_INFRAVISION,6);
+    Immune: DF_COLD;
+    Feats: FT_GUARDED_INVOCATION, FT_GREAT_FORTITUDE, 
+           SK_MOVE_SIL, SK_PERFORM, SK_KNOW_MYTH;
+    Flags: M_HUMANOID, M_SEE_INVIS, M_FLYER, M_EVIL, M_IALIGN, 
+           M_COLD, M_CHAOTIC;
+    Spells: $"dimension door", $"charm person", $"faerie fire",
+            $"summon nature's ally II", $"creeping cold";
+    Desc: "The winterwier are faeries that come out of their
+      caves deep below the earth with the first frost of winter
+      to spread an icy rime on houses and buildings -- as well
+      as to kill any poor souls who are foolish enough to be
+      trapped outside in the cold of winter. Utterly devoid
+      of compassion, the winterwier are the cruelty and malice of
+      winter given flesh, and they delight in their role as the
+      harvesters of the weak."; 
+    On Event MSG_SPECABIL
+      "It will not enter a building crafted by human(oid) hands,
+        nor a sacred place.",
+    EV_MOVE {
+      if (EMap->RegionAt(EActor->x+DirX(e.EDir),EActor->y+DirY(e.EDir)) ==
+           $"place of sanctuary")
+        return ABORT;
+      };
+  }
+
+Monster "satyr" : MA_FAERIE, MA_SYLVAN, MA_ADVENTURER
+  {
+  Image: brown 'f'; Size: SZ_MEDIUM; 
+  CR: OPT_CR(3,4); HD: 5; Hit: +2; Def: 14; Mov: 150%; Spd: 125%;
+  Str 10, Dex 12, Int 12, Wis 12, Cha 18; Arm: 5; Mana: 20;
+  Attk: A_BUTT for 1d6 AD_BLUNT,
+        A_PUNC for 1d2 AD_BLUNT;
+	ABILITY(CA_NATURE_SENSE,1);
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_BEGUILING_MAGIC,1);
+	RACIAL_SKILL(SK_HIDE,4);
+	RACIAL_SKILL(SK_LISTEN,4);
+	RACIAL_SKILL(SK_MOVE_SIL,4);
+	RACIAL_SKILL(SK_PERFORM,4);
+	RACIAL_SKILL(SK_SPOT,4);
+  Spells: $"charm person", $"sleep", $"fear";
+  Feats: FT_ALERTNESS, FT_DODGE, FT_MOBILITY,
+         SK_BLUFF, SK_DIPLOMACY, SK_HIDE, SK_INTIMIDATE,
+         SK_KNOW_GEO, SK_KNOW_MYTH, SK_KNOW_MAGIC, SK_LISTEN, 
+         SK_MOVE_SIL, SK_PERFORM, SK_SPOT, SK_WILDERNESS;
+  Gear:
+      $"dagger" of random 1 to 2,
+      $"short bow" of random 1 to 2,
+      6d4 $"sheaf arrow";
+  Flags: M_HUMANOID, M_CHAOTIC, M_FOREST, M_ALL_MALE;
+  Desc: "A satyr's hair is red or chestnut brown, while its hooves and
+  horns are jet black. A satyr is about as tall and heavy as a half-elf.
+  Satyrs speak Sylvan, and most also speak Common.
+  The keen senses of a satyr make it almost impossible to surprise one in
+  the wild. Conversely, with their own natural grace and agility, satyrs
+  can sneak up on travelers who are not carefully watching the surrounding
+  wilderness. Once engaged in battle, an unarmed satyr attacks with a
+  powerful head butt. A satyr expecting trouble is likely to be armed with
+  a bow and a dagger and typically looses arrows from hiding, weakening an
+  enemy before closing.";
+  } 
+  
+Monster "nymph" : MA_FAERIE, MA_SYLVAN, MA_ADVENTURER
+  {
+    Image: pink 'f'; Size: SZ_MEDIUM; Mana: 128;
+    CR: 8; HD: 6; Hit: 4; Def: 14; Mov: 100%; Spd: 100%;
+    Str 10, Dex 17, Con 12, Int 16, Wis 17, Cha 20;
+    Attk: A_PUNC for 1d2 AD_BLUNT,
+          A_GAZE for 10d20 AD_BLND,
+          A_SEEM for $"human";
+    ABILITY(CA_WEAPON_IMMUNITY,+1);
+    ABILITY(CA_LOWLIGHT,+6);
+    ABILITY(CA_SHARP_SENSES,+2);
+    ABILITY(CA_NATURE_SENSE,1);
+    ABILITY(CA_WOODLAND_STRIDE,1);
+    ABILITY(CA_SPELLCASTING,7);
+	RACIAL_SKILL(SK_SWIM,8);
+	RACIAL_SKILL(SK_MOVE_SIL,4);
+	Spells: $"Unearthly Beauty", $"Dimension Door";
+	/*
+	On Event EV_CALC_VALUES {
+	  AddBonus(A_SAV,BONUS_GRACE,Mod(A_CHA));
+	  AddBonus(A_DEF,BONUS_DEFLECT,Mod(A_CHA));
+	  return NOTHING;
+	  };
+	*/
+	Stati[ADJUST_INH,A_SAV,+5];
+	Stati[ADJUST_DEFL,A_DEF,+5];
+	Feats: SK_CONCENT, SK_CRAFT, SK_KNOW_GEO, SK_ESCAPE_ART,
+	        SK_ANIMAL_EMP, SK_MOVE_SIL, SK_HEAL, SK_APPRAISE,
+	        SK_HIDE, SK_LISTEN, SK_SPOT, SK_SWIM,
+	        FT_GUARDED_INVOCATION, FT_RUN, FT_DODGE;
+	Flags: M_HUMANOID, M_CHAOTIC, M_GOOD, M_FOREST, M_AVOID_MELEE,
+	       M_ALL_FEMALE;
+	On Event MSG_SPECABIL
+	  "It adds its Charisma bonus to its saving throws as a grace
+	    bonus, and to its defense class as a deflection bonus.";
+	Gear:
+	  1d4 $"dagger",
+	  50% $"viewing lens",
+	  20% $"ring" of random 1 to 6,
+	  10% $"cloak" of random 1 to 5;
+	On Event POST(EV_SATTACK) {
+	  EActor->IdentifyMon();
+	  return NOTHING;
+	  };
+  }
+
+
+0 Effect "Unearthly Beauty" : EA_GENERIC
+  {
+    Purpose: EP_ATTACK; sval: FORT; Flags: EF_DEATH, EF_GAZE;
+    aval: AR_GLOBE; lval: 3;
+    Desc: "Through a conscious act of will, a nymph can intensify
+      her beauty to the point where it is so breathtaking as to
+      literally stop a living creature's heart, striking them
+      dead instantly. This is a death effect, and a nymph will
+      only use such a power against an irredemably wicked being,
+      or in truly desperate straights.";
+    On Event EV_MAGIC_HIT {
+      VPrint(e, "You look upon the glory of the <EActor>,
+        and your heart stops.", "The <EVictim> collapses, dead.");
+      ThrowDmg(EV_DEATH,AD_NORM,0,"a nymph's beauty", EActor, EVictim);
+      return DONE;
+      },
+    EV_MAGIC_STRIKE {
+      if ((GetHandle(EVictim) != NULL) && EVictim->isCreature())
+        if (EVictim->GetAttr(A_SAV_FORT) >= e.saveDC)
+          {
+            e.Immune = true;
+            return DONE;
+          }
+      return NOTHING;
+      },    
+    EV_ISTARGET {
+      if (!EVictim->isCreature())
+        return CANNOT_CAST_IT;
+      if (!EVictim->isMType(MA_NLIVING))
+        return CANNOT_CAST_IT;
+      if (!(EVictim->Percieves(EActor) & (PER_VISUAL|PER_INFRA)))
+        return CANNOT_CAST_IT;
+      if (EActor->DistFrom(EVictim) > 3)
+        return CANNOT_CAST_IT;
+      if (EVictim->tmID == $"grey nymph" || EVictim->tmID == $"nymph")
+        return CANNOT_CAST_IT;
+      
+      if (EVictim->HasMFlag(M_EVIL) && EVictim->HasMFlag(M_IALIGN))
+        return SHOULD_CAST_IT;
+      if (EActor->mHP > EActor->cHP*2)
+        return SHOULD_CAST_IT;
+   
+      return CAN_CAST_IT;
+      };
+  }   
+
+Monster "grey nymph" : MA_FAERIE, MA_SYLVAN, MA_ADVENTURER
+  {
+    Image: grey 'f'; Size: SZ_MEDIUM; Mana: 128;
+    CR: 4; HD: 4; Hit: 3; Def: 14; Mov: 100%; Spd: 100%;
+    Str 10, Dex 17, Con 12, Int 16, Wis 17, Cha 20;
+    Attk: A_PUNC for 1d2 AD_BLUNT,
+          A_GAZE for 3d10 AD_BLND,
+          A_SEEM for $"human";
+    ABILITY(CA_LOWLIGHT,+6);
+    ABILITY(CA_SHARP_SENSES,+2);
+    ABILITY(CA_NATURE_SENSE,1);
+    ABILITY(CA_WOODLAND_STRIDE,1);
+    ABILITY(CA_SPELLCASTING,3);
+	RACIAL_SKILL(SK_SWIM,8);
+	RACIAL_SKILL(SK_MOVE_SIL,4);
+	Spells: $"Unearthly Beauty";
+	/*
+	On Event EV_CALC_VALUES {
+	  AddBonus(A_SAV,BONUS_GRACE,Mod(A_CHA));
+	  AddBonus(A_DEF,BONUS_DEFLECT,Mod(A_CHA));
+	  return NOTHING;
+	  };
+	*/
+	Stati[ADJUST_INH,A_SAV,+5];
+	Stati[ADJUST_DEFL,A_DEF,+5];
+	Stati[ENEMY_TO,MA_SYLVAN];
+	Feats: SK_CONCENT, SK_CRAFT, SK_KNOW_GEO, SK_ESCAPE_ART,
+	        SK_ANIMAL_EMP, SK_MOVE_SIL, SK_HEAL, SK_APPRAISE,
+	        SK_HIDE, SK_LISTEN, SK_SPOT, SK_SWIM,
+	        FT_GUARDED_INVOCATION, FT_RUN, FT_DODGE;
+	Flags: M_HUMANOID, M_CHAOTIC, M_EVIL, M_FOREST, M_AVOID_MELEE,
+	       M_ALL_FEMALE;
+	On Event MSG_SPECABIL
+	  "It adds its Charisma bonus to its saving throws as a grace
+	    bonus, and to its defense class as a deflection bonus.";
+	Gear:
+	  1d4 $"dagger",
+	  50% $"viewing lens",
+	  20% $"ring" of random 1 to 3,
+	  10% $"cloak" of random 1 to 2;
+	On Event POST(EV_SATTACK) {
+	  EActor->IdentifyMon();
+	  return NOTHING;
+	  };
+	Desc: "Grey nymphs were once normal nymphs, but betrayed their
+	  duty as protectors of the forests for material gain (or were
+	  corrupted and coerced by Maeve), and now exist as tempresses
+	  and politicos, surviving on the edges of human settlements or
+	  deep underground, for sylvan creatures despise them utterly.";
+  }
+
+      
+Template "half-fey" : TM_DESCENT for MA_HUMANOID
+  {
+    // drow: -2 -> 3
+    // bugbear: 2 -> 4
+    // ogre: 3 -> 5
+    CR: +2 (Min 3); MType: MA_FAERIE; Size: -1; 
+    Str -4, Dex +4, Wis +4, Cha +4; 
+    Desc: "As a result of trysts, pranks, curses and the occasional
+    romance, many humanoids have fey blood in their veins."; 
+    Feats: FT_ALERTNESS, FT_DODGE, FT_MOBILITY, FT_WEAPON_FINESSE;
+    ABILITY(CA_NATURE_SENSE,1);
+    ABILITY(CA_INFRAVISION,6);
+    Flags: M_CHAOTIC, !M_LAWFUL, M_FOREST, M_FLYER; 
+    Spells: $"faerie fire", $"sleep", $"dimension door";
+    On Event EV_ISTARGET {
+      if (EActor->HasMFlag(M_NEUTER) || EActor->isMType(MA_FAERIE))
+        return -1;
+      if (enFreaky() % 10 != 8)
+        return -1;
+      return 0;
+    } ; 
+    On Event EV_INITIALIZE {
+      hObj h;
+      for(h=EActor->FirstInv();h;h=EActor->NextInv()) {
+        if (h->QualityOK(IQ_FEATHERLIGHT))
+            h->AddQuality(IQ_FEATHERLIGHT);
+      }
+    };
+  }
+
+/*****************************************************************************
+ *****************************************************************************
+ ***                         MONSTEROUS SOCIETIES                          ***
+ *****************************************************************************
+ *****************************************************************************/
+
+/*
+
+  Nagas:
+
+      Water nagas, the weakest of their kind, are detatched sensualists and
+    hedonists, often trafficking in a variety of rare narcotic substances
+    they use to seek out mystical experiences. They tend to be sociable,
+    friendly and highly curious, but also surprisingly callous to the needs
+    and desires of others. Water nagas are inclined toward neutrality, but
+    they vary widely in alignment.
+    
+      Guardian nagas, the highest common caste of naga society, serve as
+    great and terrible champions of light. Subtle in their weavings, they
+    seek out sources of hidden darkness to oppose with their great store
+    of occult knowledge. Many guardian nagas watch over ancient evils far
+    more powerful then they, ensuring that they remain concealed from the
+    prying eyes or interlopers.
+    
+      While most nagas are concerned with discovering secrets, dark nagas
+    are rather more interested in preserving the communal secrets of the
+    naga race. They are the assasins and spies of their species, operating
+    from the shadows and answering to unseen lords and masters. They have
+    a complex and ritualistic secret society of their own, to which they
+    are fanatically loyal, and they follow arcane codes of honor dating
+    back millenia. While nobody likes them, even the guardian nagas accept
+    that the darks have a place within naga society.
+                                 
+      Spirit nagas, the most wicked of their race, are a grim and macabre
+    breed. Trafficking in the souls of the dead, they draw humanoids away
+    from the path of light with subtle deceptions and promises of occult
+    secrets, then trap their spirits in gems when they die. Overly morbid
+    in mindset and given to fatalistic outlooks, spirit nagas are usually
+    shunned by the rest of their race.
+    
+    Elder Nagas:
+      Crystal Naga (psionic, introspective, cultic)
+      Ivory Naga (ressurection mythology, evil, renewal)
+      Blood Naga (visceral, cycle of life, blood magic)
+      Shroud Naga
+      Resplendant Naga    
+     
+*/
+
+Monster "naga" : MA_NAGA, MA_SNAKE
+  {
+    Image: grey 'n'; Size: SZ_LARGE;
+    Desc: "Nagas are wise, magical creatures of legend that possess the
+      body of a snake and the head of a woman. Several different breeds
+      of nagas exist, differentiated by the coloration of their scales;
+      some are good, others evil and others neither. A naga's breed can
+      be discerned with the Knowledge (Mythology) skill.";
+    Flags: M_UNKNOWN, M_NOGEN;
+  }
+
+Monster "water naga" : MA_NAGA, MA_SNAKE
+  {
+    Image: azure 'n'; Size: SZ_LARGE; 
+    CR: OPT_CR(9,7); HD: 7; Def: 15; Hit: 5; Mov: 120%; Spd: 120%;
+    Str 16, Dex 13, Con 18, Int 10, Wis 17, Cha 15;
+    Attk: A_BITE for 2d6 AD_PIERCE and 0d0 AD_POIS (DC 17),
+          A_SEEM for $"naga";
+	  ABILITY(CA_INFRAVISION,6);
+    Feats: FT_LIGHTNING_REFLEXES, SK_CONCENT, SK_LISTEN,
+      SK_SPELLCRAFT, SK_SPOT;
+    Flags: M_CARNI, M_AMPHIB, M_ALL_FEMALE, M_POISON,
+           M_AMPHIB, M_MAGE;
+    Desc: "The water naga is a strikingly beautiful creature with
+      the head of a woman and the body of a snake. Intricate patterns
+      weave over its emerald green scales, in contrast to the brilliant
+      orange spines that line its back. A naga's eyes gleam with an
+      almost hypnotic intelligence.";
+    Poison: $"water naga venom";
+    ABILITY(CA_SPELLCASTING, 7);
+    Lists:
+      * SPELL_LIST
+          ALL_SPELLS_FROM_SOURCE(AI_WIZARDRY);
+  }
+
+Poison "water naga venom" : EA_DRAIN
+  {
+    Level: 5;
+    /*Iteration*/   cval: 7;
+    /*Save DC*/     sval: 17;
+    /*Persistance*/ lval: 4;
+    xval: AD_DACO; pval: 1d4;
+    Desc: "This poison inflicts <11>1d4<7> points of Constitution damage every 
+      <11>7<7> turns, and requires <11>4<7> saving throws against <11>DC 17<7> 
+      to overcome.";
+  }
+
+Monster "guardian naga" : MA_NAGA, MA_SNAKE
+  {
+    Image: red 'n'; Size: SZ_LARGE; 
+    CR: OPT_CR(12,8); HD: 11; Def: 10; Arm: 7; Hit: 12; Mov: 150%; Spd: 155%;
+    Str 21, Dex 14, Con 19, Int 16, Wis 19, Cha 18;
+    Attk: A_BITE for 2d6+7 AD_PIERCE and 0d0 AD_POIS (DC 19),
+          A_SPIT for 0d0 AD_POIS (DC 19),
+          A_SEEM for $"naga";
+	  ABILITY(CA_INFRAVISION,6);
+    Feats: FT_ALERTNESS, FT_COMBAT_CASTING, FT_LIGHTNING_REFLEXES,
+      FT_INHERANT_SPELL, FT_DODGE, 
+      SK_BLUFF, SK_CONCENT, SK_DIPLOMACY, SK_LISTEN, SK_APPRAISE,
+      SK_SPELLCRAFT, SK_SPOT;
+    Flags: M_CARNI, M_AMPHIB, M_ALL_FEMALE, M_POISON,
+           M_AMPHIB, M_LAWFUL, M_GOOD, M_MAGE;
+    Desc : "Guardian nagas, the highest common caste of naga society, serve as
+    great and terrible champions of light. Subtle in their weavings, they
+    seek out sources of hidden darkness to oppose with their great store
+    of occult knowledge. Many guardian nagas watch over ancient evils far
+    more powerful then they, ensuring that they remain concealed from the
+    prying eyes or interlopers.";
+    Poison: $"guardian naga venom";
+    ABILITY(CA_SPELLCASTING, 9);
+    Lists:
+      * SPELL_LIST
+          ALL_SPELLS_FROM_SOURCE(AI_WIZARDRY)
+          ALL_SPELLS_FROM_SOURCE(AI_THEURGY);
+  }
+
+Poison "guardian naga venom" : EA_DRAIN
+  {
+    Level: 9;
+    /*Iteration*/   cval: 7;
+    /*Save DC*/     sval: 19;
+    /*Persistance*/ lval: 2;
+    xval: AD_DACO; pval: 1d10;
+    Desc: "This poison inflicts <11>1d10<7> points of Constitution damage every 
+      <11>7<7> turns, and requires <11>2<7> saving throws against <11>DC 19<7> 
+      to overcome.";
+  }
+
+Monster "dark naga" : MA_NAGA, MA_SNAKE
+  {
+    Image: shadow 'n'; Size: SZ_LARGE; 
+    CR: OPT_CR(10,8); HD: 9; Def: 13; Hit: 7; Mov: 150%; Spd: 140%;
+    Str 14, Dex 15, Con 14, Int 16, Wis 15, Cha 17;
+    Attk: A_STNG for 2d4+2 AD_PIERCE and 0d0 AD_POIS (DC 16),
+          A_BITE for 1d4+2 AD_PIERCE and 0d0 AD_POIS (DC 16),
+          A_SEEM for $"naga";
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_TELEPATHY,12);
+    Immune: DF_MIND, DF_POIS;
+    Feats: FT_ALERTNESS, FT_COMBAT_CASTING, FT_LIGHTNING_REFLEXES,
+      FT_INHERANT_SPELL,
+      SK_BLUFF, SK_CONCENT, SK_DIPLOMACY, SK_LISTEN, SK_APPRAISE,
+      SK_SPELLCRAFT, SK_SPOT;
+    Flags: M_CARNI, M_AMPHIB, M_ALL_FEMALE, M_POISON,
+           M_AMPHIB, M_LAWFUL, M_EVIL, M_MAGE;
+    Stati[NONDETECTION,PER_TELE]; 
+    Desc: "While most nagas are concerned with discovering secrets, dark nagas
+    are rather more interested in preserving the communal secrets of the
+    naga race. They are the assasins and spies of their species, operating
+    from the shadows and answering to unseen lords and masters. They have
+    a complex and ritualistic secret society of their own, to which they
+    are fanatically loyal, and they follow arcane codes of honor dating
+    back millenia. While nobody likes them, even the guardian nagas accept
+    that the darks have a place within naga society.";
+    Poison: $"dark naga venom";
+    On Event MSG_SPECABIL
+      "Dark nagas are immune to any form of mind reading and cannot be
+      detected telepathically."; 
+    ABILITY(CA_SPELLCASTING, 7);
+    Lists:
+      * SPELL_LIST
+          ALL_SPELLS_FROM_SOURCE(AI_WIZARDRY);
+  }
+
+Poison "dark naga venom" : EA_INFLICT
+  {
+    Level: 5;
+    /*Iteration*/   cval: 0;
+    /*Save DC*/     sval: 16;
+    /*Persistance*/ lval: 1;
+    xval: ASLEEP;   
+    Desc: "This poison takes effect immediately and causes its victim to
+    fall into a deep slumber. It requires <11>1<7> saving throw against
+    <11>DC 16<7> to overcome."; 
+  }
+
+Monster "spirit naga" : MA_NAGA, MA_SNAKE
+  {
+    Image: white 'n'; Size: SZ_LARGE; 
+    CR: OPT_CR(12,9); HD: 9; Def: 16; Hit: 6; Mov: 150%; Spd: 145%;
+    Str 18, Dex 13, Con 18, Int 12, Wis 17, Cha 17;
+    Attk: A_BITE for 2d6+6 AD_PIERCE and 0d0 AD_POIS (DC 18),
+          A_GAZE for AD_SPE1 (DC 19),
+          A_SEEM for $"naga";
+	ABILITY(CA_INFRAVISION,6);
+    Feats: FT_ALERTNESS, FT_COMBAT_CASTING, FT_LIGHTNING_REFLEXES,
+      FT_INHERANT_SPELL,
+      SK_CONCENT, SK_LISTEN, SK_SPELLCRAFT, SK_SPOT;
+    Flags: M_CARNI, M_AMPHIB, M_ALL_FEMALE, M_POISON,
+           M_AMPHIB, M_CHAOTIC, M_EVIL, M_MAGE;
+    Desc: "Spirit nagas, the most wicked of their race, are a grim and macabre
+    breed. Trafficking in the souls of the dead, they draw humanoids away
+    from the path of light with subtle deceptions and promises of occult
+    secrets, then trap their spirits in gems when they die. Overly morbid
+    in mindset and given to fatalistic outlooks, spirit nagas are usually
+    shunned by the rest of their race.";
+    Poison: $"spirit naga venom"; 
+    On Event PRE(EV_DAMAGE) {
+      if (!EVictim->isCreature())
+        return NOTHING;
+      if (e.AType == A_GAZE && e.DType == AD_SPE1) 
+        {
+          EActor->GainTempStati(SPEC_TIMEOUT,EVictim,1d4+1,SS_MISC,A_GAZE);
+          if (EVictim->ResistLevel(AD_CHRM) == -1 ||
+              EVictim->SavingThrow(WILL,18,SA_MAGIC|SA_EVIL|SA_ENCH))
+            {
+              e.Immune = true;
+              return DONE;
+            }
+          VPrint(e,"You are charmed by the spirit naga's gaze!",
+            "The <EVictim> is charmed!");
+          EVictim->GainTempStati(CHARMED,EActor,60,SS_ENCH,CH_CHARM,0,$"spirit naga", EActor->ChallengeRating());
+          return DONE;
+        }
+      return NOTHING;
+      },
+    MSG_SPECABIL
+    "Spirit nagas can charm opponents with their beguiling gaze."; 
+    ABILITY(CA_SPELLCASTING, 7);
+    Lists:
+      * SPELL_LIST
+          ALL_SPELLS_FROM_SOURCE(AI_WIZARDRY)
+          ALL_SPELLS_FROM_SOURCE(AI_THEURGY);
+  }
+
+Poison "spirit naga venom" : EA_DRAIN
+  {
+    Level: 9;
+    /*Iteration*/   cval: 7;
+    /*Save DC*/     sval: 18;
+    /*Persistance*/ lval: 2;
+    xval: AD_DACO; pval: 1d8;
+    Desc: "This poison inflicts <11>1d8<7> points of Constitution damage every 
+      <11>7<7> turns, and requires <11>2<7> saving throws against <11>DC 18<7> 
+      to overcome.";
+  }
+
+Monster "banelar" : MA_NAGA, MA_SNAKE
+  {
+    Image: purple 'n'; Size: SZ_HUGE; 
+    CR: OPT_CR(9,5); HD: 7; Def: 12; Hit: 6; Mov: 100%; Spd: 125%;
+    Str 26, Dex 13, Con 21, Int 17, Wis 16, Cha 16; Arm: 3; 
+    Attk: A_STNG for 2d4 AD_PIERCE and 0d0 AD_POIS (DC 18),
+          A_BITE for 1d3 AD_PIERCE and 0d0 AD_POIS (DC 18),
+          A_SEEM for $"naga";
+	ABILITY(CA_REGEN,2);
+	ABILITY(CA_INFRAVISION,6);
+    Immune: DF_POIS, DF_ACID, DF_STON;
+    Stati[SCHOOL_FOCUS,SC_ENC]; 
+    Feats: FT_COMBAT_CASTING, FT_IMPROVED_INITIATIVE, FT_IRON_WILL,
+      SK_CONCENT, SK_DIPLOMACY, SK_INTIMIDATE, SK_SPOT, SK_USE_MAGIC;
+    Flags: M_CARNI, M_AMPHIB, M_POISON, M_AMPHIB, M_LAWFUL, M_EVIL,
+           M_MAGE;
+    Desc: "Banelars are evil, nagalike creatures whose mastery of spells
+      and use of magic items makes deadly opponents."; 
+    Poison: $"banelar venom"; 
+    On Event POST(EV_CAST) {
+      EActor->Timeout /= 2; 
+      },
+    MSG_SPECABIL
+      "Banelars cast spells very rapidly, incurring only half the normal
+        timecost in doing so.";
+    Gear: 
+      $"ring" of random 3 to 4,
+      $"amulet" of random 3 to 4,
+      $"bracers" of random 3 to 4,
+      20% $"wand" +3 of $"ice" else 
+        25% $"wand" +3 of $"cleansing light" else
+          33% $"wand" +3 of $"ash" else
+            50% $"wand" +3 of $"surtension" else
+              $"wand" +3 of $"the void",
+        2d1 $"potion" of $"extra-healing",
+        2d1 $"potion" of $"*mana*";
+    ABILITY(CA_SPELLCASTING, 6);
+    Lists:
+      * SPELL_LIST
+          ALL_SPELLS_FROM_SOURCE(AI_WIZARDRY)
+          ALL_SPELLS_FROM_SOURCE(AI_THEURGY);
+  }
+
+Poison "banelar venom" : EA_DRAIN
+  {
+    Level: 9;
+    /*Iteration*/   cval: 7;
+    /*Save DC*/     sval: 18;
+    /*Persistance*/ lval: 2;
+    xval: AD_DACO; pval: 2d4;
+    Desc: "This poison inflicts <11>2d4<7> points of Constitution damage every 
+      <11>7<7> turns, and requires <11>2<7> saving throws against <11>DC 18<7> 
+      to overcome.";
+  }
+
+/*** OTHER INTELLIGENT MONSTERS ***/
+
+Monster "aranea" : MA_SPIDER, MA_BEAST, MA_ADVENTURER
+  {
+    Image: pink 's'; Size: SZ_MEDIUM; 
+    CR: OPT_CR(1,4); HD: 3; Hit: 1; Def: 12; Mov: 150%; Spd: 130%; 
+    Str 11, Dex 15, Con 14, Int 14, Wis 13, Cha 14;
+    Attk: A_BITE for 1d6 AD_PIERCE and 1d6 AD_DRST,
+          A_FORM for $"human",
+          A_FORM for $"giant spider";
+	  ABILITY(CA_INFRAVISION,6);
+    Spells: $"web";
+    Immune: DF_STUK;
+    Feats: FT_CLOSE_QUARTERS_FIGHTER, FT_SNEAKY, SK_FIND_WEAKNESS;
+    Flags: M_NOLIMBS, M_NOHANDS, M_NOHEAD, M_POISON,
+           M_CARNI, M_TALKABLE, M_FRIENDLY; 
+    Desc: "Duplicitious and cunning, the aranea are a race of intelligent,
+      magical spiderfolk with the ability to take a human form. They are
+      not maliciously evil, instead prefering to exist in the moral grey
+      zones of the world and weave their curious plots with as little harm
+      to others as possible. Some aranea enmesh themselves in human society,
+      while others prefer to live as spiders, hunting for (nonsapient) prey 
+      in vast subterranian complexes. Aranea love mental puzzles, complex 
+      intrigues and scandalous gossip more than anything else.";
+    On Event EV_RATETARG {
+      if (ETarget->isMType(MA_SAPIENT) && !EActor->isHostileTo(ETarget))
+        e.EParam = 0;
+      return e.EParam;
+      };
+  }
+
+Monster "azmyth" : MA_BAT
+  {
+    Image: cyan 'b'; Size: SZ_SMALL; 
+    CR: OPT_CR(1,2); HD: 2; Hit: 1; Def: 15; Mov: 180%; Spd: 100%;
+    Str 7, Dex 15, Con 12, Int 13, Wis 13, Cha 12;
+    Attk: A_BITE for 1d4 AD_PIERCE 
+                 and 1d8+2 AD_ELEC,
+          A_SEEM for $"bat";
+	ABILITY(CA_TELEPATHY,4);
+	ABILITY(CA_BLINDSIGHT,6);
+    Spells: $"silence", $"obscurement", $"phase door";
+    Feats: SK_HIDE, FT_ALERTNESS, FT_DODGE,
+           SK_LISTEN, SK_SPOT;
+    Flags: M_NOHANDS, M_LIGHT_AVERSE, M_NOLIMBS, M_NATURAL,
+      M_FLYER, M_FRIENDLY, M_TALKABLE, M_HERBI, M_AIR, M_BLIND;
+    On Event POST(EV_EFFECT) {
+      EActor->IdentifyMon();
+      },
+    POST(EV_NATTACK) {
+      EActor->IdentifyMon();
+      };
+    Desc: "These intelligent, telepathic creatures seem to have evolved
+      from bats. They are solitary wanderers that dwell in underground
+      regions, live off of fruits and fungi and frequently form agreements
+      with humanoid beings for mutual protection and companionship. Their
+      potent magical defenses can protect them from most threats and
+      predators.";
+  }
+
+Monster "firebat" : MA_BAT, MA_BEAST
+{
+  Image: bright red 'b'; Size: SZ_TINY; 
+  CR: OPT_CR(-4,1/8); HD: 1; Hit: +0; Def: 10; Mov: 150%; Spd: 100%;
+  Str 1, Dex 15, Con 10, Int 2, Wis 14, Cha 4;
+  Attk: A_TUCH for 1d3 AD_FIRE,
+        A_DEQU for 1d3 AD_FIRE,
+        A_SPIT for 2d3 AD_FIRE;
+	RACIAL_SKILL(SK_SPOT,4);
+	RACIAL_SKILL(SK_LISTEN,4);
+	ABILITY(CA_BLINDSIGHT,2); /* "Sonar" */
+  Immune: DF_FIRE; 
+  Feats: FT_DODGE, FT_ALERTNESS,
+         SK_HIDE, SK_LISTEN, SK_MOVE_SIL, SK_SPOT; 
+  Flags: M_CARNI, M_HERBI, M_AIR,
+         M_NOHANDS, M_NOLIMBS, M_FLYER, M_BLIND, M_FIRE;
+  Desc: "The firebat bears a passing resemblance to the standard nocturnal
+  bat, if you are willing to overlook the magical aura of flame that
+  surrounds it."; 
+}
+
+Monster "night hunter" : MA_BAT, MA_ANIMAL
+{
+  Image: blue 'b'; Size: SZ_MEDIUM; 
+  CR: OPT_CR(0,1); HD: 2; Hit: +1; Def: 11; Mov: 150%; Spd: 100%;
+  Str 10, Dex 16, Con 13, Int 11, Wis 11, Cha 10; Mana: 20;
+  Attk: A_TAIL for 1d6 AD_BLUNT,
+        A_BITE for 1d6 AD_PIERCE,
+        A_CLAW for 1d4 AD_SLASH,
+        A_SEEM for $"bat";
+	ABILITY(CA_INFRAVISION,18); 
+  Spells: $"spook";
+  Feats: FT_MULTIATTACK,
+         SK_HIDE, SK_LISTEN, SK_MOVE_SIL, SK_SPOT; 
+  Flags: M_CARNI, M_HERBI, M_AIR, M_CLOSEID,
+         M_NOHANDS, M_NOLIMBS, M_FLYER;
+  Desc: "The night hunter is a large, bat-like animal with a triangular tail."; 
+}
+
+Monster "sonic bat" : MA_BAT
+  {
+    Image: yellow 'b'; Size: SZ_SMALL; 
+    CR: OPT_CR(7,2); HD: 2; Hit: 1; Def: 15; Mov: 180%; Spd: 100%;
+    Str 6, Dex 20, Con 6, Int 14, Wis 14, Cha 8; Mana: 20; 
+    Attk: A_TUCH for 2d8 AD_SONI,
+          A_SEEM for $"bat";
+	RACIAL_SKILL(SK_LISTEN,10);
+	RACIAL_SKILL(SK_MOVE_SIL,10);
+	ABILITY(CA_BLINDSIGHT,12);
+    Spells: $"shout", $"haste"; 
+    Immune: DF_SONI, DF_STUN, DF_PLYS, DF_STUK, DF_SLOW;
+    Feats: SK_HIDE, FT_MOBILITY, FT_DODGE,
+           SK_LISTEN, SK_MOVE_SIL, FT_SNEAKY;
+    Flags: M_NOHANDS, M_LIGHT_AVERSE, M_NOLIMBS, 
+      M_FLYER, M_CARNI, M_HOSTILE, M_BLIND, M_AIR, M_REACH, M_SONI;
+    On Event (EVICTIM(EV_HIT)) {
+      if (e.AType == A_FIRE) {
+        if (GetHandle(EItem2)) {
+          VPrint(e,"The <EItem2> is deflected by an invisible force!",
+              "The <EItem2> is deflected by an invisible force!");
+          return DONE;
+        } 
+      } else if (e.AType == A_HURL) {
+        if (GetHandle(EItem)) {
+          VPrint(e,"The <EItem> is deflected by an invisible force!",
+              "The <EItem> is deflected by an invisible force!");
+          return DONE;
+        } 
+      }
+      return NOTHING; 
+    }; 
+    On Event POST(EV_EFFECT) {
+      EActor->IdentifyMon();
+      },
+    POST(EV_NATTACK) {
+      EActor->IdentifyMon();
+      };
+    Desc: "These intelligent, sound-based creatures seem to have evolved
+      from bats. They are solitary wanderers that dwell in underground
+      regions, but unlike most bats they are strict carnivores. Their
+      mastery over sound and motion allows them to pulverize many living
+      creatures from a distance -- approaching a sonic bat is often as
+      difficult as approaching a pikeman. They can surround themselves with
+      a vibrating wall of air that deflects missile weapons."; 
+  }
+
+Monster "centaur" : MA_QUADRUPED, MA_SYLVAN, MA_ADVENTURER
+  {
+    Image: purple 'q'; Size: SZ_LARGE; 
+    CR: OPT_CR(4,3); HD: 4; Hit: +3; Def: 12; Mov: 175%; Spd: 125%;
+    Str 18, Dex 14, Con 15, Int 10, Wis 13, Cha 12;
+    Attk: A_KICK for 1d6 AD_BLUNT;
+    Flags: M_CARNI, M_HERBI, M_NATURAL, M_GEMS, M_GOOD;
+    Feats: FT_TRAMPLE, FT_POINT_BLANK_SHOT, FT_RAPID_SHOT,
+      FT_HARDINESS, SK_LISTEN, SK_WILD_LORE, SK_HIDE, SK_ALCHEMY;
+    Desc: "A sylvan creature with the head and torso of a man,
+      but the body of a horse, centaurs lead a tribal lifestyle
+      deep in forests and avoid contact with humanity. Their
+      prowess as archers and scholars is greatly revered."; 
+    Gear: 33% $"large club" else 50% $"bastard sword" else $"ranseur",
+      $"long bow" of random 0 to 3,
+      3d6 $"sheaf arrow",
+      1d3 $"potion" of $"healing";
+  }
+
+Monster "drider" : MA_SPIDER, MA_ABERRATION
+  {
+    Image: skyblue 's'; Size: SZ_LARGE;  
+    CR: OPT_CR(10,6); HD: 6; Hit: +6; Def: 16; Mov: 100%; Spd: 130%;
+    Str 15, Dex 15, Con 16, Int 15, Wis 16, Cha 16;
+    Attk: A_BITE for 1d4+1 AD_PIERCE and 0d0 AD_POIS (DC 16),
+          A_PUNC for 1d2 AD_BLUNT,
+          A_PUNC for 1d2 AD_BLUNT;
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_SPELLCASTING,6);
+	RACIAL_SKILL(SK_HIDE,4);
+	RACIAL_SKILL(SK_MOVE_SIL,4);
+	MAGIC_RES(50);
+    Poison: $"drider venom";
+    WEAPON_FOCUS_NATURAL_ATTACK;
+    Feats: FT_COMBAT_CASTING, FT_TWO_WEAPON_STYLE,
+           FT_CLOSE_QUARTERS_FIGHTER,
+           SK_CLIMB, SK_CONCENTRATION, SK_HIDE, SK_LISTEN,
+           SK_MOVE_SIL, SK_SPOT;
+    Immune: DF_STUK;
+    Flags: M_IALIGN, M_CHAOTIC, M_EVIL, M_MAGE;
+    Spells: $"globe of shadow", $"detect monsters", $"dispel magic",
+      $"levitation", $"faerie fire", $"suggestion";
+    Gear: 2d1 $"dagger";
+    Lists:
+      * SPELL_LIST
+          ALL_SPELLS_FROM_SOURCE(AI_WIZARDRY);
+  }
+
+Poison "drider venom" : EA_BLAST
+  {
+    Level: 6;
+    /*Iteration*/   cval: 3;
+    /*Save DC*/     sval: 16;
+    /*Persistance*/ lval: 1;
+    xval: AD_DAST; pval: 1d6;
+    Desc: "This poison inflicts <11>1d6<7> points of Strength damage every 
+      <11>3<7> turns, and requires <11>1<7> saving throw against <11>DC 16<7> 
+      to overcome.";
+  }
+
+Monster "grippli" : MA_REPTILE, MA_ADVENTURER
+  {
+    Image: bright red 'R'; Size: SZ_TINY; Mana: 25;
+    CR: -2; HD: 1; Hit: 0; Def: 13; Mov: 75%; Spd: 100%;
+    Str 5, Dex 16, Con 12, Int 12, Wis 14, Cha 12;
+    /* No Natural Attacks */
+    ABILITY(CA_INFRAVISION,3);
+    RACIAL_SKILL(SK_CLIMB,+12);
+    RACIAL_SKILL(SK_HIDE,+8);
+    RACIAL_SKILL(SK_JUMP,+4);
+    Feats: FT_IMPROVED_INITIATIVE, FT_SNEAKY, SK_HIDE, SK_JUMP,
+             SK_MOVE_SIL, SK_SPOT, SK_SWIM;
+    Flags: M_HERBI, M_NATURAL, M_WATER, M_AQUATIC, M_AMPHIB,
+           M_FRIENDLY, M_SKIRMISH, M_GROUP;   
+    Desc: "The grippli are a race of intelligent, psionically
+      active tree frogs. Gifted with opposable thumbs and well
+      given to tool use, the grippli are an isolationist people.
+      Their greatest contentment is found basking in the noonday
+      sun, contemplating the greater mysteries in the waters of
+      a lake or jungle. One of the oldest races on Theyra, they 
+      have lifespans measured in centuries, and produce young 
+      only very rarely and under special conditions. For this 
+      reasson, they distrust humans and demihumans, though they 
+      have long shared a friendship with the lizardfolk, with 
+      whom they share more in common than they do with mammals.\n
+      __Unlike the practicality of their cousins, grippli are
+      much given to mysticism, exploration and even whimsy. They
+      do not tend to embrace industry and are not capitalistic,
+      but are very curious in spite of their caution. Legends
+      claim that the grippli have built great, ancient hidden
+      cities in the jungles of Theyra.\n
+      __More and more frequently now young grippli are venturing
+      away from these mythical cities to explore the rest of the
+      world, and especially to delve underground. Grippli revere
+      and worship the sun (and are especially sacred to Hesani,
+      though Xavias respects them deeply as well), and thus see
+      long sojourns into dark places to be a kind of purifying
+      spiritual ordeal.\n
+      __Grippli defend themselves with blowguns, daggers, snares
+      and traps, as well as with the powers of their minds. Their 
+      coloration allows them to blend into jungle terrain with
+      great ease, and though they are not a violent people, they
+      excel at ambushes and defensive tactics.";
+    On Event EV_BIRTH {
+      rID wildID;
+      wildID = theGame->GetEffectID(PUR_DUNGEON,0,5,AI_PSIONIC);
+      if (wildID != NULL_ID)
+        EActor->GainPermStati(INNATE_SPELL,NULL,SS_RACE,0,0,wildID);
+      return NOTHING;
+      },
+    MSG_SPECABIL
+      "All grippli are wild talents and possess a single randomly
+        chosen psionic power.";
+    Gear:
+      50% $"dagger" else
+        $"stiletto",
+      50% $"blowpipe" else
+        $"sling",
+      80% 1d2 $"potion" of $"healing",
+      50% $"potion" of random 1 to 5,
+      2% $"bracers" of random 1 to 5,
+      2% $"gloves" of random 1 to 5,
+      2% $"headband" of random 1 to 5,
+      2% $"bracers" of random 1 to 5,
+      2% $"horn" of random 1 to 5,
+      2% $"ring" of random 1 to 5,
+      2% $"amulet" of random 1 to 5,
+      2% $"lenses" of random 1 to 5;
+    /* Later:
+       * Grippli have a special power allowing them to ignore the
+         negative effects of marsh-related terrain. For now, we
+         don't have any marsh-related terrain.
+       * When we allow monsters to use SK_JUMP, give them a 
+         behaviour script that makes them jump *all the time*.
+       * In EV_BIRTH, check to see if > 3 hit dice due to a 
+         template; if so give them the $"musk cloud" ability.
+    */
+  }
+
+/*** LYCANTHROPES ***/
+
+Monster "jackal lord" : MA_DOG, MA_HUMANOID, MA_LYCANTHROPE
+  {
+    Image: grey 'l'; Size: SZ_MEDIUM; Mana: 120;
+    CR: OPT_CR(7,8); HD: 8; Hit: +6; Def: 16; Mov: 100%; Spd: 100%;
+    Str 13, Dex 15, Con 14, Int 12, Wis 18, Cha 17;
+    Attk: A_BITE for 1d10 AD_PIERCE,
+          A_CLAW for 1d4 AD_SLASH,
+          A_CLAW for 1d4 AD_SLASH,
+          A_FORM for $"jackal",
+          A_FORM for $"human",
+          A_GAZE for AD_SPE1 (DC 20);
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_SPELLCASTING,8);
+	ABILITY(CA_WEAPON_IMMUNITY,1);
+    Feats: SK_BLUFF, SK_DIPLOMACY, SK_INTIMIDATE, SK_LISTEN,
+           SK_MOVE_SIL, SK_APPRAISE, SK_SPOT, SK_KNOW_THEO,
+           SK_FIND_WEAKNESS, FT_COMBAT_CASTING, FT_QUICKEN_SPELL, 
+           FT_MAXIMIZE_SPELL, FT_IRON_WILL;
+    Stati[ALLY_TO,MA_DOG]; 
+    Spells: $"cat's grace", $"spectral force", $"charm person",
+            $"detect monsters", $"summon jackals", $"dimension door";
+    Flags: M_HUMANOID, M_CARNI, M_EVIL, M_LAWFUL, M_IALIGN, M_SOLITARY;
+    Desc: "Aristocratic, mysterious and learned, jackal lords are nothing if 
+      not civilized. Nurturing destructive cults and weilding Machiavellian
+      schemes like swords, the jackal lords are among the last remaining
+      worshippers of the old pantheon of Eskanti. Being supremely egotistical
+      beings, jackal lords dislike other members of their own race intensely,
+      prefering to surrond themselves with fawning human worshippers. Indeed,
+      the rivalty among jackal lords has been known to grow so bitter as to
+      end in cannibalism. Deeply enmeshed in mysticism, religion and dark
+      occult secrets, the jackal lords have ensured that little else but
+      this is known about their race. In physical form, jackal lords are
+      sleek and graceful, appearing as anthropomorphized humanoid jackals
+      with reflexes as smooth as their honeyed tongues. Dogs are natural
+      allies of jackal lords.";
+    On Event PRE(EV_DAMAGE) {
+      if (e.DType == AD_SPE1) 
+        {
+          EActor->GainTempStati(SPEC_TIMEOUT,EVictim,1d4+1,SS_MISC,A_GAZE);
+          if (EVictim->ResistLevel(AD_POLY) == -1 || EVictim->mID == $"jackal")
+            {
+              e.Immune = true;
+              return DONE;
+            }
+          VPrint(e,"You change into a jackal!",
+            "The <EVictim> changes into a jackal!");
+          EVictim->Shapeshift($"jackal",true,NULL);
+          EVictim->GainTempStati(POLYMORPH,NULL,10,SS_ENCH,1,0,$"polymorph other", EActor->ChallengeRating());
+          return DONE;
+        }
+      return NOTHING;
+      },
+    MSG_SPE1DESC 
+      "to turn an enemy into a jackal every 1d4+1 rounds";
+    Lists:
+      * SPELL_LIST
+          ALL_SPELLS_FROM_SOURCE(AI_THEURGY);
+  }
+
+Effect "Summon Jackals" : EA_SUMMON
+  { SC_WEA; Base: 80; Cost: 20; qval: Q_LOC; Flags: EF_SPECABIL;
+    Purpose: EP_SUMMON; rval: $"jackal"; pval: 5; 
+    Desc: "Summons an group of jackals worth CR 5 to fight in the 
+      caster's name."; }
+
+Monster "wereboar" : MA_LYCANTHROPE, MA_BEAST
+  {
+    Image: red 'l'; Size: SZ_MEDIUM;  Arm 10;
+    CR: OPT_CR(6,4); HD: 4; Hit: +4; Def: 18; Mov: 150%; Spd: 120%;
+    Str 17, Dex 11, Con 18, Int 10, Wis 11, Cha 8;
+    Attk:
+      A_GORE for 1d6+1 AD_PIERCE,
+      A_CLAW for 1d4+3 AD_SLASH,
+      A_CLAW for 1d4+3 AD_SLASH,
+      A_FORM for $"human",
+      A_FORM for $"wild boar";
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_SCENT,6);
+    Feats: FT_ALERTNESS, FT_MASTER_BULL_RUSH, FT_IRON_WILL,
+           FT_POWER_ATTACK, FT_TOUGHNESS,
+           SK_BALANCE, SK_CLIMB, SK_HIDE, SK_LISTEN, SK_MOVE_SIL,
+           SK_SPOT;
+    Flags: M_HUMANOID, M_CARNI;
+    Gear:
+      $"battleaxe", 
+      $"banded mail",
+      1d2 $"potion" of $"extra-healing";
+    Desc: "A wereboar in humanoid form tends to be a stocky, muscular
+      individual of average height. It dresses in simple garments that are
+      easy to remove, repair, or replace.";
+    Lists:
+      * GROUP_ALLY $"minotaur",
+      * GROUP_LEADER $"minotaur",
+      * GROUP_FOLLOWER $"wild boar";
+  }
+
+Monster "wererat" : MA_LYCANTHROPE, MA_RODENT
+  {
+    Image: brown 'l'; Size: SZ_MEDIUM;  Arm: 10;
+    CR: OPT_CR(4,2); HD: 2; Hit: +2; Def: 14; Mov: 120%; Spd: 100%;
+    Str 12, Dex 16, Con 14, Int 7, Wis 13, Cha 5;
+    Attk:
+      A_CLAW for 1d4 AD_SLASH,
+      A_CLAW for 1d4 AD_SLASH,
+      A_FORM for $"human",
+      A_FORM for $"plague rat"; // ww: wererats inflict disease
+	ABILITY(CA_INFRAVISION,6);
+    Feats: FT_WEAPON_FINESSE, FT_EXPERTISE;
+    Flags: M_HUMANOID, M_EVIL, M_CHAOTIC, M_CARNI, M_SKIRMISH;
+    Gear:
+      $"rapier", $"stiletto",
+      $"chainmail shirt",
+      1d3 $"potion" of $"healing";
+    Desc: "Nimble and venomous, wererats are the weakest of the true
+      lycanthropes. They are able to take three forms: that of a human,
+      a rat and their natural form, a monsterous hybrid of the two.
+      Wererats are viscious creatures, enjoying stalking those weaker
+      then them and destroying anything that others find beautiful.";
+    Lists:
+      * GROUP_FOLLOWER $"giant rat" $"plague rat";
+  }
+
+Monster "weretiger" : MA_LYCANTHROPE, MA_CAT, MA_BEAST
+  {
+    Image: yellow 'l'; Size: SZ_LARGE;  Arm 10; 
+    CR: OPT_CR(7,7); HD: 7; Hit: +7; Def: 15; Mov: 150%; Spd: 135%;
+    Str 25, Dex 15, Con 16, Int 10, Wis 11, Cha 8;
+    Attk:
+      A_BITE for 2d6+3 AD_PIERCE,
+      A_CLAW for 1d8+7 AD_SLASH,
+      A_CLAW for 1d8+7 AD_SLASH,
+      A_FORM for $"human",
+      A_FORM for $"tiger";
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_SCENT,6);
+	RACIAL_SKILL(SK_BALANCE,4);
+	RACIAL_SKILL(SK_HIDE,4);
+	RACIAL_SKILL(SK_MOVE_SIL,4);
+    WEAPON_FOCUS_NATURAL_ATTACK;
+    Feats: FT_ALERTNESS, FT_COMBAT_REFLEXES,  
+           FT_POUNCE, FT_RAKE,
+           SK_BALANCE, SK_CLIMB, SK_HIDE, SK_LISTEN, SK_MOVE_SIL,
+           SK_SPOT;
+    Flags: M_HUMANOID, M_CARNI;
+    Gear:
+      $"ranseur", 
+      $"breastplate",
+      1d3 $"potion" of $"extra-healing";
+    Desc: "Weretigers in humanoid form tend to be sleekly muscular, taller
+    than average, and very agile.";
+    Lists:
+      * GROUP_FOLLOWER $"tiger";
+  }
+
+Monster "werewolf" : MA_LYCANTHROPE, MA_DOG, MA_BEAST
+  {
+    Image: blue 'l'; Size: SZ_MEDIUM;  Arm 10;
+    CR: OPT_CR(5,3); HD: 3; Hit: +3; Def: 14; Mov: 150%; Spd: 115%;
+    Str 15, Dex 15, Con 16, Int 10, Wis 11, Cha 8;
+    Attk:
+      A_BITE for 1d6+1 AD_PIERCE
+                 and 0d0 AD_TRIP (DC 17),
+      A_CLAW for 1d4+2 AD_SLASH,
+      A_CLAW for 1d4+2 AD_SLASH,
+      A_FORM for $"human",
+      A_FORM for $"wolf";
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_SCENT,6);
+    WEAPON_FOCUS_NATURAL_ATTACK;
+    Feats: FT_IRON_WILL, FT_SNEAKY, 
+           SK_BALANCE, SK_CLIMB, SK_HIDE, SK_LISTEN, SK_MOVE_SIL,
+           SK_SPOT;
+    Flags: M_HUMANOID, M_EVIL, M_CHAOTIC, M_CARNI;
+    Gear:
+      $"long sword", 
+      $"chainmail shirt",
+      1d3 $"potion" of $"healing";
+    Lists:
+      * GROUP_FOLLOWER $"wolf";
+  }
+  
+/* Remember MA_SYLVAN for werebears */
+
+/********************************************************************************
+ ********************************************************************************
+ ***                             LEARNED TEMPLATES                            ***
+ ********************************************************************************
+ ********************************************************************************/
+
+/*** THE SKILL ADVANCEMENT TEMPLATES ***/
+
+Template "skilled" : TM_SKILL for MA_SAPIENT
+  { CR: +1; HD: +1; Hit: +1; Spd: +2; Caster Level: +1;
+    Str +1, Dex +1, Con +1, Int +1, Wis +1, Cha +1;
+    Desc: "The survivor of a few skirmishes, this creature has had
+      its competance tested, and learned from the experience."; 
+    On Event POST(EV_STRIKE), POST(EV_CAST) {
+      EActor->IdentifyTemp($"skilled");
+      return NOTHING;
+      },
+    EV_ISTARGET {
+      if (EActor->isMType(MA_UNDEAD) || EActor->isMType(MA_DRAGON) )
+        return -1;
+      return 0;
+      };
+  }
+
+Template "experienced" : TM_SKILL for MA_SAPIENT
+  { CR: +2; HD: +2; Hit: +2; Spd: +4; Caster Level: +2;
+    Str +2, Dex +2, Con +2, Int +2, Wis +2, Cha +2;
+    /*Feats: FT_WARRIOR_LIST;*/
+    Desc: "An experienced creature is a leader among its kind, having
+      survived several raids, campaigns or battles."; 
+    On Event POST(EV_STRIKE), POST(EV_CAST) {
+      EActor->IdentifyTemp($"experienced");
+      return NOTHING;
+      },
+    EV_ISTARGET {
+      if (EActor->isMType(MA_UNDEAD) || EActor->isMType(MA_DRAGON) )
+        return -1;
+      return 0;
+      };
+  }
+
+Template "veteran" : TM_SKILL for MA_SAPIENT
+  { CR: +4; HD: +4; Hit: +4; Spd: +6; Caster Level: +3;
+    Str +2, Dex +3, Con +3, Int +3, Wis +3, Cha +3;
+    /*Feats: FT_WARRIOR_LIST, FT_WARRIOR_LIST;*/
+    Desc: "A veteran has studied the craft of warfare for the majority
+      of his or her life, and is thus an exceedingly dangerous 
+      opponent."; 
+    On Event POST(EV_STRIKE), POST(EV_CAST) {
+      EActor->IdentifyTemp($"veteran");
+      return NOTHING;
+      },
+    EV_ISTARGET {
+      if (EActor->isMType(MA_UNDEAD) || EActor->isMType(MA_DRAGON) )
+        return -1;
+      return 0;
+      };
+  }
+
+Template "elite" : TM_SKILL for MA_SAPIENT
+  { CR: +5; HD: +8; Hit: +8; Spd: +10; Caster Level: +5;
+    Str +2, Dex +4, Con +4, Int +4, Wis +4, Cha +4;
+    /*Feats: FT_WARRIOR_LIST, FT_WARRIOR_LIST, FT_WARRIOR_LIST, 
+        FT_WARRIOR_LIST;*/
+    Desc: "An experienced creature is a leader among its kind, having
+      survived several raids, campaigns or battles."; 
+    On Event POST(EV_STRIKE), POST(EV_CAST) {
+      EActor->IdentifyTemp($"elite");
+      return NOTHING;
+      },
+    EV_ISTARGET {
+      if (EActor->isMType(MA_UNDEAD) || EActor->isMType(MA_DRAGON) )
+        return -1;
+      return 0;
+      };
+  }
+
+/* Template "paragon" : TM_SKILL for MA_PERSON */
+                    
+/*** THE CR +2 CLASS TEMPLATES ***/
+
+Template "barbarian;template" : TM_CLASS for MA_ADVENTURER
+  {
+    Flags: TMF_POSTSCRIPT;
+    CR: OPT_CR(+2,+2); HD: +2; Hit: +2; Def: +1; Mov: 120%; Spd: 110%; 
+    Str +4, Dex +2, Con +4, Int +0, Wis +0, Cha +0, Luc +0;
+    ABILITY(CA_UNCANNY_DODGE,1);
+	ABILITY(CA_TOUGH_AS_HELL,2);
+    Feats: 
+      FT_AP_LIGHT, FT_AP_MEDIUM, FT_POWER_ATTACK,
+      SK_HEAL, SK_WILD_LORE, SK_ATHLETICS, SK_RIDE;
+    Flags: M_CHAOTIC, !M_LAWFUL;
+    Gear: random T_ARMOR of random 0 to 1,
+          random T_WEAPON of random 0 to 1,
+          1d1 $"potion" of $"healing";
+    On Event PRE(EV_STRIKE) {
+      if (!EActor->HasStati(RAGING) && EActor->cFP > -2)
+        {
+          DPrint(e,"You drive yourself into a killing fury!",
+                   "The <EActor> flies into a killing fury!");
+          EActor->GainTempStati(RAGING,NULL,19,SS_MISC,4);
+          EActor->LoseFatigue(3);
+        }
+      return NOTHING;
+      };
+    Desc: "These young tribesmen journey from far away lands in search
+      of treasure, blood and glory, testing their mettle against the
+      harsh dangers of the Goblin King.";
+}
+
+Template "bard;template" : TM_CLASS for MA_ADVENTURER
+{
+    Flags: TMF_POSTSCRIPT, M_MAGE;
+    // ww: Sat Feb 21 11:35:39 PST 2004
+    // brings a CR 2-3 bugbear to CR 5
+    // brings a CR 2 orc to CR 3
+    // brings a CR 1/2 drow to CR 5
+    CR: OPT_CR(+3,+2) (Min 4); HD: +2; Def: +1; Hit: +1; Mov: 100%; Spd: 105%; 
+    Dex +4, Int +4, Cha +2; 
+    ABILITY(CA_BARDIC_MUSIC,2);
+    ABILITY(CA_SPELLCASTING,1);
+    Stati[ADJUST_INH,A_MAN,+8];
+    Feats: 
+      FT_POINT_BLANK_SHOT, FT_COMBAT_CASTING,
+      FT_AP_LIGHT,
+      SK_CONCENTRATION, SK_HIDE, SK_LISTEN, SK_MOVE_SILENTLY, 
+      SK_SPOT, SK_SWIMMING, SK_PICK_POCKET;
+    Gear:
+      random T_WEAPON,
+      $"short bow" of random 0 to 1,
+      35% $"alchemy set",
+      35% $"disguise kit",
+      2d6 $"sheaf arrow",
+      random T_BOOK of random 1 to 3,
+      1d1 $"potion" of $"healing",
+      50% 1d3 $"scroll" of $"identify;scroll",
+      25% $"horn" else
+        33% $"flute" else
+          50% $"lute" else $"mandolin";
+    Desc: "These young minstrels journey from far away lands in search
+      of treasure, blood and glory, testing their mettle against the
+      harsh dangers of the Goblin King.";
+    Lists:
+      * SPELL_LIST
+          ALL_SPELLS_FROM_SOURCE(AI_WIZARDRY);
+    On Event POST(EV_STRIKE) {
+      EActor->IdentifyTemp($"bard;template");
+      return NOTHING;
+      };
+  }
+
+Template "wildshaped druid" : TM_CLASS for MA_ADVENTURER
+{
+    Flags: TMF_POSTSCRIPT;
+    // bugbear 2 -> 7
+    // troll 6 -> 10
+    CR: +4 (Min 7); HD: +2; Def: +1; Hit: +1; Mov: 100%; Spd: 105%; 
+    Str +2, Dex +2, Con +2, Wis +4;
+    ABILITY(CA_NATURE_SENSE,1);
+	  ABILITY(CA_WOODLAND_STRIDE,1);
+	  ABILITY(CA_SPELLCASTING,3);
+    Stati[ADJUST_INH,A_MAN,+6];
+    Feats: 
+      FT_POWER_ATTACK, FT_WILD_SHAPE_MASTERY,
+      SK_CONCENTRATION, SK_HIDE, SK_LISTEN, SK_MOVE_SILENTLY, 
+      SK_SPOT, SK_SWIMMING, SK_PICK_POCKET, SK_HEAL;
+    Gear:
+      33% $"ring" of random 2 to 3 
+        else 50% $"boots" of random 2 to 3
+          else $"girdle" of random 2 to 3,
+      2d1 $"potion" of $"dimension door",
+      2d1 $"potion" of $"healing";
+    Desc: "These young pagans journey from far away lands in search
+      of treasure, blood and glory, testing their mettle against the
+      harsh dangers of the Goblin King.";
+    On Event EV_INITIALIZE {
+      hObj h; rID animal;
+      EActor->GainPermStati(SAVE_BONUS,NULL,SS_CLAS,SN_NECRO,2);
+      for(h=EActor->FirstInv();h;h=EActor->NextInv()) {
+        if (h->isType(T_WEAPON) && EActor->isMonster())
+          h->Remove(true); 
+        else if (h->QualityOK(IQ_IRONWOOD))
+            h->AddQuality(IQ_IRONWOOD);
+        else if (h->QualityOK(IQ_DARKWOOD))
+            h->AddQuality(IQ_DARKWOOD);
+      } 
+      animal = theGame->GetMonID(PUR_DUNGEON,
+        EActor->ChallengeRating()-1,
+        EActor->ChallengeRating(), 
+        100, MA_ANIMAL);
+      if (!animal) animal = $"leopard";
+      EActor->Shapeshift(animal,true,NULL);
+      EActor->GainPermStati(POLYMORPH,NULL,SS_ENCH,-1,-1);
+      return NOTHING;
+    }  ;
+    Lists:
+      * SPELL_LIST
+          ALL_SPELLS_FROM_SOURCE(AI_DRUIDIC)
+          2 $"remove curse" $"cure disease" $"neutralize poison";
+    On Event POST(EV_CAST) {
+      EActor->IdentifyTemp($"wildshaped druid");
+      return NOTHING;
+      };
+  }
+
+Template "druid;template" : TM_CLASS for MA_ADVENTURER
+{
+    Flags: TMF_POSTSCRIPT;
+    // brings a CR 2-3 bugbear to CR 5
+    // brings CR 2 cave orc to CR 5
+    CR: OPT_CR(+3,+2) (Min 4); HD: +2; Def: +1; Hit: +1; Mov: 100%; Spd: 105%; 
+    Str +2, Dex +2, Con +2, Wis +4;
+    ABILITY(CA_NATURE_SENSE,1);
+	  ABILITY(CA_WOODLAND_STRIDE,1);
+	  ABILITY(CA_SPELLCASTING,3);
+    Stati[ADJUST_INH,A_MAN,+6];
+    Feats: 
+      FT_COMBAT_CASTING, FT_MAXIMIZE_SPELL,
+      SK_CONCENTRATION, SK_HIDE, SK_LISTEN, SK_MOVE_SILENTLY, 
+      SK_SPOT, SK_SWIMMING, SK_PICK_POCKET, SK_HEAL;
+    Gear:
+      25% $"quarterstaff" else
+        33% $"scimitar" else
+          50% $"scythe" else
+            $"sickle",
+      25% 1d2 $"scroll" of $"identify;scroll",
+      $"short bow",
+      2d6 $"sheaf arrow",
+      50% 1d2 $"bag" of $"tanglefoot bag",
+      1d1 $"potion" of $"healing",
+      $"ring" of random 2 to 7;
+    Desc: "These young pagans journey from far away lands in search
+      of treasure, blood and glory, testing their mettle against the
+      harsh dangers of the Goblin King.";
+    On Event EV_INITIALIZE {
+      hObj h;
+      EActor->GainPermStati(SAVE_BONUS,NULL,SS_CLAS,SN_NECRO,2);
+      for(h=EActor->FirstInv();h;h=EActor->NextInv()) {
+        if (h->QualityOK(IQ_IRONWOOD))
+            h->AddQuality(IQ_IRONWOOD);
+        else if (h->QualityOK(IQ_DARKWOOD))
+            h->AddQuality(IQ_DARKWOOD);
+      } 
+      return NOTHING;
+    }  ;
+    Lists:
+      * SPELL_LIST
+          ALL_SPELLS_FROM_SOURCE(AI_DRUIDIC)
+          /* We give the low-level priest these so she can sell them
+             to the PC as service spells -- assume it's a special NPC
+             domain power or something. If we don't, it makes the
+             idea of service spells somewhat useless. */
+          2 $"Remove Curse" $"cure disease" $"Neutralize Poison";
+    On Event POST(EV_CAST) {
+      EActor->IdentifyTemp($"druid;template");
+      return NOTHING;
+      };
+}
+
+Template "mage;template" : TM_CLASS for MA_ADVENTURER
+{
+    // bugbear CR 2 mage = cr 6
+    // drow cr 1/2 mage = cr 5
+    CR: +2 (Min 3); HD: +2; Def: +0; Hit: +0; Mov: 100%; Spd: 100%; 
+    Str -2, Dex +2, Con +2, Int +4, Wis +2;
+    ABILITY(CA_SPELLCASTING,3);
+    Stati[ADJUST_INH,A_MAN,+12];
+    Feats: FT_COMBAT_CASTING, FT_QUICKEN_SPELL,
+           SK_CONCENTRATION, SK_SPELLCRAFT, SK_METAMAGIC, SK_SPOT;
+    Flags: TMF_POSTSCRIPT, M_MAGE, M_AVOID_MELEE;
+    Gear: $"robes",
+          random T_BOOK of random 0 to 1,
+          random T_BOOK of random 0 to 1,
+          random T_BOOK of random 2 to 5,
+          random T_BOOK of random 2 to 5,
+          50% $"alchemy set",
+          $"potion" of random 1 to 4,
+          50% 1d4+1 $"scroll" of $"identify;scroll",
+          50% $"potion" of random 1 to 4,
+          20% $"wand" of random 1 to 5,
+          1d1 $"potion" of $"healing",
+          1d1 $"potion" of $"mana";
+    Desc: "These apprentices journey from far away lands in search
+      of treasure, blood and glory, testing their mettle against the
+      harsh dangers of the Goblin King.";
+    Lists:
+      * SPELL_LIST
+          ALL_SPELLS_FROM_SOURCE(AI_WIZARDRY);
+    On Event POST(EV_CAST) {
+      EActor->IdentifyTemp($"mage;template");
+      return NOTHING;
+      };
+  }
+
+
+Template "monk;template" : TM_CLASS for MA_ADVENTURER
+{
+    Flags: TMF_POSTSCRIPT;
+    CR: +2; HD: +2; Def: +0; Hit: +2; Mov: +4; Spd: 110%; 
+    Str +4, Dex +2, Con +2, Wis +2;
+    Attk: A_PUNC for 1d6 AD_BLUNT and 1d2 AD_STUN (DC 13);
+	ABILITY(CA_UNARMED_STRIKE,1);
+	ABILITY(CA_FLURRY_OF_BLOWS,1);
+	ABILITY(CA_EVASION,1);
+    Feats: FT_DODGE, FT_REED_IN_THE_WIND,
+           FT_ZEN_DEFENSE, FT_DEFLECT_ARROWS,
+           SK_ATHLETICS, SK_BALANCE, SK_HIDE, SK_JUMP, SK_LISTEN,
+           SK_MOVE_SILENTLY, SK_SPOT, SK_HEAL, SK_FIND_WEAKNESS;
+    Gear: $"robes",
+          50% 1d3 $"scroll" of $"identify;scroll",
+          50% 2d1 $"nunchaku" of random 0 to 1 
+            else 2d1 $"fighting stick" of random 0 to 1,
+          $"chakram",
+          // 3d6 $"shuriken",
+          1d2 $"potion" of $"dimension door";
+    Desc: "These young kohai journey from far away lands in search
+      of treasure, blood and glory, testing their mettle against the
+      harsh dangers of the Goblin King.";
+    On Event POST(EV_STRIKE) {
+      EActor->IdentifyTemp($"monk;template");
+      return NOTHING;
+      };
+}
+
+Template "undead hunter" : TM_CLASS for MA_ADVENTURER 
+  {
+    Flags: TMF_POSTSCRIPT;
+    // bugbear: 2 -> 5
+    // drow: 1/2 -> 2
+    CR: +3; HD: +2; Def: +0; Hit: +2; Mov: 100%; Spd: 110%; 
+    Str +6, Wis +4, Cha +4;  // charisma freebie!
+	  ABILITY(CA_SMITE,2);
+	  ABILITY(CA_DIVINE_GRACE,1);
+    Stati[ADJUST_INH,A_MAN,+5];
+    Spells: $"protection from undead",
+            $"detect undead",
+            $"protection from evil",
+            $"halt undead",
+            $"death ward";
+    Feats: FT_NECROPHYSIOLOGY, FT_DIVINE_ARMOR,
+           FT_AP_LIGHT, FT_AP_MEDIUM, FT_AP_HEAVY, SK_FIND_WEAKNESS,
+           SK_ATHLETICS, SK_HEALING, SK_CONCENT, SK_SPOT;
+    Flags: M_GOOD, !M_EVIL;
+    Gear: random T_ARMOR of random 0 to 1,
+          random T_WEAPON of random 0 to 1,
+          10% $"alchemy set",
+          10% $"climbing rig",
+          10% $"craftsman's tools",
+          25% 1d2 $"scroll" of $"identify;scroll",
+          1d1 $"potion" of $"healing",
+          6d2 blessed $"flask" of $"Water";
+    On Event EV_INITIALIZE {
+      hObj h;
+      for(h=EActor->FirstInv();h;h=EActor->NextInv()) {
+        h->IFlags |= IF_BLESSED; 
+        if (h->QualityOK(IQ_SILVER))
+            h->AddQuality(IQ_SILVER);
+      } 
+      return NOTHING;
+    };
+    Desc: "Young and inexperienced, perhaps, but she is still an
+      undead hunter, dedicated to removing the graveborn blight
+      from the land."; 
+    On Event POST(EV_STRIKE) {
+      EActor->IdentifyTemp($"undead hunter");
+      return NOTHING;
+      };
+  } 
+
+
+
+Template "knight" : TM_CLASS for MA_ADVENTURER 
+  {
+    Flags: TMF_POSTSCRIPT, TMF_OBVIOUS;
+    // bugbear: 2 -> 5
+    // drow: 1/2 -> 3
+    CR: +3 (Min 3); HD: +2; Def: +0; Hit: +2; Mov: 100%; Spd: 110%; 
+    Str +6, Con +2, Wis +2; 
+    Feats: FT_MOUNTED_COMBAT, FT_POWER_ATTACK,
+           FT_AP_LIGHT, FT_AP_MEDIUM, FT_AP_HEAVY,
+           SK_ATHLETICS, SK_HEALING, SK_RIDE, SK_CONCENT, SK_SPOT;
+    Flags: M_LAWFUL, !M_CHAOTIC;
+    Gear: $"light lance" of random 1 to 2,
+          $"banded mail" of random 0 to 1,
+          1d1 $"potion" of $"healing";
+    On Event EV_ISTARGET {
+      if (EActor->GetAttr(A_SIZ) == SZ_MEDIUM)
+        return 0;
+      else
+        return -1; 
+    } ;
+    On Event EV_INITIALIZE {
+      hObj h;
+      h = CreateMonster($"warhorse");
+      SetSilence();
+      h->PartyID = EActor->PartyID;
+      h->CalcValues();
+      Throw(EV_MOUNT,EActor,h);
+      UnsetSilence();
+      h->Initialize();
+      for(h = EActor->FirstInv(); h ; h = EActor->NextInv())
+        if (h->isType(T_WEAPON))
+          h->AddQuality(IQ_ADAMANT);
+      };
+    Desc: "Young and inexperienced, perhaps, but she is still a 
+      knight, a mounted warrior with a deadly lance."; 
+  } 
+
+Template "pike": TM_CLASS for MA_ADVENTURER
+{
+  // cave orc: 1 -> 4
+  // drow: -2 -> 2
+  // lizardman: 1 -> 3
+  // ogre: 3 -> 5
+  CR: +2 (Min 2); 
+  Flags: TMF_POSTSCRIPT, TMF_OBVIOUS, M_NOPOLY, M_NO_CHARGE,
+         M_LAWFUL, !M_CHAOTIC; 
+  Feats: FT_GUARDED_STANCE, FT_COMBAT_REFLEXES, FT_WEAPON_FOCUS, 
+         FT_SWARM, FT_IMPROVED_DEXTERITY;
+  Gear: 33% $"longspear" of random 0 to 1
+         else 50% $"ranseur" of random 0 to 1 
+           else $"lucern hammer" of random 0 to 1;
+  On Event EV_ISTARGET {
+    if (EActor->GetAttr(A_SIZ) >= SZ_MEDIUM)
+      return 0;
+    else
+      return -1; 
+  } ;
+  On Event EV_INITIALIZE { 
+    hObj h;
+    for(h = EActor->FirstInv(); h ; h = EActor->NextInv()) {
+      if (h->isType(T_WEAPON) && !h->HasIFlag(WT_REACH))
+        h->Remove(true); 
+    }
+    if (!EActor->HasStati(GENERATION)) {
+      EActor->Multiply(2,false,false);
+    } 
+  }; 
+  Desc: "The true advantage of polearms comes to light when they are used
+  in formation. It can be very difficult to approach a wall of pikes 
+  without injury."; 
+} 
+
+Template "worg-rider" : TM_CLASS for MA_GOBLIN 
+  {
+    Flags: TMF_POSTSCRIPT, TMF_OBVIOUS;
+    // goblin: 1/2 -> 5
+    // kobold: 2 -> 5
+    CR: +3 (Min 5); HD: +2; Def: +0; Hit: +2; Mov: 100%; Spd: 110%; 
+    Str +6, Con +2, Wis +2; 
+    Feats: FT_MOUNTED_COMBAT, FT_POWER_ATTACK,
+           FT_AP_LIGHT, FT_AP_MEDIUM, 
+           SK_ATHLETICS, SK_HEALING, 
+           FT_SKILL_FOCUS,
+           SK_RIDE, SK_CONCENT, SK_SPOT;
+    Gear: $"halfspear" of random 1 to 2,
+          $"chainmail shirt" of random 0 to 1,
+          1d1 $"potion" of $"healing";
+    On Event EV_ISTARGET {
+      if (EActor->GetAttr(A_SIZ) == SZ_SMALL && !EActor->isMType(MA_GOOD))
+        return 0;
+      else
+        return -1; 
+    } ;
+    On Event EV_INITIALIZE {
+      hObj h;
+      h = CreateMonster($"worg");
+      SetSilence();
+      h->PartyID = EActor->PartyID;
+      h->CalcValues();
+      Throw(EV_MOUNT,EActor,h);
+      UnsetSilence();
+      h->Initialize();
+    };
+    Desc: "Worgs are often used as mounts by goblins and other evil
+      humanoids."; 
+  } 
+
+Template "giant-rider" : TM_CLASS for MA_GOBLINOID
+  {
+    Flags: TMF_POSTSCRIPT, TMF_OBVIOUS;
+    Image: purple 0; 
+    // goblin: 0 -> 3
+    // kobold: 0 -> 5
+    CR: +4 (Min 3); HD: +2; Def: +0; Hit: +2; Mov: 100%; Spd: 110%; 
+    Dex +6, Con +2, Wis +2; 
+    Feats: FT_MOUNTED_COMBAT, FT_MOUNTED_ARCHERY, FT_RAPID_RELOAD,
+           FT_AP_LIGHT, 
+           SK_ATHLETICS, SK_HEALING, 
+           FT_SKILL_FOCUS,
+           SK_RIDE, SK_CONCENT, SK_SPOT;
+    Gear: 75% $"arbalest" of random 1 to 2 else $"cranquin" of random 1 to 2, 
+          10d6 $"crossbow bolt" of random 0 to 1,
+          $"leather armor" of random 0 to 1,
+          1d1 $"potion" of $"healing";
+    On Event EV_ISTARGET {
+      if (EActor->GetAttr(A_SIZ) == SZ_SMALL && !EActor->isMType(MA_GOOD))
+        return 0;
+      else
+        return -1; 
+    } ;
+    On Event EV_INITIALIZE {
+      rID mountID;
+      hObj h;
+      EMap->GenEncounter(EN_SINGLE|EN_MTYPE|EN_NOPLACE|EN_CREATOR,
+        EActor->ChallengeRating()+3, EMap->Depth, MA_GIANT,
+        AL_NONGOOD,(rID)0,EActor->x,EActor->y,EActor);
+      h = EMap->GetEncounterCreature(0); 
+      if (!h) { 
+        h = CreateMonster($"ogre");
+        h->Initialize();
+      }
+      SetSilence();
+      h->PartyID = EActor->PartyID;
+      h->CalcValues();
+      Throw(EV_MOUNT,EActor,h);
+      UnsetSilence();
+    };
+    Desc: "Giants are occasionally used as mounts by clever goblins and
+    other evil humanoids who perch on their shoulders and attack with
+    ranged weapons."; 
+  } 
+
+Template "paladin;template" : TM_CLASS for MA_ADVENTURER 
+  {
+    Flags: TMF_POSTSCRIPT;
+    CR: +2; HD: +2; Def: +0; Hit: +2; Mov: 100%; Spd: 110%; 
+    Str +4, Con +4, Wis +2, Cha +4; // ww: CHA freebie!
+    Spells: $"detect evil";
+	  ABILITY(CA_SMITE,2);
+	  ABILITY(CA_DIVINE_GRACE,1);
+	  ABILITY(CA_AURA_OF_VALOR,2);
+	  ABILITY(CA_LAY_ON_HANDS,2);
+    Immune: DF_DISE, DF_FEAR;
+    Flags: M_LAWFUL, M_GOOD, M_CLOSEID;
+    Feats: FT_POWER_ATTACK, FT_MASTER_GREAT_BLOW,
+           FT_AP_LIGHT, FT_AP_MEDIUM, FT_AP_HEAVY,
+           SK_ATHLETICS, SK_HEALING, SK_RIDE, SK_CONCENT, SK_SPOT;
+    Gear: random T_ARMOR of random 0 to 1,
+          25% random T_WEAPON +1 with [WQ_HOLY] else
+            random T_WEAPON of random 0 to 1,
+          50% $"healing kit",
+          25% 1d2 $"scroll" of $"identify;scroll",
+          1d1 $"potion" of $"healing",
+          50% 1d1 blessed $"flask" of $"Water";
+    On Event EV_INITIALIZE {
+      hObj h;
+      /* Give our paladin a holy sword. */
+      for(h = EActor->FirstInv(); h ; h = EActor->NextInv())
+        if (h->isType(T_WEAPON))
+          h->AddQuality(WQ_HOLY);
+      EActor->GainPermStati(INNATE_SPELL,NULL,SS_CLAS,0,0,$"Cure Disease");
+      };
+    Desc: "Young and inexperienced, perhaps, but she is still a 
+      paladin, a champion of the light, on a sacred mission to
+      cleanse this area of all things evil and unholy.";
+  } 
+
+
+
+Template "priest;template" : TM_CLASS for MA_ADVENTURER 
+  {
+    Flags: TMF_POSTSCRIPT;
+    // bugbear: cr 2 -> cr 4
+    // drow: cr 1/2 -> cr 3
+    CR: OPT_CR(+2,+2) (Min 3); HD: +2; Def: +0; Hit: +1; Mov: 100%; Spd: 105%; 
+    Str +2, Con +2, Int +2, Wis +4 ; 
+    ABILITY(CA_SPELLCASTING,3);
+	  Stati[ADJUST_INH,A_MAN,+8];
+    ABILITY(CA_TURNING,2);
+    Gear: random T_ARMOR,
+          random T_WEAPON of random 0 to 1,
+          random T_SHIELD of random 0 to 1,
+          25% 1d2 $"scroll" of $"identify;scroll",
+          $"potion" of random 1 to 4,
+          50% $"healing kit",
+          25% $"scroll" of $"hallow",
+          50% 1d2 blessed $"flask" of $"water",
+          1d1 $"potion" of $"healing",
+          1d1 $"potion" of $"mana";
+    Feats: FT_COMBAT_CASTING, FT_QUICKEN_SPELL,
+           FT_AP_LIGHT, FT_AP_MEDIUM, FT_AP_HEAVY,
+           SK_CONCENTRATION, SK_SPELLCRAFT, SK_HEAL, SK_METAMAGIC, SK_SPOT;
+    On Event EV_INITIALIZE {
+      hObj h; 
+      rID god; 
+      for(h=EActor->FirstInv();h;h=EActor->NextInv()) {
+        if (h->isType(T_WEAPON) || h->isType(T_BOW))
+            h->IFlags |= IF_BLESSED;
+        if (h->iID == $"holy symbol")
+          return NOTHING; 
+      }
+      h = CreateItem($"holy symbol");
+      switch (random(16)) {
+        case 0:  god = $"Aiswin;Symbol"; break;
+        case 1:  god = $"Asherath;Symbol"; break;
+        case 2:  god = $"Ekliazeh;Symbol"; break;
+        case 3:  god = $"Erich;Symbol"; break;
+        case 4:  god = $"Essiah;Symbol"; break;
+        case 5:  god = $"Hesani;Symbol"; break;
+        case 6:  god = $"Immotian;Symbol"; break;
+        case 7:  god = $"Khasrach;Symbol"; break;
+        case 8:  god = $"Kysul;Symbol"; break;
+        case 9:  god = $"Mara;Symbol"; break;
+        case 10: god = $"Maeve;Symbol"; break;
+        case 11: god = $"Sabine;Symbol"; break;
+        case 12: god = $"Semirath;Symbol"; break;
+        case 13: god = $"Xavias;Symbol"; break;
+        case 14: god = $"Xel;Symbol"; break;
+        case 15: god = $"Zurvash;Symbol"; break;
+      } 
+      h->MakeMagical(god);
+      h->IFlags |= IF_BLESSED; 
+      EActor->GainItem(h,true);
+      for(h=EActor->FirstInv();h;h=EActor->NextInv()) {
+        if (h->isType(T_SHIELD) && !h->ieID) {
+          h->MakeMagical(god);
+        } 
+      }
+      return DONE;
+      },
+    POST(EV_CAST) {
+      EActor->IdentifyTemp($"priest;template");
+      return NOTHING;
+      };
+
+    Desc: "These young acolytes journey from far away lands in search
+      of treasure, blood and glory, testing their mettle against the
+      harsh dangers of the Goblin King.";
+    Lists:
+      * SPELL_LIST
+          ALL_SPELLS_FROM_SOURCE(AI_THEURGY)
+          /* We give the low-level priest these so she can sell them
+             to the PC as service spells -- assume it's a special NPC
+             domain power or something. If we don't, it makes the
+             idea of service spells somewhat useless. */
+          2 $"Remove Curse" $"cure disease" $"Neutralize Poison";
+  }
+
+Template "Multitude cultist" : TM_CLASS for MA_ADVENTURER
+{
+    Flags: TMF_POSTSCRIPT;
+    // bugbear 2 -> 5
+    // drow 1/2 -> 2
+    CR: OPT_CR(+2,+2); HD: 2; Hit: +1; Def: +0; Mov: 100%; Spd: 100%;
+    Str -2, Dex +4, Con +2, Int +2, Wis +4, Cha -4, Luc +0;
+    Stati[ADJUST_INH,A_MAN,+8];
+    Spells: 
+      $"phase door", $"magic missile", $"bestow curse", $"deeper darkness";
+    Flags: M_EVIL, !M_GOOD, M_AVOID_MELEE, M_HOSTILE;
+    Feats: FT_GUARDED_INVOCATION;
+    On Event EV_GREET
+      "Blood for the horde!"
+      "Bow before the power of our dark lord!"
+      "Tremble before His presence, mortal!"
+      "Death to the unbeliever!"
+      "Now, the hour of darkness is upon you!",
+    EV_ISTARGET {
+      if (EActor->HasMFlag(M_GOOD))
+        return -1;
+      return 0;
+      };
+    Desc: "This wretched soul has given himself over utterly to the
+      demon ghost horde. Not a true spellcaster, he has instead been
+      given a paltry few magical gifts by his patron in exchange for
+      his freedom, sanity and hygene.";
+    Gear:
+      25% $"dagger" +1 with [WQ_UNHOLY],
+      25% $"scroll" of $"hallow",
+      3d4 $"dagger",
+      $"robes",
+      blessed $"holy symbol" of $"the multitude;symbol",
+      50% 1d3 $"scroll" of $"identify;scroll",
+      75% $"potion" of $"mana",
+      85% $"potion" of $"healing";
+    On Event EV_INITIALIZE {
+      int16 maxlev, i, j, k; rID spID;
+      maxlev = max(2,EActor->ChallengeRating()/2);
+      j = 4d2;
+      for (i=0;i!=j;i++) {
+        for(k=0;k<=10;k++) {
+          spID = theGame->GetEffectID(PUR_DUNGEON,1,maxlev,AI_THEURGY);
+          if (spID)
+            if (spID->Purpose != EP_PLAYER_ONLY) {
+                EActor->GainPermStati(INNATE_SPELL,NULL,SS_RACE,0,0,spID,0);
+                k = 50;
+            }
+        }
+      }
+      return NOTHING;
+    },
+    POST(EV_INVOKE) {
+      EActor->IdentifyTemp($"multitude cultist");
+      return NOTHING;
+      };
+
+}
+
+Template "archer" : TM_CLASS for MA_ADVENTURER 
+  {
+    Flags: TMF_POSTSCRIPT;
+    // drow: cr 1/2 -> cr 6
+    // bugbear: cr 2 -> 6
+    // troll: cr 6 -> cr 9
+    CR: +3 (Min 4); HD: +2; Def: +0; Hit: +2; Mov: 100%; Spd: 110%; 
+    Dex +8, Str +2; 
+    ABILITY(CA_INFRAVISION,12);
+    Flags: M_AVOID_MELEE;
+    Feats: 
+           FT_FAR_SHOT, FT_AIMED_SHOT, FT_SNEAKY, 
+           FT_SKILL_FOCUS, SK_HIDE, 
+           FT_SHOOT_FROM_COVER,
+           SK_SPOT, SK_HEALING, 
+           SK_JUMP, SK_LISTEN, SK_MOVE_SIL,
+           SK_SEARCH, SK_SWIMMING, SK_POISON_USE;
+    Gear: $"short bow" of random 1 to 2,
+          25% 1d3 $"scroll" of $"identify;scroll",
+          20d6 $"sheaf arrow" of random 1 to 2,
+          2d2 $"potion" of $"dimension door",
+          25% 6d6 $"hemp rope" else
+            5% 6d6 $"silk rope",
+          1d1 $"potion" of $"healing";
+    Desc: "This young archer was once not unlike yourself, but
+      the rigors of his ordeal in the dungeon have made him ruthless
+      and nearly insane, and now he seeks only the destruction of his
+      rivals."; 
+    On Event EV_INITIALIZE {
+      hObj h;
+      for(h = EActor->FirstInv(); h ; h = EActor->NextInv())
+        if (h->isType(T_BOW))
+          h->AddQuality(WQ_MIGHTY);
+        else if ((h->isType(T_WEAPON) ||
+                  h->isType(T_ARMOR)) && EActor->isMonster())
+          h->Remove(true); 
+      if (EActor->isMonster())
+        EActor->AddAct(ACT_EQUIP,P_URGENT); 
+    }; 
+  On Event POST(EV_RATTACK) {
+      EActor->IdentifyTemp($"archer");
+      return NOTHING;
+      };
+
+  } 
+                              
+Template "rogue-archer" : TM_CLASS for MA_ADVENTURER 
+  {
+    Flags: TMF_POSTSCRIPT;
+    // drow 1/2 -> 5
+    // bugbear 2 -> 6
+    CR: +4 (Min 4); HD: +2; Def: +1; Hit: +1; Mov: 100%; Spd: 105%;
+    Str +0, Dex +8, Int +2 ; 
+	ABILITY(CA_EVASION,1);
+	ABILITY(CA_SNEAK_ATTACK,1);
+    Flags: M_AVOID_MELEE;
+    Feats: 
+      FT_AP_LIGHT, FT_FAR_SHOT, FT_AIMED_SHOT,
+      SK_SPOT, SK_ATHLETICS, SK_BALANCE, SK_HIDE, SK_JUMP, SK_LISTEN,
+      SK_LOCKPICKING, SK_MOVE_SIL, SK_PICK_POCKET, SK_POISON_USE,
+      SK_HANDLE_DEV, SK_USE_MAGIC, SK_FIND_WEAKNESS;
+    Gear: 
+      25% $"small glass vial" of random 1 to 3,
+      1d2 $"bag" of $"tanglefoot bag",
+      $"short bow",
+      25% 1d3 $"scroll" of $"identify;scroll",
+      25% 6d6 $"hemp rope" else
+            5% 6d6 $"silk rope",
+      20d6 $"sheaf arrow",
+      1d1 $"potion" of $"dimension door",
+      1d1 $"potion" of $"healing";
+    Desc: "This young rogue-archer was once not unlike yourself, but the
+    rigors of his ordeal in the dungeon have made him ruthless and nearly
+    insane, and now he seeks only the destruction of his rivals."; 
+    On Event EV_INITIALIZE {
+      hObj h;
+      for(h = EActor->FirstInv(); h ; h = EActor->NextInv())
+        if ((h->isType(T_WEAPON) ||
+                  h->isType(T_ARMOR)) && EActor->isMonster())
+          h->Remove(true); 
+      if (EActor->isMonster())
+        EActor->AddAct(ACT_EQUIP,P_URGENT); 
+    }; 
+  On Event POST(EV_RATTACK) {
+      EActor->IdentifyTemp($"rogue-archer");
+      return NOTHING;
+      };
+    }
+
+Template "ranger;template" : TM_CLASS for MA_ADVENTURER 
+  {
+    Flags: TMF_POSTSCRIPT;
+    // drow cr 1/2 -> cr 5
+    // bugbear cr 2 -> cr 6
+    CR: OPT_CR(+4,+2); HD: +2; Def: +0; Hit: +2; Mov: 100%; Spd: 110%; 
+    Str +2, Dex +4, Con +2, Wis +2 ; 
+    Flags: M_AVOID_MELEE;
+    Feats: 
+           FT_AP_LIGHT, FT_FAR_SHOT, FT_AIMED_SHOT,
+           SK_SPOT, SK_HEALING, SK_HIDE, SK_JUMP, SK_LISTEN, SK_MOVE_SIL,
+           SK_SEARCH, SK_SWIMMING, SK_WILD_LORE, SK_FIND_WEAKNESS;
+    Gear: 50% $"leather armor" else
+            $"chainmail shirt",
+          50% $"long bow" of random 0 to 1 else
+            $"short bow" of random 0 to 1,
+          50% 6d6 $"hemp rope" else
+            15% 6d6 $"silk rope",
+          20d6 $"sheaf arrow",
+          25% 1d2 $"scroll" of $"identify;scroll",
+          1d1 $"potion" of $"healing";
+    Desc: "This young ranger was once not unlike yourself, but
+      the rigors of his ordeal in the dungeon have made him ruthless
+      and nearly insane, and now he seeks only the destruction of his
+      rivals."; 
+    On Event EV_INITIALIZE {
+      hObj h;
+      for(h = EActor->FirstInv(); h ; h = EActor->NextInv())
+        if ((h->isType(T_WEAPON) ||
+                  h->isType(T_ARMOR)) && EActor->isMonster())
+          h->Remove(true); 
+      if (EActor->isMonster())
+        EActor->AddAct(ACT_EQUIP,P_URGENT); 
+    }; 
+  On Event POST(EV_RATTACK) {
+      EActor->IdentifyTemp($"ranger;template");
+      return NOTHING;
+      };
+  } 
+
+Template "rogue;template" : TM_CLASS for MA_ADVENTURER 
+  {
+    Flags: TMF_POSTSCRIPT, M_SKIRMISH;
+    CR: +2; HD: +2; Def: +1; Hit: +1; Mov: 100%; Spd: 105%;
+    Dex +6, Int +4, Cha +2 ; 
+	  ABILITY(CA_EVASION,1);
+	  ABILITY(CA_SNEAK_ATTACK,1);
+    Feats: 
+      FT_AP_LIGHT, FT_DODGE, FT_WEAPON_FINESSE,
+      SK_SPOT, SK_ATHLETICS, SK_BALANCE, SK_HIDE, SK_JUMP, SK_LISTEN,
+      SK_LOCKPICKING, SK_MOVE_SIL, SK_PICK_POCKET, SK_POISON_USE,
+      SK_HANDLE_DEV, SK_USE_MAGIC, SK_FIND_WEAKNESS;
+    Gear: 25% $"studded leather" else
+            33% $"leather armor" else
+            50% $"chainmail shirt" else
+                $"hide armor",
+      25% $"small glass vial" of random 1 to 3,
+      35% 1d4 $"scroll" of $"identify;scroll",
+      50% $"alchemy set",
+      50% $"climbing rig",
+      50% $"disguise kit",     
+      50% 6d6 $"hemp rope" else
+            15% 6d6 $"silk rope",
+      1d2 $"bag" of $"tanglefoot bag",
+      33% $"short sword" else
+        50% $"rapier" else
+            $"light mace",
+      1d1 $"potion" of $"healing";
+    Desc: "This young rogue was once not unlike yourself, but
+      the rigors of his ordeal in the dungeon have made him ruthless
+      and nearly insane, and now he seeks only the destruction of his
+      rivals."; 
+    On Event POST(EV_WATTACK) {
+      EActor->IdentifyTemp($"rogue;template");
+      return NOTHING;
+      };    
+  }
+
+Template "warrior;template" : TM_CLASS for MA_ADVENTURER 
+  {
+    Flags: TMF_POSTSCRIPT;
+    CR: +2; HD: +2; Def: +0; Hit: +3; Mov: 100%; Spd: 110%; 
+    Str +4, Dex +2, Con +4 ; 
+    Feats: 
+      FT_AP_LIGHT, FT_AP_MEDIUM, FT_AP_HEAVY,
+      FT_POWER_ATTACK, FT_EXPERTISE, FT_MASTER_GREAT_BLOW,
+      FT_MASTER_BULL_RUSH, SK_CLIMB, SK_BLUFF, SK_ATHLETICS, 
+      SK_SPOT, SK_FIND_WEAKNESS;
+    Gear: 
+      random T_WEAPON of random 0 to 2,
+      random T_ARMOR of random 0 to 2,
+      random T_SHIELD of random 0 to 1,
+      35% 1d4 $"scroll" of $"identify;scroll",
+      25% $"potion" of $"oil of transformation",
+      40% $"craftsman's tools",
+      25% $"climbing rig",
+      50% 6d6 $"hemp rope" else
+        15% 6d6 $"silk rope",  
+      1d3 $"potion" of $"healing";
+    Desc: "This young warrior was once not unlike yourself, but
+      the rigors of his ordeal in the dungeon have made him ruthless
+      and nearly insane, and now he seeks only the destruction of his
+      rivals."; 
+  }
+
+/*** THE CR +5 CLASS TEMPLATES ***/
+
+/* Barbarian    -> Reaver
+ * Bard         -> Minstrel
+ * Druid        -> Grey Druid
+ * Mage         -> Dark Sorcerer
+ * Monk         -> Scarlet disciple
+ * Paladin      -> Blackguard
+ * Priest       -> Curate
+ * Ranger       -> Stalker
+ * Rogue        -> Shadowdancer
+ * Warrior      -> Myrmidon
+ */
+
+Template "reaver" : TM_CLASS for MA_ADVENTURER
+  {
+    Flags: TMF_POSTSCRIPT;
+    CR: +4 (Min 4); HD: +5; Hit: +5; Def: +2; Mov: 150%; Spd: 125%; 
+    Str +6, Dex +2, Con +6, Int +0, Wis +0, Cha +0, Luc +0;
+    ABILITY(CA_UNCANNY_DODGE,4);
+	ABILITY(CA_TOUGH_AS_HELL,5);
+    Feats: 
+      FT_AP_LIGHT, FT_AP_MEDIUM, FT_POWER_ATTACK,
+      FT_KNOCK_PRONE, FT_MASTER_GREAT_BLOW, FT_SUNDER,
+      SK_HEAL, SK_WILD_LORE, SK_ATHLETICS, SK_RIDE,
+      SK_FIND_WEAKNESS;
+    Flags: M_CHAOTIC, !M_LAWFUL;
+    Gear: random T_ARMOR of random 2 to 4,
+          random T_WEAPON of random 2 to 4,
+          15% 6d6 $"hemp rope" else
+            40% 6d6 $"silk rope" else
+            20% 6d6 $"giant's-hair rope",
+          25% 1d2 $"scroll" of $"identify;scroll",
+          2d1 $"potion" of $"extra-healing";
+    On Event PRE(EV_STRIKE) {
+      if (!EActor->HasStati(RAGING) && EActor->cFP > -2)
+        {
+          DPrint(e,"You drive yourself into a killing fury!",
+                   "The <EActor> flies into a killing fury!");
+          EActor->GainTempStati(RAGING,NULL,19,SS_MISC,4);
+          EActor->LoseFatigue(3);
+        }
+      return NOTHING;
+      };       
+    Desc: "These young tribesmen journey from far away lands in search
+      of treasure, blood and glory, testing their mettle against the
+      harsh dangers of the Goblin King.";
+  }
+
+Template "minstrel" : TM_CLASS for MA_ADVENTURER
+{
+    Flags: TMF_POSTSCRIPT, M_MAGE;
+    // bugbear CR 2 -> CR 8
+    // drow cr 1/2 -> CR 8
+    CR: OPT_CR(+6,+4) (Min 8); HD: +5; Def: +1; Hit: +3; Mov: 100%; Spd: 110%; 
+    Dex +6, Int +6, Cha +2;
+    ABILITY(CA_BARDIC_MUSIC,5);
+	  ABILITY(CA_SPELLCASTING,3);
+    Stati[ADJUST_INH,A_MAN,+18];
+    Feats: 
+      FT_POINT_BLANK_SHOT, FT_COMBAT_CASTING,
+      FT_RAPID_SHOT, 
+      FT_AP_LIGHT,
+      SK_CONCENTRATION, SK_HIDE, SK_LISTEN, SK_MOVE_SILENTLY, 
+      SK_SPOT, SK_SWIMMING, SK_PICK_POCKET;
+    Gear:
+      random T_WEAPON of random 2 to 4,
+      $"short bow" of random 2 to 4,
+      2d6 $"sheaf arrow",
+      random T_BOOK of random 1 to 1,
+      random T_BOOK of random 3 to 3,
+      $"spellbook [Adventurers' Arts]",
+      2d1 $"potion" of $"extra-healing",
+      50% 1d4 $"scroll" of $"identify;scroll",
+          25% $"horn" else
+        33% $"flute" else
+          50% $"lute" else $"mandolin";
+    Desc: "These powerful singers journey from far away lands in search
+      of treasure, blood and glory, testing their mettle against the
+      harsh dangers of the Goblin King.";
+    Lists:
+      * SPELL_LIST
+          ALL_SPELLS_FROM_SOURCE(AI_WIZARDRY);
+    On Event POST(EV_EFFECT) {
+      EActor->IdentifyTemp($"minstrel");
+      return NOTHING;
+      };  
+    }
+
+Template "grey druid" : TM_CLASS for MA_ADVENTURER 
+  {
+    Flags: TMF_POSTSCRIPT;
+    // bugbear cr 2 -> cr 9
+    // drow grey druid 1/2 -> cr 6
+    CR: OPT_CR(+7,+4) (Min 6); HD: +5; Hit: +3; Def: +1; Mov: 100%; Spd: 110%;
+    Str +4, Dex +2, Con +2, Wis +6;
+    Attk:	
+          A_FORM for $"leopard",
+          A_FORM for $"juvenile tojanda",
+          A_FORM for $"wereboar";
+    ABILITY(CA_NATURE_SENSE,1);
+	  ABILITY(CA_SPELLCASTING,5);
+	  ABILITY(CA_WOODLAND_STRIDE,1);
+    Stati[ADJUST_INH,A_MAN,+18];
+    Flags: M_EVIL, !M_GOOD, M_HOSTILE;
+    Feats: 
+      FT_COMBAT_CASTING, FT_MAXIMIZE_SPELL,
+      FT_EMPOWER_SPELL, FT_EXPERTISE,
+      SK_CONCENTRATION, SK_HIDE, SK_LISTEN, SK_MOVE_SILENTLY, 
+      SK_SPOT, SK_SWIMMING, SK_PICK_POCKET, SK_HEAL;
+    Gear:
+      25% $"quarterstaff" of random 2 to 4 else
+        33% $"scimitar" of random 2 to 4 else
+          50% $"scythe" of random 2 to 4 else
+            $"sickle" of random 2 to 4,
+      $"short bow" of random 2 to 4,
+      25% 1d2 $"scroll" of $"identify;scroll",
+      2d6 $"sheaf arrow" of random 2 to 4,
+      1d2 $"bag" of $"tanglefoot bag",
+      2d1 $"potion" of $"extra-healing",
+      2d1 $"potion" of $"*mana*",
+      $"potion" of random 1 to 4,
+      $"ring" of random 2 to 7;
+    Attk: A_PUNC for 1d2 AD_BLUNT,
+          A_SEEM for $"human",
+          A_FORM for $"leopard",
+          A_FORM for $"tiger",
+          A_FORM for $"brown bear";
+    Desc: "Sometimes, a druid will find disfavor with the hierophants
+      of the inner circle, and become outcast from the druidic
+      community. Sometimes, these rogues dabble in black arts,
+      blood sacrifice and perverted nature magic, siding with the
+      evil humanoid races. These foul naturalists are called grey
+      druids, and are widely feared and despised.";
+    On Event EV_INITIALIZE {
+      hObj h;
+      EActor->GainPermStati(SAVE_BONUS,NULL,SS_CLAS,SN_NECRO,2);
+      for(h=EActor->FirstInv();h;h=EActor->NextInv()) {
+        if (h->QualityOK(IQ_IRONWOOD))
+            h->AddQuality(IQ_IRONWOOD);
+        else if (h->QualityOK(IQ_DARKWOOD))
+            h->AddQuality(IQ_DARKWOOD);
+      } 
+      return NOTHING;
+    } ;
+    Lists:
+      * SPELL_LIST
+          ALL_SPELLS_FROM_SOURCE(AI_DRUIDIC);
+    On Event POST(EV_CAST) {
+      EActor->IdentifyTemp($"grey druid");
+      return NOTHING;
+      }; 
+  }
+
+Template "dark sorcerer" : TM_CLASS for MA_ADVENTURER
+{
+    Flags: TMF_POSTSCRIPT, M_MAGE;
+    // bugbear 2 -> cr 9
+    // drow cr 1/2 -> cr 9
+    CR: OPT_CR(+7,+4) (Min 9); HD: +5; Def: +1; Hit: +1; Mov: 100%; Spd: 100%; 
+    Str -2, Dex +2, Con +2, Int +6, Wis +2;
+    ABILITY(CA_SPELLCASTING,7);
+    Stati[ADJUST_INH,A_MAN,+30];
+    Feats: FT_COMBAT_CASTING, FT_DODGE,
+           FT_VOCALIZE_SPELL, FT_BROAD_COUNTERSPELL, 
+           FT_SCRIBE_SCROLL, FT_MAXIMIZE_SPELL, FT_QUICKEN_SPELL,
+           SK_CONCENTRATION, SK_SPELLCRAFT, SK_METAMAGIC, SK_SPOT;
+    Flags: M_HUMANOID, M_CARNI, M_HERBI, M_EVIL, !M_GOOD, M_LAWFUL, 
+           !M_CHAOTIC, M_CASTER, M_HOSTILE,
+           M_AVOID_MELEE;
+    Gear: $"robes",
+          50% $"quarterstaff" of random 1 to 4 else
+              $"dagger" of random 1 to 4,
+          random T_BOOK of random 1 to 1,
+          random T_BOOK of random 3 to 3,
+          random T_BOOK of random 3 to 3,
+          random T_BOOK of random 5 to 5,
+          random T_BOOK of random 5 to 5,
+          $"potion" of random 1 to 4,
+          50% $"potion" of random 1 to 4,
+          25% 1d2 $"scroll" of $"identify;scroll",
+          20% $"wand" of random 1 to 5,
+          $"scroll" of random 1 to 8,
+          $"scroll" of random 1 to 8,
+          $"scroll" of random 1 to 8,
+          $"scroll" of random 1 to 8,
+          50% $"wand" of random 4 to 8,
+          2d1 $"potion" of $"extra-healing",
+          2d1 $"potion" of $"*mana*";
+    Desc: "This one has lived too long beneath the earth, dabbling in
+      profane magics, and now understands only fear, intimidation,
+      power and terrible magical secrets.";
+    Lists:
+      * SPELL_LIST
+          ALL_SPELLS_FROM_SOURCE(AI_WIZARDRY);
+    On Event POST(EV_CAST) {
+      EActor->IdentifyTemp($"dark sorcerer");
+      return NOTHING;
+      };  
+  }
+
+Template "scarlet disciple" : TM_CLASS for MA_ADVENTURER
+{
+    Flags: TMF_POSTSCRIPT;
+    CR: +4 (Min 4); HD: +5; Def: +2; Hit: +5; Mov: +10; Spd: 125%; 
+    Str +6, Dex +4, Con +2, Wis +2;
+    Attk: A_PUNC for 1d10 AD_BLUNT and 1d2 AD_STUN (DC 16);
+	  ABILITY(CA_UNARMED_STRIKE,5);
+	  ABILITY(CA_FLURRY_OF_BLOWS,2);
+	  ABILITY(CA_EVASION,1);
+    Feats: FT_DODGE, FT_POWER_ATTACK,
+           FT_MASTER_TRIP, FT_LIGHTNING_FISTS,
+           FT_FALLING_STAR_STRIKE, FT_CHI_STRIKE,
+           FT_ZEN_DEFENSE, FT_DEFLECT_ARROWS,
+           SK_ATHLETICS, SK_BALANCE, SK_HIDE, SK_JUMP, SK_LISTEN,
+           SK_MOVE_SILENTLY, SK_FIND_WEAKNESS, SK_SPOT, SK_HEAL;
+    Gear: $"robes",
+          50% 2d1 $"nunchaku" of random 2 to 4 
+            else 2d1 $"fighting stick" of random 2 to 4,
+          15% 6d6 $"hemp rope" else
+            40% 6d6 $"silk rope" else
+            20% 6d6 $"giant's-hair rope",
+          $"chakram" of random 2 to 4,
+          25% 1d2 $"scroll" of $"identify;scroll",
+          2d1 $"potion" of $"extra-healing",
+          1d2 $"potion" of $"dimension door";
+    Desc: "These scarlet disciple monks journey from far away lands in search
+      of treasure, blood and glory, testing their mettle against the
+      harsh dangers of the Goblin King.";
+    On Event POST(EV_NATTACK) {
+      EActor->IdentifyTemp($"scarlet disciple");
+      return NOTHING;
+      };  
+  }
+
+
+Template "blackguard;template" : TM_CLASS for MA_ADVENTURER 
+  {
+    Flags: TMF_POSTSCRIPT;
+    // bugbear: cr 2 -> cr 6
+    // drow: cr 1/2 -> cr 6
+    CR: OPT_CR(+4,+4) (Min 6); HD: 5; Hit: +7; Def: 1; Mov: 100%; Spd: 125%;
+    Str +6, Con +6, Wis +2, Cha +4; // ww: CHA freebie!
+	  ABILITY(CA_SMITE,5);
+	  ABILITY(CA_DIVINE_GRACE,1);
+	  ABILITY(CA_LAY_ON_HANDS,5);
+	  ABILITY(CA_SNEAK_ATTACK,2);
+	  ABILITY(CA_SPELLCASTING,1);
+    Stati[ADJUST_INH,A_MAN,+6];
+    Immune: DF_DISE, DF_FEAR;
+    Flags: M_CHAOTIC, M_EVIL, !M_GOOD, !M_LAWFUL, M_CLOSEID, M_HOSTILE;
+    Feats: FT_POWER_ATTACK, FT_MASTER_GREAT_BLOW,
+           FT_MASTER_DISARM, FT_SUNDER,
+           FT_AP_LIGHT, FT_AP_MEDIUM, FT_AP_HEAVY,
+           SK_ATHLETICS, SK_HEALING, SK_RIDE, SK_CONCENT, SK_SPOT,
+           SK_POISON_USE, SK_FIND_WEAKNESS;
+    Gear: random T_ARMOR of random 2 to 4,
+          random T_WEAPON of random 2 to 4 with [WQ_UNHOLY],
+          7% 6d6 $"hemp rope" else
+            20% 6d6 $"silk rope" else
+            10% 6d6 $"giant's-hair rope",
+          50% 1d2 $"bag" of $"tanglefoot bag",
+          25% 1d2 $"scroll" of $"identify;scroll",
+          2d1 $"potion" of $"extra-healing",
+          50% cursed $"flask" of $"water",
+          $"ring" of random 1 to 8;
+    On Event EV_INITIALIZE {
+      hObj h, hMount;
+      for(h = EActor->FirstInv(); h ; h = EActor->NextInv())
+        if (h->isType(T_WEAPON) && h->QualityOK(WQ_UNHOLY))
+          h->AddQuality(WQ_UNHOLY);
+      /*
+      hMount = CreateMonster($"nightmare");
+      if (hMount == NULL)
+        return NOTHING;
+      SetSilence();
+      hMount->PartyID = EActor->PartyID;
+      hMount->CalcValues();
+      Throw(EV_MOUNT,EActor,hMount);
+      UnsetSilence();
+      hMount->Initialize();
+      */
+      return NOTHING;
+      },
+    EV_INIT_FIELDS {
+      EMap->NewField(FI_MODIFIER|FI_MOBILE,EActor->x,EActor->y,2,
+        GREEN*256+GLYPH_FLOOR2,-1,$"aura of despair",EActor);
+      };
+    Desc: "Once a paladin, the blackguard has renounced his higher
+      calling and consciously embraced the ways of evil and blight.
+      Answering to demons or devils, blackguards are twisted parodies
+      of paladins, dark knights who leave death, ruin and despair in
+      their passing.";
+    Lists:
+      * SPELL_LIST
+          ALL_SPELLS_FROM_SOURCE(AI_THEURGY);
+
+  }
+
+Template "curate" : TM_CLASS for MA_ADVENTURER 
+  {
+    Flags: TMF_POSTSCRIPT;
+    // bugbear: cr 2 -> cr 5
+    // drow: cr 1/2 -> cr 5
+    CR: OPT_CR(+3,+3) (Min 5); HD: +4; Def: +2; Hit: +3; Mov: 100%; Spd: 120%; 
+    Str +2, Con +2, Int +4, Wis +6 ; 
+    ABILITY(CA_SPELLCASTING,5);
+	  ABILITY(CA_TURNING,5);
+	  Stati[ADJUST_INH,A_MAN,+20];
+    Gear: random T_ARMOR of random 2 to 4,
+          random T_WEAPON of random 2 to 4,
+          random T_SHIELD of random 2 to 4,
+          $"potion" of random 1 to 4,
+          3d4 blessed $"flask" of $"water",
+          2d1 $"potion" of $"extra-healing",
+          25% 1d3 $"scroll" of $"identify;scroll",
+          25% $"scroll" of $"hallow",
+          2d1 $"potion" of $"*mana*";
+    Feats: FT_COMBAT_CASTING, FT_FOCUS_SPELL,
+           FT_POWER_ATTACK, FT_EMPOWER_SPELL,
+           FT_AP_LIGHT, FT_AP_MEDIUM, FT_AP_HEAVY,
+           SK_CONCENTRATION, SK_SPELLCRAFT, SK_METAMAGIC, SK_HEAL, SK_SPOT;
+    On Event EV_INITIALIZE {
+      hObj h; 
+      rID god; 
+      for(h=EActor->FirstInv();h;h=EActor->NextInv()) {
+        if (h->isType(T_WEAPON) || h->isType(T_BOW))
+            h->IFlags |= IF_BLESSED;
+        if (h->iID == $"holy symbol")
+          return NOTHING; 
+      }
+      h = CreateItem($"holy symbol");
+      switch (random(16)) {
+        case 0:  god = $"Aiswin;Symbol"; break;
+        case 1:  god = $"Asherath;Symbol"; break;
+        case 2:  god = $"Ekliazeh;Symbol"; break;
+        case 3:  god = $"Erich;Symbol"; break;
+        case 4:  god = $"Essiah;Symbol"; break;
+        case 5:  god = $"Hesani;Symbol"; break;
+        case 6:  god = $"Immotian;Symbol"; break;
+        case 7:  god = $"Khasrach;Symbol"; break;
+        case 8:  god = $"Kysul;Symbol"; break;
+        case 9:  god = $"Mara;Symbol"; break;
+        case 10: god = $"Maeve;Symbol"; break;
+        case 11: god = $"Sabine;Symbol"; break;
+        case 12: god = $"Semirath;Symbol"; break;
+        case 13: god = $"Xavias;Symbol"; break;
+        case 14: god = $"Xel;Symbol"; break;
+        case 15: god = $"Zurvash;Symbol"; break;
+      } 
+      h->MakeMagical(god);
+      h->IFlags |= IF_BLESSED; 
+      EActor->GainItem(h,true);
+      for(h=EActor->FirstInv();h;h=EActor->NextInv()) {
+        if (h->isType(T_SHIELD) && !h->ieID) {
+          h->MakeMagical(god);
+        } 
+      }
+      return DONE;
+      };
+    Desc: "These experienced devotees journey from far away lands in search
+      of treasure, blood and glory, testing their mettle against the
+      harsh dangers of the Goblin King.";
+    Lists:
+      * SPELL_LIST
+          ALL_SPELLS_FROM_SOURCE(AI_THEURGY)
+          3 $"neutralize poison";
+    On Event POST(EV_CAST) {
+      EActor->IdentifyTemp($"curate");
+      return NOTHING;
+      };
+  }
+
+Template "stalker" : TM_CLASS for MA_ADVENTURER 
+  {
+    Flags: TMF_POSTSCRIPT;
+    // bugbear 2 -> 6
+    // drow 1/2 -> 6
+    // troll 6 -> 9
+    CR: OPT_CR(+3,+4) (Min 6); HD: +5; Def: +2; Hit: +5; Mov: 100%; Spd: 125%; 
+    Str +4, Dex +6, Con +2, Wis +2 ; 
+    ABILITY(CA_SPELLCASTING,1);
+    Feats: 
+          FT_AP_LIGHT, FT_AIMED_SHOT, FT_POINT_BLANK_SHOT, FT_RAPID_SHOT,
+          SK_SPOT, SK_HEALING, FT_SKILL_FOCUS,
+          SK_HIDE, SK_JUMP, SK_LISTEN, SK_MOVE_SIL, SK_HIDE, SK_SEARCH,
+          SK_SWIMMING, SK_WILD_LORE, SK_FIND_WEAKNESS;
+    Flags: M_AVOID_MELEE, M_HOSTILE;
+    Gear: 33% $"studded leather" of random 2 to 4 else
+            50% $"leather armor" of random 2 to 4 else
+            $"chainmail shirt" of random 2 to 4,
+          15% 6d6 $"hemp rope" else
+            40% 6d6 $"silk rope" else
+            20% 6d6 $"giant's-hair rope",
+          50% $"long bow" of random 1 to 3 else
+            $"short bow" of random 1 to 3,
+          20d6 $"sheaf arrow",
+          25% 1d2 $"scroll" of $"identify;scroll",
+          2d1 $"potion" of $"extra-healing";
+    Desc: "This ranger was once not unlike yourself, but
+      the rigors of his ordeal in the dungeon have made him ruthless
+      and nearly insane, and now he seeks only the destruction of his
+      rivals."; 
+    On Event EV_INITIALIZE {
+      hObj h;
+      for(h = EActor->FirstInv(); h ; h = EActor->NextInv())
+        if (h->isType(T_BOW))
+          h->AddQuality(WQ_MIGHTY);
+        else if ((h->isType(T_WEAPON) ||
+                  h->isType(T_ARMOR)) && EActor->isMonster())
+          h->Remove(true); 
+      if (EActor->isMonster())
+        EActor->AddAct(ACT_EQUIP,P_URGENT); 
+    }; 
+    Lists:
+      * SPELL_LIST
+          ALL_SPELLS_FROM_SOURCE(AI_DRUIDIC);
+    On Event POST(EV_CAST), POST(EV_RATTACK) {
+      EActor->IdentifyTemp($"stalker");
+      return NOTHING;
+      };
+  } 
+
+Template "twilight huntsman;temp" : TM_CLASS for MA_ELF
+  {
+    CR: OPT_CR(+6,+7) (Min 7); HD: +7; Def: +2; Hit: +7; Mov: 120%; Spd: 125%; 
+    Str +2, Dex +8, Wis +2, Cha +4; 
+    ABILITY(CA_SPELLCASTING,3);
+    ABILITY(CA_RAPID_RIDING,+4);
+    ABILITY(CA_LOWLIGHT,+4);
+    Stati[ADJUST_INH,A_MAN,+10];
+    Stati[SMITE_ABILITY,MA_LAWFUL,+2];
+    Feats: 
+          FT_AP_LIGHT, FT_INTENSIVE_STUDY, FT_POINT_BLANK_SHOT, FT_RAPID_SHOT,
+          SK_SPOT, SK_HEALING, FT_SKILL_FOCUS, SK_ATHLETICS, SK_ANIMAL_EMP,
+          SK_HIDE, SK_JUMP, SK_LISTEN, SK_MOVE_SIL, SK_RIDE, SK_SEARCH,
+          SK_SWIMMING, SK_WILD_LORE, SK_FIND_WEAKNESS;
+    Flags: M_AVOID_MELEE, TMF_POSTSCRIPT, M_CHAOTIC, M_EVIL;
+    Gear: 33% $"studded leather" of random 2 to 4 with [IQ_ELVEN] else
+            50% $"leather armor" of random 2 to 4 with [IQ_ELVEN] else
+            $"chainmail shirt" of random 2 to 4 with [IQ_ELVEN] ,
+          50% $"long bow" of random 1 to 3 with [IQ_ELVEN] else
+            $"short bow" of random 1 to 3 with [IQ_ELVEN],
+          15% 6d6 $"hemp rope" else
+            40% 6d6 $"silk rope" else
+            20% 6d6 $"giant's-hair rope",
+          20d6 $"sheaf arrow" +1 with [IQ_ELVEN],
+          50% 1d4 $"potion" of $"dimension door",
+          50% $"cloak" +2 of $"elvenkind;cloak",
+          50% $"boots" +2 of $"elvenkind;boots",
+          25% 1d2 $"scroll" of $"identify;scroll",
+          2d1 $"potion" of $"extra-healing";
+    Desc: "Twilight huntsmen are Maeve's most skilled hunters, trackers
+      and slayers, tasked with tracking down and destroying any elves who
+      try to turn their backs on the Faerie Queen."; 
+    On Event EV_INITIALIZE {
+      hObj h;
+      for(h = EActor->FirstInv(); h ; h = EActor->NextInv())
+        if (h->isType(T_BOW))
+          h->AddQuality(WQ_MIGHTY);
+        else if ((h->isType(T_WEAPON) ||
+                  h->isType(T_ARMOR)) && EActor->isMonster())
+          h->Remove(true); 
+      if (EActor->isMonster())
+        EActor->AddAct(ACT_EQUIP,P_URGENT); 
+    }; 
+    Lists:
+      * SPELL_LIST
+        1 $"bane" $"change self" $"charm person" $"color spray" $"doom"
+          $"enthrall" $"faerie fire" $"inflict light wounds" $"longstrider"
+          $"malignance" $"phantasmal force" $"slow poison" $"true strike"
+        2 $"animate rope" $"bladethirst" $"globe of shadow" $"heal mount"
+          $"hypnotic pattern" $"improved phantasmal force" $"inflict moderate wounds"
+          $"phantom steed" $"scare" $"see invisibility" $"silence"
+        3 $"adamant facade" $"animate shadows" $"blackmantle" $"confusion"
+          $"fly" $"hold person" $"illusory stance" $"inflict serious wounds"
+          $"insightful stroke" $"lorecall" $"spectral force" $"track monster"
+          $"vampiric touch";
+    On Event POST(EV_CAST), POST(EV_RATTACK) {
+      EActor->IdentifyTemp($"twilight huntsman;temp");
+      return NOTHING;
+      };
+  } 
+
+
+
+Template "shadowdancer;template" : TM_CLASS for MA_ADVENTURER 
+  {
+    Flags: TMF_POSTSCRIPT, M_SKIRMISH;
+    // bugbear: cr 2 -> cr 6
+    // drow: cr 1/2 -> cr 6
+    CR: OPT_CR(+4,4) (Min 6); HD: +6; Def: +2; Hit: +3; Mov: 100%; Spd: 115%;
+    Str +4, Dex +6, Con +2, Int +2 ; 
+	  ABILITY(CA_EVASION,2);
+	  ABILITY(CA_SNEAK_ATTACK,3);
+	  ABILITY(CA_HIDE_IN_PLAIN_SIGHT,1);
+	  ABILITY(CA_UNCANNY_DODGE,3);
+	  Stati[ADJUST_INH,A_MAN,+8];
+    Feats: 
+      FT_AP_LIGHT, FT_DODGE, FT_WEAPON_FINESSE,
+      FT_SNEAKY,
+      SK_SPOT, SK_ATHLETICS, SK_BALANCE, SK_HIDE, SK_JUMP, SK_LISTEN,
+      SK_LOCKPICKING, SK_MOVE_SIL, SK_PICK_POCKET, SK_POISON_USE,
+      SK_HANDLE_DEV, SK_USE_MAGIC, SK_FIND_WEAKNESS;
+    Flags: M_CHAOTIC, M_EVIL;
+    Spells: $"shadow step", $"summon shadows";
+    Gear: 25% $"studded leather" of random 2 to 4 else
+            33% $"leather armor" of random 2 to 4 else
+            50% $"chainmail shirt" of random 2 to 4 else
+                $"hide armor" of random 2 to 4,
+      random T_WEAPON of random 2 to 4,
+      15% 6d6 $"hemp rope" else
+            40% 6d6 $"silk rope" else
+            20% 6d6 $"giant's-hair rope",
+          25% $"small glass vial" of random 2 to 4,
+      1d4 $"bag" of $"tanglefoot bag",
+      25% $"small glass vial" of random 2 to 4,
+      25% 1d3 $"scroll" of $"identify;scroll",
+      50% $"cloak" of $"nondetection;item" else
+        $"ring" of $"nondetection;item" ,
+      $"wand" of random 1 to 6,
+      2d1 $"potion" of $"extra-healing";
+    Desc: "Legends speak of secret fraternal orders joined by rogues
+      (and occasionally other adventurers) that teach their members a
+      kind of supernatural kinship with the shadows, allowing them to
+      phase through shadow, summon living shadows to their aid and
+      perform other unearthly feats. This, apparently, is one such
+      being.";
+    On Event POST(EV_INVOKE), POST(EV_STRIKE) {
+      EActor->IdentifyTemp($"shadowdancer;template");
+      return NOTHING;
+      };
+  }
+
+Template "myrmidon" : TM_CLASS for MA_ADVENTURER 
+  {
+    Flags: TMF_POSTSCRIPT;
+    // bugbear 2 -> 9
+    // drow 1/2 -> 8
+    CR: OPT_CR(+7,+7) (Min 8); HD: +5; Def: +2; Hit: +5; Mov: 100%; Spd: 130%; 
+    Str +6, Dex +2, Con +6 ; 
+    Feats: 
+      FT_AP_LIGHT, FT_AP_MEDIUM, FT_AP_HEAVY,
+      FT_POWER_ATTACK, FT_EXPERTISE, FT_MASTER_GREAT_BLOW,
+      FT_KNOCK_PRONE, FT_CLEAVE, FT_MASTER_BULL_RUSH, SK_CLIMB, 
+      SK_BLUFF, SK_ATHLETICS, SK_SPOT, SK_FIND_WEAKNESS;
+    Gear: 
+      random T_WEAPON of random 3 to 4,
+      random T_ARMOR of random 3 to 4,
+      random T_SHIELD of random 1 to 2,
+      15% 6d6 $"hemp rope" else
+            40% 6d6 $"silk rope" else
+            20% 6d6 $"giant's-hair rope",
+      25% 1d3 $"scroll" of $"identify;scroll",
+      2d3 $"potion" of $"extra-healing";
+    Desc: "This salted warrior was once not unlike yourself, but
+      the rigors of his ordeal in the dungeon have made him ruthless
+      and nearly insane, and now he seeks only the destruction of his
+      rivals."; 
+  }
+
+/* Specialist Mage Templates */
+
+Template "ruby initiate" : TM_CLASS for MA_ADVENTURER
+{
+    Flags: TMF_POSTSCRIPT, M_MAGE;
+    // bugbear 2 -> 9
+    // drow 1/2 -> 6
+    CR: OPT_CR(+7,+5) (Min 9); HD: +11; Def: +2; Hit: +5; Mov: 100%; Spd: 125%; 
+    Str -4, Dex +2, Con -2, Int +10, Wis +8;
+    ABILITY(CA_SPELLCASTING,9);
+    Stati[ADJUST_INH,A_MAN,+35];
+    Feats: 
+      FT_COMBAT_CASTING, FT_ONE_BODY_ONE_SOUL, FT_HARDINESS, FT_VOCALIZE_SPELL,
+      FT_REFLECTIVE_COUNTERSPELL, FT_EMPOWER_SPELL, FT_SCRIBE_SCROLL,
+      FT_MAXIMIZE_SPELL, FT_QUICKEN_SPELL, SK_CONCENTRATION, SK_SPELLCRAFT,
+      SK_METAMAGIC, SK_SPOT;
+    Flags: M_HUMANOID, M_CARNI, M_HERBI, M_EVIL, !M_GOOD, 
+           M_CASTER, M_AVOID_MELEE, M_HOSTILE;
+    Gear: $"robes",
+          50% $"quarterstaff" of random 1 to 4,
+          random T_BOOK of random 1 to 1,
+          random T_BOOK of random 3 to 3,
+          random T_BOOK of random 5 to 5,
+          $"potion" of random 1 to 4,
+          $"potion" of random 1 to 4,
+          $"ring" +2 of $"channeling",
+          $"wand" of random 3 to 6,
+          50% 1d4+1 $"scroll" of $"identify;scroll",
+          2d1 $"potion" of $"extra-healing",
+          2d1 $"potion" of $"*mana*";
+    Desc: "This mage was once an initiate of the Ruby Order, a body that
+    governs the formalized study of Evocation. This practitioner has
+    traded power for flexibility and will only cast Abjuration, Evocation
+    and Thaumaturgy spells. However, it casts such spells very well indeed."; 
+    On Event EV_INITIALIZE {
+      EActor->GainPermStati(SCHOOL_FOCUS,NULL,SS_MISC,0,SC_ABJ);
+      EActor->GainPermStati(SCHOOL_FOCUS,NULL,SS_MISC,0,SC_EVO);
+      EActor->GainPermStati(SCHOOL_FOCUS,NULL,SS_MISC,0,SC_THA);
+    } ;
+    Lists:
+      * SPELL_LIST
+          ALL_SPELLS_FROM_SCHOOL(AI_WIZARDRY,SC_ABJ)
+          ALL_SPELLS_FROM_SCHOOL(AI_WIZARDRY,SC_EVO)
+          ALL_SPELLS_FROM_SCHOOL(AI_WIZARDRY,SC_THA);
+    On Event POST(EV_CAST) {
+      EActor->IdentifyTemp($"ruby initiate");
+      return NOTHING;
+      };
+  }
+
+/* THE TRIBAL CREATURE TEMPLATES */
+
+Template "chieftan" : TM_CHIEFTAN for MA_GOBLINOID
+  {
+    Image: purple 0;
+    CR: +2; HD: 200%; Hit: +2; Dmg: +2; Str +4; Con +4;
+    Feats: FT_POWER_ATTACK, FT_CLEAVE, SK_FIND_WEAKNESS;   
+    Flags: TMF_POSTSCRIPT, M_CLOSEID;
+    Gear:
+      random T_WEAPON of random 2 to 4,
+      random T_ARMOR of random 1 to 3; 
+    Desc: "The chieftan is the toughest, strongest and most
+      often simply the meanest of his kind. As such, he manages
+      to dominate a clique, tribe or warband beneath him.";
+  }
+
+Template "shaman" : TM_SHAMAN for MA_GOBLINOID
+  {
+    Image: bright cyan 0;
+    CR: +2; HD: 150%; Wis +4; 
+    Feats: FT_COMBAT_CASTING, SK_SPELLCRAFT, SK_CONCENT, SK_HEAL;   
+    Flags: TMF_POSTSCRIPT, M_CLOSEID;
+    Gear:
+      50% $"potion" of random 1 to 6,
+      50% $"potion" of random 1 to 6,
+      50% $"wand" of random 1 to 4,
+      75% $"potion" of $"healing",
+      75% $"potion" of $"mana";
+    Desc: "This dark mystic holds his position of power in the tribe
+      through profane knowledge, politically-motivated healing and
+      sheer terror. Nonetheless, the goblinoid peoples revere their
+      shamans greatly, for they can be the difference between victory
+      and death for an entire tribe.";
+    ABILITY(CA_SPELLCASTING, 3);
+    Stati[ADJUST_INH,A_MAN,+8];
+    Lists:
+      * SPELL_LIST
+          ALL_SPELLS_FROM_SOURCE(AI_THEURGY);
+  }
+
+/*** MORE SPECIFIC PROFESSION TEMPLATES ***/
+
+/* I made this guy a little weaker, so that there's more variety
+   at lower levels. */
+Template "bandit" : TM_CLASS for MA_ADVENTURER
+	{
+    Flags: TMF_POSTSCRIPT;
+    CR: +1 (min 1); HD: +1; Mov: 100%; Spd: 105%;
+    Str +2, Con +1, Cha -2;
+    Flags: M_CHAOTIC, !M_LAWFUL, M_CLOSEID, M_HOSTILE;
+    Feats: 
+      FT_AP_LIGHT, FT_AP_MEDIUM, FT_AP_HEAVY,
+      FT_POWER_ATTACK, FT_EXPERTISE, 
+      FT_MASTER_BULL_RUSH, 
+      SK_CLIMB, SK_BLUFF, SK_ATHLETICS, SK_SPOT, SK_BALANCE, SK_HIDE,
+      SK_JUMP, SK_LISTEN, SK_LOCKPICKING, SK_MOVE_SIL, SK_PICK_POCKET,
+      SK_POISON_USE, SK_USE_MAGIC;
+    Desc: "Many common scoundrels infest dungeon and city alike,
+      looking to make a quick buck off of weak or infirm passers-by.";
+    Gear: 
+      random T_WEAPON of random 0 to 1,
+      random T_ARMOR of random 0 to 1,
+      15% $"small glass vial" of random 1 to 2,
+      1d3 $"potion" of $"healing",
+      25% 1d2 $"scroll" of $"identify;scroll",
+      3d6 $"gold piece";
+  }
+
+/* kobold vermin-rider */
+
+/********************************************************************************
+ ********************************************************************************
+ ***                                 TOWNSFOLK                                ***
+ ********************************************************************************
+ ********************************************************************************/

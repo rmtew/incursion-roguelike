@@ -1,0 +1,466 @@
+#include "Defines.h"
+#include "Api.h"
+
+#define Wizard AI_WIZARDRY
+#define Priest AI_THEURGY
+#define Witch  AI_WITCHCRAFT
+#define Druid  AI_DRUIDIC
+#define Sorcerer AI_SORCERY
+#define Scroll AI_SCROLL
+#define Potion AI_POTION
+
+Monster "(Resource Zero)" : 0
+  {                                                                       
+    Flags: M_NOGEN, M_NOPOLY;
+  }
+  
+Effect "unimplemented" : EA_NOTIMP
+  {
+    Level: 10;
+  }
+
+Module "Incursion Core Module";
+File "Incursion.Mod";
+Slot 0;
+
+#define USE_WEIMER_CR 1
+#ifdef USE_WEIMER_CR
+#define OPT_CR(wes,orig)     wes
+#else
+#define OPT_CR(wes,orig)     orig
+#endif
+
+
+#include "defines.irh"
+
+#if 0
+
+#include "alchemy.irh" 
+
+#else
+
+#include "races.irh"
+#include "classes.irh"
+#include "prestige.irh"
+#include "subraces.irh"
+#include "sp_books.irh"
+
+#include "weapons.irh" 
+#include "m_items.irh"
+#include "wspells.irh" 
+#include "dungeon.irh" 
+#include "mon1.irh"
+#include "mon2.irh"
+#include "mon3.irh"
+#include "mon4.irh"
+#include "flavors.irh" 
+#include "religion.irh" 
+#include "domains.irh" 
+#include "help.irh"   
+#include "sk_descs.irh"
+#include "pspells.irh" 
+#include "threats.irh"
+#include "alchemy.irh"
+#include "mundane.irh"
+#include "abilities.irh"
+#endif
+
+
+/* Needed for class abilities */
+
+Effect "Protective Ward" : EA_GENERIC
+  { Purpose: EP_BUFF; Flags: EF_SHOWNAME; }
+
+Effect "Feat of Strength" : EA_GENERIC
+  { Purpose: EP_BUFF; Flags: EF_SHOWNAME; }
+  
+Effect "Soulblade" : EA_GENERIC
+  { Purpose: EP_PLAYER_ONLY; }
+
+Effect "Demoralize" : EA_GENERIC
+  { Purpose: EP_PLAYER_ONLY; Flags: EF_SHOWNAME, EF_MUNDANE;
+    On Event MSG_STATINAME "Shaken" / "Shak"; }
+Effect "Battlefield Inspiration" : EA_GENERIC
+  { Purpose: EP_PLAYER_ONLY; }
+
+Effect "Dance of Tukima" : EA_INFLICT
+  {
+    xval: TRAP_EVENT; yval: EV_STRIKE;
+    On Event EV_EFFECT {
+      if (!EActor->LoseFatigue(1,true))
+        return ABORT;
+      return NOTHING;
+      },
+    EV_CALC_EFFECT {
+      e.vDuration = max(1, EActor->SkillLevel(SK_ATHLETICS)*2);
+      return NOTHING;
+      },
+    META(EV_STRIKE) {
+      if (EActor->InSlot(SL_WEAPON) == NULL_OBJ)
+        return NOTHING;
+      if (!(EActor->InSlot(SL_WEAPON)->isGroup(WG_LIGHT) ||
+            EActor->InSlot(SL_WEAPON)->isGroup(WG_DAGGERS) ||
+            EActor->InSlot(SL_WEAPON)->isGroup(WG_SBLADES)) )
+        return NOTHING;
+      if (EActor->InSlot(SL_READY) != NULL_OBJ)
+        if (!(EActor->InSlot(SL_WEAPON)->isGroup(WG_LIGHT) ||
+              EActor->InSlot(SL_WEAPON)->isGroup(WG_DAGGERS) ||
+              EActor->InSlot(SL_WEAPON)->isGroup(WG_SBLADES)) )
+          return NOTHING;
+      
+      if (EActor->Mod(A_CHA) > 0)
+        {
+          e.vHit += EActor->Mod(A_CHA);
+          e.strHit += Format(" %+d Tukima", EActor->Mod(A_CHA));
+        } 
+      if (EActor->SkillLevel(SK_PERFORM) > 1)
+        {
+          e.bDmg += EActor->SkillLevel(SK_PERFORM) / 2;
+          e.strDmg += Format(" %+d Tukima", 
+             EActor->SkillLevel(SK_PERFORM) / 2);
+        }      
+      return NOTHING;
+      },
+    EV_REMOVED
+      "You stop dancing." /
+      "The <EActor> stops dancing.",
+    MSG_CAST
+      "You begin a beguiling, frenzied dance." /
+      "The <EActor> begins a beguiling, frenzied dance.",
+    MSG_STATINAME
+      "Tukima" / "Tuk";
+    Flags: EF_MUNDANE, EF_SHOWNAME;
+  }
+  
+Effect "Warcry" : EA_GENERIC
+  {
+    sval: WILL; aval: AR_GLOBE; cval: PINK; lval: 8; 
+    xval: ADJUST_MOR; Flags: EF_FEAR, EF_MUNDANE, EF_ALLIES_IMMUNE;
+    On Event EV_EFFECT {
+      EActor->Timeout += 15;
+      if (EActor->HasAbility(CA_STUN_ATTACK))
+        EActor->IDPrint("You give a mighty kiai-shout!",
+                        "The <hObj> gives out a mighty kiai-shout!", EActor);
+      else
+        EActor->IDPrint("You let loose with a mighty war-cry!",
+                        "The <hObj> lets loose with a mighty war-cry!", EActor);
+      return NOTHING;
+      },
+    EV_CALC_EFFECT {
+      e.saveDC = 10 + EActor->SkillLevel(SK_INTIMIDATE) / 2;
+      return NOTHING;
+      },
+    EV_MAGIC_HIT {
+      int16 pen, bon;
+      if (EVictim->HasEffStati(EFF_FLAG1,$"Warcry",-1,EActor))
+        {
+          EActor->IPrint("The <hObj> is unaffected.", EVictim);
+          return DONE;
+        }
+      pen = max(2,EActor->SkillLevel(SK_INTIMIDATE)/5);
+      bon = EVictim->SumStatiMag(SAVE_BONUS,SN_FEAR);
+      EVictim->Timeout += 50;
+      if (pen > bon)
+        EVictim->GainTempStati(ADJUST_MOR,EActor,30,SS_MISC,
+                   A_AID, bon - pen, $"Demoralize");
+      EVictim->IDPrint("You hesitate!", "The <hObj> hesitates!", EVictim);
+      return DONE;
+      },
+    POST(EV_MAGIC_STRIKE) {
+      EVictim->GainTempStati(EFF_FLAG1,EActor,-1,SS_MISC,0,0,$"Warcry");
+      return NOTHING;
+      };
+  }
+  
+/*
+Effect "Flurry of Blows" : EA_GRANT
+  { Flags: EF_SHOWNAME, EF_MUNDANE;
+    xval: ADJUST_COMP; xval: A_SPD_BRAWL; pval: 20; }
+and EA_GRANT
+  { xval: ADJUST_COMP; xval: A_SPD_MELEE; pval: 10; 
+    On Event EV_CALC_EFFECT {
+      e.vDuration = 1d4 + EActor->AbilityLevel(CA_FLURRY_OF_BLOWS);
+      return NOTHING;
+      },
+    MSG_STATINAME
+      "Flurry of Blows" / "Flurry";
+  }
+*/
+
+/* Stand-In for MagicXY */
+
+Effect "Breath Weapon" : EA_BLAST
+  { Flags: EF_NOGEN, EF_HIT_MOUNT; sval: REF partial;
+    aval: AR_BREATH; Purpose: EP_ATTACK; }
+
+Effect "Spit Weapon" : EA_BLAST
+  { Flags: EF_NOGEN, EF_HIT_MOUNT; sval: REF;
+    aval: AR_BREATH; Purpose: EP_ATTACK; }
+
+Effect "Curse Research" : EA_GENERIC
+  {
+    Flags: EF_NOGEN;
+    On Event META(POST(EVICTIM(EV_DEATH)))
+      {
+        hObj it, pl;
+        pl = EVictim->GetEffStatiObj(TRAP_EVENT,$"Curse Research");
+        pl->IPrint("Having lain the damned creature to rest, you
+          find a weight lifted from you!");
+        pl->RemoveEffStati($"Bestow Curse");
+        pl->RemoveEffStati($"Mark of Justice");
+        for (it=pl->FirstInv();it;it=pl->NextInv())
+          if (it->IFlags & IF_CURSED)
+            {
+              /*it->IFlags &= ~IF_CURSED;*/
+              pl->IDPrint("Your <hObj> glows with a soft blue light.",
+                              "The <hObj2>'s <hObj1> glows with a soft blue light.",
+                              it, EActor);
+            }
+        return NOTHING;
+      };
+  }    
+  
+Effect "GodTest" : EA_GENERIC
+  {
+    Level: 1; Base: SP_EASY;
+    On Event EV_MAGIC_HIT {
+      rID gID; char ch;
+      ETerm->LOption("Aiswin",(int32) $"Aiswin");
+      ETerm->LOption("Asherath",(int32) $"Asherath");
+      ETerm->LOption("Ekliazeh",(int32) $"Ekliazeh");
+      ETerm->LOption("Erich",(int32) $"Erich");
+      ETerm->LOption("Essiah",(int32) $"Essiah");
+      ETerm->LOption("Hesani",(int32) $"Hesani");
+      ETerm->LOption("Khasrach",(int32) $"Khasrach");
+      ETerm->LOption("Immotian",(int32) $"Immotian");
+      ETerm->LOption("Kysul",(int32) $"Kysul");
+      ETerm->LOption("Maeve",(int32) $"Maeve");
+      ETerm->LOption("Mara",(int32) $"Mara");
+      ETerm->LOption("Sabine",(int32) $"Sabine");
+      ETerm->LOption("Semirath",(int32) $"Semirath");
+      ETerm->LOption("Xavias",(int32) $"Xavias");
+      ETerm->LOption("Xel",(int32) $"Xel");
+      ETerm->LOption("Zurvash",(int32) $"aiswin");
+      ETerm->LOption("The Multitude",(int32) $"The Multitude");
+      gID = (rID) ETerm->LMenu(MENU_BORDER,"Choose a God:",WIN_MENUBOX);
+      ch = EActor->ChoicePrompt("Pulse, Anger or Retribution?", "par");
+      EActor->GodID = gID;
+      switch (ch)
+        {
+          case 'p':
+            ThrowEff(EV_GODPULSE,gID,EActor);
+           break;
+          case 'a':
+            ThrowEff(EV_ANGER_PULSE,gID,EActor);
+           break;
+          case 'r':
+            e.eID = gID;
+            e.EParam = 5;
+            ReThrow(EV_RETRIBUTION,e);
+           break;     
+        }      
+
+      };
+  }
+  
+#if 0
+
+AI_POTION Effect "Testing Continue Statement" : EA_GENERIC
+  {
+    On Event EV_EFFECT {
+      int16 i;
+      for (i=0;i!=10;i++)
+        {
+          if ((i % 2) == 1)
+            continue;
+          EActor->IPrint("Five! ");
+        }
+      return DONE;
+      };
+  }
+
+Monster "automated stress tester" : MA_LYCANTHROPE
+  {
+    Image: bright red 'X'; Size: SZ_MEDIUM; Mana: 500; 
+    CR: 9; HD: 14; Hit: +10; Def: 12; Mov: 100%; Spd: 100%;
+    Str 10, Dex 10, Con 10, Int 10, Wis 10, Cha 10;
+    Attk: A_CLAW for 1d6 AD_SLASH;
+	ABILITY(CA_INFRAVISION,6);
+    Feats: SK_LISTEN, SK_MOVE_SIL, SK_SPOT;
+    Flags: M_HUMANOID, M_NOGEN;
+    Desc: "The automated stress tester is a creature used for debugging
+      by running it through the Monster Evaluation. It can cast every
+      spell in the game and starts with a bunch of magical items, so it
+      proves useful for detecting which spells and items cause the game
+      to crash when used by monsters.";
+    On Event EV_BIRTH {
+      int16 i, src; rID spID;
+      /* Grant 15 random spells; this guarantees that less effective spells
+         will eventually be cast instead of ignoring poorer ones in favor
+         of repeating the same over and over. */
+      for (i=0;i!=15;i++)
+        {
+          switch (1d5) {
+            case 1: 
+            case 2: src = AI_WIZARDRY; break;
+            case 3: src = AI_THEURGY; break;
+            case 4: src = AI_DRUIDIC; break;
+            case 5: src = AI_PSIONIC; break;
+            }
+          spID = theGame->GetEffectID(PUR_DUNGEON,0,5,src);
+          if (spID != NULL_ID && spID->Purpose != EP_PLAYER_ONLY)
+            EActor->GainPermStati(INNATE_SPELL,NULL,SS_RACE,0,0,spID);
+        }
+      return NOTHING;
+      };
+    Gear:
+      $"long sword",
+      1d2 $"potion" of $"healing",
+      $"potion" of random 1 to 20,
+      25% $"staff" of random 1 to 20,
+      $"bracers" of random 1 to 20,
+      $"gloves" of random 1 to 20,
+      $"headband" of random 1 to 20,
+      $"bracers" of random 1 to 20,
+      $"horn" of random 1 to 20,
+      $"ring" of random 1 to 20,
+      $"amulet" of random 1 to 20,
+      $"wand" of random 1 to 20,
+      $"lenses" of random 1 to 20;    
+  }
+
+AI_POTION Effect "Testing Resource Members" : EA_GENERIC
+  {
+    On Event EV_EFFECT {
+      EActor->IPrint("Trolls have Def <Num>.",$"troll"->Def);
+      EActor->IPrint("Outsider <Num>, Evil <Num>, Humanoid <Num>.",
+        $"troll"->isMType(MA_OUTSIDER),
+        $"troll"->isMType(MA_EVIL),
+        $"troll"->isMType(MA_HUMANOID) );
+
+      EActor->IPrint("Human Glyph: <Num>, Pillar Glyph: <num>, 
+                        Door Glyph: <Num>, Potion Glyph: <num>.",
+        $"human"->Image & 0x00FF,
+        $"pillar"->Image & 0x00FF,
+        $"large oak door"->Image & 0x00FF,
+        $"potion"->Image & 0x00FF);
+
+      return DONE;
+      };
+  }
+
+AI_POTION Effect "String Test" : EA_GENERIC
+  {
+    On Event EV_EFFECT {
+      String str;
+      str = Capitalize("hello " + "world!",true);
+      EActor->IPrint(str);
+      return DONE;
+      };
+  }
+
+AI_POTION Effect "String Test 2" : EA_GENERIC
+  {
+    On Event EV_EFFECT {
+      EActor->IPrint("Hello, World!12345".Left(13));
+      return DONE;
+      };
+  }
+
+AI_POTION Effect "String Test 3" : EA_GENERIC
+  {
+    On Event EV_EFFECT {
+      String s1, s2;
+      s1 = "hello";
+      s2 = "world";
+
+      EActor->IPrint(s1.Capitalize() + " " + s2.Capitalize() + "!");
+      return DONE;
+      };
+  }
+
+AI_POTION Effect "String Test 4" : EA_GENERIC
+  {
+    On Event EV_EFFECT {
+      e.strHit = "Hello";
+      e.strDmg = ", World!";
+      EActor->IPrint(e.strHit + e.strDmg);
+      return DONE;
+      };
+  }
+
+AI_POTION Effect "String Test 5" : EA_GENERIC
+  {
+    On Event EV_EFFECT {
+      e.vHit = 4;
+      return DONE;
+      };
+  }
+
+AI_POTION Effect "Conditional Test" : EA_GENERIC
+  {
+    On Event EV_EFFECT {
+      String s1, s2, s3;
+      s1 = "Yes.";
+      s2 = "No.";
+      s3 = EActor->yn("Yes or no?") ? s1 : s2;
+      EActor->IPrint(s3);
+      return DONE;
+      };
+  }
+
+AI_POTION Effect "Test Rect" : EA_GENERIC
+  {
+    On Event EV_EFFECT {
+      Rect r;
+      r@x1 = 10;
+      r@y1 = 15;
+      r@x2 = 20;
+      r@y2 = 25;
+      PrintRect(r);
+      EActor->IPrint(XPrint("r@x2: <Num>.",r@x2));
+      return DONE;
+      };
+  }
+
+AI_POTION Effect "Operator Test" : EA_GENERIC
+  {
+    On Event EV_EFFECT {
+      int16 i, j;
+      
+      /* Second parameter should never be executed */
+      i = 5 || EActor->yn("You'll never see this!");
+      i = 0 && EActor->yn("You'll never see this!");
+      j = EActor->yn("One") && EActor->yn("Two");
+      if (j)
+        EActor->IPrint("True.");
+      else
+        EActor->IPrint("False.");
+      return DONE;
+      };
+  }
+  #endif
+
+Effect "Display Statistics" : EA_GENERIC
+  {
+    On Event EV_EFFECT {
+      hObj h, h2; int16 mCount, iCount;
+      mCount = 0;
+      for (h=EMap->FirstThing();h;h=EMap->NextThing())
+        if (h->isMonster())
+          mCount++;
+      EActor->IPrint("Monsters on level: <Num>.",mCount);
+      return DONE;
+      };
+  }
+  
+Effect "XP Ticker" : EA_INFLICT
+  {
+    xval: TRAP_EVENT; yval: EV_TURN;
+    Flags: EF_PERSISTANT; Base: 100; Cost: 1;
+    On Event META(EV_TURN) {
+      if ((1d10 == 1) && EActor->isCharacter())
+        EActor->GainXP(1);
+      return NOTHING;
+      };
+  }

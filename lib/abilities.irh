@@ -1,0 +1,611 @@
+Effect "Circle Kick" : EA_BLAST
+  { 
+    Flags: EF_ACTIVATE; qval: Q_DIR;
+    On Event EV_EFFECT {
+      hObj h1,h2,h3; int16 time;
+      time = 0;
+      if (EActor->GetAttr(A_SIZ) > SZ_LARGE)
+        return ABORT;
+      if (!EActor->LoseFatigue(1,true))
+        return ABORT;
+      #define HIT_SPOT(vx,vy,h)                                       \
+        if (EMap->InBounds(EActor->x + vx,EActor->y + vy) &&          \
+              !EMap->SolidAt(EActor->x + vx,EActor->y + vy))          \
+          {                                                           \
+            ETerm->PutGlyph(EActor->x + vx,                           \
+                            EActor->y + vy,                           \
+                            GLYPH_BULK | (EActor->Image & 0x00F0));   \
+            h = EMap->FCreatureAt(EActor->x + vx,EActor->y + vy);     \
+          }                                                       
+      h1 = NULL; h2 = NULL; h3 = NULL;
+      if (DirX(e.EDir) && DirY(e.EDir)) {
+        HIT_SPOT(DirX(e.EDir),DirY(e.EDir),h1)
+        HIT_SPOT(DirX(e.EDir),0,h2)
+        HIT_SPOT(0,DirY(e.EDir),h3)
+        }
+      else if (DirX(e.EDir)) {
+        HIT_SPOT(DirX(e.EDir),0,h1)
+        HIT_SPOT(DirX(e.EDir),1,h2)
+        HIT_SPOT(DirX(e.EDir),-1,h3)
+        }
+      else if (DirY(e.EDir)) {
+        HIT_SPOT(0,DirY(e.EDir),h1)
+        HIT_SPOT(1,DirY(e.EDir),h2)
+        HIT_SPOT(-1,DirY(e.EDir),h3)
+        }
+      else {
+        e.SetParam(1,EActor);
+        ReThrow(EV_MAGIC_STRIKE,e);
+        e.isSomething = true;
+        return DONE;
+        }
+      if ((EActor != NULL && EActor->isPlayer()) || 
+          (EVictim != NULL && EVictim->isPlayer())) { 
+        ETerm->TermUpdate();
+        ETerm->StopWatch(500);
+        ETerm->RefreshMap();
+      } 
+      time = 0;
+      EActor->IDPrint("You execute a spectacular spinning kick!",
+        "The <Obj> executes a spectacular spinning kick!", EActor);
+      
+      if (h1) {
+        ThrowVal(EV_SATTACK,A_KICK,EActor,h1);
+        time = max(time,EActor->Timeout);
+        EActor->Timeout = 0;
+        }
+      if (h2) {
+        ThrowVal(EV_SATTACK,A_KICK,EActor,h2);
+        time = max(time,EActor->Timeout);
+        EActor->Timeout = 0;
+        }
+      if (h3) {
+        ThrowVal(EV_SATTACK,A_KICK,EActor,h3);
+        time = max(time,EActor->Timeout);
+        EActor->Timeout = 0;
+        }
+      EActor->Timeout = time;
+      e.isSomething = true;
+      return DONE;
+      #undef HIT_SPOT
+      },
+    EV_ISTARGET {
+      /* This is included so that the monster AI won't cast burning hands at
+         targets that are out of the (customized) area of effect. */
+      if (!EVictim->isBeside(EActor))
+        return CANNOT_CAST_IT;
+      return SHOULD_CAST_IT;
+      },
+    MSG_BLASTNAME "spinning kick";
+    Desc: "At the cost of one fatigue point, you execute a circle kick
+      striking a creature in the direction you choose, and also any
+      creatures in the squares beside both it and you. Only creatures
+      of Large size or smaller have enough maneuverability in the
+      dungeon to perform this maneuver. You can perform a Circle Kick
+      by selecting it from the Activate menu.";
+  }
+
+Wizard Spell "Create Corporeal Undead" : EA_GENERIC
+  { SC_NEC; Base: SP_VERY_HARD; Cost: 15; Level: 5; tval: T_CORPSE; cval: RED;
+    Flags: EF_LIM_ITYPE, EF_AFFECTS_ITEMS, EF_ITEMS_ONLY, EF_LOSEMANA; 
+    rID uID; hObj hCorpse; qval: Q_TAR; Purpose: EP_SUMMON;
+    On Event EV_EFFECT {
+      ANIMATION_HEADER
+      if (!EActor->isPlayer())
+        { uID = $"wight"; 
+          SetEVictim(e,hCorpse);
+          return NOTHING; }
+      ETerm->LOption("Graveborn", (int32) $"Graveborn;template");
+      ETerm->LOption("Ghoul [Evil]", (int32) $"Ghoul");
+      ETerm->LOption("Wight [Evil]", (int32) $"Wight");
+      if (e.vCasterLev >= 10) {
+        ETerm->LOption("Crypt Thing", (int32) $"Crypt Thing");
+        ETerm->LOption("Ghast [Evil]", (int32) $"Ghast");
+        ETerm->LOption("Burning Ghast [Evil]", (int32) $"Burning Ghast");
+        ETerm->LOption("Icewight [Evil]", (int32) $"Icewight");
+        }
+      if (e.vCasterLev >= 11) {
+        ETerm->LOption("Revenant", (int32) $"Revenant");
+        ETerm->LOption("Mummy", (int32) $"Mummy");
+        ETerm->LOption("Vampire [Evil]", (int32) $"Vampire");
+        if (isMarist)
+          ETerm->LOption("Mourner", (int32) $"Mourner");
+        }
+      uID = (rID) ETerm->LMenu(MENU_ESC|MENU_BORDER, 
+                    "-- Choose to Raise: --", WIN_MENUBOX);
+      if (uID == (rID) -1)
+        return ABORT;
+      },
+    EV_MAGIC_HIT {
+      rID cmID, ctID; hObj und;
+      ANIMATION_HEADER
+      if (!ETarget->isType(T_CORPSE))
+        { EActor->IPrint("This spell must be cast on a corpse.");
+          return ABORT; }
+      cmID = ETarget->GetCorpseType();
+      if (!cmID)
+        return DONE;
+        
+      /* Odd Cases */
+      if (cmID == $"goblin vizier" ||
+          cmID == $"Murgash, the Goblin King")
+        cmID = $"goblin";
+       
+      if (!ResourceHasFlag(cmID,M_HUMANOID) || cmID->MSize > SZ_MEDIUM ||
+           cmID->MSize < SZ_SMALL)
+        {
+          EActor->IPrint("That corpse is not suitable for becoming
+            a more advanced undead.");
+          return ABORT;
+        }
+      
+      if (uID != $"graveborn;template" && uID != $"vampire")
+        und = CreateMonster(uID);
+      else {
+        und = CreateMonster(cmID);
+
+        und->AddTemplate(uID);
+        if (!und->HasStati(TEMPLATE)) {
+          und->Remove(true);
+          APrint(e,"The <hObj> shifts briefly, but does not move.",ETarget);
+          return DONE;
+          }
+        }
+
+      while (ETarget->HasStati(TEMPLATE))
+        {
+          ctID = ETarget->GetStatiEID(TEMPLATE);
+          if (ctID->TType & (TM_CLASS|TM_SKILL|TM_CHIEFTAN|
+                               TM_SHAMAN|TM_PLANAR))
+            { und->AddTemplate(ctID);
+              SetSilence();
+              und->IdentifyTemp(ctID);
+              UnsetSilence(); }
+          ETarget->RemoveEffStati(ctID);
+        }        
+      
+      if (ETarget->Owner() == EActor)
+        und->PlaceAt(EMap,EActor->x,EActor->y);
+      else
+        und->PlaceAt(EMap,ETarget->x,ETarget->y);
+	    und->Initialize();
+      und->PartyID = EActor->PartyID;
+      und->StateFlags |= MS_KNOWN;
+
+	    if (EActor->isPlayer()) {
+	      SetSilence();
+		    if (!und->MakeCompanion(EActor,PHD_UNDEAD)) {
+		      UnsetSilence();
+		      APrint(e,"The <hObj> shifts briefly, but does not move.",ETarget);
+          und->Remove(true);
+		      return DONE;
+		      }
+		    UnsetSilence();
+		    }
+      
+      ETarget->Remove(true);
+      APrint(e,"The dead rise!");
+      ANIMATION_MORALITY(ETarget,und)
+      return DONE;
+      },
+    EV_ISTARGET {
+      hObj h; rID cmID;
+      for (h=EMap->FirstThing();h;h=EMap->NextThing())
+        if (h->isType(T_CORPSE) && EActor->Percieves(h) &&
+              EActor->DistFrom(h) <= 6) {
+          cmID = h->GetCorpseType();
+          if (ResourceHasFlag(cmID,M_HUMANOID) && cmID->MSize <= SZ_MEDIUM ||
+            cmID->MSize >= SZ_SMALL)
+            { hCorpse = h; return SHOULD_CAST_IT; }
+          }
+      return CAN_CAST_IT;
+      };   
+    Desc: "Casting this animates a single humanoid corpse as a type of greater 
+      corporeal undead. Based of the caster's caster level, she may choose
+      to create different forms of undead. Certain types are available only
+      to Marists, while others are inherantly evil.\n
+      __There are two metaphysical powers that can be invoked on Theyra to
+      animate the dead. The first is various archfiends, notably Orcus --
+      the demon lord of undead. The second is the goddess of death, Mara.
+      As such, casting this spell is an evil act (as a result of allying
+      with fiends) unless the caster is devoted to Mara or has earned at
+      least two blessings from her as a lay worshipper.";
+  }  
+
+
+Wizard Spell "Create Spectral Undead" : EA_GENERIC
+  { SC_NEC; Base: SP_VERY_HARD; Cost: 25; Level: 5; tval: T_CORPSE; cval: RED;
+    Flags: EF_LIM_ITYPE, EF_AFFECTS_ITEMS, EF_ITEMS_ONLY, EF_LOSEMANA; 
+    rID uID; hObj hCorpse; qval: Q_TAR; Purpose: EP_SUMMON;
+    On Event EV_EFFECT {
+      ANIMATION_HEADER
+      if (!EActor->isPlayer())
+        { uID = $"wraith"; 
+          SetEVictim(e,hCorpse);
+          return NOTHING; }
+      ETerm->LOption("Shadow [Evil]", (int32) $"shadow");
+      ETerm->LOption("Poltergeist", (int32) $"Poltergeist");
+      if (e.vCasterLev >= 10) {
+        ETerm->LOption("Wraith [Evil]", (int32) $"wraith");
+        if (isMarist)
+          ETerm->LOption("Blessed Soul [Good]", (int32) $"Blessed Soul");  
+        }
+      if (e.vCasterLev >= 11) {
+        ETerm->LOption("Spectre [Evil]", (int32) $"Spectre");
+        ETerm->LOption("Ghost", (int32) $"Ghost");
+        if (isMarist)
+          ETerm->LOption("Avenging Spirit [Good]", (int32) $"Avenging Spirit");
+        }
+      uID = (rID) ETerm->LMenu(MENU_ESC|MENU_BORDER, 
+                    "-- Choose to Raise: --", WIN_MENUBOX);
+      if (uID == (rID) -1)
+        return ABORT;
+      },
+    EV_MAGIC_HIT {
+      rID cmID, ctID; hObj und;
+      ANIMATION_HEADER
+      if (!ETarget->isType(T_CORPSE))
+        { EActor->IPrint("This spell must be cast on a corpse.");
+          return ABORT; }
+      cmID = ETarget->GetCorpseType();
+      if (!cmID)
+        return DONE;
+        
+      /* Odd Cases */
+      if (cmID == $"goblin vizier" ||
+          cmID == $"Murgash, the Goblin King")
+        cmID = $"goblin";
+       
+      if (!ResourceHasFlag(cmID,M_HUMANOID) || cmID->MSize > SZ_MEDIUM ||
+           cmID->MSize < SZ_SMALL)
+        {
+          EActor->IPrint("That corpse is not suitable for becoming
+            a more advanced undead.");
+          return ABORT;
+        }
+      
+      if (uID != $"ghost" && uID != $"avenging spirit")
+        und = CreateMonster(uID);
+      else {
+        und = CreateMonster(cmID);
+        und->GainPermStati(ALIGNMENT,NULL,SS_MISC,
+               ETarget->GetStatiVal(ALIGNMENT));
+        und->CalcValues();
+        und->AddTemplate(uID);
+        if (!und->HasStati(TEMPLATE)) {
+          und->Remove(true);
+          APrint(e,"The <hObj> glows briefly, but no spirit rises.",ETarget);
+          return DONE;
+          }
+        }
+
+      while (ETarget->HasStati(TEMPLATE))
+        {
+          ctID = ETarget->GetStatiEID(TEMPLATE);
+          if (ctID->TType & (TM_CLASS|TM_SKILL|TM_CHIEFTAN|
+                               TM_SHAMAN|TM_PLANAR))
+            { und->AddTemplate(ctID);
+              SetSilence();
+              und->IdentifyTemp(ctID);
+              UnsetSilence(); }
+          ETarget->RemoveEffStati(ctID);
+        }        
+      
+      if (ETarget->Owner() == EActor)
+        und->PlaceAt(EMap,EActor->x,EActor->y);
+      else
+        und->PlaceAt(EMap,ETarget->x,ETarget->y);
+	    und->Initialize();
+      und->PartyID = EActor->PartyID;
+      und->StateFlags |= MS_KNOWN;
+
+	    if (EActor->isPlayer()) {
+	      SetSilence();
+		    if (!und->MakeCompanion(EActor,PHD_UNDEAD)) {
+		      UnsetSilence();
+		      APrint(e,"The <hObj> glows briefly, but no spirit rises.",ETarget);
+          und->Remove(true);
+		      return DONE;
+		      }
+		    UnsetSilence();
+		    }
+      
+      APrint(e,"A spirit rises up! The <hObj> crumbles to dust.", ETarget);
+      ETarget->Remove(true);
+      ANIMATION_MORALITY(ETarget,und)
+      return DONE;
+      },
+    EV_ISTARGET {
+      hObj h; rID cmID;
+      for (h=EMap->FirstThing();h;h=EMap->NextThing())
+        if (h->isType(T_CORPSE) && EActor->Percieves(h) &&
+              EActor->DistFrom(h) <= 6) {
+          cmID = h->GetCorpseType();
+          if (ResourceHasFlag(cmID,M_HUMANOID) && cmID->MSize <= SZ_MEDIUM ||
+            cmID->MSize >= SZ_SMALL)
+            { hCorpse = h; return SHOULD_CAST_IT; }
+          }
+      return CAN_CAST_IT;
+      };   
+    Desc: "Casting this calls forth an incorporeal undead creature from 
+      the remains of a single humanoid corpse. Based of the caster's 
+      caster level, she may choose to create different forms of spectral 
+      undead. Certain types are available only to Marists, while others 
+      are inherantly evil.\n
+      __There are two metaphysical powers that can be invoked on Theyra to
+      animate the dead. The first is various archfiends, notably Orcus --
+      the demon lord of undead. The second is the goddess of death, Mara.
+      As such, casting this spell is an evil act (as a result of allying
+      with fiends) unless the caster is devoted to Mara or has earned at
+      least two blessings from her as a lay worshipper.";
+  }
+  
+Priest Spell "Holy Orb" : EA_BLAST
+  { SC_THE; Base: SP_EASY; Cost: 9; Level: 5; qval: Q_TAR|Q_LOC;
+    Desc: "Casting this spell conjures an orb of golden light
+      that a priest can hurl like a shotput. Being struck
+      by the orb has no effect on most creatures, but evil
+      beings suffer 1d6 points of holy damage per caster
+      level (scaled after 9th level); this damage is modified 
+      by both Strength and Wisdom, and is not subject to elemental
+      resistance of any type. A thrown-weapon attack roll
+      is used to determine if the orb strikes its intended
+      target. The orb also knocks an evil creature back
+      1d6 + [Str mod] squares if the save is failed.";
+    aval: AR_BOLT; cval: YELLOW; pval: (LEVEL_SCALED)d6;
+    xval: AD_HOLY; sval: REF partial; Flags: EF_GOOD, EF_ATTACK;
+    Purpose: EP_ATTACK;
+    On Event EV_CALC_EFFECT {
+      if (e.efNum == 0)
+        SetPVal(e,EActor->Mod(A_STR) + EActor->Mod(A_WIS),
+          LevelAdjust(LEVEL_SCALED,e.vCasterLev),6);
+      else
+        SetPVal(e,EActor->Mod(A_STR),1,6);
+      return NOTHING;
+      },
+    MSG_BLASTNAME
+      "golden orb",
+    EV_ISTARGET {
+      if (GetHandle(ETarget))
+        if (ETarget->isCreature())
+          if (ETarget->isMType(MA_EVIL))
+            return SHOULD_CAST_IT;
+      return CAN_CAST_IT;
+      },
+    PRE(EV_MAGIC_HIT) {
+      if (!EVictim->isMType(MA_EVIL))
+        { e.Immune = true; return DONE; }
+      if (e.efNum == 1 && e.Resist)
+        return DONE;
+      return NOTHING;
+      };
+  }
+and EA_BLAST
+  { xval: AD_KNOC; sval: REF; aval: AR_BOLT; pval: 1d6; }
+
+
+Wizard Spell "Necrosynthesis" : EA_INFLICT
+  {
+    SC_NEC; Base: SP_HARD; Cost: 35; Level: 6; qval: Q_TAR;
+    xval: EXTRA_ABILITY; yval: CA_REGEN; Flags: EF_PERMANANT;
+    Purpose: EP_BUFF;
+    On Event EV_ISTARGET {
+      if (ETarget->isCreature())
+        if (ETarget->isMType(MA_UNDEAD) &&
+             !ETarget->isPlayer())
+          return SHOULD_CAST_IT;
+      return CANNOT_CAST_IT; 
+      },
+    EV_CALC_EFFECT {
+      SetPVal(e,5+e.vCasterLev/3);
+      return NOTHING;
+      },
+    EV_MAGIC_STRIKE {
+      if (EActor->isCharacter())
+        EActor->LoseXP(max(25,25*EVictim->ChallengeRating()));
+      APrint(e,"The <hObj> glows with an eerie scarlett light!", EVictim);
+      return NOTHING;
+      };
+    Desc: "Casting this spell imbues an undead with a permanent
+      channel to the negative energy plane, allowing them to
+      automatically replenish their form, regenerating 5 + 1 per
+      3 caster levels points of damage per round. This effect is
+      permanent, and costs the caster [25 x Target's Challenge
+      Rating] xp.";
+  }
+
+  
+Priest Spell "Sticks to Snakes" : EA_GENERIC
+  { SC_THA|SC_ARC; Cost: 14; Base: SP_MEDIUM; Level: 3; Purpose: EP_SUMMON;
+    Desc: "Casting this spell allows a priest to transform one or more
+      wooden sticks (either arrows or staves) into serpents for a brief
+      period. The spell can transform one arrow per caster level into
+      boa constrictors, or one quarterstaff per four levels into huge
+      vipers. The spell operates on items in the caster's inventory in
+      the order they appear in the inventory screen, and the created
+      snakes appear next to the caster. As a transformation effect,
+      these serpents are not treated as summoned creatures.
+      Magical items transformed into snakes retain their bonus to hit
+      and damage, but none of their other qualities.\n
+      __Casting this spell costs the priest two Fatigue points.";
+    char ch;
+    On Event EV_ISTARGET {
+      hObj it;
+      if (EActor->cFP < 0)
+        return CAN_CAST_IT;
+      for(it=EActor->FirstInv();it;it=EActor->NextInv())
+        {
+          if (it->iID == $"quarterstaff" || it->iID == $"staff")
+            { ch = 's'; return SHOULD_CAST_IT; }
+          if (it->iID == $"sheaf arrow" || it->iID == $"flight arrow")
+            { ch = 'a'; return SHOULD_CAST_IT; }
+        }
+      return CAN_CAST_IT;
+      },
+    EV_MAGIC_HIT {
+      hObj it, it2, hSnake; int16 n; bool stop, found;
+      if (!EActor->LoseFatigue(2,true))
+        return ABORT;
+      if (EActor->isPlayer())
+        ch = EActor->ChoicePrompt("Transform arrows or staves?","as",'a');
+
+      n = (ch == 'a') ? e.vCasterLev : (e.vCasterLev / 4);
+      found = false;
+      for (it=EActor->FirstInv();(it != NULL_OBJ) && (n>0);it=EActor->NextInv())
+        if (((ch == 'a') && (it->iID == $"sheaf arrow" || it->iID == $"flight arrow")) ||
+            ((ch == 's') && (it->iID == $"quarterstaff" || it->iID == $"staff"))) {
+          stop = false;
+          do {
+            it2 = it->TakeOne();
+            it2->Remove(false);
+            EMap->GenEncounter(EN_MONID|EN_CREATOR|EN_SINGLE|EN_SPECIFIC,10,10,
+              (int32)((ch == 'a') ? $"boa constrictor" : $"huge viper"), 0, NULL_ID, 
+              EActor->x, EActor->y, EActor);
+            hSnake = EMap->GetEncounterCreature(0);
+            if (hSnake == NULL_OBJ)
+              return found ? DONE : ABORT;
+            hSnake->GainTempStati(TRANSFORMED,it2,e.vDuration,SS_ENCH,0,0,
+                    $"Sticks to Snakes", e.vCasterLev);
+            if (it2->GetPlus()) {
+              hSnake->GainPermStati(ADJUST,EActor,SS_MISC,A_HIT_BRAWL,it2->GetPlus());
+              hSnake->GainPermStati(ADJUST,EActor,SS_MISC,A_DMG_BRAWL,it2->GetPlus());
+              }
+            found = true;
+            n--;
+            if ((it2 == it) || !n)
+              stop = true;
+            }
+          while (!stop);
+          }
+      if (!found)
+        { EActor->IPrint("You have no sticks of that sort to transform.");
+          return ABORT; }
+      return DONE;
+      };
+  }
+  
+#if 0
+
+Monster "leucrotta" : MA_MYTHIC, MA_QUADRUPED, MA_ABERRATION
+  { Image: yellow 'M'; Size: SZ_MEDIUM; 
+    CR: 8; HD: 7; Hit: +6; Def: 12; Mov: 225%; Spd: 150%;
+    Str 20, Dex 17, Con 21, Int 10, Wis 12, Cha 6;
+    Attk: A_BITE for 3d6 AD_BLUNT,
+          A_KICK for 1d8 AD_BLUNT,
+          A_KICK for 1d8 AD_BLUNT;
+    ABILITY(CA_SCENT,4);
+    ABILITY(CA_SHARP_SENSES,4);
+    ABILITY(CA_WOODLAND_STRIDE,1);
+    ABILITY(CA_DEVOURING,1);
+	  Feats: FT_POWER_ATTACK, FT_SNEAKY, FT_ENDURANCE, 
+	         FT_MULTIATTACK, FT_TRAMPLE, SK_BLUFF, SK_LISTEN,
+	         SK_SPOT, SK_HIDE, SK_MOVE_SIL, SK_WILD_LORE;
+	  Flags: M_CHAOTIC, M_EVIL, M_IALIGN, M_NOHANDS, M_MOUNTABLE,
+	         M_MAGC, M_CARNI;
+	  Desc: "A swift and fearsome unnatural creature, the leucrotta 
+	   combines the legs and hooves of a great stag, the trunk and 
+	   neck of a lion, the head of a prehistoric badger -- and the 
+	   voice, intellect and capacity for malice of a human being. 
+	   Inherantly cruel, the leucrotta posseses
+	   no volition of its own, instead seeming to exist as a
+	   symbolic personification of deciet. It can mimic nearly
+	   any sound, using these unearthly noises to lure prey to
+	   it, and its inhuman bite is strong enough to pulp bone
+	   and even tear through the metal of armor and shields.
+	   Leucrottas prefer to ambush and slay humanoid victims
+	   via deception, then eat their entire bodies, including
+	   bones, clothing, possessions and soul. The hide of a
+	   leucrotta is a soft leather in a fine tan color, and is
+	   highly prized for crafting magical boots. Leucrotta are
+	   sterile and genderless; it is not known how they come
+	   into being, but they are surely not born of other
+	   leucrotta. Fae in service to Maeve sometimes tame
+	   leucrotta and use them as mounts; they are preternaturally
+	   deft on their feet and never impeded by rough terrain.";
+	  On Event EV_TURN {
+	    hObj h;
+	    if (1d20 == 1) {
+	      h = theGame->GetPlayer(0);
+	      if (h == NULL_OBJ)
+	        return NOTHING;
+	      if (h->Percieves(EActor)) {
+	        if (h->HasEffStati(-1,$"leucrotta")) {
+	          h->IPrint("You realize the strange noises you heard were the
+	            charms of a leucrotta, luring prey into its ambush!");
+	          h->RemoveEffStati($"leucrotta");
+	          /* Immune for three days! */
+	          h->GainTempStati(EFF_FLAG1,EActor,-4,SS_MISC,0,0,$"leucrotta");
+	          }
+	        return NOTHING;
+	      if (isPlayer())
+	        return NOTHING;
+	      if (h->DistFrom(EActor) > 20)
+	        return NOTHING;
+	      if (h->HasEffStati(EFF_FLAG1,$"leucrotta"))
+	        return NOTHING;
+	      switch (1d4) {
+	        case 1:
+	          h->IPrint("You hear the fearful crying of young children!");
+	         break;
+	        case 2:
+	          h->IPrint("You hear the desperate mewling of injured animals!");
+	         break;
+	        case 3:
+	          h->IPrint("You hear the clink and rattle of spilled treasure!");
+	         break;
+	        case 4:
+	          h->IPrint("You hear the seductive whispers of nymphs!");
+	         break;
+	        }   
+	      if (h->SavingThrow(WILL,13 + EActor->SkillLevel(SK_BLUFF)/2,SA_ENCH|SA_EVIL))
+	        {
+	          h->IPrint("You resist a magical compulsion to investigate
+	            the strange noises.");
+	          h->GainTempStati(EFF_FLAG1,EActor,-2,SS_MISC,0,0,$"leucrotta");
+	          return DONE;
+	        }
+	      h->IPrint("You feel a strange urge to investigate the sounds!");
+	      h->GainPermStati(TRAP_EVENT,EActor,SS_CURS,PRE(EV_REST),0,$"leucrotta",9);
+	      return NOTHING;
+	      }
+	    return NOTHING;
+	    },
+	  META(PRE(EV_REST)) {
+	    EActor->IPrint("Try as you might, you find that rest eludes you as you
+	      are haunted by curiosity regarding the strange sounds you have heard.");
+	    return ABORT;
+	    },
+	  PRE(EV_DAMAGE) {
+	    if (!EVictim->isCreature())
+	      return NOTHING;
+	    if (e.AType == A_BITE) {
+	      if (EVictim->InSlot(SL_READY))
+	        if (EVictim->InSlot(SL_READY)->isType(T_SHIELD))
+	          {
+	            TPrint(e, "Your bite tears at the <EVictim>'s shield!",
+	                      "The leucrotta's bite tears at your shield!",
+	                      "The leucrotta's bite tears at the <EVictim>'s shield!");
+	            ThrowDmg(EV_DAMAGE,AD_BLUNT,e.vDmg,"",EActor,EVictim->InSlot(SL_READY));
+	            return DONE;
+	          }
+	      if (EVictim->InSlot(SL_ARMOR))
+	        if (EVictim->InSlot(SL_ARMOR)->isType(T_ARMOR))
+	          {
+	            TPrint(e, "Your bite tears at the <EVictim>'s armor!",
+	                      "The leucrotta's bite tears at your armor!",
+	                      "The leucrotta's bite tears at the <EVictim>'s armor!");
+	            ThrowDmg(EV_DAMAGE,AD_BLUNT,e.vDmg,"",EActor,EVictim->InSlot(SL_ARMOR));
+	            return DONE;
+	          }  
+	      }
+	    return NOTHING;
+	    },
+	  MSG_SPECABIL
+	    "It can mimic sounds at a distance, casting a magical charm that
+	       compels listeners who fail a Will saving throw (DC 13 + [Bluff / 2])
+	       to investigate before they rest. Its bite can rend a foe's 
+	       shield or armor, dealing damage directly to them instead of 
+	       to the bearer.";  
+  }
+
+#endif

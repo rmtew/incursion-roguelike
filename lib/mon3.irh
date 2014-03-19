@@ -1,0 +1,4765 @@
+/* Mon1.Irc -- Monsterous Beasts       Mon2.Irc -- Peoples of Therya
+     Dragons and Kin                     Humanoid Races
+     Mythic Hybrids                      Giants and Faeries
+     Magical Beasts                      Monsterous Societies
+     Other Beasts                        Learned Templates
+     Natural Animals                     Townsfolk
+   Mon3.Irc -- The Wierd Stuff         Mon4.Irc -- Planar Creatures
+     Aberrations                         Demons
+     Constructs                          Devils
+     Plants and Fungi                    Elementalkin
+     Oozes and Vermin                    Other Outsiders
+     Undead Creatures                    Planar Templates              */
+
+// WW: TODO: MA_CONSTRUCT, MA_VORTEX, MA_GOLEM and MA_LIGHT 
+// should all get NONDETECTION PER_SCENT
+
+/********************************************************************************
+ ********************************************************************************
+ ***                                 ABERRATIONS                              ***
+ ********************************************************************************
+ ********************************************************************************/
+
+Monster "belabra" : MA_ABERRATION
+  {
+    Image: bright blue 'X'; Size: SZ_MEDIUM;  Arm: 10;
+    CR: OPT_CR(4,3); HD: 4; Hit: +3; Def: 12; Mov: 70%; Spd: 70%;
+    Str 14, Dex 15, Con 13, Int 2, Wis 12, Cha 11;
+    Attk: A_TENT for 1d4 AD_BLUNT and 1d8+2 AD_PLYS (DC 19),
+          A_BITE for 1d3 AD_PIERCE,
+          A_CONS for 1d6 AD_BLUNT;
+	ABILITY(CA_INFRAVISION,6);
+    Feats: SK_LISTEN, SK_MOVE_SIL, SK_SPOT, FT_NATURAL_GRAB;
+    Flags: M_NEUTER, M_NOHANDS, M_NOHEAD, M_DEAF, M_THICK_HIDE,
+      M_MFLYER;
+    Spells: $"slow", $"phase door", $"blur";
+    Desc: "The belabra, or tangler beast, appears as a jellyfish-like
+      creature, the soft core of its body being covered by a hard
+      shell. Two eyestalks protrude from its body, along with six
+      tentacles. The belabra flies magically.";
+    On Event POST(EVICTIM(EV_HIT)) {
+      if (!EActor->isBeside(EVictim))
+        return NOTHING;
+      VPrint(e,"White, sticky blood sprays from your body!",
+               "White, sticky blood sprays from the <EVictim>'s body!");
+      if (EActor->SavingThrow(REF,15))
+        DPrint(e, "You avoid being splashed.",
+                  "The <EActor> avoids being splashed.");
+      else {
+        EActor->GainTempStati(BLIND,NULL,2d6,SS_ATTK);
+        DPrint(e, "You are blinded by the blood spray!",
+                  "The <EActor> is blinded by the blood spray!");
+        }
+      return NOTHING;
+      };
+  }
+
+
+Monster "cellar dwellar" : MA_HUMANOID, MA_ABERRATION
+  {
+    Image: blue 'h'; Size: SZ_SMALL; 
+    CR: OPT_CR(3,6); HD: 4; Hit: 4; Def: 14; Mov: 150%; Spd: 120%;
+    Str 7, Dex 16, Con 13, Int 9, Wis 11, Cha 12;
+    Attk: A_BITE for 1d3 AD_PIERCE and 1d4+1 AD_DRST,
+          A_CLAW for 1d2 AD_SLASH, 
+          A_CLAW for 1d2 AD_SLASH, 
+          A_GAZE for 1d4 AD_BLND (DC 13); /* Charm Later */
+	ABILITY(CA_REGEN,1);
+	ABILITY(CA_INFRAVISION,6);
+    Feats: FT_ALERTNESS, FT_MULTIATTACK,
+          SK_HIDE, SK_INTIMIDATE, SK_LISTEN, SK_MOVE_SIL, SK_SPOT;
+    Flags: M_CARNI, M_HOSTILE, M_CITY, M_HOSTILE, M_SOLITARY,
+           M_CHAOTIC, M_EVIL, M_IALIGN;
+    Spells: $"cause fear", $"shadow step";
+    Resists: DF_FIRE, DF_COLD;
+    Immune: DF_SLEE, DF_DISE, DF_PLYS;
+    Desc: "Known as the bone crusher for its eating habits, the
+      hideous cellar dweller is a malevolent being of pure
+      evil. The cellar dweller resembles a small ogre with
+      olive flesh and sparkling white pupils. It dwells in
+      the dark, cramped spaces in the cellar and under
+      furniture, waiting for an opportunity to slay
+      innocents and spread mayhem.
+        This wicked creature exists only to torment and
+      consume other beings. It seems to have been
+      created by an evil entity or perhaps a priest, and is
+      incapable of breeding. Indeed it is almost never
+      found in the company of its own kind.
+        A cellar dweller has a number of innate magical
+      abilities that make it a highly dangerous foe, in
+      spite of its diminutive stature. Staring into the eyes
+      of this creature can cause temporary blindness. The
+      bite of the blackened fangs of this beast will cause
+      a numbing weakness to quickly spread through the
+      body.
+        While it has an all-consuming, bloodthirsty nature,
+      it has no need to consume food and can survive
+      indefinitely in all but the most extreme
+      environments."; 
+  } 
+
+Monster "chuul" : MA_ABERRATION, MA_VERMIN, MA_SNAKE
+  {
+    Image: blue 'X'; Size: SZ_LARGE;  
+    CR: OPT_CR(10,7); HD: 11; Hit: +12; Def: 10; Mov: 100%; Spd: 155%; Arm: 10;
+    Str 20, Dex 16, Con 18, Int 10, Wis 14, Cha 5, Luc 18;
+    Attk: 
+          A_CLAW for 2d6+5 AD_SLASH,
+          A_CLAW for 2d6+5 AD_SLASH,
+          A_TENT for 1d8+2 AD_PLYS (DC 19),
+          A_TENT for 1d8+2 AD_PLYS (DC 19),
+          A_CONS for 3d6+5 AD_BLUNT;
+	ABILITY(CA_INFRAVISION,6);
+    Immune: DF_POIS;
+    Feats: FT_ALERTNESS, FT_BLIND_FIGHT, FT_COMBAT_REFLEXES, 
+           FT_NATURAL_GRAB, FT_MULTIATTACK,
+                 SK_HIDE, SK_LISTEN, SK_SPOT, SK_MOVE_SIL;
+    Flags: M_NOHANDS, M_CHAOTIC, M_EVIL, M_AMPHIB;
+    Desc: "A horrible mix of crustacean, insect, and serpent, the chuul is
+      an abomination that lurks submerged or partially submerged, awaiting
+      intelligent prey to devour. Although amphibious, chuuls are not good
+      swimmers and actually prefer to be on land or in very shallow water
+      when they attack. A chuul is about 8 feet long and weighs 650 pounds.
+      Chuuls speak Common (or Undercommon, for the underground variety).";
+  }
+
+Monster "cloaker" : MA_ABERRATION
+  { Image: blue 'X'; Size: SZ_LARGE; 
+    CR: OPT_CR(4,4); HD: 4; Hit: 3; Def: 15; Mov: 125%; Spd: 100%;
+    Str 21, Dex 16, Con 17, Int 14, Wis 15, Cha 15;
+    Attk: A_BITE for 1d4 AD_SLASH,
+          A_TAIL for 1d6 AD_BLUNT,
+          A_WRAP for AD_ENGL (DC 15), /* More Wail Effects Later */
+		  /* A_SEEM as $"cloak", */
+          A_ROAR for 2d1 AD_FEAR (DC 15),
+          A_ROAR for 1d4+1 AD_STUN (DC 15);
+	ABILITY(CA_INFRAVISION,6);
+    Immune: DF_SONI;
+    Feats: SK_HIDE, SK_LISTEN, SK_SPOT, SK_MOVE_SIL, SK_DIPLOMACY,
+           SK_BLUFF, SK_APPRAISE, FT_GUARDED_INVOCATION, FT_HOVER;
+    Flags: M_NOHANDS, M_NOLIMBS, M_NOHEAD, M_AMPHIB, M_NEUTER,
+           M_CARNI, M_FLYER, M_LIGHT_AVERSE, M_SONI;
+    Spells: $"phantasmal force", $"blur", $"mirror image";
+    Desc: "An intelligent and canny Underdark race, cloakers resemble
+      land-dwelling manta rays. Their bodies are surprisingly light,
+      and their flight is graceful, belying their great strength. When
+      face down and still, a cloaker can resemble a dark navy cloak,
+      hence their name. Their innate magic originates in their ability
+      to manipulate, animate and shape shadows.";  
+    On Event MSG_ROARVERB "wail" / "wails";
+  }
+
+Monster "disir" : MA_ABERRATION, MA_ADVENTURER
+  { Image: grey 'X'; Size: SZ_MEDIUM; 
+    CR: OPT_CR(5,3); HD: 5; Hit: 3; Def: 13; Mov: 100%; Spd: 125%;
+    Str 14, Dex 12, Con 14, Int 13, Wis 11, Cha 7; Arm: 3; 
+    Attk: A_CLAW for 1d6 AD_SLASH and AD_POIS (DC 14),
+          A_CLAW for 1d6 AD_SLASH and AD_POIS (DC 14),
+          A_BITE for 1d8 AD_PIERCE and AD_POIS (DC 14);
+	ABILITY(CA_INFRAVISION,6);
+    Resists: DF_FIRE;
+    Feats: SK_CLIMB, SK_ESCAPE_ART, SK_HIDE, SK_LISTEN, SK_MOVE_SIL, SK_SPOT,
+           SK_WILDERNESS,
+           FT_ALERTNESS, FT_MULTIATTACK;
+    Flags: M_LAWFUL, M_EVIL, M_HUMANOID, M_NOHANDS, M_CARNI,
+           M_LIGHT_AVERSE;
+    Desc: "The disir are a race of subterranean creatures known for their
+    disgusting appearance and hateful disposition."; 
+    Poison: $"disir venom"; 
+  }
+
+Poison "disir venom" : EA_DRAIN
+  {
+    Level: 2;
+    /*Iteration*/   cval: 1;
+    /*Save DC*/     sval: 14;
+    /*Persistance*/ lval: 2;
+    xval: AD_DADX; pval: 1d6;
+    Desc: "This poison inflicts <11>1d6<7> points of Dexterity damage every 
+      <11>turn<7>, and requires <11>2<7> saving throws against <11>DC 14<7> 
+      to overcome.";
+  }
+
+Monster "magori" : MA_ABERRATION, MA_ADVENTURER
+  { Image: bright red 'X'; Size: SZ_LARGE; 
+    CR: OPT_CR(9,9); HD: 8; Hit: 6; Def: 10; Mov: 75%; Spd: 140%;
+    Str 20, Dex 16, Con 17, Int 12, Wis 14, Cha 6; Arm: 10; 
+    Attk: A_CLAW for 1d6 AD_SLASH,
+          A_CLAW for 1d6 AD_SLASH,
+          A_BITE for 1d4 AD_PIERCE and AD_POIS (DC 19);
+	ABILITY(CA_SMITE,5);
+	ABILITY(CA_BLINDSIGHT,6);
+	ABILITY(CA_INFRAVISION,6);
+    Feats: FT_MASTER_GRAPPLE, FT_NATURAL_GRAB, FT_GREAT_FORTITUDE, 
+          FT_MULTIATTACK,
+           SK_HIDE, SK_INTIMIDATE, SK_LISTEN, SK_SPOT, SK_SWIM;
+    Flags: M_HOSTILE, M_GROUP, M_AMPHIB, M_WATER,
+           M_CHAOTIC, M_EVIL, M_HUMANOID, M_CARNI,
+           M_LIGHT_AVERSE;
+    Desc: "This hideous bipedal creature resembles a ten-foot-tall
+    crayfish with a bundle of five alien red eyes on stalks, and a long
+    flexible snout filled with many jagged rows of fangs. Magori are
+    crab-like creatures that known only hate and live to destroy sentient
+    life."; 
+    On Event POST(EVICTIM(EV_HIT)) {
+      if (!EActor->isBeside(EVictim))
+        return NOTHING;
+      VPrint(e,"Acidic blood sprays from your body!",
+               "Acidic blood sprays from the <EVictim>'s body!");
+      if (EActor->SavingThrow(REF,17))
+        DPrint(e, "You avoid being splashed.",
+                  "The <EActor> avoids being splashed.");
+      else {
+        ThrowDmg(EV_DAMAGE,AD_ACID,2d4,"magori blood",EVictim,EActor);
+        }
+      return NOTHING;
+    };
+    On Event EV_INITIALIZE {
+      hObj h;
+      for(h=EActor->FirstInv();h;h=EActor->NextInv()) {
+        if (h->isType(T_WEAPON) && h->QualityOK(WQ_KEEN))
+            h->AddQuality(WQ_KEEN);
+      }
+      if (EActor->x > 0) {
+        ThrowEff(EV_INVOKE,$"obscurement",EActor,EActor);
+      }
+    };
+    Poison: $"magori venom"; 
+  }
+
+Poison "magori venom" : EA_DRAIN
+  {
+    Level: 6;
+    /*Iteration*/   cval: 1;
+    /*Save DC*/     sval: 19;
+    /*Persistance*/ lval: 2;
+    xval: AD_DACO; pval: 2d6;
+    Desc: "This poison inflicts <11>2d6<7> points of Constitution damage every 
+      <11>turn<7>, and requires <11>2<7> saving throws against <11>DC 19<7> 
+      to overcome.";
+  }
+
+/* Note that the primary threat of this monster is equipment theft, so the
+   CR is manually set! */
+Monster "ethereal filcher" : MA_OUTSIDER, MA_ABERRATION
+  {
+    Image: azure 'O'; Size: SZ_MEDIUM; 
+    CR: 3; HD: 5; Hit: +5; Def: 13; Mov: 150%; Spd: 100%;
+    Str 10, Dex 18, Con 11, Int 4, Wis 12, Cha 10;
+    Attk: A_BITE for 1d4 AD_BLUNT,
+          A_TUCH for AD_STEA (DC 18);
+        ABILITY(CA_PHASE,PHASE_ETHERIAL);
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_SENSE_MAGIC,6);
+    Flags: M_GREEDY, M_NOHEAD, M_NEUTER, M_SKIRMISH, M_HOSTILE;
+    Feats: FT_RUN, FT_SKILL_FOCUS, SK_PICK_POCKET, SK_SPOT, 
+      SK_MOVE_SIL;
+    Desc: "These freakish interplanar pickpockets have no malign
+      intelligence, but have spelled ruin for more than one adventurer
+      none the less due to their penchant for stealing (and, one must
+      imagine, later eating) magical items. Able to phase in and out
+      of the etherial at will, the filcher has a truly bizarre anatomy.
+      Standing on a single leg, their grey, bulbous body sports four 
+      gangly, long-taloned arms, four tiny eyes on the belly, a thin
+      and wormlike head and two mouths -- one of the head, and one on
+      the belly. Filchers tend to be more playful than aggressive, and
+      will flee an encounter if seriously wounded.";
+  }
+
+Template "ethereal;template" : TM_DESCENT for MA_NLIVING 
+  { CR: +3 (Min 2); 
+  // cr: human 1/8 (-3) -> 2
+  // cr: drow 1/2 -> 2
+  // cr: bugbear 2 -> 5
+    Image: gray 0; MType: MA_OUTSIDER; 
+    Attk: A_TUCH for 1d2 AD_BLUNT;
+    Flags: M_INCOR, TMF_OBVIOUS;
+    Desc: "Ethereal creatures have been trapped by magical mischance or
+      ill fortune in the ethereal plane."; 
+    On Event EV_ISTARGET {
+      if (EActor->HasMFlag(M_INCOR) || 
+          EActor->HasAbility(CA_PHASE))
+        return -1;
+      else 
+        return 0;
+    };
+  }
+
+Monster "floating eye" : MA_EYE
+  {
+    Image: grey 'e'; Size: SZ_TINY;  Depth: 2;
+    CR: OPT_CR(2,2); HD: 1; Hit: +0; Def: 13; Mov: 50%; Spd: 100%;
+    Str 2, Dex 12, Con 10, Int 3, Wis 15, Cha 8;
+    Attk: A_GAZE for 1d8 AD_PLYS (DC 14),
+          A_GAZE for 2d4 AD_MAGC;
+	RACIAL_SKILL(SK_SPOT,6);
+	RACIAL_SKILL(SK_SEARCH,6);
+	ABILITY(CA_INFRAVISION,6);
+    Immune: DF_MAGC; 
+    Feats: SK_SPOT, SK_SEARCH, SK_MOVE_SIL; 
+    Flags: M_NOHANDS, M_NOHEAD, M_DEAF, M_FLYER, M_NOLIMBS, M_NEUTER,
+           M_AVOID_MELEE, M_SOLITARY, M_HOSTILE, M_MAGC;
+    Desc: "A terrible magical accident, it isn't known where these
+      eye creatures originate from. Appearing as a disembodied eye
+      the size of a fist, its gaze can freeze even the stoutest soul
+      dead in their tracks.";
+  }
+
+Monster "greater floating eye" : MA_EYE
+  {
+    Image: white 'e'; Size: SZ_TINY;  Depth: 2;
+    CR: OPT_CR(5,5); HD: 3; Hit: +0; Def: 15; Mov: 100%; Spd: 100%;
+    Str 2, Dex 14, Con 12, Int 3, Wis 15, Cha 12;
+    Attk: A_GAZE for 1d8 AD_PLYS (DC 16),
+          A_GAZE for 2d4 AD_MAGC,
+          A_SEEM for $"floating eye";
+	RACIAL_SKILL(SK_SPOT,9);
+	RACIAL_SKILL(SK_SEARCH,9);
+	ABILITY(CA_INFRAVISION,9);
+    Immune: DF_MAGC; 
+    Feats: SK_SPOT, SK_SEARCH, SK_MOVE_SIL; 
+    Flags: M_NOHANDS, M_NOHEAD, M_DEAF, M_FLYER, M_NOLIMBS, M_NEUTER,
+           M_AVOID_MELEE, M_SOLITARY, M_HOSTILE, M_MAGC;
+    Desc: "A terrible magical accident, it isn't known where these
+      eye creatures originate from. Appearing as a disembodied eye
+      the size of a fist, its gaze can freeze even the stoutest soul
+      dead in their tracks. This particular floating eye is slightly
+      tougher and more perceptive than its peers.";
+    On Event POST(EV_SATTACK) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };
+  }
+
+Monster "seven eyes" : MA_EYE, MA_ABERRATION
+  {
+    Image: purple 'e'; Size: SZ_TINY;  Depth: 2;
+    CR: OPT_CR(11,9); HD: 7; Hit: +0; Def: 13; Mov: 50%; Spd: 100%;
+    Str 2, Dex 12, Con 10, Int 3, Wis 15, Cha 8;
+    Attk: A_GAZE for 1d8 AD_PLYS (DC 14),
+          A_GAZE for 1d8 AD_PLYS (DC 14),
+          A_GAZE for 1d8 AD_PLYS (DC 14),
+          A_GAZE for 1d8 AD_PLYS (DC 14),
+          A_GAZE for 1d8 AD_PLYS (DC 14),
+          A_GAZE for 1d8 AD_PLYS (DC 14),
+          A_GAZE for 1d8 AD_PLYS (DC 14),
+          A_GAZE for 14d4 AD_MAGC;
+	RACIAL_SKILL(SK_SPOT,6);
+	RACIAL_SKILL(SK_SEARCH,6);
+	ABILITY(CA_INFRAVISION,6);
+    Immune: DF_MAGC;
+    Feats: SK_SPOT, SK_SEARCH, SK_MOVE_SIL; 
+    Flags: M_NOHANDS, M_NOHEAD, M_DEAF, M_FLYER, M_NOLIMBS, M_NEUTER,
+           M_AVOID_MELEE, M_SOLITARY, M_HOSTILE, M_MAGC;
+    Desc: "A terrible magical accident, it isn't known where these
+      eye creatures originate from. Appearing as a disembodied eye
+      the size of a fist, its gaze can freeze even the stoutest soul
+      dead in their tracks. This particular creature is actually
+      a ring of seven separate floating eyes revolving in a tight
+      formation and linked by short, pulsing veins. Even among eye
+      creatures it is an abomination.";
+  }
+
+Monster "blurry eye" : MA_EYE
+  {
+    Image: brown 'e'; Size: SZ_TINY;  Depth: 2;
+    CR: OPT_CR(6,6); HD: 3; Hit: +0; Def: 15; Mov: 100%; Spd: 100%;
+    Str 2, Dex 14, Con 12, Int 3, Wis 15, Cha 12;
+    Attk: A_GAZE for 4d2 AD_CONF (DC 16),
+          A_GAZE for 4d2 AD_STUN (DC 16),
+          A_GAZE for 4d2 AD_SLOW (DC 16),
+          A_GAZE for 2d2 AD_KNOC (DC 16),
+          A_GAZE for 2d4 AD_MAGC,
+          A_SEEM for $"floating eye";
+	RACIAL_SKILL(SK_SPOT,9);
+	RACIAL_SKILL(SK_SEARCH,9);
+	ABILITY(CA_INFRAVISION,9);
+    Mana: 50; Spells: $"blur", $"blink", $"mirror image", $"displacement";
+    Immune: DF_CONF, DF_STUN, DF_SLOW;
+    Feats: SK_SPOT, SK_SEARCH, SK_MOVE_SIL; 
+    Flags: M_NOHANDS, M_NOHEAD, M_DEAF, M_FLYER, M_NOLIMBS, M_NEUTER,
+           M_AVOID_MELEE, M_SOLITARY, M_HOSTILE;
+    Desc: "A terrible magical accident, it isn't known where these
+      eye creatures originate from. Appearing as a disembodied eye
+      the size of a fist, its gaze can freeze even the stoutest soul
+      dead in their tracks. This particular floating eye has a baleful
+      and unsettling visage but lacks the power of true paralysis."; 
+    On Event POST(EV_SATTACK) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };
+
+  }
+
+Monster "eye of the storm" : MA_EYE
+  {
+    Image: blue 'e'; Size: SZ_TINY;  Depth: 2;
+    CR: OPT_CR(6,2); HD: 1; Hit: +0; Def: 13; Mov: 50%; Spd: 100%;
+    Str 2, Dex 12, Con 10, Int 3, Wis 15, Cha 8;
+    Attk: A_GAZE for 1d8 AD_PLYS (DC 14),
+          A_GAZE for 2d4 AD_ELEC,
+          A_SEEM for $"floating eye";
+	  RACIAL_SKILL(SK_SPOT,6);
+	  RACIAL_SKILL(SK_SEARCH,6);
+	  ABILITY(CA_INFRAVISION,6);
+    Mana: 50; Spells: $"electric loop", $"lightning bolt";
+    Immune: DF_ELEC;
+    Feats: SK_SPOT, SK_SEARCH, SK_MOVE_SIL, FT_LORE_OF_STORMS; 
+    Flags: M_NOHANDS, M_NOHEAD, M_DEAF, M_FLYER, M_NOLIMBS, M_NEUTER,
+           M_AVOID_MELEE, M_SOLITARY, M_HOSTILE, M_ELEC, M_AIR;
+    Desc: "A terrible magical accident, it isn't known where these
+      eye creatures originate from. Appearing as a disembodied eye
+      the size of a fist, its gaze can freeze even the stoutest soul
+      dead in their tracks. This particular floating eye is surrounded
+      by a small, whirling vortex of storm clouds.";
+    On Event POST(EV_SATTACK) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };
+  }
+
+Monster "ice blue eye" : MA_EYE
+  {
+    Image: azure 'e'; Size: SZ_TINY;  Depth: 2;
+    CR: OPT_CR(5,2); HD: 1; Hit: +0; Def: 13; Mov: 50%; Spd: 100%;
+    Str 2, Dex 12, Con 10, Int 3, Wis 15, Cha 8;
+    Attk: A_GAZE for 1d8 AD_PLYS (DC 14),
+          A_GAZE for 2d4 AD_COLD,
+          A_SEEM for $"floating eye";
+	RACIAL_SKILL(SK_SPOT,6);
+	RACIAL_SKILL(SK_SEARCH,6);
+	ABILITY(CA_INFRAVISION,6);
+    Mana: 50; Spells: $"icelance", $"chill metal";
+    Immune: DF_COLD;
+    Feats: SK_SPOT, SK_SEARCH, SK_MOVE_SIL, FT_LORE_OF_RIME; 
+    Flags: M_NOHANDS, M_NOHEAD, M_DEAF, M_FLYER, M_NOLIMBS, M_NEUTER,
+           M_AVOID_MELEE, M_SOLITARY, M_HOSTILE, M_COLD;
+    Desc: "A terrible magical accident, it isn't known where these
+      eye creatures originate from. Appearing as a disembodied eye
+      the size of a fist, its gaze can freeze even the stoutest soul
+      dead in their tracks. This particular floating eye is surrounded
+      by a small, whirling vortex of icicles.";
+    On Event POST(EV_SATTACK), POST(EV_CAST) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };
+  }
+
+Monster "bloodshot eye" : MA_EYE
+  {
+    Image: red 'e'; Size: SZ_TINY;  Depth: 2;
+    CR: OPT_CR(1/2,2); HD: 1; Hit: +0; Def: 13; Mov: 50%; Spd: 100%;
+    Str 2, Dex 12, Con 10, Int 3, Wis 15, Cha 8;
+    Attk: A_GAZE for 1d8 AD_PLYS (DC 14),
+          A_GAZE for AD_SPE1,
+          A_SEEM for $"floating eye";
+	RACIAL_SKILL(SK_SPOT,6);
+	RACIAL_SKILL(SK_SEARCH,6);
+	ABILITY(CA_INFRAVISION,6);
+    Mana: 50; Spells: $"scorcher", $"heat metal";
+    Immune: DF_FIRE;
+    Feats: SK_SPOT, SK_SEARCH, SK_MOVE_SIL, FT_LORE_OF_FLAMES; 
+    Flags: M_NOHANDS, M_NOHEAD, M_DEAF, M_FLYER, M_NOLIMBS, M_NEUTER,
+           M_AVOID_MELEE, M_SOLITARY, M_HOSTILE, M_FIRE;
+    Desc: "A terrible magical accident, it isn't known where these
+      eye creatures originate from. Appearing as a disembodied eye
+      the size of a fist, its gaze can freeze even the stoutest soul
+      dead in their tracks. This particular floating eye is lined 
+      with pulsing, bloodshot veins."; 
+    On Event PRE(EV_DAMAGE) {
+      if (e.DType == AD_SPE1) {
+        e.eID = $"burning blood";
+        // e.saveDC = 14 + EActor->Mod2(A_CHA);
+        e.vCasterLev = EActor->ChallengeRating();
+        e.DType = AD_FIRE; 
+        ReThrow(EV_EFFECT,e);
+        return DONE;
+        }
+      return NOTHING;
+      },
+    MSG_SPECABIL
+      "Its gaze has the effect of a <1>Burning Blood<7> spell on any
+        victim within range, recurring every 1d4+1 rounds.";
+    On Event POST(EV_SATTACK), POST(EV_CAST) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };
+  }
+
+Monster "eye of the abyss" : MA_EYE
+  {
+    Image: shadow 'e'; Size: SZ_TINY;  Depth: 2;
+    CR: OPT_CR(3,2); HD: 1; Hit: +0; Def: 13; Mov: 50%; Spd: 100%;
+    Str 2, Dex 12, Con 10, Int 3, Wis 15, Cha 8;
+    Attk: A_GAZE for 1d8 AD_PLYS (DC 14),
+          A_GAZE for 2d4 AD_VAMP,
+          A_SEEM for $"floating eye";
+	RACIAL_SKILL(SK_SPOT,6);
+	RACIAL_SKILL(SK_SEARCH,6);
+	ABILITY(CA_INFRAVISION,6);
+    Mana: 50; Spells: $"false life", $"blackmantle";
+    Immune: DF_NECR;
+    Feats: SK_SPOT, SK_SEARCH, SK_MOVE_SIL, FT_LORE_OF_DEATH; 
+    Flags: M_NOHANDS, M_NOHEAD, M_DEAF, M_FLYER, M_NOLIMBS, M_NEUTER,
+           M_AVOID_MELEE, M_SOLITARY, M_HOSTILE;
+    Desc: "A terrible magical accident, it isn't known where these
+      eye creatures originate from. Appearing as a disembodied eye
+      the size of a fist, its gaze can freeze even the stoutest soul
+      dead in their tracks. This particular floating eye is completely
+      black."; 
+    On Event POST(EV_SATTACK), POST(EV_CAST) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };
+  }
+
+Monster "floating eyesocket" : MA_EYE, MA_ZOMBIE
+  {
+    Image: yellow 'e'; Size: SZ_TINY;  Depth: 2;
+    CR: OPT_CR(5,2); HD: 2; Hit: +0; Def: 13; Mov: 30%; Spd: 100%;
+    Str 2, Dex 12, Wis 14, Cha 2;
+    Attk: A_GAZE for 1d8 AD_PLYS (DC 14),
+          A_GAZE for 2d4 AD_MAGC,
+          A_SEEM for $"floating eye";
+	RACIAL_SKILL(SK_SPOT,6);
+	RACIAL_SKILL(SK_SEARCH,6);
+	ABILITY(CA_INFRAVISION,12);
+    Immune: UNDEAD_IMMUNITIES, DF_MAGC;
+    Resists: DF_PIERCE, DF_SLASH;
+    Feats: SK_SPOT, SK_SEARCH, SK_MOVE_SIL; 
+    Flags: M_NOHANDS, M_NOHEAD, M_DEAF, M_FLYER, M_NOLIMBS, M_NEUTER,
+           M_AVOID_MELEE, M_SOLITARY, M_HOSTILE, M_MAGC,
+           M_UNDEAD, M_MINDLESS, M_EVIL, M_OLD_CORPSE, M_NO_BLOOD;
+    Desc: "A terrible magical accident, it isn't known where these
+      eye creatures originate from. Appearing as a disembodied eye
+      the size of a fist, its gaze can freeze even the stoutest soul
+      dead in their tracks. To make matters worse, this particular floating
+      eye has been brought back from the grave and now serves as a
+      mindless, undead evil."; 
+    On Event POST(EV_SATTACK) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };
+  }
+
+Template "three-eyed" : TM_NATURE for MA_NLIVING
+  { CR: +3; 
+    // drow: 1/2 ->     2
+    // bugbear: 2 ->    5
+    // leopard: 3 ->    5
+    // troll: 6 ->      9
+    MType: MA_EYE; Flags: M_CLOSEID;
+    Desc: "This creature has grown or been granted a third eye in the
+    center of its forehead."; 
+    Attk: A_GAZE for 1d8 AD_CONF (DC 14);
+	  RACIAL_SKILL(SK_SPOT,6);
+	  RACIAL_SKILL(SK_SEARCH,6);
+	  ABILITY(CA_INFRAVISION,3);
+    On Event POST(EV_SATTACK) {
+      if (e.AType == A_GAZE) 
+        EActor->IdentifyTemp($"three-eyed");
+      return NOTHING;
+      },
+    EV_ISTARGET {
+      if (enFreaky() % 30 != 7)
+        return -1;
+      if (EActor->HasMFlag(M_BLIND) || 
+          EActor->HasMFlag(M_NOHEAD) ||
+          EActor->HasAttk(A_GAZE))
+        return -1;
+      else 
+        return 0;
+      };
+  }
+
+Monster "scryer" : MA_EYE
+  {
+    Image: green 'e'; Size: SZ_SMALL; 
+    CR: OPT_CR(3,4); HD: 7; Hit: +2; Def: 14; Mov: 50%; Spd: 70%;
+    Str 6, Dex 11, Con 8, Int 14, Wis 16, Cha 12;
+    Attk: A_BITE for 1d3 AD_PIERCE;
+	ABILITY(CA_INFRAVISION,6);
+    Spells: $"inflict light wounds;ray", $"cause blindness;ray",
+      $"magic missile", $"reduce;ray", $"scorcher";
+    Flags: M_NOHANDS, M_NOHEAD, M_FLYER, M_NOLIMBS, M_NEUTER,
+           M_CASTER, M_AVOID_MELEE;
+    On Event EV_INVOKE {
+
+      /* if aval != AR_BEAM, return NOTHING; */
+    
+      if (GetHandle(EActor) == GetHandle(EVictim) || !(GetHandle(EVictim)))
+        DPrint(e,"You fire an eye ray at yourself.", 
+                 "The <EActor> fires an eye ray at itself.");
+      else
+        TPrint(e,"You fire an eye ray at the <EVictim>.",
+                 "The <EActor> fires an eye ray at you.",
+                 "The <EActor> fires an eye ray at the <EVictim>.");
+      EActor->Timeout += 3;
+      return ReThrow(EV_EFFECT,e);
+      };
+    
+    Desc: "These tiny beings are flawed beholders born with genetic
+      abberations. Due to the intense conformity and xenophobic
+      focus on blood purity that race possesses, these creatures
+      are thaumaturgically frozen eternally in an infant state and 
+      used by healthy adult beholders as spies, attendants and lackies. 
+      A scryer is notoriously craven, and appears as a baseball-sized 
+      fleshy sphere with four tiny eyestalks."; 
+  }
+
+Effect "Reduce;ray" : EA_INFLICT
+  { SC_THA; Base: 85; Cost: 3; Level: 1; qval: Q_TAR; sval: FORT;
+    Purpose: EP_ATTACK; xval: ADJUST; yval: A_SIZ; pval: -1;
+    Desc: "Causes a target creature to become smaller, lowering their
+      size catagory by one level."; aval: AR_BEAM; cval: EMERALD;
+    Flags: EF_SPECABIL;
+    On Event EV_MAGIC_HIT {
+      if (EVictim->GetAttr(A_SIZ) == SZ_MINISCULE)
+        {
+          EActor->IPrint("You can't get any smaller!");
+          return DONE;
+        }
+      if (EVictim->HasEffStati(ADJUST,$"enlarge")) {
+        EVictim->RemoveEffStati($"enlarge");
+        return DONE;
+        }
+      return NOTHING;
+    };
+  }
+
+Effect "Inflict Light Wounds;ray" : EA_BLAST
+  { SC_NEC; Base: 90; Cost: 2; Level: 1; aval: AR_BEAM;
+    xval: AD_NECR; pval: 1d8 + LEVEL_MAX5; cval: BLUE;
+    Purpose: EP_ATTACK; qval: Q_TAR; Flags: EF_SPECABIL;
+    On Event EV_MAGIC_HIT
+      "Wounds appear on your body!" / 
+      "Wounds appear on the <EVictim>'s body!";
+    Desc: "Inflicts 1d8 + caster level (maximum 1d8+5) points of necromantic
+      damage on the creatures struck by your eye ray.";
+  }
+
+Effect "Cause Blindness;ray" : EA_INFLICT
+  { SC_THA; Base: 75%; Cost: 12; Level: 3; qval: Q_TAR;
+    aval: AR_BEAM; cval: PURPLE; Flags: EF_SPECABIL;
+    xval: BLIND; sval: FORT; Purpose: EP_CURSE; Flags: EF_DLONG;
+    Desc: "Blinds the target creature, assuming that they fail a
+      Fortitude save."; }
+
+
+Monster "frost slug" : MA_ABERRATION, MA_VERMIN, MA_WORM
+  {
+    Image: bright blue 'w'; Size: SZ_TINY; 
+    CR: OPT_CR(1,1); HD: 2; Hit: +3; Def: 7; Mov: 30%; Spd: 100%;
+    Str 13, Dex 7, Con 15, Int 1, Wis 16, Cha 3; 
+    Attk: A_BITE for 1d6 AD_PIERCE,
+          A_SUCK for 2d6 AD_NORM;
+	MAGIC_RES(50);
+	ABILITY(CA_TREMORSENSE,6);
+    Feats: FT_TOUGHNESS, SK_MOVE_SIL, FT_NATURAL_GRAB; 
+    Immune: DF_COLD;
+    Flags: M_CARNI, M_NOHANDS, M_NOLIMBS, M_NOHEAD, M_HIDE_UNDER,
+           M_LAYS_EGGS, M_NEUTER, M_COLD;
+    Desc: "These creatures resemble a cross between a slug, a
+      leech and a serpent, and can grow to be the size of a
+      housecat. They subsist by drinking the blood of living
+      creatures, just like leeches, but their true form is
+      rarely seen -- they have developed a kind of innate
+      magical improved invisibility.";
+    Stati[INVIS,INV_IMPROVED]; 
+  }    
+
+Monster "hook horror" : MA_ABERRATION, MA_VERMIN
+  {
+    Image: grey 'X'; Size: SZ_LARGE; Arm: 8;
+    CR: OPT_CR(6,3); HD: 5; Hit: +4; Def: 12; Hit: 3; Mov: 60%; Spd: 80%;
+    Str 20, Dex 13, Con 17, Int 7, Wis 13, Cha 12;
+    Attk: A_CLAW for 1d8 AD_PIERCE,
+          A_CLAW for 1d8 AD_PIERCE,
+          A_BITE for 1d10 AD_PIERCE;
+	ABILITY(CA_BLINDSIGHT,6);
+    Feats: FT_RAKE, FT_MULTIATTACK, FT_NATURAL_GRAB, 
+      SK_SPOT, SK_LISTEN, SK_CLIMB;
+    Flags: M_CARNI, M_LAYS_EGGS, M_NOHANDS, M_REACH, M_HOSTILE;
+    Desc: "Standing over nine feet tall and weighing more than 350
+      pounds, the hook horror is a terrible Underdark predator. 
+      Resembling a cross between a beetle and a vulture, the hook
+      horror has razor-sharp hooks on the end of each of its arms,
+      and three smaller hooks in the position of toes on each foot.
+      Its carapice is rock-hard, and while its multifaceted eyes
+      are very poor its hearing is simply unearthly.";
+  }
+
+Monster "mind flayer" : MA_ILLITHID, MA_ABERRATION
+  {
+    Image: purple 'I'; Size: SZ_MEDIUM; Mana: 15; 
+    CR: OPT_CR(5,7); HD: 8; Hit: +4; Def: 13; Mov: 100%; Spd: 100%;
+    Str 12, Dex 14, Con 12, Int 19, Wis 17, Cha 17;
+    Attk: A_TENT for 1d4 AD_SLASH,
+          A_CONS for 2d8 AD_PIERCE and 1d6 AD_DRIN;
+	ABILITY(CA_INFRAVISION,6);
+	MAGIC_RES(65);
+	ABILITY(CA_TELEPATHY,10);
+    WEAPON_FOCUS_NATURAL_ATTACK;
+    Feats: FT_GUARDED_INVOCATION, FT_ALERTNESS, FT_DODGE,
+      FT_NATURAL_GRAB, FT_MASTER_GRAPPLE,
+      FT_WEAPON_FINESSE, SK_BLUFF,
+      SK_CONCENT, SK_HIDE, SK_INTIMIDATE, /*SK_KNOWLEDGE,*/ 
+      SK_LISTEN, SK_MOVE_SIL, SK_SPOT;
+    Flags: M_HUMANOID, M_EVIL, M_LAWFUL, M_LIGHT_AVERSE,
+      M_TALKABLE, M_FLYER, M_CARNI;
+    Spells: 
+      $"levitation", 
+      $"charm monster", 
+      $"emotion", 
+      $"mind blast", 
+      $"deep slumber";
+    On Event PRE(EV_DAMAGE) {
+      if (e.DType == AD_DRIN) {
+        if (EVictim->HasMFlag(M_MINDLESS))
+          return ABORT;
+        if (e.vDmg >= EVictim->GetAttr(A_INT)) {
+          TPrint(e,"You extract the <EVictim>'s brain.", 
+                   "The <EActor> extracts your brain.",
+                   "The <EActor> extracts the <EVictim>'s brain.");
+          ThrowDmg(EV_DEATH,AD_DRIN,0,XPrint("having <his:hObj> brain eaten",EVictim),EActor,EVictim);
+          e.Died = true;
+          return DONE;
+          }
+        }
+      };
+  }
+
+Effect "Mind Blast" : EA_INFLICT
+  { Level: 5; xval: STUNNED; sval: WILL; qval: Q_DIR;
+    aval: AR_BEAM; cval: MAGENTA; lval: 6; 
+    Purpose: EP_ATTACK; Flags: EF_SPECABIL;
+    On Event MSG_CAST "Fwoomp!" / "Fwoomp!"; }                  
+
+Monster "nothic" : MA_ABERRATION
+  { Image: brown 'X'; Size: SZ_LARGE; Mana 70;
+    CR: 4; HD: 5; Def: 10; Hit: +4; Mov: 135%; Spd: 80%;
+    Str 18, Dex 12, Con 19, Int 5, Wis 13, Cha 8;
+    Attk: A_GAZE for 1d8 AD_NECR,
+          A_CLAW for 1d4 AD_SLASH,
+          A_CLAW for 1d4 AD_SLASH;
+    ABILITY(CA_INFRAVISION,12);
+    Resists: DF_COLD; Immune: DF_NECR, DF_DISE;
+    Feats: FT_IMPROVED_INITIATIVE, FT_DODGE, SK_SPOT;
+    Flags: M_EVIL, M_NEUTER, M_AVOID_MELEE, M_SEE_INVIS;
+    On Event PRE(EV_DAMAGE) {
+      if (e.AType == A_GAZE)
+        if (e.DType == AD_NECR)
+          if (EVictim->ResistLevel(AD_NECR) != -1)
+            VPrint(e,"Your flesh rots!","The <EVictim>'s flesh rots!");
+      return NOTHING;
+      },
+    EV_INIT_STATI {
+      EActor->GainPermStati(SKILL_BONUS,NULL,SS_RACE,SK_SPOT,+4,$"nothic");
+      return NOTHING;
+      },
+    MSG_SPECABIL
+      "It has a +4 racial bonus to Spot checks.";
+    Desc: "Nothics are a race of subterranian scavengers who dwell in 
+      lightless caverns deep beneath the earth and prefer to feed upon
+      rotted carrion. They are only vaguely humanoid, with thick tan
+      hides, muscular legs, spindly arms and a stooped, awkward posture.
+      Their arms are long enough that their hands drag along the ground
+      as they walk. The face of a nothic is dominated by a single huge
+      eye -- a glossy orb a foot across, with a hypnotic, unnatural
+      spiral pattern swirling within the vast pupil.";
+  }
+
+/* I gave the mind flayer warrior Master Disarm to try and
+   track down crashes related to monsters using Disarm, so
+   I can have a monster that reliably does so to auto-test
+   with Monster Evaluation. */
+Monster "mind flayer warrior" : MA_ILLITHID, MA_ABERRATION
+  {
+    Image: pink 'I'; Size: SZ_MEDIUM; Mana: 15; 
+    CR: OPT_CR(10,8); HD: 8; Hit: +8; Def: 13; Mov: 100%; Spd: 140%;
+    Str 18, Dex 14, Con 18, Int 17, Wis 12, Cha 12;
+    Attk: A_TENT for 1d4 AD_SLASH,
+          A_TENT for 1d4 AD_SLASH,
+          A_CONS for 2d8 AD_PIERCE and 1d6 AD_DRIN,
+          A_SEEM for $"mind flayer";
+	ABILITY(CA_INFRAVISION,6);
+	MAGIC_RES(65);
+	ABILITY(CA_TELEPATHY,10);
+    Feats: FT_TOUGHNESS,                // level 1
+           FT_WEAPON_MASTERY,           // warrior bonus feats
+           FT_IMPROVED_STRENGTH,        // level 3
+           FT_MASTER_DISARM,
+           FT_MULTIATTACK,              // level 6
+           FT_NATURAL_GRAB, FT_MASTER_GRAPPLE,
+
+           SK_ATHLETICS, SK_HIDE, SK_LISTEN, SK_MOVE_SIL, SK_SPOT;
+
+    Flags: M_HUMANOID, M_EVIL, M_LAWFUL, M_LIGHT_AVERSE, M_TALKABLE,
+    M_CARNI, M_FLYER;
+    
+    Gear: $"kite shield" of random 1 to 2,
+          $"field plate armor" of random 1 to 2,
+          5d2 $"potion" of $"extra-healing",
+          5d2 $"potion" of $"dimension door";
+
+    On Event PRE(EV_DAMAGE) {
+      if (e.DType == AD_DRIN) {
+        if (EVictim->HasMFlag(M_MINDLESS))
+          return ABORT;
+        if (e.vDmg >= EVictim->GetAttr(A_INT)) {
+          TPrint(e,"You extract the <EVictim>'s brain.", 
+                   "The <EActor> extracts your brain.",
+                   "The <EActor> extracts the <EVictim>'s brain.");
+          ThrowDmg(EV_DEATH,AD_DRIN,0,XPrint("having <his:hObj> brain eaten",EVictim),EActor,EVictim);
+          e.Died = true;
+          return DONE;
+          }
+        }
+      },
+    POST(EV_HIT) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };
+  }
+
+Monster "mind flayer mage" : MA_ILLITHID, MA_ABERRATION
+  {
+    Image: skyblue 'I'; Size: SZ_MEDIUM; Mana: 15; 
+    CR: OPT_CR(10,8); HD: 8; Hit: +4; Def: 13; Mov: 100%; Spd: 100%;
+    Str 10, Dex 12, Con 14, Int 21, Wis 19, Cha 15;
+    Attk: A_TENT for 1d4 AD_SLASH,
+          A_CONS for 2d8 AD_PIERCE and 1d6 AD_DRIN,
+          A_SEEM for $"mind flayer";
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_SPELLCASTING,8);
+	MAGIC_RES(65);
+	ABILITY(CA_TELEPATHY,10);
+    Feats: 
+      FT_COMBAT_CASTING,        // 1
+      FT_DEFENSIVE_SPELL,       // 3 
+      FT_LORE_OF_FLAMES,        // 5 
+      FT_EMPOWER_SPELL,          // 6
+      FT_NATURAL_GRAB, FT_MASTER_GRAPPLE,
+
+      SK_CONCENT, SK_HIDE, /*SK_KNOWLEDGE,*/ SK_LISTEN, SK_MOVE_SIL, SK_SPOT;
+
+    Flags: M_HUMANOID, M_EVIL, M_LAWFUL, M_LIGHT_AVERSE, M_TALKABLE,
+           M_AVOID_MELEE, M_CARNI, M_FLYER, M_MAGE;
+    Spells: $"levitation", $"charm monster", $"suggestion",
+      $"emotion", $"mind blast";
+    On Event PRE(EV_DAMAGE) {
+      if (e.DType == AD_DRIN) {
+        if (EVictim->HasMFlag(M_MINDLESS))
+          return ABORT;
+        if (e.vDmg >= EVictim->GetAttr(A_INT)) {
+          TPrint(e,"You extract the <EVictim>'s brain.", 
+                   "The <EActor> extracts your brain.",
+                   "The <EActor> extracts the <EVictim>'s brain.");
+          ThrowDmg(EV_DEATH,AD_DRIN,0,XPrint("having <his:hObj> brain eaten",EVictim),EActor,EVictim);
+          e.Died = true;
+          return DONE;
+          }
+        }
+      },
+    POST(EV_CAST) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };
+    Gear: 5d2 $"potion" of $"extra-healing",
+          5d2 $"potion" of $"*mana*",
+          $"wand" of random 3 to 4,
+          5d2 $"potion" of $"dimension door";
+    Lists:
+      * SPELL_LIST
+          ALL_SPELLS_FROM_SOURCE(AI_WIZARDRY);
+  }
+
+Monster "quylthulg" : MA_QUYLTHULG, MA_ABERRATION
+  { Image: pink 'Q'; Size: SZ_HUGE; Mana: 60; Depth: 7;
+    CR: OPT_CR(9,5); HD: 7; Def: 12; Hit: +0; Mov: 0%; Spd: 80%;
+    Str 5, Dex 4, Con 22, Int 8, Wis 13, Cha 10;
+    ABILITY(CA_TREMORSENSE,12);
+    Immune: DF_FEAR, DF_BLND, DF_CONF, DF_MIND, DF_SLEE;
+    Resists: DF_COLD, DF_ACID, DF_NECR;
+    Feats: FT_TOUGHNESS, SK_SPOT, SK_LISTEN;
+    Flags: M_NOLIMBS, M_NOHANDS, M_NOHEAD, M_CHAOTIC, M_ACID,
+      M_POISON, M_INVIS, M_MAGC, M_NEUTER, M_AVOID_MELEE;
+    Spells: $"blink", $"dimension door", $"monster summoning III";
+    On Event EV_TURN {
+      EActor->GainMana(3);
+      return NOTHING;
+      },
+    MSG_SPECABIL
+      "It regenerates mana at a rate of three points per round. It is
+        innately invisible.";
+    Desc: "When these strange and naturally invisible creatures are 
+      actually seen, they appear as a pulsing mound of flesh crusted
+      with odd fleshy orbs. They are inherantly magical, defending
+      themselves by innate invisibility, teleportation and calling
+      other creatures to their aid.";
+  }
+
+Monster "tentacle stalker" : MA_ABERRATION
+  { Image: green 'X'; Size: SZ_HUGE; 
+    CR: OPT_CR(7,7); HD: 9; Hit: +9; Def: 20; Mov: 200%; Spd: 175%;
+    Str 19, Dex 17, Con 17, Int 2, Wis 14, Cha 12;
+    Attk: A_TENT for 1d6 AD_SLASH,
+          A_TENT for 1d6 AD_SLASH,
+          A_CONS for 1d8 AD_BLUNT;
+	ABILITY(CA_REGEN,10);
+	ABILITY(CA_TRACKING,12);
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_TREMORSENSE,6);
+    Feats: FT_REND, FT_MULTIATTACK, 
+      FT_NATURAL_GRAB, FT_MASTER_GRAPPLE, FT_COMBAT_REFLEXES, FT_SKILL_FOCUS,
+      SK_SWIM, SK_HIDE, SK_MOVE_SIL, 
+      SK_WILD_LORE;
+    Flags: M_NOHANDS, M_NOHEAD, M_DEAF, M_AQUATIC, M_LIGHT_AVERSE,
+      M_SWAMP, M_REACH, M_NEUTER, M_HOSTILE;
+    Spells: $"obscurement", $"ray of enfeeblement", $"dimension door",
+      $"monster summoning IV", $"wall of thorns", $"dominate animal";
+    Desc: "This terrible cephalopod vaguely resembles a giant squid,
+      but it's better described as a cloud of fast, strong tentacles
+      in the water -- its actual body is rarely seen, obscured by the
+      literal dozens of tentacles this creature possesses. Tentacle 
+      stalkers are canny predators with an instinctive understanding
+      of magic and a xenophobic aggression toward anyone who dares to
+      disturb their slumber.";
+  }        
+
+Monster "umber hulk" : MA_ABERRATION
+  {
+    Image: brown 'X'; Size: SZ_LARGE; Arm: 12;
+    CR: OPT_CR(7,7); HD: 8; Hit: +6; Def: 12; Mov: 75%; Spd: 75%;
+    /* In the SRD, these things are intelligent, but I've never
+       once seen any referance to their culture, society, etc.
+       so it makes more sense to me for them to be of beastial
+       intellect. The alignment change follows from this. */
+    Str 23, Dex 13, Con 19, Int 2, Wis 11, Cha 13;
+    Attk: A_GAZE for 3d4  AD_CONF (DC 15),
+          A_CLAW for 1d12 AD_SLASH,
+          A_CLAW for 1d12 AD_SLASH,
+          A_BITE for 2d8  AD_SLASH;
+    ABILITY(CA_TREMORSENSE,6);
+    ABILITY(CA_TUNNEL,6);
+    Feats: FT_REND, FT_MULTIATTACK, SK_JUMP, SK_CLIMB, SK_LISTEN;
+    Flags: M_NOHANDS, M_BLIND, M_REACH, M_NEUTER, M_HOSTILE,
+           M_LAYS_EGGS, M_THICK_HIDE, M_MOUNTABLE, M_CARNI;
+    Desc: "Umber hulks are strange subterranian creatures that resemble
+      a hybrid of an ape and a beetle. They have a thick, chitinous
+      shell and two sets of eyes, the larger ones segmented like a fly's.
+      Umber hulks are dangerous and irascible creatures, but are
+      sometimes trained or tamed by illithids, drow or other races
+      of the Underdark.";
+  }
+  
+Template "pseudonatural" : TM_PLANAR for MA_NLIVING
+  {
+    Desc: "In the spaces between shadows, beyond the edges without
+      corners, there lay in wait unimaginable things. Visitors to
+      our reality from truly distant lands, pseudonatural creatures
+      are inscrutable and arcane, to the point that even looking at
+      the true form of such a being can sunder the fragile human
+      mind. They are not evil, not truly, but their nature is so
+      utterly alien to everything native to Theyra that encounters
+      with them most often end in violence. Followers of Kysul have
+      some greater understanding of these beings, and may be able
+      to negotiate with them. The best anyone else can hope to do
+      is survive with body and sanity intact.";
+    Glyph: pink 0; MType: MA_OUTSIDER;
+    CR: +4 (Min 7); HD: +3; Hit: +2;
+    Caster Level: +2; Power: +2;
+    Dex +4, Int +8, Wis +6, Cha +4;
+    Attk: A_TENT for 1d8 AD_SLASH 
+                 and AD_GRAB (DC 16),
+          A_TENT for 1d8 AD_SLASH 
+                 and AD_GRAB (DC 16),
+          A_CRIT for AD_ENGL (DC 16),
+          A_DGST for 2d6 AD_ACID,
+          A_GAZE for 6d12 AD_FEAR (DC 20)
+                 and 1d6 AD_DAIN (DC 16),
+          A_SPOR for 0d0 AD_DISE (DC 16);
+    Spells: $"true strike", $"distance distortion",
+            $"evard's black tentacles",
+            $"displacement", $"confusion";
+    ABILITY(CA_EVASION,12);
+    ABILITY(CA_WEAPON_IMMUNITY,+2);
+    MAGIC_RES(35);
+    Stati[SUSTAIN,A_CON];
+    Stati[SUSTAIN,A_INT];
+    Stati[ADJUST_INS,A_DEF,+6];
+    Disease: $"blinding sickness", $"cackle fever", $"mindfire";
+    On Event EV_SATTACK {
+      if (e.AType == A_GAZE)
+        if (EVictim->isCharacter())
+          if (EVictim->GodID == $"Kysul")
+            return ABORT;
+      return NOTHING;
+      },
+    POST(EV_STRIKE), POST(EV_INVOKE) {
+      if (e.Event == EV_INVOKE || e.AType == A_TENT)
+        EActor->IdentifyTemp($"pseudonatural");
+      return NOTHING;
+      };
+    Resists: DF_ACID, DF_SONI;
+    Flags: M_LIGHT_AVERSE, !M_EVIL, !M_LAWFUL, !M_CHAOTIC, 
+           !M_GOOD, !M_NATURAL, M_AMORPH, M_HOSTILE;
+    /* To add later:
+       change A_GAZE to A_VISA (just different messages,
+         but it should be looking at their form, rather
+         then meeting their gaze, that does the harm).
+       add GATE ability for more pseudonaturals
+       trap EV_SOCIAL so that only Kysul-followers can
+       communicate with them. Maybe make them neutral to
+       followers of Kysul from birth? 
+    */
+  }
+       
+            
+
+
+/***************************************************************************
+ ***************************************************************************
+ ***                            VORTICES                                 ***
+ ***************************************************************************
+ ***************************************************************************/
+Monster "yellow light" : MA_VORTEX
+  {
+    Image: bright yellow 'v'; Size: SZ_SMALL;             
+    CR: OPT_CR(2,2); HD: 1; Hit: 1; Def: 17; Mov: 160%; Spd: 100%;    
+    Dex 16, Con 10, Int 3, Wis 12, Cha 10;
+    Attk: A_EXPL for 7d10 AD_BLND (DC 17);
+    Immune: DF_MIND, DF_CRIT, DF_FIRE, DF_COLD, DF_POLY,
+            DF_ACID, DF_POIS, DF_ELEC, DF_STON, DF_DISN, DF_SLEE;
+    Flags: M_NEUTER, M_NOHANDS, M_DEAF, M_NOLIMBS, M_HOSTILE, M_SUNL,
+           M_NOBODY, M_INCOR, M_BLIND, M_NO_CORPSE, M_FLYER, M_NOPOLY;
+    Desc: "This odd creature results from chaotic magical experimentation.
+      A wisp of yellow luminescance, it is attracted to warm-blooded
+      creatures within 180 feet (18 squares) and explodes in a blinding
+      flash of light when it comes in contact with another creature.";
+    Stati[DETECTING,MA_HAS_BLOOD,18]; 
+  }
+
+Monster "mote of frost" : MA_VORTEX, MA_ELEMENTAL
+  {
+    Image: bright blue 'v'; Size: SZ_TINY;             
+    CR: OPT_CR(3,2); HD: 1; Hit: 1; Def: 15; Mov: 100%; Spd: 100%;    
+    Dex 16, Wis 14;
+    Attk: A_TUCH for 1d2 AD_SLOW (DC 18),
+          A_PROX for 1d6 AD_COLD,
+          A_DETH for 2d6 AD_COLD (DC 20);
+	ABILITY(CA_INFRAVISION,9);
+    Immune: DF_MIND, DF_CRIT, DF_COLD, DF_NECR, DF_POLY,
+            DF_ACID, DF_POIS, DF_ELEC, DF_STON, DF_DISN, DF_SLEE;
+    Flags: M_NEUTER, M_NOHANDS, M_NOLIMBS, M_MINDLESS,
+           M_HOSTILE, M_NOBODY, M_INCOR, M_NO_CORPSE, M_FLYER,
+           M_SKIRMISH, M_NOPOLY, M_NOHEAD, M_COLD;
+    On Event EV_MOVE, EV_STRIKE {
+      if (!GetHandle(EActor))
+        return NOTHING; 
+      if (EActor->isDead())
+        return NOTHING;
+      if (!EMap->SolidAt(EActor->x,EActor->y) &&
+          !EMap->FallAt(EActor->x,EActor->y)) 
+        EMap->WriteTerra(EActor->x,EActor->y,$"ice floor");
+         
+      if (GetHandle(EVictim))
+        if (!EVictim->isDead())
+          if(!EMap->SolidAt(EVictim->x,EVictim->y) &&
+             !EMap->FallAt(EVictim->x,EVictim->y)) 
+            EMap->WriteTerra(EVictim->x,EVictim->y,$"ice floor");
+         
+    } ;
+    Desc: "This strange quasi-elemental is surrounded by an intense field
+    of cold. It leaves a trail of rimey permafrost in its path."; 
+  }
+
+Monster "mote of fire" : MA_VORTEX, MA_ELEMENTAL
+  {
+    Image: bright red 'v'; Size: SZ_TINY;             
+    CR: OPT_CR(4,3); HD: 1; Hit: 1; Def: 15; Mov: 100%; Spd: 100%;    
+    Dex 16, Wis 14;
+    Attk: A_TUCH for 1d2 AD_CONF (DC 18),
+          A_PROX for 1d6 AD_FIRE,
+          A_DETH for 2d6 AD_FIRE (DC 20);
+	ABILITY(CA_INFRAVISION,9);
+    Immune: DF_MIND, DF_CRIT, DF_FIRE, DF_NECR, DF_POLY,
+            DF_ACID, DF_POIS, DF_ELEC, DF_STON, DF_DISN, DF_SLEE;
+    Flags: M_NEUTER, M_NOHANDS, M_NOLIMBS, M_MINDLESS,
+           M_HOSTILE, M_NOBODY, M_INCOR, M_NO_CORPSE, M_FLYER,
+           M_SKIRMISH, M_FIRE, M_NOPOLY, M_NOHEAD;
+    On Event EV_MOVE, EV_STRIKE {
+      if (!GetHandle(EActor) || EActor->isDead())
+        return NOTHING; 
+      if (!EMap->SolidAt(EActor->x,EActor->y)) {
+        EMap->WriteTerra(EActor->x,EActor->y,$"brimstone");
+      } 
+      if (GetHandle(EVictim) && !EVictim->isDead() && 
+          !EMap->SolidAt(EVictim->x,EVictim->y)) {
+        EMap->WriteTerra(EVictim->x,EVictim->y,$"brimstone");
+      } 
+    } ;
+    Desc: "This strange quasi-elemental is surrounded by an intense field
+    of heat. It leaves a trail of melted brimstone in its path."; 
+  }
+
+Monster "mote of negative energy" : MA_VORTEX, MA_ELEMENTAL, MA_OUTSIDER
+  {
+    Image: shadow 'v'; Size: SZ_TINY;             
+    CR: OPT_CR(5,5); HD: 1; Hit: 1; Def: 15; Mov: 100%; Spd: 100%;    
+    Dex 16, Wis 14;
+    Attk: A_TUCH for 1d2 AD_FEAR (DC 18),
+          A_PROX for 1d6 AD_VAMP,
+          A_DETH for 2d6 AD_NECR (DC 20);
+	ABILITY(CA_INFRAVISION,9);
+    Immune: DF_MIND, DF_CRIT, DF_FIRE, DF_COLD, DF_NECR, DF_POLY,
+            DF_ACID, DF_POIS, DF_ELEC, DF_STON, DF_DISN, DF_SLEE;
+    Flags: M_NEUTER, M_NOHANDS, M_NOLIMBS, M_MINDLESS,
+           M_HOSTILE, M_NOBODY, M_INCOR, M_NO_CORPSE, M_FLYER,
+           M_SKIRMISH, M_AIR, M_NOPOLY, M_NOHEAD;
+    Desc: "This strange quasi-elemental sucks in life from its
+    surroundings, leaving only emptiness behind."; 
+  }
+
+Monster "mote of pure magic" : MA_VORTEX, MA_ELEMENTAL
+  {
+    Image: purple 'v'; Size: SZ_TINY;             
+    CR: OPT_CR(4,3); HD: 1; Hit: 1; Def: 15; Mov: 100%; Spd: 100%;    
+    Dex 16, Wis 14; Depth: 5;
+    Attk: A_TUCH for 1d2 AD_DRMA (DC 18),
+          A_PROX for 1d6 AD_MAGC,
+          A_DETH for 2d6 AD_MAGC (DC 20);
+	ABILITY(CA_INFRAVISION,9);
+    Immune: DF_MIND, DF_CRIT, DF_FIRE, DF_COLD, DF_NECR, DF_POLY,
+            DF_ACID, DF_POIS, DF_ELEC, DF_STON, DF_DISN, DF_SLEE, DF_MAGC;
+    Flags: M_NEUTER, M_NOHANDS, M_NOLIMBS, M_MINDLESS,
+           M_HOSTILE, M_NOBODY, M_INCOR, M_NO_CORPSE, M_FLYER,
+           M_SKIRMISH, M_AIR, M_NOPOLY, M_NOHEAD, M_MAGC;
+    Desc: "This strange quasi-elemental appears to be made of pure magical
+    energy. Its can drain mana from nearby creatures and it
+    redistributes that energy in a harmful way to its surrounding
+    environment."; 
+    On Event EVICTIM(PRE(EV_MAGIC_HIT)) {
+      e.Immune = true;
+      return DONE;
+      },
+    MSG_SPECABIL
+     "It is completely immune to magical effects.";
+  }
+
+Monster "mote of vacuum" : MA_VORTEX, MA_ELEMENTAL
+  {
+    Image: grey 'v'; Size: SZ_MINISCULE;             
+    CR: OPT_CR(3,2); HD: 1; Hit: 1; Def: 15; Mov: 100%; Spd: 100%;    
+    Dex 16, Wis 14;
+    Attk: A_TUCH for 1d2 AD_STUN (DC 18),
+          A_PROX for 1d6 AD_CHOK,
+          A_DETH for 2d6 AD_CHOK (DC 20);
+	ABILITY(CA_INFRAVISION,9);
+    Immune: DF_MIND, DF_CRIT, DF_FIRE, DF_COLD, DF_NECR, DF_POLY,
+            DF_ACID, DF_POIS, DF_ELEC, DF_STON, DF_DISN, DF_SLEE;
+    Flags: M_NEUTER, M_NOHANDS, M_NOLIMBS, M_MINDLESS,
+           M_HOSTILE, M_NOBODY, M_INCOR, M_NO_CORPSE, M_FLYER,
+           M_SKIRMISH, M_AIR, M_NOPOLY, M_NOHEAD, M_MAGC;
+    Desc: "This strange quasi-elemental appears to be a pinprick-sized
+    complete absence of anything. It draws air into itself at a furious
+    rate, causing nearby breathing creatures to choke and suffocate."; 
+  }
+
+Monster "mote of entropy" : MA_VORTEX, MA_ELEMENTAL
+  {
+    Image: brown 'v'; Size: SZ_TINY;             
+    CR: OPT_CR(3,3); HD: 1; Hit: 1; Def: 15; Mov: 100%; Spd: 100%;    
+    Dex 16, Wis 14;
+    Attk: A_TUCH for 8d6 AD_RUST (DC 18),
+          A_PROX for 1d6 AD_DACO,
+          A_DETH for 16d6 AD_RUST (DC 20);
+	ABILITY(CA_INFRAVISION,9);
+    Immune: DF_MIND, DF_CRIT, DF_FIRE, DF_COLD, DF_NECR, DF_POLY,
+            DF_ACID, DF_POIS, DF_ELEC, DF_STON, DF_DISN, DF_SLEE;
+    Flags: M_NEUTER, M_NOHANDS, M_NOLIMBS, M_MINDLESS,
+           M_HOSTILE, M_NOBODY, M_INCOR, M_NO_CORPSE, M_FLYER,
+           M_SKIRMISH, M_AIR, M_NOPOLY, M_NOHEAD, M_EARTH;
+    Desc: "This strange quasi-elemental accelerates the natural process of
+    decay and disintegration in its immediate vicinity."; 
+  }
+
+Monster "ball lightning" : MA_VORTEX, MA_ELEMENTAL
+  {
+    Image: magenta 'v'; Size: SZ_MEDIUM;             
+    CR: OPT_CR(8,2); HD: 2; Hit: 1; Def: 15; Mov: 300%; Spd: 100%;    
+    Dex 20, Wis 14;
+    Attk: A_TUCH for 1d2 AD_STUN (DC 18),
+          A_CPRX for 1d20 AD_ELEC,
+          A_DETH for 2d20 AD_ELEC (DC 20);
+	ABILITY(CA_INFRAVISION,9);
+    Feats: FT_MOBILITY;
+    Immune: DF_MIND, DF_CRIT, DF_FIRE, DF_COLD, DF_POLY,
+            DF_ACID, DF_POIS, DF_ELEC, DF_STON, DF_DISN, DF_SLEE;
+    Flags: M_NEUTER, M_NOHANDS, M_NOLIMBS, M_MINDLESS,
+           M_HOSTILE, M_NOBODY, M_INCOR, M_NO_CORPSE, M_FLYER,
+           M_SKIRMISH, M_NOPOLY, M_NOHEAD, M_ELEC;
+    Desc: "This strange quasi-elemental is widely reviled by adventurers.
+    A mindless force of nature, it is difficulty to kill and inflicts
+    damage with an apparent capriciousness." ;
+  }
+
+Template "turbulent" : TM_NATURE for MA_VORTEX { 
+  // frost 2 -> 4
+  // pure 3 -> 6
+  // ball 6 -> 9
+  CR: +3; 
+  Size +1 (Min SZ_HUGE); Spd: +5; Mov: +5; HD: +2; 
+  ABILITY(CA_REGEN,1);
+  Desc: "This particular vortex is larger than normal and swirls with
+  immense, thrashing currents of power. It seems to draw substance and 
+  force from parts unknown. It spinning size and speed make it
+  difficult to escape."; 
+  On Event POST(EV_STRIKE) {
+    EActor->IdentifyTemp($"turbulent");
+    return NOTHING;
+  };
+  On Event EV_ISTARGET {
+    if (EActor->HasAttk(A_EXPL)) // no turbulent yellow lights, etc. 
+      return -1;
+    else
+      return 1; 
+  } ;
+}
+
+Monster "will-o'-wisp" : MA_VORTEX, MA_ABERRATION
+  {
+    Image: bright white 'v'; Size: SZ_SMALL;             
+    CR: OPT_CR(9,6); HD: 8; Hit: +6; Def: 19; Mov: 150%; Spd: 145%;    
+    Str 1, Dex 29, Con 10, Int 15, Wis 16, Cha 12;
+    Attk: A_TUCH for 2d8 AD_ELEC;
+	ABILITY(CA_INFRAVISION,6);
+    Feats: SK_BLUFF, SK_DIPLOMACY, SK_INTIMIDATE, SK_LISTEN, SK_SEARCH,
+           SK_SPOT,
+           FT_ALERTNESS, FT_BLIND_FIGHT, FT_DODGE, FT_IMPROVED_INITIATIVE;
+    Immune: DF_MIND, DF_CRIT, DF_POIS, DF_STON, DF_DISN, DF_SLEE;
+    Flags: M_NEUTER, M_NOHANDS, M_NOLIMBS, M_NOBODY, M_FLYER, M_NO_CORPSE,
+          M_SWAMP, M_NOHEAD, M_ELEC;
+    Desc: "Will-o'-wisps can be yellow, white, green, or blue. They are
+    easily mistaken for lanterns, especially in the foggy marshes and
+    swamps where they reside. A will-o'-wisp's body is a globe of spongy
+    material about 1 foot across and weighing about 3 pounds, and its
+    glowing body sheds as much light as a torch.
+    Will-o'-wisps speak Common and Auran. They have no vocal apparatus but
+    can vibrate to create a voice with a ghostly sound.
+    Will-o'-wisps usually avoid combat. They prefer to confuse and bewilder
+    adventurers, luring them into morasses or other hazardous places. When
+    they are forced to fight, they loose small electrical shocks, which act
+    as melee touch attacks. A will-o'-wisp is immune to most spells or
+    spell-like abilities that allow spell resistance, except magic missile
+    and maze.";
+    On Event EV_INITIALIZE, EV_TURN {
+      if (!EActor->HasStati(INVIS))
+        EActor->GainPermStati(INVIS,NULL,SS_RACE,INV_IMPROVED);
+      return NOTHING;
+    },            
+    MSG_SPECABIL
+      "It is innately invisible and can turn invisible at will.";
+    On Event EVICTIM(PRE(EV_MAGIC_HIT)) {
+      switch(e.eID) {
+        case $"magic missile":
+        // case $"maze":
+          return NOTHING; 
+        default:
+          e.Immune = true;
+          return DONE;
+        }
+      return NOTHING;
+    };
+  }
+
+
+
+/********************************************************************************
+ ********************************************************************************
+ ***                                  CONSTRUCTS                              ***
+ ********************************************************************************
+ ********************************************************************************/
+
+/*** THE TRUE GOLEMS ***/
+
+Monster "glass golem" : MA_GOLEM, MA_CONSTRUCT
+  {
+    Image: white 'G'; Size: SZ_LARGE;
+    CR: OPT_CR(6,5); HD: 7; Hit: +5; Def: 13; Mov: 100%; Spd: 100%;
+    Str 16, Dex 12, Con 0, Int 0, Wis 11, Cha 1;
+    Attk: A_SLAM for 2d8 AD_SLASH,
+          A_AURA for 1d4 AD_SLASH;
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_WEAPON_IMMUNITY,1);
+    Immune: DF_MIND, DF_POIS, DF_SLEE, DF_PLYS, DF_STUN,
+            DF_DISE, DF_NECR, DF_CRIT, DF_SUBD;
+    Spells: $"color spray";
+    Flags: M_HUMANOID, M_MINDLESS, M_DEAF, M_NEUTER, M_PSYCHO,
+           M_HOSTILE;
+    On Event EVICTIM(PRE(EV_MAGIC_HIT)) {
+      /*if (e.eID->HasFlag(EF_MUNDANE))
+        return NOTHING;*/
+      switch(e.eID) {
+        case $"shatter":
+          VPrint(e,"You shatter!", "The <EVictim> shatters...");
+          ThrowDmg(EV_DEATH, 0,0, "shattering", EActor, EVictim, EItem);  
+          return DONE;
+        case $"force bolt":
+          e.vDmg *= 2;
+          return NOTHING;
+        case $"color spray":
+        case $"color burst":
+        case $"chromatic orb":
+          e.eID = $"haste";
+          return NOTHING;
+        case $"sunscorch":
+        case $"searing light":
+          if (EVictim->cHP < EVictim->mHP + EVictim->GetAttr(A_THP))
+            {
+              VPrint(e,"You heal completely!",
+                       "The <EVictim> heals completely!");
+              EVictim->cHP = EVictim->mHP + EVictim->GetAttr(A_THP);
+            }
+          else
+            e.Immune = true;
+          return DONE;
+        default:
+          e.Immune = true;
+          return DONE;
+        }
+      return NOTHING;
+      },
+    EV_TURN {
+      int16 oHP; oHP = EActor->cHP;
+      if (EMap->BrightAt(EActor->x,EActor->y))
+        EActor->cHP = min((EActor->mHP + EActor->GetAttr(A_THP))-EActor->cHP,
+                              EActor->cHP + 3d8);
+      else if (EMap->LightAt(EActor->x,EActor->y))
+        EActor->cHP = min((EActor->mHP + EActor->GetAttr(A_THP))-EActor->cHP,
+                              EActor->cHP + 1d8);
+      if (oHP < EActor->cHP)
+        VPrint(e, "You regenerate!", "The <EVictim> regenerates!");
+      return NOTHING;
+      },
+    EV_MOVE {
+      if (EMap->FieldAt(EActor->x + DirX(e.EDir),EActor->y + DirY(e.EDir), FI_DARKNESS))
+        if (!EMap->FieldAt(EActor->x,EActor->y, FI_DARKNESS))
+          return ABORT;
+      return NOTHING;
+      },
+    MSG_SPECABIL
+        "It is immune to all direct magic spells, save that <9>shatter<7> will
+          destroy it outright, <9>color spray<7>/<9>burst<7> will haste it,
+          <9>force bolt<7> does double the normal damage and light-based spells 
+          heal it fully. It heals 1d8 points of damage in lit areas and 3d8 points
+          on damage in bright magical light. It will not willingly enter areas of
+          absolute magical darkness.";
+  }
+
+Monster "flesh golem" : MA_GOLEM, MA_CONSTRUCT
+  {
+    Image: pink 'G'; Size: SZ_LARGE; 
+    CR: OPT_CR(6,7); HD: 9; Hit: +7; Def: 15; Mov: 70%; Spd: 80%;
+    Str 21, Dex 9, Wis 11, Cha 1;
+    Attk: A_SLAM for 2d8 AD_BLUNT;
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_WEAPON_IMMUNITY,2);
+
+    Immune: DF_MIND, DF_POIS, DF_SLEE, DF_PLYS, DF_STUN,
+            DF_DISE, DF_NECR, DF_CRIT, DF_SUBD;
+    Flags: M_HUMANOID, M_MINDLESS, M_DEAF, M_NEUTER, M_PSYCHO,
+           M_HOSTILE, M_HAS_BLOOD;
+    On Event EVICTIM(PRE(EV_MAGIC_HIT)) {
+      // ww: "e.eval" may involve dereferencing a null pointer
+      // (e.g., if it comes from the Crypt Thing's $"dismissal"
+      // FIXME!
+      if (e.eval == EA_BLAST) {
+        if (e.xval == AD_FIRE || e.xval == AD_COLD) { 
+            if (!EVictim->HasEffStati(-1,$"slow")) {
+              VPrint(e,"You feel yourself slowing down.","The <EVictim> slows down.");
+              EVictim->GainTempStati(ADJUST,EActor,2d6,SS_ENCH,A_SPD,-10,$"slow");
+              EVictim->GainTempStati(ADJUST,EActor,2d6,SS_ENCH,A_MOV,-10,$"slow");
+              EVictim->GainTempStati(ADJUST_CIRC,EActor,2d6,SS_ENCH,A_DEF,-2,$"slow");
+              return DONE;
+              }
+        } else if (e.xval == AD_ELEC) { 
+            if (EVictim->cHP == EVictim->mHP+EVictim->GetAttr(A_THP))
+              break;
+            EVictim->cHP = min(EVictim->mHP+EVictim->GetAttr(A_THP),
+			                 EVictim->cHP+e.vDmg);
+            if (EVictim->cHP == EVictim->mHP)
+              VPrint(e,"Your wounds heal fully!",
+                       "The <EVictim>'s wounds heal fully!");
+            else
+              VPrint(e,"Your wounds heal!",
+                       "The <EVictim>'s wounds heal!");
+            return DONE;
+          }
+        } 
+      e.Immune = true;
+      return DONE;
+    },
+  MSG_SPECABIL
+      "It is <9>slow<7>ed by fire or cold damage, healed by lightning, and immune to
+    all other direct-effect spells.";
+  }
+
+/* bone golem (9) -- AD_SLASH aura, resist slash/pierce, paralyzing wail */
+
+/* clay golem (10) */
+
+Monster "stone golem" : MA_GOLEM, MA_CONSTRUCT
+  {
+    Image: grey 'G'; Size: SZ_LARGE; 
+    CR: OPT_CR(9,11); HD: 14; Hit: +10; Def: 18; Mov: 70%; Spd: 100%;
+    Str 29, Dex 9, Wis 11, Cha 1; 
+    Arm: 10; // 10/adamantine
+    Attk: A_SLAM for 2d8 AD_BLUNT,
+          A_SLAM for 2d8 AD_BLUNT;
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_WEAPON_IMMUNITY,2);
+    Immune: DF_MIND, DF_POIS, DF_SLEE, DF_PLYS, DF_STUN,
+            DF_DISE, DF_NECR, DF_CRIT, DF_SUBD;
+    Flags: M_HUMANOID, M_MINDLESS, M_DEAF, M_NEUTER, 
+           M_PSYCHO, M_IALIGN, M_NO_CORPSE;
+    Desc: "This golem has a humanoid body made from stone. A stone golem is
+    9 feet tall and weighs around 2,000 pounds. Its body is frequently
+    stylized to suit its creator. For example, it might look like it is
+    wearing armor, with a particular symbol carved on the breastplate, or
+    have designs worked into the stone of its limbs.
+    Stone golems are formidable opponents, being physically powerful and
+    difficult to harm."; 
+    Spells: $"slow"; 
+    On Event EVICTIM(PRE(EV_MAGIC_HIT)) {
+    /*if (e.eID->HasFlag(EF_MUNDANE))
+      return NOTHING;*/
+    switch(e.eID) {
+      case $"transmute rock to mud":
+      case $"soften stone":
+      case $"shatter":
+        if (!EVictim->HasEffStati(-1,$"slow")) {
+        VPrint(e,"You feel yourself slowing down.","The <EVictim> slows down.");
+        EVictim->GainTempStati(ADJUST,EActor,2d6,SS_ENCH,A_SPD,-10,$"slow");
+        EVictim->GainTempStati(ADJUST,EActor,2d6,SS_ENCH,A_MOV,-10,$"slow");
+        EVictim->GainTempStati(ADJUST_CIRC,EActor,2d6,SS_ENCH,A_DEF,-2,$"slow");
+        return DONE;
+        }
+      }
+    e.Immune = true;
+    return DONE;
+    },
+    MSG_SPECABIL
+      "It is <9>slow<7>ed by <9>transmute rock to mud<7>, <9>soften
+      stone<7> and <9>shatter<7> and is immune to all other direct-effect
+      spells.",
+    EVICTIM(EV_DEATH) {
+      EMap->WriteTerra(EVictim->x,EVictim->y,$"pile of rubble");
+      return NOTHING;
+      };
+  }
+
+/*** OTHER CONSTRUCTS ***/
+
+Monster "scarecrow" : MA_CONSTRUCT
+  {
+    Image: brown 'C'; Size: SZ_MEDIUM; 
+    CR: 1; HD: 2; Hit: +1; Def: 7; Mov: 75%; Spd: 75%;
+    Str 16, Dex 7, Con 0, Int 0, Wis 13, Cha 0;
+    Attk: A_SLAM for 1d4 AD_BLUNT,
+          A_SLAM for 1d4 AD_BLUNT;
+    ABILITY(CA_INFRAVISION, 9); 
+    MAGIC_RES(50);
+    Immune: DF_MIND, DF_POIS, DF_SLEE, DF_PLYS, DF_STUN,
+            DF_DISE, DF_NECR, DF_CRIT, DF_SUBD, DF_PSYC,
+            DF_COLD;
+    Flags: M_MINDLESS, M_DEAF, M_NEUTER, M_NO_CORPSE, M_PSYCHO, M_NOPOLY,
+           M_HOSTILE;
+    Spells: $"cause fear";
+    Desc: "A scarecrow is a magically animated figure composed of
+      straw, also sometimes called a wicker man or straw golem
+      (though it is not a true golem, being only partially resistant
+      to magic).";
+    On Event EVICTIM(EV_DAMAGE) {
+      if (e.AType == A_FIRE)
+        e.vDmg = (e.vDmg * 150) / 100;
+      return NOTHING;
+      },
+    POST(EVICTIM(EV_DAMAGE)) {
+      if (e.AType == A_FIRE)
+        if (!EVictim->isDead())
+          RedirectEff(e,$"Burn",EV_EFFECT);
+      return NOTHING;
+      },
+    MSG_SPECABIL
+      "It takes 150~ damage from fire attacks, and may be set on fire 
+        to burn for 1d4 damage per turn thereafter.";
+  }
+    
+
+Monster "repelling column" : MA_CONSTRUCT
+  {
+    Image: grey 'C'; Size: SZ_LARGE; 
+    CR: OPT_CR(4,5); 
+    HD: 1; Hit: +1; Def: 0; Hit: 0; Mov: 0%; Spd: 60%; Arm: 20;
+    Str 0, Dex 0, Int 0, Wis 14, Cha 0; Mana: 400; 
+    ABILITY(CA_INFRAVISION,9);
+	ABILITY(CA_TELEPATHY,9);
+    Immune: DF_MIND, DF_POIS, DF_SLEE, DF_PLYS, DF_STUN,
+            DF_DISE, DF_NECR, DF_CRIT, DF_SUBD, DF_PSYC;
+    Flags: M_MINDLESS, M_DEAF, M_NEUTER, M_NO_CORPSE, M_PSYCHO, M_NOPOLY,
+           M_HOSTILE;
+    Spells: $"force bolt"; 
+    Desc: "This difficult-to-understand construct has been imbued with
+           magical power and a single purpose: to keep all others away
+           from itself. It is immune to most magical effects."; 
+    On Event EVICTIM(PRE(EV_MAGIC_HIT)) {
+      switch(e.eID) {
+        case $"transmute rock to mud":
+        case $"soften stone":
+        case $"shatter":
+          VPrint(e,"You shatter!", "The <EVictim> shatters...");
+          ThrowDmg(EV_DEATH, 0,0, "shattering", EActor, EVictim, EItem);  
+          return DONE;
+        default:
+          e.Immune = true;
+          return DONE;
+        }
+      return NOTHING;
+    },
+    EVICTIM(EV_DEATH) {
+      EMap->WriteTerra(EVictim->x,EVictim->y,$"pile of rubble");
+      return NOTHING;
+    };
+  }
+
+Monster "caryatid column" : MA_CONSTRUCT
+  {
+    Image: white 'C'; Size: SZ_LARGE; 
+    CR: OPT_CR(3,4); HD: 8; Hit: +5; Def:7; Hit: 7; Mov: 0%; Spd: 60%; Arm: 20;
+    Str 18, Dex 12, Wis 8, Cha 13;
+    // ww: A_SWNG was causing NAttack to choke -- 
+    Attk: A_PUNC for 1d8 AD_BLUNT,
+          A_DEQU for 12d6 AD_SHAT;
+          // A_FORM for $"pillar",
+	ABILITY(CA_TREMORSENSE,6);
+	ABILITY(CA_REGEN,5);
+    Immune: DF_MIND, DF_POIS, DF_SLEE, DF_PLYS, DF_STUN,
+            DF_DISE, DF_NECR, DF_CRIT, DF_SUBD, DF_PSYC;
+    // ww: cursed so we won't drop it ...
+    Gear: cursed $"long sword" of random 1 to 2;
+    Feats: FT_EXPERTISE, FT_WHIRLWIND_ATTACK, FT_POWER_ATTACK,
+      FT_IMPROVED_CRIT;
+    Flags: M_MINDLESS, M_DEAF, M_NEUTER, M_NO_CORPSE, M_PSYCHO, M_NOPOLY;
+    Desc: "It's beautiful, really, in a sad way. The caryatid column
+      is a statue of an alluring, introspective maiden, wielding a
+      long sword, carved from a stone pillar affixed to the floor and
+      ceiling and animated by a wizard's magic.";
+    On Event EVICTIM(PRE(EV_MAGIC_HIT)) {
+      /*if (e.eID->HasFlag(EF_MUNDANE))
+        return NOTHING;*/
+      switch(e.eID) {
+        case $"transmute rock to mud":
+        case $"soften stone":
+        case $"shatter":
+          VPrint(e,"You shatter!", "The <EVictim> shatters...");
+          ThrowDmg(EV_DEATH, 0,0, "shattering", EActor, EVictim, EItem);  
+          return DONE;
+        default:
+          e.Immune = true;
+          return DONE;
+        }
+      return NOTHING;
+      },
+    EVICTIM(EV_DEATH) {
+      EMap->WriteTerra(EVictim->x,EVictim->y,$"pile of rubble");
+      return NOTHING;
+      },
+    MSG_SPECABIL
+      "It is immune to most magical effects, save for <9>shatter<7>, <9>soften
+         stone<7> and <9>transmute rock to mud<7>, which cause it to shatter.";
+  }
+
+Monster "clockwork horror" : MA_CONSTRUCT
+  { Image: bright cyan 'C'; Size: SZ_LARGE; 
+    CR: OPT_CR(6,5); HD: 7; Def: 10; Hit: 5; Mov: 70%; Spd: 90%;
+    Str 21, Dex 8, Con 18, Int 2, Wis 8, Cha 10;
+    Attk: A_SLAM for 1d8 AD_BLUNT,
+          A_REND for 3d8 AD_BLUNT;
+	ABILITY(CA_INFRAVISION,6);
+    Immune: DF_MIND, DF_POIS, DF_SLEE, DF_PLYS, DF_STUN,
+            DF_DISE, DF_NECR, DF_CRIT, DF_SUBD, DF_PSYC;
+    Feats: FT_POWER_ATTACK, FT_CLEAVE, FT_TOUGHNESS, FT_NATURAL_GRAB,
+           SK_SEARCH, SK_SPOT, SK_CRAFT, SK_ALCHEMY;
+    Flags: M_LAWFUL, M_IALIGN, M_NEUTER, M_REACH, M_MINDLESS;
+    Desc: "These horrors of steel and gears combine a wizard's
+      talents with a clock-maker's craft, being ungainly tangles
+      of shafts, spinwheels and mechanical limbs. They are
+      inhumanly devoted to their commands, and left without a
+      master they simply hunt down and crush any biological
+      creatures in their area with terrible precision.";
+  }
+
+/* maug */
+
+Monster "necrophidius" : MA_CONSTRUCT, MA_SNAKE
+  {
+    Image: grey 'C'; Size: SZ_MEDIUM; Mana: 0; Depth: 3;
+    CR: OPT_CR(5,3); HD: 5; Hit: +3; Def: 21; Mov: 125%; Spd: 125%;
+    Str 13, Dex 16, Con 0, Int 0, Wis 11, Cha 12;
+    Attk: A_BITE for 1d6 AD_PIERCE
+                 and 3d4 AD_PLYS (DC 13);
+	ABILITY(CA_INFRAVISION,6);
+	RACIAL_SKILL(SK_CLIMB,8);
+	RACIAL_SKILL(SK_HIDE,8);
+	RACIAL_SKILL(SK_MOVE_SIL,8);
+	ABILITY(CA_SNEAK_ATTACK,2);
+    Feats: SK_CLIMB, SK_HIDE, SK_MOVE_SIL, FT_COMBAT_REFLEXES;
+    Immune: DF_CRIT, DF_STUN, DF_MIND, DF_PSYC, DF_POIS,
+            DF_PLYS, DF_SLEE, DF_DISE, DF_NECR, DF_STUN, DF_COLD;
+    Flags: M_NEUTER, M_NOHANDS, M_NOLIMBS, M_MINDLESS;
+    Spells: $"Hypnotic Dance";
+    Desc: "These skeletal constructs are often mistaken for undead,
+      but they are not. A necrophidus has a serpent-like shape,
+      but is made from human remains -- human vertabrae from many
+      bodies form the flexible chain of the body, topped with a
+      human skull. The only inhuman element is the two fangs in the
+      skull's mouth, drawn from a viper or vampire.";
+  }
+
+
+/* EF_SPECABIL:
+     No "you concentrate" message.
+     Save DC calculated by caster CR. (10 + CR + Cha mod)
+*/
+
+Effect "Hypnotic Dance" : EA_INFLICT
+  {
+    xval: CONFUSED; sval: WILL; qval: 0; cost: 0; 
+    aval: AR_GLOBE; lval: 6; cval: EMERALD; Purpose: EP_ATTACK | EP_CURSE; 
+    Flags: EF_CASTER_IMMUNE, EF_SPECABIL;
+    Desc: "A necrophidius can cause its body to sway and weave
+      in a hypnotic manner, causing anyone within 60 feet of the
+      creature to become confused on a failed saving throw.";
+    On Event MSG_CAST
+      "You sway and weave hypnotically."
+      "The <EActor> sways and weaves <his:EActor> body hypnotically.";
+  }
+
+/* quesar */
+
+/*** CONSTRUCT TEMPLATES ***/
+
+Template "celeritous" : TM_SKILL for MA_CONSTRUCT { 
+  // flesh golem: cr 5 -> 9 
+  // clockwork: 5 -> 6
+  // stone golem: 9 -> 9
+  // necro: 5 -> 6
+  CR: +1 (Min 6); Dex +10; Spd: +10; Mov: +10; 
+    Def: +5; 
+    Feats: FT_MOBILITY, FT_DODGE, FT_COMBAT_REFLEXES, FT_SPRING_ATTACK,
+      FT_LIGHTNING_REFLEXES, FT_WHIRLWIND_ATTACK;
+    Flags: M_SKIRMISH;
+    Desc: "This particular construct has been crafted with speed in mind.
+      Quicksilver and adamant alloys ensure improved agility with no extra
+      weight."; 
+    On Event POST(EV_STRIKE) {
+      EActor->IdentifyTemp($"celeritous");
+      return NOTHING;
+      };
+  }
+
+Template "monsterous clockwork" : TM_NATURE for MA_NLIVING { 
+  // drow:      0 -> 6
+  // bugbear:   2 -> 6
+  // leopard:   3 -> 5
+  Image: 'C'; Size: +1; CR: +2 (Min 6);
+  Str +12, Dex -2, Wis +6 (Min 14), Int = 0, Con = 0, Cha = 0; Arm: 10; 
+  Mov: 80%; Spd: 80%; MType: MA_CONSTRUCT; 
+  Attk: A_SLAM for 1d6 AD_BLUNT;
+  Immune: DF_MIND, DF_POIS, DF_SLEE, DF_PLYS, DF_STUN,
+          DF_DISE, DF_NECR, DF_CRIT, DF_SUBD, DF_PSYC;
+  Feats: FT_TOUGHNESS, FT_NATURAL_GRAB, FT_MASTER_GRAPPLE, FT_POWER_ATTACK,
+         FT_KNOCK_PRONE;
+  Flags: M_MINDLESS, M_DEAF, M_NEUTER, M_NO_CORPSE, M_PSYCHO, M_NOPOLY,
+         M_CLOSEID, TMF_BODY_ONLY, M_HOSTILE;
+  Desc: "This coarse automaton has been constructed to closely resemble
+         a living creature. Made of gears and clockwork, springs and
+         mithril, it is a mindless device bent on destruction. Its jagged
+         edges and whirling gears allow it to easily latch onto its prey.
+         Possessed
+         of incredible brute strength, it is thankfully somewhat lacking
+         in speed. It is immune to most magic."; 
+    On Event EVICTIM(PRE(EV_MAGIC_HIT)) {
+      switch(e.eID) {
+        case $"transmute rock to mud":
+        case $"soften stone":
+        case $"shatter":
+          VPrint(e,"You shatter!", "The <EVictim> shatters...");
+          ThrowDmg(EV_DEATH, 0,0, "shattering", EActor, EVictim, EItem);  
+          return DONE;
+        default:
+          e.Immune = true;
+          return DONE;
+        }
+      return NOTHING;
+    },
+    EVICTIM(EV_DEATH) {
+      EMap->WriteTerra(EVictim->x,EVictim->y,$"pile of rubble");
+      return NOTHING;
+    };
+    On Event EV_ISTARGET {
+      if (EActor->HasMFlag(M_AMORPH) ||
+          EActor->HasMFlag(M_NOBODY))
+        return -1; 
+      else 
+        return 1; 
+    }; 
+  }
+
+Template "clockwork" : TM_NATURE for MA_NLIVING { 
+  // drow:      0 -> 2
+  // bugbear:   2 -> 5
+  // leopard:   3 -> 5
+  Image: shadow 'C'; CR: +2; 
+  Str +6, Dex -1, Wis +3 (Min 11), Int = 0, Con = 0, Cha = 0; Arm: 5; 
+  Mov: 90%; Spd: 90%; MType: MA_CONSTRUCT; 
+  Immune: DF_MIND, DF_POIS, DF_SLEE, DF_PLYS, DF_STUN,
+          DF_DISE, DF_NECR, DF_CRIT, DF_SUBD, DF_PSYC;
+  Feats: FT_TOUGHNESS, FT_POWER_ATTACK;
+  Flags: M_MINDLESS, M_DEAF, M_NEUTER, M_NO_CORPSE, M_PSYCHO, M_NOPOLY,
+         M_CLOSEID, TMF_BODY_ONLY, M_HOSTILE;
+  Desc: "This coarse automaton has been constructed to closely resemble
+         a living creature. Made of gears and clockwork, springs and
+         mithril, it is a mindless device bent on destruction. 
+         Possessed of brute strength, it is thankfully somewhat lacking in
+         speed. It is immune to most magic."; 
+    On Event EVICTIM(PRE(EV_MAGIC_HIT)) {
+      switch(e.eID) {
+        case $"transmute rock to mud":
+        case $"soften stone":
+        case $"shatter":
+          VPrint(e,"You shatter!", "The <EVictim> shatters...");
+          ThrowDmg(EV_DEATH, 0,0, "shattering", EActor, EVictim, EItem);  
+          return DONE;
+        default:
+          e.Immune = true;
+          return DONE;
+        }
+      return NOTHING;
+    },
+    EVICTIM(EV_DEATH) {
+      EMap->WriteTerra(EVictim->x,EVictim->y,$"pile of rubble");
+      return NOTHING;
+    };
+    On Event EV_ISTARGET {
+      if (EActor->HasMFlag(M_AMORPH) ||
+          EActor->HasMFlag(M_NOBODY))
+        return -1; 
+      else 
+        return 1; 
+    }; 
+  }
+
+/********************************************************************************
+ ********************************************************************************
+ ***                               PLANTS AND FUNGI                           ***
+ ********************************************************************************
+ ********************************************************************************/
+
+/*** PLANT CREATURES ***/
+
+Monster "vampire melon" : MA_PLANT
+  {
+    Image: pink 'P'; Size: SZ_TINY;
+    CR: -4; HD: 3; Hit: +2; Def: 12; Mov: 75%; Spd: 100%;
+    Str 7, Dex 7, Con 16, Int 0, Wis 4, Cha 6;
+    Attk: A_RUBS for AD_GRAB (DC 15),
+          A_SUCK for 1d4 AD_DACO;
+    ABILITY(CA_TREMORSENSE,9);
+	  Immune: PLANT_IMMUNITIES;
+    Flags: M_NOHEAD, M_NOHANDS, M_BLIND, M_NOBODY,
+           M_NEUTER, M_MINDLESS, M_VERY_RARE;     
+    Desc: "Legends claim that it is not only humanoids who
+      can rise from their graves -- melon farmers in distant,
+      mist-enshrouded lands claim that if melons are left in
+      silence to grow in unclean moonlight for three nights,
+      there is a chance they will become vampiric in nature,
+      rolling along the ground and ensnaring small mammals
+      with an adhesive they secrete in order to drink their
+      blood. Vampire melons can be told from the mundane kind
+      by examining their surface, where they will be covered
+      with a spiderweb-like net of brown veins which, if
+      pressed or cut, will bleed human blood.";
+  }
+      
+Monster "deadly nettle" : MA_PLANT
+  {
+    Image: blue 'P'; Size: SZ_SMALL;  
+    CR: OPT_CR(3,2); HD: 2; Hit: +2; Def: 10; Mov: 15%; Spd: 100%;
+    Str 10, Dex 18, Con 12, Int 0, Wis 14, Cha 8;
+    Attk: A_STNG for 1d3 AD_PIERCE;
+	RACIAL_SKILL(SK_HIDE,15);
+	ABILITY(CA_SNEAK_ATTACK,3);
+	ABILITY(CA_TREMORSENSE,9);
+	ABILITY(CA_BLINDSIGHT,1);
+    Immune: PLANT_IMMUNITIES, DF_PIERCE;
+    Resists: DF_BLUNT;
+    Feats: SK_HIDE, SK_MOVE_SIL, SK_LISTEN, 
+           FT_SNEAKY, FT_BACKSTAB;
+    Flags: M_NOHEAD, M_NOHANDS, M_BLIND, M_NOBODY, M_FOREST,
+           M_NEUTER, M_MINDLESS, M_BLIND;
+    Desc: "An animate thorn, the deadly nettle grows both underground and
+    in the wilderness. It possesses an uncanny insight into the vulnerable
+    spots of living creatures, and it stining thorns always seem to catch
+    foes unware. Victims without the Uncanny Dodge ability or Improved
+    Initiative feat are always considered flat-footed when attacked by a
+    deadly nettle. Its thin, sinewy stalks are all but impossible to
+    hurt with piercing attacks and are quite resistant to bludgeoning.";
+    Stati[NONDETECTION,(PER_TREMOR)];
+    On Event MSG_SPECABIL
+    "As a plant, it cannot be detected by tremorsense.";
+    On Event PRE(EV_STRIKE) {
+      if (EVictim->isCreature()) {
+        if (!EVictim->HasAbility(CA_UNCANNY_DODGE) &&
+            !EVictim->HasFeat(FT_IMPROVED_INITIATIVE))
+          e.isFlatFoot = true; 
+        }
+    } ;
+  }
+
+Monster "malyss root" : MA_PLANT
+  {
+    Image: bright blue 'P'; Size: SZ_SMALL;  
+    CR: OPT_CR(2,2); HD: 2; Hit: +2; Def: 10; Mov: 15%; Spd: 100%;
+    Str 18, Dex 10, Con 12, Int 0, Wis 14, Cha 8; Arm: 5; 
+    Attk: A_WRAP for 1d3 AD_BLUNT 
+                 and 1d3 AD_DADX 
+                 and 1d3 AD_STUK (DC 20);
+	ABILITY(CA_TREMORSENSE,9);
+	ABILITY(CA_BLINDSIGHT,1);
+    Immune: PLANT_IMMUNITIES;
+    Feats: SK_HIDE, SK_MOVE_SIL, SK_LISTEN;
+    Flags: M_NOHEAD, M_NOHANDS, M_BLIND, M_NOBODY, M_FOREST,
+           M_NEUTER, M_MINDLESS, M_BLIND;
+    Desc: "An animate root, the malyss plant is able to damage the nerves
+    of living beings and reduce their mobility. It can entangle creatures
+    and slowly numb them to death. The malyss root itself it not
+    particularly agile, but it is strong, tough and sinewy."; 
+    Stati[NONDETECTION,(PER_TREMOR)];
+    On Event MSG_SPECABIL
+    "As a plant, it cannot be detected by tremorsense.";
+  }
+
+Monster "assassin vine" : MA_PLANT
+  {
+    Image: grey 'P'; Size: SZ_MEDIUM;  
+    CR: OPT_CR(3,3); HD: 4; Hit: +3; Def: 13; Mov: 15%; Spd: 100%;
+    Arm: 3; Str 20, Dex 10, Con 16, Int 0, Wis 13, Cha 9;
+    Attk: A_SLAM for 1d6+2 AD_BLUNT, 
+          A_CRUS for 1d6+2 AD_BLUNT;
+	RACIAL_SKILL(SK_HIDE,10);
+	ABILITY(CA_TREMORSENSE,9);
+	ABILITY(CA_BLINDSIGHT,1);
+    Resists: DF_COLD, DF_FIRE;
+    Immune: PLANT_IMMUNITIES, DF_ELEC ;
+    Spells: $"entangle"; 
+    Feats: SK_HIDE, SK_MOVE_SIL, FT_NATURAL_GRAB, FT_MASTER_GRAPPLE;
+    Flags: M_NOHEAD, M_NOHANDS, M_BLIND, M_NOBODY, M_FOREST,
+      M_NEUTER, M_MINDLESS, M_REACH, M_HAS_BLOOD, M_BLIND, M_CARNI;
+    Desc: "An animate root, the assassin vine grows both underground
+      and in the wilderness. It is capable of animating enough to
+      wrap around its prey and crush it, providing both natural
+      defense from herbivores and a grisly source of fertilizer. The
+      main trunk can be as thick as a human forearm, but the sprouts
+      and sub-vines disguise the plant, allowing it to blend into
+      other vegetation easily.";
+    Stati[NONDETECTION,(PER_TREMOR)];
+    On Event MSG_SPECABIL
+    "As a plant, it cannot be detected by tremorsense.";
+  }
+
+Monster "blood grass" : MA_PLANT
+  { Image: brown 'P'; Size: SZ_HUGE;  
+    CR: OPT_CR(4,5); HD: 7; Def: 9; Hit: +4; Mov: 0%; Spd: 100%;
+    Str 22, Dex 14, Con 14, Int 2, Wis 6, Cha 5;
+    Attk: A_SLAM for 1d6 AD_BLUNT, 
+          A_CRUS for 2d6 AD_BLUNT,
+          A_SUCK for 2d3 AD_DRCO,
+          A_SUCK for 2d8 AD_VAMP;
+	ABILITY(CA_TREMORSENSE,9);
+	ABILITY(CA_BLINDSIGHT,1);
+    Immune: PLANT_IMMUNITIES;
+    Feats: FT_SKILL_FOCUS, SK_HIDE, SK_MOVE_SIL, 
+      FT_NATURAL_GRAB, FT_MASTER_GRAPPLE;
+    Flags: M_MINDLESS, M_NOLIMBS, M_NOHANDS, M_NOHEAD, M_NOBODY,
+      M_NO_CORPSE, M_CARNI, M_SWAMP, M_NEUTER, M_BLIND, M_REACH, M_HAS_BLOOD;
+    Desc: "This seemingly benign patch of shoulder-height swamp grass
+      is in fact a dangerous carnivorous plant creature. Capable of
+      wrapping around its prey and crushing it to death in a reflex
+      action, the stalks of blood grass can also bore beneath a victim's
+      flesh and suckle its blood in order to sustain itself. It can detect
+      creatures with blood within 120 feet (12 squares).";
+    Stati[DETECTING,MA_HAS_BLOOD,12];
+  }
+
+Monster "razor-whip vine" : MA_PLANT
+  { Image: green 'P'; Size: SZ_SMALL;  
+    CR: OPT_CR(7,3); HD: 3; Def: 10; Hit: +3; Mov: 50%; Spd: 300%;
+    Str 8, Dex 22, Con 14, Int 2, Wis 6, Cha 5;
+    Attk: A_SWAT for 3d2 AD_SLASH 
+                 and 0d0 AD_TRIP (DC 20) 
+                 and 0d0 AD_STEA (DC 20);
+	ABILITY(CA_TREMORSENSE,9);
+	ABILITY(CA_BLINDSIGHT,1);
+    Immune: PLANT_IMMUNITIES; 
+    Feats: 
+      FT_COMBAT_REFLEXES, FT_MASTER_TRIP, FT_DODGE,
+      FT_DEFLECT_ARROWS, FT_MOBILITY, FT_MASTER_DISARM, SK_SPOT;
+    Flags: M_MINDLESS, M_NOLIMBS, M_NOHANDS, M_NOHEAD, M_NOBODY,
+      M_NO_CORPSE, M_SWAMP, M_NEUTER, M_BLIND, M_REACH, M_PSYCHO;
+    Desc: "This distinctive green vine is edged with a continual
+      line of shiny thorns. Animated with an uncanny alacrity, it
+      lashes out at all nearby creatures, scraping its vines along their
+      limbs and lashing about like a whip. Razor-whip vines use the
+      trinkets and bones of animals and adventurers to form their
+      trellises.  They can drag themselves along at a rate that is slow for
+      a human but quite rapid for a plant."; 
+    Stati[NONDETECTION,(PER_TREMOR)];
+    On Event MSG_SPECABIL
+    "As a plant, it cannot be detected by tremorsense.";
+  }
+
+Monster "dark tree" : MA_PLANT
+  { Image: bright black 'P'; Size: SZ_HUGE; 
+    CR: OPT_CR(3,5); HD: 6; Hit: +4; Def: 10; Mov: 10%; Spd: 70%;
+    Str 22, Dex 8, Con 21, Int 5, Wis 10, Cha 7;
+    Attk:
+      A_SLAM for 2d4 AD_BLUNT,
+      A_SLAM for 2d4 AD_BLUNT;
+	ABILITY(CA_TREMORSENSE,9);
+	ABILITY(CA_BLINDSIGHT,1);
+    Immune: PLANT_IMMUNITIES; 
+    Spells: $"confusion", $"entangle"; 
+    Resists: DF_COLD; 
+    Feats: 
+      FT_REND, 
+      /*SK_KNOWLEDGE,*/ SK_WILD_LORE, FT_NATURAL_GRAB;
+    Flags: 
+      M_NOHANDS, M_NOLIMBS, M_CARNI, M_NEUTER, M_BLIND,
+      M_SWAMP, M_LIGHT_AVERSE, M_EVIL, M_HAS_BLOOD, M_REACH;
+    Desc: "Dark trees are twisted cousins of the treants, horrible
+      monsters who delight in drinking the blood of demihumans with
+      their roots. They use their confusion ability to mislead
+      travellers, and spread deciet and dischord in sylvan societies
+      whenever they have the opportunity.";
+  }
+
+Monster "shambling mound" : MA_PLANT
+  { Image: bright green 'P'; Size: SZ_LARGE;  
+    CR: OPT_CR(7,6); HD: 8; Def: 11; Hit: +6; Mov: 50%; Spd: 130%;
+    Str 21, Dex 10, Con 17, Int 7, Wis 10, Cha 9;
+    Attk: A_SLAM for 2d6 AD_BLUNT, 
+          A_SLAM for 2d6 AD_BLUNT,
+          A_CRUS for 2d6+2 AD_BLUNT;
+	RACIAL_SKILL(SK_HIDE,16);
+	RACIAL_SKILL(SK_LISTEN,4);
+	RACIAL_SKILL(SK_MOVE_SIL,4);
+	ABILITY(CA_NATURE_SENSE,1);
+	ABILITY(CA_INFRAVISION,6);
+    Immune: PLANT_IMMUNITIES; 
+    Resists: DF_FIRE; 
+    WEAPON_FOCUS_NATURAL_ATTACK;
+    Feats: 
+      SK_HIDE, SK_LISTEN, SK_MOVE_SIL,
+      FT_IRON_WILL, FT_POWER_ATTACK, 
+      FT_NATURAL_GRAB;
+    Flags: M_NOHEAD, M_SWAMP, M_NEUTER, M_REACH, M_AMPHIB, M_NO_BLOOD;
+    Desc: "Shambling mounds, also called shamblers, appear to be heaps of
+    rotting vegetation. They are actually intelligent, carnivorous plants.
+    A shambler's brain and sensory organs are located in its upper body.
+    A shambler's body has an 8-foot girth and is about 6 feet tall when the
+    creature stands erect. It weighs about 3,800 pounds.
+    A shambling mound batters or constricts its opponents with two huge,
+    armlike appendages. Despite this, they are very difficult to spot.
+
+    Shamblers take no damage from electricity. Instead, any electricity
+    attack used against a shambler temporarily grants it 1d4 points of
+    Constitution. The shambler loses these points at the rate of 1 per
+    hour.";
+    On Event EVICTIM(EV_DAMAGE) {
+      if (e.DType == AD_ELEC) {
+        EVictim->GainTempStati(ADJUST_INH,EVictim,300,SS_MISC,A_CON,1d4);
+        e.Immune = true; 
+        return DONE; 
+      }
+    };
+  }
+
+Monster "tendriculous" : MA_PLANT
+  { Image: bright green 'P'; Size: SZ_HUGE;  
+    CR: OPT_CR(9,6); HD: 9; Def: 19; Hit: +6; Mov: 50%; Spd: 130%;
+    Str 28, Dex 9, Con 22, Int 3, Wis 8, Cha 3;
+    Attk: A_BITE for 2d8 AD_PIERCE
+                 and 0d0 AD_SWAL (DC 20),
+          A_TENT for 1d6 AD_BLUNT,
+          A_TENT for 1d6 AD_BLUNT,
+          A_CRUS for 2d6 AD_ACID
+                 and 3d6 AD_PLYS (DC 20),
+          A_DGST for 2d6 AD_ACID
+                 and 3d6 AD_PLYS (DC 20);
+	ABILITY(CA_NATURE_SENSE,1);
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_REGEN,10); // really!
+    Immune: PLANT_IMMUNITIES; 
+    Feats: 
+      SK_HIDE, SK_LISTEN, SK_MOVE_SIL, SK_SPOT,
+      FT_IRON_WILL, FT_ALERTNESS, FT_POWER_ATTACK, FT_SNEAKY,
+      FT_NATURAL_GRAB;
+    Flags: M_NOHEAD, M_FOREST, M_NEUTER, M_REACH, M_HAS_BLOOD, M_IALIGN,
+           M_HOSTILE, M_PSYCHO;
+    Desc: "A tendriculos can rear up to a height of 15 feet. It weighs
+    about 3,500 pounds.
+    Animals and other plant creatures are unnerved by the presence of a
+    tendriculos; they avoid it and any place it has been within the last 24
+    hours.
+    Prowling deep forests or waiting in vegetated areas (looking like
+    nothing more than a small hillock), a tendriculos attacks savagely,
+    showing no fear. It attempts to swallow as much flesh as it can, as
+    quickly as it can.";
+  }
+
+Monster "treant" : MA_PLANT
+  { Image: bright yellow 'P'; Size: SZ_HUGE;  
+    CR: OPT_CR(12,8); HD: 7; Def: 16; Hit: +5; Mov: 100%; Spd: 140%;
+    Arm: 6;
+    Str 29, Dex 8, Con 21, Int 12, Wis 16, Cha 12; 
+    Attk: A_SLAM for 2d6 AD_BLUNT,
+          A_SLAM for 2d6 AD_BLUNT;
+	RACIAL_SKILL(SK_HIDE,16); // really
+	ABILITY(CA_NATURE_SENSE,1);
+	ABILITY(CA_INFRAVISION,6);
+    Resists: DF_PIERCE, DF_SLASH;
+    Spells: $"verdant aid"; 
+    Immune: PLANT_IMMUNITIES; 
+    Feats: 
+      FT_SUNDER, FT_IRON_WILL, FT_POWER_ATTACK, FT_TRAMPLE,
+      SK_DIPLOMACY, SK_HIDE, SK_INTIMIDATE, /*SK_KNOWLEDGE,*/ 
+      SK_LISTEN, SK_APPRAISE, SK_SPOT, SK_WILDERNESS;
+    Flags: M_GOOD, M_FOREST, M_NEUTER, M_REACH, M_NO_BLOOD; 
+    Desc: "A treant's leaves are deep green in the spring and summer. In
+    the fall and winter the leaves change to yellow, orange, or red, but
+    they rarely fall out. A treant's legs fit together when closed to look
+    like the trunk of a tree, and a motionless treant is nearly
+    indistinguishable from a tree.
+    A treant is about 30 feet tall, with a 'trunk' about 2 feet in
+    diameter. It weighs about 4,500 pounds.";
+  }
+
+#if 0
+
+/* Turning this off until we do the new Encounter gen --
+   it's WAY too common, and I don't see a way to fix
+   that, and all it does is screw rogues who need sneak
+   attack damage. If there were a way to make it rare, it
+   would be a really nice unusual template. */
+
+Template "plantform" : TM_DESCENT for MA_NLIVING { 
+  // drow:      -2 -> 1
+  // bugbear:   2 -> 3
+  // leopard:   3 -> ?
+  Image: green 0; CR: +1 (Min 1);
+  Wis +2, Luc -2; 
+  Mov: 100%; Spd: 100%; MType: MA_PLANT; 
+  Attk: A_SPOR for 1d4 AD_TOXI;
+	ABILITY(CA_PLANT_MASTERY,3);
+	ABILITY(CA_NATURE_SENSE,1);
+  Immune: PLANT_IMMUNITIES; 
+  Flags: M_NATURAL, M_NO_BLOOD, TMF_OBVIOUS; 
+    On Event EV_BIRTH {
+      hObj h;
+      for(h=EActor->FirstInv();h;h=EActor->NextInv()) {
+        if (h->QualityOK(IQ_DARKWOOD))
+          h->AddQuality(IQ_DARKWOOD);
+        if (h->QualityOK(IQ_IRONWOOD))
+          h->AddQuality(IQ_IRONWOOD);
+      } 
+      return NOTHING;
+    };
+  Desc: "This strange creature is made entirely of plant matter."; 
+    On Event EV_ISTARGET {
+      if (enFreaky() % 20 != 4)
+        return -1;
+      if (EActor->HasMFlag(M_AMORPH) ||
+          EActor->HasMFlag(M_NOBODY) ||
+          EActor->isMType(MA_DRAGON) ||
+          EActor->isMType(MA_PLANT))
+        return -1; 
+      else 
+        return 1; 
+    }; 
+  }
+  
+#endif
+
+/*** DANGEROUS FUNGI ***/
+
+Monster "strange fungus" : MA_NAGA, MA_SNAKE
+  {
+    Image: grey 'F'; Size: SZ_MEDIUM;
+    Desc: "Deep beneath the surface of Theyra, many strange forms of fungus
+      grow, developing supernatural abilities resulting from the strange
+      radiation of the Underdark. While they often vary in color or shape,
+      the Knowledge (Nature) skill is needed to identify their nature and
+      abilities more completely.";
+    Flags: M_UNKNOWN, M_NOGEN;
+  }
+  
+Monster "aether sponge" : MA_FUNGI, MA_ABERRATION, MA_OUTSIDER
+  {
+    Image: yellow 'F'; Size: SZ_TINY;
+    CR: 1; HD: 3; Hit: +0; Def: 10; Mov: 75%; Spd: 125%;
+    Str 5, Dex 8, Con 15, Int 0, Wis 0, Cha 0;
+    ABILITY(CA_TREMORSENSE, 6);
+    Resists: DF_PIERCE, DF_BLUNT; 
+    Attk: A_RUBS for 1d8 AD_ELEC
+                 and 2d6 AD_STUN (DC 12);
+    Immune: PLANT_IMMUNITIES, DF_MAGC;
+    Flags: M_MINDLESS, M_NOLIMBS, M_NOHANDS, M_NOHEAD, M_ELEC,
+           M_NEUTER, M_BLIND, M_DEAF, M_NO_BLOOD, M_MAGC,
+           M_SOLITARY, M_RARE, M_WATER;    
+    Desc: "This odd creature appears like certain varieties of
+      sponges usually found deep undersea; through some unknown
+      magical process it is able to support itself on air as if
+      that air had the viscosity of water. (Magical scholars claim
+      that it exists partially phased into the Elemental Plane of
+      Water, and is thus supported by the water on that plane.)
+      It can 'swim' by expanding and contracting its body to
+      expel nonexistant water behind it, creating thrust, and
+      produces bioelectricity which it can use to stun attackers.";
+  }
+  
+Monster "id moss;monster" : MA_FUNGI
+{
+  Image: white 'F'; Size: SZ_MEDIUM; 
+  CR: OPT_CR(0,2); HD: 2; Hit: +0; Def: 10; Mov: 5%; Spd: 100%;
+  Str 0, Dex 10, Con 10, Int 0, Wis 0, Cha 0; 
+  Resists: DF_PIERCE, DF_SLASH; 
+  Attk: A_SPOR for 1d4 AD_DAIN,
+        A_SEEM for $"strange fungus";
+	ABILITY(CA_TELEPATHY,6);
+  Immune: PLANT_IMMUNITIES, DF_MAGC;
+  Flags: M_MINDLESS, M_NOLIMBS, M_NOHANDS, M_NOHEAD, 
+         M_NEUTER, M_BLIND, M_DEAF, M_NO_BLOOD, M_MAGC;
+  Feats: SK_SPOT, FT_SWARM;
+  Desc :"The vile id moss has the power to feed off of the intellect from
+  living creatures, and it can sense such creatures from a distance. 
+  Successful attacks cause it to multiply. Its strange mental acuity allows
+  it to act like a manifesting creature in combat, aweing intelligent foes
+  and drinking the thoughts of incorporeal attackers. A single patch can
+  quickly become a deadly menace."; 
+  On Event POST(EV_DAMAGE) {
+    if (e.DType == AD_DAIN && e.vDmg > 0 && 
+        !e.Immune && ETarget->isCreature()) { 
+      EActor->cHP += e.vDmg * 5; 
+      EActor->mHP += e.vDmg * 5; 
+      EActor->Multiply(1,true);
+    } 
+  };
+  Stati[NONDETECTION,(PER_TREMOR|PER_SCENT)];
+  Stati[MANIFEST];
+  On Event MSG_SPECABIL
+    "As a fungus, it cannot be detected by tremorsense."; 
+  On Event POST(EV_HIT) {
+    EActor->IdentifyMon();
+    return NOTHING;
+    };
+} 
+
+Monster "brown mold" : MA_FUNGI
+{
+  Image: brown 'F'; Size: SZ_MEDIUM; 
+  CR: OPT_CR(5,1/4); HD: 3; Hit: +10; Def: 10; Mov: 5%; Spd: 100%;
+  Str 0, Dex 16, Con 16, Int 0, Wis 0, Cha 0; 
+  Resists: DF_PIERCE, DF_SLASH; 
+  Attk: A_SPOR for 1d4 AD_SLOW (DC 18),
+        A_SPOR for 2d4 AD_COLD,
+        A_SEEM for $"strange fungus";
+	ABILITY(CA_TREMORSENSE,9);
+	ABILITY(CA_BLINDSIGHT,1);
+  Immune: PLANT_IMMUNITIES, DF_COLD;
+
+  Flags: M_MINDLESS, M_NOLIMBS, M_NOHANDS, M_NOHEAD, 
+         M_NEUTER, M_BLIND, M_NO_BLOOD, M_COLD;
+  Feats: SK_SPOT, FT_SWARM;
+  Desc :"The dreaded brown mold sucks the heat from nearby creatures.
+  External fire damage and successful attacks cause it to multiply. It
+  can detect all fire creatures within 180 feet (18 squares)."; 
+  On Event POST(EV_DAMAGE) {
+    if (e.DType == AD_COLD && e.vDmg > 0) { 
+      EActor->cHP += e.vDmg; 
+      EActor->mHP += e.vDmg; 
+      if (e.vDmg > 4) 
+        EActor->Multiply(1,true);
+    } 
+  };
+  On Event EVICTIM(EV_DAMAGE) {
+      if (e.DType == AD_FIRE) {
+        EVictim->cHP += e.vDmg;
+        EVictim->mHP += e.vDmg;
+        VPrint(e,"You grow!","The <EVictim> grows!");
+        if (e.vDmg > 4) 
+          EVictim->Multiply(1,true);
+        return DONE;
+      }
+  };
+  Stati[DETECTING,MA_FIRE,18];
+  On Event POST(EV_HIT) {
+    EActor->IdentifyMon();
+    return NOTHING;
+    };
+} 
+
+Monster "spectral mold" : MA_FUNGI
+{
+  Image: shadow 'F'; Size: SZ_MEDIUM; 
+  CR: OPT_CR(6,6); HD: 6; Hit: +10; Def: 10; Mov: 50%; Spd: 100%;
+  Str 0, Dex 16, Con 16, Int 0, Wis 0, Cha 0; 
+  Resists: DF_PIERCE, DF_SLASH; 
+  Attk: A_SPOR for 2d4 AD_VAMP,
+        A_SPOR for 1d4 AD_DAST,
+        A_SPOR for 1d4 AD_DADX,
+        A_SPOR for 1d4 AD_DACO,
+        A_SEEM for $"strange fungus";
+	ABILITY(CA_TREMORSENSE,9);
+	ABILITY(CA_BLINDSIGHT,1);
+  Immune: PLANT_IMMUNITIES; 
+  Flags: M_MINDLESS, M_NOLIMBS, M_NOHANDS, M_NOHEAD, 
+         M_NEUTER, M_BLIND, M_NO_BLOOD;
+  Feats: SK_SPOT;
+  Desc :"This mysterious breed of creeping mold is not truly undead but
+  seems to possess a strange connection to the negative material plane.
+  Though mindless, it is capable of a number of spell-like abilities, and
+  its special spores allow it to draw life and energy from nearby
+  creatures. Undead treat patches of spectral mold as allies. Patches
+  of spectral mold can detect living creatures within 120 feet (12
+  squares)."; 
+  Stati[ALLY_TO,MA_UNDEAD];
+  Stati[DETECTING,MA_LIVING,12];
+  On Event POST(EV_HIT) {
+    EActor->IdentifyMon();
+    return NOTHING;
+    };
+} 
+
+Monster "sonic bloom" : MA_FUNGI
+{
+  Image: yellow 'F'; Size: SZ_TINY; 
+  CR: OPT_CR(6,3); HD: 2; Hit: 5; Def: 10; Mov: 200%; Spd: 200%;
+  Str 0, Dex 20, Con 12, Int 0, Wis 0, Cha 0;
+  Resists: DF_PIERCE, DF_SLASH; 
+  Attk: A_SPOR for 2d4 AD_SONI,
+        A_SPOR for 2d4 AD_STUN (DC 18),
+        A_SEEM for $"strange fungus";
+	RACIAL_SKILL(SK_LISTEN,12);
+	ABILITY(CA_BLINDSIGHT,16);
+  Immune: PLANT_IMMUNITIES, DF_SONI;
+  Feats: FT_DODGE, FT_MOBILITY, FT_FLYBY_ATTACK, 
+         SK_LISTEN; 
+  Flags: M_MINDLESS, M_NOLIMBS, M_NOHANDS, M_NOHEAD, 
+         M_NEUTER, M_BLIND, M_FLYER, M_NO_BLOOD, M_SONI;
+  Desc :"This hated breed of magical fungus manages to keep its particles
+  airborne via powerful but localized vortices. It can shoot its spores
+  at supersonic speeds, stunning opponents and creating a racket that
+  allows it to rival the fabled shrieker mushroom."; 
+  On Event POST(EV_DAMAGE) {
+    if (e.DType == AD_SONI && e.vDmg > 0 && EVictim != NULL) { 
+      EVictim->MakeNoise(e.vDmg * 4); 
+    } 
+  };
+  On Event POST(EV_HIT) {
+    EActor->IdentifyMon();
+    return NOTHING;
+    };
+} 
+
+Monster "caustic fungus" : MA_FUNGI
+{
+  Image: purple 'F'; Size: SZ_HUGE; 
+  CR: OPT_CR(7,5); HD: 5; Hit: 10; Def: 10; Mov: 5%; Spd: 150%;
+  Str 0, Dex 12, Con 18, Int 0, Wis 0, Cha 0;
+  Resists: DF_PIERCE, DF_SLASH; 
+  Attk: A_SPOR for 3d4 AD_ACID,
+        A_DEQU for 3d4 AD_ACID (DC 15),
+        A_SEEM for $"strange fungus";
+	ABILITY(CA_BLINDSIGHT,1);
+	ABILITY(CA_TREMORSENSE,16);
+    Immune: PLANT_IMMUNITIES, DF_ACID;
+  Feats: FT_WEATHER_BLAST, FT_TOUGHNESS; 
+  Flags: M_MINDLESS, M_NOLIMBS, M_NOHANDS, M_NOHEAD, 
+         M_NEUTER, M_BLIND, M_NO_BLOOD, M_ACID;
+  Desc :"This despised fungus has a body chemistry based on acids and
+  vitriolic fluid. Essentially a vaguely mobile collection of somewhat dry 
+  caustic spores, this fungus has the ability to destroy equipment, making
+  it a bane of adventurers everywhere. Striking it without a weapon is
+  also quite damaging to the assailant. Strangely, only huge patches have
+  been observed."; 
+  On Event POST(EV_HIT) {
+    EActor->IdentifyMon();
+    return NOTHING;
+    };
+} 
+
+Monster "spore patch" : MA_FUNGI
+  { 
+    Image: green 'F'; Size: SZ_TINY; Mana: 30; 
+    CR: OPT_CR(-2,0); HD: 2; Def: 10; Hit: 10; Mov: 0%; Spd: 100%;
+    Str 0, Dex 0, Con 12, Int 0, Wis 16, Cha 0;
+    Attk: A_SPOR for 1d6 AD_BLUNT,
+        A_SEEM for $"strange fungus";
+	ABILITY(CA_BLINDSIGHT,1);
+	ABILITY(CA_TREMORSENSE,12);
+    Immune: PLANT_IMMUNITIES; 
+    Flags: M_MINDLESS, M_NOLIMBS, M_NOHANDS, M_NOHEAD, 
+      M_NEUTER, M_BLIND, M_AVOID_MELEE, M_NO_BLOOD;
+    Feats: FT_GUARDED_INVOCATION;
+    Spells: $"puffball", $"tree stride"; 
+    Desc: "These patches of spores reproduce by hurling bursts of seeds
+      across the dungeon when triggered by vibrations in the earth."; 
+    On Event POST(EV_INVOKE) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };
+  }    
+
+Monster "shrieker" : MA_FUNGI
+  { 
+    Image: pink 'F'; Size: SZ_TINY; 
+    CR: OPT_CR(1/8,0); HD: 2; Def: 10; Hit: 0; Mov: 0%; Spd: 100%;
+    Con 13, Int 1, Wis 5, Cha 1;
+    Attk: A_PROX for 6d8 AD_SPE1,
+        A_SEEM for $"strange fungus";
+    Immune: DF_MIND, DF_STUN, DF_CONF, DF_PLYS, DF_CRIT,
+      DF_SLEE, DF_BLND, DF_SLOW, DF_DISE, DF_FEAR, DF_SUBD,
+      DF_PSYC, DF_POIS;
+    Flags: M_MINDLESS, M_NOLIMBS, M_NOHANDS, M_NOHEAD, 
+      M_NEUTER, M_BLIND, M_DEAF;
+    On Event EV_ATTACKMSG {
+      if (e.AType == A_PROX) {
+        DPrint(e,"You shriek!",
+                   "The <EActor> emits a piercing screech!");
+        EActor->IdentifyMon();
+        e.Terse = true;
+        }
+      return NOTHING;
+      },
+    PRE(EV_DAMAGE) {
+      if (e.DType == AD_SPE1) {
+        EActor->Reveal();
+        EMap->SetQueue(QUEUE_DAMAGE_MSG);
+        EActor->MakeNoise(e.vDmg);
+        EMap->UnsetQueue(QUEUE_DAMAGE_MSG);
+        return DONE;
+        }
+      return NOTHING;
+      },
+    MSG_SPECABIL
+      "When disturbed it shrieks, waking all sleeping monsters within
+        6d8 squares.";
+    Desc: "These little toadstools would be all but harmless were it
+      not for their natural defense mechinism of emitting a piercing
+      shriek when disturbed, drawing the attention of many other far
+      more dangerous creatures nearby.";
+  }    
+
+Monster "ascomoid" : MA_FUNGI
+  {
+    Image: grey 'F'; Size: SZ_LARGE; 
+    CR: 6; HD: 6; Def: 7; Hit: 7; Mov: 150%; Spd: 70%;
+    Str 26, Dex 5, Con 14, Int 0, Wis 11, Cha 4;
+    Attk: A_SLAM for 1d10 AD_BLUNT
+                 and AD_TRIP (DC 16),
+          A_SPOR for 3d6 AD_BLND (DC 16)
+                 and 1d6 AD_DACO;
+    ABILITY(CA_TREMORSENSE,6);
+    /* ABILITY(CA_MIMIC,$"boulder"); */
+    Resists: DF_FIRE, DF_ELEC;
+    Immune: DF_MIND, DF_STUN, DF_CONF, DF_PLYS, DF_CRIT,
+      DF_SLEE, DF_BLND, DF_SLOW, DF_DISE, DF_FEAR, DF_SUBD,
+      DF_PSYC, DF_POIS;
+    Flags: M_CHARGE, M_NOHEAD, M_NOLIMBS, M_NOHANDS, M_MINDLESS,
+           M_NEUTER, M_BLIND, M_DEAF;
+    On Event POST(EV_HIT) {
+      if (e.AType == A_SLAM)
+        if (EVictim->isCreature() && EVictim->HasStati(PRONE) 
+                                  && !EVictim->isDead())
+          {
+            TPrint(e,"The <EActor> rolls over you, crushing you.",
+                     "You roll over the <EVictim>, crushing <him:EVictim>.",
+                     "The <EActor> rolls over the <EVictim>, crushing <him:EVictim>.");
+            ThrowDmg(EV_DAMAGE,AD_BLUNT,3d10 + EActor->Mod(A_STR),
+                     "being crushed beneath an ascomoid", EActor,EVictim);
+          }
+      return NOTHING;
+      },
+    PRE(EVICTIM(EV_DAMAGE)) {
+      switch (e.DType)
+        {
+          case AD_BLUNT:
+            e.Immune = true;
+            return DONE;
+          case AD_SLASH:
+            e.Resist = true;
+            e.vDmg /= 2;
+            return NOTHING;
+          case AD_PIERCE:
+            if (GetHandle(EItem2) != NULL)
+              if (EItem2->iID == $"sheaf arrow" ||
+                  EItem2->iID == $"flight arrow")
+                {
+                  DPrint(e,"Your <EItem2> sinks deep!",
+                           "The <EActor>'s <EItem2> sinks deep!");
+                  e.vDmg *= 2;
+                  e.strDmg += " x2";
+                }
+            if (GetHandle(EItem) != NULL)
+              if (EItem->HasIFlag(WT_REACH))
+                {
+                  DPrint(e,"Your <EItem> sinks deep!",
+                           "The <EActor>'s <EItem> sinks deep!");
+                  e.vDmg *= 2;
+                  e.strDmg += " x2";
+                }
+            return NOTHING;
+        }
+      return NOTHING;
+      },
+    MSG_SPECABIL
+      "It is immune to blunt damage and suffers half damage from slashing
+         weapons, but takes double damage from arrows and piercing melee
+         weapons with reach. If it knocks over a target with its slam
+         attack, or hits an already prone target, it rolls over that
+         target for an additional 3d10 + Strength modifier points of
+         damage.";
+    Desc: "Though this strange creature appears to casual examination
+      to be a large, pockmarked grey boulder, it is in fact an unusual
+      form of rocket-propelled fungal infestation. The ascomoid is a
+      mindless, spheroid fungus creature which exudes a slime that 
+      hardens over time into a rocky carapice. Beneath the carapice
+      is about two feet of spongy white matter covering all the
+      creature's most vital internal functions -- this unique anatomy
+      making it resistant to blunt impact but vulnerable to long
+      weapons that can pierce all the way to its vulnerable innards.\n
+      __The ascomoid moves by rolling, propelling itself at considerable
+      momentum by firing jets of compressed air out of tiny holes (that
+      appear as pockmarks) on its surface. It can fire offensive spores
+      from these openings as well.";
+  }
+
+/********************************************************************************
+ ********************************************************************************
+ ***                               OOZES AND VERMIN                           ***
+ ********************************************************************************
+ ********************************************************************************/
+
+/*** OOZES ***/
+
+Monster "acid blob" : MA_JELLY
+  {
+    Image: green 'j'; Size: SZ_SMALL; Mana: 3;
+    /* The low speed and low damage should serve to balance this
+       as a low-CR monster, despite having 2 HD and immunities. */
+    CR: OPT_CR(-2,1/4); HD: 2; Hit: 0; Def: 8; Mov: 40%; Spd: 60%;
+    Str 4, Dex 7, Con 14, Int 0, Wis 7, Cha 0;
+    Attk: A_RUBS for 2d4 AD_ACID,
+          A_DEQU for 2d4 AD_ACID (DC 13);
+	ABILITY(CA_BLINDSIGHT,6);
+    Immune: OOZE_IMMUNITIES, DF_ACID; 
+    Resists: DF_BLUNT;
+    Flags: M_NOHANDS, M_NOLIMBS, M_NOHEAD, M_NEUTER, M_AMORPH,
+           M_AQUATIC, M_MINDLESS, M_BLIND, M_CARNI, M_ACID;
+    Desc: "A rolling green macroscopic single-celled organism, the acid 
+      blob of named for the powerful digestive acid that it secretes. Its
+      natural diet includes any mammal small and slow enough for it to roll 
+      over and digest, including sloths, baby pigs, lizards and the occasional
+      goblin.";
+  }
+
+Monster "bloodbloater" : MA_JELLY
+  {
+    Image: red 'j'; Size: SZ_TINY; Mana: 3; 
+    CR: OPT_CR(-6,1); HD: 2; Hit: +1; Def: 13; Mov: 120%; Spd: 70%;
+    Str 2, Dex 13, Con 12, Int 0, Wis 8, Cha 0;
+    Attk: A_GRAB for 1d6 AD_BLUNT,
+          A_SUCK for 1d4+1 AD_NORM and
+                     1d1   AD_DRST;
+	RACIAL_SKILL(SK_HIDE,4);
+	ABILITY(CA_BLINDSIGHT,6);
+    Feats: SK_HIDE, SK_SWIM, SK_MOVE_SIL, FT_MASTER_GRAPPLE;
+    Immune: OOZE_IMMUNITIES; 
+    Resists: DF_BLUNT;
+    Flags: M_NOHANDS, M_NOLIMBS, M_NOHEAD, M_NEUTER, M_AMORPH,
+           M_AQUATIC, M_MINDLESS, M_BLIND, M_HAS_BLOOD, M_CARNI;
+    Desc: "An aquatic ooze a foot in diameter, the bloodbloater appears
+      not unlike an egg, with a globular, translucent red yolk surronded
+      by a clear, thin disc shot through with red veins. It latches on
+      to a victim's body and begins to suck their blood just like a
+      lamprey or leech.";
+  }
+
+Monster "bloodsucker" : MA_JELLY
+  {
+    Image: bright red 'j'; Size: SZ_LARGE; Mana: 10; 
+    CR: OPT_CR(6,6); HD: 6; Hit: +4; Def: 10; Mov: 130%; Spd: 130%;
+    Str 16, Dex 10, Con 16, Int 0, Wis 0, Cha 0;
+    Attk: A_TUCH for 2d4+2 AD_BLUNT and
+                     1d3   AD_DRST,
+          A_TUCH for 2d4+2 AD_BLUNT and
+                     1d3   AD_DRCO,
+          A_BREA for AD_SPE1;
+	RACIAL_SKILL(SK_HIDE,8);
+	ABILITY(CA_BLINDSIGHT,12);
+    Feats: SK_HIDE, SK_SWIM, SK_MOVE_SIL, SK_SPOT,
+           FT_MASTER_GRAPPLE, FT_NATURAL_GRAB;
+    Immune: OOZE_IMMUNITIES; 
+    Resists: DF_BLUNT;
+    Flags: M_NOHANDS, M_NOLIMBS, M_NOHEAD, M_NEUTER, M_AMORPH, M_BLIND,
+           M_AQUATIC, M_MINDLESS, M_HAS_BLOOD, M_CARNI, M_NOPOLY;
+    On Event PRE(EV_DAMAGE) {
+      if (e.DType == AD_SPE1) {
+        ThrowEff(EV_EFFECT,$"chill blood",EActor,EVictim);
+        return DONE; 
+      }
+    },
+    MSG_SPE1DESC
+      "to <9>chill blood<7>";
+    Stati[DETECTING,MA_HAS_BLOOD,12]; 
+    On Event EVICTIM(EV_DEATH) {
+      rID t; 
+      if (GetHandle(EMap) && GetHandle(EVictim) && 
+          EMap->InBounds(EVictim->x,EVictim->y)) { 
+        t = EMap->TerrainAt(EVictim->x,EVictim->y);
+        if (!t->TerrainHasFlag(TF_SPECIAL) &&
+            !t->TerrainHasFlag(TF_STICKY))
+          EMap->WriteTerra(EVictim->x,EVictim->y,$"bloodstain");
+      }
+    }; 
+    Desc: "This monsterous relative of the bloodbloater appears to be
+      a crimson sack of blood covered with a thick, fimly resin. Its touch
+      drains vitality from its victims and it can project a ray that
+      chills the blood of its enemies. It can detect creatures with blood
+      within 120 feet (12 squares)."; 
+  }
+
+Monster "stone jelly" : MA_JELLY, MA_ELEMENTAL
+  { Image: brown 'j'; Size: SZ_MEDIUM;  Arm: 10;
+    CR: OPT_CR(3,2); HD: 2; Hit: 1; Def: 8; Mov: 50%; Spd: 100%;
+    Str 18, Dex 8, Con 14, Int 4, Wis 4, Cha 4;
+    Attk: A_RUBS for 1d6 AD_BLUNT and AD_TRIP (DC 15)
+                 and 2d2 AD_STUK (DC 15);
+	ABILITY(CA_EARTH_MASTERY,2);
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_TREMORSENSE,6);
+	ABILITY(CA_EARTHMELD,1);
+    Immune: OOZE_IMMUNITIES, DF_NECR;
+    Resists: DF_BLUNT;
+    Feats: SK_LISTEN, SK_SPOT, FT_POWER_ATTACK;
+    Flags: M_NEUTER, M_NOHANDS, M_NO_CORPSE, M_EARTH, M_AMORPH,
+           M_NOHANDS, M_NOLIMBS, M_NOHEAD, M_BLIND, M_EARTH; 
+    Desc: "This mysterious para-elemental has taken the form of a roiling
+    jelly made of stone. It can passes through earthen barriers more by
+    animating them and leaving itself behind than by truly melding with
+    the stone. In its path it leaves a trail of rubble.";
+    On Event EV_MOVE, EV_STRIKE {
+      if (!GetHandle(EActor) || EActor->isDead())
+        return NOTHING; 
+      if (!EMap->SolidAt(EActor->x,EActor->y)) {
+        EMap->WriteTerra(EActor->x,EActor->y,$"loose-packed earth");
+      } 
+      if (GetHandle(EVictim) && !EVictim->isDead() && 
+          !EMap->SolidAt(EVictim->x,EVictim->y)) {
+        EMap->WriteTerra(EVictim->x,EVictim->y,$"loose-packed earth");
+      } 
+    } ;
+    On Event EVICTIM(EV_DEATH) {
+      hObj it;
+      if (GetHandle(EMap) && GetHandle(EVictim) && 
+          EMap->InBounds(EVictim->x,EVictim->y)) { 
+        it = CreateItem($"boulder");
+        if (!it)
+          return NOTHING;
+        it->SetQuantity(2d4);
+        it->PlaceAt(EMap,EVictim->x,EVictim->y);
+        }
+      };
+  }
+
+Monster "shadow ooze" : MA_JELLY
+  { Image: blue 'j'; Size: SZ_MEDIUM; 
+    CR: OPT_CR(1,4); HD: 4; Hit: +2; Def: 10; Mov: 100%; Spd: 100%;
+    Str 10, Dex 10, Con 10;
+    Attk: A_TUCH for 1d10 AD_VAMP,
+          A_CONS for 1d6 AD_BLUNT and 1d10 AD_VAMP;
+	RACIAL_SKILL(SK_HIDE,10);
+	ABILITY(CA_TRACKING,6);
+	ABILITY(CA_BLINDSIGHT,6);
+    Immune: OOZE_IMMUNITIES, DF_COLD, DF_FIRE; 
+    Resists: DF_BLUNT;
+    Feats: SK_HIDE, SK_MOVE_SIL, FT_SNEAKY, FT_NATURAL_GRAB;
+    Flags: M_MINDLESS, M_AMORPH, M_NOHANDS, M_NOLIMBS, M_NOHEAD,
+      M_GREEDY, M_NEUTER, M_BLIND;
+    On Event EVICTIM(POST(EV_HIT)) {
+      if (GetHandle(EActor) != GetHandle(EVictim)) 
+        if (!EVictim->isDead())
+          ThrowEff(EV_EFFECT,$"shadow step",EVictim,EVictim);
+      return NOTHING;
+    };
+    Stati[DETECTING,MA_LIVING,10];
+    On Event MSG_SPECABIL
+      "When struck in combat, if it survives it can use <9>Shadow Step<7> as
+       a reflexive action. It detects living things out to a range of 100 feet.";  
+  }
+
+Monster "blue jelly" : MA_JELLY 
+  { Image: azure 'j'; Size: SZ_SMALL;
+    CR: OPT_CR(5,3); HD: 4; Hit: +3; Def: 8; Mov: 30%; Spd: 75%;
+    Str 5, Dex 8, Con 13, Int 0, Wis 12, Cha 4;
+    Attk: A_OOZE for 3d4 AD_COLD;
+	ABILITY(CA_BLINDSIGHT,6);
+    Immune: OOZE_IMMUNITIES, DF_COLD; 
+    Resists: DF_BLUNT;
+    Feats: FT_SWARM;
+    On Event EVICTIM(POST(EV_DAMAGE)) {
+      if (!(EVictim->isDead()))
+        if (e->DType != AD_FIRE && e->DType <= AD_LAST_PHYSICAL)
+          EVictim->Multiply(1,true);
+      return NOTHING;
+      };
+    Flags: M_NOHANDS, M_NOLIMBS, M_NOHEAD, M_NEUTER, 
+           M_AMORPH, M_MINDLESS, M_BLIND, M_COLD;
+    Desc: "This freezing ooze is often best left undisturbed: when injured
+    by anything other than fire it tends to split and multiply."; 
+  }
+
+Monster "crystal ooze" : MA_JELLY
+  { Image: bright cyan 'j'; Size: SZ_HUGE; Mana: 120; 
+    CR: OPT_CR(6,7); HD: 10; Hit: +12; Def: 10; Mov: 200%; Spd: 125%;
+    Str 22, Dex 14, Con 16, Int 0, Wis 1, Cha 1;
+    Attk: A_RUBS for 6d12 AD_DRMA,
+          A_CONS for 6d12 AD_DRMA and 3d6 AD_BLUNT;
+	ABILITY(CA_REGEN,10);
+	MAGIC_RES(50);
+	ABILITY(CA_BLINDSIGHT,6);
+    Immune: OOZE_IMMUNITIES, DF_MAGC;
+    Resists: DF_BLUNT;
+    Feats: FT_NATURAL_GRAB;
+    Flags: M_NOHANDS, M_NOLIMBS, M_NOHEAD, M_NEUTER, 
+           M_AMORPH, M_MINDLESS, M_LIGHT_AVERSE, M_BLIND, M_MAGC;
+    Desc: "This translucent glob of gelatinous material is in fact a
+      highly sophisticated thaumavore -- a creature that survives by
+      drawing the magical potential out of others. Crystal oozes live
+      deep underground and are sometimes created or controlled by
+      drow war parties as living war machines.";
+    Lists:
+      * GROUP_ALLY $"drow",
+      * GROUP_LEADER $"drow",
+      * GROUP_FOLLOWER $"drow";
+  }    
+
+Monster "brown pudding" : MA_JELLY
+  { Image: bright brown 'j'; Size: SZ_LARGE; 
+    CR: OPT_CR(9,5); HD: 6; Hit: +4; Def: 10; Mov: 30%; Spd: 100%;
+    Str 15, Dex 1, Con 22, Wis 1, Cha 1;
+    Attk: A_SLAM for 2d4 AD_BLUNT and 5d6 AD_DCAY,
+          A_SLAM for 2d4 AD_BLUNT and 5d6 AD_DCAY,
+          A_CONS for 2d4 AD_BLUNT and 5d6 AD_DCAY,
+          A_DEQU for 5d6 AD_DCAY (DC 19);
+	RACIAL_SKILL(SK_CLIMB,8);
+	ABILITY(CA_BLINDSIGHT,6);
+    Immune: OOZE_IMMUNITIES; 
+    Resists: DF_BLUNT;
+    Feats: SK_CLIMB, FT_NATURAL_GRAB, FT_MASTER_GRAPPLE;
+    Flags: M_MINDLESS, M_AMORPH, M_NOHANDS, M_NOLIMBS, M_NOHEAD,
+      M_NEUTER, M_BLIND;
+    On Event EVICTIM(EV_DAMAGE) {
+      if (!(EVictim->isDead()))
+        if (e->DType == AD_SLASH ||
+            e->DType == AD_PIERCE ||
+            e->DType == AD_ELEC) {
+          e.Immune = true;
+          EVictim->Multiply(1,true);
+          return DONE;
+          }
+      return NOTHING;
+    };
+    Desc: "Brown puddings are immune to slashing, piercing and electrical
+    damage and instead split into two identical jellies when subject to
+    them."; 
+  }
+
+Monster "grey ooze" : MA_JELLY
+  { Image: grey 'j'; Size: SZ_MEDIUM; 
+    CR: OPT_CR(2,4); HD: 3; Hit: +2; Def: 10; Mov: 50%; Spd: 75%;
+    Str 12, Dex 1, Con 11, Wis 1, Cha 1;
+    Attk: A_TUCH for 1d10 AD_ACID,
+          A_CONS for 1d6 AD_BLUNT and 1d10 AD_ACID,
+          A_DEQU for 5d6 AD_ACID (DC 19);
+	RACIAL_SKILL(SK_HIDE,10);
+	ABILITY(CA_BLINDSIGHT,6);
+    Immune: OOZE_IMMUNITIES, DF_COLD, DF_FIRE; 
+    Resists: DF_BLUNT;
+    Feats: SK_HIDE, SK_MOVE_SIL, FT_NATURAL_GRAB;
+    Flags: M_MINDLESS, M_AMORPH, M_NOHANDS, M_NOLIMBS, M_NOHEAD,
+      M_GREEDY, M_NEUTER, M_BLIND, M_ACID;
+  }
+
+Monster "magma creeper" : MA_JELLY
+  { Image: bright red 'j'; Size: SZ_GARGANTUAN; 
+    CR: OPT_CR(11,12); HD: 12; Hit: +9; Def: 10; Mov: 100%; Spd: 150%;
+    Str 16, Dex 1, Con 22, Wis 1, Cha 1;
+    Attk: A_SLAM for 4d6 AD_BLUNT 
+                 and 3d6 AD_ACID (DC 22),
+          A_DEQU for 3d6 AD_ACID (DC 22),
+          A_CRUS for 10d6 AD_ACID;
+	ABILITY(CA_BLINDSIGHT,9);
+    Immune: OOZE_IMMUNITIES, DF_FIRE, DF_ACID, DF_ELEC; 
+    Resists: DF_BLUNT;
+    Feats: SK_HIDE, SK_MOVE_SIL, FT_NATURAL_GRAB;
+    Flags: M_MINDLESS, M_CARNI, M_AMORPH, M_NOHANDS, M_NOLIMBS, M_NOHEAD,
+      M_GREEDY, M_NEUTER, M_REACH, M_BLIND, M_ACID, M_FIRE;
+    Desc: "A magma creeper is a huge ooze that usually lives near areas of
+    extreme heat such as a volcano. A magma creeper usually resembles a
+    quick-moving flow of magma; however, it often changes course and
+    certainly does not follow the path of least resistance to find
+    potential prey. The creature can subsist on rocks due to its extremely
+    powerful acids, but prefers animal flesh for the greater nutritional
+    value. Magma creepers simply flow toward the nearest available animal
+    target, not distinguishing among foes, and attempting to slam or
+    (preferably) grab the target. If two creatures are an equal distance
+    from it, the magma creeper attacks the larger of the two.";
+  }
+
+Monster "stunjelly" : MA_JELLY
+  {
+    /* This is a little bit of a different monster from the
+       original stunjelly. There are too many paralyzing
+       attacks already, so we reinterpret the name to mean
+       an electric attack. */
+    Image: white 'j'; Size: SZ_LARGE; Mana: 2;
+    CR: OPT_CR(5,4); HD: 4; Hit: 3; Def: 12; Mov: 300%; Spd: 200%;
+    Str 14, Dex 22, Con 12, Int 0, Wis 4, Cha 1;
+    Immune: OOZE_IMMUNITIES;
+    Resists: DF_BLUNT;
+    Attk: A_TENT for 2d4 AD_ELEC 
+                 and AD_ENGL (DC 15),
+          A_DGST for 3d4 AD_ACID;
+	ABILITY(CA_BLINDSIGHT,6);
+    Feats: SK_HIDE, SK_MOVE_SILENTLY, FT_SNEAKY;
+    Flags: M_MINDLESS, M_AMORPH, M_NOHANDS, M_NOLIMBS, M_NOHEAD,
+      M_GREEDY, M_NEUTER, M_BLIND, M_ELEC;
+    Desc: "A translucent, amorphious organism resembling an ameoba,
+      the stunjelly is almost invisible when viewed against stone
+      or other uniform surfaces. It seeks out any organic materials
+      to absorb, digest and metabolize. The stunjelly has nearly
+      complete control over its form, and its terrible speed makes
+      it a dangerous adversary.";
+  }
+
+/*** VERMIN ***/
+
+Monster "giant wasp" : MA_VERMIN
+  {
+    Image: yellow 'x'; Size: SZ_LARGE;  
+    CR: OPT_CR(5,3); HD: 5; Def: 14; Hit: +3; Mov: 200%; Spd: 115%;
+    Str 18, Dex 12, Con 14, Int 0, Wis 13, Cha 11;
+    Poison: $"giant wasp venom";
+    Attk:
+      A_STNG for 1d3+2 AD_PIERCE 
+             and 0d0 AD_POIS (DC 14);
+	RACIAL_SKILL(SK_SPOT,8);
+	RACIAL_SKILL(SK_WILDERNESS,4);
+	ABILITY(CA_INFRAVISION,6);
+    Immune: DF_MIND;
+    Feats: SK_SPOT, SK_WILDERNESS;
+    Flags: M_CARNI, M_HERBI, M_FLYER, M_LAYS_EGGS, M_AIR, 
+      M_NOHANDS, M_NOLIMBS, M_NATURAL,
+      M_MINDLESS, M_MOUNTABLE, M_HOSTILE;
+  }
+  
+Monster "giant dragonfly" : MA_VERMIN
+  {
+    Image: pink 'x'; Size: SZ_SMALL;
+    CR: 1; HD: 1; Def: 14; Hit: +2; Mov: 400%; Spd: 175%;
+    Str 7, Dex 20, Con 12, Int 0, Wis 12, Cha 11;
+    Attk:
+      A_BITE for 1d3 AD_PIERCE,
+      A_STNG for 1d4 AD_PIERCE;
+    RACIAL_SKILL(SK_SPOT,4);
+    ABILITY(CA_INFRAVISION,6);
+    Stati[MISS_CHANCE,MISS_FULL,50];
+    Feats: SK_SPOT, SK_WILDERNESS, SK_HIDE;
+    Flags: M_CARNI, M_HERBI, M_FLYER, M_LAYS_EGGS, M_AIR,
+      M_NOHANDS, M_NOLIMBS, M_NATURAL, M_MINDLESS, M_MOUNTABLE,
+      M_HOSTILE, M_FOREST;
+    On Event MSG_SPECABIL
+      "Its exceptional agility and body structure allow it to employ Motion 
+        Camoflague -- a pattern of rapid movements leaving behind afterimages
+        that is uses to stalk other vermin invading its territory, effectively
+        duplicating the <9>displacement<7> spell mundanely. This is not an
+        illusion and is not negated by <9>true seeing<7>.";
+  }
+
+Monster "giant bee" : MA_VERMIN
+  {
+    Image: yellow 'x'; Size: SZ_MEDIUM;  
+    CR: OPT_CR(0,1); HD: 3; Def: 12; Hit: +2; Mov: 250%; Spd: 110%;
+    Str 11, Dex 14, Con 11, Int 0, Wis 12, Cha 9;
+    Poison: $"giant bee venom";
+    Attk:
+      A_STNG for 1d4 AD_PIERCE 
+             and 0d0 AD_POIS (DC 11); 
+	RACIAL_SKILL(SK_SPOT,4);
+	RACIAL_SKILL(SK_WILDERNESS,4);
+	ABILITY(CA_INFRAVISION,6);
+    Immune: DF_MIND;
+    Feats: SK_SPOT, SK_WILDERNESS;
+    Flags: M_CARNI, M_HERBI, M_FLYER, M_LAYS_EGGS, M_AIR, 
+      M_NOHANDS, M_NOLIMBS, M_NATURAL,
+      M_MINDLESS, M_MOUNTABLE, M_HOSTILE;
+    Desc: "Although many times larger, growing to a length of about 5 feet,
+    giant bees behave generally the same as their smaller cousins. Giant
+    bees are usually not aggressive except when defending themselves or
+    their hive. This type of giant bee can sting an opponent without
+    killing itself in the process.";
+  }
+
+Monster "giant praying mantis" : MA_VERMIN
+  {
+    Image: green 'x'; Size: SZ_LARGE;  Arm: 6;
+    CR: OPT_CR(4,2); HD: 4; Def: 14; Hit: +3; Mov: 150%; Spd: 125%;
+    Str 19, Dex 8, Con 15, Int 0, Wis 14, Cha 11;
+    Attk:
+      A_CLAW for 1d8 AD_SLASH, 
+      A_BITE for 1d6 AD_PIERCE;
+	ABILITY(CA_INFRAVISION,6);
+    Feats: FT_REND, SK_LISTEN, SK_SPOT; Immune: DF_MIND;
+    Flags: M_CARNI, M_THICK_HIDE, M_NOHANDS, M_NATURAL,
+      M_MINDLESS, M_MOUNTABLE, M_HOSTILE;
+    Desc: "A fast and agile cousin of the mundane mantis, the
+      giant mantis can grow to be as large as a small horse.
+      It remains perfectly still while stalking its prey.";
+  }
+
+Monster "small monsterous centipede" : MA_VERMIN, MA_FORCE_D4
+  {
+    Image: red 'x'; Size: SZ_SMALL;  Arm: 3;
+    CR: OPT_CR(-4,1/4); HD: 1; Def: 12; Hit: +1; Mov: 100%; Spd: 60%;
+    Str 5, Dex 15, Con 10, Int 0, Wis 10, Cha 2;
+    Attk: 
+      A_BITE for 1d4 AD_PIERCE and AD_POIS (DC 11);
+	ABILITY(CA_INFRAVISION,6);
+    Feats: FT_SNEAKY, SK_HIDE, SK_CLIMB, SK_SPOT;
+    Immune: DF_MIND; 
+    Poison: $"monsterous centipede venom";
+    Flags: M_CARNI, M_THICK_HIDE, M_NOHANDS, M_NATURAL,
+      M_MINDLESS, M_NEUTER;
+    Desc: "This centipede is about the size of a hunting dog.
+      It has a shiny maroon carapice.";
+  }
+
+Monster "monsterous centipede" : MA_VERMIN
+  {
+    Image: bright red 'x'; Size: SZ_LARGE;  Arm: 6;
+    CR: OPT_CR(3,4); HD: 4; Def: 10; Hit: +3; Mov: 100%; Spd: 200%;
+    Str 14, Dex 11, Con 14, Int 0, Wis 10, Cha 2;
+    Attk: 
+      A_BITE for 1d4 AD_PIERCE and AD_POIS (DC 11);
+	ABILITY(CA_INFRAVISION,6);
+    Feats: FT_SNEAKY, SK_HIDE, SK_CLIMB, SK_SPOT;
+    Immune: DF_MIND; 
+    Poison: $"monsterous centipede venom";
+    Flags: M_CARNI, M_THICK_HIDE, M_NOHANDS, M_NATURAL,
+      M_MINDLESS, M_NEUTER;
+    Desc: "This centipede is larger than a human. It attacks by rearing
+    back part of its body and darting forward with its mouth. Surprisingly,
+    it can do this quite rapidly. It has a bright maroon carapice.";
+  }
+
+Poison "monsterous centipede venom" : EA_DRAIN
+  {
+    Level: 1;
+    /*Iteration*/   cval: 5;
+    /*Save DC*/     sval: 11;
+    /*Persistance*/ lval: 2;
+    xval: AD_DADX; pval: 1d2;
+    Desc: "This poison inflicts <11>1d2<7> points of Dexterity damage every 
+      <11>5<7> turns, and requires <11>2<7> saving throws against <11>DC 11<7> 
+      to overcome.";
+  }
+  
+Monster "giant soldier ant" : MA_VERMIN
+  {
+    Image: blue 'x'; Size: SZ_MEDIUM;  Arm: 5;
+    CR: OPT_CR(2,2); HD: 2; Def: 13; Hit: +2; Mov: 150%; Spd: 125%;
+    Str 14, Dex 10, Con 13, Int 0, Wis 13, Cha 11;
+    Attk: 
+      A_BITE for 2d4 AD_PIERCE,
+      A_STNG for 1d4 AD_PIERCE and 1d8 AD_ACID;
+	ABILITY(CA_SCENT,6);                                       
+    Feats: FT_SKILL_FOCUS, SK_CLIMB, SK_SPOT, SK_LISTEN, FT_NATURAL_GRAB;
+    Immune: DF_MIND;
+    Flags: M_CARNI, M_THICK_HIDE, M_NOHANDS, M_NATURAL,
+           M_MINDLESS, M_MOUNTABLE, M_ALL_MALE;
+    Desc: "This ant has a glossy black carapice, a stinger
+      dripping with acid and razor-sharp pincers. It is
+      about the size of a man.";
+  }
+
+Monster "large spider" : MA_SPIDER, MA_VERMIN
+	{
+		Image: shadow 's'; Size: SZ_TINY; 
+    CR: OPT_CR(-6,1/2); HD: 1; Hit: +1; Def: 8; Mov: 30%; Spd: 70%;
+    Str 1, Dex 4, Con 10, Int 1, Wis 6, Cha 12;
+		Attk:A_BITE for 1d3 AD_PIERCE and AD_POIS (DC 12);
+	ABILITY(CA_INFRAVISION,6);
+    Immune: DF_STUK;
+    WEAPON_FOCUS_NATURAL_ATTACK;
+    Feats: FT_ENDURANCE, SK_HIDE,
+      FT_CLOSE_QUARTERS_FIGHTER,
+      SK_MOVE_SIL, SK_CLIMB, SK_JUMP, SK_SPOT;
+		Flags: M_CARNI, M_HERBI, M_NOLIMBS, M_NOHANDS,
+      M_HIDE_UNDER, M_LAYS_EGGS;
+    Poison: $"spider venom";
+	}
+
+Monster "dancing spider" : MA_SPIDER, MA_VERMIN
+{
+  Image: purple 's'; Size: SZ_TINY; 
+  CR: OPT_CR(-2,1/2); HD: 1; Hit: +1; Def: 10; Mov: 100%; Spd: 100%;
+  Str 1, Dex 14, Con 10, Int 1, Wis 6, Cha 12;
+  Attk:A_BITE for 1d3 AD_PIERCE and AD_POIS (DC 12);
+	ABILITY(CA_INFRAVISION,6);
+  WEAPON_FOCUS_NATURAL_ATTACK;
+  Feats: FT_ALERTNESS, 
+         FT_DODGE,
+         FT_MOBILITY,
+         FT_SPRING_ATTACK,
+         SK_HIDE,
+         SK_MOVE_SIL, SK_CLIMB, SK_JUMP, SK_SPOT;
+  Flags: M_CARNI, M_HERBI, M_NOLIMBS, M_NOHANDS,
+         M_HIDE_UNDER, M_LAYS_EGGS, M_SKIRMISH;
+  Immune: DF_STUK;
+  Poison: $"spider venom";
+  Desc: "The so-called dancing spider has a distinctive purple pattern of
+  coloration and a rapid metabolism. It eschews web-spinning in favor of
+  making darting attacks at its prey."; 
+}
+
+Monster "spitting spider" : MA_SPIDER, MA_VERMIN
+{
+  Image: green 's'; Size: SZ_SMALL;
+  CR: -4; HD: 2; Hit: +1; Def: 10; Mov: 50%; Spd: 70%;
+  Str 1, Dex 14, Con 10, Int 1, Wis 6, Cha 12;
+  Attk: A_SPIT for 0d0 AD_POIS (DC 16),
+        A_BITE for 1d3 AD_PIERCE and AD_POIS (DC 12);
+	ABILITY(CA_INFRAVISION,6); 
+  Feats: FT_ALERTNESS, FT_HARDINESS,
+         SK_HIDE, SK_MOVE_SIL, SK_CLIMB, SK_JUMP, SK_SPOT, SK_LISTEN;
+  Flags: M_CARNI, M_HERBI, M_NOLIMBS, M_NOHANDS,
+         M_HIDE_UNDER, M_LAYS_EGGS, M_SKIRMISH, M_HOSTILE;
+  On Event POST(EV_HIT) {
+    if (!EVictim->isDead() && e.AType == A_SPIT && e.DType == AD_POIS) {
+      if (!EVictim->SavingThrow(REF,20))
+        ThrowDmg(EV_DAMAGE,AD_BLND,2d2,"spider spit",EActor,EVictim);
+    } 
+    return NOTHING; 
+  } ;
+  Immune: DF_STUK;
+  Poison: $"spider venom";
+  Desc: "The dreaded spitting spider is reviled for its ability to 
+  breathe gobs of venomous ichor at the eyes of its prey. Any opponent
+  hit by the spider's spit must make a Reflex saving throw (DC 20) to
+  avoid being blinded for 2d2 rounds. A spitting spider is about the size
+  of a small dog."; 
+} 
+
+Poison "spider venom" : EA_DRAIN
+  {
+    Level: 5;
+    /*Iteration*/   cval: 20;
+    /*Save DC*/     sval: 12;
+    /*Persistance*/ lval: 6;
+    xval: AD_DAST; pval: 1d6;
+    Desc: "This poison inflicts <11>1d6<7> points of Strength damage every 
+      <11>20<7> turns, and requires <11>6<7> saving throws against <11>DC 12<7> 
+      to overcome.";
+  }
+
+Monster "giant spider" : MA_SPIDER, MA_VERMIN
+  {
+    Image: red 's'; Size: SZ_LARGE; 
+		CR: OPT_CR(3,3); HD: 6; Hit: +5; Def: 15; Mov: 100%; Spd: 100%;
+    Str 15, Dex 17, Con 12, Int 2, Wis 10, Cha 2;
+    Attk: A_BITE for 1d8 AD_PIERCE and AD_POIS (DC 16);
+	  ABILITY(CA_INFRAVISION,6);
+    WEAPON_FOCUS_NATURAL_ATTACK;
+    Immune: DF_STUK;
+    Feats: SK_HIDE,
+      FT_DEFT_OPPORTUNIST,
+      FT_CLOSE_QUARTERS_FIGHTER,
+      SK_MOVE_SIL, SK_CLIMB, SK_JUMP, SK_SPOT;
+		Flags: M_CARNI, M_HERBI, M_NOLIMBS, M_NOHANDS,
+      M_HIDE_UNDER, M_LAYS_EGGS;
+	  Poison: $"giant spider venom";
+  }
+
+Monster "pike spider" : MA_SPIDER, MA_VERMIN
+{
+  Image: bright red 's'; Size: SZ_LARGE; 
+  CR: OPT_CR(6,5); HD: 6; Hit: +5; Def: 10; Mov: 100%; Spd: 100%;
+  Str 12, Dex 20, Con 12, Int 2, Wis 10, Cha 2;
+  Attk: A_STNG for 1d8 AD_PIERCE and AD_POIS (DC 16),
+        A_STNG for 1d8 AD_PIERCE and AD_POIS (DC 16);
+	ABILITY(CA_INFRAVISION,6);
+  Immune: DF_STUK;
+  WEAPON_FOCUS_NATURAL_ATTACK;
+  Feats: 
+      FT_DODGE, 
+      FT_MULTIATTACK,
+      SK_HIDE, SK_MOVE_SIL, SK_CLIMB, SK_JUMP, SK_SPOT;
+  Flags: M_CARNI, M_HERBI, M_NOLIMBS, M_NOHANDS,
+         M_HIDE_UNDER, M_LAYS_EGGS, M_REACH;
+  Poison: $"giant spider venom";
+  Desc: "The pike spider has two large, piercing stingers that can be used
+  to strike unwary foes from a distance. Its attacks are very good at
+  penetrating and bypassing armor."; 
+  On Event PRE(EV_DAMAGE) {
+    e.isBypass = true; 
+  }; 
+}
+
+Poison "giant spider venom" : EA_DRAIN
+  {
+    Level: 7;
+    /*Iteration*/   cval: 8;
+    /*Save DC*/     sval: 16;
+    /*Persistance*/ lval: 6;
+    xval: AD_DAST; pval: 1d6;
+    Desc: "This poison inflicts <11>1d6<7> points of Strength damage every 
+      <11>8<7> turns, and requires <11>6<7> saving throws against <11>DC 16<7> 
+      to overcome.";
+  }
+
+Poison "elder spider venom" : EA_DRAIN
+  {
+    Level: 10;
+    /*Iteration*/   cval: 6;
+    /*Save DC*/     sval: 20;
+    /*Persistance*/ lval: 6;
+    xval: AD_DAST; pval: 1d8;
+    Desc: "This poison inflicts <11>1d8<7> points of Strength damage every 
+      <11>6<7> turns, and requires <11>6<7> saving throws against <11>DC 20<7> 
+      to overcome.";
+  }
+
+Poison "collosal spider venom" : EA_DRAIN
+  {
+    Level: 10;
+    /*Iteration*/   cval: 6;
+    /*Save DC*/     sval: 24;
+    /*Persistance*/ lval: 6;
+    xval: AD_DAST; pval: 1d10;
+    Desc: "This poison inflicts <11>1d10<7> points of Strength damage every 
+      <11>6<7> turns, and requires <11>6<7> saving throws against <11>DC 24<7> 
+      to overcome.";
+  }
+
+Monster "giant slug" : MA_VERMIN, MA_ABERRATION
+  { Image: brown 'x'; Size: SZ_HUGE; 
+    CR: OPT_CR(4,6); HD: 12; Hit: +8; Def: 10; Mov: 50%; Spd: 70%;
+    Str 19, Dex 10, Con 12, Int 1, Wis 10, Cha 2;
+    Attk:
+      A_BREA for 4d8 AD_ACID (DC 17),
+      A_BITE for 2d6 AD_PIERCE;
+	ABILITY(CA_TUNNEL,3);
+	ABILITY(CA_BLINDSIGHT,6);
+    Immune: DF_BLUNT; Feats: SK_LISTEN;
+    Flags: M_NOHANDS, M_NOLIMBS, M_CARNI, M_NEUTER, M_BLIND,
+           M_SWAMP, M_MOUNTABLE, M_LIGHT_AVERSE, M_HOSTILE;
+    Desc: "Ranging from 20 to 30 feet long, giant slugs are
+      terrible predators and aberrations of nature. They
+      dwell amidst rot and darkness, their powerful digestive
+      acids allowing them to burrow deep into even the most
+      well-fortified structure. They are a light brown in 
+      coloration, with a pale white underbelly. As with their
+      more mundane counterparts, salt is a terrible poison to
+      giant slugs.";
+  }
+
+Monster "giant blue beetle" : MA_VERMIN
+	{
+		Image: blue 'x'; Size: SZ_MEDIUM;  Arm: 6;
+		CR: OPT_CR(2,2); HD: 2; Hit: 2; Def: 10; Mov: 130%; Speed: 125%; 
+		Str 16, Dex 7, Con 18, Int 1, Wis 13, Cha 4;
+		Attk:A_BITE for 2d4 AD_PIERCE,
+         A_BREA for 3d8 AD_FIRE (DC 13);
+	ABILITY(CA_INFRAVISION,6);
+		Flags: M_NOHANDS, M_NOLIMBS, M_NOHEAD, M_NATURAL, M_DEAF, 
+      M_FIRE;
+    Desc: "This huge, magical beetle has a glossy blue carapace and
+      clear, vestigal wings. It can grow to be as large as a rottwieler
+      if it feeds well, and the fiery jet it projects can kill nearly
+      anything that would prey on it in its native habitat. Despite
+      this, the beetle is a scavenger, not a predator, and fights more
+      often out of defense then hunger.";
+	}
+
+Monster "giant crustacean" : MA_VERMIN
+  {
+    Image: skyblue 'x'; Size: SZ_HUGE; 
+    CR: OPT_CR(7,5); HD: 6; Hit: 4; Def: 10; Arm: 10; Mov: 150%; Spd: 125%;
+    Str 21, Dex 13, Con 19, Int 2, Wis 10, Cha 2;
+    Attk: A_CLAW for 1d8 AD_SLASH,
+          A_CLAW for 1d8 AD_SLASH,
+          A_CONS for 2d8 AD_SLASH;
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_PREMONITION,1);
+	ABILITY(CA_TREMORSENSE,6);
+    Feats: SK_CLIMB, SK_SWIM, FT_NATURAL_GRAB, FT_MULTIATTACK;
+    Flags: M_NATURAL, M_CARNI, M_HERBI, M_NOHANDS, M_AMPHIB;
+    Immune: DF_CRIT;
+    Desc: "These marine crustaceans have multiple legs, a
+      thick shell, and a pair of massive pincers. They
+      dwell in shallow waters or along beaches, feeding
+      on the morsels brought in by the tide.
+        When threatened they will wield their claws in a
+      threatening manner, and use they to grapple their
+      foe and apply a powerful pinch. They will drag a
+      surface dweller underwater to drown.
+        Due to the simple, redundant anatomy of a giant 
+      crustacean, it has a 50~ chance of ignoring additional 
+      damage from a sneak attack and is immune to critical 
+      hits.";
+  } 
+  
+Monster "cave cricket" : MA_VERMIN
+  {
+    Image: brown 'x'; Size: SZ_SMALL; Arm: 6;
+    CR: 1; HD: 2; Hit: +1; Def: 12; Mov: 70%; Spd: 100%;
+    Str 10, Dex 15, Con 12, Int 0, Wis 10, Cha 2;
+    Attk: A_BITE for 1d2 AD_PIERCE;
+    ABILITY(CA_TREMORSENSE,3);
+    RACIAL_SKILL(SK_JUMP,+10);
+    Spells: $"Spit Goo";
+    Feats: SK_SPOT, SK_JUMP, SK_MOVE_SIL, SK_HIDE;
+    Flags: M_CARNI, M_THICK_HIDE, M_NOHANDS, M_NATURAL,
+           M_MINDLESS, M_MOUNTABLE, M_NEUTER, M_FRIENDLY;
+    Immune: DF_POIS, DF_MIND;  
+    On Event POST(EVICTIM(EV_DAMAGE)) {
+        if (EVictim->isDead())
+          return NOTHING;
+        EMap->SetQueue(QUEUE_DAMAGE_MSG);
+        VPrint(e,"You shriek!", "The <EVictim> shrieks!");
+        EVictim->MakeNoise(e.vDmg);
+        EMap->UnsetQueue(QUEUE_DAMAGE_MSG);
+        return NOTHING;
+      },
+    PRE(EVICTIM(EV_HIT)) {
+      if (e.AType == A_SPOR)
+        {
+          e.Immune = true;
+          return DONE;
+        }
+      return NOTHING;
+      },
+    MSG_SPECABIL
+      "It shrieks when struck, waking creatures within 100 feet
+        just like a shrieker mushroom patch. Its sealed carapice
+        renders it immune to spores and spore-based attacks.";
+    /* Later: script that causes them to become hostile if 
+              "startled". */
+    Desc: "Cave crickets are large crickets the size of a hunting
+      dog, typically very deep underground. They feed on a variety
+      of fungi and the occasional corpse. They are normally docile
+      creatures, but can become violent if started or surprised.
+      When panicked they shriek loudly and jump about wildly,
+      causing tremendous havoc and attracting far more dangerous
+      predators.";
+  }
+  
+Effect "Spit Goo" : EA_INFLICT
+  { xval: NAUSEA; aval: AR_BOLT; qval: Q_TAR; 
+    sval: FORT; Purpose: EP_ATTACK; cval: WHITE;
+    Flags: EF_ATTACK, EF_SPECABIL, EF_MUNDANE;
+    Desc: "Once per hour, a cave cricket can spit a long, thick
+      stream of goo at another creature within 20 feet, who must
+      then succeed in a Fortitude save (DC 13) or become nauseated 
+      for 3d6 rounds.";
+    On Event 
+      EV_ISTARGET {
+        if (EActor->HasEffStati(SPEC_TIMEOUT,$"Spit Goo"))
+          return CANNOT_CAST_IT;
+        if (EVictim->DistFrom(EActor) > 2)
+          return CANNOT_CAST_IT;
+        return SHOULD_CAST_IT;
+        },
+      PRE(EV_EFFECT) {
+        EActor->GainTempStati(SPEC_TIMEOUT,NULL,18000,
+                              SS_MISC,0,0,$"Spit Goo");
+        return NOTHING;
+        },
+      EV_CALC_EFFECT {
+        e.vRange = 2;
+        e.saveDC = 13;
+        e.vDuration = 3d6;
+        return NOTHING;
+        },
+      MSG_CAST
+        "You spit goo!" /
+        "The <EActor> spits goo!",
+      MSG_BLASTNAME
+        "glob of goo";
+  }
+
+#if 0
+Monster "scarab swarm" : MA_VERMIN
+  {
+    Image: black 'x'; Size: SZ_GARGANTUAN; Mana: 32;
+    CR: 7; HD: 7; Hit: +8; Def: 26; Mov: 175%; Spd: 200%;
+    Str 6, Dex 14, Con 16, Int 1, Wis 13, Cha 8;
+    /* Add Engulf attack later */
+    Attk: A_BITE for 3d10 AD_PIERCE;
+    ABILITY(CA_TREMORSENSE,12);
+    Flags: M_SWARM, M_AMORPH, M_NEUTER, M_NOHANDS, M_NOLIMBS,
+           M_NOHEAD, M_CARNI, M_MAGIC;
+    Skills: SK_CLIMB, FT_DASH;
+    Desc: "A swarm of flesh-eating scarabs, given a hive-mind
+      intellect by malevolent magic as the instrument of a dark
+      god's wrath. The swarm cannot fly, but it is incredibly
+      fast, flowing across corridors like a chitinous river and
+      devouring everything in its path.";
+  }
+#endif
+
+/* WORMS AND WORM MASSES */
+
+Monster "white worm mass" : MA_WORM, MA_VERMIN
+  {
+    Image: white 'w'; Size: SZ_SMALL; 
+    CR: OPT_CR(-2,2); HD: 4; Hit: +1; Def: 13; Mov: 30%; Spd: 70%;
+    Str 4, Dex 7, Con 13, Int 0, Wis 6, Cha 6;
+    Attk: A_RUBS for AD_DISE (DC 15);
+	ABILITY(CA_TREMORSENSE,3);
+    Disease: $"filth fever", $"red ache", $"slimy doom";
+    Flags: M_POISON, M_AMORPH, M_NEUTER, M_NOHANDS, M_NOHEAD,
+	   M_NOLIMBS, M_BLIND, M_NO_CORPSE;
+    Feats: FT_SWARM;
+    On Event POST(EVICTIM(EV_HIT)) {
+      if (e->DType <= AD_LAST_PHYSICAL)
+        if (!(EVictim->Flags & F_DELETE))
+          EVictim->Multiply(1,false);
+      };
+    Desc: "A mass of thin white earthworms twisted by thaumaturgy
+      to reproduce literally quicker then the eye can see, these
+      horrors can quickly become a plague if fought improperly.";
+  }
+
+/********************************************************************************
+ ********************************************************************************
+ ***                                UNDEAD CREATURES                          ***
+ ********************************************************************************
+ ********************************************************************************/
+
+Monster "skeleton;mon" : MA_SKELETON
+  {
+    Image: white 'Z'; Size: SZ_MEDIUM;
+    Desc: "Animated skeletons are common servants of necromancers and evil
+      warlords, and can be essentially mundane foes or have unusual abilities
+      based on the specific magic used in giving them unlife. The Knowledge
+      (Undead) skill is thus useful to identify creatures like this more
+      completely.";
+    Flags: M_UNKNOWN, M_NOGEN;
+  }
+
+Monster "corporeal undead" : MA_UNDEAD
+  {
+    Image: brown 'U'; Size: SZ_MEDIUM;
+    Desc: "This creature, on casual visual examination, is clearly a rotting
+      corpse animated by unknown magic or a malignant curse. Wights, zombies,
+      graveborn, revenants and even liches all appear strikingly similar to 
+      one not steepled in the lore of the dead. A Knowledge (Undead) check
+      would have allowed you to identify this creature more accurately.";
+    Flags: M_UNKNOWN, M_NOGEN;
+  }
+
+Monster "spectral undead" : MA_SPIRIT
+  {
+    Image: green 'W'; Size: SZ_MEDIUM;
+    Desc: "This creature, on casual visual examination, is a translucent
+      humanoid form, clearly existing partly on this plane and partly on
+      some other, lingering on beyond its natural lifespan. Shadows, wraiths,
+      ghosts, spectres and poltergeists all appear strikingly similar to 
+      one not steepled in the lore of the dead. A Knowledge (Undead) check
+      would have allowed you to identify this creature more accurately.";
+    Flags: M_UNKNOWN, M_NOGEN;
+  }
+
+Monster "bodak" : MA_OUTSIDER
+  {
+    Image: shadow 'U'; Size: SZ_MEDIUM;  Arm: 10;
+    CR: OPT_CR(10,8); HD: 9; Hit: +6; Def: 18; Mov: 75%; Spd: 145%;
+    Str 13, Dex 15, Con 0, Int 6, Wis 12, Cha 12;
+    Attk: A_SLAM for 1d8+1 AD_BLUNT,
+          A_SEEM for $"corporeal undead";
+	ABILITY(CA_INFRAVISION,6);
+    Immune: UNDEAD_IMMUNITIES, DF_ELEC; 
+    Resists: DF_ACID, DF_FIRE;
+    Feats: FT_ALERTNESS, FT_DODGE, 
+                 SK_HIDE, SK_LISTEN, SK_SPOT, SK_MOVE_SIL;
+    Flags: 
+      M_HUMANOID, M_UNDEAD, M_IALIGN, M_CHAOTIC, M_EVIL, 
+      M_NEUTER, M_PSYCHO;
+    Spells: $"bodak death gaze"; 
+    Desc: "Bodaks are the undead remnants of humanoids who have been
+      destroyed by the touch of absolute evil.
+      A bodak retains fleeting memories of its past life and can speak Common
+      (or some other humanoid language).";
+    On Event POST(EV_INVOKE) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };
+  }
+
+Effect "Bodak Death Gaze" : EA_BLAST
+  { SC_NEC; Base: 90; Cost: 10; qval: Q_TAR; 
+    Purpose: EP_ATTACK | AIM_AT_ENEMY; 
+    Flags: EF_GAZE, EF_DEATH, EF_LIM_MTYPE, EF_SHOWNAME, EF_SPECABIL;
+    tval: MA_LIVING; aval: AR_BOLT; 
+    cval: SHADOW;
+    xval: AD_NECR; pval: 0;  
+    On Event EV_MAGIC_HIT {
+      if (!EVictim->SavingThrow(FORT,15,SA_DEATH|SA_NECRO|SA_MAGIC)) {
+        ReThrow(EV_DEATH,e);
+        return DONE;
+      }
+      return NOTHING;
+    };
+    On Event MSG_CAST
+      "Your eyes glow with a black aura."
+      "The <EActor>'s eyes glow with a black aura.";
+  }
+
+Monster "bonebat" : MA_BAT, MA_SKELETON
+	{
+		Image: white 'b'; Size: SZ_TINY; 
+		CR: OPT_CR(0,2); HD: 2; Hit: +0; Def: 17; Mov: 150%; Spd: 130%;
+    Str 4, Dex 10, Con 8, Int 0, Wis 10, Cha 8;
+		Attk: A_BITE for 1d3 AD_PIERCE and 1d2 AD_DRWI (DC 14);
+	ABILITY(CA_INFRAVISION,6); 
+    Immune: UNDEAD_IMMUNITIES, SKELETON_IMMUNITIES;
+    Feats: FT_DODGE, SK_HIDE, FT_SWARM;
+    Flags: M_UNDEAD, M_NOHANDS, M_NOLIMBS, M_FLYER, M_NEUTER,
+           M_CHAOTIC, M_IALIGN, M_NO_BLOOD, M_MINDLESS, M_PSYCHO;
+           // ww: is there any reason for these guys not to be bad? 
+           // fjm: mindless undead
+	}
+
+Monster "crawling claw" : MA_ZOMBIE
+  {
+    Image: grey 'Z'; Size: SZ_TINY; Mana: 2;
+    CR: OPT_CR(-2,1/4); HD: 1; Hit: -1; Def: 14; Mov: 75%; Spd: 75%;
+    Str 17, Dex 14, Con 12, Int 0, Wis 12, Cha 4;
+    Attk: A_GRAB for 1d6 AD_BLUNT,
+          A_CRUS for 1d2 AD_BLUNT;
+	  ABILITY(CA_INFRAVISION,6);
+	  ABILITY(CA_TREMORSENSE,6);
+    Immune: UNDEAD_IMMUNITIES; 
+    Feats: SK_HIDE, FT_SKILL_FOCUS, SK_JUMP, SK_MOVE_SIL, FT_MASTER_GRAPPLE, 
+           FT_SWARM;
+    Flags: M_UNDEAD, M_NOHANDS, M_NOLIMBS, M_NOHEAD, M_NEUTER,
+           M_GROUP, M_IALIGN, M_NO_BLOOD, M_HOSTILE,
+           M_MINDLESS, M_PSYCHO;
+           // ww: is there any reason for these guys not to be bad? 
+           // fjm: lack of sentience == lack of malicious intent
+    Desc: "A severed hand, animated by necromatic magic, the crawling
+      claw possesses strength that belies its small size.";
+  }
+  
+Monster "accursed cow" : MA_REVENANT, MA_QUADRUPED
+  {
+    Image: cyan 'q'; Size: SZ_LARGE;
+    CR: 1; HD: 4; Hit: 0; Def: 10; Mov: 75%; Spd: 60%;
+    Str 13, Dex 8, Con 0, Int 1, Wis 12, Cha 9;
+    Attk: A_KICK for 1d6 AD_BLUNT,
+          A_PROX for 1d6 AD_DAST;
+  	ABILITY(CA_SCENT,6);
+  	ABILITY(CA_INFRAVISION,6);
+    Feats: FT_TOUGHNESS;
+    Flags: M_NOHANDS, M_MOUNTABLE, M_PLAINS, M_VERY_RARE, 
+           M_FRIENDLY, M_NEUTER;
+    On Event POST(EVICTIM(EV_DAMAGE)) {
+      if (GetHandle(EActor) != GetHandle(EVictim)) {
+        VPrint(e,"You glow black.", "The cow glows black.");
+        ThrowEff(EV_EFFECT,$"Bestow Curse",EVictim,EActor);
+        }
+      return NOTHING;
+      },
+    EV_TURN {
+      if (1d6 == 1)
+        APrint(e,"'Moo.'");
+      return NOTHING;
+      };
+    Desc: "This is what the elderly wives of superstitious farmers
+      say: that sometimes, when a farmer is tremendously cruel to
+      his cattle, beating them without surcease, they will rise up
+      anew from the grave when they finally pass, wandering the world
+      as accursed cattle, spreading weakness in their wake, and that
+      whomsoever should injure them shall be subject to a terrible
+      curse to haunt them for past cruelty.";
+  }
+
+Monster "bone delver" : MA_REVENANT
+  {
+    Image: blue 'U'; Size: SZ_MEDIUM; 
+    CR: OPT_CR(0,1); HD: 2; Hit: +0; Def: 13; Mov: 100%; Spd: 100%; 
+    Str 13, Dex 11, Int 10, Wis 11, Cha 11; 
+    Attk: A_CLAW for 1d4 AD_SLASH,
+          A_CLAW for 1d4 AD_SLASH,
+          A_ROAR for 2d6 AD_FEAR (DC 11),
+          A_PROX for AD_DISE (DC 12),
+          A_SEEM for $"corporeal undead";
+          ABILITY(CA_INFRAVISION,6); 
+    Immune: UNDEAD_IMMUNITIES; 
+    Feats: SK_HANDLE_DEV, SK_HIDE, /*SK_KNOWLEDGE,*/ SK_MOVE_SIL, 
+      SK_LOCKPICKING, SK_SEARCH, SK_SPOT;
+    Stati[WEP_SKILL,WS_FOCUSED,0,$"pickaxe"];
+    Disease: $"grave rot"; 
+    Flags: M_UNDEAD, M_HUMANOID, M_NEUTER, M_PSYCHO,
+           M_IALIGN, M_EVIL, M_CHAOTIC, M_NO_BLOOD;
+    Gear: $"brass lantern",
+          $"pickaxe";
+    Desc: "Bone delvers are grave robbers who have died while performing
+    their nefarious tasks. They usually appear as hunched, twisted
+    humanoids. They forever carry the tools of their trade."; 
+    On Event MSG_ROARVERB "wail" / "wails";
+    On Event POST(EV_SATTACK) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };
+  } 
+
+Monster "tomb guardian" : MA_REVENANT 
+{
+    Image: white 'U'; Size: SZ_LARGE; 
+    CR: OPT_CR(7,7); HD: 7; Hit: +7; Def: 15; Mov: 100%; Spd: 135%;
+    Str 16, Dex 14, Int 12, Wis 14, Cha 15; 
+    Arm: 10; /* DR 10/+1 */
+    Attk: A_CLAW for 1d6+4 AD_SLASH,
+          A_SEEM for $"skeleton;mon";
+	  ABILITY(CA_TURN_RESISTANCE,5);
+	  ABILITY(CA_INFRAVISION,6);
+    Immune: UNDEAD_IMMUNITIES, SKELETON_IMMUNITIES; 
+    Feats: 
+      SK_BLUFF, SK_INTIMIDATE, SK_LISTEN, SK_MOVE_SIL, 
+      SK_SEARCH, SK_APPRAISE, SK_SPOT,
+
+      FT_ALERTNESS, FT_WEAPON_FOCUS;
+
+    Flags: M_HUMANOID, M_UNDEAD, M_SEE_INVIS, M_IALIGN, M_CLOSEID,
+           M_NEUTER;
+
+    Spells: /* $"wall of force" */ $"wall of stone"; 
+
+    Gear:
+      75% $"great scythe" of random 2 to 3
+      else random T_WEAPON of random 1 to 3; 
+
+    Desc: 
+    "Tomb guardians are undead warriors found
+    guarding tombs, graves, corpses, and crypts. If left
+    alone and the place they are guarding remains
+    undisturbed, they will take no actions. However, if
+    any actions are taken to disturb the tomb guardian
+    or its place of protection, the tomb guardian will use
+    all means necessary to remove the offenders.
+    A tomb guardian appears as an imposing 10-foot
+    tall skeleton with thick, sturdy looking bones and
+    red pinpoints of light where its eyes should be.
+    Tomb guardians are often seen wielding great
+    scythes, though may be found wielding any sort
+    weapon.";
+
+    On Event EV_INITIALIZE {
+      EActor->StateFlags |= MS_GUARDING; 
+    } ;
+} 
+
+Monster "crypt thing" : MA_REVENANT, MA_SKELETON
+  {
+    Image: brown 'U'; Size: SZ_MEDIUM; Mana: 45;
+    CR: OPT_CR(2,3); HD: 6; Hit: +4; Def: 13; Mov: 100%; Spd: 100%;
+    Str 10, Dex 16, Con 0, Int 11, Wis 15, Cha 13;
+    Attk: A_TUCH for AD_SPE1,
+          A_CLAW for 1d6 AD_SLASH,
+          A_CLAW for 1d6 AD_SLASH,
+          A_SEEM for $"skeleton;mon";
+	ABILITY(CA_TURN_RESISTANCE,4);
+	ABILITY(CA_INFRAVISION,6);
+    Immune: UNDEAD_IMMUNITIES, SKELETON_IMMUNITIES; 
+    WEAPON_FOCUS_NATURAL_ATTACK;
+    Feats: FT_DEFLECT_ARROWS, FT_IMPROVED_INITIATIVE, FT_WEAPON_FINESSE,
+           SK_BLUFF, SK_DIPLOMACY, SK_ESCAPE_ART,
+           SK_INTIMIDATE, SK_LISTEN, SK_APPRAISE, SK_SPOT;
+    Flags: M_HUMANOID, M_UNDEAD, M_IALIGN, M_NEUTER;
+    On Event PRE(EV_DAMAGE) {
+      if (e.DType == AD_SPE1) {
+        if (EVictim->SavingThrow(WILL,14,SA_MAGIC) ||
+            EVictim->isMType(MA_GOLEM)) // ww: hack to prevent segfault
+          {
+            e.Resist = true;
+            return DONE;
+          }
+          EActor->IdentifyMon();
+          ThrowEff(EV_MAGIC_STRIKE,$"dismissal",EActor,EVictim);
+        return DONE;
+        }
+      return NOTHING;
+      },
+    MSG_SPE1DESC
+      "to teleport enemies away (as <9>dismissal<7>, DC 14)";
+    Desc: "Crypt things are undead guardians set to watch over a place
+      of great importance, appearing as a skeletal figure wrapped in a
+      tattered cloak and cowl. Crypt things can be negotiated with and
+      avoided, but are absolutely devoted to their task and cannot be
+      cowed or easily decieved.";
+  }
+
+Monster "ghoul" : MA_REVENANT
+  {
+    Image: blue 'U'; Size: SZ_MEDIUM;  Depth: 5;
+    CR: OPT_CR(2,2); HD: 2; Hit: +1; Def: 12; Mov: 100%; Spd: 100%;
+    Str 13, Dex 15, Int 13, Wis 14, Cha 16;
+    Attk: A_BITE for 1d6 AD_PIERCE and 1d4 AD_PLYS,
+          A_CLAW for 1d3 AD_SLASH,
+          A_CLAW for 1d3 AD_SLASH,
+          A_SEEM for $"corporeal undead";
+	  ABILITY(CA_INFRAVISION,6);
+  	ABILITY(CA_TURN_RESISTANCE,2);
+    Immune: UNDEAD_IMMUNITIES; 
+    Feats: FT_MULTIATTACK, FT_WEAPON_FINESSE, SK_HIDE,
+      SK_CLIMB, SK_ESCAPE_ART, SK_JUMP, SK_LISTEN, SK_SPOT,
+      SK_MOVE_SIL, SK_SEARCH;
+    Flags: M_HUMANOID, M_UNDEAD, M_EVIL, M_CHAOTIC, M_IALIGN,
+      M_CARNI;
+    On Event PRE(EV_DAMAGE) {
+      if (e.AType == A_BITE && e.DType == AD_PLYS)
+        if (EVictim->isMType(MA_ELF))
+          {
+            e.Immune = true;
+            return DONE;
+          }
+      },
+    EV_RATETARG {
+      if (ETarget->isType(T_CORPSE))
+        return 120;
+      },
+    POST(EV_HIT) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };
+    Desc: "These undead cannibals seek only to devour the flesh
+      of humanoids, living or dead, and are thus typically found 
+      around graveyards, slaughterhouses and abatoirs. They appear
+      as slavering, emaciated corpses with sharp teeth and claws.";
+    Lists:
+      * GROUP_LEADER $"ghast";
+  }
+
+Monster "ghast" : MA_REVENANT
+  {
+    Image: bright blue 'U'; Size: SZ_MEDIUM;  Depth: 5;
+    CR: OPT_CR(4,3); HD: 4; Hit: +2; Def: 14; Hit: 4; Mov: 100%; Spd: 130%;
+    Str 13, Dex 15, Int 13, Wis 14, Cha 16;
+    Attk: A_BITE for 1d6 AD_PIERCE and 1d4 AD_PLYS,
+          A_CLAW for 1d3 AD_SLASH,
+          A_CLAW for 1d3 AD_SLASH,
+          A_SEEM for $"corporeal undead";
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_TURN_RESISTANCE,2);
+    Immune: UNDEAD_IMMUNITIES; 
+    Feats: FT_MULTIATTACK, FT_WEAPON_FINESSE, SK_HIDE,
+      SK_CLIMB, SK_ESCAPE_ART, SK_JUMP, SK_LISTEN, SK_SPOT,
+      SK_MOVE_SIL, SK_SEARCH;
+    Flags: M_HUMANOID, M_UNDEAD, M_EVIL, M_CHAOTIC, M_IALIGN, M_CLOSEID;
+    On Event EV_INITIALIZE {
+      EMap->NewField(FI_MODIFIER|FI_MOBILE,EActor->x,EActor->y,2,
+        GREEN*256+GLYPH_FLOOR2,-1,$"ghast stench",EActor);
+      },
+    EV_RATETARG {
+      if (ETarget->isType(T_CORPSE))
+        return 120;
+      };
+    Desc: "The more highly developed form of ghouls, ghasts have
+      lived many years and exude a terrible carrion stench that
+      sickens their enemies where they stand. Sages speculate that
+      ghouls may become ghasts by consuming enough live prey and
+      surviving for a long enough period.";
+    Lists:
+      * GROUP_FOLLOWER $"ghoul",
+      * GROUP_ALLY $"ghoul";
+  }
+
+Effect "ghast stench" : EA_INFLICT
+  { aval: AR_MFIELD; rval: FI_MODIFIER | FI_MOBILE;
+    xval: ADJUST_CIRC; yval: A_AID; pval: -2;
+    tval: MA_LIVING; Flags: EF_LIM_MTYPE; Purpose: EP_BUFF; 
+    Flags: EF_SPECABIL;
+    On Event 
+      EV_FIELDON
+        "The ghastly stench sickens you." /
+        "The <EActor> seems ready to retch.",
+      EV_FIELDOFF
+        "The air seems cleaner now." / 
+        "The <EActor> leaves the area of tainted air.";
+  }
+
+Monster "burning ghast" : MA_REVENANT
+  {
+    Image: bright red 'U'; Size: SZ_MEDIUM; 
+    CR: OPT_CR(4,3); HD: 4; Hit: +4; Def: 14; Mov: 100%; Spd: 120%; 
+    Str 13, Dex 15, Int 13, Wis 14, Cha 14; Mana: 10; 
+    Attk:  A_CLAW for 1d4 AD_SLASH and 2d6 AD_FIRE,
+           A_CLAW for 1d4 AD_SLASH and 2d6 AD_FIRE,
+           A_SEEM for $"corporeal undead";
+	  ABILITY(CA_INFRAVISION,6);
+    Spells: $"scorcher"; 
+    Immune: UNDEAD_IMMUNITIES, DF_FIRE; 
+    Feats: SK_CLIMB, SK_ESCAPE_ART, SK_HIDE, SK_JUMP, SK_LISTEN,
+           SK_MOVE_SIL, SK_SEARCH, SK_SPOT,
+           FT_BLIND_FIGHT, FT_WEAPON_FINESSE;
+    Flags: M_GROUP, M_CARNI, M_HUMANOID, M_UNDEAD, M_EVIL,
+      M_OLD_CORPSE, M_IALIGN, M_CHAOTIC, M_FIRE;
+    Desc: "A burning ghast is created when an innocent is unnjustly put to
+    death by fire."; 
+    Lists:
+      * GROUP_FOLLOWER $"ghoul",
+      * GROUP_ALLY $"ghoul";
+    On Event EVICTIM(EV_DAMAGE) {
+      if (e.DType == AD_SOAK) {
+        e.DType = AD_NORM; 
+        e.vDmg = e.vDmg * 2;
+        } 
+      return NOTHING;
+      },
+    POST(EV_INVOKE) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      },
+    MSG_SPECABIL
+      "It takes double damage from soaking attacks.";
+  }
+
+Monster "icewight" : MA_REVENANT
+  {
+		Image: bright cyan 'U'; Size: SZ_MEDIUM; 
+    CR: OPT_CR(4,5); HD: 6; Hit: +5; Def: 14;  Mov: 100%; Spd: 100%; 
+    Str 12, Dex 12, Int 11, Wis 13, Cha 15;
+		Attk:  A_TUCH for 1d12 AD_DREX (DC 16)
+                  and 1d3 AD_DRDX
+                  and 3d12 AD_COLD,
+           A_SEEM for $"corporeal undead";
+	  ABILITY(CA_INFRAVISION,6);
+    Immune: UNDEAD_IMMUNITIES, DF_COLD; 
+    Resists:DF_ACID;
+    Feats: FT_BLIND_FIGHT, SK_MOVE_SILENTLY, SK_LISTEN;
+		Flags: M_CARNI, M_HUMANOID, M_UNDEAD, M_EVIL,
+      M_OLD_CORPSE, M_IALIGN, M_CHAOTIC, M_COLD, M_CLOSEID;
+    Desc: "Icewights are a species of undead that are created
+      by a human dying of winter's chill with a mission of
+      great importance uncompleted. They are similar to, but
+      more powerful than, the more common kind of wight.";
+    On Event POST(EV_HIT) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };
+  }
+
+Monster "skeletal foot soldier" : MA_SKELETON, MA_FORCE_D12
+  {
+    Image: green 'Z'; Size: SZ_MEDIUM; 
+    CR: OPT_CR(2,2); HD: 1; Hit: +1; Def: 10; Mov: 100%; Spd: 105%;
+    Str 14, Dex 6, Wis 12; 
+    Attk: A_CLAW for 1d6 AD_SLASH,
+          A_SEEM for $"skeleton;mon";
+  	ABILITY(CA_INFRAVISION,6);
+    Immune: UNDEAD_IMMUNITIES, SKELETON_IMMUNITIES; 
+    Resists: DF_PIERCE, DF_SLASH;
+    Feats: FT_POWER_ATTACK, FT_KNOCK_PRONE, 
+      SK_FIND_WEAKNESS, /*SK_KNOWLEDGE,*/ SK_SENESCHAL, SK_MOVE_SIL,
+      SK_SPOT, SK_LISTEN;
+    Flags: M_HUMANOID, M_UNDEAD, M_EVIL, M_LAWFUL, M_NEUTER,
+      M_SEE_INVIS, M_IALIGN, M_NO_BLOOD, M_PSYCHO;
+    Gear:
+      50% $"greatsword" of random 0 to 1
+        else random T_WEAPON of random 0 to 1,
+      $"chainmail shirt" of random 0 to 1;
+    Desc: "These undead are raised by an evil priest from
+      the remains of a warrior who died without fulfilling his
+      (or her) dreams of power and conquest. They are free-willed
+      and occasionally difficult to dominate, being somewhat
+      strong-willed monsters.";
+    On Event POST(EV_HIT) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };
+  }
+
+Monster "skeletal trooper" : MA_SKELETON, MA_FORCE_D12
+  {
+    Image: bright green 'Z'; Size: SZ_MEDIUM; 
+    CR: OPT_CR(3,3); HD: 2; Hit: +2; Def: 10; Mov: 100%; Spd: 110%;
+    Str 16, Dex 8, Wis 14; 
+    Attk: A_CLAW for 1d6 AD_SLASH,
+          A_SEEM for $"skeleton;mon";
+	  ABILITY(CA_INFRAVISION,6);
+    Immune: UNDEAD_IMMUNITIES, SKELETON_IMMUNITIES; 
+    Resists: DF_PIERCE, DF_SLASH;
+    Feats: FT_POWER_ATTACK, FT_KNOCK_PRONE, 
+      SK_FIND_WEAKNESS, /*SK_KNOWLEDGE,*/ SK_SENESCHAL, SK_MOVE_SIL,
+      SK_SPOT, SK_LISTEN;
+    Flags: M_HUMANOID, M_UNDEAD, M_EVIL, M_LAWFUL, M_NEUTER,
+      M_SEE_INVIS, M_IALIGN, M_NO_BLOOD, M_PSYCHO;
+    Gear:
+      50% $"greatsword" of random 0 to 1
+        else random T_WEAPON of random 0 to 1,
+      $"chainmail" of random 0 to 1;
+    Desc: "These undead are raised by an evil priest from
+      the remains of a warrior who died without fulfilling his
+      (or her) dreams of power and conquest. They are free-willed
+      and occasionally difficult to dominate, being somewhat
+      strong-willed monsters.";
+    On Event POST(EV_HIT) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };
+  }
+
+Monster "skeletal skirmisher" : MA_SKELETON, MA_FORCE_D12
+  {
+    Image: red 'Z'; Size: SZ_MEDIUM; 
+    CR: OPT_CR(4,4); HD: 3; Hit: +3; Def: 10; Mov: 100%; Spd: 115%;
+    Str 17, Dex 9, Wis 15; 
+    Attk: A_CLAW for 1d6 AD_SLASH,
+          A_SEEM for $"skeleton;mon";
+  	ABILITY(CA_INFRAVISION,6);
+    Immune: UNDEAD_IMMUNITIES, SKELETON_IMMUNITIES; 
+    Resists: DF_PIERCE, DF_SLASH;
+    Feats: FT_POWER_ATTACK, FT_KNOCK_PRONE, FT_DODGE, 
+      SK_FIND_WEAKNESS, /*SK_KNOWLEDGE,*/ SK_SENESCHAL, SK_MOVE_SIL,
+      SK_SPOT, SK_LISTEN;
+    Flags: M_HUMANOID, M_UNDEAD, M_EVIL, M_LAWFUL,
+      M_SEE_INVIS, M_IALIGN, M_NO_BLOOD, M_PSYCHO;
+    Gear:
+      50% $"greatsword" of random 1 to 1
+        else random T_WEAPON of random 1 to 1,
+      $"breastplate" of random 1 to 1;
+    Desc: "These powerful undead are raised by an evil priest from
+      the remains of a great warrior who died without fulfilling his
+      (or her) dreams of power and conquest. They are free-willed
+      and notoriously difficult to dominate, being tremendously
+      strong-willed monsters.";
+    On Event POST(EV_HIT) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };
+  }
+
+Monster "skeletal fighter" : MA_SKELETON, MA_FORCE_D12
+  {
+    Image: bright red 'Z'; Size: SZ_MEDIUM; 
+    CR: OPT_CR(6,6); HD: 4; Hit: +4; Def: 10; Mov: 100%; Spd: 120%;
+    Str 18, Dex 10, Wis 16; 
+    Attk: A_CLAW for 1d6 AD_SLASH,
+          A_SEEM for $"skeleton;mon";
+  	ABILITY(CA_INFRAVISION,6);
+    Immune: UNDEAD_IMMUNITIES, SKELETON_IMMUNITIES; 
+    Resists: DF_PIERCE, DF_SLASH;
+    Feats: FT_POWER_ATTACK, FT_KNOCK_PRONE, FT_DODGE, 
+      SK_FIND_WEAKNESS, /*SK_KNOWLEDGE,*/ SK_SENESCHAL, SK_MOVE_SIL,
+      SK_SPOT, SK_LISTEN;
+    Flags: M_HUMANOID, M_UNDEAD, M_EVIL, M_LAWFUL, M_NEUTER,
+      M_SEE_INVIS, M_IALIGN, M_NO_BLOOD, M_PSYCHO;
+    Gear:
+      50% $"greatsword" of random 1 to 2
+        else random T_WEAPON of random 1 to 2,
+      $"banded mail" of random 1 to 2;
+    Desc: "These powerful undead are raised by an evil priest from
+      the remains of a great warrior who died without fulfilling his
+      (or her) dreams of power and conquest. They are free-willed
+      and notoriously difficult to dominate, being tremendously
+      strong-willed monsters.";
+    On Event POST(EV_HIT) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };
+  }
+
+Monster "skeletal warrior" : MA_SKELETON, MA_FORCE_D12
+  {
+    Image: purple 'Z'; Size: SZ_MEDIUM; 
+    CR: OPT_CR(7,7); HD: 7; Hit: +7; Def: 16; Mov: 100%; Spd: 150%;
+    Str 22, Dex 14, Wis 20; 
+    Attk: A_CLAW for 1d6 AD_SLASH,
+          A_SEEM for $"skeleton;mon";
+  	ABILITY(CA_INFRAVISION,6);
+    Immune: UNDEAD_IMMUNITIES, SKELETON_IMMUNITIES; 
+    Resists: DF_PIERCE, DF_SLASH;
+    Feats: FT_POWER_ATTACK, FT_CLEAVE, FT_KNOCK_PRONE,
+      FT_SUNDER, FT_MASTER_GREAT_BLOW, FT_DODGE, FT_MOBILITY,
+      SK_FIND_WEAKNESS, /*SK_KNOWLEDGE,*/ SK_SENESCHAL, SK_MOVE_SIL,
+      SK_SPOT, SK_LISTEN;
+    Flags: M_HUMANOID, M_UNDEAD, M_EVIL, M_LAWFUL, M_NEUTER,
+      M_SEE_INVIS, M_IALIGN, M_NO_BLOOD, M_PSYCHO;
+    Gear:
+      50% $"greatsword" of random 1 to 3
+        else random T_WEAPON of random 1 to 3,
+      $"field plate armor" of random 1 to 3;
+    Desc: "These powerful undead are raised by an evil priest from
+      the remains of a great warrior who died without fulfilling his
+      (or her) dreams of power and conquest. They are free-willed
+      and notoriously difficult to dominate, being tremendously
+      strong-willed monsters.";
+    On Event POST(EV_HIT) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };
+  }
+
+
+Monster "skeletal myrmidon" : MA_SKELETON, MA_FORCE_D12
+  {
+    Image: bright purple 'Z'; Size: SZ_MEDIUM; 
+    CR: OPT_CR(9,9); HD: 10; Hit: +10; Def: 16; Mov: 125%; Spd: 150%;
+    Str 26, Dex 18, Wis 24; Arm: 5; 
+    Attk: A_CLAW for 1d6 AD_SLASH,
+          A_SEEM for $"skeleton;mon";
+	ABILITY(CA_REGEN,5);
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_BLINDSIGHT,9);
+    Immune: UNDEAD_IMMUNITIES, SKELETON_IMMUNITIES; 
+    Resists: DF_PIERCE, DF_SLASH;
+    Feats: FT_POWER_ATTACK, FT_CLEAVE, FT_KNOCK_PRONE,
+      FT_SUNDER, FT_MASTER_GREAT_BLOW, FT_DODGE, FT_MOBILITY,
+      SK_FIND_WEAKNESS, /*SK_KNOWLEDGE,*/ SK_HIDE, SK_MOVE_SIL,
+      SK_SPOT, SK_LISTEN;
+    Flags: M_HUMANOID, M_UNDEAD, M_EVIL, M_LAWFUL, M_NEUTER,
+      M_SEE_INVIS, M_IALIGN, M_NO_BLOOD, M_PSYCHO;
+    Gear:
+      50% $"greatsword" of random 3 to 5
+        else random T_WEAPON of random 3 to 5,
+      $"full plate armor" of random 3 to 5;
+    Desc: "These mighty undead are raised by an evil priest from
+      the remains of a legendary warrior who died without fulfilling his
+      (or her) dreams of power and conquest. They are free-willed and
+      notoriously difficult to dominate, being tremendously strong-willed
+      monsters. Truly potent skeletal myrmidons can reassamble themselves
+      from the very dust in the air and are almost impossibly difficult to
+      damage.";
+    On Event POST(EV_HIT) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };
+  }
+
+Monster "poltergeist" : MA_SPIRIT
+  { Image: green 'N'; Size: SZ_MEDIUM; Depth: 2; 
+    CR: OPT_CR(2,3); HD: 3; Def: 15; Hit: 2; Mov: 150%; Spd: 125%;
+    Dex 14, Int 7, Wis 6, Cha 14;
+    Attk: A_TUCH for 3d4 AD_FEAR (DC 17),
+          A_SEEM for $"spectral undead";
+    ABILITY(CA_INFRAVISION,6);
+    ABILITY(CA_FLIGHT,9);
+    Stati[INVIS,INV_IMPROVED,0,$"poltergeist"];
+    Immune: DF_MIND, DF_POIS, DF_SLEE, DF_PLYS, DF_STUN,
+            DF_DISE, DF_NECR, DF_CRIT, DF_SUBD;
+    Feats: FT_GUARDED_INVOCATION, SK_INTIMIDATE, SK_BLUFF,
+           SK_SPOT;
+    Flags: M_CHAOTIC, M_EVIL, M_HUMANOID, M_INCOR,
+           M_UNDEAD, M_NO_CORPSE, M_NEUTER;
+    Spells: $"gust of wind", $"phantasmal force";
+    Desc: "These mischevious spirits are naturally invisible,
+      spreading terror and misunderstanding in their wake. They
+      tend to be tied to one specific location, and will defend
+      that location with all their supernatural cunning. Though
+      they cannot actually touch or harm living creatures, they
+      can use their abilities to lead the living into mortal
+      danger. Most such beings are evil, but some poltergeists
+      are merely playful and disoriented.";
+    On Event MSG_SPECABIL
+      "It is naturally invisible.";
+    On Event POST(EV_INVOKE) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };
+  }
+
+Monster "slow shadow" : MA_WRAITH
+  {
+    Image: green 'W'; Size: SZ_MEDIUM; 
+    CR: OPT_CR(2,2); HD:2; Hit: 2; Def: 12; Hit: 3; Mov: 150%; Spd: 150%; 
+    Dex 14, Int 6, Wis 12, Cha 13;
+		Attk:  A_TUCH for 1d4 AD_SLOW (DC 17),
+		       A_SEEM for $"spectral undead";
+    ABILITY(CA_INFRAVISION,6);
+    Immune: DF_MIND, DF_POIS, DF_SLEE, DF_PLYS, DF_STUN,
+            DF_DISE, DF_NECR, DF_CRIT, DF_SUBD;
+    Resists:DF_COLD, DF_ACID;
+    Feats: FT_DODGE, SK_HIDE;
+		Flags: M_HUMANOID, M_UNDEAD, M_EVIL, M_IALIGN, M_NO_CORPSE,
+      M_CHAOTIC, M_INCOR, M_NEUTER, M_LIGHT_AVERSE, M_NEUTER,
+      M_PSYCHO;
+    Desc: "Creatures of living darkness, these restless spirits are
+      all that remains of those whose lives were consumed by malevolant
+      apathy and silent complicity to evil. Shadows are a favored tool
+      of necromancers and grim sorcerors everywhere.";
+    On Event POST(EV_STRIKE) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };
+  }
+
+Monster "shadow" : MA_WRAITH
+  {
+    Image: shadow 'W'; Size: SZ_MEDIUM; 
+    CR: OPT_CR(4,3); HD:2; Hit: 2; Def: 12; Hit: 3; Mov: 150%; Spd: 150%; 
+    Dex 14, Int 6, Wis 12, Cha 13;
+    Attk: A_TUCH for 1d6 AD_DRST (DC 13),
+          A_SEEM for $"spectral undead";
+          // A_ABIL for $"shadow" CA_SPAWN
+	ABILITY(CA_TURN_RESISTANCE,2);
+	RACIAL_SKILL(SK_LISTEN,2);
+	RACIAL_SKILL(SK_SPOT,2);
+	RACIAL_SKILL(SK_SEARCH,4);
+	RACIAL_SKILL(SK_HIDE,4);
+	ABILITY(CA_INFRAVISION,6);
+    Immune: UNDEAD_IMMUNITIES; 
+    Resists:DF_COLD, DF_ACID;
+    Feats: FT_ALERTNESS, FT_DODGE, SK_HIDE, SK_LISTEN, SK_SEARCH, SK_SPOT;
+    Flags: M_HUMANOID, M_UNDEAD, M_EVIL, M_IALIGN, M_NO_CORPSE,
+      M_CHAOTIC, M_INCOR, M_NEUTER, M_LIGHT_AVERSE, M_NO_BLOOD,
+      M_PSYCHO;
+    Desc: "Creatures of living darkness, these restless spirits are
+      all that remains of those whose lives were consumed by malevolant
+      apathy and silent complicity to evil. Shadows are a favored tool
+      of necromancers and grim sorcerors everywhere.";
+    On Event POST(EV_HIT) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };
+  }
+
+Monster "blessed soul" : MA_SPIRIT
+  {
+    Image: yellow 'N'; Size: SZ_MEDIUM; Mana: 70; Depth: 2;
+    CR: 3; HD: 3; Hit: 2; Def: 12; Hit: 3; Mov: 150%; Spd: 150%; 
+    Dex 10, Int 13, Wis 16, Cha 14;
+    Attk: A_TUCH for 1d4 AD_COLD,
+          A_SEEM for $"spectral undead";
+          // A_ABIL for $"shadow" CA_SPAWN
+	  ABILITY(CA_TURN_RESISTANCE,8);
+	  ABILITY(CA_INFRAVISION,6);
+	  RACIAL_SKILL(SK_SPOT,+4);
+    RACIAL_SKILL(SK_LISTEN,+4);
+    Immune: UNDEAD_IMMUNITIES; 
+    Resists:DF_COLD, DF_ACID;
+    Spells: $"Bless", $"Cure Moderate Wounds", $"Remove Curse",
+            $"Dispel Fatigue";
+    Feats: FT_IRON_WILL, SK_HEALING, SK_KNOW_THEO, SK_KNOW_PLANES,
+           SK_SPOT, SK_LISTEN;
+    Flags: M_HUMANOID, M_UNDEAD, M_GOOD, M_IALIGN, M_NO_CORPSE,
+      M_INCOR, M_NO_BLOOD, M_VERY_RARE;
+    Desc: "Blessed souls are rarely seen outside the peaceful
+      afterlife of the Upper Planes, but some remain connected
+      to Theyra, unable to move on due to unresolved issues.";
+    On Event POST(EV_HIT) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };
+  }
+
+Monster "shadow haunt" : MA_WRAITH
+  {
+    Image: bright shadow 'W'; Size: SZ_MEDIUM; 
+    CR: OPT_CR(7,8); HD: 6; Hit: +3; Def: 15;  Mov: 150%; Spd: 130%; 
+    Dex 17, Int 14, Wis 13, Cha 21; Arm: 10; 
+    Attk: A_TUCH for 1d8 AD_DRCH,
+          A_GAZE for 1d2 AD_FEAR (DC 18);
+	SPELL_RES(17);
+	ABILITY(CA_TELEPATHY,10);
+	ABILITY(CA_TURN_RESISTANCE,4);
+	ABILITY(CA_INFRAVISION,6);
+    Immune: UNDEAD_IMMUNITIES; 
+    WEAPON_FOCUS_NATURAL_ATTACK;
+    Feats: FT_ALERTNESS, FT_IMPROVED_INITIATIVE, 
+           SK_HIDE, SK_INTIMIDATE, SK_LISTEN, SK_SEARCH, SK_APPRAISE,
+           SK_SPOT;
+    Flags: M_CARNI, M_NEUTER, M_UNDEAD, M_EVIL, M_PSYCHO,
+           M_NO_CORPSE, M_LIGHT_AVERSE, M_IALIGN, M_CHAOTIC;
+    Desc: "This is a menacing cloud of smoke and shadows that coalesces
+    into a humanoid shape. Pinpricks of red light serve as eyes and its
+    arms ends in grasping, claw-like hands."; 
+  }
+
+
+Monster "spectre" : MA_SPIRIT
+  { Image: bright cyan 'N'; Size: SZ_MEDIUM; Depth: 6; 
+    CR: OPT_CR(8,7); HD: 7; Def: 12; Hit: 6; Mov: 250%; Spd: 125%;
+    Dex 16, Int 14, Wis 14, Cha 15;
+    Attk: A_TUCH for 6d12 AD_DREX 
+                 and 3d4 AD_FEAR (DC 22),
+          A_SEEM for $"spectral undead";
+	  ABILITY(CA_FLIGHT,9);
+	  ABILITY(CA_TURN_RESISTANCE,2);
+	  ABILITY(CA_INFRAVISION,6);
+    // A_ABIL for $"spectre" CA_SPAWN;
+    Immune: UNDEAD_IMMUNITIES; 
+    Feats: FT_ALERTNESS, FT_BLIND_FIGHT, FT_MURDEROUS,
+           FT_DODGE, SK_LISTEN, SK_HIDE, SK_INTIMIDATE, 
+           SK_SPOT, SK_SEARCH;
+    Flags: M_LAWFUL, M_EVIL, M_IALIGN, M_HUMANOID, M_INCOR,
+           M_LIGHT_AVERSE, M_UNDEAD, M_LIGHT_AVERSE, M_NO_CORPSE, M_MFLYER,
+           M_NO_BLOOD;
+    Desc: "Powerful essences of selfish will, domination and
+          terror, spectres are the restless souls of evil
+          individuals whose will to live was so overwhelming
+          that it allowed them to linger after death with most
+          of their minds intact.";
+    On Event EVICTIM(EV_DAMAGE) {
+      if (e.DType == AD_SUNL)
+        {
+          EVictim->GainTempStati(NEGATED,NULL,-2,SS_MISC);
+          EVictim->GainTempStati(AFRAID,NULL,e.vDmg,SS_MISC,FEAR_PANIC);
+          if (e.vDmg >= EVictim->GetAttr(A_WIS))
+            {
+              EVictim->IDPrint("You are paralyzed with terror!",
+                               "The <hObj> is paralyzed with terror!", EVictim);
+              EVictim->GainTempStati(PARALYSIS,NULL,e.vDmg / EVictim->GetAttr(A_WIS),
+                                       SS_MISC,PARA_HELD);
+            }
+          return DONE;
+        }
+      return NOTHING;
+      },
+    MSG_SPECABIL "Being exposed to sunlight negates a spectre's special abilities
+      for a full day, frightens the creature for one turn per points of damage the
+      light would normally inflict and, if the light would do more damage than the
+      spectre's Wisdom score, it also paralyzes the creature for one turn per
+      [Wisdom] points of damage.";     
+    On Event POST(EV_HIT) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };
+  }
+
+Monster "wight" : MA_REVENANT
+  {
+		Image: cyan 'U'; Size: SZ_MEDIUM; 
+		CR: OPT_CR(2,3); HD:4; Hit: +2; Def: 14; Mov: 100%; Spd: 100%; 
+    Str 12, Dex 12, Int 11, Wis 13, Cha 15;
+		Attk:  A_TUCH for 1d8 AD_DREX (DC 16),
+           A_SLAM for 1d4  AD_BLUNT,
+           A_SEEM for $"corporeal undead";
+	  ABILITY(CA_INFRAVISION,6);
+    Immune: UNDEAD_IMMUNITIES; 
+    Resists:DF_COLD, DF_ACID;
+    Feats: FT_BLIND_FIGHT, SK_MOVE_SILENTLY, SK_LISTEN;
+		Flags: M_CARNI, M_HUMANOID, M_UNDEAD, M_EVIL,
+      M_OLD_CORPSE, M_IALIGN, M_CHAOTIC, M_NO_BLOOD, M_ACID;
+    On Event POST(EV_HIT) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };
+  }
+
+Monster "wraith" : MA_WRAITH
+  {
+		Image: blue 'W'; Size: SZ_MEDIUM;
+    CR: OPT_CR(5,5); HD:5; Hit: +5; Def: 14; Mov: 100%; Spd: 100%; 
+    Dex 16, Int 14, Wis 14, Cha 15;
+    Attk:  A_TUCH for 3d12 AD_DREX (DC 17)
+                  and 1d6  AD_DACO (DC 17),
+           A_PROX for AD_FEAR (DC 15),
+           A_SEEM for $"spectral undead";
+	  ABILITY(CA_INFRAVISION,6);
+           // A_ABIL for $"wight" CA_SPAWN;
+    Immune: UNDEAD_IMMUNITIES; 
+    Resists:DF_COLD, DF_ACID;
+    Feats: FT_ALERTNESS, FT_BLIND_FIGHT, FT_WEAPON_FINESSE,
+      FT_RUN, SK_MOVE_SILENTLY, SK_LISTEN, SK_INTIMIDATE,
+      SK_SEARCH, SK_APPRAISE;
+    Flags: M_HUMANOID, M_UNDEAD, M_EVIL, M_IALIGN, M_NO_CORPSE,
+      M_CHAOTIC, M_INCOR, M_NEUTER, M_NO_BLOOD;
+    On Event POST(EV_HIT) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };
+    Gear:
+      25% $"long sword" +1 with [IQ_GHOST_TOUCH]
+        else 50% $"long sword" of random 1 to 3
+          else $"long sword",
+      25% $"plate mail" else
+          $"chainmail",
+      50% $"ring" of random 2 to 5,
+      $"robes";
+  }
+  
+Monster "mummy" : MA_REVENANT
+  {
+    Image: yellow 'U'; Size: SZ_MEDIUM; Mana: 45;
+    CR: 5; HD: 8; Hit: +6; Def: 16; Mov: 70%; Spd: 75%;
+    Str 18, Dex 10, Con 0, Int 6, Wis 14, Cha 15;
+    Attk: A_SLAM for 1d6 AD_BLUNT,
+          A_TUCH for 0d0 AD_DISE (DC 16);
+    ABILITY(CA_INFRAVISION,6);
+    Disease: $"mummy rot";
+    Spells: $"bestow curse", $"summon swarm";
+    Desc: "Mummies are undead creatures created by potent magical
+      rituals practiced by certain desert-dwelling ancient civilizations.
+      Many of these rights have since been unearthed by modern
+      spellcasters, though mummification is more popular among clerics
+      than mages, since the rituals are highly religious. While most
+      mummies are malicious creatures, they are also ordered and
+      dutiful beings that adhere vigorously to religious law.
+      The priesthoods of Xel and Aiswin frequently creatures mummies, as 
+      do some truly ancient members of the Multitude. More benevolent
+      mummies are sometimes created by (or from!) priests of Mara or
+      Xavias, though these creatures are uncommon.";
+    Immune: UNDEAD_IMMUNITIES; 
+    Feats: SK_HIDE, SK_LISTEN, SK_MOVE_SIL, SK_SPOT, SK_KNOW_THEO,
+           FT_TOUGHNESS, FT_POWER_ATTACK, FT_KNOCK_PRONE;
+    Flags: M_HUMANOID, M_UNDEAD, M_EVIL, M_LAWFUL, M_OLD_CORPSE, 
+           M_NO_BLOOD, M_PSYCHO;
+    On Event EV_INIT_FIELDS {
+      EMap->NewField(FI_MODIFIER|FI_MOBILE,EActor->x,EActor->y,2,
+        GREEN*256+GLYPH_FLOOR2,-1,$"aura of despair",EActor);
+      },
+    EVICTIM(EV_DAMAGE) {
+      if (e.DType == AD_FIRE)
+        e.vDmg = (e.vDmg * 15) / 10;
+      return NOTHING;
+      },
+    MSG_SPECABIL
+      "It is vulnerable to fire, suffering 150~ damage from fire attacks.
+       It projects an aura of despair in a 20 foot radius, causing nearby
+       creatures to suffer a -2 general morale penalty.";
+    Gear:
+      25% $"amulet" of random 2 to 6,
+      50% $"longspear" +1;
+  }    
+
+Monster "mummy lord" : MA_REVENANT
+  {
+    Image: white 'U'; Size: SZ_MEDIUM; Mana: 180;
+    CR: 10; HD: 15; Hit: +12; Def: 16; Mov: 70%; Spd: 75%;
+    Str 22, Dex 12, Con 0, Int 12, Wis 20, Cha 17;
+    Attk: A_SLAM for 1d8 AD_BLUNT,
+          A_TUCH for 0d0 AD_DISE (DC 16),
+          A_SEEM for $"mummy";
+    ABILITY(CA_INFRAVISION,6);
+    ABILITY(CA_SPELLCASTING,7);
+    ABILITY(CA_DOMAINS,7);
+    Stati[HAS_DOMAIN,0,0,$"Death"];
+    Stati[HAS_DOMAIN,0,0,$"Guardian"];
+    Stati[HAS_DOMAIN,0,0,$"Retribution"];
+    Disease: $"mummy rot";
+    Spells: $"bestow curse", $"summon swarm";
+    Desc: "Mummies are undead creatures created by potent magical
+      rituals practiced by certain desert-dwelling ancient civilizations.
+      Many of these rights have since been unearthed by modern
+      spellcasters, though mummification is more popular among clerics
+      than mages, since the rituals are highly religious. While most
+      mummies are malicious creatures, they are also ordered and
+      dutiful beings that adhere vigorously to religious law.
+      The priesthoods of Xel and Aiswin frequently creatures mummies, as 
+      do some truly ancient members of the Multitude. More benevolent
+      mummies are sometimes created by (or from!) priests of Mara or
+      Xavias, though these creatures are uncommon.\n
+      __The most powerful mummies are known as mummy lords, and augment
+      their potent innate abilities with a powerful understanding of
+      clerical magic and a far greater degree of intelligence and
+      reason then the majority of their kind.";
+    Immune: UNDEAD_IMMUNITIES; 
+    Feats: SK_HIDE, SK_LISTEN, SK_MOVE_SIL, SK_SPOT, SK_KNOW_THEO,
+           FT_TOUGHNESS, FT_POWER_ATTACK, FT_KNOCK_PRONE,
+           FT_MAXIMIZE_SPELL, FT_QUICKEN_SPELL, FT_SUNDER;
+    Flags: M_HUMANOID, M_UNDEAD, M_EVIL, M_LAWFUL, M_OLD_CORPSE, 
+           M_NO_BLOOD, M_PSYCHO;
+    On Event EV_INIT_FIELDS {
+      EMap->NewField(FI_MODIFIER|FI_MOBILE,EActor->x,EActor->y,2,
+        GREEN*256+GLYPH_FLOOR2,-1,$"aura of despair",EActor);
+      },
+    EVICTIM(EV_DAMAGE) {
+      if (e.DType == AD_FIRE)
+        e.vDmg = (e.vDmg * 15) / 10;
+      return NOTHING;
+      },
+    POST(EV_CAST) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      },
+    MSG_SPECABIL
+      "It is vulnerable to fire, suffering 150~ damage from fire attacks.
+       It projects an aura of despair in a 20 foot radius, causing nearby
+       creatures to suffer a -2 general morale penalty.";
+    Lists:
+      * SPELL_LIST
+          ALL_SPELLS_FROM_SOURCE(AI_THEURGY);
+    Gear:
+      $"amulet" of random 5 to 10,
+      50% $"amulet" of random 5 to 10,
+      75% $"ring" of $"fire resistance",
+      50% $"cloak" +2 of $"resistance",
+      50% $"longspear" +3;
+  }    
+
+Monster "revenant" : MA_REVENANT 
+{
+    Image: yellow 'U'; Size: SZ_MEDIUM; 
+    CR: OPT_CR(5,4); HD: 4; Hit: +4; Def: 15; Mov: 100%; Spd: 100%;
+    Str 18, Dex 16, Int 14, Wis 16, Cha 14; Arm: 4;
+    Attk: A_PUNC for 1d2 AD_BLUNT,
+          A_SEEM for $"corporeal undead";
+	  ABILITY(CA_TURN_RESISTANCE,2);
+	  ABILITY(CA_INFRAVISION,6);
+	  ABILITY(CA_REGEN,3);
+    Immune: UNDEAD_IMMUNITIES; 
+    Feats: 
+      SK_APPRAISE, SK_KNOW_UNDEAD, SK_SPOT, SK_LISTEN,
+      SK_CLIMB, SK_JUMP, SK_ATHLETICS,
+      FT_POWER_ATTACK, FT_KNOCK_PRONE;
+    Flags: M_HUMANOID, M_UNDEAD, M_CLOSEID;
+    Desc: "Some creatures die with their greatest ambitions in life
+      unfulfilled, only to return from the grave as revenants -- either
+      through Mara's blessing or the sheer force of their own willpower.
+      Revenants are canny undead, driven to the point of obsession to
+      fulfill what they failed at in life. Physically strong and possessed
+      of unearthly willpower, they can be a frightening threat or steadfast
+      ally to a living adventurer."; 
+    Gear:
+      $"peasant garb",
+      25% $"chainmail" else
+        33% $"banded mail" else
+        50% $"cord armor" else
+            $"coat of plates",
+      25% $"halberd" else
+        33% $"long sword" else
+        50% $"heavy mace" else
+            $"large club",
+      10% $"ring" of random 3 to 8;
+} 
+
+Monster "mourner" : MA_REVENANT 
+{
+    Image: bright cyan 'U'; Size: SZ_MEDIUM; Mana: 45;
+    CR: OPT_CR(6,5); HD: 6; Hit: +4; Def: 10; Mov: 100%; Spd: 100%;
+    Str 10, Dex 14, Int 6, Wis 13, Cha 17; 
+    Attk: A_PUNC for 1d2 AD_BLUNT,
+          A_GAZE for 1d2 AD_DACH,
+          A_SEEM for $"corporeal undead";
+	  ABILITY(CA_INFRAVISION,6);
+    Immune: UNDEAD_IMMUNITIES; 
+    Feats: 
+      SK_SPOT, SK_LISTEN, SK_PERFORM,
+      FT_SOULBLADE, FT_ENDURANCE;
+    Spells: $"silence", $"creeping cold", $"revenance", $"enthrall";
+    Flags: M_HUMANOID, M_UNDEAD, M_LAWFUL, M_FLYER, M_PSYCHO;
+    Desc: "Many sages have speculated on the origin and purpose of
+      the mourners. Emaciated figures cloaked in black cowled robes
+      carrying lengths of magical chain, these creatures, though
+      corporeal undead, do not appear to be the remains of creatures
+      who once lived. How they come into existance is unknown. What
+      is known is that they show up at the sights of great battles
+      and massacres to terrorize the guilty and bring about justice
+      according to their own, harsh code. Mourners never speak and
+      move in utter silence, gliding over the ground with only the 
+      trails of their robes brushing the floor."; 
+    On Event EV_DAMAGE {
+      if (e.DType == AD_DACH)
+        EVictim->IPrint("You experience a soul-draining flashback of
+          unresolved violence!");
+      return NOTHING;
+      },
+    EV_INVOKE, POST(EV_SATTACK) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      };
+    Gear:
+      $"robes",
+      25% $"spiked chain" of random 1 to 6 else
+          $"spiked chain";
+} 
+
+
+/*** UNDEAD GENERATION TEMPLATES ***/
+
+Template "vampire" : TM_UNDEAD for MA_NLIVING
+  {
+    Glyph: pink 'V'; MType: MA_VAMPIRE;
+    CR: +4 (Min 9); HD: +4; Hit: +5; Def: +6; 
+    Caster Level: +2; Power: +2;
+    Str +9, Dex +6, Con =0, Int +3, Wis +3, Cha +6; // ww: +50% from SRD
+    Arm +10; // 10/silver&magic
+    Attk: A_BITE for 1d6 AD_PIERCE 
+                 and 6d6 AD_DREX,
+          A_SUCK for 1d4 AD_DRCO (DC 17),
+          A_GAZE for 3d6 AD_SPE1 (DC 17),
+          A_FORM for $"bat",
+          A_FORM for $"wolf";
+	  ABILITY(CA_GASEOUS_FORM,1);
+	  ABILITY(CA_REGEN,5);
+	  ABILITY(CA_INFRAVISION,12);
+	  ABILITY(CA_TURN_RESISTANCE,4);
+	  RACIAL_SKILL(SK_BLUFF,8);
+	  RACIAL_SKILL(SK_HIDE,8);
+	  RACIAL_SKILL(SK_LISTEN,8);
+	  RACIAL_SKILL(SK_MOVE_SIL,8);
+	  RACIAL_SKILL(SK_SEARCH,8);
+    RACIAL_SKILL(SK_APPRAISE,8);
+	  RACIAL_SKILL(SK_SPOT,8);
+    Spells: $"spider climb", $"Summon Rats", $"Summon Bats", 
+            $"Summon Wolves";
+    Feats: 
+      SK_CLIMB, SK_BLUFF, SK_HIDE, SK_JUMP, SK_LISTEN,
+      SK_MOVE_SIL, SK_SEARCH, SK_APPRAISE, SK_SPOT, 
+      FT_ALERTNESS, FT_COMBAT_REFLEXES, FT_DODGE, FT_POWER_ATTACK,
+      FT_PERSUASIVE, FT_NATURAL_GRAB;
+    Immune: UNDEAD_IMMUNITIES; 
+    Resists: DF_COLD, DF_ELEC;
+    Flags: M_UNDEAD, M_EVIL, !M_GOOD, M_CHAOTIC, !M_LAWFUL, M_IALIGN,
+           M_LIGHT_AVERSE, TMF_BODY_ONLY,
+           TMF_POSTSCRIPT, M_HOSTILE, !M_NO_BLOOD, M_HAS_BLOOD;
+    Desc: "Vampires appear just as they did in life, although their
+    features are often hardened and feral, with the predatory look of
+    wolves.  Like liches, they often embrace finery and decadence and may
+    assume the guise of nobility. Despite their human appearance, vampires
+    can be easily recognized, for they cast no shadows and throw no
+    reflections in mirrors.";
+    On Event EV_ISTARGET {
+      if (EActor->isMType(MA_ADVENTURER) && 
+          EActor->isMType(MA_NLIVING))
+        return 1; 
+      else 
+        return -1; 
+      },
+    POST(EV_NATTACK) {
+      if (EActor->mID == EActor->tmID)
+        EActor->IdentifyTemp($"vampire");
+      return NOTHING;
+      },
+    PRE(EV_DAMAGE) {
+      if (e.DType == AD_SPE1)
+        {
+          RedirectEff(e,$"dominate monster",EV_EFFECT);
+          EActor->IdentifyTemp($"vampire");
+          return DONE;
+        }
+      return NOTHING;
+      },
+    MSG_SPE1DESC 
+      "dominate its victim"; 
+  }  
+  
+Effect "Summon Rats" : EA_SUMMON
+  { SC_WEA; Base: 80; Cost: 8; qval: Q_LOC;
+    Purpose: EP_SUMMON; rval: $"giant rat"; pval: 4; 
+    Desc: "This power allows a vampire to summon a group of
+      giant rats worth CR 4."; 
+      Flags: EF_SPECABIL, EF_MULTIPLE, EF_XSUMMON; 
+    On Event MSG_CAST 
+      "You call for aid!" / "The <EActor> calls for aid!"; }
+
+Effect "Summon Bats" : EA_SUMMON
+  { SC_WEA; Base: 80; Cost: 8; qval: Q_LOC;
+    Purpose: EP_SUMMON; rval: $"bat"; pval: 4; 
+    Desc: "This power allows a vampire to summon a group of
+      bats worth CR 4."; 
+      Flags: EF_SPECABIL, EF_MULTIPLE, EF_XSUMMON; 
+    On Event MSG_CAST 
+      "You call for aid!" / "The <EActor> calls for aid!"; }
+
+Effect "Summon Wolves" : EA_SUMMON
+  { SC_WEA; Base: 80; Cost: 8; qval: Q_LOC;
+    Purpose: EP_SUMMON; rval: $"wolf"; pval: 4; 
+    Desc: "This power allows a vampire to summon a group of
+      wolves worth CR 4."; 
+      Flags: EF_SPECABIL, EF_MULTIPLE, EF_XSUMMON; 
+    On Event MSG_CAST 
+      "You call for aid!" / "The <EActor> calls for aid!"; }
+
+
+Monster "vampire spawn" : MA_VAMPIRE, MA_ADVENTURER
+  {
+    Image: grey 'V'; Size: SZ_MEDIUM; 
+    CR: OPT_CR(4,6); HD: 4; Hit: +2; Def: 13; Mov: 100%; Spd: 100%;
+    Str 16, Dex 14, Con 16, Int 13, Wis 13, Cha 14;
+    Attk: A_BITE for 1d6 AD_BLUNT 
+                 and 3d6 AD_DREX,
+          A_SUCK for 1d4 AD_DRCO (DC 17),
+          A_GAZE for 3d6 AD_SPE1 (DC 17),
+          A_SEEM for $"human";
+	  ABILITY(CA_GASEOUS_FORM,1);
+	  ABILITY(CA_INFRAVISION,6);
+	  ABILITY(CA_REGEN,2);
+	  ABILITY(CA_TURN_RESISTANCE,4);
+	  ABILITY(CA_WEAPON_IMMUNITY,1);
+    Spells: $"spider climb";
+    Feats: SK_CLIMB, SK_BLUFF, SK_HIDE, SK_JUMP, SK_LISTEN,
+      SK_MOVE_SIL, SK_SEARCH, SK_APPRAISE, SK_SPOT, FT_ALERTNESS,
+      FT_LIGHTNING_REFLEXES, FT_POWER_ATTACK, FT_CAPTIVATING,
+      FT_NATURAL_GRAB;
+    Immune: UNDEAD_IMMUNITIES; 
+    Flags: M_HUMANOID, M_UNDEAD, M_EVIL, M_CHAOTIC, M_IALIGN,
+           M_LIGHT_AVERSE, M_HAS_BLOOD, M_HOSTILE;
+    Desc: "Vampire spawn are the result when a vampire tries to bring
+      across an individual whose psyche is too weak to survive the
+      transformation as a full-fledged vampire. Vampire spawn are 
+      cunning predators without any concept of morality, who seek
+      to acquire power and feed upon the blood of the living.";
+    On Event POST(EV_HIT) {
+      EActor->IdentifyMon();
+      return NOTHING;
+      },
+    PRE(EV_DAMAGE) {
+      if (e.DType == AD_SPE1)
+        {
+          RedirectEff(e,$"dominate monster",EV_EFFECT);
+          EActor->IdentifyMon();
+          return DONE;
+        }
+      return NOTHING;
+      },
+    MSG_SPE1DESC "dominate its victim";
+  }  
+
+
+Template "zombie" : TM_UNDEAD for MA_NLIVING
+  {
+    MType: MA_ZOMBIE; Glyph: brown 'Z'; CR +1;
+    Str +6, Dex -4, Con =0, Int = 0, Wis -6 (min 2), Cha -6 (min 1);
+    Def: -2; Arm: +5; Spd: 50%; HitDice: +3 (max 12); Mov: 30%; 
+    ABILITY(CA_INFRAVISION,6);
+    Feats: FT_TOUGHNESS; 
+    Immune: UNDEAD_IMMUNITIES; 
+    Flags: M_UNDEAD, M_MINDLESS, !M_GOOD, !M_EVIL, !M_LAWFUL,
+      !M_CHAOTIC, M_IALIGN, M_OLD_CORPSE, !M_FLYER, !M_HIDE_ABOVE, 
+      TMF_BODY_ONLY, M_HOSTILE, TMF_OBVIOUS, TMF_POSTSCRIPT,
+      M_PSYCHO;
+    On Event EV_ISTARGET {
+      if (EActor->isMType(MA_FUNGI) || EActor->isMType(MA_PLANT))
+        return -1;
+      if (EActor->HasMFlag(M_AMORPH) || EActor->HasMFlag(M_INCOR))
+        return -1;
+      if (!(EActor->HasMFlag(M_HUMANOID) || EActor->isMType(MA_ANIMAL) ||
+            EActor->isMType(MA_BEAST) || EActor->isMType(MA_DRAGON)))
+        return -1;
+      return 0;
+      };
+
+  }
+
+Template "zombie;visage" : TM_UNDEAD for MA_NLIVING
+  {
+    Glyph: brown 'Z'; CR: 0; 
+    Cha -6 (min 1);
+    Resists: DF_COLD, DF_ELEC;
+    Flags: M_NOGEN, TMF_NOGEN, M_NO_BREATH, TMF_OBVIOUS, TMF_POSTSCRIPT;
+    On Event EV_DEATH {
+      EActor->RemoveEffStati($"zombie;visage");
+    }; 
+    On Event EV_ISTARGET {
+      if (EActor->isMType(MA_FUNGI) || EActor->isMType(MA_PLANT))
+        return -1;
+      if (EActor->HasMFlag(M_AMORPH) || EActor->HasMFlag(M_INCOR))
+        return -1;
+      if (!(EActor->HasMFlag(M_HUMANOID) || EActor->isMType(MA_ANIMAL) ||
+            EActor->isMType(MA_BEAST) || EActor->isMType(MA_DRAGON)))
+        return -1;
+      return 0;
+      };
+    Desc: "The Visage of Death spell allows you to alter your appearance to
+    that of a zombie of the same size class. Your body temperature will
+    feel cold and your limbs will appear stiff, putrid and rotting; you
+    lose six points of Charisma. This spell does not actually make you
+    undead or grant the usual undead abilities or resistances. However, it
+    does grant resistance to cold and electricity and you do not need to
+    breathe while the spell is in effect. Finally and perhaps most
+    importantly, the spell makes you neutral to undead by default.";
+  }
+
+Template "skeleton" : TM_UNDEAD for MA_NLIVING
+  {
+    MType: MA_SKELETON; Glyph: white 'Z'; CR +1;
+    Con =0, Int = 0, Wis -6 (min 2), Cha -6 (min 1);
+    Spd: 90%; HitDice: 80% (max 5); Mov: 80%;
+    Attk: A_CLAW for 1d6 AD_SLASH;
+	ABILITY(CA_INFRAVISION,6);
+    Immune: UNDEAD_IMMUNITIES, SKELETON_IMMUNITIES; 
+    Resists: DF_PIERCE, DF_SLASH;
+    Flags: M_UNDEAD, M_MINDLESS, !M_GOOD, !M_EVIL, !M_LAWFUL,
+      !M_CHAOTIC, M_IALIGN, M_OLD_CORPSE, M_MINDLESS,
+      !M_GOOD, M_HOSTILE, !M_FLYER, !M_HIDE_ABOVE, TMF_BODY_ONLY,
+      TMF_OBVIOUS, TMF_POSTSCRIPT, !M_HAS_BLOOD, M_NO_BLOOD,
+      M_PSYCHO;
+    On Event EV_ISTARGET {
+      if (EActor->isMType(MA_FUNGI) || EActor->isMType(MA_PLANT))
+        return -1;
+      if (EActor->HasMFlag(M_AMORPH) || EActor->HasMFlag(M_INCOR))
+        return -1;
+      if (!(EActor->HasMFlag(M_HUMANOID) || EActor->isMType(MA_ANIMAL) ||
+            EActor->isMType(MA_BEAST) || EActor->isMType(MA_DRAGON)))
+        return -1;
+      return 0;
+      };
+  }
+
+Template "graveborn;template" : TM_UNDEAD for MA_NLIVING 
+  {
+    // drow: 0 -> 2
+    // bugbear: cr 2 -> 3
+    // troll: cr 6 -> 6
+    MType: MA_REVENANT; Image: gray 'U'; 
+    CR: +0 (Min 2); 
+    Con =0; 
+    ABILITY(CA_INFRAVISION,6);
+    Immune: UNDEAD_IMMUNITIES; 
+    Flags: M_UNDEAD, M_CARNI, M_NO_BLOOD, M_NOPOLY, TMF_OBVIOUS;
+    Desc: "Graveborn are weak undead, recently raised from
+      the grave. Through some magical mischance or divine favor they retain
+      their previous intelligence and drive and can advance in any standard
+      character class. ";
+  }
+
+
+Template "avenging spirit" : TM_UNDEAD for MA_NLIVING
+  {
+    MType: MA_SPIRIT; Glyph: white 'N'; CR: +3;
+    Con = 0; Wis +4; Cha +4;
+    ABILITY(CA_TURN_RESISTANCE,8); 
+	  RACIAL_SKILL(SK_HIDE,8);
+	  RACIAL_SKILL(SK_LISTEN,8);
+	  RACIAL_SKILL(SK_SEARCH,8);
+	  RACIAL_SKILL(SK_SPOT,8); 
+    Feats: FT_HOVER, FT_POWER_ATTACK, FT_DIVINE_MIGHT;
+    Flags: M_UNDEAD, !M_EVIL, M_GOOD, M_FLYER, M_INCOR,
+      TMF_OBVIOUS, TMF_POSTSCRIPT, M_NO_CORPSE, M_VERY_RARE;    
+    On Event EV_ISTARGET {
+      if (EActor->isMType(MA_FUNGI) || EActor->isMType(MA_PLANT) ||
+          EActor->isMType(MA_DRAGON))
+        return -1;
+      if (EActor->HasMFlag(M_AMORPH) || EActor->HasMFlag(M_INCOR))
+        return -1;
+      if (EActor->HasMFlag(M_EVIL))
+        return -1;
+      if (EActor->GetAttr(A_CHA) < 6)
+        return -1; 
+      return 0;
+      };
+    Spells: $"searing light", $"holy smite", $"cause fear";
+    Gear:
+      $"chainmail" of random 2 to 5,
+      $"long sword" +2 with [IQ_GHOST_TOUCH, WQ_HOLY];
+  }
+
+Template "ghost" : TM_UNDEAD for MA_NLIVING
+  {
+    // drow 0 -> 6
+    // bugbear 2 -> 9
+    MType: MA_SPIRIT; Glyph: bright blue 'N'; CR +6; Con =0, Cha +4; 
+    Attk:	
+          A_GAZE for 2d10 AD_MAGC (DC 18),
+          A_GAZE for 1d4 AD_DACH (DC 18),
+          A_TUCH for 1d6 AD_VAMP,
+          A_ROAR for 2d4 AD_FEAR (DC 18);
+    ABILITY(CA_TURN_RESISTANCE,4); 
+	  RACIAL_SKILL(SK_HIDE,8);
+	  RACIAL_SKILL(SK_LISTEN,8);
+	  RACIAL_SKILL(SK_SEARCH,8);
+	  RACIAL_SKILL(SK_SPOT,8); 
+    Feats: FT_HOVER;
+    Immune: UNDEAD_IMMUNITIES; 
+    Flags: M_UNDEAD, M_EVIL, !M_GOOD, M_FLYER, M_INCOR,
+      TMF_OBVIOUS, TMF_POSTSCRIPT, M_NO_CORPSE;
+    On Event EV_ISTARGET {
+      if (EActor->isMType(MA_FUNGI) || EActor->isMType(MA_PLANT) ||
+          EActor->isMType(MA_DRAGON))
+        return -1;
+      if (EActor->HasMFlag(M_AMORPH) || EActor->HasMFlag(M_INCOR))
+        return -1;
+      if (EActor->GetAttr(A_CHA) < 6)
+        return -1; 
+      return 0;
+      },
+    MSG_ROARVERB "wail" / "wails";
+  }
+
+Template "death knight" : TM_CLASS for MA_ADVENTURER 
+  {
+    Flags: M_UNDEAD, 
+           M_IALIGN, M_LAWFUL, M_EVIL, !M_CHAOTIC, !M_GOOD,
+           M_SEE_INVIS, TMF_POSTSCRIPT, M_CLOSEID;
+    // bugbear: 2 -> 6
+    // drow: 1/2 -> 6
+    CR: +3 (Min 6); MType: MA_UNDEAD; 
+    Str +4, Wis +2, Cha +2, Con =0; 
+    Attk:	A_PROX for AD_FEAR (DC 14);
+        RACIAL_SKILL(SK_INTIMIDATE,8);
+	RACIAL_SKILL(SK_APPRAISE,8);
+	RACIAL_SKILL(SK_SPOT,8);
+	RACIAL_SKILL(SK_RIDE,8);
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_TURN_RESISTANCE,4);
+	SPELL_RES(16); 
+    Spells: $"desecrate", $"detect good", $"protection from good"
+            $"symbol of pain";
+    HD: +0; Def: +3; Hit: +0; Mov: 100%; Spd: 100%; 
+    Feats: FT_MOUNTED_COMBAT, FT_POWER_ATTACK, 
+           FT_SPEAR_AND_SHIELD;
+    Immune: UNDEAD_IMMUNITIES; 
+    Gear: $"kite shield" of random 1 to 2,
+          $"heavy lance" of random 1 to 2,
+          $"full plate armor" of random 1 to 2;
+    On Event EV_ISTARGET {
+      if (EActor->GetAttr(A_SIZ) == SZ_MEDIUM)
+        return 0;
+      else
+        return -1; 
+    } ;
+    On Event EV_INITIALIZE {
+      hObj h;
+      h = CreateMonster($"nightmare");
+      SetSilence();
+      h->PartyID = EActor->PartyID;
+      h->CalcValues();
+      Throw(EV_MOUNT,EActor,h);
+      UnsetSilence();
+      h->Initialize();
+      for(h = EActor->FirstInv(); h ; h = EActor->NextInv())
+        if (h->isType(T_WEAPON))
+          h->AddQuality(IQ_ADAMANT);
+      };
+    Desc: "Doomed to devastate the world they once cherished, death knights
+    are cursed paladins."; 
+  } 
+
+/*** TEMPLATES FOR UNDEAD ***/
+
+Template "elder" : TM_SKILL for MA_UNDEAD
+  { CR: OPT_CR(+2,+2); Str +1, Int +2, Cha +2; Spd: +5; HD: 150% (min 4);
+    Power: +3; Caster Level: +2;
+    Hit: 140%; Def: +2; Feats: FT_POWER_ATTACK, 
+      FT_COMBAT_REFLEXES, FT_TOUGHNESS;
+	  ABILITY(CA_REGEN,3);
+	  ABILITY(CA_TURN_RESISTANCE,3); 
+	  ABILITY(CA_COMMAND,4);
+    Desc: "After decades of existence, the elder undead is far
+      more cunning, potent, resilient and skillful than its more
+      mundane counterparts. It can command its fellows, naturally
+      heal injuries and fights with terrifying skill.";
+    On Event POST(EV_HIT), POST(EV_CAST) {
+      EActor->IdentifyTemp($"elder");
+      return NOTHING;
+      };
+  }
+
+Template "ancient" : TM_SKILL for MA_UNDEAD
+  { CR: OPT_CR(+3,+4); Str +2, Int +4, Cha +4; Spd: +10; HD: 200% (min 6);
+    Power: +6; Caster Level: +4;
+    Hit: 180%; Def: +4; Feats: FT_POWER_ATTACK, FT_EXPERTISE,
+      FT_COMBAT_REFLEXES, FT_TOUGHNESS, FT_IMPROVED_CRIT;
+	  ABILITY(CA_REGEN,7);
+	  ABILITY(CA_TURN_RESISTANCE,6); 
+	  ABILITY(CA_COMMAND,9);
+    Desc: "After centuries of existence, the ancient undead is far
+      more cunning, potent, resilient and skillful than its more
+      mundane counterparts. It can command its fellows, naturally
+      heal injuries and fights with terrifying skill.";
+    On Event POST(EV_HIT), POST(EV_CAST) {
+      EActor->IdentifyTemp($"ancient");
+      return NOTHING;
+      };
+  }
+
+Template "spiked;template" : TM_NATURE for 0
+  { // ghoul: 2 -> 2
+    // ghast: 5 -> 5
+    // flesh golem: 5 -> 6
+    CR: +1; Feats: FT_MULTIATTACK; Flags: TMF_OBVIOUS; 
+    Desc: "The internal structure of this being has been warped and large,
+    wickedly sharp spikes have burst forst from its surface. These spikes
+    are typically caused by the Skeletal Spikes spell.";
+    Attk:
+      A_GORE for 1d6 AD_PIERCE,
+      A_GORE for 1d6 AD_PIERCE,
+      A_GORE for 1d6 AD_PIERCE;
+    On Event EV_ISTARGET {
+      if (enFreaky() % 30 != 12)
+        return -1;
+      if ((EActor->isMType(MA_UNDEAD) || 
+          EActor->isMType(MA_CONSTRUCT)) &&
+          !EActor->HasMFlag(M_NOBODY) && 
+          !EActor->HasMFlag(M_INCOR) && 
+          !EActor->HasMFlag(M_AMORPH) &&
+          EActor->mID != $"crawling claw")
+          return 1;
+      else
+          return -1; 
+    };
+  } 
+
+Template "spellstitched" : TM_NATURE for MA_UNDEAD
+  { CR: OPT_CR(+2,+1); Int: +2; Feats: FT_GUARDED_INVOCATION; 
+    Desc: "Covered with ornate ritual tattoos, this undead beast has
+      been imbued with the ability to use certain spell-like abilities
+      by a dark necromantic ritual -- the very essence and formula of
+      the magic having been grafted onto its being.";      
+    On Event EV_INITIALIZE {
+      int16 maxlev, i, j, k; rID spID;
+
+      maxlev = max(2,EActor->ChallengeRating()/2);
+      j = 1d4+2;
+      for (i=0;i!=j;i++) 
+        {
+          for(k=0;k<=10;k++)
+            {
+              spID = theGame->GetEffectID(PUR_DUNGEON,1,maxlev,AI_WIZARDRY);
+              if (spID)
+                if (spID->Schools & (SC_EVO|SC_NEC|SC_WEA|SC_ARC))
+                  if (spID->Purpose != EP_PLAYER_ONLY)
+                    {
+                      EActor->GainPermStati(INNATE_SPELL,NULL,SS_RACE,0,0,spID,0);
+                      k = 50;
+                    }
+            }
+        }
+      return NOTHING;
+      },
+    POST(EV_INVOKE) {
+      if (EActor->HasEffStati(INNATE_SPELL,e.eID))
+        EActor->IdentifyTemp($"spellstitched");
+      return NOTHING;
+      },
+    EV_ISTARGET {
+      if ( EActor->isMType(MA_LICH) || EActor->isMType(MA_ZOMBIE) )
+        return -1;
+      if ( EActor->HasMFlag(M_INCOR) )
+        return -1;
+      return 0;
+      },
+    MSG_SPECABIL
+      "It has 1d4+2 randomly chosen arcane spells from the schools of
+         <9>Arcana<7>, <9>Evocation<7>, <9>Necromancy<7> and <9>Weavecraft<7>
+         as innate spell-like abilities.";
+  }
+
+
+

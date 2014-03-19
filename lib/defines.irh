@@ -1,0 +1,110 @@
+/* ww: let's prevent copy-past errors! */
+
+#define PLANT_IMMUNITIES \
+  DF_MIND, DF_POIS, DF_SLEE, DF_PLYS, DF_POLY, \
+  DF_STUN, DF_CRIT, DF_CONF, DF_FEAR
+
+#define UNDEAD_IMMUNITIES \
+  DF_MIND, DF_POIS, DF_SLEE, DF_PLYS, DF_STUN, \
+  DF_DISE, DF_NECR, DF_CRIT, DF_SUBD 
+
+#define SKELETON_IMMUNITIES \
+  DF_COLD
+
+#define OOZE_IMMUNITIES \
+  DF_CRIT, DF_FEAR, DF_MIND, DF_PLYS, DF_POIS, DF_POLY, DF_PSYC \
+  DF_SLEE, DF_STUK, DF_STUN, DF_SONI
+
+#define ELEMENTAL_IMMUNITIES \
+  DF_DISE, DF_POIS, DF_SLEE, DF_PLYS, DF_STUN, DF_STUK, DF_CRIT
+
+#define WEAPON_FOCUS_NATURAL_ATTACK \
+  Stati[ADJUST_NAT,A_HIT_BRAWL,+1]
+
+#define RACIAL_SKILL(sk,lv) \
+  Stati[SKILL_BONUS,sk,lv]
+#define ABILITY(ab,lv) \
+  Stati[EXTRA_ABILITY,ab,lv]
+#undef  MAGIC_RES
+#define MAGIC_RES(lv) \
+  Stati[ADJUST_NAT,A_MR,lv]
+#define SPELL_RES(lv) \
+  Stati[ADJUST_NAT,A_MR,((lv*5)-50)]
+
+/* Spell Difficulties */
+#define SP_BUFF         100
+#define SP_TRIVIAL      95
+#define SP_EASY         90
+#define SP_MEDIUM       75
+#define SP_HARD         60
+#define SP_VERY_HARD    30
+
+#define IS_A_BUFF(the_cost) \
+  Flags: EF_NOTBAD, EF_PERSISTANT, EF_LOSEMANA, EF_SHOWNAME, EF_CANCEL; \
+  Base: SP_BUFF; Purpose: EP_BUFF; Cost: the_cost
+
+#define COST_1     5
+#define COST_1X    10
+#define COST_2     15
+#define COST_2X    20
+#define COST_3     25
+#define COST_3X    30
+#define COST_4     35
+#define COST_4X    40
+#define COST_5     45
+#define COST_5X    50
+#define COST_6     55
+#define COST_6X    60
+
+#define ABIL_BOOST_COST(percent) \
+  ( (1000   * percent) / 200 ) \
+  ( (4000   * percent) / 200 ) \
+  ( (8000   * percent) / 200 ) \
+  ( (16000  * percent) / 200 ) \
+  ( (32000  * percent) / 200 ) \
+  ( (64000  * percent) / 200 )
+  
+#define ALIENIST_CLAUSE(n)                      \
+  On Event POST(EV_MAGIC_HIT) {                 \
+    hObj cr;                                    \
+    if (EActor->isCharacter())                  \
+      if (EActor->LevelAs($"alienist") >= n+1)  \
+        {                                       \
+          cr = EMap->GetEncounterCreature(0);   \
+          if (cr != NULL_OBJ)                   \
+            if (cr->CanAddTemplate($"pseudonatural")) \
+              cr->AddTemplate($"pseudonatural");\
+        }                                       \
+    return NOTHING;                             \
+    };                                          
+    
+#define ANIMATION_MORALITY(corpse, undead)                              \
+  if (undead->isMType(MA_EVIL) && undead->HasMFlag(M_IALIGN))           \
+    EActor->Transgress($"mara",5,false,"creating inherantly evil undead");    \
+  else if (undead->isMType(MA_EVIL) && !EActor->isMType(MA_EVIL) &&     \
+            EActor->isCharacter() && EActor->GodID == $"Mara")          \
+    undead->GainPermStati(ALIGNMENT,NULL,SS_MISC,AL_GOOD|AL_LAWFUL);    \
+  if (corpse->HasStati(WAS_FRIENDLY,-1,EActor))                         \
+    EActor->Transgress($"Mara",5,false,"desecrating foes' bodies");           \
+  if (!corpse->HasEffStati(CORPSE_FLAG,$"Mara"))\
+    if (undead->isMType(MA_SAPIENT))            \
+      EActor->gainFavor($"Mara",50);            \
+  EActor->Transgress($"Immotian",7,false,"creating undead");  \
+  EActor->Transgress($"Hesani",7,false,"creating undead");    \
+  EActor->Transgress($"Xavias",4,false,"creating undead");    \
+  EActor->Transgress($"Erich",4,false,"creating undead");     \
+  EActor->Transgress($"Ekliazeh",6,false,"creating undead");  \
+
+#define ANIMATION_HEADER \
+  bool isMarist; \
+  isMarist = (EActor->getGod() == $"Mara" || \
+    (EActor->isCharacter() && EActor->getGodLevel($"Mara") >= 2)); \
+
+
+/* Imagine that for every pair of weapons we hold a best-out-of-21 pitfight
+ * with equal fighters. The percentage of such matches won by a weapon is
+ * its weimer-cost. This gives a feel for the relative powers of weapons.
+ * Note that currently (Fri Dec 19 09:26:30 PST 2003) the enemy AI is 
+ * really abysmal with reach weapons like the longspear. */
+#define OPT_COST(wes,orig)     orig
+    

@@ -1,0 +1,2771 @@
+/* PRESTIGE CLASSES */
+
+/* 
+
+  Death Master
+
+  1st - 1 divine level, command undead, increased party HD, death domain powers
+  2nd - 1 arcane level, permanent "spook" aura
+  3rd - 1 divine level, Special Ability
+  4th - 1 arcane level, +10% to Necromancy spells
+  5th - 1 divine level, Special Ability
+  6th - 1 arcane level, +10% to Necromancy spells
+  7th - 1 divine level, Special Ability
+  8th - 1 arcane level, +10% to Necromancy spells
+  9th - 1 divine level, Special Ability
+  10th - 1 arcane level, Innate Power Word, Kill
+  
+  
+  Special Abilities
+  * Lich-like touch
+  * Constant vampiric touch
+  * Level-draining touch
+  * Innate Wraithform
+  * Innate Create Greater Undead
+  * Innate Enervation
+  * Deathless Vigor (Toughness Feat, cold resist 10)
+  * Necromancer's Aegis (Resist Nec 20, +10 save vs. death)
+  * Bonemail +2 / +4 / +6
+  * Deathsight
+  * Pact of Undeath (undead non-hostile)
+  
+
+  Racial Prestige Classes:
+  Elven Bladesinger
+  Dwarven Defender
+  Gnomish Artificer
+  Halfling Sheriff
+  Orc Eye of Grummsh
+  Lizardfolk Watcher
+  Kobold Skirmisher
+  Drow Shadowlord? Spymaster? (intrigue-master)
+
+  Cavalier:
+    Prereq:
+      Mounted Combat
+      Battlefield Inspiration
+      Lawful Alignment
+      Ride +12
+      Seneschal +9
+      
+    Warcry as a later bonus feat
+    Standard of Glory:
+      field gives allies +1 morale bonus to hit, +2
+        morale bonus vs. fear saves
+      Sustain Charisma at level 1
+      inherant Cha bonus and 3, 6 & 9
+
+    Let's revise the Sentinal into something sensation/
+  hedonism/altered mindstate based and tie it to Essiah,
+  so that it has more of an archetype behind it.  
+
+  Desc: "<15>HitDie:_<1>d8__<15>Mana:<1>_d12__<15>Skills:<1>_4_<15>Saves:<1>_fr<9>W<1>_<15>Defense:_<1>1/4\n
+      <15>+toHit: <1>Archery <9>50~<1>, Brawl <9>50~<1>, Melee <9>50~<1>, Thrown <9>50~<1>\n
+      <2>\n__[ Flavor Text ]
+
+          \n\n<10>CLASS REQUIREMENTS<2>\n
+          __The elementalist is a prestige class. It counts as a favored class
+          for all characters. When you attempt entry into the class, you must
+          choose one of the four classical elements (earth, air, fire or water)
+          to focus on. Once you have gained your first elementalist level, this
+          choice cannot be changed. In order to become an elementalist, you must 
+          have:\n
+          __*_<7>Spells<2> -- Eight levels of spells (for example, 1 3rd level and
+          two 2nd level) with the descriptor of your chosen element. Characters
+          who worship a god who grants the appropriate elemental domain (Immotian,
+          Ekliazeh, Sabine or Kysul), or who have a matching elemental affinity as
+          a racial ability, only need six levels of appropriate spells.\n
+          __*_<7>Skills Levels<2> -- Knowledge (Planes) +12.\n
+          __*_<7>Mentorship<2> -- You must have an intelligent creature of at least
+          CR 3 in your party that has the appropriate elemental subtype.\n
+          __*_<7>Feats<2> -- Empower Spell, Heighten Spell.\n
+                
+          \n\n<10>CLASS SKILLS<2>\n
+          __The class skills of the elementalist are Concentration, Decipher Script, 
+          Knowledge (all), Metamagic, Spellcraft and Use Magic. Additionally, you
+          gain some additional class skills based on your chosen element: Earth --
+          Craft, Mining and Wilderness Lore; Air -- Jump, Listen and Tumble; Fire --
+          Athletics and Craft, and Water -- Alchemy, Escape Artist and Swim.\n 
+          
+          \n\n<10>CLASS FEATURES<2>\n
+          __*_<7>Proficiencies<2> -- Elementalists gain no new proficiencies.\n
+          __*_<7>Spellcasting<2> -- Elementalists gain access to all wizard,
+          priest and druid spells with their chosen elemental descriptor, at a
+          rate of one spell level per elementalist level. They also continue to
+          advance the spell access of whatever other spellcasting class they
+          have; if they have more than one, one is chosen to advance in this
+          order of priority: druid, mage, priest, ranger or bard. Elementalists
+          can cast their newly accessable spells with the same rules the class
+          whose spell access is still advancing has. In other words, priest-
+          elementalists need holy symbols to use their elemental spells, but
+          can cast in heavy armor; druid elementalists cannot cast elemental
+          spells in metal armor, etc. The one exception is mage/elementalists,
+          who do not need spellbooks for their elemental spells.\n
+          __Elementalists gain a new caster level at every elementalist level
+          except 1st and 5th.\n
+          __*_<7>Elemental Specialist<2> -- An elementalist gains the same benefits
+          as a specialist mage when using spells with her elemental descriptor
+          -- a +25~ chance of spell success, correspondingly reduced mana cost
+          and so forth. These benefits stack with existing specialist benefits
+          for a mage-elementalist. Spells without the elemental descriptor are
+          unaltered by this ability.\n
+          __The elementalist also increases her effective caster level when
+          using these spells by +2 at 1st and 5th levels. At 6th level, the
+          DC of all spells with the appropriate descriptor increases by +2,
+          just as with the School Focus feat, but for the element instead of
+          a school.\n
+          __There is a penalty to this power. When casting spells that do
+          not have her chosen elemental descriptor, the spell inflicts only
+          75~ of the damage, or has 75~ of its normal numerical magnitude.
+          A mage-elementalist also loses the special advantage associated with
+          her previous school specialization, such as a necromancer's increased
+          ability to control undead, a weaver's controlled teleports or an 
+          evoker's increased fatigue.\n
+          __*_<7>Elemental Summons<2> -- When using a Summon Nature's Ally,
+          Monster Summoning or Holy Summoning spell, elementalists always
+          call creatures with the appropriate elemental subtype. This applies
+          to all such spells effective at the 1st elementalist level.\n
+          __Further, any animal companion or sacred mount you summon gains
+          the aqueous, flame, earthen or gaseous template, as appropriate. 
+          __*_<7>Elemental Dependency<2> -- Elementalists acquire a certain
+          weakness based on their chosen element, starting at 1st level. Fire
+          elementalists cannot cast spells or use magical items with the Water
+          descriptor, and suffer untyped hit point damage from soaking, in
+          addition to the normal effects. Water elementalists cannot use spells
+          with the Fire descriptor, and suffer double damage from fire effects
+          and magic. They are not injured by cold damage, but instead are
+          <9>slow<2>ed for one round for every hit point of damage they would
+          have taken.\n
+          __Earth elementalists suffer a -2 penalty to hit, damage and saves, and 
+          1 1/2 times mana cost for all spells, when they are not in direct physical 
+          contact with earth or stone -- for example, when flying, levitating, climbing
+          in trees, wearing boots or mounted. Air elementalists suffer a similar penalty 
+          whenever they are not airbourne, or when they are grappled.\n
+          __*_<7>Elemental Boost<2> -- Elementalists recieve a magic bonus to two
+          attributes as they advance. This bonus is +1/+0 at 2nd level, +1/+1 at
+          4th level, +2/+2 at 7th level and +3/+3 at 10th level. The attributes are
+          Strength and Constitution for earth elementalists, Dexterity and Luck for
+          air elementalists, Charisma and Intelligence for fire elementalists and
+          Wisdom and Dexterity for water elementalists.\n
+          __*_<7>Elemental Defense<2> -- Elementalists also gain certain defensive
+          abilities based on their close connection to their chosen element. Earth
+          elementalists add their elementalist level as a bonus to saving throws
+          versus petrification, and gain the Toughness feat (or one of Endurance,
+          Living Wall or Great Fortitude if they already have all the precursors)
+          at 5th and immunity to critical hits at 8th. Air elementalists move like
+          the wind itself, gaining Uncanny Dodge as a rogue of their elementalist
+          level, Evasion at 5th and Improved Evasion at 8th.\n 
+          __Fire elementalists gain fire resistance equal to three times their
+          elementalist level, until they recieve complete immunity to fire at
+          8th level. Water elementalists move sinuously, their bodies flowing
+          like water -- they add their elementalist level to their Swim skill
+          rating, gain the ability to breathe water at 5th level and a +4 magic
+          bonus to their DC at 8th level.\n
+          __*_<7>Elemental Brand<2> -- Any magical weapon wielded by an elementalist
+          of 3rd level or higher gains a magical quality for as long as it remains
+          in the elementalist's hands at no cost: flaming for fire elementalists,
+          shifting for water elementalists, stunning for earth elementalists and
+          seeking for air elementalists.\n
+          __*_<7>Elemental Covenant<2> -- Starting at 9th level, creatures with the
+          appropriate elemental subtype are automatically neutral to the elementalist,
+          and will not attack her unless she provokes them.\n
+          __*_<7>Elemental Body<2> -- At 10th level, the elementalist gains the
+          innate spell-like ability to polymorph into a large elemental of the
+          appropriate type. This costs 2 fatigue and lasts for 10 turns. When
+          she uses this special form of polymorph, all of her equipment merges 
+          into her new form. 
+           
+           \n\n<10>THE ELEMENTALIST<15>\n
+           __Level__Def__Fort_Refl_Will_CL__EL_Special Abilities<1>\n
+           ____1____+0____+0___+0___+2__--_+2__Focus, Specialist,
+           ____________________________________Summons, Dependency<1>\n
+           ____2____+0____+0___+0___+3__+1_+3__Boost (+1/+0)\n
+           ____3____+1____+1___+1___+3__+1_+4__Brand\n
+           ____4____+1____+1___+1___+4__+1_+5__Boost (+1/+1)\n
+           ____5____+1____+1___+1___+4__--_+7__Defense I\n
+           ____6____+2____+2___+2___+5__+1_+8__DC Increase (+2)\n
+           ____7____+2____+2___+2___+5__+1_+9__Boost (+2/+2)\n
+           ____8____+2____+2___+2___+6__+1_+10_Defense II\n
+           ____9____+3____+3___+3___+6__+1_+11_Covenant\n
+           ____10___+3____+3___+3___+7__+1_+12_Body, Boost (+3/+3)\n
+           \n";
+
+  Desc: "<15>HitDie:_<1>d8__<15>Mana:<1>_d12__<15>Skills:<1>_4_<15>Saves:<1>_<9>FRW<1>_<15>Defense:_<1>1/2\n
+      <15>+toHit: <1>Archery <9>75~<1>, Brawl <9>75~<1>, Melee <9>75~<1>, Thrown <9>75~<1>\n
+      <2>\n__[ Flavor Text ]
+
+          \n\n<10>CLASS REQUIREMENTS<2>\n
+          __The celestial initiate is a prestige class. It counts as a favored class
+          for all characters. In order to become a celestial initiate, you must have:\n
+          __*_<7>Skills Levels<2> -- Knowledge (Theology) +12.\n
+          __*_<7>Alignment<2> -- Zealously Good (or zealously lawful for Immotian).\n
+          __*_<7>Religion<2> -- You must worship, and have gained 6 blessings from,
+          Essiah, Immotian or Xavias.\n
+          __*_<7>Abilities<2> -- You must be able to cast <9>bless<2>.\n
+          __*_<7>BAB<2> -- You must have one BAB category at +3. 
+                
+          \n\n<10>CLASS SKILLS<2>\n
+          __The class skills of the celestial initiate are Athletics, Concentration, 
+          Decipher Script, Diplomacy, Heal, Intimidate, Knowledge (all), Listen,
+          Perform and Tumble. 
+          
+          \n\n<10>CLASS FEATURES<2>\n
+          __*_<7>Proficiencies<2> -- Celestial initiates gain proficiency with
+          long blades, all types of armor and shields.\n
+          __*_<7>Smite Evil<2> -- The celestial initiate gains the ability to
+          smite evil just as a paladin does. Levels of this ability from
+          paladin and celestial initiate stack.\n
+          __*_<7>Resist Poison<2> -- At 1st level, the celestial initiate
+          recieves a +4 bonus to saving throws versus poison. At 7th level,
+          she becomes immune to poison.\n
+          __*_<7>Elemental Resistances<2> -- At 2nd level, the celestial
+          initiate gains resistances to two types of elemental damage, based
+          on her alignment and the type of celestial she is transforming
+          into: lawful archons resist electricity and acid, neutral guardinals
+          resist fire and cold and chaotic eladrins resist fire and necromantic
+          damage. These resistances begin at 5 and increase by +3 for every
+          celestial initiate level thereafter.\n
+          __*_<7>Spell-Like Abilities<2> -- At 1st level, the celestial
+          initiate gains the ability to use <9>call light<2> as an innate
+          spell-like ability.\n    
+          __*_<7>Ability Increases<2> -- At 4th level, the celestial initiate
+          recieves a +2 sacred bonus to Wisdom and Charisma; this bonus  
+          increases to +4 at 7th level and +6 at 10th level.\n
+          __*_<7>Wings<2> -- At 5th level, the celestial initiate grows a
+          vestigal pair of feathery white wings that allow her to control
+          her descent, giving her a constant <9>feather fall<2> effect. At
+          6th level, these wings are fully developed and she may now fly
+          at her full normal movement rate. At 8th level, she gains a 150%
+          inherant bonus to her flying movement rate.\n
+          __*_<7>Protective Aura<2> -- At 3rd level, a celestial initiate 
+          gains the benefit of a constantly active <9>magic circle vs. evil<2> 
+          effect. At 9th level, this strengthens to duplicate the full effect
+          of a celestial's protective aura: the area of effect and penalty of
+          the circle is doubled, and it also duplicates the effects of a
+          <9>globe of invulnerability<2>, preventing the casting of
+          spells of 5th level or lower by anyone other than the celestial
+          initiate.\n
+          __*_<7>Sharp Senses<2> -- The celestial initiate's senses sharpen
+          starting at level 5, granting her two levels of the Sharp Senses
+          ability (possessed by elves); levels of this ability gained from
+          being an elf and a celestial initiate stack. The initiate gains
+          another two levels of Sharp Senses at level 10.\n
+          
+           \n\n<10>THE CELESTIAL INITIATE<15>\n
+           __Level__Def__Fort_Refl_Will_Special Abilities<1>\n
+           ____1____+0____+2___+2___+2__Smite Evil, +4 vs.
+           _____________________________poison, <9>call light<1>\n
+           ____2____+0____+3___+3___+3__Elemental Resistances\n
+           ____3____+1____+3___+3___+3__<9>magic circle vs. evil<1>\n
+           ____4____+1____+4___+4___+4__+2 Wisdom, +2 Charisma\n
+           ____5____+1____+4___+4___+4__Wings (Slow Fall), Sen. +2\n
+           ____6____+2____+5___+5___+5__Wings (Full Flight)\n
+           ____7____+2____+5___+5___+5__+4 Wisdom, +4 Charisma\n
+           ____8____+2____+6___+6___+6__Wings (150~ Move Rate)\n
+           ____9____+3____+6___+6___+6__Full Protective Aura\n
+           ____10___+3____+7___+7___+7__+6 Wis, +6 Cha, Senses +4\n
+           \n";
+
+  Desc: "<15>HitDie:_<1>d6__<15>Mana:<1>_d10__<15>Skills:<1>_8_<15>Saves:<1>_<9>F<1>r<9>W<1>_<15>Defense:_<1>1/3\n
+      <15>+toHit: <1>Archery <9>50~<1>, Brawl <9>50~<1>, Melee <9>75~<1>, Thrown <9>50~<1>\n
+      <2>\n__[ Flavor Text ]
+
+          \n\n<10>CLASS REQUIREMENTS<2>\n
+          __The inquisitor is a prestige class. It counts as a favored class
+          for all characters. In order to become an inquisitor, you must have:\n
+          __*_<7>Skills Levels<2> -- Intimidate +12.\n
+          __*_<7>Alignment<2> -- Zealously Lawful.\n
+          __*_<7>Feats<2> -- Detective.\n
+          __*_<7>Abilities<2> -- You must be able to turn undead as a 5th-level
+          priest.\n
+          __*_<7>Religion<2> -- You must worship Immotian, and have attained at
+          least four blessings from him. 
+                
+          \n\n<10>CLASS SKILLS<2>\n
+          __The class skills of the inquisitor are Appraise, Bluff, Concentration,
+          Decipher Script, Diplomacy, Disguise, Escape Artist, Find Weakness,
+          Gather Information, Intimidate, Knowledge (all), Listen, Lockpicking,
+          Metamagic, Poison Use, Search, Spellcraft and Spot.
+          
+          \n\n<10>CLASS FEATURES<2>\n
+          __*_<7>Proficiencies<2> -- Inquisitors gain proficiency with light
+          weapons and daggers.\n
+          __*_<7>Spellcasting<2> -- At every level save for 1st and 3rd, the
+          inquisitor gains a spellcasting chart level. The inquisitor also
+          treats inquisitor levels as if they were priest levels for the purpose
+          of improving her access to the priest spell list. Inquisitors also
+          have their own spell list, which they recieve access to at one
+          spell level per inquisitor level.\n
+          __The inquisitor does not gain new domain spells or improve the
+          abilities granted by domains for her inquisitor levels, however.\n
+          __*_<7>Turn Undead<2> -- The inquisitor gains one level of the turn
+          undead ability for every inquisitor class level; this stacks with
+          the levels gained from being a priest or paladin.\n
+          __*_<7>Zealous Mettle<2> -- The inquisitor learns to trust in zeal
+          and endurance alone to protect them. When unarmored, she adds a
+          sacred bonus to all of her saving throws equal to her inquisitor
+          class level. At 9th level she recieves Toughness as a bonus feat
+          as long as she is unarmored; at 10th level, she recieves Resilience
+          likewise.\n
+          __*_<7>Grim Reputation<2> -- The agents of the Purified Office of the
+          Sacred Inquisition are rightly feared for their political power and
+          methods of torture; they in turn learn to exloit fear as a tactical
+          advantage, adding their inquisitor class level to their Intimidate
+          skill as an insight bonus.\n
+          __*_<7>Detect Corruption<2> -- Inquisitors are trained to root out
+          criminal behaviour, discerning heretics and dissidents. Starting at
+          1st level, they gain <9>detect corruption<2> as an innate spell-like
+          ability; this functions as <9>detect evil<2>, save that it detects
+          both evil and chaotic creatures, and does not reveal those who have
+          Immotian's favor regardless of alignment.\n
+          __*_<7>Smite Corruption<2> -- An inquisitor can smite corrupt creatures
+          just as a paladin smites evil creatures. Additionally, the inquisition
+          thrives on mob justice; for every allied creature the inquisitor has
+          with her, her effective level increases by one for smiting purposes.
+          If a paladin/inquisitor smites a creature both evil and corrupt, the
+          damage bonuses stack, but the Charisma bonus to hit is added only
+          once.\n
+          __*_<7>Purge Magic<2> -- Inquisitors, like all of Immotian's clergy,
+          view arcane magic as unclean; they are taught special methods of
+          purging magical influences from an area, person or object, and recieve
+          a +1 bonus to caster level checks for <9>dispel magic<2> and related
+          efffect at 2nd level, +1 for every inquisitor level thereafter.\n
+          __*_<7>Blessed Tithe<2> -- At its root, the inquisition exists not
+          to defend light and purity, or even to uphold dogma and suppress
+          other religions, but to provide a legal framework for the Church of
+          Immotian to sieze the land and wealth of social malcontents and
+          minorities, thereby maintaining the hegemony of the Church of Immotian 
+          within Theryan society. Inquisitors thus have as a primary goal the
+          procurement of gold for the church, which they can translocate to
+          the High Temple of the Pure Flame by offering it on an altar to
+          Immotian.\n
+          __Immotian offers a powerful incentive to those inquisitors who 
+          bring wealth to the church. Starting at 3rd level, an inquisitor
+          can offer coins as a sacrifice to Immotian. While this does not
+          increase divine favor -- the coins are not a 'true' sacrifice --
+          the inquisitor does recieve 1 experience point for every 25 gold
+          pieces worth of riches offered in this manner.\n 
+          __Using this ability funds an evil organization and is therefore
+          an evil act.\n
+          __*_<7>Purified Sight<2> -- Starting at 4th level, the inquisitor
+          is innately able to see invisible creatures.\n
+          __*_<7>Gentle Inquiry<2> -- Starting at 5th level, the inquisitor 
+          is able to inflict agony with a simple touch., and may use the
+          <9>pain touch<2> spell (described under domain spells) as an 
+          innate spell-like ability. At 7th level, she may use <9>burning
+          blood<2> likewise.\n
+          __*_<7>Incorruptable<2> -- Immotian blesses his inquisitors
+          personally, rendering them incorruptable (for some definitions
+          of the term, anyway). Starting at 6th level, they are immune
+          to charm effects; at 8th level, they become immune to all
+          compulsions.\n
+      
+           <10>SPELL LIST<2>\n
+           <15>__1st level -- <1> ethereal blade, spiritwrack.\n
+           <15>__2nd level -- <1> animate rope, bladethirst, divine sacrifice,
+           ESP, false life, invisibility.\n
+           <15>__3rd level -- <1> clairvoyance, dismissal, explosive runes, 
+           fear, iron sword, phantom steed.\n
+           <15>__4th level -- <1> aura of abjuration, crushing despair, 
+           dominate person, improved invisibility, nemesis spell, 
+           order's wrath, phantasmal killer, premonition.\n
+           <15>__5th level -- <1> force shapechange, holy sword.\n      
+      
+           \n\n<10>THE INQUISITOR<15>\n
+           __Level__Def__Fort_Refl_Will_CL_Special Abilities<1>\n
+           ____1____+0____+2___+0___+2__-- Turn Undead, Zealous
+           ________________________________Mettle, Grim Rep.,
+           ________________________________Det./Smite Corruption\n
+           ____2____+0____+3___+0___+3__+1 Purge Magic\n
+           ____3____+1____+3___+1___+3__-- Blessed Tithe\n
+           ____4____+1____+4___+1___+4__+2 Purified Sight\n
+           ____5____+1____+4___+1___+4__+3 Inquiry (Pain Touch)\n
+           ____6____+2____+5___+2___+5__+4 Incorruptable (Charms)\n
+           ____7____+2____+5___+2___+5__+5 Inquiry (Burn. Blood)\n
+           ____8____+2____+6___+2___+6__+6 Incorruptable (Comp.)\n
+           ____9____+3____+6___+3___+6__+7 Toughness\n
+           ____10___+3____+7___+3___+7__+8 Resilience\n
+           \n";
+        
+
+
+
+  Desc: "<15>HitDie:_<1>d8__<15>Mana:<1>_d12__<15>Skills:<1>_4_<15>Saves:<1>_<9>F<1>r<9>W<1>_<15>Defense:_<1>1/4\n
+      <15>+toHit: <1>Archery <9>50~<1>, Brawl <9>50~<1>, Melee <9>50~<1>, Thrown <9>50~<1>\n
+      <2>\n__[ Flavor Text ]
+
+          \n\n<10>CLASS REQUIREMENTS<2>\n
+          __The crimson adept is a prestige class. It counts as a favored class
+          for all characters. In order to become a crimson adept, you must have:\n
+          __*_<7>Skills Levels<2> -- Alchemy +12, Concentration +12.\n
+          __*_<7>Known Spells<2> -- Ten combined spell levels of Thaumaturgy and
+          Necromancy spells.\n
+          __*_<7>Feats<2> -- Brew Potion, Endurance.\n
+          __*_<7>Attributes<2> -- Constitution 16+.\n
+          __*_<7>Religion<2> -- You must worship Khasrach, Xel, Essiah, or no diety 
+          at all. 
+                
+          \n\n<10>CLASS SKILLS<2>\n
+          __The class skills of the crimson adept are Alchemy, Concentration, Decipher 
+          Script, Find Weakness, Healing, Intimidate, Knowledge (Infernal), Knowledge 
+          (Magic), Knowledge (Mythology), Knowledge (Theology), Knowledge (Undead), 
+          Metamagic, Spellcraft and Use Magic.
+          
+          \n\n<10>CLASS FEATURES<2>\n
+          __*_<7>Proficiencies<2> -- Crimson adepts gain proficiency with the
+          whip.\n
+          __*_<7>Spellcasting<2> -- At 2nd, 3rd, 5th, 6th, 8th and 9th levels, the
+          crimson adept recieves a new spellcasting chart level, and advances her
+          progress in another class's spell list in this order of priority: mage,
+          priest, ranger, druid, paladin.\n
+          __If the crimson adept has Domains, she continues to advance those as well,
+          provided she is advancing as a divine caster.\n
+          __*_<7>Blood Magic<2> -- Once per day (twice at 4th, thrice at 7th and
+          four times at 10th), the crimson adept can choose to sacrifce hit points
+          to regain mana points on a 1 for 1 basis. This is an instantaneous action
+          that takes no time.\n
+          __*_<7>Pain Tolerance<2> -- The self-mutilating practices of a crimson
+          adept give her a strong resistance to pain and hone her mental discipline,
+          allowing her to add her crimson adept level as a competance bonus to her
+          Concentration skill rating.
+          __*_<7>Blood Infusion<2> -- The crimson adept gains the power to enchant
+          her own bloodstream, using a kind of blood alchemy to create and store
+          potions within her own body. She may have up to [Crimson Adept level +
+          Constitution modifier] potions in her bloodstream at once, and can activate
+          these just like normal potions with the Quaff command. The primary advantage
+          of blood infusions is that they take only five segments to permeate, versus
+          the 30 segments normally used to drink a potion. Additionally, when the
+          crimson adept reaches 10th level, the effects of all blood infusions are
+          automatically maximized.\n
+          __*_<7>Thicker than Water<2> -- The crimson adept learns to transmute her
+          blood at 3rd level, diffussing and thickening it to make her more resistant
+          to injury. She becomes immune to bleeding and gains a +2 magic bonus to her
+          constitution, as well as a resistance of 5 to slashing damage. At 5th level,
+          these bonuses increase to +4 Con and 7 resistance, and at 9th, +6 Con and
+          9 resistance.\n
+          __*_<7>Blood Whip<2> -- At 3rd level, the crimson adept gains the ability
+          to slit his wrist and emit a stream of blood that supernaturally congeals
+          into a razor-sharp liquid whip. This weapon acts as a keen weakening whip
+          with an enchantment bonus equal to half the user's crimson adept class
+          level (round down), but creating it costs her 3d6 hit points.\n
+          __*_<7>Wounding Magic<2> -- Whenever a crimson adept of 4th level or higher
+          inflicts non-elemental, non-aligned spell damage on a target (such as from 
+          <9>magic missile<2>, <9>thornwrack<2>, <9>ring of blades<2>, <9>glyph of
+          warding<2>, etc.), the target must make an additional Fortitude save (DC
+          15 + crimson adept class level) or bleed for 1 additional point of damage
+          for the next 2d6 rounds.\n
+          __*_<7>Steal Life<2> -- The crimson adept is now able to regain magical
+          energy through the death of creatures with blood; every such creature she
+          kills restores to her half its Challenge Rating in mana points.\n
+          __*_<7>Animate Blood<2> -- At the cost of 3 fatigue points, the crimson
+          adept can animate the blood within any other creature, causing that
+          creature to suffer [crimson adept level]d8 points of untyped damage as 
+          their blood attempts to tear free of their body; a Fortitude saving
+          throw halves the damage. If this effect kills the victim, a blood elemental
+          (similar to a water elemental) is created to serve the caster for the
+          remainder of the day, with its size being dependant upon the victim's
+          Challenge Rating.\n    
+      
+           \n\n<10>THE CRIMSON ADEPT<15>\n
+           __Level__Def__Fort_Refl_Will_CL_Special Abilities<1>\n
+           ____1____+0____+2___+0___+2__-- Blood Magic, Pain Tol.\n
+           ____2____+0____+3___+0___+3__+1 Blood Infusion\n
+           ____3____+0____+3___+1___+3__+2 +2 Con, Resistance 5,
+           ________________________________Blood Whip, Clotting\n
+           ____4____+1____+4___+1___+4__-- Wounding Spells\n
+           ____5____+1____+4___+1___+4__+3 +4 Con, Resistance 7\n
+           ____6____+1____+5___+2___+5__+4 /Caustic Vitae/\n
+           ____7____+1____+5___+2___+5__-- Steal Life\n
+           ____8____+2____+6___+2___+6__+5 Animate Blood\n
+           ____9____+2____+6___+3___+6__+6 +6 Con, Resistance 9\n
+           ____10___+2____+7___+3___+7__-- Maximize Infusion\n
+           \n";
+
+
+  Desc: "<15>HitDie:_<1>d6__<15>Mana:<1>_d6__<15>Skills:<1>_6_<15>Saves:<1>_f<9>R<1>w_<15>Defense:_<1>1/2\n
+      <15>+toHit: <1>Archery <9>50~<1>, Brawl <9>50~<1>, Melee <9>100~<1>, Thrown <9>50~<1>\n
+      <2>\n__[ Flavor Text ]
+
+          \n\n<10>CLASS REQUIREMENTS<2>\n
+          __The duelist is a prestige class. It counts as a favored class
+          for all characters. In order to become a duelist, you must have:\n
+          __*_<7>BAB<2> -- Melee BAB +3.\n
+          __*_<7>Skills Levels<2> -- Tumble +10.\n
+          __*_<7>Feats<2> -- Expertise, Mobility, Weapon Finesse.
+                
+          \n\n<10>CLASS SKILLS<2>\n
+          __The class skills of the duelist are Appraise, Athletics, Balance, 
+          Bluff, Climb, Escape Artist, Jump, Listen, Perform and Tumble.
+          
+          \n\n<10>CLASS FEATURES<2>\n
+          __*_<7>Proficiencies<2> -- Duelists gain proficiency with the daggers
+          and short blades weapon groups, and with the long sword.\n
+          __*_<7>Canny Defense<2> -- Starting at 1st level, duelists add the
+          lower of their duelist level or their primary Intelligence modifier
+          as an insight bonus to their armor class, when wearing medium or
+          lighter armor. Note that as an insight bonus, this does not stack 
+          with Zen Defense.\n
+            [ Implementation note: use this as an excuse to do EV_CALC_VALUES
+          and export AddBonus as an IncursionScript function -- it's about
+          time! ]\n
+          __*_<7>Scoundrel's Charm<2> -- Duelists recieve the Alluring feat
+          as a bonus feat at 2nd level.
+          __*_<7>Acrobatic Fighting<2> -- This ability grants a number of
+          related benefits to a duelist, starting at 2nd level. Its benefits
+          apply only when a character is wearing light or no armor, and is
+          lightly encombered or less. Levels of this ability gained from
+          duelist and bladesinger.\n
+          __<3>Grace:<2> At 2nd level, the duelist recieves a +2 bonus to
+          reflex saving throws, and to the skills Athletics, Balance, Jump and Tumble,
+          provided she meets the conditions described above. This bonus increases 
+          by +1 for every three further acrobatic fighting levels -- +3 at 5th, 
+          +4 at 8th, etc.\n
+          __<3>Acrobatic Charge:<2> At 3rd level, the duelist may perform an
+          acrobatic charge. This allows her to charge and tumble at the same
+          time, and when she does, her charge bonus increases by +1.\n
+          __<3>Enhanced Mobility:<2> Starting at 4th level, the duelist gains
+          a +1 bonus to Defense Class against attacks of opportunity; this
+          bonus stacks with the one granted from the Mobility feat, and
+          increases by +1 for every further level of acrobatic fighting from
+          any source.\n
+          __<3>Scenery is Power:<2> Starting at 5th level, the duelist gains
+          a peerless ability to make use of her enviornment and objects around
+          her when fighting. She gains a stunt bonus to hit and damage based on the
+          terrain and objects around her. For example, standing in the same 
+          square with a chest might give her +1/+1 (she could stand atop it for 
+          a height advantage, kick it at an opponent, position it between her 
+          and her opponent to direct the opponent's advance, etc.) Other
+          features that can be used effectively in combat include doors, mud,
+          water, forges, other furnature, hanging vines, etc.\n
+          __Different types of scenery increase the creative stunts a character
+          with this ability is capable of, and thus increase the bonuses granted,
+          but a single type of scenery doesn't increase in bonus regardless of
+          how much of it there is.\n
+          __<3>Elaborate Parry:<2> A character with 5 levels of acrobatic fighting
+          (such as a 6th-level duelist) finds that the benefits gained fron fighting
+          defensively are doubled, while the penalties remain unchanged, provided
+          that she is wielding a short blade or long sword as her primary weapon.\n
+          __<3>Mantis Leap:<2> A character with 6 levels of acrobatic fighting is
+          treated as possessing the Mantis Leap feat when she is wielding a short
+          blade or long sword and wearing light or no armor.\n 
+          __<3>Free Tumble:<2> With 8 levels of acrobatic fighting (i.e., a 9th-level
+          duelist), the character gains the ability to use the Tumble skill without
+          paying fatigue points. She may tumble for free once per day per two levels
+          of acrobatic fighting.\n
+          __*_<7>Rapier Wit<2> -- Duelists are infamous for using cutting insults
+          and clever repartee to rattle their opponents, allowing them to land
+          especially telling blows. Starting at 4th level, on 1 in 5 attacks
+          against a sapient opponent using a dagger, short blade or long sword, 
+          the duelist makes a Bluff check, which the target opposes with a
+          Concentration check. If the duelist's check is higher, she adds half her
+          margin of success to the damage of the attack, to a maximum of twice
+          her primary Charisma modifier.\n
+          __When the duelist reaches 7th level, this ability functions on 1 in 4
+          attacks; at 10th, it functions on 1 in 3. This ability does not function
+          if either attacker or victim is in a region of magical silence.\n
+          __*_<7>Flashing Blade<2> -- The duelist recieves Deflect Arrows as
+          a conditional bonus feat at 5th level and Deflect Magic as a conditional
+          bonus feat at 8th level. The character is treated as having these
+          feats only when wielding a magical short blade or long sword one-
+          handed in her weapon hand with which her attack speed is 250~ or
+          higher, and wearing light or no armor.\n 
+          __*_<7>Luck of the Daring<2> -- The duelist recieves the Unearthly
+          Luck ability at 6th level, allowing her to add her primary Luck
+          modifier to all saving throws. Halfling duelists, who already have
+          this ability from their race, recieve two bonus feats from the
+          warrior feat list instead.
+           
+               
+           \n\n<10>THE DUELIST<15>\n
+           __Level__Def__Fort_Refl_Will_EM_Special Abilities<1>\n
+           ____1____+0____+0___+2___+0__-- Canny Defense\n
+           ____2____+1____+0___+3___+0__-- Charm, Grace +2\n
+           ____3____+1____+1___+3___+1__-- Acrobatic Charge\n
+           ____4____+2____+1___+4___+1__+1 Rapier Wit (1 in 5)\n
+           ____5____+2____+1___+4___+1__+2 Def. Arrows, Grace +3,\n
+           ________________________________Scenery is Power\n
+           ____6____+3____+2___+5___+2__+3 Elaborate Parry, Luck\n
+           ____7____+3____+2___+5___+2__+4 Wit (1 in 4), M. Leap\n
+           ____8____+4____+2___+6___+2__+5 Def. Magic, Grace +4\n
+           ____9____+4____+3___+6___+3__+6 Free Tumble\n
+           ____10___+5____+3___+7___+3__+7 Rapier Wit (1 in 3)\n
+           \n";
+
+  Desc: "<15>HitDie:_<1>d6__<15>Mana:<1>_d10__<15>Skills:<1>_4_<15>Saves:<1>_f<9>RW<1>_<15>Defense:_<1>1/2\n
+      <15>+toHit: <1>Archery <9>50~<1>, Brawl <9>50~<1>, Melee <9>75~<1>, Thrown <9>50~<1>\n
+      <2>\n__[ Flavor Text ]
+
+          \n\n<10>CLASS REQUIREMENTS<2>\n
+          __The bladesinger is a prestige class. It counts as a favored class
+          for all characters. In order to become a bladesinger, you must have:\n
+          __*_<7>Race<2> -- Only elves (not drow) may become bladesingers.\n
+          __*_<7>BAB<2> -- Melee BAB +4.\n
+          __*_<7>Skills Levels<2> -- Perform +15.\n
+          __*_<7>Known Spells<2> -- You must know the <9>cat's grace<2> spell;
+          having it as an innate spell-like ability does not qualify.\n 
+          __*_<7>Feats<2> -- Expertise, Quicken Spell, Weapon Finesse.
+                
+          \n\n<10>CLASS SKILLS<2>\n
+          __The class skills of the bladesinger are Athletics, Balance, 
+          Diplomacy, Escape Artist, Jump, Knowledge (all), Listen, Perform 
+          and Tumble.
+          
+          \n\n<10>CLASS FEATURES<2>\n
+          __*_<7>Proficiencies<2> -- Bladesingers are proficient with the long
+          sword.\n
+          __*_<7>Spellcasting<2> -- Bladesingers cast spells just as bards do,
+          being able to cast in light armor and not requiring spellbooks. They
+          cast spells from the bladesinger spell list and recieve one caster
+          level for every even bladesinger level. They can also continue to
+          learn spells from whatever casting class qualified them to be a
+          bladesinger, though they must follow the restrictions of that class
+          in casting those spells -- a warrior/mage/bladesinger, for example,
+          cannot wear armor and must use spellbooks when casting spells on the
+          mage list but not on the bladesinger list.\n
+          __*_<7>Acrobatic Fighting<2> -- Bladesingers recieve a level of the
+          Acrobatic Fighting ability (as described under the duelist prestige
+          class) at every odd bladesinger level, starting at 3rd. Levels of
+          this ability recieved from bladesinger and duelist stack.\n
+          __*_<7>Bladesong Style<2> -- Starting at 1st level, a bladesinger
+          recieves a dodge bonus to her defense class equal to the lower of 
+          her Intelligence bonus or her total levels in the bladesong ability, 
+          when wielding a rapier or long sword in her weapon hand and
+          nothing in her ready hand. Every even level of bladesong
+          also grants her a +5% bonus to attack speed when she is
+          so equipped.\n
+          __At 3rd level, she gains a +4 bonus to Perform and
+          Concentration when wielding a rapier or long sword in her
+          weapon hand and nothing in her ready hand.\n
+          __At 6th level, she no longer requires verbal components to
+          cast bladesinger spells when she is wielding a rapier or
+          long sword in her weapon hand and nothing in her ready
+          hand.\n
+          __At 9th level, she is able to use blade gestures to aid
+          in the rapid casting of spells, and thus subtracts half
+          (round up) of her weapon's enchantment bonus from the
+          metamagic cost of the Quicken Spell feat.\n
+
+           <10>SPELL LIST<2>\n
+           <15>__1st level -- <1> burning hands, charm person, chromatic orb,
+           color spray, enthrall, force bolt, magic missile, magic weapon, phase
+           door, sleep, true strike, wall of fog.\n
+           <15>__2nd level -- <1> apportation, bladethirst, cat's grace, eagle's
+           splendour, ethereal blade, glitterdust, gust of wind, hypnotic pattern, 
+           mage armor, mirror image, phantasmal force, see invisibility, shield, .\n
+           <15>__3rd level -- <1> adamant facade, blink, conjure vortex, dimension
+           door, dispel magic, displacement, flame arrow, fly, haste, heroism, ice
+           lance, illusionary stance, improved phantasmal force, insightful stroke, 
+           keen edge, ring of blades, suggestion, thunderlance.\m 
+           <15>__4th level -- <1> charm monster, confusion, dismissal, evard's black 
+           tentacles, force missiles, ice storm, phantasmal killer, premonition, 
+           spectral force.\n
+           <15>__5th level -- <1> color burst, cone of cold, fire lotus, lesser 
+           symbol, lower resistance, misdirection, mooncloak, teleport, telekinesis, 
+           watery double.\n
+           <15>__6th level -- <1> immortal grandeur, true seeing.\n
+      
+           \n\n<10>THE BLADESINGER<15>\n
+           __Level_Def__Fort_Refl_Will_Spd__Special Abilities<1>\n
+           ____1___+0____+0___+2___+0__+0~__Bladesong Style\n
+           ____2___+1____+0___+3___+0__+5~__+1 Caster Level
+           ____3___+1____+1___+3___+1__+5~__Acrobatic Fight. 1,
+           _________________________________Perform/Concent\n
+           ____4___+2____+1___+4___+1__+10~ +1 Caster Level\n
+           ____5___+2____+1___+4___+1__+10~ Acrobatic Fight. 2\n
+           ____6___+3____+2___+5___+2__+15~ No Verbal Comp.,
+           _________________________________+1 Caster Level\n
+           ____7___+3____+2___+5___+2__+15~ Acrobatic Fight. 3\n
+           ____8___+4____+2___+6___+2__+20~ +1 Caster Level\n
+           ____9___+4____+3___+6___+3__+20~ Acrobatic Fight. 4,
+           _________________________________Improved Quicken\n
+           ____10__+5____+3___+7___+3__+25~ +1 Caster Level\n
+           \n";
+
+*/
+
+
+Class "Alienist"
+  {
+    On Event EV_ISTARGET {
+      bool failed; int16 i, c;
+      failed = false;
+
+      if (EActor->ISkillLevel(SK_KNOW_PLANES) < 10) { 
+        failed = true; EActor->IPrint("You need Knowledge (Planes) 10+.");
+        } 
+        
+      c = 0;
+      for(i=0;i!=MAX_SPELLS;i++)
+        if (EActor->SpellKnown(i) & (SP_ARCANE|SP_DIVINE|SP_SORCERY|SP_BARDIC|SP_PRIMAL))
+          if (theGame->SpellID(i)->Schools & SC_WEA)
+            c += theGame->SpellID(i)->Level;
+            
+      if (c < 7) {
+        failed = true;
+        EActor->IPrint("You must have 7 levels of known Weavecraft spells.");
+        }
+        
+      if (!EActor->IHasFeat(FT_AUGMENT_SUMMONING)) {
+        failed = true;
+        EActor->IPrint("You must have the Augment Summoning feat.");
+        }
+      
+      if (EActor->GodID != $"Kysul" && EActor->GodID != NULL_ID) {
+        failed = true;
+        EActor->IPrint("You must worship Kysul, or no one at all.");
+        }
+      
+      
+      if (failed) 
+        return ABORT; 
+      else
+        return DONE;
+      };
+  Desc: "<15>HitDie:_<1>d4__<15>Mana:<1>_d12__<15>Skills:<1>_4_<15>Saves:<1>_<9>F<1>r<9>W<1>_<15>Defense:_<1>1/4\n
+      <15>+toHit: <1>Archery <9>50~<1>, Brawl <9>50~<1>, Melee <9>50~<1>, Thrown <9>50~<1>\n
+      <2>\n__There exist beings beyond the capacity of the minds of humans (and
+           demihumans) to comprehend. Dwelling beyond the Outer Planes that
+           define the human concept of the afterlife, these creatures are
+           ancient, inscrutable, tremendously powerful and unbelievably alien.
+           The most well known -- but certainly not the only -- representative
+           of these beings on Theyra is Kysul, who serves as a guardian of any
+           contact between the Prime Material and the Outer Rim, and is served
+           by a handful of scattered mystery cults across the Kinlands.\n
+           __The Alienist is a spellcaster who has devoted herself wholly to
+           the intensely esoteric practice of summoning and dealing with these
+           beings. Most would call her a madwoman, a crazed and irresponsible
+           cultist that endangers the safety of all of Theyra. For some Alienists
+           this accusation is true, while others are more responsible -- but no
+           less feared or hated. The most common motive among alienists is
+           knowledge -- knowledge of concepts and ideas that cannot exist in a
+           stable manner in our reality and thus must be experienced firsthand
+           in order to be understood, since human languages lack the terms to
+           express them. This search for ultimate knowledge drives many alienists
+           to enlightenment, damnation or both.\n
+           __Alienists are not, by their nature, stable beings. They are driven
+           by inhuman desire and exposed to unknowable secrets and eldritch
+           beings, and as a result their minds are often deeply fractured and
+           the majority of them are no longer able to relate to their original
+           race in any normal way.\n
+           __Many lizardfolk are alienists. Their people worshipped the Outer
+           Lords long before humanity or the modern gods existed, and while the
+           modern lizardfolk treat druidism as the closest thing they have to a
+           state religion, alienism forms a distinct minority in their society,
+           and they are the only peoples on all of Theyra (other than aberrations)
+           who respect the practice of alienism. Mind flayers also sometimes become 
+           alienists, though their society is fierce in the persecution of these
+           forsaken scholars -- worship of Outer Lords threatens their fiercely
+           regimented social structure, and they long ago turned their backs on
+           their father, Kysul.
+
+          \n\n<10>CLASS REQUIREMENTS<2>\n
+          __The alienist is a prestige class. It counts as a favored class
+          for all characters. In order to become an alienist, you must have:\n
+          __*_<7>Skills Levels<2> -- Knowledge (Planes) +10.\n
+          __*_<7>Known Spells<2> -- Seven total spell levels of Weavecraft spells.\n
+          __*_<7>Feats<2> -- Augment Summoning.\n
+          __*_<7>Religion<2> -- You must worship Kysul, or no diety at all. None 
+          of Theyra's other gods tolerate alienists.
+                
+          \n\n<10>CLASS SKILLS<2>\n
+          __The class skills of the alienist are 
+          Bluff, Concentration, Decipher Script, Hide in Shadows, Intimidate, 
+          Knowledge (Magic), Knowledge (Mythology), Knowledge (Oceans), 
+          Knowledge (Planes), Metamagic, Move Silently, Spellcraft and
+          Use Magic.
+          
+          \n\n<10>CLASS FEATURES<2>\n
+          __*_<7>Proficiencies<2> -- Alienists gain no additional weapon or armor
+          proficiencies.\n
+          __*_<7>Spellcasting<2> -- At every level except 1st and 4th, alienists
+          gain a new caster level. They continue to advance in arcane spell access
+          if they had any before entering this class, otherwise advancing in the
+          divine, druidic or other class spell list that allowed them to meet the
+          caster prerequisite given above.\n
+          __If the alienist has Domains, she continues to advance those as well,
+          provided she is advancing as a divine caster.\n
+          __*_<7>Incomprehensible Wisdom<2> -- Alienists gain the Improved Wisdom
+          feat for free at 1st level. If they already have it, they can select any
+          other feat to fill the free slot.\n
+          __*_<7>Uneasy Mind<2> -- Alienists grow increasingly distant from humanity
+          as they continue to advance in this class, and suffer a penalty equal to
+          their alienist level to Diplomacy and Appraise; they also become very
+          focused on distant mysteries and given to long periods of introspection,
+          and being thus out of touch with the world apply this same penalty to Spot,
+          Listen and Searching.\n
+          __*_<7>Outer Pathways<2> -- The primary ability of the alienist class is
+          the power to summon pseudonatural creatures from the far-distant realm in
+          which Kysul and his kin dwell. Starting at second alienist level, any 1st-level
+          <9>monster summoning<2>, <9>holy summoning<2> or <9>summon nature's ally<2>
+          spell the alienist casts summons a pseudonatural version of whatever
+          creature it would normally summon. At 3rd level, the 2nd-level spells are
+          so altered, and so on until 10th level, when even 9th-level summoning spells
+          call forth pseudonatural creatures.\n
+          __In addition to the normal mana cost of the summoning spell, the pseudonatural
+          summoning of an alienist drains [Summoned Creature's CR x 2] mana, and this
+          mana does not regenerate.\n
+          __*_<7>Surreal Presence<2> -- The sense that there is something faintly
+          off, something <10>wrong<2> about the alienist crystalizes to a razor-sharp
+          clarity at 3rd level, and she gains the benefit (or curse) of a constantly
+          active <9>spook<2> spell as an innate supernatural ability.\n
+          __*_<7>Mad Certainty<2> -- At 4th level, the alienist's fanatical devotion
+          gives her a kind of ability to ignore physical harm and pursue her
+          obsession with an utterly inhuman resilience even in the face of crippling
+          wounds. She gains Toughness as a bonus feat and a +10 bonus to the 
+          Concentration skill.\n
+          __*_<7>Visitation<2> -- At 5th level, the alienist may use <9>contact other
+          plane<2> at will as an innate spell-like ability.\n
+          __*_<7>Inhuman Allies<2> -- At 6th level, the alienist gains the ability to
+          invoke ancient pacts between the harbringers of the Outer Rim and their
+          Outer Ones' more modern spawn. Aberrations are neutral to her unless she
+          breaks the pact by taking some hostile action against them.\n
+          __*_<7>Feverish Obsession<2> -- Upon reaching 7th level, the alienist becomes
+          so driven and devoted that she develops an inhuman kind of vigor, working
+          beyond the established limits of the human body. She thus regenerates fatigue
+          points just as dwarves do.\n 
+          __*_<7>Psychic Mortification<2> -- At 8th level, the alienist's mind has become
+          so scorched by outer horrors that mortal traumas no longer have the ability
+          to damage it -- her Intelligence, Wisdom and Charisma are sustained at 5
+          points each.\n
+           __*_<7>Sanity-Blasting Spellcasting<2> -- At 9th level, the alienist's
+           methods of spellcasting are so otherworldly and alien that any creature
+           of CR 7 or lower who sees her cast a spell takes 1d2 points of Wisdom
+           damage.\n
+           __*_<7>Distant Apotheosis<2> -- At 10th level, the alienist becomes a
+           fundamentally alien creature herself, developing trememdously increased
+           physical resistance. She gains immunity to critical hits, no longer needs
+           to breathe or eat and does not age.\n\n 
+
+           <10>SPELL LIST<2>\n
+           <15>__1st level -- <1> grease, obscurement, spiritwrack, true strike.\n
+           <15>__2nd level -- <1> hypnotic pattern, revealed lore, stinking cloud, 
+           touch of idiocy.\n
+           <15>__3rd level -- <1> animate shadows, explosive runes, lorecall.\n
+           <15>__4th level -- <1> confusion, evard's black tentacles, phantasmal 
+           killer, premonition.\n
+           <15>__5th level -- <1> banishment, distance distortion, dream, nightmare,
+           open the third eye.
+      
+           \n\n<10>THE ALIENIST<15>\n
+           __Level__Def__Fort_Refl_Will_CL_Special Abilities<1>\n
+           ____1____+0____+2___+2___+0__-- In. Wisdom, Uneasy Mind\n
+           ____2____+0____+3___+3___+0__+1 Outer Pathways\n
+           ____3____+0____+3___+3___+1__+2 Surreal Presence\n
+           ____4____+1____+4___+4___+1__-- Mad Certainty\n
+           ____5____+1____+4___+4___+1__+3 Visitation\n
+           ____6____+1____+5___+5___+2__+4 Inhuman Allies\n
+           ____7____+1____+5___+5___+2__+5 Feverish Obsession\n
+           ____8____+2____+6___+6___+2__+6 Psychic Mortification\n
+           ____9____+2____+6___+6___+3__+7 Sanity-Blasting Sp.\n
+           ____10___+2____+7___+7___+3__+8 Distant Apotheosis\n
+           \n";
+    HitDice: 4; Mana: 12; Def: 1/4;
+    Attk:  S_BRAWL    50,
+           S_MELEE    50,
+           S_THROWN   50,
+           S_ARCHERY  50;    
+    Skills[4]: SK_BLUFF, SK_CONCENT, SK_DECIPHER, SK_HIDE, SK_INTIMIDATE,
+      SK_KNOW_MAGIC, SK_KNOW_MYTH, SK_KNOW_OCEANS, SK_KNOW_PLANES,
+      SK_METAMAGIC, SK_MOVE_SIL, SK_SPELLCRAFT, SK_USE_MAGIC;
+    Grants:
+      Stati[SKILL_BONUS,SK_DIPLOMACY,-1] at every level starting at 1st,
+      Stati[SKILL_BONUS,SK_APPRAISE,-1] at every level starting at 1st,
+      Stati[SKILL_BONUS,SK_SPOT,-1]      at every level starting at 1st,
+      Stati[SKILL_BONUS,SK_LISTEN,-1]    at every level starting at 1st,
+      Stati[SKILL_BONUS,SK_SEARCH,-1]    at every level starting at 1st,
+      Stati[SPELL_ACCESS,(SP_DIVINE|SP_BARDIC),+1]   at every level starting at 1st,
+      Ability[CA_SPELLCASTING,+1]        at 2nd level,
+      Ability[CA_SPELLCASTING,+1]        at 3rd level,
+      Ability[CA_SPELLCASTING,+1]        at every level starting at 5th,
+      Feat[FT_IMPROVED_WISDOM]           at 1st level,
+      Feat[FT_TOUGHNESS]                 at 4th level,
+      Stati[SKILL_BONUS,SK_CONCENT,+10]  at 4th level,
+      Ability[CA_INNATE_SPELL, $"contact other plane"] at 5th level,
+      Stati[NEUTRAL_TO,MA_ABERRATION]    at 6th level,
+      Ability[CA_FATIGUE_REGEN,+1]       at 7th level,
+      Stati[SUSTAIN,A_INT,+5]            at 8th level,
+      Stati[SUSTAIN,A_WIS,+5]            at 8th level,
+      Stati[SUSTAIN,A_CHA,+5]            at 8th level,
+      Stati[TRAP_EVENT,POST(EV_CAST)]    at 9th level;
+   Flags: CF_PRESTIGE, CF_GOOD_FORT, CF_GOOD_WILL, CF_FAVORED;
+   Lists:
+     * SPELL_LIST
+       1 $"grease" $"obscurement" $"spiritwrack" $"true strike"
+       2 $"hypnotic pattern" $"revealed lore" $"stinking cloud"
+         $"touch of idiocy"
+       3 $"animate shadows" $"explosive runes" $"lorecall"
+       4 $"confusion" $"evard's black tentacles" $"phantasmal killer"
+         $"premonition"
+       5 $"banishment" $"distance distortion" $"dream" $"nightmare;spell"
+         $"open the third eye";
+    On Event EV_ADVANCE {
+      
+      /* Advance Spell Access -- Wow, Complexy-Like! */
+      if (EActor->HasEffStati(SPELL_ACCESS,$"Mage")) {
+
+        /* Advance Specialist Spell Access */
+        if (EActor->HasEffStati(SPELL_ACCESS,$"Abjurer"))
+          EActor->IncEffStatiMag(SPELL_ACCESS,$"Abjurer",SS_CLAS,NULL,+1);
+        else if (EActor->HasEffStati(SPELL_ACCESS,$"Arcanist"))
+          EActor->IncEffStatiMag(SPELL_ACCESS,$"Arcanist",SS_CLAS,NULL,+1);          
+        else if (EActor->HasEffStati(SPELL_ACCESS,$"Diviner"))
+          EActor->IncEffStatiMag(SPELL_ACCESS,$"Diviner",SS_CLAS,NULL,+1);
+        else if (EActor->HasEffStati(SPELL_ACCESS,$"Enchanter"))
+          EActor->IncEffStatiMag(SPELL_ACCESS,$"Enchanter",SS_CLAS,NULL,+1);
+        else if (EActor->HasEffStati(SPELL_ACCESS,$"Evoker"))
+          EActor->IncEffStatiMag(SPELL_ACCESS,$"Evoker",SS_CLAS,NULL,+1);  
+        else if (EActor->HasEffStati(SPELL_ACCESS,$"Illusionist"))
+          EActor->IncEffStatiMag(SPELL_ACCESS,$"Illusionist",SS_CLAS,NULL,+1);  
+        else if (EActor->HasEffStati(SPELL_ACCESS,$"Necromancer"))
+          EActor->IncEffStatiMag(SPELL_ACCESS,$"Necromancer",SS_CLAS,NULL,+1);          
+        else if (EActor->HasEffStati(SPELL_ACCESS,$"Thaumaturge"))
+          EActor->IncEffStatiMag(SPELL_ACCESS,$"Thaumaturge",SS_CLAS,NULL,+1);          
+        else if (EActor->HasEffStati(SPELL_ACCESS,$"Weaver"))
+          EActor->IncEffStatiMag(SPELL_ACCESS,$"Weaver",SS_CLAS,NULL,+1);
+          
+        /* Advance General Mage Spell Access */
+        if (EActor->LevelAs($"mage") + EActor->LevelAs($"alienist") >= 18)
+          EActor->SetEffStatiMag(SPELL_ACCESS,$"Mage",9);
+        else if (EActor->LevelAs($"mage") + EActor->LevelAs($"alienist") >= 16)
+          EActor->SetEffStatiMag(SPELL_ACCESS,$"Mage",8);
+        else if (EActor->LevelAs($"mage") + EActor->LevelAs($"alienist") >= 14)
+          EActor->SetEffStatiMag(SPELL_ACCESS,$"Mage",7);          
+        else if (EActor->LevelAs($"mage") + EActor->LevelAs($"alienist") >= 12)
+          EActor->SetEffStatiMag(SPELL_ACCESS,$"Mage",6);          
+        else if (EActor->LevelAs($"mage") + EActor->LevelAs($"alienist") >= 9)
+          EActor->SetEffStatiMag(SPELL_ACCESS,$"Mage",5);          
+        else if (EActor->LevelAs($"mage") + EActor->LevelAs($"alienist") >= 7)
+          EActor->SetEffStatiMag(SPELL_ACCESS,$"Mage",4);
+        else if (EActor->LevelAs($"mage") + EActor->LevelAs($"alienist") >= 5)
+          EActor->SetEffStatiMag(SPELL_ACCESS,$"Mage",3);
+        else if (EActor->LevelAs($"mage") + EActor->LevelAs($"alienist") >= 3)
+          EActor->SetEffStatiMag(SPELL_ACCESS,$"Mage",2);               
+        }
+      else if (EActor->HasEffStati(SPELL_ACCESS,$"Priest")) {
+        EActor->IncEffStatiMag(SPELL_ACCESS,$"Priest",SS_CLAS,NULL,+1);
+        EActor->GainAbility(CA_DOMAINS,+1,$"Priest",SS_CLAS);
+        }
+      else if (EActor->HasEffStati(SPELL_ACCESS,$"Bard"))
+        EActor->IncEffStatiMag(SPELL_ACCESS,$"Bard",SS_CLAS,NULL,+1);
+      else if (EActor->HasEffStati(SPELL_ACCESS,$"Druid"))
+        EActor->IncEffStatiMag(SPELL_ACCESS,$"Druid",SS_CLAS,NULL,+1);
+      else if (EActor->HasEffStati(SPELL_ACCESS,$"Ranger"))
+        EActor->IncEffStatiMag(SPELL_ACCESS,$"Ranger",SS_CLAS,NULL,+1);
+      else if (EActor->HasEffStati(SPELL_ACCESS,$"Paladin"))
+        EActor->IncEffStatiMag(SPELL_ACCESS,$"Paladin",SS_CLAS,NULL,+1);
+      return NOTHING;
+      };
+  }
+  
+Effect "Surreal Presence" : EA_INFLICT
+  { SC_ENC; IS_A_BUFF(COST_1); Level: 1; 
+    Flags: EF_CASTER_IMMUNE, EF_MENTAL, EF_PERMANANT;
+    rval: FI_MODIFIER|FI_MOBILE; aval: AR_MFIELD; lval: 3; cval: SHADOW;
+    xval: ADJUST_MOR; yval: A_AID; pval: -2;  
+    On Event 
+      EV_FIELDON
+        "You feel disquieted." /
+        "The <EActor> seems unsettled.",
+      EV_FIELDOFF
+        "You feel less disturbed now." /
+        "The <EActor> seems more composed now.";
+  }
+  
+Class "Assassin"
+  {
+    On Event EV_ISTARGET {
+      bool failed;
+      failed = false;
+      if (EActor->ISkillLevel(SK_DISGUISE) < 10) { 
+        failed = true; EActor->IPrint("You need Disguise +10.");
+        } 
+      if (EActor->ISkillLevel(SK_POISON_USE) < 10) { 
+        failed = true; EActor->IPrint("You need Poison Use +10.");
+        } 
+      if (EActor->ISkillLevel(SK_HIDE) < 7) { 
+        failed = true; EActor->IPrint("You need Hide +7.");
+        } 
+      if (EActor->ISkillLevel(SK_MOVE_SIL) < 7) { 
+        failed = true; EActor->IPrint("You need Move Silently +7.");
+        } 
+      if (EActor->isMType(MA_GOOD)) { 
+        failed = true; EActor->IPrint("Assassins cannot be of Good alignment.");
+        } 
+      if (failed) 
+        return ABORT; 
+      else
+        return DONE;
+      };
+  Desc: "<15>HitDie:_<1>d8__<15>Mana:<1>_d8__<15>Skills:<1>_8_<15>Saves:<1>_f<9>R<1>w_<15>Defense:_<1>1/2\n
+      <15>+toHit: <1>Archery <9>100~<1>, Brawl <9>50~<1>, Melee <9>75~<1>, Thrown <9>100~<1>\n
+      <2>\n__The Guild of Assassins has an old and arcane history on Theyra, having existed
+      in some recognizable form for over two millenia, and having pursued an ageless
+      vendetta with the Thieves. More than simply murderers, Assassins are mystical slayers
+      devoted to a secret order and famed to be able to reach even the most protected
+      targets in even the most remote locations. There is an aristocracy to the Assassin,
+      a sense of entitlement and elitism. Assassins tend to believe their order fulfills an
+      important philosophical purpose, maintaining political and social balance by
+      ensuring that decadant kings and degenerate nobles are not able to place themselves
+      beyond retribution as a function of their station. Of course, in practice, the
+      Assassins are killers for profit, and there is very little that qualifies as 
+      redeeming qualities within their guild.\n
+
+      \n\n<10>CLASS REQUIREMENTS<2>\n
+      __The Assassin is a prestige class. It counts as a favored class
+      for all characters. In order to become an Assassin, you must have:\n
+      __*_<7>Skills Levels<2> -- Disguise +10, Poison Use +10, Hide in
+      Shadows +7, Move Silently +7.\n
+      __*_<7>Alignment<2> -- Assassins cannot be of Good alignment.\n
+            
+      \n\n<10>CLASS SKILLS<2>\n
+      __The class skills of the Assassin are Appraise,
+      Balance, Bluff, Climb, Disguise, Escape Artist, Find Weakness,
+      Gather Information, Handle Device, Hide in Shadows, Intimidate, 
+      Intuition, Jump, Listen, Lockpicking, Move Silently, Poison Use,
+      Spot, Swim and Tumble. 
+      
+      \n\n<10>CLASS FEATURES<2>\n
+      __*_<7>Proficiencies<2> -- Assassins gain proficiency with crossbows
+      and light weapons.\n      
+      __*_<7>Sneak Attack<2> -- Assassins can make use of Sneak Attacks in
+      the same manner a Rogue does; they gain +1d6 Sneak Attack damage
+      every odd level. Levels of this ability from Assassin, Rogue and any
+      other class stack.\n
+      __*_<7>Death Attack<2> -- An assassin who has had time to study her
+      target (in game terms, being out of combat long enough to be considered
+      Exploring rather than Fighting) and attacks that target by complete 
+      surprise in a situation where the target cannot percieve the Assassin, 
+      is considered to have made a death attack and has a chance to slay that 
+      target outright. A death attack can only be made against a target within
+      30 feet; greater distance negates the needed precision.\n
+      __The victim of a death attack must make a Fortitude saving throw
+      against a DC of 10 + the Assassin's class level + the Assassin's
+      Intelligence modifier; failure means they are slain instantly. If
+      they succeed at this saving throw, they are still subject to damage
+      from the attack, which may kill them anyway.\n
+      __*_<7>Spells<2> -- Assassins practice magic and are capable of
+      casting Arcane spells from a tiny subset of the mage list. They have
+      their own spellbooks, though in a pinch they can use normal arcane
+      spellbooks for spellcasting as well.\n
+      __*_<7>Skill Mastery<2> -- Assassins gain a +1 competance bonus to
+      Disguise and Poison Use for every Assassin class level.\n
+      __*_<7>Uncanny Dodge<2> -- Assassins gain this ability at the same
+      rate that Rogues do, and a character's Rogue and Assassin levels
+      stack to determine her effective Rogue level for the purposes of
+      Uncanny Dodge.
+
+      \n\n<10>SPELL LIST<2>\n
+      <15>__1st level -- <1>change self, convulsion, expeditious retreat,
+      magic weapon, obscurement, passwall, read magic, shield, sleep,
+      spider climb, true strike, ventriloquism.\n
+      <15>__2nd level -- <1>bladethirst, choke, ESP, globe of shadow, 
+      hypnotic pattern, infravision, invisibility, levitation, 
+      pass without trace, rope trick, web.\n
+      <15>__3rd level -- <1>animate shadows, blink, clairvoyance, deeper 
+      darkness, deep slumber, displacement, gaseous form, greater magic
+      weapon, illusory stance, nondetection.\n
+      <15>__4th level -- <1>enervation, free action, improved invisibility,
+      phantasmal killer, poison, premonition, track monster.\n
+      <15>__5th level -- <1>cloudkill, dream, lower resistance, misdirection,
+      power word: stop, telekinesis, wizard sight.\n
+      <15>__6th level -- <1>disintegrate, power word: stun.
+      
+      \n\n<10>THE ASSASSIN<15>\n
+      __Level__Def__Fort_Refl_Will_Special Abilities<1>\n
+      ____1____+0____+0___+2___+0__Sneak Attack +1d6 \n
+      ____2____+1____+0___+3___+0__+1 caster level   \n
+      ____3____+1____+1___+3___+1__Sneak Attack +2d6 \n
+      ____4____+2____+1___+4___+1__+1 caster level   \n
+      ____5____+2____+1___+4___+1__Sneak Attack +3d6 \n
+      ____6____+3____+2___+5___+2__+1 caster level   \n
+      ____7____+3____+2___+5___+2__Sneak Attack +4d6 \n
+      ____8____+4____+2___+6___+2__+1 caster level   \n
+      ____9____+4____+3___+6___+3__Sneak attack +5d6 \n
+      ____10___+5____+3___+7___+3__+1 caster level";
+    HitDice: 8; Mana: 8; Def: 1/2;
+    Attk:  S_BRAWL    50,
+           S_MELEE    75,
+           S_THROWN   100,
+           S_ARCHERY  100;    
+    Skills[8]: SK_BALANCE, SK_BLUFF, SK_CLIMB, SK_DISGUISE, SK_ESCAPE_ART,
+      SK_FIND_WEAKNESS, /*SK_GATHER_INF,*/ SK_HANDLE_DEV, SK_HIDE, SK_INTIMIDATE,
+      SK_INTUITION, SK_JUMP, SK_LISTEN, SK_LOCKPICKING, SK_MOVE_SIL, 
+      SK_POISON_USE, SK_APPRAISE, SK_SPOT, SK_SWIM, SK_TUMBLE;
+    Grants:
+      Ability[CA_SPELLCASTING,+1] at every 2nd level starting at 2nd,
+      Ability[CA_SNEAK_ATTACK,+1] at every 2nd level starting at 1st,
+      Ability[CA_UNCANNY_DODGE,+1] at every level starting at 1st,
+      /* Stati[TRAP_EVENT,PRE(EV_HIT),+1,$"Death Attack"] 
+           at every level starting at 1st, */
+      Stati[SKILL_BONUS,SK_DISGUISE,+1] at every level starting at 1st,
+      Stati[SKILL_BONUS,SK_POISON_USE,+1] at every level starting at 1st,
+      Stati[SPELL_ACCESS,SP_ARCANE,+1] at every level starting at 1st;
+    On Event EV_ADVANCE {
+      hObj hBook;
+      if (EActor->LevelAs($"Assassin") == 1) {
+        EActor->GainPermStati(TRAP_EVENT,NULL,SS_CLAS,
+          PRE(EV_HIT),0,$"Death Attack");
+        EActor->GainPermStati(TRAP_EVENT,NULL,SS_CLAS,
+          PRE(EV_STRIKE),0,$"Death Attack");
+        EActor->IPrint("Aiswin blesses you with a book of murder lore!");
+        hBook = CreateItem($"spellbook [Lore of Murder I]");
+        EActor->GainItem(hBook);
+        }
+      return NOTHING;
+      };
+    Flags: CF_GOOD_REF, CF_FAVORED, CF_PRESTIGE;
+    Lists:
+      * SPELL_LIST
+          1 $"change self" $"convulsion" $"expeditious retreat" $"magic weapon"
+            $"obscurement" $"passwall" $"read magic" $"shield" $"sleep" $"spider climb" 
+            $"true strike" $"ventriloquism"
+          2 $"choke" $"ESP" $"globe of shadow" $"hypnotic pattern"
+            $"infravision" $"invisibility" $"pass without trace" $"levitation"
+            $"bladethirst" $"rope trick" $"web"
+          3 $"deeper darkness" $"nondetection" $"displacement"
+            $"animate shadows" $"illusory stance" $"blink" $"clairvoyance"
+            $"deep slumber" $"gaseous form" $"greater magic weapon"
+          4 $"improved invisibility" $"free action;spell" $"phantasmal killer"
+            $"enervation" $"premonition" $"track monster" 
+          5 $"dream" $"lower resistance" $"misdirection" $"power word: stop"
+            $"cloudkill" $"telekinesis" $"wizard sight"
+          6 $"disintegrate" $"power word: stun";  
+           
+  }
+  
+Effect "Death Attack" : EA_GENERIC
+  {
+    Flags: EF_SPECABIL; bool okForDA;
+    On Event META(PRE(EV_STRIKE))
+      {
+        okForDA = false;
+        if (EActor->isFlatFooted() && EVictim->isFlatFooted())
+          if (!EVictim->Percieves(EActor))
+            if (EActor->Percieves(EVictim))
+              okForDA = true;
+        return NOTHING;
+      },   
+    META(PRE(EV_HIT))
+      {
+        int16 svDC;
+        if (!EVictim->isCreature())
+          return NOTHING;
+        if (EVictim->isDead())
+          return NOTHING;
+        if (EActor->DistFrom(EVictim) > 3)
+          return NOTHING;
+        if (e.isSurprise && okForDA)
+            {
+              svDC = 10 + EActor->LevelAs($"Assassin");
+              svDC += EActor->Mod(A_INT);
+              if (EVictim->SavingThrow(FORT,svDC,SA_DEATH))
+                {
+                  EActor->IPrint("The <hObj> resists your death attack!", EVictim);
+                  return NOTHING;
+                }
+              TPrint(e,"You assassinate the <EVictim>!",
+                       "The <EActor> assassinates you!",
+                       "The <EActor> assassinates the <EVictim>!");
+              ThrowDmg(EV_DEATH,e.DType,0,"an Assassin's death attack", 
+                EActor, EVictim, EItem, EItem2);
+              return EVictim->isDead() ? DONE : NOTHING;
+            }
+        return NOTHING;
+      },
+    EV_GETNAME {
+      e.nAppend = Format(" (DC %d)",
+          10 + EActor->LevelAs($"Assassin") +
+               EActor->Mod(A_INT));
+      return NOTHING;
+      };
+  }
+
+Class "Blackguard"
+  { 
+    On Event EV_ISTARGET {
+      bool failed;
+      failed = false;
+
+      if (!EActor->isMType(MA_EVIL))
+        {
+          EActor->IPrint("You must be Evil.");
+          failed = true;
+        }
+        
+      if (EActor->GodID == $"Erich" || EActor->GodID == $"Immotian" ||
+          EActor->GodID == $"Khasrach" || EActor->GodID == $"Xel")
+        {
+          EActor->IPrint("You may not worship Erich, Immotian, Khasrach 
+            or Xel.");
+          failed = true;
+        }
+      if (EActor->ISkillLevel(SK_INTIMIDATE) < 12) { 
+        failed = true; 
+        EActor->IPrint("You need to have Intimidate +12.");
+        } 
+      if (EActor->ISkillLevel(SK_KNOW_INF) < 10) { 
+        failed = true; 
+        EActor->IPrint("You need to have Knowledge (The Infernal) +10.");
+        }
+      if (EActor->GetBAB(S_MELEE) < 6 && EActor->GetBAB(S_ARCHERY) < 6 &&
+          EActor->GetBAB(S_BRAWL) < 6 && EActor->GetBAB(S_THROWN) < 6) { 
+        failed = true; 
+        EActor->IPrint("You need to have a BAB of at least +6 in one category.");
+        }
+      if (failed) 
+        return ABORT; 
+      else
+        return DONE;
+      };
+    Desc: "<15>HitDie:_<1>d10_<15>Mana:<1>_d6__<15>Skills:<1>_4_<15>Saves:<1>_<9>F<1>rw_<15>Defense:_<1>1/4\n
+      <15>+toHit: <1>Archery <9>100~<1>, Brawl <9>100~<1>, Melee <9>100~<1>, Thrown <9>100~<1>\n
+      <2>__It's uncommon in the extreme for free-willed, intelligent living beings to
+      willingly and knowingly devote themselves to the ideal of evil. Oh, certainly,
+      Theyra is well stocked with murderers, tyrants and all manner of despicable
+      corruption -- but at the end of the day, the vast majority of Evil characters
+      commit their amoralities for false ideology or personal profit, and then turn
+      around and rationalize their acts as best as they can within their own value
+      systems. The blackguard, however, is the exception to this rule.\n
+      __A blackguard is fully cognisant of the objective quality of good and evil,
+      and in that context has willfully and knowingly embraced evil, determined to
+      live up to the image of everything unholy and profane. This deviant psychology
+      includes a willful drive to cultivate and nurture sociopathy and to engage in
+      all manner of wicked acts simply because their are so. The blackguard may be 
+      superficially motivated by powerlust, bigotry, guilt or any other common drive,
+      but in the end if is a kind of spiritual perversity, a love of evil, that drives
+      them to do the things that they do. They know what they are, and they enjoy it.\n
+      __No mainstream religion on Theyra tolerates blackguards. Despite his objective
+      alignment, Erich will expend truly significant military force to hunt down and
+      destroy a blackguard -- or anyone suspected or accused of being one -- often
+      killing hundreds of innocents in the process. Neither does the priesthood of Xel 
+      tolerate them, fearing that their perversity and theatric nature would draw too
+      much of the wrong kind of attention down on their ranks. A few blackguards
+      worship Zurvash, but the majority serve either the Multitude or the archdevils
+      and demon princes of the Lower Planes directly.
+      
+      \n\n<10>CLASS REQUIREMENTS<2>\n
+      __The blackguard is a prestige class. It counts as a favored class for
+      all characters. In order to become a blackguard, you must have:\n
+      __*_<7>Alignment<2> -- Obviously, any character who wishes to become a
+      blackguard must be utterly Evil. Changing to a non-evil alignment causes
+      all of the blackguard's supernatural class features to become inaccessable.\n
+      __*_<7>Base Attack Bonus<2> -- An aspirant must have a BAB of at least +6
+      in one category.\n
+      __*_<7>Skills<2> -- A character must be a creature of blood, terror and
+      brutality even before becoming a blackguard, possessed of an Intimidate
+      score of +12 or higher. He must also be knowledgable in the ways of the
+      Lower Planes in order to attract a patron, with a Knowledge (Infernal)
+      rating of +10 or higher.\n
+      __*_<7>Religion<2> -- Very few gods will tolerate a blackguard as a 
+      follower. In addition to gods who do not tolerate Evil followers in
+      general, Xel, Erich, Immotian and Khasrach will not accept blackguards
+      among their worshippers.
+
+      \n\n<10>CLASS SKILLS<2>\n
+      __The class skills of the blackguard are Craft, Find Weakness,
+      Intimidate, Knowledge (Infernal), Knowledge (Theology), Knowledge 
+      (Planes), Poison Use and Ride. 
+
+      \n\n<10>CLASS FEATURES<2>\n
+      __*_<7>Proficiencies<2> -- The blackguard is proficient with blades,
+      impact weapons, polearms and spears, and with all classes of armor.\n
+      __*_<7>Spellcasting<2> -- Blackguards practice certain diabolical magic.
+      They gain one caster level for every even blackguard level, and choose
+      their spells from the special blackguard list. Blackguards cast spells
+      just like priests do, being able to cast in any armor freely, but
+      needing to have a holy symbol equipped (if they have a god).\n
+      __*_<7>Unholy Grace<2> -- Just as a paladin does, a blackguard may add
+      his Charisma bonus to all of his saving throws as a grace bonus.\n
+      __*_<7>Sense Light<2> -- Starting at 1st level, a blackguard can use
+      <9>detect good<2> as an innate spell-like ability at will.\n
+      __*_<7>Smite Good<2> -- A blackguard can smite Good-aligned creatures.
+      When she perform the Great Blow maneuver against a Good creature, a
+      blackguard adds her Charisma bonus to the attack roll and gains a
+      bonus to the damage roll equal to her blackguard class level.\n
+      __*_<7>Command Undead<2> -- Starting at 3rd level, a blackguard can
+      rebuke or command undead exactly as an evil priest of 1st level does.
+      Every additional blackguard level increases this effective level by
+      one.\n
+      __*_<7>Aura of Despair<2> -- Starting at 4th level, a blackguard
+      projects an aura of crushing despair around himself, not unlike that
+      of a mummy. The aura reaches out to a radius of 20 feet around the
+      blackguard; all who enter it and are not evil or immune to fear
+      suffer a -2 morale penalty to all rolls.\n
+      __*_<7>Sneak Attack<2> -- A blackguard gains a sneak attack just
+      like a rogue's, starting at 5th level. Blackguard levels stack with
+      rogue, assasin or any similar levels for determining the total level
+      of this ability a blackguard possesses.\n
+      __*_<7>Fiendish Servant<2> -- Starting at 5th level, a blackguard
+      can summon an imp or quasit, as suits his alignment, who will serve
+      him loyally. The creature remains until dismissed, and if slain can
+      be summoned anew the next day.
+
+      \n\n<10>SPELL LIST<2>\n
+      <15>__1st level -- <1>bane, cause fear, convulsion, cure light wounds, 
+      doom, inflict light wounds, magic weapon, malignance, mount, pain touch,
+      protection from good, spiritwrack.\n
+      <15>__2nd level -- <1>bladethirst, bull's strength, cure moderate
+      wounds, death knell, deeper darkness, inflict moderate wounds, scare,
+      shatter, summon swarm, visage of death.\n
+      <15>__3rd level -- <1>adamant facade, animate shadows, blackmantle, 
+      contagion, cure serious wounds, greater magic weapon, inflict serious 
+      wounds, magic circle vs. good, phantom steed, sign of discord.\n
+      <15>__4th level -- <1>animate dead, burning blood, cure critical wounds, 
+      inflict critical wounds, lesser planar conjuration, thornwrack, wall of 
+      fire.\n
+      <15>__5th level -- <1>evard's black tentacles, infernal blood, nightmare, 
+      slay living.\n
+      <15>__6th level -- <1>create corporeal undead, harm, heal, planar 
+      conjuration.\n
+      
+      \n\n<10>THE BLACKGUARD<15>\n
+      __Level__Def__Fort_Refl_Will_Special Abilities<1>\n
+      ____1____+0____+2___+0___+0__Sense Light, Smite Good\n
+      ____2____+1____+3___+0___+0__+1 caster level,\n
+      _____________________________Unholy Grace\n
+      ____3____+1____+3___+1___+1__Command Undead\n
+      ____4____+2____+4___+1___+1__Aura of Despair,\n
+      _____________________________+1 caster level \n
+      ____5____+2____+4___+1___+1__Sneak Attack +1d6,\n
+      _____________________________Fiendish Servant\n
+      ____6____+3____+5___+2___+2__+1 caster level\n
+      ____7____+3____+5___+2___+2__Sneak Attack +2d6\n
+      ____8____+4____+6___+2___+2__+1 caster level\n
+      ____9____+4____+6___+3___+3__Sneak Attack +3d6\n
+      ____10___+5____+7___+3___+3__+1 caster level\n";
+    HitDice: 10; Mana: 6; Def: 1/4;
+    Attk:  S_BRAWL    100,
+           S_MELEE    100,
+           S_THROWN   100,
+           S_ARCHERY  100;    
+    Skills[4]: SK_CRAFT, SK_FIND_WEAKNESS, SK_INTIMIDATE, SK_KNOW_INF,
+      SK_KNOW_THEO, SK_KNOW_PLANES, SK_POISON_USE, SK_RIDE;
+    Grants:
+      Ability[CA_SPELLCASTING,+1] at every 2nd level starting at 2nd,
+      Stati[SPELL_ACCESS,SP_DIVINE,+1] at every level starting at 1st,
+      Ability[CA_SMITE,MA_GOOD,+1] at every level starting at 1st,
+      Ability[CA_INNATE_SPELL,$"detect good"] at 1st level,
+      Ability[CA_DIVINE_GRACE,+1] at 2nd level,
+      Ability[CA_SNEAK_ATTACK,+1] at every 2nd level starting at 5th,
+      Ability[CA_COMMAND,MA_UNDEAD,+1] at every level starting at 3rd,
+      Ability[CA_INNATE_SPELL,$"fiendish servant"] at 5th level;
+    On Event EV_ADVANCE {
+      if (EActor->LevelAs($"blackguard") == 4)
+        EMap->NewField(FI_MODIFIER|FI_MOBILE,EActor->x,EActor->y,2,
+          GREEN*256+GLYPH_FLOOR2,-1,$"aura of despair",EActor);        
+      return NOTHING;
+      };
+    Flags: CF_PRESTIGE, CF_FAVORED, CF_GOOD_FORT;
+    Lists:
+      * SPELL_LIST
+          1 $"bane" $"cause fear" $"convulsion" $"cure light wounds"
+            $"doom" $"inflict light wounds" $"magic weapon" $"malignance"
+            $"mount" $"pain touch" $"protection from good" $"spiritwrack"
+          2 $"bladethirst" $"bull's strength" $"cure moderate wounds"
+            $"death knell" $"deeper darkness" $"inflict moderate wounds"
+            $"scare" $"shatter" $"summon swarm" $"visage of death"
+          3 $"adamant facade" $"animate shadows" $"blackmantle" $"contagion"
+            $"cure serious wounds" $"greater magic weapon" 
+            $"inflict serious wounds" $"magic circle vs. good" $"phantom steed"
+            $"sign of discord"
+          4 $"animate dead" $"burning blood" $"cure critical wounds"
+            $"inflict critical wounds" $"lesser planar conjuration" 
+            $"thornwrack" $"wall of fire"
+          5 $"evard's black tentacles" $"infernal blood" $"nightmare;spell"
+            $"slay living"
+          6 $"create corporeal undead" $"harm" $"heal;spell" $"planar conjuration";
+          
+  }
+
+
+Effect "Aura of Despair" : EA_INFLICT
+  { SC_ENC; Base: 90; Cost: 1; Level: 1; Flags: EF_SPECABIL;
+    Purpose: EP_BUFF (VS_GENERAL); Flags: EF_CASTER_IMMUNE, EF_MENTAL;
+    rval: FI_MODIFIER|FI_MOBILE; aval: AR_MFIELD; lval: 3; cval: SHADOW;
+    xval: ADJUST_MOR; yval: A_AID; pval: -2;  
+    On Event 
+      EV_FIELDON
+        "You feel your heart grow leaden." /
+        "The <EActor> seems overcome with hopelessnes.",
+      EV_FIELDOFF
+        "The unnatural despair passses." /
+        "The <EActor> seems brighter now.",
+      EV_ISTARGET {
+        if (EVictim->isMType(MA_EVIL) ||
+            EVictim->ResistLevel(AD_FEAR) == -1)
+          return CANNOT_CAST_IT;
+        return SHOULD_CAST_IT;
+        };
+  }
+
+Effect "Fiendish Servant" : EA_SUMMON
+  { SC_WEA; rval: $"babau"; pval: 6; Purpose: EP_SUMMON;
+    Flags: EF_ACTIVATE, EF_XSUMMON, EF_EVIL, EF_LAWFUL, EF_DLONG,
+           EF_3PERDAY, EF_CANCEL;
+    Desc: "Starting at 5th level, a blackguard
+      can summon an imp or quasit, as suits his alignment, who will serve
+      him loyally. The creature remains until dismissed, and if slain can
+      be summoned anew the next day.";
+    On Event MSG_XSUMMON
+      "You call upon the Lower Planes for aid!",
+    EV_ELAPSED
+      "Your fiendish servant returns Below.",
+    POST(EV_MAGIC_HIT) {
+      hObj hImp;
+      hImp = EMap->GetEncounterCreature(0);
+      if (hImp != NULL)
+        hImp->GainPermStati(TRAP_EVENT,EItem,SS_MISC,
+          POST(EVICTIM(EV_DEATH)), 0, $"Fiendish Servant", e.vCasterLev);
+      return NOTHING;
+      },
+    PRE(EV_EFFECT) {
+      if (EActor->HasEffStati(SPEC_TIMEOUT,$"Fiendish Servant"))
+        {
+          EActor->IPrint("Your fiendish servant is still recovering after being killed.");
+          return ABORT;
+        }
+      return NOTHING;
+      },
+    META(POST(EVICTIM(EV_DEATH))) {
+      hObj hBlackguard;
+      if (!EVictim->isDead())
+        return NOTHING;
+      hBlackguard = EVictim->GetEffStatiObj(TRAP_EVENT,$"Fiendish Servant");
+      hBlackguard->GainTempStati(SPEC_TIMEOUT,NULL,-1,SS_MISC, 0, 0, $"Fiendish Servant");
+      return NOTHING;
+      };
+  }
+        
+        
+Class "Earthsinger"
+  {
+    On Event EV_ISTARGET {
+      bool failed;
+      failed = false;
+      
+      if (!EActor->isMType(MA_DWARF) /*&& EActor->RaceID != $"Gnome, Rock" &&
+             EActor->RaceID != $"Gnome, Deep"*/)
+        {
+          EActor->IPrint("You must be of a race that has spiritual ties to
+            elemental earth, such as a dwarf, rock gnome or deep gnome.");
+          failed = true;
+        }
+      if (!EActor->IHasAbility(CA_BARDIC_MUSIC))
+        {
+          EActor->IPrint("You must have the Bardic Music ability.");
+          failed = true;
+        }
+      if (EActor->GetBAB(S_MELEE) < 5)
+        {
+          EActor->IPrint("You must have a melee BAB of +5.");
+          failed = true;
+        }
+      if (EActor->ISkillLevel(SK_CRAFT) < 15) 
+        { 
+          failed = true; 
+          EActor->IPrint("You need the Craft skill at 15+.");
+        } 
+      if (EActor->GodID != $"ekliazeh" && EActor->GodID != NULL_ID)
+        { 
+          failed = true; 
+          EActor->IPrint("You may not worship a god other than Ekliazeh.");
+        } 
+      if (!EActor->IHasFeat(FT_ENDURANCE)) {
+        failed = true;
+        EActor->IPrint("You must have the Endurance feat.");
+        }
+      if (!EActor->IHasFeat(FT_HARDINESS)) {
+        failed = true;
+        EActor->IPrint("You must have the Hardiness feat.");
+        }
+      if (failed) 
+        return ABORT; 
+      else
+        return DONE;
+      };
+    Desc: "<15>HitDie:_<1>d10_<15>Mana:<1>_d8__<15>Skills:<1>_4_<15>Saves:<1>_<9>F<1>r<9>W<1>_<15>Defense:_<1>1/4\n
+      <15>+toHit: <1>Archery <9>50~<1>, Brawl <9>75~<1>, Melee <9>100~<1>, Thrown <9>50~<1>\n
+      <2>\n__Beyond even the priesthood of Ekliazeh, the dwarves as a race have
+      always held a deep spiritual reverance for elemental earth. Their mythology
+      is filled with animistic tales of heroes who spoke to the very stone, and
+      were able to work miracles through communion with it. These rare dwarves
+      occupy a niche vaguely similar to a saint -- their abilities are unquestionably
+      sacred, yet they also set them outside of traditional society.\n
+      __Very few dwarves have the potential to awaken the Earthsong within themselves.
+      A potential Earthsinger must have some exposure to supernatural music, usually
+      via bardic training, but the physical demands of the tradition mean that most
+      aspirants are warrior-craftsmen with only a casual experimentation in the bardic
+      arts. The stone demands champions who are as strong and enduring as it is, and
+      also demands that they be master stoneworkers. For every thousand dwarves who
+      aspires to learn the mystical Earthsong, only one or two manage to meet all of
+      the requisites to become Earthsingers.\n
+
+      \n\n<10>CLASS REQUIREMENTS<2>\n
+      __The Earthsinger is a prestige class. It counts as a favored class for
+      all characters. In order to become an Earthsinger, you must have:\n
+      __*_<7>Race<2> -- All known Earthsingers are dwarves. An aspirant must be
+      a dwarf, or a member of a race with similarly strong bonds to the earth,
+      such as a rock gnome or pech.\n
+      __*_<7>Base Attack Bonus<2> -- An aspirant must have a melee BAB of +5.\n
+      __*_<7>Feats<2> -- Endurance, Hardiness.\n
+      __*_<7>Skills<2> -- A successful aspirant must be a master stonecutter
+      with a Crafts skill of 15+.\n
+      __*_<7>Class Abilities<2> -- An aspirant must have the Bardic Music ability.\n
+      __*_<7>Religion<2> -- An aspirant must either worship Ekliazeh (or another
+      god who grants the Earth domain), or forsake gods entirely and devote himself
+      utterly to the worship of elemental earth.
+
+      \n\n<10>CLASS SKILLS<2>\n
+      __The class skills of the Earthsinger are Athletics, Balance, Climb, 
+      Concentration, Craft, Heal, Knowledge (Planes), Listen, Mining,
+      Perform, Search and Spot. 
+
+      \n\n<10>CLASS FEATURES<2>\n
+      __*_<7>Proficiencies<2> -- The Earthsinger gains no weapon or armor
+      proficiencies.\n
+      __*_<7>Stonebody<2> -- As an Earthsinger becomes closer and closer
+      to the spiritual nature of elemental earth, her skin begins to take
+      on a rocky texture and grows harder and harder. Every odd level of
+      this class gives the Earthsinger a +1 natural armor bonus.\n 
+      __*_<7>Earth Magic<2> -- By speaking to the stone itself using the
+      Earthsong, the singer can learn from it, shape it, animate it and
+      even take on its properties. In game terms, the character gains a
+      number of spell-like abilities as she advances in this class, in
+      the following order: <9>stone tell<2>, <9>soften stone<2>, <9>meld
+      into stone<2>, <9>spike stones<9>, <9>earthmaw<2>, <9>wall of stone<2>,
+      <9>transmute rock to mud<2>, <9>stoneskin<2>, <9>animate rock<2>,
+      <9>conjure earth elemental<2>, <9>transmute flesh to stone<2> and
+      <9>elemental aura<2> (the earth version only).\n
+      __*_<7>Geomancy<2> -- Starting at 3rd level, a Earthsinger can tap
+      into the primal energies of the earth in order to replenish her own
+      magical energies. By spending two fatigue points, she can instantly
+      regain 5d12 points of mana. At 7th level, the Earthsinger gains a
+      greater facility with this ability, and it then costs her only one
+      fatigue point.\n
+      __*_<7>Grounded Stance<2> -- An Earthsinger is able to draw upon
+      the power of the earth in order to enhance the force of her blows
+      in melee or unarmed combat. Provided that her feet are touching
+      the ground -- she is not levitating, ethereal or standing on 
+      non-earthen terrain, and she is not wearing magical boots -- she
+      may add her Earthsinger level to the damage of her melee or
+      unarmed attacks.
+      
+      \n\n<10>THE EARTHSINGER<15>\n
+      _Level_Def_Fort_Refl_Will_NA_GS__Special Abilities<1>\n
+      ___1___+0___+2___+0___+2__+1 +1__Grounded Stance, Stone Tell\n
+      ___2___+0___+3___+0___+3__+1 +2__Soften Stone, Meld i. Stone\n
+      ___3___+0___+3___+1___+3__+2 +3__Geomancy I, Spike Stones\n
+      ___4___+1___+4___+1___+4__+2 +4__Earthmaw, Wall of Stone\n
+      ___5___+1___+4___+1___+4__+3 +5__Transmute Rock to Mud\n
+      ___6___+1___+5___+2___+5__+3 +6__Stoneskin\n
+      ___7___+1___+5___+2___+5__+4 +7__Geomancy II, Animate Rock\n
+      ___8___+2___+6___+2___+6__+4 +8__Conjure Earth Elemental\n
+      ___9___+2___+6___+3___+6__+5 +9__Transmute Flesh to Stone\n
+      ___10__+2___+7___+3___+7__+5 +10_Elemental Aura (Earth)\n      
+      \n";       
+    HitDice: 10; Mana: 8; Def: 1/4;
+    Attk:  S_BRAWL    75,
+           S_MELEE    100,
+           S_THROWN   50,
+           S_ARCHERY  50;    
+    Skills[4]: SK_ATHLETICS, SK_BALANCE, SK_CLIMB, SK_CONCENT, SK_CRAFT,
+      SK_HEAL, SK_KNOW_PLANES, SK_LISTEN, SK_MINING, SK_PERFORM, 
+      SK_SEARCH, SK_SPOT; 
+    Grants:      
+      Stati[ADJUST_NAT,A_ARM,+1] at every 2nd level starting at 1st,
+      Ability[CA_INNATE_SPELL, $"Stone Tell"]               at 1st level,
+      Ability[CA_INNATE_SPELL, $"Soften Stone"]             at 2nd level,
+      Ability[CA_INNATE_SPELL, $"Meld into Stone"]          at 2nd level,
+      Ability[CA_INNATE_SPELL, $"Geomancy"]                 at 3rd level,
+      Ability[CA_INNATE_SPELL, $"Spike Growth"]             at 3rd level,
+      Ability[CA_INNATE_SPELL, $"Earthmaw"]                 at 4th level,
+      Ability[CA_INNATE_SPELL, $"Wall of Stone"]            at 4th level,
+      Ability[CA_INNATE_SPELL, $"Transmute Rock to Mud"]    at 5th level,
+      Ability[CA_INNATE_SPELL, $"Stoneskin"]                at 6th level,
+      /*
+      Ability[CA_INNATE_SPELL, $"Animate Rock"]             at 7th level,
+      Ability[CA_INNATE_SPELL, $"Conjure Earth Elemental"]  at 8th level,
+      Ability[CA_INNATE_SPELL, $"Transmute Flesh to Stone"] at 9th level,
+      Ability[CA_INNATE_SPELL, $"Elemental Aura (Earth)"]   at 10th level
+      */
+      ;
+    On Event EV_ADVANCE {
+      if (EActor->LevelAs($"Earthsinger") == 1)
+        ThrowEff(EV_EFFECT,$"Grounded Stance",EActor,EActor);
+      return NOTHING;
+      };
+    Flags: CF_PRESTIGE, CF_FAVORED, CF_GOOD_WILL, CF_GOOD_FORT;
+  }
+      
+Effect "Grounded Stance" : EA_INFLICT
+  {
+    xval: TRAP_EVENT; yval: PRE(EV_HIT);
+    Flags: EF_PERMANANT, EF_SPECABIL, EF_MUNDANE;
+    On Event PRE(EV_HIT) {
+      int16 mat;
+      if (EActor->isAerial())
+        return NOTHING;
+      if (EActor->InSlot(SL_BOOTS) != NULL_OBJ)
+        return NOTHING;
+      /*
+      mat = EMap->TerrainAt(EActor->x,EActor->y)->Material;
+      if (mat != MAT_GRANITE && mat != MAT_MINERAL &&
+          mat != MAT_QUARTZ && mat != MAT_INDESTRUCTABLE_STONE)
+        return NOTHING;
+      */
+      if (ResourceHasFlag(EMap->TerrainAt(EActor->x,EActor->y), TF_DEEP_LIQ) ||
+            EMap->FallAt(EActor->x,EActor->y))
+        return NOTHING;
+      
+      e.strDmg += Format(" %+d GS", EActor->LevelAs($"Earthsinger"));
+      e.bDmg   += EActor->LevelAs($"Earthsinger");
+      return NOTHING;
+      };
+  }
+  
+Effect "Geomancy" : EA_HEALING
+  { SC_THA; Level: 3; xval: HEAL_MANA; pval: 5d12+12; 
+    Purpose: EP_FIX_TROUBLE (TROUBLE_LOWMANA); Level: 3; 
+    Desc: "By using geomancy, you can draw magical power from the
+      earth, using it to restore 5d12 points of mana. This is
+      draining, costing you 2 points of fatigue. At 7th level, it
+      becomes easier to perform, costing only 1 fatigue.";
+    On Event PRE(EV_EFFECT) {
+      if (!EActor->LoseFatigue(EActor->LevelAs($"Earthsinger") 
+              >= 7 ? 1 : 2, true))
+        return ABORT;
+      return NOTHING;
+      },
+    MSG_CAST
+      "You draw mystical power from the stone around you!";
+  }
+  
+Class "Loremaster"
+  {
+    On Event EV_ISTARGET {
+      bool failed; int16 i, c;
+      failed = false;
+      
+      c = 0;
+      for (i=SK_KNOW_FIRST;i<=SK_KNOW_LAST;i++)
+        if (EActor->ISkillLevel(i) >= 10)
+          c++;
+          
+      if (c < 4) {
+        failed = true;
+        EActor->IPrint("You must have 4 Knowledge skills at 10+;
+                        you only have <Num>.", c);
+        }
+        
+      c = 0;
+      for(i=0;i!=MAX_SPELLS;i++)
+        if (EActor->SpellKnown(i) & (SP_KNOWN))
+          if (theGame->SpellID(i)->Schools & SC_DIV)
+            c += theGame->SpellID(i)->Level;
+            
+      if (c < 10) {
+        failed = true;
+        EActor->IPrint("You must have 10 levels of known Divination spells;
+                        you only know <Num>.",c);
+        }
+        
+      if (!EActor->IHasFeat(FT_SCRIBE_SCROLL)) {
+        failed = true;
+        EActor->IPrint("You must have the Scribe Scroll feat.");
+        }
+
+      if (EActor->isMType(MA_GOOD) || EActor->isMType(MA_EVIL))
+        if (EActor->isMType(MA_LAWFUL) || EActor->isMType(MA_CHAOTIC))
+          {
+            failed = true;
+            EActor->IPrint("You must have a neutral alignment component.");
+          }      
+
+      if (failed) 
+        return ABORT; 
+      else
+        return DONE;
+      };
+  Desc: "<15>HitDie:_<1>d4__<15>Mana:<1>_d12__<15>Skills:<1>_6_<15>Saves:<1>_fr<9>W<1>_<15>Defense:_<1>1/4\n
+      <15>+toHit: <1>Archery <9>50~<1>, Brawl <9>50~<1>, Melee <9>50~<1>, Thrown <9>50~<1>\n
+      <2>\n__While many mages are academics to some extent, the Loremasters are an order
+      that places the seeking of knowledge above all other goals. These wise wizards are
+      widely sought after by universities as teachers, and by royal courts and military
+      camps as advisers and viziers. Despite this demand, however, Loremasters tend to
+      be isolationistic, living cloistered lives in distant towers or establishing sacred
+      monastaries in the desert in which to preserve vast stores of ancient books.\n
+
+      \n\n<10>CLASS REQUIREMENTS<2>\n
+      __The Loremaster is a prestige class. It counts as a favored class for
+      all characters. In order to become a Loremaster, you must have:\n
+      __*_<7>Skills Levels<2> -- 4 Knowledge skills at +10.\n
+      __*_<7>Feats<2> -- Scribe Scroll.\n
+      __*_<7>Spells<2> -- 10 levels of known Divination spells (i.e., 2 3rd-level
+      spells and 2 2nd-level spells).\n
+      __*_<7>Alignment<2> -- You must have a neutral component in your alignment.   
+
+      \n\n<10>CLASS SKILLS<2>\n
+      __The class skills of the Loremaster are Alchemy, Appraise, Craft, Concentration, Decipher
+      Script, Heal, Illusioncraft, Intuition, Knowledge (all), Metamagic, Seneschal,
+      Spellcraft and Use Magic.
+
+      \n\n<10>CLASS FEATURES<2>\n
+      __*_<7>Proficiencies<2> -- The Loremaster gains no weapon or armor
+      proficiencies.\n
+      __*_<7>Spellcasting<2> -- The Loremaster gains one spellcasting level for every
+      Loremaster level after the 1st. Additionally, she continues to gain access to new
+      spells from her original spellcasting class as if every Loremaster level was a
+      level in that class. If she has more than one spellcasting class, she gains new
+      spell access for mage as a priority if she has that, then bard, then druid, then
+      priest, then ranger, then paladin.\n
+      __*_<7>Legend Lore<2> -- Loremasters gain -- or continue to advance in -- the 
+      Legend Lore ability, gaining one level of such for every Loremaster level.\n
+      __*_<7>Ancient Books<2> -- At 2nd, 4th and 8th levels, the constant knowledge-seeking
+      and research of a Loremaster pays off and they 'discover' a new spellbook hidden away 
+      somewhere near them.\n
+      __*_<7>Knowledge<2> -- Loremasters gain three bonus skill points that can be devoted
+      only to Knowledge skills with every class level.\n 
+      __*_<7>Forewarning<2> -- Loremasters are able to sense and predict attacks before
+      they occur, and gain a +1 insight bonus to DC every even Loremaster level.\n 
+      __*_<7>Studious Development<2> -- Loremasters gain a +1 competance bonus to their
+      Intelligence at every odd Loremaster level.\n 
+      __*_<7>Secrets<2> -- As Loremasters advance in level, they gain certain exceptional
+      abilities as a result of the ancient mysticism they study:\n
+      __At 1st level, Loremasters gain the inherant ability to see invisible.\n
+      __At 3th level, Loremasters gain the Fatesense ability, allowing them to instantly
+      discern whether a given item is cursed or blessed.\n
+      __At 5th level, Loremasters gain an exceptional insight into magical books, and
+      gain an extra +1d2 attribute points from any tome they read.\n
+      __At 6th level, Loremasters gain the ability to use Glyph of Warding as an innate
+      spell-like ability.\n
+      __At 7th level, Loremasters gain constant <9>true seeing<2>.\n
+      __At 9th level, Loremasters gain the Skill Mastery ability also possessed by some
+      rogues (and described under that class).
+      __At 10th level, Loremasters gain the ability to use Greater Glyph of Warding as an
+      innate spell-like ability.
+      
+      \n\n<10>THE LOREMASTER<15>\n
+      __Level__Def__Fort_Refl_Will_Bonus_Special Abilities<1>\n
+      ____1____+0____+0___+2___+0__+1 In_Lore, See Invisible \n
+      ____2____+0____+0___+3___+0__+1 DC_Bonus Spellbook   \n
+      ____3____+0____+1___+3___+1__+2 In_Fatesense\n
+      ____4____+1____+1___+4___+1__+2 DC_Bonus Spellbook  \n
+      ____5____+1____+1___+4___+1__+3 In_Bibliographic Insight\n
+      ____6____+1____+2___+5___+2__+3 DC_Glyph of Warding\n
+      ____7____+1____+2___+5___+2__+4 In_True Seeing\n
+      ____8____+2____+2___+6___+2__+4 DC_Bonus Spellbook \n
+      ____9____+2____+3___+6___+3__+5 In_Skill Mastery \n
+      ____10___+2____+3___+7___+3__+5 DC_Greater Glyph of W.\n      
+      \n";
+    HitDice: 4; Mana: 12; Def: 1/4;
+    Attk:  S_BRAWL    50,
+           S_MELEE    50,
+           S_THROWN   50,
+           S_ARCHERY  50;    
+    Skills[6]: SK_ALCHEMY, SK_CRAFT, SK_CONCENT, SK_DECIPHER, SK_HEALING, 
+      SK_ILLUSION, SK_INTUITION, SK_KNOW_ALL, SK_METAMAGIC, SK_SENESCHAL,
+      SK_APPRAISE, SK_SPELLCRAFT, SK_USE_MAGIC; 
+    Grants:      
+      Ability[CA_SPELLCASTING,+1] at every level starting at 2nd,
+      Stati[ADJUST_COMP,A_INT,+1] at every 2nd level starting at 1st,
+      Stati[ADJUST_INS,A_DEF,+1] at every 2nd level starting at 2nd,
+      Ability[CA_LEGEND_LORE,+1] at every level starting at 1st,
+      Stati[SEE_INVIS] at 1st level,
+      Ability[CA_FATESENSE,+1] at 3rd level,
+      Ability[CA_INNATE_SPELL,$"Glyph of Warding"] at 6th level,
+      Stati[TRUE_SIGHT] at 7th level,
+      Ability[CA_SKILL_MASTERY,+1] at 9th level,
+      Ability[CA_INNATE_SPELL,$"Glyph of Warding, Greater"] at 10th level;
+    On Event EV_ADVANCE {
+      hObj hBook, it; rID bID; int16 i; bool found;
+      EActor->GainBonusSkills($"Loremaster Knowledge",3);
+      if ( EActor->LevelAs($"Loremaster") == 2 ||
+           EActor->LevelAs($"Loremaster") == 4 ||
+           EActor->LevelAs($"Loremaster") == 8 )
+        {
+          for (i=0;i!=20;i++)
+            {
+              bID = theGame->GetItemID(PUR_DUNGEON,4,20,T_BOOK);
+              found = false;
+              for (it=EActor->FirstInv();it;it=EActor->NextInv())
+                if (it->iID == bID)
+                  found = true;
+              if (!found)
+                break;
+            }
+          hBook = CreateItem(bID);
+          EActor->IPrint("You've discovered a tome of ancient lore!");
+          EActor->GainItem(hBook,false);
+        }
+      
+      /* Advance Spell Access -- Wow, Complexy-Like! */
+      if (EActor->HasEffStati(SPELL_ACCESS,$"Mage")) {
+
+        /* Advance Specialist Spell Access */
+        if (EActor->HasEffStati(SPELL_ACCESS,$"Abjurer"))
+          EActor->IncEffStatiMag(SPELL_ACCESS,$"Abjurer",SS_CLAS,NULL,+1);
+        else if (EActor->HasEffStati(SPELL_ACCESS,$"Arcanist"))
+          EActor->IncEffStatiMag(SPELL_ACCESS,$"Arcanist",SS_CLAS,NULL,+1);          
+        else if (EActor->HasEffStati(SPELL_ACCESS,$"Diviner"))
+          EActor->IncEffStatiMag(SPELL_ACCESS,$"Diviner",SS_CLAS,NULL,+1);
+        else if (EActor->HasEffStati(SPELL_ACCESS,$"Enchanter"))
+          EActor->IncEffStatiMag(SPELL_ACCESS,$"Enchanter",SS_CLAS,NULL,+1);
+        else if (EActor->HasEffStati(SPELL_ACCESS,$"Evoker"))
+          EActor->IncEffStatiMag(SPELL_ACCESS,$"Evoker",SS_CLAS,NULL,+1);  
+        else if (EActor->HasEffStati(SPELL_ACCESS,$"Illusionist"))
+          EActor->IncEffStatiMag(SPELL_ACCESS,$"Illusionist",SS_CLAS,NULL,+1);  
+        else if (EActor->HasEffStati(SPELL_ACCESS,$"Necromancer"))
+          EActor->IncEffStatiMag(SPELL_ACCESS,$"Necromancer",SS_CLAS,NULL,+1);          
+        else if (EActor->HasEffStati(SPELL_ACCESS,$"Thaumaturge"))
+          EActor->IncEffStatiMag(SPELL_ACCESS,$"Thaumaturge",SS_CLAS,NULL,+1);          
+        else if (EActor->HasEffStati(SPELL_ACCESS,$"Weaver"))
+          EActor->IncEffStatiMag(SPELL_ACCESS,$"Weaver",SS_CLAS,NULL,+1);
+          
+        /* Advance General Mage Spell Access */
+        if (EActor->LevelAs($"mage") + EActor->LevelAs($"loremaster") >= 18)
+          EActor->SetEffStatiMag(SPELL_ACCESS,$"Mage",9);
+        else if (EActor->LevelAs($"mage") + EActor->LevelAs($"loremaster") >= 16)
+          EActor->SetEffStatiMag(SPELL_ACCESS,$"Mage",8);
+        else if (EActor->LevelAs($"mage") + EActor->LevelAs($"loremaster") >= 14)
+          EActor->SetEffStatiMag(SPELL_ACCESS,$"Mage",7);          
+        else if (EActor->LevelAs($"mage") + EActor->LevelAs($"loremaster") >= 12)
+          EActor->SetEffStatiMag(SPELL_ACCESS,$"Mage",6);          
+        else if (EActor->LevelAs($"mage") + EActor->LevelAs($"loremaster") >= 9)
+          EActor->SetEffStatiMag(SPELL_ACCESS,$"Mage",5);          
+        else if (EActor->LevelAs($"mage") + EActor->LevelAs($"loremaster") >= 7)
+          EActor->SetEffStatiMag(SPELL_ACCESS,$"Mage",4);
+        else if (EActor->LevelAs($"mage") + EActor->LevelAs($"loremaster") >= 5)
+          EActor->SetEffStatiMag(SPELL_ACCESS,$"Mage",3);
+        else if (EActor->LevelAs($"mage") + EActor->LevelAs($"loremaster") >= 3)
+          EActor->SetEffStatiMag(SPELL_ACCESS,$"Mage",2);               
+        }
+      else if (EActor->HasEffStati(SPELL_ACCESS,$"Bard"))
+        EActor->IncEffStatiMag(SPELL_ACCESS,$"Bard",SS_CLAS,NULL,+1);
+      else if (EActor->HasEffStati(SPELL_ACCESS,$"Druid"))
+        EActor->IncEffStatiMag(SPELL_ACCESS,$"Druid",SS_CLAS,NULL,+1);
+      else if (EActor->HasEffStati(SPELL_ACCESS,$"Priest"))
+        EActor->IncEffStatiMag(SPELL_ACCESS,$"Priest",SS_CLAS,NULL,+1);
+      else if (EActor->HasEffStati(SPELL_ACCESS,$"Ranger"))
+        EActor->IncEffStatiMag(SPELL_ACCESS,$"Ranger",SS_CLAS,NULL,+1);
+      else if (EActor->HasEffStati(SPELL_ACCESS,$"Paladin"))
+        EActor->IncEffStatiMag(SPELL_ACCESS,$"Paladin",SS_CLAS,NULL,+1);
+      return NOTHING;
+      };
+    Flags: CF_GOOD_WILL, CF_FAVORED, CF_PRESTIGE;
+  }
+
+
+
+Class "Loremaster Knowledge"
+  {
+    Flags: CF_PSEUDO;
+    Skills[0]: SK_KNOW_ALL;
+  }
+  
+Class "Master Archer"
+  {
+    On Event EV_ISTARGET {
+      bool failed;
+      failed = false;
+      if (EActor->GetBAB(A_HIT_ARCHERY) < 5)
+        {
+          failed = true;
+          EActor->IPrint("You must have an archery BAB of +5.");
+        }
+      if (EActor->WepSkill($"long bow") < WS_FOCUSED &&
+          EActor->WepSkill($"short bow") < WS_FOCUSED)
+        {
+          failed = true;
+          EActor->IPrint("You must have Weapon Focus in a bow.");
+        }
+      if (!EActor->IHasFeat(FT_POINT_BLANK_SHOT))
+        {
+          failed = true;
+          EActor->IPrint("You must have the Point Blank Shot feat.");
+        }
+      if (!EActor->IHasFeat(FT_RAPID_SHOT))
+        {
+          failed = true;
+          EActor->IPrint("You must have the Rapid Shot feat.");
+        }      
+      if (!EActor->IHasFeat(FT_ZEN_ARCHERY))
+        {
+          failed = true;
+          EActor->IPrint("You must have the Zen Archery feat.");
+        }
+      if (!EActor->ISkillLevel(SK_CONCENT) < 7)
+        {
+          failed = true;
+          EActor->IPrint("You must have Concentration 7+.");
+        }      
+      if (!(EActor->isMType(MA_ELF) || EActor->IAttr(A_WIS) >= 17))
+        {
+          failed = true;
+          EActor->IPrint("You must have Wisdom 17+, or be elven.");
+        }      
+      
+      if (failed) 
+        return ABORT; 
+      else
+        return DONE;
+      };
+    Desc: "
+      <15>HitDie:_<1>d6__<15>Mana:<1>_d4__<15>Skills:<1>_6_<15>Saves:<1>_f<9>RW<1>_<15>Defense:_<1>1/2\n
+      <15>+toHit: <1>Archery <9>100~<1>, Brawl <9>50~<1>, Melee <9>75~<1>, Thrown <9>50~<1>\n
+      <2>\n\tThe Master Archer is a practicioner of a secretive but potent archery-based
+      martial art, a philosophical ideal that seeks to meld meditation, archery and
+      athleticism into a single, perfected whole. The practice is particulairly common
+      among elves, but members of other races have on rare occasions been initiated into
+      the Master Archer class as well.\n
+      
+      \n\n<10>CLASS REQUIREMENTS<2>\n
+      __The Master Archer is a prestige class. It counts as a favored class for
+      all characters. In order to become a Master Archer, you must have:\n
+      __*_<7>Skills Levels<2> -- Concentration +10.\n
+      __*_<7>Feats<2> -- Point Blank Shot, Rapid Shot, Zen Archery, Weapon
+      Focus (long bow or short bow).\n
+      __*_<7>Base Attack<2> -- Initiates must have a Base Attack Bonus of +5 in
+      the archery category.\n
+      __*_<7>Special<2> -- Initiates must show exceptional aptitude for the art
+      in the form of a Wisdom score of 17+; this requirement is waived for elves,
+      who have an easier time finding a teacher.\n
+
+      \n\n<10>CLASS SKILLS<2>\n
+      __The class skills of the Master Archer are Athletics, Balance, Climb, 
+      Concentration, Craft, Find Weakness, Hide, Listen, Move Silently, Spot
+      and Wilderness Lore.
+      
+      \n\n<10>CLASS FEATURES<2>\n
+      __*_<7>Proficiencies<2> -- The Master Archer gains no weapon or armor
+      proficiencies.\n
+      __*_<7>Arrowstorm<2> -- The primary ability of the Master Archer is to fire
+      arrows at a truly staggering rate as a result of their transcendent focus and
+      discipline. Every Master Archer level taken adds a +5%% bonus to attack speed
+      in archery.\n
+      __*_<7>Blindsight<2> -- Starting at 6th level, the Master Archer gains the
+      Blindsight ability as a result of her transcendant focus and meditation; this
+      ability has a range of 30 feet at 6th, plus 10 feet for every Master Archer
+      level thereafter.\n
+      __*_<7>Ranged Sneak Attack<2> -- The Master Archer is able to strike unprepared
+      foes with lethal shots for extra damage. This functions exactly like a Rogue's
+      Sneak Attack ability, but can only be performed with a long bow or short bow.\n
+      __*_<7>Feats<2> -- The Master Archer gains the Defensive Shot feat at 2nd level
+      and the Precise Shot feat at 8th; if she already has either of these feats, she
+      can choose any other feat upon attaining these levels instead.\n
+      __*_<7>Opportune Shot<2> -- Starting at 4th level, whenever a creature hostile 
+      to the Master Archer is struck as an attack of opportunity by someone other than
+      the archer within 60 feet of the archer, and the archer has a clear line of fire
+      to that creature, she may take an immediate, single shot against the creature
+      that suffered an attack of opportunity.\n
+      __*_<7>Banked Shot<2> -- Upon reaching 10th level, the master archer is able to
+      rebound a shot off a solid surface like a wall one or more times to strike a
+      target outside her line of sight. There must be a clear path to the target
+      traversing fewer squares than the outside limit of her bow's range, and the
+      shot is made at a -4 penalty, not including any range modifier. The archer
+      must have some ability to percieve her target without a clear line of sight,
+      such as the blindsight ability above.
+      
+      \n\n<10>THE MASTER ARCHER<15>\n
+      __Level__Def__Fort_Refl_Will_AStorm_Special Abilities<1>\n
+      ____1____+0____+0___+2___+2___+5~___Ranged Sneak +1d6\n
+      ____2____+1____+0___+3___+3___+10~__Defensive Shot\n
+      ____3____+1____+1___+3___+3___+15~__Ranged Sneak +2d6\n
+      ____4____+2____+1___+4___+4___+20~__Opportune Shot\n
+      ____5____+2____+1___+4___+4___+25~__Ranged Sneak +3d6\n
+      ____6____+3____+2___+5___+5___+30~__Blindsight\n
+      ____7____+3____+2___+5___+5___+35~__Ranged Sneak +4d6\n
+      ____8____+4____+2___+6___+6___+40~__Precise Shot\n
+      ____9____+4____+3___+6___+6___+45~__Ranged Sneak +5d6\n
+      ____10___+5____+3___+7___+7___+50~__Banked Shot\n
+      \n";      
+    HitDice: 6; Mana: 4; Def: 1/2;
+    Attk:  S_BRAWL    50,
+           S_MELEE    75,
+           S_THROWN   50,
+           S_ARCHERY  100;    
+    Skills[6]: SK_ATHLETICS, SK_BALANCE, SK_CLIMB, SK_CRAFT, SK_CONCENT,
+      SK_FIND_WEAKNESS, SK_HIDE, SK_LISTEN, SK_MOVE_SIL, SK_SPOT,
+      SK_WILD_LORE; 
+    Grants:
+      Stati[ADJUST_INH,A_SPD_ARCHERY,+1] at every level starting at 1st,
+      Feat[FT_DEFENSIVE_SHOT] at 2nd level,
+      Ability[CA_BLINDSIGHT,+3] at 6th level,
+      Ability[CA_BLINDSIGHT,+1] at every level starting at 7th,
+      Feat[FT_PRECISE_SHOT] at 8th level;
+      /* Ability[CA_BANKED_SHOT,+1] at 10th level; */
+    On Event EV_ADVANCE {
+      if (EActor->LevelAs($"Master Archer") == 1)
+        ThrowEff(EV_EFFECT,$"Ranged Sneak Attack",EActor,EActor);
+      if (EActor->LevelAs($"Master Archer") == 4)
+        ThrowEff(EV_EFFECT,$"Opportune Shot",EActor,EActor);
+      };  
+    
+    Flags: CF_GOOD_REF, CF_GOOD_WILL, CF_FAVORED, CF_PRESTIGE;
+  } 
+  
+Effect "Ranged Sneak Attack" : EA_INFLICT
+  {
+    On Event META(PRE(EV_STRIKE)) {
+      EActor->RemoveEffStati($"Ranged Sneak Attack;2");
+      if (e.AType != A_FIRE)
+        return NOTHING;
+      EActor->GainTempStati(EXTRA_ABILITY,NULL,1,SS_MISC,
+        CA_SNEAK_ATTACK,(EActor->LevelAs($"Master Archer")+1)/2,$"Ranged Sneak Attack;2");
+      return NOTHING;
+      },
+    META(POST(EV_STRIKE)) {
+      EActor->RemoveEffStati($"Ranged Sneak Attack;2");
+      return NOTHING;
+      },
+    EV_GETNAME {
+      e.nAppend = XPrint(" +<Num>d6", 
+        (EActor->LevelAs($"Master Archer")+1)/2);
+      return NOTHING;
+      };
+    xval: TRAP_EVENT; yval: PRE(EV_STRIKE);
+    Flags: EF_PERMANANT, EF_MUNDANE, EF_SPECABIL;
+  }
+and EA_INFLICT
+  { xval: TRAP_EVENT; yval: PRE(EV_STRIKE); }
+  
+Effect "Ranged Sneak Attack;2" : EA_INFLICT
+  { }
+  
+Effect "Opportune Shot" : EA_INFLICT
+  {
+    aval: AR_MFIELD; lval: 6; rval: FI_MODIFIER;
+    Flags: EF_PERMANANT, EF_SPECABIL, EF_MUNDANE;
+    xval: TRAP_EVENT; yval: POST(EVICTIM(EV_STRIKE));
+    On Event META(POST(EVICTIM(EV_STRIKE))) {
+      hObj hArcher; int16 to;
+      hArcher = EVictim->GetEffStatiObj(TRAP_EVENT, $"Opportune Shot");
+      if (hArcher == NULL_OBJ)
+        return NOTHING;
+      if (hArcher->InSlot(SL_WEAPON) == NULL_OBJ)
+        return NOTHING;
+      if (!hArcher->InSlot(SL_WEAPON)->isType(T_BOW))
+        return NOTHING;
+      if (e.isAoO && EVictim->isHostileTo(hArcher))
+        {
+          to = hArcher->Timeout;
+          Throw(EV_RATTACK,hArcher,EVictim);
+          hArcher->Timeout = to;
+        }
+      return NOTHING;
+      };
+  }
+  
+Class "Sentinel"
+  {
+    On Event EV_ISTARGET {
+      bool failed;
+      failed = false;
+      if (EActor->ISkillLevel(SK_LISTEN) < 10) { 
+        failed = true; EActor->IPrint("You need Listen level 10.");
+      } 
+      if (EActor->ISkillLevel(SK_SPOT) < 10) { 
+        failed = true; EActor->IPrint("You need Spot level 10.");
+      } 
+      if (EActor->ISkillLevel(SK_SEARCH) < 10) { 
+        failed = true; EActor->IPrint("You need Search level 10.");
+      } 
+      if (!EActor->IHasFeat(FT_ALERTNESS)) { 
+        failed = true; EActor->IPrint("You need the Alertness feat.");
+      } 
+      if (failed) 
+        return ABORT; 
+      else
+        return DONE;
+    };
+    Desc: "
+      <15>HitDie:_<1>d6__<15>Mana:<1>_d4__<15>Skills:<1>_8_<15>Saves:<1>_f<9>R<1>w_<15>Defense:_<1>1/4\n
+      <15>+toHit: <1>Archery <9>75~<1>, Brawl <9>75~<1>, Melee <9>75~<1>, Thrown <9>75~<1>\n
+      <12>Experimental:<2> The Sentinel is not a Core Incursion class.\n
+      <2>\n\tSentinels are characters who have learned how important it is
+      to notice dangers before they notice you. Rogues and rangers often
+      end up as sentinels.\n
+
+      \n\n<10>CLASS REQUIREMENTS<2>\n
+      __The Sentinel is a prestige class. It counts as a favored class for
+      all characters. In order to become a
+      sentinel, you must have:\n
+      __*_<7>Skills Levels<2> -- Listen 10, Search 10, Spot 10.\n
+      __*_<7>Feats<2> -- Alertness.\n
+
+      \n\n<10>CLASS SKILLS<2>\n
+      __The class skills of the sentinel are Appraise, 
+      Concentration, Handle Device, Hide, Listen, Move Silently, 
+      Lockpicking, Pick Pockets, Search, and Spot.
+
+      \n\n<10>CLASS FEATURES<2>\n
+      __*_<7>Proficiencies<2> -- The sentinel gains no weapon or armor
+      proficiencies.\n
+      __*_<6>1st Level: <7>Superior Senses<2> -- The sentinel gains a
+      +2 insight bonus to all Spot, Search and Listen skills. The sentinel
+      also gains a +2 save bonus against illusions.\n
+      __*_<6>2nd Level: <7>Sharp Senses<2> -- The sentinel gains an
+      addition +1 bonus to all Spot, Search and Listen skills. The sentinel
+      automatically makes a Search check whenever she steps within 10 feet
+      of a secret door that has not already been searched for. \n
+      __*_<6>3rd Level: <7>Detect Unnatural<2> -- The sentinel gains the
+      innate ability to cast <9>detect good<2> and <9>detect evil<2>.\n
+      __*_<6>3rd Level: <7>Acute Senses<2> -- The sentinel gains the
+      Acute Senses feat, increasing her Sight, Shadow,
+      Infravision and Scent Ranges by 50~.\n
+      __*_<6>4th Level: <7>Blindsight<2> -- Using senses not available to
+      normal adventurers, the sentinel can function in total darkness using
+      a form of sonar that allows them to locate objects and creatures
+      within 120 feet (12 squares). Blindsight is reduced by metallic
+      helmets and large objects held in the hands.\n
+      __*_<6>4th Level: <7>Uncanny Dodge<2> -- The sentinel is never caught
+      flat-footed.\n
+      \n\n<10>THE SENTINEL<15>\n
+      __Level__Def__Fort_Refl_Will_Special Abilities<1>\n
+      ____1____+0____+2___+0___+0__Superior Senses\n
+      ____2____+0____+3___+0___+0__Sharp Senses\n
+      ____3____+0____+3___+1___+1__Detect Unnat, Acute Senses\n
+      ____4____+1____+4___+1___+1__Blindsight, Uncanny Dodge\n
+      ..."; 
+    HitDice: 6; Mana: 4; Def: 1/4;
+    Attk:  S_BRAWL    75,
+           S_MELEE    75,
+           S_THROWN   75,
+           S_ARCHERY  75;    
+    Skills[8]: SK_CONCENTRATION, SK_HANDLE_DEV, SK_HIDE, SK_LISTEN,
+    SK_MOVE_SIL, SK_LOCKPICKING, SK_PICK_POCKET, SK_SEARCH, SK_APPRAISE,
+    SK_SPOT; 
+    Grants:
+      Stati[SKILL_BONUS,SK_SPOT,+2] at 1st level,
+      Stati[SKILL_BONUS,SK_LISTEN,+2] at 1st level,
+      Stati[SKILL_BONUS,SK_SEARCH,+2] at 1st level,
+      Stati[SAVE_BONUS,SN_ILLUS,+2] at 1st level,
+      Ability[CA_SHARP_SENSES,+1] at 2nd level,
+      Ability[CA_INNATE_SPELL,$"detect good"] at 3rd,
+      Ability[CA_INNATE_SPELL,$"detect evil"] at 3rd,
+      Feat[FT_ACUTE_SENSES]             at 3rd level,
+      Ability[CA_BLINDSIGHT,+12]            at 4th level,
+      Ability[CA_UNCANNY_DODGE,+1]     at every level starting at 4th;
+    Flags: CF_GOOD_REF, CF_FAVORED, CF_PRESTIGE;
+  } 
+
+Class "Shadowdancer"
+  {
+    On Event EV_ISTARGET {
+      bool failed;
+      failed = false;
+      if (EActor->ISkillLevel(SK_MOVE_SIL) < 8) { 
+        failed = true; EActor->IPrint("You need Move Silently +8.");
+      } 
+      if (EActor->ISkillLevel(SK_HIDE) < 12) { 
+        failed = true; EActor->IPrint("You need Hide +12.");
+      } 
+      if (EActor->ISkillLevel(SK_PERFORM) < 10) { 
+        failed = true; EActor->IPrint("You need Perform +10.");
+      } 
+      if (EActor->ISkillLevel(SK_ATHLETICS) < 7) { 
+        failed = true; EActor->IPrint("You need Athletics +7.");
+      } 
+      if (!EActor->IHasFeat(FT_COMBAT_REFLEXES)) { 
+        failed = true; EActor->IPrint("You need the Combat Reflexes feat.");
+      } 
+      if (!EActor->IHasFeat(FT_DODGE)) { 
+        failed = true; EActor->IPrint("You need the Dodge feat.");
+      } 
+      if (!EActor->IHasFeat(FT_MOBILITY)) { 
+        failed = true; EActor->IPrint("You need the Mobility feat.");
+      } 
+      if (failed) 
+        return ABORT; 
+      else
+        return DONE;
+    };
+    Desc: "
+      <15>HitDie:_<1>d8__<15>Mana:<1>_d4__<15>Skills:<1>_8_<15>Saves:<1>_f<9>R<1>w_<15>Defense:_<1>1/2\n
+      <15>+toHit: <1>Archery <9>75~<1>, Brawl <9>75~<1>, Melee <9>75~<1>, Thrown <9>75~<1>\n
+      <2>\n__Shadowdancers are stealthy characters whose affinity for shadows goes
+      beyond merely finding them useful concealment -- instead, these characters
+      form a mystical bond with shadow, learning to use shadows for protection,
+      travel and even allies. Shadowdancers are a diverse society, travelling
+      across Theyra in tropes and staging elaborate, sinister dances for adoring
+      audiences -- their order harbors many secrets but is not, ultimately, a
+      malignant force in the world.\n
+
+      \n\n<10>CLASS REQUIREMENTS<2>\n
+      __The shadowdancer is a prestige class. It counts as a favored class
+      for all characters. In order to become a
+      shadowdancer, you must have:\n
+      __*_<7>Skills Levels<2> -- Move Silently +8, Hide +12, Perform +10,
+      Athletics +7.\n
+      __*_<7>Feats<2> -- Combat Reflexes, Dodge, Mobility.\n
+
+      \n\n<10>CLASS SKILLS<2>\n
+      __The class skills of the shadowdancer are 
+      Balance, Bluff, Decphier Script, Escape Artist, Hide, Jump, Listen, 
+      Move Silently, Perform, Search, Spot, Pick Pockets, and Tumble. 
+       
+      \n\n<10>CLASS FEATURES<2>\n
+      __*_<7>Proficiencies<2> -- The shadowdancer is proficient with all
+      simple weapons, daggers, blades, thrown weapons, flexible weapons,
+      archery and light armor.\n
+      __*_<7>Evasion<2> -- A shadowdancer that makes a Reflex
+      save to avoid an area-effect attack takes no damage. Levels of this
+      ability from shadowdancer and other classes stack toward gaining
+      Improved Evasion.\n
+      __*_<7>Uncanny Dodge<2> -- A shadowdancer has a preternatural ability 
+      to avoid harm. Levels of this ability gained from shadowdancer and
+      other classes stack.\n
+      __*_<7>Hide in Plain Sight<2> -- A shadowdancer is able to use this
+      ability to slip away into shadows, hiding even when directly observed
+      by other characters, at 3rd level.\n
+      __*_<7>Infravision<2> -- A shadowdancer gains the ability to see in 
+      the dark for 20 feet (2 squares) or has her darkvision range extended 
+      by 20 feet (2 squares) culmulatively at 2nd, 5th and 9th levels.\n
+      __*_<7>Shadow Illusion<2> -- A shadowdancer gains the innate ability to 
+      use <9>animate shadows<2> at 2nd level, <9>mirror image<2> at 7th level
+      and <9>shadow monsters<2> at 10th level.\n
+      __*_<7>Shadow Companion<2> -- Starting at 4th level, a shadowdancer
+      gains the ability to summon shadows from the Demiplane of Shadows.
+      Unlike most shadows, these creatures are not ravenous predators of
+      life, but instead loyal and dependable allies. The shadows gain the
+      elder template when the shadowdancer reaches level 6 and the ancient
+      template when the shadowdancer reaches level 9.\n
+      __*_<7>Shadow Step<2> -- A shadowdancer gains the innate ability 
+      to cast <9>shadow step<2> at will, starting at 4th level. This
+      ability allows her to teleport herself short distances so long
+      as she is in a shadowy area; the distance travelled depends upon
+      her level as a shadowdancer.\n
+      __*_<7>Defensive Roll<2> -- If you have this ability, you are able to 
+      move with the impact from blows, lessening their effect even if they do 
+      hit you. This ability does not function in heavy armor. When you are 
+      struck by a creature that needs a 15 or greater to hit you, you only 
+      suffer a certain fraction of the damage, starting at 5/6th. The number 
+      of sixths of the total damage can be further reduced in the following 
+      circumstances, to a minimum of 1/6th:\n
+      __* You are Small and your foe is Medium-sized or larger (-1/6th).\n
+      __* Your foe can only hit you on a natural 20 (-1/6th).\n
+      __* You are unarmored (-2/6ths) or in light armor (-1/6th).\n
+      __This ability does not function if you have spells active which
+      simulate the effect of heavy armor (such as Spirit Armor) and
+      Mage Armor is treated as medium armor for this purpose.\n
+      __*_<7>Improved Uncanny Dodge<2> -- A shadowdancer
+      can no longer be flanked except by a rogue four levels higher.
+      
+      \n\n<10>THE SHADOWDANCER<15>\n
+      __Level__Def__Fort_Refl_Will_Special Abilities<1>\n
+      ____1____+0____+0___+2___+0__Evasion, Uncanny Dodge\n
+      ____2____+1____+0___+3___+0__Infravision (20 ft),\n
+      _____________________________Shadow Illusion I\n
+      ____3____+1____+1___+3___+1__Hide In Plain Sight\n 
+      _____________________________Sneak Attack +1d6\n
+      ____4____+2____+1___+4___+1__Shadow Step, Shadow Com.\n
+      ____5____+2____+1___+4___+1__Defensive Roll,\n
+      _____________________________Infravision (40 ft)\n
+      ____6____+3____+2___+5___+2__Elder Companions,\n
+      _____________________________Sneak Attack +2d6\n
+      ____7____+3____+2___+5___+2__Shadow Illusion II\n
+      ____8____+4____+2___+6___+2__Ancient Companions\n
+      ____9____+4____+3___+6___+3__Sneak Attack +3d6,\n
+      _____________________________Infravision (60 ft)\n
+      ____10___+5____+3___+7___+3__Shadow Illusion III\n";
+    HitDice: 8; Mana: 4; Def: 1/2;
+    Attk:  S_BRAWL    75,
+           S_MELEE    75,
+           S_THROWN   75,
+           S_ARCHERY  75;    
+    Proficiencies: WG_SIMPLE, WG_DAGGERS, WG_SBLADES, WG_THROWN, 
+      WG_FLEXIBLE, WG_ARCHERY, WG_LARMOR;
+    Skills[8]: SK_BALANCE, SK_BLUFF, SK_DECIPHER, SK_ESCAPE_ART, SK_HIDE, 
+      SK_JUMP, SK_LISTEN, SK_MOVE_SIL, SK_PERFORM, SK_SEARCH, SK_SPOT, 
+      SK_PICK_POCKET, SK_TUMBLE; 
+    Grants:
+      Feat[FT_AP_LIGHT]                         at 1st level,
+      Ability[CA_EVASION,+1]                    at every level starting at 1st,
+      Ability[CA_UNCANNY_DODGE,+1]              at every level starting at 1st,
+      Ability[CA_INFRAVISION,+2]                at 2nd level,
+      Ability[CA_INNATE_SPELL,$"animate shadows"] at 2nd,
+      Ability[CA_HIDE_IN_PLAIN_SIGHT]           at 3rd level,
+      Ability[CA_INNATE_SPELL,$"Shadow Companion"] at 4th,
+      Ability[CA_INNATE_SPELL,$"shadow step"]   at 4th,
+      Ability[CA_DEFENSIVE_ROLL,+1]             at 5th,
+      Ability[CA_INFRAVISION,+2]                at 5th level,
+      Ability[CA_SNEAK_ATTACK,+1]               at every 3rd level starting at 3rd,
+      Ability[CA_INNATE_SPELL,$"mirror image"]  at 7th level,
+      Ability[CA_INFRAVISION,+2]                at 9th level,
+      Ability[CA_INNATE_SPELL,$"shadow monsters"] at 10th level;
+    Flags: CF_GOOD_REF, CF_FAVORED, CF_PRESTIGE;
+  }
+  
+Effect "Shadow Companion" : EA_SUMMON
+  { SC_NEC; SC_ILL; Base: SP_MEDIUM; Cost: 7; Level: 4; qval: Q_LOC;
+    Purpose: EP_SUMMON; rval: $"shadow"; pval: 5; 
+    Desc: "A shadowdancer is able to summon shadows to act as her
+      companions; if she has 6 levels as a shadowdancer, the shadows
+      gain the elder template; with 9 levels, the shadowdancer
+      summons ancient shadows.";
+    Flags: EF_MULTIPLE, EF_XSUMMON;
+    On Event POST(EV_MAGIC_HIT) {
+      rID tID; hObj cr; int16 i;
+      if (!EActor->isCharacter())
+        return NOTHING;
+      if (EActor->LevelAs($"shadowdancer") >= 9)
+        tID = $"ancient";
+      else if (EActor->LevelAs($"shadowdancer") >= 6)
+        tID = $"elder";
+      else
+        return NOTHING;
+      for (i=0;cr = EMap->GetEncounterCreature(i);i++)
+        cr->AddTemplate(tID);
+      };
+  }
+
+Effect "Shadow Step" : EA_TRAVEL
+  { SC_WEA; Base: 90; Cost: 6; Level: 3; pval: 1d12+LEVEL_2PER1; 
+    Purpose: EP_ESCAPE; xval: TRAVEL_ANYWHERE; Flags: EF_SPECABIL;
+    Desc: "This ability allows you to meld into a shadow, stepping out
+      of any other shadow within 1d12 + (shadowdancer level x 2) squares
+      away. In cannot be used in areas of bright light. Favor with Aiswin
+      can replace shadowdancer levels in strengthening this ability.";
+    On Event EV_MAGIC_HIT
+      "You dissolve into the shadows." /
+      "The <EVictim> dissolves into the shadows.",
+    PRE(EV_EFFECT) {
+      if (EMap->BrightAt(EActor->x,EActor->y))
+        {
+          EActor->IPrint("There are no suitable shadows to step into here!");
+          return ABORT;
+        }
+      return NOTHING;
+      },
+    EV_CALC_EFFECT {
+      if (EActor->isCharacter())
+        e.vCasterLev = max(EActor->getGodLevel($"Aiswin"),
+                           EActor->LevelAs($"shadowdancer"));
+      else
+        e.vCasterLev = 4;
+      return NOTHING;
+      };
+  }
+
+Class "Tattoo Mystic"
+  {
+    On Event EV_ISTARGET {
+      bool failed;
+      failed = false;
+      if (EActor->GetBAB(S_BRAWL) < 3) { 
+        failed = true; 
+        EActor->IPrint("You must have a brawl BAB of 3+.");
+        } 
+      if (EActor->ISkillLevel(SK_KNOW_MYTH) < 8) { 
+        failed = true; EActor->IPrint("You need Knowledge (Mythology) +8.");
+        }
+      if (EActor->ISkillLevel(SK_ALCHEMY) < 8) { 
+        failed = true; EActor->IPrint("You need Alchemy +8.");
+        }
+      if (EActor->ISkillLevel(SK_KNOW_NATURE) < 8) { 
+        failed = true; EActor->IPrint("You need Knowledge (Nature) +8.");
+        }
+      if (!EActor->IHasAbility(CA_UNARMED_STRIKE)) { 
+        failed = true; EActor->IPrint("You need the class feature Unarmed Strike.");
+        } 
+      if (failed) 
+        return ABORT; 
+      else
+        return DONE;
+    };      
+    Desc: "
+      <15>HitDie:_<1>d8_<15>Mana:<1>_d4__<15>Skills:<1>_4_<15>Saves:<1>_<9>FRW_<15>Defense:_<1>1/2\n
+      <15>+toHit: <1>Archery <9>75~<1>, Brawl <9>100~<1>, Melee <9>75~<1>, Thrown <9>75~<1>\n
+      <2>__Some monks, rather than continuing to develop along the more conventional
+      route, choose to take up the path of the tattoo mystic -- an ancient tradition
+      involving the creation of magical tattoos to augment a martial artist's strength
+      and prowess. These supernatural artisans are anything but pragmatic, however,
+      viewing their craft as both a great form of art and an ability to express the
+      inner, totemic natures of their beings. Steepled in myth and metaphor, the way
+      of the tattoo mystic involves fasting, dream interpretation, the careful study
+      of animals and an advanced understanding of alchemy, used in the preparation of
+      the supernatural inks used for tattooing.
+
+      \n\n<10>CLASS REQUIREMENTS<2>\n
+      __The tattoo mystic is a prestige class. It counts as a favored
+      class for all characters. In order to become a tattoo mystic, 
+      a character must have must have:\n
+      __*_<7>Skills Levels<2> -- The understanding of the complex metaphors,
+      animal allegories and legends the tradition is steepled in requires
+      Knowledge (Mythology) +8 and Knowledge (Nature) +8. To prepre the
+      tattoo inks, a character must also have Alchemy +8.\n
+      __*_<7>Base Attack Bonus<2> -- A character must have a brawling BAB of
+      +3 before they can enter the tattoo mystic class.\n
+      __*_<7>Abilities<2> -- A potential tattoo mystic must possess the
+      Unarmed Strike class feature.
+
+      \n\n<10>CLASS SKILLS<2>\n
+      __The class skills of the tattoo mystic are Appraise, Athletics, Balance, Climb, 
+      Diplomacy, Escape Artist, Find Weakness, Healing, Hide, Jump, Knowledge, 
+      Listen, Move Silently, Poison Use, Spot and Tumble.
+
+      \n\n<10>CLASS FEATURES<2>\n
+      __*_<7>Proficiencies<2> -- Tattoo mystics recieve no additional weapon
+      or armor proficiencies.\n
+      __*_<7>Monk Abilities<2> -- A tattoo mystic continues to advance his 
+      existing Unarmed Attack, Increased Move and Stun Attack abilities just as
+      if he were taking monk levels, so a monk 5/tattoo mystic 3 has the base
+      base damage, stun attack save DC and so forth that a monk 8 would.\n
+      __The tattoo mystic does not gain any further benefits of monk levels,
+      such as better Flurry of Blows, abilities like Abundant Step, Leap of
+      the Clouds or Diamond Body, bonus feats and so forth.\n
+      __*_<7>Tattoos<2> -- The primary benefit of becoming a tattoo mystic, of
+      course, is the inscription of magical tattoos on the character's body. A
+      tattoo mystic gains a new tattoo every even level, and many of the effects
+      of these tattoos scale with her tattoo mystic level. Some of the tattoos
+      available to the mystic include the Tiger, Sun, Mantis, Demon, Crane,
+      Dragon, Scorpion, Dragonfly, Mountain, Bamboo, Monkey, Butterfly, Spider,
+      Eye and Tree.
+      
+      \n\n<10>THE TATTOO MYSTIC<15>\n
+      _Level__Def__Fort_Refl_Will_Special Abilities<1>\n
+      ___1____+0____+2___+2___+2__\n
+      ___2____+1____+3___+3___+3__New Tattoo\n
+      ___3____+1____+3___+3___+3__\n
+      ___4____+2____+4___+4___+4__New Tattoo\n
+      ___5____+2____+4___+4___+4__\n
+      ___6____+3____+5___+5___+5__New Tattoo\n
+      ___7____+3____+5___+5___+5__\n
+      ___8____+4____+6___+6___+6__New Tattoo\n
+      ___9____+4____+6___+6___+6__\n
+      ___10___+5____+7___+7___+7__New Tattoo\n\n
+      
+      <10>AVAILABLE TATTOOS<15>\n\n<list tattoos>";
+    HitDice: 8; Mana: 4; Def: 1/2;
+    Attk:  S_BRAWL    100,
+           S_MELEE    75,
+           S_THROWN   75,
+           S_ARCHERY  75;
+    Skills[4]:  SK_ATHLETICS, SK_BALANCE, SK_CLIMB, SK_DIPLOMACY, 
+      SK_ESCAPE_ART, SK_FIND_WEAKNESS, SK_HEALING, SK_HIDE, SK_JUMP, SK_KNOW_MYTH,
+      SK_KNOW_GEO, SK_KNOW_THEO, SK_KNOW_NATURE, SK_KNOW_PLANES, 
+      SK_LISTEN, SK_MOVE_SIL, SK_POISON_USE, SK_APPRAISE, SK_SPOT, SK_TUMBLE;
+    Grants:
+      Ability[CA_UNARMED_STRIKE]     at every level starting at 1st,
+      Ability[CA_INCREASED_MOVE,+2]  at every level starting at 1st,
+      Ability[CA_STUN_ATTACK]        at every level starting at 1st,
+      Ability[CA_TATTOOS]            at every 2nd level starting at 2nd;
+    Flags: CF_GOOD_FORT, CF_GOOD_REF, CF_GOOD_WILL, CF_FAVORED, CF_PRESTIGE;
+  }
+      
+Class "Twilight Huntsman"
+  {
+    On Event EV_ISTARGET {
+      bool failed;
+      failed = false;
+      if (EActor->ISkillLevel(SK_RIDE) < 8) { 
+        failed = true; EActor->IPrint("You need Ride level 8.");
+      } 
+      if (EActor->ISkillLevel(SK_ATHLETICS) < 8) { 
+        failed = true; EActor->IPrint("You need Athletics level 8.");
+      } 
+      if (EActor->ISkillLevel(SK_HIDE) < 5) { 
+        failed = true; EActor->IPrint("You need Hide level 5.");
+      } 
+      if (EActor->ISkillLevel(SK_ANIMAL_EMP) < 5) { 
+        failed = true; EActor->IPrint("You need Animal Empathy level 5.");
+      } 
+      if (EActor->ISkillLevel(SK_MOVE_SIL) < 5) { 
+        failed = true; EActor->IPrint("You need Move Silently level 5.");
+      } 
+      if (EActor->GodID != $"maeve") {
+        failed = true; EActor->IPrint("You must worship Maeve.");
+      } 
+      if (failed) 
+        return ABORT; 
+      else
+        return DONE;
+    };
+    Desc: "
+      <15>HitDie:_<1>d6__<15>Mana:<1>_d6__<15>Skills:<1>_6_<15>Saves:<1>_<9>FR<1>w_<15>Defense:_<1>1/4\n
+      <15>+toHit: <1>Archery <9>100~<1>, Brawl <9>50~<1>, Melee <9>100~<1>, Thrown <9>100~<1>\n
+      <2>\n\tMaeve honors the most skilled huntsmen of the faerie and mortal
+      relms by making them members of her Twilight Hunt, also called the Wild
+      Hunt. Twilight huntsmen promote her chaotic plans.\n
+
+      \n\n<10>CLASS REQUIREMENTS<2>\n
+      __The Twilight huntsman is a prestige class. It counts as a favored class
+      for all characters. In order to become a twilight huntsman, you must have:\n
+      __*_<7>Skills Levels<2> -- Move Silently 5, Animal Empathy 5, 
+        Hide 5, Atheltics 8, Ride 8.\n
+      __*_<7>Religion<2> -- You must worship Maeve.\n
+
+      \n\n<10>CLASS SKILLS<2>\n
+      __The class skills of the twilight huntsman are Animal Empathy, 
+      Appraise, Climb, Concentration, Healing, Hide, Jump,
+      Knowledge, Listen, Move Silently, Ride, Search, Spot,
+      Swim, and Wilderness Lore. 
+
+      \n\n<10>CLASS FEATURES<2>\n
+      __*_<7>Proficiencies<2> -- The twilight huntsman gains no weapon or armor
+      proficiencies.\n
+      __*_<7>Low-Light Vision<2> -- At 1st level, the twilight huntsman gains
+      40 feet (4 squares) of low-light vision.\n
+      __*_<7>Fast Mount<2> -- A twilight huntsman can 
+      spur her mount to speeds beyond the norm for its kind. Each twilight 
+      huntsman level adds a 5~ class bonus to her mounted speed.\n
+      __*_<7>Fast Move<2> -- The twilight huntsman can move  quite rapidly on her 
+      own, gaining a 5~ class bonus to her movement rate for every twilight
+      huntsman level.\n
+      __*_<7>Tracking<2> -- Starting at 2nd level, Twilight huntsmen gain the
+      ability to track their enemies just as rangers do; levels of ranger
+      and twilight huntsman stack for this purpose.\n
+      __*_<7>Spells<2> -- Like assassins, twilight huntsmen dabble in magic,
+      learning some of Maeve's tricks of enchantment, illusion and chaos-
+      magic to aid them in their mission. A twilight huntsman gains one caster
+      level for every even class level, and they draw spells from their own
+      spell list. Twilight huntsmen cast as priests do, being able to cast in
+      armor and not depending on spellbooks, but needing a holy symbol and
+      the favor of their diety.\n
+      __*_<7>Smite Law<2> -- At 3rd level, the twilight huntsman gains
+      the ability to smite lawful creatures, exactly as a paladin smites
+      evil creatures; she gains +2 damage on such smite attacks at 3rd
+      level, and an additional +2 for every twilight huntsman level thereafter.\n
+      __*_<7>Relentless<2> -- Once a twilight huntsman has begun the hunt for
+      an enemy of Maeve, there is no force short of utter annihiliation that
+      will turn her away from her task. This intense focus is represented in
+      game terms by the Dwarven Focus ability, gained at 4th level.\n
+      __*_<7>Noble Aegis<2> -- At 4th level, the twilight huntsman's role
+      as an appointed soveriegn of Maeve is recognized in the form of a
+      noble aegis that protects her from base treachery in the form of a
+      +4 bonus to defense versus surprise attacks and a reduction of two
+      points per level after 4th of a rogue's Sneak Attack damage against
+      her. Levels of this ability from being a twilight huntsman and a
+      priest with the Nobility Domain stack.\n
+      __*_<7>Scent<2> -- At 5th level, the twilight huntsman can detect creatures
+      by Scent within 30 feet (3 squares) (or has her current scent range 
+      extended by 30 feet).\n
+      __*_<7>Freedom of Movement<2> -- At 6th level, the twilight huntsman
+      becomes completely immune to paralysis, petrification, slowing,
+      entangling, and other effects that constraint movement.\n
+      __*_<7>Twilight Walking<2> -- At 7th level, the twilight huntsman gains
+      the ability to move in and out of the ethereal plane at will, exactly
+      as a phase spider does.\n
+      __*_<7>Spook<2> -- At 8th level, the twilight huntsman learns to heighten
+      her already unsettling faerie otherworldliness to a pinprick sharpness,
+      causing intense disquiet in others around her; in game terms, she can
+      evoke <9>spook<2> as a spell-like ability at will.\n
+      __*_<7>Feed Upon Pain<2> -- At 9th level, the twilight huntsman learns
+      to draw strength from those she stalks and wounds, healing one HP of
+      damage for every 10 points she inflicts in combat.\n
+      __*_<7>One Body, One Soul<2> -- At 10th level, the twilight huntsman
+      gains the One Body, One Soul feat, even if she doesn't meet the normal
+      requirements for that feat.
+
+      \n\n<10>SPELL LIST<2>\n
+      <15>__1st level -- <1>bane, change self, charm person, color spray, doom, 
+      enthrall, faerie fire, inflict light wounds, longstrider, malignance, 
+      phantasmal force, slow poison, true strike.\n
+      <15>__2nd level -- <1>animate rope, bladethirst, globe of shadow, heal 
+      mount, hypnotic pattern, improved phantasmal force, inflict moderate
+      wounds, phantom steed, scare, see invisibility, silence.\n
+      <15>__3rd level -- <1>adamant facade, animate shadows, bestow curse, 
+      blackmantle, confusion, fly, hold person, illusory stance, inflict 
+      serious wounds, insightful stroke, lorecall, spectral force, track monster, 
+      vampiric touch.\n
+      <15>__4th level -- <1>crushing despair, dimensional anchor, enervation, 
+      hallucinatory terrain, improved spectral force, inflict critical wounds, 
+      mooncloak, music of the spheres, phantasmal killer, thornwrack.\n
+      <15>__5th level -- <1>advanced illusion, color burst, divine agility, 
+      dream, hold monster, insect plague, lower resistance, nightmare, 
+      symbol of pain, symbol of sleep.\n
+      <15>__6th level -- <1>animate objects, harm, immortal grandeur.
+      
+      \n\n<10>THE TWILIGHT HUNTSMAN<15>\n
+      __Level__Def__Fort_Refl_Will_Special Abilities<1>\n
+      ____1____+0____+2___+2___+0__Vision, Fast Move & Mount\n
+      ____2____+0____+3___+3___+0__+1 CL, Tracking\n
+      ____3____+0____+3___+3___+1__Smite Law, Relentless\n
+      ____4____+1____+4___+4___+1__+1 CL, Noble Aegis\n
+      ____5____+1____+4___+4___+1__Scent\n
+      ____6____+1____+5___+5___+2__+1 CL, Freedom of Movement\n
+      ____7____+2____+5___+5___+2__Twilight Walking\n
+      ____8____+2____+6___+6___+2__+1 CL, <9>spook<1>\n
+      ____9____+2____+6___+6___+3__Feed Upon Pain\n 
+      ____10___+3____+7___+7___+3__+1 CL, One Body, One Soul\n"; 
+    HitDice: 6; Mana: 6; Def: 1/4;
+    Attk:  S_BRAWL    50,
+           S_MELEE    100,
+           S_THROWN   100,
+           S_ARCHERY  100;    
+    Skills[6]: SK_ANIMAL_EMP, SK_CLIMB, SK_CONCENT, SK_HEAL, SK_HIDE,
+      SK_JUMP, SK_KNOW_GEO, SK_MOVE_SIL, SK_RIDE, SK_SEARCH, SK_APPRAISE,
+      SK_SPOT, SK_SWIM, SK_WILDERNESS;
+    Grants:
+      Ability[CA_LOWLIGHT,+4]       at 1st level,
+      Ability[CA_INCREASED_MOVE,+1] at every level starting at 1st,
+      Ability[CA_RAPID_RIDING,+1]   at every level starting at 1st,
+      Ability[CA_SPELLCASTING]      at every 2nd level starting at 2nd,
+      Ability[CA_TRACKING,+10]      at every level starting at 2nd,
+      Ability[CA_SMITE,MA_GOOD,+2]  at every level starting at 3rd,
+      Ability[CA_DWARVEN_FOCUS,+1]  at 3rd level,
+      Ability[CA_NOBLE_AEGIS,+1]    at every level starting at 4th,
+      Ability[CA_SCENT,+3]          at 5th level,
+      Stati[IMMUNITY,AD_PLYS]       at 6th level,
+      Stati[IMMUNITY,AD_STUK]       at 6th level,
+      Stati[IMMUNITY,AD_SLOW]       at 6th level,
+      Stati[IMMUNITY,AD_STON]       at 6th level,
+      Ability[CA_PHASE,+1]          at 7th level,
+      Ability[CA_INNATE_SPELL,$"spook"] at 8th level,
+      Ability[CA_FEED_UPON_PAIN,+1] at 9th level,
+      Feat[FT_ONE_BODY_ONE_SOUL]    at 10th level;
+    Flags: CF_GOOD_REF, CF_GOOD_FORT, CF_FAVORED, CF_PRESTIGE;
+    Lists:
+      * SPELL_LIST
+        1 $"bane" $"change self" $"charm person" $"color spray" $"doom"
+          $"enthrall" $"faerie fire" $"inflict light wounds" $"longstrider"
+          $"malignance" $"phantasmal force" $"slow poison" $"true strike"
+        2 $"animate rope" $"bladethirst" $"globe of shadow" $"heal mount"
+          $"hypnotic pattern" $"improved phantasmal force" $"inflict moderate wounds"
+          $"phantom steed" $"scare" $"see invisibility" $"silence"
+        3 $"adamant facade" $"animate shadows" $"blackmantle" $"confusion"
+          $"fly" $"hold person" $"illusory stance" $"inflict serious wounds"
+          $"insightful stroke" $"lorecall" $"spectral force" $"track monster"
+          $"vampiric touch"
+        4 $"crushing despair" $"dimensional anchor" $"enervation"
+          $"hallucinatory terrain" $"improved spectral force"
+          $"inflict critical wounds" $"mooncloak" $"music of the spheres"
+          $"phantasmal killer" $"thornwrack"
+        5 $"advanced illusion" $"color burst" $"divine agility" $"dream"
+          $"hold monster" $"insect plague" $"lower resistance" $"nightmare;spell"
+          $"symbol of pain" $"symbol of sleep"
+        6 $"animate objects" $"harm" $"immortal grandeur";
+          
+  } 
+
+Class "Underdark Warrior"
+  {
+    On Event EV_ISTARGET {
+      bool failed;
+      failed = false;
+      if (EActor->ISkillLevel(SK_MOVE_SIL) < 10) { 
+        failed = true; 
+        EActor->IPrint("You need to have Move Silently 10+.");
+        } 
+      if (EActor->ISkillLevel(SK_HIDE) < 10) { 
+        failed = true; 
+        EActor->IPrint("You need to have Hide in Shadows 10+.");
+        } 
+      if (EActor->ISkillLevel(SK_CLIMB) < 10) { 
+        failed = true; 
+        EActor->IPrint("You need to have Climb 10+.");
+        } 
+      if (!EActor->IHasFeat(FT_BLIND_FIGHT)) { 
+        failed = true; 
+        EActor->IPrint("You need the Blind Fighting feat.");
+        } 
+      if (!EActor->IHasFeat(FT_TOUGHNESS)) { 
+        failed = true; 
+        EActor->IPrint("You need the Toughness feat.");
+        }
+      if (EActor->IAttr(A_WIS) < 17) { 
+        failed = true; 
+        EActor->IPrint("You need a base Wisdom score of 17+.");
+        }
+      
+      if (failed) 
+        return ABORT; 
+      else
+        return DONE;
+    };
+    Desc: "
+      <15>HitDie:_<1>d10_<15>Mana:<1>_d4__<15>Skills:<1>_6_<15>Saves:<1>_<9>FR<1>w_<15>Defense:_<1>1/2\n
+      <15>+toHit: <1>Archery <9>100~<1>, Brawl <9>100~<1>, Melee <9>100~<1>, Thrown <9>100~<1>\n
+      <2>__The Underdark is a ruthlessly Darwinian enviornment where only the strong survive.
+      Even among the drow, illithids and deep gnomes, there are few who venture outside their
+      large cities in order to explore the tunnels -- magical, predatory beasts unheard of on
+      the surface lurk in the twisting tunnels, and most intelligent humanoids travel outside
+      their communities only in the company of large military units. Valued by their people as
+      spies, scouts and escorts in matters of skullduggery where large military support is too
+      conspicious, there is a unique prestige associated with those rugged men and women who
+      are able to survive alone in the harshest enviornment on Theyra.\n
+      __Underdark warriors hone their instincts, learning to fight based upon lightning
+      intuitive reaction rather than rational thought. They sharpen their senses beyond what
+      other members of their races would believe possible without magic, learning to detect 
+      foes by the vibrations their movement produces in the stone in utter, lightness 
+      darkness.
+
+      \n\n<10>CLASS REQUIREMENTS<2>\n
+      __The Underdark Warrior is a prestige class. It counts as a favored
+      class for all characters. In order to become an underdark warrior, 
+      you must have:\n
+      __*_<7>Race<2> -- You must be of a race native to the Underdark -- drow,
+      deep gnomes, cave orcs and kobolds all qualify among the player races,
+      but goblins and illithids are known to become underdark warrior on occasion
+      as well.\n
+      __*_<7>Skills Levels<2> -- Move Silently +10, Hide in Shadows +10, Climb +10.\n
+      __*_<7>Feats<2> -- Blind-Fighting, Toughness.\n
+      __*_<7>Attributes<2> -- Good instincts are an absolute prerequisite of this
+      class -- an underdark warrior must have a Wisdom score of 17
+      before external magical augmentations are taken into account.
+
+      \n\n<10>CLASS SKILLS<2>\n
+      __The class skills of the underdark warrior are Athletics, Balance, Bluff,
+      Climb, Escape Artist, Find Weakness, Hide in Shadows, Jump, Listen, Move 
+      Silently, Spot, Swim, Tumble and Wilderness Lore.
+
+      \n\n<10>CLASS FEATURES<2>\n
+      __*_<7>Proficiencies<2> -- Underdark warriors do not gain and additional
+      weapon or armor proficiencies.\n
+      __*_<7>Tremorsense<2> -- The underdark warrior learns to feel vibrations
+      in stone in exactly the same manner that some monsters do, developing the
+      Tremorsense ability with a range in squares equal to twice her class 
+      level.\n 
+      __*_<7>Supremely Skilled<2> -- The survivalist nature of the underdark trains
+      certain physical skills as no less lethal enviornment possibly could. The
+      underdark warrior adds her class level to her Climb, Hide and Move Silently
+      skill ratings.\n
+      __*_<7>Fasting<2> -- Like rangers, underdark warriors sometimes need to
+      survive with very little food and thus condition their bodies to cope well
+      with times of privation. Levels of this ability from ranger and underdark
+      warrior stack.\n
+      __*_<7>Bonus Feats<2> -- An underdark warrior gains Close Quarters Fighter
+      as a bonus feat at level 2, Improved Initiative as a bonus feat at level 3
+      and Zen Defense as a bonus feat at level 5.\n
+      __*_<7>Uncanny Dodge<2> -- The underdark warrior gains the Uncanny Dodge 
+      ability at 2nd level; levels of this ability gained from the barbarian or
+      rogue classes stack with those gained from underdark warrior.\n
+      __*_<7>Stonework Sense<2> -- Starting at 4th level, underdark warriors
+      develop a sense for stonework identical to the ability possessed by dwarves
+      and gnomes. If they already have this ability, its depth increases by one
+      square.\n
+      __*_<7>Defensive Roll<2> -- At 5th level, the underdark warrior recieves
+      the Defensive Roll ability, which functions identically to the rogue special
+      ability of the same name.
+
+      \n\n<10>THE UNDERDARK WARRIOR<15>\n
+      __Level__Def__Fort_Refl_Will_Special Abilities<1>\n
+      ____1____+0____+2___+2___+0__Tremorsense, Sup. Skilled\n
+      _____________________________Close Quart. Fighter, Fast.\n
+      ____2____+1____+3___+3___+0__Uncanny Dodge\n
+      ____3____+1____+3___+3___+1__Improved Initiative\n
+      ____4____+2____+4___+4___+1__Stonework Sense\n
+      ____5____+2____+4___+4___+1__Zen Defense, Defensive Roll\n_"; 
+    HitDice: 10; Mana: 4; Def: 1/2;
+    Attk:  S_BRAWL    100,
+           S_MELEE    100,
+           S_THROWN 100,
+           S_ARCHERY  100;    
+    Skills[6]: SK_ATHLETICS, SK_BALANCE, SK_BLUFF, SK_CLIMB, SK_ESCAPE_ART,
+      SK_FIND_WEAKNESS, SK_HIDE, SK_JUMP, SK_LISTEN, SK_MOVE_SIL, SK_SPOT,
+      SK_SWIM, SK_TUMBLE, SK_WILD_LORE; 
+    Grants:
+      Ability[CA_TREMORSENSE,+2]         at every level starting at 1st,
+      Ability[CA_FASTING,+1]             at every level starting at 1st,
+      Stati[SKILL_BONUS,SK_CLIMB,+1]     at every level starting at 1st,
+      Stati[SKILL_BONUS,SK_MOVE_SIL,+1]  at every level starting at 1st,
+      Stati[SKILL_BONUS,SK_HIDE,+1]      at every level starting at 1st,
+      Feat[FT_CLOSE_QUARTERS_FIGHTER]    at 1st,
+      Feat[FT_IMPROVED_INITIATIVE]       at 3rd,
+      Feat[FT_ZEN_DEFENSE]               at 5th,
+      Ability[CA_UNCANNY_DODGE,+1]       at every level starting at 2nd,
+      Ability[CA_STONEWORK_SENSE,+1]     at 4th,
+      Ability[CA_DEFENSIVE_ROLL,+1]      at 5th;
+    Flags: CF_GOOD_FORT, CF_FAVORED, CF_PRESTIGE;
+    Constants:
+      * TOTAL_CLASS_LEVELS 5;
+  }

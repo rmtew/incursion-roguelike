@@ -1,0 +1,2682 @@
+/* New Alchemical Items:
+   Rogues get Alchemy!
+   
+   
+   New Alchemicals:
+   * Dusktorch (torch that emits shadowy light visible
+       only from a meter away when a special ungent is
+       applied to the eyes; in short allows one to Hide
+       in Shadows while bearing a torch).
+   * Blitzblade (a kind of "damage poison" for starting
+       rogues not unlike Oil of Impact, adds 1d8 damage
+       to a weapon -- perhaps it ignites on contact with
+       blood to burst into flame)
+   * Weatherpaper (special oil to treat spellbooks and
+       scrolls with that gives them [Alchemy - 3] extra
+       hardness against water damage)
+   * Tanglefoot Bag (save DC = 10 + 1/2 Alchemy)
+   * Sunrod
+   * Thunderstone
+   * Smoke Bomb (short-lasting Obscurement effect)
+   * Weaponblack
+   * Alchemist's Fire (1d4 + [Alchemy / 5]d4, burns for
+       half damage for X turns thereafter).
+   * Flask of Acid (1d4 + [Alchemy / 5]d4)
+   * Universal Solvent (removes stuck... once, but only
+       from tanglefoot bag, web, etc. -- not from rubble,
+       construct webbing, bands of billaro, etc.)
+   * Metalmend ("heals" 1d4 points of damage to a metal
+       item on application)
+   * Silversheen (Wes did this one already)
+   * Firefoam (pour on terrain to make one fire square
+       walkable)
+   * Antitoxin
+   * Sponge Wrapping (+2 circumstance to Move Silently)
+   * Alchemical DMSO substitute; fire poisons from a
+       blowgun and enemies need an opposed check to
+       notice anything happened.
+   * Scentblind (LARGE-area fireball effect that kills
+       the Scent ability, effectively blinding creatures
+       who rely on it and allowing rogues to be at least
+       a little effective).
+   * Dreamdust (essentially an amphetemine, allows safe
+       resting for one "night" but does 1d2 points of
+       Con damage from the strain). If you have Sustain
+       Con, you simply get a message saying that the
+       effect of the dreamdust is negated and it doesn't
+       work.
+   
+   ALL dungeon-found alchemy items are made with an
+     Alchemy skill of +10; thus, raising it higher
+     then that is very desirable.
+     
+   Alchemy CANNOT be used untrained!
+   
+   * One formula per level of Alchemy. Rogues are guaranteed
+       the following three formulas first: blitzblade,
+       dusktorch, antitoxin and weaponblack; wizards get 
+       weatherpaper, tanglefoot, 
+       
+*/
+
+
+Item "flask" : T_TOOL
+  {
+    Image: grey GLYPH_POTION; 
+    Level: 1; Mat: MAT_GLASS; Weight: 1; hp: 5;
+    Flags: IT_NOGEN, IT_THROWABLE, IT_GROUP;
+    On Event PRE(EV_RATTACK) {
+      if (GetHandle(EItem2))
+        if (EItem2->ieID == $"water" ||
+            EItem2->ieID == $"acid;alchemy" ||
+            EItem2->ieID == $"Alchemist's Fire")
+          {
+            e.eID = EItem2->ieID;
+            e.isActivation = true;
+            SetEItem(e,EItem2->TakeOne());
+            ReThrow(EV_EFFECT, e);
+            return DONE;
+          }
+      return NOTHING;
+      },
+    EV_APPLY {
+      if (GetHandle(EItem))
+        if (EItem->ieID == $"Universal Solvent" ||
+            EItem->ieID == $"Scentblind" ||
+            EItem->ieID == $"Silversheen;alchemy")
+          {
+            e.eID = EItem->ieID;
+            e.isActivation = true;
+            SetEItem(e,EItem->TakeOne());
+            if (ReThrow(EV_EFFECT, e) == DONE)
+              EItem->Remove(true);
+            return DONE;          
+          }
+      return NOTHING;
+      },
+    EV_DIP {
+      if (GetHandle(EItem2) && e.eID == NULL_ID)
+        if (EItem2->iID == $"flask")
+          return RedirectEff(e,EItem2->ieID,EV_DIP);
+      return NOTHING;
+      },
+    POST(EV_EFFECT) {
+      hObj hOne;
+      if (e.isWield || e.isRemove)
+        return NOTHING;
+      if (GetHandle(EItem))
+        {
+          hOne = EItem->TakeOne();
+          hOne->Remove(true);
+        }
+      return NOTHING;
+      };
+  } 
+
+Item "Eggshell Bomb" : T_TOOL
+  {
+    Image: white GLYPH_TOOL; 
+    Level: 1; Mat: MAT_VEGGY; Weight: 1; hp: 1;
+    Flags: IT_NOGEN, IT_THROWABLE;
+    On Event PRE(EV_RATTACK) {
+      if (GetHandle(EItem2))
+        {
+          e.eID = EItem2->ieID;
+          e.isActivation = true;
+          SetEItem(e,EItem2->TakeOne());
+          ReThrow(EV_EFFECT, e);
+          return DONE;
+        }
+      return NOTHING;
+      },
+    POST(EV_EFFECT) {
+      hObj hOne;
+      if (e.isWield || e.isRemove)
+        return NOTHING;
+      if (GetHandle(EItem))
+        {
+          hOne = EItem->TakeOne();
+          hOne->Remove(true);
+        }
+      return NOTHING;
+      };
+  } 
+
+
+AI_POTION Effect "water" : EA_BLAST { 
+  SC_THE; Cost: 0; xval: AD_HOLY; pval: 3d6; 
+  qval: Q_DIR | Q_TAR | Q_LOC; aval: AR_BALL; lval: 1; 
+  sval: NOSAVE; 
+  Flags: EF_ACTIVATE, EF_ATTACK, EF_MUNDANE, EF_BLIND_PROMPT, 
+         EF_NAMEONLY, EF_NO_BONUS_DMG; 
+  Purpose: EP_ATTACK (VS_UNDEAD); 
+  cval: WHITE; On Event MSG_BLASTNAME "splash of holy water"; 
+  Level: 1; 
+  Desc: "This is simply water. When blessed, it becomes holy water;
+    when cursed, it becomes unholy water.
+    A vial of holy water can be thrown (activated) and
+    inflicts 3d6 points of holy damage against all undead, demons and
+    devils within a 10 foot (1 square) radius. Unholy water has the
+    same effect on celestials and paladins. Holy water can be thrown 
+    accurately out to a range of 60 feet."; 
+  On Event EV_EFFECT {
+    if (GetHandle(EItem) != NULL_OBJ) 
+      EItem->Remove(true); 
+    },
+  EV_ISTARGET {
+    if (EItem->IFlags & IF_BLESSED)
+      if (EVictim->isMType(MA_UNDEAD) ||
+          EVictim->isMType(MA_DEMON) ||
+          EVictim->isMType(MA_DEVIL))
+        return SHOULD_CAST_IT;
+    if (EItem->IFlags & IF_CURSED)
+      if (EVictim->isMType(MA_CELESTIAL) ||
+          EVictim->HasAbility(CA_LAY_ON_HANDS))
+        return SHOULD_CAST_IT;
+    return CANNOT_CAST_IT;
+    },    
+  EV_CALC_EFFECT {
+    e.vRange = 6;
+    SetPVal(e,0,3,6);
+    if (GetHandle(EActor) != NULL_OBJ)
+      if (EActor->HasEffStati(-1,$"Iron Sword"))
+        SetPVal(e,0,7,6);    
+    return NOTHING;
+    },
+  PRE(EV_EFFECT)
+    "You throw an <EItem>." /
+    "The <EActor> throws an <EItem>.",
+  EV_GETNAME {
+    if (EActor->IFlags & IF_BLESSED)
+      e.nBase = "vial of holy water";
+    else if (EActor->IFlags & IF_CURSED)
+      e.nBase = "vial of unholy water";
+    else
+      e.nBase = "vial of water";
+    e.nCursed = "";
+    return NOTHING;
+    };
+  Constants:
+    * BASE_ITEM $"flask",
+    * ITEM_COST 50;
+  } 
+
+Item "bag" : T_TOOL
+  {
+    Image: brown GLYPH_TOOL; hp: 3;
+	  Level:0; Mat:MAT_LEATHER;
+    Weight: 10; Flags: IT_THROWABLE, IT_NOGEN;
+    Desc: "This small brown leather bag is about the size of a
+      troll's fist. It has no apparent opening and is stiched
+      tightly shut. By its weight you can tell that it is filled
+      with some compressed substance.";
+    On Event PRE(EV_RATTACK) {
+      e.eID = $"tanglefoot bag";
+      e.isActivation = true;
+      ReThrow(EV_EFFECT, e);
+      return DONE;
+      };
+  }
+
+AI_ALCHEMY Effect "tanglefoot bag" : EA_TERRAFORM { 
+  SC_ARC; Cost: 0; aval: AR_GLOBE; Level: 1; lval: 2; qval: Q_LOC;
+  Flags: EF_NAMEONLY, EF_AUTOID, EF_MUNDANE, EF_ACTIVATE; 
+  xval: TERRA_OPEN; rval: $"tanglefoot strands"; sval: NOSAVE; 
+  Purpose: EP_ATTACK | EP_FOIL_PURSUIT | EP_CURSE | AIM_AT_ENEMY; 
+  Desc: "A tanglefoot bag can be thrown to create a mass of tanglefoot 
+    strands with a radius of 10 feet (1 square). A creature
+    attempting to move or attack in the strands must make a reflex saving
+    throw (DC 15) to avoid becoming stuck instead. Woodland Stride, Free
+    Action and Flight all render one immune to tanglefoot strands."; 
+  On Event (EV_EFFECT) {
+    if (GetHandle(EItem) != NULL_OBJ) EItem->Remove(true); 
+    DPrint(e,"You throw a tanglefoot bag.",
+             "The <EActor> throws a leather bag, and it explodes
+              in a mess of gooey strands!");
+    };
+  Constants:
+    * BASE_ITEM $"bag",
+    * ITEM_COST 500;
+  } 
+
+Terrain "tanglefoot strands" { 
+  Image: purple GLYPH_WATER on brown; Mat:MAT_VEGGY;
+  Flags: TF_WARN, TF_SPECIAL, TF_NOGEN, TF_SHOWNAME; 
+  Desc: "A tanglefoot bag can be thrown (activated) to create a mass of
+  tanglefoot strands with a radius of 10 feet (1 square). A creature
+  attempting to move or attack in the strands must make a reflex saving
+  throw (DC 15) to avoid becoming stuck instead. Woodland Stride, Free
+  Action and Flight all render one immune to tanglefoot strands."; 
+  On Event EV_MON_CONSIDER {
+    hObj mount;
+    mount = EActor->GetStatiObj(MOUNTED);
+    if (mount) {
+      if (mount->SkillLevel(SK_ESCAPE_ART) >= 5 ||
+          mount->HasAbility(CA_WOODLAND_STRIDE) ||
+          mount->ResistLevel(AD_STUK) == -1 ||
+          mount->HasStati(STUCK) || 
+          EActor->HasStati(STUCK) || 
+          mount->isAerial())
+        return NOTHING;
+      else 
+        return ABORT; 
+    } else {
+      if (EActor->SkillLevel(SK_ESCAPE_ART) >= 5 ||
+          EActor->HasAbility(CA_WOODLAND_STRIDE) ||
+          EActor->ResistLevel(AD_STUK) == -1 ||
+          EActor->HasStati(STUCK) || 
+          EActor->isAerial())
+        return NOTHING;
+      else 
+        return ABORT; 
+    } 
+  } ;
+    On Event EV_MOVE, PRE(EV_STRIKE), EV_JUMP_OFF, EV_LAND {
+      hObj mount;
+      mount = EActor->GetStatiObj(MOUNTED);
+      if (mount) {
+        if (mount->HasAbility(CA_WOODLAND_STRIDE) ||
+            mount->HasStati(STUCK) || 
+            EActor->HasStati(STUCK) || 
+            mount->ResistLevel(AD_STUK) == -1 ||
+            mount->isAerial())
+          return NOTHING;
+        if (mount->SavingThrow(REF,15,SA_GRAB|SA_TRAPS)) {
+          return NOTHING; 
+        } 
+      } else {
+        if (EActor->HasAbility(CA_WOODLAND_STRIDE) ||
+            EActor->HasStati(STUCK) || 
+            EActor->ResistLevel(AD_STUK) == -1 ||
+            EActor->isAerial())
+          return NOTHING;
+        if (EActor->SavingThrow(REF,15,SA_GRAB|SA_TRAPS)) {
+          return NOTHING; 
+        } 
+      } 
+      ThrowDmg(EV_DAMAGE,AD_STUK,-1,"tanglefoot strangs",EActor,EActor);
+      if (EActor->HasStati(STUCK)) {
+        DPrint(e,"You become entangled!", 
+                 "An <EActor> becomes entangled!");
+        EActor->Timeout += 10;
+      } 
+      return DONE;
+    };
+  }
+  
+Item "wooden rod" : T_TOOL
+  {
+    Image: yellow GLYPH_TOOL; hp: 5;
+	  Level:0; Mat:MAT_WOOD;
+    Weight: 1; Flags: IT_NOGEN;
+    Desc: "This wooden rod is about an inch thick and a foot long. It
+      has been coated with some thick, yellowish chemical at the tip,
+      like an overlarge match.";
+    SDmg: 1d2; LDmg 1d1; Acc: -2; Crit: x2; Threat: 1; Spd: 65%;
+    On Event PRE(EV_HIT) {   
+      /* It's nothing special if it's not lit! */
+      if ((!GetHandle(EItem)) || (!EItem->HasEffStati(EFF_FLAG1,$"sunrod")))
+        if ((!GetHandle(EItem2)) || (!EItem2->HasEffStati(EFF_FLAG1,$"sunrod")))
+          return NOTHING;
+      if (EVictim->isMType(MA_WRAITH) || EVictim->isMType(MA_VAMPIRE)) {
+        ThrowDmg(EV_DAMAGE,AD_SUNL,2d8,"a sunrod",
+          EActor,EVictim,EItem,EItem2);
+        VPrint(e,"Light sears you!", "Light sears the <EVictim>!");
+        }
+      else {
+        ThrowDmg(EV_DAMAGE,AD_FIRE,1d3,"a sunrod",
+          EActor,EVictim,EItem,EItem2);
+        VPrint(e,"The sunrod mildly sears you!", 
+                 "The sunrod mildly sears the <EVictim>!");
+        }
+      return DONE;
+      },
+    EV_REMOVE, EV_LOSEITEM, EV_DROP, EV_INSERT {
+      if (EItem->HasEffStati(EFF_FLAG1,$"sunrod") && !EItem->isDead()) {
+        APrint(e,"The sunrod burns out.");
+        EItem->Owner()->m->RemoveEffFieldFrom($"sunrod",EItem->Owner());
+        EItem->Remove(true);
+        return DONE;
+        }
+      return NOTHING;
+      };
+  }
+  
+AI_ALCHEMY Effect "sunrod" : EA_GENERIC
+  {
+    Flags: EF_NAMEONLY, EF_MUNDANE, EF_ACTIVATE, EF_PERMANANT;
+    aval: AR_MFIELD; rval: FI_LIGHT|FI_MOBILE; lval: 2; cval: YELLOW;
+    Desc: "When lit (activated), a sunrod emits brilliant golden light
+      out to a radius of 20 feet. Light-averse creatures will suffer the
+      penalties of being in a brightly-lit area. The lit
+      sunrod can also be used as a bludgeoning weapon; it inflicts 1d3
+      points of fire damage to most creatures, but against wraiths, shadows
+      and similar creatures of negative energy, it inflicts 2d8 points of
+      sunlight damage and strikes true against their incorporeality. A
+      sunrod burns for only 3d6+6 turns.";
+    On Event EV_ELAPSED {
+      EActor->Owner()->IPrint("The sunrod burns out.");
+      /* Since this is EV_ELAPSED, the EActor is the sunrod that
+         gains the EFF_FLAG1 Stati. */
+      EActor->Owner()->m->RemoveEffFieldFrom($"sunrod",EActor->Owner());
+      EActor->Remove(true);
+      return NOTHING;
+      },
+    EV_CALC_EFFECT {
+      e.vDuration = 24;
+      return NOTHING;
+      },
+    POST(EV_EFFECT) {
+      DPrint(e,"You light an <EItem>.",
+               "The <EActor> lights an <EItem>.");
+      EItem->GainTempStati(EFF_FLAG1,EActor,3d6+6,SS_MISC,0,0,$"sunrod");
+      return NOTHING;
+      };
+    Constants:
+      * BASE_ITEM $"wooden rod",
+      * ITEM_COST 150;
+  }
+
+
+AI_ALCHEMY Effect "Antitoxin" : EA_INFLICT
+  {
+    Desc: "This alchemical antitoxin makes a character's immune system
+      more active and resistant to poisons. It grants a +3 bonus (or
+      higher, when crafted with a superior Alchemy skill) to saving
+      throws against poison for the next 80 turns.";
+    On Event EV_CALC_EFFECT {
+      SetPVal(e,3 + max(0,(e.vAlchemy - 8) / 4));
+      e.vDuration = 80;
+      return NOTHING;
+      };
+    xval: SAVE_BONUS; yval: SN_POISON; 
+    Flags: EF_NAMEONLY, EF_MUNDANE;
+    Constants:
+      * BASE_ITEM $"potion",
+      * ITEM_COST 300;
+    
+  }
+  
+AI_ALCHEMY Effect "Stimtab" : EA_INFLICT
+  {
+    Desc: "This perilous alchemical item accelerates a character's
+      metabolism greatly, albiet at a cost to her long-term health;
+      characters also learn from their experiences less effectively
+      while in this chemically altered state. A stimtab grants +4 
+      temporary fatigue points (+2 per +5 Alchemy above +10) and a 
+      +50~ increase to Spd (+5~ per point of Alchemy rating over 10), 
+      for the next 30 turns.";
+    Flags: EF_NAMEONLY, EF_MUNDANE, EF_ACTIVATE, EF_ACTIVATE2, EF_ACTIVATE3,
+           EF_DLONG;
+    On Event EV_CALC_EFFECT {
+      switch (e.efNum)
+        {
+          case 0:
+            SetPVal(e,max(4,(e.vAlchemy/5)*2));
+            e.vDmg = max(4,(e.vAlchemy/5)*2);
+           break;
+          case 1:
+            SetPVal(e,e.vAlchemy);
+            e.vDmg = e.vAlchemy;
+           break;
+          case 2:
+            SetPVal(e,50);
+            e.vDmg = 50;
+           break;
+        }
+      return NOTHING;
+      },
+    EV_ELAPSED
+      "The Stimtab wears off.",
+    POST(EV_MAGIC_STRIKE) {
+      EVictim->Abuse(A_CON,4d20);
+      return NOTHING;
+      };
+    Constants:
+      * BASE_ITEM $"tablet",
+      * ITEM_COST 600;
+    xval: ADJUST_CIRC; yval: A_FAT;
+  }
+and EA_INFLICT
+  { xval: ADJUST_CIRC; yval: A_SPD; }
+and EA_INFLICT
+  { xval: XP_PENALTY; pval: 50; }
+      
+AI_ALCHEMY Effect "Scentblind" : EA_INFLICT
+  {
+    Desc: "This alchemical preparation takes the form of a thick,
+      pungent oil applied directly to the skin, causing the user
+      to emit an intense aroma that blinds the smell of creatures
+      with the Scent ability. It renders the wearer inperceptable
+      with Scent, but also awakens any creatures with Scent that
+      are within 30 feet. The effects last for (Alchemy x 10) turns,
+      to a minimum of 100.";
+    xval: NONDETECTION; yval: PER_SCENT;
+    Flags: EF_MUNDANE, EF_ACTIVATE;
+  }
+and EA_GENERIC
+  { aval: AR_MFIELD; lval: 3;
+    On Event EV_ENTER {
+      if (EVictim->HasAbility(CA_SCENT)) {
+        EVictim->Awaken(-1);
+        EVictim->IPrint("An overwhelming chemical aroma assaults you!");
+        }
+      return DONE;
+      },
+    EV_CALC_EFFECT {
+      e.vDuration = max(100,e.vAlchemy * 10);
+      return NOTHING;
+      }; 
+    Constants:
+      * ITEM_COST 100;
+  }
+  
+AI_ALCHEMY Effect "Universal Solvent" : EA_GENERIC
+  {
+    Desc: "This alchemical solvent dissolves any adhesive material,
+      allowing a character to free themselves from webbing, sticky
+      slime, mimic adhesive, the effects of the <9>molecular bonding<7>
+      psionic power, the webs of ettercaps and so forth. It should
+      be [A]pplied to be used.";
+    On Event EV_MAGIC_HIT {
+      if (EActor->HasStati(STUCK)) {
+        EActor->RemoveStati(STUCK,-1,STUCK_STICKY);
+        EActor->RemoveStati(STUCK,-1,STUCK_ATTACK);
+        EActor->RemoveStati(STUCK,-1,STUCK_BONDED);
+        if (!EActor->HasStati(STUCK))
+          EActor->IPrint("You're free to move again!");
+        else
+          EActor->IPrint("You're still stuck.");
+        }
+      else if(EMap->TerrainAt(EActor->x,EActor->y) == 
+                $"Ettercap Webbing") {
+        EActor->IPrint("You're free to move through the webbing for 
+                          a short period!");
+        EActor->GainTempStati(EFF_FLAG1,NULL_OBJ,30,SS_MISC,0,0,$"Universal Solvent");
+        /* See "Ettercap Webbing" in Mon1.Irh */
+        }
+      else
+        EActor->IPrint("The solvent has no effect.");
+      return DONE;
+      };
+    Flags: EF_MUNDANE, EF_ACTIVATE;
+    Constants:
+      * ITEM_COST 400;
+  }
+
+AI_ALCHEMY Effect "Acid;alchemy" : EA_BLAST
+  {
+    Desc: "Alchemical acids are area-effect splash weapons inflicting 1d8 points of 
+      damage for every total +5 Alchemy rating possessed by their creator, with
+      a minimum of 2d8 acid damage. A Reflex saving throw (DC 10 + 1/2 Alchemy
+      skill rating + thrower's Dexterity modifier) allows half damage. Acid has 
+      other uses as well as being a weapon -- it can be poured into a lock to 
+      melt it open without triggering it, or very tiny items can be dissolved 
+      in it -- some alchemists believe that the properties of a magical item 
+      can be discerned as it dissolves in acid, its mystical essence released.
+      Some claim that drinking acid can prevent petrification, but surely one
+      would have to be a stalwart soul to survive such an act...";
+    aval: AR_BALL; xval: AD_ACID; cval: GREEN; lval: 1; qval: Q_LOC; 
+    Flags: EF_ACTIVATE, EF_AFFECTS_ITEMS, EF_MUNDANE, EF_NO_BONUS_DMG,
+           EF_ATTACK;
+    On Event EV_CALC_EFFECT {
+      e.vCasterLev = max(10,e.vAlchemy);
+      e.saveDC = 10 + e.vAlchemy / 2 + EActor->Mod(A_DEX);
+      SetPVal(e,0,e.vAlchemy/5,8);
+      return NOTHING;
+      },
+    MSG_BLASTNAME
+      "splash of acid",
+    EV_DRINK {
+      int16 pen;
+      EActor->IPrint("This burns like acid!");
+      ThrowDmg(EV_DAMAGE,AD_ACID,8d10,"drinking a flask of acid",EActor,EActor);
+      if (EActor->isDead())
+        return DONE;
+      pen = 6 - EActor->ResistLevel(AD_ACID) / 2;
+      if (pen > 0)
+        EActor->GainTempStati(ADJUST_PAIN,NULL_OBJ,10d6,SS_MISC,A_AID,-pen);
+      EActor->RemoveStati(STONING);
+      EItem->TakeOne()->Remove(true);
+      EActor->Timeout += 20;
+      return DONE;
+      },
+    PRE(EV_EFFECT) {
+      hObj h;
+      if (dist(EActor->x,EActor->y,e.EXVal,e.EYVal) <= 1)
+        {
+          if (h = EMap->FChestAt(e.EXVal, e.EYVal))
+            {
+              if (!h->HasStati(LOCKED))
+                { EActor->IPrint("That chest isn't locked.");
+                  return ABORT; }
+              h->RemoveStati(LOCKED);
+              EActor->IDPrint("You pour the acid in the chest's lock,
+                                destroying it!", "The <hObj> pours a vial
+                                of liquid into the lock on a chest,
+                                destroying it!", EActor);
+              return DONE;
+            }
+          if (h = EMap->FDoorAt(e.EXVal, e.EYVal))  
+            {
+              if (!(h->DoorFlags & DF_LOCKED))
+                { EActor->IPrint("That door isn't locked.");
+                  return ABORT; }
+              h->DoorFlags &= ~DF_LOCKED;
+              EActor->IDPrint("You pour the acid in the door's lock,
+                                destroying it!", "The <hObj> pours a vial
+                                of liquid into the lock on a door,
+                                destroying it!", EActor);
+              return DONE;
+            }
+        }
+      DPrint(e,"You throw an <EItem>.",
+        "The <EActor> throws an <EItem>.");
+      return NOTHING;
+      },
+    EV_DIP {
+      bool doID, doDestroy;
+      if (GetHandle(EItem2) == NULL_OBJ ||
+          GetHandle(EItem) == NULL_OBJ)
+        return NOTHING;
+      if (EItem2->ieID != $"Acid;alchemy")
+        return NOTHING;
+      if (EItem->Size() > SZ_MINISCULE)
+        {
+          EActor->IPrint("That is too large to dip in the acid.");
+          return ABORT;
+        }
+      
+      doID = false; doDestroy = true;
+      switch (EItem->ieID)
+        {
+          case $"the Dancer":
+            EActor->IPrint("The acid seems to flow rhythmically and gracefully
+                              inside the flask.");
+            doID = true;
+           break;
+          case $"Good Fortune":
+            EActor->IPrint("Wow, you almost lost your ring, but it bounced off
+                      the edge of the flask as you were trying to dip it.");
+            doID = true;
+            doDestroy = false;
+           break;
+          case $"Fire Resistance":
+            EActor->IPrint("The flask feels distinctly cool as the ring dissolves.");
+            doDestroy = false;
+            doID = true;
+           break;
+          case $"Acid Warding":
+            EActor->IPrint("The acid turns clear!");
+            EItem2->ieID = $"Water";
+            doID = true;
+           break;
+          case $"Brass and Glass":
+            EActor->IPrint("Flecks of brass form as a precipitate at the bottom
+                              of the flask.");
+            doID = true;
+           break;
+          case $"Greater Ring of Identify":
+          case $"Identify":
+            EActor->IPrint("You are struck by a magical revelation:");
+            doID = true;
+           break;
+          case $"Evasion":
+            EActor->IPrint("The acid flows around the ring, seemingly avoiding
+                              it, before it finally engulfs and dissolves it.");
+            doID = true;
+           break;
+          case $"Infravision":
+            EActor->IPrint("Shadows seem to part in the wake of the fumes rising
+                              from the flask.");
+            doID = true;
+           break;
+          case $"the Imp":
+            EActor->IPrint("As the ring dissolves, you hear an agonized cackling.");
+            doID = true;
+           break;
+          case $"Ring, Djinn Prison":
+            EActor->IPrint("As the ring dissolves, you hear an agonized screaming.");
+            EActor->AlignedAct(AL_EVIL|AL_NONGOOD,2,
+              "killing a trapped djinn with acid");
+            doID = true;
+           break;
+          case $"Mind Shielding":
+            doID = false;
+           break;
+          case $"the Endless Wave":
+            EActor->IPrint("Tiny ripples and waves form on the surface of the acid
+                              as the ring dissolves.");
+            doID = true;
+           break;
+          case $"Water Walking":
+            EActor->IPrint("The ring lands upon the surface of the acid as if it
+                             were a solid skin, and takes several seconds to break
+                             the surface tension.");
+            doID = true;
+           break;
+          case $"Climbing":
+            EActor->IPrint("Precipitate from the ring's dissolution crawls up the
+                              edges of the flask before losing its magic and
+                              sinking down again.");
+            doID = true;
+           break;
+          case $"the Chameleon":
+            EActor->IPrint("The acid changes color briefly!");
+            doID = true;
+           break;
+          case $"Animal Kinship":
+            EActor->IPrint("You could swear you hear a mournful howl as the ring
+                              dissolves.");
+            doID = true;
+           break;
+          case $"Jumping":
+            EActor->IPrint("The acid bubbles violently, and tiny droplets splatter
+                             and spray, jumping out of the flask.");
+            ThrowDmg(EV_DAMAGE,AD_ACID,1d4,"an alchemical reaction", EActor, EActor);
+            doID = true;
+           break;
+          case $"Invisibility;ring":
+            EActor->IPrint("The acid seems to vanish for a second, leaving an empty
+                              flask -- but it reappears once the ring finishes
+                              dissolving.");
+            doID = true;
+           break;
+          case $"Penetrating Sight":
+            EActor->IPrint("The whole flask seems translucent as the ring dissolves!");
+            doID = true;
+           break;
+          case $"Channeling":
+            EActor->IPrint("The flask glows with a silvery light as the ring dissolves!");
+            doID = true;
+           break;
+          case $"Regeneration":
+            EActor->IPrint("Are you imagining it, or is there actually *more* acid in the
+                              flask than there was before?");
+            doID = true;
+           break;
+          case $"the Ram":
+            EActor->IPrint("The vial of acid shatters violently!");
+            ThrowDmg(EV_DAMAGE,AD_ACID,3d6,"an alchemical reaction", EActor, EActor);
+            EItem2->Remove(true);
+            doID = true;
+           break;
+          case $"Polymorphing":
+            EActor->IPrint("The flask changes into a scroll briefly!");
+            doID = true;
+           break;
+          case $"Spell Disruption":
+            doID = false;
+           break;
+          case $"Weakness;ring":
+            doID = false;
+           break;
+          case $"Ignorance":
+            EActor->IPrint("You haven't a clue how to interpret what you just
+                              saw happen.");
+            doID = false;
+           break;
+          case $"Aggravate Monster":
+            EActor->IPrint("The acid seems to roil angrily.");
+            doID = true;
+           break;
+          case $"Elemental Command (Air)":
+            EActor->IPrint("Winds lash up around you!");
+            doID = true;
+           break;
+          case $"Elemental Command (Earth)":
+            EActor->IPrint("The earth trembles angrily as that ring dissolves.");
+            doID = true;
+           break;
+          case $"Elemental Command (Fire)":
+            EActor->IPrint("A furious jet of flame sprays from the flask!");
+            ThrowDmg(EV_DAMAGE,AD_FIRE,3d6,"an alchemical reaction", EActor, EActor);
+            doID = true;
+           break;
+          case $"Elemental Command (Water)":
+            EActor->IPrint("Watery condensate forms on the outside of the flask.");        
+            doID = true;
+           break;
+          case $"Item Preservation":
+            EActor->IPrint("The acid and flask both vanish to another plane!");
+            EItem2->Remove(true);
+            doID = true;
+           break;
+          case $"the Kobolds":
+            EActor->IPrint("You hear a mad cackling.");
+            doID = true;
+           break;
+          case $"the Gnomes":
+            EActor->IPrint("You hear joyful laughter.");
+            doID = true;
+           break;
+          case $"Elvenkind;ring":
+            EActor->IPrint("You hear regal music.");
+            doID = true;
+           break;
+          case $"Elemental Disjunction":
+            EActor->IPrint("The acid seems to decompose into its base
+                             components before flowing back into a homogenous
+                             liquid.");
+            doID = true;
+           break;
+        }
+      if (doID)
+        EActor->IdentByTrial(EItem);
+      if (doDestroy)
+        EItem->Remove(true);
+      return DONE;
+      };
+    Constants:
+      * ITEM_COST 350;
+  }
+          
+AI_ALCHEMY Effect "Alchemist's Fire" : EA_BLAST
+  {          
+    Desc: "Alchemist's Fire is a sticky, viscous semi-liquid that catches
+      fire when exposed to air. It is usually thrown is a sealed glass
+      flask at an enemy, who suffers 1d10 points of fire damage for every +5
+      Alchemy skill the Fire was created with (minimum 2d10). A Reflex
+      saving throw (DC 10 + 1/2 Alchemy skill level + thrower's Dexterity
+      modifier) can be made for half damage; failing this save indicates
+      the target has been set on fire and will suffer 1d4 additional points 
+      of fire damage each round until the flames are successfully 
+      extinguished.";
+    aval: AR_BOLT; xval: AD_FIRE; cval: PINK; lval: 4; qval: Q_LOC; 
+    Flags: EF_ACTIVATE, EF_MUNDANE, EF_NO_BONUS_DMG, EF_ATTACK; 
+    sval: REF partial;
+    On Event EV_CALC_EFFECT {
+      e.vCasterLev = max(10,e.vAlchemy);
+      e.saveDC = 10 + e.vAlchemy / 2 + EActor->Mod(A_DEX);
+      SetPVal(e,0,e.vAlchemy/5,10);
+      return NOTHING;
+      },
+    POST(EV_MAGIC_HIT) {
+      if (!e.Resist)
+        RedirectEff(e,$"Burn",EV_EFFECT);
+      return NOTHING;
+      },
+    MSG_BLASTNAME
+      "spray of burning liquid",
+    PRE(EV_EFFECT)
+      "You throw an <EItem>." /
+      "The <EActor> throws an <EItem>.";
+    Constants:
+      * ITEM_COST 150;
+  }          
+
+AI_ALCHEMY Effect "eggshell flash-bomb" : EA_INFLICT
+  {
+    Desc: "An ingenious incendiary device, the eggshell bomb ignites 
+      upon striking any solid surface, producing a brilliant flash
+      of light that blinds any creatures within 30 feet of its point
+      of impact. A Reflex save (DC 10 + 1/2 Alchemy skill level + the
+      thrower's Dexterity mod) negates the blinding; the thrower 
+      herself, being prepared for the flash, is immune. The blinding
+      lasts for 1d4 rounds.";
+    aval: AR_GLOBE; xval: BLIND; cval: WHITE; lval: 3; qval: Q_LOC; 
+    Flags: EF_ACTIVATE, EF_MUNDANE, EF_DSHORT, EF_NAMEONLY; sval: REF;
+    On Event EV_CALC_EFFECT {
+      e.vCasterLev = max(10,e.vAlchemy);
+      e.saveDC = 10 + e.vAlchemy / 2 + EActor->Mod(A_DEX);
+      return NOTHING;
+      },
+    PRE(EV_EFFECT)
+      "You throw an <EItem>." /
+      "The <EActor> throws an <EItem>.";
+    Constants:
+      * BASE_ITEM $"eggshell bomb",
+      * ITEM_COST 250;
+  }
+
+AI_ALCHEMY Effect "eggshell smoke-bomb" : EA_INFLICT
+  {
+    Desc: "This alchemical item produces a surprising volume of misty,
+      harmless smoke from a combination of chemical powders sealed
+      inside an eggshell. The eggshell is thrown and triggers upon
+      impact, creating a smoke cloud with a radius of [Alchemy skill /
+      5] + 2 squares.";
+    rval: FI_FOG; cval: GREY; aval: AR_FIELD; qval: Q_LOC;
+    Flags: EF_GLYPH_FOG, EF_ACTIVATE, EF_MUNDANE, EF_NAMEONLY;
+    On Event PRE(EV_EFFECT)
+      "You throw an <EItem>." /
+      "The <EActor> throws an <EItem>.",
+    EV_ELAPSED
+      "The fog disperses.",
+    EV_CALC_EFFECT {
+      e.lval = 2 + e.vAlchemy / 5;
+      return NOTHING;
+      };
+    Constants:
+      * BASE_ITEM $"eggshell bomb",
+      * ITEM_COST 450;
+  } 
+
+AI_ALCHEMY Effect "Silversheen;alchemy" : EA_GENERIC
+  {          
+    Flags: EF_DLONG, EF_ACTIVATE, EF_AFFECTS_ITEMS, EF_ITEMS_ONLY; qval: Q_INV;
+    On Event EV_MAGIC_STRIKE {
+      if (ETarget->isType(T_WEAPON) || ETarget->isType(T_MISSILE) ||
+          ETarget->isType(T_SHIELD) || ETarget->isType(T_ARMOR))
+        if (ETarget->QualityOK(IQ_SILVER) && ETarget->isMetallic())
+          ETarget->GainTempStati(EXTRA_QUALITY,EActor,e.vDuration,SS_ENCH,
+              IQ_SILVER,IQ_SILVER, $"silversheen;alchemy", e.vCasterLev);
+      return DONE;
+      }, 
+    EV_RATETARG {
+      if (EItem->isType(T_WEAPON) || EItem->isType(T_MISSILE) ||
+          EItem->isType(T_SHIELD) || EItem->isType(T_ARMOR))
+        if (EItem->QualityOK(IQ_SILVER) && EItem->isMetallic())
+          return NOTHING;
+      return ABORT;
+      },
+    EV_ELAPSED
+      "The Silversheen has worn off.";
+    Constants:
+      * BASE_ITEM $"flask",
+      * ITEM_COST 750;
+    Desc: "This thin alchemical resin can be applied to any metal weapon,
+      bonding with the metal for a brief period of time to give it the
+      qualities of silver with regard to lycanthropes and devils.";
+  }   
+
+AI_ALCHEMY Effect "twilight salve" : EA_INFLICT
+  {
+    Flags: EF_ACTIVATE, EF_MUNDANE, EF_SHOWNAME;
+    Desc: "By rubbing this pungent salve on one's eyelids (by Activating
+      this item), the user is able to see invisible or ethereal creatures
+      for a brief period of time. Unfortunately, the aftereffect of the
+      salve leaves the user deeply disoriented for a period when it wears
+      off; it also tend to abuse the body in the longer term.";
+    xval: SEE_INVIS; 
+    On Event 
+      EV_ELAPSED {
+        EActor->IPrint("Your vision fades back to mundane levels.");
+        if (EActor->isCharacter())
+          EActor->Abuse(A_CON,2d10);
+        EActor->GainTempStati(STUNNED,NULL,3d6,SS_MISC,0,0);
+        return NOTHING;
+        },
+      EV_EFFECT
+        "You apply the salve to your eyelids. Your vision expands 
+          into the otherworldly!";
+    Constants:
+      * BASE_ITEM $"flask",
+      * ITEM_COST 750;
+  }  
+
+#if 0
+AI_ALCHEMY Effect "Dusktorch" : EA_NOTIMP
+  {          
+    
+  }  
+#endif           
+          
+          
+/************************************************************************\
+ *                                 MACROS                               *
+\************************************************************************/
+
+AI_MACRO Effect "Autobuff" : EA_GENERIC
+  {
+    Desc: "<5>Activating this macro causes you to cast all the spells
+      in your autobuff list -- normally self-improvement spells (like
+      <9>Bull's Strength<5>), protection spells (<9>stoneskin<5>) and
+      detection spells (<9>detect monsters<5>). You can have up to 64
+      spells in your autobuff list, which is shown on the character
+      sheet. Spells can be added or removed from this list using the
+      Spell Manager, by pressing the key bound to this macro.\n
+      __If you already have some of the spells cast, you'll just cast
+      the ones that are missing from the list -- thus, you can use
+      this macro to fix things if you get hit with a <9>dispel magic<5>
+      spell.";
+    On Event EV_MACRO {
+      int16 spNum, r; rID spID;
+      for(spNum=EActor->FirstAutoBuff();spNum;
+          spNum=EActor->NextAutoBuff())
+        {
+          spID = theGame->SpellID(spNum);
+          if (!(EActor->HasEffStati(-1, spID) ||
+                EActor->HasEffField(spID) ||
+                EActor->HasEffStati(EFF_FLAG1,$"Autobuff",spNum)))
+            {
+              e.eID = spID;
+              EActor->IPrint("You cast <9><Res><7>.",spID);
+              if (ReThrow(EV_CAST,e) != DONE)
+                {
+                  /* Casting failed for some reason -- probably out of
+                     mana -- so don't keep trying. */
+                  EActor->RemoveEffStati($"Autobuff");
+                  return DONE;
+                }
+              /* Sometimes a player might put a spell like /call light/
+                 or /fireball/ into the auto-buff by mistake, or the
+                 spell might have a script that prevents it from giving
+                 the stati, or whatever. We don't want to loop forever,
+                 so we give a flag saying we cast it even if we don't
+                 have any stati from it. */
+              if (!EActor->HasEffStati(-1,spID))
+                EActor->GainPermStati(EFF_FLAG1,NULL_OBJ,SS_MISC,spNum,0,$"Autobuff");
+              return DONE;
+            }
+        }
+      EActor->IPrint("All spells cast.");
+      EActor->RemoveEffStati($"Autobuff");
+    };
+  }
+
+AI_MACRO Effect "AutoRest" : EA_GENERIC
+  {
+    Desc: "<5>This macro repeats the 'rest' action for as many turns as
+      it takes to recover full mana (if you are still recovering mana
+      at all) and to get rid of any negative conditions such as stunned,
+      confused, trap or spell effects that expire over a number of turns,
+      etc. If you have regeneration, it waits until you are fully healed
+      as well. The macro asks to stop resting if you are threatened by 
+      any hostile creatures.\n
+      __To prevent pathological situations of infinite resting, the macro
+      stop resting after 1000 turns; it also stops if you are starving.";
+    int32 restedTurns;
+    On Event EV_MACRO {
+      bool moreRest;
+      moreRest = false;
+      if (EActor->GetStatiDur(STUNNED) > 0)
+        moreRest = true;
+      if (EActor->GetStatiDur(CONFUSED) > 0)
+        moreRest = true;
+      if (EActor->GetStatiDur(BLIND) > 0)
+        moreRest = true;
+      if (EActor->GetStatiDur(HALLU) > 0)
+        moreRest = true;
+      if (EActor->GetStatiDur(AFRAID) > 0)
+        moreRest = true;
+      if (EActor->GetStatiDur(NAUSEA) > 0)
+        moreRest = true;
+        
+      if (EActor->GetStatiDur(ADJUST) > 0)
+        moreRest = true;
+      if (EActor->GetStatiDur(ADJUST_SAC) > 0)
+        moreRest = true;
+      if (EActor->GetStatiDur(ADJUST_CIRC) > 0)
+        moreRest = true;
+      if (EActor->GetStatiDur(ADJUST_MOR) > 0)
+        moreRest = true;
+      if (EActor->GetStatiDur(ADJUST_PAIN) > 0)
+        moreRest = true;      
+        
+      if (EActor->HasAbility(CA_FATIGUE_REGEN))
+        if (EActor->GetAttr(A_FAT) > EActor->cFP)
+          moreRest = true;
+      
+      if (EActor->cHP < EActor->mHP + EActor->GetAttr(A_THP))
+        if (EActor->GetStatiVal(REGEN) > 0 ||
+            EActor->HasAbility(CA_REGEN))
+          moreRest = true;
+  
+      if (EActor->cMana() < EActor->nhMana())
+        if (EActor->cMana()*2 >= EActor->nhMana())
+          moreRest = true;
+          
+      if (restedTurns > 1000)
+        {
+          EActor->IPrint("Breaking auto-rest after 1000 turns!");
+          moreRest = false;
+        }
+        
+      if (EActor->HungerState() <= STARVING)
+        moreRest = false;
+  
+      if (!moreRest)
+        {
+          EActor->IPrint("AutoRest: <Num> turns.", restedTurns);
+          restedTurns = 0;
+          EActor->Timeout += 1;
+          EActor->RemoveEffStati($"AutoRest");
+          return DONE;
+        }
+      else
+        {
+          EActor->Timeout += 15;
+          restedTurns++;
+        }
+      };
+  }
+  
+AI_MACRO Effect "AutoDrop" : EA_GENERIC
+  {
+    Desc: "<5>This macro allows you to select multiple items from
+      your inventory, in any container you possess, and then drops
+      them on the ground one by one, stopping if you are threatened
+      or otherwise interrupted.";
+    hObj it; bool doneSelect;
+    On Event EV_INITIALIZE {
+      doneSelect = false;
+      return NOTHING;
+      },
+    EV_MACRO {
+      bool found; int16 i, sl;
+      if (!doneSelect) {
+        for (it=EActor->FirstInv();it!=NULL_OBJ;it=EActor->NextInv())
+          { found = true;
+            it->RemoveEffStati($"AutoDrop");
+            ETerm->LOption(it->Name(NA_A|NA_LONG|NA_MECH),(int32)it/*,it->Describe(EActor)*/); }
+        if (!found)
+          { EActor->HaltAction("nothing to drop",true);
+            return ABORT; }
+        if (!ETerm->LMultiSelect(MENU_BORDER|MENU_ESC/*|MENU_DESC*/,
+                "Select Items to Drop",WIN_MENUBOX))
+          { EActor->HaltAction("aborted",true);
+            ETerm->LOptionClear();
+            return ABORT; }
+        doneSelect = true;
+        }
+      
+      for (it=(hObj)ETerm->FirstSelected();it!=NULL_OBJ;it=(hObj)ETerm->NextSelected())
+        {
+          if (it->HasEffStati(EFF_FLAG1,$"AutoDrop"))
+            continue;
+          if (it->x > 0)
+            continue;
+          if (it->IFlags & IF_WORN) {
+            sl = 0;
+            for (i=0;i!=SL_LAST;i++)
+              if (EActor->InSlot(i) == it)
+                sl = i;
+            if (ThrowVal(EV_REMOVE,sl,EActor,NULL_OBJ,it,NULL_OBJ) == ABORT)
+              { it->GainTempStati(EFF_FLAG1,NULL_OBJ,-2,SS_MISC,0,0,$"AutoDrop"); 
+                return NOTHING; }
+            if (it->IFlags & IF_WORN)
+              { it->GainTempStati(EFF_FLAG1,NULL_OBJ,-2,SS_MISC,0,0,$"AutoDrop"); 
+                return NOTHING; }
+            }
+          else if (it->GetParent() != NULL_OBJ && it->GetParent()->isType(T_CONTAIN)) {
+            if (Throw(EV_TAKEOUT,EActor,NULL_OBJ,it->GetParent(),it) != DONE)
+              { it->GainTempStati(EFF_FLAG1,NULL_OBJ,-2,SS_MISC,0,0,$"AutoDrop"); 
+                return NOTHING; }
+            if (it->GetParent() != NULL_OBJ && it->GetParent()->isType(T_CONTAIN))
+              { it->GainTempStati(EFF_FLAG1,NULL_OBJ,-2,SS_MISC,0,0,$"AutoDrop"); 
+                return NOTHING; }
+            }
+          /*if (it->GetParent() != NULL_OBJ)
+            { it->GainTempStati(EFF_FLAG1,NULL_OBJ,-2,SS_MISC,0,0,$"AutoDrop"); 
+              return NOTHING; }*/
+          Throw(EV_DROP,EActor,NULL_OBJ, it);
+          if (it->x > 0)
+            EActor->IPrint("<hObj> dropped.", it);
+        }
+      EActor->HaltAction("done",true);
+      return DONE;
+      },
+    EV_REMOVED {
+      hObj it;
+      if (e.EParam != ACTING)
+        return NOTHING;
+      for (it=(hObj)ETerm->FirstSelected();it!=NULL_OBJ;it=(hObj)ETerm->NextSelected())
+        if (isValidHandle(it))
+          it->RemoveEffStati($"AutoDrop");
+      for (it=EMap->FItemAt(EActor->x,EActor->y);it;
+           it=EMap->NItemAt(EActor->x,EActor->y))
+        it->RemoveEffStati($"AutoDrop");
+      for (it=EActor->FirstInv();it;it=EActor->NextInv())
+        it->RemoveEffStati($"AutoDrop");
+      ETerm->LOptionClear();
+      return NOTHING;
+      };
+  }
+
+AI_MACRO Effect "AutoLoot" : EA_GENERIC
+  {
+    Desc: "This macro automates collecting items both from chests and from
+      piles on the ground. First, it attempts to open any chests in the
+      square you are standing in. It tries three methods to do this, first
+      attempting to pick the lock on the chest, then potentially zapping any 
+      wand of opening in your inventory at the chest until either it opens, 
+      the wand is out of charges or you have insufficient mana, as moderated
+      by the Tactical Option 'Use Wand of Opening'. If these methods
+      fail, your character will strike the chest until it breaks. You will
+      be asked for confirmation before trying to break open a chest.\n
+      __Once all chests are unlocked, the macro will display a list of all
+      the items in your square, both those in chests and on the ground, and
+      allow you to mark the ones you would like to pick up. Then it will
+      pick the selected items up one by one, placing them in your pack if
+      possible, otherwise bringing up the inventory screen to allow you to
+      select where to put the item before moving on to the next one.";
+    hObj it; bool doneSelect; int16 cKick;
+    On Event EV_INITIALIZE {
+      doneSelect = false;
+      cKick = 0;
+      return NOTHING;
+      },
+    EV_MACRO {      
+      hObj h, h2, pack;
+      int16 i, cnum; 
+      String s; bool found, first;
+
+      if (EActor->InSlot(SL_INAIR))
+        { 
+          first = true;
+          do {
+            ETerm->InventoryManager(first);
+            first = false;
+            }
+          while (!EActor->Timeout);
+          return NOTHING;
+        }
+
+      for (h=EMap->FirstAt(EActor->x,EActor->y);h;h=EMap->NextAt(EActor->x,EActor->y)) 
+        if (h->isType(T_CHEST) || h->isType(T_CONTAIN)) {
+          /* Chest broken by force */
+          if (!isValidHandle(h))
+            continue;
+          if (h->HasEffStati(EFF_FLAG1,$"AutoLoot"))
+            continue;
+          if (h->HasStati(LOCKED)) {            
+                
+            if (!h->HasStati(TRIED,SK_LOCKPICKING)) {
+              if (Throw(EV_PICKLOCK,EActor,NULL_OBJ,h) != DONE)
+                h->GainTempStati(TRIED,EActor,-2,SS_MISC,SK_LOCKPICKING,0,$"AutoLoot");            
+              if (EActor->Timeout)
+                return DONE;
+              }
+                      
+            for (h2=EActor->FirstInv();h2;h2=EActor->NextInv())
+              if (h2->isType(T_WAND) && h2->ieID == $"Opening" &&
+                    EActor->cMana() >= 5)
+                if (h2->isKnown(KN_MAGIC) && h2->GetCharges() >= 1)
+                  {
+                    switch(EActor->Opt(OPT_WAND_OPENING))
+                      {
+                        case 0:
+                          break;
+                        case 1:
+                          if (EActor->cMana() >= EActor->nhMana()/3) {
+                            ThrowXY(EV_ZAP,EActor->x,EActor->y,EActor,h,h2);
+                            return DONE;
+                            }
+                         break;
+                        case 2:
+                          if (EActor->yn(XPrint("Zap the chest (<hObj>)?",h2))) {
+                            ThrowXY(EV_ZAP,EActor->x,EActor->y,EActor,h,h2);
+                            return DONE;
+                            }
+                         break;
+                      }
+                  }
+              
+            if (cKick == 0 && !EActor->yn(XPrint("Force open the <hObj>?",h)))
+              {
+                h->GainTempStati(EFF_FLAG1,EActor,-2,SS_MISC,0,0,$"AutoLoot");
+                continue;
+              }
+              
+            cKick++;
+            
+            if (EActor->AttackMode() == S_MELEE ||
+                EActor->AttackMode() == S_DUAL)
+              Throw(EV_WATTACK,EActor,h);
+            else
+              ThrowVal(EV_SATTACK,A_KICK,EActor,h);
+              
+            if (!isValidHandle(h) || h->isDead())
+              { cKick = 0; }
+            else if ((cKick % 20 == 19) &&
+              EActor->yn(XPrint("Stop striking the <hObj> after <Num> tries?",h,cKick)))
+              h->GainTempStati(EFF_FLAG1,EActor,-2,SS_MISC,0,0,$"AutoLoot");
+            
+            return DONE;
+            }
+          }
+    
+      if (!doneSelect)
+        {
+          found = false;
+          for (h=EMap->FItemAt(EActor->x,EActor->y);h;h=EMap->NItemAt(EActor->x,EActor->y)) 
+            if (h->isType(T_CHEST) || h->isType(T_CONTAIN))
+              if (!h->HasStati(LOCKED)) {
+                for (i=0;h2=h->getItem(i);i++)
+                  {
+                    cnum++;
+                    s = h2->Name(NA_A|NA_LONG|NA_MECH); 
+                    s += " (in chest)";
+                    ETerm->LOption(s,(int32)h2);
+                    found = true;
+                  }
+                }
+                  
+          for (h=EMap->FItemAt(EActor->x,EActor->y);h;h=EMap->NItemAt(EActor->x,EActor->y)) 
+            if (!(h->isType(T_CHEST) || h->isType(T_CONTAIN)))
+              {
+                s = h->Name(NA_A|NA_LONG|NA_MECH);
+                s += " (on ground)";
+                ETerm->LOption(s,(int32)h);
+                found = true;
+              }
+          
+          if (!found)
+            { EActor->HaltAction("nothing to loot",true);
+              return ABORT; }
+          
+          if (!ETerm->LMultiSelect(MENU_BORDER|MENU_ESC/*|MENU_DESC*/,
+                  "Select Items to Loot",WIN_MENUBOX))
+            { EActor->HaltAction("aborted",true);
+              ETerm->LOptionClear();
+              return ABORT; }
+          doneSelect = true;
+        }
+
+      for (it=(hObj)ETerm->FirstSelected();it!=NULL_OBJ;it=(hObj)ETerm->NextSelected())
+        {
+          /* Stacking caused the item-object to be destroyed? */
+          if (!isValidHandle(it))
+            continue;
+          if (it->Owner() == GetHandle(EActor))
+            continue;
+          if (it->HasEffStati(EFF_FLAG1,$"AutoLoot"))
+            continue;
+          if (it->GetParent() != NULL_OBJ && it->GetParent()->isType(T_CONTAIN)) {
+            Throw(EV_TAKEOUT,EActor,NULL_OBJ,it->GetParent(),it);
+            if (it->GetParent())
+              { 
+                EActor->IPrint("Cannot take out <hObj>.", it);
+                it->GainTempStati(EFF_FLAG1,EActor,-2,SS_MISC,0,0,$"AutoLoot");
+                return DONE;
+              }
+            }
+          else {
+            Throw(EV_PICKUP,EActor,NULL_OBJ,it);
+            if (it->Owner() != GetHandle(EActor))
+              { 
+                it->GainTempStati(EFF_FLAG1,EActor,-2,SS_MISC,0,0,$"AutoLoot");
+                return DONE;
+              }
+            if (EActor->InSlot(SL_INAIR) != it) {
+              EActor->IPrint("Failed to pick up <hObj>.", it);
+              it->GainTempStati(EFF_FLAG1,EActor,-2,SS_MISC,0,0,$"AutoLoot");
+              if (!(it->Flags & F_DELETE))
+                it->PlaceAt(EMap,EActor->x,EActor->y);
+              if (EActor->isCharacter())
+                EActor->SetInvSlot(SL_INAIR,NULL_OBJ);
+              return DONE;
+              }
+            }
+          if (EActor->isCharacter())
+            EActor->SetInvSlot(SL_INAIR,NULL_OBJ);
+          pack = EActor->InSlot(SL_PACK);
+          if (pack != NULL_OBJ && pack->isType(T_CONTAIN)) {
+            if (Throw(EV_INSERT,EActor,NULL_OBJ,pack,it) == DONE) {
+              EActor->IPrint("<hObj> taken.", it);
+              return DONE;
+              }
+            }
+          /* Here we tag the item so that if the user drops it in the
+             inventory manager, we don't just pick it right up again
+             in an infinite loop! */
+          it->GainTempStati(EFF_FLAG1,EActor,-2,SS_MISC,0,0,$"AutoLoot");
+          EActor->GainItem(it,false);
+          if (it->Owner() != GetHandle(EActor))
+            { EActor->IPrint("Cannot stow <hObj>.", it);
+              it->Remove(false);
+              it->PlaceAt(EMap,EActor->x,EActor->y);
+              return DONE; }
+          else
+            EActor->IPrint("<hObj> taken.",it);
+          return DONE;
+        }
+
+      EActor->HaltAction("finished looting",true);
+      return DONE;
+      },
+    EV_REMOVED {
+      hObj it;
+      if (e.EParam != ACTING)
+        return NOTHING;
+      for (it=(hObj)ETerm->FirstSelected();it!=NULL_OBJ;it=(hObj)ETerm->NextSelected())
+        if (isValidHandle(it))
+          it->RemoveEffStati($"AutoLoot");
+      for (it=EMap->FItemAt(EActor->x,EActor->y);it;
+           it=EMap->NItemAt(EActor->x,EActor->y))
+        it->RemoveEffStati($"AutoLoot");
+      ETerm->LOptionClear();
+      return NOTHING;
+      };
+  }
+
+/************************************************************************\
+ *                              WILD TALENTS                            *
+\************************************************************************/
+
+/* Psionic powers in Incursion have no levels. Instead, when we
+   actually implement mechanics for psionicists, powers will have
+   a power roll, the base bonuses for which go up in level as the
+   character advances in level as a psionicist just like a warrior's
+   BAB. The better the roll, the better the power use -- thus,
+   powers scale with the character who has them, moreso even than
+   mage spells.
+     For now there's no real rules and only a few monster races
+   with wild talents, plus the possibility of having them as
+   quirks, so we're keeping them on the power level of level 1-2
+   spells. Psionic powers aren't magic and, thus, don't cost mana
+   either. Some cost fatigue, though. Later, there will be limits
+   to the number of powers you can have active at once, and there
+   will be penalties to having them up constantly, and so forth,
+   but for now, they're just neat quirks for monsters...
+     They are EF_MUNDANE because they *aren't* magic, and can't
+   be dispelled, cancelled by an anti-magic zone, etc.
+     Most of this stuff is psychometabolic for now, because that
+   seems to be what most wild talents focus on.
+   
+   DRAFT PSI RULES:
+     Here is a loose outline of the psionics rules as they will
+   appear in final release Incursion. For now, psi is just a
+   quirk possessed by monsters, and the effects have no real
+   mechanical structure. They're a little powerful because of
+   that, but weak at higher levels. Anyway...
+   
+   Power Check:
+     The use of psionic powers is based on the power check, which
+   works very similarly to power rolls. The power check is rolled
+   on 1d12, and to that is added the base psionic bonus, which is
+   1/1 for psionicists and monks (who synergize well with psi) and
+   1/2 for every other class. You also add an ability score modifier
+   based on the discipline the power is from, per the following
+   chart:
+      Clairsentience    Wis  (extra-sensory perceptions, hyper-awareness, mind-boosting)
+      Metaphysics       Int  (luck manipulation, planar powers, reality alteration)
+      Psychoportation   Int  (teleportation, travel powers, spatial control)
+      Psychokinesis     Wis  (telekinetic powers, matter tranformation, physical effects)
+      Psychometabolism  Con  (control over body and metabolism)
+      Telepathy         Cha  (mind-to-mind contact and control, psi combat)
+   The DC to activate a power is 10. Psionicists can choose to be a
+   full generalist (roll 1d12 for power checks in all disciplines), a
+   full specialist (roll 1d20 in one discipline and 1d8 for all the
+   rest, or a dualist (roll 2d8 for two disciplines, 1d8 for all the
+   rest). Modifiers, feats and so forth will be set up to allow psis
+   to activate powers reliably in at least one discipline (BPB of near
+   +8 or +9) at 1st level, if they have good attributes and build
+   their character to focus on that.
+     Every +5 above the base 10 the power check rolls stages the power
+   up by one level, much like supercharging a wand. This will increase
+   the damage and potency of powers in idividual ways -- for example,
+   /detonate/ might do 2d10 *per stage*.
+     When a psionic character uses a hostile power against another
+   character, the result of their power check is the DC of any relevant
+   saving throw to resist that power.
+   
+   Constant/Reflexive Powers and Enhancing Powers:
+     Many psionic powers work very much like spells -- you 
+   
+   Psionic Combat:
+     Psionic combat is initiated by a character with /contact/ using an
+   attack mode on another psionic character. The attacker and defender
+   compare power check results -- the defender automatically uses their
+   best defense mode against whatever attack mode the attacker used.
+   A specific combination of one attack mode against one defense mode
+   has a modifier that is applied to the defender's power check roll
+   per the psionic combat chart. Psionic combat takes very little time
+   compared to manifesting normal powers -- an average attack has a
+   timecost of 5 compared to 20-30 for manifesting a power.
+     If the defender's score is higher, the attack mode has no effect.
+   If the attacker's score is higher, however, the attacker gains a
+   "tangent" on the defender. A tangent represents a sustained opening
+   and access into another character's mind. A psionic character can
+   have between one and three tangents on another psi, with three
+   being considered "victory" in psionic combat. When one psionic
+   gains three tangents on another, any tangents the victim had on the
+   victor are instantly severed.
+     When a psionic character manifests a telepathic power against a
+   non-psionic character, the victim benefits from having a closed mind
+   and gains a Will saving throw (at a DC equal to the power check).
+   Psionic characters do not gain the benefit of this Will save; instead,
+   they use their defense modes to resist telepathic powers. These powers
+   cannot be used successfully on them unless the manifester has the
+   required number of tangents: minor powers such as /awe/ or /mental 
+   invisibility/ require only one tangent, powers that can severely
+   debilitate the target character (such as /false sensory input/ or
+   /double pain/) require two tangents and powers that mentally enslave, 
+   paralyze or kill outright a target require three tangents to function
+   on a non-psionic character.
+     When a psionic successfully uses an attack mode on another psi, it
+   has its normal effects -- attribute damage, psychic damage, etc. -- in 
+   addition to granting tangents. On the first tangent, however, the
+   victim is considered to have made their saving throw, so they suffer
+   half damage and do not suffer from added effects like stunning or
+   confusion. On the second or third tangents, the attack mode has its
+   full normal effects. Once a psionicist has the full three tangents on
+   a character, manifesting further attack modes inflicts double attribute
+   damage or other effects, but does not grant any other tangents.
+     A psionic may wish to gain access to another psionic's mind covertly
+   -- for example, to use a manipulate telepathic power on a neutral
+   creature, or to get tangents on a sleeping enemy without waking them
+   up, or simply to prevent another psionic from using their attack modes
+   in response. To do this, a psychic attacker must choose to forego the
+   normal detrimental effects of psionic combat (attribute damage, stunning,
+   etc.) and try merely for tangents. This can only be done if the victim
+   is either not hostile to the attacker, or cannot currently percieve the
+   attacker. To see if the intrusion is detected, the attacker makes a
+   Bluff check opposed by a Sense Motive check made by the defender;
+   non-sapient psionic beasts may substitute their [CR + Wisdom modifier]
+   for a Sense Motive rating in this specific case. The attack mode used
+   modifies the Bluff check; some modes are stealthier than others. Id
+   Insinuation is the best for covert attacks, whereas Psionic Blast
+   cannot be used covertly at all.
+     Success on the attacker's part means that the victim is completely
+   unaware that her mind has been entered, though she still gains the
+   benefit of her defense mode to resist the intrusion. Obviously,
+   however, she will not use an attack mode in response, does not become
+   hostile to the psionicist as a result of the attack and, if asleep,
+   does not wake up.
+     When in psionic combat, the only things a character can do are
+   use attack modes, manifest telepathic powers or exit psionic combat.
+   A character that has one or more tangents on them cannot choose to
+   leave psionic combat voluntarily, though combat can end if the victor
+   chooses to end it. Characters are not helpless while in psionic
+   combat, however, they're just focused and otherwise occupied.
+     Tangents do not vanish when a psionic combat concludes; the have a
+   duration based on the number obtained -- one tangent fades after 5d6
+   rounds, two tangents fade after a day and three tangents last for as
+   long as the tangent holder wants to maintain them. Tangents are severed
+   if the holding psion leaves psionic range with the victim, and the
+   telepathic power Ejection can be used to sever all established
+   tangents at any time.
+     Every time in a single combat you use an attack or defense mode 
+   against your adversary they've already bested, you suffer a -2 
+   culmulative penalty to the power check for every time they overcame
+   that specific mode. (The game takes this into account when choosing
+   the best defense mode for you.) So there's a really obvious benefit
+   to having a lot of different modes rather then just "the best ones".
+   
+   Psionic Visuals:
+     I want psionic combat to be very cool and flavorful in Incursion.
+   Whenever a psi learns an attack or defense mode, they will choose a
+   specific manifestation to go with that mode from a list of five.
+   This is inspired by the old Dark Sun psionic system. Ego Whip 
+   manifests as social interaction/situation (the courtesan, the prince,
+   the scoundrel, etc.), id insinuation as a temptation (the feast, the
+   seductress, the treasure trove, etc.), mind thrust as a weapon
+   (the greatsword, the ballista, the crossbow, the rapier, etc.),
+   psychic crush as an abstract concept (the equation, the unnatural
+   space, the hissing sands, etc.) and psionic blast as a rampaging
+   beast (the tiger, the barbarian, the tarrasque, etc.) Thought Shield
+   forms a literal shield or barrier (the buckler, the kite shield,
+   the iron door, etc.), intellect fortress manifests as a fortified
+   locale (the iron keep, the grand tower, the hidden valley, the
+   ancient castle), tower of iron will takes the form of the character's
+   abstract ideals (virtue, desire, honor, wisdom, etc.), mind blank is
+   a vast empty expanse or repetition of some kind (the desert, the void,
+   the process, the library, the recitation (of scripture)). Mental
+   Barrier takes the form of an obsticle or curse of some kind (the
+   trap, the dungeon, the wall, the mountains, the broken bridge).
+   Hopefully, this should make psionic combat very flavorful, as well
+   as more than a little surreal. These manifestations will be done as
+   resources, but have no game impact. Instead, they determine the
+   messages given in psicombat.
+     "Hishram's prince demeans the blue goblin's desert. The desert 
+        stands eternal. The blue goblin's tiger ravages Hishram's
+        hidden valley. Hishram's hissing sands are swallowed up by the
+        blue goblin's void. The blue goblin's treasure trove fails
+        to tempt Hishram's virtue. Hishram's seductress beckons
+        alluringly to the blue goblin's broken bridge."
+   
+   The Importance of Contact:
+   -- you need /contact/ to initiate psicombat, only psionicists get it,
+      but all outsiders are /latent/ psionics and have attack and defense 
+      modes; some but by no means all also have other psi powers.
+   -- nonpsionic creatures have closed minds, and you need normal line
+      of sight to contact them, and they get Will saves to resist. 
+      Wild talents and psionics have open minds, and can be contacted
+      by any psi that can percieve them, even using clairvoyance to do
+      so through walls, etc. This means that 
+   -- Wild talent as double-edged sword -- neat power, but you end up
+      in psi-combat with things you don't want to be.
+   
+   Psionic Focus:
+     Psionic Focus is a kind of prepatory reserve used to augment psionic
+   abilities. It is gained when the character is calm outside of combat
+   using the concentration skill. When the character is struck for damage
+   or otherwise distracted, a Concentration check is required not to lose
+   the focus. It can be expended to augment psionic powers in various ways,
+   possibly including maxing one power check roll.
+     There are a lot of ideas for this in the 3.5 SRD. My exact intent on
+   how to implement them isn't fully solidified yet, but I do want to
+   include it. 
+   
+   Aspects:
+     A character of the psionicist class can choose one of four aspects,
+   and gains significantly variant class features based on the aspect
+   that they choose: contemplative, wilder, ascendant (renaissance man,
+   skill based, slower powers) or somatic (physical adept).
+     The different aspects are different analogues to the various d20
+   psi classes -- contemplative/base psion with flavor, wilder/wilder,
+   somatic/psychic warrior, apothetic/"psionic rogue". The contemplative
+   gets more powers (but not _better_ powers, just more diverse) and is
+   the only type to get a psycrystal and various crystal powers, the
+   wilder gets less powers but gets the edges in the 3.5 SRD, the
+   ascendant, deticated to transhumanism and perfecting both the body
+   and the mind, gains 6 skill points per level instead of 2, higher
+   hit dice, bonus feats at 5th, 10th, 15th and 20th but significantly
+   fewer powers than the contemplative.
+   
+   
+   
+   
+
+Object Reading
+  bonus to Intuition / Identify / +1 bonus to
+use object at high stage
+
+Sensitivity to Psychic Impressions
+  takes an hour, gain bonuses from roomtypes
+
+Limestone Cave -- Mining bonus?
+Abbatoir -- some innate necromancy
+Magic Academy -- 1-2 random innate spells
+Elemental Chamber -- elemental resists
+Graveyard -- bonus to command undead?
+Ritual Chamber -- use binding spell?
+
+Bone Reading
+  Temporary stat bonuses based on psychometric
+reading of a corpse, boosting the attribute you
+have that has the highest difference between
+you and the skeleton.      
+   
+   
+   
+*/
+
+AI_PSIONIC Effect "Inertial Barrier" : EA_GRANT
+  { Flags: EF_DLONG, EF_NOTBAD, EF_SHOWNAME, EF_CANCEL;
+    Purpose: EP_BUFF; xval: TRAP_EVENT; yval: EVICTIM(PRE(EV_DAMAGE));
+    Desc: "This psionic ability creates a field about two inches
+      thick around the psychic's body, dampening the inertia of
+      any object moving toward her. This effect reduces the damage
+      inflicted by blunt weapons against her by a flat absolute of
+      10 hit points, and slashing weapons by 5 hit points.\n
+      __Activating this power costs 2 fatigue points if your Fortitude
+      save bonus is lower that +8, 1 fatigue point if your Fortitude
+      save bonus is lower than +15 and no fatigue if your Fortitude
+      save bonus is +15 or higher.";
+    On Event PRE(EV_EFFECT) {
+      if (EActor->GetAttr(A_SAV_FORT) >= 15)
+        0;
+      else if (EActor->GetAttr(A_SAV_FORT) >= 8) {
+        if (!EActor->LoseFatigue(1,true))
+          return ABORT;
+        }
+      else if (!EActor->LoseFatigue(2,true))
+        return ABORT;
+      return NOTHING;
+      },       
+    META(EVICTIM(PRE(EV_DAMAGE))) {
+      if (e.DType == AD_BLUNT)
+        {
+          e.vDmg = max(0,e.vDmg - 10);
+          e.strDmg += " -10 IB";
+          if (e.vDmg == 0)
+            return DONE;
+        }
+      else if (e.DType == AD_SLASH)
+        {
+          e.vDmg = max(0,e.vDmg - 5);
+          e.strDmg += " -5 IB";
+          if (e.vDmg == 0)
+            return DONE;
+        }
+      return NOTHING;
+      };
+  }
+
+/* Later, allow an option with this power to stretch only limbs
+   when needed, giving natural reach instead of causing the
+   character to grow a size category. */
+
+AI_PSIONIC Effect "Expansion" : EA_GRANT
+  { Flags: EF_PERSISTANT, EF_NOTBAD, EF_SHOWNAME, EF_CANCEL, EF_MUNDANE;
+    Purpose: EP_BUFF; xval: ADJUST; yval: A_SIZ; pval: 1;
+    Desc: "Drawing upon this psychometabolic devotion causes the
+      character to absorb ambient vitality from the biome around
+      her, causing her body to physically grow one full size
+      category larger for as long as the power is active.";
+    On Event EV_MAGIC_HIT {
+      if (EVictim->GetAttr(A_SIZ) == SZ_COLLOSAL)
+        {
+          EActor->IPrint("You can't get any larger!");
+          return DONE;
+        }
+      /* Unlike Enlarge, does *not* cancel /reduce/. */
+      VPrint(e,"You grow larger!",
+               "The <EVictim> grows larger!");
+      e.Terse = true;
+      return NOTHING;
+    },
+  EV_REMOVED
+    "You return to your normal size." /
+    "The <EActor> grows smaller again.";
+  }
+  
+AI_PSIONIC Effect "Chemical Simulation" : EA_BLAST
+  { 
+    aval: AR_TOUCH; xval: AD_ACID; pval: 2d8; lval: 5; Purpose: EP_ATTACK;
+    Desc: "Using this power, a psychic character can psychometabolically
+      alter the sweat glands and pores in her hands, causing them to emit
+      a strong acid she herself is immune to. She may make a touch attack
+      to inflict 2d8 points of acid damage; one manifestation of this power 
+      allows her to make up to five such touch attacks.\n
+      __Activating this power costs 2 fatigue points if your Fortitude
+      save bonus is lower that +8, 1 fatigue point if your Fortitude
+      save bonus is lower than +15 and no fatigue if your Fortitude
+      save bonus is +15 or higher.";
+    On Event PRE(EV_EFFECT) {
+      if (EActor->GetAttr(A_SAV_FORT) >= 15)
+        0;
+      else if (EActor->GetAttr(A_SAV_FORT) >= 8) {
+        if (!EActor->LoseFatigue(1,true))
+          return ABORT;
+        }
+      else if (!EActor->LoseFatigue(2,true))
+        return ABORT;
+      return NOTHING;
+      };        
+    Flags: EF_CANCEL;
+  }
+  
+AI_PSIONIC Effect "Adrenaline Control" : EA_GRANT
+  { xval: ADJUST; yval: A_STR; pval: +4; }
+and EA_GRANT
+  { xval: ADJUST; yval: A_CON; pval: +4; Purpose: EP_BUFF;
+    Desc: "This wild talent allows its bearer to channel an adrenaline
+      surge to great effect, gaining a +4 magic bonus to Strength and
+      Constitution for a brief period at the cost of two Fatigue points.";
+    On Event PRE(EV_EFFECT) {
+      if (!EActor->LoseFatigue(2,true))
+        return ABORT;
+      return NOTHING;
+      };
+  }
+  
+AI_PSIONIC Effect "Flesh Armor" : EA_GRANT
+  { Flags: EF_PERSISTANT, EF_NOTBAD, EF_SHOWNAME, EF_CANCEL, EF_MUNDANE;
+    Purpose: EP_BUFF; xval: ADJUST_NAT; yval: A_ARM; pval: +5;
+    Desc: "This wild talent allows a character to exercise mental
+      discipline to physically toughen her skin, strengthening the
+      bonds between cells and making her skin as hard to pierce,
+      tear or crush as cured leather (though its outward appearance
+      does not change). While this power is manifest, the character
+      has a +5 natural armor bonus."; }
+    
+AI_PSIONIC Effect "Cell Adjustment" : EA_HEALING
+  { Flags: EF_NOTBAD; Purpose: EP_FIX_TROUBLE (TROUBLE_INJURY);
+    xval: HEAL_HP; pval: 4d12+4;
+    Desc: "The entry-point of the psychic healing arts, this devotion
+      allows a character to assume conscious control over his body's
+      natural healing facilities, stimulating them to heal him of
+      4d12+4 points of damage. This places great strain on the body,
+      however, and may only be used once per day.";
+    On Event EV_ISTARGET {
+      if (EVictim->HasEffStati(EFF_FLAG1,$"cell adjustment"))
+        return CANNOT_CAST_IT;
+      return SHOULD_CAST_IT;
+      },
+    PRE(EV_MAGIC_HIT) {
+      EVictim->GainTempStati(EFF_FLAG1,NULL_OBJ,-2,SS_MISC,0,0,$"cell adjustment");
+      return NOTHING;
+      };
+  }
+  
+AI_PSIONIC Effect "Body Equilibrium" : EA_GRANT
+  {
+    Flags: EF_PERSISTANT, EF_NOTBAD, EF_SHOWNAME, EF_CANCEL, EF_MUNDANE;
+    Desc: "This devotion allows a character to perfectly attune their
+      body to any surface, allowing them to walk along anything -- even
+      surfaces such as water or a spider's web that could not normally
+      support their weight. A side effect of this perfect equilibrium
+      is a +10 bonus to the character's Balance skill.";
+    Purpose: EP_BUFF | EP_PASSAGE; xval: WATER_WALKING;
+  }
+and EA_GRANT
+  { xval: SKILL_BONUS; yval: SK_BALANCE; pval: +10; }
+  
+AI_PSIONIC Effect "Telepathic Awareness" : EA_GRANT
+  { Flags: EF_PERSISTANT, EF_NOTBAD, EF_SHOWNAME, EF_CANCEL, EF_MUNDANE;
+    Purpose: EP_BUFF; xval: EXTRA_ABILITY; yval: CA_TELEPATHY; pval: 6;
+    Desc: "The entry-point to the psionic Discipline of Telepathy,
+      this power allows a psionicist to sense the presence of other
+      minds around him. Telepathic Awareness allows the manifester
+      to automatically percieve the presence, identity and location of 
+      any non-mindless, non-shielded creatures within 60 feet of her 
+      while it is active.";
+  }      
+
+AI_PSIONIC Effect "Ballistic Attack" : EA_INFLICT
+  { Flags: EF_DSHORT, EF_NOTBAD, EF_SHOWNAME, EF_MUNDANE, EF_ONCEONLY;
+    /* Purpose: EP_PRE_ATTACK (VS_THROWN); */
+    xval: ADJUST_CIRC; yval: A_DMG_THROWN; pval: +10;
+    Desc: "Using this psionic power, a character can psychokinetically
+      accelerate any thrown weapon to such a velocity that it becomes
+      a terrifying, bullet-like blast. The effect lasts for only one
+      attack, which must be made shortly after the power is activated;
+      if it hits this attack recieves a +10 bonus to damage.";
+  }
+  
+AI_PSIONIC Effect "Detonate" : EA_BLAST
+  {
+    Flags: EF_MUNDANE, EF_AFFECTS_ITEMS; Purpose: EP_ATTACK; 
+    aval: AR_GLOBE; lval: 2; cval: PINK; qval: Q_TAR | Q_INV | Q_ITM;
+    xval: AD_BLUNT; pval: 2d10;
+    Desc: "By focusing her will into an explosive pinpoint pressure, a
+      character with this power can cause any mindless, unliving
+      object -- including mindless undead and constructs -- to
+      explode, destroying it in the process and inflicting 2d10
+      points of blunt damage to everything within 10 feet of it.
+      An undead or construct, or the bearer of a targeted item,
+      can resist with a Will save (DC 16).\n    
+      __Activating this power costs 2 fatigue points if your Fortitude
+      save bonus is lower that +8, 1 fatigue point if your Fortitude
+      save bonus is lower than +15 and no fatigue if your Fortitude
+      save bonus is +15 or higher.";
+    hObj hTarget, hSaver;
+    On Event EV_ISTARGET {
+      /* Kludge -- discern /what we target/ from /what is in the area/ */
+      if (e.isSomething && ETarget->isCreature())
+        return SHOULD_CAST_IT;
+    
+      if (ETarget->isType(T_ITEM))
+        if (!ETarget->isMagic())
+          return SHOULD_CAST_IT;
+      if (ETarget->isType(T_FEATURE))
+        return SHOULD_CAST_IT;
+      if (ETarget->isCreature())
+        if ((ETarget->isMType(MA_UNDEAD) || ETarget->isMType(MA_CONSTRUCT)) 
+              && (!ETarget->HasMFlag(M_INCOR)) && (ETarget->GetAttr(A_INT) == 0))
+          return SHOULD_CAST_IT;
+      /* Monsters target creatures carrying items, whereas players
+         must target the items themselves -- kludge so this works
+         with the monster AI. */
+      if (ETarget->isCreature() && (!EActor->isPlayer()))
+        if (hTarget = ETarget->FirstInv())
+          {
+            while (hTarget != NULL_OBJ && hTarget->isMagic())
+              hTarget = EVictim->NextInv();
+            if (hTarget != NULL_OBJ)
+              return SHOULD_CAST_IT;
+          }
+      return CANNOT_CAST_IT;
+      },
+    PRE(EV_EFFECT) {
+      hObj hMon;
+      if (EActor->GetAttr(A_SAV_FORT) >= 15)
+        0;
+      else if (EActor->GetAttr(A_SAV_FORT) >= 8) {
+        if (!EActor->LoseFatigue(1,true))
+          return ABORT;
+        }
+      else if (!EActor->LoseFatigue(2,true))
+        return ABORT;
+
+      hTarget = GetHandle(EVictim);
+      if (hTarget->isCreature() && EActor->isMonster())
+        if (!((hTarget->isMType(MA_UNDEAD) || hTarget->isMType(MA_CONSTRUCT)) 
+              && !hTarget->HasMFlag(M_INCOR) && hTarget->GetAttr(A_INT) == 0))
+          {
+            hTarget = hTarget->FirstInv();
+            while (hTarget->isMagic())
+              hTarget = EVictim->NextInv();
+          }   
+      
+      if (hTarget->isType(T_ITEM) && (hTarget->Owner() != NULL_OBJ))
+        hSaver = hTarget->Owner();
+      else if (hTarget->isMonster())
+        hSaver = hTarget;
+      else
+        hSaver = NULL_OBJ;
+      if ((hSaver != NULL_OBJ && hSaver != GetHandle(EActor)) && 
+                         hSaver->SavingThrow(WILL,16,SA_DISINT))
+        {
+          e.Resist = true;
+          APrint(e,"The <hObj> resists the detonation.",hTarget);
+          return DONE;
+        }
+      
+      if (hSaver != NULL_OBJ && hSaver->isPlayer())
+        { hSaver->IDPrint("<12>Your <hObj> explodes!<7>", "The <hObj> explodes!", hTarget); }
+      else
+        APrint(e,"The <hObj> explodes!", hTarget);
+      
+      if (hTarget->isCreature())
+        EActor->KillXP(hTarget);
+      
+      e.isLoc = true;
+      if (hSaver == NULL_OBJ)
+        {
+          e.EXVal = hTarget->x;
+          e.EYVal = hTarget->y;
+        }
+      else
+        {
+          e.EXVal = hSaver->x;
+          e.EYVal = hSaver->y;
+        }
+      /* For the "contents spill out..." stuff */
+      if (hTarget->isType(T_CONTAIN) || hTarget->isType(T_CHEST)) {
+        hMon = CreateMonster($"human");
+        ThrowDmg(EV_DAMAGE,AD_MAGC,1000,"",hMon,hTarget);
+        hMon->Remove(true);
+        }
+      else
+        hTarget->Remove(true);
+      SetEVictim(e,NULL_OBJ);
+      e.isSomething = true;
+      return NOTHING;
+      }; 
+  }
+
+AI_PSIONIC Effect "Combat Mind" : EA_INFLICT
+  {
+    xval: TRAP_EVENT; yval: EVICTIM(EV_STRIKE); Purpose: EP_BUFF;
+    Flags: EF_PERSISTANT, EF_NOTBAD, EF_SHOWNAME, EF_CANCEL, EF_MUNDANE;
+    Desc: "Using this power, you enter a trance-like state where you 
+      gain the ability to predict the moves of those you face in combat 
+      with an eerie accuracy. Whenever a sapient creature attacks you, 
+      you gain a +1 bonus to DC for every point your Intelligence score 
+      exceeds theirs. If they are a humanoid, this bonus is doubled.
+      This state requires focus; it can only be activated in combat and
+      ceases as soon as you become flat-footed."; 
+    On Event META(EVICTIM(EV_STRIKE)) {
+      int16 bonus;
+      if (EActor->isMType(MA_SAPIENT))
+        {
+          bonus = EVictim->GetAttr(A_INT) - 
+                  EActor->GetAttr(A_INT);
+          if (EActor->HasMFlag(M_HUMANOID))
+            bonus *= 2;
+          if (bonus > 0)
+            {
+              e.strDef += Format(" %+d CM",bonus);
+              e.vDef += bonus;
+            }
+        }
+      return NOTHING;
+      },
+    META(EV_TURN) {
+      if (EActor->isFlatFooted())
+        EActor->RemoveEffStati($"combat mind");
+      return NOTHING;
+      },
+    PRE(EV_EFFECT) {
+      if (EActor->isFlatFooted())
+        {
+          EActor->IPrint("You must be in combat to use that power.");
+          return ABORT;
+        }
+      return NOTHING;
+      },
+    EV_ISTARGET {
+      return EActor->isFlatFooted() ? CANNOT_CAST_IT : SHOULD_CAST_IT;
+      };
+  }
+and EA_INFLICT
+  { xval: TRAP_EVENT; yval: EV_TURN; }
+        
+AI_PSIONIC Effect "Brain Lock" : EA_INFLICT
+  { xval: PARALYSIS; yval: PARA_DAZED; sval: WILL; tval: MA_SAPIENT;
+    Flags: EF_MUNDANE, EF_LIM_MTYPE; qval: Q_TAR;
+    Desc: "A victim of this power finds their conscious mind severed from
+      their autonomic brain functions. The effect is in some ways similar
+      to entering a fugue state -- the victim stands dazed and blank,
+      though they will defend themselves from attacks and are not
+      helpless. Only sapient creatures are subject to <9>brain lock<1> --
+      the minds of beasts and animals are too primal and instinctive to
+      be divided so easily.\n
+      __The victim is entitled to a Will saving throw (DC 10 + your Wisdom
+      modifier) to resist the effect.\n
+      __Activating this power costs 2 fatigue points if your Fortitude
+      save bonus is lower that +8, 1 fatigue point if your Fortitude
+      save bonus is lower than +15 and no fatigue if your Fortitude
+      save bonus is +15 or higher.";
+    On Event PRE(EV_EFFECT) {
+      if (EActor->GetAttr(A_SAV_FORT) >= 15)
+        0;
+      else if (EActor->GetAttr(A_SAV_FORT) >= 8) {
+        if (!EActor->LoseFatigue(1,true))
+          return ABORT;
+        }
+      else if (!EActor->LoseFatigue(2,true))
+        return ABORT;
+      return NOTHING;
+      },       
+    EV_CALC_EFFECT {
+      e.saveDC = 10 + EActor->Mod(A_WIS);
+      },
+    EV_MAGIC_HIT
+      "The world seems distant and unimportant." /
+      "The <EVictim> stares blankly ahead and does not move.";    
+  }
+  
+AI_PSIONIC Effect "Energy Containment" : EA_INFLICT
+  {
+    xval: TRAP_EVENT; yval: EVICTIM(EV_DAMAGE);
+    Flags: EF_PERSISTANT, EF_NOTBAD, EF_SHOWNAME, EF_CANCEL, EF_MUNDANE;
+    Desc: "Activating this power, you align the psychometabolic
+      signature of your body to energy, allowing you to absorb
+      energy attacks directed against you and convert them into
+      harmless light. When you suffer damage from fire, lightning,
+      sound or pure magical force the first 20 points of that 
+      damage is converted harmlessly into energy provided that you
+      react in time by making a DC 10 Intelligence check. When you
+      absorb energy in this manner, you glow as if under the effect
+      of a <9>faerie fire<1> spell for one round per point of
+      damage so absorbed.";
+    On Event META(EVICTIM(EV_DAMAGE)) {
+      if (e.DType == AD_FIRE || e.DType == AD_ELEC ||
+          e.DType == AD_SONI || e.DType == AD_MAGC)
+        {
+          if (1d20 + EVictim->Mod(A_INT) < 10)
+            {
+              EVictim->IPrint("You fail to activate <5>energy containment<7>.");
+              return NOTHING;
+            }
+          VPrint(e,"You <hText>absorb the blast. You glow.",
+                   "The <EVictim> <hText>absorbs the blast. The <EVictim> glows.",
+                   e.vDmg > 20 ? "partially " : "");
+          if (EVictim->HasEffStati(ILLUMINATED,$"Energy Containment;glow"))
+            EVictim->SetEffStatiDur(ILLUMINATED,$"Energy Containment;glow",
+              EVictim->GetEffStatiDur(ILLUMINATED,$"Energy Containment;glow") +
+                min(20,e.vDmg));
+          else
+            EVictim->GainTempStati(ILLUMINATED,NULL_OBJ,min(20,e.vDmg),SS_MISC,0,0,
+                  $"Energy Containment;glow");
+          if (e.vDmg <= 20)
+            return DONE;
+          else
+            e.vDmg -= 20;
+        }
+      return NOTHING;
+      };
+  }
+
+Effect "Energy Containment;glow" : EA_GENERIC
+  {
+    Flags: EF_SHOWNAME;
+    On Event MSG_STATINAME "Glowing";
+    Desc: "You are currently glowing as a result of having absorbed energy using
+      the <9>Energy Containment<1> psionic power.";
+  }
+
+/* Later, this should affect YOU only, not your allies / friends /
+   party members / animal companion / mount / etc. */
+   
+AI_PSIONIC Effect "Ectoplasmic Cocoon" : EA_GENERIC
+  {
+    Desc: "You draw upon ectoplasm -- the material of the astral plane
+      -- to weave a cocoon around yourself inside which you can rest
+      safely in even the most dangerous enviornments. Because the
+      cocoon exists between the astral, ethereal and material planes,
+      it is all but impossible to harm and provides a secure resting
+      place from even the most powerful threats. Weaving it takes time
+      and meditation, however, so this power cannot be used to escape
+      combat or other immediate threats.";
+    On Event EV_MAGIC_HIT {
+      ThrowVal(EV_REST,REST_DUNGEON|REST_SAFE,EActor,EActor);
+      return DONE;
+      };
+  }
+  
+AI_PSIONIC Effect "Whitefire" : EA_BLAST
+  { sval: REF partial; xval: AD_FIRE; pval: 3d4; Purpose: EP_ATTACK;
+    aval: AR_BALL; qval: Q_DIR | Q_TAR; cval: COL_SILVERY; lval: 12;
+    Flags: EF_AFFECTS_ITEMS;
+    Desc: "By manifesting this power, you conjure intensely unstable
+      strands of excited matter from the astral plane that combust
+      into brilliant streams of silvery fire upon contact with air
+      in the prime material. This material manifests as a compressed
+      globe at the very edges of your fingertips and streaks outward
+      to explode in a volumetric blast inflicting 3d4 points of fire
+      damage and 1d4 points of unavoidable trauma damage. The intense
+      heat of whitefire easily damages items.\n
+      __Activating this power costs 2 fatigue points if your Fortitude
+      save bonus is lower that +8, 1 fatigue point if your Fortitude
+      save bonus is lower than +15 and no fatigue if your Fortitude
+      save bonus is +15 or higher.";
+    On Event PRE(EV_EFFECT) {
+      if (EActor->GetAttr(A_SAV_FORT) >= 15)
+        0;
+      else if (EActor->GetAttr(A_SAV_FORT) >= 8) {
+        if (!EActor->LoseFatigue(1,true))
+          return ABORT;
+        }
+      else if (!EActor->LoseFatigue(2,true))
+        return ABORT;
+      return NOTHING;
+      };        
+  }
+and EA_BLAST
+  { xval: AD_NORM; pval: 1d4; 
+    On Event MSG_BLASTNAME "strands of burning ectoplasm"; }
+
+AI_PSIONIC Effect "Clairvoyance;psi version" : EA_VISION
+  { Purpose: EP_PLAYER_ONLY; xval: VIS_MOBILE | VIS_LOS; pval: 30; yval: 5; 
+    Desc: "Manifesting this power allows a psionically active character
+      to extend his senses beyond his body, viewing through solid matter
+      to see distant locations as if he was physically present there."; }
+
+AI_PSIONIC Effect "Biocurrent" : EA_BLAST
+  { aval: AR_TOUCH; lval: LEVEL_1PER1; xval: AD_ELEC; pval: 1d12; 
+    Purpose: EP_ATTACK; 
+    Flags: EF_NOTBAD, EF_SHOWNAME, EF_DLONG, EF_CANCEL, EF_MUNDANE; 
+    Desc: "Through natural talent or careful training, you are able to
+      manipulate your body into producing a surprisingly intense
+      bioelectric current not unlike an electric eel, discharged through 
+      the palms of your hands. When you manifest this power, you charge
+      this internal reserve, and gain the ability to make a touch attack
+      which inflicts 1d12 lightning damage. You can make a number of such
+      attacks equal to your Constitution modifier plus 2 (minimum 1) before
+      the reserve is depleted.\n
+      __Activating this power costs 2 fatigue points if your Fortitude
+      save bonus is lower that +8, 1 fatigue point if your Fortitude
+      save bonus is lower than +15 and no fatigue if your Fortitude
+      save bonus is +15 or higher.";
+    On Event PRE(EV_EFFECT) {
+      if (EActor->GetAttr(A_SAV_FORT) >= 15)
+        0;
+      else if (EActor->GetAttr(A_SAV_FORT) >= 8) {
+        if (!EActor->LoseFatigue(1,true))
+          return ABORT;
+        }
+      else if (!EActor->LoseFatigue(2,true))
+        return ABORT;
+      return NOTHING;
+      },       
+    MSG_CAST
+      "You feel a humming power within your bones." / "",
+	EV_MAGIC_STRIKE
+	  "Fzzap!" /
+	  "Fzzap!",
+	EV_CALC_EFFECT {
+	  e.vCasterLev = max(1,EActor->Mod(A_CON) + 2);
+	  return NOTHING;
+	  };
+  }
+  
+AI_PSIONIC Effect "Mental Invisibility" : EA_INFLICT
+  { xval: INVIS_TO; yval: MA_SAPIENT; Purpose: EP_STEALTH;
+    Flags: EF_NOTBAD, EF_SHOWNAME, EF_DLONG, EF_CANCEL, EF_MUNDANE;
+    Desc: "Using this power, the manifester can cloud the minds of those
+      around her, rendering them unable to percieve her presence. This
+      only affects creatures that have a mind and whose Will save modifier
+      does not exceed 5 + your CR. Attacking ends the effect.\n
+      __Activating this power costs 2 fatigue points if your Fortitude
+      save bonus is lower that +8, 1 fatigue point if your Fortitude
+      save bonus is lower than +15 and no fatigue if your Fortitude
+      save bonus is +15 or higher.";
+    On Event PRE(EV_EFFECT) {
+      if (EActor->GetAttr(A_SAV_FORT) >= 15)
+        0;
+      else if (EActor->GetAttr(A_SAV_FORT) >= 8) {
+        if (!EActor->LoseFatigue(1,true))
+          return ABORT;
+        }
+      else if (!EActor->LoseFatigue(2,true))
+        return ABORT;
+      return NOTHING;
+      },
+    EV_ISTARGET {
+      /* Differentiate between targeting during casting and determining
+         who is affected later. */
+      if (!EActor->HasEffStati(TRAP_EVENT,$"Mental Invisibility"))
+        return SHOULD_CAST_IT;
+      if (EVictim->HasMFlag(M_MINDLESS))
+        return CANNOT_CAST_IT;
+      if (EVictim->GetAttr(A_SAV_WILL) > 5 + EActor->ChallengeRating())
+        return CANNOT_CAST_IT;
+      return SHOULD_CAST_IT;
+      };
+  }
+  
+AI_PSIONIC Effect "Chameleon Shifting" : EA_INFLICT
+  { xval: SKILL_BONUS; yval: SK_HIDE; Purpose: EP_BUFF | EP_STEALTH;
+    Flags: EF_NOTBAD, EF_SHOWNAME, EF_PERSISTANT, EF_CANCEL, EF_MUNDANE;
+    Desc: "Characters with this power can imitate the biological
+      process a chameleon uses to change the color of its skin,
+      allowing them to blend nearly perfectly into their surrondings.
+      Manifesting this power gives the character a +10 bonus to the
+      Hide skill.";
+  }
+  
+AI_PSIONIC Effect "Synaptic Static" : EA_INFLICT
+  { xval: TRAP_EVENT; yval: EV_INVOKE; Purpose: EP_BUFF;
+    aval: AR_FIELD; lval: 6; rval: FI_MOBILE | FI_MODIFIER; cval: PURPLE;
+    Flags: EF_NOTBAD, EF_SHOWNAME, EF_CANCEL, EF_MUNDANE, EF_CASTER_IMMUNE;
+    Desc: "By manifesting this power, a character emits a kind of
+      psychic static that interferes with other psionic creatures'
+      attempts to use their powers. This effects an area consisting
+      of a globe centered on you with a 60 foot radius. If a character 
+      wishes to manifest a psionic power while inside this area (other
+      than a defense mode), they must beat you in an opposed
+      Concentration check; otherwise, the power does not manifest and
+      the manifester has wasted 15 phases.";
+    On Event META(EV_INVOKE) {
+      int16 manifester_check, static_check;
+      hObj hStatic;
+      if (e.eID->HasSource(AI_PSIONIC))
+        {
+          hStatic = EActor->GetEffStatiObj(TRAP_EVENT,$"Synaptic Static");
+          if (hStatic->isPlayer())
+            {
+              EActor->SkillCheck(SK_CONCENT,0,true);
+              manifester_check = LastSkillCheckResult();
+              hStatic->SkillCheck(SK_CONCENT,manifester_check,true);
+              static_check = LastSkillCheckResult();
+            }
+          else
+            { 
+              hStatic->SkillCheck(SK_CONCENT,0,true);
+              static_check = LastSkillCheckResult();
+              EActor->SkillCheck(SK_CONCENT,static_check+1,true);
+              manifester_check = LastSkillCheckResult();
+            }
+          if (static_check >= manifester_check)
+            {
+              EActor->IDPrint("Psychic static overwhelms your attempt to
+                                  manifest a power.", "The <hObj> concentrates,
+                                  but nothing happens.", EActor);
+              EActor->Timeout += 15;
+              return DONE;
+            }
+        }
+      return NOTHING;
+      },
+    EV_FIELDON
+      "You hear a buzzing sound at the back of your mind.",
+    EV_FIELDOFF
+      "The buzzing fades away now.";
+  }
+
+  
+/*
+
+
+  Id Insinuation
+    Id Insinuation is a subtle, subversive form of psionic attack
+  that strips away the higher facilities of a victim's psyche,
+  exposing their base desires and instinctual drives. A victim of
+  Id Insinuation suffers 1d4 points of Intelligence damage and
+  enters a mad rage for 1d6+1 turns; a Will save (DC 10 + the
+  manifester's Wisdom modifier) negates the fury and halves the
+  Intelligence damage.
+  
+  Ego Whip
+    This form of psionic assault sears away a victim's confidance
+  and self-esteem, destroying their sense of identity and willpower.
+  A successful use inflicts 1d4 points of Charisma damage on the
+  victim and grants them a -2 morale penalty to most rolls;
+  successive uses increase this penalty by -1 per use, to a maximum
+  of 2 or the manifester's Charisma modifier -- whichever is lower.
+  A successful Will saving throw (DC 10 + the manifester's Wisdom
+  modifier) negates the penalty and halves the Charisma damage.
+  
+  Mind Thrust
+    The most direct psionic weapon, a mind thrust overwhelms the
+  victim with the sheer force of the psionicist's will, sublimating
+  her will to her own. A successful use inflicts 1d4 points of
+  Wisdom damage (thereby lowering the victim's Will save modifier
+  and making her more vulnerable to other coercive telepathic
+  powers) and slows the victim for 1d4 (more) rounds. A successful
+  Will save (at its value prior to any Wisdom damage) negates the
+  slow effect and halves the Wisdom damage.
+  
+  Psychic Crush
+    The most rarefied and abstract of the five psionic attack modes,
+  this approach to psychic warfare overwhelms the victim's intellectual
+  mind with complex mathamatical concepts, paradoxical ideas, all-
+  encompassing vista or unearthly geometries. A successful use of this
+  power so overloads the victim's mind as to damage neurons and inflict
+  psychosomatic injury, doing 2d8 hit points worth of psychic damage to 
+  the victim, and causing him to be confused for 3d6 (more) rounds. 
+  There are no tangible wounds caused by this power; the only visible
+  effect in many cases is a nosebleed, while severe cases also exhibit
+  bleeding from the eyes. Only sapient creatures are subject to the
+  effects of <9>psychic crush<1>.\n
+  __A Will save negates the confusion and halves the psychic damage.
+  
+  
+  
+  Psionic Blast
+    By far the most powerful of the five psionic attacks, a psionic blast
+  affects all creatures in a cone stretching from the manifester out to a
+  range of 60 feet. [ This is probably the single psionic power with the
+  greatest mystique behind it, so I want to leave it until we have a full
+  mechanics system for psionics implemented. It shouldn't be a wild talent
+  anyway. It will have a variety of possible effects, potentially including
+  instant death for the victim. ]
+
+
+  Aversion -- enchant item so monsters can't pick it up and won't step
+    into a square where it lays.
+  Attraction / Repulsion -- New field type, FI_GRAVITY, that also works
+    for the Repulsion spell, that affects the gravity calculations of
+    monster movement.
+
+  Psychic Surgery (desc)
+  -- repair ability damage
+  -- other effects
+
+    
+  Inflict Pain -- grant a -4 telepathic A_AID penalty to a foe.
+  Mind Over Body -- grants a +10 bonus to Concentration, and includes a
+    EV_CALC_VALUES handler that zeroes all the fatigue bonus type penalties
+    from hunger and fatigue.
+  Graft Weapon -- Metaphysically attunes a weapon to the bearer, granting
+    him a +2 bonus to hit using it; this is a Clairsentient power and has
+    no visible effect.
+  Object Reading -- Identify with a nice writeup; evil items sicken the
+    bearer. Maybe also detect the last holder of the item? Once we implement
+    the "You found this sword on level n after a goblin dropped it" thing.
+  Metaphysical Stroke -- grant ki strike, planar fists
+  Probability Travel -- do something via the astral plane.
+  Lend Health -- Give an ally temporary hit points sufficient to raise their
+    total to be equal to your own.
+  Double Pain -- Increase the relative amount of HP damage a target has taken;
+    every turn a target victim to this power who is at half HP or less must
+    save or pass out, also trap the EV_CALC_VALUES to double all the penalties
+    they are taking from the pain bonus type.
+  Fate Link -- Give the USER a TRAP_EVENT stati with the TARGET as the stati
+    object. On EVICTIM(EV_DAMAGE), make the target suffer half the damage the
+    user suffers.
+  Invincible Foe -- Trap psi's EV_DAMAGE; whenever someone damages him, the
+    attacker must Will save or flee, believing he is unharmable. Save starts
+    REALLY easy, gets harder with every attack, maybe they need 3 failures
+    before fleeing? 
+  
+  Combat Mind
+    Using this power, you enter a trance-like state where you gain the
+  ability to predict the moves of those you face in combat with an
+  eerie accuracy. Whenever a sapient creature attacks you, you gain a
+  +1 bonus to DC for every point your Intelligence score exceeds theirs.
+  If they are a humanoid, this bonus is doubled.
+  
+  Martial Trance
+    Upon activating this power, you enter a fierce combat trance in
+  which you gain a +25% bonus to speed, a +5 bonus to Concentration
+  and use of the first one of the following feats that you do not
+  yet possess: Dodge, Expertise, Spring Attack, Improved Trip and
+  Whirlwind Attack.
+  
+  Brain Lock
+    A victim of this power finds their conscious mind severed from
+  their autonomic brain functions. The effect is in some ways similar
+  to entering a fugue state -- the victim stands dazed and blank,
+  though they will defend themselves from attacks and are not
+  helpless. Only sapient creatures are subject to <9>brain lock<1> --
+  the minds of beasts and animals are too primal and instinctive to
+  be divided so easily.
+  
+  Control Light
+    Manifesting this power gives a psionicist control over light in
+  her nearby vicinity. She can apply this in one of three ways:
+    Intensify Light Source: The psion is able to use her control to
+  extend the range of any light source she carries by 20 feet.
+    Evoke Shadows: By bending light away from herself and deepening
+  shadows, the psionicist is able to hide in areas where light would
+  normally prevent her from doing so.
+    Blinding Flare: By focusing all nearby ambient light as an instantaneous
+  effect, the psychic can produce a brilliant flare capable of blinding
+  creatures with eyes, stunning creatures who are light-averse and
+  frightening the undead.
+  
+  Recall Death
+    You cause a victim to experience a premonition of their own death
+  so accurate, fated and terrifying that they are struck dead immediately
+  by the foresight; a Will saving throw negates the effect. This is a
+  fear effect and a death effect, and creatures immune to either are
+  unaffected.
+  
+  Whitefire (conjure astral matter that explodes into spectral silver flames
+    for 3d4 fire damage and 1d4 wisdom damage)
+  Biocurrent (like /shocking grasp/, you carefully condition your body to
+    manifest a surprisingly intense bioelectric currect through your touch)
+  Biofeedback (turn a number of points of damage from any attack equal to
+    [Str Mod x Stage] into subdual damage by controlling blood flow to 
+    wounded areas).
+  Wrench (force inocrporeal creature corporeal, loses negative attacks and
+            suffers 2d10 points of damage -- "corporeal" template grants
+            !M_INCOR, removes CA_PHASE, and script aborts negative
+            AD_DRXP attacks)
+  Cryokinesis (cold damage continues until save is made, high DC, damage
+          increases by +1 every turn.)
+  Entangling Ectoplasm
+  Skate (you gain double normal speed and a charging feat?)
+  
+  Somatic Replication (observe someone fight and duplicate one of their
+            fighter-list feats -- Cleave, Expertise, Improved Dexterity,
+            Combat Finesse, Power Attack, Endurance, etc.)
+  
+  Seven Disciplines
+    Psychokinesis
+    Psychometabolism
+    Telepathy
+    Clairsentience
+    Psychoportation
+    Metaphysics (influence mana and chance with psionics)
+  
+    
+  New Hooks:
+    EV_PERCIEVE
+    EV_CALC_VALUES
+    EV_EVALUATE (target system hostility hook)
+    EV_THINK    (monster AI -- list actions)
+    EV_SKILL_CHECK
+    EV_INNER_DAMAGE (after damage (e.aDmg) is calculated, before it's taken)
+    EV_SAVING_THROW
+    
+    Macro for hooks:
+      CALL_HOOK(HOOK,EV_SKILL_CHECK,
+        xe.EParam = sk;
+        xe.vSkill = rating;
+        );
+    
+*/
+
+
+/************************************************************************\
+ *                              MONK TATTOOS                            *
+\************************************************************************/
+
+AI_TATTOO Effect "Butterfly" : EA_GRANT
+  {
+    xval: MISS_CHANCE; yval: MISS_FULL; pval: 25;
+    Desc: "This tattoo grants a monk a preternatural agility at dodging,
+      allowing her to flit from place to place in an almost supernatural
+      manner and giving all attacks -- melee and ranged -- made against 
+      her a 25~ miss chance.";
+  }
+  
+AI_TATTOO Effect "Monkey" : EA_GRANT
+  {
+    Desc: "The monkey is the most skillfull and clever of all animals,
+      so a monkey tattoo grants a monk a bonus to Tumble, Escape Artist,
+      Pick Pockets, Climb, Athletics and Lockpicking checks equal to
+      his tattoo mystic level, as well as granting him the Brachiation
+      feat.";
+    On Event PRE(EV_MAGIC_HIT) {
+      if (e.efNum != 6)
+        e.vDmg = EActor->LevelAs($"Tattoo Mystic");
+      return NOTHING;
+      };
+    xval: SKILL_BONUS; yval: SK_TUMBLE;
+  }
+and EA_GRANT
+  { xval: SKILL_BONUS; yval: SK_ESCAPE_ART; }
+and EA_GRANT
+  { xval: SKILL_BONUS; yval: SK_PICK_POCKET; }
+and EA_GRANT
+  { xval: SKILL_BONUS; yval: SK_CLIMB; }
+and EA_GRANT
+  { xval: SKILL_BONUS; yval: SK_ATHLETICS; }
+and EA_GRANT
+  { xval: SKILL_BONUS; yval: SK_LOCKPICKING; }
+and EA_GRANT
+  { xval: EXTRA_FEAT; yval: FT_BRACHIATION; }
+  
+AI_TATTOO Effect "Bamboo" : EA_GRANT
+  {
+    Desc: "The bamboo tattoo grants the mystic great fortitude, giving
+      her an enhancement bonus to her Constitution equal to half her
+      tattoo mystic class level, but paradoxically also grants her a
+      yielding character, allowing her to weave and roll with attacks
+      by granting her the Dodge feat.";
+    On Event PRE(EV_MAGIC_HIT) {
+      if (e.efNum == 0)
+        e.vDmg = (EActor->LevelAs($"Tattoo Mystic")+1) / 2;
+      return NOTHING;
+      };
+    xval: ADJUST; yval: A_CON;
+  }
+and EA_GRANT
+  { xval: EXTRA_FEAT; yval: FT_DODGE; }
+  
+AI_TATTOO Effect "Scorpion" : EA_GRANT
+  {
+    Desc: "The scorpion tattoo grants a mystic the power of striking
+      retributively - once a foe has injured him in combat recently for 
+      more then 10~ of his total hit points, he gains a +1 bonus to all 
+      melee attack rolls against that foe, and twice that to damage,
+      for every 10~ of the mystic's hit points inflicted, to a maximum
+      of the tattoo mystic's class level (i.e., max +5/+10 at 5th level). 
+      The scorpion tattoo also grants unearthly reflexes, bestowing the 
+      Improved Initiative feat.";
+    On Event PRE(EV_MAGIC_HIT) {
+      if (e.efNum == 0)
+        e.vDmg = EActor->LevelAs($"Tattoo Mystic");
+      return NOTHING;
+      };    
+    xval: EXTRA_ABILITY; yval: CA_RETRIBUTIVE_STRIKE;
+  }
+and EA_GRANT
+  { xval: EXTRA_FEAT; yval: FT_IMPROVED_INITIATIVE; }
+  
+AI_TATTOO Effect "Dragonfly" : EA_INFLICT
+  {
+    Desc: "The dragonfly tattoo grants the mystic the speed of its namesake
+      -- it can be activated at the cost of two fatigue to grant the mystic
+      a 150% bonus to attack speed for a number of rounds equal to twice the 
+      mystic's class level.";
+    On Event PRE(EV_MAGIC_HIT) {
+      if (!EActor->LoseFatigue(2,true))
+        return ABORT;
+      e.vDuration = EActor->LevelAs($"Tattoo Mystic")*2;
+      return NOTHING;
+      };
+    xval: ADJUST; yval: A_SPD; pval: 30;
+    Flags: EF_ACTIVATE;
+  }
+    
+AI_TATTOO Effect "Mountain" : EA_GRANT
+  {
+    Desc: "The mountain tattoo gives the mystic all the weight and immovability
+      of ageless stone, granting her a bonus to resist knockdown equal to her
+      tattoo mystic level as well as bestowing the Living Wall and Endurance
+      feats.";
+    On Event PRE(EV_MAGIC_HIT) {
+      if (e.efNum == 0)
+        e.vDmg = EActor->LevelAs($"Tattoo Mystic");
+      return NOTHING;
+      };
+    xval: SAVE_BONUS; yval: SN_KNOCKDOWN; 
+  }
+and EA_GRANT
+  { xval: EXTRA_FEAT; yval: FT_LIVING_WALL; }
+and EA_GRANT
+  { xval: EXTRA_FEAT; yval: FT_ENDURANCE; }
+  
+AI_TATTOO Effect "Dragon" : EA_BLAST
+  {
+    Desc: "The dragon tattoo grants perhaps the most spectacular, though not
+      necessarily the most powerful, ability of all. A tattoo mystic with this
+      tattoo can breathe fire in a 60-foot cone, inflicting [Level + 3]d10 points 
+      of damage based on tattoo mystic class level, plus your Constitution
+      modifier, at a cost of one fatigue. A Reflex save halves the damage.";
+    On Event PRE(EV_EFFECT) {
+      if (!EActor->LoseFatigue(1,true))
+        return ABORT;
+      },
+    EV_CALC_EFFECT {
+      SetPVal(e,EActor->Mod(A_CON),
+        EActor->LevelAs($"Tattoo Mystic") + 4, 10);
+      return NOTHING;
+      },
+    MSG_BLASTNAME
+      "gout of flame";
+    aval: AR_BEAM; cval: RED; sval: REF partial; Flags: EF_ACTIVATE;
+    xval: AD_FIRE;  
+  }
+  
+AI_TATTOO Effect "Crane" : EA_GRANT
+  {
+    Desc: "The crane, among the noblest of all animals, grants the mystic a
+      bonus to Balance equal to twice his class level, as well as bestowing the
+      Improved Trip feat and sustaining his Dexterity and Charisma at a level
+      equal to his class level.";
+    On Event PRE(EV_MAGIC_HIT) {
+      if (e.efNum == 0)
+        e.vDmg = EActor->LevelAs($"Tattoo Mystic") * 2;
+      else if (e.efNum != 1)
+        e.vDmg = EActor->LevelAs($"Tattoo Mystic");
+      return NOTHING;
+      };
+    xval: SKILL_BONUS; yval: SK_BALANCE;
+  }
+and EA_GRANT
+  { xval: EXTRA_FEAT; yval: FT_MASTER_TRIP; }
+and EA_GRANT
+  { xval: SUSTAIN; yval: A_DEX; }
+and EA_GRANT
+  { xval: SUSTAIN; yval: A_CHA; } 
+  
+AI_TATTOO Effect "Mantis" : EA_GRANT
+  {
+    Desc: "The mantis tattoo bestows upon a mystic three benefits -- a hardening
+      of the skin akin to a mantis' carapice which grants +1 natural armor every
+      even class level, the Mantis Leap feat and a bonus to Jump equal to the
+      mystic's class level.";
+    On Event PRE(EV_MAGIC_HIT) {
+      if (e.efNum == 0)
+        e.vDmg = EActor->LevelAs($"Tattoo Mystic");
+      if (e.efNum == 2)
+        e.vDmg = EActor->LevelAs($"Tattoo Mystic") / 2;      
+      return NOTHING;
+      };
+    xval: SKILL_BONUS; yval: SK_JUMP;
+  }
+and EA_GRANT
+  { xval: EXTRA_FEAT; yval: FT_MANTIS_LEAP;}       
+and EA_GRANT
+  { xval: ADJUST_NAT; yval: A_ARM; }
+      
+AI_TATTOO Effect "Demon" : EA_GRANT
+  {
+    Desc: "One of the darker tattoos a tattoo mystic can recieve, the demon allows
+      its bearer to grow strong by feeding on the pain of others -- the mystic
+      regains one hit points for every ten hit points of damage she inflicts.";
+    xval: EXTRA_ABILITY; yval: CA_FEED_UPON_PAIN; pval: 1;
+  }
+  
+AI_TATTOO Effect "Spider" : EA_GRANT
+  {
+    Desc: "A mystic with the spider tattoo is able to poison his foes when he scores
+      a critical hit using his unarmed attack, or on 1 in 3 normal unarmed attacks. A 
+      Fortitude saving throw against a DC of 10 + the tattoo mystic's class level + 
+      his Wisdom modifier negates this effect. The poison used is spider venom at
+      tattoo mystic class levels 1-2, giant spider venom at levels 3-6, elder spider
+      venom at levels 7-8 and collosal spider venom at level 9+.\n
+      __A foe must make a new saving throw after every poisoning attack, but once a
+      foe has been poisoned, further attacks do not increase the effect.";
+    xval: TRAP_EVENT; yval: POST(EV_HIT);
+    On Event META(POST(EV_HIT)) {
+      rID poisonID;
+      if (EVictim->isDead())
+        return NOTHING;
+      if (EActor->isDead())
+        return NOTHING;
+        
+      if (EActor->LevelAs($"tattoo mystic") >= 9)
+        poisonID = $"collosal spider venom";
+      else if (EActor->LevelAs($"tattoo mystic") >= 7)
+        poisonID = $"elder spider venom";
+      else if (EActor->LevelAs($"tattoo mystic") >= 3)
+        poisonID = $"giant spider venom";
+      else 
+        poisonID = $"spider venom";
+      
+      if (EVictim->HasEffStati(POISONED,poisonID))
+        return NOTHING;
+      if (EVictim->SavingThrow(FORT,10 + EActor->LevelAs($"tattoo mystic")
+                                + EActor->Mod(A_WIS), SA_POISON))
+        {
+          EActor->IPrint("The <hObj> resists your poison!", EVictim);
+          EVictim->IPrint("You briefly feel feverish, but then you resist!");
+        }
+      EVictim->GainPermStati(POISONED,EActor,SS_ATTK,0,0,poisonID);
+      EActor->IPrint("Your strike poisones the <hObj>!", EVictim);
+      EVictim->IPrint("You suddenly feel feverish!");
+      return NOTHING;
+      };
+  }
+
+AI_TATTOO Effect "Sun;tattoo" : EA_GRANT
+  {
+    Desc: "The sun tattoo is a powerful symbol of positive energies. A
+      tattoo mystic with this tattoo inflicts +2d6 bonus damage against
+      undead using his unarmed strike. Additionally, the tattoo can be
+      activated to illuminate a 60-foot area around the mystic with
+      brilliant golden light for a brief period, with the same effects
+      as a <9>call light<7> spell. A tattoo mystic must be Good-aligned 
+      to recieve this tattoo.";
+    xval: TRAP_EVENT; yval: PRE(EV_HIT);
+    On Event META(PRE(EV_HIT)) {
+      int16 xd;
+      if (EVictim->isMType(MA_UNDEAD))
+        {
+          xd = 2d6;
+          e.strXDmg += " +2d6 sun";
+          e.xDmg += xd;
+          ThrowDmg(EV_DAMAGE,AD_NORM,xd,"the effects of a sun tattoo",EActor,EVictim);
+          VPrint(e,"Golden light sears you!", "Golden light sears the <EVictim>!");
+        }
+      return NOTHING;
+      },
+    EV_PREREQ {
+      if (!EActor->isMType(MA_GOOD))
+        return ABORT;
+      return NOTHING;
+      };
+  }
+and EA_GENERIC
+  {
+    cval: YELLOW; lval: 5; aval: AR_FIELD; rval: FI_LIGHT; 
+    Flags: EF_GLYPH_FLOOR, EF_ACTIVATE2;
+    On Event EV_ELAPSED
+      "The light fades away.",
+    EV_MAGIC_HIT {
+      if (e.efNum == 1) {
+        APrint(e, "A golden light illuminates the area!");
+        e.vDuration = 10;
+        }
+      return NOTHING;
+      };
+  }
+   
+AI_TATTOO Effect "Eye" : EA_GRANT
+  {
+    Desc: "The eye tattoo expands the mystic's perceptions, allowing
+      him to see invisible creatures and detect cursed or blessed items,
+      and grants him a bonus to Spot equal to his tattoo mystic level.";
+    xval: SKILL_BONUS; yval: SK_SPOT;
+    On Event PRE(EV_MAGIC_HIT) {
+      if (e.efNum == 0)
+        e.vDmg = EActor->LevelAs($"Tattoo Mystic");
+      return NOTHING;
+      };  
+  }
+and EA_GRANT
+  { xval: SEE_INVIS; }
+and EA_GRANT
+  { xval: EXTRA_ABILITY; yval: CA_FATESENSE; pval: +1; }
+  
+AI_TATTOO Effect "Tiger" : EA_GRANT
+  {
+    Desc: "The tiger tattoo inbues the mystic with strength, power and
+      virility, granting him a magic bonus to Strength equal to half
+      his tattoo mystic class level, as well as a bonus to the Intimidate
+      skill equal to his full class level.";
+    On Event PRE(EV_MAGIC_HIT) {
+      if (e.efNum == 0)
+        e.vDmg = (EActor->LevelAs($"Tattoo Mystic")+1) / 2;
+      else
+        e.vDmg = EActor->LevelAs($"Tattoo Mystic");
+      return NOTHING;
+      };  
+    xval: ADJUST; yval: A_STR; 
+  }
+and EA_GRANT
+  { xval: SKILL_BONUS; yval: SK_INTIMIDATE; }
+    

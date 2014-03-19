@@ -1,0 +1,4723 @@
+/************************************************************************
+                                   Dungeons
+ ************************************************************************/
+
+int16 murgash_killed,
+      murgash_quelled;
+Dungeon "The Goblin Caves"
+  {
+    Constants:
+      * ROOM_MAXX 16,
+      * ROOM_MAXY 16,
+      * TURN_CHANCE 20,
+      * STUBBORN_CORRIDOR 4,
+      * STAIRS_UP $"up stairs",
+      * STAIRS_DOWN $"down stairs",
+      * DIGGING_REGION $"Rough-Hewn Tunnel",
+      * DUN_DEPTH 10,
+      * FIRST_LEV_PORTAL $"ancient passage";
+    Specials:
+      * $"entry chamber" at level 1,
+      * $"ancient library" at level 2,
+      /* * $"lesser vault;2" at level 1d3+4, */
+      /* * $"hellish rift" at level 1d3+6, */
+      * $"Parthenion" at level 2,
+      /* ww: previously, Places of Sanctuary were too uneven -- giving 
+       * them every room type in the book just meant that you would 
+       * sometimes have 3 of them on one level and somehaves have none.
+       * They were useless on some levels (like level 1, which has the
+       * Entrance). Let's make it consistent: every two levels there is
+       * a safe place to rest. */
+      * $"place of sanctuary" at level 3,
+      * $"armoury"            at level 3,
+      * $"place of sanctuary" at level 5,
+      * $"abandoned temple"   at level 6,
+      * $"place of sanctuary" at level 7,
+      * $"armoury"            at level 7,
+      * $"place of sanctuary" at level 9,
+      * $"the Goblin Encampment" at level 10;
+  	Desc: "These are the Goblin Caves, the subterrainian passages in 
+        eastern Mohandi where many kings and warlords believe the goblinoid
+        peoples are preparing for a massive attack upon the surface world
+        of Therya. Many believe them to have once been an ancient dwarven
+        or drow citadel, long since abandoned."; 
+  }
+
+Dungeon "The Nine Hells"
+  {
+    Constants:
+      * DUN_DEPTH 9,
+      * INITIAL_CR 10,
+      * FIRST_LEV_PORTAL $"infernal portal";
+    Lists:
+      * MTYPE_LIST MA_DEVIL MA_DEVIL MA_DEVIL /*$"fiendish" $"fiendish"*/ 
+                     MA_EVIL  MA_UNDEAD $"cave orc";
+    Specials:
+      * $"entry chamber;hells" at level 1;
+    #if 0
+      * ROOM_LIST $"brimstone chamber" $"brimstone chamber" $"brimstone chamber"
+                  $"brimstone chamber" $"brimstone chamber" $"brimstone chamber"
+                  $"brimstone chamber" $"brimstone chamber" $"brimstone chamber"
+                  $"underground maze" $"tfgh" 0 0 0;
+      * RTYPE LIST RM_LIFECAVE 50
+                   RM_NORMAL   5
+                   RM_CASTLE   5;
+    On Event MSG_DEPTH {
+      switch (EMap->Depth)
+        {
+          case 1: return "Avernus"; 
+          case 2: return "Dis";
+          case 3: return "Minauros";
+          case 4: return "Phlegethos";
+          case 5: return "Stygia";
+          case 6: return "Malbolge";
+          case 7: return "Maladomini";
+          case 8: return "Cania";
+          case 9: return "Nessus";
+        }
+      return "???";
+      };
+    #endif
+  }
+
+Dungeon "Monster Evaluation Arena"
+  {
+    Constants:
+      /*
+      * ROOM_MAXX 1,
+      * ROOM_MAXY 1,
+      * ROOM_MINX 1,
+      * ROOM_MINY 1,
+      */
+      * TURN_CHANCE 20,
+      * STUBBORN_CORRIDOR 4,
+      * STAIRS_UP $"up stairs",
+      * STAIRS_DOWN $"down stairs",
+      * DIGGING_REGION $"Rough-Hewn Tunnel",
+      * DUN_DEPTH 1;
+    Specials:
+      * $"arena chamber" at level 1;
+    Desc: "This area is used to compare the combat prowess of various
+           monsters."; 
+  }
+
+/************************************************************************
+                                   Doors
+ ************************************************************************/
+
+Feature "oak door" : T_DOOR {
+  Image: brown '-';
+  Mat:MAT_WOOD;
+  HP: 20; 
+}
+
+Feature "ice door" : T_DOOR {
+  Image: bright blue '-' on blue;
+  Mat:MAT_ICE;
+  HP: 30; 
+}
+
+
+
+Feature "iron door" : T_DOOR {
+  Image: grey '-';
+  Mat:MAT_IRON;
+  HP: 40; 
+}
+
+Feature "darkwood door" : T_DOOR {
+  Image: shadow '-';
+  Mat:MAT_DARKWOOD;
+  HP: 60; 
+}
+
+
+Feature "vault door" : T_DOOR {
+  Image: cyan '-';
+  Mat:MAT_ADAMANT;
+  HP: 60; 
+}
+
+Feature "warded oak door" : T_DOOR
+  {
+    Image: purple '-'; Mat:MAT_WOOD; HP: 20; 
+    Desc: "This door has been imbued with mystic runes that keep out
+    (or perhaps keep in) incorporeal threats. It is solid (when
+    not opened) to creatures on other planes."; 
+    On Event EV_MON_CONSIDER {
+      if (!(EItem->DoorFlags & DF_OPEN))  
+        if ((EActor->onPlane() != PHASE_MATERIAL) ||
+            (EActor->HasStati(SUMMONED)))
+          return ABORT;
+    };
+    On Event EV_WALKON {
+      if (!(EItem->DoorFlags & DF_OPEN))  
+        if ((EActor->onPlane() != PHASE_MATERIAL) ||
+            (EActor->HasStati(SUMMONED))) {
+          EActor->IPrint("When closed, the warded door bars entry to incorporeal and summoned creatures.");
+        return ABORT;
+        } 
+    };
+  } 
+
+/************************************************************************
+                                   Portals
+ ************************************************************************/
+
+Feature "up stairs" : T_PORTAL
+  {
+    Image: pink '<';
+    Mat:MAT_GRANITE;
+    xval:POR_UP_STAIR;
+  }
+
+Feature "down stairs" : T_PORTAL
+  {
+    Image: pink '>';
+    Mat:MAT_GRANITE;
+    xval:POR_DOWN_STAIR;
+  }
+
+Feature "infernal portal" : T_PORTAL
+  {
+    Image: red GLYPH_PORTAL;
+    Mat: MAT_EMPTYNESS;
+    xval: POR_DUN_ENTRY;
+    Target: $"The Nine Hells";
+    Desc: "This shimmering red portal leads to the Nine Hells.";
+  }
+
+Feature "material portal" : T_PORTAL
+  {
+    Image: green GLYPH_PORTAL;
+    Mat: MAT_EMPTYNESS;
+    xval: POR_DUN_ENTRY;
+    Target: $"The Goblin Caves";
+  }
+
+Feature "ancient passage" : T_PORTAL
+  {
+    Image: bright cyan '<';
+    Mat:MAT_EMPTYNESS;
+    xval:POR_DUN_ENTRY;
+    Target: $"The Goblin Caves";
+  }
+
+Feature "cave enterance" : T_PORTAL
+  {
+    Image: bright green '<'; 
+    Mat:MAT_EMPTYNESS; xval:POR_UP_STAIR;
+    Desc: "Warm light and the reassuring clear air of the surface
+      world waft out of this upward egress.";
+    hObj hRoark, hCoins;
+    On Event EV_ENTER {
+      if (murgash_killed) {
+        ETerm->Box("__You step out of the caves and back into the light
+          of day, content that your mission is complete. The world has
+          not changed much for your absence, but it is new to your
+          eyes -- where you left it as a novice, you re-emerge into it
+          as a hero, having taken the first steps toward becoming like
+          the great adventurer-lords of old.
+          \n\tThe goblin king is dead. His tribes will scatter across
+          the lands, and perhaps that is ultimately for the best. But
+          the shadow of a great and subtle evil still hangs over the
+          land of Therya, and you very much doubt that your ordeals
+          have come to an end on this day.");
+        Throw(EV_VICTORY,EActor); 
+        return DONE;
+        }
+      else if (murgash_quelled) {
+        ETerm->Box("__You step out of the caves and back into the light
+          of day, content that your mission is complete. The world has
+          not changed much for your absence, but it is new to your
+          eyes -- where you left it as a novice, you re-emerge into it
+          as a hero, having taken the first steps toward becoming like
+          the great adventurer-lords of old.
+          \n\tThe goblin king has been defeated. His tribes will scatter 
+          across the lands, and perhaps that is ultimately for the best. 
+          But the shadow of a great and subtle evil still hangs over the
+          land of Therya, and you very much doubt that your ordeals
+          have come to an end on this day.");
+        Throw(EV_VICTORY,EActor); 
+        return DONE;
+        }
+      else {
+        do {
+          if (EActor->InSlot(SL_INAIR))
+            return DONE;
+          switch(EActor->ChoicePrompt("Store, Inn, Retire or Descend?", "sird", 'd'))
+            {
+              case 's':
+                if (hRoark == NULL_OBJ) 
+                  hRoark = InitShopkeeper($"Roark Ironbeard",100000);
+                  
+                Throw(EV_BARTER,EActor,hRoark);
+               break;
+              case 'i':  
+                if (EActor->TotalLevel() >= 5 ||
+                    EActor->getMaxDepth($"The Goblin Caves") >= 4)
+                  {
+                    ETerm->Box("__You make your way to the inn, but stop around
+                      the streetcorner as you spot armed hobgoblin sentinels
+                      surveilling the area -- and see suspiciously humanoid
+                      shapes slumped dead in the alley. It looks as though
+                      your descent has beed noticed by Murgash, and assassins
+                      allied with the goblins wait in the hamlet to strike at
+                      you when you let down your guard. It might be safer to
+                      rest in a secured area in the Goblin Caves themselves
+                      from now on.");
+                    return ABORT;
+                  }
+                ETerm->Box("__You return to the surface world for a brief night
+                  of rest and respite, replenishing your magical energies and
+                  giving your wounds time to heal. Yet, duty awaits, and you
+                  dare not dally too long. Regretfully, you return to the
+                  claustrophobic enclaves of the Goblin King.");
+                ThrowVal(EV_REST,REST_SAFE|REST_NOMSG,EActor);
+               break;
+              case 'd':
+                return DONE;
+               break;
+              case 'r':
+                ETerm->Box("__Having done all you feel able against the hordes
+                  of the Goblin King, you choose to turn away from the life of
+                  the adventurer and move on with a more mundane existance. As
+                  the next few years pass, however, you continue to hear the
+                  drums of war in the back of your mind, and when the hordes
+                  finally do boil forth and the sky is filled with fire, you
+                  find yourself wishing you had found the fortitude to continue
+                  with your quest, no matter how impractical it may have seemed
+                  to you at the time.");
+                ThrowDmg(EV_DEATH, AD_NORM,0,"the coming storm", EActor, EActor);
+                return DONE;
+            }
+          }
+        while (1);
+        return DONE;
+        }
+      };
+  }
+
+Monster "Roark Ironbeard" : MA_DWARF, MA_ADVENTURER
+  { 
+    Image: red GLYPH_HUMAN; Size: SZ_MEDIUM; Mana: 10;
+    CR: 5; HD: 5; Hit:+5; Def:15; Mov: 100%; Speed: 100%;
+    Str 16, Dex 14, Con 16, Int 14, Wis 16, Cha 13, Luc 8;
+    Attk:A_PUNC for 1d2 AD_BLUNT;
+	  ABILITY(CA_INFRAVISION,6);
+    Flags: M_CARNI, M_HERBI, M_HUMANOID, M_SELLER, M_UNIQUE, M_NOGEN;
+    Feats: FT_SKILL_FOCUS, SK_DIPLOMACY, SK_SPOT, SK_INTUITION,
+      SK_LISTEN, SK_APPRAISE;
+    Gear:
+      5d10 $"potion" of $"mana",
+      2d6  $"potion" of $"see invisibility;potion",
+      5d10 $"potion" of $"dimension door",
+      3d10 $"potion" of $"light;potion",
+      50% 1d8 $"potion" of $"faerie;potion",
+      20d20 $"hemp rope",
+      50% 5d20 $"silk rope",
+      2d4  $"spellbook [Adventurers' Arts]",
+      1d4  $"spellbook [Fundamentals of Magick]",
+      50%  $"spellbook [Mystic Aegis]",
+      50%  $"spellbook [Tome of Magic]",
+      50%  $"spellbook [Practical Divinings]",
+      50%  $"spellbook [Book of Glamour]",
+      50%  $"spellbook [Energy Magicks]",
+      50%  $"spellbook [Magician's Manual]",
+      50%  $"spellbook [Ars Mortis]",
+      /* 50%  $"spellbook [Mortal Coil]", */
+      50%  $"spellbook [Place and Time]",
+      3d4   $"medium backpack",
+      1d4+1 $"small backpack",
+      50%   $"medium backpack" +2,
+      50%   $"medium backpack" +3,
+      50%   $"small backpack" +2,
+      50%   $"gnomish backpack",
+      $"long sword" of random 2 to 3,
+      $"long sword" of random 6 to 12,
+      25% $"greatsword" of random 6 to 12 else
+        33% $"warhammer" of random 6 to 12 else
+        50% $"halberd" of random 6 to 12 else
+            $"longspear" of random 6 to 12,
+      10d10 $"dagger",
+      75% 2d10 $"dagger" +1,
+      35% 2d10 $"dagger" of random 2 to 5,
+      $"cloak" of $"nondetection",
+      $"leather armor",
+      $"studded leather",
+      $"full plate armor",
+      $"chainmail shirt",
+      $"plate mail",
+      50% $"splint mail",
+      50% $"banded mail",
+      2d6 $"bag" of $"tanglefoot bag",
+      random T_WEAPON of random 3 to 10,
+      random T_WEAPON of random 3 to 10,
+      random T_WEAPON of random 3 to 10,
+      50% random T_WEAPON of random 3 to 10,
+      50% random T_WEAPON of random 3 to 10,
+      50% random T_WEAPON of random 3 to 10,
+      random T_ARMOR of random 3 to 10,
+      random T_ARMOR of random 1 to 10,
+      50% random T_ARMOR of random 1 to 10,
+      25% random T_RING of random 1 to 10,
+      25% random T_RING of random 1 to 10,
+      15% random T_BOOTS of random 1 to 10,
+      15% $"amulet" of random 1 to 10,
+      15% random T_HELMET of random 1 to 10,
+      
+      10% $"girdle" +3 of $"giant strength" else
+        50% $"girdle" +2 of $"giant strength" else
+        $"girdle" +1 of $"giant strength",      
+      10% $"gauntlets" +3 of $"gloves of dexterity" else
+        50% $"gauntlets" +2 of $"gloves of dexterity" else
+        $"gauntlets" +1 of $"gloves of dexterity",
+      10% $"bracers" +3 of $"health" else
+        50% $"bracers" +2 of $"health" else
+        $"bracers" +1 of $"health",
+      10% $"headband" +3 of $"intellect" else
+        50% $"headband" +2 of $"intellect" else
+        $"headband" +1 of $"intellect",
+      10% $"amulet" +3 of $"periapt of wisdom" else
+        50% $"amulet" +2 of $"periapt of wisdom" else
+        $"amulet" +1 of $"periapt of wisdom",
+      10% $"cloak" +3 of $"charisma" else
+        50% $"cloak" +2 of $"charisma" else
+        $"cloak" +1 of $"charisma",
+      50% random T_BOOK,
+      50% random T_BOOK,
+      50% random T_BOOK,
+      3d10 $"potion" of $"remove curse;potion",
+	    2d10 $"potion" of $"cure disease",
+	    50% 2d4 $"potion" of $"antitoxin",
+	    50% 1d4 $"potion" of $"restore strength",
+      50% 1d4 $"potion" of $"restore dexterity",
+      50% 1d4 $"potion" of $"restore constitution",
+      50% 1d4 $"potion" of $"restore intelligence",
+      50% 1d4 $"potion" of $"restore wisdom",
+      50% 1d4 $"potion" of $"restore charisma",
+      50% 1d4 $"potion" of $"restore luck",
+      1d2+1 $"potion" of $"restoration",
+      1d2+1 $"potion" of $"detect stairs",
+      1d3 $"wand" of $"identify;wand",
+      50% $"climbing rig",
+      66% $"alchemy set",
+      50% $"viewing lens",
+      50% $"healing kit",
+      1d2 $"craftsman's tools",
+      50% $"mechanical tools",
+      30% $"disguise kit", 
+      75% 1d2 $"pickaxe",
+      3d10 $"food ration";
+    On Event MSG_SHOPNAME
+      "Roark Ironbeard's All-Purpose Adventurers' Store",
+    EVICTIM(EV_WILLBUY) {
+      if (EItem->isType(T_GEM))
+        return DONE;
+        
+      if (EActor->SkillLevel(SK_DIPLOMACY) + 
+            EVictim->getSocialMod(EActor,false) >= 12)
+        { 
+          if (!EVictim->HasStati(EFF_FLAG1,-1,EActor))
+            EActor->IPrint("Roark says, 'Now normally I don't buy my wares
+              from adventurers, but you really look like you could use a
+              hand so I'll help you out here.'");
+          if (!((EItem->isType(T_WEAPON) || EItem->isType(T_ARMOR) ||
+                 EItem->isType(T_BOW) || EItem->isType(T_MISSILE)) &&
+                EItem->isMagic() && EItem->ItemLevel() > 3))
+            {
+              EActor->IPrint("Roark grumbles, 'I don't think I can move that, but I do want
+                to help. If you could bring me some powerful, magical weapons
+                or armor, though, I'd be interested in that...'");
+              return NOMSG;
+            }
+          if (EVictim->GetStatiMag(EFF_FLAG1) > (EActor->SkillLevel(
+                SK_DIPLOMACY) + EVictim->getSocialMod(EActor,false)) / 4)
+            {
+              EActor->IPrint("Roark frowns. 'No question, you bring in 
+                great goods, but I'm already overstocked with the other
+                items you've sold me.'");
+              return NOMSG;
+            }
+          EVictim->IncStatiMag(EFF_FLAG1,SS_MISC,-1,EActor,+1);
+          return DONE;
+        }
+      EActor->IPrint("Roark says, 'Sorry, <hText>, I get my wares from the
+        guild. I do by gems and precious metals, though -- got a nice
+        contract with the blacksmiths and jewellers. It's me dwarven soul,
+        what can I say.'", EActor->StateFlags & MS_FEMALE ? "love" : "son");
+      return NOMSG;
+      };
+  }
+
+
+/************************************************************************
+                                 Streamers
+ ************************************************************************/
+
+Region "Underground River" : RF_RIVER
+  { Floor: $"shallow water"; }
+
+Region "Cooled Magma Flow" : RF_RIVER
+  { Floor: $"smooth igneous rock"; }
+
+Region "Mud-Choked River" : RF_RIVER
+  { Floor: $"shallow mud"; }
+
+Region "Magma Flow" : RF_RIVER
+  { Floor: $"brimstone"; Depth: 3; }
+
+Region "Raging Underground River" : RF_RIVER
+  { Floor: $"turbulent water"; Depth: 5; }
+
+Region "Quartz Streamer" : RF_ROCKTYPE
+  { Floor: $"quartz"; }
+
+Region "Limestone Streamer" : RF_ROCKTYPE
+  { Floor: $"limestone"; }
+
+Region "Glacial Streamer" : RF_ROCKTYPE
+  { Floor: $"ice wall"; }
+
+Region "Crumbled Crevice" : RF_ROCKTYPE
+  { Floor: $"loose-packed earth"; }
+
+Region "Vast Chasm" : RF_CHASM
+  { Floor: $"chasm"; Depth: 5; }
+
+/************************************************************************
+                                   Walls
+ ************************************************************************/
+
+Terrain "Solid Rock"
+  { Image: brown GLYPH_ROCK; Mat:MAT_GRANITE; 
+    Flags: TF_SOLID, TF_OPAQUE, TF_WALL; }
+
+Terrain "Indestructable Rock"
+  { Image: shadow GLYPH_ROCK; Mat:MAT_INDESTRUCTABLE_STONE; 
+    Flags: TF_SOLID, TF_OPAQUE, TF_WALL, TF_SPECIAL; 
+    On Event EV_MOVE, EV_MON_CONSIDER {
+      return ABORT;
+    }; 
+  }
+
+Terrain "Dungeon Wall"
+  { Image: grey GLYPH_WALL; Mat:MAT_GRANITE; 
+    Flags: TF_SOLID, TF_OPAQUE, TF_WALL; }
+
+Terrain "Ice Wall"
+  { Image: bright blue GLYPH_SOLID on blue; Mat:MAT_ICE; 
+    Flags: TF_SOLID, TF_WALL, TF_SPECIAL; 
+    On Event EV_MAGIC_XY {
+        if (e.DType == AD_FIRE && e.vDmg > (10+random(10))) {
+          EMap->WriteTerra(e.EXVal,e.EYVal,$"shallow water");
+          SinglePrintXY(e,"The ice melts!");
+          }
+      return NOTHING;
+      };
+  }
+
+Terrain "Wall Torch"
+  { Image: yellow GLYPH_WALL; Mat: MAT_GRANITE;
+    Flags: TF_SOLID, TF_OPAQUE, TF_TORCH, TF_INTERIOR, TF_WALL; }
+
+Terrain "quartz"
+  { Image: grey GLYPH_ROCK; Mat:MAT_QUARTZ; 
+    Flags: TF_WALL, TF_SOLID, TF_OPAQUE; }
+
+Terrain "solid igneous rock"
+  { Image: shadow GLYPH_ROCK; Mat:MAT_MAGMA; 
+    Flags: TF_WALL, TF_SOLID, TF_OPAQUE; }
+
+Terrain "limestone"
+  { Image: green GLYPH_ROCK; Mat:MAT_MINERAL; 
+    Flags: TF_WALL, TF_SOLID, TF_OPAQUE; }
+
+Terrain "Warded Wall"
+  { Image: bright purple GLYPH_ROCK; Mat:MAT_GRANITE; 
+    Flags: TF_SOLID, TF_OPAQUE, TF_WALL, TF_SPECIAL; 
+    On Event EV_ENTER, EV_MON_CONSIDER {
+      if ((EActor->onPlane() != PHASE_MATERIAL) ||
+          (EActor->HasStati(SUMMONED)))
+        return ABORT;
+    }; 
+    Desc: "This wall has been imbued with mystic runes that keep out
+    (or perhaps keep in) incorporeal threats and summoned creatures. It is
+    solid to creatures on other planes."; 
+  }
+
+Terrain "Building Wall"
+  { Image: brown GLYPH_WALL; Mat:MAT_WOOD; 
+    Flags: TF_SOLID, TF_OPAQUE, TF_WALL; }
+
+Terrain "Adamant Wall"
+  { Image: shadow 219; Mat:MAT_ADAMANT; 
+    Flags: TF_SOLID, TF_OPAQUE, TF_WALL; }
+
+Terrain "bookshelf"
+  { Image: brown 219; Mat: MAT_WOOD;
+    Flags: TF_SOLID, TF_OPAQUE, TF_WALL; }
+
+
+
+Terrain "Steel Fence"
+  { Image: cyan 240; Mat:MAT_IRON; 
+    Flags: TF_SOLID, TF_WALL; }
+
+
+/************************************************************************
+                        Treasure for Mining
+ ************************************************************************/
+
+Terrain "gold vein"
+  { Image: yellow GLYPH_ROCK; Mat:MAT_MINERAL; 
+    Flags: TF_SOLID, TF_OPAQUE, TF_WALL, TF_DEPOSIT, TF_SPECIAL; 
+    On Event EV_MINE {
+      hObj it;
+      it = CreateItem($"gold nugget");
+      it->SetQuantity( (3d10 + EActor->SkillLevel(SK_MINING)) *
+                          (3 + EMap->Depth));
+      it->PlaceAt(EMap,e.EXVal,e.EYVal);
+      };
+  }
+  
+Item "gold nugget" : T_GEM
+  {
+    Image: yellow GLYPH_GEM; Cost: 10;
+    Mat: MAT_GOLD; Weight: 1; HP: 10;
+    Size: SZ_MINISCULE; Flags: IT_BGROUP, IT_NOGEN;
+  }
+
+Terrain "diamond deposit"
+  { Image: white GLYPH_ROCK; Mat:MAT_MINERAL; 
+    Flags: TF_SOLID, TF_OPAQUE, TF_WALL, TF_DEPOSIT, TF_SPECIAL; 
+    On Event EV_MINE {
+      hObj it;
+      it = CreateItem($"diamond");
+      it->SetQuantity( (1d4 + EActor->SkillLevel(SK_MINING)/3) *
+                          (3 + EMap->Depth/2));
+      it->PlaceAt(EMap,e.EXVal,e.EYVal);
+      };
+    Constants:
+      * DEPOSIT_DEPTH 3;
+  }
+
+Item "diamond" : T_GEM
+  {
+    Image: white GLYPH_GEM; Cost: 100;
+    Mat: MAT_GOLD; Weight: 0; HP: 1;
+    Size: SZ_MINISCULE; Flags: IT_BGROUP, IT_NOGEN;
+  }
+
+Terrain "mithril vein"
+  { Image: grey GLYPH_ROCK; Mat:MAT_MINERAL; 
+    Flags: TF_SOLID, TF_OPAQUE, TF_WALL, TF_DEPOSIT, TF_SPECIAL; 
+    On Event EV_MINE {
+      hObj it;
+      it = CreateItem($"mithril ingot");
+      it->SetQuantity( (1d4 + EActor->SkillLevel(SK_MINING)/3) *
+                          (3 + EMap->Depth/2));
+      it->PlaceAt(EMap,e.EXVal,e.EYVal);
+      };
+    Constants:
+      * DEPOSIT_DEPTH 5;
+  }
+
+Item "mithril ingot" : T_GEM
+  {
+    Image: grey GLYPH_GEM; Cost: 300;
+    Mat: MAT_ADAMANT; Weight: 1; HP: 20;
+    Size: SZ_MINISCULE; Flags: IT_BGROUP, IT_NOGEN;
+  }
+
+Terrain "adamant vein"
+  { Image: grey GLYPH_ROCK; Mat:MAT_MINERAL; 
+    Flags: TF_SOLID, TF_OPAQUE, TF_WALL, TF_DEPOSIT, TF_SPECIAL; 
+    On Event EV_MINE {
+      hObj it;
+      it = CreateItem($"adamant ingot");
+      it->SetQuantity( (1d4 + EActor->SkillLevel(SK_MINING)/3) *
+                          (3 + EMap->Depth/2));
+      it->PlaceAt(EMap,e.EXVal,e.EYVal);
+      };
+    Constants:
+      * DEPOSIT_DEPTH 7;
+  }
+
+Item "adamant ingot" : T_GEM
+  {
+    Image: grey GLYPH_GEM; Cost: 500;
+    Mat: MAT_ADAMANT; Weight: 1; HP: 40;
+    Size: SZ_MINISCULE; Flags: IT_BGROUP, IT_NOGEN;
+  }
+
+/************************************************************************
+                        Empty Terrain (Chasms)
+ ************************************************************************/
+
+Terrain "chasm"
+  { Image: white ' ' on shadow; Mat:MAT_EMPTYNESS; 
+    Flags: TF_FALL, TF_WARN, TF_SHOWNAME; 
+    On Event EV_MON_CONSIDER {
+      if (EActor->isAerial() || EActor->HasStati(ELEVATED)) 
+          return NOTHING;
+      return ABORT; 
+      };
+  }
+
+Feature "tightrope" : T_FEATURE
+  {
+    Image: brown GLYPH_BULK; Mat: MAT_CLOTH;
+    Flags: F_WARN, F_BRIDGE;
+    On Event EV_BRIDGE {
+      /* What we're doing here is using the EFF_FLAG1 stati to
+         hold our last x/y position to compare to our current
+         one, so that we only make the skill check when we move,
+         not every TerrainEffects() call. */   
+      if (EActor->SkillLevel(SK_BALANCE) < 10)
+        {
+          EActor->IPrint("You lack the skill to balance on the tightrope!");
+          return NOTHING;
+        }
+      if (!EActor->HasEffStati(ON_BRIDGE,$"tightrope"))
+        EActor->IDPrint("You step out onto the tightrope...",
+          "The <hObj> begins walking along the tightrope bridge...", 
+          EActor);  
+      if (EActor->GetEffStatiVal(ON_BRIDGE,$"tightrope") ==
+            (EActor->x + EActor->y*128))
+        return DONE;
+      if (!EActor->SkillCheck(SK_BALANCE,15,true))
+        { EActor->RemoveEffStati($"tightrope");
+          EActor->IDPrint("You fall!","The <hObj> falls!", EActor);
+          return NOTHING; }
+      EActor->RemoveEffStati($"tightrope");
+      EActor->GainTempStati(ON_BRIDGE,NULL,2,SS_MISC,
+        EActor->x + EActor->y*128,0,$"tightrope");
+      EActor->IPrint("You stay balanced...");
+      return DONE;
+      };
+  }
+
+Effect "create tightrope bridge" : EA_GENERIC
+  {
+    aval: AR_BEAM; qval: Q_LOC; cval: BROWN;
+    int16 feet_needed, tx, ty; 
+    Flags EF_ADJUST_GLYPH;
+    On Event PRE(EV_EFFECT) {
+      feet_needed = 0;
+      if (EMap->SolidAt(EActor->x,EActor->y) ||
+          EMap->FallAt(EActor->x,EActor->y) ||
+          ResourceHasFlag(EMap->TerrainAt(
+            EActor->x,EActor->y), TF_DEEP_LIQ))
+        {
+          EActor->IPrint("You must stand on solid, open ground
+            before you create a tightrope bridge.");
+          return ABORT;
+        }
+      return NOTHING;
+      },
+    EV_EFFECT {
+      hObj hRope;
+      switch (e.efNum)  
+        {
+          case 0:
+            if (e.isLoc) {
+              tx = e.EXVal;
+              ty = e.EYVal;
+              }
+            else if (e.isDir) {
+              tx = EActor->x + DirX(e.EDir);
+              ty = EActor->y + DirY(e.EDir);
+              }
+            else {
+              tx = ETarget->x;
+              ty = ETarget->y;
+              }
+           break;
+          case 1:
+            if (!feet_needed)
+              {
+                EActor->IPrint("There's nothing there to make a bridge over.");
+                return ABORT;
+              }
+            hRope = EActor->ConsumeRope(feet_needed);
+            if (hRope == NULL_OBJ)
+              return ABORT;
+            hRope->Remove(true);
+            EActor->IPrint("You anchor a rope at the other side tightly,
+              wrapping it around an outcropping and pulling it taut.");
+            return NOTHING;
+          case 2:
+            e.EXVal = tx;
+            e.EYVal = ty;
+            e.isLoc = true;
+            e.isDir = false;
+            SetETarget(e,NULL_OBJ);
+           break;
+        }
+      return NOTHING;
+      },
+    EV_MAGIC_XY {
+      if ((e.efNum == 0) && (EMap->FallAt(e.EXVal, e.EYVal) ||
+          ResourceHasFlag(EMap->TerrainAt(e.EXVal, e.EYVal), TF_DEEP_LIQ)))
+        feet_needed += 10;
+      return NOTHING;
+      },
+    EV_CALC_EFFECT {
+      e.vRange = 15;
+      return NOTHING;
+      };
+  }
+and EA_GENERIC
+  {
+    aval: 0;
+  }
+and EA_TERRAFORM
+  {
+    aval: AR_BEAM; lval: 12; cval: BROWN;
+    xval: TERRA_BRIDGE; rval: $"tightrope";
+  }
+  
+/************************************************************************
+                        Solid Features (Obstacles)
+ ************************************************************************/
+
+Feature "Pillar" : T_FEATURE
+  { Image: grey GLYPH_PILLAR; Mat:MAT_GRANITE; 
+    Flags: F_SOLID, F_OPAQUE; HP: 40; 
+  }
+  
+Feature "altar" : T_FEATURE
+  { Image: white '8'; Mat: MAT_MINERAL;
+    Flags: F_ALTAR; HP: 25;
+  }
+
+Feature "pews" : T_FEATURE
+  { Image: brown 219; Mat: MAT_WOOD; HP: 10; }
+
+Feature "rock column" : T_FEATURE
+  { Image: brown GLYPH_PILLAR; Mat:MAT_MINERAL; 
+    HP: 10; 
+    Flags: F_SOLID, F_OPAQUE; 
+    Desc: "Stalactites and stalagmites are naturally occurring rock
+    formations that look somewhat like massive icicles or spears crafted
+    from stone. They are especially common in areas with limestone
+    deposits.";
+  } 
+
+Feature "pile of rubble" : T_FEATURE
+  { Image: brown GLYPH_RUBBLE; Mat:MAT_GRANITE; 
+    Flags: F_STICKY, F_WARN; HP: 10; 
+    Constants:
+      * STICK_TYPE STUCK_PINNED;
+  } 
+
+/************************************************************************
+ *                         Normal Floor Terrain                         *
+ ************************************************************************/
+
+Terrain "Floor"
+  { Image: grey GLYPH_FLOOR; Mat:MAT_GRANITE; 
+    Flags: TF_SHADE; }
+
+Terrain "Floor;2"
+  { Image: grey GLYPH_FLOOR2; Mat:MAT_GRANITE; 
+    Flags: TF_SHADE; }
+
+Terrain "smooth igneous rock"
+  { Image: shadow GLYPH_LAVA; Mat:MAT_MAGMA;
+    Flags: TF_SHOWNAME ; }
+
+Terrain "obsidian"
+  { Image: shadow GLYPH_FLOOR; Mat:MAT_MAGMA;
+    Flags: TF_SHOWNAME , TF_SHADE; }
+
+Terrain "bloodstain"
+  { Image: red GLYPH_FLOOR2; Mat:MAT_GRANITE; 
+    Flags: TF_SHADE, TF_SHOWNAME; }
+
+Terrain "pool of blood"
+  { Image: red GLYPH_WATER; Mat:MAT_LIQUID; }
+
+Terrain "pile of trash"
+  { Image: shadow GLYPH_TRASH; Mat: MAT_FLESH;
+    Desc: "A messy pile of rags, tattered papers and rotting food, along
+      with lumps and fluids you would rather not try to identify.";
+    Flags: TF_SHOWNAME;
+  }
+
+Terrain "pile of bones"
+  { Image: red GLYPH_BONES;
+    Desc: "A pile of greasy, gnawed bonus.";
+    Flags: TF_SHOWNAME;
+  }
+
+Terrain "pool of slime"
+  { Image: purple GLYPH_WATER on brown; Mat:MAT_LIQUID; 
+    Flags: TF_WARN, TF_STICKY, TF_SHOWNAME; 
+    Constants:
+      * STICK_TYPE STUCK_STICKY;
+
+  } 
+
+Terrain "Loose-Packed Earth"
+  { Image: brown GLYPH_FLOOR2; Mat:MAT_MINERAL;
+    Flags: TF_SHADE; 
+    On Event EV_MAGIC_XY {
+      if (e.aval == AR_BEAM || e.aval == AR_BALL || e.aval == AR_GLOBE ||
+          (e.aval == AR_BOLT && e.EDir == DOWN) ) 
+        if (e.DType == AD_SOAK)
+          if (random(20) < e.vDmg) {
+            EMap->WriteTerra(e.EXVal,e.EYVal,$"shallow mud");
+            SinglePrintXY(e,"The ground turns to mud!");
+            }
+      return NOTHING;
+      },
+    EV_SPECIAL {
+      if (EActor->isMType(MA_ELEMENTAL) && EActor->isMType(MA_WATER))    
+        {
+          EMap->WriteTerra(EActor->x,EActor->y,$"shallow mud");
+          SinglePrintXY(e,"The ground turns to mud!");
+        }
+      return NOTHING;
+      };
+    Flags: TF_SPECIAL;
+  }
+
+
+/************************************************************************
+                           Flora and Plant Terrain
+ ************************************************************************/
+
+Feature "hanging vines" : T_FEATURE
+  { Image: brown GLYPH_TREE; Mat:MAT_VEGGY;
+    Flags: F_TREE;
+    Move: 100%;  HP: 11; 
+    Desc: "This area contains strong hanging vines. The vines do not impede
+    movement or vision, but they can be climbed and they do give the area
+    a verdant feel."; 
+  }
+
+Feature "tree" : T_FEATURE
+  { Image: green GLYPH_TREE; Mat:MAT_WOOD;
+    Flags: F_TREE, F_OBSCURE;
+    Move: 75%;  HP: 20; 
+  }
+
+Feature "giant mushroom" : T_FEATURE
+  { Image: purple GLYPH_TREE; MAT:MAT_VEGGY;
+    Flags: F_TREE, F_OBSCURE; 
+    Move: 75%;  HP: 20; 
+  }
+
+Feature "verdant bloom" : T_FEATURE
+  { Image: bright green GLYPH_TREE; MAT:MAT_VEGGY;
+    Flags: F_TREE; 
+    Move: 75%;  HP: 10; 
+    Desc: "This area is thick with fungal outcroppings and rope-like roots.
+    A soft, warm light shines indirectly from incandescent motes in the
+    air. It would appear to be the perfect habitat for plant life." ;
+    On Event EV_INITIALIZE {
+      if (1d6 >= 5 && EMap->Depth > 1) 
+        EMap->GenEncounter(EN_SINGLE|EN_MTYPE,EMap->Depth,EMap->Depth,
+            MA_PLANT, 0,(rID)0,e.EXVal,e.EYVal,NULL);
+    };
+  }
+
+Terrain "thorn wall"
+  { Image: green GLYPH_HEDGE; Mat:MAT_VEGGY; 
+    Flags: TF_TREE, TF_OPAQUE, TF_WARN, TF_SPECIAL, TF_SHOWNAME; Mov: 15%; 
+    On Event EV_MON_CONSIDER {
+      if (EActor->HasAbility(CA_WOODLAND_STRIDE) ||
+          EActor->onPlane() != PHASE_MATERIAL ||
+          EActor->ResistLevel(AD_SLASH) == -1 ||
+          EActor->ResistLevel(AD_SLASH) >= 20)
+        return NOTHING; 
+      else
+        return ABORT; 
+    } ; 
+    On Event EV_MAGIC_XY {
+      if (e.aval == AR_BEAM || e.aval == AR_BALL ||
+          (e.aval == AR_BOLT && e.EDir == DOWN) ) 
+        if (e.DType == AD_FIRE)
+          if (random(20) < e.vDmg) {
+            EMap->WriteTerra(e.EXVal,e.EYVal,
+              EMap->RegionAt(e.EXVal,e.EYVal)->Floor);
+            SinglePrintXY(e,"The thorn wall burns!");
+            }
+      return NOTHING;
+      };
+    On Event EV_MOVE {
+      if (EActor->HasAbility(CA_WOODLAND_STRIDE) ||
+          EActor->onPlane() != PHASE_MATERIAL)
+        return NOTHING;
+      if (!EActor->SkillCheck(SK_ESCAPE_ART,30,true,false))
+        {
+          DPrint(e,"You are still tangled in the thorn wall!",
+            "An <EActor> remains tangled in the thorn wall!");
+          EActor->Reveal(false);
+          EActor->MakeNoise(3);
+          EActor->Timeout += 30;
+          return ABORT;
+        }
+      ThrowTerraDmg(EV_DAMAGE,AD_SLASH,25,"a wall of thorns",EActor, $"thorn wall"); 
+      return NOTHING;
+    };
+    Desc: "A towering wall of thorns. Moving out of a thorn wall requires a
+    DC 30 Escape Artist check. Creatures moving through a thorn wall
+    suffer 25 points of slashing damage. Creatures with the woodland
+    stride ability or creatures on different planes are immune."; 
+    }
+
+/************************************************************************
+                           Fog and Cloud Terrain
+ ************************************************************************/
+
+Terrain "stinking cloud;terrain"
+  { Image: green '~'; Mat:MAT_EMPTYNESS; 
+    Flags: TF_OBSCURE, TF_SHOWNAME, TF_WARN, TF_SPECIAL; 
+    On Event EV_MOVE {
+      if (EActor->onPlane() == PHASE_MATERIAL &&
+          EActor->isMType(MA_BREATHER) && 
+          !EActor->SavingThrow(FORT,20))
+        EActor->GainTempStati(NAUSEA,EVictim,2d4,SS_ENCH,0,0,
+          $"stinking cloud");
+    } , EV_MON_CONSIDER {
+      if (EActor->onPlane() == PHASE_MATERIAL &&
+          EActor->isMType(MA_BREATHER) && 
+          !EActor->GetAttr(A_SAV_FORT) < 15)
+        return ABORT;
+      else 
+        return NOTHING;
+    } ;
+    Desc: "Any breathing creature in a stinking cloud must make a
+    Fortitude Save (DC 20) each round to avoid becoming nauseated for
+    an additional 2d4 rounds. Nauseated creatures cannot attack or
+    cast spells."; 
+  }
+
+Terrain "fog"
+  { Image: grey '~'; Mat:MAT_EMPTYNESS; 
+    Flags: TF_OBSCURE, TF_SHOWNAME; 
+    On Event EV_MAGIC_XY {
+      if (e.aval == AR_BEAM || e.aval == AR_BALL || e.aval == AR_GLOBE ||
+          (e.aval == AR_BOLT && e.EDir == DOWN) ) 
+        if (e.DType == AD_FIRE || e.DType == AD_COLD)
+          if (!random(3)) {
+            EMap->WriteTerra(e.EXVal,e.EYVal,
+              EMap->RegionAt(e.EXVal,e.EYVal)->Floor);
+            SinglePrintXY(e,"The fog is cleared!");
+            }
+      return NOTHING;
+      };    
+  }
+
+Terrain "solid fog bank"
+  { Image: skyblue '~'; Mat:MAT_FORCE; 
+    Flags: TF_SPECIAL, TF_SHOWNAME, TF_OBSCURE; Mov: 15%; 
+    On Event EV_MISSILE {
+      if (GetHandle(EItem2) == NULL)
+	    return NOTHING;
+      APrint(e,"The <EItem2> is deflected by the solid fog!");
+      return ABORT;
+    };
+  }
+
+Terrain "acid fog"
+  { Image: brown '~'; Mat:MAT_EMPTYNESS; 
+    Flags: TF_OBSCURE, TF_SHOWNAME, TF_SPECIAL, TF_WARN; 
+    On Event EV_MON_CONSIDER {
+      if ((EActor->onPlane() != PHASE_MATERIAL) ||
+          (EActor->ResistLevel(AD_ACID) == -1) ||
+          (EActor->ResistLevel(AD_ACID) >= 6))
+        return NOTHING;
+      else
+        return ABORT; 
+    } ;
+    On Event EV_MOVE, EV_STRIKE, EV_CAST {
+      if (EActor->onPlane() != PHASE_MATERIAL)
+        return NOTHING;
+      ThrowTerraDmg(EV_DAMAGE,AD_ACID,1d6,"acid fog",EActor, $"acid fog"); 
+      if (EActor->ResistLevel(AD_ACID) < 6)
+        ThrowTerraDmg(EV_DAMAGE,AD_RUST,1d6,"acid fog",EActor, $"acid fog"); 
+      return NOTHING; 
+    } ;
+    Desc: "This deadly corrosive fog deals 1d6 points of acid damage and
+    1d6 points of rust damage to any creature that moves, attacks or casts
+    a spell in it. The Woodland Stride ability does not prevent this
+    damage. Acid Resistance of 6 or higher negates the threat of
+    equipment damage."; 
+  }
+
+/************************************************************************
+                           Dangerous Floor Terrain
+ ************************************************************************/
+
+Terrain "pool of grease"
+  { Image: yellow GLYPH_WATER on brown; Mat:MAT_OIL; /* Flammable! */
+    Flags: TF_WARN, TF_SPECIAL, TF_NOGEN, TF_SHOWNAME; 
+    hObj mount;
+    On Event EV_MON_CONSIDER {
+      if (EActor->HasStati(ON_BRIDGE))
+        return true;
+      mount = EActor->GetStatiObj(MOUNTED);
+      if (mount) {
+        if (mount->SkillLevel(SK_BALANCE) > 10 ||
+            mount->HasStati(PRONE) ||
+            mount->HasAbility(CA_WOODLAND_STRIDE) ||
+            mount->isAerial() ||
+            mount->isMType(MA_OOZE) ||
+            mount->HasMFlag(M_INCOR))
+          return true; 
+        else
+          return -1; 
+      } else {
+        if (EActor->SkillLevel(SK_BALANCE) > 10 ||
+            EActor->HasStati(PRONE) ||
+            EActor->HasAbility(CA_WOODLAND_STRIDE) ||
+            EActor->isAerial() ||
+            EActor->isMType(MA_OOZE) ||
+            EActor->HasMFlag(M_INCOR))
+          return true; 
+        else
+          return -1; 
+      } 
+    } ;
+    Desc: "You (or your mount) must make a Balance skill check (DC
+    typically 15) to avoid slipping on the grase when you move, attack,
+    jump off it or land on it. Flying creatures, jellies, incorporeal
+    creatures, and creatures with the Woodland Stride ability are immune."; 
+    On Event EV_MOVE, PRE(EV_STRIKE), EV_JUMP_OFF, EV_LAND {
+      if (EActor->isIllusion())
+        return NOTHING;
+      if (EActor->HasStati(ON_BRIDGE))
+        return NOTHING;
+      mount = EActor->GetStatiObj(MOUNTED);
+      if (mount) {
+        if (mount->HasStati(PRONE) ||
+            mount->HasAbility(CA_WOODLAND_STRIDE) ||
+            mount->isAerial() ||
+            mount->isMType(MA_OOZE) ||
+            mount->HasMFlag(M_INCOR))
+          return NOTHING; 
+        if (!mount->SkillCheck(SK_BALANCE,max(15,EMap->GetTerraDC(EActor->x,EActor->y)),true,false)) {
+          DPrint(e,"Your mount slips and falls!", 
+                   "An <EActor>'s mount slips and falls!");
+          ThrowTerraDmg(EV_DAMAGE,AD_TRIP,-1,"pool of grease",mount, $"pool of grease"); 
+          EActor->Timeout += 10;
+          return DONE; 
+        } 
+      } else { 
+        if (EActor->HasStati(PRONE)
+            || EActor->HasAbility(CA_WOODLAND_STRIDE) 
+            || EActor->isMType(MA_OOZE) 
+            || EActor->HasMFlag(M_INCOR) 
+            || EActor->isAerial())
+          return NOTHING;
+        if (!EActor->SkillCheck(SK_BALANCE,max(15,EMap->GetTerraDC(EActor->x,EActor->y)),true,false)) {
+          DPrint(e,"You slip and fall!",
+              "An <EActor> slips and falls!");
+          ThrowTerraDmg(EV_DAMAGE,AD_TRIP,-1,"pool of grease",EActor, $"pool of grease"); 
+          EActor->Timeout += 10;
+          return DONE;
+        }
+      }
+      return NOTHING;
+    };
+  }
+
+
+Terrain "Old Webbing"
+  { Image: shadow GLYPH_WEB; Mat:MAT_WEBBING; Mov: 25%;
+    Flags: TF_OBSCURE, TF_SPECIAL, TF_SHOWNAME; 
+    hObj mount;
+    On Event EV_MAGIC_XY {
+      if (e.aval == AR_BEAM || e.aval == AR_BALL || e.aval == AR_GLOBE ||
+          (e.aval == AR_BOLT && e.EDir == DOWN) ) 
+        if (e.DType == AD_FIRE)
+          if (random(20) < e.vDmg) {
+            EMap->WriteTerra(e.EXVal,e.EYVal,
+              EMap->RegionAt(e.EXVal,e.EYVal)->Floor);
+            SinglePrintXY(e,"The old webbing burns!");
+            }
+      return NOTHING;
+      },      
+    EV_MON_CONSIDER {
+      mount = EActor->GetStatiObj(MOUNTED);
+      if (mount) {
+        if (mount->isMType(MA_SPIDER) || 
+            mount->onPlane() != PHASE_MATERIAL ||
+            mount->HasAbility(CA_WOODLAND_STRIDE))
+          return NOTHING;
+      } else {
+        if (EActor->isMType(MA_SPIDER) || 
+            EActor->onPlane() != PHASE_MATERIAL ||
+            EActor->HasAbility(CA_WOODLAND_STRIDE))
+          return NOTHING; 
+      }
+      if (EActor->ChallengeRating() >= 3)
+        return NOTHING;
+      else 
+        return ABORT; 
+    } ,
+    EV_MOVE, EV_LAND {
+      if (!GetHandle(EActor)) return ABORT; 
+      if (EActor->isIllusion())
+        return NOTHING;
+      mount = EActor->GetStatiObj(MOUNTED);
+      if (mount) {
+        if (mount->isMType(MA_SPIDER) || 
+            mount->onPlane() != PHASE_MATERIAL ||
+            mount->HasAbility(CA_WOODLAND_STRIDE))
+          return NOTHING;
+      } else {
+        if (EActor->isMType(MA_SPIDER) || 
+            EActor->onPlane() != PHASE_MATERIAL ||
+            EActor->HasAbility(CA_WOODLAND_STRIDE))
+          return NOTHING; 
+        EActor->MakeNoise(10);
+      } 
+      SinglePrintXY(e,"The old webbing is torn apart.");
+      EMap->WriteTerra(EActor->x,EActor->y,$"floor");
+      if (random(100) <= 10) {
+        EMap->GenEncounter(EN_SINGLE|EN_MTYPE,EMap->Depth,EMap->Depth,
+            MA_SPIDER, AL_NONGOOD,(rID)0,EActor->x,EActor->y,NULL);
+        EActor->Timeout += 1;
+      } 
+      return NOTHING; 
+    } ;    
+  }
+
+Terrain "Webbing"
+  { Image: grey GLYPH_WEB; Mat:MAT_WEBBING; 
+    Flags: TF_OBSCURE, TF_WARN, TF_SPECIAL, TF_STICKY, TF_SHOWNAME; 
+    hObj mount;
+    On Event EV_MAGIC_XY {
+      if (e.aval == AR_BEAM || e.aval == AR_BALL || e.aval == AR_GLOBE ||
+          (e.aval == AR_BOLT && e.EDir == DOWN) ) 
+        if (e.DType == AD_FIRE)
+          if (random(30) < e.vDmg) {
+            EMap->WriteTerra(e.EXVal,e.EYVal,
+              EMap->RegionAt(e.EXVal,e.EYVal)->Floor);
+            SinglePrintXY(e,"The webbing burns!");
+            }
+      return NOTHING;
+      },      
+    EV_MON_CONSIDER {
+      mount = EActor->GetStatiObj(MOUNTED);
+      if (mount) {
+        if (mount->isMType(MA_SPIDER) || 
+            mount->onPlane() != PHASE_MATERIAL ||
+            mount->HasAbility(CA_WOODLAND_STRIDE))
+          return NOTHING;
+        mount->MakeNoise(10);
+      } else {
+        if (EActor->isMType(MA_SPIDER) || 
+            EActor->onPlane() != PHASE_MATERIAL ||
+            EActor->HasAbility(CA_WOODLAND_STRIDE))
+          return NOTHING; 
+      }
+      if (EActor->ChallengeRating() >= 3)
+        return NOTHING;
+      else 
+        return ABORT; 
+    } ,
+    EV_MOVE, EV_LAND {
+      hObj mount2;
+      if (!GetHandle(EActor)) 
+        return ABORT; 
+      if (EActor->isIllusion())
+        return NOTHING;
+      mount2 = EActor->GetStatiObj(MOUNTED);
+      if (mount2) {
+        if (mount2->isMType(MA_SPIDER) || 
+            mount2->onPlane() != PHASE_MATERIAL ||
+            mount2->HasAbility(CA_WOODLAND_STRIDE))
+          return NOTHING;
+        mount2->MakeNoise(10);
+      } else {
+        if (EActor->isMType(MA_SPIDER) || 
+            EActor->onPlane() != PHASE_MATERIAL ||
+            EActor->HasAbility(CA_WOODLAND_STRIDE))
+          return NOTHING; 
+        EActor->MakeNoise(10);
+      } 
+      return NOTHING; 
+    } ;    
+    Constants:
+      * STICK_TYPE STUCK_STICKY;
+  }
+
+Terrain "Ice Floor"
+  { Image: grey GLYPH_FLOOR on blue; Mat:MAT_ICE;
+    Flags: TF_SPECIAL, TF_SHOWNAME, TF_SHADE; 
+    Desc: "Landing on, jumping off of, or attacking from a patch of
+    ice floor requires a DC 10 Balance Skill Check. If you fail, you
+    are tripped. Attacking with a weapon that does not grant a Strength
+    bonus to damage does not trigger this effect."; 
+    hObj mount;
+    On Event EV_MON_CONSIDER {
+      if (!GetHandle(EActor)) return ABORT; 
+      if (EActor->HasStati(ON_BRIDGE))
+        return NOTHING;
+      mount = EActor->GetStatiObj(MOUNTED);
+      if (mount) {
+        if (mount->SkillLevel(SK_BALANCE) < 10)
+          return ABORT; 
+      } 
+      return NOTHING; 
+    }; 
+    On Event PRE(EV_STRIKE), PRE(EV_JUMP_OFF), EV_LAND {
+      if (!GetHandle(EActor)) return ABORT;
+      if (EActor->HasStati(ON_BRIDGE))
+        return NOTHING;
+      if (EActor->isIllusion())
+        return NOTHING;
+      mount = EActor->GetStatiObj(MOUNTED);
+      if (mount) {
+        if (mount->HasStati(PRONE) || 
+            mount->HasAbility(CA_WOODLAND_STRIDE) || 
+            mount->isAerial() || mount->isMType(MA_COLD) ||
+            mount->HasEffStati(-1,$"the Winterlands") ||
+            EActor->HasEffStati(-1,$"the Winterlands") ||
+            (e.Event == EV_STRIKE && 
+             ( (EItem && !EItem->useStrength()) ||
+               (EItem2 && !EItem2->useStrength()) )))
+          return NOTHING; 
+        if (!mount->SkillCheck(SK_BALANCE,10,true,false))
+          {
+            EActor->Reveal(false);
+            DPrint(e,"Your mount slips on the ice!",
+              "An <EActor>'s mount slips on the ice!");
+            ThrowTerraDmg(EV_DAMAGE,AD_TRIP,-1,"ice floor",mount,$"ice floor");
+            EActor->Timeout += 12;
+            return ABORT;
+          }
+        return NOTHING; 
+      } 
+      if (EActor->HasStati(PRONE) || 
+          EActor->HasAbility(CA_WOODLAND_STRIDE) || 
+          EActor->isAerial() || EActor->isMType(MA_COLD) ||
+          EActor->HasEffStati(-1,$"the Winterlands") ||
+            (e.Event == EV_STRIKE && 
+             ( (EItem && !EItem->useStrength()) ||
+               (EItem2 && !EItem2->useStrength()) )))
+        return NOTHING;
+      if (!EActor->SkillCheck(SK_BALANCE,10,true,false))
+        {
+          EActor->Reveal(false);
+          DPrint(e,"You slip on the ice!",
+            "An <EActor> slips on the ice!");
+          ThrowTerraDmg(EV_DAMAGE,AD_TRIP,-1,"ice floor",EActor,$"ice floor");
+          EActor->Timeout += 12;
+          return ABORT;
+        }
+      return NOTHING;
+      },
+    EV_MAGIC_XY {
+      if (e.aval == AR_BEAM || e.aval == AR_BALL || 
+          e.aval == AR_GLOBE || (e.aval == AR_BOLT && e.EDir == DOWN) )
+        if (e.DType == AD_FIRE)
+          if (random(30) < e.vDmg) {
+            EMap->WriteTerra(e.EXVal,e.EYVal,$"shallow water");
+            SinglePrintXY(e,"The ice melts!");
+            }
+      return NOTHING;
+      };
+  }
+
+Terrain "storm of sleet"
+  { Image: bright cyan '~' on blue; Mat:MAT_ICE;
+    Flags: TF_SPECIAL, TF_SHOWNAME, TF_OBSCURE, TF_WARN; Move: 50%;  
+    hObj mount;
+    On Event EV_MON_CONSIDER {
+      if (!EActor) return ABORT; 
+      mount = EActor->GetStatiObj(MOUNTED);
+      if (mount) {
+        if (mount->SkillLevel(SK_BALANCE) < 10)
+          return ABORT; 
+      } 
+      return NOTHING; 
+    } ;
+    On Event PRE(EV_MOVE), PRE(EV_STRIKE), PRE(EV_JUMP_OFF), EV_LAND {
+      if (!EActor) return ABORT; 
+      if (EActor->HasStati(ON_BRIDGE))
+        return NOTHING;
+      if (EActor->isIllusion())
+        return NOTHING;
+      mount = EActor->GetStatiObj(MOUNTED);
+      if (mount) {
+        if (mount->HasStati(PRONE) || 
+            mount->HasAbility(CA_WOODLAND_STRIDE) || 
+            mount->isAerial() || 
+            mount->HasEffStati(-1,$"the Winterlands") ||
+            EActor->HasEffStati(-1,$"the Winterlands") ||
+            (e.Event == EV_STRIKE && 
+             ( (EItem && !EItem->useStrength()) ||
+               (EItem2 && !EItem2->useStrength()) )))
+          return NOTHING; 
+        if (!mount->SkillCheck(SK_BALANCE,10,true,false))
+          {
+            DPrint(e,"Your mount slips on the ice!",
+              "An <EActor>'s mount slips on the ice!");
+            ThrowTerraDmg(EV_DAMAGE,AD_TRIP,-1,"ice floor",mount,$"ice floor");
+            EActor->Timeout += 12;
+            return ABORT;
+          }
+        return NOTHING; 
+      } 
+      if (EActor->HasStati(PRONE) || 
+          EActor->HasAbility(CA_WOODLAND_STRIDE) || 
+          EActor->isAerial() || 
+          EActor->HasEffStati(-1,$"the Winterlands") ||
+            (e.Event == EV_STRIKE && 
+             ( (EItem && !EItem->useStrength()) ||
+               (EItem2 && !EItem2->useStrength()) )))
+        return NOTHING;
+      if (!EActor->SkillCheck(SK_BALANCE,10,true,false))
+        {
+          DPrint(e,"You slip on the ice!",
+            "An <EActor> slips on the ice!");
+          ThrowTerraDmg(EV_DAMAGE,AD_TRIP,-1,"ice floor",EActor,$"ice floor");
+          EActor->Timeout += 12;
+          return ABORT;
+        }
+      return NOTHING;
+    };
+    Desc: "Driving sleet blocks all sight (even darkvision) within it and
+    causes the ground in the area to be icy. A creature can walk within or
+    through the area of sleet at half normal speed with a DC 15 Balance
+    check. Failure means it can't move in that round, while failure by 5 or
+    more means it falls (see the Balance skill for details).";
+  }
+
+Terrain "bed of spikes"
+  { Image: brown '^'; Mat:MAT_GRANITE; Mov: 50%;
+    Flags: TF_WARN, TF_SPECIAL, TF_SHOWNAME;
+    On Event EV_MON_CONSIDER {
+      if (EActor->isAerial() || EActor->HasAbility(CA_WOODLAND_STRIDE) 
+           || EActor->HasStati(ON_BRIDGE))
+        return NOTHING;
+      else 
+        return ABORT; 
+      }; 
+    On Event EV_MOVE {
+      if (EActor->isAerial() || EActor->HasAbility(CA_WOODLAND_STRIDE))
+        return NOTHING;
+      if (EActor->HasStati(ON_BRIDGE))
+        return NOTHING;
+      if (EActor->isIllusion())
+        return NOTHING;
+      if (!EActor->SkillCheck(SK_ESCAPE_ART,15,true,false))
+        {
+          DPrint(e,"You are still tangled in the spikes!",
+            "An <EActor> remains tangled in the spikes!");
+          EActor->Reveal(false);
+          EActor->MakeNoise(3);
+          EActor->Timeout += 30;
+          return ABORT;
+        }
+      ThrowTerraDmg(EV_DAMAGE,AD_PIERCE,1d8,"a bed of spikes",EActor, $"bed of spikes"); 
+      return NOTHING;
+      };
+  }
+
+Terrain "Summoning Circle"
+  { Image: bright purple 233; Mat:MAT_GRANITE; 
+    Flags: TF_SHOWNAME | TF_SPECIAL; 
+    On Event EV_INITIALIZE {
+      hObj h,w;
+      int16 dx,dy,mx,my,trial;
+      for (trial=0; trial<9; trial++) {
+        EMap->GenEncounter(EN_SINGLE,
+            EMap->Depth+2, EMap->Depth+2, 0,
+            0,(rID)0,e.EXVal,e.EYVal,NULL);
+        h = EMap->GetEncounterCreature(0); 
+        if (h) {
+          h->GainPermStati(SUMMONED,h,SS_MISC);
+          h->PlaceAt(EMap,e.EXVal,e.EYVal);
+          trial = 999;
+        } 
+      }
+      for (dx = -4; dx <= 4; dx++) 
+        for (dy = -4; dy <= 4; dy++) { 
+          mx = dx + e.EXVal; 
+          my = dy + e.EYVal; 
+          if (EMap->InBounds(mx,my) &&
+              dist(mx,my,e.EXVal,e.EYVal) <= 3 &&
+              dist(mx,my,e.EXVal,e.EYVal) >= 2) {
+            if (EMap->SolidAt(mx,my)) 
+              EMap->WriteTerra(mx,my,$"warded wall");
+            else {
+              w = CreateFeature($"warding rune");
+              w->PlaceAt(EMap,mx,my);
+            } 
+          } 
+        }
+      };
+    Desc: "This summoning circle sits at the center of a carefully warded
+    area that keeps in (and keeps out) summoned and incorporeal
+    creatures.";
+  }
+
+
+
+/************************************************************************
+                      River (Water, Magma) Terrain
+ ************************************************************************/
+
+#define WATER_COMBAT                                                     \
+    On Event EVICTIM(EV_DAMAGE) {                                        \
+      if ((!EVictim->isAerial()) && (!EVictim->HasStati(ON_BRIDGE))) {   \
+        if (e.AType == A_HURL) {                                         \
+          DPrint(e,"Thrown weapons are ineffective under water!",        \
+            "The <EActor>'s thrown weapon is ineffective under water."); \
+          e.Immune = true;                                               \
+          return DONE;                                                   \
+        } else if (e.DType == AD_FIRE) {                                 \
+          if (EActor->SkillCheck(SK_SPELLCRAFT,20,true)) {               \
+            DPrint(e,"Your fire damage makes a bubble of steam!",        \
+              "The <EActor>'s fire damage makes a bubble of steam.");    \
+          } else {                                                       \
+            DPrint(e,"Your fire damage is ineffective under water!",     \
+              "The <EActor>'s fire damage is ineffective under water."); \
+            e.Immune = true;                                             \
+            return DONE;                                                 \
+          }                                                              \
+        } else if ((e.DType == AD_BLUNT || e.DType == AD_SLASH) &&       \
+          (EActor->ResistLevel(AD_STUK) != -1)) {                        \
+          e.vDmg /= 2;                                                   \
+          e.strDmg += " /2 water";                                       \
+        }                                                                \
+      }                                                                  \
+    };                                                                   \
+    On Event EVICTIM(EV_STRIKE) {                                        \
+      if (EVictim->HasStati(ON_BRIDGE))                                  \
+        return NOTHING;                                                  \
+      if ((e.AType == A_FIRE || e.DType == AD_SLASH ||                   \
+           e.DType == AD_BLUNT) && (!EVictim->isAerial()) &&             \
+           (EActor->ResistLevel(AD_STUK) != -1)) {                       \
+        e.vHit -= 2;                                                     \
+        e.strHit += " -2 water";                                         \
+      }                                                                  \
+      if (!EVictim->isAerial() &&                                        \
+          !EMap->TerrainAt(EActor->x,EActor->y)->TerrainHasFlag(TF_WATER)) { \
+        e.vDef += 8;                                                     \
+        e.strDef += " +8 water";                                         \
+      }                                                                  \
+      return NOTHING;                                                    \
+    }
+
+
+
+Terrain "shallow water"
+  { Image: azure GLYPH_WATER; Mat:MAT_LIQUID;
+    Flags: TF_SHOWNAME, TF_SPECIAL, TF_WATER, TF_DEEP_LIQ; 
+    On Event EV_DROP {
+      DPrint(e,"The <EItem> is quickly swept away.",
+               "The <EActor> drops an <EItem>, and it is quickly swept away.");
+      EItem->Remove(true);
+      return DONE;
+      };
+    On Event EV_MAGIC_XY {
+      if (e.aval == AR_BEAM || e.aval == AR_BALL || e.aval == AR_GLOBE ||
+          (e.aval == AR_BOLT && e.EDir == DOWN) )
+        if (e.DType == AD_COLD)
+          if (random(30) < e.vDmg) {
+            EMap->WriteTerra(e.EXVal,e.EYVal,$"ice floor");
+            SinglePrintXY(e,"The water freezes!");
+            }
+      return NOTHING;
+      };
+
+    WATER_COMBAT; 
+
+    Desc: 
+      "__This water is shallow. It is waist-high, allowing allowing aquatic
+      creatures and landlubbers to pass with equal ease.";
+  }
+
+
+
+Terrain "shallow mud"
+  { Image: brown GLYPH_WATER; Mat:MAT_LIQUID; Move: 50%; 
+    Flags: TF_SHOWNAME, TF_SPECIAL, TF_WATER, TF_DEEP_LIQ; 
+    On Event EV_MAGIC_XY {
+      if (e.aval == AR_BEAM || e.aval == AR_BALL ||
+          (e.aval == AR_BOLT && e.EDir == DOWN) ) 
+        if (e.DType == AD_FIRE || e.DType == AD_COLD)
+          if (random(30) < e.vDmg) {
+            EMap->WriteTerra(e.EXVal,e.EYVal,
+              EMap->RegionAt(e.EXVal,e.EYVal)->Floor);
+            SinglePrintXY(e,"The mud hardens!");
+            }
+      return NOTHING;
+      },
+    EV_MOVE {
+      if (EActor->isAerial() || EActor->HasStati(ON_BRIDGE))
+        return NOTHING;
+      EActor->IPrint("Glup.");
+      return NOTHING;
+      };      
+
+    WATER_COMBAT; 
+
+    Desc: 
+      "__This watery mud is shallow. It is waist-high, allowing allowing
+      aquatic creatures and landlubbers to pass with equal ease.
+      \n__Water Combat: Thrown weapons are ineffective against targets in
+      the water. Fire damage is ineffective against targets in the water
+      unless the attacker makes a DC 20 Spellcraft check. Creatures in the
+      water attacked by creatures not in a water square gain a +8 defense
+      bonus.  Blunt, slashing and ranged attacks suffer a -2 penalty to hit
+      creatures in the water (unless the attacker has Freedom of Movement).
+      Blunt and slashing attacks do half damage to creatures in the water
+      (unless the attacker has freedom of movement).
+      ";
+  }
+
+
+Terrain "deep water"
+  { Image: blue GLYPH_WATER; Mat:MAT_LIQUID;
+    Flags: TF_SHOWNAME, TF_SPECIAL, TF_WATER, TF_WARN, TF_DEEP_LIQ; 
+    hObj mount;
+    On Event EV_DROP {
+      DPrint(e,"The <EItem> is quickly swept away.",
+               "The <EActor> drops an <EItem>, and it is quickly swept away.");
+      EItem->Remove(true);
+      return DONE;
+      },    
+    EV_MAGIC_XY {
+      if (e.aval == AR_BEAM || e.aval == AR_BALL || e.aval == AR_GLOBE ||
+          (e.aval == AR_BOLT && e.EDir == DOWN) )
+        if (e.DType == AD_COLD)
+          if ((10+random(30)) < e.vDmg) {
+            EMap->WriteTerra(e.EXVal,e.EYVal,$"ice floor");
+            SinglePrintXY(e,"The water freezes!");
+            }
+      return NOTHING;
+      },
+    EV_JUMP_OFF {
+      if (EActor->HasStati(ON_BRIDGE))
+        return NOTHING;
+      EActor->IPrint("You cannot jump out of deep water.");
+      // Only Mario can do that ...
+      return ABORT; 
+    },
+    EV_MOVE, PRE(EV_STRIKE), EV_LAND, PRE(EV_CAST) {
+      int16 res;
+      if (EActor->HasStati(ON_BRIDGE))
+        return NOTHING;
+      mount = EActor->GetStatiObj(MOUNTED);
+      if (mount) {
+        if (mount->HasMFlag(M_AMPHIB) ||
+            mount->isMType(MA_AQUATIC) ||
+            mount->isMType(MA_WATER) ||
+            mount->HasMFlag(M_INCOR) ||
+            !mount->isMType(MA_BREATHER) ||
+            mount->HasStati(WATER_WALKING) ||
+            mount->isAerial())
+          return NOTHING;
+        mount->SkillCheck(SK_SWIM,10,true,false);
+        res = LastSkillCheckResult() - 10;
+        if (res >= 0)
+          return NOTHING;
+        else if (res >= -5) {
+          EActor->Timeout += 30;
+          EActor->IPrint("Your mount fails to make progress in the water.");
+          return ABORT;
+        } else {
+          // (1) we should do the whole "hold your breath" thing here
+          // (2) the SRD doesn't actually seem to define drowning!
+          EActor->Timeout += 30;
+          EActor->IPrint("Your mount is drowning!");
+          mount->GainTempStati(EXPOSED,NULL,2,SS_MISC,0,2);
+          ThrowTerraDmg(EV_DAMAGE,AD_NORM,6d2,"drowning",mount, $"deep water");
+          ThrowTerraDmg(EV_DAMAGE,AD_SOAK,8d4,"drowning",mount, $"deep water");
+          return ABORT;
+        } 
+      } 
+      if (EActor->HasMFlag(M_AMPHIB) ||
+          EActor->isMType(MA_AQUATIC) ||
+          EActor->isMType(MA_WATER) ||
+          EActor->HasMFlag(M_INCOR) ||
+          !EActor->isMType(MA_BREATHER) ||
+          EActor->HasStati(WATER_WALKING) ||
+          EActor->isAerial())
+        return NOTHING;
+
+      EActor->SkillCheck(SK_SWIM,10,true,false);
+      res = LastSkillCheckResult() - 10;
+      if (res >= 0)
+        return NOTHING;
+      else if (res >= -5) {
+        EActor->Timeout += 30;
+        EActor->IPrint("You fail to make progress in the water.");
+        return ABORT;
+      } else {
+        EActor->Timeout += 30;
+        EActor->IPrint("You are drowning!");
+        EActor->GainTempStati(EXPOSED,NULL,2,SS_MISC,0,2);
+        ThrowTerraDmg(EV_DAMAGE,AD_NORM,6d2,"drowning",EActor, $"deep water");
+        ThrowTerraDmg(EV_DAMAGE,AD_SOAK,8d4,"drowning",EActor, $"deep water");
+        return ABORT;
+      } 
+    } ;
+    On Event EV_MON_CONSIDER {
+      mount = EActor->GetStatiObj(MOUNTED);
+      if (EActor->HasStati(ON_BRIDGE))
+        return NOTHING;
+      if (mount) {
+        if (mount->HasMFlag(M_AMPHIB) ||
+            mount->isMType(MA_AQUATIC) ||
+            mount->isMType(MA_WATER) ||
+            mount->HasMFlag(M_INCOR) ||
+            !mount->isMType(MA_BREATHER) ||
+            mount->HasStati(WATER_WALKING) ||
+            mount->isAerial())
+          return NOTHING;
+        if (mount->SkillLevel(SK_SWIM) >= 5)
+          return NOTHING;
+      } else { 
+        if (EActor->HasMFlag(M_AMPHIB) ||
+            EActor->isMType(MA_AQUATIC) ||
+            EActor->isMType(MA_WATER) ||
+            EActor->HasMFlag(M_INCOR) ||
+            !EActor->isMType(MA_BREATHER) ||
+            EActor->HasStati(WATER_WALKING) ||
+            EActor->isAerial())
+          return NOTHING;
+        if (EActor->SkillLevel(SK_SWIM) >= 5)
+          return NOTHING;
+      } 
+      return ABORT; 
+    } ;
+
+    WATER_COMBAT; 
+
+    Desc: "__This water is deep. Any attempt to move through it or attack
+    through it requires a Swim skill check (DC 10). Failure means the 
+    action is aborted (but it still takes time). Failure by more than 5
+    means that you start drowning and take 6d2 points of damage.
+    Amphibians, aquatic creatures, water creatures, water alkers,
+    flyers, and creatures that don't breathe always succeed. Blunt and
+    slashing attacks deal half damage in water squares.
+      \n__Water Combat: Thrown weapons are ineffective against targets in
+      the water. Fire damage is ineffective against targets in the water
+      unless the attacker makes a DC 20 Spellcraft check. Creatures in the
+      water attacked by creatures not in a water square gain a +8 defense
+      bonus.  Blunt, slashing and ranged attacks suffer a -2 penalty to hit
+      creatures in the water (unless the attacker has Freedom of Movement).
+      Blunt and slashing attacks do half damage to creatures in the water
+      (unless the attacker has freedom of movement).
+      ";
+  }
+
+Terrain "turbulent water"
+  { Image: cyan GLYPH_WATER; Mat:MAT_LIQUID;
+    Flags: TF_SHOWNAME, TF_SPECIAL, TF_WATER, TF_WARN, TF_DEEP_LIQ; 
+    hObj mount;
+      
+    WATER_COMBAT; 
+
+    On Event EV_DROP {
+      DPrint(e,"The <EItem> is quickly swept away.",
+               "The <EActor> drops an <EItem>, and it is quickly swept away.");
+      EItem->Remove(true);
+      return DONE;
+      },    
+    EV_MAGIC_XY {
+      if (e.aval == AR_BEAM || e.aval == AR_BALL || e.aval == AR_GLOBE ||
+          (e.aval == AR_BOLT && e.EDir == DOWN) )
+        if (e.DType == AD_COLD)
+          if ((15+random(30)) < e.vDmg) {
+            EMap->WriteTerra(e.EXVal,e.EYVal,$"ice floor");
+            SinglePrintXY(e,"The water freezes!");
+            }
+      return NOTHING;
+      },
+    EV_JUMP_OFF {
+      if (EActor->HasStati(ON_BRIDGE))
+        return NOTHING;
+      EActor->IPrint("You cannot jump out of turbulent water.");
+      // Only Mario can do that ...
+      return ABORT; 
+    },
+    EV_MOVE, PRE(EV_STRIKE), EV_LAND, PRE(EV_CAST) {
+      int16 res;
+      bool progress; 
+      if (EActor->HasStati(ON_BRIDGE))
+        return NOTHING;
+      progress = true; 
+      mount = EActor->GetStatiObj(MOUNTED);
+      if (mount) {
+        if (mount->HasStati(WATER_WALKING) ||
+            mount->isAerial())
+          return NOTHING; 
+        if (mount->HasMFlag(M_AMPHIB) ||
+            mount->isMType(MA_AQUATIC) ||
+            mount->HasMFlag(M_INCOR) ||
+            mount->isMType(MA_WATER) ||
+            !mount->isMType(MA_BREATHER)) {
+          // mount is not hurt ...
+        } else { 
+          mount->SkillCheck(SK_SWIM,10,true,false);
+          res = LastSkillCheckResult() - 10;
+          if (res >= 0) {
+            // mount is OK 
+          } else if (res >= -5) {
+            EActor->Timeout += 30;
+            progress = false; 
+            EActor->IPrint("Your mount fails to make progress in the water.");
+          } else {
+            EActor->Timeout += 30;
+            EActor->IPrint("Your mount is drowning!");
+            mount->GainTempStati(EXPOSED,NULL,2,SS_MISC,0,2);
+            ThrowTerraDmg(EV_DAMAGE,AD_NORM,6d4,"drowning",mount, $"turbulent water");
+            ThrowTerraDmg(EV_DAMAGE,AD_SOAK,16d4,"drowning",mount, $"turbulent water");
+            ThrowTerraDmg(EV_DAMAGE,AD_NORM,3d4,"drowning",EActor, $"turbulent water");
+            ThrowTerraDmg(EV_DAMAGE,AD_SOAK,8d4,"drowning",EActor, $"turbulent water");
+            progress = false; 
+          } 
+        }
+      } 
+      if (EActor->HasMFlag(M_AMPHIB) ||
+          EActor->isMType(MA_AQUATIC) ||
+          EActor->isMType(MA_WATER) ||
+            EActor->HasMFlag(M_INCOR) ||
+          !EActor->isMType(MA_BREATHER) ||
+          EActor->HasStati(WATER_WALKING) ||
+          EActor->isAerial()) {
+        // actor is OK ...
+      } else { 
+        EActor->SkillCheck(SK_SWIM,20,true,false);
+        res = LastSkillCheckResult() - 20;
+        if (res >= 0)
+          return NOTHING;
+        else if (res >= -5) {
+          EActor->Timeout += 30;
+          EActor->IPrint("You fail to make progress in the water.");
+          ThrowTerraDmg(EV_DAMAGE,AD_SOAK,1d4,"drowning",EActor, $"turbulent water");
+          progress = false;
+        } else {
+          // (1) we should do the whole "hold your breath" thing here
+          // (2) the SRD doesn't actually seem to define drowning!
+          EActor->Timeout += 30;
+          EActor->IPrint("You are drowning!");
+          EActor->GainTempStati(EXPOSED,NULL,2,SS_MISC,0,2);
+          ThrowTerraDmg(EV_DAMAGE,AD_NORM,6d4,"drowning",EActor, $"turbulent water");
+          ThrowTerraDmg(EV_DAMAGE,AD_SOAK,16d4,"drowning",EActor, $"turbulent water");
+          progress = false; 
+        } 
+      } 
+
+      if (progress) {
+        return NOTHING;
+      } else {
+        return ABORT;
+      } 
+    } ;
+    On Event EV_MON_CONSIDER {
+      mount = EActor->GetStatiObj(MOUNTED);
+      if (mount) {
+        if (mount->HasStati(WATER_WALKING) ||
+            mount->isAerial())
+          return NOTHING; 
+        if (mount->HasMFlag(M_AMPHIB) ||
+            mount->isMType(MA_AQUATIC) ||
+            mount->isMType(MA_WATER) ||
+            mount->HasMFlag(M_INCOR) ||
+            !mount->isMType(MA_BREATHER)) {
+          // mount is not hurt ...
+        } else { 
+          if (mount->SkillLevel(SK_SWIM) < 15)
+            return ABORT; 
+        } 
+      } 
+      if (EActor->HasMFlag(M_AMPHIB) ||
+          EActor->isMType(MA_AQUATIC) ||
+          EActor->isMType(MA_WATER) ||
+            EActor->HasMFlag(M_INCOR) ||
+          !EActor->isMType(MA_BREATHER) ||
+          EActor->HasStati(WATER_WALKING) ||
+          EActor->isAerial())
+        return NOTHING;
+      if (EActor->SkillLevel(SK_SWIM) >= 15)
+        return NOTHING;
+      return ABORT; 
+    } ;
+    Desc: "__This water is deep and turbulent. Any attempt to move through it
+    or attack through it requires a Swim skill check (DC 20). Failure means
+    the action is aborted (but it still takes time). Failure by more than 5
+    means that you start drowning and take 6d4 points of damage.
+    Amphibians, aquatic creatures and water creatures always succeed. Blunt
+    and slashing attacks deal half damage in water squares.
+      \n__Water Combat: Thrown weapons are ineffective against targets in
+      the water. Fire damage is ineffective against targets in the water
+      unless the attacker makes a DC 20 Spellcraft check. Creatures in the
+      water attacked by creatures not in a water square gain a +8 defense
+      bonus.  Blunt, slashing and ranged attacks suffer a -2 penalty to hit
+      creatures in the water (unless the attacker has Freedom of Movement).
+      Blunt and slashing attacks do half damage to creatures in the water
+      (unless the attacker has freedom of movement).
+      ";
+  }
+
+
+
+Terrain "magma"
+  { Image: pink GLYPH_LAVA; Mat:MAT_MAGMA; 
+    Flags: TF_WARN, TF_SPECIAL, TF_SHOWNAME, TF_LOCAL_LIGHT, TF_DEEP_LIQ; 
+    Desc: "Magma deals 6d6 points of fire damage to your or your mount
+    as you cross it, land on it or jump out of it."; 
+    hObj mount;
+    On Event EV_MON_CONSIDER {
+      int16 rl;
+      if (!GetHandle(EActor)) 
+        return ABORT; 
+      if (EActor->HasStati(ON_BRIDGE))
+        return NOTHING;
+      mount = EActor->GetStatiObj(MOUNTED);
+      if (mount) {
+        if (mount->isAerial() ||
+            mount->HasEffStati(-1,$"the Inferno") ||
+            EActor->HasEffStati(-1,$"the Inferno") ||
+            mount->HasAbility(CA_WOODLAND_STRIDE))
+          return NOTHING;
+        rl = mount->ResistLevel(AD_FIRE);
+        if (rl < 0 || rl >= 36) return NOTHING;
+      } else {
+        if (EActor->isAerial() ||
+            EActor->HasEffStati(-1,$"the Inferno") ||
+            EActor->HasAbility(CA_WOODLAND_STRIDE))
+          return NOTHING;
+        rl = EActor->ResistLevel(AD_FIRE);
+        if (rl < 0 || rl >= 36) return NOTHING;
+      } 
+      return ABORT; 
+    } ;
+    On Event EV_MOVE, EV_JUMP_OFF, EV_LAND, EV_STRIKE {
+      int16 r, dmg; 
+      if (!GetHandle(EActor)) return ABORT; 
+      if (EActor->HasStati(ON_BRIDGE))
+        return NOTHING;
+      mount = EActor->GetStatiObj(MOUNTED);
+      if (mount) {
+        if (mount->isAerial() || 
+            mount->HasEffStati(-1,$"the Inferno") ||
+            EActor->HasEffStati(-1,$"the Inferno") ||
+            mount->HasAbility(CA_WOODLAND_STRIDE))
+          return NOTHING;
+        r = mount->ResistLevel(AD_FIRE);
+        if (r == -1) return NOTHING;
+        dmg = (6d6) - r;
+        if (dmg <= 0) return NOTHING;
+        ThrowTerraDmg(EV_DAMAGE,AD_FIRE,dmg,"magma",mount,$"magma");
+        DPrint(e,"Your mount is burned by the magma!",
+            "An <EActor>'s mount is burned by magma!");
+        return NOTHING; 
+      } 
+        if (EActor->isAerial() || 
+            EActor->HasEffStati(-1,$"the Inferno") ||
+            EActor->HasAbility(CA_WOODLAND_STRIDE))
+          return NOTHING;
+      r = EActor->ResistLevel(AD_FIRE);
+      if (r == -1) return NOTHING;
+      dmg = (6d6) - r;
+      if (dmg <= 0) return NOTHING;
+      ThrowTerraDmg(EV_DAMAGE,AD_FIRE,dmg,"magma",EActor,$"magma");
+      return NOTHING;
+      },
+    EV_MAGIC_XY {
+      if (e.aval == AR_BEAM || e.aval == AR_BALL || e.aval == AR_GLOBE ||
+          (e.aval == AR_BOLT && e.EDir == DOWN) )
+        if (e.DType == AD_COLD)
+          if ((15+random(30)) < e.vDmg) {
+            EMap->WriteTerra(e.EXVal,e.EYVal,$"brimstone");
+            SinglePrintXY(e,"The magma cools!");
+            }
+      return NOTHING;
+      };
+
+  }
+
+Terrain "brimstone"
+  { Image: red GLYPH_LAVA; Mat:MAT_MAGMA;
+    Flags: TF_WARN, TF_SPECIAL, TF_SHOWNAME, TF_LOCAL_LIGHT, TF_DEEP_LIQ; 
+    Desc: "Brimstone deals 1d6 points of fire damage to your or your mount
+    as you cross it, land on it or jump out of it."; 
+    hObj mount;
+    On Event EV_MON_CONSIDER {
+      int16 rl;
+      if (!GetHandle(EActor)) 
+        return ABORT; 
+      if (EActor->HasStati(ON_BRIDGE))
+        return NOTHING;
+      mount = EActor->GetStatiObj(MOUNTED);
+      if (mount) {
+        if (mount->isAerial() ||
+            mount->HasEffStati(-1,$"the Inferno") ||
+            EActor->HasEffStati(-1,$"the Inferno") ||
+            mount->HasAbility(CA_WOODLAND_STRIDE))
+          return NOTHING;
+        rl = mount->ResistLevel(AD_FIRE);
+        if (rl < 0 || rl >= 6) return NOTHING;
+      } else {
+        if (EActor->isAerial() ||
+            EActor->HasEffStati(-1,$"the Inferno") ||
+            EActor->HasAbility(CA_WOODLAND_STRIDE))
+          return NOTHING;
+        rl = EActor->ResistLevel(AD_FIRE);
+        if (rl < 0 || rl >= 6) return NOTHING;
+      } 
+      return ABORT; 
+    } ;
+    On Event EV_MOVE, EV_JUMP_OFF, EV_LAND, EV_STRIKE {
+      int16 r, dmg; 
+      if (!GetHandle(EActor)) 
+        return ABORT; 
+      if (EActor->HasStati(ON_BRIDGE))
+        return NOTHING;
+      mount = EActor->GetStatiObj(MOUNTED);
+      if (mount) {
+        if (mount->isAerial() || 
+            mount->HasEffStati(-1,$"the Inferno") ||
+            EActor->HasEffStati(-1,$"the Inferno") ||
+            mount->HasAbility(CA_WOODLAND_STRIDE))
+          return NOTHING;
+        r = mount->ResistLevel(AD_FIRE);
+        if (r == -1) return NOTHING;
+        dmg = (1d6) - r;
+        if (dmg <= 0) return NOTHING;
+        ThrowTerraDmg(EV_DAMAGE,AD_FIRE,dmg,"brimstone",mount,$"brimstone");
+        DPrint(e,"Your mount is burned by the brimstone!",
+            "An <EActor>'s mount is burned by brimstone!");
+        return NOTHING; 
+      } 
+        if (EActor->isAerial() || 
+            EActor->HasEffStati(-1,$"the Inferno") ||
+            EActor->HasAbility(CA_WOODLAND_STRIDE))
+          return NOTHING;
+      r = EActor->ResistLevel(AD_FIRE);
+      if (r == -1) return NOTHING;
+      dmg = (1d6) - r;
+      if (dmg <= 0) return NOTHING;
+      ThrowTerraDmg(EV_DAMAGE,AD_FIRE,dmg,"brimstone",EActor,$"brimstone");
+      return NOTHING;
+      },
+    EV_MAGIC_XY {
+      if (e.aval == AR_BEAM || e.aval == AR_BALL ||
+          (e.aval == AR_BOLT && e.EDir == DOWN) )
+        if (e.DType == AD_COLD)
+          if ((10+random(30)) < e.vDmg) {
+            EMap->WriteTerra(e.EXVal,e.EYVal,$"smooth igneous rock");
+            SinglePrintXY(e,"The brimstone cools!");
+            }
+      return NOTHING;
+      };
+
+  }
+
+/************************************************************************
+                                 Features
+ ************************************************************************/
+
+Feature "Tomb" : T_FEATURE
+  {
+    Image: white GLYPH_GRAVE;
+    Mat:MAT_GRANITE;
+    On Event EV_DAMAGE, EV_MAGIC_XY, EV_MAGIC_STRIKE {
+      int16 i; 
+      if (e.Event == EV_DAMAGE)
+        if (EActor->onPlane() != EVictim->onPlane())
+          return NOTHING;
+      if (!ETarget->HasStati(TRIED,1) &&
+           e.eID != $"tanglefoot bag" &&
+           !e.isActOfGod)
+        {
+          ETarget->GainPermStati(TRIED,NULL,SS_MISC,1);
+          EActor->Transgress($"Mara", 2, false, "desecrating a tomb");
+          EActor->IDPrint("The tomb is desecrated, the dead rise!", "The tomb is desecrated, the dead rise!");
+          for (i=2d4; i > 0; i--) { 
+            EMap->GenEncounter(EN_SINGLE|EN_MTYPE|EN_STREAMER,
+              EMap->Depth+4,EMap->Depth+4,
+              MA_UNDEAD, AL_NONGOOD,(rID)0,ETarget->x,ETarget->y,NULL);
+          }
+          if (e.eID != $"desecrate") 
+            ThrowEffXY(EV_EFFECT,$"desecrate",ETarget->x,ETarget->y,
+              EActor,EVictim);
+          ETarget->Remove(false);
+        }
+      return NOTHING;
+    };
+  }
+
+Feature "Gravestone" : T_FEATURE
+  {
+    Image: grey GLYPH_GRAVE;
+    Mat:MAT_GRANITE;
+    On Event EV_DAMAGE, EV_MAGIC_XY, EV_MAGIC_STRIKE {
+      if (!ETarget->HasStati(TRIED,1) &&
+           e.eID != $"tanglefoot bag" &&
+           !e.isActOfGod)
+        {
+          EActor->Transgress($"Mara", 2, false, "desecrating a grave");
+          ETarget->GainPermStati(TRIED,NULL,SS_MISC,1);
+          EActor->IDPrint("The gravestone is desecrated, the dead rise!", 
+            "The gravestone is desecrated, the dead rise!");
+          EMap->GenEncounter(EN_SINGLE|EN_MTYPE|EN_STREAMER,
+              EMap->Depth+2,EMap->Depth+2,
+              MA_UNDEAD, AL_NONGOOD,(rID)0,ETarget->x,ETarget->y,NULL);
+          if (e.eID != $"desecrate") 
+            ThrowEffXY(EV_EFFECT,$"desecrate",ETarget->x,ETarget->y,
+              EActor,EVictim);
+          ETarget->Remove(false); 
+        }
+
+      return NOTHING;
+    };
+  }
+
+Feature "warding rune" : T_FEATURE
+  {
+    Image: bright purple GLYPH_FLOOR2; Mat:MAT_GRANITE; 
+    Desc: "This mystic warding rune keeps out (or perhaps keeps in)
+    incorporeal threats and summoned monsters. It is solid to creatures on
+    other planes."; 
+    On Event EV_MON_CONSIDER {
+      if ((EActor->onPlane() != PHASE_MATERIAL) ||
+          (EActor->HasStati(SUMMONED)))
+        return ABORT;
+    };
+    On Event EV_WALKON, EV_LEAVE {
+      if ((EActor->onPlane() != PHASE_MATERIAL) ||
+          (EActor->HasStati(SUMMONED))) {
+        EActor->IPrint("The warding rune prevents your passage!");
+        return ABORT;
+      } 
+    };
+  } 
+
+Feature "Forge" : T_FEATURE
+  { Image: red 8; Mat:MAT_IRON; }
+
+Item "fountain" : T_FOUNTAIN
+  {
+    Image: bright blue GLYPH_FOUNTAIN; 
+    Level:0; Mat:MAT_MINERAL;
+    Weight: 10000; Flags: IT_NOGEN; hp: 150;
+    Desc: "Deep below the earth, some natural springs absorb the magical
+      radiations of the Underdark. Magical fountains are large, immobile
+      magical items built to harness the energy of these springs, usually
+      for the purposes of healing or item enchantment. Though useful, these
+      magics are deeply chaotic and unpredictable, and using them represents
+      a great risk for a significant possible reward."; 
+    On Event EV_PICKUP {
+      EActor->IPrint("The fountain is affixed to the floor, <hObj>.",EActor);
+      return ABORT;
+      },
+    PRE(EV_DIP) {
+      e.eID = $"fountain;effect";
+      return NOTHING;
+      };
+  }
+  
+/* When items are dipped in a fountain and you roll badly, it might
+   do 1d4 points of damage to the item, bypassing hardness. This
+   makes Craft valuable to fountain-enchanters. */
+  
+AI_FOUNTAIN Effect "fountain;effect" : EA_GENERIC
+  {
+    Level: PLUS_2PER1; Flags: EF_NEEDS_PLUS, EF_NAMEONLY;
+    On Event EV_MAGIC_HIT {
+      int16 val, i,j; rID mID, dID; hObj hRing, hMon, it;
+      if (EItem->IFlags & IF_BLESSED)
+        val = max(1d20,1d20);
+      else if (EItem->IFlags & IF_CURSED)
+        val = min(1d20,1d20);
+      else
+        val = 1d20;
+      val += EActor->Mod(A_LUC);
+      /* EActor->IPrint("<Num>.",val); */
+      if (EActor->HasEffStati(HAS_DOMAIN,$"Water;Domain"))
+        val += 3;
+      
+      while (val < 0)
+        val += 5;
+      
+      EActor->Exercise(A_LUC,1d20,ELUC_FOUNTAIN,70);
+      
+      switch (val)
+        {
+          case 0:
+            if (!EActor->HasStati(ADJUST_INH))
+              {
+                EActor->IPrint("You feel very lucky.");
+                break;
+              }
+            EActor->IPrint("You feel tremendously dissipated.");
+            for (i=0;i!=7;i++)
+              EActor->RemoveStati(ADJUST_INH,-1,i);
+           break;
+          case 1:
+            EActor->IPrint("This water tastes like poison!");
+            ThrowDmg(EV_DAMAGE,AD_TOXI,(4 - EActor->Mod(A_LUC) + EItem->GetPlus())d10,
+                       "poisonous fountain water", EActor, EActor);          
+          case 2:
+            EActor->IPrint("This water must be contaminated!");
+            if (EActor->ResistLevel(AD_DISE) == -1)
+              {
+                EActor->IPrint("Fortunately, you are unaffected.");
+                break;
+              }
+            switch (1d6)
+              {
+                case 1: dID = $"red ache"; break;
+                case 2: dID = $"filth fever"; break;
+                case 3: dID = $"cackle fever"; break;
+                case 4: dID = $"mindfire"; break;
+                case 5: dID = $"blinding sickness"; break;
+                case 6: dID = $"the Shakes"; break;
+              }
+            EActor->GainPermStati(DISEASED,NULL,SS_MISC,0,0,dID);
+           break;
+          case 3:
+            EActor->IPrint("You feel a spiritual nullity pervade your body!");
+            if (EActor->isCharacter())
+              EActor->LoseXP(4d6 * 100);
+           break;
+          case 4:
+            EActor->IPrint("The water rises up and takes on a monsterous form!");
+            hMon = CreateMonster(EMap->Depth > 2 ? $"large water elemental" :
+                                                   $"small water elemental");
+            hMon->PlaceAt(EMap,EActor->x,EActor->y);
+            hMon->Initialize();
+            hMon->TurnHostileTo(EActor);
+           break;
+          case 5:
+            EActor->IPrint("The eerie waters bestow a curse!");
+            RedirectEff(e,$"Bestow Curse",EV_EFFECT);
+           break;
+          case 6:
+            EActor->IPrint("There's snakes in this fountain!");
+            j = 1d4;
+            for (i=0;i!=j;i++)
+              {
+                hMon = CreateMonster(1d2 == 1 ? $"boa constrictor" :
+                                                $"huge viper");
+                hMon->PlaceAt(EMap,EActor->x,EActor->y);
+                hMon->Initialize();
+                hMon->TurnHostileTo(EActor);
+              }
+           break;
+          case 7:
+            EActor->IPrint("Wow, these magic waters are trippy!");
+            EActor->GainTempStati(CONFUSED,NULL,-2,SS_ENCH,0,0,$"Fountain;effect");
+           break;
+          case 8:
+            EActor->IPrint("After drinking the water, you begin to glow!");
+            RedirectEff(e,$"Faerie Fire", EV_EFFECT);
+           break;
+          case 9:
+          case 10:
+            RedirectEff(e,$"Fountain Polymorph",EV_EFFECT);
+           break;
+          case 11:
+            EActor->IPrint("You feel like you could take on a legion!");
+            RedirectEff(e,$"Heroism",EV_EFFECT);
+           break;
+          case 12:
+            EActor->GainTempStati(INVIS,NULL,-2,SS_ENCH,INV_NORMAL);
+           break;
+          case 13:
+            EActor->IPrint("Drinking these waters makes you feel mighty!");
+            EActor->GainTempStati(ADJUST,NULL,-2,SS_ENCH,A_STR,+4);
+           break;
+          case 14:
+            if (!EItem->HasEffStati(EFF_FLAG1,$"Fountain;effect"))
+              {
+                EItem->GainPermStati(EFF_FLAG1,NULL,SS_MISC,0,0,$"Fountain;effect");
+                EActor->IPrint("You discover a ring lying on the bottom of the
+                                 fountain!");
+                hRing = GenDungeonItem(0,$"ring",EMap->Depth,10+EItem->GetPlus()*2);
+                EActor->GainItem(hRing,true);
+                break;
+              }
+            /* Drop Through */          
+          default:
+            EActor->IPrint("The waters taste cool and invigorating!");
+            EActor->cFP = min(EActor->cFP + (val - 14),EActor->GetAttr(A_FAT));
+            if (val >= 16 && EActor->XPDrained()) {
+              EActor->RestoreXP(1000 + (val-16)*500);
+              EActor->IPrint("You feel <hText>revitalized!",
+                EActor->XPDrained() ? "" : "completely ");
+              }
+            if (val >= 17)
+              EActor->RemoveStati(POISONED);
+            if (val >= 18)
+              EActor->RemoveStati(DISEASED);
+            if (val >= 19)
+              EActor->RemoveStati(ADJUST_DMG);
+            if (val >= 20) {
+              for (it=EActor->FirstInv();it;it=EActor->NextInv())
+                if (it->IFlags & IF_WORN && it->IFlags & IF_CURSED)
+                  {
+                    DPrint(e,"Your <hObj> glows with a soft blue light.",
+                             "The <EActor>'s <hObj> glows with a soft blue light.", it);
+                    it->IFlags &= ~IF_CURSED;
+                  }
+              if (EActor->HasStatiFromSource(SS_CURS))
+                {
+                  EActor->RemoveStatiSource(SS_CURS);
+                  DPrint(e,"Your body glows with a soft blue light.",
+                             "The <EActor>'s body glows with a soft blue light.", it);
+                }
+              }
+                
+           break;
+        }
+      EItem->SetCharges(EItem->GetCharges() - 1);
+      if (EItem->GetCharges() <= 0)
+        {
+          APrint(e,"The fountain dries up!");
+          EItem->Remove(true);
+        }
+      return DONE;
+      },
+    EV_BIRTH {
+      EActor->SetCharges(4 + 1d6);
+      //EActor->PurgeAllQualities();
+      return NOTHING;
+      },
+    EV_DIP {
+      int16 val, x, y, oHP; bool forceDry; hObj hMon;
+      if (GetHandle(EItem2) == NULL_OBJ ||
+           !EItem2->isType(T_ITEM))
+        return NOTHING;
+      if (GetHandle(EItem) == NULL_OBJ ||
+           !EItem->isType(T_ITEM))
+        return NOTHING;
+      if (EItem2->iID != $"fountain")
+        return NOTHING;
+      if (!EItem->isMagic())
+        {
+          EActor->IPrint("Nothing happens.");
+          EActor->Timeout += 30;
+          return DONE;
+        }
+        
+        
+      if (EItem->IFlags & IF_BLESSED)
+        val = max(1d20,1d20); 
+      else if (EItem->IFlags & IF_CURSED)
+        val = min(1d20,1d20);
+      else
+        val = 1d20;
+      val += EActor->Mod(A_LUC);
+      /* EActor->IPrint("<Num>.",val); */
+      if (EActor->HasEffStati(HAS_DOMAIN,$"Water;Domain"))
+        val += 3;
+      EActor->Exercise(A_LUC,1d20,ELUC_FOUNTAIN,70);
+      forceDry = false;
+      EActor->Timeout = 30;
+      
+      DPrint(e,"You dip your <EItem> in the <EItem2>.",
+               "The <EActor> dips an <EItem> in the <EItem2>.");
+      
+      switch (val)
+        {
+          case 1: case 2: // wastrilith
+            hMon = CreateMonster($"wastrilith");
+            hMon->PlaceAt(EMap,EActor->x,EActor->y);
+            hMon->Initialize();
+            hMon->TurnHostileTo(EActor);
+            EActor->IPrint("Your misguided experiments attract a water demon!");
+            /* Give player time to drink potion of dimension door, etc. */
+            EActor->Timeout = 0;
+            break;
+          case 3: case 4: // curse item
+            EItem->IFlags &= ~IF_BLESSED;
+            EItem->IFlags |= IF_CURSED;
+            EItem->ReApply();
+            APrint(e, "The <EItem> glows black!");
+            
+            break;
+          case 7: case 8: // fountain boils
+            EActor->IPrint("The waters bubble over and spray everywhere!");
+            ThrowDmg(EV_DAMAGE,AD_SOAK,3d10,"fountain splashing",EActor,EActor);
+           break;          
+          case 5: case 6: // animate object
+            /*ThrowEff(EV_MAGIC_HIT,$"animate objects",EActor,EItem);
+            break;*/
+          case 9: case 10: // change into monster 
+            EMap->GenEncounter(EN_SINGLE|EN_MAXIMIZE,EActor->ChallengeRating()+3,
+              EMap->Depth,MA_NLIVING,0,NULL_ID,EActor->x,EActor->y,NULL_OBJ);
+            hMon = EMap->GetEncounterCreature(0);
+            hMon->TurnHostileTo(EActor);
+            hMon->GainPermStati(TRANSFORMED,EItem,SS_ENCH,0,0,$"fountain;effect",15);
+            APrint(e, "The <EItem> transforms into an <hObj>!", hMon);
+            EItem->Remove(false);
+            break;
+          case 11: case 12: // object teleported
+            APrint(e, "The <EItem> vanishes!");
+            do {
+              x = 1d(EMap->SizeX());
+              y = 1d(EMap->SizeY());
+              }
+            while (!EMap->InBounds(x,y) || EMap->FallAt(x,y) ||
+                   !EMap->SolidAt(x,y));
+            EItem->Remove(false);
+            EItem->PlaceAt(EMap,x,y);
+            EItem->IDPrint(NULL,"An <hObj> appears!", EItem);
+            break;
+          case 13: case 14: // damage item
+            APrint(e,"Magical energies warp the <EItem>'s structure!");
+            ThrowDmg(EV_DAMAGE,AD_MAGC,2d6,"",EActor,EItem);
+            break;
+          case 15: case 16: // rust item
+            oHP = EItem->GetHP();
+            ThrowDmg(EV_DAMAGE,AD_RUST,4d6,"",EActor,EItem);
+            if (EItem->isDead())
+              APrint(e,"The <EItem> rusts away to nothing!");
+            else if (oHP > EItem->GetHP())
+              APrint(e,"The <EItem> rusts!");
+            else
+              APrint(e,"Nothing happens.");
+            break;          
+          default:
+            if (val <= 0)
+              {
+                APrint(e,"The <EItem> glows silvery, then explodes!");
+                ThrowDmg(EV_DAMAGE,AD_SLASH,(max(1,(1 - val)))d(max(4,EItem->ItemLevel())*2),
+                  XPrint("an exploding <hObj>", EItem), EActor, EActor);
+                EItem->Remove(true);
+                break;
+              }
+            if (val >= 22)
+              if (EItem->isType(T_WEAPON) && EItem->QualityOK(WQ_KEEN)) 
+                {
+                  EItem->AddQuality(WQ_KEEN);
+                  APrint(e, "The <EItem> gleams with a razor edge!");
+                  forceDry = true;
+                  break;
+                }
+            if (EItem->ItemLevel() > EItem2->ItemLevel() + 3 ||
+                  EItem->GetInherantPlus() >= 5)
+              {
+                APrint(e, "The <EItem> gives off a silvery glow, but it quickly
+                  fades -- this fountain does not seem to be a powerful enough
+                  source of magic to better its enchantment further.");
+                return DONE;
+              }
+            APrint(e, "The <EItem> glows with a silvery light!");
+            EItem->SetInherantPlus(EItem->GetInherantPlus() + 1);
+            forceDry = true;
+            break;
+        }
+      EItem2->SetCharges(EItem->GetCharges() - 1);
+      if (EItem2->GetCharges() <= 0 || forceDry)
+        {
+          APrint(e,"The fountain dries up!");
+          EItem2->Remove(true);
+        }
+      return DONE;
+      };
+    Desc: "Deep below the earth, some natural springs absorb the magical
+      radiations of the Underdark. Magical fountains are large, immobile
+      magical items built to harness the energy of these springs, usually
+      for the purposes of healing or item enchantment. Though useful, these
+      magics are deeply chaotic and unpredictable, and using them represents
+      a great risk for a significant possible reward."; 
+    
+  }
+  
+/* Dipping Effects:
+   * mildly damage item ("Magical energies warp the <hObj>'s structure!")
+   * fountain boils over, move this from drink to where it makes more sense
+   * fountain explodes, fill area around player with water
+   * summon wastrilith
+   * dipped object hit with /animate object/
+   * dipped object changes to crystal
+   * dipped object gets cursed
+   * dipped object gets /keen/ if appropriate
+   * dipped object gets TRANSFORMED into tough monster (your lev + 2)
+   * dipped object rusts
+   * dipped object increases in plus -- the big one
+   * dipped object is teleported elsewhere on the level
+   
+*/
+      
+Effect "Fountain Polymorph" : EA_POLYMORPH
+  {
+    On Event PRE(EV_MAGIC_HIT) {
+      e.rval = theGame->GetMonID(PUR_POLY,EActor->Mod(A_LUC),EMap->Depth +
+                EActor->Mod(A_LUC),EMap->Depth);
+      return NOTHING;
+      },
+    EV_EFFECT
+      "The magical waters transfigure your form!";
+    Flags: EF_PERSISTANT;
+  }
+  
+
+/************************************************************************
+                                 Corridors
+ ************************************************************************/
+
+Region "Winding Corridor" : RF_CORRIDOR
+  { Desc: "These corridors are about ten feet across and twelve feet tall.
+  The craftmanship seems surprisingly sturdy, all things considered.";  
+    Walls: $"Dungeon Wall"; Floor: $"Floor"; 
+    Flags: RF_STAPLE; RoomTypes: 0;
+    Door: $"oak door"; Size: SZ_LARGE; }
+
+Region "Rough-Hewn Tunnel" : RF_CORRIDOR
+  { Desc: "This rough tunnel twists and turns awkwardly, looking to have
+      been carved out of the stone recently and under makeshift conditions.";
+    Flags: RF_NOGEN; RoomTypes: 0;
+    Walls: $0; Floor: $"floor"; Door: $0; Size: SZ_LARGE; }
+
+Region "Vaulted Corridor" : RF_CORRIDOR
+  { Desc: "The corridors here are quite large and extend at least twenty
+           feet from floor to ceiling. "; 
+    Walls: $"Dungeon Wall"; Floor: $"Floor;2"; 
+    Flags: RF_NOGEN; RoomTypes: 0;
+    Door: $"oak door";  
+  }
+
+Region "Icy Corridor": RF_CORRIDOR
+  { Desc: "These corridors are about 10 feet across and twelve feet tall. 
+      An unnatural cold permates the corridor. The walls are made of ice
+      and the floors are coated with frozen water."; 
+    Walls: $"ice Wall"; Floor: $"ice Floor";  RoomTypes: 0;
+    Door: $"ice door";  Size: SZ_LARGE; }
+
+Region "Misty Corridor": RF_CORRIDOR
+  { Desc: "These corridors are about 10 feet across and twelve feet tall. 
+      This corridor is filled with a thick, obscuring fog."; 
+    Walls: $"dungeon Wall"; Floor: $"fog";  RoomTypes: 0;
+    Door: $"oak door";  Size: SZ_LARGE; }
+
+
+Region "Flooded Corridor": RF_CORRIDOR
+  { Desc: "These corridors are about 10 feet across and twelve feet tall. 
+      This corridor has been flooded with cold water."; 
+    Walls: $"dungeon Wall"; Floor: $"shallow water";  RoomTypes: 0;
+    Door: $"oak door";  Size: SZ_LARGE; }
+
+Region "Webbed Corridor": RF_CORRIDOR
+  { Desc: "These corridors are about 10 feet across and twelve feet tall. 
+      Webs have been spun throughout this corridor."; 
+    Walls: $"dungeon Wall"; Floor: $"old webbing";  RoomTypes: 0;
+    Door: $"oak door";  Size: SZ_LARGE; }
+
+Region "Twisty Little Passage" : RF_CORRIDOR
+  { Desc: "This awkward, twisting tunnel is about three feet in diameter.
+      A human-sized traveller would have to crawl to get through it with
+      very limited maneuverability, but it would be just right for a kobold 
+      or similar creature.\n
+      __This is a Medium-sized corridor. Large and larger creatures cannot
+      enter it. Medium-sized creatures find their movement rate halved and 
+      lose their Dexterity bonus to defense. Small and smaller creatures
+      can move normally and are unimpeded. Medium-sized creatures have a
+      1 in 10 chance of injuring themselves for 2d10 blunt damage with
+      each movement action they take in this passage while threatened by
+      other creatures; a Balance check (DC 15) negates this damage.";
+    Walls: $"dungeon wall"; Floor: $"floor"; RoomTypes: 0;
+    Door: $"oak door"; Size: SZ_MEDIUM; 
+    On Event EV_MOVE {
+      if (EActor->GetAttr(A_SIZ) >= SZ_MEDIUM)
+        if (EActor->isThreatened() && (1d10 == 1))
+          {
+            if (EActor->HasAbility(CA_STONEWORK_SENSE)) {
+              if (EActor->SkillCheck(SK_BALANCE,15,true,EActor->AbilityLevel(
+                          CA_STONEWORK_SENSE), "Stonework Sense")) {
+                EActor->IPrint("You carefully navigate a treacherous slope.");
+                return NOTHING;
+                }
+              }
+            else if (EActor->SkillCheck(SK_BALANCE,15,true)) {
+              EActor->IPrint("You carefully navigate a treacherous slope.");
+              return NOTHING;
+              }
+            DPrint(e,"You slip on a treacherous slope, falling hard 
+              against the wet stone!", "The <EActor> trips on a treacherous
+              slope, striking the wet stone!");
+            EActor->GainPermStati(PRONE,NULL,SS_MISC);
+            EActor->Timeout += 30;
+            ThrowDmg(EV_DAMAGE,AD_BLUNT,2d10,"a spelunking accident",EActor,EActor);
+            return DONE;
+          }
+      return NOTHING;
+      };
+    Constants:
+      * TURN_CHANCE       35,
+      * SEGMENT_MINLEN    1,
+      * SEGMENT_MAXLEN    4,
+      * STUBBORN_CORRIDOR 30;
+    Lists:
+      * WALL_COLORS BROWN GREY SHADOW; 
+  }
+
+/* 
+
+  This is seriously annoying to try and move through/around, and it
+doesn't present a real tactical challenge (yet). I'll bring it back
+when we can assign depths to regions. 
+
+Region "Slimy Corridor": RF_CORRIDOR
+  { Desc: "These corridors are about 10 feet across and twelve feet tall. 
+      The floor of this corridor has been coated in a sticky, disgusting
+      slime."; 
+    Walls: $"dungeon Wall"; Floor: $"pool of slime";  RoomTypes: 0;
+    Door: $"oak door"; }
+
+*/
+
+/************************************************************************
+                                   Rooms
+ ************************************************************************/
+
+Region "Unworked Stone" : RF_NOGEN
+  { 
+  }
+
+/* Weimer Room Wall Color Scheme: 
+ * 
+ * cyan                                 -> vaults
+ * purple                               -> place of sanctuary
+ * WHITE GREY SHADOW CYAN               -> marble
+ * BLUE SKYBLUE GREY CYAN,              -> icy cold
+ * green                                -> limestone
+ * shadow                               -> tomb, graveyard
+ * blue, azure                          -> flooded, naga 
+ * BLUE SKYBLUE GREEN EMERALD BROWN YELLOW -> farm
+ * purple, magenta                      -> illithid, smart people
+ * red                                  -> brimstone
+ * BLUE PURPLE CYAN GREEN               -> fungal forest, hedge maze, fungi
+ * FLOOR_COLORS BROWN GREY,             -> uncrafted
+ * BROWN, YELLOW                        -> orcs, trolls, slimes
+ * GREEN                                -> ancient barracks, kobolds, vermin
+ *
+ */
+
+Region "Bare Cavern" : RF_ROOM
+  { Desc: "This cavern is distinguished only by a thin layer of dust
+      on the floor, and the oddly chalky texture of its plain white
+      walls.";
+    Walls: $"Dungeon Wall"; Floor: $"Floor"; 
+    Door: $"oak door"; RoomTypes: RM_LIFECAVE;
+    Lists: 
+      * WALL_COLORS WHITE;
+  }
+
+Region "Smooth Enclosure" : RF_ROOM
+  { Desc: "The walls in this chamber are perfectly smooth and unblemished,
+      as if carved out by some unearthly magical force.";
+    Walls: $"Dungeon Wall"; Floor: $"Floor"; 
+    Door: $"oak door"; RoomTypes: RM_NORMAL, RM_CIRCLE; 
+  }
+
+Region "Inner Keep" : RF_ROOM
+  { Desc: "This strange double room appears to have once been a
+    fortification of some sort in ages gone by. You have trouble imagining
+    the sort of invading forces that would inspire someone to make a stand
+    inside a dungeon. Despite the passage of time, reasonably intelligent
+    dungeon dwellers can recognize the strategic importance of such a
+    location."; 
+    Walls: $"Dungeon Wall"; Floor: $"Floor"; 
+    Door: $"iron door"; RoomTypes: RM_DOUBLE; 
+    Lists: 
+      * WALL_COLORS PURPLE MAGENTA,
+      * MTYPE_LIST MA_SAPIENT; 
+  }
+
+Region "Marble Enclave" : RF_ROOM
+  { Desc: "This chamber has walls carved from fine white marble; while no
+      furnishings remain, the walls alone attest to its value. Perhaps it
+      once served as the bedchambers of a dwarven lord or drow noble.";
+    Walls: $"Dungeon Wall"; Floor: $"Floor"; 
+    Door: $"oak door"; 
+    RoomTypes: RM_NORMAL, RM_CIRCLE, RM_OVERLAP,
+               RM_ADJACENT, RM_AD_ROUND, RM_AD_MIXED;
+    Lists:
+      * WALL_COLORS WHITE GREY SHADOW CYAN; }
+
+Region "Limestone Cave" : RF_ROOM
+  { Desc: "This vast cavern, eroded by the natural waterflow, has walls of
+      crumbling, porous limestone. The ceiling is caked with stalactites, 
+      and an equal number of stalagmites rise up from the floor. The water
+      almost seems to glow in the dim illumination.";
+    Walls: $"Dungeon Wall"; Floor: $"Floor"; 
+    Door: $"darkwood door"; RoomTypes: RM_LIFECAVE;     
+    Constants:
+      * BLOB_WITH $"shallow water";
+    Lists:
+      * WALL_COLORS GREEN, 
+      * FLOOR_COLORS GREEN,
+      * FURNISHINGS FU_SPLATTER $"rock column",
+      * MTYPE_LIST MA_AQUATIC MA_WATER MA_LIVING; }
+
+Region "Ancient Tomb" : RF_ROOM
+  { Desc: "This room appears to have been a tomb to a long-dead
+      dwarven hero or king. Carved runes cover the walls, and an
+      ornate tomb sits in the center of the room. There are
+      signs of recent habitation here.";
+    Walls: $"Dungeon Wall"; Floor: $"floor"; 
+    Door: $"iron door"; 
+    RoomTypes: RM_CIRCLE | RM_OCTAGON | RM_NORMAL | RM_DOUBLE;     
+    Lists: 
+      * WALL_COLORS SHADOW, 
+      * FURNISHINGS FU_CENTER  $"tomb"
+                    FU_XCORNERS $"gravestone"
+                    FU_CORNERS $"pillar",
+      * MTYPE_LIST MA_UNDEAD MA_DWARF;
+  } 
+
+Region "Graveyard" : RF_ROOM
+  { Desc: "This room's floor is covered with loose, rich soil about
+      two feet deep, and headstones are placed over scattered burial
+      mounds. There is a faint scent of rot and mildew hanging in the
+      air as well.";
+    Walls: $"Dungeon Wall"; Floor: $"Loose-Packed Earth"; 
+    Door: $"iron door"; RoomTypes: RM_CIRCLE | RM_CROSS | RM_DOUBLE;     
+    Lists: 
+      * WALL_COLORS SHADOW, 
+      * FURNISHINGS FU_SPLATTER $"gravestone"; 
+  }
+
+Region "Orderly Graveyard" : RF_ROOM
+  { Desc: "This room's floor is covered with loose, rich soil about
+      two feet deep, and headstones are placed in regular rows. 
+      There is a faint scent of rot and mildew hanging in the
+      air as well.";
+    Walls: $"Dungeon Wall"; Floor: $"Loose-Packed Earth"; 
+    Door: $"iron door"; RoomTypes: RM_NORMAL, RM_PILLARS, RM_GRID;     
+    Lists: 
+      * WALL_COLORS SHADOW, 
+      * MTYPE_LIST MA_LAWFUL,
+      * FURNISHINGS FU_SPACED_COLUMNS $"gravestone"; 
+  } 
+
+Region "Orderly Flood" : RF_ROOM
+  {
+    Walls: $"Dungeon Wall"; Floor: $"shallow water"; 
+    Door: $"oak door";
+    Desc: "This chambers has clearly been flooded recently. The water
+      depth seems to vary in a predictable pattern, but you cannot imagine
+      why anyone would shape a room in this way. Small 'islands' of dry
+      land should make it easier for you to cross, if you so desire."; 
+    RoomTypes: RM_NORMAL, RM_LARGE, RM_CIRCLE, RM_GRID;
+    Lists:
+      * MTYPE_LIST MA_AQUATIC MA_WATER, 
+      * FURNISHINGS FU_SPACED_COLUMNS $"floor",
+      * WALL_COLORS BLUE AZURE; 
+  }
+
+Region "Island Lake" : RF_ROOM
+  {
+    Walls: $"Dungeon Wall"; Floor: $"floor"; 
+    Door: $"oak door";
+    Desc: "This area contains an underground lake complete with its own
+    island."; 
+    RoomTypes: RM_OCTAGON, RM_LCIRCLE, RM_LARGE;
+    Lists:
+      * MTYPE_LIST MA_AQUATIC MA_WATER, 
+      * FURNISHINGS FU_CENTER_CIRCLE_LARGE $"shallow water",
+      * FURNISHINGS FU_CENTER_CIRCLE_SMALL $"floor",
+      * FURNISHINGS FU_CENTER $"large iron chest",
+      * WALL_COLORS BLUE AZURE; 
+  }
+
+Region "Cultic Underchamber" : RF_ROOM
+  { Desc: "Torches line every inch of this circular room's walls, but the
+      light nonetheless remains shadowy and indistinct. The runes on the
+      walls, and the bloodstains on the floor, suggest that this area had
+      once been -- or is -- the ceremony chamber of some secretive humanoid
+      cult.";
+    Walls: $"Wall Torch"; Floor: $"Floor"; 
+    Lists:
+      * FURNISHINGS FU_SPLATTER $"bloodstain";
+    Door: $"oak door"; RoomTypes: RM_CIRCLE; }
+
+Region "Abandoned Temple" : RF_ROOM
+  {
+    Desc: "Though this place has not seen regular worship in many decades,
+      there are still ritual prayers carved into the walls, and you have a
+      sense that it is not entirely devoid of divine power. A crude altar
+      stands at the center of the room.";
+    Walls: $"Dungeon Wall"; Floor: $"floor"; 
+    Door: $"iron door"; 
+    RoomTypes: RM_CIRCLE | RM_OCTAGON;     
+    Lists: 
+      * WALL_COLORS GREY GREY RED YELLOW, 
+      * FURNISHINGS FU_CENTER  $"altar"
+                    FU_CORNERS $"pillar";
+  }
+  
+Region "Uneven Ampitheater" : RF_ROOM
+  { Desc: "This room has a hewn appearance, almost as if it were carved
+      from the earth by a massive, jagged plow. Spikes and columns of rock 
+      are strewn about in no discernable pattern."; 
+    Walls: $"Dungeon Wall"; Floor: $"Floor"; 
+    Door: $"oak door"; 
+    RoomTypes: RM_LARGE, RM_LCIRCLE; 
+    Lists:
+      * FURNISHINGS FU_SPLATTER $"bed of spikes",
+      * FURNISHINGS FU_SPLATTER $"rock column",
+      * MTYPE_LIST MA_ABERRATION MA_CONSTRUCT;
+  }
+
+Region "Vast Ampitheater" : RF_ROOM
+  { Desc: "Here the walls curve slightly upward, giving this vast room an
+      eerie echo. Perhaps it once served as a clan assembly room or lecture
+      hall. Even with a bright light source, the area is large enough
+      that the far corners will always remain in shadow.";
+    Walls: $"Dungeon Wall"; Floor: $"Floor"; 
+    Door: $"oak door"; RoomTypes: RM_LARGE, RM_LCIRCLE; }
+
+Region "Oddly-formed Hall" : RF_ROOM      
+  { Desc: "You've given to wonder if the odd shape of this room is some artifact
+      of a long-forgotten purpose, or if it is simple the result of the
+      continual cycle of crafting, abandonment and rebuilding that
+      characterizes dungeon structures.";
+    Walls: $"Dungeon Wall"; Floor: $"Floor"; 
+    Door: $"oak door"; RoomTypes: RM_ADJACENT, RM_AD_ROUND, RM_AD_MIXED,
+      RM_OVERLAP; }
+
+Region "Fungal Forest" : RF_ROOM
+  { Desc: "Filled with deep purple toadstool 'trees' ranging from twelve to
+    fifteen feet high, this chamber is at once beautiful and eerie, peaceful
+    and claustrophobic. Even the floor and ceiling are coated with a fine
+    layer of luminescent, multicolored moss.";
+    Walls: $"Dungeon Wall"; Floor: $"Floor"; 
+    Door: $"darkwood door"; RoomTypes: RM_LIFECAVE;
+    Constants:               
+      * BLOB_WITH $"giant mushroom";
+    Lists:
+      * FURNISHINGS FU_SPLATTER $"verdant bloom",
+      * WALL_COLORS BLUE PURPLE CYAN GREEN ,
+      * FLOOR_COLORS BLUE PURPLE CYAN GREEN ;
+    Flags: RF_RAINBOW; } 
+
+Region "Vine Region" : RF_ROOM
+  { Desc: "A large number of sparse, strong vines fall from the ceiling
+    here."; 
+    Walls: $"Dungeon Wall"; Floor: $"Floor"; 
+    Door: $"oak door"; 
+    RoomTypes: RM_LIFECAVE, RM_CIRCLE, RM_LCIRCLE;
+    Constants:               
+      * BLOB_WITH $"hanging vines";
+    Lists:
+      * MTYPE_LIST MA_HOMINID;
+  }
+
+Region "Enchanted Forest" : RF_ROOM
+  { Desc: "Against all logic, the dungeon here gives way to a richly verdant
+      forest, lit by ambient sunlight with no discernable source. This must
+      surely be the work of faerie...";
+    Walls: $"Dungeon Wall"; Floor: $"Floor"; 
+    Door: $"darkwood door"; 
+    RoomTypes: RM_LIFECAVE, RM_CIRCLE, RM_LCIRCLE;
+    Constants:               
+      * BLOB_WITH $"tree";
+    Lists:
+      * MTYPE_LIST MA_FAERIE;
+    Flags: RF_RAINBOW; Depth: 4;
+  }
+
+Region "Gardened Forest" : RF_ROOM
+  { Desc: "Some powerful force has planted trees here as regularly as the
+           hin would plant carrots. Sunlight streams in from no
+           discernable source."; 
+    Walls: $"Dungeon Wall"; Floor: $"Floor"; 
+    Door: $"darkwood door";
+    RoomTypes: RM_NORMAL, RM_LARGE, RM_CIRCLE, RM_GRID;
+    Lists:
+      * WALL_COLORS BLUE PURPLE CYAN GREEN,
+      * FLOOR_COLORS BLUE PURPLE CYAN GREEN,
+      * FURNISHINGS FU_INNER_COLUMNS $"tree",
+      * MTYPE_LIST MA_FAERIE MA_SYLVAN;
+    Flags: RF_RAINBOW, RF_ODD_WIDTH, RF_ODD_HEIGHT; 
+  }
+
+Region "Flooded Cavern" : RF_ROOM
+  { Walls: $"Dungeon Wall"; Floor: $"Floor"; 
+    Door: $"oak door"; RoomTypes: RM_LIFECAVE, RM_LCIRCLE;
+    Constants:
+      * BLOB_WITH $"shallow water";
+    Lists:
+     * MTYPE_LIST MA_AQUATIC MA_WATER,
+     * WALL_COLORS BLUE AZURE; }
+
+Region "Misty Cavern" : RF_ROOM
+  { Walls: $"Dungeon Wall"; Floor: $"Floor"; 
+    Door: $"oak door"; RoomTypes: RM_LIFECAVE, RM_LCIRCLE;
+    Desc: "A constant heavy mist hangs in the air here."; 
+    Constants:
+      * BLOB_WITH $"fog";
+    Lists:
+      * MTYPE_LIST MA_AVIAN MA_WATER MA_COLD; 
+  }
+
+Region "Earthen Cavern" : RF_ROOM
+  { Walls: $"solid rock"; Floor: $"loose-packed earth"; 
+    Door: $"oak door"; RoomTypes: RM_LIFECAVE, RM_LCIRCLE, RM_RCAVERN;
+    Desc: "This portion of the dungeon appears to be unfinished or
+    recently-crafted. The floor is made of loose earth that has
+    given way to mud in many areas."; 
+    Flags: RF_NEVER_LIT;
+    Constants:
+      * BLOB_WITH $"shallow mud";
+    Lists:
+      * MTYPE_LIST M_EARTH M_BURROW; 
+  }
+
+Region "Acid Fog Cavern" : RF_ROOM
+  { Walls: $"Dungeon Wall"; Floor: $"Floor"; 
+    Door: $"oak door"; RoomTypes: RM_LIFECAVE, RM_LCIRCLE;
+    Desc: "A constant acidic mist hangs in the air here."; 
+    Constants:
+      * BLOB_WITH $"acid fog";
+    Lists:
+      * MTYPE_LIST MA_ACID,
+      * FURNISHINGS FU_SPLATTER $"floor",
+      * WALL_COLORS YELLOW BROWN;
+  }
+
+Region "Place of Sanctuary" : RF_ROOM
+  { Walls: $"Dungeon Wall"; Floor: $"Floor"; 
+    Door: $"iron door"; 
+    RoomTypes: RM_CIRCLE, RM_OCTAGON, RM_CROSS, RM_NORMAL, RM_DOUBLE;
+    Flags: RF_NOGEN;
+    Desc: "This looks like it might once have been some kind of temple
+      of light or other holy place, and you can't help but feel that
+      some of the sacredness remains. Mosaics cover the walls here, and
+      you feel an almost palpable sense of safety and restoration in
+      the air. You have the sense that you would be protected if you
+			rested here, preserved by the aegis of Essiah.";
+	  On Event PRE(EV_REST) {
+      int32 c;
+      
+      c = EActor->GetEffStatiMag(EFF_FLAG1,$"Place of Sanctuary",EMap->Depth);
+      if (c >= 2 + max(0,EActor->Mod(A_LUC)) + 
+            (EActor->getGodLevel($"Essiah") / 2)) {
+        EActor->IPrint("You fear the ancient magic that once sanctified this
+          place has been all but depleted.");
+        if (EActor->yn("Rest here anyway?"))
+          return NOTHING;
+        else
+          return ABORT;
+        }
+      e.EParam |= REST_SAFE | REST_FULL;
+      
+      return NOTHING;
+      },
+    POST(EV_REST) {
+      int32 c;
+      
+      if (EActor->HasEffStati(EFF_FLAG1,$"Place of Sanctuary",EMap->Depth)) {
+        EActor->SetEffStatiMag(EFF_FLAG1,$"Place of Sanctuary",
+          EActor->GetEffStatiMag(EFF_FLAG1,$"Place of Sanctuary",EMap->Depth)
+          + 1, EMap->Depth);
+        }
+      else {
+        EActor->GainPermStati(EFF_FLAG1,NULL_OBJ,SS_MISC,EMap->Depth,1,
+          $"Place of Sanctuary");
+        }
+      c = EActor->GetEffStatiMag(EFF_FLAG1,$"Place of Sanctuary",EMap->Depth);
+      if (c >= 2 + max(0,EActor->Mod(A_LUC)) + 
+            (EActor->getGodLevel($"Essiah") / 2))
+        EActor->IPrint("You fear the ancient magic that once sanctified this
+          place has been all but depleted.");
+      
+      return NOTHING;
+      };
+    Lists:
+      * WALL_COLORS CYAN;
+    Grid: {:
+      %%%%%%%%%
+      %%.....%%
+      %.......%
+      %.......%
+      %.......%
+      %.......%
+      %.......%
+      %%.....%%
+      %%%%%%%%%
+    :}; 
+  }
+
+Region "Ice Cavern" : RF_ROOM
+  { Desc: "An abrupt, almost certainly supernatural drop in temperature greets
+      you as you step into this cavern. Much of the area is coated in a thick
+      layer of bright, clear ice, and snow covers the floor like a fine white
+      powder.";
+    Walls: $"Ice Wall"; Floor: $"Floor"; 
+    Door: $"ice door"; 
+    Flags: RF_NEVER_LIT;
+    Constants:
+      * BLOB_WITH $"Ice Floor";
+    Lists:
+      * FLOOR_COLORS BLUE SKYBLUE GREY CYAN,
+      * MTYPE_LIST MA_COLD;
+    RoomTypes: RM_NORMAL, RM_LIFECAVE; }
+
+Region "Arachnid Lair" : RF_ROOM
+  { Desc: "This entire area is coated with overlapping strands of sticky
+  webbing. Some of the strands are thin and brittle, others are thicker and
+  glistening: it would appears that this place has been used by spiders for
+  quite some time. Desiccated corpses hang wrapped in silvery threads.";  
+    Walls: $"Dungeon Wall"; Floor: $"old webbing"; 
+    Depth: 3; 
+    Door: $"oak door"; 
+    Lists:
+      * MTYPE_LIST MA_SPIDER,
+      * FURNISHINGS FU_SPLATTER $"floor",
+      * FURNISHINGS FU_SPLATTER $"floor",
+      * FURNISHINGS FU_SPLATTER $"floor",
+      * FURNISHINGS FU_SPLATTER $"corpse";
+    RoomTypes: RM_PILLARS; 
+  }
+
+Region "Dragon Cave" : RF_ROOM
+  { Desc: "Piles of treasure litter the floor here, and a unique stench
+      combining sulphur, rot, ozone and magic lingers in the air. The
+      walls are carved with ancient glyphs warning away intruders on pain
+      of death.";
+    Walls: $"Dungeon Wall"; Floor: $"floor"; Depth: 6;
+    RoomTypes: RM_LIFECAVE, RM_CIRCLE;
+    Lists:
+      * WALL_COLORS RED, 
+      * MTYPE_LIST MA_DRAGON;
+    On Event EV_BIRTH {
+      int16 i,j; hObj it;
+      j = 30 + random(20);
+      for (i=0;i!=30;i++)
+        if (EMap->FindOpenAreas(e.cPanel)) {
+          it = CreateItem($"gold piece");
+          it->SetQuantity(100+random(101));
+          it->PlaceOpen(EMap);
+        }
+      return NOTHING;
+      };
+  }
+
+Region "Lesser Vault;1" : RF_ROOM
+  { Desc: "The air is cool and still here, and the hair on the back of your
+      neck bristles. This chamber's inner doors are carefully sealed and 
+      covered with strange runes, among which you can only make out 'timelessness',
+      'prison'... and 'death'.";
+    Walls: $"Dungeon Wall"; Floor: $"Floor"; 
+    Door: $"vault door"; RoomTypes: RM_SHAPED;
+    Lists:
+     * WALL_COLORS CYAN;
+    Flags: RF_VAULT;
+    Grid: {:
+      %%%%%%%%%%%%%%%%%%%%%%%
+      %.....................%
+      %.#########+#########.%
+      %.#.1.....1....1.+..#.%
+      %.#....1.....1...#..#.%
+      %.################1.#.%
+      %.#..#3.#.2.....2#..#.%
+      %.#..#..+....2...#..#.%
+      %.#.3#..#######+##.1#.%
+      %.#..#.3##.G.##..#..#.%
+      %.#..+..#.....#..#..#.%
+      %.#..#..#G.G.G#2.#1.#.%
+      %.#..#.3#.5.5.#..#..#.%
+      %.#.3#..##.G.##.2#..#.%
+      %.#..######+###..#.1#.%
+      %.#..+..4.....#.2#..#.%
+      %.#..#.4....4.#..#..#.%
+      %.#3.##########+##+##.%
+      %.#..#.....1.....1..#.%
+      %.#..#........1.....#.%
+      %.###################.%
+      %.....................%
+      %%%%%%%%%%%%%%%%%%%%%%%
+      :};
+}
+
+Region "Parthenion" : RF_ROOM
+  { 
+    Desc: "This room is carved with glyphs of sanctuary and faith.
+      Religious mosaics depicting all the gods of the Theryan pantheon
+      cover the walls, and the sides of the room are filled with alcoves
+      containing altars to all the socially acceptable religions. The
+      High Altar of Immotian stands before sacred fire-braziers at the
+      center of the room. The air is heavy with incense, and there is a 
+      strong feeling that this place of faith is shared by many diverse
+      creatures.";
+    Walls: $"Dungeon Wall"; Floor: $"Floor";
+    Door: $"vault door"; RoomTypes: RM_SHAPED;
+    Flags: RF_NOGEN;
+    Lists:
+      * WALL_COLORS WHITE;
+    Grid: {:
+      %%%%%%%%%%%%%%%%%%%%%%%%%%%
+      %.........................%
+      %.#######################.%
+      %.########.N...O.########.%
+      %.######.....M.....######.%
+      %.####...............####.%
+      %.#H.+...............+.L#.%
+      %.####.&&&&&&&&&&&&&.####.%
+      %.####...............####.%
+      %.#G.+.&&&&&&&&&&&&&.+.K#.%
+      %.####...............####.%
+      %.####.&&&&&&&&&&&&&.####.%
+      %.#F.+...............+.J#.%
+      %.####.&&&&&&&&&&&&&.####.%
+      %.####...............####.%
+      %.#E.+...............+.I#.%
+      %.#####+##+##.##+##+#####.%
+      %.#####.##.##.##.##.#####.%
+      %.#####C##D##.##A##B#####.%
+      %.###########+###########.%
+      %.........................%
+      %%%%%%%%%%%%%%%%%%%%%%%%%%%
+      :};
+    Tiles:
+      'A': $"bloodstain" with $"altar" of $"asherath",
+      'B': $"floor"      with $"altar" of $"hesani",
+      'C': $"floor"      with $"altar" of $"mara",
+      'D': $"bloodstain" with $"altar" of $"ekliazeh",
+      'E': $"bloodstain" with $"altar" of $"essiah",
+      'F': $"bloodstain" with $"altar" of $"maeve",
+      'G': $"bloodstain" with $"altar" of $"kysul",
+      'H': $"bloodstain" with $"altar" of $"xel",
+      'I': $"bloodstain" with $"altar" of $"zurvash",
+      'J': $"bloodstain" with $"altar" of $"aiswin",
+      'K': $"bloodstain" with $"altar" of $"sabine",
+      'L': $"bloodstain" with $"altar" of $"semirath",
+      'M': $"floor"      with $"altar" of $"immotian",
+      'N': $"floor"      with $"altar" of $"xavias",
+      'O': $"bloodstain" with $"altar" of $"erich",      
+      '&': $"floor"      with $"pews";
+  }
+  
+Region "Lesser Vault;2" : RF_ROOM
+  { Desc: "The air is cool and still here, and the hair on the back of your
+      neck bristles. This chamber's inner doors are carefully sealed and 
+      covered with strange runes, among which you can only make out 'timelessness',
+      'prison'... and 'death'.";
+    Walls: $"Dungeon Wall"; Floor: $"Floor"; 
+    Door: $"vault door"; RoomTypes: RM_SHAPED;
+    Lists:
+     * WALL_COLORS CYAN;
+    Flags: RF_VAULT;
+    Grid: {:
+      %%%%%%%%%%%%%%%%%%%%%%%
+      %.....................%
+      %..########+########..%
+      %.###..1.1...1.1..###.%
+      %.####...........####.%
+      %.#.###..2.2.2..###.#.%
+      %.#..###.......###..#.%
+      %.#1..###.3.3.###..1#.%
+      %.#....###...###....#.%
+      %.#1.2..###4###..2.1#.%
+      %.#....3.##G##.3....#.%
+      %.+..2...4GGG4...2..+.%
+      %.#....3.##G##.3....#.%
+      %.#1.2..###4###..2.1#.%
+      %.#....###...###....#.%
+      %.#1..###.3.3.###..1#.%
+      %.#..###.......###..#.%
+      %.#.###..2.2.2..###.#.%
+      %.####...........####.%
+      %.###..1.1...1.1..###.%
+      %..########+########..%
+      %.....................%
+      %%%%%%%%%%%%%%%%%%%%%%%
+      :};
+  }
+
+Region "Unholy Sepulchre" : RF_ROOM
+  { Desc: 
+  "The air is cool and still here, and the hair on the back of your neck
+  bristles. Beyond that, however, a stench of death permeates the area. 
+  It would appear that this room once served as a temple or tomb of some
+  sort. Something about this place makes you ... afraid."; 
+    On Event EV_BIRTH {
+      int32 i,j;
+      hObj c; 
+      for(c = EMap->FirstThing(); c ; c = EMap->NextThing()) {
+        if (c->isCreature() && !c->isPlayer()) { 
+          if (WithinRect(e.cPanel,c->x,c->y)) {
+            if (1d10 <= 3) 
+              c->AddTemplate($"vampire");
+            else
+              c->AddTemplate($"zombie");
+            // if we can't be a vampire, let's be a zombie!
+            if (!c->isMType(MA_UNDEAD)) {
+              // you're in the wrong neighborhood, buddy!
+              ThrowDmg(EV_DEATH,AD_NORM,9999,"vampire fodder",
+                  c,c,NULL,NULL);
+            } else {
+              if (1d10 <= 2)
+                c->AddTemplate($"ancient");
+              else if (1d10 <= 3)
+                c->AddTemplate($"elder");
+            }
+          }
+        } 
+      }
+      return NOTHING;
+    };
+    Walls: $"Dungeon Wall"; Floor: $"Floor"; 
+    Door: $"vault door"; RoomTypes: RM_SHAPED;
+    Lists:
+     * WALL_COLORS CYAN;
+    Flags: RF_VAULT;
+    Grid: {:
+      %%%%%%%%%%%%%%%%%%%%%%%
+      %.....................%
+      %.###################.%
+      %.#0...............0#.%
+      %.#.0....##.##....0.#.%
+      %.#..0..##0.0##..0..#.%
+      %.#...0..#0.0#..0...#.%
+      %.#....0.##.##.0....#.%
+      %.#...0.0.#.#.0.0...#.%
+      %.#.#0...0#.#0...0#.#.%
+      %.#.#######.#######.#.%
+      %.#.#0.G.0#.#0.G.0#.#.%
+      %.#...0.0.#.#.0.0...#.%
+      %.#....3..#.#..3....#.%
+      %.#.......#.#.......#.%
+      %.#.......#.#.......#.%
+      %.#...3...#.#...3...#.%
+      %.#..0.0..#.#..0.0..#.%
+      %.#.0...0.#.#.0...0.#.%
+      %.#0..G..0#.#0..G..0#.%
+      %.#########+#########.%
+      %.....................%
+      %%%%%%%%%%%%%%%%%%%%%%%
+      :};
+  }
+
+Region "Hellish Rift" : RF_ROOM
+  { Desc: 
+  "The air here is warm and sulphuric, and the hair on the back of your
+  neck bristles. Something about this place seems evil beyond the 
+  mundane... almost like something from another realm."; 
+  Walls: $"Dungeon Wall"; Floor: $"Floor"; 
+  Door: $"vault door"; RoomTypes: RM_SHAPED;
+  Lists:
+        * WALL_COLORS CYAN;
+  On Event EV_BIRTH {
+    EMap->GenEncounter(EN_MTYPE,EMap->Depth+20,EMap->Depth,
+        MA_DEVIL, AL_NONGOOD,(rID)0,e.EXVal,e.EYVal,NULL);
+  } ; 
+    Tiles:
+      'd': $"loose-packed earth", 
+      'S': $"smooth igneous rock",
+      'B': $"brimstone",
+      'P': $"magma" with $"infernal portal"; 
+  Flags: RF_VAULT, RF_NOGEN;
+    Grid: {:
+      %%%%%%%%%%%%%%%%%
+      %...............%
+      %..d...SS.....d.%
+      %.....BBBBBBB...%
+      %.d..dBBBBBBB...%
+      %.....BBBSBBBBB.%
+      %..S..SBBBBBBBB.%
+      %.SBBBBBBBBBBBBS%
+      %..BBBBBBBSSBBBS%
+      %..BBPBBBB..BBB.%
+      %..BBBBBS..BBBB.%
+      %.SBBBBBS.SBBB..%
+      %..S.......BBBB.%
+      %.....d.S.S.BBB.%
+      %.d.d....BBBBBB.%
+      %......BBBBBBBB.%
+      %..d.dBBBBSBBBB.%
+      %....BBBBBBBBBB.%
+      %.d...BBBBBBBBB.%
+      %...........BBB.%
+      %%%%%%%%%%%%%%%%%
+      :};
+  }
+
+Region "Maze" : RF_ROOM
+  {
+    Walls: $"Dungeon Wall"; Floor: $"Floor"; 
+    Door: $"oak door"; RoomTypes: RM_MAZE;
+    Depth: 4; 
+    Desc: "The passages twist and turn on themselves here,
+      forming an elaborate maze.";
+    Lists:
+      * MTYPE_LIST MA_ADVENTURER; 
+  }
+
+// ww: advantage to the player: a surreal maze can always be
+// circumnavigated easily
+Region "Surreal Maze" : RF_ROOM
+  {
+    Walls: $"Floor"; Floor: $"solid rock"; 
+    Door: $"oak door"; RoomTypes: RM_MAZE;
+    Depth: 3; Flags: RF_NEVER_LIT;
+    Desc: "The passages twist and turn on themselves here,
+      forming an elaborate maze. There's something surreal and strangely
+      comforting about this particular maze, but you cannot quite put your
+      finger on it.";
+    Lists:
+      * MTYPE_LIST MA_ADVENTURER; 
+  }
+
+Region "Hedge Maze" : RF_ROOM
+  {
+    Walls: $"giant mushroom"; Floor: $"Floor"; 
+    Door: $"darkwood door"; RoomTypes: RM_MAZE;
+    Lists:
+      * FLOOR_COLORS BLUE PURPLE CYAN GREEN;
+    Flags: RF_RAINBOW, RF_NEVER_LIT;  
+    Desc: "The mushrooms in this area have been groomed and crafted into
+    well-kept passageways."; 
+  }
+
+Region "Underground Farm" : RF_ROOM
+  {
+    Walls: $"Floor"; Floor: $"shallow water"; 
+    Door: $"darkwood door"; RoomTypes: RM_MAZE;
+    Lists:
+      * WALL_COLORS BLUE SKYBLUE GREEN EMERALD BROWN YELLOW;
+      * MTYPE_LIST MA_PLANT MA_PLANT;
+      * FURNISHINGS FU_SPLATTER $"giant mushroom";
+    Flags: RF_RAINBOW, RF_NEVER_LIT;  
+    Desc: "This area appears to have been designed to care for undergroud
+      plants. Irrigation waterways swirl through the area, conveyed by some
+      unseen force. Magical torches have been placed on pillars at irregular
+      intervals to provide light."; 
+      On Event EV_BIRTH {
+        EMap->GenEncounter(EN_MTYPE,EMap->Depth+2,EMap->Depth+2,
+            MA_PLANT, 0,(rID)0,e.EXVal,e.EYVal,NULL);
+        EMap->GenEncounter(EN_MTYPE,EMap->Depth+2,EMap->Depth+2,
+            MA_PLANT, 0,(rID)0,e.EXVal,e.EYVal,NULL);
+      } ; 
+  }
+
+Region "Kobold Warren" : RF_ROOM
+  { Floor: $"Floor";  Walls: $"limestone"; 
+    Door: $"oak door"; RoomTypes: RM_RCAVERN;
+    Flags: RF_NEVER_LIT; Size: SZ_MEDIUM;
+    Desc: "A cramped mess of tiny winding passages carved clean out of
+      rock and turning in every imaginable direction. The surfaces are
+      littered with sharp edges and tiny claw-marks, and you think that
+      you can hear yelping nearby.";
+    Lists:
+      * MTYPE_LIST MA_KOBOLD; 
+    On Event EV_BIRTH {
+      hObj tr; int16 i,j; rID xID;
+      j = 2d10;
+      for(i=0;i<j;i++) {
+        xID = theGame->GetEffectID(PUR_DUNGEON,0,EMap->Depth+3,AI_TRAP);
+        if (xID) {
+          if (EMap->FindOpenAreas(e.cPanel)) {
+            tr = CreateTrap($"trap", xID);
+            if (tr != NULL_OBJ)
+              tr->PlaceOpen(EMap);
+            }
+          }
+        }      
+      };
+  }   
+
+Region "Twisting Chasm" : RF_ROOM
+  { Walls: $"Floor"; Floor: $"chasm"; 
+    Door: $"oak door"; RoomTypes: RM_RCAVERN; Depth: 2; 
+    Desc: "This otherwise-normal area is lacking huge chunks of floor,
+      as if the supports had been scooped out by a giant hand or
+      cataclysmic spells."; 
+    Flags: RF_NEVER_LIT; 
+    Lists:
+     * MTYPE_LIST MA_AIR MA_BIRD MA_AVIAN,
+     * FURNISHINGS FU_SPLATTER $"floor";
+  }
+
+Region "Vermin Burrow" : RF_ROOM
+  { Floor: $"Floor";  Walls: $"limestone"; 
+    Door: $"oak door"; RoomTypes: RM_RCAVERN;
+    Flags: RF_NEVER_LIT; 
+    Desc: "This roughly-hewn area appears to be some sort of animal burrow
+    that has been expanded over time by its residents.";
+    Lists:
+      * MTYPE_LIST MA_VERMIN MA_BURROW; 
+  }      
+
+Region "Magma Vein" : RF_ROOM
+  { Floor: $"brimstone"; Walls: $"solid igneous rock"; 
+    Door: $"oak door"; RoomTypes: RM_RCAVERN;
+    Depth: 2; 
+    Flags: RF_NEVER_LIT; 
+    Desc: "This collection of molten, narrow tunnels seems to lead into the
+    very center of the earth."; 
+    Lists:
+      * FURNISHINGS FU_SPLATTER $"smooth igneous rock",
+      * MTYPE_LIST MA_FIRE; }      
+
+Region "Fungi Garden" : RF_ROOM
+  { Desc: "This room is exceedingly humid, and carries with it an almost
+      overpoweringly rancid smell. The walls, floor and ceiling are covered 
+      with mosses, toadstools, molds and every other type of fungi you can
+      imagine. Most -- but likely not all -- are harmless.";
+    Walls: $"Dungeon Wall"; Floor: $"Floor"; 
+    Door: $"oak door"; Depth: 2;
+    Flags: RF_NEVER_LIT; 
+    RoomTypes: RM_AD_ROUND, RM_RCAVERN, RM_LIFELINK; 
+    // ww: you mention in the room-fill-with-monsters code that you want
+    // fungi to play a bigger role (it is a dungeon/cave, etc.), so let's
+    // make them a bit more common. 
+    Constants:
+      * BLOB_WITH $"stinking cloud;terrain";
+    Lists:
+    // ww: ma_ooze covers pudding and jelly
+      * MTYPE_LIST MA_FUNGI MA_OOZE MA_JELLY MA_PLANT,
+      * FURNISHINGS FU_SPLATTER $"giant mushroom",
+      * WALL_COLORS BLUE PURPLE CYAN GREEN; 
+  }
+
+Region "Slime Chamber" : RF_ROOM
+  {
+    Walls: $"Dungeon Wall"; Floor: $"pool of grease"; 
+    Door: $"oak door"; Depth: 2; 
+    RoomTypes: RM_OCTAGON, RM_RCAVERN, RM_CIRCLE;
+    Desc: "The floor of this room is drenched in a few inches of a slimy,
+    greasy substance. Unhealthy fluids seep from the walls."; 
+    Flags: RF_NEVER_LIT; 
+    Constants:
+      * BLOB_WITH $"pool of slime";
+    Lists:
+      * FURNISHINGS FU_SPLATTER $"floor",
+      * WALL_COLORS YELLOW BROWN, 
+      * MTYPE_LIST MA_JELLY MA_OOZE;
+  }
+
+
+Region "Statue Garden" : RF_ROOM    
+  { Walls: $"Dungeon Wall"; Floor: $"Floor"; 
+    Door: $"oak door"; 
+      RoomTypes: RM_NORMAL , RM_CIRCLE , RM_OCTAGON, RM_GRID;
+    Lists:
+      * FURNISHINGS FU_GRID $"statue";
+    Desc: "This room is filled with statues of every description,
+      scattered in a regular manner about its area."; } 
+
+Region "Orc Barracks" : RF_ROOM
+  { Walls: $"Dungeon Wall"; Floor: $"Floor"; Depth: 2; 
+    Door: $"oak door"; RoomTypes: RM_NORMAL, RM_BUILDING, RM_DOUBLE;
+    Desc: "The bones, trash and fetid stench mark this area as the lair
+      of a party of orcs.";
+    Lists:
+      * MTYPE_LIST MA_ORC,
+      * WALL_COLORS BROWN YELLOW,
+      * FURNISHINGS FU_SPLATTER $"pile of trash"; 
+  }
+
+Region "Troll Cave" : RF_ROOM
+  { Walls: $"Dungeon Wall"; Floor: $"Floor"; Depth: 6;
+    Door: $"oak door"; RoomTypes: RM_LIFECAVE;
+    Desc: "A sweet, rotting smell permeates the air here, and the walls
+      are coated with mildew and dirt. Tiny animal skeletons and piles
+      of chewed bones litter the room, and thus you suspect that there 
+      may be trolls nearby."; 
+      On Event EV_BIRTH {
+        EMap->GenEncounter(EN_MTYPE,EMap->Depth+5,EMap->Depth,
+            MA_TROLL, AL_NONGOOD,(rID)0,e.EXVal,e.EYVal,NULL);
+      } ; 
+    Lists:
+      * MTYPE_LIST MA_TROLL MA_TROLL,
+      * WALL_COLORS BROWN YELLOW,
+      * FURNISHINGS FU_SPLATTER $"pile of bones"; }
+
+/* "cave" is just so *boorish*... */
+Region "Illithid Cenaculeum" : RF_ROOM
+  { Walls: $"Dungeon Wall"; Floor: $"Floor"; Depth: 6;
+    Door: $"iron door"; RoomTypes: RM_LIFECAVE;
+    Desc: "A sweet, cloying smell permeates the air here, and the walls
+      are coated with strange secretions. You sense a sort of throbbing
+      hum in the area, but it seems to be in your mind rather than your
+      ears."; 
+      On Event EV_BIRTH {
+        EMap->GenEncounter(EN_MTYPE,EMap->Depth+5,EMap->Depth+5,
+            MA_ILLITHID, AL_NONGOOD,(rID)0,e.EXVal,e.EYVal,NULL);
+      } ; 
+    Constants:
+      * BLOB_WITH $"pool of slime";
+    Lists:
+      * MTYPE_LIST MA_ILLITHID MA_ILLITHID,
+      * WALL_COLORS PURPLE MAGENTA;
+    Flags: RF_RAINBOW; 
+  }  
+
+Region "Naga Cavern" : RF_ROOM
+  { Walls: $"Dungeon Wall"; Floor: $"shallow water"; Depth: 8; 
+    Door: $"iron door"; RoomTypes: RM_LIFECAVE, RM_LCIRCLE;
+    Constants:
+      * BLOB_WITH $"shallow water";
+      On Event EV_BIRTH {
+        EMap->GenEncounter(EN_MTYPE,EMap->Depth+5,EMap->Depth+5,
+            MA_NAGA, 0,(rID)0,e.EXVal,e.EYVal,NULL);
+        EMap->GenEncounter(EN_MTYPE,EMap->Depth+5,EMap->Depth+5,
+            MA_NAGA, 0,(rID)0,e.EXVal,e.EYVal,NULL);
+        EMap->GenEncounter(EN_MTYPE,EMap->Depth+5,EMap->Depth+5,
+            MA_NAGA, 0,(rID)0,e.EXVal,e.EYVal,NULL);
+        EMap->GenEncounter(EN_MTYPE,EMap->Depth+5,EMap->Depth+5,
+            MA_NAGA, 0,(rID)0,e.EXVal,e.EYVal,NULL);
+      } ; 
+    Lists:
+     * WALL_COLORS BLUE AZURE; 
+  }
+
+Region "Jagged Chasm" : RF_ROOM
+  { Walls: $"Dungeon Wall"; Floor: $"floor"; 
+    Door: $"oak door"; RoomTypes: RM_NORMAL, RM_CIRCLE, RM_LCIRCLE;
+    Desc: "This otherwise-normal area is lacking huge chunks of floor,
+      as if the supports had been scooped out by a giant hand or
+      cataclysmic spells."; 
+    Constants:
+      * BLOB_WITH $"chasm";
+    Lists:
+     * MTYPE_LIST MA_AIR MA_BIRD MA_AVIAN,
+     * FURNISHINGS FU_SPLATTER $"floor";
+  }
+
+Region "Floating Rock;1" : RF_ROOM
+  { 
+    Desc: "The center of this area contains a floating section of rocky
+    floor that is supported by no visible means. Around it lies a chasm.";
+    Walls: $"Dungeon Wall"; Floor: $"obsidian"; Depth: 3;
+    Door: $"oak door"; RoomTypes: RM_SHAPED;
+    Tiles:
+      'X': $"chasm";
+    Grid: {:
+      %%%%%%%%%%%%
+      %..........%
+      %..XXXXXX..%
+      %.XXXXXXXX.%
+      %.XXX1.XXX.%
+      %.XX.G.1XX.%
+      %.XX1.G.XX.%
+      %.XXX.1XXX.%
+      %.XXXXXXXX.%
+      %..XXXXXX..%
+      %..........%
+      %%%%%%%%%%%%
+      :};
+}
+
+
+
+Region "Warded Laboratory" : RF_ROOM
+  {
+    Walls: $"warded wall"; Floor: $"Floor"; 
+    Door: $"warded oak door"; 
+    Desc: "Tables fill this room, covered with alchemical apparatus and
+      generally inscrutable devices. More importantly, however, the walls
+      and doors are deeply inscribed with mystic runes that keep out (or
+      perhaps keep in) incorporeal creatures. The laboratory shows signs
+      of use and may well have been used to summon something
+      dangerous recently."; 
+    Flags: RF_NEVER_LIT; 
+    RoomTypes: RM_CROSS, RM_NORMAL, RM_CIRCLE;
+    Lists:
+      * WALL_COLORS PURPLE MAGENTA,
+      * MTYPE_LIST MA_VORTEX,
+      * FURNISHINGS FU_CENTER $"summoning circle",
+      * FURNISHINGS FU_XCORNERS $"summoning circle"; 
+  }
+
+Region "Ritual Chamber" : RF_ROOM
+  { 
+    Walls: $"Dungeon Wall"; Floor: $"Floor"; 
+    Door: $"oak door"; 
+    Desc: "Intricate designs are carved on the walls here, and the faint
+      remains of summoning and warding circles can be made out carved into
+      the floor. Once, this place must have been a great mage's ritual
+      area, and even now you can feel a certain unnatural tension in the
+      air.";
+    RoomTypes: RM_CIRCLE, RM_OCTAGON, RM_NORMAL, RM_AD_ROUND;
+    Lists: 
+      * WALL_COLORS PURPLE MAGENTA,
+      * FURNISHINGS FU_CENTER $"summoning circle"; 
+  }
+
+
+Region "Armoury" : RF_ROOM
+  {
+    Walls: $"Dungeon Wall"; Floor: $"Floor"; 
+    Door: $"iron door";
+    Desc: "Rotting stands lined with rust flakes are all that is left
+      of the ancient dwarven armoury that once stood here, though a
+      few of the remaining weapons seem to be at least remotely usable.";
+    RoomTypes: RM_NORMAL, RM_ADJACENT, RM_AD_ROUND, RM_OCTAGON;
+    Lists: // ww: let's add some flavor
+      * FURNISHINGS FU_CORNERS $"pillar",
+      * FURNISHINGS FU_CENTER $"forge"; 
+    On Event EV_BIRTH {
+      hObj it; int16 i,j; rID xID;
+      j = 8 + random(8);
+      for(i=0;i!=j;i++) {
+        if (!random(6))
+          xID = theGame->GetItemID(PUR_DUNGEON,0,0,T_SHIELD);
+        else if (!random(4))
+          xID = theGame->GetItemID(PUR_DUNGEON,0,0,T_ARMOR);
+        else
+          xID = theGame->GetItemID(PUR_DUNGEON,0,0,T_WEAPON);
+        if (xID)
+          if (EMap->FindOpenAreas(e.cPanel)) {
+            it = CreateItem(xID);
+            if (it)
+              it->PlaceOpen(EMap);
+          }
+        }
+      it = CreateFeature($"forge");
+      it->PlaceOpen(EMap);
+      return NOTHING;
+    };
+  }
+
+Region "Abatoir" : RF_ROOM
+  {
+    Walls: $"Dungeon Wall"; Floor: $"Floor"; 
+    Door: $"oak door";
+    Floor: $"bloodstain";
+    Desc: "There can be no doubt as to the purpose of this room -- the
+      floor is caked with centuries of dried blood. You vaguely wonder
+      who, or what, was driven to use this room as a killing ground for
+      so many over such a long period.";
+    RoomTypes: RM_NORMAL, RM_CIRCLE; 
+    Lists:
+      * FURNISHINGS FU_SPLATTER $"corpse";
+  }
+
+Region "Ancient Barracks" : RF_ROOM
+  {
+    Walls: $"Dungeon Wall"; Floor: $"Floor"; 
+    Door: $"iron door";
+    Desc: "These tiny, spartan chambers were once likely home to dwarven
+      soldiers, or warriors or some other underground race. Regardless,
+      the original inhabitants are millenia dead, but the vague imprint of
+      noble crests on the limestone walls and tight, functional corridors
+      still speak strongly of nobility, strength, militarism and an
+      uncompromising spirit.";
+    Lists:
+      * WALL_COLORS GREEN;
+    RoomTypes: RM_BUILDING;
+  }
+
+Region "Magic Academy": RF_ROOM
+  {
+    Walls: $"Dungeon Wall"; Floor: $"Floor"; 
+    Door: $"iron door";
+    Desc: "Here, in ages past, many young and idealistic students of the
+      underdark races must have come to study the arts of magic at the
+      hands of their superiors. You wonder vaguely whether their life
+      was harsh or pleasant, rewarding or slavish, but so many centuries
+      after their passing it hardly seems relevant.";
+    Lists:
+      * WALL_COLORS PURPLE MAGENTA;
+    RoomTypes: RM_BUILDING;
+  }
+
+Region "Community Offices" : RF_ROOM
+  {
+    Walls: $"Dungeon Wall"; Floor: $"Floor"; 
+    Door: $"oak door";
+    Desc: "The desks, chairs and other furniture has long since rotted
+      away to dust, but the signs and ideograms carved on the marble walls
+      remain to indicate that this area was once some kind of civil
+      bureaucracy or trade guild from a forgotten civilization.";
+    RoomTypes: RM_BUILDING;
+    Lists:
+      * WALL_COLORS WHITE GREY SHADOW CYAN; 
+  }
+
+Region "Flooded Encampment" : RF_ROOM
+  {
+    Walls: $"Dungeon Wall"; Floor: $"Floor"; 
+    Door: $"oak door";
+    Desc: "These small chambers were presumably once the living spaces for
+      an underground enclave. Seepage from natural water flows has made the
+      area largely uninhabitable. If the original occupants were present at
+      the time, they would have been witnesses to a slowly mounting
+      cataclysm as their homes were slowly filled with water."; 
+    RoomTypes: RM_BUILDING;
+    Constants:
+      * BLOB_WITH $"shallow water";
+    Lists:
+      * MTYPE_LIST MA_AQUATIC MA_WATER, 
+      * FURNISHINGS FU_SPLATTER $"shallow water",
+      * WALL_COLORS BLUE AZURE; }
+
+Region "Ice Matrix" : RF_ROOM
+  {
+    Walls: $"Ice Wall"; Floor: $"Ice Floor"; 
+    Door: $"ice door";
+    Flags: RF_NEVER_LIT;
+    Desc: "An abrupt, almost certainly supernatural drop in temperature
+  greets you as you step into this cavern. The entire area is crafted from a
+  thick layer of bright, clear ice, and snow covers the floor like a fine
+  white powder.";
+    RoomTypes: RM_BUILDING, RM_MAZE, RM_RCAVERN;
+    Lists:
+      * MTYPE_LIST MA_COLD MA_ADVENTURER;
+  }
+
+Region "Icy Prison" : RF_ROOM
+  {
+    Walls: $"ice Wall"; Floor: $"floor"; 
+    Door: $"oak door"; Depth: 3; 
+    Flags: RF_NEVER_LIT;
+    Desc: "An abrupt, clearly supernatural drop in temperature greets you
+    as you step into this cavern. The center of the area is dominated by
+    a translucent curtain of icy, destructive magical power."; 
+    RoomTypes: RM_OCTAGON, RM_LCIRCLE, RM_LARGE;
+    Lists:
+      * FURNISHINGS FU_CENTER_CIRCLE_LARGE $"curtain of frost",
+      * FURNISHINGS FU_CENTER_CIRCLE_MEDIUM $"floor",
+      * FURNISHINGS FU_CENTER $"large iron chest",
+    On Event EV_BIRTH {
+      EMap->GenEncounter(EN_MTYPE,EMap->Depth+5,EMap->Depth+5,
+          MA_FIRE, 0,(rID)0,e.EXVal,e.EYVal,NULL);
+    };
+  }
+
+Region "Fiery Prison" : RF_ROOM
+  {
+    Walls: $"solid igneous rock"; Floor: $"floor"; 
+    Door: $"oak door"; Depth: 3; 
+    Flags: RF_NEVER_LIT;
+    Desc: "An abrupt, clearly supernatural raise in temperature greets you
+    as you step into this cavern. The center of the area is dominated by
+    a translucent curtain of destructive magical fire."; 
+    RoomTypes: RM_OCTAGON, RM_LCIRCLE, RM_LARGE;
+    Lists:
+      * FURNISHINGS FU_CENTER_CIRCLE_LARGE $"curtain of flame",
+      * FURNISHINGS FU_CENTER_CIRCLE_MEDIUM $"floor",
+      * FURNISHINGS FU_CENTER $"large iron chest";
+    On Event EV_BIRTH {
+      EMap->GenEncounter(EN_MTYPE,EMap->Depth+5,EMap->Depth+5,
+          MA_COLD, 0,(rID)0,e.EXVal,e.EYVal,NULL);
+    };
+  }
+
+Region "Ancient Library" : RF_ROOM
+  {
+    Walls: $"dungeon wall"; Floor: $"floor"; Door: $"oak door";
+    Flags: RF_NEVER_LIT, RF_ODD_WIDTH, RF_ODD_HEIGHT; 
+    RoomTypes: RM_LARGE;
+    Lists:
+      * FURNISHINGS FU_INNER_COLUMNS $"bookshelf";
+    On Event EV_BIRTH {
+      hObj it; int16 i,j; rID xID;
+      j = 1d8+theGame->GetPlayer(0)->Mod(A_LUC);
+      for(i=0;i<j;i++) {
+        xID = theGame->GetItemID(PUR_DUNGEON,0,EMap->Depth+5,T_BOOK);
+        if (xID)
+          if (EMap->FindOpenAreas(e.cPanel)) {
+            it = CreateItem(xID);
+            if (it)
+              it->PlaceOpen(EMap);
+            }
+        }
+      j = 1d2;
+      if (1d2 == 1)
+        for (i=0;i!=j;i++)
+          {
+            it = GenDungeonItem(0,$"tome",EMap->Depth+5,
+                  theGame->GetPlayer(0)->GetAttr(A_LUC));
+            if (it != NULL)
+              if (EMap->FindOpenAreas(e.cPanel))
+                it->PlaceOpen(EMap);
+          }
+      return NOTHING;
+    };
+  }
+
+Region "Meeting Hall" : RF_ROOM
+  {
+    Walls: $"Dungeon Wall"; Floor: $"Floor"; 
+    Door: $"oak door";
+    Desc: "The upraised speaking platform and the tiny indentations in
+      the floor where rows of chairs would once have stood mark this as
+      a community meeting hall. If you close your eyes, you can imagine
+      the room crammed with dwarves, drow, illithids or members of some
+      other underground race, eager to socialize and receive pronouncements
+      from leaders spiritual or secular. But now, it is simply a vast,
+      shadowed and empty chamber.";
+    RoomTypes: RM_LARGE, RM_ADJACENT, RM_PILLARS;
+  }
+
+Region "Feast Hall" : RF_ROOM
+  {
+    Walls: $"Dungeon Wall"; Floor: $"Floor"; 
+    Door: $"oak door";
+    Desc: "The long stone table, and the noble shields carved into the
+      walls, suggest that this room once served as a royal feast hall
+      where nobles and kings would dine on the richest Underdark delicacies.
+      Now, it is starkly empty, and the air is cool and still.";
+    RoomTypes: RM_LARGE, RM_CROSS;
+    Lists:
+      * FURNISHINGS FU_XCORNERS $"pillar";
+  }
+
+Region "Underking's Court" : RF_ROOM
+  {
+    Walls: $"Dungeon Wall"; Floor: $"Floor"; 
+    Door: $"iron door";
+    RoomTypes: RM_LARGE, RM_PILLARS;
+    Lists:
+      * FURNISHINGS FU_XCORNERS $"pillar";
+  }    
+
+Region "Hall of Knights" : RF_ROOM
+  {
+    Desc: "The walls here are lined with ancient, rusted suits of field 
+      plate, and the pillars are inscribed in forgotten languages with
+      the names of knights fallen in battle ages before you were even
+      born.";
+    Walls: $"Dungeon Wall"; Floor: $"Floor"; 
+    Door: $"iron door";
+    RoomTypes: RM_PILLARS;
+    Lists:
+      * FURNISHINGS FU_CORNERS $"statue";
+
+  }    
+
+
+Region "Surreal Chamber" : RF_ROOM
+  {
+    Walls: $"Dungeon Wall"; Floor: $"Floor"; 
+    Door: $"oak door"; RoomTypes: RM_CIRCLE, RM_PILLARS, RM_AD_ROUND;
+    Desc: "You're not quite sure what it is, but there's something just
+      wrong about this room. It has something to do with angles, you
+      think, and the proportions of the walls, but you can't place it
+      exactly, and trying to figure it out is giving you a headache. You
+      feel the strange urge to pray...";
+    Lists:
+      * MTYPE_LIST MA_CHAOTIC;
+  }
+
+Region "Elemental Chamber" : RF_ROOM
+  {
+    Walls: $"dungeon wall"; Floor: $"floor"; 
+    Door: $"oak door"; 
+    RoomTypes: RM_LARGE, RM_LCIRCLE, RM_ADJACENT, RM_AD_ROUND, RM_AD_MIXED;
+    Desc: "This mysterious room appears to pay homage to the four
+    major elements.";  
+    Lists:
+      * WALL_COLORS RED BLUE WHITE BROWN,
+      * MTYPE_LIST MA_ELEMENTAL;
+    On Event EV_BIRTH {
+      int16 a1, a2, a3, a4;
+      int16 myrand;
+      a1 = 1;
+      a2 = 1;
+      a3 = 1;
+      a4 = 1; 
+      // while loop doesn't work ...
+      for (a1=1; (a1 || a2 || a3 || a4) ; a1 = a1) {
+        myrand = 1d4;
+        if (myrand == 1 && a1)  {
+          EMap->WriteBlobs(e.cPanel,$"elemental chamber",$"shallow water");
+          a1 = 0;
+        }  else if (myrand == 2 && a2) { 
+          EMap->WriteBlobs(e.cPanel,$"elemental chamber",$"brimstone");
+          a2 = 0;
+        }  else if (myrand == 3 && a3) { 
+          EMap->WriteBlobs(e.cPanel,$"elemental chamber",$"fog");
+          a3 = 0;
+        }  else if (myrand == 4 && a4) { 
+          EMap->WriteBlobs(e.cPanel,$"elemental chamber",$"loose-packed earth");
+          a4 = 0;
+        }
+      }
+      return NOTHING; 
+    }; 
+  }
+
+Region "Brimstone Chamber" : RF_ROOM
+  {
+    Walls: $"solid igneous rock"; Floor: $"Floor"; Depth: 2; 
+    Door: $"oak door"; RoomTypes: RM_CIRCLE, RM_PILLARS, RM_AD_ROUND;
+    Desc: "The strangely-hot air in this room is filled with a stench of
+    sulphur. Patches of the ground glow with a faint incandescence and
+    the stone crackles with heat.";
+    Flags: RF_NEVER_LIT; 
+    Constants:
+      * BLOB_WITH $"brimstone";
+    Lists:
+      // * WALL_COLORS RED, 
+      * FURNISHINGS FU_SPLATTER $"smooth igneous rock",
+      * MTYPE_LIST MA_FIRE MA_ELEMENTALKIN;
+  }
+
+Region "Entry Chamber;hells" : RF_ROOM
+  { Walls: $"Dungeon Wall"; Floor: $"Floor"; 
+    Door: $"oak door"; RoomTypes: RM_SHAPED;
+    Desc: "A sense of dread fills you as you realize that you are no
+    longer on the Prime Material plane."; 
+    Flags: RF_NOGEN;
+    Tiles:
+      '.': $"bloodstain", 
+      '1': $"bloodstain" with $"corpse" of $"human",
+      '>': $"floor" with $"material portal" [TILE_START];
+    Grid: {:
+      %%%%%%%
+      %11111%
+      %11111%
+      %11>11%
+      %11111%
+      %11111%
+      %%%%%%%
+      :};
+  }
+
+Region "Entry Chamber" : RF_ROOM
+  { Walls: $"Dungeon Wall"; Floor: $"Floor"; 
+    Door: $"oak door"; RoomTypes: RM_SHAPED;
+    Desc: "Your first sight of the goblin caves is not a heartening one:
+      this room is a mass grave, the floor splattered with blood and the
+      corpses of your fellow adventurers laying strewn around the stairs.
+      There is an old, thick pillar in each corner, covered with the
+      twisting, indecipherable goblin script; while you can't make out the
+      message, you can discern the runes for 'light' and 'surface'."; 
+    Flags: RF_NOGEN;
+    Tiles:
+      'o': $"floor" with $"pillar",
+      'b': $"bloodstain", 
+      'T': $"floor" with $"tree",
+      'p': $"floor" with $"potion" of $"healing",
+      'd': $"floor" with $"potion" of $"dimension door",
+      'i': $"floor" with $"potion" of $"see invisibility;potion",
+      '1': $"bloodstain" with $"corpse" of $"human",
+      '2': $"bloodstain" with $"corpse" of $"elf",
+      '3': $"bloodstain" with $"corpse" of $"lizardman",
+      '4': $"bloodstain" with $"corpse" of $"dwarf",
+      '5': $"bloodstain" with $"corpse" of $"gnome",
+      '6': $"bloodstain" with $"corpse" of $"cave orc",
+      '7': $"bloodstain" with $"corpse" of $"kobold",
+      /* 'G': $"floor" with $"potion" of $"vampirism", */
+      'w': $"floor" with $"wand" of $"identify;wand",
+      'P': $"floor" with $"infernal portal",
+      '>': $"floor" with $"cave enterance" [TILE_START];
+    Grid: {:
+      %%%%%%%%%%%%%%%%%%%%%%%
+      %pb........d..2......p%
+      %.o......1..b....o..o.%
+      %.....................%
+      %....6...b....b...3...%
+      %..b................o.%
+      %...5................i%
+      %.......b..4.b........%
+      %..3..4...5...........%
+      %.........6...7.b..7..%
+      %..2...1..............%
+      %p.........>.........d%
+      %............3...4....%
+      %...b...........b.....%
+      %.........2...........%
+      %.................b..b%
+      %.............b.b1.b.b%
+      %.o..b....b...b..b.bbb%
+      %............b.b...b5b%
+      %.............bbb.b.bb%
+      %.o..o7....bb.b6bb.bob%
+      %d.........pbbbb..bb.p%
+      %%%%%%%%%%%%%%%%%%%%%%%
+      :};
+    On Event EV_REST {
+      if (e.EParam & REST_SAFE)
+        return NOTHING;
+      if (EActor->TotalLevel() >= 5 ||
+          EActor->getMaxDepth($"The Goblin Caves") >= 4)
+        return NOTHING;
+      EActor->IPrint("If you want to rest, you can just climb back out
+        of the dungeon entirely and rest in perfect safety in the fields
+        above.");
+      return ABORT;
+      };
+  }  
+
+Region "The Goblin Encampment" : RF_ROOM
+  {
+   Desc: "The air is filled with the scent of decaying trash and bodies and
+   you can tell that the Goblin Encampment proper begins here. Under
+   Murgash the goblins have fenced off their area from the rest of the
+   dungeon, probably to keep out wandering menaces like yourself. The gates
+   are unguarded, however, and a winding path paved with purple stones lies
+   deserted. The goblins themselves live huddled in shanties and shacks. A
+   forge and a slaughterhouse appear to be the only well-constructed
+   outlying buildings. The camp itself is dominated by a squat inner keep
+   surrounded by a moat. The keep itself appears to have been fashioned
+   from an adamant alloy and looks quite tactically sound compared to the
+   rest of the camp."; 
+
+   Floor: $"floor"; Walls: $"solid rock"; Door: $"iron door";
+   Flags: RF_NOGEN; RoomTypes: RM_SHAPED; 
+     Tiles:
+       /* keep the rabble out */
+       '=': $"steel fence",
+       'o': $"floor" with $"pillar" as red 15,
+
+       /* follow the yellow-brick road ... */
+       ',': $"floor" as purple GLYPH_FLOOR2,
+
+       /* you're so vain! you probably think this game is about you,
+        * don't you? */
+       '$': $"guardian runes" with 
+            $"statue" of $"Murgash, the Goblin King",    
+
+       /* goblin family barracks: a life of squalor */
+       '*': $"building wall" as brown 219,
+       '-': $"building wall" as brown 205,
+       '|': $"building wall" as brown 186,
+       'F': $"floor" with $"forge",
+       'b': $"bloodstain",      /* charnel house, grocery strore */
+       'm': $"bloodstain" with $"strip of cured meat",
+       'g': $"floor" with $"goblin family",
+       '_': $"floor" with $"bed",
+       
+       /* the Goblin Army */
+       '1': $"floor" with $"goblin",
+       '2': $"floor" with $"hobgoblin",
+       '3': $"floor" with $"ogre",
+       '4': $"floor" with $"troll",
+       '5': $"floor" with $"hill giant",
+       
+
+       /* decor! */
+       '&': $"pile of trash",
+       '7': $"pile of bones",
+
+       /* slain victims */
+       'D': $"bloodstain" with $"corpse" of $"kobold;temp",
+       'H': $"bloodstain" with $"corpse" of $"human;temp",
+       'W': $"bloodstain" with $"corpse" of $"dwarf;temp",
+       'O': $"bloodstain" with $"corpse" of $"orc;temp",
+       'N': $"bloodstain" with $"corpse" of $"gnome;temp",
+       'E': $"bloodstain" with $"corpse" of $"elf;temp",
+
+       /* mott and bailey architecture :-) ... */
+       'X': $"adamant wall",
+
+       '~': $"deep water",
+       '`': $"deep water" with $"tojanda", 
+       '!': $"deep water" with $"elder tojanda", 
+       'B': $"drawbridge",
+       'C': $"floor" with $"caryatid column",
+
+       /* welcome to the jungle */
+       ';': $"guardian runes",
+       '@': $"guardian runes;2",
+       '^': $"guardian runes" as azure GLYPH_FLOOR,
+
+       /* what king lacks adivsors? */
+       'S': $"guardian runes" 
+            with $"goblin vizier" [TILE_GUARDING],   // CR 7
+       'I': $"guardian runes" 
+            with $"mind flayer mage" [TILE_GUARDING],   
+
+       'T': $"floor" /* with $"deathblade scythe trap" */, 
+
+       /* and finally */
+       'M': $"iron throne" with $"Murgash, the Goblin King"
+            [TILE_GUARDING];    // CR 9
+
+   Grid: {:
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%..........%%%%%%%%%.................%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%..............%%%%%.......................%%%%%%%%%%%%%%%%%%%%%%.%
+%%.....................................................%%%%%%%%%%%%..%
+%%%..============================o,o============================.%..%%
+%%%..=............................,............................=...%%%
+%%%..=.*--*-*--*..*--*-*--*.......,...*---*--*-*--*..*--*-*--*.=....%%
+%%%..=.|g.+.+.g|..|1.+.+.g|.11111.,.1.|&.1|g.+1+.g|..|g.+1+.g|.=....%%
+%%%..=.|..|.|&.|..|..|.|..|1111...,.1.|111|1.|1|.&|..|..|1|..|.=....%%
+%%%..=.*--*.*--*..*--*.*--*---*...,.1.|..F*--*.*--*..*--*.*--*.=....%%
+%%%..=.|g.+.+.1|..|g.+.+.g|HOH|.5.,...|111|g.+.+.g|..|1.+.+.g|.=...%%%
+%%%..=.|.&|.|..|..|.&|.|&.|EHb|...,,,,+111|.&|.|..|..|..|.|&.|.=...%%%
+%%...=.*--*.*--*..*--*.*--*Dbb|.1.,...|11F*--*.*--*..*--*.*--*.=...%%%
+%%...=.|1.+.+.g|..|1.+.+.1|b7b|111,...|111|1.+.+.g|..|g.+.+.#|.=...%%%
+%%...=.|..|.|..|..|.&|.|..|b..+,,,,...|.1.|..|.|..|..|&.|.|..|.=...%%%
+%%...=.*--*.*--*..*--*.*--*..m|...,...*---*--*.*--*..*--*.*--*.=...%%%
+%%%..=.|1.+.+.3|..|g.+.+.g|7mm|...,.......|g.+.+.g|..|g.+.+.g|.=...%%%
+%%%..=.|.&|.|..|..|..|.|..|mmm|...,.1.5.1.|..|.|&.|..|..|.|..|.=....%%
+%.%..=.*--*+*--*..*--*+*--*---*...,.......*--*+*--*..*--*+*--*.=....%%
+%.%..=.....,..........,...........,.....11....,..........,.....=....%%
+%.%..=.....,.221.5.11.,11111111221,.;;;.......,.11111.5..,.11..=....%%
+%.%..=.....,..........,14112321111,.;$;1114131,..........,..2..=....%%
+%.%..=.....,,,,,,,,,,,,11111411221,.;;;11221..,,,,,,,,,,,,.....=....%%
+%.%..=.*--*+*--*......,11211232311,....11212.5,..........,.141.=....%%
+%....=.|g.+.+.3|...,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,.1.....,.....=.....%
+%....=.|..|.|..|...,`~~~~~~~~~~~~`B`~~~~~~~~~~~~`,.2.*--*+*--*.=.....%
+%....=.*--*.*--*...,~XXXXXXX~~~~~~B~~~~~~XXXXXXX~,.1.|1.+.+.1|.=.....%
+%....=.|g.+.+.1|...,~X..T.CX`~~~~!B!~~~~`XC.T..X~,.3.|..|.|&.|.=.....%
+%....=.|&.|.|&.|...,~X.CX..T.............T..XC.X~,2..*--*.*--*.=.....%
+%...%=.*--*.*--*...,~XTXXXXXXXXXXXXXXXXXXXXXXXTX~,.1.|1.+.+.1|.=.....%
+%%..%=.|1.+.+.g|...,~X.CXXXXXXXXXXXXXXXXXXXXXC.X~,1.3|..|.|..|.=.....%
+%%..%=.|..|.|..|...,~X..T.......;;;;;.......T..X~,.1.*--*.*--*.=....%%
+%%..%=.*--*.*--*...,~XXX=========;;;=========XXX~,..2|g.+.+.1|.=....%%
+%%.%%=.|1.+.+.g|...,~~XXX^;^;^;;@@@@@;;^;^;^XXX~~,...|..|.|&.|.=...%%%
+%%.%%=.|.&|.|&.|...,~~~XX;^;^;;;;;^;;;;;^;^;XX~~~,...*--*.*--*.=...%%%
+%%.%%=.*--*-*--*...,~~~XX^;^;;;;;^;^;;;;;^;^XX~~~,...|g.+.+.1|.=..%%%%
+%%.%%=.............,~~~XX;^;;;;;^;^;^;;;;;^;XX~~~,...|.&|.|..|.=..%%%%
+%%..%=..111214321..,~~~XX^;;;;;^S^;^S^;;;;;^XX~~~,...*--*-*--*.=..%%%%
+%%..%o.............,~~~XX;;;;;^;^;^;^;^;;;;;XX~~~,.............o..%%%%
+%....,,,,,,,,,,,,,,,~~~XXI;;;;;^;^M^;^;;;;;IXX~~~,,,,,,,,,,,,,,,..%%%%
+%....o.............,~~~XX;;;;;;;^;^;^;;;;;;;XX~~~,.............o.%%%%%
+%%%%%=.....1112121.,~~~XX;;;;;^;;^;^;;^;;;;;XX~~~,.11111311111.=.%%%%%
+%%%%%=.H.E..311411.,~~~XX^;;;^S^;;^;;^S^;;;^XX~~~,.12211314111.=.%%%%%
+%%%%%=HHDHOE.21112.,~~~XX;^;;;^;;;;;;;^;;;^;XX~~~,.1113123111..=.%%%%%
+%%%%%=.DEW.7H.3731.,~~~XX^;^;;;;;;I;;;;;;^;^XX~~~,.121211311.&.=.%%%%%
+%%%%%=EEHDWHH..222.,~~XXX;^;^;;;;;;;;;;;^;^;XXX~~,.13121111.&.&=.%%%%%
+%%%%%=HHHEDWWW.111.,~XXXXXXX;^;;;;;;;;;^;XXXXXXX~,.4411111.&7&.=.%%%%%
+%%%%%=.WWDENN..111.,~XXX$..X^;^;;;;;;;^;^X_._XXX~,.11111...&...=.%%%%%
+%%%%.=H7DHEDEO.121.,~XX....+;^;^;;;;;^;^;+..._XX~,.1111.....&&&=..%%%%
+%%%%.=.ONOHDO..131.,~XX....XXXXXXXXXXXXXXX....XX~,.111....&.&..=..%%%%
+%%%%.=DHNHW.EE.141.,~XX_..XXXXXXXXXXXXXXXXX.._XX~,.43...&..&.&.=..%%%%
+%%%..=DHDOWEH..111.,~XXXXXXXX~~~~~~~~~~~XXXXXXXX~,.11...&7&..&.=..%%%%
+%%%..=.OOH7OWW.111.,~XXXXXXX~~~~~~~~~~~~~XXXXXXX~,.11..7...&&.&=..%%%%
+%%%..=.WHHHDO...21.,~~~~~~~~~~~~~~~~~~~~~~~~~~~~~,.11...&&&.&&.=..%%%%
+%%...=DHW.OE.HE..2.,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,......&..&&&.=..%%%%
+%%...=.DHONHDH...2................,................5...&...&7&.=..%%%%
+%..%.=NEHHHDO.7O..111331112111411.,5.2211221231111....&..&&..&.=..%%%%
+%..%.=.W.NWWHNE.7.................,................&7&.&..&.&&&=..%%%%
+%%...============================o,o============================..%%%%
+%%................................................................%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   :};
+  On Event EV_REST {
+    EActor->IPrint("Taking a nap during a covert intrusion into a hostile
+      enemy fortress is generally considered to be tactically inadvisable,
+      you know.");
+    return ABORT;
+    },
+  EV_BIRTH {
+    hObj hMon;
+    for (hMon=EMap->FirstThing();hMon;hMon=EMap->NextThing())
+      if (hMon->isCreature() && EMap->RegionAt(hMon->x,hMon->y) ==
+                                     $"The Goblin Encampment") {
+        switch(hMon->mID) {
+          case $"goblin":
+          case $"hobgoblin":
+            switch (1d30) {
+              case 1:  hMon->AddTemplate($"rogue-archer"); break;
+              case 2:  hMon->AddTemplate($"archer"); break;
+              case 3:  hMon->AddTemplate($"myrmidon"); break;
+              case 4:  hMon->AddTemplate($"reaver"); break;
+              case 5:  hMon->AddTemplate($"shadowdancer;template"); break;
+              case 6:  hMon->AddTemplate($"blackguard;template"); break;
+              case 7:  hMon->AddTemplate($"stalker"); break;
+              case 8:  hMon->AddTemplate($"chieftan"); break;
+              case 9:  hMon->AddTemplate($"shaman"); break;
+              case 10: case 11: case 12:
+                       hMon->AddTemplate($"veteran"); break;
+              default: hMon->AddTemplate($"elite"); break;
+              }
+           break;
+          case $"ogre":
+          case $"hill giant":
+            switch (1d10) {
+              case 1:  hMon->AddTemplate($"skilled"); break;
+              case 2:  hMon->AddTemplate($"experienced"); break;
+              case 3:  hMon->AddTemplate($"experienced"); break;
+              case 4:  hMon->AddTemplate($"veteran"); break;
+              case 5:  hMon->AddTemplate($"chieftan"); break;
+              case 6:  hMon->AddTemplate($"shaman"); break;
+              }
+           break;
+          }
+        hMon->RemoveStati(ALIGNMENT);
+        hMon->PlaceAt(EMap,hMon->x,hMon->y);
+        }
+    return NOTHING;
+    };
+  }
+
+Terrain "iron throne"
+  { Image: grey '#'; Mat:MAT_IRON; 
+    Flags: TF_SHOWNAME; }
+
+Feature "bed" : T_FEATURE
+  { Image: brown 'b'; Mat:MAT_WOOD; }
+
+Terrain "drawbridge"
+  { Image: brown '='; Mat:MAT_WOOD; 
+    Flags: TF_SHOWNAME; }
+
+Terrain "guardian runes"
+  { Image: pink GLYPH_FLOOR; Mat:MAT_GRANITE; 
+    Flags: TF_SHOWNAME, TF_WARN, TF_SPECIAL; 
+    On Event EV_MON_CONSIDER {
+      return NOTHING; 
+      }, 
+    EV_MOVE, EV_JUMP_OFF {
+      int16 dmg, typ; 
+      if (EActor->isCharacter()) {
+        if (EActor->HasAbility(CA_WOODLAND_STRIDE))
+          return NOTHING;
+        if (murgash_quelled)
+          return NOTHING;
+        DPrint(e,"The guardian runes flare at you!",
+            "The guardian runes flare at an <EActor>!");
+        
+        dmg = 6 + random(6);
+        
+        switch (random(6)) {
+          case 0: typ = AD_FEAR; break;
+          case 1: typ = AD_SLOW; break;
+          case 2: typ = AD_CONF; break;
+          case 3: typ = AD_EVIL; break;
+          case 4: typ = AD_RUST; break;
+          case 5: typ = 0; break;
+        }
+        
+        if (EActor->SavingThrow((typ == AD_SLOW || typ == AD_EVIL || 
+              typ == AD_RUST) ? FORT : WILL, 27, SA_MAGIC|SA_EVIL |
+              (typ == AD_FEAR ? SA_FEAR : 0) |
+              (typ == AD_CONF ? SA_CONF : 0)))
+          {
+            EActor->IPrint("You resist the runes' effect.");
+            return NOTHING;
+          }
+        
+        if (typ == 0) {
+          e.vCasterLev = 15;
+          SetEVictim(e,EActor);
+          RedirectEff(e,$"dispel magic",EV_MAGIC_HIT);
+          }
+        else
+          ThrowTerraDmg(EV_DAMAGE,typ,dmg,"guardian runes",EActor,
+                                       $"guardian runes"); 
+        if (EActor->isDead())
+          return ABORT;
+        return NOTHING;
+      }
+      return NOTHING;
+      },
+    EV_EFFECT {
+      if (murgash_quelled)
+          return NOTHING;
+      if ((e.eID == $"Phase Door" || e.eID == $"Dimension Door" ||
+          e.eID == $"Teleport" || e.eID == $"Shift Level" ||
+          e.eID == $"Shadow Shifting" || e.eID == $"Passwall" ||
+          e.eID == $"Shadow Step" || e.eID == $"Tree Stride" ||
+          e.eID == $"Teleportation") && !EActor->isMType(MA_GOBLIN))
+        {
+          if (EActor->HasStati(SPECIALTY_SCHOOL,8))
+            if (EActor->yn("The runes try to block your weavecraft; force it?"))
+              if (EActor->LoseFatigue(2,true))
+                return NOTHING;
+          EActor->IPrint("The guardian runes flare. You flicker, but remain
+            where you are.");
+          return DONE;
+        }
+      return NOTHING;
+      };
+  }
+
+Terrain "guardian runes;2"
+  { Image: red GLYPH_FLOOR; Mat:MAT_GRANITE; 
+    Flags: TF_SHOWNAME, TF_WARN, TF_SPECIAL; 
+    On Event EV_MON_CONSIDER {
+      if (EActor->isMType(MA_GOBLIN))
+        return ABORT;
+      return NOTHING; 
+      }, 
+    EV_MOVE, EV_JUMP_OFF {
+      int16 dmg, typ; 
+      if (EActor->isCharacter()) {
+        if (murgash_quelled)
+          return NOTHING;
+        if (EActor->HasAbility(CA_WOODLAND_STRIDE))
+          return NOTHING;
+        DPrint(e,"The guardian runes flare at you!",
+            "The guardian runes flare at an <EActor>!");
+        dmg = 6 + random(6);
+        // this requires you to have good saves or not to move around that
+        // much
+        switch (random(6)) {
+          case 0: typ = AD_FEAR; break;
+          case 1: typ = AD_SLOW; break;
+          case 2: typ = AD_CONF; break;
+          case 3: typ = AD_EVIL; break;
+          case 4: typ = AD_RUST; break;
+          case 5: typ = 0; break;
+          }
+
+        if (EActor->SavingThrow((typ == AD_SLOW || typ == AD_EVIL || 
+              typ == AD_RUST) ? FORT : WILL, 27, SA_MAGIC | SA_EVIL |
+              (typ == AD_FEAR ? SA_FEAR : 0) |
+              (typ == AD_CONF ? SA_CONF : 0)))
+          {
+            EActor->IPrint("You resist the runes' effect.");
+            return NOTHING;
+          }
+
+        if (typ == 0) {
+          e.vCasterLev = 15;
+          SetEVictim(e,EActor);
+          RedirectEff(e,$"dispel magic",EV_MAGIC_HIT);
+          }
+        else
+          ThrowTerraDmg(EV_DAMAGE,typ,dmg,"guardian runes",EActor,
+                                       $"guardian runes;2"); 
+        if (EActor->isDead())
+          return ABORT;
+        return NOTHING;
+        }
+      return NOTHING;
+      },
+    EV_EFFECT {
+      if (murgash_quelled)
+        return NOTHING;
+        
+      if ((e.eID == $"Phase Door" || e.eID == $"Dimension Door" ||
+          e.eID == $"Teleport" || e.eID == $"Shift Level" ||
+          e.eID == $"Shadow Shifting" || e.eID == $"Passwall" ||
+          e.eID == $"Shadow Step" || e.eID == $"Tree Stride" ||
+          e.eID == $"Teleportation") && !EActor->isMType(MA_GOBLIN))
+        {
+          if (EActor->HasStati(SPECIALTY_SCHOOL,8))
+            if (EActor->yn("The runes try to block your weavecraft; force it?"))
+              if (EActor->LoseFatigue(2,true))
+                return NOTHING;
+          EActor->IPrint("The guardian runes flare. You flicker, but remain
+            where you are.");
+          return DONE;
+        }
+      return NOTHING;
+      };
+  }
+
+Monster "goblin family" : MA_GOBLIN
+{
+    Image: Green 'g'; Size: SZ_SMALL; Mana: 6;
+    CR: 1/4; HD: 3; Hit: +0; Def: 12; Mov: 50%; Spd: 80%;
+    Str 6, Dex 12, Con 10, Int 12, Wis 10, Cha 8;
+    Attk: A_PUNC for 1d2 damage;
+    Flags: M_CARNI, M_HERBI, M_HUMANOID, M_CHIEFTAN, M_SHAMAN, 
+      M_LAWFUL, M_NEUTER, M_NOPOLY, M_NOGEN;
+    On Event EV_BIRTH {
+      EActor->GainPermStati(SLEEPING,NULL,SS_MISC);
+    };
+    Desc: "This pitiful civilian goblin family lives under the iron fist
+    of Murgash. The family members are huddling together, completely
+    terrified, hoping that you will go away. Your real foes are elsewhere.";
+}
+
+Monster "goblin vizier" : MA_GOBLIN, MA_FORCE_D8
+{
+  Image: bright red 'g'; Size: SZ_SMALL; 
+  CR: 8; HD: 7; Hit: +5; Def: 11; Mov: 100%; Spd: 125%;
+  Str 12, Dex 16, Con 16, Int 18, Wis 20, Cha 10;
+  Attk: A_PUNC for 1d2 AD_BLUNT;
+  ABILITY(CA_INFRAVISION,12);
+  ABILITY(CA_SPELLCASTING,7);
+  ABILITY(CA_TURNING,7);
+  Gear: $"potion" of random 1 to 4,
+      blessed $"whip" of random 3 to 4,
+      20% $"wand" +4 of $"thunderbolts" else 
+        25% $"wand" +4 of $"acid;wand" else
+          33% $"wand" +4 of $"the Void" else
+            50% $"wand" +4 of $"soul flaying" else
+              $"wand" +4 of $"striking;wand",
+        2d1 $"potion" of $"extra-healing",
+        2d1 $"potion" of $"*mana*";
+  Feats: FT_COMBAT_CASTING, FT_LORE_OF_FLAMES,
+         FT_VOCALIZE_SPELL, FT_HEIGHTEN_SPELL,
+         FT_AP_LIGHT, FT_AP_MEDIUM, FT_AP_HEAVY,
+         SK_CONCENTRATION, SK_SPELLCRAFT, SK_METAMAGIC, SK_USE_MAGIC, SK_SPOT;
+  Flags: M_CARNI, M_HERBI, M_HUMANOID, M_EVIL, M_LAWFUL, M_PSYCHO,
+         M_LIGHT_AVERSE, M_NOPOLY, M_IGNORE_ITEMS, M_AVOID_MELEE;
+  On Event EV_INITIALIZE {
+    hObj it;
+
+    it = CreateItem($"field plate armor");
+    it->MakeMagical((rID)0,+1);
+    it->AddQuality(IQ_FEATHERLIGHT);
+    EActor->GainItem(it,true);
+
+    EActor->GainPermStati(SEE_INVIS,NULL,SS_CLAS);
+
+    return NOTHING;
+    };
+    Desc: "These priests of The Multitude spread bloody doctrines and offer
+      counsel to goblin rulers.";
+    Lists:
+      * SPELL_LIST
+          ALL_SPELLS_FROM_SOURCE(AI_THEURGY);
+}
+
+// ww: let's make him a blackguard of the Multitude!
+Monster "Murgash, the Goblin King" : MA_GOBLIN, MA_FORCE_D10, MA_ADVENTURER
+  {
+    Image: bright purple 'g'; Size: SZ_SMALL; 
+    CR: 10; HD: 14; Hit: +14; Def: 22; Mov: 100%; Spd: 145%;
+    // assumes inherent: +4 dex, +2 con
+    Str 16, Dex 24, Con 20, Int 16, Wis 16, Cha 16;
+    Attk: A_PUNC for 1d2 AD_BLUNT;
+    ABILITY(CA_INFRAVISION,12);
+    ABILITY(CA_DIVINE_GRACE,1);
+    ABILITY(CA_FEED_UPON_PAIN,7);
+    ABILITY(CA_SMITE,9);
+    ABILITY(CA_SPELLCASTING,3);
+    ABILITY(CA_LAY_ON_HANDS,9);
+    // ww: poison worked too well on M before: he's spent the last few years
+    // building up an immunity to iocaine powder ...
+    // actually, it doesn't work so well now, so we'll take it out
+    Immune: DF_DISE, DF_FEAR;
+    Feats: 
+          FT_ALERTNESS,
+          FT_BLIND_FIGHT,
+          FT_WEAPON_FINESSE,
+          FT_DODGE,
+          FT_MOBILITY,
+          FT_EXPERTISE,
+          FT_GREAT_BLOW,
+          FT_IMPROVED_CRIT,
+          FT_IRON_WILL,
+          FT_POWER_ATTACK,
+          FT_IMPROVED_DEXTERITY,
+          FT_TOUGHNESS,
+          SK_HIDE,
+          SK_LISTEN,
+          SK_MOVE_SIL,
+          SK_SPOT;
+          /* ww: currently 16 feat/skill limit, which, when violated,
+            * silently corrupts the rest of the structure ...
+          SK_FIND_WEAKNESS,
+          SK_BLUFF,
+          SK_DIPLOMACY,
+          SK_SENESCHAL;
+          */
+    Flags: M_CARNI, M_HERBI, M_HUMANOID, M_NOGEN, M_EVIL, M_LAWFUL,
+          M_UNIQUE, M_LIGHT_AVERSE, M_PROPER, M_ALL_MALE, M_KING,
+          M_NOPOLY, M_IGNORE_ITEMS, M_PSYCHO;
+    Spells: $"bull's strength",
+            $"shield of faith";
+    Gear: 
+        4d2 $"potion" of $"true-healing",
+        $"potion" of $"stoneskin",
+        $"ring" of $"regeneration",
+        $"amulet" +3 of $"brass and glass",
+        $"girdle" +4 of $"the winterlands",
+        $"helm" +4 of $"clear sound",
+        $"cloak" of $"mantle of magic resistance",
+        $"bracers" +2 of $"blinding strikes",
+        $"boots" +2 of $"striding and springing";
+      On Event EV_GREET
+        "We will bury you!" /
+        "Bow before my soverign might!" /
+        "You dare to approach?" /
+        "Die, surfacer!";
+      On Event EV_BIRTH {
+        hObj it;
+
+        // the Multitude's benison ... previously M was much too easily killed by
+        // invisible opponents ...
+        EActor->GainPermStati(SEE_INVIS,NULL,SS_CLAS);
+
+        /* Nasty Faux-Artifact Sword */
+        it = CreateItem($"scimitar");
+        it->AddQuality(WQ_UNHOLY);
+        it->AddQuality(WQ_CORROSIVE);
+        it->AddQuality(WQ_BURST);
+        it->AddQuality(WQ_KEEN);
+        it->AddQuality(WQ_SOULDRINK);
+        it->AddQuality(WQ_WITHERING);
+        it->MakeMagical((rID)0,+5);
+        it->Named = "Soulcleaver";
+        EActor->GainItem(it,true);
+
+        it = CreateItem($"chainmail shirt");
+        it->MakeMagical((rID)0,+5);
+        // ww: now that we have armor qualities in incursion, M should have
+        // some -- his sword rocks, but without this his armor needed work
+        it->AddQuality(AQ_INVULN);
+        it->AddQuality(AQ_COMMAND);
+        it->Named = "Bladewarder";
+        EActor->GainItem(it,true);
+
+        },
+      EV_TURN {
+        /* ww: Previously, Murgash was killed too easily because he would
+        * charge out of his guardian runes and engage the player before
+        * the viziers could "soften up" the player. */
+        int16 dx,dy, mx, my; 
+        hObj cre; 
+        if (EActor->HasStati(AVOID_MELEE))
+        return NOTHING; 
+
+        for (dx = -30; dx <= 30; dx++) {
+          for (dy = -30; dy <= 30; dy++) { 
+            mx = dx + EActor->x; 
+            my = dy + EActor->y; 
+            if (EMap->InBounds(mx,my)) {
+              cre = EMap->FCreatureAt(mx,my);
+              if (cre != NULL) { 
+                if (cre->mID == $"goblin vizier" ||
+                    cre->tmID == $"goblin vizier") {
+                  EActor->GainTempStati(AVOID_MELEE,EActor,2,SS_MISC);
+                  return NOTHING; 
+                } 
+              } 
+            } 
+          } 
+        } 
+        return NOTHING; 
+        },  
+      EVICTIM(EV_DEATH) {
+        if (!murgash_quelled)
+          theGame->GetPlayer(0)->IPrint("You have done it! You have slain the king of 
+            the goblins! Now if only you can make your way back to the
+            surface, you will forevermore be known as a great hero (as
+            opposed to a great martyr)!");
+        murgash_killed = true;
+        },
+      PRE(EVICTIM(EV_SURRENDER)) {
+        theGame->GetPlayer(0)->IPrint("You throw down your weapons and
+              surrender to the king of the goblins. He escorts you to one
+              of his viziers, who casts a spell of mental enslavement upon
+              you, and you are sent to the barracks. For what it's worth,
+              when the army of goblinoids surges out across the surface
+              world a few months from now, you lead one of the great charges,
+              but you are ultimately slain by a dwarven champion defending
+              his city.");
+        ThrowDmg(EV_DEATH,0,0,"the fruits of treason",EVictim,EActor);
+        return DONE;
+        },
+      POST(EVICTIM(EV_QUELL)), 
+      POST(EVICTIM(EV_COW)), 
+      POST(EVICTIM(EV_TERMS)) {
+        hObj hGob;
+        if (murgash_quelled)
+          return NOTHING;
+        if ((EVictim->StateFlags & MS_PEACEFUL) &&
+            e.Event == POST(EVICTIM(EV_TERMS)))
+          {
+            theGame->GetPlayer(0)->IPrint("You have done it! You have forced terms
+              from the king of the goblins! Murgash stands before the army by your
+              command and orders them to disperse, returning to the tunnels and
+              grottos from whence they came. Now if only you can make your way back 
+              to the surface, you will forevermore be known as a great hero (as
+              opposed to a great martyr)!");
+          }
+        else if ((EVictim->HasStati(AFRAID) &&
+                  EVictim->GetStatiDur(AFRAID) == 0))
+          {
+            theGame->GetPlayer(0)->IPrint("You have done it! You have broken the 
+              king of the goblins! Seeing their leader humbled and cowed before
+              your might, his advisors and mercenaries turn to flee; the army is
+              collapsing. Now if only you can make your way back 
+              to the surface, you will forevermore be known as a great hero (as
+              opposed to a great martyr)!");
+            for (hGob=EMap->FirstThing();hGob;hGob=EMap->NextThing())
+              if (hGob->isCreature() && hGob->PartyID == EVictim->PartyID) {
+                hGob->GainPermStati(AFRAID,EActor,SS_MISC,FEAR_COWED);
+                EActor->KillXP(hGob,100);
+                }
+            murgash_quelled = true;
+            return DONE;
+          }
+        else if (EVictim->StateFlags & MS_PEACEFUL)
+          {
+            theGame->GetPlayer(0)->IPrint("You speak of many things. You tell the
+              goblin king's court about the strengths of human and elven armies,
+              and their great numbers. You speak of the militant ambition of the
+              priesthood of Erich toward goblinkind, and you present the legendary
+              stories of the skill of the Assassins' Guild. With legendary eloquence,
+              you describe how history would have played out: the goblins would
+              devastate one, perhaps two large cities before the armies of men and
+              demihumans unite in a genocidal war that would spell the end of
+              the goblinoid peoples. Murgash himself would not live to see this --
+              he would be quietly slain one night in his sleep by an assassin he
+              would have no ability to detect. Demihumanity would suffer, and then
+              goblinkind would die. On consideration, the goblin king agrees to
+              accept the terms you offer for a very conditional surrender, and
+              signs a notice of terms. Now if only you can make your way back
+              to the surface, you will forevermore be known as a great hero (as
+              opposed to a great martyr)!");
+          }
+        else
+          return NOTHING;
+        for (hGob=EMap->FirstThing();hGob;hGob=EMap->NextThing())
+          if (hGob->isCreature() && hGob->PartyID == EVictim->PartyID) {
+            hGob->TurnNeutralTo(EActor);
+            EActor->KillXP(hGob,100);
+            }
+        murgash_quelled = true;
+        return DONE;                   
+        };
+      Lists:
+        * SPELL_LIST
+            ALL_SPELLS_FROM_SOURCE(AI_THEURGY);
+  }
+
+/* Altered to leave room for the new multi-square monsters */
+
+Region "Arena Chamber" : RF_ROOM
+  { Walls: $"Dungeon Wall"; Floor: $"Floor"; 
+    Door: $"oak door"; RoomTypes: RM_SHAPED;
+    Flags: RF_NOGEN;
+    Tiles:
+      'p': $"floor" with $"potion" of $"healing",
+      'd': $"floor" with $"potion" of $"dimension door",
+      'R': $"Indestructable Rock",
+      'w': $"shallow water",
+      'm': $"floor" with $"giant mushroom",
+      '>': $"shallow water" with $"cave enterance" [TILE_START];
+    Grid: {:
+      RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+      RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+      RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+      RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+      RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+      RRRRRRRRRRRRRRR.....RRRRRRRRRRRRRRR
+      RRRRRRRRRRRm...........mRRRRRRRRRRR
+      RRRRRRRRRR.......m.......RRRRRRRRRR
+      RRRRRRRRRR......mmm......RRRRRRRRRR
+      RRRRRRRRRwwwwwwwwwwwwwwwwwRRRRRRRRR
+      RRRRRRRRRw.w.w.w.w.w.www.wRRRRRRRRR
+      RRRRRRRRRwwwwwwww>wwwwwwwwRRRRRRRRR
+      RRRRRRRRRw.www.w.w.w.w.w.wRRRRRRRRR
+      RRRRRRRRRwwwwwwwwwwwwwwwwwRRRRRRRRR
+      RRRRRRRRRR......mmm......RRRRRRRRRR
+      RRRRRRRRRR.......m.......RRRRRRRRRR
+      RRRRRRRRRRRm...........mRRRRRRRRRRR
+      RRRRRRRRRRRRRRR.....RRRRRRRRRRRRRRR
+      RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+      RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+      RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+      RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+      RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
+      :};
+  }
+
+
+Terrain "Testing Terrain"
+  { Image: brown GLYPH_ROCK; Mat:MAT_GRANITE; 
+    Flags: TF_SOLID, TF_OPAQUE, TF_WALL; 
+    On Event EV_MOVE {
+      if (EActor->HasStati(PRONE)
+          || EActor->HasAbility(CA_WOODLAND_STRIDE))
+	    return NOTHING;
+      if (!EActor->SkillCheck(SK_BALANCE,15,true,false))
+        {
+          DPrint(e,"You slip and fall!",
+            "An <EActor> slips and falls!");
+          EActor->GainPermStati(PRONE,NULL,SS_MISC);
+          EActor->Reveal(false);
+          EActor->MakeNoise(3);
+          EActor->Timeout += 30;
+          return ABORT;
+        }
+      return NOTHING;
+    };
+  } 
+
+#if 0
+Terrain "Summoning Circle"
+  { Image: bright green 233; Mat:MAT_GRANITE; 
+    Flags: TF_SHOWNAME | TF_SPECIAL; 
+    On Event EV_INITIALIZE {
+      rID fID;
+      int8 color, mtype; 
+      int16 x,y, r;
+      r = 3; 
+      switch (random(3)) {
+        case 0: fID = $"summoning circle;field"; 
+                color = EMERALD; mtype = MA_OUTSIDER; break;
+        case 1: fID = $"circle vs. evil;field"; r = 2; 
+                color = SKYBLUE; mtype = MA_GOOD; break;
+        case 2: fID = $"circle vs. non-evil;field"; r = 2; 
+                color = RED; mtype = MA_EVIL; break;
+      } 
+      EMap->NewField(FI_BLOCKER,e.EXVal,e.EYVal,r,
+          color*256+GLYPH_FLOOR2,-1,fID,NULL);
+      x = -3 + (random(2) * 6);
+      y = -3 + (random(3) * 6); 
+      if (EMap->InBounds(e.EXVal+x,e.EYVal+y))
+        EMap->GenEncounter(EN_SINGLE|EN_MTYPE,EMap->Depth+2,EMap->Depth+2,
+            mtype, 0,(rID)0,e.EXVal+x,e.EYVal+y,NULL);
+    };
+    Desc: "This summoning circle projects a field of spectral force that
+    keeps out undead, outsiders and summoned creatures."; 
+  }
+
+// ww: MA_ALLIES in the original magic circle doesn't work well when no one
+// is casting the spell!  fjm: Let's use a script instead of a new MA_TYPE
+Effect "Summoning Circle;field" : EA_INFLICT
+  { lval: 3; level: 5; 
+    rval: FI_BLOCKER; 
+    aval: AR_FIELD; cval: GREEN; 
+    Desc: "Creates an enchanted circle (30 ft. radius) that
+      prevents the entry of undead, outsiders and summoned creatures.";
+    Purpose: EP_COUNTER (VS_SUMMON); 
+    On Event EV_ISTARGET {
+      return (ETarget->isMType(MA_OUTSIDER) ||
+             ETarget->isMType(MA_UNDEAD) ||
+             ETarget->HasStati(SUMMONED) ) ? 1 : -1;
+      };
+  }
+
+Effect "Circle vs. Non-Evil;field" : EA_INFLICT
+  { lval: 3; level: 5; rval: FI_BLOCKER; aval: AR_FIELD; cval: RED; 
+    Desc: "Creates an enchanted circle (30 ft. radius) that
+      prevents the entry of non-evil creatures."; 
+    Purpose: EP_COUNTER; 
+    On Event EV_ISTARGET {
+      return (ETarget->isMType(MA_EVIL)) ? -1: 1; 
+      };
+  }
+
+Effect "Circle vs. Evil;field" : EA_INFLICT
+  { lval: 3; level: 5; rval: FI_BLOCKER; aval: AR_FIELD; cval: SKYBLUE; 
+    Desc: "Creates an enchanted circle (30 ft. radius) that
+      prevents the entry of evil creatures."; 
+    Purpose: EP_COUNTER; 
+    On Event EV_ISTARGET {
+      return (ETarget->isMType(MA_EVIL)) ? 1: -1; 
+      };
+  }
+#endif
+
+#if 0
+
+Region "Temple to Elemental Water" : RF_ROOM
+  { Walls: $"Dungeon Wall"; Floor: $"Floor";
+    Door: $"oak door"; RoomTypes: RM_LCIRCLE;
+    Desc: "This room is consecrated to the elemental power of
+      water, with a large, still and clear pool in the center.
+      The walls carved from fine alabaster and lettered with
+      glyphs in the elven script. The air is unusually humid,
+      and a faint mist hangs in the air. A rippling azure glow
+      spreads outward from the pool.";
+    Lists:
+      * WALL_COLORS AZURE GREY,
+      * FLOOR_COLORS BLUE WHITE;
+    On Event EV_BIRTH {
+      /* The room proper is already drawn by RM_LCIRCLE; now,
+         we draw the pool. */
+      Rect r; r = e.rRoom; hObj h;
+      r.x1 += 2; r.x2 -= 2;
+      r.y1 += 2; r.y2 -= 2;
+      EMap->PlainCircle(r,$"shallow water"); 
+      r.x1 += 2; r.x2 -= 2;
+      r.y1 += 2; r.y2 -= 2;
+      EMap->PlainCircle(r,$"deep water");
+      h = CreateFeature($"altar");
+      h->SetDiety($"Kysul");
+      h->PlaceAt(EMap,r.x1 + (r.x2 - r.x1)/2,r.y1 + (r.y2 - r.y1)/2);
+      return DONE;
+      };
+  }
+
+#endif  
+

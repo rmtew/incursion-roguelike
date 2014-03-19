@@ -1,0 +1,1879 @@
+Text "help::animal empathy"
+  {
+    "The Animal Empathy skill represents a primal, empathic link with
+    wild beasts, and has the following use:\n
+    __<15>* <11>Influence Animals (Passive):<3> This skill allows you 
+    to communicate with animals and magical beasts. You can pacify angry 
+    animals, making them nonhostile. You can cow angry animals, making 
+    them afraid of you. You can soothe allied animals, removing sleep 
+    and fear. Finally, you can befriend nonhostile animals, turning them 
+    into temporary party members. The DC for an Animal Empty skill check 
+    is 15 + the challenge rating of the animal.";
+  }
+  
+Text "help::appraise"
+  { "__The Appraise skill has the following Passive uses.
+     All represent new information that shows up in the window
+     when you examine a monster:\n
+    __<15>* <11>Discern Hiding Awareness (Passive):<3> When you are Hiding
+    in Shadows and you examine a creature, the game will tell you if that
+    creature is aware or unaware of your presence if your [Appraise - 4]
+    is equal to or higher than the subject's Bluff. Otherwise, you do not
+    recieve any indication.\n
+    __<15>* <11>Identify Monsters (Passive):<3> The primary utility of Appraise
+    is the ability to appraise monsters. By carefully observing other
+    creatures and noting tell-tale signs in their behaviour, a character with
+    a high Appraise skill can learn a great deal about intelligent creatures.
+    Appraise is the primary skill that is used to identify the true nature
+    of monsters who initially appear as other kinds of monsters -- a character
+    might spot a vampire, dragon or wererat posing as a normal human, or discern
+    that a kobold is in fact a skilled kobold rogue merely be watching the way
+    she moves. Appraise is not the only skill that helps to identify monsters
+    -- many Knowledge skills aid as well, and Appraise affects only intelligent
+    creatures, but it is the only skill that allows a character to determine if a
+    monster has class levels, or to tell a human priest apart from a human mage.\n
+    __The check to identify a monster is made automatically the very first time
+    the player character sees the monster. The DC of a check to identify a 
+    creature's fundamental nature (telling a vampire apart from a normal human)
+    is DC 10 + the subject's CR, whereas discerning a creature's class or level
+    of skill is DC 15 + CR. This check is only ever made once; if it is successful,
+    the game will tell the player that her character's knowledge aided in identifying
+    the creature in question.\n 
+    __<15>* <11>Sense Motivation (Passive, <4>Unimplemented<11>):<3> The Appraise skill can be used
+    to determine what a creature desires, and how it feels about other creatures
+    around it. Learning this information requires that the character possess a Sense
+    Motive skill of 7, plus the subject's CR, plus 1 per 10 feet currently between 
+    the subject and the PC; it's harder to discern motives at a great range, since 
+    it involves observing body language. If the player character's Appraise level
+    is sufficient, this information will automatically appear in the monster's
+    description when it is examined.\n 
+    __<15>* <11>Discern Strain (Passive, <4>Unimplemented<11>):<3> Strain represents the status of a
+    follower's relationship with her leader. If a character has an Appraise
+    skill of [10 + a subject's CR], she can see how much strain that creature's
+    leader has accumulated toward it -- the higher a creature's strain, the more
+    likely it is to snap and turn on its leader if something happens that should
+    offend it.\n
+    __<15>* <11>Psionic Combat (Passive, <4>Unimplemented<11>):<3> The Sense
+    Motive skill is useful for discerning the psychological weaknesses of
+    other characters, and thus plays a strong role in psionic combat. The
+    threat range of a character's psionic attack modes increases by +1 for
+    every full +5 Appraise a psychic character possesses.\n"; 
+  }  
+
+
+Text "help::athletics"
+  {
+    "The Athletics skill has the following effects:\n
+      __<15>* <11>Increased Movement (Passive):<3> The Athletics skill increases a
+      character's base movement rate. For every +2 worth of a character's
+      overall Athletics rating, her movement rate increases by 5~.\n
+      __<15>* <11>Increased Fatigue (Passive):<3> Athletic activity also improves
+      endurance and general health. A character with this skill adds
+      [Athletics / 3] to her maximum total Fatigue points.\n
+      __<15>* <11>Train Attributes (Passive):<3> A character with a high Athletics
+      skill maintains a regular program of calisthenics, dietary
+      management, body training and so forth in order to improve her
+      physical prowess. In game terms, this makes it easier for her
+      to exercise her physical Attributes to gain inherant Attribute
+      bonuses. A character that has the Athletics skill needs only
+      [100 - Skill Rating] percentile points to successfully gain a
+      +1 inherant bonus to Strength, Dexterity or Constitution rather
+      than the full 100.";
+      /*
+      __<15>* <11>Recover Attributes (Passive):<3> Athletic characters are sometimes
+      able to recover Attribute damage simply through exertion and forcing
+      their body to work over the poison, negative energy or other ailment.
+      Every 3d10 swings the character makes in combat gives her a chance to
+      recover a point of physical Attribute damage, provided that her Athletics
+      skill is higher than [5 + (5 x the total damage to the Attribute in
+      question)].
+      */
+  }
+  
+Text "help::alchemy"
+  {
+    "The Alchemy skill has the following effects:\n
+      __<15>* <11>Identify Potions (Passive):<3> Characters with exceptional 
+      ratings in the Alchemy skill can identify potions. This requires a 
+      check against a DC of 15 + twice the depth the potion is usually found 
+      at, and is only made one per potion, ever.\n
+      __<15>* <11>Create Alchemical Items (Active):<3> The primary purpose of the
+      Alchemy skill is the manufacture of alchemical items. A character with
+      the Alchemy skill and access to an alchemy kit can create a number of
+      different items equal to their Alchemy skill rating, albiet with a cost
+      in both experience and time.\n
+      __<15>* <11>Potion Formulas (Passive):<3> A character with the Brew Potions 
+      feat is able to create potions; the number of formulas for potions she knows
+      is based on the average of her skill ratings in Alchemy and Knowledge
+      (Magic). This total does not include any potions she may be able to
+      manufacture as a result of knowing the spell the potion is based on.
+      __<15>* <11>Identify Potions (Passive):<3> When your character drinks an 
+      unknown potion, and the effect is not immediately obvious, an Alchemy check 
+      is allowed against a DC of 10 + the potion's depth in order to identify the 
+      effect that potions of that type contain.";
+  }
+  
+Text "help::balance"
+  {
+    "The Balance skill has the following effects:\n
+      __<15>* <11>Resist Knockdown (Passive):<3> The balance skill 
+      aids you in resisting knockdown and knockback in combat; you 
+      gain a bonus to the saving throw equal to half your Balance 
+      skill rating if you have Balance as a class skill.\n
+      __<15>* <11>Tightrope Walking (Active):<3> Characters with a 
+      rating of 10 or higher in the Balance skill are able to do 
+      tightrope walking. Using the skill at the edge of a chasm or
+      other dangerous terrain will create a rope walk-line from your
+      current position to the nearest wall in the specified direction.
+      Every square so affected consumes 10 feet of rope. You must
+      thus have both sufficient rope and a crossbow (to use to fire
+      the rope, like a grappel gun) to do this. Creating a tightrope
+      bridge does not require a skill check, but you do have to have
+      Balance 10+ to do it.\n
+      __Moving while on a tightrope requires a Balance check (DC 15)
+      for every square covered. If you suffer damage while on the
+      tightrope, you must make a Balance check against DC 20 + 2 per
+      5~ of your total hit points suffered. Failing either of these
+      checks causes you to suffer the effects of the terrain you fall
+      onto, to become prone and to be unable to use the tightrope bridge 
+      again until you reach solid flooring.\n
+      __<15>* <11>Terrain Effects (Passive):<3> Some types of terrain -- 
+      notably ice -- require a Balance check to cross or fight on without 
+      suffering some side effect, as described in the terrain in
+      question.\n
+      __<15>* <11>Invisibility to Tremorsense (Passive):<3> Characters 
+      with a Balance score of 20+ are able to move so carefully and 
+      softly as to be immune to Tremorsense whenever they are Hiding.
+      At 30+, they are immune to Tremorsense at all times, whether they
+      are hiding or not.\n
+      __<15>* <11>Mounted Casting (Passive):<3> Casting while mounted
+      normally takes a character 15 phases more than usual; characters
+      with Balance 20+ are exempt from this restriction.\n
+      __<15>* <11>Aeriel Casting (Passive):<3> Characters using magic
+      to fly or levitate must succeed in a Balance check to correctly
+      perform the somatic components of a spell. The DC of this check
+      is 7 + (Spell Level x 3).";
+  }
+
+Text "help::bluff"
+  {
+    "__The Bluff skill has these uses:\n
+        <15>* <11>Exploitation (Talking):<3> Characters can use the Bluff 
+      skill to exploit others, convincing them that damage inflicted 
+      wasn't a hostile act and causing creatures who have become hostile 
+      as the result of being attacked or suffering damage to become 
+      neutral again. Thus, a character with high Bluff can convince
+      summoned creatures to set off traps, use allies as cannon fodder,
+      etc. and still manage to retain their loyalty. This can't be 
+      used to change the attitude of creatures who begin play hostile 
+      (use Diplomacy for that) -- it is only effective on creatures 
+      who began friendly or neutral and became hostile as a result of 
+      later events. The DC for this ability varies based on many 
+      different circumstances. Exploitation is an evil act -- unless
+      it is used on an inherantly evil creature.\n
+      __<15>* <11>Create Distraction (Active):<3> The Bluff skill can
+      be used to create a distraction, misleading creatures observing
+      the skill user. If this use is successful, creatures watching
+      the skill user are not counted as witnesses for the purposes of
+      Hiding -- the character can draw the attention of others away
+      from her and slip into the shadows even when surronded by foes.
+      If the character beats a given observer's distraction DC by 10
+      or more, that observer is so distracted that they are considered
+      flat-footed against the Bluff user's attacks for a full round, in
+      addition to the normal effect.\n
+      __Every previous distraction attempt against the same creature
+      increases the DC of future attempts by +2 if successful, or +5 if
+      it fails. A character can elect to try and distract everyone
+      watching her at the same time, but this increases the DC by +5.
+      The base DC of a distraction attempt is 10 + the target's Will
+      save modifier or Concentration skill rating, whichever is
+      superior -- for multiple targets, the highest DC from the group
+      determines if a distraction is successful.\n
+      __<15>*_<11>Conceal Alignment (Active):<3> Some creatures are hostile 
+      to other creatures based on alignment, and in some cases alignment
+      affects other skill checks, usually giving penalties; furthermore,
+      characters with radically different alignments than a party leader's
+      count as higher effective CR when they join a party. In all these
+      cases, the creatures are assumed to be familiar with the player's
+      alignment based on her reputation and past actions -- however, a
+      character with Bluff as a class skill is assumed to be covert
+      enough in her behaviour and activities that other creatures will
+      not easily be able to percieve her alignment. Such a character
+      suffers alignment-based penalties or hostility only if the subject
+      creature's Sense Motive skill exceeds her Bluff skill. If it does
+      not, creatures percieve her as whatever alignment favors her most
+      -- devils will percieve her as Lawful Evil, for example, and thus
+      be non-hostile to her and eager to deal.\n
+      __<15>* <11>Trick Magic (Passive):<3> A rogue's special ability
+      to use class or race-specific magic is based on the sum of her
+      Bluff and Use Magic scores.\n
+      __<15>* <11>Issue Requests (Talking):<3> Characters that lack a
+      strong rating in the Diplomacy skill can choose to use their
+      Bluff skill in place of Diplomacy to Issue Requests. This works
+      exactly as with Diplomacy, except that if the check fails, the
+      target creature will become hostile as a result. Because of this
+      added factor of danger, characters whose Bluff skill exceeds
+      their Diplomacy skill will always be asked which they want to
+      use when issuing a request -- they can then choose to use their
+      lower Diplomacy score and have less chance of success, but not
+      risk causing the creature to become hostile.\n
+      __Using Bluff to issue requests (i.e., trick people into doing
+      things for you) is an unlawful act unless it is used on
+      monsterous creatures that aren't well recognized as people by
+      human society, and is an evil act if used on non-evil creatures.\n
+      __<15>* <11>Deceptive Diplomacy:<3> In certain circumstances use
+      of the Diplomacy skill is considered to be deceptive, and it thus
+      requires the Bluff skill to support it. In these cases, the 
+      Diplomacy skill check suffers a -1 penalty for every point by
+      which the target's Sense Motive skill exceeds the skill user's
+      Bluff skill.\n
+      __<15>* <11>Taunt (Talking):<3> The Bluff skill can be used to taunt other
+      characters, causing them to run up and attack you in melee as if
+      affected by the spell <9>dire charm<3>. This requires a successful
+      skill check against a DC of 10 + twice the target's Will save
+      bonus.\n\n
+
+      <8>Unimplimented Uses:\n
+      __<15>* <11>Exclusive Guilds (Passive):<3> Certain guilds do not allow
+      members of other guilds to join them, as a result of competitive
+      practices or old enimities between them -- the Thieves and
+      Assassins, Justicars and Templars, the different mercenary
+      orders, etc. A very high (15+) Bluff skill can allow a character
+      to circumvent most of these restrictions by leading a kind of
+      double-life using alternate identities. There is no check
+      involved here; all that is required is a certain level of Bluff
+      on a case-by-case basis.\n
+      __<15>* <11>Evade Justice (Passive):<3> When a player character angers the
+      guard in a town or city through criminal activities, a Bluff
+      check can be used to deny evidence and get off the hook. These
+      checks start relatively easy, but every such check made increases
+      the DC of all future checks for the same town or city by +2. This
+      modifier is culmulative and never goes away.\n
+      __<15>* <11>Reputation Buffer (Passive):<3> When a character
+      performs actions that would normally permanently damage his
+      reputation and leave him with penalties to social interactions
+      (notably killing friendly creatures outside of a dungeon), the
+      Bluff skill gives that character a kind of buffer, allowing him
+      to wheedle his way out of otherwise incriminating and damaging
+      situations. Enough psychopathic behaviour will still end up with
+      the character being unable to take allies and being shunned by
+      all but the most chaotic and evil, but a character with Bluff
+      as a high-rated class skill has much more leeway in this regard
+      than most characters do.";
+  }
+
+Text "help::climb"
+  {
+    "The Climb skill can be used in several different ways. Most of the
+    passive applications can be invoked with the Ascend and Descend
+    commands -- the same ones used to climb up and down stairs.\n
+    __<15>* <11>Climb Vines/Trees (Passive):<3> A character with a Climb
+    skill rating of 7+ can climb trees (or giant mushrooms) and move about 
+    above the ground in a wooded area by standing in a square with a tree
+    in it ans using the Ascend command. This does not require a skill check,
+    merely the listed skill rating. The Descend command returns the character
+    to ground level. If you are struck for damage while climbing in trees, 
+    you must make a Climb check against DC 10 + 2 per 5~ of your total hit 
+    points suffered. Failure means you suffer falling damage, the terrain 
+    effects of whatever square you are climbing over and you become prone.\n
+    __A skill check against DC 13 allows a character to move from tree to tree
+    while elevated in this manner; with a skill check against DC 25, the character
+    is even able to use the Jump skill as if she were on the ground. When climbing
+    in trees, a character gains a bonus to hit and to her defense class equal to
+    2 + 1/6th of her Climb skill, and also benefits from 25~ cover against missile
+    attacks.\n
+    __Casting a spell while climbing in trees requires a Climb check against DC
+    15; failure causes you to fall, and to botch the spell.\n
+    __<15>* <11>Descend Chasm Safely (Passive):<3> With a Climb check against DC
+    15, a character standing on the edge of a chasm can attempt to descend
+    to the level below safely, coming to rest in the nearest safe square
+    one dungeon level below where she began.\n
+    __<15>* <11>Ascend Level (Passive):<3> If you fall down a chasm or trapdoor
+    trap, you can attempt a Climb roll to climb back up to the level 
+    you were on. You need to have a Climb score of at least +12 to 
+    attempt this, you must have rope equal to the distances to the nearest
+    ledge and you need to succeed on a Climb check versus DC 20. Failure means 
+    that you suffer the falling damage again. Anytime you are underground and 
+    the game tells you there is no ceiling, you can climb up to the level 
+    above -- you can recognize these areas because the floor will be cyan,
+    and the status bar will include '(open above)'.\n
+    __Failing the Climb check causes falling damage. The <9>fly<3> spell
+    allows you to ascend in such areas automatically, but <9>levitate<3>
+    is insufficient, as you cannot use it to rise very far above the
+    ground.\n
+    __<15>* <11>Escape Pit Trap (Passive):<3> Attempting to get out
+    of a pit trap requires a Climb check, usually against DC 20.
+    Failing the check causes you to suffer the effects of the trap
+    (falling damage, poisoned spikes, etc.) again, as you climb
+    partially out and then fall.\n
+    __<15>* <11> Climb Along Ceiling (Passive):<3> If you have an 
+    Climb skill rating of 20+ (probably throuh <9>spider climb<3>), 
+    you can climb on the roof of the dungeon. You can ascend 
+    whenever you're standing next to a wall. On the ceiling, you 
+    get a bonus to Hide equal to +6 +1/3 your Climb skill, can walk 
+    over creatures undetected, are at a higher layer and gain the 
+    same combat benefits as a character climbing in trees, save for 
+    the cover. You also avoid traps and terrain effects.\n
+    __You have no Dex bonus when climbing on the ceiling, and it 
+    costs 1 Fatigue to make the climb up. Your movement rate is 30~
+    normal, +5~ per point of Climb above 20. On one in thirty movement 
+    actions while climbing on the ceiling you must make a Climb check 
+    against DC 25. If you fail, you fall; if you score less than 35, 
+    the effort costs you one fatigue. Furthermore, if you are struck 
+    for damage while on the ceiling, you must make a Climb check 
+    against DC 25 + 2 per 5~ of your total hit points suffered.
+    Failure means you suffer falling damage, the terrain effects
+    of whatever square you are climbing over and you become 
+    prone.\n
+    __Casting a spell while climbing on the ceiling requires a Climb 
+    check against DC 25; failure causes you to fall, and to botch the 
+    spell. Even if you succeed, the casting requires 15 phases more
+    than usual, unless the spell is Stilled and thus does not require
+    somatic gestures.\n\n
+      
+    <8>Unimplimented Uses:\n
+    __<15>* <11>Climb Structures (Passive):<3> On the city map, you can 
+    use the Climb skill to climb up on top of any building or barrier,
+    including the city walls (which is counted as criminal if the
+    city guard sees you). Climbing buildings may also allow you to
+    enter some buildings by upper floor windows, which it rumored to
+    be the only way to enter certain locations (such as the thieves'
+    guild and some wizards' towers). The DC of the Climb check is 
+    determined by the structure in question.\n
+    __Characters who have ascended buildings have significant bonuses
+    to Hide and to attack and damage rolls, and if not standing near
+    the edge of a building they simply cannot be seen by other creatures
+    withour exceptional sense abilities.\n
+    __<15>* <11>Cross Mountains (Passive):<3> You must have the Climb 
+    skill and possess a rating of at least +10 in order to travel across
+    mountains on the wilderness map. Any terrain survival checks you
+    make in mountanous areas use the lower of your Climb and Wilderness
+    Lore skills.";
+  }
+
+Text "help::concentration"
+  { "__The Concentration skill has these applications:\n
+      __<15>* <11>Cast while Distracted (Passive):<3> The primary function
+      of the Concentration skill is being able to cast spells successfully
+      while in difficult circumstances. Every point of Concentration rating
+      above +5 cancels a 5~ increase is spell failure chance due to status
+      conditions or enviornment. Multiple distractions form a culmulative
+      spellcasting penalty that Concentration is subtracted from as a whole
+      -- it isn't counted seperately against each penalty, so strong
+      Concentration rating can be very valuable to melee spellcasters.
+      The following situations all impose penalties to spellcasting:\n
+      __<7>Attacks:<3> Spellcasting in melee provokes attacks of opportunity
+      unless the Defensive Spell feat is used; if these attacks inflict
+      damage on the caster, his spell may be disrupted. Every 1~ of the
+      caster's total hit points lost to these attacks adds a 3~ chance of
+      spell failure, so a caster who loses 20~ of his hit points to an
+      attack of opportunity from spellcasting also suffers a -60~ chance
+      of spell success.\n
+      __<7>Stunning/Nausea:<3> A stunned or nauseated character suffers a 
+      -50~ chance of spell success.\n
+      __<7>Confusion:<3> A confused character suffers a -75~ chance to
+      spell success, and if they suffer spell failure, the spell may have
+      an odd or unintended effect.\n
+      __<7>Grappling/Stuck:<3> A character locked in a grapple suffers a
+      -30~ spell success chance (assuming use of the Still Spell feat,
+      without which a Grappled character cannot cast at all), and a
+      character that has become stuck (such as from a <9>web<3> spell or
+      the strands from a tanglefoot bag) suffers a -20~ chance of spell
+      success.\n
+      __<7>Distraction:<3> A caster successfully distracted by a use of
+      the Bluff skill suffers a spell success penalty equal to 5~ per two
+      points the Bluff check exceeded the spellcaster's distraction DC.\n   
+      __<7>Terrain:<3> Swimming or being waist-deep in mud grants a -15~ 
+      penalty to spell success.\n
+      __<7>Hunger:<3> Being Starving inflicts a -15~ spell success penalty,
+      and being Weak from hunger increases that penalty to -30~.\n
+      __<7>Spell Effects:<3> Spells such as <9>insect plague<3>, <9>control
+      winds<3> or <9>hideous laughter<3> penalize spellcasting as described
+      under the spell in question.\n
+      __<7>Flight:<3> Characters who are levitating or flying suffer a -15~ 
+      penalty to spellcasting.\n
+      __Note that Concentration does <11>not<3> cancel penalties to spell
+      success chance from wearing armor, low Intelligence or fighting
+      defensively.\n
+      __<15>* <11>Reduce Penalties (Passive):<3> An exceptional Concentration
+      skill gives a character a heightened ability to resist pain, and a
+      high Concentration skill will lessen the attack and damage penalties
+      inflicted by magical effects that cause pain, such as <9>pain touch<3>,
+      weapons of pain or a <9>symbol of pain<3>. If a character has Concentration
+      as a class skill and a rating of +10, the sum of all her pain penalties are 
+      reduced by 1; at +12, this increases to 2, at +14, 3, at +16, 4, and so
+      forth.\n
+      __<15>* <11>Contests of Will (Passive):<3> Some spells and magical
+      items (notably <9>spiritwrack<3> and the various <9>planar conjuration<3>
+      spells) require the caster to engage in a contest of wills with another
+      creature, which is resolved an opposed Concentration check -- whichever
+      character scores higher wins.\n
+      __<15>* <11>Break Paralysis (Passive):<3> Characters with a 15+ rating
+      in Concentration are able to overcome paralysis effects through sheer
+      force of will. If they fail a saving throw against a paralysis effect,
+      they recieve an additional Fortitude save against DC 18 every turn
+      until they have beaten the effect.\n
+      __Characters with this ability are also able to move when paralyzed 
+      and truly, deeply desperate just enough that they cannot be subjected
+      to the Coup de Grace maneuver.\n
+      __The Escape Artist skill can also provide this benefit.\n
+      __<15>* <11>Attack while Nauseated (Passive):<3> Characters with a
+      rating of 10+ in Concentration have a chance to attack even while
+      Nauseated -- a state which normally prevents a character from
+      attacking. A DC 20 Concentration check is required, and failing
+      this check costs the character a full 40 segments without any
+      action being taken, and provokes an attack of opportunity.\n
+      __<15>* <11>Psionic Focus (Active, <4>Unimplemented<11>):<3> When a character is not in
+      combat and not in the immediate presence of hostile creatures, she
+      may spend a fatigue point and make a Concentration check (DC 15)
+      to gain a state of psionic focus (which can be expended to augment
+      psionic powers in various ways, fulfilling a vaguely similar role
+      to metamagic for spellcasters). Failure causes the fatigue point to
+      be wasted, but the attempt can be made freely again on the character's
+      next turn without any further penalty.\n
+      __<15>* <11>Train Wisdom (Passive):<3> The techniques of meditation
+      and mental focus a character learns in developing the Concentration
+      skill serve as an excelent springboard for heightening perception
+      and strengthening the will overall. Concentration can be used to
+      train the Wisdom attribute in the same manner that Athletics is used
+      to train the three physical attributes.";
+  }
+
+Text "help::craft"
+  { "__The Craft skill has these applications:\n
+    __<15>* <11>Repair Items (Active):<3> The Craft skill can be used
+    to repair items which have become damaged as a result of magical
+    attacks, acid, rust or any of the other rigors of the dungeon. 
+    Mending a metal item requires access to a forge, and mending any
+    item demands a set of craftsman's tools. To repair items, a Craft
+    skill check is made against a base DC of 10, plus a modifier based
+    on the power of an item if it is magical (more advanced magical
+    items require more careful craftwork!), +1 for every 10~ of its
+    hit points the item is missing, +2 per previous failed attempt to
+    repair this item.\n
+    __Repairing an item normally takes two hour, but if the craftsman
+    values the item highly, she may decide to work slowly, taking 8
+    hours instead and recieving a +4 bonus to the skill check. A
+    successful Craft check repairs a number of hit points of damage
+    to equal to 2d8 + 1/3rd of the crafter's Craft skill rating.
+    __Failing a repair DC by 5 or more actually damages the item
+    further, inflicting an additional 1d8 points of damage.\n
+    __<15>* <11>Temper Masterwork (Active):<3> By tempering and
+    reforging a sword or other item, a character can preserve it in
+    a state of perfect flawlessness - a masterwork. Crafting a
+    weapon so that it becomes a masterwork in this manner requires
+    a Craft skill of at least +12. A masterwork weapon gains a bonus
+    to damage of +1 at Craft +12, +2 at Craft +17, +3 at Craft +22
+    and so forth. After being used on combat over a period of time,
+    a masterwork blade can lose its edge and revert to being a
+    normal weapon, requiring the crafter to temper it again. The DC
+    to temper an item is 15 + the dungeon depth such an item would
+    be typically found at. Doing this takes 6 hours.\n
+    __Only long blades, short blades and daggers can be tempered.
+    As always, working with metallic items requires a forge.\n
+    __<15>* <11>Dwarven Weaponcraft (Active):<3> The dwarven ability
+    to create magical weapons and armor is limited by the Crafts
+    skill. A dwarf using this ability can create items roughly equal
+    to what would be found at a depth equal to her Craft skill rating
+    -- a dwarf with Crafts +8 could create items typically found on
+    dungeon level 8. Note that the <11>best<3> items found on a given
+    level of the dungeon are typically somewhat 'out of depth', being
+    excepyional for the depth they are found at.\n
+    __<15>* <11>Craft Dragon-Armor (Active, <4>Unimplemented<11>):<3>
+    If a character exceptionally skilled with Craft should be fortunate 
+    enough to slay a dragon of young adult age or older, she can use
+    her skill to craft dragon scale mail armor from the beast's remains.
+    Doing this requires that the dragon corpse be dissected in order to
+    obtain dragon scales, and then a forge found at which the character
+    can work. Creating dragon scale mail requires a Craft skill of at
+    least +15, eight hours of work and a Craft check against a DC of 20
+    plus the dragon's age category. Failing this check causes the dragon
+    scales to be wasted and the attempt to create armor fails.\n
+    __If the check is successful, the armor gains the base traits of
+    normal scale mail, but its base armor values are increased by +1
+    per age category of the dragon; additionally, it conveys either a
+    saving throw bonus or an elemental resistance equal is magnitude to
+    twice the dragon's age category -- for example, scale mail made from
+    the hide of an adult red dragon would grant Fire Resistance 12.\n
+    __Dragonskin is supple and almost infinitely adaptable in the hands
+    of a truly skilled craftsman. For every three points the base DC is
+    beaten by, the mail's armor check penalty decreases by one, to a
+    minimum of 0.";
+  }
+  
+Text "help::decipher script"
+  { "__The Decipher Script skill has the following applications:\n
+      __<15>* <11>Read Scrolls (Passive):<3> The primary use of the Decipher
+      Script skill is reading magical scrolls; this may be attempted
+      regardless of whether the character actually has the skill.
+      The base DC to successfully read a scroll is 20 for a scroll
+      of a 'buff' spell, 15 for an offensive spell and 10 for a general
+      purpose spell. Added to this is twice the spell level, minus 1.\n
+      __Characters have a +5 competance bonus to read any spell from a
+      scroll that is on their class spell list, that they have access
+      to at their current level. (Note the difference between chart
+      levels and spell access as described in the Multiclass Spellcasters
+      section.) If a character reads a scroll of a spell they actually
+      know and are able to cast normally, the casting is automatically
+      successful and costs no mana.\n
+      __If the reader's Decipher Script check beats the required DC by
+      10 or more, the reader has a 50~ chance of being able to preserve
+      the scroll and use it again.\n
+      __The effective caster level of a scroll-read spell is the higher
+      of twice the spell's level minus one and the reader's Decipher
+      Script level - 2. Thus, low-level characters with high Decipher
+      Script skills can often produce impressive castings from scrolls.
+      It takes [50 - (Decipher Script x 2)] segments to read a scroll,
+      to a minimum of 10 segments.\n
+      __<15>* <11>Damaged Spellbooks (Passive):<3> When a mage attempts
+      to cast a spell that she only has in a spellbook that has suffered
+      damage, a Decipher Script check is necessary to make out the
+      partially illegible text. This check has a DC of 10 + 1 per 10~ of
+      the spellbook's hit points that have been lost.\n
+      __<15>* <11>Item Identification (Passive):<3> Certain items of
+      various types are identified by the game as 'runed', 'enscribed',
+      'rune-covered' or so forth. By reading these runes with the 
+      Decipher Script skill, a character may be able to identify the
+      item. This requires that the character actually have the Decipher
+      Script skill as a class skill, and requires a check against a DC
+      of 10 + twice the item's level. This check is made automatically
+      at the same time Intuition information is gained; success reveals
+      the item's plus and magical nature to the player.";
+  }
+
+Text "help::diplomacy"
+  { "__Diplomacy is a very broad and open-ended skill with the following
+     possible applications:\n
+      __<15>* <11>Increased PCR (Passive):<3> The total
+      possible CR of your party -- your PCR -- is increased
+      by your Diplomacy rating. If adding a creature to your
+      party would cause the party's total CR to exceed
+      your PCR, that creature won't be able to join
+      unless you dismiss someone else. You must have a
+      Diplomacy score above +5 for it to impact your PCR;
+      every full +5 after the first increases the maximum
+      possible size of your party by 100~.\n
+      __Creatures whose Personality Architypes or
+      alignments conflict with your own or with other
+      members of your party have an inflated effective
+      CR when it comes to determining their role in the
+      calculation of PCR. This inflation is reduced by
+      a high Diplomacy level on the player character's
+      part. Thus, it requires an exceptional Diplomacy
+      skill to maintain a party with both good and
+      evil characters of any reasonable power in a 
+      stable manner.\n
+      __<15>* <11>Issue Request (Active):<3> One of the 
+      possible uses for Diplomacy is the ability to 
+      give non-hostile, non-friendly NPCs requests. The 
+      creature must be intelligent, and unlike a true 
+      ally he will not cross from one map to another 
+      with the PC -- his aid is purely situational.\n
+      __Orders that can be given vary. NPCs can be
+      asked to give the PC items that they picked up
+      in the dungeon (this is difficult), but not
+      items that are part of their inherant equipment.
+      NPCs can also be persuaded to attack other
+      creatures that are already hostile to them --
+      in other words, their priority of enemies can
+      be changed.\n
+      __Perhaps the most useful order a player can
+      give is to get an NPC to follow her. By so
+      doing, the player can lead an NPC to other
+      creatures that they hate -- demons vs. devils,
+      elves vs. drow, good vs. evil, etc. -- and
+      allow the NPC to fight the player's battles
+      for him. Once a player has successfully used
+      Diplomacy on a given NPC, he recieves half of
+      the experience for all the creatures that NPC
+      kills, for the remainder of the day Diplomacy
+      was used in. However, creatures that the
+      player guides in this manner do not count as
+      party members for party Hit Dice purposes --
+      they are still neutrals, not allies.\n
+      __Diplomacy cannot be used to give a creature
+      orders in the same day it was used to change
+      that creature from hostile to neutral, and
+      every order given after the first in a single
+      day increases the DC by +2.\n
+      __The DC for a Diplomacy check to convince a
+      creature to do something depends on your race,
+      the creature's race, the request given, your
+      Personality Architype, the creature's alignment
+      and so forth. The one factor that always applies, 
+      however, is CR -- the target creature's CR is
+      always added to the DC of an Issue Request check.
+      __This function of Diplomacy can also be used to
+      convince creatures to barter with you when they
+      otherwise would not be willing -- dwarves will
+      not trade with drow or orcs without an impressive
+      check, for example.\n
+      __Storekeepers sell to anyone, but they are often
+      more reluctant to buy wares from dungeon delvers
+      (as opposed to trade guilds). Whether they will
+      purchase items often depends on a character's base
+      Diplomacy skill rating, modified by the normal
+      social modifiers. For example, Roark Ironbeard
+      will purchase powerful magical weapons and armor
+      only from characters with an adjusted Diplomacy
+      rating of +12.\n
+      __<15>* <11>Enlist Aid (Talking):<3> When you ask
+      a named character to join your party, a Diplomacy
+      check determines if they are willing, modified by
+      personality architypes, alignment, race, etc. You
+      only get one check against a given character in
+      this circumstance, <11>ever<3>.\n
+      __Unlike most Diplomacy checks, this one cannot
+      be modified by magical bonuses, because it 
+      represents a long-term commitment on the NPC's
+      part.\n
+      __The DC of an Enlist Aid check is 15 + twice the
+      affected character's CR.\n
+      __<15>* <11>Dismiss Ally (Talking):<3> Conversely, the 
+      Diplomacy skill can be used to get a character to
+      leave your party on graceful terms. When you elect
+      to dismiss a character, they will automatically cease
+      to be an ally and become a neutral character. The
+      success or failure of the Diplomacy check determines
+      if they can be added back into your party reliably at
+      a later time. If you fail the Dismiss Ally check, you
+      need to make the Enlist Aid check again, and if that
+      check fails, the character is permanently closed to
+      you as a party member as usual.\n
+      __If you succeed, you can automatically add the
+      character in question back into your party at any
+      time in the future, provided you have enough free
+      PCR.\n
+      __The DC of a Dismiss Ally check is 7 + the affected
+      character's CR, and the check does not fail on a 
+      natural one.\n
+      __<15>* <11>Haggling (Passive):<3> Your Diplomacy rating 
+      is used internally by the game in calculating shop and
+      barter prices, along with racial affinities, personality
+      modifiers and so forth. Note that regardless of exceptional
+      Charisma and Diplomacy, characters will still always find
+      that there is a very steep difference between buying and
+      selling price in Incursion. Adventurers are a very tiny,
+      very volatile customer base, and merchants trading in magic
+      items must allocate a massive portion of their budget to
+      the protection and procurement of their wares.\n
+      __An average human character can expect to sell goods for 
+      1/20th of their base price and buy them for five times their 
+      base price. A character with maxed-out Diplomacy and Charisma
+      can expect to sell items for 1/10th their base price and buy
+      them for 2-3 times their base price.\n
+      __More significantly, however, Diplomacy determines how much
+      gold a merchant, adventurer or shop is willing to part with.
+      A merchant may have 10,000 gp worse of loose cash, but being
+      frugally smart only want to spent 3,000 gp to purchase new
+      wares. Every point of a character's Diplomacy increases the
+      amount of cash a merchant can be persuaded to use to purchase
+      goods by 5~, up to an obvious maximum of the total amount of
+      cash the merchant has.\n
+      __Forcing sellers to expend too much of their operating finances
+      buying items from you can impact your alignment.\n
+      __<15>* <11>Barter for Services (Talking):<3> In addition to
+      buying items from NPCs, a player character can buy services --
+      usually the casting of spells -- from them. Spells that can
+      be purchased from NPCs include Identify, Remove Curse, Cure
+      spells, Restoration, and so forth, as well as certain extended
+      protective magics like Resist Fire, Misdirection or Stoneskin.\n
+      __As with items, Diplomacy influences the price of service spells,
+      and a Diplomacy check (DC 5/10 + caster's CR, with modifiers based
+      on race, alignment, etc.) is required to convince a caster to
+      sell magic to you. Arcane casters are easier to convince to
+      merchandise their magic (base DC 5) than divine casters (base DC
+      10).\n
+      __<15>* <11>Resolve Conflict (Active):<3> A Diplomacy check can
+      be used to convince a hostile character to become neutral in some
+      circumstances. The DC for this differs wildly -- it's not hard to
+      calm down an angry goblin, but inherantly evil and vicious creatures
+      like demons can be very hard to make peace with. In some circumstances,
+      a creature will want something -- often a bribe -- in order to stop
+      attacking you.\n
+      __You cannot make creatures neutral to you with Diplomacy if you
+      have already attacked them; for that, use Bluff.\n
+      __<15>* <11>Surrender (Active):<3> When you choose to surrender to
+      attacking NPCs, a fairly easy Diplomacy check is made; success
+      causes the NPCs to accept your surrender and become neutral, taking
+      all your gold and your best item in so doing. If you beat the check
+      DC by 10 or more, you can reduce the amount of wealth and goods
+      enemies take from you when you surrender.\n
+      __Returning to attack enemies you have surrendered to is an unlawful
+      act; if the enemies aren't themselves evil, it is also an evil act.";
+  }
+
+Text "help::disguise"
+  { 
+    "__The disguise skill has only one, Active, application --
+    donning a disguise. To do this, you must have a disguise
+    kit and make a disguise check against a varying DC -- 10
+    to disguise yourself as a different member of the same
+    race, 13 to disguise yourself as a member of a similar-
+    looking race (halfling/gnome, drow/elf, human/elf, 
+    human/dwarf, kobold/goblin, kobold/lizardfolk, etc.) or 
+    16 to disguise yourself as any different humanoid race.
+    You suffer a +4 DC to disguise yourself as a member of
+    a race with a different size category than your current
+    size category -- so this penalty can be removed with a
+    magical gain or loss of a size category.\n
+    __Donning a disguise requires an hour's worth of work.
+    Failing the Disguise check gives you a -2 penalty to
+    all further Disguise checks for the remainder of the
+    day; multiple failures are culmulative.\n
+    __Whether or not your disguise is seen through is
+    determined by comparing the results of your Disguise
+    check to the sum total of an observer's Spot and Sense
+    Motive skills. Additionally, you need to have a base
+    skill total of +8 to fool creatures with the Sharp
+    Senses ability, and +12 to fool Scent. Disguises can
+    be awkard and bulky, and impose a -2 circumstance 
+    penalty to all actions unless the bearer has Disguise
+    10+, at which point they only impose a -1 penalty. At
+    +15, there is no penalty at all.\n
+    __Though the Disguise skill only has one use, that use
+    has several different effects, as follows; note that
+    none of these effects apply if the creatures in question
+    can see though your disguise.\n
+    __<15>* <11>Affect Hostility:<3> The primary function
+    of Disguise is to affect the hostility of other
+    creatures. Creatures that are hostile to you because
+    you struck them will not be hostile to you when you
+    are disguised unless you strike them again while in a
+    given disguise. Creatures that are hostile to you
+    because you are 'the player character invading the
+    dungeon' will not be hostile to you when you are
+    disguised. Creatures that are hostile to you based
+    on racial enemity will re-evaluate you based on the
+    new race you seem to be -- most creatures will not be
+    hostile to members of their own race, or to races
+    that are traditionally friendly.\n
+    __<15>* <11>Diplomacy Checks:<3> If you make a
+    Diplomacy check while disguised, it is automatically
+    considered to be Deceptive Diplomacy, as described
+    under that skill.\n 
+    __<15>* <11>Shop Prices:<3> Many shop-keepers in
+    Incursion are racist, and adjust their prices based
+    on the percieved race of their customers. Thus, you
+    can use the Disguise skill to get lower prices in
+    the shops by altering your race.";
+  }
+  
+Text "help::escape artist"
+  { "__The Escape Artist skill has the following uses:\n
+     __<15>* <11>Escape Grapples:<3> When a hostile creature grabs a
+     character with this skill, her Escape Artist skill rating may be
+     used in place of her Strength bonus in the manuever check to try
+     to escape.\n
+     __<15>* <11>Escape Engulfment:<3> When a character with the Escape
+     Artist skill is engulfed or swallowed whole by a monster, she is
+     allowed to make an Escape Artist check each turn to try and force
+     the beast to disgorge her. The DC of this check is 10 + twice the
+     creature's CR or 10 + the creature's Strength score, whichever is
+     higher.\n 
+     __<15>* <11>Tearing Free:<3> When a character has become stuck in
+     entrapping terrain like rubble or bushes, or the effects of a <9>web<3>
+     spell or tanglefoot bag, the Escape Artist skill allows her to try
+     and break free. This requires a skill check against a DC of 15 +
+     a modifier determined by how severely she is held in place.\n 
+     __<15>* <11>Break Paralysis (Passive):<3> Characters with a 15+ rating
+      in Escape Artist are able to overcome paralysis effects through sheer
+      mental chicanery. If they fail a saving throw against a paralysis effect,
+      they recieve an additional Fortitude save against DC 18 every turn
+      until they have beaten the effect.\n
+      __Characters with this ability are also able to move when paralyzed 
+      and truly, deeply desperate just enough that they cannot be subjected
+      to the Coup de Grace maneuver.\n
+      __The Concentration skill can also provide this benefit.";
+  }  
+      
+Text "help::find weakness"
+  { "__The Find Weakness skill has the following use:\n
+    __<15>* <11>Fighting Humanoids (Passive):<3> Characters with the
+    Find Weakness skill are especially proficient at fighting living
+    humanoids -- the skill grants essentially similar benefits as
+    Knowledge skills do for certain monsters. In game terms, the
+    character gains a bonus of [Find Weakness / 3] to his Defense
+    against their attacks, and the threat ranges of his own attacks
+    against living humanoids are increased by [Find Weakness / 9].\n
+    __<15>* <11>Coup de Grace (Passive):<3> When you perform a
+    Coup de Grace maneuver against an opponent, the DC of the saving
+    throw to avoid instant death, even if you do not deal sufficient
+    damage to kill that opponent, is 15 + your Dexterity modifier +
+    1/2 your Find Weakness skill.\n
+    __Characters with a Find Weakness skill of 20+ can Coup de Grace
+    enemies who are both stuck and prone, just as if they were
+    paralyzed.\n
+    __<15>* <11>Precision Strike (Active):<3> Characters with the
+    Find Weakness skill can use the Precision Strike combat option
+    (in the Combat Options menu), gaining a bonus to a single attack
+    roll against another creature equal to 1/2 their Find Weakness
+    skill rating, at the cost of the attack taking an extra 45
+    segments."; 
+  }  
+  
+Text "help::gather information"
+  {
+    "__Learning this skill represents attuning yourself
+    to the flow of information and rumor in a town or
+    city; it can be applied at taverns, certain guilds
+    and similar locales. It has the following use:\n
+    __<15>* <11>Discover Rumors (Active):<3> A character with this skill
+    can go to a tavern and attempt to uncover knowledge
+    about the whereabouts of a specific legendary
+    magical item. With a successful Gather Information
+    check, the character will be told the dungeon, and
+    the depth within that dungeon, where she can find
+    an item of the type she specified. The item is
+    then guaranteed to be generated at that specific
+    locale, waiting for the character to claim it.\n
+    __Gather Information can only be used once in
+    any given locale, so a character who seeks many
+    rare items will have to travel across the country
+    to cultivate new sources of information in
+    different cities. Towns are smaller and more
+    insular communities, and the knowledge a rogue
+    can dig up there is much more limited.";
+  }
+  
+Text "help::handle device"
+ { "__The Handle Device skill is a rough medieval-fantasy
+    equivalent to engineering, and has the following facets:\n
+    __<15>* <11>Disarm Trap (Passive):<3> A character can make 
+    a Handle Device check to attempt to disarm any trap found 
+    in the dungeon. The DC of this check is based on the trap
+    in question, but typically increases the deeper into a
+    dungeon a character goes. Failing a check to disarm a trap
+    by more than 5 typically sets it off.\n
+    __<15>* <11>Reset Traps (Active):<3> Once a trap has been
+    disarmed, a character can examine its mechanism and reset
+    it, calibrating it so that she is able to avoid any danger
+    it presents, but other creatures -- even those native to
+    the area the trap is found in -- may fall victim to its
+    effects. If the trap kills a hostile creature, the player
+    character who set is recieves the experience. Even if it
+    is triggered and does not kill its victim, the player will
+    recieve some experience.\n
+    __Traps can only be reset if they have been disarmed. If
+    they have been triggered, most aren't usable -- though
+    some traps are multi-use and can be reset and triggered
+    again and again.\n
+    __The DC to reset a trap is always 5 higher than whatever
+    was needed to disarm it, and a character must have Handle
+    Device 10+ to make the attempt.\n
+    __<15>* <11>Retrieve Components (Active):<3> A clever rogue
+    can go one set further than setting or disarming traps,
+    actually taking apart a trap and idsmantling it into its
+    base components -- a collection of items she can carry with
+    her through the dungeon. She can then later set up the trap
+    at a new location without a check by 'a'ctivating the trap
+    components.\n
+    __The check to dismantle a trap is always made at a DC 10
+    higher than that needed to disarm it, and a character must
+    have Handle Device 15+ to make the attempt. If a rogue should
+    come upon trap components by a means other than dismantling
+    a trap -- buying them in a store, or killing another character
+    that posssessed them, for example -- she must then make the
+    save Retrieve Components check in order to set up the trap
+    components in a new location.\n
+    __<15>* <11>Mechanical Weapons (Passive, <4>Unimplemented<11>):<3> 
+    The Handle Device skill is also used
+    to operate mechanical weapons skillfully. Gnomes begin with
+    these kinds of weapons, and other character may buy them, find
+    them in the dungeon or take them from slain gnomes. Characters
+    that do not have the Handle Device skill are not considered to
+    be proficient with mechanical weapons, even if they would be
+    proficient with a normal weapon of the type. Characters that
+    possess te skill are proficient with any kind of mechanical
+    weapon that they have the appropriate normal weapon group
+    proficiency for.\n
+    __Additionally, characters with this skill recieve bonuses of
+    various kinds when using mechanical weapons, as follows:\n
+    __<7>Polearms:<3> Mechanical polearms have spring-loaded telescoping
+    hafts that can change length freely to accomodate their user's
+    desire. These weapons add their wielder's [Handle Device / 3]
+    to the DC of the saving throw to close with the wielder, and
+    if the wielder has a Handle Device score of +10 or higher, they
+    can be used to attack a target who is inside the normal reach
+    in which a polearm of the type in question would be ineffective.\n
+    __<7>Daggers / Knives:<3> Mechanical daggers or knives have various
+    concealed or spring-loaded blades, whether the primary blade of
+    the weapon or a secondary edge. On one in three attacks, the
+    wielder can use this function to surprise an opponent, treating
+    them as flat-footed if they can beat them on an opposed Handle
+    Device vs. Spot check.\n
+    __<7>Bows:<3> Mechanical conventional bows feature elaborate balances
+    and pulley systems to direct force and channel torque, allowing
+    the wielder to substitute (10 + [Handle Device / 2]) for her
+    Strength score (if beneficial) when using them.\n
+    __<7>Flexible Weapons:<3> Flails, whips, spiked chains and similar 
+    weapons typically replace the chain with a very intricately 
+    crafted mechanical tentacle that flows easily where guided until 
+    a slight shift 'locks' it into its current form, turning the
+    weapon rigid and potentially trapping weapons or limbs. This
+    allows the wielder to add [Handle Device / 3] to the DC of
+    saving throws against being tripped or disarmed by a mechanical
+    flexible weapon.\n
+    __<7>Crossbows:<3> Gnomish crossbows are fit with special sights made
+    with ground glass lenses, allowing their wielder to aim her
+    shots very precisely. They add [Handle Device / 5] to their
+    threat range when used by a competant bearer.";
+  }
+
+Text "help::healing"
+  { "__The Heal skill has the following uses. Note that in all cases
+    except Improved Healing, a character can only try to treat a given
+    ailment once per day using the Heal skill. The Heal skill requires
+    a kit to use, and cannot be used in combat.\n
+    __<15>* <11>Improved Healing (Active):<3> Normally, characters
+    heal ([Character Level + 3] x Constitution) / 5 hit points worth of
+    damage every time they rest for a night. However, characters that
+    have Heal as a class skill instead heal ([Character Level + Heal
+    Skill Rating + 3] x Constitution) / 5 hit points per night, which
+    can easily be enough to restore even mid-level characters from
+    seriously wounded to fully healed overnight.\n 
+    __<15>* <11>Treat Attribute Damage (Active):<3> The base DC for a
+    Heal check to treat Attribute Damage is 10 + 2 per point of damage
+    the attribute has suffered. Beating this DC heals one point of
+    attribute damage, plus one per full 5 points the character's check
+    result exceeds the base DC by.
+    __Characters can only treat attribute damage with Heal once per
+    day, and they cannot treat both disease or poison and attribute
+    damage in the same day. In this specific case, the player must
+    choose whether it's better tactically to treat the damage to an
+    attribute, or to try and remove the cause of that damage -- the
+    poison or disease -- overall.\n 
+    __<15>* <11>Staunch Bleeding (Active):<3> The Heal skill can also
+    be used to stop bleeding. This requires a skill check against a DC
+    of 10 plus 3 times the number of hit points being lost per turn as
+    a result of bleeding.\n
+    __<15>* <11>Treat Blindness (Active):<3> A truly skilled healer
+    may be able to cure blindness. This requires a Heal check against
+    DC 30 (permanant blindness), DC 25 (blindness lasting days), or DC
+    10-20 (blindness with a shorter-term duration).\n
+    __<15>* <11>Treat Poison/Disease (Active):<3> A Heal check can be
+    made to attempt to treat a poison or disease, but only once per
+    affliction. The DC of the heal check is the same as the DC of the
+    Fortitude saving throw against the disease or poison. A variable
+    number of successful Fortitude saving throws are required to
+    overcome a specific disease or poison. A successful Heal check
+    counts as at least one successful saving throw; for every +5 the
+    check exceeds the base DC by, it counts as another successful
+    save against the poison or disease. Thus, a sufficiently high
+    Heal check can purge a poison or disease instantly, while a
+    less overwhelming one will at least lessen its effect and speed
+    the time it takes for the character's body to overcome it
+    naturally.\n
+    __<15>* <11>Forestall Petrification (Active):<3> Petrification is
+    a magical effect, and the Healing skill alone cannot cure it.
+    However, by the application of careful herbal remidies and other
+    obscure treatments, a successful Heal check against DC 20 can
+    delay the onset of petrification by [Heal Skill x 20] combat
+    rounds."; 
+  }
+
+Text "help::hide in shadows"
+  { "__The Hide in Shadows skill has the following use:\n
+    __<15>* <11>Hide (Active):<3> Using Hide, you can attain partial invisibility 
+    in dimly lit areas of the dungeon at will. This slows your movement rate by 50~, and 
+    the invisibility is broken the second that you attack, use a light source stronger 
+    than a torch or otherwise draw attention to yourself. You can only Hide when you are 
+    out of sight of all monsters hostile to you. You will recieve a warning if you are
+    about to move into a brightly lit area, ending your hiding.\n
+    __There is no Hide skill check; instead, when a character hides, a random adjustment
+    between -5 and +5 is assigned to their Hide skill, and this adjustment is compared
+    to the Spot skill of creatures nearby them; if an observer's Spot skill rating exceeds
+    the character's adjusted Hide, that creature can then percieve the hiding character.\n
+    __When a hiding creature steps next to a hostile creature, they may be given away by
+    sound (as described under Move Silently), and which point they are no longer hiding 
+    and become visible to everyone -- presumably the creature they stepped close to speaks
+    or takes actions that make their presence apparent. Hiding creatures who do not step
+    next to hostile creatures do not risk being exposed by noise.\n
+    __Hiding and invisibility overlap. To percieve an invisible, hiding character, one
+    must both be able to see invisible creatures, and must have sufficient Spot to be
+    able to see the hiding creature.";
+  }
+
+Text "help::illusioncraft"
+  { "__The Illusioncraft skill has the following use:\n
+    __<15>* <11>Illusory Monsters (Passive):<3> The maximum CR of creature that can
+    be created by an illusion spell like <9>phantasmal force<3> or <9>shadow
+    monsters<3> is equal to the illusionist's [Illusioncraft - 3], to a minimum
+    of one.\n
+    __<15>* <11>Illusory Items (Passive):<3> An item created with an illusion spell,
+    typically as a lure for monsters, it typical of what would be found at a dungeon
+    depth equal to the creator's Illusioncraft skill -- the higher the skill, the
+    more attractive the item looks to a monster who seeks to acquire it.\n
+    __<15>* <11>Disbelief DC (Passive):<3> The DC of the saving throw to disbelieve
+    an illusion (<11>not<3> the DC of an Illusion spell's generic saving throw, which 
+    is calculated in the normal manner for a spell save) is equal to 10 + half the
+    caster's Illusioncraft skill rating, plus modifiers for school focus, arcane
+    trickery and so forth.\n"; 
+  }
+
+Text "help::intimidate"
+  { "__The Intimidate skill has the following uses. Note that creatures who are
+    immune to fear are unaffected by all uses of the Intimidate skill, and those
+    who have saving throw bonuses against fear also apply those bonuses as 
+    increases to the DC of Intimidate checks made against them.\n
+    __<15>* <11>Cow Enemies (Talking):<3> Through a display of force or merely an
+    expert display of threatening body language, a fearsome character can terrorize
+    her enemies. By making an Intimidate check against a base DC of 15 + her most
+    powerful foe's Will save modifier, adjusted for the apparent strength of the
+    player's group in contrast with the monsters', a player can cause a group of
+    monsters to become shaken, suffering a -2 morale penalty to all rolls. If she
+    beats the DC by 10 or more, her foes will rout, fleeing in a mad panic.\n 
+    __<15>* <11>Coerce Service (Talking):<3> Intimidate can also be used to extract
+    service from other characters through threat of violence. This works essentially
+    identically to issuing requests with Diplomacy, except that a failed check
+    causes the subjects to become hostile. However, service can be coerced from
+    frightened creatures as well as neutral ones, whereas Diplomacy can only be
+    used on neutral creatures.\n 
+    __<15>* <11>Demoralize (Passive):<3> When a player with the Intimidate skill
+    and a skill rating of 10+ kills a creature with a critical hit, every other
+    creature in that monster's group that witnessed the act must roll a Will saving
+    throw against a DC of the character's [Intimidate + 5]; on a failure, creatures
+    of CR 3 or lower become afraid, and others become shaken, suffering a morale
+    penalty to all rolls of -1 at Intimidate 10+, -2 at 15+, -3 at 20+, etc.\n"; 
+  }  
+
+Text "help::intuition"
+  { "__The Intuition skill has the following use:\n
+    __<15>* <11>Item Hunches (Passive):<3>This skill allows you to gain special 
+    feelings about items picked up in the dungeon, telling you if they are good, 
+    bad or neutral.  Obviously, this is a valuable skill to single-classed rogues 
+    and warriors who lack divination magics or Clairsentient arts. Normally, a
+    character must have possessed an item for at least a day to gain this kind
+    of hunch about it, and the Intuition check will be made immediately after
+    the character rests a full night. However, there is a Character Generation
+    Option that allows intuition to take place when an item is first percieved;
+    by default, this option applies only to weapons and armor.\n
+    __The Intuition check is a standard skill check with staggered results. If
+    the result exceeds DC 5, the character learns whether items are magical or
+    not. If the result exceeds DC 10, the character will learn which schools of
+    magic the item is related to. With a check result of DC 15 or higher, cursed
+    or blessed items can be discerned from normal items.\n
+    __There is no messages for Intuition, since it takes place so frequently.
+    Instead, the results appear in curly braces in the full name of the item,
+    when it is seen in a pile on the floor or in the character's inventory
+    screen."; 
+  }  
+  
+Text "help::jump"
+  {
+    "__The Jump skill has only this one, singular use:\n
+     __<15>* <11>Jumping (Active):<3> Use this skill to cross from one square to another in 
+     the dungeon while missing a square in between. This skill will let you get 
+     past a monster without bull-rushing it, or to avoid a trap or pit. Beware, 
+     though -- if you try to jump too far, you may not end up where you want! A 
+     typical jumping DC is 10 for 1 square, +7 per extra square! Jumping provokes
+     an attack of opportunity.";
+  }
+
+Text "help::knowledge (Theyra)"
+  { "__The Knowledge (Theyra) skill has the following uses:\n
+    __<15>* <11>Map Memory (Passive, <4>Unimplemented<11>):<3> Characters with this skill will find
+    that there is a radius of the overland map already visible around heavily
+    inhabited or famous areas such as cities, ruins and roads based on their 
+    skill rating, illuminating areas they might want to travel through or
+    explore. At low skill ratings, this ia a very tiny radius and only appears
+    around the most significant population centers; at higher levels of skill,
+    it is larger and appears around towns and other smaller population centers.
+    At the highest levels of skill, certain secret locations that cannot be
+    found in other ways might be revealed in this manner.\n 
+    __<15>* <11>Area Familiarity (Passive, <4>Unimplemented<11>):<3> Travelling through areas that
+    are made familiar with this skill is both quicker and safer than travelling
+    through other areas. The chance of encounters is less, and there is a bonus
+    to Wilderness Lore checks made in the area.\n"; 
+  }  
+  
+Text "help::knowledge (magic)"
+  { "__The Knowledge (Magic) skill has the following uses:\n
+        __<15>* <11>Formulas (Passive):<3> The Knowledge (Magic) skill figures into 
+      the number of formulas you have available when creating certain types of 
+      magical items. When you choose the Scribe Scroll feat, you know how to 
+      scribe a number of scrolls equal to twice your rating in this skill, in 
+      addition to being able to scribe any scroll that you can cast as a spell. 
+      Similarly, if you select the Brew Potion feat, you know a number of potion 
+      formulas equal to your [Alchemy + Knowledge (Magic)] ratings.\n
+      __<15>* <11>Learning Spells (Passive, <4>Unimplemented<11>):<3> When you attempt to learn a new 
+      spell for which you have an open slot, a Knowledge (Magic) check is made 
+      against a DC of [5 + (Spell Level x 2)]. Success indicates you are able to 
+      learn the spell normally, while failure means that you will not be able to 
+      learn that spell until you've gained a number of caster levels equal to 
+      half the amount your roll missed the DC by.\n
+      __<15>* <11>Research Items (Active):<3> When you are in an Ancient Library, 
+      you can attempt to use the books found therein to learn about your magical
+      items. If you can succeed in a Knowledge (Magic) check against a DC of 10 + 
+      twice the dungeon depth the item would typically be found at, you will
+      be able to fully identify it as per the <9>identify<3> spell. This research
+      requires two hours, but if you choose to devote 8 hours to it, you recieve
+      a +3 circumstance bonus on the skill check. You must have Knowledge (Magic)
+      as a class skill to research items.\n
+      __<15>* <11>Research Curses (Active):<3> Similarly to researching items, you
+      can use an Ancient Library to try to discover a way to lift a curse. This
+      requires the full 8 hours and a check against a DC of 10 + the caster level
+      of the curse. Success lifts the effect. You must have Knowledge (Magic)
+      as a class skill to research curses.\n
+      __<15>* <11>Identify Monsters (Passive):<3> The Knowledge (Magic) skill
+      can be used to identify inherantly magical monsters as well as those whose
+      origins lie with magical experimentation, as described under Sense Motive.\n
+      __<15>* <11>Identify Scrolls (Passive):<3> When your character successfully
+      reads an unknown scroll (using the Decipher Script skill), and the effect
+      is not immediately obvious, a Knowledge (Magic) check is allowed against a
+      DC of 10 + the spell's level in order to identify the spell that scrolls
+      of that type contain.";
+  }
+
+Text "help::knowledge (theology)"
+  {
+    "__This skill represents a knowledge of the Theryan pantheon and your diety in 
+      particular. It has the following specific applications:\n
+      __<15>* <11>Make Offerings (Passive):<3> When you make a sacrificial offering
+      to your diety, the Knowledge (Theology) skill determines how well you enact
+      the ritual and ceremony of the act, and thus how pleasing your sacrifice is
+      to your diety. The effective value of the sacrifice increases by 10~ for every
+      +1 of your Knowledge (Theology) skill rating. Thus, a character with a +15
+      Knowledge (Theology) finds that his sacrifices are worth twice as much as 
+      those of a character with only +5 Knowledge (Theology).\n
+      __<15>* <11>Identify Altar (Passive):<3> When you discover an unknown or
+      strange altar in your travels, you can learn which diety it belongs to with
+      a Knowledge (Theology) check against DC 15. You only get one chance to 
+      identify an altar, and the attempt is made automatically when you walk into
+      the square with the altar on it.\n
+      __<15>* <11>Conversion (Passive):<3> When you make a sacrifice at an altar
+      that does not belong to your current diety -- whether in an attempt to
+      convert the altar or yourself -- the result is determined by a Knowledge
+      (Theology) check with several circumstantial modifiers; the DC varies with
+      the gods involved and the sacrifice made, but is typically DC 20 or higher.
+      Failing altar conversion angers the god the altar belongs to, while failing
+      self-conversion angers the god you are rejecting. In both cases the diety
+      in question will have the ability to send immediate supernatural retribution
+      if you lapse the ritual mystical protections by failing the Knowledge
+      (Theology) check.\n
+      __<15>* <11>Opposing Ideals:<3> Certain spells, such as <9>banishment<3>,
+      oppose Outsiders by directing opposing ideals against them. In game terms,
+      you are able to add a third of your Knowledge (Theology) skill rating to
+      the DC of these spells.\n
+      __<15>* <11>Identify Monsters (Passive):<3> The Knowledge (Theology) skill
+      can be used to identify celestials, as described under Sense Motive.";
+  }
+
+Text "help::knowledge (mythology)"
+  {
+    "__Knowledge (Mythology) has the following uses:\n
+    __<15>* <11>Mythic Creatures:<3>
+    A solid understanding of mythology sets up an adventurer to fight 
+    more effectively against mythic creatures. By applying simple hearth 
+    wisdom and studying the vulnerabilities of his targets, this skill 
+    allows a character the following bonuses when facing creatures of 
+    mythology: his effective DC is increased by [Skill Rating / 3] 
+    against their attacks, and his understanding of their banes and 
+    biology increases the threat ratings of his attacks against them 
+    by [Skill Rating / 9]. He can also summon them more effectively; 
+    mythic creatures summoned by such a caster have a [Skill Rating x 5]~
+    bonus to their hit points.\n
+    __<15>* <11>Identify Monsters (Passive):<3> The Knowledge (Mythology) skill
+    can be used to identify mythic hybrids, lycanthropes, nagas, dragons and
+    fae, as described under Sense Motive.";
+  }
+  
+Text "help::knowledge (nature)"
+  {
+    "__The Knowledge (Nature) skill grants the following benefits:\n
+    __<15>* <11>Identify Herbs (Passive, <4>Unimplemented<11>):<3> With a successful Knowledge (Nature)
+    check, any herb or mushroom can be identified. There are many different
+    herbs and mushrooms on Theyra, some of which possess potent magical
+    effects.\n
+    __<15>* <11>Herbalism (Active, <4>Unimplemented<11>):<3> Knowledge (Nature) can be used to
+    make certain herbal preparations in exactly the same way that Alchemy
+    is used to make alchemical items.\n 
+    __<15>* <11>Plants and Animals (Passive):<3> Knowledge (Nature) aids a 
+    character when fighting, summoning or handling plant creatures and 
+    natural animals in the same way that other Knowledge skills do for
+    creatures in their domain.\n
+    __<15>* <11>Speak to Plant Creatures (Passive):<3> Characters with a
+    Knowledge (Nature) skill of +10 or higher can speak to sapient plant
+    creatures such as the myconids. Other characters find the odd signals
+    of these alien creatures too distant to understand.\n
+    __<15>* <11>Identify Monsters (Passive):<3> The Knowledge (Nature) skill
+    can be used to identify plants and fungi, natural animals, sylvan creatures 
+    and wilderness beasts, as described under Sense Motive.";
+  }
+  
+Text "help::knowledge (Infernal)"
+  {
+    "__The Knowledge (Infernal) skill has the following uses:\n
+     __<15>* <11>Demons and Devils (Passive):<3> Many priests and 
+     paladins study demons and devils to learn how 
+    to better fight them, while dark sorcerors want to understand 
+    exactly what they are summoning. Knowledge (The Infernal) 
+    grants certain bonuses when fighting demons and devils. 
+    By applying simple hearth 
+    wisdom and studying the vulnerabilities of his targets, this skill 
+    allows a character the following bonuses when facing demons and 
+    devils: his effective DC is increased by [Skill Rating / 3] 
+    against their attacks, and his understanding of their banes and 
+    biology increases the threat ratings of his attacks against them 
+    by [Skill Rating / 9]. He can also summon them more effectively; 
+    demons and devils summoned by such a caster have a [Skill Rating x 5]~
+    bonus to their hit points.\n
+    __<15>* <11>The Lower Planes (Passive):<3> The Knowledge (Infernal)
+    skill works just like Knowledge (Theyra) when the character is on
+    a wilderness map in the Lower Planes.\n
+    __<15>* <11>Identify Monsters (Passive):<3> The Knowledge (Infernal) skill
+    can be used to identify demons and devils, as described under Sense Motive.";
+  }
+
+Text "help::knowledge (oceans)"
+  {
+    "__Some adventurers spend much of their lives out at sea, exploring
+    the great Western Ocean or scouring trade routes for pirates and 
+    other threats. The Knowledge (Oceans) skill grants the following benefits:\n
+    __<15>* <11>Area Knowledge (Passive): <3> This knowledge skill gives 
+    map-memory of oceanic areas in a manner similar to what Knowledge (Theyra)
+    gives for more conventional wilderness locales.\n
+    __<15>* <11>Aquatic Creatures (Passive): <3> This Knowledge also aids 
+    an adventurer in fighting aquatic threats. By using a thourogh 
+    knowledge of their behaviour, biology and weaknesses, this skill 
+    allows a character the following bonuses when fighting aquatic or 
+    amphibious creatures: his effective DC is increased by [Skill Rating / 3] 
+    against their attacks, and his understanding of their banes and 
+    biology increases the threat ratings of his attacks against them 
+    by [Skill Rating / 9]. He can also summon them more effectively; 
+    aquatic creatures summoned by such a caster have a [Skill Rating x 5]~
+    bonus to their hit points.\n
+    __<15>* <11>Identify Monsters (Passive):<3> The Knowledge (Oceans) skill
+    can be used to identify aquatic creatures, as described under Sense Motive.";
+  }
+  
+Text "help::knowledge (planes)"
+  {
+    "__This skill gives a character knowledge of the many planes of 
+    existance, with the following specific benefits:\n
+    __<15>* <11>Planar Travel (Passive):<3> This skill is necessary 
+    to cast plane-travelling spells like <9>plane shift<3> safely. 
+    When moving across a wilderness map on a different plane, the
+    lower of a character's Knowledge (Planes) and Wilderness Lore is
+    used for most things that Wilderness Lore alone usually achieves.\n
+    __<15>* <11>Outsiders (Passive):<3> Knowledge (Planes) can also
+    aid the character in fighting outsiders who are not also 
+    demons, devils or celestials (who are covered by their own skill). 
+    By using a thorogh 
+    knowledge of their behaviour, biology and weaknesses, this skill 
+    allows a character the following bonuses when fighting 
+    such outsiders: his effective DC is increased by [Skill Rating / 3] 
+    against their attacks, and his understanding of their banes and 
+    biology increases the threat ratings of his attacks against them 
+    by [Skill Rating / 9]. He can also summon them more effectively; 
+    general outsiders summoned by such a caster have a [Skill Rating x 5]~ 
+    bonus to their hit points.\n
+    __<15>* <11>Identify Monsters (Passive):<3> The Knowledge (Planes) skill
+    can be used to identify outsiders (other than celestials, demons and 
+    devils), as described under Sense Motive.";
+  }
+
+Text "help::knowledge (undead)"
+  {
+    "__The dead hate the living, and the living often return the 
+    sentiment. A character with this skill is a trained undead 
+    slayer or master necromancer, well versed in the inherant 
+    abilities and weaknesses of the Damned. This skill has the
+    following uses:\n
+    __<15>* <11>Fighting Undead (Passive):<3> By using a thourogh 
+    knowledge of their behaviour, weaknesses and unnatural existance, this skill 
+    allows a character the following bonuses when fighting aquatic or 
+    the undead: his effective DC is increased by [Skill Rating / 3] 
+    against their attacks, and his understanding of their banes and 
+    biology increases the threat ratings of his attacks against them 
+    by [Skill Rating / 9]. He can also summon them more effectively; 
+    aquatic creatures summoned by such a caster have a [Skill Rating x 5]~ 
+    bonus to their hit points. Note that undead are not normally 
+    subject to critical hits, but with this skill they can be struck
+    for such with the threat range it provides alone.\n
+    __<15>* <11>Identify Monsters (Passive):<3>  The Knowledge (Undead) skill
+    can be used to identify all undead, as described under Sense Motive.";
+  }
+  
+Text "help::listen"
+  { "__The Listen skill has the following uses:\n
+    __<15>* <11>Hear Hiding Creatures (Passive):<3> The Listen skill can
+    reveal the presence of hiding creatures with an opposed test against
+    the hidden creature's Move Silently skill, as described under Move
+    Silently.\n 
+    __<15>* <11>Hear Nearby Creatures (Active):<3> The active use of the
+    listen skill can tell a character what kinds of creatures are nearby
+    her based on the noises they make, even if those creatures are behind
+    solid walls or otherwise outside her normal perceptual range.\n 
+    __<15>* <11>Determine Resting Safety (Active):<3> The Listen skill
+    can also tell a character whether or not it is safe to rest -- by
+    listening carefully, a skilled character can determine if any
+    dangerous creatures are nearby and able to ambush her while she
+    sleeps, or if her rest is certain to be safe.\n
+    __This check is made against DC 15, and if it is failed, it may not
+    be attempted again until either the character has rested, or has
+    gained experience three seperate times."; 
+  }  
+
+Text "help::lockpicking"
+  { "__The Lockpicking skill has the following uses:\n
+    __<15>* <11>Unlock Doors (Passive):<3> A successful Lockpicking skill
+    test can open a locked door; the DC is determined by the quality of
+    the lock on the door, but 15 is typical in the earlier dungeon levels.
+    This check may only be made once per day, but if it is failed the
+    character can try again the next day with a +4 retry bonus. The bonus
+    increases to +6 on the third day, then +8, etc. -- eventually a
+    character will be able to pick a given lock regardless of their skill.\n
+    __If a character fails to pick a lock and does not have time to lose,
+    they can attempt to force the door open by kicking it. This has several
+    disadvantages -- it makes noise, which will wake up sleeping monsters
+    and attract others, and if the door is trapped kicking it will trigger
+    the trap automatically, but picking the lock does not.\n 
+    __<15>* <11>Unlock Chests (Passive):<3> Similarly, the Lockpicking skill
+    can be used to open locked chests. Chests can also be forced by striking
+    them, but this risks breaking fragile items contained inside the chest,
+    such as potions or scrolls, and will automatically trigger any traps on
+    the chest."; 
+  }  
+
+Text "help::metamagic"
+  { "__The Metamagic skill has only the following use:\n
+     __<15>* <11>Reduce Fatigue (Passive):<3> The Metamagic skill can
+     reduce the fatigue cost of using metamagic feats. A successful
+     check against DC 10 reduces the fatigue cost by one point; if
+     the check beats DC 15, the reduction is two points; over DC 20,
+     the cost is reduced by 3 and so forth.\n "; 
+  }  
+  
+Text "help::move silently"
+  { "__The Move Silently skill has the following uses:\n
+     __<15>* <11>Stealth:<3> When a character is hiding (using the Hide
+     in Shadows skill) or invisible due to magic, or when she cannot be
+     visually percieved for any other reason, the Move Silently skill
+     comes into play. As long as she stays at least 10 feet (one square)
+     away from all other creatures, her existing methods of imperceptibility
+     are sufficient. However, when she moves directly beside another creature
+     or attempts to attack, an opposed skill check is made with the creature
+     in question: her Move Silently against the creature's Listen. Success
+     allows her to remain undetected and potentially score a surprise attack;
+     failure means that she is exposed, and cannot attack by surprise.\n
+     __These skill checks is made with tests of (Skill Rating + 1d10 + 10),
+     rather than (Skill Rating + 1d20), in order to decrease the range of
+     the randomness and make the game more playable for low-level rogues.\n
+     __<15>* <11>Noise:<3> Many actions a character can take make noise,
+     causing sleeping creatures within a certain radius to wake up, and
+     alerting all creatures in that radius to her presence, motivating them
+     to investigate. The radius in question is reduced by 10 feet for every
+     full +2 of a character's Move Silently rating.";
+  }
+  
+Text "help::mining"
+  {
+    "__The Mining skill has these uses:\n
+        __<15>* <11>Discern Value (Passive):<3> In addition to actual mining, the 
+      Mining skill allows you to discern the location of deposits of diamonds, 
+      gold, gemstones and valuable magical metals such as adamant, orichalcum or
+      mithril -- your character is able to percieve where these deposits lie
+      by analyzing the composition and formations of the stone around her.
+      This perception is automatic and reaches out to a range of 1/2 your
+      Mining skill rating in squares; this range is extended by 3 squares for
+      characters with the Stonework Sense ability. These deposits appear on
+      screen as rock glyphs, usually isolated islands in the middle of solid
+      stone, that are colored differently then the normal rock that composes
+      the dungeon -- bright white for diamonds, silver or mithril, yellow for
+      gold, various bright colors for gemstones, dark grey for adamant, etc.\n
+      __Characters that do not have the Mining skill cannot percieve deposits,
+      even if they have a significant untrained skill rating. Furthermore, only
+      digging releases the mineral treasure from a deposit -- since the metals
+      or gemstones are essentially part of the stone, catching a deposit in the
+      area of a <9>transmute rock to mud<3> spell destroys the treasure along
+      with the stone.\n 
+      __<15>* <11>Mining (Active):<3> Using the Mining skill puts a character
+      into digging mode; in this mode simply walking into walls will cause
+      you to mine through them. A character's rating in the Mining skill 
+      determines what materials she can penetrate when digging. The character's
+      skill rating plus a modifier based on the tool they are using must exceed 
+      the Hardness of the material in question, otherwise mining cannot occur.
+      Thus, characters with low Mining will be able to dig through streamers
+      but not normal rock, while a character with a magical digging implement
+      and a truly exceptional digging tool might even be able to dig through
+      an adamant wall!\n
+      __The difference between a character's level in the Mining skill and the
+      hardness of the material they are diffing through is also the factor used
+      to calculate how long mining out a single square, and how much Fatigue,
+      if any, is lost in so doing.\n
+      __Finally, when the character successfully mines through a vein or deposit
+      containing treasure, the amount of precious materials that can be recovered
+      intact in the mining process is modified by the Mining skill level, as well
+      as the depth the deposit was found at.\n
+      __<15>* <11>Structural Integrity:<3> Dungeons have already been heavily
+      shaped and altered by human hands, and casual excavation not planned for
+      in their initial creation places a strain on their geological integrity.
+      Fortunately, a skillful miner can choose to remove stone in ways that
+      minimize the strain on existing structures and grant a safe, well-
+      supported mineshaft that stretches a greater distance. A character can 
+      mine out a number of squares on a given level equal to thrice their Mining 
+      skill rating safely. After this, every additional percent of that total mined 
+      increases the chance of a cave-in (with the same effect as an <9>earthquake<3>
+      spell cast at 20th level) by the same percent culmulatively -- so a character 
+      with Mining +5 who mines 6 squares has a 20~ chance of cave-in on the sixth, 
+      since a single square is 1/5th, or 20~, above the total safe limit. The next 
+      square would have a 40~ chance of collapse, and so forth...";
+  }
+
+Text "help::perform"
+  { "__The Perform skill has the following uses:\n
+      __<15>* <11>Bardic Music (Passive):<3> The Perform skill determines
+      several factors related to bardic music, including range and the DC
+      of saving throws. As such, it is a centrally important skill for
+      bards who intend to make effective use of this class feature.\n
+      __<15>* <11>Stage Performance (Active, <4>Unimplemented<11>):<3> Characters with the
+      Perform skill can enter different taverns and hold performances,
+      gaining gold from the managers and appreuciative audience. Initiaally,
+      this can be quite lucrative relative to a character of any level, but
+      performing for cash remains valuable only so long as the performer is
+      a novelty in the area. A performer can perform only once per night per
+      locale, and every additional performance in the same locale ever turns
+      in only half of what the last performance at that locale did.\n
+      __Obviously, then, characters with a high Perform skill have a strong
+      motive to travel from city to city in order to maximize the financial
+      rewards this skill can bring them.\n
+      __<15>* <11>Recruit Allies (Passive):<3> The Perform skill aids in
+      the recruitment of party members (as described under Diplomacy) --
+      by telling enthralling tales of her heroic exploits, a character with
+      the Perform skill makes joining her party seem a much more attractive
+      proposition. In game terms, 1/3rd of the character's Perform skill
+      rating is added to the Diplomacy check to enlist a new party member,
+      provided that the player character has Perform as a class skill.\n
+      __<15>* <11>Prerequisites (Passive):<3> Several prestige classes,
+      notably the shadowdancer and twilight huntsman, depend on Perform
+      as a prerequisite for entry.\n
+      __<15>* <11>Train Charisma (Passive):<3> A central element of any
+      performer's repitoire is simple flair, and learning various
+      performance arts brings out one's flamboyant, extroverted side
+      by the very nature of the work. In game terms, the Perform skill
+      trains Charisma in exactly the same way as the Athletics skill is
+      used to train the physical Ability scores.";
+  } 
+
+Text "help::pick pockets"
+  {
+    "__Contrary to it's name, this skill encompasses a wide
+    variety of feats of legerdemain and sleight of hand. It
+    has the following uses:\n
+    __<15>* <11>Theft (Active):<3> The primary use of the Pick
+    Pockets skill is removing small items from other character.
+    It can be used to steal gold from passing nobles, healing
+    potions from foes in battle or even to slip a sword out of
+    its sheath.\n
+    __There are two seperate DCs involved in a Pick Pockets
+    attempt. The first is 15 + the victim's Reflex save modifier
+    (and the setting of this DC counts as a saving throw on the
+    victim's part, so bonuses like the Protection Domain granted
+    power apply); whether this DC is beaten or not determines
+    if the attempt to procure an item is successful. The second
+    DC is 15 + the victim's Spot rating, and determines if the
+    attempt is noticed or not. The DC decreases by 5 if the mark
+    can't see the would-be thief. On a failed check, the victim 
+    becomes aware of the attempt and likely becomes hostile to 
+    the thief; in an urban setting, the guardmen will become 
+    hostile as well. If a hostile creature notices a pick-pocket
+    attempt, they get an Attack of Opportunity on the thief.\n
+    __The thief must be standing next to the
+    character to be pickpocketed. A successful check adds one
+    unattended Small item from the victim's possession to the
+    skill user's inventory -- the thief can choose from any
+    Small, unattended item in the victim's inventory. 
+    __Lifting larger items is possible, but increases the DC
+    of the attempt by +3 per size category above Small. Removing
+    items from a container (like a backpack) gives a +5 DC. If a
+    victim is distracted, however (as per the Bluff skill),
+    the Pick Pocket DC gains a -10 bonus. Only if the victim
+    is distracted can the skill be used to remove worn or
+    wielded items; if a rogue removes something their mark
+    holds in their hands (i.e., a wielded weapon), or a worn
+    cloak or full backpack, the victim will automatically become 
+    hostile -- but the thief still has the item. Stealing worn 
+    items has a -10 penalty, which effectively cancels the 
+    +10 bonus due to distraction.
+    __A Pick Pockets attempt takes (40 - skill level) segments,
+    to a minimum of 15. It is not possible to use the Pick 
+    Pockets skill to remove worn armor.\n
+    __<15>* <11>Apportation (Passive):<3> The mage spell <9>apportation<3>
+    has an effect similar to the Pick Pockets skill, save for
+    being usable at range, and it function depends upon the Pick
+    Pockets skill as explained in the spell description.\n
+    __<15>* <11>Defense from Theft (Passive):<3> A central element of the
+    Pick Pockets skill is understanding all of the tricks and
+    techniques that can be used to mislead a mark and seperate
+    him from his items. Once these methods are understood, they
+    also become far easier to defend against -- characters with
+    the Pick Pockets skill as a class skill have a a bonus to
+    saving throws against theft equal to a third of their skill 
+    rating.\n
+    __<15>* <11>Conceal Item (Active, <4>Unimplemented<11>):<3> The Pick Pockets skill
+    can also be used to conceal a small-sized item on one's person.
+    Such an item must be placed in a belt inventory slot; using the
+    skill in this manner automatically marks the chose item as
+    concealed. Such an item will not be removed from a character
+    when they enter an area where some items (like weapons, holy
+    symbols, spellbooks and other items capable of producing 
+    offensive effects) are not allowed -- such as taverns, which
+    do not permit weapons and automatically remove them from a
+    player character upon entry.\n
+    __With a Pick Pockets skill of 12 or greater, a character can
+    even conceal items from magical detection, preventing them
+    from being stripped from her upon passing through certain
+    magical portals that normally remove most or all items.\n
+    __<15>* <11>Catch Thrown Weapons (Passive):<3> In addition to larceny,
+    this skill covers forms of sleight of hand used in service
+    to entertainment, such as juggling. This kind of coordination
+    can be put to a more practical use by snatching items out of
+    the air when thrown at a character. When a character with a
+    Pick Pockets rating of 15+ and Pick Pockets as a class skill
+    is targeted with a thrown weapon, he may make a Pick Pockets
+    check to catch the weapon, avoiding any damage to himself if
+    successful. The DC of this check is 11 + 1/2 the total result
+    of the thrower's attack roll.\n
+    __Only Small or smaller weapons can be caught in this manner.
+    If the character has [???], he can immediately throw the caught
+    weapon at any target of his choice as an attack of opportunity.";
+  }
+
+
+Text "help::poison use"
+  {
+    "Poison Use gives a rogue or assasin a broad understanding
+    of poisons and their use on the battlefield; it has the
+    following applications:\n
+    __<15>* <11>Poison Familiarity (Passive):<3> Characters are
+    considered to be familiar with poisons based on their rating
+    in the Poison Use skill. Most characters cannot identify what
+    type of poison is on a blade or in a vial when they look at
+    such, but characters with Poison Use as a class skill can
+    recognize any poison whose base save DC is equal to or lower 
+    than their [Poison Use +5].\n
+    __<15>* <11>Create Poisons (Passive):<3> Poisons are alchemical
+    items and are created just like other alchemical items are --
+    an active use of the Alchemy skill. However, a character must
+    have both the Poison Use and Alchemy skills as class skills to
+    manufacture poisons, must have Poison Use 12+, and the lower of 
+    the two skill ratings is used in place of straight Alchemy in 
+    the normal process. A character that meets these requirements
+    is able to manufacture any poison whose save DC is equal to or
+    lower than the lower of her Poison Use or Alchemy skills.\n   
+    __<15>* <11>Apply Poison (Active):<3> The primary use of the
+    Poison Use skill is applying poisons to weapons. A DC 10 Poison
+    Use check allows a character to apply poison; failing this check
+    wastes the poison the character was trying to apply. For every 
+    three points the character beats the DC 10 base by, the poison 
+    will remain potent for another hit with the weapon.\n
+    __A character without this skill can still attempt to apply 
+    poison to a blade using the Apply verb, but on 1 in 3 failed
+    checks she will poison herself!\n
+    __<15>* <11>Save DC Increase (Passive):<3> A character's Poison 
+    Use skill also educates her in how to use a poisoned weapon most
+    effectively, striking to apply the poison to the bloodstream in
+    the most direct routes, ensuring it is placed on the blade in
+    the most effective manner and so forth. In game terms, when a
+    character with Poison Use strikes another with a poisoned weapon,
+    the save DC of the poison in increased by a third of her skill
+    rating.\n 
+    __<15>* <11>Save Bonuses (Passive):<3> A solid knowledge of
+    poisons also increases a character's ability to treat poisoning,
+    and she recieves a bonus to her saving throws against poison equal
+    to 1/4th of her skill rating.";
+  }
+
+Text "help::Ride"
+  { "__The Ride skill has the following use:\n
+    __<15>* <11>Riding (Passive):<3> Characters that do not have Ride
+    as a class skill are not trained as horsemen and are thus unable
+    to ride at all. A mounted character uses his mount's movement
+    rate, +5~ per two levels of her total Ride rating.\n 
+    __<15>* <11>Elevation Bonuses (Passive):<3> A mounted rider has
+    a significant advantage over a footman, provided he's sufficiently
+    skilled at handling his mount. A mounted character recieves an
+    elevation bonus to Defense equal to two plus a sixth of his Ride
+    skill, an elevation bonus to melee attack rolls equal to one plus
+    a fifth of his Ride skill, and an elevation bonus to melee damage
+    rolls equal to a fifth of his Ride skill.\n 
+    __<15>* <11>Exotic Mounts (Passive):<3> You can ride any neutral 
+    animal that is suitable to be a mount, or any other creature 
+    suitable to be a mount that has CR 2 or less. To ride a more 
+    powerful creature that is not a natural animal, however, you
+    must have a Ride skill equal to twice its Challenge Rating.
+    This is only one of several conditions relating to exotic
+    mounts.\n
+    __<15>* <11>Staying Mounted (Passive):<3> A DC 20 Ride check is
+    made for a mounted character to avoid being thrown from his mount
+    in situations when a character on foot would become prone. A truly
+    skilled rider can also prevent his mount from being knocked prone
+    (from falling or being tripped, for example), with a DC 40 Ride
+    check.\n 
+    __<15>* <11>Jumping (Passive):<3> When you attempt to jump while
+    mounted, you can use your mount's Jump skill, but only if you
+    first convince it to make the jump with a Ride check against
+    the jump's normal DC. Failure wastes the action.\n
+    __<15>* <11>Mounted Combat (Passive):<3> If a character with
+    the Mounted Combat feat is attacked while mounted, a Ride skill 
+    check is made, and the result can be used in place of said
+    character's normal Defense if it is higher.\n
+    __<15>* <11>Overrun (Passive):<3> The saving throw DC associated
+    with the Overrun feat is 10 + 1/2 your Ride skill.\n"; 
+  }
+  
+Text "help::searching"
+  { "__The Search skill has the following uses:\n
+    __<15>* <11>Find Traps (Passive/Active):<3> The Search skill is used to
+    locate traps before they can harm a character. When a character
+    walks into a square with a trap, a Search check is automatically
+    made to see if the trap is found. Success reveals the trap and
+    asks for confirmation if the player wants to move over it and
+    risk triggering it.
+    __Traps can also be actively searched for in a 50 foot radius 
+    area immediately around the player using the 'S'earch command.\n
+    __The DC to spot a mundane trap is 15 + the Challenge Rating of
+    the trap for a mundane trap, or 20 + the Challenge Rating of the
+    trap for a magical trap. This check is only ever made once per
+    trap -- if failed, it cannot be retried, though the trap will
+    be revealed when it is triggered.\n 
+    __<15>* <11>Find Secret Doors (Active):<3> The Search skill is
+    also used to locate secret doors and discern a way of opening
+    them. Normal character do not detect secret doors just by walking
+    past them, though elves and other characters with exceptionally
+    acute senses have this ability. Others must rely on using the
+    'S'earch command.\n
+    __The Search check to find a secret door is DC 15. If there is
+    a secret door in the search area but the check is failed, the
+    game will mention that the character 'thinks there might be
+    something there, but can't find it', to avoid great frustration
+    on the player's part. A character can try to find a secret door
+    once a day. Additional checks after the first have a +4 retry
+    bonus, then +6, +8, etc. until the character is able to locate
+    the door successfully and move on with the dungeon."; 
+  }  
+
+Text "help::seneschal"
+  { "__The Seneschal skill has the following uses:\n
+     __<15>* <11>Claim Keep (Active, <4>Unimplemented<11>):<3> The Seneschal skill covers
+     courtly etiquette, medieval finance and moneylending and general
+     lordly competance. In game terms, it allows a character to own
+     property and manage it compenantly, building and maintaining a
+     keep or fortress somewhere on the overland map should she complete
+     a quest that would award her with such. In addition to providing
+     her with a safe place to keep items she doesn't carry with her,
+     such a locale would provide the character with a steady income
+     of gold based on her Seneschal rating as time passes, and allow
+     her to attract greater numbers of troops to her banner over time."; 
+  }    
+  
+Text "help::spellcraft"
+  {
+    "__Spellcraft can be used in the following ways:\n
+      __<15>* <11>Identify Spells (Passive):<3> When you witness another
+      spellcaster cast a spell, the game will automatically make a 
+      Spellcraft check to see if you can identify the spell. The DC of
+      this check is 10 + the spell's level.\n
+      __<15>* <11>Counterspell (Passive):<3> If you beat the above check
+      to identify a spell by a high enough margin, you may also be able
+      to quickly issue a counterspell in response, completely negating
+      the enemy's spell. If you know a spell from the same school of magic 
+      of equal or higher level than the one you are trying to counter, the
+      DC to counterspell is 15 + spell level. If you do not know such a
+      spell, but you do know <9>dispel magic<3>, you are still capable of
+      issuing a counterspell provided that your Spellcraft check exceeds
+      DC 20 + spell level.\n
+      __A counterspell costs you the higher of the mana cost of the spell
+      countered or the spell used to counter, unless your Spellcraft exceeds 
+      +15, +20 or +25, in which case it costs you 2/3rds, 1/2 or 1/3rd of the
+      casting mana cost. It also costs you [20 - Spellcraft Rating] segments
+      to utter the words (minimum 5), and you must not be magically silenced. 
+      Using <9>dispel magic<3> to counterspell takes longer, requiring [30 -
+      Spellcraft Rating] segments instead. There is a Tactical
+      Option which allows you to decide to counterspell always, never,
+      intelligently or to ask the player manually each time the opportunity 
+      arises.\n
+      __Regardless of your Spellcraft score, you cannot counterspell the
+      reading of scrolls, use of wands or other magical items or the
+      invocation of innate abilities unless you have the Broad Counterspell
+      feat; the Reflective Counterspell feat also augments counterspells.\n
+      __<15>* <11>Discern Standing Magic (Passive, <4>Unimplemented<11>):<3> If you have a 
+      Spellcraft score of 11+, you will be able to discern spells that 
+      enemy casters or creatures have active on them, provided your 
+      Spellcraft equals or exceeds [10 + Spell Level]. If this is
+      the case, this information will automatically be listed after
+      a character's equipment when you examine that character.";
+  }
+
+  
+Text "help::spot"
+  { "__The Spot skill has these practical applications:\n
+      __<15>* <11>Discern Hiding Creatures (Passive):<3> The Spot
+      skill is used to percieve creatures that are using the Hide
+      in Shadows skill, as described under Hide in Shadows.\n
+      __<15>* <11>Spot Invisible Creatures (Passive):<3> A DC 20
+      Spot skill test is used to discern the slight shimmering
+      effect around an invisible creature, as described in the
+      writeup of the <9>invisibility<3> spell.\n
+      __<15>* <11>Setup Watches (Passive):<3> The Spot skill is 
+      also used to arrange
+      and undertake watches when a character rests in the dungeon
+      at night with companions. The character must have at least
+      one companion who is not a mindless undead or a summoned
+      creature with a summoning duration of less than a full day
+      to use this function.\n
+      __Each character in the group takes an equal portion of the
+      night to watch over the others, ensuring their safe rest.
+      The total of all the Spot scores in the group is taken, and
+      that total is subtracted from the percentile chance the
+      player's group has of having an encounter during that rest
+      period. (It's assumed that monster groups that ambush the
+      party at night are looking for an easy victory, and can be
+      held at bay with sufficient vigilance.)\n
+      __Additionally, if the total of the group's Spot scores
+      exceeds three times the current Depth of the dungeon, the
+      group is guaranteed to gain forewarning of any encounter
+      even if one does occur -- the members of the group will
+      all be awake, and will not suffer a delay in acting at
+      the beginning of the encounter. This is especially
+      important, since it prevents monsters from being able to
+      perform a Coup de Grace on the player character or her
+      allies.";
+  }
+
+Text "help::swimming"
+  { "__The Swim skill has the following uses:\n
+    __<15>* <11>Avoid Drowning (Passive):<3> A Swim check is made when moving
+    through a square containing deep water. The usual DC is 10, though
+    especially turbulent water pushes the DC as high as 20. Failing this
+    check causes the character's equipment to become soaked (it's presumed
+    to be securely packaged otherwise), and the character takes damage and
+    begins choking as described under the water terrain in question.\n 
+    __<15>* <11>Swimming Speed (Passive):<3> A character's swimming movement
+    rate is 70~ of her normal movement rate, plus 10~ per point of the Swim
+    skill she has above +10. Aquatic creatures (and druids or mages shifted
+    into such beings) have a base movement rate in water of 100~, but still 
+    gain a +10~ bonus for every point of Swim skill above +10.\n 
+    __These modifiers are distinct from a terrain's movement modifier -- some
+    liquid terrains might slow down movement even further.\n
+    __<15>* <11>Defense in Water (Passive):<3> A swimming character suffers
+    a -4 penalty to Defense, adjusted up by one for every point of Swim above
+    +10. At +15 and higher, this actually causes her to gain a bonus to Def
+    instead of a penalty, as a result of being so agile and graceful in the
+    water. As with movement, aquatic creatures suffer no penalty, but gain a
+    +1 bonus for every point of Swim above +10.\n"; 
+  }  
+
+Text "help::tumble"
+  { "__The Tumble skill can be used in these ways:\n
+        __<15>* <11>Tumbling (Active):<3> Using this skill allows you to 
+      move acrobatically; tumbling uses one fatigue point and lasts for 
+      [Tumble Rating + 1d4] turns, but gives several advantages. While tumbling, 
+      a character adds half of their Tumble skill rating to their DC 
+      versus normal attacks, and their full Tumble skill rating to their 
+      DC versus attacks of opportunity provoked by movement. Tumbling 
+      increases one's movement rate by [(Skill Rating / 2) x 5~], but decreases
+      attack speed by 25~ and increases threat ranges by 2 (after any doublings due
+      to keen weapons, Improved Critical, etc.) against any creature whose Wisdom 
+      is lower than the tumbler's skill rating.\n
+      __<15>* <11>Land Gracefully (Passive):<3> When a character with
+      Tumble as a class skill falls, a skill check against DC 20 is made.
+      Success allows her to land gracefully, halving the falling damage
+      and preventing her from becoming prone.\n
+      __<15>* <11>Defensive Roll (Passive):<3> A Tumble skill total of
+      15+ is the prerequisite to character that do not recieve Defensive
+      Roll as a class feature gaining it as a feat.\n
+      __<15>* <11>Reflex Saving Throw (Passive):<3> In addition to the
+      active benefit, characters with Tumble as a class skill and a rating
+      above +5 gain a competance bonus to Reflex saving throws -- +1 at +6,
+      +2 at +9, +3 at +12, +4 at +15 and so forth. This is a constant, 
+      nonmagical benefit.";
+  }
+
+Text "help::Use Magic"
+  { "__The Use Magic skill has the following uses:\n
+    __<15>* <11>Zap Wand (Passive):<3> The Use Magic skill governs the
+    activation of wands. When a character tries to blast a wand, a Use
+    Magic check is made against a DC of 10 + 1/2 the wand's level (the
+    typical depth it would be found at in a dungeon). If this check is
+    successful, the wielder is able to activate the wand. A specialist
+    mage gains bonuses when using wands affiliated with his school of
+    choice, or related schools, equal to +1 per 5~ of his specialist
+    modifier for the school in question. Penalties do not apply to
+    oppositional schools, however.\n
+    __Some wands have a magical plus, which frequently determines the
+    number of dice of damage they inflict, the power of the creatures
+    they summon or some other variable factor of their effect. In this
+    case, a highly successful Use Magic check has a chance of increasing
+    the wand's effective plus, per the following table:\n
+    <15>___DC Exceeded________Increased Plus__\n
+    <1>___[15 + Wand Depth]________+1________\n
+    ___[20 + Wand Depth]________+2________\n
+    ___[25 + Wand Depth]________+3________\n
+    ___[30 + Wand Depth]________+4________\n
+    __<3>This can even raise the temporary effective plus of a wand above
+    +5, for the purpose of this single activation.\n
+    __<15>* <11>Trick Magic (Passive):<3> A rogue's special ability
+      to use class or race-specific magic is based on the sum of her
+      Bluff and Use Magic scores.\n"; 
+  }
+    
+Text "help::Wilderness Lore"
+  { "__The Wilderness Lore skill can be used in these ways:\n
+      __<15>* <11>Food Tending (Passive):<3> The Wilderness Lore skill covers
+      the cooking and preservation of food in survivalist conditions.
+      The Wilderness Lore skill determines how quickly corpses age
+      when they are in a character's possession -- if a character with
+      Wilderness Lore +9 kills a deer, the meat will last 3 times as
+      long in his possession as it will for a character with Wilderness
+      Lore +3. The same decay rates apply to food items subject to decay
+      that a character with Wilderness Lore can preserve better -- food
+      rations never decay, but apples and melons will.\n
+      __Wilderness Lore also comes into play when a character eats the
+      corpse of a creature not normally used for food. In this case a
+      character always has a chance of contracting a disease, and a
+      Wilderness Lore check is made against a DC determined by a variety
+      of factors, including the age of the corpse, to see if the character
+      becomes diseased.\n
+      __<15>* <11>Hunting (Active, <4>Unimplemented<11>):<3> On the overland map, a
+      character can use the Wilderness Lore skill in order to hunt for
+      food; a successful check takes two hours and moves the character
+      to Satiated. Failure can simply result in no suitable food being
+      found, or if the check is failed by five or more can throw the
+      character into a dangerous encounter with wilderness creatures.\n
+      __The DC of this check is determined by the terrain that the
+      character is moving through.\n
+      __<15>* <11>Harsh Terrain (Passive, <4>Unimplemented<11>):<3> Some forms of terrain on
+      the Wilderness screen are so hostile to life that they require a 
+      Wilderness Lore check for every step the character takes. The DC
+      of this check is set by the terrain in question, and the effects
+      of failing can include encounters, damage, becoming lost (unable
+      to control the direction you move on the overland map), equipment
+      loss, fatigue, disease and so forth.\n
+      __<15>* <11>Resist Weather (Passive, <4>Unimplemented<11>):<3> Weather effects function
+      in Incursion much like harsh terrain, except that they are invisible 
+      fields that move about the overland map rather than being fixed in
+      one location. The <9>predict weather<3> spell allows these fields
+      to be seen. Entering a weather field requires a Wilderness Lore
+      check each turn, with much the same effects for failure as harsh
+      terrain.\n
+      __<15>* <11>Tracking Range (Passive):<3> One of the factors in
+      determining the range of a ranger's Tracking class feature is the
+      Wilderness Lore skill; see the description of the ranger class for
+      more information on this ability.\n
+      __<15>* <11>Harvesting Mushrooms/Herbs (Passive, <4>Unimplemented<11>):<3> When a 
+      character picks herbs from a bush or mushrooms from the floor of
+      the dungeon (using the normal 'g'et item command), a Wilderness 
+      Lore check is made, though not displayed, usually against DC 15,
+      though potent herbs and mushrooms might have a higher DC. If this
+      check is failed, the herb or mushroom automatically becomes cursed,
+      and will have only deleterious effects if consumed.\n
+      __Since this is not a magical curse, but merely the result of a
+      bad preparation, it does not show up to most things that normally
+      detect curses.";
+
+  }    
+
+ 
+ 

@@ -1,0 +1,946 @@
+Domain "Air" : 0 {
+  Desc: "__<15>Granted Power:<7> You can command air creatures 
+    just as an evil priest commands undead, and you gain
+    the ability to fall without suffering damage (as per
+    <9>feather fall<7>) -- the air naturally buffers your 
+    descent.";
+  Grants:
+        Ability[CA_COMMAND,MA_AIR] at 1st level,
+        Ability[CA_SLOW_FALL] at 1st level;
+        //Stati[IMMUNITY,AD_FALL] at 1st level;
+  Spells:
+        $"Wall of Fog", /* Wind Column */
+        $"Wind Wall",
+        $"Gaseous Form", 
+        $"Air Walk",
+        $"Cloudkill"; 
+      /* Control Wind,
+         Chain Lightning,
+         Whirlwind,
+         Elemental Swarm */
+}
+
+Domain "Animal" : 0 {
+  Desc: "__<15>Granted Power:<7> Animals are naturally neutral to you.";
+  Grants:
+      Stati[NEUTRAL_TO,MA_ANIMAL] at 1st level;
+  Spells:
+        $"Magic Fang",
+        $"Hold Beast",
+        $"Dominate Animal", 
+        $"Commune With Nature",
+        $"Animal Growth";
+      /* Antilife Shell,
+         Awaken,
+         Creeping Doom,
+         Shapechange */
+}
+
+Domain "Beauty" : 0
+  {
+    Desc: "__<15>Granted Power:<7> You have the power of beguiling magic -- you
+      add your Charisma bonus (if any) to the DC of all of your mental
+      spells. You also recieve a permanant sacred bonus to your Charisma - +1 
+      for every three priest levels.";
+    Grants:
+      Ability[CA_BEGUILING_MAGIC] at 1st level,
+      Stati[ADJUST_SAC,A_CHA,+1] at every 3rd level;
+    Spells:
+      $"Charm Person",
+      $"Enthrall"
+      $"Suggestion",
+      $"Charm Monster",
+      $"Music of the Spheres",
+      $"Immortal Grandeur";
+     /* Chariot of Sustarre,
+        Crown of Glory */
+  }
+  
+#if 0
+Domain "Blood;domain" : 0 {
+  Grants: 
+    Ability[CA_INNATE_SPELL,$"caustic vitae"] at 1st level,
+    Ability[CA_INNATE_SPELL,$"chill blood"] at 1st level;
+  Spells:
+    $"detect blood",
+    $"sanguine touch",
+    $"blood fury",
+    $"burning blood",
+    $"infernal blood";
+  Desc: "__<15>Granted Power:<7> You can use <9>Caustic Vitae<7> and <9>Chill Blood<7>
+    as innate spell-like abilities."; 
+  }
+#endif 
+
+Domain "Chaos" : 0 {
+  Desc: "__<15>Granted Power:<7> You have a bonus to save against compulsions equal 
+    to your priest level and you gain the Transmute Spell feat for free. Your
+    individuality and independence are honed to a supernatural level, sustaining
+    your Charisma at a level equal to your priest level.";
+  Grants:
+      Feat[FT_TRANSMUTE_SPELL] at 1st level,
+      Stati[SUSTAIN,A_CHA,+1] at every level starting at 1st,
+      Stati[SAVE_BONUS,SN_COMP,+1] at every level starting at 1st;
+  Spells:
+      $"Miscast Magic",
+      $"Sign of Discord",
+      $"Confusion",
+      $"Chaos Hammer",
+      $"Animate Objects",
+      $"Misdirection";
+    /*  Insanity,
+        Word of Chaos,
+        Cloak of Chaos,
+        Wildfire */
+    On Event EV_PREREQ {
+      if (EActor->isMType(MA_CHAOTIC))
+        return 1;
+      return -1;
+      };
+  }
+
+Domain "Community" : 0
+  {
+    Desc: "__<15>Granted Power:<7> Diplomacy is a treated as a class skill for you. 
+      Any allies standing within 30 feet (3 squares) of you receive a +2 circumstance 
+      bonus to Defense, +1 per three priest levels.";
+    Grants:
+      Stati[EXTRA_SKILL,SK_DIPLOMACY] at 1st level,
+      Ability[CA_SHIELD_GROUP,+2] at 1st level,
+      Ability[CA_SHIELD_GROUP,+1] at every 3rd level starting at 3rd;
+    Spells:
+      $"Valor", 
+      $"Chant",
+      $"Prayer",
+      $"Invocation",
+      $"Resist the Elements";
+    /*  Recitation,
+        Strength of One,
+        Word of Recall,
+        Succor,
+        Mass Charm */
+  }
+
+Domain "Craft" : 0
+  {
+    Desc: "__<15>Granted Power:<7> Craft is treated as a bonus class skill for 
+      you. When crafting items, you reduce the cost in gold pieces by five percent 
+      per priest level, up to a maximum of 80% at 16th level. You never need a skill
+      kit to use a skill that normally requires such, including Craft, Heal, 
+      Disguise, Alchemy, Mining and Lockpicking.";
+    Grants:
+      Ability[CA_MASTER_ARTISAN] at every level starting at 1st,
+      Stati[EXTRA_SKILL,SK_CRAFT] at 1st level,
+      Stati[INNATE_KIT,SK_CRAFT] at 1st level,
+      Stati[INNATE_KIT,SK_HEAL] at 1st level,
+      Stati[INNATE_KIT,SK_DISGUISE] at 1st level,
+      Stati[INNATE_KIT,SK_ALCHEMY] at 1st level,
+      Stati[INNATE_KIT,SK_MINING] at 1st level,
+      Stati[INNATE_KIT,SK_LOCKPICKING] at 1st level;
+    Spells:
+      $"Mending",
+      $"Detect Objects",
+      $"Keen Edge",
+      $"Major Creation",
+      $"Wall of Stone";
+    /*  Major Creation,
+        Blade Barrier,
+        Simulacrum,
+        Ringweave,
+        Wildfire */
+  }
+
+Domain "Death" : 0
+  {
+    Desc: "__<15>Granted Power:<7> You are supernaturally resistant to negative energy,
+      and have inherent necromantic damage resistance equal to half your level as a
+      priest. You may also perform a <9>Death Touch<7> as an innate spell-like
+      ability, killing any creature with fewer hit points then your roll of
+      (caster level)d8. Each touch costs you one fatigue point, and the ability
+      can be shut off with the cancel command ('x').";
+    Grants:
+      Stati[RESIST,AD_NECR,+1] at every 2nd level starting at 1st,
+      Ability[CA_INNATE_SPELL,$"death touch"] at 1st level;    
+    Spells:
+      $"Rigor Mortis",
+      $"Bladethirst", // Death Knell ...
+      $"Animate Dead",
+      $"Death Ward",
+      $"Slay Living";
+    /*  Create Undead
+        Destruction
+        Create Greater Undead
+        Wail of the Banshee */
+  }
+
+Effect "Death Touch" : EA_GENERIC
+  { SC_NEC; aval: AR_TOUCH; pval: (LEVEL_1PER1)d8; 
+    lval: LEVEL_HALF_PLUS3; tval: MA_LIVING; 
+    Flags: EF_SHOWNAME, EF_LIM_MTYPE, EF_DEATH, EF_DLONG, 
+      EF_SPECABIL, EF_CANCEL;
+    On Event MSG_CAST
+      "Your hands glow black!" /
+      "The <EActor>'s hands glow black!",
+    EV_MAGIC_HIT {
+      EActor->LoseFatigue(1,false);
+      if (EVictim->cHP > e.vDmg) 
+        e.Immune = true;
+      else {
+        VPrint(e,"Your soul is snuffed out!",
+                 "The <EVictim> collapses, dead.");
+        ThrowDmg(EV_DEATH,AD_NECR,0,"a priest's death touch",EActor,EVictim);
+        }
+      return DONE;
+      };
+    Desc: "You may perform a <9>Death Touch<7> as an innate spell-like
+      ability, killing any creature with fewer hit points then your roll of
+      (caster level)d8. Each touch costs you one fatigue point, and the ability
+      can be shut off with the cancel command ('x').";
+  } 
+
+Domain "Destruction" : 0 {
+    Desc:"__<15>Granted Power:<7> You gain the smite ability. Whenever you make a 
+      Great Blow attack, your Charisma bonus (if any) is added to the attack 
+      roll, and your priest level is added to the damage inflicted.";
+    Grants:
+      Ability[CA_SMITE] at every level starting at 1st;
+    Spells:
+      $"Shatter",
+      $"Scorcher",
+      $"Tremor",
+      $"Explosive Runes",
+      $"Cloudkill",
+      $"Disintegrate";
+    /*  
+        ???
+        Earthquake,
+        Creeping Doom */
+  }
+
+Domain "Domination" : 0
+  {
+    Desc: "__<15>Granted Power:<7> You gain the feat School Focus (enchantment) for free 
+      at 1st level. The CR of summoned, controlled or commanded creatures you can 
+      safely manage increases by +1 every 4th priest level.";
+    Grants:      
+      Ability[CA_COMMAND_AUTHORITY,+1] at every 4th level starting at 4th,
+      Feat[FT_SCHOOL_FOCUS,SC_ENC] at 1st level;
+    Spells:
+      $"Command",
+      $"Ray of Enfeeblement",
+      $"Hold Person",
+      $"Crushing Despair",      /* Greater Command */
+      $"Dominate Person";
+  }
+Domain "Earth" : 0
+  {
+    Desc: "__<15>Granted Power:<7> You can command earth creatures just as an evil 
+      priest commands undead. You have a bonus to save against petrification
+      equal to your priest level; starting at 7th level, you are immune.";
+    Grants:
+      Ability[CA_COMMAND,MA_EARTH] at 1st level,
+      Stati[SAVE_BONUS,SN_PETRI,+1] at every level starting at 1st,
+      Stati[IMMUNITY,AD_STON] at 7th level;
+    Spells:
+      $"Magic Stone",
+      $"Stone Tell",
+      $"Meld into Stone",
+      $"Transmute Rock to Mud",
+      $"Stoneskin";
+      /* Animate Rock, Statue, Sink, Elemental Swarm */
+  }
+
+Domain "Evil" : 0 {
+  Desc: "__<15>Granted Power:<7> You cast evocation spells at +1 caster level. You
+    can command demons or devils, as suits your alignment, just as other evil 
+    clerics command undead.";
+    Grants:
+      Stati[BONUS_SCHOOL_CASTING_LEVEL,SC_EVO,+1] at 1st level;
+    Spells:
+      $"Malignance", 
+      $"Desecrate",
+      $"Armor of Darkness",
+      $"Unholy Blight",
+      $"Fiendform";
+      /* Torment,
+         Cacodaemon,
+         Blasphemy,
+         Unholy Aura,
+         Gate (or Violation) */
+    On Event EV_ADVANCE {
+      if (EActor->isMType(MA_CHAOTIC))
+        EActor->GainAbility(CA_COMMAND,MA_DEMON,$"Evil",SS_DOMA);
+      else
+        EActor->GainAbility(CA_COMMAND,MA_DEVIL,$"Evil",SS_DOMA);
+      return NOTHING;
+      },
+    EV_PREREQ {
+      if (EActor->isMType(MA_EVIL))
+        return 1;
+      return -1;
+      };
+        
+  }
+Domain "Fate" : 0
+  {
+    Desc: "__<15>Granted Power:<7> You have an insight into the weave of destiny, and can 
+      identify the blessed / uncursed / cursed state of an item upon picking it up. 
+      This ability also grants you a +4 bonus to Intuition checks. You cast Divination
+      spells at +1 caster level.";
+    Grants:
+      Ability[CA_FATESENSE] at 1st level,
+      Stati[BONUS_SCHOOL_CASTING_LEVEL,SC_DIV,+1] at 1st level; 
+    Spells:
+      $"True Strike",
+      $"Minor Malison",           
+      $"Bestow Curse",      
+      $"Nemesis Spell",
+      $"Nightmare;spell";
+  }
+  
+Domain "Fire" : 0
+  { Desc: "__<15>Granted Power:<7> You command fire creatures just as an evil 
+      priest commands undead. You gain one level of innate fire resistance 
+      with every odd priest level that you gain."; 
+    Grants:
+      Ability[CA_COMMAND,MA_FIRE] at 1st level,
+      Stati[RESIST,AD_FIRE,+1] at every 2nd level starting at 1st;
+    Spells:
+      $"Burning Hands",
+      $"Produce Flame",
+      $"Flaming Sphere",
+      $"Wall of Fire",
+      $"Flame Strike";
+    /*$"Flame Strike" 
+      $"Fire Seeds",
+      $"Fire Storm",
+      $"Incindiary Cloud",
+      $"Elemental Swarm (Fire)";*/
+  }
+  
+Domain "Good" : 0
+  {
+    Desc: "__<15>Granted Power:<7> You are surrounded by a sacred aura. Evil creatures
+      that touch you directly (such as with natural attacks) suffer 1d4 points
+      of damage at first level, increasing to 2d4 at 4th, 3d4 at 7th, and so
+      forth.";
+    Grants:
+      Ability[CA_SACRED_AURA] at every 3th level starting at 1st level; 
+    Spells:
+      $"Benevolence",   
+      $"Divine Sacrifice", 
+      $"Bolts of Glory",  
+      $"Holy Smite",
+      $"Dispel Evil";
+      /*$"Dispel Evil",
+      $"Crown of Fire",
+      $"Crown of Glory",
+      $"Shield of the Archons",
+      $"Planetar Ally";*/   // or Armageddon      
+    On Event EV_PREREQ {
+      if (EActor->isMType(MA_GOOD))
+        return 1;
+      return -1;
+      };
+  }
+
+Domain "Guardian" : 0
+  {
+    Desc: "__<15>Granted Power:<7> You treat Spot and Listen as bonus priest class skills 
+      and gain a +1 bonus to them every 3rd priest level. You are also ever wakeful,
+      being immune to sleep effects.";
+    Grants:
+      Stati[EXTRA_SKILL,SK_SPOT] at 1st level,
+      Stati[EXTRA_SKILL,SK_LISTEN] at 1st level,
+      Stati[SKILL_BONUS,SK_SPOT,+1] at every 3rd level starting at 3rd level,
+      Stati[SKILL_BONUS,SK_LISTEN,+1] at every 3rd level starting at 3rd level,
+      Stati[IMMUNITY,AD_SLEE] at 1st level;
+    Spells:
+      $"Find Traps",
+      $"See Invisibility",   /* Wyvern Watch */
+      $"Glyph of Warding",
+      $"Dimensional Anchor",
+      $"Energy Buffer";
+      /*$"Unceasing Vigilance of the Holy Sentinal",
+        $"True Seeing",
+        $"Blade Barrier", (or Guards and Wards)
+        $"Antipathy",
+        $"Foresight" */
+  }
+
+Domain "Hatred" : 0 {
+    Grants:
+      Ability[CA_FAV_ENEMY,MA_CHOICE5] at every level starting at 1st;
+    Spells: 
+        $"Brand of Hatred",  
+        $"Dire Charm", 
+        $"Bestow Curse",  
+        $"Blackmantle", /* 4  */
+        $"Thornwrack"; /* 5 */
+    Desc: "__<15>Granted Power:<7> You are able to choose a hated enemy, much like a ranger
+      does, and gain bonuses in combat against that enemy similar to a ranger's."; 
+} 
+
+Domain "Healing;domain" : 0
+  {
+    Desc: "__<15>Granted Power:<7> All healing spells that you cast are automatically 
+      considered to be maximized. You never need to have a healing kit to use any of
+      the functions of the Heal skill.";
+    Grants:
+      Ability[CA_MAXIMIZE_HEALING] at 1st level,
+      Stati[INNATE_KIT,SK_HEAL] at 1st level;
+    Spells:
+      $"Lifesight", // ww: all priests have CLW anyway! $"Cure Light Wounds",
+      $"Cure Moderate Wounds",
+      $"Cure Serious Wounds",
+      $"Cure Critical Wounds",
+      $"Heal;spell";
+      /*$"Healing Circle",
+      $"Heal",
+      $"Regenerate",
+      $"Mass Heal",
+      $"Breath of Life";*/      
+  }
+
+Domain "Knowledge" : 0
+  {
+    Desc: "__<15>Granted Power:<7> You get all Knowledges as bonus class skills. You gain 
+      the Scribe Scroll feat as a bonus feat at 1st level, and gain one extra
+      skill point at every priest level.\n";
+    Grants:
+      Stati[EXTRA_SKILL,SK_KNOW_GEO] at 1st level,
+      Stati[EXTRA_SKILL,SK_KNOW_INF] at 1st level,
+      Stati[EXTRA_SKILL,SK_KNOW_MAGIC] at 1st level,
+      Stati[EXTRA_SKILL,SK_KNOW_MYTH] at 1st level,
+      Stati[EXTRA_SKILL,SK_KNOW_PLANES] at 1st level,
+      Stati[EXTRA_SKILL,SK_KNOW_OCEANS] at 1st level,
+      Stati[EXTRA_SKILL,SK_KNOW_NATURE] at 1st level;
+    Spells:
+      $"Read Magic",
+      $"Identify",
+      $"Lorecall",
+      $"Clairvoyance",
+      $"Wizard Sight",
+      $"True Seeing";
+      /*$"True Seeing",
+        $"Legend Lore",
+        $"Insight",
+        $"Eldritch Tongue",
+        $"Foresight"; */
+    On Event EV_ADVANCE {
+      EActor->GainBonusSkills($"priest",1);
+      return NOTHING;
+      };
+  }
+
+Domain "Law" : 0 
+  {
+    Desc: "__<15>Granted Power:<7> The ordered nature of your mind gives you a bonus to save 
+      versus confusion and stunning equal to your priest level, and sustains your
+      Intelligence at a level equal to your priest level. Furthermore, you gain the 
+      Sure Spell feat for free at 1st level.";
+    Grants:
+      Stati[SAVE_BONUS,SN_CONF,+1] at every level starting at 1st,
+      Stati[SAVE_BONUS,SN_STUN,+1] at every level starting at 1st,
+      Stati[SUSTAIN,A_INT,+1] at every level starting at 1st,
+      Feat[FT_SURE_SPELL] at 1st level;
+    Spells:
+      $"Protection from Theft",
+      $"Hold Person",
+      $"Iron Sword",
+      $"Order's Wrath",
+      $"Mark of Justice";      
+    /* Castigate,
+       Geas,
+       Dictum,
+       Interdiction,
+       Imprisonment */
+    On Event EV_PREREQ {
+      if (EActor->isMType(MA_LAWFUL))
+        return 1;
+      return -1;
+      };
+}
+Domain "Liberation" : 0 
+  {
+    Desc: "__<15>Granted Power:<7> You are able to release creatures summoned by other
+      spellcasters from the control their master has over them; at this point
+      they will usually turn on their summoner. Using this power costs two
+      fatigue points, and affects a group of creatures whose combined CR is
+      less than or equal to you priest level.";
+    Grants:
+      Ability[CA_UNBIND] at every level starting at 1st;
+    Spells:
+      $"Valor",
+      $"Passwall",
+      $"Free Action;spell",
+      $"Restoration",
+      $"True Seeing";
+  } 
+
+Domain "Luck" : 0
+  {
+    Desc :"__<15>Granted Power:<7> You gain a +1 sacred bonus to your Luck score every 
+      4th level, starting at 1st. Additionally, you have a 25% chance, +5% per 
+      odd priest level, to negate critical hits against you due to sheer luck.";
+    Grants:
+      Ability[CA_NEGATE_CRIT,+4] at 1st level,
+      Ability[CA_NEGATE_CRIT,+1] at every 2nd level starting at 1st,
+      Stati[ADJUST_SAC,A_LUC,+1] at every 4th level starting at 1st;      
+    Spells:
+      $"Entropic Shield",
+      $"True Strike",
+      $"Warning",
+      $"Premonition",
+      $"Energy Buffer";
+    /* Evasion, 
+       Probability Control,
+       Spell Turning,
+       Tempus Fugit,
+       Miracle */        
+    /*On Event EV_ADVANCE {
+      if (EActor->LevelAs($"priest") == 1)
+        GainPermStati(TRAP_EVENT,PRE
+    */
+  }
+Domain "Magic" : 0 
+  {
+    Desc: "__<15>Granted Power:<7> You gain Use Magic Device and Decipher Script as bonus 
+      class skills. You gain a bonus to them equal to one-third your priest level.";
+    Grants:
+      Stati[SKILL_BONUS,SK_USE_MAGIC,+1] at every 3rd level starting at 3rd,
+      Stati[SKILL_BONUS,SK_DECIPHER,+1] at every 3rd level starting at 3rd,
+      Stati[EXTRA_SKILL,SK_USE_MAGIC] at 1st level,
+      Stati[EXTRA_SKILL,SK_DECIPHER] at 1st level;
+    Spells:
+      $"Nystrom's Magical Aura", // magic aura ...
+      $"Mana Theft",
+      $"Dispel Magic",
+      $"Wandwierd",
+      $"Magic Resistance";
+  }
+
+Domain "Moon" : 0 {
+    Grants: 
+      Stati[ALSO_TURN_MA_TYPE,MA_LYCANTHROPE] at 1st level,
+      Ability[CA_INNATE_SPELL,$"faerie fire"] at 1st level;
+    Spells: 
+      $"Silversheen;spell", /* 1 */
+      $"invisibility", /* 2 */
+      $"polymorph self", /* 3 */
+      $"spectral force", /* 4 */
+      $"mooncloak"; /* 5 */
+    Desc: "__<15>Granted Power:<7> When you turn Undead you also turn
+      Lycanthropes. In addition, you gain <9>Faerie Fire<7> as an
+      innate spell-like ability.";
+} 
+Domain "Mysticism" : 0 
+  {
+    Grants:
+      Stati[SEE_INVIS] at 1st level;
+    Spells: 
+      $"Divine Favor", /* 1 */
+      $"Hypnotism", /* 2 */
+      $"displacement", /* 3 */
+      $"Lesser Aspect of Divinity", /* 4 */
+      $"wizard sight"; /* 5 */
+    Desc: "__<15>Granted Power:<7> Your affinity for the Higher Mysteries allows you to 
+      see things no other being can -- you innately perceive invisible creatures.";
+  }          
+
+Domain "Night" : 0
+  {
+    Desc: "__<15>Granted Power:<7> You have infravision out to a range of 30 feet, or 
+      your existing infravision has its range extended by 30 feet. Starting at
+      5th level, you can use <9>Deeper Darkness<7> as an innate spell-like
+      ability at will.";
+    Grants:
+      Ability[CA_INFRAVISION,+3] at 1st level,
+      Ability[CA_INNATE_SPELL,$"deeper darkness"] at 5th level;
+    Spells:
+      $"Sleep",
+      $"Globe of Shadow",
+      $"Nightmare;spell",    // Nightmare here? Starshine?
+      $"Summon Shadows",
+      $"Phantasmal Killer"; 
+    /*$"Summon Shadows",
+      $"Nightmare",
+      $"Darkbolt",
+      $"Utterdark",
+      $"Sphere of Ultimate Destruction"; */
+  }
+
+Domain "Nobility" : 0
+  {
+   Desc: "__<15>Granted Power:<7> You are protected from treachery and ambush by
+     a noble aegis, receiving a +4 bonus to your defense class against 
+     surprise attacks. Against you, the bonus damage from a rogue's sneak 
+     attack is reduced by two points per priest level, to a minimum of 
+     zero. Additionally, you recieve Ride as a priest class skill.";
+    Grants:
+      Ability[CA_NOBLE_AEGIS] at every level starting at 1st,
+      Stati[EXTRA_SKILL,SK_RIDE] at 1st;
+    Spells:
+      $"Mount",
+      $"Enthrall",
+      $"Phantom Steed", /* Spirit Armor? */
+      $"Dismissal",
+      $"Righteous Might";
+    /* Greater Command,
+       Geas,
+       Tenser's Transformation,
+       Crown of Glory,
+       Master the Land / Storm of Vengeance */
+  }
+
+
+Domain "Pain" : 0
+  {
+    Desc: "__<15>Granted Power:<7> You can feed upon the pain you inflict upon
+      others, healing 1 hit point for every 10 that your attacks inflict.";
+    Grants:
+      Ability[CA_FEED_UPON_PAIN] at 1st level;
+    Spells:
+      $"Pain Touch",
+      $"Wrack",
+      $"Blackmantle",
+      $"Thornwrack",
+      $"Vitriolic Sphere";
+    /*$"Sighing Chain",
+      $"Blood Lightning",
+      $"Symbol",
+      $"Implosion"; */
+  }
+
+Domain "Passion" : 0 
+  {
+    Grants: 
+      Ability[CA_FATIGUE_REGEN,+1] at every 3rd level starting at 3rd;
+    Spells: 
+      $"hideous laughter",
+      $"dire charm", 
+      $"emotion", 
+      $"shout", 
+      $"dream";
+    Desc: "__<15>Granted Power:<7> Your joy for life gives you a boundless
+      vigor, allowing you to regenerate fatigue in the same manner
+      that dwarves do, starting at 3rd level and increasing every
+      3rd level thereafter."; 
+  } 
+
+Domain "Planning" : 0
+  {
+    Desc: "__<15>Granted Power:<7> You are able to prepare buff spells more
+      effectively then most spellcasters -- every even priest level 
+      reduces the mana cost of buffs by 5%, to a maximum of 25% reduction at
+      10th level. You also recieve the Extend Spell feat for free at 1st
+      level.";
+    Grants:
+      Feat[FT_EXTEND_SPELL] at 1st,
+      Ability[CA_PREPATORY_MAGIC,+1] at 2nd,
+      Ability[CA_PREPATORY_MAGIC,+1] at 4th,
+      Ability[CA_PREPATORY_MAGIC,+1] at 6th,
+      Ability[CA_PREPATORY_MAGIC,+1] at 8th,
+      Ability[CA_PREPATORY_MAGIC,+1] at 10th;
+    Spells:
+      $"Call Companions",
+      $"Detect Objects",
+      $"Detect Monsters",
+      $"Insightful Stroke", 
+      $"Lower Resistance";
+    /*  Contingency
+        Vanish
+        Foresight
+        Time Stop */
+  }
+
+
+Domain "Plant" : 0 
+  {
+    Desc: "__<15>Granted Power:<7> You can command plant creatures just as an evil
+      priest commands undead. Wilderness Lore is considered a class skill
+      for you.";
+    Grants: 
+      Stati[EXTRA_SKILL,SK_WILD_LORE] at 1st level,
+      Ability[CA_COMMAND,MA_PLANT] at every level starting at 1st;
+    Spells: 
+      $"entangle",
+      $"barkskin",
+      $"forestation",
+      $"verdant aid",
+      $"wall of thorns";
+    /*  Repel Wood
+        Tree Stride
+        Changestaff
+        Defoliate
+        Shambler */
+  } 
+
+Domain "Protection;domain" : 0 
+  {
+    Desc: "__<15>Granted Power:<7> You can create a protective ward that gives a
+      target creature a resistance bonus to their next saving throw equal
+      in magnitude to your priest level. Additionally, you gain a sacred
+      bonus to your saving throws every 4th priest level, starting at 4th.";
+    Grants:
+      Ability[CA_PROTECTIVE_WARD] at every level starting at 1st,
+      Stati[ADJUST_SAC,A_SAV,+1] at every 4th level starting at 4th;
+    Spells:
+      $"Alarm",
+      $"Shield",
+      $"Endure the Elements",
+      $"Spell Immunity",
+      $"Magic Resistance";
+  }
+
+Domain "Retribution" : 0 
+  {
+    Desc: "__<15>Granted Power:<7> No enemy can hide from you for long -- you gain
+      Search and Find Weakness as bonus priest class skills. Additionally,
+      you have the power of Retributive Strikes - once a foe has injured you
+      in combat recently for more then 10~ of your total hit points, you gain 
+      a +1 bonus to all melee attack rolls against that foe, and twice that to
+      damage. This bonus increases to +2 for 20~ at 4th level, +3 for 30~ at 
+      7th, +4 for 40~ at 10th and so forth.";
+   Grants:
+      Stati[EXTRA_SKILL,SK_SEARCH] at 1st level,
+      Stati[EXTRA_SKILL,SK_FIND_WEAKNESS] at 1st level,
+      Ability[CA_RETRIBUTIVE_STRIKE] at every 3rd level starting at 1st;
+    Spells:
+      $"Gaze Reflection",
+      $"Retributive Mirror",
+      $"Bestow Curse",
+      $"Fire Shield",
+      $"Righteous Might";
+  }
+   
+Domain "Slime" : 0 
+  {
+    Grants: 
+      Ability[CA_COMMAND,MA_OOZE] at 1st level,
+      Ability[CA_PASS_SLIME] at 1st level,
+      Stati[RESIST,AD_ACID] at every 3rd level starting at 1st;
+    Spells:
+      $"grease",
+      $"blur",
+      $"choke",
+      $"solid fog",
+      $"Conjure Oozes";
+    /*$"Blindsight",
+      */
+    Desc: "__<15>Granted Power:<7> You can command oozes just as an evil priest
+      commands undead. Additionally, you gain Acid Resistance 1, and this
+      increases by one level every third priest level (at 4th, 7th, etc.).
+      Finally, you are able to move over terrain squares that contain
+      slime without becoming stuck as a constant, innate ability.";
+  }
+
+Domain "Spider;domain" : 0
+  {
+    Grants:
+      Ability[CA_COMMAND,MA_SPIDER] at every level starting at 1st;
+    Spells:
+      $"Spider Climb",
+      $"Summon Swarm",
+      $"Spectral Spider",
+      $"Giant Vermin", /* Later, Poison */
+      $"Insect Plague";
+  }
+
+Domain "Strength" : 0
+  {
+    Desc: "<15>Granted Power:<7> You gain a sacred bonus to your Strength every
+      five priest levels. Additionally, at the cost of four fatigue points, 
+      you can gain a sacred bonus to your strength equal to your full priest 
+      level that lasts for one single turn."; 
+    Grants:
+      Stati[ADJUST_SAC,A_STR,+1] at every 5th level starting at 1st, 
+      Ability[CA_FEAT_OF_STRENGTH] at every 4th level starting at 1st;
+    Spells:
+      $"Enlarge",
+      $"Bull's Strength",
+      $"Force Bolt",
+      $"Shout",
+      $"Telekinesis";
+    /* Telekinesis,
+       Grasping Hand, 
+       Clenched Fist,
+       Crushing Hand */
+  }
+
+
+Domain "Succor" : 0 
+  {
+    Desc: "__<15>Granted Power:<7> You can speak a soothing word, which causes all
+      hostile, non-intelligent living creatures that fail a Will save in 
+      your vicinity (60 feet) to become friendly, provided you have not 
+      already harmed them. Additionally, you can use <9>sanctuary<7> as an
+      innate spell-like ability at will.";
+    Grants:
+      Ability[CA_SOOTHING_WORD] at every level starting at 1st,
+      Ability[CA_INNATE_SPELL,$"sanctuary"] at 1st level;
+    Spells: 
+      $"Calm Emotions",
+      $"Create Food and Water",
+      $"Aura of Abjuration",
+      $"Heroes' Feast",
+      $"Antilife Shell",
+      $"Find the Path";					
+    /*  Repulsion,
+        Seclusion,
+        Swords to Plowshares */
+  } 
+
+Domain "Sun" : 0 
+  {
+    Desc: "__<15>Granted Power:<7> You can perform a Greater Turning,
+      wherein all creatures that would normally be frightened are destroyed
+      outright instead. A Greater Turning costs three times as much mana as a
+      normal turning."; 
+    Grants:
+      Ability[CA_GREATER_TURNING,MA_UNDEAD] at every level starting at 1st;
+    Spells:
+      $"Call Light",
+      $"Heat Metal",
+      $"Searing Light",
+      $"Dispel Fatigue",
+      $"Fire Shield";
+    /*$"Sunbow",  
+      $"Sunbeam",
+      $"Ressurection",
+      $"Sunburst",
+      $"Prismatic Sphere"; */
+  }
+
+Domain "Time" : 0
+  {
+    Desc: "__<15>Granted Power:<7> You have a limited insight into the future,
+      granting you premonitions that have a 50~ chance of negating
+      surprise or flat-footedness on any attack made against you.";
+    Grants:
+      Ability[CA_PREMONITION] at 1st level;
+    Spells:
+      $"Moment",
+      $"Slow",
+      $"Premonition",
+      $"Haste",
+      $"Divine Agility";
+    /*$"Permanency",
+      $"Othertime",
+      $"Mass Haste",
+      $"Foresight",
+      $"Time Stop";*/
+  }
+
+Domain "Travel" : 0
+  {
+    Desc: "__<15>Granted Power:<7> You gain a +5~ class bonus to your base movement
+      rate every 3rd priest level. Additionally, you have the power of limited 
+      free action, automatically resisting one paralysis attack per day at 1st 
+      level, and one additional automatic resistant every four levels thereafter."; 
+    Grants:
+      Ability[CA_INCREASED_MOVE,+1] at every 3rd level starting at 1st,
+      Ability[CA_LIMITED_FREE_ACTION] at every 4th level starting at 1st;
+    Spells:
+      $"Longstrider",
+      $"Magic Mapping",
+      $"Fly",
+      $"Dimension Door",
+      $"Teleport";
+  }
+
+Domain "Trickery" : 0 {
+    Desc: "__<15>Granted Power:<7> Bluff, Hide, Move Silently and Pick Pocket are considered
+      to be priest class skills for you.";
+    Grants:
+      Stati[EXTRA_SKILL,SK_BLUFF] at 1st level,
+      Stati[EXTRA_SKILL,SK_HIDE]  at 1st level,
+      Stati[EXTRA_SKILL,SK_MOVE_SIL]  at 1st level,
+      Stati[EXTRA_SKILL,SK_PICK_POCKET] at 1st level;
+    Spells:
+      $"Change Self",
+      $"Invisibility",
+      $"Nondetection",
+      $"Confusion",
+      $"Displacement"; // false vision ..
+    /*Ruby Ray of Reversal, 
+      Mislead,
+      Alter Reality,
+      Polymorph any Object,
+      Wierd */
+  }
+
+Domain "War" : 0 
+  {
+    Desc: "__<15>Granted Power:<7> You gain proficiency with heavy armor and
+      shields, as well as a free weapon focus in your diety's chosen weapon.
+      You recieve a bonus feat from the Warrior list at 7th, 14th and 20th
+      levels.";
+    Grants:
+      Feat[FT_WARRIOR_LIST] at 7th level,
+      Feat[FT_WARRIOR_LIST] at 14th level,
+      Feat[FT_WARRIOR_LIST] at 20th level;
+    On Event EV_ADVANCE {
+      rID wID;
+      if (EActor->GodID != NULL_ID) {
+        wID = (rID) EActor->GodID->GetConst(CHOSEN_WEAPON);
+        if (wID != NULL_ID)
+          if (EActor->WepSkill(wID) < WS_FOCUSED)
+            EActor->GainPermStati(WEP_SKILL,NULL,SS_CLAS,WS_FOCUSED,0,wID);
+        }
+      EActor->Proficiencies |= WG_HARMOR | WG_SHIELDS;
+      return NOTHING;
+      };
+    Spells: 
+      $"magic weapon",
+      $"spiritual hammer",
+      $"magic vestment",
+      $"divine power",
+      $"flame strike";
+     /* Blade Barrier,
+        Power Word, Stun,
+        Power Word, Blind,
+        Power Word, Kill */
+  } 
+
+Domain "Water;domain" : 0
+  {
+    Desc: "__<15>Granted Power:<7> You can command water creatures, including
+      fish, just as an evil priest of your level commands undead. 
+      Additionally, you treat Swim as a bonus priest class skill, and have an
+      increased chance of a positive result when using a fountain."; 
+    Grants:
+      Ability[CA_COMMAND,MA_WATER] at every level starting at 1st,
+      Ability[CA_COMMAND,MA_AQUATIC] at every level starting at 1st,
+      Stati[EXTRA_SKILL,SK_SWIM] at 1st level;
+    Spells:
+      $"Resist Water",
+      $"Create Water",
+      $"Water Walking",
+      $"Whirlpool",
+      $"Watery Double"; /* Watery Double */
+    /* Water to Dust, 
+       Waterspout,
+       Horrid Wilting,
+       Elemental Swarm */
+
+  }
+
+Domain "Weather" : 0 
+  {
+    Desc: "__<15>Granted Power:<7> At 1st level you gain the Nature Sense
+      special ability and may see through fog and mist."; 
+    Grants: 
+      Ability[CA_NATURE_SENSE] at 1st level;            
+    Spells:
+      $"wall of fog", 
+      $"gust of wind",
+      $"ice storm", 
+      $"lightning bolt", 
+      $"Control Winds"; 
+    // Desc: "__<15>Granted Power:<7> You are able to predict the weather with great 
+    // accuracy, increasing your movement rate on the wilderness screen by 25~ 
+    // and allowing you to avoid the negative effects of bad weather.";
+    // Grants:
+	  // Ability[CA_WEATHER_SENSE] at every level starting at 1st;
+  } 

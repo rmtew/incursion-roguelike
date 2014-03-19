@@ -1,0 +1,2163 @@
+%prelude {
+/* GRAMMAR.ACC -- Copyright (c) 1999-2003 Julian Mensch
+     Contains the BNF+ grammar for the IncursionScript compiler,
+	 along with semantic actions that essentially compose the bulk
+	 of the compiler. Designed to be fed into the ACCENT compiler
+	 compiler system to produce yygram.cpp.
+*/
+
+#include "Incursion.h"
+#include <setjmp.h>
+
+#define printf T1->Write
+
+#define GETBIND_MEMFUNC(id)         ((BMemFunc*)(theSymTab.GetBinding(id,0,0,MEM_FUNC)))
+#define GETBIND_SYSFUNC(id)         ((BSysFunc*)(theSymTab.GetBinding(id,0,0,SYS_FUNC)))
+#define GETBIND_MEMVAR(id)          ((BMemVar*)(theSymTab.GetBinding(id,0,1,MEM_VAR)))
+#define GETBIND_RESMEM(id)          ((BResMem*)(theSymTab.GetBinding(id,0,1,RES_MEM)))
+#define GETBIND_RESFUNC(id)         ((BResFunc*)(theSymTab.GetBinding(id,0,0,RES_FUNC)))
+#define GETBIND_GLOBALVAR(id)       ((BGlobalVar*)(theSymTab.GetBinding(id,0,0,GLOB_VAR)))
+#define GETBIND_LOCALVAR(id,xID,Ev) ((BLocalVar*)(theSymTab.GetBinding(id,xID,Ev,LOC_VAR)))
+#define GETBIND_RESVAR(id,xID)   ((BResVar*)(theSymTab.GetBinding(id,xID,0,RES_VAR)))
+#define GETBIND_SYSOBJ(id)          ((BSysObj*)(theSymTab.GetBinding(id,0,SYS_OBJ)))
+#define IDENT_DEFINED(id)           (theSymTab.GetBinding(id,0,ANY))
+
+#define pBSysFunc                 BSysFunc*
+int16 currMap;
+int16 ArtPowerType;
+uint32 TempList[1024]; 
+int16 TempListLoc;
+extern int16 Errors;
+extern long yypos;
+extern uint32 CompilerFlags, MemFuncID;
+extern String Unresolved;
+
+int yyselect(), yymallocerror(), yyparse(),
+  yylex();
+void get_lexval();
+
+extern uint16 yyMapSize[512];
+extern SymbolTable theSymTab;
+
+uint8    CurrAttk, CurrFeat;
+int file(), resource(), monster_def(), item_def(), map_def(),
+  room_def(), feature_def(), quest_def(), spell_def(), mon_entry(),
+  mflag_entry(), color(long*), save_entry(), attack_entry(), attrib_entry(),
+  arm_type(), item_entry(), arm_entry(), iflag_entry(), eff_entry(),
+  feat_entry(), numlist(long*), effect_def(), map_entry(), tile_entry(),
+  region_entry(), object_entry(), race_def(), race_entry(), class_def(),
+  class_entry(),  abil_level(), dungeon_def(), god_def(), arti_entry(),
+  art_power(), dun_entry(), dconst_entry(), list_entry(), artifact_def(), 
+  region_def(), domain_def(), domain_entry(), temp_attack_entry(), flavor_def(),
+  flavor_entry(),
+  terrain_def(), template_def(), domain_entry(), god_entry(), terrain_entry(),
+  template_entry(), event_entry(), event_desc(), prototype(), s_prototype(), 
+  s_object_decl(), l_declaration(VBlock*), s_declaration(), g_declaration(), 
+  r_declaration(), sg_prototype();
+
+int  res_ref(long*),
+     abil_param(long*),
+     abil_level(long*,long*),
+     special_ability(long*,long*,long*,long*,long*);
+
+int cexpr(long*), cexpr2(long*), cexpr3(long*), cexpr4(long*),
+    dice_val(Dice*), mval(MVal*);
+
+int expr(PExp*), expr150(PExp*), expr140(PExp*), expr130(PExp*), 
+      expr120(PExp*), expr110(PExp*), expr100(PExp*), expr90(PExp*),
+      expr80(PExp*), expr70(PExp*), expr60(PExp*), expr50(PExp*),
+      expr40(PExp*), expr30(PExp*), expr20(PExp*), expr10(PExp*),
+      fund_expr(PExp*), lvalue(PExp*);
+int block(VBlock*), statement(VBlock*), routine(VBlock*),
+      param_list(BSysFunc*,long,VBlock*,int*), sep_expr(hCode *hc);
+
+extern jmp_buf jb;
+extern TMonster * theMon, * firstMon;
+extern TItem * theItem, * firstItem;
+extern TFeature * theFeat, * firstFeat;
+extern TEffect * theEff, * firstEff;
+extern TQuest * theQuest, * firstQuest;
+extern TArtifact *theArti, *firstArti;
+extern TDungeon *theDgn, *firstDgn;
+extern TRoutine *theRou, *firstRou;
+extern TNPC *theNPC, *firstNPC;
+extern TClass *theClass, *firstClass;
+extern TRace *theRace, *firstRace;
+extern TDomain *theDom, *firstDom;
+extern TGod *theGod, *firstGod;
+extern TRegion *theReg, *firstReg;
+extern TTerrain *theTer, *firstTer;
+extern TText *theTxt, *firstTxt;
+extern TVariable *theVar, *firstVar;
+extern TTemplate *theTemp, *firstTemp;
+extern TFlavor *theFlavor, *firstFlavor;
+extern Module * theModule;
+extern Resource *theRes;
+
+extern char preprocFilename[];
+
+extern LocationInfo __Tiles__[];
+
+extern LocationInfo *firstTile, *theTile;
+
+int32 theValsIdx;
+#define ESTABLISH_VALS                          \
+  EffectValues * theVals = (theValsIdx == 0) ?  \
+    (&theEff->ef) : &(theEff->Annot(theValsIdx)->u.ef);  \
+
+int32 theEvent = 0;
+
+EffectValues * ChillShieldSeg3 = NULL;
+
+EffectValues ValArray[32];
+
+#pragma warning (disable : 4508)
+
+yyerror(const char*msg)
+{
+   Errors++;
+   T1->Color(RED);
+   T1->CWrite(Format("\"%s\" (%d): %s\n", preprocFilename, yypos, msg));
+   longjmp(jb,1);
+}
+
+yywarning(const char*msg)
+{
+   T1->Color(GREY);
+   T1->CWrite(Format("\"%s\" (%d): %s\n", preprocFilename,  yypos, msg));
+}
+
+
+extern "C" yywrap()
+{
+   return 1;
+}
+
+
+}
+
+
+
+%token 
+
+  NUMBER, LITERAL, IDENT, CHAR_CONST, MAPAREA, 
+    NOTDONE, SCOPE_OPER,
+
+  HOBJ, VOID, INT8, INT16, INT32, UINT8, UINT16, UINT32, 
+    HTEXT, RID, STRING,
+
+  COLOR, WEP_TYPE, ATTRIBUTE, DIRECTION, STYPE,
+    OPCODE, REGNAME,
+
+  ABILITY, ABS, ACC, ALIGN, ALL, ALSO, AND, APTITUDES, ARCHERY,
+    ARM, ARTIFACT, AS, AT, ATTACK, AVAL, BASE, BLESSED, BRAWL,
+    BREAK, BRIGHT, CAPACITY, CASE, CASTER, WORD_CR, CHANCE, CLASS, 
+    WORD_COLOR, CONSTANTS, COVERAGE, CTYPE, CONTINUE,
+    COST, CRIT, CURSED, CVAL, DMG, DARK, DAY, WORD_DC, DEF, 
+    DEFAULT, DEPTH, WORD_DESC, DOOR, DOMAIN, DOMAINS, DISEASE,
+    DO, DUNGEON, DVAL, EFFECT, ELSE, EXPORT, EQUIP, EVAL, FAVORED, FLAVOR,
+    EVENT, EVERY, FACTOR, WORD_FALSE, FEATS, FEAT, FEATURE, FIRES, FLAGS, FLOOR,
+    WORD_FILE, FOR, FROM, FUEL, GEAR, GLYPH, GOD, GRANTS, GRID, GROUP, GUILD, HEAVY,
+    HITDICE, HITPOINTS, HIT, IF, IMAGE, IMMUNE, INNATE, 
+    INVOKE, ITEM, LDMG, WORD_LEVEL, LIFESPAN, LIGHT, LISTS, LVAL, MAX_SIZE, MODULE,
+    MANA, MAP, MATERIAL, WORD_MAX, MELEE, MEMBER, WORD_MIN, MONSTER, MOVE, MTYPE,
+    NEAR, NONE, NORMAL, NPC, WORD_NULL, NUTRITION, OBJECT, OBJECTS, OF, ON, OR, 
+    OPTION, PARAMS, PARRY, PARTIAL, PENALTY, PER, POISON, POWER, PROFICIENCIES,
+    PROP, PURPOSE, PVAL, QUALITIES, QUEST, QVAL, RACE, RANDOM, RANGE, RATING, 
+    REGION, REGIONS, RESISTS, RETURN, ROOMTYPES, ROUTINE, RVAL, SAVES,
+    SDMG, SIZE, SKILLS, SLOT, SPECIALS, SPEED, SPELL, SPELLS, 
+    START, STARTING, STATI, STATIC, STOCK, STORE, SUSTAINS, SVAL,
+    SWITCH, SYSTEM, WORD_TARGET, WORD_TEMPLATE, TERRAIN, TEXT, THREAT, 
+    THROWING, TILE, TILES, TIMEOUT, TO, WORD_TRUE, TURNS, TYPE, TVAL, 
+    VALUE, VAR, WALLS, WEEK, WEIGHT, WEIGHT_MOD, WEIGHT_LIM, WHILE, 
+    WIELD, WITH, XVAL, YVAL, WORD_RECT,
+
+  INCREMENT_OP, DECREMENT_OP, LSHIFT_OP, RSHIFT_OP, GE_OP, LE_OP,
+    EQ_OP, NE_OP, AND_OP, OR_OP, ASSIGN_MULT, ASSIGN_ADD, ASSIGN_DIV,
+    ASSIGN_MOD, ASSIGN_AND, ASSIGN_OR, ASSIGN_NEG, ASSIGN_LSHIFT,
+    ASSIGN_RSHIFT, ASSIGN_SUB, ELLIPSIS, MEMBER_OP 
+
+
+;
+
+
+file:
+  { currMap = 0; MemFuncID = 0; MemVarID = 0; }
+  (resource)*;
+
+resource:
+    MODULE LITERAL<name> ';'     { theModule->Name = name; }
+  | SLOT cexpr3<n> ';'           { theModule->Slot = n; }
+  | WORD_FILE LITERAL<fname> ';' { theModule->FName = fname; }
+  | monster_def
+  | item_def
+  | feature_def
+  | artifact_def
+  | dungeon_def
+  | quest_def
+  | effect_def
+  | race_def
+  | class_def
+  | god_def
+  | domain_def
+  | region_def
+  | terrain_def
+  | template_def
+  | flavor_def
+  | prototype
+  | s_prototype
+  | sg_prototype
+  | g_declaration
+  | s_declaration
+  | s_object_decl
+  | FLAGS (':') cexpr<n>  { CompilerFlags |= n; }
+  | TEXT LITERAL<nam> '{' (WORD_DESC ':')? LITERAL<text> (';')? '}'
+      { theRes = theTxt; theTxt->Name = nam; theTxt->Desc = text; theTxt++; }
+  ;
+
+res_ref<rID res>:
+    '$' LITERAL<lit>   { PurgeStrings();
+                         *res = FIND(theModule->GetText(lit)); 
+                         if (!*res) {
+                           if (Unresolved.GetLength())
+                             Unresolved += ", ";
+                           Unresolved += Capitalize(theModule->GetText(lit),true);
+                           *res = FIND("unimplemented");
+                           }
+                        }
+  | '$' cexpr3<n>         { *res = n; }
+  ;
+
+cexpr<val>:
+    cexpr<x> '+' cexpr2<y> { *val = x+y; }
+  | cexpr<x> '-' cexpr2<y> { *val = x-y; }
+  | cexpr2<val2> { *val = val2; } 
+  ;
+
+cexpr2<val>:
+    cexpr2<x> '*' cexpr3<y> { *val = x * y; }
+  | cexpr2<x> '/' cexpr3<y> { *val = x / y; }
+  | cexpr2<x> '%' cexpr3<y> { *val = x % y; }
+  | cexpr2<x> '|' cexpr3<y> { *val = x | y; }
+  | cexpr2<x> '&' cexpr3<y> { *val = x & y; }
+
+  | cexpr3<val2> { *val = val2; } 
+  ;
+
+cexpr3<val>:
+    '+' cexpr4<val2> { *val = val2; } 
+  | '-' cexpr4<n>   { *val = -n; }
+  | cexpr4<val3>    { *val = val3; } 
+  ;
+
+cexpr4<val>:
+    '(' cexpr<val2> ')' { * val = val2; } 
+  | NUMBER<val3> { *val = val3; } 
+  | WORD_TRUE { *val = 1; }
+  | WORD_FALSE { *val = 0; }
+  | CHAR_CONST<val4>     { * val = val4; } 
+  ;
+
+dice_val<Dice d>:
+    cexpr4<num> 'd' cexpr4<sid> '+' cexpr4<bon> 
+      { d->Number = num; d->Sides = sid; d->Bonus = bon; }
+  | cexpr4<num> 'd' cexpr4<sid> '+' '-' cexpr4<bon> 
+      { d->Number = num; d->Sides = sid; d->Bonus = -bon; }
+  | cexpr4<num> 'd' cexpr4<sid>
+      { d->Number = num; d->Sides = sid; d->Bonus = 0; }
+  | cexpr3<x>
+      { d->Number = 0; d->Sides = 0; d->Bonus = x; }
+  ;
+
+dice_only<Dice d>:
+    cexpr4<num> 'd' cexpr4<sid> '+' cexpr4<bon> 
+      { d->Number = num; d->Sides = sid; d->Bonus = bon; }
+  | cexpr4<num> 'd' cexpr4<sid>
+      { d->Number = num; d->Sides = sid; d->Bonus = 0; }
+  ;
+
+gear_entry<int16 chance,Dice amt,rID iID,rID eID,uint16 spec,
+                                 uint32 qual,uint32 fl,hCode cond>:
+  { *chance = *iID = *eID = *spec = *qual = *fl = *cond = 0; 
+    int16 q; q=0;
+    amt->Set(1,1,0); }
+  (IF '(' sep_expr<hc> ')' { *cond = hc; } )?
+  (NUMBER<n> '%' { *chance = n; } )?
+  (dice_only<dv> { *amt = yyDice(dv); } )?
+  (CURSED        { *fl |= GF_CURSED; }
+   | BLESSED     { *fl |= GF_BLESSED; } )?
+  (res_ref<rr>   { *iID = rr; } 
+   | RANDOM cexpr3<n> { *iID = n; *fl |= GF_RANDOM_ITEM; } )
+  ( '+' NUMBER<n> { *spec = n; } | '-' NUMBER<n> { *spec = -n; } )?
+  (WITH '[' (cexpr<wq> (',')? { if (q >= 4)
+                                   yyerror("Max 4 qualities in gear lists!");
+                                else
+                                  ((uint8*)qual)[q++] = wq;} )* ']'
+   | OF res_ref<rr> { *eID = rr; }
+   | OF RANDOM cexpr3<a> TO cexpr3 <b>
+       { *eID = a + b*256; *fl |= GF_RANDOM_EFFECT; }
+   | OF RANDOM cexpr3<b>
+       { *eID = b*256; *fl |= GF_RANDOM_EFFECT; }
+   | OF RANDOM
+       { *eID = 0; *fl |= GF_RANDOM_EFFECT; }
+   | AT '(' cexpr3<x> ',' cexpr3<y> ')'
+   )*
+   ;
+
+gear_desc:
+   { int16 is_else = 0; }
+  GEAR (':')
+    ( gear_entry<chance,amt,iID,eID,spec,qual,fl,cond> 
+      { theRes->AddEquip(chance,amt,iID,eID,spec,(uint8*)(&qual),fl | is_else,cond); }
+      (',' { is_else = 0; } | ELSE { is_else = GF_ELSE; } ) )*
+     gear_entry<chance,amt,iID,eID,spec,qual,fl,cond>
+      { theRes->AddEquip(chance,amt,iID,eID,spec,(uint8*)(&qual),fl | is_else,cond); } ';'
+  ;
+
+glyph_entry<uint16 img>:
+  (IMAGE|GLYPH) (':')?               { *img = 15 << 8; }
+    (color<col>                      { *img = col << 8; }
+    )? (CHAR_CONST<n>                { *img |= n; }
+    | NUMBER<n>                      { *img |= n; }
+    ) 
+    (ON color<back>                  { *img |= back << 12; }
+    )? ';'
+  ;
+
+glyph_desc<uint16 img>:              { *img = 15 << 8; }
+  ( color<col>                       { *img = col << 8; } )?
+  (CHAR_CONST<n>                     { *img |= n; }
+    | NUMBER<n>                      { *img |= n; } )
+  (ON color<back>                    { *img |= back << 12; } )?
+  ;
+
+event_desc: 
+  ON EVENT event_entry (',' event_entry)*  ';'
+  ;
+
+event_entry: 
+                          { int16 EvList[32]; int16 i, cEvent = 0; hCode hc; }
+  cexpr<n>                { EvList[cEvent++] = n; theEvent = n; }
+  (',' cexpr<n>           { EvList[cEvent++] = n; } )*
+  ( LITERAL <lv>          { for(i=0;i!=cEvent;i++)
+                              theRes->AddEvent(-EvList[i],lv); }
+    ( '/' LITERAL<lv>     { for(i=0;i!=cEvent;i++)
+                              theRes->AddEvent(-EvList[i],lv); } )*
+/*                                                                              */
+/*  | IDENT<iv>           { for(i=0;i!=cEvent;i++)                              */
+/*                            theRes->AddEvent(EvList[i],GetRoutineCode(iv)); } */ 
+    | routine<vc>         { hCode hc = theCodeSeg.Add(&vc);
+                            theCodeSeg.Generate(HALT);
+                            for(i=0;i!=cEvent;i++)
+                              theRes->AddEvent(EvList[i],hc);
+                            theEvent = 0; }
+  )
+  ;  
+
+sep_expr<hCode hc>: 
+  { theEvent = EV_CONDITION; }
+  expr<ex>
+    { *hc = theCodeSeg.Add(ex.Code);
+      theCodeSeg.Generate(RET,ex.Storage,ex.Value); }
+  { theEvent = 0; }
+  ;
+
+mval<MVal mv>:
+  { mv->BType = mv->Bound = 0; }
+  (   ('+')? cexpr4<n>      { mv->Value = n;  mv->VType = MVAL_ADD; }
+    | '-' cexpr4<n>         { mv->Value = -n; mv->VType = MVAL_ADD; }
+    | '=' cexpr4<n>         { mv->Value = n;  mv->VType = MVAL_SET; }
+    | cexpr3<n> '%'         { mv->Value = n;  mv->VType = MVAL_PERCENT; } ) 
+  ( '(' (
+      WORD_MIN cexpr4<n>    { mv->Bound = n;  mv->BType = MBOUND_MIN; }
+    | WORD_MAX cexpr4<n>    { mv->Bound = n;  mv->BType = MBOUND_MAX; }
+    | NEAR cexpr4<n>        { mv->Bound = n;  mv->BType = MBOUND_NEAR; } 
+  ) ')' )?
+  ;
+      
+monster_def:
+  MONSTER          { theMon->Attr[0] = theMon->Attr[1] =
+                       theMon->Attr[2] = theMon->Attr[3] =
+                         theMon->Attr[4] = theMon->Attr[5] =
+                         0; CurrAttk = 0; CurrFeat = 0; theRes = theMon; }
+    LITERAL<name>  { theMon->Name = name; }
+    ':' cexpr3<n>    { theMon->MType[0] = n; }
+    ( ',' cexpr3<n2> { theMon->MType[1] = n2; }
+    ( ',' cexpr3<n3> { theMon->MType[2] = n3; } )? )?
+    '{' (mon_entry)* '}'
+      { theMon++; }  ;
+
+mon_entry:
+    WORD_DESC (':')? LITERAL<lv> ';' { theMon->Desc = lv; }
+  | DEPTH (':')? cexpr3<n> ';'       { theMon->Depth = n; }
+  | (WORD_LEVEL | WORD_CR) (':')? cexpr3<n> ';' { theMon->CR = n; }
+  | (WORD_LEVEL | WORD_CR) (':')? cexpr3<n2> '/' cexpr3<n1> ';'
+                                    { if (n2 != 1 || n1 > 8 || n1 < 2)
+                                        yyerror("Fractional CR error!");
+                                      theMon->CR = (-n1) + 2; }
+  | HITDICE (':')? cexpr<n> ';'     { theMon->HitDice = n; }
+  | HITPOINTS (':')? cexpr<n> ';'   { theMon->HitDice = n; 
+                                       theMon->SetFlag(M_FIXED_HP); }
+  | ('+')? HIT (':')? cexpr<n> ';'  { theMon->Hit = n; }
+  | glyph_entry<img>                 { theMon->Image = img; }                       
+  | STATI '[' cexpr3<st> ']' ';'
+    { if (!theMon->GainStati(st)) yyerror("too many Stati in monster"); }
+  | STATI '[' cexpr3<st> ',' cexpr3<stV> ']' ';'
+    { if (!theMon->GainStati(st,stV)) yyerror("too many Stati in monster"); }
+  | STATI '[' cexpr3<st> ',' cexpr3<stV> ',' cexpr3<stM> ']' ';'
+    { if (!theMon->GainStati(st,stV,stM)) 
+        yyerror("too many Stati in monster"); }
+  | STATI '[' cexpr3<st> ',' cexpr3<stV> ',' cexpr3<stM> ',' res_ref<rr> ']' ';'
+    { if (!theMon->GainStati(st,stV,stM,rr)) 
+        yyerror("too many Stati in monster"); }
+
+  | RESISTS (':')? (cexpr3<res> { theMon->Res |= res; } (',')?)* ';'
+  | IMMUNE (':')? (cexpr3<imm> { theMon->Imm |= imm; } (',')?)* ';'
+  | ATTACK (':')? attack_entry (',' attack_entry)* ';'
+  | AS LITERAL<l> ';'                { for(TMonster*m=firstMon;m!=theMon;m++)
+                                         if(stricmp(theModule->GetText(l),theModule->GetText(m->Name))==0)
+                                           { memcpy(theMon,m,sizeof(TMonster));
+                                             goto DoneCopy; }
+                                       Fatal("Monster '%s' not found!",theModule->GetText(l));
+                                       DoneCopy:; }
+  | AS cexpr3<n>  ';'                { if (n > (theMon - firstMon) || n < 0)
+                                         Fatal("Bad number in Monster:as!");
+                                       memcpy(theMon,&(firstMon[n]),sizeof(TMonster)); }
+  | DEF (':')? cexpr<n> ';'         { theMon->Def = n; }
+  | ARM (':')? cexpr<n> ';'         { theMon->Arm = n; }
+  | MANA (':')? cexpr<n> ';'        { theMon->Mana = n; }
+  | FEATS (':')? (cexpr3<n> ','      { theMon->Feats[CurrFeat++] = n; 
+    if (CurrFeat > 16) Fatal("Too many feats for '%s' (max 16)",
+                                theModule->QTextSeg + theMon->Name);
+    } )*
+                  cexpr3<n> ';'      { theMon->Feats[CurrFeat++] = n; 
+    if (CurrFeat > 16) Fatal("Too many feats for '%s' (max 16)",
+                                theModule->QTextSeg + theMon->Name);
+    } 
+  | FLAGS (':')? (mflag_entry)* ';'
+  | attrib_entry (',' attrib_entry)* ';'
+  | SIZE (':')? cexpr3<n> ';'        { theMon->Size = n; }
+  | SPEED (':')? cexpr3<n> ('%')? ';'{ theMon->Spd = (n-100)/5; }
+  | MOVE (':')? cexpr3<n> ('%')? ';'    { theMon->Mov = (n-100)/5; }
+  | SPELLS (':')? ( res_ref<rr>      { theMon->SetFlag(M_INNATE);
+                                       theMon->AddResID(AN_INNATE, rr); }
+     (',')? )* ';'
+  | DISEASE (':')? ( res_ref<rr>      { theMon->AddResID(AN_DISEASE, rr); }
+     (',')? )* ';'
+  | POISON (':')? ( res_ref<rr>      { theMon->AddResID(AN_POISON, rr); }
+     (',')? )* ';'
+  | gear_desc
+  | event_desc
+  | dconst_entry
+  | r_declaration
+  ;
+
+color<col>:
+  COLOR<n>            { *col = n; }
+  | BRIGHT COLOR<n>   { *col = n | 8; }
+  | LIGHT COLOR<n>    { *col = n | 8; }
+  | DARK COLOR<n>     { *col = n & ~8; }
+  ;
+
+
+attack_entry:                  { uint8 dt = AD_NORM; dam.Set(0,0,0);
+                                 theMon->Attk[CurrAttk].u.a.Dmg.Set(0,0,0); }
+  cexpr3<at> FOR 
+    ( dice_only<dam>           { theMon->Attk[CurrAttk].u.a.Dmg = yyDice(dam); } 
+      | cexpr4<chance> '%'     { theMon->Attk[CurrAttk].u.a.Dmg.Bonus = chance; } )?
+  (cexpr4<n> { dt = n; } )?
+
+  (DMG)?                    
+    ( '(' (WORD_DC|WORD_CR|WORD_LEVEL) cexpr3<dc> { theMon->Attk[CurrAttk].u.a.DC = dc; } ')' )?
+                               { theMon->Attk[CurrAttk].AType = at;
+                                 theMon->Attk[CurrAttk].DType = dt;
+                                 /*
+                                 if (at == A_ABIL)
+                                   theMon->Attk[CurrAttk].u.a.DC = max(
+                                        theMon->Attk[CurrAttk].u.a.DC, 1);
+                                        */
+                                 CurrAttk++;
+                                 if (CurrAttk >= 32)
+                                   yyerror("> 32 attacks on a single monster!");
+                               }
+  (AND { dt = AD_NORM; dam2.Set(0,0,0); theMon->Attk[CurrAttk].u.a.Dmg.Set(0,0,0); } 
+    ( dice_only<dam2>          { theMon->Attk[CurrAttk].u.a.Dmg = yyDice(dam2); } )?
+    (cexpr3<n2> { dt = n2; } )?
+    (DMG)?
+    ( '(' (WORD_DC|WORD_CR|WORD_LEVEL) cexpr3<dc> { theMon->Attk[CurrAttk].u.a.DC = dc; } ')' )?
+                               { theMon->Attk[CurrAttk].AType = A_ALSO;
+                                 theMon->Attk[CurrAttk].DType = dt;
+                                 CurrAttk++;
+                                 if (CurrAttk >= 12)
+                                   Fatal("> 12 attacks on a single monster!");
+                               }
+  )*
+  | cexpr3<at> FOR res_ref<rr>  { theMon->Attk[CurrAttk].AType = at;
+                                  theMon->Attk[CurrAttk].u.xID = rr; }
+                  ( cexpr3<dt>  { theMon->Attk[CurrAttk].DType = dt; } )?
+                               {
+                                 CurrAttk++;
+                                 if (CurrAttk >= 32)
+                                   yyerror("> 32 attacks on a single monster!");
+                               }
+  ;
+
+mflag_entry:
+  cexpr3<mf>  (',')?        { theMon->SetFlag(mf); }
+  | '~' cexpr3<mf> (',')?   { theMon->UnsetFlag(mf); }
+  ;
+
+attrib_entry:
+  ATTRIBUTE<at> (':')? cexpr3<v> { theMon->Attr[at] = v; }
+  ;
+
+item_def:
+  ITEM                       { theRes = theItem; 
+                               theItem->u.w.Crit = 2; 
+                               theItem->u.w.Threat = 1; 
+                               theItem->hp = 15; }
+    LITERAL<name>            { theItem->Name = name; }
+    ':' cexpr3<n>            { theItem->IType = n; }
+    '{' (item_entry)* '}'    { theItem++; }
+    ;
+
+item_entry:
+    WORD_DESC (':')? LITERAL<lv> ';' { theItem->Desc = lv; }
+  |  WORD_LEVEL (':')? cexpr<n> ';'       { theItem->Level = n; }
+  | glyph_entry<img>                 { theItem->Image = img; }
+  | SDMG (':')? dice_val<dv> ';'         { theItem->u.w.SDmg = yyDice(dv); }
+  | LDMG (':')? dice_val<dv> ';'         { theItem->u.w.LDmg = yyDice(dv); }
+  | CRIT (':')? cexpr3<n> ';'        { theItem->u.w.Crit = n; }
+  | THREAT (':')? cexpr3<n> ';'      { theItem->u.w.Threat = n; }
+  | ACC (':')? cexpr<n> ';'          { theItem->u.w.Acc = n; }
+  | SPEED (':')? cexpr<n> ';'        { theItem->u.w.Spd = n; }
+  | SPEED (':')? cexpr4<n> '%' ';'   { theItem->u.w.Spd = n > 0 ? ((n-100)/5) : n/5; }
+  | SPEED (':')? '+' cexpr4<n> '%' ';' { theItem->u.w.Spd = n/5; }
+  | PARRY (':')? cexpr<n> ';'        { theItem->u.w.ParryMod = n; }
+  | RANGE (':')? cexpr<n> ';'        { theItem->u.w.RangeInc = n; }
+  | MATERIAL (':')? cexpr3<m> ';'    { theItem->Material = m; }
+  | COST (':')? cexpr3<n>            { theItem->Cost = n * 100; }
+    ( cexpr3<unit>                   { switch (unit)
+                                         { case PLATINUM: theItem->Cost *= 5; break;
+                                           case GOLD:     break;
+                                           case ELECTRUM: theItem->Cost /= 2; break;
+                                           case SILVER:   theItem->Cost /= 10; break;
+                                           case COPPER:   theItem->Cost /= 100; break;
+                                           
+                                         }
+                                     }
+    )? ';'
+  | WEIGHT (':')? cexpr3<n> ';'      { theItem->Weight = n; 
+    /* ww: according to the SRD, one inch (thickness) of iron has 30
+     * hit point. We assume that the canonical long sword (at 4 lbs = 40
+     * weight) is 1/2 inch thick. So a base weight of 80 gets you 30 hit
+     * points. */
+                               theItem->hp = (n * 30) / 80; 
+                               if (theItem->hp < 1) theItem->hp = 1; }
+  | SIZE (':')? cexpr3<n> ';'        { theItem->Size = n; }
+  | NUTRITION (':')? cexpr3<n> ';'   { theItem->Nutrition = n; }
+  | DEF (':')? cexpr3<n> ';'         { theItem->u.a.Def = n; }
+  | COVERAGE (':')? cexpr3<n> ';'    { theItem->u.a.Cov = n; }
+  | PENALTY (':')? cexpr3<n> ';'     { theItem->u.a.Penalty = n; }
+  | ARM (':')? (arm_entry)* ';'
+  | HITPOINTS (':')? cexpr3<n> ';'   { theItem->hp = n; }
+  | SPELLS (':')? ( res_ref<rr>      { theItem->AddResID(AN_SPELLS, rr); }
+     (',')? )* ';'
+  | FIRES (':')? ( res_ref<rr>       { theItem->AddResID(AN_FIRES, rr); }
+     (',')? )* ';'
+  | FLAGS (':')? (iflag_entry)* ';'
+  | GROUP (':')? ( cexpr3<n> (','|'|')?  { theItem->Group |= n; } )* ';'
+  | CAPACITY (':')? cexpr3<n> ';'    { theItem->u.c.Capacity = n; }
+  | WEIGHT_LIM (':')? cexpr3<n> ';'  { theItem->u.c.WeightLim = n; }
+  | WEIGHT_MOD (':')? cexpr3<n> ';'  { theItem->u.c.WeightMod = n; }
+  | MAX_SIZE (':')? cexpr3<n> ';'    { theItem->u.c.MaxSize = n; }
+  | TIMEOUT (':')? cexpr3<n> ';'     { theItem->u.c.Timeout = n; }
+  | CTYPE (':')? cexpr3<n> ';'       { theItem->u.c.CType = n; }
+  | LIGHT RANGE (':')? cexpr3<n> ';' { theItem->u.l.LightRange = n; }
+  | LIFESPAN (':')? cexpr3<n> ';'    { theItem->u.l.Lifespan = n; }
+  | FUEL (':')? res_ref<rr> ';'      { theItem->u.l.Fuel = rr; }
+  | dconst_entry
+  | event_desc
+  | r_declaration
+  ;
+
+arm_entry:
+  cexpr3<n>  (',')?       { if (theItem->u.a.Arm[0] == 0) theItem->u.a.Arm[0] = n;
+                            if (theItem->u.a.Arm[1] == 0) theItem->u.a.Arm[1] = n;
+                            if (theItem->u.a.Arm[2] == 0) theItem->u.a.Arm[2] = n;
+                         }
+  | WEP_TYPE<wt> cexpr3<n> (',')? { theItem->u.a.Arm[wt] = n; }
+  ;
+
+iflag_entry:
+    cexpr3<itf>  (',')?        { theItem->SetFlag(itf); }
+  | '~' cexpr3<itf> (',')?     { theItem->UnsetFlag(itf); }
+  ;
+
+
+feature_def:
+  FEATURE                    
+  LITERAL<name>              { theRes = theFeat; theFeat->Name = name; theRes = theFeat; }
+  ':' cexpr3<n>              { theFeat->FType = n; }
+  '{' (feat_entry)* '}'      { theFeat++; }
+  ;
+
+feat_entry:
+     WORD_DESC (':')? LITERAL<lv> ';'         { theFeat->Desc = lv; }
+  |  MATERIAL (':')? cexpr3<m> ';'            { theFeat->Material = m; }
+  | glyph_entry<img>                          { theFeat->Image = img; }
+  | MOVE (':')? cexpr3<mov> '%' ';'  { theFeat->MoveMod = (mov-100)/5; }
+  | HITPOINTS (':')? cexpr3<n>  ';'           { theFeat->hp = n; }
+  | FLAGS (':')?  (cexpr3<n> ('|' | ',')? { theFeat->Flags |= n; } )* ';'
+  | (WORD_TARGET | EFFECT) (':')? res_ref<rr> ';'  { theFeat->xID = rr; }
+  | XVAL (':')? cexpr<n> ';'                  { theFeat->xval = n; }
+  | FACTOR (':')? dice_val<d> ';'                { theFeat->Factor = d; }
+  | event_desc
+  | dconst_entry
+  | r_declaration
+  ;
+  
+effect_def:                         { theRes = theEff; theEff->ef.sval = NOSAVE; }
+  ( cexpr3<n>                       { if (theEff->Sources[2])
+                                        theEff->Sources[3] = n;
+                                      else if (theEff->Sources[1])
+                                        theEff->Sources[2] = n;
+                                      else if (theEff->Sources[0])
+                                        theEff->Sources[1] = n; 
+                                      else
+                                        theEff->Sources[0] = n; }
+    ('/')? )* 
+  (SPELL | EFFECT 
+    | POISON                        { theEff->ef.aval = AR_POISON; }
+    | DISEASE                       { theEff->ef.aval = AR_DISEASE; } )
+  LITERAL<name>                     { theEff->Name = name; }
+  ':' cexpr3<n>                     { theValsIdx = 0; 
+                                      theEff->ef.eval = n; }
+  '{' (eff_entry)* '}'
+  ( AND cexpr3<n>           {  Annotation *a; EffectValues tmp; int16 t;
+                               ESTABLISH_VALS
+							                 memcpy(&tmp,theVals,sizeof(EffectValues));
+                               if (!theEff->AnHead) {
+                                 a = theEff->NewAnnot(AN_EFFECT, &theEff->AnHead);
+                                 theValsIdx = theEff->AnHead;
+                                 ASSERT(theValsIdx > 0);
+                                 }
+                               else {
+                                 a = theEff->Annot(theEff->AnHead);
+                                 while (a->Next) 
+                                   a = theEff->Annot(a->Next);
+                                 a = theEff->NewAnnot(AN_EFFECT,&a->Next,&t);
+                                 theValsIdx = t;
+                                 ASSERT(theValsIdx > 0);
+                                 }
+                               a->Next = 0;
+                               memcpy(&(a->u.ef),&tmp,sizeof(EffectValues));
+                               a->u.ef.eval = n;
+                             }
+
+   '{' (eff_entry)* '}' )*
+                            { theEff++; } 
+  ;
+
+eff_entry:
+    WORD_DESC (':')? LITERAL<lv> ';' { theEff->Desc = lv; }
+  | cexpr<sc> ';'                    { theEff->Schools |= sc; } 
+  | WORD_LEVEL (':')? cexpr3<n> ';'       { theEff->Level = n; }
+  | COST (':')? cexpr3<n> ';'        { theEff->ManaCost = n; }
+  | BASE (CHANCE)? (':')? cexpr3<n> ('%')? ';' { theEff->BaseChance = n; }
+  | PURPOSE (':')? cexpr<n>          { theEff->Purpose = n; }
+      ( '(' cexpr<n2> ')'            { theEff->Purpose |= n2<<16; } )? ';'     
+  | SVAL (':')? cexpr<sv> ( PARTIAL { theEff->SetFlag(EF_PARTIAL); } )?
+                               ';'   { ESTABLISH_VALS; theVals->sval = sv; }
+  | QVAL (':')? cexpr<n> ';'         { ESTABLISH_VALS; theVals->qval = n; }
+  | XVAL (':')? cexpr<n> ';'         { ESTABLISH_VALS; theVals->xval = n; }
+  | YVAL (':')? cexpr<n> ';'         { ESTABLISH_VALS; theVals->yval = n; }
+  | DVAL (':')? cexpr<n> ';'         { ESTABLISH_VALS; theVals->dval = n; }
+  | PVAL (':')? dice_val<d> ';'      { ESTABLISH_VALS; theVals->pval = d; }
+  | AVAL (':')? cexpr<n> ';'         { ESTABLISH_VALS; theVals->aval = n; }
+  | LVAL (':')? cexpr<n> ';'         { ESTABLISH_VALS; theVals->lval = n; }
+  | TVAL (':')? cexpr<n> ';'         { ESTABLISH_VALS; theVals->tval = n; }
+  | RVAL (':')? res_ref<rr> ';'      { ESTABLISH_VALS; theVals->rval = rr; }
+  | RVAL (':')? cexpr<n> ';'         { ESTABLISH_VALS; theVals->rval = n; }
+  | CVAL (':')? cexpr<n> ';'         { ESTABLISH_VALS; theVals->cval = n; }
+  | CVAL (':')? COLOR<n> ';'         { ESTABLISH_VALS; theVals->cval = n; }
+  | FLAGS (':')? (cexpr3<n>          { theEff->SetFlag(n); }
+    (',' | '|')? )* ';'
+  | event_desc
+  | r_declaration  
+  | dconst_entry
+  ;
+
+numlist<val>: { *val = 0; }
+  (cexpr3<n> { *val |= n; } (',' | '|')?)*
+  ;
+
+
+
+object_entry:
+  NOTDONE;
+
+race_def:
+  RACE LITERAL<name>              { theRes = theRace; theRace->Name = name;
+                                    theRace->BaseRace = 0; }
+    ( ':' res_ref<base>           { TRace tr; 
+                                    theRace->BaseRace = base;                                        
+                                    if (TRACE(base) > theRace)
+                                      Fatal("Subrace definition before def of base race!"); } 
+                        )?
+  '{' (race_entry)* '}'           { theRace++; }
+   ;
+
+race_entry:
+   WORD_DESC (':')? LITERAL<lv> ';'{ theRace->Desc = lv; }
+  |(ATTRIBUTE<at> (':')? cexpr<v> { theRace->AttrAdj[at] = v; }
+  (',')? )* ';'
+  | GRANTS (':')? (special_ability<AbT,Abil,p,l1,l2> (',')?
+      { theRace->AddAbility(AbT,Abil,p,l1,l2); } )* ';'
+  | MONSTER (':')? res_ref<rr> ';' { theRace->mID = rr; }
+  | FAVORED (CLASS)? (':')? res_ref<rr> ',' res_ref<rr2> ';'   
+                                { theRace->FavoredClass[0] = rr;
+                                  theRace->FavoredClass[1] = rr2; }
+  | FAVORED (CLASS)? (':')? res_ref<rr> ',' res_ref<rr2> ',' res_ref<rr3> ';'   
+                                { theRace->FavoredClass[0] = rr;
+                                  theRace->FavoredClass[1] = rr2; 
+                                  theRace->FavoredClass[2] = rr3; }
+  | SKILLS (':')? {int8 skn = 0;}
+      ( cexpr3<sk> { theRace->Skills[skn++] = sk; } (',')? )* ';'
+  | cexpr3<n> (':')? LITERAL<lv> ';' { switch(n) {
+                                         case MALE_NAMES  : theRace-> MNames = lv; break;
+                                         case FEMALE_NAMES: theRace-> FNames = lv; break;
+                                         case FAMILY_NAMES: theRace-> SNames = lv; break;
+                                         default: yyerror("Illegal name const in race!");
+                                         } }
+  | FLAGS (':')?  (cexpr3<n> ('|' | ',')? { theRace->SetFlag(n); } )* ';'
+  | gear_desc
+  | dconst_entry
+  | event_desc
+  | r_declaration  
+  ;
+  
+class_def:
+  CLASS LITERAL<name>             { theRes = theClass; theClass->Name = name; }
+  '{' (class_entry)* '}'           { theClass++; }
+   ;
+
+class_entry: 
+    WORD_DESC (':')? LITERAL<lv> ';'       { theClass->Desc = lv; }
+  | HITDICE (':')? ('d')? cexpr3<n> ';'    { theClass->HitDie = n; }
+  | MANA (':')? ('d')? cexpr3<n> ';'       { theClass->ManaDie = n; }
+  | DEF (':')? cexpr3<x> '/' cexpr3<n> ';' { theClass->DefMod = n;
+                                             if (x != 1) yyerror("class defense mod must by 1 per N."); }
+  | ATTACK (':')?
+      (cexpr3<typ> cexpr3<l> { theClass->AttkVal[typ] = l; } (',')?)* ';'
+  | SAVES (':')?
+      (cexpr3<typ> cexpr3<l> { theClass->Saves[typ] = l; } (',')?)* ';'
+  | GRANTS (':')? (special_ability<AbT,Abil,p,l1,l2> (',')?
+      { theClass->AddAbility(AbT,Abil,p,l1,l2); } )* ';'
+  | SKILLS ('[') cexpr3<sp> (']')  { theClass->SkillPoints = sp; int8 skn = 0; }
+      (':')? ( cexpr3<sk> { theClass->Skills[skn++] = sk; } (',')? )* ';'
+  | PROFICIENCIES (':')?
+      (cexpr3<pr> { theClass->Proficiencies |= pr; } (',')? )* ';'
+  | FLAGS (':')?  (cexpr3<n> ('|' | ',')? { theClass->SetFlag(n); } )* ';'
+  | gear_desc
+  | event_desc
+  | dconst_entry
+  | r_declaration  
+  ;
+
+special_ability<AbT,Abil,p,l1,l2>:
+  { *p = 0; } ABILITY '[' cexpr3<ca> (abil_param<xp> { *p = xp; })? ']' AT abil_level<xl1,xl2>
+      { *AbT = AB_ABILITY; *Abil = ca; *l1 =xl1; *l2 = xl2; }
+  | { *p = 0; } STATI   '[' cexpr3<st> (abil_param<xp> { *p = xp; })? ']' AT abil_level<xl1,xl2>
+      { *AbT = AB_STATI;   *Abil = st; *l1 = xl1; *l2 = xl2; }
+  | { *p = 0; } FEAT    '[' cexpr3<ft> (abil_param<xp> { *p = xp; })? ']' AT abil_level<xl1,xl2>
+      { *AbT = AB_FEAT;    *Abil = ft; *l1 = xl1; *l2 = xl2; }
+  ;
+
+abil_param<p>:
+  ',' cexpr3<pa>      { *p = pa; }
+  | ',' res_ref<rr>   { *p = rr; }
+  | ',' cexpr3<pa> ',' cexpr3<pa2> { *p = pa | (pa2 << 16); }
+  ;
+
+abil_level<l1,l2>:
+  cexpr3<xl1> (WORD_LEVEL)?
+    { *l1 = xl1; *l2 = 0; }
+  | EVERY cexpr3<xl2> WORD_LEVEL
+    { *l1 = 1;  *l2 = xl2; }
+  | EVERY WORD_LEVEL
+    { *l1 = 1;  *l2 = 1; }
+  | EVERY WORD_LEVEL STARTING AT cexpr3<xl1> (WORD_LEVEL)?
+    { *l1 = xl1; *l2 = 1; }
+  | EVERY cexpr3<xl2> WORD_LEVEL STARTING AT cexpr3<xl1> (WORD_LEVEL)?
+    { *l1 = xl1; *l2 = xl2; }
+  ;
+
+dungeon_def:
+  DUNGEON LITERAL<name>           { theRes = theDgn; theDgn->Name = name; }
+  '{' (dun_entry)* '}'            { theDgn++; }
+   ;
+
+dun_entry:
+    WORD_DESC (':')? LITERAL<lv> ';'{ theDgn->Desc = lv; }
+  | dconst_entry
+  | event_desc
+  | r_declaration
+  ;
+
+dconst_entry:
+  CONSTANTS (':')?
+    ( '*' cexpr3<con> cexpr3<val>   { theRes->AddConstant(con,val); } (',')? | 
+      '*' cexpr3<con> res_ref<rr>   { theRes->AddConstant(con,rr); } (',')? )*
+  ';'
+  | LISTS (':')? 
+    ( '*' cexpr4<lis> { TempListLoc = 0; } (list_entry)* (','|';')
+      { TempList[TempListLoc++] = 0;
+        TempList[TempListLoc++] = 0;
+        TempList[TempListLoc++] = 0;
+        ASSERT(TempListLoc < 1023);
+        theRes->AddList(lis,TempList); }
+    )*
+  | SPECIALS (':')?
+    ( { int16 Chance = 100; } '*' ( cexpr4<n> '%' { Chance = n; } )?
+      (   res_ref<rr> AT WORD_LEVEL cexpr3<n>     { theRes->AddSpecial(rr,Chance,n); }
+        | res_ref<rr> AT cexpr3<n> WORD_LEVEL     { theRes->AddSpecial(rr,Chance,n); }
+        | res_ref<rr> AT WORD_LEVEL dice_only<dv>  { theRes->AddSpecial(rr,Chance,yyDice(dv)); }
+        ) (',')? )* ';'
+  ;
+
+list_entry:
+    res_ref<rr>         { TempList[TempListLoc++] = rr; ASSERT(TempListLoc < 1023); }
+  | cexpr4<n>           { TempList[TempListLoc++] = n;  ASSERT(TempListLoc < 1023); }
+  | LITERAL<text>       { TempList[TempListLoc++] = text; ASSERT(TempListLoc < 1023); }
+  ;
+  
+artifact_def:
+  ARTIFACT LITERAL<name>         { theRes = theArti; theArti->Name = name; }
+  '{' (arti_entry)* '}'          { theArti++; }
+   ;
+
+arti_entry:
+    WORD_DESC (':')? LITERAL<lv> ';' { theRes = theArti; theArti->Desc = lv; }
+  | ITEM (':')? res_ref<rr> ';' { theArti->iID = rr; }
+  | (ATTRIBUTE<at> (':')? cexpr3<v> { theArti->AttrAdjLow[at] = v; } (',')? )* ';'
+  | RESISTS (':')? (cexpr3<res> { theArti->Resists |= res; } (',')?)* ';'
+  | SUSTAINS (':')? (ATTRIBUTE<at> { theArti->Sustains |= 1 << (at-1); } (',')?)* ';'
+  | QUALITIES (':')? (cexpr3<qu> { theArti->Qualities |= qu; } (',')?)* ';'
+
+  | EQUIP  { ArtPowerType = AN_ART_EQUIP; } FOR (art_power (','))* ';'
+  | WIELD  { ArtPowerType = AN_ART_WIELD; } FOR (art_power (','))* ';'
+  | HIT    { ArtPowerType = AN_ART_HIT;   } FOR (art_power (','))* ';'
+  | INVOKE { ArtPowerType = AN_ART_INVOKE;} FOR (art_power (','))* ';'
+  | event_desc
+  | r_declaration
+  ;
+
+art_power:
+    STATI '[' cexpr3<st> ',' cexpr3<p> ']'
+      { theArti->AddPower(ArtPowerType,AB_STATI,st,p,NULL); }
+  | STATI '[' cexpr3<st> ']'
+      { theArti->AddPower(ArtPowerType,AB_STATI,st,0,NULL); }
+  | res_ref<rr> (AT STYPE)?
+      { theArti->AddPower(ArtPowerType,AB_EFFECT,rr,0,NULL); }
+  | res_ref<rr> EVERY dice_val<dv> TURNS
+      { theArti->AddPower(ArtPowerType,AB_EFFECT,rr,0,&yyDice(dv)); }
+  | res_ref<rr> cexpr3<n> ('/'|PER) DAY
+      { Dice d; d.Set(0,n,1);
+        theArti->AddPower(ArtPowerType,AB_EFFECT,rr,0,&d); }
+  | res_ref<rr> cexpr3<n> ('/'|PER) WEEK
+      { Dice d; d.Set(0,n,7);
+        theArti->AddPower(ArtPowerType,AB_EFFECT,rr,0,&d); }
+  | INNATE res_ref<rr>
+      { theArti->AddPower(ArtPowerType,AB_INNATE,rr,0,NULL); }
+  | FEAT cexpr3<ft>
+      { theArti->AddPower(ArtPowerType,AB_FEAT,ft,0,NULL); }
+  ;
+
+domain_def: DOMAIN LITERAL<name> ':' cexpr3<type>
+  { theRes = theDom; theDom->Name = name; theDom->DType = type; }
+  '{' (domain_entry)* '}'
+  { theDom++; }
+  ;
+
+domain_entry:
+  { int8 sp = 0; }
+  SPELLS (':')? (res_ref<rr> { theDom->Spells[min(sp,8)] = rr; sp++; } (',')?)* ';'
+  { if (sp > 9) 
+      { yyerror(Format("Error: Domain %s has %d spells; must have at most nine.",
+        theModule->QTextSeg + theDom->Name,sp)); } }
+  | GRANTS (':')? (special_ability<AbT,Abil,p,l1,l2> (',')?
+      { theDom->AddAbility(AbT,Abil,p,l1,l2); } )* ';'
+  | WORD_DESC (':')? LITERAL<lv> ';'       { theDom->Desc = lv; }
+  | event_desc
+  | dconst_entry
+  | r_declaration
+  ;
+
+god_def: GOD LITERAL<name>  { theRes = theGod; theGod->Name = name; }
+  '{' (god_entry)* '}'
+  { theGod++; }
+  ;
+
+god_entry:
+  { int8 dm = 0; }
+  DOMAINS (':')? (res_ref<rr> { theGod->Domains[min(dm,5)] = rr; dm++; } (',')?)* ';'
+  { if (dm < 3 || dm > 6) 
+      { yyerror(Format("Error: God %s has %d domains; must have between 3 and 6.",
+        theModule->QTextSeg + theGod->Name,dm)); } }
+  | CONSTANTS ';'
+  | FLAGS (':')? (cexpr3<n> ('|' | ',')? { theGod->SetFlag(n); } )* ';'
+  | WORD_DESC (':')? LITERAL<lv> ';'     { theGod->Desc = lv; }
+  | GRANTS (':')? (special_ability<AbT,Abil,p,l1,l2> (',')?
+      { theGod->AddAbility(AbT,Abil,p,l1,l2); } )* ';'
+  | event_desc
+  | dconst_entry
+  | r_declaration
+  ;
+
+terrain_def: TERRAIN LITERAL<name>  { theRes = theTer; 
+                                      theTer->Name = name; }
+  '{' (terrain_entry)* '}'
+  { theTer++; }
+  ;
+
+terrain_entry:
+    WORD_DESC (':')? LITERAL<lv> ';' { theTer->Desc = lv; }
+  | glyph_entry<img>                 { theTer->Image = img; }
+  | MOVE (':')? cexpr3<mov> '%' ';'  { theTer->MoveMod = (mov-100)/5; }
+  | PENALTY (':')? cexpr3<pen> ';'   { theTer->Penalty = pen; }
+  | MATERIAL (':')? cexpr3<mat> ';'  { theTer->Material = mat; }
+  | FLAGS (':')?  (cexpr3<n> ('|' | ',')? { theTer->SetFlag(n); } )* ';'
+  | dconst_entry
+  | event_desc
+  | r_declaration
+  ;
+
+region_def: REGION LITERAL<name> ':' cexpr3<regflag>
+  { theRes = theReg; theReg->Name = name; theReg->SetFlag(regflag); 
+    theReg->Size = SZ_COLLOSAL; }
+  '{' (region_entry)* '}' 
+  { theReg++; }
+  ;
+
+region_entry:
+    WORD_DESC (':')? LITERAL<lv> ';' { theReg->Desc = lv; }
+  | WALLS (':')? res_ref<rr> ';'     { theReg->Walls = rr; }
+  | FLOOR (':')? res_ref<rr> ';'     { theReg->Floor = rr; }
+  | DOOR  (':')? res_ref<rr> ';'     { theReg->Door = rr; }
+  | DEPTH (':')? cexpr<n> ';'        { theReg->Depth = n; }
+  | SIZE  (':')? cexpr<n> ';'        { theReg->Size = n; }
+  | ROOMTYPES (':')? (cexpr3<n>   { theReg->RoomTypes |= BIT(n); }
+     (',' | '|')? )* ';'
+  | FLAGS (':')?  (cexpr3<n> ('|' | ',')? { theReg->SetFlag(n); } )* ';'
+  | GRID ':' MAPAREA<mg> ';'      { theReg->sx   = yyMapSize[currMap] % 256; 
+                                    theReg->sy   = yyMapSize[currMap++] / 256;
+                                    theReg->Grid = mg; }
+  | TILES ':' (                   { rID tID, xID, xID2; Glyph Img; uint8 fl; 
+                                    tID = xID = xID2 = 0; Img = 0; fl = 0; }
+     CHAR_CONST<ch> ':' res_ref<rr> { tID = rr; } 
+     (   '[' cexpr<n> ']'           { fl |= n; }
+       | WITH ( res_ref<rr>         { xID = rr; }
+                | RANDOM ITEM (cexpr<v> { xID = v; } )?
+                                    { fl |= TILE_RANDOM | TILE_ITEM; }
+                | RANDOM MONSTER (cexpr<v> { xID = v; } )?
+                                    { fl |= TILE_RANDOM | TILE_MONSTER; } )
+         (OF res_ref<rr2>           { xID2 = rr2; } 
+          | OF RANDOM cexpr<v> TO cexpr<v2>
+                                    { fl |= TILE_RANDOM_EFF; xID2 = v+v2*256; }
+          | OF cexpr<v>             { xID2 = v; } )?
+       | AS glyph_desc<g>           { Img = g; } 
+     )*                             { theReg->AddTile(ch,Img,fl,tID,xID,xID2); }
+  (',')? )* ';'
+  | REGIONS ':' (region_entry)*
+  | OBJECTS ':' (object_entry)* 
+  | dconst_entry
+  | event_desc
+  | r_declaration
+  ;
+
+template_def: WORD_TEMPLATE LITERAL<name> 
+  { theRes = theTemp; theTemp->Name = name; CurrFeat = 0; CurrAttk = 0; }
+    ':' cexpr3<ty>   { theTemp->TType = ty; } 
+    (FOR cexpr3<mt> { theTemp->ForMType = mt; } )?
+  '{' (template_entry)* '}' 
+  { theTemp++; }
+  ;
+
+template_entry:
+    WORD_DESC (':')? LITERAL<lv> ';' { theTemp->Desc = lv; }
+  | FOR (':')? cexpr3<mt> ';'        { theTemp->ForMType = mt; }
+  | MTYPE (':')? cexpr3<mt> ';'      { theTemp->AddMType = mt; }
+  | glyph_entry<img>                 { theTemp->NewImage = img; }
+  | (WORD_LEVEL | WORD_CR) (':')? mval<mv> ';' { theTemp->CR = mv; }
+  | HITDICE (':')? mval<mv> ';'      { theTemp->HitDice = mv; }
+  | HIT     (':')? mval<mv> ';'      { theTemp->Hit = mv; }
+  | DEF     (':')? mval<mv> ';'      { theTemp->Def = mv; }
+  | ARM     (':')? mval<mv> ';'      { theTemp->Arm = mv; }
+  | DMG     (':')? cexpr<n> ';'      { theTemp->DmgMod = n; }
+  | POWER   (':')? mval<mv> ';'      { theTemp->Power = mv; }
+  | CASTER WORD_LEVEL  (':')? mval<mv> ';'{ theTemp->CasterLev = mv; }
+  | SIZE    (':')? mval<mv> ';'      { theTemp->Size = mv; }
+  | SPEED   (':')? mval<mv> ';'      { theTemp->Spd = mv; }
+  | MOVE    (':')? mval<mv> ';'      { theTemp->Mov = mv; }
+  | ATTRIBUTE<at> (':')? mval<mv> (','|';') { theTemp->Attr[at] = mv; }
+  | ATTACK (':')? temp_attack_entry (',' temp_attack_entry)* ';'
+
+  | STATI '[' cexpr3<st> ']' ';'
+    { if (!theTemp->GainStati(st)) yyerror("too many Stati in template"); }
+  | STATI '[' cexpr3<st> ',' cexpr3<stV> ']' ';'
+    { if (!theTemp->GainStati(st,stV)) yyerror("too many Stati in template"); }
+  | STATI '[' cexpr3<st> ',' cexpr3<stV> ',' cexpr3<stM> ']' ';'
+    { if (!theTemp->GainStati(st,stV,stM)) 
+        yyerror("too many Stati in template"); }
+  | STATI '[' cexpr3<st> ',' cexpr3<stV> ',' cexpr3<stM> ',' res_ref<rr> ']' ';'
+    { if (!theTemp->GainStati(st,stV,stM,rr)) 
+        yyerror("too many Stati in template"); }
+
+  | RESISTS (':')? (( cexpr3<res>    { theTemp->AddRes |= res; } 
+            | ('~'|'!') cexpr3<res>  { theTemp->SubRes |= res; } ) 
+      (',')?)* ';'
+  | IMMUNE  (':')? (( cexpr3<res>    { theTemp->AddImm |= res; } 
+            | ('~'|'!') cexpr3<res>  { theTemp->SubImm |= res; } ) 
+      (',')?)* ';'
+  | FEATS (':')? (cexpr3<n> ','      { theTemp->NewFeats[CurrFeat++] = n; } )*
+                  cexpr3<n> ';'      { theTemp->NewFeats[CurrFeat++] = n; } 
+  | SPELLS (':')? ( res_ref<rr>      { theTemp->AddsFlag(M_INNATE);
+                                       theTemp->AddResID(AN_INNATE, rr); }
+     (',')? )* ';'
+  | DISEASE (':')? ( res_ref<rr>      { theTemp->AddResID(AN_DISEASE, rr); }
+     (',')? )* ';'
+  | POISON (':')? ( res_ref<rr>      { theTemp->AddResID(AN_POISON, rr); }
+     (',')? )* ';'
+  | FLAGS (':')? ( (
+     cexpr3<fl>                      { if (fl < 0) 
+                                         theTemp->Flags[(-fl)/8] |= 1 << ((-fl)%8);
+                                       else
+                                         theTemp->AddFlags[fl/8] |= 1 << (fl % 8); 
+                                     }
+     | ('~'|'!') cexpr3<fl>          { theTemp->SubFlags[fl/8] |= 1 << (fl % 8); } )
+     (','|';') )*
+  | gear_desc
+  | event_desc
+  | dconst_entry
+  | r_declaration
+  ;
+
+temp_attack_entry:             { uint8 dt = AD_NORM; dam.Set(0,0,0);
+                                 theTemp->NewAttk[CurrAttk].u.a.Dmg.Set(0,0,0);}
+  cexpr3<at> FOR 
+    ( dice_only<dam>           { theTemp->NewAttk[CurrAttk].u.a.Dmg = yyDice(dam); } 
+      | cexpr3<chance> '%'     { theTemp->NewAttk[CurrAttk].u.a.Dmg.Bonus = chance; } )?
+  (cexpr3<n> { dt = n; } )?
+
+  (DMG)?                    
+    ( '(' (WORD_DC|WORD_CR|WORD_LEVEL) cexpr3<dc> { theTemp->NewAttk[CurrAttk].u.a.DC = dc; } ')' )?
+                               { theTemp->NewAttk[CurrAttk].AType = at;
+                                 theTemp->NewAttk[CurrAttk].DType = dt;
+                                 /*
+                                 if (at == A_ABIL)
+                                   theTemp->NewAttk[CurrAttk].u.a.DC = max(
+                                        theTemp->NewAttk[CurrAttk].u.a.DC, 1);
+                                        */
+                                 CurrAttk++;
+                                 if (CurrAttk >= 16)
+                                   yyerror("> 16 attacks on a single template!");
+                               }
+  (AND { dt = AD_NORM; theTemp->NewAttk[CurrAttk].u.a.Dmg.Set(0,0,0); dam2.Set(0,0,0); } 
+    ( dice_only<dam2>          { theTemp->NewAttk[CurrAttk].u.a.Dmg = yyDice(dam2); } )?
+    (cexpr3<n2> { dt = n2; } )?
+    (DMG)?
+    ( '(' (WORD_DC|WORD_CR|WORD_LEVEL) cexpr3<dc> { theTemp->NewAttk[CurrAttk].u.a.DC = dc; } ')' )?
+                               { theTemp->NewAttk[CurrAttk].AType = A_ALSO;
+                                 theTemp->NewAttk[CurrAttk].DType = dt;
+                                 theTemp->NewAttk[CurrAttk].u.a.Dmg = yyDice(dam2);
+                                 CurrAttk++;
+                                 if (CurrAttk >= 16)
+                                   Fatal("> 16 attacks on a single monster!");
+                               }
+  )*
+  | cexpr3<at> FOR res_ref<rr>  { theTemp->NewAttk[CurrAttk].AType = at;
+                                  theTemp->NewAttk[CurrAttk].u.xID = rr; }
+                  ( cexpr3<dt>  { theTemp->NewAttk[CurrAttk].DType = dt; } )?
+  ;
+
+
+quest_def: NOTDONE;
+
+flavor_def:
+  FLAVOR LITERAL<name> ':' cexpr3<it>  { theRes = theFlavor; 
+                                         theFlavor->Name = name;
+                                         theFlavor->IType = it;
+                                         theFlavor->Material = -1;
+                                         theFlavor->Color = -1;
+                                         theFlavor->Weight = 20; }
+  '{' (flavor_entry)* '}'               { theFlavor++; }
+   ;
+
+flavor_entry: 
+    WORD_DESC  (':')? LITERAL<lv> ';'       { theFlavor->Desc     = lv; }
+  | MATERIAL   (':')? cexpr3<n> ';'         { theFlavor->Material = n; }
+  | WORD_COLOR (':')? color<col> ';'        { theFlavor->Color    = col; }
+  | WEIGHT     (':')? cexpr3<n> '%' ';'     { theFlavor->Weight   = n/5; }
+  ;
+
+prototype: NOTDONE;
+
+type_name<ty>: 
+    VOID          { *ty = DT_VOID; }
+  | INT32         { *ty = DT_INT32; }
+  | HOBJ          { *ty = DT_HOBJ; }
+  | HTEXT         { *ty = DT_HTEXT; }
+  | RID           { *ty = DT_RID; }
+  | STRING        { *ty = DT_STRING; }
+  | WORD_RECT     { *ty = DT_RECT; }
+  ;
+
+                                                     
+s_prototype:  { BSysFunc *b; }
+  SYSTEM type_name<ty> cexpr3<ot> SCOPE_OPER IDENT<fn> '('
+    { if (is_res(ot)) {
+        if (theSymTab.GetBinding(fn,0,0,RES_FUNC))
+          if (GETBIND_RESFUNC(fn)->RType == ot)
+            yyerror(Format("Resource member function '%s' declared for same resource type twice!",theSymTab[fn]));
+        b = new BResFunc(MemFuncID++,ty,ot);
+        theSymTab.Bind(fn,b);
+        }
+      else {
+        if (theSymTab.GetBinding(fn,0,0,MEM_FUNC))
+          yyerror(Format("System member function '%s' declared twice!",theSymTab[fn]));
+        /*else if (theSymTab.GetBinding(fn,1,0,ANY))
+          yyerror(Format("Identifier conflict: '%s'.", theSymTab[fn]));*/
+        b = new BMemFunc(MemFuncID++,ty,ot);
+        theSymTab.Bind(fn,b); 
+      }
+    }
+  ( type_name<ty_1> (':' cexpr3<ot_1> { b->ParamOType[0] = ot_1; } )?
+    { b->ParamType[0] = ty_1; b->ParamCount++; }
+    (IDENT<paramname>)? ( '=' cexpr<def> { b->Default[0] = def; b->HasDefault |= BIT(2); } )?
+   
+    (',' type_name<ty_n> (':' cexpr3<ot_n> { b->ParamOType[b->ParamCount] = ot_n; } )?
+      { b->ParamType[b->ParamCount] = ty_n; b->ParamCount++; }
+      (IDENT<paramname>)? ( '=' cexpr<def> { b->Default[b->ParamCount] = def; b->HasDefault |= BIT(1+b->ParamCount); } )?
+    )* )? 
+   (',' ELLIPSIS { b->isVarParam = true; } )? ')' ';'   
+  ;
+
+sg_prototype:  { BSysFunc *b; }
+  SYSTEM type_name<ty> IDENT<fn> '('
+    { if (theSymTab.GetBinding(fn,0,0,SYS_FUNC))
+        yyerror(Format("System global function '%s' declared twice!",theSymTab[fn]));
+      else if (theSymTab.GetBinding(fn,0,1,ANY))
+        yyerror(Format("Identifier conflict: '%s'.", theSymTab[fn]));
+      b = new BSysFunc(MemFuncID++,ty);
+      theSymTab.Bind(fn,b); }
+  ( type_name<ty_1> (':' cexpr3<ot_1> { b->ParamOType[0] = ot_1; } )?
+    { b->ParamType[0] = ty_1; b->ParamCount++; }
+    (IDENT<paramname>)? ( '=' cexpr<def> { b->Default[0] = def; b->HasDefault |= BIT(2); } )?
+   
+    (',' type_name<ty_n> (':' cexpr3<ot_n> { b->ParamOType[b->ParamCount] = ot_n; } )?
+      { b->ParamType[b->ParamCount] = ty_n; b->ParamCount++; }
+      (IDENT<paramname>)? ( '=' cexpr<def> { b->Default[b->ParamCount] = def; b->HasDefault |= BIT(1+b->ParamCount); } )?
+    )* )? 
+   (',' ELLIPSIS { b->isVarParam = true; } )? ')' ';'   
+  ;
+
+s_declaration: { BMemVar *b; BResMem *b2; }
+  SYSTEM type_name<ty> cexpr3<ot> SCOPE_OPER IDENT<vn> ';'
+    { 
+      if (is_res(ot)) {
+        if (theSymTab.GetBinding(vn,0,RES_MEM))
+          if (((BResMem*)theSymTab.GetBinding(vn,0,0,RES_MEM))->RType == ot)
+            yyerror(Format("System resource member '%s' declared twice!",theSymTab[vn]));
+        b2 = new BResMem();
+        b2->varid = MemVarID++;
+        b2->VarType = ty;
+        b2->RType = ot;
+        b2->xID   = 0;
+        b2->Event = 1;
+        b2->type  = RES_MEM;
+        theSymTab.Bind(vn,b2);
+        }
+      else {
+        if (theSymTab.GetBinding(vn,0,0,MEM_VAR))
+          yyerror(Format("System member variable '%s' declared twice!",theSymTab[vn]));
+        else if (theSymTab.GetBinding(vn,0,1,ANY))
+          yyerror(Format("Identifier conflict: '%s'.", theSymTab[vn]));
+        b = new BMemVar();
+        b->varid = MemVarID++; 
+        b->VarType = ty; 
+        b->OType = ot;
+        b->xID   = 0;
+        b->Event = 1;
+        b->type  = MEM_VAR;
+        theSymTab.Bind(vn,b); 
+        }
+    }
+  ;
+
+s_object_decl: { BSysObj *b; }
+  SYSTEM cexpr3<ot> IDENT<oname> EQ_OP cexpr3<oid> ';'
+    { if (theSymTab.GetBinding(oname,0,0,SYS_OBJ))
+        yyerror(Format("System object '%s' declared twice!",theSymTab[oname]));
+      else if (theSymTab.GetBinding(oname,0,1,ANY))
+        yyerror(Format("Identifier conflict: '%s'.", theSymTab[oname]));
+      b = new BSysObj();
+      b->ObjNum = oid;
+      b->OType  = ot;
+      b->xID   = 0;
+      b->Event = 0;
+      b->type  = SYS_OBJ;
+      theSymTab.Bind(oname,b); }
+  ;
+
+
+g_declaration: { BGlobalVar *b; }
+  type_name<ty> IDENT<vn>
+    { if (ty == DT_STRING)
+        Error("Global variables of type String cannot be created!");
+      if (theSymTab.GetBinding(vn,0,0,GLOB_VAR))
+        Error("Global variable '%s' declared twice!",theSymTab[vn]);
+      else if (theSymTab.GetBinding(vn,0,1,ANY))
+        yyerror(Format("Identifier conflict: '%s'.", theSymTab[vn]));
+      b = new BGlobalVar();
+      b->VarType = ty; 
+      b->Address = HeapHead++;
+      b->xID     = 0;
+      b->Event   = 0;
+      
+      b->type    = GLOB_VAR;
+      theSymTab.Bind(vn,b); }
+  (',' IDENT<vn>
+    { if (theSymTab.GetBinding(vn,0,0,GLOB_VAR))
+        Error("Global variable '%s' declared twice!",theSymTab[vn]);
+      else if (theSymTab.GetBinding(vn,0,1,ANY))
+        yyerror(Format("Identifier conflict: '%s'.", theSymTab[vn]));
+      b = new BGlobalVar();
+      b->VarType = ty; 
+      b->Address = HeapHead++;
+      b->xID     = 0;
+      b->Event   = 0;
+      b->type    = GLOB_VAR;
+      theSymTab.Bind(vn,b); } )* ';'
+  ;
+
+l_declaration<VBlock code>: { BLocalVar *b; int32 scope, i; String scope_id; }
+  type_name<ty> IDENT<vn>
+    { b = new BLocalVar();
+      b->xID   = FIND(theModule->GetText(theRes->Name));
+      ASSERT(theEvent);
+      b->Event = theEvent;
+      if (theSymTab.GetBinding(vn,b->xID,b->Event,LOC_VAR))
+        Error("Local variable '%s' declared twice!",theSymTab[vn]);
+      b->VarType = ty; 
+      b->StackOffset = ++StackHead;
+      b->type    = LOC_VAR;
+      if (ty == DT_STRING) {
+        i = AllocString();
+        LockString(i);
+        code->Generate(MOV,RT_MEMORY,-(b->StackOffset),RT_CONSTANT,-i);
+        code->Generate(ESTR,RT_CONSTANT,-i);
+        }
+      theSymTab.Bind(vn,b); }
+  (',' IDENT<vn>
+    { b = new BLocalVar();
+      b->xID   = FIND(theModule->GetText(theRes->Name));
+      ASSERT(theEvent);
+      b->Event = theEvent;
+      if (theSymTab.GetBinding(vn,b->xID,b->Event,LOC_VAR))
+        Error("Local variable '%s' declared twice!",theSymTab[vn]);
+      b->VarType = ty; 
+      b->StackOffset = ++StackHead;
+      b->type    = LOC_VAR;
+      if (ty == DT_STRING) {
+        i = AllocString();
+        LockString(i);
+        code->Generate(MOV,RT_MEMORY,-(b->StackOffset),RT_CONSTANT,-i);
+        code->Generate(ESTR,RT_CONSTANT,-i);
+        }
+      theSymTab.Bind(vn,b); } )* ';'
+  ;
+
+r_declaration: { BResVar *b; int32 scope; String scope_id; }
+  type_name<ty> IDENT<vn>
+    { if (ty == DT_STRING)
+        yyerror("Resource variables of type String cannot be allocated.");
+      b = new BResVar();
+      b->xID   = FIND(theModule->GetText(theRes->Name));
+      b->Event = 0;
+      if (theSymTab.GetBinding(vn,b->xID,b->Event,RES_VAR))
+        Error("Resource variable '%s' declared twice!",theSymTab[vn]);
+      b->VarType = ty; 
+      b->Address = HeapHead++;
+      b->type    = RES_VAR;
+      theSymTab.Bind(vn,b); }
+  (',' IDENT<vn>
+    { b = new BResVar();
+      b->xID   = FIND(theModule->GetText(theRes->Name));
+      b->Event = 0;
+      if (theSymTab.GetBinding(vn,b->xID,b->Event,RES_VAR))
+        Error("Resource variable '%s' declared twice!",theSymTab[vn]);
+      b->VarType = ty; 
+      b->Address = HeapHead++;
+      b->type    = RES_VAR;
+      theSymTab.Bind(vn,b); } )* ';'
+  ;
+
+
+statement <VBlock st>:
+  expr<ex> ';'
+    {
+      st->Add(ex.Code);
+      if (ex.Storage == RT_REGISTER) {
+        st->TrimGratuitousMOV();
+        FreeRegister(ex.Value);
+        }
+      if (ex.Type == DT_STRING && ex.Storage == RT_CONSTANT)
+        if (ex.Value < -1)
+          FreeString(-ex.Value);
+    }
+  | IF '(' expr<ex> ')' statement<st1> ELSE statement<st2>
+    {
+      st->Add(ex.Code);
+      /* Here, we compute the address to include the size
+         of the JUMP opcode below, which may be one or two
+         words, depending upon if it needs data space. */
+      st->Generate(JFAL, ex.Storage, ex.Value, 
+        RT_CONSTANT, st1.GetSize()+ (st2.GetSize()+1> 511?
+          3 : 2));
+      if (ex.Storage == RT_REGISTER)
+        FreeRegister(ex.Value);                  
+      st->Add(&st1);                            
+      st->Generate(JUMP, RT_CONSTANT, st2.GetSize()+1);
+      st->Add(&st2);
+    }   
+  | IF '(' expr<ex> ')' statement<st1>
+    {
+      st->Add(ex.Code);
+      st->Generate(JFAL, ex.Storage, ex.Value, 
+        RT_CONSTANT, st1.GetSize()+1);
+      if (ex.Storage == RT_REGISTER)
+        FreeRegister(ex.Value);
+      st->Add(&st1);
+    }
+  | FOR '(' expr<ex1> ';' expr<ex2> ';' expr <ex3> ')'
+      statement<st1>
+    {
+      int16 jumpback;
+      ex1.Code->TrimGratuitousMOV();
+      ex3.Code->TrimGratuitousMOV();
+      st->Add(ex1.Code);
+      if (ex1.Storage == RT_REGISTER)
+        FreeRegister(ex1.Value);
+      jumpback = st->GetSize();
+      st->Add(ex2.Code);
+      /* Here again, we compensate for the fact that the lower JUMP
+         opcode may be either one or two words; there has to be a
+         less kludgy way to do this... */
+      st->Generate(JFAL, ex2.Storage,ex2.Value,
+        RT_CONSTANT,st1.GetSize() + (ex3.Code ? ex3.Code->GetSize() : 0) + 
+        (st1.GetSize() + (ex3.Code ? ex3.Code->GetSize() : 0) + 
+                         (ex2.Code ? ex2.Code->GetSize() : 0) > 511 ? 3 : 2));
+      if (ex2.Storage == RT_REGISTER)
+        FreeRegister(ex2.Value);
+      st1.ProcessContinues();
+      st->Add(&st1);
+      st->Add(ex3.Code);
+      if (ex3.Storage == RT_REGISTER)
+        FreeRegister(ex3.Value);
+      st->Generate(JUMP,RT_CONSTANT,jumpback - st->GetSize());
+    }
+  | SWITCH '(' expr<ex> ')' '{'
+      {
+        int16 CaseAddr[256], DefaultAddr;
+        int32 CaseVal[256];
+        VBlock *CaseCode[256], *DefaultCode;
+        int8 CaseCount, i;
+        CaseCount = 0;
+        DefaultAddr = 0;
+        CaseAddr[0] = 0; 
+      }
+    ( CASE ( cexpr<val> | res_ref<rr> { val = rr; } ) ':'    
+      { CaseCode[CaseCount] = new VBlock; }
+      ( { st_n.Clear(); } statement<st_n> { CaseCode[CaseCount]->Add(&st_n);  } )*
+      {
+        /* We know where *this* case ends, which is synonimous with where
+           the *next* case starts... */
+        CaseAddr[CaseCount + 1] = CaseAddr[CaseCount] +
+          CaseCode[CaseCount]->GetSize();
+        CaseVal[CaseCount] = val;
+        CaseCount++;  
+      }
+    )* 
+    ( DEFAULT ':'         { DefaultCode = new VBlock; } 
+      ( { st_n.Clear(); } statement<st_n> { DefaultCode->Add(&st_n);  } )*
+      { 
+        DefaultAddr = CaseAddr[CaseCount]; 
+        CaseAddr[CaseCount] = DefaultAddr + DefaultCode->GetSize(); 
+      }
+    )?
+    
+    '}'
+      {
+        /* Now we code the *entire* switch statement! */
+        
+        /* Evaluate the Expression */
+        st->Add(ex.Code);
+
+        /* Set the break location */
+        st->Generate(SBRK, RT_CONSTANT, CaseAddr[CaseCount]+(CaseCount*2+3));
+
+        /* Jump to the proper case */
+        st->Generate(JTAB, ex.Storage, ex.Value, RT_CONSTANT, CaseCount);
+        
+        /* Write out the Jump Table */
+        for(i=0;i!=CaseCount;i++) {
+          st->GenDWord(CaseVal[i]);
+          st->GenDWord(CaseAddr[i] + (CaseCount*2+1));
+          }
+        /* And then add the default case */
+        st->GenDWord((DefaultAddr ? DefaultAddr : CaseAddr[i]) + (CaseCount*2+1));
+
+        if (ex.Storage == RT_REGISTER)
+          FreeRegister(ex.Value);
+
+        /* Copy in each case's code, in order */
+        for (i=0;i!=CaseCount;i++)
+          {
+            st->Add(CaseCode[i]);
+            delete CaseCode[i];
+          } 
+
+        /* Don't forget the default case */
+        if (DefaultAddr) {
+          st->Add(DefaultCode);
+          delete DefaultCode;
+          }
+
+        /* Free the break location */
+        st->Generate(FBRK);
+        
+      }
+  | BREAK ';'
+      {
+        st->Generate(JBRK);
+      }
+  | CONTINUE ';'
+      {
+        st->Generate(CONT);
+      }
+  | DO statement<st1> WHILE '(' expr<ex> ')' ';'
+      {
+        st->Add(&st1);
+        st->Add(ex.Code);
+        st->Generate(JTRU,ex.Storage,ex.Value,
+          RT_CONSTANT, -st->GetSize());
+        if (ex.Storage == RT_REGISTER)
+          FreeRegister(ex.Value);
+      }
+  | WHILE '(' expr<ex> ')' statement<st1>
+      {
+        st->Add(ex.Code);
+        st->Generate(JFAL,ex.Storage,ex.Value,
+          RT_CONSTANT, st1.GetSize()+
+            (st->GetSize() > 511 ? 3 : 2));
+        st->Add(&st1);
+        st->Generate(JUMP,RT_CONSTANT, - st->GetSize());
+        if (ex.Storage == RT_REGISTER)
+          FreeRegister(ex.Value);
+      }
+  | block<bl>               
+      { 
+        st->Add(&bl); 
+      }
+  | RETURN expr<ex> ';'
+      {
+        st->Add(ex.Code);
+        if (StackHead) {
+          st->Generate(MOV,RT_REGISTER,0,ex.Storage,ex.Value);
+          st->Generate(DEC,RT_REGISTER,63,RT_CONSTANT,StackHead);
+          st->Generate(RET,RT_REGISTER,0);
+          }
+        else
+          st->Generate(RET,ex.Storage,ex.Value);
+        if (ex.Storage == RT_REGISTER)
+          FreeRegister(ex.Value);
+      }
+  | RETURN ';'
+      {
+        if (StackHead)
+          st->Generate(DEC,RT_REGISTER,63,RT_CONSTANT,StackHead);
+        st->Generate(RET);
+      }
+  ;
+
+block<VBlock bl>:
+  '{' ( { st.Clear(); } statement<st> { bl->Add(&st); } )* '}'
+  ;
+
+routine<VBlock bl>:
+   { VBlock decl_code; StackHead = 0; ClearStrings(); }
+  '{' ( { code.Clear(); } l_declaration<code> { decl_code.Add(&code); } 
+        | STATIC r_declaration )*
+      { if (StackHead)
+          bl->Generate(INC,RT_REGISTER,63,RT_CONSTANT,StackHead);
+        bl->Add(&decl_code); }
+      ( { st.Clear(); } statement<st> { bl->Add(&st); } )* '}'
+      { if (StackHead)
+          bl->Generate(DEC,RT_REGISTER,63,RT_CONSTANT,StackHead); 
+      
+        /* This code is being inserted by FJM May 7 2006 to suppress
+           the bug where registers fail to deallocate. Remove it to
+           cause that bug to manifest again for debugging purposes,
+           or insert a warning here to track WHICH scripts leave
+           registers still allocated. */
+        int16 i;
+        for (i=0;i!=64;i++)
+          FreeRegister(i);
+      }
+      
+  ;
+
+/* The Operator Precedence Chart, ala C/C++:                      */
+/* Level 1: post++, post--, func(), array[], ->member  (expr10)   */
+/* Level 2.: ++pre, --pre, unary+, unary-, !, ~         (expr20)   */
+/* Level 3: 5 d 4                                                 */
+/* Level 4: (typecast)                                            */
+/* Level 5: *, /, %                                               */
+/* Level 6: +, -                                                  */
+/* Level 7: <<, >>                                                */
+/* Level 8: <, >, <=, >=, !=                                      */
+/* Level 9: &                                                     */
+/* Level 10: ^                                                    */
+/* Level 11: |                                                    */
+/* Level 12: &&                                                   */
+/* Level 13: ||                                                   */
+/* Level 14: e ? a : b                                            */
+/* Level 15: =, *=, +=, /=, %=, -=, <<=, >>=, &=, |=, ^=          */
+/* Level 16: expr , expr                                          */
+ 
+
+fund_expr<PExp ex>:
+    NUMBER<n>
+    { ex->Type = DT_INT32; ex->Storage = RT_CONSTANT; ex->Value = n; ex->Code = NULL; }
+  | CHAR_CONST<n>
+    { ex->Type = DT_INT32; ex->Storage = RT_CONSTANT; ex->Value = n; ex->Code = NULL; }
+  | LITERAL<lv>
+    { ex->Type = DT_HTEXT; ex->Storage = RT_CONSTANT; ex->Value = lv; ex->Code = NULL; }
+  | WORD_TRUE
+    { ex->Type = DT_BOOL; ex->Storage = RT_CONSTANT; ex->Value = 1; ex->Code = NULL; }
+  | WORD_FALSE
+    { ex->Type = DT_BOOL; ex->Storage = RT_CONSTANT; ex->Value = 0; ex->Code = NULL; }
+  | WORD_NULL
+    { ex->Type = DT_UNKNOWN; ex->Storage = RT_CONSTANT; ex->Value = 0; ex->Code = NULL; }
+  | res_ref<rr>
+    { ex->Type = DT_RID;   ex->Storage = RT_CONSTANT; ex->Value = rr; ex->Code = NULL; }
+  | '(' expr<ex2> ')'
+    { ex->Code = ex2.Code; 
+      ex->Type = ex2.Type; ex->Storage = ex2.Storage; ex->Value = ex2.Value; }
+  | IDENT<id>
+    { BGlobalVar *b; BLocalVar *b2; BSysObj *b3; BResVar *b4; rID resID;
+      resID = FIND(theModule->GetText(theRes->Name));
+      ASSERT(resID);
+      ASSERT(theEvent);
+      if (b2 = GETBIND_LOCALVAR(id,resID,theEvent))
+        {
+          ex->Type = b2->VarType;
+          ex->Storage = RT_MEMORY;
+          ex->Value = -(b2->StackOffset);
+        }
+      else if (b4 = GETBIND_RESVAR(id,resID))
+        {
+          ex->Type = b4->VarType;
+          ex->Storage = RT_MEMORY;
+          ex->Value = b4->Address;
+        }
+      else if (b = GETBIND_GLOBALVAR(id))
+        {
+          ex->Type = b->VarType;
+          ex->Storage = RT_MEMORY;
+          ex->Value = b->Address;
+        }
+      else if (b3 = GETBIND_SYSOBJ(id))
+        {
+          ex->Type = DT_HOBJ;
+          ex->Storage = RT_CONSTANT;
+          ex->Value   = b3->ObjNum;
+          ex->Code = NULL;
+        }
+      else
+        {
+          ex->Type = DT_INT32;
+          ex->Storage = RT_CONSTANT; ex->Value = 0;
+          if (IDENT_DEFINED(id))
+            yyerror(Format("Improper use of identifier '%s'",theSymTab[id]));
+          else
+            yyerror(Format("Undeclared identifier '%s'",theSymTab[id]));
+
+        }
+    }
+  | fund_expr<obj> ('.'|MEMBER_OP) IDENT<id>
+    {
+      int8 reg; BMemVar *b; BResMem *b2;
+      if (obj.Type == DT_RID) {
+        if (!(b2 = GETBIND_RESMEM(id))) {
+          yyerror(Format("Expected resource member in place of '%s'",theSymTab[id]));
+          ex->Type = DT_VOID;
+          ex->Storage = RT_CONSTANT;
+          ex->Value = 0;
+          }
+        else {
+          ex->Code = obj.Code;
+          ex->Type = b2->VarType;
+          if (obj.Storage == RT_REGISTER)
+            FreeRegister(obj.Value);
+          ex->Value = AllocRegister();
+          ex->Storage = RT_REGISTER;
+          if (!ex->Code)
+            ex->Code = new VBlock;
+          ex->Code->Generate(GVAR,obj.Storage,obj.Value,
+            RT_CONSTANT, b2->varid);
+          ex->Code->Generate(MOV,ex->Storage,ex->Value,RT_REGISTER,0);
+          }
+        }
+      else {
+        if (obj.Type != DT_HOBJ && obj.Type != DT_STRING && obj.Type != DT_HTEXT)
+          yyerror("Type musmatch: non-hObj on left side of '.' operator.");
+        if (!(b = GETBIND_MEMVAR(id))) {
+          yyerror(Format("Expected Member in place of '%s'",theSymTab[id]));
+          ex->Type = DT_VOID;
+          ex->Storage = RT_CONSTANT;
+          ex->Value = 0;
+          }
+        else {
+          ex->Code = obj.Code;
+          ex->Type = b->VarType;
+          if (obj.Storage == RT_REGISTER)
+            FreeRegister(obj.Value);
+
+          if (!ex->Code)
+            ex->Code = new VBlock;
+          ex->Code->Generate(GVAR,obj.Storage,obj.Value,
+            RT_CONSTANT, b->varid);
+          if (ex->Type == DT_STRING) {
+            ex->Value   = -AllocString();
+            ex->Storage = RT_CONSTANT;
+            ex->Code->Generate(WSTR,ex->Storage,ex->Value,RT_CONSTANT,-1);
+            }
+          else {
+            ex->Value = AllocRegister();
+            ex->Storage = RT_REGISTER;
+            ex->Code->Generate(MOV,ex->Storage,ex->Value,RT_REGISTER,0);
+            }
+          }
+        }
+    }
+  | fund_expr<obj> ('.'|MEMBER_OP) IDENT<fn> 
+      { BSysFunc *b;
+        if (obj.Type == DT_RID) {
+          if (!(b = GETBIND_RESFUNC(fn)))
+            yyerror(Format("Expected: member function name after '.' (%s).",
+              theSymTab[fn]));
+          }
+        else if (obj.Type == DT_HOBJ || obj.Type == DT_STRING ||
+                 obj.Type == DT_HTEXT) {
+          if (!(b = GETBIND_MEMFUNC(fn)))
+            yyerror(Format("Expected: member function name after '.' (%s).",
+              theSymTab[fn]));
+          }
+        else
+          yyerror("Type mismatch: non-hObj on left side of '.' operator.");
+        ex->Code = new VBlock;
+        /* Allocate a string, if necessary */
+        if (obj.Type == DT_STRING || obj.Type == DT_HTEXT)
+          if (obj.Storage == RT_CONSTANT && obj.Value >= 0)
+            {
+              int16 j = -AllocString();
+              if (!obj.Code)
+                obj.Code = new VBlock;
+              obj.Code->Generate(WSTR,RT_CONSTANT,j,RT_CONSTANT,obj.Value);
+              obj.Value = j;
+            }          
+      }
+    '(' param_list<b,fn,bl,narg> ')'
+      {
+        if (obj.Code)
+          ex->Code->Add(obj.Code);
+        ex->Code->Add(&bl);
+        /* Adjust any stack offset to account for PUSH opcodes contained in
+           bl. */
+        if (obj.Storage == RT_MEMORY)
+          if (obj.Value < 0)
+            obj.Value -= b->ParamCount;
+
+
+        /* Call the Function */
+        ex->Code->Generate(CMEM,obj.Storage,obj.Value,RT_CONSTANT,b->funcid);
+        /* Clean up the Stack */
+        ex->Code->Generate(DEC,RT_REGISTER,63,RT_CONSTANT,narg);
+        ex->Type = b->ReturnType;
+        if (ex->Type == DT_STRING) {
+          ex->Value = -AllocString();
+          ex->Storage = RT_CONSTANT;
+          ex->Code->Generate(WSTR,ex->Storage,ex->Value,RT_CONSTANT,-1);
+          }
+        else {
+          ex->Value = AllocRegister();
+          ex->Storage = RT_REGISTER;
+          ex->Code->Generate(MOV,RT_REGISTER,ex->Value,RT_REGISTER,0);
+          }
+      }
+  | IDENT<fn>
+      { BSysFunc *b;
+        if (!(b = GETBIND_SYSFUNC(fn)))
+          yyerror(Format("Expected: global function name before '(' (%s).",
+            theSymTab[fn]));
+        ex->Code = new VBlock;
+      }
+    '(' param_list<b,fn,bl,narg> ')'
+      {
+        ex->Code->Add(&bl);
+        /* Call the Function */
+        ex->Code->Generate(CMEM,RT_CONSTANT,0,RT_CONSTANT,b->funcid);
+        /* Clean up the Stack */
+        ex->Code->Generate(POP,RT_CONSTANT,narg);
+        ex->Type = b->ReturnType;
+        if (ex->Type == DT_STRING) {
+          ex->Value = -AllocString();
+          ex->Storage = RT_CONSTANT;
+          ex->Code->Generate(WSTR,ex->Storage,ex->Value,RT_CONSTANT,-1);
+          }
+        else {
+          ex->Value = AllocRegister();
+          ex->Storage = RT_REGISTER;
+          ex->Code->Generate(MOV,RT_REGISTER,ex->Value,RT_REGISTER,0);
+          }
+      }
+  | fund_expr<rect> '@' IDENT<id>
+    {
+      if (rect.Type != DT_RECT)
+        yyerror("Type mismatch: '@' operator used on non-Rect target.");
+      *ex = CodeRectMember(&rect,id);
+      
+    }
+  ;
+
+lvalue<LExp lv>:
+  IDENT<id>
+    { BGlobalVar *b; BLocalVar *b2; BResVar *b3; rID resID;
+      resID = FIND(theModule->GetText(theRes->Name));
+      ASSERT(resID);
+      ASSERT(theEvent);
+      
+      if (b2 = GETBIND_LOCALVAR(id,resID,theEvent))
+        {
+          lv->Type = b2->VarType;
+          lv->Storage = RT_MEMORY;
+          lv->Value = -(b2->StackOffset);
+          lv->RCode = NULL;
+          lv->WCode = new VBlock;
+          lv->WCode->Generate(MOV,RT_MEMORY,-b2->StackOffset,RT_REGISTER,0);
+        }
+      else if (b3 = GETBIND_RESVAR(id,resID))
+        {
+          lv->Type = b3->VarType;
+          lv->Storage = RT_MEMORY;
+          lv->Value = b3->Address;
+          lv->RCode = NULL;
+          lv->WCode = new VBlock;
+          lv->WCode->Generate(MOV,RT_MEMORY,b3->Address,RT_REGISTER,0);
+        }
+      else if (b = GETBIND_GLOBALVAR(id))
+        {
+          lv->Type = b->VarType;
+          lv->Storage = RT_MEMORY;
+          lv->Value = b->Address;
+          lv->RCode = NULL;
+          lv->WCode = new VBlock;
+          lv->WCode->Generate(MOV,RT_MEMORY,b->Address,RT_REGISTER,0);
+        }
+      else
+        {
+          lv->Type = DT_UNKNOWN;
+          lv->Storage = RT_MEMORY; 
+          lv->Value = 0;
+          if (IDENT_DEFINED(id))
+            yyerror(Format("Improper use of identifier '%s'",theSymTab[id]));
+          else
+            yyerror(Format("Undeclared identifier '%s'",theSymTab[id]));
+
+        }
+    }
+  | lvalue<rect> '@' IDENT<id>
+    {
+      if (rect.Type != DT_RECT)
+        yyerror("Type mismatch: '@' operator used on non-Rect target.");
+      *lv = CodeRectLVal(&rect,id);
+    }
+  | fund_expr<obj> ('.'|MEMBER_OP) IDENT<id>
+    {
+      int8 reg, i; BMemVar *b;
+      if (obj.Type != DT_HOBJ)
+        yyerror("Type mismatch: non-hObj on left side of '.' operator.");
+      if (!(b = GETBIND_MEMVAR(id))) {
+        yyerror(Format("Expected Member in place of '%s'",theSymTab[id]));
+        lv->Type = DT_VOID;
+        lv->Storage = RT_CONSTANT;
+        lv->Value = 0;
+        }
+      else {
+        lv->Type = b->VarType;
+        if (obj.Storage == RT_REGISTER)
+          FreeRegister(obj.Value);
+        lv->RCode = new VBlock;
+        lv->RCode->Add(obj.Code);
+        lv->RCode->Generate(GVAR,obj.Storage,obj.Value,
+          RT_CONSTANT, b->varid);
+
+        if (lv->Type == DT_STRING) {
+          i = -AllocString();
+          lv->Storage = RT_CONSTANT;
+          lv->Value   = i;
+          lv->RCode->Generate(WSTR,RT_CONSTANT,i,RT_CONSTANT,-1);
+          }
+        else {
+          lv->Value = AllocRegister();
+          lv->Storage = RT_REGISTER;
+          lv->RCode->Generate(MOV,lv->Storage,lv->Value,RT_REGISTER,0);      
+          }
+        lv->WCode = new VBlock;
+        lv->WCode->Add(obj.Code);
+        lv->WCode->Generate(MOV,lv->Storage,lv->Value,RT_REGISTER,0);
+        lv->WCode->Generate(SVAR,obj.Storage,obj.Value,
+          RT_CONSTANT, b->varid);
+        }
+    }
+  ;
+
+
+expr10<PExp ex>:
+    lvalue<lv> INCREMENT_OP
+    { *ex = CodeAssignment('i',lv,NULL); }
+  | lvalue<lv> DECREMENT_OP
+    { *ex = CodeAssignment('d',lv,NULL); }
+  | WORD_MIN '(' expr150<ex1> ',' expr150<ex2> ')'
+    { *ex = CodeOperator('m',ex1,ex2); }
+  | WORD_MAX '(' expr150<ex1> ',' expr150<ex2> ')'
+    { *ex = CodeOperator('M',ex1,ex2); }
+  | fund_expr<ex1>
+    { *ex = ex1; }
+  ;
+
+expr20<PExp ex>:
+    INCREMENT_OP lvalue<lv> 
+    { *ex = CodeAssignment('I',lv,NULL); }
+  | DECREMENT_OP lvalue<lv> 
+    { *ex = CodeAssignment('D',lv,NULL); }     
+  | '+' expr20<ex1> 
+    { *ex = ex1; } 
+  | '-' expr20<ex1>
+    { *ex = CodeOperator('-',ex1,ex1); }
+  | '!' expr20<ex1>
+    { *ex = CodeOperator('!',ex1,ex1); }
+  | '~' expr20<ex1>
+    { *ex = CodeOperator('~',ex1,ex1); }
+  | ':' expr20<ex1> ':'  /* absolute value op */
+    { *ex = CodeOperator(':',ex1,ex1); }
+  | expr10<ex1>
+    { *ex = ex1; }
+  ;
+
+expr30<PExp ex>:
+    expr20<ex1> 'd' expr20<ex2>
+    { *ex = CodeOperator('d',ex1,ex2); }
+  | expr20<ex1>
+    { *ex = ex1; }
+  ;
+
+expr40<PExp ex>:
+    '(' type_name<tn> ')' expr40<ex1>
+    { *ex = ex1; ex->Type = tn; }
+  | expr30<ex1>
+    { *ex = ex1; }
+  ;
+
+
+expr50<PExp ex>:
+    expr50<ex1> '*' expr40<ex2>
+    { *ex = CodeOperator('*',ex1,ex2); }
+  | expr50<ex1> '/' expr40<ex2>
+    { *ex = CodeOperator('/',ex1,ex2); }
+  | expr50<ex1> '%' expr40<ex2>
+    { *ex = CodeOperator('%',ex1,ex2); }
+  | expr40<ex1>
+    { *ex = ex1; }
+  ;
+
+expr60<PExp ex>:
+    expr60<ex1> '+' expr50<ex2>
+    { *ex = CodeOperator('+',ex1,ex2); }
+  | expr60<ex1> '-' expr50<ex2>
+    { *ex = CodeOperator('-',ex1,ex2); }
+  | expr50<ex1>
+    { *ex = ex1; }
+  ;
+
+expr70<PExp ex>:
+    expr70<ex1> LSHIFT_OP expr60<ex2>
+    { *ex = CodeOperator(LSHIFT_OP,ex1,ex2); }
+  | expr70<ex1> RSHIFT_OP expr60<ex2>
+    { *ex = CodeOperator(RSHIFT_OP,ex1,ex2); }
+  | expr60<ex1>
+    { *ex = ex1; }
+  ;
+
+/* Later, we want to expand this to take expressions like: */
+/*  if (i == 5 or 6 or 9 or 12)                            */
+
+
+expr80<PExp ex>:
+    expr80<ex1> '<' expr70<ex2>
+    { *ex = CodeOperator('<',ex1,ex2); }
+  | expr80<ex1> '>' expr70<ex2>
+    { *ex = CodeOperator('>',ex1,ex2); }
+  | expr80<ex1> GE_OP expr70<ex2>
+    { *ex = CodeOperator(GE_OP,ex1,ex2); }
+  | expr80<ex1> LE_OP expr70<ex2>
+    { *ex = CodeOperator(LE_OP,ex1,ex2); }
+  | expr80<ex1> EQ_OP expr70<ex2>
+    { *ex = CodeOperator(EQ_OP,ex1,ex2); }
+  | expr80<ex1> NE_OP expr70<ex2>
+    { *ex = CodeOperator(NE_OP,ex1,ex2); }
+  | expr70<ex1>
+    { *ex = ex1; }
+  ;
+
+expr90<PExp ex>:
+    expr90<ex1> '&' expr80<ex2>
+    { *ex = CodeOperator('&',ex1,ex2); }
+  | expr80<ex1>
+    { *ex = ex1; }
+  ;
+
+expr100<PExp ex>:
+    expr100<ex1> '^' expr90<ex2>
+    { *ex = CodeOperator('^',ex1,ex2); }
+  | expr90<ex1>
+    { *ex = ex1; }
+  ;
+
+expr110<PExp ex>:
+    expr110<ex1> '|' expr100<ex2>
+    { *ex = CodeOperator('|',ex1,ex2); }
+  | expr100<ex1>
+    { *ex = ex1; }
+  ;
+
+expr120<PExp ex>:
+    expr120<ex1> AND_OP expr110<ex2>
+    { *ex = CodeOperator(AND_OP,ex1,ex2); }
+  | expr110<ex1>
+    { *ex = ex1; }
+  ;
+
+expr130<PExp ex>:
+    expr130<ex1> OR_OP expr120<ex2>
+    { *ex = CodeOperator(OR_OP,ex1,ex2); }
+  | expr120<ex1>
+    { *ex = ex1; }
+  ;
+
+expr140<PExp ex>:
+  expr130<ex1> '?' expr<ex2> ':' expr140<ex3>
+    {
+      VBlock bl;
+      if (!AllowedCast(ex1.Type,DT_BOOL))
+        yyerror("Type mismatch: first operand of conditional operator "
+                "must cast to bool.");
+      if (!AllowedCast(ex2.Type,ex3.Type))
+        yyerror("Type mismatch: conditional operator with incompatible "
+                "types for true and false.");
+      ex->Type = ex2.Type;
+      ex->Code = new VBlock;
+      ex->Code->Add(ex1.Code);
+      ex->Code->Add(ex2.Code);
+      ex->Code->Add(ex3.Code);
+      
+      if (ex2.Type == DT_STRING || ex3.Type == DT_STRING) {
+        ex->Storage = RT_CONSTANT;
+        ex->Value   = -AllocString();
+        bl.Clear();
+        ex->Code->Generate(CMEQ,ex1.Storage,ex1.Value,RT_CONSTANT,0);
+        bl.Generate(WSTR, ex->Storage,ex->Value,ex2.Storage,ex2.Value);
+        ex->Code->Generate(JTRU,RT_REGISTER, 0, RT_CONSTANT,2 + bl.GetSize());
+        ex->Code->Add(&bl);
+        bl.Clear();
+        bl.Generate(WSTR, ex->Storage,ex->Value,ex3.Storage,ex3.Value);        
+        ex->Code->Generate(JUMP,RT_CONSTANT,1 + bl.GetSize());
+        ex->Code->Add(&bl);
+        if (ex2.Storage == RT_CONSTANT && ex2.Type == DT_STRING && ex2.Value < -1)
+          FreeString(-ex2.Value);
+        if (ex3.Storage == RT_CONSTANT && ex3.Type == DT_STRING && ex3.Value < -1)
+          FreeString(-ex3.Value);
+        }
+      else {
+        ex->Storage = RT_REGISTER;
+        ex->Value   = AllocRegister();
+        bl.Clear();
+        ex->Code->Generate(CMEQ,ex1.Storage,ex1.Value,RT_CONSTANT,0);
+        bl.Generate(MOV, ex->Storage,ex->Value,ex2.Storage,ex2.Value);
+        ex->Code->Generate(JTRU,RT_REGISTER, 0, RT_CONSTANT,2 + bl.GetSize());
+        ex->Code->Add(&bl);
+        bl.Clear();
+        bl.Generate(MOV, ex->Storage,ex->Value,ex3.Storage,ex3.Value);        
+        ex->Code->Generate(JUMP,RT_CONSTANT,1 + bl.GetSize());
+        ex->Code->Add(&bl);
+        }        
+      if (ex2.Storage == RT_REGISTER)
+        FreeRegister(ex2.Value);
+      if (ex3.Storage == RT_REGISTER)
+        FreeRegister(ex3.Value);
+    }
+  | expr130<ex1>
+    { *ex = ex1; }
+  ;
+
+
+/* Later: *=, +=, /=, %=, -=, <<=, >>=, &=, |=, ^= */
+
+expr150<PExp ex>:
+    lvalue<lv> '=' expr140<ex2>
+    { *ex = CodeAssignment('=',lv,&ex2); }
+  | lvalue<lv> ASSIGN_ADD expr140<ex2>
+    { *ex = CodeAssignment(ASSIGN_ADD,lv,&ex2); }
+  | lvalue<lv> ASSIGN_SUB expr140<ex2>
+    { *ex = CodeAssignment(ASSIGN_SUB,lv,&ex2); }
+  | lvalue<lv> ASSIGN_MULT expr140<ex2>
+    { *ex = CodeAssignment(ASSIGN_MULT,lv,&ex2); }
+  | lvalue<lv> ASSIGN_DIV expr140<ex2>
+    { *ex = CodeAssignment(ASSIGN_DIV,lv,&ex2); }
+  | lvalue<lv> ASSIGN_MOD expr140<ex2>
+    { *ex = CodeAssignment(ASSIGN_MOD,lv,&ex2); }
+  | lvalue<lv> ASSIGN_AND expr140<ex2>
+    { *ex = CodeAssignment(ASSIGN_AND,lv,&ex2); }
+  | lvalue<lv> ASSIGN_OR expr140<ex2>
+    { *ex = CodeAssignment(ASSIGN_OR,lv,&ex2); }
+  | lvalue<lv> ASSIGN_LSHIFT expr140<ex2>
+    { *ex = CodeAssignment(ASSIGN_LSHIFT,lv,&ex2); }
+  | lvalue<lv> ASSIGN_RSHIFT expr140<ex2>
+    { *ex = CodeAssignment(ASSIGN_RSHIFT,lv,&ex2); }
+  | lvalue<lv> ASSIGN_NEG expr140<ex2>
+    { *ex = CodeAssignment(ASSIGN_NEG,lv,&ex2); }
+  | expr140<ex1> 
+    { *ex = ex1; }
+  ;
+     
+expr<PExp ex>:
+  expr<ex1> ',' expr150<ex2>
+    {
+      ex->Code = ex1.Code;
+      if (!ex->Code)
+        ex->Code = new VBlock;
+      if (ex2.Code) {
+        ex->Code->Add(ex2.Code);
+        delete ex2.Code;
+        }
+      ex->Storage = ex1.Storage;
+      ex->Value   = ex1.Value;
+      ex->Type    = ex1.Type;
+    }
+  | expr150<ex1>
+    { *ex = ex1; }
+  ;
+
+/* There is a known bug here relating to the sending of local variables as
+   the second or later parameter in a function, due to the stack offset
+   being changed by PUSH opcodes. Will compensate later. */
+
+param_list<%in pBSysFunc b, YYSTYPE fn %out VBlock bl, int narg>:
+  { *narg = 0; int16 i,j; bl->Clear();
+    int16 PStorage[10]; int32 PValue[10]; }
+  ( expr150<p>
+    {
+      if (!b)
+        ;
+      else {
+        if (*narg < b->ParamCount)
+          if (!AllowedCast(p.Type,b->ParamType[*narg]))
+            yyerror(Format("Type mismatch in parameter %d of call to function %s (%s/%s).",
+              (*narg)+1, theSymTab[fn], Lookup(DataTypeNames, b->ParamType[*narg]),
+                Lookup(DataTypeNames,p.Type))); 
+        bl->Add(p.Code);
+        if (p.Type == DT_STRING && p.Storage == RT_CONSTANT)
+          if (p.Value < 0)
+            FreeString(-p.Value);
+        if (p.Storage == RT_MEMORY && p.Value < 0) {
+          j = AllocRegister();
+          bl->Generate(MOV,RT_REGISTER,j,p.Storage,p.Value);
+          PStorage[*narg] = RT_REGISTER;
+          PValue[*narg] = j;
+          }
+        else { 
+          PStorage[*narg] = p.Storage;
+          PValue[*narg]   = p.Value;
+          }
+        (*narg)++;
+        }
+    }
+  ( ',' expr150<p>
+    {
+      if (!b)
+        ;
+      else if (*narg == 10)
+        yyerror("More than maximum of 10 parameters in function call!");
+      else if (*narg > 10)
+        ;
+      else {
+        if (*narg < b->ParamCount)
+          if (!AllowedCast(p.Type,b->ParamType[*narg]))
+            yyerror(Format("Type mismatch in parameter %d of call to function %s (%s/%s).",
+              narg+1, theSymTab[fn], Lookup(DataTypeNames, b->ParamType[*narg]),
+                Lookup(DataTypeNames,p.Type))); 
+        if (*narg > b->ParamCount && !b->isVarParam)
+          yyerror(Format("Too many parameters in call to function %s.",theSymTab[fn]));
+        else {
+          bl->Add(p.Code);
+          if (p.Type == DT_STRING && p.Storage == RT_CONSTANT)
+            if (p.Value < 0)
+              FreeString(-p.Value);
+          if (p.Storage == RT_MEMORY && p.Value < 0) {
+            j = AllocRegister();
+            bl->Generate(MOV,RT_REGISTER,j,p.Storage,p.Value);
+            PStorage[*narg] = RT_REGISTER;
+            PValue[*narg] = j;
+            }
+          else { 
+            PStorage[*narg] = p.Storage;
+            PValue[*narg]   = p.Value;
+            }
+          }
+        (*narg)++;
+        }
+    } 
+  )* )? 
+    {
+      if ((*narg) <= b->ParamCount)
+        for(i=b->ParamCount;i!=(*narg);i--) {
+          if (b->HasDefault & BIT(i+1)) {
+            bl->Generate(PUSH,RT_CONSTANT,b->Default[i]);
+            }
+          else {
+            yyerror(Format("Too few parameters in call to function %s.",theSymTab[fn]));
+            goto Done;
+            }
+          }
+      for(i=(*narg)-1;i!=-1;i--) {
+        bl->Generate(PUSH,PStorage[i],PValue[i]);
+        if (PStorage[i] == RT_REGISTER)
+          FreeRegister(PValue[i]);
+        }
+      *narg = max(*narg,b->ParamCount);
+      Done:;
+      }
+            
+    ;

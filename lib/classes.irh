@@ -1,0 +1,2946 @@
+Class "Barbarian"
+  {              
+    Desc: "
+      <15>HitDie:_<1>d12_<15>Mana:<1>_d4__<15>Skills:<1>_6_<15>Saves:<1>_<9>F<1>rw_<15>Defense:_<1>1/2\n
+      <15>+toHit: <1>Archery <9>75~<1>, Brawl <9>100~<1>, Melee <9>100~<1>, Thrown <9>75~<1>\n
+      <2>\n\tHe may be born out of the harsh winters of Njordland, or from the
+      expansionist peoples of Arasaki. He could be a gladiator-lord from
+      the fallen Empire of Mohandi, or a tribesman from the dense and
+      humid jungles of Angla Maua. Regardless, the Barbarian is a fierce
+      berzerker-warrior, well-trained in brutal combat and wilderness
+      survival, but not as accustomed to the subtle intrigues and unseen
+      dangers of the civilized world. Uncivilized inherantly makes the 
+      barbarian neither stupid nor evil, thoughh of course many members
+      of this breed may be both. At his (or her) noblest, the barbarian
+      is the champion of a simpler time, when might did not make right,
+      but simply defended it, and the most major problems could be solved
+      with a sword and a battlecry.
+      \n\tThe Barbarian's physical toughness is unmatched by any other
+      class in the game, though the Warrior exceeds her in skill. In
+      straight-up melee combat, the Barbarian excels. 
+
+      \n\n<10>CLASS SKILLS<2>\n
+      __The class skills of the barbarian are Athletics, Climb, Craft,
+      Heal, Intimidate, Intuition, Jump, Knowledge (Nature),
+      Listen, Spot, Swimming and Wilderness Lore. 
+
+      \n\n<10>CLASS FEATURES<2>\n
+      __All of the following are class features of the barbarian.\n
+      __*_<7>Proficiencies<2> -- The barbarian is proficient with simple
+      weapons, impact weapons, long blades, polearms, spears, axes and flails,
+      and with light and medium armors.\n
+      __*_<7>Berserk Rage<2> -- Barbarians are well-known for going berserk
+      in combat, augmenting their strength and terrifying their foes. Upon
+      entering a berserk rage, a barbarian gains a +4 bonus to Strength and 
+      Constitution, a +20% bonus to Speed and a +2 bonus to Will saves. The 
+      rage lasts for a base duration of 10 rounds, plus three rounds per 
+      barbarian level -- provided that the barbarian remains in combat. If a 
+      barbarian is out of combat long enough to become flat-footed, their rage 
+      ceases.\n 
+      __This battle rage requires a certain purity of mind, and thus multiclass
+      barbarians with fewer than 3 barbarian levels halve the modifiers (+2
+      Strength, +2 Constitution, +1 to Will saves). Upon reaching 8th level, 
+      the barbarian is immune to all confusion effects while raging; at 13th, 
+      the barbarian cannot be stunned while raging. At 9th level, the raging 
+      barbarian's bonuses increase to +6/+6/+30~/+3, and at 16th level they reach 
+      their maximum potential of +8/+8/+40~/+4.\n
+      __Barbarians from naturally Small races apply only half the normal bonus 
+      to Strength when they Rage, and apply the other half to their Dexterity.
+      Their rages resemble the fighting of a panicked cat, and tend to throw
+      enemies off balance -- every time they make a successful attack while
+      raging, they make a Charisma check against a DC of 11 + their opponent's
+      Wisdom modifier; success causes the opponent to suffer a -1 penalty to
+      attack, damage, defense class and most other rolls for the next 1d4+1
+      rounds. Further enraged attacks increase both the magnitude and duration
+      of this penalty culmulatively; multi-class barbarians can inflict a
+      maximum penalty equal to their barbarian levels, while straight barbarians
+      can inflict an unlimited penalty.\n
+      __Entering a rage costs a barbarian four fatigue points if they are in 
+      heavy armor, three in medium armor, two in light armor and one if they
+      are unarmored. The fatigue cost of raging while armored decreases by one
+      at 4th level, and an unarmored barbarian of 4th level or above may make 
+      a Con check against DC 20 to avoid fatigue loss when raging; failing this 
+      check costs one fatigue point. A raging barbarian is never considered to 
+      be fatigued or exhausted, though they suffer the effects of those traits 
+      as soon as the rage ends, if applicable.\n
+      __A raging character may not cast spells, don or remove armor or clothing,
+      pick locks or search through a container (such as his backpack) for items.\n
+      __*_<7>Tough as Hell<2> -- A barbarian recieves double the normal
+      number of bonus hit points from a high Constitution score for all of
+      his barbarian levels.\n 
+      __When struck for physical damage, an unarmored,
+      single-classed barbarian can subtract his Constitution modifier from the
+      damage suffered (to a minimum of one point). A multiclass barbarian subtracts
+      a proportion of his Constitution modifier from damage equal to his
+      number of barbarian levels proportionate to his total
+      level -- for example, a barbarian 2/warrior 1 would subtract
+      66% of his Con modifier from damage. This proportion
+      is always rounded down, so even one non-barbarian level
+      reduces the amount subtracted by at least one.\n
+      __If the barbarian wears armor, every 'degree' (light, medium,
+      heavy) of armor worn counts as three non-barbarian levels
+      added to his total for the purposes of reducing this bonus.\n
+      __Finally, starting at 7th level the barbarian
+      has a natural armor rating similar to a monster's. This value is
+      identical against slashing, piercing and blunt damage, is not
+      penetrated by weapons of any plus and increases by +1 for every odd
+      barbarian level.\n
+      __*_<7>Increased Move<2> -- A barbarian, like a monk, naturally moves
+      faster than other characters. Barbarians gain a culmulative bonus of 
+      +10~ to their movement rate for every even barbarian level.\n
+      __*_<7>Hardy Lifestyle<2> -- Barbarians lead perhaps the harshest and
+      most physically demanding existance of any of the adventuring classes,
+      surviving brutal raids and inhospitable terrain that would break weaker
+      men and women. This constant forcing of their bodies to the limit ends
+      up tempering them into beings of incredible physical prowess.\n
+      __In game terms, barbarians recieve a +1 inherant bonus to either Strength
+      or Constitution at every even level, chosen randomly, up to the maximum
+      possible inherant bonus for their race (+5 for most characters, or +8 
+      for humans). Barbarians of a Small race naturally improve their Dexterity
+      in this manner as well.\n
+      __Characters who start play as barbarians have assumed to have lived
+      this lifestyle all their life, and therefore have a +1d2 inherant bonus
+      to Strength and Constitution (and Dexterity, for Small barbarians) from
+      the very start of their career. (This is balanced by the fact that
+      barbarians have the weakest starting equipment of an class.)\n
+      __*_<7>Uncanny Dodge<2> -- Like the rogue, the barbarian is possessed
+      of preternatural agility and instincts that allow her to avoid harm.
+      Starting at 2nd level and beyond, the barbarian is never caught flat-
+      footed -- no matter how many rounds have passed since her last combat
+      exchange, she is always alert. At 4th level, her uncanny instincts allow
+      her to wake alert if she has an encounter while resting, avoiding being
+      flat-footed, vulnerable to Coup de Grace attacks and being able to act
+      immediately as the encounter begins. At 5th level and above, she suffers no
+      ill effects from having enemies on either side and is effectively
+      immune to flanking. Starting at 6th level and above, the barbarian
+      recieves gradually increasing bonuses to all saving throws against
+      traps -- her instincts tell her exactly when to dodge or pull back.\n
+      __Levels of this ability from the barbarian and rogue classes stack.\n
+      __*_<7>Spellbreaker<2> -- Barbarians recieve experience points for
+      the destruction of magical items other then weapons or armor. When
+      they destroy such an item, they recieve experience equal to that
+      gained from killing a creature with a CR two below the item's level.
+      Multiclass barbarians recieve a fraction of the experience proporational
+      to their barbarian levels -- a barbarian 2/warrior 3 would recieve 2/5ths
+      of the normal experience for breaking an item. Use the Break verb on
+      the [Y]use menu to break items in your inventory.\n
+      __Characters with arcane spellcasting ability recieve no experience for
+      destroying magical items.\n
+      __*_<7>Mighty Stroke<2> -- Starting at 3rd level performing a Great Blow
+      costs a barbarian only one fatigue point. When they achieve 6th level,
+      they can perform this maneuver without expending any fatigue at all.\n
+      __*_<7>Small Barbarians<2> -- In addition to the changes to the Berserk
+      Rage ability listed above, barbarians from Small races also recieve the 
+      Defensive Roll ability (from the rogue's higher-level special ability 
+      list) upon attaining four combined levels of warrior, ranger, paladin, 
+      monk or barbarian.\n
+      __*_<7>Starting Benefits<2> -- Barbarians start with a racially-determined 
+      heavy weapon, a loincloth and potentially hide armor. Their starting
+      equipment is the weakest of any class, which balances the powerful
+      inherant bonus a character who enters play as a barbarian gains.\n\n
+      <10>THE BARBARIAN<15>\n
+      __Level__Def__Fort_Refl_Will_Move_Special Abilities<1>\n
+      ____1____+0____+2___+0___+0___--__Rage (+4/+20~/+2)   \n
+      ____2____+1____+3___+0___+0__+10~_Never Flat-Footed \n
+      ____3____+1____+3___+1___+1__+10~_Mighty Stroke I   \n
+      ____4____+2____+4___+1___+1__+20~_Rage (Less Fat.),\n
+      __________________________________Wake Alert_______\n
+      ____5____+2____+4___+1___+1__+20~_Immune to Flanking\n
+      ____6____+3____+5___+2___+2__+30~_Mighty Stroke II, \n
+      __________________________________Trap Sense +1     \n
+      ____7____+3____+5___+2___+2__+30~_Natural Armor +1, \n
+      ____8____+4____+6___+2___+2__+40~_Rage (vs. Confus.)\n
+      ____9____+4____+6___+3___+3__+40~_Trap Sense +2,    \n
+      __________________________________Natural Armor +2  \n
+      ____10___+5____+7___+3___+3__+50~_Rage(+6/+30~/+3)   \n
+      ____11___+5____+7___+3___+3__+50~_Natural Armor +3  \n
+      ____12___+6____+8___+4___+4__+60~_Trap Sense +3\n";
+
+    HitDice: 12; Mana: 4; Def: 1/2;
+    Attk: S_BRAWL   100,
+          S_MELEE   100,
+          S_ARCHERY 75,
+          S_THROWN  75;
+    Skills[6]: SK_CLIMB, SK_CRAFT, SK_HEAL, SK_INTIMIDATE, SK_INTUITION,
+      SK_JUMP, SK_LISTEN, SK_SPOT, SK_SWIMMING, SK_WILD_LORE, SK_ATHLETICS,
+      SK_KNOW_NATURE;
+    Proficiencies: WG_LBLADES, WG_SIMPLE, WG_IMPACT, WG_POLEARMS, WG_SPEARS,
+      WG_FLAILS, WG_AXES;
+    Grants:
+      Feat[FT_AP_LIGHT]             at 1st level,
+      Feat[FT_AP_MEDIUM]            at 1st level,
+      //Ability[CA_FATIGUE_REGEN,+1]  at every 3rd level starting at 3rd,
+      Ability[CA_BERSERK_RAGE]      at every level starting at 1st,
+      Ability[CA_MIGHTY_STROKE]     at 3rd level,
+      Ability[CA_MIGHTY_STROKE]     at 6th level,
+      Ability[CA_INCREASED_MOVE,+2] at every 2nd level starting at 2nd,
+      Ability[CA_UNCANNY_DODGE]     at every level starting at 2nd,
+      Ability[CA_TOUGH_AS_HELL]     at every level starting at 1st,
+      Ability[CA_SPELLBREAKER]      at every level starting at 1st,
+      Stati[ADJUST_INH,A_ARM,+1]    at every 2nd level starting at 7th;
+    Gear:
+      if (EActor->isMType(MA_REPTILIAN))
+        $"large club"
+      else if (EActor->isMType(MA_HALFLING))
+        50% $"long sword" 
+      else if (EActor->isMType(MA_HALFLING))
+        $"heavy mace"
+      else if (EActor->isMType(MA_ELF))
+        $"long sword"
+      else if (EActor->isMType(MA_GNOME))
+        $"tiger claws"
+      else if (EActor->isMType(MA_DROW))
+        $"scimitar"
+      else if (EActor->isMType(MA_DWARF) || 1d3 == 1)
+        $"greataxe"
+      else
+        20% $"halberd"
+      else
+        $"greatsword",      
+      $"loincloth",
+      5d10 $"gold piece";
+    Flags: CF_GOOD_FORT, CF_NONLAWFUL;
+
+    On Event EV_ADVANCE {
+      int16 a, b, att;
+      if (EActor->isMType(MA_LIZARDFOLK))
+        EActor->Proficiencies |= WG_IMPACT;      
+      if (EActor->isSmallRace() && (EActor->LevelAs($"barbarian") + 
+          EActor->LevelAs($"warrior") + EActor->LevelAs($"ranger") +
+          EActor->LevelAs($"paladin") + EActor->LevelAs($"monk")) == 4)
+        EActor->GainAbility(CA_DEFENSIVE_ROLL,1,$"barbarian",SS_CLAS);
+      
+      if (EActor->TotalLevel() == 1 &&
+          EActor->LevelAs($"barbarian") == 1)
+        {
+          EActor->GainInherantBonus(A_STR,1d2,false);
+          EActor->GainInherantBonus(A_CON,1d2,false);
+          /*if (EActor->tmID->isMType(MA_KOBOLD) ||
+              EActor->tmID->isMType(MA_GNOME) ||
+              EActor->tmID->isMType(MA_HALFLING) )
+            EActor->GainInherantBonus(A_DEX,1d2,true);*/
+          return NOTHING;
+        }
+                
+      if (EActor->LevelAs($"barbarian") % 2)
+        return NOTHING;
+      /* A_STR = 0, A_DEX = 1, A_CON = 2 */
+      a = 1d3 - 1;  
+      for (b=0;b!=3;b++)
+        {
+          att = (a+b) % 3;
+          
+          /* Only Small races get Dex */
+          if (att == A_DEX)
+            /*if (EActor->tmID->isMType(MA_KOBOLD) ||
+                EActor->tmID->isMType(MA_GNOME) ||
+                EActor->tmID->isMType(MA_HALFLING) )*/
+              continue;
+          
+          /* Check if this Attr is maxed */
+          if (EActor->SumStatiMag(ADJUST_INH,att) >=
+                (5 + EActor->AbilityLevel(CA_INHERANT_POTENTIAL)))
+            continue;
+            
+          EActor->GainInherantBonus(att,1,true);
+          return NOTHING;
+        }
+      /* All possible attributes maxed! */
+      EActor->IPrint("A perfect physical specimen!");
+      return NOTHING; 
+      };
+  }
+  
+  
+Class "Bard"
+  {
+    Desc: "
+      <15>HitDie:_<1>d6__<15>Mana:<1>_d10__<15>Skills:<1>_8_<15>Saves:<1>_f<9>RW<1>_<15>Defense:_<1>1/3\n
+      <15>+toHit: <1>Archery <9>75~<1>, Brawl <9>50~<1>, Melee <9>75~<1>, Trown <9>75~<1>\n
+      <2>\n\tThis is not some merry minstrel or casual playwright, but a
+      dynamic figure whose powerful charisma and diverse skills inspire
+      and fortify those around him. The bard is a magnetic personality;
+      admirers want to be near him, while enemies fear him. He's very
+      world-learned and cosmopolitan, being familiar with many different
+      legends and customs and having travelled to all manner of exotic
+      lands. He dabbles in magic, scholarship, intrigue and skullduggery 
+      and even in the combat arts, not trusting any one field alone to 
+      protect him in the world. Like the Rogue, he relies first and 
+      foremost on his wits and charisma to get him out of trouble. Many
+      Bards eventually join one of the bardic colleges that dot the world,
+      ancient institutues of hallowed mystery, revered heritage and grand
+      political power.
+      \n\tThe Bard is a jack-of-all-trades class, with a lot of diverse
+      abilities. He has a wide selection of skills, including stealth,
+      a dabbling of arcane magic and competant fighting skill with a wide
+      variety of weapons and armor. He also has entirely unique abilities,
+      such as the power to hearten and augment his allies supernaturally
+      with music, and a diverse body of knowledge that gives him a good
+      chance to automatically identify items and monsters.
+
+      \n\n<10>CLASS SKILLS<2>\n
+      __The class skills of the bard are Alchemy, Appraise, Balance, Bluff,
+      Climb, Concentration, Crafts, Decipher Script, Diplomacy, Escape Artist,
+      Jump, Knowledge (all), Listen, Perform, Spellcraft, 
+      Swim, Tumble and Use Magic Device. 
+
+      \n\n<10>CLASS FEATURES<2>\n
+      __All the following are class features of the bard.
+	    \n__*_<7>Proficiencies<2> -- The bard is proficient with simple weapons,
+	    light weapons, short blades, daggers, archery and light armor.\n
+      \n__*_<7>Spells<2> -- Though not nearly as skilled as wizards 
+      or druids, bards do dabble in magic. They cast spells from memory,
+      having no need for spellbooks or paraphenelia. Their spell list
+      lacks the raw power of the primary casters, but it is very diverse, 
+      including enchantments, illusions, minor evocations and even
+      low-grade healing spells. Bards recieve one sorcerous spell level at
+      every even class level, and start with a single, bonus 1st-level spell
+      slot at 1st level. Bardic spells are not negatively impacted by light
+      armor or shields. 
+      \n__*_<7>Bardic Music<2> -- Bards excel at performance, whether it be
+      singing or using a musical instrument. In fact, bardic adventurers
+      can create works so moving as to have a tangibly supernatural effect
+      upon their audience. This ability is a valued secret passed down by
+      the bardic colleges, and is the source of much mystique and legend.
+      \n__Bards can produce the following musical effects as they advance
+      in level. All bardic music effects are based on a Perform skill check;
+      creatures unwilling to be affected may counter with a Will-based saving
+      throw. Bardic music does not affect mindless or deaf creatures, for
+      obvious reasons, and has a range equal to the bard's Perform skill rating
+      plus two. Each use of bardic music costs 1 Fatigue Point, unless otherwise 
+      noted. Maintaining a bardic music effect requires singing, which prevents 
+      spellcasting (barring the use of Vocalize Spell) and imposes a -2 
+      circumstance penalty to attack and defense. You automatically stop singing 
+      whenever you change map screens as well.
+      \n__<10>Inspire Courage (1st):<2> The bard is able to inspire great valor in 
+      her allies and friends. When this bardsong is sung, all allies are freed
+      from the effects of the <7>Afraid<2> status, and gain a morale bonus
+      to attack and damage rolls equal to the bard's Charisma modifier; for
+      multiclass bards, this modifier is capped at their total bard levels.\n
+      \n__<10>Fascination (3rd):<2> The bard causes a single creature to become 
+      enraptured with his music, unable to move or attack for as long as she
+      sings. Attacking the creature of otherwise inflicting damage will break 
+      the spell. A Will save against DC (10 + 1/2 bardic music levels + Charisma
+      modifier) negates this effect.\n
+      __A bard with 10 levels of bardic music is skillful enough to fascinate
+      entire groups of creatures -- when she uses this song, every hostile
+      creature who can see and hear her is affected.\n
+      \n__<10>Countersong (5nd):<2> This ability allows a bard to counter sound-based
+      mystical effects that might harm her or her allies, such as a banshee's
+      wail or the <9>shout<2> spell. 
+      \n__<10>Inspire Competance (7th):<2> The bard's music can inspire allies to great
+      feats of heroism, granting them a competance bonus equal in magnitude to the bard's
+      Charisma bonus (capped at bard level for multiclass characters) to attack rolls
+      and saving throws. The effect also grants +15% attack speed per level of Charisma
+      modifier, and twice the modifier to Defense Class.\n
+      \n__<10>Hymn of the Phoenix Arisen (9th):<2> The bard sings a
+      primal, life-affirming ballad that establishes a kind of psychosomatic bond
+      among herself and all allies who hear the song. Any healing effect on any
+      member of the party thereafter affects all members of the party equally,
+      whether from potion, spell or other source. Additionally, all listeners
+      -- including the bard -- are treated as having a Fire Resistance equal to
+      the bard's Perform skill rating and gaining six temporary Fatigue for the
+      duration of the song.\n
+      \n__<10>Spellbreaker Chant (11th):<2> A bard with this
+      level of ability is able to sing a baritone chant with intensely difficult
+      phonetics that duplicate and confuse the verbal components used by spellcasters,
+      hypnotically leading them to mispronounce syllables. Anyone attempting to cast a 
+      spell who can hear the chant must make a Concentration check opposed to an
+      immediate Perform check by the bard. If the bard's check is higher, the spell
+      is disrupted. Additionally, the spellcaster must then make a Will saving throw
+      (DC 10 + 1/2 Bardic Music level + Charisma modifier) of become confused for 2d4
+      rounds. 
+      \n__<10>Dirge (13th, <4>Uniplmemented<10>):<2> The deep harmonics of the bard's music evoke a supernatual
+      dread and despair in all who hear it, causing them to become <7>Afraid<2> and 
+      flee for the length of the song.
+      \n__<10>Inspire Greatness (15th, <4>Uniplmemented<10>):<2> The bard's music augments the power, endurance
+      and general heroic ability of her party, adding a morale bonus based on her roll 
+      to all of their attack and damage rolls, saving throws, skill checks and other
+      rolls. She also grants them extra temporary Hit Dice (d10s) and the accompanying
+      temporary hit points. Finally, her party is made immune to fatigue and fear
+      effects for the duration of the song.
+      \n__<10>Ensnare the Heart (18th, <4>Uniplmemented<10>):<2> The bard is able to produce a strain of music so
+      pure and beautiful that it will echo throughout the heartstrings of another for
+      eternity, binding them to the bard's service willingly and gladly. Only one being
+      may be so enthralled at a time, and that being's CR may not exceed the bard's level
+      plus her Charisma bonus. No loyalty checks are made for this creature, and it does
+      not count toward either the bard's party HD or summoned/charmed HD.\n
+      __*_<7>Legend Lore<2> -- Bards are familiar with a wide variety of legends, and have
+      a reasonable chance of identifying any item or monster on sight. A bard makes a 
+      one-time lore check when first picking up any unidentified item; success allows
+      the bard to fully identify the item. The check is not a skill check, but an opposed
+      roll of the character's bard levels versus the item's own level. Bards have a similar
+      chance to identify monsters completely upon first inflicting damage upon a given
+      monster.\n
+      __*_<7>Storycraft<2> -- Artifacts are more then magical items; they are
+      legends. Quite literally, an artifact gains its
+      enchantment not from a mage's workings, but from
+      the shifting of the tapestry of fate and the
+      recognition and blessing of the gods after a
+      legendary deed is performed with it. Even normal
+      magical items gain power when the raw stuff of
+      stories is woven around them.\n
+      __Bards tell stories, craft reputation and carve
+      the very fabric of legend with their words.
+      Needless to say, this gives them no small degree
+      of power over magical items and artifacts.\n
+      __In game terms, every bard level taken after the
+      first gives a
+      character the ability to increase the magical
+      plus of any single magical item by one. This can
+      only be done if doing so would not increase the
+      item's Item Level to a greater total then the
+      bard's [Bard Level + Charisma modifier]. The
+      increase is permanent and irreversable, and is
+      not refunded if the item is destroyed.\n
+      __[ In the full-release version of Incursion,
+      this will only be possible in a tavern, where
+      the bard can tell stories to an appreuciative
+      audience. In this version, it can be done
+      anywhere, at any time. In the full release,
+      bards will also gain the following ability
+      related to magical items:\n
+        If a bard performs a legendary deed -- killing
+      a quest nemesis or a creature whose Challenge
+      Rating is six or more above his own -- using a
+      magical item, that item has a chance (5% per
+      bard level) of becoming an artifact and gaining
+      extra powers. ]\n
+      __*_<7>Bonus Feats<2> -- Reflecting the diverse tricks they pick up on their travels,
+      bards gain a bonus feat slot at 4th, 8th, 12th, 16th and 20th levels. These feats may be
+      chosen from any feat in the game that does not have another feat as a prerequisite.
+      \n__*_<7>Starting Equipment<2> -- Bards start with a musical
+      instrument, a short bow and light melee weapon (if they don't
+      already have better from a different source), noble attire and 
+      a significant supply of gold -- the largest allotment of any
+      class.\n
+      __Bards, as the most social class, also start out with a humanoid
+      companion willing to quest with them to explore the dungeon and
+      discover new treasures under a kind of apprenticeship.
+      \n\n<10>THE BARD<15>\n
+      __Level__Def__Fort_Refl_Will_Special Abilities<1>\n
+      ____1____+0____+0___+2___+2__Inspire Courage   \n
+      ____2____+1____+0___+3___+3__+1 CL, Storycraft \n
+      ____3____+1____+1___+3___+3__Fascination       \n
+      ____4____+1____+1___+4___+4__+1 CL, bonus feat \n
+      ____5____+2____+1___+4___+4__Countersong       \n
+      ____6____+2____+2___+5___+5__+1 caster level   \n
+      ____7____+2____+2___+5___+5__Inspire Competance\n
+      ____8____+3____+2___+6___+6__+1 CL, bonus feat \n
+      ____9____+3____+3___+6___+6__Mass Fascination  \n
+      ____10___+3____+3___+7___+7__+1 caster level   \n
+      ____11___+4____+3___+7___+7__Inspire Heroism   \n
+      ____12___+4____+4___+8___+8__+1 CL, bonus feat \n";
+
+    HitDice: 6; Mana: 10; Def: 1/3;
+    Attk: S_BRAWL 50,
+          S_MELEE 75,
+          S_ARCHERY 75,
+          S_THROWN 75;
+    Skills[8]: SK_ALCHEMY, SK_BLUFF, SK_CONCENTRATION, SK_CRAFT, SK_DECIPHER,
+      SK_DIPLOMACY, SK_DISGUISE, SK_ESCAPE_ART, SK_HEAL, SK_HIDE, SK_JUMP,
+      SK_KNOW_ALL, SK_LISTEN, SK_MOVE_SILENTLY, SK_PERFORM, SK_PICK_POCKET, 
+      SK_APPRAISE, SK_SWIMMING, SK_USE_MAGIC;
+    Proficiencies: WG_SIMPLE, WG_DAGGERS, WG_LIGHT, WG_SBLADES, WG_ARCHERY;
+    Flags: CF_GOOD_REF, CF_GOOD_WILL;
+    Grants:
+      Feat[FT_AP_LIGHT]                at 1st level,
+      Stati[BONUS_SLOTS,1,1]           at 1st level,
+      Ability[CA_BARDIC_MUSIC]         at every level starting at 1st,
+      /*Feat[FT_POLYGLOT] at 1st level, */
+      Ability[CA_SPELLCASTING,+1]      at every 2nd level starting at 2nd,
+      Stati[SPELL_ACCESS,SP_BARDIC,+1] at every level starting at 1st,
+      Ability[CA_LEGEND_LORE,+1]       at every level starting at 1st,
+      Ability[CA_STORYCRAFT,+1]        at every level starting at 2nd,
+      Feat[FT_FULL_LIST]               at every 4th level starting at 4th;
+    Gear:
+      if (EActor->rateMeleeWeapon() == 2)
+        $"gold piece" else
+          10% $"dagger" else
+          13% $"short sword" else
+          25% $"long sword" else
+          33% $"scimitar" else
+          50% $"light mace" else
+              $"rapier",
+      if (EActor->rateRangedWeapon())
+        $"gold piece"
+      else
+        $"short bow",
+      $"noble attire",    
+      50d100 $"gold piece",
+      25% $"horn" else
+        33% $"flute" else
+          50% $"lute" else $"mandolin";
+    On Event EV_INIT_COMP
+      {
+        hObj hComp;
+        rID monID, tempID, raceID;
+        raceID = EActor->RaceID;
+        if (raceID->BaseRace != NULL_ID)
+          raceID = raceID->BaseRace;
+        switch (raceID)
+          {
+            case $"human;race":      monID = $"human"; break;
+            case $"elf;race":        monID = $"elf"; break;
+            case $"dwarf;race":      monID = $"dwarf"; break;
+            case $"gnome;race":      monID = $"gnome"; break;
+            case $"halfling;race":   monID = $"halfling"; break;
+            case $"lizardfolk;race": monID = $"lizardman"; break;
+            case $"kobold;race":     monID = $"kobold"; break;
+            case $"orc;race":        monID = $"cave orc"; break;
+            case $"drow;race":       monID = $"drow"; break;
+          }
+        switch(1d10)
+          {
+            case 1:  tempID = $"druid;template"; break;
+            case 2:  tempID = $"barbarian;template"; break;
+            case 3:  tempID = $"mage;template"; break;
+            case 4:  tempID = $"monk;template"; break;
+            case 5:  tempID = $"knight"; break;
+            case 6:  tempID = $"paladin;template"; break;
+            case 7:  tempID = $"priest;template"; break;
+            case 8:  tempID = $"ranger;template"; break;
+            case 9:  tempID = $"rogue;template"; break;
+            case 10: tempID = $"warrior;template"; break;
+          }
+        hComp = CreateMonster(monID);
+        hComp->AddTemplate(tempID);
+        SetSilence();
+        hComp->IdentifyTemp(tempID);
+        UnsetSilence();
+        /* Kludge -- if the companion goes over our max PHD, just
+           ignore it; the bard starting companion is a special
+           case. */
+        EActor->GainTempStati(BONUS_PHD, NULL, 2,SS_MISC,PHD_PARTY,+10);
+        hComp->GainPermStati(HEROIC_QUALITY,NULL,SS_MISC,0,0);
+        hComp->MakeCompanion(EActor,PHD_PARTY); 
+        hComp->PlaceAt(EActor->m,EActor->x,EActor->y+1);
+        hComp->Initialize();
+        return NOTHING;
+      };
+    Lists:
+      * SPELL_LIST
+          1 $"call companions" $"call light" $"cause fear" $"charm person" $"chant" $"cure light wounds"
+            $"convulsion" $"dancing lights" $"detect secret doors" $"erase" $"grease"
+            $"feather fall" $"expeditious retreat" $"friends" $"hypnotism" $"mending" 
+            $"magic weapon" $"phantasmal force" $"protection from evil" $"read magic"
+            $"sleep" $"monster summoning I" $"unseen servant" $"ventriloquism" $"true strike"
+            $"chromatic orb" $"knock" $"mount" $"detect stairs" $"phase door" 
+          2 $"cause blindness" $"blur" $"bull's strength" $"cat's grace" $"cure moderate wounds"
+            $"globe of shadow" $"slow poison" $"ESP" $"enthrall" $"glitterdust" $"hold person"
+            $"hypnotic pattern" $"invisibility" $"levitation" $"detect objects" $"detect monsters"
+            $"improved phantasmal force" $"pyrotechnics" $"scare" $"see invisibility"
+            $"shatter" $"sound burst" $"suggestion" $"monster summoning ii" $"summon swarm"
+            $"hideous laughter" $"iron mind" $"protection from arrows" $"web" $"revealed lore"
+            $"gust of wind" $"rope trick" $"shield" $"false life"
+          3 $"bestow curse" $"blink" $"charm monster" $"clairvoyance" $"confusion" 
+            $"cure serious wounds" $"dispel magic" $"displacement" $"emotion" $"fear"
+            $"gaseous form" $"greater magic weapon" $"haste" $"group invisibility"
+            $"keen edge" $"magic circle vs. evil" $"spectral force" $"phantom steed"
+            $"remove curse" $"cure disease" $"sculpt sound" $"slow" $"monster summoning iii"
+            $"wind wall" $"nondetection" $"fly"
+          4 $"cure critical wounds" $"dimension door" $"dominate person" 
+            $"hallucinatory terrain" $"hold monster" $"improved invisibility" 
+            $"rainbow pattern" $"color burst" $"neutralize poison" $"shout" 
+            $"monster summoning IV" $"dismissal" $"endure the elements" $"wandwierd"
+            $"solid fog" $"detect magic" $"premonition" $"track monster" $"ice storm"
+            $"phantasmal killer" $"evard's black tentacles"
+          5 $"part water" $"dream" $"mind fog" $"nightmare;spell" $"monster summoning v"
+            $"wizard sight" $"hold monster" $"polymorph self" $"force shapechange"
+            $"magic resistance" $"insect plague" $"animal growth" $"wall of thorns";
+  }
+
+Class "Druid"
+  {
+    Desc: "
+      <15>HitDie:_<1>d8__<15>Mana:<1>_d12_<15>Skills:<1>_6_<15>Saves:<1>_<9>F<1>r<9>W<1>_<15>Defense:_<1>1/3\n
+      <15>+toHit: <1>Archery <9>75~<1>, Brawl <9>100~<1>, Melee <9>75~<1>, Thrown <9>50~<1>\n
+      <2>\n\tRevered and mysterious nature priests, the Druids are an
+      invisible faction on Therya. They are rarely seen, and those that are
+      most often are neither imposing nor terrible, but their agenda -- the
+      pursuit of political balance and stability -- weaves its tentacles
+      into every level of society none the less. They have been accused of
+      worshipping the status quo as a religious ideal, and its quite true
+      that their militant neutrality holds a complete disregard for most
+      civilized ideas of morality.  In truth, they see man as just another
+      beast -- one who can be nurtured when his presence supports the
+      balance of elements in an area, and trimmed back when he exceeds his
+      natural niche. Druids collect knowledge, the better to manipulate
+      people with, and have a strict and secret hierarchy of their own that
+      has endured for millenia.                 
+      \n__A beginning Druid character is not recognized as a true Druid in
+      the social sense; rather, she is an Initiate, a journeyman in
+      training to become a true Druid. Regardless, the character's powers
+      include mighty elemental magics, shapechanging and a natural affinity
+      for nature that grants her the companionship of animals and allows
+      her to sway many types of natural monsters to her side.
+
+      \n\n<10>CLASS SKILLS<2>\n
+      __The class skills of the druid are Animal Empathy, Appraise, 
+      Concentration, Craft, Heal, Knowledge (Nature), 
+      Knowledge (Oceans), Knowledge (Theyra), Ride, Spellcraft, Swim 
+      and Wilderness Lore.\n
+      __Druids recieve Bluff and Diplomacy as class skills at 9th level,
+      when they take on the full formal title of Druid and begin moving
+      within the worldwide hierarchy of the Druidic Enclaves.
+
+      \n\n<10>CLASS FEATURES<2>\n
+      __All of the following are class features of the druid.\n
+	  \n__*_<7>Proficiencies<2> -- The druid is proficient with simple weapons,
+	  quarterstaves, sickles, scimitars, scythes, short bows and light armor.\n
+      __*_<7>Spells<2> -- Druids cast primal spells from the special druid
+      spell list, which includes magics relating to plants, animals, natural
+      forces and elemental power. They have a full spellcasting progression,
+      just like mages and clerics.\n
+      __Like priests, druids can cast spells
+      while wearing armor. However, druids suffer an 80~ spell failure rate
+      while wearing metallic armor and when holding metallic items in their 
+      hands. Leather, hide, ironwood and darkwood are all favored materials 
+      for the druid, and do not invoke this penalty.\n
+      __*_<7>Nature Sense<2> -- At 2nd level, a druid gains a flawless
+      mystical knowledge of plants and natural animals, and can identify
+      such with perfect accuracy. Specifically, the druid may automatically
+      identify the different magical herbs and mushrooms that grow in
+      dungeons and can be used as components or enhancers for spells and
+      poisons, or as magical treasures in their own right.\n
+      __*_<7>Animal Companions<2> -- Druids can tame animals using their
+      Animal Empathy class skill, and if successful add those companions
+      to their adventuring party. A druid character recieves a free 'buffer'
+      of (approximately) two hit dice per druid level for animal companions; 
+      these hit dice worth of animals do not count toward the total hit dice 
+      of the party for purposes of party loyalty checks or gaining new party 
+      members.\n
+      __Levels of this ability from the druid and ranger classes stack.\n
+      __*_<7>Woodland Stride<2> -- Starting at 3rd level, a druid's movement
+      rate is never modified negatively by the terrain she is standing on (as
+      with brambles, hedges, rubble or webbing).\n
+      __*_<7>Pass Without Trace<2> -- At 3th level, the druid may use the
+      <9>pass without trace<2> spell at will as a spell-like ability. This
+      spell (which is not currently implemented) will make it effectively
+      impossible for encounters to chase after a character on the wilderness
+      screen.\n
+      __*_<7>Vitality of Life<2> -- At 4th level and above, druids recieve a
+      +2 bonus to saving throws versus necromantic damage and effects.\n
+      __*_<7>Sylvan Affinity<2> -- Also starting at 4th level, true faeries
+      and faerie creatures (not mere elves) will never attack the druid
+      unless she attacks them first, as a result of ancient pacts between
+      Maeve and the druidic circles dating back millenia.\n 
+      __*_<7>Wild Shape<2> -- Upon reaching 5th level, the druid gains the
+      ability to shapechange into any natural animal of CR 3 or lower. This
+      is largely identical to a mage's polymorph spell, but the druid
+      is able to pick the animal form she wishes to take, and may terminate
+      the effect at will. Using wild shape costs a druid one fatigue point.
+      Unlike a polymorphed creature, a wildshaped druid retains the
+      benefits of equipped magic items in 'unavailable' slots (e.g., a ring
+      of the inferno will continue to provide fire resistance even if your
+      new form has no fingers).\n
+      __In the full release game, higher level druids will be able to change
+      into dire animals, legendary animals, mythic beasts and even elementals
+      as they advance in level.\n
+      __*_<7>Venom Immunity<2> -- Druids of 7th level and above are completely
+      immune to poisons and toxins; their body is able to instantly metabolize
+      such noxious foriegn agents.
+      \n__*_<7>Starting Benefits<2> -- 
+      Druids begin the game with either a quarterstaff, scimitar, sickle,
+      shortspear or scythe, a short bow (if they don't already have better),
+      a random magical ring, robes and extra potions of healing and dimension
+      door. All wooden items are instead from darkwood and are thus twice as
+      durable. All iron items are instead made from ironwood. 
+      \n\n<10>THE DRUID<15>\n
+      __Level__Def__Fort_Refl_Will_Special Abilities<1>\n
+      ____1____+0____+2___+0___+2__Animal Companions \n
+      ____2____+0____+3___+0___+3__Nature Sense      \n
+      ____3____+1____+3___+1___+3__Woodland Stride,  \n
+      _____________________________Pass without Trace\n
+      ____4____+1____+4___+1___+4__Sylvan Affinity,  \n
+      _____________________________Vitality of Life  \n
+      ____5____+1____+4___+1___+4__Wild Shape        \n
+      ____6____+2____+5___+2___+5__                  \n
+      ____7____+2____+5___+2___+5__Venom Immunity    \n
+      ____8____+2____+6___+2___+6__\n
+      ____9____+3____+6___+3___+6__Bluff, Diplomacy\n
+      ____10___+3____+7___+3___+7__\n
+      ____11___+4____+7___+3___+7__\n
+      ____12___+4____+8___+4___+8__\n";
+
+
+    HitDice: 8; Mana: 12; Def: 1/3;
+    Attk: S_BRAWL 100, // ww: for wild shape natural attacks!
+          S_MELEE 75,
+          S_ARCHERY 75,
+          S_THROWN 50;
+    Skills[6]: 
+      SK_ANIMAL_EMP, 
+      SK_APPRAISE, 
+      SK_CONCENT, 
+      SK_CRAFT, 
+      SK_HEAL, 
+      SK_KNOW_GEO,
+      SK_KNOW_NATURE,
+      SK_KNOW_OCEANS,
+      SK_RIDE, 
+      SK_SPELLCRAFT, 
+      SK_SWIMMING, 
+      SK_WILD_LORE;
+      // ww: SRD says druids get spears -- and why not? they're wood ...
+    Proficiencies: WG_SIMPLE, WG_SPEARS, WG_STAVES, WG_LARMOR;
+    Grants:
+      Feat[FT_WEAPON_PROFICIENCY,$"scimitar"] at 1st,
+      Feat[FT_WEAPON_PROFICIENCY,$"scythe"] at 1st,
+      Feat[FT_WEAPON_PROFICIENCY,$"short bow"] at 1st,
+      //Stati[CAN_FORGET_SPELL,0,+1] at every 2nd level starting at 2nd,
+      Ability[CA_SPELLCASTING]              at every level starting at 1st,
+      Stati[SPELL_ACCESS,SP_PRIMAL,+1]      at every level starting at 1st,
+      Ability[CA_ANIMAL_COMP]              at every level starting at 1st,
+      Ability[CA_NATURE_SENSE]              at 2nd level,
+      Ability[CA_WOODLAND_STRIDE]           at 3nd level,
+      Ability[CA_INNATE_SPELL,$"pass without trace"] at 3rd level,
+      Ability[CA_SYLVAN_AFFINITY]           at 4th level,
+      Stati[SAVE_BONUS,SN_NECRO,+2]         at 4th level,
+      Ability[CA_WILD_SHAPE]                at every level starting at 1st,
+      // ww: but it only starts to work when you've got 5 levels of it
+      Stati[IMMUNITY,AD_TOXI]               at 7th level,
+      Stati[EXTRA_SKILL,SK_BLUFF]           at 9th level,
+      Stati[EXTRA_SKILL,SK_DIPLOMACY]       at 9th level;
+    Gear:
+      if (EActor->rateMeleeWeapon() >= 2)
+        $"gold piece" else
+        20% $"scythe" else
+        25% $"quarterstaff" else
+        33% $"scimitar" else
+        50% $"sickle" else
+            $"shortspear",
+      if (!EActor->rateRangedWeapon())
+        $"short bow",
+      $"robes",
+      $"ring" of random 2 to 3,
+      2d10 $"gold piece",
+      2d3 $"potion" of $"healing",
+      2d3 $"potion" of $"dimension door";
+    On Event EV_BIRTH {
+      hObj h;
+      for(h=EActor->FirstInv();h;h=EActor->NextInv()) {
+        if (h->QualityOK(IQ_IRONWOOD))
+            h->AddQuality(IQ_IRONWOOD);
+        else if (h->QualityOK(IQ_DARKWOOD))
+            h->AddQuality(IQ_DARKWOOD);
+        } 
+      return NOTHING;
+      },
+    EV_ADVANCE {
+       if (EActor->LevelAs($"druid") == 1) {
+         EActor->GainSpell($"summon nature's ally i",SP_KNOWN|SP_PRIMAL);
+         EActor->GainSpell($"cure light wounds",SP_KNOWN|SP_PRIMAL);
+         } 
+      };
+    Flags: CF_GOOD_WILL, CF_GOOD_FORT;
+    Lists:
+      * SPELL_LIST
+          ALL_SPELLS_FROM_SOURCE(AI_DRUIDIC),
+      * ALLOWED_GODS
+          $"Essiah" $"Hesani" $"Kysul" $"Mara" $"Maeve" 
+          $"Sabine" $"Xel" $"Zurvash";
+  }
+
+
+
+/* Why all the new class features for mages? Because under the new
+   spellcasting system, there has to be something mages get that
+   makes mage 20 superior to mage 10/priest 10. The answer, of
+   course, is bonus slots, arcane will, skill bonuses and bonus
+   feats. This also makes it easier to design balanced prestige
+   classes for mages -- they can have full chart progression and
+   still legitimately "lose" something.
+   If mage/priest turns out to still be too powerful, we might
+   have to do something else, like apply a penalty to the maximum
+   spellcasting level, so a mage 10/priest 10 only get a casting
+   chart level of 17, or something, the same way a mage 10/warrior
+   10 can only get up to caster level of about 17 using Intensive
+   Study. Let's playtest a bit and see how this works. */
+
+Class "Mage"
+  {
+    Desc: "
+      <15>HitDie:_<1>d4__<15>Mana:<1>_d20_<15>Skills:<1>_4_<15>Saves:<1>_fr<9>W<1>_<15>Defense:_<1>1/5\n
+      <15>+toHit: <1>Archery <9>50~<1>, Brawl <9>50~<1>, Melee <9>50~<1>, Thrown <9>50~<1>\n
+      <2>\n\tPowerful, mysterious and feared, the mage is a student of the
+      arcane arts and a seeker of occult mysteries. Most mages adventure
+      to gain access to ancient, powerful magics and to hone their spellcasting
+      prowess. The lifestyle of a mage is tiring, combining academic focus
+      with a draining of vital forces to power eldritch magics; as such,
+      mages tend to be weaker than other adventurers, but they are second
+      to none in the sheer bredth of their magical knowledge.
+        \n\tThere are many, many mages on Theyra. Most are mere prestidigitators,
+      having learned a few parlor tricks to enliven their lives. The most
+      serious often find their way to the High College of Wizardry in Erisia
+      and study high ritual magic full-time, initiating into one of the
+      seven gemstone orders (Ruby, Opal, Topaz, Emerald, Diamond, Sapphire
+      or Amethyst) that govern the formalized study of magic in the Kinlands.
+      Others scribe ancient secrets from librams purchased or stolen, keeping
+      a fierce independance in their studies. Regardless, the mage is a figure
+      of awe and fear to his fellow man, and even millenia past the memory of
+      the Mage Wars still taints the image of the wizard.
+
+      \n\n<10>CLASS SKILLS<2>\n
+      __The class skills of the mage are Alchemy, Appraise, Concentration, Craft, 
+      Diplomacy, Knowledge (all), Metamagic and Spellcraft.
+
+      \n\n<10>CLASS FEATURES<2>\n
+      __All of the following are class features of the mage.\n
+      __*_<7>Proficiencies<2> -- The mage is proficient only with daggers
+      and staves. Few mages rely upon material weapons with any regularity.\n
+      __*_<7>Spells<2> -- Mages recieve one spellcasting level for
+      every mage class level they possess. Mage spells must be studied
+      and cast from spellbooks, and are all but impossible to cast while
+      wearing armor. However, the mage spell list is the most flexible
+      and diverse list in Incursion. They have access to all arcane spells, 
+      though they must study them from a spellbook in order to learn them.\n
+      __*_<7>Magical Diversity<2> -- The arcane knowledge of mages is truly
+      peerless, unequalled among all the other classes. Mages gain two 
+      bonus spell slots of every spell level they can cast, the level after 
+      they gain access to that level of spells. Thus, mages gain two
+      bonus 1st-level slots at 2nd level, two bonus 3rd-level spell slots
+      at 6th level, and so forth.\n
+      __*_<7>Arcane Will<2> -- The spellcasting power of elder mages exceeds
+      that of any other class. The arcane will ability represents this superior
+      power by increasing the DC of saving throws against all mage spells cast
+      by the character in question. Mages recieve a +1 arcane will at 8th, +2
+      at 11th, +3 at 13th, +4 at 17th and +5 at 19th.\n
+      __*_<7>Skill Benefits<2> -- Representing their supreme mastery of the
+      magical arts, mages recieve a +1 competance bonus to Decipher Script,
+      Metamagic, Spellcraft and Use Magic every level starting at 10th level.\n 
+      __*_<7>School Specialist<2> -- All mages choose one of nine
+      schools of magic (Abjuration, Arcana, Divination, Enchantment, Evocation,
+      Illusion, Necromancy, Thaumaturgy or Weavecraft) in which to focus their
+      study; mages may not specialize in Theurgy or Naturalism. This choice 
+      modifies their spell success rates for spells of every school, with the
+      highest modifier going to the mage's school of choice. Specialization
+      also determines what the third spellbook the mage enters play with is,
+      which has a strong influence on spell selection in the early game.\n
+      __*_<7>Bonus Feats<2> -- All mages recieve the Scribe Scroll feat for
+      free at 1st level. In addition, mages recieve a bonus feat chosen from 
+      either the Metamagic or Item Creation feat lists at every 5th level -- 
+      5th, 10th, 15th, 20th and so forth.
+      \n__*_<7>Starting Benefits<2> -- Mages start with a quarterstaff 
+      and daggers, potions of mana, a stone +2 of channeling, a collection
+      of scrolls and the spellbooks [Adventurer's Arts] and [Fundamentals
+      of Magick], along with two specific to their chosen specialty
+      school. 
+      \n\n<10>THE MAGE<15>________________________________<15>Spells Known\n
+      _Level__Def__Fort_Refl_Will_Specials__1_2_3_4_5_6_7_8_9<1>\n
+      ___1____+0____+0___+0___+2__Scribe S._1_-_-_-_-_-_-_-_-\n
+      ___2____+0____+0___+0___+3____________2_-_-_-_-_-_-_-_-\n
+      ___3____+0____+1___+1___+3____________2_1_-_-_-_-_-_-_-\n
+      ___4____+0____+1___+1___+4____________3_2_-_-_-_-_-_-_-\n
+      ___5____+1____+1___+1___+4__Bonus Ft._3_2_1_-_-_-_-_-_-\n
+      ___6____+1____+2___+2___+5____________4_3_2_-_-_-_-_-_-\n
+      ___7____+1____+2___+2___+5____________5_4_3_1_-_-_-_-_-\n
+      ___8____+1____+2___+2___+6__A.Will +1_6_5_3_2_-_-_-_-_-\n
+      ___9____+1____+3___+3___+6____________6_6_3_3_1_-_-_-_-\n
+      ___10___+2____+3___+3___+7__Bonus Ft._7_6_4_3_2_-_-_-_-\n
+      ___11___+2____+3___+3___+7__A.Will +2_7_7_5_4_3_-_-_-_-\n
+      ___12___+2____+4___+4___+8____________7_7_5_4_4_1_-_-_-\n_";
+    HitDice: 4; Mana: 20; Def: 1/5;
+    Attk:  S_BRAWL 50,
+           S_MELEE 50,
+           S_ARCHERY 50,
+           S_THROWN 50;
+    Skills[4]: SK_CONCENT, SK_DECIPHER, SK_KNOW_ALL,
+      SK_ALCHEMY, SK_SPELLCRAFT, SK_METAMAGIC, SK_INTUITION, 
+      SK_ILLUSION, SK_APPRAISE, SK_CRAFT, SK_USE_MAGIC;
+    Proficiencies: WG_DAGGERS, WG_STAVES;
+    Grants:
+      Ability[CA_SPELLCASTING]     at every level starting at 1st,
+      Stati[SPELL_ACCESS,SP_ARCANE,+1] at 1st level,
+      Stati[SPELL_ACCESS,SP_ARCANE,+1] at 3rd level,
+      Stati[SPELL_ACCESS,SP_ARCANE,+1] at 5th level,
+      Stati[SPELL_ACCESS,SP_ARCANE,+1] at 7th level,
+      Stati[SPELL_ACCESS,SP_ARCANE,+1] at 9th level,
+      Stati[SPELL_ACCESS,SP_ARCANE,+1] at 12th level,
+      Stati[SPELL_ACCESS,SP_ARCANE,+1] at 14th level,
+      Stati[SPELL_ACCESS,SP_ARCANE,+1] at 16th level,
+      Stati[SPELL_ACCESS,SP_ARCANE,+1] at 18th level,
+      Ability[CA_SPECIALIST]       at every level starting at 1st,
+      //Stati[CAN_FORGET_SPELL,0,+1] at every 2nd level starting at 2nd,
+      Feat[FT_SCRIBE_SCROLL]       at 1st level,
+      Feat[FT_WIZARD_LIST]         at every 5th level starting at 5th,
+      Stati[SKILL_BONUS,SK_METAMAGIC,+1] at every level starting at 10th,
+      Stati[SKILL_BONUS,SK_USE_MAGIC,+1] at every level starting at 10th,
+      Stati[SKILL_BONUS,SK_DECIPHER,+1] at every level starting at 10th,
+      Stati[SKILL_BONUS,SK_SPELLCRAFT,+1] at every level starting at 10th,
+      /* These boosts are placed so that there's something "going on"
+         every level, so that any level lost/gained in multiclassing
+         is a trade-off, whether it's access to a new level of spells,
+         an Arcane Will plus or a bonus feat. */
+      Ability[CA_ARCANE_WILL,+1]   at 8th level,
+      Ability[CA_ARCANE_WILL,+2]   at 11th level,
+      Ability[CA_ARCANE_WILL,+3]   at 13th level,
+      Ability[CA_ARCANE_WILL,+4]   at 17th level,
+      Ability[CA_ARCANE_WILL,+5]   at 19th level,
+      Stati[BONUS_SLOTS,1,2]       at 2nd level,
+      Stati[BONUS_SLOTS,2,2]       at 4th level,
+      Stati[BONUS_SLOTS,3,2]       at 6th level,
+      Stati[BONUS_SLOTS,4,2]       at 8th level,
+      Stati[BONUS_SLOTS,5,2]       at 10th level,
+      Stati[BONUS_SLOTS,6,2]       at 13th level,
+      Stati[BONUS_SLOTS,7,2]       at 15th level,
+      Stati[BONUS_SLOTS,8,2]       at 17th level,
+      Stati[BONUS_SLOTS,9,2]       at 19th level;
+    Gear:
+      // ww: this is not helpful, just gets in the way $"ivory scroll case",
+      1d4+1 $"dagger",
+      if (EActor->rateMeleeWeapon() < 2)
+        $"quarterstaff",
+      30d10 $"gold piece",
+      $"robes",            
+      4d2 $"potion" of $"mana",
+      $"stone" +2 of $"channeling",
+      $"spellbook [Adventurers' Arts]",
+      $"spellbook [Fundamentals of Magick]",
+      random T_BOOK,
+      random T_BOOK,
+      $"scroll" of random 1 to 5,
+      $"scroll" of random 1 to 5,
+      $"scroll" of random 1 to 5,
+      $"scroll" of random 1 to 5,
+      $"scroll" of random 1 to 5,
+      50% $"scroll" of random 1 to 5,
+      50% $"scroll" of random 1 to 5,
+      50% $"scroll" of random 1 to 5,
+      50% $"scroll" of random 1 to 5,
+      50% $"scroll" of random 1 to 5;
+    Flags: CF_GOOD_WILL; 
+
+    /* ww: previously, random chance determined your "real" school
+     * specialty. You might have picked Abjuration, but if the only
+     * spellbooks you find are Adventurer's Arts and Ars Mortis, you 
+     * end up being a Necromancer. Basically, you level up as a mage far
+     * before these books become halfway common as chest items. To fix
+     * this, we now give out the next tier at birth. */
+    On Event EV_BIRTH {
+      hObj sbook, sbook2, sbook3;
+      sbook3 = NULL_OBJ;
+      switch (EActor->GetStatiVal(SPECIALTY_SCHOOL)) {
+        case 0: // abj
+          sbook = CreateItem($"spellbook [Mystic Aegis]");
+          sbook2= CreateItem($"spellbook [Libram of Silver Magic]");
+          sbook3= CreateItem($"spellbook [Secrets of Abjuration]");
+         break;
+        case 8: // wea
+          sbook = CreateItem($"spellbook [Place and Time]");
+          sbook2= CreateItem($"spellbook [Conjurations and Summonings]");
+         break;
+        case 1: // arc
+          sbook = CreateItem($"spellbook [Tome of Magic]");
+          sbook2= CreateItem($"spellbook [Tricks and Traps]");
+         break;
+        case 2: // div
+          sbook = CreateItem($"spellbook [Practical Divinings]");
+          sbook2= CreateItem($"spellbook [Libram of Silver Magic]");
+         break;
+        case 5: // ill
+          sbook = CreateItem($"spellbook [Magician's Manual]");
+          sbook2= CreateItem($"spellbook [Tricks and Traps]");
+         break;
+        case 3: // enc
+          sbook = CreateItem($"spellbook [Book of Glamour]");
+          sbook2= CreateItem($"spellbook [Venom and Curses]");
+         break;
+        case 4: // evo
+          sbook = CreateItem($"spellbook [Energy Magicks]");
+          sbook2= CreateItem($"spellbook [Elemental Covenant]");
+         break;
+        case 6: // nec
+          sbook = CreateItem($"spellbook [Mastery over Death]");
+          sbook2= CreateItem($"spellbook [Ars Mortis]");
+         break;
+        case 7: // tha
+          sbook = CreateItem($"spellbook [Mortal Coil]");
+          sbook2= CreateItem($"spellbook [Ars Bellicus]");
+         break; 
+        default:
+          Error("Strange specialty school in $'Mage'::EV_BIRTH!");
+        }
+      if (sbook) EActor->GainItem(sbook,true);
+      if (sbook2) EActor->GainItem(sbook2,true);
+      if (sbook3) EActor->GainItem(sbook3,true);
+      },
+    EV_ADVANCE {
+      rID listID;
+      /* ww: We put this here so that if you multi-class to priest you 
+       * still get the free spells (but not the spellbooks -- you'll have
+       * to find those) */
+       if (EActor->LevelAs($"mage") == 1)
+         switch (EActor->GetStatiVal(SPECIALTY_SCHOOL)) {
+           case 0: // abj
+             EActor->GainSpell($"shield",SP_KNOWN|SP_ARCANE);
+             EActor->GainSpell($"mage armor",SP_KNOWN|SP_ARCANE);
+            break;           
+           case 1: // arc             
+             /* I know these aren't Arcana spells. Arcana has entirely
+                utility spells at 1st, except Chromatic Orb, which is
+                more an Illusionist signature then an Arcanist. Give the
+                player the fundamentals and let him choose from there;
+                arcanists are suposed to be diverse. */ 
+             EActor->GainSpell($"magic missile",SP_KNOWN|SP_ARCANE);
+             EActor->GainSpell($"phase door",SP_KNOWN|SP_ARCANE);
+            break;
+           case 2: // div
+             EActor->GainSpell($"read magic",SP_KNOWN|SP_ARCANE);
+             EActor->GainSpell($"phase door",SP_KNOWN|SP_ARCANE);
+            break;
+           case 3: // enc
+             EActor->GainSpell($"charm person",SP_KNOWN|SP_ARCANE);
+             EActor->GainSpell($"shield",SP_KNOWN|SP_ARCANE);
+            break;
+           case 4: // evo
+             EActor->GainSpell($"magic missile",SP_KNOWN|SP_ARCANE);
+             EActor->GainSpell($"shield",SP_KNOWN|SP_ARCANE);
+            break;
+           case 5: // ill
+             EActor->GainSpell($"phantasmal force",SP_KNOWN|SP_ARCANE);
+             EActor->GainSpell($"phase door",SP_KNOWN|SP_ARCANE);
+            break;
+           case 6: // nec
+             EActor->GainSpell($"minor drain",SP_KNOWN|SP_ARCANE);
+             EActor->GainSpell($"phase door",SP_KNOWN|SP_ARCANE);
+            break;
+           case 7: // tha
+             EActor->GainSpell($"false life",SP_KNOWN|SP_ARCANE);
+             EActor->GainSpell($"convulsion",SP_KNOWN|SP_ARCANE);
+             EActor->Proficiencies |= WG_LIGHT;
+            break;
+           case 8: // wea
+             EActor->GainSpell($"monster summoning i",SP_KNOWN|SP_ARCANE);
+             EActor->GainSpell($"phase door",SP_KNOWN|SP_ARCANE);
+            break;         
+           } 
+       
+       /* Hey, Wes,
+       
+            These aren't currently as balanced as they could be, since
+          some really cruical skills (i.e., Diplomacy for Enchanters)
+          aren't implemented yet, nor is much of the illusion rules-set.
+          Still, let me know which you think are good, which too good,
+          and which need to be beefed up.
+            The design intent here is not so much that every specialty
+          should be EQUAL (although that should be a distinct secondary
+          goal), as that every specialist should *play differently*, that
+          playing an Enchanter should truly be different from playing a
+          Weaver, and require and support different strategies. This thus
+          improves replayability -- always a core goal in Incursion.
+            An alternate thought for Weavecraft was to give Weavers a 50%
+          bonus on summoned creatures' hit points -- it depends whether
+          you want to play them as summoners or teleporters/tactical
+          mages. Let me know if you think that would be better, more
+          balanced or more differentiating.
+       */
+       
+       switch(EActor->GetStatiVal(SPECIALTY_SCHOOL))
+         {
+           case 0: //SC_ABJ:
+             listID = $"Abjurer";
+             if (EActor->LevelAs($"mage") % 3 == 1) {
+               if (EActor->LevelAs($"mage") == 1)
+                 EActor->GainPermStati(ADJUST_INH,NULL,
+                   SS_CLAS,A_SAV,1,$"mage",0);
+               else
+                 EActor->IncEffStatiMag(ADJUST_INH,
+                   $"mage",SS_MISC,NULL,+1);
+               }
+            break;
+           case 1: //SC_ARC:
+             listID = $"Arcanist";
+            break;
+           case 2: //SC_DIV:
+             listID = $"Diviner";
+             EActor->GainBonusSkills($"mage",3);
+             if (EActor->LevelAs($"mage") % 4 == 0) {
+               if (EActor->LevelAs($"mage") == 4) 
+                 EActor->GainPermStati(ADJUST_INS,NULL,
+                   SS_CLAS,A_INT,1,$"mage",0);
+               else
+                 EActor->IncEffStatiMag(ADJUST_INS,$"mage",
+                   SS_CLAS,NULL,+1);
+               } 
+            break;
+           case 3: //SC_ENC:
+             listID = $"Enchanter";
+             if (EActor->LevelAs($"mage") == 1)
+               {
+                 EActor->GainPermStati(EXTRA_SKILL,NULL,
+                   SS_CLAS,SK_DIPLOMACY,0,$"mage",0);
+                 EActor->GainAbility(CA_BEGUILING_MAGIC,
+                   1,$"mage",SS_CLAS);
+               }
+            break;
+           case 4: //SC_EVO:
+             listID = $"Evoker";
+             if (EActor->LevelAs($"mage") % 2 == 0) {
+               if (EActor->LevelAs($"mage") == 2)
+                 EActor->GainPermStati(ADJUST_INH,NULL,
+                   SS_CLAS,A_FAT,1,$"mage",0);
+               else
+                 EActor->IncEffStatiMag(ADJUST_INH,
+                   $"mage",SS_MISC,NULL,+1);
+               }       
+            break;
+           case 5: //SC_ILL:
+             listID = $"Illusionist";
+             if (EActor->LevelAs($"mage") == 1)
+               {
+                 EActor->GainPermStati(EXTRA_SKILL,NULL,
+                   SS_CLAS,SK_BLUFF,0,$"mage",0);
+                 EActor->GainPermStati(EXTRA_SKILL,NULL,
+                   SS_CLAS,SK_MOVE_SIL,0,$"mage",0);
+                 EActor->GainPermStati(EXTRA_SKILL,NULL,
+                   SS_CLAS,SK_PICK_POCKET,0,$"mage",0);
+                 EActor->GainPermStati(EXTRA_SKILL,NULL,
+                   SS_CLAS,SK_DISGUISE,0,$"mage",0);
+               }
+             if (EActor->LevelAs($"mage") == 2)
+               EActor->GainPermStati(SKILL_BONUS,NULL,
+                 SS_CLAS, SK_ILLUSION,1,$"mage",0);
+             else if (EActor->LevelAs($"mage") % 2 == 0)
+               EActor->IncEffStatiMag(SKILL_BONUS,$"mage",
+                 SS_CLAS,NULL_OBJ,+1);
+            break;
+           case 6: //SC_NEC:
+             listID = $"Necromancer";
+             if (EActor->LevelAs($"mage") == 1)
+               {
+                 EActor->GainPermStati(BONUS_PHD,NULL,
+                   SS_CLAS,PHD_COMMAND,1,$"mage",0);
+                 EActor->GainPermStati(SAVE_BONUS,NULL,
+                   SS_CLAS,SN_FEAR,2,$"mage",0);
+                 EActor->GainPermStati(EXTRA_SKILL,NULL,
+                   SS_CLAS,SK_POISON_USE,0,$"mage",0);
+               }
+             else
+               EActor->IncEffStatiMag(BONUS_PHD,$"mage",
+                 SS_CLAS,NULL,+1);
+            break; 
+           case 7: //SC_THA:
+             listID = $"Thaumaturge";
+             EActor->Proficiencies |= WG_LIGHT;
+            break;
+           case 8: //SC_WEA:
+             listID = $"Weaver";
+             if (EActor->LevelAs($"mage") == 1)
+               EActor->GainPermStati(TRAP_EVENT,NULL,
+                 SS_CLAS,PRE(EV_EFFECT),0,$"mage",0);
+            break;
+         } 
+      if (EActor->LevelAs($"mage") == 1)
+        EActor->GainPermStati(SPELL_ACCESS,NULL,SS_CLAS,SP_ARCANE,1,listID);
+      else
+        EActor->SetEffStatiMag(SPELL_ACCESS,listID,EActor->LevelAs($"mage"));
+      return NOTHING;
+      },
+    META(PRE(EV_EFFECT)) {
+      if (e.eID == $"phase door" || e.eID == $"dimension door" ||
+          e.eID == $"teleport" || e.eID == $"shadow shifting" ||
+          e.eID == $"teleportation")
+        e.MM |= MM_CONTROL;
+      return NOTHING;
+      };
+    Lists:
+      * SPELL_LIST
+          ALL_SPELLS_FROM_SOURCE(AI_WIZARDRY)
+          2 $"call light" $"vigor"
+          3 $"death knell"
+          5 $"animate dead"
+          6 $"death ward"
+            $"ethereal jaunt"
+            $"create corporeal undead"
+          7 $"create spectral undead"
+          8 $"etherealness";
+  }                
+  
+Class "Abjurer"
+  { 
+    Flags: CF_PSEUDO;
+    Lists:
+      * SPELL_LIST
+          ALL_SPELLS_FROM_SCHOOL(AI_WIZARDRY,SC_ABJ)
+          1 $"sanctuary" $"detect evil"
+          2 $"shield other" $"glyph of warding"
+          3 $"remove curse" $"negative plane protection"
+          4 $"death ward" $"free action;spell" $"spell immunity"
+          5 $"magic resistance" $"dispel evil"
+          6 $"antilife shell" $"glyph of warding, greater";
+  }
+  
+Class "Arcanist"
+  { 
+    Flags: CF_PSEUDO;
+    Lists:
+      * SPELL_LIST
+          ALL_SPELLS_FROM_SCHOOL(AI_WIZARDRY,SC_ARC);
+  }
+  
+Class "Diviner"
+  { 
+    Flags: CF_PSEUDO;
+    Lists:
+      * SPELL_LIST
+          ALL_SPELLS_FROM_SCHOOL(AI_WIZARDRY,SC_DIV)
+          2 $"detect monsters";
+  }
+  
+Class "Enchanter"
+  { 
+    Flags: CF_PSEUDO;
+    Lists:
+      * SPELL_LIST
+          ALL_SPELLS_FROM_SCHOOL(AI_WIZARDRY,SC_ENC)
+          2 $"enthrall";
+  }
+  
+Class "Evoker"
+  { 
+    Flags: CF_PSEUDO;
+    Lists:
+      * SPELL_LIST
+          ALL_SPELLS_FROM_SCHOOL(AI_WIZARDRY,SC_EVO);
+  }
+  
+Class "Illusionist"
+  { 
+    Flags: CF_PSEUDO;
+    Lists:
+      * SPELL_LIST
+          ALL_SPELLS_FROM_SCHOOL(AI_WIZARDRY,SC_ILL);
+  }
+  
+Class "Necromancer"
+  { 
+    Flags: CF_PSEUDO;
+    Lists:
+      * SPELL_LIST
+          ALL_SPELLS_FROM_SCHOOL(AI_WIZARDRY,SC_NEC)
+          1 $"death knell"
+          3 $"animate dead"
+          4 $"necrosynthesis"
+          5 $"create corporeal undead"
+          5 $"create spectral undead";
+  }
+
+Class "Thaumaturge"
+  { 
+    Flags: CF_PSEUDO;
+    Lists:
+      * SPELL_LIST
+          ALL_SPELLS_FROM_SCHOOL(AI_WIZARDRY,SC_THA);
+  }
+  
+Class "Weaver"
+  { 
+    Flags: CF_PSEUDO;
+    Lists:
+      * SPELL_LIST
+          ALL_SPELLS_FROM_SCHOOL(AI_WIZARDRY,SC_WEA)
+          4 $"ethereal jaunt"
+          6 $"etherealness";
+  }         
+
+Class "Monk"
+  {
+    Desc: "
+      <15>HitDie:_<1>d8__<15>Mana:<1>_d4__<15>Skills:<1>_6_<15>Saves:<1>_<9>FRW<1>_<15>Defense:_<1>1/2\n
+      <15>+toHit: <1>Archery <9>75~<1>, Brawl <9>100~<1>, Melee <9>75~<1>, Thrown <9>75~<1>\n
+      \n<2>__An asectic mystic, the monk disciplines his mind, body and spirit to
+      perform incredible feats. Monks uphold the traditions of mysticism and martial
+      arts in the Kinlands, and their practices and rituals date back nearly two
+      millenia. Once, at least in mythology, all monks were united in perfect worship 
+      of Immotian, but that unity has long since been lost, and now every monastary
+      teaches a different ideology and tradition of worship. A monk owes absolute
+      loyalty to his monastary and his patron father, at least in theory.
+      \n__In addition to their legendary prowess with martial arts, monks practice
+      calligraphy, meditative trances, lucid dreaming and scholarship. Monastaries
+      boast private libraries that often rival the largest government institutions
+      of major cities, and these private collections often boast mystical works that
+      have long since been lost to the public eye. Despite their spiritual focus,
+      there is a great deal of worldly politics at the higher levels of the average
+      monastary. Some are xenophobic, others militant, but no elder monk is unaware
+      of the degree of real power their mystic secrets and martial skill gives them
+      in the world.\n\n
+
+      \n\n<10>CLASS SKILLS<2>\n
+      __The class skills of the monk are Alchemy, Appraise, Athletics, Balance, 
+      Climb, Decipher Script, Diplomacy, Escape Artist, Find Weakness, Healing, 
+      Hide, Jump, Knowledge (Mythology, Nature, Planes, Theyra and Theology), 
+      Listen, Move Silently, Poison Use, Spot and Tumble.
+
+      \n\n<10>CLASS FEATURES<2>\n
+      __All of the following are class features of the monk.\n
+      __*_<7>Proficiencies<2> -- Monks are proficient with staves, thrown
+      weapons and their own special catagory of martial weapons. They have no
+      proficiency with any type of armor or shields.\n
+      __*_<7>Unarmed Attack<2> -- Monks do not provoke an attack of opportunity
+      when they attack an armed foe unarmed. In addition, they inflict additional
+      damage with their bare-hand attacks, as shown on the class table below.
+      Monks that have a natural attack sequence (i.e., lizardfolk and kobolds)
+      can choose to punch and kick as human monks do, or to use their natural
+      attack sequence and gain a +1 inherant bonus to hit and damage using their
+      natural attacks every even monk level. This choice is made on the tactical
+      options panel.\n
+      __*_<7>Stun Attack<2> -- A monk's attacks have a chance of stunning their
+      opponent. Whenever a monk scores a critical hit or performs a Great Blow,
+      or on 1 in 3 randomly chosen normal attacks, an enemy who is hit must make
+      a Fortitude saving throw against a DC of 10 + 1/2 the monk's level + the
+      monk's Wisdom modifier, or be stunned for 1d4+1 rounds.\n
+      __*_<7>Flurry of Blows<2> -- At the cost of one fatigue point, a monk can
+      perform a Flurry of Blows, increasing her unarmed speed, and speed when using
+      martial weapons, by 100~ for (10 + Wisdom modifier) rounds. The monk suffers a
+      -2 penalty to her attacks while flurrying; this decreases to -1 at 5th level
+      and to nothing at 9th.\n
+      __*_<7>Increased Move<2> -- Monks inherantly move faster than other creatures.
+      A monk recieves a +20~ bonus to her movement rate at every odd level starting
+      at 3rd.\n
+      __*_<7>Evasion<2> -- Starting at 1st level, when a monk successfully
+      makes a Reflex saving throw against an area-effect attack that allows
+      a Reflex save for half damage (such as a dragon's fiery breath or a 
+      mage's <9>lightning bolt<2>), he takes no damage at all. At 9th level
+      and above, the monk takes only half damage on a failed Saving Throw.\n
+      __Levels of this ability from the monk and rogue classes stack.\n
+      __*_<7>Zen Defense<2> -- At 1st level, the monk recieves the Zen Defense feat
+      for free. This allows her to add her Wisdom modifier, if positive, to her
+      defense class.\n
+      __*_<7>Deflect Arrows<2> -- At 2nd level, the monk recieves the Deflect Arrows
+      feat for free, even if she does not meet the normal prerequisites.\n
+      __*_<7>Still Mind<2> -- At 3rd level, the monk gains a +2 bonus to saving throws
+      versus enchantment effects, representing her superior mental discipline.\n
+      __*_<7>Slow Fall<2> -- Starting at 4th level, the monk gains the ability to
+      avoid or reduce falling damage. She takes 5 points off of all falling damage
+      at 4th level, and an additional 5 points every even level thereafter.\n
+      __*_<7>Master Trip, Disarm<2> -- The monk recieves the Master Trip
+      and Master Disarm feats for free at 5th level.\n
+      __*_<7>Purity of Body<2> -- Upon reaching 6th level, the monk learns to purify
+      her body completely, and is forever after completely immune to diseases.\n
+      __*_<7>Leap of the Clouds<2> -- Upon reaching 7th level, the monk attains a
+      mystical prowess at jumping, gaining a +10 competance bonus to all Jump skill
+      rolls.\n
+      __*_<7>Wholeness of Body<2> -- Also beginning at 7th level, the monk is able
+      to heal injuries to her body through meditative exercizes. At the cost of four
+      fatigue points, the monk may heal three times her full character level in hit
+      points simply by focusing her mind.\n
+      __*_<7>Diamond Body<2> -- Starting at 10th level, the monk has perfected her
+      body to the extent that she is completely immune to poisons of all kinds.\n
+      __*_<7>Abundant Step<2> -- At 11th level, the monk gains the ability to use
+      <9>dimension door<2> at will as a spell-like ability.\n
+      __*_<7>Transcendant Sight<2> -- at 12th level, the monk gains the inherant
+      ability to see invisible creatures.\n
+      __*_<7>Small Monks<2> -- Starting at 3rd level, monks of races who are
+      naturally Small size (kobolds, gnomes and halflings) learn to use the size of
+      other races against them, and recieve the Redirect Attack feat for free. Monks
+      that are Medium-sized or larger do not gain this benefit.\n
+      __Small monks also never suffer a penalty to damage when fighting unarmed
+      as a result of a low Strength score.\n      
+      __Finally, Small races recieve the Defensive Roll ability (from the rogue's
+      higher-level special ability list) upon attaining four combined levels of 
+      warrior, ranger, paladin, monk or barbarian.
+      __*_<7>Starting Benefits<2> -- Monks start with a sizable stock of potions of 
+      dimension door, robes, a martial arts melee weapon (quarterstaff, fighting
+      stick or 2 nunchaku) and a chakram. Evil monks also begin with a randomly
+      chosen vial of poison.
+      \n\n<10>THE MONK<15>\n
+      _Level__Def__Fort_Refl_Will_Damage_Special Abilities<1>\n
+      ___1____+0____+2___+2___+2___1d6___Evasion, Zen Defense\n
+      ___2____+1____+3___+3___+3___1d8___Deflect Arrows      \n
+      ___3____+1____+3___+3___+3___1d10__Still Mind, Redirect\n
+      ___4____+2____+4___+4___+4___1d10__Slow Fall, Ki St. +1\n
+      ___5____+2____+4___+4___+4___1d12__Master Trip,        \n
+      ___________________________________Master Disarm       \n
+      ___6____+3____+5___+5___+5___1d12__Purity of Body      \n
+      ___7____+3____+5___+5___+5___4d4___Leap of the Clouds, \n
+      ___________________________________Wholeness of Body   \n
+      ___8____+4____+6___+6___+6___4d4___Ki Strike +2        \n
+      ___9____+4____+6___+6___+6___3d6___Improved Evasion    \n
+      ___10___+5____+7___+7___+7___3d6___Diamond Body        \n
+      ___11___+5____+7___+7___+7___1d20__Abundant Step       \n
+      ___12___+6____+8___+8___+8___1d20__Transcendant Sight  \n";
+      /*
+      __*_<7>Ki Strike<2> -- Also at 4th level, the monk gains the ability to affect
+      creatures immune to non-magical weapons with his unarmed strikes. The monk's
+      fists are effectively +1 weapons at 4th level, +2 at 8th, +3 at 12th and so
+      forth.\n
+      */
+
+    HitDice: 8; Mana: 4; Def: 1/2;
+    Attk:  S_BRAWL    100,
+           S_MELEE    75,
+           S_THROWN   75,
+           S_ARCHERY  75;
+    Skills[6]:  SK_ALCHEMY, SK_ATHLETICS, SK_BALANCE, SK_CLIMB, SK_DECIPHER, SK_DIPLOMACY, 
+      SK_ESCAPE_ART, SK_FIND_WEAKNESS, SK_HEALING, SK_HIDE, SK_JUMP, SK_KNOW_MYTH,
+      SK_KNOW_GEO, SK_KNOW_THEO, SK_KNOW_NATURE, SK_KNOW_PLANES, 
+      SK_LISTEN, SK_MOVE_SIL, SK_POISON_USE, SK_APPRAISE, SK_SPOT, SK_TUMBLE;
+    Proficiencies: WG_STAVES, WG_MARTIAL, WG_THROWN;
+    Grants:
+      Ability[CA_UNARMED_STRIKE]     at every level starting at 1st,
+      Ability[CA_FLURRY_OF_BLOWS]    at every 4th level starting at 1st,
+	  Ability[CA_INCREASED_MOVE,+2]  at every level starting at 1st,
+      Ability[CA_STUN_ATTACK]        at every level starting at 1st,
+      Ability[CA_EVASION]            at every level starting at 1st,
+      Feat[FT_ZEN_DEFENSE]           at 1st level,
+      Feat[FT_DEFLECT_ARROWS]        at 2nd level,
+      Stati[SAVE_BONUS,SN_ENCH,+2]   at 3rd level,
+      Stati[ADJUST_INH,A_MOV,+4]     at every 2nd level starting at 3rd,
+      Ability[CA_SLOW_FALL]          at every 2nd level starting at 4th,
+      // Ability[CA_KI_STRIKE]          at every 4th level starting at 4th,
+      // ww: monks still seem weak, let's try both of these!
+      Feat[FT_MASTER_TRIP]           at 5th level,
+      Feat[FT_MASTER_DISARM]         at 5th level,
+      Stati[IMMUNITY,AD_DISE]        at 6th level,
+      Ability[CA_WHOLENESS_OF_BODY]  at 7th level,
+      Stati[SKILL_BONUS,SK_JUMP,+10] at 7th level,
+      Stati[IMMUNITY,AD_POIS]        at 10th level,
+      Ability[CA_INNATE_SPELL,$"dimension door"] at 11th level,
+      Stati[SEE_INVIS]               at 12th level;
+    Flags: CF_GOOD_FORT, CF_GOOD_REF, CF_GOOD_WILL, CF_RELIGIOUS, CF_NONCHAOTIC;
+    Gear:
+      if (!EActor->isSmallRace())
+        33% $"quarterstaff" else
+          50% 2d1 $"nunchaku" else
+              2d1 $"fighting stick",
+      $"chakram",
+      $"robes",
+      if (EActor->isMType(MA_EVIL) && !EActor->isMType(MA_LAWFUL))
+        1d3 $"small glass vial" of random 2 to 4,
+      4d4 $"potion" of $"dimension door";
+    On Event EV_ADVANCE {
+      if (EActor->LevelAs($"monk") == 3)
+        if (EActor->isSmallRace())
+          EActor->GainFeat(FT_REDIRECT_ATTACK);
+      if (EActor->isSmallRace() && (EActor->LevelAs($"barbarian") + 
+          EActor->LevelAs($"warrior") + EActor->LevelAs($"ranger") +
+          EActor->LevelAs($"paladin") + EActor->LevelAs($"monk")) == 4)
+        EActor->GainAbility(CA_DEFENSIVE_ROLL,1,$"monk",SS_CLAS);
+      return NOTHING;
+      },
+    EV_BIRTH {
+      String str;
+      switch (1d20)
+        {
+          case 1:  str = "Scarlet"; break;
+          case 2:  str = "Ebon"; break;
+          case 3:  str = "Righteous"; break;
+          case 4:  str = "Jade"; break;
+          case 5:  str = "Iron"; break;
+          case 6:  str = "Excelent"; break;
+          case 7:  str = "Graceful"; break;
+          case 8:  str = "Unfolding"; break;
+          case 9:  str = "Revealed"; break;
+          case 10: str = "Ivory"; break;
+          case 11: str = "Harmonious"; break;
+          case 12: str = "Furious"; break;
+          case 13: str = "Transcendant"; break;
+          case 14: str = "Resplendant"; break;
+          case 15: str = "River"; break;
+          case 16: str = "Flawless"; break;
+          case 17: str = "Immaculate"; break;
+          case 18: str = "August"; break;
+          case 19: str = "Fivefold"; break;
+          case 20: str = "Eightfold"; break;
+        }
+      str += "_";
+      switch(1d20)
+        {
+          case 1:  str += "Lotus"; break;
+          case 2:  str += "Crysanthemum"; break;
+          case 3:  str += "Sword"; break;
+          case 4:  str += "Sutra"; break;
+          case 5:  str += "Rain"; break;
+          case 6:  str += "Dragon"; break;
+          case 7:  str += "Tiger"; break;
+          case 8:  str += "Phoenix"; break;
+          case 9:  str += "Tempest"; break;
+          case 10: str += "Devil"; break;
+          case 11: str += "Crane"; break;
+          case 12: str += "Monkey"; break;
+          case 13: str += "Shadow"; break;
+          case 14: str += "Ghost"; break;
+          case 15: str += "Mask"; break;
+          case 16: str += "Serpent"; break;
+          case 17: str += "Sage"; break;
+          case 18: str += "Lion"; break;
+          case 19: str += "Fox"; break;
+          case 20: str += EActor->StateFlags & MS_FEMALE ?
+                          "Princess" : "Prince";
+        }
+      EActor->Named = str;
+      };
+    Lists:
+      * ALLOWED_GODS
+          $"Aiswin" $"Essiah" $"Hesani" $"Immotian" $"Mara"
+          $"The Multitude" $"Xavias";
+  }
+
+
+
+Class "Paladin"
+  {
+    Desc: "
+      <15>HitDie:_<1>d10_<15>Mana:<1>_d8__<15>Skills:<1>_4_<15>Saves:<1>_<9>F<1>r<9>W<1>_<15>Defense:_<1>1/4\n
+      <15>+toHit: <1>Archery <9>75~<1>, Brawl <9>75~<1>, Melee <9>100~<1>, Thrown <9>75~<1>\n
+      <2>\n\tLike Priests, Paladins are holy warriors, and they share the most
+      kinship with that class, but they are not the masterful theurgists that 
+      their contemporaries are. Though deeply religious, they draw their power
+      primarily from the metaphysical force of good itself. Seeming to be the
+      very embodiement of virtue, the Paladin lives by a rigourous code but
+      shines brighter than the sun itself, an example to all those around them.
+      Paladins are exceedingly rare in contrast to the other classes, each 
+      being a personally selected champion of virtue.
+      
+      \n\n<10>CLASS SKILLS<2>\n
+      __The class skills of the paladin are Appraise, Athletics, Concentration, 
+      Craft, Diplomacy, Healing, Knowledge (Planes, Theology, Theyra and Undead), 
+      Ride and Seneschal.
+       
+      \n\n<10>CLASS FEATURES<2>\n
+      __All the following are class features of the paladin.
+      \n__*_<7>Proficiencies<2> -- Paladins are proficient with simple weapons,
+      long blades, polearms, lances and flails, as well as with all categories of
+      armor.
+      \n__*_<7>Lay on Hands<2> -- At will, a paladin can lay his hands upon himself
+      or another living creature, causing them to heal hit points of damage equal
+      to 2d6 plus his level multiplied by his primary Charisma modifier plus two 
+      (minimum 1). This healing costs two fatigue points, but no mana.
+      \n__*_<7>Divine Grace<2> -- The paladin benefits from an extraordinary, sacred
+      protection from harm. His primary Charisma modifier (if any) is added as a
+      grace bonus to all of his saving throws. This ability is gained at 2nd level.
+      \n__*_<7>Divine Health<2> -- A paladin is immune to all diseases, except for
+      those gained from eating the corpses of fallen foes (which isn't very paladin-like
+      anyway. Starting at 3rd level, the paladin gains the spell <9>Cure Disease<2> as 
+      an innate spell-like ability.
+      \n__*_<7>Detect Evil<2> -- Paladins can cast the spell <9>Detect
+      Evil<2> as an innate ability, allowing them to locate all evil
+      creatures within 250 feet (25 squares).
+      \n__*_<7>Smite Evil<2> -- Whenever a paladin performs a Great Blow maneuver
+      against an evil creature, he adds his Charisma bonus (if any) to the attack
+      roll, and if he hits he also adds his paladin level to the damage that he
+      inflicts.
+      \n__*_<7>Aura of Valor<2> -- Starting at second level, a paladin is immune to
+      fear, and grants any allies within 3 squares of him a +1 bonus to save versus
+      fear effects for every even paladin level he possesses. This ability is innate
+      and always active.
+      \n__*_<7>Turn Undead<2> -- Starting at third level, a paladin may turn undead
+      just as a priest of two levels lower does.
+      \n__*_<7>Divine Magic<2> -- Starting at 4th level, the paladin is able to cast
+      a limited number of divine spells. He recieves one divine casting level for
+      every even paladin level thereafter.
+      \n__*_<7>Sacred Mount<2> -- Starting at 5th level, the paladin can summon a
+      specially-bonded mount from the Upper Planes to serve him in the corporeal
+      world. This creature usually has the celestial template, as well as a +10
+      sacred bonus to it defense class. Paladins start out with a celestial
+      warhorse (or something similar as suits their race) for a sacred mount. If
+      the mount is slain in combat, it vanishes rather than truly dying, and can
+      be summoned back by the paladin after resting.\n
+      __At 7th, 9th and 11th level, the paladin recieves the ability to summon
+      superior, mythic creatures as mounts. The creature the paladin recieves is
+      fixed based on his race, but rumors speak of holy knights riding upon even
+      young dragons as their steeds...
+      \n__*_<7>Small Paladins<2> -- It's unusual for members of the Small races
+      to become paladins -- the class's focus on head-on confrontation and
+      resolute fortitude isn't the best match for their usual methodology. To
+      offset this weakness, the gods grant a special boon to members of the
+      Small races who show the courage and resilience to become paladins, granting
+      them a +1 sacred bonus to melee damage and inherant armor at 2nd, 4th, 6th, 
+      9th, 12th and 16th levels.
+      __Small races also recieve the Defensive Roll ability (from the rogue's
+      higher-level special ability list) upon attaining four combined levels of 
+      warrior, ranger, paladin, monk or barbarian.
+      \n__*_<7>Starting Benefits<2> -- Paladins start with a +1 sword (a small long 
+      sword for small races, otherwise a long sword), a light lance, a kite shield
+      (or buckler for small races), potions of healing, vials of holy water, a holy 
+      symbol, noble attire and a suitable mount. Their best melee weapon gains the 
+      Holy quality.
+      \n\n<10>THE PALADIN<15>\n
+      __Level__Def__Fort_Refl_Will_Special Abilities<1>\n
+      ____1____+0____+2___+0___+2__Lay on Hands,\n
+      _____________________________Smite Evil, Immune\n
+      _____________________________to Diseases\n
+      ____2____+0____+3___+0___+3__Aura of Valor,\n
+      _____________________________Divine Grace\n
+      ____3____+0____+3___+1___+3__Turn Undead,\n
+      _____________________________Cure Disease\n
+      ____4____+1____+4___+1___+4__+1 caster level\n
+      ____5____+1____+4___+1___+4__Sacred Mount I\n
+      ____6____+1____+5___+2___+5__+1 caster level\n
+      ____7____+1____+5___+2___+5__Sacred Mount II\n
+      ____8____+2____+6___+2___+6__+1 caster level\n
+      ____9____+2____+6___+3___+6__Sacred Mount III\n
+      ____10___+2____+7___+3___+7__+1 caster level\n
+      ____11___+2____+7___+3___+7__Sacred Mount IV\n
+      ____12___+3____+8___+4___+8__+1 caster level\n\n";
+    HitDice: 10; Mana: 8; Def: 1/4;
+    Attk:  S_BRAWL    75,
+           S_MELEE    100,
+           S_THROWN 75,
+           S_ARCHERY  75;
+    Skills[4]: SK_ATHLETICS, SK_CRAFT, SK_DIPLOMACY, SK_APPRAISE,
+      SK_HEALING, SK_KNOW_THEO, SK_KNOW_PLANES, SK_KNOW_UNDEAD,
+      SK_KNOW_GEO, SK_RIDE, SK_CONCENT, SK_SENESCHAL;
+    Proficiencies: WG_SIMPLE, WG_LBLADES, WG_POLEARMS, WG_LANCES, WG_FLAILS,
+                   WG_SPEARS;
+    Grants:
+      Feat[FT_AP_LIGHT]             at 1st level,
+      Feat[FT_AP_MEDIUM]             at 1st level,
+      Feat[FT_AP_HEAVY]             at 1st level,
+      Feat[FT_SHIELD_PROFICIENCY]             at 1st level,
+      Ability[CA_INNATE_SPELL,$"detect evil"] at 1st level,
+      Ability[CA_LAY_ON_HANDS]      at 1st level,
+      Ability[CA_AURA_OF_VALOR]     at every level starting at 2nd,
+      Ability[CA_DIVINE_GRACE]      at 2nd level,
+      Ability[CA_TURNING,MA_UNDEAD] at every level starting at 3rd,
+      Ability[CA_SMITE,MA_EVIL]     at every level,
+      Stati[IMMUNITY, AD_DISE]      at 1st level,
+      Stati[IMMUNITY, AD_FEAR]      at 2nd level,
+      Ability[CA_SACRED_MOUNT]      at every level starting at 1st,
+      Ability[CA_SPELLCASTING]      at every 2nd level starting at 4th,
+      Stati[SPELL_ACCESS,SP_DIVINE,+1] at every level starting at 3th,
+      Ability[CA_INNATE_SPELL,$"Cure Disease"] at 3rd level;
+    Gear:
+      if (EActor->rateMeleeWeapon() >= 3)
+        $"gold piece" else
+      if (EActor->isMType(MA_DWARF))
+        $"warhammer" +1 else
+      if (EActor->isSmallRace())
+        $"small long sword" +1 else
+        $"long sword" +1,
+      $"light lance",
+      if (EActor->isSmallRace())
+        $"buckler;wooden" else
+      $"kite shield",
+      $"noble attire",
+      2d10 $"gold piece",
+      2d2 $"Potion" of $"Healing",
+      3d6 blessed $"flask" of $"Water";
+    Flags: CF_RELIGIOUS, CF_GOOD_FORT, CF_GOOD_WILL, CF_GOOD, CF_LAWFUL, 
+           CF_PALADIN;
+    On Event EV_BIRTH {
+      hObj h; bool given;
+      EActor->GainAbility(CA_INNATE_SPELL,(int32)($"mount"),$"mount",SS_CLAS);
+      given = false;
+      if (EActor->rateMeleeWeapon() >= 3) {
+        h = EActor->getPrimaryMelee();
+        if (h->QualityOK(WQ_HOLY) && (h->iID != $"light lance")
+              && (h->iID != $"knife"))
+          {
+            h->AddQuality(WQ_HOLY);
+            h->IFlags |= IF_BLESSED;
+            given = true;
+            h->SetInherantPlus(max(1,h->GetInherantPlus()));
+          }
+        }
+      if (EActor->isMType(MA_ELF) && !given) {
+        for(h=EActor->FirstInv();h;h=EActor->NextInv()) 
+          if (h->isType(T_BOW) && !given) {
+            h->SetInherantPlus(max(1,h->GetInherantPlus()));
+            h->AddQuality(WQ_HOLY);
+            h->IFlags |= IF_BLESSED;
+            given = true;
+            }
+        }
+      else if (EActor->isMType(MA_DWARF) && !given) {
+        for(h=EActor->FirstInv();h;h=EActor->NextInv()) 
+          if (h->isGroup(WG_AXES|WG_IMPACT) && !given && (h->iID != $"pickaxe")) {
+            h->SetInherantPlus(max(1,h->GetInherantPlus()));
+            h->AddQuality(WQ_HOLY);
+            h->IFlags |= IF_BLESSED;
+            given = true;
+            }
+        }
+      if (!given)
+        for(h=EActor->FirstInv();h;h=EActor->NextInv()) 
+          if (h->isGroup(WG_LBLADES) && !given) {
+            h->SetInherantPlus(max(1,h->GetInherantPlus()));
+            h->AddQuality(WQ_HOLY);
+            h->IFlags |= IF_BLESSED;
+            given = true;
+            }
+      return NOTHING;
+      },
+    EV_ADVANCE {
+      if (EActor->isSmallRace())
+        {
+          if (EActor->LevelAs($"paladin") == 2)
+            {
+              EActor->GainPermStati(ADJUST_SAC,NULL,
+                        SS_CLAS,A_DMG_MELEE,+1,$"paladin",0);
+              EActor->GainPermStati(ADJUST_SAC,NULL,
+                        SS_CLAS,A_DMG_OFFHAND,+1,$"paladin",0);
+              EActor->GainPermStati(ADJUST_SAC,NULL,
+                        SS_CLAS,A_ARM,+1,$"paladin",0);
+            }
+          else if (EActor->LevelAs($"paladin") == 4 ||
+                   EActor->LevelAs($"paladin") == 6 ||
+                   EActor->LevelAs($"paladin") == 9 ||
+                   EActor->LevelAs($"paladin") == 12 ||
+                   EActor->LevelAs($"paladin") == 16)
+            { 
+              EActor->IncStatiMag(ADJUST_SAC,SS_CLAS,A_DMG_MELEE,NULL,+1);
+              EActor->IncStatiMag(ADJUST_SAC,SS_CLAS,A_DMG_OFFHAND,NULL,+1);
+              EActor->IncStatiMag(ADJUST_SAC,SS_CLAS,A_ARM,NULL,+1);
+            }
+        }
+      if (EActor->isSmallRace() && (EActor->LevelAs($"barbarian") + 
+          EActor->LevelAs($"warrior") + EActor->LevelAs($"ranger") +
+          EActor->LevelAs($"paladin") + EActor->LevelAs($"monk")) == 4)
+        EActor->GainAbility(CA_DEFENSIVE_ROLL,1,$"paladin",SS_CLAS);
+      };
+    Lists:
+      * SPELL_LIST
+          1 $"bless" $"call light" $"magic weapon" $"create water"
+            $"cure light wounds" $"detect undead" $"divine favor"
+            $"divine sacrifice" $"protection from evil" $"shield of faith" 
+            $"slow poison"
+          2 $"aid" $"bull's strength" $"consecrate" $"draw upon holy might"
+            $"heal mount" $"free action;spell" $"resist fire"
+            $"resist cold" $"resist acid" $"shield other" $"spiritual hammer"
+            $"cure moderate wounds" $"chant" $"zeal"
+          3 $"dispel magic" $"dispel evil" $"create food and water"
+            $"magic circle vs. evil" $"magic circle vs. undead" $"prayer"
+            $"negative plane protection" $"cure serious wounds"
+          4 $"cure critical wounds" $"death ward" $"holy sword"
+            $"neutralize poison" $"holy smite" $"dimensional anchor"
+            $"invocation" $"magic resistance" $"disrupting weapon"
+          5 $"righteous might" $"banishment" $"raise dead" $"true seeing"
+            $"commune" $"undeath to death"
+          6 $"blade barrier" $"heal;spell" $"heroes' feast" $"word of recall",
+      * ALLOWED_GODS
+          $"Ekliazeh" $"Erich" $"Immotian" $"Kysul" $"Mara" $"Semirath" $"Xavias";
+            
+  }
+
+0 Effect "Aura of Valor" : EA_GRANT
+  { aval: AR_MFIELD; lval: 3; cval: WHITE;
+    xval: SAVE_BONUS; yval: SN_FEAR; pval: +4; 
+    tval: MA_ALLIES; rval: FI_MOBILE|FI_MODIFIER;
+    Purpose: EP_BUFF; 
+    Flags: EF_LIM_MTYPE, EF_PERMANANT;
+    On Event 
+      EV_GAIN_STATI
+        "You feel a sacred courage come over you.",
+      EV_REMOVED
+        {
+          if (GetHandle(EActor) != GetHandle(EVictim))
+            EVictim->IPrint("The unearthly valor passes.");
+          return NOTHING;
+        },
+      MSG_STATINAME "AValor";
+  }
+
+Class "Priest"
+  {
+    Desc: "
+      <15>HitDie:_<1>d8__<15>Mana:<1>_d12__<15>Skills:<1>_4_<15>Saves:<1>_<9>F<1>r<9>W<1>_<15>Defense:_<1>1/4\n
+      <15>+toHit: <1>Archery <9>50~<1>, Brawl <9>75~<1>, Melee <9>75~<1>, Thrown <9>75~<1>\n
+      <2>\n__The servants of the gods are as many and varied as the gods
+      themselves, each deticated heart and soul to the ethos of his
+      patron. Yet the adventuring priest is not a casual minister or
+      greedy cleric, but a holy warrior and sacred theurgist rolled into
+      one package. Working closely with the (far rarer) paladins, priests
+      do the will of their diety by pushing forth civilization and 
+      carrying the Word into the deepest night to bright light from
+      darkness. Adventuring priests often consider themselves to be the
+      special foes of undead, whom they hunt relentlessly; less benevolant
+      priests extend this attitude to witches as well.
+      \n__The priest casts divine spells, which focus on empowerment,
+      healing, divination, protection and the support of the group more
+      than on direct power. He gains access to domains that allow
+      him extra themed spells and special powers in line with his god's
+      portfolio -- a harvest-priest is quite different from a battle-
+      priest. Priests are also competant warriors -- not as skilled as 
+      the militant classes, but above the likes of mages, bards or rogues.
+      
+      \n\n<10>CLASS SKILLS<2>\n
+      __The class skills of the priest are Appraise, Concentration, Craft, 
+      Diplomacy, Healing, Metamagic, Seneschal, Spellcraft, and Theology.
+      Priest characters may also recieve certain bonus class skills, if their
+      god offers them one or more Domains that grant such.
+       
+      \n\n<10>CLASS FEATURES<2>\n
+      __All the following are class features of the priest.\n
+      __*_<7>Proficiencies<2> -- Priests are proficient with simple weapons,
+      impact weapons, flails and light or medium armor. Each priest is also 
+      proficient with the one specific weapon that is a chosen weapon of his 
+      diety.\n
+      __*_<7>Spellcasting<2> -- Priests cast divine spells from the priest
+      spell list, which focuses on healing, divination, protection and the
+      augmentation of combat ability. They recieve one spellcasting level
+      for every class level, and learn spells simply by praying -- priests
+      have no need for spellbooks. A priest
+      must have his holy symbol equipped in the amulet slot or in a hand
+      slot in order to cast spells, however.\n
+      __*_<7>Domains<2> -- Every god has a portfolio, a sphere of influence
+      over which he has authority. This protectorate is described in game
+      terms by two Domains that the diety grants to his priests. Each
+      Domain gives a priest a special granted power, as well as nine spells,
+      one of each spell level. As soon as the priest reaches the class level
+      to be able to cast a certain level of spell, she may spend spell
+      slots to learn the two spells of the appropriate level from her god's
+      Domains. Priests gain one extra spell slot per known spell level and
+      this extra spell slot is typically used to learn a domain spell.\n
+      __*_<7>Turn Undead<2> -- By channeling positive energy and holy
+      eminations, a priest can rattle, terrify, wound or even annihilate
+      undead creatures.  Turning undead costs the priest three fatigue
+      points, and may have a variety of baneful effects on all nearby
+      undead, based on the level of the priest in contrast with the power
+      of the undead he is trying to affect.\n
+      __Evil priests rebuke or command undead, not turn them, but all player
+      character priests in this release of Incursion are assumed to be good
+      or neutral aligned -- even if they worship and evil god. Priest and
+      paladin levels stack together for the purposes of turning undead.\n
+      __*_<7>Starting Benefits<2> -- 
+      Priests start with a mace, their diety's chosen weapon, potions of 
+      healing and vials of holy water. All priest starting weapons are 
+      blessed.
+      
+      \n\n<10>THE PRIEST<15>__________________<15>Spells Known\n
+      _Level_Def_Fort_Refl_Will__1___2___3___4___5___6___7<1>\n
+      ___1___+0___+2___+0___+2__1+3__-___-___-___-___-___-\n
+      ___2___+0___+3___+0___+3__2+3__-___-___-___-___-___-\n
+      ___3___+0___+3___+1___+3__2+3_1+3__-___-___-___-___-\n
+      ___4___+1___+4___+1___+4__3+3_2+3___-__-___-___-___-\n
+      ___5___+1___+4___+1___+4__3+3_2+3_1+3__-___-___-___-\n
+      ___6___+1___+5___+2___+5__4+3_3+3_2+3__-___-___-___-\n
+      ___7___+1___+5___+2___+5__5+3_4+3_3+3_1+3__-___-___-\n
+      ___8___+2___+6___+2___+6__6+3_5+3_3+3_2+3__-___-___-\n
+      ___9___+2___+6___+3___+6__6+3_6+3_3+3_3+3_1+3__-___-\n
+      ___10__+2___+7___+3___+7__7+3_6+3_4+3_3+3_2+3__-___-\n
+      ___11__+2___+7___+3___+7__7+3_7+3_5+3_4+3_3+3__-___-\n
+      ___12__+3___+8___+4___+8__7+3_7+3_5+3_4+3_4+3_1+3__-\n
+      __(Note that priests do recieve 8th and 9th level
+      spells at the same rate mages do, along with three
+      bonus 8th and three bonus 9th level spells -- there
+      just isn't room to show this on the chart.)\n";
+
+    HitDice: 8; Mana: 12; Def: 1/4;
+    Attk:  S_BRAWL    75,
+           S_MELEE    75,
+           S_THROWN 75,
+           S_ARCHERY  75;
+    Skills[4]: SK_CONCENT, SK_CRAFT, SK_HEAL, SK_INTUITION, SK_KNOW_THEO, 
+      SK_KNOW_UNDEAD, SK_METAMAGIC, SK_SENESCHAL, SK_SPELLCRAFT;
+    Proficiencies: WG_SIMPLE, WG_IMPACT, WG_FLAILS, WG_LARMOR, WG_MARMOR;
+    Grants:
+      //Stati[CAN_FORGET_SPELL,0,+1] at every 2nd level starting at 2nd,
+      Ability[CA_SPELLCASTING]      at every level starting at 1st,
+      Stati[SPELL_ACCESS,SP_DIVINE,+1] at every level starting at 1st,
+      Ability[CA_DOMAINS]           at every level starting at 1st;
+    Flags: CF_RELIGIOUS, CF_GOOD_FORT, CF_GOOD_WILL;
+    Gear:
+      if (EActor->isSmallRace())
+        $"light mace" else
+      $"heavy mace",
+      3d8 blessed $"flask" of $"water",
+      4d2 $"potion" of $"healing", 
+      // ww: armor covered elsewhere
+      10d10 $"gold piece",
+      $"clerical vestment";      
+    On Event PRE(EV_BIRTH) {
+      hObj h; rID wID;
+      wID = (rID) (EActor->GodID)->GetConst(CHOSEN_WEAPON);
+      if (wID != NULL_ID) {
+        h = CreateItem(wID);
+        h->MakeKnown(0xFF);
+        EActor->GainItem(h,true);
+        }
+      return NOTHING;
+      },
+    EV_BIRTH {
+      hObj h;     
+      for(h=EActor->FirstInv();h;h=EActor->NextInv()) 
+        if (h->isType(T_WEAPON) || h->isType(T_BOW) ||
+            h->isType(T_ARMOR) || h->isType(T_SHIELD)) 
+          h->IFlags |= IF_BLESSED;
+      return NOTHING;
+      },
+    EV_ADVANCE {
+      int16 turntype; rID wID;
+      /* ww: We put this here so that if you multi-class to priest you 
+       * still get the free spells (but not the spellbooks -- you'll have
+       * to find those) */
+       if (EActor->LevelAs($"priest") == 1) {
+         EActor->GainSpell($"bless",SP_KNOWN|SP_DIVINE);
+         EActor->GainSpell($"cure light wounds",SP_KNOWN|SP_DIVINE);
+         wID = (rID) (EActor->GodID)->GetConst(CHOSEN_WEAPON);
+         if (wID != NULL_ID) {
+           if (EActor->WepSkill(wID) < WS_PROFICIENT)
+             EActor->GainPermStati(WEP_SKILL,NULL,SS_CLAS,WS_PROFICIENT,0,wID);
+           }
+      
+         } 
+
+      turntype = 0;
+      if (!EActor->GodID)
+        Error("Priest has no god!");
+             
+      if (ResourceHasFlag(EActor->GodID,GF_FORCE_TURN) || EActor->isMType(MA_ELF))
+        turntype = 1;
+      else if (ResourceHasFlag(EActor->GodID,GF_FORCE_COMMAND))
+        turntype = 2;
+      else if (ResourceHasFlag(EActor->GodID,GF_GOOD) || ResourceHasFlag(EActor->GodID,GF_NO_EVIL))
+        turntype = 1;
+      else if (ResourceHasFlag(EActor->GodID,GF_EVIL) || ResourceHasFlag(EActor->GodID,GF_NO_GOOD))
+        turntype = 2;
+      else if (EActor->isMType(MA_GOOD))
+        turntype = 1;
+      else if (EActor->isMType(MA_EVIL))
+        turntype = 2;
+      else if (EActor->HasEffStati(TURN_ABILITY,$"priest"))
+        turntype = 1;
+      else if (EActor->HasEffStati(COMMAND_ABILITY,$"priest"))
+        turntype = 2;
+      else if (EActor->ChoicePrompt("Do you want to turn or command undead?", "tc", 't') == 't')
+        turntype = 1;
+      else
+        turntype = 2;
+
+      if (turntype == 1)
+        {
+          if (EActor->HasEffStati(TURN_ABILITY,$"priest"))
+            EActor->SetStatiMag(TURN_ABILITY,MA_UNDEAD,NULL,
+              EActor->GetStatiMag(TURN_ABILITY,MA_UNDEAD,NULL) + 1);
+          else
+            EActor->GainPermStati(TURN_ABILITY,NULL,SS_CLAS,MA_UNDEAD,1,$"priest");
+        }
+      else if (turntype == 2)
+        {
+          if (EActor->HasEffStati(COMMAND_ABILITY,$"priest"))
+            EActor->SetStatiMag(COMMAND_ABILITY,MA_UNDEAD,NULL,
+              EActor->GetStatiMag(COMMAND_ABILITY,MA_UNDEAD,NULL) + 1);
+          else
+            EActor->GainPermStati(COMMAND_ABILITY,NULL,SS_CLAS,MA_UNDEAD,1,$"priest");
+        }
+      else
+        Error("Illegal turntype in priest::EV_ADVANCE!");
+      
+      return NOTHING;
+      };
+    Lists:
+      * SPELL_LIST
+          ALL_SPELLS_FROM_SOURCE(AI_THEURGY)
+        5 $"air walk";
+  }
+  
+
+
+
+Class "Ranger"
+  {
+    Desc: "
+      <15>HitDie:_<1>d8__<15>Mana:<1>_d8__<15>Skills:<1>_8_<15>Saves:<1>_<9>FR<1>w_<15>Defense:_<1>1/3\n
+      <15>+toHit: <1>Archery <9>100~<1>, Brawl <9>75~<1>, Melee <9>100~<1>, Thrown <9>100~<1>\n
+      <2>\n\tThe hunter, the archer, the woodsman, the explorer, the tracker,
+      the forester -- all these have the seeds of a Ranger in them, but a
+      Ranger exceed them all. The superlative masters of the woodlands, the
+      Ranger combines stealth, nature skill and martial prowess into a deadly,
+      effective package. Heroic Rangers often act as the hand of the law outside of
+      the cities, protecting innocent villages from the depridations of vile
+      humanoids, while others stalk and hunt men in one form or another, or
+      simply remove themselves from society utterly to commune with nature.
+      \n\tThe Ranger is a formidable fighter. Rangers have a variety of 
+      wilderness-oriented skills, including the valued stealth skills, and 
+      diverse special abilities to aid their role: tracking, bonuses against 
+      studied enemies, weapon skill, traceless passage, bonus combat feats 
+      oriented toward archery and two weapon-fighting and a dabbling of 
+      nature-oriented magics at the higher levels.
+      
+      \n\n<10>CLASS SKILLS<2>\n
+      __The class skills of the ranger are Animal Empathy, Climb, Craft,
+      Find Weakness, Healing, Hide, Intuition, Jump, Knowledge (Nature),
+      Knowledge (Oceans), Knowledge (Theyra), Listen, Move Silently, 
+      Ride, Search, Spot, Swimming and Wilderness Lore.
+       
+      \n\n<10>CLASS FEATURES<2>\n
+      __All the following are class features of the ranger.\n
+      __*_<7>Proficiencies<2> -- Rangers are proficient with all simple
+      weapons, long blades, short blades, axes, archery, thrown weapons, 
+      staves and spears, and with light armor and shields.\n
+      __*_<7>Animal Companions<2> -- Rangers can tame animals using their
+      Animal Empathy class skill, and if successful add those companions
+      to their adventuring party. A ranger character recieves a free 'buffer'
+      of (approximately) two hit dice per ranger level for animal companions; 
+      these hit dice worth of animals do not count toward the total hit dice 
+      of the party for purposes of party loyalty checks or gaining new party 
+      members.\n
+      __Levels of this ability from the druid and ranger classes stack.\n
+      __*_<7>Tracking<2> -- The ranger's tracking ability is a combination
+      of mundane tracking skill, keenly honed intuition and a mystical kind
+      of insight. Once a ranger of 2nd level or higher somehow notices a 
+      creature (via normal sight, scent, infravision, or whatnot), she 
+      begins tracking it.
+      Thereafter it will always appear on the map even if it is not in the
+      ranger's direct field of vision. The monster's location will be known
+      as long as it is within 100 feet (10 squares) of the ranger and no
+      more than 10 turns have passed. These limits increase by 20 feet (2
+      squares) and 2 turns with each additional ranger level. Since this
+      is a partially mystical ability, it will even allow the ranger to
+      keep track of a creature that has teleported or shifted into another
+      plane and it will allow the ranger to track creatures with her eyes
+      closed. Since the creature must be noticed initially before tracking can
+      take place, a well-honed Spot skill is important. Tracked enemies can
+      be targeted with spells or arrows (etc.) even if they are out of the
+      range of normal sight.\n
+      __*_<7>Lore of Arms<2> -- Like warriors, rangers are extremely well
+      versed in the ins and outs of weapons. Every <10>even<2> level as a
+      ranger counts as a warrior level would for advancing this ability
+      (which is described under the warrior class), and ranger and warrior
+      levels in Lore of Arms stack.\n
+      __*_<7>Favored Enemies<2> -- The ranger is at heart a hunter, and she
+      makes a practice of knowing her enemies. By studying different types of
+      creatures estensively, the ranger gains bonuses in combat against those
+      she specializes in stalking. These bonus begin at +1 to hit and damage
+      and increase by +1 for every 4 full ranger levels.\n
+      __A ranger begins with one favored enemy, and gains another at every fifth
+      ranger level.\n 
+      __*_<7>Woodland Stride<2> -- Starting at 3rd level, a ranger's movement
+      rate is never modified negatively by the terrain she is standing on (as
+      with brambles, hedges, rubble or webbing).\n
+      __*_<7>Combat Style<2> -- Starting at 1st level, rangers must choose one
+      of the three ranger combat styles: archery, skirmish or two-weapon. Based
+      on their choice, they recieve pre-set bonus feats at 1st, 3rd, 7th, 11th
+      and 15th level. If they already have a feat inherantly, they recieve the
+      next one in the progression; if the progression is complete and the ranger
+      gains a bonus feat, they will gain one of the following instad: Woodsman,
+      Endurance, Alertness, Toughness. Rangers do not need to meet the prerequisites 
+      for feats gained from their combat style, but the feats only function if 
+      the ranger is wearing light or no armor.\n
+      __<10>Archery<2> -- This combat style gives the ranger the Rapid Shot feat
+      at 1st, the Point-Blank Shot feat at 3rd, Defensive Shot at 7th, Zen 
+      Archery at 11th and Aimed Shot at 15th.\n
+      __<10>Two-Weapon<2> -- This combat style gives the ranger the Two-Weapon
+      Style feat at 1st, the Ambidexterity feat at 3rd, Defensive Synergy at 7th, 
+      Two-Weapon Tempest at 11th and Twin Weapon Style at 15th.\n
+      __<10>Skirmish<2> -- This combat style gives the ranger the Sneaky feat at
+      1st, the Backstab feat at 3rd, the Expert Tactician feat at 7th, the Mobility
+      feat at 11th and the Deft Opportunist feat at 15th.\n
+      __*_<7>Spellcasting<2> -- Rangers dabble with magic, being able to cast a
+      few nature-oriented spells from a subset of the druid spell list. They gain
+      one spellcasting chart level at 4th level, and an additional spell level
+      for every even ranger class level thereafter.\n
+      __*_<7>Fasting<2> -- Being well accustomed to the harsh ways of the
+      wilderness, rangers are able to survive for extended periods on much less
+      food than other creatures; they get hungry at 1/3rd the rate of other
+      characters. Multi-classed rangers recieve this advantage in proportion
+      to the amount of their total levels that are ranger levels.\n
+      __*_<7>Size Advantage<2> -- Much like Small warriors, Small rangers
+      train to fight larger creatures by exploiting their vulnerabilities,
+      and thus gain reduced threat ranges just as warriors do. For rangers,
+      this training is delayed by two levels, so they recieve a -1 threat
+      range at 3rd level, -2 at 5th and so forth.\n
+      __Warrior and ranger levels in this ability stack.\n
+      __Small races also recieve the Defensive Roll ability (from the rogue's
+      higher-level special ability list) upon attaining four combined levels of 
+      warrior, ranger, paladin, monk or barbarian.\n
+      __*_<7>Starting Benefits<2> -- Rangers start with a mighty long bow +2
+      (or a short bow for small races, or a quick-loading arbalest +1 for
+      dwarves and gnomes), a miscellaneous magic item designed for stealth
+      or mobility, a racially-determined melee weapon and peasant garb. Any 
+      starting ranger missile gains a +1 bonus. 
+      \n\n<10>THE RANGER<15>\n
+      __Level__Def__Fort_Refl_Will_Special Abilities<1>\n
+      ____1____+0____+2___+0___+0__Bonus Feat, Fast.,\n
+      _____________________________1st Fav. Enemy    \n
+      ____2____+0____+3___+0___+0__Tracking, LoreArms\n
+      ____3____+1____+3___+1___+1__Woodland Stride,  \n
+      _____________________________Bonus Feat        \n
+      ____4____+1____+4___+1___+1__+1 caster level   \n
+      ____5____+1____+4___+1___+1__2nd Favored Enemy \n
+      ____6____+2____+5___+2___+2__+2 caster level   \n
+      ____7____+2____+5___+2___+2__Bonus Feat        \n
+      ____8____+2____+6___+2___+2__+3 caster level   \n
+      ____9____+3____+6___+3___+3____________________\n
+      ____10___+3____+7___+3___+3__3rd Favored Enemy,\n
+      _____________________________+4 caster level   \n
+      ____11___+3____+7___+3___+3__Bonus Feat________\n
+      ____12___+4____+8___+4___+4__+5 caster level   \n";
+    Gear:
+      if (EActor->rateMeleeWeapon() >= 2)
+        $"gold piece"
+      else if (EActor->isMType(MA_HALFLING) || EActor->isMType(MA_KOBOLD) ||
+               EActor->isMType(MA_GNOME))
+        $"halfspear"
+      else if (EActor->isMType(MA_ELF) || EActor->isMType(MA_HUMAN) )
+        $"long sword"
+      else if (EActor->isMType(MA_DWARF))
+        $"battleaxe" 
+      else if (EActor->isMType(MA_DROW))
+        $"scimitar"
+      else if (EActor->isMType(MA_REPTILIAN))
+        $"large club" 
+      else if (EActor->isMType(MA_ORC))
+        $"longspear"
+      else
+        $"long sword",
+      
+      if (EActor->GetEffStatiVal(EFF_FLAG1,$"ranger") == 's')
+        33% $"stone" +2 of $"shadowstone"
+      else if (EActor->GetEffStatiVal(EFF_FLAG1,$"ranger") == 's')
+        50% $"lenses" of $"the night"
+      else if (EActor->GetEffStatiVal(EFF_FLAG1,$"ranger") == 's')
+        $"boots" +1 of $"striding and springing",
+        
+      // if not +2, then a warrior with the bow does better than a ranger 
+      if (EActor->rateRangedWeapon() >= 2)
+        $"gold piece" else
+      if (EActor->isMType(MA_DWARF) || EActor->isMType(MA_GNOME) ||
+            EActor->HasFeat(FT_RAPID_RELOAD))
+        $"arbalest" else
+      if (EActor->isSmallRace())
+        $"short bow"
+      else
+        $"long bow",
+        
+      if (EActor->isMType(MA_LIZARDFOLK))
+        $"blowpipe",
+       
+      $"peasant garb";
+    HitDice: 8; Mana: 8; Def: 1/3;
+    Attk:  S_BRAWL    75,
+           S_MELEE    100,
+           S_THROWN   100,
+           S_ARCHERY  100;
+    Skills[8]: SK_SPOT, SK_ANIMAL_EMP, SK_CLIMB, SK_CRAFT, SK_FIND_WEAKNESS,
+      SK_HEALING, SK_HIDE, SK_INTUITION, SK_JUMP, SK_LISTEN, SK_MOVE_SIL,
+      SK_RIDE, SK_SEARCH, SK_SWIMMING, SK_WILD_LORE, SK_KNOW_NATURE,
+      SK_KNOW_OCEANS, SK_KNOW_GEO;
+    Proficiencies: WG_SIMPLE, WG_LBLADES, WG_AXES, WG_ARCHERY, WG_THROWN,
+      WG_STAVES, WG_DAGGERS, WG_SPEARS, WG_SBLADES, WG_LARMOR, WG_SHIELDS; 
+    Grants:
+      Ability[CA_TRACKING,+10]          at 2nd level,
+      Ability[CA_LORE_OF_ARMS,+1]       at every 2nd level starting at 2nd,
+      Ability[CA_TRACKING,+2]           at every level starting at 3rd,
+      Ability[CA_FAV_ENEMY,MA_CHOICE1]  at every level starting at 1st,
+      Ability[CA_FAV_ENEMY,MA_CHOICE2]  at every level starting at 5th,
+      Ability[CA_FAV_ENEMY,MA_CHOICE3]  at every level starting at 10th,
+      Ability[CA_FAV_ENEMY,MA_CHOICE4]  at every level starting at 15th,
+      Ability[CA_FAV_ENEMY,MA_CHOICE5]  at every level starting at 20th,
+      Ability[CA_WOODLAND_STRIDE]       at 3rd level,
+      Ability[CA_ANIMAL_COMP]           at every level starting at 1st,
+      Ability[CA_SPELLCASTING]          at every 2nd level starting at 4th,
+      Stati[SPELL_ACCESS,SP_BARDIC,+1]  at every level starting at 3rd;
+    Flags: CF_GOOD_FORT, CF_GOOD_REF;
+    On Event EV_BIRTH {
+      hObj h; 
+      if (EActor->GetEffStatiVal(EFF_FLAG1,$"ranger") == 'a')
+        {
+          h = EActor->getPrimaryRanged();
+          if (h->QualityOK(WQ_QUICK_LOADING)) {
+            h->AddQuality(WQ_QUICK_LOADING);
+            h->SetInherantPlus(max(1,
+                h->GetInherantPlus()));
+            }
+          else {
+            if (h->QualityOK(WQ_MIGHTY) && EActor->GetAttr(A_STR) >= 15)
+              h->AddQuality(WQ_MIGHTY);
+              h->SetInherantPlus(max(2,
+                h->GetInherantPlus()));
+            }  
+          for (h=EActor->FirstInv();h;h=EActor->NextInv())
+            if (h->iID == $"sheaf arrow" ||
+                h->iID == $"flight arrow" ||
+                h->iID == $"crossbow bolt" ||
+                h->iID == $"hand crossbow dart")
+              h->SetInherantPlus(max(1,
+                  h->GetInherantPlus()));      
+        }   
+      return NOTHING;
+      },
+    EV_ADVANCE {
+      char style; int16 ft;
+      if (EActor->isMType(MA_LIZARDFOLK))
+        EActor->Proficiencies |= WG_IMPACT;
+      if (EActor->isSmallRace())
+        if (EActor->LevelAs($"ranger") >= 3)
+          EActor->GainAbility(CA_SIZE_ADVANTAGE,+1,$"ranger",SS_CLAS);
+      if (EActor->isSmallRace() && (EActor->LevelAs($"barbarian") + 
+          EActor->LevelAs($"warrior") + EActor->LevelAs($"ranger") +
+          EActor->LevelAs($"paladin") + EActor->LevelAs($"monk")) == 4)
+        EActor->GainAbility(CA_DEFENSIVE_ROLL,1,$"ranger",SS_CLAS);
+        
+      if (EActor->LevelAs($"ranger") == 1) {
+        style = EActor->ChoicePrompt("Combat style: archery, skirmish or two-weapon?", "ast");
+        EActor->GainPermStati(EFF_FLAG1,NULL,SS_MISC,style,0,$"ranger");
+        }
+      if (EActor->LevelAs($"ranger") == 1 ||
+          EActor->LevelAs($"ranger") == 3 ||
+          EActor->LevelAs($"ranger") == 7 ||
+          EActor->LevelAs($"ranger") == 11 ||
+          EActor->LevelAs($"ranger") == 15)
+        {
+          #define HASFEAT(ft) (EActor->HasFeat(ft) || EActor->HasStati(CONDITIONAL_FEAT,ft))
+          style = EActor->GetEffStatiVal(EFF_FLAG1,$"ranger");
+          /* Not a switch statement due to script-compiler bug */
+          if (style == 'a')
+            {
+              if (!HASFEAT(FT_RAPID_SHOT))
+                ft = FT_RAPID_SHOT;
+              else if (!HASFEAT(FT_POINT_BLANK_SHOT))
+                ft = FT_POINT_BLANK_SHOT;
+              else if (!HASFEAT(FT_DEFENSIVE_SHOT))
+                ft = FT_DEFENSIVE_SHOT;
+              else if (!HASFEAT(FT_ZEN_ARCHERY))
+                ft = FT_ZEN_ARCHERY;
+              else if (!HASFEAT(FT_AIMED_SHOT))
+                ft = FT_AIMED_SHOT;
+              else
+                ft = FT_FULL_LIST;
+            }
+          else if (style == 't')
+            {
+              if (!HASFEAT(FT_TWO_WEAPON_STYLE))
+                ft = FT_TWO_WEAPON_STYLE;
+              else if (!HASFEAT(FT_AMBIDEXTERITY))
+                ft = FT_AMBIDEXTERITY;
+              else if (!HASFEAT(FT_DEFENSIVE_SYNERGY))
+                ft = FT_DEFENSIVE_SYNERGY;
+              else if (!HASFEAT(FT_TWO_WEAPON_TEMPEST))
+                ft = FT_TWO_WEAPON_TEMPEST;
+              else if (!HASFEAT(FT_TWIN_WEAPON_STYLE))
+                ft = FT_TWIN_WEAPON_STYLE;
+              else
+                ft = FT_FULL_LIST;
+            }
+          else if (style == 's')
+            {
+              if (!HASFEAT(FT_SNEAKY))
+                ft = FT_SNEAKY;
+              else if (!HASFEAT(FT_BACKSTAB))
+                ft = FT_BACKSTAB;
+              else if (!HASFEAT(FT_EXPERT_TACTICIAN))
+                ft = FT_EXPERT_TACTICIAN;
+              else if (!HASFEAT(FT_MOBILITY))
+                ft = FT_MOBILITY;
+              else if (!HASFEAT(FT_DEFT_OPPORTUNIST))
+                ft = FT_DEFT_OPPORTUNIST;
+              else
+                ft = FT_FULL_LIST;       
+            }
+          if (ft == FT_FULL_LIST)
+            {
+              if (!HASFEAT(FT_WOODSMAN))
+                ft = FT_WOODSMAN;
+              else if (!HASFEAT(FT_ENDURANCE))
+                ft = FT_ENDURANCE;
+              else if (!HASFEAT(FT_ALERTNESS))
+                ft = FT_ALERTNESS;     
+              else if (!HASFEAT(FT_TOUGHNESS))
+                ft = FT_TOUGHNESS;
+              else 
+                return NOTHING;
+            }
+          EActor->GainPermStati(CONDITIONAL_FEAT,NULL,SS_CLAS,
+            ft,0,$"Ranger Feat");
+        }
+      return NOTHING;
+      };
+      
+    /* Rangers have a VERY nice spell list, combining some of the best
+       strengths and utility spells of wizard, priest and druid spells
+       into one whole. This is very much by design -- it was one of my
+       primary motives for doing the class spell list system. Anything
+       that fits the theme of enhancing hunting, minor elemental
+       manipulation or combat mastery is fair game for the ranger list.
+       This actually has some precident -- in 1E they cast arcane, in
+       2E they cast divine, in 3E they had a subset of the druid list.
+    */ 
+    Lists:
+      * SPELL_LIST
+          1 $"alarm" $"arrow mind" $"call companions" $"camouflage" $"cure light wounds"
+            $"detect animals and plants" $"entangle" $"invisibility to animals"
+            $"hawkeye" $"jump;spell" $"longstrider" $"magic missile" $"magic fang"
+            $"mending" $"obscurement" $"pass without trace" $"reduce" $"resist fire" 
+            $"resist cold" $"sleep" $"slow poison" $"summon nature's ally i" 
+            $"true strike" $"warp wood" $"mount" $"wind wall"
+          2 $"barkskin" $"bear's endurance" $"blur" $"cat's grace"
+            $"cure moderate wounds" $"flame blade" $"hold beast"
+            $"might of the oaks" $"persistance of the waves"
+            $"protection from cold" $"protection from fire" $"rainstorm"
+            $"resist water" $"summon swarm" $"summon nature's ally ii"
+            $"web" $"wind wall" $"endure the elements" $"nondetection"
+          3 $"control plant" $"neutralize poison"
+            $"plant growth" $"cure disease" $"create food and water"
+            $"summon nature's ally iii" $"earthmaw" $"dominate animal"
+            $"rope trick" $"resist the elements" $"haste" $"blink"
+            $"phantom steed" $"false life" $"cure serious wounds"
+          4 $"cure critical wounds" $"free action;spell" $"polymorph self"
+            $"ice storm" $"tree stride" $"explosive runes" 
+            $"clairvoyance" $"detect monsters" $"fire charm"
+            $"protection from elements" $"solid fog" $"premonition"
+            $"stoneskin" $"divine agility" $"air walk" $"death ward"
+            $"dire regression" $"spike growth" $"solid fog"
+          5 $"animal growth" $"insect plague" $"commune with nature"
+            $"turnclaw" $"force shapechange" $"wizard sight";
+  }
+
+Effect "Ranger Feat" : EA_GENERIC
+  {
+    On Event EV_ISTARGET {
+      if (EActor->InSlot(SL_ARMOR) != NULL_OBJ)
+        if (EActor->InSlot(SL_ARMOR)->isGroup(WG_MARMOR) ||
+            EActor->InSlot(SL_ARMOR)->isGroup(WG_HARMOR))
+          return false;
+      return true;
+      };
+  }
+
+Class "Rogue"
+  {
+    Desc: "
+      <15>HitDie:_<1>d6__<15>Mana:<1>_d6__<15>Skills:<1>_12_<15>Saves:<1>_f<9>R<1>w_<15>Defense:_<1>1/2\n
+      <15>+toHit: <1>Archery <9>75~<1>, Brawl <9>75~<1>, Melee <9>75~<1>, Thrown <9>75~<1>\n
+      <2>\n\tShe might be a cutpurse, a wayfarer, an assassin, a scoundrel or 
+      simply an everywoman who slipped into the adventuring life and chose
+      to rely on quick wits, light fingers, clever plans and stealth instead
+      of might or magic. Regardless, she's a rogue, and the world is like an
+      oyster to her. Members of this class are not powerful, and can be
+      difficult to play effectively, but their grab-bag abilities and wide
+      range of skills make them highly proficient in areas where other
+      characters would be helpless.
+      \n\tRogues have only a d6 for Hit Dice and mediocre combat skills
+      (though they can be quite proficient as archers or using thrown
+      weapons) but they recieve the most skill points, and the widest
+      selection of class skills, of any class in the game. This means
+      that if they can survive the dungeon, they have a lot of unusual
+      options open to them for advancing, and for gaining valuable magic
+      items. Rogues inflict extra damage when attacking from surprise,
+      have excellent defense values and gain a number of special abilities
+      describing their danger sense, good instincts and ability to avoid
+      harmful surprises.
+
+      \n\n<10>CLASS SKILLS<2>\n
+      __More than any other character type, the rogue depends upon her
+      skills. The class skills of the rogue are Alchemy, Appraise, Athletics,
+      Balance, Bluff, Climb, Craft, Decipher Script, Disguise, Diplomacy, Disable Device,
+      Escape Artist, Find Weakness, Healing, Hide, Ride, Intimidate, Intuition,
+      Jump, Knowledge (all), Listen, Lockpicking, Move Silently, Perform, Pick Pocket,
+      Poison Use, Searching, Spot, Tumble and Use Magic
+      Device.\n
+      __Like all classes that recieve 8 or more base skill points per level,
+      the Rogue doubles his Intelligence bonus for determining skill points
+      gained every level.
+       
+      \n\n<10>CLASS FEATURES<2>\n
+      __All the following are class features of the rogue.\n
+      __*_<7>Proficiencies<2> -- The rogue is proficient with all simple
+      weapons, daggers, short blades, thrown weapons, flexible weapons, 
+      archery and light armor.\n
+      __*_<7>Sneak Attack<2> -- A rogue has the ability to inflict extra
+      dice of damage when they can attack an opponent in such a manner as
+      to slip past their defenses. The rogue gains 1d6 points of bonus
+      damage on sneak attacks at 1st level, and another 1d6 for every odd
+      rogue level she possesses; for example, a fifth level rogue gains
+      +3d6 points of damage on a successful sneak attack. Certain weapons
+      are expecially useful for sneak attacks and allow the rogue to roll
+      eight-sided dice instead, while an unskilled unarmed sneak attack 
+      is only rolled on four-sided dice. Creatures which are immune to
+      critical hits are also immune to the bonus damage of a rogue's sneak 
+      attack. The damage from a sneak attack is not multiplied if that
+      attack also turns out to be a critical hit. A rogue can peform a
+      sneak attack in the following situations:\n
+      __<10>Surprise:<2> If the rogue can take her target completely by
+      surprise -- that is, the target is unaware of the rogue's presence,
+      usually due to her using Hide and Move Silently -- then she can
+      perform a sneak attack.\n
+      __<10>Flat-Footed:<2> If a rogue can catch her enemy flat-footed
+      (i.e., strike the first blow against a given enemy that has been
+      out of combat for several rounds before it can respond and attempt
+      to strike her), she gets her sneak attack damage.\n
+      __<10>Flanking:<2> If a rogue has an ally in the square directly opposite
+      her, and an enemy trapped between the two of them, the enemy must turn
+      her back partially on the rogue, and she can thus gain her sneak
+      attack damage.\n
+      __<10>Exposure:<2> If an enemy is unable to focus her defenses as a
+      result of being stunned, paralyzed, charging, off-balance after
+      performing a Great Blow or is currently engaging in grappling combat
+      with someone other then the rogue, then the rogue can gain her sneak
+      attack damage on all attacks against that creature.\n
+      __Sneak attacks require freedom of movement, and a rogue cannot 
+      perform them while she is grappled or ensnared.\n
+      __*_<7>Evasion<2> -- Starting at 2nd level, when a rogue successfully
+      makes a Reflex saving throw against an area-effect attack that allows
+      a Reflex save for half damage (such as a dragon's fiery breath or a 
+      mage's <9>lightning bolt<2>), he takes no damage at all. At 10th level
+      and above, the rogue takes only half damage on a failed Saving Throw.\n
+      __Levels of this ability from the monk and rogue classes stack.\n
+      __*_<7>Uncanny Dodge<2> -- Like the barbarian, the rogue is possessed
+      of preternatural agility and instincts that allow her to avoid harm.
+      Starting at 3rd level and beyond, the rogue is never caught flat-
+      footed -- no matter how many rounds have passed since her last combat
+      exchange, she is always alert. At 5th level, her uncanny instincts allow
+      her to wake alert if she has an encounter while resting, avoiding being
+      flat-footed, vulnerable to Coup de Grace attacks and being able to act
+      immediately as the encounter begins. At 6th level and above, she suffers no
+      ill effects from having enemies on either side and is effectively
+      immune to flanking. Starting at 9th level and above, the rogue recieves
+      gradually increasing bonuses to all saving throws against traps -- her
+      instincts tell her exactly when to dodge or pull back.\n
+      __Levels of this ability from the barbarian and rogue classes stack.\n
+      __*_<7>Stealth<2> -- While rangers and, in truth, members of any class
+      can gain skill with stealth, rogues excel at it beyond all others. 
+      They recieve a +1 class bonus to Hide in Shadows and Move Silently at
+      8th level and this bonus increases by 1 for every even level thereafter.\n
+      __*_<7>Special Abilities<2> -- Starting at 6th level, and then every third
+      level thereafter (at 6th, 9th, 12th, 15th and 18th), a rogue can choose 
+      one of the following special abilities:\n
+      __<10>Trick Magic:<2> A Rogue possessed of this ability can use her
+      Bluff and Use Magic skills in conjunct to 'trick' a magic item normally
+      reserved for a specific race, class or alignment into accepting her as a
+      legitimite wielder. The strength of this ability is based on the sum of
+      her Use Magic and Bluff skill ratings, with a total of 30 or higher
+      allowing her to use nearly any item she might find.\n
+      __<10>Skill Mastery:<2> This rogue has achieved such a transcendant mastery
+      of her skills that she is always guaranteed some minimum degree of success.
+      The lowest she can ever roll on any skill roll for a rogue class skill (i.e.,
+      the 1d20 roll, not the entire skill check) is 7 + her intelligence modifier (maximum 15).
+      If the roll would normally come out lower, it is adjusted up to this level.
+      Thus a rogue with Intelligence 18, Move Silently +13 and this ability would 
+      always score at least 24 on a Move Silently check.\n
+      __<10>No Mind:<2> In studying this ability, a rogue learns a number of
+      meditative exercises and philosophies that she can apply to attain a state
+      of transcendant nothingness. Thereafter, she is invisible to telepathy as
+      an innate, permanent and non-magical ability.\n
+      __<10>Crippling Strike:<2> Whenever a rogue possessed of this ability
+      successfully executes a sneak attack against a creature with blood, the
+      attack inflicts a bleeding wound, causing the victim to lose a number of
+      hit points each turn from blood loss equal to the total of the rogue's
+      sneak attack dice. The bleeding lasts for 1d6+1 turns; further sneak
+      attacks on a creature already bleeding as a result of this ability do
+      not increase the bleeding damage; instead, they extend its duration
+      for 1d6 rounds per strike.\n
+      __<10>Slippery Mind:<2> A rogue with this ability has naturally trained
+      mental defenses against enchantment effects. At the end of the turn after
+      she succumbed to some form of enchantment, she may make a second saving
+      throw with a +4 retry bonus to the save DC. Success allows her to shrug
+      off the enchantment effect.\n
+      __<10>Soft Steps:<2> By training in a very specific and difficult manner,
+      a rogue can learn to walk across a surface without causing any vibration
+      inside that surface's volume. This causes her to be effectively invisible
+      to tremorsense, and is a constant, permanent and non-magical ability.\n
+      __<10>Unearthly Reflexes:<2> A rogue who chooses this special ability
+      has training her reaction time to a nearly inhuman degree, and recieves
+      a +6 bonus to her Reflex saves.\n
+      __<10>Peerless Accuracy:<2> When a rogue learns this ability, she
+      becomes a master of thrown weapons -- she never misses. Well, almost
+      never. She gains a permanent and inherant +5 bonus to hit when using
+      thrown weapons. This does <10>not<2> apply to archery.\n
+      __<10>Defensive Roll:<2> If you have this ability, you are able to 
+      move with the impact from blows, lessening their effect even if they do 
+      hit you. This ability does not function in heavy armor. When you are 
+      struck by a creature that needs a 15 or greater to hit you, you only 
+      suffer a certain fraction of the damage, starting at 5/6th. The number 
+      of sixths of the total damage can be further reduced in the following 
+      circumstances, to a minimum of 1/6th:\n
+      __* You are Small and your foe is Medium-sized or larger (-1/6th).\n
+      __* Your foe can only hit you on a natural 20 (-1/6th).\n
+      __* You are unarmored (-2/6ths) or in light armor (-1/6th).\n
+      __This ability does not function if you have spells active which
+      simulate the effect of heavy armor (such as Spirit Armor) and
+      Mage Armor is treated as medium armor for this purpose.\n
+      __<10>Bonus Feat:<2> In lieu of choosing a rogue special ability, a rogue 
+      can elect to gain a bonus feat chosen from a list of all feats in the 
+      game that do not have other feats as prerequisites.\n
+      __*_<7>Thief in the Night<2> -- Characters of most classes gain experience
+      by moving through the dungeon killing monsters, but rogues have the option
+      to avoid the killing entirely. If a single-classed rogue enters a region 
+      and handles every single magical item within that region, and then leaves 
+      without the monsters or NPCs who dwell there being even slightly aware of 
+      her presence, she will recieve experience for every enemy in the room just 
+      as if she had killed them normally. In this context, handling an item means 
+      holding it in one's hands -- the rogue can then decide if she want to keep 
+      it or leave it where she finds it to remain unburdened.\n
+      __This has to be executed flawlessly to function. If even one monster is
+      aware of the rogue's presence -- as a result of seeing her, notcing her
+      with an ability like blindsight, tremorsense, telepathy or scent or
+      hearing noise she made (by casting a noisy spell or kicking open a door,
+      for example), then she does not gain any experience upon leaving the
+      region. If one enemy becomes aware of her and she kills that enemy,
+      however, she gains the experience for any remaining oblivious foes. If
+      foes in the room carry valuable magic items, those must be removed from
+      them (perhaps using the Pick Pockets skill) for this experience to be
+      gained.\n
+      __Rogues do not gain XP for monsters twice; if they meet these conditions
+      and gain XP upon leaving the region, later killing the monsters gives
+      them nothing. They also gain nothing for entering and leaving regions
+      that have no treasure, regardless of how stealthy they are. Multi-class
+      characters with rogue levels gain this stealth XP an a proportionate 
+      percent equal to their rogue levels -- a Rogue 2/Warrior 6 gains 25~ of
+      the total experience value of creatures via this method, and can claim
+      the remaining 70~ by going back to kill them.\n
+      __*_<7>Starting Benefits<2> -- Rogues start with a short sword, a weapon
+      from the daggers group, a few potions of healing, some tanglefoot bags, 
+      a cloak of nondetection (which prevents monsters from smelling them while 
+      they hide, for example) and a fair amount of gold. They always have a 
+      ranged weapon -- a short bow unless their race gives them something else.
+      Rogues also begin play with a second, random magical item suitable to the
+      skills of a sneak. Finally, evil rogues also begin play with two vials of
+      poison.
+      \n\n<10>THE ROGUE<15>\n
+      __Level__Def__Fort_Refl_Will_Special Abilities<1>\n
+      ____1____+0____+0___+2___+0__Sneak Attack +1d6 \n
+      ____2____+1____+0___+3___+0__Evasion           \n
+      ____3____+1____+1___+3___+1__Never Flat-Footed,\n
+      _____________________________Sneak Attack +2d6 \n
+      ____4____+2____+1___+4___+1____________________\n
+      ____5____+2____+1___+4___+1__Sneak Attack +3d6,\n
+      _____________________________Wake Alert_______ \n
+      ____6____+3____+2___+5___+2__Imm. to Flanking, \n
+      _____________________________Special Ability   \n
+      ____7____+3____+2___+5___+2__Sneak Attack +4d6 \n
+      ____8____+4____+2___+6___+2__Stealth +1________\n
+      ____9____+4____+3___+6___+3__Sneak Attack +5d6,\n
+      _____________________________Special Ability___\n
+      ____10___+5____+3___+7___+3__St. +2, Evasion II\n
+      ____11___+5____+3___+7___+3__Sneak Attack _6d6 \n
+      ____12___+6____+4___+8___+4__Stealth +3,_______\n
+      _____________________________Special Ability\n";
+    Gear:
+      if ((EActor->isMType(MA_DWARF) || EActor->isMType(MA_GNOME) ||
+            EActor->HasFeat(FT_RAPID_RELOAD)) && 
+            (EActor->rateRangedWeapon() == 0))
+        $"cranquin" else    
+      if (EActor->rateRangedWeapon() == 0)
+        $"short bow",
+      $"short sword",
+      33% $"dagger" else
+        50% $"stiletto" else
+            $"main gauche",
+      $"cloak" of $"nondetection;item",
+      25% $"stone" +2 of $"shadowstone" else 
+        33% $"gauntlets" +2 of $"nimble fingers" else
+        50% $"bracers" of $"legerdemain" else
+        3d10 $"potion" of $"invisibility",
+      2d6 $"potion" of $"healing",
+      3d4 $"bag" of $"tanglefoot bag",
+      2d6 $"potion" of $"dimension door",
+      300d10 $"gold piece",
+      if (EActor->isMType(MA_REPTILE))
+        $"blowpipe",
+      if (EActor->isMType(MA_EVIL))
+        $"small glass vial" of random 3 to 9,
+      if (EActor->isMType(MA_EVIL))
+        $"small glass vial" of random 3 to 9,
+      $"peasant garb";
+    HitDice: 6; Mana: 6; Def: 1/2;
+    Attk:  S_BRAWL    75,
+           S_MELEE    75,
+           S_THROWN   75,
+           S_ARCHERY  75;
+    Skills[12]: SK_ALCHEMY, SK_SPOT, SK_ATHLETICS,
+      SK_BALANCE, SK_BLUFF, SK_CLIMB, SK_CRAFT, SK_DECIPHER, SK_DISGUISE,
+      SK_DIPLOMACY, SK_HANDLE_DEV, SK_ESCAPE_ART, SK_FIND_WEAKNESS,
+      SK_HEALING, SK_HIDE, SK_RIDE, SK_INTIMIDATE, SK_INTUITION,
+      SK_JUMP, SK_KNOW_ALL, SK_LISTEN, SK_LOCKPICKING, SK_MOVE_SIL,
+      SK_PERFORM, SK_PICK_POCKET, SK_POISON_USE, SK_SEARCHING,
+      SK_APPRAISE, SK_TUMBLE, SK_USE_MAGIC;
+    Proficiencies: WG_SIMPLE, WG_DAGGERS, WG_SBLADES, WG_THROWN, 
+      WG_FLEXIBLE, WG_ARCHERY, WG_LARMOR;
+    Grants:
+      Feat[FT_AP_LIGHT]             at 1st level,
+      /* Ability[CA_DISARM_MAGIC_TRAP] at 1st level, */
+      Stati[SAVE_BONUS,SN_TRAPS,+1] at every 3rd level starting at 3rd,
+      Stati[SKILL_BONUS,SK_HIDE,+1] at every 2nd level starting at 8th,
+      Stati[SKILL_BONUS,SK_MOVE_SIL,+1] at every 2nd level starting at 8th,
+      Ability[CA_SNEAK_ATTACK]      at every 2nd level starting at 1st,
+      Ability[CA_EVASION]           at every 2nd level starting at 2nd,
+      Ability[CA_UNCANNY_DODGE]     at every level starting at 3rd, 
+      Ability[CA_THIEF_IN_THE_NIGHT] at every level starting at 1st,   
+      Feat[FT_ROGUE_LIST]           at every 3rd level starting at 10th;
+    Flags: CF_GOOD_REF;
+    On Event EV_ADVANCE {
+      int16 choice;
+      if (EActor->LevelAs($"rogue") == 6 || EActor->LevelAs($"rogue") == 9 ||
+          EActor->LevelAs($"rogue") == 12 || EActor->LevelAs($"rogue") == 15 ||
+          EActor->LevelAs($"rogue") == 18)
+        {
+          if (!EActor->HasAbility(CA_TRICK_MAGIC))
+            ETerm->LOption("Trick Magic",1,
+               "A Rogue possessed of this ability can use her
+                Bluff and Use Magic skills in conjunct to 'trick' a magic item normally
+                reserved for a specific race, class or alignment into accepting her as a
+                legitimite wielder. The strength of this ability is based on the sum of
+                her Use Magic and Bluff skill ratings, with a total of 30 or higher
+                allowing her to use nearly any item she might find.");
+          if (!EActor->HasAbility(CA_SKILL_MASTERY))
+            ETerm->LOption("Skill Mastery",2,
+               "This rogue has achieved such a transcendant mastery
+                of her skills that she is always guaranteed some minimum degree of success.
+                The lowest she can ever roll on any skill roll for a rogue class skill (i.e.,
+                the 1d20 roll, not the entire skill check) is 7 + her intelligence modifier
+                (maximum 15). If the roll would normally come out lower, it is adjusted up 
+                to this level. Thus a rogue with Intelligence 18, Move Silently +13 and this 
+                ability would always score at least 24 on a Move Silently check.");
+          if (!EActor->HasEffStati(NONDETECTION,$"rogue",PER_TELE))
+            ETerm->LOption("No Mind",3,
+               "In studying this ability, a rogue learns a number of
+                meditative exercises and philosophies that she can apply to attain a state
+                of transcendant nothingness. Thereafter, she is invisible to telepathy as
+                an innate, permanent and non-magical ability.");
+          if (!EActor->HasEffStati(TRAP_EVENT,$"Crippling Strike"))
+            ETerm->LOption("Crippling Strike",4,
+               "Whenever a rogue possessed of this ability
+                successfully executes a sneak attack against a creature with blood, the
+                attack inflicts a bleeding wound, causing the victim to lose a number of
+                hit points each turn from blood loss equal to the total of the rogue's
+                sneak attack dice. The bleeding lasts for 1d6+1 turns; further sneak
+                attacks on a creature already bleeding as a result of this ability do
+                not increase the bleeding damage; instead, they extend its duration
+                for 1d6 rounds per strike.");
+          if (!EActor->HasAbility(CA_SLIPPERY_MIND))
+            ETerm->LOption("Slippery Mind",5,
+               "A rogue with this ability has naturally trained
+                mental defenses against enchantment effects. At the end of the turn after
+                she succumbed to some form of enchantment, she may make a second saving
+                throw with a +4 retry bonus to the save DC. Success allows her to shrug
+                off the enchantment effect.");
+          if (!EActor->HasEffStati(NONDETECTION,$"rogue",PER_TREMOR))
+            ETerm->LOption("Soft Steps",6,
+               "By training in a very specific and difficult manner,
+                a rogue can learn to walk across a surface without causing any vibration
+                inside that surface's volume. This causes her to be effectively invisible
+                to tremorsense, and is a constant, permanent and non-magical ability.");
+          if (!EActor->HasEffStati(ADJUST_COMP,$"rogue",A_SAV_REF))
+            ETerm->LOption("Unearthly Reflexes",7,
+               "A rogue who chooses this special ability
+                has training her reaction time to a nearly inhuman degree, and recieves
+                a +6 bonus to her Reflex saves.");
+          if (!EActor->HasEffStati(TRAP_EVENT,$"Peerless Accuracy"))
+            ETerm->LOption("Peerless Accuracy",8,
+               "When a rogue learns this ability, she
+                becomes a master of thrown weapons -- she never misses. Well, almost
+                never. She gains a permanent and inherant +5 bonus to hit when using
+                thrown weapons. This does <10>not<2> apply to archery.");
+          if (!EActor->HasAbility(CA_DEFENSIVE_ROLL))
+            ETerm->LOption("Defensive Roll", 9,
+               "If you have this ability, you are able to move with the impact from 
+                blows, lessening their effect even if they do hit you. This ability
+                does not function in heavy armor. When you are struck by a creature
+                that needs a 15 or greater to hit you, you only suffer a certain
+                fraction of the damage, starting at 5/6th. The number of sixths of
+                the total damage can be further reduced in the following circumstances,
+                to a minimum of 1/6th:\n
+                __* You are Small and your foe is Medium-sized or larger (-2/6th).\n
+                __* Your foe can only hit you on a natural 20 (-1/6th).\n
+                __* You are unarmored (-2/6ths) or in light armor (-1/6th).\n
+                __This ability does not function if you have spells active which
+                simulate the effect of heavy armor (such as Spirit Armor) and
+                Mage Armor is treated as medium armor for this purpose.");              
+          ETerm->LOption("Bonus Feat", 10,
+               "In lieu of choosing a rogue special ability, a rogue can elect to gain
+                a bonus feat chosen from a list of all feats in the game that do not
+                have other feats as prerequisites.");
+          
+          choice = ETerm->LMenu(MENU_2COLS|MENU_DESC|MENU_BORDER, 
+                            "Choose a Rogue special ability:", WIN_MENUBOX);
+          switch (choice)
+            {
+              case 1: 
+                EActor->GainAbility(CA_TRICK_MAGIC,1,$"rogue",SS_CLAS);
+               break;
+              case 2:
+                EActor->GainAbility(CA_SKILL_MASTERY,1,$"rogue",SS_CLAS);
+               break;
+              case 3:
+                EActor->GainPermStati(NONDETECTION,NULL,SS_CLAS,
+                                        PER_TELE,0,$"No Mind");
+               break;
+              case 4:
+                EActor->GainPermStati(TRAP_EVENT,NULL,SS_CLAS,
+                                        POST(EV_HIT),0,$"Crippling Strike");
+               break;
+              case 5:
+                EActor->GainAbility(CA_SLIPPERY_MIND,1,$"rogue",SS_CLAS);
+               break;
+              case 6:
+                EActor->GainPermStati(NONDETECTION,NULL,SS_CLAS,
+                                        PER_TREMOR,0,$"Soft Steps");
+               break;
+              case 7:
+                EActor->GainPermStati(ADJUST_COMP,NULL,SS_CLAS,
+                                        A_SAV_REF,+6,$"Unearthly Reflexes");
+               break;
+              case 8:
+                EActor->GainPermStati(TRAP_EVENT,NULL,SS_CLAS,
+                                        EV_STRIKE,0,$"Peerless Accuracy");
+               break;
+              case 9:
+                EActor->GainAbility(CA_DEFENSIVE_ROLL,1,$"rogue",SS_CLAS);
+               break;
+              case 10:
+                /* In the SRD, this is ANY feat, not the bard list. But I'm
+                   a little bit nervous about rogue balance in comparison to
+                   warriors, given that feats are a warrior's only bread and
+                   butter, and I've already given SO MUCH new stuff to the
+                   rogues. So no advancing on the fighter feat trees with
+                   rogue bonus feats for now. I don't think many people will
+                   choose the bonus feats, anyway. If you want to be a feat-
+                   based rogue, play a human rogue. */
+                EActor->GainFeat(FT_BARD_LIST,0);
+               break;
+            }
+        }
+      return NOTHING;
+      }; 
+  }   
+
+Effect "No Mind" : EA_GENERIC
+  { Flags: EF_SPECABIL; }
+
+Effect "Crippling Strike" : EA_GENERIC
+  { Flags: EF_SPECABIL; 
+    On Event META(POST(EV_HIT)) {
+      if (e.isSneakAttack && !EVictim->isDead() && EVictim->isMType(MA_HAS_BLOOD))
+        {
+          if (EVictim->HasEffStati(BLEEDING,$"Crippling Strike"))
+            {
+              EVictim->SetEffStatiMag(BLEEDING,$"Crippling Strike",
+                max(EVictim->GetEffStatiMag(BLEEDING,$"Crippling Strike"),
+                      EActor->AbilityLevel(CA_SNEAK_ATTACK)));
+              EVictim->SetEffStatiDur(BLEEDING,$"Crippling Strike",
+                EVictim->GetEffStatiDur(BLEEDING,$"Crippling Strike") + 1d6);
+            }
+          else
+            EVictim->GainTempStati(BLEEDING,NULL,1d6+1,SS_ATTK,
+              0, EActor->AbilityLevel(CA_SNEAK_ATTACK), $"Crippling Strike");
+        }
+      return NOTHING;
+      };
+  }
+
+Effect "Soft Steps" : EA_GENERIC
+  { Flags: EF_SPECABIL; }
+
+Effect "Unearthly Reflexes" : EA_GENERIC
+  { Flags: EF_SPECABIL; }
+
+Effect "Peerless Accuracy" : EA_GENERIC
+  { Flags: EF_SPECABIL;
+    On Event META(EV_STRIKE) {
+      if (e.AType == A_HURL)
+        if (GetHandle(EItem2) != NULL_OBJ && EItem2->isGroup(WG_THROWN))
+          {
+            e.strHit += " +5 peerless";
+            e.vHit += 5;
+          }
+      };
+  }
+
+
+
+
+Class "Warrior"
+  {
+    Desc: "
+      <15>HitDie:_<1>d10_<15>Mana:<1>_d6__<15>Skills:<1>_4_<15>Saves:<1>_<9>F<1>r<9>W<1>_<15>Defense:_<1>1/4\n
+      <15>+toHit: <1>Archery <9>100~<1>, Brawl <9>100~<1>, Melee <9>100~<1>, Thrown <9>100~<1>\n
+      <2>\n\tThe architypical man-at-arms, the warrior can be a soldier,
+      mercenary or warlord; the peasant hero, noble fencer or questing
+      knight. Regardless, his (or her) skills are unmatched -- unlike
+      the paladin, barbarian or monk, the Warrior has no supernatural
+      powers to back up his basic human prowess, so he has to focus
+      on being the best there is with what he has. Warriors are both
+      generalists -- being skilled in many weapons and diverse combat
+      tactics -- and specialists, gaining the powerful ability to
+      study specific weapons and better their skill with them as they
+      advance in levels.
+      __\n\tWarriors are ubiquitous. The militant arts are highly regarded
+      on Therya, and as long as he shows a respect for life and law a
+      Warrior can expect to earn a position of high regard in most social
+      circles. Even in this more civilized age, most kings and barons are
+      members of this class, ruling in equal measure from political
+      canniness and force of arms. The peasantry respects a lord who is
+      willing to take up arms to defend them rather then letting others
+      die in his name, and even among the most cosmopolitan of noble
+      families, warcraft is still a respected art.\n
+      
+      \n\n<10>CLASS SKILLS<2>\n
+      __The class skills of the warrior are Appraise, Athletics, Bluff, Climb, Craft, 
+      Diplomacy, Find Weakness, Healing, Intimidate, Intuition, Ride, 
+      Seneschal and Spot.
+       
+      \n\n<10>CLASS FEATURES<2>\n
+      __*_<7>Proficiencies<2> -- Warriors are proficient with all weapon
+      groups save for Exotic weapons, for which proficiency must be bought
+      seperately in each. They are proficient with light, medium and heavy
+      armors, and with shields. This gives them the widest range of weapon
+      and armor proficiencies in the game.\n
+      __*_<7>Weapon Skill<2> -- Warriors can develop exceptional degrees of
+      skill with specific weapons, becoming eligable for special feats that
+      represent such as they rise in level. They must still buy these feats
+      normally, of course. At 1st level, all warriors recieve a free 
+      Weapon Focus in a weapon of their choice. \n
+      __Starting at 3rd level, the warrior is eligable to buy the Weapon
+      Specialization feat in any weapon which he is focused in. At 7th level,
+      he may choose to buy the Weapon Mastery feat in any weapon he is
+      specialized it. The next level of skill is High Mastery, which may be
+      bought at 11th level, then Grand Mastery at 15th.\n
+      __*_<7>Bonus Feats<2> -- While the barbarian may be tougher and the
+      rogue more agile, the warrior is bar none the most skilled and adept
+      fighter in the game. To represent this, every even level the warrior 
+      gains a bonus feat from the rather extensive warrior list, which 
+      includes most of the combat-centered feats in the game.\n
+      __*_<7>Lore of Arms<2> -- Warriors have a peerless understanding of
+      weapons, and are able to identify the magical properties of weapons
+      just by using them in combat. When a warrior wields an unidentified
+      magical weapon and fights with it, the game will automatically identify
+      it for him after 3 + ([9 - Warrior Level] x 2) successful hits with it
+      in combat. Hits that kill their target count as three hits for this
+      purpose.\n
+      __*_<7>Size Advantage<2> -- Most living creatures, humanoid or otherwise,
+      are set up to defend themselves from attacks by other creatures of human
+      size or larger, because those creatures constitute the greatest threat to
+      them on the food chain. Halfling, gnome and kobold warriors learn to take
+      advantage of these blind spots, utilizing their smaller size to strike at
+      vital regions their opponents usually aren't as skilled at defending. From
+      an anatomical standpoint, after all, humans are much better set up to block
+      blows from their height or from above then they are to deflect strikes
+      coming in low.\n
+      __In game terms, Small warriors gain increased threat ranges in melee
+      combat against anything larger than them. Their threat range increases by
+      -1 at 1st level, -2 at 3rd, -3 at 9th and -4 at 17th. These modifiers are
+      applied after accounting for any increased threat ranges due to Improved
+      Critical, keen weapons and similar abilities. This ability is a function of
+      both anatomy and special training, so it doesn't apply to humans or other
+      characters who become Small-sized as a result of magic, or to Small
+      warriors who become human-sized (or giant-sized, or even tinier than they
+      usually are) as a result of magic.\n
+      __Small races also recieve the Defensive Roll ability (from the rogue's
+      higher-level special ability list) upon attaining four combined levels of 
+      warrior, ranger, paladin, monk or barbarian.\n
+      __*_<7>Starting Benefits<2> -- Warriors start with a +1 version of the
+      weapon they are focused in with an elemental brand or similar-powered
+      enchantment, a kite shield or buckler, a fair supply of gold, a dagger,
+      peasant garb and 1d4+1 vials of Oil of Transformation.
+      \n\n<10>THE WARRIOR<15>\n
+      __Level__Def__Fort_Refl_Will_Special Abilities<1>\n
+      ____1____+0____+2___+0___+2__Weapon Focus      \n
+      ____2____+0____+3___+0___+3__Bonus Feat        \n
+      ____3____+0____+3___+1___+3__Weapon Specializ. \n
+      ____4____+1____+4___+1___+4__Bonus Feat        \n
+      ____5____+1____+4___+1___+4__                  \n
+      ____6____+1____+5___+2___+5__Bonus Feat        \n
+      ____7____+1____+5___+2___+5__Weapon Mastery    \n
+      ____8____+2____+6___+2___+6__Bonus Feat        \n
+      ____9____+2____+6___+3___+6__Name Rank         \n
+      ____10___+2____+7___+3___+7__Bonus Feat        \n
+      ____11___+2____+7___+3___+7__High Mastery      \n
+      ____12___+3____+8___+4___+8__Bonus Feat        \n";
+    HitDice: 10; Mana: 6; Def: 1/4;
+    Attk:  S_BRAWL    100,
+           S_MELEE    100,
+           S_THROWN 100,
+           S_ARCHERY  100;    
+    Skills[4]: SK_ATHLETICS, SK_BLUFF, SK_CLIMB, SK_CRAFT,
+      SK_FIND_WEAKNESS, SK_HEALING, SK_INTIMIDATE, SK_INTUITION, 
+      SK_RIDE, SK_SPOT, SK_SENESCHAL;
+    Proficiencies: WG_SIMPLE, WG_AXES, WG_ARCHERY, WG_STAVES, WG_IMPACT,
+      WG_THROWN, WG_POLEARMS, WG_SPEARS, WG_LANCES, WG_DAGGERS, WG_FLEXIBLE,
+      WG_FLAILS, WG_SBLADES, WG_LBLADES, WG_LIGHT; 
+    Grants:
+      Feat[FT_AP_LIGHT]            at 1st level,
+      Feat[FT_AP_MEDIUM]           at 1st level,
+      Feat[FT_AP_HEAVY]            at 1st level,
+      Feat[FT_SHIELD_PROFICIENCY]  at 1st level,
+      Ability[CA_WEAPON_SKILL]     at 4th level,
+      Ability[CA_WEAPON_SKILL]     at 7th level,
+      Ability[CA_WEAPON_SKILL]     at 10th level,
+      Ability[CA_WEAPON_SKILL]     at 13th level,
+      Ability[CA_LORE_OF_ARMS]     at every level starting at 1st,
+      Feat[FT_WARRIOR_LIST]        at every 2nd level starting at 2nd;
+    Gear:
+      50d10 $"gold piece",
+      1d4+1 $"potion" of $"oil of transformation",
+      if (EActor->isSmallRace() || (1d3 == 1))
+        $"buckler;wooden" else
+        $"kite shield",
+      $"dagger",
+      $"peasant garb";
+    On Event EV_BIRTH {
+      hObj h; rID iID;
+      // ww: first, find armor, make it +1
+      for(h=EActor->FirstInv();h;h=EActor->NextInv()) {
+        if (h->isType(T_ARMOR)) {
+          switch(random(3)) {
+            case 0: h->AddQuality(AQ_LIGHT_FOR); break;
+            case 1: case 2: h->MakeMagical(NULL_ID,h->GetPlus()+1);
+          }
+        } else if (h->isType(T_SHIELD))
+          h->MakeMagical(NULL_ID,h->GetPlus()+1);
+      }
+      h = EActor->getPrimaryMelee();
+      if (h && EActor->rateMeleeWeapon() > 1) {
+        if (h->GetInherantPlus() < 1)
+          h->MakeMagical(NULL_ID,+1);
+        if ((EActor->HasFeat(FT_CLEAVE) ||
+                  EActor->HasFeat(FT_GREAT_CLEAVE) ||
+                  EActor->HasFeat(FT_SUPREME_CLEAVE)) &&
+                  h->QualityOK(WQ_CLEAVING))
+          h->AddQuality(WQ_CLEAVING); 
+        else switch(EActor->formulaSeed % 7) {
+          case 0: h->AddQuality(WQ_FLAMING); break;
+          case 1: h->AddQuality(WQ_SHOCKING); break;
+          case 2: h->AddQuality(WQ_FROST); break;
+          case 3: h->AddQuality(WQ_THUNDERING); break;
+          case 4: 
+            if (h->QualityOK(WQ_KEEN))
+              h->AddQuality(WQ_KEEN);
+            else
+              h->MakeMagical(NULL_ID,+2);
+           break;
+          case 5: h->AddQuality(IQ_GHOST_TOUCH); break;
+          case 6: 
+            if (h->GetInherantPlus() < 1)
+              h->MakeMagical(NULL_ID,+2);
+          } 
+        }
+      h = EActor->getPrimaryRanged();
+      if (h && EActor->rateRangedWeapon() > 1) {
+        h->MakeMagical(NULL_ID,+1);
+        if ((EActor->HasFeat(FT_CLEAVE) ||
+                  EActor->HasFeat(FT_GREAT_CLEAVE) ||
+                  EActor->HasFeat(FT_SUPREME_CLEAVE)) &&
+                  h->QualityOK(WQ_CLEAVING))
+          h->AddQuality(WQ_CLEAVING); 
+        else switch(random(7)) {
+          case 0: h->AddQuality(WQ_FLAMING); break;
+          case 1: h->AddQuality(WQ_SHOCKING); break;
+          case 2: h->AddQuality(WQ_FROST); break;
+          case 3: h->AddQuality(WQ_THUNDERING); break;
+          case 4: 
+            if (h->QualityOK(WQ_RETURNING))
+              h->AddQuality(WQ_RETURNING);
+            else
+              h->MakeMagical(NULL_ID,+2);
+           break;
+          case 5: h->AddQuality(IQ_GHOST_TOUCH); break;
+          case 6: case 6: h->MakeMagical(NULL_ID,+2);
+          } 
+        }
+      return NOTHING;
+      },
+    EV_ADVANCE {
+      if (EActor->isSmallRace())
+        EActor->GainAbility(CA_SIZE_ADVANTAGE,+1,$"warrior",SS_CLAS);
+      if (EActor->isSmallRace() && (EActor->LevelAs($"barbarian") + 
+          EActor->LevelAs($"warrior") + EActor->LevelAs($"ranger") +
+          EActor->LevelAs($"paladin") + EActor->LevelAs($"monk")) == 4)
+        EActor->GainAbility(CA_DEFENSIVE_ROLL,1,$"warrior",SS_CLAS);
+      return NOTHING;
+      },
+    POST(EV_ADVANCE) {
+      /* We put this here so that the warrior can choose to use either
+         his bonus human feat or his universal first feat to buy Exotic
+         Weapon Proficiency, and then choose to focus in the exotic
+         weapon in question. 
+         UPDATE: Moved to POST(EV_ADVANCE) because the War domain fix
+         required that feats be gained AFTER EV_ADVANCE. */
+      if (EActor->LevelAs($"warrior") == 1)
+        EActor->GainFeat(FT_WEAPON_FOCUS,0);
+      return NOTHING;
+      };
+    Flags: CF_GOOD_FORT, CF_GOOD_WILL;
+  }

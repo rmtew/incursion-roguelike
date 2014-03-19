@@ -1,0 +1,4199 @@
+/* Mon1.Irc -- Monsterous Beasts       Mon2.Irc -- Peoples of Therya
+     Dragons and Kin                     Humanoid Races
+     Mythic Hybrids                      Giants and Faeries
+     Magical Beasts                      Monsterous Societies
+     Other Beasts                        Learned Templates
+     Natural Animals                     Townsfolk
+   Mon3.Irc -- The Wierd Stuff         Mon4.Irc -- Planar Creatures
+     Aberrations                         Demons
+     Constructs                          Devils
+     Plants and Fungi                    Elementalkin
+     Oozes and Vermin                    Other Outsiders
+     Undead Creatures                    Planar Templates              */
+
+
+Monster "fiend" : MA_DRAGON
+  {
+    Image: red GLYPH_FIEND; Size: SZ_MEDIUM;
+    Desc: "Fiends are sadistic and monsterous creatures from worlds far
+      beyond Theyra. Some, demons, are aligned with chaos, while others
+      (devils) are lawful in temperment, but all are inheranty evil, and
+      in fact are the living personification of all-consuming darkness.
+      Destroying a fiend is a good act for a creature aspiring to a good
+      alignment, though there are plenty of selfish reasons to kill them
+      too -- such as avoiding being tortured, corrupted or eaten.\n
+      __Fiends come in a wide variety of monsterous forms, and only a
+      skilled demonologist can identify them all. Learning the specific
+      species of a fiend is based on the Knowledge (Infernal) skill.";
+    Flags: M_UNKNOWN, M_NOGEN;
+  }
+
+
+/********************************************************************************
+ ********************************************************************************
+ ***                                    DEMONS                                ***
+ ********************************************************************************
+ ********************************************************************************/
+
+Monster "manes" : MA_DEMON
+  {
+    Image: cyan GLYPH_LDEMON; Size: SZ_SMALL; 
+    CR: 1; HD: 1; Hit: +1; Def: 10; Mov: 70%; Spd: 90%;
+    Str 10, Dex 10, Con 10, Int 3, Wis 3, Cha 3;
+    Attk: A_CLAW for 1d3 AD_SLASH,
+          A_CLAW for 1d3 AD_SLASH,
+          A_BITE for 1d4 AD_PIERCE,
+          A_DETH for 2d6 AD_ACID,
+          A_SEEM for $"fiend",
+          A_GATE for 10% MA_DEMON (CR 4);
+	ABILITY(CA_TELEPATHY,6);
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_WEAPON_IMMUNITY,1);
+    Feats: FT_MULTIATTACK, SK_JUMP, SK_CLIMB;
+    Resists: DF_FIRE, DF_COLD, DF_ACID;
+    Immune: DF_ELEC, DF_POIS;
+    Flags: M_CHAOTIC, M_EVIL, M_IALIGN, M_HUMANOID,
+      M_NO_CORPSE, M_PSYCHO, M_MINDLESS, M_CLOSEID;
+    On Event EVICTIM(EV_DAMAGE) {
+      if (EActor->mID == $"manes")
+        if (e.DType == AD_ACID && e.AType == A_DETH)
+          {
+            e.Immune = true;
+            return DONE;
+          }
+      return NOTHING;
+      };
+    Desc: "The lowest of all demons, manes are the wretched souls
+      of the damned transformed into a pathetic form. They appear
+      as obese grey bags of distended flesh, open wounds filled
+      with squirming maggots -- it would be easy to mistake them
+      for undead (though they aren't). Manes are driven to madness
+      with pain, agony and loss, and are effectively mindless as a
+      result. More powerful demons herd them forward in truly vast
+      numbers, using them as shock troops and cannon fodder in the
+      endless wars that plague the Abyss.";
+  }
+
+Monster "quasit" : MA_DEMON, MA_IMPKIN
+  {
+    Image: blue 'i'; Size: SZ_TINY;  Arm: 3;
+    CR: OPT_CR(2,3); HD: 3; Hit: +2; Def: 13; Mov: 150%; Spd: 100%;
+    Str 8, Dex 17, Con 10, Int 10, Wis 12, Cha 10;
+    Attk: A_BITE for 1d4 AD_PIERCE,
+          A_CLAW for 1d3 AD_SLASH and AD_POIS (DC 13),
+          A_CLAW for 1d3 AD_SLASH and AD_POIS (DC 13),
+          A_FORM for $"bat",
+          A_FORM for $"giant rat";
+	ABILITY(CA_REGEN,2);
+	ABILITY(CA_WEAPON_IMMUNITY,1);
+    Poison: $"quasit venom";
+    WEAPON_FOCUS_NATURAL_ATTACK;
+    Feats: FT_DODGE, SK_HIDE, 
+      SK_LISTEN, SK_MOVE_SIL, SK_SEARCH, SK_SPELLCRAFT, SK_SPOT;
+    Flags: M_IALIGN, M_CHAOTIC, M_EVIL, M_GREEDY, M_MFLYER,
+      M_NO_CORPSE, M_PSYCHO;
+    Desc: "These creatures are among the weakest of demonkind, often
+      sent to the prime material plane to serve as familiars to
+      chaotic and evil mages. A quasit is a two-foot tall humanoid
+      with sharp claws, spiky horns and bat wings.";
+  }
+
+Poison "quasit venom" : EA_DRAIN
+  {
+    Level: 3;
+    /*Iteration*/   cval: 2;
+    /*Save DC*/     sval: 13;
+    /*Persistance*/ lval: 2;
+    xval: AD_DADX;  pval: 1d4;
+    Desc: "This poison inflicts <11>1d4<7> points of Dexterity damage every 
+      <11>2<7> turns, and requires <11>2<7> saving throws against <11>DC 13<7> 
+      to overcome.";
+  }
+
+Monster "rutterkin" : MA_DEMON
+  {
+    Image: grey GLYPH_LDEMON; Size: SZ_LARGE;  Arm: 6;
+    CR: OPT_CR(4,3); HD: 5; Hit: +4; Def: 10; Mov: 70%; Spd: 90%;
+    Str 14, Dex 15, Con 14, Int 9, Wis 12, Cha 10;
+    Attk: A_CLAW for 1d6 AD_SLASH,
+          A_CLAW for 1d6 AD_SLASH,
+          A_SEEM for $"fiend",
+          A_GATE for 10% MA_DEMON (CR 4);
+	ABILITY(CA_TELEPATHY,1);
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_WEAPON_IMMUNITY,1);
+    Feats: FT_AMBIDEXTERITY, FT_TWO_WEAPON_STYLE, FT_EXOTIC_WEAPON,
+      SK_CLIMB, SK_INTIMIDATE, SK_JUMP, SK_LISTEN, SK_MOVE_SIL,
+      SK_SPOT, SK_TUMBLE;
+    Resists: DF_FIRE, DF_COLD, DF_ACID;
+    Immune: DF_ELEC, DF_POIS;
+    Flags: M_CHAOTIC, M_EVIL, M_IALIGN, M_HUMANOID,
+      M_NO_CORPSE, M_PSYCHO, M_CLOSEID;
+    Spells: $"globe of shadow", $"cause fear", $"desecrate", 
+      $"dire charm";
+  }
+
+Monster "jovoc" : MA_DEMON
+  {
+    Image: red GLYPH_LDEMON; Size: SZ_SMALL;  Arm: 3;
+    CR: OPT_CR(7,5); HD: 4; Hit: +4; Def: 12; Mov: 100%; Spd: 120%;
+    Str 12, Dex 15, Con 16, Int 7, Wis 10, Cha 7; 
+    Attk: A_CLAW for 1d3 AD_SLASH,
+          A_CLAW for 1d3 AD_SLASH,
+          A_BITE for 1d4 AD_BLUNT,
+          A_SEEM for $"fiend",
+          A_GATE for 25% MA_DEMON (CR 5);
+	ABILITY(CA_TELEPATHY,10);
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_REGEN,5);
+	ABILITY(CA_WEAPON_IMMUNITY,1);
+	MAGIC_RES(30);
+    Feats: FT_TOUGHNESS, FT_MULTIATTACK, FT_SWARM, SK_HIDE, SK_LISTEN,
+      SK_APPRAISE, SK_SPOT, SK_SEARCH;
+    Resists: DF_FIRE, DF_COLD, DF_ACID;
+    Immune: DF_ELEC, DF_POIS;
+    Flags: M_CHAOTIC, M_EVIL, M_IALIGN, M_HUMANOID,
+      M_NO_CORPSE, M_PSYCHO, M_SKIRMISH, M_CLOSEID;
+    Desc: "These tiny sadists are able to channel any injury done
+      to them to similarly affect anyone nearby. They are humanoids
+      with builds similar to a gnome, but their skin is blackened,
+      tanned and emaciated, and their features have a feral look. Their
+      hands alone are brilliant red, and their fingers curve into long, 
+      sharp talons.";
+    On Event EVICTIM(POST(EV_DAMAGE)) {
+      int16 i; hObj c, m, hJovoc; int8 msg_flag;
+      msg_flag = 0;
+      m = GetHandle(EMap);
+      if (m == NULL || EVictim->isDead())
+        return NOTHING;
+      if (e.DType > AD_LAST_PHYSICAL)
+        return NOTHING;
+      hJovoc = GetHandle(EVictim);
+        
+      if (e.aDmg) {
+        for(c = m->FirstThing();c; c = m->NextThing()) {
+          if (c->isCreature() && c != hJovoc)
+            if (dist(hJovoc->x,hJovoc->y,c->x,c->y) <= 4)
+              if (!c->isMType(MA_DEMON)) {
+                if (!msg_flag) {
+                  msg_flag = 1;
+                  VPrint(e,"Your injury retributively affects everyone close to you.",
+                           "The jovoc's injuries retributively manifest on everyone nearby it!");
+                  }
+                if (c->SavingThrow(FORT,15))
+                  ThrowDmg(EV_DAMAGE,e.DType,e.aDmg/2,"a jovoc's aura of retribution",EVictim,c);
+                else
+                  ThrowDmg(EV_DAMAGE,e.DType,e.aDmg,"a jovoc's aura of retribution",EVictim,c);
+                }
+          }
+        }
+      },
+    MSG_SPECABIL
+      "Any damage done to it is reflected back on any non-demon within 40 feet; a
+        Fortitude saving throw (DC 15) halves the reflected damage.";
+  }    
+  
+Monster "uridezu" : MA_DEMON, MA_RODENT
+  {
+    Image: white GLYPH_LDEMON; Size: SZ_MEDIUM; Mana: 37;
+    CR: 6; HD: 7; Hit: +7; Def: 10; Mov: 135%; Spd: 125%;
+    Attk:
+      A_CLAW for 1d4 AD_SLASH,
+      A_CLAW for 1d4 AD_SLASH,
+      A_BITE for 1d6 AD_PIERCE
+             and 1d4 AD_SLOW (DC 22),
+      A_TAIL for 1d2 AD_BLUNT
+             and 0d0 AD_TRIP (DC 22),
+      A_SEEM for $"fiend",
+      A_GATE for 40% MA_DEMON (CR 6);
+	ABILITY(CA_TELEPATHY,10);
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_SCENT,6);
+	ABILITY(CA_WEAPON_IMMUNITY,1);
+	Stati[EXTRA_FEAT,FT_MASTER_DISARM];
+	Stati[ALLY_TO,MA_RODENT];
+	MAGIC_RES(25);
+    Immune: DF_POIS, DF_ELEC;
+    Resists: DF_COLD, DF_FIRE, DF_ACID; 
+    Feats: FT_BLIND_FIGHT, FT_MULTIATTACK, SK_CLIMB, SK_JUMP,
+           SK_LISTEN, SK_MOVE_SIL, SK_HIDE, SK_SPOT;
+    Spells: $"globe of shadow", $"desecrate", $"detect monsters",
+            $"unholy blight", $"vampiric touch", $"rigor mortis",
+            $"doom", $"pyrotechnics";
+    Flags: M_HUMANOID, M_IALIGN, M_CHAOTIC, M_EVIL, M_GREEDY, 
+           M_NO_CORPSE, M_CLOSEID;
+    On Event PRE(EV_DAMAGE) {
+      if (e.DType == AD_TRIP && 1d2 == 1 && 
+            EVictim->InSlot(SL_WEAPON) != NULL)
+        e.DType = AD_DISA;
+      return NOTHING;
+      },
+    MSG_SPECABIL
+      "Rodents instinctively recognize it as their master. It has a
+         +4 racial bonus to disarm attempts.";
+    Desc: "One of the many weaker ranks of demons in the Abyss, Uridezu
+      appear as hairless, emaciated anthropomorphic rats. They have
+      leathery white skin, beady red-pink rodent eyes and a prehensile,
+      15-foot long tail. Sometimes they grab the length of the latter in
+      their hands and wield it as a whip, often using it to trip, disarm
+      or ensnare opponents. Uridezu serve Abyssal society (such as it is)
+      as pages, gofers and units of light skirmishers, but prefer to skulk 
+      in the shadows, flee anything larger or more powerful than them and
+      stalk, terroriz and murder anything weaker."; 
+  }
+
+Monster "ghour" : MA_DEMON, MA_GIANT
+{ Image: brown GLYPH_GDEMON; Size: SZ_HUGE; 
+  CR: OPT_CR(13,12); HD: 12; Hit: +10; Def: 10; Arm: 14; 
+  Str 28, Dex 8, Con 20, Int 15, Wis 13, Cha 11;
+  Move: 150%; Spd: 150%; 
+  Attk: 
+    A_GORE for 1d8 AD_PIERCE,
+    A_GORE for 1d8 AD_PIERCE,
+    A_SWAT for 2d6 AD_BLUNT,
+    A_SWAT for 2d6 AD_BLUNT,
+    A_BREA for 1d6 AD_DAST (DC 21),
+    A_SEEM for $"fiend",
+    A_ROAR for 1d4 AD_STUN (DC 13);
+	SPELL_RES(25);
+	ABILITY(CA_SCENT,3);
+	ABILITY(CA_TELEPATHY,10);
+	ABILITY(CA_TRACKING,20);
+  SPells: $"chaos hammer", $"deeper darkness", 
+          $"desecrate", $"detect good",
+          $"magic circle vs. good",
+          $"teleport", $"unholy blight",
+          $"confusion", $"fear", $"righteous might";
+  Immune: DF_POIS, DF_ELEC;
+  Resists: DF_COLD, DF_FIRE, DF_ACID; 
+  Feats: FT_CLEAVE, FT_GREAT_CLEAVE, FT_POWER_ATTACK,
+    SK_BLUFF, SK_CLIMB, SK_CONCENTRATION, SK_DIPLOMACY, SK_HIDE, 
+    SK_JUMP, SK_LISTEN, SK_MOVE_SIL, SK_SPOT, SK_WILDERNESS;
+  Flags: M_HUMANOID, M_IALIGN, M_CHAOTIC, M_EVIL, M_GREEDY, M_NO_CORPSE,
+         M_CHARGE, M_CLOSEID;
+  On Event POST(EV_SATTACK) {
+    if (e.AType == A_ROAR) {
+      EActor->GainTempStati(SPEC_TIMEOUT,NULL,10d6,SS_ATTK,A_ROAR);
+      } 
+    return NOTHING; 
+    },
+  MSG_BLASTNAME 
+    "cloud of weakening gas";
+  Desc: "A ghour is a 20-foot-tall humanoid creature that strongly
+  resembles an oversized ogre."; 
+  }
+
+Monster "palrethee" : MA_DEMON
+  {
+    Image: bright red GLYPH_LDEMON; Size: SZ_MEDIUM; Arm: 7;
+    CR: OPT_CR(9,8); HD: 8; Hit: +8; Def: 18; Mov: 100%; Spd: 125%;
+    Str 19, Dex 16, Con 16, Int 13, Wis 12, Cha 11;
+    Attk: A_SLAM for 1d8 AD_BLUNT,
+          A_SLAM for 1d8 AD_BLUNT,
+          A_AURA for 2d8 AD_FIRE,
+          A_SEEM for $"fiend",
+          A_GATE for 35% MA_DEMON (CR 8);
+    ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_TELEPATHY,10);
+	Stati[ADJUST_CIRC,A_AID,-2];
+	Immune: DF_ELEC, DF_POIS; 
+    Resists: DF_ACID, DF_COLD, DF_FIRE;
+    Spells: $"see invisibility", $"detect monsters", $"fear";
+    Feats: FT_DODGE, FT_EXPERTISE, FT_WEAPON_FOCUS, 
+           SK_BLUFF, SK_DIPLOMACY, SK_HIDE, SK_INTIMIDATE,
+           SK_LISTEN, SK_APPRAISE, SK_SPELLCRAFT, SK_SPOT;
+    Flags: M_HUMANOID, M_IALIGN, M_CHAOTIC, M_EVIL, M_GREEDY, 
+           M_NO_CORPSE, M_FIRE, M_CLOSEID;
+    Desc: "In the Abyss, failure carries unimaginable costs -- the
+      palrethee serve to illustrate this fact in a visceral manner.
+      It isn't known what terrible offence they wrought against the
+      powers that be so many millenia ago -- perhaps the conspired
+      to usurp the station of the balor -- but their punishment is
+      unforgettable. The palrethee have been turned into eternal
+      torches -- set aflame and kept alive by magic to burn for all
+      eternity.\n
+      __A palrethee appears as an emaciated, vaguely humanoid being
+      with leathery purple skin and the bony remnants of wings long
+      since flayed of flesh. Their faces are distended and covetious,
+      with long ears and sharp teeth at the end of a mouth that could
+      almost be called a muzzle.";
+    On Event MSG_SPECABIL
+      "It suffers a constant -2 circumstance penalty to all rolls as a
+        result of the agony of burning alive. Any creature struck by its
+        fiery aura attack will be set ablaze, suffering an additional 1d8 
+        points of fire damage every turn until they succeed at a Reflex 
+        save (DC 17) to put out the flames. Additional contact does not
+        increase the damage when a creature is already aflame.",
+      POST(EV_DAMAGE) {
+        if (e.AType == A_AURA && e.DType == AD_FIRE && e.aDmg != 0)
+          RedirectEff(e,$"Demonic Burn",EV_EFFECT);
+        return NOTHING;
+        },
+      EV_BIRTH {
+        hObj h;
+        for(h=EActor->FirstInv();h;h=EActor->NextInv())
+          if (h->isType(T_WEAPON))
+            if (h->QualityOK(WQ_FLAMING))
+              h->AddQuality(WQ_FLAMING);
+        return NOTHING;
+        };
+      Gear: 
+        50% $"long sword" +1 else
+          50% $"halberd" +1 else
+            50% $"glaive" +1 else
+              $"greataxe" +1;
+  }
+  
+Effect "Demonic Burn" : EA_INFLICT
+  { xval: TRAP_EVENT; yval: EV_TURN; Flags: EF_PERSISTANT, EF_MUNDANE; 
+    On Event META(EV_TURN) {
+      int16 saveDC;
+      if (EActor->SavingThrow(REF,17,SA_DEATH))
+        {
+          EActor->IDPrint("You manage to put out the flames.",
+                          "The <hObj> is no longer burning.", EActor);
+          EActor->RemoveEffStati($"Demonic Burn");
+          return DONE;
+        }
+      EActor->IDPrint("You burn!", "The <hObj> burns!", EActor);
+      ThrowDmg(EV_DAMAGE,AD_FIRE,1d8,"being burned alive",EActor,
+                                EActor->GetEffStatiObj(TRAP_EVENT,$"Demonic Burn"));
+      return NOTHING;
+      },
+    EV_MAGIC_HIT {
+      if (EVictim->HasEffStati(TRAP_EVENT,$"Demonic Burn"))
+        return DONE;
+      if (EVictim->SavingThrow(REF,17,SA_DEATH))
+        {
+          EVictim->IPrint("You avoid being set on fire.");
+          e.Resist = true;
+          return DONE;
+        }
+      EVictim->IDPrint("You catch on fire!",
+                       "The <hObj> catches on fire!", EVictim);
+      return NOTHING;
+      };
+  }
+  
+/* This monster needs to stay at fixed CR for the blackguard's
+   fiendish servant ability to work. */
+Monster "babau" : MA_DEMON
+  {
+    Image: skyblue GLYPH_LDEMON; Size: SZ_MEDIUM;  Arm: 10;
+    CR: 6; HD: 7; Hit: +12; Def: 18; Mov: 100%; Spd: 135%;
+    Str 21, Dex 12, Con 20, Int 14, Wis 13, Cha 16;
+    Attk: A_BITE for 1d6 AD_PIERCE,
+          A_CLAW for 1d6 AD_SLASH,
+          A_CLAW for 1d6 AD_SLASH,
+          A_DEQU for 3d8 AD_ACID (DC 24),
+          A_SEEM for $"fiend",
+          A_GATE for 35% MA_DEMON (CR 6);
+	RACIAL_SKILL(SK_HIDE,8);
+	RACIAL_SKILL(SK_LISTEN,8);
+	RACIAL_SKILL(SK_MOVE_SIL,8);
+	RACIAL_SKILL(SK_SEARCH,8);
+	ABILITY(CA_SNEAK_ATTACK,3);
+    ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_TELEPATHY,10);
+	Immune: DF_ELEC, DF_POIS; 
+    WEAPON_FOCUS_NATURAL_ATTACK;
+    Resists: DF_ACID, DF_COLD, DF_FIRE;
+    Feats: FT_CLEAVE, SK_HIDE, SK_LISTEN, 
+           FT_MULTIATTACK, FT_POWER_ATTACK, SK_SPOT, SK_MOVE_SIL;
+    Flags: M_HUMANOID, M_IALIGN, M_CHAOTIC, M_EVIL, M_GREEDY, M_NO_CORPSE,
+           M_ACID, M_CLOSEID;
+    Spells: $"globe of shadow", $"dispel magic", $"dimension door",
+            $"See Invisibility";
+    Desc: "Babaus are sneaky and sly. They attack the most powerful foe
+    first, hoping to eliminate the true threats quickly and then toy with
+    the rest. When ambushing their opponents, they make excellent use of
+    the combination of multiple attacks and sneak attacks. A slimy red jelly
+    coats the babau's skin. ";
+  }
+  
+Monster "nabassu" : MA_DEMON
+  {
+    Image: brown GLYPH_LDEMON; Size: SZ_MEDIUM; Arm: 9; Mana: 90;
+    CR: 9; HD: 7; Hit: +7; Def: 15; Mov: 125%; Spd: 125%;
+    Str 19, Dex 13, Con 14, Int 14, Wis 14, Cha 13;
+    Attk: A_CLAW for 1d4 AD_SLASH,
+          A_CLAW for 1d4 AD_SLASH,
+          A_BITE for 1d6 AD_PIERCE,
+          A_SEEM for $"fiend",
+          A_GATE for 50% MA_DEMON (CR 8);
+    MAGIC_RES(50);
+    /* Monsters can't use this, yet, but I want that to change,
+       and I put it here so it shows up in the monster memory
+       because it's kind of a nabassu's "thing". */
+	ABILITY(CA_DEVOURING,10);
+    ABILITY(CA_INFRAVISION,6);
+    ABILITY(CA_PHASE,6);
+    ABILITY(CA_TELEPATHY,10);
+    ABILITY(CA_SPAWN, 6); 
+    ABILITY(CA_SNEAK_ATTACK,3);
+    RACIAL_SKILL(SK_HIDE,+4);
+    RACIAL_SKILL(SK_MOVE_SIL,+4);
+    Immune: DF_ELEC, DF_POIS; 
+    Resists: DF_ACID, DF_COLD, DF_FIRE;
+    Feats: SK_CLIMB, SK_HIDE, SK_MOVE_SIL, SK_LISTEN, SK_SPOT, 
+           SK_SEARCH, SK_INTIMIDATE, SK_KNOW_MAGIC,
+           FT_IMPROVED_INITIATIVE, FT_FLYBY_ATTACK;
+    Spells: $"globe of shadow", $"deeper darkness", $"Paralyzing Aura", 
+            $"Summon Ghasts", $"Death Stealing";
+    /* Psionics: $"probability travel"; */
+    Flags: M_HUMANOID, M_IALIGN, M_CHAOTIC, M_EVIL, M_GREEDY, M_FLYER,
+           M_NO_CORPSE, M_AIR, M_CLOSEID;
+    Desc: "Of all the races of demons, the nabassu are the most likely
+      to be found on the Prime Material plane -- they journey to human
+      worlds in order to feed upon the flesh of men (or demihumans), 
+      and thereby come of age. These sojourns are a source of great
+      sport and racuous celebration for nabassu, and they delight in
+      their power to take strength from the flesh of others before
+      their more serious responsibilities as adult demons come into 
+      play. Nabassu are, quite literally, death-dealers -- they possess
+      the magical ability to steal the deaths of living creatures and
+      pass them on to others. Many nabassu cultivate this inherant
+      magic by becoming powerful necromancers or respected assasion,
+      and they are known in the Abyss as the undisputed experts of all
+      things thanatoic.\n
+      __Nabassu are about seven feet tall, with leathery grey skin. They
+      are tall and slender with avian features, and can be mistaken for
+      gargoyles at a distance. They have elongated, almost batlike heads,
+      large tusks emerging from their lower jaw, long slender claws and
+      grey feathered wings.";
+    On Event EV_BIRTH {
+      /* Allow 50% of nabassu to start with some pre-stolen deaths
+         before the game begins. */
+      if (1d2 == 1)
+        EActor->IncEffStatiMag(EFF_FLAG1,
+           $"Death Stealing", SS_MISC, NULL, 1d6);
+      if (EActor->ChallengeRating() >= 11)
+        {
+          EActor->GainPermStati(INNATE_SPELL,NULL, 
+            SS_RACE,0,0, $"energy drain");
+          EActor->GainPermStati(INNATE_SPELL,NULL, 
+            SS_RACE,0,0, $"teleport");
+          EActor->GainPermStati(INNATE_SPELL,NULL, 
+            SS_RACE,0,0, $"vampiric touch");
+          EActor->GainPermStati(INNATE_SPELL,NULL, 
+            SS_RACE,0,0, $"spell turning");
+          EActor->GainPermStati(INNATE_SPELL,NULL, 
+            SS_RACE,0,0, $"retributive mirror");
+          EActor->GainPermStati(REGEN,NULL, 
+            SS_RACE,0,400, $"nabassu");
+        }
+      return NOTHING;
+      },
+    EV_DEATH {
+      EActor->IncEffStatiMag(EFF_FLAG1,
+           $"Death Stealing", SS_MISC, NULL, 1);
+      TPrint(e,"You steal the <EVictim>'s death!",
+               "The <EActor> steals your death!",
+               "The <EActor> steals the <EVictim>'s death!");
+      return NOTHING;
+      },
+    MSG_SPECABIL
+      "If it rises to or above Challenge Rating 11 (as the result of
+        a template, extra hit dice or any other reason), it gains the
+        additional innate spell-like abilities <9>energy drain<7>,
+        <9>teleport<7>, <9>vampiric touch<7>, <9>retributive mirror<7>
+        and <9>spell turning<7>, as well as the ability to regenerate 
+        4 hp per round.";
+    Constants:
+      * SPAWN_TYPE $"ghast";
+    Gear:
+      25% $"wand" of random 5 to 9;
+  }
+    
+Effect "Summon Ghasts" : EA_SUMMON
+  { SC_NEC; Cost: 7; Level: 4; qval: Q_LOC;
+    Purpose: EP_SUMMON; rval: $"shadow"; pval: 1d4+4; 
+    Desc: "Summons a group of ghasts worth CR 1d4+4.";
+    Flags: EF_MULTIPLE, EF_SPECABIL; 
+    On Event MSG_CAST
+      "The <EActor> calls upon unholy aid!"; }
+ 
+Effect "Paralyzing Aura" : EA_INFLICT
+  { SC_THA; Cost: 12; aval: AR_GLOBE; lval: 2; cval: BLUE;
+    xval: PARALYSIS; yval: PARA_HELD; sval: WILL; Level: 6;
+    Flags: EF_SPECABIL, EF_ALLIES_IMMUNE;
+    Desc: "A nabassu can eminate an aura of paralyzation within
+      a 10-foot radius of its being, requiring all creatures other
+      than it and its allies to succeed in a Fortitude save or be
+      paralyzed."; }
+
+Effect "Death Stealing" : EA_GENERIC
+  { SC_THA; Cost: 0; qval: Q_TAR; tval: MA_LIVING; 
+    Flags: EF_DEATH, EF_SPECABIL; sval: WILL;
+    Desc: "When a nabassu kills a victim, they are able to steal that
+      victim's death. This causes the victim to continue existing as
+      a ghast -- an undead creature bound to serve the nabassu -- in
+      spite of their passing on, and their soul remains trapped within
+      their now-undead body.\n
+      __Additionally, the nabassu can bestow this stolen death on any
+      other living creature instantly, with nothing more than a glance.
+      This will strike dead any creature who fails a Will saving throw.
+      This kind of transferral is a death effect, and is blocked by
+      powers that block such effects.";
+    On Event EV_ISTARGET {
+      /* Are you "holding" any deaths to give away? */
+      if (EActor->GetEffStatiMag(EFF_FLAG1,$"Death Stealing") == 0)
+        return CANNOT_CAST_IT;
+      /* Later, maybe program this to save the last death for a
+         truly dangerous victim, etc. */
+      return SHOULD_CAST_IT;
+      },
+    EV_MAGIC_HIT {
+      EActor->IncEffStatiMag(EFF_FLAG1,
+           $"Death Stealing", SS_MISC, NULL, -1);
+      /* RedirectEff(e,$"finger of death"); */
+      ThrowDmg(EV_DEATH,AD_NECR,0,"a stolen death",EActor,EVictim);
+      if (EVictim->isDead())
+        VPrint(e,NULL,"The <EVictim> falls to the ground, dead.");
+      return DONE;
+      },
+    MSG_CAST
+      "You bestow a stolen death on the <EVictim>!" /
+      "The <EActor> bestows a stolen death on you!" /
+      "The <EActor> bestows a stolen death on the <EVictim>!";
+  }
+
+Monster "vrock" : MA_DEMON, MA_BIRD
+  {
+    Image: purple GLYPH_LDEMON; Size: SZ_LARGE;  Arm: 10;
+    CR: OPT_CR(11,9); HD: 10; Hit: +9; Def: 21; Mov: 200%; Spd: 150%;
+    Str 23, Dex 15, Con 25, Int 14, Wis 16, Cha 16;
+    Attk: A_BITE for 1d8 AD_PIERCE,
+          A_CLAW for 2d6 AD_SLASH,
+          A_CLAW for 2d6 AD_SLASH,
+          A_RAKE for 1d6 AD_SLASH,
+          A_RAKE for 1d6 AD_SLASH,
+          A_SPOR for AD_POIS (DC 24),
+          A_SEEM for $"fiend",
+          A_GATE for 35% MA_DEMON (CR 9);
+	RACIAL_SKILL(SK_SPOT,8);
+	RACIAL_SKILL(SK_LISTEN,8);
+	MAGIC_RES(50);
+	ABILITY(CA_TELEPATHY,10);
+    Immune: DF_ELEC, DF_POIS; 
+    Resists: DF_ACID, DF_COLD, DF_FIRE;
+    Feats: FT_CLEAVE, FT_COMBAT_REFLEXES, 
+           SK_HIDE, SK_LISTEN, 
+           FT_MULTIATTACK, FT_POWER_ATTACK, SK_SPOT, SK_MOVE_SIL;
+    Flags: M_HUMANOID, M_IALIGN, M_CHAOTIC, M_EVIL, M_GREEDY, M_FLYER,
+           M_NO_CORPSE, M_AIR, M_CLOSEID;
+    Spells: $"mirror image", $"dimension door", $"vrock screech", $"heroism",
+              $"telekinesis", $"dance of ruin";
+    Desc: "A vrock is about 8 feet tall and weighs about 500 pounds.
+      Vrocks are vicious fighters who like to fly down into the enemy and
+      cause as much damage as possible. They prance about in battle, taking
+      briefly to the air and bringing their clawed feet into play. Despite
+      their advantage in mobility, the vrocks' deep love of battle frequently
+      leads them into melee combats against heavy odds.";
+    Poison: $"vrock spores";
+    On Event EV_STRIKE {
+      if (e.AType == A_SPOR)
+        {
+          if (EActor->HasStati(SPEC_TIMEOUT,ATTK_VAL + A_SPOR))
+            return ABORT;
+          EActor->GainTempStati(SPEC_TIMEOUT,NULL,3,SS_MISC,
+                                  ATTK_VAL + A_SPOR);
+        }
+      return NOTHING;
+      };
+  }
+
+0 Effect "Vrock Screech" : EA_INFLICT
+  { xval: STUNNED; aval: AR_GLOBE; lval: 3; sval: FORT;
+    Flags: EF_SPECABIL, EF_HARDSAVE4, EF_HARDSAVE2, EF_SOUND,
+      EF_EVIL, EF_CASTER_IMMUNE, EF_DSHORT;
+    Purpose: EP_ATTACK; Cost: 5;
+    Desc: "A vrock's screech is a horrible, bloodcurdling thing
+      to hear, and it stuns all within 30 feet of the demon who
+      fail a Fortitude save.";
+    On Event MSG_CAST
+      "You screech!" /
+      "The <EActor> screeches!"; }
+      
+0 Effect "Dance of Ruin" : EA_BLAST
+  { xval: AD_MAGC; pval: 20d6; lval: 12; aval: AR_GLOBE;
+    xval: REF; Flags: EF_SPECABIL, EF_PARTIAL, EF_EVIL;
+    Purpose: EP_ATTACK; 
+    Desc: "When three or more vrocks fight together, once every
+      thirty turns they can enact the dance of ruin. All three
+      creatures dance and gyrate wildly, and then unholy energy
+      rains down from above, flaying all creatures in the area
+      for 20d6 damage as the vulture-demons' blasphemous prayers
+      are answered. A Reflex save for half damage is allowed,
+      but lif more then three vrocks participate in the
+      dance, the save DC increases by +4 for every participant
+      after the first three.";
+    
+    int16 vrock_count; hObj vrock_caster; int32 the_turn;
+    On Event EV_ISTARGET {
+      hObj c;
+      
+      if (EActor->HasEffStati(SPEC_TIMEOUT,$"Dance of Ruin"))
+        return CANNOT_CAST_IT;
+
+      if (vrock_caster == GetHandle(EActor))
+        if (theGame->GetTurn() == the_turn)
+          return (vrock_count >= 3) ? SHOULD_CAST_IT :
+                                      CANNOT_CAST_IT;
+
+      vrock_count = 1;
+      vrock_caster = GetHandle(EActor);
+      the_turn = theGame->GetTurn();
+      
+      for(c = EMap->FirstThing(); c ; c = EMap->NextThing())
+        if (c->isCreature() && c->mID == $"vrock")
+          if (c != GetHandle(EActor))
+            if (dist(c->x,c->y,EActor->x,EActor->y) <= 6)
+              if (c->isFriendlyTo(EActor))
+                vrock_count++;
+      if (vrock_count < 3)
+        return CANNOT_CAST_IT;
+      return SHOULD_CAST_IT;
+      },
+    PRE(EV_MAGIC_HIT) {
+      /* Other demons are unaffected. */
+      if (EVictim->isMType(MA_DEMON))
+        return ABORT;
+      return NOTHING;
+      },
+    EV_EFFECT {
+      hObj c;
+      if (vrock_caster != GetHandle(EActor))
+        ReThrow(EV_ISTARGET,e);
+      for(c = EMap->FirstThing(); c ; c = EMap->NextThing())
+        if (c->isCreature() && c->mID == $"vrock")
+          if (dist(c->x,c->y,EActor->x,EActor->y) <= 6)
+            if (c->isFriendlyTo(EActor))
+              {
+                c->GainTempStati(SPEC_TIMEOUT,NULL,30,SS_MISC,
+                              0,0,$"Dance of Ruin",0);
+                if (c != GetHandle(EActor))
+                  c->Timeout += 10;
+              }
+      return NOTHING;
+      },
+    EV_CALC_EFFECT {
+      e.saveDC += (vrock_count - 3) * 4;
+      return NOTHING;
+      },
+    MSG_CAST
+      "You and the other vrocks dance. Unholy energies rain from above!" /
+      "The vrocks dance! Unholy energies rain from above!";
+  }    
+  
+Poison "Vrock Spores" : EA_BLAST
+  {  
+    Level: 7;
+    /*Iteration*/   cval: 1;
+    /*Save DC*/     sval: 24;
+    /*Persistance*/ lval: 3;
+    xval: AD_NORM; pval: 1d6;
+    On Event EV_MAGIC_HIT
+      "The vrock spores burrow beneath your skin!" /
+      "The vrock spores burrow beneath the <EActor>'s skin!";
+    Desc: "Vrocks can release clouds of spores from their bodies
+      that get underneath any nearby victims' skin, burrowing into
+      their bodies and growing into thin, piercing grey vines.";
+  }
+
+     
+Monster "cedar wretch": MA_DEMON
+  {
+    Image: bright black 'P'; Size: SZ_LARGE;
+    CR: OPT_CR(8,4); HD: 6; Hit: +5; Def: 10; Mov: 100%; Spd: 130%;
+    Str 19, Dex 14, Con 17, Int 6, Wis 8, Cha 6; Arm: 8; 
+    Attk: // ww: yes, six
+      A_SLAM for 1d8 AD_BLUNT,
+      A_SLAM for 1d8 AD_BLUNT,
+      A_SLAM for 1d8 AD_BLUNT,
+      A_SLAM for 1d8 AD_BLUNT,
+      A_SLAM for 1d8 AD_BLUNT,
+      A_SLAM for 1d8 AD_BLUNT, 
+      A_SEEM for $"dark tree";
+	RACIAL_SKILL(SK_HIDE,10);
+	ABILITY(CA_SMITE,6); 
+	ABILITY(CA_INFRAVISION,6);
+    Desc: "Cedar wretches are hateful spirits drawn from the Abyss to
+      inhabit the husks of trees."; 
+    Resists: DF_ACID, DF_COLD, DF_ELEC, DF_SONI;
+    Immune: DF_PLYS, DF_POLY, DF_STUN, DF_DISE, DF_POIS, DF_NECR, DF_CRIT,
+      DF_SUBD, DF_MIND;
+    Feats: FT_COMBAT_REFLEXES, FT_POWER_ATTACK, FT_SUNDER,
+           SK_ESCAPE_ART, SK_HIDE, SK_INTIMIDATE, /*SK_KNOWLEDGE,*/
+           SK_MOVE_SIL, SK_WILDERNESS;
+    Flags: M_REACH, M_CHAOTIC, M_EVIL, M_NOHEAD, M_NOHANDS, M_IALIGN,
+          M_NEUTER, M_NO_BLOOD, M_NO_BREATH;
+  } 
+  
+Monster "succubus" : MA_DEMON
+  {
+    Image: bright purple GLYPH_LDEMON; Size: SZ_MEDIUM;
+    CR: 9; HD: 6; Hit: +6; Def: 20; Mov: 100%; Spd: 115%;
+    Str 13, Dex 13, Con 13, Int 16, Wis 14, Cha 20;
+    Attk: A_CLAW for 1d3 AD_SLASH,
+          A_CLAW for 1d3 AD_SLASH,
+          A_SEEM for $"human",
+          /* In 3E, it was just "a balor"! */
+          A_GATE for 10% MA_DEMON (CR 15); 
+    ABILITY(CA_INFRAVISION,6);
+    ABILITY(CA_TELEPATHY,10);
+    ABILITY(CA_PHASE,PHASE_ETHERIAL);
+    MAGIC_RES(25);
+    Spells: $"charm person", $"friends", $"deeper darkness", $"desecrate",
+            $"doom", $"suggestion", $"teleport", $"unholy blight", $"hypnotism", 
+            $"blur";
+	  Immune: DF_ELEC, DF_POIS; 
+    Resists: DF_ACID, DF_COLD, DF_FIRE;
+    Feats: FT_ALLURING, FT_NATURAL_GRAB, FT_DODGE, FT_MOBILITY, FT_EXPERTISE,
+           SK_BLUFF, SK_DIPLOMACY, SK_APPRAISE, SK_LISTEN, SK_SPOT,
+           SK_HIDE, SK_MOVE_SIL, SK_ESCAPE_ART, SK_DISGUISE;
+    Flags: M_HUMANOID, M_IALIGN, M_CHAOTIC, M_EVIL, M_GREEDY, M_FLYER,
+           M_NO_CORPSE, M_CLOSEID, M_ALL_FEMALE;
+    Desc: "Appearing to mortals as breathtakingly beautiful, demure women 
+      or men of great magnetism and sensuality, succubi and incubi are the
+      social agents and sexual predators of the tanar'ri. They procure
+      favors from powerful mortals, move unseen among the highest levels
+      of society and leads the world into darkness, chaos and corruption
+      through its carnal desires.\n
+      __The true form of a succubus is a woman with small horns and bat
+      wings, while an incubus has tiny horns and cloven hooves. Both breeds
+      prefer congress to combat, and will avoid melee unless they have an
+      overwhelming advantage. Despite their non-combative nature many
+      demons frequently owe these creatures favors, and they are feared
+      in the Abyss for their ability to summon aid well outside the range
+      of their personal power."; 
+    On Event PRE(EV_NATTACK), PRE(EV_WATTACK) {
+      /* This is an ugly way to do the kiss, but we'll leave it until
+         revisions to the monster AI handle abilities like this better. */
+      if (EVictim->HasStati(GRABBED,-1,EActor) ||
+          EVictim->HasStati(STUCK,-1,EActor))
+        {
+          TPrint(e,"You kiss the <EVictim>.",
+                   "The <EActor> kisses you.",
+                   "The <EActor> kisses the <EVictim>.");
+          ThrowDmg(EV_DAMAGE,AD_DREX,10d10, (EActor->StateFlags 
+            & MS_FEMALE) ? "a succubus' embrace" : "an incubus' embrace",
+            EActor, EVictim);
+          EActor->Timeout += 40;
+          return DONE;
+        }
+      return NOTHING;
+      },
+    EV_GETNAME {
+      e.nBase = (EActor->StateFlags & MS_FEMALE) ? "succubus" : "incubus";
+      return NOTHING;
+      },
+    MSG_SPECABIL
+      "It can kiss a held victim to steal [10d10 x 50] points of experience.";
+    Gear:
+      30% $"whip" else
+        15% $"whip" of random 3 to 6 else
+        20% $"spiked chain" of random 3 to 8,
+      35% $"leather armor" of random 3 to 6,
+      1d3 $"potion" of $"healing";
+  }
+  
+Monster "buleazu" : MA_DEMON
+  {
+    Image: yellow GLYPH_LDEMON; Size: SZ_LARGE; Arm: 12;
+    CR: OPT_CR(11,8); HD: 9; Hit: +9; Def: 12; Mov: 150%; Spd: 150%;
+    Str 26, Dex 8, Con 24, Int 8, Wis 13, Cha 13;
+    /* Later, when the system can support this, allow them
+       to take their gore attack as part of their *weapon*
+       attack sequence as well as their natural attack
+       sequence. */
+    Attk: A_GORE for 2d8 AD_SLASH,
+          A_CLAW for 1d6 AD_SLASH,
+          A_CLAW for 1d6 AD_SLASH,
+          A_TAIL for 1d3 AD_BLUNT, 
+          A_SEEM for $"fiend",
+          A_GATE for 25% MA_DEMON (CR 6); 
+    ABILITY(CA_INFRAVISION,6);
+    ABILITY(CA_TELEPATHY,10);
+    /* Later, do this by script, with a chance of going berzerk
+       every turn based on circumstance. */
+    ABILITY(CA_BERSERK_RAGE,9);
+    Stati[EXTRA_FEAT,FT_MASTER_BULL_RUSH];
+    Stati[EXTRA_FEAT,FT_MONKEY_GRIP];
+    MAGIC_RES(20);
+    Spells: $"cause fear", $"bane", $"deeper darkness",
+            $"fog cloud", $"teleport", $"see invisibility",
+            $"shout";
+	Immune: DF_ELEC, DF_POIS; 
+    Resists: DF_ACID, DF_COLD, DF_FIRE;
+    Feats: FT_POWER_ATTACK, FT_MULTIATTACK, 
+           SK_INTIMIDATE, SK_HIDE, SK_LISTEN, SK_MOVE_SIL,
+           SK_SEARCH, SK_SPOT;
+    Flags: M_HUMANOID, M_IALIGN, M_CHAOTIC, M_EVIL, M_NO_CORPSE;
+    int16 gore_hit;
+    On Event PRE(EV_NATTACK)
+      { gore_hit = 0; return NOTHING; },
+    POST(EV_HIT) {
+      if (e.AType == A_GORE)
+        gore_hit = 1;
+      return NOTHING;
+      },
+    POST(EV_NATTACK) {
+      int16 time, x, y;
+      if (gore_hit == 1 && !EVictim->isDead()) {
+        time = EActor->Timeout;
+        x = EVictim->x;
+        y = EVictim->y;
+        ThrowVal(EV_SATTACK,A_BULL,EActor,EVictim);
+        EActor->Timeout = time;
+        if (x != EVictim->x || y != EVictim->y)
+          if (!EVictim->isDead())
+            if (!EVictim->SavingThrow(FORT,15,SA_STUN))
+              EVictim->GainTempStati(STUNNED,NULL,3d6,SS_ATTK);
+        }
+      return NOTHING;
+      },
+    MSG_SPECABIL
+      "If it hits with its gore attack, it may make a free Bull Rush
+        attempt at no time cost at the end of its natural attack
+        sequence. If this Bull Rush forces the victim back, the
+        victim must also make a Fortitude save (DC 15) or be stunned
+        for 3d6 rounds.";
+    Desc: "Far from the most powerful of the Abyssal hordes, these
+      demons may none the less be the toughest and most violent.
+      They have a simple purpose in their existance -- they are 
+      shock troops -- and they relish everything that job entails.
+      Buleazu are strong and fearless, being either to stubborn or
+      too stupid to give up.\n
+      __Buleazu resemble minotaurs in general form, but they lack
+      any hair on their bodies, having a leathery grey hide instead.
+      Their massively muscled hands and heavy arms allow them to
+      wield weapons larger than they would normally be able to as a
+      function of their race. Their hides are most frequently covered
+      with weeping sores and discolored patches, and their bloodshot
+      eyes burn with an unnatural, undying hatred of all things.";
+  }
+
+
+/*
+Monster "cerebrilith" : MA_DEMON
+  {
+    Desc: "While all demons possess a rudimentary competance in the
+      psionic aptitudes, it is the cerebrilith who excel here above
+      all others. One of the newer breeds of demons, many sages
+      believe that the cerebrilith species was created some perverse
+      exercise in Abyssal thaumaturgy, specifically as instruments
+      designed to serve a narrowly defined purpose: they are the
+      telepathic combat specialists of the Abyss.\n
+      __A cerebrilith is a huge, hulking creature with transparent
+      skin. Their skull curves up into a flowing, graceful taper,
+      and encloses their masssive brain like a cage with openings,
+      seeming more like a second ribcage than a skull. The massive
+      weight of a cerebrilith's head gives it an awkward balance,
+      making it more vulnerable to being knocked down or back.";
+      
+      
+    MSG_SPECABIL
+      "It suffers a -6 racial penalty to Balance, and a -4 racial
+        penalty to knockdown checks.";
+  
+  
+  }
+*/
+
+Monster "wastrilith" : MA_DEMON, MA_AQUATIC
+  {
+    Image: bright blue GLYPH_GDEMON; Size: SZ_LARGE;
+    CR: 10; HD: 12; Hit: +9; Def: 15; Mov: 150%; Spd: 150%;
+    Str 22, Dex 16, Con 15, Int 12, Wis 10, Cha 15;
+    Attk: A_BITE for 2d6 AD_PIERCE,
+          A_CLAW for 1d6 AD_SLASH,
+          A_CLAW for 1d6 AD_SLASH,
+          A_SEEM for $"fiend",
+          A_BREA for 3d10 AD_ACID;
+    ABILITY(CA_INFRAVISION,6);
+    ABILITY(CA_TELEPATHY,10);
+    ABILITY(CA_WATER_MASTERY,+2);
+    ABILITY(CA_REGEN, +7);
+    RACIAL_SKILL(SK_INTIMIDATE,+8);
+    RACIAL_SKILL(SK_SWIM,+8);
+    MAGIC_RES(40);
+    Immune: DF_ELEC, DF_POIS, DF_COLD;
+    Resists: DF_ACID;
+    Spells: $"blasphemy", $"deeper darkness", $"desecrate", $"cause fear",
+            $"dispel magic", $"read magic", $"part water", $"telekinesis",
+            $"teleport", $"unholy blight", $"wall of ice", 
+            $"waterspout", $"whirlpool";
+    Feats: FT_GUARDED_INVOCATION, FT_POWER_ATTACK, FT_DODGE, FT_MOBILITY, 
+           FT_KNOCK_PRONE, SK_BLUFF, SK_ESCAPE_ART, SK_INTIMIDATE, 
+           SK_KNOW_PLANES, SK_LISTEN, SK_SWIM, SK_SPOT;
+    Flags: M_IALIGN, M_CHAOTIC, M_EVIL, M_NO_CORPSE, M_AMPHIB, M_PSYCHO,
+           M_CLOSEID;
+    Desc: "Wastriliths are the antediluvian water demons of the Abyss --
+      great, coiling sea creatures that live only to cause terror and
+      bloodshed. Their habit of dwelling deep beneath the oceans lead
+      many scholars to suggest that there might be more wastriliths on
+      the prime material than most other kinds of demons, because their
+      habitat allows them to evade notice, preying on sailors and
+      adventurers in a more isolated environment.\n
+      __Wastriliths have diamond-shaped upper bodies with insectile heads
+      and two tentacles in place of arms; their lower body tapers off into
+      a long, prehensile tail like an eel's.";
+  }
+
+Monster "chasme" : MA_DEMON
+  {
+    Image: black GLYPH_GDEMON; Size: SZ_LARGE;
+    CR: 10; HD: 9; Hit: +9; Def: 20; Mov: 100%; Spd: 125%;
+    Str 19, Dex 16, Con 18, Int 14, Wis 14, Cha 14;
+    Attk: A_CLAW for 1d8  AD_SLASH
+                 and 2d4  AD_BLEE,
+          A_CLAW for 1d8  AD_SLASH
+                 and 2d4  AD_BLEE,
+          A_PROB for 1d10 AD_PIERCE
+                 and 3d6  AD_BLEE,
+          A_ROAR for 3d8  AD_SLEE,
+          A_PROX for 2d4  AD_FEAR (DC 16),
+          A_SEEM for $"fiend",
+          A_GATE for 40%  MA_DEMON (CR 10);
+    ABILITY(CA_INFRAVISION,6);
+    ABILITY(CA_TELEPATHY,10);
+    RACIAL_SKILL(SK_INTIMIDATE,+6);
+    MAGIC_RES(50);
+    Spells: $"contagion", $"deeper darkness", $"dispel magic", 
+            $"insect plague", $"ray of enfeeblement", 
+            $"protection from good", $"see invisibility",
+            $"telekinesis", $"teleport", $"stinking cloud",
+            $"unholy aura";
+	Immune: DF_ELEC, DF_POIS; 
+    Resists: DF_ACID, DF_COLD, DF_FIRE;
+    Feats: FT_FLYBY_ATTACK, FT_MULTIATTACK, FT_POWER_ATTACK,
+           SK_INTIMIDATE, SK_HIDE, SK_LISTEN, SK_MOVE_SIL,
+           SK_SEARCH, SK_SPOT;
+    Flags: M_HUMANOID, M_IALIGN, M_CHAOTIC, M_EVIL, M_GREEDY, M_FLYER,
+           M_NO_CORPSE, M_CLOSEID;
+    On Event MSG_ROARVERB "drone" / "drones";
+    Desc: "Loathsome and deviant, the chasme are scavengers and torturers,
+      demons who specialize in preying on the weak and exploiting emotional
+      and physical vulnerabilities. Chasmes serve as a kinds of internal
+      affairs among demons, reporting attempts at betrayal to demon lords 
+      even as they delight in betraying their own kind. Few beings in all
+      creation are as skilled at inflicting pain as the chasme are.\n
+      __Chasme resemble giant, Gigeresque anthropomorphic flies. The droning
+      sound produced by their wings is eerie and unnatural, and can lull
+      other creatures to sleep even in the heated conditions of battle. 
+      Chasme exploit this ability for all it is worth -- there's nothing
+      they like less than a fair fight.";
+  }
+  
+Monster "hezrou" : MA_DEMON
+  {
+    Image: green GLYPH_GDEMON; Size: SZ_LARGE; Arm: 10;
+    CR: 14; HD: 9; Hit: +9; Def: 16; Mov: 100%; Spd: 125%;
+    Str 21, Dex 10, Con 17, Int 14, Wis 14, Cha 14;
+    Attk: A_BITE for 4d4 AD_BLUNT,
+          A_CLAW for 1d6 AD_SLASH,
+          A_CLAW for 1d6 AD_SLASH,
+          A_PROX for 3d6 AD_SPE1,
+          A_SEEM for $"fiend",
+          A_GATE for 35% MA_DEMON (CR 14);
+    ABILITY(CA_INFRAVISION,6);
+    ABILITY(CA_TELEPATHY,10);
+    Spells: $"animate objects", $"blasphemy", $"blink", $"chaos hammer",
+            $"deeper darkness", $"desecrate", $"detect good", 
+            $"detect objects", $"produce flame", $"summon swarm",
+            $"teleport", $"unholy blight", $"gaseous form";
+    RACIAL_SKILL(SK_SPOT,8);
+	RACIAL_SKILL(SK_LISTEN,8);
+	MAGIC_RES(55);
+	Immune: DF_ELEC, DF_POIS; 
+    Resists: DF_ACID, DF_COLD, DF_FIRE;
+    Feats: FT_NATURAL_GRAB, FT_BLIND_FIGHT, FT_POWER_ATTACK, FT_TOUGHNESS,
+           SK_INTIMIDATE, SK_KNOW_THEO, SK_LISTEN, SK_SEARCH, SK_APPRAISE, 
+           SK_SPELLCRAFT, SK_SPOT;
+    Flags: M_IALIGN, M_CHAOTIC, M_EVIL, M_GREEDY, M_NO_CORPSE, M_CLOSEID;
+    Desc: "The demonic marshalls and troop leaders of the Abyss, hezrou
+      are repellent, squat demons with frog-like bodies, flat heads and
+      greedy, leering eyes. Rows of spines run along their back, and
+      their legs are short, thick and muscular. Triple rows of heavy,
+      blunt teeth line their mouths -- a hezrou's bite pulps armor and
+      flesh alike. Their most notable feature, however, is their stench
+      -- a hezrou's body produces a musk-like phereomone that coats the
+      horror when it fights, the scent of which can render mortals all
+      but helpless in a fit of gagging and vomiting.\n
+      __Hezrous are stolid, lazy demons that indulge much in complicitly
+      -- they have a great love of combat, and of devouring their foes
+      alive, but they do not normally seek power the way the balors and
+      palrethee do, being content in their station so long as they have
+      other people around them to bully, molest and eat.";
+    On Event PRE(EV_DAMAGE) {
+      if (e.DType == AD_SPE1)
+        {
+          if (EVictim->isMType(MA_DEMON) ||
+              (EVictim->ResistLevel(AD_POIS) == -1))
+            {
+              e.Immune = true;
+              return DONE;
+            }
+          if (EVictim->HasStati(NAUSEA,0,EActor))
+            {
+              EVictim->SetStatiDur(NAUSEA,0,EActor, max(e.vDmg,
+                EVictim->GetStatiDur(NAUSEA,0,EActor)));
+              return DONE;
+            }
+          if (EVictim->SavingThrow(FORT,17,SA_POISON|SA_EVIL))
+            {
+              TPrint(e,"The <EVictim> resists the effect of your stench!",
+                       "You resist the effect of the <EActor>'s stench!",
+                       "The <EActor> resists the effect of the <EVictim>'s stench!");
+              return DONE;
+            }
+          else
+            {
+              TPrint(e,"The <EVictim> is sickened by your stench!",
+                       "You are sickened by the <EActor>'s stench!",
+                       "The <EActor> is sickened by the <EVictim>'s stench!");
+              EVictim->GainTempStati(NAUSEA,EActor,e.vDmg,SS_ATTK);
+              return DONE;
+            }
+        }
+      return NOTHING;
+      },
+    EVICTIM(EV_DAMAGE)
+      {
+        if ((GetHandle(EItem) != NULL &&
+             GetHandle(EItem)->isType(T_WEAPON)) ||
+            (GetHandle(EItem2) != NULL &&
+             GetHandle(EItem2)->isType(T_WEAPON)))
+          if (e.DType == AD_SLASH || e.DType == AD_PIERCE ||
+              e.DType == AD_BLUNT)
+            e.vDmg /= 2;
+        return NOTHING;
+      },
+    MSG_SPECABIL
+      "It suffers only half damage from all weapon-based attacks.",
+    MSG_SPE1DESC
+      "cause nausea (DC 17)";
+  }
+  
+Monster "glabrezu" : MA_DEMON
+  {
+    Image: blue GLYPH_GDEMON; Size: SZ_HUGE; Arm: 7;
+    CR 15; HD: 10; Hit: +10; Def: 16; Mov: 150%; Spd: 125%;
+    Str 25, Dex 10, Con 19, Int 16, Wis 16, Cha 16;
+    Attk: A_GORE for 2d6 AD_PIERCE,
+          A_GORE for 2d6 AD_PIERCE,
+          A_CLAW for 1d6 AD_SLASH,
+          A_CLAW for 1d6 AD_SLASH,
+          A_BITE for 1d8 AD_PIERCE,
+          A_SEEM for $"fiend",
+          A_GATE for 50% MA_DEMON (CR 13);
+    ABILITY(CA_INFRAVISION,6);
+    ABILITY(CA_TELEPATHY,10);
+    Stati[TRUE_SIGHT];
+    Spells: $"burning hands", $"chaos hammer", $"charm person",
+            $"confusion", $"death knell", $"deeper darkness",
+            $"desecrate", $"detect good", $"dispel magic",
+            $"enlarge", $"mirror image", $"power word: stun",
+            $"reverse gravity",$"shatter", $"teleport", 
+            $"thornwrack", $"unholy blight";
+    RACIAL_SKILL(SK_SPOT,8);
+	RACIAL_SKILL(SK_LISTEN,8);
+	MAGIC_RES(60);
+	Immune: DF_ELEC, DF_POIS; 
+    Resists: DF_ACID, DF_COLD, DF_FIRE;
+    Feats: FT_POWER_ATTACK, FT_MULTIATTACK, FT_IMPROVED_CRIT,
+           SK_BLUFF, SK_CONCENT, SK_DIPLOMACY, SK_HIDE, SK_KNOW_THEO, 
+           SK_LISTEN, SK_MOVE_SIL, SK_SEARCH, SK_APPRAISE, SK_SPELLCRAFT,
+           SK_SPOT;
+    Flags: M_HUMANOID, M_IALIGN, M_CHAOTIC, M_EVIL, M_GREEDY,
+           M_NO_CORPSE, M_CLOSEID;
+  }  
+      
+Monster "nalfeshnee" : MA_DEMON
+  {
+    Image: brown GLYPH_GDEMON; Size: SZ_HUGE; Depth: 9;
+    CR: 16; HD: 11; Hit: +11; Def: 17; Mov: 100%; Spd: 150%;
+    Str 23, Dex 13, Con 19, Int 22, Wis 22, Cha 16; Arm: 7;
+    Attk: A_BITE for 2d4 AD_PIERCE,
+          A_CLAW for 1d4 AD_PIERCE,
+          A_CLAW for 1d4 AD_PIERCE,
+          A_SEEM for $"fiend",
+          A_GATE for 50% MA_DEMON (CR 16);
+    ABILITY(CA_INFRAVISION,6);
+    ABILITY(CA_TELEPATHY,10);
+    Stati[SEE_INVIS];
+    Spells: $"Nightmare Smite", $"change self", $"call lightning",
+            $"chaos hammer", $"chill touch", $"death knell", 
+            $"deeper darkness", $"desecrate", $"dispel magic",
+            $"feeblemind", $"invisibility", $"mirror image",
+            $"raise dead", $"slow", $"teleport", $"unholy aura",
+            $"unholy blight", $"web", $"bladethirst", $"eldritch bolt",
+            $"symbol of pain";
+    RACIAL_SKILL(SK_SPOT,8);
+	RACIAL_SKILL(SK_LISTEN,8);
+	MAGIC_RES(50);
+	Immune: DF_ELEC, DF_POIS; 
+    Resists: DF_ACID, DF_COLD, DF_FIRE;
+    Feats: FT_POWER_ATTACK, FT_MULTIATTACK, FT_MASTER_BULL_RUSH,
+           SK_BLUFF, SK_DIPLOMACY, SK_HIDE, SK_KNOW_THEO, SK_LISTEN,
+           SK_MOVE_SIL, SK_SEARCH, SK_APPRAISE, SK_SPELLCRAFT,
+           SK_SPOT;
+    Flags: M_HUMANOID, M_IALIGN, M_CHAOTIC, M_EVIL, M_GREEDY, M_FLYER,
+           M_NO_CORPSE, M_CLOSEID;
+    Desc: "Nalfehsnee are huge demons with features resembling both apes
+      and boars. They stand upright and are roughly humanoid, though their
+      hands end in pincer-like claws and their greasy fur is studded with
+      spikes. Large bone plates on their shoulders resemble shoulder-pads,
+      and they have shiny black tusks and horns.\n
+      __Nalfeshnee judge the souls of the damned, acting as merchants and
+      slave-lords of the lower realms, forming the infrastructure that
+      herds, tortures and farms the hundreds of millions of damned souls
+      chaotic and evil enough to end up in the Abyss.";
+  }
+
+Effect "Nightmare Smite" : EA_INFLICT
+  {
+    Desc: "Nalfeshnee have the ability to draw forth the most secret
+      fears and nightmares of others, forcing anyone nearby to experience
+      these horrors. When the demon activates this ability, brilliant beams
+      of rainbow-colored light play around its body for the remainder of 
+      the current turn and the duration of the next, gathering the power
+      for this effect. Then, this nimbus of unholy light explodes outwards,
+      and any creatures in the area take 10d6 points of unholy damage, 3d6
+      points of Charisma damage and are nauseated. A Will saving throw (DC
+      18) halves the damage and negates the nausea. Other demons are immune
+      to this effect.";
+    xval: EFF_FLAG1; Purpose: EP_ATTACK;
+    On Event EV_ELAPSED {
+      DPrint(e,"Your ribbons of light explode outward!",
+               "The <EActor>'s ribbons of light explode outward!");
+      RedirectEff(e,$"Nightmare Smite;actual blast", EV_EFFECT, e);
+      return NOTHING;
+      },
+    EV_CALC_EFFECT {
+      e.vDuration = 2;
+      return NOTHING;
+      },
+    EV_ISTARGET {
+      if (EActor->HasEffStati(EFF_FLAG1,$"Nightmare Smite"))
+        return CANNOT_CAST_IT;
+      return SHOULD_CAST_IT;
+      },
+    MSG_CAST
+      "You are surronded by a nimbus of unholy, coruscating light!" /
+      "The <EActor> is surronded by a nimbus of unholy, coruscating light!";
+  }
+
+Effect "Nightmare smite;actual blast" : EA_BLAST
+  { aval: AR_GLOBE; cval: COL_RAINBOW; lval: 8;
+    xval: AD_EVIL; pval: 10d6; sval: WILL partial; }
+and EA_BLAST
+  { aval: AR_GLOBE; cval: COL_RAINBOW; lval: 8;
+    xval: AD_DACH; pval: 3d6; sval: WILL partial; }
+and EA_INFLICT
+  { aval: AR_GLOBE; cval: COL_RAINBOW; lval: 8;
+    xval: NAUSEA; sval: WILL; 
+    On Event MSG_BLASTNAME "ribbons of light"; }
+
+/********************************************************************************
+ ********************************************************************************
+ ***                                    DEVILS                                ***
+ ********************************************************************************
+ ********************************************************************************/
+
+Monster "lemure" : MA_DEVIL
+  {
+    Image: grey GLYPH_LDEVIL; Size: SZ_MEDIUM; Depth: 4;
+    CR: OPT_CR(-2,1); HD: 2; Hit: +2; Def: 8; Mov: 75%; Spd: 75%;
+    Str 10, Dex 10, Con 10, Int 0, Wis 11, Cha 5;
+    Attk: A_CLAW for 1d3 AD_SLASH,
+          A_CLAW for 1d3 AD_SLASH,
+          A_SEEM for $"fiend";
+	ABILITY(CA_WEAPON_IMMUNITY,1);
+	ABILITY(CA_INFRAVISION,12);
+    Immune: DF_FIRE, DF_POIS, DF_MIND; 
+    Resists: DF_COLD, DF_ACID;
+    Flags: M_LAWFUL, M_EVIL, M_IALIGN, M_NO_CORPSE, M_MINDLESS,
+           M_NOHANDS, M_CLOSEID;
+    Desc: "The lowest of all devils, lemures of the souls of the
+      petty damned, tortured in the Hells for all eternity. Mindless
+      and savage, they know only to obey other demons. Lemures appear
+      as distended grey blobs of flesh with an obese form that is
+      only vaguely humanoid.";
+  }
+
+Monster "nupperibo" : MA_DEVIL
+  {
+    Image: grey GLYPH_LDEVIL; Size: SZ_LARGE; Depth 4;
+    CR: OPT_CR(1,2); HD: 3; Hit: +1; Def: 8; Mov: 75%; Spd: 75%;
+    Str 16, Dex 8, Con 14, Int 0, Wis 13, Cha 5;
+    Attk: A_CLAW for 1d3 AD_SLASH,
+          A_CLAW for 1d3 AD_SLASH,
+          A_BITE for 0d0 AD_SWAL (DC 10),
+          A_DGST for 2d4 AD_ACID,
+          A_SEEM for $"fiend";
+	ABILITY(CA_REGEN,2);
+	ABILITY(CA_WEAPON_IMMUNITY,1);
+	ABILITY(CA_INFRAVISION,12);
+    Immune: DF_FIRE, DF_POIS, DF_MIND, DF_CRIT; 
+    Resists: DF_COLD, DF_ACID;
+    Feats: FT_NATURAL_GRAB;
+    Flags: M_LAWFUL, M_EVIL, M_IALIGN, M_NO_CORPSE, M_MINDLESS,
+           M_NOHANDS, M_AMORPH, M_DEAF, M_CLOSEID;
+    Spells: $"inflict light wounds", $"burning hands"; 
+    Desc: "Slightly more willful damned souls become nupperibos
+      instead of lemures. Obese and amorphious, much like the
+      lemures, nupperibo possess a greater degree of physical
+      power then the lemures -- though they are still mindless --
+      and are sometimes used as hard laborers or press gangs in
+      the hells. Their bodies are sticky to the touch, and they
+      are eager to devour and absorb any other beings in order
+      to increase their own station.";
+  }
+
+Monster "true imp" : MA_DEVIL, MA_IMPKIN
+  {
+    Image: grey 'i'; Size: SZ_TINY;  Arm: 3;
+    CR: OPT_CR(2,3); HD: 3; Hit: +2; Def: 13; Mov: 150%; Spd: 100%;
+    Str 8, Dex 17, Con 7, Int 14, Wis 12, Cha 10;
+    Attk: A_STNG for 1d6 AD_PIERCE and AD_POIS (DC 13),
+          A_FORM for $"bat",
+          A_FORM for $"giant rat";
+	  ABILITY(CA_REGEN,2);
+	  ABILITY(CA_WEAPON_IMMUNITY,1);
+    Poison: $"imp venom";
+    WEAPON_FOCUS_NATURAL_ATTACK;
+    Feats: FT_SNEAKY, SK_HIDE, 
+      SK_LISTEN, SK_MOVE_SIL, SK_SEARCH, SK_SPELLCRAFT, SK_SPOT;
+    Flags: M_IALIGN, M_LAWFUL, M_EVIL, M_GREEDY, M_MFLYER,
+      M_NO_CORPSE;
+    Spells: $"detect good", $"hypnotism", $"invisibility";
+    Desc: "True imps are creatures of the Nine Hells, of which quasits
+      and mephits are deviant offshoots. They are clever, malicious
+      and numerous creatures, given the scutwork of maintaining the
+      vast infernal bureaucracy.";
+  }
+
+Poison "imp venom" : EA_DRAIN
+  {
+    Level: 3;
+    /*Iteration*/   cval: 2;
+    /*Save DC*/     sval: 13;
+    /*Persistance*/ lval: 2;
+    xval: AD_DADX;  pval: 1d4;
+    Desc: "This poison inflicts <11>1d4<7> points of Dexterity damage every 
+      <11>2<7> turns, and requires <11>2<7> saving throws against <11>DC 13<7> 
+      to overcome.";
+  }
+
+Monster "advespa" : MA_DEVIL
+  { 
+    Image: yellow GLYPH_LDEVIL; Size: SZ_LARGE; 
+    CR: OPT_CR(7,3); HD: 4; Hit: +4; Def: 16; Mov: 150%; Spd: 125%;
+    Str 15, Dex 13, Con 17, Int 8, Wis 11, Cha 10; Arm: 4;
+    Attk: A_CLAW for 1d6 AD_SLASH,
+          A_CLAW for 1d6 AD_SLASH,
+          A_STNG for 1d4 AD_PIERCE 
+                 and AD_POIS (DC 15),
+          A_SEEM for $"fiend",
+          A_GATE for 30% MA_DEVIL (CR 4);
+	ABILITY(CA_WEAPON_IMMUNITY,1);
+	ABILITY(CA_REGEN,2);
+	ABILITY(CA_INFRAVISION,12);
+	SPELL_RES(15); 
+    Immune: DF_FIRE, DF_POIS; Resists: DF_COLD, DF_ACID;    
+    Feats: SK_HIDE, SK_LISTEN, SK_MOVE_SIL, SK_SEARCH, SK_SPOT,
+           FT_FLYBY_ATTACK, FT_IMPROVED_INITIATIVE,
+           FT_POUNCE, FT_NATURAL_GRAB;
+    Spells: $"command", $"produce flame", $"blur", $"dire charm";
+    Flags: M_LAWFUL, M_EVIL, M_IALIGN, M_NO_CORPSE, M_FLYER, 
+           M_REACH, M_ALL_FEMALE, M_CLOSEID;
+    Desc: "A horrible hybrid of woman and wasp, the advespa, or
+           wasp demons, serve as aerial scouts and snipers in the
+           realm of Baator. As venomous in temperment as they are
+           in personality, advespa are concerned primarily with
+           their own social status and prestige -- and with
+           hunting, which they dearly enjoy.";
+    Poison: $"giant wasp venom";
+  }
+
+Monster "spinagon" : MA_DEVIL
+  {
+    Image: grey GLYPH_LDEVIL; Size: SZ_SMALL; 
+    CR: OPT_CR(4,4); HD: 3; Hit: +4; Def: 17; Mov: 175%; Spd: 125%;
+    Str 10, Dex 13, Con 11, Int 8, Wis 13, Cha 13; Arm: 5;
+    Attk: A_CLAW for 1d4 AD_SLASH and 1d4 AD_FIRE,
+          A_CLAW for 1d4 AD_SLASH and 1d4 AD_FIRE,
+          A_SEEM for $"fiend",
+          A_GATE for 35% MA_DEVIL (CR 6);
+	ABILITY(CA_INFRAVISION,12);
+	SPELL_RES(18);
+    Immune: DF_FIRE, DF_POIS; Resists: DF_COLD, DF_ACID;    
+    Feats: SK_DIPLOMACY, SK_HIDE, SK_LISTEN, SK_SPOT,
+           FT_POINT_BLANK_SHOT, FT_RAPID_SHOT;
+    Spells: $"blur", $"produce flame", $"phase door";
+    Flags: M_LAWFUL, M_EVIL, M_IALIGN, M_NO_CORPSE, M_FLYER,
+           M_AVOID_MELEE, M_CLOSEID;
+    Desc: "Spinagons resemble halfling-sized gargoyles, but their
+      bodies are covered with hundreds of thin spikes -- hence their
+      nomiker, spined devils. They travel in packs, harrying the 
+      weaker beings in the Hells and weaning out the weak in order
+      to make the whole stronger.";
+    Gear: 20d6 $"spinagon spike";
+    On Event EV_TURN {
+      hObj h, hSpike; int16 SpikeCount;
+      hSpike = NULL; SpikeCount = NULL;
+      /* Regen spikes every 1 in 10 turns, to reduce
+         CPU load (apparently this is a drain!) */
+      if (1d10 != 10)
+        return NOTHING;
+
+      for(h=EActor->FirstInv();h;h=EActor->NextInv())
+        if (h->iID == $"spinagon spike")
+          { hSpike = h; SpikeCount += h->GetQuantity(); }
+      /* Always keep at least seven spikes on hand */
+      if (SpikeCount >= 7)
+        return NOTHING;
+      if (hSpike)
+        hSpike->SetQuantity(7);
+      else {
+        hSpike = CreateItem($"spinagon spike");
+        if (!hSpike)
+          return NOTHING;
+        hSpike->AddQuality(WQ_FLAMING);
+        hSpike->SetKnown(0xFFFF);
+        hSpike->SetQuantity(7);
+        EActor->GainItem(hSpike,false);
+        }
+      DPrint(e,"You grow more spikes.",
+               "The <EActor> grows more spikes.");
+      return NOTHING;
+      },
+    EVICTIM(EV_DAMAGE) {
+      if (e.DType == AD_STEA) {
+        e.Immune = true;
+        return ABORT; 
+      }
+      return NOTHING; 
+    }, 
+
+    EV_DEATH {
+      hObj h2;
+      /* Since the spinagon corpse is presumed to have spikes in
+         it, wew don't want to leave a pile of loose spikes behind
+         on the ground. */
+      for(h2=EActor->FirstInv();h2;h2=EActor->NextInv())
+        if (h2->iID == $"spinagon spike")
+          { h2->Remove(true); h2 = EActor->FirstInv(); }
+      return NOTHING;
+      },
+    MSG_SPECABIL
+      "It grows spinagon spikes out of its body, regenerating them as
+         quickly as it can throw them.";
+  }
+        
+Item "spinagon spike" : T_WEAPON
+  { Image: purple GLYPH_ARROW; Group: WG_THROWN; Range: 3;
+    Mat: MAT_BONE; Size: SZ_TINY; Weight: 0; Flags: WT_PIERCING, IT_NOGEN; 
+    SDmg: 1d6; LDmg: 1d6; Acc:+0; Crit: x2; Threat: 2; Spd: 120%;
+    Cost: OPT_COST(88,0); 
+    Desc: "Spinagons grow a kind of throwing spike out of their
+      diabolic bodies, which continues to burn even after it has
+      been thrown."; }
+
+Monster "black abishai" : MA_DEVIL
+  {
+    Image: shadow GLYPH_LDEVIL; Size: SZ_LARGE; Arm: 4;
+    CR: OPT_CR(7,4); HD: 4; Hit: +2; Def: 12; Hit: +4; Mov: 125%; Spd: 100%;
+    Str 17, Dex 12, Con 13, Int 10, Wis 11, Cha 10; 
+    Attk: A_CLAW for 1d4 AD_SLASH,
+          A_CLAW for 1d4 AD_SLASH,
+          A_STNG for 1d4 AD_PIERCE and 0d0 AD_POIS (DC 13),
+          A_SEEM for $"fiend",
+          A_GATE for 50% MA_DEVIL (CR 4);
+	ABILITY(CA_TELEPATHY,6);
+	ABILITY(CA_BLINDSIGHT,6);
+	MAGIC_RES(30);
+    Immune: DF_FIRE, DF_POIS; Resists: DF_COLD, DF_ACID;
+    Feats: FT_FLYBY_ATTACK, FT_TOUGHNESS, FT_GUARDED_INVOCATION;
+    Spells: $"animate dead", $"change self", $"charm person", $"command",
+      $"desecrate", $"spectral force", $"produce flame", $"fireball",
+      $"spook", $"suggestion";
+    Poison: $"black abishai venom";
+    Flags: M_EVIL, M_LAWFUL, M_IALIGN, M_POISON, M_THICK_HIDE, M_FLYER,
+      M_HUMANOID, M_NEUTER, M_NO_CORPSE, M_CLOSEID;
+    Desc: "Abishai look like gothic gargoyles, with large wings and long,
+      barbed prehensile tails. They carry with them the scent of vinegar,
+      and the air warms in their presence. In baatezu society, the color
+      of an abishai determines its station: black is lowest, then green,
+      with red being the highest.";
+  }
+
+Poison "black abishai venom" : EA_BLAST
+  {
+    Level: 5;
+    /*Iteration*/   cval: 10;
+    /*Save DC*/     sval: 13;
+    /*Persistance*/ lval: 4;
+    xval: AD_DRCO; pval: 1d6;
+    Desc: "This poison inflicts <11>1d6<7> points of Constitution damage every 
+      <11>10<7> turns, and requires <11>4<7> saving throws against <11>DC 13<7> 
+      to overcome.";
+  }
+
+
+Monster "green abishai" : MA_DEVIL
+  {
+    Image: green GLYPH_LDEVIL; Size: SZ_LARGE; Arm: 6;
+    CR: OPT_CR(8,5); HD: 5; Hit: +3; Def: 13; Hit: +5; Mov: 125%; Spd: 100%;
+    Str 17, Dex 12, Con 13, Int 10, Wis 11, Cha 10; 
+    Attk: A_CLAW for 1d4 AD_SLASH,
+          A_CLAW for 1d4 AD_SLASH,
+          A_STNG for 1d4 AD_PIERCE and 0d0 AD_POIS (DC 15),
+          A_SEEM for $"fiend",
+          A_GATE for 50% MA_DEVIL (CR 5);
+	ABILITY(CA_TELEPATHY,6);
+	ABILITY(CA_BLINDSIGHT,6);
+	MAGIC_RES(35); 
+    Immune: DF_FIRE, DF_POIS; Resists: DF_COLD, DF_ACID;
+    Feats: FT_FLYBY_ATTACK, FT_TOUGHNESS, FT_GUARDED_INVOCATION, SK_HIDE,
+      SK_INTIMIDATE, SK_CONCENT, SK_LISTEN, SK_SPOT, SK_APPRAISE;
+    Spells: $"animate dead", $"change self", $"charm person", $"command",
+      $"desecrate", $"spectral force", $"produce flame", $"fireball",
+      $"spook", $"suggestion";
+    Poison: $"green abishai venom";
+    Flags: M_EVIL, M_LAWFUL, M_IALIGN, M_POISON, M_THICK_HIDE, M_FLYER,
+      M_HUMANOID, M_NEUTER, M_NO_CORPSE, M_CLOSEID;
+    Desc: "Abishai look like gothic gargoyles, with large wings and long,
+      barbed prehensile tails. They carry with them the scent of vinegar,
+      and the air warms in their presence. In baatezu society, the color
+      of an abishai determines its station: black is lowest, then green,
+      with red being the highest.";
+  }
+
+Poison "green abishai venom" : EA_BLAST
+  {
+    Level: 6;
+    /*Iteration*/   cval: 10;
+    /*Save DC*/     sval: 15;
+    /*Persistance*/ lval: 4;
+    xval: AD_DRCO; pval: 1d8;
+    Desc: "This poison inflicts <11>1d8<7> points of Constitution damage every 
+      <11>10<7> turns, and requires <11>4<7> saving throws against <11>DC 15<7> 
+      to overcome.";
+  }
+
+Monster "red abishai" : MA_DEVIL
+  {
+    Image: red GLYPH_LDEVIL; Size: SZ_LARGE; Arm: 8;
+    CR: OPT_CR(8,6); HD: 6; Hit: +4; Def: 14; Hit: +6; Mov: 125%; Spd: 100%;
+    Str 17, Dex 12, Con 13, Int 10, Wis 11, Cha 10; 
+    Attk: A_CLAW for 1d4 AD_SLASH,
+          A_CLAW for 1d4 AD_SLASH,
+          A_STNG for 1d4 AD_PIERCE and 0d0 AD_POIS (DC 17),
+          A_SEEM for $"fiend",
+          A_GATE for 50% MA_DEVIL (CR 6);
+	ABILITY(CA_TELEPATHY,6);
+	ABILITY(CA_BLINDSIGHT,6);
+	MAGIC_RES(40);
+    Immune: DF_FIRE, DF_POIS; Resists: DF_COLD, DF_ACID;
+    Feats: FT_FLYBY_ATTACK, FT_TOUGHNESS, FT_GUARDED_INVOCATION, SK_HIDE,
+      SK_INTIMIDATE, SK_CONCENT, SK_LISTEN, SK_SPOT, SK_APPRAISE;
+    Spells: $"animate dead", $"change self", $"charm person", $"command",
+      $"desecrate", $"spectral force", $"produce flame", $"fireball",
+      $"spook", $"suggestion";
+    Poison: $"red abishai venom";
+    Flags: M_EVIL, M_LAWFUL, M_IALIGN, M_POISON, M_THICK_HIDE, M_FLYER,
+      M_HUMANOID, M_NEUTER, M_NO_CORPSE, M_CLOSEID;
+    Desc: "Abishai look like gothic gargoyles, with large wings and long,
+      barbed prehensile tails. They carry with them the scent of vinegar,
+      and the air warms in their presence. In baatezu society, the color
+      of an abishai determines its station: black is lowest, then green,
+      with red being the highest.";
+  }
+
+Poison "red abishai venom" : EA_BLAST
+  {
+    Level: 7;
+    /*Iteration*/   cval: 10;
+    /*Save DC*/     sval: 17;
+    /*Persistance*/ lval: 4;
+    xval: AD_DRCO; pval: 1d10;
+    Desc: "This poison inflicts <11>1d10<7> points of Constitution damage every 
+      <11>10<7> turns, and requires <11>4<7> saving throws against <11>DC 17<7> 
+      to overcome.";
+  }
+
+Monster "osyluth" : MA_DEVIL
+  {
+    Image: shadow GLYPH_LDEVIL; Size: SZ_LARGE; 
+    CR: OPT_CR(9,6); HD: 5; Hit: +5; Def: 19; Mov: 150%; Spd: 150%;
+    Str 21, Dex 10, Con 15, Int 14, Wis 14, Cha 14; Arm: 5;
+    Attk: A_BITE for 1d8 AD_PIERCE,
+          A_CLAW for 1d4 AD_SLASH,
+          A_CLAW for 1d4 AD_SLASH,
+          A_STNG for 3d4 AD_PIERCE and AD_POIS (DC 14),
+          A_SEEM for $"fiend",
+          A_GATE for 50% MA_DEVIL (CR 6),
+          A_PROX for 3d6 AD_FEAR (DC 14);
+	ABILITY(CA_WEAPON_IMMUNITY,1);
+	ABILITY(CA_INFRAVISION,12);
+	SPELL_RES(21);
+    Immune: DF_FIRE, DF_POIS; Resists: DF_COLD, DF_ACID;    
+    Feats: SK_LISTEN, SK_MOVE_SIL, SK_SEARCH, SK_APPRAISE, SK_SPOT,
+           FT_ALERTNESS, FT_GUARDED_INVOCATION/*, FT_IMPROVED_INITIATIVE*/; 
+    Spells: $"animate dead", $"charm person", $"dimensional anchor", 
+            $"bane", $"fly", $"invisibility", $"spectral force", 
+            $"suggestion", $"teleport", $"wall of ice";
+    /* TODO -- Special ability to know creature's alignment without
+       casting a spell. */           
+    Flags: M_LAWFUL, M_EVIL, M_IALIGN, M_NO_CORPSE, M_HUMANOID, M_REACH,
+           M_CLOSEID;
+    Desc: "The secret police of the Nine Hells, osyluths (also called
+      bone devils) sniff out corruption and goodness in the armies of 
+      the damned. They appear as skeletal humanoids with a long, barbed 
+      tail.";
+    Poison: $"osyluth venom";
+    On Event PRE(EV_DAMAGE) {
+      if (e.AType == A_PROX) {
+        if (EVictim->HasStati(AFRAID))
+          return ABORT;
+        if (EVictim->isMType(MA_DEVIL))
+          return ABORT;
+        if (EActor->HasStati(SPEC_TIMEOUT,A_PROX,EVictim))
+          return ABORT;
+        }
+      return NOTHING;
+      },
+    POST(EV_DAMAGE) {
+      if (e.AType == A_PROX && e.Resist)
+        EActor->GainTempStati(SPEC_TIMEOUT,EVictim,-1,SS_MISC,A_PROX);
+      return NOTHING;
+      };
+  }
+
+Monster "kocrachon" : MA_DEVIL
+  {
+    Image: cyan GLYPH_LDEVIL; Size: SZ_MEDIUM; 
+    CR: OPT_CR(8,6); HD: 6; Hit: +6; Def: 17; Mov: 150%; Spd: 150%;
+    Str 16, Dex 19, Con 13, Int 17, Wis 14, Cha 16; 
+    Attk: A_PROB for 1d6 AD_PIERCE and AD_DISE (DC 14),
+          A_CLAW for 1d4 AD_SLASH,
+          A_CLAW for 1d4 AD_SLASH,
+          A_SEEM for $"fiend",
+          A_GATE for 40% MA_DEVIL (CR 6);
+	ABILITY(CA_FEED_UPON_PAIN,6);
+	ABILITY(CA_WEAPON_IMMUNITY,1);
+	ABILITY(CA_INFRAVISION,12);
+	SPELL_RES(17);
+    Immune: DF_FIRE, DF_POIS; Resists: DF_COLD, DF_ACID;
+    Feats: SK_BLUFF, SK_HEAL, SK_HIDE, SK_INTIMIDATE, SK_MOVE_SIL, SK_SPOT,
+           SK_LISTEN, /*FT_IMPROVED_INITIATIVE,*/ FT_DODGE, FT_COMBAT_REFLEXES;
+    Flags: M_LAWFUL, M_EVIL, M_IALIGN, M_NO_CORPSE, M_FLYER, M_CLOSEID;
+    Disease: $"devil chills";
+    Spells: $"animate dead", $"cure moderate wounds", $"desecrate", 
+      $"detect monsters", $"dispel magic", $"spectral force", $"suggestion",
+      $"teleport", $"thornwrack", $"emotion", $"pain touch";
+    Desc: "Kocrachon, or agony devils, are the torturers and interrogators
+      of the Hells, justly feared for their skill at inflicting pain. 
+      They are usually kept as retainers and household staff by more powerful
+      diabolical lords. Insectile in appearance, the kocrachon have glistening
+      navy or deep purple carapices and long, serrated proboscises. Their
+      limbs are long and spindly (and multi-jointed), and their heads are
+      tiny in comparison to the rest of their body.";
+  }
+
+Poison "osyluth venom" : EA_DRAIN
+  {
+    Level: 3;
+    /*Iteration*/   cval: 7;
+    /*Save DC*/     sval: 14;
+    /*Persistance*/ lval: 5;
+    xval: AD_DRST; pval: 1d6;
+    Desc: "This poison inflicts <11>1d6<7> points of Strength damage every 
+      <11>7<7> turns, and requires <11>5<7> saving throws against <11>DC 14<7> 
+      to overcome.";
+  }
+
+Monster "barbazu" : MA_DEVIL
+  {
+    Image: red GLYPH_LDEVIL; Size: SZ_MEDIUM; 
+    CR: OPT_CR(7,7); HD: 6; Hit: +6; Def: 15; Mov: 150%; Spd: 125%;
+    Str 15, Dex 11, Con 13, Int 6, Wis 10, Cha 10; Arm: 8;
+    Attk: A_CLAW for 1d4 AD_SLASH,
+          A_CLAW for 1d4 AD_SLASH,
+          A_SEEM for $"fiend",
+          A_GATE for 50% MA_DEVIL (CR 6);
+	ABILITY(CA_WEAPON_IMMUNITY,1);
+	ABILITY(CA_INFRAVISION,12);
+	SPELL_RES(23); 
+    Immune: DF_FIRE, DF_POIS; Resists: DF_COLD, DF_ACID;
+    Spells: $"animate dead", $"charm person", $"command", $"desecrate", 
+            $"bladethirst", $"produce flame", $"spectral force", 
+            $"suggestion", $"teleport";
+    Feats: SK_LISTEN, SK_APPRAISE, SK_MOVE_SIL, SK_SPOT, SK_INTIMIDATE,
+           /*FT_IMPROVED_INITIATIVE, */ FT_CLEAVE, FT_GUARDED_INVOCATION; 
+    Flags: M_LAWFUL, M_EVIL, M_IALIGN, M_NO_CORPSE, M_HUMANOID, M_CLOSEID;
+    int16 claw_hits;
+    On Event POST(EV_DAMAGE) {
+      int16 i;
+      /* Simulate WQ_WOUNDING */
+      if (e.AType == A_SWNG)
+        if (EItem->iID == $"saw-toothed glaive")
+          if (!(EVictim->ResistLevel(AD_CRIT) == -1)) {
+            if (i = EVictim->GetEffStatiDur(BLEEDING,$"saw-toothed glaive"))
+              EVictim->SetEffStatiDur(BLEEDING,$"saw-toothed glaive",i + 4d6);
+            else
+              EVictim->GainTempStati(BLEEDING,NULL,4d6,SS_ATTK,2,0,$"saw-toothed glaive");
+            }
+      },
+    PRE(EV_NATTACK) { claw_hits = 0; 
+                      return NOTHING; },
+    EV_HIT          { if (e.AType == A_CLAW) 
+                        claw_hits++; 
+                      return NOTHING; },
+    POST(EV_NATTACK) {
+      if (claw_hits >= 2 && !EVictim->isDead()) {
+        TPrint(e,"You ravage the <EVictim> with your wire-sharp beard!",
+                 "The <EActor> ravages you with <his:EActor> wire-sharp beard!",
+                 "The <EActor> ravages the <EVictim> with <his:EActor> wire-sharp beard!");
+        ThrowDmg(EV_DAMAGE,AD_SLASH,1d8+EActor->Mod(A_STR),"a barbazu's beard",EActor,EVictim);
+        if (!EVictim->isDead())
+          if (!EVictim->SavingThrow(FORT,14,SA_DISEASE))
+            EVictim->GainPermStati(DISEASED,NULL,SS_ATTK, 0, 0, $"devil chills");
+        }
+      return NOTHING;
+      },
+    PRE(EV_STRIKE) {
+      if (!EActor->HasStati(RAGING) && EActor->cFP > -2)
+        {
+          DPrint(e,"You fly into a killing fury!",
+                   "The <EActor> flies into a killing fury!");
+          EActor->GainTempStati(RAGING,NULL,6,SS_MISC,4);
+          EActor->LoseFatigue(1);
+        }
+      return NOTHING;
+      },       
+    MSG_SPECABIL
+      "When a barbazu hits with both claw attacks, it also ravages its
+      victim with its wire-sharp beard for 1d8 points of damage. If such a
+      victim fails a Fortitude save (DC 14), she also contracts <4>devil
+      chills<7>. A barbazu attacking with a glaive inflicts wounds that
+      bleed for 4d6 turns, at a rate of 2 points of damage per turn.";     
+    Stati[WEP_SKILL,WS_PROFICIENT,0,$"saw-toothed glaive"];
+    Desc: "The terrifying shock troops of Hell, barbazu -- also known as
+    bearded devils -- delight in violence in a manner few other beings
+    could comprehend.  Barbazu have scaly crimson hides, long serpentine
+    tails, and humanoid faces with sharp beards like wire.";   
+    Disease: $"devil chills"; /* for the Monster Memory */
+    Gear:
+      50% $"saw-toothed glaive" of random 1 to 3;
+  }      
+
+Monster "amnizu" : MA_DEVIL
+  {
+    Image: bright green GLYPH_LDEVIL; Size: SZ_MEDIUM; 
+    CR: OPT_CR(10,7); HD: 9; Hit: +9; Def: 13; Mov: 135%; Spd: 125%;
+    Str 12, Dex 11, Con 13, Int 16, Wis 15, Cha 10; Arm: 10;
+    Attk: A_TUCH for 3d6 AD_PSYC
+                 and 2d4 AD_DRIN,
+          A_SEEM for $"fiend",
+          A_GATE for 50% MA_DEVIL (CR 7);
+	ABILITY(CA_WEAPON_IMMUNITY,1);
+	ABILITY(CA_INFRAVISION,12);
+	ABILITY(CA_REGEN,4);
+	SPELL_RES(18); 
+	ABILITY(CA_TRACKING,15);
+    Immune: DF_FIRE, DF_POIS; Resists: DF_COLD, DF_ACID;
+    Feats: SK_DIPLOMACY,  SK_KNOW_INF, SK_KNOW_PLANES, SK_SEARCH, SK_SPELLCRAFT, 
+           SK_SPOT, SK_SWIM, SK_TUMBLE, FT_SKILL_FOCUS, SK_USE_MAGIC,
+           /* FT_QUICKEN_INNATE_SPELL, */ FT_GUARDED_INVOCATION,
+           FT_DODGE;
+    Flags: M_LAWFUL, M_EVIL, M_IALIGN, M_NO_CORPSE, M_FLYER, M_REACH,
+           M_CLOSEID;
+    Spells: $"dismissal", $"fireball", $"spectral force", $"choke", 
+            /* sequester?! */ $"displacement", $"wall of ice";
+    Stati[SUSTAIN,A_INT];
+    On Event MSG_SPECABIL
+      "It is immune to Intelligence damage or drain.";
+    Desc: "Amnizu are short, stocky and cunning devils charged with
+      guarding the gates of Hell. They ensure that none of the souls
+      within are ever allowed to escape.";
+    Gear:
+      // 33% $"ring" +3 of $"protection" else
+        50% $"bracers" +3 of $"defense" else
+          $"amulet" of $"natural armor",
+      50% $"ring" of $"evasion",
+      /* 50% $"wand" of $"paralysis",
+         50% $"wand" of $"polymorph", */
+      $"wand" of random 4 to 7,
+      50% $"wand" of random 4 to 7,
+      50% $"cloak" of random 1 to 6;
+      
+  }
+
+Monster "hamatula" : MA_DEVIL
+  { 
+    Image: brown GLYPH_LDEVIL; Size: SZ_MEDIUM; 
+    CR: OPT_CR(9,8); HD: 9; Hit: +9; Def: 17; Mov: 100%; Spd: 100%;
+    Str 17, Dex 11, Con 13, Int 12, Wis 14, Cha 10; Arm: 13;
+    Attk: A_CLAW for 2d4 AD_SLASH 
+                 and 3d6 AD_FEAR (DC 14),
+          A_CLAW for 2d4 AD_SLASH 
+                 and 3d6 AD_FEAR (DC 14),
+          A_IMPA for 3d4 AD_PIERCE,
+          A_AURA for 1d4 AD_PIERCE,
+          A_SEEM for $"fiend",
+          A_GATE for 50% MA_DEVIL (CR 8);
+	ABILITY(CA_WEAPON_IMMUNITY,1);
+	ABILITY(CA_INFRAVISION,12);
+	SPELL_RES(23); 
+    Immune: DF_FIRE, DF_POIS; Resists: DF_COLD, DF_ACID;
+    Spells: $"animate dead", $"bane", $"charm person", $"desecrate", 
+            $"hold person", $"order's wrath", $"produce flame", 
+            $"spectral force", $"suggestion", $"teleport", $"unholy blight";
+    Feats: SK_HIDE, SK_LISTEN, SK_MOVE_SIL, SK_APPRAISE, SK_SPOT,
+    SK_INTIMIDATE, FT_ALERTNESS, FT_CLEAVE, FT_GUARDED_INVOCATION,
+    FT_POWER_ATTACK, FT_NATURAL_GRAB, FT_MULTIATTACK; 
+    Flags: M_LAWFUL, M_EVIL, M_IALIGN, M_NO_CORPSE, M_HUMANOID, M_CLOSEID;
+    Desc: "Hamatula, known commonly as barbed devils, are bulky, muscular 
+      creatures whose bodies are covered with sharp barbs. They are the 
+      military officers and drill sergeants of the Hells, keeping lower-ranking 
+      demons in line and breaking the spirits of the unruly.";
+    On Event PRE(EV_DAMAGE) {
+      if (e.AType == A_PROX) {
+        if (EVictim->HasStati(AFRAID))
+          return ABORT;
+        if (EVictim->isMType(MA_DEVIL))
+          return ABORT;
+        if (EActor->HasStati(SPEC_TIMEOUT,A_CLAW,EVictim))
+          return ABORT;
+        }
+      return NOTHING;
+      },
+    POST(EV_DAMAGE) {
+      if (e.AType == A_PROX && e.Resist)
+        EActor->GainTempStati(SPEC_TIMEOUT,EVictim,-1,SS_MISC,A_CLAW);
+      return NOTHING;
+      },
+    MSG_SPECABIL
+      "Once a character has made one successful save against a hamatula's fear,
+        that character is immune to that specific hamatula's fear for the remainder
+        of the day.";
+  }  
+
+Monster "malebranche" : MA_DEVIL
+  {
+    Image: magenta GLYPH_LDEVIL; Size: SZ_HUGE; 
+    CR: OPT_CR(12,9); HD: 16; Hit: +14; Def: 13; Mov: 180%; Spd: 150%;
+    Str 30, Dex 9, Con 23, Int 10, Wis 9, Cha 10; Arm: 15;
+    Attk: A_GORE for 2d6 AD_PIERCE,
+          A_BITE for 2d6 AD_PIERCE,          
+          A_CLAW for 2d4 AD_SLASH,
+          A_CLAW for 2d4 AD_SLASH,
+          A_SEEM for $"fiend",
+          A_PROX for 3d6 AD_FEAR (DC 18);
+	ABILITY(CA_REGEN,8);
+	ABILITY(CA_WEAPON_IMMUNITY,1);
+	SPELL_RES(20);
+	ABILITY(CA_INFRAVISION,12);
+    Feats: SK_BLUFF, SK_CLIMB, SK_INTIMIDATE, SK_JUMP, SK_LISTEN,
+           FT_CLEAVE, FT_FLYBY_ATTACK, FT_POWER_ATTACK, FT_KNOCK_PRONE, 
+           FT_MULTIATTACK, FT_MASTER_BULL_RUSH, FT_GREAT_BLOW,
+           FT_NATURAL_GRAB;
+    Flags: M_LAWFUL, M_EVIL, M_IALIGN, M_NO_CORPSE, M_FLYER, M_REACH,
+           M_CLOSEID;
+    Desc: "Malebranches are huge, hulking devils with wickedly curving
+      horns. The raw power of Hell made manifest, these creatures are
+      bruisers, and they know it. They act as enforcers, thugs and
+      anthropomorphic seige engines within the armies of Baator. Their
+      great bat wings allow them to fly awkwardly, but with great
+      speed.";
+    /* TODO: the malebrache have a charge-related special ability.
+       Right now, the monster AI doesn't know how to charge. */
+    On Event PRE(EV_DAMAGE) {
+      if (e.AType == A_PROX) {
+        if (EVictim->HasStati(AFRAID))
+          return ABORT;
+        if (EVictim->isMType(MA_DEVIL))
+          return ABORT;
+        if (EActor->HasStati(SPEC_TIMEOUT,A_PROX,EVictim))
+          return ABORT;
+        }
+      return NOTHING;
+      },
+    POST(EV_DAMAGE) {
+      if (e.AType == A_PROX && e.Resist)
+        EActor->GainTempStati(SPEC_TIMEOUT,EVictim,-1,SS_MISC,A_PROX);
+      return NOTHING;
+      },
+    MSG_SPECABIL
+      "It is immune to Strength damage or drain.";
+    Stati[SUSTAIN,A_STR]; 
+  }
+
+Monster "narzugon" : MA_DEVIL
+  {
+    Image: purple GLYPH_LDEVIL; Size: SZ_MEDIUM; 
+    CR: OPT_CR(11,9); HD: 10; Hit: +12; Def: 16; Mov: 100%; Spd: 150%;
+    Str 18, Dex 14, Con 13, Int 12, Wis 13, Cha 19;
+    Attk: A_PUNC for 1d3 AD_BLUNT,
+          A_GAZE for AD_SPE1,
+          A_GATE for 30% MA_DEVIL (CR 9),
+          A_SEEM for $"fiend";
+	ABILITY(CA_WEAPON_IMMUNITY,3);
+	ABILITY(CA_INFRAVISION,12);
+	RACIAL_SKILL(SK_RIDE,6);
+	SPELL_RES(23);
+	ABILITY(CA_TRACKING,15);
+	ABILITY(CA_REGEN,5);
+    Immune: DF_FIRE, DF_POIS; Resists: DF_COLD, DF_ACID;
+    Feats: SK_INTIMIDATE, SK_KNOW_INF, SK_KNOW_PLANES, SK_RIDE, SK_SEARCH,
+           SK_APPRAISE, SK_SPOT, SK_WILD_LORE, FT_MOUNTED_COMBAT,
+           FT_RIDE_BY_ATTACK, FT_SPIRITED_CHARGE, FT_IMPROVED_CRIT,
+           FT_POWER_ATTACK; 
+    Flags: M_LAWFUL, M_EVIL, M_IALIGN, M_NO_CORPSE, M_HUMANOID,
+           M_CLOSEID;
+    Spells: $"desecrate", $"hold person", $"produce flame", $"haste",
+            $"bestow curse", $"unholy blight";
+    Desc: "The elite cavalry of the Nine Hells, narzugons are famous
+      for their zeal and twisted honor. Riding nightmares, fiendish
+      dire boars, young chromatic dragons or more horrific mounts
+      still, the narzugons are sent out of Baator to retrive anyone
+      or anything that escapes. They harry the fugitive to exhaustion,
+      then close in for the kill. Rumors claim that the gaze of the
+      narzugon eclipses reason and brings death. Narzugons appear as
+      humanoids with coal-black eyes and leathery grey skin, but their
+      bodies are rarely seen beneath their iconic spiked full plate
+      armor.";
+    Gear:
+      33% $"cloak" of random 2 to 6,
+      33% $"ring" of random 2 to 6,
+      33% $"boots" of random 2 to 6,
+      33% $"helm" of random 2 to 6,
+      33% $"girdle" of random 2 to 6,
+      $"field plate armor" of random 5 to 8,
+      50% $"greatsword" of random 3 to 6 else
+        50% $"scimitar" of random 4 to 7 else
+            $"long sword" of random 4 to 7,
+      /* When they actually _are_ mounted, will give them lances,
+         horseman's picks, etc. */
+      3d4 $"potion" of $"extra-healing",
+      2d4 $"potion" of $"dimension door";
+    On Event PRE(EV_DAMAGE) {
+      if (e.DType == AD_SPE1) {
+        if (EActor->HasStati(SPEC_TIMEOUT,A_GAZE,EVictim))
+          return ABORT;
+        EActor->GainTempStati(SPEC_TIMEOUT,EVictim,1d4+1,SS_MISC,A_GAZE);
+        e.eID = $"phantasmal killer";
+        e.saveDC = 14 + EActor->Mod2(A_CHA);
+        e.vCasterLev = EActor->ChallengeRating();
+        ReThrow(EV_EFFECT,e);
+        return DONE;
+        }
+      return NOTHING;
+      },
+    MSG_SPECABIL
+      "Its gaze has the effect of a <1>Phantasmal Killer<7> spell on any
+        victim within range, recurring every 1d4+1 rounds.",
+    EV_INITIALIZE {
+      hObj hMount;
+      switch (random(10))
+        {
+          case 0:
+            hMount = CreateMonster($"wild boar");
+            hMount->AddTemplate($"dire");
+            hMount->AddTemplate($"fiendish");
+           break;
+          case 1:
+            hMount = CreateMonster($"winter wolf");
+            hMount->AddTemplate($"fiendish");
+           break;
+          case 2:
+            hMount = CreateMonster($"blue dragon");
+            hMount->AddTemplate($"young");
+           break;   
+          case 3:
+            hMount = CreateMonster($"black dragon");
+            hMount->AddTemplate($"young");
+           break;   
+          case 4:
+            hMount = CreateMonster($"purple dragon");
+            hMount->AddTemplate($"young");
+           break;   
+          case 5:
+            hMount = CreateMonster($"greater barghest");
+           break;   
+          /*case 6:
+            hMount = CreateMonster($"bezekira");
+           break;*/
+          /* default: */   
+          case 6:
+          case 7:
+          case 8:
+          case 9:
+            hMount = CreateMonster($"nightmare");
+           break;
+        }
+
+      if (hMount == NULL)
+        return NOTHING;
+
+      SetSilence();
+      hMount->PartyID = EActor->PartyID;
+      hMount->PlaceAt(EMap,EActor->x,EActor->y);
+      hMount->Initialize();
+      hMount->CalcValues();
+      Throw(EV_MOUNT,EActor,hMount);
+      UnsetSilence();
+      return NOTHING;
+      
+      };
+  }
+
+Monster "cornugon" : MA_DEVIL
+  {
+    Image: brown GLYPH_GDEVIL; Size: SZ_LARGE; 
+    CR: OPT_CR(11,10); HD: 11; Hit: +11; Def: 20; Mov: 200%; Spd: 150%;
+    Str 21, Dex 12, Con 17, Int 14, Wis 14, Cha 14; Arm: 15;
+    Attk: A_CLAW for 1d4 AD_SLASH, 
+          A_CLAW for 1d4 AD_SLASH, 
+          A_BITE for 1d4 AD_PIERCE,
+          A_TAIL for 1d3 AD_BLUNT,
+          A_GATE for 50% MA_DEVIL (CR 10),
+          A_SEEM for $"fiend",
+          A_PROX for 3d6 AD_FEAR (DC 14);
+	ABILITY(CA_WEAPON_IMMUNITY,3);
+	ABILITY(CA_INFRAVISION,12);
+	SPELL_RES(24); 
+	ABILITY(CA_REGEN,5);
+    Immune: DF_FIRE, DF_POIS; Resists: DF_COLD, DF_ACID;
+    Feats: SK_BLUFF, SK_CLIMB, SK_LISTEN, SK_MOVE_SIL, SK_APPRAISE, SK_SPOT, 
+           SK_INTIMIDATE, FT_CLEAVE, FT_POWER_ATTACK, FT_SUNDER,
+           FT_GUARDED_INVOCATION, FT_WEAPON_SPECIALIST;
+    Spells: $"animate dead", $"charm person", $"detect monsters", $"ESP",
+            $"fireball", $"lightning bolt", $"produce flame", $"spectral force", 
+            $"stoneskin", $"suggestion", $"teleport", $"wall of fire";
+    Flags: M_LAWFUL, M_EVIL, M_IALIGN, M_NO_CORPSE, M_FLYER, M_HUMANOID,
+           M_CLOSEID;
+    On Event PRE(EV_DAMAGE) {
+      if (e.AType == A_PROX) {
+        if (EVictim->HasStati(AFRAID))
+          return ABORT;
+        if (EVictim->isMType(MA_DEVIL))
+          return ABORT;
+        if (EActor->HasStati(SPEC_TIMEOUT,A_PROX,EVictim))
+          return ABORT;
+        }
+      if (e.AType == A_SWNG)
+        if (EItem->iID == $"whip")
+          if (e.isCrit || !EVictim->SavingThrow(FORT,17))
+            EVictim->GainTempStati(STUNNED, NULL,3d6,SS_ATTK);
+      if (e.AType == A_TAIL)
+        EVictim->GainTempStati(BLEEDING, NULL, 3d6, SS_ATTK, 2, 0);
+      return NOTHING;
+      },
+    POST(EV_DAMAGE) {
+      if (e.AType == A_PROX && e.Resist)
+        EActor->GainTempStati(SPEC_TIMEOUT,EVictim,-1,SS_MISC,A_PROX);
+      return NOTHING;
+      },
+    MSG_SPECABIL
+      "It is specialized in the whip. When it hits an enemy with its
+        whip, the enemy must make a Fortitude save (DC 17) or be stunned
+        for 3d6 rounds. When is scores a critical with the whip, no save
+        is allowed against the stun effect. Wounds inflicted by its tail
+        bleed for 3d6 rounds, at a rate of 2 points of damage per round.";
+    Gear:
+      75% $"whip" of random 5 to 7;
+    Desc: "The cornugon, or horned devil, is the lowest of the greater
+      devils, which means its hardly a creature for any mortal being to
+      trifle with casually. Resembling a hybrid between a dragon, a man
+      (or woman) and a thornbush, the cornugon has huge wings, reptilian
+      brown skin and a fierce temperment. They serve as the elite defense
+      forces of the Nine Hells.";
+  }    
+
+/* Monster "gelugon" : MA_DEVIL (Ice Devil) */
+
+/* Monster "ghargatula" : MA_DEVIL (Thunder Devil) (CR 16) */
+
+/* Monster "pit fiend" : MA_DEVIL */
+
+/*** DEVILKIN ***/
+
+Monster "hell hound" : MA_OUTSIDER, MA_DOG, MA_DEVIL
+  {
+    Image: pink 'd'; Size: SZ_MEDIUM; 
+    CR: OPT_CR(4,4); HD: 4; Hit: 4; Def: 15; Mov: 150%; Spd: 125%;
+    Str 13, Dex 13, Con 13, Int 6, Wis 10, Cha 6;
+    Attk: A_BITE for 1d8+1 AD_PIERCE
+                 and 1d6 AD_FIRE,
+          A_BREA for 2d6 AD_FIRE (DC 13);
+	RACIAL_SKILL(SK_HIDE,5);
+	RACIAL_SKILL(SK_MOVE_SIL,5);
+	ABILITY(CA_INFRAVISION,6);
+    Immune: DF_FIRE;
+    Feats: SK_SPOT, SK_HIDE, SK_MOVE_SIL,
+           FT_RUN, FT_SWARM;
+    Flags: M_LAWFUL, M_EVIL, M_NO_CORPSE, M_NOHANDS, M_FIRE;
+  }
+
+Monster "yeth hound" : MA_OUTSIDER, MA_DOG, MA_DEVIL
+  {
+    Image: grey 'd'; Size: SZ_MEDIUM; 
+    CR: OPT_CR(6,3); HD: 3; Hit: 3; Def: 18; Mov: 200%; Spd: 115%;
+    Str 17, Dex 15, Con 15, Int 6, Wis 14, Cha 10; Arm: 10; 
+    Attk: A_BITE for 1d8 AD_PIERCE
+                 and 0d0 AD_TRIP (DC 20),
+          A_ROAR for 2d4 AD_FEAR (DC 11);
+	ABILITY(CA_SCENT,6);
+	ABILITY(CA_TRACKING,12);
+	ABILITY(CA_INFRAVISION,6);
+	RACIAL_SKILL(SK_WILDERNESS,4);
+    Feats: SK_LISTEN, SK_SPOT, SK_SEARCH, SK_HIDE, SK_MOVE_SIL,
+           SK_WILDERNESS, 
+           FT_IMPROVED_INITIATIVE, FT_SWARM;
+    Flags: M_EVIL, M_NO_CORPSE, M_NOHANDS, M_LIGHT_AVERSE;
+    Desc: "A yeth hound stands 5 feet tall at the shoulder and weighs about
+    400 pounds.
+    Yeth hounds cannot speak, but understand Infernal.
+    Yeth hounds hunt only at night. They fear the sun and never venture out
+    in daylight, even if their lives depend on it. ";
+    On Event MSG_ROARVERB "bay" / "bays";
+  }
+
+/********************************************************************************
+ ********************************************************************************
+ ***                                 ELEMENTALKIN                             ***
+ ********************************************************************************
+ ********************************************************************************/
+
+/*** TRUE ELEMENTALS ***/
+
+/* Each elemental type has a strong advantage: air elementals
+   are FAST, fire elementals have a fire aura and generally
+   deal a lot more damage, earth elementals have strong natural
+   armor and water elementals regenerate. */
+
+#define AIR_ELEM(word,size,cr,hd,def,arm,st,dx,cn,dmg,dc,ft1,ft2,ft3,desc)            \
+                                                                                      \
+Monster word " air elemental" : MA_ELEMENTAL                                          \
+  { Image: white 'E'; Size: size; Mana: (7*hd); Arm: arm;                             \
+    CR: cr; HD: hd; Hit: (hd*3)/4; Def: def;  Mov: 150%; Spd: 150%;                   \
+    Str st, Dex dx, Con cn, Int 6, Wis 11, Cha 11;                                    \
+    Attk: A_SLAM for dmg AD_BLUNT and 1d(cr) AD_KNOC (DC dc),                         \
+          A_TUCH for 0d0 AD_ENGL (DC dc),                                             \
+          A_CRUS for dmg AD_BLUNT;                                                    \
+    ABILITY(CA_AIR_MASTERY,2);                                                        \
+    ABILITY(CA_FLIGHT,12);                                                            \
+    ABILITY(CA_INFRAVISION,6);                                                        \
+    Immune: DF_POIS, DF_SLEE, DF_STUN, DF_PLYS, DF_CRIT;                              \
+    Resists: DF_ELEC;                                                                 \
+    Feats: SK_LISTEN, SK_SPOT, FT_IMPROVED_INITIATIVE, FT_FLYBY_ATTACK,               \
+      ft1, ft2, ft3;                                                                  \
+    Flags: M_NEUTER, M_AMORPH, M_NOHANDS, M_NOLIMBS, M_NOHEAD,                        \
+      M_NOBODY, M_NO_CORPSE, M_MFLYER, M_AIR;                                         \
+    Desc: "An air elemental is the spiritual personification of the base element "    \
+      "of air, dwelling on the elemental plane of air but occasionally summoned by "   \
+      "wizards and creatures of magic to the prime plane for air. Air elementals "     \
+      "are flighty and tempramantal -- fierce when aroused, but quick to forget "      \
+      "any slights against them. A " word " air elemental is about the size "          \
+      "of a " desc ".";                                                                \
+    On Event POST(EVICTIM(EV_DAMAGE)) {                                                \
+      rID mID;                                                                         \
+      if (EVictim->isDead())                                                           \
+        return NOTHING;                                                                \
+      if ((EVictim->cHP * 2) / 3 > EVictim->mHP)                                       \
+        return NOTHING;                                                                \
+      if (EVictim->mID != EVictim->tmID)                                               \
+        return NOTHING;                                                                \
+      if (!EVictim->isThreatened())                                                    \
+        return NOTHING;                                                                \
+      if (EVictim->cFP < 0)                                                            \
+        return NOTHING;                                                                \
+      if (EVictim->HasStati(POLYMORPH))                                                \
+        return NOTHING;                                                                \
+      EVictim->LoseFatigue(2,false);                                                   \
+      EVictim->IDPrint("Enraged, you change into a whirlwind!",                         \
+                      "Enraged, the <hObj> changes into a whirlwind!", EVictim);       \
+      switch (EVictim->tmID)                                                           \
+        {                                                                              \
+          case $"tiny air elemental":    mID = $"tiny whirlwind"; break;               \
+          case $"small air elemental":   mID = $"small whirlwind"; break;              \
+          case $"medium air elemental":  mID = $"medium whirlwind"; break;             \
+          case $"large air elemental":   mID = $"large whirlwind"; break;              \
+          case $"huge air elemental":    mID = $"huge whirlwind"; break;               \
+          case $"greater air elemental": mID = $"greater whirlwind"; break;            \
+          case $"elder air elemental":   mID = $"elder whirlwind"; break;              \
+        }                                                                              \
+      EVictim->Shapeshift(mID,false,NULL_OBJ);                                         \
+      EVictim->GainTempStati(POLYMORPH,NULL,3d6,SS_ENCH,0,0,mID,15);                   \
+      return NOTHING;                                                                  \
+      };                                                                               \
+  }     
+
+//       word       size      cr  hd  def arm  st  dx  cn  dmg  dc  
+AIR_ELEM("tiny",    SZ_TINY,   1,  1,  12,  0, 8,  15, 8,  1d2, 10, 0, 0, 0, "pixie")
+AIR_ELEM("small",   SZ_SMALL,  2,  2,  14,  0, 10, 17, 10, 1d4, 13, 0, 0, 0, "halfling")
+AIR_ELEM("medium",  SZ_MEDIUM, 4,  4,  16,  0, 12, 21, 14, 1d6, 16, 0, 0, 0, "human")
+AIR_ELEM("large",   SZ_LARGE,  6,  8,  18,  0, 14, 25, 16, 2d6, 19, FT_DODGE, 0, 0, "ogre")
+AIR_ELEM("huge",    SZ_HUGE,   8,  16, 20,  0, 18, 29, 18, 2d8, 22, FT_DODGE, 0, 0, "covered wagon")
+AIR_ELEM("greater", SZ_HUGE,   10, 21, 22,  0, 20, 31, 18, 3d6, 25, FT_DODGE, FT_MOBILITY, 0, "tiny house")
+AIR_ELEM("elder",   SZ_HUGE,   12, 24, 24,  0, 22, 33, 18, 3d8, 28, FT_DODGE, FT_MOBILITY, 0, "tiny house")
+
+
+  
+#define WHIRLWIND(word,size,cr,hd,def,arm,st,dx,cn,dmg,dc,ft1,ft2,ft3,desc)            \
+Monster word " whirlwind" : MA_ELEMENTAL, MA_VORTEX                                   \
+  { Image: bright cyan 'v'; Size: size; Mana: (7*hd); Arm: arm;                             \
+    CR: cr; HD: hd; Hit: (hd*3)/4+2; Def: def;  Mov: 250%; Spd: 200%;                 \
+    Str (st+4), Dex (dx-4), Con cn, Int 6, Wis 11, Cha 11;                            \
+    Attk: A_SLAM for dmg AD_BLUNT                                                     \
+                 and 1d(cr) AD_KNOC (DC dc),                                          \
+          A_TUCH for 0d0 AD_ENGL (DC dc),                                             \
+          A_CRUS for dmg AD_BLUNT;                                                    \
+    ABILITY(CA_AIR_MASTERY,2);                                                        \
+    ABILITY(CA_FLIGHT,12);                                                            \
+    ABILITY(CA_INFRAVISION,6);                                                        \
+    Immune: DF_POIS, DF_SLEE, DF_STUN, DF_PLYS, DF_CRIT;                              \
+    Resists: DF_ELEC;                                                                 \
+    Feats: SK_LISTEN, SK_SPOT, FT_IMPROVED_INITIATIVE, FT_FLYBY_ATTACK,               \
+      ft1, ft2, ft3;                                                                  \
+    Flags: M_NEUTER, M_AMORPH, M_NOHANDS, M_NOLIMBS, M_NOHEAD, M_NOGEN,               \
+      M_NOBODY, M_NO_CORPSE, M_MFLYER, M_AIR;                                         \
+    Desc: "A whirlwind is the alternate form taken me an enraged air elemental "      \
+      "-- the spiritual personification of the base element "                         \
+      "of air, dwelling on the elemental plane of air but occasionally summoned by "  \
+      "wizards and creatures of magic to the prime plane for air. Air elementals "    \
+      "are flighty and tempramantal -- fierce when aroused, but quick to forget "     \
+      "any slights against them. A " word " air elemental is about the size "         \
+      "of a " desc ".";                                                               \
+  }                                                                                   
+
+                                                                                      
+//       word       size      cr  hd  def arm  st  dx  cn  dmg  dc  
+WHIRLWIND("tiny",    SZ_TINY,   1,  1,  12,  0, 8,  15, 8,  1d6, 10, 0, 0, 0, "pixie")
+WHIRLWIND("small",   SZ_SMALL,  2,  2,  14,  0, 10, 17, 10, 1d8, 13, 0, 0, 0, "halfling")
+WHIRLWIND("medium",  SZ_MEDIUM, 4,  4,  16,  0, 12, 21, 14, 1d10, 16, 0, 0, 0, "human")
+WHIRLWIND("large",   SZ_LARGE,  6,  8,  18,  0, 14, 25, 16, 2d8, 19, FT_DODGE, 0, 0, "ogre")
+WHIRLWIND("huge",    SZ_HUGE,   8,  16, 20,  0, 18, 29, 18, 2d10, 22, FT_DODGE, 0, 0, "covered wagon")
+WHIRLWIND("greater", SZ_HUGE,   10, 21, 22,  0, 20, 31, 18, 3d12, 25, FT_DODGE, FT_MOBILITY, 0, "tiny house")
+WHIRLWIND("elder",   SZ_HUGE,   12, 24, 24,  0, 22, 33, 18, 3d20, 28, FT_DODGE, FT_MOBILITY, 0, "tiny house")
+
+#define WATER_ELEM(word,size,cr,hd,def,arm,st,dx,cn,dmg,dc,ft1,ft2,ft3,desc)          \
+                                                                                      \
+Monster word  " water elemental" : MA_ELEMENTAL                                       \
+  { Image: azure 'E'; Size: size; Mana: (7*hd); Arm: arm;                             \
+    CR: cr; HD: hd; Hit: (hd*3)/4; Def: def;  Mov: 150%; Spd: 150%;                   \
+    Str st, Dex dx, Con cn, Int 6, Wis 11, Cha 11;                                    \
+    Attk: A_SLAM for dmg AD_BLUNT and dmg AD_SOAK (DC dc),                            \
+          A_TUCH for AD_ENGL (DC dc),                                                 \
+          A_CRUS for dmg AD_BLUNT and 10d6 AD_SOAK;                                   \
+    ABILITY(CA_WATER_MASTERY,2);                                                      \
+    ABILITY(CA_REGEN,cr);                                                             \
+    ABILITY(CA_INFRAVISION,6);                                                        \
+    Immune: DF_POIS, DF_SLEE, DF_STUN, DF_PLYS, DF_CRIT;                              \
+    Resists: DF_FIRE, DF_COLD;                                                        \
+    Feats: SK_LISTEN, SK_SPOT, SK_SWIM, FT_POWER_ATTACK, ft1, ft2, ft3;               \
+    Flags: M_NEUTER, M_AMORPH, M_NOHANDS, M_NOLIMBS, M_NOHEAD,                        \
+      M_NOBODY, M_NO_CORPSE, M_AQUATIC, M_AMPHIB, M_WATER;                            \
+    Desc: "A water elemental is the spiritual personification of the base element "    \
+      "of water, dwelling on the elemental plane of water but occasionally summoned by "\
+      "wizards and creatures of magic to the prime plane. Water elementals "            \
+      "are primal, secretive, cautious and reverant, but also fickle, stormy and "      \
+      "dangerous. A "  word  " water elemental is about the size "                  \
+      "of a "  desc  ".";                                                          \
+    On Event EVICTIM(EV_DEATH) {                                                      \
+      if (GetHandle(EMap) && EVictim->GetAttr(A_SIZ) >= SZ_MEDIUM)                    \
+        EMap->WriteTerra(EVictim->x,EVictim->y,$"shallow water");                     \
+      };                                                                              \
+  }                                                                                   
+
+//         word       size      cr  hd  def arm  st  dx  cn  dmg   dc  
+WATER_ELEM("tiny",    SZ_TINY,   1,  1,  10,  0, 12, 10, 11, 1d4,  10, 0, 0, 0, "pixie")
+WATER_ELEM("small",   SZ_SMALL,  2,  2,  12,  0, 14, 10, 13, 1d6,  13, 0, 0, 0, "halfling")
+WATER_ELEM("medium",  SZ_MEDIUM, 4,  4,  14,  0, 16, 12, 17, 1d8,  16, 0, 0, 0, "human")
+WATER_ELEM("large",   SZ_LARGE,  6,  8,  16,  0, 20, 14, 19, 2d8,  19, FT_CLEAVE, 0, 0, "ogre")
+WATER_ELEM("huge",    SZ_HUGE,   8,  16, 18,  0, 24, 18, 21, 2d10, 22, FT_CLEAVE, 0, 0, "covered wagon")
+WATER_ELEM("greater", SZ_HUGE,   10, 21, 20,  0, 26, 20, 21, 3d8,  25, FT_CLEAVE, FT_SUNDER, 0, "tiny house")
+WATER_ELEM("elder",   SZ_HUGE,   12, 24, 22,  0, 28, 22, 21, 3d10, 28, FT_CLEAVE, FT_SUNDER, 0, "tiny house")
+
+#define EARTH_ELEM(word,size,cr,hd,def,arm,st,dx,cn,dmg,dc,ft1,ft2,ft3,desc)          \
+                                                                                      \
+Monster word  " earth elemental" : MA_ELEMENTAL                                     \
+  { Image: brown 'E'; Size: size; Mana: (7*hd); Arm: arm;                             \
+    CR: cr; HD: hd; Hit: (hd*3)/4; Def: def;  Mov: 75%; Spd: 75%;                     \
+    Str st, Dex dx, Con cn, Int 6, Wis 11, Cha 11;                                    \
+    Attk: A_SLAM for dmg AD_BLUNT and dmg AD_TRIP (DC dc);                              \
+    ABILITY(CA_EARTH_MASTERY,2);                                                        \
+    ABILITY(CA_EARTHMELD,cr);                                                            \
+    ABILITY(CA_INFRAVISION,6);                                                        \
+    Immune: DF_POIS, DF_SLEE, DF_STUN, DF_PLYS, DF_CRIT;                              \
+    Feats: SK_LISTEN, SK_SPOT, SK_SWIM, FT_POWER_ATTACK, FT_SUNDER,                    \
+             FT_MASTER_BULL_RUSH, ft1, ft2, ft3;                                     \
+    Flags: M_NEUTER, M_AMORPH, M_NOHANDS, M_NOLIMBS, M_NOHEAD,                        \
+      M_NOBODY, M_NO_CORPSE, M_EARTH;                            \
+    Desc: "An earth elemental is the spiritual personification of the base element "    \
+      "of earth, dwelling on the elemental plane of earth but occasionally summoned by "\
+      "wizards and creatures of magic to the prime plane. Earth elementals "            \
+      "are primal, traditional, honorable and patient, given to long periods of "       \
+      "slumber and contemplation. A "  word  " earth elemental is about the size "  \
+      "of a "  desc  ".";                                                          \
+    On Event EVICTIM(EV_DEATH) {                                                      \
+      hObj it;                                                                        \
+      if (GetHandle(EMap)) {                                                          \
+        it = CreateItem($"rock");                                                     \
+        if (!it)                                                                      \
+          return NOTHING;                                                             \
+        it->SetQuantity((dmg)*2);                                                     \
+        it->PlaceAt(EMap,EVictim->x,EVictim->y);                                      \
+        }                                                                             \
+      };                                                                              \
+  }                                  
+
+//         word       size      cr  hd  def arm  st  dx  cn  dmg   dc  
+EARTH_ELEM("tiny",    SZ_TINY,   1,  1,   8,  6, 15,  8, 11, 1d4,  10, 0, 0, 0, "pixie")
+EARTH_ELEM("small",   SZ_SMALL,  2,  2,   8,  9, 17,  8, 13, 1d6,  13, 0, 0, 0, "halfling")
+EARTH_ELEM("medium",  SZ_MEDIUM, 4,  4,  10, 12, 21,  8, 17, 1d8,  16, 0, 0, 0, "human")
+EARTH_ELEM("large",   SZ_LARGE,  6,  8,  12, 15, 25,  8, 19, 2d8,  19, FT_CLEAVE, 0, 0, "ogre")
+EARTH_ELEM("huge",    SZ_HUGE,   8,  16, 12, 18, 28,  8, 21, 2d10, 22, FT_CLEAVE, 0, 0, "covered wagon")
+EARTH_ELEM("greater", SZ_HUGE,   10, 21, 12, 21, 31,  8, 21, 3d8,  25, FT_CLEAVE, FT_IMPROVED_CRIT, 0, "tiny house")
+EARTH_ELEM("elder",   SZ_HUGE,   12, 24, 12, 24, 33,  8, 21, 3d10, 28, FT_CLEAVE, FT_IMPROVED_CRIT, 0, "tiny house")
+
+#define FIRE_ELEM(word,size,cr,hd,def,arm,st,dx,cn,dmg,dc,ft1,ft2,ft3,desc)           \
+                                                                                      \
+Monster word  " fire elemental" : MA_ELEMENTAL                                        \
+  { Image: red 'E'; Size: size; Mana: (7*hd); Arm: arm;                               \
+    CR: cr; HD: hd; Hit: (hd*3)/4; Def: def;  Mov: 150%; Spd: 150%;                   \
+    Str st, Dex dx, Con cn, Int 6, Wis 11, Cha 11;                                    \
+    Attk: A_SLAM for dmg AD_BLUNT,                                                    \
+          A_AURA for 2d(cr) AD_FIRE;                                                  \
+    ABILITY(CA_INFRAVISION,6);                                                        \
+    Immune: DF_POIS, DF_SLEE, DF_STUN, DF_PLYS, DF_CRIT, DF_FIRE;                     \
+    Feats: SK_LISTEN, SK_SPOT, FT_DODGE, FT_COMBAT_FINESSE,                           \
+             FT_COMBAT_REFLEXES, ft1, ft2, ft3;                                       \
+    Flags: M_NEUTER, M_AMORPH, M_NOHANDS, M_NOLIMBS, M_NOHEAD,                        \
+      M_NOBODY, M_NO_CORPSE, M_FIRE;                                                  \
+    Desc: "A fire elemental is the spiritual personification of the base element "    \
+      "of fire, dwelling on the elemental plane of fire but occasionally summoned by "\
+      "wizards and creatures of magic to the prime plane. Fire elementals "           \
+      "are fierce, wild, destructive, capricious and passionate, loving nothing more "\
+      "then to watch things burn. A "  word  " fire elemental is about the size "     \
+      "of a "  desc  ".";                                                             \
+    On Event EVICTIM(EV_DAMAGE) {                                                     \
+      if (e.DType == AD_SOAK) {                                                       \
+        e.DType = AD_NORM;                                                            \
+        e.vDmg  = e.vDmg*3;                                                           \
+        }                                                                             \
+      return NOTHING;                                                                 \
+      },                                                                              \
+    MSG_SPECABIL                                                                      \
+      "Any creature struck by its fiery aura attack will be set ablaze, "             \
+      "suffering an additional 1d4 points of fire damage every turn until "           \
+      "they succeed at a Reflex save (DC 12 + CR) to put out the flames. "            \
+      "Additional contact does not increase the damage when a creature is "           \
+      "already aflame.",                                                              \
+    POST(EV_DAMAGE) {                                                                 \
+      if (e.AType == A_AURA && e.DType == AD_FIRE && e.aDmg != 0)                     \
+        RedirectEff(e,$"Burn",EV_EFFECT);                                             \
+      return NOTHING;                                                                 \
+      },                                                                              \
+    PRE(EV_MOVE) {                                                                    \
+      rID tID;                                                                        \
+      tID = EMap->TerrainAt(EActor->x + DirX(e.EDir),                                 \
+                            EActor->y + DirY(e.EDir));                                \
+      if (ResourceHasFlag(tID,TF_WATER))                                              \
+        {                                                                             \
+          EActor->IPrint("You cannot move over water.");                              \
+          return ABORT;                                                               \
+        }                                                                             \
+      return NOTHING;                                                                 \
+      };                                                                              \
+  } 
+
+Effect "Burn" : EA_INFLICT
+  { xval: TRAP_EVENT; yval: EV_TURN; Flags: EF_PERSISTANT, EF_MUNDANE; 
+    On Event META(EV_TURN) {
+      int16 saveDC;
+      saveDC = 10 + EActor->GetEffStatiObj(TRAP_EVENT,$"Burn")->ChallengeRating();
+      if (EActor->SavingThrow(REF,saveDC,SA_DEATH))
+        {
+          EActor->IDPrint("You manage to put out the flames.",
+                          "The <hObj> is no longer burning.", EActor);
+          EActor->RemoveEffStati($"Burn");
+          return DONE;
+        }
+      EActor->IDPrint("You burn!", "The <hObj> burns!", EActor);
+      ThrowDmg(EV_DAMAGE,AD_FIRE,1d4,"being burned alive",EActor,
+                                EActor->GetEffStatiObj(TRAP_EVENT,$"Burn"));
+      return NOTHING;
+      },
+    EV_MAGIC_HIT {
+      int16 saveDC;
+      if (EVictim->HasEffStati(TRAP_EVENT,$"Burn"))
+        return DONE;
+      if (EVictim->SavingThrow(REF,saveDC,SA_DEATH))
+        {
+          EVictim->IPrint("You avoid being set on fire.");
+          e.Resist = true;
+          return DONE;
+        }
+      EVictim->IDPrint("You catch on fire!",
+                       "The <hObj> catches on fire!", EVictim);
+      return NOTHING;
+      };
+  }
+
+
+//        word       size      cr  hd  def arm  st  dx  cn  dmg  dc  
+FIRE_ELEM("tiny",    SZ_TINY,   1,  1,   8,  0,  8, 13,  9, 1d3, 10, 0, 0, 0, "pixie")
+FIRE_ELEM("small",   SZ_SMALL,  2,  2,  10,  0, 10, 13, 10, 1d4, 13, 0, 0, 0, "halfling")
+FIRE_ELEM("medium",  SZ_MEDIUM, 4,  4,  12,  0, 12, 17, 14, 1d6, 16, 0, 0, 0, "human")
+FIRE_ELEM("large",   SZ_LARGE,  6,  8,  14,  0, 14, 21, 16, 2d6, 19, FT_MOBILITY, 0, 0, "ogre")
+FIRE_ELEM("huge",    SZ_HUGE,   8,  16, 16,  0, 18, 25, 18, 2d8, 22, FT_MOBILITY, 0, 0, "covered wagon")
+FIRE_ELEM("greater", SZ_HUGE,   10, 21, 18,  0, 20, 27, 18, 3d6, 25, FT_MOBILITY, FT_SPRING_ATTACK, 0, "tiny house")
+FIRE_ELEM("elder",   SZ_HUGE,   12, 24, 20,  0, 22, 29, 18, 3d7, 28, FT_MOBILITY, FT_SPRING_ATTACK, 0, "tiny house")
+
+/*** PARA-ELEMENTALS ***/
+
+Monster "small metal elemental" : MA_ELEMENTAL, MA_EARTH
+  { Image: shadow 'E'; Size: SZ_SMALL;  Arm: 10;
+    CR: OPT_CR(5,2); HD: 2; Hit: 2; Def: 8; Mov: 120%; Spd: 120%;
+    Str 16, Dex 8, Con 16, Int 4, Wis 12, Cha 8;
+    Attk: A_SLAM for 1d6 AD_BLUNT,
+          A_SLAM for 1d6 AD_SLASH;
+	ABILITY(CA_INFRAVISION,6);
+    Immune: ELEMENTAL_IMMUNITIES, DF_FIRE, DF_COLD;
+    Feats: 
+      SK_LISTEN, SK_SPOT, 
+      FT_IRON_SKIN,
+      FT_TOUGHNESS;
+    Flags: M_NEUTER, M_NOHANDS, M_NO_CORPSE, M_EARTH; 
+    On Event EVICTIM(PRE(EV_DAMAGE)) {
+      if (GetHandle(EItem2)) {
+        if (EItem2->isMetallic()) { e.Immune = true; return ABORT; } 
+      } else if (GetHandle(EItem)) { 
+        if (EItem->isMetallic()) { e.Immune = true; return ABORT; } 
+      } else if (e.DType == AD_RUST) {
+        e.DType = AD_NORM; 
+      } 
+    };
+    Desc: "The metal para-elemental appears as a coagulated hunk of metal
+    bludgeons and shape edges. It cannot be harmed by metallic weapons
+    but is harmed by rusting effects."; 
+  }
+
+Monster "metal elemental" : MA_ELEMENTAL, MA_EARTH
+  { Image: shadow 'E'; Size: SZ_SMALL;  Arm: 10;
+    CR: OPT_CR(7,6); HD: 4; Hit: 3; Def: 10; Mov: 150%; Spd: 150%;
+    Str 18, Dex 10, Con 18, Int 6, Wis 14, Cha 10;
+    Attk: A_SLAM for 1d6 AD_BLUNT,
+          A_SLAM for 1d6 AD_SLASH;
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_WEAPON_IMMUNITY,1);
+    Immune: ELEMENTAL_IMMUNITIES,
+      DF_FIRE, DF_COLD;
+    Feats: 
+      SK_LISTEN, SK_SPOT, 
+      FT_IRON_SKIN,
+      FT_TOUGHNESS;
+    Flags: M_NEUTER, M_NOHANDS, M_NO_CORPSE, M_EARTH; 
+    On Event EVICTIM(PRE(EV_DAMAGE)) {
+      if (GetHandle(EItem2)) {
+        if (EItem2->isMetallic()) { e.Immune = true; return ABORT; } 
+      } else if (GetHandle(EItem)) { 
+        if (EItem->isMetallic()) { e.Immune = true; return ABORT; } 
+      } else if (e.DType == AD_RUST) {
+        e.DType = AD_NORM; 
+      } 
+    };
+    Desc: "The metal para-elemental appears as a coagulated hunk of metal
+    bludgeons and shape edges. It cannot be harmed by metallic weapons
+    but is harmed by rusting effects."; 
+  }
+
+Monster "small mud elemental" : MA_ELEMENTAL, MA_OOZE, MA_EARTH
+  { Image: brown 'E'; Size: SZ_SMALL;  
+    CR: OPT_CR(1,0); HD: 2; Hit: 2; Def: 8; Mov: 80%; Spd: 100%;
+    Str 14, Dex 10, Con 13, Int 4, Wis 11, Cha 11;
+    Attk: A_SLAM for 1d6 AD_BLUNT and 1d2 AD_STUK (DC 13),
+          A_DEQU for 1d6 AD_RUST (DC 15);
+	ABILITY(CA_EARTH_MASTERY,2);
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_EARTHMELD,1);
+	ABILITY(CA_REGEN,2);
+    Immune: ELEMENTAL_IMMUNITIES, OOZE_IMMUNITIES;
+    Feats: 
+      SK_LISTEN, SK_SPOT, 
+      FT_TOUGHNESS;
+    Flags: 
+      M_NEUTER, M_NOHANDS, M_NO_CORPSE, M_EARTH,
+      M_NOLIMBS, M_NOHEAD, M_AMORPH, M_AQUATIC;
+    On Event EVICTIM(EV_DEATH) {
+      if (GetHandle(EMap))
+        EMap->WriteTerra(EVictim->x,EVictim->y,$"shallow mud");
+      };
+    Desc: "The mud para-elemental appears as an amorphous blob of living
+    mud. It quick forms and reforms pseudopods that can entangle foes."; 
+  }
+
+/*** THE MEPHITS ***/
+
+Monster "fire mephit" : MA_OUTSIDER, MA_FIRE, MA_IMPKIN
+  {
+    Image: red 'i'; Size: SZ_SMALL; 
+    CR: 3; HD: 3; Hit: 2; Def: 12; Mov: 150%; Spd: 120%;
+    Str 10, Dex 13, Con 10, Int 12, Wis 11, Cha 15;
+    Attk: A_CLAW for 1d3 AD_SLASH,
+          A_BREA for 4d4 AD_FIRE (DC 14);
+	  ABILITY(CA_INFRAVISION,6);
+	  ABILITY(CA_REGEN,2);
+    Gear:
+      50% $"dagger";
+    Immune: DF_FIRE;
+    Resists: DF_MAGC;
+    Feats: SK_SPOT, SK_HIDE, SK_MOVE_SIL,
+           FT_DODGE;
+    Spells: $"produce flame", $"heat metal";
+    Flags: M_HUMANOID, M_FLYER, M_GREEDY, M_FIRE, M_NO_CORPSE,
+           M_HOSTILE;
+    Desc: "These tiny winged humanoids are the pages and gofers
+      of the inner and outer planes. Possessed of a distinctly
+      spiteful sense of humor, they enjoy tormenting humans and
+      the few other creatures they see that are (on average)
+      weaker then them.\n
+      __Fire mephits look like red-skinned, puckish devils, and
+      have a malicious sense of humor to suit.";
+  }
+
+Monster "ice mephit" : MA_OUTSIDER, MA_COLD, MA_IMPKIN
+  {
+    Image: cyan 'i'; Size: SZ_SMALL;
+    CR: 3; HD: 3; Hit: 2; Def: 12; Mov: 150%; Spd: 120%;
+    Str 10, Dex 17, Con 10, Int 12, Wis 11, Cha 15;
+    Attk: A_CLAW for 1d3 AD_SLASH,
+          A_BREA for 3d4 AD_COLD (DC 14);
+	  ABILITY(CA_INFRAVISION,6);
+	  ABILITY(CA_REGEN,2);
+    Gear:
+      50% $"dagger";
+    Feats: SK_SPOT, SK_HIDE, SK_MOVE_SIL,
+           FT_DODGE;
+    Immune: DF_COLD;
+    Resists: DF_MAGC;
+    Spells: $"magic missile", $"chill touch";
+    Flags: M_HUMANOID, M_FLYER, M_GREEDY, M_WATER, M_NO_CORPSE,
+           M_HOSTILE;
+    Desc: "These tiny winged humanoids are the pages and gofers
+      of the inner and outer planes. Possessed of a distinctly
+      spiteful sense of humor, they enjoy tormenting humans and
+      the few other creatures they see that are (on average)
+      weaker then them.\n
+      __Ice mephits are blue-skinned, with sharp features and
+      regal manners. Aloof and distant, they remember petty
+      vendettas for centuries.";
+    On Event MSG_BLASTNAME "frost breath";
+  }
+
+Monster "water mephit" : MA_OUTSIDER, MA_IMPKIN
+  {
+    Image: blue 'i'; Size: SZ_SMALL; 
+    CR: 4; HD: 3; Hit: 2; Def: 15; Mov: 150%; Spd: 120%;
+    Str 14, Dex 10, Con 13, Int 12, Wis 11, Cha 15;
+    Attk: A_CLAW for 1d3 AD_SLASH,
+          A_BREA for 0d0 AD_TRIP (DC 14) and
+                     1d4 AD_BLUNT and
+                     3d4 AD_SOAK (DC 14);
+	  ABILITY(CA_INFRAVISION,6);
+	  ABILITY(CA_REGEN,2);
+    Gear:
+      50% $"dagger";
+    Resists: DF_MAGC;
+    Feats: SK_SPOT, SK_HIDE, SK_MOVE_SIL,
+           FT_POWER_ATTACK, FT_TOUGHNESS;
+    Spells: $"water walking", $"obscurement";
+    Flags: M_HUMANOID, M_FLYER, M_GREEDY, M_WATER, M_NO_CORPSE, 
+           M_HOSTILE, M_AMPHIB;
+    Desc: "These tiny winged humanoids are the pages and gofers
+      of the inner and outer planes. Possessed of a distinctly
+      spiteful sense of humor, they enjoy tormenting humans and
+      the few other creatures they see that are (on average)
+      weaker then them.\n
+      __Resembling tiny fish people, water mephits have cheerful
+      (if callous) senses of humor; their enthusiasm gets on the
+      nerves of everyone around them.";
+    On Event MSG_BLASTNAME "jet of water";
+  }
+
+Monster "dust mephit" : MA_OUTSIDER, MA_IMPKIN
+  {
+    Image: grey 'i'; Size: SZ_SMALL; 
+    CR: 3; HD: 3; Hit: 2; Def: 15; Mov: 150%; Spd: 120%;
+    Str 14, Dex 10, Con 13, Int 6, Wis 11, Cha 15;
+    Attk: A_CLAW for 1d3 AD_SLASH,
+          A_BREA for 1d4 AD_BLND (DC 14) and
+                     3d4 AD_CHOK (DC 14);
+	  ABILITY(CA_INFRAVISION,6);
+	  ABILITY(CA_REGEN,2);
+    Gear:
+      50% $"dagger";
+    Resists: DF_MAGC;
+    Feats: SK_SPOT, SK_HIDE, SK_MOVE_SIL,
+           FT_POWER_ATTACK, FT_TOUGHNESS;
+    Spells: $"dust devil", $"sandblast";
+    Flags: M_HUMANOID, M_FLYER, M_GREEDY, M_AIR, M_NO_CORPSE, 
+           M_HOSTILE;
+    Desc: "These tiny winged humanoids are the pages and gofers
+      of the inner and outer planes. Possessed of a distinctly
+      spiteful sense of humor, they enjoy tormenting humans and
+      the few other creatures they see that are (on average)
+      weaker then them.\n
+      __Wizened, gaunt and wrinkly grey skinned humanoids, dust 
+      mephits speak slowly and take a morbid, nihilistic attitude 
+      to life.";
+    On Event MSG_BLASTNAME "cloud of dust";
+  }  
+  
+Monster "ooze mephit" : MA_OUTSIDER, MA_IMPKIN
+  {
+    Image: green 'i'; Size: SZ_SMALL; 
+    CR: 3; HD: 3; Hit: 2; Def: 15; Mov: 150%; Spd: 120%;
+    Str 14, Dex 10, Con 13, Int 6, Wis 11, Cha 15;
+    Attk: A_CLAW for 1d3 AD_SLASH,
+          A_BREA for 3d4 AD_ACID;
+	  ABILITY(CA_INFRAVISION,6);
+	  ABILITY(CA_REGEN,2);
+    Gear:
+      50% $"dagger";
+    Immune: DF_ACID;
+    Resists: DF_MAGC;
+    Feats: SK_SPOT, SK_HIDE, SK_MOVE_SIL,
+           FT_POWER_ATTACK;
+    Spells: $"grease", $"stinking cloud";
+    Flags: M_HUMANOID, M_FLYER, M_GREEDY, M_WATER, M_NO_CORPSE, 
+           M_HOSTILE, M_EARTH;
+    Desc: "These tiny winged humanoids are the pages and gofers
+      of the inner and outer planes. Possessed of a distinctly
+      spiteful sense of humor, they enjoy tormenting humans and
+      the few other creatures they see that are (on average)
+      weaker then them.\n
+      __Ooze mephits are squat humanoids with eternally greasy
+      skin, giving off an offensive odor and delighting in 
+      shocking everyone around them with their perversity.";
+    On Event MSG_BLASTNAME "glob of slime";
+  }  
+
+Monster "earth mephit" : MA_OUTSIDER, MA_IMPKIN
+  {
+    Image: green 'i'; Size: SZ_SMALL; 
+    CR: 3; HD: 3; Hit: 2; Def: 15; Mov: 150%; Spd: 120%;
+    Str 17, Dex 8, Con 13, Int 6, Wis 11, Cha 15;
+    Attk: A_CLAW for 1d3 AD_SLASH,
+          A_BREA for 3d4 AD_BLUNT;
+	  ABILITY(CA_INFRAVISION,6);
+	  ABILITY(CA_REGEN,2);
+    Gear:
+      50% $"dagger";
+    Resists: DF_MAGC;
+    Feats: SK_SPOT, SK_HIDE, SK_MOVE_SIL,
+           FT_POWER_ATTACK;
+    Spells: $"soften stone", $"enlarge";
+    Flags: M_HUMANOID, M_FLYER, M_GREEDY, M_NO_CORPSE, 
+           M_HOSTILE, M_EARTH;
+    Desc: "These tiny winged humanoids are the pages and gofers
+      of the inner and outer planes. Possessed of a distinctly
+      spiteful sense of humor, they enjoy tormenting humans and
+      the few other creatures they see that are (on average)
+      weaker then them.\n
+      __Stocky and broad-shouldered, earth mephits have a stubborn
+      and petty cast to their personalities.";
+    On Event MSG_BLASTNAME "spray of tiny stones";
+  }    
+
+Monster "salt mephit" : MA_OUTSIDER, MA_IMPKIN
+  {
+    Image: white 'i'; Size: SZ_SMALL; 
+    CR: 3; HD: 3; Hit: 2; Def: 15; Mov: 150%; Spd: 120%;
+    Str 10, Dex 17, Con 13, Int 6, Wis 11, Cha 15;
+    Attk: A_CLAW for 1d3 AD_SLASH,
+          A_BREA for 1d4 AD_BLND (DC 14) and
+                     3d4 AD_CHOK (DC 14);
+	  ABILITY(CA_INFRAVISION,6);
+	  ABILITY(CA_REGEN,2);
+    Gear:
+      50% $"dagger";
+    Resists: DF_MAGC, DF_COLD;
+    Feats: SK_SPOT, SK_HIDE, SK_MOVE_SIL,
+           FT_DODGE;
+    Spells: $"glitterdust", $"dehydrate";
+    Flags: M_HUMANOID, M_FLYER, M_GREEDY, M_WATER, M_NO_CORPSE, 
+           M_HOSTILE, M_AIR;
+    Desc: "These tiny winged humanoids are the pages and gofers
+      of the inner and outer planes. Possessed of a distinctly
+      spiteful sense of humor, they enjoy tormenting humans and
+      the few other creatures they see that are (on average)
+      weaker then them.\n
+      __Salt mephits appear as albino humanoids with bleary eyes
+      and a bored and apathetic demeanor.";
+    On Event MSG_BLASTNAME "spray of salt crystals";
+  }
+  
+Effect "dehydrate" : EA_DRAIN
+  {
+    Cost: 3; Flags: EF_SPECABIL, EF_LIM_MTYPE; SC_THA;
+    xval: AD_NORM; tval: MA_LIVING; pval: 2d4; sval: FORT partial;
+    On Event EV_MAGIC_HIT {
+      EVictim->LoseFatigue(e.Resist ? 1 : 2, false);
+      return NOTHING;
+      };
+    Desc: "This unique ability of the salt mephit dehydrates a
+      living creature, costing it 2d4 hit points (untyped damage)
+      and 2 fatigue points. A successful fortitude save halves
+      both losses.";
+  }
+  
+Monster "air mephit" : MA_OUTSIDER, MA_IMPKIN
+  {
+    Image: light blue 'i'; Size: SZ_SMALL; 
+    CR: 3; HD: 3; Hit: 2; Def: 12; Mov: 150%; Spd: 120%;
+    Str 8, Dex 17, Con 10, Int 12, Wis 11, Cha 15;
+    Attk: A_CLAW for 1d3 AD_SLASH,
+          A_BREA for 2d4 AD_BLUNT and
+                     0d0 AD_TRIP (DC 14);
+	  ABILITY(CA_INFRAVISION,6);
+	  ABILITY(CA_REGEN,2);
+    Gear:
+      50% $"dagger";
+    Resists: DF_MAGC;
+    Feats: SK_SPOT, SK_HIDE, SK_MOVE_SIL,
+           FT_DODGE;
+    Spells: $"blur", $"gust of wind";
+    Flags: M_HUMANOID, M_FLYER, M_GREEDY, M_AIR, M_NO_CORPSE,
+           M_HOSTILE;
+    Desc: "These tiny winged humanoids are the pages and gofers
+      of the inner and outer planes. Possessed of a distinctly
+      spiteful sense of humor, they enjoy tormenting humans and
+      the few other creatures they see that are (on average)
+      weaker then them.\n
+      __Air mephits are thin, graceful creatures resembling a
+      cross between a pixie and an imp. Their hyperactive
+      mindset irritates all who must spend time with them.";
+    On Event MSG_BLASTNAME "blast of compressed air";  
+  }  
+  
+Monster "fog mephit" : MA_OUTSIDER, MA_IMPKIN
+  {
+    Image: cyan 'i'; Size: SZ_SMALL; 
+    CR: 3; HD: 3; Hit: 2; Def: 12; Mov: 150%; Spd: 120%;
+    Str 8, Dex 17, Con 10, Int 12, Wis 11, Cha 15;
+    Attk: A_CLAW for 1d3 AD_SLASH,
+          A_BREA for 3d4 AD_FIRE;
+	  ABILITY(CA_INFRAVISION,6);
+	  ABILITY(CA_REGEN,2);
+    Gear:
+      50% $"dagger";
+    Resists: DF_MAGC, DF_FIRE;
+    Feats: SK_SPOT, SK_HIDE, SK_MOVE_SIL,
+           FT_DODGE;
+    Spells: $"obscurement", $"color spray";
+    Flags: M_HUMANOID, M_FLYER, M_GREEDY, M_AIR, M_NO_CORPSE,
+           M_HOSTILE, M_WATER;
+    Desc: "These tiny winged humanoids are the pages and gofers
+      of the inner and outer planes. Possessed of a distinctly
+      spiteful sense of humor, they enjoy tormenting humans and
+      the few other creatures they see that are (on average)
+      weaker then them.\n
+      __Fog mephits are plump and ponderous, slow to act and
+      easily distracted by anything getting in their way.";
+    On Event MSG_BLASTNAME "cone of scalding steam";  
+  }  
+  
+/*** GENIES ***/
+
+Monster "janni" : MA_GENIE
+  {
+    Image: blue 'J'; Size: SZ_MEDIUM; 
+    CR: OPT_CR(6,4); HD: 6; Hit: +6; Def: 11; Mov: 70%; Spd: 100%;
+    Str 16, Dex 15, Con 12, Int 14, Wis 15, Cha 13;
+    Attk: A_PUNC for 1d3 AD_BLUNT;
+        ABILITY(CA_PHASE,PHASE_ASTRAL);
+	ABILITY(CA_BOOST_RESISTS,5);
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_TELEPATHY,2);
+    Flags: M_HUMANOID, M_DESERT, M_GREEDY, M_GEMS, M_TALKABLE,
+           M_MFLYER, M_NO_CORPSE;
+    Feats: SK_DIPLOMACY, SK_CRAFT, SK_CONCENT, SK_ESCAPE_ART,
+           SK_LISTEN, SK_MOVE_SIL, SK_RIDE, SK_APPRAISE, SK_SPOT,
+           FT_COMBAT_REFLEXES, FT_DODGE, FT_MOBILITY, FT_EXPERTISE,
+           SK_ANIMAL_EMP;
+    Resists: DF_FIRE;
+    Gear: $"scimitar" of random 0 to 3, 
+          $"long bow", 3d6 $"sheaf arrow",
+          $"chainmail";
+    Spells: $"invisibility", $"enlarge", $"reduce", $"create food and water";
+    Desc: "The weakest of the true genies, jann are formed from the intersection
+      of all four elements: earth, air, fire and water. The jann are a cultured
+      people, lacking the arrogance of the other genie races yet often unwilling
+      to involve themselves in others' struggles. The jann have a very open
+      society, with a bent toward responsible individualism and equal privlidge
+      for both genders.";         
+  } 
+
+/* Dao */
+
+Monster "djinni" : MA_GENIE, MA_AIR
+  {
+    Image: skyblue 'J'; Size: SZ_LARGE; 
+    CR: OPT_CR(8,5); HD: 7; Hit: +7; Def: 13; Mov: 200%; Spd: 125%;
+    Str 18, Dex 19, Con 14, Int 14, Wis 15, Cha 15;
+    Attk: A_SLAM for 1d8 AD_BLUNT,
+          A_SLAM for 1d8 AD_BLUNT;
+        ABILITY(CA_PHASE,PHASE_ASTRAL);
+	ABILITY(CA_GASEOUS_FORM,1);
+	ABILITY(CA_NATURE_SENSE,1);
+	ABILITY(CA_AIR_MASTERY,1);
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_TELEPATHY,10);
+    Flags: M_HUMANOID, M_DESERT, M_GREEDY, M_GEMS, M_TALKABLE, M_ACID,
+           M_MFLYER, M_REACH, M_NO_CORPSE, M_CHAOTIC, M_GOOD, M_IALIGN;
+    Feats: FT_COMBAT_REFLEXES, FT_GUARDED_INVOCATION, FT_DODGE, FT_EXPERTISE,
+           SK_DIPLOMACY, SK_CRAFT, SK_CONCENT, SK_ESCAPE_ART,
+           SK_LISTEN, SK_SPELLCRAFT, SK_MOVE_SIL, SK_RIDE, SK_APPRAISE,
+           SK_SPOT;
+    Immune: DF_ACID, DF_ELEC;
+    Gear: random T_ARMOR of random 1 to 2,
+          random T_POTION of random 1 to 2,
+          random T_POTION of random 1 to 2;
+    Spells: $"invisibility", $"obscurement", $"create food and water";
+    Desc: "The djinn (singular djinni) are genies from the Elemental Plane
+      of Air. A djinni is about 10-1/2 feet tall and weighs about 1,000 pounds.
+      Djinn disdain physical combat, preferring to use their magical powers
+      and aerial abilities against foes. A djinni overmatched in combat
+      usually takes flight and becomes a whirlwind to harass those who
+      follow.";
+  } 
+
+Monster "efreeti" : MA_GENIE, MA_FIRE
+  {
+    Image: red 'J'; Size: SZ_LARGE; 
+    CR: OPT_CR(9,8); HD: 10; Hit: +10; Def: 16; Mov: 200%; Spd: 150%;
+    Str 23, Dex 17, Con 14, Int 12, Wis 15, Cha 15;
+    Attk: A_SLAM for 1d8 AD_BLUNT and 1d8 AD_FIRE,
+          A_SLAM for 1d8 AD_BLUNT and 1d8 AD_FIRE;
+        ABILITY(CA_PHASE,PHASE_ASTRAL);
+	  ABILITY(CA_GASEOUS_FORM,1);
+	  ABILITY(CA_INFRAVISION,6);
+	  ABILITY(CA_TELEPATHY,10);
+    Flags: M_HUMANOID, M_DESERT, M_GREEDY, M_GEMS, M_TALKABLE,
+           M_MFLYER, M_REACH, M_NO_CORPSE, M_LAWFUL, M_EVIL, M_IALIGN;
+    Feats: FT_COMBAT_REFLEXES, FT_GUARDED_INVOCATION, FT_DODGE, FT_EXPERTISE,
+           SK_DIPLOMACY, SK_CRAFT, SK_CONCENT, SK_ESCAPE_ART,
+           SK_LISTEN, SK_SPELLCRAFT, SK_MOVE_SIL, SK_RIDE, SK_APPRAISE,
+           SK_SPOT;
+    Immune: DF_FIRE;
+    Gear: random T_ARMOR of random 2 to 3,
+          random T_POTION of random 1 to 6,
+          random T_POTION of random 1 to 6,
+          random T_POTION of random 1 to 6;
+    Spells: $"invisibility", $"produce flame", $"scorcher", $"wall of fire",
+            $"polymorph other", $"enlarge", $"reduce";
+    Desc: "The efreet (singular efreeti) are genies from the Elemental
+    Plane of Fire. An efreeti stands about 12 feet tall and weighs about
+    2,000 pounds. Efreet love to mislead, befuddle, and confuse their
+    foes. They do so for enjoyment as well as a battle tactic.";
+  } 
+
+/* Marid */
+
+/*** OTHER ELEMENTALKIN ***/
+
+Monster "azer" : MA_ELEMENTALKIN, MA_ADVENTURER, MA_DWARF
+  { Image: pink 'K'; Size: SZ_MEDIUM;  
+    CR: OPT_CR(4,2); HD: 2; Def: 16; Hit: +2; Mov: 100%; Spd: 100%;
+    Str 16, Dex 13, Con 13, Int 12, Wis 12, Cha 9; Mana: 20; 
+    Attk: A_SLAM for 1d6 AD_FIRE,
+          A_AURA for 1d3 AD_FIRE;
+	ABILITY(CA_INFRAVISION,6);
+	MAGIC_RES(40);
+    Immune: DF_FIRE;
+    Feats: FT_POWER_ATTACK, SK_CLIMB, SK_CRAFT, SK_LISTEN,
+           FT_ARMOR_OPTIMIZATION;
+    Spells: $"flame blade"; 
+    Flags: M_HUMANOID, M_FIRE, M_LAWFUL;
+    Desc: "An offshoot of dwarves native to the elemnental plane of
+      fire, the azer are a highly structured and authoritarian race.
+      While not evil, they are militaristic and eager for conquest.
+      They appear as dwarves with skin of bronze, flames wreathing
+      their faces where a beard would normally rest.";
+    Gear: 33% $"dwarven waraxe" else 50% $"battleaxe" else $"warhammer",
+          33% $"banded mail" else 
+            50% $"breastplate" else $"field plate armor",
+          $"kite shield";
+    On Event EV_INITIALIZE {
+      hObj h;
+      for(h=EActor->FirstInv();h;h=EActor->NextInv()) {
+        if (h->QualityOK(IQ_DWARVEN))
+          h->AddQuality(IQ_DWARVEN);
+      } 
+      return NOTHING;
+    };
+  } 
+
+Monster "azerkin" : MA_ELEMENTALKIN, MA_ADVENTURER, MA_DWARF
+  { Image: pink 'K'; Size: SZ_MEDIUM;  
+    CR: OPT_CR(2,2); HD: 2; Def: 10; Hit: +2; Mov: 100%; Spd: 100%;
+    Str 16, Dex 13, Con 13, Int 12, Wis 12, Cha 9; 
+    Attk: A_PUNC for 1d2 AD_BLUNT,
+          A_AURA for 1d3 AD_FIRE;
+	ABILITY(CA_INFRAVISION,6);
+    Immune: DF_FIRE;
+    Feats: FT_POWER_ATTACK, SK_CLIMB, SK_CRAFT, SK_LISTEN,
+           FT_ARMOR_OPTIMIZATION;
+    Flags: M_HUMANOID, M_FIRE, M_LAWFUL;
+    Desc: "An offshoot of dwarves native to the elemnental plane of
+      fire, the azer are a highly structured and authoritarian race.
+      While not evil, they are militaristic and eager for conquest.
+      They appear as dwarves with skin of bronze, flames wreathing
+      their faces where a beard would normally rest. The azerkin are
+      the result of azer breeding with prime material dwarves -- they
+      retain the firey aura of the azer but lack their magic resistance and
+      innate melee defense.";
+    Gear: 33% $"dwarven waraxe" else 50% $"battleaxe" else $"warhammer",
+          33% $"banded mail" else 
+            50% $"breastplate" else $"field plate armor",
+          $"kite shield";
+    On Event EV_INITIALIZE {
+      hObj h;
+      for(h=EActor->FirstInv();h;h=EActor->NextInv()) {
+        if (h->QualityOK(IQ_DWARVEN))
+          h->AddQuality(IQ_DWARVEN);
+      } 
+      return NOTHING;
+    };
+  } 
+
+/* ww: these things are way too weak ... let's beef it up! */
+Monster "dust devil;monster" : MA_VORTEX, MA_ELEMENTALKIN
+  {
+    Image: brown 'K'; Size: SZ_SMALL; 
+    CR: OPT_CR(2,1); HD: 2; Hit: +2; Def: 15; Mov: 150%; Spd: 150%;
+    Str 8, Dex 15, Con 10, Int 4, Wis 7, Cha 5;
+    Attk: A_SLAM for 1d4 AD_BLUNT and AD_TRIP (DC 14);
+	  ABILITY(CA_AIR_MASTERY,1);
+	  ABILITY(CA_FLIGHT,9);
+	  ABILITY(CA_BLINDSIGHT,6);
+    Immune: ELEMENTAL_IMMUNITIES;
+    Resists: DF_ELEC, DF_SLASH, DF_PIERCE;
+    Feats: FT_DODGE, FT_MOBILITY;
+    Flags: M_AMORPH, M_NATURAL, M_NOLIMBS, M_NOHANDS,
+      M_NOHEAD, M_NOBODY, M_NEUTER, M_NO_CORPSE, M_AIR,
+      M_EARTH, M_MFLYER, M_BLIND;
+    Desc: "A weak cousin of the true air elemental, the dust devil
+      is a miniature whirlwind of sand the size of a halfling.
+      Elementally-aspected clerics and druids often send these beings 
+      out on errands for them.";
+  }
+
+Monster "thoqqua" : MA_ELEMENTALKIN, MA_FIRE, MA_BURROW
+  { Image: pink 'K'; Size: SZ_MEDIUM;  
+    CR: OPT_CR(1,3); HD: 3; Hit: +1; Def: 17; Mov: 70%; Spd: 100%;
+    Str 15, Dex 13, Con 13, Int 6, Wis 12, Cha 10;
+    Attk: A_SLAM for 1d6 AD_BLUNT,
+          A_AURA for 2d6 AD_FIRE;
+	ABILITY(CA_TUNNEL,10);
+	ABILITY(CA_TREMORSENSE,6);
+    Feats: SK_JUMP, SK_LISTEN, SK_MINING;
+    Flags: M_NEUTER, M_NOHANDS, M_NOHEAD, M_NOLIMBS,
+           M_BLIND, M_DEAF, M_THICK_HIDE, M_FIRE, M_EARTH;
+    Desc: "The thoqqua, or lavaworm, radiates a body heat strong
+      enough to melt solid rock. It is native to the elemental
+      plane of fire, appears as a large segmented worm with a skin of 
+      rock and a pointed tip glowing red with heat. Thoqqua are 
+      ill-tempered creatures, but are often found in the company of 
+      gnomes, who can use their empathy with burrowing creatures 
+      to tame these beasts.";
+  }
+
+Monster "vampiric mist" : MA_ELEMENTALKIN, MA_AIR
+  {
+    Image: red 'K'; Size: SZ_LARGE; 
+    CR: OPT_CR(1,3); HD: 4; Hit: +4; Def: 10; Mov: 30%; Spd: 70%;
+    Dex 12, Int 3, Wis 12, Cha 13;
+    Attk: A_TUCH for 1d8 AD_VAMP
+                 and     AD_ENGL (DC 16),
+          A_DGST for 3d4 AD_VAMP;
+	ABILITY(CA_TRACKING,15);
+	ABILITY(CA_INFRAVISION,6);
+    Immune: ELEMENTAL_IMMUNITIES;
+    Resists:DF_FIRE;
+    Feats: SK_LISTEN;
+    Flags: M_EVIL, M_IALIGN, M_NOHANDS, M_NOLIMBS, M_NOBODY, 
+      M_NOHEAD, M_NEUTER, M_NO_CORPSE, M_FLYER, M_SWAMP,
+      M_AMORPH, M_AIR, M_WATER, M_NO_BLOOD;
+  }
+
+Monster "blinding mist" : MA_ELEMENTALKIN, MA_AIR
+  {
+    Image: bright yellow 'K'; Size: SZ_LARGE; 
+    CR: OPT_CR(0,3); HD: 4; Hit: +4; Def: 10; Mov: 100%; Spd: 100%;
+    Dex 18, Int 3, Wis 18, Cha 13;
+    Attk: A_TUCH for 1d8 AD_BLND (DC 18),
+          A_TUCH for 1d8 AD_SUNL;
+	ABILITY(CA_INFRAVISION,6);
+    Immune: ELEMENTAL_IMMUNITIES, DF_FIRE; 
+    Feats: FT_MULTIATTACK, SK_SPOT, SK_LISTEN;
+    Flags: M_EVIL, M_IALIGN, M_NOHANDS, M_NOLIMBS, M_NOBODY, 
+           M_NOHEAD, M_NEUTER, M_NO_CORPSE, M_FLYER, M_DESERT,
+           M_AMORPH, M_AIR, M_FIRE, M_NO_BLOOD, M_SKIRMISH;
+  }
+
+Monster "fog elemental" : MA_ELEMENTALKIN, MA_AIR
+  {
+    Image: bright white 'K'; Size: SZ_LARGE; 
+    CR: OPT_CR(6,3); HD: 4; Hit: +4; Def: 10; Mov: 100%; Spd: 100%;
+    Dex 18, Int 3, Wis 18, Cha 13; Mana: 50; 
+    Attk: A_SLAM for 1d8 AD_BLUNT and
+                     1d2 AD_KNOC (DC 15),
+          A_PROX for 1d2 AD_CONF (DC 15);
+	ABILITY(CA_AIR_MASTERY,2);
+	ABILITY(CA_NATURE_SENSE,1);
+	ABILITY(CA_INFRAVISION,9);
+    Immune: ELEMENTAL_IMMUNITIES; 
+    Spells: $"obscurement", $"wall of fog"; 
+    Feats: SK_SPOT, SK_LISTEN;
+    Flags: M_EVIL, M_IALIGN, M_NOHANDS, M_NOLIMBS, M_NOBODY, M_NOHEAD,
+           M_NOHEAD, M_NEUTER, M_NO_CORPSE, M_FLYER, 
+           M_AMORPH, M_AIR, M_WATER, M_NO_BLOOD, M_NOPOLY,
+           M_SKIRMISH, M_REACH;
+    Stati[INVIS,INV_IMPROVED]; 
+    On Event MSG_SPECABIL
+      "It is innately invisible.";
+  }
+
+Monster "storm elemental" : MA_ELEMENTALKIN
+  {
+    Image: blue 'K'; Size: SZ_LARGE; 
+    CR: OPT_CR(8,3); HD: 6; Hit: +6; Def: 10; Mov: 150%; Spd: 100%;
+    Dex 18, Int 3, Wis 18, Cha 13; Mana: 50; 
+    Attk: A_SLAM for 3d4 AD_BLUNT and
+                     3d4 AD_ELEC and
+                     1d2 AD_KNOC (DC 18),
+          A_PROX for 1d2 AD_TRIP (DC 18);
+	ABILITY(CA_AIR_MASTERY,3);
+	ABILITY(CA_NATURE_SENSE,1);
+	ABILITY(CA_INFRAVISION,9);
+    Immune: ELEMENTAL_IMMUNITIES, DF_ELEC; 
+    Spells: $"rainstorm", $"lightning bolt"; 
+    Feats: SK_SPOT, SK_LISTEN;
+    Flags: M_EVIL, M_IALIGN, M_NOHANDS, M_NOLIMBS, M_NOBODY, M_NOHEAD,
+           M_NOHEAD, M_NEUTER, M_NO_CORPSE, M_FLYER, 
+           M_AMORPH, M_AIR, M_WATER, M_NO_BLOOD, M_NOPOLY,
+           M_SKIRMISH, M_REACH, M_ELEC;
+    Stati[IMMUNITY,AD_SOAK];
+    On Event EV_INITIALIZE {
+      ThrowEff(EV_EFFECT,$"rainstorm",EActor,EActor,NULL,NULL);
+    } ;
+  }
+
+Monster "ice serpent" : MA_ELEMENTAL, MA_SNAKE
+  { Image: white 'E'; Size: SZ_LARGE; 
+    CR: OPT_CR(4,3); HD: 6; Hit: 3; Def: 10; Mov: 250%; Spd: 115%;
+    Str 20, Dex 25, Con 16, Int 4, Wis 13, Cha 11;
+    Attk: A_GRAB for 0d0 AD_GRAB (DC -1),
+          A_CONS for 1d8 AD_BLUNT,
+          A_CONS for 2d4 AD_COLD;
+	ABILITY(CA_WEAPON_IMMUNITY,1);
+	ABILITY(CA_INFRAVISION,6);
+    Immune: ELEMENTAL_IMMUNITIES, DF_COLD; 
+    Feats: 
+      SK_MOVE_SIL, SK_SPOT, FT_POWER_ATTACK;
+    Flags: M_NEUTER, M_AMORPH, M_NOHANDS, M_NOLIMBS, M_NOHEAD,
+      M_AIR, M_COLD, M_NOBODY, M_NO_CORPSE; 
+    Desc: "The ice serpent is an unusual variety of air elemental composed
+    of frigid air in serpentine motion. Ice serpents do not fly."; 
+  }
+
+Monster "xorn" : MA_ELEMENTALKIN, MA_EARTH
+  { Image: grey 'K'; Size: SZ_MEDIUM;  Arm: 8;
+    CR: OPT_CR(6,6); HD: 7; Hit: 5; Def: 10; Mov: 75%; Spd: 75%;
+    Str 17, Dex 10, Con 15, Int 10, Wis 11, Cha 10;
+    Attk: A_BITE for 4d6 AD_PIERCE,
+          A_CLAW for 1d4 AD_SLASH,
+          A_CLAW for 1d4 AD_SLASH,
+          A_CLAW for 1d4 AD_SLASH;
+	ABILITY(CA_TREMORSENSE,6);
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_EARTHMELD,12);
+    Immune: DF_FIRE, DF_COLD; Resists: DF_SLASH, DF_ELEC;
+    Feats: SK_INTUITION, SK_LISTEN, SK_MOVE_SIL, SK_SEARCH,
+      SK_SPOT, FT_MULTIATTACK, FT_POWER_ATTACK;
+    Flags: M_EATSMETAL, M_NOHANDS, M_NOHEAD, M_THICK_HIDE,
+           M_EARTH, M_NEUTER, M_EARTH, M_NOGEN; 
+    Desc: "Xorn are strange creatures from the elemental plane
+      of Earth, composed of both flesh and living rock. 
+      Essentially a large, ambulatory maw, the xorn has
+      a triply-symmetrical anatomy, with three clawed arms, three 
+      eyes and three stubby cloven feet, each equally spaced along
+      its cylindrical body. The mouth is as the top, with the
+      entire core of the creature as one large stomach. The xorn
+      thus has no head or face.";
+  }
+
+Monster "minor xorn" : MA_ELEMENTALKIN, MA_EARTH
+  { Image: grey 'K'; Size: SZ_MEDIUM;  Arm: 4;
+    CR: OPT_CR(2,3); HD: 3; Hit: 2; Def: 10; Mov: 75%; Spd: 75%;
+    Str 15, Dex 10, Con 15, Int 10, Wis 11, Cha 10;
+    Attk: A_BITE for 2d8 AD_PIERCE,
+          A_CLAW for 1d3 AD_SLASH,
+          A_CLAW for 1d3 AD_SLASH,
+          A_CLAW for 1d3 AD_SLASH,
+          A_SEEM for $"xorn";
+	ABILITY(CA_TREMORSENSE,6);
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_EARTHMELD,12);
+    Immune: DF_FIRE, DF_COLD; Resists: DF_SLASH, DF_ELEC;
+    Feats: SK_INTUITION, SK_LISTEN, SK_MOVE_SIL, SK_SEARCH,
+      SK_SPOT, FT_MULTIATTACK;
+    Flags: M_EATSMETAL, M_NOHANDS, M_NOHEAD, M_THICK_HIDE,
+           M_EARTH, M_NEUTER, M_EARTH; 
+    Desc: "Xorn are strange creatures from the elemental plane
+      of Earth, composed of both flesh and living rock. 
+      Essentially a large, ambulatory maw, the xorn has
+      a triply-symmetrical anatomy, with three clawed arms, three 
+      eyes and three stubby cloven feet, each equally spaced along
+      its cylindrical body. The mouth is as the top, with the
+      entire core of the creature as one large stomach. The xorn
+      thus has no head or face.";
+    On Event POST(EV_STRIKE) {
+      if (e.isHit)
+        EActor->IdentifyMon();
+      };
+  }
+  
+Monster "stone sentinel" : MA_ELEMENTAL, MA_EARTH
+  { Image: brown 'E'; Size: SZ_TINY;  Arm: 2;
+    CR: OPT_CR(1,1); HD: 1; Hit: 1; Def: 6; Mov: 40%; Spd: 100%;
+    Str 8, Dex 8, Con 13, Int 3, Wis 11, Cha 11;
+    Attk: A_SLAM for 1d2 AD_BLUNT;
+	  ABILITY(CA_EARTH_MASTERY,2);
+	  ABILITY(CA_INFRAVISION,6);
+	  ABILITY(CA_EARTHMELD,1);
+    Immune: ELEMENTAL_IMMUNITIES; 
+    Feats: SK_LISTEN, SK_SPOT, FT_DODGE;
+    Flags: M_HUMANOID, M_NEUTER, M_NOHANDS, M_NO_CORPSE, M_EARTH, M_NOGEN; 
+    Desc: "A stone sentinel is a very minor elemental creature created
+      by a priest's magic; it resembles a foot-high rough stone homonuculous
+      and has a playful, inquisitive nature.";
+  }
+
+
+/********************************************************************************
+ ********************************************************************************
+ ***                                OTHER OUTSIDERS                           ***
+ ********************************************************************************
+ ********************************************************************************/
+
+/*** CELESTIALS ***/
+
+Monster "torch archon" : MA_CELESTIAL
+  { Image: brown 'A';  Size: SZ_SMALL; Mana: 20;
+    CR: 0; HD: 1; Hit: +1; Def: 14; Mov: 200%; Spd: 100%;
+    Str 1, Dex 11, Con 10, Int 6, Wis 11, Cha 10;
+	  ABILITY(CA_WEAPON_IMMUNITY,1);
+	  ABILITY(CA_AURA_OF_MENACE,2);
+	  ABILITY(CA_SHARP_SENSES,5);
+	  MAGIC_RES(10);
+	  ABILITY(CA_INFRAVISION,6);
+    Resists: DF_POIS; 
+    Immune: DF_ELEC, DF_SLEE, DF_STON, DF_SUNL;
+    Feats: FT_DODGE, FT_GUARDED_INVOCATION, SK_ATHLETICS;
+    Flags: M_LAWFUL, M_GOOD, M_IALIGN, M_NOHANDS, M_NOLIMBS,
+      M_NOBODY, M_NO_CORPSE, M_CASTER, M_AVOID_MELEE, M_NEUTER, 
+      M_NO_BLOOD, M_SUNL, M_MFLYER;
+    Spells: $"minor light ray", $"call light", $"aid", $"cure light wounds",
+      $"dimension door", $"detect evil";
+    On Event EV_INITIALIZE {
+      if (!EActor->HasStati(SUMMONED))
+        EMap->NewField(FI_LIGHT|FI_MODIFIER|FI_MOBILE|FI_BLOCKER,EActor->x,EActor->y,2,
+          WHITE*256+GLYPH_FLOOR2,-1,$"magic circle vs. evil",EActor);
+      },
+    MSG_SPECABIL 
+      "It projects a continual <1>Magic Circle vs. Evil<7> effect. ";
+    Desc: "The lowliest of celestials are still potent beings by
+      mortal standards. Appearing as glowing globes of yellow
+      radiance, these spirits of light and life can aid beleagured
+      adventurers or fight the forces of evil with potent rays of
+      holy light.";
+  }
+
+Effect "Minor Light Ray" : EA_BLAST
+  { SC_EVO; Cost: 1; aval: AR_BEAM; qval: Q_DIR; cval: YELLOW;
+    xval: AD_SUNL; lval: 8; sval: REF partial; pval: 1d8;
+    Purpose: EP_ATTACK; On Event MSG_BLASTNAME "light ray";
+    Flags: EF_SPECABIL;
+    Desc: "Projects a ray of light at the archon's enemies inflicting
+      1d8 points of damage. A Reflex save halves the damage."; }
+
+/* This is a little bit on the high side for CR 1, but that's
+   by intent -- another perk for being Good! */
+Monster "protectar" : MA_CELESTIAL, MA_ADVENTURER
+  { Image: white 'A'; Size: SZ_MEDIUM; Mana: 12;
+    CR: 1; HD: 1; Hit: +1; Def: 10; Mov: 100%; Spd: 100%;
+    Str 15, Dex 12, Con 15, Int 10, Wis 12, Cha 15;
+    Attk: A_PUNC for 1d2 AD_BLUNT;
+    ABILITY(CA_AURA_OF_MENACE,2);
+    ABILITY(CA_INFRAVISION,6);
+    Resists: DF_POIS; 
+    Immune: DF_ELEC, DF_SLEE, DF_STON, DF_SUNL;
+    Feats: FT_POWER_ATTACK, SK_ATHLETICS, SK_SPOT, SK_CRAFT, 
+           SK_DIPLOMACY, SK_APPRAISE, SK_HEALING, SK_KNOW_THEO,
+           SK_KNOW_PLANES;
+    Spells: $"cure light wounds", $"bless", $"protection from evil";
+    Flags: M_HUMANOID, M_GOOD, M_LAWFUL, M_IALIGN, M_NO_CORPSE,
+           M_FLYER;
+    Gear:
+      25% $"long sword" +1 with [WQ_HOLY]
+        else $"long sword", 
+      50% $"kite shield",
+      50% $"ring mail" else
+          $"scale mail";
+    Desc: "Protectars form the rank and file of celestial armies.
+      They are the blessed souls of dead warriors of light: brave,
+      loyal, honest, moral and honorable. They appear as idealized
+      humans with white feathered wings.";
+  }  
+
+Monster "shining torch archon" : MA_CELESTIAL
+  { Image: yellow 'A';  Size: SZ_SMALL; Mana: 20;
+    CR: OPT_CR(2,2); HD: 2; Hit: +1; Def: 14; Mov: 200%; Spd: 100%;
+    Str 1, Dex 11, Con 10, Int 6, Wis 11, Cha 10;
+	ABILITY(CA_WEAPON_IMMUNITY,1);
+	ABILITY(CA_AURA_OF_MENACE,2);
+	ABILITY(CA_SHARP_SENSES,5);
+	MAGIC_RES(15);
+	ABILITY(CA_INFRAVISION,6);
+    Resists: DF_POIS; 
+    Immune: DF_ELEC, DF_SLEE, DF_STON, DF_SUNL;
+    Feats: FT_DODGE, FT_GUARDED_INVOCATION, SK_ATHLETICS;
+    Flags: M_LAWFUL, M_GOOD, M_IALIGN, M_NOHANDS, M_NOLIMBS,
+      M_NOBODY, M_NO_CORPSE, M_CASTER, M_NEUTER, M_MFLYER,
+      M_NO_BLOOD, M_SUNL;
+    Spells: $"minor light ray", $"call light", 
+      $"aid", $"cure light wounds",
+      $"dimension door", $"detect evil";
+    On Event EV_INITIALIZE {
+      if (!EActor->HasStati(SUMMONED))
+        EMap->NewField(FI_LIGHT|FI_MODIFIER|FI_MOBILE|FI_BLOCKER,EActor->x,EActor->y,3, 
+          WHITE*256+GLYPH_FLOOR2,-1,$"magic circle vs. evil",EActor);
+      },
+    MSG_SPECABIL 
+      "It projects a continual <1>Magic Circle vs. Evil<7> effect. ";
+    Desc: "These low celestials are still potent beings by
+      mortal standards. Appearing as glowing globes of yellow
+      radiance, these spirits of light and life can aid beleagured
+      adventurers or fight the forces of evil with potent rays of
+      holy light.";
+  }
+
+Monster "ramadeen" : MA_CELESTIAL, MA_ADVENTURER
+  { Image: brown 'A'; Size: SZ_LARGE; Mana: 7;
+    CR: 3; HD: 4; Hit: +3; Def: 10; Mov: 150%; Spd: 100%;
+    Str 21, Dex 12, Con 16, Int 12, Wis 14, Cha 17;
+    Attk: A_BUTT for 1d8 AD_BLUNT;
+    ABILITY(CA_AURA_OF_MENACE,2);
+    ABILITY(CA_INFRAVISION,6);
+    ABILITY(CA_SCENT,3);
+    ABILITY(CA_SMITE,4);
+    Stati[SMITE_ABILITY,MA_EVIL];
+    Resists: DF_POIS; 
+    Immune: DF_ELEC, DF_SLEE, DF_STON, DF_SUNL;
+    Feats: FT_POWER_ATTACK, FT_POWER_CHARGE, SK_ATHLETICS, SK_SPOT, 
+           SK_CRAFT, SK_DIPLOMACY, SK_APPRAISE, SK_HEALING, 
+           SK_KNOW_THEO, SK_KNOW_PLANES;
+    Flags: M_HUMANOID, M_GOOD, M_IALIGN, M_NO_CORPSE, M_CHARGE;
+    Gear:
+      25% $"scimitar" +1 with [WQ_HOLY]
+        else $"scimitar", 
+      $"plate mail";
+    Desc: "Ramadeen are second-tier celestial warriors with features
+      derived from humans and rams. Clad in heavy armor and wielding
+      scimitars forged from divine steel, they lead divine charges
+      and rally the heavenly armies of protectars.";
+    On Event MSG_SPECABIL
+      "It can smite evil as a 4th level paladin.";
+  }  
+
+Monster "lantern archon" : MA_CELESTIAL
+  { Image: bright red 'A';  Size: SZ_SMALL; Mana: 20;
+    CR: OPT_CR(5,4); HD: 4; Hit: +3; Def: 14; Mov: 200%; Spd: 120%;
+    Str 1, Dex 15, Con 14, Int 10, Wis 15, Cha 14;
+    Attk:
+      A_TUCH for 1d2 AD_BLND (DC 16) and 1d8 AD_SUNL;
+	ABILITY(CA_WEAPON_IMMUNITY,1);
+	ABILITY(CA_AURA_OF_MENACE,2);
+	ABILITY(CA_SHARP_SENSES,5);
+	MAGIC_RES(20);
+	ABILITY(CA_INFRAVISION,6);
+    Resists: DF_POIS; 
+    Immune: DF_ELEC, DF_SLEE, DF_STON, DF_SUNL;
+    Feats: FT_DODGE, FT_GUARDED_INVOCATION, SK_ATHLETICS;
+    Flags: M_LAWFUL, M_GOOD, M_IALIGN, M_NOHANDS, M_NOLIMBS,
+      M_NOBODY, M_NO_CORPSE, M_CASTER, M_NEUTER, 
+      M_NO_BLOOD, M_SUNL;
+    Spells: $"major light ray", $"call light", 
+      $"aid", $"cure light wounds",
+      $"dimension door", $"detect evil";
+    On Event EV_INITIALIZE {
+      if (!EActor->HasStati(SUMMONED))
+        EMap->NewField(FI_LIGHT|FI_MODIFIER|FI_MOBILE|FI_BLOCKER,
+          EActor->x,EActor->y,4, WHITE*256+GLYPH_FLOOR2,-1,$"magic circle vs. evil",EActor);
+      },
+    MSG_SPECABIL 
+      "It projects a continual <1>Magic Circle vs. Evil<7> effect. ";
+    Desc: "These low celestials are still potent beings by
+      mortal standards. Appearing as glowing globes of yellow
+      radiance, these spirits of light and life can aid beleagured
+      adventurers or fight the forces of evil with potent rays of
+      holy light.";
+  }
+
+Effect "Major Light Ray" : EA_BLAST
+  { SC_EVO; Cost: 1; aval: AR_BEAM; qval: Q_DIR; cval: YELLOW;
+    xval: AD_SUNL; lval: 8; sval: REF partial; pval: 3d8;
+    Purpose: EP_ATTACK; On Event MSG_BLASTNAME "light ray";
+    Flags: EF_SPECABIL;
+    Desc: "Projects a ray of light at the archon's enemies inflicting
+      3d8 points of damage. A Reflex save halves the damage."; }
+
+Monster "hound archon" : MA_CELESTIAL, MA_DOG, MA_HUMANOID
+  { Image: grey 'A'; Size: SZ_MEDIUM; 
+    CR: OPT_CR(6,6); HD: 6; Hit: +8; Def: 19; Mov: 150%; Spd: 130%; Arm 10;
+    Str 15, Dex 10, Con 13, Int 10, Wis 13, Cha 12;
+    Attk: A_BITE for 1d8+2 AD_PIERCE
+                 and AD_TRIP (DC 16),
+          A_SLAM for 1d4+1 AD_BLUNT,
+          A_FORM for $"winter wolf";
+	ABILITY(CA_SCENT,6);
+	ABILITY(CA_AURA_OF_MENACE,6);
+	ABILITY(CA_INFRAVISION,6);
+	SPELL_RES(16); 
+	ABILITY(CA_TRACKING,12);
+    Immune: DF_ELEC, DF_STON; 
+    Feats: 
+      FT_POWER_ATTACK,
+      SK_CONCENTRATION, SK_HIDE, SK_JUMP, SK_LISTEN, SK_MOVE_SIL, SK_SPOT;
+    Flags: M_HUMANOID, M_LAWFUL, M_GOOD, M_IALIGN, 
+      M_NOBODY, M_NO_CORPSE, M_CASTER;
+    Spells: $"flame strike", $"aid", $"dimension door", $"detect evil";
+    On Event EV_INITIALIZE {
+      if (!EActor->HasStati(SUMMONED))
+        EMap->NewField(FI_MODIFIER|FI_MOBILE|FI_BLOCKER,EActor->x,EActor->y,2,
+          WHITE*256+GLYPH_FLOOR2,-1,$"magic circle vs. evil",EActor);
+      },
+    MSG_SPECABIL 
+      "It projects a continual <1>Magic Circle vs. Evil<7> effect. ";
+    Desc: "Hound archons look like well-muscled humans with canine heads.";
+  }
+
+/*** MISC. OUTSIDERS ***/
+
+
+Monster "barghest" : MA_OUTSIDER, MA_DOG, MA_LYCANTHROPE
+  {
+    Image: red 'd'; Size: SZ_MEDIUM; 
+    CR: OPT_CR(6,4); HD: 6; Hit: 9; Def: 16; Mov: 100%; Spd: 130%;
+    Str 17, Dex 15, Con 13, Int 14, Wis 14, Cha 14;
+    Arm: 5; 
+    Attk: A_BITE for 1d6+3 AD_PIERCE
+                 and 0d0 AD_TRIP (DC 17),
+          A_CLAW for 1d4+1 AD_SLASH,
+          A_CLAW for 1d4+1 AD_SLASH,
+          A_FORM for $"goblin",
+          A_FORM for $"wolf";
+	RACIAL_SKILL(SK_HIDE,4);
+	ABILITY(CA_INFRAVISION,6);
+    Feats: SK_SPOT, SK_HIDE, SK_MOVE_SIL,
+           FT_COMBAT_REFLEXES, FT_SWARM;
+    Spells: $"charm monster", $"emotion", // crushing despair
+        $"blink", $"levitation", $"dimension door"; 
+    Flags: M_LAWFUL, M_EVIL, M_NO_CORPSE, M_MOUNTABLE;
+    Desc: "A barghest is a lupine fiend that can take the shape of a wolf
+    or a goblin. In its natural form, it resembles a goblin-wolf hybrid
+    with terrible jaws and sharp claws. As whelps, barghests are nearly
+    indistinguishable from wolves, except for their size and claws. As they
+    grow larger and stronger, their skin darkens to bluishred and
+    eventually becomes blue altogether.  A full-grown barghest is about 6
+    feet long and weighs 180 pounds. A barghest's eyes glow orange when the
+    creature becomes excited.";
+  }
+
+Monster "greater barghest" : MA_OUTSIDER, MA_DOG, MA_LYCANTHROPE
+  {
+    Image: pink 'd'; Size: SZ_LARGE; 
+    CR: OPT_CR(8,5); HD: 9; Hit: 13; Def: 19; Mov: 100%; Spd: 145%;
+    Str 20, Dex 15, Con 16, Int 18, Wis 18, Cha 18;
+    Arm: 10;
+    Attk: A_BITE for 1d8+5 AD_PIERCE
+                 and 0d0 AD_TRIP (DC 17),
+          A_CLAW for 1d6+2 AD_SLASH,
+          A_CLAW for 1d6+2 AD_SLASH,
+          A_FORM for $"hobgoblin",
+          A_FORM for $"wolf";
+	  RACIAL_SKILL(SK_HIDE,4);
+	  ABILITY(CA_INFRAVISION,6);
+    Feats: SK_SPOT, SK_HIDE, SK_MOVE_SIL, FT_SWARM,
+           FT_COMBAT_REFLEXES, FT_COMBAT_CASTING;
+    Spells: $"charm monster", $"emotion", // crushing despair
+        $"blink", $"levitation", $"dimension door",
+        $"invisibility", $"bull's strength", $"enlarge"; 
+    Flags: M_LAWFUL, M_EVIL, M_NO_CORPSE, M_MOUNTABLE;
+    // ww: TODO, add shapechange forms
+    Desc: "A barghest that reaches 9 Hit Dice through feeding becomes a
+    greater barghest. These creatures can change shape into a goblinlike
+    creature of Large size (about 8 feet tall and 400 pounds) or a winter
+    wolf. In hobgoblin form, a greater barghest cannot use its natural weapons
+    but can wield weapons and wear armor."; 
+    Gear: 
+        10% random T_WEAPON of random 2 to 3;
+  }
+  
+Monster "vaporighu" : MA_OUTSIDER, MA_HOMINID
+  { Image: grey 'O'; Size: SZ_MEDIUM; 
+    CR: 9; HD: 10; Hit: +10; Def: 10; Mov: 100%; Spd: 100%;
+    Str 15, Dex 9, Con 16, Int 13, Wis 8, Cha 10;
+    Attk: A_SLAM for 1d8 AD_BLUNT and 1d8 AD_ACID,
+          A_SLAM for 1d8 AD_BLUNT and 1d8 AD_ACID,
+          A_DEQU for 3d6 AD_ACID,
+          A_PROX for 2d4 AD_FEAR (DC 15),
+          A_BREA for 2d10 AD_ACID 
+                 and 2d10 AD_TOXI
+                 and 1d4  AD_PLYS (DC 15);
+    ABILITY(CA_WEAPON_IMMUNITY,1);
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_UNCANNY_DODGE,3);
+	Spells: $"animate objects", $"enlarge", $"fly", $"call light",
+	        $"produce flame", $"sleep", /* $"mislead", */ 
+	        $"summon night hag";   
+	Feats: FT_POWER_ATTACK, FT_IMPROVED_CRIT, FT_MASTER_BULL_RUSH,        
+	       SK_BALANCE, SK_CONCENT, SK_KNOW_PLANES, SK_INTIMIDATE,
+	       SK_LISTEN, SK_SPELLCRAFT, SK_SPOT;      
+    On Event PRE(EV_DAMAGE) {
+      if (e.AType == A_PROX) {
+        if (EVictim->HasStati(AFRAID))
+          return ABORT;
+        if (EActor->HasStati(SPEC_TIMEOUT,A_PROX,EVictim))
+          return ABORT;
+        }
+      return NOTHING;
+      },
+    POST(EV_DAMAGE) {
+      if (e.AType == A_PROX && e.Resist)
+        EActor->GainTempStati(SPEC_TIMEOUT,EVictim,-1,SS_MISC,A_PROX);
+      return NOTHING;
+      },
+    MSG_SPECABIL
+      "Once a character has made one successful save against a vaporighu's fear,
+        that character is immune to that specific vaporighu's fear for the remainder
+        of the day."; 
+    Desc: "Native inhabitants of Gehenna, the vaporighu are sometimes
+      called slime apes, and the description fits. These repellant
+      creatures have a primitive appearance somewhere between a
+      neanderthal and a great, obese ape, with curved tusks like a boar or
+      an orc. Where their flesh is exposed, it a a thick, rough grey
+      hide like an elephant's, but the majority of their body is
+      covered with a tangled mass of stringy grey hair and a thick
+      layer of ropy, mucus-like slime. They eminate a terrible stench
+      of decay and putrescent flesh.\n
+      __Vaporighu are technically sapient creatures, but seem to prefer
+      living a life of crude  beastiality and forsaking any kind of
+      intelligent or civilized conduct. They are solitary and have little
+      or no society, living to prey on those weaker then them and enjoy
+      the sadistic pleasures of the Lower Planes.";
+  }
+  
+0 Effect "Summon Night Hag" : EA_SUMMON
+  { rval: $"night hag"; pval:0; Flags: EF_SPECABIL;
+    On Event EV_ISTARGET {
+      if (EActor->HasEffStati(SPEC_TIMEOUT,$"Summon Night Hag"))
+        return CANNOT_CAST_IT;
+      return SHOULD_CAST_IT;
+      },
+    EV_EFFECT {
+      if (EActor->HasEffStati(SPEC_TIMEOUT,$"Summon Night Hag"))
+        {
+          EActor->IPrint("You can only summon a night hag once per day.");
+          return ABORT;
+        }
+      EActor->GainTempStati(SPEC_TIMEOUT,NULL,-2,SS_MISC,0,0,$"Summon Night Hag");
+      };
+    Desc: "Once per day, a vaporighu can call upon their ties
+      to the plane of Gehenna in order to summon a friendly
+      night hag to their aid.";  
+  }
+  
+Monster "grid bug" : MA_VERMIN, MA_OUTSIDER, MA_LOUTSIDER
+  { Image: purple 'x'; Size: SZ_SMALL; 
+    CR: OPT_CR(-4,1/3); HD: 1; Hit: +1; Def: 10; Mov: 80%; Spd: 100%;
+    Str 10, Dex 14, Con 10, Int 3, Wis 5, Cha 4;
+    Attk: A_BITE for 1d3 AD_ELEC;
+	ABILITY(CA_INFRAVISION,4); 
+    Immune: DF_MIND, DF_STUN, DF_ELEC, DF_SLEE, DF_POIS, DF_STUK;
+    Flags: M_NOHANDS, M_NOHEAD, M_NEUTER, M_HOSTILE, M_NO_CORPSE,
+      M_LAWFUL, M_IALIGN, M_NO_BLOOD;
+    On Event EV_MOVE {
+      if (e.EDir == NORTHWEST)
+        { if (random(2)) e.EDir = NORTH; else e.EDir = WEST; }
+      if (e.EDir == NORTHEAST)
+        { if (random(2)) e.EDir = NORTH; else e.EDir = EAST; }
+      if (e.EDir == SOUTHWEST)
+        { if (random(2)) e.EDir = SOUTH; else e.EDir = WEST; }
+      if (e.EDir == SOUTHEAST)
+        { if (random(2)) e.EDir = SOUTH; else e.EDir = EAST; }
+      },
+    POST(EV_HIT) {
+      if (e->AType == A_BITE)
+        { DPrint(e,"Fzzt!","Fzzt!"); e.Terse = true; }
+      return NOTHING;
+      };
+    Desc: "These strange beings appear as glowing crystaline spiders,
+      perfect in their geometry. They are native to the Clockwork Nirvana
+      of Mechanus, where they serve as builders, drones and enforcers.
+      When on Therya, they are almost always violent, driven to near-
+      insanity by the disorder in the world around them. Grid bugs
+      are notorious for their rigidly aligned patterns of movement.";
+    Lists:
+      * GROUP_LEADER $"grid bug enforcer";     
+  }
+
+Monster "grid bug enforcer" : MA_VERMIN, MA_OUTSIDER, MA_LOUTSIDER
+  { Image: bright purple 'x'; Size: SZ_MEDIUM; 
+    CR: OPT_CR(4,3); HD: 4; Hit: +4; Def: 10; Mov: 150%; Spd: 120%;
+    Str 14, Dex 18, Con 14, Int 6, Wis 6, Cha 6;
+    Attk: A_BITE for 1d6 AD_PIERCE and 3d3 AD_ELEC;
+	ABILITY(CA_INFRAVISION,9); 
+    Immune: DF_MIND, DF_STUN, DF_ELEC, DF_SLEE, DF_POIS, DF_STUK;
+    Flags: M_NOHANDS, M_NOHEAD, M_NEUTER, M_HOSTILE, M_NO_CORPSE,
+      M_LAWFUL, M_IALIGN, M_NO_BLOOD;
+    Feats: FT_DODGE, FT_MOBILITY, SK_SPOT, SK_LISTEN; 
+    On Event EV_MOVE {
+      if (e.EDir == NORTHWEST)
+        { if (random(2)) e.EDir = NORTH; else e.EDir = WEST; }
+      if (e.EDir == NORTHEAST)
+        { if (random(2)) e.EDir = NORTH; else e.EDir = EAST; }
+      if (e.EDir == SOUTHWEST)
+        { if (random(2)) e.EDir = SOUTH; else e.EDir = WEST; }
+      if (e.EDir == SOUTHEAST)
+        { if (random(2)) e.EDir = SOUTH; else e.EDir = EAST; }
+      },
+    POST(EV_HIT) {
+      if (e->AType == A_BITE)
+        { DPrint(e,"Fzzt!","Fzzt!"); e.Terse = true; }
+      return NOTHING;
+      };
+    Desc: "These strange beings appear as glowing crystaline spiders,
+      perfect in their geometry. They are native to the Clockwork Nirvana
+      of Mechanus, where they serve as builders, drones and enforcers.
+      When on Therya, they are almost always violent, driven to near-
+      insanity by the disorder in the world around them. Grid bugs
+      are notorious for their rigidly aligned patterns of movement.
+      Enforcers are larger, stronger and capable of slightly more
+      autonomous thought than standard grid bugs. They are also quite
+      adept at skittering out of the way of potential attacks.";
+    Lists:
+      * GROUP_FOLLOWER $"grid bug";
+  }
+
+Monster "nightmare" : MA_QUADRUPED, MA_OUTSIDER
+  {
+    Image: red 'q'; Size: SZ_LARGE; 
+    CR: OPT_CR(8,6); HD: 6; Hit: 6; Def: 23; Mov: 200%; Spd: 130%;
+    Str 18, Dex 15, Con 16, Int 13, Wis 13, Cha 12;
+    Attk: A_KICK for 1d8+4 AD_BLUNT and 1d4 AD_FIRE,
+          A_KICK for 1d8+4 AD_BLUNT and 1d4 AD_FIRE,
+          A_BITE for 1d8+2 AD_PIERCE;
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_PHASE,PHASE_ASTRAL);
+	ABILITY(CA_PHASE,PHASE_ETHERIAL);
+    Feats: SK_LISTEN, SK_SPOT, SK_SEARCH,
+        FT_ALERTNESS, FT_RUN;
+    Flags: M_NATURAL, M_HERBI, M_NOHANDS, M_NO_CORPSE,
+           M_MOUNTABLE;
+  }
+
+Monster "phase spider" : MA_SPIDER, MA_OUTSIDER
+  {
+    Image: skyblue 's'; Size: SZ_LARGE; 
+    CR: OPT_CR(4,5); HD: 5; Def: 13; Hit: +4; Mov: 150%; Spd: 120%;
+    Str 17, Dex 17, Con 16, Int 7, Wis 13, Cha 10;
+    Attk: A_BITE for 1d6 AD_PIERCE and AD_POIS (DC 15);
+	ABILITY(CA_PHASE,PHASE_ETHERIAL);
+	ABILITY(CA_INFRAVISION,6);
+    Feats: FT_LIGHTNING_REFLEXES, SK_CLIMB, SK_MOVE_SIL, SK_SPOT,
+      FT_CLOSE_QUARTERS_FIGHTER;
+    Immune: DF_STUK;
+    Flags: M_DEAF, M_NOHANDS, M_CARNI, M_SKIRMISH;
+    Desc: "As large as a small wagon, the phase spider is a fearsome
+      arachnid with the ability to slip in and out of the etherial
+      plane at will. Its light grey body is covered with deep navy
+      splotches and markings, the pattern unique to each individual
+      spider.";
+    Poison: $"phase spider venom";
+  }
+
+Poison "phase spider venom" : EA_DRAIN
+  {
+    Level: 9;
+    /*Iteration*/   cval: 4;
+    /*Save DC*/     sval: 15;
+    /*Persistance*/ lval: 10;
+    xval: AD_DAST; pval: 1d4;
+    Desc: "This poison inflicts <11>1d4<7> points of Strength damage every 
+      <11>4<7> turns, and requires <11>10<7> (!!) saving throws against 
+      <11>DC 15<7> to overcome.";
+  }
+
+Monster "rakshasa" : MA_OUTSIDER, MA_HUMANOID, MA_ADVENTURER
+  {
+    Image: red 'O'; Size: SZ_MEDIUM;  
+    CR: OPT_CR(10,7); HD: 7; Def: 19; Hit: +7; Mov: 150%; Spd: 135%;
+    Str 12, Dex 14, Con 16, Int 17, Wis 13, Cha 13;
+    Arm: 15; // ww: yes, really!
+    Attk: A_BITE for 1d6 AD_PIERCE,
+          A_CLAW for 1d4+1 AD_SLASH,
+          A_CLAW for 1d4+1 AD_SLASH;
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_SPELLCASTING,7);
+	SPELL_RES(27);
+    Feats: FT_ALERTNESS, FT_COMBAT_CASTING, FT_DODGE,
+        SK_CONCENTRATION, SK_LISTEN, SK_MOVE_SIL, SK_SPOT, 
+        SK_SPELLCRAFT, SK_METAMAGIC;
+    Flags: M_LAWFUL, M_EVIL, M_HUMANOID, M_NO_CORPSE, M_MAGE;
+    Gear:
+      2d3 $"potion" of $"extra-healing",
+      2d3 $"potion" of $"*mana*",
+      $"ring" of random 2 to 13,
+      $"ring" of random 2 to 13;
+    Desc: "A closer look at a rakshasa reveals that the palms of its hands
+    are where the backs of the hands would be on a human. A rakshasa is
+    about the same height and weight as a human.";
+    Lists:
+      * SPELL_LIST
+          ALL_SPELLS_FROM_SOURCE(AI_WIZARDRY);
+  }
+
+Monster "rast" : MA_OUTSIDER, MA_FIRE
+  {
+    Image: bright red 'O'; Size: SZ_MEDIUM; Mana: 40; 
+    CR: OPT_CR(4,6); HD: 6; Hit: +6; Def: 14; Mov: 200%; Spd: 130%;
+    Str 14, Dex 12, Int 3, Wis 13, Cha 12;
+    Attk: A_BITE for 1d8+3 AD_PIERCE,
+          A_GAZE for 0d0 AD_PIERCE and 1d6 AD_PLYS (DC 13),
+          A_SUCK for 1d1 AD_DRCO;
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_FLIGHT,9);
+    Immune: DF_FIRE;
+    Feats: FT_MULTIATTACK, FT_TOUGHNESS, FT_NATURAL_GRAB,
+      SK_CLIMB, SK_ESCAPE_ART, SK_JUMP, SK_LISTEN, SK_SPOT,
+      SK_MOVE_SIL, SK_SEARCH;
+    Flags: M_CARNI, M_NOHANDS, M_NO_CORPSE;
+    Desc: "A rast has a body about the size of a large dog's, with a head
+    almost as large as the body. It weighs about 200 pounds.";
+  }
+
+Monster "tatterdemalion" : MA_OUTSIDER 
+  { 
+    Image: grey GLYPH_PLAYER; Size: SZ_SMALL; Mana: 10;
+    CR: OPT_CR(7,4); HD: 4; Hit: +4; Def: +14; Mov: 100%; Speed: 120%;
+    Str 16, Dex 20, Con 15, Int 12, Wis 14, Cha 10, Luc 10;
+    Arm: 10; /* DR 10/+1 */
+    Attk:A_CLAW for 2d4+3 AD_SLASH
+                and 1d6   AD_PLYS (DC 15),
+         A_CLAW for 2d4+3 AD_SLASH
+                and 1d6   AD_PLYS (DC 15);
+	ABILITY(CA_KI_STRIKE,1);
+	ABILITY(CA_INFRAVISION,6);
+         // humanoid shape ability
+    Flags: M_CARNI, M_HUMANOID, M_NO_CORPSE, M_EVIL, M_CHAOTIC;
+    Feats: 
+      SK_HIDE, SK_LISTEN, SK_BLUFF, SK_SPOT, 
+      FT_DODGE, FT_MULTIATTACK;
+    Immune: DF_POIS, DF_DISE, DF_MIND;
+    Desc: "Tatterdemalions appear as small, gaunt, starving children
+    covered in hooded robes that are tattered and torn and dirty.
+    Underneath the robes, however, they are far from children in
+    appearance. They are hairless and their skin is oily and smells faintly
+    of dead fish. Tatterdemalions are flesh eaters. They use their claws to
+    paralyze a victim so that the flesh is still warm. They will not eat
+    those that are dead.";
+  }
+
+
+/*** FORMIANS ***/
+
+Monster "formian worker" : MA_OUTSIDER, MA_VERMIN, MA_LOUTSIDER
+  {
+    Image: brown 'x'; Size: SZ_SMALL; Mana: 20; 
+    CR: OPT_CR(1,1); HD: 2; Def: 14; Hit: +2; Mov: 150%; Spd: 100%;   
+    Str 13, Dex 14, Con 13, Int 6, Wis 10, Cha 9;
+    Attk: A_BITE for 1d4 AD_BLUNT;
+	ABILITY(CA_INFRAVISION,6);
+    Immune: DF_POIS, DF_STON, DF_COLD;
+    Resists: DF_FIRE, DF_SONI, DF_ELEC;
+    Feats: FT_SKILL_FOCUS, SK_CRAFT, SK_CLIMB, FT_SWARM;
+    Flags: M_LAWFUL, M_VARGROUP, M_FRIENDLY, M_NEUTER, M_CARNI, M_HERBI;  
+    Spells: $"cure serious wounds";
+    Desc: "The lowest caste of the ant-like formians -- the outer-planar
+      personification of lawful existance -- the worker appears as an ant
+      creature the size of a doberman. Their mentality is very limited,
+      and they tend to be non-hostile unless attacked or provoked, though
+      they can easily panic when seperated from their superiors.";
+    Lists:
+      * GROUP_ALLY $"formian warrior",
+      * GROUP_LEADER $"formian warrior" $"formian taskmaster";     
+  }
+
+Monster "formian warrior" : MA_OUTSIDER, MA_VERMIN, MA_LOUTSIDER
+  {
+    Image: yellow 'x'; Size: SZ_MEDIUM; 
+    CR: OPT_CR(6,3); HD: 4; Def: 15; Hit: +7; Mov: 150%; Spd: 100%;   
+    Str 17, Dex 16, Con 14, Int 10, Wis 12, Cha 11;
+    Attk: A_BITE for 1d4 AD_BLUNT,
+          A_CLAW for 1d8 AD_PIERCE,
+          A_STNG for 2d4 AD_PIERCE and 0d0 AD_POIS (DC 14);
+	MAGIC_RES(40);
+	ABILITY(CA_INFRAVISION,6);
+    Immune: DF_POIS, DF_STON, DF_COLD;
+    Resists: DF_FIRE, DF_SONI, DF_ELEC;
+    Feats: FT_DODGE, FT_MULTIATTACK, SK_CLIMB, SK_HIDE, SK_LISTEN,
+      SK_MOVE_SIL, SK_SPOT, FT_SWARM;
+    Flags: M_HUMANOID, M_LAWFUL, M_VARGROUP, M_NEUTER, M_CARNI, M_HERBI;       
+    Poison: $"formian venom";
+    Desc: "A humanoid ant-creature the size of a horse, the formian
+      warrior is the absolute enforcement of outer-planar law, and
+      serves as the local militia across the planes of law and 
+      neutrality.";
+    Lists:
+      * GROUP_FOLLOWER $"formian worker",
+      * GROUP_LEADER $"formian taskmaster";     
+  }
+
+Poison "formian venom" : EA_DRAIN
+  {
+    Level: 1;
+    /*Iteration*/   cval: 7;
+    /*Save DC*/     sval: 14;
+    /*Persistance*/ lval: 6;
+    xval: AD_DAST; pval: 1d2;
+    Desc: "This poison inflicts <11>1d2<7> points of Strength damage every 
+      <11>7<7> turns, and requires <11>6<7> saving throws against <11>DC 14<7> 
+      to overcome.";
+  }
+
+Monster "formian taskmaster" : MA_OUTSIDER, MA_VERMIN, MA_LOUTSIDER
+  {
+    Image: yellow 'x'; Size: SZ_MEDIUM;  
+    CR: OPT_CR(8,7); HD: 6; Def: 16; Hit: +10; Mov: 150%; Spd: 130%;   
+    Str 18, Dex 16, Con 14, Int 11, Wis 16, Cha 19;
+    Attk: A_CLAW for 1d6+2 AD_PIERCE,
+          A_CLAW for 1d6+2 AD_PIERCE,
+          A_STNG for 2d4+4 AD_PIERCE and 0d0 AD_POIS (DC 14);
+	SPELL_RES(21); 
+	ABILITY(CA_INFRAVISION,6);
+    Immune: DF_POIS, DF_STON, DF_COLD;
+    Resists: DF_FIRE, DF_SONI, DF_ELEC;
+    Feats: FT_DODGE, FT_MULTIATTACK, SK_CLIMB, SK_HIDE, SK_LISTEN,
+      SK_MOVE_SIL, SK_SPOT, FT_SWARM;
+    Flags: M_HUMANOID, M_LAWFUL, M_VARGROUP, M_NEUTER, M_CARNI, M_HERBI;       
+    Poison: $"formian venom";
+    Spells: $"dominate person";
+    Desc: "A humanoid ant-creature the size of a horse, the formian
+      warrior is the absolute enforcement of outer-planar law, and
+      serves as the local militia across the planes of law and 
+      neutrality.";
+    Lists:
+      * GROUP_FOLLOWER $"formian worker" $"formian warrior";
+  }
+
+Monster "modron" : MA_CONSTRUCT, MA_OUTSIDER, MA_LOUTSIDER
+  {
+    Image: bright green 'C'; Size: SZ_SMALL; Mana: 12; Arm: 7;
+    CR: 1; HD: 2; Hit: +1; Def: 12; Mov: 80%; Spd: 80%;
+    Str 0, Dex 8, Con 0, Int 6, Wis 6, Cha 3;
+    ABILITY(CA_INFRAVISION,6);
+    ABILITY(CA_TELEPATHY,6);
+    Spells: $"force bolt", $"mending";
+    Feats: FT_SKILL_FOCUS, SK_CRAFT;
+    Flags: M_NOHANDS, M_NOLIMBS, M_NOHEAD, M_LAWFUL, M_IALIGN,
+           M_TALKABLE;
+    Resists: DF_COLD, DF_FIRE, DF_ACID;
+    Immune: DF_MIND, DF_CRIT, DF_FEAR, DF_CONF, DF_POLY, DF_PSYC,
+            DF_POIS;
+    Desc: "Modrons are the simplest of the naturally occuring geoform
+      constructs on the lawful outer planes. Barely intelligent, they
+      serve as workers and soldiers capable of completing only the
+      simplest tasks unsupervised. A modron appears as a featureless
+      cube of translucent emerald, hovering in the air; when on the
+      Prime Material plane, they sometimes manifest an anthropomorphic
+      face to better communicate with the natives.";
+  }
+
+Monster "duodrone" : MA_CONSTRUCT, MA_OUTSIDER, MA_LOUTSIDER
+  {
+    Image: white 'C'; Size: SZ_MEDIUM; Mana: 12; Arm: 7;
+    CR: 2; HD: 4; Hit: +3; Def: 15; Mov: 120%; Spd: 120%;
+    Str 0, Dex 14, Con 0, Int 6, Wis 6, Cha 3;
+    Attk: A_AURA for 1d4 AD_DADX;
+    ABILITY(CA_INFRAVISION,6);
+    ABILITY(CA_TELEPATHY,6);
+    Stati[TELEKINETIC,10,10];
+    Spells: $"make whole";
+    Feats: FT_SKILL_FOCUS, SK_CRAFT;
+    Flags: M_NOHANDS, M_NOLIMBS, M_NOHEAD, M_LAWFUL, M_IALIGN,
+           M_TALKABLE;
+    Resists: DF_COLD, DF_FIRE, DF_ACID;
+    Immune: DF_MIND, DF_CRIT, DF_FEAR, DF_CONF, DF_POLY, DF_PSYC,
+            DF_POIS;
+    Desc: "The more agile duodrones are the second lowest (after the
+      modrons) in the naturally occuring hierarchy of geoform
+      constructs native to the lawful outer planes. They are capable
+      of more complex tasks and tactics in combat. A duodrone appears as 
+      a featureless pyramid of translucent quartz, hovering in the air; 
+      when on the Prime Material plane, they sometimes manifest an 
+      anthropomorphic face to better communicate with the natives.";
+  }
+
+/*** SLAADI ***/
+
+Monster "red slaad" : MA_OUTSIDER, MA_COUTSIDER
+  {
+    Image: bright red 'O'; Size: SZ_LARGE; Mana: 34; Arm: 5;
+    CR: OPT_CR(7,7); HD: 7; Hit: +5; Def: 15; Mov: 100%; Spd: 125%;
+    Str 19, Dex 13, Con 17, Int 6, Wis 6, Cha 8;
+    Attk: A_BITE for 2d8 AD_PIERCE and AD_DISE (DC 17),
+          A_CLAW for 1d4 AD_SLASH,
+          A_CLAW for 1d4 AD_SLASH,
+          A_GATE for 40% MA_COUTSIDER (CR 7);
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_REGEN,5);
+    Feats: FT_MULTIATTACK, FT_DODGE, FT_POUNCE, SK_CLIMB, SK_JUMP, 
+           SK_LISTEN, SK_SPOT;
+    Flags: M_CHAOTIC, M_IALIGN, M_HUMANOID, M_POISON, M_CARNI,
+           M_HERBI, M_THICK_HIDE, M_LAYS_EGGS, M_REACH;
+    Resists: DF_ACID, DF_ELEC, DF_FIRE, DF_COLD, DF_SONI;
+    Disease: $"red slaad egg infestation"; Spells: $"stunning croak";
+    Desc: "Slaadi are inhabitants of Pandemonium, the Outer Plane aligned
+      with pure, primordial chaos. They are frog-like humanoids with a
+      fiercely independant streak, a hatred of domination and a cruel
+      disposition.\n
+      __Red slaadi are the weakest of their race, possessing limited
+      intelligence and a cowardly outlook. They frequently seek to set
+      up lairs away from other thinking beings, striving to preserve
+      their freedom. More powerful slaadi also sometimes use them as
+      shock troops and canon fodder.";
+    Lists:
+      * GROUP_ALLY $"blue slaad" $"green slaad",
+      * GROUP_LEADER $"blue slaad" $"green slaad";
+  }
+
+Effect "Stunning Croak" : EA_INFLICT
+  { xval: STUNNED; sval: FORT; Level: 4; aval: AR_GLOBE; 
+    Purpose: EP_ATTACK | EP_CURSE;
+    cval: RED; lval: 3; Flags: EF_DSHORT; 
+    Flags: EF_SPECABIL, EF_CASTER_IMMUNE;
+    Desc: "A creature who hears the thunderous croak of a red slaad
+      and fails her saving throw will be stunned for the duration
+      of the effect."; }
+
+Disease "red slaad egg infestation" : EA_DRAIN
+  {
+    Level: 7;
+    /*Iteration*/   cval: 30;
+    /*Save DC*/     sval: 20;
+    /*Persistance*/ lval: 10;
+    xval: AD_DACO; pval: 1d2;
+    int16 vx, vy; hObj vmap;
+    On Event PRE(EV_DAMAGE) {
+      /* Record the victim's location on the map, as we might need it
+         later. */
+      if (EVictim != NULL && !EVictim->isDead()) {
+        vx = EVictim->x;
+        vy = EVictim->y;
+        vmap = EVictim->m;
+      }
+      return NOTHING;
+      },
+    POST(EV_DAMAGE) {
+      hObj mn;
+      if (EVictim != NULL && EVictim->isDead())
+        {
+          if (EVictim->CasterLev()) {          
+            VPrint(e,NULL,"A green slaad tears its way out of the <EVictim>'s corpse!");
+            mn = CreateMonster($"green slaad");
+            }
+          else {
+            VPrint(e,NULL,"A blue slaad tears its way out of the <EVictim>'s corpse!");
+            mn = CreateMonster($"blue slaad");
+            }
+          mn->PlaceAt(vmap,vx,vy);
+        }
+      return NOTHING;
+      };
+    Desc: "Red slaadi reproduce by implanting their eggs within a living
+      victim. Once the eggs hatch, they devour the victim from within
+      and emerge full-formed. This condition inflicts 1d2 point of 
+      Constitution damage every 30 turns, and requires 10 successful
+      saves against DC 20 to overcome. If it claims a victim, a new
+      blue slaad appears where the victim died. Spellcasting victims 
+      instead produce green slaadi.";
+  }
+
+Monster "blue slaad" : MA_OUTSIDER, MA_COUTSIDER
+  {
+    Image: bright blue 'O'; Size: SZ_LARGE; Mana: 57; Arm: 5;
+    CR: OPT_CR(9,8); HD: 8; Hit: +7; Def: 18; Mov: 100%; Spd: 125%;
+    Str 19, Dex 15, Con 17, Int 6, Wis 6, Cha 10;
+    Attk: A_BITE for 2d8 AD_PIERCE and AD_DISE (DC 17),
+          A_CLAW for 1d4 AD_SLASH,
+          A_CLAW for 1d4 AD_SLASH,
+          A_GATE for 40% MA_COUTSIDER (CR 7);
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_REGEN,5);
+    Feats: FT_MULTIATTACK, FT_DODGE, FT_MOBILITY, FT_RAKE,
+           SK_CLIMB, SK_JUMP, SK_MOVE_SIL, SK_LISTEN, SK_SPOT;
+    Flags: M_CHAOTIC, M_IALIGN, M_HUMANOID, M_POISON, M_CARNI,
+           M_HERBI, M_THICK_HIDE, M_LAYS_EGGS, M_REACH;
+    Resists: DF_ACID, DF_ELEC, DF_FIRE, DF_COLD, DF_SONI;
+    Disease: $"blue slaad transformation disease"; 
+    Spells: $"hold person", $"passwall", /* $"telekinesis", */
+            $"chaos hammer";
+    Desc: "Slaadi are inhabitants of Pandemonium, the Outer Plane aligned
+      with pure, primordial chaos. They are frog-like humanoids with a
+      fiercely independant streak, a hatred of domination and a cruel
+      disposition.\n
+      __Blue slaadi are the most common of their race, and a violent
+      and warlike. They form raiding tribes to attack the Prime Material,
+      eager to test their mettle against new conquests.";
+    Lists:
+      * GROUP_ALLY $"blue slaad" $"green slaad",
+      * GROUP_LEADER $"green slaad",
+      * GROUP_FOLLOWER $"red slaad";
+  }
+
+Disease "blue slaad transformation disease" : EA_DRAIN
+  {
+    Level: 7;
+    /*Iteration*/   cval: 30;
+    /*Save DC*/     sval: 20;
+    /*Persistance*/ lval: 10;
+    xval: AD_DACO; pval: 1d2;
+    int16 vx, vy; hObj vmap;
+    On Event PRE(EV_DAMAGE) {
+      /* Record the victim's location on the map, as we might need it
+         later. */
+      vx = EVictim->x;
+      vy = EVictim->y;
+      vmap = EVictim->m;
+      return NOTHING;
+      },
+    POST(EV_DAMAGE) {
+      hObj mn;
+      if (EVictim->isDead())
+        {
+          if (EVictim->CasterLev()) {          
+            VPrint(e,NULL,"The <EVictim> changes into a green slaad!");
+            mn = CreateMonster($"green slaad");
+            }
+          else {
+            VPrint(e,NULL,"The <EVictim> changes into a red slaad!");
+            mn = CreateMonster($"red slaad");
+            }
+          mn->PlaceAt(vmap,vx,vy);
+        }
+      return NOTHING;
+      };
+    Desc: "Blue slaadi reproduce by the means of a supernatural disease
+      which changes other beings into red or green slaadi. This 
+      condition inflicts 1d2 point of Constitution damage every 30 
+      turns, and requires 10 successful saves against DC 17 to overcome. 
+      If it claims a victim, a new red slaad appears where the victim 
+      died. Spellcasting victims instead produce green slaadi.";
+  }
+
+Monster "green slaad" : MA_OUTSIDER, MA_COUTSIDER
+  {
+    Image: bright green 'O'; Size: SZ_LARGE; Mana: 96; Arm: 5;
+    CR: OPT_CR(11,9); HD: 9; Hit: +7; Def: 22; Mov: 100%; Spd: 125%;
+    Str 19, Dex 13, Con 17, Int 10, Wis 10, Cha 10;
+    Attk: A_BITE for 2d8 AD_PIERCE,
+          A_CLAW for 1d4 AD_SLASH,
+          A_CLAW for 1d4 AD_SLASH,
+          A_GATE for 40% MA_COUTSIDER (CR 7);
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_REGEN,5);
+    Feats: FT_POWER_ATTACK, FT_GUARDED_INVOCATION, FT_CLEAVE,
+           SK_CLIMB, SK_HIDE, SK_JUMP, SK_MOVE_SIL, SK_LISTEN, 
+           SK_SPOT;
+    Flags: M_CHAOTIC, M_IALIGN, M_HUMANOID, M_POISON, M_CARNI,
+           M_HERBI, M_THICK_HIDE, M_LAYS_EGGS, M_REACH;
+    Resists: DF_ACID, DF_ELEC, DF_FIRE, DF_COLD, DF_SONI;
+    Spells: $"globe of shadow", $"chaos hammer", $"detect monsters",
+            $"ESP", $"fear", $"see invisibility", $"mirror image",
+            $"confusion", $"force bolt", $"cat's grace", $"summon swarm",
+            $"bull's strength";
+    Desc: "Slaadi are inhabitants of Pandemonium, the Outer Plane aligned
+      with pure, primordial chaos. They are frog-like humanoids with a
+      fiercely independant streak, a hatred of domination and a cruel
+      disposition.\n
+      __Green slaadi possess a human intelligence, and are cunning, patient
+      and devious. Arrogant to a fault, they are eager to seek out new
+      knowledge and to gain power in the anarchic society of Pandemonium.";
+    Lists:
+      * GROUP_FOLLOWER $"blue slaad" $"green slaad",
+      * GROUP_ALLY $"blue slaad" $"green slaad";
+  }
+
+/********************************************************************************
+ ********************************************************************************
+ ***                               PLANAR TEMPLATES                           ***
+ ********************************************************************************
+ ********************************************************************************/
+
+Template "flame" : TM_PLANAR for MA_NLIVING
+  {
+    MType: MA_ELEMENTAL; Glyph: red 0; CR: OPT_CR(+3,+2);
+    Attk:
+      A_AURA for 1d10 AD_FIRE;
+	ABILITY(CA_WEAPON_IMMUNITY,1);
+    Immune: ELEMENTAL_IMMUNITIES, DF_FIRE; 
+    Flags: M_FIRE, TMF_OBVIOUS, !M_HAS_BLOOD, M_NO_BLOOD;
+    Desc: "Native to the elemental plane of fire, flame creatures
+      appear as their mundane counterparts, but composed of living,
+      congealed fire -- just like an elemental.";
+    On Event EV_ISTARGET {
+      if (enFreaky() % 10 != 7)
+        return -1;
+      if (EActor->isMType(MA_FUNGI) || EActor->isMType(MA_PLANT) ||
+          EActor->isMType(MA_OOZE) || EActor->isMType(MA_UNDEAD))
+        return -1;
+      if (EActor->HasMFlag(M_EARTH) || EActor->HasMFlag(M_AIR) ||
+          EActor->HasMFlag(M_FIRE) || EActor->HasMFlag(M_WATER) )
+        return -1;
+      return 0;
+      };
+  }
+
+Template "earthen" : TM_PLANAR for MA_NLIVING
+  {
+    MType: MA_ELEMENTAL; Glyph: brown 0; Arm: +6 (max 21); CR: OPT_CR(+3,+2); 
+    Str +4, Dex -2;
+	ABILITY(CA_WEAPON_IMMUNITY,1);
+	ABILITY(CA_EARTHMELD,1);
+	ABILITY(CA_TREMORSENSE,6);
+    Immune: ELEMENTAL_IMMUNITIES; 
+    Flags: M_EARTH, TMF_OBVIOUS, !M_HAS_BLOOD, M_NO_BLOOD;
+    Desc: "Native to the elemental plane of earth, stone creatures
+      appear as their mundane counterparts, but composed of fluid rock,
+      appearing like an animated, perfectly lifelike statue.";
+    On Event EV_ISTARGET {
+      if (enFreaky() % 10 != 7)
+        return -1;
+      if (EActor->isMType(MA_FUNGI) || EActor->isMType(MA_PLANT) ||
+          EActor->isMType(MA_OOZE) || EActor->isMType(MA_UNDEAD))
+        return -1;
+      if (EActor->HasMFlag(M_EARTH) || EActor->HasMFlag(M_AIR) ||
+          EActor->HasMFlag(M_FIRE) || EActor->HasMFlag(M_WATER) )
+        return -1;
+      return 0;
+      };
+  }
+
+Template "gaseous" : TM_PLANAR for MA_NLIVING
+  {
+    MType: MA_ELEMENTAL; Glyph: white 0; Mov: +20; CR: OPT_CR(+2,+2);
+    Dex +6;
+	ABILITY(CA_WEAPON_IMMUNITY,1);
+	ABILITY(CA_FLIGHT,10);
+    Immune: ELEMENTAL_IMMUNITIES; 
+    Flags: M_AIR, M_MFLYER, M_AMORPH, TMF_OBVIOUS, 
+      !M_HAS_BLOOD, M_NO_BLOOD; 
+    Feats: FT_FLYBY_ATTACK;
+    Desc: "Native to the elemental plane of air, gaseous creatures
+      appear as their mundane counterparts, but composed purely of
+      abstract vapours.";
+    On Event EV_ISTARGET {
+      if (enFreaky() % 10 != 7)
+        return -1;
+      if (EActor->isMType(MA_FUNGI) || EActor->isMType(MA_PLANT) ||
+          EActor->isMType(MA_OOZE) || EActor->isMType(MA_UNDEAD))
+        return -1;
+      if (EActor->HasMFlag(M_EARTH) || EActor->HasMFlag(M_AIR) ||
+          EActor->HasMFlag(M_FIRE) || EActor->HasMFlag(M_WATER) )
+        return -1;
+      return 0;
+      };
+  }
+
+Template "aqueous" : TM_PLANAR for MA_NLIVING
+  {
+    MType: MA_ELEMENTAL; Glyph: azure 0; CR: OPT_CR(+3,+2);
+    Attk:
+      A_AURA for 3d4 AD_SOAK (DC 20),
+      A_SLAM for 1d4 AD_BLUNT 
+                 and AD_ENGL (DC 20);
+	ABILITY(CA_WEAPON_IMMUNITY,1);
+    Immune: ELEMENTAL_IMMUNITIES; 
+    Flags: M_AIR, M_AMORPH, TMF_OBVIOUS, 
+      !M_HAS_BLOOD, M_NO_BLOOD; 
+    Desc: "Native to the elemental plane of water, aqueous creatures
+      appear as their mundane counterparts, but composed of supernaturally
+      animate water.";
+    On Event EV_ISTARGET {
+      if (EActor->isMType(MA_FUNGI) || EActor->isMType(MA_PLANT) ||
+          EActor->isMType(MA_OOZE) || EActor->isMType(MA_UNDEAD))
+        return -1;
+      if (EActor->HasMFlag(M_EARTH) || EActor->HasMFlag(M_AIR) ||
+          EActor->HasMFlag(M_FIRE) || EActor->HasMFlag(M_WATER) )
+        return -1;
+      return 0;
+      };
+  }
+
+Template "celestial" : TM_PLANAR for MA_NLIVING
+  { MType: MA_CELESTIAL; CR: +1; Wis +2, Cha +2;
+  // drow 0 -> 2
+    HitDice: 150%; 
+	ABILITY(CA_INFRAVISION,6);
+        ABILITY(CA_SMITE,5); 
+	MAGIC_RES(35);
+	Resists: DF_ACID, DF_COLD, DF_ELEC;
+  Flags: M_GOOD, !M_EVIL, TMF_OBVIOUS;
+  Desc: "Celestial creatures are the versions of normal creatures
+      that dwell on the Upper Planes, and benefit from some of the
+      same inherant traits that true celestials do.";
+    On Event EV_ISTARGET {
+      if (EActor->isMType(MA_FUNGI) || EActor->isMType(MA_PLANT) ||
+          EActor->isMType(MA_OOZE) || EActor->isMType(MA_UNDEAD))
+        return -1;
+      /* Celestial kobolds are OK; Celestial spinagons are not. */
+      if (EActor->HasMFlag(M_IALIGN) && !EActor->HasMFlag(M_GOOD))
+        return -1;
+      return 0;
+      };
+  }
+
+Template "fiendish" : TM_PLANAR for MA_NLIVING
+  { CR: +1; Str +2, Con +2;
+    HitDice: 125%; 
+	  ABILITY(CA_INFRAVISION,6);
+	  MAGIC_RES(35); 
+	  Resists: DF_FIRE, DF_COLD;
+    Flags: !M_GOOD, M_EVIL, TMF_OBVIOUS;
+    Desc: "Fiendish creatures are the versions of normal creatures
+      that dwell on the Lower Planes, and benefit from some of the
+      same inherant traits that true fiends do.";
+    On Event EV_ISTARGET {
+      if (EActor->isMType(MA_FUNGI) || EActor->isMType(MA_PLANT) ||
+          EActor->isMType(MA_OOZE) || EActor->isMType(MA_UNDEAD))
+        return -1;
+      /* Fiendish halflings are OK; fiendish archons are not. */
+      if (EActor->HasMFlag(M_IALIGN) && !EActor->HasMFlag(M_EVIL))
+        return -1;
+      return 0;
+      };
+  }
+
+
+
+
+
+
+Template "half-celestial" : TM_DESCENT for MA_NLIVING
+  {
+    CR: +2; MType: MA_CELESTIAL; Def: +2; Spd: +25%;
+    Str +4, Dex +2, Con +4, Int +2, Wis +4, Cha +4;
+    Desc: "Celestials often take mates from among the more virtious
+      creatures on the Prime Material plane, and their magical nature
+      allows these unions to produce offspring -- mortal creatures
+      with the blood of angels in their veins. Regardless of the 
+      nature of the celestial parent, half-celestials allways appear
+      as members of their base species, but with beautiful, white
+      feathered wings upon which they can fly.";
+    Immune: DF_COLD, DF_ACID, DF_DISE, DF_ELEC; 
+    Flags: M_GOOD, !M_EVIL, M_FLYER;
+    On Event EV_INITIALIZE {
+      EActor->GainPermStati(SAVE_BONUS,NULL,SS_RACE,SN_POISON,4,$"half-celestial");      
+      EActor->GainPermStati(INNATE_SPELL,NULL,SS_RACE,0,0,$"call light");
+      if (EActor->ChallengeRating() >= 3)
+        EActor->GainPermStati(INNATE_SPELL,NULL,SS_RACE,0,0,$"protection from evil");
+      if (EActor->ChallengeRating() >= 4)
+        EActor->GainPermStati(INNATE_SPELL,NULL,SS_RACE,0,0,$"bless");
+      if (EActor->ChallengeRating() >= 5)
+        EActor->GainPermStati(INNATE_SPELL,NULL,SS_RACE,0,0,$"detect evil");
+      if (EActor->ChallengeRating() >= 6)
+        EActor->GainPermStati(INNATE_SPELL,NULL,SS_RACE,0,0,$"cure serious wounds");
+      if (EActor->ChallengeRating() >= 7)
+        EActor->GainPermStati(INNATE_SPELL,NULL,SS_RACE,0,0,$"neutralize poison");
+      if (EActor->ChallengeRating() >= 8)
+        EActor->GainPermStati(INNATE_SPELL,NULL,SS_RACE,0,0,$"holy smite");
+      if (EActor->ChallengeRating() >= 9)
+        EActor->GainPermStati(INNATE_SPELL,NULL,SS_RACE,0,0,$"cure disease");
+      if (EActor->ChallengeRating() >= 10)
+        EActor->GainPermStati(INNATE_SPELL,NULL,SS_RACE,0,0,$"holy summoning V");
+      return NOTHING;
+      },
+    EV_ISTARGET {
+      if (!EActor->isMType(MA_SAPIENT))
+        return -1;
+      return 0;
+      },
+    MSG_SPECABIL
+      "It has a +4 racial bonus to saving throws versus poison. Based on its final
+        CR, it will have access to some of the following spell-like abilities, in
+        the order listed: <1>Call Light<7>, <1>Protection from Evil<7>, <1>Bless<7>,
+        <1>Detect Evil<7>, <1>Cure Serious Wounds<7>, <1>Neutralize Poison<7>, 
+        <1>Holy Smite<7>, <1>Cure Disease<7> and <1>Holy Summoning V<7>.";
+  }
+
+Template "half-fiend" : TM_DESCENT for MA_NLIVING
+  {
+    CR: +2; MType: MA_OUTSIDER; Arm: +4;
+    Str +4, Dex +4, Con +2, Int +4, Cha +2;
+    Desc: "Fiends are infamous for using sexuality to corrupt humans --
+      especially succubi and erinyes -- but any fiend can have congress
+      with a human victim, and due to the fiend's metaphyical nature,
+      these unions can produce children. Half-fiends are monsterous
+      things, resembling their mortal parent's species but with claws,
+      fangs and other monsterous traits, and instinctually driven to acts
+      of violence and general psychopathic conduct.";
+    Immune: DF_POIS; Resists: DF_ACID, DF_COLD, DF_FIRE, DF_ELEC;
+    Flags: !M_GOOD, M_EVIL;
+    On Event EV_INITIALIZE {
+      EActor->GainPermStati(INNATE_SPELL,NULL,SS_RACE,0,0,$"globe of shadow");
+      if (EActor->ChallengeRating() >= 3)
+        EActor->GainPermStati(INNATE_SPELL,NULL,SS_RACE,0,0,$"desecrate");
+      if (EActor->ChallengeRating() >= 4)
+        EActor->GainPermStati(INNATE_SPELL,NULL,SS_RACE,0,0,$"produce flame");
+      if (EActor->ChallengeRating() >= 5)
+        EActor->GainPermStati(INNATE_SPELL,NULL,SS_RACE,0,0,$"bestow curse");
+      if (EActor->ChallengeRating() >= 6)
+        EActor->GainPermStati(INNATE_SPELL,NULL,SS_RACE,0,0,$"unholy blight");
+      if (EActor->ChallengeRating() >= 7)
+        EActor->GainPermStati(INNATE_SPELL,NULL,SS_RACE,0,0,$"contagion");
+      if (EActor->ChallengeRating() >= 8)
+        EActor->GainPermStati(INNATE_SPELL,NULL,SS_RACE,0,0,$"animate dead");
+      if (EActor->ChallengeRating() >= 9)
+        EActor->GainPermStati(INNATE_SPELL,NULL,SS_RACE,0,0,$"enervation");
+      if (EActor->ChallengeRating() >= 10)
+        EActor->GainPermStati(INNATE_SPELL,NULL,SS_RACE,0,0,$"thornwrack");
+      return NOTHING;
+      },
+    MSG_SPECABIL
+      "It has a +4 racial bonus to saving throws versus poison. Based on its final
+        CR, it will have access to some of the following spell-like abilities, in
+        the order listed: <1>Globe of Shadow<7>, <1>Desecrate<7>, <1>Produce
+        Flame<7>, <1>Bestow Curse<7>, <1>Unholy Blight<7>, <1>Contagion<7>, 
+        <1>Animate Dead<7>, <1>Enervation<7> and <1>Thornwrack<7>.";
+  }
+

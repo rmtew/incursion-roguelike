@@ -1,0 +1,1131 @@
+/************************************************************************\
+ *                          MAGIC ITEM TEMPLATES                        *
+\************************************************************************/
+  
+Item "wand" : T_WAND
+	{
+		Image: white '/'; 
+		Level:0; Mat:MAT_WOOD;
+    Weight: 1; Flags: IT_NOGEN; hp: 5;
+    Desc: "Magical wands are thin, finely crafted sticks containing 
+      innate, repeatable magical effects -- often evocations or
+      conjurations. They have between one and fifty charges and can
+      be used with the Blast Staff or Wand ('b') command. The Use
+      Magic skill determines your degree of success when using a
+      wand.";
+	}
+
+Item "lenses" : T_EYES
+  {
+    Image: white GLYPH_EYES; 
+    Level:0; Mat:MAT_GLASS;
+    Weight: 1; Flags: IT_PLURAL, IT_NOGEN; hp: 5;
+    Desc: "Magical lenses are thin, finely crafted sheets of glass
+      or crystal that imbue magical powers when fitted over the eyes."; 
+    Cost: 100 GOLD;
+  }
+
+Item "potion" : T_POTION
+	{
+	  Image: white GLYPH_POTION; hp: 1;
+		Level:0; Mat:MAT_GLASS;
+    Weight: 2; Flags: IT_THROWABLE, IT_NOGEN;
+    On Event PRE(EV_HIT), POST(EV_RATTACK) {
+      if (GetHandle(EItem2))
+        if (!(EItem2->Flags & F_DELETE))
+          {
+            APrint(e,"The potion shatters!");
+            EItem2->Remove(true);
+          }
+      },
+    PRE(EV_APPLY) {
+      if (GetHandle(EItem) != NULL_OBJ)
+        if (e.eID == NULL_ID)
+          e.eID = EItem->ieID;
+      return NOTHING;
+      };
+    Desc: "A potion is a magically prepared liquid that conveys a
+      supernatural effect to its wearer when drunk -- often imbuing
+      her with magical power or curing some malady she suffers from.";
+	}
+
+Item "tablet" : T_TOOL
+	{
+	  Image: white GLYPH_FOOD; hp: 1;
+		Level:0; Mat:MAT_VEGGY;
+    Weight: 0; Flags: IT_NOGEN, IT_EDIBLE;
+    Desc: "Tablets are the product of alchemy, containing mundane effects
+      similar to, but less pronounced than, those of magical potions. Many
+      of them have psychoactive effects.";
+    On Event PRE(EV_EAT) {
+      if (GetHandle(EItem))
+        {
+          DPrint(e,"You swallow an <EItem>.",
+                   "The <EActor> swallows an <EItem>.");
+          e.eID = EItem->ieID;
+          e.isActivation = true;
+          SetEItem(e,EItem->TakeOne());
+          if (ReThrow(EV_EFFECT, e) == DONE)
+            EItem->Remove(true);
+          return DONE;          
+        }
+      return ABORT;
+      };  
+	}
+
+Item "tome" : T_TOME
+  {
+    Image: brown GLYPH_BOOK;
+    Mat:MAT_PAPER; Level: 0;
+    Weight: 40; Flags: IT_NOGEN;
+    Desc: "These incredibly rare and ancient items are the remnants of a
+      kind of magic long since lost from Therya's surface. They have the
+      power to permanantly augment the traits of one who reads them, and
+      typically vanish after being read once.";
+    On Event EV_READ {
+      if (GetHandle(EItem) == NULL_OBJ)
+        return NOTHING;
+      if (EItem->ieID == NULL_ID)
+        {
+          EActor->IPrint("This tome's entirely blank!");
+          return DONE;
+        }
+      if (!EItem->isKnown(KN_MAGIC))
+        {
+          EActor->IPrint("This strange tome makes no sense when you try 
+            to read it -- if only you had some magic to help you understand
+            how to use it!");
+          return DONE;
+        }
+      e.eID = EItem->ieID;
+      return ReThrow(EV_EFFECT,e);
+      };
+  }
+  
+Item "ring" : T_RING
+	{
+  	Image: yellow GLYPH_RING; Size: SZ_MINISCULE;
+    Mat:MAT_GEMSTONE; Level: 0;
+    Weight: 0; Flags: IT_NOGEN; hp: 10;
+    Desc: "Rings of all shapes and sizes can contain powerful dwenomers,
+      often enhancing the wearer's capabilities in some way or providing
+      a special function when activated.";
+    Cost: 2 GOLD;
+  }
+
+Item "bracers" : T_BRACERS
+	{
+  	Image: white GLYPH_BRACERS;
+    Mat:MAT_IRON; Level: 0;
+    Weight: 20; 
+    Flags: IT_PLURAL, IT_NOGEN;
+    Desc: "Bracers are leather or metal bands worn around the wrists,
+      typically just under a foot in length. They are often granted
+      enhancements which increase the wearer's militant prowess."; 
+  }
+
+Item "scroll" : T_SCROLL
+	{
+  	Image: grey GLYPH_SCROLL;
+    Mat:MAT_PAPER; Level: 0;
+    Weight: 1; hp: 5;
+    Flags: IT_NOGEN;
+    Desc: "Scrolls are transcriptions of magical spells, as might be found
+      in a spellbook, imbued with an innate magic of their own. They cannot
+      be read by common folk, but skilled spellcasters (and canny rogues
+      with the Decipher Script skill) can use the magic stored within them 
+      to cast spells they do not know naturally. Each scroll holds a single
+      spell."; 
+    On Event EV_GETNAME {
+      if (!EItem->isKnown(KN_MAGIC)) {
+        e.nPostqual += " labeled ";
+        e.nPostqual += Trim(e.nFlavor);
+        }
+      e.nFlavor = "";
+      return DONE;
+      };
+  }
+
+
+Item "boots" : T_BOOTS
+	{
+  	Image: grey GLYPH_BOOTS;
+    Mat:MAT_LEATHER; Level: 0;
+    Weight: 30; hp: 15;	Cov: 1;
+    Flags: IT_PLURAL, IT_NOGEN;
+    Desc: "Boots come in all shapes and sizes. They can be enchanted like
+      other items, typically to augment a wearer's movement or prowess
+      with his feet.";
+  }
+
+Item "headband" : T_HELMET
+	{                                  
+  	Image: grey GLYPH_HEADBAND;
+    Mat:MAT_CLOTH; Level: 0;
+    Weight: 2; hp: 5;
+    Flags: IT_NOGEN;
+    Desc: "Magical headbands are often created by wizards to augment their
+      mind, mystical insight or magical abilities.";
+  }
+
+Item "hat" : T_HELMET
+	{                                  
+  	Image: brown GLYPH_HELMET;
+    Mat:MAT_CLOTH; Level: 0;
+    Weight: 2; hp: 10;
+    Flags: IT_NOGEN;
+    Desc: "Hats come in a staggering variety of styles and shapes and are
+      worn by all classes of people, though only a few magical varieties
+      are known to exist.";
+  }
+
+Item "helm" : T_HELMET
+	{
+  	Image: grey GLYPH_HELMET;
+    Mat:MAT_IRON; Level: 0;
+    Weight: 40; hp: 20;	
+    Cov: 2; Flags: IT_NOGEN;
+	  Penalty: 1;
+    Desc: "Helms are favored by warriors and paladins, and often contain
+      types of magic useful to those who have few innate spells of their
+      own to call on.";
+  }
+
+Item "girdle" : T_GIRDLE
+  {
+    Image: brown GLYPH_GIRDLE;
+    Mat: MAT_LEATHER; Level: 0;
+    Weight: 5; hp: 10;
+    Flags: IT_NOGEN;
+    Desc: "A girdle is a thick leather belt, occasionally enchanted to
+      augment a wearer's hardiness or bestow other primal blessings.";
+  }
+
+Item "amulet" : T_AMULET
+	{
+  	Image: cyan GLYPH_AMULET; hp: 5;
+    Mat: MAT_GEMSTONE; Level: 0;
+    Weight: 5; Flags: IT_NOGEN;
+    Desc: "An amulet can be a necklace, brooch, periapt or any other
+      similar piece of jewelry. They are typically enchanted with
+      abjurations and wards against harm.";
+  }
+
+Item "stone" : T_GEM
+  {
+    Image: grey '*'; hp: 10;
+    Mat: MAT_GRANITE; Level: 0;
+    Weight: 10; Flags: IT_NOGEN;
+    Desc: "Occasionally, a simple stone is imbued with magic by a wizard,
+      whether a rare gem or mineral or simply a normal polished rock.
+      Unlike most magic items, a stone does not need to be worn to gain
+      its benefit -- simply carrying it outside one's pack will bestow its
+      blessing upon the bearer.";
+  }
+
+Item "stone;light" : T_GEM
+  {
+    Image: grey '*'; hp: 10;
+    Mat: MAT_GRANITE; Level: 0;
+    Weight: 2; Flags: IT_NOGEN;
+    Desc: "Occasionally, a simple stone is imbued with magic by a wizard,
+      whether a rare gem or mineral or simply a normal polished rock.
+      Unlike most magic items, a stone does not need to be worn to gain
+      its benefit -- simply carrying it outside one's pack will bestow its
+      blessing upon the bearer. This stone seems to be considerably lighter
+      than most such magical stones.";
+  }
+
+Item "cloak" : T_CLOAK
+  {
+    Image: blue GLYPH_CLOAK; hp: 10;
+    Mat: MAT_CLOTH; Level: 0;
+    Weight: 10; Flags: IT_NOGEN;
+    Desc: "Cloaks come in any number of styles, from opulent luxury to
+      tattered rags. When gifted with magic, they often enhance stealth,
+      bestow elegance or convey kinship to certain night creatures.";
+  }
+
+Item "gauntlets" : T_GAUNTLETS
+  {
+  	Image: grey GLYPH_GAUNTLETS;
+    Mat:MAT_IRON; Level: 0;
+    Weight: 30; hp: 10;	Cov: 1;
+    Flags: IT_PLURAL, IT_NOGEN;
+    Desc: "Gauntlets are armored gloves made of thick metal, designed
+      to accompany a suit of heavy armor. They are typically enchanted
+      to augment the wearer's offensive power.";
+  }
+
+Item "gloves" : T_GAUNTLETS
+	{
+  	Image: brown GLYPH_GAUNTLETS;
+    Mat:MAT_LEATHER; Level: 0;
+    Weight: 10; hp: 3;	Cov: 0;
+    Flags: IT_PLURAL, IT_NOGEN;
+    Desc: "Gloves are supple, light-weight hand coverings often favored by
+    rogues and adventurers. Many are enchanted."; 
+  }
+  
+Item "rod" : T_WEAPON
+  {
+    Image: grey GLYPH_ROD; Group: WG_SIMPLE | WG_IMPACT; Spd: 90%;
+    Mat: MAT_IRON; Size: SZ_MEDIUM; Weight: 10; Cost: 15 GOLD;
+    Parry: 4; SDmg: 1d8; LDmg: 1d6; Acc: +2; Crit: x3; Threat: 2;
+    Flags: WT_BLUNT, WT_STUNNING, IT_NOGEN;
+    Desc: "Rods symbolize lordship, power, authority and military
+      might; they are often enchanted with useful abilities by
+      warlords, soldiers, humanoids and other men at arms."; 
+  }
+  
+/* Exact duplicate of "quarterstaff" but for IT_NOGEN and the
+   size-altering scripts. */
+Item "staff" : T_WEAPON
+	{ Image: bright cyan '|'; Group: WG_SIMPLE | WG_STAVES | WG_MARTIAL;
+    Mat:MAT_WOOD; Size: SZ_MEDIUM; Weight: 7; Cost: OPT_COST(28,13) GOLD; 
+    Parry: 8;
+    SDmg:1d8; LDmg:1d6; Acc: +4; Crit: x2; Threat: 1; Spd: 100%;
+    Flags: WT_SUPER_TRIP, WT_BLUNT, WT_TWO_HANDED, IT_NOGEN; 
+    Desc: "A long stout staff used as a weapon and wielded with one hand in
+    the middle and the other between the middle and the end.";
+	}
+
+/************************************************************************\
+ *                               SKILL KITS                             *
+\************************************************************************/
+
+Item "climbing rig" : T_TOOL
+  {
+    Image: brown GLYPH_TOOL; Mat: MAT_LEATHER; Level: 0; HP: 15; 
+    Size: SZ_SMALL;  Weight: 30;
+    Desc: "This heavy leather pouch includes special tools for knotting
+      rope, pitons, a climbing harness, suction cups for smooth surfaces
+      and other equipment useful to climbers.";
+    Lists:
+      * SKILL_KIT_FOR SK_CLIMB;
+    Constants:
+      * SKILL_KIT_MOD +4;
+    Cost: 30 GOLD;
+  }
+  
+Item "alchemy set" : T_TOOL
+  {
+    Image: bright red GLYPH_TOOL; Mat: MAT_WOOD; Level: 0; HP: 10;
+    Size: SZ_SMALL;  Weight: 60;
+    Desc: "An alchemy set is a heavy wooden box about the size of a
+      briefcase, filled with a variety of reagents along with glassware,
+      miniature burners, testing strips and magical measuring instruments.
+      It also contains fold-out charts describing elemental correspondances
+      and literally hundres of strange powders and ingredients.\n
+      __You cannot use the Alchemy skill without an alchemy set.";
+    Lists:
+      * SKILL_KIT_FOR SK_ALCHEMY;
+    Cost: 5000 GOLD;
+  }
+
+Item "viewing lens" : T_TOOL
+  {
+    Image: bright cyan GLYPH_TOOL; Mat: MAT_GLASS; Level: 0; HP: 1;
+    Size: SZ_TINY; Weight: 3;
+    Desc: "As much a sign of nobility as fine clothing or servants,
+      a viewing lens is an expertly manufactured concave glass that
+      magnifies whatever is seen through it. The level of skill as
+      a glassblower needed to create such a finely-crafted item is
+      rare on Theyra, making it a valuable tool drawing high prices
+      from specialists in many fields. It is thus highly useful
+      when using the Search, Decipher Script, Craft or Handle Device
+      skills, to which it grants a +2 kit bonus that stacks with
+      other kit bonuses.";
+    Lists:
+      * SECONDARY_KIT_FOR SK_SEARCH SK_DECIPHER SK_CRAFT SK_HANDLE_DEV;
+    Constants:
+      * SKILL_KIT_MOD +2;
+    Cost: 300 GOLD;
+  }
+  
+Item "craftsman's tools" : T_TOOL
+  {
+    Image: grey GLYPH_TOOL; Mat: MAT_IRON; Level: 0; HP: 15;
+    Size: SZ_SMALL;  Weight: 40; Flags: IT_PLURAL;
+    Desc: "The craftsman's tool set consists of a dozen different
+      miniature hammers, picks and bevels, needles and thread, 
+      tiny tubes of glue and grease, files for use on metal and 
+      wood-carving knives and various ungents and oils used to
+      treat and smooth surfaces and clear away rust.\n 
+      __You cannot use the Craft skill without a tool set,
+      but you also need raw materials (i.e., an iron ingot, a
+      bolt of fine cloth, gemstones) to create new items.";  
+    Lists:
+      * SKILL_KIT_FOR SK_CRAFT;
+    Cost: 120 GOLD;
+  }
+
+Item "mechanical tools" : T_TOOL
+  {
+    Image: bright blue GLYPH_TOOL; Mat: MAT_IRON; Level: 0; HP: 5;
+    Size: SZ_TINY;  Weight: 10; Flags: IT_PLURAL;
+    Desc: "This tiny steel snap-case contains a number of
+      miniature screwdrivers, replacement gears, long-spoon
+      wire cutters and so forth. It is useful for anyone
+      building or repairing clockwork devices -- and is thus
+      of primary important to gnomes -- and also to adventurers
+      who want to be able to disarm traps in a dungeon.\n
+      __You cannot use the Handle Device skill without these
+      tools.";  
+    Lists:
+      * SKILL_KIT_FOR SK_HANDLE_DEV;
+    Cost: 150 GOLD;
+  }
+  
+Item "disguise kit" : T_TOOL
+  {
+    Image: purple GLYPH_TOOL; Mat: MAT_IRON; Level: 0; HP: 5;
+    Size: SZ_SMALL; Weight: 20;
+    Desc: "This wooden case, about a foot long and same wide, 
+      and half that in thickness, snaps open to reveal a wide
+      variety of dyes, makeup, contact lenses, prosthetics, 
+      mirrors and straps. It also contains a wide variety of
+      clothing bearing a minor magical enchantment that allows
+      it to occupy far less space then it normally would.\n
+      __You cannot use the Disguise skill without a disguise
+      kit, unless you have magical aid (such as the <9>hat of
+      disguise<7> or a <9>change self<1> spell).";
+    Lists:
+      * SKILL_KIT_FOR SK_DISGUISE;
+    Cost: 1000 GOLD;
+  }
+
+Item "healing kit" : T_TOOL
+  {
+    Image: white GLYPH_TOOL; Mat: MAT_WOOD; Level: 0; HP: 5;
+    Size: SZ_SMALL; Weight: 40;
+    Desc: "This wooden case, about a foot long and same wide, 
+      and half that in thickness, snaps open to reveal a wide
+      variety of bandages, scalpels, ointments, antitoxins,
+      disinfectants and alchemical medications. 
+      __You cannot use the Healing skill without a healing
+      kit, unless you are a priest with the Healing domain.";
+    Lists:
+      * SKILL_KIT_FOR SK_HEAL;
+    Cost: 250 GOLD;
+  }
+  
+Item "pickaxe" : T_WEAPON
+  { Image: purple GLYPH_WEAPON; Group: WG_AXES | WG_EXOTIC;
+    Mat: MAT_IRON; Size: SZ_MEDIUM; Weight: 100; Cost: OPT_COST(32,4) GOLD; 
+    Parry: +3;
+    SDmg: 1d8; LDmg: 1d8; Acc: -1; Crit: x4; Threat: 1; Spd: 70%;
+    Flags: WT_PIERCING, WT_WOOD_PARTS, WT_FUMBLE1, WT_DIGGER,
+      WT_PENETRATING;
+    Desc: "The pickaxe may be useful as a weapon in desperate
+      circumstances, but its primary utility -- to miners and
+      adventurers alike -- is as a digging instrument to break
+      apart hard rock.\n
+      __You cannot use the Mining skill without a pickaxe or
+      similar digging instrument."; 
+    Lists:
+      * SKILL_KIT_FOR SK_MINING;
+    Constants:
+      * SKILL_KIT_MOD +2;
+    Cost: 50 GOLD;
+  } 
+  
+Item "hemp rope" : T_TOOL
+  {
+    Image: brown GLYPH_TOOL; Mat: MAT_CLOTH; Level: 0; HP: 2;
+    Size: SZ_SMALL; Flags: IT_ROPE, IT_GROUP; Weight: 10; Cost: 1;
+    Desc: "Most rope on Theyra is woven out of hemp; however,
+      it is heavy and not as strong as the more expensive kinds
+      of rope made from silk or the rare giant-hair rope. Rope
+      can be used to aid in climbing, bind subdued opponents,
+      set trip wire and snare traps or make a lasso.\n
+      __Hemp rope grants a +3 kit bonus to Climb checks that 
+      stacks with the bonus from a climbing set.";
+    Constants:
+      * ROPE_MOD +3;
+    On Event EV_GETNAME {
+      e.nArticle = e.nArticle + "coil of ";
+      e.nAppend  += Format(" (%d feet)",EActor->GetQuantity()*5);
+      return NOTHING;
+      };
+    COST: 3 SILVER;      
+  }
+
+Item "silk rope" : T_TOOL
+  {
+    Image: brown GLYPH_TOOL; Mat: MAT_CLOTH; Level: 0; HP: 4;
+    Size: SZ_SMALL; Flags: IT_ROPE, IT_GROUP; Weight: 5; Cost: 10;
+    Desc: "Silk rope is strong, light and supple, but also
+      more expensive than hemp. Rope can be used to aid in 
+      climbing, bind subdued opponents, set trip wire and 
+      snare traps or make a lasso.\n
+      __Silk rope grants a +4 kit bonus to Climb checks that 
+      stacks with the bonus from a climbing set.";
+    Constants:
+      * ROPE_MOD +4;
+    On Event EV_GETNAME {
+      e.nArticle = e.nArticle + "coil of ";
+      e.nAppend  += Format(" (%d feet)",EActor->GetQuantity()*5);
+      return NOTHING;
+      };
+    Cost: 2 GOLD;      
+  }
+  
+Item "giant's-hair rope" : T_TOOL
+  {
+    Image: brown GLYPH_TOOL; Mat: MAT_LEATHER; Level: 0; HP: 10;
+    Size: SZ_SMALL; Flags: IT_ROPE, IT_GROUP; Weight: 6; Cost: 100;
+    Desc: "The strongest, best and rarest rope found on Theyra
+      is that woven from the hair of giants. While some giants
+      shear and weave their own hair to sell to human or
+      demihuman communities, most giant's-hair rope is made
+      from the corpses of giants slain by dwarves, who invented
+      the rope. Rope can be used to aid in climbing, bind 
+      subdued opponents, set trip wire and snare traps or make 
+      a lasso.\n
+      __Giant's-hair rope grants a +5 kit bonus to Climb checks that 
+      stacks with the bonus from a climbing set.";
+    Constants:
+      * ROPE_MOD +5;
+    On Event EV_GETNAME {
+      e.nArticle = e.nArticle + "coil of ";
+      e.nAppend  += Format(" (%d feet)",EActor->GetQuantity()*5);
+      return NOTHING;
+      };
+    Cost: 30 GOLD;      
+  }  
+  
+Item "lute" : T_TOOL
+  {
+    Image: cyan '&'; 
+    Mat: MAT_WOOD; Weight: 15; hp: 15;
+    Lists:
+      * SKILL_KIT_FOR SK_PERFORM;
+    Constants:
+      * SKILL_KIT_MOD +2;  
+    Cost: 7 GOLD;      
+  }
+
+Item "mandolin" : T_TOOL
+  {
+    Image: cyan '&'; 
+    Mat: MAT_WOOD; Weight: 15; hp: 15;
+    Lists:
+      * SKILL_KIT_FOR SK_PERFORM;
+    Constants:
+      * SKILL_KIT_MOD +2;
+    Cost: 30 GOLD;      
+  }
+
+Item "flute" : T_TOOL
+  {
+    Image: cyan '&'; 
+    Mat: MAT_BONE; Weight: 5; hp: 10;
+    Lists:
+      * SKILL_KIT_FOR SK_PERFORM;
+    Constants:
+      * SKILL_KIT_MOD +2;
+    Cost: 2 GOLD;      
+  }
+
+Item "horn" : T_TOOL
+  {
+    Image: cyan '&'; hp: 15;
+    Mat: MAT_BONE; Weight: 10;
+    Flags: IT_NOGEN;
+    Desc: "Horns come in all shapes and sizes, and are often associated
+      with the nobility. Some are enchanted to produce a magical effect
+      when blown (activated).";
+    Lists:
+      * SKILL_KIT_FOR SK_PERFORM;
+    Constants:
+      * SKILL_KIT_MOD +2;
+    Cost: 5 GOLD;      
+  }
+    
+/************************************************************************\
+ *                      MISCELLANEOUS MUNDANE ITEMS                     *
+\************************************************************************/
+
+
+Item "corpse" : T_CORPSE
+	{
+		Image: light purple '%'; hp: 50;
+		Level:0; Mat:MAT_FLESH;
+  Desc: "This is the lifeless body of a slain creature. Corpses often carry 
+    diseases and are generally not safe sources of food. Creatures with the 
+    <11>Devouring<7> special ability can sometimes benefit from eating entire 
+    corpses, but are still vulnerable to carried diseases.";  
+	}
+
+Item "statue" : T_STATUE
+	{
+		Image: light grey GLYPH_STATUE; 
+		Level:0; Mat:MAT_GRANITE;
+    hp: 100;
+	}
+
+Item "figure" : T_FIGURE
+	{
+		Image: light grey GLYPH_FIGURE; 
+		Level:0; Mat:MAT_GEMSTONE; Weight: 3; hp: 5;
+		Flags: IT_NOGEN;
+	}
+
+Item "robes" : T_CLOTHES
+  {
+    Image: purple '['; 
+    Mat: MAT_CLOTH; Weight: 0; hp: 20;
+    Flags: IT_PLURAL, IT_NOGEN;
+    Cost: 3 SILVER;      
+  }
+
+Item "white robe" : T_CLOTHES
+  {
+    Image: white '['; 
+    Mat: MAT_CLOTH; Weight: 0; hp: 20;
+    Flags: IT_NOGEN;
+    Cost: 3 SILVER;      
+  }
+
+Item "loincloth" : T_CLOTHES
+  {
+    Image: brown '['; 
+    Mat: MAT_CLOTH; Weight: 0; hp: 20;
+  }
+
+Item "clerical vestment" : T_CLOTHES
+  {
+    Image: white '['; 
+    Mat: MAT_CLOTH; Weight: 0; hp: 20;
+    Cost: 2 GOLD;      
+  }
+
+Item "peasant garb" : T_CLOTHES
+  {
+    Image: grey '['; 
+    Mat: MAT_CLOTH; Weight: 0; hp: 20;
+    Cost: 3 COPPER;      
+  }
+
+Item "noble attire" : T_CLOTHES
+  {
+    Image: blue '['; 
+    Mat: MAT_CLOTH; Weight: 0;   hp: 20;
+    Cost: 20 GOLD;      
+  }
+
+Item "holy symbol" : T_SYMBOL
+  {
+    Image: white GLYPH_SYMBOL; Cost: 15;
+    Mat: MAT_IRON; Weight: 3; hp: 20;
+    Cost: 5 GOLD;      
+  }
+
+Item "torch" : T_LIGHT
+  { Image: brown '{'; 
+    Mat: MAT_WOOD; Weight: 10; hp: 10;
+    Light Range: 4; Lifespan: 3000;
+    Cost: 1 SILVER;      
+  }
+
+// ww: accocrding to the SRD, torches last for 1 hour and lanterns last for
+// six hours ... I'm now sure how many "Lifespan" units are in an hour, but
+// the lantern should definitely be 6x the torch. 
+Item "brass lantern" : T_LIGHT
+  { Image: yellow '{'; 
+    Mat: MAT_COPPER; Weight: 20; hp: 20;
+    Light Range: 6; Lifespan: 18000; 
+    Flags: WT_RACIAL;
+    On Event EV_POUR, EV_APPLY {
+      hObj h;
+      if (GetHandle(ETarget) && GetHandle(EItem))
+        if (ETarget->isType(T_ITEM) && EItem->isType(T_ITEM)) 
+          if (EItem->ieID == $"flask of oil" && EItem->isKnown(KN_MAGIC))
+            if (ETarget->iID == $"brass lantern")
+              {
+                ETarget->Age = 18000;
+                DPrint(e,"You refill your lantern.",
+                         "The <EActor> refills his lantern.");
+                h = EItem->TakeOne();
+                h->Remove(true);
+                return DONE;
+              }
+      return NOTHING;
+      };
+    Cost: 2000 GOLD;      
+  }
+
+Potion Effect "flask of oil" : EA_GENERIC
+  { 
+    Flags: EF_NAMEONLY, EF_AUTOID;
+    On Event EV_MAGIC_HIT
+      "This tastes greasy!";
+    Lists: 
+      * ITEM_COST 10;      
+  }
+
+Item "trap components" : T_TOOL
+  { Image: bright green GLYPH_DISARMED; 
+    Mat: MAT_IRON; Weight: 50; hp: 25;
+    Flags: IT_PLURAL, IT_NOGEN, IT_ACTIVATE;
+    Desc: "Trap components typically consist of complex clockwork mechanisms,
+      canisters of pressurized gas, magical glyphs and intricate touch
+      sensors. Characters with a Handle Device score of +12 or higher can
+      set up traps where they are standing by Activating trap components.";
+    On Event EV_GETNAME {
+      rID trID;
+      trID = EActor->GetStatiEID(COMPONENTS_OF);
+      if (trID != NULL_ID)
+        {
+          e.nBase = NAME(trID);
+          e.nBase += " components";
+        }
+      return NOTHING;
+      },
+    EV_ACTIVATE {
+      rID trID; hObj tr; int16 CheckDC; bool res;
+      if (!EItem->HasStati(COMPONENTS_OF))
+        return ABORT;
+      if (EActor->SkillLevel(SK_HANDLE_DEV) < 15)
+        {
+          EActor->IPrint("You must have Handle Device 15+ in
+            order to set up traps.");
+          return ABORT;
+        }
+      if (EMap->FallAt(EActor->x, EActor->y) ||
+          EMap->SolidAt(EActor->x, EActor->y))
+        {
+          EActor->IPrint("You must be on open, solid ground to
+            set up a trap.");
+          return ABORT;
+        }
+      trID = EItem->GetStatiEID(COMPONENTS_OF);
+      switch (EItem->GetStatiMag(COMPONENTS_OF))
+        {
+          case 1:
+            break;
+          case -1:
+            EActor->IPrint("You've already failed to set up that trap.");
+            return ABORT;
+          case 0:
+            CheckDC = 25 + trID->Level;
+            res = EActor->SkillCheck(SK_HANDLE_DEV,CheckDC,true);
+            EItem->SetStatiMag(COMPONENTS_OF,-1,NULL_OBJ,res ? 1 : -1);
+            if (!res)
+              {
+                EActor->IPrint("You fail to set up the trap correctly.");
+                return DONE;
+              }
+            break;
+        }
+      /*if (!ETerm->EffectPrompt(e,Q_NEAR,false,"Setup Trap"))
+        return ABORT;*/
+      e.EXVal = EActor->x;
+      e.EYVal = EActor->y;
+      tr = CreateTrap($"trap", trID);
+      tr->PlaceAt(EMap, e.EXVal, e.EYVal);
+      tr->GainPermStati(RESET_BY,EActor,SS_MISC);
+      tr->TrapFlags |= TS_FOUND;
+      if (EItem->HasStati(XP_GAINED))
+        tr->GainPermStati(XP_GAINED,EItem->GetStatiObj(XP_GAINED),SS_MISC);
+      EActor->IPrint("You set up a <Res>.",trID);
+      EActor->Timeout += 60;
+      EItem->Remove(true);
+      return DONE;
+      };
+  }
+  
+
+
+
+/* 
+ * WW: food theory: 
+ * Humans (food rations) are "average" at 5 Nut / LB
+ * Hobbits are above average: 10 Nut / LB
+ * Elves and Drow are superior: 15 Nut / LB
+ * Everything else is "poor" at 3 Nut / LB
+ */
+
+Item "food ration" : T_FOOD
+  {
+    Image: light grey '%'; 
+    Mat: MAT_VEGGY; Weight: 5; hp: 10;
+    Nutrition: 25; Flags: IT_STAPLE;
+    Desc: "Food rations contain dried foodstuffs
+    that can be stored for extended periods of time without spoiling.
+    Combined with a ten-foot pole and fifty feet of rope, they round out an
+    old school adventurer's backpack nicely.";
+    Cost: 5 GOLD;     
+  }
+
+Item "cottonberry loaf" : T_FOOD
+  {
+    Image: light grey '%'; 
+    Mat: MAT_VEGGY; Weight: 3; hp: 10;
+    Nutrition: 30; 
+    Desc: "Cottonberries are a staple and a delicacy in the Hinlands.
+    Cottonberry loaves travel well and retain a tangy flavor.";
+    Cost: 10 GOLD;     
+  }
+
+Item "piece of elven waybread" : T_FOOD
+  {
+    Image: light grey '%'; 
+    Mat: MAT_VEGGY; Weight: 2; hp: 2;
+    Nutrition: 30; Flags: WT_RACIAL;
+    Cost: 25 GOLD;     
+  }
+
+Item "piece of spider bread" : T_FOOD
+  {
+    Image: light grey '%'; 
+    Mat: MAT_VEGGY; Weight: 2; hp: 2;
+    Nutrition: 30; Flags: WT_RACIAL;
+    Desc: "A favored food of the Drow, spider bread is seasoned with actual
+    spider venom and can be fatal those lacking a Dark Elf's constitution.";
+    On Event EV_EAT {
+      if (!EActor->isMType(MA_DROW) && (EActor->ResistLevel(AD_POIS) != -1)) {
+        DPrint(e,"Spider toxins poison you!",
+                 "Spider toxins poison the <EActor>!");
+        EActor->GainPermStati(POISONED,NULL,SS_PERM, 0, 0, 
+          $"giant spider venom");
+      } 
+      return NOTHING; 
+    } ;
+    Cost: 10 GOLD;     
+  }
+
+Item "apple" : T_FOOD
+  {
+    Image: bright red '%'; 
+    Mat: MAT_VEGGY; Weight: 1; hp: 2;
+    Nutrition: 3;
+    Cost: 3 COPPER;     
+  }
+
+Item "melon" : T_FOOD
+  {
+    Image: bright green '%'; 
+    Mat: MAT_VEGGY; Weight: 6; hp: 2;
+    Nutrition: 18;
+    Cost: 2 SILVER;          
+  }
+
+Item "strip of cured meat" : T_FOOD
+  {
+    Image: light grey '%'; 
+    Mat: MAT_FLESH; Weight: 5; hp: 4;
+    Nutrition: 15; Flags: WT_RACIAL;
+    Desc: "Cured (and often smoked) meat is well-loved by travelling orcs,
+    lizardfolk and kobolds.";
+    Cost: 8 SILVER;
+  }
+
+Item "holy wafer" : T_FOOD
+  {
+    Image: brown '%'; 
+    Mat: MAT_VEGGY; Weight: 1; hp: 1;
+    Nutrition: 3;
+    Cost: 1 GOLD;     
+  }
+
+Item "large oak chest" : T_CHEST
+  {
+    Image: brown GLYPH_CHEST; 
+    Mat: MAT_WOOD; Weight: 500; hp: 40;
+    Size: SZ_LARGE; Capacity: 100;
+    MaxSize: SZ_LARGE; Timeout: 50;
+    WeightLim: 0;
+  }
+
+Item "large iron chest" : T_CHEST
+  {
+    Image: grey GLYPH_CHEST; 
+    Mat: MAT_IRON; Weight: 500; hp: 80;
+    Size: SZ_LARGE; Capacity: 100;
+    MaxSize: SZ_LARGE; Timeout: 50;
+    WeightLim: 0; Level: 2; 
+  }
+
+Item "large darkwood chest" : T_CHEST
+  {
+    Image: shadow GLYPH_CHEST; 
+    Mat: MAT_DARKWOOD; Weight: 500; hp: 120;
+    Size: SZ_LARGE; Capacity: 100;
+    MaxSize: SZ_LARGE; Timeout: 50;
+    WeightLim: 0; Level: 4; 
+  }
+
+Item "large adamant chest" : T_CHEST
+  {
+    Image: cyan GLYPH_CHEST; 
+    Mat: MAT_ADAMANT; Weight: 500; hp: 120;
+    Size: SZ_LARGE; Capacity: 100;
+    MaxSize: SZ_LARGE; Timeout: 50;
+    WeightLim: 0; Level: 6; 
+  }
+
+Item "medium backpack" : T_CONTAIN
+  {
+    Image: brown '&'; 
+    Mat: MAT_LEATHER;
+    Weight: 30; Size: SZ_MEDIUM; hp: 30;
+    Capacity: 50; MaxSize: SZ_MEDIUM;
+    Timeout: 50; WeightLim: 1000;
+    Lists:
+      * ITEM_COST 2 52 102 202 402 802;
+    Constants:
+     * MIN_CRAFT_LEVEL 8;
+  }
+
+Item "small backpack" : T_CONTAIN
+  {
+    Image: brown '&'; 
+    Mat: MAT_LEATHER;
+    Weight: 30; Size: SZ_SMALL; hp: 30;
+    Capacity: 50; MaxSize: SZ_SMALL;
+    Timeout: 50; WeightLim: 750;
+    Lists:
+      * ITEM_COST 4 54 104 204 404 804;  
+    Constants:
+     * MIN_CRAFT_LEVEL 8;
+  }
+
+Item "gnomish backpack" : T_CONTAIN
+  {
+    Image: yellow '&'; 
+    Mat: MAT_LEATHER; Level: 2; 
+    Weight: 30; Size: SZ_SMALL; hp: 30;
+    Capacity: 75; MaxSize: SZ_SMALL;
+    Timeout: 40; WeightLim: 1000;
+    Desc: "This backpack is of gnomish original and has been fitted with 
+    a number of special flaps, external pouches and fasteners. A clever
+    lightweight frame runs through pack and distributes weight to the hips.
+    As a results the pack can hold more items and heavier items than the
+    traditional model and those items can be accessed more quickly.";  
+    Lists:
+      * ITEM_COST 12 62 112 212 412 812;  
+    Constants:
+     * MIN_CRAFT_LEVEL 20;
+  }
+
+Item "force backpack" : T_CONTAIN
+  {
+    Image: blue '&'; 
+    Mat: MAT_FORCE; Level 4; 
+    Weight: 0; Size: SZ_SMALL; hp: 100;
+    Capacity: 100; MaxSize: SZ_MEDIUM;
+    Timeout: 10; WeightLim: 2000;
+    Desc: "This magical carrying device is really an amorphous area of 
+    translucent permeable force. When the user concentrates slightly, items
+    can be placed inside or extracted with a simple touch. Otherwise the
+    force is sufficiently rigid to hold items inside, suspended as if in
+    tar. This wonderous pack can hold many items compared to a traditional
+    model, but most importantly those items can be accessed very quickly.";  
+    Lists:
+      * ITEM_COST 5000 6000 8000 12000 15000 20000;  
+  }
+
+/* ww: currently these two are never useful ...
+Item "ivory scroll case" : T_CONTAIN
+  {
+    Image: white '&'; hp: 20;
+    Mat: MAT_BONE;
+    Weight: 5; Size: SZ_SMALL;
+    Capacity: 12; MaxSize: SZ_SMALL;
+    Timeout: 10; CType: T_SCROLL;
+  }
+
+Item "quiver" : T_CONTAIN
+  {
+    Image: grey '&'; 
+    Mat: MAT_LEATHER;
+    Weight: 25; Size: SZ_LARGE; hp: 10;
+    Capacity: 24; CType: T_MISSILE; Timeout: 3;
+  }
+  */
+
+Item "placeholder" : T_WONDER
+  {
+    Image: grey '&';
+    Flags: IT_NOGEN;
+    Desc: "This item is used as a placeholder for the item ID
+      of a wonderous item, before the eID is known and the
+      correct iID can be assigned based on that. You should
+      never see this text in the game.";
+  }
+    
+Item "gold piece" : T_COIN
+  {
+    Image: yellow '$'; Cost: 1 GOLD;
+    Mat: MAT_GOLD; Weight: 0;
+    hp: 5;
+    Size: SZ_MINISCULE;
+    Flags: IT_BGROUP;
+  }
+
+Item "platinum piece" : T_COIN
+  {
+    Image: white '$'; Cost: 1 PLATINUM;
+    Mat: MAT_METAL; Weight: 0;
+    hp: 5;
+    Size: SZ_MINISCULE;
+    Flags: IT_BGROUP;
+  }
+  
+Item "silver piece" : T_COIN
+  {
+    Image: cyan '$'; Cost: 1 SILVER;
+    Mat: MAT_SILVER; Weight: 0;
+    hp: 5;
+    Size: SZ_MINISCULE;
+    Flags: IT_BGROUP;
+  }
+  
+Item "copper piece" : T_COIN
+  {
+    Image: brown '$'; Cost: 1 COPPER;
+    Mat: MAT_COPPER; Weight: 0;
+    hp: 5;
+    Size: SZ_MINISCULE;
+    Flags: IT_BGROUP;
+  }
+  
+Item "electrum piece" : T_COIN
+  {
+    Image: bright cyan '$'; Cost: 1 ELECTRUM;
+    Mat: MAT_METAL; Weight: 0;
+    hp: 5;
+    Size: SZ_MINISCULE;
+    Flags: IT_BGROUP;
+  }
+
+Item "small glass vial" : T_TOOL
+  {
+    Image: grey GLYPH_POTION; 
+    Level: 1; Mat: MAT_GLASS; Weight: 1; hp: 1;
+    On Event EV_GENITEM {
+      rID xID;
+      xID = theGame->GetEffectID(PUR_POISON,0,e.vLevel);
+      ETarget->GainPermStati(POISONED,NULL,SS_MISC,0,1d4+1,xID);
+      return DONE;
+      }, 
+    EV_APPLY {
+      rID pID;
+      int16 m, q; 
+      if (!GetHandle(EItem))
+        return NOTHING;
+      if (EItem->iID != $"small glass vial")
+        return NOTHING;
+      if (!GetHandle(ETarget))
+        return NOTHING;
+      if (!ETarget->isType(T_WEAPON) && 
+          !ETarget->isType(T_MISSILE)) {
+        EActor->IPrint("You can only poison weapons and ammunition.");
+        return NOTHING;
+      } 
+      if (!EItem->GetStatiMag(POISONED))
+        {
+          EActor->IPrint("That vial is empty.");
+          return ABORT;
+        }
+      if (!(ETarget->HasIFlag(WT_SLASHING) ||
+              ETarget->HasIFlag(WT_PIERCING) ||
+              ETarget->isType(T_MISSILE)) )
+        {
+          EActor->IPrint("Poison can only be applied to slashing
+            or piercing weapons.");
+          return ABORT;
+        }            
+      
+      pID = EItem->GetStatiEID(POISONED);
+      
+      if (ETarget->GetQuantity() > 1)
+        {
+          if (ETarget->isType(T_MISSILE))
+            q = max(1,ETarget->GetQuantity()/10);
+          else
+            q = ETarget->GetQuantity();
+          if (q > EItem->GetStatiMag(POISONED))
+            {
+              EActor->IPrint("You don't have enough doses 
+                to poison all those items.");
+              return ABORT;
+            }
+        }
+      else
+        q = 1;
+      
+      if (EItem->GetStatiMag(POISONED) <= q)
+        EItem->RemoveStati(POISONED);
+      else
+        EItem->SetStatiMag(POISONED,-1,NULL,
+          EItem->GetStatiMag(POISONED) - q );
+      EActor->Timeout += 50;
+
+      if (!EActor->SkillCheck(SK_POISON_USE,10,true))
+        {
+          if (!(EActor->HasSkill(SK_POISON_USE) || (1d3==1)))
+            {
+              EActor->IPrint("You poison yourself!");
+              if (EActor->ResistLevel(AD_POIS) != -1)
+                EActor->IPrint("Fortunately, it has no effect.");
+              else
+                EActor->GainPermStati(POISONED,NULL,SS_MISC,0,0,pID);
+            }
+          else
+            EActor->IPrint("You fail to correctly apply the poison, 
+              wasting <hText>.", q > 1 ? "the doses" : "a dose");
+          return DONE;
+        }
+
+      DPrint(e,"You apply the <Res> to your <ETarget>.",
+               "The <EActor> coats <his:EActor> <ETarget> with poison.",
+               pID);
+
+      /* ww: combine doses with previously-applied poison of the same
+       * type ... */
+      if (ETarget->HasEffStati(POISONED,pID)) {
+        m = ETarget->GetEffStatiMag(POISONED,pID);
+        ETarget->SetEffStatiMag(POISONED,pID,
+          m + (LastSkillCheckResult()-7)/3); 
+        } 
+      else { 
+        ETarget->RemoveStati(POISONED);
+        ETarget->GainPermStati(POISONED,NULL,SS_MISC,0,
+          (LastSkillCheckResult()-7)/3,pID);  
+        } 
+      return DONE;
+      },
+    EV_GETNAME {
+      hObj p;
+      p = theGame->GetPlayer(0);
+      /* paranoia */
+      if (p == NULL_OBJ)
+        return NOTHING;
+      if (EItem->HasStati(POISONED) && (EItem->isKnown(KN_NATURE) ||
+        (p->HasSkill(SK_POISON_USE) && p->SkillLevel(SK_POISON_USE)+5 >= 
+           PoisonDC(EItem->GetStatiEID(POISONED)))))
+        {
+          if (EItem->GetStatiMag(POISONED) == 1)
+            e.nAppend += " (with 1 dose of " + NAME(EItem->GetStatiEID(POISONED)) + ")";
+          else 
+            e.nAppend += XPrint(" (with <Num> doses of ",
+                          EItem->GetStatiMag(POISONED) ) +
+                          NAME(EItem->GetStatiEID(POISONED)) + ")";
+        }
+      else if (EItem->HasStati(POISONED))
+        {
+          if (EItem->GetStatiMag(POISONED) == 1)
+            e.nAppend += " (with 1 dose of unknown poison)";
+          else 
+            e.nAppend += XPrint(" (with <Num> doses of unknown poison)",
+                          EItem->GetStatiMag(POISONED) );
+        }
+      else
+        e.nAppend += " (empty)";
+      return DONE;
+      };
+  }
+
