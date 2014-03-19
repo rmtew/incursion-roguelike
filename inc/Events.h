@@ -101,6 +101,34 @@ union EvParam
     ReThrow(EV_DAMAGE,xe);                               \
   }
 
+#define XTHROW(ev, e, set_val)  \
+  {                             \
+    EventInfo xe;               \
+    xe.Clear();                 \
+    xe = e;                     \
+    set_val;                    \
+    ReThrow(ev,xe);             \
+    e.chResult = xe.chResult;   \
+  }
+
+#define RXTHROW(ev, e, r, set_val)  \
+  {                             \
+    EventInfo xe;               \
+    xe.Clear();                 \
+    xe = e;                     \
+    set_val;                    \
+    r = ReThrow(ev,xe);             \
+    e.chResult = xe.chResult;   \
+  }
+
+#define THROW(ev, set_val)       \
+  {                              \
+    EventInfo xe;                \
+    xe.Clear();                  \
+    set_val;                     \
+    ReThrow(ev, xe);             \
+  }
+
 struct EventInfo
 	{
     /* We do some ugly tricks here to make copying EventInfo
@@ -118,7 +146,7 @@ struct EventInfo
         /* Blank out the Strings using memset, as they contain
            pointers to string buffers that properly belong to
            the other EventInfo's Strings. */
-        memset(&GraveText,0,sizeof(String)*22);
+        memset(&GraveText,0,sizeof(String)*24);
         /* Copy the Strings properly */
         GraveText = e.GraveText;
         strDmg    = e.strDmg;
@@ -143,7 +171,8 @@ struct EventInfo
         nMech      = e.nMech;
         nArticle   = e.nArticle;
         nPlus      = e.nPlus;
-
+        enDump     = e.enDump;
+        Text       = e.Text;
     // ww: what about nPrefix, etc.? 
         return e;
       }
@@ -161,6 +190,7 @@ struct EventInfo
         nAdjective= NULL; nFlavor = NULL;
         nInscrip  = NULL; nMech = NULL;
         nArticle  = NULL; nPlus = NULL;
+        Text      = NULL; enDump = NULL;
         /* Now that no Strings have non-NULL pointers
            within them to leave behind dangling strdup
            blocks, we can safely use memset. */
@@ -225,9 +255,67 @@ struct EventInfo
        #defined to be synonyms of the above? */
     String nPrefix, nCursed, nPrequal, nPostqual, nNamed, nBase, 
            nAppend, nOf, nAdjective, nFlavor, nInscrip, nMech,
-           nArticle, nPlus;
+           nArticle, nPlus, Text, enDump;
       
     Rect cPanel, cMap, cRoom;
+
+    /* Encounter Gen stuff */
+    uint32 enTerrain;
+    int16 cPart, 
+          cMember,
+          enAlign,
+          enCR,
+          enDepth,
+          enFreaky,
+          enPurpose,
+          enSleep,
+          enDesAmt,
+          enType,
+          enPartyID,
+          enDriftGE,
+          enDriftLC,
+          epMinAmt, 
+          epMaxAmt,
+          epAmt,
+          epFreaky, 
+          epWeight,
+          epMType,
+          ep_monCR,
+          ep_mountCR,
+          epSkillRoll,
+          epClassRoll,
+          epCurrXCR,
+          epTries,
+          enTries;
+    rID   enID,
+          enRegID,
+          ep_mID,
+          ep_tID,
+          ep_tID2,
+          ep_tID3,
+          ep_hmID,
+          ep_htID,
+          ep_htID2,
+          ep_pID,
+          ep_iID;
+    int32 enXCR,  // Total XCR of the entire Encounter
+          epXCR,  // Total XCR of the current Part
+          eimXCR,  // Individual XCR of one monster in current Part
+          enConstraint;
+    bool  enSkipPart[MAX_PARTS],
+          enIsFormation,
+          epFailed,
+          isGetMinCR,
+          isGetMaxCR,
+          isAquaticContext;
+    uint32 enFlags;
+    uint32 chType;
+    uint16 chList;
+    bool   chMaximize,
+           chBestOfTwo;
+    rID    chResult,
+           chSource;
+    bool (*chCriteria)(EventInfo &e, rID tID);
 
 	};
 

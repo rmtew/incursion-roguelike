@@ -41,6 +41,9 @@ TText *theTxt, *firstTxt;
 TVariable *theVar, *firstVar;
 TTemplate *theTemp, *firstTemp;
 TFlavor *theFlavor, *firstFlavor;
+TBehaviour *theBev, *firstBev;
+TEncounter *theEnc, *firstEnc;
+TText *theText, *firstText;
 Module * theModule;
 Resource *theRes;
 
@@ -99,7 +102,7 @@ String & Game::CompileStatistics()
              poiCount, disCount, domCount, 
              enchCount, divCount, druCount,
              terCount, regCount, spCount,
-             itemCount, magCount;
+             itemCount, magCount, encCount;
     
     s = Format("\n%cModule Statistics:%c\n",-14,-7);
     
@@ -109,6 +112,7 @@ String & Game::CompileStatistics()
     terCount = Modules[0]->szTer;
     regCount = Modules[0]->szReg;
     itemCount = Modules[0]->szItm;
+    encCount = Modules[0]->szEnc;
     
     trapCount = poiCount = disCount =
       enchCount = divCount = druCount =
@@ -376,7 +380,9 @@ bool Game::ResourceCompiler()
    theVar = firstVar = theModule->QVar;
    theTemp = firstTemp = theModule->QTem;
    theFlavor = firstFlavor = theModule->QFla;
-
+   theBev = firstBev = theModule->QBev;
+   theEnc = firstEnc = theModule->QEnc;
+   theText = firstText = theModule->QTxt;
    theCodeSeg.Clear();
    memset(RegsInUse,0,sizeof(int8)*64);
 
@@ -485,7 +491,7 @@ void Game::CountResources()
       DunNames, NPCNames, ClassNames, RaceNames,
       DomNames, GodNames, RegNames, TerNames,
       TextNames, VarNames, TempNames, RoutNames,
-      FlavNames;
+      FlavNames, BevNames, EncNames;
     textSeg.Empty();
     while(1)
       switch(yylex())
@@ -548,6 +554,12 @@ void Game::CountResources()
                         break;
           case FLAVOR:  if (!brack) { yylex();
                           FlavNames.Set(yylval,theModule->szFla++); } 
+                        break;
+          case BEHAVIOUR:if (!brack) { yylex();
+                          BevNames.Set(yylval,theModule->szBev++); } 
+                        break;
+          case WORD_ENCOUNTER:if (!brack) { yylex();
+                          EncNames.Set(yylval,theModule->szEnc++); } 
                         break;
           case EOF: case 0:
             goto DoneScan;
@@ -658,6 +670,17 @@ void Game::CountResources()
     for(i=0;i!=theModule->szFla;i++)
       theModule->QFla[i].Name = FlavNames[i];
 
+    if (theModule->szBev)
+      theModule->QBev = new TBehaviour[theModule->szBev + 2];
+    for(i=0;i!=theModule->szBev;i++)
+      theModule->QBev[i].Name = BevNames[i];
+
+    if (theModule->szEnc)
+      theModule->QEnc = new TEncounter[theModule->szEnc + 2];
+    for(i=0;i!=theModule->szEnc;i++)
+      theModule->QEnc[i].Name = EncNames[i];
+
+
     theModule->szTextSeg = textSeg.GetLength();
     theModule->QTextSeg = AllocTextSeg();
 
@@ -731,7 +754,14 @@ void GenerateDispatch()
       "TDUN", "TROU", "TNPC", "TCLASS", "TRACE", "TDOM", "TGOD", "TREG", "TTER",
       "TTEX", "TVAR", "TTEM", "TFLA" };
 
-    fp = fopen((const char*)Format("%s\\dispatch.h",(const char*)T1->LibrarySubDir()),"wt");
+    /* HACKFIX */
+    fp = fopen((const char*)Format(
+    #ifdef WIN32
+    "%s\\dispatch.h"
+    #else
+    "%s/dispatch.h"
+    #endif  
+    ,(const char*)T1->LibrarySubDir()),"wt");
     if (!fp)
       Error("Can't open LIBDIR\\dispatch.h");
     fprintf(fp,

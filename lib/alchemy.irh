@@ -1557,7 +1557,9 @@ AI_MACRO Effect "AutoLoot" : EA_GENERIC
    fewer powers than the contemplative.
    
    
-   
+Duodimensional Hand
+  punches are slashing and vorpal, threat range
+determined by stage of power activation.
    
 
 Object Reading
@@ -2191,6 +2193,63 @@ AI_PSIONIC Effect "Synaptic Static" : EA_INFLICT
       "The buzzing fades away now.";
   }
 
+AI_PSIONIC Spell "Clairvoyance;psi" : EA_VISION
+  { Purpose: EP_PLAYER_ONLY;
+    xval: VIS_MOBILE | VIS_LOS; pval: 30; yval: 5; 
+    Desc: "Allows the caster to scry around the nearby area."; }
+
+AI_PSIONIC Spell "Telekinesis;psi" : EA_GRANT
+  { Purpose: EP_BUFF;
+    Desc: "__This power can be enacted in one of two
+      forms, as chosen when the power is manifested:\n
+      __<9>Violent Thrust:<1> This form of Telekinesis
+      targets a single creature of your choice,
+      causing them to be knocked down and back
+      up to 3d4 squares and to
+      suffer 5d4 points of blunt damage.\n
+      __<9>Sustained Force:<1> This version of the
+      spell allows you to exert force at a range
+      of 60 feet. You can use
+      the combat maneuvers Grapple, Punch, Trip
+      and Bull Rush in this manner, with your
+      Wisdom standing in for Strength and
+      Intelligence for Dexterity. You can also
+      open or kick doors, pick up items or try 
+      to disarm traps at range.";
+    xval: TELEKINETIC; pval: 6;
+    Flags: EF_SHOWNAME;
+    Lists:
+      * SUBEFFECTS $"telekinesis;psi-thrust";
+    On Event EV_EFFECT {
+      if (EActor->ChoicePrompt("Violent thrust or sustained force?",
+                   "vs",'s', PURPLE, MAGENTA) == 'v')
+        {
+          if (!ETerm->EffectPrompt(e,Q_TAR,false,"Target:"))
+            return ABORT;
+          return RedirectEff(e,$"Telekinesis;psi-thrust");
+        }
+      return NOTHING;
+      },
+    MSG_STATINAME "Telekinesis" / "T-K";
+  }
+  
+Effect "Telekinesis;psi-thrust" : EA_BLAST
+  { xval: AD_BLUNT; pval: 5d4; Purpose: EP_ATTACK;
+    aval: AR_BOLT; cval: WHITE; }
+and EA_BLAST
+  { xval: AD_KNOC; pval: 3d4; }
+
+AI_PSIONIC Effect "Translocate" : EA_TRAVEL
+  { pval: 3d12; 
+    Purpose: EP_ESCAPE; xval: TRAVEL_ANYWHERE; 
+    Desc: "Manifesting this power teleports you randomly 3d12 squares 
+      away, at the cost of two fatigue points."; 
+    On Event EV_EFFECT {
+      if (!EActor->LoseFatigue(2,true))
+        return ABORT;
+      return NOTHING;
+      };    
+  }
   
 /*
 
@@ -2359,20 +2418,6 @@ AI_PSIONIC Effect "Synaptic Static" : EA_INFLICT
     Metaphysics (influence mana and chance with psionics)
   
     
-  New Hooks:
-    EV_PERCIEVE
-    EV_CALC_VALUES
-    EV_EVALUATE (target system hostility hook)
-    EV_THINK    (monster AI -- list actions)
-    EV_SKILL_CHECK
-    EV_INNER_DAMAGE (after damage (e.aDmg) is calculated, before it's taken)
-    EV_SAVING_THROW
-    
-    Macro for hooks:
-      CALL_HOOK(HOOK,EV_SKILL_CHECK,
-        xe.EParam = sk;
-        xe.vSkill = rating;
-        );
     
 */
 

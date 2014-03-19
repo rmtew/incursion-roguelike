@@ -46,7 +46,8 @@ bool effectGivesStati(rID eID)
     EffectValues *ev; int16 i;
     TEffect *te = TEFF(eID);
     for(i=0,ev=te->Vals(i);ev;ev=te->Vals(++i))
-      if (ev->eval == EA_GRANT || ev->eval == EA_INFLICT)
+      if (ev->eval == EA_GRANT || ev->eval == EA_INFLICT ||
+          ev->eval == EA_OVERRIDE)
         return true;
     return false;
   }
@@ -1230,6 +1231,7 @@ EvReturn Magic::MagicHit(EventInfo &e)
         case EA_GRANT: r = Grant(e); break;
         case EA_DRAIN: r = Drain(e); break;
         case EA_INFLICT: r = Inflict(e); break;
+        case EA_OVERRIDE: r = Override(e); break;
         case EA_DETECT: r = Detect(e); break;
         case EA_TRAVEL: r = Travel(e); break;
         case EA_HEALING: r = Healing(e); break;

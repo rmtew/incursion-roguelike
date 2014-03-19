@@ -320,8 +320,11 @@ EvReturn Creature::Cow(EventInfo &e)
     if (e.EVictim->ResistLevel(AD_FEAR) == -1)
       { Timeout += 30; goto AutoFail; }
     
+    /* HACKFIX */
     if (!e.EVictim->isMType(MA_EVIL))
-      e.EActor->AlignedAct(AL_NONCHAOTIC,3,"intimidation");
+      if (!(e.EActor->isMType(MA_ORC) ||
+          e.EActor->LevelAs(FIND("barbarian"))))
+        e.EActor->AlignedAct(AL_NONCHAOTIC,3,"intimidation");
     
     CheckDC = 10;
     
@@ -2166,7 +2169,7 @@ int32 Item::getShopCost(Creature *Buyer, Creature *Seller)
               isType(T_SHIELD) || isType(T_BOW))
             cost += defCost[max(0,min(20,ItemLevel(false)))] * (eID ? 400L : 160L);
           else    
-            cost += defCost[max(0,min(20,ItemLevel(false)))] * 20L;
+            cost += defCost[max(0,min(20,ItemLevel(false)))] * 70L;
           }
       }
           
@@ -2664,6 +2667,9 @@ int32 Player::GetGroupXCR(int16 CompType, int16 AddCR)
     return CRCubed;
   }      
 
+int32 Player::MaxGroupXCR(int16 CompType)
+  { return XCR(MaxGroupCR(CompType)); }
+  
 int16 Player::MaxGroupCR(int16 CompType)
   {
     int16 MaxCR, bonus;

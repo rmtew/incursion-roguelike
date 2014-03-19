@@ -1,0 +1,1589 @@
+Encounter "Lone Aquatic Monster"
+  {
+    CR: 1+;
+    Parts:
+      * 1 of any MA_AQUATIC [EP_SKILLED];
+    Flags: NF_SINGLE, NF_AQUATIC, NF_NOGEN, NF_FREAKY;
+  }
+  
+Encounter "Vault Monster"
+  {
+    CR: 6+;
+    Align: AL_EVIL;
+    Parts:
+      * 1 of any (MA_EVIL+MA_SAPIENT*256) [EP_SKILLMAX]
+      * 1 of any MA_ALL [EP_SKEW_FOR_MID];
+    Flags: NF_SINGLE, NF_VAULT, NF_STAGGERED;
+    On Event EV_CRITERIA {
+      if (e.cPart == 1) {
+        if (mID_isMType(e.eID,MA_SAPIENT))
+          return -1;
+        if (mID_isMType(e.eID,MA_BEAST) ||
+            mID_isMType(e.eID,MA_ABERRATION) ||
+            mID_isMType(e.eID,MA_PLANT) ||
+            mID_isMType(e.eID,MA_VORTEX) ||
+            mID_isMType(e.eID,MA_OOZE))
+          return 1;
+        return -1;
+        }
+      return 1;
+      };
+  }
+        
+Encounter "Holy Summons"
+  {
+    CR: 1+;
+    Parts:
+      * 1 of any (MA_NLIVING+MA_NONEVIL*256) $"celestial" [EP_SKEW_FOR_MID]
+      * 1 of any (MA_NLIVING+MA_EVIL*256)    $"fiendish" [EP_SKEW_FOR_MID]
+      * 1 of any MA_OUTSIDER [EP_SKILLMAX|EP_SKEW_FOR_MID]
+      * 1 of any MA_FAERIE [EP_SKEW_FOR_MID];
+    Flags: NF_NOGEN, NF_SINGLE, NF_STAGGERED, NF_CONTEXT_AQUATIC;
+    /* HACKFIX */
+    On Event PRE(EV_ENGEN_PART) {
+      /* Summoning fae makes more sense for maeve than
+         the Slaadi or demons, who are against her aesthetic
+         despite the alignment fit. */
+      if (GetHandle(EActor) == NULL)
+        return NOTHING;
+      if (EActor->getGod() == $"Maeve")
+        { e.cPart = 3; return NOTHING; }
+      /*
+      if (e.EXVal && ResourceHasFlag(EMap->TerrainAt(e.EXVal,e.EYVal),TF_WATER))
+        {
+          e.isAquaticContext = true;
+          if (EActor->getGod() == $"Xel" ||
+              EActor->getGod() == $"Zurvash" ||
+              EActor->getGod() == $"The Multitude")
+            e.cPart = 1;
+          else 
+            e.cPart = 0;
+          return NOTHING;
+        }
+      */          
+      if ((e.enCR < 5  && 1d2==1) ||
+          (e.enCR >= 6 && 1d6==1))
+        {  
+          if (EActor->getGod() == $"Xel" ||
+              EActor->getGod() == $"Zurvash" ||
+              EActor->getGod() == $"The Multitude")
+            e.cPart = 1;
+          else 
+            e.cPart = 0;
+        }
+      else
+        {
+          e.cPart = 2;
+          if (EActor->isMType(MA_GOOD) ||
+              EActor->getGod() == $"Immotian" ||
+              EActor->getGod() == $"Erich")
+            e.enConstraint = MA_CELESTIAL;
+          else if (EActor->getGod() == $"Xel" ||
+                   EActor->getGod() == $"Zurvash" ||
+                   EActor->getGod() == $"The Multitude")
+            {
+              if (EActor->isMType(MA_LAWFUL))
+                e.enConstraint = MA_DEVIL;
+              else if (EActor->isMType(MA_CHAOTIC))
+                e.enConstraint = MA_DEMON;
+              else
+                e.enConstraint = MA_EVIL;
+            }
+          else if (EActor->isMType(MA_LAWFUL))
+            e.enConstraint = MA_LOUTSIDER;
+          else if (EActor->isMType(MA_CHAOTIC))
+            /* HACKFIX */
+            //e.enConstraint = MA_COUTSIDER;
+            e.enConstraint = MA_DEMON;
+          else
+            e.enConstraint = MA_ELEMENTAL;
+        }
+    return NOTHING;
+    };
+  }
+  
+Encounter "Nature's Ally"
+  {
+    CR: 1+;
+    Parts:
+      * [50] 1 of any MA_ANIMAL [EP_SKILLMAX|EP_SKEW_FOR_MID]
+      * [20] <CR 4+>1 of any MA_SYLVAN [EP_SKILLMAX|EP_SKEW_FOR_MID];
+    Flags: NF_NOGEN, NF_SINGLE, NF_STAGGERED, NF_CONTEXT_AQUATIC;
+  }
+  
+Encounter "Summoned Monster"
+  { 
+    CR: 1+;
+    Parts:
+      * 1 of any MA_ALL [EP_SKILLMAX|EP_SKEW_FOR_MID];
+    Flags: NF_NOGEN, NF_SINGLE, NF_CONTEXT_AQUATIC;
+    /* HACKFIX */
+    On Event EV_CRITERIA {
+      if (mID_isMType(e.eID,MA_ANIMAL))
+        return CANNOT_CAST_IT;
+      if (mID_isMType(e.eID,MA_UNDEAD))
+        return CANNOT_CAST_IT;
+      if (mID_isMType(e.eID,MA_OUTSIDER))
+        return CANNOT_CAST_IT;
+      if (ResourceHasFlag(e.eID,M_INCOR))
+        return CANNOT_CAST_IT;
+      return SHOULD_CAST_IT;
+      };
+        
+  }
+  
+Encounter "Conjured Vortex"
+  {
+    CR: 5+;
+    Parts:
+      * 1 of any MA_VORTEX [EP_SKILLMAX];
+    Flags: NF_NOGEN, NF_SINGLE, NF_CONTEXT_AQUATIC;
+    Lists:
+      * SKILL_LIST $"turbulent";
+  }
+
+Encounter "mass summons"
+  {
+    Parts:
+      * 2-20 of any MA_ALL;
+    Flags: NF_MULTIPLE, NF_NOGEN, NF_UNIFORM;
+  }
+  
+Encounter "gated outsiders"
+  {
+    CR: 1-36;
+    Parts:
+      * 1-8 of any MA_ALL [EP_SKILLED];
+    Flags: NF_NOGEN;
+  }
+  
+Encounter "horde of valhalla"
+  {
+    CR: 3+;
+    Parts:
+      * 2-20 of $"human" $"barbarian;template" [EP_SKILLED];
+    Flags: NF_MULTIPLE, NF_NOGEN;
+  }
+  
+Encounter "Generic Summons"
+  { 
+    CR: 1+;
+    Parts: 
+      * 1 of any MA_ALL [EP_SKILLMAX|EP_SKEW_FOR_MID];
+    Flags: NF_NOGEN, NF_SINGLE, NF_CONTEXT_AQUATIC;
+  }
+
+Encounter "single monster"
+  { 
+    CR: 1+;
+    Parts: 
+      * 1 of any MA_ALL [EP_SKILLMAX|EP_SKEW_FOR_MID|EP_FREAKY];
+    Flags: NF_NOGEN, NF_SINGLE, NF_CONTEXT_AQUATIC;
+  }
+
+Encounter "exact monster"
+  { 
+    CR: 1+;
+    Parts: 
+      * 1 of any MA_ALL [EP_NOXCR];
+    Flags: NF_NOGEN, NF_SINGLE, NF_CONTEXT_AQUATIC;
+  }
+  
+Encounter "Summoned Goblinoid"
+  {
+    CR: 1+;
+    Parts:
+      * <CR 3+> 1 of any MA_GOBLINOID [EP_CLASSED|EP_SKILLMAX] else
+        1 of any MA_GOBLINOID [EP_SKILLMAX];
+    Flags: NF_NOGEN, NF_SINGLE;
+  } 
+  
+Encounter "Conjured Outsider"
+  {
+    CR: 6+;
+    Parts:
+      * 1 of any MA_OUTSIDER [EP_SKEW_FOR_MID|EP_SKILLHIGH];
+    Flags: NF_SINGLE, NF_NOGEN;
+  }
+       
+
+Encounter "Mated Pair of Dragons"
+  {
+    Weight: 10;
+    CR: 8+;
+    Parts:
+      * 2       of any MA_DRAGON              [EP_SKILLMAX]
+      * 50% 1d4 of any MA_DRAGON $"hatchling" [EP_NOXCR];
+    Flags: NF_MULTIPLE, NF_UNIFORM;
+    Lists:
+      * SKILL_LIST
+          $"young"
+          $"juvenile"
+          $"young adult"
+          $"adult";
+    On Event POST(EV_ENGEN) {
+      if (e.enFlags & (EN_NOBUILD|EN_DUMP))
+        return NOTHING;
+      EMap->GetEncounterCreature(0)->StateFlags &= ~MS_FEMALE;
+      EMap->GetEncounterCreature(1)->StateFlags |= MS_FEMALE;
+      return NOTHING;
+      };
+  }
+  
+Encounter "Lone Dragon"
+  {
+    CR: 7+;
+    Parts:
+      * 1 of any MA_DRAGON [EP_SKILLMAX];
+    Flags: NF_SINGLE, NF_FREAKY;
+    Lists:
+      * SKILL_LIST
+          $"young"
+          $"juvenile"
+          $"young adult"
+          $"adult";
+  }
+  
+Encounter "goblinoid warband"
+  {
+    Weight: 40;
+    CR: 1-10;
+    Align: AL_EVIL;
+    Parts:
+      * [30] 1             of MON_LIST1 $"chieftan" [EP_SKILLMAX|EP_LEADER]
+      * [30] <CR 3+> 75% 1 of MON_LIST1 $"shaman" [EP_SKILLED]
+      * [70] 2-15          of MON_LIST1 [EP_SKILLED]
+      * [30] <CR 6+> 15%   of MON_LIST1 [EP_CLASSED|EP_SKILLED];
+    Lists:
+      * MON_LIST1
+          5 $"goblin"
+          3 $"cave orc"
+          2 $"hill orc" 
+          2 $"kobold"
+          2 $"hobgoblin"
+          1 $"black orc"
+            $"gremlin"
+            $"batkin"
+          1 $"bugbear"
+          1 $"adlet";
+    Flags: NF_UNIFORM;
+    On Event POST(EV_ENCHOOSE_MID) {
+      if (e.chResult == $"goblin" && 1d20==1)
+        e.chResult = $"blue goblin";
+      return NOTHING;
+      };
+  }
+
+Encounter "mixed kobold warband"
+  {
+    Weight: 5;
+    CR: 1-13;
+    Align: AL_EVIL;
+    Parts:
+      * [30] 1             of MON_LIST1 $"chieftan" [EP_SKILLMAX|EP_LEADER]
+      * [30] <CR 3+> 75% 1 of MON_LIST1 $"shaman" [EP_SKILLED]
+      * [70] 2-15          of MON_LIST1 [EP_SKILLED]
+      * [30] <CR 6+> 15%   of MON_LIST1 [EP_CLASSED|EP_SKILLED];
+    Lists:
+      * MON_LIST1
+          3 $"kobold"
+          1 $"batkin"
+            $"gremlin";
+  }
+
+Encounter "goblinoid war-riders"
+  {
+    Weight: 40;
+    CR: 3-10;
+    Align: AL_EVIL;
+    Parts:
+      * [30] 1             of MON_LIST1 $"chieftan" [EP_SKILLMAX|EP_LEADER|EP_MOUNTED]
+      * [30] <CR 3+> 75% 1 of MON_LIST1 $"shaman" [EP_SKILLED|EP_MOUNTED]
+      * [70] 2-15          of MON_LIST1 [EP_SKILLED|EP_MOUNTED]
+      * [30] <CR 6+> 15%   of MON_LIST1 [EP_CLASSED|EP_SKILLED|EP_MOUNTED];
+    Lists:
+      * MON_LIST1
+          5 $"goblin"
+          3 $"cave orc"
+          2 $"hill orc" 
+          2 $"kobold"
+          2 $"hobgoblin"
+          1 $"black orc"
+          1 $"bugbear"
+          1 $"adlet";
+    Flags: NF_UNIFORM;
+    On Event POST(EV_ENCHOOSE_MID) {
+      if (e.chResult == $"goblin" && 1d20==1)
+        e.chResult = $"blue goblin";
+      return NOTHING;
+      };
+  }
+
+Encounter "tribal warband"
+  {
+    Weight: 5;
+    CR: 1-10;
+    Parts:
+      * [30] 1             of MON_LIST1 $"chieftan" [EP_SKILLMAX|EP_LEADER]
+      * [30] <CR 3+> 75% 1 of MON_LIST1 $"shaman" [EP_SKILLED]
+      * [70] 2-15          of MON_LIST1 [EP_SKILLED]
+      * [30] <CR 6+> 15%   of MON_LIST1 [EP_CLASSED|EP_SKILLED];
+    Lists:
+      * MON_LIST1
+          $"locathah"
+          $"sahuagin"
+          $"lizardman"
+          $"mongrelman"
+          $"troll"
+          $"scrag"
+          $"ogre"
+          $"muckdweller"
+          $"grippli"
+          $"kyrie"
+          $"hill giant"
+          $"frost giant"
+          $"merrow"
+          $"verbeeg"
+          $"saqualaminoi"
+          $"bogwart"
+          $"tabaxi"
+          $"nixie"
+          /*
+            gremlin
+            mugwart
+          */
+          ;
+    Flags: NF_UNIFORM;
+  }
+
+  
+Encounter "church knights"
+  {
+    Weight: 5;
+    CR: 3+;
+    Align: AL_GOOD;
+    Parts:
+      *     [40] 1-3         of $"human" TEMP_LIST1 [EP_SKILLMAX|EP_MOUNTED]
+      * 75% [50] 1-3         of MON_LIST1        [EP_CLASSED|EP_SKILLED|EP_MOUNTED]
+      * 20% [50] <cr 6+>     of MON_LIST2        [EP_SKILLED]
+      * 30% [50] <cr 4+> 1d2 of any MA_CELESTIAL [EP_SKILLED];
+    Lists:
+      * MON_LIST1
+          20 $"human"
+          8  $"elf" $"dwarf" $"stoutheart halfling" $"aasimar"
+          2  $"cave orc" $"gnome" $"halfling" $"goblin" $"kobold"
+             $"lizardman" $"drow"
+          1  $"air genasi" $"water genasi" $"earth genasi"
+             $"fire genasi" $"mongrelman" $"kyrie" $"batkin"
+             $"thri-kreen" $"ogre" $"hill giant" $"stone giant"
+             $"frost giant" $"verbeeg" $"centaur";
+      * MON_LIST2
+          //$"lamasu"
+          //$"androsphynx"
+          $"nymph"
+          //$"ki-rin"
+          //$"shedu"
+          $"guardian naga"
+          $"silver dragon"
+          //$"werebear"
+          $"steel dragon",
+      * CLASS_LIST
+         10 $"paladin;template"
+         5  $"priest;template" $"curate"
+         3  $"knight" $"monk;template" $"undead hunter"
+         2  $"ranger;template"
+         1  $"druid;template" $"rogue;template" $"archer" $"rogue-archer"
+            $"mage;template",
+      * TEMP_LIST1
+          5 $"priest;template" $"curate"
+          2 $"paladin;template";
+    Constants:
+      * MIN_XCR_MULT 3;
+  }
+
+Encounter "Lone Dark-Dwelling Beast"
+  {
+    Weight: 40;
+    CR: 1+;
+    Parts:
+      * 1 of MON_LIST1 [EP_FREAKY|EP_SKEW_FOR_MID];
+    Flags: NF_SINGLE, NF_HOSTILE;
+    On Event EV_CRITERIA {
+      if (e.chList == MON_LIST1) {
+        if (!(e.eID->Terrains & TT_SURFACE) &&
+              !ResourceHasFlag(e.eID, M_GROUP))
+          if (!mID_isMType(e.eID, MA_SAPIENT))
+            return SHOULD_CAST_IT;
+        return CANNOT_CAST_IT;
+        }
+      return SHOULD_CAST_IT;
+      };
+    Lists: 
+      * MON_LIST1
+          ANY(MA_ANIMAL)
+          ANY(MA_ABERRATION)
+          ANY(MA_BEAST)
+          ANY(MA_HAG)
+          ANY(MA_VERMIN)
+          ANY(MA_WORM)
+          ANY(MA_OOZE);
+    
+  }
+
+Encounter "zombie horde"
+  {
+    Weight: 10;
+    Terrain: TT_SWAMP|TT_TROPICAL;
+    CR:1-5;
+    Parts:
+      * 1-30 of MON_LIST1 $"zombie" [EP_SKEW_FOR_AMT];
+    Flags: NF_MULTIPLE, NF_HORDE;
+    Lists:
+      * MON_LIST1
+          700 $"human"
+           50 $"dwarf" $"halfling" $"cave orc"
+              $"hill orc" $"lizardman" $"drow"
+              $"gnome" $"kobold" $"goblin" $"hobgoblin"
+              $"bugbear" $"batkin"
+           1  ANY(MA_NLIVING);
+    Constants:
+      * MIN_XCR_MULT 3;
+  } 
+
+Encounter "skeletal armada"
+  {
+    Weight: 10;
+    CR:1-8;
+    Parts:
+      * [30] <CR 3+> 1 of any MA_SKELETON [EP_SKILLMAX|EP_SKEW_FOR_MID]
+      * [30] 1-30 of MON_LIST1 $"skeleton" [EP_SKEW_FOR_AMT];
+    Flags: NF_MULTIPLE, NF_HORDE;
+    Lists:
+      * MON_LIST1
+          500 $"human"
+           50 $"dwarf" $"halfling" $"cave orc"
+              $"hill orc" $"lizardman" $"drow"
+              $"gnome" $"kobold" $"goblin" $"hobgoblin"
+              $"bugbear" $"batkin"
+           1  ANY(MA_NLIVING);
+    Constants:
+      * MIN_XCR_MULT 3;
+  } 
+    
+Encounter "pack encounter"
+  {
+    Weight: 30;
+    CR: 1-20;
+    Parts:
+      * 1-30 of any MA_ALL [EP_SKEW_FOR_AMT];
+    Flags: NF_MULTIPLE, NF_HORDE, NF_UNIFORM;
+    On Event EV_CRITERIA {
+      if (ResourceHasFlag(e.eID, M_GROUP))
+        return SHOULD_CAST_IT;
+      return CANNOT_CAST_IT;
+      },
+    PRE(EV_ENCHOOSE_MID) {
+      e.eimXCR = max(e.eimXCR,XCR(1));
+      e.epXCR = max(e.epXCR,XCR(1)*3);
+      return NOTHING;
+      };
+    Constants:
+      * MIN_XCR_MULT 2;
+  }
+  
+Encounter "adventurer"
+  {
+    Weight: 20;
+    CR: 1-36;
+    Parts:
+      * 1 of MON_LIST1 [EP_CLASSED|EP_SKILLMAX];
+    Flags: NF_SINGLE;
+    Lists:
+      * MON_LIST1
+           200 $"human"
+           100 $"dwarf" $"elf" 
+            75 $"gnome" $"halfling"
+               $"aranea" $"tabaxi"
+            20 $"cave orc" $"hill orc"
+               $"stoutheart halfling"
+               $"lizardman" $"drow"
+               $"kobold" $"kyrie"
+               $"ogre" $"ogre mage"
+               ANY(MA_PLANETOUCHED)
+             1 ANY(MA_ADVENTURER),
+      * CLASS_LIST
+          $"warrior;template"
+          $"mage;template"
+          $"priest;template"
+          $"rogue;template"
+          $"barbarian;template"
+          $"bard;template"
+          $"druid;template"
+          $"monk;template"
+          $"paladin;template"
+          $"ranger;template"
+          
+          $"reaver"
+          $"minstrel"
+          $"dark sorcerer"
+          $"shadowdancer;template"
+          $"grey druid"
+          $"scarlet disciple"
+          $"blackguard;template"
+          $"myrmidon"
+          $"curate"
+          $"ruby initiate"    
+          $"stalker"
+          ;
+  }
+    
+Encounter "adventuring party"
+  {
+    Weight: 20;
+    CR:3-10;
+    Parts: 
+      * 1d4+3 of MON_LIST1 [EP_CLASSED|EP_SKILLHIGH]
+      * 10% <CR 6+> 1 of any (MA_SAPIENT) [EP_SKILLED|EP_CLASSED];
+    Flags: NF_MULTIPLE, NF_FREAKY;
+    Lists:
+      * MON_LIST1
+          1000 $"human"
+           100 $"dwarf" $"elf" 
+            50 $"gnome" $"halfling"
+            20 $"cave orc" $"hill orc"
+               $"stoutheart halfling"
+               $"lizardman" $"drow"
+               $"kobold" $"tabaxi" 
+               $"ogre" $"ogre mage"
+               ANY(MA_PLANETOUCHED)
+               $"wererat" $"aranea" 
+             1 ANY(MA_HUMANOID+MA_NLIVING*256),
+      * CLASS_LIST
+           50 $"warrior;template"
+              $"mage;template"
+              $"priest;template"
+              $"rogue;template"
+           20 $"barbarian;template"
+              $"bard;template"
+              $"druid;template"
+              $"monk;template"
+              $"paladin;template"
+              $"ranger;template",
+      * WEIGHT_CURVE_BY_CR 20 20 20 20 20 10 5 5;
+    Constants:
+      * MIN_XCR_MULT 3;
+  }
+              
+Encounter "experienced adventuring party"
+  {
+    Weight: 20;
+    CR:8-20;
+    Parts: 
+      * 1d4+4 of MON_LIST1 [EP_CLASSED|EP_SKILLHIGH]
+      * 10% <CR 6+> 1 of any (MA_SAPIENT) [EP_SKILLED|EP_CLASSED];
+    Flags: NF_MULTIPLE, NF_FORMATION, NF_FREAKY;
+    Lists:
+      * MON_LIST1
+          1000 $"human"
+           100 $"dwarf" $"elf" 
+            50 $"gnome" $"halfling"
+            20 $"cave orc" $"hill orc"
+               $"stoutheart halfling"
+               $"lizardman" $"drow"
+               $"kobold" $"wererat"
+               ANY(MA_PLANETOUCHED)
+               $"tabaxi" $"aranea"
+               $"ogre" $"ogre mage"
+             1 ANY(MA_HUMANOID+MA_NLIVING*256),
+      * CLASS_LIST
+           50 $"myrmidon"
+              $"mage;template"
+              $"curate"
+              $"rogue;template"
+           20 $"reaver"
+              $"minstrel"
+              $"dark sorcerer"
+              $"shadowdancer;template"
+              $"grey druid"
+              $"stalker"
+              $"scarlet disciple"
+              $"blackguard;template"
+              $"druid;template"
+              $"monk;template"
+              $"paladin;template"
+              $"ranger;template"
+              $"ruby initiate";
+    Constants:
+      * MIN_XCR_MULT 3;
+  }
+
+Encounter "mounted adventuring party"
+  {
+    Weight: 10;
+    CR:3-10;
+    Parts: 
+      * 1d4+3 of MON_LIST1 [EP_CLASSED|EP_SKILLHIGH|EP_MOUNTED]
+      * 10% <CR 6+> 1 of any (MA_SAPIENT) [EP_SKILLED];
+    Flags: NF_MULTIPLE, NF_FREAKY;
+    Lists:
+      * MON_LIST1
+          1000 $"human"
+           100 $"dwarf" $"elf" 
+            50 $"gnome" $"halfling"
+            20 $"cave orc" $"hill orc"
+               $"stoutheart halfling"
+               $"lizardman" $"drow"
+               $"kobold" $"aranea"
+               ANY(MA_PLANETOUCHED)
+               $"wererat" $"tabaxi"
+               $"ogre" $"ogre mage"
+             1 ANY(MA_HUMANOID+MA_NLIVING*256),
+      * CLASS_LIST
+           50 $"warrior;template"
+              $"mage;template"
+              $"priest;template"
+              $"rogue;template"
+           20 $"barbarian;template"
+              $"bard;template"
+              $"druid;template"
+              $"monk;template"
+              $"paladin;template"
+              $"ranger;template",
+      * WEIGHT_CURVE_BY_CR 20 20 20 20 20 10 5 5;
+    Constants:
+      * MIN_XCR_MULT 3;
+  }
+              
+Encounter "mounted experienced adventuring party"
+  {
+    Weight: 10;
+    CR:8-20;
+    Parts: 
+      * 1d4+4 of MON_LIST1 [EP_CLASSED|EP_SKILLHIGH|EP_MOUNTED]
+      * 10% <CR 6+> 1 of any (MA_SAPIENT) [EP_SKILLED];
+    Flags: NF_MULTIPLE, NF_FORMATION, NF_FREAKY;
+    Lists:
+      * MON_LIST1
+          1000 $"human"
+           100 $"dwarf" $"elf" 
+            50 $"gnome" $"halfling"
+            20 $"cave orc" $"hill orc"
+               $"stoutheart halfling"
+               $"lizardman" $"drow"
+               $"kobold" $"wererat"
+               $"tabaxi" $"aranea"
+               $"ogre" $"ogre mage"
+               ANY(MA_PLANETOUCHED)
+             1 ANY(MA_HUMANOID+MA_NLIVING*256),
+      * CLASS_LIST
+           50 $"myrmidon"
+              $"mage;template"
+              $"curate"
+              $"rogue;template"
+           20 $"reaver"
+              $"minstrel"
+              $"dark sorcerer"
+              $"shadowdancer;template"
+              $"grey druid"
+              $"stalker"
+              $"scarlet disciple"
+              $"blackguard;template"
+              $"druid;template"
+              $"monk;template"
+              $"paladin;template"
+              $"ranger;template"
+              $"ruby initiate";
+    Constants:
+      * MIN_XCR_MULT 3;
+  }
+
+  
+Encounter "band of outlaws"
+  {
+    Weight: 20;
+    CR: 1-7;
+    Parts:
+      * 2-10 of MON_LIST1 [EP_CLASSED|EP_SKILLED];
+    Flags: NF_MULTIPLE, NF_FORMATION;
+    Lists:
+      * CLASS_LIST
+          $"bandit" $"brigand" $"outlaw",
+      * MON_LIST1
+           100 $"human"
+            40 $"tiefling" $"hobgoblin"
+            20 $"halfling" $"drow" $"hill orc" $"ogre"
+               $"mongrelman" $"goblin" 
+            10 $"dwarf" $"cave orc"
+             3 $"elf" $"kobold" $"gnome" $"black orc"
+               $"dekanter goblin" $"bugbear" $"batkin",
+      * WEIGHT_CURVE_BY_CR
+          5 20 30 20 10 5 5;
+    Constants:
+      * MIN_XCR_MULT 2;
+  }
+  
+Encounter "pack of rats"
+  {
+    Weight: 10;
+    CR:1-5;
+    Parts:
+      * 4-20 of MON_LIST1;
+    Flags: NF_MULTIPLE, NF_HORDE;
+    Lists:
+      * WEIGHT_CURVE_BY_CR 40 10 5 3,
+      * MON_LIST1
+          10 $"giant rat"
+           1 $"plague rat";
+  }
+  
+Encounter "aberration group"
+  {
+    Weight: 10;
+    CR:1-20;
+    Parts:
+      * 1-6 of any MA_ABERRATION [EP_SKILLED];
+    Flags: NF_MULTIPLE, NF_UNIFORM, NF_NOGEN;
+    Constants:
+      * MIN_XCR_MULT 2;
+  }
+  
+Encounter "chitine band"
+  {
+    Weight: 2;
+    CR: 2-7;
+    Parts:
+      * [40] <CR 5+> 1-3 of $"choldrith" [EP_SKILLED]
+      * [40] 2-8         of $"chitine"   [EP_SKILLED|EP_MAYCLASS];
+    Flags: NF_MULTIPLE;
+    Lists:
+      * CLASS_LIST 30 $"mage;template" 
+                      $"rogue;template"
+                      $"warrior;template";
+  }
+  
+Encounter "mind flayer inquisition"
+  {
+    Weight: 15;
+    CR: 8+;
+    Parts:
+      * 3 of any MA_ILLITHID [EP_SKILLMAX];
+    Flags: NF_MULTIPLE;
+    Constants:
+      * MIN_XCR_MULT 2;
+  }
+  
+Encounter "drow scouting party"
+  {
+    Weight: 20;
+    CR: 6+;
+    Parts:
+      * [50] 1 of $"drow" $"priest;template" [EP_MOUNTED|EP_SKILLMAX|EP_LEADER]
+      * [30] 1 of $"drow" $"mage;template"   [EP_MOUNTED|EP_SKILLMAX]
+      * [30] 3-8 of $"drow"                  [EP_CLASSED|EP_SKILLED|EP_MOUNTED|EP_SKEW_FOR_AMT]
+      * [15] 25% 1-3 of $"chitine"           [EP_CLASS25]
+      * [60] 25% <CR 8+> 1-3 of $"crystal ooze"  [EP_SKILLED];
+    Lists:
+      * CLASS_LIST
+          20 $"rogue;template"
+          10 $"rogue-archer"
+             $"archer"
+             $"warrior;template"
+             $"shadowdancer;template"
+             $"myrmidon"
+             $"blackguard;template";
+    On Event POST(EV_ENGEN) {
+      if (e.enFlags & (EN_NOBUILD|EN_DUMP))
+        return NOTHING;
+      /* Drow priestesses are always female. */
+      EMap->GetEncounterCreature(0)->StateFlags |= MS_FEMALE;
+      return NOTHING;
+      };
+    Constants:
+      * MIN_XCR_MULT 3;
+  }
+  
+Encounter "grippli tribe"
+  {
+    Weight: 5;
+    CR: 2+;
+    Parts:
+      * [60] 3-15 of $"grippli" [EP_MAYCLASS|EP_SKILLHIGH]
+      * [30] <CR 5+> 1-2 of $"oxthixi" [EP_MAYCLASS|EP_SKILLHIGH];
+    Flags: NF_MULTIPLE, NF_AQUATIC;
+  }
+  
+Encounter "band of ixitxachitl"
+  {
+    Weight: 10;
+    CR: 2+;
+    Parts:
+      * 2-20 of MON_LIST1 [EP_SKILLED];
+    Flags: NF_MULTIPLE, NF_AQUATIC;
+    Lists:
+      * MON_LIST1 $"ixitxachitl" $"greater ixitxachitl";
+  }
+  
+Encounter "trapper ambush"
+  {
+    Weight: 5;
+    CR: 2+;
+    Parts:
+      * 1-15 of any MA_TRAPPER;
+    Flags: NF_UNIFORM;
+  }
+
+Encounter "mixed trapper ambush"
+  {
+    Weight: 3;
+    CR: 2+;
+    Parts:
+      * 1-15 of any MA_TRAPPER;
+  }
+
+Encounter "oozes"
+  {
+    Weight: 5;
+    CR: 1+;
+    Parts:
+      * 1-15 of any MA_OOZE [EP_SKILLED];
+    Flags: NF_UNIFORM;
+  }
+
+Encounter "mixed oozes"
+  {
+    Weight: 3;
+    CR: 1+;
+    Parts:
+      * 1-15 of any MA_OOZE [EP_SKILLED];
+  }
+
+Encounter "fungi"
+  {
+    Weight: 5;
+    CR: 1+;
+    Parts:
+      * 1-15 of any MA_FUNGI [EP_SKEW_FOR_MID];
+    Flags: NF_UNIFORM;
+  }
+
+Encounter "mixed fungi"
+  {
+    Weight: 3;
+    CR: 1+;
+    Parts:
+      * 1-15 of any MA_FUNGI;
+  }
+  
+Encounter "myconid colony"
+  {
+    CR: 2+;
+    Parts:
+      * [30] 1             of $"myconid" $"chieftan" [EP_SKILLMAX|EP_LEADER]
+      * [30] <CR 3+> 75% 1 of $"myconid" $"shaman" [EP_SKILLED]
+      * [70] 2-15          of $"myconid" [EP_SKILLED]
+      * [30] <CR 6+> 15%   of $"myconid" [EP_CLASSED|EP_SKILLED]
+      * [50] 3-9           of any MA_FUNGI;
+    Constants:
+      * MIN_XCR_MULT 3;
+  }
+  
+Encounter "nest of nagas"
+  {
+    CR: 10+;
+    Parts:
+      * [60] 1-5 of any MA_NAGA [EP_SKILLED]
+      * [15] 3-10 of any (MA_ANIMAL+MA_SNAKE*256);
+    Flags: NF_MULTIPLE, NF_UNIFORM, NF_NOGEN;
+  }
+  
+Encounter "band of ghouls"
+  {
+    Weight: 15;
+    CR: 3-9;
+    Parts:
+      * [30] <CR 4+> 1 of $"ghast" [EP_SKILLMAX|EP_LEADER|EP_FREAKY]
+      * [60] 1-10 of $"ghoul" [EP_SKILLED|EP_SKEW_FOR_AMT];
+    Flags: NF_MULTIPLE;
+    Constants:
+      * MIN_XCR_MULT 2;
+  }
+  
+Encounter "flock of birds"
+  { 
+    Weight: 3;
+    CR: 1+;
+    Parts:
+      * 3-25 of any MA_BIRD;
+    Flags: NF_MULTIPLE, NF_UNIFORM;
+  }
+  
+Encounter "graveborn creatures"
+  {
+    Weight: 10;
+    CR: 3-20;
+    Parts: 
+      * 1-10 of any MA_NLIVING $"graveborn;template" [EP_SKEW_FOR_MID];
+    On Event EV_CRITERIA {
+      if (mID_isMType(e.eID,MA_DRAGON))
+        return -1;
+      return 1;
+      };
+    Flags: NF_UNIFORM;
+  }
+
+Encounter "lone template undead"
+  {
+    Weight: 10;
+    CR: 7+;
+    Parts:
+      * 1 of MON_LIST1 TEMP_LIST1 [EP_SKILLED|EP_CLASSED];
+    Lists:
+      * MON_LIST1
+          300 $"human"
+            5 $"drow" $"tiefling" $"black orc"
+            1 $"cave orc" $"hill orc" $"goblin"
+              $"kobold" $"gnome" $"dwarf" $"halfling"
+              $"ogre" $"lizardman" $"hobgoblin"
+              $"bugbear" $"sahuagin" $"kyrie"
+              $"thri-kreen" $"centaur",
+      * CLASS_LIST
+          20 $"warrior;template" $"myrmidon"
+             $"mage;template" $"ruby initiate" $"dark sorcerer"
+             $"rogue;template" $"shadowdancer;template"
+             $"priest;template" $"curate"
+             $"monk;template" $"scarlet disciple"
+             $"bard;template" $"minstrel"
+          5  $"ranger;template" $"stalker"
+             $"barbarian;template" $"reaver",
+      * TEMP_LIST1
+          10 $"vampire"
+           5 $"ghost" $"death knight";
+  }
+  
+Encounter "monsterous animated corpse"
+  {
+    Weight: 10;
+    CR: 1+;
+    Parts:
+      * 1 of any MA_NLIVING TEMP_LIST1 [EP_SKEW_FOR_MID];
+    Lists:
+      * TEMP_LIST1
+          $"skeleton" $"zombie";
+    On Event EV_CRITERIA {
+      if (isResType(e.eID,T_TMONSTER)) {
+        if (ResourceHasFlag(e.eID,M_HUMANOID) && 
+              !mID_isMType(e.eID,MA_GIANT))
+          return -1;
+        if (mID_isMType(e.eID,MA_DRAGON))
+          return -1;
+        }
+      return 1;
+      };
+  }
+  
+Encounter "mixed corporeal undead"
+  {
+    Weight: 25;
+    CR: 3+;
+    Parts:
+      * 2-10 of MON_LIST1 [EP_SKEW_FOR_MID|EP_SKILLED|EP_SKEW_FOR_XCR];
+    Flags: NF_MULTIPLE, NF_FREAKY;
+    Lists:
+      * MON_LIST1
+          10 ANY(MA_UNDEAD)
+             $"monsterous animated corpse"
+          30 $"lone template undead";
+    Constants:
+      * MIN_XCR_MULT 2;
+    On Event EV_CRITERIA {
+      if (isResType(e.eID, T_TMONSTER))
+        if (ResourceHasFlag(e.eID,M_INCOR))
+          return -1;
+      return 1;
+      };
+  }
+
+Encounter "gravestone undead"
+  {
+    CR: 3+;
+    Parts:
+      * <CR 7+> 33% 1 of $"lone template undead" else
+        1 of MON_LIST1 [EP_SKILLMAX|EP_FREAKY|EP_CLASS10];
+    Flags: NF_NOGEN, NF_CONTEXT_AQUATIC;    
+    Lists:
+      * MON_LIST1
+          $"ghoul"
+          $"ghast"
+          $"revenant"
+          $"wraith"
+          $"wight"
+          $"skeletal warrior"
+          $"icewight"
+          $"burning ghast"
+          $"bone delver"
+          $"bodak"
+          $"spectre"
+          $"mummy"
+          $"mummy lord";
+  }   
+
+Encounter "negative undead"
+  {
+    Weight: 10;
+    CR: 3+;
+    Parts:
+      * 2-10 of any MA_WRAITH [EP_SKEW_FOR_MID|EP_SKILLED];
+  }  
+  
+Encounter "water creatures"
+  {
+    Weight: 10;
+    CR: 3+;
+    Parts:
+      * [50] of MON_LIST1    [EP_SKEW_FOR_MID]
+      * [50] of any (MA_ELEMENTALKIN+MA_WATER*256)
+      * [5] <CR 3+> of $"water genasi"            [EP_CLASSED|EP_SKILLMAX]
+      * [40] of any MA_NLIVING $"aqueous";
+    Flags: NF_STAGGERED, NF_AQUATIC;
+    Lists:
+      * MON_LIST1
+          $"tiny water elemental"
+          $"small water elemental"
+          $"medium water elemental"
+          $"large water elemental"
+          $"huge water elemental"
+          $"greater water elemental"
+          $"elder water elemental";
+    Constants:
+      * MIN_XCR_MULT 3;
+  }           
+  
+Encounter "fire creatures"
+  {
+    Weight: 10;
+    CR: 3+;
+    Parts:
+      * [50] of MON_LIST1    [EP_SKEW_FOR_MID]
+      * [50] of any (MA_ELEMENTALKIN+MA_FIRE*256)
+      * [5] <CR 3+> of $"fire genasi"            [EP_CLASSED|EP_SKILLMAX]
+      * [40] of any MA_NLIVING $"flame";
+    Flags: NF_STAGGERED;
+    Lists:
+      * MON_LIST1
+          $"tiny fire elemental"
+          $"small fire elemental"
+          $"medium fire elemental"
+          $"large fire elemental"
+          $"huge fire elemental"
+          $"greater fire elemental"
+          $"elder fire elemental";
+    Constants:
+      * MIN_XCR_MULT 3;
+  }           
+
+Encounter "earth creatures"
+  {
+    Weight: 10;
+    CR: 3+;
+    Parts:
+      * [50] of MON_LIST1    [EP_SKEW_FOR_MID]
+      * [50] of any (MA_ELEMENTALKIN+MA_EARTH*256)
+      * [5] <CR 3+> of $"earth genasi"            [EP_CLASSED|EP_SKILLMAX]
+      * [40] of any MA_NLIVING $"earthen";
+    Flags: NF_STAGGERED;
+    Lists:
+      * MON_LIST1
+          $"tiny earth elemental"
+          $"small earth elemental"
+          $"medium earth elemental"
+          $"large earth elemental"
+          $"huge earth elemental"
+          $"greater earth elemental"
+          $"elder earth elemental";
+    Constants:
+      * MIN_XCR_MULT 3;
+  }
+  
+Encounter "air creatures"
+  {
+    Weight: 10;
+    CR: 3+;
+    Parts:
+      * [50] of MON_LIST1    [EP_SKEW_FOR_MID]
+      * [50] of any (MA_ELEMENTALKIN+MA_AIR*256)
+      * [5] <CR 3+> of $"air genasi"            [EP_CLASSED|EP_SKILLMAX]
+      * [40] of any MA_NLIVING $"gaseous";
+    Flags: NF_STAGGERED;
+    Lists:
+      * MON_LIST1
+          $"tiny air elemental"
+          $"small air elemental"
+          $"medium air elemental"
+          $"large air elemental"
+          $"huge air elemental"
+          $"greater air elemental"
+          $"elder air elemental";
+    Constants:
+      * MIN_XCR_MULT 3;
+  }
+  
+Encounter "werebeast and allies"
+  {
+    Weight: 10;
+    CR: 4+;
+    Parts:
+      * [50] 1 of any MA_LYCANTHROPE [EP_CLASS50|EP_SKILLED]
+      * [25] 3-15 of  MON_LIST1;
+    Flags: NF_UNIFORM;
+    On Event PRE(EV_ENCHOOSE_MID) {
+      if (e.cPart == 1)
+        {
+          switch (EMap->enUniformGet(0x0F000000 | MA_LYCANTHROPE))
+            {
+              case $"wererat": e.chResult = (random(2) ? $"giant rat" : $"plague rat"); break;
+              case $"werebear": e.chResult = (random(2) ? $"black bear" : $"brown bear"); break;
+              case $"werewolf": e.chResult = $"wolf"; break;
+              case $"wereboar": e.chResult = $"wild boar"; break;
+              case $"jackal lord": e.chResult = $"jackal"; break;
+              case $"weretiger": e.chResult = $"tiger"; break; 
+              case $"goblin spider": e.chResult = $"goblin"; break;
+              case $"barghest": e.chResult = $"wolf"; break;
+              case $"greater barghest": e.chResult = $"winter wolf"; break;
+              default: e.chResult = $"mastiff"; break;
+            }
+          return DONE;
+        }
+      return NOTHING;
+      };
+  }
+  
+Encounter "werebeast pack and allies"
+  {
+    Weight: 10;
+    CR: 6+;
+    Parts:
+      * [75] 2-6 of any MA_LYCANTHROPE [EP_CLASS50|EP_SKILLED]
+      * [25] 3-15 of  MON_LIST1;
+    Flags: NF_UNIFORM;
+    On Event PRE(EV_ENCHOOSE_MID) {
+      if (e.cPart == 1)
+        {
+          switch (EMap->enUniformGet(0x0F000000 | MA_LYCANTHROPE))
+            {
+              case $"wererat": e.chResult = (random(2) ? $"giant rat" : $"plague rat"); break;
+              case $"werebear": e.chResult = (random(2) ? $"black bear" : $"brown bear"); break;
+              case $"werewolf": e.chResult = $"wolf"; break;
+              case $"wereboar": e.chResult = $"wild boar"; break;
+              case $"jackal lord": e.chResult = $"jackal"; break;
+              case $"weretiger": e.chResult = $"tiger"; break; 
+              case $"goblin spider": e.chResult = $"goblin"; break;
+              case $"barghest": e.chResult = $"wolf"; break;
+              case $"greater barghest": e.chResult = $"winter wolf"; break;
+              default: e.chResult = $"mastiff"; break;
+            }
+          return DONE;
+        }
+      return NOTHING;
+      };
+  }
+  
+Encounter "regiment of devils"
+  {
+    CR: 7+;
+    Weight: 15;
+    Parts:
+      * [50] 3-6 of any MA_DEVIL [EP_SKEW_FOR_MID]
+      * 50% [30] 8-30 of any MA_DEVIL [EP_SKEW_FOR_AMT|EP_UNIFORM]
+      * 33% [20] 4-8 of any MA_NLIVING $"fiendish";
+    Flags: NF_FORMATION, NF_MULTIPLE;
+    Constants:
+      * MIN_XCR_MULT 3;
+    Lists:
+      * WEIGHT_CURVE_BY_CR 5 10 15 20 25 30;
+  }
+  
+Encounter "horde of demons"
+  {
+    CR: 7+;
+    Weight: 15;
+    Parts:
+      * [50] 5-12 of any MA_DEMON
+      * 33% [20] 4-8 of any MA_NLIVING $"fiendish";
+    Flags: NF_MULTIPLE;
+    Constants:
+      * MIN_XCR_MULT 3;
+    Lists:
+      * WEIGHT_CURVE_BY_CR 5 10 15 20 25 30;
+  }
+  
+Encounter "lone outsider"
+  {
+    CR: 5+;
+    Parts:
+      * 1 of any MA_OUTSIDER;
+    Flags: NF_SINGLE;
+    Lists:
+      * WEIGHT_CURVE_BY_CR 5 10 15 20 25 30;
+  }
+  
+Encounter "druid, with animals"
+  {
+    Weight: 5;
+    CR: 4+;
+    Parts:
+      * [50] 1 of MON_LIST1 [EP_CLASSED|EP_SKILLMAX]
+      * [20] 1-4 of any MA_ANIMAL;
+    Lists:
+      * CLASS_LIST
+         $"druid;template"
+         $"grey druid"
+         $"wildshaped druid",
+      * MON_LIST1
+          100 $"human" $"elf" $"lizardman"
+           10 $"gnome" $"cave orc" $"hill orc"
+              $"halfling"
+            1 ANY(MA_ADVENTURER);
+  }
+  
+Encounter "uniform classed group"
+  {
+    Weight: 20;
+    CR:3+;
+    Parts: 
+      * 1d4+4 of MON_LIST1 [EP_CLASSED|EP_SKILLHIGH];
+    Flags: NF_MULTIPLE, NF_FORMATION, NF_UNIFORM;
+    Lists:
+      * MON_LIST1
+            50 $"human"
+            10 $"dwarf" $"elf" 
+               $"gnome" $"halfling"
+               $"cave orc" $"hill orc"
+               $"stoutheart halfling"
+               $"lizardman" $"drow"
+               $"kobold" $"wererat"
+               $"locathah" $"sahuagin"
+               $"nixie" $"tabaxi"
+               $"batkin",
+      * CLASS_LIST
+              $"myrmidon"
+              $"mage;template"
+              $"curate"
+              $"rogue;template"
+              $"reaver"
+              $"dark sorcerer"
+              $"shadowdancer;template"
+              $"grey druid"
+              $"stalker"
+              $"scarlet disciple"
+              $"druid;template"
+              $"monk;template"
+              $"paladin;template"
+              $"ranger;template"
+              $"warrior;template"
+              $"ruby initiate";
+    Constants:
+      * MIN_XCR_MULT 3;
+  }
+  
+Encounter "band of giants"
+  {
+    Weight: 20;
+    CR: 6+;
+    Parts:
+      * [30] 1 of any MA_GIANT $"chieftan" [EP_SKILLMAX]
+      * 50% [30] 1 of any MA_GIANT $"priest;for giants" [EP_SKILLMAX]
+      * [60] 3-6 of any MA_GIANT [EP_SKILLED|EP_CLASS25];
+    Flags: NF_UNIFORM, NF_MULTIPLE;
+    Constants:
+      * MIN_XCR_MULT 3;
+  }
+  
+Encounter "multitude cultists"
+  {
+    CR: 2+;
+    Parts:
+      * 1-5 of any MA_ADVENTURER $"multitude cultist" [EP_SKILLMAX];
+  }
+  
+Encounter "homogenous fae group"
+  {
+    CR: 1+;
+    Parts:
+      * 1-12 of any MA_FAERIE [EP_CLASS25|EP_SKILLMAX];
+    Flags: NF_UNIFORM;
+  }
+  
+Encounter "diverse fae group"
+  {
+    CR: 1+;
+    Parts:
+      * 1-12 of any MA_FAERIE [EP_CLASS25|EP_SKILLMAX];
+  }
+  
+Encounter "sylvan creatures"
+  {
+    CR: 1+;
+    Parts:
+      * 1-12 of any MA_SYLVAN [EP_SKILLED];
+    Flags: NF_NOGEN;
+  }
+  
+Encounter "spider encounter"
+  {
+    CR: 1+;
+    Parts:
+      * 4-12 of any MA_SPIDER [EP_SKILLED|EP_SKEW_FOR_MID];
+    Flags: NF_UNIFORM;
+    On Event EV_CRITERIA {
+      if (e.eID == $"drider" || e.eID == $"chitine" || 
+          e.eID == $"choldrith" || ResourceHasFlag(e.eID,M_SOLITARY))
+        return -1;
+      return 1;
+      };
+  }
+
+Encounter "lone vampire"
+  {
+    Weight: 10;
+    CR: 7+;
+    Parts:
+      * <CR 6+> 1 of MON_LIST1 $"vampire" [EP_SKILLED|EP_CLASSED] else
+        1 of $"vampire spawn";
+    Lists:
+      * MON_LIST1
+          300 $"human"
+            5 $"drow" $"tiefling" $"black orc"
+            1 $"cave orc" $"hill orc" $"goblin"
+              $"kobold" $"gnome" $"dwarf" $"halfling"
+              $"ogre" $"lizardman" $"hobgoblin"
+              $"bugbear" $"sahuagin" $"kyrie"
+              $"thri-kreen" $"centaur"
+              $"ogre mage",
+      * CLASS_LIST
+          20 $"warrior;template" $"myrmidon"
+             $"mage;template" $"ruby initiate" $"dark sorcerer"
+             $"rogue;template" $"shadowdancer;template"
+             $"priest;template" $"curate"
+             $"monk;template" $"scarlet disciple"
+             $"bard;template" $"minstrel"
+          5  $"ranger;template" $"stalker"
+             $"barbarian;template" $"reaver";
+  }
+
+Encounter "group of minotaurs"
+  {
+    CR: 6+;
+    Parts: 
+      * 1-12 of $"minotaur";
+    Flags: NF_NOGEN;
+  }
+  
+Encounter "plants"
+  {
+    Parts:
+      * 1-12 of any MA_PLANT [EP_SKEW_FOR_MID];
+    Flags: NF_NOGEN;
+  }
+    
+Encounter "druid, with plants"
+  {
+    Parts:
+      * [50] 1 of MON_LIST1 [EP_CLASSED|EP_SKILLMAX]
+      * 1-12 of any MA_PLANT [EP_SKEW_FOR_MID];
+    Lists:
+      * CLASS_LIST
+         $"druid;template"
+         $"grey druid"
+         $"wildshaped druid",
+      * MON_LIST1
+          100 $"human" $"elf" $"lizardman"
+           10 $"gnome" $"cave orc" $"hill orc"
+              $"halfling" $"tabaxi"
+            1 ANY(MA_ADVENTURER);
+    Flags: NF_NOGEN;
+  }
+  
+Encounter "homogenous vermin"
+  {
+    Parts:
+      * 1-12 of any MA_VERMIN;
+    Flags: NF_MULTIPLE, NF_UNIFORM;
+  }
+  
+Encounter "mixed vermin"
+  {
+    Parts:
+      * 1-12 of any MA_VERMIN;
+    Flags: NF_MULTIPLE;
+  }
+  
+Encounter "hag covey"
+  {
+    CR: 7+;
+    Parts:
+      * [70] 3 of any MA_HAG [EP_SKILLED|EP_CLASS25]
+      * [15] 2-6 of $"ogre"
+      * [25] <CR 10+> 1-4 of any (MA_GIANT+MA_EVIL*256);
+    Flags: NF_MULTIPLE;
+    Constants:
+      * MIN_XCR_MULT 3;
+  } 
+  
+Encounter "formian workgroup"
+  {
+    CR: 2+;
+    Parts:
+      * 3-15 of $"formian worker"
+      * <CR 5+> 1-6 of $"formian warrior"
+      * <CR 8+> 1-3 of $"formian taskmaster";
+    Flags: NF_MULTIPLE;
+  }
+  
+Encounter "slaad raiders"
+  {
+    CR: 10+;
+    Parts:
+      * 3-6 of MON_LIST1;
+    Flags: NF_MULTIPLE;
+    Lists:
+      * MON_LIST1
+          $"red slaad"
+          $"green slaad"
+          $"blue slaad";
+  }
+
+Encounter "modron envoy"
+  {
+    CR: 1-4;
+    Parts:
+      * 2-15 of MON_LIST1;
+    Flags: NF_MULTIPLE;
+    Lists:
+      * MON_LIST1
+          $"modron"
+          $"duodrone";
+  }
+  
+Encounter "grid bug patrol"
+  {
+    CR: 1-6;
+    Parts:
+      * 3-15 of $"grid bug"
+      * <CR 4+> 1-4 of $"grid bug enforcer";
+    Flags: NF_MULTIPLE;
+  }
+  
+Encounter "giant, with humanoid followers"
+  {
+    CR: 5-14;
+    Align: AL_EVIL;
+    Parts:
+      * [70] 1-2 of any (MA_GIANT+MA_EVIL*256) [EP_SKILLMAX|EP_CLASS50]
+      * [20] 3-20 of MON_LIST1 [EP_SKILLED|EP_SKEW_FOR_AMT];
+    Lists:
+      * MON_LIST1
+          $"goblin" 
+          $"cave orc"
+          $"hill orc"
+          $"bugbear"
+          $"hobgoblin"
+          $"grimlock"
+          $"locathah"
+          $"sahuagin"
+          $"bogwart"
+          $"mongrelman"
+          $"adlet"
+          $"dekanter goblin"
+          $"lizardman"
+          $"kobold";
+    Flags: NF_UNIFORM, NF_MULTIPLE;
+  }
+  
+Encounter "dark lord, with slaves"
+  {
+    CR: 9+;
+    Align: AL_EVIL;
+    Parts:
+      * [50] 15% <CR 12+> 1 of any MA_HAG [EP_SKILLMAX|EP_LEADER] else
+        [50] 50% 1 of MON_LIST1 [EP_SKILLMAX|EP_CLASSED|EP_LEADER] else
+        [50] 50% 1 of any MA_DEVIL [EP_SKILLMAX|EP_LEADER] else 
+        [50]     1 of $"lone vampire"
+      * [50] 1 of $"goblinoid warband";
+    Flags: NF_MULTIPLE, NF_FORM50;
+    Lists:
+      * CLASS_LIST
+          100 $"dark sorcerer"
+              $"blackguard;template"
+              $"reaver"
+              $"stalker"
+              $"scarlet disciple"
+              $"shadowdancer;template"
+            1 $"rogue;template"
+              $"warrior;template"
+              $"priest;template"
+              $"mage;template"
+              $"knight"
+              $"monk;template"
+          // $"crimson adept"
+              ,
+      * MON_LIST1
+          20 $"human"
+           1 $"goblin spider"
+             ANY(MA_ILLITHID)
+             $"magori"
+             $"skeletal warrior"
+             $"wraith"
+             $"mummy lord"
+             $"revenant"       
+          ;
+  }
+  
+Encounter "lone pseudonatural"
+  {
+    CR: 7+;
+    Parts:
+      * 1 of any MA_NLIVING $"pseudonatural" [EP_SKILLMAX];
+    On Event EV_CRITERIA {
+      if (ResourceHasFlag(e.eID,M_AMORPH) ||
+          ResourceHasFlag(e.eID,M_INCOR))
+        return -1;
+      return 1;
+      };
+    Flags: NF_SINGLE;
+  }
+  
+Encounter "pseudonatural group"
+  {
+    CR: 7+;
+    Parts:
+      * [70] 3-7 of any MA_NLIVING $"pseudonatural" [EP_SKILLMAX]
+      * [30] 50% 1-2 of MON_LIST1 [EP_SKILLED];
+    On Event EV_CRITERIA {
+      if (ResourceHasFlag(e.eID,M_AMORPH) ||
+          ResourceHasFlag(e.eID,M_NOBODY) ||
+          ResourceHasFlag(e.eID,M_INCOR))
+        return -1;
+      return 1;
+      };
+    Flags: NF_MULTIPLE;
+    Lists:
+      * MON_LIST1 5 ANY(MA_ILLITHID) $"chuul" $"magori"
+                    $"oxthixi" $"umber hulk" $"tentacle stalker"
+                    $"quylthulg" $"hook horror" $"cloaker"
+                    $"disir" $"cellar dwellar" $"belabra"
+                  1 ANY(MA_EYE);
+  }
+  
+Encounter "clockwork beasts"
+  {
+    CR: 4+;
+    Parts:
+      * 1-6 of any MA_NLIVING $"clockwork" [EP_SKILLMAX];
+    On Event EV_CRITERIA {
+      if (ResourceHasFlag(e.eID,M_AMORPH) ||
+          ResourceHasFlag(e.eID,M_NOBODY) ||
+          ResourceHasFlag(e.eID,M_INCOR))
+        return -1;
+      return 1;
+      };  
+  } 

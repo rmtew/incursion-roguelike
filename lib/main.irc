@@ -44,7 +44,7 @@ Slot 0;
 #include "prestige.irh"
 #include "subraces.irh"
 #include "sp_books.irh"
-
+#include "enclist.irh"
 #include "weapons.irh" 
 #include "m_items.irh"
 #include "wspells.irh" 
@@ -53,6 +53,7 @@ Slot 0;
 #include "mon2.irh"
 #include "mon3.irh"
 #include "mon4.irh"
+#include "new.irh"
 #include "flavors.irh" 
 #include "religion.irh" 
 #include "domains.irh" 
@@ -211,7 +212,8 @@ Effect "Curse Research" : EA_GENERIC
         for (it=pl->FirstInv();it;it=pl->NextInv())
           if (it->IFlags & IF_CURSED)
             {
-              /*it->IFlags &= ~IF_CURSED;*/
+              it->IFlags &= (~IF_CURSED);
+              it->ReApply();
               pl->IDPrint("Your <hObj> glows with a soft blue light.",
                               "The <hObj2>'s <hObj1> glows with a soft blue light.",
                               it, EActor);

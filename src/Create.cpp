@@ -905,7 +905,6 @@ void Player::TouchGallery(bool active)
     MyTerm->FRead(ri,sz * sizeof(ReincarnationInfo));
     MyTerm->Close();
     
-    ASSERT(sz > GallerySlot);
     ri[GallerySlot].Active = active;
     time(&ri[GallerySlot].Touched);
     
@@ -1769,7 +1768,7 @@ void Player::ChooseDomains()
     // the following cannot be chosen at random 
     god->Domains[0] = FIND("Evil"); 
     god->Domains[1] = FIND("Good"); 
-    srand(storeSeed);
+    srand(formulaSeed);
     for (i=2;i<2+8;) {
       rID choice = possDom[random(max)]; 
       bool already = false; 
@@ -2140,6 +2139,9 @@ void Creature::ThiefXP(rID regID)
     foundMon = false;
     mc = 0;
     
+    if (!isCharacter())
+      return;
+    
     for (t=m->FirstThing();t;t=m->NextThing())
       {
         if (t->isItem())
@@ -2180,9 +2182,10 @@ void Creature::ThiefXP(rID regID)
     
     if (foundTreasure && foundMon)
       { 
-        IPrint("You slip out like a thief in the night!");
+        IDPrint("You slip out like a thief in the night!",
+                "The <Obj> slips out like a thief in the night!",this);
         percent = (AbilityLevel(CA_THIEF_IN_THE_NIGHT) * 
-                     100) / ChallengeRating();
+                     100) / max(1,ChallengeRating());
         for (i=0;i!=mc;i++)
           KillXP(ml[i],percent);
       }
@@ -2576,8 +2579,9 @@ void Player::GainFeat(int16 feat, int32 param)
     //Win = WIN_SCREEN; 
     OneFeat = false;
     
-    if (feat >= FT_FIRST)
+    if (feat >= FT_FIRST) {
       goto SelectedFeat;
+      }
     switch(ofeat)
       {
         case FT_WIZARD_LIST: 
@@ -2683,6 +2687,8 @@ pick_again:
     if (feat != FT_WEAPON_PROFICIENCY || OneFeat)
       Feats[feat/8] |= 1 << (feat%8);
 
+    ChooseParam:
+
     switch(feat)
       {
         case FT_LION_HEART:
@@ -2751,14 +2757,16 @@ pick_again:
           eli = getEligableStudies();
           for (i=0;Studies[i][0];i++)
             if (eli == XBIT(Studies[i][0]))
-              { choice = i; goto ChosenStudy; }
+              { choice = Studies[i][0]; goto ChosenStudy; }
+          if (eli == XBIT(STUDY_BAB))
+            { choice = STUDY_BAB; goto ChosenStudy; }
           for (i=0;StudyNames[i].Val;i++)
             if (eli & XBIT(StudyNames[i].Val))
               MyTerm->LOption(StudyNames[i].Text, 
                               StudyNames[i].Val);
-          ChosenStudy:
           choice = MyTerm->LMenu(MENU_SORTED|MENU_BORDER,
                 "Choose an area to improve:",WIN_MENUBOX);
+          ChosenStudy:
           IntStudy[choice]++;
           tStoryPluses = AbilityLevel(CA_STORYCRAFT);
          break;

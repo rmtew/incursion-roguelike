@@ -14,9 +14,23 @@
 
 */
 
+#ifdef UNDEF_WIN32
+#include <windows.h>
+#include <Winbase.h>
+#include <tchar.h>
+#endif
 
 #include "Incursion.h"
 #include <time.h>
+
+#include <stdio.h>  /* defines FILENAME_MAX */
+#ifdef WIN32
+    #include <direct.h>
+    #define platf_getcwd _getcwd
+#else
+    #include <unistd.h>
+    #define platf_getcwd getcwd
+#endif
 
 int test;
 
@@ -50,9 +64,10 @@ Game::Game() : Object(T_GAME)
     PlayMode = false;
     ItemGenNum = 10;
     DestroyCount = 0;
-    srand((unsigned)time(NULL)); 
+    srand((unsigned)time(NULL));
   }
-  
+
+
 extern hObj excessItems[30];
 
 void Game::NewGame(rID mID, bool reincarnate)
@@ -2052,9 +2067,11 @@ void Game::ListItemsByLevel()
       }
 
     T1->Box(WIN_SCREEN,BOX_WIDEBOX,YELLOW,GREY,full);
-    
+
+    String path = T1->IncursionDirectory + "\\notes\\itemlist.txt";
+
     FILE * fp;
-    fp = fopen("d:\\incursion\\notes\\itemlist.txt","wt");
+    fp = fopen((const char *)path,"wt");
     fwrite(((const char*)full),strlen((const char*)full),1,fp);
     fclose(fp);
     
@@ -2063,8 +2080,7 @@ void Game::ListItemsByLevel()
   }
     
     
-
-
+extern void TestEncounterGen(Term *t);
 
 void Game::StartMenu()
 	{                                      
@@ -2104,6 +2120,8 @@ void Game::StartMenu()
               T1->LOption("Generate HTML Manual",6);
               T1->LOption("Generate Rarity Table", 7);
               T1->LOption("List Items by Level",8);
+              T1->LOption("Test New Encounter Gen",9);
+              T1->LOption("Generate Encounter Stats",10);
               switch(T1->LMenu(MENU_2COLS|MENU_ESC|MENU_REDRAW,"-- Debugging Commands -- ",WIN_CUSTOM)) {
                 case 1: CheckConsistency(); break; 
                 case 2: MonsterEvaluation(); break; 
@@ -2127,6 +2145,18 @@ void Game::StartMenu()
                 case 6: WriteHTMLHelp(); break;
                 case 7: GenerateRarityTable(); break;
                 case 8: ListItemsByLevel(); break;
+                case 9: 
+                  theGame->LoadModules();
+                  TestEncounterGen(T1); 
+                  theGame->Cleanup();
+                  break;
+                case 10:
+                  theGame->LoadModules();
+                  Map *m;
+                  m = new Map();
+                  m->GenEncounterStats(T1);
+                  delete m;
+                  theGame->Cleanup();
                 case -2: goto Redraw;
               } 
             } 

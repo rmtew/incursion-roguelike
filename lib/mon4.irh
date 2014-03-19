@@ -1896,60 +1896,20 @@ Monster "narzugon" : MA_DEVIL
       },
     MSG_SPECABIL
       "Its gaze has the effect of a <1>Phantasmal Killer<7> spell on any
-        victim within range, recurring every 1d4+1 rounds.",
-    EV_INITIALIZE {
-      hObj hMount;
-      switch (random(10))
-        {
-          case 0:
-            hMount = CreateMonster($"wild boar");
-            hMount->AddTemplate($"dire");
-            hMount->AddTemplate($"fiendish");
-           break;
-          case 1:
-            hMount = CreateMonster($"winter wolf");
-            hMount->AddTemplate($"fiendish");
-           break;
-          case 2:
-            hMount = CreateMonster($"blue dragon");
-            hMount->AddTemplate($"young");
-           break;   
-          case 3:
-            hMount = CreateMonster($"black dragon");
-            hMount->AddTemplate($"young");
-           break;   
-          case 4:
-            hMount = CreateMonster($"purple dragon");
-            hMount->AddTemplate($"young");
-           break;   
-          case 5:
-            hMount = CreateMonster($"greater barghest");
-           break;   
-          /*case 6:
-            hMount = CreateMonster($"bezekira");
-           break;*/
-          /* default: */   
-          case 6:
-          case 7:
-          case 8:
-          case 9:
-            hMount = CreateMonster($"nightmare");
-           break;
-        }
-
-      if (hMount == NULL)
-        return NOTHING;
-
-      SetSilence();
-      hMount->PartyID = EActor->PartyID;
-      hMount->PlaceAt(EMap,EActor->x,EActor->y);
-      hMount->Initialize();
-      hMount->CalcValues();
-      Throw(EV_MOUNT,EActor,hMount);
-      UnsetSilence();
-      return NOTHING;
-      
-      };
+        victim within range, recurring every 1d4+1 rounds.";
+    Lists:
+      * MOUNT_LIST
+          100 $"nightmare"
+           10 $"dire" $"fiendish" $"wild boar"
+              $"fiendish" $"winter wolf"
+              $"graveborn;template" $"wyvern"
+              $"graveborn;template" $"griffon"
+              $"young" $"blue dragon"
+              $"young" $"black dragon"
+              $"young" $"purple dragon"
+              $"greater barghest"
+              //$"bezekira"
+          ;
   }
 
 Monster "cornugon" : MA_DEVIL
@@ -2429,7 +2389,7 @@ Monster "small mud elemental" : MA_ELEMENTAL, MA_OOZE, MA_EARTH
       SK_LISTEN, SK_SPOT, 
       FT_TOUGHNESS;
     Flags: 
-      M_NEUTER, M_NOHANDS, M_NO_CORPSE, M_EARTH,
+      M_NEUTER, M_NOHANDS, M_NO_CORPSE, M_EARTH, M_AMPHIB,
       M_NOLIMBS, M_NOHEAD, M_AMORPH, M_AQUATIC;
     On Event EVICTIM(EV_DEATH) {
       if (GetHandle(EMap))
@@ -2884,7 +2844,7 @@ Monster "dust devil;monster" : MA_VORTEX, MA_ELEMENTALKIN
 	  ABILITY(CA_AIR_MASTERY,1);
 	  ABILITY(CA_FLIGHT,9);
 	  ABILITY(CA_BLINDSIGHT,6);
-    Immune: ELEMENTAL_IMMUNITIES;
+    Immune: ELEMENTAL_IMMUNITIES, DF_ACID;
     Resists: DF_ELEC, DF_SLASH, DF_PIERCE;
     Feats: FT_DODGE, FT_MOBILITY;
     Flags: M_AMORPH, M_NATURAL, M_NOLIMBS, M_NOHANDS,
@@ -2926,12 +2886,12 @@ Monster "vampiric mist" : MA_ELEMENTALKIN, MA_AIR
           A_DGST for 3d4 AD_VAMP;
 	ABILITY(CA_TRACKING,15);
 	ABILITY(CA_INFRAVISION,6);
-    Immune: ELEMENTAL_IMMUNITIES;
+    Immune: ELEMENTAL_IMMUNITIES, DF_ACID;
     Resists:DF_FIRE;
     Feats: SK_LISTEN;
     Flags: M_EVIL, M_IALIGN, M_NOHANDS, M_NOLIMBS, M_NOBODY, 
       M_NOHEAD, M_NEUTER, M_NO_CORPSE, M_FLYER, M_SWAMP,
-      M_AMORPH, M_AIR, M_WATER, M_NO_BLOOD;
+      M_AMORPH, M_AIR, M_WATER, M_NO_BLOOD, M_ACID;
   }
 
 Monster "blinding mist" : MA_ELEMENTALKIN, MA_AIR
@@ -2960,7 +2920,7 @@ Monster "fog elemental" : MA_ELEMENTALKIN, MA_AIR
 	ABILITY(CA_AIR_MASTERY,2);
 	ABILITY(CA_NATURE_SENSE,1);
 	ABILITY(CA_INFRAVISION,9);
-    Immune: ELEMENTAL_IMMUNITIES; 
+    Immune: ELEMENTAL_IMMUNITIES, DF_ACID; 
     Spells: $"obscurement", $"wall of fog"; 
     Feats: SK_SPOT, SK_LISTEN;
     Flags: M_EVIL, M_IALIGN, M_NOHANDS, M_NOLIMBS, M_NOBODY, M_NOHEAD,
@@ -2984,7 +2944,7 @@ Monster "storm elemental" : MA_ELEMENTALKIN
 	ABILITY(CA_AIR_MASTERY,3);
 	ABILITY(CA_NATURE_SENSE,1);
 	ABILITY(CA_INFRAVISION,9);
-    Immune: ELEMENTAL_IMMUNITIES, DF_ELEC; 
+    Immune: ELEMENTAL_IMMUNITIES, DF_ELEC, DF_ACID; 
     Spells: $"rainstorm", $"lightning bolt"; 
     Feats: SK_SPOT, SK_LISTEN;
     Flags: M_EVIL, M_IALIGN, M_NOHANDS, M_NOLIMBS, M_NOBODY, M_NOHEAD,
@@ -3297,6 +3257,73 @@ Monster "hound archon" : MA_CELESTIAL, MA_DOG, MA_HUMANOID
     Desc: "Hound archons look like well-muscled humans with canine heads.";
   }
 
+Monster "lillend" : MA_CELESTIAL, MA_SNAKE
+  {
+    Image: bright green 'A'; Size: SZ_LARGE; Mana: 230;
+    CR: 7; HD: 7; Hit: +7; Def: 16; Mov: 225%; Spd: 150%;
+    Str 20, Dex 17, Con 15, Int 14, Wis 16, Cha 18;
+    Attk:
+      A_TAIL for 2d6 AD_BLUNT
+             and     AD_GRAB (DC 18),
+      A_CONS for 3d6 AD_BLUNT;
+    RACIAL_SKILL(SK_WILD_LORE,+4);
+    ABILITY(CA_BARDIC_MUSIC,7);
+    ABILITY(CA_SPELLCASTING,5);
+    Immune: DF_POIS; Resists: DF_FIRE;
+    Spells: $"deeper darkness", $"hallucinatory terrain",
+            $"call light", $"charm person", $"commune with nature",
+            $"dancing lights"; 
+    Feats: SK_APPRAISE, SK_CONCENT, SK_CRAFT, SK_KNOW_NATURE,
+           SK_KNOW_MAGIC, SK_LISTEN, SK_PERFORM, SK_SPELLCRAFT,
+           SK_WILD_LORE,
+           
+           FT_COMBAT_CASTING, FT_GUARDED_INVOCATION,
+           FT_HEIGHTEN_SPELL;
+    Flags: M_CHAOTIC, M_GOOD, M_IALIGN, M_NO_CORPSE, M_CASTER,
+           M_FLYER;
+    Desc: "The lillend are a celestial breed from the wilder, more
+      untamed areas of the upper planes. They are artisans, dancers,
+      singers and scholars -- fierce defenders of art in all its
+      forms. They frequently serve the powers of light as translators,
+      linguists and sages.\n
+      __A lillend has the head, torso and arms of a beautiful woman,
+      a serpentine lower body tapering off to a feathered tail and
+      great, hawklike wings. Their hair, wings and tail all have the
+      same coloration -- a shifting, nearly hypnotic spectrum of
+      radiant greens, purples and violets.";
+    /* Bard Spell List */
+    Lists:
+      * SPELL_LIST
+          1 $"call companions" $"call light" $"cause fear" $"charm person" $"chant" $"cure light wounds"
+            $"convulsion" $"dancing lights" $"detect secret doors" $"erase" $"grease"
+            $"feather fall" $"expeditious retreat" $"friends" $"hypnotism" $"mending" 
+            $"magic weapon" $"phantasmal force" $"protection from evil" $"read magic"
+            $"sleep" $"monster summoning I" $"unseen servant" $"ventriloquism" $"true strike"
+            $"chromatic orb" $"knock" $"mount" $"detect stairs" $"phase door" 
+          2 $"cause blindness" $"blur" $"bull's strength" $"cat's grace" $"cure moderate wounds"
+            $"globe of shadow" $"slow poison" $"ESP" $"enthrall" $"glitterdust" $"hold person"
+            $"hypnotic pattern" $"invisibility" $"levitation" $"detect objects" $"detect monsters"
+            $"improved phantasmal force" $"pyrotechnics" $"scare" $"see invisibility"
+            $"shatter" $"sound burst" $"suggestion" $"monster summoning ii" $"summon swarm"
+            $"hideous laughter" $"iron mind" $"protection from arrows" $"web" $"revealed lore"
+            $"gust of wind" $"rope trick" $"shield" $"false life"
+          3 $"bestow curse" $"blink" $"charm monster" $"clairvoyance" $"confusion" 
+            $"cure serious wounds" $"dispel magic" $"displacement" $"emotion" $"fear"
+            $"gaseous form" $"greater magic weapon" $"haste" $"group invisibility"
+            $"keen edge" $"magic circle vs. evil" $"spectral force" $"phantom steed"
+            $"remove curse" $"cure disease" $"sculpt sound" $"slow" $"monster summoning iii"
+            $"wind wall" $"nondetection" $"fly"
+          4 $"cure critical wounds" $"dimension door" $"dominate person" 
+            $"hallucinatory terrain" $"hold monster" $"improved invisibility" 
+            $"rainbow pattern" $"color burst" $"neutralize poison" $"shout" 
+            $"monster summoning IV" $"dismissal" $"endure the elements" $"wandwierd"
+            $"solid fog" $"detect magic" $"premonition" $"track monster" $"ice storm"
+            $"phantasmal killer" $"evard's black tentacles"
+          5 $"part water" $"dream" $"mind fog" $"nightmare;spell" $"monster summoning v"
+            $"wizard sight" $"hold monster" $"polymorph self" $"force shapechange"
+            $"magic resistance" $"insect plague" $"animal growth" $"wall of thorns";
+  }
+
 /*** MISC. OUTSIDERS ***/
 
 
@@ -3378,7 +3405,8 @@ Monster "vaporighu" : MA_OUTSIDER, MA_HOMINID
 	        $"summon night hag";   
 	Feats: FT_POWER_ATTACK, FT_IMPROVED_CRIT, FT_MASTER_BULL_RUSH,        
 	       SK_BALANCE, SK_CONCENT, SK_KNOW_PLANES, SK_INTIMIDATE,
-	       SK_LISTEN, SK_SPELLCRAFT, SK_SPOT;      
+	       SK_LISTEN, SK_SPELLCRAFT, SK_SPOT;    
+	Flags: M_ACID, M_IALIGN, M_EVIL, M_NOHANDS;   
     On Event PRE(EV_DAMAGE) {
       if (e.AType == A_PROX) {
         if (EVictim->HasStati(AFRAID))
@@ -3657,7 +3685,7 @@ Monster "formian worker" : MA_OUTSIDER, MA_VERMIN, MA_LOUTSIDER
 Monster "formian warrior" : MA_OUTSIDER, MA_VERMIN, MA_LOUTSIDER
   {
     Image: yellow 'x'; Size: SZ_MEDIUM; 
-    CR: OPT_CR(6,3); HD: 4; Def: 15; Hit: +7; Mov: 150%; Spd: 100%;   
+    CR: 4; HD: 4; Def: 15; Hit: +7; Mov: 150%; Spd: 100%;   
     Str 17, Dex 16, Con 14, Int 10, Wis 12, Cha 11;
     Attk: A_BITE for 1d4 AD_BLUNT,
           A_CLAW for 1d8 AD_PIERCE,
@@ -3694,7 +3722,7 @@ Poison "formian venom" : EA_DRAIN
 Monster "formian taskmaster" : MA_OUTSIDER, MA_VERMIN, MA_LOUTSIDER
   {
     Image: yellow 'x'; Size: SZ_MEDIUM;  
-    CR: OPT_CR(8,7); HD: 6; Def: 16; Hit: +10; Mov: 150%; Spd: 130%;   
+    CR: 7; HD: 6; Def: 16; Hit: +10; Mov: 150%; Spd: 130%;   
     Str 18, Dex 16, Con 14, Int 11, Wis 16, Cha 19;
     Attk: A_CLAW for 1d6+2 AD_PIERCE,
           A_CLAW for 1d6+2 AD_PIERCE,
@@ -3972,8 +4000,8 @@ Template "flame" : TM_PLANAR for MA_NLIVING
       appear as their mundane counterparts, but composed of living,
       congealed fire -- just like an elemental.";
     On Event EV_ISTARGET {
-      if (enFreaky() % 10 != 7)
-        return -1;
+      //if (enFreaky() % 10 != 7)
+      //  return -1;
       if (EActor->isMType(MA_FUNGI) || EActor->isMType(MA_PLANT) ||
           EActor->isMType(MA_OOZE) || EActor->isMType(MA_UNDEAD))
         return -1;
@@ -3997,8 +4025,8 @@ Template "earthen" : TM_PLANAR for MA_NLIVING
       appear as their mundane counterparts, but composed of fluid rock,
       appearing like an animated, perfectly lifelike statue.";
     On Event EV_ISTARGET {
-      if (enFreaky() % 10 != 7)
-        return -1;
+      //if (enFreaky() % 10 != 7)
+      //  return -1;
       if (EActor->isMType(MA_FUNGI) || EActor->isMType(MA_PLANT) ||
           EActor->isMType(MA_OOZE) || EActor->isMType(MA_UNDEAD))
         return -1;
@@ -4023,8 +4051,8 @@ Template "gaseous" : TM_PLANAR for MA_NLIVING
       appear as their mundane counterparts, but composed purely of
       abstract vapours.";
     On Event EV_ISTARGET {
-      if (enFreaky() % 10 != 7)
-        return -1;
+      //if (enFreaky() % 10 != 7)
+      //  return -1;
       if (EActor->isMType(MA_FUNGI) || EActor->isMType(MA_PLANT) ||
           EActor->isMType(MA_OOZE) || EActor->isMType(MA_UNDEAD))
         return -1;

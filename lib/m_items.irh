@@ -669,7 +669,13 @@ Effect "quality::blinding" : EA_GRANT
   
 Effect "quality::etherealness" : EA_INFLICT
   { xval: PHASED; yval: PHASE_ETHERIAL; 
-    Flags: EF_ACTIVATE, EF_CANCEL, EF_PERMANANT, EF_3PERDAY; }
+    Flags: EF_ACTIVATE, EF_CANCEL, EF_PERMANANT, EF_3PERDAY;
+    On Event POST(EV_EFFECT) {
+      if (e.isActivation)
+        EActor->LoseFatigue(2,false);
+      return NOTHING;
+      };
+  }
 
 Effect "quality::feather-light" : EA_GENERIC { }
 
@@ -1973,7 +1979,7 @@ AI_WAND Effect "Dehydration" : EA_BLAST
     On Event MSG_BLASTNAME "thin amber bolt",
       EV_MAGIC_HIT {
         VPrint(e,"You feel ravenously thirsty suddenly!",
-                 "The <EActor>'s skin splits and peels!");
+                 "The <EVictim>'s skin splits and peels!");
         EVictim->LoseFatigue(e.vDmg/4,false);
         return NOTHING;
         };
@@ -2747,17 +2753,9 @@ AI_WAND Effect "Dismissal;wand" : EA_GENERIC
   }
       
 AI_WAND Effect "Dragon Summoning" : EA_SUMMON
-  { SC_WEA; Cost: 25; xval: MA_DRAGON; pval: PLUS_3PER1_ADD3; level: PLUS_4PER1_ADD3;
+  { SC_WEA; Cost: 25; pval: PLUS_3PER1_ADD3; level: PLUS_4PER1_ADD3;
     Purpose: EP_SUMMON; Flags: EF_AUTOID, EF_NEEDS_PLUS;
-    On Event EV_MAGIC_HIT {
-      if ((EItem->IFlags & IF_CURSED) || !EItem->isKnown(KN_MAGIC)) {
-        /* Summon an *uncontrolled* monster from an unid'd wand '*/
-        EMap->GenEncounter(EN_SUMMON|EN_SINGLE|EN_MTYPE|EN_HOSTILE,
-          e.vDmg,3,e.xval,0,NULL_ID,EActor->x,EActor->y,EActor);
-        return DONE;
-        }
-      return NOTHING;
-      };
+    xval: MA_DRAGON; rval: $"generic summons";
     Desc: "This wand summons a dragon when fired. If the dragon's
       CR is too high in comparison to the user's level, or if the
       wand has nor been properly identified when fired, the dragon may
@@ -2766,17 +2764,9 @@ AI_WAND Effect "Dragon Summoning" : EA_SUMMON
 
 
 AI_WAND Effect "Animal Summoning" : EA_SUMMON
-  { SC_WEA; Cost: 10; xval: MA_ANIMAL; pval: PLUS_2PER1; level: PLUS_2PER1;
+  { SC_WEA; Cost: 10; pval: PLUS_2PER1; level: PLUS_2PER1;
     Purpose: EP_SUMMON; Flags: EF_AUTOID, EF_NEEDS_PLUS;
-    On Event EV_MAGIC_HIT {
-      if ((EItem->IFlags & IF_CURSED) || !EItem->isKnown(KN_MAGIC)) {
-        /* Summon an *uncontrolled* monster from an unid'd wand '*/
-        EMap->GenEncounter(EN_SUMMON|EN_SINGLE|EN_MTYPE|EN_HOSTILE,
-          e.vDmg,3,e.xval,0,NULL_ID,EActor->x,EActor->y,EActor);
-        return DONE;
-        }
-      return NOTHING;
-      };
+    xval: MA_DRAGON; rval: $"generic summons";
     Desc: "This wand summons an animal when fired. If the animal's
       CR is too high in comparison to the user's level, or if the
       wand has nor been properly identified when fired, the animal may
@@ -2784,17 +2774,9 @@ AI_WAND Effect "Animal Summoning" : EA_SUMMON
   }
 
 AI_WAND Effect "Goblinoid Summoning" : EA_SUMMON
-  { SC_WEA; Cost: 6; xval: MA_GOBLINOID; pval: PLUS_2PER1; level: PLUS_2PER1;
+  { SC_WEA; Cost: 6; pval: PLUS_2PER1; level: PLUS_2PER1;
     Purpose: EP_SUMMON; Flags: EF_AUTOID, EF_NEEDS_PLUS;
-    On Event EV_MAGIC_HIT {
-      if ((EItem->IFlags & IF_CURSED) || !EItem->isKnown(KN_MAGIC)) {
-        /* Summon an *uncontrolled* monster from an unid'd wand '*/
-        EMap->GenEncounter(EN_SUMMON|EN_SINGLE|EN_MTYPE|EN_HOSTILE,
-          e.vDmg,3,e.xval,0,NULL_ID,EActor->x,EActor->y,EActor);
-        return DONE;
-        }
-      return NOTHING;
-      };
+    rval: $"summoned goblinoid";
     Desc: "This wand summons a goblinoid when fired. If the goblinoid's
       CR is too high in comparison to the user's level, or if the
       wand has not been properly identified when fired, the goblinoid may
@@ -2802,18 +2784,9 @@ AI_WAND Effect "Goblinoid Summoning" : EA_SUMMON
   }
 
 AI_WAND Effect "Beast Summoning" : EA_SUMMON
-  { SC_WEA; Cost: 15; xval: MA_BEAST; pval: PLUS_3PER1; level: PLUS_3PER1;
+  { SC_WEA; Cost: 15; pval: PLUS_3PER1; level: PLUS_3PER1;
     Purpose: EP_SUMMON; Flags: EF_AUTOID, EF_NEEDS_PLUS;
-    On Event EV_MAGIC_HIT {
-      if ((EItem->IFlags & IF_CURSED) || !EItem->isKnown(KN_MAGIC)) {
-        /* Summon an *uncontrolled* monster from an unid'd wand '*/
-        EMap->GenEncounter(EN_SUMMON|EN_SINGLE|EN_MTYPE|EN_HOSTILE,
-          e.vDmg,3,e.xval,0,NULL_ID,EActor->x,EActor->y,EActor);
-        return DONE;
-        return DONE;
-        }
-      return NOTHING;
-      };
+    xval: MA_BEAST; rval: $"generic summons";
     Desc: "This wand summons a beast when fired. If the beast's
       CR is too high in comparison to the user's level, or if the
       wand has nor been properly identified when fired, the beast may
@@ -2821,18 +2794,9 @@ AI_WAND Effect "Beast Summoning" : EA_SUMMON
   }
 
 AI_WAND Effect "Undead Summoning" : EA_SUMMON
-  { SC_WEA; Cost: 20; xval: MA_UNDEAD; pval: PLUS_3PER1; Level: PLUS_3PER1;
+  { SC_WEA; Cost: 20; pval: PLUS_3PER1; Level: PLUS_3PER1;
     Purpose: EP_SUMMON; Flags: EF_AUTOID, EF_NEEDS_PLUS; 
-    On Event EV_MAGIC_HIT {
-      if ((EItem->IFlags & IF_CURSED) || !EItem->isKnown(KN_MAGIC)) {
-        /* Summon an *uncontrolled* monster from an unid'd wand '*/
-        EMap->GenEncounter(EN_SUMMON|EN_SINGLE|EN_MTYPE|EN_HOSTILE,
-          e.vDmg,3,e.xval,0,NULL_ID,EActor->x,EActor->y,EActor);
-        return DONE;
-        return DONE;
-        }
-      return NOTHING;
-      };
+    xval: MA_UNDEAD; rval: $"generic summons";
     Desc: "This wand summons an undead when fired. If the undead's
       CR is too high in comparison to the user's level, or if the
       wand has nor been properly identified when fired, the undead may
@@ -2841,18 +2805,9 @@ AI_WAND Effect "Undead Summoning" : EA_SUMMON
 
 
 AI_WAND Effect "Vermin Summoning" : EA_SUMMON
-  { SC_WEA; Cost: 10; xval: MA_VERMIN; pval: PLUS_2PER1; level: PLUS_2PER1;
+  { SC_WEA; Cost: 10; pval: PLUS_2PER1; level: PLUS_2PER1;
     Purpose: EP_SUMMON; Flags: EF_AUTOID, EF_NEEDS_PLUS;
-    On Event EV_MAGIC_HIT {
-      if ((EItem->IFlags & IF_CURSED) || !EItem->isKnown(KN_MAGIC)) {
-        /* Summon an *uncontrolled* monster from an unid'd wand '*/
-        EMap->GenEncounter(EN_SUMMON|EN_SINGLE|EN_MTYPE|EN_HOSTILE,
-          e.vDmg,3,e.xval,0,NULL_ID,EActor->x,EActor->y,EActor);
-        return DONE;
-        return DONE;
-        }
-      return NOTHING;
-      };
+    xval: MA_VERMIN; rval: $"generic summons";
     Desc: "This wand summons vermin when fired. If the vermin's
       CR is too high in comparison to the user's level, or if the
       wand has nor been properly identified when fired, the vermin may
@@ -3604,8 +3559,8 @@ and EA_GENERIC
       hObj hVrock; 
       if (e.isActivation)
         {
-          EMap->GenEncounter(EN_MONID|EN_CREATOR|EN_SINGLE|EN_SPECIFIC,10,10,
-            (int32)$"vrock", 0, NULL_ID, e.EXVal, e.EYVal, EActor);
+          EMap->thEnGenMonSummXY($"exact monster", $"vrock", 
+            EN_SINGLE, 36, 0, EActor, e.EXVal, e.EYVal);
           hVrock = EMap->GetEncounterCreature(0);
           hVrock->GainTempStati(TRANSFORMED,EItem,e.vDuration,
             SS_ENCH,0,0,$"the Abyss",e.vCasterLev);   
@@ -4195,7 +4150,7 @@ AI_RING Effect "Infravision;ring" : EA_GRANT
    should use up a slot. */
 
 AI_RING Effect "the Imp" : EA_SUMMON
-  { SC_WEA; rval: $"quasit"; pval: 2; Level: 1; Purpose: EP_SUMMON;
+  { SC_WEA; rval: $"true imp"; pval: 2; Level: 1; Purpose: EP_SUMMON;
     Flags: EF_ACTIVATE, EF_XSUMMON, EF_EVIL, EF_LAWFUL, EF_DLONG,
            EF_3PERDAY;
     Desc: "This elegant, sharp-edged ring serves as a planar prison
@@ -5521,8 +5476,8 @@ and EA_GENERIC
       hObj hPython; 
       if (e.isActivation)
         {
-          EMap->GenEncounter(EN_MONID|EN_CREATOR|EN_SINGLE|EN_SPECIFIC,10,10,
-            (int32)$"boa constrictor", 0, NULL_ID, e.EXVal, e.EYVal, EActor);
+          EMap->thEnGenMonSummXY($"exact monster", $"boa constrictor", 
+            EN_SINGLE, 36, 0, EActor, e.EXVal, e.EYVal);
           hPython = EMap->GetEncounterCreature(0);
           switch (EItem->GetPlus())
             {
@@ -5736,9 +5691,9 @@ AI_ROD Effect "Rod of Lordly Might" : EA_GENERIC
                        EActor, hDoor, EItem);
            break;
           case 12:
-            EMap->GenEncounter(EN_MONID|EN_CREATOR|EN_SINGLE|EN_SPECIFIC,10,10,
-              (int32)(EActor->isSmallRace() ? $"warpony" : $"warhorse"), 
-              0, NULL_ID, e.EXVal, e.EYVal, EActor);
+            EMap->thEnGenMonSummXY($"exact monster", 
+              EActor->isSmallRace() ? $"warpony" : $"warhorse", 
+              EN_CREATOR|EN_SINGLE, 36, 0, EActor, e.EXVal, e.EYVal);
             hHorse = EMap->GetEncounterCreature(0);
             hHorse->GainTempStati(TRANSFORMED,EItem,e.vDuration*10,
               SS_ENCH,0,0,$"Rod of Lordly Might",e.vCasterLev);          
@@ -5873,40 +5828,22 @@ AI_HORN Effect "Goodness" : EA_INFLICT
 			vs. Evil) 60 feet in radius.";
   }
 
-AI_HORN Effect "Valhalla" : EA_GENERIC
-  { SC_WEA; rval: $"barbarian"; pval: 8; Level: PLUS_ADD3;
+AI_HORN Effect "Valhalla" : EA_SUMMON
+  { SC_WEA; rval: $"horde of valhalla"; pval: 8; Level: PLUS_ADD3;
     Flags: EF_ACTIVATE, EF_GROUP, EF_DLONG, EF_AUTOID, EF_SOUND,
            EF_3PERDAY, EF_NEEDS_PLUS; 
 		Desc: "When blown (activated), this horn summons berzerk warriors 
 		  to fight on the hornblower's behalf."; 
-    On Event EV_MAGIC_HIT {
-        int16 count, i;
-        count = 1d((EItem->GetPlus()-1)*2);
-        for (i=0;i!=count;i++)
-          {
-            EMap->GenEncounter(EN_SPECIFIC|EN_MONID|EN_SINGLE|EN_SUMMON,
-              0,0,(int32)$"human",0,$"barbarian;template",EActor->x,
-              EActor->y,EActor);
-          }
-        return DONE;
-      };  
+
   }
 
 /* So one day, it occured to me that the kobold swarm ability
    is completely useless to a kobold PC. Let's fix that. */
 AI_HORN Effect "the Kobolds;horn" : EA_SUMMON
-  { SC_WEA; xval: MA_KOBOLD; Level: PLUS_2PER1; 
+  { SC_WEA; xval: MA_KOBOLD; rval: $"mass summons"; Level: PLUS_2PER1; 
     pval:  PLUS_2PER1; Purpose: EP_SUMMON;
     Flags: EF_ACTIVATE, EF_DLONG, EF_AUTOID, EF_SOUND,
            EF_3PERDAY, EF_NEEDS_PLUS; 
-    On Event EV_MAGIC_HIT {
-      if (!EActor->ItemPrereq(MTYPE_VAL + MA_KOBOLD,1,25)) {
-        EMap->GenEncounter(EN_SUMMON|EN_MTYPE, EItem->GetPlus()*2, 6,
-          e.xval,0,NULL_ID,EActor->x,EActor->y,EActor);
-        return DONE;
-        }
-      return NOTHING;
-      };
     Desc: "When blown by a kobold, this horn summons a group of
       her fellows to fight on her behalf with a CR equal to twice 
       its magical plus. In the hands of a member of any other
@@ -5929,7 +5866,7 @@ and EA_INFLICT
       it is going to do."; }
 
 AI_HORN Effect "Ordered Defense" : EA_SUMMON
-  { SC_WEA; xval: MA_LAWFUL; Level: PLUS_2PER1; 
+  { SC_WEA; xval: MA_LOUTSIDER; rval: $"mass summons"; Level: PLUS_2PER1; 
     pval: (PLUS_2PER1)d(1); Purpose: EP_SUMMON;
     Flags: EF_ACTIVATE, EF_DLONG, EF_AUTOID, EF_SOUND,
            EF_3PERDAY, EF_NEEDS_PLUS; 
@@ -5938,7 +5875,7 @@ AI_HORN Effect "Ordered Defense" : EA_SUMMON
   }
 
 AI_HORN Effect "the Frenzied Hunt" : EA_SUMMON
-  { SC_WEA; xval: MA_CHAOTIC; Level: PLUS_2PER1; 
+  { SC_WEA; xval: MA_COUTSIDER; rval: $"mass summons"; Level: PLUS_2PER1; 
     pval: (PLUS_2PER1)d(1); Purpose: EP_SUMMON;
     Flags: EF_ACTIVATE, EF_MULTIPLE, EF_DLONG, EF_AUTOID, EF_SOUND,
            EF_3PERDAY, EF_NEEDS_PLUS; 
@@ -5947,7 +5884,7 @@ AI_HORN Effect "the Frenzied Hunt" : EA_SUMMON
   }
 
 AI_HORN Effect "the Sewers" : EA_SUMMON
-  { SC_WEA; xval: MA_SWARM; Level: PLUS_2PER1; 
+  { SC_WEA; rval: $"pack of rats"; Level: PLUS_2PER1; 
     pval: (PLUS_2PER1)d(1); Purpose: EP_SUMMON;
     Flags: EF_ACTIVATE, EF_MULTIPLE, EF_DLONG, EF_AUTOID, EF_SOUND,
            EF_3PERDAY, EF_NEEDS_PLUS; 
@@ -5956,7 +5893,7 @@ AI_HORN Effect "the Sewers" : EA_SUMMON
   }
 
 AI_HORN Effect "the Tritons" : EA_SUMMON
-  { SC_WEA; xval: MA_AQUATIC; Level: PLUS_2PER1; 
+  { SC_WEA; xval: MA_AQUATIC; rval: $"mass summons"; Level: PLUS_2PER1; 
     pval: (PLUS_2PER1)d(1); Purpose: EP_SUMMON;
     Flags: EF_ACTIVATE, EF_MULTIPLE, EF_DLONG, EF_AUTOID, EF_SOUND,
            EF_3PERDAY, EF_NEEDS_PLUS; 
@@ -6095,7 +6032,7 @@ and EA_GENERIC
   
 AI_WEAPON Effect "Holy Avenger" : EA_GRANT
   { SC_ABJ; Level: 5; Flags: EF_POSTFIX, EF_HIDEQUAL;
-    xval: ADJUST; yval: A_MR; pval: 10;
+    xval: ADJUST; yval: A_MR; pval: 50;
     On Event EV_EFFECT {
       if (e.isRemove)
         return NOTHING;

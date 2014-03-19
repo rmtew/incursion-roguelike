@@ -8,7 +8,7 @@
 */
 
 #include "Incursion.h"
-#include "yygram.h"
+#include "inc/yygram.h"
 #ifdef WIN32
 #include <io.h>
 #endif
@@ -71,6 +71,7 @@ TextVal Keywords1[] = {
 TextVal Keywords2[] = {
   { ABILITY, "Ability" },   { ACC, "Acc" },           { ALIGN, "Align"},
   { ALL, "All" },           { ALSO, "Also" },         { AND, "And" },
+  { WORD_ANY, "Any" },
   { APTITUDES, "Aptitudes"},{ ARCHERY, "Archery" },   { ARM, "Arm",  },
   { ARTIFACT, "Artifact" }, { AS, "As" },             { AT,  "At" },
   { ATTACK, "Attk" },       { AVAL, "aval",  },       { BASE, "Base" },
@@ -87,6 +88,7 @@ TextVal Keywords2[] = {
   { FAVORED, "Favoured" },  { FLAVOR, "Flavor" },
   { DOMAINS, "domains" },   { DOMAIN, "domain" },     { DUNGEON, "Dungeon" },
   { DVAL, "dval" },         { EFFECT, "Effect" },     { EXPORT, "Export" },
+  { WORD_ENCOUNTER, "Encounter"},{ BEHAVIOUR, "Behaviour" }, { PARTS, "Parts" },
   { EQUIP, "Equip" },       { EVAL, "eval" },         { EVENT, "Event" },
   { EVERY, "Every" },       { FACTOR, "Factor" },     { FEATS, "Feats" },
   { FEAT, "Feat" },         { FEATURE, "Feature" },   { FIRES, "Fires" },
@@ -109,7 +111,7 @@ TextVal Keywords2[] = {
   { NPC, "NPC" },           { NUTRITION,"Nutrition" },{ NUTRITION, "Nut" },
   { OBJECTS, "Objects" },   { OBJECT, "Object" },     { OF, "Of" },
   { ON, "On" },             { OR, "Or" },             { OPTION, "Option" },
-  { PARAMS, "Params" },     { PARRY, "Parry" },
+  { PARAMS, "Params" },     { PARRY, "Parry" },       { PARTS, "Parts" },
   { PARTIAL, "Partial" },   { PENALTY, "Penalty" },   { PURPOSE, "purpose" },
   { PER, "Per" },           { POWER, "power" },       { POISON, "poison" },
   { PVAL, "pval" },         { PROFICIENCIES, "Proficiencies" },
@@ -245,10 +247,17 @@ YYSTYPE DoKeywords(const char *text)
 
 "'"[^\']"'"        { yylval = yytext[1]; return CHAR_CONST; }
 
-[A-Z][A-Z]"_"[A-Z0-9_]* { yyerror(Format("Undefined Constant: %s (assuming value 0)\n",yytext));
+[A-Z][A-Z]"_"[A-Z0-9_]* { 
+                     for (int32 i=0;yytext[i];i++)
+                       if (islower(yytext[i]))
+                         return DoKeywords(yytext);
+                     yyerror(Format("Undefined Constant: %s (assuming value 0)\n",yytext));
                      yylval = 0; return NUMBER; }
 
-[A-Z]"_"[A-Z0-9_]* { yyerror(Format("Undefined Constant: %s (assuming value 0)\n",yytext));
+[A-Z]"_"[A-Z0-9_]* { for (int32 i=0;yytext[i];i++)
+                       if (islower(yytext[i]))
+                         return DoKeywords(yytext);
+                     yyerror(Format("Undefined Constant: %s (assuming value 0)\n",yytext));
                      yylval = 0; return NUMBER; }
 
 

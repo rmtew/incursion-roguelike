@@ -215,7 +215,7 @@ void Creature::IdentifyMon()
     int16 i; String oldname;
     if (m) {
       for (i=0;i!=MAX_PLAYERS && m->pl[i];i++)
-        if (oPlayer(m->pl[i])->Percieves(this))
+        if (oPlayer(m->pl[i])->XPercieves(this))
           goto IsSeen;
       return;
       }
@@ -302,9 +302,9 @@ void Creature::IdentifyTemp(rID tID)
                 if (p != this)
                   if (p->XPercieves(this)) {
                     S->Mag = 1;
-              SetImage();
-              IDPrint(NULL, "This must be an <Obj>!",this);
-            }
+                    SetImage();
+                    IDPrint(NULL, "This must be an <Obj>!",this);
+                    }
           }
         } 
     StatiIterEnd(this)
@@ -414,6 +414,9 @@ void Creature::Multiply(int16 val, bool split, bool msg)
     if (HasStati(POLYMORPH))
       return;
     if (HasStati(NEGATED))
+      return;
+    /* HACKFIX */
+    if (HasStati(SUMMONED))
       return;
     // ww: these things tend to dominate the world otherwise ...
     if (GetStatiMag(GENERATION) > 1)
@@ -1495,7 +1498,7 @@ void Creature::DoTurn()
           goto NoIntervention;
           
         gNum = theGame->GodNum(gID);
-        isAnger = (thisp->Anger[gNum] != 0);
+        isAnger = (thisp->Anger[gNum] > TGOD(gID)->GetConst(TOLERANCE_VAL));
         interval = TGOD(gID)->GetConst(isAnger ?
           GODANGER_INTERVAL : GODPULSE_INTERVAL);
         
@@ -1503,7 +1506,10 @@ void Creature::DoTurn()
                ((gID == thisp->GodID) ? 1 : 5))
           goto NoIntervention;
         
+        if (thisp->Anger[gNum] && !isAnger)
+          goto NoIntervention;
         
+        /* HACKFIX */
         if (TGOD(gID)->HasFlag(isAnger ?
               GF_COMBAT_ANGER : GF_COMBAT_PULSE))
           if (!isThreatened())
@@ -1606,7 +1612,7 @@ void Creature::DoTurn()
           uMana--; 
           // if you are down 5*N%, it takes you N turns to get back 1%
           int N = (tMana() - (cMana() + hMana)) * 20 / max(1,tMana());
-          ManaPulse = N * 100 / tMana(); 
+          ManaPulse = N * 100 / max(1,tMana()); 
         } 
       } 
     }
@@ -1784,12 +1790,16 @@ void Creature::DoTurn()
   
 void Creature::DiseasePulse(bool force, bool rest)
   {
+    if (ResistLevel(AD_DISE) == -1) {
+      RemoveStati(DISEASED);
+      return;
+      } 
+      
+  
     StatiIterNature(this,DISEASED)
-      if (ResistLevel(AD_DISE) == -1) {
-        RemoveStati(DISEASED);
-        continue;
-        } 
-      if (S->Val >= TEFF(S->eID)->ef.cval || force)
+        
+      /* HACKFIX */
+      if (S->Val >= (TEFF(S->eID)->ef.cval*100) || force)
         {
           S->Val = 0;
           // ww: just in case you somehow have +2 resistance to
@@ -2057,12 +2067,21 @@ int16 Creature::HungerState()
     return STARVED;
   }
 
-int16 Creature::ChallengeRating()
+int16 Creature::ChallengeRating(bool allow_neg)
   {
     int16 CR = TMON(mID)->CR, i;
     StatiIterNature(this,TEMPLATE)
       CR = TTEM(S->eID)->CR.Adjust(CR);
     StatiIterEnd(this)
+    
+    /* HACKFIX */
+    if (isCharacter())
+      CR = thisc->Level[0] +
+           thisc->Level[1] +
+           thisc->Level[2];
+    
+    if (allow_neg)
+      return CR;
     return max(0,CR);
   }
 
@@ -2513,6 +2532,12 @@ bool Creature::CanAddTemplate(rID tID)
     if (tt->ForMType && !isMType(tt->ForMType))  
       return false; 
 
+    /* HACKFIX */
+    if (tt->TType & TM_CLASS)
+      if (!(HasMFlag(M_HUMANOID) &&
+            TMON(tmID)->Attr[A_INT] >= 7))
+        return false;
+
     if (tt->PEvent(EV_ISTARGET,this,tID) == -1)
       return false;
 
@@ -2526,6 +2551,7 @@ void Creature::AddTemplate(rID tID)
     TAttack *at, *at2;
     ASSERT(tID);
     tt = TTEM(tID);
+    ASSERT(tt->Type == T_TTEMPLATE);
 
     if (!isPlayer() && !CanAddTemplate(tID)) {
       CanAddTemplate(tID);

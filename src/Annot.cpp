@@ -307,12 +307,12 @@ bool Resource::GetList(int16 ln, rID *lv,int16 max)
       RM_PILLARS,  3,
       //RM_CASTLE, 3, 
       RM_CHECKER,  1,
-      RM_BUILDING, 6,
+      RM_BUILDING, 3,
       //RM_DESTROYED, 1,
       RM_GRID,     1,
       RM_LIFECAVE, 10,
       RM_RCAVERN,  4,
-      RM_MAZE,     1,       // they're too annoying to be more than '1' 
+      RM_MAZE,     2,   
       RM_LCIRCLE,  1,
       RM_SHAPED,   2,
       //RM_2ROOMS,  3,
@@ -427,6 +427,23 @@ bool Resource::GetList(int16 ln, rID *lv,int16 max)
       }
   }
 
+bool Resource::HasList(int16 ln)
+  {
+    Annotation *a;
+    
+    if (AnHead == 0)
+      return false;
+    a = Annot(AnHead);
+    do {
+      if (a->AnType == AN_DUNLIST && a->u.dl.Const == ln)
+        return true;
+      a = Annot(a->Next);
+      }
+    while(a);
+    return false;
+  }
+
+
 bool Resource::ListHasItem(int16 ln, int32 look_for)
   {
     rID List[64]; int16 i;
@@ -454,7 +471,9 @@ uint32 Resource::GetConst(int16 cn)
         if (a->AnType == AN_DUNCONST)
           for (i=0;i!=6;i++)
             if (a->u.dc[I(i,6)].Const == cn)
-              return a->u.dc[I(i,6)].Value;
+              /* HACKFIX */
+              return a->u.dc[I(i,6)].Value +
+                ((cn == TOLERANCE_VAL) ? 3 : 0);
         a = Annot(a->Next);
       }
     DoDefaults:
@@ -522,7 +541,7 @@ uint32 Resource::GetConst(int16 cn)
         case CURSED_CHANCE:       return 20;
         // ww: streamer monster density was way too high -- any level with
         // a river became a battle royale on the water
-        case STREAMER_MON_DENSITY:return 300;
+        case STREAMER_MON_DENSITY:return 75;
         case MONSTER_EQUILIBRIUM_BASE: return 50;
         case MONSTER_EQUILIBRIUM_INC: return 5;
         case TRAP_CHANCE:         return 200;

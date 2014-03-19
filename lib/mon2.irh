@@ -22,7 +22,7 @@
 Monster "cave orc" : MA_ORC, MA_ADVENTURER
   {
     Image: brown 'o'; Size: SZ_MEDIUM; Mana: 5;
-    CR: OPT_CR(0,1/2); HD: 2; Hit: 0; Def: 10; Mov: 100%; Spd: 100%;
+    CR: OPT_CR(0,1/2); HD: 1; Hit: 0; Def: 10; Mov: 100%; Spd: 100%;
     Str 14, Dex 10, Con 10, Int 6, Wis 14, Cha 8, Luc 10;
     Attk: A_PUNC for 1d3 AD_BLUNT;
 	ABILITY(CA_INFRAVISION,12);
@@ -49,12 +49,32 @@ Monster "cave orc" : MA_ORC, MA_ADVENTURER
             h->AddQuality(IQ_ORCISH);
         }
       };
+    Lists:
+      * MOUNT_LIST
+          $"horse"
+          $"warhorse"
+          $"griffon"
+          $"dire" $"wolf"
+          $"cave lion"
+          $"cave ankylosaurus"
+          $"cave triceratops"
+          $"cave tyrannosaurus",
+      * PALADIN_MOUNTS
+          $"celestial" $"horse"
+          $"celestial" $"warhorse"
+          $"celestial" $"griffon"
+          $"celestial" $"dire" $"wolf"
+          $"celestial" $"cave lion"
+          $"celestial" $"cave ankylosaurus"
+          $"celestial" $"cave triceratops"
+          $"celestial" $"cave tyrannosaurus"
+           ;
   }
 
 Monster "hill orc" : MA_ORC, MA_ADVENTURER
   {
     Image: grey 'o'; Size: SZ_MEDIUM; Mana: 5;
-    CR: OPT_CR(0,1/2); HD: 3; Hit: +2; Def: 10; Mov: 100%; Spd: 100%;
+    CR: OPT_CR(0,1/2); HD: 1; Hit: +2; Def: 10; Mov: 100%; Spd: 100%;
     Str 18, Dex 10, Con 10, Int 8, Wis 14, Cha 8, Luc 10;
     Attk: A_PUNC for 1d3 AD_BLUNT;
 	  ABILITY(CA_SCENT,3);
@@ -85,7 +105,7 @@ Monster "hill orc" : MA_ORC, MA_ADVENTURER
 Monster "black orc" : MA_ORC, MA_ADVENTURER
   {
     Image: shadow 'o'; Size: SZ_MEDIUM; Mana: 20;
-    CR: OPT_CR(0,1/2); HD: 3; Hit: +2; Def: 10; Mov: 100%; Spd: 100%;
+    CR: OPT_CR(0,1/2); HD: 1; Hit: +2; Def: 10; Mov: 100%; Spd: 100%;
     Str 18, Dex 10, Con 10, Int 12, Wis 16, Cha 8, Luc 10;
     Attk: A_PUNC for 1d3 AD_BLUNT;
 	  ABILITY(CA_SCENT,3);
@@ -111,7 +131,7 @@ Monster "black orc" : MA_ORC, MA_ADVENTURER
 Monster "drow" : MA_DROW, MA_ADVENTURER
   { 
     Image: blue GLYPH_ELF; Size: SZ_MEDIUM; Mana: 10; Depth: 4;
-    CR: OPT_CR(-2,1/2); HD: 2; Hit:0; Def:10; Mov: 100%; Speed: 100%;
+    CR: OPT_CR(-2,1/2); HD: 1; Hit:0; Def:10; Mov: 100%; Speed: 100%;
     Str 8, Dex 14, Con 10, Int 14, Wis 10, Cha 14, Luc 8;
     Attk:A_PUNC for 1d2 AD_BLUNT;
 	RACIAL_SKILL(SK_MOVE_SIL,2);
@@ -141,12 +161,29 @@ Monster "drow" : MA_DROW, MA_ADVENTURER
           if (h->QualityOK(IQ_ELVEN)) h->AddQuality(IQ_ELVEN);
         } 
       };
+
+    Lists:
+      * MOUNT_LIST
+          $"riding lizard"
+          $"psionic riding lizard"
+          $"war lizard"
+          $"giant spider"
+          $"night hunter"
+          $"pike spider",
+      * PALADIN_MOUNTS
+          $"celestial" $"riding lizard"
+          $"celestial" $"psionic riding lizard"
+          $"celestial" $"war lizard"
+          $"celestial" $"giant spider"
+          $"celestial" $"night hunter"
+          $"celestial" $"pike spider"
+          $"juvenile" $"purple dragon";
   }
 
 Monster "dwarf" : MA_DWARF, MA_ADVENTURER
   { 
     Image: red GLYPH_DWARF; Size: SZ_MEDIUM; Mana: 10;
-    CR: OPT_CR(-2,1/2); HD: 2; Hit:0; Def:10; Mov:75%; Speed: 100%;
+    CR: OPT_CR(-2,1/2); HD: 1; Hit:0; Def:10; Mov:75%; Speed: 100%;
     Str 10, Dex 10, Con 14, Int 10, Wis 10, Cha 8, Luc 10;
     Attk:A_PUNC for 1d2 AD_BLUNT;
 	RACIAL_SKILL(SK_MINING,2);
@@ -181,14 +218,39 @@ Monster "dwarf" : MA_DWARF, MA_ADVENTURER
       for(h=EActor->FirstInv();h;h=EActor->NextInv()) {
         if (h->QualityOK(IQ_DWARVEN))
           h->AddQuality(IQ_DWARVEN);
-      } 
-    };
+        } 
+      };
+    Lists:
+      * MOUNT_LIST
+          300 $"warpony"
+          100 $"pony"
+           10 $"elephant"
+              $"giant tortoise"
+            1 $"rust monster"
+              $"grick"
+              $"owlbear"
+              $"dire" $"elephant"
+              $"arsinoitherium",
+      * PALADIN_MOUNTS
+           50 $"celestial" $"warpony"
+           10 $"celestial" $"pony"
+            5 $"celestial" $"elephant"
+              $"celestial" $"giant tortoise"
+            1 $"celestial" $"rust monster"
+              $"celestial" $"grick"
+              $"celestial" $"owlbear"
+              $"celestial" $"dire" $"elephant"
+              $"celestial" $"arsinoitherium"
+              $"celestial" $"cave ankylosaurus"
+              $"celestial" $"cave triceratops"
+              $"celestial" $"cave tyrannosaurus"
+           ;  
   }
 
 Monster "elf" : MA_ELF, MA_ADVENTURER
   { 
     Image: bright cyan GLYPH_ELF; Size: SZ_MEDIUM; Mana: 15;
-    CR: OPT_CR(1,1/2); HD: 2; Hit:0; Def:10; Mov: 100%; Speed: 100%;
+    CR: OPT_CR(1,1/2); HD: 1; Hit:0; Def:10; Mov: 100%; Speed: 100%;
     Str 9, Dex 14, Con 9, Int 12, Wis 10, Cha 14, Luc 10;
     Attk:A_PUNC for 1d2 AD_BLUNT;
 	ABILITY(CA_LOWLIGHT,2);
@@ -214,13 +276,34 @@ Monster "elf" : MA_ELF, MA_ADVENTURER
       for(h = EActor->FirstInv(); h ; h = EActor->NextInv())
         if (h->QualityOK(IQ_ELVEN))
           h->AddQuality(IQ_ELVEN);
-    };
+      };
+    Lists:
+      * MOUNT_LIST
+          100 $"horse" $"warhorse"
+           10 $"pegasus" $"unicorn"
+              $"hippogriff"
+           /* $"stag of the west" */
+           /* $"roc" */
+           ,
+      * PALADIN_MOUNTS
+          100 $"celestial" $"horse"
+              $"celestial" $"warhorse"
+           10 $"celestial" $"pegasus"
+              $"unicorn"
+              $"senmurv"
+              $"young"     $"silver dragon"
+              $"juvenile"  $"silver dragon"
+           /* $"stag of the west" */
+           /* $"roc" */
+           
+           ;
+
   }
 
 Monster "gnome" : MA_GNOME, MA_ADVENTURER
   { 
     Image: pink GLYPH_GNOME; Size: SZ_SMALL; Mana: 10;
-    CR: OPT_CR(-2,1/2); HD: 2; Hit:0; Def:10; Mov:75%; Speed: 100%;
+    CR: OPT_CR(-2,1/2); HD: 1; Hit:0; Def:10; Mov:75%; Speed: 100%;
     Str 9, Dex 10, Con 10, Int 14, Wis 8, Cha 12, Luc 10;
     Attk:A_PUNC for 1d2 AD_BLUNT;
 	ABILITY(CA_SCENT,2);
@@ -241,12 +324,37 @@ Monster "gnome" : MA_GNOME, MA_ADVENTURER
           25% $"food ration"; 
     Desc: "Gnomes are short, rotund demihumans famous for their
       skill with illusions.";
+    Lists:
+      * PALADIN_MOUNTS
+          100 $"celestial" $"riding dog"
+           10 $"celestial" $"pygmy war rhino"
+              $"clockwork" $"riding dog"
+              $"celestial" $"mastiff"
+              $"clockwork" $"mastiff"
+              $"celestial" $"hatori"
+              $"young"     $"brass dragon"
+              $"young"     $"copper dragon"
+              $"young"     $"mercury dragon"
+              $"juvenile"  $"brass dragon"
+              $"juvenile"  $"copper dragon"
+              $"young"     $"mercury dragon"
+              $"celestial" $"aurumvorax",
+      * MOUNT_LIST
+           30 $"riding dog"
+              $"pygmy war rhino"
+              $"clockwork" $"riding dog"
+           10 $"mastiff"
+              $"clockwork" $"mastiff"
+              $"hatori"
+              $"aurumvorax";
+
+
   }
 
 Monster "stoutheart halfling" : MA_HALFLING, MA_ADVENTURER
   { 
     Image: yellow GLYPH_HOBBIT; Size: SZ_SMALL; Mana: 10;
-    CR: OPT_CR(-2,1/2); HD: 2; Hit:0; Def:10; Mov: 75%; Speed: 100%;
+    CR: OPT_CR(-2,1/2); HD: 1; Hit:0; Def:10; Mov: 75%; Speed: 100%;
     Str 8, Dex 14, Con 10, Int 10, Wis 14, Cha 14, Luc 14;
     Flags: M_CARNI, M_HERBI, M_HUMANOID, M_LAWFUL, M_GOOD;
     Attk:  
@@ -289,7 +397,7 @@ Monster "stoutheart halfling" : MA_HALFLING, MA_ADVENTURER
 Monster "halfling" : MA_HALFLING, MA_ADVENTURER
   { 
     Image: yellow GLYPH_HOBBIT; Size: SZ_SMALL; Mana: 10;
-    CR: OPT_CR(-6,1/2); HD: 2; Hit:0; Def:10; Mov: 75%; Speed: 100%;
+    CR: OPT_CR(-6,1/2); HD: 1; Hit:0; Def:10; Mov: 75%; Speed: 100%;
     Str 8, Dex 14, Con 10, Int 10, Wis 10, Cha 14, Luc 18;
     Attk:A_PUNC for 1d2 AD_BLUNT;
     Flags: M_CARNI, M_HERBI, M_HUMANOID, M_GOOD;
@@ -307,12 +415,36 @@ Monster "halfling" : MA_HALFLING, MA_ADVENTURER
       control of approximately a third of the Kinlands' wealth. Opportunistic 
       and ambitious, the hin have carved out a niche for themselves as the 
       dominant demihuman race in the civilized lands.";
+    Lists:
+      * PALADIN_MOUNTS
+          100 $"celestial" $"pony"
+              $"celestial" $"warpony"
+           10 $"celestial" $"rust monster"
+              $"celestial" $"wolf"
+              $"celestial" $"mastiff"
+              $"celestial" $"cheetah"
+              $"hippogriff"
+              $"senmurv"
+              $"young"     $"brass dragon"
+              $"young"     $"bronze dragon"
+              $"juvenile"  $"brass dragon"
+              $"juvenile"  $"bronze dragon"
+              $"celestial" $"aurumvorax",
+      * MOUNT_LIST
+          100 $"pony"
+              $"warpony"
+           10 $"rust monster"
+              $"wolf"
+              $"mastiff"
+              $"cheetah"
+              $"hippogriff"
+              $"aurumvorax";
   }
 
 Monster "human" : MA_HUMAN, MA_ADVENTURER
   { 
     Image: grey GLYPH_HUMAN; Size: SZ_MEDIUM; Mana: 10;
-    CR: OPT_CR(-4,1/2); HD: 2; Hit:0; Def:10; Mov: 100%; Speed: 100%;
+    CR: OPT_CR(-4,1/2); HD: 1; Hit:0; Def:10; Mov: 100%; Speed: 100%;
     Str 10, Dex 10, Con 10, Int 10, Wis 10, Cha 10, Luc 10;
     Attk: A_PUNC for 1d2 AD_BLUNT;
     Flags: M_CARNI, M_HERBI, M_HUMANOID, M_COMMON;
@@ -329,7 +461,7 @@ Monster "human" : MA_HUMAN, MA_ADVENTURER
 Monster "kobold" : MA_KOBOLD, MA_ADVENTURER
 	{
 		Image: green 'k'; Size: SZ_SMALL; Mana: 10; Arm: 2;
-		CR: OPT_CR(-2,0); HD: 2; Hit:0; Def:10; Mov:75%; Speed: 100%;
+		CR: OPT_CR(-2,0); HD: 1; Hit:0; Def:10; Mov:75%; Speed: 100%;
     Str 6, Dex 14, Con 10, Int 14, Wis 10, Cha 8, Luc 10;
     Attk: A_BITE for 1d6 AD_PIERCE damage,
           A_CLAW for 1d4 AD_SLASH damage,
@@ -345,7 +477,7 @@ Monster "kobold" : MA_KOBOLD, MA_ADVENTURER
             FT_CLOSE_QUARTERS_FIGHTER;
     Flags: M_POISON, M_CARNI, M_HERBI, M_HUMANOID, M_EVIL,
            M_COMMON, M_FOREST, M_SWAMP, M_CHIEFTAN, M_SHAMAN,
-           M_LIGHT_AVERSE, M_COMMON;
+           M_LIGHT_AVERSE, M_COMMON, M_CHAOTIC;
     Immune: DF_POIS; 
     Gear: 80% $"whip"
             else random T_WEAPON,
@@ -356,12 +488,35 @@ Monster "kobold" : MA_KOBOLD, MA_ADVENTURER
     Desc: "These tiny reptillian humanoids have green scales and facial
       features crossed between a man and a dog's. They are infamous for
       their malice, their skill at trapcraft and their love of treachery.";
-    }
+    Lists:
+      * PALADIN_MOUNTS
+          $"celestial" $"cave cricket"
+          $"celestial" $"giant soldier ant"
+          $"celestial" $"giant dragonfly"
+          $"celestial" $"monsterous centipede"
+          $"celestial" $"giant blue beetle"
+          $"celestial" $"giant praying mantis"
+          $"celestial" $"grick"
+          $"celestial" $"giant slug"
+          $"celestial" $"giant crustacean"
+          $"celestial" $"giant wasp",
+      * MOUNT_LIST
+          $"cave cricket"
+          $"giant soldier ant"
+          $"giant dragonfly"
+          $"monsterous centipede"
+          $"giant blue beetle"
+          $"giant praying mantis"
+          $"grick"
+          $"giant slug"
+          $"giant crustacean"
+          $"giant wasp";
+  }
 
 Monster "lizardman" : MA_REPTILE, MA_LIZARDFOLK, MA_ADVENTURER
   { 
     Image: green 'h'; Size: SZ_MEDIUM; Mana: 10;
-    CR: OPT_CR(0,1/2); HD: 2; Hit: 0; Def: 10; Mov: 100%; Spd: 100%; Arm: 5;
+    CR: OPT_CR(0,1/2); HD: 1; Hit: 0; Def: 10; Mov: 100%; Spd: 100%; Arm: 5;
     Str 14, Dex 10, Con 14, Int 8, Wis 10, Cha 10, Luc 8;
     Attk: A_CLAW for 1d4+1 AD_SLASH,
           A_CLAW for 1d4+1 AD_SLASH,
@@ -383,6 +538,30 @@ Monster "lizardman" : MA_REPTILE, MA_LIZARDFOLK, MA_ADVENTURER
       for breeding, survival, food supply and the security of
       their tribe. Though they are intelligent, many more
       'civilized' concerns are simply irrelevant to them.";
+    Lists:
+      * PALADIN_MOUNTS
+          $"celestial" $"riding lizard"
+          $"celestial" $"war lizard"
+          $"young" $"plant ur-dragon"
+          $"young" $"shadow ur-dragon"
+          $"young" $"brilliant ur-dragon"
+          $"young" $"shattering ur-dragon"
+          $"young" $"water ur-dragon"
+          $"behir"
+          $"celestial" $"cave ankylosaurus"
+          $"celestial" $"cave triceratops"
+          $"celestial" $"cave tyrannosaurus"
+          $"tendriculous"
+          $"froghemoth",
+      * MOUNT_LIST
+          $"riding lizard"
+          $"war lizard"
+          $"behir"
+          $"tendriculous"
+          $"cave ankylosaurus"
+          $"cave triceratops"
+          $"cave tyrannosaurus"
+          $"froghemoth";
   }
 
 /*** GOBLINKIN ***/
@@ -404,6 +583,14 @@ Monster "goblin" : MA_GOBLIN, MA_ADVENTURER
           50% $"club" else
             $"light mace",
       25% $"hide armor";
+    Lists:
+      * MOUNT_LIST
+          $"worg"
+          $"wyvern"
+          $"young" $"black dragon",
+      * PALADIN_MOUNTS
+          $"celestial" $"wolf"
+          $"celestial" $"wyvern";
   }
 
 Monster "blue goblin" : MA_GOBLIN, MA_ADVENTURER
@@ -633,6 +820,120 @@ Monster "adlet" : MA_GOBLINOID, MA_ADVENTURER, MA_DOG
         
 Effect "Adlet Frost" : EA_GENERIC { }
 
+/*** KOBOLD SUBRACES ***/
+
+Monster "batkin" : MA_KOBOLD, MA_ADVENTURER
+	{
+		Image: brown 'k'; Size: SZ_SMALL; Mana: 10; Arm: 2;
+		CR: OPT_CR(-2,0); HD: 1; Hit:0; Def:10; Mov:75%; Speed: 100%;
+    Str 6, Dex 14, Con 10, Int 10, Wis 16, Cha 8, Luc 10;
+    Attk: A_BITE for 1d3 AD_PIERCE 
+                 and     AD_GRAB (DC 13),
+          A_SUCK for 1d6 AD_NORM;
+	  RACIAL_SKILL(SK_CRAFT,2);
+	  ABILITY(CA_BLINDSIGHT, 6);
+    Feats: FT_WEAPON_FINESSE, FT_DIRTY_FIGHTING, FT_SWARM, 
+            FT_EXPERTISE, SK_POISON_USE, SK_HIDE, SK_MOVE_SIL,
+            SK_LOCKPICKING, SK_CLIMB, SK_FIND_WEAKNESS, 
+            FT_CLOSE_QUARTERS_FIGHTER;
+    Flags: M_CARNI, M_HERBI, M_HUMANOID, M_EVIL, M_COMMON, 
+           M_LIGHT_AVERSE, M_COMMON, M_FLYER;
+    Immune: DF_POIS; 
+    Gear: 80% $"whip"
+            else random T_WEAPON,
+          75% $"bolas",
+          30% 1d2 $"bag" of $"tanglefoot bag",
+          50% $"small glass vial" of random 1 to 3,
+          25% $"strip of cured meat"; 
+    Desc: "Batkin are a kobold bloodline resulting from interbreeding
+      with bats. They lack the reptilian features of normal kobolds,
+      instead possessing soft black fur, wide glossy eyes and thin,
+      leathery wings. They serve as the aerial assault forces and
+      deep underdelvers of the kobold peoples, and are slightly more
+      sedate and calm-minded than their psychotic cousins.";
+  }
+
+Monster "gremlin" : MA_KOBOLD, MA_ADVENTURER
+	{
+		Image: yellow 'k'; Size: SZ_SMALL; Mana: 10; Arm: 2;
+		CR: -1; HD: 1; Hit:0; Def:10; Mov:75%; Speed: 100%;
+    Str 6, Dex 14, Con 10, Int 14, Wis 10, Cha 8, Luc 10;
+    Attk: A_BITE for 1d6 AD_PIERCE damage,
+          A_CLAW for 1d4 AD_SLASH damage,
+          A_CLAW for 1d4 AD_SLASH damage;
+  	RACIAL_SKILL(SK_CRAFT,2);
+	  RACIAL_SKILL(SK_HANDLE_DEV,6);
+	  RACIAL_SKILL(SK_SEARCH,2);
+	  ABILITY(CA_INFRAVISION,6);
+    Feats:  FT_WEAPON_FINESSE, FT_DIRTY_FIGHTING, FT_SWARM, 
+            FT_EXPERTISE, SK_POISON_USE, SK_HIDE, SK_MOVE_SIL,
+            SK_LOCKPICKING, SK_CLIMB, SK_FIND_WEAKNESS, 
+            FT_CLOSE_QUARTERS_FIGHTER;
+    Flags: M_POISON, M_CARNI, M_HERBI, M_HUMANOID, M_EVIL,
+           M_COMMON, M_FOREST, M_SWAMP, M_CHIEFTAN, M_SHAMAN,
+           M_LIGHT_AVERSE, M_COMMON, M_CHAOTIC;
+    Gear: 80% $"whip"
+            else random T_WEAPON,
+          75% $"bolas",
+          30% 1d2 $"bag" of $"tanglefoot bag",
+          50% $"small glass vial" of random 1 to 3,
+          25% $"strip of cured meat"; 
+    Desc: "Gremlins are a kobold subrace warped in incredibly
+      bizarre ways by the magical radiations of the Underdark.
+      They resemble normal kobolds in many ways, but have a
+      stripe of hair on their head and down their back, which
+      is often a strange, brilliant color. They also have huge,
+      bat-like ears. Gremlins are even more chaotic, erratic
+      and psychotic than normal kobolds, fond of malicious
+      mischief and elaborate trap-setting with a wickedly
+      black sense of humor.";
+    On Event EV_TURN {
+      int16 x, y;
+      bool isWater;
+      isWater = false;
+      if (EActor->x == -1)
+        return NOTHING;
+      if (EMap->BrightAt(EActor->x,EActor->y) && !EActor->HasStati(STONING))
+        {
+          EActor->IDPrint("You hiss in agony at the bright light...",
+            "The <hObj> hisses in agony at the bright light...", EActor);
+          EActor->GainTempStati(STONING,NULL_OBJ,1d4+1,SS_MISC);
+        }
+      for (x=EActor->x-1;x!=EActor->x+2;x++)
+        for (y=EActor->y-1;y!=EActor->y+2;y++)
+          if (EMap->InBounds(x,y) &&
+               ResourceHasFlag(EMap->TerrainAt(x,y),TF_WATER))
+            isWater = true;
+      if (isWater)
+        EActor->Multiply(1,false,true);
+      return NOTHING;
+      },
+    EV_FIELDON {
+      if (EActor->x == -1)
+        return NOTHING;
+      if (EMap->BrightAt(EActor->x,EActor->y) && !EActor->HasStati(STONING))
+        {
+          EActor->IDPrint("You hiss in agony at the bright light...",
+            "The <hObj> hisses in agony at the bright light...", EActor);
+          EActor->GainTempStati(STONING,NULL_OBJ,1d4+1,SS_MISC);
+        }
+      return NOTHING;
+      },
+    PRE(EV_DAMAGE) {
+      if (e.DType == AD_SOAK)
+        EActor->Multiply(1,false,true);
+      if ((e.DType == AD_SUNL || e.eID == $"cleansing light") && !EActor->HasStati(STONING))
+        {
+          EActor->IDPrint("You hiss in agony at the bright light...",
+            "The <hObj> hisses in agony at the bright light...", EActor);
+          EActor->GainTempStati(STONING,NULL_OBJ,1d4+1,SS_MISC);
+        }
+      return NOTHING;
+      },
+    MSG_SPECABIL
+      "It multiplies when exposed to water. Bright light causes it to petrify.";
+  }
+
 /*** PLANETOUCHED ***/
 
 Monster "aasimar" : MA_PLANETOUCHED, MA_ADVENTURER
@@ -813,6 +1114,162 @@ Monster "water genasi" : MA_PLANETOUCHED, MA_ADVENTURER
       };  
   }
 
+Monster "githyanki" : MA_PLANETOUCHED, MA_ADVENTURER
+  { 
+    Image: bright green GLYPH_HUMAN; Size: SZ_MEDIUM; Mana: 10;
+    CR: 2; HD: 1; Hit:1; Def:10; Mov: 100%; Speed: 100%;
+    Str 10, Dex 12, Con 13, Int 11, Wis 8, Cha 10, Luc 10;
+    Attk: A_PUNC for 1d2 AD_BLUNT,
+          A_SEEM for $"human";
+    ABILITY(CA_PHASE,PHASE_ASTRAL);
+    MAGIC_RES(25);
+    Feats: FT_WEAPON_FOCUS,
+           SK_CRAFT, SK_CONCENT, SK_SEARCH;
+    
+    Flags: M_CARNI, M_HERBI, M_HUMANOID, M_ASTRAL, M_LAWFUL,
+           M_EVIL;
+    Spells: $"clairvoyance;psi", $"telekinesis;psi",
+            $"translocate";
+    Gear: if ((EActor->ChallengeRating() >= 7) || (e.enCR >= 9))
+            $"greatsword" of $"silver sword" else
+          $"greatsword" +1,
+          50% random T_ARMOR,
+          25% random T_WAND of random 1 to 4,
+          25% $"food ration"; 
+    Desc: "Long, long ago, the mind flayers began an ill-fated
+      experiment to unlock the psionic abilities in humans,
+      hoping to breed a psychoactive slave race. They succeeded
+      in their stated goal, but their newly-bred slaves, the
+      gith, revolted and escaped, fleeing to the astral plane
+      where they naturalized and adapted to the harsh, alien
+      life. Ever their minds were drawn to revenge upon their
+      former masters, however, and in time this bile created a
+      schism among their people, dividing them into the githyanki
+      and githzerai. Now, these two species, so very similar,
+      wage a tireless, timeless war against each other across
+      the farthest reaches of the astral plane.\n
+      __Gith look vaguely like elongated humans, with
+      sunken, triangular faces, pointed ears and long, spindly
+      fingers. Their skin is a mottled mixture of dull green,
+      browns and greys. Their dress is baroque and elaborate,
+      often harkening back to the styles of empires fallen
+      millenia ago.\n
+      __The githyanki are brutal and tyrranical, living under
+      the horrible dictatorship of an ancient lich-queen. They
+      are militaristic and hierarchical, often forming alliances
+      with devils in their struggle against the githzerai and
+      illithids.";
+  }
+
+AI_WEAPON Effect "silver sword" : EA_GENERIC
+  { SC_WEA|SC_ENC; Level: 7; Flags: EF_NAMEONLY, EF_HIDEQUAL, EF_NOGEN;
+    On Event PRE(EV_PICKUP), PRE(EV_WIELD) {
+      if (!EActor->ItemPrereq($"githyanki",0,25))  
+        {
+          APrint(e, "Wielded by a non-githyanki, the silver
+            sword collapses into liquid silver and melts away to
+            nothing!");
+          EItem->Remove(true);
+          return DONE;
+        }
+      return NOTHING;
+      },
+    PRE(EV_HIT) {
+      if (EVictim->HasStati(PHASED,PHASE_ASTRAL)) {
+        if (!EVictim->SavingThrow(FORT,20,SA_DEATH|SA_MAGIC))
+          {
+            VPrint(e,"Your silver cord is severed!",
+                     "The <EActor>'s silver cord is severed!");
+            ThrowDmg(EV_DEATH,AD_NORM,0,"a githyanki silver sword",
+              EActor,EVictim,EItem);
+            if (EVictim->isDead())
+              return DONE;
+          }
+        else
+          VPrint(e,"You resist having your silver cord severed!",
+            "The <EVictim> evades an attempt to sever <his:EVictim> silver cord!");
+        }
+      return NOTHING;
+      };
+    Constants: 
+      * BASE_ITEM $"greatsword",
+      * INITIAL_PLUS +3;
+    Lists:
+      * ITEM_QUALITIES IQ_SILVER WQ_KEEN IQ_GHOST_TOUCH;
+    Desc: "Silver swords are the wicked trademark weapon of experienced
+      githyanki. They are <11>+3 keen ghost touch silver greatswords<7>,
+      and have the additional property of severing the silver cord of
+      any astrally projected prime material native they strike, killing
+      him instantly, unless that character succeeds at a Fortitude
+      saving throw (DC 20). If any non-githyanki (other than high-level
+      rogues able to decieve magical items) picks up a silver sword, it
+      melts away to molten silver.";
+  }
+
+Monster "githzerai" : MA_PLANETOUCHED, MA_ADVENTURER
+  { 
+    Image: bright cyan GLYPH_HUMAN; Size: SZ_MEDIUM; Mana: 10;
+    CR: 2; HD: 1; Hit:1; Def:10; Mov: 100%; Speed: 100%;
+    Str 10, Dex 16, Con 10, Int 8, Wis 12, Cha 11, Luc 10;
+    Attk: A_PUNC for 1d2 AD_BLUNT,
+          A_SEEM for $"human";
+    ABILITY(CA_PHASE,PHASE_ASTRAL);
+    ABILITY(CA_SLOW_FALL,10);
+    MAGIC_RES(25);
+    Feats: FT_WEAPON_FINESSE,
+           SK_CONCENT, SK_SEARCH;
+    Flags: M_CARNI, M_HERBI, M_HUMANOID, M_ASTRAL, M_CHAOTIC;
+    Spells: $"inertial barrier", $"flesh armor", 
+            $"energy containment", $"detonate";
+    Gear: 50% $"quarterstaff" of random 1 to 6 else
+            $"spiked chain" of random 1 to 4,
+          10% $"amulet" of random 1 to 5,
+          25% $"wand" of random 1 to 4,
+          25% $"food ration"; 
+    Desc: "Long, long ago, the mind flayers began an ill-fated
+      experiment to unlock the psionic abilities in humans,
+      hoping to breed a psychoactive slave race. They succeeded
+      in their stated goal, but their newly-bred slaves, the
+      gith, revolted and escaped, fleeing to the astral plane
+      where they naturalized and adapted to the harsh, alien
+      life. Ever their minds were drawn to revenge upon their
+      former masters, however, and in time this bile created a
+      schism among their people, dividing them into the githyanki
+      and githzerai. Now, these two species, so very similar,
+      wage a tireless, timeless war against each other across
+      the farthest reaches of the astral plane.\n
+      __Gith look vaguely like elongated humans, with
+      sunken, triangular faces, pointed ears and long, spindly
+      fingers. Their skin is a mottled mixture of dull green,
+      browns and greys. Their dress is baroque and elaborate,
+      often harkening back to the styles of empires fallen
+      millenia ago.\n
+      __The githzerai are allied with the extraplanar forces
+      of chaos, valuing rugged individuality above all else
+      in their fight against their dual oppressors, the mind
+      flayers and githyanki. The only githzerai who commonly
+      forswear chaos are those who wish to become monks -- a
+      common choice among their people. Even these martial
+      artists fight in the name of freedom, though they are
+      fiercely disciplined themselves. These monks often lead
+      hunting parties against illithids or githyanki.";
+  }
+
+Encounter "githzerai rrakkma"
+  {
+    CR: 8+;
+    Parts:
+      * [50] 2-5 of $"githzerai" TEMP_LIST1 [EP_SKILLMAX]
+      * [40] 1-4 of $"githzerai" [EP_CLASSED|EP_SKILLED]
+      * <CR 10+> 25% 1 of (MA_OUTSIDER+MA_CHAOTIC*256) [EP_SKILLED];
+    Lists:
+      * TEMP_LIST1
+          20 $"scarlet disciple"
+           1 $"monk;template";
+    Constants:
+      * MIN_XCR_MULT 3;
+  } 
+
 /*** OTHER HUMANOID RACES ***/
 
 /* gibberling */
@@ -902,7 +1359,7 @@ Monster "grimlock" : MA_HUMANOID, MA_ADVENTURER
     Feats: 
       FT_ALERTNESS, FT_BLIND_FIGHT,
       SK_CLIMB, SK_HIDE, FT_SKILL_FOCUS, SK_LISTEN, SK_SPOT;
-    Flags: M_CARNI, M_HUMANOID, M_CHIEFTAN, M_EVIL, M_BLIND, 
+    Flags: M_CARNI, M_HUMANOID, M_EVIL, M_BLIND, 
       M_NEUTER;
     Gear: 
       50% $"battleaxe" else random T_WEAPON;
@@ -916,7 +1373,55 @@ Monster "grimlock" : MA_HUMANOID, MA_ADVENTURER
     Lists:
       * GROUP_ALLY $"medusa" $"mind flayer";
   } 
-
+  
+Monster "muckdweller" : MA_REPTILE
+  {
+    Image: brown 'R'; Size: SZ_TINY; Terrain: TT_SWAMP;
+    CR: 1/2; HD: 1; Def: 12; Hit: +1; Mov: 35%; Spd: 100%;
+    Str 4, Dex 16, Con 12, Int 10, Wis 12, Cha 6;
+    Attk: A_BITE for 1d4 AD_PIERCE;
+    RACIAL_SKILL(SK_HIDE,+4); 
+    Feats: FT_SNEAKY, SK_LISTEN, SK_SPOT, SK_SWIM, SK_HIDE,
+           SK_MOVE_SIL, SK_BALANCE;
+    Flags: M_CARNI, M_NOHANDS, M_EVIL, M_LAWFUL, M_AQUATIC,
+           M_AMPHIB;
+    Spells: $"Mud Spray";
+    Desc: "These tiny reptilian creatures resemble gila monsters,
+      but stand upright and measure only a foot high. Dwelling in
+      swamps, marshlands and muddy underground areas, the muckdwellers
+      form tight, vicious tribal communities to hunt down and slay
+      larger creatures. Their forepaws are so small and weak as to
+      be useless, much like a tyranosaur's. Their scales are mottled
+      brown and grey in color, while their bellies are yellow.";
+    /*
+    On Event POST(EV_SKILL_RATING) {
+      if (e.EParam == SK_HIDE)
+        if (EMap->TerrainAt(EActor->x,EActor->y) == $"shallow mud")
+          e.vSkillRating += 10;
+      return NOTHING;
+      },
+      MSG_SPECABIL
+        "They gain a +10 circumstance bonus to hide in muddy areas.";
+    */
+  }
+  
+Effect "Mud Spray" : EA_BLAST
+  {
+    aval: AR_BEAM; lval: 2; cval: BROWN; qval: Q_TAR|AIM_AT_ENEMY;
+    xval: AD_BLND; pval: 2d4; Purpose: EP_ATTACK;
+    Flags: EF_ATTACK, EF_MUNDANE, EF_SPECABIL;
+    Desc: "A muckdweller can produce a pressurized spray of mud by
+      swinging their tail, using this directed jet to blind larger
+      creatures. The muckdweller must roll to hit when using this
+      ability, and can only use it in a muddy area.";
+    On Event EV_ISTARGET {
+      if (EMap->TerrainAt(EActor->x,EActor->y) != $"shallow mud")
+        return CANNOT_CAST_IT;
+      if (EVictim->isBlind())
+        return CAN_CAST_IT;
+      return SHOULD_CAST_IT;
+      };
+  }
 #if 0
 Monster "kuo-toa" : MA_HUMANOID, MA_REPTILE
   {
@@ -1065,7 +1570,7 @@ Monster "troll" : MA_TROLL
 	ABILITY(CA_REGEN,5);
     Feats: FT_ALERTNESS, FT_IRON_WILL, FT_REND, SK_SPOT, SK_LISTEN;
     Flags: M_CARNI, M_HUMANOID, M_CHIEFTAN, M_CHAOTIC,
-      M_EVIL, M_REACH;
+             M_EVIL, M_REACH, M_GROUP;
     Desc: "With spindly limbs and skin like limestone, the
       trolls are among the most frightening of the humanoid
       marauders. They have very limited intelligence in the
@@ -1088,7 +1593,8 @@ Monster "scrag" : MA_TROLL
     Feats: FT_ALERTNESS, FT_IRON_WILL, FT_REND, SK_SPOT, SK_LISTEN,
       SK_SWIM;
     Flags: M_CARNI, M_HUMANOID, M_CHIEFTAN, M_CHAOTIC,
-      M_EVIL, M_REACH, M_WATER, M_AQUATIC, M_CLOSEID;
+           M_EVIL, M_REACH, M_WATER, M_AQUATIC, M_CLOSEID,
+           M_GROUP;
     Desc: "With spindly limbs and skin like limestone, the
       trolls are among the most frightening of the humanoid
       marauders. They have very limited intelligence in the
@@ -1115,11 +1621,9 @@ Monster "chitine" : MA_ABERRATION, MA_SPIDER, MA_ADVENTURER
       SK_BALANCE, SK_CLIMB, SK_CRAFT, SK_HIDE, SK_JUMP, 
       SK_MOVE_SIL;
     Flags: M_CARNI, M_POISON, M_HUMANOID, M_CHAOTIC, M_EVIL, 
-           M_LIGHT_AVERSE;
+           M_LIGHT_AVERSE, M_NOGEN;
     Desc: "Chitine are spiderlike humanoids inadvertently created by
     the drow as the result of failed experiments."; 
-    Lists:
-      * GROUP_LEADER $"choldrith"; 
   } 
 
 Monster "choldrith" : MA_ABERRATION, MA_SPIDER, MA_ADVENTURER
@@ -1141,7 +1645,7 @@ Monster "choldrith" : MA_ABERRATION, MA_SPIDER, MA_ADVENTURER
       SK_SPELLCRAFT, 
       FT_COMBAT_CASTING, FT_LIGHTNING_REFLEXES; 
     Flags: M_CARNI, M_POISON, M_HUMANOID, M_CHAOTIC, M_EVIL, M_IALIGN,
-           M_LIGHT_AVERSE, M_NOPOLY;
+           M_LIGHT_AVERSE, M_NOPOLY, M_NOGEN;
     Desc: "Choldriths are the priest race of the chitines."; 
     Poison: $"choldrith venom"; 
     Gear:
@@ -1301,6 +1805,50 @@ Item "gythka" : T_WEAPON
       blade at each end, and is used almost exclusively by the
       thri-kreen."; 
   }
+
+Monster "tabaxi" : MA_CAT, MA_ADVENTURER
+  {
+    Terrain: TT_JUNGLE;
+    Image: yellow 'c'; Size: SZ_MEDIUM; Mana: 10;
+    CR: 2; HD: 2; Hit: +1; Def: 16; Mov: 150%; Spd: 115%;
+    Str 14, Dex 16, Con 8, Int 12, Wis 12, Cha 13;
+    Attk: A_CLAW for 1d8 AD_SLASH,
+          A_CLAW for 1d8 AD_SLASH;
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_TREMORSENSE,6);
+	RACIAL_SKILL(SK_MOVE_SIL,+8);
+	RACIAL_SKILL(SK_BALANCE,+8);
+	Stati[EXTRA_FEAT,FT_POUNCE];
+    Feats: SK_ALCHEMY, SK_ANIMAL_EMP, SK_BALANCE, SK_MOVE_SIL, SK_WILD_LORE,
+           SK_HIDE, SK_FIND_WEAKNESS, SK_PERFORM, SK_JUMP, SK_POISON_USE,
+           FT_DODGE, FT_RUN, FT_LIGHTNING_REFLEXES;
+           
+    Flags: M_CARNI, M_HUMANOID;
+    Desc: "Tabaxi are a species of secretive, feline humanoids that
+      dwell either far underground or in the depths of unexplored
+      jungles. They are a secretive, tribal people with a great
+      reverance for nature, dance and hunting. Most tabaxi restrain
+      their predatory nature to animals, but some evil jungle cats
+      stalk humans, wood elves and other thinking beings. Tabaxi
+      rarely leave their insular society, but when they do they
+      excel as rangers, rogues and psionicists among other
+      adventurers.\n
+      __Tabaxi appear as humanoid leopards with mottled orange and
+      black fur -- their mystics ascribe great value to the patterns
+      of a tabaxi's coloration, believing it reveals some of the
+      jungle cat's destiny. Their whiskers let them sense even the
+      faintest vibrations in the air, giving them a kind of second
+      sight."; 
+    Gear:
+      $"long bow" of random 0 to 2,
+      3d6 $"sheaf arrow",
+      50% $"longspear" else
+        50% $"scimitar" else 
+          $"whip",
+      50% $"potion" of $"healing",
+      50% $"potion" of random 1 to 4;
+  } 
+
 
 /*** HAGS ***/
 
@@ -2034,6 +2582,63 @@ Monster "ogre" : MA_GIANT, MA_ADVENTURER
       ridden by goblins with crossbows."; 
   }
 
+Monster "ogre mage" : MA_GIANT, MA_ADVENTURER
+  {
+    Image: bright purple 'H'; Size: SZ_LARGE; Mana: 120;
+    CR: 8; HD: 5; Hit: +5; Def: 13; Mov: 120%; Spd: 100%;
+    Str 21, Dex 10, Con 17, Int 14, Wis 14, Cha 17;
+    Attk: A_PUNC for 1d6 AD_BLUNT,
+          A_FORM for $"human",
+          A_SEEM for $"ogre";
+    ABILITY(CA_REGEN,2);
+    MAGIC_RES(20);
+    Spells: $"fly", $"deeper darkness", $"invisibility",
+            $"charm person", $"cone of cold", $"sleep",
+            $"gaseous form", $"scare";
+    Feats: FT_GUARDED_INVOCATION, FT_POWER_ATTACK, 
+    
+           SK_APPRAISE, SK_BLUFF, SK_CONCENT, SK_LISTEN, 
+           SK_KNOW_MAGIC, SK_SPELLCRAFT, SK_SPOT;
+    Flags: M_CARNI, M_HERBI, M_HUMANOID, M_LAWFUL, M_EVIL, 
+           M_REACH, M_MOUNTABLE, M_SOLITARY;
+    Gear: 33% $"guisarme" of random 0 to 3 else
+             // naginata
+            50% 2d1 $"scimitar" of random 0 to 3 else
+              $"longspear" of random 0 to 3,
+           50% $"bolas" of random 0 to 4,
+           50% $"lamellar armor" else
+             $"chainmail hauberk",
+           50% $"chakram" of random 0 to 4,
+           50% $"boots" of random 2 to 6,
+           $"noble attire";
+    Desc: "Many sages believe that ogres were not always a species
+      of dumb brutes, but in truth wise and mystical creatures who
+      suffered a terrible, degenerating fall from grace following an 
+      age of great decadence. If this theory is correct, then the 
+      ogre magi must be throwbacks to the origin of the species at 
+      the time of their fall, for their cruelty and amibition is
+      matched only by their sophistication and culture.\n
+      __Ogre magi possess a great magical inheritance, a gift of
+      glory and intellect from ages long since past. While ogres
+      are common in the Kinlands, ogre magi normally hail from
+      far-distant Eastern lands known to no others and forever
+      eclipsed in mist and shadow. They appear as perfectly
+      manicured ogres, without the tusks, beetle brow or large ears 
+      but with deep blue skin like the ocean at night, two tiny ivory
+      horns on their forehead, sharp 
+      intelligent eyes and agile fingers well suited 
+      to somatic gestures. Most maintain a perfectly trimmed, long
+      thin mustache and goatee beard, and dress in the richest
+      fineries of empires long since passed into history.\n
+      __Ogre magi are frequently cannibalistic, using duplicity
+      and stealth to capture smaller humanoids to use as food
+      reserves -- though they would never admit to this practice
+      in casual conversation. When seeking food, they tend to
+      bind their captives in cocoon-like cloth wrappings to carry
+      over their backs. Many practice some form of martial
+      arts, advancing in the monk class."; 
+  }
+
 Monster "merrow" : MA_GIANT, MA_ADVENTURER
   {
     Image: grey 'H'; Size: SZ_LARGE; 
@@ -2729,8 +3334,8 @@ Template "half-fey" : TM_DESCENT for MA_HUMANOID
     On Event EV_ISTARGET {
       if (EActor->HasMFlag(M_NEUTER) || EActor->isMType(MA_FAERIE))
         return -1;
-      if (enFreaky() % 10 != 8)
-        return -1;
+      //if (enFreaky() % 10 != 8)
+      //  return -1;
       return 0;
     } ; 
     On Event EV_INITIALIZE {
@@ -3057,7 +3662,7 @@ Monster "aranea" : MA_SPIDER, MA_BEAST, MA_ADVENTURER
     Spells: $"web";
     Immune: DF_STUK;
     Feats: FT_CLOSE_QUARTERS_FIGHTER, FT_SNEAKY, SK_FIND_WEAKNESS;
-    Flags: M_NOLIMBS, M_NOHANDS, M_NOHEAD, M_POISON,
+    Flags: M_NOLIMBS, M_NOHANDS, M_NOHEAD, M_POISON, M_SOLITARY,
            M_CARNI, M_TALKABLE, M_FRIENDLY; 
     Desc: "Duplicitious and cunning, the aranea are a race of intelligent,
       magical spiderfolk with the ability to take a human form. They are
@@ -3126,19 +3731,18 @@ Monster "firebat" : MA_BAT, MA_BEAST
 
 Monster "night hunter" : MA_BAT, MA_ANIMAL
 {
-  Image: blue 'b'; Size: SZ_MEDIUM; 
+  Image: blue 'b'; Size: SZ_LARGE; 
   CR: OPT_CR(0,1); HD: 2; Hit: +1; Def: 11; Mov: 150%; Spd: 100%;
   Str 10, Dex 16, Con 13, Int 11, Wis 11, Cha 10; Mana: 20;
   Attk: A_TAIL for 1d6 AD_BLUNT,
         A_BITE for 1d6 AD_PIERCE,
-        A_CLAW for 1d4 AD_SLASH,
-        A_SEEM for $"bat";
+        A_CLAW for 1d4 AD_SLASH;
 	ABILITY(CA_INFRAVISION,18); 
   Spells: $"spook";
   Feats: FT_MULTIATTACK,
          SK_HIDE, SK_LISTEN, SK_MOVE_SIL, SK_SPOT; 
   Flags: M_CARNI, M_HERBI, M_AIR, M_CLOSEID,
-         M_NOHANDS, M_NOLIMBS, M_FLYER;
+         M_NOHANDS, M_NOLIMBS, M_FLYER, M_MOUNTABLE;
   Desc: "The night hunter is a large, bat-like animal with a triangular tail."; 
 }
 
@@ -3401,9 +4005,9 @@ Monster "wereboar" : MA_LYCANTHROPE, MA_BEAST
     CR: OPT_CR(6,4); HD: 4; Hit: +4; Def: 18; Mov: 150%; Spd: 120%;
     Str 17, Dex 11, Con 18, Int 10, Wis 11, Cha 8;
     Attk:
-      A_GORE for 1d6+1 AD_PIERCE,
-      A_CLAW for 1d4+3 AD_SLASH,
-      A_CLAW for 1d4+3 AD_SLASH,
+      A_GORE for 1d6 AD_PIERCE,
+      A_CLAW for 1d4 AD_SLASH,
+      A_CLAW for 1d4 AD_SLASH,
       A_FORM for $"human",
       A_FORM for $"wild boar";
 	ABILITY(CA_INFRAVISION,6);
@@ -3458,9 +4062,9 @@ Monster "weretiger" : MA_LYCANTHROPE, MA_CAT, MA_BEAST
     CR: OPT_CR(7,7); HD: 7; Hit: +7; Def: 15; Mov: 150%; Spd: 135%;
     Str 25, Dex 15, Con 16, Int 10, Wis 11, Cha 8;
     Attk:
-      A_BITE for 2d6+3 AD_PIERCE,
-      A_CLAW for 1d8+7 AD_SLASH,
-      A_CLAW for 1d8+7 AD_SLASH,
+      A_BITE for 2d6 AD_PIERCE,
+      A_CLAW for 1d8 AD_SLASH,
+      A_CLAW for 1d8 AD_SLASH,
       A_FORM for $"human",
       A_FORM for $"tiger";
 	ABILITY(CA_INFRAVISION,6);
@@ -3490,10 +4094,10 @@ Monster "werewolf" : MA_LYCANTHROPE, MA_DOG, MA_BEAST
     CR: OPT_CR(5,3); HD: 3; Hit: +3; Def: 14; Mov: 150%; Spd: 115%;
     Str 15, Dex 15, Con 16, Int 10, Wis 11, Cha 8;
     Attk:
-      A_BITE for 1d6+1 AD_PIERCE
+      A_BITE for 1d6 AD_PIERCE
                  and 0d0 AD_TRIP (DC 17),
-      A_CLAW for 1d4+2 AD_SLASH,
-      A_CLAW for 1d4+2 AD_SLASH,
+      A_CLAW for 1d4 AD_SLASH,
+      A_CLAW for 1d4 AD_SLASH,
       A_FORM for $"human",
       A_FORM for $"wolf";
 	ABILITY(CA_INFRAVISION,6);
@@ -3511,7 +4115,35 @@ Monster "werewolf" : MA_LYCANTHROPE, MA_DOG, MA_BEAST
       * GROUP_FOLLOWER $"wolf";
   }
   
-/* Remember MA_SYLVAN for werebears */
+Monster "werebear" : MA_LYCANTHROPE, MA_BEAST, MA_SYLVAN
+  {
+    Image: shadow 'l'; Size: SZ_LARGE;  Arm: 15;
+    CR: OPT_CR(8,6); HD: 9; Hit: +6; Def: 12; Mov: 100%; Spd: 100%;
+    Str 27, Dex 13, Con 19, Int 10, Wis 16, Cha 7;
+    Attk:
+      A_CLAW for 1d8 AD_SLASH,
+      A_CLAW for 1d8 AD_SLASH,
+      A_BITE for 2d8 AD_PIERCE,
+      A_FORM for $"human",
+      A_FORM for $"wild boar";
+	ABILITY(CA_INFRAVISION,6);
+	ABILITY(CA_SCENT,6);
+    Feats: FT_MASTER_BULL_RUSH, FT_IRON_WILL, FT_MULTIATTACK,
+           FT_POWER_ATTACK, FT_TOUGHNESS,
+           SK_CLIMB, SK_HIDE, SK_LISTEN, SK_MOVE_SIL, SK_SPOT,
+           SK_WILD_LORE;
+    Flags: M_HUMANOID, M_CARNI, M_GOOD, M_LAWFUL;
+    Gear:
+      $"quarterstaff" of random 1 to 3,
+      $"hide armor", 
+      1d2 $"potion" of $"extra-healing";
+    Desc: "Werebears are normally kindly, peaceful lycanthropes who
+      often live alone in solitude in deep forests. They can become
+      tremendously vicious when provoked, however, and are fierce
+      enemies of the forces of evil.";
+    Lists:
+      * GROUP_ALLY $"black bear" $"brown bear";
+  }
 
 /********************************************************************************
  ********************************************************************************
@@ -3531,7 +4163,7 @@ Template "skilled" : TM_SKILL for MA_SAPIENT
       return NOTHING;
       },
     EV_ISTARGET {
-      if (EActor->isMType(MA_UNDEAD) || EActor->isMType(MA_DRAGON) )
+      if (mID_isMType(EActor->tmID,MA_UNDEAD) || EActor->isMType(MA_DRAGON) )
         return -1;
       return 0;
       };
@@ -3548,7 +4180,7 @@ Template "experienced" : TM_SKILL for MA_SAPIENT
       return NOTHING;
       },
     EV_ISTARGET {
-      if (EActor->isMType(MA_UNDEAD) || EActor->isMType(MA_DRAGON) )
+      if (mID_isMType(EActor->tmID,MA_UNDEAD) || EActor->isMType(MA_DRAGON) )
         return -1;
       return 0;
       };
@@ -3566,38 +4198,86 @@ Template "veteran" : TM_SKILL for MA_SAPIENT
       return NOTHING;
       },
     EV_ISTARGET {
-      if (EActor->isMType(MA_UNDEAD) || EActor->isMType(MA_DRAGON) )
+      if (mID_isMType(EActor->tmID,MA_UNDEAD) || EActor->isMType(MA_DRAGON) )
         return -1;
       return 0;
       };
   }
 
 Template "elite" : TM_SKILL for MA_SAPIENT
-  { CR: +5; HD: +8; Hit: +8; Spd: +10; Caster Level: +5;
+  { CR: +5; HD: +8; Hit: +6; Spd: +10; Caster Level: +5;
     Str +2, Dex +4, Con +4, Int +4, Wis +4, Cha +4;
     /*Feats: FT_WARRIOR_LIST, FT_WARRIOR_LIST, FT_WARRIOR_LIST, 
-        FT_WARRIOR_LIST;*/
-    Desc: "An experienced creature is a leader among its kind, having
-      survived several raids, campaigns or battles."; 
+        FT_WARRIOR_LIST;*/ 
     On Event POST(EV_STRIKE), POST(EV_CAST) {
       EActor->IdentifyTemp($"elite");
       return NOTHING;
       },
     EV_ISTARGET {
-      if (EActor->isMType(MA_UNDEAD) || EActor->isMType(MA_DRAGON) )
+      if (mID_isMType(EActor->tmID,MA_UNDEAD) || EActor->isMType(MA_DRAGON) )
         return -1;
       return 0;
       };
   }
 
-/* Template "paragon" : TM_SKILL for MA_PERSON */
+Template "master" : TM_SKILL for MA_SAPIENT
+  { CR: +7; HD: +12; Hit: +8; Spd: +12; Caster Level: +7;
+    Str +2, Dex +4, Con +4, Int +4, Wis +4, Cha +4;
+    /*Feats: FT_WARRIOR_LIST, FT_WARRIOR_LIST, FT_WARRIOR_LIST, 
+        FT_WARRIOR_LIST;*/
+    On Event POST(EV_STRIKE), POST(EV_CAST) {
+      EActor->IdentifyTemp($"master");
+      return NOTHING;
+      },
+    EV_ISTARGET {
+      if (mID_isMType(EActor->tmID,MA_UNDEAD) || EActor->isMType(MA_DRAGON) )
+        return -1;
+      return 0;
+      };
+  }
+
+Template "paragon" : TM_SKILL for MA_SAPIENT
+  { CR: +9; HD: +15; Hit: +10; Spd: +15; Caster Level: +9;
+    Str +2, Dex +4, Con +4, Int +4, Wis +4, Cha +4;
+    /*Feats: FT_WARRIOR_LIST, FT_WARRIOR_LIST, FT_WARRIOR_LIST, 
+        FT_WARRIOR_LIST;*/
+    On Event POST(EV_STRIKE), POST(EV_CAST) {
+      EActor->IdentifyTemp($"paragon");
+      return NOTHING;
+      },
+    EV_ISTARGET {
+      if (mID_isMType(EActor->tmID,MA_UNDEAD) || EActor->isMType(MA_DRAGON) )
+        return -1;
+      return 0;
+      };
+  }
+
+Template "legendary" : TM_SKILL for MA_SAPIENT
+  { CR: +12; HD: +20; Hit: +14; Spd: +15; Caster Level: +12;
+    Str +2, Dex +4, Con +4, Int +4, Wis +4, Cha +4;
+    /*Feats: FT_WARRIOR_LIST, FT_WARRIOR_LIST, FT_WARRIOR_LIST, 
+        FT_WARRIOR_LIST;*/
+    On Event POST(EV_STRIKE), POST(EV_CAST) {
+      EActor->IdentifyTemp($"legendary");
+      return NOTHING;
+      },
+    EV_ISTARGET {
+      if (mID_isMType(EActor->tmID,MA_UNDEAD) || EActor->isMType(MA_DRAGON) )
+        return -1;
+      return 0;
+      };
+  }
+
+/* Template "master" : TM_SKILL for MA_SAPIENT */
+/* Template "paragon" : TM_SKILL for MA_SAPIENT */
+/* Template "legendary" : TM_SKILL for MA_SAPIENT */
                     
 /*** THE CR +2 CLASS TEMPLATES ***/
 
-Template "barbarian;template" : TM_CLASS for MA_ADVENTURER
+Template "barbarian;template" : TM_CLASS for MA_SAPIENT
   {
     Flags: TMF_POSTSCRIPT;
-    CR: OPT_CR(+2,+2); HD: +2; Hit: +2; Def: +1; Mov: 120%; Spd: 110%; 
+    CR: +2 (min 2); HD: +2; Hit: +2; Def: +1; Mov: 120%; Spd: 110%; 
     Str +4, Dex +2, Con +4, Int +0, Wis +0, Cha +0, Luc +0;
     ABILITY(CA_UNCANNY_DODGE,1);
 	ABILITY(CA_TOUGH_AS_HELL,2);
@@ -3623,14 +4303,10 @@ Template "barbarian;template" : TM_CLASS for MA_ADVENTURER
       harsh dangers of the Goblin King.";
 }
 
-Template "bard;template" : TM_CLASS for MA_ADVENTURER
+Template "bard;template" : TM_CLASS for MA_SAPIENT
 {
     Flags: TMF_POSTSCRIPT, M_MAGE;
-    // ww: Sat Feb 21 11:35:39 PST 2004
-    // brings a CR 2-3 bugbear to CR 5
-    // brings a CR 2 orc to CR 3
-    // brings a CR 1/2 drow to CR 5
-    CR: OPT_CR(+3,+2) (Min 4); HD: +2; Def: +1; Hit: +1; Mov: 100%; Spd: 105%; 
+    CR: +2 (min 2); HD: +2; Def: +1; Hit: +1; Mov: 100%; Spd: 105%; 
     Dex +4, Int +4, Cha +2; 
     ABILITY(CA_BARDIC_MUSIC,2);
     ABILITY(CA_SPELLCASTING,1);
@@ -3664,16 +4340,16 @@ Template "bard;template" : TM_CLASS for MA_ADVENTURER
       };
   }
 
-Template "wildshaped druid" : TM_CLASS for MA_ADVENTURER
+Template "wildshaped druid" : TM_CLASS for MA_SAPIENT
 {
     Flags: TMF_POSTSCRIPT;
     // bugbear 2 -> 7
     // troll 6 -> 10
-    CR: +4 (Min 7); HD: +2; Def: +1; Hit: +1; Mov: 100%; Spd: 105%; 
+    CR: +3 (min 3); HD: +2; Def: +1; Hit: +1; Mov: 100%; Spd: 105%; 
     Str +2, Dex +2, Con +2, Wis +4;
     ABILITY(CA_NATURE_SENSE,1);
 	  ABILITY(CA_WOODLAND_STRIDE,1);
-	  ABILITY(CA_SPELLCASTING,3);
+	  ABILITY(CA_SPELLCASTING,2);
     Stati[ADJUST_INH,A_MAN,+6];
     Feats: 
       FT_POWER_ATTACK, FT_WILD_SHAPE_MASTERY,
@@ -3718,16 +4394,14 @@ Template "wildshaped druid" : TM_CLASS for MA_ADVENTURER
       };
   }
 
-Template "druid;template" : TM_CLASS for MA_ADVENTURER
+Template "druid;template" : TM_CLASS for MA_SAPIENT
 {
     Flags: TMF_POSTSCRIPT;
-    // brings a CR 2-3 bugbear to CR 5
-    // brings CR 2 cave orc to CR 5
-    CR: OPT_CR(+3,+2) (Min 4); HD: +2; Def: +1; Hit: +1; Mov: 100%; Spd: 105%; 
+    CR: +2 (min 2); HD: +2; Def: +1; Hit: +1; Mov: 100%; Spd: 105%; 
     Str +2, Dex +2, Con +2, Wis +4;
     ABILITY(CA_NATURE_SENSE,1);
-	  ABILITY(CA_WOODLAND_STRIDE,1);
-	  ABILITY(CA_SPELLCASTING,3);
+	ABILITY(CA_WOODLAND_STRIDE,1);
+	ABILITY(CA_SPELLCASTING,2);
     Stati[ADJUST_INH,A_MAN,+6];
     Feats: 
       FT_COMBAT_CASTING, FT_MAXIMIZE_SPELL,
@@ -3772,13 +4446,11 @@ Template "druid;template" : TM_CLASS for MA_ADVENTURER
       };
 }
 
-Template "mage;template" : TM_CLASS for MA_ADVENTURER
+Template "mage;template" : TM_CLASS for MA_SAPIENT
 {
-    // bugbear CR 2 mage = cr 6
-    // drow cr 1/2 mage = cr 5
-    CR: +2 (Min 3); HD: +2; Def: +0; Hit: +0; Mov: 100%; Spd: 100%; 
+    CR: +2 (min 2); HD: +2; Def: +0; Hit: +0; Mov: 100%; Spd: 100%; 
     Str -2, Dex +2, Con +2, Int +4, Wis +2;
-    ABILITY(CA_SPELLCASTING,3);
+    ABILITY(CA_SPELLCASTING,2);
     Stati[ADJUST_INH,A_MAN,+12];
     Feats: FT_COMBAT_CASTING, FT_QUICKEN_SPELL,
            SK_CONCENTRATION, SK_SPELLCRAFT, SK_METAMAGIC, SK_SPOT;
@@ -3808,15 +4480,15 @@ Template "mage;template" : TM_CLASS for MA_ADVENTURER
   }
 
 
-Template "monk;template" : TM_CLASS for MA_ADVENTURER
+Template "monk;template" : TM_CLASS for MA_SAPIENT
 {
     Flags: TMF_POSTSCRIPT;
-    CR: +2; HD: +2; Def: +0; Hit: +2; Mov: +4; Spd: 110%; 
+    CR: +2 (min 2); HD: +2; Def: +0; Hit: +2; Mov: +4; Spd: 110%; 
     Str +4, Dex +2, Con +2, Wis +2;
     Attk: A_PUNC for 1d6 AD_BLUNT and 1d2 AD_STUN (DC 13);
-	ABILITY(CA_UNARMED_STRIKE,1);
-	ABILITY(CA_FLURRY_OF_BLOWS,1);
-	ABILITY(CA_EVASION,1);
+  	ABILITY(CA_UNARMED_STRIKE,2);
+	  ABILITY(CA_FLURRY_OF_BLOWS,2);
+	  ABILITY(CA_EVASION,1);
     Feats: FT_DODGE, FT_REED_IN_THE_WIND,
            FT_ZEN_DEFENSE, FT_DEFLECT_ARROWS,
            SK_ATHLETICS, SK_BALANCE, SK_HIDE, SK_JUMP, SK_LISTEN,
@@ -3837,13 +4509,11 @@ Template "monk;template" : TM_CLASS for MA_ADVENTURER
       };
 }
 
-Template "undead hunter" : TM_CLASS for MA_ADVENTURER 
+Template "undead hunter" : TM_CLASS for MA_SAPIENT 
   {
     Flags: TMF_POSTSCRIPT;
-    // bugbear: 2 -> 5
-    // drow: 1/2 -> 2
-    CR: +3; HD: +2; Def: +0; Hit: +2; Mov: 100%; Spd: 110%; 
-    Str +6, Wis +4, Cha +4;  // charisma freebie!
+    CR: +2 (min 2); HD: +2; Def: +0; Hit: +2; Mov: 100%; Spd: 110%; 
+    Str +4, Wis +4, Cha +4;  // charisma freebie!
 	  ABILITY(CA_SMITE,2);
 	  ABILITY(CA_DIVINE_GRACE,1);
     Stati[ADJUST_INH,A_MAN,+5];
@@ -3884,17 +4554,17 @@ Template "undead hunter" : TM_CLASS for MA_ADVENTURER
 
 
 
-Template "knight" : TM_CLASS for MA_ADVENTURER 
+Template "knight" : TM_CLASS for MA_SAPIENT 
   {
     Flags: TMF_POSTSCRIPT, TMF_OBVIOUS;
     // bugbear: 2 -> 5
     // drow: 1/2 -> 3
-    CR: +3 (Min 3); HD: +2; Def: +0; Hit: +2; Mov: 100%; Spd: 110%; 
-    Str +6, Con +2, Wis +2; 
+    CR: +2 (min 2); HD: +2; Def: +0; Hit: +2; Mov: 100%; Spd: 110%; 
+    Str +2, Con +2, Wis +2; 
     Feats: FT_MOUNTED_COMBAT, FT_POWER_ATTACK,
            FT_AP_LIGHT, FT_AP_MEDIUM, FT_AP_HEAVY,
            SK_ATHLETICS, SK_HEALING, SK_RIDE, SK_CONCENT, SK_SPOT;
-    Flags: M_LAWFUL, !M_CHAOTIC;
+    Flags: M_LAWFUL, !M_CHAOTIC, M_RIDER;
     Gear: $"light lance" of random 1 to 2,
           $"banded mail" of random 0 to 1,
           1d1 $"potion" of $"healing";
@@ -3906,27 +4576,38 @@ Template "knight" : TM_CLASS for MA_ADVENTURER
     } ;
     On Event EV_INITIALIZE {
       hObj h;
-      h = CreateMonster($"warhorse");
-      SetSilence();
-      h->PartyID = EActor->PartyID;
-      h->CalcValues();
-      Throw(EV_MOUNT,EActor,h);
-      UnsetSilence();
-      h->Initialize();
       for(h = EActor->FirstInv(); h ; h = EActor->NextInv())
         if (h->isType(T_WEAPON))
           h->AddQuality(IQ_ADAMANT);
       };
     Desc: "Young and inexperienced, perhaps, but she is still a 
       knight, a mounted warrior with a deadly lance."; 
+    On Event PRE(EV_ENGEN_MOUNT) {
+      if (mID_isMType(e.ep_mID,MA_KOBOLD))
+        { e.chSource = $"kobold"; }
+      else if (mID_isMType(e.ep_mID,MA_DROW))
+        { e.chSource = $"drow"; }
+      else if (mID_isMType(e.ep_mID,MA_GNOME))
+        { e.chSource = $"gnome"; }
+      else if (mID_isMType(e.ep_mID,MA_HALFLING))
+        { e.chSource = $"halfling"; }
+      else if (mID_isMType(e.ep_mID,MA_ELF))
+        { e.chSource = $"elf"; }
+      else if (mID_isMType(e.ep_mID,MA_DWARF))
+        { e.chSource = $"dwarf"; }
+      else if (mID_isMType(e.ep_mID,MA_ORC) ||
+           e.ep_mID == $"hobgoblin" || e.ep_mID == $"bugbear")
+        { e.chSource = $"cave orc"; }
+      else if (mID_isMType(e.ep_mID,MA_GOBLINOID))
+        { e.chSource = $"goblin"; }
+      else if (mID_isMType(e.ep_mID,MA_LIZARDFOLK))
+        { e.chSource = $"lizardman"; }
+      return NOTHING;
+      };
   } 
 
-Template "pike": TM_CLASS for MA_ADVENTURER
+Template "pike": TM_CLASS for MA_SAPIENT
 {
-  // cave orc: 1 -> 4
-  // drow: -2 -> 2
-  // lizardman: 1 -> 3
-  // ogre: 3 -> 5
   CR: +2 (Min 2); 
   Flags: TMF_POSTSCRIPT, TMF_OBVIOUS, M_NOPOLY, M_NO_CHARGE,
          M_LAWFUL, !M_CHAOTIC; 
@@ -3959,15 +4640,14 @@ Template "pike": TM_CLASS for MA_ADVENTURER
 Template "worg-rider" : TM_CLASS for MA_GOBLIN 
   {
     Flags: TMF_POSTSCRIPT, TMF_OBVIOUS;
-    // goblin: 1/2 -> 5
-    // kobold: 2 -> 5
-    CR: +3 (Min 5); HD: +2; Def: +0; Hit: +2; Mov: 100%; Spd: 110%; 
-    Str +6, Con +2, Wis +2; 
+    CR: +2 (min 2); HD: +2; Def: +0; Hit: +2; Mov: 100%; Spd: 110%; 
+    Str +2, Dex +2, Con +2, Wis +2; 
     Feats: FT_MOUNTED_COMBAT, FT_POWER_ATTACK,
            FT_AP_LIGHT, FT_AP_MEDIUM, 
            SK_ATHLETICS, SK_HEALING, 
            FT_SKILL_FOCUS,
            SK_RIDE, SK_CONCENT, SK_SPOT;
+    Flags: M_RIDER;
     Gear: $"halfspear" of random 1 to 2,
           $"chainmail shirt" of random 0 to 1,
           1d1 $"potion" of $"healing";
@@ -3977,27 +4657,18 @@ Template "worg-rider" : TM_CLASS for MA_GOBLIN
       else
         return -1; 
     } ;
-    On Event EV_INITIALIZE {
-      hObj h;
-      h = CreateMonster($"worg");
-      SetSilence();
-      h->PartyID = EActor->PartyID;
-      h->CalcValues();
-      Throw(EV_MOUNT,EActor,h);
-      UnsetSilence();
-      h->Initialize();
-    };
     Desc: "Worgs are often used as mounts by goblins and other evil
       humanoids."; 
+    Lists:
+      * MOUNT_LIST 
+          $"worg";
   } 
 
 Template "giant-rider" : TM_CLASS for MA_GOBLINOID
   {
     Flags: TMF_POSTSCRIPT, TMF_OBVIOUS;
     Image: purple 0; 
-    // goblin: 0 -> 3
-    // kobold: 0 -> 5
-    CR: +4 (Min 3); HD: +2; Def: +0; Hit: +2; Mov: 100%; Spd: 110%; 
+    CR: +2 (min 2); HD: +2; Def: +0; Hit: +2; Mov: 100%; Spd: 110%; 
     Dex +6, Con +2, Wis +2; 
     Feats: FT_MOUNTED_COMBAT, FT_MOUNTED_ARCHERY, FT_RAPID_RELOAD,
            FT_AP_LIGHT, 
@@ -4008,38 +4679,30 @@ Template "giant-rider" : TM_CLASS for MA_GOBLINOID
           10d6 $"crossbow bolt" of random 0 to 1,
           $"leather armor" of random 0 to 1,
           1d1 $"potion" of $"healing";
+    Flags: M_RIDER;
     On Event EV_ISTARGET {
       if (EActor->GetAttr(A_SIZ) == SZ_SMALL && !EActor->isMType(MA_GOOD))
         return 0;
       else
         return -1; 
-    } ;
-    On Event EV_INITIALIZE {
-      rID mountID;
-      hObj h;
-      EMap->GenEncounter(EN_SINGLE|EN_MTYPE|EN_NOPLACE|EN_CREATOR,
-        EActor->ChallengeRating()+3, EMap->Depth, MA_GIANT,
-        AL_NONGOOD,(rID)0,EActor->x,EActor->y,EActor);
-      h = EMap->GetEncounterCreature(0); 
-      if (!h) { 
-        h = CreateMonster($"ogre");
-        h->Initialize();
-      }
-      SetSilence();
-      h->PartyID = EActor->PartyID;
-      h->CalcValues();
-      Throw(EV_MOUNT,EActor,h);
-      UnsetSilence();
-    };
+      };
     Desc: "Giants are occasionally used as mounts by clever goblins and
     other evil humanoids who perch on their shoulders and attack with
     ranged weapons."; 
+    Lists:
+      * MOUNT_LIST 
+          $"ogre"
+          $"troll"
+          $"hill giant"
+          $"fire giant"
+          $"frost giant"
+          ;
   } 
 
-Template "paladin;template" : TM_CLASS for MA_ADVENTURER 
+Template "paladin;template" : TM_CLASS for MA_SAPIENT 
   {
     Flags: TMF_POSTSCRIPT;
-    CR: +2; HD: +2; Def: +0; Hit: +2; Mov: 100%; Spd: 110%; 
+    CR: +2 (min 2); HD: +2; Def: +0; Hit: +2; Mov: 100%; Spd: 110%; 
     Str +4, Con +4, Wis +2, Cha +4; // ww: CHA freebie!
     Spells: $"detect evil";
 	  ABILITY(CA_SMITE,2);
@@ -4047,7 +4710,7 @@ Template "paladin;template" : TM_CLASS for MA_ADVENTURER
 	  ABILITY(CA_AURA_OF_VALOR,2);
 	  ABILITY(CA_LAY_ON_HANDS,2);
     Immune: DF_DISE, DF_FEAR;
-    Flags: M_LAWFUL, M_GOOD, M_CLOSEID;
+    Flags: M_LAWFUL, M_GOOD, M_IALIGN, M_CLOSEID, M_RIDER;
     Feats: FT_POWER_ATTACK, FT_MASTER_GREAT_BLOW,
            FT_AP_LIGHT, FT_AP_MEDIUM, FT_AP_HEAVY,
            SK_ATHLETICS, SK_HEALING, SK_RIDE, SK_CONCENT, SK_SPOT;
@@ -4069,19 +4732,47 @@ Template "paladin;template" : TM_CLASS for MA_ADVENTURER
     Desc: "Young and inexperienced, perhaps, but she is still a 
       paladin, a champion of the light, on a sacred mission to
       cleanse this area of all things evil and unholy.";
+    Lists:
+      * MOUNT_LIST
+          100 $"celestial" $"warhorse"
+           10 $"celestial" $"pegasus"
+              $"unicorn"
+              $"young" $"silver dragon"
+              $"young" $"steel dragon"
+              $"lammasu";
+    On Event PRE(EV_ENGEN_MOUNT) {
+      if (mID_isMType(e.ep_mID,MA_KOBOLD))
+        { e.chSource = $"kobold"; e.chList = PALADIN_MOUNTS; }
+      else if (mID_isMType(e.ep_mID,MA_DROW))
+        { e.chSource = $"drow"; e.chList = PALADIN_MOUNTS; }
+      else if (mID_isMType(e.ep_mID,MA_GNOME))
+        { e.chSource = $"gnome"; e.chList = PALADIN_MOUNTS; }
+      else if (mID_isMType(e.ep_mID,MA_HALFLING))
+        { e.chSource = $"halfling"; e.chList = PALADIN_MOUNTS; }
+      else if (mID_isMType(e.ep_mID,MA_ELF))
+        { e.chSource = $"elf"; e.chList = PALADIN_MOUNTS; }
+      else if (mID_isMType(e.ep_mID,MA_DWARF))
+        { e.chSource = $"dwarf"; e.chList = PALADIN_MOUNTS; }
+      else if (mID_isMType(e.ep_mID,MA_ORC) ||
+           e.ep_mID == $"hobgoblin" || e.ep_mID == $"bugbear")
+        { e.chSource = $"cave orc"; e.chList = PALADIN_MOUNTS; }
+      else if (mID_isMType(e.ep_mID,MA_GOBLINOID))
+        { e.chSource = $"goblin"; e.chList = PALADIN_MOUNTS; }
+      else if (mID_isMType(e.ep_mID,MA_LIZARDFOLK))
+        { e.chSource = $"lizardman"; e.chList = PALADIN_MOUNTS; }
+      return NOTHING;
+      };
   } 
 
 
 
-Template "priest;template" : TM_CLASS for MA_ADVENTURER 
+Template "priest;template" : TM_CLASS for MA_SAPIENT 
   {
     Flags: TMF_POSTSCRIPT;
-    // bugbear: cr 2 -> cr 4
-    // drow: cr 1/2 -> cr 3
-    CR: OPT_CR(+2,+2) (Min 3); HD: +2; Def: +0; Hit: +1; Mov: 100%; Spd: 105%; 
+    CR: +2 (min 2); HD: +2; Def: +0; Hit: +1; Mov: 100%; Spd: 105%; 
     Str +2, Con +2, Int +2, Wis +4 ; 
-    ABILITY(CA_SPELLCASTING,3);
-	  Stati[ADJUST_INH,A_MAN,+8];
+    ABILITY(CA_SPELLCASTING,2);
+	Stati[ADJUST_INH,A_MAN,+8];
     ABILITY(CA_TURNING,2);
     Gear: random T_ARMOR,
           random T_WEAPON of random 0 to 1,
@@ -4152,23 +4843,100 @@ Template "priest;template" : TM_CLASS for MA_ADVENTURER
           2 $"Remove Curse" $"cure disease" $"Neutralize Poison";
   }
 
-Template "Multitude cultist" : TM_CLASS for MA_ADVENTURER
+Template "priest;for giants" : TM_CLASS for MA_GIANT 
+  {
+    Flags: TMF_POSTSCRIPT;
+    CR: +2 (min 2); HD: +2; Def: +0; Hit: +1; Mov: 100%; Spd: 105%; 
+    Str +2, Con +2, Int +2, Wis +4 ; 
+    ABILITY(CA_SPELLCASTING,7);
+	  Stati[ADJUST_INH,A_MAN,+30];
+    ABILITY(CA_TURNING,7);
+    Gear: random T_ARMOR,
+          random T_WEAPON of random 0 to 1,
+          random T_SHIELD of random 0 to 1,
+          25% 1d2 $"scroll" of $"identify;scroll",
+          $"potion" of random 1 to 4,
+          50% $"healing kit",
+          25% $"scroll" of $"hallow",
+          50% 1d2 blessed $"flask" of $"water",
+          1d1 $"potion" of $"healing",
+          1d1 $"potion" of $"mana";
+    Feats: FT_COMBAT_CASTING, FT_QUICKEN_SPELL,
+           FT_AP_LIGHT, FT_AP_MEDIUM, FT_AP_HEAVY,
+           SK_CONCENTRATION, SK_SPELLCRAFT, SK_HEAL, SK_METAMAGIC, SK_SPOT;
+    Flags: TMF_NOGEN;
+    On Event EV_INITIALIZE {
+      hObj h; 
+      rID god; 
+      for(h=EActor->FirstInv();h;h=EActor->NextInv()) {
+        if (h->isType(T_WEAPON) || h->isType(T_BOW))
+            h->IFlags |= IF_BLESSED;
+        if (h->iID == $"holy symbol")
+          return NOTHING; 
+      }
+      h = CreateItem($"holy symbol");
+      switch (random(16)) {
+        case 0:  god = $"Aiswin;Symbol"; break;
+        case 1:  god = $"Asherath;Symbol"; break;
+        case 2:  god = $"Ekliazeh;Symbol"; break;
+        case 3:  god = $"Erich;Symbol"; break;
+        case 4:  god = $"Essiah;Symbol"; break;
+        case 5:  god = $"Hesani;Symbol"; break;
+        case 6:  god = $"Immotian;Symbol"; break;
+        case 7:  god = $"Khasrach;Symbol"; break;
+        case 8:  god = $"Kysul;Symbol"; break;
+        case 9:  god = $"Mara;Symbol"; break;
+        case 10: god = $"Maeve;Symbol"; break;
+        case 11: god = $"Sabine;Symbol"; break;
+        case 12: god = $"Semirath;Symbol"; break;
+        case 13: god = $"Xavias;Symbol"; break;
+        case 14: god = $"Xel;Symbol"; break;
+        case 15: god = $"Zurvash;Symbol"; break;
+      } 
+      h->MakeMagical(god);
+      h->IFlags |= IF_BLESSED; 
+      EActor->GainItem(h,true);
+      for(h=EActor->FirstInv();h;h=EActor->NextInv()) {
+        if (h->isType(T_SHIELD) && !h->ieID) {
+          h->MakeMagical(god);
+        } 
+      }
+      return DONE;
+      },
+    POST(EV_CAST) {
+      EActor->IdentifyTemp($"priest;template");
+      return NOTHING;
+      };
+
+    Desc: "Giant tribes rely strongly on their priests for guidance
+      in spiritual and traditional ways, and for the development of
+      their culture and society.";
+    Lists:
+      * SPELL_LIST
+          ALL_SPELLS_FROM_SOURCE(AI_THEURGY)
+          /* We give the low-level priest these so she can sell them
+             to the PC as service spells -- assume it's a special NPC
+             domain power or something. If we don't, it makes the
+             idea of service spells somewhat useless. */
+          2 $"Remove Curse" $"cure disease" $"Neutralize Poison";
+  }
+
+
+Template "Multitude cultist" : TM_CLASS for MA_SAPIENT
 {
     Flags: TMF_POSTSCRIPT;
-    // bugbear 2 -> 5
-    // drow 1/2 -> 2
-    CR: OPT_CR(+2,+2); HD: 2; Hit: +1; Def: +0; Mov: 100%; Spd: 100%;
-    Str -2, Dex +4, Con +2, Int +2, Wis +4, Cha -4, Luc +0;
+    CR: OPT_CR(+1,+1); HD: +1; Hit: +1; Def: +0; Mov: 100%; Spd: 100%;
+    Str -2, Dex +4, Con +2, Int +2, Cha -4, Luc +0;
     Stati[ADJUST_INH,A_MAN,+8];
     Spells: 
-      $"phase door", $"magic missile", $"bestow curse", $"deeper darkness";
+      $"phase door", $"minor drain", $"convulsion", $"deeper darkness";
     Flags: M_EVIL, !M_GOOD, M_AVOID_MELEE, M_HOSTILE;
     Feats: FT_GUARDED_INVOCATION;
     On Event EV_GREET
-      "Blood for the horde!"
-      "Bow before the power of our dark lord!"
-      "Tremble before His presence, mortal!"
-      "Death to the unbeliever!"
+      "Blood for the horde!" / 
+      "Bow before the power of our dark lord!" / 
+      "Tremble before His presence, mortal!" /
+      "Death to the unbeliever!" /
       "Now, the hour of darkness is upon you!",
     EV_ISTARGET {
       if (EActor->HasMFlag(M_GOOD))
@@ -4211,13 +4979,10 @@ Template "Multitude cultist" : TM_CLASS for MA_ADVENTURER
 
 }
 
-Template "archer" : TM_CLASS for MA_ADVENTURER 
+Template "archer" : TM_CLASS for MA_SAPIENT 
   {
     Flags: TMF_POSTSCRIPT;
-    // drow: cr 1/2 -> cr 6
-    // bugbear: cr 2 -> 6
-    // troll: cr 6 -> cr 9
-    CR: +3 (Min 4); HD: +2; Def: +0; Hit: +2; Mov: 100%; Spd: 110%; 
+    CR: +2 (min 2); HD: +2; Def: +0; Hit: +2; Mov: 100%; Spd: 110%; 
     Dex +8, Str +2; 
     ABILITY(CA_INFRAVISION,12);
     Flags: M_AVOID_MELEE;
@@ -4257,12 +5022,10 @@ Template "archer" : TM_CLASS for MA_ADVENTURER
 
   } 
                               
-Template "rogue-archer" : TM_CLASS for MA_ADVENTURER 
+Template "rogue-archer" : TM_CLASS for MA_SAPIENT 
   {
     Flags: TMF_POSTSCRIPT;
-    // drow 1/2 -> 5
-    // bugbear 2 -> 6
-    CR: +4 (Min 4); HD: +2; Def: +1; Hit: +1; Mov: 100%; Spd: 105%;
+    CR: +2 (min 2); HD: +2; Def: +1; Hit: +1; Mov: 100%; Spd: 105%;
     Str +0, Dex +8, Int +2 ; 
 	ABILITY(CA_EVASION,1);
 	ABILITY(CA_SNEAK_ATTACK,1);
@@ -4300,16 +5063,14 @@ Template "rogue-archer" : TM_CLASS for MA_ADVENTURER
       };
     }
 
-Template "ranger;template" : TM_CLASS for MA_ADVENTURER 
+Template "ranger;template" : TM_CLASS for MA_SAPIENT 
   {
     Flags: TMF_POSTSCRIPT;
-    // drow cr 1/2 -> cr 5
-    // bugbear cr 2 -> cr 6
-    CR: OPT_CR(+4,+2); HD: +2; Def: +0; Hit: +2; Mov: 100%; Spd: 110%; 
+    CR: +2 (min 2); HD: +2; Def: +0; Hit: +2; Mov: 100%; Spd: 110%; 
     Str +2, Dex +4, Con +2, Wis +2 ; 
     Flags: M_AVOID_MELEE;
     Feats: 
-           FT_AP_LIGHT, FT_FAR_SHOT, FT_AIMED_SHOT,
+           FT_AP_LIGHT, FT_FAR_SHOT, FT_AIMED_SHOT, SK_RIDE,
            SK_SPOT, SK_HEALING, SK_HIDE, SK_JUMP, SK_LISTEN, SK_MOVE_SIL,
            SK_SEARCH, SK_SWIMMING, SK_WILD_LORE, SK_FIND_WEAKNESS;
     Gear: 50% $"leather armor" else
@@ -4340,10 +5101,10 @@ Template "ranger;template" : TM_CLASS for MA_ADVENTURER
       };
   } 
 
-Template "rogue;template" : TM_CLASS for MA_ADVENTURER 
+Template "rogue;template" : TM_CLASS for MA_SAPIENT 
   {
     Flags: TMF_POSTSCRIPT, M_SKIRMISH;
-    CR: +2; HD: +2; Def: +1; Hit: +1; Mov: 100%; Spd: 105%;
+    CR: +2 (min 2); HD: +2; Def: +1; Hit: +1; Mov: 100%; Spd: 105%;
     Dex +6, Int +4, Cha +2 ; 
 	  ABILITY(CA_EVASION,1);
 	  ABILITY(CA_SNEAK_ATTACK,1);
@@ -4378,16 +5139,16 @@ Template "rogue;template" : TM_CLASS for MA_ADVENTURER
       };    
   }
 
-Template "warrior;template" : TM_CLASS for MA_ADVENTURER 
+Template "warrior;template" : TM_CLASS for MA_SAPIENT 
   {
     Flags: TMF_POSTSCRIPT;
-    CR: +2; HD: +2; Def: +0; Hit: +3; Mov: 100%; Spd: 110%; 
+    CR: +2 (min 2); HD: +2; Def: +0; Hit: +3; Mov: 100%; Spd: 110%; 
     Str +4, Dex +2, Con +4 ; 
     Feats: 
-      FT_AP_LIGHT, FT_AP_MEDIUM, FT_AP_HEAVY,
+      FT_AP_LIGHT, FT_AP_MEDIUM, FT_AP_HEAVY, 
       FT_POWER_ATTACK, FT_EXPERTISE, FT_MASTER_GREAT_BLOW,
       FT_MASTER_BULL_RUSH, SK_CLIMB, SK_BLUFF, SK_ATHLETICS, 
-      SK_SPOT, SK_FIND_WEAKNESS;
+      SK_SPOT, SK_FIND_WEAKNESS, SK_RIDE;
     Gear: 
       random T_WEAPON of random 0 to 2,
       random T_ARMOR of random 0 to 2,
@@ -4419,10 +5180,10 @@ Template "warrior;template" : TM_CLASS for MA_ADVENTURER
  * Warrior      -> Myrmidon
  */
 
-Template "reaver" : TM_CLASS for MA_ADVENTURER
+Template "reaver" : TM_CLASS for MA_SAPIENT
   {
     Flags: TMF_POSTSCRIPT;
-    CR: +4 (Min 4); HD: +5; Hit: +5; Def: +2; Mov: 150%; Spd: 125%; 
+    CR: +5 (Min 5); HD: +5; Hit: +5; Def: +2; Mov: 150%; Spd: 125%; 
     Str +6, Dex +2, Con +6, Int +0, Wis +0, Cha +0, Luc +0;
     ABILITY(CA_UNCANNY_DODGE,4);
 	ABILITY(CA_TOUGH_AS_HELL,5);
@@ -4454,12 +5215,12 @@ Template "reaver" : TM_CLASS for MA_ADVENTURER
       harsh dangers of the Goblin King.";
   }
 
-Template "minstrel" : TM_CLASS for MA_ADVENTURER
+Template "minstrel" : TM_CLASS for MA_SAPIENT
 {
     Flags: TMF_POSTSCRIPT, M_MAGE;
     // bugbear CR 2 -> CR 8
     // drow cr 1/2 -> CR 8
-    CR: OPT_CR(+6,+4) (Min 8); HD: +5; Def: +1; Hit: +3; Mov: 100%; Spd: 110%; 
+    CR: +5 (Min 5); HD: +5; Def: +1; Hit: +3; Mov: 100%; Spd: 110%; 
     Dex +6, Int +6, Cha +2;
     ABILITY(CA_BARDIC_MUSIC,5);
 	  ABILITY(CA_SPELLCASTING,3);
@@ -4494,12 +5255,12 @@ Template "minstrel" : TM_CLASS for MA_ADVENTURER
       };  
     }
 
-Template "grey druid" : TM_CLASS for MA_ADVENTURER 
+Template "grey druid" : TM_CLASS for MA_SAPIENT 
   {
     Flags: TMF_POSTSCRIPT;
     // bugbear cr 2 -> cr 9
     // drow grey druid 1/2 -> cr 6
-    CR: OPT_CR(+7,+4) (Min 6); HD: +5; Hit: +3; Def: +1; Mov: 100%; Spd: 110%;
+    CR: +5 (Min 5); HD: +5; Hit: +3; Def: +1; Mov: 100%; Spd: 110%;
     Str +4, Dex +2, Con +2, Wis +6;
     Attk:	
           A_FORM for $"leopard",
@@ -4559,12 +5320,12 @@ Template "grey druid" : TM_CLASS for MA_ADVENTURER
       }; 
   }
 
-Template "dark sorcerer" : TM_CLASS for MA_ADVENTURER
+Template "dark sorcerer" : TM_CLASS for MA_SAPIENT
 {
     Flags: TMF_POSTSCRIPT, M_MAGE;
     // bugbear 2 -> cr 9
     // drow cr 1/2 -> cr 9
-    CR: OPT_CR(+7,+4) (Min 9); HD: +5; Def: +1; Hit: +1; Mov: 100%; Spd: 100%; 
+    CR: +5 (Min 5); HD: +5; Def: +1; Hit: +1; Mov: 100%; Spd: 100%; 
     Str -2, Dex +2, Con +2, Int +6, Wis +2;
     ABILITY(CA_SPELLCASTING,7);
     Stati[ADJUST_INH,A_MAN,+30];
@@ -4573,7 +5334,7 @@ Template "dark sorcerer" : TM_CLASS for MA_ADVENTURER
            FT_SCRIBE_SCROLL, FT_MAXIMIZE_SPELL, FT_QUICKEN_SPELL,
            SK_CONCENTRATION, SK_SPELLCRAFT, SK_METAMAGIC, SK_SPOT;
     Flags: M_HUMANOID, M_CARNI, M_HERBI, M_EVIL, !M_GOOD, M_LAWFUL, 
-           !M_CHAOTIC, M_CASTER, M_HOSTILE,
+           !M_CHAOTIC, M_CASTER, M_HOSTILE, M_IALIGN,
            M_AVOID_MELEE;
     Gear: $"robes",
           50% $"quarterstaff" of random 1 to 4 else
@@ -4606,10 +5367,10 @@ Template "dark sorcerer" : TM_CLASS for MA_ADVENTURER
       };  
   }
 
-Template "scarlet disciple" : TM_CLASS for MA_ADVENTURER
+Template "scarlet disciple" : TM_CLASS for MA_SAPIENT
 {
     Flags: TMF_POSTSCRIPT;
-    CR: +4 (Min 4); HD: +5; Def: +2; Hit: +5; Mov: +10; Spd: 125%; 
+    CR: +5 (Min 5); HD: +5; Def: +2; Hit: +5; Mov: +10; Spd: 125%; 
     Str +6, Dex +4, Con +2, Wis +2;
     Attk: A_PUNC for 1d10 AD_BLUNT and 1d2 AD_STUN (DC 16);
 	  ABILITY(CA_UNARMED_STRIKE,5);
@@ -4641,12 +5402,12 @@ Template "scarlet disciple" : TM_CLASS for MA_ADVENTURER
   }
 
 
-Template "blackguard;template" : TM_CLASS for MA_ADVENTURER 
+Template "blackguard;template" : TM_CLASS for MA_SAPIENT 
   {
     Flags: TMF_POSTSCRIPT;
     // bugbear: cr 2 -> cr 6
     // drow: cr 1/2 -> cr 6
-    CR: OPT_CR(+4,+4) (Min 6); HD: 5; Hit: +7; Def: 1; Mov: 100%; Spd: 125%;
+    CR: +5 (Min 5); HD: 5; Hit: +7; Def: 1; Mov: 100%; Spd: 125%;
     Str +6, Con +6, Wis +2, Cha +4; // ww: CHA freebie!
 	  ABILITY(CA_SMITE,5);
 	  ABILITY(CA_DIVINE_GRACE,1);
@@ -4656,7 +5417,7 @@ Template "blackguard;template" : TM_CLASS for MA_ADVENTURER
     Stati[ADJUST_INH,A_MAN,+6];
     Immune: DF_DISE, DF_FEAR;
     Flags: M_CHAOTIC, M_EVIL, !M_GOOD, !M_LAWFUL, M_CLOSEID, M_HOSTILE;
-    Feats: FT_POWER_ATTACK, FT_MASTER_GREAT_BLOW,
+    Feats: FT_POWER_ATTACK, FT_MASTER_GREAT_BLOW, M_IALIGN,
            FT_MASTER_DISARM, FT_SUNDER,
            FT_AP_LIGHT, FT_AP_MEDIUM, FT_AP_HEAVY,
            SK_ATHLETICS, SK_HEALING, SK_RIDE, SK_CONCENT, SK_SPOT,
@@ -4676,17 +5437,6 @@ Template "blackguard;template" : TM_CLASS for MA_ADVENTURER
       for(h = EActor->FirstInv(); h ; h = EActor->NextInv())
         if (h->isType(T_WEAPON) && h->QualityOK(WQ_UNHOLY))
           h->AddQuality(WQ_UNHOLY);
-      /*
-      hMount = CreateMonster($"nightmare");
-      if (hMount == NULL)
-        return NOTHING;
-      SetSilence();
-      hMount->PartyID = EActor->PartyID;
-      hMount->CalcValues();
-      Throw(EV_MOUNT,EActor,hMount);
-      UnsetSilence();
-      hMount->Initialize();
-      */
       return NOTHING;
       },
     EV_INIT_FIELDS {
@@ -4700,16 +5450,19 @@ Template "blackguard;template" : TM_CLASS for MA_ADVENTURER
       their passing.";
     Lists:
       * SPELL_LIST
-          ALL_SPELLS_FROM_SOURCE(AI_THEURGY);
+          ALL_SPELLS_FROM_SOURCE(AI_THEURGY),
+      * MOUNT_LIST
+         $"graveborn;template" $"warhorse"
+         $"nightmare";
 
   }
 
-Template "curate" : TM_CLASS for MA_ADVENTURER 
+Template "curate" : TM_CLASS for MA_SAPIENT 
   {
     Flags: TMF_POSTSCRIPT;
     // bugbear: cr 2 -> cr 5
     // drow: cr 1/2 -> cr 5
-    CR: OPT_CR(+3,+3) (Min 5); HD: +4; Def: +2; Hit: +3; Mov: 100%; Spd: 120%; 
+    CR: +5 (Min 5); HD: +4; Def: +2; Hit: +3; Mov: 100%; Spd: 120%; 
     Str +2, Con +2, Int +4, Wis +6 ; 
     ABILITY(CA_SPELLCASTING,5);
 	  ABILITY(CA_TURNING,5);
@@ -4778,18 +5531,18 @@ Template "curate" : TM_CLASS for MA_ADVENTURER
       };
   }
 
-Template "stalker" : TM_CLASS for MA_ADVENTURER 
+Template "stalker" : TM_CLASS for MA_SAPIENT 
   {
     Flags: TMF_POSTSCRIPT;
     // bugbear 2 -> 6
     // drow 1/2 -> 6
     // troll 6 -> 9
-    CR: OPT_CR(+3,+4) (Min 6); HD: +5; Def: +2; Hit: +5; Mov: 100%; Spd: 125%; 
+    CR: +5 (Min 5); HD: +5; Def: +2; Hit: +5; Mov: 100%; Spd: 125%; 
     Str +4, Dex +6, Con +2, Wis +2 ; 
     ABILITY(CA_SPELLCASTING,1);
     Feats: 
           FT_AP_LIGHT, FT_AIMED_SHOT, FT_POINT_BLANK_SHOT, FT_RAPID_SHOT,
-          SK_SPOT, SK_HEALING, FT_SKILL_FOCUS,
+          SK_SPOT, SK_HEALING, FT_SKILL_FOCUS, SK_RIDE,
           SK_HIDE, SK_JUMP, SK_LISTEN, SK_MOVE_SIL, SK_HIDE, SK_SEARCH,
           SK_SWIMMING, SK_WILD_LORE, SK_FIND_WEAKNESS;
     Flags: M_AVOID_MELEE, M_HOSTILE;
@@ -4830,7 +5583,7 @@ Template "stalker" : TM_CLASS for MA_ADVENTURER
 
 Template "twilight huntsman;temp" : TM_CLASS for MA_ELF
   {
-    CR: OPT_CR(+6,+7) (Min 7); HD: +7; Def: +2; Hit: +7; Mov: 120%; Spd: 125%; 
+    CR: +7 (Min 7); HD: +7; Def: +2; Hit: +7; Mov: 120%; Spd: 125%; 
     Str +2, Dex +8, Wis +2, Cha +4; 
     ABILITY(CA_SPELLCASTING,3);
     ABILITY(CA_RAPID_RIDING,+4);
@@ -4842,7 +5595,7 @@ Template "twilight huntsman;temp" : TM_CLASS for MA_ELF
           SK_SPOT, SK_HEALING, FT_SKILL_FOCUS, SK_ATHLETICS, SK_ANIMAL_EMP,
           SK_HIDE, SK_JUMP, SK_LISTEN, SK_MOVE_SIL, SK_RIDE, SK_SEARCH,
           SK_SWIMMING, SK_WILD_LORE, SK_FIND_WEAKNESS;
-    Flags: M_AVOID_MELEE, TMF_POSTSCRIPT, M_CHAOTIC, M_EVIL;
+    Flags: M_AVOID_MELEE, TMF_POSTSCRIPT, M_CHAOTIC, M_EVIL, M_RIDER;
     Gear: 33% $"studded leather" of random 2 to 4 with [IQ_ELVEN] else
             50% $"leather armor" of random 2 to 4 with [IQ_ELVEN] else
             $"chainmail shirt" of random 2 to 4 with [IQ_ELVEN] ,
@@ -4891,12 +5644,10 @@ Template "twilight huntsman;temp" : TM_CLASS for MA_ELF
 
 
 
-Template "shadowdancer;template" : TM_CLASS for MA_ADVENTURER 
+Template "shadowdancer;template" : TM_CLASS for MA_SAPIENT 
   {
     Flags: TMF_POSTSCRIPT, M_SKIRMISH;
-    // bugbear: cr 2 -> cr 6
-    // drow: cr 1/2 -> cr 6
-    CR: OPT_CR(+4,4) (Min 6); HD: +6; Def: +2; Hit: +3; Mov: 100%; Spd: 115%;
+    CR: +5 (Min 5); HD: +6; Def: +2; Hit: +3; Mov: 100%; Spd: 115%;
     Str +4, Dex +6, Con +2, Int +2 ; 
 	  ABILITY(CA_EVASION,2);
 	  ABILITY(CA_SNEAK_ATTACK,3);
@@ -4939,18 +5690,16 @@ Template "shadowdancer;template" : TM_CLASS for MA_ADVENTURER
       };
   }
 
-Template "myrmidon" : TM_CLASS for MA_ADVENTURER 
+Template "myrmidon" : TM_CLASS for MA_SAPIENT 
   {
     Flags: TMF_POSTSCRIPT;
-    // bugbear 2 -> 9
-    // drow 1/2 -> 8
-    CR: OPT_CR(+7,+7) (Min 8); HD: +5; Def: +2; Hit: +5; Mov: 100%; Spd: 130%; 
+    CR: +5 (Min 5); HD: +5; Def: +2; Hit: +5; Mov: 100%; Spd: 130%; 
     Str +6, Dex +2, Con +6 ; 
     Feats: 
       FT_AP_LIGHT, FT_AP_MEDIUM, FT_AP_HEAVY,
       FT_POWER_ATTACK, FT_EXPERTISE, FT_MASTER_GREAT_BLOW,
       FT_KNOCK_PRONE, FT_CLEAVE, FT_MASTER_BULL_RUSH, SK_CLIMB, 
-      SK_BLUFF, SK_ATHLETICS, SK_SPOT, SK_FIND_WEAKNESS;
+      SK_BLUFF, SK_ATHLETICS, SK_SPOT, SK_FIND_WEAKNESS, SK_RIDE;
     Gear: 
       random T_WEAPON of random 3 to 4,
       random T_ARMOR of random 3 to 4,
@@ -4968,12 +5717,10 @@ Template "myrmidon" : TM_CLASS for MA_ADVENTURER
 
 /* Specialist Mage Templates */
 
-Template "ruby initiate" : TM_CLASS for MA_ADVENTURER
+Template "ruby initiate" : TM_CLASS for MA_SAPIENT
 {
     Flags: TMF_POSTSCRIPT, M_MAGE;
-    // bugbear 2 -> 9
-    // drow 1/2 -> 6
-    CR: OPT_CR(+7,+5) (Min 9); HD: +11; Def: +2; Hit: +5; Mov: 100%; Spd: 125%; 
+    CR: +7 (Min 7); HD: +11; Def: +2; Hit: +5; Mov: 100%; Spd: 125%; 
     Str -4, Dex +2, Con -2, Int +10, Wis +8;
     ABILITY(CA_SPELLCASTING,9);
     Stati[ADJUST_INH,A_MAN,+35];
@@ -5018,11 +5765,11 @@ Template "ruby initiate" : TM_CLASS for MA_ADVENTURER
 
 /* THE TRIBAL CREATURE TEMPLATES */
 
-Template "chieftan" : TM_CHIEFTAN for MA_GOBLINOID
+Template "chieftan" : TM_CHIEFTAN for MA_SAPIENT
   {
     Image: purple 0;
     CR: +2; HD: 200%; Hit: +2; Dmg: +2; Str +4; Con +4;
-    Feats: FT_POWER_ATTACK, FT_CLEAVE, SK_FIND_WEAKNESS;   
+    Feats: FT_POWER_ATTACK, FT_CLEAVE, SK_FIND_WEAKNESS, SK_RIDE;   
     Flags: TMF_POSTSCRIPT, M_CLOSEID;
     Gear:
       random T_WEAPON of random 2 to 4,
@@ -5032,7 +5779,7 @@ Template "chieftan" : TM_CHIEFTAN for MA_GOBLINOID
       to dominate a clique, tribe or warband beneath him.";
   }
 
-Template "shaman" : TM_SHAMAN for MA_GOBLINOID
+Template "shaman" : TM_SHAMAN for MA_SAPIENT
   {
     Image: bright cyan 0;
     CR: +2; HD: 150%; Wis +4; 
@@ -5060,9 +5807,9 @@ Template "shaman" : TM_SHAMAN for MA_GOBLINOID
 
 /* I made this guy a little weaker, so that there's more variety
    at lower levels. */
-Template "bandit" : TM_CLASS for MA_ADVENTURER
+Template "bandit" : TM_CLASS for MA_SAPIENT
 	{
-    Flags: TMF_POSTSCRIPT;
+    Flags: TMF_POSTSCRIPT, TMF_NOGEN;
     CR: +1 (min 1); HD: +1; Mov: 100%; Spd: 105%;
     Str +2, Con +1, Cha -2;
     Flags: M_CHAOTIC, !M_LAWFUL, M_CLOSEID, M_HOSTILE;
@@ -5079,8 +5826,53 @@ Template "bandit" : TM_CLASS for MA_ADVENTURER
       random T_WEAPON of random 0 to 1,
       random T_ARMOR of random 0 to 1,
       15% $"small glass vial" of random 1 to 2,
-      1d3 $"potion" of $"healing",
-      25% 1d2 $"scroll" of $"identify;scroll",
+      50% $"potion" of $"healing",
+      15% 1d2 $"scroll" of $"identify;scroll",
+      3d6 $"gold piece";
+  }
+
+Template "outlaw" : TM_CLASS for MA_SAPIENT
+	{
+    Flags: TMF_POSTSCRIPT, TMF_NOGEN;
+    CR: +1 (min 1); HD: +1; Mov: 100%; Spd: 105%;
+    Dex +2, Con +1, Cha -2;
+    Flags: M_CHAOTIC, !M_LAWFUL, M_CLOSEID, M_HOSTILE;
+    Feats: 
+      FT_AP_LIGHT, FT_AP_MEDIUM, FT_AP_HEAVY,
+      FT_DODGE, FT_EXPERTISE, 
+      FT_DEFT_OPPORTUNIST, 
+      SK_CLIMB, SK_BLUFF, SK_ATHLETICS, SK_SPOT, SK_BALANCE, SK_HIDE,
+      SK_JUMP, SK_LISTEN, SK_LOCKPICKING, SK_MOVE_SIL, SK_PICK_POCKET,
+      SK_POISON_USE, SK_USE_MAGIC;
+    Desc: "Many common scoundrels infest dungeon and city alike,
+      looking to make a quick buck off of weak or infirm passers-by.";
+    Gear: 
+      random T_WEAPON of random 0 to 1,
+      random T_ARMOR of random 0 to 1,
+      15% $"small glass vial" of random 1 to 2,
+      50% $"potion" of $"healing",
+      15% 1d2 $"scroll" of $"identify;scroll",
+      3d6 $"gold piece";
+  }
+
+Template "brigand" : TM_CLASS for MA_SAPIENT
+	{
+    Flags: TMF_POSTSCRIPT, TMF_NOGEN;
+    CR: +1 (min 1); HD: +2; Mov: 100%; Spd: 105%;
+    Dex +2, Con +1, Cha -2;
+    Flags: M_CHAOTIC, !M_LAWFUL, M_CLOSEID, M_HOSTILE;
+    Feats: 
+      FT_AP_LIGHT, FT_AP_MEDIUM, FT_AP_HEAVY,
+      FT_POWER_ATTACK, FT_ENDURANCE, SK_RIDE,
+      SK_SPOT, SK_HIDE, SK_MOVE_SIL, SK_POISON_USE;
+    Desc: "Many common scoundrels infest dungeon and city alike,
+      looking to make a quick buck off of weak or infirm passers-by.";
+    Gear: 
+      random T_WEAPON of random 0 to 1,
+      random T_ARMOR of random 0 to 1,
+      15% $"small glass vial" of random 1 to 2,
+      50% $"potion" of $"healing",
+      15% 1d2 $"scroll" of $"identify;scroll",
       3d6 $"gold piece";
   }
 

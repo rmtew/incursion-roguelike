@@ -655,7 +655,6 @@ Race "Gnome;race"
            $"celestial" $"mastiff"
          7 $"clockwork" $"riding dog"
            $"clockwork" $"mastiff"
-           $"celestial" $"giant badger"
            $"celestial" $"hatori"
            $"celestial" $"pygmy war rhino"
            $"young"     $"brass dragon"
@@ -929,6 +928,9 @@ Race "Dwarf;race"
            $"celestial" $"grick"
            $"celestial" $"owlbear"
          9 $"celestial" $"dire" $"elephant"
+           $"celestial" $"cave ankylosaurus"
+           $"celestial" $"cave triceratops"
+           $"celestial" $"cave tyrannosaurus"
            $"celestial" $"arsinoitherium";
     Constants:
       * RES_SURVIVAL_CHANCE 135;
@@ -1143,7 +1145,7 @@ Race "Elf;race"
       EActor->setGodFlags($"Maeve",GS_INVOLVED);
       if (EActor->GodID == NULL_ID)
         EActor->GodID = $"Maeve";
-      else {
+      else if (EActor->GodID != $"Maeve") {
         SetSilence();
         EActor->Transgress($"Maeve",10,false,"turning away from Maeve");
         EActor->setGodFlags($"Maeve",GS_KNOWN_ANGER);
@@ -1184,6 +1186,7 @@ Race "Elf;race"
          7 $"celestial" $"pegasus"
            $"unicorn"
            $"hippogriff"
+           $"senmurv"
            /* $"stag of the west" */
            $"young"     $"silver dragon"
          9 $"juvenile"  $"silver dragon"
@@ -1609,6 +1612,7 @@ Race "Halfling;race"
            $"celestial" $"mastiff"
            $"celestial" $"cheetah"
            $"hippogriff"
+           $"senmurv"
            $"young"     $"brass dragon"
            $"young"     $"bronze dragon"
          9 $"juvenile"  $"brass dragon"
@@ -1816,6 +1820,9 @@ Race "Lizardfolk;race"
            $"young" $"shattering ur-dragon"
            $"young" $"water ur-dragon"
          9 $"behir"
+           $"celestial" $"cave ankylosaurus"
+           $"celestial" $"cave triceratops"
+           $"celestial" $"cave tyrannosaurus"
            $"tendriculous"
            $"froghemoth";
     Constants:
@@ -2077,6 +2084,9 @@ Race "Orc;race"
            $"winter wolf"
            $"blazing terror"
          9 $"celestial" $"dire" $"cave lion"
+           $"celestial" $"cave ankylosaurus"
+           $"celestial" $"cave triceratops"
+           $"celestial" $"cave tyrannosaurus"
          /* Manticore */;
     Constants:
       * RES_SURVIVAL_CHANCE 100;

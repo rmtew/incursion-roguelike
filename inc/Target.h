@@ -145,6 +145,13 @@ typedef enum {
     OrderGiveMeItem,
     OrderReturnHome,
     OrderNoPickup,
+    
+    MemoryCantHitPhased,
+    MemoryCantHitWImmune,
+    MemoryElemResistKnown,
+    MemoryMeleeDCKnown,
+    MemoryRangedDCKnown,
+    
     TargetAny = -1
 } TargetType;
 

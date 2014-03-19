@@ -278,7 +278,7 @@ class Creature: public Thing, public Magic
       virtual void AccessTime(Item *it);
       virtual void ExtendedAction();
       virtual void HaltAction(const char *why, bool force_halt=true);
-      virtual int16 ChallengeRating();
+      virtual int16 ChallengeRating(bool allow_neg = false);
       virtual void GainXP(uint32 XP) { return; }
       virtual int32 TotalXP() { return 0; }
       virtual void KillXP(Creature*kill, int16 percent=100);
@@ -345,8 +345,7 @@ class Creature: public Thing, public Magic
       void  wieldSoulblade(Item *blade);
       virtual uint16 getSoulbladeConfig() { return 0xFFFF; }
       int16 getAlignment();
-      void  CustomAlign();
-
+      
       public:
       int ListAttacks(TAttack * buf, int numEltsInBuf);
 
@@ -407,8 +406,7 @@ class Creature: public Thing, public Magic
       virtual void RippleCheck(int16 range);
       virtual int16 GetPower(int16);
       
-      virtual int16 GetBAB(int16 mode)
-        { return TMON(tmID)->Hit; }
+      virtual int16 GetBAB(int16 mode);
       int16 ResistLevel(int16 DType, bool bypass_armor = false);
       virtual int16 WeaponSaveDC(Item *wp, int16 at);
 
@@ -632,9 +630,9 @@ class Character: public Creature
       
       /* Religion Stuff */
       int16 FavorLev[MAX_GODS];
-      int16 TempFavor[MAX_GODS];
+      int32 TempFavor[MAX_GODS];
       int16 Anger[MAX_GODS];
-      int16 SacVals[MAX_GODS][MAX_SAC_CATS + 2];
+      int32 SacVals[MAX_GODS][MAX_SAC_CATS + 2];
       int16 FavPenalty[MAX_GODS];
       int16 PrayerTimeout[MAX_GODS];
       int16 AngerThisTurn[MAX_GODS];
@@ -794,8 +792,10 @@ class Character: public Creature
         { godFlags[theGame->GodNum(gID)] &= ~fl; }
       int16 getGodLevel(rID gID)
         { return FavorLev[theGame->GodNum(gID)]; }
-      int16 getGodAnger(rID gID)
-        { return Anger[theGame->GodNum(gID)]; }
+      int16 getGodAnger(rID gID) /* HACKFIX */
+        { int16 ang = Anger[theGame->GodNum(gID)];
+          ang -= TGOD(gID)->GetConst(TOLERANCE_VAL);
+          return max(0,ang); }
       
 
     ARCHIVE_CLASS(Character,Creature,r)
@@ -1061,8 +1061,7 @@ class Player: public Character
       int16 GetGroupCR(int16 CompType, int16 AddCR=0)
         { return XCRtoCR(GetGroupXCR(CompType,AddCR)); }
       int16 MaxGroupCR(int16 CompType);
-      int32 MaxGroupXCR(int16 CompType)
-        { return XCR(MaxGroupCR(CompType)); }
+      int32 MaxGroupXCR(int16 CompType);
       int16 FixSummonCR(int16 enCR, int16 CompType=PHD_MAGIC);
       void GainSpell(rID sID,int16 Flags)
         { Spells[theGame->SpellNum(sID)] |= Flags; }

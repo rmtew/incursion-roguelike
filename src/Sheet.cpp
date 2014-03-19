@@ -1101,7 +1101,7 @@ void TextTerm::CreateCharSheet(CharSheet &cs)
   int16 favPen;
   for (i=-1;i!=nGods;i++)
     {
-      rID gID, favChart[11]; 
+      rID gID, favChart[15]; 
       int16 lev; int32 fv, fl;
       if (i==-1)
         gID = p->GodID;
@@ -1135,7 +1135,7 @@ void TextTerm::CreateCharSheet(CharSheet &cs)
       fv = p->calcFavor(gID);
       favPen = p->FavPenalty[theGame->GodNum(gID)];
       
-      TGOD(gID)->GetList(FAVOR_CHART,favChart,10);
+      TGOD(gID)->GetList(FAVOR_CHART,favChart,15);
       
       cs.sSpiritual += "__";
       cs.sSpiritual += XPrint(FavorStrength[p->getGodLevel(gID)],gID);
@@ -1148,8 +1148,14 @@ void TextTerm::CreateCharSheet(CharSheet &cs)
                               fv, p->getGodLevel(gID), favPen);
       cs.sSpiritual += "\n";
   
-      if (fl & GS_KNOWN_ANGER)
-        cs.sSpiritual += XPrint("__You have angered <Res>.\n", gID);
+      if (fl & GS_KNOWN_ANGER) {
+        /* HACKFIX */
+        int i = p->getGodAnger(gID); 
+        if (i)
+          cs.sSpiritual += XPrint("__At present, you have angered <Res>.\n", gID);
+        else
+          cs.sSpiritual += XPrint("__At present, you have displeased <Res>.\n", gID);
+        }
 
 
     }

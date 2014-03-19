@@ -116,6 +116,16 @@ struct TerraRecord
                         // who gets the XP? 
   };
 
+struct EncMember
+  {
+    rID mID, tID, tID2, tID3,
+        iID, pID, hmID, htID, htID2;
+    uint16 Flags, Align; hObj hMon;
+    int8 Part; int8 xxx; 
+  };
+  
+#define MAX_ENC_MEMBERS  100
+
 class Map: public Object
   {
    friend class Magic;
@@ -154,6 +164,13 @@ class Map: public Object
     static uint8 PlayerStartX, PlayerStartY;
     static bool IndividualRooms;
 
+    /* Encounter Gen stuff */
+    static EncMember EncMem[MAX_ENC_MEMBERS];
+    static int16 cEncMem;
+    static int32 uniformKey[50];
+    static rID   uniformChoice[50];
+    static int16 cUniform;
+    
     /* Print Queues */
     int8 QueueStack[32], QueueSP;
 
@@ -316,7 +333,8 @@ class Map: public Object
     void Generate(rID dunID, int16 Depth, Map *Above,int8 Luck);
     void GeneratePrompt();
     void DrawPanel(uint8 x, uint8 y,rID regID=0);
-    void PopulatePanel(Rect &r);
+    void PopulatePanel(Rect &r, uint16 extraFlags=0); /* HACKFIX */
+    void FurnishArea(Rect &r);
     void LightPanel(Rect &r, rID regID);
     void PopulateChest(Container *c); 
     int16 isTorched(uint8 x, uint8 y, int16 t);
@@ -337,11 +355,23 @@ class Map: public Object
           At(x,y).Glyph &= 0xF0FF;
         At(x,y).Glyph |= g; }
 
-    bool FindOpenAreas(Rect r, int16 Flags=0);
+    bool FindOpenAreas(Rect r, rID regID=0, int16 Flags=0);
     void SetRegion(Rect r, rID regID);
     uint16 GetOpenXY();
 
-    int16 GenEncounter(uint32 fl, int8 CR, int8 Depth, uint32 mon, int8 AType, rID xID, int16 ex=0, int16 ey=0, Creature*creator=NULL);
+    EvReturn thEnGen(rID xID, uint32 fl, int8 CR, uint16 enAlign);
+    EvReturn thEnGenXY(rID xID, uint32 fl, int8 CR, uint16 enAlign, int16 x, int16 y);
+    EvReturn thEnGenSummXY(rID xID, uint32 fl, int8 CR, uint16 enAlign, Creature* crea, int16 x, int16 y);
+    EvReturn thEnGenMon(rID xID, rID mID, uint32 fl, int8 CR, uint16 enAlign);
+    EvReturn thEnGenMonXY(rID xID, rID mID, uint32 fl, int8 CR, uint16 enAlign, int16 x, int16 y);
+    EvReturn thEnGenMType(rID xID, int16 mt, uint32 fl, int8 CR, uint16 enAlign);
+    EvReturn thEnGenMTypeXY(rID xID, int16 mt, uint32 fl, int8 CR, uint16 enAlign, int16 x, int16 y);
+    EvReturn thEnGenMonSummXY(rID xID, rID mID, uint32 fl, int8 CR, uint16 enAlign, Creature *crea, int16 x, int16 y);
+    EvReturn thEnGenMTypeSummXY(rID xID, int16 mt, uint32 fl, int8 CR, uint16 enAlign, Creature *crea, int16 x, int16 y)
+      { return thEnGenMonSummXY(xID,mt,fl,CR,enAlign,crea,x,y); }
+    EvReturn rtEnGen(EventInfo &e, rID xID, uint32 fl, int8 CR, uint16 enAlign);
+    
+    
     void  PlaceEncounter(int16 ex=0, int16 ey=0, Creature*creator=NULL); 
     Creature * GetEncounterCreature(int32 i);
     String & PrintEncounter();
@@ -412,6 +442,27 @@ class Map: public Object
     uint16 RunOver(uint8 x, uint8 y, bool memonly, Creature *c,
                    int32 dangerFactor, bool Incor, bool Meld);
 
+    /* Encounter Generation */
+    EvReturn enGenerate(EventInfo &e);
+    EvReturn enGenPart(EventInfo &e);
+    EvReturn enBuildMon(EventInfo &e);
+    EvReturn enSelectTemps(EventInfo &e);
+    EvReturn enChooseMID(EventInfo &e);
+    EvReturn enChooseTemp(EventInfo &e);
+    EvReturn enGenMount(EventInfo &e);
+    EvReturn enGenAlign(EventInfo &e);
+    
+    void  enUniformAdd(int32 key, rID choice);
+    rID   enUniformGet(int32 key);
+    void  enAddMon(EventInfo &e);
+    void  enAddTemp(EventInfo &e, rID tID);
+    void  enAddMountTemp(EventInfo &e, rID tID);
+    void  enCalcCurrPartXCR(EventInfo &e);
+    bool  enTemplateOk(EventInfo &e, rID tID, bool force=false);    
+    void  enWarn(const char*msg,...);
+
+    void GenEncounterStats(Term *t);
+
     /* Miscellaneous Stuff */
     bool Filled(int16 x,int16 y);
     void Load(rID mID);
@@ -463,6 +514,15 @@ extern Map* TheMainMap;
      S->Nature = 0; S->eID = 0; FixupBackrefs(S,targ);\
      targ->StatiOff(s); } }                          
      
+/* HACKFIX */
+#define StatiIter_DispelCurrent(targ)                 \
+   { if (S->eID && RES(S->eID)->Type == T_TEFFECT)    \
+       targ->RemoveEffStati(S->eID, EV_DISPELLED);    \
+     else {                                           \
+     Status s; s = *S;                                \
+     targ->__Stati.Removed++;                         \
+     S->Nature = 0; S->eID = 0; FixupBackrefs(S,targ);\
+     targ->StatiOff(s); } }                          
     
 
 #define StatiIter_ElapseCurrent(targ)                  \

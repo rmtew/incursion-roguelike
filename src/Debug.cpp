@@ -155,6 +155,171 @@ long array_index(long index, long size)
 
 #endif
 
+void TestEncounterGen(Term *MyTerm)
+  {
+    String str; bool mul; int16 i, mt, dp,des; rID enID;
+    MyTerm->SetWin(WIN_INPUT);
+    MyTerm->Color(SKYBLUE);
+    MyTerm->Write(0,0,"Desired # of Monsters: ");
+    MyTerm->Color(MAGENTA);
+    MyTerm->ReadLine();
+    MyTerm->Clear();
+    des = atoi(MyTerm->GetTypedString());
+    
+    MyTerm->SetWin(WIN_INPUT);
+    MyTerm->Color(SKYBLUE);
+    MyTerm->Write(0,0,"Enter Challenge Rating/Depth: ");
+    MyTerm->Color(MAGENTA);
+    MyTerm->ReadLine();
+    MyTerm->Clear();
+    dp = atoi(MyTerm->GetTypedString());
+    MyTerm->SetWin(WIN_INPUT);
+    MyTerm->Color(SKYBLUE);
+    MyTerm->Write(0,0,"Enter Encounter Name: ");
+    MyTerm->Color(MAGENTA);
+    MyTerm->ReadLine();
+    MyTerm->Clear();
+    enID = FIND(MyTerm->GetTypedString());
+    str.Empty();
+    Map *m = new Map();
+    for(i=0;i!=30;i++)
+      {
+        EventInfo e;
+        e.Clear();
+        if (!enID || RES(enID)->Type == T_TENCOUNTER)
+          e.enID = enID;
+        else
+          e.enRegID = enID;
+        e.enCR = dp;
+        e.enDepth = dp;
+        e.enDesAmt = des;
+        e.EMap = m;
+        e.enFlags = EN_NOBUILD|EN_DUNGEON|EN_DUMP;
+        ReThrow(EV_ENGEN,e);
+        str += e.enDump;
+        PurgeStrings();
+      }
+    delete m;
+    MyTerm->Box(WIN_SCREEN,BOX_WIDEBOX,YELLOW,GREY,str);
+  }
+
+void FPrint(Term *t, const char *msg)
+  {
+    const char* _msg = Decolorize(msg);
+    int16 ln = strlen(_msg);
+    t->FWrite(_msg,ln);
+    t->FWrite("\n",1);
+  }
+
+int SortByCR(const void *A, const void *B)
+  {
+    rID aID = *(rID*)A,
+        bID = *(rID*)B;
+    return TMON(aID)->CR - TMON(bID)->CR;
+  }
+
+void Map::GenEncounterStats(Term *t)
+  {
+    int16 CR, enc, i, j, q, mt; EventInfo e;
+    String eStat;
+    int32 mID_count[2048],
+          mType_count[MA_LAST];
+    rID first_mID;
+    t->ChangeDirectory(".");
+    t->SetWin(WIN_SCREEN);
+    t->Clear();
+    t->Color(YELLOW);
+    t->Write(0,0,"Writing .\\EncStats.txt...\n");
+    t->Color(BROWN);
+    
+    first_mID = theGame->Modules[0]->MonsterID(0);
+    memset(mID_count,0,2048*4);
+    memset(mType_count,0,MA_LAST*4);
+    eStat = "";
+    for (CR=1;CR!=16;CR++) {
+      for (enc=0;enc!=500;enc++) {       
+        e.Clear();
+        e.enCR = CR;
+        e.enDepth = CR;
+        e.EMap = this;
+        e.enFlags = EN_NOBUILD|EN_DUNGEON;
+        if (enc < 50)
+          e.enFlags |= EN_DUMP;
+        ReThrow(EV_ENGEN,e);
+        if (enc < 50)
+          eStat += Decolorize(e.enDump);
+        PurgeStrings();
+        for (i=0;i!=cEncMem;i++) {
+          if (!EncMem[i].mID)
+            continue;
+          mID_count[EncMem[i].mID - first_mID]++;
+          Monster *mn;
+          mn = new Monster(EncMem[i].mID);
+          if (EncMem[i].tID)
+            mn->AddTemplate(EncMem[i].tID);
+          if (EncMem[i].tID2)
+            mn->AddTemplate(EncMem[i].tID2);
+          if (EncMem[i].tID3)
+            mn->AddTemplate(EncMem[i].tID3);
+          for (mt=0;mt!=MA_LAST;mt++)
+            if (mn->isMType(mt))
+              mType_count[mt]++;
+          delete mn;
+          }
+        }
+      eStat += "\n\n----";
+      t->Write(Format("Done CR %d...\n",CR));
+      t->Update();
+      }    
+    
+    t->OpenWrite("EncStats.txt");
+    t->FWrite((const char*)eStat,strlen(eStat));
+    
+    for (i=0;i!=theGame->Modules[0]->szMon;i++)
+      {
+        FPrint(t,Format("%d %s",mID_count[i],
+          (const char*)Pluralize(NAME(theGame->Modules[0]->MonsterID(i)))));
+      }
+    FPrint(t,"\n\n----");
+    for (mt=0;mt!=MA_LAST;mt++)
+      {
+        FPrint(t,Format("%d %s",mType_count[mt],
+          (const char*)Pluralize(Lookup(MTypeNames,mt))));
+      }
+      
+    for (i=0;i!=MA_LAST;i++)
+      if (LookupOnly(MTypeNames,i))
+        {
+          rID monList[4096]; int16 n;
+          n = 0;
+          for (int16 q=0;q!=1;q++)
+            for (j=0;j!=theGame->Modules[0]->szMon;j++)
+              {
+                rID mID = theGame->Modules[0]->MonsterID(j);
+                if (TMON(mID)->isMType(mID,i))
+                  monList[n++] = mID;
+              }
+          if (!n)
+            continue;
+          qsort(monList,n,sizeof(rID),SortByCR);
+          FPrint(t,Format("%s (%d):", (const char*)
+            Pluralize(Lookup(MTypeNames,i)), n));
+          for (j=0;j!=n;j++)
+            FPrint(t,Format("  %2d %s", TMON(monList[j])->CR,
+              (const char*) NAME(monList[j]))); 
+        }
+      
+    t->Close();
+    t->Color(WHITE);
+    t->Write("\n\nDone.\n\nPress any key to continue...");
+    t->GetCharRaw();
+    t->Clear();
+  }
+          
+          
+          
+          
+          
 
 void Player::WizardOptions()
 	{
@@ -688,6 +853,7 @@ void Player::WizardOptions()
           break; 
 
         case 23:       
+          /*
           bool mul; int16 mt, dp;
           mul = yn("Generate for large room?");
           MyTerm->SetWin(WIN_INPUT);
@@ -707,13 +873,15 @@ void Player::WizardOptions()
           str.Empty();
           for(i=0;i!=30;i++)
             {
-              m->GenEncounter(EN_NOBUILD|EN_DUNGEON|(mul ? EN_MULTIPLE : 0)|
+              m->GnEncounter(EN_NOBUILD|EN_DUNGEON|(mul ? EN_MULTIPLE : 0)|
                 (mt ? EN_MTYPE : 0), dp,dp,mt,0,0,0,0,NULL);
-              //m->GenEncounter(EN_NOBUILD|EN_SINGLE|EN_MTYPE|EN_STREAMER,
+              //m->GnEncounter(EN_NOBUILD|EN_SINGLE|EN_MTYPE|EN_STREAMER,
               //  dp,dp,mt, AL_NONGOOD,(rID)0,0,0,NULL);
               str += m->PrintEncounter();
             }
           MyTerm->Box(WIN_SCREEN,BOX_WIDEBOX,YELLOW,GREY,str);
+          */
+          TestEncounterGen(T1);
          break;
         case 31:
           ListLevelTreasure();

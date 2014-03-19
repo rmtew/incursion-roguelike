@@ -1807,8 +1807,8 @@ TextVal AQualityDescs[] = {
               "that target attacks by sight, and has a 1 in 20 chance of blinding any "
               "enemy who attacks you (Fortitude saving throw negates) for 1d4 rounds." },
   { AQ_ETHEREALNESS, "This suit of armor allows its wearer to become etherial at will, "
-              "costing two Fatigue Points per use. To utilize this ability, 'a'ctivate "
-              "the armor." },
+              "costing two Fatigue Points per use, and functioning 3 times per day. To "
+              "utilize this ability, 'a'ctivate the armor." },
   { AQ_GRACEFUL, "This armor is fluid, supple and perfectly fitted, granting its "
               "wearer a supernatural freedom of movement. As such, the armor penalty "
               "it inflicts is halved, rounding down." },
@@ -2493,6 +2493,11 @@ Option OptionList[] = {
       "<9>open the third eye<2>), this switch allows you to turn it on and off. "
       "Gaze attacks consume 2 mana per creature potentially affected, and this "
       "mana does not regenerate, so use your gaze sparingly!" },
+  { OPT_DIRTY_FIGHTING, "Use Dirty Fighting", "OFF/ON/SMART", 2, 2, 0,
+      "__This option determines whether a character that has the Dirty Fighting "
+      "feat (such as a kobold) will use it. When it is set to OFF, it will not "
+      "be used; when set to ON, it will. When set to SMART, it will only be used "
+      "if your desired alignment is not lawful." },
 
 /* Gameplay Options */
   { OPT_STOP_CORNER, "Stop Running at Corners", "NO/YES", 1, 0, 0,

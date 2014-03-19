@@ -2558,8 +2558,18 @@ EvReturn Creature::Research(EventInfo &e)
               return ABORT;
             }
           
-          m->GenEncounter(EN_SINGLE|EN_MAXIMIZE|EN_NOPLACE|EN_MTYPE,
-               ChallengeRating() + cLevel/2, m->Depth, MA_UNDEAD, AL_EVIL, 0, 0, 0, 0);
+          THROW(EV_ENGEN,
+            e.enFlags = EN_SINGLE|EN_NOPLACE;
+            e.enCR = ChallengeRating() + cLevel/2;
+            e.enDepth = m->Depth;
+            e.enAlign = AL_EVIL;
+            e.enDesAmt = 1;
+            if (e.enCR < 7 || !random(2))
+              { e.enID = FIND("Generic Summons");
+                e.enConstraint = (MA_UNDEAD+MA_EVIL*256); }
+            else
+              e.enID = FIND("lone template undead");
+            );
           cr = m->GetEncounterCreature(0);
           if (!cr)
             return ABORT;
@@ -4260,24 +4270,37 @@ EvReturn Creature::Mount(EventInfo &e)
     if (!HasSkill(SK_RIDE)) { 
       IPrint("You don't know how to ride!");
       return ABORT; 
-    } else if (!HasMFlag(M_HUMANOID) || HasMFlag(M_NOLIMBS)) {
+      } 
+    else if (!HasMFlag(M_HUMANOID) || HasMFlag(M_NOLIMBS)) {
       IPrint("You can't ride in this form.");
       return ABORT; 
-    } else if (!e.EVictim->HasMFlag(M_MOUNTABLE)) { 
+      } 
+    else if (!e.EVictim->HasMFlag(M_MOUNTABLE)) { 
       IPrint("That sort of creature cannot be ridden.");
       return ABORT; 
-    } else if (e.EVictim->m && e.EVictim->isHostileTo(this)) { 
+      } 
+    else if (e.EVictim->isMType(MA_VERMIN) && 
+             !e.EActor->isMType(MA_KOBOLD) &&
+             !(e.EVictim->isMType(MA_SPIDER) &&
+               e.EActor->isMType(MA_DROW))) {
+      IPrint("Only kobolds can ride vermin.");
+      return ABORT;
+      }
+    else if (e.EVictim->m && e.EVictim->isHostileTo(this)) { 
       IPrint("You cannot ride a hostile creature.");
       return ABORT; 
-    } else if (e.EVictim->onPlane() != e.EActor->onPlane()) { 
+      } 
+    else if (e.EVictim->onPlane() != e.EActor->onPlane()) { 
       IPrint("You cannot ride a creature on another plane.");
       return ABORT; 
-    } else if (e.EVictim->HasStati(PRONE) ||
+      } 
+    else if (e.EVictim->HasStati(PRONE) ||
         e.EVictim->HasStati(STUCK) ||
         e.EVictim->HasStati(GRAPPLED)) { 
       IPrint("You cannot ride a creature that is prone, stuck or grappled.");
       return ABORT; 
-    } else if (e.EVictim->isPlayer()) {
+      } 
+    else if (e.EVictim->isPlayer()) {
       IPrint("You cannot use another player character as a mount.");
       return ABORT; 
     }
@@ -4298,7 +4321,9 @@ EvReturn Creature::Mount(EventInfo &e)
       return ABORT; 
     } else if (e.EVictim->GetAttr(A_SIZ) <= e.EActor->GetAttr(A_SIZ) &&
                (e.EVictim->GetAttr(A_SIZ) != SZ_SMALL ||
-                e.EActor->GetAttr(A_SIZ) != SZ_SMALL)) { 
+                e.EActor->GetAttr(A_SIZ) != SZ_SMALL) &&
+                !(e.EVictim->GetAttr(A_SIZ) == SZ_MEDIUM &&
+                 e.EActor->isMType(MA_DWARF))) { 
       IPrint(Format("That %s %s is not large enough to support your (%s) weight.",
                         Lookup(SizeNames,e.EVictim->GetAttr(A_SIZ)),
                         (const char*)e.EVictim->Name(0),
@@ -4309,7 +4334,7 @@ EvReturn Creature::Mount(EventInfo &e)
        must use warponies or war dogs instead of warhorses. Maybe this should
        just be a penalty of some kind? */
     else if (e.EVictim->GetAttr(A_SIZ) > e.EActor->GetAttr(A_SIZ)+1 &&
-        e.EVictim->isMType(MA_ANIMAL)) { 
+        e.EVictim->isMType(MA_ANIMAL) && e.EVictim->isMType(MA_QUADRUPED)) { 
       IPrint("That kind of animal is too large for you to ride effectively.");
       return ABORT; 
     }
@@ -4665,7 +4690,7 @@ EvReturn Creature::Turn(EventInfo &e)
 
 EvReturn Creature::Phase(EventInfo &e)
   {               
-    const char * Planes[8] = { "???", "astral plane", 
+    const char * Planes[8] = { "material plane", "astral plane", 
       "etherial plane", "plane of shadow", "negative energy plane",
       "positive energy plane", "???", "???" };       
     Creature *c; int16 i; bool vis[MAX_PLAYERS];
@@ -4863,7 +4888,8 @@ void Character::LegendIdent(Item *it)
             case 0: break; /* No Easy Intuit */
             case 1: thisp->IntuitItem(it); break;
             case 2: if ( it->isType(T_WEAPON) || it->isType(T_ARMOR) ||
-                         it->isType(T_MISSILE) || it->isType(T_BOW) )
+                         it->isType(T_MISSILE) || it->isType(T_BOW) ||
+                         it->isType(T_SHIELD) )
                       thisp->IntuitItem(it); break;
           }
       }
@@ -4983,6 +5009,8 @@ void Player::ScrutinizeMon(Creature *cr)
   {
     String name1, name2;
     int16 sk, lv; bool knowClass, unseenClass, knowRace, unseenRace;
+    if (!XPercieves(cr))
+      return;
     if (cr->StateFlags & MS_SCRUTINIZED)
       return;
     cr->StateFlags |= MS_SCRUTINIZED;
@@ -5638,7 +5666,7 @@ bool Creature::ItemPrereq(rID xID, int16 ReqLevel, int16 TrickDC)
       switch (RES(xID)->Type)
         {
           case T_TMONSTER:
-            return mID == xID;
+            return tmID == xID;
           case T_TGOD:
             if (isCharacter())
               if (thisc->GodID == xID)

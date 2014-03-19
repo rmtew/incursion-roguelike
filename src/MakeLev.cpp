@@ -64,8 +64,6 @@ int8  Map::panelsX, Map::panelsY, Map::disX, Map::disY, Map::mLuck;
 uint8 *Map::FloodArray, *Map::FloodStack, *Map::EmptyArray;
 bool Map::IndividualRooms;
 
-extern uint32 RList[33];     /* Resource List Buffer */
-
 static rID usedInThisLevel[1024] = { 0, };
 
 /* LocationInfo has a number of flags that start at zero universally
@@ -88,6 +86,50 @@ static rID usedInThisLevel[1024] = { 0, };
 #define TT_EXACT    0x10  /* Go to *exact* destination */
 #define TT_WANDER   0x20  /* Chance to end after touching 2 rooms. */
 #define TT_NATURAL  0x40  /* Curved, natural, non-horizontal tunnels */
+
+Rect PopulateQueue[1024];
+int16 cRectPop;
+
+EvReturn Map::Event(EventInfo &e)
+  {
+    #define SEND_TO(xxx) \
+    if (e.xxx) { \
+      int16 res; \
+      res = TENC(e.xxx)->Event(e,e.xxx); \
+      if (res == DONE || res == ERROR || res == ABORT) \
+        return res; \
+      if (res == NOMSG) \
+        e.Terse = true; \
+      } 
+      
+    SEND_TO(enID)
+    SEND_TO(ep_mID)
+    SEND_TO(ep_tID)
+    SEND_TO(ep_tID2)
+    SEND_TO(ep_tID3)
+      
+    switch (e.Event)
+      {
+        case EV_ENGEN:
+          return enGenerate(e);
+        case EV_ENGEN_PART:
+          return enGenPart(e);
+        case EV_ENGEN_MOUNT:
+          return enGenMount(e);
+        case EV_ENBUILD_MON:
+          return enBuildMon(e);
+        case EV_ENCHOOSE_MID:
+          return enChooseMID(e);
+        case EV_ENCHOOSE_TEMP:
+          return enChooseTemp(e);
+        case EV_ENSELECT_TEMPS:
+          return enSelectTemps(e);
+        case EV_ENGEN_ALIGN:
+          return enGenAlign(e);
+        default:
+          return NOTHING;
+      }
+  }
 
 void Map::calcLight(Rect &r)
   {
@@ -309,8 +351,8 @@ void Map::WriteRoom(Rect &r,rID regID)
       return;
     WallID  = TREG(regID)->Walls;
     FloorID = TREG(regID)->Floor;
-    for(uint8 x=r.x1;x<=r.x2;x++)
-      for(uint8 y=r.y1;y<=r.y2;y++)
+    for(int16 x=r.x1;x<=r.x2;x++)
+      for(int16 y=r.y1;y<=r.y2;y++)
         if (x == r.x1 || x == r.x2 || y == r.y1 || y == r.y2)
           WriteAt(r,x,y,WallID,regID,PRIO_ROOM_WALL);
         else
@@ -476,12 +518,10 @@ void Map::WriteCastle(Rect &r, rID regID)
   sx = r.x2 - r.x1;
   sy = r.y2 - r.y1;
   if (sx < 7 || sy < 7)
-  {
-    PopulatePanel(r);
-    return;
-  }
-
-
+    {
+      PopulateQueue[cRectPop++] = r;
+      return;
+    }
 
   if (!random(10) || (sx > sy && random(9))) {
     o = 0;
@@ -854,7 +894,7 @@ void Map::WriteStreamer(Rect &r, uint8 sx, uint8 sy, Dir d, rID regID)
 {
   int16 rx,ry,Width,MWidth,i; int16 DepthCR;
   int16 ix,iy,mx,my; bool isRiver, isWater;   
-  rID terID = TREG(regID)->Floor;
+  rID terID = TREG(regID)->Floor, aquaID;
   isWater = TTER(terID)->HasFlag(TF_WATER);
 
   if (TREG(regID)->HasFlag(RF_RIVER)) {
@@ -906,6 +946,7 @@ void Map::WriteStreamer(Rect &r, uint8 sx, uint8 sy, Dir d, rID regID)
 
     mx = sx - (Width / 2);
     my = sy - (Width / 2);
+    //aquaID = FIND("lone aquatic monster");
     for(ix = mx;ix<mx+Width;ix++)
       for(iy = my;iy<my+Width;iy++) {
         int prio = PRIO_ROCK_STREAMER;
@@ -913,12 +954,18 @@ void Map::WriteStreamer(Rect &r, uint8 sx, uint8 sy, Dir d, rID regID)
             TREG(regID)->HasFlag(RF_RIVER))
           prio = PRIO_RIVER_STREAMER; 
         WriteAt(r,ix,iy,terID,regID, prio);
-        if (isWater && (!random(Con[STREAMER_MON_DENSITY])) && 
-            InBounds(ix,iy)) {
+        if ((!random(Con[STREAMER_MON_DENSITY])) && InBounds(ix,iy) &&
+              TREG(regID)->HasList(ENCOUNTER_LIST)) {
           DepthCR = AdjustCR(Con[INITIAL_CR] + (Depth*Con[DUN_SPEED])/100 - 1); 
-          i = GenEncounter(EN_MTYPE|EN_STREAMER|EN_SINGLE,
-            DepthCR,DepthCR,MA_AQUATIC,0,regID,ix,iy);
-          ASSERT(i)
+          THROW(EV_ENGEN,
+            xe.EMap = this;
+            xe.enFlags = EN_STREAMER|(isWater ? EN_AQUATIC : 0);
+            xe.enRegID = regID;
+            xe.EXVal = ix;
+            xe.EYVal = iy;
+            xe.isLoc = true;
+            xe.enCR = DepthCR;
+            xe.enDepth = DepthCR;);
         }
       }
   }
@@ -1102,23 +1149,35 @@ void Map::WriteMap(Rect &r,rID regID)
               t->xID && (RES(t->xID)->Type == T_TMONSTER)))
         {
           /* Create the Monster */
-          if (t->fl & TILE_RANDOM)
-            xID = theGame->GetMonID(PUR_DUNGEON,-2,DepthCR+4,DepthCR,t->xID ? t->xID : -1);
-          else
-            xID = t->xID;
+          if (t->xID) {
+            mn = new Monster(t->xID);
+            TMON(t->xID)->GrantGear(mn,t->xID,true);
+            TMON(t->xID)->PEvent(EV_BIRTH,mn,t->xID);
 
-          mn = new Monster(xID);
+            if (t->xID2 && RES(t->xID2)->Type == T_TTEMPLATE)
+              if (mn->isMType(TTEM(t->xID2)->ForMType))
+                mn->AddTemplate(t->xID2);
+            mn->PlaceAt(this,r.x1+x,r.y1+y);
+            }
+          else {
+            THROW(EV_ENGEN,
+              xe.enFlags = EN_DUNGEON|EN_VAULT|EN_SINGLE|EN_FREAKY;
+              xe.enCR = DepthCR+4;
+              xe.enRegID = regID;
+              xe.enDepth = DepthCR;
+              xe.EXVal = r.x1 + x;
+              xe.EYVal = r.y1 + y;
+              xe.isLoc = true;
+              );
+            mn = GetEncounterCreature(0);
+            }
+          
           if (t->fl & TILE_NO_PARTY)
             mn->PartyID = MAX_PLAYERS + 10 + random(200);
           else
             mn->PartyID = PartyID;
-          TMON(xID)->GrantGear(mn,xID,true);
-          TMON(xID)->PEvent(EV_BIRTH,mn,xID);
-
-          if (t->xID2 && RES(t->xID2)->Type == T_TTEMPLATE)
-            if (mn->isMType(TTEM(t->xID2)->ForMType))
-              mn->AddTemplate(t->xID2);
-
+          
+            
           if (t->fl & TILE_PEACEFUL)
             mn->StateFlags |= MS_PEACEFUL;
           if (t->fl & TILE_HOSTILE)
@@ -1127,7 +1186,6 @@ void Map::WriteMap(Rect &r,rID regID)
             mn->StateFlags |= MS_GUARDING;
           if (t->fl & TILE_ASLEEP)
             mn->GainPermStati(ASLEEP,NULL,SS_MISC,SLEEP_NATURAL);
-          mn->PlaceAt(this,r.x1+x,r.y1+y);                
           mn->Initialize();
         }
         else {
@@ -1992,19 +2050,16 @@ SecondStreamerSame:
                 TTER(TerrainAt(x,y))->HasFlag(TF_FALL));
             if (RES(a->u.ds[i].xID)->Type == T_TMONSTER)
             {
-              // ww: this works much better for Orc Warrens 
-              // and whatnot -- the other way had no possibility of
-              // a template, so you'd still get 1/2 CR kobolds at
-              // dlevel 9 ...
-              GenEncounter(EN_MONID,DepthCR,DepthCR,
-                a->u.ds[i].xID,0, 0,x,y,NULL);
-              /*
-                 mn = new Monster(a->u.ds[i].xID);
-                 if (!mn)
-                 continue;
-                 mn->PlaceAt(this,x,y);
-                 mn->Initialize();
-               */
+              THROW(EV_ENGEN,
+                xe.enID = FIND("unique encounter");
+                xe.enCR = DepthCR;
+                xe.enDepth = DepthCR;
+                xe.enRegID = dID;
+                xe.enConstraint = a->u.ds[i].xID;
+                xe.EXVal = x;
+                xe.EYVal = y;
+                xe.isLoc = true;
+                );
             }
             else if (RES(a->u.ds[i].xID)->Type == T_TITEM)
             {
@@ -2375,11 +2430,29 @@ StartAgain:
     for (y=0;y<sizeY;y++)
       At(x,y).Priority = 0;
 
+  /* HACKFIX */
+  int16 capCR = Depth + (theGame->Opt(OPT_OOD_MONSTERS) ? 3 : 1);
+  rID campID = FIND("The Goblin Encampment");
+  RestartVerifyMon:
+  if (theGame->Opt(OPT_DIFFICULTY) != DIFF_NIGHTMARE) {
+    MapIterate(this,t,i)
+      if (t->isType(T_MONSTER))
+        if (((Creature*)t)->ChallengeRating() > capCR)
+          {
+            if (theGame->GetPlayer(0))
+              if (((Creature*)t)->isFriendlyTo(theGame->GetPlayer(0)))
+                continue;
+            if (RegionAt(t->x,t->y) == campID)
+              continue;
+            t->Remove(true);
+            goto RestartVerifyMon;
+          }
+    }
+
   /* Kludge to make sure that no fortress enemies are neutral */
   if (Depth == 10)
     {
       Creature *cr; int32 i;
-      rID campID = FIND("The Goblin Encampment");
       MapIterate(this,cr,i)
         if (cr->isCreature() && RegionAt(cr->x,cr->y) == campID)
           {
@@ -2488,7 +2561,12 @@ void Map::DrawPanel(uint8 px, uint8 py, rID regID)
     
     usedInThisLevel[i] = regID;
 
+    /*regID = FIND("ice matrix");
+    RType = RM_CASTLE;*/
+
     PresetRegion:
+
+    
 
     xe.Clear();
     xe.EMap = this;
@@ -2758,8 +2836,9 @@ void Map::DrawPanel(uint8 px, uint8 py, rID regID)
           sy = max(Con[PANEL_SIZEY]/2,Con[PANEL_SIZEY] - (random(6)+2));
           r = cPanel.PlaceWithinSafely(sx,sy);
           WriteRoom(r,regID);
+          cRectPop = 0;
           WriteCastle(r,regID);
-          FindOpenAreas(r,0);
+          FindOpenAreas(r,0,FOA_ALLOW_WATER|FOA_ALLOW_WARN|FOA_ALLOW_FALL|FOA_ALLOW_SPEC);
           xe.cRoom = r;
          break;
         case RM_CHECKER:
@@ -2950,17 +3029,35 @@ void Map::DrawPanel(uint8 px, uint8 py, rID regID)
 
           LightPanel(cPanel,regID);
 
-          if ((RType == RM_CASTLE || RType == RM_BUILDING) && IndividualRooms)
-            break; /* Encounters set up in WriteCastle. */
-     
+          if ((RType == RM_CASTLE || RType == RM_BUILDING) /*&& IndividualRooms*/)
+            {
+              for (i=0;i!=cRectPop;i++)
+                {
+                  if (TREG(regID)->HasList(ENCOUNTER_LIST))
+                    if (random(3))
+                      continue;
+                  FindOpenAreas(PopulateQueue[i],regID,
+                    FOA_ALLOW_WATER|FOA_ALLOW_WARN|FOA_ALLOW_FALL|FOA_ALLOW_SPEC);
+                  /* HACKFIX */
+                  PopulatePanel(PopulateQueue[i],EN_SINGLE);
+                }
+              break; /* Encounters set up in WriteCastle. */
+            }
           {
           bool anything = false; 
-          if (r.x1 < r.x2) { anything = true; PopulatePanel(r); }
-          if (r2.x1 < r2.x2) { anything = true; PopulatePanel(r2);}
-          if (r3.x1 < r3.x2) { anything = true; PopulatePanel(r3); }
-          if (r4.x1 < r4.x2) { anything = true; PopulatePanel(r4); }
-          /*if (!anything) 
-            PopulatePanel(NULL_RECT);*/
+          FindOpenAreas(cPanel,regID,0);
+          if (r.x1 < r.x2) { anything = true; FurnishArea(r); }
+          if (r2.x1 < r2.x2) { anything = true; FurnishArea(r2);}
+          if (r3.x1 < r3.x2) { anything = true; FurnishArea(r3); }
+          if (r4.x1 < r4.x2) { anything = true; FurnishArea(r4); }
+          
+          
+          if (!anything) 
+            FurnishArea(NULL_RECT);
+          FindOpenAreas(cPanel,regID,
+            FOA_ALLOW_WATER|FOA_ALLOW_WARN|FOA_ALLOW_FALL|FOA_ALLOW_SPEC);
+          PopulatePanel(cPanel);
+          
           }
          break;
         case DONE:
@@ -3027,14 +3124,14 @@ void Map::PopulateChest(Container *ch)
   
 } 
 
-void Map::PopulatePanel(Rect &r)
+void Map::FurnishArea(Rect &r)
 	{
     Item *it, *ch; Creature *mn; Feature *ft;
 		int16 x,y,c,i,j,k,l,maxlev, MType, sz, tx, ty; 
     rID mID, regID, iID; 
+    int16 DepthCR = Con[INITIAL_CR] + (Depth*Con[DUN_SPEED])/100 - 1; 
     static rID furn[32]; int32 roCount;
     uint16 fl;
-    int16 DepthCR = Con[INITIAL_CR] + (Depth*Con[DUN_SPEED])/100 - 1; 
 
     /* Macro to _quickly_ give us a random open point
        in the room or subroom we're supposed to fill. */
@@ -3352,7 +3449,6 @@ void Map::PopulatePanel(Rect &r)
 
     DepthCR = maxlev = AdjustCR(Con[INITIAL_CR] + (Depth*Con[DUN_SPEED])/100 - 1); 
 
-    fl = EN_DUNGEON|EN_ANYOPEN;
     if (r.x2) {
       OpenC = 0;
       for(int16 ix=r.x1;ix<=r.x2;ix++)
@@ -3367,47 +3463,61 @@ void Map::PopulatePanel(Rect &r)
     regID = RegionAt(OpenX[0],OpenY[0]);
     ASSERT(RES(regID)->Type == T_TREGION);
     
-    RList[0] = 0;        
-    if (!TREG(regID)->GetList(MTYPE_LIST,RList,31))
-      TDUN(dID)->GetList(MTYPE_LIST,RList,31);
-
-    mID = 0;
-    if (RList[0]) {
-      for(i=0;RList[i];i++)
-        ;
-      if (i) {
-        i = random(i);
-        if (RList[i] == -1)
-          ;
-        else if (RList[i] < 255) /* MA_XXX constant */
-          { fl |= EN_MTYPE; mID = RList[i]; }
-        else if (RES(RList[i]) && RES(RList[i])->Type == T_TMONSTER)
-          { fl |= EN_MONID; mID = RList[i]; }
-        else
-          Error("Strange value in MTYPE_LIST!");
-        }
-      }
     
+  }
+  
+/* HACKFIX */
+void Map::PopulatePanel(Rect &r, uint16 extraFlags)
+	{ 
+    int16 DepthCR = Con[INITIAL_CR] + (Depth*Con[DUN_SPEED])/100 - 1; 
+    int16 realCR;
+    rID regID = RegionAt(OpenX[0],OpenY[0]);
     if ((random(100) < 22 - mLuck) && DepthCR > 1 && theGame->Opt(OPT_OOD_MONSTERS))
-      {
-        /* Generate Out-of-Depth Encounter */
-        GenEncounter(fl|EN_SINGLE,maxlev,min(DepthCR*2,DepthCR + random(4) + 1),
-                      mID,0 /*Con[MAP_ALIGNMENT]*/,regID,0,0);
-      }
+      /* Generate Out-of-Depth Encounter */
+      realCR = DepthCR + random(4) + 1;
     else
-      GenEncounter(fl,maxlev,DepthCR,mID,0 /*Con[MAP_ALIGNMENT]*/,regID,0,0);
-
+      realCR = DepthCR;
+      
+    THROW(EV_ENGEN,
+      xe.enFlags = EN_DUNGEON|EN_ANYOPEN|((realCR==DepthCR)?0:(EN_OODMON|EN_SINGLE));
+      xe.enFlags |= extraFlags;
+      xe.enRegID = regID;
+      xe.EMap = this;
+      xe.enCR = realCR;
+      xe.enDepth = DepthCR;
+      if (TREG(regID)->HasFlag(RF_CENTER_ENC) && nCenters)
+        {
+          xe.enFlags &= ~EN_ANYOPEN;
+          xe.isLoc = true;
+          int16 i = random(nCenters);
+          xe.EXVal = Centers[i] % 256;
+          xe.EYVal = Centers[i] / 256;
+        }
+      );
+    Creature *c;
+    ASSERT(c=GetEncounterCreature(0));
+    /*ASSERT(c->x >= r.x1 &&
+           c->y >= r.y1 &&
+           c->x <= r.x2 &&
+           c->y <= r.y2);*/
  }
 
-bool Map::FindOpenAreas(Rect r, int16 Flags)
+bool Map::FindOpenAreas(Rect r, rID regID, int16 Flags)
   {
-    int16 x, y; int16 ter; TTerrain *tt;
+    int16 x, y; int16 ter, reg; TTerrain *tt;
     
-    OpenC = 0; ter = -1; 
+    OpenC = 0; ter = -1; reg = -1;
     
+    bool isReg;
+    
+    isReg = false;
+    tt = NULL;
     for (x=r.x1;x<=r.x2;x++)
       for (y=r.y1;y<=r.y2;y++)
         {
+          /*if (tt && tt->HasFlag(TF_WATER) &&
+                (Flags & FOA_ALLOW_WATER))
+            __asm int 3;*/
 
           if (At(x,y).Solid != (Flags & FOA_SOLID_ONLY))
             continue;
@@ -3419,15 +3529,30 @@ bool Map::FindOpenAreas(Rect r, int16 Flags)
           if (At(x,y).Terrain != ter)
             { ter = At(x,y).Terrain;
               tt = TTER(TerrainAt(x,y)); }
+          if (At(x,y).Region != reg)
+            {
+              reg = At(x,y).Region;
+              if (!regID)
+                isReg = true;
+              else if (RegionAt(x,y) == regID)
+                isReg = true;
+              else
+                isReg = false;
+            }
+            
+          if (!isReg)
+            continue;
 
-          if (tt->HasFlag(TF_SPECIAL)) {
+          if (tt->HasFlag(TF_SPECIAL) &&
+               !tt->HasFlag(TF_WATER)) {
             if (!(Flags & FOA_ALLOW_SPEC))
               continue;
             }
           else if (Flags & FOA_SPEC_ONLY)
             continue;
 
-          if (tt->HasFlag(TF_WARN)) {
+          if (tt->HasFlag(TF_WARN) &&
+               !tt->HasFlag(TF_WATER)) {
             if (!(Flags & FOA_ALLOW_WARN))
               continue;
             }

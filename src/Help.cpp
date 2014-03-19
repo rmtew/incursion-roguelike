@@ -2111,8 +2111,9 @@ String & Monster::Describe(Player *p)
     static String List[512]; rID sID, xID; Dice d; int16 st; hObj h;
     int8 MType1, MType2, MType3, lc, i,j,k, sv, n, feats,skills,CR;
     String groupStr; 
+    /* HACKFIX */
     static MonMem PerfectMem = {
-      255, 255, 255, 511, 255, 65535, 1, 1, 65535, 31 };
+      255, 255, 255, 255, 511, 255, 65535, 1, 1, 65535, 31 };
     TextVal AbilDescs[] = {
       { CA_AURA_OF_MENACE, "It radiates an aura of menace in a %d0-foot radius. " },
       { CA_BERSERK_RAGE, "It can fly into a berserk rage. " },
@@ -2895,7 +2896,7 @@ String & Monster::Describe(Player *p)
             const char * c = LookupOnly(MTypeNames,i);
             if (c) 
               groupStr += Format("%s, ",(const char*)c);
-          } 
+          }
           /* TODO: Correct workaround, as strrchr cannot be implemented in the custom String class. RICHARD */
           const char *str1 = groupStr.GetData();
           const char *str2 = strrchr(str1, ',');

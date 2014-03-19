@@ -491,6 +491,7 @@ void Thing::RemoveStatiFrom(Thing *t, int16 ev)
   StatiIterEnd(this)
   for (i=0;i!=c;i++) {
     EvReturn r;
+    r = NOTHING;
     if (sLog[i].eID) {
       PEVENT(ev,this,sLog[i].eID,
         e.EParam = sLog[i].Nature; 
@@ -794,7 +795,15 @@ void Creature::StatiOn(Status s)
         RemoveStati(CHARGING);
         RemoveStati(TUMBLING);
        break;
-
+      case SPELL_ACCESS:
+        if (!isPlayer())
+          Error("Something other than the player character is gaining a "
+                "SPELL_ACCESS stati. This is probably a bug. Please check "
+                "the news section of the official Incursion webpage to see "
+                "if a save has already been submitted for this; if one "
+                "hasn't, please upload one to one of the discussion forums "
+                "or to the bug database, where this relates to task #434.");
+       break;
 
     }
 
@@ -1070,14 +1079,28 @@ void Creature::StatiOff(Status s, bool elapsed)
               IPrint("Your slippery mind fails to escape the enchantment.");
           }
          break;
+        case ALIGNMENT:
+          if (this == theGame->GetPlayer(0))
+            Error("The player character is losing her ALIGNMENT stati. "
+                  "Under normal circumstances, this shouldn't happen. "
+                  "If you are able to get this error repeatably, please "
+                  "upload a save to the bug database on the website, if "
+                  "no one else has already done so. The task number "
+                  "for this issue is #1262.");
+         break;     
         case SPELL_ACCESS:
-          Fatal("Your character is losing the SPELL_ACCESS stati. This is "
-                "very likely the root of the 'losing spellcasting ability' "
-                "Critical bug in the buglist. The game will now be terminated "
-                "so you can recover your character from the most recent "
-                "backup save with your casting ability intact. If you find "
-                "you can produce this message repeatably, please contact Julian "
-                "Mensch IMMEDIATELY at incursion@shaw.ca!");
+          if (s.eID == FIND("Paladin"))
+            break;
+          if (this != theGame->GetPlayer(0))
+            break;
+          Error("Your character is losing the SPELL_ACCESS stati. This is "
+                "possibly the root of the 'losing spellcasting ability' "
+                "Critical bug in the buglist. If you find "
+                "you can produce this message repeatably, please upload a "
+                "saved game and steps to reproduce to the Incursion bug "
+                "database (task #434) unless someone else has done this "
+                "already. Thanks for helping to support Incursion!");
+         break;
       }
     if (theGame->InPlay()) {
       SetImage();

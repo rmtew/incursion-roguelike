@@ -825,7 +825,9 @@ Class "Mage"
       and daggers, potions of mana, a stone +2 of channeling, a collection
       of scrolls and the spellbooks [Adventurer's Arts] and [Fundamentals
       of Magick], along with two specific to their chosen specialty
-      school. 
+      school. Illusionists also start with 2d4 scrolls of Improved
+      Phantasmal Force and 1d3+1 scrolls of Spectral Force, to help them
+      face monsters immune to lower-level illusions. 
       \n\n<10>THE MAGE<15>________________________________<15>Spells Known\n
       _Level__Def__Fort_Refl_Will_Specials__1_2_3_4_5_6_7_8_9<1>\n
       ___1____+0____+0___+0___+2__Scribe S._1_-_-_-_-_-_-_-_-\n
@@ -899,6 +901,11 @@ Class "Mage"
       $"spellbook [Fundamentals of Magick]",
       random T_BOOK,
       random T_BOOK,
+      /* HACKFIX */
+      if (EActor->HasStati(SPECIALTY_SCHOOL,5))
+        2d4 $"scroll" of $"improved phantasmal force",
+      if (EActor->HasStati(SPECIALTY_SCHOOL,5))
+        1d3+1 $"scroll" of $"spectral force",
       $"scroll" of random 1 to 5,
       $"scroll" of random 1 to 5,
       $"scroll" of random 1 to 5,

@@ -1332,7 +1332,8 @@ struct FeatInfoStruct FeatInfo[] = {
     "defense (for any reason except being flat-footed or not being able to see you), "
     "the attack takes no time. This only applies to normal melee, ranged and brawl "
     "attacks, as well as magical touch attacks. It does not apply to great blows or "
-    "trip attempts (for example).", 
+    "trip attempts (for example). You may only make one \"free\" Expert Tactician "
+    "attack on a given adversary per turn.", 
     {{{FP_ATTR,A_INT,13,
        FP_FEAT,FT_COMBAT_REFLEXES,0,
        FP_BAB,S_MELEE,2}}}},

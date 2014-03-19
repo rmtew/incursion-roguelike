@@ -410,7 +410,7 @@ and EA_INFLICT
 
 Priest Spell "Holy Summoning I" : EA_SUMMON
   { SC_WEA; Base: SP_MEDIUM; Cost: 3; Level: 1; qval: Q_LOC;
-    Purpose: EP_SUMMON; xval: MA_HOLY_SUMM; pval: 1; 
+    Purpose: EP_SUMMON; rval: $"Holy Summons"; pval: 1; 
     Desc: "Summons an outsider of CR 1 to fight in the 
       caster's name.";  
     ALIENIST_CLAUSE(1) }
@@ -625,7 +625,7 @@ Druid Spell "Camouflage" : EA_INFLICT
 
 Druid Spell "Dust Devil" : EA_SUMMON
   { SC_WEA|SC_EARTH|SC_AIR; Level: 1; Cost: 1; Base: SP_MEDIUM; qval: Q_LOC; pval: 2; 
-    rval: $"dust devil;monster"; Flags: EF_DLONG, EF_MULTIPLE;
+    rval: $"dust devil;monster"; Flags: EF_DLONG, EF_MULTIPLE, EF_XSUMMON;
     Purpose: EP_SUMMON;
     Desc: "Conjures waist-high whirlwinds of dust (totalling CR 2) that can
       attack your foes."; }
@@ -1076,7 +1076,7 @@ Wizard / Druid  Spell "Obscurement" : EA_INFLICT
 
 Druid Spell "Summon Nature's Ally I" : EA_SUMMON
   { SC_WEA; Base: SP_MEDIUM; Cost: 2; Level: 1; qval: Q_LOC;
-    Purpose: EP_SUMMON; xval: MA_NATURAL; pval: 1; 
+    Purpose: EP_SUMMON; rval: $"Nature's Ally"; pval: 1; 
     Desc: "Summons a natural creature of CR 1 to fight in the 
       caster's name.";  
     ALIENIST_CLAUSE(1) }
@@ -1556,7 +1556,7 @@ Druid Spell "Beast Claw" : EA_INFLICT
       if (EVictim->HasAttk(A_CLAW))
         {
           EVictim->IDPrint("You already have a natural claw attack.",
-            "The <Obj> already has a natural claw attack.", EVictim);
+            "The <hObj> already has a natural claw attack.", EVictim);
           return ABORT;
         }
       EVictim->GainTempStati(TEMPLATE,EActor,e.vDuration,SS_ENCH,
@@ -1836,7 +1836,7 @@ Priest Spell "Find Traps" : EA_INFLICT
 
 Priest Spell "Holy Summoning II" : EA_SUMMON
   { SC_WEA; Base: SP_MEDIUM; Cost: 5; Level: 2; qval: Q_LOC;
-    Purpose: EP_SUMMON; xval: MA_HOLY_SUMM; pval: 2; 
+    Purpose: EP_SUMMON; rval: $"Holy Summons"; pval: 2; 
     Desc: "Summons an outsider of CR 2 to fight in the 
       caster's name.";  
     ALIENIST_CLAUSE(2) }
@@ -2025,7 +2025,8 @@ Priest  Spell "Shield Other" : EA_INFLICT
 
 Priest  Spell "Spiritual Hammer" : EA_SUMMON
   { SC_EVO; Base: SP_MEDIUM; Cost: 4; Level: 2; qval: Q_LOC; pval: 3; 
-    rval: $"spiritual hammer;monster"; Purpose: EP_SUMMON; Flags: EF_DLONG;
+    rval: $"spiritual hammer;monster"; Purpose: EP_SUMMON; 
+    Flags: EF_DLONG, EF_XSUMMON;
     Desc: "Summons a warhammer-shaped manifestation of force
       (approximately CR 3) to strike at your enemies."; }
 
@@ -2306,7 +2307,7 @@ and EA_INFLICT
 
 Wizard / Druid  Spell "Flaming Sphere" : EA_SUMMON
   { SC_EVO|SC_FIRE; Level: 2; Cost: 4; Base: SP_MEDIUM; qval: Q_LOC; pval: 3; 
-    rval: $"flaming sphere;monster"; Flags: EF_DLONG;
+    rval: $"flaming sphere;monster"; Flags: EF_DLONG, EF_XSUMMON;
     Desc: "Conjures a boulder-sized globe of fire that rolls
       around and burns your enemies (approximate CR 3)."; Purpose: EP_SUMMON; }
 
@@ -2437,14 +2438,17 @@ Druid Spell "Stone Tell" : EA_GENERIC
     };
   }
 
+/* HACKFIX */
+#if 0
 Druid Spell "Verdant Aid" : EA_SUMMON
   { SC_WEA; Base: SP_HARD; Cost: 4; Level: 2; qval: Q_LOC;
-    Purpose: EP_SUMMON; xval: MA_PLANT; pval: LEVEL_MAX10; 
+    Purpose: EP_SUMMON; xval: MA_PLANT; rval: $"generic summons"; pval: LEVEL_MAX10; 
     Desc: "Conjures plants with a challenge rating equal to your
       level (max 10) to fight on your behalf. Plants are generally neither
       particularly mobile nor particularly effective in combat. The
       advantages of this spell over other summoning spells are (1) it is
       easy to cast and (2) the effect scales with your level."; } 
+#endif
 
 Druid Spell "Forestation" : EA_TERRAFORM
   { SC_WEA; Base: SP_EASY; Cost: 4; Level: 2; qval: Q_LOC; 
@@ -2459,7 +2463,7 @@ Druid Spell "Forestation" : EA_TERRAFORM
 
 Druid Spell "Summon Nature's Ally II" : EA_SUMMON
   { SC_WEA; Base: SP_MEDIUM; Cost: 4; Level: 2; qval: Q_LOC;
-    Purpose: EP_SUMMON; xval: MA_NATURAL; pval: 2; 
+    Purpose: EP_SUMMON; rval: $"Nature's Ally"; pval: 2; 
     Desc: "Summons a natural creature of CR 2 to fight in the 
       caster's name.";  
     ALIENIST_CLAUSE(2) }
@@ -2861,6 +2865,9 @@ Druid Spell "Create Water" : EA_TERRAFORM
     xval: TERRA_OPEN; rval: $"deep water"; aval: AR_GLOBE;
     lval: 3; cval: BLUE; Purpose: 
       EP_FOIL_PURSUIT | EP_CURSE | AIM_AT_ENEMY;
+    
+    /* HACKFIX */ Purpose: EP_PLAYER_ONLY;
+    
     Flags: EF_PERMANANT;
     Desc: "Creates a pool of deep water 30 feet (3 squares) in
       radius."; 
@@ -2911,7 +2918,7 @@ Priest  Spell "Glyph of Warding" : EA_TERRAFORM
 
 Priest Spell "Holy Summoning III" : EA_SUMMON
   { SC_WEA; Base: SP_MEDIUM; Cost: 7; Level: 3; qval: Q_LOC;
-    Purpose: EP_SUMMON; xval: MA_HOLY_SUMM; pval: 3; 
+    Purpose: EP_SUMMON; rval: $"Holy Summons"; pval: 3; 
     Desc: "Summons an outsider of CR 3 to fight in the 
       caster's name.";  
     ALIENIST_CLAUSE(3) }
@@ -2919,6 +2926,7 @@ Priest Spell "Holy Summoning III" : EA_SUMMON
 
 /* Priest Spell "Magic Circle vs. Evil" -- see wspells.irc */
 
+#if 0
 Priest Spell "Imbue with Spell Ability" : EA_INFLICT
   { SC_THE; IS_A_BUFF(COST_3X); Level: 3; aval: Q_TAR;
     xval: EXTRA_ABILITY; yval: CA_SPELLCASTING; pval: LEVEL_EVERY2;
@@ -2958,7 +2966,7 @@ Priest Spell "Imbue with Spell Ability" : EA_INFLICT
       features -- just the ability to cast divine spells. The beneficiary
       does not require a holy symbol to make use of this gift.";
   }
-        
+#endif   
         
 Priest Spell "Inflict Serious Wounds" : EA_BLAST
   { SC_NEC; Base: SP_TRIVIAL; Cost: 5; Level: 3; aval: AR_TOUCH;
@@ -3293,7 +3301,7 @@ Druid Spell "Waterspout" : EA_BLAST
 
 Druid Spell "Summon Nature's Ally III" : EA_SUMMON
   { SC_WEA; Base: SP_MEDIUM; Cost: 6; Level: 3; qval: Q_LOC;
-    Purpose: EP_SUMMON; xval: MA_NATURAL; pval: 3; 
+    Purpose: EP_SUMMON; rval: $"Nature's Ally"; pval: 3; 
     Desc: "Summons a natural creature of CR 3 to fight in the 
       caster's name.";  
     ALIENIST_CLAUSE(3) }
@@ -3836,7 +3844,7 @@ Priest / Druid / Sorcerer Spell "Free Action;spell" : EA_INFLICT
 
 Priest Spell "Holy Summoning IV" : EA_SUMMON
   { SC_WEA; Base: SP_MEDIUM; Cost: 9; Level: 4; qval: Q_LOC;
-    Purpose: EP_SUMMON; xval: MA_HOLY_SUMM; pval: 4; 
+    Purpose: EP_SUMMON; rval: $"Holy Summons"; pval: 4; 
     Desc: "Summons an outsider of CR 4 to fight in the 
       caster's name.";  
     ALIENIST_CLAUSE(4) }
@@ -4042,6 +4050,7 @@ Druid Spell "Whirlpool" : EA_TERRAFORM
     lval: 4; cval: BLUE; Purpose: 
       EP_FOIL_PURSUIT | EP_CURSE | AIM_AT_ENEMY;
     Flags: EF_PERMANANT;
+    /* HACKFIX */ Purpose: EP_PLAYER_ONLY;
     Desc: "Creates a pool of deep, turbulent water 40 feet (4 squares) in
       radius. A swim check (DC 20) is required to make progress in such
       water."; 
@@ -4073,7 +4082,7 @@ Druid / Sorcerer Spell "Repel Vermin" : EA_GENERIC
 
 Druid Spell "Summon Nature's Ally IV" : EA_SUMMON
   { SC_WEA; Base: SP_MEDIUM; Cost: 8; Level: 4; qval: Q_LOC;
-    Purpose: EP_SUMMON; xval: MA_NATURAL; pval: 4; 
+    Purpose: EP_SUMMON; rval: $"Nature's Ally"; pval: 4; 
     Desc: "Summons a natural creature of CR 4 to fight in the 
       caster's name.";  
     ALIENIST_CLAUSE(4) }
@@ -4141,7 +4150,7 @@ Druid  Spell "Dire Regression" : EA_GENERIC
 
 Druid  Spell "Giant Vermin" : EA_SUMMON
   { SC_WEA; Base: SP_MEDIUM; Cost: 8; Level: 4; qval: Q_LOC;
-    Purpose: EP_SUMMON; xval: MA_VERMIN; pval: 6; 
+    Purpose: EP_SUMMON; xval: MA_VERMIN; rval: $"mass summons"; pval: 6; 
     Desc: "Conjures giant insects worth CR 6 in total to fight
       on your behalf."; }
 
@@ -4559,7 +4568,7 @@ Priest Spell "Slay Living" : EA_DRAIN
 
 Priest Spell "Holy Summoning V" : EA_SUMMON
   { SC_WEA; Base: SP_MEDIUM; Cost: 11; Level: 5; qval: Q_LOC;
-    Purpose: EP_SUMMON; xval: MA_HOLY_SUMM; pval: 5; 
+    Purpose: EP_SUMMON; rval: $"Holy Summons"; pval: 5; 
     Desc: "Summons an outsider of CR 5 to fight in the 
       caster's name.";  
     ALIENIST_CLAUSE(5) }
@@ -4633,7 +4642,7 @@ Desc: "Turns aside the claw attacks of animals, humanoids and monsters
 
 Druid Spell "Summon Nature's Ally V" : EA_SUMMON
   { SC_WEA; Base: SP_MEDIUM; Cost: 10; Level: 5; qval: Q_LOC;
-    Purpose: EP_SUMMON; xval: MA_NATURAL; pval: 5; 
+    Purpose: EP_SUMMON; rval: $"Nature's Ally"; pval: 5; 
     Desc: "Summons a natural creature of CR 5 to fight in the 
       caster's name.";  
     ALIENIST_CLAUSE(5) }
@@ -4999,7 +5008,7 @@ Effect "Mark of Punishment" : EA_INFLICT
 
 Effect "Conjure Oozes" : EA_SUMMON
   { SC_WEA; Base: SP_MEDIUM; Cost: 30; Level: 5; qval: Q_LOC;
-    Purpose: EP_SUMMON; xval: MA_OOZE;  
+    Purpose: EP_SUMMON; xval: MA_OOZE; rval: $"mass summons";  
     Flags: EF_PERSISTANT;
     On Event EV_CALC_EFFECT {
       e.vDmg = 3 + (e.vCasterLev + 1) / 2;
@@ -5107,7 +5116,7 @@ Item "fire seeds" : T_WEAPON
 
 Druid Spell "Summon Nature's Ally VI" : EA_SUMMON
   { SC_WEA; Base: SP_MEDIUM; Cost: 12; Level: 6; qval: Q_LOC;
-    Purpose: EP_SUMMON; xval: MA_NATURAL; pval: 6; 
+    Purpose: EP_SUMMON; rval: $"Nature's Ally"; pval: 6; 
     Desc: "Summons a natural creature of CR 6 to fight in the 
       caster's name.";  
     ALIENIST_CLAUSE(6) }
@@ -5136,10 +5145,13 @@ Priest Spell "Animate Objects" : EA_GENERIC
       hold in their hands from tearing free and animating, but
       worn objects do not animate.";
     On Event EV_MAGIC_HIT {
-      hObj hItem, hAnim; rID animID;
+      hObj hItem, hAnim; rID animID; int16 tx, ty;
       if (!(EVictim->isCreature() || EVictim->isType(T_ITEM)))
         return NOTHING;
-        
+      
+      tx = ETarget->x;
+      ty = ETarget->y;
+      
       if (EVictim->isCreature())
         {
           hItem = EVictim->FirstInv();
@@ -5210,10 +5222,15 @@ Priest Spell "Animate Objects" : EA_GENERIC
             return NOTHING;
         }
         
-      EMap->GenEncounter(EN_MONID|EN_CREATOR|EN_SINGLE|EN_SPECIFIC,10,10,
-        (int32)animID, 0, NULL_ID, ETarget->x, ETarget->y, EActor);
-      hAnim = EMap->GetEncounterCreature(0);
+      EMap->thEnGenMonSummXY($"exact monster", animID, 
+        EN_CREATOR|EN_SINGLE, 36, 0, EActor, tx, ty);
       
+      hAnim = EMap->GetEncounterCreature(0);
+      if (hAnim == NULL_OBJ)
+        {
+          APrint(e,"[ Animate Objects failed! ]");
+          return DONE;
+        }
       hAnim->GainTempStati(TRANSFORMED,hItem,e.vDuration,SS_ENCH);
       hItem->Remove(false);
       return DONE;
@@ -5519,7 +5536,7 @@ and EA_HEALING
 
 Priest Spell "Holy Summoning VI" : EA_SUMMON
   { SC_WEA; Base: SP_MEDIUM; Cost: 13; Level: 6; qval: Q_LOC;
-    Purpose: EP_SUMMON; xval: MA_HOLY_SUMM; pval: 6; 
+    Purpose: EP_SUMMON; rval: $"Holy Summons"; pval: 6; 
     Desc: "Summons an outsider of CR 6 to fight in the 
       caster's name.";  
     ALIENIST_CLAUSE(6) }

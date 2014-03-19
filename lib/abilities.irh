@@ -14,7 +14,7 @@ Effect "Circle Kick" : EA_BLAST
           {                                                           \
             ETerm->PutGlyph(EActor->x + vx,                           \
                             EActor->y + vy,                           \
-                            GLYPH_BULK | (EActor->Image & 0x00F0));   \
+                            GLYPH_BULK | (EActor->Image & 0x0F00));   \
             h = EMap->FCreatureAt(EActor->x + vx,EActor->y + vy);     \
           }                                                       
       h1 = NULL; h2 = NULL; h3 = NULL;
@@ -47,7 +47,7 @@ Effect "Circle Kick" : EA_BLAST
       } 
       time = 0;
       EActor->IDPrint("You execute a spectacular spinning kick!",
-        "The <Obj> executes a spectacular spinning kick!", EActor);
+        "The <hObj> executes a spectacular spinning kick!", EActor);
       
       if (h1) {
         ThrowVal(EV_SATTACK,A_KICK,EActor,h1);
@@ -458,9 +458,9 @@ Priest Spell "Sticks to Snakes" : EA_GENERIC
           do {
             it2 = it->TakeOne();
             it2->Remove(false);
-            EMap->GenEncounter(EN_MONID|EN_CREATOR|EN_SINGLE|EN_SPECIFIC,10,10,
-              (int32)((ch == 'a') ? $"boa constrictor" : $"huge viper"), 0, NULL_ID, 
-              EActor->x, EActor->y, EActor);
+            EMap->thEnGenMonSummXY($"exact monster",
+              (ch == 'a') ? $"boa constrictor" : $"huge viper", 
+              EN_SINGLE|EN_CREATOR, 36, 0, EActor, e.EXVal, e.EYVal);
             hSnake = EMap->GetEncounterCreature(0);
             if (hSnake == NULL_OBJ)
               return found ? DONE : ABORT;

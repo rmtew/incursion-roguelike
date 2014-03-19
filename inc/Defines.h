@@ -8,9 +8,9 @@
    in #ifdef/#endif statements appropriately. 
 */
 
-#define SIGNATURE 0x1248ABCD
-#define SIGNATURE_TWO 0xF1F1F1F1
-#define VERSION_STRING "0.6.5"
+#define SIGNATURE 0x1234ABCD
+#define SIGNATURE_TWO 0xF1F2F3F4
+#define VERSION_STRING "0.6.9H"
 
 #ifndef ICOMP
 #define __MINMAX_DEFINED
@@ -70,13 +70,11 @@ typedef signed long       hObj;
   #define BREAKOUT asm("int $3");
 #endif
 
-#ifdef ICOMP
-  #define XCR(CR) ((CR+3)*(CR+3)*(CR+3))
-#else
-  #define XCR(CR) ((CR+3L)*(CR+3L)*(CR+3L))
-#endif
 
 #define HOUR_TURNS 18000L
+
+#define CONSTRAINED_ENC(enc,con) (-2) enc con
+#define CON_ENC_MINMAX(enc,con,low,high) (-3) enc con low high
 
 #define ERROR    -1
 #define NOTHING   0
@@ -352,7 +350,9 @@ typedef signed long       hObj;
 #define T_TVARIABLE  78
 #define T_TTEMPLATE  79
 #define T_TFLAVOR    80
-#define T_MODULE     81
+#define T_TBEHAVIOUR 81
+#define T_TENCOUNTER 82
+#define T_MODULE     83
 
 #define T_ANNOT      90
 #define T_RESOURCE   91
@@ -720,7 +720,8 @@ typedef signed long       hObj;
 #define RF_STAPLE     24
 #define RF_ODD_WIDTH  25
 #define RF_ODD_HEIGHT 26
-#define RF_LAST       27
+#define RF_CENTER_ENC 27
+#define RF_LAST       28
 
 #define CF_RELIGIOUS  1
 #define CF_LAWFUL     2
@@ -763,6 +764,86 @@ typedef signed long       hObj;
 #define GF_LAST       21 /* God Flags */
 #define FF_LAST       1 /* Feature Flags */
 #define MF_LAST       1 /* Map Flags */
+
+#define BF_LMELEE      1  // load mtarg into EVictim
+#define BF_LRANGED     2  // load rtarg into EVictim
+#define BF_LEITHER     3  // load either into EVictim
+#define BF_EVICTIM     4  // do not call with null EVictim
+#define BF_UNIVERSAL   5  // assign to all monsters
+#define BF_INTELLIGENT 6  // assign to sapient monsters
+#define BF_CASTER      7  // assign to primary casters
+#define BF_AFRAID      8  // only applies when afraid
+#define BF_UNAFRAID    9  // only applies when not afraid
+#define BF_AVOID_MELEE 10 // 
+#define BF_NOT_AFRAID  11
+#define BF_WHEN_AFRAID 12
+#define BF_NOT_ENRAGED 13
+#define BF_WHEN_ENRAGED 14
+#define BF_SPECIFIC    15 // Not Applicable unless attached by stati
+
+#define BC_AFRAID      0x00000001
+#define BC_NAFRAID     0x00000002
+#define BC_ENRAGED     0x00000004
+#define BC_NENRAGED    0x00000008
+#define BC_AVOID_MELEE 0x00000010
+#define BC_HAS_TARG    0x00000020
+#define BC_HAS_RTARG   0x00000040
+#define BC_HAS_MTARG   0x00000080
+#define BC_HAS_EFF     0x00000100
+#define BC_CASTER      0x00000400
+#define BC_TROUBLED    0x00000800
+#define BC_HAS_ALLIES  0x00001000
+#define BC_MAG_SUPPORT 0x00002000
+#define BC_SPECIFIC    0x00004000
+#define BC_CANT_HIT    0x00008000
+
+#define BF_LAST 32
+
+
+#define EP_ELSE         0x00000001
+#define EP_OR           0x00000002
+#define EP_NOXCR        0x00000004
+#define EP_UNIFORM      0x00000008
+#define EP_SKILLED      0x00000010
+#define EP_SKILLMAX     0x00000020
+#define EP_SKILLHIGH    0x00000040
+#define EP_CLASSED      0x00000080
+#define EP_CLASS50      0x00000100
+#define EP_CLASS25      0x00000200
+#define EP_CLASS10      0x00000400
+#define EP_SKEW_FOR_AMT 0x00000800
+#define EP_SKEW_FOR_XCR 0x00001000
+#define EP_MOUNTED      0x00002000
+#define EP_MOUNTABLE    0x00004000
+#define EP_LEADER       0x00008000
+#define EP_POPCORN      0x00010000
+#define EP_PET          0x00020000
+#define EP_ANYMON       0x00040000
+#define EP_ANYTEMP      0x00080000
+#define EP_FREAKY       0x00100000
+#define EP_SKEW_FOR_MID 0x00200000
+#define EP_MAYCLASS     0x00400000
+#define EP_NOALIGN      0x00800000
+
+#define NF_NOGEN        1
+#define NF_SINGLE       2
+#define NF_MULTIPLE     3
+#define NF_HORDE        4
+#define NF_FREAKY       5
+#define NF_AQUATIC      6
+#define NF_STAGGERED    7
+#define NF_FORMATION    8
+#define NF_UNIFORM      9
+#define NF_HOSTILE      10
+#define NF_PEACEFUL     11
+#define NF_WANDER       12
+#define NF_VAULT        13
+#define NF_FORM25       14
+#define NF_FORM50       15
+#define NF_CONTEXT_AQUATIC 16
+#define NF_LAST 31
+
+#define ANY(X) (-1) (X)
 
 #define L_HASFIELD    0x00000001
 #define L_OPAQUE      0x00000002
@@ -1264,7 +1345,8 @@ typedef signed long       hObj;
 #define M_ASTRAL          109
 #define M_PLAYER          110
 #define M_MAGE            111
-#define M_LAST            112  
+#define M_RIDER           112
+#define M_LAST            113  
 
 #define TT_SURFACE    0x0001 /* Never in a dungeon */
 #define TT_FOREST     0x0002
@@ -1593,6 +1675,14 @@ typedef signed long       hObj;
 #define EN_ILLUSION 0x00010000 /* Create illusionary creatures */
 #define EN_SPECIFIC 0x00020000 /* Generate specific creature, not by CR */
 #define EN_HOSTILE  0x00040000 /* Create creatures hostile to summoner */
+#define EN_DUMP     0x00080000 /* Construct Text Description of Encounter */
+#define EN_NESTED   0x00100000 /* Nested Encounter (i.e., vampire) */
+#define EN_NOSLEEP  0x00200000 /* Generate None Sleeping */
+#define EN_NOMAGIC  0x00400000 /* No Powerful Magic Items (anti-scumming) */
+#define EN_VAULT    0x00800000 /* Vault Encounter */
+#define EN_AQUATIC  0x01000000 /* Aquatic Encounter */
+#define EN_OODMON   0x02000000
+#define EN_DUNREGEN 0x04000000
 
 #define TM_SKILL    0x0001 /* skilled kobold, veteran mind flayer, etc. */
 #define TM_CLASS    0x0002 /* orc barbarian, firenewt sorceror, etc. */
@@ -3007,7 +3097,8 @@ typedef signed long       hObj;
 #define MAGIC_AURA        234
 #define SOCIAL_MOD        234
 #define DEATH_LOC         235
-#define LAST_STATI        236
+#define ENCOUNTER         236
+#define LAST_STATI        237
   
 
 
@@ -3207,7 +3298,7 @@ typedef signed long       hObj;
 #define EA_RAISE    27 /* Raise Dead, Ressurection */
 #define EA_MENU     28 /* Multi-Effect Staves & Artifacts */
 #define EA_CANCEL   29 /* Rod of Cancellation */
-#define EA_WONDER   30 /* Wand of Wonder */
+#define EA_OVERRIDE   30 
 #define EA_MANYTHINGS 31 /* Guess */
 #define EA_POLYMORPH 32
 #define EA_LEVGAIN   34
@@ -3416,7 +3507,7 @@ typedef signed long       hObj;
 #define WALL_COLORS           7
 #define FLOOR_COLORS          8
 #define MONSTER_LIST          9
-#define MTYPE_LIST            10
+#define ENCOUNTER_LIST        10
 #define CORRIDOR_WEIGHTS      11
 
 #define ITEM_QUALITIES        12
@@ -3445,13 +3536,28 @@ typedef signed long       hObj;
   #define REL_DEFAULT         (-20)
 #define FAVORED_SKILLS        32
 #define ALLOWED_GODS          33
-
+#define TEXT_LIST             34
 
 #define GROUP_LEADER          100
 #define GROUP_FOLLOWER        101
 #define GROUP_MOUNT           102
 #define GROUP_ALLY            103
 #define GROUP_PET             104
+#define MON_LIST1             105
+#define MON_LIST2             106
+#define MON_LIST3             107
+#define MON_LIST4             108
+#define MON_LIST5             109
+#define CLASS_LIST            110
+#define SKILL_LIST            111
+#define TEMP_LIST1            112
+#define TEMP_LIST2            113
+#define TEMP_LIST3            114
+#define TEMP_LIST4            115
+#define TEMP_LIST5            116
+#define MOUNT_LIST            117
+#define UNIVERSAL_TEMPLATE    118
+#define WEIGHT_CURVE_BY_CR    119
 
 #define LEVEL_SIZEX           1
 #define LEVEL_SIZEY           2
@@ -3545,6 +3651,8 @@ typedef signed long       hObj;
 #define TOTAL_CLASS_LEVELS    112
 #define RES_SURVIVAL_CHANCE   113
 #define MIN_CRAFT_LEVEL       114
+#define MIN_XCR_MULT          115
+#define MIN_XCR               116
 
 #define VOICE_COLOR           120
 #define ALTAR_COLOR           121
@@ -3568,7 +3676,8 @@ typedef signed long       hObj;
 #define PERSONAL_ALIGN        139
 #define STICK_TYPE            140
 #define DRAGON_FEAR_DC        141
-#define LAST_DUNCONST         142
+#define UNIFORMITY_CHANCE     142
+#define LAST_DUNCONST         143
 
 
 #define MSG_IS_ANGRY      1
@@ -3808,10 +3917,11 @@ typedef signed long       hObj;
 #define QKY_VERB     4
 #define QKY_SKILL    5
 
-#define MAX_QKEYS     40
+#define MAX_QKEYS       40
 //#define MAX_MACROS    48
-#define MAX_MACROS    12
+#define MAX_MACROS      12
 #define MAX_PATH_LENGTH 1024
+#define MAX_PARTS       16
 
 
 
@@ -3945,6 +4055,7 @@ typedef signed long       hObj;
 #define OPT_DEMORALIZE          519
 #define OPT_WAND_OPENING        520
 #define OPT_USE_GAZE            521
+#define OPT_DIRTY_FIGHTING      522
 
 #define OPC_STABILITY           600
 #define OPT_NO_FREE             601
@@ -4348,6 +4459,20 @@ typedef signed long       hObj;
 #define EV_IBLESSING    176
 #define EV_TERMS        177
 #define EV_PICKLOCK     178
+#define EV_CALC_VALUES  179
+
+#define EV_GEN_DUNGEON  180
+#define EV_GEN_LEVEL    181
+#define EV_GEN_PANEL    182
+#define EV_GEN_ROOM     183
+#define EV_ENGEN        184
+#define EV_ENGEN_PART   185
+#define EV_ENBUILD_MON    186
+#define EV_ENCHOOSE_MID 188
+#define EV_ENCHOOSE_TEMP 189
+#define EV_ENSELECT_TEMPS 190
+#define EV_ENGEN_MOUNT  191
+#define EV_ENGEN_ALIGN  192
 
 #define MSG_BLASTNAME   200  /* "fireball", "hail of burning stones" */
 #define MSG_CHATTER     201 
@@ -4424,6 +4549,13 @@ typedef signed long       hObj;
 #define CONT        62
 #define LAST        63
 
+#define TC_LPAREN    0xFF000001 // '('
+#define TC_RPAREN    0xFF000002 // ')'
+#define TC_CASE      0xFF000003 // '[expr]:' (process next seg if true)
+#define TC_CHOICE    0xFF000004 // '|'
+#define TC_TERM      0xFF000005 // ';'
+#define TC_ACTION    0xFF000006 // '[action]'
+#define TC_WCHOICE   0xFF000007 // '60%'
 
 #define MAX_OVERLAY_GLYPHS 250
 

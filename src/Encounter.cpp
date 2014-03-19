@@ -1,702 +1,2697 @@
-/* ENCOUNTER.CPP -- Copyright (c) g1999-2003 Julian Mensch
+/* ENCOUNTER.CPP -- Copyright (c) 1999-2003 Julian Mensch
      Contains the code for generating groups of monsters or random
      items within a given set of specifications; this is used by 
      both summoning effects and the dungeon generator.
 
-     int16 Map::GenEncounter(uint16 fl, int8 CR, int8 Depth, uint32 mon, 
-                int8 AType, rID xID, int16 ex, int16 ey, Creature *creator)
-     Item* Item::GenItem(uint16 Flags, rID xID, int16 Deptht, int8 Luck, 
-                ItemGen *Gen)
+     
 */
-
 #include "Incursion.h"
 
-#define MG_BASE     1
-#define MG_LEADER   2
-#define MG_POPCORN  3
-#define MG_ALLY     4
-#define MG_SHAMAN   5
+/* TODO:
 
-#define MGF_RANGED  0x0001
-#define MGF_MAGIC   0x0002
-#define MGF_EQUIP   0x0004
-#define MGF_POISON  0x0008
-#define MGF_SLEEP1  0x0010
-#define MGF_SLEEP2  0x0020
-
-/* These are for debugging use, to facilitate getting the text
-   name of a mID in Visual Studio's watch window */
-const char *txt;
-TMonster   *tmm;
-int32      tmi;
-
-
-/* Kludge to convey extra info */
-int16 summDuration;
-int16 illDuration, 
-      illSaveDC,
-      illCasterLev;
-rID   illEID;
-
-
-
-/* This constant determines how far an encounter can deviate
-   from what was requested, both in desired xCR and in terms
-   of how many monsters were requested (to fill a large room
-   of a given size) versus how many are actually generated.
-   Higher values result in quicker, more innaccurate encounter
-   generation, whereas lower values result in longer hashing
-   periods, more accurate encounters and more circumstances
-   where the encounter generator gives up and doesn't build
-   any encounter at all.
-     Note that this has nothing to do with generating out-of-
-   depth encounters. That's based on player Luck, and is
-   determined in MakeLev.Cpp before GenEncounter is ever
-   called. */
-#define DEVIANCE_THRESHOLD   20
-
-int16 HomogenousMixedGroups[] = {
-  MA_DEMON, MA_DEVIL, MA_CELESTIAL, MA_EARTH, MA_AIR, 
-  MA_FIRE, MA_WATER, MA_ILLITHID, MA_SPIRIT, MA_UNDEAD,
-  MA_JELLY, MA_PLANT, 
-  MA_ADVENTURER, MA_MYTHIC, MA_CONSTRUCT, 0 };
+  HIGH:
+  -- make "Ancient Barracks" monsters more thematic
+  -- Encounters for:
+       pseudonatural
+       clockwork
+       dire animals
+       cave animals
+       pseudonaturals
+       eye creatures
+       band of mephits
+       dryad/nymph, with animals (add to forest room)
+       animal family, with baby template
+       
+       Multitude Cult encounter:
+       2-6 Multitude cultists
+       50% 1 blackguard 
+       30% 1 dark sorceror
+       30% 1 lone vampire
+       1   wraith or spectre with "demon ghost" template
+       2d4 low-level demons
+       possibly special themed servitor monsters 
+       
+       Lone Multitude Cultist:
+       1 Multitude cultist
+       1-3 demon followers
+       
+  -- Rename generic encounters --
+       A/M/Si/H Any/Multiple/Single/Horde
+       U/D   Uniform/Diverse
+       E/Sk/C/F Exact/Skilled/Classed/Freaky
+       Aligned - script to copy enConstraint to enAlign
+       
+       "Generic SUE"
+       "Generic MDSC"
+  -- MINION / priests
+     -- M_MINION for templates that need a god
+     -- ALLOWED_GODS list in TMonster / TTemplate
+     -- Choose god based on alignment in enGenAlign
+     -- Monster::Name returns "lizardfolk priest of Immotian"
+     -- MonsterGear gives creatures with hands and M_MINION
+        a holy symbol.
+        
+  MODERATE:
+  -- enSleep
+  -- poisoned weapons
+  -- look at probability dump
+  -- Formation, Starting Orders
+  -- death knights with living mounts
+  -- FREAKY_LIST, add to more encounters
+     with more specific limits, and with
+     "freak factors" listed in the weighted
+     list for rarity.
+  -- add higher age categories
+  -- add higher skill templates
+  -- statue garden == basilisk, cockatrice or
+                        medusa, or dwarves
+  -- call FindOpenAreas in script in fire/ice
+       prison regions to make sure encounter
+       ends up INSIDE the prison -- call it in
+       PRE(EV_ENGEN), and also increase CR?
+  -- special encounter -- mixed elements? --
+       for elemental chamber, with high
+       MIN_XCR_MULT
+  -- Templates:
+       "of Legend"
+       gelatinous
+       insectile
+       runecarved (for constructs, like spellstitched)
+       psionic
+       karmic
+       ethereal
+       titanic
+  -- Magma streamers get a special encounter that searches
+       for fire-immune monsters, esp. magmin and magma creepers
+  -- CR 1 ice room encounters:
+     -- adapt kruthic as arctic beast
+     -- cave husky
+     -- ice beetle
+     -- ice mephit
+     -- ice paraelementals
+          (standardize paras in general)
+     -- hatchling crystal spider / crysmal
+     -- later, mote of frost
+     -- wights, skeleton
+     -- snow angel -- feminine form made of wind-swept snow,
+                        low level celestial
+     -- arctic lemming
+      
   
-  
-/*   We are making the following variables global to this file
-   only in order to avoid an excessive amount of parameters and
-   pointers in different functions. They aren't really program-
-   level global variables, and cannot be guaranteed to hold any
-   meaningful values when GenEncounter() or its sub-functions 
-   are not executing. */
-int16 mgCount;        /* # of monster groups */
-int16 max_mCount;     /* max # of monsters total */
-int16 des_mCount;     /* desired #, based on room size */
-int16 cur_mCount;     /* current # of monsters generated */
-uint8 enAlign;        /* encounter group alignment stricture */
-int32 enMType;        /* encounter overall MA_TYPE */
-int16 enDepth;        /* the Deptht of the overall encounter */
-int16 enTries;        /* Iterations of main loop */
-int16 enPartyID;      /* PartyID for encounter */
-uint32 enFlags;       /* Encounter Flags */
-int16 enSleep;        /* Encounter Sleep Percentage */
-int16 enCR;           /* Encounter desired CR */
-int32 enFreakFactor;  /* Encounter "freak factor" */
-int32 enXCR;          /* Encounter XCR, adjusted for room size */
-rID   enRegID;        /* Region ID for encounter */
-rID   enMonID;        /* Monster ID for encounter */
-int16 enPurpose;      /* Encounter Generation Purpose */
-bool  enIrregular;    /* Generate strange/unlikely groupings? */
-bool  enParty;        /* Generate an adventuring party */
-bool  enSimilar;      /* Party of all same races */
-bool  enPlanarOK;     /* Planar Templates Acceptable */
-int16 Deviance,       /* Deviance of Current Group */
-      bDeviance;      /* Deviance of best group yet */ 
-uint32 RList[33];     /* Resource List Buffer */
-Creature *enCreator;
+   -- verify manditory templates can go on chosen mID --
+      we still get errors here, frex 'bison'
+   * In Holy Summons encounter, trap PRE(EV_ENGEN_PART) and
+       set e.cPart based on CR, and set e.enAlign based on
+       EActor. Grant in NF_STAGGERED, but the event overrides
+       the random choice, different parts for celestial animals,
+       fiendish animals, devils, celestials, demons, etc.
+       Now we can do different summons for different gods,
+       too!
+     In PRE(EV_ENGEN), redirect the summons to an aquatic
+       equivalent if e.EXVal,e.EYVal is aquatic, or add a
+       flag, NF_CHECK_WATER, to do this automatically.
+   -- NF_VAULT, EN_VAULT
+   * enSleep
+   * M_RARE, M_COMMON, etc. as multipliers to ChooseMID weight,
+       but only when choosing from all mIDs, not specified ones
+   * Fix duplicate monsters caused by ANY(MA_TYPE) in weighted
+       lists.
+   * getMaxCR and getMinCR should also calculate max and min
+       TEMPLATE CR, which will then be taken into account by
+       the later "real" call to enChooseMID().
+   * Monster::PseudoCalcValues();
+   
+   * BuildMon  
+     -- ENCOUNTER stati
+     -- NF_SHOWDESC
+     -- illusions, summons, etc.
+   * Purify for Memory Corruption
+   * Fix EP_ELSE known issues for multi-else
+   * Iterate 3-5 times, save results and choose best if
+       finished encounter XCR exceeds specified XCR by
+       more then ALLOWED_DEVIANCE
+   * When choosing mID, figure out the CR adjust of the
+       required/specified templates, and take it into
+       account in the maximum mID CR allowed.
+   * Recalc part XCR by taking total desired XCR, subtracting
+       the XCR what was ACTUALLY created to date, calculating
+       total REM  AINING weight dividing remaining XCR by the
+       fraction of this part's weight from the REMAINING total
+       weight. 
+   * Confirm that required templates can be applied to all
+       chosen mIDs -- if they can't, discard the mID, so that
+       we don't get, frex, living things in a zombie horde.
+   * Optimizations
+       -- generate the mID weighted list once and
+          then store it, so that we don't repeat the gen (and the
+          EV_CRITERIA call) 10+ times in getMinCR()
+       -- separate EV_CRITERIA from EV_TCRITERIA, and set a bool
+          value outside the loop for whether a given encounter
+          uses either.
+   * Encounter Name MSG_ENCNAME == "pack of <res1:plural>"
+   * Generate all the fixed-Amt parts of an Encounter first, then
+       calculate remaining XCR, allocate by weight and do the
+       variable amount parts.
+       
+   ENCOUNTERS & TERRAIN
+     When we do EncStats, add a second part to try each encounter
+   100 times and check the terrain of the mIDs that result. Then,
+     (1) Make a list of Terrain Types the EncType can provide
+         encounters for.
+     (2) Calculate the percent of total used mIDs that are of the
+         needed terrain type, and use this as a multiplier for the
+         encounter's terrain type.
+     (3) Call the encounter for each terrain type and see which
+         ones it fails at.
+   Based on this, build a .h autogen static table listing the name
+   of each encounter, the relevant terrains, a 0 in rID and the
+   percent of its normal weight to apply in an encounter which
+   uses the terrain type in question. Leave the xID column empty,
+   and then fill it out on initialization of modules by calling
+   FIND(name) for each encounter ahead of time as a form of
+   caching.
+   THE DOWNSIDE of this is that is goes against the "plug in new
+   modules at design time" philospohy - think about this.    
+   
+       
+*/
 
-struct MonGroup
-  {
-    uint8 mgType;
-    rID mID, tID[6];
-    uint32 TempTypes;
-    uint8  mCount, tCount;
-    uint16 Flags;
-    hObj mItems[10];        
-    bool isMType(int32 MType);
-    #define VerifyTemplate(x) isMType(-((signed)(x)))
-  } mGroups[12], bestGroups[12];
+int32 Map::uniformKey[50];
+rID   Map::uniformChoice[50];
+int16 Map::cUniform;
+EncMember Map::EncMem[MAX_ENC_MEMBERS];
+int16 Map::cEncMem; 
 
-
-
-MonGroup* AddGroup(int16 GType, int16 xCR);
-rID AppropriateTemplate(uint16 Types, int16 CR, MonGroup *mg);
-
-uint16 GroupAlign(MonGroup *mg)
-  {
-    uint16 al, i;
-
-    al = ResAlign(mg->mID);
-    for (i=0;i!=6;i++)
-      if (mg->tID[i])
-        {
-          if (TTEM(mg->tID[i])->HasFlag(TMF_BODY_ONLY))
-            al = AL_NONGOOD;
-          if (TTEM(mg->tID[i])->SubFlags[M_GOOD/8] & (M_GOOD % 8))
-            al &= ~AL_GOOD;
-          if (TTEM(mg->tID[i])->SubFlags[M_EVIL/8] & (M_EVIL % 8))
-            al &= ~AL_EVIL;
-          if (TTEM(mg->tID[i])->SubFlags[M_LAWFUL/8] & (M_LAWFUL % 8))
-            al &= ~AL_LAWFUL;
-          if (TTEM(mg->tID[i])->SubFlags[M_CHAOTIC/8] & (M_CHAOTIC % 8))
-            al &= ~AL_CHAOTIC;
-          if (TTEM(mg->tID[i])->AddFlags[M_GOOD/8] & (M_GOOD % 8))
-            al |= AL_GOOD;
-          if (TTEM(mg->tID[i])->AddFlags[M_EVIL/8] & (M_EVIL % 8))
-            al |= AL_EVIL;
-          if (TTEM(mg->tID[i])->AddFlags[M_LAWFUL/8] & (M_LAWFUL % 8))
-            al |= AL_LAWFUL;
-          if (TTEM(mg->tID[i])->AddFlags[M_CHAOTIC/8] & (M_CHAOTIC % 8))
-            al |= AL_CHAOTIC;
-        }
-
-    return al;
-  }
-
-
-int16 TotalMCount(rID mID=0)
-  {
-    int16 n = 0;
-    for (int8 i=0;mGroups[i].mID;i++)
-      if ((!mID) || mID == mGroups[i].mID)
-        n += mGroups[i].mCount;
-    return n;
-  }
-
-int32 CalcXCR(int16 CR)
-  {
-    int32 xCR;
-    if (CR <= 0)
-      xCR = 27 / ((-CR)+2);
-    else
-      xCR = (CR+2)*(CR+2)*(CR+2);
-    return xCR;
-  }
-
-int16 CalcCR(int32 xCR)
-  {
-    int32 i, Cubes[] = {
-      27/9,     27/8,     27/7,     27/6,
-      27/5,     27/4,     27/3,     27/2,
-
-      3*3*3,    4*4*4,    5*5*5,    6*6*6,    
-      7*7*7,    8*8*8,    9*9*9,    10*10*10, 
-      11*11*11, 12*12*12, 13*13*13, 14*14*14, 
-      15*15*15, 16*16*16, 17*17*17, 18*18*18, 
-      19*19*19, 20*20*20, 21*21*21, 22*22*22, 
-      23*23*23, 24*24*24, 25*25*25, 26*26*26, 
-      27*27*27, 28*28*28, 29*29*29, 30*30*30,
-      31*31*31, 32*32*32 };
-    
-    for (i=0;i!=39;i++)
-      if (Cubes[i] > xCR)
-        return i - 8;
-    return 30;
-  }
-
-int32 GroupXCR(MonGroup *mg)
-  {
-    int16 CR, n, i; int32 xCR;
-
-    CR = TMON(mg->mID)->CR;
-
-    for (i=0;i!=mg->tCount;i++)
-      CR = TTEM(mg->tID[i])->CR.Adjust(CR);
-
-    if (mg->Flags & MGF_POISON)
-      CR++;
-    if (mg->Flags & MGF_MAGIC)
-      CR++;
-
-    xCR = CalcXCR(CR);
-    
-    xCR *= mg->mCount;
-
-    return xCR;
-  }
-
-int32 TotalXCR()
-  {
-    int32 xCR = 0; int16 i;
-    for (i=0;mGroups[i].mID;i++)
-      xCR += GroupXCR(&mGroups[i]);
-    return xCR;
-  }
-
-// ww: Return the creatures from the last GenEncounter. Helpful if it was
-// EN_NOPLACE. 
 Creature * CandidateCreatures[2048]; 
+void UpdateAlignRestrict(EventInfo &e);
+
+
+#define PTEMP_MOUNTED 10001
+#define PTEMP_POISON  10002
+#define PTEMP_MAGIC   10003
+
+/* Throw Functions */
+EvReturn Map::thEnGen(rID xID, uint32 fl, int8 CR, uint16 enAlign)
+  {
+    EventInfo e;
+    e.Clear();
+    e.EMap = this;
+    if (xID && RES(xID)->isType(T_TENCOUNTER))
+      e.enID = xID;
+    else if (xID && RES(xID)->isType(T_TENCOUNTER))
+      e.enRegID = xID;
+    e.enFlags = fl;
+    e.enCR = CR;
+    e.enDepth = Depth;
+    e.enAlign = enAlign;
+    return ReThrow(EV_ENGEN,e);
+  }
+
+EvReturn Map::thEnGenXY(rID xID, uint32 fl, int8 CR, uint16 enAlign, int16 x, int16 y)
+  {
+    EventInfo e;
+    e.Clear();
+    e.EMap = this;
+    if (xID && RES(xID)->isType(T_TENCOUNTER))
+      e.enID = xID;
+    else if (xID && RES(xID)->isType(T_TENCOUNTER))
+      e.enRegID = xID;
+    e.enFlags = fl;
+    e.enCR = CR;
+    e.enDepth = Depth;
+    e.enAlign = enAlign;
+    e.EXVal = x;
+    e.EYVal = y;
+    e.isLoc = true;
+    return ReThrow(EV_ENGEN,e);
+  }
+  
+EvReturn Map::thEnGenSummXY(rID xID, uint32 fl, int8 CR, uint16 enAlign, Creature* crea, int16 x, int16 y)
+  {
+    EventInfo e;
+    e.Clear();
+    e.EMap = this;
+    if (xID && RES(xID)->isType(T_TENCOUNTER))
+      e.enID = xID;
+    else if (xID && RES(xID)->isType(T_TENCOUNTER))
+      e.enRegID = xID;
+    e.enFlags = fl;
+    e.enCR = CR;
+    e.enDepth = Depth;
+    e.enAlign = enAlign;
+    e.EXVal = x;
+    e.EYVal = y;
+    e.EActor = crea;
+    e.isLoc = true;
+    return ReThrow(EV_ENGEN,e);
+  }
+
+EvReturn Map::thEnGenMon(rID xID, rID mID, uint32 fl, int8 CR, uint16 enAlign)
+  {
+    EventInfo e;
+    e.Clear();
+    e.EMap = this;
+    if (xID && RES(xID)->isType(T_TENCOUNTER))
+      e.enID = xID;
+    else if (xID && RES(xID)->isType(T_TENCOUNTER))
+      e.enRegID = xID;
+    e.enConstraint = mID;
+    e.enFlags = fl;
+    e.enCR = CR;
+    e.enDepth = Depth;
+    e.enAlign = enAlign;
+    return ReThrow(EV_ENGEN,e);
+  }
+
+
+EvReturn Map::thEnGenMonXY(rID xID, rID mID, uint32 fl, int8 CR, uint16 enAlign, int16 x, int16 y)
+  {
+    EventInfo e;
+    e.Clear();
+    e.EMap = this;
+    if (xID && RES(xID)->isType(T_TENCOUNTER))
+      e.enID = xID;
+    else if (xID && RES(xID)->isType(T_TENCOUNTER))
+      e.enRegID = xID;
+    e.enFlags = fl;
+    e.enCR = CR;
+    e.enDepth = Depth;
+    e.enAlign = enAlign;
+    e.EXVal = x;
+    e.EYVal = y;
+    e.enConstraint = mID;
+    e.isLoc = true;
+    return ReThrow(EV_ENGEN,e);
+  }
+
+EvReturn Map::thEnGenMonSummXY(rID xID, rID mID, uint32 fl, int8 CR, uint16 enAlign, Creature *crea, int16 x, int16 y)
+  {
+    EventInfo e;
+    e.Clear();
+    e.EMap = this;
+    if (xID && RES(xID)->isType(T_TENCOUNTER))
+      e.enID = xID;
+    else if (xID && RES(xID)->isType(T_TENCOUNTER))
+      e.enRegID = xID;
+    e.enFlags = fl;
+    e.enCR = CR;
+    e.enDepth = Depth;
+    e.enAlign = enAlign;
+    e.EXVal = x;
+    e.EYVal = y;
+    e.enConstraint = mID;
+    e.isLoc = true;
+    e.EActor = crea;
+    return ReThrow(EV_ENGEN,e);
+  }
+
+
+EvReturn Map::thEnGenMType(rID xID, int16 mt, uint32 fl, int8 CR, uint16 enAlign)
+  {
+    EventInfo e;
+    e.Clear();
+    e.EMap = this;
+    if (xID && RES(xID)->isType(T_TENCOUNTER))
+      e.enID = xID;
+    else if (xID && RES(xID)->isType(T_TENCOUNTER))
+      e.enRegID = xID;
+    e.enConstraint = mt;
+    e.enFlags = fl;
+    e.enCR = CR;
+    e.enDepth = Depth;
+    e.enAlign = enAlign;
+    return ReThrow(EV_ENGEN,e);
+  }
+
+EvReturn Map::thEnGenMTypeXY(rID xID, int16 mt, uint32 fl, int8 CR, uint16 enAlign, int16 x, int16 y)
+  {
+    EventInfo e;
+    e.Clear();
+    e.EMap = this;
+    if (xID && RES(xID)->isType(T_TENCOUNTER))
+      e.enID = xID;
+    else if (xID && RES(xID)->isType(T_TENCOUNTER))
+      e.enRegID = xID;
+    e.enFlags = fl;
+    e.enCR = CR;
+    e.enDepth = Depth;
+    e.enAlign = enAlign;
+    e.EXVal = x;
+    e.EYVal = y;
+    e.enConstraint = mt;
+    e.isLoc = true;
+    return ReThrow(EV_ENGEN,e);
+  }
+
+EvReturn Map::rtEnGen(EventInfo &_e, rID xID, uint32 fl, int8 CR, uint16 enAlign)
+  {
+    EventInfo e;
+    e.Clear();
+    e = _e;
+    e.EMap = this;
+    if (xID && RES(xID)->isType(T_TENCOUNTER))
+      e.enID = xID;
+    else if (xID && RES(xID)->isType(T_TENCOUNTER))
+      e.enRegID = xID;
+    e.enFlags = fl;
+    e.enCR = CR;
+    e.enDepth = Depth;
+    e.enAlign = enAlign;
+    return ReThrow(EV_ENGEN,e);
+  }
+
 
 Creature * Map::GetEncounterCreature(int32 i)
-{
-  if (i < 0 || i >= (sizeof(CandidateCreatures)/sizeof(CandidateCreatures[0]))) return NULL;
-  else return (CandidateCreatures[i]);
-} 
-
-
-int16 Map::GenEncounter(uint32 fl, int8 CR, int8 Depth, uint32 mon, int8 AType, rID xID,
-                          int16 ex, int16 ey, Creature*creator)
   {
-    static uint8 PartyID = 100, i;
-    MonGroup *mg;
-    bool doneLeader, doneShaman;
+    if (i < 0 || i >= (sizeof(CandidateCreatures)/sizeof(CandidateCreatures[0]))) 
+      return NULL;
+    else 
+      return (CandidateCreatures[i]);
+  }
 
-    txt = theGame->Modules[0]->QTextSeg;
-    tmm = theGame->Modules[0]->QMon;
-    tmi = theGame->Modules[0]->MonsterID(0);
-
-    memset(Candidates,0,sizeof(Candidates));
-    memset(CandidateCreatures,0,sizeof(CandidateCreatures));
-
-    Restart:
-    enCR = CR;
-    enFlags = fl;
-    enDepth = Depth;
-    enAlign = AType;
-    enCreator = creator;
-    enPurpose = PUR_DUNGEON;
-    enFreakFactor = random(5000);
-    enIrregular = !random(6);
-    if (!(fl & (EN_SUMMON|EN_STREAMER|EN_CREATOR|EN_ILLUSION))
-           || (fl & EN_HOSTILE)) {
-      PartyID++;
-      if (PartyID < (MAX_PLAYERS+4))
-        PartyID = MAX_PLAYERS+4;
-      enPartyID = PartyID;
+void Map::enWarn(const char* msg,...)
+  {
+    va_list ap;
+    if (!theGame->GetPlayer(0))
+      {
+        Player *p = new Player(T1);
+        va_start(ap, msg);
+        T1->Box(__XPrint(p,msg,ap));
+		    va_end(ap);
+		    delete p;
+		  }
+		else if (1)//theGame->GetPlayer(0)->WizardMode)
+		  {
+		    va_start(ap, msg);
+        T1->Box(__XPrint(theGame->GetPlayer(0),msg,ap));
+		    va_end(ap);
       }
-    else if ((fl & (EN_SUMMON|EN_CREATOR|EN_ILLUSION)) && creator)
-      enPartyID = creator->PartyID;
-    else if (fl & EN_STREAMER)
-      enPartyID = MAX_PLAYERS + 1;
+  }
+
+void Map::enUniformAdd(int32 key, rID choice)
+  {
+    uniformKey[cUniform] = key;
+    uniformChoice[cUniform] = choice;
+    cUniform++;
+    ASSERT(cUniform < 50);
+  }
+
+rID Map::enUniformGet(int32 key)
+  {
+    for (int32 i=0;i!=cUniform;i++)
+      if (uniformKey[i] == key)
+        return uniformChoice[i];
+    return 0;
+  }
+
+void Map::enAddMon(EventInfo &e)
+  {
+    ASSERT(cEncMem < MAX_ENC_MEMBERS);
+    EncMem[cEncMem].mID   = e.ep_mID;
+    EncMem[cEncMem].tID   = e.ep_tID;
+    EncMem[cEncMem].tID2  = e.ep_tID2;
+    EncMem[cEncMem].tID3  = e.ep_tID3;
+    EncMem[cEncMem].hmID  = e.ep_hmID;
+    EncMem[cEncMem].htID  = e.ep_htID;
+    EncMem[cEncMem].htID2 = e.ep_htID2;
+    EncMem[cEncMem].pID   = e.ep_pID;
+    EncMem[cEncMem].iID   = e.ep_iID;
+    EncMem[cEncMem].Part =  e.cPart;
+    cEncMem++;
+  }
+
+/*7398
+
+  9594
+  9558
+  9571
+  9560
+
+*/
+
+void Map::enAddTemp(EventInfo &e, rID tID)
+  {
+    ASSERT(TTEM(tID)->Type == T_TTEMPLATE);
+    if (e.ep_tID && e.ep_tID2 && e.ep_tID3)
+      {
+        enWarn("Monster generated with 4+ templates!");
+        return;
+      }
+    if (e.ep_tID && e.ep_tID2)
+      e.ep_tID3 = tID;
+    else if (e.ep_tID)
+      e.ep_tID2 = tID;
     else
-      enPartyID = 0;
-    enRegID = (xID && RES(xID)->Type == T_TREGION) ? xID : 0;
-    enMonID = (enFlags & EN_MONID) ? mon : 0;
-    enMType = (enFlags & EN_MTYPE) ? mon : 0;
-    enPlanarOK = !random(4);
+      e.ep_tID = tID;
+    enCalcCurrPartXCR(e);
+  }
 
-    if (fl & EN_SINGLE) {
-      max_mCount = 1;
-      des_mCount = 1;
+void Map::enAddMountTemp(EventInfo &e, rID tID)
+  {
+    ASSERT(TTEM(tID)->Type == T_TTEMPLATE);
+    if (e.ep_htID && e.ep_htID2)
+      {
+        enWarn("Mount generated with 3+ templates!");
+        return;
       }
-    else if (fl & EN_ANYOPEN) {
-      max_mCount = min(32,OpenC/3);
-      if (Depth > 2)
-        des_mCount = OpenC / 30;
-      else if (Depth == 2)
-        des_mCount = OpenC / 50;
-      else
-        des_mCount = OpenC / 75;
-      }
-    else if (fl & EN_MULTIPLE) {
-      max_mCount = 32;
-      des_mCount = 12;
-      }
-    else {
-      max_mCount = 32;
-      des_mCount = 1;
-      }
-
-    /* Are we building a party of adventurers? */
-    if ((enMType == MA_ADVENTURER || (!random(6) && !enMType && !enMonID)) && CR >= 3)
-      { enMType = MA_ADVENTURER; enParty = true;
-        enSimilar = random(2);         
-        des_mCount = max(des_mCount,3+random(4)); }
+    if (e.ep_htID)
+      e.ep_htID2 = tID;
     else
-      { enParty = false; enSimilar = false; }
+      e.ep_htID = tID;
+    enCalcCurrPartXCR(e);
+  }
 
-    // ww: far too many monsters in Incursion are generated asleep! 
-    enSleep = (!random(5)) ? 100 : ((!random(4)) ? 0 : (20+random(61)));
-    enXCR = CalcXCR(CR);
+void Map::enCalcCurrPartXCR(EventInfo &e)
+  {
+    e.ep_monCR = 0;
+    e.ep_mountCR = 0;
+    if (!e.ep_mID)
+      { e.epCurrXCR = 0; return; }
+    e.ep_monCR = TMON(e.ep_mID)->CR;
+    if (e.ep_tID)
+      e.ep_monCR = TTEM(e.ep_tID)->CR.Adjust(e.ep_monCR);
+    if (e.ep_tID2)
+      e.ep_monCR = TTEM(e.ep_tID2)->CR.Adjust(e.ep_monCR);
+    if (e.ep_tID3)
+      e.ep_monCR = TTEM(e.ep_tID3)->CR.Adjust(e.ep_monCR);
+    e.epCurrXCR = XCR(e.ep_monCR);
     
+    if (e.ep_hmID) {
+      e.ep_mountCR = TMON(e.ep_hmID)->CR;
+      if (e.ep_htID)
+        e.ep_mountCR = TTEM(e.ep_htID)->CR.Adjust(e.ep_mountCR);
+      if (e.ep_htID2)
+        e.ep_mountCR = TTEM(e.ep_htID2)->CR.Adjust(e.ep_mountCR);
+      e.epCurrXCR += XCR(e.ep_mountCR);
+      }
+      
+    if (e.ep_pID)
+      e.epCurrXCR += XCR(TEFF(e.ep_pID)->Level-2);
+    if (e.ep_iID)
+      e.epCurrXCR += XCR(TEFF(e.ep_iID)->Level-2);
+  }
+
+
+
+
+bool okDesAmt(TEncounter *te, int16 des);
+
+int16 maxAmtByCR(int16 CR)
+  {
+    switch (CR)
+      {
+        case 1: return 5;
+        case 2: return 7;
+        case 3: return 10;
+        case 4: return 12;
+        case 5: return 15;
+        default:
+          return (CR > 1) ? 50 : 4;
+      }
+  }
+
+EvReturn Map::enGenerate(EventInfo &e)
+  {
+    int32 q, c, i, w, j, n, enWeight[1024], tWeight;
+    int16 nParts, regTries; uint16 old_enAlign;
+    rID enList[1024], xID, wgtCurve[30]; 
+    
+    e.enTries = 1; 
+                 
+    regTries = 0;
+   
+    old_enAlign = e.enAlign;
+    DevianceRestart:
+    e.enAlign = old_enAlign;
+    
+    //********* Stage 0: Clear And Initialize Variables
+    if (!(e.enFlags & EN_NESTED))
+      {
+        memset(EncMem,0,sizeof(EncMember)*MAX_ENC_MEMBERS);
+        cEncMem = 0;
+        cUniform = 0;
+        memset(uniformKey,0,sizeof(uniformKey));
+        memset(uniformChoice,0,sizeof(uniformChoice));
+        memset(CandidateCreatures,0,sizeof(Creature*)*2048);
+      }
+
+    if (e.enDesAmt)
+      ;
+    else if (e.enFlags & EN_SINGLE) 
+      e.enDesAmt = 1;
+    else if (e.enFlags & EN_ANYOPEN) {
+      if (e.enDepth > 2)
+        e.enDesAmt = max(1,OpenC / 30);
+      else if (e.enDepth == 2)
+        e.enDesAmt = max(1,OpenC / 50);
+      else
+        e.enDesAmt = max(1,OpenC / 75);
+      }
+    else if (e.enFlags & EN_MULTIPLE)
+      e.enDesAmt = 4 + random(5);
+
+    e.enDesAmt = min(e.enDesAmt, maxAmtByCR(e.enCR));
+
+    if (e.enConstraint == MA_AQUATIC ||
+        (e.enConstraint > 0x01000000 &&
+           RES(e.enConstraint)->isType(T_TMONSTER) &&
+           TMON(e.enConstraint)->HasFlag(M_AQUATIC)))
+      e.enFlags |= EN_AQUATIC;
+    
+    if (e.enID)
+      goto PresetEncounter;
+   
+    //********* Stage 1: Choose Encounter ID from Region List
+    if (e.enRegID && TREG(e.enRegID)->HasList(ENCOUNTER_LIST) && !e.enID)
+      {
+        rID wtList[512]; int32 cWeight, enConst[512];
+        TREG(e.enRegID)->GetList(ENCOUNTER_LIST,wtList,510);
+        cWeight = 10; n = 0; memset(enConst,0,512*sizeof(int32));
+        enWeight[0] = 0;
+        for (i=0;wtList[i] || wtList[i+1];i++)
+          {
+            if (wtList[i] == -2)
+              {
+                ASSERT(RES(wtList[i+1])->Type == T_TENCOUNTER);
+                if (TENC(wtList[i+1])->minCR > e.enCR)
+                  { i += 2; continue; }
+                if (AlignConflict(TENC(wtList[i+1])->Align,e.enAlign,true))
+                  { i += 2; continue; }
+                enList[n] = wtList[i+1];
+                enWeight[n+1] = enWeight[n] + cWeight;
+                enConst[n] = wtList[i+2];
+                i += 2; n++;
+                continue;
+              }
+            else if (wtList[i] == -3)
+              {
+                ASSERT(RES(wtList[i+1])->Type == T_TENCOUNTER);
+                if (TENC(wtList[i+1])->minCR > e.enCR)
+                  { i += 4; continue; }
+                if (wtList[i+3] > e.enCR)
+                  { i += 4; continue; }
+                if (wtList[i+4] < e.enCR)
+                  { i += 4; continue; }
+                if (AlignConflict(TENC(wtList[i+1])->Align,e.enAlign,true))
+                  { i += 3; continue; }
+                enList[n] = wtList[i+1];
+                enWeight[n+1] = enWeight[n] + cWeight;
+                enConst[n] = wtList[i+2];
+                i += 4; n++;
+                continue;
+              }
+            else if (wtList[i] < 0x01000000)
+              cWeight = wtList[i];
+            else {
+              ASSERT(RES(wtList[i])->Type == T_TENCOUNTER);
+              if (TENC(wtList[i])->minCR > e.enCR)
+                continue;
+              if (AlignConflict(TENC(wtList[i])->Align,e.enAlign,true))
+                continue;
+              enList[n] = wtList[i];
+              enWeight[n+1] = enWeight[n] + cWeight;
+              enConst[n] = 0;
+              n++;
+              continue;
+              }
+          }
+        if (n) {
+          w = random(enWeight[n]);
+          for (i=0;i!=n;i++)
+            if (enWeight[i+1] > w)
+              {
+                e.enID = enList[i];
+                e.enConstraint = enConst[i];
+                goto PresetEncounter;
+              }
+          }
+      }
+  
+    //********* Stage 2: Build Potential Encounter List  
+    enWeight[0] = 0; 
+    for (q=0,c=0;q!=1;q++) 
+      for(i=0;i!=theGame->Modules[q]->szEnc;i++)
+        {
+          TEncounter *te = &theGame->Modules[q]->QEnc[i];
+          if (te->minCR > e.enCR)
+            continue;
+          if (te->maxCR < e.enCR)
+            continue;
+          if (te->HasFlag(NF_NOGEN))
+            continue;
+          if (!(e.enFlags & EN_AQUATIC)) {
+            if (te->HasFlag(NF_AQUATIC))
+              continue;
+            }
+          else {
+            if (!(te->HasFlag(NF_AQUATIC) ||
+                  te->HasFlag(NF_CONTEXT_AQUATIC)))
+              continue;
+            }
+          if (((e.enFlags & EN_VAULT) == EN_VAULT) != 
+              te->HasFlag(NF_VAULT))
+            continue;
+          if (e.enTerrain) {
+            if (!(e.enTerrain & te->Terrain))
+              continue;
+            if (!(e.enTerrain & TT_SURFACE))
+              if (te->Terrain & TT_SURFACE)
+                continue;
+            }
+          if (e.enType)
+            if (!(e.enType & te->Type))
+              continue;
+          if (e.enDesAmt && e.enDesAmt > 1)
+            if (te->HasFlag(NF_SINGLE))
+              continue;
+          if (e.enDesAmt && e.enDesAmt < 2)
+            if (te->HasFlag(NF_MULTIPLE))
+              continue;
+          if (e.enDesAmt && e.enDesAmt > 10)
+            if (!te->HasFlag(NF_HORDE))
+              continue;
+          if (e.enDesAmt && e.enDesAmt < 10)
+            if (te->HasFlag(NF_HORDE))
+              continue;
+          if (e.enDesAmt && !okDesAmt(te,e.enDesAmt))
+            continue;
+          if (AlignConflict(te->Align,e.enAlign,true))
+            continue;
+          xID = theGame->Modules[q]->EncounterID(i);
+          if (TENC(xID)->Event(e,xID,EV_ISTARGET) == CANNOT_CAST_IT)
+            continue;
+          enList[c++] = xID;
+          if (te->GetList(WEIGHT_CURVE_BY_CR,wgtCurve,30)) {
+            for (int16 j=0;;j++)
+              if (!wgtCurve[j+1] || (j == e.enCR - te->minCR))
+                {
+                  enWeight[c] = enWeight[c-1] + wgtCurve[j];
+                  break;
+                }
+            }
+          else
+            enWeight[c] = enWeight[c-1] + te->Weight;
+        }
+    
+    if (!c)
+      {
+        enWarn("No suitable encounters found!");
+        return ABORT;
+      }      
+  
+    //********* Stage 3: Choose Encounter from Weighted List
+    w = random(enWeight[c]);
+    for (i=0;i!=c;i++)
+      if (enWeight[i+1] > w)
+        {
+          e.enID = enList[i];
+          break;
+        }
+    
+    PresetEncounter:
+    //********* Stage 4: Eliminate Inapplicabe/Percentile Parts
+    // -- eliminate any with overhigh CR minimums
+    // -- choose only one from each OR list
+    // -- roll each percentile chance
+    ASSERT(e.enID);
+    TEncounter *te = TENC(e.enID);
+    e.enAlign |= te->Align;
+    if (te->HasFlag(NF_CONTEXT_AQUATIC) && e.isLoc)
+      if (ResourceHasFlag(e.EMap->TerrainAt(e.EXVal,e.EYVal),TF_WATER) &&
+           (e.enConstraint < 0x01000000))
+        e.isAquaticContext = true;
+    if (te->HasFlag(NF_CONTEXT_AQUATIC))
+      if (e.enFlags & EN_AQUATIC)
+        e.isAquaticContext = true;
+    if (te->HasFlag(NF_AQUATIC))
+      e.enFlags |= EN_AQUATIC;
+    for (i=0;i!=MAX_PARTS && (te->Parts[i].xID || te->Parts[i].Flags);i++)
+      {
+        if (te->Parts[i].minCR > e.enCR)
+          e.enSkipPart[i] = true;
+        if (te->Parts[i].Chance)
+          if (random(100)+1 > te->Parts[i].Chance)
+            e.enSkipPart[i] = true;
+        if (i >= 1 && te->Parts[i].Flags & EP_ELSE)
+          if (!e.enSkipPart[i-1]) 
+            /* Need to fix for multi-else */
+            e.enSkipPart[i] = true;
+      }
+    nParts = i;
+      
+    for (i=1;i<nParts;i++)
+      if (te->Parts[i].Flags & EP_OR)
+        {
+          j = i;
+          while (j != MAX_PARTS && (te->Parts[j].Flags & EP_OR))
+            j++;
+          n = (i-1) + random(j-(i-1));
+          for(i=i;i!=j;i++)
+            if (i != n)
+              e.enSkipPart[i] = true;
+        }
+              
+         
+    
+    //********* Stage 5: Calculate Total Weight; divide XCR
+    e.enXCR = XCR(e.enCR);
+    e.enSleep = random(100)+1;
     /* We need to increase the xCR in large rooms with a high number
        of desired monsters, else we end up with wierd imbalances and
        hashing. To balance this, we increase the chances that more of
        the monsters will be asleep, initially. */
-    if (des_mCount >= 4) {
-      enXCR *= (des_mCount / 3);   
-      for (i=0;i!=(des_mCount / 3);i++)
-        enSleep = max(enSleep,random(100)+1);
+    if (e.enDesAmt >= 4) {
+      e.enXCR += (e.enDesAmt / 3) * (e.enXCR/2);   
+      if (!(e.enFlags & EN_NOSLEEP))
+        for (i=0;i!=(e.enDesAmt / 3);i++)
+          e.enSleep = max(e.enSleep,random(100)+1);
+      }
+    e.enXCR = max(e.enXCR, XCR(e.enCR) * te->GetConst(MIN_XCR_MULT));
+    e.enXCR = max(e.enXCR, te->GetConst(MIN_XCR));
+    
+    tWeight = 0;
+    for(i=0;i!=nParts;i++)
+      if (!e.enSkipPart[i])
+        tWeight += te->Parts[i].Weight;
+    
+    
+    
+    //********* Stage 6: Create Parts in Order
+    // if uniform, one mID for everyone, otherwise new one
+    // every time
+    // a) determine max mID CR
+    // b) choose mID
+    // c) Fill XCR with numbers and/or templates
+    
+    /* Some universal preparations for building the encounter */
+    if (te->GetList(UNIVERSAL_TEMPLATE,enList,1020))
+      {
+        rID tID;
+        XTHROW(EV_ENCHOOSE_TEMP,xe,
+          e.chList = UNIVERSAL_TEMPLATE;
+          e.chType = 0;
+          );
+        if (e.chResult)
+          enUniformAdd(UNIVERSAL_TEMPLATE,e.chResult);
+      }
+      
+    e.enFreaky = random(10)+1;
+    
+    /* Handle NF_STAGGERED encounters differently from most */
+    if (te->HasFlag(NF_STAGGERED))
+      {
+        int16 mCount, nOkParts, okParts[MAX_PARTS], 
+                partWeight[MAX_PARTS+1], w, i, j;
+        if (e.enDesAmt)
+          mCount = e.enDesAmt;
+        //else if (te->GetConst(MIN_MCOUNT))
+        //  ...
+        else
+          mCount = 3 + random(5);
+        
+        nOkParts = 0; partWeight[0] = 0;
+        for (i=0;te->Parts[i].xID || te->Parts[i].Flags;i++)
+          if (!e.enSkipPart[i])
+            {
+              okParts[nOkParts] = i;
+              partWeight[nOkParts+1] = partWeight[nOkParts]
+                + te->Parts[i].Weight;
+              nOkParts++;
+            }
+        
+        for (i=0;i!=mCount;i++)
+          {
+            w = random(partWeight[nOkParts]);
+            for (j=0;j!=nOkParts;j++)
+              if (partWeight[j+1] > w)
+                { e.cPart = okParts[j];
+                  break; }
+            ASSERT(j < nOkParts);
+            
+            e.epMinAmt = e.epMaxAmt = 1;
+            e.epXCR = e.enXCR / mCount;
+            ReThrow(EV_ENGEN_PART,e);
+          }
+        goto DoneParts;
       }
     
-    bDeviance = 1000;
-
-    /* Generate Single Specific Monster? */
-    if (enFlags & EN_SPECIFIC)
-      {
-        ASSERT(enMonID > 0xFFFF)
-        memset(&mGroups[0],0,sizeof(mGroups[0]));
-        mGroups[0].mgType = MG_BASE;
-        mGroups[0].mID = enMonID;
-        mGroups[0].mCount = 1;
-        if (xID && RES(xID)->Type == T_TTEMPLATE)
-          {
-            mGroups[0].tID[0] = xID;
-            mGroups[0].tCount = 1;
-          }
-        mgCount = 1;
-        enTries = 1;
-      }
-    else for (enTries=0;enTries!=100;enTries++)
-      {
-        RestartGen:
-        enTries++;
-        //theGame->GetPlayer(0)->IPrint(".");
-        //T1->Update();
-        mgCount = 0; mg = NULL;
-        memset(mGroups,0,sizeof(MonGroup)*12);
-        for(i=0;i!=10 && !mg;i++)
-          mg = AddGroup(MG_BASE,enXCR / (enParty ? 4 : 1)); 
-        if (!mg)
-          continue;
-        mGroups[mgCount++] = *mg;
-               
-        doneLeader = doneShaman = 0;
-        
-        while ((TotalXCR() < (enXCR*2)/3 || ((TotalMCount()*3)/2) < des_mCount) && random(10))
-          {
-            if (mgCount >= 11)
-              break;
-            if ((des_mCount > TotalMCount()) && !enParty)
-              {
-                mg = AddGroup(MG_POPCORN,max(enXCR/4,enXCR - TotalXCR()));
-                if (mg && (TotalMCount() + mg->mCount <= max_mCount)) {
-                  mGroups[mgCount++] = *mg;
-                  continue;
-                  }
-              }
-
-            if (TMON(mGroups[0].mID)->HasFlag(M_CHIEFTAN) && !enParty)
-              if (TotalMCount(mGroups[0].mID) >= 4 && !doneLeader)
-                {
-                  mg = AddGroup(MG_LEADER,max(enXCR/4,enXCR - TotalXCR()));
-                  if (mg && (TotalMCount() + mg->mCount <= max_mCount)) {
-                    mGroups[mgCount++] = *mg;
-                    doneLeader = true;
-                    continue;
-                    }
-                }
-
-            if (TMON(mGroups[0].mID)->HasFlag(M_SHAMAN) && !enParty)
-              if (TotalMCount(mGroups[0].mID) >= 6 && !doneShaman)
-                {
-                  mg = AddGroup(MG_SHAMAN,max(enXCR/4,enXCR - TotalXCR()));
-                  if (mg && (TotalMCount() + mg->mCount <= max_mCount)) {
-                    mGroups[mgCount++] = *mg;
-                    doneShaman = true;
-                    continue;
-                    }
-                }
-      
-            if (TMON(mGroups[0].mID)->CR <= min(CR-3,CR/3) && !doneLeader){
-              mg = AddGroup(MG_LEADER,max(enXCR/4,enXCR - TotalXCR()));
-              if (mg && (TotalMCount() + mg->mCount <= max_mCount))
-                { mGroups[mgCount++] = *mg; doneLeader = true; }
-              }
-            else {
-              mg = AddGroup(MG_ALLY,max(enXCR/4,enXCR - TotalXCR()));
-              if (mg && (TotalMCount() + mg->mCount <= max_mCount))
-                mGroups[mgCount++] = *mg;
-              }
-
-            if (TotalMCount() > max_mCount)
-              break;
-          } 
-      
-      Deviance = abs(enXCR-TotalXCR())*10 / min(enXCR,TotalXCR());
-      if (des_mCount != 1)
-        Deviance += abs(TotalMCount() - des_mCount);
-      
-
-      if (bDeviance > Deviance)
+    /* Choose mID, tID for each MON_LIST, TEMP_LIST here first
+       if encounter or part is uniform */
+    EvReturn r;
+    for(i=0;i!=nParts;i++)
+      if (!e.enSkipPart[i])
         {
-          bDeviance = Deviance;
-          memcpy(bestGroups,mGroups,sizeof(MonGroup)*12);
-        }
-
-      if (bDeviance > DEVIANCE_THRESHOLD)
-        continue;
-      
-      if (enTries > 6)
-        break;
+          /* Possible combos of constraints:
+           * base CR
+           * # of creatures
+           * fixed CR
+           * -- if too many constraints are true, we can't match
+           *    intended XCR, thus just give up and ignore intended
+           *    XCR. There may also be _no_ intended XCR (EP_IGNORE_XCR).
+           */
           
-      }  
-
-    if (enTries == 100)
-      {
-        //memset(mGroups,0,sizeof(MonGroup)*12);
-        return 0;
-      }
-    if (!(enFlags & EN_SPECIFIC))
-      memcpy(mGroups,bestGroups,sizeof(MonGroup)*12);
-
-    if (!(enFlags & EN_NOBUILD))
-      PlaceEncounter(ex,ey,creator);
-
-    return 1;
-  }
-
-String & Map::PrintEncounter()
-  {
-    String str, n; int16 i, j;
-    
-    str = Format("%cCR %d Encounter (xCR %d/%d, Depth %d, Dev %d, enTries %d, enSleep %d~):\n%c",
-              -PINK,enCR, TotalXCR(),enXCR,Depth,bDeviance,enTries,enSleep,-GREY);
-    if (enSimilar)
-      str += "(homogenous encounter) ";
-    else if (enIrregular)
-      str += "(irregular encounter) ";
-    if (enParty)
-      str += "(adventuring party) ";
-    if (enIrregular || enSimilar || enParty)
-      str += "\n";
-    if (enTries == 100)
-      {
-        str += Format("  %c[Encounter failed to generate properly]\n",
-                    -RED,-GREY);
-      }
-
-    for (i=0;mGroups[i].mID;i++)
-      {
-        str += -7; str += "-- ";                        
-        if (mGroups[i].mCount != 1)
-          str += Format("%d ",mGroups[i].mCount);
-        n.Empty();
-        for (j=0;j!=6;j++)
-          if (mGroups[i].tID[j] && !TTEM(mGroups[i].tID[j])->HasFlag(TMF_POSTSCRIPT))
-            { n += NAME(mGroups[i].tID[j]); n += " "; }
-        n += NAME(mGroups[i].mID);
-        for (j=0;j!=6;j++)
-          if (mGroups[i].tID[j] && TTEM(mGroups[i].tID[j])->HasFlag(TMF_POSTSCRIPT))
-            { n += " "; n += NAME(mGroups[i].tID[j]); }
-        
-        if (mGroups[i].mCount != 1)
-          n = Pluralize(n);
-
-        str += n;
-
-        str += Format(" [CR %d, xCR %d]",
-              CalcCR(GroupXCR(&mGroups[i])/mGroups[i].mCount),
-              GroupXCR(&mGroups[i]));
-
-
-        switch(mGroups[i].mgType)
-          {
-            case MG_POPCORN:
-              str += " (popcorn)";
-             break;
-            case MG_LEADER:
-              str += " (leader)";
-             break;
-            case MG_ALLY:
-              str += " (ally)";
-             break;
-            case MG_SHAMAN:
-              str += " (magic support)";
-             break;
-          }
-
-        if (mGroups[i].Flags & MGF_MAGIC) {
-          if ((mGroups[i].mCount*2/3) == 1)
-            str += Format("\n     [with extra magic items]");
+          EncPart &ep = te->Parts[i];
+          if (tWeight && te->Weight)
+            e.epXCR = (e.enXCR * ep.Weight) / tWeight;
           else
-            str += Format("\n     [1 in %d with extra magic items]",
-                          1+(mGroups[i].mCount*2/3));
-
-          }
-        if (mGroups[i].Flags & MGF_POISON)
-          str += "\n     [with poisoned weapons]";
-        str += "\n";
+            e.epXCR = 0;
+          if (ep.Amt.Sides)
+            e.epMinAmt = e.epMaxAmt = ep.Amt.Roll();
+          else if (ep.Amt.Number && ep.Amt.Bonus)
+            { e.epMinAmt = ep.Amt.Number;
+              e.epMaxAmt = ep.Amt.Bonus; }
+          else if (ep.Amt.Bonus)
+            e.epMinAmt = e.epMaxAmt = ep.Amt.Bonus;
+          else if (TENC(e.enID)->HasFlag(NF_SINGLE))
+            e.epMinAmt = e.epMaxAmt = 1;
+          else if (TENC(e.enID)->HasFlag(NF_HORDE))
+            { e.epMinAmt = 10; e.epMaxAmt = 50; }
+          else
+            e.epMinAmt = e.epMaxAmt = 0;
+          e.cPart = i;
+          r = ReThrow(EV_ENGEN_PART,e);
+          if (r == ABORT) {
+            if (e.enConstraint && e.enRegID)
+              {
+                e.enID = 0;
+                if (regTries++ > 100) {
+                  Error(XPrint("Region <Res> has no working encounter at CR "
+                    "<Num> after 100 tries!"), e.enRegID, e.enCR);
+                  e.enRegID = 0;
+                  }
+                    
+                goto DevianceRestart;
+              }
+            if (e.enConstraint)
+              e.enConstraint = 0;
+            e.enTries = 0;
+            e.enID = 0;
+            goto DevianceRestart;
+            } 
+        }
+    DoneParts:
+  
+    /* If we're building a nested sub-encounter, skip the
+       deviance testing and the actual building of the
+       encounter itself. */
+    if (e.enFlags & EN_NESTED)
+      return DONE;
+      
+    int16 Deviance; 
+    int32 totXCR = 0;
+    for (i=0;i!=cEncMem;i++)
+      {
+        int16 CR;
+        CR = TMON(EncMem[i].mID)->CR;
+        if (EncMem[i].tID)
+          CR = TTEM(EncMem[i].tID)->CR.Adjust(CR);
+        if (EncMem[i].tID2)
+          CR = TTEM(EncMem[i].tID2)->CR.Adjust(CR);
+        if (EncMem[i].tID3)
+          CR = TTEM(EncMem[i].tID3)->CR.Adjust(CR);
+        totXCR += XCR(CR);
+      }
+    Deviance = (abs(e.enXCR-totXCR) * 100L) / e.enXCR;
+    if (e.enDesAmt)
+      Deviance += max(0,((abs(e.enDesAmt-cEncMem)*100L)/e.enDesAmt)-50);
+    if (cEncMem > maxAmtByCR(e.enCR))
+      Deviance += (cEncMem - maxAmtByCR(e.enCR))*100 / maxAmtByCR(e.enCR);
+    if (Deviance > 50 && e.enTries < 5)
+      {
+        e.enTries++;
+        goto DevianceRestart;
       }
       
-    return *tmpstr(str);
-  }       
-
-void Map::PlaceEncounter(int16 ex, int16 ey, Creature *creator)              
-  {  
-    int16 i, j, k, c, Tries;
-    Monster *mn, *mna[1024];
-    Item *it; rID xID;
-
-    c = 0; // ww: paranoia! 
-    for (i=0;mGroups[i].mID;i++)
+    //********* Stage 7: Build the Encounter, if Requested
+    
+    /* Determine the moat likely alignment leaning of the
+       entire group, and exclude 'bad' alignment accordingly. */
+    if (cEncMem)
+      e.enDriftGE = e.enDriftGE*(100 / cEncMem);
+    if (e.enAlign & (AL_NONGOOD|AL_NONEVIL|AL_GOOD|AL_EVIL))
+      ;
+    else if (e.enDriftGE - 25 + random(50) > 0)
+      e.enAlign |= AL_NONGOOD;
+    else
+      e.enAlign |= AL_NONEVIL;
+    
+    e.enIsFormation = false;
+    if (te->HasFlag(NF_FORMATION) ||
+        (te->HasFlag(NF_FORM50) && !random(2)))
+      e.enIsFormation = true;
+    
+    /* Cap # of creatures at CR max */
+    cEncMem = min(cEncMem,maxAmtByCR(e.enCR));
+    /* HACKFIX */
+    cEncMem = min(cEncMem,5);
+    
+    if (e.enFlags & EN_DUMP)
       {
-        
-        for (j=0;j!=mGroups[i].mCount;j++)
+        int16 c, j; 
+        String str;
+        e.enDump = XPrint("<14><Res> (CR <Num>, Dev <Num>%, <Num> tries):<7>\n",
+          e.enID, e.enCR, Deviance, e.enTries);
+        totXCR = 0;
+        for (i=0;i!=cEncMem;i++)
           {
-            if (RES(mGroups[i].mID)->Type != T_TMONSTER) {
-              Error(XPrint("Non-Monster resource <Res> in PlaceEncounter!", 
-                              mGroups[i].mID));
+            Monster *mn;
+            if (!EncMem[i].mID)
               continue;
+            mn = new Monster(EncMem[i].mID);
+            mn->CalcValues();
+            if (EncMem[i].tID) {
+              mn->AddTemplate(EncMem[i].tID);
+              mn->IdentifyTemp(EncMem[i].tID);
               }
-            mn = new Monster(mGroups[i].mID);
-            mn->PartyID = enPartyID;
-            TMON(mGroups[i].mID)->GrantGear(mn,mGroups[i].mID,true);
-            for (k=0;mGroups[i].tID[k];k++) {
-              mn->AddTemplate(mGroups[i].tID[k]);
-              if (!mn->HasEffStati(TEMPLATE,mGroups[i].tID[k]))
-                mn->GainPermStati(ILLUMINATED,NULL,SS_MISC);
-              TTEM(mGroups[i].tID[k])->GrantGear(mn,mGroups[i].tID[k],true); 
-              TTEM(mGroups[i].tID[k])->PEvent(EV_BIRTH,mn,mGroups[i].tID[k]);  
+            mn->CalcValues();
+            if (EncMem[i].tID2) {
+              mn->AddTemplate(EncMem[i].tID2);
+              mn->IdentifyTemp(EncMem[i].tID2);
               }
-            // weimer paranoia: I'm getting non undead from kicking
-            // gravestones. 
-            if (enMType && !mn->isMType(enMType)) {
-              if (enMType == MA_UNDEAD) {
-                
-                //mn->AddTemplate(FIND("graveborn;template"));
-                }
-            } 
-            TMON(mGroups[i].mID)->PEvent(EV_BIRTH,mn,mGroups[i].mID);  
-            mn->MonsterGear();
-            if ((enFlags & EN_DUNGEON) && random(100)+1 <= enSleep &&
-                !mn->ResistLevel(AD_SLEE)) {
-              mn->GainPermStati(SLEEPING,NULL,SS_MISC,SLEEP_NATURAL);
+            mn->CalcValues();
+            if (EncMem[i].tID3) {
+              mn->AddTemplate(EncMem[i].tID3);
+              mn->IdentifyTemp(EncMem[i].tID3);
               }
-            if (mGroups[i].Flags & MGF_POISON) {
-              xID = theGame->GetEffectID(PUR_POISON,0,max(3,enCR));
-              for(it = mn->FirstInv();it;it = mn->NextInv())
-                if (it->isType(T_WEAPON) || it->isType(T_MISSILE))
-                  if (it->HasIFlag(WT_PIERCING) || it->HasIFlag(WT_SLASHING)) 
-                    it->GainPermStati(POISONED,NULL,SS_MISC,3,0,xID);
-              }
-
-
-            if (mGroups[i].Flags & MGF_MAGIC) 
-              if (!random(1 + (mGroups[i].mCount*2)/3)) {
-                it = Item::GenItem(0,dID,(Depth*2)/3,10,MonsterItems);
-                if (it)
-                  mn->GainItem(it,true);
-                }
-
-            mna[c++] = mn;
-            ASSERT(c < (sizeof(mna)/sizeof(mna[0])));
+            mn->CalcValues();
+            Creature *old_actor = e.EActor;
+            e.EActor = mn;
+            ReThrow(EV_ENGEN_ALIGN, e);
+            e.EActor = old_actor;
+            EncMem[i].Align = mn->getAlignment();
+            EncMem[i].hMon = mn->myHandle;
           }
-      }    
-
-    if (enFlags & (EN_SUMMON|EN_CREATOR|EN_ILLUSION)) {
-      for (i=0;i!=c;i++)
-        {
-          if (!(enFlags & EN_HOSTILE))
-            mna[i]->PartyID = creator->PartyID;
-          Creature * true_leader = creator->getLeader();
-          if (!true_leader) true_leader = creator; 
-          if (enFlags & EN_SUMMON) {
-            mna[i]->GainTempStati(SUMMONED, creator,summDuration, SS_MISC,
-                                     0,0,EventStack[EventSP].eID); 
-            if (!(enFlags & EN_HOSTILE))
-              mna[i]->ts.addCreatureTarget(true_leader,TargetSummoner);
-          } else if (enFlags & EN_ILLUSION) {
-            mna[i]->GainTempStati(ILLUSION, creator, illDuration, SS_ENCH,
-              illSaveDC, 0, illEID, illCasterLev);
-            creator->GainPermStati(DISBELIEVED,mna[i],SS_MISC);
-            mna[i]->ts.addCreatureTarget(true_leader,TargetMaster);
-          } else {
-            if (!(enFlags & EN_HOSTILE))
-              mna[i]->ts.addCreatureTarget(true_leader,TargetMaster);
-          } 
+        for (i=0;i!=cEncMem;i++)
+          { 
+            if (!EncMem[i].mID)
+              continue;
+            Monster *mn = oMonster(EncMem[i].hMon), *mt;
+            for (j=i+1,c=1;j<cEncMem;j++)
+              if (EncMem[i].mID == EncMem[j].mID &&
+                  EncMem[i].tID == EncMem[j].tID &&
+                  EncMem[i].tID2 == EncMem[j].tID2 &&
+                  EncMem[i].tID3 == EncMem[j].tID3 &&
+                  EncMem[i].hmID == EncMem[j].hmID &&
+                  EncMem[i].htID == EncMem[j].htID &&
+                  EncMem[i].htID2 == EncMem[j].htID2 &&
+                  EncMem[i].iID == EncMem[j].iID &&
+                  EncMem[i].pID == EncMem[j].pID &&
+                  EncMem[i].Flags == EncMem[j].Flags &&
+                  EncMem[i].Align == EncMem[j].Align)
+                { EncMem[j].mID = 0; c++; }
+            mn->StateFlags |= MS_KNOWN;
+            str = "> ";
+            if (c > 1)
+              str += Format("%d %s", c, (const char*)
+                Pluralize(mn->Name(NA_MONO|NA_IDENT)));
+            else
+              str += mn->Name(NA_MONO|NA_IDENT);
+            
+            if (!EncMem[i].Align)
+              str += " (TN)";
+            else
+              str += Format(" (%c%c)",
+                       (EncMem[i].Align & AL_LAWFUL) ? 'L' :
+                       (EncMem[i].Align & AL_CHAOTIC) ? 'C' : 'N',
+                       (EncMem[i].Align & AL_GOOD) ? 'G' :
+                       (EncMem[i].Align & AL_EVIL) ? 'E' : 'N');
+            
+            mt = NULL;
+            if (EncMem[i].hmID)
+              {
+                String mstr;
+                mt = new Monster(EncMem[i].hmID);
+                mt->CalcValues();
+                if (EncMem[i].htID) {
+                  mt->AddTemplate(EncMem[i].htID);
+                  ASSERT(mt->HasEffStati(TEMPLATE,EncMem[i].htID));
+                  mt->IdentifyTemp(EncMem[i].htID);
+                  }
+                mt->CalcValues();
+                if (EncMem[i].htID2) {
+                  mt->AddTemplate(EncMem[i].htID2);
+                  ASSERT(mt->HasEffStati(TEMPLATE,EncMem[i].htID));
+                  mt->IdentifyTemp(EncMem[i].htID2);
+                  }
+                mt->CalcValues();
+                mt->StateFlags |= MS_KNOWN;
+                mstr = mt->Name(NA_MONO|NA_IDENT);
+                if (c > 1)
+                  mstr = Pluralize(mstr);
+                str += Format("\n    (riding %s%s)", 
+                  c > 1 ? "" : "a ", (const char*)mstr);
+                delete mt;
+              }
+            if (EncMem[i].pID)
+              str += XPrint("\n    (with <Res> on weapons)", EncMem[i].pID);
+            
+            //if (flags & sleep) s+=" [Asleep]" etc.
+            e.enDump += str;
+            int32 theXCR;
+            {
+              EventInfo e;
+              e.Clear();
+              e.ep_mID   = EncMem[i].mID;
+              e.ep_tID   = EncMem[i].tID;
+              e.ep_tID2  = EncMem[i].tID2;
+              e.ep_tID3  = EncMem[i].tID3;
+              e.ep_hmID  = EncMem[i].hmID;
+              e.ep_htID  = EncMem[i].htID;
+              e.ep_htID2 = EncMem[i].htID2;
+              e.ep_iID   = EncMem[i].iID;
+              e.ep_pID   = EncMem[i].pID;
+              enCalcCurrPartXCR(e);
+              theXCR = e.epCurrXCR * c;
+            }
+              
+            e.enDump += Format(" [%d/%d]\n", mn->ChallengeRating(true),theXCR);
+            totXCR += theXCR;
+            delete mn;
+          }
+        for (i=0;i!=cEncMem;i++)
+          if (EncMem[i].hMon &&
+                isValidHandle(EncMem[i].hMon))
+            delete oThing(EncMem[i].hMon);
+            
+        e.enDump += XPrint("<6>XCR <Num>, desired <Num> (CR <Num>).\n\n",totXCR,
+            e.enXCR, e.enCR);
+        return DONE;
+        //theGame->GetPlayer(0)->AddJournalEntry(e.enDump);
+      }
+    
+    if (!(e.enFlags & EN_NOBUILD))
+      {
+        Thing *targ = e.ETarget;
+        for (i=0;i<cEncMem;i++)
+          {
+            e.cMember = i;
+            ASSERT(i < MAX_ENC_MEMBERS);
+            ReThrow(EV_ENBUILD_MON,e);
+          }
+        e.ETarget = targ;
+      
+        Creature *leader, *best;
+        int16 bestCR;
+        bestCR = -6; best = NULL; leader = NULL;
+        for (i=0;i!=cEncMem;i++)
+          {
+            Creature *mn = oCreature(EncMem[i].hMon);
+            if (te->Parts[EncMem[i].Part].Flags & EP_LEADER)
+              { 
+                leader = mn;
+                break;
+              }
+            if (mn->ChallengeRating() > bestCR);
+              if (mn->isMType(MA_SAPIENT))
+                { best = mn; bestCR = mn->ChallengeRating(); }
+          }
+        if (best && !leader)
+          leader = best;
           
-          if (creator->isPlayer() && !(enFlags & EN_HOSTILE))              
-            mna[i]->MakeCompanion((Player*)creator,PHD_MAGIC);
-          else 
-            mna[i]->PartyID = enPartyID;
-          
-          if (enFlags & EN_HOSTILE)
-            mna[i]->TurnHostileTo(creator);
-          
-          if (!(enFlags & (EN_NOPLACE|EN_NOBUILD)))
-            mna[i]->IDPrint(NULL,"An <Obj> appears!",mna[i]);
-
-        }
+        if (leader)
+          for (i=0;i!=cEncMem;i++)
+            {
+              Creature *mn = oCreature(EncMem[i].hMon);
+              if (mn == leader)
+                continue;
+              mn->ts.addCreatureTarget(leader, TargetLeader);
+              if (e.enIsFormation)
+                mn->ts.giveOrder(mn,leader,OrderWalkNearMe);
+              mn->ts.Retarget(mn);
+            }
       }
             
+    return DONE;
+  }
+  
+bool okDesAmt(TEncounter *te, int16 des)
+  {
+    int16 mn, mx, i, A, B, C;
+    mn = 0; mx = 0;
+    for (i=0;te->Parts[i].xID || te->Parts[i].Flags;i++)
+      {
+        EncPart *ep = &te->Parts[i];
+        if (ep->Amt.Sides)
+          { A = ep->Amt.Roll();
+            B = ep->Amt.Roll();
+            C = ep->Amt.Roll();
+            mn += min(A,min(B,C));
+            mx += max(A,max(B,C)); }
+        else if (ep->Amt.Number && ep->Amt.Bonus)
+          { mn += ep->Amt.Number;
+            mx += ep->Amt.Bonus; }
+        else if (ep->Amt.Bonus)
+          { mn += ep->Amt.Bonus;
+            mx += ep->Amt.Bonus; }
+        else if (te->HasFlag(NF_SINGLE))
+          { mn++; mx++; }
+        else if (te->HasFlag(NF_HORDE))
+          { mn += 10; mx += 50; }
+        else
+          { mx += 50; }
+      }
+    if (des >= mn && des <= mx)
+      return true;
+    return false;
+  }
 
-    /* Place the created things where needed */
-    for(i=0;i<c;i++) {
-      CandidateCreatures[i] = mna[i];
-      Candidates[i] = mna[i]->myHandle; 
-      /*
-      if (theGame->GetPlayer(0)->x > 0)
-        theGame->GetPlayer(0)->IPrint(Format("Monster[%d] = %s (%d).",i,
-              (const char*)mna[i]->Name(0),mna[i]->myHandle));
-              */
+int16 getMinCR(EventInfo &_e)
+  {
+    int16 i;
+    EventInfo e;
+    e.Clear();
+    e = _e;
+    e.eimXCR = 1;    
+    e.ep_mID = 
+      e.ep_tID =
+      e.ep_tID2 =
+      e.ep_tID3 = 
+      e.ep_hmID =
+      e.ep_htID =
+      e.ep_htID2 =
+      e.ep_iID =
+      e.ep_pID = 0;
+    e.isGetMinCR = true;
+    XTHROW(EV_ENCHOOSE_MID,e,);
+    if (!e.chResult)
+      return 0;
+    e.ep_mID = e.chResult;
+    ReThrow(EV_ENSELECT_TEMPS,e);
+    e.EMap->enCalcCurrPartXCR(e);
+    return XCRtoCR(e.epCurrXCR);
+  }
+
+int16 getMaxCR(EventInfo &_e)
+  {
+    int16 i;
+    EventInfo e;
+    e.Clear();
+    e = _e;
+    e.eimXCR = 1000000L;    
+    e.ep_mID = 
+      e.ep_tID =
+      e.ep_tID2 =
+      e.ep_tID3 = 
+      e.ep_hmID =
+      e.ep_htID =
+      e.ep_htID2 =
+      e.ep_iID =
+      e.ep_pID = 0;
+    e.isGetMaxCR = true;
+    XTHROW(EV_ENCHOOSE_MID,e,);
+    if (!e.chResult)
+      return 36;
+    e.ep_mID = e.chResult;
+    ReThrow(EV_ENSELECT_TEMPS,e);
+    e.EMap->enCalcCurrPartXCR(e);
+    return XCRtoCR(e.epCurrXCR);
+  }
+
+  
+EvReturn Map::enGenPart(EventInfo &e)
+  {
+    /* -- If there's no XCR, generate exactly what's asked for
+          without regard to how much it "costs". 
+       -- If we have XCR and a fixed amount, divide the XCR by
+          the amount, and then generate N monsters as close to
+          that XCR as possible.
+       -- If we have fixed monster CR (set mID, no EP_SKILLED
+          or EP_CLASSED, etc.) but unspecified or ranged Amt,
+          calculate individual monster XCR, divide by total XCR 
+          to find ideal Amt, then if needed raise Amt to minAmt
+          or lower it to maxAmt.
+       -- If we have variable monster CR and unspecified or
+          ranged Amt, do these steps:
+          a) find minimum and maximum monster CR
+          b) -- If EP_SKEW_FOR_AMT,
+             -- If EP_SKEW_FOR_XCR,
+             
+       Also, check M_GROUP, M_SOLITARY, etc. if we chose an mID
+       and it doesn't override explicit settings in the encounter
+       
+       We might have NF_GENERIC single-Part encounters that can
+       respect GROUP_LEADER, GROUP_PET, GROUP_MOUNT, etc. lists
+       in the monster resource. We could also kludge this to allow
+       building encounters around a specific mID again.
+       (We could also scan through encounters to see which have a
+        match for a desired mID in any of their Parts, and then
+        force that mID, for use in, eg., generating an adlet tribe
+        in a cold room with "Goblinoid Warband" unmodified.) 
+       
+       
+       */
+    int16 i, uBound, lBound;
+    TEncounter *te = TENC(e.enID);
+    EncPart *ep = &te->Parts[e.cPart];
+    
+    e.epClassRoll = random(100)+1;
+    
+    #define RNDAMT (e.epMinAmt + random((e.epMaxAmt+1) - e.epMinAmt))
+    {
+      int16 A, B, C, D, E;
+      A = RNDAMT;
+      B = RNDAMT;
+      C = RNDAMT;
+      D = RNDAMT;
+      E = RNDAMT;
+      uBound = max(A,max(B,max(C,max(D,E))));
+      lBound = min(A,min(B,min(C,min(D,E))));
     }
-    CandidateCreatures[i] = NULL;
-    Candidates[i] = 0;
-    if (enFlags & EN_NOPLACE) {
-    }
-    else if (enFlags & EN_ANYOPEN) {
-      for(i=0;i!=c;i++) {
-        Tries = 0;
-        Retry:
+    if (ep->Flags & EP_NOXCR)
+      {
+        if (e.epMinAmt)
+          e.epAmt = RNDAMT;
+        else
+          e.epAmt = 1;
+      }
+    else if (e.epMinAmt != 0 &&
+             e.epMinAmt == e.epMaxAmt)
+      {
+        e.eimXCR = min(XCR(e.enCR),e.epXCR / e.epMinAmt);
+        e.epAmt = e.epMinAmt;
+      }
+    else 
+      {
+        int16 minCR, maxCR;
+        minCR = getMinCR(e);
+        maxCR = getMaxCR(e);
+        maxCR = min(maxCR,e.enCR);
+        if (minCR == maxCR)
+          {
+            e.eimXCR = XCR(minCR);
+            e.epAmt = max(1,e.epXCR / e.eimXCR);
+            if (e.epMaxAmt)
+              if (e.epAmt > e.epMaxAmt)
+                e.epAmt = e.epMaxAmt;
+            if (e.epMinAmt)
+              if (e.epAmt < e.epMinAmt)
+                e.epAmt = e.epMinAmt;
+          }
+        else
+          {
+            if (ep->Flags & EP_SKEW_FOR_AMT)
+              e.eimXCR = (XCR(minCR)*3+XCR(maxCR)*1)/4;
+            else if (ep->Flags & EP_SKEW_FOR_XCR)
+              e.eimXCR = (XCR(minCR)*1+XCR(maxCR)*4)/4;
+            else
+              e.eimXCR = (XCR(minCR)*2+XCR(maxCR)*2)/4;
+            e.eimXCR = min(XCR(e.enCR),e.eimXCR);
+            e.epAmt = max(1,e.epXCR / e.eimXCR);
+            
+            if (e.epMaxAmt)
+              if (e.epAmt > e.epMaxAmt)
+                {
+                  /* Don't gen *exactly* the max, include some randomness
+                     by taking highest-of-four. */
+                  e.epAmt = uBound;
+                  e.eimXCR = e.epXCR / e.epAmt;
+                  if (e.eimXCR < XCR(minCR))
+                    e.eimXCR = XCR(minCR);
+                }
+            if (e.epMinAmt)
+              if (e.epAmt < e.epMinAmt)
+                {
+                  /* Don't gen *exactly* the min, include some randomness
+                     by taking lowest-of-four. */
+                  e.epAmt = lBound;
+                  e.eimXCR = e.epXCR / e.epAmt;
+                  if (e.eimXCR < XCR(minCR))
+                    e.eimXCR = XCR(minCR);
+                }    
+            e.eimXCR = min(XCR(e.enCR),e.eimXCR);
+          }
+      }
 
-        if (Tries >= 10)
-          { mna[i]->Remove(true); continue; }
 
-        /* Place aquatic monsters in water, and other monsters on dry
-           land. No exceptions -- even amphibians start in their favored
-           terrain. */
-        j = random(OpenC);
-        if (mna[i]->HasMFlag(M_AQUATIC)) {
-          if (!TTER(TerrainAt(OpenX[j],OpenY[j]))->HasFlag(TF_WATER))
-            { Tries++; goto Retry; }
-        } else {
-          // not aquatic 
-          if (TTER(TerrainAt(OpenX[j],OpenY[j]))->HasFlag(TF_WATER))
-            { Tries++; goto Retry; }
-        } 
-        // ww: spiders can start in 'sticky' web
-        if (TTER(TerrainAt(OpenX[j],OpenY[j]))->HasFlag(TF_STICKY)) {
-          if (!mna[i]->isMType(MA_SPIDER)) 
-            { Tries++; goto Retry; }
-        } else  
-        /* Don't place anything on dangerous terrain, unless it's deep
-           water and an aquatic monster. */
-        if (TTER(TerrainAt(OpenX[j],OpenY[j]))->HasFlag(TF_WARN)) {
-          // ww: terrain with TF_WARN now support a special event that says
-          // if it is OK to put the monster there ...
-          if (TTER(TerrainAt(OpenX[j],OpenY[j]))->
-              PEvent(EV_MON_CONSIDER,mna[i],mna[i]->mID) == ABORT)
-            { Tries++; goto Retry; }
+    int32 totalXCR; 
+    int16 old_cEncMem, old_cUniform;
+    totalXCR = 0; e.epTries = 0;
+    EvReturn r;
+    
+    for (i=0;i!=e.epAmt;i++)
+      {
+        old_cEncMem = cEncMem;
+        old_cUniform = cUniform;
+        RetryPart:
+        e.epFailed = false;
+        e.ep_mID = 
+          e.ep_tID =
+          e.ep_tID2 =
+          e.ep_tID3 = 
+          e.ep_hmID =
+          e.ep_htID =
+          e.ep_htID2 =
+          e.ep_iID =
+          e.ep_pID = 0;
+        if (te->HasFlag(NF_FREAKY) || ep->Flags & EP_FREAKY)
+          e.epFreaky = min(e.enFreaky, random(10)+1);
+        else
+          e.epFreaky = 0;
+          
+        RXTHROW(EV_ENCHOOSE_MID,e,r,);
+        if (r == ABORT)
+          return ABORT;
+        e.ep_mID = e.chResult;
+        ASSERT(e.ep_mID);
+        if (RES(e.ep_mID)->Type == T_TENCOUNTER)
+          {
+            EventInfo ne;
+            ne.Clear();
+            ne = e;
+            ne.enXCR = e.eimXCR;
+            ne.enCR = XCRtoCR(ne.enXCR);
+            ne.enID = e.ep_mID;
+            ne.cPart = 0;
+            ne.enFlags = (e.enFlags | EN_NESTED);
+            ReThrow(EV_ENGEN,ne);
+            
+            for (int j=old_cEncMem;j!=cEncMem;j++)
+              {
+                e.ep_mID   = EncMem[j].mID;
+                e.ep_tID   = EncMem[j].tID;
+                e.ep_tID2  = EncMem[j].tID2;
+                e.ep_tID3  = EncMem[j].tID3;
+                e.ep_hmID  = EncMem[j].hmID;
+                e.ep_htID  = EncMem[j].htID;
+                e.ep_htID2 = EncMem[j].htID2;
+                e.ep_pID   = EncMem[j].pID;
+                e.ep_iID   = EncMem[j].iID;
+                enCalcCurrPartXCR(e);
+                totalXCR += e.epCurrXCR;
+              }
+            
+            goto DoneNestedEnc;
+          }
+        
+        e.ep_mID = e.chResult;
+        ReThrow(EV_ENSELECT_TEMPS,e);
+        if (e.epFailed && e.epTries++ < 20) {
+          cEncMem = old_cEncMem;
+          cUniform = old_cUniform;
+          goto RetryPart;
+          }
+        Player *p;
+        if (e.epFailed && (p = theGame->GetPlayer(0))) {
+          String str;
+          str = XPrint("e.epFailed == true after 20 tries: Enc '<Res>', CR <Num>, Part <Num>,"
+            " eimXCR <Num>", e.enID, e.enCR, e.cPart, e.eimXCR);
+          if (e.eID)
+            str += XPrint(", eID '<Res>'", e.eID);
+          if (e.enRegID && RES(e.enRegID)->HasList(ENCOUNTER_LIST))
+            str += XPrint(", enRegID '<Res>'", e.enRegID);
+          if (e.enConstraint && e.enConstraint >= 0x01000000)
+            str += XPrint(", e.enConstraint '<Res>'", e.enConstraint);
+          else if (e.enConstraint)
+            str += XPrint(", e.enConstraint '<Str>'", Lookup(MTypeNames,e.enConstraint));
+          str += ".";
+          if (e.enFlags & EN_OODMON)
+            str += " [EN_OODMON]";
+          if (e.enFlags & EN_SINGLE)
+            str += " [EN_SINGLE]";
+          if (e.enFlags & EN_AQUATIC)
+            str += " [EN_AQUATIC]";
+          if (e.enFlags & EN_STREAMER)
+            str += " [EN_STREAMER]";
+          if (e.enFlags & EN_CREATOR)
+            str += " [EN_CREATOR]";
+          if (e.enFlags & EN_SUMMON)
+            str += " [EN_SUMMON]";
+          if (e.enFlags & EN_VAULT)
+            str += " [EN_VAULT]";
+          if (e.enFlags & EN_DUNREGEN)
+            str += " [EN_DUNREGEN]";          
+          p->AddJournalEntry(str);
+          }
+        e.epFailed = false;
+        
+        ASSERT(!e.ep_tID  || (RES(e.ep_tID )->Type == T_TTEMPLATE))
+        ASSERT(!e.ep_tID2 || (RES(e.ep_tID2)->Type == T_TTEMPLATE))
+        ASSERT(!e.ep_tID3 || (RES(e.ep_tID3)->Type == T_TTEMPLATE))
+
+        if (e.ep_hmID) {
+          bool riderIsUndead, mountIsUndead;
+          riderIsUndead = mountIsUndead = false;
+          if (TMON(e.ep_mID)->isMType(e.ep_mID, MA_UNDEAD))
+            riderIsUndead = true;
+          if (e.ep_tID && (TTEM(e.ep_tID)->TType & TM_UNDEAD))
+            riderIsUndead = true;
+          if (e.ep_tID2 && (TTEM(e.ep_tID2)->TType & TM_UNDEAD))
+            riderIsUndead = true;
+          if (e.ep_tID3 && (TTEM(e.ep_tID3)->TType & TM_UNDEAD))
+            riderIsUndead = true;
+            
+          if (TMON(e.ep_hmID)->isMType(e.ep_hmID, MA_UNDEAD))
+            mountIsUndead = true;
+          if (e.ep_htID && (TTEM(e.ep_htID)->TType & TM_UNDEAD))
+            mountIsUndead = true;
+          if (e.ep_htID2 && (TTEM(e.ep_htID2)->TType & TM_UNDEAD))
+            mountIsUndead = true;
+          
+          if (riderIsUndead && !mountIsUndead)
+            switch(random(3))
+              {
+                case 0:
+                  enAddMountTemp(e,FIND("graveborn;template"));
+                break;
+                case 1:
+                  enAddMountTemp(e,FIND("zombie"));
+                break;
+                case 2:
+                  enAddMountTemp(e,FIND("skeleton"));
+                break;      
+              }
+          }
+
+        
+        enAddMon(e);
+        UpdateAlignRestrict(e);
+        
+        /* Adaptive Filling -- reappraise our judgement of how
+           many monsters we need as we continue to build them! */
+        enCalcCurrPartXCR(e);
+        totalXCR += e.epCurrXCR;
+        
+        DoneNestedEnc:
+        
+        if (totalXCR >= e.epXCR && i >= (lBound-1))
+          break;
+        if (i == (e.epAmt - 1) && e.epAmt < uBound &&
+             (totalXCR+(totalXCR/(i+1))) <= e.epXCR)
+          e.epAmt++; 
+      }
+    
+    return DONE; 
+    
+  }
+  
+EvReturn Map::enChooseMID(EventInfo &e)
+  {
+    TEncounter *te = TENC(e.enID);
+    EncPart *ep = &te->Parts[e.cPart];  
+    rID wmList[512], monList[512], xID;
+    int32 monWeights[512];
+    int16 cWeight, nMon, i, q, x, j;
+    nMon = 0;
+    bool isSingle = te->HasFlag(NF_SINGLE);
+    Restart:
+    int16 maxCR = XCRtoCR(e.eimXCR);
+    
+    /* Kludge: leave room for class template! */
+    if (ep->Flags & EP_CLASSED)
+      maxCR = max(1,maxCR-2);
+      
+      
+    if (e.enConstraint > 0x01000000)
+      maxCR = max(maxCR,min(e.enCR,TMON(e.enConstraint)->CR));
+      
+    maxCR = max(1,maxCR);
+    
+    /* If we have mandatory templates, keep lowering the maxCR
+       on consecutive tries until we have room for all of them. */
+    if (e.epTries > 5)
+      maxCR = max(0,maxCR - (e.epTries-5)/2);
+    
+      
+    if (ep->xID >= 0x01000000)
+      {
+        e.chResult = ep->xID;
+        return DONE;
+      }
+    else if (ep->Flags & EP_ANYMON)
+      {
+        if (te->HasFlag(NF_UNIFORM))
+          if (e.chResult = enUniformGet(ep->xID | 0x0F000000))
+            return DONE;
+        if (ep->Flags & EP_UNIFORM)
+          if (e.chResult = enUniformGet(e.cPart))
+            return DONE;
+        monWeights[0] = 0; nMon = 0;
+        bool isAquatic = te->HasFlag(NF_AQUATIC) ||
+                         e.isAquaticContext ||
+                         e.enConstraint == MA_AQUATIC;
+        if ((ep->xID2 > 0x01000000) && !stricmp(NAME(ep->xID2),"aqueous"))
+          isAquatic = false;
+        for (q=0;q!=1;q++) 
+          for(i=0;i!=theGame->Modules[q]->szMon;i++)
+            {
+              TMonster *tm = &theGame->Modules[q]->QMon[i];
+              if (tm->CR > max(1,maxCR) && !e.isGetMinCR)
+                continue;
+              if (tm->HasFlag(M_NOGEN) && e.enConstraint < 0x01000000)
+                continue;
+              if (tm->Depth > e.enDepth)
+                continue;
+              if (tm->HasFlag(M_AQUATIC) != isAquatic)
+                if (!tm->HasFlag(M_AMPHIB))
+                  continue;
+              if (tm->HasFlag(M_PLAYER) || tm->HasFlag(M_UNKNOWN))
+                continue;
+              if (tm->HasFlag(M_SOLITARY) && !isSingle)
+                continue;
+              rID mID = theGame->Modules[q]->MonsterID(i);
+              if (tm->HasFlag(M_IALIGN) && tm->isMType(mID,MA_SAPIENT))
+                if (AlignConflict(ResAlign(mID),e.enAlign,true))
+                  continue;
+              if (!tm->isMType(mID,ep->xID))
+                continue;
+              if (e.enConstraint) {
+                if (e.enConstraint > 0x01000000)
+                  if (mID != e.enConstraint)
+                    continue;
+                if (e.enConstraint < 0x01000000)
+                  if (!tm->isMType(mID,e.enConstraint))
+                    continue;
+                }
+              {
+                rID old_eID = e.eID;
+                e.eID = mID;
+                if (TENC(e.enID)->Event(e,e.enID,EV_CRITERIA) == CANNOT_CAST_IT)
+                  { e.eID = old_eID; continue; }
+                e.eID = old_eID;
+              }
+              if (e.chCriteria)
+                if ((*e.chCriteria)(e,mID) == false)
+                  continue;
+              monList[nMon++] = mID;
+              monWeights[nMon] = monWeights[nMon-1]+1;
+            }
+        goto ChooseFromList;
+      }
+    else
+      {
+        if (te->HasFlag(NF_UNIFORM))
+          if (e.chResult = enUniformGet(ep->xID))
+            return DONE;
+        if (ep->Flags & EP_UNIFORM)
+          if (e.chResult = enUniformGet(e.cPart))
+            return DONE;
+          
+        if (te->GetList(ep->xID,wmList,510)) {
+          monWeights[0] = 0; nMon = 0; cWeight = 10;
+          bool isAquatic = te->HasFlag(NF_AQUATIC) ||
+                           e.isAquaticContext ||
+                         e.enConstraint == MA_AQUATIC;
+          if ((ep->xID2 > 0x01000000) && !stricmp(NAME(ep->xID2),"aqueous"))
+            isAquatic = false;
+          e.chList = ep->xID;
+          for(i=0;wmList[i] || wmList[i+1];i++)
+            {
+              if (wmList[i] == -1) // ANY TM_PLANAR
+                { 
+                  i++; 
+                  for (q=0;q!=1;q++) 
+                    for(j=0;j!=theGame->Modules[q]->szMon;j++)
+                      {
+                        TMonster *tm = &theGame->Modules[q]->QMon[j];
+                        if (tm->CR > maxCR && !e.isGetMinCR)
+                          continue;
+                        if (tm->HasFlag(M_NOGEN) && e.enConstraint < 0x01000000)
+                          continue;
+                        if (tm->Depth > e.enDepth)
+                          continue;
+                        if (tm->HasFlag(M_AQUATIC) != isAquatic)
+                          if (!tm->HasFlag(M_AMPHIB))
+                            continue;
+                        if (tm->HasFlag(M_SOLITARY) && !isSingle)
+                          continue;
+                        if (tm->HasFlag(M_PLAYER) || tm->HasFlag(M_UNKNOWN))
+                          continue;
+                        rID mID = theGame->Modules[q]->MonsterID(j);
+                        if (!tm->isMType(mID,wmList[i]))
+                          continue;
+                        if (tm->HasFlag(M_IALIGN) && tm->isMType(mID,MA_SAPIENT))
+                          if (AlignConflict(ResAlign(mID),e.enAlign,true))
+                            continue;
+                        if (e.enConstraint) {
+                          if (e.enConstraint > 0x01000000)
+                            if (mID != e.enConstraint)
+                              continue;
+                          if (e.enConstraint < 0x01000000)
+                            if (!tm->isMType(mID,e.enConstraint))
+                              continue;
+                          }
+                        {
+                          rID old_eID = e.eID;
+                          e.eID = mID;
+                          if (TENC(e.enID)->Event(e,e.enID,EV_CRITERIA) == CANNOT_CAST_IT)
+                            { e.eID = old_eID; continue; }
+                          e.eID = old_eID;
+                        }
+                        if (e.chCriteria)
+                          if ((*e.chCriteria)(e,mID) == false)
+                            continue;
+                        monList[nMon++] = mID;
+                        monWeights[nMon] = monWeights[nMon-1]+cWeight;
+                      }
+                  e.chList = 0;
+                }
+              else if (wmList[i] < 0x01000000)
+                cWeight = wmList[i];
+              else 
+                {
+                  TMonster *tm = TMON(wmList[i]);
+                  if (tm->Type == T_TENCOUNTER)
+                    {
+                      TEncounter *nte = (TEncounter*)tm;
+                      if (nte->minCR > maxCR && !e.isGetMinCR)
+                        continue;
+                      if (nte->HasFlag(NF_AQUATIC) && !isAquatic)
+                        continue;
+                      if (nte->Depth > e.enDepth)
+                        continue;
+                      goto GenericTests;
+                    }
+                  if (tm->CR > maxCR && !e.isGetMinCR)
+                    continue;
+                  if (tm->Depth > e.enDepth)
+                    continue;
+                  if (tm->HasFlag(M_AQUATIC) && !isAquatic)
+                    if (!tm->HasFlag(M_AMPHIB))
+                      continue;
+                  if (tm->HasFlag(M_PLAYER) || tm->HasFlag(M_UNKNOWN))
+                    continue;
+                  if (e.enConstraint) {
+                    if (e.enConstraint > 0x01000000)
+                      if (wmList[i] != e.enConstraint)
+                        continue;
+                    if (e.enConstraint < 0x01000000)
+                      if (!tm->isMType(wmList[i],e.enConstraint))
+                        continue;
+                    }
+                  if (tm->HasFlag(M_IALIGN) && tm->isMType(wmList[i],MA_SAPIENT))
+                    if (AlignConflict(ResAlign(wmList[i]),e.enAlign,true))
+                      continue;
+              
+                  GenericTests:
+                  {
+                    rID old_eID = e.eID;
+                    e.eID = wmList[i];
+                    if (TENC(e.enID)->Event(e,e.enID,EV_CRITERIA) == CANNOT_CAST_IT)
+                      { e.eID = old_eID; continue; }
+                    e.eID = old_eID;
+                  }
+                  if (e.chCriteria)
+                    if ((*e.chCriteria)(e,wmList[i]) == false)
+                      continue;
+                  monList[nMon++] = wmList[i];
+                  monWeights[nMon] = monWeights[nMon-1]+cWeight;
+                }
+              if (nMon >= 510)
+                break;
+            }
+          goto ChooseFromList;
+          }
+      }
+            
+    ChooseFromList:
+    if (!nMon)
+      {
+        Player *p;   
+        if (p = theGame->GetPlayer(0)) {
+          String str;
+          str = XPrint("enChooseMID Failed: Enc '<Res>', CR <Num>, Part <Num>,"
+            " eimXCR <Num>", e.enID, e.enCR, e.cPart, e.eimXCR);
+          if (e.eID)
+            str += XPrint(", eID '<Res>'", e.eID);
+          if (e.enRegID && RES(e.enRegID)->HasList(ENCOUNTER_LIST))
+            str += XPrint(", enRegID '<Res>'", e.enRegID);
+          if (e.enConstraint && e.enConstraint >= 0x01000000)
+            str += XPrint(", e.enConstraint '<Res>'", e.enConstraint);
+          else if (e.enConstraint)
+            str += XPrint(", e.enConstraint '<Str>'", Lookup(MTypeNames,e.enConstraint));
+          str += ".";
+          if (e.enFlags & EN_OODMON)
+            str += " [EN_OODMON]";
+          if (e.enFlags & EN_SINGLE)
+            str += " [EN_SINGLE]";
+          if (e.enFlags & EN_AQUATIC)
+            str += " [EN_AQUATIC]";
+          if (e.enFlags & EN_STREAMER)
+            str += " [EN_STREAMER]";
+          if (e.enFlags & EN_CREATOR)
+            str += " [EN_CREATOR]";
+          if (e.enFlags & EN_SUMMON)
+            str += " [EN_SUMMON]";
+          if (e.enFlags & EN_VAULT)
+            str += " [EN_VAULT]";
+          if (e.enFlags & EN_DUNREGEN)
+            str += " [EN_DUNREGEN]";          
+          p->AddJournalEntry(str);
+          }
+        e.chResult = FIND("human");
+        return ABORT;    
+      }
+
+    if (e.isGetMinCR)
+      {
+        int16 bestCR; rID bestID;
+        bestID = 0; bestCR = 100;
+        for(i=0;i!=nMon;i++)
+          if (TMON(monList[i])->CR < bestCR)
+            { bestCR = TMON(monList[i])->CR;
+              bestID = monList[i]; }
+        e.chResult = bestID;
+        return DONE;
+      }
+    else if (e.isGetMaxCR)
+      {
+        int16 bestCR; rID bestID;
+        bestID = 0; bestCR = -100;
+        for(i=0;i!=nMon;i++)
+          if (TMON(monList[i])->CR > bestCR)
+            { bestCR = TMON(monList[i])->CR;
+              bestID = monList[i]; }
+        e.chResult = bestID;
+        return DONE;
+      }
+    else if (ep->Flags & EP_SKEW_FOR_MID)
+      {
+        int16 bestCR, j; rID bestID;
+        bestID = 0; bestCR = -100;
+        for (j=0;j!=4;j++) {
+          x = random(monWeights[nMon]);
+          for (i=0;monWeights[i+1];i++)
+            if (monWeights[i+1]>x) {
+              if (TMON(monList[i])->CR > bestCR)
+                { bestID = monList[i]; 
+                  bestCR = TMON(monList[i])->CR; }
+              break;
+              }
+              
+          }
+        e.chResult = bestID;
+      }
+    else
+      {
+        x = random(monWeights[nMon]);
+        for (i=0;monWeights[i+1];i++)
+          if (monWeights[i+1]>x)
+            { e.chResult = monList[i]; 
+              break; }
+        ASSERT(e.chResult);
+      }
+    if (te->HasFlag(NF_UNIFORM))
+      enUniformAdd(ep->xID | ((ep->Flags & EP_ANYMON) ? 0x0F000000 : 0),e.chResult);
+    if (ep->Flags & EP_UNIFORM)
+      enUniformAdd(e.cPart,e.chResult);
+    
+    return DONE;
+  }
+
+  
+EvReturn Map::enGenMount(EventInfo &e)
+  {
+    rID wtList[512], xID; int16 mtIdxList[512];
+    int32 mtWeights[512]; TMonster *tm;
+    int16 cWeight, cFreaky, nMount, i, j, x, Idx;
+    int16 maxCR, lowCR, highCR, lowIdx, highIdx;
+    
+    enCalcCurrPartXCR(e);
+    maxCR = XCRtoCR(e.eimXCR - e.epCurrXCR);
+    maxCR = max(1,maxCR);
+    lowCR = 36; lowIdx = -1;
+    highCR = -6; highIdx = -1;
+    
+    mtWeights[0] = 0;
+    
+    tm = TMON(e.ep_mID);
+    if (!tm->HasFlag(M_HUMANOID) ||
+         tm->HasFlag(M_NOLIMBS))
+      return DONE;
+      
+    if (!(e.chSource && e.chList))
+      { 
+        e.ep_hmID = FIND("warhorse");
+        return DONE;
+      }
+      
+    RES(e.chSource)->GetList(e.chList,wtList,511);
+    nMount = 0; cWeight = 10;
+    for(i=0;wtList[i] || wtList[i+1];i++)
+      {
+        if (((int32)wtList[i]) <= -10) 
+          cFreaky = -wtList[i];
+        else if (wtList[i] < 0x01000000)
+          cWeight = wtList[i];
+        else if (RES(wtList[i])->Type == T_TTEMPLATE)
+          continue;
+        else if (RES(wtList[i])->Type == T_TMONSTER)
+          {
+            int16 theCR;
+            theCR = TMON(wtList[i])->CR;
+            for (j=i-1;j>=0;j--)
+              {
+                if ((wtList[j] < 0x01000000) || 
+                    (RES(wtList[j])->Type != T_TTEMPLATE))
+                  break;
+                theCR = TTEM(wtList[j])->CR.Adjust(theCR);
+              }
+            lowCR = min(theCR,lowCR);
+            highCR = max(theCR,highCR);
+            if (theCR == lowCR)
+              lowIdx = i;
+            if (theCR == highCR)
+              highIdx = i;
+            if (theCR > maxCR)
+              continue;
+            mtIdxList[nMount++] = i;
+            mtWeights[nMount] = mtWeights[nMount-1]+cWeight;
+          }
+        if (nMount >= 510)
+          break;
+      }
+    if (!nMount)
+      return DONE;
+      
+    if (e.isGetMinCR)
+      {
+        if (lowIdx == -1)
+          return DONE;
+        Idx = lowIdx;
+        goto RenderMount;
+      }
+    else if (e.isGetMaxCR)
+      {
+        if (highIdx == -1)
+          return DONE;
+        Idx = highIdx;
+        goto RenderMount;
+      }
+      
+      
+    if (e.chMaximize)
+      {          
+        //
+      }  
+    else if (e.chBestOfTwo)
+      {
+        //
+      }     
+    x = random(mtWeights[nMount]);
+    for (i=0;mtWeights[i+1];i++)
+      if (mtWeights[i+1]>x)
+        {
+          Idx = mtIdxList[i]; 
+          
+          RenderMount:
+          e.ep_hmID = wtList[Idx];
+          for (j=Idx-1;j>=0;j--)
+            {
+              if ((wtList[j] < 0x01000000) || 
+                  (RES(wtList[j])->Type != T_TTEMPLATE))
+                break;
+              enAddMountTemp(e,wtList[j]);
+            }
+          break;
         }
-        Feature * f;
-        for (f=FFeatureAt(OpenX[j],OpenY[j]);f;f=NFeatureAt(OpenX[j],OpenY[j]))
-          if (f && (TFEAT(f->fID)->PEvent(EV_MON_CONSIDER,mna[i],f,mna[i]->mID) 
-                  == ABORT)) 
-              { Tries++; goto Retry; }
+        
+          
+    return DONE;
+  }  
 
-        mna[i]->PlaceAt(this,OpenX[j],OpenY[j]);
-        mna[i]->Initialize(true);
+bool hasTempType(EventInfo &e, uint32 type)
+  {
+    uint32 types;
+    types = 0;
+    if (e.ep_tID)
+      types |= TTEM(e.ep_tID)->Type;
+    if (e.ep_tID2)
+      types |= TTEM(e.ep_tID2)->Type;
+    if (e.ep_tID3)
+      types |= TTEM(e.ep_tID3)->Type;
+    if (type & types)
+      return true;
+    return false;
+  }
+
+EvReturn Map::enSelectTemps(EventInfo &e)
+  {
+  
+    /*
+    
+      1) Apply any templates explicitly specified in the Part
+        object.
+      2) Apply the UNIVERSAL_TEMPLATE for the encounter, if
+        any, choosing from a weighted list.
+      3) After this, return after each step if equal to or over
+        90% of the allotted XCR.
+      4) If EP_CLASSED (or EP_10CLASS, or EP_25CLASS, or EP_50CLASS
+        and we roll above), choose a template from the weighted
+        CLASS_LIST if it exists, otherwise call listClassTemplates() 
+        and choose one.
+      5) If NF_SINGLE or NF_FREAKY and FF >= 19 (or whatever), then
+        call listOtherTemplates and choose one (which might be
+        TM_NATURE, TM_DESCENT or (with careful checks) TM_PLANAR.
+      6) If EP_SKILLED, call listSkillTemplates() and choose whichever
+        one brings the XCR closest to the desired XCR.
+    
+    
+      The listTemplates functions takes a parameter, a template type,
+      and returns a list of all the templates that can fit the chosen
+      mID, don't put the current CR over desired XCR and match the
+      type.
+      
+      Testing Template Appropriateness:
+          
+      or:
+      rID enChooseTemp(uint32 TTypes, int16 OverrideList, bool maximize)
+    
+      Remember that we call this also if the template is 
+        "any TM_PLANAR" or whatever
+        
+      rID processWeightedList(rID xID, uint32 listNum, bool (*criteria)(EventInfo &e))
+      -- remember that this has to work for both the specified
+        criteria func and also test with EV_CRITERIA
+      -- for mon lists, evaluate some kind of "any MA_ANIMAL"
+        construct properly
+      
+    
+      Choosing mID:
+        -- nothing with M_IALIGN and conflicting alignment with any
+          previous parts
+        -- calculate max base CR, considering explicit and universal
+          template adjustments and allowed XCR.
+    
+    */
+    rID tID, tmList[512]; int32 q, i, c, chance;
+    TEncounter *te = TENC(e.enID); bool isRider, hasRide;
+    EncPart *ep = &(te->Parts[e.cPart]);
+    bool isDragon = TMON(e.ep_mID)->isMType(e.ep_mID,MA_DRAGON);
+    
+    /* (1) Apply Explicitly Specified Templates */
+    if (ep->xID2 && ep->xID2 >= 0x01000000) 
+      {
+        if (enTemplateOk(e,ep->xID2,true))
+          enAddTemp(e,ep->xID2);
+        else
+          e.epFailed = true;
+      }
+    else if (ep->xID2 && (ep->Flags & EP_ANYTEMP))
+      {
+        c = 0;
+        for (q=0;q!=1;q++) 
+          for(i=0;i!=theGame->Modules[q]->szTem;i++)
+            {
+              TTemplate *tt = &theGame->Modules[q]->QTem[i];
+              if (!(tt->TType & ep->xID2))
+                continue;
+              if (tt->HasFlag(TMF_NOGEN))
+                continue;
+              tID = theGame->Modules[q]->TemplateID(i);
+              if (!enTemplateOk(e, tID))
+                continue; 
+              if (c >= 510)
+                break;
+              tmList[c++] = tID;
+            }
+        if (c && e.isGetMinCR)
+          {
+            int16 bestCR; rID bestID;
+            bestID = 0; bestCR = 100;
+            for(i=0;i!=c;i++)
+              if (TTEM(tmList[i])->CR.Adjust(TMON(e.ep_mID)->CR) < bestCR)
+                { bestCR = TTEM(tmList[i])->CR.Adjust(TMON(e.ep_mID)->CR);
+                  bestID = tmList[i]; }
+            if (bestID)
+              enAddTemp(e,bestID);
+          }
+        else if (c && e.isGetMaxCR)
+          {
+            int16 bestCR; rID bestID;
+            bestID = 0; bestCR = -100;
+            for(i=0;i!=c;i++)
+              if (TTEM(tmList[i])->CR.Adjust(TMON(e.ep_mID)->CR) > bestCR)
+                { bestCR = TTEM(tmList[i])->CR.Adjust(TMON(e.ep_mID)->CR);
+                  bestID = tmList[i]; }
+            if (bestID)
+              enAddTemp(e,bestID);
+          }
+        else if (c) 
+          enAddTemp(e,tmList[random(c)]);
+        else
+          e.epFailed = true;
+      }  
+    else if (ep->xID2)
+      {
+        e.chList = ep->xID2;
+        e.chType = 0;
+        e.chCriteria = NULL;
+        e.chMaximize = false;
+        ReThrow(EV_ENCHOOSE_TEMP,e);
+        if (e.chResult)
+          enAddTemp(e,e.chResult);
+        else
+          e.epFailed = true;
+      }        
+    
+    /* (2) Apply universal template */
+    
+    if (enUniformGet(UNIVERSAL_TEMPLATE)) {
+      if (!enTemplateOk(e,enUniformGet(UNIVERSAL_TEMPLATE),true))
+        e.epFailed = true;
+      enAddTemp(e,enUniformGet(UNIVERSAL_TEMPLATE));
+      }
+    /* (4) Apply Class Template, if needed */
+    
+    if (!(ep->Flags & EP_NOXCR))
+      if (e.eimXCR < e.epCurrXCR &&
+           !(ep->Flags & EP_CLASSED))
+        goto SkipClassed;
+    
+    chance = 0;
+    if (ep->Flags & EP_CLASS10)
+      chance += 10;
+    if (ep->Flags & EP_CLASS25)
+      chance += 25;
+    if (ep->Flags & EP_CLASS50)
+      chance += 50;
+    if ((ep->Flags & (EP_CLASSED|EP_MAYCLASS)) ||
+        chance >= e.epClassRoll)
+      {
+        int32 oldXCR = e.eimXCR;
+        RetryClass:
+        e.chList = CLASS_LIST;
+        e.chType = TM_CLASS;
+        e.chCriteria = NULL;
+        e.chMaximize = false;
+        ReThrow(EV_ENCHOOSE_TEMP,e);
+        if ((ep->Flags & EP_CLASSED) && !e.chResult)
+          {
+            e.eimXCR = XCR(XCRtoCR(e.eimXCR)+1);
+            if (XCRtoCR(e.eimXCR) < 35)
+              goto RetryClass;
+          }
+        e.eimXCR = oldXCR;
+        if (e.chResult)
+          enAddTemp(e,e.chResult);
+        if ((ep->Flags & EP_CLASSED) && !e.chResult)
+          e.epFailed = true;
+      }
+    
+    SkipClassed:
+    
+    /* (5) Generate Mounts */
+    isRider = false;
+    if (e.ep_mID && TMON(e.ep_mID)->HasFlag(M_RIDER))
+      isRider = true;
+    if (e.ep_tID && TTEM(e.ep_tID)->AddsFlag(M_RIDER))
+      isRider = true;
+    if (e.ep_tID2 && TTEM(e.ep_tID2)->AddsFlag(M_RIDER))
+      isRider = true;
+    if (e.ep_tID3 && TTEM(e.ep_tID3)->AddsFlag(M_RIDER))
+      isRider = true;
+    
+    hasRide = false;
+    if (e.ep_mID && TMON(e.ep_mID)->HasFeat(SK_RIDE))
+      hasRide = true;
+    if (e.ep_tID && TTEM(e.ep_tID)->HasFeat(SK_RIDE))
+      hasRide = true;
+    if (e.ep_tID2 && TTEM(e.ep_tID2)->HasFeat(SK_RIDE))
+      hasRide = true;
+    if (e.ep_tID3 && TTEM(e.ep_tID3)->HasFeat(SK_RIDE))
+      hasRide = true;
+    
+    if (!(ep->Flags & EP_NOXCR))
+      if (e.eimXCR < e.epCurrXCR && !isRider &&
+           !(ep->Flags & EP_MOUNTED))
+        goto SkipMount;
+        
+    if (isRider || (ep->Flags & EP_MOUNTED) ||
+        ((ep->Flags & EP_MOUNTABLE) && !random(2)) ||
+        (hasRide && !random(3)))
+      {
+        e.chSource = 0;
+        e.chList = MOUNT_LIST;
+        if (e.ep_mID && RES(e.ep_mID)->HasList(MOUNT_LIST))
+          e.chSource = e.ep_mID;
+        if (e.ep_tID  && RES(e.ep_tID)->HasList(MOUNT_LIST))
+          e.chSource = e.ep_tID;
+        if (e.ep_tID2 && RES(e.ep_tID2)->HasList(MOUNT_LIST))
+          e.chSource = e.ep_tID2;
+        if (e.ep_tID3 && RES(e.ep_tID3)->HasList(MOUNT_LIST))
+          e.chSource = e.ep_tID3;
+        ReThrow(EV_ENGEN_MOUNT,e);
+      }
+    
+    SkipMount:
+    
+    /* (6) Apply Freaky Template, if appropriate */
+    if (!(ep->Flags & EP_NOXCR))
+      if (e.eimXCR < e.epCurrXCR)
+        goto SkipFreaky;
+
+    if (e.epFreaky >= 7)
+      {
+        e.chList = 0;
+        e.chType = TM_NATURE|TM_DESCENT;
+        if (te->HasFlag(NF_SINGLE))
+          e.chType |= TM_PLANAR;
+        e.chCriteria = NULL;
+        e.chMaximize = false;
+        ReThrow(EV_ENCHOOSE_TEMP,e);
+        if (e.chResult)
+          enAddTemp(e,e.chResult);
+      }
+        
+    SkipFreaky:
+    
+    /* (7) Poison Weapons; Grant Extra Magic Items */
+    
+    /* (8) Apply Skill Template, if needed */
+    if (!(ep->Flags & EP_NOXCR))
+      if (e.eimXCR < e.epCurrXCR)
+        goto SkipSkilled;
+    
+    if (ep->Flags & (EP_SKILLED|EP_SKILLMAX|EP_SKILLHIGH))
+      {
+        e.chList = SKILL_LIST;
+        e.chType = TM_SKILL;
+        e.chCriteria = NULL;
+        if (ep->Flags & EP_SKILLMAX) 
+          e.chMaximize = true;
+        else if (ep->Flags & EP_SKILLHIGH)
+          e.chBestOfTwo = true;
+        else
+          e.chMaximize = false;
+        ReThrow(EV_ENCHOOSE_TEMP,e);
+        if (e.chResult)
+          enAddTemp(e,e.chResult);
+      }
+      
+    SkipSkilled:
+      
+      
+    /* (9) Give dragons age categories */
+    if (isDragon && !hasTempType(e,TM_AGECAT))
+      {
+        e.chList = 0;
+        e.chType = TM_AGECAT;
+        e.chCriteria = NULL;
+        e.chMaximize = true;
+        ReThrow(EV_ENCHOOSE_TEMP,e);
+        if (!e.chResult)
+          e.chResult = FIND("young");
+        enAddTemp(e,e.chResult);
+      }
+      
+    return DONE;
+  }  
+  
+  
+EvReturn Map::enChooseTemp(EventInfo &e)
+  {
+    rID wtList[512], tmList[512], xID;
+    int32 tmWeights[512];
+    int16 cWeight, nTemp, i, q, x;
+
+    if (TENC(e.enID)->HasFlag(NF_UNIFORM))
+      if (e.chResult = enUniformGet((e.chList+e.cPart*10000) | 0x0D000000))
+        return DONE;
+    
+    enCalcCurrPartXCR(e);
+    tmWeights[0] = 0;
+    if (e.chList && TENC(e.enID)->GetList(e.chList,wtList,511))
+      {
+        nTemp = 0; cWeight = 10;
+        for(i=0;wtList[i] || wtList[i+1];i++)
+          {
+            if (wtList[i] == -1) // ANY TM_PLANAR
+              { i++; Error("ANY in TEMP_LIST not implemented!"); }
+            else if (wtList[i] < 0x01000000)
+              cWeight = wtList[i];
+            else if (enTemplateOk(e, wtList[i]))
+              {
+                tmList[nTemp++] = wtList[i];
+                tmWeights[nTemp] = tmWeights[nTemp-1]+cWeight;
+              }
+            if (nTemp >= 510)
+              break;
+          }
+      }  
+    else
+      {
+        nTemp = 0;
+        for (q=0;q!=1;q++) 
+          for(i=0;i!=theGame->Modules[q]->szTem;i++)
+            {
+              TTemplate *tt = &theGame->Modules[q]->QTem[i];
+              if (!(tt->TType & e.chType))
+                continue;
+              if (tt->HasFlag(TMF_NOGEN))
+                continue;
+              xID = theGame->Modules[q]->TemplateID(i);
+              if (!enTemplateOk(e, xID))
+                continue; 
+              if (nTemp >= 510)
+                break;
+              tmList[nTemp++] = xID;
+              tmWeights[nTemp] = tmWeights[nTemp-1]+1;
+
+            }
+      }
+    if (!nTemp) {
+      e.chResult = 0;
+      return DONE;
+      }
+    if (e.isGetMinCR)
+      {
+        int16 bestCR; rID bestID;
+        bestID = 0; bestCR = 100;
+        for(i=0;i!=nTemp;i++)
+          if (TTEM(tmList[i])->CR.Adjust(TMON(e.ep_mID)->CR) < bestCR)
+            { bestCR = TTEM(tmList[i])->CR.Adjust(TMON(e.ep_mID)->CR);
+              bestID = tmList[i]; }        
+        e.chResult = bestID;
+        return DONE;
+      }
+    else if (e.isGetMaxCR)
+      {
+        int16 bestCR; rID bestID;
+        bestID = 0; bestCR = -100;
+        for(i=0;i!=nTemp;i++)
+          if (TTEM(tmList[i])->CR.Adjust(TMON(e.ep_mID)->CR) > bestCR)
+            { bestCR = TTEM(tmList[i])->CR.Adjust(TMON(e.ep_mID)->CR);
+              bestID = tmList[i]; }        
+        e.chResult = bestID;
+        return DONE;
+      }
+      
+      
+    if (e.chMaximize)
+      {          
+        int16 bestCR = -100, n; rID highlist[32];
+        for (i=0;i!=nTemp;i++)
+          if (TTEM(tmList[i])->CR.Adjust(TMON(e.ep_mID)->CR) > bestCR)
+            bestCR = TTEM(tmList[i])->CR.Adjust(TMON(e.ep_mID)->CR);
+        for (i=0,n=0;i!=nTemp;i++)
+          if (TTEM(tmList[i])->CR.Adjust(TMON(e.ep_mID)->CR) >= bestCR)
+            highlist[n++] = tmList[i];
+        if (n)
+          e.chResult = highlist[random(n)];
+        else
+          e.chResult = 0;
+        enUniformAdd(((e.chList+e.cPart*10000) | 0x0D000000), e.chResult);
+        ASSERT(e.chResult >= 0x01000000);
+        return DONE;
+      }  
+    else if (e.chBestOfTwo)
+      {
+        rID aID, bID;
+        aID = tmList[random(nTemp)];
+        bID = tmList[random(nTemp)];
+        if (TTEM(aID)->CR.Adjust(0) >
+            TTEM(bID)->CR.Adjust(0))
+          e.chResult = aID;
+        else
+          e.chResult = bID;
+        ASSERT(e.chResult >= 0x01000000);
+        enUniformAdd(((e.chList+e.cPart*10000) | 0x0D000000), e.chResult);
+        return DONE;
+      }     
+    x = random(tmWeights[nTemp]);
+    for (i=0;tmWeights[i+1];i++)
+      if (tmWeights[i+1]>x)
+        {
+          e.chResult = tmList[i];
+          ASSERT(e.chResult >= 0x01000000);
+          enUniformAdd(((e.chList+e.cPart*10000) | 0x0D000000), e.chResult);
+          return DONE;
+        }
+    e.chResult = 0;
+    return DONE;
+  }
+
+
+  
+bool Map::enTemplateOk(EventInfo &e, rID tID, bool force)
+  {
+    /*
+    1) Is the basemon mID the appropriate MTYPE for the Template?
+       _Only test this if this is the first template being applied._
+    2) Would the adjusted CR violate the desired XCR?
+    3) Does the template get disqualified on freak factor grounds?
+    4) Does the template do M_IALIGN and get disqualified based on
+       alignment conflict?
+    4) If we get this far, create the Monster object, apply any
+       prior templates and then call EV_ISTARGET for the template
+       in question. We can use the same monster object to test all
+       the templates in a given call to listTemplates.
+    */
+    
+    int32 newXCR;
+    TTemplate *tt = TTEM(tID);
+    
+
+    if (force)
+      goto MinTest;
+    
+    if (!TMON(e.ep_mID)->isMType(e.ep_mID,tt->ForMType))
+      return false;
+    
+    newXCR = e.epCurrXCR -
+             XCR(e.ep_monCR) +
+             XCR(tt->CR.Adjust(e.ep_monCR));
+    if (newXCR > e.eimXCR)
+      return false;
+      
+    /* Add freak factor tests here later */
+    
+    if (tt->AddsFlag(M_IALIGN))
+      if (AlignConflict(ResAlign(tID),e.enAlign,true))
+        return false;        
+      
+    if (e.chCriteria)
+      if ((*e.chCriteria)(e,tID) == false)
+        return false;
+      
+    {
+      rID old_eID = e.eID;
+      e.eID = tID;
+      if (TENC(e.enID)->Event(e,e.enID,EV_CRITERIA) == CANNOT_CAST_IT)
+        { e.eID = old_eID; return false; }
+      e.eID = old_eID;
+    }
+      
+    {
+      MinTest:
+      Monster *mn = new Monster(e.ep_mID);
+      if (e.ep_tID)
+        mn->AddTemplate(e.ep_tID);
+      if (e.ep_tID2)
+        mn->AddTemplate(e.ep_tID2);
+      if (e.ep_tID3)
+        mn->AddTemplate(e.ep_tID3);
+      mn->CalcValues();
+      if (!mn->CanAddTemplate(tID))
+        { delete mn; return false; }
+      delete mn;
+    }
+    return true;
+  }
+
+EvReturn Map::enBuildMon(EventInfo &e)
+  {
+    Monster *mn, *mt;
+    EncMember *em = &EncMem[e.cMember];
+    mt = NULL;
+    if (!em->mID)
+      return ABORT;
+      
+    /* HACKFIX */
+    if (e.cMember >= 5)
+      return ABORT;
+      
+      
+    mn = new Monster(em->mID);
+    mn->PartyID = e.enPartyID;
+    em->hMon = mn->myHandle;
+    TMON(em->mID)->GrantGear(mn,em->mID,true);
+    if (em->tID && em->tID > 0x01000000) {
+      mn->CalcValues();
+      mn->AddTemplate(em->tID);
+      #ifdef DEBUG
+      ASSERT(mn->HasEffStati(TEMPLATE,em->tID));
+      #endif
+      TTEM(em->tID)->GrantGear(mn,em->tID,true);
+      TTEM(em->tID)->PEvent(EV_BIRTH,mn,em->tID);
+      }
+    if (em->tID2 && em->tID2 > 0x01000000) {
+      mn->CalcValues();
+      mn->AddTemplate(em->tID2);
+      #ifdef DEBUG
+      ASSERT(mn->HasEffStati(TEMPLATE,em->tID2));
+      #endif
+      TTEM(em->tID2)->GrantGear(mn,em->tID2,true);
+      TTEM(em->tID2)->PEvent(EV_BIRTH,mn,em->tID2);
+      }
+    if (em->tID3 && em->tID3 > 0x01000000) {
+      mn->CalcValues();
+      mn->AddTemplate(em->tID3);
+      #ifdef DEBUG
+      ASSERT(mn->HasEffStati(TEMPLATE,em->tID3));
+      #endif
+      TTEM(em->tID3)->GrantGear(mn,em->tID3,true);
+      TTEM(em->tID3)->PEvent(EV_BIRTH,mn,em->tID3);
+      }      
+    TMON(em->mID)->PEvent(EV_BIRTH,mn,em->mID);
+    mn->MonsterGear();
+    if ((e.enFlags & EN_DUNGEON) && random(100)+1 <= e.enSleep &&
+        !mn->ResistLevel(AD_SLEE) && !em->hmID)
+      mn->GainPermStati(SLEEPING,NULL,SS_MISC,SLEEP_NATURAL);
+    /* LATER...
+    if (mGroups[i].Flags & MGF_POISON) {
+      xID = theGame->GetEffectID(PUR_POISON,0,max(3,enCR));
+      for(it = mn->FirstInv();it;it = mn->NextInv())
+        if (it->isType(T_WEAPON) || it->isType(T_MISSILE))
+          if (it->HasIFlag(WT_PIERCING) || it->HasIFlag(WT_SLASHING)) 
+            it->GainPermStati(POISONED,NULL,SS_MISC,3,0,xID);
+      }
+    */
+    
+    if (em->hmID)
+      {
+        mt = new Monster(em->hmID);
+        mt->PartyID = e.enPartyID;
+        TMON(em->hmID)->GrantGear(mt,em->hmID,true);
+        if (em->htID && em->htID > 0x01000000) {
+          mt->CalcValues();
+          mt->AddTemplate(em->htID);
+          #ifdef DEBUG
+          ASSERT(mt->HasEffStati(TEMPLATE,em->htID));
+          #endif
+          TTEM(em->htID)->GrantGear(mt,em->htID,true);
+          TTEM(em->htID)->PEvent(EV_BIRTH,mt,em->htID);
+          }
+        if (em->htID2 && em->htID2 > 0x01000000) {
+          mt->CalcValues();
+          mt->AddTemplate(em->htID2);
+          #ifdef DEBUG
+          ASSERT(mt->HasEffStati(TEMPLATE,em->htID2));
+          #endif
+          TTEM(em->htID2)->GrantGear(mt,em->htID2,true);
+          TTEM(em->htID2)->PEvent(EV_BIRTH,mt,em->htID2);
+          }
+        TMON(em->hmID)->PEvent(EV_BIRTH,mt,em->hmID);
+        mt->MonsterGear();
+        mn->GainPermStati(MOUNTED,mt,SS_MISC,0,0);
+        mt->GainPermStati(MOUNT,mn,SS_MISC,0,0);
+        mt->Initialize();
+      }
+      
+    Creature *old_actor = e.EActor;
+    e.EActor = mn;
+    ReThrow(EV_ENGEN_ALIGN, e);
+    e.EActor = old_actor;
+    em->Align = mn->getAlignment();
+      
+    if (e.enFlags & (EN_SUMMON|EN_CREATOR|EN_ILLUSION)) {
+      if (!(e.enFlags & EN_HOSTILE))
+        mn->PartyID = e.EActor->PartyID;
+      Creature *true_leader = NULL;
+      if (e.EActor)
+        true_leader = e.EActor->getLeader();
+      if (!true_leader)
+        true_leader = e.EActor;
+      if (e.enFlags & EN_SUMMON) {
+        mn->GainTempStati(SUMMONED, e.EActor,e.vDuration, SS_MISC,
+                            0, 0, e.eID, e.vCasterLev);
+        if (mt)
+          mt->GainTempStati(SUMMONED, e.EActor,e.vDuration, SS_MISC,
+                              0, 0, e.eID, e.vCasterLev);
+          
+        if (true_leader && !(e.enFlags & EN_HOSTILE)) {
+          mn->ts.addCreatureTarget(true_leader,TargetSummoner);
+          if (mt)
+            mt->ts.addCreatureTarget(true_leader,TargetSummoner);
+          }
+        }
+      else if (e.enFlags & EN_ILLUSION) {
+        mn->GainTempStati(ILLUSION, e.EActor, e.vDuration, SS_ENCH,
+          e.saveDC, 0, e.eID, e.vCasterLev);
+        e.EActor->GainPermStati(DISBELIEVED,mn,SS_MISC);
+        if (mt) {
+          mt->GainTempStati(ILLUSION, e.EActor, e.vDuration, SS_ENCH,
+            e.saveDC, 0, e.eID, e.vCasterLev);
+          e.EActor->GainPermStati(DISBELIEVED,mn,SS_MISC);
+          if (true_leader) 
+            mt->ts.addCreatureTarget(true_leader,TargetMaster);
+          }
+        if (true_leader)
+          mn->ts.addCreatureTarget(true_leader,TargetMaster);
+        }
+      else {
+        if (true_leader && !(e.enFlags & EN_HOSTILE)) {
+          mn->ts.addCreatureTarget(true_leader,TargetMaster);
+          if (mt)
+            mt->ts.addCreatureTarget(true_leader,TargetMaster);
+          }
+        }
+        
+      if (e.EActor && e.EActor->isPlayer() && !(e.enFlags & EN_HOSTILE)) {
+        mn->MakeCompanion(e.EPActor,PHD_MAGIC);
+        if (mt)
+          mt->MakeCompanion(e.EPActor,PHD_MAGIC);
+        }
+      else {
+        mn->PartyID = e.EActor->PartyID;
+        if (mt)
+          mt->PartyID = e.EActor->PartyID;
+        }
+        
+      if (e.enFlags & EN_HOSTILE) {
+        mn->TurnHostileTo(e.EActor);
+        if (mt)
+          mt->TurnHostileTo(e.EActor);
+        }
+        
+      }
+      
+    CandidateCreatures[e.cMember] = mn;
+    Candidates[e.cMember] = mn->myHandle;
+  
+    /*if (mn->mID == FIND("grippli"))
+      __asm int 3;*/
+  
+    if (e.enFlags & EN_NOPLACE)
+      ;
+    else if (e.enFlags & EN_ANYOPEN) {
+      int16 Tries = 0, j;
+      
+      if (e.enIsFormation)
+        if (e.EXVal)
+          goto PlaceAtSpot;
+      
+      rID Terrains[256];
+      for (int i=0;i!=min(256,OpenC);i++)
+        Terrains[i] = TerrainAt(OpenX[i],OpenY[i]);
+      
+      Retry:
+      if (Tries >= 50)
+        { 
+          /*
+          String s;
+          s = XPrint("Monster <Obj> deleted due to lack of suitable terrain at (<Num>,<Num>).",
+              mn, OpenX[j],OpenY[j]);
+          for (int i=0;i!=OpenC;i++)
+            s += Format("\n[%d,%d]: %s",
+                   OpenX[i],OpenY[i],(const char*)
+                   NAME(TerrainAt(OpenX[i],OpenY[i])));
+          theGame->GetPlayer(0)->AddJournalEntry(s);
+          s.Empty();
+          */
+          mn->Remove(true); return ABORT; }
+      
+      /* Place aquatic monsters in water, and other monsters on dry
+         land. No exceptions -- even amphibians start in their favored
+         terrain. */  
+      j = random(OpenC);
+      
+      if (mn->HasMFlag(M_AMPHIB))
+        ;
+      else if (mn->isMType(MA_AQUATIC)) {
+        if (!TTER(TerrainAt(OpenX[j], OpenY[j]))->HasFlag(TF_WATER))
+          { 
+            //if (GlyphAt(OpenX[j],OpenY[j]) & 0xFF == GLYPH_WATER)
+            //  __asm int 3; 
+            Tries++; 
+            goto Retry; 
+          }
+        }
+      else {
+        if (TTER(TerrainAt(OpenX[j], OpenY[j]))->HasFlag(TF_WATER))
+          { Tries++; goto Retry; }
+        }
+      
+      if (TTER(TerrainAt(OpenX[j],OpenY[j]))->HasFlag(TF_STICKY))
+        if (!mn->isMType(MA_SPIDER))
+          { Tries++; goto Retry; }
+      if (TTER(TerrainAt(OpenX[j],OpenY[j]))->HasFlag(TF_FALL))
+        if (!mn->isAerial())
+          { Tries++; goto Retry; }
+      
+      
+
+      /* Don't place anything on dangerous terrain, unless it's deep
+          water and an aquatic monster. */
+      if (TTER(TerrainAt(OpenX[j],OpenY[j]))->HasFlag(TF_WARN) &&
+          !TTER(TerrainAt(OpenX[j],OpenY[j]))->HasFlag(TF_WATER) &&
+          !TTER(TerrainAt(OpenX[j],OpenY[j]))->HasFlag(TF_FALL) &&
+          !TTER(TerrainAt(OpenX[j],OpenY[j]))->HasFlag(TF_STICKY)) {
+        // ww: terrain with TF_WARN now support a special event that says
+        // if it is OK to put the monster there ...
+        // Is this the wrong way to call PEvent?!
+        if (TTER(TerrainAt(OpenX[j],OpenY[j]))->
+            PEvent(EV_MON_CONSIDER,mn,mn->mID) == ABORT)
+          { Tries++; goto Retry; }
+        }
+      Feature * f;
+      for (f=FFeatureAt(OpenX[j],OpenY[j]);f;f=NFeatureAt(OpenX[j],OpenY[j]))
+        if (f && (TFEAT(f->fID)->PEvent(EV_MON_CONSIDER,mn,f,mn->mID) 
+                == ABORT)) 
+          { Tries++; goto Retry; }
+      
+      mn->PlaceAt(this,OpenX[j],OpenY[j]);
+      /*ASSERT(mn->x > 0 && mn->y > 0);
+      mn->PlaceAt(this,OpenX[j],OpenY[j]);*/
+      if (!(e.enFlags & EN_VAULT))
+        mn->Initialize(true);
+      if (e.enIsFormation)
+        {
+          e.EXVal = OpenX[j];
+          e.EYVal = OpenY[j];
         }
       }
     else {
-      for(i=0;i!=c;i++) {
-        mna[i]->PlaceAt(this,ex,ey);
-        mna[i]->Initialize(true);
+      PlaceAtSpot:
+      mn->PlaceAt(this, e.EXVal, e.EYVal);
+      if (mn->x == -1) 
+        theGame->GetPlayer(0)->AddJournalEntry(
+          XPrint("Failed to place <Obj> at <Num>,<Num>.",mn,e.EXVal,e.EYVal));
+      /*ASSERT(mn->x > 0 && mn->y > 0);
+      mn->Flags &= ~F_DELETE;
+      mn->PlaceAt(this, e.EXVal, e.EYVal);*/
+      if (!(e.enFlags & EN_VAULT))
+        mn->Initialize(true);
       }
-    }
+      
+    mn->GainPermStati(ENCOUNTER,NULL,SS_MISC,e.cPart,e.enDesAmt,e.enID);
     
-    
-    /* Initialize calls CustomAlign(), which may give us a party
-       with an alignment conflict -- fix that here. */
-    bool isBad;
-    for (i=0;i!=c;i++) {
-      k = 0;
-      
-      if (mna[i]->HasMFlag(M_IALIGN) ||
-          !mna[i]->isMType(MA_SAPIENT))
-        continue;
-      
-      RetryAlign:
-      
-      isBad = false;
-      if (AlignConflict(mna[i]->getAlignment(),enAlign))
-        isBad = true;
-      for (j=0;j!=c;j++)
-        if (i > j || mna[j]->HasMFlag(M_IALIGN))
-          if (AlignConflict(mna[i]->getAlignment(),enAlign))
-            isBad = true;
-      
-      if (isBad) {
-        k++;
-        if (k > 15)
-          continue;
-        mna[i]->CustomAlign();
-        goto RetryAlign;
+    Player *p;
+    if (mn->ChallengeRating() > max(2,e.enCR))
+      if (p = theGame->GetPlayer(0)) {
+        String str;
+        str = XPrint("OOD monster <Obj> (CR <Num>) generated on "
+          "dlev <Num> by Encounter '<Res>'", mn, mn->ChallengeRating(), Depth, e.enID);
+        if (e.eID)
+          str += XPrint(" and the eID '<Res>'", e.eID);
+        if (e.enRegID && RES(e.enRegID)->HasList(ENCOUNTER_LIST))
+          str += XPrint(" and the ENCOUNTER_LIST from '<Res>'", e.enRegID);
+        if (e.enConstraint && e.enConstraint >= 0x01000000)
+          str += XPrint(" with the constraint '<Res>'", e.enConstraint);
+        else if (e.enConstraint)
+          str += XPrint(" with the constraint '<Str>'", Lookup(MTypeNames,e.enConstraint));
+        str += ".";
+        if (e.enFlags & EN_OODMON)
+          str += " [EN_OODMON]";
+        if (e.enFlags & EN_SINGLE)
+          str += " [EN_SINGLE]";
+        if (e.enFlags & EN_AQUATIC)
+          str += " [EN_AQUATIC]";
+        if (e.enFlags & EN_STREAMER)
+          str += " [EN_STREAMER]";
+        if (e.enFlags & EN_CREATOR)
+          str += " [EN_CREATOR]";
+        if (e.enFlags & EN_SUMMON)
+          str += " [EN_SUMMON]";
+        if (e.enFlags & EN_VAULT)
+          str += " [EN_VAULT]";
+        if (e.enFlags & EN_DUNREGEN)
+          str += " [EN_DUNREGEN]";          
+        p->AddJournalEntry(str);
         }
-      }
       
-    return; 
-  } 
+    return NOTHING;
+  }
 
 void Monster::MonsterGear()
   {
@@ -729,770 +2724,6 @@ void Monster::MonsterGear()
         }
 
 
-  }
-
-/* Appropriate Group Rules:
-   1. Elementals are paired with things that share their
-      elemental subtype.
-   2. Dragons come either solitary or as mated pairs, and
-      sometimes have humanoid servants or younger dragons
-      with them.
-   3. Humanoids may work together, alignment permitting
-      (i.e., a fire giant and orcs, or a troll with kobold
-      lackies.)
-   4. Jellies are found in multiples with skill-template
-      leaders.
-   5. Demons, devils and celestials are found in completely
-      mixed groups of their own kind.
-   6. Monsters have lists of allies (and typical mounts)
-      in their writeup.
-   7. Humanoids get chieftans and shamen.
-   8. Fungi are generated in much larger groups then other
-      creature types. Same for other immobiles.
-   10. Undead are found 30% in completely mixed groups, and
-      otherwise in groups of their own kind/template or with
-      specifically listed allies.
-   11. Solitary or near-Depth CR monsters are rerolled for
-      big rooms; to compensate, small rooms (without an MA_TYPE)
-      roll twice to keep the high CRs equally common.
-   12. Monsters with M_EXCLUSIVE only form groups with themselves
-      and their listed pets/allies. Grimlocks, frex, don't team
-      with trolls the way orcs might.
-   13. Vermin form big groups -- as big as possible -- with only
-      their listed allies / templates. Same for misc. Outsiders.   
-   14. Requesting groups of MA_UNDEAD may in fact return a group
-      with a base mID of type MA_NLIVING, with the skeleton or
-      zombie template applied.
-   15. Requesting groups of MA_OUTSIDERS may return MA_ANIMAL
-      groups with the celestial or fiendish templates.
-
-   Monster Lists:
-     GROUP_LEADER
-     GROUP_FOLLOWER
-     GROUP_MOUNT
-     GROUP_PETS
-
-*/
-
-int16 MaxGroupSize(MonGroup *mg, int16 xCR)
-  {
-    int32 cxCR, /* Current CR */ 
-          nxCR, /* Needed  CR */
-          ixCR; /* Individual xCR */
-
-    cxCR = GroupXCR(mg);
-    nxCR = xCR - cxCR;
-    ixCR = cxCR / mg->mCount;
-
-    return nxCR / ixCR;
-  }
-
-
-MonGroup* AddGroup(int16 GType, int16 xCR)
-  {
-    int32 xMType = enMType, i, m, c = 0, j, Tries; 
-    rID xID, xID2; int16 baseCR, CR;
-    static MonGroup mg; bool isHomog = false;
-
-    //theGame->GetPlayer(0)->IPrint(Format("AddGroup(%d,%d).",GType,xCR));
-    //T1->Update();
-            
-    /* What this line does is determine the maximum possible base CR
-       for the mID to be selected, based on the overall requested CR 
-       of the encounter. The remainder of the encounter's CR will be
-       made up by increasing numbers, adding templates or magic, and
-       so forth. */
-    if (enParty)
-      baseCR = min(random(CalcCR(xCR))+1,3);
-    else
-      baseCR = max(random(CalcCR(xCR))+1,random(CalcCR(xCR))+1);
-    if (baseCR > enCR)
-      baseCR = enCR;
-
-    baseCR = max(baseCR,0);
-    
-    /* Allocate a new MonGroup */
-    if (mgCount >= 12)
-      return NULL;
-     
-    Tries = 0; 
-     
-    BadTempRestart:
-      
-    Tries++;
-      
-    memset(&mg,0,sizeof(MonGroup));
-    mg.mgType = GType;
-
-    /* Rule 14. Templated undead are generated in the following circumstances:
-         50% of the time if the encounter is EL 3 or below, 66% of the time if
-         we're generating a popcorn group, or 25% of the time otherwise. */
-    if (enMType == MA_ZOMBIE && (baseCR < 6 || random(3)))
-      goto ZombieTemplate;
-    if (!enMonID && (!enMType || enMType == MA_UNDEAD))
-      if (((enMType == MA_UNDEAD) || (GType == MG_BASE && !enParty)) && !random(2))
-        if ((enMType == MA_UNDEAD) || (baseCR < 4 && random(2)) || (GType == MG_POPCORN && !random(3)) || !random(5))
-          {
-            ZombieTemplate:
-            xID = theGame->GetTempID(TM_UNDEAD,FIND("human"),max(2,(baseCR*2)/3));
-            if (!xID) 
-              xID = FIND("graveborn;template");
-            mg.tID[mg.tCount++] = xID;
-            xMType = MA_NLIVING;
-            enMType = MA_UNDEAD;
-          }
-    
-    /* Rule 15. When we want outsiders, we sometimes generate celestial or fiendish
-         animals instead. The chances are 100% at CR 2 or lower, 50% at CR 3-4 and
-         20% thereafter. This is mostly so clerical Holy Summoning spells can give
-         you a celestial badger et al., just like in canon. */
-    if (enMType == MA_HOLY_SUMM && enCreator) {
-      if (enCreator->isMType(MA_GOOD))
-        xMType = MA_CELESTIAL;
-      else if (enCreator->isMType(MA_EVIL) &&
-          enCreator->isMType(MA_LAWFUL))
-        xMType = MA_DEVIL;
-      else if (enCreator->isMType(MA_EVIL) &&
-          enCreator->isMType(MA_CHAOTIC))
-        xMType = MA_DEMON;
-      else if (enCreator->isMType(MA_EVIL))
-        xMType = MA_OUTSIDER + MA_EVIL*256;
-      else if (enCreator->isMType(MA_CHAOTIC))
-        xMType = MA_COUTSIDER;
-      else if (enCreator->isMType(MA_LAWFUL))
-        xMType = MA_LOUTSIDER;
-      else
-        xMType = MA_ELEMENTAL;
-                
-      if ((baseCR < 5 && !random(2)) || (baseCR >= 5 && !random(5)))
-        {
-          if (enCreator->isMType(MA_EVIL))
-            xID = FIND("fiendish");
-          else
-            xID = FIND("celestial");
-          mg.tID[mg.tCount++] = xID;
-          if (enCreator->isMType(MA_GOOD))
-            xMType = MA_NLIVING + MA_NONEVIL*256;
-          else if (enCreator->isMType(MA_EVIL))
-            xMType = MA_NLIVING + MA_EVIL*256;
-          else
-            xMType = MA_NLIVING;
-        }
-      baseCR++;
-      }
-    else if (enMType == MA_HOLY_SUMM)
-      xMType = MA_OUTSIDER;
-
-    switch (GType) 
-      {
-        case MG_BASE:
-          if (enMonID)
-            mg.mID = enMonID;
-          if (enMType && !mg.mID) {
-            mg.mID = theGame->GetMonID(enPurpose,-10,baseCR,enDepth,xMType ? xMType : enMType);
-            if (!mg.mID)
-              return NULL;
-            }
-          if (!mg.mID)
-            mg.mID = theGame->GetMonID(enPurpose,-10,baseCR,enDepth,0);
-          if (!mg.mID) {
-            Error("Cannot find mID for MG_BASE!");
-            mg.mID = FIND("human");
-            }
-         break;
-        case MG_LEADER:
-        case MG_POPCORN:
-        case MG_ALLY:
-        case MG_SHAMAN:
-          TMonster *tm; bool isPet, isTyped;
-          ASSERT(mGroups[0].mID);
-          tm = TMON(mGroups[0].mID);
-          if (!tm->isMType(mGroups[0].mID,MA_UNDEAD))
-            if (mGroups[0].isMType(MA_UNDEAD))
-              // ww: you had '== MA_UNDEAD' here! 
-              { if (!xMType) 
-                  xMType = MA_UNDEAD;
-                goto UndeadGroup; }
-          
-          if (GType == MG_LEADER && tm->HasFlag(M_CHIEFTAN) && TotalMCount() >= 4) {
-              mg.mID = mGroups[0].mID;
-              xID = AppropriateTemplate(TM_CHIEFTAN,CalcCR(xCR),&mg);
-              if (!xID)
-                mg.mID = 0;
-              else {
-                mg.tID[mg.tCount++] = xID;
-                goto GotMID;
-                }
-              }
-
-          if (GType == MG_SHAMAN && tm->HasFlag(M_SHAMAN) && TotalMCount() >= 4) {
-              mg.mID = mGroups[0].mID;
-              xID = AppropriateTemplate(TM_SHAMAN,CalcCR(xCR),&mg);
-              if (!xID)
-                mg.mID = 0;
-              else {
-                mg.tID[mg.tCount++] = xID;
-                goto GotMID;
-                }
-              }
-          if (GType == MG_SHAMAN)
-            return NULL;              
-
-          if (GType == MG_ALLY && tm->GetList(GROUP_ALLY,RList,32)) 
-            mg.mID = RList[random(ListLength)];
-          else if (GType != MG_POPCORN && tm->GetList(GROUP_LEADER,RList,32)) 
-            mg.mID = RList[random(ListLength)];
-          else if (GType != MG_LEADER && tm->GetList(GROUP_FOLLOWER,RList,32)) 
-            mg.mID = RList[random(ListLength)];
-          else {
-            if (tm->HasFlag(M_EXCLUSIVE) || enSimilar || 
-                (tm->isMType(mGroups[0].mID,MA_DRAGON) && !enIrregular))
-              { mg.mID = mGroups[0].mID; ASSERT(mg.mID); goto GotMID; }
-            for (i=0;HomogenousMixedGroups[i];i++)
-              if (mGroups[0].isMType(HomogenousMixedGroups[i]))
-                if (!tm->isMType(mGroups[0].mID,MA_DRAGON))
-                  { xMType = HomogenousMixedGroups[i]; isHomog = true; }
-            if (!xMType && random(2))
-              { mg.mID = mGroups[0].mID; ASSERT(mg.mID); goto GotMID; }
-
-
-            UndeadGroup:
-            c = 0;
-            isPet = mGroups[0].isMType(MA_PERSON) ||
-                    mGroups[0].isMType(MA_DRAGON);
-
-            /* This is kludged to avoid making troll caves be too hard.
-               MA_TROLL is one of the only MA_TYPEs that is requested to
-               fill large rooms at reasonably low depths, yet has no low-
-               level monsters. */
-            isTyped = (enMType != 0) && (enMType != MA_TROLL || enDepth >= 10);
-            Retry:
-            
-            for (m=0;m!=MAX_MODULES && theGame->Modules[m]
-                     && c < 2048;m++)
-              for (i=0;i!=theGame->Modules[m]->szMon 
-                     && c < 2048;i++)
-                {      
-                  tm = &(theGame->Modules[m]->QMon[i]);
-                  if (xMType && !tm->isMType(mGroups[0].mID, xMType))
-                    continue;
-                  if (tm->Depth > enDepth)
-                    continue;
-                  if (tm->HasFlag(M_NOGEN) || tm->HasFlag(M_UNIQUE))
-                    continue;
-                  if (tm->HasFlag(M_EXCLUSIVE) || tm->HasFlag(M_UNIQUE))
-                    continue;
-                  if (!(isPet || enIrregular || xMType)) {
-                    if (!tm->HasFlag(M_HUMANOID))
-                      continue;
-                    }
-                  if (isPet) {
-                    if (!tm->HasFlag(M_HUMANOID))
-                      if (!tm->isMType(mGroups[0].mID,MA_NLIVING))
-                        continue;
-                    }
-                  if (GType == MG_POPCORN) {
-                    if (tm->CR > min(baseCR - 3, baseCR / 3))
-                      continue;
-                    }
-                  if (GType == MG_LEADER)
-                    if (tm->CR > baseCR || tm->CR < baseCR/2)
-                      continue;
-                  if (GType == MG_ALLY)
-                    if (tm->CR > baseCR-2)
-                      continue;
-                  if (isTyped)
-                    if (!tm->isMType(mGroups[0].mID,enMType))
-                      continue;
-                  
-                  for (j=0;j!=mgCount;j++) {
-                    if (AlignConflict(ResAlign(theGame->Modules[m]->
-                      MonsterID(i)),GroupAlign(&mGroups[j])))
-                        continue;
-                    }
-
-                  /* We might generate groups of elementals and their
-                     kin (pech, living holocausts, aerial servants,
-                     etc.) but not dragons, whose ties to the elements
-                     aren't that strong. */
-                  if (tm->isMType(mGroups[0].mID,MA_DRAGON))
-                    if (xMType == MA_EARTH || xMType == MA_FIRE ||
-                        xMType == MA_WATER || xMType == MA_AIR )
-                      continue;
-                  Candidates[c] = theGame->Modules[m]->MonsterID(i);
-                  ASSERT(Candidates[c]);
-                  c++;
-                }
-            
-            if (!c && isTyped)
-              { 
-
-                /* Try again, looking outside the type. */
-                isTyped = false;
-                goto Retry;
-              }
-            if (!c)
-              return NULL; 
-            mg.mID = Candidates[random(c)];
-            // ww: I have gotten here with c == -20820 ...
-            // presumably because your "goto UndeadGroup" skipped the
-            // initialization of 'c=0' ...
-            ASSERT(mg.mID);
-            }
-
-      }
-  
-
-    
-    ASSERT (mg.mID);
-    GotMID:
-    ASSERT (mg.mID);
-    mg.mCount = 1;
-
-    if (TMON(mg.mID)->HasFlag(M_GROUP))
-      mg.mCount = 3 + random(4);
-
-    /* Reduce popcorn in homogenous groups in order to increase
-       the overall diversity of the group. */
-    if (isHomog && GType == MG_POPCORN && random(4))
-      return NULL;
-
-    /* Can't create dragons without age catagory templates! */
-    if (TMON(mg.mID)->isMType(mg.mID,MA_DRAGON)) {
-      /* Make sure we select a high age catagory template; we
-         don't want rooms full of hatchlings of DLev 7.  */
-      mg.tID[mg.tCount] = 0;
-      for (i=0;i!=4;i++) {
-        xID = theGame->GetTempID(TM_AGECAT,mg.mID,enCR);
-        if (mg.tID[mg.tCount] == 0 || (TTEM(xID)->CR.Adjust(7) > 
-              TTEM(mg.tID[mg.tCount])->CR.Adjust(7)))
-          mg.tID[mg.tCount] = xID;
-        if (GType == MG_POPCORN)
-          break;
-        }
-      if(!mg.tID[mg.tCount])
-        return NULL;     
-      mg.tCount++;
-      }    
-
-    /* Planar Templates apply to entire encounter */
-    for (i=0;i!=6 && mGroups[0].tID[i]; i++)
-      if (TTEM(mGroups[0].tID[i])->TType & TM_PLANAR)
-        {
-          for (j=0;j!=6 && j!=mg.tCount;j++)
-            if (mg.isMType(MA_UNDEAD)) {
-              if ( mGroups[0].tID[i] == FIND("fiendish") )
-                goto DonePlanarTemplate;
-              /* We've generated an unusable undead -- a zombie
-                 badger in a group of celestial elves, for ex. */
-              return NULL;  
-              }
-          if (j == 6)
-            /* No room for plane template */
-            return NULL;
-          if (!mg.isMType(TTEM(mGroups[0].tID[i])->ForMType))
-            return NULL;
-          mg.tID[j] = mGroups[0].tID[i];
-          break;
-        }
-    DonePlanarTemplate:
-
-
-    
-    /* First off, we try to add a skill template if the CR of our chosen
-       monster is more than 2d2 points below the desired CR of the encounter
-       we're creating. */
-    if (!random(7) || (CalcCR(GroupXCR(&mg) < ((CalcCR(xCR)-(2+random(2))) / 
-         (GType == MG_POPCORN ? 3 : 1) )))) {
-      xID = 0;                                           
-      if (enParty)
-        xID = AppropriateTemplate(TM_CLASS,CalcCR(xCR),&mg);
-      else if (TMON(mg.mID)->HasFlag(M_HUMANOID) && !enMonID &&
-                (TMON(mg.mID)->isMType(mg.mID,MA_GOBLINOID) || !random(4)))
-        xID = AppropriateTemplate(TM_SKILL,CalcCR(xCR),&mg);
-      if (xID) 
-        mg.tID[mg.tCount++] = xID;
-      }
-
-    /* Now that we have found the group's base mID, we can amp the
-       group's CR in several ways: increasing the number of creatures
-       in the group, adding templates, adding magical items, etc. We
-       use the following loop to do that. */
-    if (GType == MG_POPCORN && ! isHomog) {
-      i = MaxGroupSize(&mg,xCR);
-      if (i < 3)
-        return NULL;
-      mg.mCount = max(1,min(des_mCount - TotalMCount(),i));
-      }
-    else if (GType == MG_SHAMAN) {
-      mg.mCount = 1 + random(mGroups[0].mCount/3);
-      if (!random(2))
-        mg.Flags |= MGF_MAGIC;
-      }
-      
-
-    while (GroupXCR(&mg) < xCR && random(GType == MG_SHAMAN ? 2 : 8)) 
-      {
-        switch(enMonID ? 0 : random(6)) {
-          case 0: // Raise the EL by increasing mCount
-          case 1:
-            if (GType == MG_LEADER || GType == MG_ALLY)
-              break;
-            if (enParty || isHomog)
-              break;
-            if (TMON(mg.mID)->HasFlag(M_SOLITARY))
-              break;
-            if (enFlags & EN_SINGLE)
-              break;
-            if (enFlags & EN_ANYOPEN)
-              if (max_mCount + mg.mCount >= max_mCount)
-                break;
-            mg.mCount += random((xCR / max(1,GroupXCR(&mg)/max(1,mg.mCount))) - mg.mCount);
-           break;
-          case 2: // Add magical gear. 
-            if (!(mg.Flags & MGF_MAGIC) )
-              if (!TMON(mg.mID)->HasFlag(M_MINDLESS) && 
-                    !TMON(mg.mID)->HasFlag(M_NOHANDS) && 
-                      mg.isMType(MA_SAPIENT))
-                mg.Flags |= MGF_MAGIC;
-           break;
-          case 3: // Add a template to the creature or some of the creatures
-          case 4: // to make them tougher. 
-            uint16 tt;
-            if (random(mg.tCount) || mg.tCount >= 12)
-              break; 
-            tt = TM_CLASS | TM_SKILL | TM_NATURE | TM_ATTR | TM_DESCENT;
-            if (GType == MG_BASE && enPlanarOK)
-              tt |= TM_PLANAR;
-            if (!(enParty || xMType))
-              tt |= TM_UNDEAD;
-            xID = AppropriateTemplate(tt,CalcCR(xCR),&mg);
-            if (!xID)
-              break;
-            mg.tID[mg.tCount] = xID;
-            
-            /* Here, include a check to make sure the new template does not violate
-               either enMType or xMType. This is a lot of trouble mostly to ensure
-               that zombie orcs aren't added to parties of normal orcs, and a request
-               to populate a holy druidic grove doesn't give us animal skeletons. */            
-            if (xMType && !mg.isMType(xMType))
-              { mg.tID[mg.tCount] = 0; break; }
-            if (enMType && !mg.isMType(enMType))
-              { mg.tID[mg.tCount] = 0; break; }
-            if (TTEM(xID)->TType & TM_UNDEAD) {
-              if (GType != MG_BASE)
-                if (!mGroups[0].isMType(MA_UNDEAD))
-                  { mg.tID[mg.tCount] = 0; break; }
-              enMType = MA_UNDEAD;
-              }
-              
-            mg.tCount++;
-           break;
-        }
-      }
-    
-    if ((random(100) < (enCR*15)))
-      if (TMON(mg.mID)->HasFeat(SK_POISON_USE) || (!random(8) &&
-           mg.isMType(MA_SAPIENT) && (!TMON(mg.mID)->HasFlag(M_NOHANDS))))
-        mg.Flags |= MGF_POISON;
-
-    /* Catch Skeletons/Zombies with Extra Magic Items */
-    if (mg.Flags & MGF_MAGIC)
-      if (!mg.isMType(MA_SAPIENT))
-        mg.Flags &= ~MGF_MAGIC;
-
-    ASSERT (mg.mID);
-    
-    Monster *mn; bool missing_temp;
-    mn = new Monster(mg.mID);
-    for (i=0;i!=mg.tCount;i++)
-      mn->AddTemplate(mg.tID[i]);
-    missing_temp=false;
-    for (i=0;i!=mg.tCount;i++)
-      if (!mn->HasEffStati(TEMPLATE,mg.tID[i]))
-        missing_temp = true;
-    delete mn;
-    if (missing_temp && Tries < 30)
-      goto BadTempRestart;
-    
-    return &mg;
-  }
-
-/* These are the rules for appropriate templates:
-
-   1. Plants, lights, vortices and fungi never gain templates.
-   2. 75% of the time we try first to assign a
-        skill-increasing or power-increasing
-        template appropriate to the creature's
-        type first. These include:
-        * Dire/Legendary for animals
-        * Ancient for undead
-        * Experienced/Veteran/Etc. for sapient humanoids
-        * Large/Huge/Immense for oozes and jellies
-        * (Other) Large/Huge/Primal for beasts
-   3. Creatures with M_PROFESSION cannot recieve a
-        TM_CLASS template, but are the only creatures
-        who can recieve a TM_RACE template.
-   4. Summoned creatures will never gain the undead
-        or nature-changing templates.
-   5. Freaky templates must be applied to all creatures
-        in a group, or none. A normal grizzly bear will
-        not bond with an aqueous or zombie bear.
-   6. Mixed groups may get two tiers of power templates
-        (i.e., a veteran goblin chieftan and his 6 skilled
-         goblins).
-   7. Outsiders and non-humanoid aberrations don't get 
-        freaky templates.
-   8. Oozes and jellies only get large / huge.
-   9. Undead templates don't get added to things that 
-        already have an undead template, or to things that
-        have a template restricted to living things.
-   10. Outsiders, oozes, jellies and undead don't get the
-         TM_PLANAR (i.e., aqueous, celestial, axiomatic,
-         etc.) templates.
-   11. Templates should not induce alignment conflicts.
-         Undead templates override the base monster type's
-         alignment, but other templates must not conflict
-         with alignment from either the base monster or
-         any other templates.
-   12. Attribute templates only get added to creatures
-         that have a base of 8 or more in the affected 
-         attribute.
-   13. All humanoids whose CR is three or more levels
-         below the depth, or other monsters whose CR is
-         five or more below Depth, get the best of two
-         random TM_SKILL templates assigned to them
-         automatically. Underlings get this too, for
-         their adjusted depth (i.e., underlings at DL 12
-         should be CR 4, so they'll be elite goblins led
-         by a paragon goblin.)
-   14. Awakened template conveys eligability (and 50%
-         chance to gain) TM_CLASS template.
-   15. If one monster in a given encounter has a TM_PLANAR
-         or TM_UNDEAD template, that privlidge should be
-         extended to every monster in the encounter.
-   16. Creatures never have both a TM_PLANAR template and
-         a TM_UNDEAD template; this is largely handled by
-         the Types those templates require.
-
-Partial Template List:
-
-  TM_RACE   TM_CLASS    TM_UNDEAD  TM_SKILL  TM_NATURE   TM_PLANAR
-  Elven     Rogue       Zombie     Skilled   Karmic      Aqueous
-  Dwarven   Sorceror    Skeleton   Experien. Cloaked     Stone
-  Orcish    Skirmisher  Ghost      Veteran   Corrupted   Celestial
-  Drow      Scorcher    Wraith     Elite     Gelatinous  Fiendish
-  Gnomish   Warrior     Vampire    Paragon   Spellstit.  Anarchic
-            Priesty     etc.                 Phase
-            Blademaster                      Psionic
-  TM_SKILL        TM_DESCENT                 Antimagical
-  Dire            Half-Celestial             Titanic
-  Legendary       Half-Fiend                 Awakened
-  Ancient         Half-Dragon                Pale
-  Antediluvian                               Nightbreed
-                                             Pseudonatural
-
-*/
-
-rID AppropriateTemplate(uint16 Types, int16 maxCR, MonGroup *mg)
-  {
-    uint16 hasTypes = 0;
-    int32 l1, l2, l3;
-    TMonster *tm = TMON(mg->mID);
-    int16 i,q,n,j, CR, gal; 
-    EvReturn r;
-    rID bestSkill, bestCR = -10;
-    bool doSkill = false,
-         doClass = false;  
-    
-    CR = tm->CR;
-    gal = GroupAlign(mg);
-
-    for (i=0;i!=6 && mg->tID[i];i++) {
-      CR = TTEM(mg->tID[i])->CR.Adjust(CR);
-      Types &= ~(TTEM(mg->tID[i])->TType);
-      hasTypes |= TTEM(mg->tID[i])->TType;
-      /* Don't add any other templates to zombies or skeletons, for
-         believability reasons. (Maybe "ancient" or "spellstitched", 
-         later? Even "dire"?) */
-      if (TTEM(mg->tID[i])->HasFlag(TMF_BODY_ONLY))
-        return 0;
-      }
-    
-    if (!Types)
-      return 0;
-
-    if (!(Types & TM_UNDEAD))
-      Types &= ~TM_PLANAR;
-    if (!(Types & TM_PLANAR))
-      Types &= ~TM_UNDEAD;
-
-    if (hasTypes & TM_AGECAT)
-      Types &= ~TM_SKILL;
-    if (hasTypes & (TM_CHIEFTAN|TM_SHAMAN))
-      Types &= ~TM_CLASS;
-    if (hasTypes & TM_CLASS)
-      Types &= ~(TM_CHIEFTAN|TM_SHAMAN);
-
-    if (Types & TM_CLASS)
-      if (enParty)
-        doClass = true;
-    if (Types & TM_SKILL)
-      if (random(4) && !doClass)
-        if (!TMON(mg->mID)->HasFlag(M_CHIEFTAN))
-        doSkill = true; 
-    
-    Retry: 
-    n = 0; 
-    for (q=0;q!=1;q++) /* Only one Module at the moment */
-      for(i=0;i!=theGame->Modules[q]->szTem;i++)
-        {
-          /* We never add a BODY_ONLY template (i.e., mindless
-             undead) to something that already has one or more
-             other templates, for sanity reasons. */
-          if (theGame->Modules[q]->QTem[i].HasFlag(TMF_BODY_ONLY))
-            if (mg->tID[0])
-              continue;
-
-          if (!(theGame->Modules[q]->QTem[i].TType & Types))
-            continue;
-          /* TM_UNDEAD templates not only add the MA_UNDEAD template,
-             they remove all other types. Thus, an aqueous badger is
-             both MA_OUTSIDER, MA_WATER and MA_ANIMAL, but a zombie
-             black bear is *not* MA_ANIMAL, only MA_ZOMBIE. */
-          if (hasTypes & TM_UNDEAD) {
-            if (theGame->Modules[q]->QTem[i].ForMType != MA_UNDEAD)
-              continue;
-            if (AlignConflict(ResAlign(theGame->Modules[q]->TemplateID(i)),AL_EVIL))
-              continue;                
-            }
-          else {
-            if (theGame->Modules[q]->QTem[i].ForMType && !mg->isMType(theGame->Modules[q]->QTem[i].ForMType))
-              continue;
-            if (AlignConflict(ResAlign(theGame->Modules[q]->TemplateID(i)),gal))
-              continue;
-            }
-
-          if (theGame->Modules[q]->QTem[i].TType & TM_SKILL) {
-            /* Tiny humanoids have low CRs, like -4 or so. Avoid applying
-               skill templates to them at DLev 1. i.e., 4 goblins is a good
-               DLev 1 encounter, but a single skilled goblin is not. To
-               avoid this, try the template against a hypothetical CR 1
-               creature and discard it if the result is over max CR. */            
-            if (theGame->Modules[q]->QTem[i].CR.Adjust(1) >= maxCR)
-              continue;
-            if (theGame->Modules[q]->QTem[i].CR.Adjust(tm->CR) <= maxCR)
-              if (theGame->Modules[q]->QTem[i].CR.Adjust(tm->CR) > bestCR)
-                if (mg->VerifyTemplate(theGame->Modules[q]->TemplateID(i)))
-                  {
-                    bestCR = theGame->Modules[q]->QTem[i].CR.Adjust(tm->CR);
-                    bestSkill = theGame->Modules[q]->TemplateID(i);
-                  }
-            }
-            
-
-          if (doClass && !(theGame->Modules[q]->QTem[i].TType & TM_CLASS))
-            continue;
-                  
-          if (theGame->Modules[q]->QTem[i].HasFlag(TMF_NOGEN))
-            continue;
-          if (theGame->Modules[q]->QTem[i].CR.Adjust(CalcCR(GroupXCR(mg))) > min(maxCR,enCR))
-            continue;
-
-          if (theGame->Modules[q]->QTem[i].TType & TM_ATTR)
-            for (j=0;j!=7;j++)
-              if (theGame->Modules[q]->QTem[i].Attr[j].Adjust(10) > 10)
-                if (tm->Attr[j] < 8)
-                  continue;
-          Candidates[n++] = theGame->Modules[q]->TemplateID(i);
-        }
-    Candidates[n] = 0;
-    
-    if (doSkill)
-      if (bestCR != -10)
-        return bestSkill;
-    if (!n && doClass)
-      {
-        doClass = 0;
-        goto Retry;
-      }
-    
-    if (!n)
-      return 0;
-
-    do {
-      i = random(n);
-      if (!mg->VerifyTemplate(Candidates[i])) {
-        memmove(&Candidates[i],&Candidates[i+1],(2048 - (i+1))*sizeof(rID));
-        n--;
-      }
-      else
-        break;
-    }
-    while (n);
-     
-    if (!n)
-      return 0;
-
-
-    return Candidates[i];
-  }    
-
-bool AlignConflict(uint16 al1, uint16 al2)
-  {
-    if ((al1|al2) & AL_GOOD)
-      if ((al1|al2) & (AL_EVIL|AL_NONGOOD))
-        return true;
-    if ((al1|al2) & AL_EVIL)
-      if ((al1|al2) & (AL_GOOD|AL_NONEVIL))
-        return true;
-    if ((al1|al2) & AL_LAWFUL)
-      if ((al1|al2) & (AL_CHAOTIC|AL_NONLAWFUL))
-        return true;
-    if ((al1|al2) & AL_CHAOTIC)
-      if ((al1|al2) & (AL_LAWFUL|AL_NONCHAOTIC))
-        return true;
-    return false;
-  }
-
-/* This is slow and very, very kludgy, but it does seem to be
-   the most correct way to do this without a lot of excess
-   code. I doubt there will ever be enough templates for this
-   function to be a real speed bottleneck. */
-
-Monster *isMType_mn = NULL; 
-
-
-bool MonGroup::isMType(int32 MType)
-  {
-    int16 i; 
-    if (!isMType_mn) {
-      isMType_mn = new Monster(mID);
-      }
-    else {
-      if (!theRegistry->Exists(isMType_mn->myHandle)) {
-        delete isMType_mn;
-        isMType_mn = new Monster(mID);
-        }
-      isMType_mn->tmID = mID;
-      isMType_mn->mID = mID;
-      }
-    
-    /* Creature::isMType uses Int to figure out whether a
-       creature is MA_SAPIENT or not. Similarly for Size
-       and MA_PERSON. */
-
-    isMType_mn->Attr[A_INT] = TMON(mID)->Attr[A_INT];
-    isMType_mn->Attr[A_SIZ] = TMON(mID)->Size;
-
-    isMType_mn->RemoveStati(TEMPLATE);
-    for(i=0;i!=tCount;i++) 
-      isMType_mn->AddTemplate(tID[i]);
-
-    if (MType < 0)
-      return (TTEM(-MType)->PEvent(EV_ISTARGET,isMType_mn,-MType) != -1);
-    else
-      return isMType_mn->isMType(MType);
   }
 
 uint16 ResAlign(rID xID)
@@ -1529,12 +2760,165 @@ uint16 ResAlign(rID xID)
     return al;
   }
 
+bool AlignConflict(uint16 al1, uint16 al2, bool strict)
+  {
+    if ((al1|al2) & AL_GOOD)
+      if ((al1|al2) & (AL_EVIL|AL_NONGOOD))
+        return true;
+    if ((al1|al2) & AL_EVIL)
+      if ((al1|al2) & (AL_GOOD|AL_NONEVIL))
+        return true;
+    if ((al1|al2) & AL_LAWFUL)
+      if ((al1|al2) & (AL_CHAOTIC|AL_NONLAWFUL))
+        return true;
+    if ((al1|al2) & AL_CHAOTIC)
+      if ((al1|al2) & (AL_LAWFUL|AL_NONCHAOTIC))
+        return true;
+    if (strict) {
+      if ((al2 & AL_EVIL) && !(al1 & AL_EVIL))
+        return true;
+      if ((al2 & AL_CHAOTIC) && !(al1 & AL_CHAOTIC))
+        return true;
+      if ((al2 & AL_LAWFUL) && !(al1 & AL_LAWFUL))
+        return true;
+      if ((al2 & AL_GOOD) && !(al1 & AL_GOOD))
+        return true;
+      }  
+    return false;
+  }
 
-/* List 20 Encounters by depth, ala objects */
-/* Turn GenEncounter variables into globals fpr AppropriateTemplate et. al. */
-/* Add Mount support to GenEncounter; worgs for goblins;  */
+void UpdateAlignRestrict(EventInfo &e)
+  {
+    Monster *mn = new Monster(e.ep_mID);
+    if (e.ep_tID)
+      mn->AddTemplate(e.ep_tID);
+    if (e.ep_tID2)
+      mn->AddTemplate(e.ep_tID2);
+    if (e.ep_tID3)
+      mn->AddTemplate(e.ep_tID3);
+      
+    if (mn->HasMFlag(M_IALIGN))
+      {
+        if (mn->HasMFlag(M_GOOD))
+          e.enAlign |= AL_NONEVIL;
+        if (mn->HasMFlag(M_EVIL))
+          e.enAlign |= AL_NONGOOD;
+        if (mn->HasMFlag(M_CHAOTIC))
+          e.enAlign |= AL_NONLAWFUL;
+        if (mn->HasMFlag(M_LAWFUL))
+          e.enAlign |= AL_NONCHAOTIC;
+      }
+    if (mn->HasMFlag(M_GOOD))
+      e.enDriftGE -= 2;
+    if (mn->HasMFlag(M_EVIL))
+      e.enDriftGE += 2;
+    if (mn->HasMFlag(M_LAWFUL))
+      e.enDriftLC -= 2;
+    if (mn->HasMFlag(M_CHAOTIC))
+      e.enDriftLC += 2;
+    delete mn;
+  }
 
+EvReturn Map::enGenAlign(EventInfo &e)
+  {
+    int16 align, i;
+    Creature *mn = e.EActor;
+    mn->RemoveStati(ALIGNMENT);
+    
+    if (!mn->isMType(MA_SAPIENT))
+      return DONE;
+    if (mn->HasMFlag(M_IALIGN))
+      return DONE;
+    
+    if (mn->isMType(MA_DRAGON) && random(3))
+      if (!AlignConflict(mn->getAlignment(),e.enAlign,true))
+        return DONE;
+    else if (mn->isMType(MA_GOBLINOID) && random(2))
+      if (!AlignConflict(mn->getAlignment(),e.enAlign,true))
+        return DONE;
+     
+    align = 0;
+    if (e.enAlign & AL_EVIL)
+      align |= AL_EVIL;
+    else if (e.enAlign & AL_GOOD)
+      align |= AL_GOOD;
+    else if ((e.enAlign & AL_NONGOOD) &&
+             (e.enAlign & AL_NONEVIL))
+      align |= 0;
+    else if (e.enAlign & AL_NONGOOD) {
+      if (mn->HasMFlag(M_EVIL))
+        align |= random(5) ? AL_EVIL : 0;
+      else if (mn->HasMFlag(M_GOOD))
+        align |= random(2) ? 0 : AL_EVIL;
+      else
+        align |= random(3) ? AL_EVIL : 0;
+      }
+    else if (e.enAlign & AL_NONEVIL) {
+      if (mn->HasMFlag(M_EVIL))
+        align |= random(5) ? AL_EVIL : 0;
+      else if (mn->HasMFlag(M_GOOD))
+        align |= random(2) ? 0 : AL_EVIL;
+      else
+        align |= random(3) ? AL_EVIL : 0;
+      }
+    else if (mn->HasMFlag(M_EVIL))
+      align |= (random(100)+1 < 70) ? AL_EVIL :
+               (random(30)+1 < 23) ? 0 : AL_GOOD;
+    else if (mn->HasMFlag(M_GOOD))
+      align |= (random(100)+1 < 70) ? AL_GOOD :
+               (random(30)+1 < 23) ? 0 : AL_EVIL;
+    else
+      align |= (random(100)+1 < 70) ? 0 :
+               (random(30)+1 < 15) ? AL_GOOD : AL_EVIL;
+    
+    if (e.enAlign & AL_LAWFUL)
+      align |= AL_LAWFUL;
+    else if (e.enAlign & AL_CHAOTIC)
+      align |= AL_CHAOTIC;
+    else if ((e.enAlign & AL_NONLAWFUL) &&
+             (e.enAlign & AL_NONCHAOTIC))
+      align |= 0;
+    else if (e.enAlign & AL_NONLAWFUL) {
+      if (mn->HasMFlag(M_CHAOTIC))
+        align |= random(5) ? AL_CHAOTIC : 0;
+      else if (mn->HasMFlag(M_LAWFUL))
+        align |= random(2) ? 0 : AL_CHAOTIC;
+      else
+        align |= random(3) ? AL_CHAOTIC : 0;
+      }
+    else if (e.enAlign & AL_NONCHAOTIC) {
+      if (mn->HasMFlag(M_LAWFUL))
+        align |= random(5) ? AL_LAWFUL : 0;
+      else if (mn->HasMFlag(M_CHAOTIC))
+        align |= random(2) ? 0 : AL_LAWFUL;
+      else
+        align |= random(3) ? AL_LAWFUL : 0;
+      }
+    else if (mn->HasMFlag(M_LAWFUL))
+      align |= (random(100)+1 < 70) ? AL_LAWFUL :
+               (random(30)+1 < 23) ? 0 : AL_CHAOTIC;
+    else if (mn->HasMFlag(M_CHAOTIC))
+      align |= (random(100)+1 < 70) ? AL_CHAOTIC :
+               (random(30)+1 < 23) ? 0 : AL_LAWFUL;
+    else
+      align |= (random(100)+1 < 70) ? 0 :
+               (random(30)+1 < 15) ? AL_LAWFUL : AL_CHAOTIC;
+    
+    if (align & AL_GOOD)
+      e.enAlign |= AL_NONEVIL;
+    if (align & AL_EVIL)
+      e.enAlign |= AL_NONGOOD;
+    
+    mn->GainPermStati(ALIGNMENT,NULL,SS_MISC,align);
 
+    return DONE;
+  }
+
+  
+/***************************************************************
+ *                    ITEM GENERATION CODE                     *
+ ***************************************************************/
+ 
 
 int16 MaxItemPlus(int16 MaxLev,rID eID)
   {

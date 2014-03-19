@@ -49,9 +49,6 @@ Dungeon "The Nine Hells"
       * DUN_DEPTH 9,
       * INITIAL_CR 10,
       * FIRST_LEV_PORTAL $"infernal portal";
-    Lists:
-      * MTYPE_LIST MA_DEVIL MA_DEVIL MA_DEVIL /*$"fiendish" $"fiendish"*/ 
-                     MA_EVIL  MA_UNDEAD $"cave orc";
     Specials:
       * $"entry chamber;hells" at level 1;
     #if 0
@@ -456,7 +453,19 @@ Monster "Roark Ironbeard" : MA_DWARF, MA_ADVENTURER
  ************************************************************************/
 
 Region "Underground River" : RF_RIVER
-  { Floor: $"shallow water"; }
+  { Floor: $"shallow water"; 
+    Lists:
+      * ENCOUNTER_LIST
+          50 CONSTRAINED_ENC($"lone dark-dwelling beast",MA_AQUATIC)
+          40 CONSTRAINED_ENC($"pack encounter",MA_AQUATIC)
+          20 CONSTRAINED_ENC($"tribal warband",MA_AQUATIC)
+             CONSTRAINED_ENC($"oozes",MA_AQUATIC)        
+             $"band of ixitxachitl" 
+             $"water creatures"
+           5 CONSTRAINED_ENC($"uniform classed group",MA_AQUATIC)
+             CONSTRAINED_ENC($"aberration group",MA_AQUATIC)
+          ;   
+  }
 
 Region "Cooled Magma Flow" : RF_RIVER
   { Floor: $"smooth igneous rock"; }
@@ -468,7 +477,20 @@ Region "Magma Flow" : RF_RIVER
   { Floor: $"brimstone"; Depth: 3; }
 
 Region "Raging Underground River" : RF_RIVER
-  { Floor: $"turbulent water"; Depth: 5; }
+  { Floor: $"turbulent water"; Depth: 5; 
+    /*Lists:
+      * ENCOUNTER_LIST
+          50 CONSTRAINED_ENC($"lone dark-dwelling beast",MA_AQUATIC)
+          40 CONSTRAINED_ENC($"pack encounter",MA_AQUATIC)
+          20 CONSTRAINED_ENC($"tribal warband",MA_AQUATIC)
+             CONSTRAINED_ENC($"oozes",MA_AQUATIC)        
+             $"band of ixitxachitl" 
+             $"water creatures"
+           5 CONSTRAINED_ENC($"uniform classed group",MA_AQUATIC)
+             CONSTRAINED_ENC($"aberration group",MA_AQUATIC)
+          ;   
+    */
+  }
 
 Region "Quartz Streamer" : RF_ROCKTYPE
   { Floor: $"quartz"; }
@@ -919,8 +941,8 @@ Feature "verdant bloom" : T_FEATURE
     air. It would appear to be the perfect habitat for plant life." ;
     On Event EV_INITIALIZE {
       if (1d6 >= 5 && EMap->Depth > 1) 
-        EMap->GenEncounter(EN_SINGLE|EN_MTYPE,EMap->Depth,EMap->Depth,
-            MA_PLANT, 0,(rID)0,e.EXVal,e.EYVal,NULL);
+        EMap->thEnGenMTypeXY($"single monster", MA_PLANT, EN_SINGLE,
+                EMap->Depth, 0, e.EXVal, e.EYVal);
     };
   }
 
@@ -1180,8 +1202,8 @@ Terrain "Old Webbing"
       SinglePrintXY(e,"The old webbing is torn apart.");
       EMap->WriteTerra(EActor->x,EActor->y,$"floor");
       if (random(100) <= 10) {
-        EMap->GenEncounter(EN_SINGLE|EN_MTYPE,EMap->Depth,EMap->Depth,
-            MA_SPIDER, AL_NONGOOD,(rID)0,EActor->x,EActor->y,NULL);
+        EMap->thEnGenMTypeXY($"single monster", MA_SPIDER, EN_SINGLE,
+          EMap->Depth, AL_NONGOOD, e.EXVal, e.EYVal);
         EActor->Timeout += 1;
       } 
       return NOTHING; 
@@ -1428,17 +1450,19 @@ Terrain "Summoning Circle"
     On Event EV_INITIALIZE {
       hObj h,w;
       int16 dx,dy,mx,my,trial;
+      /* HACKFIX */
+      #if 0
       for (trial=0; trial<9; trial++) {
-        EMap->GenEncounter(EN_SINGLE,
-            EMap->Depth+2, EMap->Depth+2, 0,
-            0,(rID)0,e.EXVal,e.EYVal,NULL);
+        EMap->thEnGenMTypeXY($"single monster", MA_OUTSIDER, EN_SINGLE,
+          EMap->Depth+2, 0, e.EXVal, e.EYVal);
         h = EMap->GetEncounterCreature(0); 
         if (h) {
           h->GainPermStati(SUMMONED,h,SS_MISC);
           h->PlaceAt(EMap,e.EXVal,e.EYVal);
           trial = 999;
-        } 
-      }
+          } 
+        }
+      #endif
       for (dx = -4; dx <= 4; dx++) 
         for (dy = -4; dy <= 4; dy++) { 
           mx = dx + e.EXVal; 
@@ -2028,6 +2052,9 @@ Feature "Tomb" : T_FEATURE
     Mat:MAT_GRANITE;
     On Event EV_DAMAGE, EV_MAGIC_XY, EV_MAGIC_STRIKE {
       int16 i; 
+      /* HACKFIX */
+      if (!EActor->isPlayer())
+        return NOTHING;
       if (e.Event == EV_DAMAGE)
         if (EActor->onPlane() != EVictim->onPlane())
           return NOTHING;
@@ -2038,11 +2065,9 @@ Feature "Tomb" : T_FEATURE
           ETarget->GainPermStati(TRIED,NULL,SS_MISC,1);
           EActor->Transgress($"Mara", 2, false, "desecrating a tomb");
           EActor->IDPrint("The tomb is desecrated, the dead rise!", "The tomb is desecrated, the dead rise!");
-          for (i=2d4; i > 0; i--) { 
-            EMap->GenEncounter(EN_SINGLE|EN_MTYPE|EN_STREAMER,
-              EMap->Depth+4,EMap->Depth+4,
-              MA_UNDEAD, AL_NONGOOD,(rID)0,ETarget->x,ETarget->y,NULL);
-          }
+          /* HACKFIX */
+          EMap->thEnGenXY($"gravestone undead", EN_SINGLE,
+              EMap->Depth+2, AL_NONGOOD, ETarget->x, ETarget->y);
           if (e.eID != $"desecrate") 
             ThrowEffXY(EV_EFFECT,$"desecrate",ETarget->x,ETarget->y,
               EActor,EVictim);
@@ -2057,6 +2082,9 @@ Feature "Gravestone" : T_FEATURE
     Image: grey GLYPH_GRAVE;
     Mat:MAT_GRANITE;
     On Event EV_DAMAGE, EV_MAGIC_XY, EV_MAGIC_STRIKE {
+      /* HACKFIX */
+      if (!EActor->isPlayer())
+        return NOTHING;
       if (!ETarget->HasStati(TRIED,1) &&
            e.eID != $"tanglefoot bag" &&
            !e.isActOfGod)
@@ -2065,9 +2093,9 @@ Feature "Gravestone" : T_FEATURE
           ETarget->GainPermStati(TRIED,NULL,SS_MISC,1);
           EActor->IDPrint("The gravestone is desecrated, the dead rise!", 
             "The gravestone is desecrated, the dead rise!");
-          EMap->GenEncounter(EN_SINGLE|EN_MTYPE|EN_STREAMER,
-              EMap->Depth+2,EMap->Depth+2,
-              MA_UNDEAD, AL_NONGOOD,(rID)0,ETarget->x,ETarget->y,NULL);
+          /* HACKFIX */
+          EMap->thEnGenXY($"gravestone undead", EN_SINGLE,
+              EMap->Depth, AL_NONGOOD, ETarget->x, ETarget->y);
           if (e.eID != $"desecrate") 
             ThrowEffXY(EV_EFFECT,$"desecrate",ETarget->x,ETarget->y,
               EActor,EVictim);
@@ -2350,8 +2378,8 @@ AI_FOUNTAIN Effect "fountain;effect" : EA_GENERIC
             /*ThrowEff(EV_MAGIC_HIT,$"animate objects",EActor,EItem);
             break;*/
           case 9: case 10: // change into monster 
-            EMap->GenEncounter(EN_SINGLE|EN_MAXIMIZE,EActor->ChallengeRating()+3,
-              EMap->Depth,MA_NLIVING,0,NULL_ID,EActor->x,EActor->y,NULL_OBJ);
+            EMap->thEnGenMTypeXY($"single monster", MA_NLIVING, EN_SINGLE,
+              EActor->ChallengeRating()+3, AL_NONGOOD, ETarget->x, ETarget->y);
             hMon = EMap->GetEncounterCreature(0);
             hMon->TurnHostileTo(EActor);
             hMon->GainPermStati(TRANSFORMED,EItem,SS_ENCH,0,0,$"fountain;effect",15);
@@ -2629,7 +2657,10 @@ Region "Inner Keep" : RF_ROOM
     Door: $"iron door"; RoomTypes: RM_DOUBLE; 
     Lists: 
       * WALL_COLORS PURPLE MAGENTA,
-      * MTYPE_LIST MA_SAPIENT; 
+      * ENCOUNTER_LIST
+          $"adventuring party"
+          $"experienced adventuring party"
+          $"goblinoid warband"; 
   }
 
 Region "Marble Enclave" : RF_ROOM
@@ -2656,7 +2687,17 @@ Region "Limestone Cave" : RF_ROOM
       * WALL_COLORS GREEN, 
       * FLOOR_COLORS GREEN,
       * FURNISHINGS FU_SPLATTER $"rock column",
-      * MTYPE_LIST MA_AQUATIC MA_WATER MA_LIVING; }
+      * ENCOUNTER_LIST
+          50 CONSTRAINED_ENC($"lone dark-dwelling beast",MA_AQUATIC)
+          40 CONSTRAINED_ENC($"pack encounter",MA_AQUATIC)
+          20 CONSTRAINED_ENC($"tribal warband",MA_AQUATIC)
+             CONSTRAINED_ENC($"oozes",MA_AQUATIC)        
+             $"band of ixitxachitl" 
+             $"water creatures"
+           5 CONSTRAINED_ENC($"uniform classed group",MA_AQUATIC)
+             CONSTRAINED_ENC($"aberration group",MA_AQUATIC)
+          ;   
+  }
 
 Region "Ancient Tomb" : RF_ROOM
   { Desc: "This room appears to have been a tomb to a long-dead
@@ -2671,7 +2712,15 @@ Region "Ancient Tomb" : RF_ROOM
       * FURNISHINGS FU_CENTER  $"tomb"
                     FU_XCORNERS $"gravestone"
                     FU_CORNERS $"pillar",
-      * MTYPE_LIST MA_UNDEAD MA_DWARF;
+      * ENCOUNTER_LIST 
+          10 CONSTRAINED_ENC($"adventuring party",MA_DWARF)
+             CONSTRAINED_ENC($"uniform classed group",MA_DWARF)
+             $"mixed corporeal undead"
+             $"negative undead"
+             $"lone template undead"
+          5  $"graveborn creatures"
+             $"band of ghouls"
+             $"church knights";
   } 
 
 Region "Graveyard" : RF_ROOM
@@ -2683,7 +2732,15 @@ Region "Graveyard" : RF_ROOM
     Door: $"iron door"; RoomTypes: RM_CIRCLE | RM_CROSS | RM_DOUBLE;     
     Lists: 
       * WALL_COLORS SHADOW, 
-      * FURNISHINGS FU_SPLATTER $"gravestone"; 
+      * FURNISHINGS FU_SPLATTER $"gravestone", 
+      * ENCOUNTER_LIST 
+          10 $"mixed corporeal undead"
+             $"negative undead"
+             $"zombie horde"
+             $"lone template undead"
+          5  $"graveborn creatures"
+             $"band of ghouls"
+             $"church knights";
   }
 
 Region "Orderly Graveyard" : RF_ROOM
@@ -2695,8 +2752,15 @@ Region "Orderly Graveyard" : RF_ROOM
     Door: $"iron door"; RoomTypes: RM_NORMAL, RM_PILLARS, RM_GRID;     
     Lists: 
       * WALL_COLORS SHADOW, 
-      * MTYPE_LIST MA_LAWFUL,
       * FURNISHINGS FU_SPACED_COLUMNS $"gravestone"; 
+      * ENCOUNTER_LIST 
+          10 $"mixed corporeal undead"
+             $"negative undead"
+             $"zombie horde"
+             $"church knights"
+             $"lone template undead"
+          5  $"graveborn creatures"
+             $"band of ghouls";
   } 
 
 Region "Orderly Flood" : RF_ROOM
@@ -2709,9 +2773,18 @@ Region "Orderly Flood" : RF_ROOM
       land should make it easier for you to cross, if you so desire."; 
     RoomTypes: RM_NORMAL, RM_LARGE, RM_CIRCLE, RM_GRID;
     Lists:
-      * MTYPE_LIST MA_AQUATIC MA_WATER, 
       * FURNISHINGS FU_SPACED_COLUMNS $"floor",
-      * WALL_COLORS BLUE AZURE; 
+      * WALL_COLORS BLUE AZURE,
+      * ENCOUNTER_LIST
+          50 CONSTRAINED_ENC($"lone dark-dwelling beast",MA_AQUATIC)
+          40 CONSTRAINED_ENC($"pack encounter",MA_AQUATIC)
+          20 CONSTRAINED_ENC($"tribal warband",MA_AQUATIC)
+             CONSTRAINED_ENC($"oozes",MA_AQUATIC)        
+             $"band of ixitxachitl" 
+             $"water creatures"
+           5 CONSTRAINED_ENC($"uniform classed group",MA_AQUATIC)
+             CONSTRAINED_ENC($"aberration group",MA_AQUATIC)
+          ;   
   }
 
 Region "Island Lake" : RF_ROOM
@@ -2722,11 +2795,20 @@ Region "Island Lake" : RF_ROOM
     island."; 
     RoomTypes: RM_OCTAGON, RM_LCIRCLE, RM_LARGE;
     Lists:
-      * MTYPE_LIST MA_AQUATIC MA_WATER, 
-      * FURNISHINGS FU_CENTER_CIRCLE_LARGE $"shallow water",
-      * FURNISHINGS FU_CENTER_CIRCLE_SMALL $"floor",
-      * FURNISHINGS FU_CENTER $"large iron chest",
-      * WALL_COLORS BLUE AZURE; 
+      * FURNISHINGS FU_CENTER_CIRCLE_LARGE $"shallow water"
+                    FU_CENTER_CIRCLE_SMALL $"floor"
+                    FU_CENTER $"large iron chest",
+      * WALL_COLORS BLUE AZURE,
+      * ENCOUNTER_LIST
+          50 CONSTRAINED_ENC($"lone dark-dwelling beast",MA_AQUATIC)
+          40 CONSTRAINED_ENC($"pack encounter",MA_AQUATIC)
+          20 CONSTRAINED_ENC($"tribal warband",MA_AQUATIC)
+             CONSTRAINED_ENC($"oozes",MA_AQUATIC)        
+             $"band of ixitxachitl" 
+             $"water creatures"
+           5 CONSTRAINED_ENC($"uniform classed group",MA_AQUATIC)
+             CONSTRAINED_ENC($"aberration group",MA_AQUATIC)
+          ;   
   }
 
 Region "Cultic Underchamber" : RF_ROOM
@@ -2737,8 +2819,12 @@ Region "Cultic Underchamber" : RF_ROOM
       cult.";
     Walls: $"Wall Torch"; Floor: $"Floor"; 
     Lists:
-      * FURNISHINGS FU_SPLATTER $"bloodstain";
-    Door: $"oak door"; RoomTypes: RM_CIRCLE; }
+      * FURNISHINGS FU_SPLATTER $"bloodstain",
+      * ENCOUNTER_LIST
+         $"multitude cultists";
+    Door: $"oak door"; RoomTypes: RM_CIRCLE; 
+    
+    }
 
 Region "Abandoned Temple" : RF_ROOM
   {
@@ -2752,7 +2838,9 @@ Region "Abandoned Temple" : RF_ROOM
     Lists: 
       * WALL_COLORS GREY GREY RED YELLOW, 
       * FURNISHINGS FU_CENTER  $"altar"
-                    FU_CORNERS $"pillar";
+                    FU_CORNERS $"pillar",
+      * ENCOUNTER_LIST
+          $"church knights";
   }
   
 Region "Uneven Ampitheater" : RF_ROOM
@@ -2763,9 +2851,14 @@ Region "Uneven Ampitheater" : RF_ROOM
     Door: $"oak door"; 
     RoomTypes: RM_LARGE, RM_LCIRCLE; 
     Lists:
-      * FURNISHINGS FU_SPLATTER $"bed of spikes",
-      * FURNISHINGS FU_SPLATTER $"rock column",
-      * MTYPE_LIST MA_ABERRATION MA_CONSTRUCT;
+      * FURNISHINGS FU_SPLATTER $"bed of spikes"
+                    FU_SPLATTER $"rock column",
+      * ENCOUNTER_LIST 
+          CONSTRAINED_ENC($"lone dark-dwelling beast",MA_ABERRATION)
+          $"mind flayer inquisition"
+          $"aberration group"
+          // constructs
+      ;
   }
 
 Region "Vast Ampitheater" : RF_ROOM
@@ -2797,7 +2890,15 @@ Region "Fungal Forest" : RF_ROOM
     Lists:
       * FURNISHINGS FU_SPLATTER $"verdant bloom",
       * WALL_COLORS BLUE PURPLE CYAN GREEN ,
-      * FLOOR_COLORS BLUE PURPLE CYAN GREEN ;
+      * FLOOR_COLORS BLUE PURPLE CYAN GREEN ,
+      * ENCOUNTER_LIST
+          $"plants"
+          $"mixed oozes"
+          $"myconid colony"
+          $"lone dark-dwelling beast"
+          $"oozes"
+          $"fungi"
+          $"mixed fungi";
     Flags: RF_RAINBOW; } 
 
 Region "Vine Region" : RF_ROOM
@@ -2809,7 +2910,9 @@ Region "Vine Region" : RF_ROOM
     Constants:               
       * BLOB_WITH $"hanging vines";
     Lists:
-      * MTYPE_LIST MA_HOMINID;
+      * ENCOUNTER_LIST
+          10 CONSTRAINED_ENC($"pack encounter",MA_HOMINID)
+           2 CONSTRAINED_ENC($"lone dark-dwelling beast",MA_HOMINID);
   }
 
 Region "Enchanted Forest" : RF_ROOM
@@ -2822,7 +2925,11 @@ Region "Enchanted Forest" : RF_ROOM
     Constants:               
       * BLOB_WITH $"tree";
     Lists:
-      * MTYPE_LIST MA_FAERIE;
+      * ENCOUNTER_LIST
+          CON_ENC_MINMAX($"gated outsiders",$"dryad",3,15)
+          $"druid, with animals"
+          $"homogenous fae group"
+          $"diverse fae group";
     Flags: RF_RAINBOW; Depth: 4;
   }
 
@@ -2837,7 +2944,11 @@ Region "Gardened Forest" : RF_ROOM
       * WALL_COLORS BLUE PURPLE CYAN GREEN,
       * FLOOR_COLORS BLUE PURPLE CYAN GREEN,
       * FURNISHINGS FU_INNER_COLUMNS $"tree",
-      * MTYPE_LIST MA_FAERIE MA_SYLVAN;
+      * ENCOUNTER_LIST
+        10 $"homogenous fae group"
+           $"diverse fae group"
+        30 $"sylvan creatures"
+           $"druid, with animals";
     Flags: RF_RAINBOW, RF_ODD_WIDTH, RF_ODD_HEIGHT; 
   }
 
@@ -2847,9 +2958,20 @@ Region "Flooded Cavern" : RF_ROOM
     Constants:
       * BLOB_WITH $"shallow water";
     Lists:
-     * MTYPE_LIST MA_AQUATIC MA_WATER,
-     * WALL_COLORS BLUE AZURE; }
-
+      * WALL_COLORS BLUE AZURE,
+      * ENCOUNTER_LIST
+          50 CONSTRAINED_ENC($"lone dark-dwelling beast",MA_AQUATIC)
+          40 CONSTRAINED_ENC($"pack encounter",MA_AQUATIC)
+          20 CONSTRAINED_ENC($"tribal warband",MA_AQUATIC)
+             CONSTRAINED_ENC($"oozes",MA_AQUATIC)        
+             $"band of ixitxachitl" 
+             $"aboleth, with slaves"
+             $"water creatures"
+           5 CONSTRAINED_ENC($"uniform classed group",MA_AQUATIC)
+             CONSTRAINED_ENC($"aberration group",MA_AQUATIC)
+          ;   
+  }
+  
 Region "Misty Cavern" : RF_ROOM
   { Walls: $"Dungeon Wall"; Floor: $"Floor"; 
     Door: $"oak door"; RoomTypes: RM_LIFECAVE, RM_LCIRCLE;
@@ -2857,7 +2979,22 @@ Region "Misty Cavern" : RF_ROOM
     Constants:
       * BLOB_WITH $"fog";
     Lists:
-      * MTYPE_LIST MA_AVIAN MA_WATER MA_COLD; 
+      * ENCOUNTER_LIST 
+          30 CONSTRAINED_ENC($"lone dark-dwelling beast", MA_COLD)
+          60 CON_ENC_MINMAX($"mass summons", $"vampiric mist", 1, 2)
+          10 CON_ENC_MINMAX($"mass summons", $"vampiric mist", 1, 5)
+             CONSTRAINED_ENC($"pack encounter",MA_AVIAN)
+             CON_ENC_MINMAX($"tribal warband",$"kyrie",2,7)
+             CONSTRAINED_ENC($"adventuring party",$"kyrie")
+             CONSTRAINED_ENC($"experienced adventuring party",$"kyrie")
+             $"diverse fae group"
+             $"air creatures"
+             $"zombie horde"
+             CONSTRAINED_ENC($"lone dragon", $"white dragon")
+             CONSTRAINED_ENC($"mated pair of dragons", $"white dragon")
+             CONSTRAINED_ENC($"lone dragon", $"silver dragon")
+             CONSTRAINED_ENC($"mated pair of dragons", $"silver dragon")
+             CON_ENC_MINMAX($"pack encounter", MA_COLD, 3, 20); 
   }
 
 Region "Earthen Cavern" : RF_ROOM
@@ -2870,7 +3007,14 @@ Region "Earthen Cavern" : RF_ROOM
     Constants:
       * BLOB_WITH $"shallow mud";
     Lists:
-      * MTYPE_LIST M_EARTH M_BURROW; 
+      * ENCOUNTER_LIST 
+          CON_ENC_MINMAX($"tribal warband", $"muckdweller", 1, 6)
+          CON_ENC_MINMAX($"mass summons", $"small mud elemental", 1, 6)
+          CON_ENC_MINMAX($"gated outsiders", $"ooze mephit", 3, 7)
+          CONSTRAINED_ENC($"adventuring party",MA_DWARF)
+          $"fungi"
+          $"oozes"
+          $"earth creatures"; 
   }
 
 Region "Acid Fog Cavern" : RF_ROOM
@@ -2880,7 +3024,20 @@ Region "Acid Fog Cavern" : RF_ROOM
     Constants:
       * BLOB_WITH $"acid fog";
     Lists:
-      * MTYPE_LIST MA_ACID,
+      * ENCOUNTER_LIST
+          30 CONSTRAINED_ENC($"pack encounter",MA_ACID)
+             $"air creatures"
+             $"regiment of devils"
+             $"horde of demons"
+             CON_ENC_MINMAX($"mass summons", $"vampiric mist",1,5)
+             CON_ENC_MINMAX($"oozes", $"acid blob", 1, 4)
+             CON_ENC_MINMAX($"fungi", $"caustic fungus", 7, 12)
+             CON_ENC_MINMAX($"lone dragon", $"black dragon", 5, 30)
+             CON_ENC_MINMAX($"mated pair of dragons", $"black dragon", 9, 30)
+             CON_ENC_MINMAX($"gated outsiders", $"vaporighu", 9, 30)
+          15 CON_ENC_MINMAX($"gated outsiders", $"dust devil;monster", 2, 30)
+             CON_ENC_MINMAX($"gated outsiders", $"storm elemental", 8, 30)
+             CON_ENC_MINMAX($"gated outsiders", $"fog elemental", 6, 30),
       * FURNISHINGS FU_SPLATTER $"floor",
       * WALL_COLORS YELLOW BROWN;
   }
@@ -2960,7 +3117,15 @@ Region "Ice Cavern" : RF_ROOM
       * BLOB_WITH $"Ice Floor";
     Lists:
       * FLOOR_COLORS BLUE SKYBLUE GREY CYAN,
-      * MTYPE_LIST MA_COLD;
+      * ENCOUNTER_LIST 
+          5  CONSTRAINED_ENC($"lone dragon", $"white dragon")
+             CONSTRAINED_ENC($"mated pair of dragons", $"white dragon")
+             CONSTRAINED_ENC($"lone dragon", $"silver dragon")
+             CONSTRAINED_ENC($"mated pair of dragons", $"silver dragon")
+          10 CON_ENC_MINMAX($"gated outsiders", $"snow angel", 1, 5)
+          40 CONSTRAINED_ENC($"lone dark-dwelling beast", MA_COLD)
+             CON_ENC_MINMAX($"gated outsiders", $"frost slug", 1, 5)
+             CON_ENC_MINMAX($"pack encounter", MA_COLD, 3, 20); 
     RoomTypes: RM_NORMAL, RM_LIFECAVE; }
 
 Region "Arachnid Lair" : RF_ROOM
@@ -2972,11 +3137,13 @@ Region "Arachnid Lair" : RF_ROOM
     Depth: 3; 
     Door: $"oak door"; 
     Lists:
-      * MTYPE_LIST MA_SPIDER,
-      * FURNISHINGS FU_SPLATTER $"floor",
-      * FURNISHINGS FU_SPLATTER $"floor",
-      * FURNISHINGS FU_SPLATTER $"floor",
-      * FURNISHINGS FU_SPLATTER $"corpse";
+      * ENCOUNTER_LIST
+          30 $"spider encounter"
+          10 CONSTRAINED_ENC($"adventurer", $"aranea"),
+      * FURNISHINGS FU_SPLATTER $"floor"
+                    FU_SPLATTER $"floor"
+                    FU_SPLATTER $"floor"
+                    FU_SPLATTER $"corpse";
     RoomTypes: RM_PILLARS; 
   }
 
@@ -2989,7 +3156,9 @@ Region "Dragon Cave" : RF_ROOM
     RoomTypes: RM_LIFECAVE, RM_CIRCLE;
     Lists:
       * WALL_COLORS RED, 
-      * MTYPE_LIST MA_DRAGON;
+      * ENCOUNTER_LIST
+          $"lone dragon"
+          $"mated pair of dragons";
     On Event EV_BIRTH {
       int16 i,j; hObj it;
       j = 30 + random(20);
@@ -3141,36 +3310,13 @@ Region "Unholy Sepulchre" : RF_ROOM
   bristles. Beyond that, however, a stench of death permeates the area. 
   It would appear that this room once served as a temple or tomb of some
   sort. Something about this place makes you ... afraid."; 
-    On Event EV_BIRTH {
-      int32 i,j;
-      hObj c; 
-      for(c = EMap->FirstThing(); c ; c = EMap->NextThing()) {
-        if (c->isCreature() && !c->isPlayer()) { 
-          if (WithinRect(e.cPanel,c->x,c->y)) {
-            if (1d10 <= 3) 
-              c->AddTemplate($"vampire");
-            else
-              c->AddTemplate($"zombie");
-            // if we can't be a vampire, let's be a zombie!
-            if (!c->isMType(MA_UNDEAD)) {
-              // you're in the wrong neighborhood, buddy!
-              ThrowDmg(EV_DEATH,AD_NORM,9999,"vampire fodder",
-                  c,c,NULL,NULL);
-            } else {
-              if (1d10 <= 2)
-                c->AddTemplate($"ancient");
-              else if (1d10 <= 3)
-                c->AddTemplate($"elder");
-            }
-          }
-        } 
-      }
-      return NOTHING;
-    };
     Walls: $"Dungeon Wall"; Floor: $"Floor"; 
     Door: $"vault door"; RoomTypes: RM_SHAPED;
     Lists:
-     * WALL_COLORS CYAN;
+     * WALL_COLORS CYAN,
+     * ENCOUNTER_LIST
+         $"lone vampire"
+         $"lone template undead";
     Flags: RF_VAULT;
     Grid: {:
       %%%%%%%%%%%%%%%%%%%%%%%
@@ -3207,11 +3353,10 @@ Region "Hellish Rift" : RF_ROOM
   Walls: $"Dungeon Wall"; Floor: $"Floor"; 
   Door: $"vault door"; RoomTypes: RM_SHAPED;
   Lists:
-        * WALL_COLORS CYAN;
-  On Event EV_BIRTH {
-    EMap->GenEncounter(EN_MTYPE,EMap->Depth+20,EMap->Depth,
-        MA_DEVIL, AL_NONGOOD,(rID)0,e.EXVal,e.EYVal,NULL);
-  } ; 
+        * WALL_COLORS CYAN,
+        * ENCOUNTER_LIST
+            $"regiment of devils";
+ 
     Tiles:
       'd': $"loose-packed earth", 
       'S': $"smooth igneous rock",
@@ -3251,7 +3396,11 @@ Region "Maze" : RF_ROOM
     Desc: "The passages twist and turn on themselves here,
       forming an elaborate maze.";
     Lists:
-      * MTYPE_LIST MA_ADVENTURER; 
+      * ENCOUNTER_LIST
+          $"group of minotaurs"
+          $"adventuring party"
+          $"experienced adventuring party"
+          $"uniform classed group"; 
   }
 
 // ww: advantage to the player: a surreal maze can always be
@@ -3266,7 +3415,11 @@ Region "Surreal Maze" : RF_ROOM
       comforting about this particular maze, but you cannot quite put your
       finger on it.";
     Lists:
-      * MTYPE_LIST MA_ADVENTURER; 
+      * ENCOUNTER_LIST
+          $"group of minotaurs"
+          $"adventuring party"
+          $"experienced adventuring party"
+          $"uniform classed group"; 
   }
 
 Region "Hedge Maze" : RF_ROOM
@@ -3277,7 +3430,7 @@ Region "Hedge Maze" : RF_ROOM
       * FLOOR_COLORS BLUE PURPLE CYAN GREEN;
     Flags: RF_RAINBOW, RF_NEVER_LIT;  
     Desc: "The mushrooms in this area have been groomed and crafted into
-    well-kept passageways."; 
+      well-kept passageways."; 
   }
 
 Region "Underground Farm" : RF_ROOM
@@ -3285,20 +3438,17 @@ Region "Underground Farm" : RF_ROOM
     Walls: $"Floor"; Floor: $"shallow water"; 
     Door: $"darkwood door"; RoomTypes: RM_MAZE;
     Lists:
-      * WALL_COLORS BLUE SKYBLUE GREEN EMERALD BROWN YELLOW;
-      * MTYPE_LIST MA_PLANT MA_PLANT;
-      * FURNISHINGS FU_SPLATTER $"giant mushroom";
+      * WALL_COLORS BLUE SKYBLUE GREEN EMERALD BROWN YELLOW,
+      * FURNISHINGS FU_SPLATTER $"giant mushroom",
+      * ENCOUNTER_LIST
+          $"myconid colony"
+          $"plants"
+          $"druid, with plants";
     Flags: RF_RAINBOW, RF_NEVER_LIT;  
     Desc: "This area appears to have been designed to care for undergroud
       plants. Irrigation waterways swirl through the area, conveyed by some
       unseen force. Magical torches have been placed on pillars at irregular
-      intervals to provide light."; 
-      On Event EV_BIRTH {
-        EMap->GenEncounter(EN_MTYPE,EMap->Depth+2,EMap->Depth+2,
-            MA_PLANT, 0,(rID)0,e.EXVal,e.EYVal,NULL);
-        EMap->GenEncounter(EN_MTYPE,EMap->Depth+2,EMap->Depth+2,
-            MA_PLANT, 0,(rID)0,e.EXVal,e.EYVal,NULL);
-      } ; 
+      intervals to provide light.";
   }
 
 Region "Kobold Warren" : RF_ROOM
@@ -3310,7 +3460,8 @@ Region "Kobold Warren" : RF_ROOM
       littered with sharp edges and tiny claw-marks, and you think that
       you can hear yelping nearby.";
     Lists:
-      * MTYPE_LIST MA_KOBOLD; 
+      * ENCOUNTER_LIST
+          CONSTRAINED_ENC($"goblinoid warband",MA_KOBOLD); 
     On Event EV_BIRTH {
       hObj tr; int16 i,j; rID xID;
       j = 2d10;
@@ -3335,7 +3486,9 @@ Region "Twisting Chasm" : RF_ROOM
       cataclysmic spells."; 
     Flags: RF_NEVER_LIT; 
     Lists:
-     * MTYPE_LIST MA_AIR MA_BIRD MA_AVIAN,
+     * ENCOUNTER_LIST
+         $"air creatures"
+         $"flock of birds",
      * FURNISHINGS FU_SPLATTER $"floor";
   }
 
@@ -3346,7 +3499,10 @@ Region "Vermin Burrow" : RF_ROOM
     Desc: "This roughly-hewn area appears to be some sort of animal burrow
     that has been expanded over time by its residents.";
     Lists:
-      * MTYPE_LIST MA_VERMIN MA_BURROW; 
+      * ENCOUNTER_LIST
+          $"homogenous vermin"
+          $"mixed vermin"
+         ; 
   }      
 
 Region "Magma Vein" : RF_ROOM
@@ -3358,7 +3514,8 @@ Region "Magma Vein" : RF_ROOM
     very center of the earth."; 
     Lists:
       * FURNISHINGS FU_SPLATTER $"smooth igneous rock",
-      * MTYPE_LIST MA_FIRE; }      
+      * ENCOUNTER_LIST
+          $"fire creatures"; }      
 
 Region "Fungi Garden" : RF_ROOM
   { Desc: "This room is exceedingly humid, and carries with it an almost
@@ -3375,8 +3532,14 @@ Region "Fungi Garden" : RF_ROOM
     Constants:
       * BLOB_WITH $"stinking cloud;terrain";
     Lists:
-    // ww: ma_ooze covers pudding and jelly
-      * MTYPE_LIST MA_FUNGI MA_OOZE MA_JELLY MA_PLANT,
+      * ENCOUNTER_LIST 
+          $"plants"
+          $"mixed oozes"
+          $"myconid colony"
+          $"lone dark-dwelling beast"
+          $"oozes"
+          $"fungi"
+          $"mixed fungi",
       * FURNISHINGS FU_SPLATTER $"giant mushroom",
       * WALL_COLORS BLUE PURPLE CYAN GREEN; 
   }
@@ -3394,7 +3557,9 @@ Region "Slime Chamber" : RF_ROOM
     Lists:
       * FURNISHINGS FU_SPLATTER $"floor",
       * WALL_COLORS YELLOW BROWN, 
-      * MTYPE_LIST MA_JELLY MA_OOZE;
+      * ENCOUNTER_LIST
+          $"oozes"
+          $"mixed oozes";
   }
 
 
@@ -3413,7 +3578,8 @@ Region "Orc Barracks" : RF_ROOM
     Desc: "The bones, trash and fetid stench mark this area as the lair
       of a party of orcs.";
     Lists:
-      * MTYPE_LIST MA_ORC,
+      * ENCOUNTER_LIST
+          CONSTRAINED_ENC($"goblinoid warband",MA_ORC),
       * WALL_COLORS BROWN YELLOW,
       * FURNISHINGS FU_SPLATTER $"pile of trash"; 
   }
@@ -3425,12 +3591,9 @@ Region "Troll Cave" : RF_ROOM
       are coated with mildew and dirt. Tiny animal skeletons and piles
       of chewed bones litter the room, and thus you suspect that there 
       may be trolls nearby."; 
-      On Event EV_BIRTH {
-        EMap->GenEncounter(EN_MTYPE,EMap->Depth+5,EMap->Depth,
-            MA_TROLL, AL_NONGOOD,(rID)0,e.EXVal,e.EYVal,NULL);
-      } ; 
     Lists:
-      * MTYPE_LIST MA_TROLL MA_TROLL,
+      * ENCOUNTER_LIST
+          CONSTRAINED_ENC($"pack encounter",MA_TROLL),
       * WALL_COLORS BROWN YELLOW,
       * FURNISHINGS FU_SPLATTER $"pile of bones"; }
 
@@ -3442,35 +3605,24 @@ Region "Illithid Cenaculeum" : RF_ROOM
       are coated with strange secretions. You sense a sort of throbbing
       hum in the area, but it seems to be in your mind rather than your
       ears."; 
-      On Event EV_BIRTH {
-        EMap->GenEncounter(EN_MTYPE,EMap->Depth+5,EMap->Depth+5,
-            MA_ILLITHID, AL_NONGOOD,(rID)0,e.EXVal,e.EYVal,NULL);
-      } ; 
     Constants:
       * BLOB_WITH $"pool of slime";
     Lists:
-      * MTYPE_LIST MA_ILLITHID MA_ILLITHID,
+      * ENCOUNTER_LIST
+          $"mind flayer inquisition",
       * WALL_COLORS PURPLE MAGENTA;
     Flags: RF_RAINBOW; 
   }  
 
 Region "Naga Cavern" : RF_ROOM
-  { Walls: $"Dungeon Wall"; Floor: $"shallow water"; Depth: 8; 
+  { Walls: $"Dungeon Wall"; Floor: $"shallow water"; Depth: 10; 
     Door: $"iron door"; RoomTypes: RM_LIFECAVE, RM_LCIRCLE;
     Constants:
       * BLOB_WITH $"shallow water";
-      On Event EV_BIRTH {
-        EMap->GenEncounter(EN_MTYPE,EMap->Depth+5,EMap->Depth+5,
-            MA_NAGA, 0,(rID)0,e.EXVal,e.EYVal,NULL);
-        EMap->GenEncounter(EN_MTYPE,EMap->Depth+5,EMap->Depth+5,
-            MA_NAGA, 0,(rID)0,e.EXVal,e.EYVal,NULL);
-        EMap->GenEncounter(EN_MTYPE,EMap->Depth+5,EMap->Depth+5,
-            MA_NAGA, 0,(rID)0,e.EXVal,e.EYVal,NULL);
-        EMap->GenEncounter(EN_MTYPE,EMap->Depth+5,EMap->Depth+5,
-            MA_NAGA, 0,(rID)0,e.EXVal,e.EYVal,NULL);
-      } ; 
     Lists:
-     * WALL_COLORS BLUE AZURE; 
+     * WALL_COLORS BLUE AZURE,
+     * ENCOUNTER_LIST
+         $"nest of nagas"; 
   }
 
 Region "Jagged Chasm" : RF_ROOM
@@ -3482,7 +3634,10 @@ Region "Jagged Chasm" : RF_ROOM
     Constants:
       * BLOB_WITH $"chasm";
     Lists:
-     * MTYPE_LIST MA_AIR MA_BIRD MA_AVIAN,
+     * ENCOUNTER_LIST 
+         $"air creatures"
+         $"flock of birds"
+         CON_ENC_MINMAX($"tribal warband",$"kyrie",3,20),
      * FURNISHINGS FU_SPLATTER $"floor";
   }
 
@@ -3526,9 +3681,8 @@ Region "Warded Laboratory" : RF_ROOM
     RoomTypes: RM_CROSS, RM_NORMAL, RM_CIRCLE;
     Lists:
       * WALL_COLORS PURPLE MAGENTA,
-      * MTYPE_LIST MA_VORTEX,
-      * FURNISHINGS FU_CENTER $"summoning circle",
-      * FURNISHINGS FU_XCORNERS $"summoning circle"; 
+      * FURNISHINGS FU_CENTER $"summoning circle"
+                    FU_XCORNERS $"summoning circle"; 
   }
 
 Region "Ritual Chamber" : RF_ROOM
@@ -3556,8 +3710,8 @@ Region "Armoury" : RF_ROOM
       few of the remaining weapons seem to be at least remotely usable.";
     RoomTypes: RM_NORMAL, RM_ADJACENT, RM_AD_ROUND, RM_OCTAGON;
     Lists: // ww: let's add some flavor
-      * FURNISHINGS FU_CORNERS $"pillar",
-      * FURNISHINGS FU_CENTER $"forge"; 
+      * FURNISHINGS FU_CORNERS $"pillar"
+                    FU_CENTER $"forge"; 
     On Event EV_BIRTH {
       hObj it; int16 i,j; rID xID;
       j = 8 + random(8);
@@ -3650,7 +3804,16 @@ Region "Flooded Encampment" : RF_ROOM
     Constants:
       * BLOB_WITH $"shallow water";
     Lists:
-      * MTYPE_LIST MA_AQUATIC MA_WATER, 
+      * ENCOUNTER_LIST
+          50 CONSTRAINED_ENC($"tribal warband",MA_AQUATIC)
+          50 CONSTRAINED_ENC($"lone dark-dwelling beast",MA_AQUATIC)
+          40 CONSTRAINED_ENC($"pack encounter",MA_AQUATIC)
+          20 CONSTRAINED_ENC($"oozes",MA_AQUATIC)        
+             $"band of ixitxachitl" 
+             $"water creatures"
+           5 CONSTRAINED_ENC($"uniform classed group",MA_AQUATIC)
+             CONSTRAINED_ENC($"aberration group",MA_AQUATIC)
+          ,   
       * FURNISHINGS FU_SPLATTER $"shallow water",
       * WALL_COLORS BLUE AZURE; }
 
@@ -3665,45 +3828,59 @@ Region "Ice Matrix" : RF_ROOM
   white powder.";
     RoomTypes: RM_BUILDING, RM_MAZE, RM_RCAVERN;
     Lists:
-      * MTYPE_LIST MA_COLD MA_ADVENTURER;
+      * ENCOUNTER_LIST
+          5  CONSTRAINED_ENC($"lone dragon", $"white dragon")
+             CONSTRAINED_ENC($"mated pair of dragons", $"white dragon")
+          40 CONSTRAINED_ENC($"lone dark-dwelling beast", MA_COLD)
+             CON_ENC_MINMAX($"pack encounter", $"wolf",1,5)
+             CON_ENC_MINMAX($"goblinoid warband", $"adlet", 1, 5)
+             CON_ENC_MINMAX($"gated outsiders", $"bonebat", 1, 8)
+             CON_ENC_MINMAX($"gated outsiders", $"frost slug", 1, 5)
+             
+             CON_ENC_MINMAX($"generic summons", $"vampiric mist", 1, 5)
+          5  CON_ENC_MINMAX($"tribal warband", $"frost giant", 10, 25)
+             CON_ENC_MINMAX($"band of giants", $"frost giant", 10, 25)
+            
+          20 CON_ENC_MINMAX($"pack encounter", MA_COLD, 2, 20)
+             $"adventurer"
+             $"adventuring party"
+             $"experienced adventuring party"; 
   }
 
 Region "Icy Prison" : RF_ROOM
   {
     Walls: $"ice Wall"; Floor: $"floor"; 
     Door: $"oak door"; Depth: 3; 
-    Flags: RF_NEVER_LIT;
+    Flags: RF_NEVER_LIT, RF_CENTER_ENC;
     Desc: "An abrupt, clearly supernatural drop in temperature greets you
     as you step into this cavern. The center of the area is dominated by
     a translucent curtain of icy, destructive magical power."; 
     RoomTypes: RM_OCTAGON, RM_LCIRCLE, RM_LARGE;
     Lists:
-      * FURNISHINGS FU_CENTER_CIRCLE_LARGE $"curtain of frost",
-      * FURNISHINGS FU_CENTER_CIRCLE_MEDIUM $"floor",
-      * FURNISHINGS FU_CENTER $"large iron chest",
-    On Event EV_BIRTH {
-      EMap->GenEncounter(EN_MTYPE,EMap->Depth+5,EMap->Depth+5,
-          MA_FIRE, 0,(rID)0,e.EXVal,e.EYVal,NULL);
-    };
+      * FURNISHINGS FU_CENTER_CIRCLE_LARGE $"curtain of frost"
+                    FU_CENTER_CIRCLE_MEDIUM $"floor"
+                    FU_CENTER $"large iron chest",
+      * ENCOUNTER_LIST
+          CONSTRAINED_ENC($"lone dragon",$"red dragon")
+          $"fire creatures"; 
   }
 
 Region "Fiery Prison" : RF_ROOM
   {
     Walls: $"solid igneous rock"; Floor: $"floor"; 
     Door: $"oak door"; Depth: 3; 
-    Flags: RF_NEVER_LIT;
+    Flags: RF_NEVER_LIT, RF_CENTER_ENC;
     Desc: "An abrupt, clearly supernatural raise in temperature greets you
     as you step into this cavern. The center of the area is dominated by
     a translucent curtain of destructive magical fire."; 
     RoomTypes: RM_OCTAGON, RM_LCIRCLE, RM_LARGE;
     Lists:
-      * FURNISHINGS FU_CENTER_CIRCLE_LARGE $"curtain of flame",
-      * FURNISHINGS FU_CENTER_CIRCLE_MEDIUM $"floor",
-      * FURNISHINGS FU_CENTER $"large iron chest";
-    On Event EV_BIRTH {
-      EMap->GenEncounter(EN_MTYPE,EMap->Depth+5,EMap->Depth+5,
-          MA_COLD, 0,(rID)0,e.EXVal,e.EYVal,NULL);
-    };
+      * FURNISHINGS FU_CENTER_CIRCLE_LARGE $"curtain of flame"
+                    FU_CENTER_CIRCLE_MEDIUM $"floor"
+                    FU_CENTER $"large iron chest",
+      * ENCOUNTER_LIST
+          CONSTRAINED_ENC($"lone dragon",$"white dragon")
+          $"water creatures";
   }
 
 Region "Ancient Library" : RF_ROOM
@@ -3800,7 +3977,8 @@ Region "Surreal Chamber" : RF_ROOM
       exactly, and trying to figure it out is giving you a headache. You
       feel the strange urge to pray...";
     Lists:
-      * MTYPE_LIST MA_CHAOTIC;
+      * ENCOUNTER_LIST
+         $"aberration group";
   }
 
 Region "Elemental Chamber" : RF_ROOM
@@ -3812,7 +3990,11 @@ Region "Elemental Chamber" : RF_ROOM
     major elements.";  
     Lists:
       * WALL_COLORS RED BLUE WHITE BROWN,
-      * MTYPE_LIST MA_ELEMENTAL;
+      * ENCOUNTER_LIST
+          $"earth creatures"
+          $"air creatures"
+          $"fire creatures"
+          $"water creatures";
     On Event EV_BIRTH {
       int16 a1, a2, a3, a4;
       int16 myrand;
@@ -3854,7 +4036,9 @@ Region "Brimstone Chamber" : RF_ROOM
     Lists:
       // * WALL_COLORS RED, 
       * FURNISHINGS FU_SPLATTER $"smooth igneous rock",
-      * MTYPE_LIST MA_FIRE MA_ELEMENTALKIN;
+      * ENCOUNTER_LIST
+          30 $"fire creatures"
+          5  CONSTRAINED_ENC($"lone dragon",$"red dragon");
   }
 
 Region "Entry Chamber;hells" : RF_ROOM
@@ -4635,18 +4819,18 @@ Terrain "Summoning Circle"
         case 0: fID = $"summoning circle;field"; 
                 color = EMERALD; mtype = MA_OUTSIDER; break;
         case 1: fID = $"circle vs. evil;field"; r = 2; 
-                color = SKYBLUE; mtype = MA_GOOD; break;
+                color = SKYBLUE; mtype = (MA_GOOD+MA_OUTSIDER*256); break;
         case 2: fID = $"circle vs. non-evil;field"; r = 2; 
-                color = RED; mtype = MA_EVIL; break;
+                color = RED; mtype = (MA_EVIL+MA_OUTSIDER*256); break;
       } 
       EMap->NewField(FI_BLOCKER,e.EXVal,e.EYVal,r,
           color*256+GLYPH_FLOOR2,-1,fID,NULL);
       x = -3 + (random(2) * 6);
       y = -3 + (random(3) * 6); 
       if (EMap->InBounds(e.EXVal+x,e.EYVal+y))
-        EMap->GenEncounter(EN_SINGLE|EN_MTYPE,EMap->Depth+2,EMap->Depth+2,
-            mtype, 0,(rID)0,e.EXVal+x,e.EYVal+y,NULL);
-    };
+        EMap->thEnGenMTypeXY($"single monster", mtype, EN_SINGLE,
+            EMap->Depth+2, 0, e.EXVal+x, e.EYVal+y);
+      };
     Desc: "This summoning circle projects a field of spectral force that
     keeps out undead, outsiders and summoned creatures."; 
   }

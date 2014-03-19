@@ -88,7 +88,8 @@ int16 Module::TemplateNum(Resource *r)
 inline Resource* Module::GetResource(rID r)
   {
     Resource * res; 
-    if (r && (GetResourceIndex[r % GET_RESOURCE_CACHE_SIZE] == r)) 
+
+   if (r && (GetResourceIndex[r % GET_RESOURCE_CACHE_SIZE] == r)) 
       return GetResourceCache[r % GET_RESOURCE_CACHE_SIZE];
 
     res = __GetResource(r);
@@ -195,6 +196,17 @@ inline Resource* Module::__GetResource(rID r)
     else
       r -= szFla;
 
+    if (r < szBev)
+      return &QBev[r];
+    else
+      r -= szBev;
+
+    if (r < szEnc)
+      return &QEnc[r];
+    else
+      r -= szEnc;
+
+
     /*
     if (r < szQue)
       return &MQue[r];
@@ -282,6 +294,14 @@ rID Module::FindResource(const char*n)
     for(i=0;i!=szFla;i++)
       if (stricmp(n,GetText(QFla[i].Name))==0)
         return FlavorID(i);
+
+    for(i=0;i!=szBev;i++)
+      if (stricmp(n,GetText(QBev[i].Name))==0)
+        return BehaviourID(i);
+
+    for(i=0;i!=szEnc;i++)
+      if (stricmp(n,GetText(QEnc[i].Name))==0)
+        return EncounterID(i);
 
 
     return 0;
@@ -751,6 +771,8 @@ bool ResourceHasFlag(rID xID, int16 fl)
         return TREG(xID)->HasFlag(fl);
       case T_TTERRAIN:
         return TTER(xID)->HasFlag(fl);
+      case T_TENCOUNTER:
+        return TENC(xID)->HasFlag(fl);
       default:
         return false;
       }
@@ -761,7 +783,6 @@ bool ResourceHasFlag(rID xID, int16 fl)
  *            Memory Cleanup Routines and Destructors              *
 \*******************************************************************/
 
-extern Monster* isMType_mn;
 
 void Game::Cleanup()
   {
@@ -771,8 +792,6 @@ void Game::Cleanup()
        to delete /all/ maps still in memory, including ones like
        interiors of buildings in the town. For now, this is good.
     */
-
-    isMType_mn = NULL;
 
     if (Modules[0])
       for(i=0;i!=MAX_DUNGEONS;i++)
@@ -872,6 +891,11 @@ Module::~Module()
       free(QTem);
     if (QFla)
       free(QFla);
+    if (QEnc)
+      free(QEnc);
+    if (QBev)
+      free(QBev);
+
 
     if (QTextSeg)
       free((void*)QTextSeg);

@@ -255,9 +255,12 @@ void Creature::AddBonus(int8 btype,int8 attr,int16 bonus)
      AttrAdj[at][BONUS_BASE] = tm.Value;                                                \
      AttrAdj[at][BONUS_TEMP] = 0;                                                       \
      }                                                                                  \
+   else if (tm.VType == MVAL_PERCENT && percent_attr(at))                               \
+     AttrAdj[at][BONUS_TEMP] = ((((AttrAdj[at][BONUS_TEMP]*5+100L)*                     \
+                                  ((long)tm.Adjust(100))) / 100L) - 100) / 5;                    \
    else                                                                                 \
      AttrAdj[at][BONUS_TEMP] = tm.Adjust(AttrAdj[at][BONUS_BASE]                         \
-       + AttrAdj[at][BONUS_TEMP]) - (AttrAdj[at][BONUS_BASE] /* + AttrAdj[at][BONUS_TEMP]*/);  
+       + AttrAdj[at][BONUS_TEMP]) - (AttrAdj[at][BONUS_BASE] /*+ AttrAdj[at][BONUS_TEMP]*/);  
 
 #define NAT_ARMOR_TEMPLATE_MOD(at,tm)                                                  \
    if (tm.VType == MVAL_SET) {                                                          \
@@ -266,7 +269,7 @@ void Creature::AddBonus(int8 btype,int8 attr,int16 bonus)
      }                                                                                  \
    else                                                                                 \
      AttrAdj[at][BONUS_TEMP] = tm.Adjust(TMON(mID)->Arm                                 \
-       + AttrAdj[at][BONUS_TEMP]) - (TMON(mID)->Arm /* + AttrAdj[at][BONUS_TEMP]*/);  
+       + AttrAdj[at][BONUS_TEMP]) - (TMON(mID)->Arm /*+ AttrAdj[at][BONUS_TEMP]*/);  
                                                                                        
 
 int8 MonGoodSaves(int8 MType);
@@ -286,6 +289,11 @@ void Creature::CalcValues(bool KnownOnly, Item *thrown)
   oHP  = cHP;
   cFP -= Attr[A_FAT];
   cHP -= Attr[A_THP];
+  
+  /* HACKFIX -- no recursive calcval looping */
+  if (theGame->inCalcVal)
+    return;
+  
   theGame->inCalcVal++;
   
 Restart:
@@ -1642,6 +1650,11 @@ void Character::CalcValues(bool KnownOnly, Item *thrown)
   int16 i,j; Status *s;
   bool one_body = HasFeat(FT_ONE_BODY_ONE_SOUL) ||
        (Attr[A_CON] == 0);
+       
+  /* HACKFIX */
+  if (theGame->inCalcVal)
+    return;
+       
   /* Calculate both, but calculate the requested set of
      stats first so that those values remain in the AttrAdj
      array. */
@@ -2167,8 +2180,9 @@ void TMonster::InitializeMTypeCache(rID tmid)
 {
   int i;
   Monster * m = new Monster(tmid);
+  m->CalcValues();
   memset(MTypeCache,0,sizeof(MTypeCache));
-  for (i=1; i<MA_LAST; i++) {
+  for (i=0; i<MA_LAST; i++) {
     bool res = false;
     if (i == MType[0] || i == MType[1] || i == MType[2])
       res = true;
@@ -2280,7 +2294,8 @@ bool Creature::isMType(int32 mt)
       return true;
 
     case MA_BURROW:     return HasMFlag(M_BURROW);
-    case MA_AQUATIC:    return HasMFlag(M_AQUATIC);
+    case MA_AQUATIC:    return HasMFlag(M_AQUATIC) ||
+                               HasMFlag(M_AMPHIB);
     case MA_SYLVAN:
       return (HasMFlag(M_NATURAL) || isMType(MA_ANIMAL)) &&
               HasMFlag(M_FOREST); 
@@ -2631,6 +2646,16 @@ String & Player::SpellBreakdown(int8 sp, int16 maxlen)
 String & Player::ResistBreakdown(int8 dt, int16 maxlen)
   {
     return *tmpstr("");
+  }
+  
+int16 Creature::GetBAB(int16 mode)
+  {
+    int16 BAB;
+    BAB = TMON(tmID)->Hit;
+    StatiIterNature(this,TEMPLATE)
+      BAB = TTEM(S->eID)->Hit.Adjust(BAB);
+    StatiIterEnd(this);
+    return BAB; 
   }
   
 int16 Character::GetBAB(int16 mode)

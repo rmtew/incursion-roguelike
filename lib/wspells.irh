@@ -222,8 +222,8 @@ Wizard Spell "Mage Armor" : EA_INFLICT
       return NOTHING;
       };
   }
-and EA_INFLICT
-  { xval: TRAP_EVENT; yval: POST(EV_WIELD); }
+and EA_OVERRIDE
+  { }
   
   
 Wizard / Priest / Scroll Spell "Protection from Evil" : EA_INFLICT
@@ -1319,6 +1319,7 @@ Wizard Spell "Color Spray" : EA_GENERIC
 Wizard / Scroll Spell "Phantasmal Force" : EA_ILLUSION
   { SC_ILL; Base: SP_MEDIUM; Cost: 4; Level: 1;
     Purpose: EP_SUMMON; xval: MA_LIVING; yval: 0; 
+    rval: $"generic summons"; /* HACKFIX */
     Desc: "This spell creates an illusionary creature, force 
       or object. The illusion affects only one sense, and is
       therefore automatically disbelieved by any creature with
@@ -1896,7 +1897,7 @@ Wizard / Scroll Spell "Mount" : EA_GENERIC
 
 Wizard Spell "Monster Summoning I" : EA_SUMMON
   { SC_WEA; Base: SP_MEDIUM; Cost: 2; Level: 1; qval: Q_LOC;
-    Purpose: EP_SUMMON; xval: MA_LIVING; pval: 1; 
+    Purpose: EP_SUMMON; rval: $"summoned monster"; pval: 1; 
     Desc: "Summons a living creature of CR 1 to fight in the 
       caster's name.";  
     ALIENIST_CLAUSE(1) }
@@ -2405,8 +2406,10 @@ Wizard Spell "Animate Rope" : EA_GENERIC
             return ABORT;
         }
       
-      EMap->GenEncounter(EN_MONID|EN_CREATOR|EN_SINGLE|EN_SPECIFIC,10,10,
-        (int32)monID, 0, NULL_ID, EActor->x, EActor->y, EActor);
+      EMap->thEnGenMonSummXY($"exact monster", monID, EN_CREATOR|EN_SINGLE, 
+         36, 0, EActor, e.EXVal, e.EYVal);      
+
+      
       hAnim = EMap->GetEncounterCreature(0);
       if (hAnim == NULL_OBJ)
         return ABORT;
@@ -2787,6 +2790,7 @@ Priest / Sorcerer / Wizard Spell "Shatter" : EA_BLAST
   { SC_EVO; Base: SP_MEDIUM; Cost: 4; Level: 2; qval: Q_TAR | Q_EQU;
     xval: AD_SONI; pval: (LEVEL_SCALED)d4; Purpose: EP_CURSE;
     aval: AR_BEAM; Flags: EF_SOUND;
+    /* HACKFIX */ Purpose: EP_PLAYER_ONLY;
     Desc: "Creates a harmonic sound that shatters objects, inflicting
       1d4 sonic damage per caster level, scaled after 9th, to each exposed 
       item in the target creature's inventory. If the target is a 
@@ -2973,6 +2977,7 @@ Wizard / Scroll Spell "Hypnotic Pattern" : EA_INFLICT
 Wizard / Scroll Spell "Improved Phantasmal Force" : EA_ILLUSION
   { SC_ILL; Base: SP_MEDIUM; Cost: 6; Level: 2;
     Purpose: EP_SUMMON; xval: MA_LIVING; yval: IL_IMPROVED; 
+    rval: $"generic summons";
     Desc: "This spell creates an illusionary creature, force 
       or object, just as Phantasmal Force does, but the illusion
       affects all natural and supernatural senses, and is thus
@@ -3549,7 +3554,7 @@ Druid / Scroll / Wizard Spell "Summon Swarm" : EA_DRAIN
 
 Wizard / Sorcerer  Spell "Monster Summoning II" : EA_SUMMON
   { SC_WEA; Base: SP_MEDIUM; Cost: 4; Level: 2; qval: Q_LOC;
-    Purpose: EP_SUMMON; xval: MA_LIVING; pval: 2; 
+    Purpose: EP_SUMMON; rval: $"summoned monster"; pval: 2; 
     Desc: "Summons a living creature of CR 2 to fight in the 
       caster's name.";  
     ALIENIST_CLAUSE(2) }
@@ -4636,6 +4641,7 @@ Wizard / Scroll Spell "Thunderlance" : EA_BLAST
   { SC_EVO|SC_DARKNESS; Base: SP_MEDIUM; Cost: 4; Level: 3; qval: Q_LOC;
     aval: AR_FIELD; rval: FI_DARKNESS; lval: 6; cval: SHADOW; 
     Purpose: EP_STEALTH | EP_FOIL_PURSUIT; Flags: EF_DLONG;
+    /* HACKFIX */ Purpose: EP_PLAYER_ONLY; 
     Desc: "Creates a 60' (6 squares) radius globe of inpenetrable
       magical darkness that obscures all natural and magical sight.
       The spell will also negate the effects of a <9>call light<1>
@@ -4694,6 +4700,7 @@ Wizard / Scroll Spell "Nondetection" : EA_GRANT
 Wizard / Scroll Spell "Spectral Force" : EA_ILLUSION
   { SC_ILL; Base: SP_MEDIUM; Cost: 8; Level: 3; 
     Purpose: EP_SUMMON; xval: MA_LIVING; yval: IL_SPECTRAL; 
+    rval: $"generic summons";
     Desc: "This spell creates an illusionary creature, force 
       or object, just as Phantasmal Force does, but the illusion
       has a greater depth and independance to it -- it does not wink
@@ -4855,6 +4862,7 @@ Effect "Animate Shadows;spot penalty" : EA_INFLICT
 Wizard Spell "Adamant Facade" : EA_INFLICT
   {
     SC_ILL; Level: 3; IS_A_BUFF(COST_3X);
+    /* HACKFIX */ Purpose: EP_PLAYER_ONLY;
     xval: TRAP_EVENT; yval: POST(EVICTIM(EV_HIT));
     Desc: "This powerful spell wraps an illusion around the
       caster's body, causing her to appear to be in full
@@ -5067,6 +5075,7 @@ Wizard / Scroll Spell "Animate Dead" : EA_GENERIC
       },      
     EV_MAGIC_HIT {
       rID cmID; hObj zom;
+      ANIMATION_HEADER
       if (!ETarget->isType(T_CORPSE))
         return DONE;
       cmID = ETarget->GetCorpseType();
@@ -5347,7 +5356,7 @@ Wizard / Scroll Spell "Blink" : EA_INFLICT
 
 Wizard / Scroll Spell "Monster Summoning III" : EA_SUMMON
   { SC_WEA; Base: SP_MEDIUM; Cost: 6; Level: 3; qval: Q_LOC;
-    Purpose: EP_SUMMON; xval: MA_LIVING; pval: 3; 
+    Purpose: EP_SUMMON; rval: $"summoned monster"; pval: 3; 
     Desc: "Summons a living creature of CR 3 to fight in the 
       caster's name.";  
     ALIENIST_CLAUSE(3) }
@@ -5471,7 +5480,7 @@ Feature "portal;rope trick" : T_PORTAL
 
 Wizard Spell "Conjure Vortex" : EA_SUMMON
   { SC_WEA; Base: SP_HARD; Cost: 15; Level: 3; qval: Q_LOC;
-    Purpose: EP_SUMMON; xval: MA_VORTEX; pval: 5;
+    Purpose: EP_SUMMON; rval: $"conjured vortex"; pval: 5;
     Flags: EF_DLONG, EF_XSUMMON; 
     Desc: "Casting this spell opens a conduit to the turbulent para-elemental
       or quasi-elemental planes, calling forth a vortex with a Challenge Rating
@@ -5492,15 +5501,6 @@ Wizard Spell "Conjure Vortex" : EA_SUMMON
             EActor, EActor);
           return DONE;
         }
-      return NOTHING;
-      },
-    POST(EV_MAGIC_HIT) {
-      hObj hVortex;
-      hVortex = EMap->GetEncounterCreature(0);
-      if (hVortex == NULL_OBJ)
-        return NOTHING;
-      if (hVortex->ChallengeRating() <= 3)
-        hVortex->AddTemplate($"turbulent");
       return NOTHING;
       };
   }
@@ -6561,6 +6561,7 @@ Wizard Spell "Phantasmal Killer" : EA_GENERIC
 Wizard Spell "Improved Spectral Force" : EA_ILLUSION
   { SC_ILL; Base: SP_MEDIUM; Cost: 10; Level: 4; 
     Purpose: EP_SUMMON; xval: MA_LIVING; yval: IL_SPECTRAL|IL_IMPROVED; 
+    rval: $"generic summons";
     Desc: "This spell creates an illusionary creature, force 
       or object, combining the advantages of both Spectral
       Force (resilience, independence, longer-lasting psychosomatic 
@@ -6683,6 +6684,7 @@ Wizard Spell "Hallucinatory Terrain" : EA_GENERIC
 Wizard Spell "Shadow Monsters" : EA_ILLUSION
   { SC_ILL; Base: SP_MEDIUM; Cost: 10; Level: 4; 
     Purpose: EP_SUMMON; xval: MA_LIVING; yval: IL_SPECTRAL|IL_SHADE20; 
+    rval: $"generic summons";
     Desc: "This spell draws material from the Demiplane of Shadow in 
       order to form partially real illusions of one or more monsters
       to fight in the caster's name. These creatures are functionally
@@ -6814,9 +6816,17 @@ and EA_INFLICT
    Demiplane of Shadows. */
 Wizard / Sorcerer  Spell "Summon Shadows" : EA_SUMMON
   { SC_NEC; SC_ILL; Base: SP_MEDIUM; Cost: 7; Level: 4; qval: Q_LOC;
-    Purpose: EP_SUMMON; rval: $"shadow"; pval: 5; 
-    Desc: "Summons a group of shadows worth CR 5.";
-    Flags: EF_MULTIPLE; }
+    Purpose: EP_SUMMON; rval: $"mass summons"; pval: 6;
+    Flags: EF_XSUMMON; 
+    Desc: "Summons a group of shadows worth CR 6. Casting this spell
+      costs one fatigue point.";
+    Flags: EF_MULTIPLE; 
+    On Event PRE(EV_ENGEN) {
+      e.enConstraint = (int32) $"shadow";
+      EActor->LoseFatigue(1,false);
+      return NOTHING;
+      };
+    }
 
 
 /* --THAUMATURGY 4-- */
@@ -6920,6 +6930,7 @@ Wizard Spell "Burning Blood" : EA_INFLICT
 Wizard / Scroll Spell "Evard's Black Tentacles" : EA_GENERIC
   { SC_THA; Base: SP_MEDIUM; Cost: 12; Level: 4; qval: Q_LOC;
     Purpose: EP_SUMMON|EP_FOIL_PURSUIT; pval: 1d4 + LEVEL_1PER1;
+    /* HACKFIX */ Purpose: EP_PLAYER_ONLY;
     On Event EV_MAGIC_HIT {
       int16 i, j, x, y; hObj hTent;
       for (i=0;i<=e.vDmg;i++)
@@ -7005,7 +7016,7 @@ Wizard / Scroll Spell "Waves of Weariness" : EA_GENERIC
 
 Wizard / Sorcerer  Spell "Monster Summoning IV" : EA_SUMMON
   { SC_WEA; Base: SP_MEDIUM; Cost: 12; Level: 4; qval: Q_LOC;
-    Purpose: EP_SUMMON; xval: MA_LIVING; pval: 4; 
+    Purpose: EP_SUMMON; rval: $"summoned monster"; pval: 4; 
     Desc: "Summons a living creature of CR 4 to fight in the 
       caster's name."; 
     ALIENIST_CLAUSE(4) }
@@ -7075,7 +7086,7 @@ Wizard Spell "Lesser Planar Conjuration" : EA_SUMMON
       __A caster can only have one creature summoned with <9>lesser planar
       conjuration<1> at a time, though she may summon others with spells 
       like <9>planar conjuration<1> or <9>conjure earth elemental<1>.";
-    Flags: EF_XSUMMON, EF_LOSEMANA; bool hostile_flag; xval: MA_OUTSIDER;
+    Flags: EF_XSUMMON, EF_LOSEMANA; bool hostile_flag; rval: $"conjured outsider";
     On Event EV_CALC_EFFECT {
       SetPVal(e,6 + EActor->Mod(A_CHA));
       return NOTHING;
@@ -7849,6 +7860,7 @@ and EA_BLAST
 Wizard Spell "Advanced Illusion" : EA_ILLUSION
   { SC_ILL; Base: SP_MEDIUM; Cost: 12; Level: 5; 
     Purpose: EP_SUMMON; xval: MA_LIVING; yval: IL_SPECTRAL|IL_IMPROVED|IL_ADVANCED; 
+    rval: $"generic summons";
     Desc: "An advanced illusion is a complex and responsive dwenomer
       that includes all the properties of an <9>improved spectral force<1>,
       as well as a powerful enhancement: the illusion can spawn secondary
@@ -8098,6 +8110,7 @@ Wizard Spell "Misdirection" : EA_INFLICT
 Wizard Spell "Demi-Shadow Monsters" : EA_ILLUSION
   { SC_ILL; Base: SP_MEDIUM; Cost: 10; Level: 5; 
     Purpose: EP_SUMMON; xval: MA_LIVING; yval: IL_SPECTRAL|IL_SHADE40|IL_SHADE10; 
+    rval: $"generic summons";
     Desc: "This spell functions identically to <9>shadow monsters<1>,
       except that the created creatures are 50~ real, and thus inflict
       50~ if their normal damage on disbelieving characters and can suffer
@@ -8296,7 +8309,7 @@ and EA_INFLICT
 
 Wizard / Scroll Spell "Monster Summoning V" : EA_SUMMON
   { SC_WEA; Base: SP_MEDIUM; Cost: 10; Level: 5; qval: Q_LOC;
-    Purpose: EP_SUMMON; xval: MA_LIVING; pval: 5; 
+    Purpose: EP_SUMMON; rval: $"summoned monster"; pval: 5; 
     Desc: "Summons a living creature of CR 5 to fight in the 
       caster's name.";  
     ALIENIST_CLAUSE(5) }
@@ -9075,6 +9088,7 @@ Wizard Spell "Shades" : EA_ILLUSION
   { SC_ILL; Base: SP_MEDIUM; Cost: 10; Level: 6; 
     Purpose: EP_SUMMON; xval: MA_LIVING; 
     yval: IL_SPECTRAL|IL_SHADE40|IL_SHADE10|IL_SHADE20; 
+    rval: $"generic summons";
     Desc: "This spell functions identically to <9>shadow monsters<1>,
       except that the created creatures are 70~ real, and thus inflict
       70~ if their normal damage on disbelieving characters and can suffer
@@ -9108,7 +9122,7 @@ Wizard / Priest Spell "True Seeing" : EA_INFLICT
 
 Wizard / Scroll Spell "Monster Summoning VI" : EA_SUMMON
   { SC_WEA; Base: SP_MEDIUM; Cost: 12; Level: 6; qval: Q_LOC;
-    Purpose: EP_SUMMON; xval: MA_LIVING; pval: 6; 
+    Purpose: EP_SUMMON; rval: $"summoned monster"; pval: 6; 
     Desc: "Summons a living creature of CR 6 to fight in the 
       caster's name.";  
     ALIENIST_CLAUSE(6) }

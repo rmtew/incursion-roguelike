@@ -333,7 +333,7 @@ Monster "bronze dragon" : MA_DRAGON, MA_WATER, MA_AIR
       SK_INTIMIDATE, SK_CRAFT, SK_ANIMAL_EMP, SK_CONCENT;
     Flags: M_GOOD, M_CARNI, M_HERBI, M_THICK_HIDE,
       M_SEE_INVIS, M_MOUNTABLE, M_TALKABLE, M_LAYS_EGGS,
-      M_HOARD, M_FLYER, M_AQUATIC, M_SOLITARY;
+      M_HOARD, M_FLYER, M_AQUATIC, M_AMPHIB, M_SOLITARY;
     Spells: $"summon nature's ally i", $"ESP", $"create food and water",
             $"obscurement", $"part water", $"waterspout";
     On Event MSG_BLASTNAME "stroke of lightning" /
@@ -1130,7 +1130,8 @@ Monster "plant ur-dragon" : MA_DRAGON, MA_SYLVAN, MA_VERMIN
       M_HOARD, M_FLYER, M_TOXI, M_AIR;
     Stati[ALLY_TO,MA_PLANT];
     Spells: 
-      $"verdant aid",
+      /* HACKFIX */
+      //$"verdant aid",
       $"tree stride",
       $"forestation",
       $"wall of thorns",
@@ -1273,7 +1274,7 @@ Template "hatchling" : TM_AGECAT  for MA_DRAGON
 	  CR: +0; Size: -4; Power: +1;
     Str 55% (min 7), Dex 100%, Con 72%, Int 63%, Wis 58% (min 9), Cha 63% (min 6);
     Mov: 40%; Arm: 20%; HitDice: 15%; Caster Level = 0; Hit: 20%;
-    Flags: TMF_OBVIOUS;
+    Flags: TMF_OBVIOUS, TMF_NOGEN;
   }
 
 Template "very young" : TM_AGECAT for MA_DRAGON
@@ -1652,7 +1653,7 @@ Monster "griffon" : MA_MYTHIC, MA_BEAST
 	ABILITY(CA_SCENT,9);
     Feats: FT_POUNCE, FT_RAKE, SK_JUMP, SK_LISTEN, SK_SPOT;
     Flags: M_CARNI, M_NATURAL, M_MOUNTABLE, M_NOHANDS,  
-           M_HOSTILE, M_FLYER;
+           M_HOSTILE, M_FLYER, M_GROUP;
     Desc: "A hybrid of hawks and lions, these noble beasts have been
       symbols of regency, honor and nobility since time immemorial.
       Despite this, however, they are cunning predators with a peculiar
@@ -1676,7 +1677,7 @@ Monster "hippogriff" : MA_QUADRUPED, MA_BEAST, MA_MYTHIC
 	RACIAL_SKILL(SK_SPOT,4);
     Feats: FT_ACUTE_SENSES, SK_LISTEN, SK_SPOT;
     Flags: M_NATURAL, M_HERBI, M_CARNI, M_NOHANDS,
-           M_MOUNTABLE, M_FLYER, M_HOSTILE;
+           M_MOUNTABLE, M_FLYER, M_HOSTILE, M_GROUP;
     Desc: "A hybrid of horse and eagle, hippogriffs are dangerous
       predatorial beasts who defend their territory fiercely. They
       are highly prized as mounts by anyone trying to establish an
@@ -1698,7 +1699,7 @@ Monster "lammasu" : MA_QUADRUPED, MA_MYTHIC
            FT_BLIND_FIGHT, FT_GUARDED_INVOCATION, FT_COMBAT_CASTING,
            FT_FLYBY_ATTACK, FT_IRON_WILL, FT_EMPOWER_SPELL,
            FT_POUNCE, FT_RAKE;
-    Spells: $"invisibility", $"dimension door";
+    Spells: $"improved invisibility", $"dimension door";
     Flags: M_NATURAL, M_HERBI, M_CARNI, M_NOHANDS,
            M_MOUNTABLE, M_FLYER, M_LAWFUL, M_GOOD, M_IALIGN;    
     On Event EV_INITIALIZE {
@@ -1732,7 +1733,7 @@ Monster "pegasus" : MA_QUADRUPED, MA_SYLVAN, MA_MYTHIC
 	ABILITY(CA_SCENT,6);
     Feats: SK_LISTEN, SK_SPOT, SK_APPRAISE, SK_WILD_LORE,
            FT_IRON_WILL;
-    Flags:  M_NATURAL, M_HERBI, M_NOHANDS,
+    Flags:  M_NATURAL, M_HERBI, M_NOHANDS, M_GROUP,
            M_MOUNTABLE, M_FLYER, M_CHAOTIC, M_GOOD, M_IALIGN;
     Spells: $"detect evil", $"bless";
     Desc: "A magnificent winged horse, the pegasus has wings
@@ -1830,9 +1831,9 @@ Monster "pirahna bird" : MA_MYTHIC, MA_BIRD
     Str 7, Dex 12, Con 14, Int 2, Wis 16, Cha 11;
     Attk: A_BITE for 1d8 AD_PIERCE;
     Flags: M_CARNI, M_NOHANDS, M_FOREST, M_MOUNTABLE, M_NOLIMBS,
-      M_FLYER, M_HOSTILE;
+      M_FLYER, M_HOSTILE, M_GROUP;
     Feats: FT_DODGE, FT_SWARM, SK_LISTEN, SK_SPOT; 
-    Desc: "A magical mybrid of a pirahna and a parrot, pirahna birds are 
+    Desc: "A magical hybrid of a pirahna and a parrot, pirahna birds are 
       avian creatures with colorful plumes and bodies that resemble those
       of piranhas. They are somtimes encountered alone, but are most
       dangerous when they attack in swarms.";
@@ -1899,7 +1900,7 @@ Monster "devilfish" : MA_BEAST
           A_GAZE for 0d0 AD_SPE1 (DC 14);
     ABILITY(CA_INFRAVISION,6);
     Flags: M_CARNI, M_NOLIMBS, M_NOHANDS, M_DEAF, M_AQUATIC,
-       M_LIGHT_AVERSE;
+       M_LIGHT_AVERSE, M_GROUP;
     Feats: FT_SKILL_FOCUS, SK_SWIM, SK_SPOT;
     On Event MSG_SPE1DESC
       "enact <9>doom<7>";
@@ -1918,6 +1919,76 @@ Monster "devilfish" : MA_BEAST
       return NOTHING;
       };
   }
+
+Monster "cavefish" : MA_ANIMAL
+  {
+    Image: grey 'a'; Size: SZ_TINY;
+    CR: -4; HD: 1; Hit: 1; Def: 13; Mov: 150%; Spd: 100%;
+    Str 6, Dex 12, Con 10, Int 1, Wis 8, Cha 10;
+    Attk: A_BITE for 1d2 AD_PIERCE;
+    ABILITY(CA_TREMORSENSE,6);
+    Flags: M_CARNI, M_NOLIMBS, M_NOHANDS, M_DEAF, M_AQUATIC,
+           M_BLIND, M_LIGHT_AVERSE, M_GROUP;
+    Feats: FT_SKILL_FOCUS, SK_SWIM, SK_SPOT;
+    RACIAL_SKILL(SK_SWIM,+8);
+    Desc: "Many varieties of predatory fish have adapted to
+      life in deep caves or the Underdark. They are blind,
+      though many retain vestigal eyes, and percieve their
+      world by sensing vibrations in the water.";
+  }
+
+Monster "chinook salmon" : MA_ANIMAL
+  {
+    Image: bright red 'a'; Size: SZ_SMALL;
+    CR: -1; HD: 1; Hit: 0; Def: 13; Mov: 160%; Spd: 100%;
+    Str 9, Dex 13, Con 10, Int 1, Wis 8, Cha 10;
+    Attk: A_BITE for 1d2 AD_PIERCE;
+    Flags: M_CARNI, M_NOLIMBS, M_NOHANDS, M_DEAF, M_AQUATIC,
+           M_GROUP;
+    Feats: FT_SKILL_FOCUS, SK_SWIM, SK_SPOT;
+    RACIAL_SKILL(SK_SWIM,+8);
+    Desc: "Chinook salmon are the largest breed of salmon
+      found in the animal kingdom. They are rarely a threat
+      to thinking creatures, but can represent a danger to
+      swimmers in hostile environments or people already
+      worn down from other dangers.";
+  }
+
+Monster "piranha" : MA_ANIMAL
+  {
+    Image: light blue 'a'; Size: SZ_TINY;
+    CR: 0; HD: 1; Hit: 0; Def: 13; Mov: 175%; Spd: 175%;
+    Str 6, Dex 15, Con 10, Int 1, Wis 8, Cha 10;
+    Attk: A_BITE for 1d4 AD_SLASH;
+    Flags: M_CARNI, M_NOLIMBS, M_NOHANDS, M_DEAF, M_AQUATIC,
+           M_GROUP, M_SWARM, M_HOSTILE;
+    Feats: FT_SKILL_FOCUS, SK_SWIM, SK_SPOT;
+    RACIAL_SKILL(SK_SWIM,+8);
+    Desc: "Piranhas are tiny, fast fish known for travelling
+      in packs and devouring meat very rapidly. Coastal orc
+      settlements sometimes worship piranhas as totem beasts.";
+  }
+
+Monster "cave pelican" : MA_ANIMAL
+  {
+    Image: light purple 'a'; Size: SZ_SMALL;
+    CR: -1; HD: 2; Hit: 0; Def: 13; Mov: 125%; Spd: 125%;
+    Str 10, Dex 12, Con 12, Int 2, Wis 12, Cha 10;
+    Attk: A_SLAM for 1d3 AD_BLUNT,
+          A_BITE for 1d2 AD_BLUNT;
+    ABILITY(CA_INFRAVISION,+6);
+    Flags: M_CARNI, M_NOHANDS, M_FLYER, M_AQUATIC, M_GROUP;
+    Feats: FT_SKILL_FOCUS, SK_SWIM, SK_SPOT;
+    RACIAL_SKILL(SK_SWIM,+4);
+    Desc: "Pelicans are large birds with distinctive pouches
+      under their beaks. Several species of pelicans have
+      adapted to underground life, dwelling in the great
+      ancient waterflows beneath the earth, or being 
+      domesticated by svirfneblin and derro. They are normally
+      temperate creatures but panic easily and can become
+      violent if frightened or surronded by hostile creatures
+      or loud noises.";
+  }
   
 Monster "ixitxachitl" : MA_ABERRATION
   {
@@ -1929,7 +2000,7 @@ Monster "ixitxachitl" : MA_ABERRATION
           A_STNG for 1d4 AD_PIERCE;
     ABILITY(CA_INFRAVISION, 6);
     Flags: M_CARNI, M_NOLIMBS, M_NOHANDS, M_DEAF, M_AQUATIC,
-           M_LIGHT_AVERSE, M_CHAOTIC, M_EVIL;
+           M_LIGHT_AVERSE, M_CHAOTIC, M_EVIL, M_GROUP;
     Feats: FT_RUN, SK_HIDE, SK_KNOW_NATURE, SK_MOVE_SIL,
            SK_SWIM, SK_SPOT, SK_TUMBLE;
     Desc: "The ixitichitl are a race of intelligent, necromantically 
@@ -2096,7 +2167,7 @@ Monster "behir" : MA_BEAST, MA_REPTILIAN, MA_SNAKE
     Feats: SK_HIDE, SK_LISTEN, SK_MOVE_SIL, SK_SPOT,
       FT_ALERTNESS, FT_CLEAVE, FT_POWER_ATTACK, 
       FT_MULTIATTACK, FT_NATURAL_GRAB;
-    Flags: M_CARNI, M_HERBI, M_NOHANDS, M_ELEC, M_HOSTILE;
+    Flags: M_CARNI, M_HERBI, M_NOHANDS, M_ELEC, M_HOSTILE, M_MOUNTABLE;
     Desc: "The behir is a serpentine monster that can slither like a snake
     or use its dozen legs to move with considerable speed. A behir is about
     40 feet long and weighs about 4,000 pounds. It can fold its limbs close
@@ -2241,7 +2312,7 @@ Monster "darkmantle" : MA_TRAPPER, MA_BEAST
     Feats: FT_SKILL_FOCUS, SK_HIDE, SK_LISTEN, FT_SNEAKY,
       FT_NATURAL_GRAB, FT_MASTER_GRAPPLE;
     Flags: M_HIDE_ABOVE, M_CARNI, M_NOHANDS, M_NOLIMBS,
-      M_NEUTER, M_HOSTILE;
+      M_NEUTER, M_HOSTILE, M_GROUP;
     Desc: "Appearing vaguely like a black mottled octopus, the
       darkmantle ambushes its prey by clinging to the ceiling
       of its subterranian enviornment and then dropping over
@@ -2268,7 +2339,7 @@ Monster "stifler" : MA_TRAPPER, MA_BEAST
       FT_NATURAL_GRAB, FT_MASTER_GRAPPLE;
     Flags: 
       M_HIDE_ABOVE, M_CARNI, M_NOHANDS, M_NOLIMBS, M_NEUTER, M_HOSTILE,
-      M_CLOSEID;
+      M_CLOSEID, M_GROUP;
     Desc: "Appearing vaguely like a blue mottled octopus, the
       stifler ambushes its prey by clinging to the ceiling
       of its subterranian enviornment and then dropping over
@@ -2305,7 +2376,7 @@ Monster "icemantle" : MA_TRAPPER, MA_BEAST
     Immune: DF_COLD, DF_SLOW;
     Flags: 
       M_HIDE_ABOVE, M_CARNI, M_NOHANDS, M_NOLIMBS, M_NEUTER, M_HOSTILE,
-      M_COLD;
+      M_COLD, M_GROUP;
     Desc: "Appearing vaguely like an ice blue mottled octopus, the
       icemantle ambushes its prey by clinging to the ceiling
       of its subterranian enviornment and then dropping over
@@ -2340,7 +2411,8 @@ Monster "deathshroud" : MA_TRAPPER, MA_BEAST
       FT_NATURAL_GRAB, FT_MASTER_GRAPPLE;
     Immune: DF_POIS, DF_SLEE;
     Flags: 
-      M_HIDE_ABOVE, M_CARNI, M_NOHANDS, M_NOLIMBS, M_NEUTER, M_HOSTILE;
+      M_HIDE_ABOVE, M_GROUP, M_CARNI, M_NOHANDS, M_NOLIMBS, M_NEUTER, 
+      M_HOSTILE;
     Desc: "Appearing vaguely like an brown mottled octopus, the
       deathshroud or 'final blanket' ambushes its prey by clinging to the
       ceiling of its subterranian enviornment and then dropping over its
@@ -2373,7 +2445,7 @@ Monster "ettercap" : MA_SPIDER, MA_BEAST, MA_HOMINID
     Feats: FT_GREAT_FORTITUDE, FT_MULTIATTACK,
            FT_CLOSE_QUARTERS_FIGHTER,
            SK_HIDE, SK_LISTEN, SK_SPOT;
-    Flags: M_HUMANOID, M_EVIL;
+    Flags: M_HUMANOID, M_EVIL, M_GROUP;
     Immune: DF_STUK;
   }
 
@@ -2480,7 +2552,7 @@ Monster "spitting frog" : MA_BEAST, MA_REPTILIAN
     Immune: DF_FIRE, DF_SLEE;
     Flags: M_CARNI, M_NOHANDS, M_HIDE_UNDER, M_LAYS_EGGS,
            M_PSYCHO, M_NATURAL, M_FIRE, M_HOSTILE,
-           M_NOLIMBS, M_AVOID_MELEE;
+           M_NOLIMBS, M_AVOID_MELEE, M_GROUP;
     Desc: "These tiny, ivory-white frogs spit a powerfully numbing venom to
       blind their foes. They were originally native to jungles,
       but the most common varieties seen underground have been
@@ -2495,6 +2567,8 @@ Monster "spitting frog" : MA_BEAST, MA_REPTILIAN
       };
   }
 
+/* HACKFIX */
+#if 0
 Monster "foxbat" : MA_MYTHIC, MA_ANIMAL
   {
     Image: yellow 'M'; Size: SZ_TINY;
@@ -2509,12 +2583,13 @@ Monster "foxbat" : MA_MYTHIC, MA_ANIMAL
     Feats: FT_ACROBATIC, SK_JUMP, SK_HIDE, SK_MOVE_SIL, SK_SPOT,
            SK_LISTEN, SK_TUMBLE;
     Flags: M_HERBI, M_NOHANDS, M_HIDE_UNDER, M_FLYER, M_LAYS_EGGS,
-           M_NATURAL, M_NOLIMBS;
+           M_NATURAL, M_NOLIMBS, M_GROUP;
     Desc: "A magical hybrid of fox, ferret and bat, the foxbat is a curious
       and playful but easily panicked creature often used by wizards
       as a familiar and famed for its startlingly loud screech. Foxbats
       are about the size of housecats and are extremely agile and quick.";
   }
+#endif
   
 Monster "giant tortoise" : MA_BEAST, MA_REPTILE, MA_ANIMAL
   {
@@ -2586,7 +2661,8 @@ Monster "grick" : MA_WORM, MA_BEAST, MA_BURROW
 	ABILITY(CA_INFRAVISION,6);
     Feats: FT_NATURAL_GRAB;
     Flags: M_NEUTER, M_NOHANDS, M_NOLIMBS, M_NOHEAD, M_THICK_HIDE, M_CARNI,
-           M_SWAMP, M_LIGHT_AVERSE, M_HOSTILE, M_BURROW, M_EARTH;
+           M_SWAMP, M_LIGHT_AVERSE, M_HOSTILE, M_BURROW, M_EARTH,
+           M_MOUNTABLE;
     Desc: "An underground predator, the grick is a large green worm-creature
       with four suckered tentacles surronding its beak-like mouth. Gricks
       can be as long as 5 feet fully grown, with serpentine bodies up to a
@@ -2603,7 +2679,7 @@ Monster "ice toad" : MA_BEAST, MA_REPTILIAN
 	ABILITY(CA_REGEN,2);
     Feats: FT_IRON_WILL, SK_JUMP; Immune: DF_COLD, DF_CRIT;
     Flags: M_CARNI, M_NOHANDS, M_HIDE_UNDER, M_LAYS_EGGS,
-           M_PSYCHO, M_NATURAL, M_COLD;
+           M_PSYCHO, M_NATURAL, M_COLD, M_GROUP;
     Desc: "A mottled blue toad the size of a rottwieler, ice
       toads are known for their slothful lifestyle -- they sleep
       nearly 80~ of the time -- and for their vicious temperment
@@ -2655,7 +2731,7 @@ Monster "froghemoth" : MA_BEAST, MA_REPTILIAN
     Feats: FT_NATURAL_GRAB, FT_MULTIATTACK, FT_TOUGHNESS,
            SK_SPOT, SK_HIDE, SK_SWIM, SK_JUMP;
     Flags: M_REACH, M_CARNI, M_HOSTILE, M_NOHANDS, M_DEAF,
-           M_CHARGE, M_AMPHIB, M_AQUATIC;
+           M_CHARGE, M_AMPHIB, M_AQUATIC, M_MOUNTABLE;
     //Terrain: TT_SWAMP | TT_COASTAL;
     int16 hitCount;
     On Event PRE(EV_NATTACK) 
@@ -2700,7 +2776,7 @@ Monster "osquip" : MA_RODENT, MA_ANIMAL, MA_BURROW
     Str 8, Dex 7, Con 12, Int 3, Wis 8, Cha 3;
 	Attk:A_BITE for 1d8 AD_BLUNT;
     Feats: FT_SUNDER, SK_LISTEN, SK_SEARCH;
-    Flags: M_CARNI, M_ANIMAL, M_NOHANDS, M_BURROW;
+    Flags: M_CARNI, M_ANIMAL, M_NOHANDS, M_BURROW, M_GROUP;
     Desc: "A distant cousin of rats, the osquip is a six-legged
       rodent the size of a pit bull, with a leathery yellow hide
       and huge, blunt foreteeth that hang out of its mouth over
@@ -2798,7 +2874,7 @@ Monster "rust monster" : MA_BEAST, MA_ABERRATION
 	ABILITY(CA_INFRAVISION,6);
     Feats: FT_ALERTNESS, SK_LISTEN, SK_SPOT; 
     Flags: M_NOHANDS, M_NOHEAD, M_NOLIMBS, M_EATSMETAL, M_HOSTILE,
-      M_THICK_HIDE, M_EARTH; 
+           M_THICK_HIDE, M_EARTH, M_MOUNTABLE; 
     Desc: "Recognized by its dinstinctive helicopter-shaped tail and
       twin antenna, the rust monster resembles a strange cross between
       a hedgehog, lizard and beetle. They subsist by dissolving and
@@ -2822,7 +2898,8 @@ Monster "porpoise" : MA_ANIMAL
 	RACIAL_SKILL(SK_SWIM,8);
     Feats: FT_CAPTIVATING,
            SK_LISTEN, SK_SPOT, SK_SWIM, SK_PERFORM; 
-    Flags: M_CARNI, M_NOHANDS, M_AMPHIB, M_NATURAL;
+    Flags: M_CARNI, M_NOHANDS, M_AQUATIC, M_AMPHIB, M_NATURAL, M_GROUP, 
+           M_FRIENDLY;
     Desc: "Porpoises are mammals that tend to be playful, friendly, and
     helpful. A typical porpoise is 4 to 6 feet long and weighs 110 to 160
     pounds. ";
@@ -2836,7 +2913,7 @@ Monster "cave lizard" : MA_REPTILE, MA_ANIMAL
     Attk: A_BITE for 1d3 AD_PIERCE;
 	  ABILITY(CA_INFRAVISION,6);
     Feats: FT_ALERTNESS, SK_CLIMB, SK_HIDE, SK_SPOT;
-    Flags: M_NATURAL, M_CARNI, M_NOHANDS, M_FRIENDLY;
+    Flags: M_NATURAL, M_CARNI, M_NOHANDS, M_FRIENDLY, M_GROUP;
     Desc: "A variety of species of small lizards inhabit caves
       and underground complexes, feeding on insects, fungi and
       the occasional small rodent.";
@@ -2853,7 +2930,7 @@ Monster "shocker lizard" : MA_REPTILE, MA_BEAST
 	ABILITY(CA_INFRAVISION,6);
     Feats: FT_ALERTNESS, FT_DODGE, SK_CLIMB, SK_HIDE, SK_SPOT;
     Immune: DF_ELEC;
-    Flags: M_NATURAL, M_CARNI, M_NOHANDS, M_ELEC;
+    Flags: M_NATURAL, M_CARNI, M_NOHANDS, M_ELEC, M_GROUP;
     Desc: "A tiny blue lizard similar to a bipedal gecko, shocker
       lizards have wide, curious eyes, thin antenna-like horns and
       a bullet-shaped head. They are renouned for their ability to
@@ -2890,7 +2967,7 @@ Monster "stirge" : MA_BAT, MA_ANIMAL
 	ABILITY(CA_INFRAVISION,6);
     Feats: FT_ENDURANCE, FT_NATURAL_GRAB;
     Flags: M_NOHANDS, M_LIGHT_AVERSE, M_POISON, M_FLYER, 
-           M_HOSTILE, M_CARNI, M_CLOSEID;
+           M_HOSTILE, M_CARNI, M_CLOSEID, M_GROUP;
     Desc: "A twisted cross between a bat and a mosquito, the stirge
       (or archaically, 'ghoulstirge') is a winged subterranian predator 
       that latches onto victims, pierces them with its probiscis and
@@ -3053,7 +3130,7 @@ Monster "winged snake" : MA_SNAKE, MA_BEAST, MA_SYLVAN
     Feats: /*FT_IMPROVED_INITIATIVE,*/ SK_HIDE, SK_MOVE_SIL,
            SK_CLIMB;
     Flags: M_NOHANDS, M_NOLIMBS, M_NATURAL, M_CARNI, 
-           M_HERBI, M_ELEC, M_FOREST, M_NATURAL;
+           M_HERBI, M_ELEC, M_FOREST, M_NATURAL, M_GROUP;
     Desc: "Winged snakes are colorful reptiles who may be distant
       relatives of the couatl. Though their acidic bite is powerful,
       they are most feared for their ability to build up a charge
@@ -3068,7 +3145,7 @@ Monster "winged snake" : MA_SNAKE, MA_BEAST, MA_SYLVAN
 
 /*** TEMPLATES FOR BEASTS ***/
 
-Template "feral" : TM_SKILL for MA_ANIMAL
+Template "feral" : TM_NATURE for MA_ANIMAL
   { CR: OPT_CR(+2,+2); Hit: +6; HD: +1; Spd +50%; 
     MType: MA_BEAST;
     Feats: FT_POUNCE, FT_RAKE, FT_MULTIATTACK, FT_REND;
@@ -3098,8 +3175,8 @@ Template "razorjaw" : TM_NATURE for MA_BEAST
     EV_ISTARGET {
       if (!EActor->HasAttk(A_BITE))
         return -1;
-      if (enFreaky() % 30 != 27)
-        return -1;
+      //if (enFreaky() % 30 != 27)
+      //  return -1;
       return 0;
       },
     #if 0
@@ -3115,7 +3192,7 @@ Template "razorjaw" : TM_NATURE for MA_BEAST
       "On a critical hit, its bite severs a limb.";
   }             
 
-Template "dire" : TM_SKILL for 0
+Template "dire" : TM_NATURE for MA_ANIMAL
   { CR: OPT_CR(+3,+3); Size: +1; Str +4, Dex +2, Con +2; Immune: DF_FEAR;
     Arm: +3; Hit: +4; HD: +4; Flags: M_HOSTILE, M_PSYCHO, TMF_OBVIOUS,
       !M_NATURAL;
@@ -3123,6 +3200,7 @@ Template "dire" : TM_SKILL for 0
     Desc: "Dire animals are feral beasts with a vaguely prehistoric
       look. They are stronger, tougher and more aggressive than their
       mundane counterparts."; 
+    /*
     On Event EV_ISTARGET {
       if (EActor->isMType(MA_ANIMAL) ||
           EActor->isMType(MA_BEAST) ||
@@ -3131,7 +3209,8 @@ Template "dire" : TM_SKILL for 0
           EActor->isMType(MA_TROLL))
         return 0;
       else return -1;
-    } ;
+      };
+    */
   }
 
 #if 0
@@ -3316,7 +3395,7 @@ Monster "ape" : MA_ANIMAL, MA_HOMINID
     Feats: 
         FT_ALERTNESS, FT_TOUGHNESS, FT_BRACHIATION,
         SK_CLIMB, SK_LISTEN, SK_SPOT; 
-    Flags: M_HUMANOID, M_NATURAL, M_CARNI, M_REACH, M_FOREST;
+    Flags: M_HUMANOID, M_NATURAL, M_CARNI, M_REACH, M_FOREST, M_GROUP;
     Desc: "Gorillas are the largest of the primates, weighing up to 400
     pounds. They have a much heavier build than the chimpanzee, having more
     muscles, bigger canine teeth, and a much larger stature. The Eastern
@@ -3360,7 +3439,7 @@ Monster "blood ape" : MA_BEAST, MA_HOMINID
     Feats: FT_REND, FT_SKILL_FOCUS, SK_CLIMB, FT_BRACHIATION,
       SK_LISTEN, 
       SK_INTIMIDATE;
-    Flags: M_CARNI, M_REACH;
+    Flags: M_CARNI, M_REACH, M_GROUP;
     Spells: $"bull's strength", $"enlarge", $"cause fear";
     On Event POST(EV_EFFECT) {
       EActor->IdentifyMon();
@@ -3386,7 +3465,7 @@ Monster "girallon" : MA_BEAST, MA_HOMINID
     Feats: 
       FT_IRON_WILL, FT_TOUGHNESS, FT_RAKE, FT_BRACHIATION,
       SK_CLIMB, SK_MOVE_SIL, SK_SPOT; 
-    Flags: M_CARNI, M_REACH;
+    Flags: M_CARNI, M_REACH, M_GROUP;
     Desc: "Girallons are savage, magical cousins of the gorilla. When
     moving on the ground, a girallon walks on its legs and lower arms. An
     adult girallon is about 8 feet tall, broad-chested, and covered in
@@ -3413,7 +3492,7 @@ Monster "monkey" : MA_ANIMAL, MA_HOMINID
           A_TUCH for 0d0 AD_STEA (DC 16);
     Feats: SK_BALANCE, SK_CLIMB, SK_HIDE, 
            FT_DODGE, FT_BRACHIATION;
-    Flags: M_HUMANOID, M_NATURAL, M_CARNI, M_HERBI, M_FOREST;
+    Flags: M_GROUP, M_HUMANOID, M_NATURAL, M_CARNI, M_HERBI, M_FOREST;
   }
 
 
@@ -3809,7 +3888,7 @@ Monster "bat" : MA_BAT, MA_ANIMAL
 	ABILITY(CA_BLINDSIGHT,2); /* "Sonar" */
   Feats: FT_DODGE, FT_ALERTNESS,
          SK_HIDE, SK_LISTEN, SK_MOVE_SIL, SK_SPOT; 
-  Flags: M_CARNI, M_HERBI, M_ANIMAL,
+  Flags: M_CARNI, M_HERBI, M_ANIMAL, M_GROUP,
          M_NOHANDS, M_NOLIMBS, M_FLYER, M_BLIND;
       Desc: "During the day, they live in hollow trees, underneath large
       leaves, and beneath the eaves of buildings. They often roost where
@@ -3852,7 +3931,8 @@ Monster "black bear" : MA_ANIMAL, MA_QUADRUPED
           A_BITE for 1d6 AD_PIERCE;
 	ABILITY(CA_SCENT,5);
     Feats: SK_CLIMB, SK_SPOT, SK_SWIM;
-    Flags: M_NATURAL, M_CARNI, M_NOHANDS, M_BURROW, M_FOREST;
+    Flags: M_NATURAL, M_CARNI, M_NOHANDS, M_BURROW, M_FOREST,
+           M_MOUNTABLE;
     Desc: "Black bears are usually black in color.  They usually have a
     pale muzzle which contrasts with their darker fur and may sometimes
     have a white chest spot. Western populations are usually lighter in
@@ -4141,7 +4221,7 @@ Monster "chilling eel" : MA_OUTSIDER, MA_WORM
 	ABILITY(CA_NATURE_SENSE,1);
 	ABILITY(CA_BLINDSIGHT,6);
    Flags: M_CARNI, M_NATURAL, M_NOLIMBS, M_NOHANDS, M_AQUATIC, M_BLIND,
-          M_HOSTILE, M_WATER, M_COLD;
+          M_HOSTILE, M_WATER, M_COLD, M_GROUP;
    Immune: DF_COLD;
    Spells: $"ice dagger"; 
    Feats: FT_SKILL_FOCUS, SK_SWIM,
@@ -4162,7 +4242,7 @@ Monster "electric eel" : MA_ANIMAL, MA_WORM
 	ABILITY(CA_NATURE_SENSE,1);
 	ABILITY(CA_BLINDSIGHT,3);
    Flags: M_CARNI, M_NATURAL, M_NOLIMBS, M_NOHANDS, M_AQUATIC, M_BLIND,
-          M_HOSTILE, M_ELEC;
+          M_HOSTILE, M_ELEC, M_GROUP;
    Feats: FT_SKILL_FOCUS, SK_SWIM, FT_SWARM,
           SK_LISTEN, SK_SPOT, SK_HIDE;
    Spells: $"Stunning Jolt"; 
@@ -4259,9 +4339,8 @@ Monster "giant rat" : MA_RODENT, MA_ANIMAL
     Str 4, Dex 12, Con 12, Int 3, Wis 8, Cha 3;
 		Attk:A_BITE for 1d2 AD_PIERCE;
 	ABILITY(CA_LOWLIGHT,6);
-    Flags: M_AMPHIB;
     Feats: SK_MOVE_SILENTLY, FT_LIGHTNING_REFLEXES;
-		Flags: M_CARNI, M_ANIMAL, M_NOHANDS;
+	Flags: M_CARNI, M_ANIMAL, M_NOHANDS, M_GROUP;
     Desc: "Wharf rats the size of badgers, possessing a foul temperment
       to match, these creatures pose little real danger to an experienced
       adventurer, but in numbers can take down less skilled humanoid
@@ -4302,7 +4381,7 @@ Monster "jackal" : MA_DOG, MA_ANIMAL
                  and 0d0 AD_TRIP (DC 17);
 	ABILITY(CA_SCENT,3);
     Feats: SK_LISTEN, SK_MOVE_SIL, SK_SPOT, FT_SWARM;
-    Flags: M_NATURAL, M_CARNI, M_NOHANDS, M_MOUNTABLE, M_DESERT;
+    Flags: M_NATURAL, M_CARNI, M_NOHANDS, M_MOUNTABLE, M_DESERT, M_GROUP;
     Desc: "Jackals are very vocal creatures. Yipping calls are made when
     the family gathers and are specific to individual families. Non-members
     do not recognize, or respond to the calls of other families.
@@ -4348,9 +4427,8 @@ Monster "plague rat" : MA_RODENT, MA_ANIMAL
          A_SEEM for $"giant rat";
 	ABILITY(CA_LOWLIGHT,6);
     Disease: $"filth fever";
-    Flags: M_AMPHIB;
     Feats: SK_MOVE_SILENTLY, FT_LIGHTNING_REFLEXES;
-		Flags: M_CARNI, M_ANIMAL, M_NOHANDS;
+		Flags: M_CARNI, M_ANIMAL, M_NOHANDS, M_GROUP;
     On Event POST(EV_ATTACKMSG) {
       if (EActor->mID == $"plague rat")
         if (e.DType == AD_DISE && e.isHit)
@@ -4383,7 +4461,7 @@ Monster "bull shark" : MA_ANIMAL
 	ABILITY(CA_SCENT,18);
     Feats: SK_LISTEN, SK_SPOT, SK_SWIM;
     Flags: M_NATURAL, M_CARNI, M_NOHANDS, M_MOUNTABLE,
-      M_NOLIMBS, M_AQUATIC, M_HOSTILE;
+      M_NOLIMBS, M_AQUATIC, M_HOSTILE, M_GROUP;
       Desc: "The Bull Shark can be recognized by its unique body shape,
       which is much wider in comparison to its length than other sharks,
       and its snout, which is wider than it is long. These features give
@@ -4402,7 +4480,7 @@ Monster "huge shark" : MA_ANIMAL
 	ABILITY(CA_SCENT,18);
     Feats: SK_LISTEN, SK_SPOT, SK_SWIM;
     Flags: M_NATURAL, M_CARNI, M_NOHANDS, M_MOUNTABLE,
-      M_NOLIMBS, M_AQUATIC, M_HOSTILE;
+      M_NOLIMBS, M_AQUATIC, M_HOSTILE, M_GROUP;
     Desc: "A voracious and efficient predator. Its prey includes a wide
     variey of bony fishes, including salmon, hake, halibut, mackeral, and
     tunas; other sharks; sea turtles; seabirds; and marine mammals, such as
@@ -4444,7 +4522,7 @@ Monster "wolf" : MA_DOG, MA_ANIMAL
                  and 0d0 AD_TRIP (DC 17);
 	ABILITY(CA_SCENT,3);
     Feats: SK_LISTEN, SK_MOVE_SIL, SK_SPOT, FT_SWARM;
-    Flags: M_NATURAL, M_CARNI, M_NOHANDS, M_MOUNTABLE, M_FOREST;
+    Flags: M_NATURAL, M_CARNI, M_NOHANDS, M_MOUNTABLE, M_FOREST, M_GROUP;
         // ww: goblin wolf-riders are canon
     Desc: "Wolves are highly social, pack-living animals. Each pack
     comprises two to thirty-six individuals, depending upon habitat and
@@ -4506,7 +4584,7 @@ Monster "wolverine" : MA_ANIMAL
 
 /*** DINOSAURS ***/
 
-Monster "deinonychus" : MA_REPTILE
+Monster "deinonychus" : MA_REPTILE, MA_DINOSAUR
   {
     Image: bright green 'R'; Size: SZ_LARGE; 
     CR: OPT_CR(5,3); HD: 4; Hit: 6; Def: 15; Mov: 200%; Spd: 120%;
@@ -4525,7 +4603,7 @@ Monster "deinonychus" : MA_REPTILE
 	ABILITY(CA_SCENT,6);
     Feats: FT_RUN, FT_POUNCE,
         SK_HIDE, SK_JUMP, SK_LISTEN, SK_SPOT, SK_WILDERNESS;
-    Flags: M_NATURAL, M_CARNI, M_HOSTILE;
+    Flags: M_NATURAL, M_CARNI, M_HOSTILE, M_NOHANDS;
     Desc: "A deinonychus is bright green along its back and flanks, with a
     much lighter shade of the same color on its underside. The body has
     darker spots or stripes. Its tail extends straight out behind itself,
@@ -4538,7 +4616,7 @@ Monster "deinonychus" : MA_REPTILE
     hunts with cunning tactics.";
   }
 
-Monster "megaraptor" : MA_REPTILE
+Monster "megaraptor" : MA_REPTILE, MA_DINOSAUR
   {
     Image: bright green 'R'; Size: SZ_LARGE; 
     CR: OPT_CR(8,6); HD: 8; Hit: 9; Def: 16; Mov: 200%; Spd: 140%;
@@ -4557,10 +4635,80 @@ Monster "megaraptor" : MA_REPTILE
 	ABILITY(CA_SCENT,6);
     Feats: FT_RUN, FT_POUNCE, FT_TOUGHNESS,
         SK_HIDE, SK_JUMP, SK_LISTEN, SK_SPOT, SK_WILDERNESS;
-    Flags: M_NATURAL, M_CARNI, M_HOSTILE;
+    Flags: M_NATURAL, M_CARNI, M_HOSTILE, M_NOHANDS;
     Desc: "This creature is a larger version of the deinonychus, standing
     about 12 feet tall with a total length of 24 feet. It has the same
     appearance, habits, and abilities of the smaller version.";
+  }
+
+Monster "cave ankylosaurus" : MA_REPTILE, MA_DINOSAUR
+  {
+    Image: grey 'R'; Size: SZ_LARGE; Arm: 18;
+    CR: 6; HD: 7; Hit: 7; Def: 10; Mov: 100%; Spd: 75%;
+    Str 21, Dex 6, Con 21, Int 1, Wis 12, Cha 6;
+    Attk:
+      A_TAIL for 3d6 AD_BLUNT,
+      A_BITE for 1d4 AD_BLUNT;
+    ABILITY(CA_INFRAVISION, 6);
+    Stati[EXTRA_FEAT,FT_TRAMPLE];
+    Feats: FT_ENDURANCE, FT_TOUGHNESS, FT_DEFT_OPPORTUNIST,
+           SK_LISTEN, SK_SPOT;
+    Flags: M_NATURAL, M_CARNI, M_NOHANDS, M_MOUNTABLE;
+    Desc: "The ankylosaurus is a huge, heavily armored dinosaur
+      with a vaguely turtle-shaped body, known best for the
+      bone club on its tail. They are irascable and just plain
+      mean beasts. This particular line of ankylosaurus has
+      been specially bred for underground existance, being
+      muchsmaller than its surface-dwelling relatives and able
+      to see clearly in pitch blackness.";
+  }
+  
+Monster "cave triceratops" : MA_REPTILE, MA_DINOSAUR
+  {
+    Image: brown 'R'; Size: SZ_LARGE; Arm: 10;
+    CR: 5; HD: 8; Hit: 7; Def: 12; Mov: 125%; Spd: 75%;
+    Str 19, Dex 9, Con 21, Int 1, Wis 12, Cha 6;
+    Attk:
+      A_GORE for 2d6 AD_PIERCE;
+    ABILITY(CA_INFRAVISION, 6);
+    Stati[EXTRA_FEAT,FT_TRAMPLE];
+    Feats: FT_POWER_ATTACK, FT_MASTER_BULL_RUSH,
+           FT_POWER_CHARGE,
+           SK_LISTEN, SK_SPOT;
+    Flags: M_NATURAL, M_HERBI, M_NOHANDS, M_MOUNTABLE,
+           M_CHARGE;
+    Desc: "Triceratops are herbivore dinosaurs, though they
+      are fiercely defensive, stupid and irascible. Triceratops
+      resemble elephants or rhinoceri, but have three large
+      horns on their face -- one on their nose and two on 
+      their forehead. Behind these horns is a circular bony
+      plate protecting the creature's neck. 
+      This particular line of triceratops has
+      been specially bred for underground existance, being
+      much smaller than its surface-dwelling relatives and able
+      to see clearly in pitch blackness.";
+  }
+
+Monster "cave tyrannosaurus" : MA_REPTILE, MA_DINOSAUR
+  {
+    Image: bright purple 'R'; Size: SZ_LARGE; Arm: 7;
+    CR: 5; HD: 8; Hit: 7; Def: 12; Mov: 135%; Spd: 100%;
+    Str 25, Dex 14, Con 17, Int 2, Wis 15, Cha 10;
+    Attk:
+      A_BITE for 2d6 AD_PIERCE,
+      A_CRIT for 0d0 AD_SWAL (DC 18);
+    ABILITY(CA_INFRAVISION, 6);
+    Feats: FT_RUN, FT_TRACK, FT_WEAPON_FOCUS_BITE,
+           SK_LISTEN, SK_SPOT, SK_WILD_LORE;
+    Flags: M_NATURAL, M_CARNI, M_NOHANDS, M_MOUNTABLE;
+    Desc: "The mighty tyrant lizard is often referred to as
+      the king of the dinosaurs. A skillful hunter and marginally
+      smarter than most other dinosaurs, the tyrannosaurus was
+      one of the fiercest carnivores of its era. 
+      This particular line of tyrant lizards has
+      been specially bred for underground existance, being
+      much smaller than its surface-dwelling relatives and able
+      to see clearly in pitch blackness.";
   }
 
 /*** WEIRD "ANIMALS" ***/
@@ -4579,7 +4727,7 @@ Monster "winter wolf" : MA_DOG
 	ABILITY(CA_SCENT,7);
     Immune: DF_COLD;
     Flags: M_CARNI, M_MOUNTABLE, M_NATURAL, M_NOHANDS,
-    M_MOUNTABLE, M_COLD;
+    M_MOUNTABLE, M_COLD, M_GROUP;
     Feats: SK_HIDE, SK_MOVE_SIL, SK_SPOT, SK_LISTEN, SK_WILD_LORE,
       FT_ALERTNESS, FT_DODGE, FT_MOBILITY, FT_SWARM;
     Desc: "These primal beings represent the embodyment of winter's
@@ -4603,7 +4751,7 @@ Monster "worg" : MA_DOG
           A_SEEM for $"wolf";
 	  ABILITY(CA_SCENT,6);
     Flags: M_CARNI, M_MOUNTABLE, M_EVIL, M_IALIGN, M_NOHANDS,
-      M_NOLIMBS;
+      M_NOLIMBS, M_GROUP;
     Feats: SK_HIDE, SK_MOVE_SIL, SK_SPOT, SK_LISTEN, SK_WILD_LORE,
       FT_ALERTNESS, FT_SWARM;
     Desc: "The belief that worgs are an offshoot of wolves is hotly
@@ -4618,6 +4766,51 @@ Monster "worg" : MA_DOG
       return NOTHING;
       };
   }
+  
+Monster "senmurv" : MA_DOG, MA_BEAST, MA_AVIAN
+  {
+    Image: red 'd'; Size: SZ_LARGE; 
+    CR: 3; HD: 3; Hit: 3; Def: 12; Mov: 200%; Spd: 100%;
+    Str 17, Dex 15, Con 15, Int 6, Wis 14, Cha 10;
+    Attk: A_BITE for 1d6 AD_PIERCE
+                 and AD_TRIP (DC 13),
+          A_CLAW for 1d6 AD_SLASH,
+          A_CLAW for 1d6 AD_SLASH,
+          A_BREA for 3d6 AD_SUNL;
+	  ABILITY(CA_SCENT,6);
+	  ABILITY(CA_SMITE,3);
+    Flags: M_CARNI, M_MOUNTABLE, M_GOOD, M_IALIGN, M_NOHANDS,
+           M_GROUP, M_FLYER;
+    Feats: SK_APPRAISE, SK_HIDE, SK_MOVE_SIL, SK_SPOT, SK_LISTEN, 
+           SK_WILD_LORE,
+           FT_MULTIATTACK, FT_REND;
+    Spells: $"detect evil";
+    Desc: "The senmurv are a race of bipedal, winged anthropomorphic
+      wolves. Fierce champions of the cause of good, their rich fur
+      cascades through every color in the rainbow and their wings
+      resemble those of a hawk, albiet with their distinctive rainbow
+      plumage. Senmurv are reclusive sylvan creatures, dwelling in
+      peaceful tribes with no hierarchy or status. Rarely, they will
+      deign to serve as a mount for righteous elves or halflings, though
+      this is always a relationship of equals -- the senmurv never
+      accept subserviance.";
+    On Event EV_TURN {
+      int16 c;
+      switch(1d6)
+        {
+          case 1: c = PINK; break;
+          case 2: c = YELLOW; break;
+          case 3: c = MAGENTA; break;
+          case 4: c = AZURE; break;
+          case 5: c = SKYBLUE; break;
+          case 6: c = EMERALD; break;
+        }
+      if ((EActor->Image & 0x00FF) == 'f')
+        EActor->Image = 'f' + c*256;
+      return NOTHING;
+      };
+  }
+
 
 /*** CONVENTIONAL MOUNTS ***/
 
@@ -4630,7 +4823,7 @@ Monster "horse" : MA_QUADRUPED, MA_ANIMAL
   	ABILITY(CA_SCENT,6);
     Feats: SK_LISTEN, SK_SPOT, SK_JUMP;
     Flags: M_NATURAL, M_HERBI, M_NOHANDS,
-           M_MOUNTABLE, M_PLAINS;
+           M_MOUNTABLE, M_PLAINS, M_GROUP;
     /* Only warhorses fight when mounted */
     On Event EV_NATTACK {
       if (EActor->mID == $"horse")
@@ -4852,7 +5045,8 @@ Monster "mastiff" : MA_DOG, MA_ANIMAL
   Attk: A_BITE for 1d6 AD_PIERCE;
         ABILITY(CA_SCENT,3);
   Feats: FT_SWARM, SK_LISTEN, SK_SPOT, SK_JUMP;
-  Flags: M_NOHANDS, M_ANIMAL, M_CARNI, M_MOUNTABLE, M_PLAINS, M_NATURAL;
+  Flags: M_NOHANDS, M_ANIMAL, M_CARNI, M_MOUNTABLE, M_PLAINS, M_NATURAL,
+         M_GROUP;
   Desc: "This vicious hunting dog may once have been the companion
           of a ranger or druid, but now it seems to have gone feral and
           recognizes no master other then its own hunger and survival
@@ -4891,7 +5085,6 @@ Monster "giant badger" : MA_ANIMAL
       fetid odor. The pelts have considerable value as furs, and the hairs
       are used in the manufacture of shaving and other types of brushes."; 
   }
-
 
 Monster "elephant" : MA_QUADRUPED, MA_ANIMAL
   {
@@ -5069,7 +5262,7 @@ Monster "plague of monkeys" : MA_SWARM, MA_ANIMAL, MA_HOMINID
   Resists: DF_SLASH, DF_PIERCE; 
   Flags: M_SWARM, M_NO_SIZE_HP, M_NO_CORPSE, M_CARNI, M_HERBI, M_NOPOLY, 
          M_AMORPH, M_HIDE_UNDER, M_FOREST, 
-         M_ANIMAL, M_NOHANDS, M_NOLIMBS, M_HOSTILE; 
+         M_ANIMAL, M_NOHANDS, M_NOLIMBS, M_HOSTILE, M_GROUP; 
   On Event PRE(EV_DAMAGE) {
     if (e.DType == AD_SPE1) { 
       if (!EVictim->isDead())
@@ -5155,7 +5348,7 @@ Monster "plague of stirges" : MA_SWARM, MA_BAT, MA_ANIMAL
   ability to drain the blood of its victims."; 
 } 
 
-Template "swarm" : TM_ATTR for 0
+Template "swarm" : TM_NATURE for 0
   { Image: bright green 'S';
     CR: +6 (Max 7); 
     // bonebat: -2 -> 3
@@ -5163,8 +5356,8 @@ Template "swarm" : TM_ATTR for 0
     // fire toad: 6 -> 7
     // frost slug: 0 -> 7
     // quasit: 2 -> 6
-    Size: =SZ_MINISCULE; 
-    HD: +100%; 
+    Size: =SZ_HUGE; 
+    HD: +200% (min 10); 
     MType: MA_SWARM;
     Flags: TMF_OBVIOUS, TMF_POSTSCRIPT,
       M_SWARM, M_HOSTILE, M_NO_SIZE_HP, M_NO_CORPSE, M_CARNI, M_NOPOLY,
@@ -5195,7 +5388,7 @@ Template "swarm" : TM_ATTR for 0
 
 /*** ANIMAL TEMPLATES ***/
 
-Template "corrupted" : TM_SKILL for MA_ANIMAL
+Template "corrupted" : TM_NATURE for MA_ANIMAL
   { CR: OPT_CR(+3,+3); Wis +6 (min 14), Int +6 (min 10), Con +2; 
     Hit: +4; HD: +4; 
     MType: MA_ABERRATION;
@@ -5211,8 +5404,8 @@ Template "corrupted" : TM_SKILL for MA_ANIMAL
       return NOTHING;
       },
     EV_ISTARGET {
-      if (enFreaky() & 10 != 3)
-        return -1;
+      //if (enFreaky() & 10 != 3)
+      //  return -1;
       return 0;
       };
     

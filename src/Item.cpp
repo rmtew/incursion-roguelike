@@ -1537,13 +1537,14 @@ EvReturn Item::Damage(EventInfo &e)
     
     /* Animated Object Crash Prevention */
     for (i=0;backRefs[i];i++)
-      if (oThing(backRefs[i])->HasStati(TRANSFORMED,-1,this))
-        {
-          Flags |= F_DELETE;
-          oThing(backRefs[i])->RemoveStati(TRANSFORMED);
-          Flags &= ~F_DELETE;
-          break;
-        }
+      if (isValidHandle(backRefs[i]))
+        if (oThing(backRefs[i])->HasStati(TRANSFORMED,-1,this))
+          {
+            Flags |= F_DELETE;
+            oThing(backRefs[i])->RemoveStati(TRANSFORMED);
+            Flags &= ~F_DELETE;
+            break;
+          }
     Remove(true);
   } 
 

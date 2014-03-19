@@ -16,7 +16,7 @@ inline int16 random(int16 mx);
 inline const int16 dist(uint16 x1, uint16 y1, uint16 x2, uint16 y2);
 inline Dir DirTo(int16 sx, int16 sy, int16 tx, int16 ty);
 uint16 ResAlign(rID xID);
-bool AlignConflict(uint16, uint16);
+bool AlignConflict(uint16 al1, uint16 al2, bool strict=false);
 bool godAllowsAlign(rID gID, uint16 align);
 bool isLegalPersonTo(Creature *Actor, Creature *Victim);
 int16 getChivalryBreech(EventInfo &e);
@@ -28,6 +28,8 @@ int16 getGodRelation(rID fromID, rID toID, bool * doWrath);
 bool isExploreMode(Player *p);
 extern const char* OptChoice(const char *text, int16 num);
 void PurgeStrings();
+
+void EncAddMon(rID mID, rID tID=0, rID tID2=0, rID tID3=0);
 
 EvReturn Throw(int16 Ev, Object *p1=NULL, Object *p2=NULL, 
                Object*p3=NULL, Object *p4=NULL);
@@ -91,8 +93,6 @@ extern String & DescribeSkill(int16 sk);
 extern String & DescribeFeat(int16 ft);
 
 bool isSimilarDir(Dir d, Dir d2);
-
-extern int32 enFreakFactor;
 
 extern int16 Silence;
 extern int16 __spentHours;

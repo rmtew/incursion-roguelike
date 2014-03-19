@@ -814,9 +814,9 @@ SkipShifting:
         if (mtarg->hMana > 30 || mtarg->isPlayer())
           {
             int16 manaCost, buffCount, sl;
-            /*static slots[] = { SL_AMULET, SL_LRING, SL_RRING,
+            /*static int16 slots[] = { SL_AMULET, SL_LRING, SL_RRING,
                               SL_BRACERS, SL_READY, SL_WEAPON,
-                              SL_CLOAK, SL_GAUNTLETS, SL_HELM };*/ 
+                              SL_CLOAK, SL_GAUNTLETS, SL_HELM }; */ 
             sl = random(9);
             mtarg->getBuffInfo(&buffCount,&manaCost,NULL);
             if (buffCount && manaCost > 150 && !random(2))
@@ -921,7 +921,7 @@ SkipShifting:
               int16 manaCost, buffCount, sl;
               /*static slots[] = { SL_AMULET, SL_LRING, SL_RRING,
                                 SL_BRACERS, SL_READY, SL_WEAPON,
-                                SL_CLOAK, SL_GAUNTLETS, SL_HELM };*/ 
+                                SL_CLOAK, SL_GAUNTLETS, SL_HELM }; */
               sl = random(9);
               rtarg->getBuffInfo(&buffCount,&manaCost,NULL);
               if (buffCount && manaCost > 150 && !random(2))
@@ -1022,7 +1022,7 @@ NothingToDo:
     int trialsLeft = j + 1; 
     
     while (1) { 
-
+      PurgeStrings();
       j = aCandidates[curCandidate]; 
       /*
       IPrint(Format("%d = Act[%d = aCandidates[%d]] (%d).",
@@ -1394,24 +1394,22 @@ void Monster::Initialize(bool in_play)
   {
     Player *p; int16 i; 
 
-    if ((!m) || (Flags & F_DELETE))
-      return;
-
     if (HasFeat(FT_IMPROVED_INITIATIVE))  // why not? 
       FFCount = 0;
     else 
       FFCount = 20;
     
-    CustomAlign();
     if (isMType(MA_SAPIENT) && !random(20) &&
-          !HasMFlag(M_HOSTILE) && !isMType(MA_DEMON))
+          !HasMFlag(M_HOSTILE) && !isMType(MA_DEMON) &&
+          !getLeader())
       StateFlags |= MS_PEACEFUL;
     
     CalcValues();
     CalcHP();
+    cHP = mHP+Attr[A_THP];
+     
     if ((!m) || (Flags & F_DELETE))
       return;
-    cHP = mHP+Attr[A_THP]; 
     
     // RemoveStati(TARGET);
     /* Every monster gets assigned the player as a target from day one.

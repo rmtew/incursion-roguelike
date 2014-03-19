@@ -205,7 +205,7 @@ struct MVal
         default:
           Error("MVal::Adjust -- illegal BType!");
         } 
-       return nval;                                
+      return nval;                                
     }
   };
 
@@ -585,8 +585,8 @@ class Registry
       { ASSERT((!h) || (h > 0 && h < 128) || (!Get(h)) || Get(h)->Type == T_MAP);
         return (Map*)Get(h); }                  
     
-    int16 SaveGroup(Term &t, hObj hGroup,bool newFile=false);
-    int16 LoadGroup(Term &t, hObj hGroup);
+    int16 SaveGroup(Term &t, hObj hGroup, bool use_lz, bool newFile=false);
+    int16 LoadGroup(Term &t, hObj hGroup, bool use_lz);
 
   };
 

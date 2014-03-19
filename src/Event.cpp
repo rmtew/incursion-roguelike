@@ -150,7 +150,7 @@ EvReturn ThrowEvent(EventInfo &e)
     if (res == NOMSG)
       e.Terse = true;
 
-  }
+    }
   else if (e.eID && e.Event && (e.Event != EV_EFFECT)) {
     res = RES(e.eID)->Event(e,e.eID);
     if (res == ERROR) {
@@ -162,7 +162,7 @@ EvReturn ThrowEvent(EventInfo &e)
       return res;
     if (res == NOMSG)
       e.Terse = true;
-  }
+    }
 
   /* Let the gods evaluate the EActor's conduct*/
   if (e.EActor && e.EActor->isCharacter())
@@ -209,9 +209,30 @@ EvReturn ThrowEvent(EventInfo &e)
             e.Terse = true;
         }
     }    
+    
+  if (e.EMap)
+    switch(ThrowTo(e,e.EMap))
+      {
+        case NOMSG:
+          e.Terse = true;
+          //fall through;
+        case NOTHING:
+          break;
+        case ABORT:
+          return ABORT;
+        case DONE:
+          return DONE;
+        case ERROR:
+          Error(Format("Event %s::%s routine returned ERROR!",
+                e.p[i].o ? (const char*) e.p[i].o->Name(0) : "(null)",
+                Lookup(EV_CONSTNAMES,e.Event%500)));
+          return ABORT;
+      }
+    
   for(i=3;i!=-1;i--) {
     if(e.p[i].o) {
-      StatiIterNature(e.p[i].t, TRAP_EVENT)
+      Thing *t = e.p[i].t;
+      StatiIterNature(t, TRAP_EVENT)
         oEv = e.Event;
         e.Event = (i == 1) ? META(EVICTIM(e.Event)) : META(e.Event);
         if (META(S->Mag) == e.Event) {
@@ -224,7 +245,7 @@ EvReturn ThrowEvent(EventInfo &e)
             e.Terse = true;
         }
         e.Event = oEv;
-      StatiIterEnd(e.p[i].t)
+      StatiIterEnd(t)
 
       switch(ThrowTo(e,e.p[i].o))
         {
@@ -268,6 +289,7 @@ EvReturn ThrowTo(EventInfo&e, Object*t)
 							e.Terse = true;                                 \
      				i=T_BASE;                                         \
 					 goto Again;
+					HIER(Map,T_MAP,0)
   				HIER(Thing,T_THING,0)
 	  			HIER(Creature,T_CREATURE,T_THING)
 		  		HIER(Character,T_CHARACTER,T_CREATURE)

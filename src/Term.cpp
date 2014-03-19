@@ -44,6 +44,14 @@
      void TextTerm::Title()
      void TextTerm::DisplayLegend()
      void TextTerm::DisplayKnownItems();
+   File Compression
+     CFile(Term *t);
+     ~CFile();
+     void FRead(void*,size_t sz);
+     void FWrite(const void*,size_t sz);
+     void Seek(int32,int8);
+     void CommitCompressed(int16 offset, const char *fn);
+     void LoadCompressed(int16 offset, const char *fn);
 
 */
 
@@ -775,7 +783,7 @@ void Map::Update(int16 x,int16 y)
     CVis = p->Percieves(t);
     if (t->isMonster())
       if (!(((Creature*)t)->StateFlags & MS_SCRUTINIZED))
-        if (CVis & (~PER_SHADOW))
+        if (CVis & (~(PER_SHADOW|PER_DETECT|PER_SCENT)))
           p->ScrutinizeMon((Creature*)t);
     
     if (!CVis) continue;
@@ -3157,4 +3165,123 @@ void TextTerm::DisplayKnownItems()
     while(1);
   }    
 
+/*****************************************************************************\
+*                                  TEXTTERM                                  *
+*                              Compressed Files                              *
+\*****************************************************************************/
 
+#define CFILE_DELTA (1024*1024)
+
+#define bytes ((char*)data)
+
+#include "rle.h"
+#include "lz.h"
+
+
+CFile::CFile(Term *_t)
+  {
+    t = _t;
+    pos = 0;
+    size = 0;
+    alloc = CFILE_DELTA;
+    data = malloc(alloc);
+  }
+  
+CFile::~CFile()
+  {
+    if (data)
+      free(data);
+  }
+
+void CFile::FWrite(const void *vp,size_t sz)
+  {
+    if (pos + sz > alloc)
+      {
+      
+        alloc = (((pos+sz-1)/CFILE_DELTA)+1) * CFILE_DELTA;
+        data = realloc(data,alloc);
+      }
+    memcpy(&bytes[pos], vp, sz);
+    size = max(size,pos+sz);
+    pos += sz;
+  }
+  
+void CFile::FRead(void *vp,size_t sz)
+  {
+    memset(vp,0,sz);
+    memcpy(vp,&bytes[pos],min(sz,size - pos));
+    pos = min(size,pos+sz);
+  }
+
+void CFile::Seek(int32 val, int8 typ)
+  {
+    switch (typ)
+      {
+        case SEEK_SET: pos = val; break;
+        case SEEK_CUR: pos += val; break;
+        case SEEK_END: pos = size - val; break;
+      }
+    if (pos > alloc)
+      {
+      
+        alloc = (((pos-1)/CFILE_DELTA)+1) * CFILE_DELTA;
+        realloc(data,alloc);
+      }
+    size = max(pos,size);
+  }
+      
+int32 CFile::CommitCompressed(int16 offset, bool use_lz)
+  {
+    void *comped, *temp; int32 csize;
+    
+    comped = malloc(size + (size/20) + 1L);
+    ASSERT(comped);
+    if (use_lz) {
+      temp = malloc(sizeof(int)*(size+65536));
+      csize = LZ_CompressFast((unsigned char*)data,
+                   (unsigned char*)comped,
+                   size,
+                   (unsigned int*)temp);
+      free(temp);
+      }
+    else {
+      csize = RLE_Compress((unsigned char*)data,
+                           (unsigned char*)comped,
+                           size);
+      }
+    
+    
+    t->FWrite(comped,csize);
+    free(comped);
+    return csize;
+  }
+
+void CFile::LoadCompressed(int16 offset, int32 csz, int32 sz, bool use_lz)
+  {
+    void *comped; 
+    
+    t->Seek(offset,SEEK_SET);
+    comped = malloc(csz);
+    t->FRead(comped,csz);
+    
+    alloc = (((sz-1)/CFILE_DELTA)+1) * CFILE_DELTA;
+    if (data)
+      data = realloc(data,alloc);
+    else
+      data = malloc(alloc);
+    memset(data,0,alloc);
+      
+    if (use_lz) {
+      LZ_Uncompress((unsigned char*)comped,
+                    (unsigned char*)data,
+                    csz);
+      }
+    else {
+      RLE_Uncompress((unsigned char*)comped,
+                     (unsigned char*)data,
+                     csz);
+      }
+    free(comped);
+    size = sz;
+    pos = 0;
+  }

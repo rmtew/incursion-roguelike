@@ -392,7 +392,7 @@ PRIVATE void print_tree(int i)
 /*----------------------------------------------------------------------------*/
 
 #if STATISTICS
-PRIVATE int print_statistics()
+PRIVATE void print_statistics()
 /*
  * print values of statistics counters
  */

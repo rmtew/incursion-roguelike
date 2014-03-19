@@ -24,18 +24,19 @@
 
 //#ifdef DEBUG
 extern String & EventName(int16 Ev);
-#define VERIFY(h,ty,str)                                              \
+#define VERIFY(h,ty,funcname)                                         \
   if (ty != T_EVENTINFO && ty != T_TERM)                              \
     if (!oObject(h) || !(oObject(h)->isType(ty))) {                   \
       Error(Format("Invalid object referance (%s) calling %s in "     \
-        "script routine $\"%s\"::%s.", oObject(h) ?                   \
-        "object type mismatch" : "NULL object referance",             \
-        str, xID ? NAME(xID) : "<NULL>",                              \
-        pe ? EventName(pe->Event) : "???"));                          \
+        "script routine $\"%s\"::%s.",                                \
+        oObject(h) ? "object type mismatch" : "NULL object referance",\
+        funcname,                                                     \
+        xID ? ((const char*)NAME(xID)) : "<NULL>",                    \
+        pe ? ((const char *)EventName(pe->Event)) : "???"));                          \
       return;                                                         \
       }
-#undef VERIFY
-#define VERIFY(h,ty,str) ;
+//#undef VERIFY
+//#define VERIFY(h,ty,str) ;
 #define MEMORY(a)       (*getMemorySafe(a))
 #define STACK(a)        (*getStackSafe(Regs[63] - a))
 #define VSTACK(a)       (*getStackSafe(max(0,Regs[63]-(a))))
@@ -82,13 +83,20 @@ inline void SetEItem(EventInfo &e, Item *it)
 inline void SetEItem2(EventInfo &e, Item *it)
   { e.EItem2 = it; }
 
+inline bool isResType(rID xID, int16 rt)
+  { return (xID > 0x01000000) ? 
+           (RES(xID)->isType(rt)) : false; }
+
 inline void PrintRect(Rect r)
   { T1->Message(Format("Rect: x1 %d, y1 %d, x2 %d, y2 %d.",
                          r.x1, r.y1, r.x2, r.y2)); }
 inline int16 PoisonDC(rID xID)
   { return TEFF(xID)->ef.sval; }
-inline int32 enFreaky()
-  { return enFreakFactor; }
+//inline int32 enFreaky()
+//  { return enFreakFactor; }
+  
+inline bool mID_isMType(rID mID, uint32 mt)
+  { return TMON(mID)->isMType(mID,mt); }
   
 inline void SetPVal(EventInfo &e, int16 b, int16 n=0, int16 s=0)
   { if (e.EMagic) {
@@ -163,11 +171,11 @@ inline bool WithinRect(Rect r, int16 x, int16 y)
 inline void ClearCandidates()
   { memset(Candidates,0,sizeof(hObj)*2048); nCandidates = 0; }
 
-//#ifdef WIN32
-//#include "..\lib\dispatch.h"
-//#else
+#ifdef WIN32
 #include "dispatch.h"
-//#endif
+#else
+#include "dispatch.h"
+#endif
 
 #undef ItemWeight
 #undef rnd
@@ -372,28 +380,29 @@ int32 VMachine::Execute(EventInfo *e, rID _xID, hCode CP)
     // it was when we came in. 
     int32 incoming_reg_63 = REGS(63); 
     
-    switch (theGame->Opt(OPT_NO_SCRIPTS))
-      {
-        case 0:
-          break;
-        case 1:
-          return NOTHING;
-        case 2:
-          if (theGame->GetPlayer(0)) {
-            if (e->EActor == theGame->GetPlayer(0))
-              break;
-            if (e->EVictim == theGame->GetPlayer(0))
-              break;
-            }
-          return NOTHING;
-      }
+    if (theGame->InPlay())
+      switch (theGame->Opt(OPT_NO_SCRIPTS))
+        {
+          case 0:
+            break;
+          case 1:
+            return NOTHING;
+          case 2:
+            if (theGame->GetPlayer(0)) {
+              if (e->EActor == theGame->GetPlayer(0))
+                break;
+              if (e->EVictim == theGame->GetPlayer(0))
+                break;
+              }
+            return NOTHING;
+        }
               
             
     
     #ifdef DEBUG
     /* We're doing this so when a script causes an access violation, we
        can quickly discover WHAT script did it. */
-    if (e->Event != EV_ISTARGET) {
+    if (e->Event != EV_ISTARGET && e->Event != EV_CRITERIA) {
       strcpy(CurrentRoutine,NAME(_xID));
       strcat(CurrentRoutine,"::");
       strcat(CurrentRoutine,EventName(e->Event));
@@ -461,7 +470,7 @@ int32 VMachine::Execute(EventInfo *e, rID _xID, hCode CP)
           case CMLT: REGS(0) = (Value1(vc) < Value2(vc)); break;
           case CMLE: REGS(0) = (Value1(vc) <= Value2(vc)); break;
           case CMGE: REGS(0) = (Value1(vc) >= Value2(vc)); break;
-          case CMEM: CallMemberFunc(Value2(vc),Value1(vc),0); break;
+          case CMEM: CallMemberFunc(Value2(vc),Value1(vc),0); xID = _xID; break;
           case GVAR: GetMemberVar(Value2(vc),Value1(vc),0); break;
           case SVAR: SetMemberVar(Value2(vc),Value1(vc),REGS(0)); break;
           case NOT: REGS(0) = !Value1(vc);          break;

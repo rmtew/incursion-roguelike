@@ -291,25 +291,33 @@ void Thing::PlaceNear(int16 x,int16 y)
             sz = thisc->GetAttr(A_SIZ); }
       }
 
+    bool isRetry = false;
+    
+    TryAgain:
 
-
-    for (r=0;r<=(isPlayer() ? 40 : 17);r++) {
+    for (r=0;r<=(isPlayer() ? 40 : 6);r++) {
       c = 0;
       for (tx=(x-r);tx<=(x+r);tx++)
         for (ty=(y-r);ty<=(y+r);ty++)
           if (abs(x-tx)==r || abs(y-ty)==r)
             {
+              PurgeStrings();
               if (!m->InBounds(tx,ty))
                 continue;
               if (m->SolidAt(tx,ty))
                   continue;
-              if (m->FallAt(tx,ty))
+              if (m->FallAt(tx,ty) && !(isCreature() && thisc->isAerial()))
                 continue;
-              if (TTER(m->TerrainAt(tx,ty))->HasFlag(TF_WARN))
+              if (TTER(m->TerrainAt(tx,ty))->HasFlag(TF_WARN)  && 
+                  ((!isCreature()) ||
+                  TTER(m->TerrainAt(tx,ty))->PEvent(EV_MON_CONSIDER,this,
+                  m->TerrainAt(tx,ty)) == ABORT))
                 continue;
               if (m->FCreatureAt(tx,ty))
                 if (m->FCreatureAt(tx,ty) != this)
-                  continue;
+                  if (!isRetry || m->FCreatureAt(tx,ty)->GetAttr(A_SIZ) > SZ_LARGE ||
+                        isBig)
+                    continue;
               if (isBig) {
                 dc = 0;
                 for (ix = tx - FaceRadius[sz]; ix <= tx + FaceRadius[sz]; ix++)
@@ -364,6 +372,11 @@ void Thing::PlaceNear(int16 x,int16 y)
             goto FoundGoodPlace;
           } 
       }
+      
+    if (!isRetry)
+      { 
+        isRetry = true; 
+        goto TryAgain; }
       
     /* So we've finished the loop and have not found any good
        place to put ourselves. */
@@ -801,6 +814,8 @@ void Thing::Move(int16 newx,int16 newy, bool is_walk)
 	{
 		int16 ox,oy,i; Thing *th; Creature *mount;
 		ox=x; oy=y; 
+    Map *M = m;
+
     if (!m)
       return;
       
@@ -815,43 +830,48 @@ void Thing::Move(int16 newx,int16 newy, bool is_walk)
     if (x == -1 || HasStati(MOUNT))
       goto AddToList;
 
-    if (m->At(x,y).hasField || m->At(newx,newy).hasField || !is_walk)
+
+    if (M->At(x,y).hasField || M->At(newx,newy).hasField || !is_walk)
       {
-        for(i=0;m->Fields[i];i++)
-          if (m->Fields[i]->Creator == myHandle || (mount && 
-                m->Fields[i]->Creator == mount->myHandle))
-            if (m->Fields[i]->FType & FI_MOBILE)
+        for(i=0;M->Fields[i];i++)
+          if (M->Fields[i]->Creator == myHandle || (mount && 
+                M->Fields[i]->Creator == mount->myHandle))
+            if (M->Fields[i]->FType & FI_MOBILE)
               {
-                if (m->MoveField(m->Fields[i],newx,newy,is_walk) == ABORT)
+                if (M->MoveField(M->Fields[i],newx,newy,is_walk) == ABORT)
                   return;
               }
-        for(i=0;m->Fields[i];i++)
+        for(i=0;M->Fields[i];i++)
           {
-            if (m->Fields[i]->FType && FI_MOBILE)
-              if (m->Fields[i]->Creator == myHandle)
+            if (M->Fields[i]->FType && FI_MOBILE)
+              if (M->Fields[i]->Creator == myHandle)
                 continue;
-            if (m->Fields[i] && m->Fields[i]->inArea(x,y) && !m->Fields[i]->inArea(newx,newy))
+            if (M->Fields[i] && M->Fields[i]->inArea(x,y) && !M->Fields[i]->inArea(newx,newy))
               {
-                ThrowField(EV_FIELDOFF,m->Fields[i],this);
-                if (mount && m->Fields[i])
-                  ThrowField(EV_FIELDOFF,m->Fields[i],mount);
+                ThrowField(EV_FIELDOFF,M->Fields[i],this);
+                if (mount && M->Fields[i])
+                  ThrowField(EV_FIELDOFF,M->Fields[i],mount);
               }
-            if (m->Fields[i] && (!m->Fields[i]->inArea(x,y)) && m->Fields[i]->inArea(newx,newy))
+            if (M->Fields[i] && (!M->Fields[i]->inArea(x,y)) && M->Fields[i]->inArea(newx,newy))
               {
-                ThrowField(EV_FIELDON,m->Fields[i],this);
-                if (mount && m->Fields[i])
-                  ThrowField(EV_FIELDON,m->Fields[i],mount);
+                ThrowField(EV_FIELDON,M->Fields[i],this);
+                if (mount && M->Fields[i])
+                  ThrowField(EV_FIELDON,M->Fields[i],mount);
               }
           }
       }
 
+    /* If moving a field caused our death, don't put us back on the map! */
+    if (isDead() || !m)
+      goto DoneContentsAdd;
+
 		x=newx; y=newy;
     /* Remove this Thing from the old Contents list */
-    if (m->At(ox,oy).Contents == myHandle)
-      m->At(ox,oy).Contents = Next;
+    if (M->At(ox,oy).Contents == myHandle)
+      M->At(ox,oy).Contents = Next;
     else
       {
-        th = oThing(m->At(ox,oy).Contents);
+        th = oThing(M->At(ox,oy).Contents);
         while(th && th->Next != myHandle) {
           if (!th->Next)
             Fatal("Contents list wierdless in Thing::Move!");
@@ -863,26 +883,26 @@ void Thing::Move(int16 newx,int16 newy, bool is_walk)
     /* ... and add it to the new one. */
     AddToList:
 		x=newx; y=newy;
-    if (m->At(x,y).Contents)
-      if (oThing(m->At(x,y).Contents)->isCreature())
+    if (M->At(x,y).Contents)
+      if (oThing(M->At(x,y).Contents)->isCreature())
         {
-          Next = oThing(m->At(x,y).Contents)->Next;
-          oThing(m->At(x,y).Contents)->Next = myHandle;
+          Next = oThing(M->At(x,y).Contents)->Next;
+          oThing(M->At(x,y).Contents)->Next = myHandle;
           goto DoneContentsAdd;
         }
-    Next = m->At(x,y).Contents;
-    m->At(x,y).Contents = myHandle;
+    Next = M->At(x,y).Contents;
+    M->At(x,y).Contents = myHandle;
     DoneContentsAdd:
 
     if (mount) {
-      mount->m = m;
+      mount->m = M;
       mount->x = x;
       mount->y = y;
       }
 
     if (theGame->InPlay()) {
-      m->Update(ox,oy);
-		  m->Update(x,y);
+      M->Update(ox,oy);
+		  M->Update(x,y);
       }
 
   /* When we move, any engulfed creatures move with us. */
@@ -890,7 +910,7 @@ void Thing::Move(int16 newx,int16 newy, bool is_walk)
     {
       StatiIterNature(this,ENGULFER)
         Thing *t = oThing(S->h);
-        t->m = m;
+        t->m = M;
         t->x = x;
         t->y = y;
       StatiIterEnd(this)

@@ -200,9 +200,9 @@ God "Aiswin"
       Stati[SKILL_BONUS,SK_BLUFF,+5] at 6th level,
       Ability[CA_FEED_UPON_PAIN,+1] at 7th level,
       Stati[EXTRA_FEAT,FT_BACKSTAB] at 8th level,
-      Stati[CA_INNATE_SPELL,$"Pain Touch"] at 8th level,
-      Stati[CA_INNATE_SPELL,$"Shadow Step"] at 9th level,
-      Stati[CA_INNATE_SPELL,$"Ring of Blades"] at 9th level;
+      Ability[CA_INNATE_SPELL,$"Pain Touch"] at 8th level,
+      Ability[CA_INNATE_SPELL,$"Shadow Step"] at 9th level,
+      Ability[CA_INNATE_SPELL,$"Ring of Blades"] at 9th level;
     On Event EV_GIVE_AID {
       hObj hEnemy;
       if (e.EParam == AID_SMITE)
@@ -665,7 +665,8 @@ God "Asherath"
         return NOTHING;
       if (EVictim->isCreature())
         if (EActor->getGod() == $"Asherath")
-          if (EVictim->ChallengeRating() >= EActor->ChallengeRating())
+          /* HACKFIX */
+          if (EVictim->ChallengeRating(true) > EActor->ChallengeRating(true))
             {
               EActor->IPrint("You feel challenged.");
               EActor->gainFavor($"Asherath",30*EVictim->ChallengeRating(),true,true);
@@ -1664,6 +1665,9 @@ God "Essiah"
       Stati[ADJUST_SAC,A_CHA,+1] at every 2nd level starting at 3rd,
       Stati[ADJUST_SAC,A_WIS,+1] at every 2nd level starting at 3rd,
       Stati[IMMUNITY,AD_PLYS] at 4th level,
+      Stati[IMMUNITY,AD_STUK] at 4th level,
+      Stati[IMMUNITY,AD_SLOW] at 4th level,
+      Stati[IMMUNITY,AD_STON] at 4th level,
       Ability[CA_INNATE_SPELL,$"Dream"] at 5th level,
       Stati[EXTRA_FEAT,FT_SOULBLADE] at 6th level,
       Ability[CA_INNATE_SPELL,$"Lifesight"] at 7th level,
@@ -1687,7 +1691,7 @@ God "Essiah"
       if (!EActor->HasEffStati(EFF_FLAG1,$"Essiah Dream"))
         return NOTHING;
       EActor->RemoveEffStati($"Essiah Dream");
-      if (EActor->getGodAnger($"Essiah") > 5)
+      if (EActor->getGodAnger($"Essiah"))
         {
           EActor->IPrint("In your dreams, you relive all the suffering
             you have wrongfully brought to others!");
@@ -2320,11 +2324,11 @@ God "Immotian"
           #endif
           ,
       * SACRIFICE_LIST
-          (-T_BOOK)          10
-          (-T_BOOK)          10
-          (-T_BOOK)          10
-          (-T_WAND)          10
-          (-T_WAND)          10
+          (-T_BOOK)          20
+          (-T_BOOK)          20
+          (-T_BOOK)          20
+          (-T_WAND)          20
+          (-T_WAND)          20
           MA_CHOICE1         10
           MA_CHOICE1         10
           MA_HAS_BLOOD       SAC_ABOMINATION,
@@ -2456,9 +2460,9 @@ God "Immotian"
         }        
       e.vDuration = 30 + EActor->Mod(A_CHA)*5;
       EActor->GodMessage($"Immotian", MSG_CUSTOM3);
-      EMap->GenEncounter(EN_CREATOR|EN_SUMMON|EN_MAXIMIZE|EN_SINGLE|
-        EN_MTYPE, enCR, EMap->Depth,
-        MA_FIRE+(MA_ELEMENTAL*256), 0, NULL_ID, EActor->x, EActor->y, EActor);
+      
+      EMap->thEnGenSummXY($"fire creatures", EN_CREATOR|EN_SUMMON|EN_SINGLE, 
+        enCR, AL_NONEVIL, EActor, EActor->x, EActor->y);      
       return DONE;
       },
     EV_ANGER_PULSE
@@ -2730,7 +2734,7 @@ God "Khasrach"
       surrender or are overtaken with fear on the battlefield. Khasrach
       accepts that orcs and goblinoids war among themselves, so does not
       become angered when her followers kill the rank and file of such.
-      However, she demands that priests loyal to her not kill orcs who
+      However, she demands that priests loyal to her not kill non-hostile orcs who
       have attained an exceptional level of prowess, as a deferance to
       racial unity.\n
       __Khasrach will not accept elves, dwarves or human mages as followers,
@@ -2893,7 +2897,7 @@ God "Khasrach"
       Ability[CA_INNATE_SPELL, $"Primal Scream"] at 5th,
       Ability[CA_INNATE_SPELL, $"Detect Monsters"] at 6th,
       Stati[EXTRA_FEAT,FT_DIEHARD] at 7th level,
-      Stati[EXTRA_FEAT,FT_IMPROVED_CRIT] at 7th level,
+      Feat[FT_IMPROVED_CRIT] at 5th level,
       Ability[CA_INNATE_SPELL, $"Shadow Monsters"] at 8th,
       Ability[CA_INNATE_SPELL, $"Venom of Khasrach"] at 9th;
     On Event EV_GIVE_AID {
@@ -2967,6 +2971,7 @@ God "Khasrach"
             hOrc->IdentifyTemp(tID);
             }  
           hOrc->PlaceAt(EMap,EActor->x,EActor->y);
+          hOrc->Initialize();
           if (e.Event == EV_GODPULSE) {
             hOrc->GainPermStati(BONUS_PHD,NULL,SS_MISC);
             hOrc->MakeCompanion(EActor,PHD_FREEBIE);
@@ -2985,7 +2990,7 @@ God "Khasrach"
       EActor->GodMessage($"Khasrach", MSG_CUSTOM1);
       EActor->IPrint("You are cast down!");
       EActor->MoveDepth(min(10,EMap->Depth + 1 + 
-        (EActor->getGodAnger($"Khasrach") - 8) / 5), true);
+        (EActor->getGodAnger($"Khasrach") - 3) / 5), true);
       return DONE;
       },      
     EV_SACRIFICE {
@@ -3013,6 +3018,7 @@ God "Khasrach"
       if (!EVictim->isDead())
         return NOTHING;
       if (EVictim->isMType(MA_ORC) && EVictim->isMType(MA_SAPIENT) &&
+          EVictim->HasStati(WAS_FRIENDLY,-1,EActor) &&
            (!EVictim->isMType(MA_CONSTRUCT)) && EVictim->ChallengeRating() >= 2) {
         EActor->Transgress($"Khasrach",1,false,"killing a skillful orc");
         return NOTHING;
@@ -3434,7 +3440,7 @@ God "Kysul"
     GODWATCH(EV_ENTER) {
       if (EActor->getGod() != $"Kysul")
         return NOTHING;
-      if (EActor->getGodAnger($"Kysul") <= 4)
+      if (EActor->getGodAnger($"Kysul"))
         return NOTHING;
       /* Let the PC reach the ecutemp on dlevel 2 to try and make up
          with an offended Kysul */
@@ -3452,7 +3458,7 @@ God "Kysul"
       int16 tx, ty;
       if (EActor->getGod() != $"Kysul")
         return NOTHING;
-      if (EActor->getGodAnger($"Kysul") <= 4)
+      if (EActor->getGodAnger($"Kysul") == 0)
         return NOTHING;
       tx = EActor->x + DirX(e.EDir);
       ty = EActor->y + DirY(e.EDir);
@@ -3769,11 +3775,12 @@ God "Mara"
                 case 9:  hComp->AddTemplate($"mage;template"); break;
                 case 10: hComp->AddTemplate($"priest;template"); break;
               }
+          hComp->Initialize();
+          hComp->RemoveStati(ALIGNMENT);
           hComp->GainPermStati(ALIGNMENT,NULL,SS_MISC,AL_LAWFUL|AL_GOOD);
           hComp->StateFlags |= MS_KNOWN;
           hComp->PlaceAt(EMap,EActor->x,EActor->y);
-          hComp->MakeCompanion(hComp,PHD_FREEBIE);
-          hComp->Initialize();
+          hComp->MakeCompanion(EActor,PHD_FREEBIE);
           EActor->GodMessage($"Mara",1d2==1 ? MSG_CUSTOM2 : MSG_CUSTOM3);
         }
       return DONE;
@@ -3838,8 +3845,11 @@ God "Mara"
         return NOTHING;
       if (!EVictim->isMType(MA_SAPIENT))
         return NOTHING;
-      if (!EItem->HasEffStati(CORPSE_FLAG,$"Mara"))
-        e.EParam = MA_CHOICE2;
+      if (EItem->HasEffStati(CORPSE_FLAG,$"Mara"))
+        {
+          e.EParam = MA_CHOICE2;
+          return NOTHING;
+        }
       e.EParam = MA_CHOICE1;
       return NOTHING;
       },
@@ -4101,8 +4111,8 @@ God "Maeve"
       * SACRIFICE_LIST
           MA_ELF              SAC_ANGRY
           MA_DROW             10
+          MA_DROW             10
           MA_CHOICE1          10
-          MA_CHOICE2          5
           MA_CHOICE2          5
           MA_CHOICE2          5
           MA_CHOICE2          5 
@@ -4212,12 +4222,13 @@ God "Maeve"
             EActor->IDPrint("Your <hObj> vanishes.",
                             "The <hObj2>'s <hObj> vanishes.",
                             h, EActor);
+            h->Remove(true);
             return DONE;
           case 2:
             EActor->GodMessage($"Maeve",MSG_CUSTOM2);
-            EMap->GenEncounter(EN_MULTIPLE|EN_HOSTILE|EN_MTYPE,
-              EActor->ChallengeRating()+2, EMap->Depth,MA_BEAST,0,
-              NULL_ID,EActor->x,EActor->y, NULL_OBJ);
+            EMap->thEnGenSummXY($"mass summons", EN_HOSTILE|EN_SUMMON|EN_SINGLE, 
+              EActor->ChallengeRating()+2, AL_NONGOOD|AL_NONLAWFUL, EActor, 
+              EActor->x, EActor->y);      
             return DONE;
           case 3:
             EActor->GodMessage($"Maeve",MSG_CUSTOM3);
@@ -4240,10 +4251,10 @@ God "Maeve"
             return first ? DONE : NOTHING;
           case 5:
             first = false;
-            for (h=EActor->FirstInv();h;EActor->NextInv()) {
+            for (h=EActor->FirstInv();h;h=EActor->NextInv()) {
               if (h->isMagic() && (!h->isCursed()) && (h->GetInherantPlus() != 0) &&
                     (h->GetInherantPlus() < 5)) {
-                if (h->ItemLevel() <= (3 + EActor->getGodLevel($"Maeve") +
+                if (h->ItemLevel() <= (3 + EActor->getGodLevel($"Maeve")*2 +
                                           EActor->Mod(A_CHA)))
                   {
                     if (!first) {
@@ -4252,9 +4263,6 @@ God "Maeve"
                       }
                     EActor->IPrint("Your <hObj> glows with a silvery light!", h);
                     h->SetInherantPlus(h->GetInherantPlus()+1);
-                    /* Needed to prevent infinite looping -- possibly some
-                       nested calls to FirstInv()? */
-                    return DONE;
                   }
                 }
               }
@@ -4367,18 +4375,25 @@ God "Maeve"
           EVictim->isMType(MA_ELF) ||
           EVictim->isMType(MA_DROW))
         return NOTHING;
-      e.vMag = 25 * (EVictim->GetAttr(A_CHA) - 12)
+      e.vMag = 50 * (EVictim->GetAttr(A_CHA) - 12)
                  * (EVictim->GetAttr(A_CHA) - 12);
-      if (GetHandle(EItem) == NULL_OBJ)
+      if (e.DType > 0 || EVictim->isDead())
         e.vMag *= 3;
-      return MA_CHOICE2;
+      e.EParam = MA_CHOICE2;
+      return NOTHING;
       };
   }
 
 Effect "Maeve's Whimsy" : EA_POLYMORPH
   { Flags: EF_PERSISTANT;
     On Event EV_MAGIC_HIT {
-      e.rval = theGame->GetMonID(PUR_POLY, -4, 6, 1, MA_NLIVING);
+      do {
+        e.rval = theGame->GetMonID(PUR_POLY, -4, 6, 1, MA_NLIVING);
+        }
+      while
+        (ResourceHasFlag(e.rval,M_NOHANDS) ||
+         (!ResourceHasFlag(e.rval,M_HUMANOID)) ||
+         ResourceHasFlag(e.rval,M_BLIND));
       return NOTHING;
       };
     Desc: "A fit of whimsy of the part of Maeve, the Queen of the
@@ -4768,8 +4783,8 @@ Effect "Lightning Bolt;of Sabine" : EA_BLAST
     xval: AD_ELEC; pval: (LEVEL)d6; Purpose: EP_ATTACK;
     aval: AR_BEAM; qval: Q_DIR | Q_TAR; cval: YELLOW; lval: 15; 
     On Event PRE(EV_EFFECT) {
-      e.vCasterLev = EActor->getGodLevel($"Sabine") * 2;
-      if (EActor->getGodAnger($"Sabine") > 3)
+      e.vCasterLev = EActor->getGodLevel($"Sabine") * 3;
+      if (EActor->getGodAnger($"Sabine"))
         {
           EActor->IPrint("Nothing happens.");
           return DONE;
@@ -4777,7 +4792,7 @@ Effect "Lightning Bolt;of Sabine" : EA_BLAST
       return NOTHING;
       },
     EV_CALC_EFFECT {
-      e.vCasterLev = EActor->getGodLevel($"Sabine") * 2;
+      e.vCasterLev = EActor->getGodLevel($"Sabine") * 3;
       SetPVal(e,0,e.vCasterLev,6);
       return NOTHING;
       };
@@ -5024,20 +5039,24 @@ God "Semirath"
       for (hMon=EMap->FirstThing();hMon;hMon=EMap->NextThing())
         if (hMon->isCreature() && EActor->DistFrom(hMon) <= 12)
           if (hMon->isHostileTo(EActor) && EMap->LineOfFire(
-                 hMon->x, hMon->y, EActor->x, EActor->y, hMon))
+                 hMon->x, hMon->y, EActor->x, EActor->y, hMon) &&
+              hMon->isMType(MA_SAPIENT) && hMon->HasMFlag(M_HUMANOID) &&
+              !hMon->isMType(MA_GOOD))
             {
               if (!found)
                 {
                   found = true;
                   EActor->GodMessage($"Semirath",MSG_CUSTOM1);
                 }
+              SetSilence();
               hMon->GainPermStati(PRONE,NULL,SS_MISC);
               hMon->GainTempStati(STUNNED,NULL,3d6,SS_MISC);
+              UnsetSilence();
               hMon->IDPrint("You collapse in a fit of uncontrollable laughter!",
                             "The <hObj> collapses in a fit of uncontrollable 
                             laughter!", hMon);
             }
-      return DONE;
+      return found ? DONE : NOTHING;
       },
     EV_ANGER_PULSE {
       hObj hItem; int16 x, y, n, i;
@@ -5672,9 +5691,10 @@ God "Xel"
       Ability[CA_INNATE_SPELL,$"Hallow"] at 2nd level,
       Ability[CA_INNATE_SPELL,$"Hold Person"] at 3rd level,
       Ability[CA_INNATE_SPELL,$"Vampiric Touch"] at 4th level,
-      Stati[EXTRA_FEAT,FT_IMPROVED_CRIT] at 5th level,
+      Feat[FT_IMPROVED_CRIT] at 5th level,
       Stati[NEUTRAL_TO,MA_PLANT] at 6th level,
-      Ability[CA_INNATE_SPELL,$"Verdant Aid"] at 7th level,
+      /* HACKFIX -- was verdant aid */
+      Ability[CA_INNATE_SPELL,$"Spike Growth"] at 7th level,
       Ability[CA_INNATE_SPELL,$"Burning Blood"] at 8th level,
       Ability[CA_INNATE_SPELL,$"Earthmaw"] at 9th level;
     On Event EV_RETRIBUTION, EV_ANGER_PULSE {
@@ -5950,9 +5970,9 @@ God "Zurvash"
       },
     EV_RETRIBUTION {
       hObj hBeast; int16 i;
-      EMap->GenEncounter(EN_HOSTILE|EN_MULTIPLE|EN_MAXIMIZE|EN_MTYPE,
-        EActor->ChallengeRating() + 2, EMap->Depth, (MA_BEAST+(MA_NLIVING*256)), 
-        0, NULL_ID, EActor->x, EActor->y, EActor);
+      EMap->thEnGenMTypeXY($"mass summons", (MA_BEAST+(MA_NLIVING*256)),
+        EN_HOSTILE|EN_MULTIPLE, EActor->ChallengeRating()+2, AL_NONGOOD, 
+        EActor->x, EActor->y);      
       for (i=0;hBeast=EMap->GetEncounterCreature(i);i++)
         hBeast->AddTemplate($"fiendish");
       EActor->GodMessage($"Zurvash",MSG_CUSTOM1);
@@ -6065,9 +6085,7 @@ AI_SYMBOL Effect "The Multitude;symbol" : EA_GENERIC
 God "The Multitude"
   {
     Desc: "<15>Gods of Darkness, Blood, Cruelty, Power, Atrocity, Murder, etc.<11>\n
-      __Evil. Animal, Chaos, Death, Domination, Hatred, Luck,
-      Magic, Mysticism, Night, Pain, Passion, Retribution, Strength,
-      Trickery, and War.<2>\n
+      __Evil, and 8 random Domains.<2>\n
       __The Multitude, also called the Demon Ghost Horde or the Thousand
       Voices, is not a single diety but a vast congregation of evil spirits
       once human -- incorporeal undead -- that have been imbued with the
@@ -6107,9 +6125,9 @@ God "The Multitude"
       and appreuciate the sacrifice of good, friendly creatures who are
       significantly weaker then the worshipper.\n
       __Every demon ghost grants the Evil domain and two other domains.
-      The two additional domains are chosen from a list of five domains
+      The two additional domains are chosen from a list of eight domains
       that are sacred to that demon ghost (and are, effectively, drawn at
-      random from complete list of possible Multitude domains shown above).\n
+      random from the complete list of domains).\n
       __<10>Worship:<2> The spirits of the Multitude will accept as
       sacrifices the corpse of any creature killed specifically to be a
       sacrifice -- in other words, a creature that was once friendly -- or
@@ -6119,8 +6137,14 @@ God "The Multitude"
       power. This can be difficult to achieve, since incorporeal undead
       do not leave corpses. They can be sacrificed by being killed while 
       standing directly on an altar, however.\n
-      __Good acts anger the Multitude, while evil acts please them. Other
-      than this, there is no specific conduct a worshipper must abide by.\n
+      __Good acts anger the Multitude, while evil acts please them. They
+      expect their cultists to not use magical healing, since the same
+      channeling of positive energy which heals living creatures injures
+      the demon ghosts through the sympathetic link between worshipper
+      and diety. Cultists may use magical healing on creatures other
+      than themselves, and may benefit from psionic or natural healing,
+      or vampiric effects such as <9>vampiric touch<2> or regenerative
+      effects such as a <9>ring of regeneration<2>.\n
       __<10>Blessings:<2> The demon ghosts offer several forms of aid to
       anyone who so much as pledges himself to them: healing, purifying
       the body and smiting enemies. More loyal followers can also gain
@@ -6273,17 +6297,19 @@ God "The Multitude"
         }       
       e.vDuration = 30 + EActor->Mod(A_CHA)*5;
       EActor->GodMessage($"The Multitude", MSG_CUSTOM3);
-      EMap->GenEncounter(EN_CREATOR|EN_SUMMON|EN_MAXIMIZE|EN_MULTIPLE|
-        EN_MTYPE, enCR, EMap->Depth,
-        MA_DEMON, 0, NULL_ID, EActor->x, EActor->y, EActor);
+
+      EMap->thEnGenMTypeSummXY($"mass summons", MA_DEMON, EN_SUMMON|EN_MULTIPLE, 
+         EActor->ChallengeRating()+2, AL_NONGOOD|AL_NONLAWFUL, EActor, 
+         EActor->x, EActor->y);      
+
       return DONE;
       },
     EV_ANGER_PULSE {
       e.vDuration = 200;
       EActor->GodMessage($"The Multitude", MSG_CUSTOM4);
-      EMap->GenEncounter(EN_CREATOR|EN_SUMMON|EN_MAXIMIZE|EN_MULTIPLE|
-        EN_HOSTILE|EN_MTYPE, EActor->ChallengeRating() + 1, EMap->Depth,
-        MA_DEMON, 0, NULL_ID, EActor->x, EActor->y, EActor);
+      EMap->thEnGenMTypeXY($"mass summons", MA_DEMON, EN_SUMMON|EN_MULTIPLE|EN_HOSTILE, 
+         EActor->ChallengeRating()+2, AL_NONGOOD|AL_NONLAWFUL, 
+         EActor->x, EActor->y);      
       return DONE;
       },      
     EV_BLESSING {
@@ -6334,7 +6360,21 @@ God "The Multitude"
           return DONE;
         }
       return NOTHING;
-      };
+      },
+    GODWATCH(POST(EVICTIM(EV_EFFECT))) {
+      if (EVictim->getGod() == $"The Multitude")
+        if (e.eID == $"cure light wounds" ||
+            e.eID == $"cure moderate wounds" ||
+            e.eID == $"cure serious wounds" ||
+            e.eID == $"cure critical wounds" ||
+            e.eID == $"heal;spell" ||
+            e.eID == $"healing" ||
+            e.eID == $"extra-healing" ||
+            e.eID == $"true-healing")
+          EActor->Transgress($"The Multitude",2,false,
+            "using positive energy");
+      return NOTHING;
+      }; 
   }
   
 Effect "Demonic Resilience" : EA_GENERIC 

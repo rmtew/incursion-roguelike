@@ -481,6 +481,7 @@ DoCleave:
           (e.EActor->HasFeat(FT_CLEAVE) && !CleaveCount))) {
       e.isCleave = true;
       e.Died     = false;
+      e.isHit    = false;
       CleaveList[CleaveCount++] = e.EVictim;
       // ww: this is supposed to be your "threatened area" (from the
       // textual description), so if you cleave with a halberd you should
@@ -551,7 +552,9 @@ SkipThisTarget:;
         }
 
     if (e.EActor->HasFeat(FT_EXPERT_TACTICIAN) && !isDead() &&
-        (e.isSurprise || e.EVictim->noDexDefense())) { 
+        (e.isSurprise || e.EVictim->noDexDefense())
+        && !e.EActor->HasStati(TRIED,FT_EXPERT_TACTICIAN,e.EVictim)) { 
+        e.EActor->GainTempStati(TRIED,e.EVictim,1,SS_MISC,FT_EXPERT_TACTICIAN);
       // attack takes no time
     } else  if (isTWF) {
       Timeout += 
@@ -947,9 +950,9 @@ SkipAttack:
   o.ShowGlyphs();
   o.DeActivate();
 
-  if (e.EItem2 && /* e.isHit && */
+  if (e.EItem2 && 
       (e.EItem2->HasQuality(WQ_RETURNING) ||
-       TITEM(e.EItem2->iID)->HasFlag(WT_RETURNING))) {
+       (TITEM(e.EItem2->iID)->HasFlag(WT_RETURNING) && e.isHit))) {
     e.EItem2->Remove(false);
     e.EActor->IPrint(Format("%s returns to you.",(const char*)e.EItem2->Name(NA_THE)));     
     if (oldSlot != -1) {
@@ -965,13 +968,18 @@ SkipAttack:
   } else { 
     e.EItem2->Image = g; 
     e.EItem2->PlaceAt(orig_map,lx/2,ly/2); 
+    if (e.EItem2->m != orig_map)
+      goto MissileDestroyed;
     e.EItem2->PlaceNear(lx/2,ly/2); 
     e.EItem2->SetImage();
     e.EItem2 = e.EItem2->TryStack(e.EItem2->m,e.EItem2->x,e.EItem2->y);
   }
 
+  MissileDestroyed:
   if (e.EActor->HasFeat(FT_EXPERT_TACTICIAN) && e.EVictim && 
-      (e.isSurprise || e.EVictim->noDexDefense())) { 
+      (e.isSurprise || e.EVictim->noDexDefense()) && 
+      !e.EActor->HasStati(TRIED,FT_EXPERT_TACTICIAN,e.EVictim)) { 
+      e.EActor->GainTempStati(TRIED,e.EVictim,1,SS_MISC,FT_EXPERT_TACTICIAN);
     // attack takes no time
   } else if (e.EItem)
     Timeout += 3000 / 
@@ -1179,7 +1187,9 @@ EvReturn Creature::NAttack(EventInfo &e) /* this == EActor */
     e.vCrit   = 2;
     EvReturn res = ReThrow(EV_STRIKE, e);
     if (e.EActor->HasFeat(FT_EXPERT_TACTICIAN) && 
-        (e.isSurprise || e.EVictim->noDexDefense())) { 
+        (e.isSurprise || e.EVictim->noDexDefense()) 
+        && !e.EActor->HasStati(TRIED,FT_EXPERT_TACTICIAN,e.EVictim)) { 
+        e.EActor->GainTempStati(TRIED,e.EVictim,1,SS_MISC,FT_EXPERT_TACTICIAN);
       // attack takes no time
     } else Timeout += 2000 / max((100 + Attr[A_SPD_BRAWL]*5),10);
     /* Touch Attacks are quicker */
@@ -1369,7 +1379,9 @@ DoneSequence:
     return ABORT;
   }
   if (e.EActor->HasFeat(FT_EXPERT_TACTICIAN) && 
-      (e.isSurprise || e.EVictim->noDexDefense())) { 
+      (e.isSurprise || e.EVictim->noDexDefense())
+      && !e.EActor->HasStati(TRIED,FT_EXPERT_TACTICIAN,e.EVictim)) { 
+    e.EActor->GainTempStati(TRIED,e.EVictim,1,SS_MISC,FT_EXPERT_TACTICIAN);
     // takes no time
   } else Timeout += 3000 / max((100 + Attr[A_SPD_BRAWL]*5),10);
 
@@ -1411,6 +1423,8 @@ EvReturn Creature::SAttack(EventInfo &e) /* this == EActor */
         ta = tt->GetNewAttk(e.AType);
     StatiIterEnd(this)
     }
+  if (!ta) 
+    ta = TMON(tmID)->GetAttk(e.AType);
     
     
   if (!m->InBounds(x,y) ||
@@ -1585,7 +1599,7 @@ EvReturn Creature::SAttack(EventInfo &e) /* this == EActor */
        break; 
       case A_ROAR: 
       case A_GEST:
-        ASSERT(ta);
+        //ASSERT(ta);
         if (!ta)
           return ABORT;
         Reveal(true);
@@ -1757,13 +1771,18 @@ EvReturn Creature::SAttack(EventInfo &e) /* this == EActor */
         }
         else
         {
-          m->GenEncounter(EN_MTYPE|EN_SUMMON,
-              ta->u.a.DC,m->Depth,ta->DType,0,0,x,y,this);
-
+          XTHROW(EV_ENGEN,e,
+            xe.enFlags = EN_SUMMON;
+            xe.enID = FIND("gated outsiders");
+            xe.EXVal = x;
+            xe.EYVal = y;
+            xe.enCR = ta->u.a.DC;
+            xe.enDepth = m->Depth;
+            xe.vDuration = 300;
+            );
         }
         Timeout += /*HasFeat(FT_RAPID_GATE) ? 30 : */ 50;
         return DONE;
-
     case A_AURA: 
       {
         if (!ta) return ABORT; 
@@ -2204,6 +2223,7 @@ EvReturn Creature::SAttack(EventInfo &e) /* this == EActor */
                 SkipRepeat:;
               StatiIterEnd(this)
             }
+          int n; n=0;
           for (i=0;Grapplers[i];i++)
             {
               e.EVictim = Grapplers[i];
@@ -2219,15 +2239,14 @@ EvReturn Creature::SAttack(EventInfo &e) /* this == EActor */
                     to run at least one square away before the next
                     attempt. */
                   e.EVictim->Timeout += 15;
-                  i--;
                 }
               else
                 e.Resist = true;
               ReThrow(EV_ATTACKMSG,e);
-              if (e.Resist) {
+              if (e.Resist) 
                 e.EActor->Timeout += 30;
-                break;
-                }
+              if (n++ > 250)
+                Error("Infinite grapple check loop error!");
             } 
         }
         /* Shouldn't successfully breaking out of a grapple take time?
@@ -3037,6 +3056,7 @@ EvReturn Creature::PreStrike(EventInfo &e) /* this == EActor */
     e.strXDmg = "";
     e.xDmg = 0;
     e.vRideCheck = 0;
+    e.isHit = false;
     e.isBypass = false;
     e.Absorb = false;
     e.isFlanking = false;
@@ -4344,8 +4364,8 @@ EvReturn Creature::Strike(EventInfo &e) /* this == EActor */
         goto PostAttack;
       }
 
-  
-    e.EMap->SetQueue(QUEUE_DAMAGE_MSG);
+    Map *mp; mp = e.EMap;
+    mp->SetQueue(QUEUE_DAMAGE_MSG);
 
     if(e.isHit) {
       ReThrow(EV_HIT,e);
@@ -4377,7 +4397,8 @@ EvReturn Creature::Strike(EventInfo &e) /* this == EActor */
     }
     else
       ReThrow(EV_MISS,e);
-    e.EMap->UnsetQueue(QUEUE_DAMAGE_MSG);
+    
+    mp->UnsetQueue(QUEUE_DAMAGE_MSG);
 
     PostAttack:
 
@@ -5226,8 +5247,22 @@ AfterEffects:
     if (e.EActor->HasFeat(FT_DIRTY_FIGHTING) && e.AType != A_FIRE &&
         e.EVictim->isMType(MA_LIVING) && (e.EActor->GetAttr(A_WIS) >
           e.EVictim->GetAttr(A_WIS)) && !e.EVictim->isDead()) {
+      if (e.EActor->isPlayer()) {
+        switch (e.EPActor->Opt(OPT_DIRTY_FIGHTING))
+          {
+            case 0:
+              goto SkipDirty;
+            case 2:
+              if (e.EPActor->desiredAlign & AL_LAWFUL)
+                goto SkipDirty;
+             break;
+          }
+        }
+      else if (e.EActor->getAlignment() & AL_LAWFUL)
+        goto SkipDirty;
       if (e.EVictim->HasStati(TRIED,FT_DIRTY_FIGHTING,e.EActor))
         goto SkipDirty;
+      
       e.EVictim->GainTempStati(TRIED,e.EActor,Dice::Roll(3,6),SS_MISC,
                                 FT_DIRTY_FIGHTING,0,0,0);
       Dice dfDmg; 
@@ -6056,7 +6091,8 @@ Absorbed:
                 pl->AddJournalEntry(Format("You are <12>gravely wounded by %s<7>!", (const char*)e.EActor->Name(NA_A)));
               else
                 pl->AddJournalEntry(Format("You are <12>gravely wounded<7>!"));
-              e.EVictim->GainPermStati(CRIT_WOUNDED_BY,e.EActor,SS_MISC);
+              if (!(e.isTrap || e.isActOfGod))
+                e.EVictim->GainPermStati(CRIT_WOUNDED_BY,e.EActor,SS_MISC);
             } 
 
           if (HasStati(PARALYSIS))
@@ -6073,7 +6109,7 @@ Absorbed:
           
           if ((e.DType == AD_SLASH || e.DType == AD_PIERCE ||
               e.DType == AD_BLUNT) && HasStati(LEVITATION) && !isDead())
-            ThrowDmg(EV_DAMAGE,AD_KNOC,e.vDmg / (mHP/20),
+            ThrowDmg(EV_DAMAGE,AD_KNOC,e.vDmg / max(1,mHP/20),
               "aerial damage knockback", e.EActor, e.EVictim, e.EItem, e.EItem2);
              
               
@@ -7115,8 +7151,8 @@ EvReturn Creature::Death(EventInfo &e)
   if (HasStati(AFRAID) && e.EActor && e.EActor != e.EVictim && e.EActor->isMType(MA_EVIL))
     e.EActor->Exercise(A_CHA,random(4)+1,ECHA_KILLFEAR,35);
     
-  if (e.EActor->HasSkill(SK_INTIMIDATE) && e.EActor->SkillLevel(SK_INTIMIDATE) >= 10
-        && ((!e.EActor->isPlayer()) || (e.EPActor->Opt(OPT_DEMORALIZE))))
+  if (e.EActor && e.EActor->HasSkill(SK_INTIMIDATE) && e.EActor->SkillLevel(SK_INTIMIDATE) >= 10
+        && ((!e.EActor->isPlayer()) || (e.EPActor->Opt(OPT_DEMORALIZE))) && e.EActor->m)
     if (e.isCrit || e.EActor->HasFeat(FT_IMPROVED_DEMORALIZE))
       {
         Creature *cr; int16 pen, bonus;
@@ -7151,11 +7187,13 @@ EvReturn Creature::Death(EventInfo &e)
                               NULL,"Seeing the <EActor> kill the <Obj>, the <EVictim> "
                               "looks shaken!", e.EVictim);
                   }
-                                 
+                /* Crash bug paranoia */
+                if (!e.EActor->m)
+                  break;                
               }
       }
   
-  if (e.EActor->HasFeat(FT_BATTLEFIELD_INSPIRATION))
+  if (e.EActor && e.EActor->HasFeat(FT_BATTLEFIELD_INSPIRATION))
     if (e.EVictim->ChallengeRating() >= e.EActor->ChallengeRating())
       {
         int16 mod = 1 + e.EVictim->ChallengeRating() - 
@@ -7198,19 +7236,21 @@ EvReturn Creature::Death(EventInfo &e)
   {
     Feature *ft; EventInfo xe;
     for (ft=om->FFeatureAt(ox,oy);ft;ft=om->NFeatureAt(ox,oy))
-      if (ft->Flags & F_ALTAR && e.EActor->isCharacter())
-        {
-          xe.Clear();
-          xe.EActor = e.EActor;
-          xe.EVictim = e.EVictim;
-          xe.EItem = c;
-          xe.eID = ft->GetStatiEID(MY_GOD);
-          ReThrow(EV_SACRIFICE,xe);
-          break;
-        }
+      if (ft->Flags & F_ALTAR && e.EActor && e.EActor->isCharacter())
+        if (!(e.EVictim->HasStati(SUMMONED) || e.EVictim->HasStati(ILLUSION)))
+          {
+            xe.Clear();
+            xe.EActor = e.EActor;
+            xe.EVictim = e.EVictim;
+            xe.EItem = c;
+            xe.eID = ft->GetStatiEID(MY_GOD);
+            ReThrow(EV_SACRIFICE,xe);
+            break;
+          }
   }     
    
-  FocusCheck(e.EActor);  
+  if (e.EActor)
+    FocusCheck(e.EActor);  
   Remove(true);
   x = y = -1;  
   return DONE;

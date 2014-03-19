@@ -224,7 +224,7 @@ EvReturn Character::Insight(EventInfo &e)
     else 
       GodMessage(e.eID, MSG_NEUTRAL);*/
     
-    if (Anger[e.godNum] > tol)
+    if (Anger[e.godNum])
       setGodFlags(e.eID,GS_KNOWN_ANGER);
     
     rID aidChart[64]; int16 i; bool first;
@@ -370,6 +370,10 @@ EvReturn Character::Sacrifice(EventInfo &e)
     
     FoundCat:
     
+    if (e.EVictim && (e.EVictim->HasStati(SUMMONED) ||
+                      e.EVictim->HasStati(ILLUSION)))
+      goto Uninterested;
+    
     sacCat = -1;
     
     lowestVal = 100000000L;
@@ -410,7 +414,7 @@ EvReturn Character::Sacrifice(EventInfo &e)
     else if (e.EItem && e.EItem->isType(T_BOOK))
       sacVal = 100 + e.EItem->ItemLevel()*50;
     else if (e.EItem)
-      sacVal = e.EItem->getShopCost(NULL,NULL) / 10;
+      sacVal = e.EItem->getShopCost(NULL,NULL);
     else
       sacVal = 0;
       
@@ -424,11 +428,11 @@ EvReturn Character::Sacrifice(EventInfo &e)
     if (e.EVictim) {
       if (sacVal > SacVals[e.godNum][sacCat])
         isImpressed = true;
-      newVal = sacVal;
+      newVal = max(SacVals[e.godNum][sacCat],sacVal);
       }
     else {
-      newVal = SacVals[e.godNum][sacCat] + (sacVal / 10);
-      if (sacVal > WealthByLevel[TotalLevel() / 2] / 5)
+      newVal = SacVals[e.godNum][sacCat] + (sacVal / 3);
+      if (sacVal > WealthByLevel[TotalLevel() / 2] / 20)
         isImpressed = true;
       }
     
@@ -453,7 +457,7 @@ EvReturn Character::Sacrifice(EventInfo &e)
             return DONE;
           }
         */
-        Anger[e.godNum]--;
+        Anger[e.godNum] = max(0,Anger[e.godNum]-3);
         if (Anger[e.godNum] > 0)
           GodMessage(e.eID,MSG_LESSENED);
         else
@@ -461,7 +465,8 @@ EvReturn Character::Sacrifice(EventInfo &e)
         return DONE;
       }
     
-    SacVals[e.godNum][sacCat] = newVal;
+    SacVals[e.godNum][sacCat] = 
+      max(newVal,SacVals[e.godNum][sacCat]);
     
     if (isImpressed) {
       GodMessage(e.eID,MSG_IMPRESSED);
@@ -475,9 +480,9 @@ EvReturn Character::Sacrifice(EventInfo &e)
     gainedFavor(e.eID);
     
     if (isPlayer() && thisp->WizardMode) {
-      int32 Favor; rID Levs[12];
+      int32 Favor; rID Levs[15];
       Favor = calcFavor(e.eID);
-      TGOD(e.eID)->GetList(FAVOR_CHART,Levs,10);
+      TGOD(e.eID)->GetList(FAVOR_CHART,Levs,15);
       IPrint(Format("(sacVal %d, gained %d, favor %d, lev %d, next %d.)",
         sacVal, Favor - oldFavor, Favor, FavorLev[e.godNum], 
         Levs[FavorLev[e.godNum]]));
@@ -585,21 +590,30 @@ void Character::gainFavor(rID gID, int32 amt, bool advance, bool stack)
 void Character::gainedFavor(rID gID)
   {
     int16 lv, godNum; EvReturn r;
-    int32 fav; rID favorChart[11];
+    int32 fav; rID favorChart[15];
 
-    if (gID != GodID)
-      return;
+    /* HACKFIX */
+    //if (gID != GodID)
+    //  return;
+
+
 
     godNum = theGame->GodNum(gID);
     lv = FavorLev[godNum];
     fav = calcFavor(gID);
-    TGOD(gID)->GetList(FAVOR_CHART,favorChart,10);
+    TGOD(gID)->GetList(FAVOR_CHART,favorChart,15);
 
     if (lv >= 9)
       return;
 
     if (fav > favorChart[lv])
       {
+        SetSilence();
+        if (!isWorthyOf(gID,false)) {
+          UnsetSilence();
+          return;
+          }
+        UnsetSilence();
         FavorLev[godNum]++;
         PEVENT(EV_BLESSING,this,gID,e.EParam = FavorLev[godNum],r);
         if (r == ABORT)
@@ -1173,7 +1187,7 @@ EvReturn Character::Convert(EventInfo &e)
         return DONE;
       }
     
-    if (Anger[e.godNum])
+    if (getGodAnger(e.eID))
       {
         GodMessage(e.eID,MSG_ANGER);
         return DONE;
@@ -1358,7 +1372,8 @@ EvReturn Character::GodDeflect(EventInfo &e)
     if (!GodID)
       return NOTHING;
       
-    if (e.vDmg < (cHP - (mHP/5)))
+    if (e.vDmg < (cHP - (mHP/5)) &&
+        (!e.EItem || !e.EItem->HasQuality(WQ_VORPAL)))
       return NOTHING;
       
     e.godNum = theGame->GodNum(GodID);
@@ -1389,6 +1404,12 @@ EvReturn Character::GodDeflect(EventInfo &e)
              "You feel favored!<7>", "Some force deflected part of the force "
              "of that blow!");
     AddJournalEntry(XPrint("<Res> shielded you from a critical hit.", GodID));
+
+    if (e.EItem && e.EItem->HasQuality(WQ_VORPAL)) {
+      e.EVictim->IPrint("You feel strangely certain that <Obj> would "
+        "have decapitated you!", e.EItem);
+      e.EItem->MakeKnown(0xFF);
+      }
 
     /* Intervention Penalty */
     FavPenalty[e.godNum] += TGOD(GodID)->GetConst(INTERVENTION_COST);
@@ -1639,7 +1660,7 @@ void Character::Transgress(rID gID, int16 mag, bool doWrath, const char *reason)
         else if (mag && (gID == GodID))
           GodMessage(gID,MSG_UNEASY);
         }
-      if (mag && (gID == GodID))
+      if (mag && (gID == GodID) && Anger[theGame->GodNum(gID)])
         setGodFlags(gID,GS_KNOWN_ANGER);
       } 
     if (gID == GodID)
@@ -2267,35 +2288,4 @@ int16 Creature::getAlignment()
     return align;
   }
   
-void Creature::CustomAlign()
-  {
-    int16 align, i;
-    RemoveStati(ALIGNMENT);
-    
-    if (!isMType(MA_SAPIENT))
-      return;
-    if (HasMFlag(M_IALIGN))
-      return;
-    
-    if (isMType(MA_DRAGON) && random(3))
-      return;
-    else if (isMType(MA_GOBLINOID) && random(2))
-      return;
-    
-    align = 0;
-    if (HasMFlag(M_EVIL))
-      align |= (random(100) < 65) ? AL_EVIL :
-               (random(35) < 25) ? 0 : AL_GOOD;
-    else if (HasMFlag(M_GOOD))
-      align |= (random(100) < 65) ? AL_GOOD :
-               (random(35) < 25) ? 0 : AL_EVIL;
-    if (HasMFlag(M_LAWFUL))
-      align |= (random(100) < 65) ? AL_LAWFUL :
-               (random(35) < 25) ? 0 : AL_CHAOTIC;
-    else if (HasMFlag(M_CHAOTIC))
-      align |= (random(100) < 65) ? AL_CHAOTIC :
-               (random(35) < 25) ? 0 : AL_LAWFUL;
-    
-    GainPermStati(ALIGNMENT,NULL,SS_MISC,align);
-  }
     

@@ -52,6 +52,7 @@ class Magic
       EvReturn Telepathy(EventInfo &e);
       EvReturn Detect(EventInfo &e);
       EvReturn Reveal(EventInfo &e);
+      EvReturn Override(EventInfo &e);
 
       EvReturn Vision(EventInfo &e);
       EvReturn Dispel(EventInfo &e);

@@ -2,6 +2,95 @@
 
 /* 
 
+  ABILITIES AS RESOURCES:
+  * EA_OVERRIDE done
+  * Effects can have Ability/Stati lists very much
+    like classes, and can be evoked thereof with
+    GainAbilities -- these are just Annotations, so
+    it is very easy to add to the resource compiler
+  * Ability[] entries can be for resource abilities
+    as well as constant abilities, and GainAbility
+    can handle resource abilities -- easy to do.
+  * EV_LISTABIL to return the listed description of
+      an ability as it appears on the character sheet,
+      with flags for the default formats.
+  * Resource Abilities stored in a character as an
+      ABILITY stati, with the ability level in Val,
+      the Ability itself in eID, etc. Or later maybe
+      a specialized array that can grow as abilities
+      are gained, and lists the parts from different
+      classes for reversion purposes. This can co-exist
+      with the current ability scheme for now, but will
+      eventually replace it completely.
+  * EF_ACTIVATE for abilities that can be activated;
+      these then show up in the 'u' list.
+
+
+  Horizon Walker
+    Prereq: Worship Essiah, explored XX map squares,
+            Wild Lore +10, Know (Geo) +15
+    1  Increased Move
+    2  Animal Comp
+    3  Nature Sense
+    4  Ignore Terrain
+    5  Innate /Magic Mapping/
+
+    Fav Terrain (1/level, starting at 2)
+      Universal: +1 insight attk/dmg vs. terrain local monsters
+                      (except for underground, or only for light-
+                      averse ones and a few others)
+      Plains:
+        Vision Range Bonus
+        Increased Mount Speed/Endurance
+        Bonus Feat: /Mounted Combat/ or /Run/
+        +2 Archery to-hit?
+      Desert:
+        Dowsing (Detect Fountains/Water)
+        Endurance
+        Resist Fire
+      Jungle:
+        +4 vs. Poison
+        +4 Know (Nature)
+        +4 Hide
+        +4 Heal
+        Bonus Feat: Brachiation
+        Innate /Reduce/ (self only version)
+      Forest:
+        Innate /Tree Stride/
+        +4 Move Sil
+        +4 Listen
+        +4 Animal Emp.
+        +2 Animal Comp PHD levels
+        Identify Herbs / Herbalism bonus
+      Urban:
+        +4 Gather Inf
+        +4 Diplomacy
+        +4 Appraise
+      Mountains:
+        +4 Climb
+        Slow Fall
+        Innate /Rooting/
+      Underground:
+        +3 Infravision
+        +4 Mining
+        +4 Searching
+        Stonework Sense +1
+      Swamp:
+        +4 vs. Disease
+        /Resist Water/
+        /Purify Water/
+      Oceanic:
+        +4 Swim
+        /Water Breathing/
+      Arctic:
+        Cold Resist 8+[HW Lev x 2]
+        Never Slip on Ice
+        Resist Blinding (slow glare)
+        Innate /Chill Touch/
+
+
+      TT_SWAMP
+
   Death Master
 
   1st - 1 divine level, command undead, increased party HD, death domain powers
@@ -59,627 +148,24 @@
   hedonism/altered mindstate based and tie it to Essiah,
   so that it has more of an archetype behind it.  
 
-  Desc: "<15>HitDie:_<1>d8__<15>Mana:<1>_d12__<15>Skills:<1>_4_<15>Saves:<1>_fr<9>W<1>_<15>Defense:_<1>1/4\n
-      <15>+toHit: <1>Archery <9>50~<1>, Brawl <9>50~<1>, Melee <9>50~<1>, Thrown <9>50~<1>\n
-      <2>\n__[ Flavor Text ]
-
-          \n\n<10>CLASS REQUIREMENTS<2>\n
-          __The elementalist is a prestige class. It counts as a favored class
-          for all characters. When you attempt entry into the class, you must
-          choose one of the four classical elements (earth, air, fire or water)
-          to focus on. Once you have gained your first elementalist level, this
-          choice cannot be changed. In order to become an elementalist, you must 
-          have:\n
-          __*_<7>Spells<2> -- Eight levels of spells (for example, 1 3rd level and
-          two 2nd level) with the descriptor of your chosen element. Characters
-          who worship a god who grants the appropriate elemental domain (Immotian,
-          Ekliazeh, Sabine or Kysul), or who have a matching elemental affinity as
-          a racial ability, only need six levels of appropriate spells.\n
-          __*_<7>Skills Levels<2> -- Knowledge (Planes) +12.\n
-          __*_<7>Mentorship<2> -- You must have an intelligent creature of at least
-          CR 3 in your party that has the appropriate elemental subtype.\n
-          __*_<7>Feats<2> -- Empower Spell, Heighten Spell.\n
-                
-          \n\n<10>CLASS SKILLS<2>\n
-          __The class skills of the elementalist are Concentration, Decipher Script, 
-          Knowledge (all), Metamagic, Spellcraft and Use Magic. Additionally, you
-          gain some additional class skills based on your chosen element: Earth --
-          Craft, Mining and Wilderness Lore; Air -- Jump, Listen and Tumble; Fire --
-          Athletics and Craft, and Water -- Alchemy, Escape Artist and Swim.\n 
-          
-          \n\n<10>CLASS FEATURES<2>\n
-          __*_<7>Proficiencies<2> -- Elementalists gain no new proficiencies.\n
-          __*_<7>Spellcasting<2> -- Elementalists gain access to all wizard,
-          priest and druid spells with their chosen elemental descriptor, at a
-          rate of one spell level per elementalist level. They also continue to
-          advance the spell access of whatever other spellcasting class they
-          have; if they have more than one, one is chosen to advance in this
-          order of priority: druid, mage, priest, ranger or bard. Elementalists
-          can cast their newly accessable spells with the same rules the class
-          whose spell access is still advancing has. In other words, priest-
-          elementalists need holy symbols to use their elemental spells, but
-          can cast in heavy armor; druid elementalists cannot cast elemental
-          spells in metal armor, etc. The one exception is mage/elementalists,
-          who do not need spellbooks for their elemental spells.\n
-          __Elementalists gain a new caster level at every elementalist level
-          except 1st and 5th.\n
-          __*_<7>Elemental Specialist<2> -- An elementalist gains the same benefits
-          as a specialist mage when using spells with her elemental descriptor
-          -- a +25~ chance of spell success, correspondingly reduced mana cost
-          and so forth. These benefits stack with existing specialist benefits
-          for a mage-elementalist. Spells without the elemental descriptor are
-          unaltered by this ability.\n
-          __The elementalist also increases her effective caster level when
-          using these spells by +2 at 1st and 5th levels. At 6th level, the
-          DC of all spells with the appropriate descriptor increases by +2,
-          just as with the School Focus feat, but for the element instead of
-          a school.\n
-          __There is a penalty to this power. When casting spells that do
-          not have her chosen elemental descriptor, the spell inflicts only
-          75~ of the damage, or has 75~ of its normal numerical magnitude.
-          A mage-elementalist also loses the special advantage associated with
-          her previous school specialization, such as a necromancer's increased
-          ability to control undead, a weaver's controlled teleports or an 
-          evoker's increased fatigue.\n
-          __*_<7>Elemental Summons<2> -- When using a Summon Nature's Ally,
-          Monster Summoning or Holy Summoning spell, elementalists always
-          call creatures with the appropriate elemental subtype. This applies
-          to all such spells effective at the 1st elementalist level.\n
-          __Further, any animal companion or sacred mount you summon gains
-          the aqueous, flame, earthen or gaseous template, as appropriate. 
-          __*_<7>Elemental Dependency<2> -- Elementalists acquire a certain
-          weakness based on their chosen element, starting at 1st level. Fire
-          elementalists cannot cast spells or use magical items with the Water
-          descriptor, and suffer untyped hit point damage from soaking, in
-          addition to the normal effects. Water elementalists cannot use spells
-          with the Fire descriptor, and suffer double damage from fire effects
-          and magic. They are not injured by cold damage, but instead are
-          <9>slow<2>ed for one round for every hit point of damage they would
-          have taken.\n
-          __Earth elementalists suffer a -2 penalty to hit, damage and saves, and 
-          1 1/2 times mana cost for all spells, when they are not in direct physical 
-          contact with earth or stone -- for example, when flying, levitating, climbing
-          in trees, wearing boots or mounted. Air elementalists suffer a similar penalty 
-          whenever they are not airbourne, or when they are grappled.\n
-          __*_<7>Elemental Boost<2> -- Elementalists recieve a magic bonus to two
-          attributes as they advance. This bonus is +1/+0 at 2nd level, +1/+1 at
-          4th level, +2/+2 at 7th level and +3/+3 at 10th level. The attributes are
-          Strength and Constitution for earth elementalists, Dexterity and Luck for
-          air elementalists, Charisma and Intelligence for fire elementalists and
-          Wisdom and Dexterity for water elementalists.\n
-          __*_<7>Elemental Defense<2> -- Elementalists also gain certain defensive
-          abilities based on their close connection to their chosen element. Earth
-          elementalists add their elementalist level as a bonus to saving throws
-          versus petrification, and gain the Toughness feat (or one of Endurance,
-          Living Wall or Great Fortitude if they already have all the precursors)
-          at 5th and immunity to critical hits at 8th. Air elementalists move like
-          the wind itself, gaining Uncanny Dodge as a rogue of their elementalist
-          level, Evasion at 5th and Improved Evasion at 8th.\n 
-          __Fire elementalists gain fire resistance equal to three times their
-          elementalist level, until they recieve complete immunity to fire at
-          8th level. Water elementalists move sinuously, their bodies flowing
-          like water -- they add their elementalist level to their Swim skill
-          rating, gain the ability to breathe water at 5th level and a +4 magic
-          bonus to their DC at 8th level.\n
-          __*_<7>Elemental Brand<2> -- Any magical weapon wielded by an elementalist
-          of 3rd level or higher gains a magical quality for as long as it remains
-          in the elementalist's hands at no cost: flaming for fire elementalists,
-          shifting for water elementalists, stunning for earth elementalists and
-          seeking for air elementalists.\n
-          __*_<7>Elemental Covenant<2> -- Starting at 9th level, creatures with the
-          appropriate elemental subtype are automatically neutral to the elementalist,
-          and will not attack her unless she provokes them.\n
-          __*_<7>Elemental Body<2> -- At 10th level, the elementalist gains the
-          innate spell-like ability to polymorph into a large elemental of the
-          appropriate type. This costs 2 fatigue and lasts for 10 turns. When
-          she uses this special form of polymorph, all of her equipment merges 
-          into her new form. 
-           
-           \n\n<10>THE ELEMENTALIST<15>\n
-           __Level__Def__Fort_Refl_Will_CL__EL_Special Abilities<1>\n
-           ____1____+0____+0___+0___+2__--_+2__Focus, Specialist,
-           ____________________________________Summons, Dependency<1>\n
-           ____2____+0____+0___+0___+3__+1_+3__Boost (+1/+0)\n
-           ____3____+1____+1___+1___+3__+1_+4__Brand\n
-           ____4____+1____+1___+1___+4__+1_+5__Boost (+1/+1)\n
-           ____5____+1____+1___+1___+4__--_+7__Defense I\n
-           ____6____+2____+2___+2___+5__+1_+8__DC Increase (+2)\n
-           ____7____+2____+2___+2___+5__+1_+9__Boost (+2/+2)\n
-           ____8____+2____+2___+2___+6__+1_+10_Defense II\n
-           ____9____+3____+3___+3___+6__+1_+11_Covenant\n
-           ____10___+3____+3___+3___+7__+1_+12_Body, Boost (+3/+3)\n
-           \n";
-
-  Desc: "<15>HitDie:_<1>d8__<15>Mana:<1>_d12__<15>Skills:<1>_4_<15>Saves:<1>_<9>FRW<1>_<15>Defense:_<1>1/2\n
-      <15>+toHit: <1>Archery <9>75~<1>, Brawl <9>75~<1>, Melee <9>75~<1>, Thrown <9>75~<1>\n
-      <2>\n__[ Flavor Text ]
-
-          \n\n<10>CLASS REQUIREMENTS<2>\n
-          __The celestial initiate is a prestige class. It counts as a favored class
-          for all characters. In order to become a celestial initiate, you must have:\n
-          __*_<7>Skills Levels<2> -- Knowledge (Theology) +12.\n
-          __*_<7>Alignment<2> -- Zealously Good (or zealously lawful for Immotian).\n
-          __*_<7>Religion<2> -- You must worship, and have gained 6 blessings from,
-          Essiah, Immotian or Xavias.\n
-          __*_<7>Abilities<2> -- You must be able to cast <9>bless<2>.\n
-          __*_<7>BAB<2> -- You must have one BAB category at +3. 
-                
-          \n\n<10>CLASS SKILLS<2>\n
-          __The class skills of the celestial initiate are Athletics, Concentration, 
-          Decipher Script, Diplomacy, Heal, Intimidate, Knowledge (all), Listen,
-          Perform and Tumble. 
-          
-          \n\n<10>CLASS FEATURES<2>\n
-          __*_<7>Proficiencies<2> -- Celestial initiates gain proficiency with
-          long blades, all types of armor and shields.\n
-          __*_<7>Smite Evil<2> -- The celestial initiate gains the ability to
-          smite evil just as a paladin does. Levels of this ability from
-          paladin and celestial initiate stack.\n
-          __*_<7>Resist Poison<2> -- At 1st level, the celestial initiate
-          recieves a +4 bonus to saving throws versus poison. At 7th level,
-          she becomes immune to poison.\n
-          __*_<7>Elemental Resistances<2> -- At 2nd level, the celestial
-          initiate gains resistances to two types of elemental damage, based
-          on her alignment and the type of celestial she is transforming
-          into: lawful archons resist electricity and acid, neutral guardinals
-          resist fire and cold and chaotic eladrins resist fire and necromantic
-          damage. These resistances begin at 5 and increase by +3 for every
-          celestial initiate level thereafter.\n
-          __*_<7>Spell-Like Abilities<2> -- At 1st level, the celestial
-          initiate gains the ability to use <9>call light<2> as an innate
-          spell-like ability.\n    
-          __*_<7>Ability Increases<2> -- At 4th level, the celestial initiate
-          recieves a +2 sacred bonus to Wisdom and Charisma; this bonus  
-          increases to +4 at 7th level and +6 at 10th level.\n
-          __*_<7>Wings<2> -- At 5th level, the celestial initiate grows a
-          vestigal pair of feathery white wings that allow her to control
-          her descent, giving her a constant <9>feather fall<2> effect. At
-          6th level, these wings are fully developed and she may now fly
-          at her full normal movement rate. At 8th level, she gains a 150%
-          inherant bonus to her flying movement rate.\n
-          __*_<7>Protective Aura<2> -- At 3rd level, a celestial initiate 
-          gains the benefit of a constantly active <9>magic circle vs. evil<2> 
-          effect. At 9th level, this strengthens to duplicate the full effect
-          of a celestial's protective aura: the area of effect and penalty of
-          the circle is doubled, and it also duplicates the effects of a
-          <9>globe of invulnerability<2>, preventing the casting of
-          spells of 5th level or lower by anyone other than the celestial
-          initiate.\n
-          __*_<7>Sharp Senses<2> -- The celestial initiate's senses sharpen
-          starting at level 5, granting her two levels of the Sharp Senses
-          ability (possessed by elves); levels of this ability gained from
-          being an elf and a celestial initiate stack. The initiate gains
-          another two levels of Sharp Senses at level 10.\n
-          
-           \n\n<10>THE CELESTIAL INITIATE<15>\n
-           __Level__Def__Fort_Refl_Will_Special Abilities<1>\n
-           ____1____+0____+2___+2___+2__Smite Evil, +4 vs.
-           _____________________________poison, <9>call light<1>\n
-           ____2____+0____+3___+3___+3__Elemental Resistances\n
-           ____3____+1____+3___+3___+3__<9>magic circle vs. evil<1>\n
-           ____4____+1____+4___+4___+4__+2 Wisdom, +2 Charisma\n
-           ____5____+1____+4___+4___+4__Wings (Slow Fall), Sen. +2\n
-           ____6____+2____+5___+5___+5__Wings (Full Flight)\n
-           ____7____+2____+5___+5___+5__+4 Wisdom, +4 Charisma\n
-           ____8____+2____+6___+6___+6__Wings (150~ Move Rate)\n
-           ____9____+3____+6___+6___+6__Full Protective Aura\n
-           ____10___+3____+7___+7___+7__+6 Wis, +6 Cha, Senses +4\n
-           \n";
-
-  Desc: "<15>HitDie:_<1>d6__<15>Mana:<1>_d10__<15>Skills:<1>_8_<15>Saves:<1>_<9>F<1>r<9>W<1>_<15>Defense:_<1>1/3\n
-      <15>+toHit: <1>Archery <9>50~<1>, Brawl <9>50~<1>, Melee <9>75~<1>, Thrown <9>50~<1>\n
-      <2>\n__[ Flavor Text ]
-
-          \n\n<10>CLASS REQUIREMENTS<2>\n
-          __The inquisitor is a prestige class. It counts as a favored class
-          for all characters. In order to become an inquisitor, you must have:\n
-          __*_<7>Skills Levels<2> -- Intimidate +12.\n
-          __*_<7>Alignment<2> -- Zealously Lawful.\n
-          __*_<7>Feats<2> -- Detective.\n
-          __*_<7>Abilities<2> -- You must be able to turn undead as a 5th-level
-          priest.\n
-          __*_<7>Religion<2> -- You must worship Immotian, and have attained at
-          least four blessings from him. 
-                
-          \n\n<10>CLASS SKILLS<2>\n
-          __The class skills of the inquisitor are Appraise, Bluff, Concentration,
-          Decipher Script, Diplomacy, Disguise, Escape Artist, Find Weakness,
-          Gather Information, Intimidate, Knowledge (all), Listen, Lockpicking,
-          Metamagic, Poison Use, Search, Spellcraft and Spot.
-          
-          \n\n<10>CLASS FEATURES<2>\n
-          __*_<7>Proficiencies<2> -- Inquisitors gain proficiency with light
-          weapons and daggers.\n
-          __*_<7>Spellcasting<2> -- At every level save for 1st and 3rd, the
-          inquisitor gains a spellcasting chart level. The inquisitor also
-          treats inquisitor levels as if they were priest levels for the purpose
-          of improving her access to the priest spell list. Inquisitors also
-          have their own spell list, which they recieve access to at one
-          spell level per inquisitor level.\n
-          __The inquisitor does not gain new domain spells or improve the
-          abilities granted by domains for her inquisitor levels, however.\n
-          __*_<7>Turn Undead<2> -- The inquisitor gains one level of the turn
-          undead ability for every inquisitor class level; this stacks with
-          the levels gained from being a priest or paladin.\n
-          __*_<7>Zealous Mettle<2> -- The inquisitor learns to trust in zeal
-          and endurance alone to protect them. When unarmored, she adds a
-          sacred bonus to all of her saving throws equal to her inquisitor
-          class level. At 9th level she recieves Toughness as a bonus feat
-          as long as she is unarmored; at 10th level, she recieves Resilience
-          likewise.\n
-          __*_<7>Grim Reputation<2> -- The agents of the Purified Office of the
-          Sacred Inquisition are rightly feared for their political power and
-          methods of torture; they in turn learn to exloit fear as a tactical
-          advantage, adding their inquisitor class level to their Intimidate
-          skill as an insight bonus.\n
-          __*_<7>Detect Corruption<2> -- Inquisitors are trained to root out
-          criminal behaviour, discerning heretics and dissidents. Starting at
-          1st level, they gain <9>detect corruption<2> as an innate spell-like
-          ability; this functions as <9>detect evil<2>, save that it detects
-          both evil and chaotic creatures, and does not reveal those who have
-          Immotian's favor regardless of alignment.\n
-          __*_<7>Smite Corruption<2> -- An inquisitor can smite corrupt creatures
-          just as a paladin smites evil creatures. Additionally, the inquisition
-          thrives on mob justice; for every allied creature the inquisitor has
-          with her, her effective level increases by one for smiting purposes.
-          If a paladin/inquisitor smites a creature both evil and corrupt, the
-          damage bonuses stack, but the Charisma bonus to hit is added only
-          once.\n
-          __*_<7>Purge Magic<2> -- Inquisitors, like all of Immotian's clergy,
-          view arcane magic as unclean; they are taught special methods of
-          purging magical influences from an area, person or object, and recieve
-          a +1 bonus to caster level checks for <9>dispel magic<2> and related
-          efffect at 2nd level, +1 for every inquisitor level thereafter.\n
-          __*_<7>Blessed Tithe<2> -- At its root, the inquisition exists not
-          to defend light and purity, or even to uphold dogma and suppress
-          other religions, but to provide a legal framework for the Church of
-          Immotian to sieze the land and wealth of social malcontents and
-          minorities, thereby maintaining the hegemony of the Church of Immotian 
-          within Theryan society. Inquisitors thus have as a primary goal the
-          procurement of gold for the church, which they can translocate to
-          the High Temple of the Pure Flame by offering it on an altar to
-          Immotian.\n
-          __Immotian offers a powerful incentive to those inquisitors who 
-          bring wealth to the church. Starting at 3rd level, an inquisitor
-          can offer coins as a sacrifice to Immotian. While this does not
-          increase divine favor -- the coins are not a 'true' sacrifice --
-          the inquisitor does recieve 1 experience point for every 25 gold
-          pieces worth of riches offered in this manner.\n 
-          __Using this ability funds an evil organization and is therefore
-          an evil act.\n
-          __*_<7>Purified Sight<2> -- Starting at 4th level, the inquisitor
-          is innately able to see invisible creatures.\n
-          __*_<7>Gentle Inquiry<2> -- Starting at 5th level, the inquisitor 
-          is able to inflict agony with a simple touch., and may use the
-          <9>pain touch<2> spell (described under domain spells) as an 
-          innate spell-like ability. At 7th level, she may use <9>burning
-          blood<2> likewise.\n
-          __*_<7>Incorruptable<2> -- Immotian blesses his inquisitors
-          personally, rendering them incorruptable (for some definitions
-          of the term, anyway). Starting at 6th level, they are immune
-          to charm effects; at 8th level, they become immune to all
-          compulsions.\n
-      
-           <10>SPELL LIST<2>\n
-           <15>__1st level -- <1> ethereal blade, spiritwrack.\n
-           <15>__2nd level -- <1> animate rope, bladethirst, divine sacrifice,
-           ESP, false life, invisibility.\n
-           <15>__3rd level -- <1> clairvoyance, dismissal, explosive runes, 
-           fear, iron sword, phantom steed.\n
-           <15>__4th level -- <1> aura of abjuration, crushing despair, 
-           dominate person, improved invisibility, nemesis spell, 
-           order's wrath, phantasmal killer, premonition.\n
-           <15>__5th level -- <1> force shapechange, holy sword.\n      
-      
-           \n\n<10>THE INQUISITOR<15>\n
-           __Level__Def__Fort_Refl_Will_CL_Special Abilities<1>\n
-           ____1____+0____+2___+0___+2__-- Turn Undead, Zealous
-           ________________________________Mettle, Grim Rep.,
-           ________________________________Det./Smite Corruption\n
-           ____2____+0____+3___+0___+3__+1 Purge Magic\n
-           ____3____+1____+3___+1___+3__-- Blessed Tithe\n
-           ____4____+1____+4___+1___+4__+2 Purified Sight\n
-           ____5____+1____+4___+1___+4__+3 Inquiry (Pain Touch)\n
-           ____6____+2____+5___+2___+5__+4 Incorruptable (Charms)\n
-           ____7____+2____+5___+2___+5__+5 Inquiry (Burn. Blood)\n
-           ____8____+2____+6___+2___+6__+6 Incorruptable (Comp.)\n
-           ____9____+3____+6___+3___+6__+7 Toughness\n
-           ____10___+3____+7___+3___+7__+8 Resilience\n
-           \n";
-        
-
-
-
-  Desc: "<15>HitDie:_<1>d8__<15>Mana:<1>_d12__<15>Skills:<1>_4_<15>Saves:<1>_<9>F<1>r<9>W<1>_<15>Defense:_<1>1/4\n
-      <15>+toHit: <1>Archery <9>50~<1>, Brawl <9>50~<1>, Melee <9>50~<1>, Thrown <9>50~<1>\n
-      <2>\n__[ Flavor Text ]
-
-          \n\n<10>CLASS REQUIREMENTS<2>\n
-          __The crimson adept is a prestige class. It counts as a favored class
-          for all characters. In order to become a crimson adept, you must have:\n
-          __*_<7>Skills Levels<2> -- Alchemy +12, Concentration +12.\n
-          __*_<7>Known Spells<2> -- Ten combined spell levels of Thaumaturgy and
-          Necromancy spells.\n
-          __*_<7>Feats<2> -- Brew Potion, Endurance.\n
-          __*_<7>Attributes<2> -- Constitution 16+.\n
-          __*_<7>Religion<2> -- You must worship Khasrach, Xel, Essiah, or no diety 
-          at all. 
-                
-          \n\n<10>CLASS SKILLS<2>\n
-          __The class skills of the crimson adept are Alchemy, Concentration, Decipher 
-          Script, Find Weakness, Healing, Intimidate, Knowledge (Infernal), Knowledge 
-          (Magic), Knowledge (Mythology), Knowledge (Theology), Knowledge (Undead), 
-          Metamagic, Spellcraft and Use Magic.
-          
-          \n\n<10>CLASS FEATURES<2>\n
-          __*_<7>Proficiencies<2> -- Crimson adepts gain proficiency with the
-          whip.\n
-          __*_<7>Spellcasting<2> -- At 2nd, 3rd, 5th, 6th, 8th and 9th levels, the
-          crimson adept recieves a new spellcasting chart level, and advances her
-          progress in another class's spell list in this order of priority: mage,
-          priest, ranger, druid, paladin.\n
-          __If the crimson adept has Domains, she continues to advance those as well,
-          provided she is advancing as a divine caster.\n
-          __*_<7>Blood Magic<2> -- Once per day (twice at 4th, thrice at 7th and
-          four times at 10th), the crimson adept can choose to sacrifce hit points
-          to regain mana points on a 1 for 1 basis. This is an instantaneous action
-          that takes no time.\n
-          __*_<7>Pain Tolerance<2> -- The self-mutilating practices of a crimson
-          adept give her a strong resistance to pain and hone her mental discipline,
-          allowing her to add her crimson adept level as a competance bonus to her
-          Concentration skill rating.
-          __*_<7>Blood Infusion<2> -- The crimson adept gains the power to enchant
-          her own bloodstream, using a kind of blood alchemy to create and store
-          potions within her own body. She may have up to [Crimson Adept level +
-          Constitution modifier] potions in her bloodstream at once, and can activate
-          these just like normal potions with the Quaff command. The primary advantage
-          of blood infusions is that they take only five segments to permeate, versus
-          the 30 segments normally used to drink a potion. Additionally, when the
-          crimson adept reaches 10th level, the effects of all blood infusions are
-          automatically maximized.\n
-          __*_<7>Thicker than Water<2> -- The crimson adept learns to transmute her
-          blood at 3rd level, diffussing and thickening it to make her more resistant
-          to injury. She becomes immune to bleeding and gains a +2 magic bonus to her
-          constitution, as well as a resistance of 5 to slashing damage. At 5th level,
-          these bonuses increase to +4 Con and 7 resistance, and at 9th, +6 Con and
-          9 resistance.\n
-          __*_<7>Blood Whip<2> -- At 3rd level, the crimson adept gains the ability
-          to slit his wrist and emit a stream of blood that supernaturally congeals
-          into a razor-sharp liquid whip. This weapon acts as a keen weakening whip
-          with an enchantment bonus equal to half the user's crimson adept class
-          level (round down), but creating it costs her 3d6 hit points.\n
-          __*_<7>Wounding Magic<2> -- Whenever a crimson adept of 4th level or higher
-          inflicts non-elemental, non-aligned spell damage on a target (such as from 
-          <9>magic missile<2>, <9>thornwrack<2>, <9>ring of blades<2>, <9>glyph of
-          warding<2>, etc.), the target must make an additional Fortitude save (DC
-          15 + crimson adept class level) or bleed for 1 additional point of damage
-          for the next 2d6 rounds.\n
-          __*_<7>Steal Life<2> -- The crimson adept is now able to regain magical
-          energy through the death of creatures with blood; every such creature she
-          kills restores to her half its Challenge Rating in mana points.\n
-          __*_<7>Animate Blood<2> -- At the cost of 3 fatigue points, the crimson
-          adept can animate the blood within any other creature, causing that
-          creature to suffer [crimson adept level]d8 points of untyped damage as 
-          their blood attempts to tear free of their body; a Fortitude saving
-          throw halves the damage. If this effect kills the victim, a blood elemental
-          (similar to a water elemental) is created to serve the caster for the
-          remainder of the day, with its size being dependant upon the victim's
-          Challenge Rating.\n    
-      
-           \n\n<10>THE CRIMSON ADEPT<15>\n
-           __Level__Def__Fort_Refl_Will_CL_Special Abilities<1>\n
-           ____1____+0____+2___+0___+2__-- Blood Magic, Pain Tol.\n
-           ____2____+0____+3___+0___+3__+1 Blood Infusion\n
-           ____3____+0____+3___+1___+3__+2 +2 Con, Resistance 5,
-           ________________________________Blood Whip, Clotting\n
-           ____4____+1____+4___+1___+4__-- Wounding Spells\n
-           ____5____+1____+4___+1___+4__+3 +4 Con, Resistance 7\n
-           ____6____+1____+5___+2___+5__+4 /Caustic Vitae/\n
-           ____7____+1____+5___+2___+5__-- Steal Life\n
-           ____8____+2____+6___+2___+6__+5 Animate Blood\n
-           ____9____+2____+6___+3___+6__+6 +6 Con, Resistance 9\n
-           ____10___+2____+7___+3___+7__-- Maximize Infusion\n
-           \n";
-
-
-  Desc: "<15>HitDie:_<1>d6__<15>Mana:<1>_d6__<15>Skills:<1>_6_<15>Saves:<1>_f<9>R<1>w_<15>Defense:_<1>1/2\n
-      <15>+toHit: <1>Archery <9>50~<1>, Brawl <9>50~<1>, Melee <9>100~<1>, Thrown <9>50~<1>\n
-      <2>\n__[ Flavor Text ]
-
-          \n\n<10>CLASS REQUIREMENTS<2>\n
-          __The duelist is a prestige class. It counts as a favored class
-          for all characters. In order to become a duelist, you must have:\n
-          __*_<7>BAB<2> -- Melee BAB +3.\n
-          __*_<7>Skills Levels<2> -- Tumble +10.\n
-          __*_<7>Feats<2> -- Expertise, Mobility, Weapon Finesse.
-                
-          \n\n<10>CLASS SKILLS<2>\n
-          __The class skills of the duelist are Appraise, Athletics, Balance, 
-          Bluff, Climb, Escape Artist, Jump, Listen, Perform and Tumble.
-          
-          \n\n<10>CLASS FEATURES<2>\n
-          __*_<7>Proficiencies<2> -- Duelists gain proficiency with the daggers
-          and short blades weapon groups, and with the long sword.\n
-          __*_<7>Canny Defense<2> -- Starting at 1st level, duelists add the
-          lower of their duelist level or their primary Intelligence modifier
-          as an insight bonus to their armor class, when wearing medium or
-          lighter armor. Note that as an insight bonus, this does not stack 
-          with Zen Defense.\n
-            [ Implementation note: use this as an excuse to do EV_CALC_VALUES
-          and export AddBonus as an IncursionScript function -- it's about
-          time! ]\n
-          __*_<7>Scoundrel's Charm<2> -- Duelists recieve the Alluring feat
-          as a bonus feat at 2nd level.
-          __*_<7>Acrobatic Fighting<2> -- This ability grants a number of
-          related benefits to a duelist, starting at 2nd level. Its benefits
-          apply only when a character is wearing light or no armor, and is
-          lightly encombered or less. Levels of this ability gained from
-          duelist and bladesinger.\n
-          __<3>Grace:<2> At 2nd level, the duelist recieves a +2 bonus to
-          reflex saving throws, and to the skills Athletics, Balance, Jump and Tumble,
-          provided she meets the conditions described above. This bonus increases 
-          by +1 for every three further acrobatic fighting levels -- +3 at 5th, 
-          +4 at 8th, etc.\n
-          __<3>Acrobatic Charge:<2> At 3rd level, the duelist may perform an
-          acrobatic charge. This allows her to charge and tumble at the same
-          time, and when she does, her charge bonus increases by +1.\n
-          __<3>Enhanced Mobility:<2> Starting at 4th level, the duelist gains
-          a +1 bonus to Defense Class against attacks of opportunity; this
-          bonus stacks with the one granted from the Mobility feat, and
-          increases by +1 for every further level of acrobatic fighting from
-          any source.\n
-          __<3>Scenery is Power:<2> Starting at 5th level, the duelist gains
-          a peerless ability to make use of her enviornment and objects around
-          her when fighting. She gains a stunt bonus to hit and damage based on the
-          terrain and objects around her. For example, standing in the same 
-          square with a chest might give her +1/+1 (she could stand atop it for 
-          a height advantage, kick it at an opponent, position it between her 
-          and her opponent to direct the opponent's advance, etc.) Other
-          features that can be used effectively in combat include doors, mud,
-          water, forges, other furnature, hanging vines, etc.\n
-          __Different types of scenery increase the creative stunts a character
-          with this ability is capable of, and thus increase the bonuses granted,
-          but a single type of scenery doesn't increase in bonus regardless of
-          how much of it there is.\n
-          __<3>Elaborate Parry:<2> A character with 5 levels of acrobatic fighting
-          (such as a 6th-level duelist) finds that the benefits gained fron fighting
-          defensively are doubled, while the penalties remain unchanged, provided
-          that she is wielding a short blade or long sword as her primary weapon.\n
-          __<3>Mantis Leap:<2> A character with 6 levels of acrobatic fighting is
-          treated as possessing the Mantis Leap feat when she is wielding a short
-          blade or long sword and wearing light or no armor.\n 
-          __<3>Free Tumble:<2> With 8 levels of acrobatic fighting (i.e., a 9th-level
-          duelist), the character gains the ability to use the Tumble skill without
-          paying fatigue points. She may tumble for free once per day per two levels
-          of acrobatic fighting.\n
-          __*_<7>Rapier Wit<2> -- Duelists are infamous for using cutting insults
-          and clever repartee to rattle their opponents, allowing them to land
-          especially telling blows. Starting at 4th level, on 1 in 5 attacks
-          against a sapient opponent using a dagger, short blade or long sword, 
-          the duelist makes a Bluff check, which the target opposes with a
-          Concentration check. If the duelist's check is higher, she adds half her
-          margin of success to the damage of the attack, to a maximum of twice
-          her primary Charisma modifier.\n
-          __When the duelist reaches 7th level, this ability functions on 1 in 4
-          attacks; at 10th, it functions on 1 in 3. This ability does not function
-          if either attacker or victim is in a region of magical silence.\n
-          __*_<7>Flashing Blade<2> -- The duelist recieves Deflect Arrows as
-          a conditional bonus feat at 5th level and Deflect Magic as a conditional
-          bonus feat at 8th level. The character is treated as having these
-          feats only when wielding a magical short blade or long sword one-
-          handed in her weapon hand with which her attack speed is 250~ or
-          higher, and wearing light or no armor.\n 
-          __*_<7>Luck of the Daring<2> -- The duelist recieves the Unearthly
-          Luck ability at 6th level, allowing her to add her primary Luck
-          modifier to all saving throws. Halfling duelists, who already have
-          this ability from their race, recieve two bonus feats from the
-          warrior feat list instead.
-           
-               
-           \n\n<10>THE DUELIST<15>\n
-           __Level__Def__Fort_Refl_Will_EM_Special Abilities<1>\n
-           ____1____+0____+0___+2___+0__-- Canny Defense\n
-           ____2____+1____+0___+3___+0__-- Charm, Grace +2\n
-           ____3____+1____+1___+3___+1__-- Acrobatic Charge\n
-           ____4____+2____+1___+4___+1__+1 Rapier Wit (1 in 5)\n
-           ____5____+2____+1___+4___+1__+2 Def. Arrows, Grace +3,\n
-           ________________________________Scenery is Power\n
-           ____6____+3____+2___+5___+2__+3 Elaborate Parry, Luck\n
-           ____7____+3____+2___+5___+2__+4 Wit (1 in 4), M. Leap\n
-           ____8____+4____+2___+6___+2__+5 Def. Magic, Grace +4\n
-           ____9____+4____+3___+6___+3__+6 Free Tumble\n
-           ____10___+5____+3___+7___+3__+7 Rapier Wit (1 in 3)\n
-           \n";
-
-  Desc: "<15>HitDie:_<1>d6__<15>Mana:<1>_d10__<15>Skills:<1>_4_<15>Saves:<1>_f<9>RW<1>_<15>Defense:_<1>1/2\n
-      <15>+toHit: <1>Archery <9>50~<1>, Brawl <9>50~<1>, Melee <9>75~<1>, Thrown <9>50~<1>\n
-      <2>\n__[ Flavor Text ]
-
-          \n\n<10>CLASS REQUIREMENTS<2>\n
-          __The bladesinger is a prestige class. It counts as a favored class
-          for all characters. In order to become a bladesinger, you must have:\n
-          __*_<7>Race<2> -- Only elves (not drow) may become bladesingers.\n
-          __*_<7>BAB<2> -- Melee BAB +4.\n
-          __*_<7>Skills Levels<2> -- Perform +15.\n
-          __*_<7>Known Spells<2> -- You must know the <9>cat's grace<2> spell;
-          having it as an innate spell-like ability does not qualify.\n 
-          __*_<7>Feats<2> -- Expertise, Quicken Spell, Weapon Finesse.
-                
-          \n\n<10>CLASS SKILLS<2>\n
-          __The class skills of the bladesinger are Athletics, Balance, 
-          Diplomacy, Escape Artist, Jump, Knowledge (all), Listen, Perform 
-          and Tumble.
-          
-          \n\n<10>CLASS FEATURES<2>\n
-          __*_<7>Proficiencies<2> -- Bladesingers are proficient with the long
-          sword.\n
-          __*_<7>Spellcasting<2> -- Bladesingers cast spells just as bards do,
-          being able to cast in light armor and not requiring spellbooks. They
-          cast spells from the bladesinger spell list and recieve one caster
-          level for every even bladesinger level. They can also continue to
-          learn spells from whatever casting class qualified them to be a
-          bladesinger, though they must follow the restrictions of that class
-          in casting those spells -- a warrior/mage/bladesinger, for example,
-          cannot wear armor and must use spellbooks when casting spells on the
-          mage list but not on the bladesinger list.\n
-          __*_<7>Acrobatic Fighting<2> -- Bladesingers recieve a level of the
-          Acrobatic Fighting ability (as described under the duelist prestige
-          class) at every odd bladesinger level, starting at 3rd. Levels of
-          this ability recieved from bladesinger and duelist stack.\n
-          __*_<7>Bladesong Style<2> -- Starting at 1st level, a bladesinger
-          recieves a dodge bonus to her defense class equal to the lower of 
-          her Intelligence bonus or her total levels in the bladesong ability, 
-          when wielding a rapier or long sword in her weapon hand and
-          nothing in her ready hand. Every even level of bladesong
-          also grants her a +5% bonus to attack speed when she is
-          so equipped.\n
-          __At 3rd level, she gains a +4 bonus to Perform and
-          Concentration when wielding a rapier or long sword in her
-          weapon hand and nothing in her ready hand.\n
-          __At 6th level, she no longer requires verbal components to
-          cast bladesinger spells when she is wielding a rapier or
-          long sword in her weapon hand and nothing in her ready
-          hand.\n
-          __At 9th level, she is able to use blade gestures to aid
-          in the rapid casting of spells, and thus subtracts half
-          (round up) of her weapon's enchantment bonus from the
-          metamagic cost of the Quicken Spell feat.\n
-
-           <10>SPELL LIST<2>\n
-           <15>__1st level -- <1> burning hands, charm person, chromatic orb,
-           color spray, enthrall, force bolt, magic missile, magic weapon, phase
-           door, sleep, true strike, wall of fog.\n
-           <15>__2nd level -- <1> apportation, bladethirst, cat's grace, eagle's
-           splendour, ethereal blade, glitterdust, gust of wind, hypnotic pattern, 
-           mage armor, mirror image, phantasmal force, see invisibility, shield, .\n
-           <15>__3rd level -- <1> adamant facade, blink, conjure vortex, dimension
-           door, dispel magic, displacement, flame arrow, fly, haste, heroism, ice
-           lance, illusionary stance, improved phantasmal force, insightful stroke, 
-           keen edge, ring of blades, suggestion, thunderlance.\m 
-           <15>__4th level -- <1> charm monster, confusion, dismissal, evard's black 
-           tentacles, force missiles, ice storm, phantasmal killer, premonition, 
-           spectral force.\n
-           <15>__5th level -- <1> color burst, cone of cold, fire lotus, lesser 
-           symbol, lower resistance, misdirection, mooncloak, teleport, telekinesis, 
-           watery double.\n
-           <15>__6th level -- <1> immortal grandeur, true seeing.\n
-      
-           \n\n<10>THE BLADESINGER<15>\n
-           __Level_Def__Fort_Refl_Will_Spd__Special Abilities<1>\n
-           ____1___+0____+0___+2___+0__+0~__Bladesong Style\n
-           ____2___+1____+0___+3___+0__+5~__+1 Caster Level
-           ____3___+1____+1___+3___+1__+5~__Acrobatic Fight. 1,
-           _________________________________Perform/Concent\n
-           ____4___+2____+1___+4___+1__+10~ +1 Caster Level\n
-           ____5___+2____+1___+4___+1__+10~ Acrobatic Fight. 2\n
-           ____6___+3____+2___+5___+2__+15~ No Verbal Comp.,
-           _________________________________+1 Caster Level\n
-           ____7___+3____+2___+5___+2__+15~ Acrobatic Fight. 3\n
-           ____8___+4____+2___+6___+2__+20~ +1 Caster Level\n
-           ____9___+4____+3___+6___+3__+20~ Acrobatic Fight. 4,
-           _________________________________Improved Quicken\n
-           ____10__+5____+3___+7___+3__+25~ +1 Caster Level\n
-           \n";
+  Alienist
+  Assassin
+  Bladesinger
+  Celestial Initiate
+  Crimson Adept
+  Duelist
+  Earthsinger
+  Elementalist
+  Horizon Walker **
+  Inquisitor
+  Loremaster
+  Master Archer
+  Sentinel
+  Shadowdancer
+  Tattoo Mystic
+  Twilight Huntsman
+  Undead Slayer **
+  Underdark Warrior
 
 */
 
@@ -873,7 +359,7 @@ Class "Alienist"
       Stati[SKILL_BONUS,SK_SPOT,-1]      at every level starting at 1st,
       Stati[SKILL_BONUS,SK_LISTEN,-1]    at every level starting at 1st,
       Stati[SKILL_BONUS,SK_SEARCH,-1]    at every level starting at 1st,
-      Stati[SPELL_ACCESS,(SP_DIVINE|SP_BARDIC),+1]   at every level starting at 1st,
+      Stati[SPELL_ACCESS,SP_BARDIC,+1]   at every level starting at 1st,
       Ability[CA_SPELLCASTING,+1]        at 2nd level,
       Ability[CA_SPELLCASTING,+1]        at 3rd level,
       Ability[CA_SPELLCASTING,+1]        at every level starting at 5th,
@@ -1018,7 +504,7 @@ Class "Assassin"
       __*_<7>Alignment<2> -- Assassins cannot be of Good alignment.\n
             
       \n\n<10>CLASS SKILLS<2>\n
-      __The class skills of the Assassin are Appraise,
+      __The class skills of the Assassin are Alchemy, Appraise,
       Balance, Bluff, Climb, Disguise, Escape Artist, Find Weakness,
       Gather Information, Handle Device, Hide in Shadows, Intimidate, 
       Intuition, Jump, Listen, Lockpicking, Move Silently, Poison Use,
@@ -1087,7 +573,7 @@ Class "Assassin"
            S_MELEE    75,
            S_THROWN   100,
            S_ARCHERY  100;    
-    Skills[8]: SK_BALANCE, SK_BLUFF, SK_CLIMB, SK_DISGUISE, SK_ESCAPE_ART,
+    Skills[8]: SK_ALCHEMY, SK_BALANCE, SK_BLUFF, SK_CLIMB, SK_DISGUISE, SK_ESCAPE_ART,
       SK_FIND_WEAKNESS, /*SK_GATHER_INF,*/ SK_HANDLE_DEV, SK_HIDE, SK_INTIMIDATE,
       SK_INTUITION, SK_JUMP, SK_LISTEN, SK_LOCKPICKING, SK_MOVE_SIL, 
       SK_POISON_USE, SK_APPRAISE, SK_SPOT, SK_SWIM, SK_TUMBLE;
@@ -1138,6 +624,8 @@ Effect "Death Attack" : EA_GENERIC
     Flags: EF_SPECABIL; bool okForDA;
     On Event META(PRE(EV_STRIKE))
       {
+        if (!EVictim->isCreature())
+          return NOTHING;
         okForDA = false;
         if (EActor->isFlatFooted() && EVictim->isFlatFooted())
           if (!EVictim->Percieves(EActor))
@@ -1148,6 +636,8 @@ Effect "Death Attack" : EA_GENERIC
     META(PRE(EV_HIT))
       {
         int16 svDC;
+        if (!EVictim->isCreature())
+          return NOTHING;
         if (!EVictim->isCreature())
           return NOTHING;
         if (EVictim->isDead())
@@ -1435,6 +925,480 @@ Effect "Fiendish Servant" : EA_SUMMON
       return NOTHING;
       };
   }
+
+Class "Bladesinger"
+  {
+    Desc: "<12>*** NOT FINISHED YET ***\n<15>HitDie:_<1>d6__<15>Mana:<1>_d10__<15>Skills:<1>_4_<15>Saves:<1>_f<9>RW<1>_<15>Defense:_<1>1/2\n
+      <15>+toHit: <1>Archery <9>50~<1>, Brawl <9>50~<1>, Melee <9>75~<1>, Thrown <9>50~<1>\n
+      <2>\n__[ Flavor Text ]
+
+      \n\n<10>CLASS REQUIREMENTS<2>\n
+      __The bladesinger is a prestige class. It counts as a favored class
+      for all characters. In order to become a bladesinger, you must have:\n
+      __*_<7>Race<2> -- Only elves (not drow) may become bladesingers.\n
+      __*_<7>BAB<2> -- Melee BAB +4.\n
+      __*_<7>Skills Levels<2> -- Perform +15.\n
+      __*_<7>Known Spells<2> -- You must know the <9>cat's grace<2> spell;
+      having it as an innate spell-like ability does not qualify.\n 
+      __*_<7>Feats<2> -- Expertise, Quicken Spell, Weapon Finesse.
+      		
+      \n\n<10>CLASS SKILLS<2>\n
+      __The class skills of the bladesinger are Athletics, Balance, 
+      Diplomacy, Escape Artist, Jump, Knowledge (all), Listen, Perform 
+      and Tumble.
+
+      \n\n<10>CLASS FEATURES<2>\n
+      __*_<7>Proficiencies<2> -- Bladesingers are proficient with the long
+      sword.\n
+      __*_<7>Spellcasting<2> -- Bladesingers cast spells just as bards do,
+      being able to cast in light armor and not requiring spellbooks. They
+      cast spells from the bladesinger spell list and recieve one caster
+      level for every even bladesinger level. They can also continue to
+      learn spells from whatever casting class qualified them to be a
+      bladesinger, though they must follow the restrictions of that class
+      in casting those spells -- a warrior/mage/bladesinger, for example,
+      cannot wear armor and must use spellbooks when casting spells on the
+      mage list but not on the bladesinger list.\n
+      __*_<7>Acrobatic Fighting<2> -- Bladesingers recieve a level of the
+      Acrobatic Fighting ability (as described under the duelist prestige
+      class) at every odd bladesinger level, starting at 3rd. Levels of
+      this ability recieved from bladesinger and duelist stack.\n
+      __*_<7>Bladesong Style<2> -- Starting at 1st level, a bladesinger
+      recieves a dodge bonus to her defense class equal to the lower of 
+      her Intelligence bonus or her total levels in the bladesong ability, 
+      when wielding a rapier or long sword in her weapon hand and
+      nothing in her ready hand. Every even level of bladesong
+      also grants her a +5~ bonus to attack speed when she is
+      so equipped.\n
+      __At 3rd level, she gains a +4 bonus to Perform and
+      Concentration when wielding a rapier or long sword in her
+      weapon hand and nothing in her ready hand.\n
+      __At 6th level, she no longer requires verbal components to
+      cast bladesinger spells when she is wielding a rapier or
+      long sword in her weapon hand and nothing in her ready
+      hand.\n
+      __At 9th level, she is able to use blade gestures to aid
+      in the rapid casting of spells, and thus subtracts half
+      (round up) of her weapon's enchantment bonus from the
+      metamagic cost of the Quicken Spell feat.\n\n
+
+      <10>SPELL LIST<2>\n
+      <15>__1st level -- <1> burning hands, charm person, chromatic orb,
+      color spray, enthrall, force bolt, magic missile, magic weapon, phase
+      door, sleep, true strike, wall of fog.\n
+      <15>__2nd level -- <1> apportation, bladethirst, cat's grace, eagle's
+      splendour, ethereal blade, glitterdust, gust of wind, hypnotic pattern, 
+      mage armor, mirror image, phantasmal force, see invisibility, shield\n
+      <15>__3rd level -- <1> adamant facade, blink, conjure vortex, dimension
+      door, dispel magic, displacement, flame arrow, fly, haste, heroism, ice
+      lance, illusionary stance, improved phantasmal force, insightful stroke, 
+      keen edge, ring of blades, suggestion, thunderlance.\n 
+      <15>__4th level -- <1> charm monster, confusion, dismissal, evard's black 
+      tentacles, force missiles, ice storm, phantasmal killer, premonition, 
+      spectral force.\n
+      <15>__5th level -- <1> color burst, cone of cold, fire lotus, lesser 
+      symbol, lower resistance, misdirection, mooncloak, teleport, telekinesis, 
+      watery double.\n
+      <15>__6th level -- <1> immortal grandeur, true seeing.\n
+
+      \n\n<10>THE BLADESINGER<15>\n
+      __Level_Def__Fort_Refl_Will_Spd__Special Abilities<1>\n
+      ____1___+0____+0___+2___+0__+0~__Bladesong Style\n
+      ____2___+1____+0___+3___+0__+5~__+1 Caster Level\n
+      ____3___+1____+1___+3___+1__+5~__Acrobatic Fight. 1,\n
+      _________________________________Perform/Concent\n
+      ____4___+2____+1___+4___+1__+10~ +1 Caster Level\n
+      ____5___+2____+1___+4___+1__+10~ Acrobatic Fight. 2\n
+      ____6___+3____+2___+5___+2__+15~ No Verbal Comp.,\n
+      _________________________________+1 Caster Level\n
+      ____7___+3____+2___+5___+2__+15~ Acrobatic Fight. 3\n
+      ____8___+4____+2___+6___+2__+20~ +1 Caster Level\n
+      ____9___+4____+3___+6___+3__+20~ Acrobatic Fight. 4,\n
+      _________________________________Improved Quicken\n
+      ____10__+5____+3___+7___+3__+25~ +1 Caster Level\n
+      \n";    
+
+    On Event EV_ISTARGET {
+      bool failed;
+      failed = false;
+      if (!EActor->WizardMode) {
+        EActor->IPrint("This prestige class is still under development and cannot be used.");
+        return ABORT;
+        }
+      return DONE;
+      };
+    
+    HitDice: 4; Mana: 12; Def: 1/4;
+    Attk:  S_BRAWL    50,
+           S_MELEE    50,
+           S_THROWN   50,
+           S_ARCHERY  50;    
+    Skills[0]: 0;
+    Grants:
+      ;
+    Flags: CF_PRESTIGE, CF_FAVORED;
+    Lists:
+      * SPELL_LIST
+          0;
+  }
+      
+
+Class "Celestial Initiate"
+  {
+    Desc: "<12>*** NOT FINISHED YET ***\n<15>HitDie:_<1>d8__<15>Mana:<1>_d12__<15>Skills:<1>_4_<15>Saves:<1>_<9>FRW<1>_<15>Defense:_<1>1/2\n
+      <15>+toHit: <1>Archery <9>75~<1>, Brawl <9>75~<1>, Melee <9>75~<1>, Thrown <9>75~<1>\n
+      <2>\n__[ Flavor Text ]
+
+      \n\n<10>CLASS REQUIREMENTS<2>\n
+      __The celestial initiate is a prestige class. It counts as a favored class
+      for all characters. In order to become a celestial initiate, you must have:\n
+      __*_<7>Skills Levels<2> -- Knowledge (Theology) +12.\n
+      __*_<7>Alignment<2> -- Zealously Good (or zealously lawful for Immotian).\n
+      __*_<7>Religion<2> -- You must worship, and have gained 6 blessings from,
+      Essiah, Immotian or Xavias.\n
+      __*_<7>Abilities<2> -- You must be able to cast <9>bless<2>.\n
+      __*_<7>BAB<2> -- You must have one BAB category at +3. 
+
+      \n\n<10>CLASS SKILLS<2>\n
+      __The class skills of the celestial initiate are Athletics, Concentration, 
+      Decipher Script, Diplomacy, Heal, Intimidate, Knowledge (all), Listen,
+      Perform and Tumble. 
+
+      \n\n<10>CLASS FEATURES<2>\n
+      __*_<7>Proficiencies<2> -- Celestial initiates gain proficiency with
+      long blades, all types of armor and shields.\n
+      __*_<7>Smite Evil<2> -- The celestial initiate gains the ability to
+      smite evil just as a paladin does. Levels of this ability from
+      paladin and celestial initiate stack.\n
+      __*_<7>Resist Poison<2> -- At 1st level, the celestial initiate
+      recieves a +4 bonus to saving throws versus poison. At 7th level,
+      she becomes immune to poison.\n
+      __*_<7>Elemental Resistances<2> -- At 2nd level, the celestial
+      initiate gains resistances to two types of elemental damage, based
+      on her alignment and the type of celestial she is transforming
+      into: lawful archons resist electricity and acid, neutral guardinals
+      resist fire and cold and chaotic eladrins resist fire and necromantic
+      damage. These resistances begin at 5 and increase by +3 for every
+      celestial initiate level thereafter.\n
+      __*_<7>Spell-Like Abilities<2> -- At 1st level, the celestial
+      initiate gains the ability to use <9>call light<2> as an innate
+      spell-like ability.\n    
+      __*_<7>Ability Increases<2> -- At 4th level, the celestial initiate
+      recieves a +2 sacred bonus to Wisdom and Charisma; this bonus  
+      increases to +4 at 7th level and +6 at 10th level.\n
+      __*_<7>Wings<2> -- At 5th level, the celestial initiate grows a
+      vestigal pair of feathery white wings that allow her to control
+      her descent, giving her a constant <9>feather fall<2> effect. At
+      6th level, these wings are fully developed and she may now fly
+      at her full normal movement rate. At 8th level, she gains a 150%
+      inherant bonus to her flying movement rate.\n
+      __*_<7>Protective Aura<2> -- At 3rd level, a celestial initiate 
+      gains the benefit of a constantly active <9>magic circle vs. evil<2> 
+      effect. At 9th level, this strengthens to duplicate the full effect
+      of a celestial's protective aura: the area of effect and penalty of
+      the circle is doubled, and it also duplicates the effects of a
+      <9>globe of invulnerability<2>, preventing the casting of
+      spells of 5th level or lower by anyone other than the celestial
+      initiate.\n
+      __*_<7>Sharp Senses<2> -- The celestial initiate's senses sharpen
+      starting at level 5, granting her two levels of the Sharp Senses
+      ability (possessed by elves); levels of this ability gained from
+      being an elf and a celestial initiate stack. The initiate gains
+      another two levels of Sharp Senses at level 10.\n
+
+      \n\n<10>THE CELESTIAL INITIATE<15>\n
+      __Level__Def__Fort_Refl_Will_Special Abilities<1>\n
+      ____1____+0____+2___+2___+2__Smite Evil, +4 vs.\n
+      _____________________________poison, <9>call light<1>\n
+      ____2____+0____+3___+3___+3__Elemental Resistances\n
+      ____3____+1____+3___+3___+3__<9>magic circle vs. evil<1>\n
+      ____4____+1____+4___+4___+4__+2 Wisdom, +2 Charisma\n
+      ____5____+1____+4___+4___+4__Wings (Slow Fall), Sen. +2\n
+      ____6____+2____+5___+5___+5__Wings (Full Flight)\n
+      ____7____+2____+5___+5___+5__+4 Wisdom, +4 Charisma\n
+      ____8____+2____+6___+6___+6__Wings (150~ Move Rate)\n
+      ____9____+3____+6___+6___+6__Full Protective Aura\n
+      ____10___+3____+7___+7___+7__+6 Wis, +6 Cha, Senses +4\n
+      \n";
+
+  
+    On Event EV_ISTARGET {
+      bool failed;
+      failed = false;
+      if (!EActor->WizardMode) {
+        EActor->IPrint("This prestige class is still under development and cannot be used.");
+        return ABORT;
+        }
+      return DONE;
+      };
+    
+    HitDice: 4; Mana: 12; Def: 1/4;
+    Attk:  S_BRAWL    50,
+           S_MELEE    50,
+           S_THROWN   50,
+           S_ARCHERY  50;    
+    Skills[0]: 0;
+    Grants:
+      ;
+    Flags: CF_PRESTIGE, CF_FAVORED;
+    Lists:
+      * SPELL_LIST
+          0;
+  }
+
+Class "Crimson Adept"
+  {
+    Desc: "<12>*** NOT FINISHED YET ***\n<15>HitDie:_<1>d8__<15>Mana:<1>_d12__<15>Skills:<1>_4_<15>Saves:<1>_<9>F<1>r<9>W<1>_<15>Defense:_<1>1/4\n
+      <15>+toHit: <1>Archery <9>50~<1>, Brawl <9>50~<1>, Melee <9>50~<1>, Thrown <9>50~<1>\n
+      <2>\n__[ Flavor Text ]
+
+      \n\n<10>CLASS REQUIREMENTS<2>\n
+      __The crimson adept is a prestige class. It counts as a favored class
+      for all characters. In order to become a crimson adept, you must have:\n
+      __*_<7>Skills Levels<2> -- Alchemy +12, Concentration +12.\n
+      __*_<7>Known Spells<2> -- Ten combined spell levels of Thaumaturgy and
+      Necromancy spells.\n
+      __*_<7>Feats<2> -- Brew Potion, Endurance.\n
+      __*_<7>Attributes<2> -- Constitution 16+.\n
+      __*_<7>Religion<2> -- You must worship Khasrach, Xel, Essiah, or no diety 
+      at all. 
+
+      \n\n<10>CLASS SKILLS<2>\n
+      __The class skills of the crimson adept are Alchemy, Concentration, Decipher 
+      Script, Find Weakness, Healing, Intimidate, Knowledge (Infernal), Knowledge 
+      (Magic), Knowledge (Mythology), Knowledge (Theology), Knowledge (Undead), 
+      Metamagic, Spellcraft and Use Magic.
+
+      \n\n<10>CLASS FEATURES<2>\n
+      __*_<7>Proficiencies<2> -- Crimson adepts gain proficiency with the
+      whip.\n
+      __*_<7>Spellcasting<2> -- At 2nd, 3rd, 5th, 6th, 8th and 9th levels, the
+      crimson adept recieves a new spellcasting chart level, and advances her
+      progress in another class's spell list in this order of priority: mage,
+      priest, ranger, druid, paladin.\n
+      __If the crimson adept has Domains, she continues to advance those as well,
+      provided she is advancing as a divine caster.\n
+      __*_<7>Blood Magic<2> -- Once per day (twice at 4th, thrice at 7th and
+      four times at 10th), the crimson adept can choose to sacrifce hit points
+      to regain mana points on a 1 for 1 basis. This is an instantaneous action
+      that takes no time.\n
+      __*_<7>Pain Tolerance<2> -- The self-mutilating practices of a crimson
+      adept give her a strong resistance to pain and hone her mental discipline,
+      allowing her to add her crimson adept level as a competance bonus to her
+      Concentration skill rating.\n
+      __*_<7>Blood Infusion<2> -- The crimson adept gains the power to enchant
+      her own bloodstream, using a kind of blood alchemy to create and store
+      potions within her own body. She may have up to [Crimson Adept level +
+      Constitution modifier] potions in her bloodstream at once, and can activate
+      these just like normal potions with the Quaff command. The primary advantage
+      of blood infusions is that they take only five segments to permeate, versus
+      the 30 segments normally used to drink a potion. Additionally, when the
+      crimson adept reaches 10th level, the effects of all blood infusions are
+      automatically maximized.\n
+      __*_<7>Thicker than Water<2> -- The crimson adept learns to transmute her
+      blood at 3rd level, diffussing and thickening it to make her more resistant
+      to injury. She becomes immune to bleeding and gains a +2 magic bonus to her
+      constitution, as well as a resistance of 5 to slashing damage. At 5th level,
+      these bonuses increase to +4 Con and 7 resistance, and at 9th, +6 Con and
+      9 resistance.\n
+      __*_<7>Blood Whip<2> -- At 3rd level, the crimson adept gains the ability
+      to slit his wrist and emit a stream of blood that supernaturally congeals
+      into a razor-sharp liquid whip. This weapon acts as a keen weakening whip
+      with an enchantment bonus equal to half the user's crimson adept class
+      level (round down), but creating it costs her 3d6 hit points.\n
+      __*_<7>Wounding Magic<2> -- Whenever a crimson adept of 4th level or higher
+      inflicts non-elemental, non-aligned spell damage on a target (such as from 
+      <9>magic missile<2>, <9>thornwrack<2>, <9>ring of blades<2>, <9>glyph of
+      warding<2>, etc.), the target must make an additional Fortitude save (DC
+      15 + crimson adept class level) or bleed for 1 additional point of damage
+      for the next 2d6 rounds.\n
+      __*_<7>Steal Life<2> -- The crimson adept is now able to regain magical
+      energy through the death of creatures with blood; every such creature she
+      kills restores to her half its Challenge Rating in mana points.\n
+      __*_<7>Animate Blood<2> -- At the cost of 3 fatigue points, the crimson
+      adept can animate the blood within any other creature, causing that
+      creature to suffer [crimson adept level]d8 points of untyped damage as 
+      their blood attempts to tear free of their body; a Fortitude saving
+      throw halves the damage. If this effect kills the victim, a blood elemental
+      (similar to a water elemental) is created to serve the caster for the
+      remainder of the day, with its size being dependant upon the victim's
+      Challenge Rating.\n    
+
+      \n\n<10>THE CRIMSON ADEPT<15>\n
+      __Level__Def__Fort_Refl_Will_CL_Special Abilities<1>\n
+      ____1____+0____+2___+0___+2__-- Blood Magic, Pain Tol.\n
+      ____2____+0____+3___+0___+3__+1 Blood Infusion\n
+      ____3____+0____+3___+1___+3__+2 +2 Con, Resistance 5,\n
+      ________________________________Blood Whip, Clotting\n
+      ____4____+1____+4___+1___+4__-- Wounding Spells\n
+      ____5____+1____+4___+1___+4__+3 +4 Con, Resistance 7\n
+      ____6____+1____+5___+2___+5__+4 /Caustic Vitae/\n
+      ____7____+1____+5___+2___+5__-- Steal Life\n
+      ____8____+2____+6___+2___+6__+5 Animate Blood\n
+      ____9____+2____+6___+3___+6__+6 +6 Con, Resistance 9\n
+      ____10___+2____+7___+3___+7__-- Maximize Infusion\n
+      \n";
+
+  
+    On Event EV_ISTARGET {
+      bool failed;
+      failed = false;
+      if (!EActor->WizardMode) {
+        EActor->IPrint("This prestige class is still under development and cannot be used.");
+        return ABORT;
+        }
+      return DONE;
+      };
+    
+    HitDice: 4; Mana: 12; Def: 1/4;
+    Attk:  S_BRAWL    50,
+           S_MELEE    50,
+           S_THROWN   50,
+           S_ARCHERY  50;    
+    Skills[0]: 0;
+    Grants:
+      ;
+    Flags: CF_PRESTIGE, CF_FAVORED;
+    Lists:
+      * SPELL_LIST
+          0;
+  }
+
+Class "Duelist"
+  {
+  
+    Desc: "<12>*** NOT FINISHED YET ***\n<15>HitDie:_<1>d6__<15>Mana:<1>_d6__<15>Skills:<1>_6_<15>Saves:<1>_f<9>R<1>w_<15>Defense:_<1>1/2\n
+      <15>+toHit: <1>Archery <9>50~<1>, Brawl <9>50~<1>, Melee <9>100~<1>, Thrown <9>50~<1>\n
+      <2>\n__[ Flavor Text ]
+
+      \n\n<10>CLASS REQUIREMENTS<2>\n
+      __The duelist is a prestige class. It counts as a favored class
+      for all characters. In order to become a duelist, you must have:\n
+      __*_<7>BAB<2> -- Melee BAB +3.\n
+      __*_<7>Skills Levels<2> -- Tumble +10.\n
+      __*_<7>Feats<2> -- Expertise, Mobility, Weapon Finesse.
+            
+      \n\n<10>CLASS SKILLS<2>\n
+      __The class skills of the duelist are Appraise, Athletics, Balance, 
+      Bluff, Climb, Escape Artist, Jump, Listen, Perform and Tumble.
+
+      \n\n<10>CLASS FEATURES<2>\n
+      __*_<7>Proficiencies<2> -- Duelists gain proficiency with the daggers
+      and short blades weapon groups, and with the long sword.\n
+      __*_<7>Canny Defense<2> -- Starting at 1st level, duelists add the
+      lower of their duelist level or their primary Intelligence modifier
+      as an insight bonus to their armor class, when wearing medium or
+      lighter armor. Note that as an insight bonus, this does not stack 
+      with Zen Defense.\n
+        [ Implementation note: use this as an excuse to do EV_CALC_VALUES
+      and export AddBonus as an IncursionScript function -- it's about
+      time! ]\n
+      __*_<7>Scoundrel's Charm<2> -- Duelists recieve the Alluring feat
+      as a bonus feat at 2nd level.\n
+      __*_<7>Acrobatic Fighting<2> -- This ability grants a number of
+      related benefits to a duelist, starting at 2nd level. Its benefits
+      apply only when a character is wearing light or no armor, and is
+      lightly encombered or less. Levels of this ability gained from
+      duelist and bladesinger.\n
+      __<3>Grace:<2> At 2nd level, the duelist recieves a +2 bonus to
+      reflex saving throws, and to the skills Athletics, Balance, Jump and Tumble,
+      provided she meets the conditions described above. This bonus increases 
+      by +1 for every three further acrobatic fighting levels -- +3 at 5th, 
+      +4 at 8th, etc.\n
+      __<3>Acrobatic Charge:<2> At 3rd level, the duelist may perform an
+      acrobatic charge. This allows her to charge and tumble at the same
+      time, and when she does, her charge bonus increases by +1.\n
+      __<3>Enhanced Mobility:<2> Starting at 4th level, the duelist gains
+      a +1 bonus to Defense Class against attacks of opportunity; this
+      bonus stacks with the one granted from the Mobility feat, and
+      increases by +1 for every further level of acrobatic fighting from
+      any source.\n
+      __<3>Scenery is Power:<2> Starting at 5th level, the duelist gains
+      a peerless ability to make use of her enviornment and objects around
+      her when fighting. She gains a stunt bonus to hit and damage based on the
+      terrain and objects around her. For example, standing in the same 
+      square with a chest might give her +1/+1 (she could stand atop it for 
+      a height advantage, kick it at an opponent, position it between her 
+      and her opponent to direct the opponent's advance, etc.) Other
+      features that can be used effectively in combat include doors, mud,
+      water, forges, other furnature, hanging vines, etc.\n
+      __Different types of scenery increase the creative stunts a character
+      with this ability is capable of, and thus increase the bonuses granted,
+      but a single type of scenery doesn't increase in bonus regardless of
+      how much of it there is.\n
+      __<3>Elaborate Parry:<2> A character with 5 levels of acrobatic fighting
+      (such as a 6th-level duelist) finds that the benefits gained fron fighting
+      defensively are doubled, while the penalties remain unchanged, provided
+      that she is wielding a short blade or long sword as her primary weapon.\n
+      __<3>Mantis Leap:<2> A character with 6 levels of acrobatic fighting is
+      treated as possessing the Mantis Leap feat when she is wielding a short
+      blade or long sword and wearing light or no armor.\n 
+      __<3>Free Tumble:<2> With 8 levels of acrobatic fighting (i.e., a 9th-level
+      duelist), the character gains the ability to use the Tumble skill without
+      paying fatigue points. She may tumble for free once per day per two levels
+      of acrobatic fighting.\n
+      __*_<7>Rapier Wit<2> -- Duelists are infamous for using cutting insults
+      and clever repartee to rattle their opponents, allowing them to land
+      especially telling blows. Starting at 4th level, on 1 in 5 attacks
+      against a sapient opponent using a dagger, short blade or long sword, 
+      the duelist makes a Bluff check, which the target opposes with a
+      Concentration check. If the duelist's check is higher, she adds half her
+      margin of success to the damage of the attack, to a maximum of twice
+      her primary Charisma modifier.\n
+      __When the duelist reaches 7th level, this ability functions on 1 in 4
+      attacks; at 10th, it functions on 1 in 3. This ability does not function
+      if either attacker or victim is in a region of magical silence.\n
+      __*_<7>Flashing Blade<2> -- The duelist recieves Deflect Arrows as
+      a conditional bonus feat at 5th level and Deflect Magic as a conditional
+      bonus feat at 8th level. The character is treated as having these
+      feats only when wielding a magical short blade or long sword one-
+      handed in her weapon hand with which her attack speed is 250~ or
+      higher, and wearing light or no armor.\n 
+      __*_<7>Luck of the Daring<2> -- The duelist recieves the Unearthly
+      Luck ability at 6th level, allowing her to add her primary Luck
+      modifier to all saving throws. Halfling duelists, who already have
+      this ability from their race, recieve two bonus feats from the
+      warrior feat list instead.
+        
+            
+      \n\n<10>THE DUELIST<15>\n
+      __Level__Def__Fort_Refl_Will_EM_Special Abilities<1>\n
+      ____1____+0____+0___+2___+0__-- Canny Defense\n
+      ____2____+1____+0___+3___+0__-- Charm, Grace +2\n
+      ____3____+1____+1___+3___+1__-- Acrobatic Charge\n
+      ____4____+2____+1___+4___+1__+1 Rapier Wit (1 in 5)\n
+      ____5____+2____+1___+4___+1__+2 Def. Arrows, Grace +3,\n
+      ________________________________Scenery is Power\n
+      ____6____+3____+2___+5___+2__+3 Elaborate Parry, Luck\n
+      ____7____+3____+2___+5___+2__+4 Wit (1 in 4), M. Leap\n
+      ____8____+4____+2___+6___+2__+5 Def. Magic, Grace +4\n
+      ____9____+4____+3___+6___+3__+6 Free Tumble\n
+      ____10___+5____+3___+7___+3__+7 Rapier Wit (1 in 3)\n
+      \n";
+  
+    On Event EV_ISTARGET {
+      bool failed;
+      failed = false;
+      if (!EActor->WizardMode) {
+        EActor->IPrint("This prestige class is still under development and cannot be used.");
+        return ABORT;
+        }
+      return DONE;
+      };
+    
+    HitDice: 4; Mana: 12; Def: 1/4;
+    Attk:  S_BRAWL    50,
+           S_MELEE    50,
+           S_THROWN   50,
+           S_ARCHERY  50;    
+    Skills[0]: 0;
+    Grants:
+      ;
+    Flags: CF_PRESTIGE, CF_FAVORED;
+    Lists:
+      * SPELL_LIST
+          0;
+  }
         
         
 Class "Earthsinger"
@@ -1639,6 +1603,342 @@ Effect "Geomancy" : EA_HEALING
     MSG_CAST
       "You draw mystical power from the stone around you!";
   }
+  
+Class "Elementalist"
+  {
+    Desc: "<12>*** NOT FINISHED YET ***\n<15>HitDie:_<1>d8__<15>Mana:<1>_d12__<15>Skills:<1>_4_<15>Saves:<1>_fr<9>W<1>_<15>Defense:_<1>1/4\n
+      <15>+toHit: <1>Archery <9>50~<1>, Brawl <9>50~<1>, Melee <9>50~<1>, Thrown <9>50~<1>\n
+      <2>\n__[ Flavor Text ]
+
+      \n\n<10>CLASS REQUIREMENTS<2>\n
+      __The elementalist is a prestige class. It counts as a favored class
+      for all characters. When you attempt entry into the class, you must
+      choose one of the four classical elements (earth, air, fire or water)
+      to focus on. Once you have gained your first elementalist level, this
+      choice cannot be changed. In order to become an elementalist, you must 
+      have:\n
+      __*_<7>Spells<2> -- Eight levels of spells (for example, 1 3rd level and
+      two 2nd level) with the descriptor of your chosen element. Characters
+      who worship a god who grants the appropriate elemental domain (Immotian,
+      Ekliazeh, Sabine or Kysul), or who have a matching elemental affinity as
+      a racial ability, only need six levels of appropriate spells.\n
+      __*_<7>Skills Levels<2> -- Knowledge (Planes) +12.\n
+      __*_<7>Mentorship<2> -- You must have an intelligent creature of at least
+      CR 3 in your party that has the appropriate elemental subtype.\n
+      __*_<7>Feats<2> -- Empower Spell, Heighten Spell.\n
+
+      \n\n<10>CLASS SKILLS<2>\n
+      __The class skills of the elementalist are Concentration, Decipher Script, 
+      Knowledge (all), Metamagic, Spellcraft and Use Magic. Additionally, you
+      gain some additional class skills based on your chosen element: Earth --
+      Craft, Mining and Wilderness Lore; Air -- Jump, Listen and Tumble; Fire --
+      Athletics and Craft, and Water -- Alchemy, Escape Artist and Swim.\n 
+
+      \n\n<10>CLASS FEATURES<2>\n
+      __*_<7>Proficiencies<2> -- Elementalists gain no new proficiencies.\n
+      __*_<7>Spellcasting<2> -- Elementalists gain access to all wizard,
+      priest and druid spells with their chosen elemental descriptor, at a
+      rate of one spell level per elementalist level. They also continue to
+      advance the spell access of whatever other spellcasting class they
+      have; if they have more than one, one is chosen to advance in this
+      order of priority: druid, mage, priest, ranger or bard. Elementalists
+      can cast their newly accessable spells with the same rules the class
+      whose spell access is still advancing has. In other words, priest-
+      elementalists need holy symbols to use their elemental spells, but
+      can cast in heavy armor; druid elementalists cannot cast elemental
+      spells in metal armor, etc. The one exception is mage/elementalists,
+      who do not need spellbooks for their elemental spells.\n
+      __Elementalists gain a new caster level at every elementalist level
+      except 1st and 5th.\n
+      __*_<7>Elemental Specialist<2> -- An elementalist gains the same benefits
+      as a specialist mage when using spells with her elemental descriptor
+      -- a +25~ chance of spell success, correspondingly reduced mana cost
+      and so forth. These benefits stack with existing specialist benefits
+      for a mage-elementalist. Spells without the elemental descriptor are
+      unaltered by this ability.\n
+      __The elementalist also increases her effective caster level when
+      using these spells by +2 at 1st and 5th levels. At 6th level, the
+      DC of all spells with the appropriate descriptor increases by +2,
+      just as with the School Focus feat, but for the element instead of
+      a school.\n
+      __There is a penalty to this power. When casting spells that do
+      not have her chosen elemental descriptor, the spell inflicts only
+      75~ of the damage, or has 75~ of its normal numerical magnitude.
+      A mage-elementalist also loses the special advantage associated with
+      her previous school specialization, such as a necromancer's increased
+      ability to control undead, a weaver's controlled teleports or an 
+      evoker's increased fatigue.\n
+      __*_<7>Elemental Summons<2> -- When using a Summon Nature's Ally,
+      Monster Summoning or Holy Summoning spell, elementalists always
+      call creatures with the appropriate elemental subtype. This applies
+      to all such spells effective at the 1st elementalist level.\n
+      __Further, any animal companion or sacred mount you summon gains
+      the aqueous, flame, earthen or gaseous template, as appropriate.\n 
+      __*_<7>Elemental Dependency<2> -- Elementalists acquire a certain
+      weakness based on their chosen element, starting at 1st level. Fire
+      elementalists cannot cast spells or use magical items with the Water
+      descriptor, and suffer untyped hit point damage from soaking, in
+      addition to the normal effects. Water elementalists cannot use spells
+      with the Fire descriptor, and suffer double damage from fire effects
+      and magic. They are not injured by cold damage, but instead are
+      <9>slow<2>ed for one round for every hit point of damage they would
+      have taken.\n
+      __Earth elementalists suffer a -2 penalty to hit, damage and saves, and 
+      1 1/2 times mana cost for all spells, when they are not in direct physical 
+      contact with earth or stone -- for example, when flying, levitating, climbing
+      in trees, wearing boots or mounted. Air elementalists suffer a similar penalty 
+      whenever they are not airbourne, or when they are grappled.\n
+      __*_<7>Elemental Boost<2> -- Elementalists recieve a magic bonus to two
+      attributes as they advance. This bonus is +1/+0 at 2nd level, +1/+1 at
+      4th level, +2/+2 at 7th level and +3/+3 at 10th level. The attributes are
+      Strength and Constitution for earth elementalists, Dexterity and Luck for
+      air elementalists, Charisma and Intelligence for fire elementalists and
+      Wisdom and Dexterity for water elementalists.\n
+      __*_<7>Elemental Defense<2> -- Elementalists also gain certain defensive
+      abilities based on their close connection to their chosen element. Earth
+      elementalists add their elementalist level as a bonus to saving throws
+      versus petrification, and gain the Toughness feat (or one of Endurance,
+      Living Wall or Great Fortitude if they already have all the precursors)
+      at 5th and immunity to critical hits at 8th. Air elementalists move like
+      the wind itself, gaining Uncanny Dodge as a rogue of their elementalist
+      level, Evasion at 5th and Improved Evasion at 8th.\n 
+      __Fire elementalists gain fire resistance equal to three times their
+      elementalist level, until they recieve complete immunity to fire at
+      8th level. Water elementalists move sinuously, their bodies flowing
+      like water -- they add their elementalist level to their Swim skill
+      rating, gain the ability to breathe water at 5th level and a +4 magic
+      bonus to their DC at 8th level.\n
+      __*_<7>Elemental Brand<2> -- Any magical weapon wielded by an elementalist
+      of 3rd level or higher gains a magical quality for as long as it remains
+      in the elementalist's hands at no cost: flaming for fire elementalists,
+      shifting for water elementalists, stunning for earth elementalists and
+      seeking for air elementalists.\n
+      __*_<7>Elemental Covenant<2> -- Starting at 9th level, creatures with the
+      appropriate elemental subtype are automatically neutral to the elementalist,
+      and will not attack her unless she provokes them.\n
+      __*_<7>Elemental Body<2> -- At 10th level, the elementalist gains the
+      innate spell-like ability to polymorph into a large elemental of the
+      appropriate type. This costs 2 fatigue and lasts for 10 turns. When
+      she uses this special form of polymorph, all of her equipment merges 
+      into her new form. 
+
+      \n\n<10>THE ELEMENTALIST<15>\n
+      __Level__Def__Fort_Refl_Will_CL__EL_Special Abilities<1>\n
+      ____1____+0____+0___+0___+2__--_+2__Focus, Specialist,\n
+      ____________________________________Summons, Dependency<1>\n
+      ____2____+0____+0___+0___+3__+1_+3__Boost (+1/+0)\n
+      ____3____+1____+1___+1___+3__+1_+4__Brand\n
+      ____4____+1____+1___+1___+4__+1_+5__Boost (+1/+1)\n
+      ____5____+1____+1___+1___+4__--_+7__Defense I\n
+      ____6____+2____+2___+2___+5__+1_+8__DC Increase (+2)\n
+      ____7____+2____+2___+2___+5__+1_+9__Boost (+2/+2)\n
+      ____8____+2____+2___+2___+6__+1_+10_Defense II\n
+      ____9____+3____+3___+3___+6__+1_+11_Covenant\n
+      ____10___+3____+3___+3___+7__+1_+12_Body, Boost (+3/+3)\n
+      \n";
+
+  
+    On Event EV_ISTARGET {
+      bool failed;
+      failed = false;
+      if (!EActor->WizardMode) {
+        EActor->IPrint("This prestige class is still under development and cannot be used.");
+        return ABORT;
+        }
+      return DONE;
+      };
+    
+    HitDice: 4; Mana: 12; Def: 1/4;
+    Attk:  S_BRAWL    50,
+           S_MELEE    50,
+           S_THROWN   50,
+           S_ARCHERY  50;    
+    Skills[0]: 0;
+    Grants:
+      ;
+    Flags: CF_PRESTIGE, CF_FAVORED;
+    Lists:
+      * SPELL_LIST
+          0;
+  }
+
+Class "Horizon Walker"
+  {
+    Desc: "<12>*** NOT FINISHED YET ***\n";
+  
+    On Event EV_ISTARGET {
+      bool failed;
+      failed = false;
+      if (!EActor->WizardMode) {
+        EActor->IPrint("This prestige class is still under development and cannot be used.");
+        return ABORT;
+        }
+      return DONE;
+      };
+    
+    HitDice: 4; Mana: 12; Def: 1/4;
+    Attk:  S_BRAWL    50,
+           S_MELEE    50,
+           S_THROWN   50,
+           S_ARCHERY  50;    
+    Skills[0]: 0;
+    Grants:
+      ;
+    Flags: CF_PRESTIGE, CF_FAVORED;
+    Lists:
+      * SPELL_LIST
+          0;
+  }
+  
+Class "Inquisitor"
+  {
+    Desc: "<12>*** NOT FINISHED YET ***\n<15>HitDie:_<1>d6__<15>Mana:<1>_d10__<15>Skills:<1>_8_<15>Saves:<1>_<9>F<1>r<9>W<1>_<15>Defense:_<1>1/3\n
+      <15>+toHit: <1>Archery <9>50~<1>, Brawl <9>50~<1>, Melee <9>75~<1>, Thrown <9>50~<1>\n
+      <2>\n__[ Flavor Text ]
+
+      \n\n<10>CLASS REQUIREMENTS<2>\n
+      __The inquisitor is a prestige class. It counts as a favored class
+      for all characters. In order to become an inquisitor, you must have:\n
+      __*_<7>Skills Levels<2> -- Intimidate +12.\n
+      __*_<7>Alignment<2> -- Zealously Lawful.\n
+      __*_<7>Feats<2> -- Detective.\n
+      __*_<7>Abilities<2> -- You must be able to turn undead as a 5th-level
+      priest.\n
+      __*_<7>Religion<2> -- You must worship Immotian, and have attained at
+      least four blessings from him. 
+
+      \n\n<10>CLASS SKILLS<2>\n
+      __The class skills of the inquisitor are Appraise, Bluff, Concentration,
+      Decipher Script, Diplomacy, Disguise, Escape Artist, Find Weakness,
+      Gather Information, Intimidate, Knowledge (all), Listen, Lockpicking,
+      Metamagic, Poison Use, Search, Spellcraft and Spot.
+
+      \n\n<10>CLASS FEATURES<2>\n
+      __*_<7>Proficiencies<2> -- Inquisitors gain proficiency with light
+      weapons and daggers.\n
+      __*_<7>Spellcasting<2> -- At every level save for 1st and 3rd, the
+      inquisitor gains a spellcasting chart level. The inquisitor also
+      treats inquisitor levels as if they were priest levels for the purpose
+      of improving her access to the priest spell list. Inquisitors also
+      have their own spell list, which they recieve access to at one
+      spell level per inquisitor level.\n
+      __The inquisitor does not gain new domain spells or improve the
+      abilities granted by domains for her inquisitor levels, however.\n
+      __*_<7>Turn Undead<2> -- The inquisitor gains one level of the turn
+      undead ability for every inquisitor class level; this stacks with
+      the levels gained from being a priest or paladin.\n
+      __*_<7>Zealous Mettle<2> -- The inquisitor learns to trust in zeal
+      and endurance alone to protect them. When unarmored, she adds a
+      sacred bonus to all of her saving throws equal to her inquisitor
+      class level. At 9th level she recieves Toughness as a bonus feat
+      as long as she is unarmored; at 10th level, she recieves Resilience
+      likewise.\n
+      __*_<7>Grim Reputation<2> -- The agents of the Purified Office of the
+      Sacred Inquisition are rightly feared for their political power and
+      methods of torture; they in turn learn to exloit fear as a tactical
+      advantage, adding their inquisitor class level to their Intimidate
+      skill as an insight bonus.\n
+      __*_<7>Detect Corruption<2> -- Inquisitors are trained to root out
+      criminal behaviour, discerning heretics and dissidents. Starting at
+      1st level, they gain <9>detect corruption<2> as an innate spell-like
+      ability; this functions as <9>detect evil<2>, save that it detects
+      both evil and chaotic creatures, and does not reveal those who have
+      Immotian's favor regardless of alignment.\n
+      __*_<7>Smite Corruption<2> -- An inquisitor can smite corrupt creatures
+      just as a paladin smites evil creatures. Additionally, the inquisition
+      thrives on mob justice; for every allied creature the inquisitor has
+      with her, her effective level increases by one for smiting purposes.
+      If a paladin/inquisitor smites a creature both evil and corrupt, the
+      damage bonuses stack, but the Charisma bonus to hit is added only
+      once.\n
+      __*_<7>Purge Magic<2> -- Inquisitors, like all of Immotian's clergy,
+      view arcane magic as unclean; they are taught special methods of
+      purging magical influences from an area, person or object, and recieve
+      a +1 bonus to caster level checks for <9>dispel magic<2> and related
+      efffect at 2nd level, +1 for every inquisitor level thereafter.\n
+      __*_<7>Blessed Tithe<2> -- At its root, the inquisition exists not
+      to defend light and purity, or even to uphold dogma and suppress
+      other religions, but to provide a legal framework for the Church of
+      Immotian to sieze the land and wealth of social malcontents and
+      minorities, thereby maintaining the hegemony of the Church of Immotian 
+      within Theryan society. Inquisitors thus have as a primary goal the
+      procurement of gold for the church, which they can translocate to
+      the High Temple of the Pure Flame by offering it on an altar to
+      Immotian.\n
+      __Immotian offers a powerful incentive to those inquisitors who 
+      bring wealth to the church. Starting at 3rd level, an inquisitor
+      can offer coins as a sacrifice to Immotian. While this does not
+      increase divine favor -- the coins are not a 'true' sacrifice --
+      the inquisitor does recieve 1 experience point for every 25 gold
+      pieces worth of riches offered in this manner.\n 
+      __Using this ability funds an evil organization and is therefore
+      an evil act.\n
+      __*_<7>Purified Sight<2> -- Starting at 4th level, the inquisitor
+      is innately able to see invisible creatures.\n
+      __*_<7>Gentle Inquiry<2> -- Starting at 5th level, the inquisitor 
+      is able to inflict agony with a simple touch., and may use the
+      <9>pain touch<2> spell (described under domain spells) as an 
+      innate spell-like ability. At 7th level, she may use <9>burning
+      blood<2> likewise.\n
+      __*_<7>Incorruptable<2> -- Immotian blesses his inquisitors
+      personally, rendering them incorruptable (for some definitions
+      of the term, anyway). Starting at 6th level, they are immune
+      to charm effects; at 8th level, they become immune to all
+      compulsions.\n
+
+      <10>SPELL LIST<2>\n
+      <15>__1st level -- <1> ethereal blade, spiritwrack.\n
+      <15>__2nd level -- <1> animate rope, bladethirst, divine sacrifice,
+      ESP, false life, invisibility.\n
+      <15>__3rd level -- <1> clairvoyance, dismissal, explosive runes, 
+      fear, iron sword, phantom steed.\n
+      <15>__4th level -- <1> aura of abjuration, crushing despair, 
+      dominate person, improved invisibility, nemesis spell, 
+      order's wrath, phantasmal killer, premonition.\n
+      <15>__5th level -- <1> force shapechange, holy sword.\n      
+
+      \n\n<10>THE INQUISITOR<15>\n
+      __Level__Def__Fort_Refl_Will_CL_Special Abilities<1>\n
+      ____1____+0____+2___+0___+2__-- Turn Undead, Zealous\n
+      ________________________________Mettle, Grim Rep.,\n
+      ________________________________Det./Smite Corruption\n
+      ____2____+0____+3___+0___+3__+1 Purge Magic\n
+      ____3____+1____+3___+1___+3__-- Blessed Tithe\n
+      ____4____+1____+4___+1___+4__+2 Purified Sight\n
+      ____5____+1____+4___+1___+4__+3 Inquiry (Pain Touch)\n
+      ____6____+2____+5___+2___+5__+4 Incorruptable (Charms)\n
+      ____7____+2____+5___+2___+5__+5 Inquiry (Burn. Blood)\n
+      ____8____+2____+6___+2___+6__+6 Incorruptable (Comp.)\n
+      ____9____+3____+6___+3___+6__+7 Toughness\n
+      ____10___+3____+7___+3___+7__+8 Resilience\n
+      \n";
+
+  
+    On Event EV_ISTARGET {
+      bool failed;
+      failed = false;
+      if (!EActor->WizardMode) {
+        EActor->IPrint("This prestige class is still under development and cannot be used.");
+        return ABORT;
+        }
+      return DONE;
+      };
+    
+    HitDice: 4; Mana: 12; Def: 1/4;
+    Attk:  S_BRAWL    50,
+           S_MELEE    50,
+           S_THROWN   50,
+           S_ARCHERY  50;    
+    Skills[0]: 0;
+    Grants:
+      ;
+    Flags: CF_PRESTIGE, CF_FAVORED;
+    Lists:
+      * SPELL_LIST
+          0;
+  }
+
+
   
 Class "Loremaster"
   {
@@ -1867,7 +2167,7 @@ Class "Master Archer"
     On Event EV_ISTARGET {
       bool failed;
       failed = false;
-      if (EActor->GetBAB(A_HIT_ARCHERY) < 5)
+      if (EActor->GetBAB(S_ARCHERY) < 5)
         {
           failed = true;
           EActor->IPrint("You must have an archery BAB of +5.");
@@ -1893,7 +2193,7 @@ Class "Master Archer"
           failed = true;
           EActor->IPrint("You must have the Zen Archery feat.");
         }
-      if (!EActor->ISkillLevel(SK_CONCENT) < 7)
+      if (EActor->ISkillLevel(SK_CONCENT) < 7)
         {
           failed = true;
           EActor->IPrint("You must have Concentration 7+.");
@@ -2636,6 +2936,35 @@ Class "Twilight Huntsman"
         6 $"animate objects" $"harm" $"immortal grandeur";
           
   } 
+  
+Class "Undead Slayer"
+  {
+    Desc: "<12>*** NOT FINISHED YET ***\n";
+  
+    On Event EV_ISTARGET {
+      bool failed;
+      failed = false;
+      if (!EActor->WizardMode) {
+        EActor->IPrint("This prestige class is still under development and cannot be used.");
+        return ABORT;
+        }
+      return DONE;
+      };
+    
+    HitDice: 4; Mana: 12; Def: 1/4;
+    Attk:  S_BRAWL    50,
+           S_MELEE    50,
+           S_THROWN   50,
+           S_ARCHERY  50;    
+    Skills[0]: 0;
+    Grants:
+      ;
+    Flags: CF_PRESTIGE, CF_FAVORED;
+    Lists:
+      * SPELL_LIST
+          0;
+  }
+
 
 Class "Underdark Warrior"
   {

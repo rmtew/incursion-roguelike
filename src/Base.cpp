@@ -450,6 +450,8 @@ void* x_realloc(void *block, size_t unit, size_t sz, size_t osz)
 void PurgeStrings()
   {
     int32 i,j;
+    if (iStrBufDelQueue < 256)
+      return;
     for (i=0;StrBufDelQueue[i];i++)
       {
         if (StrBufDelQueue[i]->Canary != 0xABCDEF12)
@@ -462,6 +464,7 @@ void PurgeStrings()
         StrBufDelQueue[i] = NULL;
       }
     iStrBufDelQueue = 0;
+    memset(StrBufDelQueue,0,STRING_QUEUE_SIZE*sizeof(String*));
   }
 
 /*********************************************************************/

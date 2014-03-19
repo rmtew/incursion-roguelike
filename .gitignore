@@ -3,3 +3,8 @@
 *.lo
 *.o
 *.obj
+
+# Windows build & dependencies
+Debug
+allegro
+dx70_min

@@ -60,6 +60,7 @@ struct groupHeader
     uint32 Signature;
     hObj   hGroup;
     int32  groupSize;
+    int32  compSize;
     int32  objCount;
     int32  dataCount;
     int32  LastHandle;
@@ -71,7 +72,8 @@ Registry::Registry()
     memset(DataTable,0,sizeof(DataNode)*DATA_TABLE_SIZE);
     LastUsedHandle = 128;
     #ifdef DEBUG_OBJECTS
-    reg_log = fopen("d:\\incursion\\reglog.txt","wt");
+    String path = T1->IncursionDirectory + "\\reglog.txt";
+    reg_log = fopen((const char *)path,"wt");
     #endif
   }
 
@@ -384,7 +386,7 @@ void Registry::RemoveObject(Object *o)
     Error("Registry::UnlinkObject -- invalid object handle!");
   }
 
-int16 Registry::SaveGroup(Term &t, hObj hGroup,bool newFile)
+int16 Registry::SaveGroup(Term &t, hObj hGroup, bool use_lz, bool newFile)
   {
     int32 i; uint32 sig;
     groupHeader gh; fileHeader fh;
@@ -443,6 +445,9 @@ int16 Registry::SaveGroup(Term &t, hObj hGroup,bool newFile)
     
     t.FWrite(&gh,sizeof(gh));
 
+    /* Initialize the Memory File */
+    CFile *cf = new CFile(&t);
+
     /* Write the objects in sequential order, each with a single byte in
        front of it to tell its type. */
     gh.objCount = 0; saveMode = true;
@@ -459,9 +464,9 @@ int16 Registry::SaveGroup(Term &t, hObj hGroup,bool newFile)
               
             gh.objCount++;
             /* Write the object type */
-            t.FWrite(&(r->pObj->Type),1);
+            cf->FWrite(&(r->pObj->Type),1);
             /* Write the object itself */
-            t.FWrite(r->pObj,typeSize(r->pObj->Type));
+            cf->FWrite(r->pObj,typeSize(r->pObj->Type));
 
              
             r = r->Next;
@@ -473,7 +478,7 @@ int16 Registry::SaveGroup(Term &t, hObj hGroup,bool newFile)
        the data in order to assure that we're actually reading a
        valid Incursion data file accurately. This is mostly paranoia,
        but it will likely help versus otherwise-untracable bugs. */
-    t.FWrite(&(sig = SIGNATURE_TWO),4);
+    cf->FWrite(&(sig = SIGNATURE_TWO),4);
 
     /* Now write the data, in a manner similar to how the objects were
        written, but substituting size value for type index. */
@@ -491,27 +496,33 @@ int16 Registry::SaveGroup(Term &t, hObj hGroup,bool newFile)
             ASSERT(d->hOwner > 127);
             ASSERT(d->myHandle > 127);
             /* Write the handle of the data */
-            t.FWrite(&(d->myHandle),4);
+            cf->FWrite(&(d->myHandle),4);
             /* Write the handle of the data's owner */
-            t.FWrite(&(d->hOwner),4);
+            cf->FWrite(&(d->hOwner),4);
             /* Write the size in bytes of the data */
-            t.FWrite(&(d->Size),4);
+            cf->FWrite(&(d->Size),4);
             /* And now write the data proper */
-            t.FWrite(d->pData,d->Size); // ww: segfault here, this=0 (?)
+            cf->FWrite(d->pData,d->Size); // ww: segfault here, this=0 (?)
 
             d = d->Next;
             }
           }
       }
 
+    int32 csz;
+    csz = cf->CommitCompressed(t.Tell(),use_lz);
+
     /* Now that we have all the needed information, jump back in the file
        and write out the group header. */
-    gh.groupSize  = t.Tell() - ghPos;
+    gh.groupSize  = cf->FSize();
+    gh.compSize   = csz;
     gh.Signature  = SIGNATURE;
     gh.hGroup     = hGroup;
     gh.LastHandle = LastUsedHandle;
     t.Seek(ghPos,SEEK_SET);
     t.FWrite(&gh,sizeof(gh));
+    
+    delete cf;
 
     /* Fix all the pointers in memory to data blocks, so that they point
        properly again. */
@@ -530,13 +541,12 @@ int16 Registry::SaveGroup(Term &t, hObj hGroup,bool newFile)
           }
       }
 
-
     return 0;
   }
 
 #pragma warning(disable:4291)
 
-int16 Registry::LoadGroup(Term &t, hObj hGroup)
+int16 Registry::LoadGroup(Term &t, hObj hGroup, bool use_lz)
   {
     fileHeader fh;
     groupHeader gh;
@@ -579,11 +589,15 @@ int16 Registry::LoadGroup(Term &t, hObj hGroup)
 
     foundGroup: 
 
+    CFile *cf;
+    cf = new CFile(&t);
+    cf->LoadCompressed(t.Tell(),gh.compSize,gh.groupSize,use_lz);
+
     LastUsedHandle = max(LastUsedHandle,gh.LastHandle);
     for(i=0;i!=gh.objCount;i++)
       {
         /* What type of object is this? */
-        t.FRead(&oType,1);                   
+        cf->FRead(&oType,1);                   
 
         /* Allocate the object. Account for the
            special case of the (singular) Game
@@ -597,7 +611,7 @@ int16 Registry::LoadGroup(Term &t, hObj hGroup)
           throw EMEMORY;
          
         /* ...read in the object... */
-        t.FRead(o,typeSize(oType));
+        cf->FRead(o,typeSize(oType));
 
         /* ...reattach its virtual table pointer by calling
               a kludged, overridden new() operator in Object
@@ -660,18 +674,18 @@ int16 Registry::LoadGroup(Term &t, hObj hGroup)
 
     /* Read and confirm the special objects-data seperator to assure
        that the data file is not corrupt. */
-    t.FRead(&Seperator,4);
+    cf->FRead(&Seperator,4);
     if (Seperator != SIGNATURE_TWO)
       throw ECORRUPT;
 
     for(i=0;i!=gh.dataCount;i++)
       {
         /* Read data handle */
-        t.FRead(&DataHandle,4);
+        cf->FRead(&DataHandle,4);
         /* Read data owner's handle */
-        t.FRead(&DataOwner,4);
+        cf->FRead(&DataOwner,4);
         /* Read data size */
-        t.FRead(&DataSize,4);
+        cf->FRead(&DataSize,4);
 
         ASSERT(DataHandle > 127);
         ASSERT(DataOwner  > 127);
@@ -682,7 +696,7 @@ int16 Registry::LoadGroup(Term &t, hObj hGroup)
           throw EMEMORY;
 
         /* Read in the data... */
-        t.FRead(pData,DataSize);
+        cf->FRead(pData,DataSize);
 
         /* Add it to the Registry */
         RegisterBlock(pData,DataOwner,DataSize,DataHandle);
@@ -696,6 +710,9 @@ int16 Registry::LoadGroup(Term &t, hObj hGroup)
       }
 
     loadMode = false;
+    
+    delete cf;
+    
     return 0;
   }
 
@@ -791,7 +808,7 @@ failed:
       fh.numGroups = 1;
       strncpy(fh.Name,desc,71);
       T1->FWrite(&fh,sizeof(fh));
-      theRegistry->SaveGroup(*T1,0,true);
+      theRegistry->SaveGroup(*T1,0,false,true);
       T1->Close();
       T1->ChangeDirectory(T1->IncursionDirectory);
       }
@@ -881,7 +898,7 @@ bool Game::LoadGame(bool backup)
       T1->OpenRead(fn);
       /* The central Game object gets overwritten. */
       MainRegistry.RemoveObject(theGame);
-      MainRegistry.LoadGroup(*T1,0);
+      MainRegistry.LoadGroup(*T1,0,false);
       T1->Close();
       SaveFile = fn;
     T1->ChangeDirectory(T1->IncursionDirectory);
@@ -915,7 +932,7 @@ bool Game::LoadGame(bool backup)
           T1->ChangeDirectory(T1->ModuleSubDir());
           //T1->Scour(ModFiles[i]->FName,true);
           T1->OpenRead(filespec);
-          ResourceRegistry.LoadGroup(*T1,ModFiles[i]->hMod);
+          ResourceRegistry.LoadGroup(*T1,ModFiles[i]->hMod,true);
           T1->Close();
           if (!oThing(ModFiles[i]->hMod))
             throw EHANDLE;
@@ -978,7 +995,7 @@ void Game::SaveModule(int16 mn)
       strncpy(fh.Name,Modules[mn]->GetText(Modules[mn]->Name),71);
       T1->FWrite(&fh,sizeof(fh));
       theRegistry = &ResourceRegistry;
-      theRegistry->SaveGroup(*T1,Modules[mn]->myHandle,true);
+      theRegistry->SaveGroup(*T1,Modules[mn]->myHandle,true,true);
       theRegistry = &MainRegistry;
       T1->Close();
       T1->ChangeDirectory(T1->IncursionDirectory);
@@ -1018,7 +1035,7 @@ bool Game::LoadModules()
     }
       do {
         strcpy(mr.FName,T1->GetFileName());
-        ResourceRegistry.LoadGroup(*T1,0);
+        ResourceRegistry.LoadGroup(*T1,0,true);
         T1->Close();
         mr.hMod = ResourceRegistry.GetModuleHandle();
         if (!oModule(mr.hMod))

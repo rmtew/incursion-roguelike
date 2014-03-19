@@ -34,11 +34,6 @@
 #include "Incursion.h"
 
 /* Kludge to convey extra info */
-extern int16 summDuration;
-extern int16 illDuration, 
-             illSaveDC,
-             illCasterLev;
-extern rID   illEID;
 
 EvReturn Magic::Vision(EventInfo &e)
   {           
@@ -499,7 +494,9 @@ EvReturn Magic::Grant(EventInfo &e)
       UnsetSilence();
     }
     e.ETarget->GainTempStati(e.EMagic->xval, NULL, e.vDuration, 
-        TEFF(e.eID)->HasFlag(EF_ONCEONLY) ? SS_ONCE : SS_ENCH, 
+        TEFF(e.eID)->HasFlag(EF_ONCEONLY) ? SS_ONCE : 
+        TEFF(e.eID)->HasFlag(EF_CURSE)    ? SS_CURS : 
+        TEFF(e.eID)->HasFlag(EF_MUNDANE)  ? SS_MISC : SS_ENCH, 
         e.EMagic->yval, e.vDmg,e.eID,e.vCasterLev + (e.MM & MM_FORTIFY ? 5 : 0));
   }
 
@@ -609,7 +606,8 @@ EvReturn Magic::Inflict(EventInfo &e)
 
     e.EVictim->GainTempStati(e.EMagic->xval, e.EActor, e.vDuration, 
       TEFF(e.eID)->HasFlag(EF_ONCEONLY) ? SS_ONCE : 
-      TEFF(e.eID)->HasFlag(EF_CURSE)    ? SS_CURS : SS_ENCH, 
+      TEFF(e.eID)->HasFlag(EF_CURSE)    ? SS_CURS : 
+      TEFF(e.eID)->HasFlag(EF_MUNDANE)  ? SS_MISC : SS_ENCH, 
       e.EMagic->yval, e.vDmg, e.eID,e.vCasterLev + (e.MM & MM_FORTIFY ? 5 : 0));
     
     /*
@@ -661,6 +659,43 @@ EvReturn Magic::Inflict(EventInfo &e)
           }
     return DONE;
   }
+
+bool isMetaEvent(int32 ev)
+  {
+    if (ev >= 40000)
+      ev -= 40000;
+    if (ev >= 20000)
+      ev -= 20000;
+    if (ev >= 10000)
+      return true;
+    return false;
+  }
+
+EvReturn Magic::Override(EventInfo &e)
+	{
+    int16 i; Annotation *a;
+    if (e.isRemove || e.isLeave) {
+      e.ETarget->RemoveEffStati(e.eID);
+      e.Terse = true; 
+      return DONE; 
+      }
+      
+    for(a=RES(e.eID)->FAnnot();a;a=RES(e.eID)->NAnnot())  
+      if (a->AnType == AN_EVENT) {
+        for (i=0;i!=5;i++)
+          if (a->u.ev[i].Event != 0 && 
+              isMetaEvent(a->u.ev[i].Event)) {
+            e.EVictim->GainTempStati(TRAP_EVENT, e.EActor, e.vDuration, 
+              TEFF(e.eID)->HasFlag(EF_ONCEONLY) ? SS_ONCE : 
+              TEFF(e.eID)->HasFlag(EF_CURSE)    ? SS_CURS : 
+              TEFF(e.eID)->HasFlag(EF_MUNDANE)  ? SS_MISC : SS_ENCH, 
+              a->u.ev[i].Event - 10000, e.vDmg, e.eID,
+              e.vCasterLev + (e.MM & MM_FORTIFY ? 5 : 0));            
+          } 
+      }
+    return DONE;
+  }
+
 
 EvReturn Magic::Polymorph(EventInfo &e)
   {
@@ -1006,10 +1041,12 @@ void Creature::Shapeshift(rID _mID, bool merge, Item* PolySource)
     m->Update(x,y);
 }
 
+/* HACKFIX */
 EvReturn Magic::Dispel(EventInfo &e)
   {
-    static rID Resisted[128];
-    int16 eCasterLev, rc, i, j, bon; 
+    static rID Resisted[512], Dispelled[512];
+    hObj   oResisted[512], oDispelled[512]; 
+    int16 eCasterLev, rc, dc, i, j, bon; 
     bool  Something, msg;
     Status *s; Item *it;
 
@@ -1029,7 +1066,7 @@ EvReturn Magic::Dispel(EventInfo &e)
             }
         }
 
-    rc = 0; Something = false; msg = false;
+    rc = 0; dc = 0; Something = false; msg = false;
     e.EMap->SetQueue(QUEUE_DISPEL_MSG);
     if (e.EMagic->xval & DIS_DISPEL) {
       StatiIter(e.EVictim)
@@ -1050,8 +1087,16 @@ EvReturn Magic::Dispel(EventInfo &e)
           if (TEFF(S->eID)->HasFlag(EF_MUNDANE))
             continue;
 
+          for (j=0;j!=dc;j++)
+            if (Dispelled[j] == S->eID &&
+                oDispelled[j] == S->h)
+              {
+                StatiIter_DispelCurrent(e.EVictim);
+                continue;
+              }
           for(j=0;j!=rc;j++)
-            if (Resisted[j] == S->eID)
+            if (Resisted[j] == S->eID &&
+                oResisted[j] == S->h)
               goto NextStati;
           
           eCasterLev = S->CLev;
@@ -1067,11 +1112,19 @@ EvReturn Magic::Dispel(EventInfo &e)
           if (eCasterLev+11 > e.vDmg+bon)
             {
               e.Resist = true;
+              oResisted[rc] = S->h;
               Resisted[rc++] = S->eID;
-              if (rc >= 127)
+              
+              if (rc >= 512)
                 StatiIterBreakout(e.EVictim,return DONE)
               continue;
             }
+            
+          oDispelled[dc] = S->h;
+          Dispelled[dc++] = S->eID;
+          if (dc > 512)
+            StatiIterBreakout(e.EVictim,return DONE)
+              
 
           if (it) {
             it->GainTempStati(DISPELLED,NULL,e.vDuration,SS_MISC,0,0,e.eID);
@@ -1099,8 +1152,7 @@ EvReturn Magic::Dispel(EventInfo &e)
 
           SkipMessage:
 
-          e.EVictim->RemoveEffStati(S->eID, EV_DISPELLED);
-
+          StatiIter_DispelCurrent(e.EVictim);
 
           NextStati:
             ;
@@ -1322,7 +1374,6 @@ EvReturn Magic::Summon(EventInfo &e)
       }
               
     
-    summDuration = e.vDuration;
     if (e.MM & MM_CONTROL) {
       Creature *cr[20][20];
       memset(cr,0,20*20*sizeof(Creature*));
@@ -1330,13 +1381,29 @@ EvReturn Magic::Summon(EventInfo &e)
       for (i=0;i!=n;i++)
         {
           memset(CandidateCreatures,0,2048*sizeof(Creature*));
-          if (e.EMagic->rval)
-            e.EMap->GenEncounter(EN_MONID | EN_SUMMON | EN_NOPLACE | EN_MAXIMIZE| (TEFF(e.eID)->HasFlag(EF_MULTIPLE) ? 0 : 
-              EN_SINGLE) | (e.vDmg ? 0 : EN_SPECIFIC),e.vDmg,e.EMap->Depth,e.EMagic->rval,0,0,
-              e.EXVal,e.EYVal,e.EActor);
-          else 
-            e.EMap->GenEncounter(EN_MTYPE|EN_SUMMON|EN_NOPLACE | EN_MAXIMIZE| (TEFF(e.eID)->HasFlag(EF_MULTIPLE) ? 0 : EN_SINGLE),
-              e.vDmg,e.EMap->Depth,e.EMagic->xval,0,0,e.EXVal,e.EYVal,e.EActor);
+          XTHROW(EV_ENGEN,e,
+            xe.enFlags = EN_SUMMON;
+            xe.enFlags |= TEFF(e.eID)->HasFlag(EF_MULTIPLE) ? 0 : EN_SINGLE;
+            xe.enCR = e.vDmg;
+            xe.enDepth = e.EMap->Depth;
+            xe.enConstraint = e.EMagic->xval;
+            if (!e.EMagic->rval)
+              xe.enRegID = e.eID;
+            else if (RES(e.EMagic->rval)->Type == T_TENCOUNTER)
+              xe.enID = e.EMagic->rval;
+            else if (RES(e.EMagic->rval)->Type == T_TMONSTER)
+              {
+                xe.enConstraint = e.EMagic->rval;
+                xe.enID = FIND("Generic Summons");
+              }
+            else
+              xe.enRegID = e.EMagic->rval;
+            if (!e.isLoc) {
+              xe.isLoc = true;
+              xe.EXVal = e.ETarget ? e.ETarget->x :  e.EActor->x;
+              xe.EYVal = e.ETarget ? e.ETarget->y :  e.EActor->y;
+              }
+            );
           for (j=0;CandidateCreatures[j];j++)
             {
               if (j >= 20)
@@ -1372,16 +1439,31 @@ EvReturn Magic::Summon(EventInfo &e)
           }      
       }
     else {
-      bool b;
-      if (e.EMagic->rval)
-        b = e.EMap->GenEncounter(EN_MONID | EN_SUMMON | EN_MAXIMIZE|(TEFF(e.eID)->HasFlag(EF_MULTIPLE) ? 0 : 
-          EN_SINGLE) | (e.vDmg ? 0 : EN_SPECIFIC),e.vDmg,e.EMap->Depth,e.EMagic->rval,0,0,
-          e.EXVal,e.EYVal,e.EActor);
-      else 
-        b = e.EMap->GenEncounter(EN_MTYPE|EN_SUMMON|EN_MAXIMIZE|(TEFF(e.eID)->HasFlag(EF_MULTIPLE) ? 0 : EN_SINGLE),
-          e.vDmg,e.EMap->Depth,e.EMagic->xval,0,0,e.EXVal,e.EYVal,e.EActor);
-      if (!b)
-        APrint(e, "[ Summon failed in GenEncounter ]");
+      XTHROW(EV_ENGEN,e,
+        xe.enFlags = EN_SUMMON;
+        xe.enFlags |= TEFF(e.eID)->HasFlag(EF_MULTIPLE) ? 0 : EN_SINGLE;
+        xe.enCR = e.vDmg;
+        xe.enDepth = e.EMap->Depth;
+        xe.enConstraint = e.EMagic->xval;
+        if (!e.EMagic->rval)
+          xe.enRegID = e.eID;
+        else if (RES(e.EMagic->rval)->Type == T_TENCOUNTER)
+          xe.enID = e.EMagic->rval;
+        else if (RES(e.EMagic->rval)->Type == T_TMONSTER)
+          {
+            xe.enConstraint = e.EMagic->rval;
+            xe.enID = FIND("Generic Summons");
+          }
+        else
+          xe.enRegID = e.EMagic->rval;
+        if (!e.isLoc) {
+          xe.isLoc = true;
+          xe.EXVal = e.ETarget ? e.ETarget->x :  e.EActor->x;
+          xe.EYVal = e.ETarget ? e.ETarget->y :  e.EActor->y;
+          }
+        );
+      if (!e.EMap->GetEncounterCreature(0))
+        APrint(e, "[ Summon failed in EV_ENGEN ]");
       }
       
     if (e.MM & MM_AUGMENT)
@@ -1416,6 +1498,9 @@ EvReturn Magic::Terraform(EventInfo &e)
     // level 1 map stored! This really happens!
     Map *m = NULL; 
     uint8 x,y,i;
+
+    /*if (e.EXVal == e.EActor->x-2 && e.EYVal == e.EActor->y-2)
+      __asm int 3;*/
 
     if (!e.EXVal)
       {
@@ -1485,11 +1570,18 @@ EvReturn Magic::Terraform(EventInfo &e)
     // Wed Feb 18 21:58:41 PST 2004
     if (m != theGame->GetPlayer(0)->m) {
       ASSERT(0); 
-    } 
+      } 
     TTerrain * tt = TTER(e.EMagic->rval);
     if (!tt)
       { Error("EA_TERRAFORM has blank rval!");
         return ABORT; }
+        
+    /* Avoid double-writing terraform effects -- once for the
+       target's location and once on MagicXY -- since this is
+       the root of the tanglefoot bag center square bug. */
+    if (tt == ct)
+      return DONE;
+        
     if (tt->Type == T_TFEATURE) {
       Feature *ft = new Feature(TFEAT(e.EMagic->rval)->Image,
           e.EMagic->rval,T_FEATURE);
@@ -1653,7 +1745,7 @@ void Map::RemoveTerra(int16 key)
       if (TerraList[i]->key == key)
         {
           EventInfo e;
-          memset(&e,0,sizeof(EventInfo));
+          e.Clear();
           e.Event = EV_ELAPSED;
           e.EXVal = 0; e.EYVal = 0;
           for(j=0;j!=TerraXY.Total();j++)
@@ -1832,16 +1924,27 @@ EvReturn Magic::Illusion(EventInfo &e)
             e.EXVal = e.ETarget ? e.ETarget->x : e.EActor->x;
             e.EYVal = e.ETarget ? e.ETarget->y : e.EActor->y;
             }
+            
+          XTHROW(EV_ENGEN,e,
+            xe.enFlags = EN_ILLUSION; /* HACKFIX */
+            xe.enFlags |= TEFF(e.eID)->HasFlag(EF_MULTIPLE) ? 0 : EN_SINGLE;
+            xe.enCR = e.vDmg;
+            xe.enDepth = e.EMap->Depth;
+            xe.enConstraint = e.EMagic->xval;
 
-          illDuration = e.vDuration;
-          illSaveDC = e.saveDC;
-          illEID = e.eID;
-          if (e.EMagic->rval)
-            e.EMap->GenEncounter(EN_MONID|EN_ILLUSION|(TEFF(e.eID)->HasFlag(EF_MULTIPLE) ? 0 : EN_SINGLE),
-              e.vDmg,e.EMap->Depth,e.EMagic->rval,0,0,e.EXVal,e.EYVal,e.EActor);
-          else 
-            e.EMap->GenEncounter(EN_MTYPE|EN_ILLUSION|(TEFF(e.eID)->HasFlag(EF_MULTIPLE) ? 0 : EN_SINGLE),
-              e.vDmg,e.EMap->Depth,e.EMagic->xval,0,0,e.EXVal,e.EYVal,e.EActor);
+            if (!e.EMagic->rval)
+              xe.enRegID = e.eID;
+            else if (RES(e.EMagic->rval)->Type == T_TENCOUNTER)
+              xe.enID = e.EMagic->rval;
+            else if (RES(e.EMagic->rval)->Type == T_TMONSTER)
+              {
+                xe.enConstraint = e.EMagic->rval;
+                xe.enID = FIND("Generic Summons");
+              }
+            else
+              xe.enRegID = e.EMagic->rval;
+            );
+
           
           if ((e.EItem && e.EItem->isItem()))
             e.EActor->IdentByTrial(e.EItem);

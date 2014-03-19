@@ -2531,10 +2531,30 @@ void Map::DaysPassed()
               break;
               }
             while(1);
-            if (TTER(TerrainAt(x,y))->HasFlag(TF_WATER))
-              GenEncounter(EN_DUNGEON,DepthCR,DepthCR,MA_AQUATIC,0,dID,x,y);
+            if (TTER(TerrainAt(x,y))->HasFlag(TF_WATER)) {
+              THROW(EV_ENGEN,
+                xe.enFlags = EN_DUNGEON|EN_AQUATIC|EN_NOMAGIC|EN_DUNREGEN;
+                xe.EMap = this;
+                xe.enCR = DepthCR;
+                xe.enDepth = DepthCR;
+                xe.enRegID = RegionAt(x,y);
+                xe.EXVal = x;
+                xe.EYVal = y;
+                xe.isLoc = true;
+                );
+              }
             else {
-              n = GenEncounter(EN_DUNGEON|EN_NOPLACE,DepthCR,DepthCR,0,0,dID,x,y);
+              THROW(EV_ENGEN,
+                xe.enFlags = EN_DUNGEON|EN_NOMAGIC|EN_NOPLACE|EN_DUNREGEN;
+                xe.EMap = this;
+                xe.enCR = DepthCR;
+                xe.enDepth = DepthCR;
+                xe.enRegID = RegionAt(x,y);
+                xe.EXVal = x;
+                xe.EYVal = y;
+                xe.isLoc = true;
+                );
+              n = cEncMem;
               for (j=0;j!=n;j++) {
                 Tries = 0;
                 do {
@@ -2546,6 +2566,8 @@ void Map::DaysPassed()
                   if (!InBounds(x2,y2))
                     continue;
                   if (SolidAt(x2,y2))
+                    continue;
+                  if (RegionAt(x,y) != RegionAt(x2,y2))
                     continue;
                   if (At(x2,y2).isVault)
                     continue;
@@ -2619,6 +2641,26 @@ void Map::DaysPassed()
     SkipMonUpdate:
     Day = theGame->Day;
     inDaysPassed = false;
+
+    /* HACKFIX */
+    int16 capCR = Depth + (theGame->Opt(OPT_OOD_MONSTERS) ? 3 : 1);
+    rID campID = FIND("The Goblin Encampment");
+    RestartVerifyMon:
+    if (theGame->Opt(OPT_DIFFICULTY) != DIFF_NIGHTMARE) {
+      MapIterate(this,t,i)
+        if (t->isType(T_MONSTER))
+          if (((Creature*)t)->ChallengeRating() > capCR)
+            {
+              if (theGame->GetPlayer(0))
+                if (((Creature*)t)->isFriendlyTo(theGame->GetPlayer(0)))
+                  continue;
+              if (RegionAt(t->x,t->y) == campID)
+                continue;
+              t->Remove(true);
+              goto RestartVerifyMon;
+            }
+      }
+
 
   }
 

@@ -25,7 +25,7 @@
 #define pBSysFunc                 BSysFunc*
 int16 currMap;
 int16 ArtPowerType;
-uint32 TempList[1024]; 
+uint32 TempList[2048]; 
 int16 TempListLoc;
 extern int16 Errors;
 extern long yypos;
@@ -39,7 +39,7 @@ void get_lexval();
 extern uint16 yyMapSize[512];
 extern SymbolTable theSymTab;
 
-uint8    CurrAttk, CurrFeat;
+int32    CurrAttk, CurrFeat;
 int file(), resource(), monster_def(), item_def(), map_def(),
   room_def(), feature_def(), quest_def(), spell_def(), mon_entry(),
   mflag_entry(), color(long*), save_entry(), attack_entry(), attrib_entry(),
@@ -51,7 +51,10 @@ int file(), resource(), monster_def(), item_def(), map_def(),
   region_def(), domain_def(), domain_entry(), temp_attack_entry(), flavor_def(),
   flavor_entry(),
   terrain_def(), template_def(), domain_entry(), god_entry(), terrain_entry(),
-  template_entry(), event_entry(), event_desc(), prototype(), s_prototype(), 
+  template_entry(), behaviour_def(), behaviour_entry(), encounter_def(),
+  encounter_entry(), encounter_part();
+  
+int  event_entry(), event_desc(), prototype(), s_prototype(), 
   s_object_decl(), l_declaration(VBlock*), s_declaration(), g_declaration(), 
   r_declaration(), sg_prototype();
 
@@ -69,7 +72,8 @@ int expr(PExp*), expr150(PExp*), expr140(PExp*), expr130(PExp*),
       expr40(PExp*), expr30(PExp*), expr20(PExp*), expr10(PExp*),
       fund_expr(PExp*), lvalue(PExp*);
 int block(VBlock*), statement(VBlock*), routine(VBlock*),
-      param_list(BSysFunc*,long,VBlock*,int*), sep_expr(hCode *hc);
+      param_list(BSysFunc*,long,VBlock*,int*), sep_expr(hCode *hc),
+      sep_stat(hCode *hc);
 
 extern jmp_buf jb;
 extern TMonster * theMon, * firstMon;
@@ -91,6 +95,9 @@ extern TText *theTxt, *firstTxt;
 extern TVariable *theVar, *firstVar;
 extern TTemplate *theTemp, *firstTemp;
 extern TFlavor *theFlavor, *firstFlavor;
+extern TBehaviour *theBev, *firstBev;
+extern TEncounter *theEnc, *firstEnc;
+extern TText *theText, *firstText;
 extern Module * theModule;
 extern Resource *theRes;
 
@@ -106,6 +113,8 @@ int32 theValsIdx;
     (&theEff->ef) : &(theEff->Annot(theValsIdx)->u.ef);  \
 
 int32 theEvent = 0;
+int16 currPart = 0;
+int16 cText = 0;
 
 EffectValues * ChillShieldSeg3 = NULL;
 
@@ -149,20 +158,21 @@ extern "C" yywrap()
   COLOR, WEP_TYPE, ATTRIBUTE, DIRECTION, STYPE,
     OPCODE, REGNAME,
 
-  ABILITY, ABS, ACC, ALIGN, ALL, ALSO, AND, APTITUDES, ARCHERY,
-    ARM, ARTIFACT, AS, AT, ATTACK, AVAL, BASE, BLESSED, BRAWL,
+  ABILITY, ABS, ACC, ALIGN, ALL, ALSO, AND, WORD_ANY, APTITUDES, ARCHERY,
+    ARM, ARTIFACT, AS, AT, ATTACK, AVAL, BASE, BEHAVIOUR, BLESSED, 
+    BRAWL,
     BREAK, BRIGHT, CAPACITY, CASE, CASTER, WORD_CR, CHANCE, CLASS, 
     WORD_COLOR, CONSTANTS, COVERAGE, CTYPE, CONTINUE,
     COST, CRIT, CURSED, CVAL, DMG, DARK, DAY, WORD_DC, DEF, 
     DEFAULT, DEPTH, WORD_DESC, DOOR, DOMAIN, DOMAINS, DISEASE,
-    DO, DUNGEON, DVAL, EFFECT, ELSE, EXPORT, EQUIP, EVAL, FAVORED, FLAVOR,
+    DO, DUNGEON, DVAL, EFFECT, ELSE, WORD_ENCOUNTER, EXPORT, EQUIP, EVAL, FAVORED, FLAVOR,
     EVENT, EVERY, FACTOR, WORD_FALSE, FEATS, FEAT, FEATURE, FIRES, FLAGS, FLOOR,
     WORD_FILE, FOR, FROM, FUEL, GEAR, GLYPH, GOD, GRANTS, GRID, GROUP, GUILD, HEAVY,
     HITDICE, HITPOINTS, HIT, IF, IMAGE, IMMUNE, INNATE, 
     INVOKE, ITEM, LDMG, WORD_LEVEL, LIFESPAN, LIGHT, LISTS, LVAL, MAX_SIZE, MODULE,
     MANA, MAP, MATERIAL, WORD_MAX, MELEE, MEMBER, WORD_MIN, MONSTER, MOVE, MTYPE,
     NEAR, NONE, NORMAL, NPC, WORD_NULL, NUTRITION, OBJECT, OBJECTS, OF, ON, OR, 
-    OPTION, PARAMS, PARRY, PARTIAL, PENALTY, PER, POISON, POWER, PROFICIENCIES,
+    OPTION, PARAMS, PARRY, PARTIAL, PARTS, PENALTY, PER, POISON, POWER, PROFICIENCIES,
     PROP, PURPOSE, PVAL, QUALITIES, QUEST, QVAL, RACE, RANDOM, RANGE, RATING, 
     REGION, REGIONS, RESISTS, RETURN, ROOMTYPES, ROUTINE, RVAL, SAVES,
     SDMG, SIZE, SKILLS, SLOT, SPECIALS, SPEED, SPELL, SPELLS, 
@@ -204,6 +214,8 @@ resource:
   | terrain_def
   | template_def
   | flavor_def
+  | behaviour_def
+  | encounter_def
   | prototype
   | s_prototype
   | sg_prototype
@@ -361,7 +373,15 @@ sep_expr<hCode hc>:
       theCodeSeg.Generate(RET,ex.Storage,ex.Value); }
   { theEvent = 0; }
   ;
-
+  
+sep_stat<hCode hc>:
+  { theEvent = EV_CONDITION; }
+  statement<st>
+    { *hc = theCodeSeg.Add(&st);
+      theCodeSeg.Generate(RET,0,0); }
+  { theEvent = 0; }
+  ;
+  
 mval<MVal mv>:
   { mv->BType = mv->Bound = 0; }
   (   ('+')? cexpr4<n>      { mv->Value = n;  mv->VType = MVAL_ADD; }
@@ -395,6 +415,8 @@ mon_entry:
                                     { if (n2 != 1 || n1 > 8 || n1 < 2)
                                         yyerror("Fractional CR error!");
                                       theMon->CR = (-n1) + 2; }
+  | TERRAIN (':')? cexpr<n>         { theMon->Terrains |= n; }
+                 ( ',' cexpr<n>     { theMon->Terrains |= n; } )* ';'
   | HITDICE (':')? cexpr<n> ';'     { theMon->HitDice = n; }
   | HITPOINTS (':')? cexpr<n> ';'   { theMon->HitDice = n; 
                                        theMon->SetFlag(M_FIXED_HP); }
@@ -1101,6 +1123,118 @@ flavor_entry:
   | WEIGHT     (':')? cexpr3<n> '%' ';'     { theFlavor->Weight   = n/5; }
   ;
 
+      
+encounter_def:
+  WORD_ENCOUNTER        { theRes = theEnc; 
+                     theEnc->Weight = 10; }
+    LITERAL<name>  { theEnc->Name = name; }
+    ( ':' cexpr3<n>    { theEnc->Terrain |= n; } )?
+    
+    '{' (encounter_entry)* '}'
+      { theEnc++; }  ;
+      
+encounter_entry:
+    TERRAIN ':' cexpr<n> ';'                { theEnc->Terrain |= n; }
+  | DEPTH ':' cexpr3<n> ';'                 { theEnc->Depth = n; }
+  | WEIGHT ':' cexpr3<n> ';'                { theEnc->Weight = n; }
+  | WORD_CR ':' cexpr3<n> ';'               { theEnc->minCR = theEnc->maxCR = n; }
+  | WORD_CR ':' cexpr3<n> '+' ';'           { theEnc->minCR = n; theEnc->maxCR = 36; }
+  | WORD_CR ':' cexpr3<n> (TO|'-') 
+                             cexpr3<n2> ';' { theEnc->minCR = n; theEnc->maxCR = n2; }
+  | ALIGN ':' cexpr3<n> ';'                 { theEnc->Align = n; }
+  | PARTS ':'                               { currPart = 0; }
+     (encounter_part)*
+     ';'
+  | FLAGS (':')? (cexpr3<n>                 { theEnc->SetFlag(n); }
+    (',' | '|')? )* ';'
+  | gear_desc
+  | event_desc
+  | dconst_entry
+  | r_declaration
+  ;
+  
+encounter_part:
+  { ASSERT(currPart < MAX_PARTS); }
+  (   '*'
+    | ELSE                         { theEnc->Parts[currPart].Flags |= EP_ELSE; }
+    | '|'                          { theEnc->Parts[currPart].Flags |= EP_OR; }
+  )
+                                    { theEnc->Parts[currPart].Weight = 10; }
+  ( 
+      cexpr4<n> '%'                 { theEnc->Parts[currPart].Chance = n; } 
+    | '<' WORD_CR cexpr4<n> '+' '>' { theEnc->Parts[currPart].minCR = n; } 
+    | '[' cexpr4<n> ']'             { theEnc->Parts[currPart].Weight = n; }
+    | '{' sep_expr<hc> '}'          { theEnc->Parts[currPart].Condition = hc; } 
+    | cexpr4<n> ('-'|TO) cexpr4<n2> { theEnc->Parts[currPart].Amt.Number = n;
+                                      theEnc->Parts[currPart].Amt.Bonus  = n2;
+                                      theEnc->Parts[currPart].Amt.Sides  = 0; }
+    | cexpr4<n>                     { theEnc->Parts[currPart].Amt.Number = n;
+                                      theEnc->Parts[currPart].Amt.Bonus  = n;
+                                      theEnc->Parts[currPart].Amt.Sides  = 0; }
+    | cexpr4<n> '+'                 { theEnc->Parts[currPart].Amt.Number = n;
+                                      theEnc->Parts[currPart].Amt.Bonus  = n+50;
+                                      theEnc->Parts[currPart].Amt.Sides  = 0; }
+    | dice_only<d>                  { theEnc->Parts[currPart].Amt        = d; }
+    
+  )*
+    
+    OF
+    
+  (   res_ref<rr>                   { theEnc->Parts[currPart].xID = rr; }
+    | cexpr3<n>                     { theEnc->Parts[currPart].xID = n; }
+    | WORD_ANY cexpr3<n>            { theEnc->Parts[currPart].xID = n;
+                                      theEnc->Parts[currPart].Flags |= EP_ANYMON; }
+  )
+    
+  (   res_ref<rr>                   { theEnc->Parts[currPart].xID2 = rr; }
+    | cexpr3<n>                     { theEnc->Parts[currPart].xID2 = n; } 
+    | WORD_ANY cexpr3<n>            { theEnc->Parts[currPart].xID = n;
+                                      theEnc->Parts[currPart].Flags |= EP_ANYTEMP; } 
+  )?
+    
+  ( '[' cexpr3<n>                   { theEnc->Parts[currPart].Flags |= n; }
+     ( ('|'|',') cexpr3<n>          { theEnc->Parts[currPart].Flags |= n; }
+     )* ']'   
+  )?
+                                    { currPart++; } 
+  ;
+   
+behaviour_def:
+  BEHAVIOUR LITERAL<name> ':' cexpr3<c>  { theRes = theBev; 
+                                           theBev->Name = name;
+                                           theBev->Conditions = c; }
+  '{' (behaviour_entry)* '}'               { theBev++; }
+   ;
+
+behaviour_entry: 
+    SPELL  (':')? res_ref<rr> ';'         { theBev->spID = rr; }
+  | FLAGS (':')?  (cexpr3<n> ('|' | ',')? { theBev->SetFlag(n); } )* ';'
+  | event_desc
+  | dconst_entry
+  | r_declaration
+  ;
+
+text_def:
+    TEXT LITERAL<name> { theRes = theText;
+                         theText->Name = name;
+                         cText = 0; }
+   (  LITERAL<text> { TempList[cText++] = text; }
+    | res_ref<rr>   { TempList[cText++] = rr; }
+    | '('           { TempList[cText++] = TC_LPAREN; }
+    | ')'           { TempList[cText++] = TC_RPAREN; }
+    | '|'           { TempList[cText++] = TC_CHOICE; }
+    | ';'           { TempList[cText++] = TC_TERM; }
+    | '[' sep_expr<hc> ']' ':'
+                    { TempList[cText++] = TC_CASE;
+                      TempList[cText++] = hc; }
+    | '[' sep_stat<hc> ']'
+                    { TempList[cText++] = TC_ACTION;
+                      TempList[cText++] = hc; }
+    )* ';' { TempList[cText] = 0;
+             theText->AddList(TEXT_LIST,TempList);
+             theText++; }
+    ;
+                         
 prototype: NOTDONE;
 
 type_name<ty>: 
@@ -1688,7 +1822,7 @@ fund_expr<PExp ex>:
            bl. */
         if (obj.Storage == RT_MEMORY)
           if (obj.Value < 0)
-            obj.Value -= b->ParamCount;
+            obj.Value -= narg;
 
 
         /* Call the Function */

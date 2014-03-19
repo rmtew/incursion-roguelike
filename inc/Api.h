@@ -118,7 +118,7 @@ system void    T_MAP::WriteMap(Rect r, rID mID);
 system void    T_MAP::WriteBlobs(Rect r, rID regID, rID bID);
 system void    T_MAP::Generate(rID dunID, int32 Depth, hObj:T_MAP above, int32 Luck); 
 system void    T_MAP::DrawPanel(int32 x, int32 y);
-system void    T_MAP::PopulatePanel(Rect r);
+system void    T_MAP::PopulatePanel(Rect r,uint16 extraFlags=0);
 system int32   T_MAP::Tunnel(int32 sx, int32 sy, int32 dx, int32 dy, int32 TFlags, 
                         int32 StartDir, int32 TType);
 system void    T_MAP::MakeDoor(int32 x, int32 y, rID fID);
@@ -154,11 +154,30 @@ system void    T_MAP::RemoveTerraXY(int16 x, int16 y,rID xID=0);
 system void    T_MAP::WriteTerra(int16 x, int16 t,rID tID);
 system void    T_MAP::MakeNoiseXY(int16 x, int16 y, int16 radius);
 
-system void    T_MAP::GenEncounter(uint32 fl, int8 CR, int8 Depth, uint32 mon, int8 AType, rID xID,
-                                    int16 ex=-1, int16 ey=-1, hObj:T_CREATURE creator=0);
 system hObj    T_MAP::GetEncounterCreature(int32 i);
 
 system bool    T_MAP::LineOfFire(int16 x, int16 y, int16 x2, int16 y2, hObj:T_CREATURE cr);
+
+system rID     T_MAP::enUniformGet(int32 key);
+system void    T_MAP::enUniformAdd(int32 key, rID choice);
+system void    T_MAP::enAddMon(hObj:T_EVENTINFO e);
+system void    T_MAP::enAddTemp(hObj:T_EVENTINFO e, rID tID);
+system void    T_MAP::enAddMountTemp(hObj:T_EVENTINFO e, rID tID);
+system bool    T_MAP::enTemplateOk(hObj:T_EVENTINFO e, rID tID, bool force=false);
+system void    T_MAP::enWarn(String msg,...);
+
+system EvReturn T_MAP::thEnGen(rID xID, uint32 fl, int8 CR, uint16 enAlign);
+system EvReturn T_MAP::thEnGenXY(rID xID, uint32 fl, int8 CR, uint16 enAlign, int16 x, int16 y);
+system EvReturn T_MAP::thEnGenSummXY(rID xID, uint32 fl, int8 CR, uint16 enAlign, hObj:T_CREATURE hCrea, int16 x, int16 y);
+system EvReturn T_MAP::thEnGenMon(rID xID, rID mID, uint32 fl, int8 CR, uint16 enAlign);
+system EvReturn T_MAP::thEnGenMonXY(rID xID, rID mID, uint32 fl, int8 CR, uint16 enAlign, int16 x, int16 y);
+system EvReturn T_MAP::thEnGenMType(rID xID, int16 mt, uint32 fl, int8 CR, uint16 enAlign);
+system EvReturn T_MAP::thEnGenMTypeXY(rID xID, int16 mt, uint32 fl, int8 CR, uint16 enAlign, int16 x, int16 y);
+system EvReturn T_MAP::thEnGenMonSummXY(rID xID, rID mID, uint32 fl, int8 CR, uint16 enAlign, hObj:T_CREATURE hCrea, int16 x, int16 y);
+system EvReturn T_MAP::thEnGenMTypeSummXY(rID xID, int16 mt, uint32 fl, int8 CR, uint16 enAlign, hObj:T_CREATURE hCrea, int16 x, int16 y);
+
+system EvReturn T_MAP::rtEnGen(hObj:T_EVENTINFO e, rID xID, uint32 fl, int8 CR, uint16 enAlign);
+    
 
 /*****************************************************************************
  *                                 Class Thing                               *
@@ -166,7 +185,7 @@ system bool    T_MAP::LineOfFire(int16 x, int16 y, int16 x2, int16 y2, hObj:T_CR
 
 /* Technically in Object, not Thing, but who cares? */
               
-system bool   T_THING::isType(int8 ty);
+system bool   T_OBJECT::isType(int8 ty);
 system bool   T_THING::isCreature();
 system bool   T_THING::isDead();
 system bool   T_THING::isPlayer();
@@ -321,7 +340,7 @@ system bool   T_CREATURE::isBlind();
 system void   T_CREATURE::ChooseAction();
 system void   T_CREATURE::ExtendedAction();
 // system void   T_CREATURE::HaltAction(bool force_halt = true);
-system int32  T_CREATURE::ChallengeRating();
+system int32  T_CREATURE::ChallengeRating(bool allow_neg = false);
 system void   T_CREATURE::GainXP(int32);
 system void   T_CREATURE::KillXP(hObj:T_CREATURE);
 system int32  T_CREATURE::XPDrained();
@@ -483,6 +502,7 @@ system void   T_MONSTER::TurnHostileTo(hObj:T_CREATURE);
 system void   T_MONSTER::TurnNeutralTo(hObj:T_CREATURE);
 
 system rID    T_PLAYER::RaceID;
+system bool   T_PLAYER::WizardMode;
 
 system void   T_PLAYER::GainSpell(rID sID, int16 fl);
 
@@ -780,7 +800,7 @@ system string  T_EVENTINFO::nInscrip;
 system string  T_EVENTINFO::nMech;
 system string  T_EVENTINFO::nArticle;
 system string  T_EVENTINFO::nPlus;
-
+system string  T_EVENTINFO::Text;
 
 /* These actually represent the EffectValues struct that
    EventInfo has a pointer to in the C++ core code. We
@@ -811,15 +831,59 @@ system int32   T_EVENTINFO::vVal;
 system int32   T_EVENTINFO::vMag;
 system hObj    T_EVENTINFO::vObj;
 
+system int16   T_EVENTINFO::cPart;
+system int16   T_EVENTINFO::enAlign;
+system int16   T_EVENTINFO::enCR;
+system int16   T_EVENTINFO::enDepth;
+system int16   T_EVENTINFO::enFreaky;
+system int16   T_EVENTINFO::enPurpose;
+system int16   T_EVENTINFO::enSleep;
+system uint32  T_EVENTINFO::enTerrain;
+system int16   T_EVENTINFO::enDesAmt;
+system int16   T_EVENTINFO::enType;
+system int16   T_EVENTINFO::epMinAmt;
+system int16   T_EVENTINFO::epMaxAmt;
+system int16   T_EVENTINFO::epAmt;
+system int16   T_EVENTINFO::epFreaky;
+system int16   T_EVENTINFO::epWeight;
+system int16   T_EVENTINFO::epMType;
+system int16   T_EVENTINFO::epSkillRoll;
+system int16   T_EVENTINFO::epClassRoll;
+system int32   T_EVENTINFO::epCurrXCR;
+system rID     T_EVENTINFO::enID;
+system rID     T_EVENTINFO::ep_mID;
+system rID     T_EVENTINFO::ep_tID;
+system rID     T_EVENTINFO::ep_tID2;
+system rID     T_EVENTINFO::ep_tID3;
+system rID     T_EVENTINFO::ep_hmID;
+system rID     T_EVENTINFO::ep_htID;
+system rID     T_EVENTINFO::ep_htID2;
+system rID     T_EVENTINFO::ep_iID;
+system rID     T_EVENTINFO::ep_pID;
+system int32   T_EVENTINFO::enXCR;
+system int32   T_EVENTINFO::epXCR;
+system int32   T_EVENTINFO::eimXCR;
+system int32   T_EVENTINFO::enFlags;
+system int32   T_EVENTINFO::enConstraint;
+system bool    T_EVENTINFO::chMaximize;
+system bool    T_EVENTINFO::chBestOfTwo;
+system int16   T_EVENTINFO::chList;
+system rID     T_EVENTINFO::chSource;
+system rID     T_EVENTINFO::chResult;
+system bool    T_EVENTINFO::isAquaticContext;
+          
 /*****************************************************************************
  *                             Resource Functions                            *
  *****************************************************************************/
+
+system bool    isResType(rID xID, int16 rt);
 
 system int32   T_TDUNGEON::GetConst(int16 cn);
 
 system uint16  T_TMONSTER::Image;
 system int8    T_TMONSTER::CR;
 system int8    T_TMONSTER::Depth;
+system uint32  T_TMONSTER::Terrains;
 system int8    T_TMONSTER::Hit;
 system int8    T_TMONSTER::Def;
 system int8    T_TMONSTER::Arm;
@@ -921,7 +985,11 @@ system int16   DirX(int16);
 system int16   DirY(int16);
 
 system bool    ResourceHasFlag(rID xID, int16 flagno);
+system bool    mID_isMType(rID mID, uint32 mt);
 system int16   PoisonDC(rID pID);
+
+system int16   XCRtoCR(int32 XCR);
+system int32   XCR(int16 CR);
 
 system void    SetSilence();
 system void    UnsetSilence();
@@ -986,7 +1054,6 @@ system hObj   GenDungeonItem(uint16 fl, rID xID, int16 Depth, int16 Luck);
 system hObj   GenChestItem(uint16 fl, rID xID, int16 Depth, int16 Luck);
 system hObj   InitShopkeeper(rID mID, int32 gold);
 system void   SystemBreak();
-system int32  enFreaky();
 
 system bool effectGivesStati(rID eID);
 

@@ -667,7 +667,8 @@ Domain "Plant" : 0
       $"entangle",
       $"barkskin",
       $"forestation",
-      $"verdant aid",
+      /* HACKFIX - was verdant aid */
+      $"antiplant shell",
       $"wall of thorns";
     /*  Repel Wood
         Tree Stride

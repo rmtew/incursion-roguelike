@@ -322,14 +322,17 @@ Text "help::intro"
      Gygax, Monte Cook, Skip Williams, Sean K Reynolds and all of the others
      for producing one of the greatest hobbies in the world. Finally, a very
      few more specific attributions:\n
-     __<14>*<6>_Westley Weimer has been extensively playtesting Incursion for
+     __<14>*<6>_Westley Weimer used to extensively playtest Incursion for
      me, doing some coding, helping me balance the game and generally being
      exceedingly useful. Thanks, Westley!\n
-     __<14>*<6>_Incursion now has close to 30 playtesters, all of whom I'm
+     __<14>*<6>_Mac users owe a special debt of gratitude to Steven Hamilton,
+     my deticated Mac porter who puts up with me constantly sending him
+     archives with missing files. :)\n
+     __<14>*<6>_Incursion now has many, many playtesters, all of whom I'm
      very thankful to. However, I've had a truly prodigious amount of feedback
-     from Terje S. Bo, Aaron Lambert, Adam Smith, Jussi Ylikahri, Frumple and 
-     Ivan Tomas, and the game would not have reached the state it has without 
-     their support!\n
+     from Terje S. Bo, Aaron Lambert, Adam Smith, Jussi Ylikahri, Frumple,
+     Ivan Tomas, 'XenoTheMorph', 'grdice', 'purge383', 'Alik' and 'Davzz' and 
+     the game would not have reached the state it has without their support!\n
      __<14>*<6>_David H. Hovemeyer placed into the public domain C++ source
      code for manipulating fractional values without floating-point math that
      proved to be most useful in the vision system.\n
@@ -2328,7 +2331,8 @@ Text "help::adventuring"
          part of their normal methodology.\n
          __<3>*<1> Chaotic characters should not coerce non-evil creatures by using the
          Intimidate skill to Cow or Issue Requests. They are free to negotiate with
-         them using Diplomacy or to trick them with Bluff, however.\n\n
+         them using Diplomacy or to trick them with Bluff, however. Barbarians and
+         orcs are exempt from the Cow restriction of the chaotic alignment.\n\n
          
          <9>CHANGING ALIGNMENT<1>\n
          __When you desire to change alignment and have stated a new alignment,
@@ -2560,7 +2564,12 @@ Text "help::adventuring"
          <9>Conduct and Penance<1>\n
          __Every god places upon her followers a specific standard of behaviour
          they are expected to adhere to. Violating this code of conduct will
-         anger the god, making it impossible to recieve aid from her and causing
+         first displease the god; when displeased, your god will not act
+         spontaneously on your behalf to bestow blessings, though they will
+         still bail you out of trouble (as much as they usually would, anyway)
+         when you pray for aid. Once transgressions cross a certain line,
+         however, the god will be fully angered,
+          making it impossible to recieve aid from her and causing
          her to send negative interventions instead of positive. The specific
          rules that each god places before her followers are listed in the
          'Worship' section of each god's writeup. Some rules may apply only to
@@ -2570,7 +2579,7 @@ Text "help::adventuring"
          hasn't prayed to them, they still note the acts that all people take,
          and form opinions accordingly.\n
          __The message <9>'You feel uneasy.'<1> signifies that your patron god
-         has become angry at you; no such message is given, however, when any
+         is displeased with your acts; no such message is given, however, when any
          other god becomes angry.\n
          __When a god who is involved in a character's life becomes angry, that
          diety will send negative interventions to trouble the character. When

@@ -22,6 +22,9 @@
 #define TGOD(l) ( (TGod*) theGame->Get(l) )
 #define TTEM(l) ( (TTemplate*) theGame->Get(l) )
 #define TFLA(l) ( (TFlavor*) theGame->Get(l) )
+#define TTEX(l) ( (TText*) theGame->Get(l) )
+#define TBEV(l) ( (TBehaviour*) theGame->Get(l) )
+#define TENC(l) ( (TEncounter*) theGame->Get(l) )
 
 #define NAME(l) ( (const char*) (l ? RES(l)->GetName(0) : "{null}") )
 #define DESC(l) ( l ? theGame->GetDesc(l) : "{null}" )
@@ -220,6 +223,9 @@ class Resource
       static Annotation *cAnnot, *cAnnot2;
       static String EvMsg[64];
       Resource(int8 _Type)  { Type = _Type; AnHead = 0; }
+      bool isType(int16 rt) { /*if (rt == T_TRESOURCE)
+                                return true;*/
+                              return rt == Type; }
       void Dump();
 			hText Name, Desc;
       int16 AnHead;
@@ -246,6 +252,7 @@ class Resource
       void AddPower(int8 apt,int8 pw,uint32 x,int16 pa,Dice*charge);
       uint32 GetConst(int16 cn);      
       bool GetList(int16 ln, rID *lv,int16 max);
+      bool HasList(int16 ln);
       bool ListHasItem(int16 ln, int32 look_for);
       rID  GetRes(int16 at, bool first);
       rID FirstRes(int16 at)
@@ -328,6 +335,7 @@ class TMonster: public Resource
 
       
 			Glyph Image;               //The Glyph & Color
+			uint32 Terrains;
 			int8 CR, Depth;
 			int32 MType[3];         //Monster's Level, Type
 			int8 Hit,Def,Arm;
@@ -753,7 +761,44 @@ class TFlavor: public Resource
       TFlavor() : Resource(T_TFLAVOR) { }
       int8 IType, Weight, Material, Color;
   };
-
+  
+class TBehaviour: public Resource
+  {
+    public:
+      TBehaviour() : Resource(T_TBEHAVIOUR) { }
+      rID spID; /* Spell-specific behaviour */
+      uint32 Conditions;
+      void SetFlag(uint16 fl)   { Flags[fl/8] |=  (1 << (fl % 8)); }
+      void UnsetFlag(uint16 fl) { Flags[fl/8] &= ~(1 << (fl % 8)); }
+      bool HasFlag(uint16 fl)   { return Flags[fl/8] & (1 << (fl % 8)); }
+			uint8 Flags[(BF_LAST/8)+1];
+	};
+	
+struct EncPart
+  {
+    uint32 Flags;
+    uint8 Weight;
+    uint8 Chance;
+    uint8 minCR;
+    Dice  Amt;
+    hCode Condition;
+    rID xID;
+    rID xID2;
+  };
+    
+	
+class TEncounter: public Resource
+  {
+    public:
+      TEncounter() : Resource(T_TENCOUNTER) { }
+      uint32 Terrain;
+      int16 Weight, minCR, maxCR, Freak, Depth, Align;
+      EncPart Parts[MAX_PARTS];
+      void SetFlag(uint16 fl)   { Flags[fl/8] |=  (1 << (fl % 8)); }
+      void UnsetFlag(uint16 fl) { Flags[fl/8] &= ~(1 << (fl % 8)); }
+      bool HasFlag(uint16 fl)   { return Flags[fl/8] & (1 << (fl % 8)); }
+			uint8 Flags[(NF_LAST/8)+1];
+  };
 
 class Module : public Object
   {
@@ -772,25 +817,27 @@ class Module : public Object
       if (r.Saving())
         for (i=0;i!=szTextSeg;i++)
           *(((char*)QTextSeg)+i) = ~(*(QTextSeg+i));
-      r.Block((void**)(&QMon),sizeof(TMonster) *szMon);
-      r.Block((void**)(&QItm),sizeof(TItem)    *szItm);
-      r.Block((void**)(&QFea),sizeof(TFeature) *szFea);
-      r.Block((void**)(&QEff),sizeof(TEffect)  *szEff);
-      r.Block((void**)(&QArt),sizeof(TArtifact)*szArt);
-      r.Block((void**)(&QQue),sizeof(TQuest)   *szQue);
-      r.Block((void**)(&QDgn),sizeof(TDungeon) *szDgn);
-      r.Block((void**)(&QRou),sizeof(TRoutine) *szRou);
-      r.Block((void**)(&QNPC),sizeof(TNPC)     *szNPC);
-      r.Block((void**)(&QCla),sizeof(TClass)   *szCla);
-      r.Block((void**)(&QRac),sizeof(TRace)    *szRac);
-      r.Block((void**)(&QDom),sizeof(TDomain)  *szDom);
-      r.Block((void**)(&QGod),sizeof(TGod)     *szGod);
-      r.Block((void**)(&QReg),sizeof(TRegion)  *szReg);
-      r.Block((void**)(&QTer),sizeof(TTerrain) *szTer);
-      r.Block((void**)(&QTxt),sizeof(TText)    *szTxt);
-      r.Block((void**)(&QVar),sizeof(TVariable)*szVar);
-      r.Block((void**)(&QTem),sizeof(TTemplate)*szTem);
-      r.Block((void**)(&QFla),sizeof(TFlavor)  *szFla);
+      r.Block((void**)(&QMon),sizeof(TMonster)  *szMon);
+      r.Block((void**)(&QItm),sizeof(TItem)     *szItm);
+      r.Block((void**)(&QFea),sizeof(TFeature)  *szFea);
+      r.Block((void**)(&QEff),sizeof(TEffect)   *szEff);
+      r.Block((void**)(&QArt),sizeof(TArtifact) *szArt);
+      r.Block((void**)(&QQue),sizeof(TQuest)    *szQue);
+      r.Block((void**)(&QDgn),sizeof(TDungeon)  *szDgn);
+      r.Block((void**)(&QRou),sizeof(TRoutine)  *szRou);
+      r.Block((void**)(&QNPC),sizeof(TNPC)      *szNPC);
+      r.Block((void**)(&QCla),sizeof(TClass)    *szCla);
+      r.Block((void**)(&QRac),sizeof(TRace)     *szRac);
+      r.Block((void**)(&QDom),sizeof(TDomain)   *szDom);
+      r.Block((void**)(&QGod),sizeof(TGod)      *szGod);
+      r.Block((void**)(&QReg),sizeof(TRegion)   *szReg);
+      r.Block((void**)(&QTer),sizeof(TTerrain)  *szTer);
+      r.Block((void**)(&QTxt),sizeof(TText)     *szTxt);
+      r.Block((void**)(&QVar),sizeof(TVariable) *szVar);
+      r.Block((void**)(&QTem),sizeof(TTemplate) *szTem);
+      r.Block((void**)(&QFla),sizeof(TFlavor)   *szFla);
+      r.Block((void**)(&QBev),sizeof(TBehaviour)*szBev);
+      r.Block((void**)(&QEnc),sizeof(TEncounter)*szEnc);
       Annotations.Serialize(r);
       Symbols.Serialize(r);
       r.Block((void**)(&QTextSeg), szTextSeg);
@@ -845,27 +892,31 @@ class Module : public Object
        Variables
        Templates
        Flavors
+       Behaviours
+       Encounters
       */
-      TMonster  *QMon;
-      TItem     *QItm;
-      TFeature  *QFea;
-      TEffect   *QEff;
-      TArtifact *QArt;
-      TQuest    *QQue;
-      TDungeon  *QDgn;
-      TRoutine  *QRou;
-      TNPC      *QNPC;
-      TClass    *QCla;
-      TRace     *QRac;
-      TDomain   *QDom;
-      TGod      *QGod;
-      TRegion   *QReg;
-      TTerrain  *QTer;
-      TText     *QTxt;
-      TVariable *QVar;
-      TTemplate *QTem;
-      TFlavor   *QFla;
-
+      TMonster   *QMon;
+      TItem      *QItm;
+      TFeature   *QFea;
+      TEffect    *QEff;
+      TArtifact  *QArt;
+      TQuest     *QQue;
+      TDungeon   *QDgn;
+      TRoutine   *QRou;
+      TNPC       *QNPC;
+      TClass     *QCla;
+      TRace      *QRac;
+      TDomain    *QDom;
+      TGod       *QGod;
+      TRegion    *QReg;
+      TTerrain   *QTer;
+      TText      *QTxt;
+      TVariable  *QVar;
+      TTemplate  *QTem;
+      TFlavor    *QFla;
+      TBehaviour *QBev;
+      TEncounter *QEnc;
+      
       const char *QTextSeg;
       VCode      *QCodeSeg;
       int32      szTextSeg, 
@@ -876,7 +927,8 @@ class Module : public Object
       void AddDebugInfo(int32 ID, Binding *b);
       int16     szMon, szItm, szFea, szEff, szArt, szQue,
         szDgn, szRou, szNPC, szCla, szRac, szDom, szGod, 
-        szReg, szTer, szTxt, szVar, szTem, szFla;
+        szReg, szTer, szTxt, szVar, szTem, szFla, szBev,
+        szEnc;
       int32     TurnLastUsed;
       
       
@@ -945,7 +997,16 @@ class Module : public Object
           + szArt + szQue + szDgn + szRou + szNPC + szCla +
           szRac + szDom + szGod + szReg + szTer + szTxt +
           szVar + szTem + num; }
-
+      rID BehaviourID(uint16 num)
+        { return (0x01000000 * (Slot+1)) + szMon + szItm + szFea + szEff
+          + szArt + szQue + szDgn + szRou + szNPC + szCla +
+          szRac + szDom + szGod + szReg + szTer + szTxt +
+          szVar + szTem + szFla + num; }
+      rID EncounterID(uint16 num)
+        { return (0x01000000 * (Slot+1)) + szMon + szItm + szFea + szEff
+          + szArt + szQue + szDgn + szRou + szNPC + szCla +
+          szRac + szDom + szGod + szReg + szTer + szTxt +
+          szVar + szTem + szFla + szBev + num; }
 
 
       int16 SpellNum(Resource *r);
@@ -954,7 +1015,8 @@ class Module : public Object
       int16 NumResources()
         { return szMon + szItm + szFea + szEff + szArt + szQue
             + szDgn + szRou + szNPC + szCla + szRac + szDom +
-            szGod + szReg + szTer + szTxt + szVar + szTem + szFla; }
+            szGod + szReg + szTer + szTxt + szVar + szTem + 
+            szFla + szBev + szEnc; }
 
 
 
@@ -1044,6 +1106,7 @@ class Game : public Object
       OArray<ModuleRecord,5,5> ModFiles;
       __FindCache FindCache[128];
       int16 szFindCache;
+
     public:
       VMachine VM;
       int16 ItemGenNum, BarrierCount;
@@ -1108,11 +1171,15 @@ class Game : public Object
       rID GetItemID(int16 Purpose, int8 minlev, int8 maxlev, int8 IType=-1);
       rID GetMonID(int16 Purpose, int8 minlev, int8 maxlev, int8 Depth, int32 MType=-1);
       rID GetEffectID(int16 Purpose, int8 minlev, int8 maxlev, int8 Source=0);
+      rID GetEncounterID(int16 CR, uint32 Types, uint32 Terrain);
       rID GetMapID(int16 Purpose, uint8 depth, int8 MType=-1) { return 0; }
       rID GetTempID(uint16 Types, rID mID, int8 maxCR);
       void SetFlavors();
       void* GetMemory(rID xID, Player *p);
       void DumpCode();
+
+      String BuildText(EventInfo &e, rID tID);
+      String RecursiveParse(EventInfo &e, rID tID, int32 *t, int16 len);
 
       #ifndef NO_COMP
       bool ResourceCompiler();

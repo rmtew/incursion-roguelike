@@ -783,3 +783,21 @@ class TextTerm: public Term
   };
 
 #endif
+
+class CFile
+  {
+    private:
+      void *data;
+      int32 size, alloc, pos;
+      Term *t;
+    public:
+      CFile(Term *t);
+      ~CFile();
+      void FRead(void*,size_t sz);
+      void FWrite(const void*,size_t sz);
+      void Seek(int32,int8);
+      int32 CommitCompressed(int16 offset, bool use_lz);
+      void LoadCompressed(int16 offset, int32 csz, int32 sz, bool use_lz);
+      int32 Tell() { return pos; }
+      int32 FSize() { return size; }
+  };
