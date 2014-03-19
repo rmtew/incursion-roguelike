@@ -1334,7 +1334,7 @@ Wizard / Scroll Spell "Phantasmal Force" : EA_ILLUSION
       winking out of existance."; 
     Flags: EF_DLONG, EF_SHOWNAME;
     On Event PRE(EV_MAGIC_HIT) {
-      e.vDmg = max(1, EActor->SkillLevel(SK_ILLUSION) - 3);
+      SetPVal(e,max(1, (EActor->SkillLevel(SK_ILLUSION)/2)));
       return NOTHING;
       },
     POST(EV_MAGIC_HIT) {
@@ -2985,7 +2985,7 @@ Wizard / Scroll Spell "Improved Phantasmal Force" : EA_ILLUSION
       senses or blindsight."; 
     Flags: EF_DLONG, EF_SHOWNAME;
     On Event PRE(EV_MAGIC_HIT) {
-      e.vDmg = max(1, EActor->SkillLevel(SK_ILLUSION) - 3);
+      SetPVal(e,max(1, (EActor->SkillLevel(SK_ILLUSION)/2)));
       return NOTHING;
       },
     POST(EV_MAGIC_HIT) {
@@ -4710,7 +4710,7 @@ Wizard / Scroll Spell "Spectral Force" : EA_ILLUSION
       -- the caster does not need to concentrate to keep it active, and
       it can move outside the caster's line of sight."; 
     On Event PRE(EV_MAGIC_HIT) {
-      e.vDmg = max(1, EActor->SkillLevel(SK_ILLUSION) - 3);
+      SetPVal(e,max(1, (EActor->SkillLevel(SK_ILLUSION)/2)));
       return NOTHING;
       };
     Flags: EF_DLONG;
@@ -6567,7 +6567,7 @@ Wizard Spell "Improved Spectral Force" : EA_ILLUSION
       Force (resilience, independence, longer-lasting psychosomatic 
       damage) and Improved Phantasmal Force (affecting all senses)."; 
     On Event PRE(EV_MAGIC_HIT) {
-      e.vDmg = max(1, EActor->SkillLevel(SK_ILLUSION) - 3);
+      SetPVal(e,max(1, (EActor->SkillLevel(SK_ILLUSION)/2)));
       return NOTHING;
       };
     Flags: EF_DLONG, EF_SHOWNAME;
@@ -6701,7 +6701,7 @@ Wizard Spell "Shadow Monsters" : EA_ILLUSION
       hit points to less than 80~ of their total, they are dispelled and
       cease to exist with regard to all characters."; 
     On Event PRE(EV_MAGIC_HIT) {
-      e.vDmg = max(1, EActor->SkillLevel(SK_ILLUSION) - 3);
+      SetPVal(e,max(1, (EActor->SkillLevel(SK_ILLUSION)/2)));
       return NOTHING;
       };
     Flags: EF_DLONG, EF_SHOWNAME, EF_IMONSTERS;
@@ -6718,7 +6718,7 @@ Wizard Spell "Shadow Magic" : EA_ILLUSION
       normal damage; creatures who fail the disbelief check also suffer the
       remaining 70~ as psychosomatic damage."; 
     On Event PRE(EV_MAGIC_HIT) {
-      e.vDmg = max(1, EActor->SkillLevel(SK_ILLUSION) - 3);
+      SetPVal(e,max(1, (EActor->SkillLevel(SK_ILLUSION)/2)));
       return NOTHING;
       };
     Flags: EF_IBLAST;
@@ -7890,7 +7890,7 @@ Wizard Spell "Advanced Illusion" : EA_ILLUSION
       of a previously unnoticed illusionary skylight in a shadowy area of
       the ceiling, for example."; 
     On Event PRE(EV_MAGIC_HIT) {
-      e.vDmg = max(1, EActor->SkillLevel(SK_ILLUSION) - 3);
+      SetPVal(e,max(1, (EActor->SkillLevel(SK_ILLUSION)/2)));
       return NOTHING;
       };
     Flags: EF_DLONG, EF_SHOWNAME;
@@ -8117,7 +8117,7 @@ Wizard Spell "Demi-Shadow Monsters" : EA_ILLUSION
       up to 50~ of their total hit points from disbelievers before being
       dispelled."; 
     On Event PRE(EV_MAGIC_HIT) {
-      e.vDmg = max(1, EActor->SkillLevel(SK_ILLUSION) - 3);
+      SetPVal(e,max(1, (EActor->SkillLevel(SK_ILLUSION)/2)));
       return NOTHING;
       };
     Flags: EF_DLONG, EF_SHOWNAME, EF_IMONSTERS;
@@ -9095,7 +9095,7 @@ Wizard Spell "Shades" : EA_ILLUSION
       up to 70~ of their total hit points from disbelievers before being
       dispelled."; 
     On Event PRE(EV_MAGIC_HIT) {
-      e.vDmg = max(1, EActor->SkillLevel(SK_ILLUSION) - 3);
+      SetPVal(e,max(1, (EActor->SkillLevel(SK_ILLUSION)/2)));
       return NOTHING;
       };
     Flags: EF_DLONG, EF_SHOWNAME, EF_IMONSTERS;

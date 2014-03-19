@@ -3440,7 +3440,7 @@ God "Kysul"
     GODWATCH(EV_ENTER) {
       if (EActor->getGod() != $"Kysul")
         return NOTHING;
-      if (EActor->getGodAnger($"Kysul"))
+      if (EActor->getGodAnger($"Kysul") == 0)
         return NOTHING;
       /* Let the PC reach the ecutemp on dlevel 2 to try and make up
          with an offended Kysul */
