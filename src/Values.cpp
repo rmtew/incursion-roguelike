@@ -36,7 +36,7 @@
      
      Later, we need two seperate sets of the AttrAdj array --
    AttrBon and AttrPen -- each of which will hold the largest
-   attribute modifier in each catagory. Most penalties stack,
+   attribute modifier in each category. Most penalties stack,
    but few bonuses. 
 
 

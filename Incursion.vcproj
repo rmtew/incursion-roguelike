@@ -44,7 +44,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
+				Optimization="0"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="dx70_min\include;allegro\include;inc"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;ALLEGRO_TERM;ALLEGRO_STATICLINK"
@@ -57,6 +57,7 @@
 				ObjectFile=".\Release/"
 				ProgramDataBaseFileName=".\Release/"
 				SuppressStartupBanner="true"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -73,7 +74,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="alleg_s.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib ole32.lib dinput.lib ddraw.lib dxguid.lib winmm.lib dsound.lib"
 				OutputFile=".\Release/Incursion.exe"
-				LinkIncremental="1"
+				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="dx70_min\lib;allegro\lib"
 				IgnoreDefaultLibraryNames="LIBCMT.lib"
@@ -1072,7 +1073,7 @@
 				>
 			</File>
 			<File
-				RelativePath="LIB\CONSTNAM.H"
+				RelativePath=".\inc\ConstNam.h"
 				>
 			</File>
 			<File
@@ -1117,10 +1118,6 @@
 			</File>
 			<File
 				RelativePath="INC\map.h"
-				>
-			</File>
-			<File
-				RelativePath="INC\profile.h"
 				>
 			</File>
 			<File
@@ -1178,7 +1175,7 @@
 			Filter="acc;lex"
 			>
 			<File
-				RelativePath="SRC\grammar.acc"
+				RelativePath="lang\grammar.acc"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
@@ -1200,14 +1197,14 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="SRC\tokens.lex"
+				RelativePath="lang\tokens.lex"
 				>
 				<FileConfiguration
 					Name="Release|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="FLEX -i -o.\SRC\tokens.cpp .\src\Tokens.Lex&#x0D;&#x0A;"
+						CommandLine="FLEX -i -o.\SRC\tokens.cpp .\lang\Tokens.Lex&#x0D;&#x0A;"
 						Outputs=".\SRC\tokens.cpp"
 					/>
 				</FileConfiguration>

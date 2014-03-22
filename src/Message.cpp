@@ -438,7 +438,7 @@ const char* __XPrint(Player *POV, const char *msg,va_list args)
           Error("Null string in __XPrint; msg = \"%s\"",msg);
           }
         else if (!Tag2[0]) {
-          if (POV && !POV->XPercieves(Subject))
+          if (POV && !POV->XPerceives(Subject))
             strcpy(p,Something(Flags));
           else
             strcpy(p,Subject->Name(Flags));
@@ -446,34 +446,34 @@ const char* __XPrint(Player *POV, const char *msg,va_list args)
           }
         else if (str == "her")
           {
-            Error("\"<her>\" is ambigious in a message; use him/his!");
+            Error("\"<her>\" is ambiguous in a message; use him/his!");
             xprint_lev--;
             return msg;
           }
         else if (str == "his")
           {
-            if (POV && !POV->XPercieves(Subject))
+            if (POV && !POV->XPerceives(Subject))
               strcpy(p,Flags & NA_CAPS ? "Its" : "its");
             else
               strcpy(p,Flags & NA_CAPS ? Subject->His() : Subject->his());
           }
         else if (str == "him")
           {
-            if (POV && !POV->XPercieves(Subject))
+            if (POV && !POV->XPerceives(Subject))
               strcpy(p,Flags & NA_CAPS ? "It" : "it");
             else
               strcpy(p,Flags & NA_CAPS ? Subject->Him() : Subject->him());
           }
         else if (str == "he" || str == "she")
           {
-            if (POV && !POV->XPercieves(Subject))
+            if (POV && !POV->XPerceives(Subject))
               strcpy(p,Flags & NA_CAPS ? "It" : "it");
             else
               strcpy(p,Flags & NA_CAPS ? Subject->He() : Subject->he());
           }
         else if (str == "s")
           {
-            if (POV && !POV->XPercieves(Subject))
+            if (POV && !POV->XPerceives(Subject))
               continue;
             else if (!Subject->isPlural())
               strcpy(p,"s");
@@ -535,7 +535,7 @@ void DPrint(EventInfo &e, const char* msg1, const char* msg2,...)
       for(int16 i=0;i!=MAX_PLAYERS;i++)
         if (p = oPlayer(e.EMap->pl[i]))
           if (p != e.EActor)
-            if (p->XPercieves(e.EActor))
+            if (p->XPerceives(e.EActor))
               p->__IPrint(msg2,ap);
 
 		va_end(ap);
@@ -549,9 +549,9 @@ void APrint(EventInfo &e, const char* msg,...)
     if (e.EMap)
       for(int16 i=0;i!=MAX_PLAYERS;i++)
         if (p = oPlayer(e.EMap->pl[i]))
-          if ((e.EActor && p->XPercieves(e.EActor)) || 
-               (e.EItem && p->XPercieves(e.EItem)) ||
-               (e.EVictim && p->XPercieves(e.EVictim)))              
+          if ((e.EActor && p->XPerceives(e.EActor)) || 
+               (e.EItem && p->XPerceives(e.EItem)) ||
+               (e.EVictim && p->XPerceives(e.EVictim)))              
             p->__IPrint(msg,ap);
 
 		va_end(ap);
@@ -571,7 +571,7 @@ void VPrint(EventInfo &e, const char* msg1, const char* msg2,...)
       for(int16 i=0;i!=MAX_PLAYERS;i++)
         if (p = oPlayer(e.EMap->pl[i]))
           if (p != e.EVictim && e.EVictim)
-            if (p->XPercieves(e.EVictim))
+            if (p->XPerceives(e.EVictim))
               p->__IPrint(msg2,ap);
 		va_end(ap);
   }
@@ -586,7 +586,7 @@ void Hear(EventInfo &e, int16 range, const char* msg,...)
       for(int16 i=0;i!=MAX_PLAYERS;i++)
         if (p = oPlayer(e.EMap->pl[i]))
           if (dist(e.EActor->x,e.EActor->y,p->x,p->y) <= range)
-            if (p!=e.EActor && !p->XPercieves(e.EActor))
+            if (p!=e.EActor && !p->XPerceives(e.EActor))
               if (!p->HasMFlag(M_DEAF))
                 p->__IPrint(msg,ap);
 
@@ -609,8 +609,8 @@ void TPrint(EventInfo &e, const char* msg1, const char* msg2,
       for(int16 i=0;i!=MAX_PLAYERS;i++)
         if (p = oPlayer(e.EMap->pl[i]))
           if (p != e.EActor && p != e.EVictim)
-            if ((e.EActor && p->XPercieves(e.EActor)) && 
-                  (!e.EVictim || p->XPercieves(e.EVictim)))
+            if ((e.EActor && p->XPerceives(e.EActor)) && 
+                  (!e.EVictim || p->XPerceives(e.EVictim)))
               p->__IPrint(msg3,ap);
 
     va_end(ap);
@@ -722,7 +722,7 @@ void Player::IDPrint(const char*msg1,const char*msg2,...)
       for(int16 i=0;i!=MAX_PLAYERS;i++)
         if (p = oPlayer(m->pl[i]))
           if (p != this)
-            if (p->XPercieves(this))
+            if (p->XPerceives(this))
               p->__IPrint(msg2,ap);
 
 		va_end(ap);
@@ -736,7 +736,7 @@ void Thing::IDPrint(const char*msg1,const char*msg2,...)
     if (msg2 && m)
       for(int16 i=0;i!=MAX_PLAYERS;i++)
         if (p = oPlayer(m->pl[i]))
-          if (p->XPercieves(this))
+          if (p->XPerceives(this))
             p->__IPrint(msg2,ap);
     if (isItem() && !m && ((Item*)this)->Owner())
       {
@@ -744,7 +744,7 @@ void Thing::IDPrint(const char*msg1,const char*msg2,...)
         if (_m)
           for(int16 i=0;i!=MAX_PLAYERS;i++)
             if (p = oPlayer(_m->pl[i]))
-              if (p->XPercieves(this))
+              if (p->XPerceives(this))
                 p->__IPrint(msg2,ap);
       }
 

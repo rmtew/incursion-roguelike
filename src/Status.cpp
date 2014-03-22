@@ -537,7 +537,7 @@ void Thing::CleanupRefedStati()
        a Stati from X may cause X to remove a Stati from us.
        For example, wiz summons creature which buffs all
        nearby spellcasters. Wiz dies, so creature winks out
-       of existance, in the process removing the granted buff
+       of existence, in the process removing the granted buff
        from Wiz. Complex, no? */
     flag = 1;
     
@@ -1085,8 +1085,7 @@ void Creature::StatiOff(Status s, bool elapsed)
                   "Under normal circumstances, this shouldn't happen. "
                   "If you are able to get this error repeatably, please "
                   "upload a save to the bug database on the website, if "
-                  "no one else has already done so. The task number "
-                  "for this issue is #1262.");
+                  "no one else has already done so.");
          break;     
         case SPELL_ACCESS:
           if (s.eID == FIND("Paladin"))
@@ -1098,7 +1097,7 @@ void Creature::StatiOff(Status s, bool elapsed)
                 "Critical bug in the buglist. If you find "
                 "you can produce this message repeatably, please upload a "
                 "saved game and steps to reproduce to the Incursion bug "
-                "database (task #434) unless someone else has done this "
+                "database unless someone else has done this "
                 "already. Thanks for helping to support Incursion!");
          break;
       }
@@ -1152,7 +1151,7 @@ void Item::StatiOff(Status s, bool elapsed)
           if (!isDead()) {
             if (!(Owner() && (Owner()->HasStati(SUMMONED) 
                    || Owner()->isDead())))
-              IDPrint("","The <Obj> winks out of existance.",this);
+              IDPrint("","The <Obj> winks out of existence.",this);
             Remove(true);
             }
          break;
@@ -1170,7 +1169,7 @@ void Creature::StatiMessage(int16 n,int16 val, bool ending)
     switch(n) {
       case CHANNELING:
         if (ending)
-          IPrint("The warmth of channeled divine energy leaves you.");
+          IPrint("The warmth of channelled divine energy leaves you.");
        break;
       case SICKNESS:
         if (ending)
@@ -1391,7 +1390,7 @@ void Creature::StatiMessage(int16 n,int16 val, bool ending)
       case SUMMONED:
       case ILLUSION:
         if (ending)
-          IDPrint(NULL,"The <Obj> winks out of existance.",this);
+          IDPrint(NULL,"The <Obj> winks out of existence.",this);
        break;
                      
     }

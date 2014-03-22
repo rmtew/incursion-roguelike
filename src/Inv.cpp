@@ -178,9 +178,9 @@ EvReturn Monster::PickUp(EventInfo &e)
       {
         Thing *t; int16 i;
         IDPrint("As you reach to pick up the <Obj1>, your hand passes "
-                "through it, and it winks out of existance!",
+                "through it, and it winks out of existence!",
                 "As the <Obj2> reaches to pick up the <Obj1>, <his:Obj2> hand passes "
-                "through it, and it winks out of existance!", e.EItem, this);
+                "through it, and it winks out of existence!", e.EItem, this);
         
         /* This warrants a disbelief check! */
         MapIterate(m,t,i)
@@ -527,9 +527,9 @@ EvReturn Character::PickUp(EventInfo &e)
             return ABORT;
           }
         IDPrint("As you reach to pick up the <Obj>, your hand passes "
-                "through it, and it winks out of existance!",
+                "through it, and it winks out of existence!",
                 "As the <Obj2> reaches to pick up the <Obj>, <his:Obj2> hand passes "
-                "through it, and it winks out of existance!", e.EItem, this);
+                "through it, and it winks out of existence!", e.EItem, this);
         
         /* This warrants a disbelief check! */
         MapIterate(m,t,i)
@@ -920,7 +920,7 @@ void Character::Exchange()
         for (i=0;i!=SL_LAST;i++)
           if (Inv[i] == defRanged)
             { sl1 = i; goto foundRanged; }
-        IPrint("Your default ranged weapon isn't easily accessable right now.");
+        IPrint("Your default ranged weapon isn't easily accessible right now.");
         goto XAbort;
 
         foundRanged:
@@ -942,7 +942,7 @@ void Character::Exchange()
         for (i=0;i!=SL_LAST;i++)
           if (Inv[i] == defMelee)
             { sl1 = i; goto foundMelee; }
-        IPrint("Your default melee weapon isn't easily accessable right now.");
+        IPrint("Your default melee weapon isn't easily accessible right now.");
         goto XAbort;
 
         foundMelee:
@@ -951,7 +951,7 @@ void Character::Exchange()
         for (i=0;i!=SL_LAST;i++)
           if (Inv[i] == defOffhand)
             { sl2 = i; goto foundBoth; }
-        IPrint("Your default offhand weapon isn't easily accessable right now.");
+        IPrint("Your default offhand weapon isn't easily accessible right now.");
         goto XAbort;
 
         foundBoth:
@@ -970,7 +970,7 @@ void Character::Exchange()
         for (i=0;i!=SL_LAST;i++)
           if (Inv[i] == defOffhand)
             { sl2 = i; goto foundOffOnly; }
-        IPrint("Your default offhand weapon isn't easily accessable right now.");
+        IPrint("Your default offhand weapon isn't easily accessible right now.");
         goto XAbort;
 
         foundOffOnly:

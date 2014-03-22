@@ -10,7 +10,7 @@
 
 #define SIGNATURE 0x1234ABCD
 #define SIGNATURE_TWO 0xF1F2F3F4
-#define VERSION_STRING "0.6.9H"
+#define VERSION_STRING "0.6.9Y"
 
 #ifndef ICOMP
 #define __MINMAX_DEFINED
@@ -966,7 +966,7 @@ typedef signed long       hObj;
 #define AD_POLY    20
 #define AD_CHRM    21
 #define AD_MIND    21
-#define AD_DISN    22  /* disintigration */
+#define AD_DISN    22  /* disintegration */
 #define AD_CRIT    23  /* Placeholder for Crit-immunity */
 
 #define AD_BLND    24  /* blinds (glowing eye) */
@@ -1286,7 +1286,7 @@ typedef signed long       hObj;
 #define M_GOOD            50  
 #define M_LAWFUL          51  
 #define M_CHAOTIC         52  
-#define M_IALIGN          53   /* Inherant Alignment; always as listed */
+#define M_IALIGN          53   /* Inherent Alignment; always as listed */
 #define M_FRIENDLY        54
 #define M_HOSTILE         55
 #define M_PSYCHO          56  
@@ -2739,7 +2739,7 @@ typedef signed long       hObj;
 #define BONUS_WEAPON  11  /* Weapon Accuracy & Speed */
 #define BONUS_CLASS   12 /* Bonuses from Class Abilities */
 #define BONUS_NEGLEV  13  /* Negative Levels */
-#define BONUS_COMP    14 /* d20 "competance" bonus */
+#define BONUS_COMP    14 /* d20 "competence" bonus */
 #define BONUS_SIZE    15 /* d20 "enlargement" bonus */
 #define BONUS_DEFLECT 16 /* d20 "deflection" bonus */
 #define BONUS_DAMAGE  17 /* d20 attribute damage */
@@ -3266,7 +3266,7 @@ typedef signed long       hObj;
   #define CREA_MANY   0x20
   #define CREA_TRAP   0x40
   #define CREA_XY     0x80 /* place at target xy, not evictim->xy */
-#define EA_SLAYING  18 /* Slay Living, PW Kill, Disintigrate, etc. */
+#define EA_SLAYING  18 /* Slay Living, PW Kill, Disintegrate, etc. */
 #define EA_DETECT   20  /* Misc1 = Below; Misc2 = Range (or 0 = board) */
   #define DET_VISIBLE      0x01 /* Highlighted targets become visible */     
   #define DET_VALUABLE     0x02 /* Sort by value in gold */
@@ -3443,7 +3443,7 @@ typedef signed long       hObj;
 #define FAINTING   120
 #define STARVED      0
 
-#define SS_ITEM  1  /* Permanant while worn */
+#define SS_ITEM  1  /* Permanent while worn */
 #define SS_ENCH  2  /* Potion, Scroll or Spell */
 #define SS_RACE  3  /* From your race (possibly racial knowledge) */
 #define SS_CLAS  4  /* From your class */
@@ -3615,7 +3615,7 @@ typedef signed long       hObj;
 #define BELOW_DUNGEON         56
 #define FIRST_LEV_PORTAL      57
 #define LAST_LEV_PORTAL       58
-#define PATRON_DIETY          59
+#define PATRON_DEITY          59
 #define MOOD_STRINGS          60
 #define BLOB_WITH             61
 #define MIN_CHASM_DEPTH       62

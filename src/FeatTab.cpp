@@ -49,7 +49,7 @@ struct FeatInfoStruct FeatInfo[] = {
                   "goblinoids can be attractive to other orcs, kobolds or "
                   "goblins." },
   { FT_SKILL_FOCUS, FF_MULTIPLE, "Skill Focus", 
-    "You recieve a +2 competance bonus to any one skill of your "
+    "You recieve a +2 competence bonus to any one skill of your "
                   "choice. This bonus stacks with the bonuses from other skill "
                   "enhancer feats. Additionally, when you perform a skill check "
                   "for that skill, you roll twice and take the better result. If "
@@ -75,7 +75,7 @@ struct FeatInfoStruct FeatInfo[] = {
   { FT_ATHLETIC,  0, "Athletic",
     "You are one fit and rugged adventurer, and your prowess gives you "
     "a +3 skill bonus on Athletics, Climb and Swim checks. In addition, you "
-    "gain a +1 competance bonus to your Fortitude Saving Throw." },
+    "gain a +1 competence bonus to your Fortitude Saving Throw." },
   { FT_ARTIFICER, 0, "Artificer",
     "You have a natural talent for intricate craftwork, and recieve a +3 "
     "skill bonus to Craft and Handle Device checks; you also require only "
@@ -875,8 +875,8 @@ struct FeatInfoStruct FeatInfo[] = {
   { FT_HEIGHTEN_SPELL, FF_META|FF_WIZARD, "Heighten Spell",
     "A heightened spell has the DC of its saving throw increased by "
       "+4, and the maximum Hit Dice it can affect increased by 50%." },
-  { FT_INHERANT_SPELL, FF_META|FF_WIZARD, "Inherant Spell",
-    "An inherant spell does not require a spellbook or holy symbol "
+  { FT_INHERANT_SPELL, FF_META|FF_WIZARD, "Inherent Spell",
+    "An inherent spell does not require a spellbook or holy symbol "
       "to cast, and thus has no 'material component'." },
   { FT_MAXIMIZE_SPELL, FF_META|FF_WIZARD, "Maximize Spell",
     "A maximized spell inflicts the maximum damage it possibly could, "
@@ -1289,7 +1289,7 @@ struct FeatInfoStruct FeatInfo[] = {
     "You have a hardy constitution and a developed resistance to toxins and diseases. "
     "You gain a +2 bonus to Fortitude saves versus poison and disease, and you require "
     "two fewer successful saving throws to fully overcome any given poison and three "
-    "fewer to overcome any disease, to a minimum of one. You also gain an inherant toxin "
+    "fewer to overcome any disease, to a minimum of one. You also gain an inherent toxin "
     "resistance (against direct toxic damage like a green dragon's breath weapon or a "
     "mage's <9>cloudkill<7> spell) of +5.",
     {{{FP_ATTR, A_CON, 13,
@@ -1420,7 +1420,7 @@ struct FeatInfoStruct FeatInfo[] = {
     "energy. With a successful Reflex save against DC 15, you completely negate "
     "any one magical bolt or ray directed against you, such as the effects of "
     "a <9>magic missile<7>, <9>searing light<7>, <9>ray of enfeeblement<7> or "
-    "<9>disintigrate<7> spell. This costs you one of your attacks of opportunity "
+    "<9>disintegrate<7> spell. This costs you one of your attacks of opportunity "
     "for the current round, and you must be able to percieve the attacker and "
     "must not be flat-footed.\n",
     {{{FP_ATTR, A_DEX, 13,

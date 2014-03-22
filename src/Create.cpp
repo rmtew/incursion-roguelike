@@ -3957,14 +3957,14 @@ int16 Creature::ISkillLevel(int16 sk)
     /* Calculate the skill level with all mods */
     sr = SkillLevel(sk);
     
-    /* Then subtract those that aren't inherant */
+    /* Then subtract those that aren't inherent */
     sr -= (s_enhance + s_kit + s_syn + s_armor + 
            s_size + s_circ + s_comp + s_item);
     
     /* Remove Attribute Mod */
     sr -= Mod2(SkillAttr(sk));
     
-    /* Add Inherant Attribute Mod */
+    /* Add Inherent Attribute Mod */
     sr += (IAttr(SkillAttr(sk))-11)/2;
     
     return sr;

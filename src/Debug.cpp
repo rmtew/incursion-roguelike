@@ -482,7 +482,7 @@ void Player::WizardOptions()
          } 
          break;
         case 7:
-          if (!yn("Confirm permanantly paralyze player to test game speeds?"))
+          if (!yn("Confirm permanently paralyze player to test game speeds?"))
             break;
           GainPermStati(PARALYSIS,NULL,SS_MISC);
          break;

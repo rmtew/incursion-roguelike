@@ -234,7 +234,7 @@ hasSpellFor(int8)
 
 #define DF_SPEL   0x00010000  /* Target used spells; cast silence/dispel */
 #define DF_MONK   0x00020000  /* Target used martial arts / unarmed attacks */
-#define DF_WEPN   0x00040000  /* Nice weapon -- disintigrate/disarm/telobject it */
+#define DF_WEPN   0x00040000  /* Nice weapon -- disintegrate/disarm/telobject it */
 #define DF_PSIO   0x00080000  /* Uses Psionics; cast mind shield */
 #define DF_ILLU   0x00100000  /* Target turned invis/used ill. -- dispel/true seeing */
 #define DF_SNEA   0x00200000  /* Target Hid In Shadows -- cast 'Call Light' */
@@ -546,7 +546,7 @@ RestartTargetLoop:
         for (c = m->FCreatureAt(x+DirX[i],y+DirY[i]);c;
              c = m->NCreatureAt(x+DirX[i],y+DirY[i]))
           if ((int)isHostileTo(c) > best &&
-               XPercieves(c))
+               XPerceives(c))
           {
             best = isHostileTo(c);
             bc = c;
@@ -2174,7 +2174,7 @@ void Monster::ListEffects()
       a = tm->Annot(tm->AnHead);
       /* Dragons each have a list of 12 spell-like abilities, but can only
          use the first N, where N is a number from 1 to 12 based on their
-         age catagory. All other creatures can use their full allotment of
+         age category. All other creatures can use their full allotment of
          spell-like abilities. */
       if (isMType(MA_DRAGON))
         ns = GetAgeCatagory();

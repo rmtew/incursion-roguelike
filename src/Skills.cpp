@@ -1988,7 +1988,7 @@ void Character::UseAbility(uint8 ab,int16 pa)
             if (AbilityLevel(ab) >= 5)
               thisp->MyTerm->LOption("Countersong",BARD_COUNTER);
             if (AbilityLevel(ab) >= 7)
-              thisp->MyTerm->LOption("Inspire Competance",BARD_COMP);
+              thisp->MyTerm->LOption("Inspire Competence",BARD_COMP);
             if (AbilityLevel(ab) >= 9)
               thisp->MyTerm->LOption("Hymn of the Phoenix Arisen",BARD_PHOENIX);
             if (AbilityLevel(ab) >= 10)
@@ -2108,7 +2108,7 @@ void Character::UseAbility(uint8 ab,int16 pa)
                 if (!c->isHostileTo(this))
                   continue;
                 if (!(c->Percieves(this) & (PER_VISUAL|PER_INFRA))) {
-                  if (XPercieves(c))
+                  if (XPerceives(c))
                     IPrint("The <Obj> cannot see you, and is thus unaffected.");
                   continue;
                   }
@@ -2790,7 +2790,7 @@ EvReturn Creature::Hide(EventInfo &e)
       return ABORT;
       }
     if (HasStati(MANIFEST)) {
-      IPrint("Hiding in shadows is simply not compatable with being a radiant beacon "
+      IPrint("Hiding in shadows is simply not compatible with being a radiant beacon "
              "of pure faerie grandeur.");
       return ABORT;
       }
@@ -4554,7 +4554,7 @@ EvReturn Creature::Turn(EventInfo &e)
     Timeout += 30;
 
     if (e.AType == CA_COMMAND)
-      DPrint(e,"You exercize divine authority over <Str>.",
+      DPrint(e,"You exercise divine authority over <Str>.",
                "The <EActor> compels the <Str> to obey <him:EActor>.",
                (const char*)Pluralize(Lookup(MTypeNames,e.EParam)).Lower());
     else
@@ -4636,9 +4636,9 @@ EvReturn Creature::Turn(EventInfo &e)
                 }
 
               if (mag > 60 || (e.AType == CA_GREATER_TURNING && mag > 10)) { /* Six Times CR */
-                TPrint(e,"An <EVictim> is blasted out of existance!",
+                TPrint(e,"An <EVictim> is blasted out of existence!",
                          "An <EActor>'s holy power tears you apart!",
-                         "An <EVictim> is blasted out of existance!");
+                         "An <EVictim> is blasted out of existence!");
                 printed = true; 
                 ThrowDmg(EV_DEATH, 0, 0, "holy power", e.EActor, e.ETarget);
                 continue;
@@ -4732,7 +4732,7 @@ EvReturn Creature::Phase(EventInfo &e)
         if (vis[i])
           oCreature(m->pl[i])->IPrint( oCreature(m->pl[i])->Percieves(this) ?
             "The <Obj> shifts into the <Str>." :
-            "An <Obj> winks out of existance!", this , Planes[phase_type] );
+            "An <Obj> winks out of existence!", this , Planes[phase_type] );
     
     Timeout += 12;
     return DONE;
@@ -5009,7 +5009,7 @@ void Player::ScrutinizeMon(Creature *cr)
   {
     String name1, name2;
     int16 sk, lv; bool knowClass, unseenClass, knowRace, unseenRace;
-    if (!XPercieves(cr))
+    if (!XPerceives(cr))
       return;
     if (cr->StateFlags & MS_SCRUTINIZED)
       return;

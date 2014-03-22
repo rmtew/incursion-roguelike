@@ -572,7 +572,7 @@ void TextTerm::CreateCharSheet(CharSheet &cs)
           cs.sSpecials += "  Bardic Music:\n    Inspire Courage\n" ;
           if (p->AbilityLevel(i) >= 3) cs.sSpecials += "    Fascination\n";
           if (p->AbilityLevel(i) >= 5) cs.sSpecials += "    Countersong\n";
-          if (p->AbilityLevel(i) >= 7) cs.sSpecials += "    Inspire Competance\n";
+          if (p->AbilityLevel(i) >= 7) cs.sSpecials += "    Inspire Competence\n";
           if (p->AbilityLevel(i) >= 9) cs.sSpecials += "    Hymn of the Phoenix Arisen\n";
           if (p->AbilityLevel(i) >= 10) cs.sSpecials += "    Mass Fascination\n";
           if (p->AbilityLevel(i) >= 11) cs.sSpecials += "    Spellbreaker Chant\n";
@@ -949,11 +949,11 @@ void TextTerm::CreateCharSheet(CharSheet &cs)
         if (s_armor)
           cs.sSkills += Format(", %+d armor",s_armor);
         if (s_comp)
-          cs.sSkills += Format(", %+d competance",s_comp);
+          cs.sSkills += Format(", %+d competence",s_comp);
         if (s_circ)
           cs.sSkills += Format(", %+d circumstance",s_circ);
         if (s_inh)
-          cs.sSkills += Format(", %+d inherant",s_inh);
+          cs.sSkills += Format(", %+d inherent",s_inh);
         if (s_size)
           cs.sSkills += Format(", %+d size",s_size);
         if (s_kit)

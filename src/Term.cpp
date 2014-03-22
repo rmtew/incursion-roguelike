@@ -911,7 +911,7 @@ void TextTerm::ShowMap()
       PutChar(p->x-1-XOff,p->y+1-YOff,'\\' | col);
       PutChar(p->x-1-XOff,p->y-1-YOff,'/' | col);
       
-      /* Later, draw other creature percieved by 
+      /* Later, draw other creature perceived by 
          telepathy, etc -- but get this working
          first! */
       return;
@@ -2414,7 +2414,7 @@ Thing * TextTerm::ExamineSquare(int x, int y)
 
   Field * f; 
   for (i=0;f = m->Fields[i];i++) {
-    if (!(f->FType & FI_SIZE) && p->PercievesField(x,y,f)) {
+    if (!(f->FType & FI_SIZE) && p->PerceivesField(x,y,f)) {
       retvals[c] = NULL;
       LOption(Format("%s",NAME(f->eID)),c++,DESC(f->eID),3);
     } 
@@ -2838,7 +2838,7 @@ Thing* TextTerm::AcquisitionPrompt(int8 Reason, int8 minlev, int8 maxlev, int8 M
       if (theGame->Modules[0]->QTem[i].TType & TM_AGECAT)
         if (theGame->Modules[0]->QTem[i].CR.Adjust(mn->ChallengeRating()) <= maxlev)
           LOption(NAME(theGame->Modules[0]->TemplateID(i)),theGame->Modules[0]->TemplateID(i));
-    xID = LMenu(MENU_BORDER,"Choose an age catagory:",WIN_MENUBOX);
+    xID = LMenu(MENU_BORDER,"Choose an age category:",WIN_MENUBOX);
     mn->AddTemplate(xID);
     return mn;
   } 
@@ -2976,7 +2976,7 @@ const char* IntroScreen[] = {
  "                <9>*********************************************<7>                    ", 
  "                <9>*********************************************<7>                    ", 
  "                <9>**                                         **<1>*<7>                  ", 
- "                <9>**                <15>INCURSION<9>                **<1>*<7>                  ", 
+ "                <9>**         <15>INCURSION (OPEN SOURCE)<9>         **<1>*<7>                  ", 
  "                <9>**                                         **<1>*<7>                  ", 
  "                <9>**        <13>Halls of the Goblin King<9>         **<1>*<7>                  ", 
  "                <9>**                                         **<1>*<7>                  ", 
@@ -2988,7 +2988,7 @@ const char* IntroScreen[] = {
  "                               By Julian Mensch                                ", 
  "          with additional concepts and material by Westley Weimer              ",
  "                                                                               ", 
- "                      Copyright 1999-2007 Julian Mensch                        ", 
+ "            Copyright 1999-2007 Julian Mensch, 2014 Richard Tew                ", 
  "                                                                               ", 
  "                          See Help for License Info                            ", 
  "                                                                               ", 

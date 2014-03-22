@@ -251,7 +251,7 @@ void Game::Play()
         	  Silence = 0;
             if (!t->m || t->x == -1)
               continue;
-            ASSERT(theGame->inPercieve == 0);
+            ASSERT(theGame->inPerceive == 0);
             ASSERT(theGame->inCalcVal == 0);
             
             if((!(t->Flags & F_DELETE)) && dist(t->x,t->y,pp->x,pp->y)<MaxDist)

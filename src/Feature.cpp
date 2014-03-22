@@ -446,7 +446,7 @@ EvReturn Door::Event(EventInfo &e)
         e.EActor->IPrint("Your hands pass through the <Obj>.",this); 
         return ABORT; 
       } else if (DoorFlags & DF_BROKEN) { 
-        e.EActor->IPrint("It's open, permanantly.",this); 
+        e.EActor->IPrint("It's open, permanently.",this); 
         // ww: sanity
         Flags &= ~F_SOLID;
         DoorFlags |= DF_OPEN;
@@ -1075,7 +1075,7 @@ void Feature::StatiOff(Status s)
     switch (s.Nature)
       {
         case SUMMONED:
-          IDPrint(NULL,"The <Obj> winks out of existance.",this);
+          IDPrint(NULL,"The <Obj> winks out of existence.",this);
           if (m && m->InBounds(x,y)) {
             m->At(x,y).Glyph = TTER(m->TerrainAt(x,y))->Image;
             m->At(x,y).Shade = TTER(m->TerrainAt(x,y))->HasFlag(TF_SHADE);

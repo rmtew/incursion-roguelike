@@ -1057,7 +1057,7 @@ EvReturn Magic::Dispel(EventInfo &e)
         {
           if (e.vDmg + bon >= 11+e.EVictim->GetStatiMag(SUMMONED))
             {
-              VPrint(e,NULL,"The <EVictim> winks out of existance.");
+              VPrint(e,NULL,"The <EVictim> winks out of existence.");
               // ww: it's really annoying when your summoned celestial elf
               // picks up Stormbringer and then disappears with it
               e.EVictim->DropAll();
@@ -1139,9 +1139,9 @@ EvReturn Magic::Dispel(EventInfo &e)
             {
               if (it)
                 TPrint(e,e.EActor == e.EVictim ? NULL :
-                  "The <EVictim>'s <Obj> is surronded with a dull grey aura.",
+                  "The <EVictim>'s <Obj> is surrounded with a dull grey aura.",
                   "Your <Obj> is surronded with a dull grey aura.",
-                  "The <EVictim>'s <Obj> is surronded with a dull grey aura.",it);
+                  "The <EVictim>'s <Obj> is surrounded with a dull grey aura.",it);
               else if (e.EActor != e.EVictim)
                 e.EActor->IPrint("The <Obj>'s <5><Res><7> spell is dispelled.",
                                    e.EVictim,S->eID);

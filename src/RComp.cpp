@@ -163,7 +163,7 @@ String & Game::CompileStatistics()
     s += Format("HasEffStati calls.....%d\n",ccHasEffStati);
     s += Format("HasStati==true calls..%d\n",ccHasStatiTrue);
     s += Format("HasStati==false calls.%d\n",ccHasStatiFalse);
-    s += Format("Percieve's HS calls...%d\n",ccHSPercieve);
+    s += Format("Perceive's HS calls...%d\n",ccHSPerceive);
     s += Format("CalcVal's HS calls....%d\n",ccHSCalcVal);
     s +=        "-------------------------\n";  
     

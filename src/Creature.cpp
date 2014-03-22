@@ -215,7 +215,7 @@ void Creature::IdentifyMon()
     int16 i; String oldname;
     if (m) {
       for (i=0;i!=MAX_PLAYERS && m->pl[i];i++)
-        if (oPlayer(m->pl[i])->XPercieves(this))
+        if (oPlayer(m->pl[i])->XPerceives(this))
           goto IsSeen;
       return;
       }
@@ -249,7 +249,7 @@ Item* Creature::ConsumeRope(int16 feet)
         }
     if (c == 0)
       {
-        IPrint(found ? "You don't have enough contigious rope." :
+        IPrint(found ? "You don't have enough contiguous rope." :
           "You don't have any rope.");
         return NULL;
       }
@@ -300,7 +300,7 @@ void Creature::IdentifyTemp(rID tID)
             for(int16 j=0;j!=MAX_PLAYERS;j++)
               if (Player *p = oPlayer(m->pl[j]))
                 if (p != this)
-                  if (p->XPercieves(this)) {
+                  if (p->XPerceives(this)) {
                     S->Mag = 1;
                     SetImage();
                     IDPrint(NULL, "This must be an <Obj>!",this);
@@ -572,7 +572,7 @@ int16 Creature::GetAgeCatagory()
     if (isMType(MA_DRAGON)) {
       AddTemplate(FIND("young adult"));
       return 5;
-      //Error("Dragon (hObj %d) without age catagory template!",myHandle);
+      //Error("Dragon (hObj %d) without age category template!",myHandle);
       }
     return 0;
   }
@@ -1088,8 +1088,8 @@ void Creature::ExtendedAction()
       if (isPlayer() && thisp->Opt(OPT_STOP_REGION))
         if (m->RegionAt(x,y) != m->RegionAt(x+DirX[s->Mag],y+DirY[s->Mag]))
           {
-            /* At Region Boundry; stop running */
-            HaltAction("region boundry", true);
+            /* At Region Boundary; stop running */
+            HaltAction("region boundary", true);
             return;
           }
       }
@@ -2013,7 +2013,7 @@ bool Creature::hasAccessToSpell(rID spID)
     a = tm->Annot(tm->AnHead);
     /* Dragons each have a list of 12 spell-like abilities, but can only
     use the first N, where N is a number from 1 to 12 based on their
-    age catagory. All other creatures can use their full allotment of
+    age category. All other creatures can use their full allotment of
     spell-like abilities. */
     if (isMType(MA_DRAGON))
       ns = GetAgeCatagory();
@@ -2395,7 +2395,7 @@ bool Thing::IllusionLOSCheck(bool test, int16 ix, int16 iy, int16 cx, int16 cy)
         if (!test)
           {
             cr->IPrint("You lose LOS with the <Obj>.",this);
-            IDPrint(NULL,"The <Obj> winks out of existance.",this);
+            IDPrint(NULL,"The <Obj> winks out of existence.",this);
             Remove(true);
           }
         return true;
@@ -3283,7 +3283,7 @@ inline bool Creature::SavingThrow(int16 type, int16 DC, uint32 Subtype,
     return false;
   bool show = false; 
 
-  if ((isPlayer() || theGame->GetPlayer(0)->XPercieves(this)))
+  if ((isPlayer() || theGame->GetPlayer(0)->XPerceives(this)))
     show = true; 
 
   int16 roll = Dice::Roll(1,20); 

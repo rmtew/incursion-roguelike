@@ -496,7 +496,7 @@ void HelpPowers(String & helpText)
     int16 i, n, c; rID tID; TEffect *Effs[256];
     String s;
         
-    s = BoxIt("MISCELLANEOUS REFERANCE",11,3);
+    s = BoxIt("MISCELLANEOUS REFERENCE",11,3);
     s += XPrint("<7>-- {AL:alchemy} Alchemical Items\n");
     s += XPrint("<7>-- {PS:psionics} Psionic Wild Talents\n");
     s += XPrint("<7>-- {PO:poisons} Poisons\n");
@@ -1005,7 +1005,7 @@ static bool HelpPantheon(String & helpText)
       helpText += "\n";
 
       helpText += "<11>======================\n";
-      helpText += "= DIETY DESCRIPTIONS =\n";
+      helpText += "= DEITY DESCRIPTIONS =\n";
       helpText += "======================<7>\n\n";
 
 
@@ -1283,17 +1283,17 @@ void HelpWeaponTable(String &helpText)
                      "this weapon will stun a foe who fails a Fortitude save "
                      "for 1d4+1 rounds.\n"
       "<15>E:<3> On a critical hit, or on 1 in 3 normal attacks, "
-                     "this weapon will entangle a foe of its size catagory "
+                     "this weapon will entangle a foe of its size category "
                      "or smaller who fails a Reflex save.\n" 
       "<15>K:<3> On a critical hit or great blow, or on 1 in 3 normal attacks, "
-                     "this weapon will knock prone a character of its size catagory "
+                     "this weapon will knock prone a character of its size category "
                      "or smaller who fails a Fortitude save when struck.\n"
       "<15>C:<3> This weapon deals double damage when used in a charge attack.\n"
       "<15>M:<3> This weapon can only be used while mounted unless you are one size "
                     "larger than it is.\n"
       "<15>P:<3> This weapon grants a x2 bonus to penetrating armor.\n"
-      "<15>T:<3> This weapon grants a +4 bonus to trip attemps.\n"
-      "<15>D:<3> This weapon grants a +4 bonus to disarm attemps.\n"
+      "<15>T:<3> This weapon grants a +4 bonus to trip attempts.\n"
+      "<15>D:<3> This weapon grants a +4 bonus to disarm attempts.\n"
       "<15>2:<3> This is a double weapon, and may be used as if wielding two "
               "different weapons at the same time.\n"
       "<15>X:<3> This weapon returns to the user when thrown.\n\n"
@@ -2164,7 +2164,7 @@ String & Monster::Describe(Player *p)
       { -M_LIGHT_AVERSE, "It avoids light, suffering penalties in lit areas and double damage from light-based attacks. " },
       { -M_MFLYER, "It flies magically. " },
       { -M_MINDLESS, "It is mindless, and is not detected by telepathy. " },
-      { -M_MINION, "It is always created in service to a diety. " },
+      { -M_MINION, "It is always created in service to a deity. " },
       { -M_MOUNTABLE, "It can be used as a mount by humanoids. " },
       { -M_NOGENO, "It cannot be genocided. " },
       { -M_NOPOLY, "Polymorph spells cannot turn you into this creature. " },
@@ -3003,7 +3003,7 @@ String & Monster::Describe(Player *p)
           DESCRIBE_TEMPLATE_MOD(Arm,"natural armor")
           DESCRIBE_TEMPLATE_MOD(Mov,"movement rate")
           DESCRIBE_TEMPLATE_MOD(Spd,"natural speed")
-          DESCRIBE_TEMPLATE_MOD(Size,"size catagory")
+          DESCRIBE_TEMPLATE_MOD(Size,"size category")
           DESCRIBE_TEMPLATE_MOD(CasterLev,"caster level")
           DESCRIBE_TEMPLATE_MOD(Power,"special attack power and save DC")
           if (tt->DmgMod)
@@ -3960,14 +3960,14 @@ String & Weapon::Describe(Player *p)
                      "this weapon will <11>stun<7> a foe who fails a Fortitude save (<11>DC %d<7>) "
                      "for 1d4+1 rounds.", p->WeaponSaveDC(this,WT_STUNNING));
     if (TITEM(iID)->HasFlag(WT_ENTANGLE) && TITEM(iID)->Group & WG_THROWN)
-      Desc += Format(" This weapon will <11>entangle<7> a character of its size catagory "
+      Desc += Format(" This weapon will <11>entangle<7> a character of its size category "
                      "or smaller who fails a Reflex save (<11>DC %d<7>) when struck.", p->WeaponSaveDC(this,WT_ENTANGLE));
     else if (TITEM(iID)->HasFlag(WT_ENTANGLE)) 
       Desc += Format(" On a critical hit, or on 1 in 3 normal attacks, "
-                     "this weapon will <11>entangle<7> a foe of its size catagory "
+                     "this weapon will <11>entangle<7> a foe of its size category "
                      "or smaller who fails a Reflex save (<11>DC %d<7>).", p->WeaponSaveDC(this,WT_ENTANGLE));
     if (TITEM(iID)->HasFlag(WT_KNOCKDOWN) && TITEM(iID)->Group & WG_THROWN)
-      Desc += Format(" This weapon will <11>knock prone<7> a character of its size catagory "
+      Desc += Format(" This weapon will <11>knock prone<7> a character of its size category "
                      "or smaller who fails a Fortitude save (<11>DC %d<7>) when struck.", p->WeaponSaveDC(this,WT_KNOCKDOWN));
     else if (TITEM(iID)->HasFlag(WT_KNOCKDOWN))
       Desc += Format(" On a critical hit or great blow, or on 1 in 3 normal attacks, "
@@ -3987,9 +3987,9 @@ String & Weapon::Describe(Player *p)
     if (TITEM(iID)->HasFlag(WT_PENETRATING))
       Desc += " This weapon grants a x2 bonus to <11>penetrating<7> armor.";
     if (TITEM(iID)->HasFlag(WT_SUPER_TRIP))
-      Desc += " This weapon grants a +4 bonus to <11>trip<7> attemps.";
+      Desc += " This weapon grants a +4 bonus to <11>trip<7> attempts.";
     if (TITEM(iID)->HasFlag(WT_SUPER_DISARM))
-      Desc += " This weapon grants a +4 bonus to <11>disarm<7> attemps.";
+      Desc += " This weapon grants a +4 bonus to <11>disarm<7> attempts.";
     if (TITEM(iID)->HasFlag(WT_DOUBLE))
       Desc += " This is a <11>double weapon<7>, and must be used as if wielding two "
               "different weapons at the same time.";
@@ -4474,7 +4474,7 @@ String & DescribeFeat(int16 ft)
       if (ft == FT_INTENSIVE_STUDY && theGame->GetPlayer(0))
         {
           uint16 eli;
-          s += Format("<11>Eligable Studies:<7> ");
+          s += Format("<11>Eligible Studies:<7> ");
           eli = theGame->GetPlayer(0)->getEligableStudies();
           if (!eli)
             s += "None.\n";

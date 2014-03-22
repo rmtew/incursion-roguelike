@@ -570,13 +570,13 @@ TextVal BonusNames[] = {
   { BONUS_SHIELD, "shield" },
   { BONUS_CLASS, "class" },
   { BONUS_NEGLEV, "neglev" },
-  { BONUS_COMP, "competance" },
+  { BONUS_COMP, "competence" },
   { BONUS_SIZE, "size" },
   { BONUS_DEFLECT, "deflect" },
   { BONUS_DAMAGE, "damage" },
   { BONUS_RAGE, "rage" },
   { BONUS_STATUS, "status" },
-  { BONUS_INHERANT, "inherant" },
+  { BONUS_INHERANT, "inherent" },
   { BONUS_GRACE, "grace" },
   { BONUS_NATURAL, "natural" },
   { BONUS_SKILL, "skill" },
@@ -1091,7 +1091,7 @@ TextVal DTypeNames[] = {
   { AD_STON, "Petrification" },
   { AD_POLY, "Polymorph" },
   { AD_CHRM, "Mind Effects" },
-  { AD_DISN, "Disintigration" },
+  { AD_DISN, "Disintegration" },
   { AD_CRIT, "Critical Hits" },
   { AD_BLND, "Blindness" },
   { AD_SLOW, "Slowing" },
@@ -1187,7 +1187,7 @@ TextVal MMDTypeNames[] = {
   { AD_STON, "to petrify" },
   { AD_POLY, "to polymorph" },
   { AD_CHRM, "to charm for %s rounds" },
-  { AD_DISN, "to disintigrate" },
+  { AD_DISN, "to disintegrate" },
   { AD_BLND, "to blind for %s rounds" },
   { AD_SLOW, "to slow by 50~ for %s rounds" },
   { AD_DREX, "to drain (%s x 50) XP" },
@@ -1409,7 +1409,7 @@ TextVal SaveBonusNames[] = {
   { SN_DISEASE, "disease" },
   { SN_SPELLS, "spells" },
   { SN_THEFT, "theft" },
-  { SN_DISINT, "disintigration" },
+  { SN_DISINT, "disintegration" },
   { SN_KNOCKDOWN, "knockdown" },
   { SA_CONF, "confusion" },
   { 0, NULL } };
@@ -1625,22 +1625,48 @@ TextVal APostQualNames[] = {
 // wand or an elven rope ...
 TextVal GenericQualityDescs[] = {
   { IQ_SILVER, 
-    //"A silver weapon has half the hardness of iron, but can penetrate the damage reduction of demons, devils, the undead and lycanthropes." },
-    "A silver item has half the hardness of iron but is a special bane to devils and lycanthropes. Against such foes a silver weapon gives a +2 attack bonus and a +2 damage bonus and strikes true even if the creature is immune to some weapons. This bonus is not cumulative (e.g., a silver bow and a silver arrow together yield +2). A silver shield or silver piece of armor gives a +2 defense bonus against attacks from such foes. This bonus is not cumulative (e.g., a silver shield and silver chainmail together yield +2). Such creatures will generally not pick up silver items." },
+    "A silver item has half the hardness of iron but is a special bane to devils and lycanthropes. Against such foes a silver weapon gives "
+    "a +2 attack bonus and a +2 damage bonus and strikes true even if the creature is immune to some weapons. This bonus is not cumulative "
+    "(e.g., a silver bow and a silver arrow together yield +2). A silver shield or silver piece of armor gives a +2 defense bonus against "
+    "attacks from such foes. Such creatures will generally not pick up silver items." },
   { IQ_ADAMANT, 
-    "An adamant weapon has double the normal hardness of a weapon made out of iron, and gains a +1 material bonus to damage. Armor made from adamantine grants its wearer damage reduction of 1/- if it's light armor, 2/- if it's medium armor, and 3/- if it's heavy armor."},
-  //{ IQ_DARKWOOD, "This rare magic wood is as hard as normal wood but weighs only half as much. The armor check penalty of a darkwood item is lessened by 2 compared to an ordinary item of its type." },
-  { IQ_DARKWOOD, "This rare magic wood is thrice as hard as normal wood but weighs only half as much. The armor check penalty of a darkwood item is lessened by 2 compared to an ordinary item of its type." },
-  { IQ_MITHRIL, "Mithril is a very rare silvery, glistening metal that is lighter than iron but just as hard. When worked like steel, it becomes a wonderful material from which to create weapons and armor and is occasionally used for other items as well. Mithril weapons gain a +1 material bonus to their accuracy. Mithril armors are one category lighter than normal for purposes of movement and other limitations. Heavy armors are treated as medium, and medium armors are treated as light, but light armors are still treated as light. However, you must still be proficient in the original armor type to avoid penalties. Spell failure chances for armors and shields made from mithril are decreased by 15%, maximum Dexterity bonus is increased by 3, and armor check penalties are lessened by 3 (to a minimum of 0). An item made from mithril weighs half as much as the same item made from other metals. Mithril has 150~ of the hardness of an iron and half the weight." }, 
-  { IQ_IRONWOOD, "Ironwood is a magical substance created by druids from normal iron. While remaining natural wood in almost every way, ironwood is as strong, heavy, and resistant to fire as steel. Spells or abilities that affect metal or iron (such as rusting or the Heat Metal spell) do not function on ironwood. Spells that affect wood do affect ironwood, although ironwood does not burn. Ironwood items are freely usable by druids." },
+    "An adamant weapon has double the normal hardness of a weapon made out of iron, and gains a +1 material bonus to damage. Armor made "
+    "from adamantine grants its wearer damage reduction of 1/- if it's light armor, 2/- if it's medium armor, and 3/- if it's heavy armor."},
+  { IQ_DARKWOOD,
+    "This rare magic wood is thrice as hard as normal wood but weighs only half as much. The armor check penalty of a darkwood item is " \
+    "lessened by 2 compared to an ordinary item of its type." },
+  { IQ_MITHRIL,
+    "Mithril is a very rare silvery, glistening metal that is lighter than iron but just as hard. When worked like steel, it becomes a "
+    "wonderful material from which to create weapons and armor and is occasionally used for other items as well. Mithril weapons gain a "
+    "+1 material bonus to their accuracy. Mithril armors are one category lighter than normal for purposes of movement and other "
+    "limitations. Heavy armors are treated as medium, and medium armors are treated as light, but light armors are still treated as light. "
+    "However, you must still be proficient in the original armor type to avoid penalties. Spell failure chances for armors and shields "
+    "made from mithril are decreased by 15%, maximum Dexterity bonus is increased by 3, and armor check penalties are lessened by 3 "
+    "(to a minimum of 0). An item made from mithril weighs half as much as the same item made from other metals. Mithril has 150~ of "
+    "the hardness of an iron and half the weight." }, 
+  { IQ_IRONWOOD,
+    "Ironwood is a magical substance created by druids from normal iron. While remaining natural wood in almost every way, ironwood is "
+    "as strong, heavy, and resistant to fire as steel. Spells or abilities that affect metal or iron (such as rusting or the Heat Metal "
+    "spell) do not function on ironwood. Spells that affect wood do affect ironwood, although ironwood does not burn. Ironwood items are "
+    "freely usable by druids." },
 
-  { IQ_ELVEN, "The elves craft weapons and armor that are light and fast. An elven-made item has only 75~ of its normal weight. Elven weapons have +10% bonus to speed and elven armors have their armor penalty reduced by 2." },
-  { IQ_DWARVEN, "Dwarven weapons and armor are heavy and durable. They have 125~ of the normal weight, and a +10 bonus to their hardness. Dwarven armor gains a +1 bonus to its base damage reduction." },
-  { IQ_ORCISH, "Orcish weapons and armor are crude and brutal. They have 50~ of their normal hit points. Orcish weapons suffer a -1 penalty to hit, but gain a +1 bonus to their base damage. Orcish armors are crude but effective in the short term. They suffer an increas of 1 to their armor penalty, but gain a +1 bonus to their base damage reduction." },
-  { IQ_PROFICIENT, "A proficient item grants its user additional knowledge about its proper use. A user that would normally be non-proficient with it becomes proficient and suffers no penalties. A proficient weapon also increases the user's effective level of proficiency with it by one (e.g., a user that would normally be focused with the dagger gains benefits of being specialized when using a proficient dagger)."}, 
+  { IQ_ELVEN,
+    "The elves craft weapons and armor that are light and fast. An elven-made item has only 75~ of its normal weight. Elven weapons have "
+    "+10% bonus to speed and elven armors have their armor penalty reduced by 2." },
+  { IQ_DWARVEN,
+    "Dwarven weapons and armor are heavy and durable. They have 125~ of the normal weight, and a +10 bonus to their hardness. Dwarven "
+    "armor gains a +1 bonus to its base damage reduction." },
+  { IQ_ORCISH,
+    "Orcish weapons and armor are crude and brutal. They have 50~ of their normal hit points. Orcish weapons suffer a -1 penalty to hit, "
+    "but gain a +1 bonus to their base damage. Orcish armors are crude but effective in the short term. They suffer an increase of 1 "
+    "to their armor penalty, but gain a +1 bonus to their base damage reduction." },
+  { IQ_PROFICIENT,
+    "A proficient item grants its user additional knowledge about its proper use. A user that would normally be non-proficient with it "
+    "becomes proficient and suffers no penalties. A proficient weapon also increases the user's effective level of proficiency with it "
+    "by one (e.g., a user that would normally be focused with the dagger gains benefits of being specialized when using a proficient dagger)."}, 
   { IQ_FEATHERLIGHT, 
     "Feather-light items weigh only a quarter as much as they normally would. A feather-light "
-    "weapon is treated as if it were one size catagory smaller than it actually is for the "
+    "weapon is treated as if it were one size category smaller than it actually is for the "
     "purposes of its combat effects and wielding requirements. Combat fatigue accrues at a "
     "third of the normal rate when wearing feather-light armor, to a minimum of the amount "
     "normally accrued when fighting unarmored, and feather-light armor does not impose a "
@@ -1702,8 +1728,12 @@ TextVal QualityDescs[] = {
   { WQ_CLEAVING, "A cleaving weapon inflicts a critical hit on a "
              "successful cleave attack." },
   { WQ_SMITING, "A smiting weapon doubles the bonus damage gained from a character's existing Smite ability and makes all Smite attacks critical hits." },
-  { WQ_SUNDERING, "A sundering weapon deals triple damage in Sundering attacks and deals damage even to items with a higher magical plus. It also deals triple damage to inanimate objects like chests and doors (but not golems or magical constructs)." },
-  { WQ_ENERGY, "A brilliant energy weapon phases cleanly through any inanimate matter and thus automatically bypasses a victim's armor. It deals normal damage to truly inaimate objects like chests and doors." },
+  { WQ_SUNDERING,
+    "A sundering weapon deals triple damage in Sundering attacks and deals damage even to items with a "
+    "higher magical plus. It also deals triple damage to inanimate objects like chests and doors (but not golems or magical constructs)." },
+  { WQ_ENERGY,
+    "A brilliant energy weapon phases cleanly through any inanimate matter and thus automatically bypasses a victim's armor. "
+    "It deals normal damage to truly inaimate objects like chests and doors." },
   { WQ_DISTANCE, "A weapon of distance has its range increment doubled." },
   { WQ_SPEED, "A weapon of speed grants you a +50~ magic bonus to your attack speed (or a +25~ bonus if it is your off-hand weapon)." },
   { WQ_ACCURACY, "A weapon of accuracy strikes true, granting an additional +4 circumstance "
@@ -1712,7 +1742,8 @@ TextVal QualityDescs[] = {
   { WQ_SLAYING, "A weapon of slaying (for example, troll slaying) destroys any creature "
              "of the given type outright on a successful hit, unless that target succeeds "
              "in a Fortitude saving throw (DC 10+%d) against this necromantic, death effect." },
-  { WQ_QUICK_LOADING, "A quick-loading crossbow magically loads and cocks itself automatically and instantaneously. It thus fires on demand and with no extra delay, behaving much like a bow."}, 
+  { WQ_QUICK_LOADING, "A quick-loading crossbow magically loads and cocks itself automatically and instantaneously. "
+             "It thus fires on demand and with no extra delay, behaving much like a bow."}, 
              /*
   { WQ_DANCING, "A dancing weapon guides the wielder's hand and moves of its own "
              "accord once it determines the rhythm of a fight, gaining a culmulative "
@@ -1736,13 +1767,22 @@ TextVal QualityDescs[] = {
              "damage it inflicted on every successful attack." },
   { WQ_PARRYING, "A parrying weapon adds a +4 bonus to the wielder's Defense Class, "
              "but only against attacks with other swung weapons." },
-   { WQ_BANE, "A bane weapon gains a +2 attack bonus and a +2 damage bonus against one chosen type of creature. If the weapon strikes, it also deals 2d6 points of unsoakable damage." },
-  { WQ_NIGHT, "A weapon of the night will put its target to sleep on a successful sneak attack, provided that the target fails a Will Save (DC 20)."},
-  { WQ_BANE, "A bane weapon gains a +2 attack bonus and a +2 damage bonus against one chosen type of creature. If the weapon strikes, it also deals 2d6 points of unsoakable damage." },
-  { WQ_IMPACT, "A knockback weapon can drive its targets back. On a successful hit the target must make a Fortitude Save (DC 20) or be knocked back. If the target cannot move back it instead falls to the ground. If the first save is failed the target must make another Fortitude Save (DC 20) or be stunned for 1 round. This power only works on creatures no larger than the wielder."}, 
+   { WQ_BANE, "A bane weapon gains a +2 attack bonus and a +2 damage bonus against one chosen type of creature. " \
+              "If the weapon strikes, it also deals 2d6 points of unsoakable damage." },
+  { WQ_NIGHT, "A weapon of the night will put its target to sleep on a successful sneak attack, provided that " \
+              "the target fails a Will Save (DC 20)."},
+  { WQ_BANE, "A bane weapon gains a +2 attack bonus and a +2 damage bonus against one chosen type of creature. " \
+             "If the weapon strikes, it also deals 2d6 points of unsoakable damage." },
+  { WQ_IMPACT, "A knockback weapon can drive its targets back. On a successful hit the target must make a Fortitude " \
+               "Save (DC 20) or be knocked back. If the target cannot move back it instead falls to the ground. If " \
+               "the first save is failed the target must make another Fortitude Save (DC 20) or be stunned for 1 round. " \
+               "This power only works on creatures no larger than the wielder."}, 
   { WQ_VENOM, "If a weapon of venom is coated with a poison, that poison will not wear off in combat and can be used repeatedly."}, 
   { WQ_MIGHTY, "A mighty weapon allows you to use your Strength bonus to influence the weapon's damage." },
-  { WQ_FEY_TRAPPING, "A hit from this weapon limns the target with a pale glow, much like the faerie fire spell. This prevents the target from hiding or gaining concealmeant benefits from blur, displacement, invisibility or similar effects. In addition, the target is prevented from teleporting as per the dimensional anchor spell. These effects last for one round per point of damage inflicted."}, 
+  { WQ_FEY_TRAPPING, "A hit from this weapon limns the target with a pale glow, much like the faerie fire spell. This prevents " \
+               "the target from hiding or gaining concealmeant benefits from blur, displacement, invisibility or similar effects. " \
+               "In addition, the target is prevented from teleporting as per the dimensional anchor spell. These effects last for " \
+               "one round per point of damage inflicted."}, 
   /*
   { WQ_ENTROPIC, "An entropic weapon inflicts ill luck on a target, granting a -2 "
              "luck penalty to all rolls for 3d6 rounds on a successful hit, or a -4 "
@@ -1752,8 +1792,12 @@ TextVal QualityDescs[] = {
   { WQ_WEAKENING, "A weapon of weakening inflicts 1d6 points of Strength ability damage with every successful hit (save DC 10+%d for half)." },
   { WQ_NUMBING, "A weapon of numbing inflicts 1d6 points of Dexterity ability damage with every successful hit (save DC 10+%d for half)." },
   { WQ_WITHERING, "A weapon of withering inflicts 1d6 point of Constitution ability damage with every successful hit (save DC 10+%d for half)." },
-  { WQ_VICIOUS, "A vicious weapon strikes at an enemy by consuming its wielder's own life force. At the cost of 1d6 hit points of damage to the wielder, the blade inflicts a bonus 3d6 points of unblockable damage to any creature that it strikes. This effect only occurs if the attacker has at least two-thirds of her total hit points." },
-  { WQ_SEEKING, "A seeking weapon veers toward its target, negating any miss chance due to cover, effects like <9>displacement<7>, being unable to see the target, being stunned, the target's elevation, or tower shields." }, 
+  { WQ_VICIOUS, "A vicious weapon strikes at an enemy by consuming its wielder's own life force. At the cost of " \
+            "1d6 hit points of damage to the wielder, the blade inflicts a bonus 3d6 points of unblockable damage " \
+            "to any creature that it strikes. This effect only occurs if the attacker has at least two-thirds of " \
+            "her total hit points." },
+  { WQ_SEEKING, "A seeking weapon veers toward its target, negating any miss chance due to cover, effects like <9>displacement<7>, " \
+            "being unable to see the target, being stunned, the target's elevation, or tower shields." }, 
   { WQ_BINDING, "A binding weapon binds any creature it strikes from magical movement "
              "when used to perform a Great Blow, afflicting them just as the "
              "<9>dimensional anchor<7> spell does: preventing teleportation or plane "
@@ -1767,13 +1811,13 @@ TextVal AQualityDescs[] = {
   
   { AQ_LIGHT_FOR, "This armor is magically reinforced, giving it a 25~ chance of "
               "negating any critical hit on its wearer, leaving the attack a normal "
-              "hit. It also grants a +4 bonus to saving throws versus disintigration." },
+              "hit. It also grants a +4 bonus to saving throws versus disintegration." },
   { AQ_MEDIUM_FOR, "This armor is magically reinforced, giving it a 50~ chance of "
               "negating any critical hit on its wearer, leaving the attack a normal "
-              "hit. It also grants a +8 bonus to saving throws versus disintigration." },
+              "hit. It also grants a +8 bonus to saving throws versus disintegration." },
   { AQ_HEAVY_FOR, "This armor is magically reinforced, giving it a 75~ chance of "
               "negating any critical hit on its wearer, leaving the attack a normal "
-              "hit. It also grants a +12 bonus to saving throws versus disintigration." },
+              "hit. It also grants a +12 bonus to saving throws versus disintegration." },
 
   { AQ_FIRE_RES, "This armor conveys upon its wearer a supernatural resistance to "
               "fire equal in magnitude to three times its magical bonus." },
@@ -1790,7 +1834,7 @@ TextVal AQualityDescs[] = {
   { AQ_POISON_RES, "This armor conveys upon its wearer a supernatural resistance to "
               "hit point damage from toxins equal in magnitude to three times its "
               "magical bonus, as well as a circustance bonus to saving throws versus "
-              "poison equal in madnitude to its magical bonus." },
+              "poison equal in magnitude to its magical bonus." },
 
   { AQ_ANIMATED, "On command, an animated shield hovers near its bearer without any "
               "apparent means of support, and can thus be used without filling the "
@@ -1806,7 +1850,7 @@ TextVal AQualityDescs[] = {
               "polished steel. This increases your Defense Class by 2 versus enemies "
               "that target attacks by sight, and has a 1 in 20 chance of blinding any "
               "enemy who attacks you (Fortitude saving throw negates) for 1d4 rounds." },
-  { AQ_ETHEREALNESS, "This suit of armor allows its wearer to become etherial at will, "
+  { AQ_ETHEREALNESS, "This suit of armor allows its wearer to become ethereal at will, "
               "costing two Fatigue Points per use, and functioning 3 times per day. To "
               "utilize this ability, 'a'ctivate the armor." },
   { AQ_GRACEFUL, "This armor is fluid, supple and perfectly fitted, granting its "
@@ -1998,7 +2042,7 @@ Option OptionList[] = {
       "2, 5, 8, 11, etc."},
   #endif
   { OPT_ATTR_ON_LEVEL, "Gain Attributes With Levels", "NO/YES", 1, 0, 0,
-      "__If this option is set you gain a single-point inherant attribute bonus (your choice) at levels 4, 8, 12, etc." }, 
+      "__If this option is set you gain a single-point inherent attribute bonus (your choice) at levels 4, 8, 12, etc." }, 
   { OPT_EASY_INTUIT, "Allow Rapid Intuition", "NO/YES/WEAPONS", 2, 2, 0,
       "__If this option is set, you recieve Intuition information about an item immediately "
       "after picking it up, whereas normally you must rest to recieve Intuition 'hunches' "
@@ -2068,7 +2112,9 @@ Option OptionList[] = {
       "Incursion." }, 
 */
   { OPT_SIDEBAR, "Sidebar", "Default/Recent Only", 1, 0, 0,
-      "__This option can cause the sidebar (that area on the right-hand side of the screen that lists your weapons and armor and the things in view) to omit some information that basically never changes (e.g., your race and gender) in order to leave more room for other information (e.g., things in view)." },
+      "__This option can cause the sidebar (that area on the right-hand side of the screen that lists your "
+      "weapons and armor and the things in view) to omit some information that basically never changes "
+      "(e.g., your race and gender) in order to leave more room for other information (e.g., things in view)." },
   { OPT_SHIFTARROW, "Shift Arrow Keys", "Ranged Attack/Run", 1, 0, 0,
       "__This option determines whether pressing Shift and an arrow key "
       "will activate a ranged attack shortcut or cause you to run in that "
@@ -2105,7 +2151,8 @@ Option OptionList[] = {
       "__This option determines whether the player will automatically "
       "open any chest by walking over it."}, 
   { OPT_AUTOKNOCK, "Auto-Knock Locks", "NO/YES", 1, 0, 0,
-      "__If this option is active, a player character that knows an 'Unlock' spell (like 'Knock') will automatically cast it when a Lockpicking skill check fails." },
+      "__If this option is active, a player character that knows an 'Unlock' spell (like 'Knock') will "
+      "automatically cast it when a Lockpicking skill check fails." },
   { OPT_AUTODISARM, "Auto-disarm Traps", "NO/YES", 1, 0, 0,
       "__If this option is active, walking into a known trap will cause "
       "the player to attempt to disarm it, provided that the player has any skill ranks in Handle Devices." },
@@ -2128,7 +2175,11 @@ Option OptionList[] = {
       "__When this option is active, the player must explicitly press "
       "[ENTER] to get rid of the low HP warning message." },
   { OPT_WARN_EMPTY_HAND, "Empty Hand Warning", "NEVER/SMART/ALWAYS", 1, 1, 0,
-    "__This option determines whether an aggressive warning is displayed when you are empty handed -- because you were disarmed by an opponent or forced to drop your weapon when reduced in size, for example. This sort of thing would be easy to notice in 'real life' but often gets lost in the noise in Roguelikes, causing you to waste precious time punching nearby monsters. The 'smart' setting disables the warning if you are polymorphed or have the Unarmed Strike ability." },
+    "__This option determines whether an aggressive warning is displayed when you are empty handed -- "
+    "because you were disarmed by an opponent or forced to drop your weapon when reduced in size, for "
+    "example. This sort of thing would be easy to notice in 'real life' but often gets lost in the "
+    "noise in Roguelikes, causing you to waste precious time punching nearby monsters. The 'smart' "
+    "setting disables the warning if you are polymorphed or have the Unarmed Strike ability." },
   { OPT_SHOWPATTK, "Show Player Attacks", "NO/YES", 1, 1, 0,
       "__This option determines whether the numeric aspect of the player's "
       "attacks will be listed in a window at the bottom of the screen." },
@@ -2225,13 +2276,13 @@ Option OptionList[] = {
       "__When this option is active, sleeping monsters appear with a dark "
       "purple background highlight to signify their state." },
   { OPT_HIGH_MALADY, "Highlight Afflicted Creatures", "NO/YES", 1, 0, 0,
-      "__When this option is active, creatures that have been assgined an "
+      "__When this option is active, creatures that have been assigned an "
       "obviously apparent negative stati (i.e., Stunned, Confused, Paralyzed, "
       "Blind, Stuck, Prone, etc.) are drawn with a brown background "
       "highlight to make their condition obvious." },
   { OPT_HIGH_INVIS, "Highlight Invisible Creatures", "NO/YES", 1, 0, 0,
       "__When this option is active, creatures that are invisible or phased "
-      "into an adjacent plane of existance (i.e., a phase spider or <9>wraithform<2>ed "
+      "into an adjacent plane of existence (i.e., a phase spider or <9>wraithform<2>ed "
       "mage) are drawn with a blue background." },
   { OPT_ANIMATION, "Animation Behaviour", "NORMAL/FAST/NONE/PLAYER", 3, 0, 0,
       "__Certain situations (a <9>fireball<2> spell, ranged attacks, etc.) have "
@@ -2275,9 +2326,11 @@ Option OptionList[] = {
       "even if you don't have a spellbook with the spell in question in it. " },
   
   { OPT_TERSE_BLESSED, "Terse Blessed/Cursed Info", "NO/YES", 1, 0, 0,
-      "__When this option is active, common item qualifiers will be abbreviated to save space. Blessed ('b'), cursed ('c'), uncursed (' '), unknown ('?') and ghost touch ('g') are affected."}, 
+      "__When this option is active, common item qualifiers will be abbreviated to save space. Blessed ('b'), cursed ('c'), "
+      "uncursed (' '), unknown ('?') and ghost touch ('g') are affected."}, 
   { OPT_PRECISE_TIME, "Precise Time", "MINUTES/SECONDS/TURNS", 2, 0, 0,
-      "__This option determines how accurate the clock in the sidebar will be. The default option tracks hours and minutes. It is also possible to track seconds or 'internal game turns' (5 turns to a second)." },
+      "__This option determines how accurate the clock in the sidebar will be. The default option tracks hours and minutes. "
+      "It is also possible to track seconds or 'internal game turns' (5 turns to a second)." },
 
   { OPT_FULL_RES, "Fullscreen Display Resolution",
       "640x480/800x600/1024x768/1280x960/1280x1024/1400x1050/1600x1200/"
@@ -2431,7 +2484,7 @@ Option OptionList[] = {
       "__This option allows the player to move slower in order to allow his "
       "companions to keep up with him. When it is turned on, every single "
       "move the player makes has its Timecost increased by the specified "
-      "number of segments, provided that the player can't currently percieve "
+      "number of segments, provided that the player can't currently perceive "
       "any hostile creatures, and there is at least one living (undead, "
       "whatever) ally of the player somewhere on the map. The player remains "
       "able to use her full movement any time hostile creatures are within her "
@@ -2514,11 +2567,12 @@ Option OptionList[] = {
       "This option has no effect in rooms." },
   { OPT_STOP_REGION, "Stop Running at Region Barrier", "NO/YES", 1, 0, 0,
       "__When this option is active, characters will stop running immediately "
-      "before crossing the boundry to a new region -- for example, before "
+      "before crossing the boundary to a new region -- for example, before "
       "walking into a room from a corridor." },
   { OPT_STOP_PHASE, "Stop Running at Phase Changes", "NO/YES", 1, 0, 0,
       "__When this option is active, characters will stop running immediately "
-      "before crossing the boundry from a solid region to a non-solid region (or vice-versa). This option prevents incorporeal or earth-melding characters from accidentally running to the edge of the map."}, 
+      "before crossing the boundary from a solid region to a non-solid region (or vice-versa). This option prevents incorporeal or "
+      "earth-melding characters from accidentally running to the edge of the map."}, 
   #if 0 
   { OPT_REST_BEHAVE, "Rest by Turn Behaviour", "Single Turn/Full Mana", 1, 0, 0,
       "__This option determines how the rest by turn command ('.') operates: "
@@ -2526,7 +2580,8 @@ Option OptionList[] = {
       "or resting as long as mana is still regenerating unless interrupted." },
   #endif
   { OPT_KILL_CHEST, "Destroy Empty Chests", "NO/YES", 1, 0, 0,
-      "__This option (which should really be replaced by a general auto-squelch) will destroy (for free, taking zero time) any empty chest you are standing on."},
+      "__This option (which should really be replaced by a general auto-squelch) will destroy (for free, taking zero time) any empty "
+      "chest you are standing on."},
 
 /* Wizard Options */
   { OPT_NODEATH, "Cheat Death", "NO/YES", 1, 0, 0,
@@ -2566,7 +2621,7 @@ Option OptionList[] = {
       "ethereal, however, and can engage corporeal creatures in combat "
       "normally." },
   { OPT_WIZ_SIGHT, "Wizard Sight", "NO/YES", 1, 0, 0,
-      "__When this option is active, your character percieves as much of the "
+      "__When this option is active, your character perceives as much of the "
       "map as can be displayed on the screen at any given time regardless of "
       "lighting or obstructions." },
   { OPT_FREEZE_MON, "Freeze Monsters", "NO/YES", 1, 0, 0,
@@ -2574,11 +2629,16 @@ Option OptionList[] = {
       "cycles and are frozen in place. They are still a part of the world and "
       "can be affected by spells, take attacks of opportunity and so forth." },
   { OPT_ALL_ROLLS, "Show All Combat Rolls", "NO/YES", 1, 0, 0,
-      "__When this option is active, all monster combat rolls (even those far off-screen) will be displayed to you. This information tends to be more confusing than useful, but it can help with debugging." }, 
+      "__When this option is active, all monster combat rolls (even those far "
+      "off-screen) will be displayed to you. This information tends to be more "
+      "confusing than useful, but it can help with debugging." }, 
 
 /* Stability Options */
   { OPT_NO_FREE, "Never Call free()", "NO/YES", 1, 0, 0,
-      "__When this option is set, Incursion will not attempt to reclaim allocated memory. In many causes this masks (or, more accurately, stops exposing) some memory corruption errors and may allow you to play a bit longer between crashes." }, 
+      "__When this option is set, Incursion will not attempt to reclaim "
+      "allocated memory. In many causes this masks (or, more accurately, stops "
+      "exposing) some memory corruption errors and may allow you to play a bit "
+      "longer between crashes." }, 
   { OPT_NO_SCRIPTS, "Disable all Scripts", "NO/YES/PLAYER", 2, 0, 0,
       "__If this option is turned on, Incursion will not run any of its "
       "resource scripts using its own internal virtual machine. This means "
@@ -2805,8 +2865,8 @@ const char* GlyphLegend1 =
    n  naga             N  spectral undead     #  webbing / fence \n\
    o  orc              O  outsider            (  bladed weapon   \n\
    q  quadruped        P  plant creature      )  bow / crossbow  \n";
-const char* GlyphLegend2 =
-"   r  rat / rodent     Q  quylthulg           <char:GLYPH_WEAPON>  other weapon    \n\
+const char* GlyphLegend2 = "\
+   r  rat / rodent     Q  quylthulg           <char:GLYPH_WEAPON>  other weapon    \n\
    s  spider           R  reptile             /  rod / staff     \n\
    t  trapper          S  swarm               -  wand            \n\
    u  hag              T  troll              > <char:GLYPH_USTAIRS> stairs / ladder \n\
@@ -3286,30 +3346,30 @@ YuseCommand YuseCommands[] = {
 
 
 const char* SlotNames[] = {
-	"Floating    ",
-	"Ready Hand  ",
-	"Weapon Hand ",
-  "Light Source",
-	"L. Shoulder ",
-	"R. Shoulder ",
-	"Belt        ",
-	"On Eyes     ",
-  "Clothing    ",
-	"Armour      ",
-	"Boots       ",
-	"Cloak       ",
-	"Left Ring   ",
-	"Right Ring  ",
-	"Neck        ",
-	"Gauntlets   ",
-	"Helmet      ",
-	"Bracers     ",
-	"On Belt     ",
-	"On Belt     ",
-	"On Belt     ",
-	"On Belt     ",
-	"On Belt     ",
-	"Pack        " };
+    "Floating    ",
+    "Ready Hand  ",
+    "Weapon Hand ",
+    "Light Source",
+    "L. Shoulder ",
+    "R. Shoulder ",
+    "Belt        ",
+    "On Eyes     ",
+    "Clothing    ",
+    "Armour      ",
+    "Boots       ",
+    "Cloak       ",
+    "Left Ring   ",
+    "Right Ring  ",
+    "Neck        ",
+    "Gauntlets   ",
+    "Helmet      ",
+    "Bracers     ",
+    "On Belt     ",
+    "On Belt     ",
+    "On Belt     ",
+    "On Belt     ",
+    "On Belt     ",
+    "Pack        " };
 
 
 const char* DwarfSurnames[] = { "Battlecrest", "Warforge", "Soulsmelt",
@@ -3388,7 +3448,7 @@ TextVal ClassAbilities[] = {
   { CA_INCREASED_MOVE, "Increased Move" },
   { CA_RAPID_RIDING, "Rapid Riding" },
   { CA_INFRAVISION, "Infravision" },
-  { CA_INHERANT_POTENTIAL, "Inherant Potential" },
+  { CA_INHERANT_POTENTIAL, "Inherent Potential" },
   { CA_INNATE_SPELL, "Innate Spell" },
   { CA_INSPIRE_ALLIES, "Inspire Allies" },
   { CA_INVOKE_THE_LAND, "Invoke the Land" },
@@ -3584,50 +3644,101 @@ SkillInfoStruct SkillInfo[] = {
   { 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 
 
   { SK_ALCHEMY, "Alchemy", true, true, 
-     "__This skill allows you to identify potions. It can also be used to mix potions safely, creating entirely new potions -- or blowing yourself to hell. Be careful!",
+     "__This skill allows you to identify potions. It can also be used to mix "
+     "potions safely, creating entirely new potions -- or blowing yourself to "
+     "hell. Be careful!",
      A_INT, A_INT, false, 0 }, 
 
   { SK_ANIMAL_EMP, "Animal Empathy", true, true, 
-     "__This skill allows you to communicate with animals and magical beasts. You can pacify angry animals, making them nonhostile. You can cow angry animals, making them afraid of you. You can soothe allied animals, removing sleep and fear. Finally, you can befriend nonhostile animals, turning them into temporary party members. The DC for an Animal Empty skill check is 15 + the challenge rating of the animal.",
+     "__This skill allows you to communicate with animals and magical beasts. "
+     "You can pacify angry animals, making them nonhostile. You can cow angry "
+     "animals, making them afraid of you. You can soothe allied animals, "
+     "removing sleep and fear. Finally, you can befriend nonhostile animals, "
+     "turning them into temporary party members. The DC for an Animal Empty "
+     "skill check is 15 + the challenge rating of the animal.",
      A_INT, A_WIS, false, 0 }, 
 
   { SK_APPRAISE, "Appraise", true, true, 
-     "__This skill gives you a chance to determine a creature's alignment and personality architype, and certain other intentions in a situation. It also gives you heightened skill when bargaining with the shopkeepers, and it lets you know the rough chance that any ally -- whether a party member, animal companion or summoned/charmed creature -- is likely to betray you or break control, and what can be used to ameliorate that coming betrayal.\n __Your protagonist's Sense Motive also allows him to lessen the tension caused by extreme differences in party personality archetypes, since it represents the ability to achieve rapport between people. Finally, it can be used to tell you things about an NPC's	nature or reveal general plot information.",
+     "__This skill gives you a chance to determine a creature's alignment and "
+     "personality architype, and certain other intentions in a situation. It "
+     "also gives you heightened skill when bargaining with the shopkeepers, "
+     "and it lets you know the rough chance that any ally -- whether a party "
+     "member, animal companion or summoned/charmed creature -- is likely to "
+     "betray you or break control, and what can be used to ameliorate that "
+     "coming betrayal.\n __Your protagonist's Sense Motive also allows him "
+     "to lessen the tension caused by extreme differences in party "
+     "personality archetypes, since it represents the ability to achieve "
+     "rapport between people. Finally, it can be used to tell you things "
+     "about an NPC's nature or reveal general plot information.",
      A_WIS, A_WIS, false, 0}, 
 
   { SK_ATHLETICS, "Athletics", true, false, 
-     "__This skill increases your base movement rate by 5~ for every two skill levels you possess.", 
+     "__This skill increases your base movement rate by 5~ for every two "
+     "skill levels you possess.", 
      A_STR, A_CON, false, 0 },
      /* lessens the fatigue you gain from strenuous activities, shortens the time you are stunned by powerful blows, and allows you to move more rapidly on the wilderness map."  */
 
   { SK_BALANCE, "Balance", true, true, 
-     "__This skill decreases the chance of you being knocked prone by an attack or spell effect. Balance figures into the chance of you becoming prone when moving or fighting over a slippery surface such as ice or the effects of a <13>grease<7> spell.",
+     "__This skill decreases the chance of you being knocked prone by an "
+     "attack or spell effect. Balance figures into the chance of you "
+     "becoming prone when moving or fighting over a slippery surface such "
+     "as ice or the effects of a <13>grease<7> spell.",
      A_DEX, A_DEX, false, 1 },
 /*      It also improves your ability to walk straight when <15>Confused<7>, and allows you to walk on the roofs of buildings in the town or crawl over piles of rubble safely.  */
 
   { SK_BLUFF, "Bluff", true, true, 
-     "__This skill increases your chance of getting a better deal in stores. It can also be used to gain admittance to some guilds and other places where you aren't supposed to be, on sheer force of personality alone. Finally, it helps a lot if you are caught stealing or otherwise offend the authorities.",
+     "__This skill increases your chance of getting a better deal in stores. "
+     "It can also be used to gain admittance to some guilds and other places "
+     "where you aren't supposed to be, on sheer force of personality alone. "
+     "Finally, it helps a lot if you are caught stealing or otherwise offend "
+     "the authorities.",
      A_CHA, A_CHA, false, 0 },
 
   { SK_CLIMB, "Climb", true, true, 
-     "__The Climb skill has several uses. In a dungeon, it can allow you to safely descend (DC 10 + Depth) or ascend (DC 20 + depth) chasms. You can also climb up into a tree in a forested area (or a giant mushroom in a dungeon cave). Characters climbing in trees add [2 + (Climb Skill Rating / 3)] to their Defense Class, attack rolls and Hide skill rating while doing so, and attacks against them have a 25~ miss chance due to cover. Moving from tree to tree requires a Climb check against DC 15, with a result of 25+ allowing movement at full normal speed. To climb up or down trees or chasms, use the Ascend and Descend commands when standing under a tree or beside a chasm.",
+     "__The Climb skill has several uses. In a dungeon, it can allow you to "
+     "safely descend (DC 10 + Depth) or ascend (DC 20 + depth) chasms. You "
+     "can also climb up into a tree in a forested area (or a giant mushroom "
+     "in a dungeon cave). Characters climbing in trees add [2 + (Climb Skill "
+     "Rating / 3)] to their Defense Class, attack rolls and Hide skill rating "
+     "while doing so, and attacks against them have a 25~ miss chance due to "
+     "cover. Moving from tree to tree requires a Climb check against DC 15, "
+     "with a result of 25+ allowing movement at full normal speed. To climb "
+     "up or down trees or chasms, use the Ascend and Descend commands when "
+     "standing under a tree or beside a chasm.",
      A_STR, A_DEX, false, 1 }, 
      /* "\n __Varying degrees of this skill also allow you to traverse varying extremes of mountains on the wilderness map as if they were normally crossable terrain. It can also be used to get out of pit traps quickly, to make use of broken stairs in lieu of normal ones, to move safely over rubble in the dungeon and to get on top of buildings in the town.\n\n */
 
   { SK_CONCENT, "Concentration", true, false, 
-     "__This skill decreases the chance of your spells or psionic powers being disrupted if you suffer damage during the casting or activation time. In addition, each rank in Concentration decreases your normal, non-interrupted chance of spell failure by 5%.",
+     "__This skill decreases the chance of your spells or psionic powers being "
+     "disrupted if you suffer damage during the casting or activation time. In "
+     "addition, each rank in Concentration decreases your normal, "
+     "non-interrupted chance of spell failure by 5%.",
      A_WIS, A_CON, true, 0 } , 
 
   { SK_CRAFT, "Craft", true, true, 
-     "__This skill allows you to craft items of various types, most notably weapons and armor. Any item you craft yourself is much easier to enchant, particularly if great degrees of skill are involved in the creation. You need to go to the appropriate location in town (such as the Smithy) to craft items.",
+     "__This skill allows you to craft items of various types, most notably "
+     "weapons and armor. Any item you craft yourself is much easier to "
+     "enchant, particularly if great degrees of skill are involved in the "
+     "creation. You need to go to the appropriate location in town (such as "
+     "the Smithy) to craft items.",
      A_WIS, A_DEX, true, 0 }, 
 
   { SK_DECIPHER, "Decipher Script", true, false ,
-     "__This skill is used to read scrolls, and other ancient and/or magical writings. It also gives you a chance to identify any scroll that you pick up. At very high levels, it can increase the effective plus of stat gain tomes.\n __<15>Note:<7> Anyone can read a scroll for a spell that is on their class's spell list at their level. This skill allows its user to read any scroll, even one for a class the user has no levels in, and decreases the failure chance for a spellcaster reading a scroll above their level.", 
+     "__This skill is used to read scrolls, and other ancient and/or magical "
+     "writings. It also gives you a chance to identify any scroll that you "
+     "pick up. At very high levels, it can increase the effective plus of stat "
+     "gain tomes.\n __<15>Note:<7> Anyone can read a scroll for a spell that "
+     "is on their class's spell list at their level. This skill allows its "
+     "user to read any scroll, even one for a class the user has no levels "
+     "in, and decreases the failure chance for a spellcaster reading a scroll "
+     "above their level.", 
      A_INT, A_INT, true, 0 }, 
 
   { SK_DIPLOMACY, "Diplomacy", true, false, 
-     "__This skill allows you to enter and advance within the Nobles' guild, to get better prices in stores and influences the chance of your meeting non-hostile monsters. It also determines the chance that a monster will accept your surrender or parlay.",
+     "__This skill allows you to enter and advance within the Nobles' guild, "
+     "to get better prices in stores and influences the chance of your meeting "
+     "non-hostile monsters. It also determines the chance that a monster will "
+     "accept your surrender or parlay.",
      A_CHA, A_CHA, false, 0 }, 
 
   { SK_DISGUISE, "Disguise", true, true,
@@ -3635,7 +3746,9 @@ SkillInfoStruct SkillInfo[] = {
      A_INT, A_CHA, false, 0 },
 
   { SK_ESCAPE_ART, "Escape Artist", true, false, 
-     "__This skill allows you to escape from being stuck in webbings or entangling weapons. You Escape Artist skill level is added directly to your grapple check to escape from a grapple or grab.", 
+     "__This skill allows you to escape from being stuck in webbings or "
+     "entangling weapons. You Escape Artist skill level is added directly to "
+     "your grapple check to escape from a grapple or grab.", 
      A_DEX, A_DEX, false, 1 }, 
      /* from monsters or characters who grapple, grab, ensnare or hold you, and gives you increased resistance to spells like <13>web<7> and <13>sink<7>. At high levels, it might grant you some defense even against spells that limit your movement (<13>hold person<7>, etc). Escape Artist also allows you a chance to get away if you are captured by the  authorities in town and put in the gaol.\n\n */
 
@@ -3654,7 +3767,11 @@ SkillInfoStruct SkillInfo[] = {
      A_DEX, A_INT, true, 0 }, 
 
   { SK_HEALING, "Healing", true, true, 
-     "__Using this skill, you have a chance to remove maladies such as poisoning, bleeding, blindness, injured limbs and such. However, you only get one go per malady! Heal also increases the number of hit points that you regain when you rest in the dungeon, but not by a great amount compared to healing spells.", 
+     "__Using this skill, you have a chance to remove maladies such as "
+     "poisoning, bleeding, blindness, injured limbs and such. However, "
+     "you only get one go per malady! Heal also increases the number of "
+     "hit points that you regain when you rest in the dungeon, but not "
+     "by a great amount compared to healing spells.", 
      A_WIS, A_WIS, false, 0 }, 
 
   { SK_HIDE, "Hide in Shadows", true, true, 
@@ -3662,136 +3779,153 @@ SkillInfoStruct SkillInfo[] = {
      A_DEX, A_DEX, false, 1 }, 
 
   { SK_ILLUSION, "Illusioncraft", true, false,
-     "__Creating creatures and images with magic is not truly that " \
-     "different from sketching or sculpture; it just works in an " \
-     "alternative medium. This skill gives an illusionist skill in " \
-     "that medium, imbuing his illusions with a greater realism, " \
-     "detail and believability. As such, it adds [Skill Rating / 3] " \
-     "to the DC of any saving throw to disbelieve an illusion that " \
-     "he creates. This applies only to true illusion-creation spells " \
-     "like <9>Phantasmal Force<7>, not to all spells from the Illusion "\
+     "__Creating creatures and images with magic is not truly that "
+     "different from sketching or sculpture; it just works in an "
+     "alternative medium. This skill gives an illusionist skill in "
+     "that medium, imbueing his illusions with a greater realism, "
+     "detail and believability. As such, it adds [Skill Rating / 3] "
+     "to the DC of any saving throw to disbelieve an illusion that "
+     "he creates. This applies only to true illusion-creation spells "
+     "like <9>Phantasmal Force<7>, not to all spells from the Illusion "
      "school (<9>Chromatic Orb<7>, <9>Phantasmal Killer<7>, etc.)",
      A_INT, A_INT, false, 0 }, 
 
   { SK_INTIMIDATE, "Intimidate", true, false, 
-     "__Using this skill, you have a chance of forcing intelligent monsters to accept your surrender. If you have Animal Empathy, you can attempt the same with most living creatures.",
+     "__Using this skill, you have a chance of forcing intelligent monsters "
+     "to accept your surrender. If you have Animal Empathy, you can attempt "
+     "the same with most living creatures.",
      A_STR, A_CHA, false, 0}, 
 
   { SK_INTUITION, "Intuition", true, false, 
-     " __This skill allows you to gain special feelings about items picked up in the dungeon, telling you if they are good, bad or neutral.  Obviously, this is a valuable skill to single-classed Rogues and Warriors who lack divination magics or Clairsentient arts.", 
+     " __This skill allows you to gain special feelings about items picked up "
+     "in the dungeon, telling you if they are good, bad or neutral.  "
+     "Obviously, this is a valuable skill to single-classed Rogues and "
+     "Warriors who lack divination magics or Clairsentient arts.", 
      A_WIS, A_WIS, false, 0}, 
      /* "At higher levels, it also gives you feelings about a dungeon level when you first visit it (and the game will repeat the feeling message whenever you return). These hunches can tell you when a level has a valuable magic item, a room holding many monsters, or even a legendary artifact!" */
 
   { SK_JUMP, "Jump", true, true, 
-  "__Use this skill to cross from one square to another in the dungeon while missing a square in between. This skill will let you get past a monster without bull-rushing it, or to avoid a trap or pit. Beware, though -- if you try to jump too far, you may not end up where you want! A typical jumping DC is 10 for 1 square, +7 per extra square!", 
+    "__Use this skill to cross from one square to another in the dungeon while "
+    "missing a square in between. This skill will let you get past a monster "
+    "without bull-rushing it, or to avoid a trap or pit. Beware, though -- if "
+    "you try to jump too far, you may not end up where you want! A typical "
+    "jumping DC is 10 for 1 square, +7 per extra square!", 
   A_DEX, A_STR, false, 1 }, 
 
   { SK_KNOW_GEO, "Knowledge (Theyra)", false, false, 
-    "__This skill will give a character limited memory of the wilderness" \
-    " map, and is used against checks in various DCs determined by terrain" \
+    "__This skill will give a character limited memory of the wilderness"
+    " map, and is used against checks in various DCs determined by terrain"
     " to avoid becoming lost.", A_INT, A_INT, false, 0 }, 
 
   { SK_KNOW_INF, "Knowledge (Infernal)", true, false,
-    "__Many priests and paladins study demons and devils to learn how " \
-    "to better fight them, while dark sorcerors want to understand " \
-    "exactly what they are summoning. In addition to giving you map " \
-    "knowledge of the Lower Planes the same way Knowledge (Theyra) " \
-    "does for the normal overland map, Knowledge (Infernal) " \
-    "grants certain bonuses when fighting demons and devils. "\
-    "By applying simple hearth " \
-    "wisdom and studying the vulnerabilities of his targets, this skill " \
-    "allows a character the following bonuses when facing demons and " \
-    "devils: his effective DC is increased by [Skill Rating / 3] " \
-    "against their attacks, and his understanding of their banes and " \
-    "biology increases the threat ratings of his attacks against them " \
-    "by [Skill Rating / 9]. He can also summon them more effectively; " \
-    "demons and devils summoned by such a caster have a [Skill Rating x 5]% "\
+    "__Many priests and paladins study demons and devils to learn how "
+    "to better fight them, while dark sorcerors want to understand "
+    "exactly what they are summoning. In addition to giving you map "
+    "knowledge of the Lower Planes the same way Knowledge (Theyra) "
+    "does for the normal overland map, Knowledge (Infernal) "
+    "grants certain bonuses when fighting demons and devils. "
+    "By applying simple hearth "
+    "wisdom and studying the vulnerabilities of his targets, this skill "
+    "allows a character the following bonuses when facing demons and "
+    "devils: his effective DC is increased by [Skill Rating / 3] "
+    "against their attacks, and his understanding of their banes and "
+    "biology increases the threat ratings of his attacks against them "
+    "by [Skill Rating / 9]. He can also summon them more effectively; "
+    "demons and devils summoned by such a caster have a [Skill Rating x 5]% "
     "bonus to their hit points.",
      A_INT, A_INT, false, 0 }, 
 
   { SK_KNOW_MAGIC, "Knowledge (Magic)", true, false,
-    "__This skill gives a character inherant knowledge of a number of spells," \
-    " thereby allowing him to cast them without a spellbook. The character has" \
+    "__This skill gives a character inherent knowledge of a number of spells,"
+    " thereby allowing him to cast them without a spellbook. The character has"
     " to spend spell slots to learn these spells normally, of course.",
      A_INT, A_INT, false, 0 }, 
 
   { SK_KNOW_MYTH, "Knowledge (Mythology)", true, false,
-    "__A solid understanding of mythology sets up an adventurer to fight " \
-    "more effectively against mythic creatures. By applying simple hearth " \
-    "wisdom and studying the vulnerabilities of his targets, this skill " \
-    "allows a character the following bonuses when facing creatures of " \
-    "mythology: his effective DC is increased by [Skill Rating / 3] " \
-    "against their attacks, and his understanding of their banes and " \
-    "biology increases the threat ratings of his attacks against them " \
-    "by [Skill Rating / 9]. He can also summon them more effectively; " \
-    "mythic creatures summoned by such a caster have a [Skill Rating x 5]% "\
+    "__A solid understanding of mythology sets up an adventurer to fight "
+    "more effectively against mythic creatures. By applying simple hearth "
+    "wisdom and studying the vulnerabilities of his targets, this skill "
+    "allows a character the following bonuses when facing creatures of "
+    "mythology: his effective DC is increased by [Skill Rating / 3] "
+    "against their attacks, and his understanding of their banes and "
+    "biology increases the threat ratings of his attacks against them "
+    "by [Skill Rating / 9]. He can also summon them more effectively; "
+    "mythic creatures summoned by such a caster have a [Skill Rating x 5]% "
     "bonus to their hit points.",
      A_INT, A_INT, false, 0 }, 
      
   { SK_KNOW_NATURE, "Knowledge (Nature)", true, false,
-    "__This skill gives a character knowledge of flora and fauna; with it he" \
-    " can identify and cultivate herbs and mushrooms. Additionally, his " \
-    "detailed knowledge and understanding of animals gives him a certain " \
-    "edge when fighting them, working as per similar Knowledge skills " \
+    "__This skill gives a character knowledge of flora and fauna; with it he"
+    " can identify and cultivate herbs and mushrooms. Additionally, his "
+    "detailed knowledge and understanding of animals gives him a certain "
+    "edge when fighting them, working as per similar Knowledge skills "
     "in that regard.",
      A_INT, A_INT, false, 0 },  
 
   { SK_KNOW_OCEANS, "Knowledge (Oceans)", true, false,
-    "__Some adventurers spend much of their lives out at sea, exploring "\
-    "the great Western Ocean or scouring trade routes for pirates and " \
-    "other threats. This knowledge skill gives map-memory of oceanic " \
-    "areas in a manner similar to Knowledge (Theyra), and also aids " \
-    "an adventurer in fighting aquatic threats. By using a thourogh " \
-    "knowledge of their behaviour, biology and weaknesses, this skill " \
-    "allows a character the following bonuses when fighting aquatic or " \
-    "amphibious creatures: his effective DC is increased by [Skill Rating / 3] " \
-    "against their attacks, and his understanding of their banes and " \
-    "biology increases the threat ratings of his attacks against them " \
-    "by [Skill Rating / 9]. He can also summon them more effectively; " \
-    "aquatic creatures summoned by such a caster have a [Skill Rating x 5]% "\
+    "__Some adventurers spend much of their lives out at sea, exploring "
+    "the great Western Ocean or scouring trade routes for pirates and "
+    "other threats. This knowledge skill gives map-memory of oceanic "
+    "areas in a manner similar to Knowledge (Theyra), and also aids "
+    "an adventurer in fighting aquatic threats. By using a thourogh "
+    "knowledge of their behaviour, biology and weaknesses, this skill "
+    "allows a character the following bonuses when fighting aquatic or "
+    "amphibious creatures: his effective DC is increased by [Skill Rating / 3] "
+    "against their attacks, and his understanding of their banes and "
+    "biology increases the threat ratings of his attacks against them "
+    "by [Skill Rating / 9]. He can also summon them more effectively; "
+    "aquatic creatures summoned by such a caster have a [Skill Rating x 5]% "
     "bonus to their hit points.",
-     A_INT, A_INT, false, 0 }, 
+      A_INT, A_INT, false, 0 }, 
 
   { SK_KNOW_PLANES, "Knowledge (Planes)", true, false,
-    "__This skill gives a character knowledge of the many planes of " \
-    "existance, and is necessary to cast plane-travelling spells like " \
-    "<9>Plane Shift<7> safely. Furthermore, it can aid the character " \
-    "in fighting outsiders who are not also demons, devils or celestials. "\
-    "By using a thourogh " \
-    "knowledge of their behaviour, biology and weaknesses, this skill " \
-    "allows a character the following bonuses when fighting " \
-    "such outsiders: his effective DC is increased by [Skill Rating / 3] " \
-    "against their attacks, and his understanding of their banes and " \
-    "biology increases the threat ratings of his attacks against them " \
-    "by [Skill Rating / 9]. He can also summon them more effectively; " \
-    "general outsiders summoned by such a caster have a [Skill Rating x 5]% "\
+    "__This skill gives a character knowledge of the many planes of "
+    "existence, and is necessary to cast plane-travelling spells like "
+    "<9>Plane Shift<7> safely. Furthermore, it can aid the character "
+    "in fighting outsiders who are not also demons, devils or celestials. "
+    "By using a thorough "
+    "knowledge of their behaviour, biology and weaknesses, this skill "
+    "allows a character the following bonuses when fighting "
+    "such outsiders: his effective DC is increased by [Skill Rating / 3] "
+    "against their attacks, and his understanding of their banes and "
+    "biology increases the threat ratings of his attacks against them "
+    "by [Skill Rating / 9]. He can also summon them more effectively; "
+    "general outsiders summoned by such a caster have a [Skill Rating x 5]% "
     "bonus to their hit points.",
      A_INT, A_INT, false, 0 }, 
 
   { SK_KNOW_THEO, "Knowledge (Theology)", true, false, 
-    "__This skill represents a knowledge of the Theryan pantheon and your diety in particular. If you have more than 5 total levels in this skill you gain a +2 bonus to your Turn, Command or Rebuke checks.",
+    "__This skill represents a knowledge of the Theryan pantheon and your "
+    "deity in particular. If you have more than 5 total levels in this skill "
+    "you gain a +2 bonus to your Turn, Command or Rebuke checks.",
     A_INT, A_WIS, false, 0}, 
 
   { SK_KNOW_UNDEAD, "Knowledge (Undead)", true, false,
-    "__The dead hate the living, and the living often return the " \
-    "sentiment. A character with this skill is a trained undead " \
-    "slayer or master necromancer, well versed in the inherant " \
-    "abilities and weaknesses of the Damned. By using a thourogh " \
-    "knowledge of their behaviour, weaknesses and unnatural existance, this skill " \
-    "allows a character the following bonuses when fighting aquatic or " \
-    "the undead: his effective DC is increased by [Skill Rating / 3] " \
-    "against their attacks, and his understanding of their banes and " \
-    "biology increases the threat ratings of his attacks against them " \
-    "by [Skill Rating / 9]. He can also summon them more effectively; " \
-    "aquatic creatures summoned by such a caster have a [Skill Rating x 5]% "\
-    "bonus to their hit points. Note that undead are not normally " \
-    "subject to critical hits, but with this skill they can be struck " \
+    "__The dead hate the living, and the living often return the "
+    "sentiment. A character with this skill is a trained undead "
+    "slayer or master necromancer, well versed in the inherent "
+    "abilities and weaknesses of the Damned. By using a thorough "
+    "knowledge of their behaviour, weaknesses and unnatural existence, this skill "
+    "allows a character the following bonuses when fighting aquatic or "
+    "the undead: his effective DC is increased by [Skill Rating / 3] "
+    "against their attacks, and his understanding of their banes and "
+    "biology increases the threat ratings of his attacks against them "
+    "by [Skill Rating / 9]. He can also summon them more effectively; "
+    "aquatic creatures summoned by such a caster have a [Skill Rating x 5]% "
+    "bonus to their hit points. Note that undead are not normally "
+    "subject to critical hits, but with this skill they can be struck "
     "for such with the threat range it provides alone.",
      A_INT, A_INT, false, 0 }, 
 
 
   { SK_LISTEN, "Listen", true, false, 
-    "You Listen skill is used against an enemy's Move Silently skill to determine if you are surprised by an unseen attack. If you happen to possess Blindsight, it is also used to detect nearby hiding enemies. In addition, you may actively use the Listen skill to determine the general types (e.g., animal, earth creature) of nearby monsters and determine if it is safe to rest. With a high degree of skill you can determine the names (e.g., eagle) of nearby monsters.", 
+    "You Listen skill is used against an enemy's Move Silently skill to "
+    "determine if you are surprised by an unseen attack. If you happen to "
+    "possess Blindsight, it is also used to detect nearby hiding enemies. "
+    "In addition, you may actively use the Listen skill to determine the "
+    "general types (e.g., animal, earth creature) of nearby monsters and "
+    "determine if it is safe to rest. With a high degree of skill you can "
+    "determine the names (e.g., eagle) of nearby monsters.", 
     A_WIS, A_WIS, false, 0 }, 
     /* __This skill gives you some idea what kind of monsters are
      nearby when you can't see them for whatever reason, such as
@@ -3802,65 +3936,106 @@ SkillInfoStruct SkillInfo[] = {
      Silently.\n\n */
 
   { SK_LOCKPICKING, "Lockpicking", true, false, 
-     "__This skill gives you the opportunity to pick the lock on locked doors, thereby avoiding the noise (which attracts monsters) and potential damage involved in breaking one down. There may even be doors that can be picked but not bashed down... chests can also have locks that need picking, which makes the skill valuable, since chests often contain items too fragile to survive brute force!",
+     "__This skill gives you the opportunity to pick the lock on locked doors, "
+     "thereby avoiding the noise (which attracts monsters) and potential damage "
+     "involved in breaking one down. There may even be doors that can be picked "
+     "but not bashed down... chests can also have locks that need picking, "
+     "which makes the skill valuable, since chests often contain items too "
+     "fragile to survive brute force!",
      A_DEX, A_DEX, false, 0 }, 
 
   { SK_METAMAGIC, "Metamagic", true, false, 
-     "__Metamagic allows a spellcaster to modify the effects of a spell in various ways. Unfortunately, Metamagic is taxing and fatiguing. For every 5 points by which you succeed a Metamagic skill check against DC 15, the fatigue cost for such a spell is reduced by 1.", 
+     "__Metamagic allows a spellcaster to modify the effects of a spell in "
+     "various ways. Unfortunately, Metamagic is taxing and fatiguing. For "
+     "every 5 points by which you succeed a Metamagic skill check against "
+     "DC 15, the fatigue cost for such a spell is reduced by 1.", 
      A_INT, A_INT, false, 0}, 
 
   { SK_MINING, "Mining", true, false, 
-     "__This skill increases the effectiveness and decreases the time required when trying to tunnel through walls in the dungeon. It also lets you appraise veins of minerals in the dungeon, identify gems and, at higher levels, it lets you tunnel through rock types you otherwise couldn't.", 
+     "__This skill increases the effectiveness and decreases the time required "
+     "when trying to tunnel through walls in the dungeon. It also lets you "
+     "appraise veins of minerals in the dungeon, identify gems and, at higher "
+     "levels, it lets you tunnel through rock types you otherwise couldn't.", 
      A_WIS, A_STR, true, 0}, 
 
   { SK_MOVE_SILENTLY, "Move Silently", true, false, 
-     "__This skill allows you to move past monsters in the dungeon without waking them up. It is contested against the defender's Listen skill to see if you can make certain surprise attacks (e.g., when you are hidden). Every two skill levels of Move Silently you possess reduce the noise radius of attacks you make by 10'.", 
+     "__This skill allows you to move past monsters in the dungeon without "
+     "waking them up. It is contested against the defender's Listen skill "
+     "to see if you can make certain surprise attacks (e.g., when you are "
+     "hidden). Every two skill levels of Move Silently you possess reduce "
+     "the noise radius of attacks you make by 10'.", 
      /* "It also augments your ability not to be seen when using Hide, and decreases the chance of encounters in the wilderness.", */
      A_DEX, A_DEX, false, 1},
 
   { SK_PERFORM, "Perform", true, false, 
-    "__Every rank you have in this skill increases the radius of your Bardic Music effects by 10'. It also determines the DCs for your Bardic Music effects.", 
+    "__Every rank you have in this skill increases the radius of your Bardic "
+    "Music effects by 10'. It also determines the DCs for your Bardic Music "
+    "effects.", 
     A_CHA, A_CHA, false, 0}, 
 
   { SK_PICK_POCKET, "Pick Pockets", true, true, 
-     "__This skill allows you to remove items from a monster, hostile or not, and take them for yourself. If you attempt this on a non-hostile and fail, the monster will become hostile; in a city, the authorities will also take notice!  Pick Pockets also gives you protection against monsters stealing your own possessions!", 
+     "__This skill allows you to remove items from a monster, hostile or not, "
+     "and take them for yourself. If you attempt this on a non-hostile and "
+     "fail, the monster will become hostile; in a city, the authorities will "
+     "also take notice!  Pick Pockets also gives you protection against "
+     "monsters stealing your own possessions!", 
      A_DEX, A_CHA, false, 1}, 
 
   { SK_POISON_USE, "Poison Use", true, false, 
-    "__This skill allows you to Apply poison to weapons and missiles without poisoning yourself. A typical DC for such an action is 10, and poisons that can be applied in such a manner are often stored in small glass vials. Every two levels of this skill increase the save DC of the poison on such a poisoned weapon by 1.", 
+    "__This skill allows you to Apply poison to weapons and missiles without "
+    "poisoning yourself. A typical DC for such an action is 10, and poisons "
+    "that can be applied in such a manner are often stored in small glass "
+    "vials. Every two levels of this skill increase the save DC of the poison "
+    "on such a poisoned weapon by 1.", 
     A_DEX, A_INT, true, 0}, 
 
   { SK_RIDE, "Ride", true, false, 
-  "__This skill determines the combat bonuses to attack, damage and AC you receive from being mounted, as well as determining how effectively you can control your mount, and at high levels if you can use an exotic beast as a mount.", 
+    "__This skill determines the combat bonuses to attack, damage and AC you "
+    "receive from being mounted, as well as determining how effectively you "
+    "can control your mount, and at high levels if you can use an exotic "
+    "beast as a mount.", 
   A_DEX, A_WIS, true, 0}, 
 
   { SK_SEARCHING, "Searching", true, true, 
-     "__This skill allows you to spot secret doors and concealed traps. You get a free "
-     "chance to spot a concealed trap when you move over it, and characters with preternaturally "
-     "sharp senses or stonework abilities (e.g., Elves, Dwarves) get a free chance to spot secret "
-     "doors when adjacent to them.  You may also actively look for hidden features in your "
-     "environment. If you fail, you can't try to spot that hidden feature until you rest.", 
+    "__This skill allows you to spot secret doors and concealed traps. You get a free "
+    "chance to spot a concealed trap when you move over it, and characters with preternaturally "
+    "sharp senses or stonework abilities (e.g., Elves, Dwarves) get a free chance to spot secret "
+    "doors when adjacent to them.  You may also actively look for hidden features in your "
+    "environment. If you fail, you can't try to spot that hidden feature until you rest.", 
      A_INT, A_INT, true, 0}, 
 
   { SK_SENESCHAL, "Seneschal", false, false, 
-  "__Wes has no idea what Julian wants this skill to be.",
+    "__Wes has no idea what Julian wants this skill to be.",
   A_INT, A_INT, false, 0}, 
 
   { SK_SPELLCRAFT, "Spellcraft", true, false, 
-    "__This skill allows you to determine which spell is being cast by an enemy spellcaster you can perceive. A typical DC for this skill is 15 + the level of the spell being cast.", 
+    "__This skill allows you to determine which spell is being cast by an "
+    "enemy spellcaster you can perceive. A typical DC for this skill is 15 + "
+    "the level of the spell being cast.", 
     A_INT, A_INT, false, 0}, 
 
   { SK_SPOT, "Spot", true, false, 
-     "__This skill is contested against the Hide skill of another creature and allows you to see such hiding creatures.", 
-     /* This skill increases your ability to awaken quickly if you have an encounter while resting in the dungeon. It also gives you the opportunity to begin wilderness encounters farther away from the monsters in question.  Finally, Alertness gives you a greater chance of hitting invisible monsters and spot those that are hiding.\n\n */
+    "__This skill is contested against the Hide skill of another creature and "
+    "allows you to see such hiding creatures.", 
+    /* This skill increases your ability to awaken quickly if you have an encounter while resting in the dungeon. It also gives you the opportunity to begin wilderness encounters farther away from the monsters in question.  Finally, Alertness gives you a greater chance of hitting invisible monsters and spot those that are hiding.\n\n */
      A_WIS, A_WIS, false, 0}, 
 
   { SK_SWIMMING, "Swimming", true, false, 
-     "__This skill allows you to traverse deep water on the map (rivers, not the ocean) as if it were any other harsh terrain. In deep water, a skill check is required to make forward progress or attack at all. Failing a swim check by 5 or more causes you to start to drown and take damage.", 
+    "__This skill allows you to traverse deep water on the map (rivers, not "
+    "the ocean) as if it were any other harsh terrain. In deep water, a "
+    "skill check is required to make forward progress or attack at all. "
+    "Failing a swim check by 5 or more causes you to start to drown and take "
+    "damage.", 
      A_DEX, A_STR, true, 2}, 
 
   { SK_TUMBLE, "Tumble", true, true, 
-     "__Using this skill allows you to move acrobatically; tumbling uses two fatigue points and lasts for only a few turns, but gives several advantages. While tumbling, a character adds a third of their Tumble skill rating to their DC versus normal attacks, and their full Tumble skill rating to their DC versus attacks of opportunity provoked by movement. Tumbling increases one's movement rate based on skill rating, and decreases attack Speed and spell success by a set 25%.",
+    "__Using this skill allows you to move acrobatically; tumbling uses two "
+    "fatigue points and lasts for only a few turns, but gives several "
+    "advantages. While tumbling, a character adds a third of their Tumble "
+    "skill rating to their DC versus normal attacks, and their full Tumble "
+    "skill rating to their DC versus attacks of opportunity provoked by "
+    "movement. Tumbling increases one's movement rate based on skill rating, "
+    "and decreases attack Speed and spell success by a set 25%.",
      /* "\n __Finally, when tumbling a character may avoid provoking attacks of opportunity when jumping by making a Tumble skill check against a DC of 20.",  */
      A_DEX, A_DEX, false, 1}, 
 
@@ -3869,7 +4044,10 @@ SkillInfoStruct SkillInfo[] = {
      A_CHA, A_INT, false, 0}, 
 
   { SK_WILD_LORE, "Wilderness Lore", true, false, 
-     "__This skill decreases the time that travel takes in the wild, and increases the amount of experience that wilderness encounters generate. It also gives you a chance to identify mushrooms and herbs, and increases your success ratio while decreasing time spent for hunting.", 
+     "__This skill decreases the time that travel takes in the wild, and "
+     "increases the amount of experience that wilderness encounters generate. "
+     "It also gives you a chance to identify mushrooms and herbs, and "
+     "increases your success ratio while decreasing time spent for hunting.", 
      A_WIS, A_WIS, false, 0}, 
   { 0, NULL, false, false, NULL, 0, 0, false, 0 }
 } ;

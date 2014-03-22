@@ -828,9 +828,9 @@ EvReturn Creature::FastTalk(EventInfo &e)
           TPrint(e, "You grab the <EVictim> by the shoulders and eagerly "
                        "start congratulating <it:EVictim>...",
                     "The <EActor> grabs the you by the shoulders and eagerly "
-                       "start congratulating you...",
+                       "starts congratulating you...",
                     "The <EActor> grabs the <EVictim> by the shoulders and eagerly "
-                       "start congratulating <it:EVictim>...");
+                       "starts congratulating <it:EVictim>...");
          break;
         case 1:
           TPrint(e, "You spin a wild story for the <EVictim>...",
@@ -1293,14 +1293,14 @@ EvReturn Creature::Request(EventInfo &e)
         tm->LOption("Follow After Me", OrderWalkNearMe,
             "Base DC 10. Convince an NPC to follow you for a brief period, usually to lead "
             "them to monsters they will be hostile against. You recieve half the "
-            "experience for his kills after successfuly using this request.");
+            "experience for his kills after successfully using this request.");
         tm->LOption("Fight Against Enemy", OrderAttackTarget,
             "Base DC 15. Convince the NPC to fight against a specific enemy of your choosing, "
             "becoming hostile to that creature and its allies. You recieve half "
             "of the experience for his kills after successfully using this request.");
         tm->LOption("Go To Location", OrderWalkToPoint,
             "Base DC 20. Convince the NPC to go to a specific location on the map. You recieve "
-            "half the experience for his kills after successfuly using this request.");
+            "half the experience for his kills after successfully using this request.");
         tm->LOption("Stop Fighting Unless Attacked", OrderBeFriendly,
             "Base DC 15. Convince an NPC to stop fighting and treat the creatures around it as "
             "neutrals for a brief period, even if it would usually be hostile to "

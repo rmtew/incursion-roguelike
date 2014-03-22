@@ -360,7 +360,7 @@ EvReturn Creature::Walk(EventInfo &e)
       
 IgnoreCreature:
 
-  /* The monster AI inherantly won't move monsters closer to things 
+  /* The monster AI inherently won't move monsters closer to things 
      that they are currently afraid of, so don't waste time checking
      this here. */
   if ((e.Event == EV_MOVE) && isPlayer() && !HasFeat(FT_LION_HEART)) {

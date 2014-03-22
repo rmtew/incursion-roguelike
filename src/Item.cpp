@@ -1471,7 +1471,7 @@ EvReturn Item::Damage(EventInfo &e)
       }
 
     if (e.DType == AD_DISN)
-      destroy = plural ? "disintigrate" : "disintigrates";
+      destroy = plural ? "disintegrate" : "disintegrates";
 
     if (e.DType == AD_NECR)
       {

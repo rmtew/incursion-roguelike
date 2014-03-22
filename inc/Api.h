@@ -1,6 +1,6 @@
 /* API.H -- Copyright (c) 1999-2003 Julian Mensch
      This file contains declarations for all of the publically
-   accessable IncursionScript API calls and variables. */
+   accessible IncursionScript API calls and variables. */
 
 /* IMPORTANT! If this file is ever altered, then dispatch.h
    must be rebuilt by the resource compiler, and VMachine.cpp

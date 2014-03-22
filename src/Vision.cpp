@@ -417,16 +417,16 @@ uint16 Creature::Percieves(Thing *t, bool assertLOS)
     } 
    
 
-  theGame->inPercieve++;
+  theGame->inPerceive++;
 
   if (HasStati(SLEEPING)) 
-    { theGame->inPercieve--; return 0; } 
+    { theGame->inPerceive--; return 0; } 
   
   if (t->HasStati(ENGULFED))
     {
       if (t->GetStatiObj(ENGULFED) == this)
-        { theGame->inPercieve--; return PER_VISUAL; }
-      theGame->inPercieve--;
+        { theGame->inPerceive--; return PER_VISUAL; }
+      theGame->inPerceive--;
       return 0;
     }
   
@@ -468,7 +468,7 @@ uint16 Creature::Percieves(Thing *t, bool assertLOS)
   StatiIterEnd(this)
   ASSERT(detectingMax <= 32); 
 
-  /* You always percieve yourself */
+  /* You always perceive yourself */
   if (t == this)
     Per |= PER_VISUAL;
   if (HasStati_ENGULFED)
@@ -477,7 +477,7 @@ uint16 Creature::Percieves(Thing *t, bool assertLOS)
   
   
   if (!theGame->InPlay())
-    { theGame->inPercieve--; return Per; }
+    { theGame->inPerceive--; return Per; }
 
 
   if (t->Flags & F_DELETE)
@@ -485,7 +485,7 @@ uint16 Creature::Percieves(Thing *t, bool assertLOS)
       tx = t->GetStatiVal(DEATH_LOC) % 256;
       ty = t->GetStatiVal(DEATH_LOC) / 256;
       if ((!m) || (t->GetStatiMag(DEATH_LOC) != m->Depth))
-        { theGame->inPercieve--; return 0; }
+        { theGame->inPerceive--; return 0; }
     }
   else {
     tx = t->x;
@@ -501,7 +501,7 @@ uint16 Creature::Percieves(Thing *t, bool assertLOS)
     StatiIterEnd(this)
 
 
-  if (t->HasStati(TELEPORTED)) { theGame->inPercieve--; return 0; } 
+  if (t->HasStati(TELEPORTED)) { theGame->inPerceive--; return 0; } 
   const bool t_HasStati_PARALYSIS = t->HasStati(PARALYSIS);
   const bool t_HasStati_HIDING = t->HasStati(HIDING);
   const bool t_HasStati_INVIS = t->HasStati(INVIS) || 
@@ -532,25 +532,25 @@ uint16 Creature::Percieves(Thing *t, bool assertLOS)
 
   if (t->m != m && t->isItem()) {
     if (((Item*)t)->Owner() == this)
-      { theGame->inPercieve--; return PER_VISUAL; }
+      { theGame->inPerceive--; return PER_VISUAL; }
     if (((Item*)t)->Owner() == NULL)
-      { theGame->inPercieve--; return PER_VISUAL; }
+      { theGame->inPerceive--; return PER_VISUAL; }
     if (Per |= Percieves(((Item*)t)->Owner()))
-      { theGame->inPercieve--; return Per; }
-    theGame->inPercieve--; return 0;
+      { theGame->inPerceive--; return Per; }
+    theGame->inPerceive--; return 0;
   }
 
   if (Dist > 30)
-    { theGame->inPercieve--; return Per; }
+    { theGame->inPerceive--; return Per; }
 
 
   /* Check Telepathy, Tremorsense, etc. */
   if (t->isType(T_DOOR))
     if (((Door*)t)->DoorFlags & DF_SECRET)
-      { theGame->inPercieve--; return Per & (~PER_DETECT); }
+      { theGame->inPerceive--; return Per & (~PER_DETECT); }
   if (t->isType(T_TRAP))
     if (!(((Trap*)t)->TrapFlags & TS_FOUND))
-      { theGame->inPercieve--; return Per & (~PER_DETECT); }
+      { theGame->inPerceive--; return Per & (~PER_DETECT); }
 
 
   if (!HasStati_ENGULFED)
@@ -634,10 +634,10 @@ uint16 Creature::Percieves(Thing *t, bool assertLOS)
     isBlind = HasMFlag(M_BLIND) || HasStati_BLIND;
 
   if (isBlind && (Dist > BlindRange))
-    { theGame->inPercieve--; return Per; }
+    { theGame->inPerceive--; return Per; }
 
   if (max(abs(x-tx),abs(y-ty)) > max(SightRange,BlindRange))
-    { theGame->inPercieve--; return Per; }
+    { theGame->inPerceive--; return Per; }
 
   // ww: we need InBounds here to avoid crashes
   /* ww: I disagree with this logic on game-annoyance reasons :-). A
@@ -721,7 +721,7 @@ SkipVisual:
      Per |= (StatiVal_DETECTING & DET_VISIBLE) ? PER_DETECT : PER_SHADOW;
    */
 
-  { theGame->inPercieve--; return Per; }
+  { theGame->inPerceive--; return Per; }
 }
 
 

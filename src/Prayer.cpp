@@ -13,7 +13,7 @@ static TextVal AidTypes[] = {
   { AID_FEED,       "satiating your hunger" },
   { AID_REFRESH,    "removing fatigue" },
   { AID_RESTORE,    "replenishing your spirit" },
-  { AID_CURE,       "curing blindness or permanant wounds" },
+  { AID_CURE,       "curing blindness or permanent wounds" },
   { AID_CLARITY,    "clearing your mind" },
   { AID_RESSURECT,  "ressurecting you" },
   { AID_BERSERK,    "improving your fighting ability" },
@@ -989,7 +989,7 @@ void Character::GrantSymbol(rID gID)
       if (it->iID == iID && it->eID == eID)
         return;
         
-    IPrint("A holy symbol of <Res> shimmers into existance in your hands!", gID);
+    IPrint("A holy symbol of <Res> shimmers into existence in your hands!", gID);
     it = Item::Create(iID);
     it->eID = eID;
     GainItem(it,false);
@@ -1265,7 +1265,7 @@ EvReturn Character::ConvertAltar(EventInfo &e)
     altarID = e.ETarget->GetStatiEID(MY_GOD);
     
     if (!GodID)
-      { IPrint("But you are not yet pledged to any specific diety!");
+      { IPrint("But you are not yet pledged to any specific deity!");
         return ABORT; }
     
     if (isThreatened())
@@ -2024,7 +2024,7 @@ int32 Character::TotalExploreFavor()
  *                              ALIGNMENT-RELATED FUNCTIONS                          *
  *************************************************************************************/   
   
-/* Enlisting inherantly evil creatures should be an evil act. 
+/* Enlisting inherently evil creatures should be an evil act. 
    Socializing with demons/devils offends many gods as well. */ 
  
 EvReturn Character::AlignedAct(EventInfo &e)

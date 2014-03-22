@@ -7,6 +7,9 @@
 #define VISION
 #define BYTECODE_TRACER
 
+/* A member of the template class is not defined.
+   http://msdn.microsoft.com/en-us/library/1k7k17za.aspx
+*/
 #pragma warning (disable : 4661)
 
 //#define DEBUG_MEMORY_CORRUPTION

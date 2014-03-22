@@ -248,8 +248,8 @@ inline bool Thing::HasStati(int16 n,int16 Val,Thing *t)
       theGame->ccHasValStati++;
     if (n != -1 && n < 256)
       theGame->ccStatiNat[n]++;
-    if (theGame->inPercieve)
-      theGame->ccHSPercieve++;
+    if (theGame->inPerceive)
+      theGame->ccHSPerceive++;
     if (theGame->inCalcVal)
       theGame->ccHSCalcVal++;
     
@@ -337,7 +337,7 @@ inline bool Creature::SavingThrow(int16 type, int16 DC, uint32 Subtype)
     bool show = false; 
 
     if (theGame->Opt(OPT_SHOWSAVES) &&
-        (isPlayer() || theGame->GetPlayer(0)->XPercieves(this)))
+        (isPlayer() || theGame->GetPlayer(0)->XPerceives(this)))
       show = true; 
 
     int16 roll = Dice::Roll(1,20); 
@@ -423,7 +423,7 @@ inline Glyph Map::FieldGlyph(int16 x,int16 y, Glyph og)
     Creature * seer = oCreature(pl[0]);  // HACK
 
     for(i=0;f = Fields[i];i++) {
-      if (seer->PercievesField(x,y,f)) {
+      if (seer->PerceivesField(x,y,f)) {
         if ((f->FType > best) && 
             (f->FType != FI_SILENCE) &&
             (f->FType != (FI_SILENCE|FI_MOBILE))) {

@@ -66,7 +66,7 @@ void Thing::PlaceAt(Map*_m,int16 _x,int16 _y, bool share_square)
     if (isCreature())
       {
         /* ASSUMPTION: Templates, magic, et al., won't cause creatures
-           to grow more then one size catagory. This is wrong in a few
+           to grow more then one size category. This is wrong in a few
            cases (dire animal drinks Potion of Enlargement), but its
            good enough in general. */
         if (thisc->GetAttr(A_SIZ) == 0)
@@ -280,7 +280,7 @@ void Thing::PlaceNear(int16 x,int16 y)
     if (isCreature())
       {
         /* ASSUMPTION: Templates, magic, et al., won't cause creatures
-           to grow more then one size catagory. This is wrong in a few
+           to grow more then one size category. This is wrong in a few
            cases (dire animal drinks Potion of Enlargement), but its
            good enough in general. */
         if (thisc->GetAttr(A_SIZ) == 0)

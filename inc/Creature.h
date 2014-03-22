@@ -139,7 +139,7 @@ struct Counterspeller
 
 /* Mana Values:
 
-   mMana    -- total calculated *inherant* mana
+   mMana    -- total calculated *inherent* mana
    uMana    -- mana spent on normal spells and such
    hMana    -- mana "held" that does not regenerate
    tMana()  -- total mana, including A_MAN adjustments
@@ -290,11 +290,11 @@ class Creature: public Thing, public Magic
       virtual void RestoreXP(uint32 xp) { return; }
       uint16 Percieves(Thing*, bool assertLOS);
       uint16 Percieves(Thing* t) { return Percieves(t, false); } 
-      virtual bool isThreatened(bool percieved_only=true);
+      virtual bool isThreatened(bool perceived_only=true);
       virtual rID getGod() { return 0; }
       virtual const char* ActingVerb();
 
-      bool PercievesField(int x, int y, Field *f) {
+      bool PerceivesField(int x, int y, Field *f) {
         if (!this || !this->m || !this->m->InBounds(x,y) ||
             !(this->m->At(x,y).Visibility & VI_VISIBLE) ||
             !f->inArea(x,y))
@@ -307,7 +307,7 @@ class Creature: public Thing, public Magic
           return false; 
       } 
 
-      bool   XPercieves(Thing *t)
+      bool   XPerceives(Thing *t)
         { return (Percieves(t) & (~(PER_SHADOW|PER_SCENT|PER_DETECT))); }
       virtual bool isShadowShape() { return TMON(mID)->Size >= SZ_SMALL; }
       bool isBeside(Thing *t, int extra_dist = 0);

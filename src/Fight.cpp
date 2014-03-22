@@ -170,7 +170,7 @@ int16 getChivalryBreech(EventInfo &e)
           EventStack[i].EVictim == e.EVictim)
         vicUnready = false;
     
-    /* Inherantly evil creatures are not subject to law or good. */
+    /* Inherently evil creatures are not subject to law or good. */
     if (e.EVictim->isMType(MA_EVIL) && e.EVictim->HasMFlag(M_IALIGN))
       return breech;
       
@@ -2781,13 +2781,13 @@ EvReturn Creature::OAttack(EventInfo &e)
     return DONE;
   }
 
-bool Creature::isThreatened(bool percieved_only)
+bool Creature::isThreatened(bool perceived_only)
   {
     Creature *cr; int32 i;
     MapIterate(m,cr,i)
       if (cr->isCreature() && cr->DistFrom(this) <= 16)
         if (cr->isHostileTo(this) && 
-            ((!percieved_only) || Percieves(cr)))
+            ((!perceived_only) || Percieves(cr)))
           if (m->LineOfFire(cr->x,cr->y,x,y,cr))
             return true;
     return false;
@@ -6359,8 +6359,8 @@ Absorbed:
         case AD_DALU:
           /* We don't necessarily know what kind of effect is *causing* the
              stat drain, so we have to make some guesses based on the nature
-             of the attacker: an inherantly evil creature that drains stats
-             is presumed to use inherantly evil means to do so; an undead is
+             of the attacker: an inherently evil creature that drains stats
+             is presumed to use inherently evil means to do so; an undead is
              assumed to drain based on negative energy, and a non-undead that
              bites is assumed to be using poison. */
           subtype = 0;
@@ -7933,7 +7933,7 @@ NotMeleeWeapon:
       d.Set(1,3,Attr[A_DMG_THROWN]);
       return d;
     default:
-      Error("Unimplimented combat type!");
+      Error("Unimplemented combat type!");
       d.Number = d.Sides = d.Bonus = 0;
       d.Bonus += Attr[A_DMG_THROWN];
       return d;
@@ -8202,8 +8202,8 @@ SkipPrintingDamageButStillPrintHitRoll:
       for(int16 i=0;i!=MAX_PLAYERS;i++)
         if (Player *p = oPlayer(e.EMap->pl[i]))
           if (p != e.EActor && p != e.EVictim)
-            if ((e.EActor && p->XPercieves(e.EActor)) && 
-                (!e.EVictim || p->XPercieves(e.EVictim)))
+            if ((e.EActor && p->XPerceives(e.EActor)) && 
+                (!e.EVictim || p->XPerceives(e.EVictim)))
               goto SkipDamage;
     return DONE;
   } 

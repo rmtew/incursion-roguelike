@@ -924,7 +924,7 @@ EvReturn Map::enGenerate(EventInfo &e)
       
     //********* Stage 7: Build the Encounter, if Requested
     
-    /* Determine the moat likely alignment leaning of the
+    /* Determine the most likely alignment leaning of the
        entire group, and exclude 'bad' alignment accordingly. */
     if (cEncMem)
       e.enDriftGE = e.enDriftGE*(100 / cEncMem);

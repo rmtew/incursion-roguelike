@@ -831,7 +831,7 @@ SkipLoop:
         e.EActor->Reveal(true);
         r = ABarrier(e); break;
       case AR_GLOBE:
-        /* Globes don't *inherantly* give away your pos. */
+        /* Globes don't *inherently* give away your pos. */
         r = AGlobe(e); break;
       case AR_NONE:
         r = ReThrow(EV_MAGIC_STRIKE,e); 

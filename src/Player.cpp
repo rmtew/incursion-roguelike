@@ -427,7 +427,7 @@ void Player::ChooseAction()
         Throw(EV_TALK,this,targ);
         break;
       case KY_CMD_EAT:
-        UseItemMenu("What do you want to eat?", "You have no comestables.", -2);
+        UseItemMenu("What do you want to eat?", "You have no comestibles.", -2);
         break;
       case KY_CMD_ACTIVATE:
         UseItemMenu("Which magic item do you wish to activate?", 
@@ -545,7 +545,7 @@ ShiftDirFire:
           for (k=0;k!=SL_LAST;k++)
             if (defAmmo == Inv[k])
               goto FoundDefAmmo;
-          IPrint("Your default projectile isn't easily accessable right now.");
+          IPrint("Your default projectile isn't easily accessible right now.");
           break;
 FoundDefAmmo:
           i = oItem(Inv[k]);
@@ -826,7 +826,7 @@ CastSpell:
         MyTerm->LOption("Bull Rush",A_BULL, "Attempt to force an opponent"
             " back one square by charging into them. This is resolved with an"
             " oppposed Strength roll modified by +4/-4 for every difference in"
-            " size catagory between you and your opponent. A bull rush normally"
+            " size category between you and your opponent. A bull rush normally"
             " provokes an attack of oppurtonity from the target.");
         MyTerm->LOption("Called Shot",A_CALL,XPrint("You aim an attack at a specific"
               " part of an opponent's body, hoping to inflict a debilitating injury"
@@ -881,7 +881,7 @@ CastSpell:
         MyTerm->LOption("Grapple",A_GRAB,"You grab your opponent and initate a"
             " grapple with him. Grappling is resolved with grapple checks, which"
             " are opposed contests of Brawl attack bonus plus Strength modifier"
-            " plus or minus 4 for every divergance in size catagory, favouring"
+            " plus or minus 4 for every divergance in size category, favouring"
             " the larger character. To begin grappling, however, you must hit your"
             " target's DC as per a normal attack. Initiating a grapple provokes an"
             " attack of opportunity from your target.");
@@ -1526,7 +1526,7 @@ void Player::UseItemMenu(const char *which, const char *haveno, int16 itype)
     /* I guess I put the "& (Q_DIR|Q_INV)" in on the assumption
        that potions can't be used on targets, but doing so badly
        messed up the Remove Curse potion, preventing it from
-       working on inherant curses, so don't uncomment this
+       working on inherent curses, so don't uncomment this
        without addressing that! */
     if (it->eID && (TEFF(it->eID)->ef.qval /*& (Q_DIR|Q_INV)*/))
       if(!MyTerm->EffectPrompt(e,TEFF(it->eID)->ef.qval /*& (Q_DIR|Q_INV)*/))
@@ -1619,7 +1619,7 @@ void Player::YuseMenu(int32 SelectedIndex)
         YuseCommands[c].Event == EV_FAST_TALK ||
         YuseCommands[c].Event == EV_DISTRACT)
       if (!e.ETarget || !e.ETarget->isCreature())
-        { IPrint("Don't socialize with the furnature.");
+        { IPrint("Don't socialize with the furniture.");
           return; }
       
     if (e.ETarget && !e.EItem)

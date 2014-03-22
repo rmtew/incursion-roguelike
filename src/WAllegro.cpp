@@ -687,7 +687,6 @@ void AllegroTerm::Reset()
       if (!d) {
         Font = load_bitmap("NGlyphs.bmp",pal);
         if (!Font) {
-          allegro_message("Error loading internal ASCII fonts.\n");
           ShutDown();
           exit(1);
           }
@@ -1000,8 +999,9 @@ int16 AllegroTerm::GetCharCmd(KeyCmdMode mode)
         closePressed = false;
         }
       
-      if (!keypressed())
+      if (!keypressed()) {
         continue;
+      }
         
       if (theGame->Opt(OPT_CLEAR_EVERY_TURN) && ClearMsgOK && 
            mode == KY_CMD_NORMAL_MODE && GetMode() == MO_PLAY) {

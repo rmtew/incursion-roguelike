@@ -27,9 +27,9 @@ extern String & EventName(int16 Ev);
 #define VERIFY(h,ty,funcname)                                         \
   if (ty != T_EVENTINFO && ty != T_TERM)                              \
     if (!oObject(h) || !(oObject(h)->isType(ty))) {                   \
-      Error(Format("Invalid object referance (%s) calling %s in "     \
+      Error(Format("Invalid object reference (%s) calling %s in "     \
         "script routine $\"%s\"::%s.",                                \
-        oObject(h) ? "object type mismatch" : "NULL object referance",\
+        oObject(h) ? "object type mismatch" : "NULL object reference",\
         funcname,                                                     \
         xID ? ((const char*)NAME(xID)) : "<NULL>",                    \
         pe ? ((const char *)EventName(pe->Event)) : "???"));                          \
