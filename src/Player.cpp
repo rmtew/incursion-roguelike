@@ -2676,8 +2676,11 @@ int16 Game::Opt(int16 op)
     if (isValidHandle(p[0]))
       return oPlayer(p[0])->Opt(op); 
     else {
-      if (T1->Exists(T1->IncursionDirectory + SC(T1->OptionsSubDir()) + OPT_FILE)) {
-        T1->OpenRead(T1->IncursionDirectory + SC(T1->OptionsSubDir()) + OPT_FILE);
+        String s = T1->IncursionDirectory \
+        + SC(T1->OptionsSubDir()) \
+        + OPT_FILE;
+      if (T1->Exists(s)) {
+        T1->OpenRead(s);
         T1->FRead(Options,OPT_LAST);
         T1->Close();
         return Options[op];

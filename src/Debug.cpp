@@ -57,7 +57,7 @@ void * _malloc(size_t sz)
     vp = malloc(sz + SAFETY_SIZE*2);
     memset(vp,0xAA,sz + SAFETY_SIZE*2);
 
-    cp = (const char*)vp;
+    cp = (char*)vp;
 
     cp += SAFETY_SIZE;
 
@@ -85,7 +85,7 @@ void _free(void *vp)
     ASSERT(c == 1);
     #endif
 
-    cp = (const char*) vp;
+    cp = (char*) vp;
 
     cp -= SAFETY_SIZE;
 
@@ -98,7 +98,7 @@ char* _strdup(const char* str)
     
     len = strlen(str);
 
-    nstr = (const char*) _malloc(len+1);
+    nstr = (char*) _malloc(len+1);
 
     strcpy(nstr,str);
 
@@ -118,11 +118,11 @@ void* _realloc(void *vp, size_t sz)
     ASSERT(c == 1);
     #endif
 
-    cp = (const char*)vp;
+    cp = (char*)vp;
 
     cp -= SAFETY_SIZE;
     
-    cp = (const char*)realloc(cp,sz + SAFETY_SIZE*2);
+    cp = (char*)realloc(cp,sz + SAFETY_SIZE*2);
                                   
     cp += SAFETY_SIZE;
 

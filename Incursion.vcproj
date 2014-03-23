@@ -136,8 +136,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="dx70_min\include;allegro\include;inc"
-				PreprocessorDefinitions="WIN32;_DEBUG;DEBUG;ALLEGRO_TERM;ALLEGRO_STATICLINK"
+				AdditionalIncludeDirectories="dx70_min\include;allegro\include;inc;&quot;D:\VCS\HG\libraries\libtcod-mine\include&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;DEBUG;LIBTCOD_TERM;TCOD_SDL2"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				RuntimeTypeInfo="true"
@@ -163,15 +163,15 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="alld_s.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib ole32.lib dinput.lib winmm.lib dsound.lib dxguid.lib ddraw.lib"
+				AdditionalDependencies="libtcod.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib ole32.lib dinput.lib winmm.lib dsound.lib dxguid.lib ddraw.lib"
 				OutputFile=".\Debug/Incursion.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="dx70_min\lib;allegro\lib"
-				IgnoreDefaultLibraryNames="LIBCMTD.lib"
+				AdditionalLibraryDirectories="dx70_min\lib;allegro\lib;&quot;D:\VCS\GIT\Roguelike\incursion-roguelike\libtcod\lib&quot;"
+				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\Debug/Incursion.pdb"
-				SubSystem="2"
+				SubSystem="1"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
 				TargetMachine="1"
@@ -1057,6 +1057,10 @@
 			</File>
 			<File
 				RelativePath=".\Src\WAllegro.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Wlibtcod.cpp"
 				>
 			</File>
 		</Filter>

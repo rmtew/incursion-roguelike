@@ -293,7 +293,7 @@ String & String::Mid(int32 start, int32 end)
     char *s;
     s = (char*)malloc((end - start) +2);
     strncpy(s,&(Buffer[I(start,Length)]),(end-start)+1);
-    s[I((end-start)+1,s.Length+1)] = 0;
+    s[I((end-start)+1,Length+1)] = 0;
     return *tmpstr(s,false);
   }
 

@@ -2346,7 +2346,7 @@ Option OptionList[] = {
       "the 8x8 font will be used instead." },
   { OPT_WIND_RES, "Windowed-Mode Window Size",
       "640x480/800x600/1024x768/1280x960/1280x1024/1400x1050/1600x1200/"
-      "1280x768 (wide)/1280x800 (wide)/1920x1080 (wide)/1920x1200 (wide)", 10, 2, 0,
+      "1280x768 (wide)/1280x800 (wide)/1920x1080 (wide)/1920x1200 (wide)", 10, 1, 0,
       "__This option determines what size Incursion will make the application "
       "window when playing in windowed mode. If the window is too large to "
       "fit on screen, the system will try consecutively smaller sizes until "
