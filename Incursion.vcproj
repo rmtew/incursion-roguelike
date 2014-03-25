@@ -72,11 +72,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="exception_handler.lib crash_generation_client.lib common.lib libtcod.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib ole32.lib dinput.lib winmm.lib dsound.lib dxguid.lib ddraw.lib"
+				AdditionalDependencies="exception_handler.lib crash_generation_client.lib common.lib libtcod.lib"
 				OutputFile=".\Release/Incursion.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="&quot;_dependencies\libtcod\lib&quot;;&quot;_dependencies\google-breakpad\src\client\windows\Release\lib&quot;"
+				AdditionalLibraryDirectories="&quot;_dependencies\libtcod\makefiles\Release&quot;;&quot;_dependencies\google-breakpad\src\client\windows\Release\lib&quot;"
 				IgnoreDefaultLibraryNames=""
 				SubSystem="1"
 				RandomizedBaseAddress="1"
@@ -103,7 +103,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="exedat  $(TargetPath) NGlyphs.dat"
+				CommandLine=""
 			/>
 		</Configuration>
 		<Configuration
@@ -115,6 +115,7 @@
 			UseOfMFC="0"
 			ATLMinimizesCRunTimeLibraryUsage="false"
 			CharacterSet="2"
+			WholeProgramOptimization="0"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -163,11 +164,11 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libtcod.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib ole32.lib dinput.lib winmm.lib dsound.lib dxguid.lib ddraw.lib"
+				AdditionalDependencies="libtcod.lib"
 				OutputFile=".\Debug/Incursion.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
-				AdditionalLibraryDirectories="&quot;_dependencies\libtcod\lib&quot;"
+				AdditionalLibraryDirectories="&quot;_dependencies\libtcod\makefiles\Release&quot;"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\Debug/Incursion.pdb"
@@ -196,7 +197,7 @@
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
-				CommandLine="exedat  $(TargetPath) NGlyphs.dat"
+				CommandLine=""
 			/>
 		</Configuration>
 	</Configurations>

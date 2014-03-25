@@ -94,8 +94,9 @@
 
 #define MAX_COLORS 16
 
-
+#ifndef DEBUG
 using google_breakpad::ExceptionHandler;
+#endif
 
 
 TCOD_color_t RGBValues[MAX_COLORS] = {

@@ -10,11 +10,13 @@ Release
 allegro
 _dependencies/libtcod
 _dependencies/sdl2
-_dependencies/google-breakpoint
+_dependencies/google-breakpad
 
 # Incursion specific temporary files.
 lib/dispatch.h
 lib/program.i
+logs/*.txt
+logs/*.html
 mod/Incursion.Mod
 save/*.sav
 save/*.sav.backup
