@@ -189,7 +189,12 @@ bool String::operator==(const char*str2)
       return (!Buffer) && (!str2); 
     return strcmp(Buffer,str2) == 0; 
   }
-      
+
+bool String::operator!=(const char*str2)
+  { 
+    return !(*this == str2); 
+  }
+
 bool String::operator>(const char* str2)
   { 
     if (!Buffer || !str2) 

@@ -76,8 +76,6 @@
 #define ATTR(g) ((g & 0xFF00) / 256)
 #define CHAR(g) ((g & 0x00FF))
 
-#define SCREEN_BUFF_SIZE (300 * 200)
-
 #define MAX_COLORS 16
 
 TCOD_color_t RGBValues[MAX_COLORS] = {
@@ -188,11 +186,11 @@ class libtcodTerm: public TextTerm
       virtual const char* ManualSubDir()  { return "man"; } 
       virtual const char* OptionsSubDir() { return "."; } 
       virtual void ChangeDirectory(const char * c) { 
-          if (chdir(IncursionDirectory) ||
-              chdir(c))
-            Fatal("Unable to locate directory '%s'.", (const char*)(IncursionDirectory + SC(c)));
           CurrentDirectory = (const char*)IncursionDirectory;
-          CurrentDirectory += c;
+          if (CurrentDirectory != c)
+              CurrentDirectory += c;
+          if (chdir(CurrentDirectory))
+              Fatal("Unable to locate directory '%s'.", (const char*)CurrentDirectory);
       }
       virtual bool Exists(const char* fn);
       virtual void Delete(const char* fn);
@@ -350,7 +348,6 @@ void libtcodTerm::Update()
   
 void libtcodTerm::Redraw()
   {
-    //memset(bCurrent,1,SCREEN_BUFF_SIZE * sizeof(Glyph));
     TCOD_console_clear(bCurrent);
     Update();
   }
@@ -439,12 +436,14 @@ void libtcodTerm::PutChar(Glyph g)
 
 void libtcodTerm::APutChar(int16 x, int16 y, Glyph g) 
   {
+    int c = CHAR(g);
+    uint32 ga;
     if (g >> 8) {
-        TCOD_console_put_char(bScreen,x,y,CHAR(g),TCOD_BKGND_SET);
+        ga = ATTR(g)*256;
     } else {
-        uint32 ga = attr*256;
-        TCOD_console_put_char_ex(bScreen,x,y,CHAR(g),Colors[FORE(ga)], Colors[BACK(ga)]);
+        ga = attr*256;
     }
+    TCOD_console_put_char_ex(bScreen,x,y,c,Colors[FORE(ga)], Colors[BACK(ga)]);
     updated = false;
   }
 
@@ -1211,7 +1210,7 @@ void libtcodTerm::Cut(int32 amt)
 
 char * libtcodTerm::MenuListFiles(const char * filespec, uint16 flags, const char * title) {
     char * file;
-    TCOD_list_t l = TCOD_sys_get_directory_content(filespec, NULL);
+    TCOD_list_t l = TCOD_sys_get_directory_content(CurrentDirectory, filespec);
     for (int *iterator = (int *)TCOD_list_begin(l); iterator != (int *)TCOD_list_end(l); iterator++) {
         const char *fileName = (const char *)(*iterator);
         char *str = strdup(fileName);

@@ -108,6 +108,7 @@ class String
         { return ((*this) = ((const char*) s)); }
       String & operator +(const char*s);
       bool operator ==(const char* s2);
+      bool operator !=(const char* s2);
       bool operator>(const char* s2);
       bool operator<(const char* s2);
       int32 strchr(char ch);

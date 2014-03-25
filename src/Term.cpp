@@ -2992,7 +2992,7 @@ const char* IntroScreen[] = {
  "                                                                               ", 
  "                          See Help for License Info                            ", 
  "                                                                               ", 
- "                                 <14>Version " VERSION_STRING "<7>                                ", 
+ "                               <14>Version " VERSION_STRING "<7>                                 ", 
  "                                                                               ", 
  "                                                                               ", 
  "                                                                               ", 
