@@ -12,13 +12,13 @@ Windows build instructions
 
 Recommended compiler:
 
-  * Visual Studio Express 2008: [VS2008ExpressWithSP1ENUX1504728.iso](http://download.microsoft.com/download/E/8/E/E8EEB394-7F42-4963-A2D8-29559B738298/VS2008ExpressWithSP1ENUX1504728.iso) (768.0MB).
+  * Visual Studio Express 2008: [VS2008ExpressWithSP1ENUX1504728.iso](http://download.microsoft.com/download/E/8/E/E8EEB394-7F42-4963-A2D8-29559B738298/VS2008ExpressWithSP1ENUX1504728.iso) 768.0MB.
 
 Dependencies:
 
   * libtcod.dll: [bitbucket project](https://bitbucket.org/jice/libtcod).
   * flex.exe: [flex-2.5.4a-1-bin.zip](http://gnuwin32.sourceforge.net/downlinks/flex-bin-zip.php) 0.2 MB ([hosting web page](http://gnuwin32.sourceforge.net/packages/flex.htm)).
-  * google breakpad static libraries (debug builds only):  [svn checkout](https://code.google.com/p/google-breakpad/).
+  * google breakpad (non-debug builds only):  [svn checkout](https://code.google.com/p/google-breakpad/).
 
 Compilation instructions:
 
