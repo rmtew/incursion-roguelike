@@ -1,0 +1,41 @@
+Incursion 0.6.9Y1
+-----------------
+
+Introduction
+============
+
+Incursion is a fantasy roguelike where you play as an adventurer in a dungeon.
+Help is provided in-game, along with copious amounts of detail.
+
+This version is a continuation of the open source release of 0.9.6H4,
+which it should be noted is earlier than the last official binary release
+of 0.6.9I.  The missing differences are unknown.
+
+Project goals
+=============
+
+To fix bugs and where the original intention is clear, implement missing
+functionality.
+
+This is a beta release of something you did not pay money for.  Use it at your
+own risk, and exercise your right to not use it if it makes you unhappy.
+
+When the beta is sufficiently stable and complete, an alpha line 0.6.9Z
+will be released.  After a period of time, an official release will be
+made of a 0.7 version.  
+
+Source code
+===========
+
+You can find the source code in a git repository hosted on bitbucket:
+
+  https://bitbucket.org/rmtew/incursion-roguelike/
+  
+
+Reporting problems
+==================
+  
+Issues can be reported to the bitbucket issue tracker:
+
+  https://bitbucket.org/rmtew/incursion-roguelike/issues?status=new&status=open
+

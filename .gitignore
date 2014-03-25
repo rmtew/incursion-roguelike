@@ -6,8 +6,11 @@
 
 # Windows build & dependencies
 Debug
+Release
 allegro
-dx70_min
+_dependencies/libtcod
+_dependencies/sdl2
+_dependencies/google-breakpoint
 
 # Incursion specific temporary files.
 lib/dispatch.h

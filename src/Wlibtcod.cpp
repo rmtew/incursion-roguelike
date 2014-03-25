@@ -66,10 +66,26 @@
 #include <ctype.h> 
 #include <time.h>
 #include <malloc.h>
+
+#ifndef DEBUG
+/* Google Breakpad. */
+#include "client/windows/handler/exception_handler.h"
+#undef ERROR
+#undef MIN
+#undef MAX
+#undef EV_BREAK
+#endif
+
 #include "Incursion.h"
+#undef ERROR
+#undef MIN
+#undef MAX
 
 #define TCOD_SKIP_ELEMENTARYTYPES
 #include "libtcod.h"
+#undef ERROR
+#undef MIN
+#undef MAX
 
 #define FORE(g) ((g & 0x0F00) / 256)
 #define BACK(g) ((g & 0xF000) / (256*16))
@@ -77,6 +93,10 @@
 #define CHAR(g) ((g & 0x00FF))
 
 #define MAX_COLORS 16
+
+
+using google_breakpad::ExceptionHandler;
+
 
 TCOD_color_t RGBValues[MAX_COLORS] = {
   {   0,   0,   0 },  // BLACK
@@ -116,7 +136,8 @@ TCOD_color_t RGBSofter[MAX_COLORS] = {
   { 230, 230, 0 }, // YELLOW
   { 230, 230, 230 }, // WHITE
   };
-  
+
+
 class libtcodTerm: public TextTerm
   {
     friend void Error(const char*fmt,...);
@@ -210,7 +231,7 @@ class libtcodTerm: public TextTerm
         { return CurrentFileName; }      
       virtual int32 Tell();
 
-      void SetArguments(int argc, char *argv[]);
+      void SetIncursionDirectory(const char *s);
 };
   
 static int16 kbStandard[][3] = {
@@ -283,19 +304,60 @@ volatile int timer;
 
 Term *T1;
 libtcodTerm *AT1;
+#ifndef DEBUG
+ExceptionHandler* crashdumpHandler;
+#endif
 
 /*****************************************************************************\
 *                                 libtcodTerm                                *
 *                              main() Function                               *
 \*****************************************************************************/
 
+void GetIncursionDirectory(int argc, char *argv[], char *out) {
+    String IncursionDirectory;
+    if (argc >= 1) {
+        const char *str = strrchr(argv[0], '\\');
+        if (str == NULL) {
+            IncursionDirectory = "";
+        } else {
+            int16 n = str - argv[0] + 1; /* Copy the separator too. */
+            char *tstr = (char*)alloca(n+1);
+            tstr[n] = '\0';
+            IncursionDirectory = strncpy(tstr,argv[0],n);
+        }
+    } else
+        IncursionDirectory = "";
 
-int main(int argc, char *argv[])
-  {
+    if (IncursionDirectory.GetLength() > 0) {
+        /* Kludge to cope with directory structure for
+           multiple builds on my machine */
+        IncursionDirectory = IncursionDirectory.Replace("DebugAllegro\\","");     
+        IncursionDirectory = IncursionDirectory.Replace("ReleaseAllegro\\","");
+        IncursionDirectory = IncursionDirectory.Replace("Debug\\","");
+        IncursionDirectory = IncursionDirectory.Replace("Release\\","");
+        IncursionDirectory = IncursionDirectory.Replace("debug/src/","");
+        IncursionDirectory = IncursionDirectory.Replace("release/src/","");
+    }
+    strncpy(out,(const char *)IncursionDirectory,IncursionDirectory.GetLength());
+    out[IncursionDirectory.GetLength()] = '\0';
+}
+
+int main(int argc, char *argv[]) {
+    char executablePath[512];
+    GetIncursionDirectory(argc, argv, executablePath);
+#ifndef DEBUG
+    std::wstring wsExecutablePath(strlen(executablePath), 0);
+    mbstowcs(&wsExecutablePath[0],executablePath,strlen(executablePath));
+    crashdumpHandler = new ExceptionHandler(wsExecutablePath,
+                           NULL, /* &filter */
+                           NULL /* &callback */,
+                           NULL,
+                           ExceptionHandler::HANDLER_ALL);
+#endif
     theGame = new Game();
     {
         AT1 = new libtcodTerm;
-        AT1->SetArguments(argc, argv);
+        AT1->SetIncursionDirectory(executablePath);
         T1 = AT1;
         // ww: otherwise we segfault checking options
         T1->SetPlayer(NULL);
@@ -557,7 +619,8 @@ void Error(const char*fmt,...)
 		
     #ifdef DEBUG
     sprintf(__buff2, "Error: %s\n[B]reak, [E]xit or [C]ontinue?",__buffer);
-		#else
+    #else
+    crashdumpHandler->WriteMinidump();
     sprintf(__buff2, "Error: %s\n[E]xit or [C]ontinue?",__buffer);
     #endif
     ((libtcodTerm*)T1)->Save();
@@ -787,31 +850,10 @@ void libtcodTerm::ShutDown()
     //allegro_exit();
   }
 
-void libtcodTerm::SetArguments(int argc, char *argv[]) {
-    if (argc >= 1) {
-        const char *str = strrchr(argv[0], '\\');
-        if (str == NULL) {
-            IncursionDirectory = "";
-        } else {
-            int16 n = str - argv[0] + 1; /* Copy the separator too. */
-            char *tstr = (char*)alloca(n+1);
-            tstr[n] = '\0';
-            IncursionDirectory = strncpy(tstr,argv[0],n);
-        }
-    } else
-        IncursionDirectory = "";
-
-    if (IncursionDirectory.GetLength() > 0) {
-        /* Kludge to cope with directory structure for
-           multiple builds on my machine */
-        IncursionDirectory = IncursionDirectory.Replace("DebugAllegro\\","");     
-        IncursionDirectory = IncursionDirectory.Replace("ReleaseAllegro\\","");
-        IncursionDirectory = IncursionDirectory.Replace("Debug\\","");
-        IncursionDirectory = IncursionDirectory.Replace("Release\\","");
-        IncursionDirectory = IncursionDirectory.Replace("debug/src/","");
-        IncursionDirectory = IncursionDirectory.Replace("release/src/","");
-    }
+void libtcodTerm::SetIncursionDirectory(const char *s) {
+    IncursionDirectory = (const char *)s;
 }
+
 
 /*****************************************************************************\
 *                                 libtcodTerm                                  *

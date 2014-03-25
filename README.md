@@ -1,27 +1,39 @@
 Incursion
 =========
 
-Incursion is a roguelike developed by Julian Mensch.  He has kindly released the source he has for some of the later versions.
+Incursion is a roguelike developed by Julian Mensch.  He has kindly released the source he has for some of the later versions.  This file is intended for people viewing the project repository where the source code can be obtained.
 
-![Title screen](https://raw.github.com/rmtew/incursion-roguelike/screenshots/0.9.6H/title-screen.png)
+![Title screen](https://bytebucket.org/rmtew/incursion-roguelike/raw/4f6afc9cc3235a56a584510e53804c3df061f936/0.9.6H/title-screen.png)
 
-At this time building is only supported on Windows, using Visual Studio 2008.
+At this time building is only supported on Windows, using Visual Studio 2008.  You should be able to substitute other versions of Visual Studio, or write a makefile if you plan to compile on another platform.
 
 Windows build instructions
 --------------------------
 
-Required dependencies:
+Recommended compiler:
 
-  * Visual Studio Express 2008: [VS2008ExpressWithSP1ENUX1504728.iso](http://download.microsoft.com/download/E/8/E/E8EEB394-7F42-4963-A2D8-29559B738298/VS2008ExpressWithSP1ENUX1504728.iso) 768.0MB.
-  * Allegro binaries: [allegro-msvc9-4.2.3.zip](http://cdn.allegro.cc/file/library/allegro-4.2.3/allegro-msvc9-4.2.3.zip) 11.0MB ([hosting web page](https://www.allegro.cc/files/?v=4.2)).
-  * DirectX 7 SDK files (if required): [dx70_min.zip](http://alleg.sourceforge.net/files/dx70_min.zip) 0.3 MB ([hosting web page](http://alleg.sourceforge.net/wip.html)).
-  * Flex: [flex-2.5.4a-1-bin.zip](http://gnuwin32.sourceforge.net/downlinks/flex-bin-zip.php) 0.2 MB ([hosting web page](http://gnuwin32.sourceforge.net/packages/flex.htm)).
+  * Visual Studio Express 2008: [VS2008ExpressWithSP1ENUX1504728.iso](http://download.microsoft.com/download/E/8/E/E8EEB394-7F42-4963-A2D8-29559B738298/VS2008ExpressWithSP1ENUX1504728.iso) (768.0MB).
 
-Dependency instructions:
+Dependencies:
 
-  1. Download and install Visual Studio Express 2008, if you do not already have it installed.
-  2. Extract the Allegro zip archive into the project directory, and rename the 'allegro-msvc9-4.2.3' subdirectory to 'allegro'.
-  3. Extract DirectX into the project directory, under a 'dx70_min' subdirectory you will have to create.
-  4. Extract 'flex.exe' directly into the project directory.
+  * libtcod.dll: [bitbucket project](https://bitbucket.org/jice/libtcod).
+  * flex.exe: [flex-2.5.4a-1-bin.zip](http://gnuwin32.sourceforge.net/downlinks/flex-bin-zip.php) 0.2 MB ([hosting web page](http://gnuwin32.sourceforge.net/packages/flex.htm)).
+  * google breakpad static libraries (debug builds only):  [svn checkout](https://code.google.com/p/google-breakpad/).
 
-At this point, Incursion should build successfully.
+Compilation instructions:
+
+  1. Download and install Visual Studio Express 2008, if necessary.
+  2. Extract 'flex.exe' directly into the project directory.
+  3. Place libtcod source code under "_dependencies\libtcod" sub-directory.
+  4. Apply "_dependencies\libtcod.patch".
+  5. Build libtcod to obtain the libtcod.dll, libtcod.lib and SDL2.dll files.
+  6. **If a non-debug build is being made, skip to step 13.**
+  7. Place google breakpad source code under "_dependencies\google-breakpad" sub-directory.
+  8. Enter the "_dependencies\google-breakpad" directory.
+  9. Execute the DOS command "set GYP_MSVS_VERSION=2008", or if you are using an alternate compiler, use a modified command.
+  10. Execute the DOS command "src\tools\gyp\gyp.bat --no-circular-check  src\client\windows\breakpad_client.gyp".
+  11. The build files should be located in "_dependencies\google-breakpad\src\windows".
+  12. Do a debug build of google breakpad.
+  13. Build Incursion.
+  14. Place "libtcod.dll" directly into the project directory.
+  15. Place "SDL2.dll" directly into the project directory.
