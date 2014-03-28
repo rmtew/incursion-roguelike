@@ -2082,161 +2082,155 @@ void Game::ListItemsByLevel()
     
 extern void TestEncounterGen(Term *t);
 
-void Game::StartMenu()
-	{                                      
+void Game::StartMenu() {                                      
     FILE *f; Thing *t; int16 i,j;            
-		Player *pl;
-    
+    Player *pl;
+
     Redraw:
-    
-		do
-      {
+
+    do {
         T1->SetMode(MO_SPLASH);
         T1->Title();
         T1->LOption("Create a New Character",0);
         T1->LOption("Restore a Saved Game",1);
         T1->LOption("Reincarnate a Character",9);
         T1->LOption("Recover a Crashed Game",8);
-        #ifdef DEBUG
+#ifdef DEBUG
         T1->LOption("Compile Resources",3);
-        #endif
+#endif
         T1->LOption("Change System Options",4);
         /* T1->LOption("View the Scoreboard",5); */
         T1->LOption("Read the Introduction",6);
         T1->LOption("General Help",2);
         T1->LOption("Quit Incursion Completely",7);
-        #ifdef DEBUG
+#ifdef DEBUG
         T1->LOption("(Debugging Commands)",99);
-        #endif
+#endif
         switch(i = T1->LMenu(MENU_2COLS|MENU_REDRAW,"-- Initial Choices -- ",WIN_CUSTOM)) {
+        case 99:
+            T1->LOption("Monster Evaluation",2);
+            T1->LOption("Check Module Consistency",1);
+            T1->LOption("Weapon Evaluation",3);
+            T1->LOption("Name of Resource ID",4);
+            T1->LOption("CR Disambiguation",5);
+            T1->LOption("Generate HTML Manual",6);
+            T1->LOption("Generate Rarity Table", 7);
+            T1->LOption("List Items by Level",8);
+            T1->LOption("Test New Encounter Gen",9);
+            T1->LOption("Generate Encounter Stats",10);
 
-          case 99:
-            {
-              T1->LOption("Monster Evaluation",2);
-              T1->LOption("Check Module Consistency",1);
-              T1->LOption("Weapon Evaluation",3);
-              T1->LOption("Name of Resource ID",4);
-              T1->LOption("CR Disambiguation",5);
-              T1->LOption("Generate HTML Manual",6);
-              T1->LOption("Generate Rarity Table", 7);
-              T1->LOption("List Items by Level",8);
-              T1->LOption("Test New Encounter Gen",9);
-              T1->LOption("Generate Encounter Stats",10);
-              switch(T1->LMenu(MENU_2COLS|MENU_ESC|MENU_REDRAW,"-- Debugging Commands -- ",WIN_CUSTOM)) {
-                case 1: CheckConsistency(); break; 
-                case 2: MonsterEvaluation(); break; 
-                case 5: MonsterEvaluationCR(); break; 
-                case 3: WeaponEvaluation(); break; 
-                case 4: 
-                        {
-                          //T1->Scour("Incursion.Exe",true);
-                          if (!LoadModules())
-                            break;
-                          T1->SetWin(WIN_INPUT);
-                          T1->Color(YELLOW);
-                          T1->Write(0,0,"Enter decimal Resource ID: ");
-                          T1->Color(MAGENTA);
-                          T1->ReadLine();
-                          T1->Clear();
-                          rID xID = atoi(T1->GetTypedString());
-                          T1->Box(NAME(xID));
-                        } 
-                        break; 
-                case 6: WriteHTMLHelp(); break;
-                case 7: GenerateRarityTable(); break;
-                case 8: ListItemsByLevel(); break;
-                case 9: 
-                  theGame->LoadModules();
-                  TestEncounterGen(T1); 
-                  theGame->Cleanup();
-                  break;
-                case 10:
-                  theGame->LoadModules();
-                  Map *m;
-                  m = new Map();
-                  m->GenEncounterStats(T1);
-                  delete m;
-                  theGame->Cleanup();
-                case -2: goto Redraw;
-              } 
+            switch(T1->LMenu(MENU_2COLS|MENU_ESC|MENU_REDRAW,"-- Debugging Commands -- ",WIN_CUSTOM)) {
+            case 1: CheckConsistency(); break; 
+            case 2: MonsterEvaluation(); break; 
+            case 5: MonsterEvaluationCR(); break; 
+            case 3: WeaponEvaluation(); break; 
+            case 4: {
+                //T1->Scour("Incursion.Exe",true);
+                if (!LoadModules())
+                    break;
+                T1->SetWin(WIN_INPUT);
+                T1->Color(YELLOW);
+                T1->Write(0,0,"Enter decimal Resource ID: ");
+                T1->Color(MAGENTA);
+                T1->ReadLine();
+                T1->Clear();
+                rID xID = atoi(T1->GetTypedString());
+                T1->Box(NAME(xID));
+                }
+                break; 
+            case 6: WriteHTMLHelp(); break;
+            case 7: GenerateRarityTable(); break;
+            case 8: ListItemsByLevel(); break;
+            case 9:
+                theGame->LoadModules();
+                TestEncounterGen(T1); 
+                theGame->Cleanup();
+                break;
+            case 10:
+                theGame->LoadModules();
+                Map *m;
+                m = new Map();
+                m->GenEncounterStats(T1);
+                delete m;
+                theGame->Cleanup();
+            case -2:
+                goto Redraw;
             } 
-            break; 
-
-          case 0:
-
+            break;
+        case 0:
             if (!LoadModules())
-              break;
-            
-            #if 0
+                break;
+
+#if 0
             for(i=0;i!=theGame->Modules[0]->szTem;i++)
-			        for(j=0;j!=6;j++)
-								if (theGame->Modules[0]->QTem[i].NewAttk[j].u.a.Dmg.Number == -52)
-									Error("-52 found!");
-            #endif
+            for(j=0;j!=6;j++)
+	            if (theGame->Modules[0]->QTem[i].NewAttk[j].u.a.Dmg.Number == -52)
+		            Error("-52 found!");
+#endif
 
             NewGame(0,false);
             Play();
             Cleanup();
-  				 break;
-  				case 9:
-  				  if (!LoadModules())
-  				    break;
-  				  NewGame(0,true);
-  				  if (m[0] && p[0])
-  				    Play();
-  				  Cleanup();
-  				 break; 
-		  		case 1:
-            if (!LoadGame(false))
-              break;
-            Play();
-            Cleanup();
-  				 break;
-		  		case 8:
-            if (!LoadGame(true))
-              break;
-            Play();
-            Cleanup();
-  				 break;
-          case 6:
+            break;
+        case 9:
             if (!LoadModules())
-              break;
+                break;
+            NewGame(0,true);
+            if (m[0] && p[0])
+                Play();
+            Cleanup();
+            break; 
+        case 1:
+            if (!LoadGame(false))
+                break;
+            Play();
+            Cleanup();
+            break;
+        case 8:
+            if (!LoadGame(true))
+                break;
+            Play();
+            Cleanup();
+            break;
+        case 6:
+            if (!LoadModules())
+                break;
             T1->HelpTopic("help::intro");
             Cleanup();
             break;
-          case 2:
+        case 2:
             if (!LoadModules())
-              break;
+                break;
             T1->SetWin(WIN_SCREEN);
             T1->Clear();
             T1->HelpTopic(NULL);
             Cleanup();
             break;
-				  case 3: //compile resources
-  					ResourceCompiler();
+        case 3: //compile resources
+            ResourceCompiler();
             Cleanup();
-	  			 break;
-			  	case 4:
+            break;
+        case 4:
             T1->SetWin(WIN_SCREEN);
             T1->Clear();
             if (!LoadModules())
-              break;
+                break;
             T1->OptionManager();
             Cleanup();
-           break;
-          case 7:
-  					goto Quit;
-  			  case -2:
-  			    goto Redraw;
-	  			default:
+            break;
+        case 7:
+            goto Quit;
+        case -2:
+            goto Redraw;
+        default:
             T1->Message("Not implemented yet.");
-           break;
-  			}
-      }
-		while(1);
-		Quit:
+            break;
+        }
+    } while(1);
+
+Quit:
     Cleanup();
-	}
+}
 
 const char* GravestoneImage =
 "                                             \n\
