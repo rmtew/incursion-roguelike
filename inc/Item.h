@@ -44,7 +44,7 @@ class Item: public Thing, public Magic
 			Item(rID iID,int8 _Type);
       virtual void Initialize(bool in_play = false);
       virtual bool isQItem() { return false; }
-      virtual void ChangeIID(rID _iID, bool mult=true);
+      virtual void ChangeIID(rID _iID, bool mult=false);
       virtual void Dump();
 			virtual String & Name(int16 Flags=0);
       virtual bool isPlural() { return Quantity != 1 ||
