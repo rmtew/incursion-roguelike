@@ -200,7 +200,7 @@ Feature "ancient passage" : T_PORTAL
     Target: $"The Goblin Caves";
   }
 
-Feature "cave enterance" : T_PORTAL
+Feature "cave entrance" : T_PORTAL
   {
     Image: bright green '<'; 
     Mat:MAT_EMPTYNESS; xval:POR_UP_STAIR;
@@ -4089,7 +4089,7 @@ Region "Entry Chamber" : RF_ROOM
       /* 'G': $"floor" with $"potion" of $"vampirism", */
       'w': $"floor" with $"wand" of $"identify;wand",
       'P': $"floor" with $"infernal portal",
-      '>': $"floor" with $"cave enterance" [TILE_START];
+      '>': $"floor" with $"cave entrance" [TILE_START];
     Grid: {:
       %%%%%%%%%%%%%%%%%%%%%%%
       %pb........d..2......p%
@@ -4756,7 +4756,7 @@ Region "Arena Chamber" : RF_ROOM
       'R': $"Indestructable Rock",
       'w': $"shallow water",
       'm': $"floor" with $"giant mushroom",
-      '>': $"shallow water" with $"cave enterance" [TILE_START];
+      '>': $"shallow water" with $"cave entrance" [TILE_START];
     Grid: {:
       RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR
       RRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR

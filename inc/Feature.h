@@ -86,11 +86,11 @@ class Trap: public Feature
    like stores or guilds. Portals include:
    * literal magic portals
    * stairs
-   * dungeon enterances
-   * sub-dungeon enterances
+   * dungeon entrances
+   * sub-dungeon entrances
    * stores
    * guilds
-   * enterance to a building (i.e., the tavern)
+   * entrance to a building (i.e., the tavern)
    * the 'Rope Trick' rope
    * the 'Mordenkainen's Mansion' door
 */

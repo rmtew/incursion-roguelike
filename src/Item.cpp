@@ -103,46 +103,40 @@ Item::Item(Item *i)
     i->__Stati.CopyTo(& this->__Stati);
   }
   
-void Item::ChangeIID(rID _iID, bool mult)
-  {
-    Item * it;
-    
+void Item::ChangeIID(rID _iID, bool mult) {
     /* QItem / Item sanity */
-    it = Item::Create(_iID);
-    ASSERT(it->isQItem() == isQItem() || 
-      it->Type == T_HELMET || it->Type == T_CLOTHES);
+    Item *it = Item::Create(_iID);
+    ASSERT(it->isQItem() == isQItem() ||  it->Type == T_HELMET || it->Type == T_CLOTHES);
     delete it;
-    
-    
+
     iID   = _iID;  
     cHP   = MaxHP();
-		Image = TITEM(iID)->Image;
-		Type  = TITEM(iID)->IType;
-		if (mult && TITEM(iID)->HasFlag(IT_GROUP))
-		  Quantity = 10 + random(10);
-		if (mult && TITEM(iID)->HasFlag(IT_BGROUP))
-		  Quantity = 40 + random(40);
-		  
-		int8 oldQual[8], c, i;
-		int16 b;
-		c = 0;
-		if (!isQItem())
-		  return;
-		  
-		b = GetBane();
-		  
-		for (i=0;i!=100;i++)
-		  if (HasQuality(i))
-		    oldQual[c++] = i;
-		PurgeAllQualities();
-		for(i=0;i!=c;i++)
-		  if (QualityOK(oldQual[i]))
-		    AddQuality(oldQual[i]);
-		
-		if (b)
-		  SetBane(b);
-		  
-  }
+    Image = TITEM(iID)->Image;
+    Type  = TITEM(iID)->IType;
+    if (mult && TITEM(iID)->HasFlag(IT_GROUP))
+        Quantity = 10 + random(10);
+    if (mult && TITEM(iID)->HasFlag(IT_BGROUP))
+        Quantity = 40 + random(40);
+
+    int8 oldQual[8], c, i;
+    int16 b;
+    c = 0;
+    if (!isQItem())
+        return;
+
+    b = GetBane();
+
+    for (i=0;i!=100;i++)
+        if (HasQuality(i))
+            oldQual[c++] = i;
+    PurgeAllQualities();
+    for(i=0;i!=c;i++)
+        if (QualityOK(oldQual[i]))
+            AddQuality(oldQual[i]);
+
+    if (b)
+        SetBane(b);
+}
   
 int16 Item::MaxHP()
  { return TITEM(iID)->hp + 
