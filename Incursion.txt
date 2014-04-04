@@ -1,4 +1,4 @@
-Incursion 0.6.9Y2
+Incursion 0.6.9Y3
 -----------------
 
 Introduction
@@ -10,6 +10,13 @@ Help is provided in-game, along with copious amounts of detail.
 This version is a continuation of the open source release of 0.9.6H4,
 which it should be noted is earlier than the last official binary release
 of 0.6.9I.  The missing differences are unknown.
+
+Support the development
+=======================
+
+If you wish to support the development, you can donate bitcoin to:
+
+  [16F6d1F82qrhXaR67NHczQbu4eUie7QJui](https://blockchain.info/address/16F6d1F82qrhXaR67NHczQbu4eUie7QJui)
 
 Project goals
 =============

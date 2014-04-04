@@ -413,8 +413,10 @@ void libtcodTerm::Update() {
     update_count++;
     TCOD_console_blit(bScreen,0,0,0,0,NULL,0,0,1.0f,1.0f);
     TCOD_console_blit(bScreen,0,0,0,0,bCurrent,0,0,1.0f,1.0f);
+#ifdef DEBUG
     if (debugText.GetLength())
         TCOD_console_print(NULL,0,0,"%d: %s",update_count,(const char *)debugText);
+#endif
     TCOD_console_flush();
 
     updated = true;
@@ -590,68 +592,66 @@ void libtcodTerm::StopWatch(int16 milli)
 \*****************************************************************************/
 
 
-void Fatal(const char*fmt,...)
-	{
-		va_list argptr; 
-		va_start(argptr, fmt);
-    char ch; 
-    if (!T1)
-      { printf(__buffer); exit(1); }
-    T1->Clear();
-		vsprintf(__buffer, fmt, argptr);
-    sprintf(__buff2, "Fatal Error: %s\nPress [ENTER] to exit...",__buffer);
-		((libtcodTerm*)T1)->Box(WIN_SCREEN,BOX_NOPAUSE|BOX_NOSAVE,RED,PINK,__buff2);
-    T1->Update();
-    readkey(1);
-    #ifdef DEBUG
-      BREAKOUT;
-    #endif
-    T1->ShutDown();
-    exit(1);
-    va_end(argptr);
-	}
+void Fatal(const char*fmt,...) {
+	va_list argptr; 
+	va_start(argptr, fmt);
+	char ch; 
+	if (!T1)
+		{ printf(__buffer); exit(1); }
+	T1->Clear();
+	vsprintf(__buffer, fmt, argptr);
+	sprintf(__buff2, "Fatal Error: %s\nPress [ENTER] to exit...",__buffer);
+	((libtcodTerm*)T1)->Box(WIN_SCREEN,BOX_NOPAUSE|BOX_NOSAVE,RED,PINK,__buff2);
+	T1->Update();
+	readkey(1);
+#ifdef DEBUG
+	BREAKOUT;
+#endif
+	T1->ShutDown();
+	exit(1);
+	va_end(argptr);
+}
 
-void Error(const char*fmt,...)
-	{
-		va_list argptr;
-		va_start(argptr, fmt); 
-    char ch;
-    vsprintf(__buffer, fmt, argptr);
-    if (!T1)
-      { printf(__buffer); exit(1); }
-		
-    #ifdef DEBUG
-    sprintf(__buff2, "Error: %s\n[B]reak, [E]xit or [C]ontinue?",__buffer);
-    #else
-    crashdumpHandler->WriteMinidump();
-    sprintf(__buff2, "Error: %s\n[E]xit or [C]ontinue?",__buffer);
-    #endif
-    ((libtcodTerm*)T1)->Save();
-    ((libtcodTerm*)T1)->Box(WIN_SCREEN,BOX_NOPAUSE|BOX_NOSAVE,RED,PINK,__buff2);
-    T1->Update();
-    
-    do 
-        ch = toupper(readkey(1).c & 0xFF);
-    while (ch != 'C' && ch != 'E' && ch != 'S'    
-    #ifdef DEBUG
-      && ch != 'B'
-    #endif
-      );
-    if (ch == 'E')
-      { T1->ShutDown(); exit(1); }
-    if (ch == 'C')
-      return;
-    #ifdef DEBUG
-      BREAKOUT;
-    #endif
-      
-    /*
-    else if (ch == 'S')
-      theGame->PanicSave();
-    */
-    ((libtcodTerm*)T1)->Restore();
-    va_end(argptr);
-	}
+void Error(const char*fmt,...) {
+	va_list argptr;
+	va_start(argptr, fmt); 
+	char ch;
+	vsprintf(__buffer, fmt, argptr);
+	if (!T1)
+		{ printf(__buffer); exit(1); }
+
+#ifdef DEBUG
+	sprintf(__buff2, "Error: %s\n[B]reak, [E]xit or [C]ontinue?",__buffer);
+#else
+	crashdumpHandler->WriteMinidump();
+	sprintf(__buff2, "Error: %s\n[E]xit or [C]ontinue?",__buffer);
+#endif
+	((libtcodTerm*)T1)->Save();
+	((libtcodTerm*)T1)->Box(WIN_SCREEN,BOX_NOPAUSE|BOX_NOSAVE,RED,PINK,__buff2);
+	T1->Update();
+
+	do 
+	ch = toupper(readkey(1).c & 0xFF);
+	while (ch != 'C' && ch != 'E' && ch != 'S'    
+#ifdef DEBUG
+		&& ch != 'B'
+#endif
+		);
+	if (ch == 'E')
+		{ T1->ShutDown(); exit(1); }
+	if (ch == 'C')
+		return;
+#ifdef DEBUG
+	BREAKOUT;
+#endif
+
+	/*
+	else if (ch == 'S')
+	theGame->PanicSave();
+	*/
+	((libtcodTerm*)T1)->Restore();
+	va_end(argptr);
+}
 
 void libtcodTerm::Reset() {
     int16 optRes, optFont, i;

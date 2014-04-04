@@ -7,6 +7,13 @@ Incursion is a roguelike developed by Julian Mensch.  He has kindly released the
 
 At this time building is only supported on Windows, using Visual Studio 2008.  You should be able to substitute other versions of Visual Studio, or write a makefile if you plan to compile on another platform.
 
+Support the development
+-----------------------
+
+If you wish to support the development, you can donate bitcoin to:
+
+  [16F6d1F82qrhXaR67NHczQbu4eUie7QJui](https://blockchain.info/address/16F6d1F82qrhXaR67NHczQbu4eUie7QJui)
+
 Windows build instructions
 --------------------------
 

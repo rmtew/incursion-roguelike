@@ -1,4 +1,4 @@
-0.6.9Y3: ADD DATE
+0.6.9Y3: 2014-04-05
 - https://bitbucket.org/rmtew/incursion-roguelike/issue/32/oil-of-transformation-multiplies-stackable: Fix bug where when items change their type, perhaps from a rod to a staff, they get multiplied in quantity.
 - https://bitbucket.org/rmtew/incursion-roguelike/issue/35/skill-typos: Spelling fixes in skill descriptions.
 - https://bitbucket.org/rmtew/incursion-roguelike/issue/34/capital-letters-not-working-shift-letter: Fix shifted keys and various other keys not working.  Not guaranteed to be correct, but is better than before.

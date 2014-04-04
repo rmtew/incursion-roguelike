@@ -1106,7 +1106,6 @@ InvalidChar:
                 c--;
             else
                 c = OptionCount - 1; 
-            SetDebugText("NORTH");
             break;
         case KY_CMD_SOUTH:
             if (c < OptionCount-1)
@@ -1115,7 +1114,6 @@ InvalidChar:
                 vStart = 0; 
                 c = 0; 
             }
-            SetDebugText("SOUTH");
             break;
         case KY_CMD_WEST:
             if (c - vRows >= vStart)
@@ -1401,7 +1399,6 @@ InvalidChar:
                 c--;
             else
                 c = OptionCount - 1; 
-            SetDebugText("NORTH");
             break;
         case KY_CMD_SOUTH:
             if (c < OptionCount-1)
@@ -1410,7 +1407,6 @@ InvalidChar:
                 vStart = 0; 
                 c = 0; 
             }
-            SetDebugText("SOUTH");
             break;
         case KY_CMD_WEST:
             if (c - vRows >= vStart)
