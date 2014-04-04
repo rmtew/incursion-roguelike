@@ -1,6 +1,7 @@
 0.6.9Y3: ADD DATE
 - https://bitbucket.org/rmtew/incursion-roguelike/issue/32/oil-of-transformation-multiplies-stackable: Fix bug where when items change their type, perhaps from a rod to a staff, they get multiplied in quantity.
 - https://bitbucket.org/rmtew/incursion-roguelike/issue/35/skill-typos: Spelling fixes in skill descriptions.
+- https://bitbucket.org/rmtew/incursion-roguelike/issue/34/capital-letters-not-working-shift-letter: Fix shifted keys and various other keys not working.  Not guaranteed to be correct, but is better than before.
 
 0.6.9Y2: 2014-03-28
 - Fix bug where saved games were not found, as the old Allegro pattern with two asterisks failed because libtcod file name matching only handles one asterisk.
