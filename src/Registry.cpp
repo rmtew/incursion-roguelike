@@ -1017,7 +1017,7 @@ bool Game::LoadModules()
 
     theRegistry = &ResourceRegistry;
     try {
-    if (!T1->FirstFile("*.mod")) {
+    if (!T1->FirstFile("*.Mod")) {
       Fatal(Format("%s\nCan't find any game data modules!",
             (const char*)T1->ModuleSubDir()));
     }
