@@ -25,15 +25,14 @@ Compilation instructions:
   1. Download and install Visual Studio Express 2008, if necessary.
   2. Extract 'flex.exe' directly into the project directory.
   3. Place libtcod source code under "_dependencies\libtcod" sub-directory.
-  4. Apply "_dependencies\libtcod.patch".
-  5. Build libtcod to obtain the libtcod.dll, libtcod.lib and SDL2.dll files.
-  6. **If a debug build is being made, skip to step 13.**
-  7. Place google breakpad source code under "_dependencies\google-breakpad" sub-directory.
-  8. Enter the "_dependencies\google-breakpad" directory.
-  9. Execute the DOS command "set GYP_MSVS_VERSION=2008", or if you are using an alternate compiler, use a modified command.
-  10. Execute the DOS command "src\tools\gyp\gyp.bat --no-circular-check  src\client\windows\breakpad_client.gyp".
-  11. The build files should be located in "_dependencies\google-breakpad\src\windows".
-  12. Do a non-debug build of google breakpad.
-  13. Build Incursion.
-  14. Place "libtcod.dll" directly into the project directory.
-  15. Place "SDL2.dll" directly into the project directory.
+  4. Build libtcod to obtain the libtcod.dll, libtcod.lib and SDL2.dll files.
+  5. **If a debug build is being made, skip to step 12.**
+  6. Place google breakpad source code under "_dependencies\google-breakpad" sub-directory.
+  7. Enter the "_dependencies\google-breakpad" directory.
+  8. Execute the DOS command "set GYP_MSVS_VERSION=2008", or if you are using an alternate compiler, use a modified command.
+  9. Execute the DOS command "src\tools\gyp\gyp.bat --no-circular-check  src\client\windows\breakpad_client.gyp".
+  10. The build files should be located in "_dependencies\google-breakpad\src\windows".
+  11. Do a non-debug build of google breakpad.
+  12. Build Incursion.
+  13. Place "libtcod.dll" directly into the project directory.
+  14. Place "SDL2.dll" directly into the project directory.
