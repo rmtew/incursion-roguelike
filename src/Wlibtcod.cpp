@@ -1089,10 +1089,9 @@ CtrlBreak:
             if (ch && strchr("`~!@#$%^&*()-_=+{}[];:'\",<.>?/|\\",ch))
                 ;
             else if (tcodKey.vk == TCODK_CHAR && ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')))
-                ; // ch = ((ControlKeys & SHIFT) ? 'A' : 'a') + (ch - 'a');
+                ch = ((ControlKeys & SHIFT) ? 'A' : 'a') + (ch - 'a');
             else if (tcodKey.vk >= TCODK_0 && tcodKey.vk <= TCODK_9)
-                ; // This should just work.
-                //ch = (ControlKeys & SHIFT) ? ")!@#$%^&*("[tcodKey.vk - TCODK_0] : '0' + (tcodKey.vk - TCODK_0);
+                ch = (ControlKeys & SHIFT) ? ")!@#$%^&*("[tcodKey.vk - TCODK_0] : '0' + (tcodKey.vk - TCODK_0);
             else if (tcodKey.vk >= TCODK_F1 && tcodKey.vk <= TCODK_F12)
                 ch = FN(tcodKey.vk - TCODK_F1 + 1);
             else
