@@ -233,7 +233,7 @@ Text "help::bluff"
       skill check against a DC of 10 + twice the target's Will save
       bonus.\n\n
 
-      <8>Unimplimented Uses:\n
+      <8>Unimplemented Uses:\n
       __<15>* <11>Exclusive Guilds (Passive):<3> Certain guilds do not allow
       members of other guilds to join them, as a result of competitive
       practices or old enimities between them -- the Thieves and
@@ -331,7 +331,7 @@ Text "help::climb"
     than usual, unless the spell is Stilled and thus does not require
     somatic gestures.\n\n
       
-    <8>Unimplimented Uses:\n
+    <8>Unimplemented Uses:\n
     __<15>* <11>Climb Structures (Passive):<3> On the city map, you can 
     use the Climb skill to climb up on top of any building or barrier,
     including the city walls (which is counted as criminal if the
@@ -620,7 +620,7 @@ Text "help::diplomacy"
       __<15>* <11>Enlist Aid (Talking):<3> When you ask
       a named character to join your party, a Diplomacy
       check determines if they are willing, modified by
-      personality architypes, alignment, race, etc. You
+      personality archetypes, alignment, race, etc. You
       only get one check against a given character in
       this circumstance, <11>ever<3>.\n
       __Unlike most Diplomacy checks, this one cannot
@@ -966,7 +966,7 @@ Text "help::healing"
     naturally.\n
     __<15>* <11>Forestall Petrification (Active):<3> Petrification is
     a magical effect, and the Healing skill alone cannot cure it.
-    However, by the application of careful herbal remidies and other
+    However, by the application of careful herbal remedies and other
     obscure treatments, a successful Heal check against DC 20 can
     delay the onset of petrification by [Heal Skill x 20] combat
     rounds."; 
@@ -1280,9 +1280,9 @@ Text "help::knowledge (undead)"
     slayer or master necromancer, well versed in the inherant 
     abilities and weaknesses of the Damned. This skill has the
     following uses:\n
-    __<15>* <11>Fighting Undead (Passive):<3> By using a thourogh 
+    __<15>* <11>Fighting Undead (Passive):<3> By using a thorough 
     knowledge of their behaviour, weaknesses and unnatural existance, this skill 
-    allows a character the following bonuses when fighting aquatic or 
+    allows a character the following bonuses when fighting 
     the undead: his effective DC is increased by [Skill Rating / 3] 
     against their attacks, and his understanding of their banes and 
     biology increases the threat ratings of his attacks against them 
@@ -1399,7 +1399,7 @@ Text "help::mining"
       and a truly exceptional digging tool might even be able to dig through
       an adamant wall!\n
       __The difference between a character's level in the Mining skill and the
-      hardness of the material they are diffing through is also the factor used
+      hardness of the material they are digging through is also the factor used
       to calculate how long mining out a single square, and how much Fatigue,
       if any, is lost in so doing.\n
       __Finally, when the character successfully mines through a vein or deposit
@@ -1476,7 +1476,7 @@ Text "help::pick pockets"
     attempt is noticed or not. The DC decreases by 5 if the mark
     can't see the would-be thief. On a failed check, the victim 
     becomes aware of the attempt and likely becomes hostile to 
-    the thief; in an urban setting, the guardmen will become 
+    the thief; in an urban setting, the guardsmen will become 
     hostile as well. If a hostile creature notices a pick-pocket
     attempt, they get an Attack of Opportunity on the thief.\n
     __The thief must be standing next to the
@@ -1543,7 +1543,7 @@ Text "help::pick pockets"
 
 Text "help::poison use"
   {
-    "Poison Use gives a rogue or assasin a broad understanding
+    "Poison Use gives a rogue or assassin a broad understanding
     of poisons and their use on the battlefield; it has the
     following applications:\n
     __<15>* <11>Poison Familiarity (Passive):<3> Characters are
@@ -1658,8 +1658,8 @@ Text "help::seneschal"
   { "__The Seneschal skill has the following uses:\n
      __<15>* <11>Claim Keep (Active, <4>Unimplemented<11>):<3> The Seneschal skill covers
      courtly etiquette, medieval finance and moneylending and general
-     lordly competance. In game terms, it allows a character to own
-     property and manage it compenantly, building and maintaining a
+     lordly competence. In game terms, it allows a character to own
+     property and manage it competrntly, building and maintaining a
      keep or fortress somewhere on the overland map should she complete
      a quest that would award her with such. In addition to providing
      her with a safe place to keep items she doesn't carry with her,
