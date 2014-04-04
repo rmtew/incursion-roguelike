@@ -495,6 +495,7 @@ class Term
 	    virtual void SetPlayer(Player *_p)=0;
       virtual void ClearPlayer()=0;
       virtual void NotifyGone(hObj h)=0;
+	    virtual void SetDebugText(const char *text)=0;
       
       /* Scroll Buffer (platform-specific) */
       virtual void SPutChar(int16 x, int16 y, Glyph g)=0;
@@ -746,6 +747,7 @@ class TextTerm: public Term
 	    virtual void SetPlayer(Player *_p) { p = _p; }
       virtual void ClearPlayer()         { p = NULL; }
       virtual void NotifyGone(hObj h)    { }
+      virtual void SetDebugText(const char *text) { };
             
       /* Scroll Buffer (platform-specific) */
       virtual void SPutChar(int16 x, int16 y, Glyph g)=0;

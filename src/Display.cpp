@@ -1007,274 +1007,256 @@ Thing* Thing::ProjectTo(int16 tx, int16 ty, int8 range)
 
   }
 
-void Thing::Show()
-	{
-		m->Update(x,y);
-	}
-EvReturn Thing::Event(EventInfo &e)
-	{
-		switch(e.Event)
-			{
-      	case EV_TURN:
-        	return DONE;
-        case EV_PLACE:
-          return DONE;
-        case PRE(EV_FIELDON):
-        case PRE(EV_FIELDOFF):
-          /* Catch this case _before_ the field effect resource is
-             allowed to override it, avoiding messages like "the
-             stairs seem unsettled" from spook. */
-          if (e.EField)
-            if (e.EField->eID)
-              {
+void Thing::Show() {
+    m->Update(x,y);
+}
+
+EvReturn Thing::Event(EventInfo &e) {
+    switch(e.Event) {
+    case EV_TURN:
+        return DONE;
+    case EV_PLACE:
+        return DONE;
+    case PRE(EV_FIELDON):
+    case PRE(EV_FIELDOFF):
+        /* Catch this case _before_ the field effect resource is
+        allowed to override it, avoiding messages like "the
+        stairs seem unsettled" from spook. */
+        if (e.EField)
+            if (e.EField->eID) {
                 /* Polymorph / selective target paranoia */
                 if (e.Event == PRE(EV_FIELDOFF) && HasEffStati(-1,e.EField->eID))
-                  return NOTHING;
+                    return NOTHING;
                 /* If the thing entering the field isn't affected
-                   by it, abort now. */
+                by it, abort now. */
                 EventInfo e2;
                 e2.Clear();
 
-				if (theRegistry->Exists(e.EField->Creator))
-                  e2.EActor = oCreature(e.EField->Creator);
-
-				else
-
-					return NOTHING; 
+                if (theRegistry->Exists(e.EField->Creator))
+                    e2.EActor = oCreature(e.EField->Creator);
+                else
+                    return NOTHING; 
                 e2.ETarget = this;
                 e2.eID = e.EField->eID;
                 e2.EMagic = TEFF(e.EField->eID)->Vals(0);
                 /* Make sure *every segment* ignores this; c.f. MCvsE */
                 for (e2.efNum=0;e2.EMagic = TEFF(e2.eID)->Vals(e2.efNum);e2.efNum++)
-                  if (thisp->isTarget(e2,this))
-                    return NOTHING;
+                    if (thisp->isTarget(e2,this))
+                        return NOTHING;
                 return ABORT;
-              }
-           return NOTHING;
-        case EV_FIELDON:
-          if (e.EActor==this)
+            }
+            return NOTHING;
+    case EV_FIELDON:
+        if (e.EActor==this)
             return FieldOn(e);
-         break;
-        case EV_FIELDOFF:
-          if (e.EActor==this)
+        break;
+    case EV_FIELDOFF:
+        if (e.EActor==this)
             return FieldOff(e);
-         break;
+        break;
+    default:
+        return NOTHING;
+    }
+    return ERROR;
+}
 
-				default:
-					return NOTHING;
-			}
-		return ERROR;
-	}
-
-void Thing::Remove(bool isDelete)
-  {
+void Thing::Remove(bool isDelete) {
     int16 ox = x, oy = y,i; Thing *th;
     Creature *mount;
-    
+
     if (isCreature() && isDelete)
-      thisc->FocusCheck(NULL);
-    
-    if (HasStati(ENGULFED))
-      {
+        thisc->FocusCheck(NULL);
+
+    if (HasStati(ENGULFED)) {
         Thing *en = GetStatiObj(ENGULFED);
         en->RemoveStati(ENGULFER,-1,-1,-1,this);
         RemoveStati(ENGULFED);
         for (i=0;m->Things[i];i++)
-          if (m->Things[i] == myHandle)
+            if (m->Things[i] == myHandle)
             {
-              m->Things.Remove(i);
-              goto FoundAndRemoved2;
+                m->Things.Remove(i);
+                goto FoundAndRemoved2;
             }
         Error("Cannot remove engulfed creature from Things!");
-        FoundAndRemoved2:
+FoundAndRemoved2:
         m = NULL;
         x = -1;
         y = -1;
-      }
-    
-    if (HasStati(ENGULFER))
-      {
+    }
+
+    if (HasStati(ENGULFER)) {
         ASSERT(isCreature());
         /* Later, some Remove(false) calls should *not* drop our
-           engulfed creatures; for example, if a dragon swallows
-           an adventurer, the adventurer shouldn't pop out if the
-           dragon casts /teleport/, or even /teleport level/. But
-           that involves going through the code to verify that
-           each individual Revove(false) call won't potentially
-           end with the Player having m==NULL, so for now any
-           remove drops engulfed creatures. */
+        engulfed creatures; for example, if a dragon swallows
+        an adventurer, the adventurer shouldn't pop out if the
+        dragon casts /teleport/, or even /teleport level/. But
+        that involves going through the code to verify that
+        each individual Revove(false) call won't potentially
+        end with the Player having m==NULL, so for now any
+        remove drops engulfed creatures. */
         if (isDelete || 1)
-          thisc->DropEngulfed();
-      } 
-    
+            thisc->DropEngulfed();
+    } 
+
     if (HasStati(MOUNTED))
-      mount = (Creature*)GetStatiObj(MOUNTED);
+        mount = (Creature*)GetStatiObj(MOUNTED);
     else
-      mount = NULL;
+        mount = NULL;
 
     if (isType(T_DOOR) && m) {
-      ((Door*)this)->DoorFlags &= ~DF_SECRET;
-      ((Door*)this)->DoorFlags |= DF_OPEN;
-      SetImage();
-      }
+        ((Door*)this)->DoorFlags &= ~DF_SECRET;
+        ((Door*)this)->DoorFlags |= DF_OPEN;
+        SetImage();
+    }
 
     if (m)
-      for (i=0;m->Fields[i];i++)
-        if (m->Fields[i]->Creator == myHandle || (mount &&
-              m->Fields[i]->Creator == mount->myHandle))
-          if (m->Fields[i]->FType & FI_MOBILE)
-            {
-              /*if (i == false)
-                Error("Remove(false) with hanging fields!"); */
-              m->RemoveField(m->Fields[i]);
-              i--;
-            }
+        for (i=0;m->Fields[i];i++)
+            if (m->Fields[i]->Creator == myHandle || (mount && m->Fields[i]->Creator == mount->myHandle))
+                if (m->Fields[i]->FType & FI_MOBILE) {
+                    /*if (i == false)
+                    Error("Remove(false) with hanging fields!"); */
+                    m->RemoveField(m->Fields[i]);
+                    i--;
+                }
 
     if (m && m->At(x,y).hasField)
-      for(i=0;m->Fields[i];i++)
-        if (m->Fields[i]->inArea(x,y)) {
-          ThrowField(EV_FIELDOFF,m->Fields[i],this);
-          if (mount)
-            ThrowField(EV_FIELDOFF,m->Fields[i],mount);
-          }
+        for(i=0;m->Fields[i];i++)
+            if (m->Fields[i]->inArea(x,y)) {
+                ThrowField(EV_FIELDOFF,m->Fields[i],this);
+                if (mount)
+                    ThrowField(EV_FIELDOFF,m->Fields[i],mount);
+            }
 
-    if (ox > -1 && m != NULL && !HasStati(MOUNT))
-      {
-
+    if (ox > -1 && m != NULL && !HasStati(MOUNT)) {
         for(i=0;m->Things[i];i++)
-          if(m->Things[i]==myHandle)
-            {
-              m->Things.Remove(i);
-              goto FoundAndRemoved;
+            if(m->Things[i]==myHandle) {
+                m->Things.Remove(i);
+                goto FoundAndRemoved;
             }
-	      Fatal("Could not find & remove Thing from m->Things!");
-    	  FoundAndRemoved:
+        Fatal("Could not find & remove Thing from m->Things!");
 
+FoundAndRemoved:
         if (m->At(ox,oy).Contents == myHandle)
-          m->At(ox,oy).Contents = Next;
+            m->At(ox,oy).Contents = Next;
         else {
-          th = oThing(m->At(ox,oy).Contents);
-          while(th && th->Next != myHandle) {
-            if (!th->Next) {
-              // I'm getting this on vampire spawn vs. blue jelly every
-              // time, and I don't know why. I'm changing it to Error so
-              // it doesn't kill the game. -- Julian
-              Error("Contents list wierdless in Thing::Remove!");
-              return;
+            th = oThing(m->At(ox,oy).Contents);
+            while(th && th->Next != myHandle) {
+                if (!th->Next) {
+                    // I'm getting this on vampire spawn vs. blue jelly every
+                    // time, and I don't know why. I'm changing it to Error so
+                    // it doesn't kill the game. -- Julian
+                    Error("Contents list wierdless in Thing::Remove!");
+                    return;
+                }
+                th = oThing(th->Next);
             }
-            th = oThing(th->Next);
-          }
-          if (th) 
-            th->Next = Next;
+            if (th) 
+                th->Next = Next;
         }
         if (theGame->InPlay())
-          m->Update(ox,oy);
-      }
+            m->Update(ox,oy);
+    }
     m = NULL; x = y = -1; Next = 0;
     if (mount) {
-      mount->m = NULL;
-      mount->x = -1;
-      mount->y = -1;
-      mount->Next = 0;
-      }
-    
-    /* Catch the case where a Creature is killed but we
-       keep its Creature object to attach to the corpse
-       in case of ressurection, i.e., for players and
-       player companions. */
-    if (isDelete || (isCreature() && thisc->isDead()))
-      CleanupRefedStati();
-      
-    if (isDelete) {
-      Flags |= F_DELETE;
-      if (Type != T_PLAYER) {
-        if (theGame->DestroyCount)
-          for (i=0;i!=theGame->DestroyCount;i++)
-            if (theGame->DestroyQueue[i] == this)
-              {
-                /* Error("Object being destroyed twice!"); */
-                goto SkipQueueAdd;
-              }
-        theGame->DestroyQueue[theGame->DestroyCount++] = this;
-        SkipQueueAdd:;
-        }
-      if (theGame->DestroyCount > 20450)
-        Error("Too many objects being destroyed at once!");
-      }
-  }
+        mount->m = NULL;
+        mount->x = -1;
+        mount->y = -1;
+        mount->Next = 0;
+    }
 
-void Item::Remove(bool isDelete)
-  {
-    int16 i; Character *c; Monster *m; String str;
-    if (Parent) {
-      if (oThing(Parent)->isCreature()) {
-        if (IFlags & IF_WORN) {
-          EventInfo e;
-          e.Clear();
-          e.eID = eID;
-          e.EActor = Owner();
-          e.EItem = this;
-          e.isRemove = true;
-          e.isItem = true;
-          e.efNum = 0;
-          if (e.eID)
-            ReThrow(EV_EFFECT,e);
-          
-          
-          if (isType(T_ARMOR)) {
-            int16 q;
-            for (i=0;i!=8;i++)
-              if (q = GetQuality(i))
-                {
-                  str = "quality::";
-                  if (LookupOnly(APreQualNames,q))
-                    str += Lookup(APreQualNames,q);
-                  else
-                    str += Lookup(APostQualNames,q);
-                  e.eID = FIND(str);
-                  if (!e.eID)
-                    continue;
-                  e.isRemove = true;  
+    /* Catch the case where a Creature is killed but we
+    keep its Creature object to attach to the corpse
+    in case of ressurection, i.e., for players and
+    player companions. */
+    if (isDelete || (isCreature() && thisc->isDead()))
+        CleanupRefedStati();
+
+    if (isDelete) {
+        Flags |= F_DELETE;
+        if (Type != T_PLAYER) {
+            if (theGame->DestroyCount)
+                for (i=0;i!=theGame->DestroyCount;i++)
+                    if (theGame->DestroyQueue[i] == this)
+                    {
+                        /* Error("Object being destroyed twice!"); */
+                        goto SkipQueueAdd;
+                    }
+            theGame->DestroyQueue[theGame->DestroyCount++] = this;
+SkipQueueAdd:;
+        }
+        if (theGame->DestroyCount > 20450)
+            Error("Too many objects being destroyed at once!");
+    }
+}
+
+  void Item::Remove(bool isDelete) {
+      int16 i; Character *c; Monster *m; String str;
+      if (Parent) {
+          if (oThing(Parent)->isCreature()) {
+              if (IFlags & IF_WORN) {
+                  EventInfo e;
+                  e.Clear();
+                  e.eID = eID;
+                  e.EActor = Owner();
+                  e.EItem = this;
+                  e.isRemove = true;
                   e.isItem = true;
                   e.efNum = 0;
-                  ReThrow(EV_EFFECT,e);
-                }
-            }
-          /* If you get disarmed, lose the parry bonus! */
-          e.EActor->CalcValues();                    
+                  if (e.eID)
+                      ReThrow(EV_EFFECT,e);
+
+                  if (isType(T_ARMOR)) {
+                      int16 q;
+                      for (i=0;i!=8;i++)
+                          if (q = GetQuality(i)) {
+                              str = "quality::";
+                              if (LookupOnly(APreQualNames,q))
+                                  str += Lookup(APreQualNames,q);
+                              else
+                                  str += Lookup(APostQualNames,q);
+                              e.eID = FIND(str);
+                              if (!e.eID)
+                                  continue;
+                              e.isRemove = true;  
+                              e.isItem = true;
+                              e.efNum = 0;
+                              ReThrow(EV_EFFECT,e);
+                          }
+                  }
+                  /* If you get disarmed, lose the parry bonus! */
+                  e.EActor->CalcValues();                    
+              }
+              if (!Parent)
+                  goto NoMoreParent;
+              if (oThing(Parent)->isCharacter()) {
+                  c = (Character*) (Owner());
+                  for (i=0;i!=SL_LAST;i++)
+                      if (c->Inv[i] == myHandle) {
+                          c->Inv[i] = 0;
+                      }
+              } else {
+                  IFlags &= ~IF_WORN;
+                  m = (Monster*)Owner();
+                  if (m->Inv == myHandle)
+                      m->Inv = Next;
+                  else {
+                      Item *it = oItem(m->Inv);
+                      while(it && it->Next != myHandle)
+                          it = oItem(it->Next);
+                      if (!it)
+                          Error("Can't find item to remove in monster inv list!");
+                      it->Next = Next;
+                  }
+              }
           }
-        if (!Parent)
-          goto NoMoreParent;
-        if (oThing(Parent)->isCharacter()) {
-          c = (Character*) (Owner());
-          for (i=0;i!=SL_LAST;i++)
-            if (c->Inv[i] == myHandle) {
-              c->Inv[i] = 0;
-            }
-          }
-        else {
-          IFlags &= ~IF_WORN;
-          m = (Monster*)Owner();
-          if (m->Inv == myHandle)
-            m->Inv = Next;
-          else {
-            Item *it = oItem(m->Inv);
-            while(it && it->Next != myHandle)
-              it = oItem(it->Next);
-            if (!it)
-              Error("Can't find item to remove in monster inv list!");
-            it->Next = Next;
-            }
-          }
-        }
-      else if (oThing(Parent)->isItem())
-        ((Container*)oItem(Parent))->Unlist(this);
-      Parent = Next = 0;    
+          else if (oThing(Parent)->isItem())
+              ((Container*)oItem(Parent))->Unlist(this);
+          Parent = Next = 0;    
       }
-    NoMoreParent:
-    IFlags &= ~IF_WORN;
-    RemoveEffStati(FIND("soulblade"));
-    Thing::Remove(isDelete);
+NoMoreParent:
+      IFlags &= ~IF_WORN;
+      RemoveEffStati(FIND("soulblade"));
+      Thing::Remove(isDelete);
   }
 
 void Creature::DoEngulf(Creature *engulfer)

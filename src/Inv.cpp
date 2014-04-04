@@ -299,335 +299,314 @@ Item* Character::InSlot(int8 sl, bool eff)
     return sl > SL_LAST ? NULL : oItem(Inv[sl]);
   }
 
-EvReturn Character::Wield(EventInfo &e)
-	{
-    if (!TMON(mID)->HasSlot(e.EParam))
-      {
+EvReturn Character::Wield(EventInfo &e) {
+    if (!TMON(mID)->HasSlot(e.EParam)) {
         IPrint("You can't use that inventory slot in your current form.");
         return ABORT;
-      }
-    if (e.EItem->GetQuantity() > 1 && e.EItem->activeSlot(e.EParam) &&
-         !e.EItem->isGroup(WG_THROWN))
-      {
+    }
+    if (e.EItem->GetQuantity() > 1 && e.EItem->activeSlot(e.EParam) && !e.EItem->isGroup(WG_THROWN)) {
         IPrint("You can't wield multiple items in an active slot.");
         return ABORT;
-      }
+    }
     if (e.EItem->isType(T_CLOTHES) && e.EParam == SL_CLOTHES && e.EItem->eID)
-      if (InSlot(SL_CLOAK) && InSlot(SL_CLOAK)->eID)
-        {
-          IPrint("You can't wear both a magical cloak and magical "
-            "clothing; both occupy the same metaphysical 'niche'.");
-          return ABORT;
+        if (InSlot(SL_CLOAK) && InSlot(SL_CLOAK)->eID) {
+            IPrint("You can't wear both a magical cloak and magical "
+                "clothing; both occupy the same metaphysical 'niche'.");
+            return ABORT;
         }
     if (e.EItem->isType(T_CLOAK) && e.EParam == SL_CLOAK && e.EItem->eID)
-      if (InSlot(SL_CLOTHES) && InSlot(SL_CLOTHES)->eID)
-        {
-          IPrint("You can't wear both a magical cloak and magical "
-            "clothing; both occupy the same metaphysical 'niche'.");
-          return ABORT;
+        if (InSlot(SL_CLOTHES) && InSlot(SL_CLOTHES)->eID) {
+            IPrint("You can't wear both a magical cloak and magical "
+                "clothing; both occupy the same metaphysical 'niche'.");
+            return ABORT;
         }
-    
+
     Item *other;
     if ((e.EParam == SL_WEAPON && (other = InSlot(SL_READY))) ||
         (e.EParam == SL_READY && (other = InSlot(SL_WEAPON))))
-      if (e.EItem->HasIFlag(WT_REACH) != other->HasIFlag(WT_REACH))
-        if (e.EItem->isType(T_WEAPON) && other->isType(T_WEAPON))
-          {
-            IPrint("You cannot wield a reach weapon along with a non-reach weapon.");
-            return ABORT;
-          }
-    
-    if (e.EParam == SL_ARMOR && m && isThreatened())
-      {
+        if (e.EItem->HasIFlag(WT_REACH) != other->HasIFlag(WT_REACH))
+            if (e.EItem->isType(T_WEAPON) && other->isType(T_WEAPON))
+            {
+                IPrint("You cannot wield a reach weapon along with a non-reach weapon.");
+                return ABORT;
+            }
+
+    if (e.EParam == SL_ARMOR && m && isThreatened()) {
         IPrint("You cannot put on armor while threatened by hostile creatures.");
         return ABORT;
-      }
-    if (e.EParam == SL_ARMOR && m && (HasStati(STUCK) || HasStati(PRONE)))
-      {
+    }
+    if (e.EParam == SL_ARMOR && m && (HasStati(STUCK) || HasStati(PRONE))) {
         IPrint("You cannot put on armor while stuck or prone.");
         return ABORT;
-      }
-    
-        
-    if (m && theGame->InPlay() && x != -1) { 
-      if((isMType(MA_DEMON) || isMType(MA_LYCANTHROPE) ||
-            isMType(MA_DEVIL) || isMType(MA_UNDEAD))) {
-        if (e.EItem->Material() == MAT_SILVER) {
-          IPrint("You are too fiendish to use silver items."); 
-          return ABORT; 
-        } else if (e.EItem->isBlessed()) {
-          e.EItem->MakeKnown(KN_BLESS);
-          IPrint("You are too unholy to use blessed items."); 
-          return ABORT; 
-        } 
-      }
-      if(onPlane() != PHASE_MATERIAL) {
-        if (!e.EItem->isGhostTouch()) {
-          IPrint("You are incorporeal and cannot use material items."); 
-          return ABORT; 
-        } 
-      } 
     }
-    
+
+
+    if (m && theGame->InPlay() && x != -1) { 
+        if((isMType(MA_DEMON) || isMType(MA_LYCANTHROPE) || isMType(MA_DEVIL) || isMType(MA_UNDEAD))) {
+            if (e.EItem->Material() == MAT_SILVER) {
+                IPrint("You are too fiendish to use silver items."); 
+                return ABORT; 
+            } else if (e.EItem->isBlessed()) {
+                e.EItem->MakeKnown(KN_BLESS);
+                IPrint("You are too unholy to use blessed items."); 
+                return ABORT; 
+            } 
+        }
+        if(onPlane() != PHASE_MATERIAL) {
+            if (!e.EItem->isGhostTouch()) {
+                IPrint("You are incorporeal and cannot use material items."); 
+                return ABORT; 
+            } 
+        } 
+    }
+
     if (e.EParam == SL_ARCHERY)
-      Error("Character attempting to use the fake SL_ARCHERY slot!");
+        Error("Character attempting to use the fake SL_ARCHERY slot!");
     if (e.EParam == SL_WEAPON || e.EParam == SL_READY) 
-      if (e.EItem->isType(T_WEAPON) || e.EItem->isType(T_BOW) || e.EItem->isType(T_SHIELD)) {
-        if (e.EItem->Size(this) > Attr[A_SIZ]+1) {
-          IPrint("The <Obj> is too large for you to wield effectively.",e.EItem);
-          return ABORT;
-          }
-        if ((TITEM(e.EItem->iID)->HasFlag(WT_EXOTIC_1H) &&
-              !HasEffStati(WEP_SKILL,e.EItem->iID)) ||
-              (e.EItem->Size(this) + 
-               TITEM(e.EItem->iID)->HasFlag(WT_TWO_HANDED) 
-               > (Attr[A_SIZ]+
-                 (e.EItem->isType(T_SHIELD) ? 0 : HasFeat(FT_MONKEY_GRIP))))) {
-          if (Inv[SL_WEAPON] || Inv[SL_READY]) {
-            IPrint("You grip the <Obj> experimentally, and find you would "
-              " need both hands free to wield it well.",e.EItem);
-            return ABORT;
+        if (e.EItem->isType(T_WEAPON) || e.EItem->isType(T_BOW) || e.EItem->isType(T_SHIELD)) {
+            if (e.EItem->Size(this) > Attr[A_SIZ]+1) {
+                IPrint("The <Obj> is too large for you to wield effectively.",e.EItem);
+                return ABORT;
             }
-          Inv[SL_WEAPON] = e.EItem->myHandle;
-          Inv[SL_READY]  = e.EItem->myHandle;
-          }
-        else if (!Inv[SL_WEAPON] && !Inv[SL_READY] && theGame->InPlay() && e.EItem->isType(T_WEAPON) &&
-                   (isExchange || yn(XPrint("Wield the <Obj> two-handed?",e.EItem))))
-          {
-            Inv[SL_WEAPON] = e.EItem->myHandle;
-            Inv[SL_READY]  = e.EItem->myHandle;
-          }
-      }
+            if ((TITEM(e.EItem->iID)->HasFlag(WT_EXOTIC_1H) &&
+                !HasEffStati(WEP_SKILL,e.EItem->iID)) ||
+                (e.EItem->Size(this) + 
+                TITEM(e.EItem->iID)->HasFlag(WT_TWO_HANDED) 
+                > (Attr[A_SIZ]+
+                (e.EItem->isType(T_SHIELD) ? 0 : HasFeat(FT_MONKEY_GRIP))))) {
+               if (Inv[SL_WEAPON] || Inv[SL_READY]) {
+                   IPrint("You grip the <Obj> experimentally, and find you would "
+                       " need both hands free to wield it well.",e.EItem);
+                   return ABORT;
+               }
+               Inv[SL_WEAPON] = e.EItem->myHandle;
+               Inv[SL_READY]  = e.EItem->myHandle;
+            } else if (!Inv[SL_WEAPON] && !Inv[SL_READY] && theGame->InPlay() && e.EItem->isType(T_WEAPON) &&
+                (isExchange || yn(XPrint("Wield the <Obj> two-handed?",e.EItem)))) {
+                Inv[SL_WEAPON] = e.EItem->myHandle;
+                Inv[SL_READY]  = e.EItem->myHandle;
+            }
+        }
+
     Inv[e.EParam] = e.EItem->myHandle;
     e.EItem->SetOwner(e.EActor->myHandle);
     if (e.EItem->activeSlot(e.EParam))
-      e.EItem->IFlags |= IF_WORN;
+        e.EItem->IFlags |= IF_WORN;
     if (theGame->InPlay()) {
-      Timeout += QD(2000) / (100 + 10 * Mod(A_DEX));
-      DPrint(e,NULL,"An <EActor> readies an <EItem>."); 
-		  }
+        Timeout += QD(2000) / (100 + 10 * Mod(A_DEX));
+        DPrint(e,NULL,"An <EActor> readies an <EItem>."); 
+    }
 
     if ((e.EItem->HasQuality(WQ_UNHOLY) && isMType(MA_GOOD)) ||
         (e.EItem->HasQuality(WQ_HOLY) && isMType(MA_EVIL)) ||
         (e.EItem->HasQuality(WQ_CHAOTIC) && isMType(MA_LAWFUL)) ||
         (e.EItem->HasQuality(WQ_LAWFUL) && isMType(MA_CHAOTIC)) ||
-        (e.EItem->HasQuality(WQ_BALANCE) && !isMType(MA_NEUTRAL)))
-      {
+        (e.EItem->HasQuality(WQ_BALANCE) && !isMType(MA_NEUTRAL))) {
         IPrint("Wielding the <Obj> makes you feel uneasy.",e.EItem);
-      }
-		
-		if (HasFeat(FT_SOULBLADE) && e.EItem->activeSlot(e.EParam))
-		  wieldSoulblade(e.EItem);		  
-		
-		if (e.EItem->eID && e.EItem->activeSlot(e.EParam)) {
-      e.eID = e.EItem->eID;
-      e.isWield = true;  
-      if (TEFF(e.EItem->eID)->HasFlag(EF_CURSED)) {
-        if (e.EItem->isKnown(KN_MAGIC|KN_BLESS)) 
-          e.EActor->IPrint("The <EITem> curses itself!");
-        e.EItem->IFlags &= ~(IF_BLESSED);
-        e.EItem->IFlags |= (IF_CURSED);
-        } 
-      ReThrow(EV_EFFECT,e);
-      ASSERT(e.EActor); 
-      }
-		
-    if (e.EParam == SL_LIGHT && isPlayer())
-      thisp->UpdateMap = true;
-    return DONE;
-  }
+    }
 
-EvReturn Character::TakeOff(EventInfo &e)
-  {
-    int16 i;
-    for (i=0;i!=SL_LAST;i++)
-      if (Inv[i] == e.EItem->myHandle)
-        if (!TMON(mID)->HasSlot(i))
-          { 
-            IPrint("You can't access that inventory slot in your current form.");
-            return ABORT;
+    if (HasFeat(FT_SOULBLADE) && e.EItem->activeSlot(e.EParam))
+        wieldSoulblade(e.EItem);		  
+
+    if (e.EItem->eID && e.EItem->activeSlot(e.EParam)) {
+        e.eID = e.EItem->eID;
+        e.isWield = true;  
+        if (TEFF(e.EItem->eID)->HasFlag(EF_CURSED)) {
+            if (e.EItem->isKnown(KN_MAGIC|KN_BLESS)) 
+                e.EActor->IPrint("The <EITem> curses itself!");
+            e.EItem->IFlags &= ~(IF_BLESSED);
+            e.EItem->IFlags |= (IF_CURSED);
+        } 
+        ReThrow(EV_EFFECT,e);
+        ASSERT(e.EActor); 
+    }
+
+    if (e.EParam == SL_LIGHT && isPlayer())
+        thisp->UpdateMap = true;
+    return DONE;
+}
+
+  EvReturn Character::TakeOff(EventInfo &e) {
+      int16 i;
+      for (i=0;i!=SL_LAST;i++)
+          if (Inv[i] == e.EItem->myHandle)
+              if (!TMON(mID)->HasSlot(i)) { 
+                  IPrint("You can't access that inventory slot in your current form.");
+                  return ABORT;
+              }
+
+      if (e.EParam == SL_ARMOR && m && isThreatened()) {
+          IPrint("You cannot take off armor while threatened by hostile creatures.");
+          return ABORT;
+      }
+      if (e.EParam == SL_ARMOR && m && (HasStati(STUCK) || HasStati(PRONE))) {
+          IPrint("You cannot remove armor while stuck or prone.");
+          return ABORT;
+      }
+
+      if (isPlayer() && e.EParam == SL_WEAPON)
+          if (thisp->DigMode) {
+              IPrint("You stop digging.");
+              thisp->DigMode = false;
           }
 
-    if (e.EParam == SL_ARMOR && m && isThreatened())
-      {
-        IPrint("You cannot take off armor while threatened by hostile creatures.");
-        return ABORT;
+      Timeout += QD(2000) / (100 + 10 * Mod(A_DEX));
+      if (e.EItem->IFlags & IF_CURSED) {
+          for(i=0;i!=SL_LAST;i++)
+              if (Inv[i] == e.EItem->myHandle)
+                  if (e.EItem->activeSlot(i)) {
+                      if (i == SL_WEAPON || i == SL_READY)
+                          IPrint("Try as you might, you can't seem to "
+                          "let go of your <Obj>.", e.EItem);
+                      else
+                          IPrint("Try as you might, you can't seem to "
+                          "get the <Obj> off.", e.EItem);
+                      e.EItem->MakeKnown(KN_CURSE);
+                      return ABORT;
+                  }
       }
-    if (e.EParam == SL_ARMOR && m && (HasStati(STUCK) || HasStati(PRONE)))
-      {
-        IPrint("You cannot remove armor while stuck or prone.");
-        return ABORT;
-      }
-    
-    if (isPlayer() && e.EParam == SL_WEAPON)
-      if (thisp->DigMode)
-        {
-          IPrint("You stop digging.");
-          thisp->DigMode = false;
-        }
 
-    Timeout += QD(2000) / (100 + 10 * Mod(A_DEX));
-    if (e.EItem->IFlags & IF_CURSED) {
       for(i=0;i!=SL_LAST;i++)
-        if (Inv[i] == e.EItem->myHandle)
-          if (e.EItem->activeSlot(i)) {
-            if (i == SL_WEAPON || i == SL_READY)
-              IPrint("Try as you might, you can't seem to "
-                "let go of your <Obj>.", e.EItem);
-            else
-              IPrint("Try as you might, you can't seem to "
-                "get the <Obj> off.", e.EItem);
-            e.EItem->MakeKnown(KN_CURSE);
-            return ABORT;
-            }
-      }
-                
-    for(i=0;i!=SL_LAST;i++)
-      if (Inv[i] == e.EItem->myHandle)
-        Inv[i] = 0;
-    e.EItem->IFlags &= ~IF_WORN;
-    e.EItem->RemoveEffStati(FIND("soulblade"));
-    if (e.EItem->isType(T_ARMOR) || e.EItem->isType(T_SHIELD))
-      if (e.EItem->HasQuality(AQ_ETHEREALNESS))
-		    RemoveStati(PHASED);
-    if (e.EItem->isType(T_LIGHT) && isPlayer())
-      thisp->UpdateMap = true;
-    return DONE;
+          if (Inv[i] == e.EItem->myHandle)
+              Inv[i] = 0;
+      e.EItem->IFlags &= ~IF_WORN;
+      e.EItem->RemoveEffStati(FIND("soulblade"));
+      if (e.EItem->isType(T_ARMOR) || e.EItem->isType(T_SHIELD))
+          if (e.EItem->HasQuality(AQ_ETHEREALNESS))
+              RemoveStati(PHASED);
+      if (e.EItem->isType(T_LIGHT) && isPlayer())
+          thisp->UpdateMap = true;
+      return DONE;
   }
 
-EvReturn Character::PickUp(EventInfo &e)
-  {
-		uint8 i;
-    if (HasMFlag(M_NOHANDS))
-      {
+EvReturn Character::PickUp(EventInfo &e) {
+    uint8 i;
+    if (HasMFlag(M_NOHANDS)) {
         IPrint("But you have no hands!");
         return ABORT;
-      }
+    }
 
-    if (HasStati(GRAPPLED) || HasStati(GRABBED) || HasStati(GRAPPLING) || HasStati(STUCK))
-    {
-      IPrint("You can't pick something up while grappling or stuck.");
-      return ABORT;
+    if (HasStati(GRAPPLED) || HasStati(GRABBED) || HasStati(GRAPPLING) || HasStati(STUCK)) {
+        IPrint("You can't pick something up while grappling or stuck.");
+        return ABORT;
     }
     if (HasStati(CHARGING) && !HasFeat(FT_SPIRITED_CHARGE)) {
-      if (HasStati(AUTO_CHARGE)) {
-        RemoveStati(CHARGING);
-      } else {
-        IPrint("You can't pick something up while charging unless you have the Spirited Charge feat.");
-        return ABORT;
-      } 
+        if (HasStati(AUTO_CHARGE)) {
+            RemoveStati(CHARGING);
+        } else {
+            IPrint("You can't pick something up while charging unless you have the Spirited Charge feat.");
+            return ABORT;
+        } 
     } 
 
-    if (e.EItem->isIllusion() && !e.EItem->isShade())
-      {
+    if (e.EItem->isIllusion() && !e.EItem->isShade()) {
         Thing *t; int16 i;
-        if (!e.EItem->isRealTo(e.EActor))
-          {
+        if (!e.EItem->isRealTo(e.EActor)) {
             IPrint("You can't pick up an illusionary item.");
             return ABORT;
-          }
+        }
         IDPrint("As you reach to pick up the <Obj>, your hand passes "
-                "through it, and it winks out of existence!",
-                "As the <Obj2> reaches to pick up the <Obj>, <his:Obj2> hand passes "
-                "through it, and it winks out of existence!", e.EItem, this);
-        
+            "through it, and it winks out of existence!",
+            "As the <Obj2> reaches to pick up the <Obj>, <his:Obj2> hand passes "
+            "through it, and it winks out of existence!", e.EItem, this);
+
         /* This warrants a disbelief check! */
         MapIterate(m,t,i)
-          if (t->isCreature() && ((Creature*)t)->Percieves(e.EItem))
-            e.EItem->DisbeliefCheck((Creature*)t);
+            if (t->isCreature() && ((Creature*)t)->Percieves(e.EItem))
+                e.EItem->DisbeliefCheck((Creature*)t);
         e.EItem->Remove(true);
         if (!HasFeat(FT_FASTER_THAN_THE_EYE)) {
-          e.EActor->ProvokeAoO(); // WW: SRD Combat I
-          if (e.EActor->isDead()) 
-            return DONE;
-          } 
+            e.EActor->ProvokeAoO(); // WW: SRD Combat I
+            if (e.EActor->isDead()) 
+                return DONE;
+        } 
         Timeout += FE(1000) / (100 + 10 * Mod(A_DEX));
         return DONE;
-      }
-
-    if (e.EItem->Weight() > MaxPress())
-      {
-        IPrint(Format("%s weighs %d and you cannot lift more than %d.",
-              (const char*)e.EItem->Name(NA_THE),
-              e.EItem->Weight() / 10, 
-              MaxPress() / 10));
-        return ABORT;
-      }
-  if((isMType(MA_DEMON) || isMType(MA_LYCANTHROPE) ||
-        isMType(MA_DEVIL) || isMType(MA_UNDEAD))) {
-    if (e.EItem->Material() == MAT_SILVER) {
-      IPrint("You are too fiendish to pick up silver items."); 
-      return ABORT; 
-    } else if (e.EItem->isBlessed()) {
-      e.EItem->MakeKnown(KN_BLESS);
-      IPrint("You are too unholy to pick up blessed items."); 
-      return ABORT; 
-    } 
-  }
-  if(onPlane() != e.EItem->onPlane()) {
-    TextVal PhaseDesc2[] = {
-      { PHASE_MATERIAL, "material" },
-      { PHASE_ETHERIAL, "ethereal" },
-      { PHASE_ASTRAL,   "astral" },
-      { PHASE_SHADOW,   "in the Demiplane of Shadows" },
-      { PHASE_NEGATIVE, "in the Negative Material Plane" },
-      { 0, NULL } };      
-      
-    if (!e.EItem->isGhostTouch() && !e.EActor->HasStati(MANIFEST)) {
-      IPrint("You are <str> and thus the <Obj> <Str> intangible to you.",
-            Lookup(PhaseDesc2,onPlane()),e.EItem,
-            e.EItem->isPlural() ? "are" : "is"); 
-      return ABORT; 
-    } 
-  } 
-
-  DPrint(e,NULL,"An <EActor> picks up an <EItem>."); 
-  e.EItem->MakeKnown(KN_HANDLED);
-  
-  if (!HasFeat(FT_FASTER_THAN_THE_EYE)) {
-    e.EActor->ProvokeAoO(); // WW: SRD Combat I
-    if (e.EActor->isDead()) return ABORT; 
     }
-  Timeout += FE(1500) / (100 + 10 * Mod(A_DEX));
-    
+
+    if (e.EItem->Weight() > MaxPress()) {
+        IPrint(Format("%s weighs %d and you cannot lift more than %d.",
+            (const char*)e.EItem->Name(NA_THE),
+            e.EItem->Weight() / 10, 
+            MaxPress() / 10));
+        return ABORT;
+    }
+    if((isMType(MA_DEMON) || isMType(MA_LYCANTHROPE) ||
+        isMType(MA_DEVIL) || isMType(MA_UNDEAD))) {
+            if (e.EItem->Material() == MAT_SILVER) {
+                IPrint("You are too fiendish to pick up silver items."); 
+                return ABORT; 
+            } else if (e.EItem->isBlessed()) {
+                e.EItem->MakeKnown(KN_BLESS);
+                IPrint("You are too unholy to pick up blessed items."); 
+                return ABORT; 
+            } 
+    }
+    if(onPlane() != e.EItem->onPlane()) {
+        TextVal PhaseDesc2[] = {
+            { PHASE_MATERIAL, "material" },
+            { PHASE_ETHERIAL, "ethereal" },
+            { PHASE_ASTRAL,   "astral" },
+            { PHASE_SHADOW,   "in the Demiplane of Shadows" },
+            { PHASE_NEGATIVE, "in the Negative Material Plane" },
+            { 0, NULL } };      
+
+            if (!e.EItem->isGhostTouch() && !e.EActor->HasStati(MANIFEST)) {
+                IPrint("You are <str> and thus the <Obj> <Str> intangible to you.",
+                    Lookup(PhaseDesc2,onPlane()),e.EItem,
+                    e.EItem->isPlural() ? "are" : "is"); 
+                return ABORT; 
+            } 
+    } 
+
+    DPrint(e,NULL,"An <EActor> picks up an <EItem>.");
+    e.EItem->MakeKnown(KN_HANDLED);
+
+    if (!HasFeat(FT_FASTER_THAN_THE_EYE)) {
+        e.EActor->ProvokeAoO(); // WW: SRD Combat I
+        if (e.EActor->isDead()) return ABORT; 
+    }
+    Timeout += FE(1500) / (100 + 10 * Mod(A_DEX));
 
     e.EItem->Remove(false);
     e.EItem->SetOwner(e.EActor->myHandle);
     LegendIdent(e.EItem); 
     /* ww: do this before stacking, otherwise if you have a healing potion and
-     * you have wiz-ident you pick up an unidentified one */
+    * you have wiz-ident you pick up an unidentified one */
     for(i=0;i!=SL_LAST;i++)
-      if (InSlot(i) && !e.EItem->activeSlot(i))
-        if (InSlot(i)->TryStack(e.EItem))
-          { e.EItem = NULL; return DONE; }
+        if (InSlot(i) && !e.EItem->activeSlot(i))
+            if (InSlot(i)->TryStack(e.EItem)) {
+                e.EItem = NULL;
+                return DONE;
+            }
     if (this->isPlayer()) {
-      int ap = thisp->Opt(OPT_AUTOPICKUP);
-      Container *pack; 
-      if (ap == 2 && Inv[SL_PACK] && 
-          oItem(Inv[SL_PACK])->Type == T_CONTAIN &&
-          (InSlot(SL_PACK) || AbilityLevel(CA_WILD_SHAPE))) { 
-        // also check pack
-        pack = (Container*)oItem(Inv[SL_PACK]);
-        if (pack)
-         for (int j=0; (*pack)[j] != NULL; j++) {
-           if (*((*pack)[j]) == *e.EItem) {
-             IPrint("AutoStowing: <Obj>.",e.EItem);
-             if (Throw(EV_INSERT,this,NULL,pack,e.EItem)==DONE)
-               return DONE;
-           }
-         } 
-      } 
+        int ap = thisp->Opt(OPT_AUTOPICKUP);
+        Container *pack; 
+        if (ap == 2 && Inv[SL_PACK] && 
+            oItem(Inv[SL_PACK])->Type == T_CONTAIN &&
+            (InSlot(SL_PACK) || AbilityLevel(CA_WILD_SHAPE))) { 
+                // also check pack
+                pack = (Container*)oItem(Inv[SL_PACK]);
+                if (pack)
+                    for (int j=0; (*pack)[j] != NULL; j++) {
+                        if (*((*pack)[j]) == *e.EItem) {
+                            IPrint("AutoStowing: <Obj>.",e.EItem);
+                            if (Throw(EV_INSERT,this,NULL,pack,e.EItem)==DONE)
+                                return DONE;
+                        }
+                    } 
+        } 
     }
-          
+
     e.EItem->RemoveStati(DROPPED,SS_MISC,-1,-1,e.EActor);
     Inv[SL_INAIR] = e.EItem->myHandle;
     e.EItem->SetOwner(e.EActor->myHandle);
     if (isPlayer() && !HasEffStati(ACTING,FIND("AutoLoot")))
-      thisp->MyTerm->InventoryManager(true);
+        thisp->MyTerm->InventoryManager(true);
     else if (!isPlayer())
-      Error("NPC Inventory?!");
-		return DONE;
-	}
+        Error("NPC Inventory?!");
+    return DONE;
+}
 
 EvReturn Character::Drop(EventInfo &e)
   {
@@ -668,149 +647,135 @@ void Character::DropAll()
         }
   }
 
-bool Character::Swap(int8 s)
-	{
-  	Item *i, *i2; bool split = false;
+bool Character::Swap(int8 s) {
+    Item *i, *i2; bool split = false;
     ASSERT(s != SL_INAIR);
     i = i2 = NULL;
     static TextVal BadSlotMsg[] = {
-      { SL_READY, "That's too big for you to grip properly." },
-      { SL_WEAPON, "That's too big for you to grip properly." },
-      { SL_LSHOULDER, "That won't sit well on your shoulder." },
-      { SL_RSHOULDER, "That won't sit well on your shoulder." },
-      { SL_BELT, "Only girdles and belts can go there." },
-      { SL_LIGHT, "Only a light source can go there." },
-      { SL_EYES, "Only eyes, monocles and masks can go there." },
-      { SL_CLOTHES, "Only robes and outfits can go in that slot." },
-      { SL_ARMOR, "Only body armor can go there." },
-      { SL_BOOTS, "Only footwear can go there." },
-      { SL_CLOAK, "Only cloaks can go in that slot.",  },
-      { SL_CLOTHES, "Only clothing can go there." },
-      { SL_LRING, "Only rings can be worn on your left finger." },
-      { SL_RRING, "Only rings can be work on yout right finger." },
-      { SL_AMULET, "Only amulets, necklaces, periapts and brooches can go in that slot." },
-      { SL_GAUNTLETS, "Only gauntlets or gloves can be worn on your hands." },
-      { SL_HELM, "Only caps, helms, circlets, tiaras, headbands and helmets go there." },
-      { SL_BRACERS, "Only bracers can go in that slot." },
-      { SL_BELT1, "That's too large to fit well on your belt." },
-      { SL_BELT2, "That's too large to fit well on your belt." },
-      { SL_BELT3, "That's too large to fit well on your belt." },
-      { SL_BELT4, "That's too large to fit well on your belt." },
-      { SL_BELT5, "That's too large to fit well on your belt." },
-      { SL_PACK, "Only a backpack or bag can serve as your pack." },
-      { 0, NULL } };
-    /* Assumption: everything can go in the 'inair' slot, and everything
-       can be taken out of the 'inair' slot without problems. Further,
-       items have no special behaviour when placed in/taken out of this
-       slot. This makes sense, really. */
-    
-    
-    
-    if (!TMON(mID)->HasSlot(s))
-      {
+        { SL_READY, "That's too big for you to grip properly." },
+        { SL_WEAPON, "That's too big for you to grip properly." },
+        { SL_LSHOULDER, "That won't sit well on your shoulder." },
+        { SL_RSHOULDER, "That won't sit well on your shoulder." },
+        { SL_BELT, "Only girdles and belts can go there." },
+        { SL_LIGHT, "Only a light source can go there." },
+        { SL_EYES, "Only eyes, monocles and masks can go there." },
+        { SL_CLOTHES, "Only robes and outfits can go in that slot." },
+        { SL_ARMOR, "Only body armor can go there." },
+        { SL_BOOTS, "Only footwear can go there." },
+        { SL_CLOAK, "Only cloaks can go in that slot.",  },
+        { SL_CLOTHES, "Only clothing can go there." },
+        { SL_LRING, "Only rings can be worn on your left finger." },
+        { SL_RRING, "Only rings can be work on yout right finger." },
+        { SL_AMULET, "Only amulets, necklaces, periapts and brooches can go in that slot." },
+        { SL_GAUNTLETS, "Only gauntlets or gloves can be worn on your hands." },
+        { SL_HELM, "Only caps, helms, circlets, tiaras, headbands and helmets go there." },
+        { SL_BRACERS, "Only bracers can go in that slot." },
+        { SL_BELT1, "That's too large to fit well on your belt." },
+        { SL_BELT2, "That's too large to fit well on your belt." },
+        { SL_BELT3, "That's too large to fit well on your belt." },
+        { SL_BELT4, "That's too large to fit well on your belt." },
+        { SL_BELT5, "That's too large to fit well on your belt." },
+        { SL_PACK, "Only a backpack or bag can serve as your pack." },
+        { 0, NULL } };
+        /* Assumption: everything can go in the 'inair' slot, and everything
+        can be taken out of the 'inair' slot without problems. Further,
+        items have no special behaviour when placed in/taken out of this
+        slot. This makes sense, really. */
+
+    if (!TMON(mID)->HasSlot(s)) {
         IPrint("You can't use that inventory slot in your current form.");
         return false;
-      }
-      
+    }
+
     if (s == SL_ARMOR || s == SL_CLOAK || s == SL_CLOTHES)
-      if (HasStati(RAGING))
-        {
-          IPrint("You can't do that while raging.");
-          return false;
+        if (HasStati(RAGING)) {
+            IPrint("You can't do that while raging.");
+            return false;
         }
 
     if (Inv[SL_INAIR]) {
-      i2 = oItem(Inv[SL_INAIR]);
-      if (!i2->allowedSlot(s,this))
-        {
-          IPrint(Lookup(BadSlotMsg,s));
-          return false;
+        i2 = oItem(Inv[SL_INAIR]);
+        if (!i2->allowedSlot(s,this)) {
+            IPrint(Lookup(BadSlotMsg,s));
+            return false;
         }
-      }
+    }
 
     if (i2 && i2->GetQuantity() > 1)
-      if (i2->activeSlot(s) && !i2->isGroup(WG_THROWN)) {
-        if (Inv[s])
-          {
-            IPrint("You need to put the <Obj> somewhere else first.", oThing(Inv[s]));
-            return false;
-          }
-        split = true;
-        i2 = i2->TakeOne();
-        }
-
-            
-        
-
-    if(Inv[s])
-     	{
-      	i=oItem(Inv[s]);
-        if (i2 && !i2->activeSlot(s))
-          if (i->TryStack(i2))
-            { Inv[SL_INAIR] = 0; return true; }
-        if(i->activeSlot(s)) {
-          if(ThrowVal(EV_REMOVE,s,this,NULL,i,NULL)==ABORT)
-        	  return false;
-          if (Inv[s])
-            return false;
-          }
-        else
-          Inv[s] = 0;
-      }
-
-    if(Inv[SL_INAIR] && !i2->isDead()) 
-      if(ThrowVal(EV_WIELD,s,this,NULL,i2,NULL)==ABORT)
-       	{
-          if (split) {
-            /* Add i2 back to the stack in SL_INAIR */
-            oItem(Inv[SL_INAIR])->Quantity++;
-            i2->Remove(true);
-            return false;
+        if (i2->activeSlot(s) && !i2->isGroup(WG_THROWN)) {
+            if (Inv[s]) {
+                IPrint("You need to put the <Obj> somewhere else first.", oThing(Inv[s]));
+                return false;
             }
-          /* Assumption: anything that can be removed from a slot
-             can be placed back into it as well. */
-          if (!i || ThrowVal(EV_WIELD,s,this,NULL,i) != ABORT)
-            Inv[s] = i ? i->myHandle : 0;
-          Inv[SL_INAIR] = i2 ? i2->myHandle: 0;
-         	
-          return false;
+            split = true;
+            i2 = i2->TakeOne();
         }
 
-    if (i && thisp->MyTerm->AltDown() && i->GetQuantity() > 1 && !Inv[SL_INAIR])
-      {
+    if (Inv[s]) {
+        i = oItem(Inv[s]);
+        if (i2 && !i2->activeSlot(s))
+            if (i->TryStack(i2)) {
+                Inv[SL_INAIR] = 0;
+                return true;
+            }
+        if (i->activeSlot(s)) {
+            if (ThrowVal(EV_REMOVE,s,this,NULL,i,NULL)==ABORT)
+                return false;
+            if (Inv[s])
+                return false;
+        } else
+            Inv[s] = 0;
+    }
+
+    if (Inv[SL_INAIR] && !i2->isDead()) 
+        if (ThrowVal(EV_WIELD,s,this,NULL,i2,NULL)==ABORT) {
+            if (split) {
+                /* Add i2 back to the stack in SL_INAIR */
+                oItem(Inv[SL_INAIR])->Quantity++;
+                i2->Remove(true);
+                return false;
+            }
+            /* Assumption: anything that can be removed from a slot
+            can be placed back into it as well. */
+            if (!i || ThrowVal(EV_WIELD,s,this,NULL,i) != ABORT)
+                Inv[s] = i ? i->myHandle : 0;
+            Inv[SL_INAIR] = i2 ? i2->myHandle: 0;
+
+            return false;
+        }
+
+    if (i && thisp->MyTerm->AltDown() && i->GetQuantity() > 1 && !Inv[SL_INAIR]) {
         Item *_i;
         _i = OneSomeAll(i,this);
         if (_i != i) {
-          Inv[SL_INAIR] = _i->myHandle;
-          _i->SetOwner(myHandle);
-          Inv[s]        = i->myHandle;
-          i->SetOwner(myHandle);
-          CalcValues();
-          return true;
-          }
+            Inv[SL_INAIR] = _i->myHandle;
+            _i->SetOwner(myHandle);
+            Inv[s]        = i->myHandle;
+            i->SetOwner(myHandle);
+            CalcValues();
+            return true;
+        }
         i = _i;
-      }
-    else if (i2 && thisp->MyTerm->AltDown() && i2->GetQuantity() > 1 && !Inv[s])
-      {
+    } else if (i2 && thisp->MyTerm->AltDown() && i2->GetQuantity() > 1 && !Inv[s]) {
         Item *_i2;
         _i2 = OneSomeAll(i2,this);
         if (_i2 != i2) {
-          Inv[s] = _i2->myHandle;
-          _i2->SetOwner(myHandle);
-          Inv[SL_INAIR]        = i2->myHandle;
-          i2->SetOwner(myHandle);
-          CalcValues();
-          return true;
-          }
+            Inv[s] = _i2->myHandle;
+            _i2->SetOwner(myHandle);
+            Inv[SL_INAIR]        = i2->myHandle;
+            i2->SetOwner(myHandle);
+            CalcValues();
+            return true;
+        }
         i2 = _i2;
-      }
-      
+    }
+
     if (!split)
-      Inv[SL_INAIR] = (i && !i->isDead()) ? i->myHandle : 0;
+        Inv[SL_INAIR] = (i && !i->isDead()) ? i->myHandle : 0;
     Inv[s]       = (i2 && !i2->isDead()) ? i2->myHandle : 0;
     CalcValues();
     return true;
-  }
+}
 
 // ww: return the best item of the given iID (or make one) ... used by Gods
 // in IRH files to make your best matching weapon a chosen weapon, etc. 

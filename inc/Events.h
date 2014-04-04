@@ -6,18 +6,17 @@
 
 
 
-union EvParam
-	{
-		Thing *t;
-		Item  *i;
-		Creature *c;
+union EvParam {
+    Thing *t;
+    Item *i;
+    Creature *c;
     Player *pl;
     Attack *at;
     Feature *f;
-		Map   *m;
-		Object*o;
+    Map   *m;
+    Object *o;
     Weapon *wp;
-	};
+};
 
 #define EMatch(th,typ)\
 	((th->Type==typ) || (typ==T_ITEM && th->isItem()) || \
@@ -129,8 +128,7 @@ union EvParam
     ReThrow(ev, xe);             \
   }
 
-struct EventInfo
-	{
+struct EventInfo {
     /* We do some ugly tricks here to make copying EventInfo
        structures quick. They depend on several things that
        might later change -- that String has no virtual members,
@@ -140,12 +138,11 @@ struct EventInfo
        these assumptions hold up... for now. It's important
        that this be noted, though, in case any of this ever
        changes. */
-    EventInfo& operator=(EventInfo &e)
-      { /* Memory image copy for the int/bool/ptr members */
+    EventInfo& operator=(EventInfo &e) { /* Memory image copy for the int/bool/ptr members */
         memcpy(this,&e,sizeof(EventInfo));
         /* Blank out the Strings using memset, as they contain
-           pointers to string buffers that properly belong to
-           the other EventInfo's Strings. */
+        pointers to string buffers that properly belong to
+        the other EventInfo's Strings. */
         memset(&GraveText,0,sizeof(String)*24);
         /* Copy the Strings properly */
         GraveText = e.GraveText;
@@ -156,7 +153,7 @@ struct EventInfo
         strOpp1   = e.strOpp1;
         strOpp2   = e.strOpp2;
         strBlastDmg = e.strBlastDmg;
-        
+
         nPrefix    = e.nPrefix;
         nCursed    = e.nCursed;
         nPrequal   = e.nPrequal;
@@ -173,11 +170,10 @@ struct EventInfo
         nPlus      = e.nPlus;
         enDump     = e.enDump;
         Text       = e.Text;
-    // ww: what about nPrefix, etc.? 
+        // ww: what about nPrefix, etc.? 
         return e;
-      }
-    void inline Clear()
-      {
+    }
+    void inline Clear() {
         GraveText = NULL; strDmg  = NULL;
         strXDmg   = NULL; strHit  = NULL;
         strDef    = NULL; strOpp1 = NULL;
@@ -192,132 +188,132 @@ struct EventInfo
         nArticle  = NULL; nPlus = NULL;
         Text      = NULL; enDump = NULL;
         /* Now that no Strings have non-NULL pointers
-           within them to leave behind dangling strdup
-           blocks, we can safely use memset. */
+        within them to leave behind dangling strdup
+        blocks, we can safely use memset. */
         memset(this,0,sizeof(EventInfo));
-      }
-    void SetParam(int16 n,Thing *t)
-      { p[n].t = t; }
-		uint16 Event;
-		EvParam p[5];
+    }
+    void SetParam(int16 n,Thing *t) { p[n].t = t; }
+
+    uint16 Event;
+    EvParam p[5];
     Field *EField;
     Map   *EMap;
-		#define EActor p[0].c
-    #define EPActor p[0].pl
-		#define EItem p[2].i
-    #define EWeapon p[2].wp
-		#define ETarget p[1].t
-		#define EVictim p[1].c
-    #define EPVictim p[1].pl
-		#define EItem1 p[2].i
-		#define EItem2 p[3].i
-    #define EFeat p[1].f
-    #define EMisc  p[3]
-    #define EDir   z
-    #define EXVal  x
-    #define EYVal  y
-    #define EString s
-    #define ESpellNum sp
-		int16  x,y,z,sp;
-		int16  EvFlags; int32 EParam, EParam2;
-		Item *remainingAmmo;
+#define EActor      p[0].c
+#define EPActor     p[0].pl
+#define EItem       p[2].i
+#define EWeapon     p[2].wp
+#define ETarget     p[1].t
+#define EVictim     p[1].c
+#define EPVictim    p[1].pl
+#define EItem1      p[2].i
+#define EItem2      p[3].i
+#define EFeat       p[1].f
+#define EMisc       p[3]
+#define EDir        z
+#define EXVal       x
+#define EYVal       y
+#define EString     s
+#define ESpellNum   sp
+    int16  x,y,z,sp;
+    int16  EvFlags; int32 EParam, EParam2;
+    Item *remainingAmmo;
     int8 vRoll, vtRoll, AType, DType, vHit, vDef, vThreat, vCrit, vArm, vPen,
-          efNum, saveDC, vRange, vRadius, vCasterLev, vOpp1, vOpp2, vRideCheck,
-          vChainCount, vChainMax, vPenetrateBonus, vAlchemy, modStr,
-          Transmute;
+        efNum, saveDC, vRange, vRadius, vCasterLev, vOpp1, vOpp2, vRideCheck,
+        vChainCount, vChainMax, vPenetrateBonus, vAlchemy, modStr,
+        Transmute;
     int16 vDmg, bDmg, aDmg, xDmg, vMult, vDuration; Dice Dmg; uint32 MM;
     int16 vDepth, vLevel, vAlign, vDefRoll;
     int16 terraKey, terrainListIndex;
     uint16 illFlags; char illType; int16 godNum;
     rID eID, ill_eID;
     bool  isHit, isCrit, isFumble, Died, ADied, Blocked, Saved, Immune, MagicRes,
-      Resist, Absorb, wasFriendly, actUnseen, vicUnseen, vicCharging, Whirlwind, Graze,
-      Stun, actIncor, vicIncor, Ranged, vicHeld, isDir, isWImmune, isTelekinetic,
-      isLoc, isActivation, isSomething, isWield, isRemove, isEnter, effDisbelieved, 
-      isLeave, isPeriodic, isProper, actIllusion, vicIllusion, effIllusion, 
-      isAoO, isCleave, isSurprise, isFirstBlastXY, isRepeatSpell, isStaffSpell,
-      isBlessed, isCursed, isConf, isHallu, isItem, isTrap, isSpell, isNAttack,
-      isGreatBlow, isMoveAoO, isWildMiss, isBypass, isFlatFoot, isFlanking, isDefRoll,
-      isGhostTouch, isSneakAttack, isSeeking, isOffhand, doVUpdate, notFullyImmune, 
-      MHMessageDone, BlastMessageDone, isEvaded, isPartiallyEvaded, isArcaneTrickery,
-      isActOfGod, ignoreHardness, halfHardness, isVerb, subStr, isPrecision,
-      isSharedSpell, isCounterTrip, isAllAllies,
-      vicReady,
-      vicNotFleeing;
+        Resist, Absorb, wasFriendly, actUnseen, vicUnseen, vicCharging, Whirlwind, Graze,
+        Stun, actIncor, vicIncor, Ranged, vicHeld, isDir, isWImmune, isTelekinetic,
+        isLoc, isActivation, isSomething, isWield, isRemove, isEnter, effDisbelieved, 
+        isLeave, isPeriodic, isProper, actIllusion, vicIllusion, effIllusion, 
+        isAoO, isCleave, isSurprise, isFirstBlastXY, isRepeatSpell, isStaffSpell,
+        isBlessed, isCursed, isConf, isHallu, isItem, isTrap, isSpell, isNAttack,
+        isGreatBlow, isMoveAoO, isWildMiss, isBypass, isFlatFoot, isFlanking, isDefRoll,
+        isGhostTouch, isSneakAttack, isSeeking, isOffhand, doVUpdate, notFullyImmune, 
+        MHMessageDone, BlastMessageDone, isEvaded, isPartiallyEvaded, isArcaneTrickery,
+        isActOfGod, ignoreHardness, halfHardness, isVerb, subStr, isPrecision,
+        isSharedSpell, isCounterTrip, isAllAllies,
+        vicReady,
+        vicNotFleeing;
     bool Silence,  /* Don't print *anything*! */
-         Terse;    /* Don't print anything other than the
-                       unexpected/ancilliary elements. */
-  	EffectValues *EMagic; hObj vObj; int32 vMag, vVal;
+        Terse;    /* Don't print anything other than the
+                  unexpected/ancilliary elements. */
+    EffectValues *EMagic; hObj vObj; int32 vMag, vVal;
     String GraveText, strDmg, strXDmg, strHit, strDef, strOpp1, strOpp2, strBlastDmg;    
 
     /* In the future, these will offer support for custom construction
-       of item or monster names in events. Perhaps these should be
-       #defined to be synonyms of the above? */
+    of item or monster names in events. Perhaps these should be
+    #defined to be synonyms of the above? */
     String nPrefix, nCursed, nPrequal, nPostqual, nNamed, nBase, 
-           nAppend, nOf, nAdjective, nFlavor, nInscrip, nMech,
-           nArticle, nPlus, Text, enDump;
-      
+        nAppend, nOf, nAdjective, nFlavor, nInscrip, nMech,
+        nArticle, nPlus, Text, enDump;
+
     Rect cPanel, cMap, cRoom;
 
     /* Encounter Gen stuff */
     uint32 enTerrain;
     int16 cPart, 
-          cMember,
-          enAlign,
-          enCR,
-          enDepth,
-          enFreaky,
-          enPurpose,
-          enSleep,
-          enDesAmt,
-          enType,
-          enPartyID,
-          enDriftGE,
-          enDriftLC,
-          epMinAmt, 
-          epMaxAmt,
-          epAmt,
-          epFreaky, 
-          epWeight,
-          epMType,
-          ep_monCR,
-          ep_mountCR,
-          epSkillRoll,
-          epClassRoll,
-          epCurrXCR,
-          epTries,
-          enTries;
+        cMember,
+        enAlign,
+        enCR,
+        enDepth,
+        enFreaky,
+        enPurpose,
+        enSleep,
+        enDesAmt,
+        enType,
+        enPartyID,
+        enDriftGE,
+        enDriftLC,
+        epMinAmt, 
+        epMaxAmt,
+        epAmt,
+        epFreaky, 
+        epWeight,
+        epMType,
+        ep_monCR,
+        ep_mountCR,
+        epSkillRoll,
+        epClassRoll,
+        epCurrXCR,
+        epTries,
+        enTries;
     rID   enID,
-          enRegID,
-          ep_mID,
-          ep_tID,
-          ep_tID2,
-          ep_tID3,
-          ep_hmID,
-          ep_htID,
-          ep_htID2,
-          ep_pID,
-          ep_iID;
+        enRegID,
+        ep_mID,
+        ep_tID,
+        ep_tID2,
+        ep_tID3,
+        ep_hmID,
+        ep_htID,
+        ep_htID2,
+        ep_pID,
+        ep_iID;
     int32 enXCR,  // Total XCR of the entire Encounter
-          epXCR,  // Total XCR of the current Part
-          eimXCR,  // Individual XCR of one monster in current Part
-          enConstraint;
+        epXCR,  // Total XCR of the current Part
+        eimXCR,  // Individual XCR of one monster in current Part
+        enConstraint;
     bool  enSkipPart[MAX_PARTS],
-          enIsFormation,
-          epFailed,
-          isGetMinCR,
-          isGetMaxCR,
-          isAquaticContext;
+        enIsFormation,
+        epFailed,
+        isGetMinCR,
+        isGetMaxCR,
+        isAquaticContext;
     uint32 enFlags;
     uint32 chType;
     uint16 chList;
     bool   chMaximize,
-           chBestOfTwo;
+        chBestOfTwo;
     rID    chResult,
-           chSource;
+        chSource;
     bool (*chCriteria)(EventInfo &e, rID tID);
 
-	};
+};
 
 
 

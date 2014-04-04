@@ -81,7 +81,7 @@
 #undef MIN
 #undef MAX
 
-#define TCOD_SKIP_ELEMENTARYTYPES
+#define TCOD_NOBASETYPES
 #include "libtcod.h"
 #undef ERROR
 #undef MIN
@@ -151,7 +151,7 @@ class libtcodTerm: public TextTerm
       int16 resX, resY, fontX, fontY, ocx, ocy;
       int32 lastBlink;
       int oldResX, oldResY;
-      bool resetFlag;
+      String debugText;
       /* File I/O Stuff */
       String CurrentDirectory;
       String CurrentFileName; 
@@ -191,6 +191,7 @@ class libtcodTerm: public TextTerm
       virtual void ShutDown();
       virtual void Reset();
       virtual bool hideOption(int16 opt) { return false; }
+      virtual void SetDebugText(const char *text);
       
       /* Scroll Buffer */
       virtual void SPutChar(int16 x, int16 y, Glyph g);
@@ -346,6 +347,9 @@ void GetIncursionDirectory(int argc, char *argv[], char *out) {
 int main(int argc, char *argv[]) {
     char executablePath[512];
     GetIncursionDirectory(argc, argv, executablePath);
+    /* Google Breakpad is only compiled into Release builds, which get distributed.
+     * Debug builds get the option to break out into the debugger, which makes it
+     * superfluous in that case. */
 #ifndef DEBUG
     std::wstring wsExecutablePath(strlen(executablePath), 0);
     mbstowcs(&wsExecutablePath[0],executablePath,strlen(executablePath));
@@ -400,18 +404,25 @@ TCOD_key_t readkey(int wait) {
 *                           Low-Level Read/Write                              *
 \*****************************************************************************/
 
-void libtcodTerm::Update() 
-  {
+void libtcodTerm::SetDebugText(const char *text) {
+    debugText = text;
+}
+
+void libtcodTerm::Update() {
+    static int update_count = 0;
+    update_count++;
     TCOD_console_blit(bScreen,0,0,0,0,NULL,0,0,1.0f,1.0f);
     TCOD_console_blit(bScreen,0,0,0,0,bCurrent,0,0,1.0f,1.0f);
-	TCOD_console_flush();
-    
+    if (debugText.GetLength())
+        TCOD_console_print(NULL,0,0,"%d: %s",update_count,(const char *)debugText);
+    TCOD_console_flush();
+
     updated = true;
-  }
+}
   
 void libtcodTerm::Redraw()
   {
-    TCOD_console_clear(bCurrent);
+    /* TCOD_console_clear(bCurrent);*/
     Update();
   }
   
@@ -551,26 +562,17 @@ void libtcodTerm::GotoXY(int16 x, int16 y)
     //SetConsoleCursorPosition(hStdOut, crd); 
   }
 
-void libtcodTerm::Clear() 
-  {
-      /*
-    for(cy=activeWin->Top;cy<activeWin->Bottom+1;cy++)
-      for(cx=activeWin->Left;cx<activeWin->Right+1;cx++)
-        { bScreen[cy*sizeX+cx] = 0;
-          bCurrent[cy*sizeX+cx] = 1; }
-    */
+void libtcodTerm::Clear() {
     TCOD_console_rect(bScreen,activeWin->Left,activeWin->Top,(activeWin->Right+1)-activeWin->Left,(activeWin->Bottom+1)-activeWin->Top,1,TCOD_BKGND_SET);
     cWrap = 0; cx = cy = 0;
     if (activeWin == &Windows[WIN_SCREEN] || activeWin == &Windows[WIN_MESSAGE])
-      linepos = linenum = 0;
+        linepos = linenum = 0;
     updated = false;
-    
-  }
+}
 
-void libtcodTerm::Color(int16 _attr) 
-  {
+void libtcodTerm::Color(int16 _attr) {
     attr = _attr;
-  }
+}
 
 void libtcodTerm::StopWatch(int16 milli)
   {    
@@ -651,22 +653,22 @@ void Error(const char*fmt,...)
     va_end(argptr);
 	}
 
-void libtcodTerm::Reset()
-  {
+void libtcodTerm::Reset() {
     int16 optRes, optFont, i;
     char fontName[256] = "";
     bool scaled_res, scaled_font;
     int res_w, res_h;
 
-    if (resetFlag) {
-        printf("TODO: Deny runtime resolution font changes.  Ignored for now\n");
-        return;
+    if (bScreen != NULL) {
+        TCOD_console_delete(bScreen);
+        TCOD_console_delete(bCurrent);
+        TCOD_console_delete(bSave);
+        TCOD_console_delete(NULL);
     }
-    resetFlag = true;
 
     scaled_res = false;
     scaled_font = false;
-    
+
     if (isWindowed) 
       { optRes  = theGame->Opt(OPT_WIND_RES);
         optFont = theGame->Opt(OPT_WIND_FONT); }
@@ -676,22 +678,20 @@ void libtcodTerm::Reset()
 
 	TCOD_sys_get_current_resolution(&res_w,&res_h);
 
-RetryRes:
-    
-    switch(optRes)
-      {
-        case 0:  resX = 640;  resY = 480;  break;
-        case 1:  resX = 800;  resY = 600;  break;
-        case 2:  resX = 1024; resY = 768;  break;
-        case 3:  resX = 1280; resY = 960; break;
-        case 4:  resX = 1280; resY = 1024; break;
-        case 5:  resX = 1400; resY = 1050; break;
-        case 6:  resX = 1600; resY = 1200; break;
-        case 7:  resX = 1280; resY = 768;  break;
-        case 8:  resX = 1280; resY = 800;  break;
-        case 9:  resX = 1920; resY = 1080; break;     
-        case 10: resX = 1920; resY = 1200; break;
-      }
+RetryRes:    
+    switch(optRes) {
+    case 0:  resX = 640;  resY = 480;  break;
+    case 1:  resX = 800;  resY = 600;  break;
+    case 2:  resX = 1024; resY = 768;  break;
+    case 3:  resX = 1280; resY = 960; break;
+    case 4:  resX = 1280; resY = 1024; break;
+    case 5:  resX = 1400; resY = 1050; break;
+    case 6:  resX = 1600; resY = 1200; break;
+    case 7:  resX = 1280; resY = 768;  break;
+    case 8:  resX = 1280; resY = 800;  break;
+    case 9:  resX = 1920; resY = 1080; break;     
+    case 10: resX = 1920; resY = 1200; break;
+    }
 
     while (resX > res_w || resY > res_h) {
         if (optRes)
@@ -701,24 +701,22 @@ RetryRes:
     }
 
 RetryFont:
-    
-    switch(optFont)
-      {
-        case 0: fontX = 8;  fontY = 8;  
-                break;
-        case 1: fontX = 12; fontY = 16; 
-                break;
-        case 2: fontX = 16; fontY = 12; 
-                break;
-        case 3: fontX = 16; fontY = 16; 
-                break;
-      }
+    switch(optFont) {
+    case 0: fontX = 8;  fontY = 8;  
+        break;
+    case 1: fontX = 12; fontY = 16; 
+        break;
+    case 2: fontX = 16; fontY = 12; 
+        break;
+    case 3: fontX = 16; fontY = 16; 
+        break;
+    }
     
     sizeX = resX / fontX;
     sizeY = resY / fontY;
    
     if (sizeX < 80 || sizeY < 48)
-      { optFont = 0; scaled_font = true; goto RetryFont; }
+        { optFont = 0; scaled_font = true; goto RetryFont; }
     
  	sprintf(fontName, "fonts/%dx%d.png", fontX, fontY);
 	TCOD_console_set_custom_font(fontName, TCOD_FONT_LAYOUT_ASCII_INROW, 16, 16);
@@ -727,24 +725,24 @@ RetryFont:
     InitWindows();
 
     if (theGame->Opt(OPT_SOFT_PALETTE))
-      for (i=0;i!=MAX_COLORS;i++)
-        Colors[i] = RGBSofter[i];
+        for (i=0;i!=MAX_COLORS;i++)
+            Colors[i] = RGBSofter[i];
     else
-      for (i=0;i!=MAX_COLORS;i++)
-        Colors[i] = RGBValues[i];
+        for (i=0;i!=MAX_COLORS;i++)
+            Colors[i] = RGBValues[i];
 
-
-    if (bScreen == NULL) {
-        bScreen  = TCOD_console_new(sizeX, sizeY);
-        TCOD_console_set_default_background(bScreen, TCOD_black);
-        TCOD_console_set_default_foreground(bScreen, TCOD_white);
-        bCurrent = TCOD_console_new(sizeX, sizeY);
-        TCOD_console_set_default_background(bCurrent, TCOD_black);
-        TCOD_console_set_default_foreground(bCurrent, TCOD_white);
-        bSave    = TCOD_console_new(sizeX, sizeY);
-        TCOD_console_set_default_background(bSave, TCOD_black);
-        TCOD_console_set_default_foreground(bSave, TCOD_white);
-    }
+    bScreen = TCOD_console_new(sizeX, sizeY);
+    TCOD_console_set_default_background(bScreen, TCOD_black);
+    TCOD_console_set_default_foreground(bScreen, TCOD_white);
+    TCOD_console_clear(bScreen);
+    bCurrent = TCOD_console_new(sizeX, sizeY);
+    TCOD_console_set_default_background(bCurrent, TCOD_black);
+    TCOD_console_set_default_foreground(bCurrent, TCOD_white);
+    TCOD_console_clear(bCurrent);
+    bSave = TCOD_console_new(sizeX, sizeY);
+    TCOD_console_set_default_background(bSave, TCOD_black);
+    TCOD_console_set_default_foreground(bSave, TCOD_white);
+    TCOD_console_clear(bSave);
 
     if (bScroll == NULL) {
         bScroll  = TCOD_console_new(SCROLL_WIDTH, MAX_SCROLL_LINES);
@@ -752,54 +750,45 @@ RetryFont:
         TCOD_console_clear(bScroll);
     }
 
-    TCOD_console_clear(bCurrent);
-    TCOD_console_clear(bScreen);
-    TCOD_console_clear(bSave);
-
-    if (Mode == MO_PLAY)
-      { 
+    if (Mode == MO_PLAY) { 
         ShowStatus();
         ShowTraits();
         ShowMap();
-      }
-    else if (Mode == MO_INV)
-      {
+    } else if (Mode == MO_INV) {
         ShowStatus();
         ShowTraits();
         InvShowSlots();
-      }
+    }
 
     Update();
     ocx = ocy = 0;
     if (scaled_res) {
-      Box(WIN_SCREEN,0,PINK,GREY,
-        "The screen resolution or window size you have selected in the "
-        "Option Manager could not be set on your current hardware. As a "
-        "result, the highest available resolution supported by Incursion "
-        "was used instead. This may have also caused the font size to "
-        "default back to 8x8, if whatever font size you have selected "
-        "was too large to fit 80x48 characters into the available resolution."
-        "\n__To change the full-screen resolution, window size and font "
-        "size, select 'Change System Options' from the startup menu, "
-        "navigate to the Output Options option group and set the options "
-        "at the bottom of the screen accordingly.");
-      }
-    else if (scaled_font) {
-      Box(WIN_SCREEN,0,PINK,GREY,
-        "The screen resolution or window size you have selected in the "
-        "Option Manager is too small to display a full 80x48 text grid "
-        "(at least 80 columns and 48 rows of characters) with the font "
-        "size you have selected. As a result, the font has been defaulted "
-        "back to 8x8. If you find the display difficult to read as a "
-        "result, you must choose a combination of resolution and font "
-        "size that allows at least 80x48 characters."
-        "\n__To change the full-screen resolution, window size and font "
-        "size, select 'Change System Options' from the startup menu, "
-        "navigate to the Output Options option group and set the options "
-        "at the bottom of the screen accordingly.");
-      }      
- 
-  }    
+        Box(WIN_SCREEN,0,PINK,GREY,
+            "The screen resolution or window size you have selected in the "
+            "Option Manager could not be set on your current hardware. As a "
+            "result, the highest available resolution supported by Incursion "
+            "was used instead. This may have also caused the font size to "
+            "default back to 8x8, if whatever font size you have selected "
+            "was too large to fit 80x48 characters into the available resolution."
+            "\n__To change the full-screen resolution, window size and font "
+            "size, select 'Change System Options' from the startup menu, "
+            "navigate to the Output Options option group and set the options "
+            "at the bottom of the screen accordingly.");
+    } else if (scaled_font) {
+        Box(WIN_SCREEN,0,PINK,GREY,
+            "The screen resolution or window size you have selected in the "
+            "Option Manager is too small to display a full 80x48 text grid "
+            "(at least 80 columns and 48 rows of characters) with the font "
+            "size you have selected. As a result, the font has been defaulted "
+            "back to 8x8. If you find the display difficult to read as a "
+            "result, you must choose a combination of resolution and font "
+            "size that allows at least 80x48 characters."
+            "\n__To change the full-screen resolution, window size and font "
+            "size, select 'Change System Options' from the startup menu, "
+            "navigate to the Output Options option group and set the options "
+            "at the bottom of the screen accordingly.");
+    }      
+}    
 
 
 void libtcodTerm::Initialize()
@@ -833,23 +822,23 @@ void libtcodTerm::Initialize()
 
     bScreen = bCurrent = bSave = bScroll = NULL;
     
-    resetFlag = false;
-    Reset();
+	TCOD_sys_startup();
+
+	Reset();
     
     InitWindows();   
 
     SetWin(WIN_SCREEN);
     Color(14);
-	}
+}
 
-void libtcodTerm::ShutDown()
-  {
+void libtcodTerm::ShutDown() {
     SetWin(WIN_SCREEN);
     Clear();
     //set_gfx_mode(GFX_AUTODETECT_FULLSCREEN,oldResX,oldResY,0,0);
     //set_gfx_mode(GFX_TEXT,80,25,0,0);
     //allegro_exit();
-  }
+}
 
 void libtcodTerm::SetIncursionDirectory(const char *s) {
     IncursionDirectory = (const char *)s;
@@ -861,13 +850,11 @@ void libtcodTerm::SetIncursionDirectory(const char *s) {
 *                               Scroll Buffer                                *
 \*****************************************************************************/
 
-void  libtcodTerm::SPutChar(int16 x, int16 y, Glyph g)
-  {
-     TCOD_console_put_char_ex(bScroll,x,y,CHAR(g),Colors[FORE(g)], Colors[BACK(g)]);
-  }
+void  libtcodTerm::SPutChar(int16 x, int16 y, Glyph g) {
+    TCOD_console_put_char_ex(bScroll,x,y,CHAR(g),Colors[FORE(g)], Colors[BACK(g)]);
+}
 
-Glyph libtcodTerm::SGetChar(int16 x, int16 y)
-{
+Glyph libtcodTerm::SGetChar(int16 x, int16 y) {
     Glyph g = TCOD_console_get_char(bScreen,x,y);
     int16 i;
     TCOD_color_t fgcolor, bgcolor;
@@ -993,10 +980,10 @@ int16 libtcodTerm::GetCharCmd(KeyCmdMode mode) {
     Update();
     activeWin = wn;
     cx = ox; cy = oy;
-    
+
     for(;;) {
         TCOD_key_t tcodKey;
-        TCOD_event_t tEvent = TCOD_sys_check_for_event(TCOD_EVENT_KEY_PRESS, &tcodKey, NULL);
+        TCOD_event_t tcodEvent = TCOD_sys_check_for_event(TCOD_EVENT_KEY_PRESS, &tcodKey, NULL);
 
         ControlKeys = 0;
         if (tcodKey.lctrl || tcodKey.rctrl)
@@ -1155,25 +1142,23 @@ void libtcodTerm::ClearKeyBuff() {
     }
 }
   
-void libtcodTerm::PrePrompt()
-  {
+void libtcodTerm::PrePrompt() {
     TCOD_key_t key;
     while (1) {
         key = readkey(0);
         if (key.vk == TCODK_NONE)
             break;
     }
-  }
+}
   
 /*****************************************************************************\
 *                                 libtcodTerm                                   *
 *                               File I/O Code                                 *
 \*****************************************************************************/
 
-bool libtcodTerm::Exists(const char *fn)
-  {
+bool libtcodTerm::Exists(const char *fn) {
     return TCOD_sys_file_exists(fn);
-  }
+}
 
 void libtcodTerm::Delete(const char *fn)
   {

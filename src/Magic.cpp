@@ -412,137 +412,127 @@ bool Magic::isTarget(EventInfo &_e, Thing *t)
     else return false;
   }
 
-void Magic::CalcEffect(EventInfo &e)
-  {
-    TEffect *te = TEFF(e.eID); 
-    int32 sp_flags = 0, i;
-    int16 efNum;
-    
-    efNum = te->Vals(e.efNum) ? e.efNum : 0;
-    e.EMagic = te->Vals(e.efNum);
-    
-    if (e.isItem && e.EItem->isItem() && e.EItem->isBlessed())
-      e.isBlessed = true;
-    if (e.isItem && e.EItem->isItem() && e.EItem->isCursed())
-      e.isCursed = true;
+  void Magic::CalcEffect(EventInfo &e) {
+      TEffect *te = TEFF(e.eID); 
+      int32 sp_flags = 0, i;
+      int16 efNum;
 
-    if (e.isTrap || e.isItem)
-      sp_flags = 0;
-    else if (e.EActor->isCharacter())
-      sp_flags = e.EPActor->Spells[theGame->SpellNum(e.eID)];
-    else {
-      sp_flags = SP_ARCANE | SP_DIVINE | SP_SORCERY | SP_PRIMAL;
-      
-      // ugly kludge; sometimes gives higher caster level
-      if (e.EActor->HasMFlag(M_INNATE))
-        sp_flags |= SP_INNATE;
-      }
-      
-    if (e.isItem)
-      {
-        e.saveDC = 10 + (e.EItem->GetPlus() * 2);
-        if (e.EActor)
-          e.saveDC += e.EActor->Mod(A_WIS);
-        if (te->HasFlag(EF_HARDSAVE2))
-          e.saveDC += 2;
-        if (te->HasFlag(EF_HARDSAVE4))
-          e.saveDC += 4;
-        if (te->HasFlag(EF_HARDSAVE8))
-          e.saveDC += 8;
-      }
-    else if ((e.AType == A_BREA || e.AType == A_SPIT ||
-             e.DType == AD_SPE1 || e.DType == AD_SPE2) &&
-             e.EActor->HasAttk(e.AType)) 
-      {
-        e.saveDC = e.EActor->GetPower(e.EActor->
-            GetAttk(e.AType)->u.a.DC);
-      }
-    else if (e.isTrap || !e.EActor)
-      e.saveDC = 10 + te->Level;
-    else if (TEFF(e.eID)->HasFlag(EF_SPECABIL))
-      e.saveDC = 10 + e.EActor->ChallengeRating()
-                    + e.EActor->Mod(A_CHA);
-    else 
-      e.saveDC = e.EActor->getSpellDC(e.eID,
-        e.isArcaneTrickery,e.MM & MM_HEIGHTEN);
-      
-    if (e.isItem && e.EItem && e.EItem->isType(T_SCROLL))
-      e.vCasterLev = max(TEFF(e.EItem->eID)->Level*2-1,
-                       e.EActor->SkillLevel(SK_DECIPHER) - 2); 
-    if (e.isItem && e.EItem && e.EItem->isItem())
-      e.vCasterLev = e.EItem->ItemLevel();
-    else if (!e.EActor)
-      e.vCasterLev = te->Level;
-    else if (e.isTrap) 
-      e.vCasterLev = TEFF(e.eID)->Level; 
-    else if (te->ef.aval == AR_POISON || te->ef.aval == AR_DISEASE)
-      e.vCasterLev = te->Level;
-    else if (sp_flags & SP_INNATE) 
-      e.vCasterLev = max(1,e.EActor->ChallengeRating());
-    else
-      e.vCasterLev = e.EActor->CasterLev();
+      efNum = te->Vals(e.efNum) ? e.efNum : 0;
+      e.EMagic = te->Vals(e.efNum);
 
-    StatiIterNature(e.EActor,BONUS_SCHOOL_CASTING_LEVEL)
-      if (S->Val & te->Schools)
-        { e.vCasterLev += S->Mag; } 
-    StatiIterEnd(e.EActor)
-    if ( (e.EActor->isMType(MA_LIZARDFOLK) && (TEFF(e.eID)->Schools & SC_WATER)) ||
-         (e.EActor->isMType(MA_DWARF) && (TEFF(e.eID)->Schools & SC_EARTH)) ) {
-      e.vCasterLev += 1;
-      if (e.isItem)
+      if (e.isItem && e.EItem->isItem() && e.EItem->isBlessed())
+          e.isBlessed = true;
+      if (e.isItem && e.EItem->isItem() && e.EItem->isCursed())
+          e.isCursed = true;
+
+      if (e.isTrap || e.isItem)
+          sp_flags = 0;
+      else if (e.EActor->isCharacter())
+          sp_flags = e.EPActor->Spells[theGame->SpellNum(e.eID)];
+      else {
+          sp_flags = SP_ARCANE | SP_DIVINE | SP_SORCERY | SP_PRIMAL;
+
+          // ugly kludge; sometimes gives higher caster level
+          if (e.EActor->HasMFlag(M_INNATE))
+              sp_flags |= SP_INNATE;
+      }
+
+      if (e.isItem) {
+          e.saveDC = 10 + (e.EItem->GetPlus() * 2);
+          if (e.EActor)
+              e.saveDC += e.EActor->Mod(A_WIS);
+          if (te->HasFlag(EF_HARDSAVE2))
+              e.saveDC += 2;
+          if (te->HasFlag(EF_HARDSAVE4))
+              e.saveDC += 4;
+          if (te->HasFlag(EF_HARDSAVE8))
+              e.saveDC += 8;
+      } else if ((e.AType == A_BREA || e.AType == A_SPIT ||
+          e.DType == AD_SPE1 || e.DType == AD_SPE2) &&
+          e.EActor->HasAttk(e.AType)) {
+          e.saveDC = e.EActor->GetPower(e.EActor->GetAttk(e.AType)->u.a.DC);
+      } else if (e.isTrap || !e.EActor)
+          e.saveDC = 10 + te->Level;
+      else if (TEFF(e.eID)->HasFlag(EF_SPECABIL))
+          e.saveDC = 10 + e.EActor->ChallengeRating() + e.EActor->Mod(A_CHA);
+      else 
+          e.saveDC = e.EActor->getSpellDC(e.eID, e.isArcaneTrickery,e.MM & MM_HEIGHTEN);
+
+      if (e.isItem && e.EItem && e.EItem->isType(T_SCROLL))
+          e.vCasterLev = max(TEFF(e.EItem->eID)->Level*2-1,e.EActor->SkillLevel(SK_DECIPHER) - 2); 
+
+      if (e.isItem && e.EItem && e.EItem->isItem())
+          e.vCasterLev = e.EItem->ItemLevel();
+      else if (!e.EActor)
+          e.vCasterLev = te->Level;
+      else if (e.isTrap) 
+          e.vCasterLev = TEFF(e.eID)->Level; 
+      else if (te->ef.aval == AR_POISON || te->ef.aval == AR_DISEASE)
+          e.vCasterLev = te->Level;
+      else if (sp_flags & SP_INNATE) 
+          e.vCasterLev = max(1,e.EActor->ChallengeRating());
+      else
+          e.vCasterLev = e.EActor->CasterLev();
+
+      StatiIterNature(e.EActor,BONUS_SCHOOL_CASTING_LEVEL) {
+          if (S->Val & te->Schools)
+              e.vCasterLev += S->Mag; 
+      }
+      StatiIterEnd(e.EActor)
+
+      if ( (e.EActor->isMType(MA_LIZARDFOLK) && (TEFF(e.eID)->Schools & SC_WATER)) ||
+        (e.EActor->isMType(MA_DWARF) && (TEFF(e.eID)->Schools & SC_EARTH)) ) {
+        e.vCasterLev += 1;
+        if (e.isItem)
         e.saveDC += 2;
       }
 
-    if (e.EItem && e.EItem->isItem())
-      e.vAlchemy = max(10,e.EItem->GetStatiMag(ALCHEMY_LEV));
+      if (e.EItem && e.EItem->isItem())
+          e.vAlchemy = max(10,e.EItem->GetStatiMag(ALCHEMY_LEV));
 
-    if (e.effIllusion && !(e.illFlags & IL_SHADE))
-      if (e.EActor->isPlayer())
-        e.vCasterLev += ((Player*)e.EActor)->Opt(OPT_OVERCAST); 
-    
-    
-    e.vRange = (te->ef.lval && !te->ef.aval) ? LevelAdjust(te->Vals(efNum)->lval,
-         e.vCasterLev, (e.EItem && e.EItem->isItem()) ? abs(e.EItem->GetPlus()) : 0) :
-         5 + e.vCasterLev/2;
-    e.vRadius = te->ef.lval ? LevelAdjust(te->Vals(efNum)->lval,
-         e.vCasterLev, (e.EItem && e.EItem->isItem()) ? abs(e.EItem->GetPlus()) : 0) : 5;
-    if (e.MM & MM_ENLARGE)
-      e.vRadius *= 2;
-    if (e.MM & MM_EXTEND)
-      e.vRange *= 2;
-      
-      
+      if (e.effIllusion && !(e.illFlags & IL_SHADE))
+          if (e.EActor->isPlayer())
+              e.vCasterLev += ((Player*)e.EActor)->Opt(OPT_OVERCAST); 
 
-    /* Calculate duration */
-    if (te->HasFlag(EF_DSHORT))
-      e.vDuration = Dice::Roll(1,4)+1;
-    else if (te->HasFlag(EF_D1ROUND))
-      e.vDuration = 2;
-    else if (te->HasFlag(EF_DLONG))
-      e.vDuration = 100 + e.vCasterLev*10;
-    else if (te->HasFlag(EF_DXLONG))
-      e.vDuration = 1000 + e.vCasterLev*100;
-    else if (te->HasFlag(EF_PERSISTANT))
-      e.vDuration = -2;
-    else if (te->HasFlag(EF_PERMANANT))
-      e.vDuration = -1;
-    else
-      e.vDuration = 10 + e.vCasterLev*2;
-    if ((e.MM & MM_ANCHOR) && e.vDuration > 1)
-      e.vDuration *= 2;
+      e.vRange = (te->ef.lval && !te->ef.aval) ? LevelAdjust(te->Vals(efNum)->lval,
+          e.vCasterLev, (e.EItem && e.EItem->isItem()) ? abs(e.EItem->GetPlus()) : 0) :
+          5 + e.vCasterLev/2;
+      e.vRadius = te->ef.lval ? LevelAdjust(te->Vals(efNum)->lval,
+          e.vCasterLev, (e.EItem && e.EItem->isItem()) ? abs(e.EItem->GetPlus()) : 0) : 5;
+      if (e.MM & MM_ENLARGE)
+          e.vRadius *= 2;
+      if (e.MM & MM_EXTEND)
+          e.vRange *= 2;
+
+      /* Calculate duration */
+      if (te->HasFlag(EF_DSHORT))
+          e.vDuration = Dice::Roll(1,4)+1;
+      else if (te->HasFlag(EF_D1ROUND))
+          e.vDuration = 2;
+      else if (te->HasFlag(EF_DLONG))
+          e.vDuration = 100 + e.vCasterLev*10;
+      else if (te->HasFlag(EF_DXLONG))
+          e.vDuration = 1000 + e.vCasterLev*100;
+      else if (te->HasFlag(EF_PERSISTANT))
+          e.vDuration = -2;
+      else if (te->HasFlag(EF_PERMANANT))
+          e.vDuration = -1;
+      else
+          e.vDuration = 10 + e.vCasterLev*2;
+      if ((e.MM & MM_ANCHOR) && e.vDuration > 1)
+          e.vDuration *= 2;
       if ((te->Purpose & EP_BUFF) && e.vDuration > 1 && 
           e.EActor->HasFeat(FT_MYSTIC_PREPARATION))
-        e.vDuration *= 2; 
-    if ((e.MM & MM_PERSISTANT) && e.vDuration >= 10)
-      e.vDuration = -2;
-    else if ((e.MM & MM_EXTEND) && e.vDuration >= 1)
-      e.vDuration *= 2;
+          e.vDuration *= 2; 
+      if ((e.MM & MM_PERSISTANT) && e.vDuration >= 10)
+          e.vDuration = -2;
+      else if ((e.MM & MM_EXTEND) && e.vDuration >= 1)
+          e.vDuration *= 2;
 
-    if (e.MM & MM_TRANSMUTE) 
-      {
-        char ch;
-        ch = e.Transmute;
-        switch (ch) {
+      if (e.MM & MM_TRANSMUTE) {
+          char ch;
+          ch = e.Transmute;
+          switch (ch) {
           case 'f': e.DType = AD_FIRE; break;
           case 'c': e.DType = AD_COLD; break;
           case 'a': e.DType = AD_ACID; break;
@@ -550,335 +540,311 @@ void Magic::CalcEffect(EventInfo &e)
           case 'p': e.DType = AD_TOXI; break;
           case 's': e.DType = AD_SONI; break;
           }
-      }
-    else if (TEFF(e.eID)->Vals(efNum)->eval == EA_BLAST)
-      e.DType = TEFF(e.eID)->Vals(efNum)->xval;
+      } else if (TEFF(e.eID)->Vals(efNum)->eval == EA_BLAST)
+          e.DType = TEFF(e.eID)->Vals(efNum)->xval;
 
-    e.Dmg = TEFF(e.eID)->Vals(efNum)->pval.LevelAdjust(e.vCasterLev,
-      ((e.EItem && e.EItem->isItem())) ? e.EItem->GetPlus() : 0);
-    if (e.isSpell || (e.isItem && e.EItem->isType(T_SCROLL))) { 
-      if (e.EMagic->eval == EA_BLAST || e.EMagic->eval == EA_DRAIN)
-        if (e.EMagic->xval <= 16) /* i.e., hit point damage */
-          e.Dmg.Bonus += e.EActor->SpellDmgBonus(e.eID); 
-      if (e.EMagic->eval == EA_INFLICT)
-        if (IsAdjustStati(e.EMagic->xval) && e.EMagic->yval == A_ARM)
-          e.Dmg.Bonus += e.EActor->SpellDmgBonus(e.eID); 
-      }
-    
-    if (e.MM & MM_MAXIMIZE)
-      e.vDmg = max(0,e.Dmg.Number) * abs(e.Dmg.Sides) + e.Dmg.Bonus;
-    else {
-      if (e.Dmg.Sides < 0)
-        e.Dmg.Sides = -e.Dmg.Sides;
-      if (e.Dmg.Number < 0)
-        e.Dmg.Number = 0;
-      e.vDmg = e.Dmg.Roll();
-      }
-    if (e.MM & MM_EMPOWER)
-      e.vDmg = (e.vDmg*150)/100;
-    
-    Dice od = e.Dmg;
-      
-    e.vChainMax = e.vCasterLev/4;
-
-    int16 oldEvent = e.Event;
-    e.Event = EV_CALC_EFFECT;
-    TEFF(e.eID)->Event(e,e.eID);
-    e.Event = oldEvent;
-    
-    /* Special kludge -- if EV_CALC_EFFECT changed e.Dmg, recalculate
-       e.vDmg based on new e.Dmg, but otherwise let EV_CALC_EFFECT set
-       e.vDmg on its own and don't overwrite. */
-    if (!(od == e.Dmg)) {
       e.Dmg = TEFF(e.eID)->Vals(efNum)->pval.LevelAdjust(e.vCasterLev,
-        ((e.EItem && e.EItem->isItem())) ? e.EItem->GetPlus() : 0);
+          ((e.EItem && e.EItem->isItem())) ? e.EItem->GetPlus() : 0);
+      if (e.isSpell || (e.isItem && e.EItem->isType(T_SCROLL))) { 
+          if (e.EMagic->eval == EA_BLAST || e.EMagic->eval == EA_DRAIN)
+              if (e.EMagic->xval <= 16) /* i.e., hit point damage */
+                  e.Dmg.Bonus += e.EActor->SpellDmgBonus(e.eID); 
+          if (e.EMagic->eval == EA_INFLICT)
+              if (IsAdjustStati(e.EMagic->xval) && e.EMagic->yval == A_ARM)
+                  e.Dmg.Bonus += e.EActor->SpellDmgBonus(e.eID); 
+      }
+
       if (e.MM & MM_MAXIMIZE)
-        e.vDmg = e.Dmg.Number * e.Dmg.Sides + e.Dmg.Bonus;
-      else
-        e.vDmg = e.Dmg.Roll();
+          e.vDmg = max(0,e.Dmg.Number) * abs(e.Dmg.Sides) + e.Dmg.Bonus;
+      else {
+          if (e.Dmg.Sides < 0)
+              e.Dmg.Sides = -e.Dmg.Sides;
+          if (e.Dmg.Number < 0)
+              e.Dmg.Number = 0;
+          e.vDmg = e.Dmg.Roll();
+      }
       if (e.MM & MM_EMPOWER)
-        e.vDmg = (e.vDmg*150)/100;
+          e.vDmg = (e.vDmg*150)/100;
+
+      Dice od = e.Dmg;
+
+      e.vChainMax = e.vCasterLev/4;
+
+      int16 oldEvent = e.Event;
+      e.Event = EV_CALC_EFFECT;
+      TEFF(e.eID)->Event(e,e.eID);
+      e.Event = oldEvent;
+
+      /* Special kludge -- if EV_CALC_EFFECT changed e.Dmg, recalculate
+      e.vDmg based on new e.Dmg, but otherwise let EV_CALC_EFFECT set
+      e.vDmg on its own and don't overwrite. */
+      if (!(od == e.Dmg)) {
+          e.Dmg = TEFF(e.eID)->Vals(efNum)->pval.LevelAdjust(e.vCasterLev,
+              ((e.EItem && e.EItem->isItem())) ? e.EItem->GetPlus() : 0);
+          if (e.MM & MM_MAXIMIZE)
+              e.vDmg = e.Dmg.Number * e.Dmg.Sides + e.Dmg.Bonus;
+          else
+              e.vDmg = e.Dmg.Roll();
+          if (e.MM & MM_EMPOWER)
+              e.vDmg = (e.vDmg*150)/100;
       }
-      
-    
+
+
   }
 
+  EvReturn Magic::MagicEvent(EventInfo &e) {
+      EvReturn r; Thing *t; int16 i;
+      bool FieldDone = false,
+          TransmutePromptDone = false;
+      TEffect *te = TEFF(e.eID);
 
-EvReturn Magic::MagicEvent(EventInfo &e)
-{
-  EvReturn r; Thing *t; int16 i;
-  bool FieldDone = false,
-  TransmutePromptDone = false;
-  TEffect *te = TEFF(e.eID);
+      /* Let's work out illusionary magic later. */
+      if (e.EActor->isIllusion() || (e.EItem && e.EItem->isIllusion()))
+          return ABORT; 
 
-  /* Let's work out illusionary magic later. */
-  if (e.EActor->isIllusion() || 
-       (e.EItem && e.EItem->isIllusion()))
-    return ABORT; 
+      r = NOTHING;
 
-  r = NOTHING;
-  
-  /* fjm Mar 2006: removed something for "pseudo-effects" here
-     because efNum wasn't being set properly. It should be set
-     to 0 at the start of EV_EFFECT, which iterates through the
-     whole Effect, right? If you change this, verify that the
-     dragonshield doesn't fire when you equip it. */
-  e.efNum = 0;
+      /* fjm Mar 2006: removed something for "pseudo-effects" here
+      because efNum wasn't being set properly. It should be set
+      to 0 at the start of EV_EFFECT, which iterates through the
+      whole Effect, right? If you change this, verify that the
+      dragonshield doesn't fire when you equip it. */
+      e.efNum = 0;
 
-  /* Cases with magical throwing items (i.e., Javelin of Lightning),
-     where we have it in Item2 and want it in Item for the Effect. */
-  if (e.EItem2 && !e.EItem)
-    e.EItem = e.EItem2;
+      /* Cases with magical throwing items (i.e., Javelin of Lightning),
+      where we have it in Item2 and want it in Item for the Effect. */
+      if (e.EItem2 && !e.EItem)
+          e.EItem = e.EItem2;
 
-  if (e.isActivation && e.EActor->m->FieldAt(e.EActor->x,e.EActor->y,FI_SILENCE))
-    {
-      e.EActor->IPrint("You cannot speak command words in fields "
-        "of magical silence.");
-      return ABORT;
-    }
+      if (e.isActivation && e.EActor->m->FieldAt(e.EActor->x,e.EActor->y,FI_SILENCE)) {
+          e.EActor->IPrint("You cannot speak command words in fields of magical silence.");
+          return ABORT;
+      }
 
-  if (e.eID == 0 || (e.EItem && e.EItem->HasStati(DISPELLED))) {
+      if (e.eID == 0 || (e.EItem && e.EItem->HasStati(DISPELLED))) {
 Nothing:
-    if (e.isWield || e.isRemove || e.isEnter || e.isLeave)
-      return DONE;
-    switch(random(4))
-    {
-      case 0:e.EActor->IPrint("Nothing happens.");break;
-      case 1:e.EActor->IPrint("There's no effect.");break;
-      case 2:e.EActor->IPrint("It doesn't do anything.");break;
-      case 3:e.EActor->IPrint("Nothing unusual occurs.");break;
-    }
-    return DONE;
-  }
-
-  if (e.MM & MM_TRANSMUTE) {
-    do
-      e.Transmute = e.EActor->ChoicePrompt("Fire, Cold, Acid, Lightning, Poison or Sonic damage?",
-                                           "fcalps", "fcalps"[random(6)]);
-    while (e.Transmute == -1);
-    }
-
-  {
-    uint16 align;
-    align = 0;
-    if (TEFF(e.eID)->HasFlag(EF_EVIL))
-      align |= AL_NONGOOD;
-    if (TEFF(e.eID)->HasFlag(EF_CHAOTIC))
-      align |= AL_NONLAWFUL;
-    if (TEFF(e.eID)->HasFlag(EF_LAWFUL))
-      align |= AL_NONCHAOTIC;
-    if (align && !(e.isTrap && e.isActOfGod))
-      e.EActor->AlignedAct(align,1,"using aligned magic");
-  }
-
-  if (!e.isActivation && !e.isWield && !e.isRemove && !e.isEnter && !e.isLeave) 
-  {
-    e.Event = MSG_CAST;
-    te->Event(e,e.eID);
-    e.Event = EV_EFFECT;
-  }
-
-  if (e.isActivation && (e.EItem && e.EItem->isItem()))
-    if (te->HasFlag(EF_3PERDAY) || te->HasFlag(EF_7PERDAY) 
-                || te->HasFlag(EF_1PERDAY)) 
-    {
-      if (te->HasFlag(EF_1PERDAY) && e.EItem->GetCharges() >= 1)
-        goto Nothing;
-      if (te->HasFlag(EF_3PERDAY) && e.EItem->GetCharges() >= 3)
-        goto Nothing;
-      if (te->HasFlag(EF_7PERDAY) && e.EItem->GetCharges() >= 7)
-        goto Nothing;
-      e.EItem->SetCharges(e.EItem->GetCharges()+1);
-    }
-
-  if (te->HasFlag(EF_SOUND) && e.EMap) {
-    if (e.EMap->FieldAt(e.EActor->x,e.EActor->y,FI_SILENCE))
-      {
-        e.EActor->IDPrint("The magical silence negates your <Res>.",
-          "Nothing happens.", e.eID);
-        return ABORT;
-      }
-    MapIterate(e.EMap,t,i) 
-      if (t->isCreature() && e.EActor->DistFrom(t) <= 30)
-        if (t->HasStati(SINGING) && !e.EMap->FieldAt(e.EActor->x,e.EActor->y,FI_SILENCE))
-          if (t->GetStati(SINGING)->Val == BARD_COUNTER)
-          {
-            ((Creature*)t)->IDPrint("Your singing negates the effect.",
-                                    "The <Obj>'s singing negates the effect.",t);
-            return ABORT;
+          if (e.isWield || e.isRemove || e.isEnter || e.isLeave)
+              return DONE;
+          switch(random(4)) {
+          case 0:e.EActor->IPrint("Nothing happens.");break;
+          case 1:e.EActor->IPrint("There's no effect.");break;
+          case 2:e.EActor->IPrint("It doesn't do anything.");break;
+          case 3:e.EActor->IPrint("Nothing unusual occurs.");break;
           }
-    }
+          return DONE;
+      }
 
-  
-  while (e.EMagic = te->Vals(e.efNum))
-  {
+      if (e.MM & MM_TRANSMUTE)
+          do {
+              e.Transmute = e.EActor->ChoicePrompt("Fire, Cold, Acid, Lightning, Poison or Sonic damage?",
+                  "fcalps", "fcalps"[random(6)]);
+          } while (e.Transmute == -1);
+
+      {
+          uint16 align = 0;
+          if (TEFF(e.eID)->HasFlag(EF_EVIL))
+              align |= AL_NONGOOD;
+          if (TEFF(e.eID)->HasFlag(EF_CHAOTIC))
+              align |= AL_NONLAWFUL;
+          if (TEFF(e.eID)->HasFlag(EF_LAWFUL))
+              align |= AL_NONCHAOTIC;
+          if (align && !(e.isTrap && e.isActOfGod))
+              e.EActor->AlignedAct(align,1,"using aligned magic");
+      }
+
+      if (!e.isActivation && !e.isWield && !e.isRemove && !e.isEnter && !e.isLeave) {
+          e.Event = MSG_CAST;
+          te->Event(e,e.eID);
+          e.Event = EV_EFFECT;
+      }
+
+      if (e.isActivation && (e.EItem && e.EItem->isItem()))
+          if (te->HasFlag(EF_3PERDAY) || te->HasFlag(EF_7PERDAY) || te->HasFlag(EF_1PERDAY)) {
+              if (te->HasFlag(EF_1PERDAY) && e.EItem->GetCharges() >= 1)
+                  goto Nothing;
+              if (te->HasFlag(EF_3PERDAY) && e.EItem->GetCharges() >= 3)
+                  goto Nothing;
+              if (te->HasFlag(EF_7PERDAY) && e.EItem->GetCharges() >= 7)
+                  goto Nothing;
+              e.EItem->SetCharges(e.EItem->GetCharges()+1);
+          }
+
+      if (te->HasFlag(EF_SOUND) && e.EMap) {
+          if (e.EMap->FieldAt(e.EActor->x,e.EActor->y,FI_SILENCE)) {
+              e.EActor->IDPrint("The magical silence negates your <Res>.",
+                  "Nothing happens.", e.eID);
+              return ABORT;
+          }
+          MapIterate(e.EMap,t,i)
+              if (t->isCreature() && e.EActor->DistFrom(t) <= 30)
+                  if (t->HasStati(SINGING) && !e.EMap->FieldAt(e.EActor->x,e.EActor->y,FI_SILENCE))
+                      if (t->GetStati(SINGING)->Val == BARD_COUNTER) {
+                          ((Creature*)t)->IDPrint("Your singing negates the effect.",
+                              "The <Obj>'s singing negates the effect.",t);
+                          return ABORT;
+                      }
+      }
+
+
+      while (e.EMagic = te->Vals(e.efNum)) {
 SkipLoop:
 
-    CalcEffect(e);
+          CalcEffect(e);
 
-    e.isFirstBlastXY = true;
+          e.isFirstBlastXY = true;
 
-    if (e.isActivation != te->HasFlag(EF_ACTIVATE+min(e.efNum,4)))
-    { e.efNum++; continue; }
+          if (e.isActivation != te->HasFlag(EF_ACTIVATE+min(e.efNum,4)))
+              { e.efNum++; continue; }
 
-    if (te->HasFlag(EF_PERIODIC) && !e.isPeriodic)
-    {                                         
-      if (e.isWield || e.isEnter)
-        e.EActor->GainPermStati(PERIODIC, e.isWield ? e.EItem : NULL,SS_ITEM,
-            e.EMagic->lval,0,e.eID);
-      else if (e.isRemove || e.isLeave)
-        e.EActor->RemoveStati(PERIODIC, SS_ITEM, -1, -1, e.isItem ? e.EItem : NULL);
-      else
-        e.EActor->GainTempStati(PERIODIC, e.isItem ? e.EItem : NULL,e.vDuration,
-            SS_ITEM, e.EMagic->lval,0,e.eID);
-      { e.efNum++; continue; }
-    }
-
-    if (e.isWield || e.isRemove || e.isEnter || e.isLeave)
-      if (e.EMagic->eval != EA_GRANT)
-        if (e.EMagic->aval != AR_MFIELD)
-        { e.efNum++; continue; }
-
-    e.Dmg = e.EMagic->pval.LevelAdjust(e.vCasterLev,((e.EItem && e.EItem->isItem())) ? 
-        e.EItem->GetPlus() : 0);
-
-    if (e.isSpell || (e.isItem && e.EItem->isType(T_SCROLL))) { 
-      if (e.EMagic->eval == EA_BLAST || e.EMagic->eval == EA_DRAIN)
-        if (e.EMagic->xval <= 16) /* i.e., hit point damage */
-          e.Dmg.Bonus += e.EActor->SpellDmgBonus(e.eID); 
-      if (e.EMagic->eval == EA_INFLICT)
-        if (IsAdjustStati(e.EMagic->xval) && e.EMagic->yval == A_ARM)
-          e.Dmg.Bonus += e.EActor->SpellDmgBonus(e.eID); 
-      }
-
-    // ww: this looks very suspicious to me: you can't tell the
-    // difference between a self hit and aiming a fireball at some floor
-    // to hit some nearby monsters ... so I'll add the EXVal check
-    if (!e.EVictim && e.EXVal <= 0)
-      e.EVictim = e.EActor;
-
-    r = te->Event(e,e.eID,0);
-
-    switch(r)
-    {
-      case NOTHING: break;
-      case DONE:    goto NextSegment;
-      case ABORT:   return ABORT;
-    }
-
-    if (e.EMagic->eval == EA_HEALING &&
-        e.EMagic->xval & HEAL_HP &&
-        e.EMagic->aval == AR_NONE)
-      {
-        Creature *cr, *cr2, *ot; bool isPhoenix; int16 i;
-        isPhoenix = false;
-        /* Optimization -- only PCs sing! */
-        cr = theGame->GetPlayer(0);
-        if (cr && cr->HasStati(SINGING))
-          if (cr->GetStatiVal(SINGING) == BARD_PHOENIX)
-            if (cr->isFriendlyTo(e.EActor))
-              if (cr->DistFrom(e.EActor) <= cr->SkillLevel(SK_PERFORM)+2)
-                isPhoenix = true;
-        
-        if (isPhoenix) { 
-          ot = e.EVictim;
-          MapIterate(e.EMap,cr2,i)
-            if (cr2->isCreature() && cr2->isFriendlyTo(e.EActor) &&
-                cr2->DistFrom(cr) <= cr->SkillLevel(SK_PERFORM)+2)
-              if (cr2 == e.EActor ||
-                  !e.EActor->m->FieldAt(cr2->x,cr2->y,FI_SILENCE))
-                {
-                  e.EVictim = cr2;
-                  ReThrow(EV_MAGIC_STRIKE,e);
-                }
-          e.EVictim = ot;
-          return DONE;
+          if (te->HasFlag(EF_PERIODIC) && !e.isPeriodic) {                                         
+              if (e.isWield || e.isEnter)
+                  e.EActor->GainPermStati(PERIODIC, e.isWield ? e.EItem : NULL,SS_ITEM,e.EMagic->lval,0,e.eID);
+              else if (e.isRemove || e.isLeave)
+                  e.EActor->RemoveStati(PERIODIC, SS_ITEM, -1, -1, e.isItem ? e.EItem : NULL);
+              else
+                  e.EActor->GainTempStati(PERIODIC, e.isItem ? e.EItem : NULL,e.vDuration,SS_ITEM, e.EMagic->lval,0,e.eID);
+              { e.efNum++; continue; }
           }
+
+          if (e.isWield || e.isRemove || e.isEnter || e.isLeave)
+              if (e.EMagic->eval != EA_GRANT)
+                  if (e.EMagic->aval != AR_MFIELD) {
+                    e.efNum++;
+                    continue;
+                  }
+
+          e.Dmg = e.EMagic->pval.LevelAdjust(e.vCasterLev,((e.EItem && e.EItem->isItem())) ? e.EItem->GetPlus() : 0);
+
+          if (e.isSpell || (e.isItem && e.EItem->isType(T_SCROLL))) { 
+              if (e.EMagic->eval == EA_BLAST || e.EMagic->eval == EA_DRAIN)
+                  if (e.EMagic->xval <= 16) /* i.e., hit point damage */
+                      e.Dmg.Bonus += e.EActor->SpellDmgBonus(e.eID); 
+              if (e.EMagic->eval == EA_INFLICT)
+                  if (IsAdjustStati(e.EMagic->xval) && e.EMagic->yval == A_ARM)
+                      e.Dmg.Bonus += e.EActor->SpellDmgBonus(e.eID); 
+          }
+
+          // ww: this looks very suspicious to me: you can't tell the
+          // difference between a self hit and aiming a fireball at some floor
+          // to hit some nearby monsters ... so I'll add the EXVal check
+          if (!e.EVictim && e.EXVal <= 0)
+              e.EVictim = e.EActor;
+
+          r = te->Event(e,e.eID,0);
+
+          switch(r) {
+          case NOTHING: break;
+          case DONE:    goto NextSegment;
+          case ABORT:   return ABORT;
+          }
+
+          if (e.EMagic->eval == EA_HEALING &&
+              e.EMagic->xval & HEAL_HP &&
+              e.EMagic->aval == AR_NONE) {
+              Creature *cr, *cr2, *ot; bool isPhoenix; int16 i;
+              isPhoenix = false;
+              /* Optimization -- only PCs sing! */
+              cr = theGame->GetPlayer(0);
+              if (cr && cr->HasStati(SINGING))
+                  if (cr->GetStatiVal(SINGING) == BARD_PHOENIX)
+                      if (cr->isFriendlyTo(e.EActor))
+                          if (cr->DistFrom(e.EActor) <= cr->SkillLevel(SK_PERFORM)+2)
+                              isPhoenix = true;
+
+              if (isPhoenix) { 
+                  ot = e.EVictim;
+                  MapIterate(e.EMap,cr2,i)
+                      if (cr2->isCreature() && cr2->isFriendlyTo(e.EActor) &&
+                          cr2->DistFrom(cr) <= cr->SkillLevel(SK_PERFORM)+2)
+                          if (cr2 == e.EActor ||
+                              !e.EActor->m->FieldAt(cr2->x,cr2->y,FI_SILENCE))
+                          {
+                              e.EVictim = cr2;
+                              ReThrow(EV_MAGIC_STRIKE,e);
+                          }
+                          e.EVictim = ot;
+                          return DONE;
+              }
+          }
+
+          switch(e.EMagic->aval) {
+          case AR_BOLT:
+          case AR_BEAM:
+          case AR_BREATH:
+          case AR_RAY:
+          case AR_CHAIN:
+          case AR_BALL:
+          case AR_BURST:
+              e.EActor->Reveal(true);
+              // r = ABolt(e); break;
+              r = ABallBeamBolt(e); break;
+          case AR_TOUCH:
+              r = ATouch(e); break;
+          case AR_FIELD:
+          case AR_MFIELD:
+              /* We only ever want to create one field per effect, even if
+              that effect has a whole slew of EffectValues. */
+              /* The logic of the isActivbation thing is this: when a field
+              has a continual effect, we use the isActivation flag to
+              signify its heartbeat (i.e., damage from Summon Swarm).
+              In this case, e.EItem will be NULL. If we're activing an
+              item that produces a field (Horn of Fog), e.EItem will not
+              be NULL, so we go to AField(). */
+              if ((e.isActivation && !e.EItem && (e.EMagic->rval & FI_CONTINUAL)) || e.isEnter || e.isLeave)
+                  r = ReThrow(EV_MAGIC_STRIKE,e);
+              else if (!FieldDone) {
+                  FieldDone = true;
+                  r = AField(e); 
+              }
+              break;
+          case AR_BARRIER:
+              e.EActor->Reveal(true);
+              r = ABarrier(e); break;
+          case AR_GLOBE:
+              /* Globes don't *inherently* give away your pos. */
+              r = AGlobe(e); break;
+          case AR_NONE:
+              r = ReThrow(EV_MAGIC_STRIKE,e); 
+              break;
+          case AR_POISON:
+              if (e.EVictim->ResistLevel(AD_TOXI)!=-1)
+                  if (isTarget(e,e.EVictim))
+                      r = ReThrow(EV_MAGIC_STRIKE,e);
+              break;
+          case AR_DISEASE:
+              if (e.EVictim->ResistLevel(AD_DISE)!=-1)
+                  if (isTarget(e,e.EVictim))
+                      r = ReThrow(EV_MAGIC_STRIKE,e);
+              break;
+          default:
+              Error("Unknown aval in effect (aval %d, effect %s)!",
+                  e.EMagic->aval,(const char*)NAME(e.eID));
+              return ABORT;
+          }
+
+          if (e.efNum == -1) /* Pseudo-effects */
+              return DONE;
+
+          while(te->Vals(e.efNum+1) && 
+              (te->Vals(e.efNum+1)->aval == te->Vals(e.efNum)->aval))
+              e.efNum++;
+
+          if (r == ERROR || r == ABORT)
+              return r;
+NextSegment:
+          e.efNum++;
       }
 
-    switch(e.EMagic->aval)
-    {
-      case AR_BOLT:
-      case AR_BEAM:
-      case AR_BREATH:
-      case AR_RAY:
-      case AR_CHAIN:
-      case AR_BALL:
-      case AR_BURST:
-        e.EActor->Reveal(true);
-        // r = ABolt(e); break;
-        r = ABallBeamBolt(e); break;
-      case AR_TOUCH:
-        r = ATouch(e); break;
-      case AR_FIELD:
-      case AR_MFIELD:
-        /* We only ever want to create one field per effect, even if
-           that effect has a whole slew of EffectValues. */
-        /* The logic of the isActivbation thing is this: when a field
-           has a continual effect, we use the isActivation flag to
-           signify its heartbeat (i.e., damage from Summon Swarm).
-           In this case, e.EItem will be NULL. If we're activing an
-           item that produces a field (Horn of Fog), e.EItem will not
-           be NULL, so we go to AField(). */
-        if ((e.isActivation && !e.EItem && (e.EMagic->rval & FI_CONTINUAL)) || e.isEnter || e.isLeave)
-          r = ReThrow(EV_MAGIC_STRIKE,e);
-        else if (!FieldDone) {
-          FieldDone = true;
-          r = AField(e); 
-        }
-        break;
-      case AR_BARRIER:
-        e.EActor->Reveal(true);
-        r = ABarrier(e); break;
-      case AR_GLOBE:
-        /* Globes don't *inherently* give away your pos. */
-        r = AGlobe(e); break;
-      case AR_NONE:
-        r = ReThrow(EV_MAGIC_STRIKE,e); 
-        break;
-      case AR_POISON:
-        if (e.EVictim->ResistLevel(AD_TOXI)!=-1)
-          if (isTarget(e,e.EVictim))
-            r = ReThrow(EV_MAGIC_STRIKE,e);
-        break;
-      case AR_DISEASE:
-        if (e.EVictim->ResistLevel(AD_DISE)!=-1)
-          if (isTarget(e,e.EVictim))
-            r = ReThrow(EV_MAGIC_STRIKE,e);
-        break;
-      default:
-        Error("Unknown aval in effect (aval %d, effect %s)!",
-          e.EMagic->aval,(const char*)NAME(e.eID));
-        return ABORT;
-    }
+      if (e.EMap)
+          e.EMap->PrintQueue(QUEUE_DAMAGE_MSG);    
 
-    if (e.efNum == -1) /* Pseudo-effects */
-      return DONE;
+      if (e.doVUpdate && e.EActor && e.EActor->m)
+          e.EActor->m->VUpdate(e.EActor->x,e.EActor->y);
 
-      while(te->Vals(e.efNum+1) && 
-           (te->Vals(e.efNum+1)->aval == te->Vals(e.efNum)->aval))
-      e.efNum++;
-
-
-    if (r == ERROR || r == ABORT)
+      if (!e.isSomething && !(r == DONE) && !FieldDone)
+          goto Nothing;
       return r;
-
-NextSegment:
-
-    e.efNum++;
   }
-
-  if (e.EMap)
-    e.EMap->PrintQueue(QUEUE_DAMAGE_MSG);    
-
-
-  if (e.doVUpdate && e.EActor && e.EActor->m)
-    e.EActor->m->VUpdate(e.EActor->x,e.EActor->y);
-    
-  if (!e.isSomething && !(r == DONE) && !FieldDone)
-    goto Nothing;
-  return r;
-}
 
 EvReturn Magic::MagicStrike(EventInfo &e)
   {

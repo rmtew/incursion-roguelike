@@ -577,350 +577,345 @@ int16 Creature::GetAgeCatagory()
     return 0;
   }
 
-EvReturn Creature::Event(EventInfo &e)
-	{
-		int16 i; EvReturn res;
+EvReturn Creature::Event(EventInfo &e) {
+    int16 i;
+    EvReturn res;
 
     if (e.EVictim == this) {
-      e.Event = EVICTIM(e.Event);
-      res = TMON(mID)->Event(e,mID);
-      if (res == DONE || res == ERROR || res == ABORT)
-        return res;
-      if (res == NOMSG)
-        e.Terse = true;
-      StatiIterNature(this,TEMPLATE)
-          {
+        e.Event = EVICTIM(e.Event);
+        res = TMON(mID)->Event(e,mID);
+        if (res == DONE || res == ERROR || res == ABORT)
+            return res;
+        if (res == NOMSG)
+            e.Terse = true;
+        StatiIterNature(this,TEMPLATE) {
             res = TTEM(S->eID)->Event(e,S->eID);
             if (res == DONE || res == ERROR || res == ABORT)
-              StatiIterBreakout(this,return res)
+                StatiIterBreakout(this,return res)
             if (res == NOMSG)
-              e.Terse = true;
-          }
-      StatiIterEnd(this)
-      e.Event -= EVICTIM(0);
-      }
+                e.Terse = true;
+        }
+        StatiIterEnd(this)
+        e.Event -= EVICTIM(0);
+    }
 
     if (e.EActor == this) {
-      res = TMON(mID)->Event(e,mID);
-      if (res == DONE || res == ERROR || res == ABORT)
-        return res;
-      if (res == NOMSG)
-        e.Terse = true;
-      StatiIterNature(this,TEMPLATE)
+        res = TMON(mID)->Event(e,mID);
+        if (res == DONE || res == ERROR || res == ABORT)
+            return res;
+        if (res == NOMSG)
+            e.Terse = true;
+        StatiIterNature(this,TEMPLATE) {
             res = TTEM(S->eID)->Event(e,S->eID);
             if (res == DONE || res == ERROR || res == ABORT)
-              StatiIterBreakout(this,return res)
+                StatiIterBreakout(this,return res)
             if (res == NOMSG)
-              e.Terse = true;
-      StatiIterEnd(this)
-      }
+                e.Terse = true;
+        }
+        StatiIterEnd(this)
+    }
 
-		switch(e.Event)
-			{
-        case PRE(EV_TALK):
-          if (e.EActor == this)
+    switch(e.Event) {
+    case PRE(EV_TALK):
+        if (e.EActor == this)
             return PreTalk(e);      
-          return NOTHING;
-        case EV_TALK:
-          if (e.EActor == this && e.EParam)
+        return NOTHING;
+    case EV_TALK:
+        if (e.EActor == this && e.EParam)
             return ReThrow(e.EParam,e);
-          return NOTHING;
-        case EV_BARTER:
-          if (e.EActor == this)
+        return NOTHING;
+    case EV_BARTER:
+        if (e.EActor == this)
             return Barter(e);
-          return NOTHING;
-        case EV_COW:
-          if (e.EActor == this)
+        return NOTHING;
+    case EV_COW:
+        if (e.EActor == this)
             return Cow(e);
-          return NOTHING;
-        case EV_DISMISS:
-          if (e.EActor == this)
+        return NOTHING;
+    case EV_DISMISS:
+        if (e.EActor == this)
             return Dismiss(e);
-          return NOTHING;
-        case EV_DISTRACT:
-          if (e.EActor == this)
+        return NOTHING;
+    case EV_DISTRACT:
+        if (e.EActor == this)
             return Distract(e);
-          return NOTHING;
-        case EV_ENLIST:
-          if (e.EActor == this)
+        return NOTHING;
+    case EV_ENLIST:
+        if (e.EActor == this)
             return Enlist(e);
-          return NOTHING;
-        case EV_FAST_TALK:
-          if (e.EActor == this)
+        return NOTHING;
+    case EV_FAST_TALK:
+        if (e.EActor == this)
             return FastTalk(e);
-          return NOTHING;
-        case EV_GREET:
-          if (e.EActor == this)
+        return NOTHING;
+    case EV_GREET:
+        if (e.EActor == this)
             return Greet(e);
-          return NOTHING;
-        case EV_ORDER:
-          if (e.EActor == this)
+        return NOTHING;
+    case EV_ORDER:
+        if (e.EActor == this)
             return Order(e);
-          return NOTHING;
-        case EV_QUELL:
-          if (e.EActor == this)
+        return NOTHING;
+    case EV_QUELL:
+        if (e.EActor == this)
             return Quell(e);
-          return NOTHING;
-        case EV_REQUEST:
-          if (e.EActor == this)
+        return NOTHING;
+    case EV_REQUEST:
+        if (e.EActor == this)
             return Request(e);
-          return NOTHING;
-        case EV_SURRENDER:
-          if (e.EActor == this)
+        return NOTHING;
+    case EV_SURRENDER:
+        if (e.EActor == this)
             return Surrender(e);
-          return NOTHING;
-        case EV_TAUNT:
-          if (e.EActor == this)
+        return NOTHING;
+    case EV_TAUNT:
+        if (e.EActor == this)
             return Taunt(e);
-          return NOTHING;      
-        case EV_TERMS:
-          if (e.EActor == this)
+        return NOTHING;      
+    case EV_TERMS:
+        if (e.EActor == this)
             return OfferTerms(e);
-          return NOTHING;    
-        case EV_CAST:
-          if (e.EActor==this)
+        return NOTHING;    
+    case EV_CAST:
+        if (e.EActor==this)
             return Cast(e);
-          else
+        else
             return NOTHING;
-        case EV_INVOKE:
-          if (e.EActor==this)
+    case EV_INVOKE:
+        if (e.EActor==this)
             return Invoke(e);
-          else
+        else
             return NOTHING;
-        case EV_DISGUISE:
-          if (e.EActor==this)
+    case EV_DISGUISE:
+        if (e.EActor==this)
             return DonDisguise(e);
-          else
+        else
             return NOTHING;
-        case EV_RESEARCH:
-          if (e.EActor==this)
+    case EV_RESEARCH:
+        if (e.EActor==this)
             return Research(e);
-          else
+        else
             return NOTHING;
-				case EV_MOVE:
-        case EV_PUSH:
-        case EV_JUMP:
-					EVerify(T_CREATURE,0,0,0)
-					if(e.EActor==this)
-						return Walk(e);
-					else
-						return NOTHING;
-        case EV_TURNING:
- 					EVerify(T_CREATURE,0,0,0)
-					if(e.EActor==this)
-						return Turn(e);
-					else
-						return NOTHING;
-				case EV_PICKUP:
-					EVerify(T_CREATURE, 0,T_ITEM,0)
-					if(e.EActor==this)
-						return PickUp(e);
-				 break;
-				case EV_DROP:
-					EVerify(T_CREATURE, 0,T_ITEM,0)
-					if(e.EActor==this)
-						return Drop(e);
-				 break;
-        case PRE(EV_EFFECT):
-          /* Chromatic Orb kludge */
-          e.EMagic = TEFF(e.eID)->Vals(0);
-          return NOTHING;
-        case EV_EFFECT:
-          return MagicEvent(e);
-				case EV_NATTACK:
-          //EVerify(T_CREATURE, T_CREATURE, 0, 0);
-					if(e.EActor==this)
-						return NAttack(e);
-				 break;
-        case EV_WATTACK:
-          //EVerify(T_CREATURE, T_CREATURE, 0, 0);
-					if(e.EActor==this)
-						return WAttack(e);
-				 break;
-        case EV_RATTACK:
-					//EVerify(T_CREATURE, 0, T_ITEM, T_ITEM);
-					if(e.EActor==this)
-						return RAttack(e);
-				 break;
-        case EV_LOADXBOW:
-          //EVerify(T_CREATURE,0,T_ITEM,0);
-          if (e.EActor == this)
+    case EV_MOVE:
+    case EV_PUSH:
+    case EV_JUMP:
+        EVerify(T_CREATURE,0,0,0)
+        if(e.EActor==this)
+            return Walk(e);
+        else
+            return NOTHING;
+    case EV_TURNING:
+        EVerify(T_CREATURE,0,0,0)
+        if(e.EActor==this)
+            return Turn(e);
+        else
+            return NOTHING;
+    case EV_PICKUP:
+        EVerify(T_CREATURE, 0,T_ITEM,0)
+        if(e.EActor==this)
+            return PickUp(e);
+        break;
+    case EV_DROP:
+        EVerify(T_CREATURE, 0,T_ITEM,0)
+        if(e.EActor==this)
+            return Drop(e);
+        break;
+    case PRE(EV_EFFECT):
+        /* Chromatic Orb kludge */
+        e.EMagic = TEFF(e.eID)->Vals(0);
+        return NOTHING;
+    case EV_EFFECT:
+        return MagicEvent(e);
+    case EV_NATTACK:
+        //EVerify(T_CREATURE, T_CREATURE, 0, 0);
+        if(e.EActor==this)
+            return NAttack(e);
+        break;
+    case EV_WATTACK:
+        //EVerify(T_CREATURE, T_CREATURE, 0, 0);
+        if(e.EActor==this)
+            return WAttack(e);
+        break;
+    case EV_RATTACK:
+        //EVerify(T_CREATURE, 0, T_ITEM, T_ITEM);
+        if(e.EActor==this)
+            return RAttack(e);
+        break;
+    case EV_LOADXBOW:
+        //EVerify(T_CREATURE,0,T_ITEM,0);
+        if (e.EActor == this)
             return LoadCrossbow(e);
-         break;
-        case EV_SATTACK:
-					//EVerify(T_CREATURE, 0, T_ITEM, T_ITEM);
-					if(e.EActor==this)
-						return SAttack(e);
-				 break;
-        case EV_OATTACK:
-					EVerify(T_CREATURE, T_CREATURE, 0, 0);
-					if(e.EActor==this)
-						return OAttack(e);
-				 break;
-        case PRE(EV_STRIKE):
-					EVerify(T_CREATURE, 0, 0, 0);
-          if(e.EActor==this && (!e.ETarget || e.ETarget->isCreature()))
-						return PreStrike(e);
-				 break;
-				case EV_STRIKE:
-					EVerify(T_CREATURE, 0, 0, 0);
-					if(e.EActor==this)
-						return Strike(e);
-				 break;
-        case POST(EV_STRIKE):
-          /* Monsters with M_SKIRMISH will run away after landing a single
-             successful blow, then return after a short period. This should
-             really be somewhere in the monster AI, but it's just so simple
-             to put it here... */
-          if (e.EActor != this)
+        break;
+    case EV_SATTACK:
+        //EVerify(T_CREATURE, 0, T_ITEM, T_ITEM);
+        if(e.EActor==this)
+            return SAttack(e);
+        break;
+    case EV_OATTACK:
+        EVerify(T_CREATURE, T_CREATURE, 0, 0);
+        if(e.EActor==this)
+            return OAttack(e);
+        break;
+    case PRE(EV_STRIKE):
+        EVerify(T_CREATURE, 0, 0, 0);
+        if(e.EActor==this && (!e.ETarget || e.ETarget->isCreature()))
+            return PreStrike(e);
+        break;
+    case EV_STRIKE:
+        EVerify(T_CREATURE, 0, 0, 0);
+        if(e.EActor==this)
+            return Strike(e);
+        break;
+    case POST(EV_STRIKE):
+        /* Monsters with M_SKIRMISH will run away after landing a single
+        successful blow, then return after a short period. This should
+        really be somewhere in the monster AI, but it's just so simple
+        to put it here... */
+        if (e.EActor != this)
             break;
 
-          if (e.isHit && e.aDmg)
-            if (e.EActor->isMonster() && e.EActor->HasMFlag(M_SKIRMISH) &&
-                (e.EActor->cHP < e.EActor->mHP))
-              if (!HasStati(AFRAID) && !random(2))
-                e.EActor->GainTempStati(AFRAID,NULL,10+random(10),SS_MONI,
-                                          FEAR_SKIRMISH);
-          
-          /* ww: add xDmg to this calc so that Sneak Attack damage counts
-           * -- certainly in character for priests of pain! */
-          if (HasAbility(CA_FEED_UPON_PAIN))
+        if (e.isHit && e.aDmg)
+            if (e.EActor->isMonster() && e.EActor->HasMFlag(M_SKIRMISH) && (e.EActor->cHP < e.EActor->mHP))
+                if (!HasStati(AFRAID) && !random(2))
+                    e.EActor->GainTempStati(AFRAID,NULL,10+random(10),SS_MONI,FEAR_SKIRMISH);
+
+        /* ww: add xDmg to this calc so that Sneak Attack damage counts
+        * -- certainly in character for priests of pain! */
+        if (HasAbility(CA_FEED_UPON_PAIN))
             if ((e.aDmg + e.xDmg)> 10 && cHP < mHP + Attr[A_THP])
-              cHP = min(mHP + Attr[A_THP],cHP + (e.aDmg + e.xDmg) / 10);
-            
-         break;
-				case EV_HIT:
-					//EVerify(T_CREATURE, T_CREATURE, 0, 0);
-					if(e.EActor==this)
-						return Hit(e);
-				 break;
-				case EV_MISS:
-					EVerify(T_CREATURE, T_CREATURE, 0, 0);
-					if(e.EActor==this)
-						return Miss(e);
-				 break;
-        case EV_DAMAGE:
-          if (e.EVictim == this) {
+                cHP = min(mHP + Attr[A_THP],cHP + (e.aDmg + e.xDmg) / 10);
+
+        break;
+    case EV_HIT:
+        //EVerify(T_CREATURE, T_CREATURE, 0, 0);
+        if(e.EActor==this)
+            return Hit(e);
+        break;
+    case EV_MISS:
+        EVerify(T_CREATURE, T_CREATURE, 0, 0);
+        if(e.EActor==this)
+            return Miss(e);
+        break;
+    case EV_DAMAGE:
+        if (e.EVictim == this) {
             EVerify(0, T_CREATURE, 0, 0);
             return Damage(e);
-            }
-         break;
-        case EV_PDAMAGE:
-          if (e.EVictim == this) {
+        }
+        break;
+    case EV_PDAMAGE:
+        if (e.EVictim == this) {
             EVerify(0, T_CREATURE, 0, 0);
             return PDamage(e);
-            }
-         break;
-        case POST(EV_DAMAGE):
-          if (isPlayer() && theGame->InPlay())
+        }
+        break;
+    case POST(EV_DAMAGE):
+        if (isPlayer() && theGame->InPlay())
             thisp->ShowStats();
-          if (e.DType == AD_SLEE)
+        if (e.DType == AD_SLEE)
             break; 
-      // fall through
-        case POST(EV_PUSH):
-          if (e.EVictim == this)
+        // fall through
+    case POST(EV_PUSH):
+        if (e.EVictim == this)
             if (!(Flags & F_DELETE))
-              Awaken();
-          return NOTHING;
-        case EV_DEATH:
-          EVerify(0, T_CREATURE, 0, 0);
-          if (e.EVictim == this)
+                Awaken();
+        return NOTHING;
+    case EV_DEATH:
+        EVerify(0, T_CREATURE, 0, 0);
+        if (e.EVictim == this)
             return Death(e);
-         break;
-				case EV_ATTACKMSG:
-					EVerify(T_CREATURE, 0, 0, 0);
-					if(e.EActor==this)
-						return AttackMsg(e);
-				 break;
-				case EV_WIELD:
-				 return Wield(e);
-				case EV_REMOVE:
-          return TakeOff(e);
-        case EV_SHIFT:
-          if (ResistLevel(AD_POLY) == -1)
-            {
-              IPrint("You find you cannot change form!");
-              return ABORT;
-            }
-          SetSilence();
-          RemoveStati(POLYMORPH);
-          UnsetSilence();
-          if (e.eID == tmID) {
+        break;
+    case EV_ATTACKMSG:
+        EVerify(T_CREATURE, 0, 0, 0);
+        if(e.EActor==this)
+            return AttackMsg(e);
+        break;
+    case EV_WIELD:
+        return Wield(e);
+    case EV_REMOVE:
+        return TakeOff(e);
+    case EV_SHIFT:
+        if (ResistLevel(AD_POLY) == -1) {
+            IPrint("You find you cannot change form!");
+            return ABORT;
+        }
+        SetSilence();
+        RemoveStati(POLYMORPH);
+        UnsetSilence();
+        if (e.eID == tmID) {
             StateFlags |= MS_KNOWN;
             IDPrint(NULL,"The <Obj1> changes back into <his:Obj1> natural form.",this);
-            }
-          else
+        } else
             IDPrint(NULL,"The <Obj> changes into a <Res>.",this,e.eID);
-          Shapeshift(e.eID,true,NULL);
-          GainPermStati(POLYMORPH,NULL,SS_MISC,1,0,e.eID);
-          return DONE;
-        case EV_HIDE:
-          return Hide(e);
-        case EV_SEARCH:
-          return Search(e);
-        case EV_DIG:
-          return Dig(e);
-        case EV_PICK_POCKET:
-          EVerify(T_CREATURE,0,0,0);
-          if (e.EActor == this)
+        Shapeshift(e.eID,true,NULL);
+        GainPermStati(POLYMORPH,NULL,SS_MISC,1,0,e.eID);
+        return DONE;
+    case EV_HIDE:
+        return Hide(e);
+    case EV_SEARCH:
+        return Search(e);
+    case EV_DIG:
+        return Dig(e);
+    case EV_PICK_POCKET:
+        EVerify(T_CREATURE,0,0,0);
+        if (e.EActor == this)
             return PickPocket(e);
-         break;
-        case EV_ASCEND:
-          EVerify(T_CREATURE,0,0,0);
-          if (e.EActor == this)
+        break;
+    case EV_ASCEND:
+        EVerify(T_CREATURE,0,0,0);
+        if (e.EActor == this)
             return Ascend(e);
-         break;
-        case EV_DESCEND:
-          EVerify(T_CREATURE,0,0,0);
-          if (e.EActor == this)
+        break;
+    case EV_DESCEND:
+        EVerify(T_CREATURE,0,0,0);
+        if (e.EActor == this)
             return Descend(e);
-         break;
-        case EV_MOUNT:
-          if (e.EActor == this)
+        break;
+    case EV_MOUNT:
+        if (e.EActor == this)
             return Mount(e);
-         break;
-        case EV_DISMOUNT:
-          if (e.EActor == this)
+        break;
+    case EV_DISMOUNT:
+        if (e.EActor == this)
             return Dismount(e);
-         break;
-				case EV_TURN:
-					DoTurn();
-				 return DONE;
-				case EV_MAGIC_HIT:
-					if(e.EActor==this)
-						return MagicHit(e);
-         break;
-				case EV_MAGIC_STRIKE:
-					if(e.EActor==this) 
+        break;
+    case EV_TURN:
+        DoTurn();
+        return DONE;
+    case EV_MAGIC_HIT:
+        if(e.EActor==this)
+            return MagicHit(e);
+        break;
+    case EV_MAGIC_STRIKE:
+        if(e.EActor==this) 
             return MagicStrike(e);                                       
-         break;
-        case EV_PHASE:
-          if (e.EActor==this)
+        break;
+    case EV_PHASE:
+        if (e.EActor==this)
             return Phase(e);
-         break;
-        case EV_BREAK:
-          if (e.EActor == this) {  
+        break;
+    case EV_BREAK:
+        if (e.EActor == this) {  
             if (e.EItem)
-              e.ETarget = e.EItem;
+                e.ETarget = e.EItem;
             if (!e.EVictim)
-              { IPrint("Break what?");
-                return ABORT; }
+            { IPrint("Break what?");
+            return ABORT; }
             if (e.EVictim->isCreature())
-              { IPrint("Use the normal attack interface for that.");
-                return ABORT; }
+            { IPrint("Use the normal attack interface for that.");
+            return ABORT; }
             if (e.EActor->AttackMode() == S_MELEE ||
                 e.EActor->AttackMode() == S_DUAL)
-              Throw(EV_WATTACK,e.EActor,e.ETarget);
+                Throw(EV_WATTACK,e.EActor,e.ETarget);
             else
-              ThrowVal(EV_SATTACK,A_KICK,e.EActor,e.ETarget);              
+                ThrowVal(EV_SATTACK,A_KICK,e.EActor,e.ETarget);              
             return DONE;
-            }
-         break;
-			}
-		if (e.isVerb && (e.EActor == this))
-			return HandleVerb(e);
-  	return NOTHING;
-	}
+        }
+        break;
+    }
+    if (e.isVerb && (e.EActor == this))
+        return HandleVerb(e);
+    return NOTHING;
+}
 
 void Creature::ExtendedAction()
   {

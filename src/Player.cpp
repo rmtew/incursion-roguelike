@@ -666,61 +666,55 @@ FoundDefAmmo:
         break; 
 
       case KY_CMD_GET:
-        gx = x; gy = y;
-        if (HasMFlag(M_NOHANDS))
-          {
-            IPrint("But you have no hands!");
-            break;
+          gx = x; gy = y;
+          if (HasMFlag(M_NOHANDS)) {
+              IPrint("But you have no hands!");
+              break;
           }
-        if (i = m->FChestAt(x,y)) {
-          if (yn("Open a container?"))
-            goto OpenChest;
+          if (i = m->FChestAt(x,y)) {
+              if (yn("Open a container?"))
+                  goto OpenChest;
           }
-        if (HasStati(TELEKINETIC))
-          {
-            e.Clear();
-            e.vRange = GetStatiMag(TELEKINETIC);
-            if (thisp->MyTerm->EffectPrompt(e,Q_LOC,false,"Get an item:"))
-              { gx = e.EXVal; gy = e.EYVal; }
-            else
-              return;
+          if (HasStati(TELEKINETIC)) {
+              e.Clear();
+              e.vRange = GetStatiMag(TELEKINETIC);
+              if (thisp->MyTerm->EffectPrompt(e,Q_LOC,false,"Get an item:"))
+                  { gx = e.EXVal; gy = e.EYVal; }
+              else
+                  return;
           }
-                  
-        
 
-        if (m->MItemAt(gx,gy)) {
-          targ = m->FItemAt(gx,gy);
-          while (targ) {
-            if (targ->isItem()) {
-              LegendIdent(oItem(targ->myHandle));
-              int32 sortKey = 0;
-              switch (Opt(OPT_SORT_PILE)) {
-                case 1: /* type */ sortKey = targ->Type; break;
-                case 2: /* quality */ 
-                        sortKey = -10 - ((Item *)targ)->PItemLevel(this); break; 
-                default: /* name */ break;
-              } 
-              MyTerm->LOption(targ->Name(NA_LONG|NA_MECH),targ->myHandle,
-                              0, sortKey);
-            }
-            targ = m->NItemAt(gx,gy);
+          if (m->MItemAt(gx,gy)) {
+              targ = m->FItemAt(gx,gy);
+              while (targ) {
+                  if (targ->isItem()) {
+                      LegendIdent(oItem(targ->myHandle));
+                      int32 sortKey = 0;
+                      switch (Opt(OPT_SORT_PILE)) {
+                      case 1: /* type */ sortKey = targ->Type; break;
+                      case 2: /* quality */ 
+                          sortKey = -10 - ((Item *)targ)->PItemLevel(this); break; 
+                      default: /* name */ break;
+                      } 
+                      MyTerm->LOption(targ->Name(NA_LONG|NA_MECH),targ->myHandle,0,sortKey);
+                  }
+                  targ = m->NItemAt(gx,gy);
+              }
+              h = MyTerm->LMenu(MENU_ESC|MENU_SORTED|MENU_BORDER,"Pick up what?",WIN_MENUBOX);
+              if (h == -1)
+                  break;
+              i = oItem(h); 
+          } else if (!(i=m->FItemAt(gx,gy)))
+              break;
+ChosenGetItem:
+          if (i->GetQuantity() > 1 && MyTerm->AltDown())
+              i = OneSomeAll(i,this);
+          if (Throw(EV_PICKUP,this,NULL,i)!=ABORT) {
+            if (gx!=x || gy!=y)
+                IPrint("The <Obj> flies through the air and into your grip!",i);
+            return;
           }
-          h = MyTerm->LMenu(MENU_ESC|MENU_SORTED|MENU_BORDER,
-                          "Pick up what?",WIN_MENUBOX);
-          if (h == -1)
-            break;
-          i = oItem(h); 
-        }
-        else if (!(i=m->FItemAt(gx,gy)))
           break;
-        ChosenGetItem:
-        if (i->GetQuantity() > 1 && MyTerm->AltDown())
-          i = OneSomeAll(i,this);
-        if(Throw(EV_PICKUP,this,NULL,i)!=ABORT)
-          { if (gx!=x || gy!=y)
-              IPrint("The <Obj> flies through the air and into your grip!",i);
-            return; }
-        break;
       case KY_CMD_HIDE:
         if (HasStati(HIDING)) {
           IPrint("You step out of the shadows.");

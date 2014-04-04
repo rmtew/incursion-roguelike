@@ -525,47 +525,45 @@ void TextTerm::Box(int16 win, int16 flags, int16 cbor, int16 ctxt, const char*te
 
 
 
-int16 TextTerm::WrapWrite(int16 x,int16 y,const char* _s, int16 x2, int16 maxlines)
-  {
-    String l, v, s; s = _s;
-    int i, pos, lines;
-    /* Trim Trailing Returns */
-    while (s.GetLength() && s[s.GetLength()-1] == '\n')
-      s = s.Left(s.GetLength()-1);
-    GotoXY(x,y); lines = 0; cWrap = 0;
-    while(1) {
-      int space_left_on_this_line = (x2 ? x2 : WinSizeX()) - max(x,cWrap);
-      int trueLength = s.GetTrueLength(); 
-      if (space_left_on_this_line > trueLength)
-        {
-          if (trueLength > 0) { lines++; } 
-          Write(s);
-          GotoXY(max(x,cWrap),y+lines);
-          return lines;
-        }
-      pos = (s.TrueLeft(space_left_on_this_line)).GetLength()-1;
+  int16 TextTerm::WrapWrite(int16 x,int16 y,const char* _s, int16 x2, int16 maxlines) {
+      String l, v, s; s = _s;
+      int i, pos, lines;
+      /* Trim Trailing Returns */
+      while (s.GetLength() && s[s.GetLength()-1] == '\n')
+          s = s.Left(s.GetLength()-1);
+      GotoXY(x,y); lines = 0; cWrap = 0;
+      while(1) {
+          int space_left_on_this_line = (x2 ? x2 : WinSizeX()) - max(x,cWrap);
+          int trueLength = s.GetTrueLength(); 
+          if (space_left_on_this_line > trueLength) {
+              if (trueLength > 0) { lines++; } 
+              Write(s);
+              GotoXY(max(x,cWrap),y+lines);
+              return lines;
+          }
+          pos = (s.TrueLeft(space_left_on_this_line)).GetLength()-1;
 
-      int good_breakpoint = pos;
-      while (good_breakpoint && 
-             s[good_breakpoint] != ' ' &&
-             s[good_breakpoint] != '\n')
-        good_breakpoint --;
-      if (!good_breakpoint) {
-        // just write out what we have 
-        l = s.TrueLeft(pos);
-      } else {
-        l = s.Left(good_breakpoint);
-      } 
-      if (l.strchr('\n')) { 
-        pos = l.strchr('\n'); 
-        l = s.Left(pos); 
-      }
-      s = s.Right((s.GetLength() - l.GetLength()));
-      lines++; Write(l); GotoXY(max(x,cWrap),y+lines);
-      if ((y + lines) >= WinSizeY() || lines >= maxlines)
-        return lines;
-      while (s.GetLength() && s[0] == ' ')
-        s = s.Right(s.GetLength()-1);
+          int good_breakpoint = pos;
+          while (good_breakpoint && 
+              s[good_breakpoint] != ' ' &&
+              s[good_breakpoint] != '\n')
+              good_breakpoint --;
+          if (!good_breakpoint) {
+              // just write out what we have 
+              l = s.TrueLeft(pos);
+          } else {
+              l = s.Left(good_breakpoint);
+          } 
+          if (l.strchr('\n')) { 
+              pos = l.strchr('\n'); 
+              l = s.Left(pos); 
+          }
+          s = s.Right((s.GetLength() - l.GetLength()));
+          lines++; Write(l); GotoXY(max(x,cWrap),y+lines);
+          if ((y + lines) >= WinSizeY() || lines >= maxlines)
+              return lines;
+          while (s.GetLength() && s[0] == ' ')
+              s = s.Right(s.GetLength()-1);
       }  
   }
 
@@ -686,13 +684,12 @@ void TextTerm::HyperTab(int16 wn)
 
   }
 
-void TextTerm::ClearScroll()
-  {
+void TextTerm::ClearScroll() {
     SClear();
     ScrollLines = 0;
     LinkCount = 0;
     SelectedLink = -1;
-  }
+}
 
 void TextTerm::SWrite(const char *text, int16 wn)
   {
@@ -879,608 +876,583 @@ void TextTerm::LOptionClear()
         OptionCount=0;
 }
 
-int LMenuOptionAlphaSort(const void *a, const void *b) 
-{
-  LMenuOption *l = (LMenuOption *)a, *r = (LMenuOption *)b;
-  if (l->SortKey == r->SortKey) {
-    /* we don't want "3 uncursed potions of levitation" to come before
-     *               "uncursed potion of growth" */
-    const char * a ;
-    const char * b ; 
-    a = strstr(l->Text,"cursed"); if (!a) a = l->Text;
-    b = strstr(r->Text,"cursed"); if (!b) b = r->Text;
-    return (strcmp(a,b));
-  } else
-          return (l->SortKey - r->SortKey);
+int LMenuOptionAlphaSort(const void *a, const void *b) {
+    LMenuOption *l = (LMenuOption *)a, *r = (LMenuOption *)b;
+    if (l->SortKey == r->SortKey) {
+        /* we don't want "3 uncursed potions of levitation" to come before
+        *                "uncursed potion of growth" */
+        const char * a ;
+        const char * b ; 
+        a = strstr(l->Text,"cursed"); if (!a) a = l->Text;
+        b = strstr(r->Text,"cursed"); if (!b) b = r->Text;
+        return (strcmp(a,b));
+    } else
+        return (l->SortKey - r->SortKey);
 }
 
-int32 TextTerm::LMenu(uint16 fl, const char*_title,int8 MWin,const char*help,
-    int8 pos)
-  {
+int32 TextTerm::LMenu(uint16 fl, const char*_title,int8 MWin,const char*help, int8 pos) {
     /* ww: since hijklnm etc are taken by the roguelike keyset, give
-     * roguelike players 123... options instead */
+    * roguelike players 123... options instead */
     const char* MenuLetters =
-            (theGame->Opt(OPT_ROGUELIKE)) ? 
+        (theGame->Opt(OPT_ROGUELIKE)) ? 
         "acdefgimopqrstvwxzACDEFGIMOPQRSTVWXZ                  " :
-        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ  " 
-        ;
-		int16 ch, i,c,p,tcol, qk, szCol, Rows, Cols, Width, Height, DY;
-		char buff[60], let[5]; int16 vStart, vRows;
-		const char *itm;
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ  ";
+    int16 ch, i,c,p,tcol, qk, szCol, Rows, Cols, Width, Height, DY;
+    char buff[60], let[5]; int16 vStart, vRows;
+    const char *itm;
     String title = _title;
-    if (Mode == MO_RECREATE)
-      {
+    if (Mode == MO_RECREATE) {
         ASSERT(strncmp(RInf.Rsp[RInf.cRsp].Question,title,31) == 0);
         LOptionClear();
         return RInf.Rsp[RInf.cRsp++].Answer;
-      }
+    }
 
     if (fl & MENU_SORTED)
-      qsort(Option,OptionCount,sizeof(Option[0]),LMenuOptionAlphaSort);
+        qsort(Option,OptionCount,sizeof(Option[0]),LMenuOptionAlphaSort);
 
     PrePrompt();
 
-    Restart:
-
+Restart:
     c = 0;
     if (pos) {
-      for (int i=0; i<OptionCount; i++) 
-        if (Option[i].Val == pos) 
-          c = i; 
+        for (int i=0; i<OptionCount; i++) 
+            if (Option[i].Val == pos) 
+                c = i; 
     } 
 
     Cols = (fl & MENU_4COLS) ? 4 :
-           (fl & MENU_3COLS) ? 3 :
-           (fl & MENU_2COLS) ? 2 : 1;
+        (fl & MENU_3COLS) ? 3 :
+        (fl & MENU_2COLS) ? 2 : 1;
+
     Save();
     Rows = max(1,OptionCount / Cols);
     if (Cols > 1)
-      if (OptionCount % Cols)
-        Rows++;
+        if (OptionCount % Cols)
+            Rows++;
     vRows = min((fl & MENU_BORDER) ? 32 : 34,Rows);
     vStart = 0;
 
-
     DY = 0;
-    if (MWin == WIN_MENUBOX)
-      {
+    if (MWin == WIN_MENUBOX) {
         szCol = 0;
         for(i=0;i!=OptionCount;i++)
-          if (strlen(Option[i].Text) > szCol)
-            szCol = strlen(Option[i].Text);
+            if (strlen(Option[i].Text) > szCol)
+                szCol = strlen(Option[i].Text);
         szCol += 6;
         if (szCol > 76 / Cols) szCol = 76 / Cols; 
         for(i=0;title[i];i++)
-          if (title[i] == '\n')
-            DY++;
-        if (fl & MENU_LARGEBOX)
-          {
+            if (title[i] == '\n')
+                DY++;
+        if (fl & MENU_LARGEBOX) {
             SetWin(WIN_SCREEN);
             Width = activeWin->Right - activeWin->Left;
             Width -= 8;
             szCol = Width / Cols;
-          }
-        else if (fl & MENU_WIDE)
-          {
+        } else if (fl & MENU_WIDE) {
             SetWin(WIN_SCREEN);
             Width = activeWin->Right - activeWin->Left;
             Width -= 16;
             szCol = Width / Cols;          
-          }
-        else if (!title)
-          Width = 4 + szCol * Cols;
+        } else if (!title)
+            Width = 4 + szCol * Cols;
         else
-          Width = 2 + max(min(45,strlen(title)),szCol*Cols);
+            Width = 2 + max(min(45,strlen(title)),szCol*Cols);
         Height = vRows + (title ? DY+1 : 0) + 1;
         if (fl & MENU_LARGEBOX) {
-          SetWin(WIN_SCREEN);
-          Height = WinSizeY() - 8;
-          }
-        else if (fl & MENU_DESC)
-          Height += 9;
-          
+            SetWin(WIN_SCREEN);
+            Height = WinSizeY() - 8;
+        } else if (fl & MENU_DESC)
+            Height += 9;
+
         if (fl & MENU_DESC) {          
-          SizeWin(WIN_MENUBOX, Width, Height);
-          SetWin(WIN_MENUBOX);
-          SizeWin(WIN_MENUDESC,WinLeft(),WinTop()+(Height-9),WinRight(),WinBottom());
-          }
-        else
-          SizeWin(WIN_MENUBOX, Width, Height);
+            SizeWin(WIN_MENUBOX, Width, Height);
+            SetWin(WIN_MENUBOX);
+            SizeWin(WIN_MENUDESC,WinLeft(),WinTop()+(Height-9),WinRight(),WinBottom());
+        } else
+            SizeWin(WIN_MENUBOX, Width, Height);
         SetWin(WIN_SCREEN); Color(EMERALD);
-      }
-    else
-      {
+    } else {
         SetWin(MWin);
         szCol = ((activeWin->Right - activeWin->Left) / Cols);
-      }
+    }
     if (fl & MENU_BORDER)
-      DrawBorder(MWin,EMERALD);
+        DrawBorder(MWin,EMERALD);
     for (i=0;i!=OptionCount;i++)
-      Option[i].Text = Option[i].Text.Left(szCol - 4); // ww: - "[A] "
-    
+        Option[i].Text = Option[i].Text.Left(szCol - 4); // ww: - "[A] "
+
     /*
     SetWin(MWin);
     tcol = activeWin->Bottom - activeWin->Top;
     if (fl & MENU_DESC)
-      {
-        SetWin(WIN_MENUDESC);
-        tcol -= (activeWin->Bottom - activeWin->Top)+1;
-        ASSERT(tcol>1);
-      }
+    {
+    SetWin(WIN_MENUDESC);
+    tcol -= (activeWin->Bottom - activeWin->Top)+1;
+    ASSERT(tcol>1);
+    }
     vRows = min(vRows,tcol);
     */
 
-
     do {            
-      SetWin(MWin);
-      Clear();
-      PurgeStrings();
-      DY = (MWin == WIN_MENUBOX) ? 1 : 2;
-      if (title) {
-	      Color(15);
-        if (strlen(title) > WinSizeX()-3 || strchr(title,'\n')) {
-          if (fl & MENU_SWRAPWRITE) {
-            ClearScroll(); 
-            DY += SWrapWrite(3,1,(fl & MENU_RAW) ? (const char*) title : XPrint(title),WinSizeX()-2,MWin);
-            UpdateScrollArea(0,MWin); 
-          } else if (MWin == WIN_CREATION) {
-            DY += WrapWrite(3,1,(fl & MENU_RAW) ? (const char*) title : XPrint(title),WinSizeX()-2);
-          }
-          else
-            DY += WrapWrite(0,0,(fl & MENU_RAW) ? (const char*) title : XPrint(title));
-          }
-        else {
-          p = ((WinSizeX()/2) - (strlen(title)/2)) /* * (MWin != WIN_MENUBOX)*/; 
-	        GotoXY(p,(MWin == WIN_MENUBOX) ? 0 : 1);
-          if (fl & MENU_RAW)
-            Write(title); 
-          else
-            Write(XPrint(title));
-          DY++;
-          }
-        }
-      if (fl & MENU_DESC) {
         SetWin(MWin);
-        SizeWin(WIN_MENUDESC, WinLeft(),min(WinTop()+vRows+DY+1,WinBottom()-5),WinRight(),WinBottom());
-        }
-
-      /* center things nicely */ 
-      if (c >= vStart + vRows*Cols)
-        vStart = c - (vRows*Cols-1);
-      if (c < vStart) 
-        vStart = c; 
-
-      SetWin(MWin);
-  	  for(i=vStart;i!=min(OptionCount,vStart+vRows*Cols);i++) {
-	      GotoXY(((i-vStart)/vRows)*szCol,((i-vStart)%vRows)+DY);
-	      let[0] = MenuLetters[min(53,i)];
-	      let[1] = 0;
-	      if (fl & MENU_QKEY)
-	        for (qk=0;qk!=MAX_QKEYS;qk++)
-	          if (Option[i].Val == QuickKeys[qk].Value)
-	            if (QKeyType == QuickKeys[qk].Type)
-	              {
-	                let[0] = -EMERALD;
-	                let[1] = '0' + qk;
-	                let[2] = -((c == i) ? WHITE : GREY);
-	                let[3] = 0;
-	              }
-        if (c == i)              
-		      {
-            /* ww: so that [A] cursed long sword 
-             * shows up as <blue>[A] <red>cursed<white>long sword
-             * and not <white][A] <red>cursed<white>long sword
-             * which makes it impossible to tell where you are 
-             * fjm: I fixed this using Decolorize(), so that the
-             * entire menu item is blue. */
-            Color(WHITE);
-            Write(Format("  [%s] ",let));
-            Color(AZURE);
-            Write(Decolorize(Option[i].Text).Left(szCol - 5));
-            Color(GREY);
-          }
-        else
-          { Color(GREY);
-            Write(Format("  [%s] %.*s",let,
-                  szCol - 5, 
-                  (const char*) Option[i].Text
-                  )); 
-          }
-        }
-      if (fl & MENU_DESC)
-        {
-          ClearScroll();
-          Color(1);
-          SWrapWrite(3,0,XPrint(Option[c].Desc),WinSizeX()-2,WIN_MENUDESC);
-          UpdateScrollArea(0,WIN_MENUDESC);
-          SetWin(MWin);
-        }
-
-      InvalidChar:
-      {
-        int16 oldMode;
-        oldMode = GetMode();
-        SetMode(MO_DIALOG);
-        if (i < 27)
-          ch=tolower(GetCharCmd(KY_CMD_ARROW_MODE));
-        else
-          ch = GetCharCmd(KY_CMD_ARROW_MODE);
-        SetMode(oldMode);
-      }
-      switch(ch)
-        {
-          case KY_REDRAW:
-            if (fl & MENU_REDRAW)
-              return -2;
-            break;
-          case KY_CMD_NORTHEAST:
-          case KY_CMD_NORTHWEST:
-            if (fl & MENU_DESC) { 
-                    SetWin(MWin);
-                    ScrollUp(WIN_MENUDESC);
-            } 
-            goto InvalidChar;
-          case KY_CMD_SOUTHEAST:
-          case KY_CMD_SOUTHWEST:
-            if (fl & MENU_DESC) { 
-                    SetWin(MWin);
-                    ScrollDown(WIN_MENUDESC);
-            } 
-            goto InvalidChar;
-          case KY_CMD_NORTH:
-            if (c > 0)
-              c--;
-            else
-              c = OptionCount - 1; 
-           break;
-          case KY_CMD_SOUTH:
-            if (c < OptionCount-1)
-              c++;
-            else  {
-              vStart = 0; 
-              c = 0; 
+        Clear();
+        PurgeStrings();
+        DY = (MWin == WIN_MENUBOX) ? 1 : 2;
+        if (title) {
+            Color(15);
+            if (strlen(title) > WinSizeX()-3 || strchr(title,'\n')) {
+                if (fl & MENU_SWRAPWRITE) {
+                    ClearScroll(); 
+                    DY += SWrapWrite(3,1,(fl & MENU_RAW) ? (const char*) title : XPrint(title),WinSizeX()-2,MWin);
+                    UpdateScrollArea(0,MWin); 
+                } else if (MWin == WIN_CREATION) {
+                    DY += WrapWrite(3,1,(fl & MENU_RAW) ? (const char*) title : XPrint(title),WinSizeX()-2);
+                } else
+                    DY += WrapWrite(0,0,(fl & MENU_RAW) ? (const char*) title : XPrint(title));
+            } else {
+                p = ((WinSizeX()/2) - (strlen(title)/2)) /* * (MWin != WIN_MENUBOX)*/; 
+                GotoXY(p,(MWin == WIN_MENUBOX) ? 0 : 1);
+                if (fl & MENU_RAW)
+                    Write(title); 
+                else
+                    Write(XPrint(title));
+                DY++;
             }
-           break;
-          case KY_CMD_WEST:
+        }
+        if (fl & MENU_DESC) {
+            SetWin(MWin);
+            SizeWin(WIN_MENUDESC, WinLeft(),min(WinTop()+vRows+DY+1,WinBottom()-5),WinRight(),WinBottom());
+        }
+
+        /* center things nicely */ 
+        if (c >= vStart + vRows*Cols)
+            vStart = c - (vRows*Cols-1);
+        if (c < vStart) 
+            vStart = c; 
+
+        SetWin(MWin);
+        for(i=vStart;i!=min(OptionCount,vStart+vRows*Cols);i++) {
+            GotoXY(((i-vStart)/vRows)*szCol,((i-vStart)%vRows)+DY);
+            let[0] = MenuLetters[min(53,i)];
+            let[1] = 0;
+            if (fl & MENU_QKEY)
+                for (qk=0;qk!=MAX_QKEYS;qk++)
+                    if (Option[i].Val == QuickKeys[qk].Value)
+                        if (QKeyType == QuickKeys[qk].Type) {
+                            let[0] = -EMERALD;
+                            let[1] = '0' + qk;
+                            let[2] = -((c == i) ? WHITE : GREY);
+                            let[3] = 0;
+                        }
+            if (c == i) {
+                /* ww: so that [A] cursed long sword 
+                * shows up as <blue>[A] <red>cursed<white>long sword
+                * and not <white][A] <red>cursed<white>long sword
+                * which makes it impossible to tell where you are 
+                * fjm: I fixed this using Decolorize(), so that the
+                * entire menu item is blue. */
+                Color(WHITE);
+                Write(Format("  [%s] ",let));
+                Color(AZURE);
+                Write(Decolorize(Option[i].Text).Left(szCol - 5));
+                Color(GREY);
+            } else {
+                Color(GREY);
+                Write(Format("  [%s] %.*s",let,
+                    szCol - 5, 
+                    (const char*) Option[i].Text
+                    )); 
+            }
+        }
+        if (fl & MENU_DESC) {
+            ClearScroll();
+            Color(1);
+            SWrapWrite(3,0,XPrint(Option[c].Desc),WinSizeX()-2,WIN_MENUDESC);
+            UpdateScrollArea(0,WIN_MENUDESC);
+            SetWin(MWin);
+        }
+
+InvalidChar:
+        {
+            int16 oldMode;
+            oldMode = GetMode();
+            SetMode(MO_DIALOG);
+            if (i < 27)
+                ch=tolower(GetCharCmd(KY_CMD_ARROW_MODE));
+            else
+                ch = GetCharCmd(KY_CMD_ARROW_MODE);
+            SetMode(oldMode);
+        }
+        switch(ch) {
+        case KY_REDRAW:
+            if (fl & MENU_REDRAW)
+                return -2;
+            break;
+        case KY_CMD_NORTHEAST:
+        case KY_CMD_NORTHWEST:
+            if (fl & MENU_DESC) { 
+                SetWin(MWin);
+                ScrollUp(WIN_MENUDESC);
+            } 
+            goto InvalidChar;
+        case KY_CMD_SOUTHEAST:
+        case KY_CMD_SOUTHWEST:
+            if (fl & MENU_DESC) { 
+                SetWin(MWin);
+                ScrollDown(WIN_MENUDESC);
+            } 
+            goto InvalidChar;
+        case KY_CMD_NORTH:
+            if (c > 0)
+                c--;
+            else
+                c = OptionCount - 1; 
+            SetDebugText("NORTH");
+            break;
+        case KY_CMD_SOUTH:
+            if (c < OptionCount-1)
+                c++;
+            else  {
+                vStart = 0; 
+                c = 0; 
+            }
+            SetDebugText("SOUTH");
+            break;
+        case KY_CMD_WEST:
             if (c - vRows >= vStart)
-              c -= vRows;
-           break;
-          case KY_CMD_EAST:
+                c -= vRows;
+            break;
+        case KY_CMD_EAST:
             if (c + vRows <= min(OptionCount-1,vStart+(vRows*Cols-1)))
-              c += vRows;
-           break;   
-          case KY_ENTER:
+                c += vRows;
+            break;   
+        case KY_ENTER:
             Restore();
             OptionCount=0;
-            if (Mode == MO_CREATE)
-              {
+            if (Mode == MO_CREATE) {
                 strncpy(RInf.Rsp[RInf.nRsp].Question,title,31);
                 RInf.Rsp[RInf.nRsp].Answer = Option[c].Val;
                 RInf.nRsp++;
-              }             
+            }             
             return Option[c].Val;
-          case KY_ESC:
-            if (fl & MENU_ESC)
-              {
+        case KY_ESC:
+            if (fl & MENU_ESC) {
                 Restore();
                 OptionCount = 0;
-                if (Mode == MO_CREATE)
-                  {
+                if (Mode == MO_CREATE) {
                     strncpy(RInf.Rsp[RInf.nRsp].Question,title,31);
                     RInf.Rsp[RInf.nRsp].Answer = -1;
                     RInf.nRsp++;
-                  }
-                return -1;
-              }
-           break;
-          case KY_HELP:
-            if (help) {
-              Restore();
-              if (!strchr(help,','))
-                HelpTopic(help);
-              else
-                {
-                  static String a, b;
-                  a = Upto(help,",/");
-                  b = Right(help,strlen(help) - (a.GetLength()+1));
-                  HelpTopic(a,b);
                 }
-              goto Restart;
-              }
-           break;
-          case ' ':
+                return -1;
+            }
             break;
-          default:
-            if (isdigit(ch))
-              {
+        case KY_HELP:
+            if (help) {
+                Restore();
+                if (!strchr(help,','))
+                    HelpTopic(help);
+                else {
+                    static String a, b;
+                    a = Upto(help,",/");
+                    b = Right(help,strlen(help) - (a.GetLength()+1));
+                    HelpTopic(a,b);
+                }
+                goto Restart;
+            }
+            break;
+        case ' ':
+            break;
+        default:
+            if (isdigit(ch)) {
                 if (!(fl & MENU_QKEY))
-                  break;
+                    break;
                 QuickKeys[ch - '0'].Type  = QKeyType;
                 QuickKeys[ch - '0'].Value = Option[c].Val;
                 QuickKeys[ch - '0'].MM    = 0;
                 break; 
-              }
+            }
             if (ControlKeys & ALT || ControlKeys & CONTROL) {
-              if (ControlKeys & SHIFT) ch = toupper(ch); 
-              for (i=0;i<OptionCount;i++) 
-                if ((Option[i].Text[0]) == ch) {
-                  c = i; 
-                  break; 
-                } 
+                if (ControlKeys & SHIFT) ch = toupper(ch); 
+                for (i=0;i<OptionCount;i++) 
+                    if ((Option[i].Text[0]) == ch) {
+                        c = i; 
+                        break; 
+                    } 
             } else { 
-              if (strchr(MenuLetters,ch) == NULL)
-                goto InvalidChar;
-              if (strchr(MenuLetters,ch) - MenuLetters >= OptionCount)
-                goto InvalidChar;
-              Restore();
-              OptionCount = 0;
-              if (Mode == MO_CREATE)
-                {
-                  strncpy(RInf.Rsp[RInf.nRsp].Question,title,31);
-                  RInf.Rsp[RInf.nRsp].Answer =
-                    Option[strchr(MenuLetters,ch)-MenuLetters].Val;
-                  RInf.nRsp++;
+                if (strchr(MenuLetters,ch) == NULL)
+                    goto InvalidChar;
+                if (strchr(MenuLetters,ch) - MenuLetters >= OptionCount)
+                    goto InvalidChar;
+
+                Restore();
+                OptionCount = 0;
+                if (Mode == MO_CREATE) {
+                    strncpy(RInf.Rsp[RInf.nRsp].Question,title,31);
+                    RInf.Rsp[RInf.nRsp].Answer =
+                        Option[strchr(MenuLetters,ch)-MenuLetters].Val;
+                    RInf.nRsp++;
                 }              
-              return Option[strchr(MenuLetters,ch)-MenuLetters].Val;
+                return Option[strchr(MenuLetters,ch)-MenuLetters].Val;
             }
         }
-      }
-    while(1);
-  }
+    } while(1);
+}
 
 bool TextTerm::LMultiSelect(uint16 fl, const char* _title,int8 MWin,const char*help,
-    int8 pos)
-  {
-		int16 ch, i,j,c,p,tcol, qk, szCol, Rows, Cols, Width, Height, DY, barlen;
-		char buff[60], let[5]; int16 vStart, vRows;
-		const char *itm; String title;
-		title = _title;
+                            int8 pos)
+{
+    int16 ch, i,j,c,p,tcol, qk, szCol, Rows, Cols, Width, Height, DY, barlen;
+    char buff[60], let[5]; int16 vStart, vRows;
+    const char *itm; String title;
+    title = _title;
 
     barlen = 5;
     for (i=0;i!=OptionCount;i++)
-      barlen = max(barlen,Option[i].Text.GetTrueLength()+6);
+        barlen = max(barlen,Option[i].Text.GetTrueLength()+6);
 
 
     if (fl & MENU_SORTED)
-      qsort(Option,OptionCount,sizeof(Option[0]),LMenuOptionAlphaSort);
+        qsort(Option,OptionCount,sizeof(Option[0]),LMenuOptionAlphaSort);
 
     PrePrompt();
 
-    Restart:
+Restart:
 
     c = 0;
     if (pos) {
-      for (int i=0; i<OptionCount; i++) 
-        if (Option[i].Val == pos) 
-          c = i; 
+        for (int i=0; i<OptionCount; i++) 
+            if (Option[i].Val == pos) 
+                c = i; 
     } 
 
     Cols = (fl & MENU_4COLS) ? 4 :
-           (fl & MENU_3COLS) ? 3 :
-           (fl & MENU_2COLS) ? 2 : 1;
+        (fl & MENU_3COLS) ? 3 :
+        (fl & MENU_2COLS) ? 2 : 1;
     Save();
     Rows = max(1,OptionCount / Cols);
     if (Cols > 1)
-      if (OptionCount % Cols)
-        Rows++;
+        if (OptionCount % Cols)
+            Rows++;
     vRows = min((fl & MENU_BORDER) ? 36 : 38,Rows);
     vStart = 0;
 
 
     DY = 0;
     if (MWin == WIN_MENUBOX)
-      {
+    {
         szCol = 0;
         for(i=0;i!=OptionCount;i++)
-          if (strlen(Option[i].Text) > szCol)
-            szCol = strlen(Option[i].Text);
+            if (strlen(Option[i].Text) > szCol)
+                szCol = strlen(Option[i].Text);
         szCol += 6;
         if (szCol > 76 / Cols) szCol = 76 / Cols; 
         for(i=0;title[i];i++)
-          if (title[i] == '\n')
-            DY++;
+            if (title[i] == '\n')
+                DY++;
         if (fl & MENU_LARGEBOX)
-          {
+        {
             SetWin(WIN_SCREEN);
             Width = activeWin->Right - activeWin->Left;
             Width -= 8;
             szCol = Width / Cols;
-          }
+        }
         else if (fl & MENU_WIDE)
-          {
+        {
             SetWin(WIN_SCREEN);
             Width = activeWin->Right - activeWin->Left;
             Width -= 16;
             szCol = Width / Cols;          
-          }
+        }
         else if (!title)
-          Width = 4 + szCol * Cols;
+            Width = 4 + szCol * Cols;
         else
-          Width = 2 + max(min(45,strlen(title)),szCol*Cols);
+            Width = 2 + max(min(45,strlen(title)),szCol*Cols);
         Height = vRows + (title ? DY+1 : 0) + 1;
         if (fl & MENU_LARGEBOX) {
-          SetWin(WIN_SCREEN);
-          Height = WinSizeY() - 8;
-          }
+            SetWin(WIN_SCREEN);
+            Height = WinSizeY() - 8;
+        }
         else if (fl & MENU_DESC)
-          Height += 9;
-          
+            Height += 9;
+
         if (fl & MENU_DESC) {          
-          SizeWin(WIN_MENUBOX, Width, Height);
-          SetWin(WIN_MENUBOX);
-          SizeWin(WIN_MENUDESC,WinLeft(),WinTop()+(Height-9),WinRight(),WinBottom());
-          }
+            SizeWin(WIN_MENUBOX, Width, Height);
+            SetWin(WIN_MENUBOX);
+            SizeWin(WIN_MENUDESC,WinLeft(),WinTop()+(Height-9),WinRight(),WinBottom());
+        }
         else
-          SizeWin(WIN_MENUBOX, Width, Height);
+            SizeWin(WIN_MENUBOX, Width, Height);
         SetWin(WIN_SCREEN); Color(EMERALD);
-      }
+    }
     else
-      {
+    {
         SetWin(MWin);
         szCol = ((activeWin->Right - activeWin->Left) / Cols);
-      }
+    }
     if (fl & MENU_BORDER)
-      DrawBorder(MWin,EMERALD);
+        DrawBorder(MWin,EMERALD);
     for (i=0;i!=OptionCount;i++)
-      Option[i].Text = Option[i].Text.Left(szCol - 4); // ww: - "[A] "
-    
+        Option[i].Text = Option[i].Text.Left(szCol - 4); // ww: - "[A] "
+
     /*
     SetWin(MWin);
     tcol = activeWin->Bottom - activeWin->Top;
     if (fl & MENU_DESC)
-      {
-        SetWin(WIN_MENUDESC);
-        tcol -= (activeWin->Bottom - activeWin->Top)+1;
-        ASSERT(tcol>1);
-      }
+    {
+    SetWin(WIN_MENUDESC);
+    tcol -= (activeWin->Bottom - activeWin->Top)+1;
+    ASSERT(tcol>1);
+    }
     vRows = min(vRows,tcol);
     */
 
 
     do {            
-      SetWin(MWin);
-      Clear();
-      PurgeStrings();
-      DY = (MWin == WIN_MENUBOX) ? 1 : 2;
-      if (title) {
-	      Color(15);
-        if (strlen(title) > WinSizeX()-3 || strchr(title,'\n')) {
-          if (fl & MENU_SWRAPWRITE) {
-            ClearScroll(); 
-            DY += SWrapWrite(3,1,(fl & MENU_RAW) ? (const char*) title : XPrint(title),WinSizeX()-2,MWin);
-            UpdateScrollArea(0,MWin); 
-          } else if (MWin == WIN_CREATION) {
-            DY += WrapWrite(3,1,(fl & MENU_RAW) ? (const char*) title : XPrint(title),WinSizeX()-2);
-          }
-          else
-            DY += WrapWrite(0,0,(fl & MENU_RAW) ? (const char*) title : XPrint(title));
-          }
-        else {
-          p = ((WinSizeX()/2) - (strlen(title)/2)) /* * (MWin != WIN_MENUBOX)*/; 
-	        GotoXY(p,(MWin == WIN_MENUBOX) ? 0 : 1);
-          if (fl & MENU_RAW)
-            Write(title); 
-          else
-            Write(XPrint(title));
-          DY++;
-          }
-        }
-      if (fl & MENU_DESC) {
         SetWin(MWin);
-        SizeWin(WIN_MENUDESC, WinLeft(),min(WinTop()+vRows+DY+1,WinBottom()-5),WinRight(),WinBottom());
-        }
-
-      /* center things nicely */ 
-      if (c >= vStart + vRows*Cols)
-        vStart = c - (vRows*Cols-1);
-      if (c < vStart) 
-        vStart = c; 
-
-      SetWin(MWin);
-  	  for(i=vStart;i!=min(OptionCount,vStart+vRows*Cols);i++) {
-	      GotoXY(((i-vStart)/vRows)*szCol,((i-vStart)%vRows)+DY);
-	      Color(WHITE);
-        Write(Format("  [%c%c%c] %.*s",-PINK,Option[i].isMarked ? '*' : ' ',-GREY,
-               szCol - 5, 
-              (const char*) Option[i].Text
-              ));
-        for (j=((i-vStart)/vRows)*szCol+1+activeWin->Left;
-             j!=((i-vStart)/vRows)*szCol+1+min(barlen,szCol)+activeWin->Left;j++)
-          APutChar(j,((i-vStart)%vRows)+DY+activeWin->Top,
-            (AGetChar(j,((i-vStart)%vRows)+DY+activeWin->Top) & 0x0FFF) | 
-              ((c == i) ? 0x1000 : 0x0000));
-	      }
-      if (fl & MENU_DESC)
-        {
-          ClearScroll();
-          Color(1);
-          SWrapWrite(3,0,XPrint(Option[c].Desc),WinSizeX()-2,WIN_MENUDESC);
-          UpdateScrollArea(0,WIN_MENUDESC);
-          SetWin(MWin);
-        }
-
-      InvalidChar:
-      {
-        int16 oldMode;
-        oldMode = GetMode();
-        SetMode(MO_DIALOG);
-        if (i < 27)
-          ch=tolower(GetCharCmd(KY_CMD_ARROW_MODE));
-        else
-          ch = GetCharCmd(KY_CMD_ARROW_MODE);
-        SetMode(oldMode);
-      }
-      switch(ch)
-        {
-          case KY_CMD_NORTHEAST:
-          case KY_CMD_NORTHWEST:
-            if (fl & MENU_DESC) { 
-                    SetWin(MWin);
-                    ScrollUp(WIN_MENUDESC);
-            } 
-            goto InvalidChar;
-          case KY_CMD_SOUTHEAST:
-          case KY_CMD_SOUTHWEST:
-            if (fl & MENU_DESC) { 
-                    SetWin(MWin);
-                    ScrollDown(WIN_MENUDESC);
-            } 
-            goto InvalidChar;
-          case KY_CMD_NORTH:
-            if (c > 0)
-              c--;
-            else
-              c = OptionCount - 1; 
-           break;
-          case KY_CMD_SOUTH:
-            if (c < OptionCount-1)
-              c++;
-            else  {
-              vStart = 0; 
-              c = 0; 
+        Clear();
+        PurgeStrings();
+        DY = (MWin == WIN_MENUBOX) ? 1 : 2;
+        if (title) {
+            Color(15);
+            if (strlen(title) > WinSizeX()-3 || strchr(title,'\n')) {
+                if (fl & MENU_SWRAPWRITE) {
+                    ClearScroll(); 
+                    DY += SWrapWrite(3,1,(fl & MENU_RAW) ? (const char*) title : XPrint(title),WinSizeX()-2,MWin);
+                    UpdateScrollArea(0,MWin); 
+                } else if (MWin == WIN_CREATION) {
+                    DY += WrapWrite(3,1,(fl & MENU_RAW) ? (const char*) title : XPrint(title),WinSizeX()-2);
+                }
+                else
+                    DY += WrapWrite(0,0,(fl & MENU_RAW) ? (const char*) title : XPrint(title));
             }
-           break;
-          case KY_CMD_WEST:
+            else {
+                p = ((WinSizeX()/2) - (strlen(title)/2)) /* * (MWin != WIN_MENUBOX)*/; 
+                GotoXY(p,(MWin == WIN_MENUBOX) ? 0 : 1);
+                if (fl & MENU_RAW)
+                    Write(title); 
+                else
+                    Write(XPrint(title));
+                DY++;
+            }
+        }
+        if (fl & MENU_DESC) {
+            SetWin(MWin);
+            SizeWin(WIN_MENUDESC, WinLeft(),min(WinTop()+vRows+DY+1,WinBottom()-5),WinRight(),WinBottom());
+        }
+
+        /* center things nicely */ 
+        if (c >= vStart + vRows*Cols)
+            vStart = c - (vRows*Cols-1);
+        if (c < vStart) 
+            vStart = c; 
+
+        SetWin(MWin);
+        for(i=vStart;i!=min(OptionCount,vStart+vRows*Cols);i++) {
+            GotoXY(((i-vStart)/vRows)*szCol,((i-vStart)%vRows)+DY);
+            Color(WHITE);
+            Write(Format("  [%c%c%c] %.*s",-PINK,Option[i].isMarked ? '*' : ' ',-GREY,
+                szCol - 5, 
+                (const char*) Option[i].Text
+                ));
+            for (j=((i-vStart)/vRows)*szCol+1+activeWin->Left;
+                j!=((i-vStart)/vRows)*szCol+1+min(barlen,szCol)+activeWin->Left;j++)
+                APutChar(j,((i-vStart)%vRows)+DY+activeWin->Top,
+                (AGetChar(j,((i-vStart)%vRows)+DY+activeWin->Top) & 0x0FFF) | 
+                ((c == i) ? 0x1000 : 0x0000));
+        }
+        if (fl & MENU_DESC)
+        {
+            ClearScroll();
+            Color(1);
+            SWrapWrite(3,0,XPrint(Option[c].Desc),WinSizeX()-2,WIN_MENUDESC);
+            UpdateScrollArea(0,WIN_MENUDESC);
+            SetWin(MWin);
+        }
+
+InvalidChar:
+        {
+            int16 oldMode;
+            oldMode = GetMode();
+            SetMode(MO_DIALOG);
+            if (i < 27)
+                ch=tolower(GetCharCmd(KY_CMD_ARROW_MODE));
+            else
+                ch = GetCharCmd(KY_CMD_ARROW_MODE);
+            SetMode(oldMode);
+        }
+        switch(ch)
+        {
+        case KY_CMD_NORTHEAST:
+        case KY_CMD_NORTHWEST:
+            if (fl & MENU_DESC) { 
+                SetWin(MWin);
+                ScrollUp(WIN_MENUDESC);
+            } 
+            goto InvalidChar;
+        case KY_CMD_SOUTHEAST:
+        case KY_CMD_SOUTHWEST:
+            if (fl & MENU_DESC) { 
+                SetWin(MWin);
+                ScrollDown(WIN_MENUDESC);
+            } 
+            goto InvalidChar;
+        case KY_CMD_NORTH:
+            if (c > 0)
+                c--;
+            else
+                c = OptionCount - 1; 
+            SetDebugText("NORTH");
+            break;
+        case KY_CMD_SOUTH:
+            if (c < OptionCount-1)
+                c++;
+            else  {
+                vStart = 0; 
+                c = 0; 
+            }
+            SetDebugText("SOUTH");
+            break;
+        case KY_CMD_WEST:
             if (c - vRows >= vStart)
-              c -= vRows;
-           break;
-          case KY_CMD_EAST:
+                c -= vRows;
+            break;
+        case KY_CMD_EAST:
             if (c + vRows <= min(OptionCount-1,vStart+(vRows*Cols-1)))
-              c += vRows;
-           break;   
-          case KY_SPACE:
+                c += vRows;
+            break;   
+        case KY_SPACE:
             Option[c].isMarked = !Option[c].isMarked;
-           break;
-          case KY_ENTER:
+            break;
+        case KY_ENTER:
             Restore();
             return true;
-          case KY_ESC:
+        case KY_ESC:
             if (fl & MENU_ESC)
-              {
+            {
                 Restore();
                 OptionCount = 0;
                 return false;
-              }
-           break;
-          case KY_HELP:
+            }
+            break;
+        case KY_HELP:
             if (help) {
-              Restore();
-              if (!strchr(help,','))
-                HelpTopic(help);
-              else
+                Restore();
+                if (!strchr(help,','))
+                    HelpTopic(help);
+                else
                 {
-                  static String a, b;
-                  a = Upto(help,",/");
-                  b = Right(help,strlen(help) - (a.GetLength()+1));
-                  HelpTopic(a,b);
+                    static String a, b;
+                    a = Upto(help,",/");
+                    b = Right(help,strlen(help) - (a.GetLength()+1));
+                    HelpTopic(a,b);
                 }
-              goto Restart;
-              }
-           break;
+                goto Restart;
+            }
+            break;
         }
-      }
+    }
     while(1);
-  }
+}
 
 int32 TextTerm::FirstSelected()
   {

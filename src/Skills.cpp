@@ -4846,158 +4846,143 @@ EvReturn Creature::Dig(EventInfo &e)
 
   }
 
-void Character::LegendIdent(Item *it)
-  {
-    bool anything = false, isRunic;
-    int16 i; String flav;
-    /* Later, legend lore should apply to monsters as well as
-       items, upon first striking or being struck by an unidentified
-       enemy. For now, in a low-level game, it's plenty useful. */
+  void Character::LegendIdent(Item *it) {
+      bool anything = false, isRunic;
+      int16 i; String flav;
+      /* Later, legend lore should apply to monsters as well as
+      items, upon first striking or being struck by an unidentified
+      enemy. For now, in a low-level game, it's plenty useful. */
 
-    if (isPlayer()) {
-      if (thisp->Opt(OPT_AUTOID)) {
-        if (!it->isKnown(KN_MAGIC))
-          anything = true;
-        it->MakeKnown(0xFF);
-        /* ww: this isn't necessary
-        if (anything)
-          IPrint("WizIdent: <Str>.", it->Name(NA_MECH|NA_LONG));
-        */
-        return;
-      } else {
-        /* ww: there is too much junk in incursion (especially daggers and
-         * rapiers and whatnot) that sleeping with all of it just to be
-         * able to separate the wheat from the chaff is not reasonable.
-         * Other roguelikes (e.g., Angband, Baldur's Gate) have big ways to
-         * easily identify stuff on the floor. For now, we apply Intuition
-         * to an item when you first see it. This makes it easy to tell
-         * what you should be spending time on. We also tone down Intuition
-         * so that you get less info (mostly just mundane vs. magical). 
-         *
-         * fjm: I recognize this argument as valid, but from a game aesthetic
-         * sense I like Intuition working when you rest. Since your change is
-         * likely cruical to playability, however, I've decided to add it as
-         * an option that is by default "on", at least for the things that
-         * have the greatest "junk to magic" ratio -- weapons and armor. Let
-         * me know what you think. I've left auto-intuit off for wands, potions,
-         * and other things that are A) almost always magical, and B) have
-         * flavors that allow easy ID-ing.
-         */
-        switch (thisp->Opt(OPT_EASY_INTUIT))
-          {
-            case 0: break; /* No Easy Intuit */
-            case 1: thisp->IntuitItem(it); break;
-            case 2: if ( it->isType(T_WEAPON) || it->isType(T_ARMOR) ||
-                         it->isType(T_MISSILE) || it->isType(T_BOW) ||
-                         it->isType(T_SHIELD) )
-                      thisp->IntuitItem(it); break;
+      if (isPlayer()) {
+          if (thisp->Opt(OPT_AUTOID)) {
+              if (!it->isKnown(KN_MAGIC))
+                  anything = true;
+              it->MakeKnown(0xFF);
+              /* ww: this isn't necessary
+              if (anything)
+              IPrint("WizIdent: <Str>.", it->Name(NA_MECH|NA_LONG));
+              */
+              return;
+          } else {
+              /* ww: there is too much junk in incursion (especially daggers and
+              * rapiers and whatnot) that sleeping with all of it just to be
+              * able to separate the wheat from the chaff is not reasonable.
+              * Other roguelikes (e.g., Angband, Baldur's Gate) have big ways to
+              * easily identify stuff on the floor. For now, we apply Intuition
+              * to an item when you first see it. This makes it easy to tell
+              * what you should be spending time on. We also tone down Intuition
+              * so that you get less info (mostly just mundane vs. magical). 
+              *
+              * fjm: I recognize this argument as valid, but from a game aesthetic
+              * sense I like Intuition working when you rest. Since your change is
+              * likely cruical to playability, however, I've decided to add it as
+              * an option that is by default "on", at least for the things that
+              * have the greatest "junk to magic" ratio -- weapons and armor. Let
+              * me know what you think. I've left auto-intuit off for wands, potions,
+              * and other things that are A) almost always magical, and B) have
+              * flavors that allow easy ID-ing.
+              */
+              switch (thisp->Opt(OPT_EASY_INTUIT)) {
+              case 0: break; /* No Easy Intuit */
+              case 1: thisp->IntuitItem(it); break;
+              case 2: if ( it->isType(T_WEAPON) || it->isType(T_ARMOR) ||
+                          it->isType(T_MISSILE) || it->isType(T_BOW) ||
+                          it->isType(T_SHIELD) )
+                          thisp->IntuitItem(it); break;
+              }
+          }
+          if (HasAbility(CA_FATESENSE) && !it->isKnown(KN_CURSE)) {
+              it->MakeKnown(KN_CURSE);
+              if (it->isCursed())
+                  IPrint("You feel a faint shiver from the <Obj>.",it);
           }
       }
-      if (HasAbility(CA_FATESENSE) && !it->isKnown(KN_CURSE))
-      {
-        it->MakeKnown(KN_CURSE);
-        if (it->isCursed())
-          IPrint("You feel a faint shiver from the <Obj>.",it);
-      }
-    }
-    
-    if (HasSkill(SK_DECIPHER) && !(it->isKnown(KN_MAGIC) && 
-         it->isKnown(KN_PLUS) && it->isKnown(KN_CURSE)) && 
-         !(it->IFlags & IF_DECIPHERED))
-      {
-        const char* RunicWords[] = { "rune", "runic", "runed",
-          "inscribed", "written", "symbol", "glyph", "engraved",
-          "ancient", "script", "iconic", NULL };
-        isRunic = false;
-        if (it->IFlags & IF_RUNIC)
-          isRunic = true;
-        if (it->eID) {
-          flav = NAME(EFFMEM(it->eID,thisp)->FlavorID);
-          for (i=0;RunicWords[i];i++)
-            if (strstr(flav,RunicWords[i]))
+
+      if (HasSkill(SK_DECIPHER) && !(it->isKnown(KN_MAGIC) && 
+          it->isKnown(KN_PLUS) && it->isKnown(KN_CURSE)) && 
+          !(it->IFlags & IF_DECIPHERED)) {
+          const char* RunicWords[] = { "rune", "runic", "runed",
+              "inscribed", "written", "symbol", "glyph", "engraved",
+              "ancient", "script", "iconic", NULL };
+          isRunic = false;
+          if (it->IFlags & IF_RUNIC)
               isRunic = true;
+          if (it->eID) {
+              flav = NAME(EFFMEM(it->eID,thisp)->FlavorID);
+              for (i=0;RunicWords[i];i++)
+                  if (strstr(flav,RunicWords[i]))
+                      isRunic = true;
           }
-        if (isRunic) {
-          if (SkillCheck(SK_DECIPHER,10+it->ItemLevel()*2,true))
-            {
-              IPrint("By translating the runes covering the <Obj>, "
-                "you discern that it is in fact <str>!",
-                it, (const char*) it->Name(NA_A|NA_IDENT));
-              it->MakeKnown(KN_MAGIC|KN_CURSE|KN_PLUS);
-              Exercise(A_INT,random(6)+max(1,it->ItemLevel()),EINT_IDENT,75);
-            }
-          else
-            IPrint("You fail to translate the runes covering the <Obj>.", it);
+          if (isRunic) {
+              if (SkillCheck(SK_DECIPHER,10+it->ItemLevel()*2,true)) {
+                  IPrint("By translating the runes covering the <Obj>, "
+                      "you discern that it is in fact <str>!",
+                      it, (const char*) it->Name(NA_A|NA_IDENT));
+                  it->MakeKnown(KN_MAGIC|KN_CURSE|KN_PLUS);
+                  Exercise(A_INT,random(6)+max(1,it->ItemLevel()),EINT_IDENT,75);
+              } else
+                  IPrint("You fail to translate the runes covering the <Obj>.", it);
 
           }
-        it->IFlags |= IF_DECIPHERED;
+          it->IFlags |= IF_DECIPHERED;
       }
 
 
-    if (it->isType(T_MUSH) || it->isType(T_HERB))
-      if (HasAbility(CA_NATURE_SENSE))
-        {
-          it->MakeKnown(0xFF);
-          Exercise(A_INT,random(6)+max(1,it->ItemLevel()),EINT_IDENT,60);
-          IPrint("With your flawless knowledge of nature, you immediately "
-            "recognize this <Str> as an <Obj>.",it->isType(T_HERB) ? "herb" :
-            "mushroom", it);
+      if (it->isType(T_MUSH) || it->isType(T_HERB))
+          if (HasAbility(CA_NATURE_SENSE)) {
+              it->MakeKnown(0xFF);
+              Exercise(A_INT,random(6)+max(1,it->ItemLevel()),EINT_IDENT,60);
+              IPrint("With your flawless knowledge of nature, you immediately "
+                  "recognize this <Str> as an <Obj>.",it->isType(T_HERB) ? "herb" :
+                  "mushroom", it);
+              return;
+          }
+
+      if (!HasAbility(CA_LEGEND_LORE))
           return;
-        }
+      if (it->isType(T_CORPSE) ||
+          it->isType(T_CHEST) ||
+          it->isType(T_COIN) ||
+          it->isType(T_STATUE)
+          )
+          return; 
 
-    if (!HasAbility(CA_LEGEND_LORE))
-      return;
-    if (it->isType(T_CORPSE) ||
-        it->isType(T_CHEST) ||
-        it->isType(T_COIN) ||
-        it->isType(T_STATUE)
-        )
-      return; 
-      
-    if (it->isMagic()) {
-      
-      i = (10 + AbilityLevel(CA_LEGEND_LORE) + Mod(A_INT)) - it->ItemLevel();
+      if (it->isMagic()) {
+          i = (10 + AbilityLevel(CA_LEGEND_LORE) + Mod(A_INT)) - it->ItemLevel();
 
-      if (i > 0 && !it->isKnown(KN_NATURE))
-        {
-          it->MakeKnown(KN_NATURE);
-          anything = true;
-        }
-      if (i > 5 && !it->isKnown(KN_CURSE))
-        {
-          it->MakeKnown(KN_CURSE);
-          anything = true;
-        }
-      if (i > 8 && !it->isKnown(KN_BLESS))
-        {
-          it->MakeKnown(KN_BLESS);
-          anything = true;
-        }
-      if (i > 10 && !it->isKnown(KN_MAGIC))
-        {
-          it->MakeKnown(KN_MAGIC);
-          anything = true;
-        }
-      if (i > 15 && !it->isKnown(KN_PLUS))
-        {
-          it->MakeKnown(KN_PLUS);
-          anything = true;
-        }
-      if (i > 20 && !it->isKnown(KN_PLUS2))
-        {
-          it->MakeKnown(KN_PLUS2);
-          anything = true;
-        }
-      if (i > 30 && !it->isKnown(KN_ARTI))
-        {
-          it->MakeKnown(KN_ARTI);
-          anything = true;
-        }
-      if (anything) {
-        IPrint("Drawing on old legends and stories, you recognize this as an <Obj>.",it);
-        if (i >= 10)
-          Exercise(A_INT,Dice::Roll(2,10),EINT_IDENT,60);
-        }
+          if (i > 0 && !it->isKnown(KN_NATURE)) {
+              it->MakeKnown(KN_NATURE);
+              anything = true;
+          }
+          if (i > 5 && !it->isKnown(KN_CURSE)) {
+              it->MakeKnown(KN_CURSE);
+              anything = true;
+          }
+          if (i > 8 && !it->isKnown(KN_BLESS)) {
+              it->MakeKnown(KN_BLESS);
+              anything = true;
+          }
+          if (i > 10 && !it->isKnown(KN_MAGIC)) {
+              it->MakeKnown(KN_MAGIC);
+              anything = true;
+          }
+          if (i > 15 && !it->isKnown(KN_PLUS)) {
+              it->MakeKnown(KN_PLUS);
+              anything = true;
+          }
+          if (i > 20 && !it->isKnown(KN_PLUS2)) {
+              it->MakeKnown(KN_PLUS2);
+              anything = true;
+          }
+          if (i > 30 && !it->isKnown(KN_ARTI)) {
+              it->MakeKnown(KN_ARTI);
+              anything = true;
+          }
+          if (anything) {
+              IPrint("Drawing on old legends and stories, you recognize this as an <Obj>.",it);
+              if (i >= 10)
+                  Exercise(A_INT,Dice::Roll(2,10),EINT_IDENT,60);
+          }
       }
   }
   

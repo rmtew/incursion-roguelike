@@ -2083,11 +2083,12 @@ void Game::ListItemsByLevel()
 extern void TestEncounterGen(Term *t);
 
 void Game::StartMenu() {                                      
-    FILE *f; Thing *t; int16 i,j;            
+    FILE *f;
+    Thing *t;
+    int16 i,j;            
     Player *pl;
 
-    Redraw:
-
+Redraw:
     do {
         T1->SetMode(MO_SPLASH);
         T1->Title();

@@ -2267,8 +2267,7 @@ void Monster::ListEffects()
     }
 }
 
-void Monster::AddEffect(TEffect *te, rID eID, Item *src)
-  {
+void Monster::AddEffect(TEffect *te, rID eID, Item *src) {
     static int16 *p, pow, rat, i, weight;
     EffectValues *ef = &(te->ef);
     pow = ef->pval.LevelAdjust(ChallengeRating()).Roll();
