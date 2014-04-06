@@ -728,8 +728,7 @@ SkipConfirms:
       return DONE;
     for (cr=m->FCreatureAt(tx+DirX[i],ty+DirY[i]);cr;cr=m->NCreatureAt(tx+DirX[i],ty+DirY[i]))
       if ((cr->StateFlags & MS_HAS_REACH) && !cr->HasStati(CHARGING)
-            && cr->InSlot(SL_WEAPON) && cr->InSlot(SL_WEAPON)->isGroup(
-              WG_SPEARS|WG_POLEARMS))
+            && cr->InSlot(SL_WEAPON) && cr->InSlot(SL_WEAPON)->HasIFlag(WT_REACH))
         if (cr != this && cr->canMakeAoO(this) && 
             ( cr->isHostileTo(this) || this->isHostileTo(cr)) &&
             cr->onPlane() == this->onPlane())
