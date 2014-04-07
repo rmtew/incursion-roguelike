@@ -10,7 +10,7 @@
 
 #define SIGNATURE 0x1234ABCD
 #define SIGNATURE_TWO 0xF1F2F3F4
-#define VERSION_STRING "0.6.9Y3"
+#define VERSION_STRING "0.6.9Y4"
 
 #define SAVE_SUFFIX ".sav"
 #define BACKUP_SUFFIX ".backup"
@@ -21,14 +21,12 @@
 #ifndef ICOMP
 #define __MINMAX_DEFINED
 
-#ifndef _LIBTCOD_H
 typedef signed char         int8;
 typedef signed short        int16;
 typedef unsigned char      uint8;
 typedef unsigned short     uint16;
 typedef unsigned long     uint32;
 typedef signed long        int32;
-#endif
 typedef unsigned long     rID;
 typedef signed char       Dir;
 typedef void*             Param;
