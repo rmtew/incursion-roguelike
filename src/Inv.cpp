@@ -239,7 +239,7 @@ void Monster::DropAll()
     while(Inv) {
       it = oItem(Inv);
       it->Remove(false);
-      it->IFlags &= IF_PROPERTY;
+      it->IFlags &= ~IF_PROPERTY;
       if (Throw(EV_TAKEOFF,this,NULL,it) != ABORT)
         it->PlaceAt(m,x,y);
       }

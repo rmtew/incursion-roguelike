@@ -1,6 +1,7 @@
 Incursion (open source) 0.6.9Y4: 2014-??-??
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/39/typo-in-cant-rest-at-the-inn-anymore: Fix typo in cave entrance scripts, reported by Tuyen Tran.
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/37/whips-unable-to-prevent-enemies-from: Fix bug where whips are unable to prevent enemies closing in with their reach, reported by Cranky_Corvids, fix provided by Carl Minden.
+* https://bitbucket.org/rmtew/incursion-roguelike/issue/38/monsters-picking-up-cursed-items-uncurse: Fix bug where when monsters died, they dropped their inventory.  But rather than clearing the flag on the item which marked the item as their property (and not something they could be ordered to give to the orderer), they cleared every other flag including as noted here the cursed flag.
 
 Incursion (open source) 0.6.9Y3: 2014-04-05
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/32/oil-of-transformation-multiplies-stackable: Fix bug where when items change their type, perhaps from a rod to a staff, they get multiplied in quantity.
