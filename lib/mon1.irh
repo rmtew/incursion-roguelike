@@ -1835,7 +1835,7 @@ Monster "pirahna bird" : MA_MYTHIC, MA_BIRD
     Feats: FT_DODGE, FT_SWARM, SK_LISTEN, SK_SPOT; 
     Desc: "A magical hybrid of a pirahna and a parrot, pirahna birds are 
       avian creatures with colorful plumes and bodies that resemble those
-      of piranhas. They are somtimes encountered alone, but are most
+      of piranhas. They are sometimes encountered alone, but are most
       dangerous when they attack in swarms.";
   }
 
