@@ -1106,7 +1106,7 @@ Restart:
   StackBonus(BONUS_SIZE,A_DEF,SZ_MEDIUM - Attr[A_SIZ]);
   StackBonus(BONUS_SIZE,A_HIT,SZ_MEDIUM - Attr[A_SIZ]);
 
-  /* Weilding a weapon two-handed gives you 1.5 times Strength bonus */
+  /* Wielding a weapon two-handed gives you 1.5 times Strength bonus */
   if (meleeWep && !meleeWep->useStrength())
     ;
   else if (meleeWep && (EInSlot(SL_WEAPON) == EInSlot(SL_READY)) && !meleeWep->HasIFlag(WT_DOUBLE))      

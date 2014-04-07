@@ -264,7 +264,7 @@ typedef signed long       hObj;
 #define IF_BLESSED     0x0001
 #define IF_CURSED      0x0002
 #define IF_WORN        0x0004
-#define IF_WEILDED     0x0004
+#define IF_WIELDED     0x0004
 #define IF_HELD        0x0004
 #define IF_MASTERWORK  0x0008
 #define IF_BROKEN      0x0010

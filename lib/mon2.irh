@@ -3957,7 +3957,7 @@ Monster "jackal lord" : MA_DOG, MA_HUMANOID, MA_LYCANTHROPE
             $"detect monsters", $"summon jackals", $"dimension door";
     Flags: M_HUMANOID, M_CARNI, M_EVIL, M_LAWFUL, M_IALIGN, M_SOLITARY;
     Desc: "Aristocratic, mysterious and learned, jackal lords are nothing if 
-      not civilized. Nurturing destructive cults and weilding Machiavellian
+      not civilized. Nurturing destructive cults and wielding Machiavellian
       schemes like swords, the jackal lords are among the last remaining
       worshippers of the old pantheon of Eskanti. Being supremely egotistical
       beings, jackal lords dislike other members of their own race intensely,
