@@ -630,14 +630,14 @@ Wizard / Scroll Spell "Knock" : EA_GENERIC
     Desc: "Magically causes all doors in your line of fire within 60 
     feet to open. This spell opens locked doors but does expose secret 
     doors. This spell opens wizard-locked doors but does not remove the
-    wizard-locked enchantment."; 
+    wizard-locked enchantment. It can also be used to unlock locked containers."; 
   }
 
 Potion / Wizard / Scroll Spell "Mending" : EA_GENERIC
   { SC_ARC; Base: SP_MEDIUM; Cost: 7; Level: 1; qval: Q_INV; 
     pval: 1d6+LEVEL_1PER1; Flags: EF_LOSEMANA;
     Desc: "Repairs 1d6+[caster level] hit points of damage to
-      any non-metallic item in the player's possesion.";
+      any non-metallic item in the player's possession.";
     On Event 
       EV_ISTARGET {
         hObj it;

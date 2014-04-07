@@ -1861,7 +1861,7 @@ Priest /Scroll Spell "Make Whole" : EA_GENERIC
     pval: 100; qval: Q_INV;
     Flags: EF_AFFECTS_ITEMS, EF_LOSEMANA;
     Desc: "Repairs all damage to an item in the 
-      caster's possesion.";
+      caster's possession.";
     hObj it;
     On Event 
       EV_ISTARGET {
