@@ -1,11 +1,2022 @@
-0.6.9Y3: 2014-04-05
-- https://bitbucket.org/rmtew/incursion-roguelike/issue/32/oil-of-transformation-multiplies-stackable: Fix bug where when items change their type, perhaps from a rod to a staff, they get multiplied in quantity.
-- https://bitbucket.org/rmtew/incursion-roguelike/issue/35/skill-typos: Spelling fixes in skill descriptions.
-- https://bitbucket.org/rmtew/incursion-roguelike/issue/34/capital-letters-not-working-shift-letter: Fix shifted keys and various other keys not working.  Not guaranteed to be correct, but is better than before.
+Incursion (open source) 0.6.9Y4: 2014-??-??
+* https://bitbucket.org/rmtew/incursion-roguelike/issue/39/typo-in-cant-rest-at-the-inn-anymore: Fix typo in cave entrance scripts, reported by Tuyen Tran.
+* https://bitbucket.org/rmtew/incursion-roguelike/issue/37/whips-unable-to-prevent-enemies-from: Fix bug where whips are unable to prevent enemies closing in with their reach, reported by Cranky_Corvids, fix provided by Carl Minden.
 
-0.6.9Y2: 2014-03-28
-- Fix bug where saved games were not found, as the old Allegro pattern with two asterisks failed because libtcod file name matching only handles one asterisk.
+Incursion (open source) 0.6.9Y3: 2014-04-05
+* https://bitbucket.org/rmtew/incursion-roguelike/issue/32/oil-of-transformation-multiplies-stackable: Fix bug where when items change their type, perhaps from a rod to a staff, they get multiplied in quantity.
+* https://bitbucket.org/rmtew/incursion-roguelike/issue/35/skill-typos: Spelling fixes in skill descriptions.
+* https://bitbucket.org/rmtew/incursion-roguelike/issue/34/capital-letters-not-working-shift-letter: Fix shifted keys and various other keys not working.  Not guaranteed to be correct, but is better than before.
 
-0.6.9Y1: 2014-03-25
-- First release of the updated open source code.
-- Replaced the dated Allegro 2.x as the base framework, with libtcod and it's underlying SDL2.
+Incursion (open source) 0.6.9Y2: 2014-03-28
+* Fix bug where saved games were not found, as the old Allegro pattern with two asterisks failed because libtcod file name matching only handles one asterisk.
+
+Incursion (open source) 0.6.9Y1: 2014-03-25
+* First release of the updated open source code.
+* Replaced the dated Allegro 2.x as the base framework, with libtcod and it's underlying SDL2.
+
+Incursion 0.6.9I
+* Fixed bug with Maeve starting (very!) angry at elves
+  who _do_ worship her.
+* Fixed very low sac values for cloaks, etc. to Maeve;
+  tweaked item costs a bit in general.
+* Multitude domains fixed -- now truly random; manual
+  updated on this issue to be correct.
+* The "OOD removal loop" no longer runs if the game is
+  set on NIGHTMARE difficulty.
+* Fixed typo that broke a special case rule allowing
+  dwarves to ride Medium mounts like warponies.
+* Fixed error related to spitting spiders hitting
+  objects with their spit attack.
+* Fixed error with favor chart being truncated at
+  level 7 because I forgot that the constant lists
+  reserve 3 spots for null terminators (XavPieryLev.sav)
+* Fixed text corruption with plural grammer (merge/merges)
+  as seen in Grognard.sav
+* Fixed favor overflow resulting from use of int16 where
+  int32 should have been used. (Note: this broke save
+  compatability).
+* Fixed recursivee CalcVales stack overflow error
+  (Kierny), and I _hope_ I didn't break anything else
+  doing so.
+* Fixed Khasrach's orc summons arriving with 0 hp (and
+  assorted other "not initialized" problems, like no
+  active buffs for the shamans).
+* Fixed incredibly baroque bug which caused displeasure
+  to be listed on character sheet as anger instead at
+  some times.
+* Fixed bug where displeased gods could still give
+  interventions, and some other logic errors regarding
+  intervention.
+* Monster Summoning now excludes animals, undead,
+  outsiders and incorporeal creatures.
+* Fixed issue where Holy Summoning failed a lot for
+  CN or CE clerics of gods other than Xel, Zurvash and
+  Multitude. (It was trying to summon CN outsiders,
+  most of which start at CR 7! Now it summons demons
+  instead.) 
+
+Incursion 0.6.9H (subrelease 4)
+* Fixed a problem where illusory creatures were always
+  CR 0, instead of CR based on Illusioncraft level.
+* Fixed Kysul's "cannot descend" bug for real this time!
+* Fixed Immotian's magic resistance (now 25% at favor
+    level 7, +15% per favor level thereafter).
+
+Incursion 0.6.9H (subrelease 3)
+* Fixed the creature-calling aspect of illusion spells,
+  which had been broken by the new encounter gen.
+* Illusionists now start with scrolls of the higher
+  level illusion spells, to help them survive the
+  illusion-immune creatures at the beginning of the
+  game.
+* Fixed a bug with Kysul preventing people from
+  descending even when not angry.
+* Fixed bugs with the Master Archer's prerequisites.
+* Fixed bug with Death Attack being applied against
+  inanimate objects.
+* Fixed "Strange Spell Type" Alienist bug.
+* I _think_ I fixed the problem with researching curses
+  using Knowledge (Magic). If not, I haven't a clue.
+
+Incursion 0.6.9H (subrelease 2)
+* Fixed bug with Maeve starting (very!) angry at elves
+  who _do_ worship her.
+* Fixed very low sac values for cloaks, etc. to Maeve;
+  tweaked item costs a bit in general.
+* Multitude domains fixed -- now truly random; manual
+  updated on this issue to be correct.
+* The "OOD removal loop" no longer runs if the game is
+  set on NIGHTMARE difficulty.
+* Fixed typo that broke a special case rule allowing
+  dwarves to ride Medium mounts like warponies.
+* Fixed error related to spitting spiders hitting 
+  objects with their spit attack.
+* Fixed error with favor chart being truncated at
+  level 7 because I forgot that the constant lists
+  reserve 3 spots for null terminators (XavPieryLev.sav)
+* Fixed text corruption with plural grammer (merge/merges)
+  as seen in Grognard.sav
+* Fixed favor overflow resulting from use of int16 where
+  int32 should have been used. (Note: this broke save
+  compatability).
+* Fixed recursivee CalcVales stack overflow error
+  (Kierny), and I _hope_ I didn't break anything else
+  doing so.
+* Fixed Khasrach's orc summons arriving with 0 hp (and
+  assorted other "not initialized" problems, like no
+  active buffs for the shamans).
+* Fixed incredibly baroque bug which caused displeasure
+  to be listed on character sheet as anger instead at
+  some times.
+* Fixed bug where displeased gods could still give
+  interventions, and some other logic errors regarding
+  intervention.
+* Monster Summoning now excludes animals, undead,
+  outsiders and incorporeal creatures.
+* Fixed issue where Holy Summoning failed a lot for
+  CN or CE clerics of gods other than Xel, Zurvash and
+  Multitude. (It was trying to summon CN outsiders,
+  most of which start at CR 7! Now it summons demons
+  instead.)
+
+Incursion 0.6.9H
+* Fixed horrid bug in Magic::Dispel, that sometimes
+  caused dispel effects to remove critical stati like
+  HUNGER or ALIGNMENT. This might also be the fix for
+  the elusive "spell access loss" bug.
+* Added fix to prevent divide by zero crash when 
+  leaving an area related to Thief in the Night.
+* Fixed bug with disease damage occuring too frequently
+  for diseases with iteration > 100.
+* For the sake of player sanity, monsters now never
+  cast Black Tentacles, Shatter, Adamant Facade, Create 
+  Water, Deeper Darkness and Whirlpool.
+* Monster are no longer generated for summoning circles
+  until the dungeon gen is smart enough to have the
+  circles properly warded.
+* Gravestone monsters are now less tough.
+* Gravestones are now only disturbed by actions taken
+  by the player character, until the monster AI is
+  smart enough to not disturb them except when it
+  makes sense to do so.
+* Class templates can now only be applied to monsters
+    who are humanoid with Int >= 7 -- no more arctic
+    boar mages or shocker lizard paladins!
+* Fixed horrible bug with the script compiler that
+  caused it to create files with a backslash in their
+  filenames under Ubuntu, even on NTFS partitions where
+  it then caused disk errors in Windows! Eeew! 
+* Commented Accursed Cows out of the game entirely, since I
+  can't easily exclude them from summons with single-point
+  source changes. Ditto foxbats.
+* Commented out /Verdant Aid/ awaiting brainstorming on a
+  decent way to fix it.
+* Summoned creatures cannot multiply.
+* Commented out ID Moss until it's growth, and growth of
+  hit points, can be debugged properly.
+* As a temporary fix against deep dungeon monster glut,
+  whenever a single encounter generates more than five
+  monsters, only the first five are created and placed on
+  the map; any remaining are dropped.
+* Added a quick loop to automatically delete any overly OOD
+  monster on the level after it is first generated, and also
+  after monsters regen when the player sleeps. If OOD switch
+  is on, any monster with CR > [Depth + 3] is deleted, else
+  any monster with CR > [Depth + 1] is deleted. Monsters in
+  the goblin camp are never deleted for this reason.
+* Complex rooms (magic academy, etc.) now generate numerically
+  less monsters -- either only 1 monster per room, or only 1
+  in 3 rooms will have a group of monsters, the rest being
+  totally empty.
+* Asherath now only says "you feel challenged" when you kill a
+  creature whose CR is higher than yours.
+* Maeve now steals cloaks, amulets and rings properly.
+* Maeve now only polymorphs followers into humanoid forms that
+  have hands and are not inherantly blind.
+* Maeve now accepts the sacrifice of charismatic creatures
+  correctly.
+* Doubled the favor value of cloaks, rings and such sacrificed
+  to Maeve. Ditto books and wands to Immotian.
+* Fixed crash bug where Maeve's intervention to improve magic
+  items would hang the game.
+* Maeve now improves magic items more substantially for those
+  with lots of favor with her.
+* Mara's helpful summons should no longer arrive angry!
+* Major fix with regard to god tolerance for transgressions,
+  described below.
+* All gods' TOLERANCE_VAL increased by 3 (so you can get 3 more
+  'anger points' before the god is considered truly 'angry').
+* Mara's revenant aid no longer crashes the game.
+* Fixed god-granted Improved Crit
+* Essiah now grants full Free Action rather than simply immunity
+  to paralysis.
+* Fixed Aiswin's higher-level innate spell grants.
+* Mara's script code now handles the sacrifice of corpses
+  correctly, I hope.
+* Sacrificing things now lowers a god's anger much more quickly,
+  taking off 3 anger points instead of just 1.
+* Barbarians and orcs are now exempt from the Cow restriction
+  for chaotic characters.
+* Characters can now hopefully gain favor levels from multiple
+  gods as lay worshippers correctly.
+
+  Divine transgression works a little differently now. Your god
+gets displeased on the first transgression, and angry when you
+cross over his tolerance value for transgressions. So, for
+example, a follower of Khasrach will have a chance to placate
+her with corpses after a fear trap rather than her getting
+angry right away. The character sheet should list whether your
+god is angry or displeased.
+  A displeased god will still aid you when you pray, and won't
+do wrathful things, but will not send favorable interventions,
+and sacrifices will be used to amerlorate the displeasure as
+opposed to granting more favor.
+  Let me know if this seems buggy -- I haven't had time to test
+it very fully.
+
+Incursion 0.6.9A
+* Fixed incorrect calculation of percentile value mods
+    from templates (that caused, for example, human
+    zombies to have 100% movement rate rather than 30%).
+* Added trap message for "alignment loss" bug.
+* Assassins now have Alchemy, so they can make custom
+    poisons with Poison Use.
+* Fixed crash bug when generating encounter summons where
+    there was no in-game summoner creature (i.e.,
+    Multitude wrath, Kissi.sav).
+* Fixed issue with summoning preset monsters (i.e., dust
+    devil) over water trying to make the encounter be
+    aquatic and ending up generating strange random
+    summons.
+
+Incursion 0.6.9
+* Implemented better auto-testing for reproducing crash
+    bugs.
+* Fixed a bug in the script engine likely responsible
+    for diverse crashes, including Semirath intervention.
+* Fixed crash bug on summoning related to missing zero
+    terminators on the CandidateCreatures array.
+* Fixed crash bug relating to division by zero when
+    calculating knockback for airborne creatures.
+* Fixed a crash relating to overflowing string buffers
+    in the monster AI.
+* Fixed crash bug related to unll map pointers when the
+    Intimidate abilities kick in.
+* Fixed crash-causing infinite loop related to attempts
+    (by monster or PC) to break grapples.
+* Fixed crash bug relating to newly-introduced "snow
+    angel" monster.
+* Fixed crash bug from VERIFY macro in CallMemberFunc()
+* Fixed Creature::GetBAB-centric error messages.
+* GetBAB now reports the correct BAB for monsters with
+    BAB-increasing templates.
+* Reduced creation of "castle" multi-rooms by 50%, by
+    request of testers for balance.
+* Fixed infinite-loop crash/hang bug in encounter gen
+    involving nested encounters
+* Fixed crash issues with Animate Objects, and added
+    code to handle it better if this spell fails for
+    some reason.
+* Fixed crash bug with NULL map pointers and the print
+    queue after attacks.
+* Implemented compressed save files. This should both
+    save disk space and make AutoSave less tedious at
+    lower dungeon levels.
+* (Intentionally) OOD encounters now generate only a
+    single OOD monster, rather than potentially an
+    entire party of them. Big fix!
+* When OOD monsters are created, they are now logged
+    in the player's journal for debugging purposes.
+    Same for other eccentric encounter gen behaviour.
+    This will go away when I get things better fine-
+    tuned. "Failed" messages are not necessarily
+    errors; the encounter gen sometimes fails and
+    tries something different naturally.
+* Fixed crash bug when corpses were destroyed; it was
+    related to backRefs and code included to prevent
+    Animated Objects from causing crashes.
+* Put in placeholders for the new prestige classes.
+* Fixed a problem causing priests to cast overly high
+    level spells at a low dungeon level (because they
+    had a template intended for high-CR, high-HD 
+    giant priests).
+* Added new skill templates: master, paragon and
+    legendary, to allow more powerful adventurers in
+    challenge mode.
+* Fixed div-by-zero crash bug in mana regeneration
+    calculation.
+* Fixed crash bug where moving into/out of a field
+    causes the death of the mobile creature, resulting
+    in a map null pointer reference.
+* Fixed crash bug with missiles being destroyed or
+    taken off-map while in flight.
+* Fixed glitch where the encounter "graveborn creatures"
+    would sometimes produce adult dragons at very low
+    CRs. (I believe this was the cause of "mages" that
+    cast cleric spells at low dungeon levels -- they
+    were polymorphed dragons.)
+* The encounter gen now keeps lowering the max base CR
+    on consecutive tries to make room for manditory
+    templates, so that they (hopefully) won't get skipped
+    anymore.
+* Encounters created in fiery or icy prisons now appear
+    inside the prison area properly.
+* Tested AutoRun ('run to location'), seems to work great
+    for me. I need some 0.6.9 saves duplicating the issues
+    people have with this! 
+* Immotian, the Multitude, Maeve, etc. now place their summons
+    near the player correctly.
+* Lots of general tweaking and fine-tuning to match special
+    room types with thematic encounters.
+* Flaming sphere, dust devil, spiritual hammer and summon
+    shadows now cannot be used again while the first summons
+    is still present. SS has higher CR, but costs fatigue.
+    These construst spells do not count towards you 'max
+    creatures controlled' PHD.
+* Summoned creatures and illusions can no longer be live-
+    sacced.
+* The Multitude now has a stricture against magical healing,
+    since they were a little to easy to accomidate before.
+* The center square of tanglefoot bag strands and web
+    spells now disappears properly. (The cause was writing
+    the center twice, and thus recording the written terrain
+    from the first write as the 'terrain to restore' on the
+    second.)
+* Aiswin no longer expects you to get revenge on traps that
+    critically wound you, or on dieties expressing their
+    wrath upon you.
+* Holy Avengers now grant 50% magic resistance.
+* Added a switch allowing the player to control the use of
+    the Dirty Fighting feat, for the sake of alignment.
+    Lawful NPCs don't use it, either.
+* New monsters: batkin, gremlin, githzerai, githyanki (and
+    added "silver sword" unique weapon and new psi powers
+    to support the gith races), senmurv, lillend, feyr.
+* Fixed crash bug with NULL EActor in Creature::Death, that
+    triggered when monsters petrify.
+
+Incursion 0.6.8A
+* New monsters: ankheg, allip, dryad, aboleth, skum,
+  wyste, snow angel, 3 cave dinosaurs.
+* Fixed issues with Intensive Study feat and empty
+    selection menu (Uchie.sav)
+* Fixed armor of etherealness fatigue cost.
+* Fixed "lose favor on sacrifice" bug.
+* Fixed crash bug with Circle Kick feat.
+* Shields now quick-intuit just like weapons/armor. 
+* All sacred mounts are now rideable.
+* Clarified mount logic a bit -- dwarves can now
+  ride either Medium or Large mounts, and only
+  kobolds can ride vermin (unless the vermin are
+  spiders, in which case drow can ride them too.)
+  Also, only quadrupeds (rather than all animals)
+  are limited by /maximum size/ as mounts.
+* Number of creatures in a single encounter is now
+  capped at 5/7/10/12/15 at levels 1/2/3/4/5 to
+  avoid overpowering swarms.
+* Fixed "This cave orc must be something!" style
+  messages, and general tweaks to avoid a monster
+  being scrutinized prematurely.
+* Expert Tactician now only grants one attack per
+  victim per turn for free -- still a good feat,
+  but not instant death when the requirements are
+  met.
+* Fixed bug causing Cleave attacks to always hit.
+* Now weapons that return as part of their mundane
+  nature (chakram, boomerang) only return on a hit.
+  Weapons with the magical "returning" quality
+  always return, hit or miss.
+* Temporarily removed the priest spell "Imbue With
+  Spell Ability" as a step toward tracking down
+  the SPELL_ACCESS bug; I don't think it worked
+  correctly anyway. Will put it back soon!
+
+Incursion 0.6.8
+* Complete refactoring of the Encounter Gen system
+  to remove multiple persistant bugs and implement
+  the use of Encounter resources for more diverse
+  and thematically grouped encounters.
+* Wrote core set of Encounter resources.
+* Added groundwork for Behaviour resources and rule-
+  based monster AI; no game-affecting changes have
+  actually been made yet.
+* New monsters: cave pelican, chinook salmon, 
+  cavefish, pirahna, tabaxi, oxthixi.
+* Fixed (some) false-positives on SPELL_ACCESS stati
+  error message.
+
+Incursion 0.6.5B
+* Warriors now get a starting weapon with _minimum_
+  +1 (or +2 if no elemental quality) rather than
+  set, so the code won't reduce the plus level of
+  starting perks.
+* The resource compiler now works correctly under
+  Linux as well as Win32.
+* Linux build process successfully streamlined.
+* Can now issue orders to all followers within line
+  of sight with a single command.
+* Added new order, Do Not Pick Up Items.
+* Fixed bug where cave orcs have /animate rope/ as
+  an innate spell (which I put in to test the animated
+  rope crashed and forgot to remove!)
+* Fixed broken parts of /abjure/, where non-summoned
+  creatures weren't immune and you could kill yourself
+  with it.
+
+Incursion 0.6.5A
+* Fixed horrid multi-faced bug in monster AI with an
+  array overwrite that caused the game to crash if a
+  monster stepped on a stack of 60+ items, or had more
+  than 64 possible actions in general (Adele Detect
+  Monster save).
+* Fixed bug causing crash if you leave goblin camp with
+  lots of monsters never having seen you in the Thief
+  in the Night calculations due to array overflow.
+* Remembered to build the release-configuration EXE
+  this time!
+
+Incursion 0.6.5
+* Identify spell now takes 1 hour and costs 2 fatigue.
+* Fixed glitch allowing the casting of Glyph of
+  Warding and similar spells across walls via Wizard
+  Sight (but you can still cast physical spells like
+  fireball into non-LOS areas).
+* Added weaknesses to flight and levitation -- Balance
+  check needed for spellcasting, knockback when hit.
+* Fixed bug where trying to remove certain cursed items
+  negated the curse effect.
+* Fixed bug where when an item becomes cursed, the
+  curse effects aren't applied until you re-wield it.
+* Apportation can no longer be used to remove cursed
+  items.
+* Tried to trace reported memory corruption relating to 
+  ice blue eyes and/or their spell-likes, but didn't
+  find anything.
+* Corrected spell description for Open the Third Eye
+  (no damage from gaze attack anymore).
+* Gaze Reflection now protects against a bodak's death
+  gaze and a nymph's unearthly beauty.
+* Fixed glitch allowing spirit armor and normal armor
+  to stack.
+* Ekliazeh no longer angers if you kill construct, non-
+  sapient or undead dwarves; Khasrach no longer angers 
+  if you kill construct or non-sapient orcs and Kysul
+  no longer angers if you kill construct aberrations.
+  Immotian's fire creature restructions are unchanged --
+  a clockwork fire creature is like a holy symbol to 
+  him.
+* Now, the weapon immunity special ability only affects
+  actual, physical weapons -- unarmed attacks penetrate
+  it automatically. The monk special ability "ki strike"
+  was removed, since it no longer makes sense. This
+  serves to balance magical armor with the Invulnerability
+  and Great Invulnerability qualities, which were reduced
+  slightly in plus.
+* Fixed HORRID bug that prevented the dice roll for Quell
+  from being made; it should now work properly.
+* Fixed glitch causing orc paladins to start with a holy
+  knife instead of a holy long sword.
+* Rope Trick no longer preserves an altar (or other feature)
+  created in the extra-dimensional space; it can also no
+  longer be cast again when already in the extradimensional
+  space.
+* Gave animated rope a bunch of monster flags it was
+  intended to have, so it won't, i.e., pick up and use
+  equipment any more.
+* Fixed bug where killing an animated rope reliably crashed
+  the game. Refactored code for animated/transformed
+  objects.
+* Added "trap code" to try to track down the loss of spell
+  access bug, that should (hopefully) cause a message to
+  appear at the actual moment of loss (and then terminate
+  the game, so that an intact save game can be recovered).
+* Fixed one possible source of the "very high spell DC" bug,
+  relating to lizardfolk and dwarves getting +2 DC with
+  water and earth spells, and the variable that stores this
+  not being cleared between DC calculation calls. Let me 
+  know ASAP if you see crazy spell/special ability DCs in
+  0.6.5 or above.
+* Essiah's "betray a friend" condition no longer triggers
+  if the "friend" has M_MINDLESS (i.e., animated rope).
+* Boots of Phasing made very high level (14) until I can
+  find a way to balance them properly -- now only high
+  luck characters will find them on rare occasions.
+
+Incursion 0.6.4E
+* Fixed bug causing crashes upon reading scrolls
+* Live sacrifices now working properly
+* Fixed bug where everyone got Sabine's favor bonus
+  for high athletic skills rather than just Sabine
+  followers.
+
+Incursion 0.6.4D
+* Fixed (hopefully) sources of inexplicable crashes.
+* Fixed bug with multiclass characters being unable to
+  take prestige classes.
+* Fixed bug with spells not recieving Wis bonus damage.
+* Fixed Brand of Hatred.
+* AutoSave crashes verified fixed.
+* Fixed Log of Everburning
+
+Incursion 0.6.4C
+* Fixed crash bug when using a Holy Avenger against
+  a flesh golem, and many other similar situations.
+* Fixed a complex bug in the target system that would
+  manifest, among other things, in failed Intimidate
+  attempts causing crashes (Rathmere Xel sac save).
+
+Incursion 0.6.4B
+* Fixed issue with arcane alienist athiests needing a
+  nonexistant holy symbol to cast alienist-specific
+  spells.
+* Added option to prevent ally/mount actions counting
+  against alignment until ally-attacks-neutral can be
+  solved more fully.
+* Fixed issue with very low shop prices.
+* Fixed RemoveStatiFrom(xID 0) crash (Kierny Tauth).
+
+Incursion 0.6.4A
+* Added fix to prevent monsters from trying again and
+  again to wield an item when they fail (such as because
+  it is too large, or whatever).
+* Fixed the adlet frost weapon script so that it does
+  not add duplicate stati for every wield attempt until
+  the stati overflow, and so the stati are only added
+  after the weapon is successfully wielded (cf. Cade
+  Goodheart crash).
+* Crash on Wildshape use (Diesa) fixed.
+* Commented out code that causes sacrifices which do
+  not impress a god not to reduce the god's anger --
+  now, any acceptable sac will lower a god's anger.
+  This is NOT a long term change, just a kludge to make
+  the game more playable over the next four months until
+  I balance the "impressed" requirements more carefully.
+* Fixed bad logic in the "no talking through solid stone"
+  code that prevented the store from working -- now
+  special creatures that have not actually been placed on
+  the map, like Roark Ironbeard, can be talked to
+  correctly.
+* Fixed crash related to armor with qualities (i.e., might)
+  as a starting perk (or in general, really) getting its
+  plus improved for starting as a warrior. You now also
+  should get the bonus from these items.
+* Girdle of Tenacity verified to work (for me).
+
+Incursion 0.6.4
+* Fixed bug where buying items in store put them silently
+  in InAir slot, possibly overwriting previous purchase,
+  and did not move correctly to inventory screen.
+* Gave each god custom experience table based on the favor
+  numbers that seem to actually appear in the game, looking
+  at victory posts.
+* Toned down Asherath's rate of favor gain for killing high
+  CR creatures.
+* Skeletal foot soldier CRs now more sensible, so avoid low
+  level instakills.
+* Drow given an absolute minimum depth of dlev 4, to avoid
+  arbitrary sleep-poison related deaths, and because being
+  a "deep" monster is thematic for them.
+* Fixed (hopefully) situations where polymorph lasted more
+  or less than 20 XP ticks as a result of polyTicks being
+  reset incorrectly.
+* Set polymorph expiry to not affect druidic wildshape, only
+  the other sources of polymorph.
+* Removed the "cannot cancel" clause from polymorph, to
+  avoid some odd game-ending situations; instead attached a
+  2 fatigue cost to prevent excessive 'form scumming'.
+* Fixed/revised Master Trip feat into line with canon -- it
+  now causes the *tripper* to *suffer* an AoO if he tries
+  to trip *without* the feat. (Before, it was documented as
+  giving the attacker an AoO on the victim, which I think
+  may have been me coding a bug and Wes documenting it how
+  he thought it was supposed to work. Or I was just confused.)
+* Implemented Trip manuever clause where opponent gets free
+  trip attempt against would-be tripper if initial trip 
+  attempt fails. Ditto for disarm.
+* Fixed maneuver check code in several ways; now uses BAB +
+  Attr + modifiers, and displays calculation correctly.
+* Reverted Slipaway feat to its old form of a bonus to the
+  Escape Grapple maneuver check.
+* Great Blow description and in-game mechanic now match --
+  +2 flat bonus to hit and damage, and also Strength bonus
+  to damage is doubled.
+* Removed help-text reference to Disarm using parry bonus
+  (which it doesn't, and hasn't for a while now).
+* Tools (including bags, flasks), holy symbols and shields
+  are now exempted from AutoPickup.
+* Fixed bug causing crashes when resting in a Place of
+  Sanctuary.
+* A flaming sphere can now be used as a source of fire for
+  the /pyrotechnics/ and /fire charm/ spells.
+* Murgash and his viziers no longer flee as a result of
+  natural HP loss in combat.
+* Player-ally monsters no longer use A_ROAR or any variants,
+  because they can't aim it right not to hit the player;
+  this can be an issue with chasmes sent by the Multitude
+  putting the PC to sleep with their droning in the middle
+  of combat.
+* You now get a warning message if you are about to zot
+  neutral undead with Turn Undead and are (or want to be)
+  good-aligned.
+* Fixed "super 1 gp item" bug (by using floating point
+  arithmetic! Ow!)
+* Toned down Sunscorch by making it level 2 and taking
+  away the bonus damage from wisdom.
+* Altered /spirit armor/ to be incompatible with conventional
+  armor the same way that /mage armor/ is.
+* Elevation bonus to Defense is now [2 + (Climb / 6)], when
+  it was [2 + (Climb / 3)] before.
+* Casting a spell while mounted or climbing on the ceiling now
+  takes 15 phases more than normal.
+* Bracers of Defense toned down -- they now add their magical
+  plus to defense and coverage, rather than twice their magical
+  plus.
+* Longstrider now specifically only applies to a chosen humanoid
+  rather than the caster in general, so it will no longer affect
+  an animal companion mount through the shared-spell bond.
+* Summoning pseudonatural creatures now costs [Summon CR x 2]
+  extra mana, and this mana does not regenerate.
+* Implemented Elemental Affinity ability for dwarves and lizards.
+* Replaced acid spells in slime domain with spells that can be 
+  without offending Kysul.
+* Vicious weapons now work as advertized, now dealing bonus
+  damage only if you have 2/3rds or more your max HP.
+* Fixed incorrent "avert your gaze" message when you are averting
+  your eyes from a creatures with a gaze attack.
+* Added clause to prevent Beast Claw from being used on a creature
+  that already has a natural claw attack; also prevented every
+  monster from casting it, to avoid excess uniformity.
+* Hopefully fixed issue with Point Buy and Reincarnation.
+* Reincarnation now also saves chargen options.
+* Changing options from the main splash screen, when no character
+  has been created, also now changes the universal defaults for
+  the Tactical and CharGen options for every new character made.
+  (i.e., Poisoned Missile Stacking will not 'reset' if set from
+  the system menu).
+* Added sub-headers to make the options setting process clearer.
+* Fixed reincarnation issue which could cause the game to record
+  rolling method incorrectly for reincarnated characters.
+* Bug which caused the creation of two mismatching options files,
+  one in "incursion/." and one in "incursion/save" fixed.
+* Fixed loophole allowing jumping out of a pit.
+* Fixed issue with not being able to attack aerial monsters who
+  were standing over pits.
+* Characters now recieve a Fort or Will save (depending on the
+  effect) when moving over the endgame Guardian Runes.
+* Hopefully fixed the issue with nymphs killing themselves with
+  their own Unearthly Beauty.
+* Removed references to "Greater Magic Fang", since "Magic Fang"
+  covers in Incursion what GMF did in canon; Zurvash now grants
+  Divine Agility at 8th favor level instead.
+* You are no longer able to lose your backpack by stowing it in
+  itself.
+* When a container gets /detonate/ed, the contents now spill out
+  rather than vanishing.
+* Fixed issue with /dispel magic/ dispelling things it has no
+  business dispelling, such as divine blessings and poisons.
+* Creatures now return to their home plane immediately when they
+  take off boots of phasing or armor of etherealness, avoiding
+  spending the rest of the game stuck on the ethereal plane.
+* Fixed a crash-to-desktop bug related to monsters with zero
+  mana.
+* Small paladins now start with a "small long sword" (a new weapon
+  the size of a shortsword, but balanced for swinging and placed
+  in the long blades group) rather than a short sword.
+* Gnomes now only start with a mercurial broadsword if they have
+  the required strength, which has been lowered; also, gnome
+  rangers and warriors have free cranquin proficiency.
+* Small characters start with a buckler in situations where other
+  characters would start with a kite shield.
+* You can no longer talk to creatures through walls unless you
+  have telepathy with sufficient range.
+* Fixed crash when attempting to grapple/sunder/etc. doors,
+  items, etc.
+* The "contaminated water" fountain effect now respects disease
+  immunity.
+* Implemented the use of [ALT] as a "qualifier key" to split a
+  pile when using Get, Stow, Swap, Drop or Take Out.
+* Should a creature with poison immunity become poisoned, they
+  now become unpoisoned on their very next turn without any ill
+  effects, as opposed to staying perpetually poisoned (as with
+  the kobold drinking a potion of poison and being forevermore
+  unable to rest due to being "too busy dying").
+* Fixed loophole allowing player to kick a monster which had
+  successfully charmed him.
+* Implemented the feat, Lion Heart, to help fighter-types having
+  trouble with fear effects.
+* Telepathy now allows you to speak to sapient creatures you could
+  not otherwise communicate with, such as myconids or elementals.
+* Fixed loophole allowing Swap Weapons command to be used to get
+  rid of cursed weapons.
+* Added new anger clauses to Aiswin and Asherath to give them more
+  depth and make them more balanced with the other gods.
+* When choosing the weapon associated with a feat, weapons for which
+  you lack the minimum strength now appear on the list, but will
+  warn you of the lack before you choose them.
+* Fixed the "Exotic Weapon Proficiency blocks Weapon Focus" bug,
+  which was in fact a bug with SetEffStatiVal() that was likely
+  responsible for a LOT of other issues.
+* Fixed bug where characters don't start with the weapon they
+  bought Weapon Focus in the way they should.
+* Fixed incorrect code that might have been responsible for some
+  cases of characters starting with duplicate items.
+* Hopefully fixed issue with "(undefined 0)bane" weapons and
+  "weapons of (undefined 0) Slaying" showing up for good.
+* Items will no longer say {tried} when both their base effect
+  and their curse state is known.
+* Fixed nonsensical message about dungeon features disbelieving
+  illusions.
+* Implemented Elethiomel's "roll stats before race and class"
+  request; now if you turn on the Roll Attributes First option,
+  they will always be rolled before both race and class. You will
+  see 3 perks, but only get 1 or 2 if you choose a race that only
+  gets one or two.
+* When a worn item changes plus, has its plus altered by a temporary
+  magic effect (i.e., Greater Magic Weapon), is dispelled or soforth,
+  the wearer's stats should now change automatically rather than the
+  item needing to be removed and re-equipped for the change to take
+  effect.
+* Riders are now thrown from mounts when a size change makes the
+  mount/rider combination invalid.  
+* Reflective Counterspell should now only affect spells marked as
+  curses or attacks.
+* Fixed "Negative Dice Values" error when dipping items in fountains.
+* Added a message upon [ESC] explaining to the player that they
+  cannot quit inventory mode when the InAir slot is occupied.
+* If the PC dies while performing actions in Inventory Mode, the
+  game now handles it gracefully.
+* You can now tab back to a chest or other container on the floor
+  in inventory mode correctly.
+* Hopefully fixed issue with hiding monsters making unfair attacks
+  against players who are also hiding, when the monster is unable 
+  to percieve the player.
+* Maeve's interventions now train Luck.
+* When Maeve summons twilight huntsmen to attack the player, they
+  now always arrive hostile.
+* Training Int and Wis is harder now.
+* Divine ressurection now costs you 15% of your XP or 2000 XP,
+  whichever is more; the old penalty (down to the amount needed
+  for the level below your current level) was reported by a player
+  as too harsh.
+* Scrolls of damaging spells like Shout, and many similar items that
+  do not have a magical plus but do have a caster level, now display
+  their damage/power correctly in the item description.
+* Fixed a bug where creatures with size fields could move over 
+  neutral creatures like smaller creatures do, allowing the neutrals
+  to overlap their size fields, which should never happen.
+* Fixed a bug causing size fields to overwrite solid terrain like
+  dungeon walls -- since the most normal case with a size field /
+  wall glyph overlap is a large creature squeezing into a small
+  space, the size glyph shouldn't be shown in a solid stone square.
+* Meld into Stone now works properly when cast by a Huge or larger
+  creature.
+* The Examine command in the Look prompt no longer has the loophole
+  to identify polymorphed monsters that you didn't see polymorph.
+* Fixed a bug which allowed monsters to wield weapons which were
+  too large (i.e., a halfling could wield a greataxe!).
+* Added some god messages, so that hopefully players won't see the
+  "(god messages still in progress)" thing so much anymore, though
+  there's still a lot to do in that regard.
+* Fixed crash issue in some situations when either monsters or the
+  player attempted to escape a grapple.
+* Fixed infinite recursion issue with ReApply().
+* Fixed crash with red slaadi attempting to gate in help with an
+  MType that didn't fit in int8.
+
+Incursion 0.6.3
+* Adjusted tumbling to give [(Tumble / 2) x 5] to movement
+    rate rather than [Tumble x 5], which proved to be
+    excessive.
+* Corrected errors in Tumble skill description so that it
+    matches game rules (i.e., can't cast while tumbling)
+* Now, only 1 in 3 monsters will use /obscurement/, to 
+    avoid it being this omnipresent out-of-genre tactic
+    where every dragon is a mobile fog bank.
+* Added new spell, /abjure/, to banish summoned creatures
+    en masse.
+* Fixed bug with messages associated with items in the
+    inventory of a creature not being printed because the
+    item had no map associated with it; the owner did.
+* Added Precise Stroke combat option, giving creatures
+    (both PC and monsters) the ability to sometimes hit
+    enemies with extremely high Defense scores.
+* Fixed issue where flying characters over pits could not
+    attack or be attacked.
+* Fixed Greater Ring of Identify uses per day decsription.
+* Fixed "doesn't want to associate with good" message
+    coming from inherantly good creatures like gold dragons
+    instead of demons and such.
+* Fixed issues with "Brand of Hatred". Ditto "Shillelagh".
+* Fixed issue with the Pacify option of Animal Empathy
+    being coded improperly and creating allied creatures
+    that stopped being allied later, when it should really
+    just create neutrals.
+* Fixed issue with TargetMount being given to allies:
+  /* VERY IMPORTANT CORRECTION -- add the mount target only if
+      we are riding a creature that is neutral to us, so that
+      we are its master for only so long as we ride it. Do NOT
+      add the mount target to creatures who were are allies
+      already before we rode them! */
+  When something happened that caused a mount to turn hostile,
+  this error made the mount stay friendly /until you dismounted/,
+  because the mount data was corrupted by the fact that it had
+  two target object for the PC -- TargetSummoner and TargetMount.
+* Fixed major root of mount hostility -- when you cast a spell,
+  your sacred mount gets affected through the bond, thinks you
+  cast a hostile spell at it and gets angry -- because all the
+  personal effect spells aren't marked EF_NOTBAD.
+  Now, spells channeled through the sacred mount spell-link will
+  never turn a mount hostile, and also spells that are not EP_CURSE
+  or EP_ATTACK will never turn _any ally_ hostile. There are some
+  holes in this -- there are offensive spells that will kill but
+  are not EP_ATTACK because the monster AI does not know how to
+  use them, for example, and you can kill your mount if you have
+  more HP by casting attack spells at yourself. But I think that
+  the player being able to game the system to kill their pets 
+  without consequences is not a huge weakness right now.
+* Fixed a bug where lots of messages concerning mounts (i.e.,
+  "snaps and turns on you", but lots of others too) would not
+  be printed because the mount isn't technically on the map.
+* Fixed a bug with monsters that have M_HOSTILE like griffons
+  letting that override having a master/rider.
+* Added new event handlers to handle what happens when you Quell, 
+  Cow or Surrender to Goblin King.
+* Increased the DC of Quell checks slightly [15 + CR*3], when
+  it was [15 + CR*2]. You need to be a real high-end Diplomacy
+  monkey to win the game that way.
+* Added a kludge to deal with you doing social actions on the
+  members of the Goblin Army that would affect Murgash -- they
+  either redirect the effect to Murgash himself (for surrender)
+  or tell you to talk to the king.
+  Being unable to Quell the goblin army outer members may be
+  difficult for Hesani followers, but I think their best approach
+  is to sneak in using Hide, invisibility, etherealness, etc. so
+  they can speak to the king directly.
+* Fixed a crash-bug related to Immotian's observation of the 
+  world.
+* You can now order allies or request neutrals attack a specific
+  target of your choice, and it works. This was there before, but
+  it was generally wonky and is now fixed.
+* Fixed horrid memory-corruption bug in endgame caused by the game
+  trying to give goblins the PC prestige class "shadowdancer" as
+  opposed to the monster template "shadowdancer;template".
+  
+The "Explore Mode" Features:
+* Explore Mode implemented. Game enters explore mode when any
+    explore options are set or when perks are rerolled.
+* Chargen options now listed on character sheet.
+* Number of rerolls and number of deaths now recorded on
+    character sheet.
+* Character generation options now can be changed in Wizard Mode
+  even in gameplay.
+* Elude Death switch implemented.
+* Power Stats switch implemented.
+* Difficulty Level switch implemented.
+* Player can now abort to rolling without perks or point buy
+    from the 4d6+Perks stat system, or to point buy from 4d6.
+* Removed some broken abilities from the perk possible special
+    abilities lists.
+* Removed armor proficiencies from the perk possible feats.
+    
+The "Infinite Safe Rest Fix":
+* The inn above the dungeon is no longer available for safe
+  rest once the player reaches dungeon level 4 or character
+  level 5.
+* Resting in the Rope Trick dimension now costs 150 XP per
+  night.
+* You can now only rest [2 + Luck bonus] times safety in a
+  Place of Sanctuary before that given Place is worn out.
+  Those with a high degree of favor with Essiah can make
+  use of these places once more for every three permanent
+  blessings from the goddess.
+
+The "Self-Buffing Caster Fix":
+* Haste now gives a 50% bonus to Spd and Mov rather
+    than 100%.
+* Shield gives +5 Def rather than +7.
+* Creatures now lose their weapon, insight and dodge
+    bonuses to Def during the Timeout after casting
+    a spell. They also have a general -4 penalty,
+    reduced to -2 if they have Combat Casting.
+* Implemented Mana Bleed
+* Decastave now has a speed modifier of 125% rather
+    than 200%.
+* Characters now suffer a -(40 - [Ride x 2])% circumstance
+    penalty to spell success rates when attempting to cast
+    spells while mounted.
+* A natural 20 attack roll now ignores miss chance from
+    spells like /blur/, /displacement/ or /blink/.
+* The /fly/ spell is no longer compatible with mounts -- it
+    dismounts you when cast and self-cancels when you try
+    to mount anything.
+* Polymorph effects are now limited to a creature of 1/2 the
+    target's CR rather than the full target's CR.
+* Invisibility is now cancelled by casting attack, curse or
+    summoning spells, or other spells targeting hostiles. You
+    can still cast things like /true strike/, however.
+* Creatures of CR 5+ now have a chance to spot the "ripple
+    effect" of an invisible creature.
+* Added new magical item: Wand of Dispelling
+* Added new endgame guardian runes effect: dispel magic
+* Added code to cause monsters to use /dispel magic/
+    strategically based on the level of damage in can
+    inflict to a given target.
+* Created new flag to give to certain spells to make monsters
+    four times more likely to use that specific spell if they
+    have access to it, and gave that flag to /fireball/, /magic
+    missile/, /lightning bolt/, /ice storm/, /cone of cold/ and
+    /flame strike/.
+* Made the Dispelling Trap three times more common in the dungeon.
+* Gaze attacks now cost non-regenerating mana and can be turned
+    off using a tactical switch.
+* The three-eyed template has been toned down so that it only
+    grants +30 feet infravision and a confusion gaze, rather than
+    +60 infra and both confusion and damage gaze effects.
+* All the gear that came with a summoned creature should now
+    vanish when it does, even if it is on the floor, in the
+    player's inventory, etc.
+* Summoned creatures no longer leave corpses.
+* Fixed horrid single bug with improperly overloaded Item::StatiOff
+    that caused decastaves not to disappear, summoned creatures' 
+    gear to persist when the creature vanished, dispellings on
+    items not to recover properly, etc. Basically, if it was
+    timed and associated with an item, it wouldn't work.
+* When you polymorph into a powerful creature, the CR of the
+    creature you changed into (min 0) is now added to your
+    own character level to determine your ECL -- Effective
+    Character Level -- for the purpose of calculating XP
+    awards for any kills you make. Put simply, you get less
+    kill experience when polymorphed into something tough.
+* Polymorph can no longer be cancelled, nor can it be re-cast
+    over an existing casting.
+* Magic, feat and inherant typed bonuses to Strength, Dexterity
+    and Constitution no longer apply while polymorphed.
+* Casting a spell while polymorphed now adds 15 segments to the
+    casting time due to the unfamiliar body.
+* Fixed bug where polymorphing into a creature with inherant 
+    spellcasting (i.e., naga) increased your real caster level.
+
+Incursion 0.6.2F
+* The spell "distance distortion" no longer angers
+  allies or neutrals caught within its area. (Pseudonatural
+  creatures use this spell, and this should fix
+  a cascade of problems with summoning them -- when
+  they are allied, they don't use /black tentacles/
+  because it's on the list of spells that are very
+  annoying to have allies cast.)
+* Verified that creatures with gaze attacks will not
+  gaze at their allies or at neutrals.
+* Gaze attacks are hardwired not to have alignment
+  effects until I can work out a more sensible case-
+  by-case basis for dealing with them, unless the
+  creature is a former friendly.
+* Semirath now exempts outsiders from his "no killing
+  non-evil sapients" rule.
+* Nausea from Semirath should now last 3d6 turns.
+* Semirath's vengeance now only bestows one curse; used
+  to be two.
+* Ekliazeh's (positive and negative) intervention intervals
+  increased, so that you don't lose so MUCH equipment should
+  you happen to anger him.
+
+Incursion 0.6.2E
+* Fixed one possible source of the false "magical
+  fear" message on skirmishing monsters (Holderhek).
+* Allies using /Spook/ should no longer cause inter-
+  party conflict.  (The elven cat party conflict 
+  issue can be tracked back to weird interaction 
+  between bugs -- spook is one of those spells allies
+  are never supposed to cast/have active, but there
+  is also a complicated-to-fix issue with Spook not
+  terminating right, so your allies could still have
+  it active.
+
+Incursion 0.6.2D
+* Finally fixed bug with hostile horses -- it turned
+    out to be an issue with the /mount/ and /phantom
+    steed/ spells; you were being put on horses that
+    were never "really" on your team, and wierdness
+    ensued.
+* Added a clause where when your mount becomes 
+    frightened, at the start of the next round you
+    get a Ride check that either calm it (success)
+    or causes you to be thrown from the mount on a
+    failure.
+* Fixed Erich so he now uses the normal chivalry code
+    for calculating chivalry stuff, except he's never
+    offended if your act treacherous to creatures he
+    (as Lawful Evil) does not consider people. Revised
+    his restriction text in the manual slightly to make
+    the intent clearer as well.
+
+Incursion 0.6.2C
+* Player will no longer get alignment ding if one
+    ally accidentally hits another (as with ranged
+    combat, frex). Player will still get dinged if
+    ally was given order to attack neutrals.
+* Player will now get alignment ding for requesting
+    a neutral to attack his enemies, if attacking
+    them himself would give a ding.
+
+Incursion 0.6.2B
+* Fixed "Eightfold Prince" crash
+* Fixed stupid typo preventing new "honorable at the
+    beginning" checks from working correctly for
+    knockdown.
+* Fixed issue where monsters would still use special
+    attacks (i.e., crushing a grappled target, breath
+    weapons) in situations where it would cause their
+    master alignment issues.
+* Added code so that when a monster turns neutral (for
+    example, as a result of Offer Terms), it will stop
+    grappling or engulfing creatures that are no longer
+    its enemies, and other creatures will do likewise
+    to it.
+
+Incursion 0.6.2A
+* Removed a hardcoded breakpoint that I put in trying
+  to figure out how folks lose favor with the Multitude.
+  This was the cause of the Rurik and Barendd crashes --
+  the game crashed whenever you commit a good act like
+  killing an inherantly evil creature with good intent
+  (desired Good alignment).
+* Fixed the bug from (Zakfienal, Violent DonkeyNose,
+  WaterDangerHobo, Sammal Onhalm) saves that caused
+  crash due to attack roll code not expecting a Trap
+  in the EItem slot, only a weapon; this is the crash
+  that only happens in the release versions, not the
+  debug versions, for some strange reason.
+
+Changes in 0.6.2
+* Fixed bugged Vest of Health -- now protects you when
+    it is activated by absorbing damage.
+* Fixed Lenses of the Soul resisting fear, used to say
+    it granted complete immunity but not work, now it
+    grants a + to saves and should work.
+* Fixed crash involving building a monster description
+    with more than 32 items (i.e., Eberk, examining
+    goblin monks, etc.)
+* Fixed bug causing Asherath priests to get WAY TOO MUCH
+    bonus favor from inherant bonuses to attributes.
+* Fixed parameter mismatch crash from "The <EActor> 
+  protects <his:EActor> <EItem>."
+* Added fatigue costs to some psionic powers.
+* Added headers to the Keybinding legend dialog box to
+    make the meaning of the key listings clearer.
+* Renamed the '.' command "wait" for clarity, to avoid
+    confusion with the rest ('z') command.
+* Warriors and paladins now have a strong Will saving 
+  throw.
+* Fixed crash bug opening one of two chests on ground
+  (Whitney Greenbottle).    
+* Fixed infinite looping / stack overflow crash involving
+  vials of holy water and/or alchemist's fire.
+* Analysis of saved games (Vorkai Tauth II, Zol the Wise)
+  reveals that stati gained from class resources outside
+  the AddAbility framework sometimes get corrupted by their
+  Mag being altered. This is the bug that causes many strange
+  effects (priests needing spellbooks, weavecrafters losing
+  the ability to control teleport, inability to learn spells,
+  etc.) Verified that it is not caused by dispel magic. More
+  investigation needed.
+* Analyzed Lyle Highhill slingstone crash; cannot duplicate.
+* Removed "Generated the Spider" type messages.
+* Black Orcs no longer have "Bestow Curse".
+* Hopefully fixed the issue with the game trying to get you
+    to automatically coup-de-grace when it won't work.
+* Hopefully fixed wraparound bug where items in store cost
+    1 gp for low-Cha characters -- not certain about this.
+* Scroll strain damage is now [Scroll Level x 2] rather than
+    mana-based, to avoid unfair instadeath when reading an
+    unknown scroll that turns out to be a low-level buff with
+    a large mana cost.
+* Fixed bug where doing a character dump automatically ID's
+    everything in inventory -- now, inventory and ground items
+    are only id'd on dumps made from the gravestone screen.
+
+The "Alignment/Allies Fix"
+* Fixed a bug that caused gods to *seem* to be angry
+  when they weren't really after a favorable intervention
+  (i.e., the multitude sending you demon aid).
+* When one ally incidentally damages another, the party
+  leader now gets a Diplomacy check (DC 15) to diffuse
+  intra-party conflict.
+* Implemented Transgression Hints
+* Player is no longer responsible alignment-wise for a
+    party member using acid, making unchivalrous attacks,
+    attacking fleeing creatures, clipping neutrals with
+    area spells or using mental coercion effects.
+* Overall numeric effect of NPC acts on alignment reduced.
+* NPCs no longer cast acid spells if they or their leader
+    is good-aligned, and also avoid spells with bad
+    alignment descriptors.
+* Messages NG/TN/NE characters recieve when moving around
+    on the law/chaos spectrum are now more intuitive and
+    less likely to be mistaken for "you did evil".
+* Situations where the target becomes afraid/prone/stuck/etc.
+    as a result of your attack and then takes more bonus
+    damage no longer have the potential to lead to unfair
+    chivalry violations. (I hope -- if you still get this,
+    please let me know!)
+* Attacking fleeing creatures does not move LN/TN/CN chars
+    closer to evil; only LG/NG/CG closer to neutral aligns.
+    This should make it easier to play non-evil characters.
+* Triggering a trap or suffering divine wrath will no longer
+    cause NPCs or mounts to be hostile to the player/leader.
+* The "hostile to horse" was caused by the horse actually
+    being hostile to rider, and thus no longer neutral to
+    things the rider was neutral to, being an out-of-control
+    animal. Now, when your horse becomes hostile to you, it
+    automatically throws you off.
+* Creatures using skirmish tactics no longer count against
+    you if you attack them as they flee; further, they no
+    longer give the strange message about "magical fear" if
+    you try to offer them terms.
+* If a prone, blind or stuck creature hits you while prone,
+    blind or stuck, you can now hit them back without
+    violating chivalry.
+* Robe of Scintillating Colors should no longer piss off
+    allies or cause alignment issues.
+* Fixed a horrid bug with the internal math of how the sum 
+    CR of your allies was calculated; should work better
+    now, albiet a bit more restrictive in some cases.
+* Immotian and the Multitude should not send more aid than
+    you can handle anymore.
+* Substantially improved the code that calls ItHitMe when
+    magic affects a monster so that allies stop turning on
+    the player from trap effects and such.
+* Now, you only suffer an alignment ding for you or your
+    allies attacking a creature that is neutral to EVERYONE
+    IN YOUR PARTY.
+
+Changes in 0.6.1A
+* Implemented the Break verb to make it more convenient
+    for barbarians to destroy magical items.
+* (Hopefully) fixed issue where you retain bonuses from
+    equipment you lose in unconventional ways.
+* Fixed grammar code mistakes with inherantly plural 
+    items like boots.
+* Fixed issue with pressing [ESC] at various ChoicePrompts
+    causing strange results.
+* Fixed issue with the titles to menus (i.e., Lorecall)
+    being rendered as corrupt garbage characters.
+* Fear immunity and bonuses to save vs. fear are now
+    factored into Intimidate attempts.
+* Fixed additional things broken by the retained bonuses
+    from lost equipment fix.
+* Fixed bug with first two letters of container equipment
+    type headers disappearing sometimes.
+* Fixed bug with two backpacks, where one was empty but
+    the container cursor treated it as if it was the other
+* Tested examining a blue goblin monk -- cannot duplicate
+    reported crash
+* Fixed bug with dropping items in a container using the
+    container cursor.
+* Highlight options moved to limits/warnings group so all
+    option panels display correctly at 1024x768 with 12x16.
+* When you make multiple rolls for a skill and take the
+    best, all the rolls are now shown to illustrate this.
+* Fixed "Chemise" crash upon selecting "Show All Feats" --
+    the LMenu window was hardcoded to 80x50 minimums and
+    was overwriting the boundry of the display buffer.
+* Gnomes now only start with an arbalest if they are
+    proficient using it.
+* Added 1280x960 and 1920x1080 resolution support.
+* Fixed bug where a successful counterspell would turn a
+    spell that has no target (like /flaming sphere/)
+    "back on its caster", actually doing nothing at all.
+* Possibly fixed issue with monsters taking multiple
+    actions (i.e., casting multiple spells) in the same
+    turn for no discernable reason -- counterspell? Needs
+    more investigation. Let me know if the "counterspell
+    loop" still happens.
+
+Changes in 0.6.1
+* Fixed issues with Ring of Polymorphing
+* Coins and Hearthstones of Onanda now weigh less
+* Fixed inventory [TAB] crash
+* Fixed inventory slowdowns
+* Fixed keyboard buffer issue -- character or cursor
+    now stops moving as soon as movement key is released
+* Fixed crash upon praying to Ekliazeh for aid during
+    prayer timeout (ungart save)
+* Fixed crash bug with charmed creatures becoming resentful
+    of charmer causes crash when their target queue is full,
+    usually manifesting on changing dungeon levels (Rathak).
+* Fixed crash bug with monsters repeatedly trying to wear
+    some types of magical armor (Win 16)
+* Bardic music is now cancelled correctly by fields of
+    magical silence.
+* Implemented Mass Fascination, Hymn of the Phoenix Arisen
+    and Spellbreaker Chant bardsongs.
+* Undead that should have the M_MINDLESS flag given it, and
+    many types of undead made not to flee in combat, though
+    animalistic (ghouls) and intelligent (mummies) undead
+    still can.
+* Bulletproofed the code to make sure that mindless and
+    inherantly evil creatures don't count as "people" for
+    alignment purposes.
+* Fixed crash on character sheet feats description caused
+    by planning domain granting the depricated Anchor Spell
+    feat; it now grants Extend Spell, and even if a character
+    gets an unknown feat, this won't crash anymore.
+* You can now scroll the cursor in the Magic Manager by
+    holding down the up/down key, and it will stop moving
+    as soon as the key is released.
+* Offer Terms and Cow now satisfy Dwarven Focus. Note that 
+    Quell does not.
+* Manual corrected regarding druids having hands and being
+    able to use silver/mithril items. (These things have been
+    depricated for a while now.)
+* Confirmed that eating spiders and snakes does not anger the
+    Multitude using Wizard Mode.
+* Initiating Barter from the Yuse menu no longer causes Cow
+    instead.
+* See Invisibility potion added; guaranteed one such potions in
+    the Entry Chamber, more in the shop and beginner's kit.
+* Added twilight salve alchemical item, to allow alchemists to
+    manufacture something allowing them to see invisible.
+* Poltergiests should now never appear before dlev 2.
+* The "clarity of mind" divine aid effect now lets you see
+    invisible if you are currently being menaced by etherial
+    or otherwise invisible creatures.
+* Fixed /remove curse/ crash upon targeting door or feature.
+* Elves using Manifestation can now see creatures on the etherial
+    plane as well as strike them.
+* Fixed HORRID bug responsible for the monster AI moving
+    monsters toward players despite being unable to see them --
+    incorporeals zeroing in on player, enemies following hidden
+    character, etc.
+* Monster wanderlust now works properly.
+* Spectres, poltergeists, blessed souls, avenging spirits, ghosts,
+    etc. are now native to the etherial, not astral, plane.
+* Fixed a bug that prevented gods from transporting their 
+    followers to safety properly as a form of divine aid.
+* Craft, Decipher Script, Knowledge (Theyra), Knowledge (Theology),
+    Ride, Search and Spot are now considered familiar skills, and
+    all characters can invest a limited number of ranks in them.
+* Removed depricated skill Food Preservation from race/class skill 
+    lists in help.
+* Added balance tweak after the SomethingAwful mind flayer rampage:
+    all polymorph effects cut out after the player has gained
+    experience 20 times, so you can't poly into something hideously
+    powerful and just _stay like that_.
+* Characters _should_ now be able to drop an item in the in-air
+    slot even if they have no hands, to prevent the game from
+    getting locked into the inventory screen if you gain an item
+    (as a god-gift, say) while polymorphed.
+* Fixed crash caused by attempting to use your breath weapon while
+    polymorphed.
+* Fixed memory corruption resulting from polymorph messages.
+* Removed incorrect code preventing use of breath weapons in
+    some situations.
+* Bug with plant ur-dragon breath weapon _hopefully_ fixed -- let
+    me know ASAP if it happens again!
+* Several issues related to /animate objects/ fixed; I think the
+    crash relating to it is fixed, too; let me know if it shows
+    up again!
+* Scrolls and Wands now only consume 1/3rd mana on a failed use
+    attempt, to make their use more viable for warriors and others
+    lacking Use Magic or Decipher Script.
+* Armor now provides coverage-based protection against the special
+    damage "bleeding" type, just like attribute damage etc.
+* Fixed Stati.__Allocated error upon kicking doors repeatedly.
+* Magical armor made notably more common in the dungeon.
+* Sacrificing cursed items to remove them fixed.
+* Multiclass XP penalty verified to work the way it is described
+  as working in the Incursion manual (which is different from the
+  canon version).
+* Fixed issue with trap effects being treated as spell effects,
+    leading to strange messages ("Your own firebolt strikes you...")
+* Fixed store overflow bug
+* Fixed barter/store slowdown bug
+* Container listing now scrolls to keep cursor always visible.
+* Coin generation rebalanced so that there is more money in the
+    game, and it is found in higher denominations.
+* Characters can now kick doors while afraid.
+* Decreased the rarity of specific weapons (i.e., Quickblade,
+    Oathbow, Sword of the Planes, Holy Avenger) and verified
+    that they are being generated.
+* Made 'building' rooms more common, to decrease the chance of
+    levels without chests.
+* Good aligned characters now recieve more experience than others
+    for resolving encounters with Quell/Offer Terms/Cow.
+* Mastiff missing stats fixed.
+* Detailed item names now shown in AutoLoop and AutoDrop selection
+    windows.
+* Implemented an option for softer palette colors with lighter
+    "dark" colors.
+* Changed minimum resolution to 80x48 (from 80x50), so now people
+    with 1024x768 play area can use the more readable 12x16 font.
+* Added support for widescreen resolutions -- 1280x768, 1280x800
+    and 1920x1200.
+* Incursion now starts a new installation with no Options.Dat file
+    at 1024x768 with 12x16 font, in both windowed and fullscreen
+    mode, if possible, to make things easier on new players.
+* Added messages when font or resolution defaults to a lower
+    setting, making it clear to the user what happened and how
+    to fix it.
+* Fixed Hesani's holy symbol so that it doesn't make all undead
+    hostile to the bearer.
+* Fixed issue with using social options like quell on creatures
+    that you aggravate -- now it's disallowed, when it used to
+    result in "formerly peaceful" creatures.
+* Fixed bug where you could use the Barter screen and a friendly
+    NPC to identify any item -- now, only designated shopkeepers
+    list all items as identified on the barter screen.
+* You can now stand up while in a pit, preventing heavy armor
+    characters from getting stuck in a pit unable to take off
+    their armor because they are prone!
+* Verified by testing that you can sacrifice both companions and
+    charmed creatures to Xel. (If anyone has problems with this,
+    let me know and I'll try to track it down more.)
+* Verified using Quell does not penalize followers of Xel.
+* If there is no way for a starting item to be stored on your
+    person at the start of the game, it will now be placed at
+    your feet at the enterance to the dungeon. This should prevent
+    cases where players are "cheated" of perk items. Let me know
+    if any more cases of this arise.
+
+Changes in 0.6.0C
+* Implemented two new inventory macros, AutoLoot and 
+    AutoDrop, to ease managing inventory.
+* Implemented two new switches, Use Container Cursor
+    and Organize Container Contents, to make the
+    inventory more user-friendly.
+* Fixed bug which caused Zurvash to make the player
+    permanently afraid as his first blessing level.
+
+Changes in 0.6.0B
+* "Dark Blue" color made brighter
+* Crash on trying to build a priest (!) fixed.
+* Game no longer crashes when you attempt a social action
+    targetting dungeon features or inanimate objects.
+
+Changes in 0.6.0A
+* Weapon Focus crash / screen corruption fixed.
+* String queue overflow on multiple rerolls fixed.
+* /gust of wind/ now clears away fog terrain, acid fog, 
+  solid fog, etc.
+
+Changes in 0.6.0
+* Fixed Battlefield Inspiration message
+* Fixed "failure to redraw" errors
+* Corrected false drow Strength penalty listing
+* Registry::UnlinkObject fixed! YAY!
+* Craft being used to make Alchemical Items bug fixed
+* Craft can now be used to make mundane items & weapons
+    from scratch.
+
+Changes in 0.5.9C
+* Help memory usage issue hopefully fixed.
+* "0d0" dice listing fixed.
+* Poisons listed more neatly in the help.
+
+Changes in 0.5.9B
+* Inconsistancy with multiclass max ranks fixed.
+* Animal Companions now get a 75% conditional movement
+    rate increase, only when not being used as a mount.
+* Fixed bug where you could summon a second animal
+    companion while riding the first.
+* Incursion no longer "monopolizes" the CPU.
+* The help now notes that only long blades, short blades
+    and daggers can be tempered with Crafts.
+* The description of an item now lists the bonuses for
+    tempering if the item is a masterwork.
+* Dwarven Weaponcraft ability tested and verified to
+    work correctly.
+* Fixed /spider climb/ giving a +10 kit bonus in addition
+    to the +10 magic bonus -- oops!
+* Fixed serious issues with crit-immune monsters not being
+    truly crit-immune.
+* Fixed monsters keeping bonuses from items they have 
+    physically lost, such as Expertise bonus after being
+    disarmed.
+* Fixed crash caused by toggling fullscreen mode on the
+    barter screen.
+* Warriors now choose weapon focus AFTER choosing other
+    feats (again -- it broke with the War domain shield
+    fix), so exotic weapon warriors don't waste their
+    focus.
+* Fixes to accomodate AZERTY keyboard -- users can now
+    set a keyboard layout by changing Incursion.cfg; see
+    comments in that file for more info.
+* Amulet of Strangulation now prevents time-consuming
+    activities like tempering swords.
+* You are now told how many hours are spent when you do
+    Craft or similar things.
+* Rewrote "Sign of Discord" so that it works correctly now.
+* Attribute damage messages fixed and highlighted.
+* Fixed issue with message window not always clearing when
+    it should clear.
+* Added Option: Clear Messages Every Action
+* Fixed issue with skill booster feats giving +2 when help
+    says they give +3.
+* Water no longer reveals a hiding character who is also
+    levitating or climbing on the ceiling.
+* Toned down Int training from Legend Lore
+* Experience-related messages now account for drained
+    experience so as not to be nonsensical (FS#193)
+* Immotian smiting your foes with Order's Wrath no longer
+    triggers gravestones or tombs.
+* General fix should prevent god-spawned effects from
+    triggering gravestones or influencing the player's
+    alignment.
+* Walking in acid fog no longer turns you evil, nor does
+    acid damage caused by traps or divine intervention.
+* Acid fog no longer deals rust damage to equipment if
+    the wearer has Acid Resistance 6+.
+* "Spell text cuts off at 16x12 in 1024x768" fixed! YAY!
+* NEUTRAL_TO (i.e., Amulet of Undead Warding, Cloak of
+    the Bat) verified to work correctly.
+* Fixed a bug causing some monsters to be generated with
+    a /visage of death/ spell cast on them for no reason.
+* Cure spells now work properly against uninjured undead.
+* Mote of Frost no longer makes icy floor squares when
+    travelling over a chasm.
+* Fixed cursor appearing at the top of screen issue with
+    the string prompt.
+* Spell damage listed in Magic Manager now takes into
+    account bonus caster levels for specific schools.
+* Lots of manual typos (FS#228) fixed up.
+* Various other very minor bugs fixed.
+* Fixed condition list duplication issue.
+* Cold-subtype creatures no longer slip on ice.
+* Modrons and duodrones now immune to poison.
+* Skill manager dots are now bright blue, to make them
+    easier to see.
+* Skill Manager header text now aligns correctly.
+* Monochrome Help now affects spell descriptions shown
+    in the spell manager as well.
+* Captivating feat now grants additional gold the way it
+    is supposed to.
+* Fixed crash bug (Iosofel) caused by cursed lenses of
+    Drow Kinship causing negative die values.
+* Fixed (I think) crash bug with Wand of the Hellstorm.
+* Added general bulletproofing against cursed items
+    causing the game to roll negative numbers of dice.
+* Fixed issue with inset parameters to god messages.
+* Fixed crash upon showing character sheet when the PC
+    has been polymorphed.
+* Fixed message-alignment issue where Maeve's colorful
+    speech was assumed to be longer than it truly was.
+* Fixed negative-dice crash from cursed Gauntlets of
+    Lightning (second Iosefel crash).
+* Fixed issue with players being able to be crowned by
+    gods, when crowning isn't implemented yet and does
+    not do anything (max favor lev is 9 now).
+* Character sheet now lists favor, favor level and favor
+    penalty; this is a temporary thing to help me get a
+    feel for the numbers in actual play.
+* Fixed the problem with monsters having caster level 0
+    or lower; this was significant because it could lead
+    to negative dice values error messages.
+* Aiswin now hates his worshippers using magical effects
+    with the [Light] descriptor.
+* Skill points are now gained retroactively from permanent
+    increases in Intelligence (i.e., training). Magical
+    items (headband of intellect) still don't grant skill
+    points, by design.
+* The saving throw to close with the wielder of a reach
+    weapon now lists the comparative size modifier sepa-
+    rately rather than factoring it in invisibly, so that
+    players can better understand the mechanics of Reach
+    weapons.
+* Weapon save DCs (reach, stunning, knockdown, etc.) have
+    been overhauled in general, and the way they are
+    calculated is better documented now. You get bonuses
+    to weapon save DCs for focus, specialization, etc.
+* Fixed a bug preventing spells like /wall of stone/ from
+    working correctly.
+
+Changes in 0.5.9A
+* Spook (and other field-spells) now work correctly with
+    AutoBuff.
+* Fixed bugs where spells affecting all allies (Bless,
+    Valor) would not affect the caster himself.
+* Since fear has become so prominent in Incursion, I
+    changed Valor to grant a +5 save bonus rather than
+    full immunity, for balance's sake.
+* New Spell: Sticks to Snakes
+* Massive mana rewrite hopefully solves mana corruption
+    issues, from persistant scrolls, service spells and
+    mana stones.
+* Fixed bug causing multiple detect spells to function
+    intermittently (i.e., detect evil + detect undead
+    would only detect whichever was cast first). Quick
+    testing suggests that this fixed the problems with
+    Detect Monsters and hiding as well -- you can now
+    both detect hiding monsters and detect monsters
+    while hiding. Let me know if you have any wierd
+    detect behaviour in 0.5.9A
+* Fixed bug causing the duplication of field effects by
+    jumping, teleporting, etc.
+
+Changes in 0.5.9
+* More string memory issues fixed
+* Gust of Wind and Fireball can now be used to get rid of
+    obscurement, stinking cloud, thunderbeast fumes, horn
+    of fog, insect plague, etc.
+* Magical light (call light, searing light) and darkness
+    (globe of shadows, deeper darkness, animate shadows)
+    can now negate each other.
+* Ranger re-balanced to avoid front-loading
+* Ranger and bard saving throws fixed
+* Antitoxin duration fixed -- I had to change the whole
+    effect-processing code to do this, so please play
+    casters and item-users and let me know if I broke
+    anything else!
+* Post-reincarnation skill point bug fixed.
+* Loremaster prerequisites fixed -- note that skills are
+    based off skill ratings _unmodified by skill kits or
+    attribute-boosting magic items or spells_.
+* Added cheetah as halfling paladin mount.
+* Added special rules exception allowing small creatures
+    (halflings, gnomes) to ride other small creatures
+    (like riding dogs).
+* Spell-like abilities now use character level as a
+    caster level.
+* New Spells: Holy Orb, Necrosynthesis
+* Fixed dwarf, gnome and halfling glyphs in 16x12 and 12x16
+    fonts.
+* Fixed major, notable glitch in the spell interpreter
+    noticed while implementing holy orb.
+* Fixed Amakiir crash on drinking potion.
+* Fixed poltergiest natural invisibility.
+* Fixed blessed soul hostility issue, which was really a
+    glitch in the entire targeting system where NPCs would
+    think the PC was hostile to them based on traditional
+    feuds (i.e., living hate the dead); also, living hate
+    the dead now excepts blessed souls and other inherantly
+    good undead, but not good individuals of normally evil
+    breeds, like good liches or whatever.
+* Healing yourself is no longer a good act!
+* Updated feat trees in manual.
+* MSVCR71D.DLL now included with distribution.
+* "Slow" inventory fixed.
+* Elves can now use Necromancy spells that are also Abjuration,
+    such as "Protection from Undead".
+* Hopefully fixed the issue with weapons not wielded granting
+    bonuses.
+* Using Legend Lore, or identifying monsters with knowledge 
+    skills, now trains Int -- and the cap for ID-ing this way
+    is now higher than the cap for id-by-experiment. Let me
+    know if this is good, bad, broken, etc.
+* Fixed bugs related to regeneration messages.
+
+Changes in 0.5.8
+* Transmute Spell fixed
+* Dragon tattoo does more damage
+* Mantis tattoo gives more armor
+* Misc. tattoo changes / fixes
+* Tattoo Mystic requirements lowered
+* "Brottir Skyforge" crash fixed -- caused by dispel traps
+    recursively dispelling themselves, and by the mis-setting
+    of e.efNum.
+* Monsters can now cast /dispel magic/ as an attack spell.
+* Bug where enemies lose the player's parry mod, dex mod,
+    etc. when surprised fixed with a kludge.
+* Enemy defending with unrolled Ride check, caused by above 
+    bug making enemy's DC lower than 0, fixed. 
+* Scintillating Colors XPrint formatting crash fixed.
+* Can't duplicate "order to hide" error, could easily before,
+    thus I assume I fixed it while fixing other things.
+* Monsters now cancel standing spells from the
+    alliesShouldntCast list when they get recruited and
+    become an ally.
+* Oil of Transformation changing weapon Bane property fixed.
+* Fixed issues with armor feats.
+* Fixed numeric imbalance causing Immotian to be very hard
+    for high-level characters to appease.
+* Fixed bug that prevented Immotian from accepting magic
+    staves as sacrifices.
+* Books are now worth more as sacrifices to Immotian.
+* Message fix: "The aranea changes into an aranea." ->
+    "The aranea changes back into its natural form."
+* Khasrach now casts the PC down a much more reasonable
+    number of levels when she is angry.
+* Fixed player character trip attacks working wrongly.
+* New feats for monks: Reed in the Wind, Defensive Throw,
+    Great Throw, Chi Strike, Falling Star Strike, Freeze
+    the Lifeblood, Choke Hold, Earth's Embrace, Power
+    Kick, Flying Kick, Circle Kick and Pain Touch.
+* Added new good and bad interventions for Ekliazeh and
+    good intervention for Immotian; these were missing
+    before as a result of oversight.
+* Fixed bug causing Multitude to demon-spam the player,
+    and other gods' similar intervention-spam.
+* Fixed targeting issue with Holy Smite, Chaos Hammer,
+    Unholy Blight and Order's Wrath.
+* Fixed a HORRID bug that caused the Encounter Generator
+    to sometimes do HORRID things, like assume spitting
+    frogs were fire elementals.
+* Added Insect Plague, Summon Swarm to alliesShouldntCast
+* New spells: Create Corporeal Undead, Create Spectral
+    Undead; also new undead: blessed soul and avenging
+    spirit.
+* God docs for Maeve, Sabine, Multitude and Erich.
+* Fixed a wide set of bugs with monster spell access:
+    innate abilities not showing up as service spells,
+    1 in 8 innate abilities not being recognized, etc.
+* Fixed a bug causing allies of the player to be neutral
+    to hostile creatures.
+* Fixed issue with using detonate on doors.
+* Revealed Lore fixed.
+* Reverie and Scent removed from 'u'se menu.
+* Drow now get Ambidexterity properly.
+* Fixed and clarified option to highlight neutral creatures.
+* Guardian Runes of Khasrach now block teleportation.
+* All goblin encampment occupants should now be hostile.
+* Fixed bug giving goblin viziers too-high spellcasting.
+* Fixed "infinite counterspell" issue (hopefully). Note that
+    there has always been a tactical option to set to
+    determine when you will counterspell!
+* Altered prompts and inventory/spell managers so they don't
+    accept held-down keys as input anymore 
+    (catch thrown+--more--=death)
+* Keybinding screen fixed
+* Player now automatically recieves first action after doing
+    a controlled ascent or descent to a different level.
+    (Monsters can still act first when you fall into a
+    chasm, which seems sensible.)
+* Creatures who are cowed or have accepted terms will no longer
+    pick up items at all, and are timed out longer than the 
+    player is.
+* Climbing on the ceiling now requires skill checks vs. DC 25
+    every 1 in 30 steps; rolling less than 35 costs 1 fatigue.
+* Failing to equip an item no longer gives you the item's
+    bonuses (see: equip cloak while wearing magical robes)
+* Falling damage now stuns the player, unless he uses Tumble
+    or slow fall.
+* Walking over pits now requires confirmation, and auto-run
+    stops for them.
+* Scrolls (and other crafted items) now priced correctly.
+* Fixed reverse charge bug.
+* Weapon swap refactored to deal with bug and other issues.
+* Auto-Run logic improved.
+* Fixed 100% slowing issue (with a kludge). Still need to think
+    about penalty stacking for RotF.
+* Lots of (undefined ##) descriptions fixed.
+* Fixed Sabine's Lightning Bolt ability caster level bug.
+
+Changes in 0.5.7A
+* Allies of the player are now barred from casting a
+  list of "obnoxious" spells:
+  const char * alliesShouldntCast[] = {
+    "Obscurement", "Rainstorm", "Rusting Grasp", 
+    "Natural Erosion", "Spook", "Deeper Darkness",
+    "Whirlpool", "Ring of Blades", "Etherealness",
+    "Blasphemy", "Grease", "Pyrotechnics", "Web",
+    "Electric Loop", "Visage of Death", "Levitation",
+    "Evard's Black Tentacles", "Cloudkill",
+    "Dream", "Nightmare", "Lesser Symbol", 
+    "Fireball", "Color Burst", "Confusion",
+    "Immortal Grandeur", "Hallucinatory Terrain",
+    "Mirage Arcana", NULL };
+* Balance checks succeed on natural 20.
+* Logic problems in SkillCheck() fixed.
+* For simplicity's sake, until this can be handled
+    better, monsters never pick up chests.
+* Restriction on reincarnating characters in play
+    commented out for now.
+
+Changes in 0.5.7
+* Changing options from main menu now works properly.
+* The Zen Defense feat no longer works with /mage armor/
+    or /spirit armor/.
+* Weapons now only add their magical plus to defense if
+    they have the Defending quality
+* Characters now regenerate mana until it dips below
+   (65 - [Concentration x 2])% of their total, to a
+   mimnimum of 20% at concentration +23.
+* Revised weapons table to make the weapons more
+    comparable and competitive -- large swords are less
+    uber; staves no longer rely on Strength.
+* New items: Scrolls of Enchant Armor (plus, fortification,
+    feather-light, graceful, life-keeping and resistance).
+* Potion of Vitality made into staple item.
+* Feather-Light armor only imposes 1/2 the Swim penalty.
+* New armor quality: life-keeping
+* Coverage now blocks special damage, as described in the
+    help under "Armor vs. Special Attacks".
+* Turning now costs only fatigue, not mana.
+* To aid warriors in using the new scrolls, Decipher Script
+    is now a skill that allies can aid you with.
+* A character's elemental resistances now add directly to
+    the hardness of her equipment, so a Helm of Clear Sound
+    helps defend against /shatter/.
+* Armor protects a character's amulet, bracers and girdle
+    from slashing, piercing and blunt damage similarly
+    to the character himself.
+* Class mana dice changed; mages now get 1d20 base/level.
+* Mana now has a single flat multiplier based on total
+    character level; this gives everyone slightly more
+    mana.
+* New Feat: Roll With It
+* Fixed a bug with damage modifiers not being displayed
+    properly at times.
+* Maeve will now turn armor feather-light.
+* The screen now redraws _mostly_ correctly on toggling
+    between fullscreen and windowed mode. 
+* Many gods will now intercede to negate a critical hit
+    that would kill a player or reduce her to less than
+    1/5th her total HP.
+* Fixed (undefined ##) in monster listings in chardump
+* Fixed the bug where appeasing your god makes you
+    anathema to them. (YAY!)
+* Allies of the player character now never attack targets
+    neutral to the player character (without being ordered
+    to).
+* Fixed religion bug so Khasrach now sends friendly orcs
+    to help the player when she's supposed to.
+* Incursion now recognizes numpad enter (I hope). :-)
+* Fixed bug where size fields caused unseen parts of the
+    map to be drawn (I hope -- this is hard to test).
+* Fixed bug causing off-hand attacks to have abnormally
+    huge timecosts.
+* Updated god writeups for Hesani, Immotian, Khasrach,
+    Essiah, Zurvash, Kysul.
+* Hesani's risk-taking clause loosened and explained, so
+    it works correctly now.
+* Added new metamagic feats: Extend Spell and Judicious
+    Spell; removed Anchor Spell, revised Enlarge Spell.
+* Prepatory Magic feat description updated.
+* Fixed the "suitable formulas" message causing problems
+    with the item selection prompt.
+* Bypassed a bug causing forges not to appear in all 
+    Armouries, will fix properly later; now there are
+    guaranteed forges on dlev 3 and 7 and they appear
+    correctly (look in piles if you don't find them!)
+* Keyboard legend now appears properly again on the
+    character sheet screen.
+* A few vestigal errors with the way the windows were
+    placed based on constant values left after the
+    Allegro port are now fixed.
+* The "monster has >1000 items" error will now appear
+    only once per run of the executable, and now only
+    comes after 10,000 items (but I suspect it's
+    irrelevant because the huge inventory is a bug)
+* Bug where curing petrification in fact caused it to
+    occur immediately is now fixed.
+* Decastave is now +2 regardless of caster level.
+* Rapiers, quarterstaves and stilettos don't use Str.
+* Hallow made to cost less mana and be easier to cast
+    in order to make life easier for Xel worshippers.
+* Humans no longer recieve a bonus feat at 2nd.
+* Open the Third Eye and related spells now work
+    correctly when cast on a player.
+* _Hopefully_ magical robes and helmets no longer show
+    bizarre properties; let me know if you still get
+    this!
+* Rangers now cast as bards rather than as priests, so
+    they can wear light armor and still cast, and do
+    not need a holy symbol.
+
+Changes in 0.5.6A
+* Holy symbols can now be equipped in the neck slot.
+* AutoBuff command works again.
+* Number Pad keys should work
+* Close Box and Ctrl-C now save-and-quit if the game is
+    in play, otherwise just terminate.
+* Fullblade toned down, complete weapon revision still
+    in the pipe.
+
+Changes in 0.5.6
+* ProvokeAoO(Creature* c) now checks isBeside, so trip 
+    no longer causes AoOs at a distance.
+* Allegro! Yay! Multiple fonts and resolutions implemented,
+    fullscreen/window toggle, etc.
+* InBounds(x,y) on descending to level 2 fixed
+* International keyboards issue identifed, addressed and
+    hopefully fixed
+* More traps that logically could be are now mundane rather
+    than magical
+* Monsters no longer cast cure spells or drink potions when
+    they are uninjured
+* Fixed AllegroTerm glitch with scrolling
+* Implemented blinking cursor for AllegroTerm
+* Two-weapon fighting now adds 1/2 the faster weapon's Spd.
+* 'preserved' uninitialized error fixed.
+* Auto-Disarm now ignores traps reset by player
+* Fountains are no longer generated in squares with water
+    or other deep liquid
+* There is now a switch to turn Demoralize off.
+* The vicious weapon quality now only activates if you have
+    2/3rds or more of your HP.
+* The tightrope bridge now works correctly over water and
+    magma, I hope.
+* Minor mana trap message fixed.
+* Bizarre templates (spiked, razorjaw, half-fiend, etc.)
+    have been made far rarer.
+* Vampire watermelon renamed vampire melon; sponge beast
+    renamed aether sponge; above and accursed cow all made
+    very rare.
+* /shatter/ damage is now 1d4/level, scaled after 9th.
+* Half-Celestial restricted to sapient creatures to prevent
+    the half-celestial vampire watermelon thing.
+* Assuming class is chosen before attributes, paladins can
+    no longer start with unholy, chaotic, corrosive or
+    vampiric weapons as perks, nor items with the [Evil]
+    or [Chaotic] descriptors.
+* Assuming race is chosen before attributes, small races
+    cannot start with Large items as perks.
+* Fixed bug causing brewing poisons to crash the game, as
+    well as adding a more coherant message if you don't
+    know any formulas; fixed other minor poisoncraft bugs.
+* Fixed bug with maximum scroll level scribable being based
+    on Alchemy rather than Knowledge (Magic).
+* Fixed scrolls and other crafted items costing 0 xp & 0 gp.
+* Investigated monsters casting spells (like command) at
+    themselves; seems pathological and difficult to fix,
+    no solution yet.
+* Money re-balancing: all costs to make or purchase items
+    cut by two-thirds, and first three dungeon levels have
+    more money now.
+* Detect Natural Traps no longer makes animal companions
+    turn hostile. This is a flag that needs to be on certain
+    spells, so let me know if you find any more that do
+    this!
+* Mage armor now cancels or cannot be cast when real armor
+    is worn.
+* Neutral endgame creatures issue hopefully fixed.
+* Brilliant energy weapons are no longer subject to weapon
+    damage.
+* Lyle spell list bug investigated, does not seem to be an
+    error.
+* Handaxe min Strength fixed.
+* Toned down lance stats.
+* Defensive Synergy bonus halved.
+* Error selecting Defensive Roll as a rogue bonus ability
+    fixed.
+* Incursion _should_ now work with international keyboards.
+* Thaumaturges now get Light weapon prof correctly.
+* Coins now weigh a fifth of what they used to weigh.
+
+Changes is 0.5.5
+* Fixed bug with Jump spell increasing damage
+* Terminal code MASSIVELY refactored to aid Allegro port
+* ANCHORED now pulls creatures using magic to become
+    ethereal or incorporeal back to their plane.
+* Guaranteed armories with forges to make and repair
+    metal items on dungeon level 3 and 7.
+* There is now an actual goblin _army_ in the endgame
+    again.
+* Rangers now have the skills Knowledge (Nature, Oceans
+    and Theyra).
+* Alignment fixed so that killing fleeing creatures is only
+    bad for lawfuls if they are sapient; crawling claws
+    and monkeys are immune.
+* Holy symbols are now their own class of items, rather
+    than being treated as special amulets. This fixes
+    several bugs and bad behaviours related to them.
+* One effect of this is that a priest can put his holy
+    symbol in his ready hand and it counts as equipped.
+* Holy symbols count as a +4 skill kit for Know (Theo).
+* Wands of Opening now opens doors
+* New Item: Wand of Dismissal
+* Wands of Alacrity work differently now -- they only
+    last for a limited time, and have a plus.
+* "Etherealness" is now a level 6 priest (and level 8
+    mage) spell the way it should be.
+* Traps generated in water / deep liquid (magma/slime)
+    squares are removed after level gen; this prevents
+    the reduce trap / water item loss thing, as well as
+    being sensible logically.
+* You can now Offer Terms to Demoralized creatures.
+* You can no longer Cow creatures that are already
+    frightened.
+* Rope Trick is now level 3; Apportation now level 2.
+* Fixed bug displaying "Hide in Plain Sight"
+* Shadowdancer level abilities rearranged for balance.
+* Erase spell now works properly, on Guardian Runes and
+    otherwise
+* Dispel Magic now affects guardian runes (with a good
+    roll -- it's hard), magical traps, symbols, etc. --
+    these have fairly high set caster levels to avoid
+    the spell being overpowered.
+* More creatures now carry rope.
+* Casting /rope trick/ now consumes rope.
+* Haste is now the 4th level Time Domain spell; it's still
+    3rd for mages.
+* Zen Defense limited WRT armor
+* Righteous Might and Divine Power rewritten for balance,
+    and to ensure they have different and distinct concepts
+    behind them.
+* Inventory manipulation takes place in realtime now,
+    giving monsters their actions and warning the player
+    when he becomes threatened.
+* Prerequisites for feats and prestige classes are now based
+    only on inherant values, not bonuses from items or spells,
+    or the effects of attribute damage. This was a complex fix
+    and I probably missed something; let me know if you spot
+    someplace where this doesn't work.
+* Fixed a crash bug involving pressing [Esc] on the 'select a
+    class' menu for multiclassing
+* Fixed _an_ InBounds(x,y) error, but I doubt it's _the_ 
+    InBounds(x,y) error (from descending to dlev 2). Let me know
+    if you still get that on 0.5.5?
+
+Changes in 0.5.4A
+* Increased kill experience for characters of level 4+ by
+  about 30% to refect the "Sammal Warrior 8" game where a
+  character with 25% XP bonus was level 8 at the end of the
+  game.
+* Friendly creatures only give 1/3rd experience when you
+  kill them, to avoid giving an unintended edge to evil
+  characters.
+* Fixed crash bug involving Expert Tactician and ranged 
+  attacks
+* Fixed bug that prevented ranged attack targeting properly
+    against monsters with cursed weapons (Zik Targeting Bug)
+* Fixed inexplicable "This must be a Potion of Fire Breath".
+* Fixed "InBounds(x,y)" bug caused by Rope Trick and
+    vision tests for creatures on one map by those on
+    another
+* Fixed Glyph of Warding crash bug (Vorn Wyndyl II)
+* Fixed "InBounds" error on dungeon descent (Kesh, Orc Paladin)
+* Fixed Remove Curse potions for real this time
+
+Changes in 0.5.4
+* All cure spells now available as service spells
+* Bartering with creatures with templates granting service
+  spells no longer causes Stati corruption
+* 'bsp' error on fountain drinking suppressed
+* Request Item crash bug fixed
+* Players can now get service spells from allied
+    creatures for free.
+* Succubus ethereality and gender fixed
+* Unaware creatures no longer get AoOs on hidden creatures
+* You can stop sprinting with the Cancel command now
+* Healing treating blindness now works properly
+* Attributes no longer train when inherant bonus is maxed,
+    to avoid 'profound wastefulness' message spam.
+* Saving should no longer take game-time
+* Monsters should no longer be able to equip tower shields
+* Monsters no longer become hostile over EF_NOTBAD spells,
+    and animate shadows is fixed to affect only hostiles
+* Fixed bug with favor-calculation that stopped followers
+    of Asherath from advancing.
+* Powered up Aiswin's level gifts a bit, and gave him level
+    gifts for 8 & 9 to match the other gods.
+* Potions of Remove Curse now remove curses on both characters
+    and items, just like the priest spell does. 
+* Fixed crash related to ranger tracking.
+* Fixed a major bug with Mara's favor calculation.
+* Your favor penalty for aid is now alluded to under spiritual 
+    state on the character sheet
+* God anger is more moderate now because only the highest anger
+    from a single act it gained -- so killing a friendly by
+    suprise (+5 by suprise, +3 friendly) will give only +5 anger
+    rather than +8.
+* The 'Seek Insight' function of prayer now tells you exactly
+    what your god will do for you based on your current favor.
+* Favor gain changed back to normal rate
+* General religion-system help in the Adventuring section added
+* Sacrificing to the 'blatant' evil gods is now an evil act;
+    sacrificing to the subtle ones (Erich/Maeve) is not.
+* Aiswin, Asherath, Ekliazeh, Mara, Semirath, Xavias, Xel all
+    recieved specific manual update
+* Added spells Vigor and Heightened Senses, and Wand of Opening
+    (currently works only on chests, not doors; will fix later)
+* Nondetection effects no longer conceal their user from 
+    Blindsight or Tremorsense.
+* Death Attack now has a range of 30 feet.
+* Feat "Shoot from Cover" removed until I can figure out how to
+    balance it.
+* Characters now gain 2 base feats at level 1
+* Ancient Library now guaranteed on dlev 2, less tomes in AL
+* Summoned creatures no longer grant XP when slain
+* Limited teamwork with skills implemented, probably still buggy
+* Monsters with negative Challenge Ratings have skill ratings
+    calculated as if they were CR 1.
+* Fixed monsters not actually getting all the skills from 
+  templates.
+
+
+Changes in 0.5.3A
+* Tanglefoot bags don't trigger gravestones
+* Divine feats are accessable
+* Summoning crash fixed
+
+Changes in 0.5.3
+* Sacrifce moves you closer to the recieving god's alignment if
+  that is also your desired alignment
+* Petrification stoppable with acid or lizard corpses
+* All characters get +2 SP/level
+* Monster alignments vary -- you can now meet neutral orcs, etc.
+* Alignment bonuses to hit, Will save and XP
+* Vortices have their own class of incorporeality, are not
+  invisible and cannot move through stone, though you still need
+  magical weapons to hit them.
+* You can now pray for aid or cast still vocalized spells while
+  paralyzed.
+* You do not recieve a Strength bonus to damage when attacking
+  incorporeal creatures unless your weapon is ghost touch.
+* The "calculated favor", which is something like XP with your
+  god, is tripled. This will probably make it too easy to advance
+  too quickly with gods, but I want to try it out to see how the
+  gods balance out and let people get farther in the game.
+* /dispel magic/ and related traps can no longer strip away
+  abilities gained from a body or template (like infravision)
+* Added Potions of Faerie and Light
+* Equipment-damaging traps toned down
+* Kobold warrens have lots of traps
+* Fountains can now restore lost experience on a good roll
+* Druids with infravision now keep it when they wildshape. Skill
+  bonuses stay when polymorphed, too.
+* Animal companions no longer get attacked by allies
+* Detonate crash fixed
+* All dice get rolled on critical hits, now 
+* Monsters no longer regenerate in the Rope Trick e-space, and
+    several related deeper map/terminal design flaws fixed
+* Fixed Lesser Planar Conjuration, kinda
+* Fixed armor bypass / natural armor absorbs message contradiction
+* You can now batter down doors with blunt weapons without crashing
+  the game; slashing weapons do 1/3 damage and doors are immune to
+  piercing damage.
+* Attribute damage/drain has messages now.
+* Preserving power now lets you keep the scroll.
+* You can identify scrolls after reading them with Knowledge (Magic).
+* To avoid message spam, all messages concerning monsters charging
+  and/or breaking off their charge have been suppressed until a way
+  can be found to display them only when appropriate.
