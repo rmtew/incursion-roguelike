@@ -717,109 +717,109 @@ int16 Registry::LoadGroup(Term &t, hObj hGroup, bool use_lz)
   }
 
 
-bool Game::SaveGame(Player &p)
-  {
-    fileHeader fh; int32 i;
-    String fn, base, desc;
+  bool Game::SaveGame(Player &p) {
+      fileHeader fh; int32 i;
+      String fn, base, desc;
 
-  p.TouchGallery(true);
+      p.TouchGallery(true);
 
-  T1->ChangeDirectory(T1->SaveSubDir());
+      T1->ChangeDirectory(T1->SaveSubDir());
 
-  memset(p.MessageQueue,0,sizeof(String)*8);
+      memset(p.MessageQueue,0,sizeof(String)*8);
 
-    if (SaveFile.GetLength()) { 
-      // ww: I'm still getting that hideous savefile corruption bug, so
-      // let's make a backup copy instead of just deleting this!
-      FILE *fin = NULL, *fout = NULL;
-      char buf[4096]; 
-      fin = fopen((const char*)SaveFile,"rb");
-      if (!fin) { p.MyTerm->Message("Save File Backup: Failed (#1)"); goto failed; }
-    fout = fopen((const char*)(SaveFile + ".backup"),"wb");
-      if (!fout) { p.MyTerm->Message("Save File Backup: Failed (#2)"); goto failed; }
-      struct stat statbuf;
-      if (stat(SaveFile,&statbuf)) 
-        { p.MyTerm->Message("Save File Backup: Failed (#3)"); goto failed; }
-      size_t sofar;
-      for (sofar = 0; sofar < statbuf.st_size ;) {
-        size_t this_read = fread(buf,1,min(sizeof(buf),statbuf.st_size - sofar),fin);
-        if (this_read == 0) 
-          { p.MyTerm->Message("Save File Backup: Failed (#4)"); goto failed; }
-        size_t this_write ;
-        this_write = fwrite(buf,1,this_read,fout);
-        if (this_write == 0 || this_read != this_write) 
-          { p.MyTerm->Message("Save File Backup: Failed (#5)"); goto failed; }
-        sofar += this_read; 
-      } 
+      if (SaveFile.GetLength()) { 
+          // ww: I'm still getting that hideous savefile corruption bug, so
+          // let's make a backup copy instead of just deleting this!
+          FILE *fin = NULL, *fout = NULL;
+          char buf[4096]; 
+          if (!T1->Exists(SaveFile) || !(fin = fopen((const char*)SaveFile,"rb")))
+            { p.MyTerm->Message("Save File Backup: Failed (#1)"); goto failed; }
+          fout = fopen((const char*)(SaveFile + ".backup"),"wb");
+          if (!fout)
+            { p.MyTerm->Message("Save File Backup: Failed (#2)"); goto failed; }
+          struct stat statbuf;
+          if (stat(SaveFile,&statbuf)) 
+            { p.MyTerm->Message("Save File Backup: Failed (#3)"); goto failed; }
+          size_t sofar;
+          for (sofar = 0; sofar < statbuf.st_size ;) {
+              size_t this_read = fread(buf,1,min(sizeof(buf),statbuf.st_size - sofar),fin);
+              if (this_read == 0) 
+                { p.MyTerm->Message("Save File Backup: Failed (#4)"); goto failed; }
+              size_t this_write ;
+              this_write = fwrite(buf,1,this_read,fout);
+              if (this_write == 0 || this_read != this_write) 
+                { p.MyTerm->Message("Save File Backup: Failed (#5)"); goto failed; }
+              sofar += this_read; 
+          } 
 failed: 
-      if (fin) fclose(fin);
-      if (fout) fclose(fout);
-      T1->Delete(SaveFile);
-      //unlink(SaveFile);
-      SaveFile.Empty(); 
-    }
-
-    Retry:
-    base = p.Named;
-    while (base.strchr(' '))
-      base = base.Left(base.strchr(' '));
-    if (!base.GetLength())
-      base = "Unnamed";
-    for(i=0;i!=base.GetLength();i++)
-      if (!isalpha(base[i]))
-        base.SetAt(i,'_');
-  fn = Format("%s.sav",(const char*)base);
-  SaveFile = fn; 
-  if (T1->Exists(fn)) 
-    for(i=2;i!=255;i++) {
-      SaveFile = Format("%s_%d.sav", (const char*)base,i);
-      fn = SaveFile; 
-      if (!T1->Exists(fn))
-        break;
-    }
-
-  desc = p.Named + SC(", ");
-   desc += NAME(p.RaceID);
-    for(i=0;i!=3 && p.ClassID[i];i++)
-      desc += Format("%s %s %d", i ? " /" : "",
-        NAME(p.ClassID[i]), p.Level[i]);
-
-    #if 0
-    if (RES(p.m->dID)->Type == T_TDUNGEON)
-      desc += Format(" (%s, at %03dm)",
-        RES(p.m->dID)->RandMessage(MSG_SHORTNAME), p.m->Depth*10);
-    else
-      desc += Format(" (%s)",
-        RES(p.m->dID)->RandMessage(MSG_SHORTNAME));
-    #endif
-
-    desc = desc.Left(63);
-
-    // weimer: I'm not sure how to hack this in, but it should happen
-    // before we serialize the player
-    theGame->GetPlayer(0)->StoreLevelStats(theGame->GetPlayer(0)->m->Depth);
-
-    try {  
-      T1->OpenWrite(fn);
-
-      memset(&fh,0,sizeof(fh));
-      strcpy(fh.Version,VERSION_STRING);
-      fh.Sig = SIGNATURE;
-      fh.numGroups = 1;
-      strncpy(fh.Name,desc,71);
-      T1->FWrite(&fh,sizeof(fh));
-      theRegistry->SaveGroup(*T1,0,false,true);
-      T1->Close();
-      T1->ChangeDirectory(T1->IncursionDirectory);
+          if (fin) fclose(fin);
+          if (fout) fclose(fout);
+          T1->Delete(SaveFile);
+          //unlink(SaveFile);
+          SaveFile.Empty(); 
       }
-    catch (int error_number) {
-      Error("Error writing save file (%s).",
-        Lookup(FileErrors,error_number));
-      T1->ChangeDirectory(T1->IncursionDirectory);
-        return false;
-   
+
+Retry:
+      base = p.Named;
+      while (base.strchr(' '))
+          base = base.Left(base.strchr(' '));
+      if (!base.GetLength())
+          base = "Unnamed";
+      for(i=0;i!=base.GetLength();i++)
+          if (!isalpha(base[i]))
+              base.SetAt(i,'_');
+      fn = Format("%s.sav",(const char*)base);
+      SaveFile = fn; 
+      if (T1->Exists(fn)) 
+          for(i=2;i!=255;i++) {
+              SaveFile = Format("%s_%d.sav", (const char*)base,i);
+              fn = SaveFile; 
+              if (!T1->Exists(fn))
+                  break;
+          }
+
+      desc = p.Named + SC(", ");
+      desc += NAME(p.RaceID);
+      for(i=0;i!=3 && p.ClassID[i];i++)
+          desc += Format("%s %s %d", i ? " /" : "",
+          NAME(p.ClassID[i]), p.Level[i]);
+
+#if 0
+      if (RES(p.m->dID)->Type == T_TDUNGEON)
+          desc += Format(" (%s, at %03dm)",
+          RES(p.m->dID)->RandMessage(MSG_SHORTNAME), p.m->Depth*10);
+      else
+          desc += Format(" (%s)",
+          RES(p.m->dID)->RandMessage(MSG_SHORTNAME));
+#endif
+
+      desc = desc.Left(63);
+
+      // weimer: I'm not sure how to hack this in, but it should happen
+      // before we serialize the player
+      theGame->GetPlayer(0)->StoreLevelStats(theGame->GetPlayer(0)->m->Depth);
+
+      try {  
+          T1->OpenWrite(fn);
+
+          memset(&fh,0,sizeof(fh));
+          strcpy(fh.Version,VERSION_STRING);
+          fh.Sig = SIGNATURE;
+          fh.numGroups = 1;
+          strncpy(fh.Name,desc,71);
+          T1->FWrite(&fh,sizeof(fh));
+          theRegistry->SaveGroup(*T1,0,false,true);
+          T1->Close();
+          T1->ChangeDirectory(T1->IncursionDirectory);
       }
-    return true;
+      catch (int error_number) {
+          Error("Error writing save file (%s).",
+              Lookup(FileErrors,error_number));
+          T1->ChangeDirectory(T1->IncursionDirectory);
+          return false;
+
+      }
+      return true;
   }
 
 
