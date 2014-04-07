@@ -410,13 +410,13 @@ void libtcodTerm::SetDebugText(const char *text) {
 
 void libtcodTerm::Update() {
     static int update_count = 0;
-    update_count++;
     TCOD_console_blit(bScreen,0,0,0,0,NULL,0,0,1.0f,1.0f);
     TCOD_console_blit(bScreen,0,0,0,0,bCurrent,0,0,1.0f,1.0f);
-#ifdef DEBUG
-    if (debugText.GetLength())
+    if (debugText.GetLength()) {
+        update_count++;
         TCOD_console_print(NULL,0,0,"%d: %s",update_count,(const char *)debugText);
-#endif
+        debugText = "";
+    }
     TCOD_console_flush();
 
     updated = true;
@@ -936,7 +936,7 @@ int16 libtcodTerm::GetCharCmd(KeyCmdMode mode) {
     int16 keyset_start, keyset_delta, keyset_last;
     int16 i, ox, oy, ch; int scancode; 
     TextWin *wn;
-    
+
     ActionsSinceLastAutoSave++;
     if (p) p->GameTimeInfo.keystrokes++;
 
@@ -1059,6 +1059,26 @@ CtrlBreak:
 
         if ((ch == 'c' || tcodKey.vk == TCODK_PAUSE) && (ControlKeys & CONTROL))
             goto CtrlBreak;
+
+#ifdef HACK_KEY_DEBUGGING
+        {
+            static bool debug_keys = false;
+            if ((ch == 'd') && (ControlKeys & CONTROL)) {
+                debug_keys = !debug_keys;
+                if (debug_keys)
+                    T1->SetDebugText("Key debugging started.");
+                else
+                    T1->SetDebugText("Key debugging stopped.");
+            } else if (debug_keys) {
+                char formatted[256];
+                int result = sprintf(formatted, "Key code: %d, Char-number: %d Char-letter: '%c'", tcodKey.vk, tcodKey.c, tcodKey.c);
+                if (result != -1)
+                    T1->SetDebugText(formatted);
+                else
+                    T1->SetDebugText("Failed to format key debugging info.");
+            }
+        }
+#endif
         
         switch (tcodKey.vk) {
         case TCODK_ENTER:      ch = KY_ENTER;     break; 
