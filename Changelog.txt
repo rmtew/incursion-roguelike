@@ -1,3 +1,6 @@
+Incursion (open source) 0.6.9Y5: 2014-??-??
+* INSERT CHANGES HERE..
+
 Incursion (open source) 0.6.9Y4: 2014-04-09
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/39/typo-in-cant-rest-at-the-inn-anymore: Fix typo in cave entrance scripts, reported by Tuyen Tran.
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/37/whips-unable-to-prevent-enemies-from: Fix bug where whips are unable to prevent enemies closing in with their reach, reported by Cranky_Corvids, fix provided by Carl Minden.
