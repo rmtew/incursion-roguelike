@@ -3174,6 +3174,7 @@ EvReturn Creature::TryToDestroyThing(Thing *f)
             e.Clear();
             e.EActor = this;
             e.eID = theGame->SpellID(i);
+            // The spell defines what kinds of targets it affects. */
             if (te->PEvent(EV_ISTARGET,this,e.eID) == SHOULD_CAST_IT) {
               IPrint("You attempt to cast <Res>.",e.eID);
               if (thisp->Spells[i] & SP_INNATE) 

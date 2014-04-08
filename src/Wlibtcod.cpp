@@ -983,22 +983,7 @@ int16 libtcodTerm::GetCharCmd(KeyCmdMode mode) {
 
     for(;;) {
         TCOD_key_t tcodKey;
-        TCOD_event_t tcodEvent = TCOD_sys_check_for_event(TCOD_EVENT_KEY_PRESS, &tcodKey, NULL);
-
-        ControlKeys = 0;
-        if (tcodKey.lctrl || tcodKey.rctrl)
-            ControlKeys |= CONTROL;
-        if (tcodKey.shift)
-            ControlKeys |= SHIFT;
-        if (tcodKey.lalt || tcodKey.ralt)
-            ControlKeys |= ALT; 
-
-        /* Allow clearing the message window ONLY if we aren't
-           repeating keys, i.e., holding down arrow to run. In
-           other words, if no keys are down, or keys are down 
-           that weren't down earlier, it is safe to clear. */
-        if (tcodKey.vk == TCODK_NONE)
-            ClearMsgOK = true;
+        TCOD_event_t tcodEvent = TCOD_sys_check_for_event(TCOD_EVENT_KEY_PRESS|TCOD_EVENT_KEY_TEXT, &tcodKey, NULL);
 
         if (Mode == MO_PLAY && p->UpdateMap)
             RefreshMap();
@@ -1027,13 +1012,15 @@ CtrlBreak:
                 return KY_CMD_QUICK_QUIT;
             }
         }
-        if (tcodKey.vk == TCODK_NONE)
-            continue;
-        /*      
-        if (!keypressed()) {
+
+        if (tcodKey.vk == TCODK_NONE) {
+            /* Allow clearing the message window ONLY if we aren't
+               repeating keys, i.e., holding down arrow to run. In
+               other words, if no keys are down, or keys are down 
+               that weren't down earlier, it is safe to clear. */
+            ClearMsgOK = true;
             continue;
         }
-        */
         
         if (theGame->Opt(OPT_CLEAR_EVERY_TURN) && ClearMsgOK && mode == KY_CMD_NORMAL_MODE && GetMode() == MO_PLAY) {
             ox = cx; oy = cy; wn = activeWin;
@@ -1049,73 +1036,95 @@ CtrlBreak:
 
         ch = tcodKey.c;
 
-        if (tcodKey.vk == TCODK_ENTER)
-            if (ControlKeys & ALT) {
-                isWindowed = !isWindowed;
-                Reset();
-                Update();
-                return KY_REDRAW;
-            }
+        ControlKeys = 0;
+        if (tcodEvent == TCOD_EVENT_KEY_PRESS) {
+            if (tcodKey.lctrl || tcodKey.rctrl)
+                ControlKeys |= CONTROL;
+            if (tcodKey.shift)
+                ControlKeys |= SHIFT;
+            if (tcodKey.lalt || tcodKey.ralt)
+                ControlKeys |= ALT; 
 
-        if ((ch == 'c' || tcodKey.vk == TCODK_PAUSE) && (ControlKeys & CONTROL))
-            goto CtrlBreak;
+            if (tcodKey.vk == TCODK_ENTER)
+                if (ControlKeys & ALT) {
+                    isWindowed = !isWindowed;
+                    Reset();
+                    Update();
+                    return KY_REDRAW;
+                }
+
+            if ((ch == 'c' || tcodKey.vk == TCODK_PAUSE) && (ControlKeys & CONTROL))
+                goto CtrlBreak;
 
 #ifdef HACK_KEY_DEBUGGING
-        {
-            static bool debug_keys = false;
-            if ((ch == 'd') && (ControlKeys & CONTROL)) {
-                debug_keys = !debug_keys;
-                if (debug_keys)
-                    T1->SetDebugText("Key debugging started.");
-                else
-                    T1->SetDebugText("Key debugging stopped.");
-            } else if (debug_keys) {
-                char formatted[256];
-                int result = sprintf(formatted, "Key code: %d, Char-number: %d Char-letter: '%c'", tcodKey.vk, tcodKey.c, tcodKey.c);
-                if (result != -1)
-                    T1->SetDebugText(formatted);
-                else
-                    T1->SetDebugText("Failed to format key debugging info.");
+            {
+                static bool debug_keys = false;
+                if ((ch == 'd') && (ControlKeys & CONTROL)) {
+                    debug_keys = !debug_keys;
+                    if (debug_keys)
+                        T1->SetDebugText("Key debugging started.");
+                    else
+                        T1->SetDebugText("Key debugging stopped.");
+                } else if (debug_keys) {
+                    char formatted[256];
+                    int result = sprintf(formatted, "Key code: %d, Char-number: %d Char-letter: '%c'", tcodKey.vk, tcodKey.c, tcodKey.c);
+                    if (result != -1)
+                        T1->SetDebugText(formatted);
+                    else
+                        T1->SetDebugText("Failed to format key debugging info.");
+                }
             }
-        }
 #endif
-        
-        switch (tcodKey.vk) {
-        case TCODK_ENTER:      ch = KY_ENTER;     break; 
-        case TCODK_KPENTER:    ch = KY_ENTER;     break; 
-        case TCODK_SPACE:      ch = KY_SPACE;     break;
-        case TCODK_ESCAPE:     ch = KY_ESC;       break;
-        case TCODK_BACKSPACE:  ch = KY_BACKSPACE; break;
-        case TCODK_TAB:        ch = KY_TAB;       break;
-        case TCODK_RIGHT:      ch = KY_RIGHT;     break;
-        case TCODK_UP:         ch = KY_UP;        break;
-        case TCODK_LEFT:       ch = KY_LEFT;      break;
-        case TCODK_DOWN:       ch = KY_DOWN;      break;
-        case TCODK_PAGEUP:     ch = KY_PGUP;      break;
-        case TCODK_PAGEDOWN:   ch = KY_PGDN;      break;
-        case TCODK_HOME:       ch = KY_HOME;      break;
-        case TCODK_END:        ch = KY_END;       break;
 
-        case TCODK_KP7:        ch = KY_HOME;      break;
-        case TCODK_KP8:        ch = KY_UP;        break;
-        case TCODK_KP9:        ch = KY_PGUP;      break;
-        case TCODK_KP4:        ch = KY_LEFT;      break;
-        case TCODK_KP6:        ch = KY_RIGHT;     break;
-        case TCODK_KP1:        ch = KY_END;       break;
-        case TCODK_KP2:        ch = KY_DOWN;      break;
-        case TCODK_KP3:        ch = KY_PGDN;      break;
+            switch (tcodKey.vk) {
+            case TCODK_ENTER:      ch = KY_ENTER;     break; 
+            case TCODK_KPENTER:    ch = KY_ENTER;     break; 
+            case TCODK_SPACE:      ch = KY_SPACE;     break;
+            case TCODK_ESCAPE:     ch = KY_ESC;       break;
+            case TCODK_BACKSPACE:  ch = KY_BACKSPACE; break;
+            case TCODK_TAB:        ch = KY_TAB;       break;
+            case TCODK_RIGHT:      ch = KY_RIGHT;     break;
+            case TCODK_UP:         ch = KY_UP;        break;
+            case TCODK_LEFT:       ch = KY_LEFT;      break;
+            case TCODK_DOWN:       ch = KY_DOWN;      break;
+            case TCODK_PAGEUP:     ch = KY_PGUP;      break;
+            case TCODK_PAGEDOWN:   ch = KY_PGDN;      break;
+            case TCODK_HOME:       ch = KY_HOME;      break;
+            case TCODK_END:        ch = KY_END;       break;
 
-        default:
-            if (ch && strchr("`~!@#$%^&*()-_=+{}[];:'\",<.>?/|\\",ch))
-                ;
-            else if (tcodKey.vk == TCODK_CHAR && ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')))
-                ch = ((ControlKeys & SHIFT) ? 'A' : 'a') + (ch - 'a');
-            else if (tcodKey.vk >= TCODK_0 && tcodKey.vk <= TCODK_9)
-                ch = (ControlKeys & SHIFT) ? ")!@#$%^&*("[tcodKey.vk - TCODK_0] : '0' + (tcodKey.vk - TCODK_0);
-            else if (tcodKey.vk >= TCODK_F1 && tcodKey.vk <= TCODK_F12)
-                ch = FN(tcodKey.vk - TCODK_F1 + 1);
-            else
+            case TCODK_KP7:        ch = KY_HOME;      break;
+            case TCODK_KP8:        ch = KY_UP;        break;
+            case TCODK_KP9:        ch = KY_PGUP;      break;
+            case TCODK_KP4:        ch = KY_LEFT;      break;
+            case TCODK_KP6:        ch = KY_RIGHT;     break;
+            case TCODK_KP1:        ch = KY_END;       break;
+            case TCODK_KP2:        ch = KY_DOWN;      break;
+            case TCODK_KP3:        ch = KY_PGDN;      break;
+
+            case TCODK_F1:         ch = KY_CMD_MACRO1; break;
+            case TCODK_F2:         ch = KY_CMD_MACRO2; break;
+            case TCODK_F3:         ch = KY_CMD_MACRO3; break;
+            case TCODK_F4:         ch = KY_CMD_MACRO4; break;
+            case TCODK_F5:         ch = KY_CMD_MACRO5; break;
+            case TCODK_F6:         ch = KY_CMD_MACRO6; break;
+            case TCODK_F7:         ch = KY_CMD_MACRO7; break;
+            case TCODK_F8:         ch = KY_CMD_MACRO8; break;
+            case TCODK_F9:         ch = KY_CMD_MACRO9; break;
+            case TCODK_F10:         ch = KY_CMD_MACRO10; break;
+            case TCODK_F11:         ch = KY_CMD_MACRO11; break;
+            case TCODK_F12:         ch = KY_CMD_MACRO12; break;
+            default:
+                /* if (ch && strchr("`~!@#$%^&*()-_=+{}[];:'\",<.>?/|\\",ch))
+                    ;
+                else if (tcodKey.vk == TCODK_CHAR && ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')))
+                    ch = ((ControlKeys & SHIFT) ? 'A' : 'a') + (ch - 'a');
+                else if (tcodKey.vk >= TCODK_0 && tcodKey.vk <= TCODK_9)
+                    ch = (ControlKeys & SHIFT) ? ")!@#$%^&*("[tcodKey.vk - TCODK_0] : '0' + (tcodKey.vk - TCODK_0);
+                else if (tcodKey.vk >= TCODK_F1 && tcodKey.vk <= TCODK_F12)
+                    ch = FN(tcodKey.vk - TCODK_F1 + 1);
+                else */
                 continue;
+            }
         }
 
         if (mode == KY_CMD_RAW)
@@ -1126,7 +1135,7 @@ CtrlBreak:
                 continue;
             if (keyset[i].raw_key_flags != -1)
                 if (keyset[i].raw_key_flags != (ControlKeys & (CONTROL|SHIFT|ALT)))
-                    continue; 
+                    continue;
             if (mode == KY_CMD_ARROW_MODE && (keyset[i].cmd < KY_CMD_FIRST_ARROW || keyset[i].cmd > KY_CMD_LAST_ARROW))
                 continue; 
             return keyset[i].cmd;
