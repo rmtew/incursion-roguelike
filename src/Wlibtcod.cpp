@@ -1079,7 +1079,6 @@ CtrlBreak:
             switch (tcodKey.vk) {
             case TCODK_ENTER:      ch = KY_ENTER;     break; 
             case TCODK_KPENTER:    ch = KY_ENTER;     break; 
-            case TCODK_SPACE:      ch = KY_SPACE;     break;
             case TCODK_ESCAPE:     ch = KY_ESC;       break;
             case TCODK_BACKSPACE:  ch = KY_BACKSPACE; break;
             case TCODK_TAB:        ch = KY_TAB;       break;
@@ -1092,6 +1091,7 @@ CtrlBreak:
             case TCODK_HOME:       ch = KY_HOME;      break;
             case TCODK_END:        ch = KY_END;       break;
 
+			/* Users with numpads should turn numlock off. */
             case TCODK_KP7:        ch = KY_HOME;      break;
             case TCODK_KP8:        ch = KY_UP;        break;
             case TCODK_KP9:        ch = KY_PGUP;      break;
@@ -1100,6 +1100,7 @@ CtrlBreak:
             case TCODK_KP1:        ch = KY_END;       break;
             case TCODK_KP2:        ch = KY_DOWN;      break;
             case TCODK_KP3:        ch = KY_PGDN;      break;
+            case TCODK_KPDEC:      ch = KY_PERIOD;    break;
 
             case TCODK_F1:         ch = KY_CMD_MACRO1; break;
             case TCODK_F2:         ch = KY_CMD_MACRO2; break;
@@ -1114,15 +1115,6 @@ CtrlBreak:
             case TCODK_F11:         ch = KY_CMD_MACRO11; break;
             case TCODK_F12:         ch = KY_CMD_MACRO12; break;
             default:
-                /* if (ch && strchr("`~!@#$%^&*()-_=+{}[];:'\",<.>?/|\\",ch))
-                    ;
-                else if (tcodKey.vk == TCODK_CHAR && ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')))
-                    ch = ((ControlKeys & SHIFT) ? 'A' : 'a') + (ch - 'a');
-                else if (tcodKey.vk >= TCODK_0 && tcodKey.vk <= TCODK_9)
-                    ch = (ControlKeys & SHIFT) ? ")!@#$%^&*("[tcodKey.vk - TCODK_0] : '0' + (tcodKey.vk - TCODK_0);
-                else if (tcodKey.vk >= TCODK_F1 && tcodKey.vk <= TCODK_F12)
-                    ch = FN(tcodKey.vk - TCODK_F1 + 1);
-                else */
                 continue;
             }
         }
