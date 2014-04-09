@@ -1,5 +1,6 @@
 Incursion (open source) 0.6.9Y5: 2014-??-??
-* INSERT CHANGES HERE..
+* https://bitbucket.org/rmtew/incursion-roguelike/issue/41/: Fix bug where numpad '.' key does not do rest action like normal '.' key.  This is because numpad is only supported when numlock is turned off, due to how we receive notification about key events from SDL2 via libtcod.
+* https://bitbucket.org/rmtew/incursion-roguelike/issue/42/: Fix bug where space key sends two key presses for each actual press.  This was caused by the non-US keyboard fix.
 
 Incursion (open source) 0.6.9Y4: 2014-04-09
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/39/typo-in-cant-rest-at-the-inn-anymore: Fix typo in cave entrance scripts, reported by Tuyen Tran.
