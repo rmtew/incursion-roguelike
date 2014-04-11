@@ -87,12 +87,18 @@
 #undef MIN
 #undef MAX
 
+#define SDL_MAIN_HANDLED
+#include "SDL.h"
+
 #define FORE(g) ((g & 0x0F00) / 256)
 #define BACK(g) ((g & 0xF000) / (256*16))
 #define ATTR(g) ((g & 0xFF00) / 256)
 #define CHAR(g) ((g & 0x00FF))
 
 #define MAX_COLORS 16
+
+#define CURSOR_BLINK_MS 300
+#define INPUT_IDLE_MS 50
 
 #ifndef DEBUG
 using google_breakpad::ExceptionHandler;
@@ -149,7 +155,7 @@ class libtcodTerm: public TextTerm
       TCOD_console_t bScreen, bSave, bScroll, bCurrent;
       TCOD_color_t Colors[MAX_COLORS];
       int16 resX, resY, fontX, fontY, ocx, ocy;
-      int32 lastBlink;
+      uint32 ticks_blink_last;
       int oldResX, oldResY;
       String debugText;
       /* File I/O Stuff */
@@ -302,8 +308,6 @@ static int16 kbPolish[][3] = {
   { KY_EQUALS,     0, '=' },
   { 0,              0,  0  }  };
 
-volatile int timer;
-
 Term *T1;
 libtcodTerm *AT1;
 #ifndef DEBUG
@@ -422,53 +426,32 @@ void libtcodTerm::Update() {
     updated = true;
 }
   
-void libtcodTerm::Redraw()
-  {
+void libtcodTerm::Redraw() {
     /* TCOD_console_clear(bCurrent);*/
     Update();
-  }
-  
-void switch_callback()
-  { /* ((libtcodTerm*)T1)->Redraw(); */ }
+}
 
-void timer_proc()
-  { timer++; }
-
-void libtcodTerm::CursorOn()
-  {
+void libtcodTerm::CursorOn() {
     showCursor = true;
-    lastBlink = 0;
+    ticks_blink_last = SDL_GetTicks();
     ocx = ocy = 0;
-    /* TODO: Get this working.
-    install_int(timer_proc,300);
-    */
-  }
+}
 
-void libtcodTerm::CursorOff()
-  {
-    Glyph g;
+void libtcodTerm::CursorOff() {
     int16 ox = (resX - (fontX*sizeX))/2,
           oy = (resY - (fontY*sizeY))/2;
     showCursor = false;
     cursorPulse = false;
     TCOD_console_blit(bCurrent,ocx,ocy,1,1,NULL,ocx,ocy,1.0f,1.0f);
     ocx = ocy = 0;
-    /* TODO: Get this working.
-    remove_int(timer_proc);
-    */
-  }
+}
   
-void libtcodTerm::BlinkCursor()
-  {
-    int16 c;
-    if (!showCursor)
-      return;
+void libtcodTerm::BlinkCursor() {
     int16 ox = (resX - (fontX*sizeX))/2,
           oy = (resY - (fontY*sizeY))/2;
     cursorPulse = !cursorPulse;
-    if (cursorPulse)  
-      {
-        c = attr & 0x000F;
+    if (cursorPulse) {
+        int16 c = attr & 0x000F;
         if (c == 8) 
           c = 7;
         else if (c < 8)
@@ -479,11 +462,9 @@ void libtcodTerm::BlinkCursor()
                     Colors[c]);
                     */
         ocy = cy; ocx = cx;
-      }
-    else
+    } else
         TCOD_console_blit(bCurrent,ocx,ocy,1,1,NULL,ocx,ocy,1.0f,1.0f);
-    lastBlink = timer;
-  }
+}
   
 void libtcodTerm::Save()
   { 
@@ -808,17 +789,8 @@ void libtcodTerm::Initialize()
     s1 = s2 = 0;      
     MsgHistory[0] = 0;
     Mode = MO_SPLASH;
-    timer = 0; 
     isWindowed = true;
     alf = NULL;
-    //set_config_file("Incursion.cfg");
-    /*
-    install_keyboard();
-    install_timer();
-    */
-    /* So we can compile resources while minimized */
-    //set_display_switch_mode(SWITCH_BACKAMNESIA);
-    //set_display_switch_callback(SWITCH_OUT,switch_callback);
 
     bScreen = bCurrent = bSave = bScroll = NULL;
     
@@ -835,9 +807,6 @@ void libtcodTerm::Initialize()
 void libtcodTerm::ShutDown() {
     SetWin(WIN_SCREEN);
     Clear();
-    //set_gfx_mode(GFX_AUTODETECT_FULLSCREEN,oldResX,oldResY,0,0);
-    //set_gfx_mode(GFX_TEXT,80,25,0,0);
-    //allegro_exit();
 }
 
 void libtcodTerm::SetIncursionDirectory(const char *s) {
@@ -936,6 +905,7 @@ int16 libtcodTerm::GetCharCmd(KeyCmdMode mode) {
     int16 keyset_start, keyset_delta, keyset_last;
     int16 i, ox, oy, ch; int scancode; 
     TextWin *wn;
+	uint32 ticks_last;
 
     ActionsSinceLastAutoSave++;
     if (p) p->GameTimeInfo.keystrokes++;
@@ -980,8 +950,10 @@ int16 libtcodTerm::GetCharCmd(KeyCmdMode mode) {
     Update();
     activeWin = wn;
     cx = ox; cy = oy;
+    ticks_last = SDL_GetTicks();
 
     for(;;) {
+		Uint32 ticks0 = SDL_GetTicks(), ticks1;
         TCOD_key_t tcodKey;
         TCOD_event_t tcodEvent = TCOD_sys_check_for_event(TCOD_EVENT_KEY_PRESS|TCOD_EVENT_KEY_TEXT, &tcodKey, NULL);
 
@@ -994,9 +966,11 @@ int16 libtcodTerm::GetCharCmd(KeyCmdMode mode) {
                 ShowStatus();
             }
           
-        if (showCursor)
-            if (timer > lastBlink)
-                BlinkCursor();
+        ticks1 = SDL_GetTicks();
+        if (showCursor && ticks1 > ticks_blink_last + CURSOR_BLINK_MS) {
+            BlinkCursor();
+            ticks_blink_last = ticks1;
+        }
           
         if (TCOD_console_is_window_closed()) {
             int16 ox, oy;
@@ -1014,6 +988,12 @@ CtrlBreak:
         }
 
         if (tcodKey.vk == TCODK_NONE) {
+            uint32 ticks_next = ticks1 + INPUT_IDLE_MS;
+            if (ticks_next > ticks_blink_last + CURSOR_BLINK_MS)
+                ticks_next = ticks_blink_last + CURSOR_BLINK_MS;
+            if (SDL_TICKS_PASSED(ticks_next, ticks1))
+                TCOD_sys_sleep_milli(ticks_next - ticks1);
+
             /* Allow clearing the message window ONLY if we aren't
                repeating keys, i.e., holding down arrow to run. In
                other words, if no keys are down, or keys are down 
@@ -1032,7 +1012,7 @@ CtrlBreak:
             ClearMsgOK = false;
         }
         
-        lastBlink = 0;
+        ticks_blink_last = SDL_GetTicks();
 
         ch = tcodKey.c;
 
