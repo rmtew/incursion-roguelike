@@ -438,8 +438,6 @@ void libtcodTerm::CursorOn() {
 }
 
 void libtcodTerm::CursorOff() {
-    int16 ox = (resX - (fontX*sizeX))/2,
-          oy = (resY - (fontY*sizeY))/2;
     showCursor = false;
     cursorPulse = false;
     TCOD_console_blit(bCurrent,ocx,ocy,1,1,NULL,ocx,ocy,1.0f,1.0f);
@@ -447,8 +445,6 @@ void libtcodTerm::CursorOff() {
 }
   
 void libtcodTerm::BlinkCursor() {
-    int16 ox = (resX - (fontX*sizeX))/2,
-          oy = (resY - (fontY*sizeY))/2;
     cursorPulse = !cursorPulse;
     if (cursorPulse) {
         int16 c = attr & 0x000F;
@@ -456,30 +452,25 @@ void libtcodTerm::BlinkCursor() {
           c = 7;
         else if (c < 8)
           c += 8;
-        /* TODO: Draw cursor.
-        rect(screen,ox + cx*fontX              , oy + cy*fontY  + (fontY*2)/3,
-                    ox + cx*fontX + (fontX - 1), oy + cy*fontY  + (fontY - 1),
-                    Colors[c]);
-                    */
+        TCOD_console_put_char_ex(NULL,cx,cy,'X',Colors[c], Colors[c]);
         ocy = cy; ocx = cx;
     } else
-        TCOD_console_blit(bCurrent,ocx,ocy,1,1,NULL,ocx,ocy,1.0f,1.0f);
+        TCOD_console_blit(bScreen,ocx,ocy,1,1,NULL,ocx,ocy,1.0f,1.0f);
+    /* Won't get an update necessarily otherwise */
+    TCOD_console_flush();
 }
   
-void libtcodTerm::Save()
-  { 
+void libtcodTerm::Save() { 
     Update();
     TCOD_console_blit(bScreen,0,0,0,0,bSave,0,0,1.0f,1.0f);
-  }
+}
 
-void libtcodTerm::Restore()
-  { 
+void libtcodTerm::Restore() { 
     TCOD_console_blit(bSave,0,0,0,0,bScreen,0,0,1.0f,1.0f);
     Update();    
-  }
+}
 
-void libtcodTerm::PutChar(Glyph g) 
-  {
+void libtcodTerm::PutChar(Glyph g) {
     if (g >> 8) {
         TCOD_console_put_char(bScreen,cx,cy,CHAR(g),TCOD_BKGND_SET);
     } else {
@@ -489,7 +480,7 @@ void libtcodTerm::PutChar(Glyph g)
 
     cx++;
     updated = false;
-  }
+}
 
 void libtcodTerm::APutChar(int16 x, int16 y, Glyph g) 
   {
