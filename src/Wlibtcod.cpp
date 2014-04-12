@@ -763,13 +763,14 @@ RetryFont:
 }    
 
 
-void libtcodTerm::Initialize()
-	{
+void libtcodTerm::Initialize() {
     int16 i;
     
     p = NULL; m = NULL; isHelp = false;
     ActionsSinceLastAutoSave = 0;
     cx = cy = 0;
+    showCursor = false;
+    cursorPulse = false;
     OptionCount = 0;
     OffscreenC = 0;
     QueuedChar = 0;
@@ -980,9 +981,9 @@ CtrlBreak:
 
         if (tcodKey.vk == TCODK_NONE) {
             uint32 ticks_next = ticks1 + INPUT_IDLE_MS;
-            if (ticks_next > ticks_blink_last + CURSOR_BLINK_MS)
+            if (showCursor && ticks_next > ticks_blink_last + CURSOR_BLINK_MS)
                 ticks_next = ticks_blink_last + CURSOR_BLINK_MS;
-            if (SDL_TICKS_PASSED(ticks_next, ticks1))
+            if (ticks_next > ticks1)
                 TCOD_sys_sleep_milli(ticks_next - ticks1);
 
             /* Allow clearing the message window ONLY if we aren't
