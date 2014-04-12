@@ -3185,7 +3185,7 @@ EvReturn Creature::TryToDestroyThing(Thing *f)
           }
         } 
     } 
-    /* I want to depricate the idea of using weapon attacks
+    /* I want to deprecate the idea of using weapon attacks
        to break down/open doors and chests. There are several
        reasons for this: first, magic swords are already SO
        GOOD in any D&D-like setting, it seems cheesy to make

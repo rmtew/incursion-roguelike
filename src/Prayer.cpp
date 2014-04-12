@@ -1026,124 +1026,110 @@ int16 AidPairs[22][2] = {
   { 0, 0 },
   };
 
-EvReturn Character::Pray(EventInfo &e)
-  {
+EvReturn Character::Pray(EventInfo &e) {
     TGod *tg = TGOD(e.eID);
     int16 retry, i, j, k, cFavor;
     int16 *Troubles; rID aidChart[64];
     bool doneSomething;
     String je;
-    
+
     je = XPrint("You prayed to <Res> for divine aid.\n",e.eID);
-    
+
     Timeout += 30;
-    
+
     retry = GetStatiMag(TRIED,SK_KNOW_THEO+1000);
-    if (!SkillCheck(SK_KNOW_THEO,tg->GetConst(PRAYER_DC),true,
-                      -retry, retry ? "retry" : ""))
-      {
+    if (!SkillCheck(SK_KNOW_THEO,tg->GetConst(PRAYER_DC),true,-retry, retry ? "retry" : "")) {
         RemoveStati(TRIED,-1,SK_KNOW_THEO+1000);
         GainTempStati(TRIED,NULL,-2,SS_MISC,SK_KNOW_THEO+1000,retry+2);
         IPrint("You fail to recite the ritual prayers and invocations correctly.");
         AddJournalEntry("You tried to pray for aid, but failed.");
         return DONE;
-      }
-      
+    }
+
     if (e.eID != GodID) {
-      je += "The response was divine jealousy.";
-      AddJournalEntry(je);
-      ReThrow(EV_JEALOUSY,e);
-      }
+        je += "The response was divine jealousy.";
+        AddJournalEntry(je);
+        ReThrow(EV_JEALOUSY,e);
+    }
     if (Flags & F_DELETE)
-      return DONE;
-    
-    if (Anger[e.godNum] > TGOD(e.eID)->GetConst(TOLERANCE_VAL))
-      {
+        return DONE;
+
+    if (Anger[e.godNum] > TGOD(e.eID)->GetConst(TOLERANCE_VAL)) {
         GodMessage(e.eID,MSG_BAD_PRAY);
         je += "The result was divine retribution.";
         AddJournalEntry(je);
         e.EParam = Anger[e.godNum] - TGOD(e.eID)->GetConst(TOLERANCE_VAL);
         ReThrow(EV_RETRIBUTION,e);
         return DONE;
-      }
-    
-    if (PrayerTimeout[e.godNum] > 0)
-      {
+    }
+
+    if (PrayerTimeout[e.godNum] > 0) {
         GodMessage(e.eID,MSG_TIMEOUT);
         je += "You called for aid too soon after your last prayer.";
         AddJournalEntry(je);
         Transgress(e.eID,1,true,"prayer during timeout");
         PrayerTimeout[e.godNum] += tg->GetConst(PRAYER_TIMEOUT);
         return DONE;
-      }
-    
+    }
+
     GodMessage(e.eID,MSG_PRAYER);
 
-    if (FavPenalty[e.godNum] + tg->GetConst(INTERVENTION_COST) > 100)
-      { 
+    if (FavPenalty[e.godNum] + tg->GetConst(INTERVENTION_COST) > 100) { 
         je += "Your god had no more aid to give.";
         AddJournalEntry(je);
         GodMessage(e.eID,MSG_OUT_OF_AID);
         return DONE;
-      }
-    
-    
-    
+    }
+
     Troubles = getTroubles();
     tg->GetList(AID_CHART,aidChart,64);
     cFavor = calcFavor(e.eID);
     doneSomething = false;
-    
+
     if (HasAbility(CA_DOMAINS) ||
         HasAbility(CA_TURNING))
-      GrantSymbol(e.eID);
+        GrantSymbol(e.eID);
     if (Timeout)
-      doneSomething = true;
-    
+        doneSomething = true;
+
     for (i=0;Troubles[i];i++)
-      for (j=0;aidChart[j];j+=3) {
-        if (aidChart[j+1] > (Troubles[i] / 256))
-          continue;
-        if (aidChart[j+2] > cFavor / 
-               (e.eID == GodID ? 1 : 5))
-          continue;
-        for (k=0;AidPairs[k][0];k++)
-          if (AidPairs[k][1] == aidChart[j] &&
-              AidPairs[k][0] == (Troubles[i] % 256))
-            {
-              e.EParam = aidChart[j];
-              ReThrow(EV_GIVE_AID,e);
-              je += XPrint("<Res> aided you by <Str>.\n",
-                      e.eID, Lookup(AidTypes,aidChart[j]));
-              doneSomething = true;
-              e.EParam = 0;
-            } 
+        for (j=0;aidChart[j];j+=3) {
+            if (aidChart[j+1] > (Troubles[i] / 256))
+                continue;
+            if (aidChart[j+2] > cFavor / (e.eID == GodID ? 1 : 5))
+                continue;
+            for (k=0;AidPairs[k][0];k++)
+                if (AidPairs[k][1] == aidChart[j] &&
+                    AidPairs[k][0] == (Troubles[i] % 256))
+                {
+                    e.EParam = aidChart[j];
+                    ReThrow(EV_GIVE_AID,e);
+                    je += XPrint("<Res> aided you by <Str>.\n",
+                        e.eID, Lookup(AidTypes,aidChart[j]));
+                    doneSomething = true;
+                    e.EParam = 0;
+                } 
         }
-        
-    if (!doneSomething)
-      {
+
+    if (!doneSomething) {
         je += XPrint("<Res> had no aid to give you.",e.eID);
         GodMessage(e.eID,MSG_NOAID);
         AddJournalEntry(je);
         return DONE;
-      }
-      
-    
-      
-    PrayerTimeout[e.godNum] = tg->GetConst(PRAYER_TIMEOUT) + TotalLevel() +
-                                   random(5);
+    }
+
+    PrayerTimeout[e.godNum] = tg->GetConst(PRAYER_TIMEOUT) + TotalLevel() + random(5);
     FavPenalty[e.godNum] += tg->GetConst(INTERVENTION_COST);
-    
-    if (FavPenalty[e.godNum] > 70 && FavPenalty[e.godNum] - 
-          tg->GetConst(INTERVENTION_COST) <= 70) {
-      GodMessage(e.eID,MSG_NEARLY_OUT);
-      je += XPrint("<Res> cannot aid you much further.",e.eID);
-      }
-      
+
+    if (FavPenalty[e.godNum] > 70 && FavPenalty[e.godNum] - tg->GetConst(INTERVENTION_COST) <= 70) {
+        GodMessage(e.eID,MSG_NEARLY_OUT);
+        je += XPrint("<Res> cannot aid you much further.",e.eID);
+    }
+
     AddJournalEntry(je);    
-    
+
     return DONE;
-  }
+}
   
   
 EvReturn Character::Convert(EventInfo &e)
