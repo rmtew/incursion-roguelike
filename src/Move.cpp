@@ -1425,12 +1425,13 @@ void Creature::TerrainEffects()
         }
     
     if (FallDepth && Falling == this) {
-      ThrowDmg(EV_DAMAGE,AD_FALL,Dice::Roll(3*FallDepth,6),
-        XPrint("falling into a <Res>",FallTerrain),this,this);
-      FallDepth = 0; 
-      Falling = NULL;
-      FallTerrain = 0;
-      }          
+        ThrowDmg(EV_DAMAGE,AD_FALL,Dice::Roll(3*FallDepth,6),XPrint("falling into a <Res>",FallTerrain),this,this);
+        if (isDead())
+            return;
+        FallDepth = 0;
+        Falling = NULL;
+        FallTerrain = 0;
+    }
         
     {
       rID stickyID = m->StickyAt(x,y); 
