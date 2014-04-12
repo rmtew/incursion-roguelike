@@ -953,7 +953,7 @@ SkipAttack:
   if (e.EItem2 && 
       (e.EItem2->HasQuality(WQ_RETURNING) ||
        (TITEM(e.EItem2->iID)->HasFlag(WT_RETURNING) && e.isHit))) {
-    e.EItem2->Remove(false);
+     e.EItem2->Remove(false);
     e.EActor->IPrint(Format("%s returns to you.",(const char*)e.EItem2->Name(NA_THE)));     
     if (oldSlot != -1) {
       if (InSlot(oldSlot)) {
@@ -970,7 +970,11 @@ SkipAttack:
     e.EItem2->PlaceAt(orig_map,lx/2,ly/2); 
     if (e.EItem2->m != orig_map)
       goto MissileDestroyed;
+    /* The PlaceAt() call does not check for suitability of placement.  PlaceNear() does and may destroy the missile
+       if it cannot move it to any suitable tile (i.e. missile fired and landing on magma "maze") */
     e.EItem2->PlaceNear(lx/2,ly/2); 
+    if (e.EItem2->m != orig_map)
+      goto MissileDestroyed;
     e.EItem2->SetImage();
     e.EItem2 = e.EItem2->TryStack(e.EItem2->m,e.EItem2->x,e.EItem2->y);
   }
