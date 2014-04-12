@@ -606,10 +606,7 @@ Wizard / Scroll Spell "Knock" : EA_GENERIC
       for(h=EMap->FirstThing();h;h=EMap->NextThing()) {
         if (h->isType(T_DOOR) && (!(h->DoorFlags & (DF_OPEN|DF_SECRET))) && 
             EActor->Percieves(h))
-          return SHOULD_CAST_IT; 
-        else if ((h->isType(T_CONTAIN) || h->isType(T_CHEST)) &&
-            (h->HasStati(LOCKED)) && EActor->Percieves(h))
-          return SHOULD_CAST_IT; 
+          return SHOULD_CAST_IT;
       } 
       return CANNOT_CAST_IT; 
     } ;
@@ -630,7 +627,7 @@ Wizard / Scroll Spell "Knock" : EA_GENERIC
     Desc: "Magically causes all doors in your line of fire within 60 
     feet to open. This spell opens locked doors but does expose secret 
     doors. This spell opens wizard-locked doors but does not remove the
-    wizard-locked enchantment. It can also be used to unlock locked containers."; 
+    wizard-locked enchantment."; 
   }
 
 Potion / Wizard / Scroll Spell "Mending" : EA_GENERIC
