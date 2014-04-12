@@ -1,6 +1,7 @@
 Incursion (open source) 0.6.9Y6: 2014-04-??
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/43/: In past libtcod builds at least, when the game was waiting for input, the CPU would be at full usage.  Now, the idle input loop only checks for input when it has to.  From 100% to 2% CPU usage.
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/48/: The cursor blinking support was not implemented for libtcod.  Now it is, and the wonderous thing that it is can be viewed at various places like where you choose your gender in character creation.
+* https://bitbucket.org/rmtew/incursion-roguelike/issue/26/: Fix crash where missiles land on terrain where they cannot be placed (e.g. magma, slime, deep water) and it was assumed they were placed successfully, and subsequent logic failed.  Reported with reproduction data by Frumple from Bay12 forums.
 
 Incursion (open source) 0.6.9Y5: 2014-04-10
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/41/: Fix bug where numpad '.' key does not do rest action like normal '.' key.  This is because numpad is only supported when numlock is turned off, due to how we receive notification about key events from SDL2 via libtcod.
