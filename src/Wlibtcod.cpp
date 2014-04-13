@@ -1028,7 +1028,7 @@ CtrlBreak:
             if ((ch == 'c' || tcodKey.vk == TCODK_PAUSE) && (ControlKeys & CONTROL))
                 goto CtrlBreak;
 
-#ifdef HACK_KEY_DEBUGGING
+#ifndef HACK_KEY_DEBUGGING
             {
                 static bool debug_keys = false;
                 if ((ch == 'd') && (ControlKeys & CONTROL)) {
@@ -1039,11 +1039,13 @@ CtrlBreak:
                         T1->SetDebugText("Key debugging stopped.");
                 } else if (debug_keys) {
                     char formatted[256];
-                    int result = sprintf(formatted, "Key code: %d, Char-number: %d Char-letter: '%c'", tcodKey.vk, tcodKey.c, tcodKey.c);
-                    if (result != -1)
-                        T1->SetDebugText(formatted);
-                    else
-                        T1->SetDebugText("Failed to format key debugging info.");
+                    if (tcodKey.vk != TCODK_CONTROL) {
+                        int result = sprintf(formatted, "Key code: %d, Char-number: %d Char-letter: '%c' CtrlKeys: %x", tcodKey.vk, tcodKey.c, tcodKey.c, ControlKeys);
+                        if (result != -1)
+                            T1->SetDebugText(formatted);
+                        else
+                            T1->SetDebugText("Failed to format key debugging info.");
+                    }
                 }
             }
 #endif
@@ -1086,6 +1088,9 @@ CtrlBreak:
             case TCODK_F10:         ch = KY_CMD_MACRO10; break;
             case TCODK_F11:         ch = KY_CMD_MACRO11; break;
             case TCODK_F12:         ch = KY_CMD_MACRO12; break;
+            case TCODK_CHAR:
+                if (ControlKeys & (CONTROL|ALT))
+                    break;
             default:
                 continue;
             }
