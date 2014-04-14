@@ -46,7 +46,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="inc;_dependencies\libtcod\include;_dependencies\sdl2\include"
+				AdditionalIncludeDirectories="inc;_dependencies\libtcod\include;_dependencies\sdl2\include;&quot;_dependencies\google-breakpad\src&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;LIBTCOD_TERM;TCOD_SDL2"
 				StringPooling="true"
 				RuntimeLibrary="0"
@@ -72,7 +72,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="exception_handler.lib crash_generation_client.lib common.lib libtcod.lib"
+				AdditionalDependencies="exception_handler.lib crash_generation_client.lib common.lib libtcod.lib  sdl2.lib"
 				OutputFile=".\Release/Incursion.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
