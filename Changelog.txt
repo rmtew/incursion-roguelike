@@ -3,6 +3,8 @@ Incursion (open source) 0.6.9Y6: 2014-04-??
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/48/: The cursor blinking support was not implemented for libtcod.  Now it is, and the wonderous thing that it is can be viewed at various places like where you choose your gender in character creation.
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/26/: Fix crash where missiles land on terrain where they cannot be placed (e.g. magma, slime, deep water) and it was assumed they were placed successfully, and subsequent logic failed.  Reported with reproduction data by Frumple from Bay12 forums.
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/49/: Fix crash where monster moves over chasm or similar terrain where they fall, then die through damage acquired in doing so.  The logic did not check that the falling damage had killed the monster, and the logic crashed as a result.  Reported with reproduction data by Frumple from Bay12 forums.
+* https://bitbucket.org/rmtew/incursion-roguelike/issue/51/: Fix use of control and alt in UI like the inventory.  The fixes for non-US keyboards broke this use case by accident.
+* https://bitbucket.org/rmtew/incursion-roguelike/issue/54/: Casting a spell at a deep water tile was treated as casting a spell when standing on a deep water tile.
 
 Incursion (open source) 0.6.9Y5: 2014-04-10
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/41/: Fix bug where numpad '.' key does not do rest action like normal '.' key.  This is because numpad is only supported when numlock is turned off, due to how we receive notification about key events from SDL2 via libtcod.

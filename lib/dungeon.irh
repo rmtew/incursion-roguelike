@@ -1602,6 +1602,7 @@ Terrain "shallow mud"
 
 
 Terrain "deep water"
+
   { Image: blue GLYPH_WATER; Mat:MAT_LIQUID;
     Flags: TF_SHOWNAME, TF_SPECIAL, TF_WATER, TF_WARN, TF_DEEP_LIQ; 
     hObj mount;
@@ -1630,6 +1631,12 @@ Terrain "deep water"
     },
     EV_MOVE, PRE(EV_STRIKE), EV_LAND, PRE(EV_CAST) {
       int16 res;
+      // We only want to apply terrain limitations if the caster is present at this location.
+      if (e.Event == PRE(EV_CAST) && e.isLoc) {
+        if (EActor->x != e.EXVal || EActor->y != e.EYVal) {
+	      return NOTHING;
+	    }
+	  }
       if (EActor->HasStati(ON_BRIDGE))
         return NOTHING;
       mount = EActor->GetStatiObj(MOUNTED);
