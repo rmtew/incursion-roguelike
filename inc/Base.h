@@ -481,11 +481,13 @@ class Object
     bool isPlayer()   { return Type == T_PLAYER; }
     bool isMonster()  { return Type == T_MONSTER; }
     bool isCharacter(){ return Type == T_PLAYER || Type == T_NPC; }
+    bool isContainer() { return Type == T_CONTAIN || Type == T_CHEST; }
     bool isType(int16 t) { return (t == T_THING) || (t == T_OBJECT) ||
                                  (t == T_ITEM && isItem()) ||
                                  (t == T_FEATURE && isFeature()) ||
                                  (t == T_CREATURE && isCreature()) ||
                                  (t == T_CHARACTER && isCharacter()) ||
+                                 (t == T_CONTAIN && isContainer()) ||
                                  (t == Type); }
 
     virtual void Serialize(Registry &r, bool isSave) {}
