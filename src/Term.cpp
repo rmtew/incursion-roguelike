@@ -1831,534 +1831,522 @@ inline String & DescribeResource(rID xID)
       return *tmpstr(XPrint("You see nothing exceptional about the <Res>.",xID));
   }
 
-bool TextTerm::EffectPrompt(EventInfo &e, 
-      uint16 fl,bool is_look, const char* PromptText)
-{
-  int16 i, ch, t, dist, best, bestd, typ, mod, tx, ty, range;
-  Thing *th, *cr; hObj hi; String Prompt; Item *wp;
-  bool first = true, found, cycled; 
-  bool isEngulfed = p->HasStati(ENGULFED);
-  cr = NULL; cycled = false;
+bool TextTerm::EffectPrompt(EventInfo &e,uint16 fl,bool is_look, const char* PromptText) {
+    int16 i, ch, t, dist, best, bestd, typ, mod, tx, ty, range;
+    Thing *th, *cr; hObj hi; String Prompt; Item *wp;
+    bool first = true, found, cycled; 
+    bool isEngulfed = p->HasStati(ENGULFED);
+    cr = NULL; cycled = false;
 
-  if (fl == 0 && e.eID && RES(e.eID)->Type == T_TEFFECT)
-    fl = TEFF(e.eID)->ef.qval;
-  
-  /* Needed to calculate range so magic missile improper targets
-     show as out-of-range and can't be selected. */
-  if (e.eID)
-    p->CalcEffect(e);
+    if (fl == 0 && e.eID && RES(e.eID)->Type == T_TEFFECT)
+        fl = TEFF(e.eID)->ef.qval;
+
+    /* Needed to calculate range so magic missile improper targets
+    show as out-of-range and can't be selected. */
+    if (e.eID)
+        p->CalcEffect(e);
 
 Reprompt:
 
-  typ = fl & 0x000F;
-  mod = Q_DIR;
-  if (!typ)
-    return true;
-
-
-
-  if (is_look)
-    Prompt = Format("%cLooking [rfmoxltn%s*?]:%c ",-9,Arrows,-7);
-  else {
-    if (typ == Q_TAR)
-    {
-SelectTarget:
-      Prompt = Format("%cChoose your target",-9,Arrows,-7);
-      Prompt += Format(": [%s%s%s%s%s%s%s]%c ", Arrows, "*", (fl & Q_DIR) ? "d" : "", 
-          fl & Q_LOC ? "l" : "", fl & Q_TAR ? "tn" : "", fl & Q_INV ? "i" : "",
-          fl & Q_ALL ? "a" : "", -7);
-      mod = Q_TAR; cr = p;
-    }
-    else if (typ == Q_INV)
-    {
-SelectItem:
-      found = false;
-      for (th = p->FirstInv();th;th = p->NextInv())
-        if (ThrowEff(EV_RATETARG,e.eID,th,th,th,th) != ABORT)
-          //if (((Item*)th)->Parent == p->myHandle)
-        {
-          LOption(th->Name(NA_MECH|NA_LONG),th->myHandle);
-          found = true;
-        }
-      if (!found) {
-        Box("You have nothing suitable in your inventory to use that on.");
-        if (typ != Q_INV) 
-          goto Reprompt;
-        e.ETarget = NULL; /* InventoryManager */
-        return false;
-        }
-      if (typ != Q_INV)
-        LOption("(non-inventory target)",-2);
-      hi = LMenu(MENU_BORDER,PromptText ? PromptText : "Choose an item:",WIN_MENUBOX);
-      if (hi == -2)
-        goto Reprompt;
-      if (hi == -1) {
-        e.ETarget = NULL;
-        return false;
-      }
-      e.ETarget = oItem(hi);
-      return e.ETarget ? true : false;
-    }
-    else if (typ == Q_LOC)
-    {
-SelectLocation:
-      Prompt = Format("%cChoose a location",-9);
-      Prompt += Format(": [%s%s%s%s%s%s%s]%c ", Arrows, "*", (fl & Q_DIR) ? "d" : "", 
-          fl & Q_LOC ? "l" : "", fl & Q_TAR ? "tn" : "", fl & Q_INV ? "i" : "",
-          fl & Q_ALL ? "a" : "", -7);
-
-      e.isLoc = true;
-      mod = Q_LOC; 
-      tx = p->x; 
-      ty = p->y;
-    }
-    else
-    {
-      Prompt += "Select ";
-      if (typ & Q_DIR) {
-        Prompt += "direction";
-        first = false;
-      }
-      if (typ & Q_LOC) {
-        if (!first) {
-          if (!(typ & (Q_TAR | Q_INV)))
-            Prompt += " or ";
-          else
-            Prompt += ", ";
-        }
-        Prompt += "location";
-        first = false;
-      }
-      if (typ & Q_TAR) {
-        if (!first) {
-          if (!(typ & Q_INV))
-            Prompt += " or ";
-          else
-            Prompt += ", ";
-        }
-        Prompt += "target";
-        first = false;
-      }
-      if (typ & Q_INV) {
-        if (!first)
-          Prompt += " or ";
-        Prompt += "inventory item";
-        first = false;
-      }
-      Prompt += Format(": [%s%s%s%s%s%s%s]%c ", Arrows, "*", (fl & Q_DIR) ? "d" : "", 
-          fl & Q_LOC ? "l" : "", fl & Q_TAR ? "tn" : "", fl & Q_INV ? "i" : "",
-          fl & Q_ALL ? "a" : "", -7);
-    }
-  }
-  if (PromptText) 
-    Prompt = SC(PromptText) + Prompt.Right(Prompt.GetLength()-(Prompt.strchr('[')-1));
-
-  if ((fl == Q_DIR) || ((fl & Q_DIR) && theGame->Opt(OPT_SELECT_DIR)))
+    typ = fl & 0x000F;
     mod = Q_DIR;
-  else if (theGame->Opt(OPT_SELECT_JUMP) && (fl & Q_TAR)) {
-    cr = p; mod = Q_TAR;
-  }
-  else if (fl & Q_LOC) {
-    tx = p->x;
-    ty = p->y;
-    mod = Q_LOC;
-  }
-  
-  range = e.vRange ? e.vRange : 80;
-  if (fl & Q_NEAR)
-    range = 1;
-  if (isEngulfed)
-    range = 1;
-
-  while (1) {
-    if (isEngulfed && mod == Q_TAR) {
-      mod = Q_LOC;
-      tx = cr->x;
-      ty = cr->y;
-      }
-    /* Display the inverted box cursor */
-    if (mod == Q_LOC) {
-      if (isEngulfed) {
-        if (tx == p->x && ty == p->y)
-          cr = p;
-        else
-          cr = p->GetStatiObj(ENGULFED);
-        }
-      else if (m->InBounds(tx,ty))
-        cr = m->FirstAt(tx,ty);
-      m->Update(tx,ty);
-      PutGlyph(tx,ty, (GetGlyph(tx,ty) & 0xFF) | 0xF000);
-      }
-    else if (mod == Q_TAR) {
-      m->Update(cr->x,cr->y);
-      PutGlyph(cr->x,cr->y, (GetGlyph(cr->x,cr->y) & 0xFF) | 0xF000);
-      }
-    SetWin(WIN_MESSAGE); Clear();
-    linenum = linepos = 0;
-    if (cr && (mod == Q_LOC || mod == Q_TAR)) {
-      if (p->Percieves(cr) & (~PER_SHADOW)) {
-        Write(cr->Name(NA_CAPS|NA_A|NA_LONG|NA_MECH|(is_look ? NA_STATI : 0)));
-        if (cr->isCreature() && ((Creature*)cr)->StateFlags & MS_HAS_REACH)
-          Write(" (reach)");
-        }
-      else if (p->Percieves(cr) & PER_SHADOW)
-        Write(cr->Name(NA_CAPS|NA_A|NA_SHADOW));
-      else
-        goto CantSee;
-      if ((p->HasStati(LIFESIGHT)) && cr->isCreature()
-            && p->Percieves(cr)) 
-        Write(Format(" (%d/%d %d/%d)",
-              ((Creature*)cr)->cHP,
-              ((Creature*)cr)->mHP+((Creature*)cr)->Attr[A_THP],
-              ((Creature*)cr)->cMana(),
-              ((Creature*)cr)->tMana()
-              ));
-      Write(0, 1, "  ");
-              
-      if (cr->HasStati(MOUNTED) && (p->Percieves(cr) & (~PER_SHADOW)))
-        Write(Format("(riding %s)",(const char*)cr->GetStatiObj(MOUNTED)->
-                       Name(NA_A|NA_LONG|NA_MECH|(is_look ? NA_STATI : 0))));
-      else if (cr->HasStati(MOUNTED) && (p->Percieves(cr) & PER_SHADOW))
-        Write("(riding something)");
-      if (cr->isCreature() && (wp=((Creature*)cr)->InSlot(SL_WEAPON)) && p->Percieves(wp))
-        Write(XPrint("(wielding a <Obj>)", wp));
-      
-      Write(0,2,"");
-      if (p->Opt(OPT_SHOW_HOW_SEE) && p != cr) {
-        int per = p->Percieves(cr); 
-        bool first_mode = true;
-        Write(0,2,XPrint("<14>Seen With:<7> "));
-        for (int i=1; i<=PER_TRACK ; i<<=1) {
-          if (per & i) {
-            if (!first_mode)
-              Write(", ");
-            Write(Format("%s",Lookup(PerDescs,i)));
-            first_mode = false;
-            }
-        
-          }
-        Write(". ");
-        }
-      if (!p->isTarget(e,cr))
-        Write(XPrint("<4>[Invalid Target]<7>"));
-      else if (::dist(p->x,p->y,cr->x,cr->y) > range) 
-        Write(XPrint("<4>[Out of Range]<7>"));
-      }
-    CantSee:
-    SetWin(WIN_INPUT);
-    Clear(); Color(12);
-    Write(0,0,Prompt);
-    Color(7);
-
-    if (mod == Q_LOC && ((m->At(tx,ty).Visibility & VI_DEFINED) ||
-                          TTER(m->PTerrainAt(tx,ty,p))->HasFlag(TF_DEPOSIT)))
-      Write(NAME(m->PTerrainAt(tx,ty,p)));
-    else if ((mod == Q_TAR) && ((m->At(cr->x,cr->y).Visibility & VI_DEFINED) ||
-                          TTER(m->PTerrainAt(cr->x,cr->y,p))->HasFlag(TF_DEPOSIT)))
-      Write(NAME(m->PTerrainAt(cr->x,cr->y,p)));
-    else if (mod == Q_LOC || mod == Q_TAR)
-      Write(Format("unseen area"));
+    if (!typ)
+        return true;
 
 
-    if (mod == Q_DIR)  
-      CursorOn();
 
-    {
-      int16 oldMode;
-      oldMode = GetMode();
-      SetMode(MO_DIALOG);
-      ch=GetCharCmd(KY_CMD_TARGET_MODE);
-      SetMode(oldMode);
-    }
-
-    CursorOff();
-    Clear();
-
-    /* Hide the cursor */
-    if (mod == Q_LOC)
-      m->Update(tx,ty);
-    else if (mod == Q_TAR)
-      m->Update(cr->x,cr->y);
-
-    if (ch == KY_CMD_ESCAPE)
-      return false;
-    else if (ch == KY_CMD_WIZMODE &&
-             theGame->GetPlayer(0) &&
-             theGame->GetPlayer(0)->WizardMode && cr) {
-      // ww: convenience feature! 
-      if (!m->FirstAt(cr->x,cr->y)) break;
-      SetWin(WIN_SCREEN);
-      Save();
-      SizeWin(WIN_CUSTOM,WinSizeX()-16,WinSizeY()-8);
-      DrawBorder(WIN_CUSTOM,MAGENTA);
-      ClearScroll();
-      SetWin(WIN_CUSTOM); Color(YELLOW);
-      m->FirstAt(cr->x,cr->y)->Dump(); 
-      // (m->ThingAt(cr->x,cr->y)->GetStatiObj(MOUNTED))->Dump(); 
-      int offset = 0, done = 0;
-      do { 
-        UpdateScrollArea(offset,WIN_CUSTOM);  
-        switch(GetCharCmd(KY_CMD_ARROW_MODE)) {
-          case KY_CMD_NORTH: offset--; break;
-          case KY_CMD_SOUTH: offset++; break; 
-          case KY_CMD_NORTHEAST:
-          case KY_CMD_NORTHWEST: offset-= WinSizeY() - 6; break;
-          case KY_CMD_SOUTHEAST:
-          case KY_CMD_SOUTHWEST: offset+= WinSizeY() - 6; break; 
-          default: done = 1; 
-        }
-      } while (!done); 
-      ClearScroll();
-      Restore();
-    }
-    else if (ch == KY_CMD_ALL_ALLIES && (fl & Q_ALL))
-      { e.EVictim = NULL;
-        e.isDir = e.isLoc = false;
-        e.isAllAllies = true;
-        return true; }
-    else if (ch == KY_CMD_LOOK && (typ & (Q_LOC|Q_TAR)))
-      { mod = Q_LOC; tx = p->x; ty = p->y; }
-    else if (ch == KY_CMD_INVENTORY && (typ & Q_INV))
-      goto SelectItem;  
-    else if (ch == KY_CMD_TARGET && (typ & Q_TAR))
-    { mod = Q_TAR; cr = p; }
-    else if (ch == KY_CMD_DIRECTION && (typ & Q_DIR))
-      mod = Q_DIR;
-    else if (ch == KY_CMD_EXAMINE && isEngulfed)
-      { if (cr) 
-          if (p->Percieves(cr) & ~PER_SHADOW)
-             Box(WIN_SCREEN,0,EMERALD, GREY, cr->Describe(p)); }
-    else if (ch == KY_CMD_EXAMINE && cr)
-      ExamineSquare(cr->x,cr->y);
-    else if (ch == KY_CMD_EXAMINE && mod == Q_LOC)
-      ExamineSquare(tx,ty);
-    else if (ch == KY_CMD_EXAMINE_REGION && mod == Q_LOC)
-      Box(WIN_SCREEN,0,PINK,GREY,DescribeResource(m->RegionAt(tx,ty)));
-    else if (ch == KY_CMD_EXAMINE_REGION && mod == Q_TAR) 
-      Box(WIN_SCREEN,0,PINK,GREY,DescribeResource(m->RegionAt(cr->x,cr->y)));
-    else if (ch == KY_CMD_EXAMINE_FEATURE && mod == Q_LOC)
-      Box(WIN_SCREEN,0,MAGENTA,GREY,DescribeResource(m->TerrainAt(tx,ty)));
-    else if (ch == KY_CMD_EXAMINE_FEATURE && mod == Q_TAR)
-      Box(WIN_SCREEN,0,MAGENTA,GREY,DescribeResource(m->TerrainAt(cr->x,cr->y)));
-    else if (ch == KY_CMD_EXAMINE_MAP)
-      Box(WIN_SCREEN,0,WHITE,GREY,m->Describe(p));
-    else if (ch == KY_CMD_OVERVIEW_MAP && is_look)
-    { ShowMapOverview(); return false; }
-    else if (ch == KY_CMD_TARGET_SELF && (typ & Q_TAR))
-    { e.ETarget = p; return true; }
-    else if (ch == KY_CMD_TARGET_SELF && (typ & Q_DIR))
-    { e.isDir = true; e.EDir = CENTER; return true; }    
-    else if (ch == KY_CMD_HELP)
-    { HelpTopic("help::interface","SP"); }
-    else if (ch == KY_CMD_ENTER || ch == KY_CMD_TARGET_MOUNT)
-    {
-      if (mod == Q_TAR)
-        { 
-          Thing *cr2;
-          e.EActor = p;
-          
-          if ((cr->isCreature() && m->MCreatureAt(cr->x,cr->y)) ||
-              ((!cr->isCreature() && m->MultiAt(cr->x, cr->y))) && !cycled
-                && !isEngulfed) 
-            cr2 = ExamineSquare(cr->x,cr->y);
-          else 
-            cr2 = cr;
-          
-          if (!cr2)
-            cr2 = cr;
-            
-          if (e.eID && !TEFF(e.eID)->HasFlag(EF_BLIND_PROMPT)) {
-            if (!p->isTarget(e,cr2))
-              continue;
-            if (::dist(p->x,p->y,cr2->x,cr2->y) > range)
-              continue;
-            }
-          e.ETarget = cr2;
-          cr = cr2; 
-          tx = cr->x;
-          ty = cr->y;
-          goto TargetChosen; 
-        }
-      if (mod == Q_LOC)
-        { 
-          if (!m->InBounds(tx,ty))
-            continue;
-          if (!(m->At(tx,ty).Visibility & VI_DEFINED))
-            {
-              Message("That square is blocked.");
-              continue;
-            }            
-          if (!(typ & Q_LOC)) {
-            if (isEngulfed) {
-              if (tx == p->x && ty == p->y)
-                cr = p;
-              else
-                cr = p->GetStatiObj(ENGULFED);
-              }  
-            else {
-              cr = m->FirstAt(tx,ty);
-              if (!cr)
-                continue;
-
-              if (m->FCreatureAt(cr->x,cr->y))
-                if (p->Percieves(m->FCreatureAt(cr->x,cr->y))) 
-                  cr = m->FCreatureAt(cr->x,cr->y);
-
-              if (!p->Percieves(cr))
-                continue;
-              e.EActor = p;
-              if (e.eID && (!TEFF(e.eID)->HasFlag(EF_BLIND_PROMPT))) {
-                if (!p->isTarget(e,cr))
-                  { cr = NULL; continue; }
-                if (::dist(p->x,p->y,cr->x,cr->y) > range)
-                  { cr = NULL; continue; }
+    if (is_look)
+        Prompt = Format("%cLooking [rfmoxltn%s*?]:%c ",-9,Arrows,-7);
+    else {
+        if (typ == Q_TAR) {
+SelectTarget:
+            Prompt = Format("%cChoose your target",-9,Arrows,-7);
+            Prompt += Format(": [%s%s%s%s%s%s%s]%c ", Arrows, "*", (fl & Q_DIR) ? "d" : "", 
+                fl & Q_LOC ? "l" : "", fl & Q_TAR ? "tn" : "", fl & Q_INV ? "i" : "",
+                fl & Q_ALL ? "a" : "", -7);
+            mod = Q_TAR; cr = p;
+        } else if (typ == Q_INV) {
+SelectItem:
+            found = false;
+            for (th = p->FirstInv();th;th = p->NextInv())
+                if (ThrowEff(EV_RATETARG,e.eID,th,th,th,th) != ABORT)
+                    //if (((Item*)th)->Parent == p->myHandle)
+                {
+                    LOption(th->Name(NA_MECH|NA_LONG),th->myHandle);
+                    found = true;
                 }
-            
-              }
-            e.ETarget = cr;
-            e.isLoc = false;
+            if (!found) {
+                Box("You have nothing suitable in your inventory to use that on.");
+                if (typ != Q_INV) 
+                    goto Reprompt;
+                e.ETarget = NULL; /* InventoryManager */
+                return false;
+            }
+            if (typ != Q_INV)
+                LOption("(non-inventory target)",-2);
+            hi = LMenu(MENU_BORDER,PromptText ? PromptText : "Choose an item:",WIN_MENUBOX);
+            if (hi == -2)
+                goto Reprompt;
+            if (hi == -1) {
+                e.ETarget = NULL;
+                return false;
+            }
+            e.ETarget = oItem(hi);
+            return e.ETarget ? true : false;
+        } else if (typ == Q_LOC) {
+SelectLocation:
+            Prompt = Format("%cChoose a location",-9);
+            Prompt += Format(": [%s%s%s%s%s%s%s]%c ", Arrows, "*", (fl & Q_DIR) ? "d" : "", 
+                fl & Q_LOC ? "l" : "", fl & Q_TAR ? "tn" : "", fl & Q_INV ? "i" : "",
+                fl & Q_ALL ? "a" : "", -7);
+
+            e.isLoc = true;
+            mod = Q_LOC; 
+            tx = p->x; 
+            ty = p->y;
+        } else {
+            Prompt += "Select ";
+            if (typ & Q_DIR) {
+                Prompt += "direction";
+                first = false;
+            }
+            if (typ & Q_LOC) {
+                if (!first) {
+                    if (!(typ & (Q_TAR | Q_INV)))
+                        Prompt += " or ";
+                    else
+                        Prompt += ", ";
+                }
+                Prompt += "location";
+                first = false;
+            }
+            if (typ & Q_TAR) {
+                if (!first) {
+                    if (!(typ & Q_INV))
+                        Prompt += " or ";
+                    else
+                        Prompt += ", ";
+                }
+                Prompt += "target";
+                first = false;
+            }
+            if (typ & Q_INV) {
+                if (!first)
+                    Prompt += " or ";
+                Prompt += "inventory item";
+                first = false;
+            }
+            Prompt += Format(": [%s%s%s%s%s%s%s]%c ", Arrows, "*", (fl & Q_DIR) ? "d" : "", 
+                fl & Q_LOC ? "l" : "", fl & Q_TAR ? "tn" : "", fl & Q_INV ? "i" : "",
+                fl & Q_ALL ? "a" : "", -7);
+        }
+    }
+    if (PromptText) 
+        Prompt = SC(PromptText) + Prompt.Right(Prompt.GetLength()-(Prompt.strchr('[')-1));
+
+    if ((fl == Q_DIR) || ((fl & Q_DIR) && theGame->Opt(OPT_SELECT_DIR)))
+        mod = Q_DIR;
+    else if (theGame->Opt(OPT_SELECT_JUMP) && (fl & Q_TAR)) {
+        cr = p; mod = Q_TAR;
+    } else if (fl & Q_LOC) {
+        tx = p->x;
+        ty = p->y;
+        mod = Q_LOC;
+    }
+
+    range = e.vRange ? e.vRange : 80;
+    if (fl & Q_NEAR)
+        range = 1;
+    if (isEngulfed)
+        range = 1;
+
+    while (1) {
+        if (isEngulfed && mod == Q_TAR) {
+            mod = Q_LOC;
             tx = cr->x;
             ty = cr->y;
-            goto TargetChosen;
+        }
+        /* Display the inverted box cursor */
+        if (mod == Q_LOC) {
+            if (isEngulfed) {
+                if (tx == p->x && ty == p->y)
+                    cr = p;
+                else
+                    cr = p->GetStatiObj(ENGULFED);
             }
-          if (ch == KY_CMD_TARGET_MOUNT)
-            continue;
-          e.isLoc = true; 
-          
-          TargetChosen:
-          if (ch == KY_CMD_TARGET_MOUNT) 
-            {
-              if (e.isLoc)
+            else if (m->InBounds(tx,ty))
+                cr = m->FirstAt(tx,ty);
+            m->Update(tx,ty);
+            PutGlyph(tx,ty, (GetGlyph(tx,ty) & 0xFF) | 0xF000);
+        } else if (mod == Q_TAR) {
+            m->Update(cr->x,cr->y);
+            PutGlyph(cr->x,cr->y, (GetGlyph(cr->x,cr->y) & 0xFF) | 0xF000);
+        }
+        SetWin(WIN_MESSAGE); Clear();
+        linenum = linepos = 0;
+        if (cr && (mod == Q_LOC || mod == Q_TAR)) {
+            if (p->Percieves(cr) & (~PER_SHADOW)) {
+                Write(cr->Name(NA_CAPS|NA_A|NA_LONG|NA_MECH|(is_look ? NA_STATI : 0)));
+                if (cr->isCreature() && ((Creature*)cr)->StateFlags & MS_HAS_REACH)
+                    Write(" (reach)");
+            }
+            else if (p->Percieves(cr) & PER_SHADOW)
+                Write(cr->Name(NA_CAPS|NA_A|NA_SHADOW));
+            else
+                goto CantSee;
+            if ((p->HasStati(LIFESIGHT)) && cr->isCreature()
+                && p->Percieves(cr)) 
+                Write(Format(" (%d/%d %d/%d)",
+                ((Creature*)cr)->cHP,
+                ((Creature*)cr)->mHP+((Creature*)cr)->Attr[A_THP],
+                ((Creature*)cr)->cMana(),
+                ((Creature*)cr)->tMana()
+                ));
+            Write(0, 1, "  ");
+
+            if (cr->HasStati(MOUNTED) && (p->Percieves(cr) & (~PER_SHADOW)))
+                Write(Format("(riding %s)",(const char*)cr->GetStatiObj(MOUNTED)->
+                Name(NA_A|NA_LONG|NA_MECH|(is_look ? NA_STATI : 0))));
+            else if (cr->HasStati(MOUNTED) && (p->Percieves(cr) & PER_SHADOW))
+                Write("(riding something)");
+            if (cr->isCreature() && (wp=((Creature*)cr)->InSlot(SL_WEAPON)) && p->Percieves(wp))
+                Write(XPrint("(wielding a <Obj>)", wp));
+
+            Write(0,2,"");
+            if (p->Opt(OPT_SHOW_HOW_SEE) && p != cr) {
+                int per = p->Percieves(cr); 
+                bool first_mode = true;
+                Write(0,2,XPrint("<14>Seen With:<7> "));
+                for (int i=1; i<=PER_TRACK ; i<<=1) {
+                    if (per & i) {
+                        if (!first_mode)
+                            Write(", ");
+                        Write(Format("%s",Lookup(PerDescs,i)));
+                        first_mode = false;
+                    }
+
+                }
+                Write(". ");
+            }
+            if (!p->isTarget(e,cr))
+                Write(XPrint("<4>[Invalid Target]<7>"));
+            else if (::dist(p->x,p->y,cr->x,cr->y) > range) 
+                Write(XPrint("<4>[Out of Range]<7>"));
+        }
+CantSee:
+        SetWin(WIN_INPUT);
+        Clear(); Color(12);
+        Write(0,0,Prompt);
+        Color(7);
+
+        if (mod == Q_LOC && ((m->At(tx,ty).Visibility & VI_DEFINED) ||
+            TTER(m->PTerrainAt(tx,ty,p))->HasFlag(TF_DEPOSIT)))
+            Write(NAME(m->PTerrainAt(tx,ty,p)));
+        else if ((mod == Q_TAR) && ((m->At(cr->x,cr->y).Visibility & VI_DEFINED) ||
+            TTER(m->PTerrainAt(cr->x,cr->y,p))->HasFlag(TF_DEPOSIT)))
+            Write(NAME(m->PTerrainAt(cr->x,cr->y,p)));
+        else if (mod == Q_LOC || mod == Q_TAR)
+            Write(Format("unseen area"));
+
+
+        if (mod == Q_DIR)  
+            CursorOn();
+
+        {
+            int16 oldMode;
+            oldMode = GetMode();
+            SetMode(MO_DIALOG);
+            ch=GetCharCmd(KY_CMD_TARGET_MODE);
+            SetMode(oldMode);
+        }
+
+        CursorOff();
+        Clear();
+
+        /* Hide the cursor */
+        if (mod == Q_LOC)
+            m->Update(tx,ty);
+        else if (mod == Q_TAR)
+            m->Update(cr->x,cr->y);
+
+        if (ch == KY_CMD_ESCAPE)
+            return false;
+        else if (ch == KY_CMD_WIZMODE &&
+            theGame->GetPlayer(0) &&
+            theGame->GetPlayer(0)->WizardMode && cr) {
+                // ww: convenience feature! 
+                if (!m->FirstAt(cr->x,cr->y)) break;
+                SetWin(WIN_SCREEN);
+                Save();
+                SizeWin(WIN_CUSTOM,WinSizeX()-16,WinSizeY()-8);
+                DrawBorder(WIN_CUSTOM,MAGENTA);
+                ClearScroll();
+                SetWin(WIN_CUSTOM); Color(YELLOW);
+                m->FirstAt(cr->x,cr->y)->Dump(); 
+                // (m->ThingAt(cr->x,cr->y)->GetStatiObj(MOUNTED))->Dump(); 
+                int offset = 0, done = 0;
+                do { 
+                    UpdateScrollArea(offset,WIN_CUSTOM);  
+                    switch(GetCharCmd(KY_CMD_ARROW_MODE)) {
+                    case KY_CMD_NORTH: offset--; break;
+                    case KY_CMD_SOUTH: offset++; break; 
+                    case KY_CMD_NORTHEAST:
+                    case KY_CMD_NORTHWEST: offset-= WinSizeY() - 6; break;
+                    case KY_CMD_SOUTHEAST:
+                    case KY_CMD_SOUTHWEST: offset+= WinSizeY() - 6; break; 
+                    default: done = 1; 
+                    }
+                } while (!done); 
+                ClearScroll();
+                Restore();
+        } else if (ch == KY_CMD_ALL_ALLIES && (fl & Q_ALL)) {
+            e.EVictim = NULL;
+            e.isDir = e.isLoc = false;
+            e.isAllAllies = true;
+            return true;
+        } else if (ch == KY_CMD_LOOK && (typ & (Q_LOC|Q_TAR))) {
+            mod = Q_LOC;
+            tx = p->x;
+            ty = p->y;
+        } else if (ch == KY_CMD_INVENTORY && (typ & Q_INV))
+            goto SelectItem;  
+        else if (ch == KY_CMD_TARGET && (typ & Q_TAR)) {
+            mod = Q_TAR;
+            cr = p;
+        } else if (ch == KY_CMD_DIRECTION && (typ & Q_DIR))
+            mod = Q_DIR;
+        else if (ch == KY_CMD_EXAMINE && isEngulfed) {
+            if (cr)
+                if (p->Percieves(cr) & ~PER_SHADOW)
+                    Box(WIN_SCREEN,0,EMERALD, GREY, cr->Describe(p));
+        } else if (ch == KY_CMD_EXAMINE && cr)
+            ExamineSquare(cr->x,cr->y);
+        else if (ch == KY_CMD_EXAMINE && mod == Q_LOC)
+            ExamineSquare(tx,ty);
+        else if (ch == KY_CMD_EXAMINE_REGION && mod == Q_LOC)
+            Box(WIN_SCREEN,0,PINK,GREY,DescribeResource(m->RegionAt(tx,ty)));
+        else if (ch == KY_CMD_EXAMINE_REGION && mod == Q_TAR) 
+            Box(WIN_SCREEN,0,PINK,GREY,DescribeResource(m->RegionAt(cr->x,cr->y)));
+        else if (ch == KY_CMD_EXAMINE_FEATURE && mod == Q_LOC)
+            Box(WIN_SCREEN,0,MAGENTA,GREY,DescribeResource(m->TerrainAt(tx,ty)));
+        else if (ch == KY_CMD_EXAMINE_FEATURE && mod == Q_TAR)
+            Box(WIN_SCREEN,0,MAGENTA,GREY,DescribeResource(m->TerrainAt(cr->x,cr->y)));
+        else if (ch == KY_CMD_EXAMINE_MAP)
+            Box(WIN_SCREEN,0,WHITE,GREY,m->Describe(p));
+        else if (ch == KY_CMD_OVERVIEW_MAP && is_look) {
+            ShowMapOverview();
+            return false;
+        } else if (ch == KY_CMD_TARGET_SELF && (typ & Q_TAR)) {
+            e.ETarget = p;
+            return true;
+        } else if (ch == KY_CMD_TARGET_SELF && (typ & Q_DIR)) {
+            e.isDir = true;
+            e.EDir = CENTER;
+            return true;
+        } else if (ch == KY_CMD_HELP) {
+            HelpTopic("help::interface","SP");
+        } else if (ch == KY_CMD_ENTER || ch == KY_CMD_TARGET_MOUNT) {
+            if (mod == Q_TAR) { 
+                Thing *cr2;
+                e.EActor = p;
+
+                if ((cr->isCreature() && m->MCreatureAt(cr->x,cr->y)) ||
+                    ((!cr->isCreature() && m->MultiAt(cr->x, cr->y))) && !cycled
+                    && !isEngulfed) 
+                    cr2 = ExamineSquare(cr->x,cr->y);
+                else 
+                    cr2 = cr;
+
+                if (!cr2)
+                    cr2 = cr;
+
+                if (e.eID && !TEFF(e.eID)->HasFlag(EF_BLIND_PROMPT)) {
+                    if (!p->isTarget(e,cr2))
+                        continue;
+                    if (::dist(p->x,p->y,cr2->x,cr2->y) > range)
+                        continue;
+                }
+                e.ETarget = cr2;
+                cr = cr2; 
+                tx = cr->x;
+                ty = cr->y;
+                goto TargetChosen; 
+            }
+
+            if (mod == Q_LOC) { 
+                if (!m->InBounds(tx,ty))
+                    continue;
+                if (!(m->At(tx,ty).Visibility & VI_DEFINED)) {
+                    Message("That square is blocked.");
+                    continue;
+                }            
+                if (!(typ & Q_LOC)) {
+                    if (isEngulfed) {
+                        if (tx == p->x && ty == p->y)
+                            cr = p;
+                        else
+                            cr = p->GetStatiObj(ENGULFED);
+                    } else {
+                        cr = m->FirstAt(tx,ty);
+                        if (!cr)
+                            continue;
+
+                        if (m->FCreatureAt(cr->x,cr->y))
+                            if (p->Percieves(m->FCreatureAt(cr->x,cr->y))) 
+                                cr = m->FCreatureAt(cr->x,cr->y);
+
+                        if (!p->Percieves(cr))
+                            continue;
+                        e.EActor = p;
+                        if (e.eID && (!TEFF(e.eID)->HasFlag(EF_BLIND_PROMPT))) {
+                            if (!p->isTarget(e,cr)) {
+                                cr = NULL;
+                                continue;
+                            }
+                            if (::dist(p->x,p->y,cr->x,cr->y) > range) {
+                                cr = NULL;
+                                continue;
+                            }
+                        }
+                    }
+                    e.ETarget = cr;
+                    e.isLoc = false;
+                    tx = cr->x;
+                    ty = cr->y;
+                    goto TargetChosen;
+                }
+
+                if (ch == KY_CMD_TARGET_MOUNT)
+                    continue;
+                e.isLoc = true; 
+
+TargetChosen:
+                if (ch == KY_CMD_TARGET_MOUNT) {
+                    if (e.isLoc)
+                        continue;
+                    if (!e.ETarget->HasStati(MOUNTED)) {
+                        Message("That creature isn't mounted.");
+                        continue;
+                    }
+                    e.ETarget = e.ETarget->GetStatiObj(MOUNTED);
+                }          
+                e.EXVal = tx;
+                e.EYVal = ty;
+                return true; 
+            }
+        } else if (ch >= KY_CMD_FIRST_ARROW && ch <= KY_CMD_LAST_ARROW) {
+            cycled = false;
+            switch (mod) {
+            case Q_DIR:
+                e.EDir = DIR_OF_KY_CMD(ch); 
+                e.isDir = true;
+                return true;
+            case Q_LOC:
+                if (::dist(p->x,p->y,tx+DirX[DIR_OF_KY_CMD(ch)],ty+DirY[DIR_OF_KY_CMD(ch)]) > range)
+                    continue;
+                tx += DirX[DIR_OF_KY_CMD(ch)];
+                ty += DirY[DIR_OF_KY_CMD(ch)];
+                if (!m->InBounds(tx,ty)) {
+                    tx -= DirX[DIR_OF_KY_CMD(ch)];
+                    ty -= DirY[DIR_OF_KY_CMD(ch)];
+                }
+                if (tx < XOff)
+                    tx = XOff;
+                if (ty < YOff)
+                    ty = YOff;
+                SetWin(WIN_MAP);
+                if (tx >= XOff+WinSizeX())
+                    tx = XOff+WinSizeX()-1;
+                if (ty >= YOff+WinSizeY())
+                    ty = YOff+WinSizeY()-1;
+                break;
+            case Q_TAR:
+                best = -1;
+                bestd = 1000;
+                MapIterate(m,th,i)
+                    if (XOff < th->x && YOff < th->y)
+                        if (XOff+Windows[WIN_MAP].Right >= th->x && YOff+(Windows[WIN_MAP].Bottom-Windows[WIN_MAP].Top) >= th->y)
+                            if ((p->Percieves(th) || (m->At(th->x,th->y).Visibility & VI_DEFINED)))
+                                if ((th->Image & 0x00FF) != GLYPH_TREE &&
+                                    (th->Image & 0x00FF) != GLYPH_FLOOR2 &&
+                                    (::dist(p->x,p->y,th->x,th->y) <= range ||
+                                    /* Kludge for reach weapons */
+                                    (range == 2 && abs(p->x-th->x) <= 2 && abs(p->y-th->y) <= 2))) {
+                                    if (!p->Percieves(th))
+                                        continue;
+                                    if (!(th->isCreature() || !e.eID || p->isTarget(e,th)))
+                                        continue;
+                                    /* ww: don't skip to something unless it's a valid
+                                    * target! 
+                                    * fjm: let's make this more intuitive for the player,
+                                    * so they /realize/ it is an invalid target.
+                                    *
+                                    if (e.eID && !p->isTarget(e,th))
+                                    continue;
+                                    */
+                                    if ((fl & Q_CRE) && !th->isCreature())
+                                        continue; 
+
+                                    dist = 0;
+                                    if (DirX[DIR_OF_KY_CMD(ch)] == 1) {
+                                        if (th->x <= cr->x)
+                                            continue;
+                                        dist += (th->x - cr->x);
+                                    }
+                                    if (DirX[DIR_OF_KY_CMD(ch)] == -1) {
+                                        if (th->x >= cr->x)
+                                            continue;
+                                        dist += -(th->x - cr->x);
+                                    }
+                                    if (DirY[DIR_OF_KY_CMD(ch)] == 1) {
+                                        if (th->y <= cr->y)
+                                            continue;
+                                        dist += (th->y - cr->y);
+                                    }
+                                    if (DirY[DIR_OF_KY_CMD(ch)] == -1) {
+                                        if (th->y >= cr->y)
+                                            continue;
+                                        dist += -(th->y - cr->y);
+                                    }
+
+                                    if (dist < bestd) {
+                                        best = i;
+                                        bestd = dist;
+                                    }
+                                }
+                if (best != -1) {
+                    t = best; 
+                    cr = oThing(m->Things[t]);
+                    if (m->FCreatureAt(cr->x,cr->y))
+                        cr = m->FCreatureAt(cr->x,cr->y);
+                }
+            }
+        } else if (ch == KY_CMD_NEXT) {
+            /* 'n' command -- skip to the next eligable target in the 
+            same location as the current target. */
+            if (!cr)
                 continue;
-              if (!e.ETarget->HasStati(MOUNTED))
-                { Message("That creature isn't mounted.");
-                  continue; }
-              e.ETarget = e.ETarget->GetStatiObj(MOUNTED);
-            }          
-          e.EXVal = tx;
-          e.EYVal = ty;
-          return true; 
-        }
-      }
-    else if (ch >= KY_CMD_FIRST_ARROW && ch <= KY_CMD_LAST_ARROW) {
-      cycled = false;
-      switch (mod) {
-        case Q_DIR:
-          e.EDir = DIR_OF_KY_CMD(ch); 
-          e.isDir = true;
-          return true;
-        case Q_LOC:
-          if (::dist(p->x,p->y,tx+DirX[DIR_OF_KY_CMD(ch)],
-                ty+DirY[DIR_OF_KY_CMD(ch)]) > range)
-            continue;
-          tx += DirX[DIR_OF_KY_CMD(ch)];
-          ty += DirY[DIR_OF_KY_CMD(ch)];
-          if (!m->InBounds(tx,ty))
-            {
-              tx -= DirX[DIR_OF_KY_CMD(ch)];
-              ty -= DirY[DIR_OF_KY_CMD(ch)];
+            cycled = true;
+            th = m->FirstAt(cr->x,cr->y);
+            while (th != cr)
+                th = m->NextAt(cr->x,cr->y);
+
+            do
+                th = m->NextAt(cr->x, cr->y);
+            while (th && ! /*p->isTarget(e,th)*/ 1);
+
+            if (!th) {
+                th = m->FirstAt(cr->x, cr->y);
+                /*
+                while (!p->isTarget(e,th));
+                th = m->NextAt(cr->x, cr->y);
+                */
             }
-          if (tx < XOff)
-            tx = XOff;
-          if (ty < YOff)
-            ty = YOff;
-          SetWin(WIN_MAP);
-          if (tx >= XOff+WinSizeX())
-            tx = XOff+WinSizeX()-1;
-          if (ty >= YOff+WinSizeY())
-            ty = YOff+WinSizeY()-1;
-          break;
-        case Q_TAR:
-          best = -1; bestd = 1000;
-          MapIterate(m,th,i)
-            if (XOff < th->x && YOff < th->y)
-              if (XOff+Windows[WIN_MAP].Right >= th->x && YOff+
-                  (Windows[WIN_MAP].Bottom-Windows[WIN_MAP].Top) >= th->y)
-                if ((p->Percieves(th) || (m->At(th->x,th->y).Visibility & VI_DEFINED)))
-                  if ((th->Image & 0x00FF) != GLYPH_TREE &&
-                       (th->Image & 0x00FF) != GLYPH_FLOOR2 &&
-                      (::dist(p->x,p->y,th->x,th->y) <= range ||
-                      /* Kludge for reach weapons */
-                      (range == 2 && abs(p->x-th->x) <= 2 && abs(p->y-th->y) <= 2)))
-                  {
-                    if (!p->Percieves(th))
-                      continue;
-                    if (!(th->isCreature() || !e.eID || p->isTarget(e,th)))
-                      continue;
-                    /* ww: don't skip to something unless it's a valid
-                     * target! 
-                     * fjm: let's make this more intuitive for the player,
-                     * so they /realize/ it is an invalid target.
-                     *
-                    if (e.eID && !p->isTarget(e,th))
-                      continue;
-                     */
-                    if ((fl & Q_CRE) && !th->isCreature())
-                      continue; 
-
-                    dist = 0;
-                    if (DirX[DIR_OF_KY_CMD(ch)] == 1)
-                    {
-                      if (th->x <= cr->x)
-                        continue;
-                      dist += (th->x - cr->x);
-                    }
-                    if (DirX[DIR_OF_KY_CMD(ch)] == -1)
-                    {
-                      if (th->x >= cr->x)
-                        continue;
-                      dist += -(th->x - cr->x);
-                    }
-                    if (DirY[DIR_OF_KY_CMD(ch)] == 1)
-                    {
-                      if (th->y <= cr->y)
-                        continue;
-                      dist += (th->y - cr->y);
-                    }
-                    if (DirY[DIR_OF_KY_CMD(ch)] == -1)
-                    {
-                      if (th->y >= cr->y)
-                        continue;
-                      dist += -(th->y - cr->y);
-                    }
-
-                    if (dist < bestd)
-                    { best = i; bestd = dist; }
-                  }
-          if (best != -1)
-          {
-            t = best; 
-            cr = oThing(m->Things[t]);
-            if (m->FCreatureAt(cr->x,cr->y))
-              cr = m->FCreatureAt(cr->x,cr->y);
-          }
+            cr = th;
         }
-      }    
-    else if (ch == KY_CMD_NEXT) {
-      /* 'n' command -- skip to the next eligable target in the 
-         same location as the current target. */
-      if (!cr)
-        continue;
-      cycled = true;
-      th = m->FirstAt(cr->x,cr->y);
-      while (th != cr)
-        th = m->NextAt(cr->x,cr->y);
-      
-      do
-        th = m->NextAt(cr->x, cr->y);
-      while (th && ! /*p->isTarget(e,th)*/ 1);
-      if (!th) {
-        th = m->FirstAt(cr->x, cr->y);
-        /*
-        while (!p->isTarget(e,th));
-          th = m->NextAt(cr->x, cr->y);
-        */
-        }
-      cr = th;
-      }
-  }
-  // ww: paranoia
-  return false; 
+    }
+    // ww: paranoia
+    return false; 
 }
 
 

@@ -1798,47 +1798,44 @@ void Map::RemoveTerraXY(int16 x, int16 y,rID xID)
         }
   }
 
-void Map::WriteTerra(int16 x, int16 y,rID terID)
-  {
+void Map::WriteTerra(int16 x, int16 y,rID terID) {
     static uint8 lastTerrain = 0; 
     uint8 TerrainVal, i; TTerrain *t;
     uint16 TorchPos; Creature *cr;
 
     if (!InBounds(x,y))
-      return;
-    
-  if (TTER(terID)->Type == T_TTERRAIN)
-    ;
-  else if (TTER(terID)->Type == T_TFEATURE) {
-    Feature *ft = new Feature(TFEAT(terID)->Image,terID,T_FEATURE);
-    if (ft)                                
-      ft->PlaceAt(this,x,y);               
-    return ;
-  } else {
-    ASSERT(0); 
-  } 
-    
-    
+        return;
+
+    if (TTER(terID)->Type == T_TTERRAIN)
+        ;
+    else if (TTER(terID)->Type == T_TFEATURE) {
+        Feature *ft = new Feature(TFEAT(terID)->Image,terID,T_FEATURE);
+        if (ft)                                
+            ft->PlaceAt(this,x,y);               
+        return ;
+    } else {
+        ASSERT(0); 
+    } 
+
+
     if (TTER(terID)->HasFlag(TF_SOLID)) 
-      for (cr = FCreatureAt(x,y);cr;cr=NCreatureAt(x,y))
-        {
-          At(x,y).Solid = true;
-          cr->PlaceAt(this,x,y);
+        for (cr = FCreatureAt(x,y);cr;cr=NCreatureAt(x,y)) {
+            At(x,y).Solid = true;
+            cr->PlaceAt(this,x,y);
         }
-    
+
     if (TerrainList[lastTerrain] == terID)
-      TerrainVal = lastTerrain;
+        TerrainVal = lastTerrain;
     else {
-      for(i=0;TerrainList[i];i++)
-        if (TerrainList[i] == terID)
-          { TerrainVal = i; goto FoundTerrain; }
-      if (i == 255)
-        Fatal("Too many Terrain types on one map!");
-      TerrainVal = i;
-      TerrainList[i++] = terID;
-      FoundTerrain:;
-      }
-  
+        for(i=0;TerrainList[i];i++)
+            if (TerrainList[i] == terID)
+            { TerrainVal = i; goto FoundTerrain; }
+            if (i == 255)
+                Fatal("Too many Terrain types on one map!");
+            TerrainVal = i;
+            TerrainList[i++] = terID;
+FoundTerrain:;
+    }
 
     At(x,y).Terrain = TerrainVal;
     t = TTER(terID);
@@ -1852,23 +1849,23 @@ void Map::WriteTerra(int16 x, int16 y,rID terID)
 
     // ww: summoning circles throw up magic fields, etc. 
     if (t) { 
-      if (t->HasFlag(TF_SPECIAL)) {
-        EventInfo e; 
-        e.Clear();
-        e.EMap = this;
-        e.EXVal = x;
-        e.EYVal = y;
-        e.Event = EV_INITIALIZE;
-        t->Event(e,terID);
-      }
-      if (t->HasFlag(TF_TORCH)) {
-        TorchPos = x+y*256;
-        TorchList.Add(TorchPos);
-      }
+        if (t->HasFlag(TF_SPECIAL)) {
+            EventInfo e; 
+            e.Clear();
+            e.EMap = this;
+            e.EXVal = x;
+            e.EYVal = y;
+            e.Event = EV_INITIALIZE;
+            t->Event(e,terID);
+        }
+        if (t->HasFlag(TF_TORCH)) {
+            TorchPos = x+y*256;
+            TorchList.Add(TorchPos);
+        }
     }
 
     Update(x,y);
-  }
+}
 
 
 EvReturn Magic::Illusion(EventInfo &e)

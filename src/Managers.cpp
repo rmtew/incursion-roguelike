@@ -21,438 +21,431 @@
 *                             Various Managers                               *
 \*****************************************************************************/
 
-int16 TextTerm::SpellManager(int16 Purpose)
-  {
+int16 TextTerm::SpellManager(int16 Purpose) {
     String FeatList, FeatKeys; EventInfo e; String sch, the_name, desc; int16 Key, abKey;
-  static const char * SaveNames[] = { "Fort", "Ref ", "Will", "----" };
+    static const char * SaveNames[] = { "Fort", "Ref ", "Will", "----" };
     static const char * WinTitle = " == Spell Manager == ";
     int16 NumSpells, Line,i,j,k,z,sp,curr,offset, mult, mana, mm_lev, oldMode;
     char ch; int16 Spells[1024];
     NumSpells = 0;
-  rID autobuffID = FIND("Autobuff");
-  abKey = 0;
-  for(i=0;i!=MAX_MACROS;i++)
-    if (p->Macros[i] == autobuffID)
-      abKey = KY_CMD_MACRO1 + i;
-  
-  oldMode = Mode;
-  SetMode(MO_INV);
-  
-  String spell_line[1024]; 
+    rID autobuffID = FIND("Autobuff");
+    abKey = 0;
+    for(i=0;i!=MAX_MACROS;i++)
+        if (p->Macros[i] == autobuffID)
+            abKey = KY_CMD_MACRO1 + i;
+
+    oldMode = Mode;
+    SetMode(MO_INV);
+
+    String spell_line[1024]; 
 
     for(i=0;i!=theGame->LastSpell();i++)
-      if (p->SpellRating(theGame->SpellID(i),0,true) != -1)
-        NumSpells++;
+        if (p->SpellRating(theGame->SpellID(i),0,true) != -1)
+            NumSpells++;
     if(!NumSpells)
-      {
+    {
         SetMode(oldMode);
         p->IPrint("You do not know any spells.");
         return -1;
-      }
-    Redraw:
+    }
+Redraw:
     Save();
     SizeWin(WIN_SPELLS,-1,5,-1,5+min(11 + NumSpells,(sizeY*39)/50));
     SetWin(WIN_SPELLS); 
     SizeWin(WIN_CUSTOM,2,WinBottom()-8,WinSizeX()-2,WinBottom()-3);
 
     if (p->HasFeat(FT_AMPLIFY_SPELL))
-      { FeatKeys += "A"; FeatList += "<15>A<9>mplify/"; }
+    { FeatKeys += "A"; FeatList += "<15>A<9>mplify/"; }
     if (p->HasFeat(FT_AUGMENT_SUMMONING))
-      { FeatKeys += "G"; FeatList += "Au<15>g<9>ment/"; }
+    { FeatKeys += "G"; FeatList += "Au<15>g<9>ment/"; }
     if (p->HasFeat(FT_ANCHOR_SPELL))
-      { FeatKeys += "Z"; FeatList += "Anchor/"; }
+    { FeatKeys += "Z"; FeatList += "Anchor/"; }
     if (p->HasFeat(FT_BIND_SPELL))
-      { FeatKeys += "B"; FeatList += "<15>B<9>ind/"; }
+    { FeatKeys += "B"; FeatList += "<15>B<9>ind/"; }
     if (p->HasFeat(FT_CONTROL_SPELL))
-      { FeatKeys += "C"; FeatList += "<15>C<9>ontrol/"; }
+    { FeatKeys += "C"; FeatList += "<15>C<9>ontrol/"; }
     if (p->HasFeat(FT_CONSECRATE_SPELL))
-      { FeatKeys += "N"; FeatList += "Co<15>n<9>secrate/"; }
+    { FeatKeys += "N"; FeatList += "Co<15>n<9>secrate/"; }
     if (p->HasFeat(FT_DEFENSIVE_SPELL))
-      { FeatKeys += "D"; FeatList += "<15>D<9>efensive/"; }
+    { FeatKeys += "D"; FeatList += "<15>D<9>efensive/"; }
     if (p->HasFeat(FT_JUDICIOUS_SPELL))
-      { FeatKeys += "J"; FeatList += "<15>J<9>udicious/"; }
+    { FeatKeys += "J"; FeatList += "<15>J<9>udicious/"; }
     if (p->HasFeat(FT_EMPOWER_SPELL))
-      { FeatKeys += "E"; FeatList += "<15>E<9>mpower/"; }
+    { FeatKeys += "E"; FeatList += "<15>E<9>mpower/"; }
     if (p->HasFeat(FT_ENLARGE_SPELL))
-      { FeatKeys += "L"; FeatList += "En<15>l<9>arge/"; }
+    { FeatKeys += "L"; FeatList += "En<15>l<9>arge/"; }
     if (p->HasFeat(FT_EXTEND_SPELL))
-      { FeatKeys += "X"; FeatList += "E<15>x<9>tend/"; }
+    { FeatKeys += "X"; FeatList += "E<15>x<9>tend/"; }
     if (p->HasFeat(FT_FOCUS_SPELL))
-      { FeatKeys += "O"; FeatList += "F<15>o<9>cus/"; }
+    { FeatKeys += "O"; FeatList += "F<15>o<9>cus/"; }
     if (p->HasFeat(FT_FORTIFY_SPELL))
-      { FeatKeys += "F"; FeatList += "<15>F<9>ortify/"; }
+    { FeatKeys += "F"; FeatList += "<15>F<9>ortify/"; }
     if (p->HasFeat(FT_HEIGHTEN_SPELL))
-      { FeatKeys += "H"; FeatList += "<15>H<9>eighten/"; }
+    { FeatKeys += "H"; FeatList += "<15>H<9>eighten/"; }
     if (p->HasFeat(FT_INHERANT_SPELL))
-      { FeatKeys += "I"; FeatList += "<15>I<9>nherant/"; }
+    { FeatKeys += "I"; FeatList += "<15>I<9>nherant/"; }
     if (p->HasFeat(FT_MAXIMIZE_SPELL))
-      { FeatKeys += "M"; FeatList += "<15>M<9>aximize/"; }
+    { FeatKeys += "M"; FeatList += "<15>M<9>aximize/"; }
     if (p->HasFeat(FT_PROJECT_SPELL))
-      { FeatKeys += "P"; FeatList += "<15>P<9>roject/"; }
+    { FeatKeys += "P"; FeatList += "<15>P<9>roject/"; }
     if (p->HasFeat(FT_QUICKEN_SPELL))
-      { FeatKeys += "Q"; FeatList += "<15>Q<9>uicken/"; }
+    { FeatKeys += "Q"; FeatList += "<15>Q<9>uicken/"; }
     if (p->HasFeat(FT_REPEAT_SPELL))
-      { FeatKeys += "R"; FeatList += "<15>R<9>epeat/"; }
+    { FeatKeys += "R"; FeatList += "<15>R<9>epeat/"; }
     if (p->HasFeat(FT_SURE_SPELL))
-      { FeatKeys += "U"; FeatList += "S<15>u<9>re/"; }
+    { FeatKeys += "U"; FeatList += "S<15>u<9>re/"; }
     if (p->HasFeat(FT_STILL_SPELL))
-      { FeatKeys += "S"; FeatList += "<15>S<9>till/"; }
+    { FeatKeys += "S"; FeatList += "<15>S<9>till/"; }
     if (p->HasFeat(FT_TRANSMUTE_SPELL))
-      { FeatKeys += "T"; FeatList += "<15>T<9>ransmute/"; }
+    { FeatKeys += "T"; FeatList += "<15>T<9>ransmute/"; }
     if (p->HasFeat(FT_VOCALIZE_SPELL))
-      { FeatKeys += "V"; FeatList += "<15>V<9>ocalize/"; }
+    { FeatKeys += "V"; FeatList += "<15>V<9>ocalize/"; }
     if (p->HasFeat(FT_VILE_SPELL))
-      { FeatKeys += "Y"; FeatList += "Vile/"; }
+    { FeatKeys += "Y"; FeatList += "Vile/"; }
     if (p->HasFeat(FT_WARP_SPELL))
-      { FeatKeys += "W"; FeatList += "<15>W<9>arp/"; }
+    { FeatKeys += "W"; FeatList += "<15>W<9>arp/"; }
     if (FeatList) {
-      FeatList = FeatList.Left(FeatList.GetLength()-1);
-      FeatList = XPrint(Format("[%s] %s Spell",
-        (const char*)FeatKeys, (const char*)FeatList));
-      if (FeatList.GetTrueLength() > WinSizeX())
-        FeatList = FeatList.TrueLeft(WinSizeX());
-      }
+        FeatList = FeatList.Left(FeatList.GetLength()-1);
+        FeatList = XPrint(Format("[%s] %s Spell",
+            (const char*)FeatKeys, (const char*)FeatList));
+        if (FeatList.GetTrueLength() > WinSizeX())
+            FeatList = FeatList.TrueLeft(WinSizeX());
+    }
 
 
     curr = 0; offset = 0;
 
-    ProcessSpells:
+ProcessSpells:
     Line = 0; ch = 'a';
     e.Clear(); e.EActor = p;
-  for (int desiredLev = 9; desiredLev >= 0; desiredLev--)
-    for (i=0;i!=theGame->LastSpell();i++)
-      if (TEFF(theGame->SpellID(i))->Level == desiredLev)
-      if ((j = p->SpellRating(theGame->SpellID(i),p->MMFeats(i),true)) != -1)
-        {
-          e.eID = theGame->SpellID(i);
-          // ww: no meta-magic for innate abilities
-          if (p->Spells[i] & SP_KNOWN) 
-            e.MM = p->MMFeats(i);
-          if (Purpose & SM_TRICKERY)
-            e.isArcaneTrickery = true;
-          e.EActor->CalcEffect(e);
-          Spells[Line] = i;
-          Color(GREY);
-          mana = p->getSpellMana(e.eID,e.MM,NULL);
-          /*
-          switch(TEFF(theGame->SpellID(i))->Schools)
-            {
-              case SC_ABJ: sch = "Abj"; break;
-              case SC_ARC: sch = "Arc"; break;
-              case SC_DIV: sch = "Div"; break;
-              case SC_ENC: sch = "Enc"; break;
-              case SC_EVO: sch = "Evo"; break;
-              case SC_ILL: sch = "Ill"; break;
-              case SC_NEC: sch = "Nec"; break;
-              case SC_THA: sch = "Tha"; break;
-              case SC_WEA: sch = "Wea"; break;
-              case SC_THE: sch = "The"; break;
-              default: sch = " * " ; break; 
-            }
-          */
-          Key = 0;
-          for(k=0;k!=MAX_QKEYS;k++) {
-            if (p->QuickKeys[k].Type == QKY_SPELL)
-              if (p->QuickKeys[k].Value == i)
-                Key = '0' + k;
-          }
-                // Write(0,1,"  Key Spell                  Mana Time Succ CLev Save DC Power & Feats");
-          String myline;
-          String save_string;
-          int KY_color = Key ? -14 : -7; 
-          int name_color = ((p->Spells[i] & SP_DOMAIN) ? -5 : -7);
-          int time_cost = 3000 / max(25,100+10*(1 + e.EActor->Mod(A_INT) -
-                                 TEFF(e.eID)->Level));
-          
-          
-          if (p->Spells[i] & SP_INNATE) {
-            name_color = -6; 
-            time_cost = 20; 
-          } 
-          if (p->Spells[i] & SP_STAFF)
-            {
-              name_color = (p->Spells[i] & (~SP_STAFF)) ? -10 : -2;
-            }
-          
-          for (z=0;p->AutoBuffs[z] && z!=63;z++)
-            if (p->AutoBuffs[z] == i)
-              name_color = -SKYBLUE;
-          
-          if (p->HasMM(MM_QUICKEN,i)) time_cost /= 2; 
+    for (int desiredLev = 9; desiredLev >= 0; desiredLev--)
+        for (i=0;i!=theGame->LastSpell();i++)
+            if (TEFF(theGame->SpellID(i))->Level == desiredLev)
+                if ((j = p->SpellRating(theGame->SpellID(i),p->MMFeats(i),true)) != -1) {
+                    e.eID = theGame->SpellID(i);
+                    // ww: no meta-magic for innate abilities
+                    if (p->Spells[i] & SP_KNOWN) 
+                        e.MM = p->MMFeats(i);
+                    if (Purpose & SM_TRICKERY)
+                        e.isArcaneTrickery = true;
+                    e.EActor->CalcEffect(e);
+                    Spells[Line] = i;
+                    Color(GREY);
+                    mana = p->getSpellMana(e.eID,e.MM,NULL);
+                    /*
+                    switch(TEFF(theGame->SpellID(i))->Schools)
+                    {
+                    case SC_ABJ: sch = "Abj"; break;
+                    case SC_ARC: sch = "Arc"; break;
+                    case SC_DIV: sch = "Div"; break;
+                    case SC_ENC: sch = "Enc"; break;
+                    case SC_EVO: sch = "Evo"; break;
+                    case SC_ILL: sch = "Ill"; break;
+                    case SC_NEC: sch = "Nec"; break;
+                    case SC_THA: sch = "Tha"; break;
+                    case SC_WEA: sch = "Wea"; break;
+                    case SC_THE: sch = "The"; break;
+                    default: sch = " * " ; break; 
+                    }
+                    */
+                    Key = 0;
+                    for(k=0;k!=MAX_QKEYS;k++) {
+                        if (p->QuickKeys[k].Type == QKY_SPELL)
+                            if (p->QuickKeys[k].Value == i)
+                                Key = '0' + k;
+                    }
+                    // Write(0,1,"  Key Spell                  Mana Time Succ CLev Save DC Power & Feats");
+                    String myline;
+                    String save_string;
+                    int KY_color = Key ? -14 : -7; 
+                    int name_color = ((p->Spells[i] & SP_DOMAIN) ? -5 : -7);
+                    int time_cost = 3000 / max(25,100+10*(1 + e.EActor->Mod(A_INT) -
+                        TEFF(e.eID)->Level));
 
-          int time_color = (time_cost <= 20 ? -GREEN :
-              (time_cost >= 30 ? -RED : -YELLOW));
 
-          int succ_color = (j == 100 ? -GREEN :
-              (j >= 90 ? -YELLOW : -RED));
-          int clev_color = (e.vCasterLev > e.EActor->CasterLev() ? -GREEN :
-              (e.vCasterLev < e.EActor->CasterLev() ? -RED : -YELLOW));
+                    if (p->Spells[i] & SP_INNATE) {
+                        name_color = -6; 
+                        time_cost = 20; 
+                    } 
+                    if (p->Spells[i] & SP_STAFF) {
+                        name_color = (p->Spells[i] & (~SP_STAFF)) ? -10 : -2;
+                    }
 
-          int total_mana = e.EActor->tMana();
-          int cur_mana = e.EActor->cMana();
-          int N = ((total_mana - cur_mana)+mana) * 20 / total_mana;
-          int ManaPulse = N * 100 / total_mana;
-          int mana_color = (ManaPulse == 0 ? -GREEN :
-              (ManaPulse == 1 ? -YELLOW : -RED));
+                    for (z=0;p->AutoBuffs[z] && z!=63;z++)
+                        if (p->AutoBuffs[z] == i)
+                            name_color = -SKYBLUE;
 
-          int savedc = 10 + TEFF(e.eID)->Level;
-          if ((p->Spells[i] & (SP_ARCANE|SP_INNATE))) 
-            savedc = max(savedc,10+TEFF(e.eID)->Level+e.EActor->Mod(A_INT));
-          if ((p->Spells[i] & (SP_DIVINE|SP_INNATE))) 
-            savedc = max(savedc,10+TEFF(e.eID)->Level+e.EActor->Mod(A_WIS));
-          if ((p->Spells[i] & (SP_PRIMAL|SP_INNATE))) 
-            savedc = max(savedc,10+TEFF(e.eID)->Level+e.EActor->Mod(A_WIS));
-          if ((p->Spells[i] & (SP_SORCERY|SP_INNATE))) 
-            savedc = max(savedc,10+TEFF(e.eID)->Level+e.EActor->Mod(A_CHA));
-           
-          
-          int save_color = (e.saveDC > savedc ? -GREEN :
-              (e.saveDC < savedc ? -RED : -YELLOW));
-               
-          if (TEFF(e.eID)->ef.sval == NOSAVE) {
-            save_string = "       ";
-          } else {
-            save_string = Format("%4s %2d",
-            SaveNames[min(3,TEFF(theGame->SpellID(i))->ef.sval % 10)],
-              e.saveDC);
-          } 
+                    if (p->HasMM(MM_QUICKEN,i)) time_cost /= 2; 
 
-          the_name = NAME(theGame->SpellID(i));
-          
-          /* Yes, we want == here -- the fatigue cost does not 
-             apply if you know the spell AND get it from the
-             staff. But you pay fatigue for spells you don't
-             know. */
-          if (p->Spells[i] == SP_STAFF)
-            {
-              int16 fat = p->GetStaffFatigueCost(theGame->SpellID(i));
-              if (fat)
-                the_name += Format(" {%d}",fat);
-            }
-          
-          the_name = the_name.Left(22); 
-          if (TEFF(e.eID)->HasFlag(EF_VARMANA))
-            myline = Format("[%c%c%c] %c%-22s%c    %cV%c %c%4d%c %c%3d~%c %c%4d%c %c%.7s%c %s",
-                KY_color, Key ? Key : (ch <= 'z' ? ch : ' '), -7,
+                    int time_color = (time_cost <= 20 ? -GREEN :
+                        (time_cost >= 30 ? -RED : -YELLOW));
 
-                name_color, (const char*)the_name, -7,
+                    int succ_color = (j == 100 ? -GREEN :
+                        (j >= 90 ? -YELLOW : -RED));
+                    int clev_color = (e.vCasterLev > e.EActor->CasterLev() ? -GREEN :
+                        (e.vCasterLev < e.EActor->CasterLev() ? -RED : -YELLOW));
 
-                -AZURE, -7,
+                    int total_mana = e.EActor->tMana();
+                    int cur_mana = e.EActor->cMana();
+                    int N = ((total_mana - cur_mana)+mana) * 20 / total_mana;
+                    int ManaPulse = N * 100 / total_mana;
+                    int mana_color = (ManaPulse == 0 ? -GREEN :
+                        (ManaPulse == 1 ? -YELLOW : -RED));
 
-                time_color, time_cost, -7, 
+                    int savedc = 10 + TEFF(e.eID)->Level;
+                    if ((p->Spells[i] & (SP_ARCANE|SP_INNATE))) 
+                        savedc = max(savedc,10+TEFF(e.eID)->Level+e.EActor->Mod(A_INT));
+                    if ((p->Spells[i] & (SP_DIVINE|SP_INNATE))) 
+                        savedc = max(savedc,10+TEFF(e.eID)->Level+e.EActor->Mod(A_WIS));
+                    if ((p->Spells[i] & (SP_PRIMAL|SP_INNATE))) 
+                        savedc = max(savedc,10+TEFF(e.eID)->Level+e.EActor->Mod(A_WIS));
+                    if ((p->Spells[i] & (SP_SORCERY|SP_INNATE))) 
+                        savedc = max(savedc,10+TEFF(e.eID)->Level+e.EActor->Mod(A_CHA));
 
-                succ_color, j, -7,
 
-                clev_color, e.vCasterLev, -7,
+                    int save_color = (e.saveDC > savedc ? -GREEN :
+                        (e.saveDC < savedc ? -RED : -YELLOW));
 
-                save_color, (const char*)save_string, -7,
+                    if (TEFF(e.eID)->ef.sval == NOSAVE) {
+                        save_string = "       ";
+                    } else {
+                        save_string = Format("%4s %2d",
+                            SaveNames[min(3,TEFF(theGame->SpellID(i))->ef.sval % 10)],
+                            e.saveDC);
+                    } 
 
-                (const char*)(TEFF(theGame->SpellID(i))->Power(0,p,theGame->SpellID(i)))
-                );
-          else
-            myline = Format("[%c%c%c] %c%-22s%c %c%4d%c %c%4d%c %c%3d~%c %c%4d%c %c%.7s%c %s",
-                KY_color, Key ? Key : (ch <= 'z' ? ch : ' '), -7,
+                    the_name = NAME(theGame->SpellID(i));
 
-                name_color, (const char*)the_name, -7,
+                    /* Yes, we want == here -- the fatigue cost does not 
+                    apply if you know the spell AND get it from the
+                    staff. But you pay fatigue for spells you don't
+                    know. */
+                    if (p->Spells[i] == SP_STAFF) {
+                        int16 fat = p->GetStaffFatigueCost(theGame->SpellID(i));
+                        if (fat)
+                            the_name += Format(" {%d}",fat);
+                    }
 
-                mana_color, mana, -7,
+                    the_name = the_name.Left(22); 
+                    if (TEFF(e.eID)->HasFlag(EF_VARMANA))
+                        myline = Format("[%c%c%c] %c%-22s%c    %cV%c %c%4d%c %c%3d~%c %c%4d%c %c%.7s%c %s",
+                        KY_color, Key ? Key : (ch <= 'z' ? ch : ' '), -7,
 
-                time_color, time_cost, -7, 
+                        name_color, (const char*)the_name, -7,
 
-                succ_color, j, -7,
+                        -AZURE, -7,
 
-                clev_color, e.vCasterLev, -7,
+                        time_color, time_cost, -7, 
 
-                save_color, (const char*)save_string, -7,
+                        succ_color, j, -7,
 
-                (const char*)(TEFF(theGame->SpellID(i))->Power(0,p,theGame->SpellID(i)))
-                );
-          myline += Format("%c",-EMERALD);
-if (p->HasMM(MM_ANCHOR,i)) myline +=  " An";/* Amplify Spell */
-if (p->HasMM(MM_AMPLIFY,i)) myline +=  " Am";/* Amplify Spell */
-if (p->HasMM(MM_AUGMENT,i)) myline +=  " Au";/* Augment Summoning */
-if (p->HasMM(MM_BIND,i)) myline +=  " Bi";/* Bind Spell */
-if (p->HasMM(MM_CONSECRATE,i)) myline +=  " Cons";/* Consecrate Spell */
-if (p->HasMM(MM_CONTROL,i)) myline +=  " Cont ";/* Control Spell */
-if (p->HasMM(MM_DEFENSIVE,i)) myline +=  " De";/* Defensive Spell */
-if (p->HasMM(MM_DEFILING,i)) myline +=  " Dl";/* Defiling Spell */
-if (p->HasMM(MM_EMPOWER,i)) myline +=  " Em";/* Empower Spell */
-if (p->HasMM(MM_ENLARGE,i)) myline +=  " En";/* Enlarge Spell */
-if (p->HasMM(MM_EXTEND,i)) myline +=  " Ex";/* Persistant Spell */
-if (p->HasMM(MM_FOCUS,i)) myline +=  " Fc";/* Focused Spell */
-if (p->HasMM(MM_FORTIFY,i)) myline +=  " Fr";/* Fortify Spell */
-if (p->HasMM(MM_HEIGHTEN,i)) myline +=  " He";/* Heighten Spell */
-if (p->HasMM(MM_INHERANT,i)) myline +=  " In";/* Inherant Spell */
-if (p->HasMM(MM_JUDICIOUS,i)) myline +=  " Ju";/* Judicious Spell */
-if (p->HasMM(MM_MAXIMIZE,i)) myline +=  " Ma";/* Maximize Spell */
-if (p->HasMM(MM_PROJECT,i)) myline +=  " Pr";/* Project Spell */
-if (p->HasMM(MM_QUICKEN,i)) myline +=  " Qu";/* Quicken Spell */
-if (p->HasMM(MM_REPEAT,i)) myline +=  " Re";/* Repeat Spell */
-if (p->HasMM(MM_STILL,i)) myline +=  " St";/* Still Spell */
-if (p->HasMM(MM_SURE,i)) myline +=  " Su";/* Sure Spell */
-if (p->HasMM(MM_TRANSMUTE,i)) myline +=  " Tr";/* Transmute Spell */
-if (p->HasMM(MM_UNSEEN,i)) myline +=  " Un";/* Unseen Spell */
-if (p->HasMM(MM_VILE,i)) myline +=  " Vi";/* Vile Spell */
-if (p->HasMM(MM_VOCALIZE,i)) myline +=  " Vo";/* Vocalize Spell */
-if (p->HasMM(MM_WARP,i)) myline +=  " Wa";/* Warp Spell */
-          myline += Format("%c",-GREY);
+                        clev_color, e.vCasterLev, -7,
 
-          spell_line[Line] = myline;
-          Line++;
-          // _snprintf(Text[Line],160,"%s%c",(const char*)myline,0);
-          if (ch <= 'z')
-            ch++;
-        }
+                        save_color, (const char*)save_string, -7,
+
+                        (const char*)(TEFF(theGame->SpellID(i))->Power(0,p,theGame->SpellID(i)))
+                        );
+                    else
+                        myline = Format("[%c%c%c] %c%-22s%c %c%4d%c %c%4d%c %c%3d~%c %c%4d%c %c%.7s%c %s",
+                        KY_color, Key ? Key : (ch <= 'z' ? ch : ' '), -7,
+
+                        name_color, (const char*)the_name, -7,
+
+                        mana_color, mana, -7,
+
+                        time_color, time_cost, -7, 
+
+                        succ_color, j, -7,
+
+                        clev_color, e.vCasterLev, -7,
+
+                        save_color, (const char*)save_string, -7,
+
+                        (const char*)(TEFF(theGame->SpellID(i))->Power(0,p,theGame->SpellID(i)))
+                        );
+                    myline += Format("%c",-EMERALD);
+                    if (p->HasMM(MM_ANCHOR,i)) myline +=  " An";/* Amplify Spell */
+                    if (p->HasMM(MM_AMPLIFY,i)) myline +=  " Am";/* Amplify Spell */
+                    if (p->HasMM(MM_AUGMENT,i)) myline +=  " Au";/* Augment Summoning */
+                    if (p->HasMM(MM_BIND,i)) myline +=  " Bi";/* Bind Spell */
+                    if (p->HasMM(MM_CONSECRATE,i)) myline +=  " Cons";/* Consecrate Spell */
+                    if (p->HasMM(MM_CONTROL,i)) myline +=  " Cont ";/* Control Spell */
+                    if (p->HasMM(MM_DEFENSIVE,i)) myline +=  " De";/* Defensive Spell */
+                    if (p->HasMM(MM_DEFILING,i)) myline +=  " Dl";/* Defiling Spell */
+                    if (p->HasMM(MM_EMPOWER,i)) myline +=  " Em";/* Empower Spell */
+                    if (p->HasMM(MM_ENLARGE,i)) myline +=  " En";/* Enlarge Spell */
+                    if (p->HasMM(MM_EXTEND,i)) myline +=  " Ex";/* Persistant Spell */
+                    if (p->HasMM(MM_FOCUS,i)) myline +=  " Fc";/* Focused Spell */
+                    if (p->HasMM(MM_FORTIFY,i)) myline +=  " Fr";/* Fortify Spell */
+                    if (p->HasMM(MM_HEIGHTEN,i)) myline +=  " He";/* Heighten Spell */
+                    if (p->HasMM(MM_INHERANT,i)) myline +=  " In";/* Inherant Spell */
+                    if (p->HasMM(MM_JUDICIOUS,i)) myline +=  " Ju";/* Judicious Spell */
+                    if (p->HasMM(MM_MAXIMIZE,i)) myline +=  " Ma";/* Maximize Spell */
+                    if (p->HasMM(MM_PROJECT,i)) myline +=  " Pr";/* Project Spell */
+                    if (p->HasMM(MM_QUICKEN,i)) myline +=  " Qu";/* Quicken Spell */
+                    if (p->HasMM(MM_REPEAT,i)) myline +=  " Re";/* Repeat Spell */
+                    if (p->HasMM(MM_STILL,i)) myline +=  " St";/* Still Spell */
+                    if (p->HasMM(MM_SURE,i)) myline +=  " Su";/* Sure Spell */
+                    if (p->HasMM(MM_TRANSMUTE,i)) myline +=  " Tr";/* Transmute Spell */
+                    if (p->HasMM(MM_UNSEEN,i)) myline +=  " Un";/* Unseen Spell */
+                    if (p->HasMM(MM_VILE,i)) myline +=  " Vi";/* Vile Spell */
+                    if (p->HasMM(MM_VOCALIZE,i)) myline +=  " Vo";/* Vocalize Spell */
+                    if (p->HasMM(MM_WARP,i)) myline +=  " Wa";/* Warp Spell */
+                    myline += Format("%c",-GREY);
+
+                    spell_line[Line] = myline;
+                    Line++;
+                    // _snprintf(Text[Line],160,"%s%c",(const char*)myline,0);
+                    if (ch <= 'z')
+                        ch++;
+                }
+
     Line++;
     do {
-      Clear(); Color(EMERALD);
-      for(i=0;i!=WinSizeX();i++)
-        {
-          PutChar(i,0,205);
-          PutChar(i,WinSizeY()-1,205);
+        Clear(); Color(EMERALD);
+        for(i=0;i!=WinSizeX();i++) {
+            PutChar(i,0,205);
+            PutChar(i,WinSizeY()-1,205);
         }
-      Color(YELLOW);
-      PutChar(0,0,219);
-      PutChar(0,WinSizeY()-1,219);
-      PutChar(WinSizeX()-1,0,219);
-      PutChar(WinSizeX()-1,WinSizeY()-1,219);
-      Write(WinLeft() + (WinSizeX() / 2) -
-        (strlen(WinTitle)/2),0,WinTitle);
+        Color(YELLOW);
+        PutChar(0,0,219);
+        PutChar(0,WinSizeY()-1,219);
+        PutChar(WinSizeX()-1,0,219);
+        PutChar(WinSizeX()-1,WinSizeY()-1,219);
+        Write(WinLeft() + (WinSizeX() / 2) -
+            (strlen(WinTitle)/2),0,WinTitle);
 
-      Color(WHITE);
-    Write(0,1,"  Key Spell                  Mana Time Succ CLev Save DC Power & Metamagic");
-      Color(GREY);
-      for(i=2;i!=WinSizeY()-10;i++)
-      // Write(2,i,Text[i + offset - 2]);
-      Write(2,i,(const char*)spell_line[i + offset - 2]);
-      Color(EMERALD);
-      PutChar(0,(curr-offset)+2,16);
-      PutChar(79,(curr-offset)+2,17);
-      Color(BLUE);
+        Color(WHITE);
+        Write(0,1,"  Key Spell                  Mana Time Succ CLev Save DC Power & Metamagic");
+        Color(GREY);
+        for(i=2;i!=WinSizeY()-10;i++)
+            // Write(2,i,Text[i + offset - 2]);
+            Write(2,i,(const char*)spell_line[i + offset - 2]);
+        Color(EMERALD);
+        PutChar(0,(curr-offset)+2,16);
+        PutChar(79,(curr-offset)+2,17);
+        Color(BLUE);
 
-      ClearScroll();
-      if (DESC(theGame->SpellID(Spells[curr]))) {
-        SGotoXY(0,0);
-        desc = XPrint(TEFF(theGame->SpellID(Spells[curr]))->Describe(p));
-        if (theGame->Opt(OPT_MONO_HELP))
-          {
-            int32 p;
-            for (p=0;desc[p];p++)
-              if (desc[p] <= -1 && desc[p] >= -8)
-                desc.SetAt(p,-7);
-          }
-        SWrapWrite(0,0,desc,WinSizeX()-2);
+        ClearScroll();
+        if (DESC(theGame->SpellID(Spells[curr]))) {
+            SGotoXY(0,0);
+            desc = XPrint(TEFF(theGame->SpellID(Spells[curr]))->Describe(p));
+            if (theGame->Opt(OPT_MONO_HELP)) {
+                int32 p;
+                for (p=0;desc[p];p++)
+                    if (desc[p] <= -1 && desc[p] >= -8)
+                        desc.SetAt(p,-7);
+            }
+            SWrapWrite(0,0,desc,WinSizeX()-2);
         }
-      UpdateScrollArea(0);
-      SetWin(WIN_SPELLS);
+        UpdateScrollArea(0);
+        SetWin(WIN_SPELLS);
 
-      Color(AZURE);
-      if(FeatList)
-        Write(0,WinSizeY()-3,FeatList);
-      Write(0,WinSizeY()-2,Format("[%c%c] Select Spell [ENTER] Cast %c[0-9] Set Spellkey%c [?] Help",
-        GLYPH_ARROW_UP,GLYPH_ARROW_DOWN,-8,-9)); 
-      GetKey:
-      ClearKeyBuff();
-      switch(sp = GetCharRaw())
-        {
-          case KY_REDRAW:
+        Color(AZURE);
+        if(FeatList)
+            Write(0,WinSizeY()-3,FeatList);
+        Write(0,WinSizeY()-2,Format("[%c%c] Select Spell [ENTER] Cast %c[0-9] Set Spellkey%c [?] Help",
+            GLYPH_ARROW_UP,GLYPH_ARROW_DOWN,-8,-9)); 
+GetKey:
+        ClearKeyBuff();
+        switch(sp = GetCharRaw()) {
+        case KY_REDRAW:
             goto Redraw;
-          case '?':
+        case '?':
             Restore();
             HelpTopic("help::magic","SM");
             goto Redraw;
-          case KY_ESC:
+        case KY_ESC:
             Restore();
             SetMode(oldMode);
             return -1;
-          case 200 + NORTH:
+        case 200 + NORTH:
             if (curr <= 0)
-              break;
+                break;
             curr--;
             if (((curr-offset) < 0) && offset)
-              offset--;
-           break;
-          case 200 + SOUTH:
+                offset--;
+            break;
+        case 200 + SOUTH:
             if (curr >= NumSpells-1)
-              break;
+                break;
             curr++;
             if ((curr-offset) > (WinSizeY()-13))
-              offset++;
-           break;
-          case 200 + NORTHEAST: ScrollUp();   SetWin(WIN_SPELLS); goto GetKey;
-          case 200 + SOUTHEAST: ScrollDown(); SetWin(WIN_SPELLS); goto GetKey;
-          case KY_ENTER:
+                offset++;
+            break;
+        case 200 + NORTHEAST: ScrollUp();   SetWin(WIN_SPELLS); goto GetKey;
+        case 200 + SOUTHEAST: ScrollDown(); SetWin(WIN_SPELLS); goto GetKey;
+        case KY_ENTER:
             Restore();
             SetMode(oldMode);
             return Spells[curr];
-           break;
-          case 'A': p->ToggleMM(MM_AMPLIFY,Spells[curr]); goto ProcessSpells;
-          case 'B': p->ToggleMM(MM_BIND,Spells[curr]); goto ProcessSpells;
-          case 'C': p->ToggleMM(MM_CONTROL,Spells[curr]); goto ProcessSpells;      
-          case 'D': p->ToggleMM(MM_DEFENSIVE,Spells[curr]); goto ProcessSpells;
-          case 'E': p->ToggleMM(MM_EMPOWER,Spells[curr]); goto ProcessSpells;
-          case 'F': p->ToggleMM(MM_FORTIFY,Spells[curr]); goto ProcessSpells;
-          case 'G': p->ToggleMM(MM_AUGMENT,Spells[curr]); goto ProcessSpells;    
-          case 'H': p->ToggleMM(MM_HEIGHTEN,Spells[curr]); goto ProcessSpells;
-          case 'I': p->ToggleMM(MM_INHERANT,Spells[curr]); goto ProcessSpells;
-          case 'J': p->ToggleMM(MM_JUDICIOUS,Spells[curr]); goto ProcessSpells;
-          case 'L': p->ToggleMM(MM_ENLARGE,Spells[curr]); goto ProcessSpells;          
-          case 'M': p->ToggleMM(MM_MAXIMIZE,Spells[curr]); goto ProcessSpells;
-          case 'N': p->ToggleMM(MM_CONSECRATE,Spells[curr]); goto ProcessSpells;
-          case 'O': p->ToggleMM(MM_FOCUS,Spells[curr]); goto ProcessSpells;
-          case 'P': p->ToggleMM(MM_PROJECT,Spells[curr]); goto ProcessSpells;
-          case 'Q': p->ToggleMM(MM_QUICKEN,Spells[curr]); goto ProcessSpells;
-          case 'R': p->ToggleMM(MM_REPEAT,Spells[curr]); goto ProcessSpells;
-          case 'S': p->ToggleMM(MM_STILL,Spells[curr]); goto ProcessSpells;
-          case 'T': p->ToggleMM(MM_TRANSMUTE,Spells[curr]); goto ProcessSpells;
-          //case 'U': p->ToggleMM(MM_UNSEEN,Spells[curr]); goto ProcessSpells;
-          case 'U': p->ToggleMM(MM_SURE,Spells[curr]); goto ProcessSpells;
-          case 'V': p->ToggleMM(MM_VOCALIZE,Spells[curr]); goto ProcessSpells;
-          case 'Y': p->ToggleMM(MM_VILE,Spells[curr]); goto ProcessSpells;
-          case 'W': p->ToggleMM(MM_WARP,Spells[curr]); goto ProcessSpells;
-          case 'X': p->ToggleMM(MM_EXTEND,Spells[curr]); goto ProcessSpells;      
-          default:
-            if (sp == abKey)
-              {
+            break;
+        case 'A': p->ToggleMM(MM_AMPLIFY,Spells[curr]); goto ProcessSpells;
+        case 'B': p->ToggleMM(MM_BIND,Spells[curr]); goto ProcessSpells;
+        case 'C': p->ToggleMM(MM_CONTROL,Spells[curr]); goto ProcessSpells;      
+        case 'D': p->ToggleMM(MM_DEFENSIVE,Spells[curr]); goto ProcessSpells;
+        case 'E': p->ToggleMM(MM_EMPOWER,Spells[curr]); goto ProcessSpells;
+        case 'F': p->ToggleMM(MM_FORTIFY,Spells[curr]); goto ProcessSpells;
+        case 'G': p->ToggleMM(MM_AUGMENT,Spells[curr]); goto ProcessSpells;    
+        case 'H': p->ToggleMM(MM_HEIGHTEN,Spells[curr]); goto ProcessSpells;
+        case 'I': p->ToggleMM(MM_INHERANT,Spells[curr]); goto ProcessSpells;
+        case 'J': p->ToggleMM(MM_JUDICIOUS,Spells[curr]); goto ProcessSpells;
+        case 'L': p->ToggleMM(MM_ENLARGE,Spells[curr]); goto ProcessSpells;          
+        case 'M': p->ToggleMM(MM_MAXIMIZE,Spells[curr]); goto ProcessSpells;
+        case 'N': p->ToggleMM(MM_CONSECRATE,Spells[curr]); goto ProcessSpells;
+        case 'O': p->ToggleMM(MM_FOCUS,Spells[curr]); goto ProcessSpells;
+        case 'P': p->ToggleMM(MM_PROJECT,Spells[curr]); goto ProcessSpells;
+        case 'Q': p->ToggleMM(MM_QUICKEN,Spells[curr]); goto ProcessSpells;
+        case 'R': p->ToggleMM(MM_REPEAT,Spells[curr]); goto ProcessSpells;
+        case 'S': p->ToggleMM(MM_STILL,Spells[curr]); goto ProcessSpells;
+        case 'T': p->ToggleMM(MM_TRANSMUTE,Spells[curr]); goto ProcessSpells;
+        //case 'U': p->ToggleMM(MM_UNSEEN,Spells[curr]); goto ProcessSpells;
+        case 'U': p->ToggleMM(MM_SURE,Spells[curr]); goto ProcessSpells;
+        case 'V': p->ToggleMM(MM_VOCALIZE,Spells[curr]); goto ProcessSpells;
+        case 'Y': p->ToggleMM(MM_VILE,Spells[curr]); goto ProcessSpells;
+        case 'W': p->ToggleMM(MM_WARP,Spells[curr]); goto ProcessSpells;
+        case 'X': p->ToggleMM(MM_EXTEND,Spells[curr]); goto ProcessSpells;      
+        default:
+            if (sp == abKey) {
                 if (TEFF(theGame->SpellID(Spells[curr]))->Vals(0)->qval &&
                     !(TEFF(theGame->SpellID(Spells[curr]))->Vals(0)->qval & Q_TAR))
-                  goto DoneAB;
+                    goto DoneAB;
                 for (z=0;p->AutoBuffs[z] && z!=63;z++)
-                  if (p->AutoBuffs[z] == Spells[curr])
-                    {
-                      memmove(&p->AutoBuffs[z],&p->AutoBuffs[z+1],
-                                sizeof(p->AutoBuffs[0]) * (63 - z));
-                      p->AutoBuffs[63] = 0; 
-                      //p->IPrint("<Res> removed from autobuff list.",
-                      //          theGame->SpellID(Spells[curr]));
-                      goto DoneAB;
+                    if (p->AutoBuffs[z] == Spells[curr]) {
+                        memmove(&p->AutoBuffs[z],&p->AutoBuffs[z+1],
+                            sizeof(p->AutoBuffs[0]) * (63 - z));
+                        p->AutoBuffs[63] = 0; 
+                        //p->IPrint("<Res> removed from autobuff list.",
+                        //          theGame->SpellID(Spells[curr]));
+                        goto DoneAB;
                     }       
                 for (z=0;z!=63;z++)
-                  if (!p->AutoBuffs[z])
-                    {
-                      p->AutoBuffs[z] = Spells[curr];
-                      //p->IPrint("<Res> added to autobuff list.",
-                      //          theGame->SpellID(Spells[curr]));
-                      goto DoneAB;  
+                    if (!p->AutoBuffs[z]) {
+                        p->AutoBuffs[z] = Spells[curr];
+                        //p->IPrint("<Res> added to autobuff list.",
+                        //          theGame->SpellID(Spells[curr]));
+                        goto DoneAB;  
                     }
-                //p->IPrint("No room left in autobuff list.");
-                DoneAB:
+                    //p->IPrint("No room left in autobuff list.");
+DoneAB:
                 goto ProcessSpells;
-              }
-          
+            }
+
             if (sp >= '0' && sp <= '9') {
-              p->QuickKeys[sp-'0'].Value = Spells[curr];
-              p->QuickKeys[sp-'0'].Type = QKY_SPELL;
-              goto ProcessSpells;
-              }
-            if (sp >= 'a' && sp <= min('z',ch-1))
-              { Restore(); SetMode(oldMode);
-                return Spells[sp - 'a']; }
-           break;
+                p->QuickKeys[sp-'0'].Value = Spells[curr];
+                p->QuickKeys[sp-'0'].Type = QKY_SPELL;
+                goto ProcessSpells;
+            }
+            if (sp >= 'a' && sp <= min('z',ch-1)) {
+                Restore();
+                SetMode(oldMode);
+                return Spells[sp - 'a'];
+            }
+            break;
         }
-      }
+    }
     while(1);
-  }
+}
 
 
 const char * SlotLetters =
@@ -645,475 +638,445 @@ void TextTerm::InvShowSlots(bool changed)
       }
     
       
-	}
+}
 
-int16 TextTerm::InventoryManager(bool first, Container *_theChest)
-{
-  uint8 ch; int8 cs, ocs;
-  int8 sl, digit = 0, num;
-  Item *i; bool changed;
-  bool conCursor = theGame->Opt(OPT_CONTAINER_CURSOR);
-  
-  #define INV(sl) (sl < NUM_SLOTS ? p->Inv[sl] : Contents[sl-NUM_SLOTS]->myHandle)
-  
-  if (first) {
-    theChest = _theChest;
-    CurrSlot=1;
-    offset = 0;
+int16 TextTerm::InventoryManager(bool first, Container *_theChest) {
+    uint8 ch; int8 cs, ocs;
+    int8 sl, digit = 0, num;
+    Item *i; bool changed;
+    bool conCursor = theGame->Opt(OPT_CONTAINER_CURSOR);
+
+#define INV(sl) (sl < NUM_SLOTS ? p->Inv[sl] : Contents[sl-NUM_SLOTS]->myHandle)
+
+    if (first) {
+        theChest = _theChest;
+        CurrSlot=1;
+        offset = 0;
     }
-  
-  /* Player gets Bull Rushed while looting a chest */
-  if (theChest)
-    if (theChest->x != p->x ||
-        theChest->y != p->y ||
-        theChest->m != p->m)
-      theChest = NULL;
-  
-  if (p->isDead())
-    {
-      Item *it;
-      if (it = p->InSlot(SL_INAIR))
+
+    /* Player gets Bull Rushed while looting a chest */
+    if (theChest)
+        if (theChest->x != p->x ||
+            theChest->y != p->y ||
+            theChest->m != p->m)
+            theChest = NULL;
+
+    if (p->isDead()) {
+        Item *it;
+        if (it = p->InSlot(SL_INAIR))
         {
-          it->Remove(false);
-          p->Inv[SL_INAIR] = 0;
-          if (p->m && p->x != -1)
-            it->PlaceAt(p->m,p->x,p->y);
-          else
-            it->Remove(true);
+            it->Remove(false);
+            p->Inv[SL_INAIR] = 0;
+            if (p->m && p->x != -1)
+                it->PlaceAt(p->m,p->x,p->y);
+            else
+                it->Remove(true);
         }
-      if (Mode == MO_INV)
-        SetMode(MO_PLAY);
-      return 0;
+        if (Mode == MO_INV)
+            SetMode(MO_PLAY);
+        return 0;
     }
-  if (Mode == MO_INV)
-    ;
-  else if (Mode != MO_PLAY && Mode != MO_CREATE)
-    {
-      SetWin(WIN_SCREEN);
-      Clear();
-      SetMode(MO_INV);
-      ShowTraits();
-      ShowStatus();
-    }
-  else
-    SetMode(MO_INV);
 
-  /* ww: automatically move the currently slot point to the first place
-   * that cold hold our up-in-the-air item */
-  if (p->Inv[SL_INAIR] && first) {
-    Item *inair = oItem(p->Inv[SL_INAIR]);
-    int match_slot;
-    for (CurrSlot=SL_LAST-1; 
-         CurrSlot > 1 && 
-         ((!inair->allowedSlot(CurrSlot,p)) || INV(CurrSlot)) ;
-         CurrSlot--)
-      ;;
-  }
-
-ResetCurrCon:
-  if (theChest)
-  { currCon = theChest; cs = -1; }
-  else {
-    currCon = NULL; cs = SL_PACK;
-    if ((TMON(p->mID)->HasSlot(SL_PACK) ||
-         p->AbilityLevel(CA_WILD_SHAPE)) && p->Inv[SL_PACK])
-      if (oItem(p->Inv[SL_PACK])->Type == T_CONTAIN)
-        currCon = (Container*)(oItem(p->Inv[SL_PACK]));
-    if (currCon == NULL) {
-      for (cs=0;cs!=SL_LAST;cs++)
-        if (p->Inv[cs] && oItem(p->Inv[cs])->isType(T_CONTAIN) &&
-            (p->InSlot(cs) || p->AbilityLevel(CA_WILD_SHAPE)))
-        {
-          currCon = (Container*)oItem(p->Inv[cs]);
-          break;
-        }
-    }
-    if (cs == SL_LAST)
-      cs = SL_PACK;
-  }
-  SetMode(MO_INV);
-  changed = true;
-  while(1)
-  {
-    if (p->Timeout)
-      return 0;
-    if (p->isThreatened())
-      p->IPrint("You are threatened.");
-    InvShowSlots(changed);
-    p->CalcValues();
-    ClearKeyBuff();
-    ch=GetCharRaw();
-    PurgeStrings();
-    if (!isdigit(ch))
-      digit = 0;
-    switch(ch)
-    {
-      case 200 + NORTHEAST:
-        if (currCon)
-          UpdateScrollArea(offset - (1+p->Opt(OPT_SCROLL_MAG)));
-        break;
-      case 200 + SOUTHEAST:
-        if (currCon)
-          UpdateScrollArea(offset + (1+p->Opt(OPT_SCROLL_MAG)));
-        break;
-      case KY_TAB:  
-        changed = true;
-        if (cs > SL_PACK)
-          cs = 0;
-        ocs = cs;
-        do {
-          cs++;
-          if (cs == -1) {
-            if (theChest) { 
-              currCon = theChest;
-              break;
-              }
-            } 
-          else if (p->Inv[cs] && oItem(p->Inv[cs])->isType(T_CONTAIN) && (p->InSlot(cs))) {
-            currCon = (Container*)oItem(p->Inv[cs]);
-            if (CurrSlot >= NUM_SLOTS)
-              CurrSlot = 1;
-            break;
-            }
-          if (cs >= SL_LAST)
-            cs = -2;
-          } 
-        while(cs != ocs);
-        break;
-      case KY_HELP:
-        HelpTopic("help::interface","IM");
-        break;
-      case KY_ENTER: 
-      case KY_ESC: 
-        if(p->Inv[SL_INAIR]) {
-          p->IPrint("You cannot leave Inventory Mode with an item "
-            "in your In-the-Air slot.");
-          break;
-          }
-        changed = true;
-        SetWin(WIN_INVEN);
+    if (Mode == MO_INV)
+        ;
+    else if (Mode != MO_PLAY && Mode != MO_CREATE) {
+        SetWin(WIN_SCREEN);
         Clear();
-        SetMode(MO_PLAY);
-        RefreshMap();
+        SetMode(MO_INV);
         ShowTraits();
         ShowStatus();
-        return 0;
-        break;
-      case 'x':
-        if (INV(CurrSlot)) {
-          p->LegendIdent(oItem(INV(CurrSlot)));
-          Box(WIN_SCREEN,0,EMERALD,GREY,oItem(INV(CurrSlot))->DescribeWithTitle(p));
-        }
-        else if (p->Inv[SL_INAIR]) {
-          p->LegendIdent(oItem(p->Inv[SL_INAIR]));
-          Box(WIN_SCREEN,0,EMERALD,GREY,oItem(p->Inv[SL_INAIR])->DescribeWithTitle(p));                
-        }
-        break;
-      case 'e':
-        if (ControlKeys & CONTROL) { 
-        if (CurrSlot)
-          if (INV(CurrSlot))
-          {
-            p->AddJournalEntry(Format("Found: %s",
-              (const char*)oItem(p->Inv[CurrSlot])->Name(NA_LONG)));
-            Message("Journal entry added.");
-          }
-          }
-          else goto default_label;
-        break;
+    } else
+        SetMode(MO_INV);
 
-      case 'd':
-        changed = true;
-        if (p->Inv[SL_INAIR])
-        {
-          Item *it;
-          it = oItem(p->Inv[SL_INAIR]);
-          if (!it)
-            break;
-          if (it->GetQuantity() > 1 && AltDown())
-            it = OneSomeAll(it,p);
-          if (p->Opt(OPT_WARN_DROP))
-            if (!yn(XPrint("Confirm drop <Str>? ", (const char*)
-                    Decolorize(oItem(p->Inv[SL_INAIR])->Name(NA_THE|NA_SINGLE)))))
-              break;
-          // ww: I don't know how this happens, but at this point the
-          // object has no parent! this causes the game to crash later
-          // because it won't be removed from Inv[SL_INAIR] even though it
-          // will be deleted
-          it->SetOwner(p->myHandle);          
-          Throw(EV_DROP,p,NULL,it);
-          if (p->Inv[SL_INAIR])
-            if (oItem(p->Inv[SL_INAIR])->Owner() != p)
-              p->Inv[SL_INAIR] = 0;
-          break;
+    /* ww: automatically move the currently slot point to the first place
+    * that cold hold our up-in-the-air item */
+    if (p->Inv[SL_INAIR] && first) {
+        Item *inair = oItem(p->Inv[SL_INAIR]);
+        int match_slot;
+        for (CurrSlot=SL_LAST-1; 
+            CurrSlot > 1 && 
+            ((!inair->allowedSlot(CurrSlot,p)) || INV(CurrSlot)) ;
+        CurrSlot--)
+            ;;
+    }
+
+ResetCurrCon:
+    if (theChest) {
+        currCon = theChest;
+        cs = -1;
+    } else {
+        currCon = NULL; cs = SL_PACK;
+        if ((TMON(p->mID)->HasSlot(SL_PACK) ||
+            p->AbilityLevel(CA_WILD_SHAPE)) && p->Inv[SL_PACK])
+            if (oItem(p->Inv[SL_PACK])->Type == T_CONTAIN)
+                currCon = (Container*)(oItem(p->Inv[SL_PACK]));
+        if (currCon == NULL) {
+            for (cs=0;cs!=SL_LAST;cs++)
+                if (p->Inv[cs] && oItem(p->Inv[cs])->isType(T_CONTAIN) &&
+                    (p->InSlot(cs) || p->AbilityLevel(CA_WILD_SHAPE)))
+                {
+                    currCon = (Container*)oItem(p->Inv[cs]);
+                    break;
+                }
         }
-        if (CurrSlot)
-          if (INV(CurrSlot))
-          {
-            Item *it = oItem(INV(CurrSlot)), *it2;
-            if (it->GetQuantity() > 1 && AltDown() && p->Inv[SL_INAIR])
-              {
-                p->IPrint("You need your in-air slot free to divide a slotted pile.");
-                break;
-              }
-            if (p->Opt(OPT_WARN_DROP))
-              if (!yn(XPrint("Confirm drop <Str>? ", (const char*)
-                    Decolorize(oItem(INV(CurrSlot))->Name(NA_THE)))))
-                break;
-            // ww: without this remove, dropping an equipped ring leaves
-            // with you with the benefits! so dropping an equipped ring of
-            // polymorph means you will still randomly morph later!
-            if (CurrSlot < NUM_SLOTS) { 
-              if (ThrowVal(EV_REMOVE,CurrSlot,p,NULL,it,NULL) == ABORT)
-                break;
-              }
-            else {
-              if (Throw(EV_TAKEOUT,p,NULL,currCon,it) != DONE)
-                break; 
-              }
-            if (it->GetQuantity() > 1 && AltDown())
-              {
-                it2 = OneSomeAll(it,p);
-                if (it2 != it)
-                  p->Inv[SL_INAIR] = it->myHandle;
-              }
-            else
-              it2 = it;  
-            Throw(EV_DROP,p,NULL,it2);
-            if (it != it2 && CurrSlot < SL_LAST && !p->Inv[CurrSlot])
-              p->Swap(CurrSlot);
-            else if (it != it2 && CurrSlot >= SL_LAST)
-              {
-                if (Throw(EV_INSERT,p,NULL,currCon,it)==DONE)
-                  if (it->myHandle == p->Inv[SL_INAIR])
-                    p->Inv[SL_INAIR] = 0;              
-              }
-          }
-        break;
-      case 's':
-        if (!currCon)
-          Message("Nothing to stow in.");
-        else if (CurrSlot >= NUM_SLOTS && !p->Inv[SL_INAIR])
-          Message("Item already stowed.");
-        else if (p->Inv[SL_INAIR])
-          {
-          
-          changed = true;
-          Item *it = oItem(p->Inv[SL_INAIR]);
-          if (it->GetQuantity() > 1 && AltDown())
-            it = OneSomeAll(it,p);
-          if (Throw(EV_INSERT,p,NULL,currCon,it)==DONE)
-            if (it->myHandle == p->Inv[SL_INAIR])
-              p->Inv[SL_INAIR] = 0;
-          }
-        else if (p->Inv[CurrSlot])
-        {
-          
-          if (oItem(p->Inv[CurrSlot]) == currCon)
-            break;
-          changed = true;
-          Item *it = oItem(p->Inv[CurrSlot]), *it2; 
-          if (ThrowVal(EV_REMOVE,CurrSlot,p,NULL,it,NULL) == ABORT)
-            break; 
-          if (it->GetQuantity() > 1 && AltDown())
-            it2 = OneSomeAll(it,p);
-          else
-            it2 = it;
-          if (it2 != it)
-            p->Inv[CurrSlot] = it->myHandle;
-          
-          if (Throw(EV_INSERT,p,NULL,currCon,it2)==DONE) {
-            if (p->Inv[CurrSlot] == it2->myHandle)
-              p->Inv[CurrSlot] = 0;
-            }
-          else if (p->Inv[CurrSlot]) {
-            if (!it->TryStack(it2))
-              it2->PlaceAt(p->m,p->x,p->y);
-            }
-          else
-            p->Inv[CurrSlot] = it2->myHandle;
-        }
-        else
-          Message("Nothing to stow.");
-        break;
-      case KY_SPACE:
-        if(!CurrSlot || CurrSlot==SL_INAIR)
-          break;
-        changed = true;
-        if (AltDown() && p->Inv[SL_INAIR] && INV(CurrSlot))
-          {
-            p->IPrint("You cannot swap two items and divide a pile "
-              "at the same time.");
-            break;
-          }
-        if (CurrSlot >= NUM_SLOTS) {
-          Item *it = Contents[CurrSlot - NUM_SLOTS];
-          if (it && AltDown() && it->GetQuantity() > 1)
-            it = OneSomeAll(it,p);
-          if (p->Inv[SL_INAIR]) {
-            if (Throw(EV_INSERT,p,NULL,currCon,oItem(p->Inv[SL_INAIR]))==DONE)
-              p->Inv[SL_INAIR] = 0;
-            else
-              break;
-            }
-          if (Throw(EV_TAKEOUT,p,NULL,currCon,it)==DONE)
-            p->Inv[SL_INAIR] = it->myHandle;    
-          else if (it != Contents[CurrSlot - NUM_SLOTS])
-            if (!Contents[CurrSlot - NUM_SLOTS]->TryStack(it))
-              it->PlaceAt(p->m,p->x, p->y);  
-          }
-        else    
-          p->Swap(CurrSlot);
-        InvShowSlots(true);
-        changed = false;
+        if (cs == SL_LAST)
+            cs = SL_PACK;
+    }
+    SetMode(MO_INV);
+    changed = true;
+    while(1) {
+        if (p->Timeout)
+            return 0;
+        if (p->isThreatened())
+            p->IPrint("You are threatened.");
+        InvShowSlots(changed);
         p->CalcValues();
-        Update();
-        PrePrompt();
-        break;
-      case 200+SOUTH:
-        CurrSlot++;
-        if(CurrSlot>=NUM_SLOTS) {
-          if (conCursor && currCon && yContents[CurrSlot-NUM_SLOTS])
-            ;
-          else
-            CurrSlot=1;
-          }
-        if (currCon && conCursor && CurrSlot >= NUM_SLOTS) {
-          int16 o_off = offset;
-          SetWin(WIN_INVEN);
-          if (offset > yContents[CurrSlot - NUM_SLOTS])
-            offset = max(0,yContents[CurrSlot - NUM_SLOTS]-4);
-          else if (offset + (WinSizeY()-(NUM_SLOTS)) < yContents[CurrSlot - NUM_SLOTS]+4)
-            offset = max(0,(yContents[CurrSlot - NUM_SLOTS]+4) - (WinSizeY()-(NUM_SLOTS)));
-          if (offset != o_off)
-            UpdateScrollArea(offset);
-          }
-        break;
-      case 200+NORTH:
-        CurrSlot--;
-        if(CurrSlot<=0) {
-          if (conCursor && currCon && Contents[0]) {
-            CurrSlot = NUM_SLOTS;
-            while (yContents[(CurrSlot-NUM_SLOTS)+1])
-              CurrSlot++;
+        ClearKeyBuff();
+        ch=GetCharRaw();
+        PurgeStrings();
+        if (!isdigit(ch))
+            digit = 0;
+        switch(ch) {
+        case 200 + NORTHEAST:
+            if (currCon)
+                UpdateScrollArea(offset - (1+p->Opt(OPT_SCROLL_MAG)));
+            break;
+        case 200 + SOUTHEAST:
+            if (currCon)
+                UpdateScrollArea(offset + (1+p->Opt(OPT_SCROLL_MAG)));
+            break;
+        case KY_TAB:  
+            changed = true;
+            if (cs > SL_PACK)
+                cs = 0;
+            ocs = cs;
+            do {
+                cs++;
+                if (cs == -1) {
+                    if (theChest) { 
+                        currCon = theChest;
+                        break;
+                    }
+                } 
+                else if (p->Inv[cs] && oItem(p->Inv[cs])->isType(T_CONTAIN) && (p->InSlot(cs))) {
+                    currCon = (Container*)oItem(p->Inv[cs]);
+                    if (CurrSlot >= NUM_SLOTS)
+                        CurrSlot = 1;
+                    break;
+                }
+                if (cs >= SL_LAST)
+                    cs = -2;
+            } while(cs != ocs);
+            break;
+        case KY_HELP:
+            HelpTopic("help::interface","IM");
+            break;
+        case KY_ENTER: 
+        case KY_ESC: 
+            if(p->Inv[SL_INAIR]) {
+                p->IPrint("You cannot leave Inventory Mode with an item "
+                    "in your In-the-Air slot.");
+                break;
             }
-          else
-            CurrSlot=NUM_SLOTS-1;
-          }
-        if (currCon && conCursor && CurrSlot >= NUM_SLOTS) {
-          int16 o_off = offset;
-          SetWin(WIN_INVEN);
-          if (offset > yContents[CurrSlot - NUM_SLOTS])
-            offset = max(0,yContents[CurrSlot - NUM_SLOTS] - 4);
-          else if (offset + (WinSizeY()-(NUM_SLOTS)) < yContents[CurrSlot - NUM_SLOTS])
-            offset = max(0,(yContents[CurrSlot - NUM_SLOTS]+4) - (WinSizeY()-(NUM_SLOTS)));
-          if (offset != o_off)
-            UpdateScrollArea(offset);
-          }
-        else if (currCon && conCursor && CurrSlot == SL_PACK)
-          UpdateScrollArea(offset = 0);        
-       break;
-      case 'M':
-        changed = true;
-        if (oItem(INV(CurrSlot)))
-          if (oItem(INV(CurrSlot))->isType(T_WEAPON))
-          {
-            if (INV(CurrSlot) == p->defMelee)
-              p->defMelee = 0;
-            else
-              p->defMelee = INV(CurrSlot);
-            if (INV(CurrSlot) == p->defOffhand)
-              p->defOffhand = 0;
-            if (INV(CurrSlot) == p->defAmmo)
-              p->defAmmo = 0;
-          }
-        break;
-      case 'O':
-        changed = true;
-        if (oItem(INV(CurrSlot)))
-          if (oItem(INV(CurrSlot))->isType(T_WEAPON) || 
-              oItem(INV(CurrSlot))->isType(T_SHIELD) )
-          {
-            if (INV(CurrSlot) == p->defOffhand)
-              p->defOffhand = 0;
-            else
-              p->defOffhand = INV(CurrSlot);
-            if (INV(CurrSlot) == p->defMelee)
-              p->defMelee = 0;
-            if (INV(CurrSlot) == p->defAmmo)
-              p->defAmmo = 0;
-          }
-        break;
-      case 'R':
-        changed = true;
-        if (oItem(INV(CurrSlot)))
-          if (oItem(INV(CurrSlot))->isType(T_BOW))
-          {
-            if (INV(CurrSlot) == p->defRanged)
-              p->defRanged = 0;
-            else
-              p->defRanged = INV(CurrSlot);
-          }
-        break;                           
-      case 'A':
-        changed = true;
-        if (oItem(INV(CurrSlot)))
-          if (oItem(INV(CurrSlot))->isType(T_MISSILE) || 
-              oItem(INV(CurrSlot))->RangeInc(p) || 
-              oItem(INV(CurrSlot))->HasIFlag(IT_THROWABLE))
-          {
-            if (INV(CurrSlot) == p->defAmmo)
-              p->defAmmo = 0;
-            else
-              p->defAmmo = INV(CurrSlot);
-            if (INV(CurrSlot) == p->defMelee)
-              p->defMelee = 0;
-            if (INV(CurrSlot) == p->defOffhand)
-              p->defOffhand = 0;
-          }
-        break;
-      default:
-      default_label: 
-        if (strchr(SlotLetters,ch))
-          CurrSlot = (strchr(SlotLetters,ch) - SlotLetters)+1;
-        if (isdigit(ch) && currCon) {
-          if (p->Inv[SL_INAIR])
-          {
-            Message("You need the 'in air' slot free to do that.");
+            changed = true;
+            SetWin(WIN_INVEN);
+            Clear();
+            SetMode(MO_PLAY);
+            RefreshMap();
+            ShowTraits();
+            ShowStatus();
+            return 0;
+        case 'x':
+            if (INV(CurrSlot)) {
+                p->LegendIdent(oItem(INV(CurrSlot)));
+                Box(WIN_SCREEN,0,EMERALD,GREY,oItem(INV(CurrSlot))->DescribeWithTitle(p));
+            }
+            else if (p->Inv[SL_INAIR]) {
+                p->LegendIdent(oItem(p->Inv[SL_INAIR]));
+                Box(WIN_SCREEN,0,EMERALD,GREY,oItem(p->Inv[SL_INAIR])->DescribeWithTitle(p));                
+            }
             break;
-          }
-          if (!digit) {
-            digit = ch;
+        case 'e':
+            if (ControlKeys & CONTROL) { 
+                if (CurrSlot && INV(CurrSlot)) {
+                    hObj v1 = INV(CurrSlot);
+                    Item *i1 = oItem(v1);
+                    if (i1) {
+                        p->AddJournalEntry(Format("Found: %s",
+                            (const char*)i1->Name(NA_LONG)));
+                        Message("Journal entry added.");
+                    }
+                }
+            } else
+                goto default_label;
             break;
-          }
-          num = (digit-'0')*10 + (ch-'0') - 1;
-          if (Contents[num] && !(currCon->HasStati(LOCKED))) {
-            if (conCursor) {
-              CurrSlot = num + NUM_SLOTS;
-              if (currCon && conCursor && CurrSlot >= NUM_SLOTS) {
+        case 'd':
+            changed = true;
+            if (p->Inv[SL_INAIR]) {
+                Item *it;
+                it = oItem(p->Inv[SL_INAIR]);
+                if (!it)
+                    break;
+                if (it->GetQuantity() > 1 && AltDown())
+                    it = OneSomeAll(it,p);
+                if (p->Opt(OPT_WARN_DROP))
+                    if (!yn(XPrint("Confirm drop <Str>? ", (const char*)
+                        Decolorize(oItem(p->Inv[SL_INAIR])->Name(NA_THE|NA_SINGLE)))))
+                        break;
+                // ww: I don't know how this happens, but at this point the
+                // object has no parent! this causes the game to crash later
+                // because it won't be removed from Inv[SL_INAIR] even though it
+                // will be deleted
+                it->SetOwner(p->myHandle);          
+                Throw(EV_DROP,p,NULL,it);
+                if (p->Inv[SL_INAIR])
+                    if (oItem(p->Inv[SL_INAIR])->Owner() != p)
+                        p->Inv[SL_INAIR] = 0;
+                break;
+            }
+            if (CurrSlot)
+                if (INV(CurrSlot)) {
+                    Item *it = oItem(INV(CurrSlot)), *it2;
+                    if (it->GetQuantity() > 1 && AltDown() && p->Inv[SL_INAIR]) {
+                        p->IPrint("You need your in-air slot free to divide a slotted pile.");
+                        break;
+                    }
+                    if (p->Opt(OPT_WARN_DROP))
+                        if (!yn(XPrint("Confirm drop <Str>? ", (const char*)
+                            Decolorize(oItem(INV(CurrSlot))->Name(NA_THE)))))
+                            break;
+                    // ww: without this remove, dropping an equipped ring leaves
+                    // with you with the benefits! so dropping an equipped ring of
+                    // polymorph means you will still randomly morph later!
+                    if (CurrSlot < NUM_SLOTS) { 
+                        if (ThrowVal(EV_REMOVE,CurrSlot,p,NULL,it,NULL) == ABORT)
+                            break;
+                    } else {
+                        if (Throw(EV_TAKEOUT,p,NULL,currCon,it) != DONE)
+                            break; 
+                    }
+                    if (it->GetQuantity() > 1 && AltDown()) {
+                        it2 = OneSomeAll(it,p);
+                        if (it2 != it)
+                            p->Inv[SL_INAIR] = it->myHandle;
+                    } else
+                        it2 = it;  
+                    Throw(EV_DROP,p,NULL,it2);
+                    if (it != it2 && CurrSlot < SL_LAST && !p->Inv[CurrSlot])
+                        p->Swap(CurrSlot);
+                    else if (it != it2 && CurrSlot >= SL_LAST) {
+                        if (Throw(EV_INSERT,p,NULL,currCon,it)==DONE)
+                            if (it->myHandle == p->Inv[SL_INAIR])
+                                p->Inv[SL_INAIR] = 0;              
+                    }
+                }
+                break;
+        case 's':
+            if (!currCon)
+                Message("Nothing to stow in.");
+            else if (CurrSlot >= NUM_SLOTS && !p->Inv[SL_INAIR])
+                Message("Item already stowed.");
+            else if (p->Inv[SL_INAIR]) {
+                changed = true;
+                Item *it = oItem(p->Inv[SL_INAIR]);
+                if (it->GetQuantity() > 1 && AltDown())
+                    it = OneSomeAll(it,p);
+                if (Throw(EV_INSERT,p,NULL,currCon,it)==DONE)
+                    if (it->myHandle == p->Inv[SL_INAIR])
+                        p->Inv[SL_INAIR] = 0;
+            } else if (p->Inv[CurrSlot]) {
+                if (oItem(p->Inv[CurrSlot]) == currCon)
+                    break;
+                changed = true;
+                Item *it = oItem(p->Inv[CurrSlot]), *it2; 
+                if (ThrowVal(EV_REMOVE,CurrSlot,p,NULL,it,NULL) == ABORT)
+                    break; 
+                if (it->GetQuantity() > 1 && AltDown())
+                    it2 = OneSomeAll(it,p);
+                else
+                    it2 = it;
+                if (it2 != it)
+                    p->Inv[CurrSlot] = it->myHandle;
+
+                if (Throw(EV_INSERT,p,NULL,currCon,it2)==DONE) {
+                    if (p->Inv[CurrSlot] == it2->myHandle)
+                        p->Inv[CurrSlot] = 0;
+                } else if (p->Inv[CurrSlot]) {
+                    if (!it->TryStack(it2))
+                        it2->PlaceAt(p->m,p->x,p->y);
+                } else
+                    p->Inv[CurrSlot] = it2->myHandle;
+            } else
+                Message("Nothing to stow.");
+            break;
+        case KY_SPACE:
+            if(!CurrSlot || CurrSlot==SL_INAIR)
+                break;
+            changed = true;
+            if (AltDown() && p->Inv[SL_INAIR] && INV(CurrSlot)) {
+                p->IPrint("You cannot swap two items and divide a pile "
+                    "at the same time.");
+                break;
+            }
+            if (CurrSlot >= NUM_SLOTS) {
+                Item *it = Contents[CurrSlot - NUM_SLOTS];
+                if (it && AltDown() && it->GetQuantity() > 1)
+                    it = OneSomeAll(it,p);
+                if (p->Inv[SL_INAIR]) {
+                    if (Throw(EV_INSERT,p,NULL,currCon,oItem(p->Inv[SL_INAIR]))==DONE)
+                        p->Inv[SL_INAIR] = 0;
+                    else
+                        break;
+                }
+                if (Throw(EV_TAKEOUT,p,NULL,currCon,it)==DONE)
+                    p->Inv[SL_INAIR] = it->myHandle;    
+                else if (it != Contents[CurrSlot - NUM_SLOTS])
+                    if (!Contents[CurrSlot - NUM_SLOTS]->TryStack(it))
+                        it->PlaceAt(p->m,p->x, p->y);  
+            } else    
+                p->Swap(CurrSlot);
+            InvShowSlots(true);
+            changed = false;
+            p->CalcValues();
+            Update();
+            PrePrompt();
+            break;
+        case 200+SOUTH:
+            CurrSlot++;
+            if(CurrSlot>=NUM_SLOTS) {
+                if (conCursor && currCon && yContents[CurrSlot-NUM_SLOTS])
+                    ;
+                else
+                    CurrSlot=1;
+            }
+            if (currCon && conCursor && CurrSlot >= NUM_SLOTS) {
                 int16 o_off = offset;
                 SetWin(WIN_INVEN);
                 if (offset > yContents[CurrSlot - NUM_SLOTS])
-                  offset = max(0,yContents[CurrSlot - NUM_SLOTS] - 4);
-                else if (offset + (WinSizeY()-(NUM_SLOTS)) < yContents[CurrSlot - NUM_SLOTS])
-                  offset = max(0,(yContents[CurrSlot - NUM_SLOTS]+4) - (WinSizeY()-(NUM_SLOTS)));
+                    offset = max(0,yContents[CurrSlot - NUM_SLOTS]-4);
+                else if (offset + (WinSizeY()-(NUM_SLOTS)) < yContents[CurrSlot - NUM_SLOTS]+4)
+                    offset = max(0,(yContents[CurrSlot - NUM_SLOTS]+4) - (WinSizeY()-(NUM_SLOTS)));
                 if (offset != o_off)
-                  UpdateScrollArea(offset);
+                    UpdateScrollArea(offset);
+            }
+            break;
+        case 200+NORTH:
+            CurrSlot--;
+            if(CurrSlot<=0) {
+                if (conCursor && currCon && Contents[0]) {
+                    CurrSlot = NUM_SLOTS;
+                    while (yContents[(CurrSlot-NUM_SLOTS)+1])
+                        CurrSlot++;
+                } else
+                    CurrSlot=NUM_SLOTS-1;
+            }
+            if (currCon && conCursor && CurrSlot >= NUM_SLOTS) {
+                int16 o_off = offset;
+                SetWin(WIN_INVEN);
+                if (offset > yContents[CurrSlot - NUM_SLOTS])
+                    offset = max(0,yContents[CurrSlot - NUM_SLOTS] - 4);
+                else if (offset + (WinSizeY()-(NUM_SLOTS)) < yContents[CurrSlot - NUM_SLOTS])
+                    offset = max(0,(yContents[CurrSlot - NUM_SLOTS]+4) - (WinSizeY()-(NUM_SLOTS)));
+                if (offset != o_off)
+                    UpdateScrollArea(offset);
+            }
+            else if (currCon && conCursor && CurrSlot == SL_PACK)
+                UpdateScrollArea(offset = 0);        
+            break;
+        case 'M':
+            changed = true;
+            if (oItem(INV(CurrSlot)))
+                if (oItem(INV(CurrSlot))->isType(T_WEAPON)) {
+                    if (INV(CurrSlot) == p->defMelee)
+                        p->defMelee = 0;
+                    else
+                        p->defMelee = INV(CurrSlot);
+                    if (INV(CurrSlot) == p->defOffhand)
+                        p->defOffhand = 0;
+                    if (INV(CurrSlot) == p->defAmmo)
+                        p->defAmmo = 0;
                 }
-              }
-            else {
-              changed = true;
-              Item *it = Contents[num];
-              if (Throw(EV_TAKEOUT,p,NULL,currCon,it)==DONE)
-                p->Inv[SL_INAIR] = it->myHandle;
-              }
-          }
+                break;
+        case 'O':
+            changed = true;
+            if (oItem(INV(CurrSlot)))
+                if (oItem(INV(CurrSlot))->isType(T_WEAPON) || oItem(INV(CurrSlot))->isType(T_SHIELD) ) {
+                    if (INV(CurrSlot) == p->defOffhand)
+                        p->defOffhand = 0;
+                    else
+                        p->defOffhand = INV(CurrSlot);
+                    if (INV(CurrSlot) == p->defMelee)
+                        p->defMelee = 0;
+                    if (INV(CurrSlot) == p->defAmmo)
+                        p->defAmmo = 0;
+                }
+                break;
+        case 'R':
+            changed = true;
+            if (oItem(INV(CurrSlot)))
+                if (oItem(INV(CurrSlot))->isType(T_BOW)) {
+                    if (INV(CurrSlot) == p->defRanged)
+                        p->defRanged = 0;
+                    else
+                        p->defRanged = INV(CurrSlot);
+                }
+                break;                           
+        case 'A':
+            changed = true;
+            if (oItem(INV(CurrSlot)))
+                if (oItem(INV(CurrSlot))->isType(T_MISSILE) || 
+                    oItem(INV(CurrSlot))->RangeInc(p) || 
+                    oItem(INV(CurrSlot))->HasIFlag(IT_THROWABLE)) {
+                    if (INV(CurrSlot) == p->defAmmo)
+                        p->defAmmo = 0;
+                    else
+                        p->defAmmo = INV(CurrSlot);
+                    if (INV(CurrSlot) == p->defMelee)
+                        p->defMelee = 0;
+                    if (INV(CurrSlot) == p->defOffhand)
+                        p->defOffhand = 0;
+                }
+                break;
+        default:
+default_label: 
+            if (strchr(SlotLetters,ch))
+                CurrSlot = (strchr(SlotLetters,ch) - SlotLetters)+1;
+            if (isdigit(ch) && currCon) {
+                if (p->Inv[SL_INAIR]) {
+                    Message("You need the 'in air' slot free to do that.");
+                    break;
+                }
+                if (!digit) {
+                    digit = ch;
+                    break;
+                }
+                num = (digit-'0')*10 + (ch-'0') - 1;
+                if (Contents[num] && !(currCon->HasStati(LOCKED))) {
+                    if (conCursor) {
+                        CurrSlot = num + NUM_SLOTS;
+                        if (currCon && conCursor && CurrSlot >= NUM_SLOTS) {
+                            int16 o_off = offset;
+                            SetWin(WIN_INVEN);
+                            if (offset > yContents[CurrSlot - NUM_SLOTS])
+                                offset = max(0,yContents[CurrSlot - NUM_SLOTS] - 4);
+                            else if (offset + (WinSizeY()-(NUM_SLOTS)) < yContents[CurrSlot - NUM_SLOTS])
+                                offset = max(0,(yContents[CurrSlot - NUM_SLOTS]+4) - (WinSizeY()-(NUM_SLOTS)));
+                            if (offset != o_off)
+                                UpdateScrollArea(offset);
+                        }
+                    } else {
+                        changed = true;
+                        Item *it = Contents[num];
+                        if (Throw(EV_TAKEOUT,p,NULL,currCon,it)==DONE)
+                            p->Inv[SL_INAIR] = it->myHandle;
+                    }
+                }
+            }
         }
-    }
-    if (!currCon || cs < 0 || !p->Inv[cs] || (oItem(p->Inv[cs])) != currCon)
-      goto ResetCurrCon;
+        if (!currCon || cs < 0 || !p->Inv[cs] || (oItem(p->Inv[cs])) != currCon)
+            goto ResetCurrCon;
 
-  }
+    }
 }
 
 Item* OneSomeAll(Item *it, Creature *cr, bool assume_some)
