@@ -734,7 +734,7 @@ int16 Registry::LoadGroup(Term &t, hObj hGroup, bool use_lz)
           char buf[4096]; 
           if (!T1->Exists(SaveFile) || !(fin = fopen((const char*)SaveFile,"rb")))
             { p.MyTerm->Message("Save File Backup: Failed (#1)"); goto failed; }
-          fout = fopen((const char*)(SaveFile + ".backup"),"wb");
+          fout = fopen((const char*)(SaveFile + BACKUP_SUFFIX),"wb");
           if (!fout)
             { p.MyTerm->Message("Save File Backup: Failed (#2)"); goto failed; }
           struct stat statbuf;
