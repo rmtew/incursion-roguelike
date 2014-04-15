@@ -17,17 +17,17 @@ If you wish to support the development, you can donate bitcoin to:
 Windows build instructions
 --------------------------
 
-Recommended compiler:
+*Recommended compiler:*
 
   * Visual Studio Express 2008: [VS2008ExpressWithSP1ENUX1504728.iso](http://download.microsoft.com/download/E/8/E/E8EEB394-7F42-4963-A2D8-29559B738298/VS2008ExpressWithSP1ENUX1504728.iso) 768.0MB.
 
-Dependencies:
+*Dependencies:*
 
   * libtcod.dll: [bitbucket project](https://bitbucket.org/jice/libtcod).
   * flex.exe: [flex-2.5.4a-1-bin.zip](http://gnuwin32.sourceforge.net/downlinks/flex-bin-zip.php) 0.2 MB ([hosting web page](http://gnuwin32.sourceforge.net/packages/flex.htm)).
   * google breakpad (non-debug builds only):  [svn checkout](https://code.google.com/p/google-breakpad/).
 
-Compilation instructions:
+*Compilation instructions:*
 
   1. Download and install Visual Studio Express 2008, if necessary.
   2. Extract 'flex.exe' directly into the project directory.
@@ -43,3 +43,7 @@ Compilation instructions:
   12. Build Incursion.
   13. Place "libtcod.dll" directly into the project directory.
   14. Place "SDL2.dll" directly into the project directory.
+
+*Building modules:*
+
+Note that the module is built by running the Incursion executable, and selecting the compile option from the main menu.  However, this option is only present in debug builds of Incursion.

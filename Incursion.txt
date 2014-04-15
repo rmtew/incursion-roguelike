@@ -1,6 +1,13 @@
 Incursion 0.6.9Y6
 -----------------
 
+ 1. Introduction.
+ 2. Support the development.
+ 3. Project goals.
+ 4. Source code.
+ 5. Reporting problems.
+ 6. FAQ.
+
 Introduction
 ============
 
@@ -46,3 +53,8 @@ Issues can be reported to the bitbucket issue tracker:
 
   https://bitbucket.org/rmtew/incursion-roguelike/issues?status=new&status=open
 
+Frequently asked questions
+==========================
+
+ Q. When I press a movement key, it sends two keypresses?
+ A. Turn off numlock. You are using a keypad on a full keyboard.  SDL2 does not support differentiating between number keypad presses, and number key presses.
