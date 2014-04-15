@@ -947,7 +947,7 @@ int16 libtcodTerm::GetCharCmd(KeyCmdMode mode) {
     for(;;) {
 		Uint32 ticks0 = SDL_GetTicks(), ticks1;
         TCOD_key_t tcodKey;
-        TCOD_event_t tcodEvent = TCOD_sys_check_for_event(TCOD_EVENT_KEY_PRESS|TCOD_EVENT_KEY_TEXT, &tcodKey, NULL);
+        TCOD_event_t tcodEvent = TCOD_sys_check_for_event(TCOD_EVENT_KEY_PRESS, &tcodKey, NULL);
 
         if (Mode == MO_PLAY && p->UpdateMap)
             RefreshMap();
@@ -1006,10 +1006,13 @@ CtrlBreak:
         
         ticks_blink_last = SDL_GetTicks();
 
-        ch = tcodKey.c;
 
         ControlKeys = 0;
-        if (tcodEvent == TCOD_EVENT_KEY_PRESS) {
+        if (tcodKey.vk == TCODK_TEXT) {
+            ch = tcodKey.text[0];
+        } else {
+            ch = tcodKey.c;
+
             if (tcodKey.lctrl || tcodKey.rctrl)
                 ControlKeys |= CONTROL;
             if (tcodKey.shift)
@@ -1028,7 +1031,7 @@ CtrlBreak:
             if ((ch == 'c' || tcodKey.vk == TCODK_PAUSE) && (ControlKeys & CONTROL))
                 goto CtrlBreak;
 
-#ifndef HACK_KEY_DEBUGGING
+#ifdef HACK_KEY_DEBUGGING
             {
                 static bool debug_keys = false;
                 if ((ch == 'd') && (ControlKeys & CONTROL)) {
