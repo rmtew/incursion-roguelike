@@ -139,7 +139,7 @@ bool isLegalPersonTo(Creature *Actor, Creature *Victim)
     return isLegalPerson;
   }
 
-/* Determines both breech of chivalry and attacking fleeing foe */
+/* Determines both breach of chivalry and attacking fleeing foe */
 int16 getChivalryBreech(EventInfo &e)
   {
     Creature *l;
