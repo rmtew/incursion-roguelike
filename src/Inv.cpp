@@ -665,7 +665,7 @@ bool Character::Swap(int8 s) {
         { SL_CLOAK, "Only cloaks can go in that slot.",  },
         { SL_CLOTHES, "Only clothing can go there." },
         { SL_LRING, "Only rings can be worn on your left finger." },
-        { SL_RRING, "Only rings can be work on yout right finger." },
+        { SL_RRING, "Only rings can be work on your right finger." },
         { SL_AMULET, "Only amulets, necklaces, periapts and brooches can go in that slot." },
         { SL_GAUNTLETS, "Only gauntlets or gloves can be worn on your hands." },
         { SL_HELM, "Only caps, helms, circlets, tiaras, headbands and helmets go there." },
