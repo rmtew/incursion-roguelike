@@ -593,7 +593,6 @@ EvReturn Door::Event(EventInfo &e)
            this,Lookup(DTypeNames,e.DType));
         return DONE; 
         } 
-      e.aDmg = e.vDmg - hard; 
 
       if (e.EActor->isPlayer())
         {
@@ -630,6 +629,8 @@ EvReturn Door::Event(EventInfo &e)
           e.EPActor->MyTerm->Clear();
           e.EPActor->MyTerm->Write(0,0,XPrint(s));
         }
+
+      e.aDmg = e.vDmg - hard; 
 
       // ww: you can get stuck here if your STR is low kicking a door
       // forever ... no way to interrupt actions
