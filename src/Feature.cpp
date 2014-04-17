@@ -424,30 +424,117 @@ void Door::SetImage()
 	}
 
 
-EvReturn Door::Event(EventInfo &e)
-{
-  EvReturn res; int16 hard, diff;
-  String s; 
-  res = TFEAT(fID)->Event(e,fID);
-  if (res == DONE || res == ERROR)
-    return res;
-  if (res == NOMSG)
-    e.Terse = true;
+EvReturn Door::Event(EventInfo &e) {
+    EvReturn res;
+    int16 hard, hardwizlock, diff;
+    String s;
+    res = TFEAT(fID)->Event(e,fID);
+    if (res == DONE || res == ERROR)
+        return res;
+    if (res == NOMSG)
+        e.Terse = true;
 
-  switch(e.Event)
-  {
+    switch(e.Event) {
     case EV_TURN: 
-      UpdateStati();
-      return DONE; 
+        UpdateStati();
+        return DONE; 
     case EV_OPEN:
-      if (e.EActor->HasMFlag(M_NOHANDS)) { 
-        e.EActor->IPrint("But you have no hands."); return ABORT; 
-      } else if (e.EActor->onPlane() != PHASE_MATERIAL) { 
-        e.EActor->IPrint("Your hands pass through the <Obj>.",this); 
-        return ABORT; 
-      } else if (DoorFlags & DF_BROKEN) { 
-        e.EActor->IPrint("It's open, permanently.",this); 
-        // ww: sanity
+        if (e.EActor->HasMFlag(M_NOHANDS)) { 
+            e.EActor->IPrint("But you have no hands."); return ABORT; 
+        } else if (e.EActor->onPlane() != PHASE_MATERIAL) { 
+            e.EActor->IPrint("Your hands pass through the <Obj>.",this); 
+            return ABORT; 
+        } else if (DoorFlags & DF_BROKEN) { 
+            e.EActor->IPrint("It's open, permanently.",this); 
+            // ww: sanity
+            Flags &= ~F_SOLID;
+            DoorFlags |= DF_OPEN;
+            DoorFlags &= ~DF_SECRET;
+            m->At(x,y).Glyph = TTER(m->TerrainAt(x,y))->Image;
+            m->At(x,y).Shade = TTER(m->TerrainAt(x,y))->HasFlag(TF_SHADE);
+            m->At(x,y).Solid = false; 
+            m->At(x,y).Opaque = TTER(m->TerrainAt(x,y))->HasFlag(TF_OPAQUE);
+            SetImage();
+            return ABORT; 
+        } else if (DoorFlags & DF_OPEN) { 
+            e.EActor->IPrint("The <Obj> is already open.",this); return ABORT; 
+        } else if (DoorFlags & DF_LOCKED && !HasStati(WIZLOCK,-1,e.EActor) &&
+            !e.EActor->HasEffStati(HOME_REGION,m->RegionAt(x,y))) {
+
+                if (e.EActor->HasStati(RAGING))
+                    goto TryKicking;
+
+                if (HasStati(TRIED, SK_LOCKPICKING, e.EActor)) { 
+                    e.EActor->IPrint("You have already tried to pick the lock on the <Obj>.",this);
+                    if (e.EActor->isPlayer() && e.EPActor->Opt(OPT_AUTOKICK))
+                        return e.EActor->TryToDestroyThing(this);
+                    else
+                        return DONE;
+                } 
+                e.EActor->IPrint("The <Obj> is locked.",this);
+                /* Players can attempt to pick locks without the skill; monsters
+                can not. This avoids players herding around charmed creatures
+                as lockpicks, and other abuses. 
+                ww: That is not a problem, really! 
+                fjm: It may be, once I add the Diplomacy stuff. Also, monsters
+                currently move to the player too quickly -- you meet a whole
+                bunch, and then you wander through a bunch of empty rooms. This
+                might be part of the issue.
+                */
+                if (e.EActor->isMonster() && !e.EActor->HasSkill(SK_LOCKPICKING))
+                    return ABORT;
+
+                if (!((e.EActor->isPlayer() && ((Player *)e.EActor)->Opt(OPT_AUTOOPEN)) || e.EActor->yn("Pick the lock?",true)))
+                    return ABORT;
+                // ww: trying to pick it takes time: a full-round action, pass or
+                // fail
+
+
+                e.EActor->Timeout += 30;
+                diff = 14 + m->Depth;
+                if (HasStati(WIZLOCK) && !HasStati(WIZLOCK,-1,e.EActor)) {
+                    e.EActor->IPrint("The <Obj> is more difficult to pick.",this);
+                    diff += 10; 
+                }
+                if (e.EActor->SkillCheck(SK_LOCKPICKING,diff,true,
+                    GetStatiMag(RETRY_BONUS,SK_LOCKPICKING,e.EActor),"retry")) { 
+                        e.EActor->IDPrint("You pick the lock!",
+                            "The <Obj> picks the lock on the <Obj>.",
+                            e.EActor, this);
+                        DoorFlags &= ~DF_LOCKED;
+                        RemoveStati(TRIED,SS_MISC,SK_LOCKPICKING); 
+
+                        if (!HasStati(TRIED,DF_LOCKED,this) && 
+                            !HasStati(SUMMONED,-1,this)) {
+                                // see DisarmTrap() 
+                                e.EActor->GainXP(90 + (diff - 14) * 10);
+                                GainPermStati(TRIED,this,SS_ATTK,DF_LOCKED);
+                        }
+
+                } else { 
+                    e.EActor->IDPrint("You fail to pick the lock on the <Obj2>. (You can try again after resting.)",
+                        "The <Obj1> tries to pick the lock on the <Obj2>, but fails.",
+                        e.EActor, this);
+                    BoostRetry(SK_LOCKPICKING,e.EActor);
+                    GainTempStati(TRIED,e.EActor,-2,SS_MISC,SK_LOCKPICKING); 
+
+TryKicking:
+                    if (e.EActor->isPlayer() && 
+                        ((Player *)e.EActor)->Opt(OPT_AUTOKICK)) {
+                            return e.EActor->TryToDestroyThing(this); 
+                    } 
+                    return ABORT; 
+                }
+        }
+        // else: just open it
+        if (HasStati(WIZLOCK,-1,e.EActor)) {
+            e.EActor->Timeout += 0;
+            e.EActor->IPrint("The <Obj> opens at your mental command.",this);
+        } else {
+            e.EActor->Timeout += 15;
+            e.EActor->IPrint("The <Obj> opens.",this);
+        }
+        e.EActor->IPrint("The door opens.");
         Flags &= ~F_SOLID;
         DoorFlags |= DF_OPEN;
         DoorFlags &= ~DF_SECRET;
@@ -455,252 +542,171 @@ EvReturn Door::Event(EventInfo &e)
         m->At(x,y).Shade = TTER(m->TerrainAt(x,y))->HasFlag(TF_SHADE);
         m->At(x,y).Solid = false; 
         m->At(x,y).Opaque = TTER(m->TerrainAt(x,y))->HasFlag(TF_OPAQUE);
+
         SetImage();
-        return ABORT; 
-      } else if (DoorFlags & DF_OPEN) { 
-        e.EActor->IPrint("The <Obj> is already open.",this); return ABORT; 
-      } else if (DoorFlags & DF_LOCKED && !HasStati(WIZLOCK,-1,e.EActor) &&
-                 !e.EActor->HasEffStati(HOME_REGION,m->RegionAt(x,y))) {
-        
-        if (e.EActor->HasStati(RAGING))
-          goto TryKicking;
-        
-        if (HasStati(TRIED, SK_LOCKPICKING, e.EActor)) { 
-          e.EActor->IPrint("You have already tried to pick the lock on the <Obj>.",this);
-          if (e.EActor->isPlayer() && e.EPActor->Opt(OPT_AUTOKICK))
-            return e.EActor->TryToDestroyThing(this);
-          else
-            return DONE;
-        } 
-        e.EActor->IPrint("The <Obj> is locked.",this);
-        /* Players can attempt to pick locks without the skill; monsters
-           can not. This avoids players herding around charmed creatures
-           as lockpicks, and other abuses. 
-           ww: That is not a problem, really! 
-           fjm: It may be, once I add the Diplomacy stuff. Also, monsters
-           currently move to the player too quickly -- you meet a whole
-           bunch, and then you wander through a bunch of empty rooms. This
-           might be part of the issue.
-        */
-        if (e.EActor->isMonster() && !e.EActor->HasSkill(SK_LOCKPICKING))
-           return ABORT;
-           
-        if (!((e.EActor->isPlayer() && ((Player *)e.EActor)->Opt(OPT_AUTOOPEN)) || e.EActor->yn("Pick the lock?",true)))
-          return ABORT;
-        // ww: trying to pick it takes time: a full-round action, pass or
-        // fail
-        
-        
-        e.EActor->Timeout += 30;
-        diff = 14 + m->Depth;
-        if (HasStati(WIZLOCK) && !HasStati(WIZLOCK,-1,e.EActor)) {
-          e.EActor->IPrint("The <Obj> is more difficult to pick.",this);
-          diff += 10; 
-        }
-        if (e.EActor->SkillCheck(SK_LOCKPICKING,diff,true,
-              GetStatiMag(RETRY_BONUS,SK_LOCKPICKING,e.EActor),"retry")) { 
-          e.EActor->IDPrint("You pick the lock!",
-              "The <Obj> picks the lock on the <Obj>.",
-              e.EActor, this);
-          DoorFlags &= ~DF_LOCKED;
-          RemoveStati(TRIED,SS_MISC,SK_LOCKPICKING); 
-
-          if (!HasStati(TRIED,DF_LOCKED,this) && 
-              !HasStati(SUMMONED,-1,this)) {
-            // see DisarmTrap() 
-            e.EActor->GainXP(90 + (diff - 14) * 10);
-            GainPermStati(TRIED,this,SS_ATTK,DF_LOCKED);
-          }
-
-        } else { 
-          e.EActor->IDPrint("You fail to pick the lock on the <Obj2>. (You can try again after resting.)",
-              "The <Obj1> tries to pick the lock on the <Obj2>, but fails.",
-              e.EActor, this);
-          BoostRetry(SK_LOCKPICKING,e.EActor);
-          GainTempStati(TRIED,e.EActor,-2,SS_MISC,SK_LOCKPICKING); 
-          
-          TryKicking:
-          if (e.EActor->isPlayer() && 
-              ((Player *)e.EActor)->Opt(OPT_AUTOKICK)) {
-            return e.EActor->TryToDestroyThing(this); 
-          } 
-          return ABORT; 
-        }
-      }
-      // else: just open it
-      if (HasStati(WIZLOCK,-1,e.EActor)) {
-        e.EActor->Timeout += 0;
-        e.EActor->IPrint("The <Obj> opens at your mental command.",this);
-      } else {
-      e.EActor->Timeout += 15;
-        e.EActor->IPrint("The <Obj> opens.",this);
-      }
-      e.EActor->IPrint("The door opens.");
-      Flags &= ~F_SOLID;
-      DoorFlags |= DF_OPEN;
-      DoorFlags &= ~DF_SECRET;
-      m->At(x,y).Glyph = TTER(m->TerrainAt(x,y))->Image;
-      m->At(x,y).Shade = TTER(m->TerrainAt(x,y))->HasFlag(TF_SHADE);
-      m->At(x,y).Solid = false; 
-      m->At(x,y).Opaque = TTER(m->TerrainAt(x,y))->HasFlag(TF_OPAQUE);
-
-      SetImage();
-      /*
-      if (e.EActor->isPlayer())
+        /*
+        if (e.EActor->isPlayer())
         if (TREG(m->RegionAt(x,y))->HasFlag(RF_AUTODESC))
-          if (!REGMEM(m->RegionAt(x,y))->Seen) {
-            REGMEM(m->RegionAt(x,y))->Seen = true;
-            ((Player*)e.EActor)->MyTerm->Box(WIN_SCREEN,0,AZURE,GREY,
-                                             m->DescribeReg(x,y));
-          }*/
-      return DONE;
+        if (!REGMEM(m->RegionAt(x,y))->Seen) {
+        REGMEM(m->RegionAt(x,y))->Seen = true;
+        ((Player*)e.EActor)->MyTerm->Box(WIN_SCREEN,0,AZURE,GREY,
+        m->DescribeReg(x,y));
+        }*/
+        return DONE;
     case EV_CLOSE:
-      if (e.EActor->HasMFlag(M_NOHANDS))
-      { e.EActor->IPrint("But you have no hands."); return ABORT; }
-      if (e.EActor->onPlane() != PHASE_MATERIAL)
-      { e.EActor->IPrint("Your hands pass through the <Obj>.",this); return ABORT; }
-      if (DoorFlags & DF_BROKEN)
-      { e.EActor->IPrint("That door is broken, and no longer closes."); return ABORT; }
-      if (!(DoorFlags & DF_OPEN))
-      { e.EActor->IPrint("It's already closed."); return ABORT; }
-      e.EActor->IPrint("The <Obj> closes.",this);
-      e.EActor->Timeout += 15;
-      Flags |= F_SOLID;
-      DoorFlags &= ~DF_OPEN;
-      SetImage();
-      return DONE; 
+        if (e.EActor->HasMFlag(M_NOHANDS)) {
+            e.EActor->IPrint("But you have no hands.");
+            return ABORT;
+        }
+        if (e.EActor->onPlane() != PHASE_MATERIAL) {
+            e.EActor->IPrint("Your hands pass through the <Obj>.",this);
+            return ABORT;
+        }
+        if (DoorFlags & DF_BROKEN) {
+            e.EActor->IPrint("That door is broken, and no longer closes.");
+            return ABORT;
+        }
+        if (!(DoorFlags & DF_OPEN)) {
+            e.EActor->IPrint("It's already closed.");
+            return ABORT;
+        }
+        e.EActor->IPrint("The <Obj> closes.",this);
+        e.EActor->Timeout += 15;
+        Flags |= F_SOLID;
+        DoorFlags &= ~DF_OPEN;
+        SetImage();
+        return DONE; 
     case EV_DAMAGE:     
-      if (e.ETarget != this) return NOTHING; 
-      if (e.EActor->onPlane() != onPlane())
-        {
-          DPrint(e, "Your attack passes through the <ETarget>.",
-                    "The <EActor>'s attack passes through the <ETarget>.");
-          return DONE;
+        if (e.ETarget != this)
+            return NOTHING;
+
+        if (e.EActor->onPlane() != onPlane()) {
+            DPrint(e, "Your attack passes through the <ETarget>.",
+                "The <EActor>'s attack passes through the <ETarget>.");
+            return DONE;
         }
-      if ((DoorFlags & (DF_OPEN|DF_BROKEN)) && e.AType == A_KICK)
-        return DONE; 
-      if (e.AType == A_SWNG && (!e.EItem || !e.EItem->HasIFlag(WT_BLUNT)))
-        e.vDmg /= 3;
-      if (e.DType == AD_PIERCE && !(e.EItem && e.EItem->HasIFlag(WT_BLUNT))
-                               && !(e.EItem && e.EItem->HasIFlag(WT_SLASHING)))
-        goto Immune;
-        
-      
-      hard = MaterialHardness(TFEAT(fID)->Material,e.DType);
-      if (hard <= -1) {
-        Immune:
-        e.EActor->IPrint("The <Obj> is immune to <Str>.",
-           this,Lookup(DTypeNames,e.DType));
-        return DONE; 
+        if ((DoorFlags & (DF_OPEN|DF_BROKEN)) && e.AType == A_KICK)
+            return DONE; 
+        if (e.AType == A_SWNG && (!e.EItem || !e.EItem->HasIFlag(WT_BLUNT)))
+            e.vDmg /= 3;
+        if (e.DType == AD_PIERCE && !(e.EItem && e.EItem->HasIFlag(WT_BLUNT))
+            && !(e.EItem && e.EItem->HasIFlag(WT_SLASHING)))
+            goto Immune;
+
+        hard = MaterialHardness(TFEAT(fID)->Material,e.DType);
+        if (hard <= -1) {
+Immune:
+            e.EActor->IPrint("The <Obj> is immune to <Str>.",
+                this,Lookup(DTypeNames,e.DType));
+            return DONE; 
         } 
 
-      if (e.EActor->isPlayer())
-        {
+        hardwizlock = 0;
+        if (HasStati(WIZLOCK))
+            hardwizlock = 2;
 
-          if (e.Dmg.Number == 0 && e.Dmg.Sides == 0 && e.Dmg.Bonus == 0) {
-            s = Format("%c%s:%c %d %s",-13,(const char*)(Name(0).Capitalize()),
-                -7,
-                e.vDmg,
-                Lookup(DTypeNames,e.DType));
-          } else { 
-            s = Format("%c%s:%c %s%s %s",-13,(const char*)(Name(0).Capitalize()),
-                -7,
-                (const char*)e.Dmg.Str(),
-                e.strDmg ? (const char*)e.strDmg : "",
-                Lookup(DTypeNames,e.DType));
-            s += Format(" = %d",e.vDmg);
-          }
+        if (e.EActor->isPlayer()) {
+            if (e.Dmg.Number == 0 && e.Dmg.Sides == 0 && e.Dmg.Bonus == 0) {
+                s = Format("%c%s:%c %d %s",-13,(const char*)(Name(0).Capitalize()),
+                    -7,
+                    e.vDmg,
+                    Lookup(DTypeNames,e.DType));
+            } else { 
+                s = Format("%c%s:%c %s%s %s",-13,(const char*)(Name(0).Capitalize()),
+                    -7,
+                    (const char*)e.Dmg.Str(),
+                    e.strDmg ? (const char*)e.strDmg : "",
+                    Lookup(DTypeNames,e.DType));
+                s += Format(" = %d",e.vDmg);
+            }
 
-          s += Format(" vs. %d (%s)",hard,(const char*)Lookup(MaterialDescs,TFEAT(fID)->Material));
+            s += Format(" vs. %d (%s)",hard,(const char*)Lookup(MaterialDescs,TFEAT(fID)->Material));
 
-          if (HasStati(WIZLOCK)) { 
-            hard *= 2;
-            s += Format(" x2 (wizlock) = %d",hard);
-          }
+            if (hardwizlock) {
+                hard *= hardwizlock;
+                s += Format(" x%d (wizlock) = %d",hardwizlock,hard);
+            }
 
+            s += Format(" <%d>[%s]<7>",
+                e.vDmg > hard ? EMERALD : PINK,
+                e.vDmg > hard ? (const char*)Format("%d damage",e.aDmg) : "unhurt");
 
-          s += Format(" <%d>[%s]<7>",
-              e.vDmg > hard ? EMERALD : PINK,
-              e.vDmg > hard ? (const char*)Format("%d damage",e.aDmg) : "unhurt");
-
-          if (e.EPActor->Opt(OPT_STORE_ROLLS))
-            e.EPActor->MyTerm->AddMessage(SC(XPrint(s)) + SC("\n"));
-          e.EPActor->MyTerm->SetWin(WIN_NUMBERS3);
-          e.EPActor->MyTerm->Clear();
-          e.EPActor->MyTerm->Write(0,0,XPrint(s));
+            if (e.EPActor->Opt(OPT_STORE_ROLLS))
+                e.EPActor->MyTerm->AddMessage(SC(XPrint(s)) + SC("\n"));
+            e.EPActor->MyTerm->SetWin(WIN_NUMBERS3);
+            e.EPActor->MyTerm->Clear();
+            e.EPActor->MyTerm->Write(0,0,XPrint(s));
         }
 
-      e.aDmg = e.vDmg - hard; 
+        e.aDmg = e.vDmg - hard; 
 
-      // ww: you can get stuck here if your STR is low kicking a door
-      // forever ... no way to interrupt actions
-      if (e.aDmg > 0)
-      { 
-        cHP -= e.aDmg;
+        // ww: you can get stuck here if your STR is low kicking a door
+        // forever ... no way to interrupt actions
+        if (e.aDmg > 0) { 
+            cHP -= e.aDmg;
 
-        if (cHP <= 0) { 
-          cHP = 0; 
+            if (cHP <= 0) { 
+                cHP = 0; 
 
-          switch (e.DType) {
-            case AD_SONI: VPrint(e,NULL,"The <Obj> shatters!",this); break;
-            case AD_ACID: VPrint(e,NULL,"The <Obj> is eaten away!",this); break;
-            case AD_FIRE: VPrint(e,NULL,"The <Obj> burns down!",this); break;
-            default:      VPrint(e,NULL,"The <Obj> breaks open!",this); break;
-          }
-          DoorFlags &= (DF_LOCKED | DF_SECRET);
-          DoorFlags |= DF_OPEN | DF_BROKEN; 
-          SetImage();
-          Hear(e,20,"You hear a loud *crack*.");
-          e.EActor->RemoveStati(ACTING); 
-          e.Died = true; 
+                switch (e.DType) {
+                case AD_SONI: VPrint(e,NULL,"The <Obj> shatters!",this); break;
+                case AD_ACID: VPrint(e,NULL,"The <Obj> is eaten away!",this); break;
+                case AD_FIRE: VPrint(e,NULL,"The <Obj> burns down!",this); break;
+                default:      VPrint(e,NULL,"The <Obj> breaks open!",this); break;
+                }
+                DoorFlags &= (DF_LOCKED | DF_SECRET);
+                DoorFlags |= DF_OPEN | DF_BROKEN; 
+                SetImage();
+                Hear(e,20,"You hear a loud *crack*.");
+                e.EActor->RemoveStati(ACTING); 
+                e.Died = true; 
 
-          if (e.EActor->isCharacter() && !HasStati(TRIED,945))
-            e.EActor->Exercise(A_STR,random(12)+1,ESTR_DOOR,35);
+                if (e.EActor->isCharacter() && !HasStati(TRIED,945))
+                    e.EActor->Exercise(A_STR,random(12)+1,ESTR_DOOR,35);
 
-          if (e.EActor && e.EMap->FTrapAt(x,y) && e.EActor->isBeside(this)) {
-            e.EActor->IPrint("The <Obj> was trapped!",this);
-            e.EMap->FTrapAt(x,y)->TriggerTrap(e,false);
-          } 
-          return NOTHING; 
+                if (e.EActor && e.EMap->FTrapAt(x,y) && e.EActor->isBeside(this)) {
+                    e.EActor->IPrint("The <Obj> was trapped!",this);
+                    e.EMap->FTrapAt(x,y)->TriggerTrap(e,false);
+                } 
+                return NOTHING; 
+            } 
         } 
-      } 
 
-      if (e.EActor->isCharacter() && !HasStati(TRIED,945))
-        GainPermStati(TRIED,e.EActor,SS_MISC,945);
-      
+        if (e.EActor->isCharacter() && !HasStati(TRIED,945))
+            GainPermStati(TRIED,e.EActor,SS_MISC,945);
 
-      // fjm: Short, onomatopic messages for repeating strikes
-      // to objects avoid annoying message spam when battering
-      // on doors in the dungeon.
-      e.EActor->IPrint("WHAMM!");
-      if (e.EActor->isPlayer() && !e.EPActor->Opt(OPT_REPEAT_KICK))
-        e.EActor->IPrint("The <Obj> holds!",this);
+        // fjm: Short, onomatopic messages for repeating strikes
+        // to objects avoid annoying message spam when battering
+        // on doors in the dungeon.
+        e.EActor->IPrint("WHAMM!");
+        if (e.EActor->isPlayer() && !e.EPActor->Opt(OPT_REPEAT_KICK))
+            e.EActor->IPrint("The <Obj> holds!",this);
 
-      //Hear(e,20,"You hear a muffled *thud*.");                         
+        //Hear(e,20,"You hear a muffled *thud*.");                         
 
-      if (e.EActor->isPlayer() && e.EPActor->Opt(OPT_REPEAT_KICK) &&
-             e.AType == A_KICK) {
-        if (!e.EActor->HasStati(ACTING,EV_SATTACK)) {
-          e.EActor->RemoveStati(ACTING);
-          e.EActor->GainPermStati(ACTING,this,SS_MISC,EV_SATTACK,20);
-        } else {
-          int16 mag = e.EActor->GetStatiMag(ACTING);
-          if (mag <= 0) {
-            e.EActor->HaltAction("not broken after 20 attacks", false); 
-            if (e.EActor->HasStati(ACTING)) {
-              e.EActor->RemoveStati(ACTING); 
-              e.EActor->GainPermStati(ACTING,this,SS_MISC,EV_SATTACK,20);
-            } else return ABORT; 
-          } else {
-            e.EActor->SetStatiMag(ACTING,-1,NULL,mag-1);
-          } 
-        } 
-      }
-      return DONE;
+        if (e.EActor->isPlayer() && e.EPActor->Opt(OPT_REPEAT_KICK) &&
+            e.AType == A_KICK) {
+                if (!e.EActor->HasStati(ACTING,EV_SATTACK)) {
+                    e.EActor->RemoveStati(ACTING);
+                    e.EActor->GainPermStati(ACTING,this,SS_MISC,EV_SATTACK,20);
+                } else {
+                    int16 mag = e.EActor->GetStatiMag(ACTING);
+                    if (mag <= 0) {
+                        e.EActor->HaltAction("not broken after 20 attacks", false); 
+                        if (e.EActor->HasStati(ACTING)) {
+                            e.EActor->RemoveStati(ACTING); 
+                            e.EActor->GainPermStati(ACTING,this,SS_MISC,EV_SATTACK,20);
+                        } else return ABORT; 
+                    } else {
+                        e.EActor->SetStatiMag(ACTING,-1,NULL,mag-1);
+                    } 
+                } 
+        }
+        return DONE;
 
     default:
-      return NOTHING;
-  }
+        return NOTHING;
+    }
 }
 
 /***************************************************************\

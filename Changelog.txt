@@ -1,3 +1,6 @@
+Incursion (open source) 0.6.9Y7: INSERT DATE
+* https://bitbucket.org/rmtew/incursion-roguelike/issue/58/: Attacking a door would calculate final damage before applying material hardness bonuses (i.e. wizlock).  Reported by Frumple, with a save file enabling quick reproduction.
+
 Incursion (open source) 0.6.9Y6: 2014-04-15
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/43/: In past libtcod builds at least, when the game was waiting for input, the CPU would be at full usage.  Now, the idle input loop only checks for input when it has to.  From 100% to 2% CPU usage.
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/48/: The cursor blinking support was not implemented for libtcod.  Now it is, and the wonderous thing that it is can be viewed at various places like where you choose your gender in character creation.
