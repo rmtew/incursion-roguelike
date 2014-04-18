@@ -2310,18 +2310,15 @@ EvReturn Magic::ATouch(EventInfo &e)
       TEFF(e.eID)->Vals(e.efNum+1)->aval == AR_TOUCH)
       e.efNum++;
     return DONE;
-  }
+}
 
-
-
-EvReturn Creature::Cast(EventInfo &e)
-  {
+EvReturn Creature::Cast(EventInfo &e) {
     int16 k, mCost, dmgMod, rating, dmg_pen, roll; 
     EvReturn res; Item *it; bool dmgFail, wasThreatened;
     int16 i, j, oHP, fc, sc, sr, cpen; Creature *c; String MMStr;
     int16 castingTimeout = 
-            3000 / max(25,100+10*(1 + e.EActor->Mod(A_INT) -
-                                 TEFF(e.eID)->Level));
+        3000 / max(25,100+10*(1 + e.EActor->Mod(A_INT) -
+        TEFF(e.eID)->Level));
     int16 specMod; 
     Counterspeller csp[64]; int16 cc; EvReturn csr;
 
@@ -2332,519 +2329,496 @@ EvReturn Creature::Cast(EventInfo &e)
     e.sp = theGame->SpellNum(e.eID);
 
     if (isCharacter())
-      if (thisc->Spells[e.sp] & SP_INNATE)
-        if (!e.MM)
-          return ReThrow(EV_INVOKE,e);
-      
-    if (isMType(MA_ELF) && (TEFF(e.eID)->Schools & SC_NEC)
-                        && !(TEFF(e.eID)->Schools & SC_ABJ))
-      {
+        if (thisc->Spells[e.sp] & SP_INNATE)
+            if (!e.MM)
+                return ReThrow(EV_INVOKE,e);
+
+    if (isMType(MA_ELF) && (TEFF(e.eID)->Schools & SC_NEC) && !(TEFF(e.eID)->Schools & SC_ABJ)) {
         IPrint("You can't cast necromatic spells.");
         return ABORT;
-      } 
-      
+    } 
+
     if (HasStati(PARALYSIS))
-      if (!(e.MM & MM_STILL) || !(e.MM & MM_VOCALIZE))
-        {
-          IPrint("You can only cast still, vocalized spells while paralyzed.");
-          return ABORT;
-        }
-    
-    if (HasStati(POLYMORPH))
-      if (HasMFlag(M_NOHANDS))
-        if (!(e.MM & MM_STILL))
-          {
-            IPrint("You cannot perform arcane gestures without hands!");
+        if (!(e.MM & MM_STILL) || !(e.MM & MM_VOCALIZE)) {
+            IPrint("You can only cast still, vocalized spells while paralyzed.");
             return ABORT;
-          }
-    
+        }
+
+    if (HasStati(POLYMORPH))
+        if (HasMFlag(M_NOHANDS))
+            if (!(e.MM & MM_STILL)) {
+                IPrint("You cannot perform arcane gestures without hands!");
+                return ABORT;
+            }
+
     if (e.EVictim && e.EVictim->HasEffStati(-1,e.eID) && 
-         (TEFF(e.eID)->HasFlag(EF_PERSISTANT) || TEFF(e.eID)->HasFlag(
-           EF_PERMANANT) || TEFF(e.eID)->HasFlag(EF_CURSE)) &&
-            e.eID != FIND("Bestow Curse"))
-      {
+        (TEFF(e.eID)->HasFlag(EF_PERSISTANT) || TEFF(e.eID)->HasFlag(
+        EF_PERMANANT) || TEFF(e.eID)->HasFlag(EF_CURSE)) &&
+        e.eID != FIND("Bestow Curse")) {
         IPrint("Since the <Obj> already has <9><Res><7> cast on them, "
-          "a second casting would have no effect.", e.EVictim, e.eID);
+            "a second casting would have no effect.", e.EVictim, e.eID);
         return ABORT;
-      }
-    
+    }
+
     if (isCharacter())
-      if (thisc->Spells[e.sp] & SP_STAFF)
-        e.isStaffSpell = true;
-    
+        if (thisc->Spells[e.sp] & SP_STAFF)
+            e.isStaffSpell = true;
+
     e.isSpell = true;
 
     // ww: spellcasting requires real concentration! you can still
     // invoke innate abilities, though ...
-  
-  /* fjm: staff spells can be used in these conditions... */
-  if (!e.isStaffSpell)
-    {
-      if (HasStati(RAGING)) {
-        IPrint("You can't cast spells while you are in a killing rage!");
-        return ABORT;
-        } 
-      else if (HasStati(SPRINTING) || HasStati(TUMBLING)) {
-        IPrint("You can't cast spells while you are sprinting or tumbling!");
-        return ABORT;
-        } 
-      else if (HasStati(CHARGING))  {
-        if (HasStati(AUTO_CHARGE))
-          RemoveStati(CHARGING);
-        else {
-          IPrint("You can't cast spells while charging!");
-          return ABORT;
-          }
-        } 
-      else if (HasStati(ENRAGED))  {
-        IPrint("You can't cast spells while enraged!");
-        return ABORT;
-        }
-      }
-      
-    if (e.isStaffSpell)
-      if (!(thisc->Spells[e.sp] & SP_KNOWN))
-        {
-          int16 fc = GetStaffFatigueCost(e.eID);
-          if (!LoseFatigue(fc,true))
+
+    /* fjm: staff spells can be used in these conditions... */
+    if (!e.isStaffSpell) {
+        if (HasStati(RAGING)) {
+            IPrint("You can't cast spells while you are in a killing rage!");
+            return ABORT;
+        } else if (HasStati(SPRINTING) || HasStati(TUMBLING)) {
+            IPrint("You can't cast spells while you are sprinting or tumbling!");
+            return ABORT;
+        } else if (HasStati(CHARGING))  {
+            if (HasStati(AUTO_CHARGE))
+                RemoveStati(CHARGING);
+            else {
+                IPrint("You can't cast spells while charging!");
+                return ABORT;
+            }
+        } else if (HasStati(ENRAGED))  {
+            IPrint("You can't cast spells while enraged!");
             return ABORT;
         }
-    
-    
-    if (e.sp == -1)
-      {
+    }
+
+    if (e.isStaffSpell)
+        if (!(thisc->Spells[e.sp] & SP_KNOWN)) {
+            int16 fc = GetStaffFatigueCost(e.eID);
+            if (!LoseFatigue(fc,true))
+                return ABORT;
+        }
+
+    if (e.sp == -1) {
         Error("Creature::Cast -- eID is not a valid spell!");
         return ABORT;
-      }
+    }
+
     if (isPlayer())
-      e.MM = MMFeats(e.sp);
+        e.MM = MMFeats(e.sp);
     else
-      e.MM = thism->SetMetamagic(e.eID,e.ETarget,TEFF(e.eID)->Purpose);
+        e.MM = thism->SetMetamagic(e.eID,e.ETarget,TEFF(e.eID)->Purpose);
 
     /* ww: are stuck in no-cast webbing or somesuch? */
     if (TTER(m->TerrainAt(x,y))->Event(e,m->TerrainAt(x,y)) == ABORT)
-            return ABORT; 
+        return ABORT; 
 
     /* Silence DOES block staff-spells, though. */
-    if (inField(FI_SILENCE) && !(e.MM & MM_VOCALIZE))
-      {
+    if (inField(FI_SILENCE) && !(e.MM & MM_VOCALIZE)) {
         IPrint("You can't cast spells in areas of magical silence.");
         return ABORT;
-      }
+    }
+
     if (isPlayer())    
-      if (InSlot(SL_WEAPON) && InSlot(SL_READY) && !(e.MM & MM_STILL))
-        if (InSlot(SL_WEAPON) != InSlot(SL_READY))
-          {
-            /* One might wonder why mages can cast spells while wielding
-               a two-handed weapon, but not while wielding two weapons,
-               or a weapon and a shield. The in-game reason is that with
-               a 2H weapon, you can /hold/ (as opposed to fight with) it
-               with one hand long enough to cast, whereas two weapons
-               keep both hands continually occupied. The real reason, 
-               though, is that the quarterstaff -- the most traditional
-               mage weapon -- is two-handed, and would otherwise be
-               nearly unusable by mages. */
-            // ww: however, this just ends up being annoying: the player
-            // can waste wall-clock time swapping the weapon out, casting
-            // the spell and putting it back. Just adding the timeout here
-            // is a very close approximation. 
-            if (!HasFeat(FT_QUICK_DRAW) && !(e.MM & MM_STILL)) {
-              IPrint("You need a hand free for somatic components, so you stow something, cast the spell, and then put it back: this takes extra time.");
-              castingTimeout += 3000 / (100 + 10 * Mod(A_DEX));
-            } 
-          }
+        if (InSlot(SL_WEAPON) && InSlot(SL_READY) && !(e.MM & MM_STILL))
+            if (InSlot(SL_WEAPON) != InSlot(SL_READY)) {
+                /* One might wonder why mages can cast spells while wielding
+                a two-handed weapon, but not while wielding two weapons,
+                or a weapon and a shield. The in-game reason is that with
+                a 2H weapon, you can /hold/ (as opposed to fight with) it
+                with one hand long enough to cast, whereas two weapons
+                keep both hands continually occupied. The real reason, 
+                though, is that the quarterstaff -- the most traditional
+                mage weapon -- is two-handed, and would otherwise be
+                nearly unusable by mages. */
+                // ww: however, this just ends up being annoying: the player
+                // can waste wall-clock time swapping the weapon out, casting
+                // the spell and putting it back. Just adding the timeout here
+                // is a very close approximation. 
+                if (!HasFeat(FT_QUICK_DRAW) && !(e.MM & MM_STILL)) {
+                    IPrint("You need a hand free for somatic components, so you stow something, cast the spell, and then put it back: this takes extra time.");
+                    castingTimeout += 3000 / (100 + 10 * Mod(A_DEX));
+                } 
+            }
 
     if (!isCharacter())
-      goto HasComponent;
+        goto HasComponent;
 
     if (e.isStaffSpell)
-      goto HasComponent;
+        goto HasComponent;
 
     if (e.MM & MM_INHERANT)
-      goto HasComponent;
+        goto HasComponent;
 
     if (thisp->Spells[e.sp] & (SP_PRIMAL|SP_BARDIC|SP_STAFF|SP_SORCERY))
-      goto HasComponent;
+        goto HasComponent;
 
     if (thisp->Spells[e.sp] & (SP_DIVINE|SP_DOMAIN)) {
-      int okSlots[] = { SL_READY, SL_WEAPON, SL_AMULET, SL_ARMOR, 0};
-      Item *it;
-      for (i=0;okSlots[i];i++) {
-        if ((it=InSlot(okSlots[i])) && it->eID && 
-            !strncmp(NAME(it->eID),NAME(thisc->GodID),
-              strlen(NAME(thisc->GodID))))
-          goto HasComponent;
-        if ((it=InSlot(okSlots[i])) && (it->isType(T_ARMOR) ||
-             it->isType(T_SHIELD)) && it->HasQuality(AQ_GRAVEN))
-          goto HasComponent;
+        int okSlots[] = { SL_READY, SL_WEAPON, SL_AMULET, SL_ARMOR, 0};
+        Item *it;
+        for (i=0;okSlots[i];i++) {
+            if ((it=InSlot(okSlots[i])) && it->eID && 
+                !strncmp(NAME(it->eID),NAME(thisc->GodID),
+                strlen(NAME(thisc->GodID))))
+                goto HasComponent;
+            if ((it=InSlot(okSlots[i])) && (it->isType(T_ARMOR) ||
+                it->isType(T_SHIELD)) && it->HasQuality(AQ_GRAVEN))
+                goto HasComponent;
         } 
-      } 
+    } 
 
     if (thisp->Spells[e.sp] & SP_ARCANE) {
-      Item *bestBook; int16 bestPercent, per;
-      if (HasStati(LUCUBRATION))
-        if (GetStatiVal(LUCUBRATION) >= TEFF(e.eID)->Level)
-          goto HasComponent;
-          
-      bestPercent = 0; bestBook = NULL;
-      for (it = FirstInv(); it ;it=NextInv())
-        if (it->HasSpell(e.sp))
-          {
-            per = (it->GetHP()*100) / it->MaxHP();
-            if (!bestBook || per > bestPercent)
-              { bestBook = it; bestPercent = per; }
-          }
-      if (bestBook)
-        {
-          if (bestPercent < 100)
-            if (!SkillCheck(SK_DECIPHER,10+bestPercent/10,true))
-              dmgFail = true;
-          goto HasComponent;
-        }
-      }
-    
+        Item *bestBook;
+        int16 bestPercent, per;
+
+        if (HasStati(LUCUBRATION))
+            if (GetStatiVal(LUCUBRATION) >= TEFF(e.eID)->Level)
+                goto HasComponent;
+
+        bestPercent = 0;
+        bestBook = NULL;
+        for (it = FirstInv(); it ;it=NextInv())
+            if (it->HasSpell(e.sp)) {
+                per = (it->GetHP()*100) / it->MaxHP();
+                if (!bestBook || per > bestPercent) {
+                    bestBook = it;
+                    bestPercent = per;
+                }
+            }
+            if (bestBook) {
+                if (bestPercent < 100)
+                    if (!SkillCheck(SK_DECIPHER,10+bestPercent/10,true))
+                        dmgFail = true;
+                goto HasComponent;
+            }
+    }
 
     if (thisp->Spells[e.sp] & (SP_DIVINE|SP_DOMAIN))
-      IPrint("You need to have a holy symbol equipped to cast divine spells.");
+        IPrint("You need to have a holy symbol equipped to cast divine spells.");
     else
-      IPrint("You don't have a spellbook with that spell currently in your inventory.");
+        IPrint("You don't have a spellbook with that spell currently in your inventory.");
     return ABORT;
-    
-    HasComponent:
- 
+
+HasComponent:
+
     if (isCharacter() && thisp->Spells[e.sp] & (SP_DIVINE|SP_DOMAIN)) {
-      if (!thisp->GodID) {
-        IPrint("You must have a god to cast spells.");
-        return ABORT;
+        if (!thisp->GodID) {
+            IPrint("You must have a god to cast spells.");
+            return ABORT;
         }
-      if (!thisp->isWorthyOf(thisp->GodID,false)) {
-        IPrint("<Res> has revoked your access to <str> divine magic.",
-                 thisp->GodID, GodPronoun(thisp->GodID, true));
-        return ABORT;
+        if (!thisp->isWorthyOf(thisp->GodID,false)) {
+            IPrint("<Res> has revoked your access to <str> divine magic.",
+                thisp->GodID, GodPronoun(thisp->GodID, true));
+            return ABORT;
         }
-      }
- 
-    if (HasStati(SINGING) && !(e.MM & MM_VOCALIZE))
-      {
+    }
+
+    if (HasStati(SINGING) && !(e.MM & MM_VOCALIZE)) {
         if (yn("Stop singing?",true))
-          RemoveStati(SINGING);
+            RemoveStati(SINGING);
         else
-          return ABORT;
-      }
-    if (HasStati(ELEVATED) && !(e.MM & MM_STILL))
-      {
-        if (!SkillCheck(SK_CLIMB, (GetStatiVal(ELEVATED) == ELEV_CEILING) ? 25: 15))
-          {
+            return ABORT;
+    }
+    if (HasStati(ELEVATED) && !(e.MM & MM_STILL)) {
+        if (!SkillCheck(SK_CLIMB, (GetStatiVal(ELEVATED) == ELEV_CEILING) ? 25: 15)) {
             IPrint("You try to perform arcane gestures from your perch, but "
-                   "instead slip and fall!");
+                "instead slip and fall!");
             ClimbFall();
             goto SpellFails;
-          }
-      }
-    else if (HasStati(LEVITATION) && !(e.MM & MM_STILL))
-      {
-        if (!SkillCheck(SK_BALANCE, 7 + TEFF(e.eID)->Level*3))
-          {
+        }
+    } else if (HasStati(LEVITATION) && !(e.MM & MM_STILL)) {
+        if (!SkillCheck(SK_BALANCE, 7 + TEFF(e.eID)->Level*3)) {
             IDPrint("You are unable to perform the gestures correctly without "
-              "solid footing!", "The <Obj> is unable to perform magical gestures "
-              "successfully without solid footing!", this);
+                "solid footing!", "The <Obj> is unable to perform magical gestures "
+                "successfully without solid footing!", this);
             goto SpellFails;
-          }
-      }
+        }
+    }
 
-      
-    if (!(e.MM & MM_VOCALIZE))
-      {
+    if (!(e.MM & MM_VOCALIZE)) {
         Creature *cr; i;
         /* Optimization -- only PCs sing! 
         MapIterate(m,cr,i)
-          if (cr->isCreature())
+        if (cr->isCreature())
         */
         cr = theGame->GetPlayer(0);
         if (cr && cr->HasStati(SINGING))
-          if (cr->GetStatiVal(SINGING) == BARD_SPELLBREAK)
-            if (cr->DistFrom(this) <= cr->SkillLevel(SK_PERFORM)+2)
-              {
-                int16 bardCheck, casterCheck;
-                SkillCheck(SK_CONCENT,0,true);
-                casterCheck = LastSkillCheckResult;
-                cr->SkillCheck(SK_PERFORM,0,true);
-                bardCheck = LastSkillCheckResult;
-                if (casterCheck >= bardCheck) {
-                  IDPrint("You manage to cast correctly despite the "
-                    "distracting chant.", "The <Obj> manages to cast "
-                    "correctly despite the distracting chant.", this);
-                  }
-                else if (SavingThrow(WILL,10+cr->AbilityLevel(CA_BARDIC_MUSIC)/2
-                          +cr->Mod(A_CHA), SA_CONF)) {
-                  IDPrint("The chanting distracts you, spoiling your spell!",
-                    "The chanting distracts the <Obj>, spoiling <his:Obj1> "
-                    "spell!", this);
-                  goto SpellFails;
-                  }
-                else {
-                  IDPrint("The chanting confuses you utterly as you try to cast!",
-                    "The chanting confuses the <Obj> utterly as <he:Obj1> tries "
-                    "to cast!", this);
-                  GainTempStati(CONFUSED,NULL,Dice::Roll(2,4),SS_ATTK,0,0);
-                  goto SpellFails;
-                  }
-              }
-      }
+            if (cr->GetStatiVal(SINGING) == BARD_SPELLBREAK)
+                if (cr->DistFrom(this) <= cr->SkillLevel(SK_PERFORM)+2) {
+                    int16 bardCheck, casterCheck;
+                    SkillCheck(SK_CONCENT,0,true);
+                    casterCheck = LastSkillCheckResult;
+                    cr->SkillCheck(SK_PERFORM,0,true);
+                    bardCheck = LastSkillCheckResult;
+                    if (casterCheck >= bardCheck) {
+                        IDPrint("You manage to cast correctly despite the "
+                            "distracting chant.", "The <Obj> manages to cast "
+                            "correctly despite the distracting chant.", this);
+                    } else if (SavingThrow(WILL,10+cr->AbilityLevel(CA_BARDIC_MUSIC)/2
+                        +cr->Mod(A_CHA), SA_CONF)) {
+                            IDPrint("The chanting distracts you, spoiling your spell!",
+                                "The chanting distracts the <Obj>, spoiling <his:Obj1> "
+                                "spell!", this);
+                            goto SpellFails;
+                    } else {
+                        IDPrint("The chanting confuses you utterly as you try to cast!",
+                            "The chanting confuses the <Obj> utterly as <he:Obj1> tries "
+                            "to cast!", this);
+                        GainTempStati(CONFUSED,NULL,Dice::Roll(2,4),SS_ATTK,0,0);
+                        goto SpellFails;
+                    }
+                }
+    }
 
     mCost = getSpellMana(e.eID,e.MM,&specMod);
 
     if (e.MM & MM_QUICKEN) 
-      castingTimeout /= 2; 
+        castingTimeout /= 2; 
 
     /* Lower Mana, Test Spell Failure, etc.
-       The actual effects of the spell are handled
-       by the Magic class. */
-    if ((cMana() < mCost) && !(Type == T_PLAYER && thisp->Opt(OPT_INF_MANA)))
-      {
+    The actual effects of the spell are handled
+    by the Magic class. */
+    if ((cMana() < mCost) && !(Type == T_PLAYER && thisp->Opt(OPT_INF_MANA))) {
         IPrint("You don't have enough mana.");
         if (Type == T_PLAYER && cMana() >= (mCost / 2))
-          if (thisp->MyTerm->yn("Attempt spell anyway?"))
-            {
-              /* take damage */
-              LoseMana(mCost);
-              if (random(25)+80 > SpellRating(e.eID))
-                goto SpellFails;
-              goto ContinueCasting;
+            if (thisp->MyTerm->yn("Attempt spell anyway?")) {
+                /* take damage */
+                LoseMana(mCost);
+                if (random(25)+80 > SpellRating(e.eID))
+                    goto SpellFails;
+                goto ContinueCasting;
             }
-        return ABORT;
-      }
-    ContinueCasting:
+            return ABORT;
+    }
+ContinueCasting:
 
     if (e.MM && e.EActor->HasSkill(SK_METAMAGIC)) {
-      fc = MMFeatLevels(e.MM);
-      /* Since we're reducing skill inflation, let's make this a
-         tad bit easier. DC 20 -> 10. */
-      e.EActor->SkillCheck(SK_METAMAGIC,10,true,false); 
-      sc = LastSkillCheckResult - 10;
-      if (sc > 0) { 
-        fc -= 1 + (sc / 5); 
-        if (fc < 0) fc = 0; 
-      } 
-      if (fc) {
-        e.EActor->IPrint(Format("Metamagic Fatigue Cost: %d (out of %d).",fc,
-              MMFeatLevels(e.MM)));
-        if (!LoseFatigue(fc,true)) return ABORT;
-      }
-    }
-    
-    if (specMod < 0)
-      if (random(100) < abs(specMod*2))
-        {
-          int16 sc = GetStatiVal(SPECIALTY_SCHOOL), worst, mod, i;
-          mod = 50; worst = 0;
-          for (i=0;i!=9;i++)
-            if (TEFF(e.eID)->Schools & XBIT(i))
-              if (mod > SpecialistTable[sc][i])
-                { mod = SpecialistTable[sc][i];
-                  worst = i; }
-          e.EActor->IPrint("Lacking aptitude for <Str>, you find casting <9><Str2><7> draining.",
-            Lookup(SchoolNames,XBIT(worst)),NAME(e.eID));
-          LoseFatigue(1,false); 
-          if (HasStati(ASLEEP))
-            return DONE;
+        fc = MMFeatLevels(e.MM);
+        /* Since we're reducing skill inflation, let's make this a
+        tad bit easier. DC 20 -> 10. */
+        e.EActor->SkillCheck(SK_METAMAGIC,10,true,false); 
+        sc = LastSkillCheckResult - 10;
+        if (sc > 0) { 
+            fc -= 1 + (sc / 5); 
+            if (fc < 0) fc = 0; 
+        } 
+        if (fc) {
+            e.EActor->IPrint(Format("Metamagic Fatigue Cost: %d (out of %d).",fc,
+                MMFeatLevels(e.MM)));
+            if (!LoseFatigue(fc,true)) return ABORT;
         }
-    
+    }
+
+    if (specMod < 0)
+        if (random(100) < abs(specMod*2)) {
+            int16 sc = GetStatiVal(SPECIALTY_SCHOOL), worst, mod, i;
+            mod = 50; worst = 0;
+            for (i=0;i!=9;i++)
+                if (TEFF(e.eID)->Schools & XBIT(i))
+                    if (mod > SpecialistTable[sc][i]) {
+                        mod = SpecialistTable[sc][i];
+                        worst = i;
+                    }
+            e.EActor->IPrint("Lacking aptitude for <Str>, you find casting <9><Str2><7> draining.",
+                Lookup(SchoolNames,XBIT(worst)),NAME(e.eID));
+            LoseFatigue(1,false); 
+            if (HasStati(ASLEEP))
+                return DONE;
+        }
+
     if (HasStati(POLYMORPH) && !(e.MM & MM_STILL)) {
-      e.EActor->IPrint("Arcane gestures in this strange form take you extra time.");
-      castingTimeout += 15;
-      }
+        e.EActor->IPrint("Arcane gestures in this strange form take you extra time.");
+        castingTimeout += 15;
+    }
     if (HasStati(ELEVATED) && (GetStatiVal(ELEVATED) == ELEV_CEILING)) {
-      e.EActor->IPrint("Your awkward perch causes casting to take extra time.");
-      castingTimeout += 15;
-      }
+        e.EActor->IPrint("Your awkward perch causes casting to take extra time.");
+        castingTimeout += 15;
+    }
     if (HasStati(MOUNTED) && !(e.MM & MM_STILL) && SkillLevel(SK_BALANCE) < 20) {
-      e.EActor->IPrint("Casting on a moving mount takes you extra time.");
-      castingTimeout += 15;
-      }
-    
-    
+        e.EActor->IPrint("Casting on a moving mount takes you extra time.");
+        castingTimeout += 15;
+    }
+
     if (Type != T_PLAYER || !thisp->Opt(OPT_INF_MANA)) 
-      LoseMana(mCost,TEFF(e.eID)->HasFlag(EF_LOSEMANA));
+        LoseMana(mCost,TEFF(e.eID)->HasFlag(EF_LOSEMANA));
 
     MMStr = "";
     if (e.MM & MM_QUICKEN)
-      MMStr += "quickened ";
+        MMStr += "quickened ";
     if (e.MM & MM_MAXIMIZE)
-      MMStr += "maximized ";
+        MMStr += "maximized ";
     if (e.MM & MM_EMPOWER)
-      MMStr += "empowered ";
+        MMStr += "empowered ";
     if (e.MM & MM_STILL)
-      MMStr += "stilled ";
+        MMStr += "stilled ";
     if (e.MM & MM_VOCALIZE)
-      MMStr += "vocalized ";
+        MMStr += "vocalized ";
     if (e.MM & MM_TRANSMUTE)
-      MMStr += "transmuted ";
+        MMStr += "transmuted ";
     if (e.MM & MM_CONSECRATE)
-      MMStr += "consecrated ";
+        MMStr += "consecrated ";
 
     cc = 0;
     MapIterate(m,c,i)
-      if (c->isCreature() && c != this)
-        if (c->Percieves(this)) {
-          if (c->HasSkill(SK_SPELLCRAFT) && c->SkillCheck(SK_SPELLCRAFT,10+TEFF(e.eID)->Level,true)) {
-            c->IPrint("The <Obj> begins casting <Str><Str><5><Res><7><Str>.",this,
-              MMStr.GetLength() ? "a ":"", (const char*)MMStr,e.eID,
-              e.MM & MM_DEFENSIVE ? " defensively" : "");
-            if (cc < 62) {
-              csp[cc].Check = LastSkillCheckResult;
-              csp[cc].cr = c;
-              cc++;
-              }
+        if (c->isCreature() && c != this)
+            if (c->Percieves(this)) {
+                if (c->HasSkill(SK_SPELLCRAFT) && c->SkillCheck(SK_SPELLCRAFT,10+TEFF(e.eID)->Level,true)) {
+                    c->IPrint("The <Obj> begins casting <Str><Str><5><Res><7><Str>.",this,
+                        MMStr.GetLength() ? "a ":"", (const char*)MMStr,e.eID,
+                        e.MM & MM_DEFENSIVE ? " defensively" : "");
+                    if (cc < 62) {
+                        csp[cc].Check = LastSkillCheckResult;
+                        csp[cc].cr = c;
+                        cc++;
+                    }
+                } else
+                    c->IPrint("The <Obj> begins casting a spell<Str>.",this,
+                    e.MM & MM_DEFENSIVE ? "defensively " : "");
             }
-          else
-            c->IPrint("The <Obj> begins casting a spell<Str>.",this,
-              e.MM & MM_DEFENSIVE ? "defensively " : "");
-          }
+
     csp[cc].cr = NULL;
     csp[cc].Check = 0;
-          
+
     oHP = cHP;
 
     if (!(e.MM & MM_VOCALIZE))
-      e.EActor->MakeNoise(12);
+        e.EActor->MakeNoise(12);
 
     StateFlags |= MS_CASTING;
     if (e.MM & MM_STILL)
-      StateFlags |= MS_STILL_CAST;
+        StateFlags |= MS_STILL_CAST;
     if (isPlayer())
-      thisp->statiChanged = true;
-      
+        thisp->statiChanged = true;
+
     if (!(e.MM & MM_DEFENSIVE || TEFF(e.eID)->HasFlag(EF_DEFENSIVE)))
-      e.EActor->ProvokeAoO();
-    if (e.EActor->isDead())
-      { StateFlags &= ~(MS_CASTING|MS_STILL_CAST);
-        return ABORT; }
+        e.EActor->ProvokeAoO();
+    if (e.EActor->isDead()) {
+        StateFlags &= ~(MS_CASTING|MS_STILL_CAST);
+        return ABORT;
+    }
 
     if (e.EActor->HasStati(INVIS))
-      if (!(e.EActor->GetStatiVal(INVIS) == INV_IMPROVED)) 
-        if ((TEFF(e.eID)->Purpose & (EP_ATTACK|EP_CURSE|EP_SUMMON)) ||
-            !((e.EVictim && e.EVictim->isCreature() && 
-                   e.EVictim->isFriendlyTo(e.EActor)) ||
-              TEFF(e.eID)->HasFlag(EF_NOTBAD)))    
-          RemoveStati(INVIS);
+        if (!(e.EActor->GetStatiVal(INVIS) == INV_IMPROVED)) 
+            if ((TEFF(e.eID)->Purpose & (EP_ATTACK|EP_CURSE|EP_SUMMON)) ||
+                !((e.EVictim && e.EVictim->isCreature() && 
+                e.EVictim->isFriendlyTo(e.EActor)) ||
+                TEFF(e.eID)->HasFlag(EF_NOTBAD)))    
+                RemoveStati(INVIS);
     StatiIterNature(e.EActor,INVIS_TO)
-      if (S->Val != INV_IMPROVED)
-        if ((TEFF(e.eID)->Purpose & (EP_ATTACK|EP_CURSE|EP_SUMMON)) ||
-            !((e.EVictim && e.EVictim->isCreature() && 
-                   e.EVictim->isFriendlyTo(e.EActor)) ||
-              TEFF(e.eID)->HasFlag(EF_NOTBAD)))    
-          StatiIter_RemoveCurrent(e.EActor);
+        if (S->Val != INV_IMPROVED)
+            if ((TEFF(e.eID)->Purpose & (EP_ATTACK|EP_CURSE|EP_SUMMON)) ||
+                !((e.EVictim && e.EVictim->isCreature() && 
+                e.EVictim->isFriendlyTo(e.EActor)) ||
+                TEFF(e.eID)->HasFlag(EF_NOTBAD)))    
+                StatiIter_RemoveCurrent(e.EActor);
     StatiIterEnd(e.EActor)     
 
     /* Get Spell Rating */
     rating = SpellRating(e.eID,e.MM);
     roll   = random(100)+1;
-    
+
     dmg_pen = 0;
-    if (oHP > cHP)
-      {
+    if (oHP > cHP) {
         dmg_pen = ((oHP-cHP)*300) / (mHP+GetAttr(A_THP));
         dmg_pen = max(0,dmg_pen - ((ConcentBuffer() - (concentUsed + p_conc))*5));
         rating -= dmg_pen;
-      }  
-      
-    if (dmgFail)
-      {
+    }  
+
+    if (dmgFail) {
         IPrint("You fail to evoke the blurred runes in your damaged "
-          "spellbook properly!");
+            "spellbook properly!");
         goto SpellFails;
-      }
+    }
 
     if (!(isPlayer() && thisp->Opt(OPT_NO_SPELLFAIL)))
-      if (roll > rating)
-        {
-          SpellFails:
-          // ww: now combat casting and quicken stack -- before you might
-          // have had the un-intuitive situation where a spell cast with
-          // quicken takes 15 but a spell disrupted with quicken takes 30!
-          if (HasFeat(FT_COMBAT_CASTING))
-            castingTimeout /= 2; 
-          Timeout += castingTimeout; 
-        
-          if (roll <= rating + dmg_pen)
-            IDPrint("Your spell is disrupted!",
-              "The <Obj>'s spell is disrupted!", this);
-          else {
-            switch(random(3)) {
-              case 0: IDPrint("The spell fizzles.", 
-                "The casting fails.", this); break;
-              case 1: IDPrint("You fail to get the spell off.", 
-                "The spell fails.", this); break;
-              case 2: IDPrint("The magic fails you.", 
-                "The casting fails.", this); break;
-              }
-            Abuse(A_INT,1);
+        if (roll > rating) {
+SpellFails:
+            // ww: now combat casting and quicken stack -- before you might
+            // have had the un-intuitive situation where a spell cast with
+            // quicken takes 15 but a spell disrupted with quicken takes 30!
+            if (HasFeat(FT_COMBAT_CASTING))
+                castingTimeout /= 2; 
+            Timeout += castingTimeout; 
+
+            if (roll <= rating + dmg_pen)
+                IDPrint("Your spell is disrupted!",
+                "The <Obj>'s spell is disrupted!", this);
+            else {
+                switch(random(3)) {
+                case 0:
+                    IDPrint("The spell fizzles.","The casting fails.",this);
+                    break;
+                case 1:
+                    IDPrint("You fail to get the spell off.","The spell fails.", this);
+                    break;
+                case 2:
+                    IDPrint("The magic fails you.","The casting fails.",this);
+                    break;
+                }
+                Abuse(A_INT,1);
             }
-          if (random(20) == 3) {
-            IPrint("The incomplete spell drains your physical reserves.");
-            LoseFatigue(1,false);
+            if (random(20) == 3) {
+                IPrint("The incomplete spell drains your physical reserves.");
+                LoseFatigue(1,false);
             } 
-          return ABORT;
+            return ABORT;
         }
-    
+
     /* Set timeout for spellcasting */
     Timeout += castingTimeout; 
-   
+
     csr = Counterspell(e,csp);
     if (csr == ABORT)
-      return DONE;
-   
+        return DONE;
+
     /* Spell Disruption Check */
 
     if (TEFF(e.eID)->ef.eval == EA_HEALING)
-      if (e.EActor->HasAbility(CA_MAXIMIZE_HEALING))
-        if (e.EActor->AbilityLevel(CA_MAXIMIZE_HEALING) >= 
-               TEFF(e.eID)->Level)
-          e.MM |= MM_MAXIMIZE;
+        if (e.EActor->HasAbility(CA_MAXIMIZE_HEALING))
+            if (e.EActor->AbilityLevel(CA_MAXIMIZE_HEALING) >= TEFF(e.eID)->Level)
+                e.MM |= MM_MAXIMIZE;
 
     if (isPlayer() && csr == NOTHING && // ww: optimization, can be removed later
         (e.EActor == e.EVictim || 
-         (!e.EVictim && TEFF(e.eID)->ef.qval == 0))) { 
-      Status * s = GetStati(HAS_ANIMAL,-1,0);
-      if (s) {
-        Creature *c = oCreature(s->h);
-        EventInfo eCopy = e;
-        eCopy.EVictim = c;
-        if (ReThrow(EV_EFFECT,eCopy) != ABORT) 
-          e.EActor->IPrint(
-            Format("%s is affected through your special bond.", (const char*)c->Name(0)));
-      } 
+        (!e.EVictim && TEFF(e.eID)->ef.qval == 0))) { 
+            Status * s = GetStati(HAS_ANIMAL,-1,0);
+            if (s) {
+                Creature *c = oCreature(s->h);
+                EventInfo eCopy = e;
+                eCopy.EVictim = c;
+                if (ReThrow(EV_EFFECT,eCopy) != ABORT) 
+                    e.EActor->IPrint(
+                    Format("%s is affected through your special bond.", (const char*)c->Name(0)));
+            } 
     } 
 
-
     if (isCharacter())
-      wasThreatened = isThreatened();
+        wasThreatened = isThreatened();
     else
-      wasThreatened = false;
+        wasThreatened = false;
 
     res = ReThrow(EV_EFFECT,e);
 
     if (e.MM && TEFF(e.eID)->HasFlag(EF_LOSEMANA))
-      if (HasEffStati(-1,e.eID))
-        GainTempStati(STORED_MM,GetEffStatiObj(-1,e.eID),
-                                GetEffStatiDur(-1,e.eID),
-                                SS_ENCH,
-                                e.MM & 0x0000FFFF,
-                                (e.MM & 0xFFFF0000) << 16,
-                                e.eID, GetEffStatiCLev(-1,e.eID));    
+        if (HasEffStati(-1,e.eID))
+            GainTempStati(STORED_MM,
+                GetEffStatiObj(-1,e.eID),
+                GetEffStatiDur(-1,e.eID),
+                SS_ENCH,
+                e.MM & 0x0000FFFF,
+                (e.MM & 0xFFFF0000) << 16,
+                e.eID, GetEffStatiCLev(-1,e.eID));    
 
     if (isCharacter() && wasThreatened) {
-      if (TEFF(e.eID)->BaseChance <= 30) // SP_VERY_HARD
-        Exercise(A_INT,random(12)+1,EINT_CASTING,30);
-      else if (TEFF(e.eID)->BaseChance <= 60) // SP_HAND
-        Exercise(A_INT,random(4)+1,EINT_CASTING,30);
-      if (e.MM)
-        Exercise(A_INT,random(MMFeatLevels(e.MM)*2)+1,EINT_CASTING,45);
-      }    
-      
+        if (TEFF(e.eID)->BaseChance <= 30) // SP_VERY_HARD
+            Exercise(A_INT,random(12)+1,EINT_CASTING,30);
+        else if (TEFF(e.eID)->BaseChance <= 60) // SP_HAND
+            Exercise(A_INT,random(4)+1,EINT_CASTING,30);
+
+        if (e.MM)
+            Exercise(A_INT,random(MMFeatLevels(e.MM)*2)+1,EINT_CASTING,45);
+    }    
+
     return res;
-  }
+}
 
 EvReturn Creature::Invoke(EventInfo &e)
   {
