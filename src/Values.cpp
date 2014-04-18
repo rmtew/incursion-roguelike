@@ -623,12 +623,7 @@ Restart:
     StateFlags |= MS_HAS_REACH;
     if (!InSlot(SL_WEAPON)->HasIFlag(WT_STRIKE_NEAR))
       StateFlags |= MS_REACH_ONLY;
-  }
-  else if (HasMFlag(M_REACH))
-    StateFlags |= MS_HAS_REACH;
-  else if (Attr[A_SIZ] >= SZ_LARGE && HasMFlag(M_HUMANOID))
-    StateFlags |= MS_HAS_REACH;
-  else if (Attr[A_SIZ] >= SZ_HUGE)
+  } else if (InherentCreatureReach())
     StateFlags |= MS_HAS_REACH;
 
 #define KNOWN \
@@ -1643,6 +1638,16 @@ Restart:
       }
   theGame->inCalcVal--;
 
+}
+
+bool Creature::InherentCreatureReach() {
+  if (HasMFlag(M_REACH))
+    return true;
+  else if (Attr[A_SIZ] >= SZ_LARGE && HasMFlag(M_HUMANOID))
+    return true;
+  else if (Attr[A_SIZ] >= SZ_HUGE)
+    return true;
+  return false;
 }
 
 void Character::CalcValues(bool KnownOnly, Item *thrown)

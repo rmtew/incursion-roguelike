@@ -355,6 +355,8 @@ class Creature: public Thing, public Magic
       bool  HasMFlag(int16 fl);
       rID   Race_mID();
 
+      bool InherentCreatureReach();
+
       virtual void StatiOn(Status s);
       virtual void StatiOff(Status s, bool elapsed = false);
       virtual void StatiMessage(int16 n,int16 val,bool ending);

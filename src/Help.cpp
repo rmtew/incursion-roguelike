@@ -3951,10 +3951,13 @@ String & Weapon::Describe(Player *p)
           " opponents who have closed with the wielder" : "",p->WeaponSaveDC(this,WT_REACH));
       }
     else if (p->StateFlags & MS_HAS_REACH) {
-      Desc += Format(" <11>Closing<7> "
-        "with you when you wield this weapon requires a Reflex saving throw "
-        "against <11>DC %d<7>.",p->WeaponSaveDC(this,WT_REACH));
-      }
+        /* The player has reach for some reason, but it's not _this_ weapon.  If it is inherent for
+           who they are as a creature, then annotate this weapon.  Otherwise, it shouldn't apply. */
+        if (((Creature*)p)->InherentCreatureReach())
+          Desc += Format(" <11>Closing<7> "
+            "with you when you wield this weapon requires a Reflex saving throw "
+            "against <11>DC %d<7>.",p->WeaponSaveDC(this,WT_REACH));
+          }
     if (TITEM(iID)->HasFlag(WT_STUNNING)) 
       Desc += Format(" On a critical hit or great blow, or on 1 in 3 normal attacks, "
                      "this weapon will <11>stun<7> a foe who fails a Fortitude save (<11>DC %d<7>) "
