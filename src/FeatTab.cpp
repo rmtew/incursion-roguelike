@@ -934,7 +934,7 @@ struct FeatInfoStruct FeatInfo[] = {
       "if there are hostile creatures in the squares surronding you." ,
       {{{FP_ABILITY,CA_INNATE_SPELL}}}},
   { FT_MYSTIC_PREPARATION, FF_WIZARD, "Mystic Preparation", "Your strategic use of "
-    "preparatory magic is without peer. When you cast a persistant enhancemennt "
+    "preparatory magic is without peer. When you cast a persistant enhancement "
     "spell it costs two mana less than it normally would (minimum 1).",
     {{{FP_FEAT,FT_EXTEND_SPELL,0},
       {FP_FEAT,FT_DEFENSIVE_SPELL,0},
