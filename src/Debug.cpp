@@ -316,16 +316,11 @@ void Map::GenEncounterStats(Term *t)
     t->Clear();
   }
           
-          
-          
-          
-          
-
-void Player::WizardOptions()
-	{
+void Player::WizardOptions() {
     int16 i,j,k,l,ch; 
     Item *it; Monster *mn; int16 n; rID xID; Thing *t;
     EventInfo e; hObj h; String str;
+
     MyTerm->LOption("Examine Player Data", 0);
     MyTerm->LOption("Examine Nearby Things", 1);
     MyTerm->LOption("Examine All Things", 2);
@@ -362,565 +357,564 @@ void Player::WizardOptions()
     MyTerm->LOption("Display Resource Statistics",32);
     MyTerm->LOption("Become Divine Champion", 34);
     MyTerm->LOption("Generate 50 XP Ticks", 35);
+    MyTerm->LOption("Change terrain type", 36);
 
-    
-
-		switch(MyTerm->LMenu(MENU_ESC|MENU_BORDER|MENU_2COLS,"Wizard Mode Options:",WIN_MENUBOX))
-			{        case -1:
-          return;
-				case 0:
-          MyTerm->SetWin(WIN_DEBUG);
-          MyTerm->SizeWin(WIN_CUSTOM,
-                          ((TextTerm*)MyTerm)->WinSizeX()-2,
-                          ((TextTerm*)MyTerm)->WinSizeY()-2);
-          MyTerm->Clear();
-          MyTerm->ClearScroll(); 
-          MyTerm->SGotoXY(0,0);
-		  		Dump();
-          MyTerm->UpdateScrollArea(0,WIN_DEBUG);
-          while (1) {
-                  switch(MyTerm->GetCharCmd(KY_CMD_ARROW_MODE))
-                  {
-                        case KY_CMD_NORTH:
-                        case KY_CMD_NORTHEAST: 
-                        case KY_CMD_NORTHWEST: 
-                                  MyTerm->ScrollUp(WIN_DEBUG);
-                                  break;
-                        case KY_CMD_SOUTH:
-                        case KY_CMD_SOUTHEAST: 
-                        case KY_CMD_SOUTHWEST: 
-                                  MyTerm->ScrollDown(WIN_DEBUG);
-                                  break;
-                        default:
-                                  MyTerm->Clear();
-                                  MyTerm->RefreshMap();
-                                  return;
-                  }
-          }
-				case 1:
-          BrowseThings(true);
-         break;
-				case 2:
-					BrowseThings(false);
-				 break;
-				case 3:
-				 break;
-        case 4:
-          it = (Item*)MyTerm->AcquisitionPrompt(ACQ_ANY_ITEM,0,20,0);
-          if (it) {
+    switch(MyTerm->LMenu(MENU_ESC|MENU_BORDER|MENU_2COLS,"Wizard Mode Options:",WIN_MENUBOX)) {
+    case -1:
+        return;
+    case 0:
+        MyTerm->SetWin(WIN_DEBUG);
+        MyTerm->SizeWin(WIN_CUSTOM,
+            ((TextTerm*)MyTerm)->WinSizeX()-2,
+            ((TextTerm*)MyTerm)->WinSizeY()-2);
+        MyTerm->Clear();
+        MyTerm->ClearScroll(); 
+        MyTerm->SGotoXY(0,0);
+        Dump();
+        MyTerm->UpdateScrollArea(0,WIN_DEBUG);
+        while (1) {
+            switch(MyTerm->GetCharCmd(KY_CMD_ARROW_MODE)) {
+            case KY_CMD_NORTH:
+            case KY_CMD_NORTHEAST: 
+            case KY_CMD_NORTHWEST: 
+                MyTerm->ScrollUp(WIN_DEBUG);
+                break;
+            case KY_CMD_SOUTH:
+            case KY_CMD_SOUTHEAST: 
+            case KY_CMD_SOUTHWEST: 
+                MyTerm->ScrollDown(WIN_DEBUG);
+                break;
+            default:
+                MyTerm->Clear();
+                MyTerm->RefreshMap();
+                return;
+            }
+        }
+    case 1:
+        BrowseThings(true);
+        break;
+    case 2:
+        BrowseThings(false);
+        break;
+    case 3:
+        break;
+    case 4:
+        it = (Item*)MyTerm->AcquisitionPrompt(ACQ_ANY_ITEM,0,20,0);
+        if (it) {
             if (it->isItem() && it->GetInherantPlus()) {
-              MyTerm->SetWin(WIN_INPUT);
-              MyTerm->Color(YELLOW);
-              MyTerm->Write(0,0,"Enter Item Level: ");
-              MyTerm->Color(MAGENTA);
-              MyTerm->ReadLine();
-              MyTerm->Clear();
-              i = atoi(MyTerm->GetTypedString());
-              if (i)
-                it->SetInherantPlus(i);
-              }
+                MyTerm->SetWin(WIN_INPUT);
+                MyTerm->Color(YELLOW);
+                MyTerm->Write(0,0,"Enter Item Level: ");
+                MyTerm->Color(MAGENTA);
+                MyTerm->ReadLine();
+                MyTerm->Clear();
+                i = atoi(MyTerm->GetTypedString());
+                if (i)
+                    it->SetInherantPlus(i);
+            }
             if (it->isType(T_TRAP))
-              it->PlaceAt(m,x,y-1);
+                it->PlaceAt(m,x,y-1);
             else 
-              #if 0
-              {
-              {
-                EventInfo xe;
-                xe.Clear();
-                xe.ETarget = it;
-                xe.EItem   = it;
-                xe.vDepth  = it->ItemLevel();
-                xe.vLevel  = it->ItemLevel();
-                xe.Event   = EV_GENITEM;
-                switch (TITEM(it->iID)->Event(xe,it->iID))
-                  {
+#if 0
+            {
+                {
+                    EventInfo xe;
+                    xe.Clear();
+                    xe.ETarget = it;
+                    xe.EItem   = it;
+                    xe.vDepth  = it->ItemLevel();
+                    xe.vLevel  = it->ItemLevel();
+                    xe.Event   = EV_GENITEM;
+                    switch (TITEM(it->iID)->Event(xe,it->iID))
+                    {
                     case DONE: break;
                     case ABORT: delete it; return;
                     case ERROR: Error("EV_GENITEM returned ERROR!");
                     case NOTHING: break;
-                  }
-                if (it->eID) switch (TITEM(it->eID)->Event(xe,it->eID))
-                  {
+                    }
+                    if (it->eID) switch (TITEM(it->eID)->Event(xe,it->eID))
+                    {
                     case DONE: break;
                     case ABORT: delete it; return;
                     case ERROR: Error("EV_GENITEM returned ERROR!");
                     case NOTHING: break;
-                  }
-              }
-              #endif
-              Throw(EV_PICKUP,this,NULL,it,NULL);
-              }
-         break;
-        case 5:
-          it = (Item*)MyTerm->AcquisitionPrompt(ACQ_ANY_ITEM,0,20,0);
-          if (it) {
+                    }
+                }
+#endif
+                Throw(EV_PICKUP,this,NULL,it,NULL);
+        }
+        break;
+    case 5:
+        it = (Item*)MyTerm->AcquisitionPrompt(ACQ_ANY_ITEM,0,20,0);
+        if (it) {
             if (it->isType(T_TRAP))
-              it->PlaceAt(m,x,y-1);
+                it->PlaceAt(m,x,y-1);
             else {
-              it->SetKnown(0);
-              Throw(EV_PICKUP,this,NULL,it,NULL);
-              }
+                it->SetKnown(0);
+                Throw(EV_PICKUP,this,NULL,it,NULL);
             }
-         break;
-        case 6:
-         {
-           rID mID = MyTerm->MonsterPrompt("Choose A Monster To Summon");
-           Monster * mn;
-           if (mID > 0) {
-             mn = new Monster(mID); 
-             e.Clear();
-             if (MyTerm->EffectPrompt(e,Q_LOC,false,"Summon where?") == false)
-               { 
-                 IPrint("Aborting Monster Summoning.");
-                 delete mn; break; 
-               }
-             TMON(mn->tmID)->GrantGear(mn,mn->tmID,true);
-             TMON(mn->tmID)->PEvent(EV_BIRTH,mn,mn->tmID);
-             mn->PlaceAt(m,e.EXVal,e.EYVal);
-             mn->Initialize(true);
-             }
-         } 
-         break;
-        case 7:
-          if (!yn("Confirm permanently paralyze player to test game speeds?"))
-            break;
-          GainPermStati(PARALYSIS,NULL,SS_MISC);
-         break;
-        case 8:
-          theGame->DumpCode();
-         break;
-        case 9:
-          if (ResistLevel(AD_POLY) == -1)
-            {
-              IPrint("You find you cannot change form!");
-              return;
+        }
+        break;
+    case 6:
+        {
+            rID mID = MyTerm->MonsterPrompt("Choose A Monster To Summon");
+            Monster * mn;
+            if (mID > 0) {
+                mn = new Monster(mID); 
+                e.Clear();
+                if (MyTerm->EffectPrompt(e,Q_LOC,false,"Summon where?") == false)
+                { 
+                    IPrint("Aborting Monster Summoning.");
+                    delete mn; break; 
+                }
+                TMON(mn->tmID)->GrantGear(mn,mn->tmID,true);
+                TMON(mn->tmID)->PEvent(EV_BIRTH,mn,mn->tmID);
+                mn->PlaceAt(m,e.EXVal,e.EYVal);
+                mn->Initialize(true);
             }
-          mn = (Monster*) MyTerm->AcquisitionPrompt(ACQ_POLYMORPH,-10,30);
-          if (!mn)
+        } 
+        break;
+    case 7:
+        if (!yn("Confirm permanently paralyze player to test game speeds?"))
             break;
-          Shapeshift(mn->mID,false,NULL);
-          GainTempStati(POLYMORPH,NULL,100,SS_MISC,0,0,mn->mID);
-         break;
-        case 10:
-          Restart:
-          MapIterate(m,t,i)
+        GainPermStati(PARALYSIS,NULL,SS_MISC);
+        break;
+    case 8:
+        theGame->DumpCode();
+        break;
+    case 9:
+        if (ResistLevel(AD_POLY) == -1)
+        {
+            IPrint("You find you cannot change form!");
+            return;
+        }
+        mn = (Monster*) MyTerm->AcquisitionPrompt(ACQ_POLYMORPH,-10,30);
+        if (!mn)
+            break;
+        Shapeshift(mn->mID,false,NULL);
+        GainTempStati(POLYMORPH,NULL,100,SS_MISC,0,0,mn->mID);
+        break;
+    case 10:
+Restart:
+        MapIterate(m,t,i)
             if (t->isMonster() && !(t->Flags & F_DELETE)) {
-              ThrowDmg(EV_DEATH,AD_NORM,0,"debug genocide",t,t);
-              goto Restart;
-              }
-         break;
-        case 11:
-          for(it=FirstInv();it;it=NextInv())
+                ThrowDmg(EV_DEATH,AD_NORM,0,"debug genocide",t,t);
+                goto Restart;
+            }
+            break;
+    case 11:
+        for(it=FirstInv();it;it=NextInv())
             it->MakeKnown(0xFF);
-         break;
-        case 12:
-          it = InSlot(SL_WEAPON);
-          if (!it)
-            {
-              IPrint("Wield a weapon first!");
-              break;
-            }
-          MyTerm->SetWin(WIN_INPUT);
-          MyTerm->Color(YELLOW);
-          MyTerm->Write(0,0,"Enter Quality Constant: ");
-          MyTerm->Color(MAGENTA);
-          MyTerm->ReadLine();
-          MyTerm->Clear();
-          i = LookupStr(WQ_CONSTNAMES,MyTerm->GetTypedString());
-          if (!i)
+        break;
+    case 12:
+        it = InSlot(SL_WEAPON);
+        if (!it)
+        {
+            IPrint("Wield a weapon first!");
+            break;
+        }
+        MyTerm->SetWin(WIN_INPUT);
+        MyTerm->Color(YELLOW);
+        MyTerm->Write(0,0,"Enter Quality Constant: ");
+        MyTerm->Color(MAGENTA);
+        MyTerm->ReadLine();
+        MyTerm->Clear();
+        i = LookupStr(WQ_CONSTNAMES,MyTerm->GetTypedString());
+        if (!i)
             i = LookupStr(IQ_CONSTNAMES,MyTerm->GetTypedString());
-          if (!i)
+        if (!i)
             break;
-          if (!it->QualityOK(i))
-            {
-              IPrint("Unacceptable quality.");
-              break;
-            }
-          it->AddQuality(i);
-          IPrint("Quality added.");
-         break;
-        case 13:
-          it = InSlot(SL_ARMOR);
-          if (!it)
-            {
-              IPrint("Wear some armor first!");
-              break;
-            }
-          MyTerm->SetWin(WIN_INPUT);
-          MyTerm->Color(YELLOW);
-          MyTerm->Write(0,0,"Enter Quality Constant: ");
-          MyTerm->Color(MAGENTA);
-          MyTerm->ReadLine();
-          MyTerm->Clear();
-          i = LookupStr(AQ_CONSTNAMES,MyTerm->GetTypedString());
-          if (!i)
+        if (!it->QualityOK(i)) {
+            IPrint("Unacceptable quality.");
+            break;
+        }
+        it->AddQuality(i);
+        IPrint("Quality added.");
+        break;
+    case 13:
+        it = InSlot(SL_ARMOR);
+        if (!it) {
+            IPrint("Wear some armor first!");
+            break;
+        }
+        MyTerm->SetWin(WIN_INPUT);
+        MyTerm->Color(YELLOW);
+        MyTerm->Write(0,0,"Enter Quality Constant: ");
+        MyTerm->Color(MAGENTA);
+        MyTerm->ReadLine();
+        MyTerm->Clear();
+        i = LookupStr(AQ_CONSTNAMES,MyTerm->GetTypedString());
+        if (!i)
             i = LookupStr(IQ_CONSTNAMES,MyTerm->GetTypedString());
-          if (!i)
+        if (!i)
             break;
-          if (!it->QualityOK(i))
-            {
-              IPrint("Unacceptable quality.");
-              break;
-            }
-          it->AddQuality(i);
-          IPrint("Quality added.");
-         break;
-        case 14:
-          it = InSlot(SL_READY);
-          if (!it)
-            {
-              IPrint("Ready a shield first!");
-              break;
-            }
-          MyTerm->SetWin(WIN_INPUT);
-          MyTerm->Color(YELLOW);
-          MyTerm->Write(0,0,"Enter Quality Constant: ");
-          MyTerm->Color(MAGENTA);
-          MyTerm->ReadLine();
-          MyTerm->Clear();
-          i = LookupStr(AQ_CONSTNAMES,MyTerm->GetTypedString());
-          if (!i)
+        if (!it->QualityOK(i)) {
+            IPrint("Unacceptable quality.");
             break;
-          if (!it->QualityOK(i))
-            {
-              IPrint("Unacceptable quality.");
-              break;
-            }
-          it->AddQuality(i);
-          IPrint("Quality added.");
-         break;
-        case 15:
-          if (!m->dID)
-            {
-              IPrint("Not in dungeon.");
-              break;
-            }
-          MyTerm->SetWin(WIN_INPUT);
-          MyTerm->Color(YELLOW);
-          MyTerm->Write(0,0,"Enter New Depth: ");
-          MyTerm->Color(MAGENTA);
-          MyTerm->ReadLine();
-          MyTerm->Clear();
-          i = atoi(MyTerm->GetTypedString());
-          if (i < 1 || RES(m->dID)->Type != T_TDUNGEON ||
-                i > TDUN(m->dID)->GetConst(DUN_DEPTH))
-            {
-              IPrint("Invalid depth.");
-              break;
-            }
-          MoveDepth(i);
-          IPrint("Done.");
-         break;  
-        case 16:
-          mn = (Monster*)MyTerm->ChooseTarget();
-          if (!mn)
+        }
+        it->AddQuality(i);
+        IPrint("Quality added.");
+        break;
+    case 14:
+        it = InSlot(SL_READY);
+        if (!it) {
+            IPrint("Ready a shield first!");
             break;
-          if (!mn->isCreature())
-            { IPrint("Not a creature."); break; }
-          {
+        }
+        MyTerm->SetWin(WIN_INPUT);
+        MyTerm->Color(YELLOW);
+        MyTerm->Write(0,0,"Enter Quality Constant: ");
+        MyTerm->Color(MAGENTA);
+        MyTerm->ReadLine();
+        MyTerm->Clear();
+        i = LookupStr(AQ_CONSTNAMES,MyTerm->GetTypedString());
+        if (!i)
+            break;
+        if (!it->QualityOK(i))
+        {
+            IPrint("Unacceptable quality.");
+            break;
+        }
+        it->AddQuality(i);
+        IPrint("Quality added.");
+        break;
+    case 15:
+        if (!m->dID)
+        {
+            IPrint("Not in dungeon.");
+            break;
+        }
+        MyTerm->SetWin(WIN_INPUT);
+        MyTerm->Color(YELLOW);
+        MyTerm->Write(0,0,"Enter New Depth: ");
+        MyTerm->Color(MAGENTA);
+        MyTerm->ReadLine();
+        MyTerm->Clear();
+        i = atoi(MyTerm->GetTypedString());
+        if (i < 1 || RES(m->dID)->Type != T_TDUNGEON ||
+            i > TDUN(m->dID)->GetConst(DUN_DEPTH))
+        {
+            IPrint("Invalid depth.");
+            break;
+        }
+        MoveDepth(i);
+        IPrint("Done.");
+        break;  
+    case 16:
+        mn = (Monster*)MyTerm->ChooseTarget();
+        if (!mn)
+            break;
+        if (!mn->isCreature()) {
+            IPrint("Not a creature.");
+            break;
+        }
+        {
             Module *m = theGame->Modules[0];
             for (i=0;i<m->szTem;i++) {
-              rID tid = m->TemplateID(i);
-              TTemplate *t = TTEM(tid);
-              if (!mn->isMType(t->ForMType))
-                continue; 
-              MyTerm->LOption(NAME(tid),tid,DESC(tid),0);
+                rID tid = m->TemplateID(i);
+                TTemplate *t = TTEM(tid);
+                if (!mn->isMType(t->ForMType))
+                    continue; 
+                MyTerm->LOption(NAME(tid),tid,DESC(tid),0);
             }
             xID = MyTerm->LMenu(MENU_ESC|MENU_DESC|MENU_3COLS|MENU_BORDER,
                 "Add Which Template?",WIN_MENUBOX);
             if (xID > 0) {
-              mn->AddTemplate(xID);
-              //mn->IdentifyTemp(xID);
-              RES(xID)->GrantGear(mn,xID,true);
-              // ww: without initialize, templates that add hitpoints or
-              // whatnot won't be noticed
-              mn->Initialize(true);
-              mn->CalcValues();
-              mn->SetImage(); 
-              int16 _x, _y; Map *_m;
-              _x = mn->x; _y = mn->y; _m = mn->m;
-              mn->Remove(false);
-              mn->PlaceAt(_m,_x,_y);
-              IPrint("Template added."); 
+                mn->AddTemplate(xID);
+                //mn->IdentifyTemp(xID);
+                RES(xID)->GrantGear(mn,xID,true);
+                // ww: without initialize, templates that add hitpoints or
+                // whatnot won't be noticed
+                mn->Initialize(true);
+                mn->CalcValues();
+                mn->SetImage(); 
+                int16 _x, _y; Map *_m;
+                _x = mn->x; _y = mn->y; _m = mn->m;
+                mn->Remove(false);
+                mn->PlaceAt(_m,_x,_y);
+                IPrint("Template added."); 
             }
-          }
-         break;         
-        case 17:
-          MyTerm->SetWin(WIN_INPUT);
-          MyTerm->Color(SKYBLUE);
-          MyTerm->Write(0,0,"Enter Spell Name: ");
-          MyTerm->Color(MAGENTA);
-          MyTerm->ReadLine();
-          MyTerm->Clear();
-          xID = FIND(MyTerm->GetTypedString());
-          if (!xID)
-            { IPrint("Can't find spell."); break; }
-          if (!RES(xID) || RES(xID)->Type != T_TEFFECT)
-            { IPrint("Not a spell."); break; }
-          Spells[theGame->SpellNum(RES(xID))] |= SP_KNOWN|SP_PRIMAL|SP_INNATE;
-          IPrint("Learned."); 
-         break;
-        case 18:
-          MyTerm->SetWin(WIN_INPUT);
-          MyTerm->Color(SKYBLUE);
-          MyTerm->Write(0,0,"Enter Resource Number: ");
-          MyTerm->Color(MAGENTA);
-          MyTerm->ReadLine();
-          MyTerm->Clear();
-          xID = atoi(MyTerm->GetTypedString());
-          if (!xID)
+        }
+        break;         
+    case 17:
+        MyTerm->SetWin(WIN_INPUT);
+        MyTerm->Color(SKYBLUE);
+        MyTerm->Write(0,0,"Enter Spell Name: ");
+        MyTerm->Color(MAGENTA);
+        MyTerm->ReadLine();
+        MyTerm->Clear();
+        xID = FIND(MyTerm->GetTypedString());
+        if (!xID)
+        { IPrint("Can't find spell."); break; }
+        if (!RES(xID) || RES(xID)->Type != T_TEFFECT)
+        { IPrint("Not a spell."); break; }
+        Spells[theGame->SpellNum(RES(xID))] |= SP_KNOWN|SP_PRIMAL|SP_INNATE;
+        IPrint("Learned."); 
+        break;
+    case 18:
+        MyTerm->SetWin(WIN_INPUT);
+        MyTerm->Color(SKYBLUE);
+        MyTerm->Write(0,0,"Enter Resource Number: ");
+        MyTerm->Color(MAGENTA);
+        MyTerm->ReadLine();
+        MyTerm->Clear();
+        xID = atoi(MyTerm->GetTypedString());
+        if (!xID)
             break;
-          IPrint(Format("%s (%s)",
+        IPrint(Format("%s (%s)",
             NAME(xID),
             Lookup(T_CONSTNAMES,RES(xID)->Type)));
-         break;
-        case 19:
-          MyTerm->SetWin(WIN_INPUT);
-          MyTerm->Color(SKYBLUE);
-          MyTerm->Write(0,0,"Enter Object Number: ");
-          MyTerm->Color(MAGENTA);
-          MyTerm->ReadLine();
-          MyTerm->Clear();
-          h = atoi(MyTerm->GetTypedString());
-          if (!MainRegistry.Exists(h))
-            { IPrint("No such object."); break; }
-          IPrint(Format("Object %d: %s",h,(const char*)oThing(h)->Name(0)));
-          if (yn("Inspect?")) {
+        break;
+    case 19:
+        MyTerm->SetWin(WIN_INPUT);
+        MyTerm->Color(SKYBLUE);
+        MyTerm->Write(0,0,"Enter Object Number: ");
+        MyTerm->Color(MAGENTA);
+        MyTerm->ReadLine();
+        MyTerm->Clear();
+        h = atoi(MyTerm->GetTypedString());
+        if (!MainRegistry.Exists(h))
+        { IPrint("No such object."); break; }
+        IPrint(Format("Object %d: %s",h,(const char*)oThing(h)->Name(0)));
+        if (yn("Inspect?")) {
             MyTerm->SetWin(WIN_DEBUG);
             MyTerm->SizeWin(WIN_CUSTOM,
-                            ((TextTerm*)MyTerm)->WinSizeX(),
-                            ((TextTerm*)MyTerm)->WinSizeY());
+                ((TextTerm*)MyTerm)->WinSizeX(),
+                ((TextTerm*)MyTerm)->WinSizeY());
             MyTerm->Clear();
             MyTerm->ClearScroll(); 
             MyTerm->SGotoXY(0,0);
-	  	  		oThing(h)->Dump();
+            oThing(h)->Dump();
             MyTerm->UpdateScrollArea(0,WIN_DEBUG);
             while (1) {
-                    switch(MyTerm->GetCharCmd(KY_CMD_ARROW_MODE))
-                    {
-                        case KY_CMD_NORTH:
-                        case KY_CMD_NORTHEAST: 
-                        case KY_CMD_NORTHWEST: 
-                                    MyTerm->ScrollUp(WIN_DEBUG);
-                                    break;
-                        case KY_CMD_SOUTH:
-                        case KY_CMD_SOUTHEAST: 
-                        case KY_CMD_SOUTHWEST: 
-                                    MyTerm->ScrollDown(WIN_DEBUG);
-                                    break;
-                        default:
-                                    MyTerm->Clear();
-                                    MyTerm->RefreshMap();
-                                    return;
-                    }
+                switch(MyTerm->GetCharCmd(KY_CMD_ARROW_MODE)) {
+                case KY_CMD_NORTH:
+                case KY_CMD_NORTHEAST: 
+                case KY_CMD_NORTHWEST: 
+                    MyTerm->ScrollUp(WIN_DEBUG);
+                    break;
+                case KY_CMD_SOUTH:
+                case KY_CMD_SOUTHEAST: 
+                case KY_CMD_SOUTHWEST: 
+                    MyTerm->ScrollDown(WIN_DEBUG);
+                    break;
+                default:
+                    MyTerm->Clear();
+                    MyTerm->RefreshMap();
+                    return;
+                }
             }
-          }
-
-
-         break;        
-        case 20:
-          MyTerm->SetWin(WIN_INPUT);
-          MyTerm->Color(SKYBLUE);
-          MyTerm->Write(0,0,"Enter Item Type: ");
-          MyTerm->Color(MAGENTA);
-          MyTerm->ReadLine();
-          MyTerm->Clear();
-          i = LookupStr(T_CONSTNAMES,MyTerm->GetTypedString());
-          MyTerm->Color(SKYBLUE);
-          MyTerm->Write(0,0,"Enter Max Level: ");
-          MyTerm->Color(MAGENTA);
-          MyTerm->ReadLine();
-          MyTerm->Clear();
-          j = atoi(MyTerm->GetTypedString());
-          k = 0;
-          do {
+        }
+        break;        
+    case 20:
+        MyTerm->SetWin(WIN_INPUT);
+        MyTerm->Color(SKYBLUE);
+        MyTerm->Write(0,0,"Enter Item Type: ");
+        MyTerm->Color(MAGENTA);
+        MyTerm->ReadLine();
+        MyTerm->Clear();
+        i = LookupStr(T_CONSTNAMES,MyTerm->GetTypedString());
+        MyTerm->Color(SKYBLUE);
+        MyTerm->Write(0,0,"Enter Max Level: ");
+        MyTerm->Color(MAGENTA);
+        MyTerm->ReadLine();
+        MyTerm->Clear();
+        j = atoi(MyTerm->GetTypedString());
+        k = 0;
+        do {
             k++;
             it = Item::GenItem(0,m->dID,j,10,DungeonItems);
             if (it->Type == i)
-              break;
+                break;
             delete it;
+        }
+        while (k < 50);
+
+        if (k == 50)
+            break;
+        GainItem(it,false);
+        break;
+    case 21:
+        ch = MyTerm->ChoicePrompt("[D]ungeon items, [S]taple items or [C]hest items?","dsc");
+        if (ch == -1)
+            break;
+        MyTerm->SetWin(WIN_INPUT);
+        MyTerm->Color(SKYBLUE);
+        MyTerm->Write(0,0,"Enter Dungeon Level: ");
+        MyTerm->Color(MAGENTA);
+        MyTerm->ReadLine();
+        MyTerm->Clear();
+        j = atoi(MyTerm->GetTypedString());
+        MyTerm->Color(SKYBLUE);
+        MyTerm->Write(0,0,"Enter Character Luck: ");
+        MyTerm->Color(MAGENTA);
+        MyTerm->ReadLine();
+        MyTerm->Clear();
+        l = atoi(MyTerm->GetTypedString());
+
+        str.Empty();
+        for(i=0;i!=30;i++) {
+            switch (ch) {
+            case 'd': it = Item::GenItem(0,m->dID,j,l,DungeonItems); break;
+            case 's': it = Item::GenItem(0,m->dID,j,l,StapleItems); break;
+            case 'c': it = Item::GenItem(0,m->dID,j,l,ChestItems); break;
             }
-          while (k < 50);
-
-          if (k == 50)
-            break;
-          GainItem(it,false);
-         break;
-        case 21:
-          ch = MyTerm->ChoicePrompt("[D]ungeon items, [S]taple items or [C]hest items?","dsc");
-          if (ch == -1)
-            break;
-          MyTerm->SetWin(WIN_INPUT);
-          MyTerm->Color(SKYBLUE);
-          MyTerm->Write(0,0,"Enter Dungeon Level: ");
-          MyTerm->Color(MAGENTA);
-          MyTerm->ReadLine();
-          MyTerm->Clear();
-          j = atoi(MyTerm->GetTypedString());
-          MyTerm->Color(SKYBLUE);
-          MyTerm->Write(0,0,"Enter Character Luck: ");
-          MyTerm->Color(MAGENTA);
-          MyTerm->ReadLine();
-          MyTerm->Clear();
-          l = atoi(MyTerm->GetTypedString());
-
-          str.Empty();
-          for(i=0;i!=30;i++)
-            {
-              switch (ch) {
-                case 'd': it = Item::GenItem(0,m->dID,j,l,DungeonItems); break;
-                case 's': it = Item::GenItem(0,m->dID,j,l,StapleItems); break;
-                case 'c': it = Item::GenItem(0,m->dID,j,l,ChestItems); break;
-                }
-              it->SetKnown(0xFF);
-              str += Format("\n[%d] %s", it->ItemLevel(),
+            it->SetKnown(0xFF);
+            str += Format("\n[%d] %s", it->ItemLevel(),
                 (const char*) it->Name(NA_A|NA_LONG|NA_MECH));
-              delete it;
-            }
-          MyTerm->Box(str);
-         break;
-        case 22:
-          MyTerm->OptionManager(OPC_WIZARD);
-         break;
+            delete it;
+        }
+        MyTerm->Box(str);
+        break;
+    case 22:
+        MyTerm->OptionManager(OPC_WIZARD);
+        break;
 
-        case 25: // forget all targets
-         MapIterate(m,t,i) {
-          if (t->isCreature() && !t->isPlayer())
-            ((Creature *)t)->ts.Clear(); 
-         }
-         break; 
+    case 25: // forget all targets
+        MapIterate(m,t,i) {
+            if (t->isCreature() && !t->isPlayer())
+                ((Creature *)t)->ts.Clear(); 
+        }
+        break; 
 
-        case 26: // retarget
-         MapIterate(m,t,i) {
-          if (t->isCreature() && !t->isPlayer())
-            ((Creature *)t)->ts.Retarget((Creature *)t);
-         }
-         break;
+    case 26: // retarget
+        MapIterate(m,t,i) {
+            if (t->isCreature() && !t->isPlayer())
+                ((Creature *)t)->ts.Retarget((Creature *)t);
+        }
+        break;
 
-        case 27: 
-         MapIterate(m,t,i) {
-          if (t->isCreature())
-            ((Creature *)t)->CalcValues();
-         }
-         break;
+    case 27: 
+        MapIterate(m,t,i) {
+            if (t->isCreature())
+                ((Creature *)t)->CalcValues();
+        }
+        break;
 
-        case 29: 
-         MapIterate(m,t,i) {
-          if (t->isMonster())
-            ((Monster *)t)->GainPermStati(ENEMY_TO,t,SS_PERM,-1,-1,
-                                          myHandle,9);
-         }
-         break;
+    case 29: 
+        MapIterate(m,t,i) {
+            if (t->isMonster())
+                ((Monster *)t)->GainPermStati(ENEMY_TO,t,SS_PERM,-1,-1,
+                myHandle,9);
+        }
+        break;
 
-        case 28: 
-          mn = (Monster*)MyTerm->ChooseTarget();
-          if (!mn)
+    case 28: 
+        mn = (Monster*)MyTerm->ChooseTarget();
+        if (!mn)
             break;
-          if (!mn->isCreature())
-            { IPrint("Not a creature."); break; }
-          {
+        if (!mn->isCreature())
+        { IPrint("Not a creature."); break; }
+        {
             mn->MakeCompanion(this,PHD_FREEBIE);
-          }
-          break; 
+        }
+        break; 
 
-        case 30: 
-          mn = (Monster*)MyTerm->ChooseTarget();
-          if (!mn)
+    case 30: 
+        mn = (Monster*)MyTerm->ChooseTarget();
+        if (!mn)
             break;
-          if (!mn->isMonster())
-            { IPrint("Not a monster."); break; }
-          {
+        if (!mn->isMonster())
+        { IPrint("Not a monster."); break; }
+        {
             mn->PreBuff();
-          }
-          break; 
+        }
+        break; 
 
-         // ww: summon traps for testing
-        case 24: 
-          MyTerm->SetWin(WIN_INPUT);
-          MyTerm->Color(YELLOW);
-          MyTerm->Write(0,0,"Enter Trap Name: ");
-          MyTerm->Color(MAGENTA);
-          MyTerm->ReadLine();
-          MyTerm->Clear();
-          xID = FIND(MyTerm->GetTypedString());
-          if (!xID)
-          { IPrint("Can't find trap."); break; }
-          e.Clear();
-          if (MyTerm->EffectPrompt(e,Q_LOC,false,"Summon trap where?")) { 
+        // ww: summon traps for testing
+    case 24: 
+        MyTerm->SetWin(WIN_INPUT);
+        MyTerm->Color(YELLOW);
+        MyTerm->Write(0,0,"Enter Trap Name: ");
+        MyTerm->Color(MAGENTA);
+        MyTerm->ReadLine();
+        MyTerm->Clear();
+        xID = FIND(MyTerm->GetTypedString());
+        if (!xID)
+        { IPrint("Can't find trap."); break; }
+        e.Clear();
+        if (MyTerm->EffectPrompt(e,Q_LOC,false,"Summon trap where?")) { 
             Trap * t = new Trap( FIND("trap") , xID);
             t->PlaceAt(m,e.EXVal,e.EYVal);
-          } else IPrint("Aborting Trap Summoning.");
-          break; 
-
-        case 23:       
-          /*
-          bool mul; int16 mt, dp;
-          mul = yn("Generate for large room?");
-          MyTerm->SetWin(WIN_INPUT);
-          MyTerm->Color(SKYBLUE);
-          MyTerm->Write(0,0,"Enter Challenge Rating/Depth: ");
-          MyTerm->Color(MAGENTA);
-          MyTerm->ReadLine();
-          MyTerm->Clear();
-          dp = atoi(MyTerm->GetTypedString());
-          MyTerm->SetWin(WIN_INPUT);
-          MyTerm->Color(SKYBLUE);
-          MyTerm->Write(0,0,"Enter Encounter MType: ");
-          MyTerm->Color(MAGENTA);
-          MyTerm->ReadLine();
-          MyTerm->Clear();
-          mt = LookupStr(MA_CONSTNAMES,MyTerm->GetTypedString());
-          str.Empty();
-          for(i=0;i!=30;i++)
-            {
-              m->GnEncounter(EN_NOBUILD|EN_DUNGEON|(mul ? EN_MULTIPLE : 0)|
-                (mt ? EN_MTYPE : 0), dp,dp,mt,0,0,0,0,NULL);
-              //m->GnEncounter(EN_NOBUILD|EN_SINGLE|EN_MTYPE|EN_STREAMER,
-              //  dp,dp,mt, AL_NONGOOD,(rID)0,0,0,NULL);
-              str += m->PrintEncounter();
-            }
-          MyTerm->Box(WIN_SCREEN,BOX_WIDEBOX,YELLOW,GREY,str);
-          */
-          TestEncounterGen(T1);
-         break;
-        case 31:
-          ListLevelTreasure();
-         break;
-        case 32:
-          MyTerm->Box(WIN_SCREEN,BOX_WIDEBOX,PINK,GREY,
+        } else IPrint("Aborting Trap Summoning.");
+        break;
+    case 23:       
+        /*
+        bool mul; int16 mt, dp;
+        mul = yn("Generate for large room?");
+        MyTerm->SetWin(WIN_INPUT);
+        MyTerm->Color(SKYBLUE);
+        MyTerm->Write(0,0,"Enter Challenge Rating/Depth: ");
+        MyTerm->Color(MAGENTA);
+        MyTerm->ReadLine();
+        MyTerm->Clear();
+        dp = atoi(MyTerm->GetTypedString());
+        MyTerm->SetWin(WIN_INPUT);
+        MyTerm->Color(SKYBLUE);
+        MyTerm->Write(0,0,"Enter Encounter MType: ");
+        MyTerm->Color(MAGENTA);
+        MyTerm->ReadLine();
+        MyTerm->Clear();
+        mt = LookupStr(MA_CONSTNAMES,MyTerm->GetTypedString());
+        str.Empty();
+        for(i=0;i!=30;i++)
+        {
+        m->GnEncounter(EN_NOBUILD|EN_DUNGEON|(mul ? EN_MULTIPLE : 0)|
+        (mt ? EN_MTYPE : 0), dp,dp,mt,0,0,0,0,NULL);
+        //m->GnEncounter(EN_NOBUILD|EN_SINGLE|EN_MTYPE|EN_STREAMER,
+        //  dp,dp,mt, AL_NONGOOD,(rID)0,0,0,NULL);
+        str += m->PrintEncounter();
+        }
+        MyTerm->Box(WIN_SCREEN,BOX_WIDEBOX,YELLOW,GREY,str);
+        */
+        TestEncounterGen(T1);
+        break;
+    case 31:
+        ListLevelTreasure();
+        break;
+    case 32:
+        MyTerm->Box(WIN_SCREEN,BOX_WIDEBOX,PINK,GREY,
             theGame->CompileStatistics()); 
-         break;         
-        case 33:
-          ListChestContents();
-         break;
-        case 34:
-          MyTerm->SetWin(WIN_INPUT);
-          MyTerm->Color(YELLOW);
-          MyTerm->Write(0,0,"Enter God: ");
-          MyTerm->Color(SKYBLUE);
-          MyTerm->ReadLine();
-          MyTerm->Clear();
-          xID = FIND(MyTerm->GetTypedString());
-          if (!xID || RES(xID)->Type != T_TGOD)
-            {
-              IPrint("No such god.");
-              break;
-            }
-          GodID = xID;
-          setGodFlags(xID,GS_INVOLVED);
-          SacVals[theGame->GodNum(xID)][8] = 30000;
-          for (i=0;i!=10;i++)
+        break;         
+    case 33:
+        ListChestContents();
+        break;
+    case 34:
+        MyTerm->SetWin(WIN_INPUT);
+        MyTerm->Color(YELLOW);
+        MyTerm->Write(0,0,"Enter God: ");
+        MyTerm->Color(SKYBLUE);
+        MyTerm->ReadLine();
+        MyTerm->Clear();
+        xID = FIND(MyTerm->GetTypedString());
+        if (!xID || RES(xID)->Type != T_TGOD) {
+            IPrint("No such god.");
+            break;
+        }
+        GodID = xID;
+        setGodFlags(xID,GS_INVOLVED);
+        SacVals[theGame->GodNum(xID)][8] = 30000;
+        for (i=0;i!=10;i++)
             gainedFavor(xID);
-         break;
-        case 35:
-          for (i=0;i!=50;i++)
+        break;
+    case 35:
+        for (i=0;i!=50;i++)
             GainXP(1);
-          IPrint("Done.");
-         break;
-
-			}
-      MyTerm->RefreshMap();
-	}
+        IPrint("Done.");
+        break;
+    case 36:
+        e.Clear();
+        if (MyTerm->EffectPrompt(e,Q_LOC,false,"Change where?") == false)
+        { 
+            IPrint("Aborting terrain type change.");
+            break; 
+        }
+        xID = theGame->Find("curtain of flame");
+        m->WriteTerra(e.EXVal,e.EYVal,xID);
+        // mn->PlaceAt(m,e.EXVal,e.EYVal);
+    }
+    MyTerm->RefreshMap();
+}
 	
 void Player::ListLevelTreasure()
   {
