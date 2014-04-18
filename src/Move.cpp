@@ -578,8 +578,10 @@ IgnoreCreature:
   if (isMonster()) {
     if (m->FieldAt(tx,ty)) {
       // Badfields() is expensive!
-      if (m->FieldAt(tx,ty,thism->BadFields()))
-        return ABORT;
+      uint32 bf = thism->BadFields();
+      if (m->FieldAt(tx,ty,bf))
+        if (!m->FieldAt(x,y,bf))
+          return ABORT;
     } 
   }
   
