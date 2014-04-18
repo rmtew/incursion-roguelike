@@ -1610,357 +1610,352 @@ Dir Monster::SmartDirTo(int16 tx, int16 ty, bool is_pet)
 
 
 
-EvReturn Monster::Movement()
-{                            
-  int16 d,i; Dir *dirlist, tDir; 
-  bool nearWall, isIncor, oppViable, canMeld;
-  Feature *f; Creature *follow;
-  bool isAfraid = HasStati(AFRAID);
+EvReturn Monster::Movement() {
+    int16 d,i; Dir *dirlist, tDir; 
+    bool nearWall, isIncor, oppViable, canMeld;
+    Feature *f; Creature *follow;
+    bool isAfraid = HasStati(AFRAID);
 
-  if (ts.hasTargetOfType(OrderStandStill))
-    return ABORT; 
+    if (ts.hasTargetOfType(OrderStandStill))
+        return ABORT; 
 
-  /* If you ALREADY ARE near Fearless Leader, don't
-     either walk away, or walk in circles. */
-  if (ts.hasTargetOfType(OrderWalkNearMe)) {
-    Target *t;
-    if ((getLeader() && isBeside(getLeader())) ||
-        ((t=ts.getTargetOfType(OrderWalkNearMe)) &&
-           t->GetThingOrNULL() && isBeside(t->GetThing())))
-      if (!rtarg)
-        return ABORT;
+    /* If you ALREADY ARE near Fearless Leader, don't
+    either walk away, or walk in circles. */
+    if (ts.hasTargetOfType(OrderWalkNearMe)) {
+        Target *t;
+        if ((getLeader() && isBeside(getLeader())) ||
+            ((t=ts.getTargetOfType(OrderWalkNearMe)) &&
+            t->GetThingOrNULL() && isBeside(t->GetThing())))
+            if (!rtarg)
+                return ABORT;
     }
-        
-        
-  /* The rules of monster movement are thus:
 
-   * Every target on the map has an x/y gravity of its own, 
-   based on its RateAsTarget intensity, the distance we
-   are from it, whether its visible, et al.
-   * The number one rule is that we never move in the exact
-   opposite direction of the direction we moved last round,
-   unless it's the *only* move possible.
-   * If we don't have a clear path to any of our targets, we
-   never move in a way that will take us away from all walls.
-   This gives monsters a fairly decent 'maze search' algorithm
-   to outwit players trying to hide.
-   * We always move, even if it's in the exact opposite direction
-   that we really want to be going. The only exceptions to this
-   are the two rules immediately above.
 
-   */
-  int32 wx, wy; int8 tx,ty; Dir r;
-    
+    /* The rules of monster movement are thus:
 
-  static Dir EastDirs[] = 
-  { EAST, SOUTHEAST, NORTHEAST, SOUTH, NORTH, NORTHWEST, SOUTHWEST, WEST, -1 };
-  static Dir WestDirs[] = 
-  { WEST, NORTHWEST, SOUTHWEST, SOUTH, NORTH, NORTHEAST, SOUTHEAST, EAST, -1 };
-  static Dir NorthDirs[] = 
-  { NORTH, NORTHWEST, NORTHEAST, EAST, WEST, SOUTHWEST, SOUTHEAST, SOUTH, -1 };
-  static Dir SouthDirs[] = 
-  { SOUTH, SOUTHEAST, SOUTHWEST, WEST, EAST, NORTHWEST, NORTHEAST, NORTH, -1 };
-  static Dir NEDirs[] = 
-  { NORTHEAST, NORTH, EAST, NORTHWEST, SOUTHEAST, SOUTH, WEST, SOUTHWEST, -1 };
-  static Dir SEDirs[] = 
-  { SOUTHEAST, SOUTH, EAST, NORTHEAST, SOUTHWEST, NORTH, WEST, NORTHWEST, -1 };
-  static Dir NWDirs[] = 
-  { NORTHWEST, NORTH, WEST, NORTHEAST, SOUTHWEST, SOUTH, EAST, SOUTHEAST, -1 };
-  static Dir SWDirs[] = 
-  { SOUTHWEST, SOUTH, WEST, NORTHWEST, SOUTHEAST, NORTH, EAST, NORTHEAST, -1 };
+    * Every target on the map has an x/y gravity of its own, 
+    based on its RateAsTarget intensity, the distance we
+    are from it, whether its visible, et al.
+    * The number one rule is that we never move in the exact
+    opposite direction of the direction we moved last round,
+    unless it's the *only* move possible.
+    * If we don't have a clear path to any of our targets, we
+    never move in a way that will take us away from all walls.
+    This gives monsters a fairly decent 'maze search' algorithm
+    to outwit players trying to hide.
+    * We always move, even if it's in the exact opposite direction
+    that we really want to be going. The only exceptions to this
+    are the two rules immediately above.
 
-  // IDPrint(NULL,(Format("%s moving from (%d,%d).",(const char*)Name(), x, y))); 
+    */
+    int32 wx, wy; int8 tx,ty; Dir r;
 
-  wx = wy = 0; dirlist = NULL;
-  bool any_objective;
-  any_objective = false;
-  RetryTargets:
-  for (i=0; i<ts.tCount; i++) {
-    if (!ts.t[i].isValid()) 
-      continue; 
-    else switch (ts.t[i].type) {
-      case TargetEnemy:
-      case OrderAttackTarget:
-        if (ts.t[i].vis == 0)
-          continue;
-      case TargetItem: 
+    static Dir EastDirs[] = 
+    { EAST, SOUTHEAST, NORTHEAST, SOUTH, NORTH, NORTHWEST, SOUTHWEST, WEST, -1 };
+    static Dir WestDirs[] = 
+    { WEST, NORTHWEST, SOUTHWEST, SOUTH, NORTH, NORTHEAST, SOUTHEAST, EAST, -1 };
+    static Dir NorthDirs[] = 
+    { NORTH, NORTHWEST, NORTHEAST, EAST, WEST, SOUTHWEST, SOUTHEAST, SOUTH, -1 };
+    static Dir SouthDirs[] = 
+    { SOUTH, SOUTHEAST, SOUTHWEST, WEST, EAST, NORTHWEST, NORTHEAST, NORTH, -1 };
+    static Dir NEDirs[] = 
+    { NORTHEAST, NORTH, EAST, NORTHWEST, SOUTHEAST, SOUTH, WEST, SOUTHWEST, -1 };
+    static Dir SEDirs[] = 
+    { SOUTHEAST, SOUTH, EAST, NORTHEAST, SOUTHWEST, NORTH, WEST, NORTHWEST, -1 };
+    static Dir NWDirs[] = 
+    { NORTHWEST, NORTH, WEST, NORTHEAST, SOUTHWEST, SOUTH, EAST, SOUTHEAST, -1 };
+    static Dir SWDirs[] = 
+    { SOUTHWEST, SOUTH, WEST, NORTHWEST, SOUTHEAST, NORTH, EAST, NORTHEAST, -1 };
+
+    // IDPrint(NULL,(Format("%s moving from (%d,%d).",(const char*)Name(), x, y))); 
+
+    wx = wy = 0; dirlist = NULL;
+    bool any_objective;
+    any_objective = false;
+
+RetryTargets:
+    for (i=0; i<ts.tCount; i++) {
+        if (!ts.t[i].isValid()) 
+            continue; 
+
+        switch (ts.t[i].type) {
+        case TargetEnemy:
+        case OrderAttackTarget:
+            if (ts.t[i].vis == 0)
+                continue;
+        case TargetItem: 
         /*
-      case TargetLeader:
-      case TargetSummoner:
-      case TargetMaster:
-      case TargetAlly:
-      */
-      case TargetWander:
-          any_objective = true;
-          break; // these are OK things to chase! 
-      default: 
-          continue;
-    } 
+        case TargetLeader:
+        case TargetSummoner:
+        case TargetMaster:
+        case TargetAlly:
+        */
+        case TargetWander:
+            any_objective = true;
+            break; // these are OK things to chase! 
+        default: 
+            continue;
+        } 
 
-    /* If the enemy is getting too close and we're a ranged fighter,
-       he instead becomes a strongly /negative/ gravity, repulsing the
-       monster until it's back at a safe distance for it's favoured
-       tactic of ranged combat. */
-    d = max(1, ts.t[i].DistanceFrom(this));
-    if (ts.t[i].type == TargetWander)
-      d = 1;
-    else if ((ts.t[i].type == TargetEnemy ||
-              ts.t[i].type == OrderAttackTarget) && isAfraid)
-      d = -d;
-    else if ((d <= 4) && (ts.t[i].type == TargetEnemy ||
-                          ts.t[i].type == OrderAttackTarget) && 
-        isAvoiding && !isEnraged)
-      d = -1;
-    else if ((d <= 5) && (ts.t[i].type == TargetEnemy ||
-                          ts.t[i].type == OrderAttackTarget) && isAvoiding &&
-        !isEnraged && HasStati(AVOID_MELEE,-1,ts.t[i].GetThing()))
-      d = -1;
+        /* If the enemy is getting too close and we're a ranged fighter,
+        he instead becomes a strongly /negative/ gravity, repulsing the
+        monster until it's back at a safe distance for it's favoured
+        tactic of ranged combat. */
+        d = max(1, ts.t[i].DistanceFrom(this));
+        if (ts.t[i].type == TargetWander)
+            d = 1;
+        else if ((ts.t[i].type == TargetEnemy ||
+            ts.t[i].type == OrderAttackTarget) && isAfraid)
+            d = -d;
+        else if ((d <= 4) && (ts.t[i].type == TargetEnemy ||
+            ts.t[i].type == OrderAttackTarget) && 
+            isAvoiding && !isEnraged)
+            d = -1;
+        else if ((d <= 5) && (ts.t[i].type == TargetEnemy ||
+            ts.t[i].type == OrderAttackTarget) && isAvoiding &&
+            !isEnraged && HasStati(AVOID_MELEE,-1,ts.t[i].GetThing()))
+            d = -1;
 
 
-    ASSERT(i >= 0);
-    ASSERT(i < ts.tCount);
-    tDir = SmartDirTo(ts.t[i].X(), ts.t[i].Y());
-    if (tDir == CENTER)
-      continue;
-    wx += (100 * ts.t[i].priority / d) * DirX[tDir];
-    wy += (100 * ts.t[i].priority / d) * DirY[tDir];
+        ASSERT(i >= 0);
+        ASSERT(i < ts.tCount);
+        tDir = SmartDirTo(ts.t[i].X(), ts.t[i].Y());
+        if (tDir == CENTER)
+            continue;
+        wx += (100 * ts.t[i].priority / d) * DirX[tDir];
+        wy += (100 * ts.t[i].priority / d) * DirY[tDir];
     }
-  if (!any_objective) {
-    ts.Wanderlust(this);
-    any_objective = true;
-    goto RetryTargets;
-    }
-
-  if (ts.hasTargetOfType(OrderWalkToPoint)) {
-    Target * t = ts.getTargetOfType(OrderWalkToPoint);
-    tDir = SmartDirTo(t->X(),t->Y(),true);
-    if (tDir != CENTER) {
-      wx = DirX[tDir];
-      wy = DirY[tDir];
-      goto DoneFollow;
-      } 
-    } 
-  if (ts.hasTargetOfType(OrderWalkInFront)) {
-    follow = ts.getLeader();
-    if (ts.getTargetOfType(OrderWalkInFront)->GetThingOrNULL())
-      follow = (Creature*)ts.getTargetOfType(OrderWalkInFront)->GetThing();
-    if (!follow)
-      goto DoneFollow;
-    Dir lastDir = follow->LastMoveDir;
-    tx = follow->x + (DirX[lastDir] * 3);
-    ty = follow->y + (DirY[lastDir] * 3);
-    tDir = SmartDirTo(tx,ty,follow->isPlayer());
-    if (tDir != CENTER) {
-      wx = DirX[tDir];
-      wy = DirY[tDir];
-      goto DoneFollow;
-      } 
-    } 
-  if (ts.hasTargetOfType(OrderWalkInBack)) {
-    follow = ts.getLeader();
-    if (ts.getTargetOfType(OrderWalkInBack)->GetThingOrNULL())
-      follow = (Creature*)ts.getTargetOfType(OrderWalkInBack)->GetThing();
-    if (!follow)
-      goto DoneFollow;
-    Dir lastDir = follow->LastMoveDir;
-    tx = follow->x - (DirX[lastDir]);
-    ty = follow->y - (DirY[lastDir]);
-    tDir = SmartDirTo(tx,ty,follow->isPlayer());
-    if (tDir != CENTER) {
-      wx = DirX[tDir];
-      wy = DirY[tDir];
-      goto DoneFollow;
-      } 
-    } 
-  if (ts.hasTargetOfType(OrderWalkNearMe)) { 
-    follow = ts.getLeader();
-    if (ts.getTargetOfType(OrderWalkNearMe)->GetThingOrNULL())
-      follow = (Creature*)ts.getTargetOfType(OrderWalkNearMe)->GetThing();
-    if (!follow)
-      goto DoneFollow;
-    tDir = SmartDirTo(follow->x,follow->y,follow->isPlayer());
-    if (tDir != CENTER) {
-      wx = DirX[tDir];
-      wy = DirY[tDir];
-      goto DoneFollow;
-      } 
-    } 
-  if ((follow = ts.getLeader()) && 
-             (dist(x,y,follow->x,follow->y) > 3)) { 
-    tDir = SmartDirTo(follow->x,follow->y,follow->isPlayer());
-    if (tDir != CENTER) {
-      wx = DirX[tDir];
-      wy = DirY[tDir];
-      goto DoneFollow;
-      } 
-    }
-  DoneFollow:
-    
-  if (abs(wx)*2 < abs(wy))
-    wx = 0;
-  else if (abs(wy)*2 < abs(wx))
-    wy = 0;
-
-  if (!wx && !wy) {
-    if (/* targVis && --> an rtarg is always seen ... */ rtarg) {
-      wx += DirX[DirTo(rtarg)];
-      wy += DirY[DirTo(rtarg)];
-    }
-    else {
-      if (!(StateFlags & MS_GUARDING) &&
-          !ts.hasTargetOfType(TargetWander) && 
-          !ts.getLeader())
+    if (!any_objective) {
         ts.Wanderlust(this);
-      return ABORT;
+        any_objective = true;
+        goto RetryTargets;
     }
-  }
 
-  d = -1; 
-  bool first = true;
-  uint32 bf = 0; 
-  for(i=0;m->Fields[i];i++) {
-    if (first) {
-      bf = BadFields(); // expensive calculation
-      first = false;
+    if (ts.hasTargetOfType(OrderWalkToPoint)) {
+        Target * t = ts.getTargetOfType(OrderWalkToPoint);
+        tDir = SmartDirTo(t->X(),t->Y(),true);
+        if (tDir != CENTER) {
+            wx = DirX[tDir];
+            wy = DirY[tDir];
+            goto DoneFollow;
+        } 
     } 
-    if (m->Fields[i]->FType & bf)
-      if (dist(x,y,m->Fields[i]->cx,m->Fields[i]->cy) <= m->Fields[i]->rad)
-        d = OppositeDir(DirTo(m->Fields[i]->cx,m->Fields[i]->cy));
-  }
-  if (isEnraged)
-    d = DirTo(GetStatiObj(ENRAGED));
-  if (d != -1) {
-    wx += DirX[d]*1000;
-    wy += DirY[d]*1000;
-  }
 
-  if (wx>0 && wy>0)
-    dirlist = SEDirs;
-  else if (wx>0 && wy<0)
-    dirlist = NEDirs;
-  else if (wx<0 && wy<0)
-    dirlist = NWDirs;
-  else if (wx<0 && wy>0)
-    dirlist = SWDirs;
-  else if (wx>0)
-    dirlist = EastDirs;
-  else if (wx<0)
-    dirlist = WestDirs;
-  else if (wy>0)
-    dirlist = SouthDirs;
-  else
-    dirlist = NorthDirs;
+    if (ts.hasTargetOfType(OrderWalkInFront)) {
+        follow = ts.getLeader();
+        if (ts.getTargetOfType(OrderWalkInFront)->GetThingOrNULL())
+            follow = (Creature*)ts.getTargetOfType(OrderWalkInFront)->GetThing();
+        if (!follow)
+            goto DoneFollow;
 
-  // IDPrint(NULL,(Format("%s moving via (%d,%d).",(const char*)Name(), wx, wy))); 
+        Dir lastDir = follow->LastMoveDir;
+        tx = follow->x + (DirX[lastDir] * 3);
+        ty = follow->y + (DirY[lastDir] * 3);
+        tDir = SmartDirTo(tx,ty,follow->isPlayer());
+        if (tDir != CENTER) {
+            wx = DirX[tDir];
+            wy = DirY[tDir];
+            goto DoneFollow;
+        } 
+    } 
 
-  ASSERT(dirlist);
+    if (ts.hasTargetOfType(OrderWalkInBack)) {
+        follow = ts.getLeader();
+        if (ts.getTargetOfType(OrderWalkInBack)->GetThingOrNULL())
+            follow = (Creature*)ts.getTargetOfType(OrderWalkInBack)->GetThing();
+        if (!follow)
+            goto DoneFollow;
 
-  nearWall = m->besideWall(x,y);
-  isIncor  = onPlane() > PHASE_VORTEX; 
-  canMeld  = HasAbility(CA_EARTHMELD);
-  oppViable = false;
+        Dir lastDir = follow->LastMoveDir;
+        tx = follow->x - (DirX[lastDir]);
+        ty = follow->y - (DirY[lastDir]);
+        tDir = SmartDirTo(tx,ty,follow->isPlayer());
+        if (tDir != CENTER) {
+            wx = DirX[tDir];
+            wy = DirY[tDir];
+            goto DoneFollow;
+        } 
+    } 
+    if (ts.hasTargetOfType(OrderWalkNearMe)) { 
+        follow = ts.getLeader();
+        if (ts.getTargetOfType(OrderWalkNearMe)->GetThingOrNULL())
+            follow = (Creature*)ts.getTargetOfType(OrderWalkNearMe)->GetThing();
+        if (!follow)
+            goto DoneFollow;
 
-  do {
+        tDir = SmartDirTo(follow->x,follow->y,follow->isPlayer());
+        if (tDir != CENTER) {
+            wx = DirX[tDir];
+            wy = DirY[tDir];
+            goto DoneFollow;
+        } 
+    } 
 
-    tx = x + DirX[*dirlist];
-    ty = y + DirY[*dirlist]; 
-
-    // IDPrint(NULL,(Format("%s (%d,%d)->(%d,%d)?.",(const char*)Name(), x, y,tx,ty))); 
-
-    if (!m->InBounds(tx,ty))
-      goto NoGood;
-
-
-    if (f = m->FDoorAt(tx,ty)) {
-      if (!isIncor && f->Type == T_DOOR)
-      {
-        /* Assumption: no Incor creatures can open doors. */
-        if (!(((Door*)f)->DoorFlags & DF_OPEN))
-          OpenDoor((Door*)f);
-        if (Timeout || !m)
-          return ABORT;
-      }
+    if ((follow = ts.getLeader()) && 
+        (dist(x,y,follow->x,follow->y) > 3)) { 
+            tDir = SmartDirTo(follow->x,follow->y,follow->isPlayer());
+            if (tDir != CENTER) {
+                wx = DirX[tDir];
+                wy = DirY[tDir];
+                goto DoneFollow;
+            } 
     }
-    if (!m)
-      return ABORT;
-    for (f=m->FFeatureAt(tx,ty);f;f=m->NFeatureAt(tx,ty)) {
-      if (f->Flags & F_XSOLID)
-        goto NoGood;
-      if (!isIncor && f->Flags & F_SOLID)
-        goto NoGood;
+DoneFollow:
+
+    if (abs(wx)*2 < abs(wy))
+        wx = 0;
+    else if (abs(wy)*2 < abs(wx))
+        wy = 0;
+
+    if (!wx && !wy) {
+        if (/* targVis && --> an rtarg is always seen ... */ rtarg) {
+            wx += DirX[DirTo(rtarg)];
+            wy += DirY[DirTo(rtarg)];
+        } else {
+            if (!(StateFlags & MS_GUARDING) &&
+                !ts.hasTargetOfType(TargetWander) && 
+                !ts.getLeader())
+                ts.Wanderlust(this);
+            return ABORT;
+        }
     }
 
-    if (!isIncor && !canMeld && m->At(tx,ty).Solid)
-      goto NoGood;
+    d = -1; 
+    bool first = true;
+    uint32 bf = 0; 
+    for (i=0;m->Fields[i];i++) {
+        if (first) {
+            bf = BadFields(); // expensive calculation
+            first = false;
+        } 
+        if (m->Fields[i]->FType & bf)
+            if (dist(x,y,m->Fields[i]->cx,m->Fields[i]->cy) <= m->Fields[i]->rad)
+                d = OppositeDir(DirTo(m->Fields[i]->cx,m->Fields[i]->cy));
+    }
+    if (isEnraged)
+        d = DirTo(GetStatiObj(ENRAGED));
+    if (d != -1) {
+        wx += DirX[d]*1000;
+        wy += DirY[d]*1000;
+    }
 
-    /*
-    if (nearWall && !targVis)
-      if (!m->besideWall(tx,ty))
+    if (wx>0 && wy>0)
+        dirlist = SEDirs;
+    else if (wx>0 && wy<0)
+        dirlist = NEDirs;
+    else if (wx<0 && wy<0)
+        dirlist = NWDirs;
+    else if (wx<0 && wy>0)
+        dirlist = SWDirs;
+    else if (wx>0)
+        dirlist = EastDirs;
+    else if (wx<0)
+        dirlist = WestDirs;
+    else if (wy>0)
+        dirlist = SouthDirs;
+    else
+        dirlist = NorthDirs;
+
+    // IDPrint(NULL,(Format("%s moving via (%d,%d).",(const char*)Name(), wx, wy))); 
+
+    ASSERT(dirlist);
+
+    nearWall = m->besideWall(x,y);
+    isIncor  = onPlane() > PHASE_VORTEX; 
+    canMeld  = HasAbility(CA_EARTHMELD);
+    oppViable = false;
+
+    do {
+        tx = x + DirX[*dirlist];
+        ty = y + DirY[*dirlist]; 
+
+        // IDPrint(NULL,(Format("%s (%d,%d)->(%d,%d)?.",(const char*)Name(), x, y,tx,ty))); 
+
+        if (!m->InBounds(tx,ty))
+            goto NoGood;
+
+        if (f = m->FDoorAt(tx,ty)) {
+            if (!isIncor && f->Type == T_DOOR) {
+                /* Assumption: no Incor creatures can open doors. */
+                if (!(((Door*)f)->DoorFlags & DF_OPEN))
+                    OpenDoor((Door*)f);
+                if (Timeout || !m)
+                    return ABORT;
+            }
+        }
+        if (!m)
+            return ABORT;
+
+        for (f=m->FFeatureAt(tx,ty);f;f=m->NFeatureAt(tx,ty)) {
+            if (f->Flags & F_XSOLID)
+                goto NoGood;
+            if (!isIncor && f->Flags & F_SOLID)
+                goto NoGood;
+        }
+
+        if (!isIncor && !canMeld && m->At(tx,ty).Solid)
+            goto NoGood;
+
+        /*
+        if (nearWall && !targVis)
+        if (!m->besideWall(tx,ty))
         goto NoGood;
         */
-    /*
-    if (*dirlist == OppositeDir(LastMoveDir))
-    {
-      oppViable = true;
-      goto NoGood;
-    }
-    */
-    
-    Dir cdir;
-    if ((cdir = GetStatiVal(CHARGING)) != -1)
-      if (!isSimilarDir(cdir,*dirlist)) {
-        RemoveStati(CHARGING);
-        //IDPrint("","The <Obj1> breaks off <his:Obj1> charge.", this);
+        /*
+        if (*dirlist == OppositeDir(LastMoveDir))
+        {
+        oppViable = true;
+        goto NoGood;
         }
-    if (HasMFlag(M_CHARGE) || (InSlot(SL_WEAPON) &&
-          InSlot(SL_WEAPON)->HasIFlag(WT_CHARGE)))
-      if (canChargeInDir(*dirlist) && !HasMFlag(M_NO_CHARGE)
-            && !HasStati(CHARGING)) {
-        GainPermStati(CHARGING,NULL,SS_MISC,*dirlist,0,0);
-        //IDPrint("","The <Obj1> charges!", this);
+        */
+
+        Dir cdir;
+        if ((cdir = GetStatiVal(CHARGING)) != -1)
+            if (!isSimilarDir(cdir,*dirlist)) {
+                RemoveStati(CHARGING);
+                //IDPrint("","The <Obj1> breaks off <his:Obj1> charge.", this);
+            }
+        if (HasMFlag(M_CHARGE) || (InSlot(SL_WEAPON) && InSlot(SL_WEAPON)->HasIFlag(WT_CHARGE)))
+            if (canChargeInDir(*dirlist) && !HasMFlag(M_NO_CHARGE) && !HasStati(CHARGING)) {
+                GainPermStati(CHARGING,NULL,SS_MISC,*dirlist,0,0);
+                //IDPrint("","The <Obj1> charges!", this);
+            }
+
+        if (ThrowDir(EV_MOVE,*dirlist,this) != ABORT) {
+            LastMoveDir = *dirlist;
+            goto DoneMove;
         }
 
-    if (ThrowDir(EV_MOVE,*dirlist,this) != ABORT)
-    {
-      LastMoveDir = *dirlist;
-      goto DoneMove;
-    }
-
-    if (!m)
-      return DONE;
+        if (!m)
+            return DONE;
 
 NoGood:
-    dirlist++;
+        dirlist++;
+    } while((*dirlist) != -1);
 
-  }
-  while((*dirlist) != -1);
+    if (oppViable)
+        if (ThrowDir(EV_MOVE,OppositeDir(LastMoveDir),this) != ABORT) {
+            LastMoveDir = OppositeDir(LastMoveDir);
+            goto DoneMove;
+        }
 
-  if (oppViable)
-    if (ThrowDir(EV_MOVE,OppositeDir(LastMoveDir),this) != ABORT) 
-    {
-      LastMoveDir = OppositeDir(LastMoveDir);
-      goto DoneMove;
-    }
-
-  return ABORT;
+    return ABORT;
 
 DoneMove:
-  /* If we're wandering, and we're stuck in a corner, change the 
-     direction that we wander in. */
-  if ( (x == Recent[0] && y == Recent[1]) ||
-      (x == Recent[2] && y == Recent[3]) ||
-      (x == Recent[4] && y == Recent[5]) )
-    if (ts.hasTargetOfType(TargetWander))
-      ts.Wanderlust(this); 
+    /* If we're wandering, and we're stuck in a corner, change the 
+    direction that we wander in. */
+    if ((x == Recent[0] && y == Recent[1]) || (x == Recent[2] && y == Recent[3]) || (x == Recent[4] && y == Recent[5]))
+        if (ts.hasTargetOfType(TargetWander))
+            ts.Wanderlust(this); 
 
-  Recent[0] = Recent[2];
-  Recent[1] = Recent[3];
-  Recent[2] = Recent[4];
-  Recent[3] = Recent[5];
-  Recent[4] = x;
-  Recent[5] = y;
+    Recent[0] = Recent[2];
+    Recent[1] = Recent[3];
+    Recent[2] = Recent[4];
+    Recent[3] = Recent[5];
+    Recent[4] = x;
+    Recent[5] = y;
 
-  return DONE;
+    return DONE;
 }
 
 EvReturn Monster::OpenDoor(Door *d)
