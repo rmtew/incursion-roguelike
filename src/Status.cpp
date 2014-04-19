@@ -1400,22 +1400,21 @@ void Creature::StatiMessage(int16 n,int16 val, bool ending)
 /////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////
 
-void Map::UpdateFields()
-  {
+void Map::UpdateFields() {
     Field *f; int16 i;
     for(i=0;Fields[i];i++) {
-      if (Fields[i]->Dur)
-        Fields[i]->Dur--;
-      }
+        /* Avoid permanent and persistent fields, whose duration is constant and negative. */
+        if (Fields[i]->Dur > 1)
+            Fields[i]->Dur--;
+    }
 
-    StartAgain:
+StartAgain:
     for(i=0;Fields[i];i++)
-      if (Fields[i]->Dur == 1)
-        {
-          RemoveField(Fields[i]);
-          goto StartAgain;
+        if (Fields[i]->Dur == 1) {
+            RemoveField(Fields[i]);
+            goto StartAgain;
         }
-  }
+}
 
 void Map::RemoveField(Field *f)
   {
