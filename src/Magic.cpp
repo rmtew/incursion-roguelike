@@ -2360,6 +2360,15 @@ EvReturn Creature::Cast(EventInfo &e) {
         return ABORT;
     }
 
+    if (TEFF(e.eID)->HasFlag(EF_PERSISTANT) || TEFF(e.eID)->HasFlag(EF_PERMANANT))
+        for(j=0;m->Fields[j];j++)
+            if (m->Fields[j]->eID == e.eID && m->Fields[j]->Creator == myHandle)
+                if (m->Fields[j]->FType & FI_MOBILE) {
+                    IPrint("You already have <9><Res><7> cast on you, "
+                        "a second casting would have no effect.", e.eID);
+                    return ABORT;
+                }
+
     if (isCharacter())
         if (thisc->Spells[e.sp] & SP_STAFF)
             e.isStaffSpell = true;

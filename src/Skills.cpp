@@ -276,8 +276,7 @@ void Player::UseMenu(int32 SuppliedIndex)
       }
   }
 
-void Player::CancelMenu()
-{
+void Player::CancelMenu() {
   /* The cancel menu lists:
    * Active Spells
    * Wild Shape
@@ -296,127 +295,152 @@ Later:
    * Cancel (some) Walls (Wall of Force advantage over Stone)
 
    */
-  rID spells[1024] = { 0, };
-  int num_spell = 1;
-  int i, c = 0;
+    rID spells[1024] = { 0, };
+    Field *fields[100] = { 0, };
+    int num_spell = 1, num_field = 1;
+    int i, j, c = 0;
 
-  StatiIter(this)
-    if (S->eID && RES(S->eID)->Type == T_TEFFECT) {
-      if (S->h && oThing(S->h)->isItem())
-        if (oItem(S->h)->Owner() != this)
-          continue;    
-      if (!TEFF(S->eID)->HasFlag(EF_CANCEL)) continue; 
-      bool found = false; 
-      for (i=0; i<num_spell; i++)
-        if (spells[i] == S->eID)
-          found = true;
-      if (found) continue; 
+    StatiIter(this)
+        if (S->eID && RES(S->eID)->Type == T_TEFFECT) {
+            if (S->h && oThing(S->h)->isItem())
+                if (oItem(S->h)->Owner() != this)
+                    continue;    
 
-      spells[num_spell] = S->eID;
+            if (!TEFF(S->eID)->HasFlag(EF_CANCEL)) continue; 
 
-      MyTerm->LOption(XPrint("Drop <9><Str><7>",
-          NAME(S->eID)),num_spell); 
+            bool found = false; 
+            for (i=0; i<num_spell; i++)
+                if (spells[i] == S->eID)
+                    found = true;
+            if (found) continue; 
 
-      num_spell++; c++;
+            spells[num_spell] = S->eID;
 
-    } else switch (S->Nature) {
-        case TUMBLING: c++;
-          MyTerm->LOption("Stop Tumbling",0-S->Nature);
-          break;
-        case MOUNTED: c++;
-          MyTerm->LOption(Format("Dismount %s",
-                (const char*)(oThing(S->h))->Name(NA_THE)),0-S->Nature);
-          break;
-        case CHARGING: c++;
-          MyTerm->LOption("Break off your charge",0-S->Nature);
-          break;
-        case AUTO_CHARGE: c++;
-          MyTerm->LOption("Stop automatically charging",0-S->Nature);
-          break;
-        case DISGUISED: c++;
-          MyTerm->LOption("Remove your Disguise",0-S->Nature);
-          break;        
-        case SINGING: c++;
-          MyTerm->LOption("Stop Singing",0-S->Nature);
-          break;
-        case RAGING: c++;
-          MyTerm->LOption("Stop Raging",0-S->Nature);
-          break;
-        case FLAWLESS_DODGE: c++;
-          MyTerm->LOption("Turn Off Flawless Dodge",0-S->Nature);
-          break;
-        case POLYMORPH: 
-          if (S->h == myHandle) { 
+            MyTerm->LOption(XPrint("Drop <9><Str><7>",
+                NAME(S->eID)),num_spell); 
+
+            num_spell++; c++;
+        } else
+            switch (S->Nature) {
+            case TUMBLING: c++;
+                MyTerm->LOption("Stop Tumbling",0-S->Nature);
+                break;
+            case MOUNTED: c++;
+                MyTerm->LOption(Format("Dismount %s",
+                    (const char*)(oThing(S->h))->Name(NA_THE)),0-S->Nature);
+                break;
+            case CHARGING: c++;
+                MyTerm->LOption("Break off your charge",0-S->Nature);
+                break;
+            case AUTO_CHARGE: c++;
+                MyTerm->LOption("Stop automatically charging",0-S->Nature);
+                break;
+            case DISGUISED: c++;
+                MyTerm->LOption("Remove your Disguise",0-S->Nature);
+                break;        
+            case SINGING: c++;
+                MyTerm->LOption("Stop Singing",0-S->Nature);
+                break;
+            case RAGING: c++;
+                MyTerm->LOption("Stop Raging",0-S->Nature);
+                break;
+            case FLAWLESS_DODGE: c++;
+                MyTerm->LOption("Turn Off Flawless Dodge",0-S->Nature);
+                break;
+            case POLYMORPH: 
+                if (S->h == myHandle) { 
+                    c++;
+                    MyTerm->LOption(XPrint("Return to <Res> form",RaceID),0-S->Nature);
+                }
+                break;
+            case HIDING: c++;
+                MyTerm->LOption("Stop Hiding",0-S->Nature);
+                break;
+            case FLURRYING: c++;
+                MyTerm->LOption("Break off Flurry of Blows", 0-S->Nature);
+                break;
+            case DEFENSIVE: c++;
+                MyTerm->LOption("Stop Fighting Defensively",0-S->Nature);
+                break;
+            case EYES_AVERTED: c++;
+                MyTerm->LOption("Stop Averting Your Eyes",0-S->Nature);
+                break;
+            case BLINDNESS:
+                if (S->Val == BLIND_EYES_CLOSED) { c++;
+                MyTerm->LOption("Open Your Eyes",0-S->Nature);
+                } 
+                break; 
+            case SPRINTING: c++;
+                MyTerm->LOption("Stop Sprinting",0-S->Nature);
+                break;
+            }
+    StatiIterEnd(this)
+
+    if (isPlayer()) {
+        if (thisp->DigMode) {
+            MyTerm->LOption("Stop Mining", 2000 + SK_MINING);
             c++;
-            MyTerm->LOption(XPrint("Return to <Res> form",RaceID),0-S->Nature);
-          }
-          break;
-        case HIDING: c++;
-          MyTerm->LOption("Stop Hiding",0-S->Nature);
-          break;
-        case FLURRYING: c++;
-          MyTerm->LOption("Break off Flurry of Blows", 0-S->Nature);
-          break;
-        case DEFENSIVE: c++;
-          MyTerm->LOption("Stop Fighting Defensively",0-S->Nature);
-          break;
-        case EYES_AVERTED: c++;
-          MyTerm->LOption("Stop Averting Your Eyes",0-S->Nature);
-          break;
-        case BLINDNESS:
-          if (S->Val == BLIND_EYES_CLOSED) { c++;
-            MyTerm->LOption("Open Your Eyes",0-S->Nature);
-          } 
-          break; 
-        case SPRINTING: c++;
-          MyTerm->LOption("Stop Sprinting",0-S->Nature);
-          break;
-      }
-  StatiIterEnd(this)
+        }
 
-  if (isPlayer())
-    if (thisp->DigMode) {
-      MyTerm->LOption("Stop Mining", 2000 + SK_MINING);
-      c++;
-      }
+        for(j=0;m->Fields[j];j++)
+            if (m->Fields[j]->Creator == myHandle) {
+                TEffect *eff = TEFF(m->Fields[j]->eID);
+                if (eff->HasFlag(EF_CANCEL)) {
+                    bool found = false; 
+                    for (i=0; i<num_spell; i++)
+                        if (spells[i] == m->Fields[j]->eID)
+                            found = true;
+                    if (found) continue;
 
+                    fields[num_field] = m->Fields[j];
+                    MyTerm->LOption(XPrint("Drop <9><Str><7>",NAME(m->Fields[j]->eID)),num_field + 1024); 
 
-  if (!c) {
-    IPrint("You have nothing active to cancel.");
-    return;
-  }
-
-
-  c = MyTerm->LMenu(MENU_ESC|MENU_BORDER,"Cancel Standing Ability:");
-
-  if (isPlayer() && c == 2000 + SK_MINING)
-    {
-      thisp->DigMode = false;
-      IPrint("You stop mining.");
-      return;
+                    num_field++; c++;
+                }
+            }
     }
 
-  if (c == -1)
-    return;
-
-  if (c > 0) {
-    /* it's an eID */
-    IPrint("Dropping <Res>.",spells[c]);
-    RemoveEffStati(spells[c],EV_ELAPSED);
-  } else {
-    c = -c; /* it's a stati nature */
-    if (c == MOUNTED) 
-      ThrowVal(EV_DISMOUNT,DSM_CHOICE,this,GetStatiObj(MOUNTED));
-    if (c == FLAWLESS_DODGE)
-      {
-        /* Don't kill the whole Stati; it has the number of dodges
-           stored in the Mag field. Instead, just set the flag to
-           zero to indicate inactive. */
-        SetStatiVal(FLAWLESS_DODGE,NULL,0);
+    if (!c) {
+        IPrint("You have nothing active to cancel.");
         return;
-      }
-    RemoveStati(c);
-  } 
+    }
+
+    c = MyTerm->LMenu(MENU_ESC|MENU_BORDER,"Cancel Standing Ability:");
+
+    if (isPlayer() && c == 2000 + SK_MINING)
+    {
+        thisp->DigMode = false;
+        IPrint("You stop mining.");
+        return;
+    }
+
+    if (c == -1)
+        return;
+
+    if (c > 0) {
+        /* it's an eID */
+        if (c < 1024) { /* Spell */
+            IPrint("Dropping <Res>.",spells[c]);
+            RemoveEffStati(spells[c],EV_ELAPSED);
+        } else { /* Field */
+            c -= 1024;
+            IPrint("Dropping <Res>.",fields[c]->eID);
+            m->RemoveField(fields[c]);
+        }
+    } else {
+        c = -c; /* it's a stati nature */
+        if (c == MOUNTED) 
+            ThrowVal(EV_DISMOUNT,DSM_CHOICE,this,GetStatiObj(MOUNTED));
+        if (c == FLAWLESS_DODGE)
+        {
+            /* Don't kill the whole Stati; it has the number of dodges
+            stored in the Mag field. Instead, just set the flag to
+            zero to indicate inactive. */
+            SetStatiVal(FLAWLESS_DODGE,NULL,0);
+            return;
+        }
+        RemoveStati(c);
+    } 
 }
 #if 0
 
