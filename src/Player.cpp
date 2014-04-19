@@ -2401,262 +2401,249 @@ EvReturn Player::Rest(EventInfo &e)
   }
 
 
-void Map::DaysPassed()
-  {
-    int16 i, c, j, k, x, y, x2, y2, n, pc, MonCount, Tries, MonEquil, numRegen; 
-    Thing *t; bool removed; Item *it; Player *p[MAX_PLAYERS]; Creature *cr;
-    static Thing *list[2048];
-    /* This function updates the map when the player rests, adding new
-       monsters and such. */
-    int8 DepthCR = TDUN(dID)->GetConst(INITIAL_CR) + 
-                   (Depth*TDUN(dID)->GetConst(DUN_SPEED))/100 - 1; 
+void Map::DaysPassed() {
+      int16 i, c, j, k, x, y, x2, y2, n, pc, MonCount, Tries, MonEquil, numRegen; 
+      Thing *t; bool removed; Item *it; Player *p[MAX_PLAYERS]; Creature *cr;
+      static Thing *list[2048];
+      /* This function updates the map when the player rests, adding new
+      monsters and such. */
+      int8 DepthCR = TDUN(dID)->GetConst(INITIAL_CR) + 
+          (Depth*TDUN(dID)->GetConst(DUN_SPEED))/100 - 1; 
 
-    if (Day == theGame->Day)
-      return;
+      if (Day == theGame->Day)
+          return;
 
-    inDaysPassed = true;
+      inDaysPassed = true;
 
-    MonCount = 0; pc = 0;
-  
-    MapIterate(this,t,c) 
-      list[c] = t;
-      
-    for (j=0;j!=c;j++)
-      {
-      t = list[j];
-      Restart1:
-      StatiIter(t)
-          if (S->Nature == HUNGER) continue; 
-          if (S->Duration > 0 || S->Duration == -2) {
-            StatiIter_RemoveCurrent(t);
-            StatiIterBreakout(t,goto Restart1);
-            }
-          else if (S->Duration < -2)
-            S->Duration++;
-          if (t->isDead()) 
-            StatiIterBreakout(t,goto Done1); 
-      StatiIterEnd(t)
-      Done1:;
-      
-      Item *it;
-      if (t->isCreature()) {
-        for (it=((Creature*)t)->FirstInv();it;
-                    it=((Creature*)t)->NextInv())
-          {
-            Restart2:
-            StatiIter(it)
+      MonCount = 0; pc = 0;
+
+      MapIterate(this,t,c) 
+          list[c] = t;
+
+      for (j=0;j!=c;j++) {
+          t = list[j];
+Restart1:
+          StatiIter(t)
+              if (S->Nature == HUNGER)
+                  continue; 
               if (S->Duration > 0 || S->Duration == -2) {
-                StatiIter_RemoveCurrent(it);
-                StatiIterBreakout(it,goto Restart2);
-                }
-              else if (S->Duration < -2)
-                S->Duration++;
-              if (t->isDead())
-                StatiIterBreakout(it,goto Done2) 
-            StatiIterEnd(it)
-            Done2:;
-          }
-        }
-      
-      if (t->isDead()) 
-        continue; 
-
-      if (t->isType(T_DOOR))
-        ((Door*)t)->DoorFlags &= ~DF_SEARCHED;
-      if (t->isMonster())
-        if (!((Monster*)t)->HasMFlag(M_BREEDER))
-          if (((Monster*)t)->ChallengeRating() + 4 >= Depth)
-            MonCount++;
-      if (t->isPlayer())
-        p[pc++] = (Player*) t;
-      }
-
-    RestartFields:
-    for(i=0;Fields[i];i++)
-      if (Fields[i]->Dur >= 1 || Fields[i]->Dur >= -2)
-        {
-          RemoveField(Fields[i]);
-          goto RestartFields;
-        }
-
-    RestartTerra:
-    for(i=0;i!=TerraList.Total();i++) {
-      if (TerraList[i]->Duration >= 1 || TerraList[i]->Duration == -2)
-        { RemoveTerra(TerraList[i]->key); goto RestartTerra; }
-      }
-
-    /* There really should be a TDUN flag for this, so we don't
-       regen monsters in a city map, but for now this should be
-       sufficient as a kludge for Rope Trick; we'll do this in
-       more depth when we do cities and wilderness for RotF. */
-    if (SizeX() < 30 && SizeY() < 30)
-      goto SkipMonUpdate;
-
-    if (dID) {
-      
-      MonEquil = TDUN(dID)->GetConst(MONSTER_EQUILIBRIUM_BASE) +
-                   Depth * TDUN(dID)->GetConst(MONSTER_EQUILIBRIUM_INC);
-
-      numRegen = max(3,DepthCR);
-
-      for (i=Day*6;i!=theGame->Day*6;i++)
-        if (MonEquil > MonCount)
-          {
-            Tries = 0;
-            do {
-              Tries++;
-              x = 2 + random(sizeX-4);
-              y = 2 + random(sizeY-4);
-              if (Tries == 100)
-                goto SkipMonUpdate;
-              if (SolidAt(x,y))
-                continue;
-              if (At(x,y).isVault)
-                continue;
-              if (TTER(TerrainAt(x,y))->HasFlag(TF_FALL))
-                continue;
-              if (TTER(TerrainAt(x,y))->HasFlag(TF_WARN))
-                continue;
-              if (TTER(TerrainAt(x,y))->HasFlag(TF_SPECIAL))
-                continue;
-              for(k=0;k!=pc;k++)
-                if (dist(x,y,p[k]->x,p[k]->y) <= 25)
-                  continue;
-              break;
-              }
-            while(1);
-            if (TTER(TerrainAt(x,y))->HasFlag(TF_WATER)) {
-              THROW(EV_ENGEN,
-                xe.enFlags = EN_DUNGEON|EN_AQUATIC|EN_NOMAGIC|EN_DUNREGEN;
-                xe.EMap = this;
-                xe.enCR = DepthCR;
-                xe.enDepth = DepthCR;
-                xe.enRegID = RegionAt(x,y);
-                xe.EXVal = x;
-                xe.EYVal = y;
-                xe.isLoc = true;
-                );
-              }
-            else {
-              THROW(EV_ENGEN,
-                xe.enFlags = EN_DUNGEON|EN_NOMAGIC|EN_NOPLACE|EN_DUNREGEN;
-                xe.EMap = this;
-                xe.enCR = DepthCR;
-                xe.enDepth = DepthCR;
-                xe.enRegID = RegionAt(x,y);
-                xe.EXVal = x;
-                xe.EYVal = y;
-                xe.isLoc = true;
-                );
-              n = cEncMem;
-              for (j=0;j!=n;j++) {
-                Tries = 0;
-                do {
-                  Tries++;
-                  x2 = x - 5 + random(11);
-                  y2 = y - 5 + random(11);
-                  if (Tries == 100)
-                    goto SkipMonUpdate;
-                  if (!InBounds(x2,y2))
-                    continue;
-                  if (SolidAt(x2,y2))
-                    continue;
-                  if (RegionAt(x,y) != RegionAt(x2,y2))
-                    continue;
-                  if (At(x2,y2).isVault)
-                    continue;
-                  if (TTER(TerrainAt(x2,y2))->HasFlag(TF_FALL))
-                    continue;
-                  if (TTER(TerrainAt(x2,y2))->HasFlag(TF_WARN))
-                    continue;
-                  if (TTER(TerrainAt(x2,y2))->HasFlag(TF_SPECIAL))
-                    continue;
-                  break;
-                  }
-                while(1);
-                if (cr=GetEncounterCreature(j)) { 
-                  cr->PlaceAt(this,x2,y2);
-                  cr->Initialize(); 
-                  /* Make sure monsters don't have good items, so that
-                     the player can't "scum" a level for items through
-                     repetition. */
-                  for (it=cr->FirstInv();it;it=cr->NextInv())
-                    if (it->isMagic() && it->ItemLevel() > min(Depth / 2, Depth - 4))
-                      {
-                        if (it->isType(T_WEAPON) || it->isType(T_ARMOR) ||
-                            it->isType(T_SHIELD) || it->isType(T_MISSILE) ||
-                            it->isType(T_CONTAIN))
-                          { it->eID = 0; it->SetInherantPlus(0);
-                            it->IFlags &= ~IF_CURSED;
-                            it->PurgeAllQualities();
-                            it->MendHP(1000); }
-                        else
-                          it->Remove(true);
+                  StatiIter_RemoveCurrent(t);
+                  StatiIterBreakout(t,goto Restart1);
+              } else if (S->Duration < -2)
+                  S->Duration++;
+              if (t->isDead()) 
+                  StatiIterBreakout(t,goto Done1); 
+          StatiIterEnd(t)
+Done1:
+          Item *it;
+          if (t->isCreature()) {
+              for (it=((Creature*)t)->FirstInv();it;it=((Creature*)t)->NextInv()) {
+Restart2:
+                  StatiIter(it)
+                      if (S->Duration > 0 || S->Duration == -2) {
+                          StatiIter_RemoveCurrent(it);
+                          StatiIterBreakout(it,goto Restart2);
                       }
-				          }
-                }
+                      else if (S->Duration < -2)
+                          S->Duration++;
+                  if (t->isDead())
+                      StatiIterBreakout(it,goto Done2) 
+                  StatiIterEnd(it)
+Done2:;
               }
           }
-        j = 2 + random(4);
-        for(i=0;j!=5;j++)
-          {
-            Tries = 0;
-            do {
-              Tries++;
-              x = 2 + random(sizeX-4);
-              y = 2 + random(sizeY-4);
-              if (Tries == 100)
-                goto SkipMonUpdate;
-        if (SolidAt(x,y))
-                continue;
-              if (At(x,y).isVault)
-                continue;
-              if (TTER(TerrainAt(x,y))->HasFlag(TF_FALL))
-                continue;
-              if (TTER(TerrainAt(x,y))->HasFlag(TF_WARN))
-                continue;
-              if (TTER(TerrainAt(x,y))->HasFlag(TF_SPECIAL))
-                continue;
-              if (TTER(TerrainAt(x,y))->HasFlag(TF_WATER))
-                continue;
-              for(k=0;k!=pc;k++)
-                if (dist(x,y,p[k]->x,p[k]->y) <= 25)
-                  continue;
-              break;
-              }
-            while(1);
 
-            it = Item::GenItem(IG_STAPLE,dID,Depth,10,StapleItems);
-            it->PlaceAt(this,x,y);
+          if (t->isDead()) 
+              continue; 
+
+          if (t->isType(T_DOOR))
+              ((Door*)t)->DoorFlags &= ~DF_SEARCHED;
+          if (t->isMonster())
+              if (!((Monster*)t)->HasMFlag(M_BREEDER))
+                  if (((Monster*)t)->ChallengeRating() + 4 >= Depth)
+                      MonCount++;
+          if (t->isPlayer())
+              p[pc++] = (Player*) t;
+      }
+
+RestartFields:
+      for(i=0;Fields[i];i++) {
+          if (Fields[i]->Dur >= 1 || Fields[i]->Dur >= -2) {
+              RemoveField(Fields[i]);
+              goto RestartFields;
           }
-
       }
 
-    SkipMonUpdate:
-    Day = theGame->Day;
-    inDaysPassed = false;
-
-    /* HACKFIX */
-    int16 capCR = Depth + (theGame->Opt(OPT_OOD_MONSTERS) ? 3 : 1);
-    rID campID = FIND("The Goblin Encampment");
-    RestartVerifyMon:
-    if (theGame->Opt(OPT_DIFFICULTY) != DIFF_NIGHTMARE) {
-      MapIterate(this,t,i)
-        if (t->isType(T_MONSTER))
-          if (((Creature*)t)->ChallengeRating() > capCR)
-            {
-              if (theGame->GetPlayer(0))
-                if (((Creature*)t)->isFriendlyTo(theGame->GetPlayer(0)))
-                  continue;
-              if (RegionAt(t->x,t->y) == campID)
-                continue;
-              t->Remove(true);
-              goto RestartVerifyMon;
-            }
+RestartTerra:
+      for(i=0;i!=TerraList.Total();i++) {
+          if (TerraList[i]->Duration >= 1 || TerraList[i]->Duration == -2) {
+              RemoveTerra(TerraList[i]->key);
+              goto RestartTerra;
+          }
       }
 
+      /* There really should be a TDUN flag for this, so we don't
+      regen monsters in a city map, but for now this should be
+      sufficient as a kludge for Rope Trick; we'll do this in
+      more depth when we do cities and wilderness for RotF. */
+      if (SizeX() < 30 && SizeY() < 30)
+          goto SkipMonUpdate;
 
-  }
+      if (dID) {
+          MonEquil = TDUN(dID)->GetConst(MONSTER_EQUILIBRIUM_BASE) +
+              Depth * TDUN(dID)->GetConst(MONSTER_EQUILIBRIUM_INC);
+
+          numRegen = max(3,DepthCR);
+
+          for (i=Day*6;i!=theGame->Day*6;i++)
+              if (MonEquil > MonCount) {
+                  Tries = 0;
+                  do {
+                      Tries++;
+                      x = 2 + random(sizeX-4);
+                      y = 2 + random(sizeY-4);
+                      if (Tries == 100)
+                          goto SkipMonUpdate;
+                      if (SolidAt(x,y))
+                          continue;
+                      if (At(x,y).isVault)
+                          continue;
+                      if (TTER(TerrainAt(x,y))->HasFlag(TF_FALL))
+                          continue;
+                      if (TTER(TerrainAt(x,y))->HasFlag(TF_WARN))
+                          continue;
+                      if (TTER(TerrainAt(x,y))->HasFlag(TF_SPECIAL))
+                          continue;
+                      for(k=0;k!=pc;k++)
+                          if (dist(x,y,p[k]->x,p[k]->y) <= 25)
+                              continue;
+                      break;
+                  } while(1);
+
+                  if (TTER(TerrainAt(x,y))->HasFlag(TF_WATER)) {
+                      THROW(EV_ENGEN,
+                          xe.enFlags = EN_DUNGEON|EN_AQUATIC|EN_NOMAGIC|EN_DUNREGEN;
+                          xe.EMap = this;
+                          xe.enCR = DepthCR;
+                          xe.enDepth = DepthCR;
+                          xe.enRegID = RegionAt(x,y);
+                          xe.EXVal = x;
+                          xe.EYVal = y;
+                          xe.isLoc = true;
+                          );
+                  } else {
+                      THROW(EV_ENGEN,
+                          xe.enFlags = EN_DUNGEON|EN_NOMAGIC|EN_NOPLACE|EN_DUNREGEN;
+                          xe.EMap = this;
+                          xe.enCR = DepthCR;
+                          xe.enDepth = DepthCR;
+                          xe.enRegID = RegionAt(x,y);
+                          xe.EXVal = x;
+                          xe.EYVal = y;
+                          xe.isLoc = true;
+                          );
+
+                      n = cEncMem;
+                      for (j=0;j!=n;j++) {
+                          Tries = 0;
+                          do {
+                              Tries++;
+                              x2 = x - 5 + random(11);
+                              y2 = y - 5 + random(11);
+                              if (Tries == 100)
+                                  goto SkipMonUpdate;
+                              if (!InBounds(x2,y2))
+                                  continue;
+                              if (SolidAt(x2,y2))
+                                  continue;
+                              if (RegionAt(x,y) != RegionAt(x2,y2))
+                                  continue;
+                              if (At(x2,y2).isVault)
+                                  continue;
+                              if (TTER(TerrainAt(x2,y2))->HasFlag(TF_FALL))
+                                  continue;
+                              if (TTER(TerrainAt(x2,y2))->HasFlag(TF_WARN))
+                                  continue;
+                              if (TTER(TerrainAt(x2,y2))->HasFlag(TF_SPECIAL))
+                                  continue;
+                              break;
+                          } while(1);
+                          if (cr=GetEncounterCreature(j)) { 
+                              cr->PlaceAt(this,x2,y2);
+                              cr->Initialize(); 
+                              /* Make sure monsters don't have good items, so that
+                              the player can't "scum" a level for items through
+                              repetition. */
+                              for (it=cr->FirstInv();it;it=cr->NextInv())
+                                  if (it->isMagic() && it->ItemLevel() > min(Depth / 2, Depth - 4)) {
+                                      if (it->isType(T_WEAPON) || it->isType(T_ARMOR) ||
+                                          it->isType(T_SHIELD) || it->isType(T_MISSILE) ||
+                                          it->isType(T_CONTAIN))
+                                      { it->eID = 0; it->SetInherantPlus(0);
+                                      it->IFlags &= ~IF_CURSED;
+                                      it->PurgeAllQualities();
+                                      it->MendHP(1000); }
+                                      else
+                                          it->Remove(true);
+                                  }
+                          }
+                      }
+                  }
+              }
+          j = 2 + random(4);
+          for(i=0;j!=5;j++) {
+              Tries = 0;
+              do {
+                  Tries++;
+                  x = 2 + random(sizeX-4);
+                  y = 2 + random(sizeY-4);
+                  if (Tries == 100)
+                      goto SkipMonUpdate;
+                  if (SolidAt(x,y))
+                      continue;
+                  if (At(x,y).isVault)
+                      continue;
+                  if (TTER(TerrainAt(x,y))->HasFlag(TF_FALL))
+                      continue;
+                  if (TTER(TerrainAt(x,y))->HasFlag(TF_WARN))
+                      continue;
+                  if (TTER(TerrainAt(x,y))->HasFlag(TF_SPECIAL))
+                      continue;
+                  if (TTER(TerrainAt(x,y))->HasFlag(TF_WATER))
+                      continue;
+                  for(k=0;k!=pc;k++)
+                      if (dist(x,y,p[k]->x,p[k]->y) <= 25)
+                          continue;
+                  break;
+              } while(1);
+
+              it = Item::GenItem(IG_STAPLE,dID,Depth,10,StapleItems);
+              it->PlaceAt(this,x,y);
+          }
+      }
+
+SkipMonUpdate:
+      Day = theGame->Day;
+      inDaysPassed = false;
+
+      /* HACKFIX */
+      int16 capCR = Depth + (theGame->Opt(OPT_OOD_MONSTERS) ? 3 : 1);
+      rID campID = FIND("The Goblin Encampment");
+RestartVerifyMon:
+      if (theGame->Opt(OPT_DIFFICULTY) != DIFF_NIGHTMARE) {
+          MapIterate(this,t,i)
+              if (t->isType(T_MONSTER))
+                  if (((Creature*)t)->ChallengeRating() > capCR) {
+                      if (theGame->GetPlayer(0))
+                          if (((Creature*)t)->isFriendlyTo(theGame->GetPlayer(0)))
+                              continue;
+                      if (RegionAt(t->x,t->y) == campID)
+                          continue;
+                      t->Remove(true);
+                      goto RestartVerifyMon;
+                  }
+      }
+}
 
 
 
