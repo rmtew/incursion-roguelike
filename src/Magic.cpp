@@ -2586,7 +2586,7 @@ HasComponent:
                     goto SpellFails;
                 goto ContinueCasting;
             }
-            return ABORT;
+        return ABORT;
     }
 ContinueCasting:
 
@@ -2785,8 +2785,7 @@ SpellFails:
                 EventInfo eCopy = e;
                 eCopy.EVictim = c;
                 if (ReThrow(EV_EFFECT,eCopy) != ABORT) 
-                    e.EActor->IPrint(
-                    Format("%s is affected through your special bond.", (const char*)c->Name(0)));
+                    e.EActor->IPrint(Format("%s is affected through your special bond.", (const char*)c->Name(0)));
             } 
     } 
 
