@@ -1275,291 +1275,291 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n)
         REGS(n) = oCreature(h)->HasInnateSpell(STACK(1));
        return;
       case 247:
+        VERIFY(h,T_CREATURE,"GetBAB")
+       ASSERT(REGS(63) >= 1)
+        REGS(n) = oCreature(h)->GetBAB(STACK(1));
+       return;
+      case 248:
         VERIFY(h,T_CREATURE,"FindBestItemOrCreate")
        ASSERT(REGS(63) >= 1)
         t = oCreature(h)->FindBestItemOrCreate(STACK(1));
         REGS(n) = t ? t->myHandle : 0;
        return;
-      case 248:
+      case 249:
         VERIFY(h,T_CREATURE,"GainItem")
        ASSERT(REGS(63) >= 2)
         oCreature(h)->GainItem(oItem(STACK(1)), STACK(2));
        return;
-      case 249:
+      case 250:
         VERIFY(h,T_CREATURE,"IdentByTrial")
        ASSERT(REGS(63) >= 1)
         oCreature(h)->IdentByTrial(oItem(STACK(1)));
        return;
-      case 250:
+      case 251:
         VERIFY(h,T_CREATURE,"GainInherantBonus")
        ASSERT(REGS(63) >= 3)
         oCreature(h)->GainInherantBonus(STACK(1), STACK(2), STACK(3));
        return;
-      case 251:
+      case 252:
         VERIFY(h,T_CREATURE,"Reveal")
        ASSERT(REGS(63) >= 1)
         oCreature(h)->Reveal(STACK(1));
        return;
-      case 252:
+      case 253:
         VERIFY(h,T_CREATURE,"ProvokeAoO")
        ASSERT(REGS(63) >= 0)
         oCreature(h)->ProvokeAoO();
        return;
-      case 253:
+      case 254:
         VERIFY(h,T_CREATURE,"ManeuverCheck")
        ASSERT(REGS(63) >= 1)
         oCreature(h)->ManeuverCheck(*pe);
        return;
-      case 254:
+      case 255:
         VERIFY(h,T_CREATURE,"isHostileTo")
        ASSERT(REGS(63) >= 1)
         REGS(n) = oCreature(h)->isHostileTo(oCreature(STACK(1)));
        return;
-      case 255:
+      case 256:
         VERIFY(h,T_CREATURE,"isHostileToPartyOf")
        ASSERT(REGS(63) >= 1)
         REGS(n) = oCreature(h)->isHostileToPartyOf(oCreature(STACK(1)));
        return;
-      case 256:
+      case 257:
         VERIFY(h,T_CREATURE,"isFriendlyTo")
        ASSERT(REGS(63) >= 1)
         REGS(n) = oCreature(h)->isFriendlyTo(oCreature(STACK(1)));
        return;
-      case 257:
+      case 258:
         VERIFY(h,T_CREATURE,"isThreatened")
        ASSERT(REGS(63) >= 0)
         REGS(n) = oCreature(h)->isThreatened();
        return;
-      case 258:
+      case 259:
         VERIFY(h,T_CREATURE,"getLeader")
        ASSERT(REGS(63) >= 0)
         t = oCreature(h)->getLeader();
         REGS(n) = t ? t->myHandle : 0;
        return;
-      case 259:
+      case 260:
         VERIFY(h,T_CREATURE,"getLeaderOrFirst")
        ASSERT(REGS(63) >= 0)
         t = oCreature(h)->getLeaderOrFirst();
         REGS(n) = t ? t->myHandle : 0;
        return;
-      case 260:
+      case 261:
         VERIFY(h,T_CREATURE,"isLedBy")
        ASSERT(REGS(63) >= 1)
         REGS(n) = oCreature(h)->isLedBy(oCreature(STACK(1)));
        return;
-      case 261:
+      case 262:
         VERIFY(h,T_CREATURE,"worstTrouble")
        ASSERT(REGS(63) >= 0)
         REGS(n) = oCreature(h)->worstTrouble();
        return;
-      case 262:
+      case 263:
         VERIFY(h,T_CREATURE,"Transgress")
        ASSERT(REGS(63) >= 4)
         oCreature(h)->Transgress(STACK(1), STACK(2), STACK(3), GETSTR(STACK(4)));
        return;
-      case 263:
+      case 264:
         VERIFY(h,T_CREATURE,"IdentifyMon")
        ASSERT(REGS(63) >= 0)
         oCreature(h)->IdentifyMon();
        return;
-      case 264:
+      case 265:
         VERIFY(h,T_CREATURE,"IdentifyTemp")
        ASSERT(REGS(63) >= 1)
         oCreature(h)->IdentifyTemp(STACK(1));
        return;
-      case 265:
+      case 266:
         VERIFY(h,T_CREATURE,"isMType")
        ASSERT(REGS(63) >= 1)
         REGS(n) = oCreature(h)->isMType(STACK(1));
        return;
-      case 266:
+      case 267:
         VERIFY(h,T_CREATURE,"isAerial")
        ASSERT(REGS(63) >= 0)
         REGS(n) = oCreature(h)->isAerial();
        return;
-      case 267:
+      case 268:
         VERIFY(h,T_CREATURE,"isFlatFooted")
        ASSERT(REGS(63) >= 0)
         REGS(n) = oCreature(h)->isFlatFooted();
        return;
-      case 268:
+      case 269:
         VERIFY(h,T_CREATURE,"ChoicePrompt")
        ASSERT(REGS(63) >= 5)
         REGS(n) = oCreature(h)->ChoicePrompt(GETSTR(STACK(1)), GETSTR(STACK(2)), STACK(3), STACK(4), STACK(5));
        return;
-      case 269:
+      case 270:
         VERIFY(h,T_CREATURE,"AddTemplate")
        ASSERT(REGS(63) >= 1)
         oCreature(h)->AddTemplate(STACK(1));
        return;
-      case 270:
+      case 271:
         VERIFY(h,T_CREATURE,"CanAddTemplate")
        ASSERT(REGS(63) >= 1)
         REGS(n) = oCreature(h)->CanAddTemplate(STACK(1));
        return;
-      case 271:
+      case 272:
         VERIFY(h,T_CREATURE,"Awaken")
        ASSERT(REGS(63) >= 0)
         oCreature(h)->Awaken();
        return;
-      case 272:
+      case 273:
         VERIFY(h,T_CREATURE,"getSocialMod")
        ASSERT(REGS(63) >= 2)
         REGS(n) = oCreature(h)->getSocialMod(oCreature(STACK(1)), STACK(2));
        return;
-      case 273:
+      case 274:
         VERIFY(h,T_CREATURE,"MakeNoise")
        ASSERT(REGS(63) >= 1)
         oCreature(h)->MakeNoise(STACK(1));
        return;
-      case 274:
+      case 275:
         VERIFY(h,T_CREATURE,"Multiply")
        ASSERT(REGS(63) >= 3)
         oCreature(h)->Multiply(STACK(1), STACK(2), STACK(3));
        return;
-      case 275:
+      case 276:
         VERIFY(h,T_CREATURE,"StatiMessage")
        ASSERT(REGS(63) >= 3)
         oCreature(h)->StatiMessage(STACK(1), STACK(2), STACK(3));
        return;
-      case 276:
+      case 277:
         VERIFY(h,T_CREATURE,"RandInv")
        ASSERT(REGS(63) >= 0)
         t = oCreature(h)->RandInv();
         REGS(n) = t ? t->myHandle : 0;
        return;
-      case 277:
+      case 278:
         VERIFY(h,T_CREATURE,"RandGoodInv")
        ASSERT(REGS(63) >= 1)
         t = oCreature(h)->RandGoodInv(STACK(1));
         REGS(n) = t ? t->myHandle : 0;
        return;
-      case 278:
+      case 279:
         VERIFY(h,T_CREATURE,"rateMeleeWeapon")
        ASSERT(REGS(63) >= 0)
         REGS(n) = oCreature(h)->rateMeleeWeapon();
        return;
-      case 279:
+      case 280:
         VERIFY(h,T_CREATURE,"rateRangedWeapon")
        ASSERT(REGS(63) >= 0)
         REGS(n) = oCreature(h)->rateRangedWeapon();
        return;
-      case 280:
+      case 281:
         VERIFY(h,T_CREATURE,"getPrimaryMelee")
        ASSERT(REGS(63) >= 0)
         t = oCreature(h)->getPrimaryMelee();
         REGS(n) = t ? t->myHandle : 0;
        return;
-      case 281:
+      case 282:
         VERIFY(h,T_CREATURE,"getPrimaryRanged")
        ASSERT(REGS(63) >= 0)
         t = oCreature(h)->getPrimaryRanged();
         REGS(n) = t ? t->myHandle : 0;
        return;
-      case 282:
+      case 283:
         VERIFY(h,T_CREATURE,"HaltAction")
        ASSERT(REGS(63) >= 2)
         oCreature(h)->HaltAction(GETSTR(STACK(1)), STACK(2));
        return;
-      case 283:
+      case 284:
         VERIFY(h,T_CHARACTER,"kcMana")
        ASSERT(REGS(63) >= 0)
         REGS(n) = oCharacter(h)->kcMana();
        return;
-      case 284:
+      case 285:
         VERIFY(h,T_CHARACTER,"ktMana")
        ASSERT(REGS(63) >= 0)
         REGS(n) = oCharacter(h)->ktMana();
        return;
-      case 285:
+      case 286:
         VERIFY(h,T_CHARACTER,"Swap")
        ASSERT(REGS(63) >= 1)
         REGS(n) = oCharacter(h)->Swap(STACK(1));
        return;
-      case 286:
+      case 287:
         VERIFY(h,T_CHARACTER,"AddAbilities")
        ASSERT(REGS(63) >= 2)
         oCharacter(h)->AddAbilities(STACK(1), STACK(2));
        return;
-      case 287:
+      case 288:
         VERIFY(h,T_CHARACTER,"GainFeat")
        ASSERT(REGS(63) >= 1)
         oCharacter(h)->GainFeat(STACK(1));
        return;
-      case 288:
+      case 289:
         VERIFY(h,T_CHARACTER,"GainAbility")
        ASSERT(REGS(63) >= 4)
         oCharacter(h)->GainAbility(STACK(1), STACK(2), STACK(3), STACK(4));
        return;
-      case 289:
+      case 290:
         VERIFY(h,T_CHARACTER,"GainBonusSkills")
        ASSERT(REGS(63) >= 2)
         oCharacter(h)->GainBonusSkills(STACK(1), STACK(2));
        return;
-      case 290:
+      case 291:
         VERIFY(h,T_CHARACTER,"FeatPrereq")
        ASSERT(REGS(63) >= 1)
         oCharacter(h)->FeatPrereq(STACK(1));
        return;
-      case 291:
+      case 292:
         VERIFY(h,T_CHARACTER,"NextLevXP")
        ASSERT(REGS(63) >= 0)
         REGS(n) = oCharacter(h)->NextLevXP();
        return;
-      case 292:
+      case 293:
         VERIFY(h,T_CHARACTER,"XPPenalty")
        ASSERT(REGS(63) >= 0)
         REGS(n) = oCharacter(h)->XPPenalty();
        return;
-      case 293:
+      case 294:
         VERIFY(h,T_CHARACTER,"LoseXP")
        ASSERT(REGS(63) >= 1)
         oCharacter(h)->LoseXP(STACK(1));
        return;
-      case 294:
+      case 295:
         VERIFY(h,T_CHARACTER,"TotalXP")
        ASSERT(REGS(63) >= 0)
         REGS(n) = oCharacter(h)->TotalXP();
        return;
-      case 295:
+      case 296:
         VERIFY(h,T_CHARACTER,"IAttr")
        ASSERT(REGS(63) >= 1)
         REGS(n) = oCharacter(h)->IAttr(STACK(1));
        return;
-      case 296:
+      case 297:
         VERIFY(h,T_CHARACTER,"LevelAs")
        ASSERT(REGS(63) >= 1)
         REGS(n) = oCharacter(h)->LevelAs(STACK(1));
        return;
-      case 297:
+      case 298:
         VERIFY(h,T_CHARACTER,"TotalLevel")
        ASSERT(REGS(63) >= 0)
         REGS(n) = oCharacter(h)->TotalLevel();
        return;
-      case 298:
+      case 299:
         VERIFY(h,T_CHARACTER,"SpellKnown")
        ASSERT(REGS(63) >= 1)
         REGS(n) = oCharacter(h)->SpellKnown(STACK(1));
        return;
-      case 299:
+      case 300:
         VERIFY(h,T_CHARACTER,"getSpellFlags")
        ASSERT(REGS(63) >= 1)
         REGS(n) = oCharacter(h)->getSpellFlags(STACK(1));
        return;
-      case 300:
+      case 301:
         VERIFY(h,T_CHARACTER,"setSpellFlags")
        ASSERT(REGS(63) >= 2)
         oCharacter(h)->setSpellFlags(STACK(1), STACK(2));
        return;
-      case 301:
+      case 302:
         VERIFY(h,T_CHARACTER,"GetSkillRanks")
        ASSERT(REGS(63) >= 1)
         REGS(n) = oCharacter(h)->GetSkillRanks(STACK(1));
-       return;
-      case 302:
-        VERIFY(h,T_CHARACTER,"GetBAB")
-       ASSERT(REGS(63) >= 1)
-        REGS(n) = oCharacter(h)->GetBAB(STACK(1));
        return;
       case 303:
         VERIFY(h,T_CHARACTER,"SetInvSlot")

@@ -389,6 +389,7 @@ system hObj   T_CREATURE::FirstInv();
 system hObj   T_CREATURE::NextInv();
 system bool   T_CREATURE::HasSkill(int16 sk);     
 system bool   T_CREATURE::HasInnateSpell(rID spID);
+system int16  T_CREATURE::GetBAB(int16 mode);
 system hObj   T_CREATURE::FindBestItemOrCreate(rID iID);     
 system void   T_CREATURE::GainItem(hObj:T_ITEM it,bool st=false);
 system void   T_CREATURE::IdentByTrial(hObj:T_ITEM it);
@@ -469,7 +470,6 @@ system int32  T_CHARACTER::SpellKnown(int16 spNum);
 system uint16 T_CHARACTER::getSpellFlags(rID spID);
 system void   T_CHARACTER::setSpellFlags(rID spID, uint16 fl);
 system int16  T_CHARACTER::GetSkillRanks(int16 sk);
-system int16  T_CHARACTER::GetBAB(int16 mode);
 system void   T_CHARACTER::SetInvSlot(int16 sl, hObj:T_ITEM it);
 
 
