@@ -1021,11 +1021,11 @@ Druid  Spell "Faerie Fire" : EA_INFLICT
   { SC_EVO|SC_LIGHT; Base: SP_EASY; Cost: 1; Level: 1; qval: Q_LOC;
     aval: AR_GLOBE; cval: SKYBLUE; lval: 4; xval: ILLUMINATED; pval: +1; 
     Purpose: EP_CURSE | EP_COUNTER | AIM_AT_ENEMY (VS_INVIS);
-    Desc: "Limns any creatures within a 40-foot radius with colored, 
+    Desc: "Limbs any creatures within a 40-foot radius with colored, 
       flickering light, granting a +1 to hit it with ranged weapons, 
       making it unable to hide, negating the effects of blur or 
       displacement and making it visible from a greater distance 
-      kaway.";
+      away.";
     On Event EV_MAGIC_HIT {    
       hText str;  
       switch(random(5)) {
