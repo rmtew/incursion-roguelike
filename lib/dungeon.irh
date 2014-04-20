@@ -1060,8 +1060,13 @@ Terrain "acid fog"
       if (EActor->onPlane() != PHASE_MATERIAL)
         return NOTHING;
       ThrowTerraDmg(EV_DAMAGE,AD_ACID,1d6,"acid fog",EActor, $"acid fog"); 
-      if (EActor->ResistLevel(AD_ACID) < 6)
+      if (EActor->isDead())
+        return ABORT;
+      if (EActor->ResistLevel(AD_ACID) < 6) {
         ThrowTerraDmg(EV_DAMAGE,AD_RUST,1d6,"acid fog",EActor, $"acid fog"); 
+        if (EActor->isDead())
+          return ABORT;
+      }
       return NOTHING; 
     } ;
     Desc: "This deadly corrosive fog deals 1d6 points of acid damage and
@@ -1106,7 +1111,7 @@ Terrain "pool of grease"
       } 
     } ;
     Desc: "You (or your mount) must make a Balance skill check (DC
-    typically 15) to avoid slipping on the grase when you move, attack,
+    typically 15) to avoid slipping on the grease when you move, attack,
     jump off it or land on it. Flying creatures, jellies, incorporeal
     creatures, and creatures with the Woodland Stride ability are immune."; 
     On Event EV_MOVE, PRE(EV_STRIKE), EV_JUMP_OFF, EV_LAND {
@@ -1141,7 +1146,7 @@ Terrain "pool of grease"
               "An <EActor> slips and falls!");
           ThrowTerraDmg(EV_DAMAGE,AD_TRIP,-1,"pool of grease",EActor, $"pool of grease"); 
           EActor->Timeout += 10;
-          return DONE;
+          return ABORT;
         }
       }
       return NOTHING;
