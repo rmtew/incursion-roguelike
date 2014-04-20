@@ -513,7 +513,10 @@ extern Map* TheMainMap;
      targ->__Stati.Removed++;                         \
      S->Nature = 0; S->eID = 0; FixupBackrefs(S,targ);\
      targ->StatiOff(s); } }                          
-     
+
+#define StatiIter_IfNothingRemoved(targ)              \
+    if (targ->__Stati.Removed == 0)
+
 /* HACKFIX */
 #define StatiIter_DispelCurrent(targ)                 \
    { if (S->eID && RES(S->eID)->Type == T_TEFFECT)    \

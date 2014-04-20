@@ -2428,6 +2428,8 @@ Restart1:
                   continue; 
               if (S->Duration > 0 || S->Duration == -2) {
                   StatiIter_RemoveCurrent(t);
+                  StatiIter_IfNothingRemoved(t)
+                      continue;
                   StatiIterBreakout(t,goto Restart1);
               } else if (S->Duration < -2)
                   S->Duration++;

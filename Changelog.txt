@@ -3,6 +3,7 @@ Incursion (open source) 0.6.9Y7: INSERT DATE
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/62/: If one weapon was ranged, all weapons would get the ranged tag in their description.  Reported by Frumple.
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/65/: Mobile fields from spells which were cancellable, could not be cancelled.  Mobile fields from spells could be stacked ad infinitum, now they are hard coded as non-stackable.  As each day passes, persistent effects should have been discarded, but a bug was modifying their duration and corrupted their identification as persistent.  Reported by Frumple.
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/71/: Creatures attempting to move within a bad field (like a summoned swarm) would be unable to.  Reported by Frumple.
+* https://bitbucket.org/rmtew/incursion-roguelike/issue/85/: Fix a bug where if a creature had an innate ability and they rested, it would infinite loop trying to repeatedly remove it and failing because it shouldn't.  Reported by Frumple.
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/88/: Change 'Chameleon Shifting' from an INFLICT (which has saving throws) to a GRANT (which has none).  Specify the hide skill bonus should be +10, not unspecified which is a +0.  Reported by Frumple.
 
 Incursion (open source) 0.6.9Y6: 2014-04-15
