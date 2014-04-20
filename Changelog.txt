@@ -5,6 +5,7 @@ Incursion (open source) 0.6.9Y7: INSERT DATE
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/71/: Creatures attempting to move within a bad field (like a summoned swarm) would be unable to.  Reported by Frumple.
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/85/: Fix a bug where if a creature had an innate ability and they rested, it would infinite loop trying to repeatedly remove it and failing because it shouldn't.  Reported by Frumple.
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/88/: Change 'Chameleon Shifting' from an INFLICT (which has saving throws) to a GRANT (which has none).  Specify the hide skill bonus should be +10, not unspecified which is a +0.  Reported by Frumple.
+* https://bitbucket.org/rmtew/incursion-roguelike/issue/90/: Fixed crash where attacker standing on magma dies from magma damage incurred by attack/strike action, before actual strike action starts.  Reported by Frumple.
 
 Incursion (open source) 0.6.9Y6: 2014-04-15
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/43/: In past libtcod builds at least, when the game was waiting for input, the CPU would be at full usage.  Now, the idle input loop only checks for input when it has to.  From 100% to 2% CPU usage.
