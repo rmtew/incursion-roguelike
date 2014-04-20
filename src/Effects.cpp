@@ -463,202 +463,209 @@ TextVal NegativeAdj[] = {
    };
 #endif
 
-EvReturn Magic::Grant(EventInfo &e)
-{
-  if (!e.ETarget->isCreature())
-    return DONE;
-  if (e.EMagic->xval == TIMESTOP)
-    theGame->StopTime(e.EVictim);
-  if (e.isWield || e.isEnter) {
-    if (e.isWield) { 
-      e.ETarget->GainPermStati(e.EMagic->xval, e.EItem, SS_ITEM, 
-          e.EMagic->yval, e.vDmg,e.eID,e.vCasterLev + (e.MM & MM_FORTIFY ? 5 : 0)); 
+EvReturn Magic::Grant(EventInfo &e) {
+    if (!e.ETarget->isCreature())
+        return DONE;
+
+    if (e.EMagic->xval == TIMESTOP)
+        theGame->StopTime(e.EVictim);
+
+    if (e.isWield || e.isEnter) {
+        if (e.isWield) { 
+            e.ETarget->GainPermStati(e.EMagic->xval,e.EItem,SS_ITEM,e.EMagic->yval,e.vDmg,e.eID,e.vCasterLev+(e.MM & MM_FORTIFY ? 5 : 0)); 
+        } else if (e.isEnter)
+            e.ETarget->GainTempStati(e.EMagic->xval,e.EItem,e.vDuration,SS_ENCH,e.EMagic->yval,e.vDmg,e.eID,e.vCasterLev+(e.MM & MM_FORTIFY ? 5 : 0)); 
+    } else if (e.isRemove || e.isLeave) {
+        if (e.EItem && e.EItem->isItem())
+            e.ETarget->RemoveStatiFrom(e.EItem);
+        else
+            e.ETarget->RemoveEffStati(e.eID);
+
+        e.Terse = true; 
+    } else {
+        if (e.ETarget->HasEffStati(e.EMagic->xval,e.eID,e.EMagic->yval)) {
+            SetSilence();
+            e.ETarget->RemoveEffStati(e.eID,EV_REMOVED,-1);
+            UnsetSilence();
+        }
+
+        e.ETarget->GainTempStati(e.EMagic->xval, NULL, e.vDuration, 
+            TEFF(e.eID)->HasFlag(EF_ONCEONLY) ? SS_ONCE : 
+            TEFF(e.eID)->HasFlag(EF_CURSE)    ? SS_CURS : 
+            TEFF(e.eID)->HasFlag(EF_MUNDANE)  ? SS_MISC : SS_ENCH, 
+            e.EMagic->yval, e.vDmg,e.eID,e.vCasterLev + (e.MM & MM_FORTIFY ? 5 : 0));
     }
-    else if (e.isEnter)
-      e.ETarget->GainTempStati(e.EMagic->xval, e.EItem, e.vDuration,
-          SS_ENCH, e.EMagic->yval, 
-          e.vDmg,e.eID,e.vCasterLev + (e.MM & MM_FORTIFY ? 5 : 0)); 
-  }
-  else if (e.isRemove || e.isLeave) {
-    if (e.EItem && e.EItem->isItem())
-      e.ETarget->RemoveStatiFrom(e.EItem);
-    else
-      e.ETarget->RemoveEffStati(e.eID);
-    e.Terse = true; 
-  }
-  else {
-    if (e.ETarget->HasEffStati(e.EMagic->xval,e.eID,e.EMagic->yval))
-    {
-      SetSilence();
-      e.ETarget->RemoveEffStati(e.eID,EV_REMOVED,-1);
-      UnsetSilence();
-    }
-    e.ETarget->GainTempStati(e.EMagic->xval, NULL, e.vDuration, 
-        TEFF(e.eID)->HasFlag(EF_ONCEONLY) ? SS_ONCE : 
-        TEFF(e.eID)->HasFlag(EF_CURSE)    ? SS_CURS : 
-        TEFF(e.eID)->HasFlag(EF_MUNDANE)  ? SS_MISC : SS_ENCH, 
-        e.EMagic->yval, e.vDmg,e.eID,e.vCasterLev + (e.MM & MM_FORTIFY ? 5 : 0));
-  }
 
-  if (e.EMagic->xval == PHASED)
-    if (e.EVictim->HasStati(ANCHORED) || e.EVictim->HasStati(MANIFEST))
-      {
-        e.Immune = true;
-        VPrint(e,"You flicker briefly but remain where you are.",
-                 "The <EVictim> flickers briefly but remains where <he:EVictim> is.");
-      }
+    if (e.EMagic->xval == PHASED)
+        if (e.EVictim->HasStati(ANCHORED) || e.EVictim->HasStati(MANIFEST)) {
+            e.Immune = true;
+            VPrint(e,"You flicker briefly but remain where you are.",
+                "The <EVictim> flickers briefly but remains where <he:EVictim> is.");
+        }
 
-
-  /*
-  Handled in GainPermStati
-  if (!e.Terse && e.ETarget->isCreature())
+    /*
+    Handled in GainPermStati
+    if (!e.Terse && e.ETarget->isCreature())
     e.EVictim->StatiMessage(e.EMagic->xval, e.EMagic->yval, e.isRemove);
-  */
-  
-  switch(e.EMagic->xval)
-  {
+    */
+
+    switch(e.EMagic->xval) {
     case INVIS:      case SICK:
     case POISONED:   case BLIND:
     case STUNNED:    case ASLEEP:
     case PARALYSIS:  case AFRAID:
     case STUCK:      case PRONE:
     case LEVITATION: case ILLUMINATED:
-      if ((e.EItem && e.EItem->isItem()))
-        e.EActor->IdentByTrial(e.EItem);
-     break;
+        if ((e.EItem && e.EItem->isItem()))
+            e.EActor->IdentByTrial(e.EItem);
+        break;
     case INVIS_TO:
-      if (e.EItem && e.EItem->isItem())
-        if (e.EActor->isMType(e.vDmg))
-          e.EActor->IdentByTrial(e.EItem);
-     break;
+        if (e.EItem && e.EItem->isItem())
+            if (e.EActor->isMType(e.vDmg))
+                e.EActor->IdentByTrial(e.EItem);
+        break;
     case STAFF_SPELLS:
-      e.EVictim->RecalcStaffSpells();
-     break;     
-  }
-  return DONE;
+        e.EVictim->RecalcStaffSpells();
+        break;     
+    }
+
+    return DONE;
 }
 
 
-EvReturn Magic::Inflict(EventInfo &e)
-	{
+EvReturn Magic::Inflict(EventInfo &e) {
     int16 i;
+
     if (e.isRemove || e.isLeave) {
-      e.ETarget->RemoveEffStati(e.eID);
-      e.Terse = true; 
-      return DONE; 
-      }
-      
-    if (e.EMagic->xval == CHARMED &&
-        e.EMagic->yval == CH_DOMINATE)
-      if (e.EVictim->isMType(MA_SAPIENT))
-        e.EActor->AlignedAct(AL_NONCHAOTIC,2,"mental coercion");
-      
+        e.ETarget->RemoveEffStati(e.eID);
+        e.Terse = true; 
+        return DONE; 
+    }
+
+    if (e.EMagic->xval == CHARMED && e.EMagic->yval == CH_DOMINATE)
+        if (e.EVictim->isMType(MA_SAPIENT))
+            e.EActor->AlignedAct(AL_NONCHAOTIC,2,"mental coercion");
+
     if (e.EVictim->isCreature()) {
-      if (e.EMagic->xval == STUNNED)
-        if (e.EVictim->ResistLevel(AD_STUN) == -1)
-          e.Immune = true;
-      if (e.EMagic->xval == CONFUSED)
-        if (e.EVictim->ResistLevel(AD_CONF) == -1)
-          e.Immune = true;
-      if (e.EMagic->xval == POISONED)
-        if (e.EVictim->ResistLevel(AD_POIS) == -1)
-          e.Immune = true;
-      if (e.EMagic->xval == DISEASED)
-        if (e.EVictim->ResistLevel(AD_DISE) == -1)
-          e.Immune = true;
-      if (e.EMagic->xval == BLIND)
-        if (e.EVictim->ResistLevel(AD_BLND) == -1)
-          e.Immune = true;
-      if (e.EMagic->xval == ASLEEP)
-        if (e.EVictim->ResistLevel(AD_SLEE) == -1)
-          e.Immune = true;
-      if (e.EMagic->xval == PARALYSIS)
-        if (e.EVictim->ResistLevel(AD_PLYS) == -1)
-          e.Immune = true;
-      if (e.EMagic->xval == AFRAID)
-        if (e.EVictim->ResistLevel(AD_FEAR) == -1)
-          e.Immune = true;
+        switch (e.EMagic->xval) {
+        case STUNNED:
+            if (e.EVictim->ResistLevel(AD_STUN) == -1)
+                goto DoneBecauseImmune;
+            break;
+        case CONFUSED:
+            if (e.EVictim->ResistLevel(AD_CONF) == -1)
+                goto DoneBecauseImmune;
+            break;
+        case POISONED:
+            if (e.EVictim->ResistLevel(AD_POIS) == -1)
+                goto DoneBecauseImmune;
+            break;
+        case DISEASED:
+            if (e.EVictim->ResistLevel(AD_DISE) == -1)
+                goto DoneBecauseImmune;
+            break;
+        case BLIND:
+            if (e.EVictim->ResistLevel(AD_BLND) == -1)
+                goto DoneBecauseImmune;
+            break;
+        case ASLEEP:
+            if (e.EVictim->ResistLevel(AD_SLEE) == -1)
+                goto DoneBecauseImmune;
+            break;
+        case PARALYSIS:
+            if (e.EVictim->ResistLevel(AD_PLYS) == -1)
+                goto DoneBecauseImmune;
+            else if (e.EVictim->UseLimitedFA())
+                goto DoneBecauseImmune;
+            break;
+        case AFRAID:
+            if (e.EVictim->ResistLevel(AD_FEAR) == -1)
+                goto DoneBecauseImmune;
+            break;
+        case PHASED:
+            if (e.EVictim->HasStati(ANCHORED) || e.EVictim->HasStati(MANIFEST)) {
+                VPrint(e,"You flicker briefly but remain where you are.",
+                    "The <EVictim> flickers briefly but remains where <he:EVictim> is.");
+                goto DoneBecauseImmune;
+            }
+            break;
+        default:
+            break;
+        }
+    }
 
-      if ((!e.Immune) && e.EMagic->xval == PARALYSIS)
-        if (e.EVictim->UseLimitedFA())
-          e.Immune = true;        
-      
-      if (e.EMagic->xval == PHASED)
-        if (e.EVictim->HasStati(ANCHORED) || e.EVictim->HasStati(MANIFEST))
-          {
-            e.Immune = true;
-            VPrint(e,"You flicker briefly but remain where you are.",
-                     "The <EVictim> flickers briefly but remains where <he:EVictim> is.");
-          }
-      
-      }
+    goto NotImmune;
 
-    if (e.Immune)
-      return DONE;
+DoneBecauseImmune:
+    e.Immune = true;
+    return DONE;
 
+NotImmune:
     if (e.EMagic->xval == TIMESTOP)
-      theGame->StopTime(e.EVictim);
+        theGame->StopTime(e.EVictim);
 
     StatiIterNature(e.EVictim,e.EMagic->xval)
         if (S->eID == e.eID && S->Val == e.EMagic->yval)
-        e.Terse = true; 
+            e.Terse = true; 
     StatiIterEnd(e.EVictim)
 
     e.EVictim->GainTempStati(e.EMagic->xval, e.EActor, e.vDuration, 
-      TEFF(e.eID)->HasFlag(EF_ONCEONLY) ? SS_ONCE : 
-      TEFF(e.eID)->HasFlag(EF_CURSE)    ? SS_CURS : 
-      TEFF(e.eID)->HasFlag(EF_MUNDANE)  ? SS_MISC : SS_ENCH, 
-      e.EMagic->yval, e.vDmg, e.eID,e.vCasterLev + (e.MM & MM_FORTIFY ? 5 : 0));
-    
-    /*
-       Duplicate messages...
-    if (!e.Terse && e.ETarget->isCreature())
-      e.EVictim->StatiMessage(e.EMagic->xval, e.EMagic->yval, e.isRemove);
-    */
-    
-    if (e.EMagic->xval == ASLEEP ||
-        e.EMagic->xval == CHARMED)
-      if (e.EVictim->isHostileTo(e.EActor))
-        e.EActor->KillXP(e.EVictim);
+        TEFF(e.eID)->HasFlag(EF_ONCEONLY) ? SS_ONCE : 
+        TEFF(e.eID)->HasFlag(EF_CURSE)    ? SS_CURS : 
+        TEFF(e.eID)->HasFlag(EF_MUNDANE)  ? SS_MISC : SS_ENCH, 
+        e.EMagic->yval, e.vDmg, e.eID,e.vCasterLev + (e.MM & MM_FORTIFY ? 5 : 0));
 
-    switch(e.EMagic->xval)
-      {
-        case INVIS:      case SICK:
-        case POISONED:   case BLIND:
-        case STUNNED:    case ASLEEP:
-        case PARALYSIS:  case AFRAID:
-        case STUCK:      case PRONE:
-        case LEVITATION: case ILLUMINATED:
-          if (e.EItem && e.EItem->isItem())
+    /*
+    Duplicate messages...
+    if (!e.Terse && e.ETarget->isCreature())
+        e.EVictim->StatiMessage(e.EMagic->xval, e.EMagic->yval, e.isRemove);
+    */
+
+    if (e.EMagic->xval == ASLEEP || e.EMagic->xval == CHARMED)
+        if (e.EVictim->isHostileTo(e.EActor))
+            e.EActor->KillXP(e.EVictim);
+
+    switch (e.EMagic->xval) {
+    case INVIS:
+    case SICK:
+    case POISONED:
+    case BLIND:
+    case STUNNED:
+    case ASLEEP:
+    case PARALYSIS:
+    case AFRAID:
+    case STUCK:
+    case PRONE:
+    case LEVITATION:
+    case ILLUMINATED:
+        if (e.EItem && e.EItem->isItem())
             e.EActor->IdentByTrial(e.EItem);
-         break;
-        case INVIS_TO:
-          if (e.EItem && e.EItem->isItem())
+        break;
+    case INVIS_TO:
+        if (e.EItem && e.EItem->isItem())
             if (e.EActor->isMType(e.vDmg))
-              e.EActor->IdentByTrial(e.EItem);
-         break;
-        case STAFF_SPELLS:
-          e.EVictim->RecalcStaffSpells();
-         break;     
-      }
-      
+                e.EActor->IdentByTrial(e.EItem);
+        break;
+    case STAFF_SPELLS:
+        e.EVictim->RecalcStaffSpells();
+        break;     
+    }
+
     if (e.EMagic->xval == AFRAID || e.EMagic->xval == CHARMED)
-      e.EActor->Exercise(A_CHA,max(0, random(4) + e.EVictim->ChallengeRating() -
-          e.EActor->ChallengeRating()), ECHA_CHARM,45);
-      
+        e.EActor->Exercise(A_CHA,max(0,random(4)+e.EVictim->ChallengeRating()-e.EActor->ChallengeRating()),ECHA_CHARM,45);
+
     if (e.eID && (TEFF(e.eID)->Schools & SC_ENC))
-      if (e.EVictim->isCreature() && (e.EMagic->sval == WILL))
-        if (e.EVictim->HasAbility(CA_SLIPPERY_MIND))
-          {
-            /* Here, we "schedule" a second saving throw versus
-               the enchantment for people who have Slippery Mind;
-               see Creature::StatiOff for the actual occurance
-               of the second saving throw. */
-            e.EVictim->GainTempStati(SLIP_MIND,NULL,2,
-                SS_MISC, theGame->SpellNum(e.eID),e.saveDC,0);
-          }
+        if (e.EVictim->isCreature() && (e.EMagic->sval == WILL))
+            if (e.EVictim->HasAbility(CA_SLIPPERY_MIND)) {
+                /* Here, we "schedule" a second saving throw versus
+                the enchantment for people who have Slippery Mind;
+                see Creature::StatiOff for the actual occurance
+                of the second saving throw. */
+                e.EVictim->GainTempStati(SLIP_MIND,NULL,2,SS_MISC,theGame->SpellNum(e.eID),e.saveDC,0);
+            }
+
     return DONE;
-  }
+}
 
 bool isMetaEvent(int32 ev)
   {
