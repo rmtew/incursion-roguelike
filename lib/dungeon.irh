@@ -1957,6 +1957,8 @@ Terrain "magma"
       dmg = (6d6) - r;
       if (dmg <= 0) return NOTHING;
       ThrowTerraDmg(EV_DAMAGE,AD_FIRE,dmg,"magma",EActor,$"magma");
+      if (EActor->isDead())
+        return ABORT;
       return NOTHING;
       },
     EV_MAGIC_XY {
