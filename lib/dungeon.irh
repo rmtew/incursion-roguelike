@@ -1825,7 +1825,7 @@ Terrain "turbulent water"
           EActor->HasStati(WATER_WALKING) ||
           EActor->isAerial()) {
         // actor is OK ...
-      } else { 
+      } else if (!EActor->isDead()) { 
         EActor->SkillCheck(SK_SWIM,20,true,false);
         res = LastSkillCheckResult() - 20;
         if (res >= 0)
@@ -2041,6 +2041,8 @@ Terrain "brimstone"
       dmg = (1d6) - r;
       if (dmg <= 0) return NOTHING;
       ThrowTerraDmg(EV_DAMAGE,AD_FIRE,dmg,"brimstone",EActor,$"brimstone");
+      if (EActor->isDead())
+        return ABORT;
       return NOTHING;
       },
     EV_MAGIC_XY {
