@@ -1345,16 +1345,13 @@ Wizard / Scroll Spell "Phantasmal Force" : EA_ILLUSION
         return NOTHING;
       if (!hPhantasm->isCreature())
         return NOTHING;
-      EActor->GainPermStati(ADJUST_CIRC,hPhantasm,SS_MISC,
-        A_AID,-2, $"Phantasmal Force");
-      EActor->GainPermStati(TRAP_EVENT,hPhantasm,SS_MISC,
-        POST(EVICTIM(EV_DAMAGE)),0, $"Phantasmal Force");
+      EActor->GainPermStati(ADJUST_CIRC,hPhantasm,SS_MISC,A_AID,-2, $"Phantasmal Force");
+      EActor->GainPermStati(TRAP_EVENT,hPhantasm,SS_MISC,POST(EVICTIM(EV_DAMAGE)),0, $"Phantasmal Force");
       return NOTHING;
       },
     META(POST(EVICTIM(EV_DAMAGE))) {
       hObj hPhantasm;
-      if (!EVictim->SkillCheck(SK_CONCENT,11 + e.aDmg,true))
-        {
+      if (!EVictim->SkillCheck(SK_CONCENT,11 + e.aDmg,true)) {
           //do {
             hPhantasm = EVictim->GetEffStatiObj(
               ADJUST_CIRC,$"Phantasmal Force");
@@ -4753,7 +4750,7 @@ Wizard Spell "Illusory Stance" : EA_INFLICT
       EMap->SetQueue(QUEUE_DAMAGE_MSG);
       TPrint(e,"Your afterimages confuse the <EVictim>!",
                "A bewildering miasma of images confuses you!",
-               "The <EActor>'s afterimages comfuse the <EVictim>!");
+               "The <EActor>'s afterimages confuse the <EVictim>!");
       EMap->UnsetQueue(QUEUE_DAMAGE_MSG);
       
       if (!EVictim->AbilityLevel(CA_UNCANNY_DODGE))
@@ -6641,21 +6638,18 @@ Wizard Spell "Hallucinatory Terrain" : EA_GENERIC
       if (EActor->HasEffStati(EFF_FLAG1,$"Hallucinatory Terrain") ||
           EActor->HasEffStati(EFF_FLAG1,$"Mirage Arcana"))
         {
-          EActor->IPrint("You can only have one terrain illusion
-            active at a time.");
+          EActor->IPrint("You can only have one terrain illusion active at a time.");
           return ABORT;
         }
       
-      ch = EActor->ChoicePrompt("Magma, Chasm, Slime, Pool or Webbing?",
-                                   "mcspw", 'm', BLUE, AZURE);
-      EActor->GainTempStati(EFF_FLAG1,NULL,e.vDuration,SS_ENCH,ch,e.saveDC,
-                                $"Hallucinatory Terrain");
+      ch = EActor->ChoicePrompt("Magma, Chasm, Slime, Pool or Webbing?", "mcspw", 'm', BLUE, AZURE);
+      EActor->GainTempStati(EFF_FLAG1,NULL,e.vDuration,SS_ENCH,ch,e.saveDC, $"Hallucinatory Terrain");
       return NOTHING;
-      },
+    },
     EV_REMOVED {
       EMap->RemoveEffField($"Hallucinatory Terrain");
       return NOTHING;
-      },
+    },
     EV_ITERRAIN {
       char ch; rID tID;
       tID = EMap->TerrainAt(e.EXVal, e.EYVal);
@@ -6720,9 +6714,9 @@ Wizard Spell "Shadow Magic" : EA_ILLUSION
       };
     Flags: EF_IBLAST;
     Lists:
-      * SPELL_LIST $"magic missile" $"force bolt" $"burning hands"
-                   $"ice dagger" $"sandblast" $"sunscorch"
-                   $"scorcher" $"electric loop";
+      * SPELL_LIST $"fireball" $"flame arrow" $"lightning bolt"
+                   $"thunderlance" $"force missiles" $"ice storm"
+                   $"shout";
   }
 
 /* --NECROMANCY 4-- */
@@ -6795,10 +6789,15 @@ Wizard Spell "Revenance" : EA_INFLICT
       them all a +2 profane bonus to hit, damage and saves, and
       a +4 turn resistance."; 
     On Event EV_ISTARGET {
-      if (!EActor->isMType(MA_UNDEAD))
+      if (!EActor->isMType(MA_UNDEAD)) {
+	  VPrint(e, "EV_TARGET not undead.",
+                "EV_TARGET not undead.");        
         return CANNOT_CAST_IT;
-      else 
+      } else {
+	  VPrint(e, "EV_TARGET undead.",
+                "EV_TARGET undead.");        
         return SHOULD_CAST_IT;
+      }
     },
     EV_MAGIC_HIT
       "You feel empowered!" /
@@ -9034,10 +9033,8 @@ Wizard Spell "Mirage Arcana" : EA_GENERIC
           return ABORT;
         }
       
-      ch = EActor->ChoicePrompt("Floor, Magma, Chasm, Slime, Pool or Webbing?",
-                                   "fmcspw", 'm', BLUE, AZURE);
-      EActor->GainTempStati(EFF_FLAG1,NULL,e.vDuration,SS_ENCH,ch,e.saveDC,
-                                $"Mirage Arcana");
+      ch = EActor->ChoicePrompt("Floor, Magma, Chasm, Slime, Pool or Webbing?","fmcspw", 'm', BLUE, AZURE);
+      EActor->GainTempStati(EFF_FLAG1,NULL,e.vDuration,SS_ENCH,ch,e.saveDC,$"Mirage Arcana");
       return NOTHING;
       },
     EV_REMOVED {
