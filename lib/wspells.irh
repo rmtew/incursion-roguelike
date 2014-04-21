@@ -7378,16 +7378,16 @@ Wizard Spell "Mooncloak" : EA_INFLICT
   {
     SC_ABJ; SC_EVO; Level: 5; IS_A_BUFF(COST_5);
     Desc: "Casting this spell evokes a shimmering silver
-      lumenescence around the mage's body not unlike that
+      luminescence around the mage's body not unlike that
       produced by <9>faerie fire<1>, but the Mooncloak
-      has a much greater effect then that. The dwenomer
+      has a much greater effect then that. The dweomer
       abjures several kinds of protection against the next
       applicable attack she suffers -- a Cold Resistance of
       7, a +5 bonus on saving throws versus paralyzation
       and petrification and absolute immunity to a single
       negative energy effect. Once the Mooncloak has offered
       its protection against one of these effects, it is
-      expended and the radiance vainshes.\n
+      expended and the radiance vanishes.\n
       __Alternatively, once the Mooncloak is in effect, the
       caster can choose to expend its magic at any time (by
       'a'ctivating it) as a destructive silvery bolt. This
@@ -7436,7 +7436,7 @@ and EA_INFLICT
       };
   }
 and EA_INFLICT
-  { xval: ACTIVATION; } 
+  { xval: ACTIVATION; qval: Q_TAR; } 
 
 
 Wizard / Priest / Druid Spell "Resist the Elements" : EA_INFLICT

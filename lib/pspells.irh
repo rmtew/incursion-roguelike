@@ -617,9 +617,9 @@ Druid Spell "Camouflage" : EA_INFLICT
   { SC_ILL; IS_A_BUFF(COST_1); Level: 1;
     xval: SKILL_BONUS; yval: SK_HIDE; pval: +5;
     On Event MSG_STATINAME "Camo";
-    Desc: "This spell subtley alters the druid's coloration and the
+    Desc: "This spell subtly alters the druid's coloration and the
       play of light around her, causing her to blend in easily with
-      rock, foliage or other natural surrondings and thus giving her
+      rock, foliage or other natural surroundings and thus giving her
       a +5 magic bonus to her Hide skill rating.";
   }
 

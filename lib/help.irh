@@ -907,7 +907,7 @@ Text "help::interface"
 	  around you. The selection prompt is usually accompanied by a white
 	  block-cursor that highlights whatever is currently selected. The 
 	  cursor keys are used to select a target as desired, while other keys 
-	  can be used to examine your surrondings.\n\n 
+	  can be used to examine your surroundings.\n\n 
 
 	  <13>SELECTION TYPES\n
       ===============<5>\n

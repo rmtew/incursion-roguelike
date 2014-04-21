@@ -420,7 +420,7 @@ AI_TOME Effect "Libram of Hidden Secrets" : EA_GENERIC
      against the feel of old-school RPGs.
    * Secondly, the item ID system isn't set up to properly handle multiple
      items types unless there's only two and one is a potion.
-   * Third, I think that vermislitude would be better served by subtley
+   * Third, I think that vermislitude would be better served by subtly
      different items rather than the same item in different categories.
    * Forth, given how drastically more common low-level items are in
      Incursion (compared to base d20), I really don't like the "should I
@@ -4257,7 +4257,7 @@ AI_RING Effect "the Chameleon" : EA_GRANT
   { SC_THA; xval: SKILL_BONUS; yval: SK_HIDE; pval: PLUS_3PER1;
     Flags: EF_NEEDS_PLUS; Level: PLUS_2PER1; 
     Desc: "This ring causes your image to shift color to match the
-      surrondings, giving you a magic bonus to your Hide skill equal
+      surroundings, giving you a magic bonus to your Hide skill equal
       to thrice its level of enchantment. In addition, it may be
       used to dominate any one nearby reptile three times per day."; }
       and EA_GRANT

@@ -2139,7 +2139,7 @@ AI_PSIONIC Effect "Chameleon Shifting" : EA_GRANT
     Flags: EF_NOTBAD, EF_SHOWNAME, EF_PERSISTANT, EF_CANCEL, EF_MUNDANE;
     Desc: "Characters with this power can imitate the biological
       process a chameleon uses to change the color of its skin,
-      allowing them to blend nearly perfectly into their surrondings.
+      allowing them to blend nearly perfectly into their surroundings.
       Manifesting this power gives the character a +10 bonus to the
       Hide skill.";
     xval: SKILL_BONUS; yval: SK_HIDE; pval: +10;
