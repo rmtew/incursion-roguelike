@@ -939,26 +939,25 @@ EvReturn Creature::Greet(EventInfo &e)
     return DONE;
   }
 
-EvReturn Creature::Order(EventInfo &e)
-  {
+EvReturn Creature::Order(EventInfo &e) {
     Term *tm; Creature *c; int32 i;
     if (!e.EActor->isPlayer())
-      return ABORT;
-      
-    if (e.isAllAllies) {
-      bool found = false;
-      MapIterate(m,c,i)
-        if (c->isCreature() && c != e.EActor && c->isLedBy(e.EActor))
-          if (e.EActor->Percieves(c))
-            found = true;
-      if (!found) {
-        IPrint("You have no visible allies.");
         return ABORT;
+
+    if (e.isAllAllies) {
+        bool found = false;
+        MapIterate(m,c,i)
+            if (c->isCreature() && c != e.EActor && c->isLedBy(e.EActor))
+                if (e.EActor->Percieves(c))
+                    found = true;
+        if (!found) {
+            IPrint("You have no visible allies.");
+            return ABORT;
         }
-      }
-        
+    }
+
     tm = thisp->MyTerm;
-  
+
     tm->LOption("Retarget", TargetMaster, 
         "General. The selected followers will forget current orders and targets "
         "and reevaluate all nearby creatures.");
@@ -983,30 +982,27 @@ EvReturn Creature::Order(EventInfo &e)
     tm->LOption("Attack Specific Target", OrderAttackTarget,
         "The selected followers will attack a specific creature of your "
         "choice in preference to others.");
-    
+
     tm->LOption("Hide", OrderHide, 
         "Hiding. The selected followers will hide when possible.");
     tm->LOption("Do Not Hide", OrderDoNotHide, 
         "Hiding. The selected followers will refrain from hiding.");
     if (!e.isAllAllies)
-      tm->LOption("Give Item to Me", OrderGiveMeItem,
-              "The selected followers will give you an item he has found in the dungeon. "
-              "You cannot ask followers to give you their personal property (i.e., items they "
-              "were generated with), though you can barter for it, but they will give you items "
-              "they merely found.");
+        tm->LOption("Give Item to Me", OrderGiveMeItem,
+        "The selected followers will give you an item he has found in the dungeon. "
+        "You cannot ask followers to give you their personal property (i.e., items they "
+        "were generated with), though you can barter for it, but they will give you items "
+        "they merely found.");
     if ((!e.EVictim) || e.EVictim->HasStati(SUMMONED))
-      tm->LOption("Return to Home Plane", OrderReturnHome,
+        tm->LOption("Return to Home Plane", OrderReturnHome,
         "A summoned creature given this order "
         "will return to its plane of origin.");
 
-        
-
     int nn = tm->LMenu(MENU_ESC|MENU_DESC|MENU_2COLS|MENU_BORDER,
         e.isAllAllies ? " -- Order All Allies -- " : 
-          " -- Give Which Order -- ",WIN_MENUBOX);
-
+        " -- Give Which Order -- ",WIN_MENUBOX);
     if (nn <= 0)
-      return ABORT; 
+        return ABORT; 
 
     TargetType n = (TargetType) nn; 
 
@@ -1015,87 +1011,86 @@ EvReturn Creature::Order(EventInfo &e)
     xe.Clear();
     switch (n) {
       case OrderWalkToPoint: 
-        if (!tm->EffectPrompt(xe,Q_LOC,false,"Direct Follower Where"))
-          return DONE;
-       break;
+          if (!tm->EffectPrompt(xe,Q_LOC,false,"Direct Follower Where"))
+              return DONE;
+          break;
       case OrderAttackTarget:
-        if (!tm->EffectPrompt(xe,Q_TAR,false,"Attack What?"))
-          return DONE;
-       break;
+          if (!tm->EffectPrompt(xe,Q_TAR,false,"Attack What?"))
+              return DONE;
+          break;
       case OrderGiveMeItem:
-        if (!e.EVictim->FirstInv())
-          {
-            e.EActor->IPrint("The <Obj> has no inventory.",e.EVictim);
-            return ABORT;
+          if (!e.EVictim->FirstInv()) {
+              e.EActor->IPrint("The <Obj> has no inventory.",e.EVictim);
+              return ABORT;
           }
-        for(it=e.EVictim->FirstInv();it;it=e.EVictim->NextInv())
-          tm->LOption(it->Name(0),it->myHandle);
-        hIt = tm->LMenu(MENU_BORDER,"Which Item?");
-        if (hIt == -1 || hIt == 0)
-          return ABORT;
-        e.EItem = oItem(hIt);
-        if (e.EItem->IFlags & IF_PROPERTY)
-          {
-            IPrint("That item is part of the <Obj>'s personal property.", 
-              e.EVictim);
-            return DONE;
+          for(it=e.EVictim->FirstInv();it;it=e.EVictim->NextInv())
+              tm->LOption(it->Name(0),it->myHandle);
+          hIt = tm->LMenu(MENU_BORDER,"Which Item?");
+          if (hIt == -1 || hIt == 0)
+              return ABORT;
+          e.EItem = oItem(hIt);
+          if (e.EItem->IFlags & IF_PROPERTY) {
+              IPrint("That item is part of the <Obj>'s personal property.", 
+                  e.EVictim);
+              return DONE;
           }
     }
 
-    if (!e.isAllAllies)
-      { c= e.EVictim;
-        goto SingleTarget; }
+    if (!e.isAllAllies) {
+        c= e.EVictim;
+        goto SingleTarget;
+    }
 
-    RestartScan:
+RestartScan:
     MapIterate(m,c,i) {
-      if (c->isCreature() && c != this) {
-        if (c->isLedBy(this) && Percieves(c)) {
-          SingleTarget:
-          switch (n) {
-            case TargetMaster: 
-              c->ts.ForgetOrders(c);
-              c->ts.Retarget(c,true);
-              break; 
+        if (c->isCreature() && c != this) {
+            if (c->isLedBy(this) && Percieves(c)) {
+SingleTarget:
+                switch (n) {
+                case TargetMaster: 
+                    c->ts.ForgetOrders(c);
+                    c->ts.Retarget(c,true);
+                    break;
+                case OrderAttackNeutrals:
+                    c->ts.giveOrder(c,this,n);
+                    c->ts.Retarget(c,true);
+                    break; 
+                case OrderAttackTarget:
+                    c->ts.ForgetOrders(c,OrderAttackTarget);
+                    c->ts.giveOrder(c,this,OrderAttackTarget,xe.EVictim);
+                    break;
+                case OrderDoNotHide: 
+                    c->Reveal(true);
+                    c->ts.giveOrder(c,this,n);
+                    break; 
 
-            case OrderAttackNeutrals:
-              c->ts.giveOrder(c,this,n);
-              c->ts.Retarget(c,true);
-              break; 
-            case OrderAttackTarget:
-              c->ts.ForgetOrders(c,OrderAttackTarget);
-              c->ts.giveOrder(c,this,OrderAttackTarget,xe.EVictim);
-             break;
-            case OrderDoNotHide: 
-              c->Reveal(true);
-              c->ts.giveOrder(c,this,n);
-              break; 
-
-            case OrderWalkToPoint: 
-              c->ts.giveOrder(c,this,n,NULL,xe.EXVal,xe.EYVal);
-              break; 
-            case OrderGiveMeItem:
-              IPrint("The <Obj> gives you the <Obj>.", e.EVictim, e.EItem);            
-              e.EItem->Remove(false);
-              GainItem(e.EItem,false);
-             break;
-            case OrderReturnHome:
-              if (c->HasStati(SUMMONED) || c->HasStati(TRANSFORMED)) {
-                c->RemoveStati(SUMMONED);
-                c->RemoveStati(TRANSFORMED);
-                goto RestartScan;
+                case OrderWalkToPoint: 
+                    c->ts.giveOrder(c,this,n,NULL,xe.EXVal,xe.EYVal);
+                    break; 
+                case OrderGiveMeItem:
+                    IPrint("The <Obj> gives you the <Obj>.", e.EVictim, e.EItem);            
+                    e.EItem->Remove(false);
+                    GainItem(e.EItem,false);
+                    break;
+                case OrderReturnHome:
+                    if (c->HasStati(SUMMONED) || c->HasStati(TRANSFORMED)) {
+                        c->RemoveStati(SUMMONED);
+                        c->RemoveStati(TRANSFORMED);
+                        if (e.isAllAllies)
+                            goto RestartScan;
+                    }
+                    break;
+                default: 
+                    c->ts.giveOrder(c,this,n);
+                    break; 
                 }
-             break;
-            default: 
-              c->ts.giveOrder(c,this,n);
-              break; 
-          } 
-        if (!e.isAllAllies)
-          return DONE;
+                if (!e.isAllAllies)
+                    return DONE;
+            } 
         } 
-      } 
     } 
     return DONE; 
-  }
+}
   
 EvReturn Creature::Quell(EventInfo &e)
   {
