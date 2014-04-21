@@ -2981,7 +2981,7 @@ Region "Flooded Cavern" : RF_ROOM
           20 CONSTRAINED_ENC($"tribal warband",MA_AQUATIC)
              CONSTRAINED_ENC($"oozes",MA_AQUATIC)        
              $"band of ixitxachitl" 
-             $"aboleth, with slaves"
+          // $"aboleth, with slaves"
              $"water creatures"
            5 CONSTRAINED_ENC($"uniform classed group",MA_AQUATIC)
              CONSTRAINED_ENC($"aberration group",MA_AQUATIC)
