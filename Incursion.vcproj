@@ -1057,10 +1057,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\Src\WAllegro.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\src\Wlibtcod.cpp"
 				>
 			</File>
