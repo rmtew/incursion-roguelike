@@ -127,7 +127,7 @@ Item "spellbook [Mortal Coil]" : T_BOOK
     Spells: $"enlarge", $"reduce", $"expeditious retreat", $"slow",
             $"bull's strength", $"cat's grace", $"bear's endurance",
             $"false life", $"convulsion", $"jump;spell", $"magic weapon",
-            $"bladethirst"; 
+            $"bladethirst", $"heightened senses"; 
     On Event MSG_STATINAME "MortalCoil";
   }
     
