@@ -306,7 +306,7 @@ Monster "feyr" : MA_ABERRATION
 	  Feats: SK_HIDE, SK_LISTEN, SK_MOVE_SIL, SK_SPOT,
            FT_GUARDED_INVOCATION, FT_MULTIATTACK;
     Spells: $"cause fear", $"scare", $"invisibility", $"emotion", 
-            $"fly", $"mage armor", $"minor drain";
+            $"fly", $"mage armour", $"minor drain";
     Flags: M_CHAOTIC, M_EVIL, M_NOHANDS, M_LIGHT_AVERSE;
     Desc: "Feyrs are strange aberrations that feed on the fear and
       nightmares of other sapient creatures. Often they are discovered
@@ -896,7 +896,7 @@ Monster "mind flayer warrior" : MA_ILLITHID, MA_ABERRATION
     M_CARNI, M_FLYER;
     
     Gear: $"kite shield" of random 1 to 2,
-          $"field plate armor" of random 1 to 2,
+          $"field plate armour" of random 1 to 2,
           5d2 $"potion" of $"extra-healing",
           5d2 $"potion" of $"dimension door";
 
@@ -1392,7 +1392,7 @@ Monster "glass golem" : MA_GOLEM, MA_CONSTRUCT
 	ABILITY(CA_WEAPON_IMMUNITY,1);
     Immune: DF_MIND, DF_POIS, DF_SLEE, DF_PLYS, DF_STUN,
             DF_DISE, DF_NECR, DF_CRIT, DF_SUBD;
-    Spells: $"color spray";
+    Spells: $"colour spray";
     Flags: M_HUMANOID, M_MINDLESS, M_DEAF, M_NEUTER, M_PSYCHO,
            M_HOSTILE;
     On Event EVICTIM(PRE(EV_MAGIC_HIT)) {
@@ -1406,8 +1406,8 @@ Monster "glass golem" : MA_GOLEM, MA_CONSTRUCT
         case $"force bolt":
           e.vDmg *= 2;
           return NOTHING;
-        case $"color spray":
-        case $"color burst":
+        case $"colour spray":
+        case $"colour burst":
         case $"chromatic orb":
           e.eID = $"haste";
           return NOTHING;
@@ -1448,7 +1448,7 @@ Monster "glass golem" : MA_GOLEM, MA_CONSTRUCT
       },
     MSG_SPECABIL
         "It is immune to all direct magic spells, save that <9>shatter<7> will
-          destroy it outright, <9>color spray<7>/<9>burst<7> will haste it,
+          destroy it outright, <9>colour spray<7>/<9>burst<7> will haste it,
           <9>force bolt<7> does double the normal damage and light-based spells 
           heal it fully. It heals 1d8 points of damage in lit areas and 3d8 points
           on damage in bright magical light. It will not willingly enter areas of
@@ -1524,7 +1524,7 @@ Monster "stone golem" : MA_GOLEM, MA_CONSTRUCT
     Desc: "This golem has a humanoid body made from stone. A stone golem is
     9 feet tall and weighs around 2,000 pounds. Its body is frequently
     stylized to suit its creator. For example, it might look like it is
-    wearing armor, with a particular symbol carved on the breastplate, or
+    wearing armour, with a particular symbol carved on the breastplate, or
     have designs worked into the stone of its limbs.
     Stone golems are formidable opponents, being physically powerful and
     difficult to harm."; 
@@ -2049,7 +2049,7 @@ Monster "dark tree" : MA_PLANT
     Desc: "Dark trees are twisted cousins of the treants, horrible
       monsters who delight in drinking the blood of demihumans with
       their roots. They use their confusion ability to mislead
-      travellers, and spread deciet and dischord in sylvan societies
+      travellers, and spread deceit and dischord in sylvan societies
       whenever they have the opportunity.";
   }
 
@@ -2204,7 +2204,7 @@ Monster "strange fungus" : MA_NAGA, MA_SNAKE
     Image: grey 'F'; Size: SZ_MEDIUM;
     Desc: "Deep beneath the surface of Theyra, many strange forms of fungus
       grow, developing supernatural abilities resulting from the strange
-      radiation of the Underdark. While they often vary in color or shape,
+      radiation of the Underdark. While they often vary in colour or shape,
       the Knowledge (Nature) skill is needed to identify their nature and
       abilities more completely.";
     Flags: M_UNKNOWN, M_NOGEN;
@@ -3045,7 +3045,7 @@ Monster "dancing spider" : MA_SPIDER, MA_VERMIN
   Immune: DF_STUK;
   Poison: $"spider venom";
   Desc: "The so-called dancing spider has a distinctive purple pattern of
-  coloration and a rapid metabolism. It eschews web-spinning in favor of
+  colouration and a rapid metabolism. It eschews web-spinning in favour of
   making darting attacks at its prey."; 
 }
 
@@ -3128,7 +3128,7 @@ Monster "pike spider" : MA_SPIDER, MA_VERMIN
   Poison: $"giant spider venom";
   Desc: "The pike spider has two large, piercing stingers that can be used
   to strike unwary foes from a distance. Its attacks are very good at
-  penetrating and bypassing armor."; 
+  penetrating and bypassing armour."; 
   On Event PRE(EV_DAMAGE) {
     e.isBypass = true; 
   }; 
@@ -3187,7 +3187,7 @@ Monster "giant slug" : MA_VERMIN, MA_ABERRATION
       dwell amidst rot and darkness, their powerful digestive
       acids allowing them to burrow deep into even the most
       well-fortified structure. They are a light brown in 
-      coloration, with a pale white underbelly. As with their
+      colouration, with a pale white underbelly. As with their
       more mundane counterparts, salt is a terrible poison to
       giant slugs.";
   }
@@ -3923,7 +3923,7 @@ Monster "skeletal warrior" : MA_SKELETON, MA_FORCE_D12
     Gear:
       50% $"greatsword" of random 1 to 3
         else random T_WEAPON of random 1 to 3,
-      $"field plate armor" of random 1 to 3;
+      $"field plate armour" of random 1 to 3;
     Desc: "These powerful undead are raised by an evil priest from
       the remains of a great warrior who died without fulfilling his
       (or her) dreams of power and conquest. They are free-willed
@@ -3957,7 +3957,7 @@ Monster "skeletal myrmidon" : MA_SKELETON, MA_FORCE_D12
     Gear:
       50% $"greatsword" of random 3 to 5
         else random T_WEAPON of random 3 to 5,
-      $"full plate armor" of random 3 to 5;
+      $"full plate armour" of random 3 to 5;
     Desc: "These mighty undead are raised by an evil priest from
       the remains of a legendary warrior who died without fulfilling his
       (or her) dreams of power and conquest. They are free-willed and
@@ -4020,7 +4020,7 @@ Monster "slow shadow" : MA_WRAITH
       M_PSYCHO;
     Desc: "Creatures of living darkness, these restless spirits are
       all that remains of those whose lives were consumed by malevolant
-      apathy and silent complicity to evil. Shadows are a favored tool
+      apathy and silent complicity to evil. Shadows are a favoured tool
       of necromancers and grim sorcerors everywhere.";
     On Event POST(EV_STRIKE) {
       EActor->IdentifyMon();
@@ -4050,7 +4050,7 @@ Monster "shadow" : MA_WRAITH
       M_PSYCHO;
     Desc: "Creatures of living darkness, these restless spirits are
       all that remains of those whose lives were consumed by malevolant
-      apathy and silent complicity to evil. Shadows are a favored tool
+      apathy and silent complicity to evil. Shadows are a favoured tool
       of necromancers and grim sorcerors everywhere.";
     On Event POST(EV_HIT) {
       EActor->IdentifyMon();
@@ -4349,7 +4349,7 @@ Monster "revenant" : MA_REVENANT
       $"peasant garb",
       25% $"chainmail" else
         33% $"banded mail" else
-        50% $"cord armor" else
+        50% $"cord armour" else
             $"coat of plates",
       25% $"halberd" else
         33% $"long sword" else
@@ -4650,7 +4650,7 @@ Template "graveborn;template" : TM_UNDEAD for MA_NLIVING
     Immune: UNDEAD_IMMUNITIES; 
     Flags: M_UNDEAD, M_CARNI, M_NO_BLOOD, M_NOPOLY, TMF_OBVIOUS;
     Desc: "Graveborn are weak undead, recently raised from
-      the grave. Through some magical mischance or divine favor they retain
+      the grave. Through some magical mischance or divine favour they retain
       their previous intelligence and drive and can advance in any standard
       character class. ";
     On Event EV_ISTARGET {
@@ -4754,7 +4754,7 @@ Template "death knight" : TM_CLASS for MA_ADVENTURER
     Immune: UNDEAD_IMMUNITIES; 
     Gear: $"kite shield" of random 1 to 2,
           $"heavy lance" of random 1 to 2,
-          $"full plate armor" of random 1 to 2;
+          $"full plate armour" of random 1 to 2;
     On Event EV_ISTARGET {
       if (EActor->GetAttr(A_SIZ) == SZ_MEDIUM)
         return 0;

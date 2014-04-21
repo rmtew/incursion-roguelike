@@ -1218,7 +1218,7 @@
 					>
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="FLEX -i -o.\SRC\tokens.cpp .\lang\Tokens.Lex&#x0D;&#x0A;&#x0D;&#x0A;"
+						CommandLine="FLEX -B -i -o.\SRC\tokens.cpp .\lang\Tokens.Lex&#x0D;&#x0A;&#x0D;&#x0A;"
 						Outputs=".\SRC\tokens.cpp"
 					/>
 				</FileConfiguration>

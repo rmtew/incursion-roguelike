@@ -340,9 +340,9 @@ Monster "Roark Ironbeard" : MA_DWARF, MA_ADVENTURER
       75% 2d10 $"dagger" +1,
       35% 2d10 $"dagger" of random 2 to 5,
       $"cloak" of $"nondetection",
-      $"leather armor",
+      $"leather armour",
       $"studded leather",
-      $"full plate armor",
+      $"full plate armour",
       $"chainmail shirt",
       $"plate mail",
       50% $"splint mail",
@@ -354,9 +354,9 @@ Monster "Roark Ironbeard" : MA_DWARF, MA_ADVENTURER
       50% random T_WEAPON of random 3 to 10,
       50% random T_WEAPON of random 3 to 10,
       50% random T_WEAPON of random 3 to 10,
-      random T_ARMOR of random 3 to 10,
-      random T_ARMOR of random 1 to 10,
-      50% random T_ARMOR of random 1 to 10,
+      random T_ARMOUR of random 3 to 10,
+      random T_ARMOUR of random 1 to 10,
+      50% random T_ARMOUR of random 1 to 10,
       25% random T_RING of random 1 to 10,
       25% random T_RING of random 1 to 10,
       15% random T_BOOTS of random 1 to 10,
@@ -419,13 +419,13 @@ Monster "Roark Ironbeard" : MA_DWARF, MA_ADVENTURER
             EActor->IPrint("Roark says, 'Now normally I don't buy my wares
               from adventurers, but you really look like you could use a
               hand so I'll help you out here.'");
-          if (!((EItem->isType(T_WEAPON) || EItem->isType(T_ARMOR) ||
+          if (!((EItem->isType(T_WEAPON) || EItem->isType(T_ARMOUR) ||
                  EItem->isType(T_BOW) || EItem->isType(T_MISSILE)) &&
                 EItem->isMagic() && EItem->ItemLevel() > 3))
             {
               EActor->IPrint("Roark grumbles, 'I don't think I can move that, but I do want
                 to help. If you could bring me some powerful, magical weapons
-                or armor, though, I'd be interested in that...'");
+                or armour, though, I'd be interested in that...'");
               return NOMSG;
             }
           if (EVictim->GetStatiMag(EFF_FLAG1) > (EActor->SkillLevel(
@@ -2600,7 +2600,7 @@ Region "Twisty Little Passage" : RF_CORRIDOR
       * SEGMENT_MAXLEN    4,
       * STUBBORN_CORRIDOR 30;
     Lists:
-      * WALL_COLORS BROWN GREY SHADOW; 
+      * WALL_COLOURS BROWN GREY SHADOW; 
   }
 
 /* 
@@ -2626,7 +2626,7 @@ Region "Unworked Stone" : RF_NOGEN
   { 
   }
 
-/* Weimer Room Wall Color Scheme: 
+/* Weimer Room Wall Colour Scheme: 
  * 
  * cyan                                 -> vaults
  * purple                               -> place of sanctuary
@@ -2639,7 +2639,7 @@ Region "Unworked Stone" : RF_NOGEN
  * purple, magenta                      -> illithid, smart people
  * red                                  -> brimstone
  * BLUE PURPLE CYAN GREEN               -> fungal forest, hedge maze, fungi
- * FLOOR_COLORS BROWN GREY,             -> uncrafted
+ * FLOOR_COLOURS BROWN GREY,             -> uncrafted
  * BROWN, YELLOW                        -> orcs, trolls, slimes
  * GREEN                                -> ancient barracks, kobolds, vermin
  *
@@ -2652,7 +2652,7 @@ Region "Bare Cavern" : RF_ROOM
     Walls: $"Dungeon Wall"; Floor: $"Floor"; 
     Door: $"oak door"; RoomTypes: RM_LIFECAVE;
     Lists: 
-      * WALL_COLORS WHITE;
+      * WALL_COLOURS WHITE;
   }
 
 Region "Smooth Enclosure" : RF_ROOM
@@ -2672,7 +2672,7 @@ Region "Inner Keep" : RF_ROOM
     Walls: $"Dungeon Wall"; Floor: $"Floor"; 
     Door: $"iron door"; RoomTypes: RM_DOUBLE; 
     Lists: 
-      * WALL_COLORS PURPLE MAGENTA,
+      * WALL_COLOURS PURPLE MAGENTA,
       * ENCOUNTER_LIST
           $"adventuring party"
           $"experienced adventuring party"
@@ -2688,7 +2688,7 @@ Region "Marble Enclave" : RF_ROOM
     RoomTypes: RM_NORMAL, RM_CIRCLE, RM_OVERLAP,
                RM_ADJACENT, RM_AD_ROUND, RM_AD_MIXED;
     Lists:
-      * WALL_COLORS WHITE GREY SHADOW CYAN; }
+      * WALL_COLOURS WHITE GREY SHADOW CYAN; }
 
 Region "Limestone Cave" : RF_ROOM
   { Desc: "This vast cavern, eroded by the natural waterflow, has walls of
@@ -2700,8 +2700,8 @@ Region "Limestone Cave" : RF_ROOM
     Constants:
       * BLOB_WITH $"shallow water";
     Lists:
-      * WALL_COLORS GREEN, 
-      * FLOOR_COLORS GREEN,
+      * WALL_COLOURS GREEN, 
+      * FLOOR_COLOURS GREEN,
       * FURNISHINGS FU_SPLATTER $"rock column",
       * ENCOUNTER_LIST
           50 CONSTRAINED_ENC($"lone dark-dwelling beast",MA_AQUATIC)
@@ -2724,7 +2724,7 @@ Region "Ancient Tomb" : RF_ROOM
     Door: $"iron door"; 
     RoomTypes: RM_CIRCLE | RM_OCTAGON | RM_NORMAL | RM_DOUBLE;     
     Lists: 
-      * WALL_COLORS SHADOW, 
+      * WALL_COLOURS SHADOW, 
       * FURNISHINGS FU_CENTER  $"tomb"
                     FU_XCORNERS $"gravestone"
                     FU_CORNERS $"pillar",
@@ -2747,7 +2747,7 @@ Region "Graveyard" : RF_ROOM
     Walls: $"Dungeon Wall"; Floor: $"Loose-Packed Earth"; 
     Door: $"iron door"; RoomTypes: RM_CIRCLE | RM_CROSS | RM_DOUBLE;     
     Lists: 
-      * WALL_COLORS SHADOW, 
+      * WALL_COLOURS SHADOW, 
       * FURNISHINGS FU_SPLATTER $"gravestone", 
       * ENCOUNTER_LIST 
           10 $"mixed corporeal undead"
@@ -2767,7 +2767,7 @@ Region "Orderly Graveyard" : RF_ROOM
     Walls: $"Dungeon Wall"; Floor: $"Loose-Packed Earth"; 
     Door: $"iron door"; RoomTypes: RM_NORMAL, RM_PILLARS, RM_GRID;     
     Lists: 
-      * WALL_COLORS SHADOW, 
+      * WALL_COLOURS SHADOW, 
       * FURNISHINGS FU_SPACED_COLUMNS $"gravestone"; 
       * ENCOUNTER_LIST 
           10 $"mixed corporeal undead"
@@ -2790,7 +2790,7 @@ Region "Orderly Flood" : RF_ROOM
     RoomTypes: RM_NORMAL, RM_LARGE, RM_CIRCLE, RM_GRID;
     Lists:
       * FURNISHINGS FU_SPACED_COLUMNS $"floor",
-      * WALL_COLORS BLUE AZURE,
+      * WALL_COLOURS BLUE AZURE,
       * ENCOUNTER_LIST
           50 CONSTRAINED_ENC($"lone dark-dwelling beast",MA_AQUATIC)
           40 CONSTRAINED_ENC($"pack encounter",MA_AQUATIC)
@@ -2814,7 +2814,7 @@ Region "Island Lake" : RF_ROOM
       * FURNISHINGS FU_CENTER_CIRCLE_LARGE $"shallow water"
                     FU_CENTER_CIRCLE_SMALL $"floor"
                     FU_CENTER $"large iron chest",
-      * WALL_COLORS BLUE AZURE,
+      * WALL_COLOURS BLUE AZURE,
       * ENCOUNTER_LIST
           50 CONSTRAINED_ENC($"lone dark-dwelling beast",MA_AQUATIC)
           40 CONSTRAINED_ENC($"pack encounter",MA_AQUATIC)
@@ -2852,7 +2852,7 @@ Region "Abandoned Temple" : RF_ROOM
     Door: $"iron door"; 
     RoomTypes: RM_CIRCLE | RM_OCTAGON;     
     Lists: 
-      * WALL_COLORS GREY GREY RED YELLOW, 
+      * WALL_COLOURS GREY GREY RED YELLOW, 
       * FURNISHINGS FU_CENTER  $"altar"
                     FU_CORNERS $"pillar",
       * ENCOUNTER_LIST
@@ -2898,15 +2898,15 @@ Region "Fungal Forest" : RF_ROOM
   { Desc: "Filled with deep purple toadstool 'trees' ranging from twelve to
     fifteen feet high, this chamber is at once beautiful and eerie, peaceful
     and claustrophobic. Even the floor and ceiling are coated with a fine
-    layer of luminescent, multicolored moss.";
+    layer of luminescent, multicoloured moss.";
     Walls: $"Dungeon Wall"; Floor: $"Floor"; 
     Door: $"darkwood door"; RoomTypes: RM_LIFECAVE;
     Constants:               
       * BLOB_WITH $"giant mushroom";
     Lists:
       * FURNISHINGS FU_SPLATTER $"verdant bloom",
-      * WALL_COLORS BLUE PURPLE CYAN GREEN ,
-      * FLOOR_COLORS BLUE PURPLE CYAN GREEN ,
+      * WALL_COLOURS BLUE PURPLE CYAN GREEN ,
+      * FLOOR_COLOURS BLUE PURPLE CYAN GREEN ,
       * ENCOUNTER_LIST
           $"plants"
           $"mixed oozes"
@@ -2957,8 +2957,8 @@ Region "Gardened Forest" : RF_ROOM
     Door: $"darkwood door";
     RoomTypes: RM_NORMAL, RM_LARGE, RM_CIRCLE, RM_GRID;
     Lists:
-      * WALL_COLORS BLUE PURPLE CYAN GREEN,
-      * FLOOR_COLORS BLUE PURPLE CYAN GREEN,
+      * WALL_COLOURS BLUE PURPLE CYAN GREEN,
+      * FLOOR_COLOURS BLUE PURPLE CYAN GREEN,
       * FURNISHINGS FU_INNER_COLUMNS $"tree",
       * ENCOUNTER_LIST
         10 $"homogenous fae group"
@@ -2974,7 +2974,7 @@ Region "Flooded Cavern" : RF_ROOM
     Constants:
       * BLOB_WITH $"shallow water";
     Lists:
-      * WALL_COLORS BLUE AZURE,
+      * WALL_COLOURS BLUE AZURE,
       * ENCOUNTER_LIST
           50 CONSTRAINED_ENC($"lone dark-dwelling beast",MA_AQUATIC)
           40 CONSTRAINED_ENC($"pack encounter",MA_AQUATIC)
@@ -3055,7 +3055,7 @@ Region "Acid Fog Cavern" : RF_ROOM
              CON_ENC_MINMAX($"gated outsiders", $"storm elemental", 8, 30)
              CON_ENC_MINMAX($"gated outsiders", $"fog elemental", 6, 30),
       * FURNISHINGS FU_SPLATTER $"floor",
-      * WALL_COLORS YELLOW BROWN;
+      * WALL_COLOURS YELLOW BROWN;
   }
 
 Region "Place of Sanctuary" : RF_ROOM
@@ -3107,7 +3107,7 @@ Region "Place of Sanctuary" : RF_ROOM
       return NOTHING;
       };
     Lists:
-      * WALL_COLORS CYAN;
+      * WALL_COLOURS CYAN;
     Grid: {:
       %%%%%%%%%
       %%.....%%
@@ -3132,7 +3132,7 @@ Region "Ice Cavern" : RF_ROOM
     Constants:
       * BLOB_WITH $"Ice Floor";
     Lists:
-      * FLOOR_COLORS BLUE SKYBLUE GREY CYAN,
+      * FLOOR_COLOURS BLUE SKYBLUE GREY CYAN,
       * ENCOUNTER_LIST 
           5  CONSTRAINED_ENC($"lone dragon", $"white dragon")
              CONSTRAINED_ENC($"mated pair of dragons", $"white dragon")
@@ -3171,7 +3171,7 @@ Region "Dragon Cave" : RF_ROOM
     Walls: $"Dungeon Wall"; Floor: $"floor"; Depth: 6;
     RoomTypes: RM_LIFECAVE, RM_CIRCLE;
     Lists:
-      * WALL_COLORS RED, 
+      * WALL_COLOURS RED, 
       * ENCOUNTER_LIST
           $"lone dragon"
           $"mated pair of dragons";
@@ -3196,7 +3196,7 @@ Region "Lesser Vault;1" : RF_ROOM
     Walls: $"Dungeon Wall"; Floor: $"Floor"; 
     Door: $"vault door"; RoomTypes: RM_SHAPED;
     Lists:
-     * WALL_COLORS CYAN;
+     * WALL_COLOURS CYAN;
     Flags: RF_VAULT;
     Grid: {:
       %%%%%%%%%%%%%%%%%%%%%%%
@@ -3239,7 +3239,7 @@ Region "Parthenion" : RF_ROOM
     Door: $"vault door"; RoomTypes: RM_SHAPED;
     Flags: RF_NOGEN;
     Lists:
-      * WALL_COLORS WHITE;
+      * WALL_COLOURS WHITE;
     Grid: {:
       %%%%%%%%%%%%%%%%%%%%%%%%%%%
       %.........................%
@@ -3291,7 +3291,7 @@ Region "Lesser Vault;2" : RF_ROOM
     Walls: $"Dungeon Wall"; Floor: $"Floor"; 
     Door: $"vault door"; RoomTypes: RM_SHAPED;
     Lists:
-     * WALL_COLORS CYAN;
+     * WALL_COLOURS CYAN;
     Flags: RF_VAULT;
     Grid: {:
       %%%%%%%%%%%%%%%%%%%%%%%
@@ -3329,7 +3329,7 @@ Region "Unholy Sepulchre" : RF_ROOM
     Walls: $"Dungeon Wall"; Floor: $"Floor"; 
     Door: $"vault door"; RoomTypes: RM_SHAPED;
     Lists:
-     * WALL_COLORS CYAN,
+     * WALL_COLOURS CYAN,
      * ENCOUNTER_LIST
          $"lone vampire"
          $"lone template undead";
@@ -3369,7 +3369,7 @@ Region "Hellish Rift" : RF_ROOM
   Walls: $"Dungeon Wall"; Floor: $"Floor"; 
   Door: $"vault door"; RoomTypes: RM_SHAPED;
   Lists:
-        * WALL_COLORS CYAN,
+        * WALL_COLOURS CYAN,
         * ENCOUNTER_LIST
             $"regiment of devils";
  
@@ -3443,7 +3443,7 @@ Region "Hedge Maze" : RF_ROOM
     Walls: $"giant mushroom"; Floor: $"Floor"; 
     Door: $"darkwood door"; RoomTypes: RM_MAZE;
     Lists:
-      * FLOOR_COLORS BLUE PURPLE CYAN GREEN;
+      * FLOOR_COLOURS BLUE PURPLE CYAN GREEN;
     Flags: RF_RAINBOW, RF_NEVER_LIT;  
     Desc: "The mushrooms in this area have been groomed and crafted into
       well-kept passageways."; 
@@ -3454,7 +3454,7 @@ Region "Underground Farm" : RF_ROOM
     Walls: $"Floor"; Floor: $"shallow water"; 
     Door: $"darkwood door"; RoomTypes: RM_MAZE;
     Lists:
-      * WALL_COLORS BLUE SKYBLUE GREEN EMERALD BROWN YELLOW,
+      * WALL_COLOURS BLUE SKYBLUE GREEN EMERALD BROWN YELLOW,
       * FURNISHINGS FU_SPLATTER $"giant mushroom",
       * ENCOUNTER_LIST
           $"myconid colony"
@@ -3557,7 +3557,7 @@ Region "Fungi Garden" : RF_ROOM
           $"fungi"
           $"mixed fungi",
       * FURNISHINGS FU_SPLATTER $"giant mushroom",
-      * WALL_COLORS BLUE PURPLE CYAN GREEN; 
+      * WALL_COLOURS BLUE PURPLE CYAN GREEN; 
   }
 
 Region "Slime Chamber" : RF_ROOM
@@ -3572,7 +3572,7 @@ Region "Slime Chamber" : RF_ROOM
       * BLOB_WITH $"pool of slime";
     Lists:
       * FURNISHINGS FU_SPLATTER $"floor",
-      * WALL_COLORS YELLOW BROWN, 
+      * WALL_COLOURS YELLOW BROWN, 
       * ENCOUNTER_LIST
           $"oozes"
           $"mixed oozes";
@@ -3596,7 +3596,7 @@ Region "Orc Barracks" : RF_ROOM
     Lists:
       * ENCOUNTER_LIST
           CONSTRAINED_ENC($"goblinoid warband",MA_ORC),
-      * WALL_COLORS BROWN YELLOW,
+      * WALL_COLOURS BROWN YELLOW,
       * FURNISHINGS FU_SPLATTER $"pile of trash"; 
   }
 
@@ -3610,7 +3610,7 @@ Region "Troll Cave" : RF_ROOM
     Lists:
       * ENCOUNTER_LIST
           CONSTRAINED_ENC($"pack encounter",MA_TROLL),
-      * WALL_COLORS BROWN YELLOW,
+      * WALL_COLOURS BROWN YELLOW,
       * FURNISHINGS FU_SPLATTER $"pile of bones"; }
 
 /* "cave" is just so *boorish*... */
@@ -3626,7 +3626,7 @@ Region "Illithid Cenaculeum" : RF_ROOM
     Lists:
       * ENCOUNTER_LIST
           $"mind flayer inquisition",
-      * WALL_COLORS PURPLE MAGENTA;
+      * WALL_COLOURS PURPLE MAGENTA;
     Flags: RF_RAINBOW; 
   }  
 
@@ -3636,7 +3636,7 @@ Region "Naga Cavern" : RF_ROOM
     Constants:
       * BLOB_WITH $"shallow water";
     Lists:
-     * WALL_COLORS BLUE AZURE,
+     * WALL_COLOURS BLUE AZURE,
      * ENCOUNTER_LIST
          $"nest of nagas"; 
   }
@@ -3696,7 +3696,7 @@ Region "Warded Laboratory" : RF_ROOM
     Flags: RF_NEVER_LIT; 
     RoomTypes: RM_CROSS, RM_NORMAL, RM_CIRCLE;
     Lists:
-      * WALL_COLORS PURPLE MAGENTA,
+      * WALL_COLOURS PURPLE MAGENTA,
       * FURNISHINGS FU_CENTER $"summoning circle"
                     FU_XCORNERS $"summoning circle"; 
   }
@@ -3712,7 +3712,7 @@ Region "Ritual Chamber" : RF_ROOM
       air.";
     RoomTypes: RM_CIRCLE, RM_OCTAGON, RM_NORMAL, RM_AD_ROUND;
     Lists: 
-      * WALL_COLORS PURPLE MAGENTA,
+      * WALL_COLOURS PURPLE MAGENTA,
       * FURNISHINGS FU_CENTER $"summoning circle"; 
   }
 
@@ -3725,7 +3725,7 @@ Region "Armoury" : RF_ROOM
       of the ancient dwarven armoury that once stood here, though a
       few of the remaining weapons seem to be at least remotely usable.";
     RoomTypes: RM_NORMAL, RM_ADJACENT, RM_AD_ROUND, RM_OCTAGON;
-    Lists: // ww: let's add some flavor
+    Lists: // ww: let's add some flavour
       * FURNISHINGS FU_CORNERS $"pillar"
                     FU_CENTER $"forge"; 
     On Event EV_BIRTH {
@@ -3735,7 +3735,7 @@ Region "Armoury" : RF_ROOM
         if (!random(6))
           xID = theGame->GetItemID(PUR_DUNGEON,0,0,T_SHIELD);
         else if (!random(4))
-          xID = theGame->GetItemID(PUR_DUNGEON,0,0,T_ARMOR);
+          xID = theGame->GetItemID(PUR_DUNGEON,0,0,T_ARMOUR);
         else
           xID = theGame->GetItemID(PUR_DUNGEON,0,0,T_WEAPON);
         if (xID)
@@ -3776,7 +3776,7 @@ Region "Ancient Barracks" : RF_ROOM
       still speak strongly of nobility, strength, militarism and an
       uncompromising spirit.";
     Lists:
-      * WALL_COLORS GREEN;
+      * WALL_COLOURS GREEN;
     RoomTypes: RM_BUILDING;
   }
 
@@ -3790,7 +3790,7 @@ Region "Magic Academy": RF_ROOM
       was harsh or pleasant, rewarding or slavish, but so many centuries
       after their passing it hardly seems relevant.";
     Lists:
-      * WALL_COLORS PURPLE MAGENTA;
+      * WALL_COLOURS PURPLE MAGENTA;
     RoomTypes: RM_BUILDING;
   }
 
@@ -3804,7 +3804,7 @@ Region "Community Offices" : RF_ROOM
       bureaucracy or trade guild from a forgotten civilization.";
     RoomTypes: RM_BUILDING;
     Lists:
-      * WALL_COLORS WHITE GREY SHADOW CYAN; 
+      * WALL_COLOURS WHITE GREY SHADOW CYAN; 
   }
 
 Region "Flooded Encampment" : RF_ROOM
@@ -3831,7 +3831,7 @@ Region "Flooded Encampment" : RF_ROOM
              CONSTRAINED_ENC($"aberration group",MA_AQUATIC)
           ,   
       * FURNISHINGS FU_SPLATTER $"shallow water",
-      * WALL_COLORS BLUE AZURE; }
+      * WALL_COLOURS BLUE AZURE; }
 
 Region "Ice Matrix" : RF_ROOM
   {
@@ -4005,7 +4005,7 @@ Region "Elemental Chamber" : RF_ROOM
     Desc: "This mysterious room appears to pay homage to the four
     major elements.";  
     Lists:
-      * WALL_COLORS RED BLUE WHITE BROWN,
+      * WALL_COLOURS RED BLUE WHITE BROWN,
       * ENCOUNTER_LIST
           $"earth creatures"
           $"air creatures"
@@ -4050,7 +4050,7 @@ Region "Brimstone Chamber" : RF_ROOM
     Constants:
       * BLOB_WITH $"brimstone";
     Lists:
-      // * WALL_COLORS RED, 
+      // * WALL_COLOURS RED, 
       * FURNISHINGS FU_SPLATTER $"smooth igneous rock",
       * ENCOUNTER_LIST
           30 $"fire creatures"
@@ -4539,7 +4539,7 @@ Monster "goblin vizier" : MA_GOBLIN, MA_FORCE_D8
   On Event EV_INITIALIZE {
     hObj it;
 
-    it = CreateItem($"field plate armor");
+    it = CreateItem($"field plate armour");
     it->MakeMagical((rID)0,+1);
     it->AddQuality(IQ_FEATHERLIGHT);
     EActor->GainItem(it,true);
@@ -4638,8 +4638,8 @@ Monster "Murgash, the Goblin King" : MA_GOBLIN, MA_FORCE_D10, MA_ADVENTURER
 
         it = CreateItem($"chainmail shirt");
         it->MakeMagical((rID)0,+5);
-        // ww: now that we have armor qualities in incursion, M should have
-        // some -- his sword rocks, but without this his armor needed work
+        // ww: now that we have armour qualities in incursion, M should have
+        // some -- his sword rocks, but without this his armour needed work
         it->AddQuality(AQ_INVULN);
         it->AddQuality(AQ_COMMAND);
         it->Named = "Bladewarder";
@@ -4828,19 +4828,19 @@ Terrain "Summoning Circle"
     Flags: TF_SHOWNAME | TF_SPECIAL; 
     On Event EV_INITIALIZE {
       rID fID;
-      int8 color, mtype; 
+      int8 colour, mtype; 
       int16 x,y, r;
       r = 3; 
       switch (random(3)) {
         case 0: fID = $"summoning circle;field"; 
-                color = EMERALD; mtype = MA_OUTSIDER; break;
+                colour = EMERALD; mtype = MA_OUTSIDER; break;
         case 1: fID = $"circle vs. evil;field"; r = 2; 
-                color = SKYBLUE; mtype = (MA_GOOD+MA_OUTSIDER*256); break;
+                colour = SKYBLUE; mtype = (MA_GOOD+MA_OUTSIDER*256); break;
         case 2: fID = $"circle vs. non-evil;field"; r = 2; 
-                color = RED; mtype = (MA_EVIL+MA_OUTSIDER*256); break;
+                colour = RED; mtype = (MA_EVIL+MA_OUTSIDER*256); break;
       } 
       EMap->NewField(FI_BLOCKER,e.EXVal,e.EYVal,r,
-          color*256+GLYPH_FLOOR2,-1,fID,NULL);
+          colour*256+GLYPH_FLOOR2,-1,fID,NULL);
       x = -3 + (random(2) * 6);
       y = -3 + (random(3) * 6); 
       if (EMap->InBounds(e.EXVal+x,e.EYVal+y))
@@ -4900,8 +4900,8 @@ Region "Temple to Elemental Water" : RF_ROOM
       and a faint mist hangs in the air. A rippling azure glow
       spreads outward from the pool.";
     Lists:
-      * WALL_COLORS AZURE GREY,
-      * FLOOR_COLORS BLUE WHITE;
+      * WALL_COLOURS AZURE GREY,
+      * FLOOR_COLOURS BLUE WHITE;
     On Event EV_BIRTH {
       /* The room proper is already drawn by RM_LCIRCLE; now,
          we draw the pool. */

@@ -1,6 +1,6 @@
 /* ITEM.H -- Copyright (c) 1999-2003 Julian Mensch
      This file contains class definitions for Item, Food,
-   Corpse, Container, Weapon, Armor, Coin and ItemGen.
+   Corpse, Container, Weapon, Armour, Coin and ItemGen.
 */
 
 int16 MaterialHardness(int8 Mat, int8 DType);
@@ -98,11 +98,11 @@ class Item: public Thing, public Magic
       virtual bool thrownOnly() { return false; }
       virtual bool KnownQuality(int16 q) { return false; }
       virtual void RemoveQuality(int8 q) 
-        { Error("Removing quality to non-Weapon/Armor Item!"); }
+        { Error("Removing quality to non-Weapon/Armour Item!"); }
       virtual void PurgeAllQualities() 
-        { Error("Purging all qualities from non-Weapon/Armor Item!"); }
+        { Error("Purging all qualities from non-Weapon/Armour Item!"); }
       virtual void AddQuality(int8 q, int16 param=0) 
-        { Error("Adding quality to non-Weapon/Armor Item!"); }
+        { Error("Adding quality to non-Weapon/Armour Item!"); }
       virtual void SetBane(int16 _Bane) { Error("SetBane on non-Weapon."); }
       virtual int16 GetBane() { return 0; }
       virtual void RandomBane() { }
@@ -395,16 +395,16 @@ class Coin: public Item
 
   };
 
-class Armor: public QItem
+class Armour: public QItem
 	{
 		public:
-			Armor(rID iID,int8 _Type = T_ARMOR) :
+			Armour(rID iID,int8 _Type = T_ARMOUR) :
         QItem(iID,_Type) {}
-      Armor(Item*i) : QItem(i) {}
+      Armour(Item*i) : QItem(i) {}
 			EvReturn Event(EventInfo &e);
 			EvReturn Wear(Creature*);
 			EvReturn Remove(Creature*);
-      virtual bool isArmor() { return true; } 
+      virtual bool isArmour() { return true; } 
       virtual int16 ArmVal(int16 ty, bool knownOnly = false);
       virtual int16 CovVal(Creature *c, bool knownOnly = false);
       virtual int16 DefVal(Creature *c, bool knownOnly = false);
@@ -416,7 +416,7 @@ class Armor: public QItem
       virtual bool isMagic();
       virtual String & Describe(Player *p);
       virtual int16 ItemLevel(bool bounded=true);
-      ARCHIVE_CLASS(Armor,QItem,r)
+      ARCHIVE_CLASS(Armour,QItem,r)
       END_ARCHIVE	
 
 	};

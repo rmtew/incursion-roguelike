@@ -25,14 +25,14 @@ class Magic
       EvReturn AField(EventInfo &e);
       EvReturn ABarrier(EventInfo &e);
 
-			bool isTarget(EventInfo &e, Thing *t);      
+      bool isTarget(EventInfo &e, Thing *t);      
       void CalcEffect(EventInfo &e);
       EvReturn MagicEvent(EventInfo &e);
       EvReturn MagicStrike(EventInfo &e);
       EvReturn MagicHit(EventInfo &e);
       EvReturn MagicXY(EventInfo &e,int16 x,int16 y);
 
-      // The Effect Architypes
+      // The Effect Archetypes
       EvReturn Blast(EventInfo &e);
       EvReturn Inflict(EventInfo &e);
       EvReturn Grant(EventInfo &e);

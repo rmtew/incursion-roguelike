@@ -10,7 +10,7 @@ Class "Barbarian"
       berzerker-warrior, well-trained in brutal combat and wilderness
       survival, but not as accustomed to the subtle intrigues and unseen
       dangers of the civilized world. Uncivilized inherantly makes the 
-      barbarian neither stupid nor evil, thoughh of course many members
+      barbarian neither stupid nor evil, though of course many members
       of this breed may be both. At his (or her) noblest, the barbarian
       is the champion of a simpler time, when might did not make right,
       but simply defended it, and the most major problems could be solved
@@ -28,7 +28,7 @@ Class "Barbarian"
       __All of the following are class features of the barbarian.\n
       __*_<7>Proficiencies<2> -- The barbarian is proficient with simple
       weapons, impact weapons, long blades, polearms, spears, axes and flails,
-      and with light and medium armors.\n
+      and with light and medium armours.\n
       __*_<7>Berserk Rage<2> -- Barbarians are well-known for going berserk
       in combat, augmenting their strength and terrifying their foes. Upon
       entering a berserk rage, a barbarian gains a +4 bonus to Strength and 
@@ -56,19 +56,19 @@ Class "Barbarian"
       maximum penalty equal to their barbarian levels, while straight barbarians
       can inflict an unlimited penalty.\n
       __Entering a rage costs a barbarian four fatigue points if they are in 
-      heavy armor, three in medium armor, two in light armor and one if they
-      are unarmored. The fatigue cost of raging while armored decreases by one
-      at 4th level, and an unarmored barbarian of 4th level or above may make 
+      heavy armour, three in medium armour, two in light armour and one if they
+      are unarmoured. The fatigue cost of raging while armoured decreases by one
+      at 4th level, and an unarmoured barbarian of 4th level or above may make 
       a Con check against DC 20 to avoid fatigue loss when raging; failing this 
       check costs one fatigue point. A raging barbarian is never considered to 
       be fatigued or exhausted, though they suffer the effects of those traits 
       as soon as the rage ends, if applicable.\n
-      __A raging character may not cast spells, don or remove armor or clothing,
+      __A raging character may not cast spells, don or remove armour or clothing,
       pick locks or search through a container (such as his backpack) for items.\n
       __*_<7>Tough as Hell<2> -- A barbarian recieves double the normal
       number of bonus hit points from a high Constitution score for all of
       his barbarian levels.\n 
-      __When struck for physical damage, an unarmored,
+      __When struck for physical damage, an unarmoured,
       single-classed barbarian can subtract his Constitution modifier from the
       damage suffered (to a minimum of one point). A multiclass barbarian subtracts
       a proportion of his Constitution modifier from damage equal to his
@@ -77,11 +77,11 @@ Class "Barbarian"
       66% of his Con modifier from damage. This proportion
       is always rounded down, so even one non-barbarian level
       reduces the amount subtracted by at least one.\n
-      __If the barbarian wears armor, every 'degree' (light, medium,
-      heavy) of armor worn counts as three non-barbarian levels
+      __If the barbarian wears armour, every 'degree' (light, medium,
+      heavy) of armour worn counts as three non-barbarian levels
       added to his total for the purposes of reducing this bonus.\n
       __Finally, starting at 7th level the barbarian
-      has a natural armor rating similar to a monster's. This value is
+      has a natural armour rating similar to a monster's. This value is
       identical against slashing, piercing and blunt damage, is not
       penetrated by weapons of any plus and increases by +1 for every odd
       barbarian level.\n
@@ -117,7 +117,7 @@ Class "Barbarian"
       traps -- her instincts tell her exactly when to dodge or pull back.\n
       __Levels of this ability from the barbarian and rogue classes stack.\n
       __*_<7>Spellbreaker<2> -- Barbarians recieve experience points for
-      the destruction of magical items other then weapons or armor. When
+      the destruction of magical items other then weapons or armour. When
       they destroy such an item, they recieve experience equal to that
       gained from killing a creature with a CR two below the item's level.
       Multiclass barbarians recieve a fraction of the experience proporational
@@ -135,7 +135,7 @@ Class "Barbarian"
       list) upon attaining four combined levels of warrior, ranger, paladin, 
       monk or barbarian.\n
       __*_<7>Starting Benefits<2> -- Barbarians start with a racially-determined 
-      heavy weapon, a loincloth and potentially hide armor. Their starting
+      heavy weapon, a loincloth and potentially hide armour. Their starting
       equipment is the weakest of any class, which balances the powerful
       inherant bonus a character who enters play as a barbarian gains.\n\n
       <10>THE BARBARIAN<15>\n
@@ -148,12 +148,12 @@ Class "Barbarian"
       ____5____+2____+4___+1___+1__+20~_Immune to Flanking\n
       ____6____+3____+5___+2___+2__+30~_Mighty Stroke II, \n
       __________________________________Trap Sense +1     \n
-      ____7____+3____+5___+2___+2__+30~_Natural Armor +1, \n
+      ____7____+3____+5___+2___+2__+30~_Natural Armour +1, \n
       ____8____+4____+6___+2___+2__+40~_Rage (vs. Confus.)\n
       ____9____+4____+6___+3___+3__+40~_Trap Sense +2,    \n
-      __________________________________Natural Armor +2  \n
+      __________________________________Natural Armour +2  \n
       ____10___+5____+7___+3___+3__+50~_Rage(+6/+30~/+3)   \n
-      ____11___+5____+7___+3___+3__+50~_Natural Armor +3  \n
+      ____11___+5____+7___+3___+3__+50~_Natural Armour +3  \n
       ____12___+6____+8___+4___+4__+60~_Trap Sense +3\n";
 
     HitDice: 12; Mana: 4; Def: 1/2;
@@ -273,7 +273,7 @@ Class "Bard"
       \n\tThe Bard is a jack-of-all-trades class, with a lot of diverse
       abilities. He has a wide selection of skills, including stealth,
       a dabbling of arcane magic and competant fighting skill with a wide
-      variety of weapons and armor. He also has entirely unique abilities,
+      variety of weapons and armour. He also has entirely unique abilities,
       such as the power to hearten and augment his allies supernaturally
       with music, and a diverse body of knowledge that gives him a good
       chance to automatically identify items and monsters.
@@ -287,7 +287,7 @@ Class "Bard"
       \n\n<10>CLASS FEATURES<2>\n
       __All the following are class features of the bard.
 	    \n__*_<7>Proficiencies<2> -- The bard is proficient with simple weapons,
-	    light weapons, short blades, daggers, archery and light armor.\n
+	    light weapons, short blades, daggers, archery and light armour.\n
       \n__*_<7>Spells<2> -- Though not nearly as skilled as wizards 
       or druids, bards do dabble in magic. They cast spells from memory,
       having no need for spellbooks or paraphenelia. Their spell list
@@ -296,7 +296,7 @@ Class "Bard"
       low-grade healing spells. Bards recieve one sorcerous spell level at
       every even class level, and start with a single, bonus 1st-level spell
       slot at 1st level. Bardic spells are not negatively impacted by light
-      armor or shields. 
+      armour or shields. 
       \n__*_<7>Bardic Music<2> -- Bards excel at performance, whether it be
       singing or using a musical instrument. In fact, bardic adventurers
       can create works so moving as to have a tangibly supernatural effect
@@ -541,7 +541,7 @@ Class "Bard"
             $"wind wall" $"nondetection" $"fly"
           4 $"cure critical wounds" $"dimension door" $"dominate person" 
             $"hallucinatory terrain" $"hold monster" $"improved invisibility" 
-            $"rainbow pattern" $"color burst" $"neutralize poison" $"shout" 
+            $"rainbow pattern" $"colour burst" $"neutralize poison" $"shout" 
             $"monster summoning IV" $"dismissal" $"endure the elements" $"wandwierd"
             $"solid fog" $"detect magic" $"premonition" $"track monster" $"ice storm"
             $"phantasmal killer" $"evard's black tentacles"
@@ -587,15 +587,15 @@ Class "Druid"
       \n\n<10>CLASS FEATURES<2>\n
       __All of the following are class features of the druid.\n
 	  \n__*_<7>Proficiencies<2> -- The druid is proficient with simple weapons,
-	  quarterstaves, sickles, scimitars, scythes, short bows and light armor.\n
+	  quarterstaves, sickles, scimitars, scythes, short bows and light armour.\n
       __*_<7>Spells<2> -- Druids cast primal spells from the special druid
       spell list, which includes magics relating to plants, animals, natural
       forces and elemental power. They have a full spellcasting progression,
       just like mages and clerics.\n
       __Like priests, druids can cast spells
-      while wearing armor. However, druids suffer an 80~ spell failure rate
-      while wearing metallic armor and when holding metallic items in their 
-      hands. Leather, hide, ironwood and darkwood are all favored materials 
+      while wearing armour. However, druids suffer an 80~ spell failure rate
+      while wearing metallic armour and when holding metallic items in their 
+      hands. Leather, hide, ironwood and darkwood are all favoured materials 
       for the druid, and do not invoke this penalty.\n
       __*_<7>Nature Sense<2> -- At 2nd level, a druid gains a flawless
       mystical knowledge of plants and natural animals, and can identify
@@ -683,7 +683,7 @@ Class "Druid"
       SK_SWIMMING, 
       SK_WILD_LORE;
       // ww: SRD says druids get spears -- and why not? they're wood ...
-    Proficiencies: WG_SIMPLE, WG_SPEARS, WG_STAVES, WG_LARMOR;
+    Proficiencies: WG_SIMPLE, WG_SPEARS, WG_STAVES, WG_LARMOUR;
     Grants:
       Feat[FT_WEAPON_PROFICIENCY,$"scimitar"] at 1st,
       Feat[FT_WEAPON_PROFICIENCY,$"scythe"] at 1st,
@@ -792,7 +792,7 @@ Class "Mage"
       __*_<7>Spells<2> -- Mages recieve one spellcasting level for
       every mage class level they possess. Mage spells must be studied
       and cast from spellbooks, and are all but impossible to cast while
-      wearing armor. However, the mage spell list is the most flexible
+      wearing armour. However, the mage spell list is the most flexible
       and diverse list in Incursion. They have access to all arcane spells, 
       though they must study them from a spellbook in order to learn them.\n
       __*_<7>Magical Diversity<2> -- The arcane knowledge of mages is truly
@@ -981,7 +981,7 @@ Class "Mage"
          switch (EActor->GetStatiVal(SPECIALTY_SCHOOL)) {
            case 0: // abj
              EActor->GainSpell($"shield",SP_KNOWN|SP_ARCANE);
-             EActor->GainSpell($"mage armor",SP_KNOWN|SP_ARCANE);
+             EActor->GainSpell($"mage armour",SP_KNOWN|SP_ARCANE);
             break;           
            case 1: // arc             
              /* I know these aren't Arcana spells. Arcana has entirely
@@ -1283,7 +1283,7 @@ Class "Monk"
       __All of the following are class features of the monk.\n
       __*_<7>Proficiencies<2> -- Monks are proficient with staves, thrown
       weapons and their own special catagory of martial weapons. They have no
-      proficiency with any type of armor or shields.\n
+      proficiency with any type of armour or shields.\n
       __*_<7>Unarmed Attack<2> -- Monks do not provoke an attack of opportunity
       when they attack an armed foe unarmed. In addition, they inflict additional
       damage with their bare-hand attacks, as shown on the class table below.
@@ -1509,7 +1509,7 @@ Class "Paladin"
       __All the following are class features of the paladin.
       \n__*_<7>Proficiencies<2> -- Paladins are proficient with simple weapons,
       long blades, polearms, lances and flails, as well as with all categories of
-      armor.
+      armour.
       \n__*_<7>Lay on Hands<2> -- At will, a paladin can lay his hands upon himself
       or another living creature, causing them to heal hit points of damage equal
       to 2d6 plus his level multiplied by his primary Charisma modifier plus two 
@@ -1546,14 +1546,14 @@ Class "Paladin"
       be summoned back by the paladin after resting.\n
       __At 7th, 9th and 11th level, the paladin recieves the ability to summon
       superior, mythic creatures as mounts. The creature the paladin recieves is
-      fixed based on his race, but rumors speak of holy knights riding upon even
+      fixed based on his race, but rumours speak of holy knights riding upon even
       young dragons as their steeds...
       \n__*_<7>Small Paladins<2> -- It's unusual for members of the Small races
       to become paladins -- the class's focus on head-on confrontation and
       resolute fortitude isn't the best match for their usual methodology. To
       offset this weakness, the gods grant a special boon to members of the
       Small races who show the courage and resilience to become paladins, granting
-      them a +1 sacred bonus to melee damage and inherant armor at 2nd, 4th, 6th, 
+      them a +1 sacred bonus to melee damage and inherant armour at 2nd, 4th, 6th, 
       9th, 12th and 16th levels.
       __Small races also recieve the Defensive Roll ability (from the rogue's
       higher-level special ability list) upon attaining four combined levels of 
@@ -1700,7 +1700,7 @@ Class "Paladin"
     Lists:
       * SPELL_LIST
           1 $"bless" $"call light" $"magic weapon" $"create water"
-            $"cure light wounds" $"detect undead" $"divine favor"
+            $"cure light wounds" $"detect undead" $"divine favour"
             $"divine sacrifice" $"protection from evil" $"shield of faith" 
             $"slow poison"
           2 $"aid" $"bull's strength" $"consecrate" $"draw upon holy might"
@@ -1771,7 +1771,7 @@ Class "Priest"
       \n\n<10>CLASS FEATURES<2>\n
       __All the following are class features of the priest.\n
       __*_<7>Proficiencies<2> -- Priests are proficient with simple weapons,
-      impact weapons, flails and light or medium armor. Each priest is also 
+      impact weapons, flails and light or medium armour. Each priest is also 
       proficient with the one specific weapon that is a chosen weapon of his 
       diety.\n
       __*_<7>Spellcasting<2> -- Priests cast divine spells from the priest
@@ -1831,7 +1831,7 @@ Class "Priest"
            S_ARCHERY  75;
     Skills[4]: SK_CONCENT, SK_CRAFT, SK_HEAL, SK_INTUITION, SK_KNOW_THEO, 
       SK_KNOW_UNDEAD, SK_METAMAGIC, SK_SENESCHAL, SK_SPELLCRAFT;
-    Proficiencies: WG_SIMPLE, WG_IMPACT, WG_FLAILS, WG_LARMOR, WG_MARMOR;
+    Proficiencies: WG_SIMPLE, WG_IMPACT, WG_FLAILS, WG_LARMOUR, WG_MARMOUR;
     Grants:
       //Stati[CAN_FORGET_SPELL,0,+1] at every 2nd level starting at 2nd,
       Ability[CA_SPELLCASTING]      at every level starting at 1st,
@@ -1844,7 +1844,7 @@ Class "Priest"
       $"heavy mace",
       3d8 blessed $"flask" of $"water",
       4d2 $"potion" of $"healing", 
-      // ww: armor covered elsewhere
+      // ww: armour covered elsewhere
       10d10 $"gold piece",
       $"clerical vestment";      
     On Event PRE(EV_BIRTH) {
@@ -1861,7 +1861,7 @@ Class "Priest"
       hObj h;     
       for(h=EActor->FirstInv();h;h=EActor->NextInv()) 
         if (h->isType(T_WEAPON) || h->isType(T_BOW) ||
-            h->isType(T_ARMOR) || h->isType(T_SHIELD)) 
+            h->isType(T_ARMOUR) || h->isType(T_SHIELD)) 
           h->IFlags |= IF_BLESSED;
       return NOTHING;
       },
@@ -1966,7 +1966,7 @@ Class "Ranger"
       __All the following are class features of the ranger.\n
       __*_<7>Proficiencies<2> -- Rangers are proficient with all simple
       weapons, long blades, short blades, axes, archery, thrown weapons, 
-      staves and spears, and with light armor and shields.\n
+      staves and spears, and with light armour and shields.\n
       __*_<7>Animal Companions<2> -- Rangers can tame animals using their
       Animal Empathy class skill, and if successful add those companions
       to their adventuring party. A ranger character recieves a free 'buffer'
@@ -1997,12 +1997,12 @@ Class "Ranger"
       ranger counts as a warrior level would for advancing this ability
       (which is described under the warrior class), and ranger and warrior
       levels in Lore of Arms stack.\n
-      __*_<7>Favored Enemies<2> -- The ranger is at heart a hunter, and she
+      __*_<7>Favoured Enemies<2> -- The ranger is at heart a hunter, and she
       makes a practice of knowing her enemies. By studying different types of
       creatures estensively, the ranger gains bonuses in combat against those
       she specializes in stalking. These bonus begin at +1 to hit and damage
       and increase by +1 for every 4 full ranger levels.\n
-      __A ranger begins with one favored enemy, and gains another at every fifth
+      __A ranger begins with one favoured enemy, and gains another at every fifth
       ranger level.\n 
       __*_<7>Woodland Stride<2> -- Starting at 3rd level, a ranger's movement
       rate is never modified negatively by the terrain she is standing on (as
@@ -2015,7 +2015,7 @@ Class "Ranger"
       gains a bonus feat, they will gain one of the following instad: Woodsman,
       Endurance, Alertness, Toughness. Rangers do not need to meet the prerequisites 
       for feats gained from their combat style, but the feats only function if 
-      the ranger is wearing light or no armor.\n
+      the ranger is wearing light or no armour.\n
       __<10>Archery<2> -- This combat style gives the ranger the Rapid Shot feat
       at 1st, the Point-Blank Shot feat at 3rd, Defensive Shot at 7th, Zen 
       Archery at 11th and Aimed Shot at 15th.\n
@@ -2056,12 +2056,12 @@ Class "Ranger"
       ____3____+1____+3___+1___+1__Woodland Stride,  \n
       _____________________________Bonus Feat        \n
       ____4____+1____+4___+1___+1__+1 caster level   \n
-      ____5____+1____+4___+1___+1__2nd Favored Enemy \n
+      ____5____+1____+4___+1___+1__2nd Favoured Enemy \n
       ____6____+2____+5___+2___+2__+2 caster level   \n
       ____7____+2____+5___+2___+2__Bonus Feat        \n
       ____8____+2____+6___+2___+2__+3 caster level   \n
       ____9____+3____+6___+3___+3____________________\n
-      ____10___+3____+7___+3___+3__3rd Favored Enemy,\n
+      ____10___+3____+7___+3___+3__3rd Favoured Enemy,\n
       _____________________________+4 caster level   \n
       ____11___+3____+7___+3___+3__Bonus Feat________\n
       ____12___+4____+8___+4___+4__+5 caster level   \n";
@@ -2116,7 +2116,7 @@ Class "Ranger"
       SK_RIDE, SK_SEARCH, SK_SWIMMING, SK_WILD_LORE, SK_KNOW_NATURE,
       SK_KNOW_OCEANS, SK_KNOW_GEO;
     Proficiencies: WG_SIMPLE, WG_LBLADES, WG_AXES, WG_ARCHERY, WG_THROWN,
-      WG_STAVES, WG_DAGGERS, WG_SPEARS, WG_SBLADES, WG_LARMOR, WG_SHIELDS; 
+      WG_STAVES, WG_DAGGERS, WG_SPEARS, WG_SBLADES, WG_LARMOUR, WG_SHIELDS; 
     Grants:
       Ability[CA_TRACKING,+10]          at 2nd level,
       Ability[CA_LORE_OF_ARMS,+1]       at every 2nd level starting at 2nd,
@@ -2287,9 +2287,9 @@ Class "Ranger"
 Effect "Ranger Feat" : EA_GENERIC
   {
     On Event EV_ISTARGET {
-      if (EActor->InSlot(SL_ARMOR) != NULL_OBJ)
-        if (EActor->InSlot(SL_ARMOR)->isGroup(WG_MARMOR) ||
-            EActor->InSlot(SL_ARMOR)->isGroup(WG_HARMOR))
+      if (EActor->InSlot(SL_ARMOUR) != NULL_OBJ)
+        if (EActor->InSlot(SL_ARMOUR)->isGroup(WG_MARMOUR) ||
+            EActor->InSlot(SL_ARMOUR)->isGroup(WG_HARMOUR))
           return false;
       return true;
       };
@@ -2335,7 +2335,7 @@ Class "Rogue"
       __All the following are class features of the rogue.\n
       __*_<7>Proficiencies<2> -- The rogue is proficient with all simple
       weapons, daggers, short blades, thrown weapons, flexible weapons, 
-      archery and light armor.\n
+      archery and light armour.\n
       __*_<7>Sneak Attack<2> -- A rogue has the ability to inflict extra
       dice of damage when they can attack an opponent in such a manner as
       to slip past their defenses. The rogue gains 1d6 points of bonus
@@ -2437,17 +2437,17 @@ Class "Rogue"
       thrown weapons. This does <10>not<2> apply to archery.\n
       __<10>Defensive Roll:<2> If you have this ability, you are able to 
       move with the impact from blows, lessening their effect even if they do 
-      hit you. This ability does not function in heavy armor. When you are 
+      hit you. This ability does not function in heavy armour. When you are 
       struck by a creature that needs a 15 or greater to hit you, you only 
       suffer a certain fraction of the damage, starting at 5/6th. The number 
       of sixths of the total damage can be further reduced in the following 
       circumstances, to a minimum of 1/6th:\n
       __* You are Small and your foe is Medium-sized or larger (-1/6th).\n
       __* Your foe can only hit you on a natural 20 (-1/6th).\n
-      __* You are unarmored (-2/6ths) or in light armor (-1/6th).\n
+      __* You are unarmoured (-2/6ths) or in light armour (-1/6th).\n
       __This ability does not function if you have spells active which
-      simulate the effect of heavy armor (such as Spirit Armor) and
-      Mage Armor is treated as medium armor for this purpose.\n
+      simulate the effect of heavy armour (such as Spirit Armour) and
+      Mage Armour is treated as medium armour for this purpose.\n
       __<10>Bonus Feat:<2> In lieu of choosing a rogue special ability, a rogue 
       can elect to gain a bonus feat chosen from a list of all feats in the 
       game that do not have other feats as prerequisites.\n
@@ -2545,7 +2545,7 @@ Class "Rogue"
       SK_PERFORM, SK_PICK_POCKET, SK_POISON_USE, SK_SEARCHING,
       SK_APPRAISE, SK_TUMBLE, SK_USE_MAGIC;
     Proficiencies: WG_SIMPLE, WG_DAGGERS, WG_SBLADES, WG_THROWN, 
-      WG_FLEXIBLE, WG_ARCHERY, WG_LARMOR;
+      WG_FLEXIBLE, WG_ARCHERY, WG_LARMOUR;
     Grants:
       Feat[FT_AP_LIGHT]             at 1st level,
       /* Ability[CA_DISARM_MAGIC_TRAP] at 1st level, */
@@ -2625,17 +2625,17 @@ Class "Rogue"
             ETerm->LOption("Defensive Roll", 9,
                "If you have this ability, you are able to move with the impact from 
                 blows, lessening their effect even if they do hit you. This ability
-                does not function in heavy armor. When you are struck by a creature
+                does not function in heavy armour. When you are struck by a creature
                 that needs a 15 or greater to hit you, you only suffer a certain
                 fraction of the damage, starting at 5/6th. The number of sixths of
                 the total damage can be further reduced in the following circumstances,
                 to a minimum of 1/6th:\n
                 __* You are Small and your foe is Medium-sized or larger (-2/6th).\n
                 __* Your foe can only hit you on a natural 20 (-1/6th).\n
-                __* You are unarmored (-2/6ths) or in light armor (-1/6th).\n
+                __* You are unarmoured (-2/6ths) or in light armour (-1/6th).\n
                 __This ability does not function if you have spells active which
-                simulate the effect of heavy armor (such as Spirit Armor) and
-                Mage Armor is treated as medium armor for this purpose.");              
+                simulate the effect of heavy armour (such as Spirit Armour) and
+                Mage Armour is treated as medium armour for this purpose.");              
           ETerm->LOption("Bonus Feat", 10,
                "In lieu of choosing a rogue special ability, a rogue can elect to gain
                 a bonus feat chosen from a list of all feats in the game that do not
@@ -2773,8 +2773,8 @@ Class "Warrior"
       __*_<7>Proficiencies<2> -- Warriors are proficient with all weapon
       groups save for Exotic weapons, for which proficiency must be bought
       seperately in each. They are proficient with light, medium and heavy
-      armors, and with shields. This gives them the widest range of weapon
-      and armor proficiencies in the game.\n
+      armours, and with shields. This gives them the widest range of weapon
+      and armour proficiencies in the game.\n
       __*_<7>Weapon Skill<2> -- Warriors can develop exceptional degrees of
       skill with specific weapons, becoming eligable for special feats that
       represent such as they rise in level. They must still buy these feats
@@ -2868,9 +2868,9 @@ Class "Warrior"
       $"peasant garb";
     On Event EV_BIRTH {
       hObj h; rID iID;
-      // ww: first, find armor, make it +1
+      // ww: first, find armour, make it +1
       for(h=EActor->FirstInv();h;h=EActor->NextInv()) {
-        if (h->isType(T_ARMOR)) {
+        if (h->isType(T_ARMOUR)) {
           switch(random(3)) {
             case 0: h->AddQuality(AQ_LIGHT_FOR); break;
             case 1: case 2: h->MakeMagical(NULL_ID,h->GetPlus()+1);

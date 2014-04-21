@@ -662,7 +662,7 @@ AI_ALCHEMY Effect "Acid;alchemy" : EA_BLAST
             doID = true;
            break;
           case $"the Chameleon":
-            EActor->IPrint("The acid changes color briefly!");
+            EActor->IPrint("The acid changes colour briefly!");
             doID = true;
            break;
           case $"Animal Kinship":
@@ -857,7 +857,7 @@ AI_ALCHEMY Effect "Silversheen;alchemy" : EA_GENERIC
     Flags: EF_DLONG, EF_ACTIVATE, EF_AFFECTS_ITEMS, EF_ITEMS_ONLY; qval: Q_INV;
     On Event EV_MAGIC_STRIKE {
       if (ETarget->isType(T_WEAPON) || ETarget->isType(T_MISSILE) ||
-          ETarget->isType(T_SHIELD) || ETarget->isType(T_ARMOR))
+          ETarget->isType(T_SHIELD) || ETarget->isType(T_ARMOUR))
         if (ETarget->QualityOK(IQ_SILVER) && ETarget->isMetallic())
           ETarget->GainTempStati(EXTRA_QUALITY,EActor,e.vDuration,SS_ENCH,
               IQ_SILVER,IQ_SILVER, $"silversheen;alchemy", e.vCasterLev);
@@ -865,7 +865,7 @@ AI_ALCHEMY Effect "Silversheen;alchemy" : EA_GENERIC
       }, 
     EV_RATETARG {
       if (EItem->isType(T_WEAPON) || EItem->isType(T_MISSILE) ||
-          EItem->isType(T_SHIELD) || EItem->isType(T_ARMOR))
+          EItem->isType(T_SHIELD) || EItem->isType(T_ARMOUR))
         if (EItem->QualityOK(IQ_SILVER) && EItem->isMetallic())
           return NOTHING;
       return ABORT;
@@ -1486,7 +1486,7 @@ AI_MACRO Effect "AutoLoot" : EA_GENERIC
    to having a lot of different modes rather then just "the best ones".
    
    Psionic Visuals:
-     I want psionic combat to be very cool and flavorful in Incursion.
+     I want psionic combat to be very cool and flavourful in Incursion.
    Whenever a psi learns an attack or defense mode, they will choose a
    specific manifestation to go with that mode from a list of five.
    This is inspired by the old Dark Sun psionic system. Ego Whip 
@@ -1501,12 +1501,12 @@ AI_MACRO Effect "AutoLoot" : EA_GENERIC
    the iron door, etc.), intellect fortress manifests as a fortified
    locale (the iron keep, the grand tower, the hidden valley, the
    ancient castle), tower of iron will takes the form of the character's
-   abstract ideals (virtue, desire, honor, wisdom, etc.), mind blank is
+   abstract ideals (virtue, desire, honour, wisdom, etc.), mind blank is
    a vast empty expanse or repetition of some kind (the desert, the void,
    the process, the library, the recitation (of scripture)). Mental
    Barrier takes the form of an obsticle or curse of some kind (the
    trap, the dungeon, the wall, the mountains, the broken bridge).
-   Hopefully, this should make psionic combat very flavorful, as well
+   Hopefully, this should make psionic combat very flavourful, as well
    as more than a little surreal. These manifestations will be done as
    resources, but have no game impact. Instead, they determine the
    messages given in psicombat.
@@ -1546,7 +1546,7 @@ AI_MACRO Effect "AutoLoot" : EA_GENERIC
    that they choose: contemplative, wilder, ascendant (renaissance man,
    skill based, slower powers) or somatic (physical adept).
      The different aspects are different analogues to the various d20
-   psi classes -- contemplative/base psion with flavor, wilder/wilder,
+   psi classes -- contemplative/base psion with flavour, wilder/wilder,
    somatic/psychic warrior, apothetic/"psionic rogue". The contemplative
    gets more powers (but not _better_ powers, just more diverse) and is
    the only type to get a psycrystal and various crystal powers, the
@@ -1696,7 +1696,7 @@ and EA_GRANT
       };
   }
   
-AI_PSIONIC Effect "Flesh Armor" : EA_GRANT
+AI_PSIONIC Effect "Flesh Armour" : EA_GRANT
   { Flags: EF_PERSISTANT, EF_NOTBAD, EF_SHOWNAME, EF_CANCEL, EF_MUNDANE;
     Purpose: EP_BUFF; xval: ADJUST_NAT; yval: A_ARM; pval: +5;
     Desc: "This wild talent allows a character to exercise mental
@@ -1704,7 +1704,7 @@ AI_PSIONIC Effect "Flesh Armor" : EA_GRANT
       bonds between cells and making her skin as hard to pierce,
       tear or crush as cured leather (though its outward appearance
       does not change). While this power is manifest, the character
-      has a +5 natural armor bonus."; }
+      has a +5 natural armour bonus."; }
     
 AI_PSIONIC Effect "Cell Adjustment" : EA_HEALING
   { Flags: EF_NOTBAD; Purpose: EP_FIX_TROUBLE (TROUBLE_INJURY);
@@ -2138,7 +2138,7 @@ AI_PSIONIC Effect "Chameleon Shifting" : EA_GRANT
   { Purpose: EP_BUFF | EP_STEALTH;
     Flags: EF_NOTBAD, EF_SHOWNAME, EF_PERSISTANT, EF_CANCEL, EF_MUNDANE;
     Desc: "Characters with this power can imitate the biological
-      process a chameleon uses to change the color of its skin,
+      process a chameleon uses to change the colour of its skin,
       allowing them to blend nearly perfectly into their surroundings.
       Manifesting this power gives the character a +10 bonus to the
       Hide skill.";
@@ -2581,7 +2581,7 @@ and EA_GRANT
 AI_TATTOO Effect "Mantis" : EA_GRANT
   {
     Desc: "The mantis tattoo bestows upon a mystic three benefits -- a hardening
-      of the skin akin to a mantis' carapice which grants +1 natural armor every
+      of the skin akin to a mantis' carapice which grants +1 natural armour every
       even class level, the Mantis Leap feat and a bonus to Jump equal to the
       mystic's class level.";
     On Event PRE(EV_MAGIC_HIT) {

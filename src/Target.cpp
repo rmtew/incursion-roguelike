@@ -1070,7 +1070,7 @@ void TargetSystem::RateAsTarget(Creature *me, Thing *t, Target & newT)
         (me->HasMFlag(M_NOHEAD)))
       return;
 
-    if ((i->isType(T_ARMOR)) && 
+    if ((i->isType(T_ARMOUR)) && 
         (!me->HasMFlag(M_HUMANOID)))
       return;
 

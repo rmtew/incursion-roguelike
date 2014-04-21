@@ -52,7 +52,7 @@ int16 Studies[9][4] =
 
 
 int16 s_racial, s_enhance, s_feat, s_domain, s_item, s_train, s_syn,
-s_armor, s_comp, s_circ, s_inh, s_size, s_ins, s_kit, s_focus;    
+s_armour, s_comp, s_circ, s_inh, s_size, s_ins, s_kit, s_focus;    
 
 ReincarnationInfo RInf;
 
@@ -313,11 +313,11 @@ RepeatClass:
         "Incursion characters can become multi-classed later in the game, "
         "investing earned levels in up to three different classes in total. "
         "The easiest class for a completely new player is probably ranger. "
-        "Mages and heavy-armor wearers can be more difficult to keep alive. "
+        "Mages and heavy-armour wearers can be more difficult to keep alive. "
         "For players who understand the skill system, magic system and "
         "religion system, rogue and priest are probably the easiest classes "
         "to win the game with. Human Warriors are useful for experimenting with the "
-        "feat system, and any flavor of Rogue likewise for the skill system. "
+        "feat system, and any flavour of Rogue likewise for the skill system. "
         "Once a player understands the skill system, it is commonly believed "
         "that Rogue is the easiest class to complete the game with. "
         "In Incursion, every race/class combination is intended "
@@ -555,7 +555,7 @@ SkipThisFocus:;
                 if(RES(xID)->Type == T_TITEM && TITEM(xID)->IType == T_SHIELD &&
                     TITEM(xID)->Size <= Attr[A_SIZ] && 
                     WepSkill(xID) != WS_NOT_PROF && TITEM(xID)->Cost <= 500*100) { 
-                        Armor * a = (Armor *)Item::Create(xID); 
+                        Armour * a = (Armour *)Item::Create(xID); 
                         a->MakeKnown(-1);
                         GainItem(a,true);
                         goto DoneShield; 
@@ -614,8 +614,8 @@ DoneShield:
         MyTerm->LOption(PersonalityNames[i],i);
     Personality = MyTerm->LMenu(MENU_2COLS,
         "<15>__Your personality archetype has little direct influence on "
-        "gameplay and is largely a 'color' choice. In later releases, it "
-        "will strongly color how NPCs relate to you, as well as affecting "
+        "gameplay and is largely a 'colour' choice. In later releases, it "
+        "will strongly colour how NPCs relate to you, as well as affecting "
         "psionic combat, the Greater Soulblade feat and follower loyalty.",
         WIN_CREATION,"help::chargen,P");
 
@@ -962,7 +962,7 @@ static void NamePerk(Perk& p, String& str)
         return; 
     case PERK_ABILITY: 
         if (p.p.ability.ca_ability == CA_FAV_ENEMY)
-            str = Format("Favored Enemy: %s",(const char*)Pluralize(Capitalize(
+            str = Format("Favoured Enemy: %s",(const char*)Pluralize(Capitalize(
             Lookup(MTypeNames,p.p.ability.ability_value & 0xffff))));
         else {
             str = Format("Extra Ability: %s",Lookup(ClassAbilities,
@@ -1116,7 +1116,7 @@ void CreatePerk(PerkSet& Perks, int i, PerkType type, Player *p)
 
             /* fjm: just don't _give out_ unusable weapons */
             if (it->isType(T_WEAPON) || it->isType(T_BOW) || it->isType(T_MISSILE)
-                || it->isType(T_ARMOR) || it->isType(T_SHIELD) ) {
+                || it->isType(T_ARMOUR) || it->isType(T_SHIELD) ) {
                     /* ww: this check just isn't working: it always returns false!
                     if (p->WepSkill(it->iID) == WS_NOT_PROF)
                     */
@@ -1138,7 +1138,7 @@ void CreatePerk(PerkSet& Perks, int i, PerkType type, Player *p)
                 /* fjm: +1 wands as being equal to bonus feats and innate
                 resistances? I think the plus should be better. */
                 if (it->GetPlus() && it->eID && !it->isType(T_WEAPON) &&
-                    !it->isType(T_ARMOR) &&
+                    !it->isType(T_ARMOUR) &&
                     !it->isType(T_BOW) &&
                     !it->isType(T_MISSILE)) 
                     it->SetInherantPlus(MaxItemPlus(6,it->eID));
@@ -1221,7 +1221,7 @@ void CreatePerk(PerkSet& Perks, int i, PerkType type, Player *p)
 
             /* getting the "resist cold" spell always seems innately inferior
             * to just getting permanent cold resistance ... and other buffs
-            * like mage armor can be very strong when cast with 0% fail
+            * like mage armour can be very strong when cast with 0% fail
             * by fighters ... */
             if (type == PERK_SPELL)
                 if (eff->Purpose & EP_BUFF ||
@@ -1310,7 +1310,7 @@ static void GrantPerks(PerkSet& p, Player *target)
           take a level of warrior. */
           if (TITEM(iID)->IType == T_WEAPON ||
               TITEM(iID)->IType == T_BOW ||
-              (TITEM(iID)->IType == T_ARMOR &&
+              (TITEM(iID)->IType == T_ARMOUR &&
               TITEM(iID)->Group))
               target->GainPermStati(WEP_SKILL,NULL,SS_PERM,WS_PROFICIENT,0,iID);
 #endif
@@ -1451,7 +1451,7 @@ JustDrawIt:
                     int r;
                     PerkType type;
                     /* fjm: I changed the odds a little bit here, now that so
-                    much of the ability array consists of favored enemies
+                    much of the ability array consists of favoured enemies
                     and smite choices instead of truly "wierd" things. */
                     // ability  25
                     // spell    15
@@ -2023,7 +2023,7 @@ int16 Character::XPPenalty()
     /* Here's how we figure the XP penalty. Humans with Versatility and
     single classed characters never suffer a penalty. Multi-classed
     characters whose highest class (or one of their highest classes,
-    for evenly matched characters) is a favored class of their race
+    for evenly matched characters) is a favoured class of their race
     also do not suffer a penalty. Other multi-class characters suffer
     a -25% experience penalty. */
     alignXP = 0;
@@ -2033,27 +2033,27 @@ int16 Character::XPPenalty()
         alignXP = 0;
 
     if (HasAbility(CA_VERSATILITY) || 
-        (isPlayer() && thisp->Opt(OPT_FAVORED_CLASS) == 1))
+        (isPlayer() && thisp->Opt(OPT_FAVOURED_CLASS) == 1))
         return 0 + SumStatiMag(XP_PENALTY) + alignXP;
-    f1 = TRACE(RaceID)->FavoredClass[0];
-    f2 = TRACE(RaceID)->FavoredClass[1];
-    f3 = TRACE(RaceID)->FavoredClass[2];
+    f1 = TRACE(RaceID)->FavouredClass[0];
+    f2 = TRACE(RaceID)->FavouredClass[1];
+    f3 = TRACE(RaceID)->FavouredClass[2];
 
     if (!Level[1] && !Level[2])
         return 0 + SumStatiMag(XP_PENALTY) + alignXP;
 
     if (ClassID[0] == f1 || ClassID[0] == f2 || ClassID[0] == f3 ||
-        TCLASS(ClassID[0])->HasFlag(CF_FAVORED))
+        TCLASS(ClassID[0])->HasFlag(CF_FAVOURED))
         if (Level[0] >= Level[1] && Level[0] >= Level[2])
             return 0 + SumStatiMag(XP_PENALTY) + alignXP;
 
     if (ClassID[1] == f1 || ClassID[1] == f2 || ClassID[1] == f3 ||
-        TCLASS(ClassID[1])->HasFlag(CF_FAVORED))
+        TCLASS(ClassID[1])->HasFlag(CF_FAVOURED))
         if (Level[1] >= Level[0] && Level[1] >= Level[2])
             return 0 + SumStatiMag(XP_PENALTY) + alignXP;
 
     if (ClassID[2] == f1 || ClassID[2] == f2 || ClassID[2] == f3 ||
-        TCLASS(ClassID[2])->HasFlag(CF_FAVORED))
+        TCLASS(ClassID[2])->HasFlag(CF_FAVOURED))
         if (Level[2] >= Level[0] && Level[2] >= Level[1])
             return 0 + SumStatiMag(XP_PENALTY) + alignXP;
 
@@ -2357,16 +2357,16 @@ GodIsOkay:;
 
 
 #if 0
-    // ww: give feats for following favored classes, rather than an xp
+    // ww: give feats for following favoured classes, rather than an xp
     // penalty for avoiding them, as per the Conan d20 game
     // fjm: see TABLES.CPP for my rationale for removing this.
-    if (Opt(OPT_FAVORED_CLASS) == 1) { 
+    if (Opt(OPT_FAVOURED_CLASS) == 1) { 
         int16 racialLevels = 0;
         for (i=0;i<3;i++) 
             if (ClassID[i] && 
-                (ClassID[i] == TRACE(RaceID)->FavoredClass[0] ||
-                ClassID[i] == TRACE(RaceID)->FavoredClass[1] ||
-                ClassID[i] == TRACE(RaceID)->FavoredClass[2] ||
+                (ClassID[i] == TRACE(RaceID)->FavouredClass[0] ||
+                ClassID[i] == TRACE(RaceID)->FavouredClass[1] ||
+                ClassID[i] == TRACE(RaceID)->FavouredClass[2] ||
                 HasAbility(CA_VERSATILITY)))
                 racialLevels += Level[i];
         if ((racialLevels + 1) % 3 == 0) {
@@ -2976,13 +2976,13 @@ ChooseExotic:
         GainPermStati(WEP_SKILL,NULL,SS_CLAS,WS_PROFICIENT,0,wID);
         break;
     case FT_AP_LIGHT:
-        Proficiencies |= WG_LARMOR;
+        Proficiencies |= WG_LARMOUR;
         break;
     case FT_AP_MEDIUM:
-        Proficiencies |= WG_MARMOR;
+        Proficiencies |= WG_MARMOUR;
         break;
     case FT_AP_HEAVY:
-        Proficiencies |= WG_HARMOR;
+        Proficiencies |= WG_HARMOUR;
         break;
 
     case FT_WILD_SHAPE_MASTERY: 
@@ -3196,7 +3196,7 @@ DoCAStati:
                                         Rarities[MonGroupRarities[j+1]]);
                                     goto Found;
                                 }
-                                Error("Favored Enemy MA_TYPE not found in MonGroupRarities!");
+                                Error("Favoured Enemy MA_TYPE not found in MonGroupRarities!");
                                 continue;
 Found: 
                                 MyTerm->LOption(category,FavEnemies[i],desc);
@@ -3324,13 +3324,13 @@ bool Character::FeatPrereq(int16 feat, bool fail_if_feat_requires_a_feat)
 
     /* Fix for War Domain & Shield feats */    
     if (feat == FT_AP_LIGHT)
-        if (Proficiencies & WG_LARMOR)
+        if (Proficiencies & WG_LARMOUR)
             return false;
     if (feat == FT_AP_MEDIUM)
-        if (Proficiencies & WG_MARMOR)
+        if (Proficiencies & WG_MARMOUR)
             return false;
     if (feat == FT_AP_HEAVY)
-        if (Proficiencies & WG_HARMOR)
+        if (Proficiencies & WG_HARMOUR)
             return false;
 
     for (i=0; FeatInfo[i].feat; i++) 
@@ -3488,13 +3488,13 @@ int8 Character::WepSkill(rID wID, bool ignore_str)
     StatiIterEnd(this)
         if (best) return best; 
     if (wID == 0) return WS_NOT_PROF; 
-    if (TITEM(wID)->Group & WG_LARMOR)
+    if (TITEM(wID)->Group & WG_LARMOUR)
         if (HasFeat(FT_AP_LIGHT))
             return WS_PROFICIENT;
-    if (TITEM(wID)->Group & WG_MARMOR)
+    if (TITEM(wID)->Group & WG_MARMOUR)
         if (HasFeat(FT_AP_MEDIUM))
             return WS_PROFICIENT;
-    if (TITEM(wID)->Group & WG_HARMOR)
+    if (TITEM(wID)->Group & WG_HARMOUR)
         if (HasFeat(FT_AP_HEAVY))
             return WS_PROFICIENT;
     if (TITEM(wID)->Group & WG_SHIELDS)
@@ -3534,13 +3534,13 @@ bool Character::HasFeat(int16 ft, bool inh, bool list)
 
     if (!list) {
         if (ft == FT_AP_LIGHT)
-            if (Proficiencies & WG_LARMOR)
+            if (Proficiencies & WG_LARMOUR)
                 return true;
         if (ft == FT_AP_MEDIUM)
-            if (Proficiencies & WG_MARMOR)
+            if (Proficiencies & WG_MARMOUR)
                 return true;
         if (ft == FT_AP_HEAVY)
-            if (Proficiencies & WG_HARMOR)
+            if (Proficiencies & WG_HARMOUR)
                 return true;
         if (ft == FT_SHIELD_PROFICIENCY)
             if (Proficiencies & WG_SHIELDS)
@@ -3566,7 +3566,7 @@ bool Character::HasFeat(int16 ft, bool inh, bool list)
                                     StatiIterBreakout(this,return true)
                             }   
                             /* Allow conditional feats from class or race (i.e., ranger
-                            light armor feats) to serve as prerequisites, but not
+                            light armour feats) to serve as prerequisites, but not
                             conditional feats from items or spells. */
                             if (S->Nature == CONDITIONAL_FEAT && S->Val == ft && inh)
                                 if (S->Source == SS_CLAS || S->Source == SS_RACE)
@@ -3702,7 +3702,7 @@ int16 Creature::SkillLevel(int16 sk)
 #define FEAT_SKILL_BONUS        3
 
 
-    s_racial = s_feat = s_enhance = s_domain = s_armor = s_kit = s_syn = 
+    s_racial = s_feat = s_enhance = s_domain = s_armour = s_kit = s_syn = 
         s_item = s_comp = s_circ = s_inh = s_size = s_train = s_focus = s_ins = 0;
 
     if (sk == SK_LISTEN || sk == SK_SPOT)
@@ -3884,31 +3884,31 @@ FoundFocus:
         if (HasStati(SINGING) && sk != SK_PERFORM)
             s_circ -= 2;
 
-        if (SkillInfo[sk].armor_penalty) {
+        if (SkillInfo[sk].armour_penalty) {
             Item *it, *ar; 
-            static int16 armorSlots[] = {
-                SL_ARMOR, SL_READY, SL_WEAPON, 0
+            static int16 armourSlots[] = {
+                SL_ARMOUR, SL_READY, SL_WEAPON, 0
             } ;
-            for (j=0; armorSlots[j]; j++) {
-                i = armorSlots[j];
+            for (j=0; armourSlots[j]; j++) {
+                i = armourSlots[j];
                 if ((it = InSlot(i)) && it->activeSlot(i))  {
                     /* count a two-handed shield only once! */
                     if (i == SL_WEAPON) 
                         if (InSlot(SL_READY) == InSlot(SL_WEAPON))
                             continue;
-                    if (it->isType(T_SHIELD) || it->isType(T_ARMOR)) {
-                        int pval = ((Armor *)it)->PenaltyVal(this,true) ;
+                    if (it->isType(T_SHIELD) || it->isType(T_ARMOUR)) {
+                        int pval = ((Armour *)it)->PenaltyVal(this,true) ;
                         if (sk == SK_SWIM && it->HasQuality(IQ_FEATHERLIGHT))
-                            s_armor += pval;
+                            s_armour += pval;
                         else
-                            s_armor += SkillInfo[sk].armor_penalty * pval;
+                            s_armour += SkillInfo[sk].armour_penalty * pval;
                     } 
                 } 
             }
         }
 
         sr += s_racial + s_feat + s_enhance + s_domain + s_item + s_ins + s_syn + 
-            s_comp + s_circ + s_inh + s_size + s_armor + s_train + s_kit + s_focus;
+            s_comp + s_circ + s_inh + s_size + s_armour + s_train + s_kit + s_focus;
         sr += Mod2(SkillAttr(sk)); 
 
         return sr;
@@ -3921,7 +3921,7 @@ int16 Creature::ISkillLevel(int16 sk)
     sr = SkillLevel(sk);
 
     /* Then subtract those that aren't inherent */
-    sr -= (s_enhance + s_kit + s_syn + s_armor + 
+    sr -= (s_enhance + s_kit + s_syn + s_armour + 
         s_size + s_circ + s_comp + s_item);
 
     /* Remove Attribute Mod */

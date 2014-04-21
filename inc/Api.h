@@ -191,7 +191,7 @@ system bool   T_THING::isDead();
 system bool   T_THING::isPlayer();
 system bool   T_THING::isMonster();
 system bool   T_THING::isWeapon();
-system bool   T_THING::isArmor();
+system bool   T_THING::isArmour();
 //system bool   T_THING::isItem();
 system bool   T_THING::isFeature();
 system bool   T_THING::isCharacter();
@@ -352,7 +352,7 @@ system bool   T_CREATURE::isSmallRace();
 system bool   T_CREATURE::ItemPrereq(rID xID, int16 ReqLevel, int16 TrickDC);
 system bool   T_CREATURE::yn(string msg,bool defc=true);
 system bool   T_CREATURE::canTalk();
-system int32  T_CREATURE::ArmorType();
+system int32  T_CREATURE::ArmourType();
 system int32  T_CREATURE::Encumbrance();
 system bool   T_CREATURE::HasAttk(int8 att);
 system bool   T_CREATURE::HasMFlag(int8 mf);
@@ -480,8 +480,8 @@ system void   T_CHARACTER::UseSkill(int16 sk);
 system void   T_CHARACTER::UseAbility(int16 ab,int16 pa);
 
 system void   T_CHARACTER::GodMessage(rID gID, int16 msg,...);
-system int32  T_CHARACTER::calcFavor(rID gID);
-system void   T_CHARACTER::gainFavor(rID gID, int32 amt, bool advance=false, bool stack=true);
+system int32  T_CHARACTER::calcFavour(rID gID);
+system void   T_CHARACTER::gainFavour(rID gID, int32 amt, bool advance=false, bool stack=true);
 system void   T_CHARACTER::lowerAnger(rID gID, int16 amt);
 system void   T_CHARACTER::AlignedAct(uint16 type, int16 mag, string reason);
 
@@ -494,7 +494,7 @@ system void   T_CHARACTER::Forsake();
 system bool   T_CHARACTER::isWorthyOf(rID gID, bool penanceOK);
 system int16  T_CHARACTER::getAnger(rID gID);
 system void   T_CHARACTER::SwapAttributes(int16 n);
-system int32  T_CHARACTER::TotalExploreFavor();
+system int32  T_CHARACTER::TotalExploreFavour();
 
 system bool   T_MONSTER::MakeCompanion(hObj:T_PLAYER p,int16 CompType);
 system void   T_MONSTER::Pacify(hObj:T_CREATURE);
@@ -588,7 +588,7 @@ system int8    T_ITEM::GetPlus();
 system int8    T_ITEM::GetInherantPlus();
 system void    T_ITEM::SetInherantPlus(int8 newPlus);
 system int16   T_ITEM::ArmVal(int16 ty);
-system int16   T_ITEM::ArmorPenalty(bool for_skill);  /* == Item::Penalty() */
+system int16   T_ITEM::ArmourPenalty(bool for_skill);  /* == Item::Penalty() */
 system int16   T_ITEM::Hardness(int8 DType);
 system int16   T_ITEM::MaxHP();
 system void    T_ITEM::MendHP(int16 hp);
@@ -795,7 +795,7 @@ system string  T_EVENTINFO::nBase;
 system string  T_EVENTINFO::nAppend;
 system string  T_EVENTINFO::nOf;
 system string  T_EVENTINFO::nAdjective;
-system string  T_EVENTINFO::nFlavor;
+system string  T_EVENTINFO::nFlavour;
 system string  T_EVENTINFO::nInscrip;
 system string  T_EVENTINFO::nMech;
 system string  T_EVENTINFO::nArticle;

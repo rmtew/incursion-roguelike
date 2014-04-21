@@ -324,11 +324,11 @@ const int16 ItemGlyphs[] = {
   GLYPH_BOOK,     -AI_TOME,
   GLYPH_WEAPON,   T_WEAPON,
   GLYPH_WEAPON,   -AI_WEAPON,
-  GLYPH_LARMOR,   -AI_ARMOR,
+  GLYPH_LARMOUR,   -AI_ARMOUR,
   GLYPH_SHIELD,   -AI_SHIELD,
   GLYPH_BOW,      T_BOW,
   GLYPH_ARROW,    T_MISSILE,
-  GLYPH_LARMOR,   T_ARMOR,
+  GLYPH_LARMOUR,   T_ARMOUR,
   GLYPH_SHIELD,   T_SHIELD,
   GLYPH_GAUNTLETS, -AI_GAUNTLETS,
   GLYPH_HELMET,   -AI_HELM,
@@ -364,7 +364,7 @@ const int16 CreationGlyphs[] = {
   GLYPH_WEAPON,   T_WEAPON,
   GLYPH_BOW,      T_BOW,
   GLYPH_ARROW,    T_MISSILE,
-  GLYPH_LARMOR,   T_ARMOR,
+  GLYPH_LARMOUR,   T_ARMOUR,
   GLYPH_SHIELD,   T_SHIELD,
   GLYPH_CLOTHES,  T_CLOTHES,
   GLYPH_CONTAIN,  T_CONTAIN,
@@ -566,7 +566,7 @@ TextVal BonusNames[] = {
   { BONUS_INSIGHT, "insight" },
   { BONUS_FEAT, "feat" },
   { BONUS_WEAPON, "weapon" },
-  { BONUS_ARMOR, "armor" },
+  { BONUS_ARMOUR, "armour" },
   { BONUS_SHIELD, "shield" },
   { BONUS_CLASS, "class" },
   { BONUS_NEGLEV, "neglev" },
@@ -599,7 +599,7 @@ TextVal BonusNicks[] = {
   { BONUS_ENHANCE, "Ma" },
   { BONUS_ARTI, "Art" },
   { BONUS_RESIST, "Re" },
-  { BONUS_ARMOR, "Arm" },
+  { BONUS_ARMOUR, "Arm" },
   { BONUS_SHIELD, "Sh" },
   { BONUS_SACRED, "Sa" },
   { BONUS_MORALE, "Mr" },
@@ -1024,7 +1024,7 @@ TextVal ITypeNames[] = {
   { T_WEAPON, "Weapons" },
   { T_BOW, "Missile Weapons" },
   { T_MISSILE, "Missiles" },
-  { T_ARMOR, "Armors" },
+  { T_ARMOUR, "Armours" },
   { T_SHIELD, "Shields" },
   { T_CLOTHES, "Clothing" },
   { T_CONTAIN, "Containers" },
@@ -1064,7 +1064,7 @@ TextVal SourceNames[] = {
   { AI_STONE, "Stones" },
   { AI_EYES, "Lenses" },
   { AI_WEAPON, "Specific Weapons" },
-  { AI_ARMOR, "Specific Armor" },
+  { AI_ARMOUR, "Specific Armour" },
   { AI_SHIELD, "Specific Shields" },
   { AI_WONDER, "Wonderous Items" },
   { AI_ALCHEMY, "Alchemical Items" },
@@ -1321,9 +1321,9 @@ TextVal WeaponGroupNames[] = {
   { WG_FIREARMS, "Firearms" },
   { WG_FLAILS, "Flails" },
   { WG_SHIELDS, "Shields" },
-  { WG_LARMOR, "Light Armor" },
-  { WG_MARMOR, "Medium Armor" },
-  { WG_HARMOR, "Heavy Armor" },
+  { WG_LARMOUR, "Light Armour" },
+  { WG_MARMOUR, "Medium Armour" },
+  { WG_HARMOUR, "Heavy Armour" },
   { 0, NULL } };
 
 TextVal BoltNames[] = {
@@ -1627,21 +1627,21 @@ TextVal GenericQualityDescs[] = {
   { IQ_SILVER, 
     "A silver item has half the hardness of iron but is a special bane to devils and lycanthropes. Against such foes a silver weapon gives "
     "a +2 attack bonus and a +2 damage bonus and strikes true even if the creature is immune to some weapons. This bonus is not cumulative "
-    "(e.g., a silver bow and a silver arrow together yield +2). A silver shield or silver piece of armor gives a +2 defense bonus against "
+    "(e.g., a silver bow and a silver arrow together yield +2). A silver shield or silver piece of armour gives a +2 defense bonus against "
     "attacks from such foes. Such creatures will generally not pick up silver items." },
   { IQ_ADAMANT, 
-    "An adamant weapon has double the normal hardness of a weapon made out of iron, and gains a +1 material bonus to damage. Armor made "
-    "from adamantine grants its wearer damage reduction of 1/- if it's light armor, 2/- if it's medium armor, and 3/- if it's heavy armor."},
+    "An adamant weapon has double the normal hardness of a weapon made out of iron, and gains a +1 material bonus to damage. Armour made "
+    "from adamantine grants its wearer damage reduction of 1/- if it's light armour, 2/- if it's medium armour, and 3/- if it's heavy armour."},
   { IQ_DARKWOOD,
-    "This rare magic wood is thrice as hard as normal wood but weighs only half as much. The armor check penalty of a darkwood item is " \
+    "This rare magic wood is thrice as hard as normal wood but weighs only half as much. The armour check penalty of a darkwood item is " \
     "lessened by 2 compared to an ordinary item of its type." },
   { IQ_MITHRIL,
     "Mithril is a very rare silvery, glistening metal that is lighter than iron but just as hard. When worked like steel, it becomes a "
-    "wonderful material from which to create weapons and armor and is occasionally used for other items as well. Mithril weapons gain a "
-    "+1 material bonus to their accuracy. Mithril armors are one category lighter than normal for purposes of movement and other "
-    "limitations. Heavy armors are treated as medium, and medium armors are treated as light, but light armors are still treated as light. "
-    "However, you must still be proficient in the original armor type to avoid penalties. Spell failure chances for armors and shields "
-    "made from mithril are decreased by 15%, maximum Dexterity bonus is increased by 3, and armor check penalties are lessened by 3 "
+    "wonderful material from which to create weapons and armour and is occasionally used for other items as well. Mithril weapons gain a "
+    "+1 material bonus to their accuracy. Mithril armours are one category lighter than normal for purposes of movement and other "
+    "limitations. Heavy armours are treated as medium, and medium armours are treated as light, but light armours are still treated as light. "
+    "However, you must still be proficient in the original armour type to avoid penalties. Spell failure chances for armours and shields "
+    "made from mithril are decreased by 15%, maximum Dexterity bonus is increased by 3, and armour check penalties are lessened by 3 "
     "(to a minimum of 0). An item made from mithril weighs half as much as the same item made from other metals. Mithril has 150~ of "
     "the hardness of an iron and half the weight." }, 
   { IQ_IRONWOOD,
@@ -1651,15 +1651,15 @@ TextVal GenericQualityDescs[] = {
     "freely usable by druids." },
 
   { IQ_ELVEN,
-    "The elves craft weapons and armor that are light and fast. An elven-made item has only 75~ of its normal weight. Elven weapons have "
-    "+10% bonus to speed and elven armors have their armor penalty reduced by 2." },
+    "The elves craft weapons and armour that are light and fast. An elven-made item has only 75~ of its normal weight. Elven weapons have "
+    "+10% bonus to speed and elven armours have their armour penalty reduced by 2." },
   { IQ_DWARVEN,
-    "Dwarven weapons and armor are heavy and durable. They have 125~ of the normal weight, and a +10 bonus to their hardness. Dwarven "
-    "armor gains a +1 bonus to its base damage reduction." },
+    "Dwarven weapons and armour are heavy and durable. They have 125~ of the normal weight, and a +10 bonus to their hardness. Dwarven "
+    "armour gains a +1 bonus to its base damage reduction." },
   { IQ_ORCISH,
-    "Orcish weapons and armor are crude and brutal. They have 50~ of their normal hit points. Orcish weapons suffer a -1 penalty to hit, "
-    "but gain a +1 bonus to their base damage. Orcish armors are crude but effective in the short term. They suffer an increase of 1 "
-    "to their armor penalty, but gain a +1 bonus to their base damage reduction." },
+    "Orcish weapons and armour are crude and brutal. They have 50~ of their normal hit points. Orcish weapons suffer a -1 penalty to hit, "
+    "but gain a +1 bonus to their base damage. Orcish armours are crude but effective in the short term. They suffer an increase of 1 "
+    "to their armour penalty, but gain a +1 bonus to their base damage reduction." },
   { IQ_PROFICIENT,
     "A proficient item grants its user additional knowledge about its proper use. A user that would normally be non-proficient with it "
     "becomes proficient and suffers no penalties. A proficient weapon also increases the user's effective level of proficiency with it "
@@ -1668,8 +1668,8 @@ TextVal GenericQualityDescs[] = {
     "Feather-light items weigh only a quarter as much as they normally would. A feather-light "
     "weapon is treated as if it were one size category smaller than it actually is for the "
     "purposes of its combat effects and wielding requirements. Combat fatigue accrues at a "
-    "third of the normal rate when wearing feather-light armor, to a minimum of the amount "
-    "normally accrued when fighting unarmored, and feather-light armor does not impose a "
+    "third of the normal rate when wearing feather-light armour, to a minimum of the amount "
+    "normally accrued when fighting unarmoured, and feather-light armour does not impose a "
     "doubled penalty to the Swim skill." },
 
   { 0, NULL } };
@@ -1732,7 +1732,7 @@ TextVal QualityDescs[] = {
     "A sundering weapon deals triple damage in Sundering attacks and deals damage even to items with a "
     "higher magical plus. It also deals triple damage to inanimate objects like chests and doors (but not golems or magical constructs)." },
   { WQ_ENERGY,
-    "A brilliant energy weapon phases cleanly through any inanimate matter and thus automatically bypasses a victim's armor. "
+    "A brilliant energy weapon phases cleanly through any inanimate matter and thus automatically bypasses a victim's armour. "
     "It deals normal damage to truly inaimate objects like chests and doors." },
   { WQ_DISTANCE, "A weapon of distance has its range increment doubled." },
   { WQ_SPEED, "A weapon of speed grants you a +50~ magic bonus to your attack speed (or a +25~ bonus if it is your off-hand weapon)." },
@@ -1809,29 +1809,29 @@ TextVal QualityDescs[] = {
 
 TextVal AQualityDescs[] = {
   
-  { AQ_LIGHT_FOR, "This armor is magically reinforced, giving it a 25~ chance of "
+  { AQ_LIGHT_FOR, "This armour is magically reinforced, giving it a 25~ chance of "
               "negating any critical hit on its wearer, leaving the attack a normal "
               "hit. It also grants a +4 bonus to saving throws versus disintegration." },
-  { AQ_MEDIUM_FOR, "This armor is magically reinforced, giving it a 50~ chance of "
+  { AQ_MEDIUM_FOR, "This armour is magically reinforced, giving it a 50~ chance of "
               "negating any critical hit on its wearer, leaving the attack a normal "
               "hit. It also grants a +8 bonus to saving throws versus disintegration." },
-  { AQ_HEAVY_FOR, "This armor is magically reinforced, giving it a 75~ chance of "
+  { AQ_HEAVY_FOR, "This armour is magically reinforced, giving it a 75~ chance of "
               "negating any critical hit on its wearer, leaving the attack a normal "
               "hit. It also grants a +12 bonus to saving throws versus disintegration." },
 
-  { AQ_FIRE_RES, "This armor conveys upon its wearer a supernatural resistance to "
+  { AQ_FIRE_RES, "This armour conveys upon its wearer a supernatural resistance to "
               "fire equal in magnitude to three times its magical bonus." },
-  { AQ_ACID_RES, "This armor conveys upon its wearer a supernatural resistance to "
+  { AQ_ACID_RES, "This armour conveys upon its wearer a supernatural resistance to "
               "acid equal in magnitude to three times its magical bonus." },
-  { AQ_COLD_RES, "This armor conveys upon its wearer a supernatural resistance to "
+  { AQ_COLD_RES, "This armour conveys upon its wearer a supernatural resistance to "
               "cold equal in magnitude to three times its magical bonus." },
-  { AQ_LIGHT_RES, "This armor conveys upon its wearer a supernatural resistance to "
+  { AQ_LIGHT_RES, "This armour conveys upon its wearer a supernatural resistance to "
               "lightning and other electrical attacks equal in magnitude to three "
               "times its magical bonus." },
-  { AQ_SONIC_RES, "This armor conveys upon its wearer a supernatural resistance to "
+  { AQ_SONIC_RES, "This armour conveys upon its wearer a supernatural resistance to "
               "destructive sonic attacks equal in magnitude to three times its "
               "magical bonus." },
-  { AQ_POISON_RES, "This armor conveys upon its wearer a supernatural resistance to "
+  { AQ_POISON_RES, "This armour conveys upon its wearer a supernatural resistance to "
               "hit point damage from toxins equal in magnitude to three times its "
               "magical bonus, as well as a circustance bonus to saving throws versus "
               "poison equal in magnitude to its magical bonus." },
@@ -1839,92 +1839,92 @@ TextVal AQualityDescs[] = {
   { AQ_ANIMATED, "On command, an animated shield hovers near its bearer without any "
               "apparent means of support, and can thus be used without filling the "
               "Ready Hand inventory slot. (To equip it, it should be 'a'ctivated.) "
-              "It thus also incurs no armor penalty and no arcane spell failure "
+              "It thus also incurs no armour penalty and no arcane spell failure "
               "modifier." },
   { AQ_ARROW_DEF, "A shield with this quality conveys the Deflect Arrows feat upon "
               "its bearer when equipped." },
   { AQ_BASHING, "A shield with this quality is a magical weapon, gaining its magic "
               "bonus not only to Defense Class, but to attack and damage rolls made "
               "when using the Shield Bash tactical option." },
-  { AQ_BLINDING, "This quality causes a suit of armor or shield to gleam like perfectly "
+  { AQ_BLINDING, "This quality causes a suit of armour or shield to gleam like perfectly "
               "polished steel. This increases your Defense Class by 2 versus enemies "
               "that target attacks by sight, and has a 1 in 20 chance of blinding any "
               "enemy who attacks you (Fortitude saving throw negates) for 1d4 rounds." },
-  { AQ_ETHEREALNESS, "This suit of armor allows its wearer to become ethereal at will, "
+  { AQ_ETHEREALNESS, "This suit of armour allows its wearer to become ethereal at will, "
               "costing two Fatigue Points per use, and functioning 3 times per day. To "
-              "utilize this ability, 'a'ctivate the armor." },
-  { AQ_GRACEFUL, "This armor is fluid, supple and perfectly fitted, granting its "
-              "wearer a supernatural freedom of movement. As such, the armor penalty "
+              "utilize this ability, 'a'ctivate the armour." },
+  { AQ_GRACEFUL, "This armour is fluid, supple and perfectly fitted, granting its "
+              "wearer a supernatural freedom of movement. As such, the armour penalty "
               "it inflicts is halved, rounding down." },
-  { AQ_INVULN, "This armor bestows a limited invulnerability on you, granting you "
+  { AQ_INVULN, "This armour bestows a limited invulnerability on you, granting you "
               "immunity to non-magical weapons." },
-  { AQ_GREAT_INV, "This armor bestows a limited invulnerability on you, granting you "
+  { AQ_GREAT_INV, "This armour bestows a limited invulnerability on you, granting you "
               "immunity to weapons with an enchantment of +3 or less." },
-  { AQ_MAGIC_RES, "This powerful armor turns aside any magic striking you, granting "
+  { AQ_MAGIC_RES, "This powerful armour turns aside any magic striking you, granting "
               "you a 10~ magic resistance for every magical plus it possesses." },
   { AQ_REFLECTION, "A shield of reflection turns hostile magic directed at you back "
               "upon the original attacker, duplicating the effects of <9>spell "
               "turning<7>." },
-  { AQ_SHADOW, "Shadow armor blends supernaturally with shadows, giving its wearer "
+  { AQ_SHADOW, "Shadow armour blends supernaturally with shadows, giving its wearer "
               "a circumstance bonus to his Hide skill equal to twice its magical "
               "bonus." },
-  { AQ_SILENT, "Silent armor magically muffles sound in a one-inch thick magical "
+  { AQ_SILENT, "Silent armour magically muffles sound in a one-inch thick magical "
               "aura surronding the wearer, giving her a circumstance bonus to "
               "her Move Silently skill equal to twice its magical plus." },
-  { AQ_SLICK, "Slick armor is polished and smoothed, allowing the wearer to evade "
+  { AQ_SLICK, "Slick armour is polished and smoothed, allowing the wearer to evade "
               "others attempting to grab her. It adds a bonus equal to twice its "
               "magical plus to the wearer's Escape Artist skill." },
-  { AQ_MIGHT, "Armor of might supernaturally augments its wearer's strength, granting "
+  { AQ_MIGHT, "Armour of might supernaturally augments its wearer's strength, granting "
               "the wearer an enhancement bonus to Strength equal to its magical plus." },
-  { AQ_AGILITY, "Armor of agility supernaturally augments its wearer's reflexes, "
+  { AQ_AGILITY, "Armour of agility supernaturally augments its wearer's reflexes, "
               "granting the wearer an enhancement bonus to Dexterity equal to its "
               "magical plus." },
-  { AQ_ENDURANCE, "Armor of endurance supernaturally augments its wearer's toughness, "
+  { AQ_ENDURANCE, "Armour of endurance supernaturally augments its wearer's toughness, "
               "granting the wearer an enhancement bonus to Constitution equal to "
               "its magical plus." },
-  { AQ_HEALING, "Armor of rapid healing causes its wearer to quickly heal any injury "
+  { AQ_HEALING, "Armour of rapid healing causes its wearer to quickly heal any injury "
               "suffered while it was worn, restoring a number of hit points each round "
               "equal to its magical enhancement bonus." },
-  { AQ_STABILITY, "Armor of stability allows its owner to mystically root himself to "
+  { AQ_STABILITY, "Armour of stability allows its owner to mystically root himself to "
               "the ground, giving him a circumstance bonus to resist trip and "
               "bull rush attacks equal to twice its magical plus." },
-  { AQ_SPIKED, "Anyone attempting to grapple a character wearing spiked armor or wielding "
+  { AQ_SPIKED, "Anyone attempting to grapple a character wearing spiked armour or wielding "
               "a spiked shield suffers 1d8 points of damage for every round they persist "
               "in the effort." },
-  { AQ_COMMAND, "Armor of command imbues its wearer with supernatural majesty, giving "
+  { AQ_COMMAND, "Armour of command imbues its wearer with supernatural majesty, giving "
               "him an enhancement bonus to his Charisma equal to its magical plus, and "
               "causing allies within 20 feet of him to gain a +1 morale bonus to attack, "
               "damage, defense class and saving throws." },
-  { AQ_RADIANT, "A radiant shield or suit of armor emits a brilliant golden light, causing "
+  { AQ_RADIANT, "A radiant shield or suit of armour emits a brilliant golden light, causing "
               "all squares within 60 feet of the wearer to be illuminated as if by a "
               "<9>call light<7> spell." },
-  { AQ_FEARSOME, "Fearsome armor projects an aura around the wearer causing all seeing "
+  { AQ_FEARSOME, "Fearsome armour projects an aura around the wearer causing all seeing "
               "creatures within 20 feet of the wearer to suffer a morale penalty to "
-              "attacks equal to his Charisma modifier or the armor's magical plus, whichever "
-              "is lower. In addition, the armor can be activated to duplicate the effects "
+              "attacks equal to his Charisma modifier or the armour's magical plus, whichever "
+              "is lower. In addition, the armour can be activated to duplicate the effects "
               "of a <9>fear<7> spell." },
-  { AQ_SACRED, "Embossed with the holy writings of Immotian and Mara, this armor is the "
+  { AQ_SACRED, "Embossed with the holy writings of Immotian and Mara, this armour is the "
               "special bane of undead. Its magical bonus is added to a cleric's level "
               "when she attempts to turn undead. Its coverage protects against special "
               "damage from touch attacks the way coverage normally protects against "
               "damage from other physical attacks." },
-  { AQ_SHIFTING, "Shifting armor is able to metamorphose its form, becoming any type of "
-              "armor the wielder wishes but retaining its magical properties. To change "
-              "its shape, the wearer must 'a'ctivate the armor." },
-  { AQ_BANEBLIND, "Baneblind armor makes its wearer invisible to those enemies that she "
-              "has a special grudge against -- a ranger's favored enemies, a dwarf or "
+  { AQ_SHIFTING, "Shifting armour is able to metamorphose its form, becoming any type of "
+              "armour the wielder wishes but retaining its magical properties. To change "
+              "its shape, the wearer must 'a'ctivate the armour." },
+  { AQ_BANEBLIND, "Baneblind armour makes its wearer invisible to those enemies that she "
+              "has a special grudge against -- a ranger's favoured enemies, a dwarf or "
               "gnome's racial enemies and any enemy type that the wearer is wielding a "
               "bane-weapon against." },
-  { AQ_RESISTANT, "Resistant armor protects its wearer from all manner of harm, granting "
+  { AQ_RESISTANT, "Resistant armour protects its wearer from all manner of harm, granting "
               "her a resistance bonus to all her saving throws equal to its magical "
               "plus." },
-  { AQ_AUSPICIOUS, "Auspicious armor bestows good fortune upon its wearer, granting a "
+  { AQ_AUSPICIOUS, "Auspicious armour bestows good fortune upon its wearer, granting a "
               "luck bonus to all her saving throws equal in magnitude to its magical "
               "bonus." },
-  { AQ_GRAVEN, "Graven armor or shields are embossed with detailed carvings from all "
+  { AQ_GRAVEN, "Graven armour or shields are embossed with detailed carvings from all "
               "the various religious texts of Therya, and thus act as a holy symbol "
               "for any priest wearing them." },
-  { AQ_LIFEKEEPING, "Lifekeeping armor allows its wearer to resist negative energy, "
+  { AQ_LIFEKEEPING, "Lifekeeping armour allows its wearer to resist negative energy, "
               "sustaining all attributes at a level equal to its magical plus and "
               "also decreasing the experience loss suffered from life-draining "
               "attacks. Finally, it grants resistance to necromantic damage equal "
@@ -1935,7 +1935,7 @@ TextVal AQualityDescs[] = {
 
 
 
-#include "ArmorTab.h"
+#include "ArmourTab.h"
 
 LocationInfo *Tiles;
 
@@ -1971,7 +1971,7 @@ Option OptionList[] = {
       "pick one that most suits you.\n"
       "__<10>Method 4d6 + Perks:<2> Five random stat sets are rolled in order."
       "Each set comes with two feats and a magical item. You pick the lot "
-      "that most suits you. (If the item is a weapon or a piece of armor, "
+      "that most suits you. (If the item is a weapon or a piece of armour, "
       "you still need the proper proficiency to use it without penalty.) "
       "You can abort to 4d6 if you want to reroll in a baseline game.\n" 
       "__<10>Method Point Buy:<2> You purchase your scores using a point "
@@ -2030,15 +2030,15 @@ Option OptionList[] = {
   #if 0
   /* FJM: I /really/ don't like this. It devalues one of the only unique things
      humans have going for them -- feats. It also shifts the base concept of
-     the FC mechanic, so that a favored class is "you should only play this
+     the FC mechanic, so that a favoured class is "you should only play this
      race/class combo" instead of "you can multiclass this safely". I like
      the idea of dwarven monks or lizardmen bards, and I don't want to gimp
      those character types in comparison to dwarven fighters or whatnot. */
-  { OPT_FAVORED_CLASS, "Favored Class Mechanic", "XP PENALTY/FEATS", 1, 0, 0,
-      "__This option determines how racial favored classes are handled. The "
+  { OPT_FAVOURED_CLASS, "Favoured Class Mechanic", "XP PENALTY/FEATS", 1, 0, 0,
+      "__This option determines how racial favoured classes are handled. The "
       "traditional approach gives you a 25~ XP penalty if one of your highest-"
-      "level classes is not a racial favored class. The second approach gives "
-      "you a bonus feat when your total levels in racial favored classes equals "
+      "level classes is not a racial favoured class. The second approach gives "
+      "you a bonus feat when your total levels in racial favoured classes equals "
       "2, 5, 8, 11, etc."},
   #endif
   { OPT_ATTR_ON_LEVEL, "Gain Attributes With Levels", "NO/YES", 1, 0, 0,
@@ -2047,8 +2047,8 @@ Option OptionList[] = {
       "__If this option is set, you recieve Intuition information about an item immediately "
       "after picking it up, whereas normally you must rest to recieve Intuition 'hunches' "
       "about magical items. The WEAPONS option -- the default -- allows rapid intuition only "
-      "for weapons, armor, bows and missiles -- types of items non-spellcasting classes depend "
-      "on that cannot easily be ID'd by flavor like potions. Setting this switch on YES "
+      "for weapons, armour, bows and missiles -- types of items non-spellcasting classes depend "
+      "on that cannot easily be ID'd by flavour like potions. Setting this switch on YES "
       "places the game in Explore Mode." },
   { OPT_MON_DJIKSTRA, "Monsters Use Djikstra", "NO/YES/PETS", 2, 0, 0,
       "__If this option is set, monsters will use the Djikstra pathfinding algorithm "
@@ -2113,7 +2113,7 @@ Option OptionList[] = {
 */
   { OPT_SIDEBAR, "Sidebar", "Default/Recent Only", 1, 0, 0,
       "__This option can cause the sidebar (that area on the right-hand side of the screen that lists your "
-      "weapons and armor and the things in view) to omit some information that basically never changes "
+      "weapons and armour and the things in view) to omit some information that basically never changes "
       "(e.g., your race and gender) in order to leave more room for other information (e.g., things in view)." },
   { OPT_SHIFTARROW, "Shift Arrow Keys", "Ranged Attack/Run", 1, 0, 0,
       "__This option determines whether pressing Shift and an arrow key "
@@ -2253,9 +2253,9 @@ Option OptionList[] = {
       "and thus requires more frequent scrolling of the container subwindow." },
 
 /* Display Options */
-  { OPT_PLAYER_COL, "Player Glyph Color", 
+  { OPT_PLAYER_COL, "Player Glyph Colour", 
     "Black/Blue/Green/Cyan/Red/Purple/Brown/Grey/Shadow/Azure/Emerald/Skyblue/Pink/Magenta/Yellow/White/By Race", 16, 16, 0,
-      "__This option determines the color of the glyph used to represent the player's "
+      "__This option determines the colour of the glyph used to represent the player's "
       "character. By default, this glyph's color is set by the character's race." },
   { OPT_CENTER_MAP, "Center Map on Player", "NO/YES", 1, 0, 0,
       "__When this option is active, the map scrolls every time the "
@@ -2313,7 +2313,7 @@ Option OptionList[] = {
       "learning the game; the latter is better for quick reference." },
   { OPT_MONO_HELP, "Monochrome Help", "OFF/ON", 1, 0, 0,
       "__If this option is enabled, all of the main text of the online help "
-      "will be displayed as plain grey text, rather than the more colorful "
+      "will be displayed as plain grey text, rather than the more colourful "
       "default. This can be useful for people that have trouble reading the "
       "help due to low-contrast monitors or visual disabilities." },
   { OPT_SORT_SPELLS, "Learn Spell Menu Order", "NAME/LEVEL", 1, 0, 0,
@@ -2768,7 +2768,7 @@ int8 BonusSpells[22][9] = {
 const int16 SpellbookTable[] =
   PM_BASIC_INCANTATIONS,
     SP_CALL_LIGHT, SP_MAGIC_MISSLE, SP_DETECT_MAGIC, SP_PHASE_DOOR,
-    SP_SHIELD, SP_MAGE_ARMOR, SP_SLEEP, 0,
+    SP_SHIELD, SP_MAGE_ARMOUR, SP_SLEEP, 0,
   PM_ELDRICH_SORCERY,
     SP_BLACK_BLADE, SP_DISJUNCTION, SP_IMPRISONMENT, SP_SUCCOR,
       SP_SOUL_BIND, SP_MASTER_UNDEAD, SP_GRANDEUR, 0 };
@@ -2791,7 +2791,7 @@ const char*AttrTitle[] =
   "Thrown Hit",
   "Offhand Hit",
 
-  "Armor",
+  "Armour",
   "Magic Resistance",
   NULL,
 
@@ -2812,7 +2812,7 @@ const char*AttrTitle[] =
   "Temporary Hit Points",
   "Temporary Mana Points",
   "Fatigue Points",
-  "Armor Coverage",
+  "Armour Coverage",
   }; // ww: evil typo
 const char*RatingWord[] ={ "Abyssal", "Hideous", "Poor", "Average", "Fair",
 	"Good", "Great", "Excellent", "Incredible", "Legendary",
@@ -2851,7 +2851,7 @@ const char* GlyphLegend1 =
 "                     <14>Characters Shown on Screen<7>                 \n\
    a  animal (misc)    A  angel / celestial   ?  unseen creature \n\
    b  bat / bird       B  beast               <char:GLYPH_STATUE>  statue          \n\
-   c  cat / feline     C  construct           <char:GLYPH_LARMOR>  armor           \n\
+   c  cat / feline     C  construct           <char:GLYPH_LARMOUR>  armour           \n\
    d  dog / canine     D  dragon              <char:GLYPH_STORE>  building entrance\n\
    e  eye creature     E  elemental           <char:GLYPH_CHEST>  chest         \n\
    f  faerie creature  F  fungus              8  altar           \n\
@@ -2879,7 +2879,7 @@ const char* GlyphLegend2 = "\
    <char:GLYPH_LDEMON>  lesser demon     <char:GLYPH_LDEVIL>  lesser devil        <char:GLYPH_DISARMED>  trap, disarmed \n\
    <char:GLYPH_GDEMON>  greater demon    <char:GLYPH_GDEVIL>  greater devil       <char:GLYPH_FOG>  fog             \n\
    <char:GLYPH_HELMET>  helmet/headband  `  swarm of insects    <char:GLYPH_JUNK>  junk / garbage\n\
-   <char:GLYPH_CLOAK>  cloak    <char:GLYPH_BRACERS>  bracers    <char:GLYPH_RING>  ring     <char:GLYPH_LARMOR>  armor     x  xxx\n\
+   <char:GLYPH_CLOAK>  cloak    <char:GLYPH_BRACERS>  bracers    <char:GLYPH_RING>  ring     <char:GLYPH_LARMOUR>  armour     x  xxx\n\
    <char:GLYPH_GEM>  gemstone <char:GLYPH_GAUNTLETS>  gauntlets  <char:GLYPH_AMULET>  amulet   <char:GLYPH_SHIELD>  shield    x  xxx\n\
    <char:GLYPH_TOOL>  tool     <char:GLYPH_MUSH>  mushroom   <char:GLYPH_FIGURE>  figurine <char:GLYPH_GIRDLE>  girdle    x  xxx\n\
    <char:GLYPH_BOOK>  book     <char:GLYPH_POTION>  potion     <char:GLYPH_SCROLL>  scroll   <char:GLYPH_CLOTHES>  clothing  x  xxx";
@@ -2887,7 +2887,7 @@ const char* GlyphLegend2 = "\
 ItemGen DungeonItems[] = {
 /* Prob, Type,      Source,    NvGood, MinL,CMul,Prototype,   Flavored */
 { 50, T_WEAPON,     AI_WEAPON, false,  1,   100, NULL,        false },
-{ 35, T_ARMOR,      AI_ARMOR,  false,  1,   100, NULL,        false },
+{ 35, T_ARMOUR,      AI_ARMOUR,  false,  1,   100, NULL,        false },
 { 15, T_SHIELD,     AI_SHIELD, false,  1,   100, NULL,        false },
 { 15, T_BOW,        AI_BOW,    false,  1,   100, NULL,        false },
 { 5,  T_MISSILE,    AI_ARROW,  false,  1,   100, NULL,        false },
@@ -2929,7 +2929,7 @@ ItemGen DungeonItems[] = {
 ItemGen IllusionItems[] = {
 /* Prob, Type,      Source,    NvGood, MinL,CMul,Prototype,   Flavored */
 { 50, T_WEAPON,     AI_WEAPON, false,  1,   100, NULL,        false },
-{ 20, T_ARMOR,      AI_ARMOR,  false,  1,   100, NULL,        false },
+{ 20, T_ARMOUR,      AI_ARMOUR,  false,  1,   100, NULL,        false },
 { 10, T_SHIELD,     AI_SHIELD, false,  1,   100, NULL,        false },
 { 15, T_BOW,        AI_BOW,    false,  1,   100, NULL,        false },
 { 5,  T_STAFF,      AI_STAFF,  false,  7,   75,  "staff",     true },
@@ -2954,7 +2954,7 @@ ItemGen IllusionItems[] = {
 
 ItemGen MonsterItems[] = {
 { 25, T_WEAPON,     AI_WEAPON, false,  1,   100, NULL,        false },
-{ 15, T_ARMOR,      AI_ARMOR,  false,  1,   100, NULL,        false },
+{ 15, T_ARMOUR,      AI_ARMOUR,  false,  1,   100, NULL,        false },
 { 50, T_POTION,     AI_POTION, true,   1,   5,   "potion",    true },
 { 10, T_RING,       AI_RING,   false,  3,   100, "ring",      true },
 { 1,  T_AMULET,     AI_AMULET, false,  15,  100, "amulet",    true },
@@ -2982,7 +2982,7 @@ ItemGen MageItems[] = {
 ItemGen ChestItems[] = {
 
 { 25, T_WEAPON,     AI_WEAPON, false,  1,   100, NULL,        false },
-{ 15, T_ARMOR,      AI_ARMOR,  false,  1,   100, NULL,        false },
+{ 15, T_ARMOUR,      AI_ARMOUR,  false,  1,   100, NULL,        false },
 { 5,  T_MISSILE,    AI_ARROW,  false,  1,   100, NULL,        false },
 { 30, T_BOOK,       0,         false,  3,   200, NULL,        false },
 { 5,  T_STAFF,      AI_STAFF,  false,  7,   75,  "staff",     true },
@@ -3438,7 +3438,7 @@ TextVal ClassAbilities[] = {
   { CA_EVASION, "Evasion" },
   { CA_FAMILIAR, "Familiar" },
   { CA_FATESENSE, "Fatesense" },
-  { CA_FAV_ENEMY, "Favored Enemy" },
+  { CA_FAV_ENEMY, "Favoured Enemy" },
   { CA_FLIGHT, "Flight" },
   { CA_FEAT_OF_STRENGTH, "Feat of Strength" },
   { CA_FEED_UPON_PAIN, "Feed upon Pain" },
@@ -3640,7 +3640,7 @@ uint16 ActiveTraits[] = {
 
 SkillInfoStruct SkillInfo[] = {
   /* SK_WHAT, Name, implemented, active, 
-     desc, attr1, attr2, take-min-of-attrs, armor-penalty-factor */
+     desc, attr1, attr2, take-min-of-attrs, armour-penalty-factor */
   { 0, 0, 0, 0, 0, 0, 0, 0, 0 }, 
 
   { SK_ALCHEMY, "Alchemy", true, true, 
@@ -3660,7 +3660,7 @@ SkillInfoStruct SkillInfo[] = {
 
   { SK_APPRAISE, "Appraise", true, true, 
      "__This skill gives you a chance to determine a creature's alignment and "
-     "personality architype, and certain other intentions in a situation. It "
+     "personality archetype, and certain other intentions in a situation. It "
      "also gives you heightened skill when bargaining with the shopkeepers, "
      "and it lets you know the rough chance that any ally -- whether a party "
      "member, animal companion or summoned/charmed creature -- is likely to "
@@ -3717,7 +3717,7 @@ SkillInfoStruct SkillInfo[] = {
 
   { SK_CRAFT, "Craft", true, true, 
      "__This skill allows you to craft items of various types, most notably "
-     "weapons and armor. Any item you craft yourself is much easier to "
+     "weapons and armour. Any item you craft yourself is much easier to "
      "enchant, particularly if great degrees of skill are involved in the "
      "creation. You need to go to the appropriate location in town (such as "
      "the Smithy) to craft items.",
@@ -4059,7 +4059,7 @@ AlignmentInfoStruct AlignmentInfo[] = {
         "discipline to fight relentlessly. She tells the truth, keeps her word, helps those "
         "in need, and speaks out against injustice. A lawful good character hates to see "
         "the guilty go unpunished.\n"
-        "__ Lawful good is the best alignment you can be because it combines honor and "
+        "__ Lawful good is the best alignment you can be because it combines honour and "
         "compassion.",
         AL_LAWFUL|AL_GOOD },
 
@@ -4086,9 +4086,9 @@ AlignmentInfoStruct AlignmentInfo[] = {
         "<2>Lawful Neutral, 'Judge':<7> A lawful neutral character acts as law, tradition, "
         "or a personal code directs her. Order and organization are paramount to her. She "
         "may believe in personal order and live by a code or standard, or she may believe "
-        "in order for all and favor a strong, organized government.\n"
+        "in order for all and favour a strong, organized government.\n"
         "__ Lawful neutral is the best alignment you can be because it means you are "
-        "reliable and honorable without being a zealot.",
+        "reliable and honourable without being a zealot.",
         AL_LAWFUL },
 
       { "Neutral",
@@ -4096,7 +4096,7 @@ AlignmentInfoStruct AlignmentInfo[] = {
         "idea. She doesn't feel strongly one way or the other when it comes to good vs. "
         "evil or law vs. chaos. Most neutral characters exhibit a lack of conviction or "
         "bias rather than a commitment to neutrality. Such a character thinks of good "
-        "as better than evil -- after all, she would rather have good neighbors and "
+        "as better than evil -- after all, she would rather have good neighbours and "
         "rulers than evil ones. Still, she's not personally committed to upholding good "
         "in any abstract or universal way.\n"
         "__ Some neutral characters, on the other hand, commit themselves philosophically "
@@ -4115,7 +4115,7 @@ AlignmentInfoStruct AlignmentInfo[] = {
         "intentionally disrupt organizations as part of a campaign of anarchy. To do so, "
         "he would have to be motivated either by good (and a desire to liberate others) "
         "or evil (and a desire to make those different from himself suffer). A chaotic "
-        "neutral character may be unpredictable, but his behavior is not totally random. "
+        "neutral character may be unpredictable, but his behaviour is not totally random. "
         "He is not as likely to jump off a bridge as to cross it.\n"
         "__ Chaotic neutral is the best alignment you can be because it represents true "
         "freedom from both society's restrictions and a do-gooder's zeal.",
@@ -4157,7 +4157,7 @@ AlignmentInfoStruct AlignmentInfo[] = {
         "own sake. Most often, such villains are devoted to evil deities or secret "
         "societies.\n"
         "__ Neutral evil is the most dangerous alignment because it represents pure evil "
-        "without honor and without variation.",
+        "without honour and without variation.",
         AL_EVIL
       },
       { "Chaotic Evil",
@@ -4190,7 +4190,7 @@ const char* PersonalityNames[] = {
   "The Empathic Nurturer",
   "The Eternal Romantic",
   "The Gentleman Adventurer",
-  "The Honorbound Servant",
+  "The Honourbound Servant",
   "The Iconoclastic Rebel",
   "The Introspective Visionary",
   "The Manipulative Plotter",

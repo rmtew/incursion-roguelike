@@ -729,7 +729,7 @@ String & Pluralize(const char *_s, rID iID)
 
     if (iID && TITEM(iID)->HasFlag(IT_PLURAL))
       switch (TITEM(iID)->IType) {
-        case T_ARMOR:
+        case T_ARMOUR:
           return SC("suits of ") + s; /* 2 suits of plate mail */
         case T_BRACERS: case T_GAUNTLETS: case T_BOOTS:
           return SC("pairs of ") + s; /* 2 pairs of boots of speed */

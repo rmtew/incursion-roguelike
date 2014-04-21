@@ -506,16 +506,16 @@ Monster "leucrotta" : MA_MYTHIC, MA_QUADRUPED, MA_ABERRATION
 	   combines the legs and hooves of a great stag, the trunk and 
 	   neck of a lion, the head of a prehistoric badger -- and the 
 	   voice, intellect and capacity for malice of a human being. 
-	   Inherantly cruel, the leucrotta posseses
+	   Inherantly cruel, the leucrotta possesses
 	   no volition of its own, instead seeming to exist as a
-	   symbolic personification of deciet. It can mimic nearly
+	   symbolic personification of deceit. It can mimic nearly
 	   any sound, using these unearthly noises to lure prey to
 	   it, and its inhuman bite is strong enough to pulp bone
-	   and even tear through the metal of armor and shields.
+	   and even tear through the metal of armour and shields.
 	   Leucrottas prefer to ambush and slay humanoid victims
 	   via deception, then eat their entire bodies, including
 	   bones, clothing, possessions and soul. The hide of a
-	   leucrotta is a soft leather in a fine tan color, and is
+	   leucrotta is a soft leather in a fine tan colour, and is
 	   highly prized for crafting magical boots. Leucrotta are
 	   sterile and genderless; it is not known how they come
 	   into being, but they are surely not born of other
@@ -588,13 +588,13 @@ Monster "leucrotta" : MA_MYTHIC, MA_QUADRUPED, MA_ABERRATION
 	            ThrowDmg(EV_DAMAGE,AD_BLUNT,e.vDmg,"",EActor,EVictim->InSlot(SL_READY));
 	            return DONE;
 	          }
-	      if (EVictim->InSlot(SL_ARMOR))
-	        if (EVictim->InSlot(SL_ARMOR)->isType(T_ARMOR))
+	      if (EVictim->InSlot(SL_ARMOUR))
+	        if (EVictim->InSlot(SL_ARMOUR)->isType(T_ARMOUR))
 	          {
-	            TPrint(e, "Your bite tears at the <EVictim>'s armor!",
-	                      "The leucrotta's bite tears at your armor!",
-	                      "The leucrotta's bite tears at the <EVictim>'s armor!");
-	            ThrowDmg(EV_DAMAGE,AD_BLUNT,e.vDmg,"",EActor,EVictim->InSlot(SL_ARMOR));
+	            TPrint(e, "Your bite tears at the <EVictim>'s armour!",
+	                      "The leucrotta's bite tears at your armour!",
+	                      "The leucrotta's bite tears at the <EVictim>'s armour!");
+	            ThrowDmg(EV_DAMAGE,AD_BLUNT,e.vDmg,"",EActor,EVictim->InSlot(SL_ARMOUR));
 	            return DONE;
 	          }  
 	      }
@@ -604,7 +604,7 @@ Monster "leucrotta" : MA_MYTHIC, MA_QUADRUPED, MA_ABERRATION
 	    "It can mimic sounds at a distance, casting a magical charm that
 	       compels listeners who fail a Will saving throw (DC 13 + [Bluff / 2])
 	       to investigate before they rest. Its bite can rend a foe's 
-	       shield or armor, dealing damage directly to them instead of 
+	       shield or armour, dealing damage directly to them instead of 
 	       to the bearer.";  
   }
 

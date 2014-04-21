@@ -20,16 +20,16 @@ God "Aiswin"
       an enemy who has genuinely and knowingly wronged her.\n
       __Aiswin holds as his protectorate all who work at night, or
       work alone, and is revered by many thieves and assasins'
-      guilds. Yet, his favor is a fickle thing for any guildmaster
+      guilds. Yet, his favour is a fickle thing for any guildmaster
       to try to hold, because he hates the oppression or degradation
-      of the weak -- one who wishes to hold his favor had best not
+      of the weak -- one who wishes to hold his favour had best not
       treat their underlings poorly or encourage victimization of the
       innocent. Aiswin has cults rather then a priesthood, forming
       loyal cliques from those who have been rejected by their peers
       or alienated from society. A common cliche states that Aiswin
       has dominion over everyone who has nobody else.\n
       __Aiswin is the god of vengeance, not the god of all-consuming
-      vengeance for imagined slights. His favor comes upon those who
+      vengeance for imagined slights. His favour comes upon those who
       have been genuinely hurt, though he is lax in enforcing morality
       upon his clerics and many pursue very destructive, over-reaching
       schemes against their enemies. Some even end up going insane for
@@ -148,7 +148,7 @@ God "Aiswin"
           $"Kinslayer"
           $"Oathbow"
           $"Spiderbite", */
-      * FAVOR_CHART
+      * FAVOUR_CHART
           100
           500
           1250
@@ -170,8 +170,8 @@ God "Aiswin"
           AID_REFRESH   P_HIGH       2000
           AID_DEFLECT   P_LOW        3000;    
     Constants:
-      * VOICE_COLOR BLUE,
-      * ALTAR_COLOR BLUE,
+      * VOICE_COLOUR BLUE,
+      * ALTAR_COLOUR BLUE,
       * HOLY_SYMBOL $"Aiswin;symbol",
       * CHOSEN_WEAPON $"short sword",
       * CHOSEN_WEAPON_QUALITY WQ_BALANCE,
@@ -180,7 +180,7 @@ God "Aiswin"
       * ALTAR_COST 5,
       * PRAYER_TIMEOUT 5,
       * MIN_RAISE_LEVEL 5,
-      * MIN_CONVERT_FAVOR 750,
+      * MIN_CONVERT_FAVOUR 750,
       * PRAYER_DC 10,
       * LEVEL_BLEEDOFF 5,
       * TOLERANCE_VAL 0,
@@ -462,7 +462,7 @@ God "Asherath"
       of the typical Outlander and favoured a harsher homeland. The other
       dieites often fear Asherath; he has a reputation for never losing,
       largely due to his proclivity for securing the outcome of any battle
-      in his favor before he even enters it. Honor is something Asherites
+      in his favour before he even enters it. Honour is something Asherites
       view as just delightful -- at least, as long as it is	something
       the enemy possesses that allows them to be easily manipulated.  This
       outlook has led the churches of Asherath and Erich into a
@@ -473,7 +473,7 @@ God "Asherath"
       and his chosen weapon is the long sword. He offers his priests the
       Domains of Knowledge, Planning, Strength, Time, Trickery and War.\n
       __<10>Worship:<2> Asherath is a pragmatic god who has little use for
-      sacrifices. Worshippers gain favor with him when they triumph over their
+      sacrifices. Worshippers gain favour with him when they triumph over their
       betters in combat, and as they improve their own inherant abilities (in
       the manner at which humans specifically excel). He is a lenient god, but 
       obvious stupidity draws anger from him (for example, the use of unidentified 
@@ -487,16 +487,16 @@ God "Asherath"
       __<10>Blessings:<2> Asherath does not normally intercede on behalf of his followers:
       he expects them to succeed on their own skill, and thus usually does not
       answer prayers for aid, nor will he ressurect the fallen. While he is easy for most
-      competant adventurers to stay in favor with, he is much less willing
+      competant adventurers to stay in favour with, he is much less willing
       to offer aid or intervention to his followers, given his distinctly
       Darwinist approach to life. However, for very
       loyal followers he has been known to smite enemies, heal wounds or purify
-      the body; asking these favors of him costs a follower greatly, however. He
+      the body; asking these favours of him costs a follower greatly, however. He
       is very distant from lay worshippers.\n
       __He does not grant supernatural powers as permanent blessings as the other
       gods do; however, his theology places followers on a relentless path of self-
       testing and disciplined improvement, that allows them to gain certain subtle
-      mundane benefits as favor with him rises. This philosophy allows a follower
+      mundane benefits as favour with him rises. This philosophy allows a follower
       to develop an insight toward causing damage, increased strength and intellect,
       skill at finding others' weaknesses and greater proficiency with the magical
       schools of Divination and Evocation.";
@@ -568,7 +568,7 @@ God "Asherath"
           $"Zurvash"    0     0,          
       * CROWNING_GIFTS
           $"Nine Lives Stealer",
-      * FAVOR_CHART
+      * FAVOUR_CHART
           1250
           4500
           9600
@@ -584,15 +584,15 @@ God "Asherath"
           AID_HEAL      P_HIGH       3000
           AID_PURIFY    P_HIGH       4000;    
     Constants:
-      * VOICE_COLOR CYAN,
-      * ALTAR_COLOR CYAN,
+      * VOICE_COLOUR CYAN,
+      * ALTAR_COLOUR CYAN,
       * HOLY_SYMBOL $"Asherath;symbol",
       * CHOSEN_WEAPON $"long sword",
       * CHOSEN_WEAPON_QUALITY WQ_ACCURACY,
       * INTERVENTION_COST 20,
       * ALTAR_COST 10,
       * PRAYER_TIMEOUT 50,
-      * MIN_CONVERT_FAVOR 0,
+      * MIN_CONVERT_FAVOUR 0,
       * PRAYER_DC 15,
       * LEVEL_BLEEDOFF 2,
       * TOLERANCE_VAL 3,
@@ -669,11 +669,11 @@ God "Asherath"
           if (EVictim->ChallengeRating(true) > EActor->ChallengeRating(true))
             {
               EActor->IPrint("You feel challenged.");
-              EActor->gainFavor($"Asherath",30*EVictim->ChallengeRating(),true,true);
+              EActor->gainFavour($"Asherath",30*EVictim->ChallengeRating(),true,true);
             }
       return NOTHING;
       },
-    EV_CALC_FAVOR {
+    EV_CALC_FAVOUR {
       int16 mult;
       mult = 50;
       mult += EActor->SumStatiMag(ADJUST_INH,-1,NULL);
@@ -729,10 +729,10 @@ God "Ekliazeh"
       people endure whatever hardships the world throws at them -- 
       Ekliazeh is a firm believer in growth through ordeal. Ekliazeh
       is prayed to by members of all the goodly races who want strength 
-      and endurance (mental or physical) in a coming trial, but his favor 
+      and endurance (mental or physical) in a coming trial, but his favour 
       is won only by those who have lived truly in accord with the ways
-      of their people and honored all who have come before them. Ekliazeh
-      is not a bigoted god, and has shown his favor to humans, halflings,
+      of their people and honoured all who have come before them. Ekliazeh
+      is not a bigoted god, and has shown his favour to humans, halflings,
       gnomes and even rare elves in the past, but the standards he holds
       people to are exacting and unforgiving.
       \n__In dwarven mythology, it is Ekliazeh who hammers the soul of every
@@ -763,7 +763,7 @@ God "Ekliazeh"
       \n__Ekliazeh's holy symbol is a tiny adamant anvil, and he offers
       his clerics the domains of Craft, Community, Earth, Law, Strength and
       Protection. His chosen weapon is the warhammer. Ekliazeh accepts the 
-      sacrifice of rare gemstones gladly, and also favors the blood of evil 
+      sacrifice of rare gemstones gladly, and also favours the blood of evil 
       creatures of the deep Underdark -- both the monsterous aberrations and 
       more recognizable races like drow, goblins and mind flayers. He is Lawful 
       Neutral in alignment, and his priests may be of any non-Chaotic alignment.\n
@@ -775,13 +775,13 @@ God "Ekliazeh"
       non-hostile creatures that are not traditional enemies of the dwarves. He
       is also gravely angered when a follower kills a dwarf or a member of their
       family, for any reason. Any character (other than goblinoids, elves, drow or 
-      lizardfolk) can worship Ekliazeh, but dwarves recieve the greatest favor in 
+      lizardfolk) can worship Ekliazeh, but dwarves recieve the greatest favour in 
       his eyes.\n
       __<10>Blessings:<2> Ekliazeh will heal his followers, purify their bodies,
       cure blindness or maiming quite casually and lift curses or smite enemies with
-      only a little more devotion. For more deeply favored followers, he can identify
-      weapons, armor and shields. It requires a great deal of both personal 
-      accomplishment and favor with Ekliazeh for him to raise a fallen hero.\n
+      only a little more devotion. For more deeply favoured followers, he can identify
+      weapons, armour and shields. It requires a great deal of both personal 
+      accomplishment and favour with Ekliazeh for him to raise a fallen hero.\n
       __His more permanent blessings bring a follower closer to the earth: increased
       health and endurance, skill with craftwork and even a kind of natural resistance
       to harm wrought by hardening of the skin.";
@@ -804,7 +804,7 @@ God "Ekliazeh"
             "A deep voice thunders, |Thou turns back on our covenant? Then suffer!|"
           MSG_CONVERT
             "|Uphold my Law, and I will carry you through all of life's hardships.
-              Honor the ways of my people, and you will discover tremendous strength!|"
+              Honour the ways of my people, and you will discover tremendous strength!|"
           MSG_FORSAKE
             "A deep voice thunders, |Thou art a traitor to the Law, and art forever
               anathema to all my people!|"
@@ -828,7 +828,7 @@ God "Ekliazeh"
             "A deep voice thunders, |This is the paltry portion you reserve for 
               your god?!|"
           MSG_SATISFIED
-            "A deep voice thunders, |You honor the Law with your offering.|"
+            "A deep voice thunders, |You honour the Law with your offering.|"
           MSG_IMPRESSED
             "A deep voice thunders, |Great glory be upon you for the sacrifice 
                you have wrought!|"
@@ -895,7 +895,7 @@ God "Ekliazeh"
           $"Glauramong"
           $"Magellin"
           $"Magicbane", */
-      * FAVOR_CHART
+      * FAVOUR_CHART
           100
           500
           1250
@@ -914,12 +914,12 @@ God "Ekliazeh"
           AID_DEFLECT   P_LOW        300
           AID_SMITE     P_LOW        500
           AID_IDENTIFY  T_WEAPON     2000
-          AID_IDENTIFY  T_ARMOR      2000
+          AID_IDENTIFY  T_ARMOUR      2000
           AID_IDENTIFY  T_SHIELD     2000
           AID_RESSURECT 0            3000;    
     Constants:
-      * VOICE_COLOR BROWN,
-      * ALTAR_COLOR BROWN,
+      * VOICE_COLOUR BROWN,
+      * ALTAR_COLOUR BROWN,
       * HOLY_SYMBOL $"Ekliazeh;symbol",
       * CHOSEN_WEAPON $"warhammer",
       * CHOSEN_WEAPON_QUALITY WQ_LAWFUL,
@@ -928,7 +928,7 @@ God "Ekliazeh"
       * ALTAR_COST 4,
       * PRAYER_TIMEOUT 12,
       * MIN_RAISE_LEVEL 8,
-      * MIN_CONVERT_FAVOR 300,
+      * MIN_CONVERT_FAVOUR 300,
       * PRAYER_DC 15,
       * LEVEL_BLEEDOFF 3,
       * TOLERANCE_VAL 2,
@@ -1025,7 +1025,7 @@ God "Ekliazeh"
         EActor->Transgress($"Ekliazeh",5,false,"killing a dwarf");
       if (EVictim->isMType(MA_DROW) || EVictim->isMType(MA_GIANT) ||
           EVictim->isMType(MA_GOBLINOID))
-        EActor->gainFavor($"Ekliazeh",EVictim->ChallengeRating() * 25,false,true);
+        EActor->gainFavour($"Ekliazeh",EVictim->ChallengeRating() * 25,false,true);
       return NOTHING;
       },
     GODWATCH(EV_ALIGNED) {
@@ -1051,7 +1051,7 @@ God "Ekliazeh"
         e.EParam = MA_CHOICE1;
       return NOTHING;
       }, 
-    EV_CALC_FAVOR {
+    EV_CALC_FAVOUR {
       if (EActor->isMType(MA_DWARF))
         e.EParam = ((e.EParam*4)/3) + 200;
       e.EParam = (e.EParam * (40 + EActor->SkillLevel(SK_CRAFT))) / 40;
@@ -1065,7 +1065,7 @@ AI_SYMBOL Effect "Erich;symbol" : EA_GENERIC
 
 God "Erich"
   {
-    Desc: "<15>God of Chivalry, Honor and Social Hierarchy<11>\n
+    Desc: "<15>God of Chivalry, Honour and Social Hierarchy<11>\n
       __Domination, Guardian, Law, Nobility, Protection, War. The
       Light Lance. Adamant Items.<2>\n
       __Erich is a deceptively honest diety, for though he stands proudly
@@ -1101,13 +1101,13 @@ God "Erich"
       slain in fair combat. Followers of Erich can always claim the right of hospitality, 
       sleeping in a castle or lordly manor, resting the night without cost. Erich 
       is a demanding and inflexible god, but has been known to reward his most 
-      honorable followers lavishly, even lending out powerful magical weapons and 
-      armor.\n
+      honourable followers lavishly, even lending out powerful magical weapons and 
+      armour.\n
       __<10>Worship:<2> Erich accepts the sacrifice of dragons, beasts, chaotic 
       demihumans and evil outsiders (which must be live-sacrified, since they
       do not leave corpses). He is gravely offended by the sacrifice of goblinoids,
       since he considers them to be vermin; their extermination is a chore, not an
-      accomplishment worthy of chivalrous accord. Cowing enemies earns favor with
+      accomplishment worthy of chivalrous accord. Cowing enemies earns favour with
       him, however; he considers it part of the enforcement of the natural order
       of the world.\n
       __He places a very strict code of conduct upon his followers: they must not be 
@@ -1117,7 +1117,7 @@ God "Erich"
       not goblinoids, chaotics or evil outsiders, nor may they attempt to resolve
       their differences peacefully with such creatures. Finally, unlawful acts in
       general offend Erich, and his followers must always follow the code of chivalry,
-      even when unmounted and unarmored.\n
+      even when unmounted and unarmoured.\n
       __Goblinoids are not considered people in Erich's theology, and thus certain
       strictures are lifted when fighting them: they may be attacked while fleeing,
       poisoned or defeated with base trickery. In Erich's cosmology, the ideals of
@@ -1126,8 +1126,8 @@ God "Erich"
       objective alignment, only their standing with Erich.\n
       __<10>Blessings:<2> Erich will heal, ease hunger or smite enemies
       for any follower. More loyal servants find that he will (in order
-      of increasing favor) purify the body, remove fatigue, identify
-      weapons, armor and shields, lift curses, replace lost spellbooks,
+      of increasing favour) purify the body, remove fatigue, identify
+      weapons, armour and shields, lift curses, replace lost spellbooks,
       replenish mana and even raise the dead.\n
       __Erich's more permanent blessings include courage and protection
       from treacherous attacks, skill at horsemanship, landkeeping and
@@ -1138,7 +1138,7 @@ God "Erich"
     Lists:
       * GODSPEAK_LIST
           MSG_SALUTATION
-            "|Let there be zeal in your heart, truth in your words, honor in 
+            "|Let there be zeal in your heart, truth in your words, honour in 
                your deeds and blood upon your sword!|",
           #if 0
           MSG_ANGER
@@ -1210,7 +1210,7 @@ God "Erich"
           $"Kysul" $"Xel" $"Khasrach" $"The Multitude" 7 1,
       * CROWNING_GIFTS
           $"Nine Lives Stealer",
-      * FAVOR_CHART
+      * FAVOUR_CHART
           100
           500
           1250
@@ -1228,15 +1228,15 @@ God "Erich"
           AID_PURIFY      P_MODERATE   100  
           AID_REFRESH     P_LOW        100      
           AID_IDENTIFY    T_WEAPON     200
-          AID_IDENTIFY    T_ARMOR      200
+          AID_IDENTIFY    T_ARMOUR      200
           AID_IDENTIFY    T_SHIELD     200
           AID_UNCURSE     P_LOW        500
           AID_NEWBOOK     P_HIGH       500
           AID_MANA        P_MODERATE   1000
           AID_RESSURECT   P_MODERATE   2000;    
     Constants:
-      * VOICE_COLOR PURPLE,
-      * ALTAR_COLOR PURPLE,
+      * VOICE_COLOUR PURPLE,
+      * ALTAR_COLOUR PURPLE,
       * HOLY_SYMBOL $"Erich;symbol",
       * CHOSEN_WEAPON $"light lance",
       * CHOSEN_WEAPON_QUALITY IQ_ADAMANT,
@@ -1245,7 +1245,7 @@ God "Erich"
       * ALTAR_COST 5,
       * PRAYER_TIMEOUT 12,
       * MIN_RAISE_LEVEL 8,
-      * MIN_CONVERT_FAVOR 200,
+      * MIN_CONVERT_FAVOUR 200,
       * PRAYER_DC 10,
       * LEVEL_BLEEDOFF 7,
       * TOLERANCE_VAL 0,
@@ -1305,7 +1305,7 @@ God "Erich"
             iID = $"long sword";
            break;
           case 4:
-            iID = $"field plate armor";
+            iID = $"field plate armour";
            break;
           case 5:
             iID = $"plate mail";
@@ -1353,10 +1353,10 @@ God "Erich"
       return DONE;
       },
     EV_ANGER_PULSE {
-      if (EActor->HasEffStati(ADJUST_SAC,$"Erich's Disfavor"))
+      if (EActor->HasEffStati(ADJUST_SAC,$"Erich's Disfavour"))
         return NOTHING;
       EActor->GodMessage($"Erich", MSG_CUSTOM4);
-      ThrowEff(EV_EFFECT,$"Erich's Disfavor",EActor,EActor);
+      ThrowEff(EV_EFFECT,$"Erich's Disfavour",EActor,EActor);
       return DONE;
       },
     EV_PREREQ {
@@ -1439,17 +1439,17 @@ God "Erich"
       if (EVictim->HasStati(AFRAID) && !EVictim->HasEffStati(EFF_FLAG1,$"Erich"))
         {
           EVictim->GainPermStati(EFF_FLAG1,EActor,SS_MISC,0,0,$"Erich");
-          EActor->gainFavor($"Erich",10*max(1,EVictim->ChallengeRating()));
+          EActor->gainFavour($"Erich",10*max(1,EVictim->ChallengeRating()));
         }
       return NOTHING;
       };
     Flags: GF_COMBAT_ANGER;
   }
 
-Effect "Erich's Disfavor" : EA_INFLICT
+Effect "Erich's Disfavour" : EA_INFLICT
   { xval: ADJUST_SAC; yval: A_AID; pval: -4; 
     Flags: EF_PERSISTANT;
-    Desc: "Erich's disfavor causes you to suffer a -4 penalty on all
+    Desc: "Erich's disfavour causes you to suffer a -4 penalty on all
       rolls while in combat.";
     On Event EV_MAGIC_HIT
         "You feel threatened.";
@@ -1471,7 +1471,7 @@ God "Essiah"
       parts of life which are most worth treasuring. Existance is too short
       and too valuable, she teaches, to squander it upon banalities like
       status games, provincial tunnel-vision or complacent obedience.  She
-      favors those who choose to take risks in pursuit of a dream or
+      favours those who choose to take risks in pursuit of a dream or
       desire, as long as those risks aren't foolhardy enough to show a lack
       of respect for life. She is the patron goddess of gnomes (along with
       Xavias) and
@@ -1486,7 +1486,7 @@ God "Essiah"
       life, but support each other loyally none the less. Essiah is also a
       staunch ally of Semirath, and frequently defends him against the
       harsh accusations of Erich in Immotian's grand celestial palace.
-      Maeve favors Essiah, but Essiah does not return that friendship --
+      Maeve favours Essiah, but Essiah does not return that friendship --
       Essiah's brood take responsibility for their actions, while Maeve's
       could care less. Her priesthood has no formal temples or ranks,
       gathering together in the wilderness on nights of a full moon for
@@ -1525,7 +1525,7 @@ God "Essiah"
       please Essiah, as does resolving conflicts without violence.\n
       __Essiah is angered by evil acts, especially attacking non-hostile 
       creatures. She also dislikes her followers remaining in one place 
-      for too long -- in game terms, her favor can be lost if a character 
+      for too long -- in game terms, her favour can be lost if a character 
       levels up more then twice in the same geographic area. (This clause 
       is not implemented in <9>Halls of the Goblin King<2>, for obvious 
       reasons.)\n
@@ -1585,7 +1585,7 @@ God "Essiah"
           
           
           MSG_BLESSING1
-            "|I teach thee now to honor the feelings of thy lovers, and the
+            "|I teach thee now to honour the feelings of thy lovers, and the
                 crafts of herbs to control thine own body.|"
           MSG_BLESSING2
             "|May all thy journeys be swift and clear, if not uninteresting.|"
@@ -1612,7 +1612,7 @@ God "Essiah"
           $"Zurvash" $"Xel" $"Maeve" $"The Multitude" 5 1,
       * CROWNING_GIFTS
           $"Nine Lives Stealer",
-      * FAVOR_CHART
+      * FAVOUR_CHART
           100
           500
           1250
@@ -1635,8 +1635,8 @@ God "Essiah"
           AID_DEFLECT    P_LOW       100
           AID_RESSURECT  P_LOW       2500;    
     Constants:
-      * VOICE_COLOR MAGENTA,
-      * ALTAR_COLOR AZURE,
+      * VOICE_COLOUR MAGENTA,
+      * ALTAR_COLOUR AZURE,
       * HOLY_SYMBOL $"Essiah;symbol",
       * CHOSEN_WEAPON $"scourge",
       * CHOSEN_WEAPON_QUALITY WQ_WARNING,
@@ -1645,7 +1645,7 @@ God "Essiah"
       * ALTAR_COST 5,
       * PRAYER_TIMEOUT 4,
       * MIN_RAISE_LEVEL 8,
-      * MIN_CONVERT_FAVOR 100,
+      * MIN_CONVERT_FAVOUR 100,
       * PRAYER_DC 10,
       * LEVEL_BLEEDOFF 3,
       * TOLERANCE_VAL 5,
@@ -1672,7 +1672,7 @@ God "Essiah"
       Stati[EXTRA_FEAT,FT_SOULBLADE] at 6th level,
       Ability[CA_INNATE_SPELL,$"Lifesight"] at 7th level,
       Stati[EXTRA_FEAT,FT_GREATER_SOULBLADE] at 8th level;
-    int32 oldExploreFavor;
+    int32 oldExploreFavour;
     On Event EV_RETRIBUTION {
         EActor->IPrint("You feel afflicted.");
         EActor->GainPermStati(ADJUST_SAC,NULL,SS_CURS,A_CHA,-6,$"Essiah");
@@ -1720,14 +1720,14 @@ God "Essiah"
         }
       return DONE;
       },
-    EV_CALC_FAVOR {
-      int32 newExploreFavor;
-      newExploreFavor = EActor->TotalExploreFavor();
-      if (newExploreFavor > oldExploreFavor)
+    EV_CALC_FAVOUR {
+      int32 newExploreFavour;
+      newExploreFavour = EActor->TotalExploreFavour();
+      if (newExploreFavour > oldExploreFavour)
         {
-          EActor->gainFavor($"Essiah", newExploreFavor - 
-            oldExploreFavor, false, true);
-          oldExploreFavor = newExploreFavor;
+          EActor->gainFavour($"Essiah", newExploreFavour - 
+            oldExploreFavour, false, true);
+          oldExploreFavour = newExploreFavour;
         }
       e.EParam = (e.EParam * (10 + EActor->Mod(A_CHA))) / 10;
       return NOTHING;
@@ -1756,13 +1756,13 @@ God "Essiah"
       }, 
     GODWATCH(EV_ALIGNED) {
       if (e.EParam & AL_GOOD)
-        EActor->gainFavor($"Essiah",25*e.vMag);
+        EActor->gainFavour($"Essiah",25*e.vMag);
       if (e.EParam & (AL_NONGOOD|AL_EVIL))
         EActor->Transgress($"Essiah",(e.vMag + 1)/2,false,
           "evil act");
       return NOTHING;
       },
-    /* Note Hardcoded Essiah Favor Fatigue clause elsewhere */
+    /* Note Hardcoded Essiah Favour Fatigue clause elsewhere */
     GODWATCH(PRE(EV_HIT)) {
       if (GetHandle(EActor) == GetHandle(EVictim) || 
             !ETarget->isCreature())
@@ -1775,7 +1775,7 @@ God "Essiah"
     GODWATCH(POST(EV_QUELL)) { 
       if (!EVictim->isHostileTo(EActor))
         if (!(EVictim->isMType(MA_EVIL) && EVictim->HasMFlag(M_IALIGN)))
-          EActor->gainFavor($"Essiah",max(1,EVictim->ChallengeRating())*20);
+          EActor->gainFavour($"Essiah",max(1,EVictim->ChallengeRating())*20);
       return NOTHING;
       },
     EV_BLESSING {
@@ -1892,7 +1892,7 @@ God "Hesani"
       forward to quickly and challenging tasks beyond their level of skill.
       Patience and knowledge of limitations is highly valued by Hesani's
       clergy.\n
-      __Though some very careful warriors can find favor with Hesani, he
+      __Though some very careful warriors can find favour with Hesani, he
       would never patronize those whose lives are ruled by rage and barbarity.
       Blind anger offends Hesani greatly.\n
       __<10>Blessings:<2> Hesani is quick to intervene on any petitioner's
@@ -1904,7 +1904,7 @@ God "Hesani"
       later replace lost spellbooks as well. His veteran followers can
       expect him to replenish the spirit and even ressurect them should
       they die. Hesani gives aid very casually in contrast with other
-      gods; asking aid costs a petitioner comparatively very little favor.
+      gods; asking aid costs a petitioner comparatively very little favour.
       Being raised from the dead is far more costly, however, given the
       extent to which it disrupts the natural cycle.\n
       __Loyal followers of Hesani find that their lifestyle of natural
@@ -1980,7 +1980,7 @@ God "Hesani"
              $"Asherath" $"Erich" 3 0,
       * CROWNING_GIFTS
           $"Nine Lives Stealer",
-      * FAVOR_CHART
+      * FAVOUR_CHART
           100
           500
           1250
@@ -2006,15 +2006,15 @@ God "Hesani"
           AID_NEWBOOK      P_MODERATE  250
           AID_MANA         P_LOW       0;    
     Constants:
-      * VOICE_COLOR YELLOW,
-      * ALTAR_COLOR SKYBLUE,
+      * VOICE_COLOUR YELLOW,
+      * ALTAR_COLOUR SKYBLUE,
       * HOLY_SYMBOL $"Hesani;symbol",
       * INTERVENTION_COST 1,
       * RESSURECTION_COST 10,
       * ALTAR_COST 3,
       * PRAYER_TIMEOUT 4,
       * MIN_RAISE_LEVEL 5,
-      * MIN_CONVERT_FAVOR 100,
+      * MIN_CONVERT_FAVOUR 100,
       * PRAYER_DC 10,
       * LEVEL_BLEEDOFF 12,
       * TOLERANCE_VAL 5,
@@ -2094,7 +2094,7 @@ God "Hesani"
       if (EVictim->isMType(MA_UNDEAD) &&
           EVictim->isMType(MA_EVIL) &&
           EVictim->HasMFlag(M_IALIGN))
-        EActor->gainFavor($"Hesani",25*max(1,EVictim->
+        EActor->gainFavour($"Hesani",25*max(1,EVictim->
                   ChallengeRating()), false, true);
       if (EActor->GodID != $"Hesani")
         return NOTHING;
@@ -2159,7 +2159,7 @@ God "Hesani"
       },
     GODWATCH(POST(EV_QUELL)) { 
       if (!EVictim->isHostileTo(EActor))
-        EActor->gainFavor($"Hesani",max(1,EVictim->ChallengeRating())*40);
+        EActor->gainFavour($"Hesani",max(1,EVictim->ChallengeRating())*40);
       return NOTHING;
       },
     EV_GAIN_STATI {
@@ -2167,8 +2167,8 @@ God "Hesani"
         EActor->Transgress($"Hesani",2,false,"entering a rage");
       return NOTHING;
       },
-    EV_CALC_FAVOR {
-      /* Favor penalty for characters with barbarian levels */
+    EV_CALC_FAVOUR {
+      /* Favour penalty for characters with barbarian levels */
       e.EParam = (e.EParam * (EActor->TotalLevel()*2 - EActor->LevelAs($"barbarian")))
                     / EActor->TotalLevel()*2;
       return NOTHING;
@@ -2338,7 +2338,7 @@ God "Immotian"
           $"Xavias" $"Erich" $"Ekliazeh" $"Hesani" 0 0,
       * CROWNING_GIFTS
           $"Nine Lives Stealer",
-      * FAVOR_CHART
+      * FAVOUR_CHART
           100
           500
           1250
@@ -2360,8 +2360,8 @@ God "Immotian"
           AID_DEFLECT        P_LOW       1500
           AID_SMITE          P_HIGH      2500;
     Constants:
-      * VOICE_COLOR PINK,
-      * ALTAR_COLOR RED,
+      * VOICE_COLOUR PINK,
+      * ALTAR_COLOUR RED,
       * HOLY_SYMBOL $"Immotian;symbol",
       * CHOSEN_WEAPON $"heavy mace",
       * CHOSEN_WEAPON_QUALITY WQ_FLAMING,
@@ -2370,7 +2370,7 @@ God "Immotian"
       * ALTAR_COST 3,
       * PRAYER_TIMEOUT 7,
       * MIN_RAISE_LEVEL 6,
-      * MIN_CONVERT_FAVOR 100,
+      * MIN_CONVERT_FAVOUR 100,
       * PRAYER_DC 15,
       * LEVEL_BLEEDOFF 4,
       * TOLERANCE_VAL 2,
@@ -2455,7 +2455,7 @@ God "Immotian"
       enCR = EActor->FixSummonCR(EActor->getGodLevel($"Immotian")+2,PHD_MAGIC);
       if (enCR <= 0) {
         EActor->GodMessage($"Immotian", MSG_CUSTOM7);
-        EActor->gainFavor($"Immotian",4d50,false,true);
+        EActor->gainFavour($"Immotian",4d50,false,true);
         return DONE; 
         }        
       e.vDuration = 30 + EActor->Mod(A_CHA)*5;
@@ -2510,7 +2510,7 @@ God "Immotian"
       
       if (EVictim->isMType(MA_UNDEAD) || EVictim->isMType(MA_ABERRATION) ||
           EVictim->isMType(MA_DEMON) || EVictim->isMType(MA_DEVIL))
-        EActor->gainFavor($"Immotian",max(1,EVictim->ChallengeRating())*10,false,true);
+        EActor->gainFavour($"Immotian",max(1,EVictim->ChallengeRating())*10,false,true);
       return NOTHING;
       },
     GODWATCH(EV_CAST), GODWATCH(EV_INVOKE) {
@@ -2518,7 +2518,7 @@ God "Immotian"
         if (EActor->GodID == $"Immotian")
           EActor->Transgress($"Immotian",1,false,"using arcane magic");
           
-      /* If you poison/infect someone, make sure you can't get favor for
+      /* If you poison/infect someone, make sure you can't get favour for
          purifying them later. */
       if (e.eID == $"contagion" || e.eID == $"poison") {
         EVictim->GainPermStati(EFF_FLAG1,EActor,SS_MISC,0,0,$"Immotian");
@@ -2526,7 +2526,7 @@ God "Immotian"
         }
       return NOTHING;
       },
-    EV_CALC_FAVOR {
+    EV_CALC_FAVOUR {
       int16 ml, tl;
       ml = EActor->LevelAs($"mage") +
            EActor->LevelAs($"loremaster") +
@@ -2561,7 +2561,7 @@ God "Immotian"
           EVictim->isMType(MA_DEMON) || EVictim->isMType(MA_DEVIL) ||
           EVictim->isMType(MA_GOBLINOID)))
           {
-            EActor->gainFavor($"Immotian",EActor->
+            EActor->gainFavour($"Immotian",EActor->
               ChallengeRating()*25,false,true);
             EVictim->GainPermStati(EFF_FLAG1,EActor,SS_MISC,0,0,$"Immotian");
           }
@@ -2598,10 +2598,10 @@ Effect "Celestial Aid" : EA_SUMMON
           return DONE;
         }
       };
-    Desc: "By invoking Immotian's name, a favored follower can call
+    Desc: "By invoking Immotian's name, a favoured follower can call
       upon the services of celestials in a time of need, at the cost
       of two Fatigue Points. Not all such creatures view Immotian's
-      favorably, but they are compelled by His purity, and by ancient
+      favourably, but they are compelled by His purity, and by ancient
       pacts, to obey the invoker.";  
   }
 
@@ -2617,8 +2617,8 @@ AI_POTION Effect "flask of fine mead" : EA_INFLICT
       EActor->Transgress($"Immotian",3,false,"drunkenness");
       EActor->Transgress($"Erich",1,false,"drunkenness");
       EActor->Transgress($"Hesani",1,false,"drunkenness");
-      EActor->gainFavor($"Maeve", 50);
-      EActor->gainFavor($"Essiah", 50);
+      EActor->gainFavour($"Maeve", 50);
+      EActor->gainFavour($"Essiah", 50);
       return NOTHING;
       };
   }
@@ -2632,8 +2632,8 @@ AI_POTION Effect "flask of fey wine" : EA_INFLICT
       EActor->Transgress($"Immotian",3,false,"drunkenness");
       EActor->Transgress($"Erich",1,false,"drunkenness");
       EActor->Transgress($"Hesani",1,false,"drunkenness");
-      EActor->gainFavor($"Maeve", 250);
-      EActor->gainFavor($"Essiah", 250);
+      EActor->gainFavour($"Maeve", 250);
+      EActor->gainFavour($"Essiah", 250);
       return NOTHING;
       };
     Desc: "Fey wines are known to render into deep slumber any
@@ -2747,7 +2747,7 @@ God "Khasrach"
       enemies, remove fatigue, ease hunger and deflect especially deadly
       blows. For a truly exceptional follower, she will (in order)
       replenish the spirit, remove curses and raise the follower should
-      he die, though the latter carries great cost in favor.\n
+      he die, though the latter carries great cost in favour.\n
       __Khasrach's gifts increase a follower's strength of will, teach
       him to develop personal fearsomeness and give him a canny insight
       into other people. She teaches her petitioners to channel fearsome
@@ -2756,7 +2756,7 @@ God "Khasrach"
       enemies.\n
       __Khasrach is known to metaphysically birth hordes of orcs, and
       often sends clutches to aid loyal followers in combat, or punish
-      those who stray from her way. She also favors trial by ordeal
+      those who stray from her way. She also favours trial by ordeal
       when followers offend her, casting them into situations out of
       their depth."; 
     Flags: GF_COMBAT_PULSE; /* Kludge vs. Paladins */
@@ -2846,7 +2846,7 @@ God "Khasrach"
           $"Xavias" $"Hesani" $"Mara" 3 0,
       * CROWNING_GIFTS
           $"Bloodspear",
-      * FAVOR_CHART
+      * FAVOUR_CHART
           100
           500
           1250
@@ -2868,8 +2868,8 @@ God "Khasrach"
           AID_UNCURSE    P_LOW    1500
           AID_RESSURECT  P_LOW    2500;    
     Constants:
-      * VOICE_COLOR RED,
-      * ALTAR_COLOR RED,
+      * VOICE_COLOUR RED,
+      * ALTAR_COLOUR RED,
       * HOLY_SYMBOL $"Khasrach;symbol",
       * CHOSEN_WEAPON $"longspear"
       * CHOSEN_WEAPON_QUALITY WQ_WOUNDING,
@@ -2878,7 +2878,7 @@ God "Khasrach"
       * ALTAR_COST 3,
       * PRAYER_TIMEOUT 8,
       * MIN_RAISE_LEVEL 7,
-      * MIN_CONVERT_FAVOR 200,
+      * MIN_CONVERT_FAVOUR 200,
       * PRAYER_DC 10,
       * LEVEL_BLEEDOFF 2,
       * TOLERANCE_VAL 5,
@@ -3026,9 +3026,9 @@ God "Khasrach"
       if (EVictim->isMType(MA_ELF) || EVictim->isMType(MA_DWARF) ||
           (EVictim->isMType(MA_HUMAN) && 
              EVictim->HasStati(SPELL_ACCESS, SP_ARCANE)))
-        EActor->gainFavor($"Khasrach",max(1,EVictim->ChallengeRating())*10,false,true);
+        EActor->gainFavour($"Khasrach",max(1,EVictim->ChallengeRating())*10,false,true);
       else
-        EActor->gainFavor($"Khasrach",max(1,EVictim->ChallengeRating()),false,true);
+        EActor->gainFavour($"Khasrach",max(1,EVictim->ChallengeRating()),false,true);
       return NOTHING;
       },
     GODWATCH(EV_SURRENDER) {
@@ -3056,7 +3056,7 @@ Effect "Primal Scream" : EA_BLAST
   { Level: 7; aval: AR_GLOBE; cval: RED; lval: 8;
     Flags: EF_SPECABIL, EF_ALLIES_IMMUNE;
     xval: AD_SONI; pval: 2d6; sval: NOSAVE;
-    Desc: "At the cost of a fatigue point, a favored servant of Khasrach
+    Desc: "At the cost of a fatigue point, a favoured servant of Khasrach
       can emit a primal scream, which affects all hostile or neutral
       creatures within 80 feet -- the screamer and any allies are immune.
       The scream inflicts 2d6 points of sonic damage, stuns anyone who
@@ -3085,7 +3085,7 @@ Effect "Venom of Khasrach" : EA_BLAST
   { SC_EVO; Base: SP_EASY; Level: 6; aval: AR_BOLT; qval: Q_DIR|Q_TAR;
     xval: AD_ACID; lval: 4; sval: REF partial; pval: (LEVEL_1PER1)d10;
     Purpose: EP_ATTACK; cval: EMERALD;
-    Desc: "The most favored champions of Khasrach can spit a jet of acid --
+    Desc: "The most favoured champions of Khasrach can spit a jet of acid --
       the metaphorical personification of Khasrach's rage -- at their
       enemies, inflicting 1d10 points of acid damage per character level
       and allowing the victim a saving throw for half damage. The cost is
@@ -3265,7 +3265,7 @@ God "Kysul"
           ,
       * CROWNING_GIFTS
           $"Nine Lives Stealer",
-      * FAVOR_CHART
+      * FAVOUR_CHART
           300
           750
           1500
@@ -3288,8 +3288,8 @@ God "Kysul"
           AID_NEWBOOK        P_LOW         400      
           AID_MANA           P_MODERATE    250;    
     Constants:
-      * VOICE_COLOR GREEN,
-      * ALTAR_COLOR GREEN,
+      * VOICE_COLOUR GREEN,
+      * ALTAR_COLOUR GREEN,
       * HOLY_SYMBOL $"Kysul;symbol",
       * CHOSEN_WEAPON $"trident",
       * CHOSEN_WEAPON_QUALITY WQ_SLEEP,
@@ -3298,7 +3298,7 @@ God "Kysul"
       * ALTAR_COST 6,
       * PRAYER_TIMEOUT 12,
       * MIN_RAISE_LEVEL 8,
-      * MIN_CONVERT_FAVOR 300,
+      * MIN_CONVERT_FAVOUR 300,
       * PRAYER_DC 17,
       * LEVEL_BLEEDOFF 5,
       * TOLERANCE_VAL 4,
@@ -3355,7 +3355,7 @@ God "Kysul"
             hGift->isType(T_SCROLL))
           isBad = true;
         if (hGift->isType(T_WEAPON) || 
-            hGift->isType(T_ARMOR) ||
+            hGift->isType(T_ARMOUR) ||
             hGift->isType(T_SHIELD))
           if (EActor->WepSkill(hGift->iID) == WS_NOT_PROF)
             isBad = true;
@@ -3412,7 +3412,7 @@ God "Kysul"
       if (EVictim->isMType(MA_ABERRATION) && !EVictim->isMType(MA_CONSTRUCT))
         {
           if (EVictim->isMType(MA_EVIL))
-            EActor->gainFavor($"Kysul",EVictim->ChallengeRating()*10,false,true);
+            EActor->gainFavour($"Kysul",EVictim->ChallengeRating()*10,false,true);
           else if (EVictim->HasStati(WAS_FRIENDLY,-1,EActor))
             EActor->Transgress($"Kysul",5,false,"killing a friendly aberration");
           else
@@ -3420,7 +3420,7 @@ God "Kysul"
         }
       else if (EVictim->isMType(MA_OUTSIDER))
         if (!EVictim->HasStati(WAS_FRIENDLY,-1,EActor))
-          EActor->gainFavor($"Kysul",EVictim->ChallengeRating()*5,false,true);
+          EActor->gainFavour($"Kysul",EVictim->ChallengeRating()*5,false,true);
       return NOTHING;
       },
     GODWATCH(EV_ALIGNED) {
@@ -3583,7 +3583,7 @@ God "Mara"
       rest the tormented souls of inherantly evil undead (and gravely 
       displeased if her clerics create such beings, though she has no 
       objection to undead in general). Evil acts in general also
-      offend Mara, while good acts grant favor with her. Leading
+      offend Mara, while good acts grant favour with her. Leading
       incorporeal undead to peaceful rest pleases Mara; this can be
       achieved by slaying them in a graveyard area, or by using
       special Marite training and the Diplomacy skill to Quell
@@ -3599,7 +3599,7 @@ God "Mara"
       __<10>Blessings:<2> Mara will heal any follower or transport
       them to safety, and will ressurect, grant mental clarity to
       or lift curses on the behalf of followers with even minimal
-      favor. For more favored followers, she will remove fatigue
+      favour. For more favoured followers, she will remove fatigue
       and restore the spirit, or even purify the body. Of all the
       gods in Incursion, Mara is the freest in ressurecting her
       followers (followed by Aiswin), as her entire ethos revolves
@@ -3690,7 +3690,7 @@ God "Mara"
           $"Khasrach" $"Zurvash" $"Xel" $"Sabine" $"The Multitude" 7 1,
       /* * CROWNING_GIFTS
           $"Scythe of Death", */
-      * FAVOR_CHART
+      * FAVOUR_CHART
           100
           500
           1250
@@ -3711,8 +3711,8 @@ God "Mara"
           AID_RESTORE   P_LOW        1000
           AID_PURIFY    P_HIGH       2000;    
     Constants:
-      * VOICE_COLOR CYAN,
-      * ALTAR_COLOR WHITE,
+      * VOICE_COLOUR CYAN,
+      * ALTAR_COLOUR WHITE,
       * HOLY_SYMBOL $"Mara;symbol",
       * CHOSEN_WEAPON $"scythe",
       * CHOSEN_WEAPON_QUALITY WQ_KEEN,
@@ -3721,7 +3721,7 @@ God "Mara"
       * ALTAR_COST        5,
       * PRAYER_TIMEOUT    15,
       * MIN_RAISE_LEVEL   3,
-      * MIN_CONVERT_FAVOR 900,
+      * MIN_CONVERT_FAVOUR 900,
       * PRAYER_DC         12,
       * LEVEL_BLEEDOFF    3,
       * TOLERANCE_VAL     2,
@@ -3758,7 +3758,7 @@ God "Mara"
       },
     EV_GODPULSE {
       hObj hComp; 
-      if (EActor->calcFavor($"Mara") >= 1500)
+      if (EActor->calcFavour($"Mara") >= 1500)
         {
           hComp = CreateMonster($"revenant");
           if (EActor->ChallengeRating() >= 5)
@@ -3789,7 +3789,7 @@ God "Mara"
       if (e.EParam & (AL_EVIL|AL_NONGOOD))
         EActor->Transgress($"Mara",(e.vMag+1) / 2,false,"evil act");
       else if (e.EParam & AL_GOOD) {
-        EActor->gainFavor($"Mara",50*e.vMag,true,true);
+        EActor->gainFavour($"Mara",50*e.vMag,true,true);
         EActor->lowerAnger($"Mara",1);
         }
       return NOTHING;
@@ -3813,7 +3813,7 @@ God "Mara"
             if (EActor->getGod() == $"Mara")
               EActor->IPrint("You have allowed the restless spirit to find a
                               peaceful end. You feel Mara is most pleased.");
-            EActor->gainFavor($"Mara",50*EVictim->ChallengeRating(),true,true);
+            EActor->gainFavour($"Mara",50*EVictim->ChallengeRating(),true,true);
           }
       return NOTHING;
       },
@@ -3853,7 +3853,7 @@ God "Mara"
       e.EParam = MA_CHOICE1;
       return NOTHING;
       },
-    EV_CALC_FAVOR {
+    EV_CALC_FAVOUR {
       e.EParam = (e.EParam * (10 + EActor->SkillLevel(SK_APPRAISE) -
                                    EActor->SkillLevel(SK_INTIMIDATE))) / 10;
       return NOTHING;
@@ -3889,7 +3889,7 @@ God "Mara"
                       peaceable rest.");
             EVictim->Remove(true);
             EActor->KillXP(EVictim,100);
-            EActor->gainFavor($"Mara",50*EVictim->ChallengeRating(),true,true);
+            EActor->gainFavour($"Mara",50*EVictim->ChallengeRating(),true,true);
           }
         else
           {
@@ -3900,7 +3900,7 @@ God "Mara"
                         but its rage overcomes <her:EActor>!");
             EActor->GainTempStati(STUNNED,NULL,3d4,SS_MISC);
             /* Trying still counts for something with Mara... */
-            EActor->gainFavor($"Mara",25*EVictim->ChallengeRating(),false,true);
+            EActor->gainFavour($"Mara",25*EVictim->ChallengeRating(),false,true);
           }
         return DONE;
         }    
@@ -3923,7 +3923,7 @@ Effect "Summon Mourner" : EA_SUMMON
         }
       return NOTHING;
       };
-    Desc: "This unique ability allows a character highly favored by
+    Desc: "This unique ability allows a character highly favoured by
       Mara to call upon the aid of a Mourner, a unique kind of undead
       creature created by Mara to mourn and avenge tragedy. Using
       this ability costs two Fatigue points.";
@@ -3980,7 +3980,7 @@ God "Maeve"
       \n__Maeve is not a true power, or at least not a true member of
       Therya's divine pantheon. Older than the world itself, she dwells
       on the fringes of the plane of Pandemonium, in a perfectly sculpted
-      domain of bright colors, beautiful flowers, cheerful music and
+      domain of bright colours, beautiful flowers, cheerful music and
       inhuman grandeur. To mortals, her motives are inscrutable and
       her hungers insatiable, and she might as well be a real god for
       all that it matters. Her temples are always richly decorated,
@@ -4011,10 +4011,10 @@ God "Maeve"
       committing unchaotic acts.\n
       __<10>Blessings:<2> For any follower, Maeve will replace lost spellbooks,
       replenish mana and use the Wyrdways to carry them to safety should they
-      be in mortal danger. For the slightly more favored, she will remove
+      be in mortal danger. For the slightly more favoured, she will remove
       fatigue, imbuing the subject with a kind of feverish creativity so much
       coveted by artists. For those more loyal still, she will identify items
-      of beauty (cloaks, rings and amulets), as well as bows. For truly favored
+      of beauty (cloaks, rings and amulets), as well as bows. For truly favoured
       followers, she can replenish the spirit, and she has even been known to
       raise truly treasured playthings from the dead.\n
       __More permanent blessings from Maeve imclude increased grace and beauty,
@@ -4025,7 +4025,7 @@ God "Maeve"
       regardless of restrictions, just as rogues do.\n
       __Maeve is mercurial and wild, however, and when she intervenes in a
       follower's life, the result may be either lavish blessings or 
-      terrible fury, regardless of how much of her favor a worshipper 
+      terrible fury, regardless of how much of her favour a worshipper 
       possesses or whether she is offended -- though of course negative
       interventions are more likely when she is angry, and positive ones
       when she is pleased."; 
@@ -4122,7 +4122,7 @@ God "Maeve"
           REL_DEFAULT   3     1,
       * CROWNING_GIFTS
           $"Nine Lives Stealer",
-      * FAVOR_CHART
+      * FAVOUR_CHART
           100
           500
           1250
@@ -4145,18 +4145,18 @@ God "Maeve"
           AID_RESTORE      P_LOW      1000
           AID_RESSURECT    P_MODERATE 1500;    
     Constants:
-      * VOICE_COLOR COL_RAINBOW,
-      * ALTAR_COLOR EMERALD,
+      * VOICE_COLOUR COL_RAINBOW,
+      * ALTAR_COLOUR EMERALD,
       * HOLY_SYMBOL $"Maeve;symbol",
       * CHOSEN_WEAPON $"short bow",
       * CHOSEN_WEAPON_QUALITY WQ_CHAOTIC,
-      * CHOSEN_ARMOR_QUALITY  IQ_FEATHERLIGHT,
+      * CHOSEN_ARMOUR_QUALITY  IQ_FEATHERLIGHT,
       * INTERVENTION_COST 2,
       * RESSURECTION_COST 6,
       * ALTAR_COST 5,
       * PRAYER_TIMEOUT 4,
       * MIN_RAISE_LEVEL 6,
-      * MIN_CONVERT_FAVOR 200,
+      * MIN_CONVERT_FAVOUR 200,
       * PRAYER_DC 12,
       * LEVEL_BLEEDOFF 7,
       * TOLERANCE_VAL 2,
@@ -4342,7 +4342,7 @@ God "Maeve"
       },
     GODWATCH(EV_DEATH) {
       if (EVictim->isMType(MA_DROW))
-        EActor->gainFavor($"Maeve",EVictim->ChallengeRating() * 50,false,true);
+        EActor->gainFavour($"Maeve",EVictim->ChallengeRating() * 50,false,true);
       return NOTHING;
       },
     GODWATCH(EV_ALIGNED) {
@@ -4473,11 +4473,11 @@ God "Sabine"
 	unchaotic acts or rely on aid from allies -- followers of Sabine are
 	expected to be independant and solitary.\n
 	__<10>Blessings:<2> For a follower who has gained a minimal degree of
-	favor, Sabine will strike at enemies with lightning, remove fatigue,
+	favour, Sabine will strike at enemies with lightning, remove fatigue,
 	replenish the spirit, clear the mind and offer ressurection in case 
 	of death -- if the follower is sufficiently skilled, Sabine will
-	raise her with even minimal favor. For more favored worshippers, 
-	Sabine will (in order of increasing favor) remove curses, refill mana
+	raise her with even minimal favour. For more favoured worshippers, 
+	Sabine will (in order of increasing favour) remove curses, refill mana
 	and purify the body.\n
 	__Sabine's more permanent blessings include athletic aptitude, the
 	ability to use wands -- the most elementally destructive of magical
@@ -4485,7 +4485,7 @@ God "Sabine"
 	and for the more experienced follower, the ability to change one's
 	own shape. Sabine's most famous granted power, however, is the ability
 	to throw bolts of lightning, which increase in power as the follower
-	increases in favor with the god. The most treasured followers of Sabine
+	increases in favour with the god. The most treasured followers of Sabine
 	find that if they push themselves to their limits, they can exceed what
 	they would have previously thought possible.";
     Lists:
@@ -4557,7 +4557,7 @@ God "Sabine"
           $"Essiah" $"Semirath" $"Maeve" $"Khasrach" 0 0,
       * CROWNING_GIFTS
           $"Nine Lives Stealer",
-      * FAVOR_CHART
+      * FAVOUR_CHART
           100
           500
           1250
@@ -4568,7 +4568,7 @@ God "Sabine"
           64000
           92000
           128000,
-      * FAVORED_SKILLS SK_ATHLETICS SK_CLIMB SK_JUMP
+      * FAVOURED_SKILLS SK_ATHLETICS SK_CLIMB SK_JUMP
                        SK_SWIM SK_TUMBLE,
       * AID_CHART  
           AID_SMITE        P_LOW    100           
@@ -4580,8 +4580,8 @@ God "Sabine"
           AID_MANA         P_LOW    500
           AID_PURIFY       P_LOW    750;    
     Constants:
-      * VOICE_COLOR COL_ELEC,
-      * ALTAR_COLOR SKYBLUE,
+      * VOICE_COLOUR COL_ELEC,
+      * ALTAR_COLOUR SKYBLUE,
       * HOLY_SYMBOL $"Sabine;symbol",
       * CHOSEN_WEAPON $"javelin",
       * CHOSEN_WEAPON_QUALITY WQ_SHOCKING,
@@ -4590,7 +4590,7 @@ God "Sabine"
       * ALTAR_COST 5,
       * PRAYER_TIMEOUT 7,
       * MIN_RAISE_LEVEL 7,
-      * MIN_CONVERT_FAVOR 200,
+      * MIN_CONVERT_FAVOUR 200,
       * PRAYER_DC 8,
       * LEVEL_BLEEDOFF 0,
       * TOLERANCE_VAL 3,
@@ -4692,7 +4692,7 @@ God "Sabine"
       if (EActor->isThreatened() && e.eID->Purpose == EP_ATTACK)
         {
           if (e.MM & (MM_MAXIMIZE|MM_EMPOWER|MM_HEIGHTEN))
-            EActor->gainFavor($"Sabine",XCR(MMFeatLevels(e.MM))/10,false,true);
+            EActor->gainFavour($"Sabine",XCR(MMFeatLevels(e.MM))/10,false,true);
         }
       return NOTHING;
       },
@@ -4725,7 +4725,7 @@ God "Sabine"
       EActor->SwapAttributes(1 + (EActor->getAnger($"Sabine")-3)/5);
       return DONE;
       },
-    EV_CALC_FAVOR {
+    EV_CALC_FAVOUR {
       e.EParam = (e.EParam * (20 + EActor->
         SkillLevel(SK_ATHLETICS) + (
           EActor->SkillLevel(SK_SWIM) +
@@ -4744,7 +4744,7 @@ God "Sabine"
             !ETarget->isCreature())
         return NOTHING;
       if (e.AType == A_GREA && EActor->isThreatened())
-        EActor->gainFavor($"Sabine",10 * EVictim->ChallengeRating());
+        EActor->gainFavour($"Sabine",10 * EVictim->ChallengeRating());
       return NOTHING;
       },
     GODWATCH(EV_ALIGNED) {
@@ -4768,7 +4768,7 @@ God "Sabine"
       if (riskBalance < -10) {
         if (EActor->GodID == $"Sabine") {
           EActor->IPrint("You fear you are working overly cautiously for
-                    one seeking Sabine's favor.");
+                    one seeking Sabine's favour.");
           EActor->Transgress($"Sabine",1 - riskBalance/20,false,
                    "overly cautious");
           }
@@ -4798,7 +4798,7 @@ Effect "Lightning Bolt;of Sabine" : EA_BLAST
       };
     Desc: "Sabine grants his followers the ability to cast lightning
       bolts inflicting a number of d6's worth of damage commensurate
-      with that follower's favor with him. A Reflex saving throw
+      with that follower's favour with him. A Reflex saving throw
       halves the damage inflicted.";
   }
 
@@ -4823,7 +4823,7 @@ God "Semirath"
       Semirath is an incorrigable trickster, but his games always
       target those who have done something deserving, whether they
       take the form of gentle chastisement or brutal guerilla warfare.
-      Beneath his casual demeanor, Semirath harbors a deep devotion to
+      Beneath his casual demeanour, Semirath harbours a deep devotion to
       equal justice, and a desire to punish those who have wrongfully
       taken joy or freedom from others. His clergy work tirelessly to
       bring down corrupt autocracies, punish domination and liberate
@@ -4862,12 +4862,12 @@ God "Semirath"
       __Semirath approves of risk-takers and dislikes caution in the
       same sense that Sabine does.\n
       __It's said that a silver tongue and skill as an entertainer
-      amplify favor with Semirath; in a more general sense, competance
+      amplify favour with Semirath; in a more general sense, competance
       and skillfully larcenous solutions to problems please him.\n
       __<10>Blessings:<2> Semirath is more willing to come to the aid
       of his followers more frequently than most gods. He will heal,
       purify the body, teleport to safety, ease hunger or fatigue or
-      replace spellbooks for followers with only minimal favor. For
+      replace spellbooks for followers with only minimal favour. For
       those who have followed him longer and done more in his name, he
       will cure blindness and permanent wounds, lift curses and grant
       incredible luck and grace in combat. He has also been known to
@@ -4945,7 +4945,7 @@ God "Semirath"
           $"Zurvash" $"Xel" $"The Multitude" 5 1,
       * CROWNING_GIFTS
           $"Nine Lives Stealer",
-      * FAVOR_CHART
+      * FAVOUR_CHART
           100
           500
           1250
@@ -4956,7 +4956,7 @@ God "Semirath"
           96000
           102000
           250000,
-      * FAVORED_SKILLS
+      * FAVOURED_SKILLS
           SK_BLUFF        10
           SK_PERFORM      10
           SK_DISGUISE     10
@@ -4981,8 +4981,8 @@ God "Semirath"
           AID_RESSURECT P_HIGH      2000   
           AID_NEWBOOK   P_LOW       100;    
     Constants:
-      * VOICE_COLOR MAGENTA,
-      * ALTAR_COLOR MAGENTA,
+      * VOICE_COLOUR MAGENTA,
+      * ALTAR_COLOUR MAGENTA,
       * HOLY_SYMBOL $"Semirath;symbol",
       * CHOSEN_WEAPON $"chakram",
       * CHOSEN_WEAPON_QUALITY WQ_DISTANCE, /* Later, Velocity? */
@@ -4991,7 +4991,7 @@ God "Semirath"
       * ALTAR_COST 5,
       * PRAYER_TIMEOUT 5,
       * MIN_RAISE_LEVEL 5,
-      * MIN_CONVERT_FAVOR 100,
+      * MIN_CONVERT_FAVOUR 100,
       * PRAYER_DC 8,
       * LEVEL_BLEEDOFF 6,
       * TOLERANCE_VAL 5,
@@ -5110,7 +5110,7 @@ God "Semirath"
           "killing a non-evil, thinking creature");
       return NOTHING;
       },
-    EV_CALC_FAVOR {
+    EV_CALC_FAVOUR {
       e.EParam = (e.EParam * (20 + EActor->GetSkillRanks(SK_PERFORM) +
                     EActor->GetSkillRanks(SK_BLUFF))) / 20;
       return NOTHING;
@@ -5120,7 +5120,7 @@ God "Semirath"
             !ETarget->isCreature())
         return NOTHING;
       if (EVictim->isMType(MA_EVIL) && e.isSurprise)
-        EActor->gainFavor($"Semirath",10*max(1,EVictim->
+        EActor->gainFavour($"Semirath",10*max(1,EVictim->
           ChallengeRating()),false,true);
       return NOTHING;
       },
@@ -5140,7 +5140,7 @@ God "Semirath"
       if (riskBalance < -10) {
         if (EActor->GodID == $"Semirath")
           EActor->IPrint("You fear you are working overly cautiously for
-                    one seeking Semirath's favor.");
+                    one seeking Semirath's favour.");
         EActor->Transgress($"Semirath",1 - riskBalance/20,false,
           "overly cautious");
         riskBalance = 0;
@@ -5201,7 +5201,7 @@ God "Xavias"
       Xavias is strictly loyal to Immotian, he's certainly more open-minded
       and liberal then his superior, viewing arcane magic as a natural part
       of the world, albiet one that must be handled cautiously and patiently
-      to avoid corruption. Xavias is rumored to have been involved in the
+      to avoid corruption. Xavias is rumoured to have been involved in the
       founding of the guilds, especially the stonecrafters' guild, but of
       course there are many secret and archaic legends surronding him, since
       his priesthood is essentially a large-scale mystery cult.\n
@@ -5250,7 +5250,7 @@ God "Xavias"
       to conceal his followers' mysteries from magical perceptions,
       augmented intellect and perception and the ability to see clearly
       past obscurements literal as well as metaphorical. His most loyal
-      followers are said to be able to craft magical arms and armor in much
+      followers are said to be able to craft magical arms and armour in much
       the same way dwarves do, and to have access to occult hideaways outside
       the bounds of normal reality.";
     Flags: GF_NO_EVIL, GF_COMBAT_ANGER; 
@@ -5335,7 +5335,7 @@ God "Xavias"
       /* CROWNING_GIFTS
           $"Cubragol"
           $"Crown of Science", */
-      * FAVOR_CHART
+      * FAVOUR_CHART
           100
           500
           1250
@@ -5360,13 +5360,13 @@ God "Xavias"
           AID_RESSURECT    P_MODERATE   2000
           AID_TELEPORT     P_LOW        3500
           AID_DEFLECT      P_LOW        3500,
-      * FAVORED_SKILLS
+      * FAVOURED_SKILLS
           SK_ALCHEMY SK_CRAFT SK_DECIPHER SK_GATHER_INF
           SK_USE_MAGIC SK_KNOW_MYTH SK_KNOW_MAGIC
           SK_KNOW_THEO SK_KNOW_PLANES SK_APPRAISE;
     Constants:
-      * VOICE_COLOR SKYBLUE,
-      * ALTAR_COLOR GREY,
+      * VOICE_COLOUR SKYBLUE,
+      * ALTAR_COLOUR GREY,
       * HOLY_SYMBOL $"Xavias;symbol",
       * CHOSEN_WEAPON $"arbalest",
       * CHOSEN_WEAPON_QUALITY WQ_QUICK_LOADING,
@@ -5375,7 +5375,7 @@ God "Xavias"
       * ALTAR_COST 5,
       * PRAYER_TIMEOUT 5,
       * MIN_RAISE_LEVEL 6,
-      * MIN_CONVERT_FAVOR 500,
+      * MIN_CONVERT_FAVOUR 500,
       * PRAYER_DC 15,
       * LEVEL_BLEEDOFF 3,
       * TOLERANCE_VAL 5,
@@ -5489,7 +5489,7 @@ God "Xavias"
           return NOTHING;
         EActor->GainTempStati(EFF_FLAG1,EVictim,
           (GetHandle(EVictim) == NULL_OBJ) ? -2 : 0, SS_MISC,0,0,$"Xavias");
-        EActor->gainFavor($"Xavias",50,false,true);
+        EActor->gainFavour($"Xavias",50,false,true);
         }
       return NOTHING;
       },
@@ -5522,7 +5522,7 @@ God "Xel"
       the majority of priests have a distinct bias toward nobility -- that's
       where the majority of the affluence is to be had, after all -- Xel's
       priests have always been the champions of the everyman, the poor and
-      the downtrodden. Even lepers recieve the favor of this diety -- indeed,
+      the downtrodden. Even lepers recieve the favour of this diety -- indeed,
       Xel's followers have a very special place in their hearts for the
       diseased. Yet, in spite of all of this, there is a sinister meaning
       hidden within Xel's playful children's songs that does not escape the
@@ -5535,7 +5535,7 @@ God "Xel"
       be slain for the purpose of human sacrifice alone. Yet, the lot of a
       peasant remains harsh, and few heros are willing to stand up for the
       lower classes. Xel has become so much a staple of hearth wisdom that
-      most villages see no wrong in the favors its clergy ask, and in return
+      most villages see no wrong in the favours its clergy ask, and in return
       its clerics take very seriously their roles as village defenders,
       protectors of the downtrodden and the political muscle of rural 
       communities. The arrival of a travelling priest of 'the Old Goat in
@@ -5553,7 +5553,7 @@ God "Xel"
       at, and its chosen weapon is the sickle. Xel itself is a weary
       diety, sleeping peacefully through the millenia, and does not keep
       a careful eye on its priests, as long as the blood flows. The clergy
-      as an organization, however, expects every priest to always honor
+      as an organization, however, expects every priest to always honour
       two central precepts: always help a peasant or peasant community in
       need, and never reveal the darker practices of the sect to those who
       cannot be trusted. In return for this, Xel grants its priests
@@ -5647,7 +5647,7 @@ God "Xel"
           REL_DEFAULT   0     0,
       * CROWNING_GIFTS
           $"Nine Lives Stealer",
-      * FAVOR_CHART
+      * FAVOUR_CHART
           100
           500
           1250
@@ -5669,15 +5669,15 @@ God "Xel"
           AID_NEWBOOK     P_MODERATE  1000     
           AID_MANA        P_LOW       1;    
     Constants:
-      * VOICE_COLOR RED,
-      * ALTAR_COLOR RED,
+      * VOICE_COLOUR RED,
+      * ALTAR_COLOUR RED,
       * HOLY_SYMBOL $"Xel;symbol",
       * INTERVENTION_COST 7,
       * RESSURECTION_COST 15,
       * ALTAR_COST 0,
       * PRAYER_TIMEOUT  10,
       * MIN_RAISE_LEVEL 7,
-      * MIN_CONVERT_FAVOR 10,
+      * MIN_CONVERT_FAVOUR 10,
       * PRAYER_DC 10,
       * LEVEL_BLEEDOFF 3,
       * TOLERANCE_VAL 3,
@@ -5803,7 +5803,7 @@ God "Zurvash"
       Pain, Passion and Strength, and is militant in his intervention on
       their behalf. His chosen weapon is a set of bolas,
       usually with razor-wire binding them together.\n
-      __<10>Worship:<2> Zurvash most favors the sacrifice of wild, predatory
+      __<10>Worship:<2> Zurvash most favours the sacrifice of wild, predatory
       beasts on his altars, and also the remains of other sapient beings 
       bested in fair combat. He is angered when his followers spare their 
       fallen enemies, or when they show self-restraint in any situation that 
@@ -5812,21 +5812,21 @@ God "Zurvash"
       on allies or summoned creatures (though illusions, as manifestation
       of magic, are fine). Animals are the only acceptable allies to Zurvash.
       Surrendering rather than fighting to the death angers Zurvash greatly, 
-      whereas cowing enemies grants favor in his eyes.\n
+      whereas cowing enemies grants favour in his eyes.\n
       __<10>Blessings:<2> Zurvash will clear any follower's mind, as well
       as imbuing them with a kind of berzerk anger, both when they prey and
       when the whim strikes him; this quality makes him a difficult god for
-      conventional mages. For a more favored follower, he will purify the
+      conventional mages. For a more favoured follower, he will purify the
       body, deflect deadly blows, remove fatigue, replenish the spirit,
       lift curses, heal injuries and raise the dead, in the order of 
-      increasing favor required.\n
+      increasing favour required.\n
       __His more permanent blessings include increasing a folllower's
       toughness and agility, granting a preternaturally sharp sense of
       smell, mystical authority to command animals and a complete lack
       of scent. His most treasured servants are said to be blessed with
       constant regeneration of all injuries. Followers with claws and
       teeth are also said to be able to enchant them to bite deeper.
-      Slashing wounds inflicted by the favored of Zurvash are also said
+      Slashing wounds inflicted by the favoured of Zurvash are also said
       to bleed more profusely than normal.";
     Flags: GF_NO_LAWFUL, GF_EVIL, GF_COMBAT_PULSE, GF_COMBAT_ANGER; 
     Lists:
@@ -5895,7 +5895,7 @@ God "Zurvash"
           $"Khasrach" $"Asherath" $"Aiswin" $"Xel" 0 0,
       * CROWNING_GIFTS
           $"Nine Lives Stealer",
-      * FAVOR_CHART
+      * FAVOUR_CHART
           100
           500
           1250
@@ -5918,8 +5918,8 @@ God "Zurvash"
           AID_RESSURECT  P_LOW     6000;
           
     Constants:
-      * VOICE_COLOR RED,
-      * ALTAR_COLOR RED,
+      * VOICE_COLOUR RED,
+      * ALTAR_COLOUR RED,
       * HOLY_SYMBOL $"Zurvash;symbol",
       * CHOSEN_WEAPON $"bolas",
       * CHOSEN_WEAPON_QUALITY WQ_VICIOUS,
@@ -5928,7 +5928,7 @@ God "Zurvash"
       * ALTAR_COST 5,
       * PRAYER_TIMEOUT 10,
       * MIN_RAISE_LEVEL 8,
-      * MIN_CONVERT_FAVOR 100,
+      * MIN_CONVERT_FAVOUR 100,
       * PRAYER_DC 10,
       * LEVEL_BLEEDOFF 2,
       * TOLERANCE_VAL 3,
@@ -6058,7 +6058,7 @@ God "Zurvash"
       if (EVictim->HasStati(AFRAID) && !EVictim->HasEffStati(EFF_FLAG1,$"Zurvash"))
         {
           EVictim->GainPermStati(EFF_FLAG1,EActor,SS_MISC,0,0,$"Zurvash");
-          EActor->gainFavor($"Zurvash",10*max(1,EVictim->ChallengeRating()));
+          EActor->gainFavour($"Zurvash",10*max(1,EVictim->ChallengeRating()));
         }
       return NOTHING;
       };
@@ -6148,10 +6148,10 @@ God "The Multitude"
       __<10>Blessings:<2> The demon ghosts offer several forms of aid to
       anyone who so much as pledges himself to them: healing, purifying
       the body and smiting enemies. More loyal followers can also gain
-      the following types of aid, in order of increasing favor: replenishment
+      the following types of aid, in order of increasing favour: replenishment
       of mana, replacement of lost spellbooks, deflection of especially
       lethal blows, identification of any items and even ressurection for
-      a truly favored follower.\n
+      a truly favoured follower.\n
       __The demon ghosts are truly diverse beings, no two alike. As such,
       the more permanent blessings they grant to followers are very
       diverse. These usually take the form of inherant magical abilities
@@ -6228,7 +6228,7 @@ God "The Multitude"
           REL_DEFAULT    0     0,
       * CROWNING_GIFTS
           $"Nine Lives Stealer",
-      * FAVOR_CHART
+      * FAVOUR_CHART
           50
           250
           500
@@ -6249,8 +6249,8 @@ God "The Multitude"
           AID_NEWBOOK        P_LOW       750      
           AID_MANA           P_LOW       125;    
     Constants:
-      * VOICE_COLOR COL_POISON,
-      * ALTAR_COLOR SHADOW,
+      * VOICE_COLOUR COL_POISON,
+      * ALTAR_COLOUR SHADOW,
       * HOLY_SYMBOL $"The Multitude;symbol",
       * CHOSEN_WEAPON_QUALITY WQ_UNHOLY,
       * INTERVENTION_COST 3,
@@ -6258,7 +6258,7 @@ God "The Multitude"
       * ALTAR_COST 2,
       * PRAYER_TIMEOUT 5,
       * MIN_RAISE_LEVEL 9,
-      * MIN_CONVERT_FAVOR 50,
+      * MIN_CONVERT_FAVOUR 50,
       * PRAYER_DC 15,
       * LEVEL_BLEEDOFF 3,
       * TOLERANCE_VAL 0,
@@ -6292,7 +6292,7 @@ God "The Multitude"
       enCR = EActor->FixSummonCR(EActor->getGodLevel($"The Multitude")+1,PHD_MAGIC);
       if (enCR <= 0) {
         EActor->GodMessage($"The Multitude", MSG_CUSTOM7);
-        EActor->gainFavor($"The Multitude",4d50,false,true);
+        EActor->gainFavour($"The Multitude",4d50,false,true);
         return DONE; 
         }       
       e.vDuration = 30 + EActor->Mod(A_CHA)*5;
@@ -6326,7 +6326,7 @@ God "The Multitude"
       },
     GODWATCH(EV_ALIGNED) {
       if (e.EParam & (AL_EVIL|AL_NONGOOD))
-        EActor->gainFavor($"The Multitude",10*e.vMag,false,true);
+        EActor->gainFavour($"The Multitude",10*e.vMag,false,true);
       if (e.EParam & AL_GOOD)
         EActor->Transgress($"The Multitude",(e.vMag+1)/2,false,
           "good act");

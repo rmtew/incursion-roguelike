@@ -2582,7 +2582,7 @@ EvReturn Map::enBuildMon(EventInfo &e)
           mn->Remove(true); return ABORT; }
       
       /* Place aquatic monsters in water, and other monsters on dry
-         land. No exceptions -- even amphibians start in their favored
+         land. No exceptions -- even amphibians start in their favoured
          terrain. */  
       j = random(OpenC);
       
@@ -2934,7 +2934,7 @@ int16 MaxItemPlus(int16 MaxLev,rID eID)
   }
 
 /* ww: currently we generate really horrible random-looking magical weapons
- * and armor ... let's see what we can do do improve that */
+ * and armour ... let's see what we can do do improve that */
 
 static int16 NumQualities(int plusLevel)
 {
@@ -2958,7 +2958,7 @@ static int16 NumQualities(int plusLevel)
 
 // this procedure gives It some combination of true plusses and weapon
 // qualities that equal exactly plusLevel
-static void MakeMagicWeaponArmor(Item *it, int _plusLevel, 
+static void MakeMagicWeaponArmour(Item *it, int _plusLevel, 
       int16 QualityMods[][2], int reserve)
 {
   int numQual;
@@ -3207,13 +3207,13 @@ Item* Item::GenItem(uint16 Flags, rID xID, int16 Depth, int8 Luck, ItemGen *Gen)
     }
 
     if ((IType == T_WEAPON || IType == T_BOW || IType == T_MISSILE || 
-         IType == T_ARMOR || IType == T_SHIELD) && !(Flags & IG_STAPLE)) {
+         IType == T_ARMOUR || IType == T_SHIELD) && !(Flags & IG_STAPLE)) {
       
       /* Generate a fully mundane item? */
       if (!random(maxlev+2))
         goto SkipMagic;
         
-      /* 5% of magic weapons/armor are specific weapons (i.e.,
+      /* 5% of magic weapons/armour are specific weapons (i.e.,
          Sunsword, Frost Brand) as opposed to randomly generated
          weapons (+2 keen pickaxe, +1 ghost touch rapier) -- but
          only at depth 6+! */ 
@@ -3221,7 +3221,7 @@ Item* Item::GenItem(uint16 Flags, rID xID, int16 Depth, int8 Luck, ItemGen *Gen)
         goto GrantEffect;
         
       NoSpecificWeaponFound:
-      int isArmor = IType == T_ARMOR || IType == T_SHIELD;
+      int isArmour = IType == T_ARMOUR || IType == T_SHIELD;
       int isShield = IType == T_SHIELD;
       magicLevel = max(random(1 + maxlev - minlev) + minlev,
                        random(1 + maxlev - minlev) + minlev);
@@ -3230,8 +3230,8 @@ Item* Item::GenItem(uint16 Flags, rID xID, int16 Depth, int8 Luck, ItemGen *Gen)
       //magicLevel /= 150;
 
       if (magicLevel >= 0) { 
-        MakeMagicWeaponArmor(theItem, magicLevel,
-            isArmor ? AQualityMods : QualityMods,0);
+        MakeMagicWeaponArmour(theItem, magicLevel,
+            isArmour ? AQualityMods : QualityMods,0);
       } 
     } 
     else if (mag)
@@ -3241,19 +3241,19 @@ Item* Item::GenItem(uint16 Flags, rID xID, int16 Depth, int8 Luck, ItemGen *Gen)
           eID = theGame->GetEffectID(PUR_CURSED,minlev,maxlev,mag);
         else if (Flags & IG_STAPLE)
           eID = theGame->GetEffectID(PUR_STAPLE,minlev,maxlev,mag);
-        else if (mag == AI_WEAPON || mag == AI_ARMOR) 
+        else if (mag == AI_WEAPON || mag == AI_ARMOUR) 
           /* Specific Weapons ALWAYS have maxlev adjusted by luck. */
           eID = theGame->GetEffectID(PUR_DUNGEON,minlev,adjlev,mag);
         else
           eID = theGame->GetEffectID(PUR_DUNGEON,minlev,maxlev,mag);
         
-        if (mag == AI_ARMOR)
-          if (eID && !TEFF(eID)->HasSource(AI_ARMOR))
-            Error("Bad armor effect bug!");
+        if (mag == AI_ARMOUR)
+          if (eID && !TEFF(eID)->HasSource(AI_ARMOUR))
+            Error("Bad armour effect bug!");
             
         if (!eID)
           {
-            if (mag == AI_WEAPON || mag == AI_ARMOR ||
+            if (mag == AI_WEAPON || mag == AI_ARMOUR ||
                 mag == AI_BOW || mag == AI_SHIELD)
               {
                 /*
@@ -3287,7 +3287,7 @@ Item* Item::GenItem(uint16 Flags, rID xID, int16 Depth, int8 Luck, ItemGen *Gen)
       theItem->IFlags |= IF_CURSED;
 
     if (theItem->Plus && theItem->eID == 0 && (theItem->isType(T_WEAPON) ||
-         theItem->isType(T_ARMOR) || theItem->isType(T_SHIELD) ||
+         theItem->isType(T_ARMOUR) || theItem->isType(T_SHIELD) ||
          theItem->isType(T_BOW) || theItem->isType(T_MISSILE)))
       if (!random(4))
         theItem->IFlags |= IF_RUNIC;
@@ -3369,7 +3369,7 @@ Item* Item::GenItem(uint16 Flags, rID xID, int16 Depth, int8 Luck, ItemGen *Gen)
 
     /*
     if (theItem->isType(T_WEAPON) ||
-        theItem->isType(T_ARMOR) ||
+        theItem->isType(T_ARMOUR) ||
         theItem->isType(T_BOW) ||
         theItem->isType(T_SHIELD))
       if (theItem->eID && theGame->GetPlayer(0)->WizardMode)

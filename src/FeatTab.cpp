@@ -326,7 +326,7 @@ struct FeatInfoStruct FeatInfo[] = {
     {{{FP_BAB,S_BRAWL,2}}}},
   { FT_IRON_SKIN, 0, "Iron Skin", 
     "Your body and soul are strong enough to withstand the heaviest blows. You gain a "
-    "+5 natural armor bonus.",
+    "+5 natural armour bonus.",
     {{{ FP_FEAT, FT_TOUGHNESS, 0,
         FP_ATTR, A_CON, 17,
         FP_ATTR, A_SAV_FORT, 10 },
@@ -342,7 +342,7 @@ struct FeatInfoStruct FeatInfo[] = {
     "blunt damage, they will be asked if they want want to use "
     "Reed in the Wind, and thus suffer only 1/3rd damage, but "
     "also suffer automatic knockdown. A character must be wearing "
-    "Light armor or be unarmored to use this feat, and it is "
+    "Light armour or be unarmoured to use this feat, and it is "
     "ineffective against piercing damage.",
     {{{ FP_ABILITY, CA_EVASION, 1,
         FP_SKILL, SK_TUMBLE, 12,
@@ -623,7 +623,7 @@ struct FeatInfoStruct FeatInfo[] = {
     {{{FP_ABILITY,CA_COMMAND},{FP_ABILITY,CA_TURNING}}}
   },
   
-  { FT_DIVINE_ARMOR, 0, "Divine Armor", 
+  { FT_DIVINE_ARMOUR, 0, "Divine Armour", 
     "You can channel divine energy to protect yourself from certain attacks. You "
     "gain a resistance to aligned damage (Law, Chaos, Holy and Unholy) as well as "
     "necromatic damage equal to twice your Charisma modifier for [Charisma x 2] "
@@ -703,28 +703,28 @@ struct FeatInfoStruct FeatInfo[] = {
  *                      WEAPON PROFICIENCY & SPECIALIZATION                   *
 \******************************************************************************/
 
-  { FT_AP_LIGHT,  0, "Armor Proficiency: Light", 
-    "You are able to wear Light armor without it severely impeding "
+  { FT_AP_LIGHT,  0, "Armour Proficiency: Light", 
+    "You are able to wear Light armour without it severely impeding "
       "your ability to function.",
-    {{{FP_NOT_PROF, WG_LARMOR, 0}}} },
-  { FT_AP_MEDIUM,  0, "Armor Proficiency: Medium",
-    "You are able to wear Medium armor without it severely impeding "
+    {{{FP_NOT_PROF, WG_LARMOUR, 0}}} },
+  { FT_AP_MEDIUM,  0, "Armour Proficiency: Medium",
+    "You are able to wear Medium armour without it severely impeding "
       "your ability to function." ,
-    {{{FP_PROF,WG_LARMOR, 0,
-       FP_NOT_PROF, WG_MARMOR, 0}}} },
-  { FT_AP_HEAVY,  0, "Armor Proficiency: Heavy",
-    "You are able to wear Heavy armor without it severely impeding "
+    {{{FP_PROF,WG_LARMOUR, 0,
+       FP_NOT_PROF, WG_MARMOUR, 0}}} },
+  { FT_AP_HEAVY,  0, "Armour Proficiency: Heavy",
+    "You are able to wear Heavy armour without it severely impeding "
       "your ability to function." ,
-    {{{FP_PROF,WG_MARMOR, 0,
-       FP_NOT_PROF,WG_HARMOR, 0}}} },
-  { FT_ARMOR_OPTIMIZATION, FF_WARRIOR, "Armor Optimization",
+    {{{FP_PROF,WG_MARMOUR, 0,
+       FP_NOT_PROF,WG_HARMOUR, 0}}} },
+  { FT_ARMOUR_OPTIMIZATION, FF_WARRIOR, "Armour Optimization",
     "You are adept at performing tasks (e.g., balancing, escaping from holds, "
-    "hiding in shadows) while wearing heavy armor and using shields. You suffer "
+    "hiding in shadows) while wearing heavy armour and using shields. You suffer "
     "only one-third of the normal Skill Check penalty (rounded up) for wearing "
-    "armor or using a shield. You suffer only one-third (rounded up) of the "
-    "movement rate penalty for wearing armor. You still suffer the full Arcane "
+    "armour or using a shield. You suffer only one-third (rounded up) of the "
+    "movement rate penalty for wearing armour. You still suffer the full Arcane "
     "spell failure rate and maximum Dexterity modifier limit, however.", 
-    {{{FP_PROF,WG_HARMOR}}} },
+    {{{FP_PROF,WG_HARMOUR}}} },
 
   { FT_SHIELD_PROFICIENCY, 0, "Shield Proficiency",
     "You have been trained in the proper use of a shield, "
@@ -746,7 +746,7 @@ struct FeatInfoStruct FeatInfo[] = {
 
   { FT_SHIELD_EXPERT, FF_WARRIOR, "Shield Expert",
     "You are able to use your shield as a barrier, preventing foes from striking "
-    "at the weak areas in your armor. Your shield grants you a bonus to coverage "
+    "at the weak areas in your armour. Your shield grants you a bonus to coverage "
     "based on it's size -- +10 for a shield larger than you, +8 for a shield with "
     "the same size category, +4 for a shield one category smaller and +2 for a "
     "shield two categories smaller.",
@@ -804,7 +804,7 @@ struct FeatInfoStruct FeatInfo[] = {
     {{{FP_WEP_SKILL,WS_MASTERY,0,
        FP_ABILITY,CA_WEAPON_SKILL, 3}}}},
   { FT_WEAPON_GRAND_MASTERY, FF_MULTIPLE|FF_WARRIOR, "Weapon Grand Mastery",
-    "Your skill with your chosen weapon is rumored to make the gods envious. You "
+    "Your skill with your chosen weapon is rumoured to make the gods envious. You "
     "recieve a +3 skill bonus to hit, a +4 skill bonus to damage, and a +50~ skill "
     "bonus to speed when using it. You gain a +4 skill bonus to melee defense. Your "
     "critical hit damage multiplier for the weapon is increased by one and your "
@@ -817,7 +817,7 @@ struct FeatInfoStruct FeatInfo[] = {
   { FT_WEAPON_FINESSE, FF_WARRIOR|FF_AGILE, "Weapon Finesse",
     "When using a qualifying melee weapon, you modify your attack rolls in combat "
       "with your Dexterity instead of your Strength, if that gives a more "
-      "favorable result. You also never suffer a penalty to damage due to "
+      "favourable result. You also never suffer a penalty to damage due to "
       "Strength with a qualifying weapon. Suitable weapons must belong to "
       "one of the following groups: Daggers, Staves, Short Blades, Flexible "
       "Weapons, Martial Arts Weapons or Light Weapons.\n"
@@ -1131,7 +1131,7 @@ struct FeatInfoStruct FeatInfo[] = {
   { FT_MISSILE_PROOF, 0, "Missile Proof",
     "You may block projectiles easily with your shield. If you are attacked by a "
     "ranged weapon and you are not surprised or flat-footed, you may make a Reflex "
-    "save against DC 20. The DC is lowered by the armor bonus of your shield and "
+    "save against DC 20. The DC is lowered by the armour bonus of your shield and "
     "raised by the magical plus, if any, of the missile weapon. If you succeed, you "
     "deflect the attack. Deflecting a missile attack in this manner uses one of your "
     "attacks of opportunity. This feat will not allow you to block magical attacks "
@@ -1159,7 +1159,7 @@ struct FeatInfoStruct FeatInfo[] = {
 
   { FT_DODGE,      FF_AGILE|FF_WARRIOR, "Dodge",
     "You recieve a +1 feat bonus to your Defense, or a +3 bonus if you "
-      "wear Light or lighter armor and have Light or lighter encumbrance.",
+      "wear Light or lighter armour and have Light or lighter encumbrance.",
     {{{FP_ATTR,A_DEX,13}}}},
     
   { FT_SLIPAWAY,   FF_AGILE|FF_WARRIOR, "Slipaway",
@@ -1184,7 +1184,7 @@ struct FeatInfoStruct FeatInfo[] = {
        FP_ATTR,A_DEX,13}}}},
 
   { FT_INSTANT_STAND, FF_AGILE|FF_WARRIOR, "Instant Stand",
-    "With a Reflex save or Balance check -- whichever favors you more -- "
+    "With a Reflex save or Balance check -- whichever favours you more -- "
     "against DC 15, you can regain your feel nearby instantly after being "
     "knocked prone. Failing the check means that you take the normal time "
     "to stand, and provoke an attack of opportunity.", 
@@ -1381,7 +1381,7 @@ struct FeatInfoStruct FeatInfo[] = {
   { FT_RIPOSTE,  FF_SMART|FF_WARRIOR, "Riposte", 
     "After deflecting an opponent's blow you can quickly attack while the "
     "enemy is over-extended. When you are not surprised, at most lightly "
-    "encumbered, and wearing at most light armor, you may make an attack of "
+    "encumbered, and wearing at most light armour, you may make an attack of "
     "opportunity against an opponent who is beside you and tries to attack you "
     "in melee and misses.",
     {{{FP_FEAT,FT_WEAPON_FINESSE,0,
@@ -1436,11 +1436,11 @@ struct FeatInfoStruct FeatInfo[] = {
        FP_FEAT,FT_BLIND_FIGHT,0}}}},
        
   { FT_ZEN_DEFENSE, FF_INTUITIVE|FF_WARRIOR, "Zen Defense",
-    "When unarmored, you gain an insight bonus to your Defense Class equal in magnitude "
+    "When unarmoured, you gain an insight bonus to your Defense Class equal in magnitude "
       "to your Wisdom modifier, if it is positive. This bonus stacks with the "
-      "normal Dexterity bonus. If you wear light armor, you get half the normal "
-      "bonus, rounding up. Characters in medium or heavy armor gain no benefit from "
-      "this feat. Spells that duplicate the effect of armor count as armor for the "
+      "normal Dexterity bonus. If you wear light armour, you get half the normal "
+      "bonus, rounding up. Characters in medium or heavy armour gain no benefit from "
+      "this feat. Spells that duplicate the effect of armour count as armour for the "
       "purpose of this feat." ,
       {{{FP_FEAT,FT_BLIND_FIGHT,0,
          FP_FEAT,FT_EXPERTISE,0}}}},
@@ -1510,7 +1510,7 @@ struct FeatInfoStruct FeatInfo[] = {
   { FT_DANCE_OF_TUKIMA, FF_COMMANDING|FF_WARRIOR, "Dance of Tukima",
     "You have mastered the Dance of Tukima, an exotic style of fighting "
     "that blends swordplay with dancing to beguile and disorient foes. "
-    "You must be in light armor and lightly encumbered to use the Dance "
+    "You must be in light armour and lightly encumbered to use the Dance "
     "of Tukima; doing so costs 1 fatigue and lasts a number of rounds "
     "equal to twice your Athletics rating. While dancing, you add your "
     "Charisma bonus to attack rolls, and half of your Perform skill "
@@ -1532,7 +1532,7 @@ struct FeatInfoStruct FeatInfo[] = {
   
   { FT_GREATER_SOULBLADE, FF_COMMANDING|FF_WARRIOR|FF_UNIMP, "Greater Soulblade",
     "You may select any one special weapon quality from a list "
-    "determined by your personality architype, with a maximum "
+    "determined by your personality archetype, with a maximum "
     "effective plus increase equal to or lower than your Charisma "
     "modifier, minus 1. Any weapon you wield gains that quality "
     "for as long as you wield it.",
@@ -1566,7 +1566,7 @@ struct FeatInfoStruct FeatInfo[] = {
     "Your presence is so very terrible that thinking foes instinctively "
     "flinch, pulling their blows. When you are struck by a sapient "
     "creature who is not immune to fear for damage in melee, you subtract "
-    "your Charisma modifier from the total damage dealt before armor and "
+    "your Charisma modifier from the total damage dealt before armour and "
     "resistances are taken into account. If the attacker has a saving "
     "throw bonus versus fear effects, your Charisma modifier is reduced "
     "by that amount for this purpose.",

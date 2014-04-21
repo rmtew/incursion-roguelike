@@ -431,7 +431,7 @@ void TextTerm::CreateCharSheet(CharSheet &cs)
           str = Format("Tracking (%d feet)",k*10);
           break;            
         case CA_FAV_ENEMY:
-          cs.sSpecials += "  Favored Enemies:\n" ; 
+          cs.sSpecials += "  Favoured Enemies:\n" ; 
           StatiIterNature(p,FAV_ENEMY)
               if (LookupOnly(MTypeNames,S->Val))
                 cs.sSpecials += Format("    %+d vs. %c%s%c\n",
@@ -818,7 +818,7 @@ void TextTerm::CreateCharSheet(CharSheet &cs)
           cs.sFeats += Format("  %s\n", FeatName(i));
       } 
 
-  cs.sResists = Format("%cResistances and Armor:%c\n",-WHITE,-GREY);
+  cs.sResists = Format("%cResistances and Armour:%c\n",-WHITE,-GREY);
 
   int8 ResistsShown[] = {
     AD_SLASH, AD_PIERCE, AD_BLUNT, 
@@ -946,8 +946,8 @@ void TextTerm::CreateCharSheet(CharSheet &cs)
           cs.sSkills += Format(", %+d domain",s_domain);
         if (s_item)
           cs.sSkills += Format(", %+d magic",s_item);
-        if (s_armor)
-          cs.sSkills += Format(", %+d armor",s_armor);
+        if (s_armour)
+          cs.sSkills += Format(", %+d armour",s_armour);
         if (s_comp)
           cs.sSkills += Format(", %+d competence",s_comp);
         if (s_circ)
@@ -1065,7 +1065,7 @@ void TextTerm::CreateCharSheet(CharSheet &cs)
     "You are zealously <Str>.",                         // 60-63
     "You are zealously <Str>.",                         // 64-67
     "You flawlessly embody <Str2>." };                  // 68+   
-  const char * FavorStrength[] = {
+  const char * FavourStrength[] = {
     "<Res> is noncommital.",
     "<Res> has noticed your\n____worship.",
     "<Res> is cautiously pleased\n____with your worship.",
@@ -1079,7 +1079,7 @@ void TextTerm::CreateCharSheet(CharSheet &cs)
     "You have been crowned by <Res>."
     };
   
-  const char * FavorPen[] = {
+  const char * FavourPen[] = {
     "<Res> has not aided you.",                                   // 0 
     "<Res> aided you trivially.",                                 // 1-9
     "<Res> aided you minorly.",                                   // 10-19
@@ -1132,19 +1132,19 @@ void TextTerm::CreateCharSheet(CharSheet &cs)
       
       
       
-      fv = p->calcFavor(gID);
+      fv = p->calcFavour(gID);
       favPen = p->FavPenalty[theGame->GodNum(gID)];
       
-      TGOD(gID)->GetList(FAVOR_CHART,favChart,15);
+      TGOD(gID)->GetList(FAVOUR_CHART,favChart,15);
       
       cs.sSpiritual += "__";
-      cs.sSpiritual += XPrint(FavorStrength[p->getGodLevel(gID)],gID);
+      cs.sSpiritual += XPrint(FavourStrength[p->getGodLevel(gID)],gID);
       cs.sSpiritual += "\n__";
       if (favPen + TGOD(gID)->GetConst(INTERVENTION_COST) > 100)
         cs.sSpiritual += XPrint("<Res> will aid you no further.",gID);
       else
-        cs.sSpiritual += XPrint(FavorPen[min(10,(favPen+9)/10)],gID);
-      cs.sSpiritual += Format("\n____(Favor %d, Lev %d, Pen %d~)",
+        cs.sSpiritual += XPrint(FavourPen[min(10,(favPen+9)/10)],gID);
+      cs.sSpiritual += Format("\n____(Favour %d, Lev %d, Pen %d~)",
                               fv, p->getGodLevel(gID), favPen);
       cs.sSpiritual += "\n";
   

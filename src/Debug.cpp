@@ -334,7 +334,7 @@ void Player::WizardOptions() {
     MyTerm->LOption("Genocide Everything", 10);
     MyTerm->LOption("Identify Whole Pack", 11);
     MyTerm->LOption("Add Quality to Weapon", 12);
-    MyTerm->LOption("Add Quality to Armor", 13);
+    MyTerm->LOption("Add Quality to Armour", 13);
     MyTerm->LOption("Add Quality to Shield", 14);
     MyTerm->LOption("Ascend / Descend Depth",15);
     MyTerm->LOption("Add Template to Creature",16);
@@ -532,9 +532,9 @@ Restart:
         IPrint("Quality added.");
         break;
     case 13:
-        it = InSlot(SL_ARMOR);
+        it = InSlot(SL_ARMOUR);
         if (!it) {
-            IPrint("Wear some armor first!");
+            IPrint("Wear some armour first!");
             break;
         }
         MyTerm->SetWin(WIN_INPUT);
@@ -895,7 +895,7 @@ Restart:
         setGodFlags(xID,GS_INVOLVED);
         SacVals[theGame->GodNum(xID)][8] = 30000;
         for (i=0;i!=10;i++)
-            gainedFavor(xID);
+            gainedFavour(xID);
         break;
     case 35:
         for (i=0;i!=50;i++)
@@ -1409,7 +1409,7 @@ void Character::Dump()
                    NAME(gID),
                    -GREY,
                    getGodLevel(gID),
-                   calcFavor(gID),
+                   calcFavour(gID),
                    getAnger(gID),
                    getGodFlags(gID) & GS_ANATHEMA ? "Ana" : "",
                    getGodFlags(gID) & GS_INVOLVED ? "Inv" : "",

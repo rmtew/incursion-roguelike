@@ -89,7 +89,7 @@
     EActor->Transgress($"Mara",5,false,"desecrating foes' bodies"); \
   if (!corpse->HasEffStati(CORPSE_FLAG,$"Mara"))\
     if (undead->isMType(MA_SAPIENT))            \
-      EActor->gainFavor($"Mara",50);            \
+      EActor->gainFavour($"Mara",50);            \
   if (!isMarist)                                \
     EActor->AlignedAct(AL_NONGOOD|AL_EVIL,1,"creating undead with infernal power"); \
   EActor->Transgress($"Immotian",7,false,"creating undead");  \

@@ -28,7 +28,7 @@ Item "spellbook [Adventurers' Arts]" : T_BOOK
     Mat:MAT_PAPER; Level: 0;
     Weight: 40;
     Spells: $"Magic Missile", $"Expeditious Retreat", $"Alarm",
-      $"Mage Armor", $"Resist Fire", $"Detect Monsters", $"Mount",
+      $"Mage Armour", $"Resist Fire", $"Detect Monsters", $"Mount",
       $"Phase Door", $"Infravision", $"Resist Water", $"Jump;spell",
       $"spider climb", $"Passwall", $"Knock", $"mending", $"shield",
       $"see invisibility", $"floating disc", $"minor light";
@@ -41,7 +41,7 @@ Item "spellbook [Mystic Aegis]" : T_BOOK
     Mat:MAT_PAPER; Level: 0;
     Weight: 40;
     Spells:  $"erase", $"feather fall", $"Endure Fire", $"Endure Cold", $"Endure Lightning",
-      $"Protection from Evil", $"Mage Armor", $"Shield", $"Gaze Reflection", 
+      $"Protection from Evil", $"Mage Armour", $"Shield", $"Gaze Reflection", 
       $"Protection from Arrows", $"Protection from Undead", $"Spiritwrack",
       $"Iron Mind", $"Resist Fire", $"Resist Acid";
     On Event MSG_STATINAME "MystAegis";
@@ -96,7 +96,7 @@ Item "spellbook [Magician's Manual]" : T_BOOK
     Image: bright red GLYPH_BOOK;
     Mat:MAT_PAPER; Level: 0;
     Weight: 40;
-    Spells: $"Phantasmal Force", $"Color Spray", $"Chromatic Orb",
+    Spells: $"Phantasmal Force", $"Colour Spray", $"Chromatic Orb",
       $"change self", $"dancing lights", $"invisibility", 
       $"Spook", $"Reduce", $"Invisibility", $"Hypnotic Pattern",
       $"globe of shadow", $"phase door", $"ventriloquism",
@@ -162,7 +162,7 @@ Item "spellbook [Ars Bellicus]" : T_BOOK
     Mat:MAT_PAPER; Level: 0;
     Weight: 40; Level: 5;
     Spells: $"expeditious retreat", $"wall of fog", $"shield",
-      $"bull's strength", $"cat's grace", $"spirit armor", $"keen edge",
+      $"bull's strength", $"cat's grace", $"spirit armour", $"keen edge",
       $"lightning bolt", $"blackmantle", $"haste", $"decastave",
       $"protection from arrows", $"phantom steed", $"magic weapon",
       $"greater magic weapon";
@@ -235,7 +235,7 @@ Item "spellbook [Artificer's Handbook]" : T_BOOK
     Weight: 40; Level: 3;
     Spells: $"Alisdair's Fundamental Breakdown", $"Minor Creation",
       $"Major Creation", $"Wall of Stone", $"Keen Edge", $"Lorecall",
-      $"Spirit Armor", $"Skull Trap", $"Apportation", $"force missiles",
+      $"Spirit Armour", $"Skull Trap", $"Apportation", $"force missiles",
       $"shield", $"mending", $"fabricate", $"magic weapon",
       $"greater magic weapon";
     On Event MSG_STATINAME "Artificer's" / "AH";
@@ -396,7 +396,7 @@ Item "spellbook [Celestial Lion Sutra]" : T_BOOK
             $"scorcher", $"lightning bolt", $"tremor", $"flame blade",
             $"crushing despair", $"keen edge", $"force bolt", $"ethereal blade",
             $"banishment", $"shield", $"lightning bolt", $"fire lotus",
-            $"spirit armor", $"enlarge",  $"hold person",
+            $"spirit armour", $"enlarge",  $"hold person",
             $"open the third eye", $"lower resistance", $"adamant facade",
             $"aura of abjuration", $"undeath to death";
     On Event MSG_STATINAME "CelLion";
@@ -469,7 +469,7 @@ Item "spellbook [Smoke and Mirrors]" : T_BOOK
     Spells: $"Phantasmal Force", $"Improved Phantasmal Force",
             $"Spectral Force", $"Improved Spectral Force",
             $"Advanced Illusion", $"Persistant Illusion",
-            $"Color Burst", $"Illusory Stance", $"Misdirection",
+            $"Colour Burst", $"Illusory Stance", $"Misdirection",
             $"Phantasmagoria", $"Hallucinatory Terrain",
             $"Mirage Arcana", $"mana theft", $"etherealness";
   }

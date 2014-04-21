@@ -18,7 +18,7 @@
      EvReturn Monster::Inventory()
      bool Item::betterFor(Creature *c, Item *curr)
      bool Weapon::betterFor(Creature *c, Item *curr)
-     bool Armor::betterFor(Creature *c, Item *curr)
+     bool Armour::betterFor(Creature *c, Item *curr)
      EvReturn Monster::Event(EventInfo &e)
      int16 Monster::RateAsTarget(Thing *t)
 
@@ -252,7 +252,7 @@ const char * alliesShouldntCast[] = {
   "Electric Loop", "Visage of Death", "Levitation",
   "Evard's Black Tentacles", "Cloudkill",
   "Dream", "Nightmare", "Lesser Symbol", 
-  "Fireball", "Color Burst", "Confusion",
+  "Fireball", "Colour Burst", "Confusion",
   "Immortal Grandeur", "Hallucinatory Terrain",
   "Mirage Arcana", "Insect Plague",
   "Summon Swarm", NULL };
@@ -1331,8 +1331,8 @@ NothingToDo:
               c = this;
             if (!c->isCreature())
             { res = ABORT; break; }
-            if (te->HasFlag(EF_LIM_ITYPE) && te->ef.tval == T_ARMOR)
-              inv_tar = c->InSlot(SL_ARMOR);
+            if (te->HasFlag(EF_LIM_ITYPE) && te->ef.tval == T_ARMOUR)
+              inv_tar = c->InSlot(SL_ARMOUR);
             else 
               inv_tar = c->InSlot(SL_WEAPON);
             if (inv_tar && isTarget(xe,inv_tar))
@@ -1494,7 +1494,7 @@ void Monster::Initialize(bool in_play)
     if (isMType(MA_UNDEAD)) { // the undead often carry cursed items
       for(Item *it=FirstInv();it;it=NextInv()) {
         if (it->Type == T_WEAPON ||
-            it->Type == T_ARMOR ||
+            it->Type == T_ARMOUR ||
             it->Type == T_SHIELD ||
             it->Type == T_BOW ||
             it->Type == T_MISSILE ||
@@ -1570,7 +1570,7 @@ void Monster::Initialize(bool in_play)
     Item *it;
     if (HasStati(ASLEEP))
       for (it=FirstInv();it;it=NextInv())
-        if (it->isType(T_ARMOR))
+        if (it->isType(T_ARMOUR))
           if (it->IFlags & IF_WORN)
             {
               it->IFlags &= ~IF_WORN;
@@ -2328,7 +2328,7 @@ void Monster::AddEffect(TEffect *te, rID eID, Item *src) {
 /*
  * WW: If you walk down the stairs and come into a room containing an enemy
  * mage, you shouldn't get a chance to stab it while it's trying to cast
- * Mage Armor -- it should have done that long ago while it was standing
+ * Mage Armour -- it should have done that long ago while it was standing
  * around, since the duration for that spell is huge. Similarly, if you do
  * some sort of Planar Gate and summon a spellcaster in from the middle of
  * nowhere, it probably wasn't sitting around naked before. PC mages always
@@ -2459,7 +2459,7 @@ EvReturn Monster::Inventory()
     
     // ww: we forgot a ring here ...
     // ww: and we forgot the shield/dual weapon!
-    int8 HotSlots[] = { SL_WEAPON, SL_READY, SL_ARMOR, SL_ARCHERY, SL_LRING, 
+    int8 HotSlots[] = { SL_WEAPON, SL_READY, SL_ARMOUR, SL_ARCHERY, SL_LRING, 
       SL_AMULET, SL_BRACERS, SL_GAUNTLETS, SL_BOOTS, SL_HELM, SL_BELT,
       SL_CLOAK, SL_LIGHT, 0 };
       int16 counter =0;
@@ -2478,8 +2478,8 @@ EvReturn Monster::Inventory()
       if (!TMON(mID)->HasSlot(HotSlots[i]))
         continue;
         
-      /* Arcane casters should NOT equip armor! */
-      if (HotSlots[i] == SL_ARMOR)
+      /* Arcane casters should NOT equip armour! */
+      if (HotSlots[i] == SL_ARMOUR)
         if (HasMFlag(M_MAGE))
           continue;
       
@@ -2607,10 +2607,10 @@ bool Weapon::betterFor(Creature *c, Item *curr)
     return rat > crat;
   }
 
-bool Armor::betterFor(Creature *c, Item *curr)
+bool Armour::betterFor(Creature *c, Item *curr)
   {
     int16 rat, crat;
-    if (!curr->isType(T_ARMOR) && !curr->isType(T_SHIELD))
+    if (!curr->isType(T_ARMOUR) && !curr->isType(T_SHIELD))
       return Item::betterFor(c,curr);
     TItem *ti = TITEM(iID), *ti2 = TITEM(curr->iID);
     
@@ -2773,7 +2773,7 @@ int16 Monster::RateAsTarget(Thing *t)
         if (!HasSkill(SK_DECIPHER))
           return 0;
 
-      if (t->isType(T_ARMOR))
+      if (t->isType(T_ARMOUR))
         if (!HasMFlag(M_HUMANOID))
           return 0;
 
@@ -2904,7 +2904,7 @@ int16 Monster::RateAsTarget(Thing *t)
          be hostile. We just assume that the good monster can
          distinguish a goblin raider from a goblic PC here,
          but it's not really unreasonable, given the distinct
-         flavor D&D adventurers have. */
+         flavour D&D adventurers have. */
       if (isMType(MA_GOOD) && mt->isPlayer())
         return 0;
 
@@ -2922,7 +2922,7 @@ int16 Monster::RateAsTarget(Thing *t)
         rat += 25;
 
       rat += 5;
-      // ww: favor close things
+      // ww: favour close things
       rat += max(min(30 - dist(x,y,t->x,t->y),30),0);
       ASSERT(rat >= 0 && rat <= 127)
       return rat;

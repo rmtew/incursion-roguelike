@@ -163,7 +163,7 @@ struct EventInfo {
         nAppend    = e.nAppend;
         nOf        = e.nOf;
         nAdjective = e.nAdjective;
-        nFlavor    = e.nFlavor;
+        nFlavour    = e.nFlavour;
         nInscrip   = e.nInscrip;
         nMech      = e.nMech;
         nArticle   = e.nArticle;
@@ -183,7 +183,7 @@ struct EventInfo {
         nPrequal  = NULL; nPostqual = NULL;
         nNamed    = NULL; nBase = NULL;
         nAppend   = NULL; nOf = NULL;
-        nAdjective= NULL; nFlavor = NULL;
+        nAdjective= NULL; nFlavour = NULL;
         nInscrip  = NULL; nMech = NULL;
         nArticle  = NULL; nPlus = NULL;
         Text      = NULL; enDump = NULL;
@@ -250,7 +250,7 @@ struct EventInfo {
     of item or monster names in events. Perhaps these should be
     #defined to be synonyms of the above? */
     String nPrefix, nCursed, nPrequal, nPostqual, nNamed, nBase, 
-        nAppend, nOf, nAdjective, nFlavor, nInscrip, nMech,
+        nAppend, nOf, nAdjective, nFlavour, nInscrip, nMech,
         nArticle, nPlus, Text, enDump;
 
     Rect cPanel, cMap, cRoom;

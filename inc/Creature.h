@@ -46,7 +46,7 @@ struct SkillInfoStruct
     const char * desc; 
     int8  attr1, attr2; // A_INT, A_DEX
     bool  take_min;     // take min of those attrs, or max? 
-    int8   armor_penalty; 
+    int8   armour_penalty; 
   } ; 
 
 struct AbilityInfoStruct 
@@ -328,7 +328,7 @@ class Creature: public Thing, public Magic
             return def; } 
       virtual bool canTalk(Creature *to=NULL);
       int32 ChargeBonus();
-      uint32 getArmorType(bool count_shield);
+      uint32 getArmourType(bool count_shield);
       virtual bool HasInnateSpell(rID spID);
       virtual void LoseMoneyTo(int32 amt, Creature *cr);
       virtual bool doSocialSanity(int16 ev, Creature *cr);
@@ -338,7 +338,7 @@ class Creature: public Thing, public Magic
 
 
       /* Inventory and Stati */
-      uint32 ArmorType();
+      uint32 ArmourType();
       uint8 Encumbrance();
       int32 Weight(bool includeEquipment);
       int32 MaxPress();
@@ -409,7 +409,7 @@ class Creature: public Thing, public Magic
       virtual int16 GetPower(int16);
       
       virtual int16 GetBAB(int16 mode);
-      int16 ResistLevel(int16 DType, bool bypass_armor = false);
+      int16 ResistLevel(int16 DType, bool bypass_armour = false);
       virtual int16 WeaponSaveDC(Item *wp, int16 at);
 
 
@@ -546,7 +546,7 @@ class Creature: public Thing, public Magic
       virtual void IdentifyTemp(rID tID);
       virtual void Initialize(bool in_play = false) {}
       virtual void Transgress(rID gID, int16 mag, bool doWrath=false, const char*reason=NULL) { }
-      virtual void gainFavor(rID gID, int16 amt, bool advance=false, bool stack=true) { }
+      virtual void gainFavour(rID gID, int16 amt, bool advance=false, bool stack=true) { }
       bool isMType(int32 MType);
       bool isPMType(int32 MType, Creature *cr);
 
@@ -631,8 +631,8 @@ class Character: public Creature
       int16  resChance;
       
       /* Religion Stuff */
-      int16 FavorLev[MAX_GODS];
-      int32 TempFavor[MAX_GODS];
+      int16 FavourLev[MAX_GODS];
+      int32 TempFavour[MAX_GODS];
       int16 Anger[MAX_GODS];
       int32 SacVals[MAX_GODS][MAX_SAC_CATS + 2];
       int16 FavPenalty[MAX_GODS];
@@ -713,7 +713,7 @@ class Character: public Creature
       void PaladinFall();
       void PaladinAtone();
       void SwapAttributes(int16 n);
-      int32 TotalExploreFavor();
+      int32 TotalExploreFavour();
       
       public:
       virtual int16 IAttr(int8 a);
@@ -770,9 +770,9 @@ class Character: public Creature
       
       void GrantSymbol(rID gID);
       void GodMessage(rID gID, int16 msgnum,...);
-      int32 calcFavor(rID gID);
-      void  gainedFavor(rID gID);
-      virtual void gainFavor(rID gID, int32 amt, bool advance=false, bool stack=true);
+      int32 calcFavour(rID gID);
+      void  gainedFavour(rID gID);
+      virtual void gainFavour(rID gID, int32 amt, bool advance=false, bool stack=true);
       virtual rID getGod() { return GodID; }
       
       EvReturn AlignedAct(EventInfo &e);
@@ -793,7 +793,7 @@ class Character: public Creature
       void resetGodFlags(rID gID, uint16 fl)
         { godFlags[theGame->GodNum(gID)] &= ~fl; }
       int16 getGodLevel(rID gID)
-        { return FavorLev[theGame->GodNum(gID)]; }
+        { return FavourLev[theGame->GodNum(gID)]; }
       int16 getGodAnger(rID gID) /* HACKFIX */
         { int16 ang = Anger[theGame->GodNum(gID)];
           ang -= TGOD(gID)->GetConst(TOLERANCE_VAL);
@@ -900,7 +900,7 @@ typedef struct {
 
 /* This structure can store the result to the following:
    * Turn or command undead? [tc] -- stores 't'
-   * LMenu questions (favored enemies, weapon focus,
+   * LMenu questions (favoured enemies, weapon focus,
        feat choice, etc).
    * yes/no prompts
 */

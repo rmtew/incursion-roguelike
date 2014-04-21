@@ -8,7 +8,7 @@
 */
 
 #include "Incursion.h"
-#include "inc/yygram.h"
+#include "yygram.h"
 #ifdef WIN32
 #include <io.h>
 #endif
@@ -17,7 +17,7 @@
 #include <ctype.h>
 #define YY_NEVER_INTERACTIVE 1
 extern int16 Errors;
-extern yywarning(const char*);
+extern void yywarning(const char*);
 char yyMap[60000];
 char preprocFilename[1024]; 
 
@@ -77,15 +77,15 @@ TextVal Keywords2[] = {
   { ATTACK, "Attk" },       { AVAL, "aval",  },       { BASE, "Base" },
   { BLESSED, "Blessed" },   { BRAWL, "Brawl" },       { BRIGHT, "Bright" },
   { CHANCE, "Chance" },     { CLASS, "class",  },     { CASTER, "caster" },
-  { WORD_COLOR, "Color" },  { CONSTANTS, "Constants" }, { CAPACITY, "capacity" },
+  { WORD_COLOR, "Colour" },  { CONSTANTS, "Constants" }, { CAPACITY, "capacity" },
   { COST, "Cost" },         { DMG, "damage",  },      { COVERAGE, "Coverage" },
   { COVERAGE, "Cov" },      { CTYPE, "CType" },       { WORD_FILE, "File" },
   { WORD_CR, "CR" },        { CRIT, "Crit" },         { CURSED, "Cursed" },
   { CVAL, "cval" },         { DMG, "Dam" },           { DARK, "Dark" },
   { DAY, "Day" },           { WORD_DC, "DC" },        { DEF, "Def" },
   { WORD_DESC, "desc" },    { DEPTH, "Depth" },       { DISEASE, "Disease" },
-  { DOOR, "door" },         { DMG, "Dmg" },           { FAVORED, "Favored" },
-  { FAVORED, "Favoured" },  { FLAVOR, "Flavor" },
+  { DOOR, "door" },         { DMG, "Dmg" },           { FAVORED, "Favoured" },
+  { FAVORED, "Favoured" },  { FLAVOR, "Flavour" },
   { DOMAINS, "domains" },   { DOMAIN, "domain" },     { DUNGEON, "Dungeon" },
   { DVAL, "dval" },         { EFFECT, "Effect" },     { EXPORT, "Export" },
   { WORD_ENCOUNTER, "Encounter"},{ BEHAVIOUR, "Behaviour" }, { PARTS, "Parts" },
@@ -149,7 +149,7 @@ TextVal DirWords[] = {
   { SOUTHEAST, "Southeast"},{SOUTHWEST, "Southwest"},{ UP, "Up" },
   { DOWN, "Down" },         { CENTER, "Center" },     { 0, NULL } };
 
-TextVal ColorWords[] = {
+TextVal ColourWords[] = {
   { BLACK, "black" },       { GREY, "grey" },         { GREY, "gray" },
   { WHITE, "white" },       { BLUE, "blue" },         { GREEN, "green" },
   { RED,   "red"   },       { PURPLE, "purple" },     { CYAN, "cyan" },
@@ -197,9 +197,9 @@ YYSTYPE DoKeywords(const char *text)
         if (stricmp(text,AttrWords[i].Text)==0)
           { yylval = AttrWords[i].Val; return ATTRIBUTE; }
 
-      for (i=0;ColorWords[i].Text;i++)
-        if (stricmp(text,ColorWords[i].Text)==0)
-          { yylval = ColorWords[i].Val; return COLOR; }
+      for (i=0;ColourWords[i].Text;i++)
+        if (stricmp(text,ColourWords[i].Text)==0)
+          { yylval = ColourWords[i].Val; return COLOR; }
       
       for (i=0;DirWords[i].Text;i++)
         if (stricmp(text,DirWords[i].Text)==0)

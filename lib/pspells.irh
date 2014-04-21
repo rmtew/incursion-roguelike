@@ -10,7 +10,7 @@ Priest / Druid  Spell "Call Light" : EA_GENERIC
 Priest  Spell "Command" : EA_GENERIC
 Priest / Druid Spell "Cure Light Wounds" : EA_HEALING
 Priest "Detect Evil" : EA_INFLICT
-Priest  Spell "Divine Favor" : EA_INFLICT
+Priest  Spell "Divine Favour" : EA_INFLICT
 Priest Spell "Holy Summoning I" : EA_SUMMON
 Priest Spell "Inflict Light Wounds" : EA_BLAST
 Druid Spell "Lifesight" : EA_INFLICT 
@@ -114,14 +114,14 @@ Priest  Spell "Bless" : EA_INFLICT
       __<9>Item Blessing:<1> This form of the spell makes a single chosen
       item <11>blessed<1>, often improving its effect in some manner.
       A blessed item cannot be picked up by undead, demons, devils, or 
-      lycanthropes. A blessed shield or suit of armor cumulatively 
+      lycanthropes. A blessed shield or suit of armour cumulatively 
       increases your Defense by +2 against the touch attacks of 
       such creatures. A blessed weapon strikes true against such creatures, 
       even if they have weapon immunity. A blessed weapon also strikes 
       true against evil incorporeal creatures.\n
       __You have the power to bless any item found commonly at a dungeon
       depth equal to or lower than half your caster level plus your secondary 
-      Charisma modifier, plus a modifier based on divine favor. Blessing an
+      Charisma modifier, plus a modifier based on divine favour. Blessing an
       item costs you 1 fatigue point, and is permanent until something acts
       to defile the item."; 
     On Event PRE(EV_EFFECT) {
@@ -392,7 +392,7 @@ Priest Spell "Doom" : EA_INFLICT
         "You feel gravely threatened.";
   }
 
-Priest  Spell "Divine Favor" : EA_INFLICT
+Priest  Spell "Divine Favour" : EA_INFLICT
   { SC_THE; IS_A_BUFF(COST_1); Level: 1; 
     xval: ADJUST_SAC; yval: A_DMG; pval: LEVEL_EVERY4; 
     Desc: "Increases your attack rolls and the damage you inflict in combat 
@@ -617,7 +617,7 @@ Druid Spell "Camouflage" : EA_INFLICT
   { SC_ILL; IS_A_BUFF(COST_1); Level: 1;
     xval: SKILL_BONUS; yval: SK_HIDE; pval: +5;
     On Event MSG_STATINAME "Camo";
-    Desc: "This spell subtly alters the druid's coloration and the
+    Desc: "This spell subtly alters the druid's colouration and the
       play of light around her, causing her to blend in easily with
       rock, foliage or other natural surroundings and thus giving her
       a +5 magic bonus to her Hide skill rating.";
@@ -774,7 +774,7 @@ Druid Spell "Sandblast" : EA_BLAST
       1d6 points of abrasive (slashing) damage per caster level, in
       a 10 foot long arc in a direction of your choice. Creatures
       who fail to save against the effect are also stunned, but
-      creatures with an armor rating of 7 or more against slashing
+      creatures with an armour rating of 7 or more against slashing
       damage are immune to this spell's effects. This spell does not
       provoke an attack of opportunity when cast.";
     On Event EV_ISTARGET {
@@ -1154,9 +1154,9 @@ Effect "Silversheen;spell" : EA_GENERIC
   {
     Level: 1; SC_ARC; IS_A_BUFF(COST_2X); Flags: EF_PERMANANT; 
     Desc: "This magical spell transmutes one of your non-organic 
-    weapons, missiles, shields or armor into silver. Silver weapons strike
+    weapons, missiles, shields or armour into silver. Silver weapons strike
     true against undead, demons, devil and lycanthropes but have only half 
-    the hardness of iron. Silver armor grants increased defense to attacks 
+    the hardness of iron. Silver armour grants increased defense to attacks 
     from such creatures. The transmutation is permanant."; 
     hObj it;
     On Event 
@@ -1168,7 +1168,7 @@ Effect "Silversheen;spell" : EA_GENERIC
           return CANNOT_CAST_IT;
         for(it=EActor->FirstInv();it;it=EActor->NextInv()) {
           if (it->isType(T_WEAPON) || it->isType(T_MISSILE) ||
-              it->isType(T_SHIELD) || it->isType(T_ARMOR))
+              it->isType(T_SHIELD) || it->isType(T_ARMOUR))
             if (it->QualityOK(IQ_SILVER) && it->isMetallic()) {
               /* VPrint(e, "You could silver your <hObj>.",
                 "The <EVictim> could silver <his:EVictim> <hObj>.",
@@ -1180,14 +1180,14 @@ Effect "Silversheen;spell" : EA_GENERIC
       },
     EV_RATETARG {
       if (EItem->isType(T_WEAPON) || EItem->isType(T_MISSILE) ||
-          EItem->isType(T_SHIELD) || EItem->isType(T_ARMOR))
+          EItem->isType(T_SHIELD) || EItem->isType(T_ARMOUR))
         if (EItem->QualityOK(IQ_SILVER) && EItem->isMetallic())
           return NOTHING;
       return ABORT;
       },  
     EV_MAGIC_STRIKE {
       if (ETarget->isType(T_WEAPON) || ETarget->isType(T_MISSILE) ||
-          ETarget->isType(T_SHIELD) || ETarget->isType(T_ARMOR))
+          ETarget->isType(T_SHIELD) || ETarget->isType(T_ARMOUR))
         if (ETarget->QualityOK(IQ_SILVER) && ETarget->isMetallic())
           ETarget->GainTempStati(EXTRA_QUALITY,EActor,e.vDuration,SS_ENCH,
               IQ_SILVER,IQ_SILVER, $"silversheen;spell", e.vCasterLev);
@@ -1254,7 +1254,7 @@ Effect "Brand of Hatred" : EA_GENERIC
   {
     IS_A_BUFF(COST_1X); SC_THE; Level: 1; qval: Q_INV;
     Desc: "This spell brands a weapon of your choice, forever marking it as a Bane 
-      weapon (+2 attack bonus, +2d6 magic damage) against your Favored Enemy from
+      weapon (+2 attack bonus, +2d6 magic damage) against your Favoured Enemy from
       the Hatred Domain power."; 
     hObj it; Flags: EF_AFFECTS_ITEMS, EF_ITEMS_ONLY;
     On Event 
@@ -2080,7 +2080,7 @@ Effect "Blood Fury" : EA_INFLICT
 Druid  Spell "Barkskin" : EA_INFLICT
   { SC_THA; IS_A_BUFF(COST_2X); Level: 2; 
     xval: ADJUST_INH; yval: A_ARM; pval: 3d1 + LEVEL_1PER5;
-    Desc: "Gives you a natural armor rating of 3, plus one for
+    Desc: "Gives you a natural armour rating of 3, plus one for
       every five caster levels above 1st."; 
     Constants:
       * SERVICE_SPELL_COST 50;
@@ -2108,7 +2108,7 @@ Druid Spell "Chill Metal" : EA_INFLICT
         if (it->GetParent() == GetHandle(EActor))
         { 
           if (it->isMetallic()) {
-            if ((it->isCursed() || it->isType(T_ARMOR) || it->isType(T_BOOTS)
+            if ((it->isCursed() || it->isType(T_ARMOUR) || it->isType(T_BOOTS)
                   || it->isType(T_CLOTHES)) && (it->IFlags & IF_WORN))
             {
               VPrint(e,"Your <hObj> sears your flesh!",
@@ -2134,7 +2134,7 @@ Druid Spell "Chill Metal" : EA_INFLICT
       };
     Desc: "Chills all the metal items a target carries, causing cold damage
     and often inspiring non-immune targets to drop loose metal items. 
-    Each round, metal armor, boots and clothes cause 2d4 points of cold
+    Each round, metal armour, boots and clothes cause 2d4 points of cold
     damage. Other worn metal items (e.g., bracers, amulets, gauntlets,
     girdles) cause 1d4 points of cold damage. Note that this spell
     does not benefit from the Maximize Spell or Empower Spell metamagic
@@ -2164,7 +2164,7 @@ Druid Spell "Heat Metal" : EA_INFLICT
         if (it->GetParent() == GetHandle(EActor))
         { 
           if (it->isMetallic()) {
-            if ((it->isCursed() || it->isType(T_ARMOR) || it->isType(T_BOOTS)
+            if ((it->isCursed() || it->isType(T_ARMOUR) || it->isType(T_BOOTS)
                   || it->isType(T_CLOTHES)) && (it->IFlags & IF_WORN))
             {
               VPrint(e,"Your <hObj> sears your flesh!",
@@ -2190,7 +2190,7 @@ Druid Spell "Heat Metal" : EA_INFLICT
       };
     Desc: "Heats all the metal items a target carries, causing fire damage
     and often inspiring non-immune targets to drop loose metal items. 
-    Each round, metal armor, boots and clothes cause 2d4 points of fire
+    Each round, metal armour, boots and clothes cause 2d4 points of fire
     damage. Other worn metal items (e.g., bracers, amulets, gauntlets,
     girdles) cause 1d4 points of fire damage. Note that this spell
     does not benefit from the Maximize Spell or Empower Spell metamagic
@@ -2285,7 +2285,7 @@ Druid Spell "Rooting" : EA_INFLICT
     Desc: "Casting this spell attunes the druid mystically to the
       earth or stone he is standing on, rooting him to the spot
       and bestowing the endurance of Therya itself. The druid gains
-      a +10 natural bonus to his armor rating versus slashing,
+      a +10 natural bonus to his armour rating versus slashing,
       piercing and blunt damage, as well as immunity to knockdown,
       stunning, knockback, teleportation and critical hits. The
       effects last until the druid moves.";
@@ -2680,7 +2680,7 @@ Effect "Zeal" : EA_GENERIC
       a Will saving throw against this spell's DC in order to attack
       the paladin, just as with <9>sanctuary<1>.\n
       __The traditional origins of this spell harken back to the knightly
-      tradition of fair single combat, and thus it finds great favor with
+      tradition of fair single combat, and thus it finds great favour with
       the paladins who serve Erich.";
     Flags: EF_SHOWNAME, EF_DLONG;
   }
@@ -2999,30 +2999,30 @@ and EA_INFLICT
 Priest Spell "Magic Vestment" : EA_GENERIC
   { SC_WEA; IS_A_BUFF(COST_3); Level: 3; qval: Q_INV; 
     Desc: "Casting this spell temporarily enchants a single chosen suit
-      of armor with a magical bonus of +1 per three caster
+      of armour with a magical bonus of +1 per three caster
       levels, to a maximum of +5 at 15th. This bonus does 
-      not stack with any other magical bonus the armor may have."; 
+      not stack with any other magical bonus the armour may have."; 
     hObj it;
     On Event 
       EV_ISTARGET {
-        if (ETarget->isType(T_ARMOR))
+        if (ETarget->isType(T_ARMOUR))
           if (ETarget->GetQuantity() == 1)
             return CAN_CAST_IT;
         if (ETarget->isMonster())
-          if (ETarget->InSlot(SL_ARMOR) != NULL_OBJ)
-            if (ETarget->InSlot(SL_ARMOR)->GetPlus() < 
+          if (ETarget->InSlot(SL_ARMOUR) != NULL_OBJ)
+            if (ETarget->InSlot(SL_ARMOUR)->GetPlus() < 
                  max(1,min(5,EActor->CasterLev() / 3)))
               return SHOULD_CAST_IT;
         return CANNOT_CAST_IT; 
         },
       EV_RATETARG {
-        if (EItem->isType(T_ARMOR))
+        if (EItem->isType(T_ARMOUR))
           return NOTHING;
         return ABORT;
         },
       PRE(EV_EFFECT) {
         if (EActor->isMonster())
-          SetETarget(e,EActor->InSlot(SL_ARMOR));
+          SetETarget(e,EActor->InSlot(SL_ARMOUR));
         return NOTHING;
         },
       EV_MAGIC_STRIKE {
@@ -3200,7 +3200,7 @@ Druid  Spell "Earthmaw" : EA_BLAST
   }
   
 // I know that Ironwood is normally a sixth level spell that turns wood
-// into iron ... but for the purposes of Incursion (where no wood armor
+// into iron ... but for the purposes of Incursion (where no wood armour
 // occurs ...) we'll make it a 2nd level spell that turns iron into wood. 
 // Thus the wandering druid can find a suit of +3 chainmail and fashion it
 // into ironwood, or make her scimitar resistant to Chill Metal. 
@@ -3214,7 +3214,7 @@ Druid Spell "Ironwood;spell" : EA_GENERIC
     abilities that affect metal or iron (such as rusting or the Heat Metal
     spell) do not function on ironwood. Spells that affect wood do affect
     ironwood, although ironwood does not burn. Ironwood items are freely
-    usable by druids because ironwood armor does not interfere with their
+    usable by druids because ironwood armour does not interfere with their
     primal spellcasting."; 
     hObj it; qval: Q_INV;
     On Event EV_ISTARGET {
@@ -3387,14 +3387,14 @@ Monster "small spectral spider;mon" : MA_QUADRUPED, MA_OUTSIDER, MA_CONSTRUCT
 
 /* We don't use IS_A_BUFF here because we don't want
    EV_SHOWNAME. */
-Effect "Armor of Darkness" : EA_GRANT
+Effect "Armour of Darkness" : EA_GRANT
   {
     SC_THE; Cost: 30; Base: SP_BUFF; Level: 3; sval: FORT+10;
     xval: TRAP_EVENT; yval: POST(EVICTIM(EV_HIT)); 
     Flags: EF_EVIL, EF_LOSEMANA, EF_NOTBAD, EF_PERSISTANT, EF_CANCEL;
     Desc: "Casting this spell congeals the pure spiritual
       matter of evil around your body into a suit of black
-      chainmail as smooth as silk. This armor gives you a
+      chainmail as smooth as silk. This armour gives you a
       slashing rating of 7, piercing of 5 and blunt of 3,
       and is considered to have a +4 magical enchantment.
       Additionally, whenever anyone strikes you, they are
@@ -3403,19 +3403,19 @@ Effect "Armor of Darkness" : EA_GRANT
       the drain.";
     On Event PRE(EV_MAGIC_HIT) {
       hObj it; int16 t;
-      if (EActor->InSlot(SL_ARMOR))
+      if (EActor->InSlot(SL_ARMOUR))
         {
-          EActor->IPrint("You are already wearing armor. You must
+          EActor->IPrint("You are already wearing armour. You must
             take it off to cast this spell.");
           return ABORT;
         }
-      it = CreateItem($"armor of darkness;item");
+      it = CreateItem($"armour of darkness;item");
       it->SetInherantPlus(4);
       it->GainTempStati(SUMMONED,EActor,-2,SS_ENCH,0,0,
-         $"Armor of Darkness", e.vCasterLev);
+         $"Armour of Darkness", e.vCasterLev);
       it->AddQuality(IQ_FEATHERLIGHT);
       t = EActor->Timeout;
-      if (ThrowVal(EV_WIELD,SL_ARMOR,EActor,NULL,it) != DONE)
+      if (ThrowVal(EV_WIELD,SL_ARMOUR,EActor,NULL,it) != DONE)
         {
           it->Remove(true);
           return ABORT;
@@ -3430,25 +3430,25 @@ Effect "Armor of Darkness" : EA_GRANT
           e.AType == A_SPEL)
         return NOTHING;
       if (EActor->SavingThrow(FORT,EVictim->GetEffStatiVal(TRAP_EVENT,
-           $"Armor of Darkness"), SA_MAGIC|SA_SPELLS|SA_EVIL|SA_NECRO))
+           $"Armour of Darkness"), SA_MAGIC|SA_SPELLS|SA_EVIL|SA_NECRO))
         {
-          TPrint(e,"You resist the effects of the <EVictim>'s armor.", 
-                   "The <EActor> resists the effects of your armor.",
+          TPrint(e,"You resist the effects of the <EVictim>'s armour.", 
+                   "The <EActor> resists the effects of your armour.",
                    "");
           return NOTHING;
         }
-      TPrint(e,"The <EVictim>'s black armor saps your life!",
-               "Your black armor saps the <EActor>'s life!",
+      TPrint(e,"The <EVictim>'s black armour saps your life!",
+               "Your black armour saps the <EActor>'s life!",
                "The <EActor> looks deathly pale.");
       ThrowDmg(EV_DAMAGE,AD_DREX,2d10, XPrint(
-        "touching an <hObj>'s Armor of Darkness", EVictim), EVictim,EActor);
+        "touching an <hObj>'s Armour of Darkness", EVictim), EVictim,EActor);
       return NOTHING;
       },
     EV_REMOVED {
       if (EActor->isCreature())
-        if (EActor->InSlot(SL_ARMOR) != NULL_OBJ)
-          if (EActor->InSlot(SL_ARMOR)->iID == $"Armor of Darkness;item")
-            EActor->InSlot(SL_ARMOR)->Remove(true);
+        if (EActor->InSlot(SL_ARMOUR) != NULL_OBJ)
+          if (EActor->InSlot(SL_ARMOUR)->iID == $"Armour of Darkness;item")
+            EActor->InSlot(SL_ARMOUR)->Remove(true);
       return NOTHING;
       },
     MSG_CAST 
@@ -3456,33 +3456,33 @@ Effect "Armor of Darkness" : EA_GRANT
       "Glistening black chainmail forms over the <EActor>'s body!";
   }
 
-Item "Armor of Darkness;item" : T_ARMOR
+Item "Armour of Darkness;item" : T_ARMOUR
   {
-    Image: cyan GLYPH_MARMOR; Cost: 150;
+    Image: cyan GLYPH_MARMOUR; Cost: 150;
     Mat: MAT_IRON; Weight: 400;
     Arm: Slash 7, Pierce 5, Blunt 3;
     Coverage: 10; Penalty: -7;
-    Group: WG_MARMOR; Flags: IT_NOGEN;
-    Desc: "While this armor appears to be glistening black chainmail
+    Group: WG_MARMOUR; Flags: IT_NOGEN;
+    Desc: "While this armour appears to be glistening black chainmail
       made with incredibly fine links at first glance, it is in fact
       a magical conjuration formed from the pure spiritual matter of
-      evil. Armor of Darkness is created by priests that have access
+      evil. Armour of Darkness is created by priests that have access
       to the Evil domain.";
     On Event PRE(EV_DROP), PRE(EV_REMOVE) {
-      EActor->IPrint("You dispel the conjured armor.");
-      EItem->GetStatiObj(SUMMONED)->RemoveEffStati($"Armor of Darkness");
+      EActor->IPrint("You dispel the conjured armour.");
+      EItem->GetStatiObj(SUMMONED)->RemoveEffStati($"Armour of Darkness");
       EItem->Remove(true);
       return DONE;
       },
     PRE(EV_PLACE) {
       APrint(e,"The glistening black chainmail dissolves into nothing.");
-      EActor->GetStatiObj(SUMMONED)->RemoveEffStati($"Armor of Darkness");
+      EActor->GetStatiObj(SUMMONED)->RemoveEffStati($"Armour of Darkness");
       EActor->Remove(true);
       return ABORT;
       },
     PRE(EV_LOSEITEM) {
       APrint(e,"The glistening black chainmail dissolves into nothing.");
-      EItem->GetStatiObj(SUMMONED)->RemoveEffStati($"Armor of Darkness");
+      EItem->GetStatiObj(SUMMONED)->RemoveEffStati($"Armour of Darkness");
       EItem->Remove(true);
       return DONE;
       },
@@ -3491,7 +3491,7 @@ Item "Armor of Darkness;item" : T_ARMOR
         {
           e.nCursed = "";
           e.nAppend += XPrint(" (DC <Num>)",
-             EActor->Owner()->GetEffStatiVal(TRAP_EVENT,$"Armor of Darkness"));
+             EActor->Owner()->GetEffStatiVal(TRAP_EVENT,$"Armour of Darkness"));
         }
       return NOTHING;
       };
@@ -4141,7 +4141,7 @@ Druid  Spell "Dire Regression" : EA_GENERIC
     Dire template permanantly. Dire animals have a vaguely prehistoric
     look. They are stronger, tougher and larger than their mundane
     counterparts. Dire animals gain one size level, +4 strength, +2
-    dexterity, +2 constitution, a +3 natural armor bonus, +4 to hit and +4
+    dexterity, +2 constitution, a +3 natural armour bonus, +4 to hit and +4
     hit dice. They become immune to fear. These bonuses are template
     bonuses. This spell does not work on players.";
     Constants:
@@ -4320,7 +4320,7 @@ Effect "Infernal Blood" : EA_GENERIC
   { SC_THE; SC_THA; IS_A_BUFF(COST_5); 
     Level: 5; qval: Q_TAR;
     Desc: "Infuses the blood of the target with the blood of demons. The
-    target gains the benefit of the Half-Fiend template: +4 Natural Armor,
+    target gains the benefit of the Half-Fiend template: +4 Natural Armour,
     +4 Strength, +4 Dexterity, +2 Constitution, +4 Intelligence, +2
     Charisma, the Outsider type, resistance to Acid, Cold, Fire and
     Electricity, and immunity to Poison."; 
@@ -4578,7 +4578,7 @@ Priest Spell "Righteous Might" : EA_INFLICT
     Desc: "Your height immediately doubles and your weight increases by a
       factor of eight. This increase changes your size category to the next
       larger one, and you gain a +4 size bonus to strength and a +2 size
-      bonus to constitution. You also gain a bonus to your natural armor rating
+      bonus to constitution. You also gain a bonus to your natural armour rating
       equal to 3 plus 1 for every 5 caster levels, and a +5 circumstance bonus
       to the Intimidate skill. When this spell expires, you lose two fatigue 
       points.";
@@ -4678,7 +4678,7 @@ Druid Spell "Animal Growth" : EA_INFLICT        // WW: SRD
     Desc: "This spell causes an animal or beast to grow to twice its normal
     size and eight times its current weight. This alteration increases the
     target's size category by +1, its strength by +8, its constitution by
-    +4, its dexterity by -2, its natural armor by +12 and its saving throws
+    +4, its dexterity by -2, its natural armour by +12 and its saving throws
     by +4.  All of these bonuses are Circumstance Bonuses."; 
     On Event
     EV_ISTARGET {
@@ -5164,8 +5164,8 @@ Priest Spell "Animate Objects" : EA_GENERIC
           if (hItem->isType(T_CORPSE))
             return NOTHING;
           
-          /* For now, don't animate worn armor. */
-          if (hItem->isType(T_ARMOR))
+          /* For now, don't animate worn armour. */
+          if (hItem->isType(T_ARMOUR))
             return NOTHING;
             
           if (EVictim->SavingThrow(REF,e.saveDC,SA_SPELLS|SA_MAGIC))

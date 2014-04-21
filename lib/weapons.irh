@@ -86,7 +86,7 @@ Item "trident" : T_WEAPON
     SDmg: 1d8; LDmg: 1d8; Acc: +0; Crit: x2; Threat: 1; Spd: 110%;
     Flags: WT_PIERCING, WT_CHARGE;
     Desc: "The trident is a three-pronged spear which is often
-      favored by seafaring races and cultures."; }
+      favoured by seafaring races and cultures."; }
 
 Item "longspear" : T_WEAPON
   { Image: bright brown GLYPH_WEAPON; Group: WG_SPEARS | WG_POLEARMS; Range: 1;
@@ -214,7 +214,7 @@ Item "voulge" : T_WEAPON
     SDmg: 2d6; LDmg: 2d6; Acc: -1; Crit: x3; Threat: 1; Spd: 70%;
     Flags: WT_SLASHING, WT_PENETRATING, WT_WOOD_PARTS;
     Desc: "It's an axe on a stick! The voulge is essentially a longaxe,
-      and is useful for hacking through plate armors."; }
+      and is useful for hacking through plate armours."; }
 
 
 Item "saw-toothed glaive" : T_WEAPON
@@ -389,7 +389,7 @@ Item "warhammer" : T_WEAPON
     SDmg: 1d8; LDmg: 1d8; Acc: 0; Crit: x3; Threat: 1; Spd: 80%;
     Flags: WT_BLUNT, WT_STR2, WT_STUNNING, WT_PENETRATING;
     Desc: "The warhammer is a blunt weapon designed specifically to
-      punch through plate armors. Its blows carry terrible force
+      punch through plate armours. Its blows carry terrible force
       with them."; }
 
 
@@ -594,10 +594,10 @@ Item "elven thinblade" : T_WEAPON
     Desc: "The natural evolution of the rapier given the existance of
       extremely strong and light metals like mithril, the elven thinblade
       is a long, needle-like sword that weighs almost nothing, can pass
-      through the links of crude chain armor and swings with terrible
+      through the links of crude chain armour and swings with terrible
       speed. These weapons are uncommon outside the elven
       courts, as they don't tend to stand up well to wear and tear, are
-      tremendously expensive and fare poorly against the natural armors
+      tremendously expensive and fare poorly against the natural armours
       of creatures that adventurers usually fight."; }
 
 Item "mercurial broadsword" : T_WEAPON
@@ -638,7 +638,7 @@ Item "stiletto" : T_WEAPON
     SDmg: 1d6; LDmg: 1d3; Acc: 0; Crit: x3; Threat: 1; Spd: 170%;
     Flags: WT_PIERCING, WT_SUPER_SNEAK, WT_PENETRATING, WT_NO_STRENGTH; 
     Desc: "This exceedingly thin blade is most famous for its ability
-      to cut through chain armors."; }
+      to cut through chain armours."; }
 
 Item "main gauche" : T_WEAPON
   { Image: grey GLYPH_SWORD; Group: WG_DAGGERS | WG_LIGHT;
@@ -704,7 +704,7 @@ Item "scourge" : T_WEAPON
     Desc: "The scourge, or cat o' nine tails, in a multi-headed whip
       with hooks or blades mounted along each tail's length. While it
       is commonly viewed as a torturer's weapon, it can also be useful
-      on a battlefield. Many demons, such as the dread balors, favor
+      on a battlefield. Many demons, such as the dread balors, favour
       this weapon."; }
 
 Item "whip" : T_WEAPON
@@ -728,7 +728,7 @@ Item "scythe" : T_WEAPON
     Desc: "Originally an agricultural implement, the scythe can also be
       a terrifying instrument of war. It is difficult to use effectively,
       but devastating in skilled hands. Druids, and those who kill in
-      their service, often favor this weapon."; }
+      their service, often favour this weapon."; }
 
 Item "great scythe" : T_WEAPON
   { Image: bright purple GLYPH_WEAPON; Group: WG_LBLADES | WG_EXOTIC;
@@ -795,7 +795,7 @@ Item "nunchaku" : T_WEAPON
     Parry: +5; SDmg: 1d6; LDmg: 1d4; Acc: +1; Crit: x2; Threat: 2; Spd: 160%;
     Flags: WT_BLUNT, WT_SUPER_DISARM;
     Desc: "Two short wooden sticks connected by a chain or rope, the
-      nunchaku are a weapon favored by some monkish orders, and almost
+      nunchaku are a weapon favoured by some monkish orders, and almost
       nobody else."; }
 
 Item "chakram" : T_WEAPON
@@ -817,7 +817,7 @@ Item "boomerang" : T_WEAPON
     Flags: WT_BLUNT, WT_RETURNING, WT_NO_MELEE;
     Desc: "The boomerang is a curved wooden throwing instrument
       designed for blunt impact; the lizardfolk are known to
-      favor their use."; }
+      favour their use."; }
 
 Item "sap" : T_WEAPON
   { Image: brown GLYPH_WEAPON; Group: WG_EXOTIC | WG_SIMPLE | WG_LIGHT;
@@ -890,7 +890,7 @@ Item "tiger claws" : T_WEAPON
     Flags: WT_SLASHING, WT_SUPER_SNEAK, IT_PLURAL; 
     Desc: "Similar in make to contemporary brass knuckles, but
       with inch-long curved blades sprouting from each 'knuckle',
-      these weapons are favored by theieves and assasins because
+      these weapons are favoured by theieves and assasins because
       their small size makes it easy to get them into places
       where weapons aren't supposed to be."; }
 
@@ -921,7 +921,7 @@ Item "long bow" : T_BOW
     Size: SZ_LARGE;
     Flags: WT_TWO_HANDED, WT_NO_STRENGTH, WT_PIERCING, WT_WOOD_PARTS,
            WT_NO_MELEE, WT_PIERCING;
-    Desc: "The long bow is favored by elven warriors for its simplicity,
+    Desc: "The long bow is favoured by elven warriors for its simplicity,
       power and easy creation. It is also the staple of many of the less
       funded units of the Great Empire's armies.";/* However, among adventurers
       and the modern military, its use has largely been superceded by the
@@ -995,7 +995,7 @@ Item "cranquin" : T_BOW
            WT_NO_MELEE, WT_PIERCING, WT_STUNNING;
     Fires: $"crossbow bolt";
     Desc: "The cranquin, or heavy crossbow, is a crank-operated miniature
-      ballista favored by dwarven and orcish militaries. It is rather
+      ballista favoured by dwarven and orcish militaries. It is rather
       difficult for a single person to reload, and is a large and awkward
       weapon in general, which explains why it is considered an exotic
       weapon. Skilled adventurers often favour the more conventional bows, 
@@ -1064,8 +1064,8 @@ Item "blowpipe" : T_BOW
     Size: SZ_SMALL;
     Flags: WT_NO_STRENGTH, WT_PIERCING, WT_WOOD_PARTS, WT_NO_MELEE;
     Desc: "The blowpipe provides a method of rapidly delivering darts at a
-      longer range. It is favored in Angla Maua, especially in conjunction
-      with poisoned darts, but is often rejected in favor of the bow or
+      longer range. It is favoured in Angla Maua, especially in conjunction
+      with poisoned darts, but is often rejected in favour of the bow or
       arbalest in the rest of Therya.";  
   }
 
@@ -1115,211 +1115,211 @@ Item "sling stone" : T_MISSILE
 
 
 /************************************************************************\
- *                                ARMOR                                 *
+ *                                ARMOUR                                 *
 \************************************************************************/
 
-Item "padded armor" : T_ARMOR
+Item "padded armour" : T_ARMOUR
   {
-    Image: white GLYPH_LARMOR; Cost: 5;
+    Image: white GLYPH_LARMOUR; Cost: 5;
     Mat: MAT_CLOTH; Weight: 100;
     Arm: Slash 2, Pierce 1, Blunt 3;
     Coverage: 8; Penalty: -1;
-    Group: WG_LARMOR; Flags: IT_PLURAL;
+    Group: WG_LARMOUR; Flags: IT_PLURAL;
   }
 
-Item "cord armor" : T_ARMOR
+Item "cord armour" : T_ARMOUR
   {
-    Image: blue GLYPH_LARMOR; Cost: 7;
+    Image: blue GLYPH_LARMOUR; Cost: 7;
     Mat: MAT_LEATHER; Weight: 120;
     Arm: Slash 3, Pierce 1, Blunt 2;
     Coverage: 6; Penalty: -2;
-    Group: WG_LARMOR; Flags: IT_PLURAL;
+    Group: WG_LARMOUR; Flags: IT_PLURAL;
   }
 
-Item "bonemail armor" : T_ARMOR
+Item "bonemail armour" : T_ARMOUR
   {
-    Image: white GLYPH_LARMOR; Cost: 9;
+    Image: white GLYPH_LARMOUR; Cost: 9;
     Mat: MAT_BONE; Weight: 150;
     Arm: Slash 3, Pierce 2, Blunt 1;
     Coverage: 8; Penalty: -1;
-    Group: WG_LARMOR; Flags: IT_PLURAL;
+    Group: WG_LARMOUR; Flags: IT_PLURAL;
   }
 
-Item "leather armor" : T_ARMOR
+Item "leather armour" : T_ARMOUR
   {
-    Image: brown GLYPH_LARMOR; Cost: 10;
+    Image: brown GLYPH_LARMOUR; Cost: 10;
     Mat: MAT_LEATHER; Weight: 150;
     Arm: Slash 3, Pierce 1, Blunt 3;
     Coverage: 8; Penalty: -2;
-    Group: WG_LARMOR; Flags: IT_PLURAL;
+    Group: WG_LARMOUR; Flags: IT_PLURAL;
   }
 
-Item "bark armor" : T_ARMOR
+Item "bark armour" : T_ARMOUR
   {
-    Image: green GLYPH_LARMOR; Cost: 5;
+    Image: green GLYPH_LARMOUR; Cost: 5;
     Mat: MAT_WOOD; Weight: 150;
     Arm: Slash 3, Pierce 3, Blunt 3;
     Coverage: 9; Penalty: -4;
-    Group: WG_LARMOR; Flags: IT_PLURAL;
+    Group: WG_LARMOUR; Flags: IT_PLURAL;
   }
 
-Item "studded leather" : T_ARMOR
+Item "studded leather" : T_ARMOUR
   {
-    Image: brown GLYPH_LARMOR; Cost: 25;
+    Image: brown GLYPH_LARMOUR; Cost: 25;
     Mat: MAT_LEATHER; Weight: 200;
     Arm: Slash 3, Pierce 4, Blunt 4;
     Coverage: 8; Penalty: -4;
-    Group: WG_LARMOR; Flags: IT_PLURAL;
+    Group: WG_LARMOUR; Flags: IT_PLURAL;
   }
 
-Item "coat of plates" : T_ARMOR
+Item "coat of plates" : T_ARMOUR
   {
-    Image: cyan GLYPH_LARMOR; Cost: 35;
+    Image: cyan GLYPH_LARMOUR; Cost: 35;
     Mat: MAT_IRON; Weight: 250;
     Arm: Slash 5, Pierce 2, Blunt 2;
     Coverage: 7; Penalty: -1;
-    Group: WG_LARMOR;
+    Group: WG_LARMOUR;
   }
 
-Item "chainmail shirt" : T_ARMOR
+Item "chainmail shirt" : T_ARMOUR
   {
-    Image: cyan GLYPH_LARMOR; Cost: 100;
+    Image: cyan GLYPH_LARMOUR; Cost: 100;
     Mat: MAT_IRON; Weight: 250;
     Arm: Slash 7, Pierce 5, Blunt 3;
     Coverage: 5; Penalty: -5;
-    Group: WG_LARMOR; 
+    Group: WG_LARMOUR; 
   }
 
-Item "hide armor" : T_ARMOR
+Item "hide armour" : T_ARMOUR
   {
-    Image: blue GLYPH_MARMOR; Cost: 15;
+    Image: blue GLYPH_MARMOUR; Cost: 15;
     Mat: MAT_LEATHER; Weight: 250;
     Arm: Slash 4, Pierce 5, Blunt 5;
     Coverage: 8; Penalty: -5;
-    Group: WG_MARMOR; Flags: IT_PLURAL;
+    Group: WG_MARMOUR; Flags: IT_PLURAL;
   }
 
-Item "ring mail" : T_ARMOR
+Item "ring mail" : T_ARMOUR
   {
-    Image: red GLYPH_MARMOR; Cost: 40;
+    Image: red GLYPH_MARMOUR; Cost: 40;
     Mat: MAT_IRON; Weight: 250;
     Arm: Slash 4, Pierce 4, Blunt 2;
     Coverage: 9; Penalty: -3;
-    Group: WG_MARMOR; Flags: IT_PLURAL;
+    Group: WG_MARMOUR; Flags: IT_PLURAL;
   }
 
-Item "scale mail" : T_ARMOR
+Item "scale mail" : T_ARMOUR
   {
-    Image: red GLYPH_MARMOR; Cost: 50;
+    Image: red GLYPH_MARMOUR; Cost: 50;
     Mat: MAT_IRON; Weight: 300;
     Arm: Slash 4, Pierce 5, Blunt 4;
     Coverage: 10; Penalty: -4;
-    Group: WG_MARMOR; Flags: IT_PLURAL;
+    Group: WG_MARMOUR; Flags: IT_PLURAL;
   }
 
-Item "brigandine" : T_ARMOR
+Item "brigandine" : T_ARMOUR
   {
-    Image: red GLYPH_MARMOR; Cost: 60;
+    Image: red GLYPH_MARMOUR; Cost: 60;
     Mat: MAT_IRON; Weight: 300;
     Arm: Slash 5, Pierce 5, Blunt 3;
     Coverage: 10; Penalty: -6;
-    Group: WG_MARMOR; Flags: IT_PLURAL;
+    Group: WG_MARMOUR; Flags: IT_PLURAL;
   }
 
-Item "chainmail" : T_ARMOR
+Item "chainmail" : T_ARMOUR
   {
-    Image: cyan GLYPH_MARMOR; Cost: 150;
+    Image: cyan GLYPH_MARMOUR; Cost: 150;
     Mat: MAT_IRON; Weight: 400;
     Arm: Slash 7, Pierce 5, Blunt 3;
     Coverage: 10; Penalty: -7;
-    Group: WG_MARMOR; Flags: IT_PLURAL;
+    Group: WG_MARMOUR; Flags: IT_PLURAL;
   }
 
-Item "chainmail hauberk" : T_ARMOR
+Item "chainmail hauberk" : T_ARMOUR
   {
-    Image: cyan GLYPH_MARMOR; Cost: 125;
+    Image: cyan GLYPH_MARMOUR; Cost: 125;
     Mat: MAT_IRON; Weight: 400;
     Arm: Slash 7, Pierce 5, Blunt 3;
     Coverage: 7; Penalty: -3;
-    Group: WG_MARMOR;
+    Group: WG_MARMOUR;
   }
 
 
-Item "breastplate" : T_ARMOR
+Item "breastplate" : T_ARMOUR
   {
-    Image: purple GLYPH_MARMOR; Cost: 200;
+    Image: purple GLYPH_MARMOUR; Cost: 200;
     Mat: MAT_IRON; Weight: 300;
     Arm: Slash 12, Pierce 8, Blunt 6;
     Coverage: 5; Penalty: -6;
-    Group: WG_MARMOR;
+    Group: WG_MARMOUR;
   }
 
-Item "augmented mail" : T_ARMOR
+Item "augmented mail" : T_ARMOUR
   {
-    Image: red GLYPH_MARMOR; Cost: 250;
+    Image: red GLYPH_MARMOUR; Cost: 250;
     Mat: MAT_IRON; Weight: 500;
     Arm: Slash 9, Pierce 6, Blunt 5;
     Coverage: 10; Penalty: -6;
-    Group: WG_MARMOR; Flags: IT_PLURAL;
+    Group: WG_MARMOUR; Flags: IT_PLURAL;
   }                         
 
 /* Double Mail */
 
-Item "splint mail" : T_ARMOR
+Item "splint mail" : T_ARMOUR
   {
-    Image: red GLYPH_HARMOR; Cost: 200;
+    Image: red GLYPH_HARMOUR; Cost: 200;
     Mat: MAT_IRON; Weight: 450;
     Arm: Slash 6, Pierce 7, Blunt 9;
     Coverage: 10; Penalty: -7;
-    Group: WG_HARMOR; Flags: IT_PLURAL;
+    Group: WG_HARMOUR; Flags: IT_PLURAL;
   }
 
-Item "banded mail" : T_ARMOR
+Item "banded mail" : T_ARMOUR
   {
-    Image: red GLYPH_HARMOR; Cost: 200;
+    Image: red GLYPH_HARMOUR; Cost: 200;
     Mat: MAT_IRON; Weight: 350;
     Arm: Slash 11, Pierce 7, Blunt 9;
     Coverage: 10; Penalty: -8;
-    Group: WG_HARMOR; Flags: IT_PLURAL;
+    Group: WG_HARMOUR; Flags: IT_PLURAL;
   }
 
-Item "plate mail" : T_ARMOR
+Item "plate mail" : T_ARMOUR
   {
-    Image: purple GLYPH_HARMOR; Cost: 600;
+    Image: purple GLYPH_HARMOUR; Cost: 600;
     Level: 3; 
     Mat: MAT_IRON; Weight: 450;
     Arm: Slash 12, Pierce 8, Blunt 8;
     Coverage: 10; Penalty: -7;
-    Group: WG_HARMOR; Flags: IT_PLURAL;
+    Group: WG_HARMOUR; Flags: IT_PLURAL;
   }
 
-Item "field plate armor" : T_ARMOR
+Item "field plate armour" : T_ARMOUR
   {
     Level: 4; 
-    Image: bright purple GLYPH_HARMOR; Cost: 1500;
+    Image: bright purple GLYPH_HARMOUR; Cost: 1500;
     Mat: MAT_IRON; Weight: 500;
     Arm: Slash 13, Pierce 9, Blunt 8;
     Coverage: 10; Penalty: -9;
-    Group: WG_HARMOR; Flags: IT_PLURAL;
+    Group: WG_HARMOUR; Flags: IT_PLURAL;
   }
 
-Item "full plate armor" : T_ARMOR
+Item "full plate armour" : T_ARMOUR
   {
     Level: 5; 
-    Image: bright purple GLYPH_HARMOR; Cost: 5000;
+    Image: bright purple GLYPH_HARMOUR; Cost: 5000;
     Mat: MAT_IRON; Weight: 600;
     Arm: Slash 15, Pierce 13, Blunt 8;
     Coverage: 10; Penalty: -8;
-    Group: WG_HARMOR; Flags: IT_PLURAL;
+    Group: WG_HARMOUR; Flags: IT_PLURAL;
   }
 
-Item "lamellar armor" : T_ARMOR
+Item "lamellar armour" : T_ARMOUR
   {
     Image: brown ']';
     Mat: MAT_IRON; Weight: 250;
     Arm: Slash 5, Pierce 6, Blunt 7;
     Coverage: 10; Penalty: -6;
-    Group: WG_HARMOR; Flags: IT_PLURAL;
+    Group: WG_HARMOUR; Flags: IT_PLURAL;
   }
 
 Item "hard steel cap" : T_HELMET
@@ -1327,14 +1327,14 @@ Item "hard steel cap" : T_HELMET
     Image: yellow GLYPH_HELMET;
     Mat: MAT_IRON; Weight: 30;
     Coverage: 2; Penalty: -2;
-    Group: WG_MARMOR;
+    Group: WG_MARMOUR;
   }
 
 Item "cured leather boots" : T_BOOTS
   {
     Image: white GLYPH_BOOTS;
     Mat: MAT_LEATHER; Weight: 10;
-    Coverage: 1; Group: WG_LARMOR;
+    Coverage: 1; Group: WG_LARMOUR;
     Flags: IT_PLURAL;
   }
 

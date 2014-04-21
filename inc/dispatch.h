@@ -572,9 +572,9 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n)
         REGS(n) = oThing(h)->isWeapon();
        return;
       case 108:
-        VERIFY(h,T_THING,"isArmor")
+        VERIFY(h,T_THING,"isArmour")
        ASSERT(REGS(63) >= 0)
-        REGS(n) = oThing(h)->isArmor();
+        REGS(n) = oThing(h)->isArmour();
        return;
       case 109:
         VERIFY(h,T_THING,"isFeature")
@@ -1086,9 +1086,9 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n)
         REGS(n) = oCreature(h)->canTalk();
        return;
       case 210:
-        VERIFY(h,T_CREATURE,"ArmorType")
+        VERIFY(h,T_CREATURE,"ArmourType")
        ASSERT(REGS(63) >= 0)
-        REGS(n) = oCreature(h)->ArmorType();
+        REGS(n) = oCreature(h)->ArmourType();
        return;
       case 211:
         VERIFY(h,T_CREATURE,"Encumbrance")
@@ -1588,14 +1588,14 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n)
                       VSTACK(3),VSTACK(4),VSTACK(5),VSTACK(6),VSTACK(7),VSTACK(8),VSTACK(9),VSTACK(10));
        return;
       case 308:
-        VERIFY(h,T_CHARACTER,"calcFavor")
+        VERIFY(h,T_CHARACTER,"calcFavour")
        ASSERT(REGS(63) >= 1)
-        REGS(n) = oCharacter(h)->calcFavor(STACK(1));
+        REGS(n) = oCharacter(h)->calcFavour(STACK(1));
        return;
       case 309:
-        VERIFY(h,T_CHARACTER,"gainFavor")
+        VERIFY(h,T_CHARACTER,"gainFavour")
        ASSERT(REGS(63) >= 4)
-        oCharacter(h)->gainFavor(STACK(1), STACK(2), STACK(3), STACK(4));
+        oCharacter(h)->gainFavour(STACK(1), STACK(2), STACK(3), STACK(4));
        return;
       case 310:
         VERIFY(h,T_CHARACTER,"lowerAnger")
@@ -1653,9 +1653,9 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n)
         oCharacter(h)->SwapAttributes(STACK(1));
        return;
       case 321:
-        VERIFY(h,T_CHARACTER,"TotalExploreFavor")
+        VERIFY(h,T_CHARACTER,"TotalExploreFavour")
        ASSERT(REGS(63) >= 0)
-        REGS(n) = oCharacter(h)->TotalExploreFavor();
+        REGS(n) = oCharacter(h)->TotalExploreFavour();
        return;
       case 322:
         VERIFY(h,T_MONSTER,"MakeCompanion")
@@ -1937,9 +1937,9 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n)
         REGS(n) = oItem(h)->ArmVal(STACK(1));
        return;
       case 377:
-        VERIFY(h,T_ITEM,"ArmorPenalty")
+        VERIFY(h,T_ITEM,"ArmourPenalty")
        ASSERT(REGS(63) >= 1)
-        REGS(n) = oItem(h)->ArmorPenalty(STACK(1));
+        REGS(n) = oItem(h)->ArmourPenalty(STACK(1));
        return;
       case 378:
         VERIFY(h,T_ITEM,"Hardness")
@@ -3116,7 +3116,7 @@ void VMachine::GetMemberVar(int16 varid, hObj h, int8 n)
           GETSTR(-1) = (pe->nAdjective);
          break;
         case 150:
-          GETSTR(-1) = (pe->nFlavor);
+          GETSTR(-1) = (pe->nFlavour);
          break;
         case 151:
           GETSTR(-1) = (pe->nInscrip);
@@ -3830,7 +3830,7 @@ void VMachine::SetMemberVar(int16 varid, hObj h, int32 val)
           pe->nAdjective = GETSTR(val);
          break;
         case 150:
-          pe->nFlavor = GETSTR(val);
+          pe->nFlavour = GETSTR(val);
          break;
         case 151:
           pe->nInscrip = GETSTR(val);

@@ -1,936 +1,936 @@
 
-Flavor "clear"           : AI_POTION  { Color: white; }
+Flavour "clear"           : AI_POTION  { Colour: white; }
 
-Flavor "crimson"                  : AI_POTION  { Color: red; }
-Flavor "black"                    : AI_POTION  { Color: black; }
-Flavor "emerald"                  : AI_POTION  { Color: bright green; }
-Flavor "amber"                    : AI_POTION  { Color: brown; }
-Flavor "silvery"                  : AI_POTION  { Color: white; }
-Flavor "white"                    : AI_POTION  { Color: grey; }
-Flavor "tan"                      : AI_POTION  { Color: brown; }
-Flavor "orange"                   : AI_POTION  { Color: pink; }
-Flavor "violet"                   : AI_POTION  { Color: purple; }
-Flavor "red"                      : AI_POTION  { Color: red; }
-Flavor "blue"                     : AI_POTION  { Color: blue; }
-Flavor "green"                    : AI_POTION  { Color: green; }
-Flavor "yellow"                   : AI_POTION  { Color: yellow; }
-Flavor "indigo"                   : AI_POTION  { Color: blue; }
+Flavour "crimson"                  : AI_POTION  { Colour: red; }
+Flavour "black"                    : AI_POTION  { Colour: black; }
+Flavour "emerald"                  : AI_POTION  { Colour: bright green; }
+Flavour "amber"                    : AI_POTION  { Colour: brown; }
+Flavour "silvery"                  : AI_POTION  { Colour: white; }
+Flavour "white"                    : AI_POTION  { Colour: grey; }
+Flavour "tan"                      : AI_POTION  { Colour: brown; }
+Flavour "orange"                   : AI_POTION  { Colour: pink; }
+Flavour "violet"                   : AI_POTION  { Colour: purple; }
+Flavour "red"                      : AI_POTION  { Colour: red; }
+Flavour "blue"                     : AI_POTION  { Colour: blue; }
+Flavour "green"                    : AI_POTION  { Colour: green; }
+Flavour "yellow"                   : AI_POTION  { Colour: yellow; }
+Flavour "indigo"                   : AI_POTION  { Colour: blue; }
 
-Flavor "viscious crimson"         : AI_POTION  { Color: red; }
-Flavor "viscious black"           : AI_POTION  { Color: black; }
-Flavor "viscious emerald"         : AI_POTION  { Color: bright green; }
-Flavor "viscious amber"           : AI_POTION  { Color: brown; }
-Flavor "viscious silvery"         : AI_POTION  { Color: white; }
-Flavor "viscious white"           : AI_POTION  { Color: grey; }
-Flavor "viscious tan"             : AI_POTION  { Color: brown; }
-Flavor "viscious orange"          : AI_POTION  { Color: pink; }
-Flavor "viscious violet"          : AI_POTION  { Color: purple; }
-Flavor "viscious red"             : AI_POTION  { Color: red; }
-Flavor "viscious blue"            : AI_POTION  { Color: blue; }
-Flavor "viscious green"           : AI_POTION  { Color: green; }
-Flavor "viscious yellow"          : AI_POTION  { Color: yellow; }
-Flavor "viscious indigo"          : AI_POTION  { Color: blue; }
+Flavour "viscious crimson"         : AI_POTION  { Colour: red; }
+Flavour "viscious black"           : AI_POTION  { Colour: black; }
+Flavour "viscious emerald"         : AI_POTION  { Colour: bright green; }
+Flavour "viscious amber"           : AI_POTION  { Colour: brown; }
+Flavour "viscious silvery"         : AI_POTION  { Colour: white; }
+Flavour "viscious white"           : AI_POTION  { Colour: grey; }
+Flavour "viscious tan"             : AI_POTION  { Colour: brown; }
+Flavour "viscious orange"          : AI_POTION  { Colour: pink; }
+Flavour "viscious violet"          : AI_POTION  { Colour: purple; }
+Flavour "viscious red"             : AI_POTION  { Colour: red; }
+Flavour "viscious blue"            : AI_POTION  { Colour: blue; }
+Flavour "viscious green"           : AI_POTION  { Colour: green; }
+Flavour "viscious yellow"          : AI_POTION  { Colour: yellow; }
+Flavour "viscious indigo"          : AI_POTION  { Colour: blue; }
 
-Flavor "glowing crimson"          : AI_POTION  { Color: red; }
-Flavor "glowing black"            : AI_POTION  { Color: black; }
-Flavor "glowing emerald"          : AI_POTION  { Color: bright green; }
-Flavor "glowing amber"            : AI_POTION  { Color: brown; }
-Flavor "glowing silvery"          : AI_POTION  { Color: white; }
-Flavor "glowing white"            : AI_POTION  { Color: grey; }
-Flavor "glowing tan"              : AI_POTION  { Color: brown; }
-Flavor "glowing orange"           : AI_POTION  { Color: pink; }
-Flavor "glowing violet"           : AI_POTION  { Color: purple; }
-Flavor "glowing red"              : AI_POTION  { Color: red; }
-Flavor "glowing blue"             : AI_POTION  { Color: blue; }
-Flavor "glowing green"            : AI_POTION  { Color: green; }
-Flavor "glowing yellow"           : AI_POTION  { Color: yellow; }
-Flavor "glowing indigo"           : AI_POTION  { Color: blue; }
+Flavour "glowing crimson"          : AI_POTION  { Colour: red; }
+Flavour "glowing black"            : AI_POTION  { Colour: black; }
+Flavour "glowing emerald"          : AI_POTION  { Colour: bright green; }
+Flavour "glowing amber"            : AI_POTION  { Colour: brown; }
+Flavour "glowing silvery"          : AI_POTION  { Colour: white; }
+Flavour "glowing white"            : AI_POTION  { Colour: grey; }
+Flavour "glowing tan"              : AI_POTION  { Colour: brown; }
+Flavour "glowing orange"           : AI_POTION  { Colour: pink; }
+Flavour "glowing violet"           : AI_POTION  { Colour: purple; }
+Flavour "glowing red"              : AI_POTION  { Colour: red; }
+Flavour "glowing blue"             : AI_POTION  { Colour: blue; }
+Flavour "glowing green"            : AI_POTION  { Colour: green; }
+Flavour "glowing yellow"           : AI_POTION  { Colour: yellow; }
+Flavour "glowing indigo"           : AI_POTION  { Colour: blue; }
 
-Flavor "metallic crimson"          : AI_POTION  { Color: red; }
-Flavor "metallic black"            : AI_POTION  { Color: black; }
-Flavor "metallic emerald"          : AI_POTION  { Color: bright green; }
-Flavor "metallic amber"            : AI_POTION  { Color: brown; }
-Flavor "metallic silvery"          : AI_POTION  { Color: white; }
-Flavor "metallic white"            : AI_POTION  { Color: grey; }
-Flavor "metallic tan"              : AI_POTION  { Color: brown; }
-Flavor "metallic orange"           : AI_POTION  { Color: pink; }
-Flavor "metallic violet"           : AI_POTION  { Color: purple; }
-Flavor "metallic red"              : AI_POTION  { Color: red; }
-Flavor "metallic blue"             : AI_POTION  { Color: blue; }
-Flavor "metallic green"            : AI_POTION  { Color: green; }
-Flavor "metallic yellow"           : AI_POTION  { Color: yellow; }
-Flavor "metallic indigo"           : AI_POTION  { Color: blue; }
+Flavour "metallic crimson"          : AI_POTION  { Colour: red; }
+Flavour "metallic black"            : AI_POTION  { Colour: black; }
+Flavour "metallic emerald"          : AI_POTION  { Colour: bright green; }
+Flavour "metallic amber"            : AI_POTION  { Colour: brown; }
+Flavour "metallic silvery"          : AI_POTION  { Colour: white; }
+Flavour "metallic white"            : AI_POTION  { Colour: grey; }
+Flavour "metallic tan"              : AI_POTION  { Colour: brown; }
+Flavour "metallic orange"           : AI_POTION  { Colour: pink; }
+Flavour "metallic violet"           : AI_POTION  { Colour: purple; }
+Flavour "metallic red"              : AI_POTION  { Colour: red; }
+Flavour "metallic blue"             : AI_POTION  { Colour: blue; }
+Flavour "metallic green"            : AI_POTION  { Colour: green; }
+Flavour "metallic yellow"           : AI_POTION  { Colour: yellow; }
+Flavour "metallic indigo"           : AI_POTION  { Colour: blue; }
 
-Flavor "syrupy crimson"          : AI_POTION  { Color: red; }
-Flavor "syrupy black"            : AI_POTION  { Color: black; }
-Flavor "syrupy emerald"          : AI_POTION  { Color: bright green; }
-Flavor "syrupy amber"            : AI_POTION  { Color: brown; }
-Flavor "syrupy silvery"          : AI_POTION  { Color: white; }
-Flavor "syrupy white"            : AI_POTION  { Color: grey; }
-Flavor "syrupy tan"              : AI_POTION  { Color: brown; }
-Flavor "syrupy orange"           : AI_POTION  { Color: pink; }
-Flavor "syrupy violet"           : AI_POTION  { Color: purple; }
-Flavor "syrupy red"              : AI_POTION  { Color: red; }
-Flavor "syrupy blue"             : AI_POTION  { Color: blue; }
-Flavor "syrupy green"            : AI_POTION  { Color: green; }
-Flavor "syrupy yellow"           : AI_POTION  { Color: yellow; }
-Flavor "syrupy indigo"           : AI_POTION  { Color: blue; }
+Flavour "syrupy crimson"          : AI_POTION  { Colour: red; }
+Flavour "syrupy black"            : AI_POTION  { Colour: black; }
+Flavour "syrupy emerald"          : AI_POTION  { Colour: bright green; }
+Flavour "syrupy amber"            : AI_POTION  { Colour: brown; }
+Flavour "syrupy silvery"          : AI_POTION  { Colour: white; }
+Flavour "syrupy white"            : AI_POTION  { Colour: grey; }
+Flavour "syrupy tan"              : AI_POTION  { Colour: brown; }
+Flavour "syrupy orange"           : AI_POTION  { Colour: pink; }
+Flavour "syrupy violet"           : AI_POTION  { Colour: purple; }
+Flavour "syrupy red"              : AI_POTION  { Colour: red; }
+Flavour "syrupy blue"             : AI_POTION  { Colour: blue; }
+Flavour "syrupy green"            : AI_POTION  { Colour: green; }
+Flavour "syrupy yellow"           : AI_POTION  { Colour: yellow; }
+Flavour "syrupy indigo"           : AI_POTION  { Colour: blue; }
 
-Flavor "vile-smelling crimson"          : AI_POTION  { Color: red; }
-Flavor "vile-smelling black"            : AI_POTION  { Color: black; }
-Flavor "vile-smelling emerald"          : AI_POTION  { Color: bright green; }
-Flavor "vile-smelling amber"            : AI_POTION  { Color: brown; }
-Flavor "vile-smelling silvery"          : AI_POTION  { Color: white; }
-Flavor "vile-smelling white"            : AI_POTION  { Color: grey; }
-Flavor "vile-smelling tan"              : AI_POTION  { Color: brown; }
-Flavor "vile-smelling orange"           : AI_POTION  { Color: pink; }
-Flavor "vile-smelling violet"           : AI_POTION  { Color: purple; }
-Flavor "vile-smelling red"              : AI_POTION  { Color: red; }
-Flavor "vile-smelling blue"             : AI_POTION  { Color: blue; }
-Flavor "vile-smelling green"            : AI_POTION  { Color: green; }
-Flavor "vile-smelling yellow"           : AI_POTION  { Color: yellow; }
-Flavor "vile-smelling indigo"           : AI_POTION  { Color: blue; }
+Flavour "vile-smelling crimson"          : AI_POTION  { Colour: red; }
+Flavour "vile-smelling black"            : AI_POTION  { Colour: black; }
+Flavour "vile-smelling emerald"          : AI_POTION  { Colour: bright green; }
+Flavour "vile-smelling amber"            : AI_POTION  { Colour: brown; }
+Flavour "vile-smelling silvery"          : AI_POTION  { Colour: white; }
+Flavour "vile-smelling white"            : AI_POTION  { Colour: grey; }
+Flavour "vile-smelling tan"              : AI_POTION  { Colour: brown; }
+Flavour "vile-smelling orange"           : AI_POTION  { Colour: pink; }
+Flavour "vile-smelling violet"           : AI_POTION  { Colour: purple; }
+Flavour "vile-smelling red"              : AI_POTION  { Colour: red; }
+Flavour "vile-smelling blue"             : AI_POTION  { Colour: blue; }
+Flavour "vile-smelling green"            : AI_POTION  { Colour: green; }
+Flavour "vile-smelling yellow"           : AI_POTION  { Colour: yellow; }
+Flavour "vile-smelling indigo"           : AI_POTION  { Colour: blue; }
 
-Flavor "pasty crimson"          : AI_POTION  { Color: red; }
-Flavor "pasty black"            : AI_POTION  { Color: black; }
-Flavor "pasty emerald"          : AI_POTION  { Color: bright green; }
-Flavor "pasty amber"            : AI_POTION  { Color: brown; }
-Flavor "pasty silvery"          : AI_POTION  { Color: white; }
-Flavor "pasty white"            : AI_POTION  { Color: grey; }
-Flavor "pasty tan"              : AI_POTION  { Color: brown; }
-Flavor "pasty orange"           : AI_POTION  { Color: pink; }
-Flavor "pasty violet"           : AI_POTION  { Color: purple; }
-Flavor "pasty red"              : AI_POTION  { Color: red; }
-Flavor "pasty blue"             : AI_POTION  { Color: blue; }
-Flavor "pasty green"            : AI_POTION  { Color: green; }
-Flavor "pasty yellow"           : AI_POTION  { Color: yellow; }
-Flavor "pasty indigo"           : AI_POTION  { Color: blue; }
+Flavour "pasty crimson"          : AI_POTION  { Colour: red; }
+Flavour "pasty black"            : AI_POTION  { Colour: black; }
+Flavour "pasty emerald"          : AI_POTION  { Colour: bright green; }
+Flavour "pasty amber"            : AI_POTION  { Colour: brown; }
+Flavour "pasty silvery"          : AI_POTION  { Colour: white; }
+Flavour "pasty white"            : AI_POTION  { Colour: grey; }
+Flavour "pasty tan"              : AI_POTION  { Colour: brown; }
+Flavour "pasty orange"           : AI_POTION  { Colour: pink; }
+Flavour "pasty violet"           : AI_POTION  { Colour: purple; }
+Flavour "pasty red"              : AI_POTION  { Colour: red; }
+Flavour "pasty blue"             : AI_POTION  { Colour: blue; }
+Flavour "pasty green"            : AI_POTION  { Colour: green; }
+Flavour "pasty yellow"           : AI_POTION  { Colour: yellow; }
+Flavour "pasty indigo"           : AI_POTION  { Colour: blue; }
 
-Flavor "bubbly crimson"          : AI_POTION  { Color: red; }
-Flavor "bubbly black"            : AI_POTION  { Color: black; }
-Flavor "bubbly emerald"          : AI_POTION  { Color: bright green; }
-Flavor "bubbly amber"            : AI_POTION  { Color: brown; }
-Flavor "bubbly silvery"          : AI_POTION  { Color: white; }
-Flavor "bubbly white"            : AI_POTION  { Color: grey; }
-Flavor "bubbly tan"              : AI_POTION  { Color: brown; }
-Flavor "bubbly orange"           : AI_POTION  { Color: pink; }
-Flavor "bubbly violet"           : AI_POTION  { Color: purple; }
-Flavor "bubbly red"              : AI_POTION  { Color: red; }
-Flavor "bubbly blue"             : AI_POTION  { Color: blue; }
-Flavor "bubbly green"            : AI_POTION  { Color: green; }
-Flavor "bubbly yellow"           : AI_POTION  { Color: yellow; }
-Flavor "bubbly indigo"           : AI_POTION  { Color: blue; }
+Flavour "bubbly crimson"          : AI_POTION  { Colour: red; }
+Flavour "bubbly black"            : AI_POTION  { Colour: black; }
+Flavour "bubbly emerald"          : AI_POTION  { Colour: bright green; }
+Flavour "bubbly amber"            : AI_POTION  { Colour: brown; }
+Flavour "bubbly silvery"          : AI_POTION  { Colour: white; }
+Flavour "bubbly white"            : AI_POTION  { Colour: grey; }
+Flavour "bubbly tan"              : AI_POTION  { Colour: brown; }
+Flavour "bubbly orange"           : AI_POTION  { Colour: pink; }
+Flavour "bubbly violet"           : AI_POTION  { Colour: purple; }
+Flavour "bubbly red"              : AI_POTION  { Colour: red; }
+Flavour "bubbly blue"             : AI_POTION  { Colour: blue; }
+Flavour "bubbly green"            : AI_POTION  { Colour: green; }
+Flavour "bubbly yellow"           : AI_POTION  { Colour: yellow; }
+Flavour "bubbly indigo"           : AI_POTION  { Colour: blue; }
 
-Flavor "foul crimson"          : AI_POTION  { Color: red; }
-Flavor "foul black"            : AI_POTION  { Color: black; }
-Flavor "foul emerald"          : AI_POTION  { Color: bright green; }
-Flavor "foul amber"            : AI_POTION  { Color: brown; }
-Flavor "foul silvery"          : AI_POTION  { Color: white; }
-Flavor "foul white"            : AI_POTION  { Color: grey; }
-Flavor "foul tan"              : AI_POTION  { Color: brown; }
-Flavor "foul orange"           : AI_POTION  { Color: pink; }
-Flavor "foul violet"           : AI_POTION  { Color: purple; }
-Flavor "foul red"              : AI_POTION  { Color: red; }
-Flavor "foul blue"             : AI_POTION  { Color: blue; }
-Flavor "foul green"            : AI_POTION  { Color: green; }
-Flavor "foul yellow"           : AI_POTION  { Color: yellow; }
-Flavor "foul indigo"           : AI_POTION  { Color: blue; }
+Flavour "foul crimson"          : AI_POTION  { Colour: red; }
+Flavour "foul black"            : AI_POTION  { Colour: black; }
+Flavour "foul emerald"          : AI_POTION  { Colour: bright green; }
+Flavour "foul amber"            : AI_POTION  { Colour: brown; }
+Flavour "foul silvery"          : AI_POTION  { Colour: white; }
+Flavour "foul white"            : AI_POTION  { Colour: grey; }
+Flavour "foul tan"              : AI_POTION  { Colour: brown; }
+Flavour "foul orange"           : AI_POTION  { Colour: pink; }
+Flavour "foul violet"           : AI_POTION  { Colour: purple; }
+Flavour "foul red"              : AI_POTION  { Colour: red; }
+Flavour "foul blue"             : AI_POTION  { Colour: blue; }
+Flavour "foul green"            : AI_POTION  { Colour: green; }
+Flavour "foul yellow"           : AI_POTION  { Colour: yellow; }
+Flavour "foul indigo"           : AI_POTION  { Colour: blue; }
 
-Flavor "speckled crimson"          : AI_POTION  { Color: red; }
-Flavor "speckled black"            : AI_POTION  { Color: black; }
-Flavor "speckled emerald"          : AI_POTION  { Color: bright green; }
-Flavor "speckled amber"            : AI_POTION  { Color: brown; }
-Flavor "speckled silvery"          : AI_POTION  { Color: white; }
-Flavor "speckled white"            : AI_POTION  { Color: grey; }
-Flavor "speckled tan"              : AI_POTION  { Color: brown; }
-Flavor "speckled orange"           : AI_POTION  { Color: pink; }
-Flavor "speckled violet"           : AI_POTION  { Color: purple; }
-Flavor "speckled red"              : AI_POTION  { Color: red; }
-Flavor "speckled blue"             : AI_POTION  { Color: blue; }
-Flavor "speckled green"            : AI_POTION  { Color: green; }
-Flavor "speckled yellow"           : AI_POTION  { Color: yellow; }
-Flavor "speckled indigo"           : AI_POTION  { Color: blue; }
+Flavour "speckled crimson"          : AI_POTION  { Colour: red; }
+Flavour "speckled black"            : AI_POTION  { Colour: black; }
+Flavour "speckled emerald"          : AI_POTION  { Colour: bright green; }
+Flavour "speckled amber"            : AI_POTION  { Colour: brown; }
+Flavour "speckled silvery"          : AI_POTION  { Colour: white; }
+Flavour "speckled white"            : AI_POTION  { Colour: grey; }
+Flavour "speckled tan"              : AI_POTION  { Colour: brown; }
+Flavour "speckled orange"           : AI_POTION  { Colour: pink; }
+Flavour "speckled violet"           : AI_POTION  { Colour: purple; }
+Flavour "speckled red"              : AI_POTION  { Colour: red; }
+Flavour "speckled blue"             : AI_POTION  { Colour: blue; }
+Flavour "speckled green"            : AI_POTION  { Colour: green; }
+Flavour "speckled yellow"           : AI_POTION  { Colour: yellow; }
+Flavour "speckled indigo"           : AI_POTION  { Colour: blue; }
 
-Flavor "smoky crimson"          : AI_POTION  { Color: red; }
-Flavor "smoky black"            : AI_POTION  { Color: black; }
-Flavor "smoky emerald"          : AI_POTION  { Color: bright green; }
-Flavor "smoky amber"            : AI_POTION  { Color: brown; }
-Flavor "smoky silvery"          : AI_POTION  { Color: white; }
-Flavor "smoky white"            : AI_POTION  { Color: grey; }
-Flavor "smoky tan"              : AI_POTION  { Color: brown; }
-Flavor "smoky orange"           : AI_POTION  { Color: pink; }
-Flavor "smoky violet"           : AI_POTION  { Color: purple; }
-Flavor "smoky red"              : AI_POTION  { Color: red; }
-Flavor "smoky blue"             : AI_POTION  { Color: blue; }
-Flavor "smoky green"            : AI_POTION  { Color: green; }
-Flavor "smoky yellow"           : AI_POTION  { Color: yellow; }
-Flavor "smoky indigo"           : AI_POTION  { Color: blue; }
+Flavour "smoky crimson"          : AI_POTION  { Colour: red; }
+Flavour "smoky black"            : AI_POTION  { Colour: black; }
+Flavour "smoky emerald"          : AI_POTION  { Colour: bright green; }
+Flavour "smoky amber"            : AI_POTION  { Colour: brown; }
+Flavour "smoky silvery"          : AI_POTION  { Colour: white; }
+Flavour "smoky white"            : AI_POTION  { Colour: grey; }
+Flavour "smoky tan"              : AI_POTION  { Colour: brown; }
+Flavour "smoky orange"           : AI_POTION  { Colour: pink; }
+Flavour "smoky violet"           : AI_POTION  { Colour: purple; }
+Flavour "smoky red"              : AI_POTION  { Colour: red; }
+Flavour "smoky blue"             : AI_POTION  { Colour: blue; }
+Flavour "smoky green"            : AI_POTION  { Colour: green; }
+Flavour "smoky yellow"           : AI_POTION  { Colour: yellow; }
+Flavour "smoky indigo"           : AI_POTION  { Colour: blue; }
 
-Flavor "translucent crimson"          : AI_POTION  { Color: red; }
-Flavor "translucent black"            : AI_POTION  { Color: black; }
-Flavor "translucent emerald"          : AI_POTION  { Color: bright green; }
-Flavor "translucent amber"            : AI_POTION  { Color: brown; }
-Flavor "translucent silvery"          : AI_POTION  { Color: white; }
-Flavor "translucent white"            : AI_POTION  { Color: grey; }
-Flavor "translucent tan"              : AI_POTION  { Color: brown; }
-Flavor "translucent orange"           : AI_POTION  { Color: pink; }
-Flavor "translucent violet"           : AI_POTION  { Color: purple; }
-Flavor "translucent red"              : AI_POTION  { Color: red; }
-Flavor "translucent blue"             : AI_POTION  { Color: blue; }
-Flavor "translucent green"            : AI_POTION  { Color: green; }
-Flavor "translucent yellow"           : AI_POTION  { Color: yellow; }
-Flavor "translucent indigo"           : AI_POTION  { Color: blue; }
+Flavour "translucent crimson"          : AI_POTION  { Colour: red; }
+Flavour "translucent black"            : AI_POTION  { Colour: black; }
+Flavour "translucent emerald"          : AI_POTION  { Colour: bright green; }
+Flavour "translucent amber"            : AI_POTION  { Colour: brown; }
+Flavour "translucent silvery"          : AI_POTION  { Colour: white; }
+Flavour "translucent white"            : AI_POTION  { Colour: grey; }
+Flavour "translucent tan"              : AI_POTION  { Colour: brown; }
+Flavour "translucent orange"           : AI_POTION  { Colour: pink; }
+Flavour "translucent violet"           : AI_POTION  { Colour: purple; }
+Flavour "translucent red"              : AI_POTION  { Colour: red; }
+Flavour "translucent blue"             : AI_POTION  { Colour: blue; }
+Flavour "translucent green"            : AI_POTION  { Colour: green; }
+Flavour "translucent yellow"           : AI_POTION  { Colour: yellow; }
+Flavour "translucent indigo"           : AI_POTION  { Colour: blue; }
 
-Flavor "milky crimson"          : AI_POTION  { Color: red; }
-Flavor "milky black"            : AI_POTION  { Color: black; }
-Flavor "milky emerald"          : AI_POTION  { Color: bright green; }
-Flavor "milky amber"            : AI_POTION  { Color: brown; }
-Flavor "milky silvery"          : AI_POTION  { Color: white; }
-Flavor "milky white"            : AI_POTION  { Color: grey; }
-Flavor "milky tan"              : AI_POTION  { Color: brown; }
-Flavor "milky orange"           : AI_POTION  { Color: pink; }
-Flavor "milky violet"           : AI_POTION  { Color: purple; }
-Flavor "milky red"              : AI_POTION  { Color: red; }
-Flavor "milky blue"             : AI_POTION  { Color: blue; }
-Flavor "milky green"            : AI_POTION  { Color: green; }
-Flavor "milky yellow"           : AI_POTION  { Color: yellow; }
-Flavor "milky indigo"           : AI_POTION  { Color: blue; }
+Flavour "milky crimson"          : AI_POTION  { Colour: red; }
+Flavour "milky black"            : AI_POTION  { Colour: black; }
+Flavour "milky emerald"          : AI_POTION  { Colour: bright green; }
+Flavour "milky amber"            : AI_POTION  { Colour: brown; }
+Flavour "milky silvery"          : AI_POTION  { Colour: white; }
+Flavour "milky white"            : AI_POTION  { Colour: grey; }
+Flavour "milky tan"              : AI_POTION  { Colour: brown; }
+Flavour "milky orange"           : AI_POTION  { Colour: pink; }
+Flavour "milky violet"           : AI_POTION  { Colour: purple; }
+Flavour "milky red"              : AI_POTION  { Colour: red; }
+Flavour "milky blue"             : AI_POTION  { Colour: blue; }
+Flavour "milky green"            : AI_POTION  { Colour: green; }
+Flavour "milky yellow"           : AI_POTION  { Colour: yellow; }
+Flavour "milky indigo"           : AI_POTION  { Colour: blue; }
 
-Flavor "murky crimson"          : AI_POTION  { Color: red; }
-Flavor "murky black"            : AI_POTION  { Color: black; }
-Flavor "murky emerald"          : AI_POTION  { Color: bright green; }
-Flavor "murky amber"            : AI_POTION  { Color: brown; }
-Flavor "murky silvery"          : AI_POTION  { Color: white; }
-Flavor "murky white"            : AI_POTION  { Color: grey; }
-Flavor "murky tan"              : AI_POTION  { Color: brown; }
-Flavor "murky orange"           : AI_POTION  { Color: pink; }
-Flavor "murky violet"           : AI_POTION  { Color: purple; }
-Flavor "murky red"              : AI_POTION  { Color: red; }
-Flavor "murky blue"             : AI_POTION  { Color: blue; }
-Flavor "murky green"            : AI_POTION  { Color: green; }
-Flavor "murky yellow"           : AI_POTION  { Color: yellow; }
-Flavor "murky indigo"           : AI_POTION  { Color: blue; }
+Flavour "murky crimson"          : AI_POTION  { Colour: red; }
+Flavour "murky black"            : AI_POTION  { Colour: black; }
+Flavour "murky emerald"          : AI_POTION  { Colour: bright green; }
+Flavour "murky amber"            : AI_POTION  { Colour: brown; }
+Flavour "murky silvery"          : AI_POTION  { Colour: white; }
+Flavour "murky white"            : AI_POTION  { Colour: grey; }
+Flavour "murky tan"              : AI_POTION  { Colour: brown; }
+Flavour "murky orange"           : AI_POTION  { Colour: pink; }
+Flavour "murky violet"           : AI_POTION  { Colour: purple; }
+Flavour "murky red"              : AI_POTION  { Colour: red; }
+Flavour "murky blue"             : AI_POTION  { Colour: blue; }
+Flavour "murky green"            : AI_POTION  { Colour: green; }
+Flavour "murky yellow"           : AI_POTION  { Colour: yellow; }
+Flavour "murky indigo"           : AI_POTION  { Colour: blue; }
 
-Flavor "oily crimson"          : AI_POTION  { Color: red; }
-Flavor "oily black"            : AI_POTION  { Color: black; }
-Flavor "oily emerald"          : AI_POTION  { Color: bright green; }
-Flavor "oily amber"            : AI_POTION  { Color: brown; }
-Flavor "oily silvery"          : AI_POTION  { Color: white; }
-Flavor "oily white"            : AI_POTION  { Color: grey; }
-Flavor "oily tan"              : AI_POTION  { Color: brown; }
-Flavor "oily orange"           : AI_POTION  { Color: pink; }
-Flavor "oily violet"           : AI_POTION  { Color: purple; }
-Flavor "oily red"              : AI_POTION  { Color: red; }
-Flavor "oily blue"             : AI_POTION  { Color: blue; }
-Flavor "oily green"            : AI_POTION  { Color: green; }
-Flavor "oily yellow"           : AI_POTION  { Color: yellow; }
-Flavor "oily indigo"           : AI_POTION  { Color: blue; }
+Flavour "oily crimson"          : AI_POTION  { Colour: red; }
+Flavour "oily black"            : AI_POTION  { Colour: black; }
+Flavour "oily emerald"          : AI_POTION  { Colour: bright green; }
+Flavour "oily amber"            : AI_POTION  { Colour: brown; }
+Flavour "oily silvery"          : AI_POTION  { Colour: white; }
+Flavour "oily white"            : AI_POTION  { Colour: grey; }
+Flavour "oily tan"              : AI_POTION  { Colour: brown; }
+Flavour "oily orange"           : AI_POTION  { Colour: pink; }
+Flavour "oily violet"           : AI_POTION  { Colour: purple; }
+Flavour "oily red"              : AI_POTION  { Colour: red; }
+Flavour "oily blue"             : AI_POTION  { Colour: blue; }
+Flavour "oily green"            : AI_POTION  { Colour: green; }
+Flavour "oily yellow"           : AI_POTION  { Colour: yellow; }
+Flavour "oily indigo"           : AI_POTION  { Colour: blue; }
 
-Flavor "thick crimson"          : AI_POTION  { Color: red; }
-Flavor "thick black"            : AI_POTION  { Color: black; }
-Flavor "thick emerald"          : AI_POTION  { Color: bright green; }
-Flavor "thick amber"            : AI_POTION  { Color: brown; }
-Flavor "thick silvery"          : AI_POTION  { Color: white; }
-Flavor "thick white"            : AI_POTION  { Color: grey; }
-Flavor "thick tan"              : AI_POTION  { Color: brown; }
-Flavor "thick orange"           : AI_POTION  { Color: pink; }
-Flavor "thick violet"           : AI_POTION  { Color: purple; }
-Flavor "thick red"              : AI_POTION  { Color: red; }
-Flavor "thick blue"             : AI_POTION  { Color: blue; }
-Flavor "thick green"            : AI_POTION  { Color: green; }
-Flavor "thick yellow"           : AI_POTION  { Color: yellow; }
-Flavor "thick indigo"           : AI_POTION  { Color: blue; }
+Flavour "thick crimson"          : AI_POTION  { Colour: red; }
+Flavour "thick black"            : AI_POTION  { Colour: black; }
+Flavour "thick emerald"          : AI_POTION  { Colour: bright green; }
+Flavour "thick amber"            : AI_POTION  { Colour: brown; }
+Flavour "thick silvery"          : AI_POTION  { Colour: white; }
+Flavour "thick white"            : AI_POTION  { Colour: grey; }
+Flavour "thick tan"              : AI_POTION  { Colour: brown; }
+Flavour "thick orange"           : AI_POTION  { Colour: pink; }
+Flavour "thick violet"           : AI_POTION  { Colour: purple; }
+Flavour "thick red"              : AI_POTION  { Colour: red; }
+Flavour "thick blue"             : AI_POTION  { Colour: blue; }
+Flavour "thick green"            : AI_POTION  { Colour: green; }
+Flavour "thick yellow"           : AI_POTION  { Colour: yellow; }
+Flavour "thick indigo"           : AI_POTION  { Colour: blue; }
 
-Flavor "Velex Tharut" : AI_SCROLL { }
-Flavor "Velex Ascid" : AI_SCROLL { }
-Flavor "Velex Cirre" : AI_SCROLL { }
-Flavor "Velex Damhan" : AI_SCROLL { }
-Flavor "Velex Jadis" : AI_SCROLL { }
-Flavor "Vox Tharut" : AI_SCROLL { }
-Flavor "Vox Golag" : AI_SCROLL { }
-Flavor "Vox Damhan" : AI_SCROLL { }
-Flavor "Vox Jadis" : AI_SCROLL { }
-Flavor "Vox Lignis" : AI_SCROLL { }
-Flavor "Ridis Velex" : AI_SCROLL { }
-Flavor "Ridis Virix" : AI_SCROLL { }
-Flavor "Ridis Erdush" : AI_SCROLL { }
-Flavor "Ridis Imran" : AI_SCROLL { }
-Flavor "Ridis Jadis" : AI_SCROLL { }
-Flavor "Olnam Virix" : AI_SCROLL { }
-Flavor "Olnam Kadash" : AI_SCROLL { }
-Flavor "Olnam Ascid" : AI_SCROLL { }
-Flavor "Olnam Jessek" : AI_SCROLL { }
-Flavor "Olnam Jadis" : AI_SCROLL { }
-Flavor "Lux Golag" : AI_SCROLL { }
-Flavor "Lux Balrut" : AI_SCROLL { }
-Flavor "Lux Ascid" : AI_SCROLL { }
-Flavor "Lux Fenrig" : AI_SCROLL { }
-Flavor "Lux Jessek" : AI_SCROLL { }
-Flavor "Golag Ridis" : AI_SCROLL { }
-Flavor "Golag Orvok" : AI_SCROLL { }
-Flavor "Golag Dethak" : AI_SCROLL { }
-Flavor "Golag Damhan" : AI_SCROLL { }
-Flavor "Golag Imran" : AI_SCROLL { }
-Flavor "Temov Solan" : AI_SCROLL { }
-Flavor "Temov Kadash" : AI_SCROLL { }
-Flavor "Temov Cirre" : AI_SCROLL { }
-Flavor "Temov Jessek" : AI_SCROLL { }
-Flavor "Temov Vigsag" : AI_SCROLL { }
-Flavor "Tharut Ridis" : AI_SCROLL { }
-Flavor "Tharut Orvok" : AI_SCROLL { }
-Flavor "Tharut Ultas" : AI_SCROLL { }
-Flavor "Tharut Damhan" : AI_SCROLL { }
-Flavor "Tharut Nul" : AI_SCROLL { }
-Flavor "Solan Vox" : AI_SCROLL { }
-Flavor "Solan Colash" : AI_SCROLL { }
-Flavor "Solan Dethak" : AI_SCROLL { }
-Flavor "Solan Cirre" : AI_SCROLL { }
-Flavor "Solan Nul" : AI_SCROLL { }
-Flavor "Virix Vox" : AI_SCROLL { }
-Flavor "Virix Temov" : AI_SCROLL { }
-Flavor "Virix Damhan" : AI_SCROLL { }
-Flavor "Virix Damhan" : AI_SCROLL { }
-Flavor "Virix Fenrig" : AI_SCROLL { }
-Flavor "Ascid Ridis" : AI_SCROLL { }
-Flavor "Ascid Solan" : AI_SCROLL { }
-Flavor "Ascid Kadash" : AI_SCROLL { }
-Flavor "Ascid Jessek" : AI_SCROLL { }
-Flavor "Ascid Vigsag" : AI_SCROLL { }
-Flavor "Orvok Lux" : AI_SCROLL { }
-Flavor "Orvok Tharut" : AI_SCROLL { }
-Flavor "Orvok Dethak" : AI_SCROLL { }
-Flavor "Orvok Lariat" : AI_SCROLL { }
-Flavor "Balrut Lux" : AI_SCROLL { }
-Flavor "Balrut Virix" : AI_SCROLL { }
-Flavor "Balrut Damhan" : AI_SCROLL { }
-Flavor "Balrut Erdush" : AI_SCROLL { }
-Flavor "Balrut Lariat" : AI_SCROLL { }
-Flavor "Kadash Ridis" : AI_SCROLL { }
-Flavor "Kadash Temov" : AI_SCROLL { }
-Flavor "Kadash Cirre" : AI_SCROLL { }
-Flavor "Kadash Cirre" : AI_SCROLL { }
-Flavor "Kadash Jessek" : AI_SCROLL { }
-Flavor "Colash Virix" : AI_SCROLL { }
-Flavor "Colash Tharut" : AI_SCROLL { }
-Flavor "Colash Damhan" : AI_SCROLL { }
-Flavor "Colash Erdush" : AI_SCROLL { }
-Flavor "Colash Imran" : AI_SCROLL { }
-Flavor "Cirre Virix" : AI_SCROLL { }
-Flavor "Cirre Orvok" : AI_SCROLL { }
-Flavor "Cirre Dethak" : AI_SCROLL { }
-Flavor "Cirre Ultas" : AI_SCROLL { }
-Flavor "Cirre Fenrig" : AI_SCROLL { }
-Flavor "Dethak Golag" : AI_SCROLL { }
-Flavor "Dethak Orvok" : AI_SCROLL { }
-Flavor "Dethak Ultas" : AI_SCROLL { }
-Flavor "Dethak Jadis" : AI_SCROLL { }
-Flavor "Dethak Fenrig" : AI_SCROLL { }
-Flavor "Damhan Golag" : AI_SCROLL { }
-Flavor "Damhan Colash" : AI_SCROLL { }
-Flavor "Damhan Colash" : AI_SCROLL { }
-Flavor "Damhan Himrath" : AI_SCROLL { }
-Flavor "Damhan Nul" : AI_SCROLL { }
-Flavor "Erdush Golag" : AI_SCROLL { }
-Flavor "Erdush Virix" : AI_SCROLL { }
-Flavor "Erdush Kadash" : AI_SCROLL { }
-Flavor "Erdush Ultas" : AI_SCROLL { }
-Flavor "Erdush Imran" : AI_SCROLL { }
-Flavor "Ultas Velex" : AI_SCROLL { }
-Flavor "Ultas Tharut" : AI_SCROLL { }
-Flavor "Ultas Cirre" : AI_SCROLL { }
-Flavor "Ultas Jadis" : AI_SCROLL { }
-Flavor "Fenrig Olnam" : AI_SCROLL { }
-Flavor "Fenrig Virix" : AI_SCROLL { }
-Flavor "Fenrig Orvok" : AI_SCROLL { }
-Flavor "Fenrig Ultas" : AI_SCROLL { }
-Flavor "Fenrig Imran" : AI_SCROLL { }
-Flavor "Himrath Temov" : AI_SCROLL { }
-Flavor "Himrath Ascid" : AI_SCROLL { }
-Flavor "Himrath Orvok" : AI_SCROLL { }
-Flavor "Himrath Jessek" : AI_SCROLL { }
-Flavor "Himrath Lariat" : AI_SCROLL { }
-Flavor "Imran Golag" : AI_SCROLL { }
-Flavor "Imran Solan" : AI_SCROLL { }
-Flavor "Imran Orvok" : AI_SCROLL { }
-Flavor "Imran Jessek" : AI_SCROLL { }
-Flavor "Jadis Tharut" : AI_SCROLL { }
-Flavor "Jadis Ascid" : AI_SCROLL { }
-Flavor "Jadis Erdush" : AI_SCROLL { }
-Flavor "Jadis Cirre" : AI_SCROLL { }
-Flavor "Jadis Imran" : AI_SCROLL { }
-Flavor "Jessek Velex" : AI_SCROLL { }
-Flavor "Jessek Temov" : AI_SCROLL { }
-Flavor "Jessek Kadash" : AI_SCROLL { }
-Flavor "Jessek Dethak" : AI_SCROLL { }
-Flavor "Jessek Fenrig" : AI_SCROLL { }
-Flavor "Nul Golag" : AI_SCROLL { }
-Flavor "Nul Orvok" : AI_SCROLL { }
-Flavor "Nul Cirre" : AI_SCROLL { }
-Flavor "Nul Jadis" : AI_SCROLL { }
-Flavor "Nul Fenrig" : AI_SCROLL { }
-Flavor "Lariat Vox" : AI_SCROLL { }
-Flavor "Lariat Orvok" : AI_SCROLL { }
-Flavor "Lariat Colash" : AI_SCROLL { }
-Flavor "Lariat Erdush" : AI_SCROLL { }
-Flavor "Lariat Himrath" : AI_SCROLL { }
-Flavor "Lignis Tharut" : AI_SCROLL { }
-Flavor "Lignis Colash" : AI_SCROLL { }
-Flavor "Lignis Cirre" : AI_SCROLL { }
-Flavor "Lignis Cirre" : AI_SCROLL { }
-Flavor "Asmodex Lux" : AI_SCROLL { }
-Flavor "Asmodex Virix" : AI_SCROLL { }
-Flavor "Asmodex Colash" : AI_SCROLL { }
-Flavor "Asmodex Damhan" : AI_SCROLL { }
-Flavor "Asmodex Jadis" : AI_SCROLL { }
-Flavor "Vigsag Velex" : AI_SCROLL { }
-Flavor "Vigsag Ascid" : AI_SCROLL { }
-Flavor "Vigsag Orvok" : AI_SCROLL { }
-Flavor "Vigsag Jessek" : AI_SCROLL { }
-Flavor "Vigsag Fenrig" : AI_SCROLL { }
-Flavor "Vugnug Lux" : AI_SCROLL { }
-Flavor "Vugnug Tharut" : AI_SCROLL { }
-Flavor "Vugnug Erdush" : AI_SCROLL { }
-Flavor "Vugnug Imran" : AI_SCROLL { }
-Flavor "Vugnug Imran" : AI_SCROLL { }
-Flavor "Elbib Temov" : AI_SCROLL { }
-Flavor "Elbib Tharut" : AI_SCROLL { }
-Flavor "Elbib Ascid" : AI_SCROLL { }
-Flavor "Elbib Cirre" : AI_SCROLL { }
-Flavor "Elbib Jadis" : AI_SCROLL { }
-Flavor "Elam Tharut" : AI_SCROLL { }
-Flavor "Elam Tharut" : AI_SCROLL { }
-Flavor "Elam Balrut" : AI_SCROLL { }
-Flavor "Elam Ultas" : AI_SCROLL { }
-Flavor "Elam Imran" : AI_SCROLL { }
-Flavor "Tharr Olnam" : AI_SCROLL { }
-Flavor "Tharr Golag" : AI_SCROLL { }
-Flavor "Tharr Colash" : AI_SCROLL { }
-Flavor "Tharr Damhan" : AI_SCROLL { }
-Flavor "Tharr Asmodex" : AI_SCROLL { }
-Flavor "Yed Golag" : AI_SCROLL { }
-Flavor "Yed Balrut" : AI_SCROLL { }
-Flavor "Yed Ultas" : AI_SCROLL { }
-Flavor "Yed Erdush" : AI_SCROLL { }
-Flavor "Yed Nul" : AI_SCROLL { }
-Flavor "Azram Velex" : AI_SCROLL { }
-Flavor "Azram Orvok" : AI_SCROLL { }
-Flavor "Azram Colash" : AI_SCROLL { }
-Flavor "Azram Jessek" : AI_SCROLL { }
-Flavor "Azram Himrath" : AI_SCROLL { }
-Flavor "Kirje Virix" : AI_SCROLL { }
-Flavor "Kirje Orvok" : AI_SCROLL { }
-Flavor "Kirje Kadash" : AI_SCROLL { }
-Flavor "Kirje Dethak" : AI_SCROLL { }
-Flavor "Kirje Jessek" : AI_SCROLL { }
-Flavor "Noxon Ridis" : AI_SCROLL { }
-Flavor "Noxon Colash" : AI_SCROLL { }
-Flavor "Noxon Orvok" : AI_SCROLL { }
-Flavor "Noxon Cirre" : AI_SCROLL { }
-Flavor "Noxon Jadis" : AI_SCROLL { }
-Flavor "Oculon Golag" : AI_SCROLL { }
-Flavor "Oculon Colash" : AI_SCROLL { }
-Flavor "Oculon Cirre" : AI_SCROLL { }
-Flavor "Oculon Ultas" : AI_SCROLL { }
-Flavor "Oculon Asmodex" : AI_SCROLL { }
-Flavor "Pasix Solan" : AI_SCROLL { }
-Flavor "Pasix Orvok" : AI_SCROLL { }
-Flavor "Pasix Damhan" : AI_SCROLL { }
-Flavor "Pasix Jessek" : AI_SCROLL { }
-Flavor "Pasix Jadis" : AI_SCROLL { }
-Flavor "Praedit Lux" : AI_SCROLL { }
-Flavor "Praedit Virix" : AI_SCROLL { }
-Flavor "Praedit Dethak" : AI_SCROLL { }
-Flavor "Praedit Dethak" : AI_SCROLL { }
-Flavor "Praedit Jessek" : AI_SCROLL { }
-Flavor "Qixl Golag" : AI_SCROLL { }
-Flavor "Qixl Kadash" : AI_SCROLL { }
-Flavor "Qixl Cirre" : AI_SCROLL { }
-Flavor "Qixl Ultas" : AI_SCROLL { }
-Flavor "Qixl Nul" : AI_SCROLL { }
-Flavor "Rashem Ridis" : AI_SCROLL { }
-Flavor "Rashem Orvok" : AI_SCROLL { }
-Flavor "Rashem Colash" : AI_SCROLL { }
-Flavor "Rashem Himrath" : AI_SCROLL { }
-Flavor "Rashem Asmodex" : AI_SCROLL { }
-Flavor "Sardox Olnam" : AI_SCROLL { }
-Flavor "Sardox Solan" : AI_SCROLL { }
-Flavor "Sardox Balrut" : AI_SCROLL { }
-Flavor "Sardox Dethak" : AI_SCROLL { }
-Flavor "Sardox Nul" : AI_SCROLL { }
-Flavor "Tuliv Ridis" : AI_SCROLL { }
-Flavor "Tuliv Ascid" : AI_SCROLL { }
-Flavor "Tuliv Kadash" : AI_SCROLL { }
-Flavor "Tuliv Jadis" : AI_SCROLL { }
-Flavor "Tuliv Jessek" : AI_SCROLL { }
-Flavor "Ugnux Vox" : AI_SCROLL { }
-Flavor "Ugnux Orvok" : AI_SCROLL { }
-Flavor "Ugnux Damhan" : AI_SCROLL { }
-Flavor "Ugnux Himrath" : AI_SCROLL { }
-Flavor "Ugnux Lignis" : AI_SCROLL { }
-Flavor "Gornach Vox" : AI_SCROLL { }
-Flavor "Gornach Kadash" : AI_SCROLL { }
-Flavor "Gornach Balrut" : AI_SCROLL { }
-Flavor "Gornach Jessek" : AI_SCROLL { }
-Flavor "Gornach Fenrig" : AI_SCROLL { }
-Flavor "Vedas Velex" : AI_SCROLL { }
-Flavor "Vedas Balrut" : AI_SCROLL { }
-Flavor "Vedas Kadash" : AI_SCROLL { }
-Flavor "Vedas Ultas" : AI_SCROLL { }
-Flavor "Vedas Himrath" : AI_SCROLL { }
-Flavor "Mugmug Vox" : AI_SCROLL { }
-Flavor "Mugmug Temov" : AI_SCROLL { }
-Flavor "Mugmug Ascid" : AI_SCROLL { }
-Flavor "Mugmug Imran" : AI_SCROLL { }
-Flavor "Mugmug Nul" : AI_SCROLL { }
-Flavor "Grabnor Golag" : AI_SCROLL { }
-Flavor "Grabnor Tharut" : AI_SCROLL { }
-Flavor "Grabnor Colash" : AI_SCROLL { }
-Flavor "Grabnor Imran" : AI_SCROLL { }
-Flavor "Grabnor Lignis" : AI_SCROLL { }
+Flavour "Velex Tharut" : AI_SCROLL { }
+Flavour "Velex Ascid" : AI_SCROLL { }
+Flavour "Velex Cirre" : AI_SCROLL { }
+Flavour "Velex Damhan" : AI_SCROLL { }
+Flavour "Velex Jadis" : AI_SCROLL { }
+Flavour "Vox Tharut" : AI_SCROLL { }
+Flavour "Vox Golag" : AI_SCROLL { }
+Flavour "Vox Damhan" : AI_SCROLL { }
+Flavour "Vox Jadis" : AI_SCROLL { }
+Flavour "Vox Lignis" : AI_SCROLL { }
+Flavour "Ridis Velex" : AI_SCROLL { }
+Flavour "Ridis Virix" : AI_SCROLL { }
+Flavour "Ridis Erdush" : AI_SCROLL { }
+Flavour "Ridis Imran" : AI_SCROLL { }
+Flavour "Ridis Jadis" : AI_SCROLL { }
+Flavour "Olnam Virix" : AI_SCROLL { }
+Flavour "Olnam Kadash" : AI_SCROLL { }
+Flavour "Olnam Ascid" : AI_SCROLL { }
+Flavour "Olnam Jessek" : AI_SCROLL { }
+Flavour "Olnam Jadis" : AI_SCROLL { }
+Flavour "Lux Golag" : AI_SCROLL { }
+Flavour "Lux Balrut" : AI_SCROLL { }
+Flavour "Lux Ascid" : AI_SCROLL { }
+Flavour "Lux Fenrig" : AI_SCROLL { }
+Flavour "Lux Jessek" : AI_SCROLL { }
+Flavour "Golag Ridis" : AI_SCROLL { }
+Flavour "Golag Orvok" : AI_SCROLL { }
+Flavour "Golag Dethak" : AI_SCROLL { }
+Flavour "Golag Damhan" : AI_SCROLL { }
+Flavour "Golag Imran" : AI_SCROLL { }
+Flavour "Temov Solan" : AI_SCROLL { }
+Flavour "Temov Kadash" : AI_SCROLL { }
+Flavour "Temov Cirre" : AI_SCROLL { }
+Flavour "Temov Jessek" : AI_SCROLL { }
+Flavour "Temov Vigsag" : AI_SCROLL { }
+Flavour "Tharut Ridis" : AI_SCROLL { }
+Flavour "Tharut Orvok" : AI_SCROLL { }
+Flavour "Tharut Ultas" : AI_SCROLL { }
+Flavour "Tharut Damhan" : AI_SCROLL { }
+Flavour "Tharut Nul" : AI_SCROLL { }
+Flavour "Solan Vox" : AI_SCROLL { }
+Flavour "Solan Colash" : AI_SCROLL { }
+Flavour "Solan Dethak" : AI_SCROLL { }
+Flavour "Solan Cirre" : AI_SCROLL { }
+Flavour "Solan Nul" : AI_SCROLL { }
+Flavour "Virix Vox" : AI_SCROLL { }
+Flavour "Virix Temov" : AI_SCROLL { }
+Flavour "Virix Damhan" : AI_SCROLL { }
+Flavour "Virix Damhan" : AI_SCROLL { }
+Flavour "Virix Fenrig" : AI_SCROLL { }
+Flavour "Ascid Ridis" : AI_SCROLL { }
+Flavour "Ascid Solan" : AI_SCROLL { }
+Flavour "Ascid Kadash" : AI_SCROLL { }
+Flavour "Ascid Jessek" : AI_SCROLL { }
+Flavour "Ascid Vigsag" : AI_SCROLL { }
+Flavour "Orvok Lux" : AI_SCROLL { }
+Flavour "Orvok Tharut" : AI_SCROLL { }
+Flavour "Orvok Dethak" : AI_SCROLL { }
+Flavour "Orvok Lariat" : AI_SCROLL { }
+Flavour "Balrut Lux" : AI_SCROLL { }
+Flavour "Balrut Virix" : AI_SCROLL { }
+Flavour "Balrut Damhan" : AI_SCROLL { }
+Flavour "Balrut Erdush" : AI_SCROLL { }
+Flavour "Balrut Lariat" : AI_SCROLL { }
+Flavour "Kadash Ridis" : AI_SCROLL { }
+Flavour "Kadash Temov" : AI_SCROLL { }
+Flavour "Kadash Cirre" : AI_SCROLL { }
+Flavour "Kadash Cirre" : AI_SCROLL { }
+Flavour "Kadash Jessek" : AI_SCROLL { }
+Flavour "Colash Virix" : AI_SCROLL { }
+Flavour "Colash Tharut" : AI_SCROLL { }
+Flavour "Colash Damhan" : AI_SCROLL { }
+Flavour "Colash Erdush" : AI_SCROLL { }
+Flavour "Colash Imran" : AI_SCROLL { }
+Flavour "Cirre Virix" : AI_SCROLL { }
+Flavour "Cirre Orvok" : AI_SCROLL { }
+Flavour "Cirre Dethak" : AI_SCROLL { }
+Flavour "Cirre Ultas" : AI_SCROLL { }
+Flavour "Cirre Fenrig" : AI_SCROLL { }
+Flavour "Dethak Golag" : AI_SCROLL { }
+Flavour "Dethak Orvok" : AI_SCROLL { }
+Flavour "Dethak Ultas" : AI_SCROLL { }
+Flavour "Dethak Jadis" : AI_SCROLL { }
+Flavour "Dethak Fenrig" : AI_SCROLL { }
+Flavour "Damhan Golag" : AI_SCROLL { }
+Flavour "Damhan Colash" : AI_SCROLL { }
+Flavour "Damhan Colash" : AI_SCROLL { }
+Flavour "Damhan Himrath" : AI_SCROLL { }
+Flavour "Damhan Nul" : AI_SCROLL { }
+Flavour "Erdush Golag" : AI_SCROLL { }
+Flavour "Erdush Virix" : AI_SCROLL { }
+Flavour "Erdush Kadash" : AI_SCROLL { }
+Flavour "Erdush Ultas" : AI_SCROLL { }
+Flavour "Erdush Imran" : AI_SCROLL { }
+Flavour "Ultas Velex" : AI_SCROLL { }
+Flavour "Ultas Tharut" : AI_SCROLL { }
+Flavour "Ultas Cirre" : AI_SCROLL { }
+Flavour "Ultas Jadis" : AI_SCROLL { }
+Flavour "Fenrig Olnam" : AI_SCROLL { }
+Flavour "Fenrig Virix" : AI_SCROLL { }
+Flavour "Fenrig Orvok" : AI_SCROLL { }
+Flavour "Fenrig Ultas" : AI_SCROLL { }
+Flavour "Fenrig Imran" : AI_SCROLL { }
+Flavour "Himrath Temov" : AI_SCROLL { }
+Flavour "Himrath Ascid" : AI_SCROLL { }
+Flavour "Himrath Orvok" : AI_SCROLL { }
+Flavour "Himrath Jessek" : AI_SCROLL { }
+Flavour "Himrath Lariat" : AI_SCROLL { }
+Flavour "Imran Golag" : AI_SCROLL { }
+Flavour "Imran Solan" : AI_SCROLL { }
+Flavour "Imran Orvok" : AI_SCROLL { }
+Flavour "Imran Jessek" : AI_SCROLL { }
+Flavour "Jadis Tharut" : AI_SCROLL { }
+Flavour "Jadis Ascid" : AI_SCROLL { }
+Flavour "Jadis Erdush" : AI_SCROLL { }
+Flavour "Jadis Cirre" : AI_SCROLL { }
+Flavour "Jadis Imran" : AI_SCROLL { }
+Flavour "Jessek Velex" : AI_SCROLL { }
+Flavour "Jessek Temov" : AI_SCROLL { }
+Flavour "Jessek Kadash" : AI_SCROLL { }
+Flavour "Jessek Dethak" : AI_SCROLL { }
+Flavour "Jessek Fenrig" : AI_SCROLL { }
+Flavour "Nul Golag" : AI_SCROLL { }
+Flavour "Nul Orvok" : AI_SCROLL { }
+Flavour "Nul Cirre" : AI_SCROLL { }
+Flavour "Nul Jadis" : AI_SCROLL { }
+Flavour "Nul Fenrig" : AI_SCROLL { }
+Flavour "Lariat Vox" : AI_SCROLL { }
+Flavour "Lariat Orvok" : AI_SCROLL { }
+Flavour "Lariat Colash" : AI_SCROLL { }
+Flavour "Lariat Erdush" : AI_SCROLL { }
+Flavour "Lariat Himrath" : AI_SCROLL { }
+Flavour "Lignis Tharut" : AI_SCROLL { }
+Flavour "Lignis Colash" : AI_SCROLL { }
+Flavour "Lignis Cirre" : AI_SCROLL { }
+Flavour "Lignis Cirre" : AI_SCROLL { }
+Flavour "Asmodex Lux" : AI_SCROLL { }
+Flavour "Asmodex Virix" : AI_SCROLL { }
+Flavour "Asmodex Colash" : AI_SCROLL { }
+Flavour "Asmodex Damhan" : AI_SCROLL { }
+Flavour "Asmodex Jadis" : AI_SCROLL { }
+Flavour "Vigsag Velex" : AI_SCROLL { }
+Flavour "Vigsag Ascid" : AI_SCROLL { }
+Flavour "Vigsag Orvok" : AI_SCROLL { }
+Flavour "Vigsag Jessek" : AI_SCROLL { }
+Flavour "Vigsag Fenrig" : AI_SCROLL { }
+Flavour "Vugnug Lux" : AI_SCROLL { }
+Flavour "Vugnug Tharut" : AI_SCROLL { }
+Flavour "Vugnug Erdush" : AI_SCROLL { }
+Flavour "Vugnug Imran" : AI_SCROLL { }
+Flavour "Vugnug Imran" : AI_SCROLL { }
+Flavour "Elbib Temov" : AI_SCROLL { }
+Flavour "Elbib Tharut" : AI_SCROLL { }
+Flavour "Elbib Ascid" : AI_SCROLL { }
+Flavour "Elbib Cirre" : AI_SCROLL { }
+Flavour "Elbib Jadis" : AI_SCROLL { }
+Flavour "Elam Tharut" : AI_SCROLL { }
+Flavour "Elam Tharut" : AI_SCROLL { }
+Flavour "Elam Balrut" : AI_SCROLL { }
+Flavour "Elam Ultas" : AI_SCROLL { }
+Flavour "Elam Imran" : AI_SCROLL { }
+Flavour "Tharr Olnam" : AI_SCROLL { }
+Flavour "Tharr Golag" : AI_SCROLL { }
+Flavour "Tharr Colash" : AI_SCROLL { }
+Flavour "Tharr Damhan" : AI_SCROLL { }
+Flavour "Tharr Asmodex" : AI_SCROLL { }
+Flavour "Yed Golag" : AI_SCROLL { }
+Flavour "Yed Balrut" : AI_SCROLL { }
+Flavour "Yed Ultas" : AI_SCROLL { }
+Flavour "Yed Erdush" : AI_SCROLL { }
+Flavour "Yed Nul" : AI_SCROLL { }
+Flavour "Azram Velex" : AI_SCROLL { }
+Flavour "Azram Orvok" : AI_SCROLL { }
+Flavour "Azram Colash" : AI_SCROLL { }
+Flavour "Azram Jessek" : AI_SCROLL { }
+Flavour "Azram Himrath" : AI_SCROLL { }
+Flavour "Kirje Virix" : AI_SCROLL { }
+Flavour "Kirje Orvok" : AI_SCROLL { }
+Flavour "Kirje Kadash" : AI_SCROLL { }
+Flavour "Kirje Dethak" : AI_SCROLL { }
+Flavour "Kirje Jessek" : AI_SCROLL { }
+Flavour "Noxon Ridis" : AI_SCROLL { }
+Flavour "Noxon Colash" : AI_SCROLL { }
+Flavour "Noxon Orvok" : AI_SCROLL { }
+Flavour "Noxon Cirre" : AI_SCROLL { }
+Flavour "Noxon Jadis" : AI_SCROLL { }
+Flavour "Oculon Golag" : AI_SCROLL { }
+Flavour "Oculon Colash" : AI_SCROLL { }
+Flavour "Oculon Cirre" : AI_SCROLL { }
+Flavour "Oculon Ultas" : AI_SCROLL { }
+Flavour "Oculon Asmodex" : AI_SCROLL { }
+Flavour "Pasix Solan" : AI_SCROLL { }
+Flavour "Pasix Orvok" : AI_SCROLL { }
+Flavour "Pasix Damhan" : AI_SCROLL { }
+Flavour "Pasix Jessek" : AI_SCROLL { }
+Flavour "Pasix Jadis" : AI_SCROLL { }
+Flavour "Praedit Lux" : AI_SCROLL { }
+Flavour "Praedit Virix" : AI_SCROLL { }
+Flavour "Praedit Dethak" : AI_SCROLL { }
+Flavour "Praedit Dethak" : AI_SCROLL { }
+Flavour "Praedit Jessek" : AI_SCROLL { }
+Flavour "Qixl Golag" : AI_SCROLL { }
+Flavour "Qixl Kadash" : AI_SCROLL { }
+Flavour "Qixl Cirre" : AI_SCROLL { }
+Flavour "Qixl Ultas" : AI_SCROLL { }
+Flavour "Qixl Nul" : AI_SCROLL { }
+Flavour "Rashem Ridis" : AI_SCROLL { }
+Flavour "Rashem Orvok" : AI_SCROLL { }
+Flavour "Rashem Colash" : AI_SCROLL { }
+Flavour "Rashem Himrath" : AI_SCROLL { }
+Flavour "Rashem Asmodex" : AI_SCROLL { }
+Flavour "Sardox Olnam" : AI_SCROLL { }
+Flavour "Sardox Solan" : AI_SCROLL { }
+Flavour "Sardox Balrut" : AI_SCROLL { }
+Flavour "Sardox Dethak" : AI_SCROLL { }
+Flavour "Sardox Nul" : AI_SCROLL { }
+Flavour "Tuliv Ridis" : AI_SCROLL { }
+Flavour "Tuliv Ascid" : AI_SCROLL { }
+Flavour "Tuliv Kadash" : AI_SCROLL { }
+Flavour "Tuliv Jadis" : AI_SCROLL { }
+Flavour "Tuliv Jessek" : AI_SCROLL { }
+Flavour "Ugnux Vox" : AI_SCROLL { }
+Flavour "Ugnux Orvok" : AI_SCROLL { }
+Flavour "Ugnux Damhan" : AI_SCROLL { }
+Flavour "Ugnux Himrath" : AI_SCROLL { }
+Flavour "Ugnux Lignis" : AI_SCROLL { }
+Flavour "Gornach Vox" : AI_SCROLL { }
+Flavour "Gornach Kadash" : AI_SCROLL { }
+Flavour "Gornach Balrut" : AI_SCROLL { }
+Flavour "Gornach Jessek" : AI_SCROLL { }
+Flavour "Gornach Fenrig" : AI_SCROLL { }
+Flavour "Vedas Velex" : AI_SCROLL { }
+Flavour "Vedas Balrut" : AI_SCROLL { }
+Flavour "Vedas Kadash" : AI_SCROLL { }
+Flavour "Vedas Ultas" : AI_SCROLL { }
+Flavour "Vedas Himrath" : AI_SCROLL { }
+Flavour "Mugmug Vox" : AI_SCROLL { }
+Flavour "Mugmug Temov" : AI_SCROLL { }
+Flavour "Mugmug Ascid" : AI_SCROLL { }
+Flavour "Mugmug Imran" : AI_SCROLL { }
+Flavour "Mugmug Nul" : AI_SCROLL { }
+Flavour "Grabnor Golag" : AI_SCROLL { }
+Flavour "Grabnor Tharut" : AI_SCROLL { }
+Flavour "Grabnor Colash" : AI_SCROLL { }
+Flavour "Grabnor Imran" : AI_SCROLL { }
+Flavour "Grabnor Lignis" : AI_SCROLL { }
 
-Flavor "blackened"       : AI_STAFF { }
-Flavor "teak"            : AI_STAFF { }
-Flavor "ornate"          : AI_STAFF { }
-Flavor "rosewood"        : AI_STAFF { }
-Flavor "glass"           : AI_STAFF { }
-Flavor "oak"             : AI_STAFF { }
-Flavor "thin"            : AI_STAFF { }
-Flavor "gnarled"         : AI_STAFF { }
-Flavor "engraved"        : AI_STAFF { }
-Flavor "crooked"         : AI_STAFF { }
-Flavor "iron-shod"       : AI_STAFF { }
-Flavor "steel-shod"      : AI_STAFF { }
-Flavor "gem-encrusted"   : AI_STAFF { }
-Flavor "fragile"         : AI_STAFF { }
-Flavor "sturdy"          : AI_STAFF { }
-Flavor "short"           : AI_STAFF { }
-Flavor "long"            : AI_STAFF { }
-
-
-Flavor "tapering"        : AI_WAND { }
-Flavor "ruby"            : AI_WAND { }
-Flavor "filigreed"       : AI_WAND { }
-Flavor "plain"           : AI_WAND { }
-Flavor "twisted"         : AI_WAND { }
-Flavor "star-tipped"     : AI_WAND { }
-Flavor "thick"           : AI_WAND { }
-Flavor "long"            : AI_WAND { }
-Flavor "pointed"         : AI_WAND { }
-Flavor "topaz"           : AI_WAND { }
-Flavor "mithril"         : AI_WAND { }
-Flavor "adamant"         : AI_WAND { }
-Flavor "darkwood"        : AI_WAND { }
-Flavor "huge"            : AI_WAND { }
-Flavor "rune-covered"    : AI_WAND { }
-Flavor "black"           : AI_WAND { }
-Flavor "forked"          : AI_WAND { }
-Flavor "intertwining"    : AI_WAND { }
-Flavor "sharpened"       : AI_WAND { }
-Flavor "fragile"         : AI_WAND { }
-Flavor "cracked;flavor"  : AI_WAND { }
-Flavor "truly old"       : AI_WAND { }
-Flavor "glowing"         : AI_WAND { }
-Flavor "steel"           : AI_WAND { }
-Flavor "copper"          : AI_WAND { }
-Flavor "curved"          : AI_WAND { }
-Flavor "flexible"        : AI_WAND { }
-Flavor "orichalchum"     : AI_WAND { }
-Flavor "moonsilver"      : AI_WAND { }
+Flavour "blackened"       : AI_STAFF { }
+Flavour "teak"            : AI_STAFF { }
+Flavour "ornate"          : AI_STAFF { }
+Flavour "rosewood"        : AI_STAFF { }
+Flavour "glass"           : AI_STAFF { }
+Flavour "oak"             : AI_STAFF { }
+Flavour "thin"            : AI_STAFF { }
+Flavour "gnarled"         : AI_STAFF { }
+Flavour "engraved"        : AI_STAFF { }
+Flavour "crooked"         : AI_STAFF { }
+Flavour "iron-shod"       : AI_STAFF { }
+Flavour "steel-shod"      : AI_STAFF { }
+Flavour "gem-encrusted"   : AI_STAFF { }
+Flavour "fragile"         : AI_STAFF { }
+Flavour "sturdy"          : AI_STAFF { }
+Flavour "short"           : AI_STAFF { }
+Flavour "long"            : AI_STAFF { }
 
 
-Flavor "inlaid"          : AI_WAND { }
-Flavor "ivory"           : AI_WAND { }
-Flavor "obsidian"        : AI_WAND { }
-Flavor "forged"          : AI_WAND { }
-Flavor "translucent"     : AI_WAND { }
-
-Flavor "ruby-tipped"     : AI_WAND { }
-Flavor "ruby-studded"    : AI_WAND { }
-Flavor "diamond-tipped"  : AI_WAND { }
-Flavor "diamond-studded" : AI_WAND { }
-Flavor "emerald-tipped"  : AI_WAND { }
-Flavor "emerald-studded" : AI_WAND { }
-Flavor "sapphire-tipped"  : AI_WAND { }
-Flavor "sapphire-studded" : AI_WAND { }
-Flavor "onyx-tipped"  : AI_WAND { }
-Flavor "onyx-studded" : AI_WAND { }
-Flavor "star-tipped"  : AI_WAND { }
-
-
-
-Flavor "steel"           : AI_ROD { }
-Flavor "regal"           : AI_ROD { }
-Flavor "carved"          : AI_ROD { }
-Flavor "intertwined"     : AI_ROD { }
-Flavor "copper"          : AI_ROD { }
-Flavor "obsidian;flavor" : AI_ROD { }
-Flavor "plain"           : AI_ROD { }
-Flavor "heavy"           : AI_ROD { }
-Flavor "thin"            : AI_ROD { }
-Flavor "lead"            : AI_ROD { }
-Flavor "long"            : AI_ROD { }
-Flavor "flanged"         : AI_ROD { }
-Flavor "forged"          : AI_ROD { }
-Flavor "telescoping"     : AI_ROD { }
-Flavor "ceremonial"      : AI_ROD { }
-Flavor "fur-covered"     : AI_ROD { }
-Flavor "rune-covered"    : AI_ROD { }
-Flavor "chipped"         : AI_ROD { }
-Flavor "mithril"         : AI_ROD { }
-Flavor "short"           : AI_ROD { }
+Flavour "tapering"        : AI_WAND { }
+Flavour "ruby"            : AI_WAND { }
+Flavour "filigreed"       : AI_WAND { }
+Flavour "plain"           : AI_WAND { }
+Flavour "twisted"         : AI_WAND { }
+Flavour "star-tipped"     : AI_WAND { }
+Flavour "thick"           : AI_WAND { }
+Flavour "long"            : AI_WAND { }
+Flavour "pointed"         : AI_WAND { }
+Flavour "topaz"           : AI_WAND { }
+Flavour "mithril"         : AI_WAND { }
+Flavour "adamant"         : AI_WAND { }
+Flavour "darkwood"        : AI_WAND { }
+Flavour "huge"            : AI_WAND { }
+Flavour "rune-covered"    : AI_WAND { }
+Flavour "black"           : AI_WAND { }
+Flavour "forked"          : AI_WAND { }
+Flavour "intertwining"    : AI_WAND { }
+Flavour "sharpened"       : AI_WAND { }
+Flavour "fragile"         : AI_WAND { }
+Flavour "cracked;flavour" : AI_WAND { }
+Flavour "truly old"       : AI_WAND { }
+Flavour "glowing"         : AI_WAND { }
+Flavour "steel"           : AI_WAND { }
+Flavour "copper"          : AI_WAND { }
+Flavour "curved"          : AI_WAND { }
+Flavour "flexible"        : AI_WAND { }
+Flavour "orichalchum"     : AI_WAND { }
+Flavour "moonsilver"      : AI_WAND { }
 
 
-Flavor "agate"           : AI_RING { }
-Flavor "amber"           : AI_RING { }
-Flavor "amethyst"        : AI_RING { }
-Flavor "ancestral"       : AI_RING { }
-Flavor "blood-stained"   : AI_RING { }
-Flavor "brass"           : AI_RING { }
-Flavor "bronze"          : AI_RING { }
-Flavor "bloody"          : AI_RING { }
-Flavor "carved"          : AI_RING { }
-Flavor "diamond;flavor"  : AI_RING { }
-Flavor "double-banded"   : AI_RING { }
-Flavor "dwarven"         : AI_RING { }
-Flavor "electrum"        : AI_RING { }
-Flavor "elven"           : AI_RING { }
-Flavor "emerald"         : AI_RING { }
-Flavor "engraved"        : AI_RING { }
-Flavor "gem-studded"     : AI_RING { }
-Flavor "glass"           : AI_RING { }
-Flavor "grass"           : AI_RING { }
-Flavor "gold"            : AI_RING { }
-Flavor "hand-made"       : AI_RING { }
-Flavor "inscribed"       : AI_RING { }
-Flavor "iron"            : AI_RING { }
-Flavor "jade"            : AI_RING { }
-Flavor "kinship"         : AI_RING { }
-Flavor "large"           : AI_RING { }
-Flavor "moonstone"       : AI_RING { }
-Flavor "onxy"            : AI_RING { }
-Flavor "opal"            : AI_RING { }
-Flavor "ornate"          : AI_RING { }
-Flavor "plain"           : AI_RING { }
-Flavor "platinum"        : AI_RING { }
-Flavor "ruby"            : AI_RING { }
-Flavor "rune-covered"    : AI_RING { }
-Flavor "sapphire"        : AI_RING { }
-Flavor "silver"          : AI_RING { }
-Flavor "steel"           : AI_RING { }
-Flavor "stylized"        : AI_RING { }
-Flavor "tarnished"       : AI_RING { }
-Flavor "thick"           : AI_RING { }
-Flavor "thin"            : AI_RING { }
-Flavor "topaz"           : AI_RING { }
-Flavor "wooden"          : AI_RING { }
-Flavor "woven vine"      : AI_RING { }
-Flavor "beryl"           : AI_RING { }
-Flavor "obsidian;1"      : AI_RING { }
-Flavor "electrum"        : AI_RING { }
-Flavor "monogrammed"     : AI_RING { }
-Flavor "adamant"         : AI_RING { }
-Flavor "slender"         : AI_RING { }
-Flavor "translucent"     : AI_RING { }
-Flavor "crudely made"    : AI_RING { }
-Flavor "crystal"         : AI_RING { }
-Flavor "sigil"           : AI_RING { }
-Flavor "black"           : AI_RING { }
+Flavour "inlaid"          : AI_WAND { }
+Flavour "ivory"           : AI_WAND { }
+Flavour "obsidian"        : AI_WAND { }
+Flavour "forged"          : AI_WAND { }
+Flavour "translucent"     : AI_WAND { }
 
-Flavor "tooled"          : AI_HORN { }
-Flavor "plain"           : AI_HORN { }
-Flavor "rune-covered"    : AI_HORN { }
-Flavor "ivory"           : AI_HORN { }
-Flavor "leather"         : AI_HORN { }
-Flavor "large"           : AI_HORN { }
-Flavor "sturdy"          : AI_HORN { }
-Flavor "wood"            : AI_HORN { }
-Flavor "copper"          : AI_HORN { }
-Flavor "bass"            : AI_HORN { }
-Flavor "treble"          : AI_HORN { }
-Flavor "carved"          : AI_HORN { }
-
-Flavor "tight"           : AI_HEADBAND { }
-Flavor "thin"            : AI_HEADBAND { }
-Flavor "gem-inset"       : AI_HEADBAND { }
-Flavor "royal"           : AI_HEADBAND { }
-Flavor "rune-covered"    : AI_HEADBAND { }
-Flavor "thick"           : AI_HEADBAND { }
-Flavor "brass"           : AI_HEADBAND { }
-Flavor "cloth"           : AI_HEADBAND { }
-Flavor "leather"         : AI_HEADBAND { }
-Flavor "wavy"            : AI_HEADBAND { }
-Flavor "adamant"         : AI_HEADBAND { }
-Flavor "heavy"           : AI_HEADBAND { }
-
-
-Flavor "outmoded"        : AI_HELM { }
-Flavor "boxy"            : AI_HELM { }
-Flavor "brass"           : AI_HELM { }
-Flavor "bronze"          : AI_HELM { }
-Flavor "ceremonial"      : AI_HELM { }
-Flavor "copper"          : AI_HELM { }
-Flavor "electrum"        : AI_HELM { }
-Flavor "fancy"           : AI_HELM { }
-Flavor "gem-encrused"    : AI_HELM { }
-Flavor "green"           : AI_HELM { }
-Flavor "heavy"           : AI_HELM { }
-Flavor "hide"            : AI_HELM { }
-Flavor "horned"          : AI_HELM { }
-Flavor "iron"            : AI_HELM { }
-Flavor "ornate"          : AI_HELM { }
-Flavor "plain"           : AI_HELM { }
-Flavor "plumed"          : AI_HELM { }
-Flavor "red"             : AI_HELM { }
-Flavor "rune-covered"    : AI_HELM { }
-Flavor "spiked"          : AI_HELM { }
-Flavor "steel"           : AI_HELM { }
-Flavor "winged"          : AI_HELM { }
-
-
-Flavor "hand-made"       : AI_CLOAK { }
-Flavor "silk"            : AI_CLOAK { }
-Flavor "reinforced"      : AI_CLOAK { }
-Flavor "satin"           : AI_CLOAK { }
-Flavor "jeweled"         : AI_CLOAK { }
-Flavor "thick black"     : AI_CLOAK { }
-Flavor "dark crimson"    : AI_CLOAK { }
-Flavor "thick"           : AI_CLOAK { }
-Flavor "expensive"       : AI_CLOAK { }
-Flavor "dark navy"       : AI_CLOAK { }
-Flavor "long"            : AI_CLOAK { }
-Flavor "stylized"        : AI_CLOAK { }
-Flavor "tattered"        : AI_CLOAK { }
-Flavor "ragged"          : AI_CLOAK { }
-Flavor "fur-trimmed"     : AI_CLOAK { }
-Flavor "glossy black"    : AI_CLOAK { }
-Flavor "winter"          : AI_CLOAK { }
-Flavor "rune-trimmed"    : AI_CLOAK { }
-Flavor "star-covered"    : AI_CLOAK { }
-Flavor "patterned"       : AI_CLOAK { }
-Flavor "heraldic"        : AI_CLOAK { }
+Flavour "ruby-tipped"     : AI_WAND { }
+Flavour "ruby-studded"    : AI_WAND { }
+Flavour "diamond-tipped"  : AI_WAND { }
+Flavour "diamond-studded" : AI_WAND { }
+Flavour "emerald-tipped"  : AI_WAND { }
+Flavour "emerald-studded" : AI_WAND { }
+Flavour "sapphire-tipped"  : AI_WAND { }
+Flavour "sapphire-studded" : AI_WAND { }
+Flavour "onyx-tipped"  : AI_WAND { }
+Flavour "onyx-studded" : AI_WAND { }
+Flavour "star-tipped"  : AI_WAND { }
 
 
 
-Flavor "fashionable"     : AI_GIRDLE { }
-Flavor "black"           : AI_GIRDLE { }
-Flavor "blue"            : AI_GIRDLE { }
-Flavor "buckled"         : AI_GIRDLE { }
-Flavor "clasped"         : AI_GIRDLE { }
-Flavor "delicate"        : AI_GIRDLE { }
-Flavor "gem-encrusted"   : AI_GIRDLE { }
-Flavor "green"           : AI_GIRDLE { }
-Flavor "heavy"           : AI_GIRDLE { }
-Flavor "hemp"            : AI_GIRDLE { }
-Flavor "iron"            : AI_GIRDLE { }
-Flavor "leather"         : AI_GIRDLE { }
-Flavor "leather"         : AI_GIRDLE { }
-Flavor "pliant"          : AI_GIRDLE { }
-Flavor "red"             : AI_GIRDLE { }
-Flavor "reinforced"      : AI_GIRDLE { }
-Flavor "rune-covered"    : AI_GIRDLE { }
-Flavor "shiny"           : AI_GIRDLE { }
-Flavor "studded"         : AI_GIRDLE { }
-Flavor "thick"           : AI_GIRDLE { }
-Flavor "thin"            : AI_GIRDLE { }
-Flavor "tight"           : AI_GIRDLE { }
-Flavor "tooled"          : AI_GIRDLE { }
-Flavor "white"           : AI_GIRDLE { }
+Flavour "steel"           : AI_ROD { }
+Flavour "regal"           : AI_ROD { }
+Flavour "carved"          : AI_ROD { }
+Flavour "intertwined"     : AI_ROD { }
+Flavour "copper"          : AI_ROD { }
+Flavour "obsidian;flavour": AI_ROD { }
+Flavour "plain"           : AI_ROD { }
+Flavour "heavy"           : AI_ROD { }
+Flavour "thin"            : AI_ROD { }
+Flavour "lead"            : AI_ROD { }
+Flavour "long"            : AI_ROD { }
+Flavour "flanged"         : AI_ROD { }
+Flavour "forged"          : AI_ROD { }
+Flavour "telescoping"     : AI_ROD { }
+Flavour "ceremonial"      : AI_ROD { }
+Flavour "fur-covered"     : AI_ROD { }
+Flavour "rune-covered"    : AI_ROD { }
+Flavour "chipped"         : AI_ROD { }
+Flavour "mithril"         : AI_ROD { }
+Flavour "short"           : AI_ROD { }
 
 
-Flavor "adamant-gilded"  : AI_BRACERS { }
-Flavor "banded"          : AI_BRACERS { }
-Flavor "chipped"         : AI_BRACERS { }
-Flavor "cloth"           : AI_BRACERS { }
-Flavor "copper-gilded"   : AI_BRACERS { }
-Flavor "firm"            : AI_BRACERS { }
-Flavor "gold-gilded"     : AI_BRACERS { }
-Flavor "heavy"           : AI_BRACERS { }
-Flavor "heavy"           : AI_BRACERS { }
-Flavor "inscribed"       : AI_BRACERS { }
-Flavor "jeweled"         : AI_BRACERS { }
-Flavor "leather"         : AI_BRACERS { }
-Flavor "light"           : AI_BRACERS { }
-Flavor "loose"           : AI_BRACERS { }
-Flavor "mithril-gilded"  : AI_BRACERS { }
-Flavor "ornate"          : AI_BRACERS { }
-Flavor "ornately carved" : AI_BRACERS { }
-Flavor "plate"           : AI_BRACERS { }
-Flavor "pliant"          : AI_BRACERS { }
-Flavor "polished"        : AI_BRACERS { }
-Flavor "rune-covered"    : AI_BRACERS { }
-Flavor "rusted"          : AI_BRACERS { }
-Flavor "sharp-edged"     : AI_BRACERS { }
-Flavor "silver-gilded"   : AI_BRACERS { }
-Flavor "spiked"          : AI_BRACERS { }
-Flavor "stained"         : AI_BRACERS { }
-Flavor "steel-gilded"    : AI_BRACERS { }
-Flavor "sturdy"          : AI_BRACERS { }
-Flavor "tight-fitting"   : AI_BRACERS { }
-Flavor "well-worn"       : AI_BRACERS { }
+Flavour "agate"           : AI_RING { }
+Flavour "amber"           : AI_RING { }
+Flavour "amethyst"        : AI_RING { }
+Flavour "ancestral"       : AI_RING { }
+Flavour "blood-stained"   : AI_RING { }
+Flavour "brass"           : AI_RING { }
+Flavour "bronze"          : AI_RING { }
+Flavour "bloody"          : AI_RING { }
+Flavour "carved"          : AI_RING { }
+Flavour "diamond;flavour" : AI_RING { }
+Flavour "double-banded"   : AI_RING { }
+Flavour "dwarven"         : AI_RING { }
+Flavour "electrum"        : AI_RING { }
+Flavour "elven"           : AI_RING { }
+Flavour "emerald"         : AI_RING { }
+Flavour "engraved"        : AI_RING { }
+Flavour "gem-studded"     : AI_RING { }
+Flavour "glass"           : AI_RING { }
+Flavour "grass"           : AI_RING { }
+Flavour "gold"            : AI_RING { }
+Flavour "hand-made"       : AI_RING { }
+Flavour "inscribed"       : AI_RING { }
+Flavour "iron"            : AI_RING { }
+Flavour "jade"            : AI_RING { }
+Flavour "kinship"         : AI_RING { }
+Flavour "large"           : AI_RING { }
+Flavour "moonstone"       : AI_RING { }
+Flavour "onxy"            : AI_RING { }
+Flavour "opal"            : AI_RING { }
+Flavour "ornate"          : AI_RING { }
+Flavour "plain"           : AI_RING { }
+Flavour "platinum"        : AI_RING { }
+Flavour "ruby"            : AI_RING { }
+Flavour "rune-covered"    : AI_RING { }
+Flavour "sapphire"        : AI_RING { }
+Flavour "silver"          : AI_RING { }
+Flavour "steel"           : AI_RING { }
+Flavour "stylized"        : AI_RING { }
+Flavour "tarnished"       : AI_RING { }
+Flavour "thick"           : AI_RING { }
+Flavour "thin"            : AI_RING { }
+Flavour "topaz"           : AI_RING { }
+Flavour "wooden"          : AI_RING { }
+Flavour "woven vine"      : AI_RING { }
+Flavour "beryl"           : AI_RING { }
+Flavour "obsidian;1"      : AI_RING { }
+Flavour "electrum"        : AI_RING { }
+Flavour "monogrammed"     : AI_RING { }
+Flavour "adamant"         : AI_RING { }
+Flavour "slender"         : AI_RING { }
+Flavour "translucent"     : AI_RING { }
+Flavour "crudely made"    : AI_RING { }
+Flavour "crystal"         : AI_RING { }
+Flavour "sigil"           : AI_RING { }
+Flavour "black"           : AI_RING { }
 
-Flavor "adamant-gilded"  : AI_GAUNTLETS { }
-Flavor "banded"          : AI_GAUNTLETS { }
-Flavor "chipped"         : AI_GAUNTLETS { }
-Flavor "cloth"           : AI_GAUNTLETS { }
-Flavor "copper-gilded"   : AI_GAUNTLETS { }
-Flavor "firm"            : AI_GAUNTLETS { }
-Flavor "gold-gilded"     : AI_GAUNTLETS { }
-Flavor "heavy"           : AI_GAUNTLETS { }
-Flavor "heavy"           : AI_GAUNTLETS { }
-Flavor "inscribed"       : AI_GAUNTLETS { }
-Flavor "jeweled"         : AI_GAUNTLETS { }
-Flavor "leather"         : AI_GAUNTLETS { }
-Flavor "light"           : AI_GAUNTLETS { }
-Flavor "loose"           : AI_GAUNTLETS { }
-Flavor "mithril-gilded"  : AI_GAUNTLETS { }
-Flavor "ornate"          : AI_GAUNTLETS { }
-Flavor "ornately carved" : AI_GAUNTLETS { }
-Flavor "plate"           : AI_GAUNTLETS { }
-Flavor "pliant"          : AI_GAUNTLETS { }
-Flavor "polished"        : AI_GAUNTLETS { }
-Flavor "rune-covered"    : AI_GAUNTLETS { }
-Flavor "rusted"          : AI_GAUNTLETS { }
-Flavor "sharp-edged"     : AI_GAUNTLETS { }
-Flavor "silver-gilded"   : AI_GAUNTLETS { }
-Flavor "spiked"          : AI_GAUNTLETS { }
-Flavor "stained"         : AI_GAUNTLETS { }
-Flavor "steel-gilded"    : AI_GAUNTLETS { }
-Flavor "sturdy"          : AI_GAUNTLETS { }
-Flavor "tight-fitting"   : AI_GAUNTLETS { }
-Flavor "well-worn"       : AI_GAUNTLETS { }
+Flavour "tooled"          : AI_HORN { }
+Flavour "plain"           : AI_HORN { }
+Flavour "rune-covered"    : AI_HORN { }
+Flavour "ivory"           : AI_HORN { }
+Flavour "leather"         : AI_HORN { }
+Flavour "large"           : AI_HORN { }
+Flavour "sturdy"          : AI_HORN { }
+Flavour "wood"            : AI_HORN { }
+Flavour "copper"          : AI_HORN { }
+Flavour "bass"            : AI_HORN { }
+Flavour "treble"          : AI_HORN { }
+Flavour "carved"          : AI_HORN { }
+
+Flavour "tight"           : AI_HEADBAND { }
+Flavour "thin"            : AI_HEADBAND { }
+Flavour "gem-inset"       : AI_HEADBAND { }
+Flavour "royal"           : AI_HEADBAND { }
+Flavour "rune-covered"    : AI_HEADBAND { }
+Flavour "thick"           : AI_HEADBAND { }
+Flavour "brass"           : AI_HEADBAND { }
+Flavour "cloth"           : AI_HEADBAND { }
+Flavour "leather"         : AI_HEADBAND { }
+Flavour "wavy"            : AI_HEADBAND { }
+Flavour "adamant"         : AI_HEADBAND { }
+Flavour "heavy"           : AI_HEADBAND { }
 
 
-Flavor "leather"         : AI_BOOTS { }
-Flavor "steel-toed"      : AI_BOOTS { }
-Flavor "sturdy"          : AI_BOOTS { }
-Flavor "decorative"      : AI_BOOTS { }
-Flavor "soft-solved"     : AI_BOOTS { }
-Flavor "tanned"          : AI_BOOTS { }
-Flavor "primitive"       : AI_BOOTS { }
-Flavor "tall"            : AI_BOOTS { }
-Flavor "deerskin"        : AI_BOOTS { }
-Flavor "well-worn"       : AI_BOOTS { }
-Flavor "rune-covered"    : AI_BOOTS { }
-Flavor "ankle-high"      : AI_BOOTS { }
-Flavor "work"            : AI_BOOTS { }
-Flavor "blacksmith's"    : AI_BOOTS { }
-Flavor "finely crafted"  : AI_BOOTS { }
+Flavour "outmoded"        : AI_HELM { }
+Flavour "boxy"            : AI_HELM { }
+Flavour "brass"           : AI_HELM { }
+Flavour "bronze"          : AI_HELM { }
+Flavour "ceremonial"      : AI_HELM { }
+Flavour "copper"          : AI_HELM { }
+Flavour "electrum"        : AI_HELM { }
+Flavour "fancy"           : AI_HELM { }
+Flavour "gem-encrused"    : AI_HELM { }
+Flavour "green"           : AI_HELM { }
+Flavour "heavy"           : AI_HELM { }
+Flavour "hide"            : AI_HELM { }
+Flavour "horned"          : AI_HELM { }
+Flavour "iron"            : AI_HELM { }
+Flavour "ornate"          : AI_HELM { }
+Flavour "plain"           : AI_HELM { }
+Flavour "plumed"          : AI_HELM { }
+Flavour "red"             : AI_HELM { }
+Flavour "rune-covered"    : AI_HELM { }
+Flavour "spiked"          : AI_HELM { }
+Flavour "steel"           : AI_HELM { }
+Flavour "winged"          : AI_HELM { }
 
 
-Flavor "agni mani"       : AI_AMULET { }
-Flavor "sparkling"       : AI_AMULET { }
-Flavor "andar"           : AI_AMULET { }
-Flavor "black opal"      : AI_AMULET { }
-Flavor "bloodstone"      : AI_AMULET { }
-Flavor "bone"            : AI_AMULET { }
-Flavor "chrysoberyl"     : AI_AMULET { }
-Flavor "clasped"         : AI_AMULET { }
-Flavor "coral"           : AI_AMULET { }
-Flavor "cracked"         : AI_AMULET { }
-Flavor "emerald"         : AI_AMULET { }
-Flavor "fragile"         : AI_AMULET { }
-Flavor "gold"            : AI_AMULET { }
-Flavor "hand-carved"     : AI_AMULET { }
-Flavor "heavy"           : AI_AMULET { }
-Flavor "high"            : AI_AMULET { }
-Flavor "iol"             : AI_AMULET { }
-Flavor "ivory"           : AI_AMULET { }
-Flavor "jade opal"       : AI_AMULET { }
-Flavor "jasper"          : AI_AMULET { }
-Flavor "large"           : AI_AMULET { }
-Flavor "moonsilver"      : AI_AMULET { }
-Flavor "moonstone"       : AI_AMULET { }
-Flavor "obsidian;flavor" : AI_AMULET { }
-Flavor "painted"         : AI_AMULET { }
-Flavor "pearl"           : AI_AMULET { }
-Flavor "primitive"       : AI_AMULET { }
-Flavor "ruby"            : AI_AMULET { }
-Flavor "ruby-inset"      : AI_AMULET { }
-Flavor "runic"           : AI_AMULET { }
-Flavor "sapphire"        : AI_AMULET { }
-Flavor "scented"         : AI_AMULET { }
-Flavor "shamanic"        : AI_AMULET { }
-Flavor "silver"          : AI_AMULET { }
-Flavor "skull"           : AI_AMULET { }
-Flavor "skydrop"         : AI_AMULET { }
-Flavor "sphere"          : AI_AMULET { }
-Flavor "steel"           : AI_AMULET { }
-Flavor "sunstone"        : AI_AMULET { }
-Flavor "tchazar"         : AI_AMULET { }
-Flavor "water opal"      : AI_AMULET { }
-Flavor "waterstar"       : AI_AMULET { }
-Flavor "wrought iron"    : AI_AMULET { }
-Flavor "ziose"           : AI_AMULET { }
-Flavor "zircon"          : AI_AMULET { }
+Flavour "hand-made"       : AI_CLOAK { }
+Flavour "silk"            : AI_CLOAK { }
+Flavour "reinforced"      : AI_CLOAK { }
+Flavour "satin"           : AI_CLOAK { }
+Flavour "jeweled"         : AI_CLOAK { }
+Flavour "thick black"     : AI_CLOAK { }
+Flavour "dark crimson"    : AI_CLOAK { }
+Flavour "thick"           : AI_CLOAK { }
+Flavour "expensive"       : AI_CLOAK { }
+Flavour "dark navy"       : AI_CLOAK { }
+Flavour "long"            : AI_CLOAK { }
+Flavour "stylized"        : AI_CLOAK { }
+Flavour "tattered"        : AI_CLOAK { }
+Flavour "ragged"          : AI_CLOAK { }
+Flavour "fur-trimmed"     : AI_CLOAK { }
+Flavour "glossy black"    : AI_CLOAK { }
+Flavour "winter"          : AI_CLOAK { }
+Flavour "rune-trimmed"    : AI_CLOAK { }
+Flavour "star-covered"    : AI_CLOAK { }
+Flavour "patterned"       : AI_CLOAK { }
+Flavour "heraldic"        : AI_CLOAK { }
 
-Flavor "crimson-tinted"                  : AI_EYES  { Color: red; }
-Flavor "black-tinted"                    : AI_EYES  { Color: black; }
-Flavor "emerald-tinted"                  : AI_EYES  { Color: bright green; }
-Flavor "amber-tinted"                    : AI_EYES  { Color: brown; }
-Flavor "silvery-tinted"                  : AI_EYES  { Color: white; }
-Flavor "white-tinted"                    : AI_EYES  { Color: grey; }
-Flavor "tan-tinted"                      : AI_EYES  { Color: brown; }
-Flavor "orange-tinted"                   : AI_EYES  { Color: pink; }
-Flavor "violet-tinted"                   : AI_EYES  { Color: purple; }
-Flavor "red-tinted"                      : AI_EYES  { Color: red; }
-Flavor "blue-tinted"                     : AI_EYES  { Color: blue; }
-Flavor "green-tinted"                    : AI_EYES  { Color: green; }
-Flavor "yellow-tinted"                   : AI_EYES  { Color: yellow; }
-Flavor "indigo-tinted"                   : AI_EYES  { Color: blue; }
-Flavor "brass-rimmed"                    : AI_EYES  { Color: brown; }
-Flavor "iron-rimmed"                     : AI_EYES  { Color: grey; }
-Flavor "circular"                        : AI_EYES  { }
-Flavor "square-lensed"                   : AI_EYES  { }
-Flavor "rose-tinted"                     : AI_EYES  { Color: red; }
-Flavor "ornate"                          : AI_EYES  { }
-Flavor "cracked"                         : AI_EYES  { }
-Flavor "thin-lensed"                     : AI_EYES  { }
-Flavor "thick-lensed"                    : AI_EYES  { }
 
-Flavor "speckled"        : AI_MUSH { }
-Flavor "toadstool"       : AI_MUSH { }
-Flavor "dark"            : AI_MUSH { }
-Flavor "tiny"            : AI_MUSH { }
-Flavor "crimson"         : AI_MUSH { }
-Flavor "smelly"          : AI_MUSH { }
-Flavor "crooked"         : AI_MUSH { }
-Flavor "colorful"        : AI_MUSH { }
+
+Flavour "fashionable"     : AI_GIRDLE { }
+Flavour "black"           : AI_GIRDLE { }
+Flavour "blue"            : AI_GIRDLE { }
+Flavour "buckled"         : AI_GIRDLE { }
+Flavour "clasped"         : AI_GIRDLE { }
+Flavour "delicate"        : AI_GIRDLE { }
+Flavour "gem-encrusted"   : AI_GIRDLE { }
+Flavour "green"           : AI_GIRDLE { }
+Flavour "heavy"           : AI_GIRDLE { }
+Flavour "hemp"            : AI_GIRDLE { }
+Flavour "iron"            : AI_GIRDLE { }
+Flavour "leather"         : AI_GIRDLE { }
+Flavour "leather"         : AI_GIRDLE { }
+Flavour "pliant"          : AI_GIRDLE { }
+Flavour "red"             : AI_GIRDLE { }
+Flavour "reinforced"      : AI_GIRDLE { }
+Flavour "rune-covered"    : AI_GIRDLE { }
+Flavour "shiny"           : AI_GIRDLE { }
+Flavour "studded"         : AI_GIRDLE { }
+Flavour "thick"           : AI_GIRDLE { }
+Flavour "thin"            : AI_GIRDLE { }
+Flavour "tight"           : AI_GIRDLE { }
+Flavour "tooled"          : AI_GIRDLE { }
+Flavour "white"           : AI_GIRDLE { }
+
+
+Flavour "adamant-gilded"  : AI_BRACERS { }
+Flavour "banded"          : AI_BRACERS { }
+Flavour "chipped"         : AI_BRACERS { }
+Flavour "cloth"           : AI_BRACERS { }
+Flavour "copper-gilded"   : AI_BRACERS { }
+Flavour "firm"            : AI_BRACERS { }
+Flavour "gold-gilded"     : AI_BRACERS { }
+Flavour "heavy"           : AI_BRACERS { }
+Flavour "heavy"           : AI_BRACERS { }
+Flavour "inscribed"       : AI_BRACERS { }
+Flavour "jeweled"         : AI_BRACERS { }
+Flavour "leather"         : AI_BRACERS { }
+Flavour "light"           : AI_BRACERS { }
+Flavour "loose"           : AI_BRACERS { }
+Flavour "mithril-gilded"  : AI_BRACERS { }
+Flavour "ornate"          : AI_BRACERS { }
+Flavour "ornately carved" : AI_BRACERS { }
+Flavour "plate"           : AI_BRACERS { }
+Flavour "pliant"          : AI_BRACERS { }
+Flavour "polished"        : AI_BRACERS { }
+Flavour "rune-covered"    : AI_BRACERS { }
+Flavour "rusted"          : AI_BRACERS { }
+Flavour "sharp-edged"     : AI_BRACERS { }
+Flavour "silver-gilded"   : AI_BRACERS { }
+Flavour "spiked"          : AI_BRACERS { }
+Flavour "stained"         : AI_BRACERS { }
+Flavour "steel-gilded"    : AI_BRACERS { }
+Flavour "sturdy"          : AI_BRACERS { }
+Flavour "tight-fitting"   : AI_BRACERS { }
+Flavour "well-worn"       : AI_BRACERS { }
+
+Flavour "adamant-gilded"  : AI_GAUNTLETS { }
+Flavour "banded"          : AI_GAUNTLETS { }
+Flavour "chipped"         : AI_GAUNTLETS { }
+Flavour "cloth"           : AI_GAUNTLETS { }
+Flavour "copper-gilded"   : AI_GAUNTLETS { }
+Flavour "firm"            : AI_GAUNTLETS { }
+Flavour "gold-gilded"     : AI_GAUNTLETS { }
+Flavour "heavy"           : AI_GAUNTLETS { }
+Flavour "heavy"           : AI_GAUNTLETS { }
+Flavour "inscribed"       : AI_GAUNTLETS { }
+Flavour "jeweled"         : AI_GAUNTLETS { }
+Flavour "leather"         : AI_GAUNTLETS { }
+Flavour "light"           : AI_GAUNTLETS { }
+Flavour "loose"           : AI_GAUNTLETS { }
+Flavour "mithril-gilded"  : AI_GAUNTLETS { }
+Flavour "ornate"          : AI_GAUNTLETS { }
+Flavour "ornately carved" : AI_GAUNTLETS { }
+Flavour "plate"           : AI_GAUNTLETS { }
+Flavour "pliant"          : AI_GAUNTLETS { }
+Flavour "polished"        : AI_GAUNTLETS { }
+Flavour "rune-covered"    : AI_GAUNTLETS { }
+Flavour "rusted"          : AI_GAUNTLETS { }
+Flavour "sharp-edged"     : AI_GAUNTLETS { }
+Flavour "silver-gilded"   : AI_GAUNTLETS { }
+Flavour "spiked"          : AI_GAUNTLETS { }
+Flavour "stained"         : AI_GAUNTLETS { }
+Flavour "steel-gilded"    : AI_GAUNTLETS { }
+Flavour "sturdy"          : AI_GAUNTLETS { }
+Flavour "tight-fitting"   : AI_GAUNTLETS { }
+Flavour "well-worn"       : AI_GAUNTLETS { }
+
+
+Flavour "leather"         : AI_BOOTS { }
+Flavour "steel-toed"      : AI_BOOTS { }
+Flavour "sturdy"          : AI_BOOTS { }
+Flavour "decorative"      : AI_BOOTS { }
+Flavour "soft-solved"     : AI_BOOTS { }
+Flavour "tanned"          : AI_BOOTS { }
+Flavour "primitive"       : AI_BOOTS { }
+Flavour "tall"            : AI_BOOTS { }
+Flavour "deerskin"        : AI_BOOTS { }
+Flavour "well-worn"       : AI_BOOTS { }
+Flavour "rune-covered"    : AI_BOOTS { }
+Flavour "ankle-high"      : AI_BOOTS { }
+Flavour "work"            : AI_BOOTS { }
+Flavour "blacksmith's"    : AI_BOOTS { }
+Flavour "finely crafted"  : AI_BOOTS { }
+
+
+Flavour "agni mani"       : AI_AMULET { }
+Flavour "sparkling"       : AI_AMULET { }
+Flavour "andar"           : AI_AMULET { }
+Flavour "black opal"      : AI_AMULET { }
+Flavour "bloodstone"      : AI_AMULET { }
+Flavour "bone"            : AI_AMULET { }
+Flavour "chrysoberyl"     : AI_AMULET { }
+Flavour "clasped"         : AI_AMULET { }
+Flavour "coral"           : AI_AMULET { }
+Flavour "cracked"         : AI_AMULET { }
+Flavour "emerald"         : AI_AMULET { }
+Flavour "fragile"         : AI_AMULET { }
+Flavour "gold"            : AI_AMULET { }
+Flavour "hand-carved"     : AI_AMULET { }
+Flavour "heavy"           : AI_AMULET { }
+Flavour "high"            : AI_AMULET { }
+Flavour "iol"             : AI_AMULET { }
+Flavour "ivory"           : AI_AMULET { }
+Flavour "jade opal"       : AI_AMULET { }
+Flavour "jasper"          : AI_AMULET { }
+Flavour "large"           : AI_AMULET { }
+Flavour "moonsilver"      : AI_AMULET { }
+Flavour "moonstone"       : AI_AMULET { }
+Flavour "obsidian;flavour": AI_AMULET { }
+Flavour "painted"         : AI_AMULET { }
+Flavour "pearl"           : AI_AMULET { }
+Flavour "primitive"       : AI_AMULET { }
+Flavour "ruby"            : AI_AMULET { }
+Flavour "ruby-inset"      : AI_AMULET { }
+Flavour "runic"           : AI_AMULET { }
+Flavour "sapphire"        : AI_AMULET { }
+Flavour "scented"         : AI_AMULET { }
+Flavour "shamanic"        : AI_AMULET { }
+Flavour "silver"          : AI_AMULET { }
+Flavour "skull"           : AI_AMULET { }
+Flavour "skydrop"         : AI_AMULET { }
+Flavour "sphere"          : AI_AMULET { }
+Flavour "steel"           : AI_AMULET { }
+Flavour "sunstone"        : AI_AMULET { }
+Flavour "tchazar"         : AI_AMULET { }
+Flavour "water opal"      : AI_AMULET { }
+Flavour "waterstar"       : AI_AMULET { }
+Flavour "wrought iron"    : AI_AMULET { }
+Flavour "ziose"           : AI_AMULET { }
+Flavour "zircon"          : AI_AMULET { }
+
+Flavour "crimson-tinted"                  : AI_EYES  { Colour: red; }
+Flavour "black-tinted"                    : AI_EYES  { Colour: black; }
+Flavour "emerald-tinted"                  : AI_EYES  { Colour: bright green; }
+Flavour "amber-tinted"                    : AI_EYES  { Colour: brown; }
+Flavour "silvery-tinted"                  : AI_EYES  { Colour: white; }
+Flavour "white-tinted"                    : AI_EYES  { Colour: grey; }
+Flavour "tan-tinted"                      : AI_EYES  { Colour: brown; }
+Flavour "orange-tinted"                   : AI_EYES  { Colour: pink; }
+Flavour "violet-tinted"                   : AI_EYES  { Colour: purple; }
+Flavour "red-tinted"                      : AI_EYES  { Colour: red; }
+Flavour "blue-tinted"                     : AI_EYES  { Colour: blue; }
+Flavour "green-tinted"                    : AI_EYES  { Colour: green; }
+Flavour "yellow-tinted"                   : AI_EYES  { Colour: yellow; }
+Flavour "indigo-tinted"                   : AI_EYES  { Colour: blue; }
+Flavour "brass-rimmed"                    : AI_EYES  { Colour: brown; }
+Flavour "iron-rimmed"                     : AI_EYES  { Colour: grey; }
+Flavour "circular"                        : AI_EYES  { }
+Flavour "square-lensed"                   : AI_EYES  { }
+Flavour "rose-tinted"                     : AI_EYES  { Colour: red; }
+Flavour "ornate"                          : AI_EYES  { }
+Flavour "cracked"                         : AI_EYES  { }
+Flavour "thin-lensed"                     : AI_EYES  { }
+Flavour "thick-lensed"                    : AI_EYES  { }
+
+Flavour "speckled"        : AI_MUSH { }
+Flavour "toadstool"       : AI_MUSH { }
+Flavour "dark"            : AI_MUSH { }
+Flavour "tiny"            : AI_MUSH { }
+Flavour "crimson"         : AI_MUSH { }
+Flavour "smelly"          : AI_MUSH { }
+Flavour "crooked"         : AI_MUSH { }
+Flavour "colourful"       : AI_MUSH { }
 
 // Pern
-Flavor   "Diver"         : AI_ANIMAL_NAME { }
-Flavor   "Ramoth"        : AI_ANIMAL_NAME { }
-Flavor   "Rocky"         : AI_ANIMAL_NAME { }
-Flavor   "Ruth"          : AI_ANIMAL_NAME { }
+Flavour   "Diver"         : AI_ANIMAL_NAME { }
+Flavour   "Ramoth"        : AI_ANIMAL_NAME { }
+Flavour   "Rocky"         : AI_ANIMAL_NAME { }
+Flavour   "Ruth"          : AI_ANIMAL_NAME { }
 // Deed of Paks
-Flavor   "Star"          : AI_ANIMAL_NAME { }
+Flavour   "Star"          : AI_ANIMAL_NAME { }
 // French Heraldry (hey, why not?)
-Flavor   "Anjou"         : AI_ANIMAL_NAME { }    // ww: Kitahara ... Anjou! :-)
-Flavor   "Aunis"         : AI_ANIMAL_NAME { }
-Flavor   "Bearn"         : AI_ANIMAL_NAME { }
-Flavor   "Berry"         : AI_ANIMAL_NAME { }
-Flavor   "Cerf"          : AI_ANIMAL_NAME { }
-Flavor   "Colmar"        : AI_ANIMAL_NAME { }
-Flavor   "Dauphine"      : AI_ANIMAL_NAME { }
-Flavor   "Lambel"        : AI_ANIMAL_NAME { }
-Flavor   "Murale"        : AI_ANIMAL_NAME { }
-Flavor   "Rohan"         : AI_ANIMAL_NAME { }
-Flavor   "Sarlat"        : AI_ANIMAL_NAME { }
-Flavor   "Sinople"       : AI_ANIMAL_NAME { }
-Flavor   "Vair"          : AI_ANIMAL_NAME { }
+Flavour   "Anjou"         : AI_ANIMAL_NAME { }    // ww: Kitahara ... Anjou! :-)
+Flavour   "Aunis"         : AI_ANIMAL_NAME { }
+Flavour   "Bearn"         : AI_ANIMAL_NAME { }
+Flavour   "Berry"         : AI_ANIMAL_NAME { }
+Flavour   "Cerf"          : AI_ANIMAL_NAME { }
+Flavour   "Colmar"        : AI_ANIMAL_NAME { }
+Flavour   "Dauphine"      : AI_ANIMAL_NAME { }
+Flavour   "Lambel"        : AI_ANIMAL_NAME { }
+Flavour   "Murale"        : AI_ANIMAL_NAME { }
+Flavour   "Rohan"         : AI_ANIMAL_NAME { }
+Flavour   "Sarlat"        : AI_ANIMAL_NAME { }
+Flavour   "Sinople"       : AI_ANIMAL_NAME { }
+Flavour   "Vair"          : AI_ANIMAL_NAME { }
 
 // Julian's names
-Flavor "Cahleed"         : AI_ANIMAL_NAME { }
-Flavor "Dace"            : AI_ANIMAL_NAME { }
-Flavor "Farstrider"      : AI_ANIMAL_NAME { }
-Flavor "Fluffy"          : AI_ANIMAL_NAME { }
-Flavor "Izzy"            : AI_ANIMAL_NAME { }
-Flavor "Keeper"          : AI_ANIMAL_NAME { }
-Flavor "Seeker"          : AI_ANIMAL_NAME { }
-Flavor "Shadow"          : AI_ANIMAL_NAME { }
-Flavor "Shadowfax"       : AI_ANIMAL_NAME { }
-Flavor "Shorven"         : AI_ANIMAL_NAME { }
-Flavor "Striker"         : AI_ANIMAL_NAME { }
-Flavor "Taith"           : AI_ANIMAL_NAME { }
-Flavor "Vervain"         : AI_ANIMAL_NAME { }
-Flavor "Whisper"         : AI_ANIMAL_NAME { }
-Flavor "Wixel"           : AI_ANIMAL_NAME { }
+Flavour "Cahleed"         : AI_ANIMAL_NAME { }
+Flavour "Dace"            : AI_ANIMAL_NAME { }
+Flavour "Farstrider"      : AI_ANIMAL_NAME { }
+Flavour "Fluffy"          : AI_ANIMAL_NAME { }
+Flavour "Izzy"            : AI_ANIMAL_NAME { }
+Flavour "Keeper"          : AI_ANIMAL_NAME { }
+Flavour "Seeker"          : AI_ANIMAL_NAME { }
+Flavour "Shadow"          : AI_ANIMAL_NAME { }
+Flavour "Shadowfax"       : AI_ANIMAL_NAME { }
+Flavour "Shorven"         : AI_ANIMAL_NAME { }
+Flavour "Striker"         : AI_ANIMAL_NAME { }
+Flavour "Taith"           : AI_ANIMAL_NAME { }
+Flavour "Vervain"         : AI_ANIMAL_NAME { }
+Flavour "Whisper"         : AI_ANIMAL_NAME { }
+Flavour "Wixel"           : AI_ANIMAL_NAME { }

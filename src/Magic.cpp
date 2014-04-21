@@ -1,6 +1,6 @@
 /* MAGIC.CPP -- Copyright (c) 1999-2003 Julian Mensch
      This file implements the core system for handling magical effects
-   in Incursion; the specific precoded effect architypes are handled
+   in Incursion; the specific precoded effect archetypes are handled
    in Effects.Cpp. All code general to all effects goes here, as does
    code for areas of effect and specific magical actions (casting spells,
    blasting wands, reading scrolls, etc.
@@ -215,7 +215,7 @@ String & TEffect::Power(int8 Mod, Creature *Caster, rID spID, Item *it)
   }
                   
                                    
-uint8 BlastColorSets[] = {
+uint8 BlastColourSets[] = {
  /* BLACK */       BLACK, BLACK, BLACK, BLACK,
  /* BLUE */        BLUE, BLUE, BLUE, BLUE,
  /* GREEN */       GREEN, GREEN, GREEN, GREEN,
@@ -1629,7 +1629,7 @@ EvReturn Magic::ABallBeamBolt(EventInfo &e)
 
   int ourEvent = e.isNAttack ? EV_HIT : EV_MAGIC_STRIKE;
 
-  // use the default color unless we're transmuting the elemental type
+  // use the default colour unless we're transmuting the elemental type
   int16 Color = e.EMagic ? e.EMagic->cval : 1 + random(15);
   if ((e.MM & MM_TRANSMUTE) || !e.EMagic || e.EMagic->aval == AR_BREATH)
     switch(e.DType) {
@@ -1644,7 +1644,7 @@ EvReturn Magic::ABallBeamBolt(EventInfo &e)
       case AD_TOXI: Color = PURPLE; break;
     }
 
-  // glyph (color set below) 
+  // glyph (colour set below) 
   int16 g = 15 ;
 
   // where do we start? 
@@ -1800,12 +1800,12 @@ EvReturn Magic::ABallBeamBolt(EventInfo &e)
 
 
     if (vis) {
-      int16 color; 
+      int16 colour; 
       if (isBeam) 
-        color = (BlastColorSets[(Color * 4)+random(4)] << 8);
+        colour = (BlastColourSets[(Color * 4)+random(4)] << 8);
       else 
-        color = (BlastColorSets[Color * 4] << 8);
-      o.AddGlyph(cx/2,cy/2, g | color);
+        colour = (BlastColourSets[Color * 4] << 8);
+      o.AddGlyph(cx/2,cy/2, g | colour);
       o.ShowGlyphs();
       PossiblyPause(T1,cx/2,cy/2,35);
       if (!isBeam) {
@@ -2006,7 +2006,7 @@ EvReturn Magic::ABallBeamBolt(EventInfo &e)
                 ListY[szList] = OListY[i] + DirY[j];                                    
                 if (vis)                                                         
                   o.AddGlyph(ListX[szList],ListY[szList],                        
-                    15 | (BlastColorSets[Color*4+1+random(3)] << 8));            
+                    15 | (BlastColourSets[Color*4+1+random(3)] << 8));            
                 szList++; GlyphCount++;                                          
                 if (szList > 58)                                                 
                   goto Breakout;                                                 
@@ -2461,14 +2461,14 @@ EvReturn Creature::Cast(EventInfo &e) {
         goto HasComponent;
 
     if (thisp->Spells[e.sp] & (SP_DIVINE|SP_DOMAIN)) {
-        int okSlots[] = { SL_READY, SL_WEAPON, SL_AMULET, SL_ARMOR, 0};
+        int okSlots[] = { SL_READY, SL_WEAPON, SL_AMULET, SL_ARMOUR, 0};
         Item *it;
         for (i=0;okSlots[i];i++) {
             if ((it=InSlot(okSlots[i])) && it->eID && 
                 !strncmp(NAME(it->eID),NAME(thisc->GodID),
                 strlen(NAME(thisc->GodID))))
                 goto HasComponent;
-            if ((it=InSlot(okSlots[i])) && (it->isType(T_ARMOR) ||
+            if ((it=InSlot(okSlots[i])) && (it->isType(T_ARMOUR) ||
                 it->isType(T_SHIELD)) && it->HasQuality(AQ_GRAVEN))
                 goto HasComponent;
         } 
@@ -3089,7 +3089,7 @@ int16 Creature::SpellRating(rID eID, uint32 mm, bool percieved)
 
     /* This is not always correct -- it lets NPC wizards in plate
        mail cast spells that are shared on both the arcane and
-       divine list without spell failure due to armor -- but its
+       divine list without spell failure due to armour -- but its
        close enough for now. */
     if ( TEFF(eID)->HasSource(AI_THEURGY) || 
          TEFF(eID)->HasSource(AI_DRUIDIC) )
@@ -3184,7 +3184,7 @@ int16 Character::SpellRating(rID eID, uint32 mm, bool percieved)
     if (HasStati(SPECIALTY_SCHOOL) && (Spells[sp] & (SP_ARCANE))) {
       i = GetStatiVal(SPECIALTY_SCHOOL);
       p_spec = -50;
-      /* Choose the most favorable modifier out of all the
+      /* Choose the most favourable modifier out of all the
          schools that the spell belongs to. */
       for(j = 0;j!=9;j++)
         if (TEFF(eID)->Schools & XBIT(j))
@@ -3361,7 +3361,7 @@ int16 Creature::getSpellMana(rID spID, uint32 MM, int16 *specMod2)
       if (HasStati(SPECIALTY_SCHOOL)) {
         sch = GetStatiVal(SPECIALTY_SCHOOL);
         specMod = -50;
-        /* Choose the most favorable modifier out of all the
+        /* Choose the most favourable modifier out of all the
            schools that the spell belongs to. */
         for(j = 0;j!=9;j++)
           if (TEFF(spID)->Schools & XBIT(j)) 
@@ -3773,7 +3773,7 @@ EvReturn Item::ZapWand(EventInfo &e)
     if (e.EActor->HasStati(SPECIALTY_SCHOOL)) {
       int i = e.EActor->GetStatiVal(SPECIALTY_SCHOOL);
       int m = -50;
-      /* Choose the most favorable modifier out of all the
+      /* Choose the most favourable modifier out of all the
          schools that the spell belongs to. */
       for(int j = 0;j!=9;j++)
         if (TEFF(eID)->Schools & XBIT(j))

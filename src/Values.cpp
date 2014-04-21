@@ -6,7 +6,7 @@
 
      void Creature::CalcValues(bool KnownOnly)
      void Character::CalcValues(bool KnownOnly)
-     int16 Creature::ResistLevel(int16 DType, bool bypass_armor)
+     int16 Creature::ResistLevel(int16 DType, bool bypass_armour)
      int8 MonHDType(int8 MType)
      int8 MonGoodSaves(int8 MType)
      void Creature::CalcHP()
@@ -55,7 +55,7 @@ int16 concentTotal;
 void Creature::StackBonus(int8 btype, int8 attr,int16 bonus)
   { 
     if (attr == A_MAG && bonus < 0 && concentUsed < concentTotal)
-      if (btype != BONUS_TACTIC && btype != BONUS_ARMOR && btype != BONUS_SHIELD)
+      if (btype != BONUS_TACTIC && btype != BONUS_ARMOUR && btype != BONUS_SHIELD)
         {
           if (concentUsed + (-bonus) <= concentTotal)
             {
@@ -262,7 +262,7 @@ void Creature::AddBonus(int8 btype,int8 attr,int16 bonus)
      AttrAdj[at][BONUS_TEMP] = tm.Adjust(AttrAdj[at][BONUS_BASE]                         \
        + AttrAdj[at][BONUS_TEMP]) - (AttrAdj[at][BONUS_BASE] /*+ AttrAdj[at][BONUS_TEMP]*/);  
 
-#define NAT_ARMOR_TEMPLATE_MOD(at,tm)                                                  \
+#define NAT_ARMOUR_TEMPLATE_MOD(at,tm)                                                  \
    if (tm.VType == MVAL_SET) {                                                          \
      AttrAdj[at][BONUS_BASE] = tm.Value;                                                \
      AttrAdj[at][BONUS_TEMP] = 0;                                                       \
@@ -585,7 +585,7 @@ Restart:
       }
     if (it == offhandWep || it == meleeWep)
       if (it->isMetallic())
-        { StackBonus(BONUS_ARMOR, A_PRI, -16); }
+        { StackBonus(BONUS_ARMOUR, A_PRI, -16); }
         
     if (it->HasQuality(WQ_HOLY) && isMType(MA_EVIL))
       { AddBonus(BONUS_NEGLEV,A_HIT_ARCHERY+i,-2);
@@ -719,7 +719,7 @@ Restart:
   StatiIterEnd(this)
   StatiIterNature(this,ADJUST_ARM)
     KNOWN;
-    AddBonus(BONUS_ARMOR,S->Val,S->Mag);
+    AddBonus(BONUS_ARMOUR,S->Val,S->Mag);
   StatiIterEnd(this)
   StatiIterNature(this,ADJUST_DODG)
     KNOWN;
@@ -827,7 +827,7 @@ Restart:
         APPLY_TEMPLATE_MODIFIER(A_SPD_OFFHAND,tt->Spd)
         APPLY_TEMPLATE_MODIFIER(A_SPD_THROWN,tt->Spd)
         APPLY_TEMPLATE_MODIFIER(A_SIZ,tt->Size)
-        NAT_ARMOR_TEMPLATE_MOD(A_ARM,tt->Arm)
+        NAT_ARMOUR_TEMPLATE_MOD(A_ARM,tt->Arm)
         StackBonus(BONUS_TEMP,A_DMG_BRAWL,tt->DmgMod);
   StatiIterEnd(this)
   if (HasStati(TUMBLING)) {
@@ -855,23 +855,23 @@ Restart:
     AddBonus(BONUS_ELEV,A_DMG_MELEE,SkillLevel(SK_RIDE)/5);
   }
 
-  static int armorSlots[] = {
-    SL_ARMOR, SL_READY, SL_WEAPON, 0
+  static int armourSlots[] = {
+    SL_ARMOUR, SL_READY, SL_WEAPON, 0
   } ;
-  for (j=0; armorSlots[j]; j++) {
-    i = armorSlots[j];
+  for (j=0; armourSlots[j]; j++) {
+    i = armourSlots[j];
     if ((it = EInSlot(i)) && it->activeSlot(i)) {
       /* count a two-handed shield only once! */
       if (i == SL_WEAPON) 
         if (EInSlot(SL_READY) == EInSlot(SL_WEAPON))
           continue;
 
-      /* don't count a suit of armor held in a hand */
+      /* don't count a suit of armour held in a hand */
       if (!it->activeSlot(i))
         continue; 
 
       if (it->isType(T_SHIELD)) {
-        int penalty = ((Armor *)it)->PenaltyVal(this,true) ;
+        int penalty = ((Armour *)it)->PenaltyVal(this,true) ;
 
         if (!grappling) { 
           StackBonus(BONUS_SHIELD, A_COV,it->CovVal(this,KnownOnly));
@@ -882,9 +882,9 @@ Restart:
         } 
         StackBonus(BONUS_SHIELD,A_ARC,penalty * 2);
         if (it->isMetallic())
-          { StackBonus(BONUS_ARMOR, A_PRI, -16); }
+          { StackBonus(BONUS_ARMOUR, A_PRI, -16); }
         
-        // ww: not bonus skill because if you're wearing armor *and* a
+        // ww: not bonus skill because if you're wearing armour *and* a
         // shield, the penalties stack! 
         if (WepSkill(it) == WS_NOT_PROF) {
           StackBonus(BONUS_SHIELD,A_SPD,penalty);
@@ -894,22 +894,22 @@ Restart:
 
         AddBonus(BONUS_SHIELD, A_MOV, (penalty / 2));
 
-      } else if (it->isType(T_ARMOR)) {
-        int penalty = ((Armor *)it)->PenaltyVal(this,true) ;
+      } else if (it->isType(T_ARMOUR)) {
+        int penalty = ((Armour *)it)->PenaltyVal(this,true) ;
 
-        StackBonus(BONUS_ARMOR, A_COV, it->CovVal(this,KnownOnly));
-        StackBonus(BONUS_ARMOR, A_ARC, penalty * 2);
+        StackBonus(BONUS_ARMOUR, A_COV, it->CovVal(this,KnownOnly));
+        StackBonus(BONUS_ARMOUR, A_ARC, penalty * 2);
         if (it->isMetallic())
-          { StackBonus(BONUS_ARMOR, A_PRI, -16); }
-        if (!it->isGroup(WG_LARMOR))
-          { StackBonus(BONUS_ARMOR, A_BAR, penalty * 2); }
+          { StackBonus(BONUS_ARMOUR, A_PRI, -16); }
+        if (!it->isGroup(WG_LARMOUR))
+          { StackBonus(BONUS_ARMOUR, A_BAR, penalty * 2); }
 
         if (WepSkill(it) == WS_NOT_PROF) {
-          StackBonus(BONUS_ARMOR,A_SPD,penalty);
-          StackBonus(BONUS_ARMOR,A_HIT,penalty);
-          StackBonus(BONUS_ARMOR,A_SAV_REF,penalty);
+          StackBonus(BONUS_ARMOUR,A_SPD,penalty);
+          StackBonus(BONUS_ARMOUR,A_HIT,penalty);
+          StackBonus(BONUS_ARMOUR,A_SAV_REF,penalty);
         }
-        AddBonus(BONUS_ARMOR, A_MOV, penalty);
+        AddBonus(BONUS_ARMOUR, A_MOV, penalty);
       } 
     } 
   } 
@@ -919,7 +919,7 @@ Restart:
  
 
   if (onPlane() != PHASE_MATERIAL) {
-    // SRD: An incorporeal creature has no natural armor bonus but has a
+    // SRD: An incorporeal creature has no natural armour bonus but has a
     // deflection bonus equal to its Charisma bonus (always at least +1,
     // even if the creature's Charisma score does not normally provide a
     // bonus).
@@ -979,7 +979,7 @@ Restart:
   /*
   if (HasFeat(FT_FAST_STRIDE) &&
       (Encumbrance() <= EN_MODERATE) &&
-      ((ArmorType() == 0) || !(ArmorType() & WG_HARMOR)))
+      ((ArmourType() == 0) || !(ArmourType() & WG_HARMOUR)))
   { AddBonus(BONUS_ENHANCE,A_MOV,10); }
   */
   
@@ -1000,10 +1000,10 @@ Restart:
   
   if (HasFeat(FT_ZEN_DEFENSE))
     { 
-      uint32 at = getArmorType(true);
+      uint32 at = getArmourType(true);
       if (!at)
         AddBonus(BONUS_INSIGHT,A_DEF,Mod(A_WIS)); 
-      else if (!(at & (WG_MARMOR|WG_HARMOR)))
+      else if (!(at & (WG_MARMOUR|WG_HARMOUR)))
         AddBonus(BONUS_INSIGHT,A_DEF,(Mod(A_WIS)+1)/2); 
     }
 
@@ -1157,9 +1157,9 @@ Restart:
 
   // ww: "no dodge while grappling" is handled in fight.cpp
   if (HasFeat(FT_DODGE)) {
-    // ww: +2/+1 is too weak compared to the phenominal power of armor
+    // ww: +2/+1 is too weak compared to the phenominal power of armour
     // in this game! 
-    if (!(getArmorType(true) & WG_MARMOR) &&
+    if (!(getArmourType(true) & WG_MARMOUR) &&
         (Encumbrance() <= EN_LIGHT))
     { AddBonus(BONUS_DODGE,A_DEF,+3); }
     else 
@@ -1199,9 +1199,9 @@ Restart:
   // ww: monk Flurry of Blows ability: make an extra attack each round
   // but at -2 penalty ... -1 at 5th level, -0 at ninth, but only with
   // unarmed strikes or martial weapons. To balance things, this only
-  // works if you are wearing nothing in the armor slot. 
+  // works if you are wearing nothing in the armour slot. 
   if (HasAbility(CA_FLURRY_OF_BLOWS) && HasStati(FLURRYING) &&
-      (!isCharacter() || !thisc->EInSlot(SL_ARMOR)) 
+      (!isCharacter() || !thisc->EInSlot(SL_ARMOUR)) 
       && !HasStati(POLYMORPH)) {
     int penalty = -3 + AbilityLevel(CA_FLURRY_OF_BLOWS);
 
@@ -1835,7 +1835,7 @@ void Character::CalcValues(bool KnownOnly, Item *thrown)
 
 int16 Resists[16], ResistCount;
 
-int16 Creature::ResistLevel(int16 DType, bool bypass_armor)
+int16 Creature::ResistLevel(int16 DType, bool bypass_armour)
   {
     uint32 Res = TMON(mID)->Res, Imm = TMON(mID)->Imm;
     uint8  StatiResists[16]; int16 i,highest,highval,total;
@@ -1904,7 +1904,7 @@ int16 Creature::ResistLevel(int16 DType, bool bypass_armor)
         DType == AD_HOLY ||
         DType == AD_LAWF ||
         DType == AD_CHAO ||
-        DType == AD_EVIL) && HasFeat(FT_DIVINE_ARMOR)
+        DType == AD_EVIL) && HasFeat(FT_DIVINE_ARMOUR)
                           && HasStati(CHANNELING)) {
       Resists[ResistCount++] = Mod(A_CHA)*2;
     }
@@ -1929,10 +1929,10 @@ int16 Creature::ResistLevel(int16 DType, bool bypass_armor)
         return -1;
     
     if (is_wepdmg(DType)) {
-      if (Attr[A_ARM] && !bypass_armor)
+      if (Attr[A_ARM] && !bypass_armour)
         Resists[ResistCount++] = max(0,Attr[A_ARM]);
-      if ((it = EInSlot(SL_ARMOR)) && !bypass_armor)
-        Resists[ResistCount++] = ((Armor *)it)->ArmVal(DType - AD_SLASH);
+      if ((it = EInSlot(SL_ARMOUR)) && !bypass_armour)
+        Resists[ResistCount++] = ((Armour *)it)->ArmVal(DType - AD_SLASH);
       }
 
     // ww: a sword that comes in with AD_SLASH won't get a skeletons
@@ -1941,11 +1941,11 @@ int16 Creature::ResistLevel(int16 DType, bool bypass_armor)
     switch (DType)
       {
         case AD_SLASH: Resists[ResistCount++] =
-                       ResistLevel(DF_SLASH,bypass_armor); break;
+                       ResistLevel(DF_SLASH,bypass_armour); break;
         case AD_PIERCE: Resists[ResistCount++] =
-                       ResistLevel(DF_PIERCE,bypass_armor); break;
+                       ResistLevel(DF_PIERCE,bypass_armour); break;
         case AD_BLUNT: Resists[ResistCount++] =
-                       ResistLevel(DF_BLUNT,bypass_armor); break;
+                       ResistLevel(DF_BLUNT,bypass_armour); break;
       }
       */
             
@@ -2677,16 +2677,16 @@ int16 Character::GetBAB(int16 mode)
     return max(BAB,sBAB);
   }
 
-uint32 Creature::getArmorType(bool count_shield)
+uint32 Creature::getArmourType(bool count_shield)
   {
     Item *arm; uint32 at;
-    int16 i, sl[] = { SL_ARMOR, SL_READY, SL_WEAPON, 0 };
+    int16 i, sl[] = { SL_ARMOUR, SL_READY, SL_WEAPON, 0 };
     at = 0;
     
     for (i=0;sl[i];i++)
       {
-        arm = InSlot(SL_ARMOR);
-        if (arm && (arm->isType(T_ARMOR) || arm->isType(T_SHIELD)))
+        arm = InSlot(SL_ARMOUR);
+        if (arm && (arm->isType(T_ARMOUR) || arm->isType(T_SHIELD)))
           at |= TITEM(arm->iID)->Group;
         if (!count_shield)
           break;
@@ -2696,19 +2696,19 @@ uint32 Creature::getArmorType(bool count_shield)
       if (S->eID && (RES(S->eID)->Type == T_TEFFECT))
         {
           TEffect *te = TEFF(S->eID);
-          if (te->HasFlag(EF_LARMOR))
-            at |= WG_LARMOR;
-          if (te->HasFlag(EF_MARMOR))
-            at |= WG_MARMOR;
-          if (te->HasFlag(EF_HARMOR))
-            at |= WG_HARMOR;
+          if (te->HasFlag(EF_LARMOUR))
+            at |= WG_LARMOUR;
+          if (te->HasFlag(EF_MARMOUR))
+            at |= WG_MARMOUR;
+          if (te->HasFlag(EF_HARMOUR))
+            at |= WG_HARMOUR;
         }
     StatiIterEnd(this)
     
-    if (at & WG_HARMOR)
-      at |= WG_LARMOR|WG_MARMOR;
-    else if (at & WG_MARMOR)
-      at |= WG_LARMOR;
+    if (at & WG_HARMOUR)
+      at |= WG_LARMOUR|WG_MARMOUR;
+    else if (at & WG_MARMOUR)
+      at |= WG_LARMOUR;
     
     return at;
   }

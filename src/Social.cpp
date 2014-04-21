@@ -392,7 +392,7 @@ EvReturn Creature::Cow(EventInfo &e)
                   cr,e.EActor);
                 Restart:
                 for (it=cr->FirstInv();it;it=cr->NextInv())
-                  if (!(it->IFlags & IF_WORN) || !it->isType(T_ARMOR))
+                  if (!(it->IFlags & IF_WORN) || !it->isType(T_ARMOUR))
                     {
                       it->Remove(false);
                       it->PlaceAt(m,x,y);
@@ -523,7 +523,7 @@ EvReturn Creature::OfferTerms(EventInfo &e)
                   cr,e.EActor);
                 Restart:
                 for (it=cr->FirstInv();it;it=cr->NextInv())
-                  if (!(it->IFlags & IF_WORN) || !it->isType(T_ARMOR))
+                  if (!(it->IFlags & IF_WORN) || !it->isType(T_ARMOUR))
                     {
                       it->Remove(false);
                       it->PlaceAt(m,x,y);
@@ -688,7 +688,7 @@ EvReturn Creature::Enlist(EventInfo &e)
     if (e.EVictim->HasStati(CHARMED))
       {
         IPrint("You cannot add a character under the effect of a charm "
-          "spell to your party, though you can ask favors of them with "
+          "spell to your party, though you can ask favours of them with "
           "the Issue Request function.");
         return ABORT;
       }
@@ -2165,7 +2165,7 @@ int32 Item::getShopCost(Creature *Buyer, Creature *Seller)
             12000, 16000, 24000, 36000, 48000, 56000,
             75000, 102000, 128000, 256000, 512000,
             1000000, 1500000, 2000000 };
-          if (isType(T_WEAPON) || isType(T_ARMOR) ||
+          if (isType(T_WEAPON) || isType(T_ARMOUR) ||
               isType(T_SHIELD) || isType(T_BOW))
             cost += defCost[max(0,min(20,ItemLevel(false)))] * (eID ? 400L : 160L);
           else    
@@ -2282,10 +2282,10 @@ rID getAnimalName()
       if ((theGame->Modules[m]->QFla+j)->IType == AI_ANIMAL_NAME) {
         Candidates[c++] = theGame->Modules[m]->FlavorID(j);
         if (c >= 2000)
-          Fatal("Too many animal name flavors!");
+          Fatal("Too many animal name flavours!");
       }
   if (!c)
-    Fatal("Not enough animal name flavors!");
+    Fatal("Not enough animal name flavours!");
   return Candidates[random(c)];
 } 
 

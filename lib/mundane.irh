@@ -139,9 +139,9 @@ Item "scroll" : T_SCROLL
     On Event EV_GETNAME {
       if (!EItem->isKnown(KN_MAGIC)) {
         e.nPostqual += " labeled ";
-        e.nPostqual += Trim(e.nFlavor);
+        e.nPostqual += Trim(e.nFlavour);
         }
-      e.nFlavor = "";
+      e.nFlavour = "";
       return DONE;
       };
   }
@@ -186,7 +186,7 @@ Item "helm" : T_HELMET
     Weight: 40; hp: 20;	
     Cov: 2; Flags: IT_NOGEN;
 	  Penalty: 1;
-    Desc: "Helms are favored by warriors and paladins, and often contain
+    Desc: "Helms are favoured by warriors and paladins, and often contain
       types of magic useful to those who have few innate spells of their
       own to call on.";
   }
@@ -252,8 +252,8 @@ Item "gauntlets" : T_GAUNTLETS
     Mat:MAT_IRON; Level: 0;
     Weight: 30; hp: 10;	Cov: 1;
     Flags: IT_PLURAL, IT_NOGEN;
-    Desc: "Gauntlets are armored gloves made of thick metal, designed
-      to accompany a suit of heavy armor. They are typically enchanted
+    Desc: "Gauntlets are armoured gloves made of thick metal, designed
+      to accompany a suit of heavy armour. They are typically enchanted
       to augment the wearer's offensive power.";
   }
 
@@ -263,7 +263,7 @@ Item "gloves" : T_GAUNTLETS
     Mat:MAT_LEATHER; Level: 0;
     Weight: 10; hp: 3;	Cov: 0;
     Flags: IT_PLURAL, IT_NOGEN;
-    Desc: "Gloves are supple, light-weight hand coverings often favored by
+    Desc: "Gloves are supple, light-weight hand coverings often favoured by
     rogues and adventurers. Many are enchanted."; 
   }
   
@@ -765,7 +765,7 @@ Item "cottonberry loaf" : T_FOOD
     Mat: MAT_VEGGY; Weight: 3; hp: 10;
     Nutrition: 30; 
     Desc: "Cottonberries are a staple and a delicacy in the Hinlands.
-    Cottonberry loaves travel well and retain a tangy flavor.";
+    Cottonberry loaves travel well and retain a tangy flavour.";
     Cost: 10 GOLD;     
   }
 
@@ -782,7 +782,7 @@ Item "piece of spider bread" : T_FOOD
     Image: light grey '%'; 
     Mat: MAT_VEGGY; Weight: 2; hp: 2;
     Nutrition: 30; Flags: WT_RACIAL;
-    Desc: "A favored food of the Drow, spider bread is seasoned with actual
+    Desc: "A favoured food of the Drow, spider bread is seasoned with actual
     spider venom and can be fatal those lacking a Dark Elf's constitution.";
     On Event EV_EAT {
       if (!EActor->isMType(MA_DROW) && (EActor->ResistLevel(AD_POIS) != -1)) {

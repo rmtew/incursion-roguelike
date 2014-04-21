@@ -96,9 +96,9 @@ EvReturn Monster::Wield(EventInfo &e)
       }
     
 
-    if (e.EParam == SL_ARMOR && m && isThreatened())
+    if (e.EParam == SL_ARMOUR && m && isThreatened())
       {
-        IPrint("You cannot put on armor while threatened by hostile creatures.");
+        IPrint("You cannot put on armour while threatened by hostile creatures.");
         return ABORT;
       }
 
@@ -107,7 +107,7 @@ EvReturn Monster::Wield(EventInfo &e)
        keep track of whether Joe kobold has his Wand of Striking
        in his belt slot or his ready hand slot -- we just want
        to make sure he can't get the benefit of two suits of
-       armor at once. */
+       armour at once. */
     if (!e.EItem->activeSlot(e.EParam))
       return DONE;
     
@@ -139,15 +139,15 @@ EvReturn Monster::TakeOff(EventInfo &e)
     if (e.EItem->IFlags & IF_CURSED)
       return ABORT;
       
-    if (e.EParam == SL_ARMOR && m && isThreatened())
+    if (e.EParam == SL_ARMOUR && m && isThreatened())
       {
-        IPrint("You cannot take off armor while threatened by hostile creatures.");
+        IPrint("You cannot take off armour while threatened by hostile creatures.");
         return ABORT;
       }
       
     e.EItem->IFlags &= ~IF_WORN;
 		e.EItem->RemoveEffStati(FIND("soulblade"));
-		if (e.EItem->isType(T_ARMOR) || e.EItem->isType(T_SHIELD))
+		if (e.EItem->isType(T_ARMOUR) || e.EItem->isType(T_SHIELD))
       if (e.EItem->HasQuality(AQ_ETHEREALNESS))
 		    RemoveStati(PHASED);
 		Timeout += QD(2000) / (100 + 10 * Mod(A_DEX));
@@ -331,12 +331,12 @@ EvReturn Character::Wield(EventInfo &e) {
                 return ABORT;
             }
 
-    if (e.EParam == SL_ARMOR && m && isThreatened()) {
-        IPrint("You cannot put on armor while threatened by hostile creatures.");
+    if (e.EParam == SL_ARMOUR && m && isThreatened()) {
+        IPrint("You cannot put on armour while threatened by hostile creatures.");
         return ABORT;
     }
-    if (e.EParam == SL_ARMOR && m && (HasStati(STUCK) || HasStati(PRONE))) {
-        IPrint("You cannot put on armor while stuck or prone.");
+    if (e.EParam == SL_ARMOUR && m && (HasStati(STUCK) || HasStati(PRONE))) {
+        IPrint("You cannot put on armour while stuck or prone.");
         return ABORT;
     }
 
@@ -435,12 +435,12 @@ EvReturn Character::Wield(EventInfo &e) {
                   return ABORT;
               }
 
-      if (e.EParam == SL_ARMOR && m && isThreatened()) {
-          IPrint("You cannot take off armor while threatened by hostile creatures.");
+      if (e.EParam == SL_ARMOUR && m && isThreatened()) {
+          IPrint("You cannot take off armour while threatened by hostile creatures.");
           return ABORT;
       }
-      if (e.EParam == SL_ARMOR && m && (HasStati(STUCK) || HasStati(PRONE))) {
-          IPrint("You cannot remove armor while stuck or prone.");
+      if (e.EParam == SL_ARMOUR && m && (HasStati(STUCK) || HasStati(PRONE))) {
+          IPrint("You cannot remove armour while stuck or prone.");
           return ABORT;
       }
 
@@ -471,7 +471,7 @@ EvReturn Character::Wield(EventInfo &e) {
               Inv[i] = 0;
       e.EItem->IFlags &= ~IF_WORN;
       e.EItem->RemoveEffStati(FIND("soulblade"));
-      if (e.EItem->isType(T_ARMOR) || e.EItem->isType(T_SHIELD))
+      if (e.EItem->isType(T_ARMOUR) || e.EItem->isType(T_SHIELD))
           if (e.EItem->HasQuality(AQ_ETHEREALNESS))
               RemoveStati(PHASED);
       if (e.EItem->isType(T_LIGHT) && isPlayer())
@@ -660,7 +660,7 @@ bool Character::Swap(int8 s) {
         { SL_LIGHT, "Only a light source can go there." },
         { SL_EYES, "Only eyes, monocles and masks can go there." },
         { SL_CLOTHES, "Only robes and outfits can go in that slot." },
-        { SL_ARMOR, "Only body armor can go there." },
+        { SL_ARMOUR, "Only body armour can go there." },
         { SL_BOOTS, "Only footwear can go there." },
         { SL_CLOAK, "Only cloaks can go in that slot.",  },
         { SL_CLOTHES, "Only clothing can go there." },
@@ -687,7 +687,7 @@ bool Character::Swap(int8 s) {
         return false;
     }
 
-    if (s == SL_ARMOR || s == SL_CLOAK || s == SL_CLOTHES)
+    if (s == SL_ARMOUR || s == SL_CLOAK || s == SL_CLOTHES)
         if (HasStati(RAGING)) {
             IPrint("You can't do that while raging.");
             return false;

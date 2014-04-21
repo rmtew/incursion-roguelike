@@ -148,7 +148,7 @@ Monster "drow" : MA_DROW, MA_ADVENTURER
       4d3 $"hand crossbow dart",
       50% $"rapier" else $"short sword";
     Desc: "No race, save perhaps the kobolds, is more widely despised then
-      the drow. Trecherous, decietful, chaotic, power-hungry and supremely
+      the drow. Treacherous, deceitful, chaotic, power-hungry and supremely
       skillful, the drow are an offshoot of elves who sought freedom from
       Maeve through pacts with tanari and other profane powers.";
     On Event EV_INITIALIZE {
@@ -192,7 +192,7 @@ Monster "dwarf" : MA_DWARF, MA_ADVENTURER
 	ABILITY(CA_INFRAVISION,6);
 	ABILITY(CA_STONEWORK_SENSE,2);
         ABILITY(CA_GIANT_KILLER,1);
-    Feats: FT_ARMOR_OPTIMIZATION;
+    Feats: FT_ARMOUR_OPTIMIZATION;
     Flags: M_CARNI, M_HERBI, M_HUMANOID, M_GOOD, M_LAWFUL,
            M_UNCOMMON;
     Stati[SAVE_BONUS,SN_POISON,2];
@@ -386,7 +386,7 @@ Monster "stoutheart halfling" : MA_HALFLING, MA_ADVENTURER
     On Event EV_INITIALIZE {
       hObj h; 
       for(h=EActor->FirstInv();h;h=EActor->NextInv()) {
-        if (h->isType(T_ARMOR)) {
+        if (h->isType(T_ARMOUR)) {
           if (h->QualityOK(AQ_GRACEFUL)) h->AddQuality(AQ_GRACEFUL);
           if (h->QualityOK(IQ_FEATHERLIGHT)) h->AddQuality(IQ_FEATHERLIGHT);
         } 
@@ -449,7 +449,7 @@ Monster "human" : MA_HUMAN, MA_ADVENTURER
     Attk: A_PUNC for 1d2 AD_BLUNT;
     Flags: M_CARNI, M_HERBI, M_HUMANOID, M_COMMON;
     Gear: random T_WEAPON,
-          25% random T_ARMOR,
+          25% random T_ARMOUR,
           50% random T_TOOL,
           10% random T_TOOL,
           25% $"food ration"; 
@@ -582,7 +582,7 @@ Monster "goblin" : MA_GOBLIN, MA_ADVENTURER
         33% $"dagger" else
           50% $"club" else
             $"light mace",
-      25% $"hide armor";
+      25% $"hide armour";
     Lists:
       * MOUNT_LIST
           $"worg"
@@ -784,7 +784,7 @@ Monster "adlet" : MA_GOBLINOID, MA_ADVENTURER, MA_DOG
       M_SHAMAN, M_EXCLUSIVE, M_COLD;
     Gear: 
       50% $"halfspear",
-      25% $"hide armor";
+      25% $"hide armour";
     Desc: "This odd species of goblinoid is said in myth to
       have been born as the result of misceganation between
       human women and dogs. Slightly smaller than goblins,
@@ -794,7 +794,7 @@ Monster "adlet" : MA_GOBLINOID, MA_ADVENTURER, MA_DOG
       illness has been known to decimate a tribe. In
       temperment they are vicious but stupid, even willing
       to engage in cannibalism and gaining powers from doing
-      so just as orcs do. They particulairly favor drinking
+      so just as orcs do. They particulairly favour drinking
       the blood of living foes they face in combat, which
       they can do after a successful grapple attack.";
     On Event MSG_SPECABIL
@@ -882,11 +882,11 @@ Monster "gremlin" : MA_KOBOLD, MA_ADVENTURER
       bizarre ways by the magical radiations of the Underdark.
       They resemble normal kobolds in many ways, but have a
       stripe of hair on their head and down their back, which
-      is often a strange, brilliant color. They also have huge,
+      is often a strange, brilliant colour. They also have huge,
       bat-like ears. Gremlins are even more chaotic, erratic
       and psychotic than normal kobolds, fond of malicious
       mischief and elaborate trap-setting with a wickedly
-      black sense of humor.";
+      black sense of humour.";
     On Event EV_TURN {
       int16 x, y;
       bool isWater;
@@ -1133,7 +1133,7 @@ Monster "githyanki" : MA_PLANETOUCHED, MA_ADVENTURER
     Gear: if ((EActor->ChallengeRating() >= 7) || (e.enCR >= 9))
             $"greatsword" of $"silver sword" else
           $"greatsword" +1,
-          50% random T_ARMOR,
+          50% random T_ARMOUR,
           25% random T_WAND of random 1 to 4,
           25% $"food ration"; 
     Desc: "Long, long ago, the mind flayers began an ill-fated
@@ -1219,7 +1219,7 @@ Monster "githzerai" : MA_PLANETOUCHED, MA_ADVENTURER
     Feats: FT_WEAPON_FINESSE,
            SK_CONCENT, SK_SEARCH;
     Flags: M_CARNI, M_HERBI, M_HUMANOID, M_ASTRAL, M_CHAOTIC;
-    Spells: $"inertial barrier", $"flesh armor", 
+    Spells: $"inertial barrier", $"flesh armour", 
             $"energy containment", $"detonate";
     Gear: 50% $"quarterstaff" of random 1 to 6 else
             $"spiked chain" of random 1 to 4,
@@ -1296,7 +1296,7 @@ Monster "mongrelman" : MA_ABERRATION, MA_ADVENTURER
         33% $"dagger" else
           50% $"club" else
             $"light mace",
-      25% $"hide armor",
+      25% $"hide armour",
       3d6 $"copper piece",
       25% $"food ration",
       25% $"wand" of random 1 to 4;
@@ -1392,7 +1392,7 @@ Monster "muckdweller" : MA_REPTILE
       form tight, vicious tribal communities to hunt down and slay
       larger creatures. Their forepaws are so small and weak as to
       be useless, much like a tyranosaur's. Their scales are mottled
-      brown and grey in color, while their bellies are yellow.";
+      brown and grey in colour, while their bellies are yellow.";
     /*
     On Event POST(EV_SKILL_RATING) {
       if (e.EParam == SK_HIDE)
@@ -1472,7 +1472,7 @@ Monster "kuo-toa" : MA_HUMANOID, MA_REPTILE
         Its supernaturally keen sight duplicates the effect of <1>True Seeing<7>.";
 
     /*Lists:
-      * FAVORED_TEMPLATES 50% $"whip" $"rogue";*/
+      * FAVOURED_TEMPLATES 50% $"whip" $"rogue";*/
 
 
 
@@ -1540,8 +1540,8 @@ Monster "sahuagin" : MA_HUMANOID, MA_ADVENTURER
     Flags: M_CARNI, M_HUMANOID, M_AMPHIB, M_SHAMAN, M_AQUATIC,
       M_CHIEFTAN, M_EVIL, M_LAWFUL, M_LIGHT_AVERSE;
     Gear: 50% $"trident" else $"longspear",
-          25% $"hide armor" else
-            33% $"cord armor";
+          25% $"hide armour" else
+            33% $"cord armour";
     Desc: "The sahuagin, or sea devils, are a bloodthirsty race
       of aquatic raiders, appearing as a cross between humans an
       spinefish. They have scaly skin, bulbous eyes and sharp
@@ -1613,7 +1613,7 @@ Monster "chitine" : MA_ABERRATION, MA_SPIDER, MA_ADVENTURER
 	ABILITY(CA_INFRAVISION,6);
     Gear: 
       3d1 $"short sword" of random 0 to 1,
-      $"hide armor" of random 0 to 1,
+      $"hide armour" of random 0 to 1,
       3d3 $"javelin" of random 0 to 1;
     Stati[IMMUNITY,AD_STUK];
     Feats: 
@@ -1731,16 +1731,16 @@ Monster "thri-kreen" : MA_VERMIN, MA_HUMANOID, MA_ADVENTURER
             $"body equilibrium",
             $"cell adjustment";
     /*
-    Psionics: $"chameleon coloration", 
+    Psionics: $"chameleon colouration", 
               $"displacement",
-              $"inertial armor",
+              $"inertial armour",
               $"metaphysical weapon";
     Modes: EGO_WHIP, MIND_THRUST / 
            THOUGHT_SHIELD, EMPTY_MIND;
     */
-    Spells: $"displacement", $"mage armor",
+    Spells: $"displacement", $"mage armour",
             $"magic weapon";
-    RACIAL_SKILL(SK_HIDE,10); /* chameleon coloration */
+    RACIAL_SKILL(SK_HIDE,10); /* chameleon colouration */
     RACIAL_SKILL(SK_JUMP,20);
     Stati[IMMUNITY,AD_SLEE];
     Stati[WEP_SKILL,WS_PROFICIENT,0,$"gythka"];
@@ -1763,7 +1763,7 @@ Monster "thri-kreen" : MA_VERMIN, MA_HUMANOID, MA_ADVENTURER
       little in common with humanity or other similar races,
       but they sometimes ally with the lizardfolk, with whom
       they have a great deal more in common psychologically but
-      very little common ground in terms of favored terrain.";
+      very little common ground in terms of favoured terrain.";
     Gear:
       60% $"gythka" else
         25% $"gythka" of random 2 to 5,
@@ -1835,7 +1835,7 @@ Monster "tabaxi" : MA_CAT, MA_ADVENTURER
       adventurers.\n
       __Tabaxi appear as humanoid leopards with mottled orange and
       black fur -- their mystics ascribe great value to the patterns
-      of a tabaxi's coloration, believing it reveals some of the
+      of a tabaxi's colouration, believing it reveals some of the
       jungle cat's destiny. Their whiskers let them sense even the
       faintest vibrations in the air, giving them a kind of second
       sight."; 
@@ -2063,7 +2063,7 @@ Monster "annis" : MA_HAG, MA_ADVENTURER
       30% 1d3 $"potion" of $"fire breath",
       25% $"stone" of random 2 to 5 else
         33% $"amulet" of random 2 to 5,
-      50% $"hide armor";
+      50% $"hide armour";
     On Event POST(EV_INVOKE), POST(EV_NATTACK) {
       EActor->IdentifyMon();
       return NOTHING;
@@ -2170,7 +2170,7 @@ Monster "night hag" : MA_HAG, MA_OUTSIDER
       };  
     Gear:
       $"stone" of $"heartstone",
-      25% $"hide armor",
+      25% $"hide armour",
       25% $"amulet" of random 3 to 6,
       50% 1d3 $"potion" of $"healing";
   }
@@ -2387,7 +2387,7 @@ Monster "hill giant" : MA_GIANT
     Gear: 50% $"huge club" else
            50% $"great maul" else
              random T_WEAPON,
-          random T_ARMOR,
+          random T_ARMOUR,
           2d4 $"boulder";
     On Event EVICTIM(EV_HIT) {
       if (e.AType == A_HURL && GetHandle(EItem2) != NULL)
@@ -2433,7 +2433,7 @@ Monster "stone giant" : MA_GIANT
     Gear: 50% $"fullblade" else
            50% $"great maul" else
              random T_WEAPON,
-          random T_ARMOR,
+          random T_ARMOUR,
           2d4 $"boulder";
     On Event EVICTIM(EV_HIT) {
       if (e.AType == A_HURL && GetHandle(EItem2) != NULL)
@@ -2471,7 +2471,7 @@ Monster "frost giant" : MA_GIANT
            FT_GREAT_CLEAVE, FT_SUNDER;
     Immune: DF_COLD;
     Desc: "A frost giant's hair can be light blue or dirty yellow, and its
-    eyes usually match its hair color. Frost giants dress in skins and
+    eyes usually match its hair colour. Frost giants dress in skins and
     pelts, along with any jewelry they own. Frost giant warriors add chain
     shirts and metal helmets decorated with horns or feathers.
     An adult male is about 15 feet tall and weighs about 2,800 pounds.
@@ -2480,7 +2480,7 @@ Monster "frost giant" : MA_GIANT
     Gear: 50% $"greataxe" of random 2 to 4 else
            50% $"great maul" of random 2 to 4 else
              random T_WEAPON of random 2 to 4 ,
-          random T_ARMOR of random 2 to 4,
+          random T_ARMOUR of random 2 to 4,
           15% $"wand" +3 of $"ice",
           2d4 $"boulder";
     On Event EVICTIM(EV_HIT) {
@@ -2523,7 +2523,7 @@ Monster "fire giant" : MA_GIANT
     Gear: 50% $"greataxe" of random 2 to 4 else
            50% $"great maul" of random 2 to 4 else
              random T_WEAPON of random 2 to 4 ,
-          random T_ARMOR of random 2 to 4,
+          random T_ARMOUR of random 2 to 4,
           2d4 $"food ration",
           2d4 $"boulder";
     On Event EVICTIM(EV_HIT) {
@@ -2606,7 +2606,7 @@ Monster "ogre mage" : MA_GIANT, MA_ADVENTURER
             50% 2d1 $"scimitar" of random 0 to 3 else
               $"longspear" of random 0 to 3,
            50% $"bolas" of random 0 to 4,
-           50% $"lamellar armor" else
+           50% $"lamellar armour" else
              $"chainmail hauberk",
            50% $"chakram" of random 0 to 4,
            50% $"boots" of random 2 to 6,
@@ -2673,7 +2673,7 @@ Monster "verbeeg" : MA_GIANT, MA_ADVENTURER, MA_SYLVAN
     Flags: M_CARNI, M_HERBI, M_HUMANOID, M_CHIEFTAN, M_SHAMAN,
       M_REACH, M_CLOSEID; 
     Gear: 50% $"studded leather" else 25% $"chainmail shirt" else
-             13% $"hide armor" else $"breastplate",
+             13% $"hide armour" else $"breastplate",
           25% $"fullblade" else 33% $"greataxe" else 50% $"great maul"
             else $"heavy mace",
           50% 2d2 $"longspear",
@@ -2743,7 +2743,7 @@ Monster "slyph" : MA_FAERIE, MA_ELEMENTALKIN, MA_SYLVAN
       especially to males, and love to travel and learn -- but they can
       be vicious to orcs and other creatures which despoil the natural
       splendour they so adore. Slyphs appear as small, beautiful women
-      with translucent, brightly colored wings.";
+      with translucent, brightly coloured wings.";
   }
 
 Monster "nereid" : MA_FAERIE, MA_ELEMENTALKIN
@@ -2885,7 +2885,7 @@ Monster "spriggan" : MA_FAERIE, MA_GNOME, MA_SYLVAN
           A_TUCH for 2d4 AD_STEA,
           A_FORM for $"giant spriggan";
     Spells: $"shatter", $"cause fear", $"bestow curse",
-      $"color spray";
+      $"colour spray";
     Feats: FT_QUICKEN_INNATE_MAGIC, FT_MASTER_TRIP,
       FT_TWO_WEAPON_STYLE, SK_PICK_POCKET, SK_HIDE, SK_MOVE_SIL,
       SK_TUMBLE, SK_BLUFF, SK_SPOT, SK_JUMP;
@@ -2928,7 +2928,7 @@ Monster "rainbow sprite" : MA_FAERIE, MA_SYLVAN, MA_COUTSIDER
     CR: 1; HD: 1; Hit: 0; Def: 18; Mov: 150%; Spd: 60%; Mana: 45;
     Str 5, Dex 14, Con 10, Int 8, Wis 12, Cha 14;
     ABILITY(CA_INFRAVISION, 6);
-    Spells: $"color spray", $"dimension door";
+    Spells: $"colour spray", $"dimension door";
     Feats: FT_SNEAKY, SK_HIDE, SK_MOVE_SIL, SK_LISTEN, SK_SPOT,
            SK_ESCAPE_ART, SK_PICK_POCKET, SK_KNOW_NATURE,
            SK_WILD_LORE;
@@ -2953,7 +2953,7 @@ Monster "rainbow sprite" : MA_FAERIE, MA_SYLVAN, MA_COUTSIDER
       in bedeviling and blinding adventurers, eventually leading
       them to their death at the hands of more powerful creatures.
       They appear as miniscule humans with pointed ears and 
-      gossamer wings, ever shifting colors.";
+      gossamer wings, ever shifting colours.";
     Gear:
       $"sprite bow",
       3d6 $"tiny arrow";
@@ -2996,7 +2996,7 @@ Monster "leprechaun" : MA_FAERIE, MA_SYLVAN, MA_COUTSIDER
     Flags: M_HUMANOID, M_CHAOTIC, M_SKIRMISH, M_FOREST,
            M_GREEDY, M_COVETOUS;
     Desc: "Magical pranksters and thieves, leprechauns are
-      famous for the rumors of their treasure and their duplicity.
+      famous for the rumours of their treasure and their duplicity.
       They treat their own thefts as acts of harmless whimsy, but
       will viciously betray and slay any who steal from them or
       endanger their treasure.";
@@ -3024,7 +3024,7 @@ Monster "nixie" : MA_FAERIE
     Spells: $"charm person", $"suggestion", $"waterspout"; 
     Desc: "Most nixies are slim and comely, with lightly scaled, pale green
     skin and dark green hair. Females often twine shells and pearl strings
-    in their hair and dress in wraps woven from colorful seaweed. Males
+    in their hair and dress in wraps woven from colourful seaweed. Males
     wear loincloths of the same materials. Nixies prefer not to leave their
     lakes."; 
   }
@@ -3048,7 +3048,7 @@ Monster "sprite" : MA_FAERIE, MA_SYLVAN, MA_COUTSIDER
     Spells: $"confusion", $"ESP", $"dispel magic", 
       $"spectral force", $"polymorph self", $"faerie fire";
     Desc: "Tiny fey with a malicious and inscrutable sense of
-      humor, the sprites are naturally invisible. When they
+      humour, the sprites are naturally invisible. When they
       are seen by magical means, they appear as tiny elves with
       gossamer wings and a faint glowing aura.";
     On Event MSG_ABILITY "It is naturally invisible. ";
@@ -3376,7 +3376,7 @@ Template "half-fey" : TM_DESCENT for MA_HUMANOID
     naga race. They are the assasins and spies of their species, operating
     from the shadows and answering to unseen lords and masters. They have
     a complex and ritualistic secret society of their own, to which they
-    are fanatically loyal, and they follow arcane codes of honor dating
+    are fanatically loyal, and they follow arcane codes of honour dating
     back millenia. While nobody likes them, even the guardian nagas accept
     that the darks have a place within naga society.
                                  
@@ -3401,7 +3401,7 @@ Monster "naga" : MA_NAGA, MA_SNAKE
     Image: grey 'n'; Size: SZ_LARGE;
     Desc: "Nagas are wise, magical creatures of legend that possess the
       body of a snake and the head of a woman. Several different breeds
-      of nagas exist, differentiated by the coloration of their scales;
+      of nagas exist, differentiated by the colouration of their scales;
       some are good, others evil and others neither. A naga's breed can
       be discerned with the Knowledge (Mythology) skill.";
     Flags: M_UNKNOWN, M_NOGEN;
@@ -3507,7 +3507,7 @@ Monster "dark naga" : MA_NAGA, MA_SNAKE
     naga race. They are the assasins and spies of their species, operating
     from the shadows and answering to unseen lords and masters. They have
     a complex and ritualistic secret society of their own, to which they
-    are fanatically loyal, and they follow arcane codes of honor dating
+    are fanatically loyal, and they follow arcane codes of honour dating
     back millenia. While nobody likes them, even the guardian nagas accept
     that the darks have a place within naga society.";
     Poison: $"dark naga venom";
@@ -3893,7 +3893,7 @@ Monster "grippli" : MA_REPTILE, MA_ADVENTURER
       spiritual ordeal.\n
       __Grippli defend themselves with blowguns, daggers, snares
       and traps, as well as with the powers of their minds. Their 
-      coloration allows them to blend into jungle terrain with
+      colouration allows them to blend into jungle terrain with
       great ease, and though they are not a violent people, they
       excel at ambushes and defensive tactics.";
     On Event EV_BIRTH {
@@ -4135,7 +4135,7 @@ Monster "werebear" : MA_LYCANTHROPE, MA_BEAST, MA_SYLVAN
     Flags: M_HUMANOID, M_CARNI, M_GOOD, M_LAWFUL;
     Gear:
       $"quarterstaff" of random 1 to 3,
-      $"hide armor", 
+      $"hide armour", 
       1d2 $"potion" of $"extra-healing";
     Desc: "Werebears are normally kindly, peaceful lycanthropes who
       often live alone in solitude in deep forests. They can become
@@ -4285,7 +4285,7 @@ Template "barbarian;template" : TM_CLASS for MA_SAPIENT
       FT_AP_LIGHT, FT_AP_MEDIUM, FT_POWER_ATTACK,
       SK_HEAL, SK_WILD_LORE, SK_ATHLETICS, SK_RIDE;
     Flags: M_CHAOTIC, !M_LAWFUL;
-    Gear: random T_ARMOR of random 0 to 1,
+    Gear: random T_ARMOUR of random 0 to 1,
           random T_WEAPON of random 0 to 1,
           1d1 $"potion" of $"healing";
     On Event PRE(EV_STRIKE) {
@@ -4522,11 +4522,11 @@ Template "undead hunter" : TM_CLASS for MA_SAPIENT
             $"protection from evil",
             $"halt undead",
             $"death ward";
-    Feats: FT_NECROPHYSIOLOGY, FT_DIVINE_ARMOR,
+    Feats: FT_NECROPHYSIOLOGY, FT_DIVINE_ARMOUR,
            FT_AP_LIGHT, FT_AP_MEDIUM, FT_AP_HEAVY, SK_FIND_WEAKNESS,
            SK_ATHLETICS, SK_HEALING, SK_CONCENT, SK_SPOT;
     Flags: M_GOOD, !M_EVIL;
-    Gear: random T_ARMOR of random 0 to 1,
+    Gear: random T_ARMOUR of random 0 to 1,
           random T_WEAPON of random 0 to 1,
           10% $"alchemy set",
           10% $"climbing rig",
@@ -4677,7 +4677,7 @@ Template "giant-rider" : TM_CLASS for MA_GOBLINOID
            SK_RIDE, SK_CONCENT, SK_SPOT;
     Gear: 75% $"arbalest" of random 1 to 2 else $"cranquin" of random 1 to 2, 
           10d6 $"crossbow bolt" of random 0 to 1,
-          $"leather armor" of random 0 to 1,
+          $"leather armour" of random 0 to 1,
           1d1 $"potion" of $"healing";
     Flags: M_RIDER;
     On Event EV_ISTARGET {
@@ -4714,7 +4714,7 @@ Template "paladin;template" : TM_CLASS for MA_SAPIENT
     Feats: FT_POWER_ATTACK, FT_MASTER_GREAT_BLOW,
            FT_AP_LIGHT, FT_AP_MEDIUM, FT_AP_HEAVY,
            SK_ATHLETICS, SK_HEALING, SK_RIDE, SK_CONCENT, SK_SPOT;
-    Gear: random T_ARMOR of random 0 to 1,
+    Gear: random T_ARMOUR of random 0 to 1,
           25% random T_WEAPON +1 with [WQ_HOLY] else
             random T_WEAPON of random 0 to 1,
           50% $"healing kit",
@@ -4774,7 +4774,7 @@ Template "priest;template" : TM_CLASS for MA_SAPIENT
     ABILITY(CA_SPELLCASTING,2);
 	Stati[ADJUST_INH,A_MAN,+8];
     ABILITY(CA_TURNING,2);
-    Gear: random T_ARMOR,
+    Gear: random T_ARMOUR,
           random T_WEAPON of random 0 to 1,
           random T_SHIELD of random 0 to 1,
           25% 1d2 $"scroll" of $"identify;scroll",
@@ -4851,7 +4851,7 @@ Template "priest;for giants" : TM_CLASS for MA_GIANT
     ABILITY(CA_SPELLCASTING,7);
 	  Stati[ADJUST_INH,A_MAN,+30];
     ABILITY(CA_TURNING,7);
-    Gear: random T_ARMOR,
+    Gear: random T_ARMOUR,
           random T_WEAPON of random 0 to 1,
           random T_SHIELD of random 0 to 1,
           25% 1d2 $"scroll" of $"identify;scroll",
@@ -5010,7 +5010,7 @@ Template "archer" : TM_CLASS for MA_SAPIENT
         if (h->isType(T_BOW))
           h->AddQuality(WQ_MIGHTY);
         else if ((h->isType(T_WEAPON) ||
-                  h->isType(T_ARMOR)) && EActor->isMonster())
+                  h->isType(T_ARMOUR)) && EActor->isMonster())
           h->Remove(true); 
       if (EActor->isMonster())
         EActor->AddAct(ACT_EQUIP,P_URGENT); 
@@ -5052,7 +5052,7 @@ Template "rogue-archer" : TM_CLASS for MA_SAPIENT
       hObj h;
       for(h = EActor->FirstInv(); h ; h = EActor->NextInv())
         if ((h->isType(T_WEAPON) ||
-                  h->isType(T_ARMOR)) && EActor->isMonster())
+                  h->isType(T_ARMOUR)) && EActor->isMonster())
           h->Remove(true); 
       if (EActor->isMonster())
         EActor->AddAct(ACT_EQUIP,P_URGENT); 
@@ -5073,7 +5073,7 @@ Template "ranger;template" : TM_CLASS for MA_SAPIENT
            FT_AP_LIGHT, FT_FAR_SHOT, FT_AIMED_SHOT, SK_RIDE,
            SK_SPOT, SK_HEALING, SK_HIDE, SK_JUMP, SK_LISTEN, SK_MOVE_SIL,
            SK_SEARCH, SK_SWIMMING, SK_WILD_LORE, SK_FIND_WEAKNESS;
-    Gear: 50% $"leather armor" else
+    Gear: 50% $"leather armour" else
             $"chainmail shirt",
           50% $"long bow" of random 0 to 1 else
             $"short bow" of random 0 to 1,
@@ -5090,7 +5090,7 @@ Template "ranger;template" : TM_CLASS for MA_SAPIENT
       hObj h;
       for(h = EActor->FirstInv(); h ; h = EActor->NextInv())
         if ((h->isType(T_WEAPON) ||
-                  h->isType(T_ARMOR)) && EActor->isMonster())
+                  h->isType(T_ARMOUR)) && EActor->isMonster())
           h->Remove(true); 
       if (EActor->isMonster())
         EActor->AddAct(ACT_EQUIP,P_URGENT); 
@@ -5114,9 +5114,9 @@ Template "rogue;template" : TM_CLASS for MA_SAPIENT
       SK_LOCKPICKING, SK_MOVE_SIL, SK_PICK_POCKET, SK_POISON_USE,
       SK_HANDLE_DEV, SK_USE_MAGIC, SK_FIND_WEAKNESS;
     Gear: 25% $"studded leather" else
-            33% $"leather armor" else
+            33% $"leather armour" else
             50% $"chainmail shirt" else
-                $"hide armor",
+                $"hide armour",
       25% $"small glass vial" of random 1 to 3,
       35% 1d4 $"scroll" of $"identify;scroll",
       50% $"alchemy set",
@@ -5151,7 +5151,7 @@ Template "warrior;template" : TM_CLASS for MA_SAPIENT
       SK_SPOT, SK_FIND_WEAKNESS, SK_RIDE;
     Gear: 
       random T_WEAPON of random 0 to 2,
-      random T_ARMOR of random 0 to 2,
+      random T_ARMOUR of random 0 to 2,
       random T_SHIELD of random 0 to 1,
       35% 1d4 $"scroll" of $"identify;scroll",
       25% $"potion" of $"oil of transformation",
@@ -5193,7 +5193,7 @@ Template "reaver" : TM_CLASS for MA_SAPIENT
       SK_HEAL, SK_WILD_LORE, SK_ATHLETICS, SK_RIDE,
       SK_FIND_WEAKNESS;
     Flags: M_CHAOTIC, !M_LAWFUL;
-    Gear: random T_ARMOR of random 2 to 4,
+    Gear: random T_ARMOUR of random 2 to 4,
           random T_WEAPON of random 2 to 4,
           15% 6d6 $"hemp rope" else
             40% 6d6 $"silk rope" else
@@ -5294,7 +5294,7 @@ Template "grey druid" : TM_CLASS for MA_SAPIENT
           A_FORM for $"leopard",
           A_FORM for $"tiger",
           A_FORM for $"brown bear";
-    Desc: "Sometimes, a druid will find disfavor with the hierophants
+    Desc: "Sometimes, a druid will find disfavour with the hierophants
       of the inner circle, and become outcast from the druidic
       community. Sometimes, these rogues dabble in black arts,
       blood sacrifice and perverted nature magic, siding with the
@@ -5422,7 +5422,7 @@ Template "blackguard;template" : TM_CLASS for MA_SAPIENT
            FT_AP_LIGHT, FT_AP_MEDIUM, FT_AP_HEAVY,
            SK_ATHLETICS, SK_HEALING, SK_RIDE, SK_CONCENT, SK_SPOT,
            SK_POISON_USE, SK_FIND_WEAKNESS;
-    Gear: random T_ARMOR of random 2 to 4,
+    Gear: random T_ARMOUR of random 2 to 4,
           random T_WEAPON of random 2 to 4 with [WQ_UNHOLY],
           7% 6d6 $"hemp rope" else
             20% 6d6 $"silk rope" else
@@ -5467,7 +5467,7 @@ Template "curate" : TM_CLASS for MA_SAPIENT
     ABILITY(CA_SPELLCASTING,5);
 	  ABILITY(CA_TURNING,5);
 	  Stati[ADJUST_INH,A_MAN,+20];
-    Gear: random T_ARMOR of random 2 to 4,
+    Gear: random T_ARMOUR of random 2 to 4,
           random T_WEAPON of random 2 to 4,
           random T_SHIELD of random 2 to 4,
           $"potion" of random 1 to 4,
@@ -5547,7 +5547,7 @@ Template "stalker" : TM_CLASS for MA_SAPIENT
           SK_SWIMMING, SK_WILD_LORE, SK_FIND_WEAKNESS;
     Flags: M_AVOID_MELEE, M_HOSTILE;
     Gear: 33% $"studded leather" of random 2 to 4 else
-            50% $"leather armor" of random 2 to 4 else
+            50% $"leather armour" of random 2 to 4 else
             $"chainmail shirt" of random 2 to 4,
           15% 6d6 $"hemp rope" else
             40% 6d6 $"silk rope" else
@@ -5567,7 +5567,7 @@ Template "stalker" : TM_CLASS for MA_SAPIENT
         if (h->isType(T_BOW))
           h->AddQuality(WQ_MIGHTY);
         else if ((h->isType(T_WEAPON) ||
-                  h->isType(T_ARMOR)) && EActor->isMonster())
+                  h->isType(T_ARMOUR)) && EActor->isMonster())
           h->Remove(true); 
       if (EActor->isMonster())
         EActor->AddAct(ACT_EQUIP,P_URGENT); 
@@ -5597,7 +5597,7 @@ Template "twilight huntsman;temp" : TM_CLASS for MA_ELF
           SK_SWIMMING, SK_WILD_LORE, SK_FIND_WEAKNESS;
     Flags: M_AVOID_MELEE, TMF_POSTSCRIPT, M_CHAOTIC, M_EVIL, M_RIDER;
     Gear: 33% $"studded leather" of random 2 to 4 with [IQ_ELVEN] else
-            50% $"leather armor" of random 2 to 4 with [IQ_ELVEN] else
+            50% $"leather armour" of random 2 to 4 with [IQ_ELVEN] else
             $"chainmail shirt" of random 2 to 4 with [IQ_ELVEN] ,
           50% $"long bow" of random 1 to 3 with [IQ_ELVEN] else
             $"short bow" of random 1 to 3 with [IQ_ELVEN],
@@ -5619,14 +5619,14 @@ Template "twilight huntsman;temp" : TM_CLASS for MA_ELF
         if (h->isType(T_BOW))
           h->AddQuality(WQ_MIGHTY);
         else if ((h->isType(T_WEAPON) ||
-                  h->isType(T_ARMOR)) && EActor->isMonster())
+                  h->isType(T_ARMOUR)) && EActor->isMonster())
           h->Remove(true); 
       if (EActor->isMonster())
         EActor->AddAct(ACT_EQUIP,P_URGENT); 
     }; 
     Lists:
       * SPELL_LIST
-        1 $"bane" $"change self" $"charm person" $"color spray" $"doom"
+        1 $"bane" $"change self" $"charm person" $"colour spray" $"doom"
           $"enthrall" $"faerie fire" $"inflict light wounds" $"longstrider"
           $"malignance" $"phantasmal force" $"slow poison" $"true strike"
         2 $"animate rope" $"bladethirst" $"globe of shadow" $"heal mount"
@@ -5663,9 +5663,9 @@ Template "shadowdancer;template" : TM_CLASS for MA_SAPIENT
     Flags: M_CHAOTIC, M_EVIL;
     Spells: $"shadow step", $"summon shadows";
     Gear: 25% $"studded leather" of random 2 to 4 else
-            33% $"leather armor" of random 2 to 4 else
+            33% $"leather armour" of random 2 to 4 else
             50% $"chainmail shirt" of random 2 to 4 else
-                $"hide armor" of random 2 to 4,
+                $"hide armour" of random 2 to 4,
       random T_WEAPON of random 2 to 4,
       15% 6d6 $"hemp rope" else
             40% 6d6 $"silk rope" else
@@ -5702,7 +5702,7 @@ Template "myrmidon" : TM_CLASS for MA_SAPIENT
       SK_BLUFF, SK_ATHLETICS, SK_SPOT, SK_FIND_WEAKNESS, SK_RIDE;
     Gear: 
       random T_WEAPON of random 3 to 4,
-      random T_ARMOR of random 3 to 4,
+      random T_ARMOUR of random 3 to 4,
       random T_SHIELD of random 1 to 2,
       15% 6d6 $"hemp rope" else
             40% 6d6 $"silk rope" else
@@ -5773,7 +5773,7 @@ Template "chieftan" : TM_CHIEFTAN for MA_SAPIENT
     Flags: TMF_POSTSCRIPT, M_CLOSEID;
     Gear:
       random T_WEAPON of random 2 to 4,
-      random T_ARMOR of random 1 to 3; 
+      random T_ARMOUR of random 1 to 3; 
     Desc: "The chieftan is the toughest, strongest and most
       often simply the meanest of his kind. As such, he manages
       to dominate a clique, tribe or warband beneath him.";
@@ -5824,7 +5824,7 @@ Template "bandit" : TM_CLASS for MA_SAPIENT
       looking to make a quick buck off of weak or infirm passers-by.";
     Gear: 
       random T_WEAPON of random 0 to 1,
-      random T_ARMOR of random 0 to 1,
+      random T_ARMOUR of random 0 to 1,
       15% $"small glass vial" of random 1 to 2,
       50% $"potion" of $"healing",
       15% 1d2 $"scroll" of $"identify;scroll",
@@ -5848,7 +5848,7 @@ Template "outlaw" : TM_CLASS for MA_SAPIENT
       looking to make a quick buck off of weak or infirm passers-by.";
     Gear: 
       random T_WEAPON of random 0 to 1,
-      random T_ARMOR of random 0 to 1,
+      random T_ARMOUR of random 0 to 1,
       15% $"small glass vial" of random 1 to 2,
       50% $"potion" of $"healing",
       15% 1d2 $"scroll" of $"identify;scroll",
@@ -5869,7 +5869,7 @@ Template "brigand" : TM_CLASS for MA_SAPIENT
       looking to make a quick buck off of weak or infirm passers-by.";
     Gear: 
       random T_WEAPON of random 0 to 1,
-      random T_ARMOR of random 0 to 1,
+      random T_ARMOUR of random 0 to 1,
       15% $"small glass vial" of random 1 to 2,
       50% $"potion" of $"healing",
       15% 1d2 $"scroll" of $"identify;scroll",

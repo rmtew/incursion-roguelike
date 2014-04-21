@@ -298,7 +298,7 @@ Again:
         HIER(Weapon,T_WEAPON,T_ITEM)
         case T_BOOTS:
         case T_GAUNTLETS: case T_SHIELD:
-        HIER(Armor,T_ARMOR,T_ITEM)
+        HIER(Armour,T_ARMOUR,T_ITEM)
         HIER(Door,T_DOOR,T_FEATURE)
         HIER(Portal,T_PORTAL,T_FEATURE)
         HIER(Trap,T_TRAP,T_FEATURE)

@@ -72,10 +72,10 @@ String & DescribeSkill(int16 sk)
         AttrTitle[SkillInfo[sk].attr2]);
   } 
 
-  if (SkillInfo[sk].armor_penalty == 2) 
-    res += Format(" %c[DOUBLE armor penalty]",-RED);
-  else if (SkillInfo[sk].armor_penalty) 
-    res += Format(" %c[armor penalty]",-RED);
+  if (SkillInfo[sk].armour_penalty == 2) 
+    res += Format(" %c[DOUBLE armour penalty]",-RED);
+  else if (SkillInfo[sk].armour_penalty) 
+    res += Format(" %c[armour penalty]",-RED);
   
   res += Format("\n%c__Possessed By:%c Some Humans",-13,-7);
   for (int mIdx=0;theGame->Modules[mIdx];mIdx++) {
@@ -1632,7 +1632,7 @@ bool Creature::SkillCheck(int16 sk, int16 DC, bool show, int16 mod1,
         msa == this ? "" : "]",
         -7,roll, (const char*) sRolls,
         sr,(const char*) modStr,
-        armPen ? (const char*)Format(" %+d armor",armPen) : "",
+        armPen ? (const char*)Format(" %+d armour",armPen) : "",
         sr+roll+mod1+mod2+armPen,DC,succ ? -EMERALD : -PINK,
         succ ? "success" : "failure", -7);
       thisp->MyTerm->Write(0,0,sStr);
@@ -1705,13 +1705,13 @@ bool Creature::SkillCheck(int16 sk, int16 DC, bool show, int16 mod1,
               for (i=0;GodIDList[i];i++)
                 {
                   int32 fsList[30];
-                  TGOD(GodIDList[i])->GetList(FAVORED_SKILLS,(rID*)fsList,30);
+                  TGOD(GodIDList[i])->GetList(FAVOURED_SKILLS,(rID*)fsList,30);
                   for (int8 j=0;fsList[j];j++)
                     if (sk == fsList[j])
                       goto OnTheList;
                   continue;
                   OnTheList:
-                  gainFavor(GodIDList[i], max(0,10 * (sr + roll + mod1 + 
+                  gainFavour(GodIDList[i], max(0,10 * (sr + roll + mod1 + 
                               mod2 + armPen - 15)), false, true);
                 } 
               }
@@ -1837,16 +1837,16 @@ void Character::UseAbility(uint8 ab,int16 pa)
          break;
         case CA_BERSERK_RAGE:
           fc = 3;
-          if (!InSlot(SL_ARMOR))
+          if (!InSlot(SL_ARMOUR))
             fc = 1;
-          else if (InSlot(SL_ARMOR)->isGroup(WG_HARMOR))
+          else if (InSlot(SL_ARMOUR)->isGroup(WG_HARMOUR))
             fc = 4;
-          else if (InSlot(SL_ARMOR)->isGroup(WG_MARMOR))
+          else if (InSlot(SL_ARMOUR)->isGroup(WG_MARMOUR))
             fc = 3;
-          else if (InSlot(SL_ARMOR)->isGroup(WG_LARMOR))
+          else if (InSlot(SL_ARMOUR)->isGroup(WG_LARMOUR))
             fc = 2;
           else
-            Error("Armor is neither Light, Medium nor Heavy?!");
+            Error("Armour is neither Light, Medium nor Heavy?!");
             
           if (HasStati(AFRAID))
             {
@@ -2196,7 +2196,7 @@ void Character::UseAbility(uint8 ab,int16 pa)
             break;
           if (!targ->isCreature())
             {
-              IPrint("There is no honor in slaying inanimate opponents.");
+              IPrint("There is no honour in slaying inanimate opponents.");
               break;
             }
           if (ChallengeRating() < ((Creature*)targ)->ChallengeRating())
@@ -2705,7 +2705,7 @@ EvReturn Creature::PickPocket(EventInfo &e)
     c = 0;
     for (it=e.EVictim->FirstInv();it;it=e.EVictim->NextInv())
       if ((!(it->IFlags & IF_WORN)) || (e.EVictim->HasStati(DISTRACTED) &&
-                                         !it->isType(T_ARMOR)))
+                                         !it->isType(T_ARMOUR)))
         {
           Candidates[c++] = it->myHandle;
           if (isPlayer())
@@ -2995,11 +2995,11 @@ void Creature::DevourMonster(Monster * m)
       Transgress(FIND("Immotian"),6,false,"eating sapient creatures");
       Transgress(FIND("Xavias"),3,false,"eating sapient creatures");
       Transgress(FIND("Hesani"),3,false,"eating sapient creatures");
-      gainFavor(FIND("Khasrach"),10*m->ChallengeRating(),false,true);
+      gainFavour(FIND("Khasrach"),10*m->ChallengeRating(),false,true);
       if (!(isMType(MA_ORC) || isMType(MA_REPTILE)))
         AlignedAct(AL_NONLAWFUL,3,"eating sapient creatures");
       }
-    gainFavor(FIND("Zurvash"),5*m->ChallengeRating(),false,true);
+    gainFavour(FIND("Zurvash"),5*m->ChallengeRating(),false,true);
       
     if (m->isMType(MA_REPTILIAN))
       RemoveStati(STONING);
@@ -3146,7 +3146,7 @@ void Creature::Devour(Corpse * c)
       and clerics making items, but it's assumed that PC casters will
       make some for their PC warrior-type party-mates. In Incursion,
       SRD item creation would mean that wizards and priests would end
-      up with the best magic swords and armor, and the fighter types
+      up with the best magic swords and armour, and the fighter types
       would be left out cold. I don't want that.
    ----
      This said, there are some exceptions to this. Definitely, I want
@@ -3157,7 +3157,7 @@ void Creature::Devour(Corpse * c)
    scrolls being written with monster blood, too. I may consider some other
    magic item creation system in the future, but it would have to A) be
    decidedly inferior to the dwarves and bards abilities, or at least not
-   directly intersect it, B) not favor the spellcasters so immensely, C)
+   directly intersect it, B) not favour the spellcasters so immensely, C)
    be less predictable and require more effort (components, quests, etc.)
    and creativity then the SRD version, which just drives the player into
    scumming for gold and XP. 
@@ -3262,7 +3262,7 @@ EvReturn Character::CraftItem(int16 abil)
         case CA_WEAPONCRAFT + ABIL_VAL:
           if (!foundForge)
             {
-              IPrint("You need to find a forge to create weapons or armor.");
+              IPrint("You need to find a forge to create weapons or armour.");
               return ABORT;
             }
           do
@@ -3379,7 +3379,7 @@ EvReturn Character::CraftItem(int16 abil)
         if (it->GetInherantPlus() >= 5)
           continue;
         if (weaponsOnly && !(it->isType(T_WEAPON) || 
-                             it->isType(T_ARMOR) ||
+                             it->isType(T_ARMOUR) ||
                              it->isType(T_SHIELD)))
           continue;
         
@@ -3407,7 +3407,7 @@ EvReturn Character::CraftItem(int16 abil)
       {
         TextVal *desc, *pre, *post;
         bool isWeapon = false;
-        if (it->isType(T_SHIELD) || it->isType(T_ARMOR))
+        if (it->isType(T_SHIELD) || it->isType(T_ARMOUR))
           { desc = AQualityDescs; pre = APreQualNames; post = APostQualNames; }
         else if (it->isType(T_WEAPON))
           { desc = QualityDescs; pre = PreQualNames; 
@@ -4473,14 +4473,14 @@ EvReturn Creature::Turn(EventInfo &e)
 
     found = false;
 
-    int okSlots[] = { SL_READY, SL_WEAPON, SL_AMULET, SL_ARMOR, 0};
+    int okSlots[] = { SL_READY, SL_WEAPON, SL_AMULET, SL_ARMOUR, 0};
     Item *it;
     for (i=0;okSlots[i];i++) {
       if ((it=InSlot(okSlots[i])) && it->eID && 
           !strncmp(NAME(it->eID),NAME(thisc->GodID),
             strlen(NAME(thisc->GodID))))
         goto HasComponent;
-      if ((it=InSlot(okSlots[i])) && (it->isType(T_ARMOR) ||
+      if ((it=InSlot(okSlots[i])) && (it->isType(T_ARMOUR) ||
             it->isType(T_SHIELD)) && it->HasQuality(AQ_GRAVEN))
         goto HasComponent;
       } 
@@ -4497,7 +4497,7 @@ EvReturn Creature::Turn(EventInfo &e)
         return ABORT;
         }
       if (!thisp->isWorthyOf(thisp->GodID,false)) {
-        IPrint("You must have <Res>'s favor to channel <Str> holy power.",
+        IPrint("You must have <Res>'s favour to channel <Str> holy power.",
                  thisp->GodID, GodPronoun(thisp->GodID, true));
         return ABORT;
         }
@@ -4506,7 +4506,7 @@ EvReturn Creature::Turn(EventInfo &e)
 
     
     if (e.AType == CA_TURNING || e.AType == CA_GREATER_TURNING)
-      if (e.EActor->HasFeat(FT_DIVINE_ARMOR) || e.EActor->HasFeat(FT_DIVINE_CLEANSING) ||
+      if (e.EActor->HasFeat(FT_DIVINE_ARMOUR) || e.EActor->HasFeat(FT_DIVINE_CLEANSING) ||
           e.EActor->HasFeat(FT_DIVINE_MIGHT) || e.EActor->HasFeat(FT_DIVINE_RESISTANCE) ||
           e.EActor->HasFeat(FT_DIVINE_VENGEANCE) || e.EActor->HasFeat(FT_DIVINE_VIGOR) ||
           e.EActor->HasFeat(FT_DIVINE_AEGIS))
@@ -4901,15 +4901,15 @@ EvReturn Creature::Dig(EventInfo &e)
               * sense I like Intuition working when you rest. Since your change is
               * likely cruical to playability, however, I've decided to add it as
               * an option that is by default "on", at least for the things that
-              * have the greatest "junk to magic" ratio -- weapons and armor. Let
+              * have the greatest "junk to magic" ratio -- weapons and armour. Let
               * me know what you think. I've left auto-intuit off for wands, potions,
               * and other things that are A) almost always magical, and B) have
-              * flavors that allow easy ID-ing.
+              * flavours that allow easy ID-ing.
               */
               switch (thisp->Opt(OPT_EASY_INTUIT)) {
               case 0: break; /* No Easy Intuit */
               case 1: thisp->IntuitItem(it); break;
-              case 2: if ( it->isType(T_WEAPON) || it->isType(T_ARMOR) ||
+              case 2: if ( it->isType(T_WEAPON) || it->isType(T_ARMOUR) ||
                           it->isType(T_MISSILE) || it->isType(T_BOW) ||
                           it->isType(T_SHIELD) )
                           thisp->IntuitItem(it); break;

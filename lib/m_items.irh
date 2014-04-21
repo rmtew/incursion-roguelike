@@ -416,7 +416,7 @@ AI_TOME Effect "Libram of Hidden Secrets" : EA_GENERIC
 // keeps players on their toes, makes inventory shuffling more fun, etc,
 // but doesn't really give any more power. 
 /* FJM: Unfortunately, there's several reasons that this isn't that good.
-   * Firstly, it kills flavor by making items more generic, and goes 
+   * Firstly, it kills flavour by making items more generic, and goes 
      against the feel of old-school RPGs.
    * Secondly, the item ID system isn't set up to properly handle multiple
      items types unless there's only two and one is a potion.
@@ -597,12 +597,12 @@ and EA_GRANT
   }
 
 /************************************************************************\
- *                             ARMOR QUALITIES                          *
+ *                             ARMOUR QUALITIES                          *
 \************************************************************************/
 
 /* NOTE: These names are hardcoded into Incursion's C++ source. If the
    game can't find these resources when it needs them, it will whinge
-   and bail. You can't, at this time, add extra Qualities (for armor or
+   and bail. You can't, at this time, add extra Qualities (for armour or
    weapons) just through resources. Sorry.' */
 
 Effect "quality::light fortification" : EA_GRANT
@@ -651,7 +651,7 @@ Effect "quality::blinding" : EA_GRANT
           e.strDef += " +2 glint";
           if (!random(20))
             {
-              VPrint(e,"Your armor flares!", "The <EVictim>'s armor flares!");
+              VPrint(e,"Your armour flares!", "The <EVictim>'s armour flares!");
               if (EActor->ResistLevel(AD_BLND) == -1)
                 DPrint(e,"You are unaffected.", "The <EActor> is unaffected.");
               else if (EActor->SavingThrow(FORT,10 + EVictim->GetEffStatiObj(TRAP_EVENT,
@@ -790,30 +790,30 @@ AI_SCROLL Spell "*Identify*;scroll" : EA_GENERIC
         };
   }
 
-AI_SCROLL Effect "Enchant Armor" : EA_GENERIC
+AI_SCROLL Effect "Enchant Armour" : EA_GENERIC
   {
     Level: 3;
     Desc: "This scroll, when read, will increase the plus of the
-      suit of armor you currently wear by 1 (to a maximum of +5),
-      provided that the armor's item level (before enchantment) is 
+      suit of armour you currently wear by 1 (to a maximum of +5),
+      provided that the armour's item level (before enchantment) is 
       lower than your character level plus your Charisma modifier, 
-      +2 if enchanting medium armor or +4 if enchanting heavy armor.";
+      +2 if enchanting medium armour or +4 if enchanting heavy armour.";
     On Event EV_MAGIC_HIT {
       hObj Ar; int16 lev;
       lev = EActor->ChallengeRating() + EActor->Mod(A_CHA);
-      Ar = EActor->InSlot(SL_ARMOR); 
+      Ar = EActor->InSlot(SL_ARMOUR); 
       if (Ar == NULL_OBJ)
         return NOTHING;
-      if (!Ar->isType(T_ARMOR))
+      if (!Ar->isType(T_ARMOUR))
         return NOTHING;
-      if (Ar->isGroup(WG_HARMOR))
+      if (Ar->isGroup(WG_HARMOUR))
         lev += 4;
-      else if (Ar->isGroup(WG_MARMOR))
+      else if (Ar->isGroup(WG_MARMOUR))
         lev += 2;
       if (Ar->isCursed())
         {
-          EActor->IPrint("Your armor glows an angry red!",
-                          "The <hObj>'s armor glows an angry red!",
+          EActor->IPrint("Your armour glows an angry red!",
+                          "The <hObj>'s armour glows an angry red!",
                           EActor);
           EActor->MakeKnown(KN_CURSE);
           return DONE;
@@ -821,42 +821,42 @@ AI_SCROLL Effect "Enchant Armor" : EA_GENERIC
       if (Ar->GetInherantPlus() >= 5 ||
             Ar->ItemLevel() > lev)
         {
-          EActor->IDPrint("Your armor glows white, but the glow soon fades.",
-                          "The <hObj>'s armor glows white, but the glow soon fades.",
+          EActor->IDPrint("Your armour glows white, but the glow soon fades.",
+                          "The <hObj>'s armour glows white, but the glow soon fades.",
                           EActor);
           return DONE;
         }
-      EActor->IDPrint("Your armor glows white!",
-                      "The <hObj>'s armor glows white!", EActor);
+      EActor->IDPrint("Your armour glows white!",
+                      "The <hObj>'s armour glows white!", EActor);
       Ar->SetInherantPlus(Ar->GetInherantPlus()+1);
       return DONE;
       };
   }      
 
-AI_SCROLL Effect "Enchant Armor (featherlight)" : EA_GENERIC
+AI_SCROLL Effect "Enchant Armour (featherlight)" : EA_GENERIC
   {
     Level: 3;
     Desc: "This scroll, when read, will bestow the featherlight
-      quality on the suit of armor you currently wear, provided 
-      that the armor's item level (before enchantment) is lower 
+      quality on the suit of armour you currently wear, provided 
+      that the armour's item level (before enchantment) is lower 
       than your character level plus your Charisma modifier, 
-      +2 if enchanting medium armor or +4 if enchanting heavy armor.";
+      +2 if enchanting medium armour or +4 if enchanting heavy armour.";
     On Event EV_MAGIC_HIT {
       hObj Ar; int16 lev;
       lev = EActor->ChallengeRating() + EActor->Mod(A_CHA);
-      Ar = EActor->InSlot(SL_ARMOR); 
+      Ar = EActor->InSlot(SL_ARMOUR); 
       if (Ar == NULL_OBJ)
         return NOTHING;
-      if (!Ar->isType(T_ARMOR))
+      if (!Ar->isType(T_ARMOUR))
         return NOTHING;
-      if (Ar->isGroup(WG_HARMOR))
+      if (Ar->isGroup(WG_HARMOUR))
         lev += 4;
-      else if (Ar->isGroup(WG_MARMOR))
+      else if (Ar->isGroup(WG_MARMOUR))
         lev += 2;
       if (Ar->isCursed())
         {
-          EActor->IPrint("Your armor glows an angry red!",
-                          "The <hObj>'s armor glows an angry red!",
+          EActor->IPrint("Your armour glows an angry red!",
+                          "The <hObj>'s armour glows an angry red!",
                           EActor);
           EActor->MakeKnown(KN_CURSE);
           return DONE;
@@ -864,42 +864,42 @@ AI_SCROLL Effect "Enchant Armor (featherlight)" : EA_GENERIC
       if (Ar->HasQuality(IQ_FEATHERLIGHT) ||
             Ar->ItemLevel() > lev)
         {
-          EActor->IDPrint("Your armor glows white, but the glow soon fades.",
-                          "The <hObj>'s armor glows white, but the glow soon fades.",
+          EActor->IDPrint("Your armour glows white, but the glow soon fades.",
+                          "The <hObj>'s armour glows white, but the glow soon fades.",
                           EActor);
           return DONE;
         }
-      EActor->IDPrint("Your armor glows white!",
-                      "The <hObj>'s armor glows white!", EActor);
+      EActor->IDPrint("Your armour glows white!",
+                      "The <hObj>'s armour glows white!", EActor);
       Ar->AddQuality(IQ_FEATHERLIGHT);
       return DONE;
       };
   }      
 
-AI_SCROLL Effect "Enchant Armor (graceful)" : EA_GENERIC
+AI_SCROLL Effect "Enchant Armour (graceful)" : EA_GENERIC
   {
     Level: 3;
     Desc: "This scroll, when read, will bestow the featherlight
-      quality on the suit of armor you currently wear, provided 
-      that the armor's item level (before enchantment) is lower 
+      quality on the suit of armour you currently wear, provided 
+      that the armour's item level (before enchantment) is lower 
       than your character level plus your Charisma modifier, 
-      +2 if enchanting medium armor or +4 if enchanting heavy armor.";
+      +2 if enchanting medium armour or +4 if enchanting heavy armour.";
     On Event EV_MAGIC_HIT {
       hObj Ar; int16 lev;
       lev = EActor->ChallengeRating() + EActor->Mod(A_CHA);
-      Ar = EActor->InSlot(SL_ARMOR); 
+      Ar = EActor->InSlot(SL_ARMOUR); 
       if (Ar == NULL_OBJ)
         return NOTHING;
-      if (!Ar->isType(T_ARMOR))
+      if (!Ar->isType(T_ARMOUR))
         return NOTHING;
-      if (Ar->isGroup(WG_HARMOR))
+      if (Ar->isGroup(WG_HARMOUR))
         lev += 4;
-      else if (Ar->isGroup(WG_MARMOR))
+      else if (Ar->isGroup(WG_MARMOUR))
         lev += 2;
       if (Ar->isCursed())
         {
-          EActor->IPrint("Your armor glows an angry red!",
-                          "The <hObj>'s armor glows an angry red!",
+          EActor->IPrint("Your armour glows an angry red!",
+                          "The <hObj>'s armour glows an angry red!",
                           EActor);
           EActor->MakeKnown(KN_CURSE);
           return DONE;
@@ -907,42 +907,42 @@ AI_SCROLL Effect "Enchant Armor (graceful)" : EA_GENERIC
       if (Ar->HasQuality(AQ_GRACEFUL) ||
             Ar->ItemLevel() > lev)
         {
-          EActor->IDPrint("Your armor glows white, but the glow soon fades.",
-                          "The <hObj>'s armor glows white, but the glow soon fades.",
+          EActor->IDPrint("Your armour glows white, but the glow soon fades.",
+                          "The <hObj>'s armour glows white, but the glow soon fades.",
                           EActor);
           return DONE;
         }
-      EActor->IDPrint("Your armor glows white!",
-                      "The <hObj>'s armor glows white!", EActor);
+      EActor->IDPrint("Your armour glows white!",
+                      "The <hObj>'s armour glows white!", EActor);
       Ar->AddQuality(AQ_GRACEFUL);
       return DONE;
       };
   }      
 
-AI_SCROLL Effect "Enchant Armor (life-keeping)" : EA_GENERIC
+AI_SCROLL Effect "Enchant Armour (life-keeping)" : EA_GENERIC
   {
     Level: 5;
     Desc: "This scroll, when read, will bestow the featherlight
-      quality on the suit of armor you currently wear, provided 
-      that the armor's item level (before enchantment) is lower 
+      quality on the suit of armour you currently wear, provided 
+      that the armour's item level (before enchantment) is lower 
       than your character level plus your Charisma modifier, 
-      +2 if enchanting medium armor or +4 if enchanting heavy armor.";
+      +2 if enchanting medium armour or +4 if enchanting heavy armour.";
     On Event EV_MAGIC_HIT {
       hObj Ar; int16 lev;
       lev = EActor->ChallengeRating() + EActor->Mod(A_CHA);
-      Ar = EActor->InSlot(SL_ARMOR); 
+      Ar = EActor->InSlot(SL_ARMOUR); 
       if (Ar == NULL_OBJ)
         return NOTHING;
-      if (!Ar->isType(T_ARMOR))
+      if (!Ar->isType(T_ARMOUR))
         return NOTHING;
-      if (Ar->isGroup(WG_HARMOR))
+      if (Ar->isGroup(WG_HARMOUR))
         lev += 4;
-      else if (Ar->isGroup(WG_MARMOR))
+      else if (Ar->isGroup(WG_MARMOUR))
         lev += 2;
       if (Ar->isCursed())
         {
-          EActor->IPrint("Your armor glows an angry red!",
-                          "The <hObj>'s armor glows an angry red!",
+          EActor->IPrint("Your armour glows an angry red!",
+                          "The <hObj>'s armour glows an angry red!",
                           EActor);
           EActor->MakeKnown(KN_CURSE);
           return DONE;
@@ -950,45 +950,45 @@ AI_SCROLL Effect "Enchant Armor (life-keeping)" : EA_GENERIC
       if (Ar->HasQuality(AQ_LIFEKEEPING) ||
             Ar->ItemLevel() > lev)
         {
-          EActor->IDPrint("Your armor glows white, but the glow soon fades.",
-                          "The <hObj>'s armor glows white, but the glow soon fades.",
+          EActor->IDPrint("Your armour glows white, but the glow soon fades.",
+                          "The <hObj>'s armour glows white, but the glow soon fades.",
                           EActor);
           return DONE;
         }
-      EActor->IDPrint("Your armor glows white!",
-                      "The <hObj>'s armor glows white!", EActor);
+      EActor->IDPrint("Your armour glows white!",
+                      "The <hObj>'s armour glows white!", EActor);
       Ar->AddQuality(AQ_LIFEKEEPING);
       return DONE;
       };
   }      
 
 
-AI_SCROLL Effect "Enchant Armor (fortification)" : EA_GENERIC
+AI_SCROLL Effect "Enchant Armour (fortification)" : EA_GENERIC
   {
     Level: 4;
     Desc: "This scroll, when read, will bestow a level of the
       fortification (no fortification becomes light, light
       becomes medium and medium becomes heavy) 
-      quality on the suit of armor you currently wear, provided 
-      that the armor's item level (before enchantment) is lower 
+      quality on the suit of armour you currently wear, provided 
+      that the armour's item level (before enchantment) is lower 
       than your character level plus your Charisma modifier, 
-      +2 if enchanting medium armor or +4 if enchanting heavy armor.";
+      +2 if enchanting medium armour or +4 if enchanting heavy armour.";
     On Event EV_MAGIC_HIT {
       hObj Ar; int16 lev;
       lev = EActor->ChallengeRating() + EActor->Mod(A_CHA);
-      Ar = EActor->InSlot(SL_ARMOR); 
+      Ar = EActor->InSlot(SL_ARMOUR); 
       if (Ar == NULL_OBJ)
         return NOTHING;
-      if (!Ar->isType(T_ARMOR))
+      if (!Ar->isType(T_ARMOUR))
         return NOTHING;
-      if (Ar->isGroup(WG_HARMOR))
+      if (Ar->isGroup(WG_HARMOUR))
         lev += 4;
-      else if (Ar->isGroup(WG_MARMOR))
+      else if (Ar->isGroup(WG_MARMOUR))
         lev += 2;
       if (Ar->isCursed())
         {
-          EActor->IPrint("Your armor glows an angry red!",
-                          "The <hObj>'s armor glows an angry red!",
+          EActor->IPrint("Your armour glows an angry red!",
+                          "The <hObj>'s armour glows an angry red!",
                           EActor);
           EActor->MakeKnown(KN_CURSE);
           return DONE;
@@ -996,13 +996,13 @@ AI_SCROLL Effect "Enchant Armor (fortification)" : EA_GENERIC
       if (Ar->HasQuality(AQ_HEAVY_FOR) ||
             Ar->ItemLevel() > lev)
         {
-          EActor->IDPrint("Your armor glows white, but the glow soon fades.",
-                          "The <hObj>'s armor glows white, but the glow soon fades.",
+          EActor->IDPrint("Your armour glows white, but the glow soon fades.",
+                          "The <hObj>'s armour glows white, but the glow soon fades.",
                           EActor);
           return DONE;
         }
-      EActor->IDPrint("Your armor glows white!",
-                      "The <hObj>'s armor glows white!", EActor);
+      EActor->IDPrint("Your armour glows white!",
+                      "The <hObj>'s armour glows white!", EActor);
       if (Ar->HasQuality(AQ_MEDIUM_FOR))
         { Ar->RemoveQuality(AQ_MEDIUM_FOR);
           Ar->AddQuality(AQ_HEAVY_FOR);
@@ -1017,31 +1017,31 @@ AI_SCROLL Effect "Enchant Armor (fortification)" : EA_GENERIC
       };
   }   
 
-AI_SCROLL Effect "Enchant Armor (resistance)" : EA_GENERIC
+AI_SCROLL Effect "Enchant Armour (resistance)" : EA_GENERIC
   {
     Level: 4;
     Desc: "This scroll, when read, will bestow one of the 
-      elemental resistance qualities (that your armor doesn't
-      already have) on the suit of armor you currently wear, provided 
-      that the armor's item level (before enchantment) is lower 
+      elemental resistance qualities (that your armour doesn't
+      already have) on the suit of armour you currently wear, provided 
+      that the armour's item level (before enchantment) is lower 
       than your character level plus your Charisma modifier, 
-      +2 if enchanting medium armor or +4 if enchanting heavy armor.";
+      +2 if enchanting medium armour or +4 if enchanting heavy armour.";
     On Event EV_MAGIC_HIT {
       hObj Ar; int16 lev;
       lev = EActor->ChallengeRating() + EActor->Mod(A_CHA);
-      Ar = EActor->InSlot(SL_ARMOR); 
+      Ar = EActor->InSlot(SL_ARMOUR); 
       if (Ar == NULL_OBJ)
         return NOTHING;
-      if (!Ar->isType(T_ARMOR))
+      if (!Ar->isType(T_ARMOUR))
         return NOTHING;
-      if (Ar->isGroup(WG_HARMOR))
+      if (Ar->isGroup(WG_HARMOUR))
         lev += 4;
-      else if (Ar->isGroup(WG_MARMOR))
+      else if (Ar->isGroup(WG_MARMOUR))
         lev += 2;
       if (Ar->isCursed())
         {
-          EActor->IPrint("Your armor glows an angry red!",
-                          "The <hObj>'s armor glows an angry red!",
+          EActor->IPrint("Your armour glows an angry red!",
+                          "The <hObj>'s armour glows an angry red!",
                           EActor);
           EActor->MakeKnown(KN_CURSE);
           return DONE;
@@ -1051,13 +1051,13 @@ AI_SCROLL Effect "Enchant Armor (resistance)" : EA_GENERIC
            Ar->HasQuality(AQ_SONIC_RES) && Ar->HasQuality(AQ_POISON_RES)) ||
             Ar->ItemLevel() > lev)
         {
-          EActor->IDPrint("Your armor glows white, but the glow soon fades.",
-                          "The <hObj>'s armor glows white, but the glow soon fades.",
+          EActor->IDPrint("Your armour glows white, but the glow soon fades.",
+                          "The <hObj>'s armour glows white, but the glow soon fades.",
                           EActor);
           return DONE;
         }
-      EActor->IDPrint("Your armor glows white!",
-                      "The <hObj>'s armor glows white!", EActor);
+      EActor->IDPrint("Your armour glows white!",
+                      "The <hObj>'s armour glows white!", EActor);
       do {
         switch(1d6) {
           case 1:
@@ -1819,7 +1819,7 @@ AI_EYES Effect "Precision;eyes" : EA_GRANT
  * -- Purpose
  * -- qval: Q_DIR | Q_TAR | Q_LOC;
  * -- aval:
- * -- cval (beam color)
+ * -- cval (beam colour)
  * -- lval
  * -- Flags (EF_NEEDS_PLUS, EF_AUTOID, others?)
  * -- sval
@@ -2414,7 +2414,7 @@ AI_WAND Effect "cracked" : EA_BLAST
 /* Attack Wands (15):
 
    Wand of Disruption (AD_SONI + AD_MAGC)
-   Wand of Colors (Prismatic Spray effect)
+   Wand of Colours (Prismatic Spray effect)
    Wand of Mana Theft
 
 
@@ -3025,7 +3025,7 @@ AI_WAND Effect "Wonder" : EA_GENERIC
    * Wand of Duplication (creates another creature it hits)
    * Wand of Rust
    * Wand of Striking (like force bolt)
-   * Wand of Colors (Prismatic Effect)
+   * Wand of Colours (Prismatic Effect)
 
    * Rod of Earth Authority
    * Rod of Ruin
@@ -3118,7 +3118,7 @@ AI_STAFF Effect "the Spider" : EA_GRANT
           $"serpent tongue" $"web";
     Desc: "A solid adamant rod adorned with carvings of spiders,
       these staves are frequently created by drow sorcerors eager
-      to earn the favor of their demonic Spider Queen.\n
+      to earn the favour of their demonic Spider Queen.\n
       __In the hands of a spellcaster of 3rd level or higher,
       a staff of the spider allows access to the spells <9>spider
       climb<7>, <9>serpent tongue<7>, <9>web<7> and <9>summon
@@ -3255,7 +3255,7 @@ AI_STAFF Effect "Illusion" : EA_GRANT
   {
     xval: STAFF_SPELLS; Level: 10; pval: 3;
     Desc: "This staff is carved from a milky, nearly translucent
-      marble, and has a swirling, colorful design painted on its
+      marble, and has a swirling, colourful design painted on its
       surface. In the hands of any character with three or more
       levels as an arcane caster, or a gnome, it grants a +4 bonus to the
       Illusioncraft skill and access to the following spells:
@@ -3852,7 +3852,7 @@ Item "springblade" : T_WEAPON
 AI_BRACERS Effect "Springblade Bracers" : EA_GENERIC
   { SC_ARC; SC_ENC; Level: 3; 
     Flags: EF_NAMEONLY, EF_ACTIVATE, EF_CANCEL, EF_MUNDANE;
-    Desc: "These crafty mechanical bracers are favored by gnomes
+    Desc: "These crafty mechanical bracers are favoured by gnomes
       and assasins. Mounted carefully inside them are two spring-loaded
       telescoping mithril blades, that when fully extended are not
       unlike those of a short sword. Activating the bracers causes
@@ -4017,7 +4017,7 @@ AI_GAUNTLETS Effect "Rust;gauntlet" : EA_GRANT
       if (h = ETarget->InSlot(SL_WEAPON))
         if (h->Material() == MAT_IRON)
           return 1;
-      if (h = ETarget->InSlot(SL_ARMOR))
+      if (h = ETarget->InSlot(SL_ARMOUR))
         if (h->Material() == MAT_IRON)
           return 1;
       if (h = ETarget->InSlot(SL_GAUNTLETS))
@@ -4133,7 +4133,7 @@ AI_RING Effect "Evasion" : EA_GRANT
     Desc: "This ring grants you four levels of the Evasion ability (as
       the rogue and monk class feature), or improves any existing Evasion 
       ability you may have by four levels. Evasion allows you to dodge
-      spell blasts if you are wearing light armor or no armor and you
+      spell blasts if you are wearing light armour or no armour and you
       make a successful Reflex save. If you dodge a spell that allows a
       saving throw you take no damage. If the spell does not normally
       allow a saving throw, you take half damage."; }
@@ -4256,7 +4256,7 @@ AI_RING Effect "Climbing" : EA_GRANT
 AI_RING Effect "the Chameleon" : EA_GRANT
   { SC_THA; xval: SKILL_BONUS; yval: SK_HIDE; pval: PLUS_3PER1;
     Flags: EF_NEEDS_PLUS; Level: PLUS_2PER1; 
-    Desc: "This ring causes your image to shift color to match the
+    Desc: "This ring causes your image to shift colour to match the
       surroundings, giving you a magic bonus to your Hide skill equal
       to thrice its level of enchantment. In addition, it may be
       used to dominate any one nearby reptile three times per day."; }
@@ -4886,10 +4886,10 @@ AI_RING Effect "Spell Storing" : EA_GENERIC
  *                                AMULETS                               *
 \************************************************************************/
 
-AI_AMULET Effect "Natural Armor" : EA_GRANT
+AI_AMULET Effect "Natural Armour" : EA_GRANT
   { xval: ADJUST_NAT; yval: A_ARM; pval: PLUS_2PER1; 
     Flags: EF_NEEDS_PLUS; Level: PLUS_3PER1; 
-    Desc: "This amulet grants its wearer a natural armor rating of
+    Desc: "This amulet grants its wearer a natural armour rating of
       twice its magical plus against slashing, piercing and blunt
       damage."; }
 
@@ -5365,7 +5365,7 @@ AI_HELM Effect "Lesser Helm of Brilliance" : EA_GENERIC
         ETerm->LOption(XPrint("Throw ruby (<9>fireball<7>)"),2); }
     if (EItem->GetStatiMag(COUNTER,3))
       { found = true;
-        ETerm->LOption(XPrint("Throw fire opal (<9>color burst<7>)"),3); }
+        ETerm->LOption(XPrint("Throw fire opal (<9>colour burst<7>)"),3); }
     if (EItem->GetStatiMag(COUNTER,4))
       { found = true;
         ETerm->LOption(XPrint("Throw diamond (<9>searing light<7>)"),4); }
@@ -5381,7 +5381,7 @@ AI_HELM Effect "Lesser Helm of Brilliance" : EA_GENERIC
           neID = $"fireball";
          break;
         case 3:
-          neID = $"color burst";
+          neID = $"colour burst";
          break;
         case 4:
           neID = $"searing light";
@@ -5458,7 +5458,7 @@ and EA_GRANT
   { xval: IMMUNITY; yval: AD_NECR;
     Desc: "This powerful defensive garment conveys five distinct protective
       effects: immunity to mind magic, charms, paralysis, a +4 bonus
-            to save versus spells, a +6 luck bonus to armor and immunity to
+            to save versus spells, a +6 luck bonus to armour and immunity to
             life draining and necromantic damage."; }
 
 /************************************************************************\
@@ -6020,7 +6020,7 @@ and EA_GENERIC
       * INITIAL_PLUS +3;
     Lists:
       * ITEM_QUALITIES WQ_KEEN;
-    Desc: "The Luckblade is a powerful and rare treasure often favored
+    Desc: "The Luckblade is a powerful and rare treasure often favoured
       by adventurers and followers of Semirath, who are the best known
       for creating these valuable relics. It is a <11>+3 keen short sword<7>,
       and it adds its magical plus as a magic bonus to the wearer's Luck
@@ -6238,7 +6238,7 @@ AI_WEAPON Effect "Hornblade" : EA_GENERIC
       as a sickle-like slashing weapon. Because it is so difficult
       to visually recognize as a weapon, the first attack made with
       it against any given foe is considered to be a sneak attack.
-      Rogues favor hornblades for this reason, and druids favor them
+      Rogues favour hornblades for this reason, and druids favour them
       because they are treated as sickles with no metal parts.";
   }    
   
@@ -6511,7 +6511,7 @@ AI_WEAPON Effect "Sword of the Planes" : EA_GENERIC
     Desc: "This unusual weapon is forged from a special form of
       adamant mined on the plane of Concordant Opposition, the
       spiritual homeland of True Neutrality. It is among the
-      most common of the unique weapons overall, favored by
+      most common of the unique weapons overall, favoured by
       adventurers who mount extraplanar expeditions and by the
       humans and other brave souls who fight against the harsh
       rigor of the Outer Planes. Swords of the Planes are not
@@ -6749,7 +6749,7 @@ AI_SHIELD Effect "Dragonshield" : EA_BLAST
       __In addition to this special ability, a Dragonshield
       is a <11>+1 <7>(or higher)<11> light fortification 
       fearsome shield<7>. Bearing a Dragonshield makes all
-      chromatic dragons hostile to the bearer -- rumors
+      chromatic dragons hostile to the bearer -- rumours
       claim that their blood is an essential component in
       these shields' manufacture.";
     Flags: EF_HIDEQUAL, EF_NAMEONLY, EF_ACTIVATE, EF_PARTIAL,
@@ -7098,7 +7098,7 @@ AI_WEAPON Effect "Wit" : EA_GRANT
       __Wit is a powerful magical weapon in its own right, being
       a <11>+4 keen defending rapier<7>. When held, it grants to
       its bearer the benefit of the feats Spring Attack, Combat
-      Finesse and Chink in the Armor, as well as an enhancement bonus 
+      Finesse and Chink in the Armour, as well as an enhancement bonus 
       to the wearer's Charisma equal to its plus; if the wearer 
       already has these feats, the magnitude of the Charisma bonus 
       is increased by +1 for every duplication.\n
@@ -7146,7 +7146,7 @@ Read Magic
 Blur
 Scare
 Explosive Runes
-Spirit Armor
+Spirit Armour
 Enervation
    * spell-themed abilities
    * mana theft
@@ -7156,7 +7156,7 @@ Enervation
    Longtooth (dagger)
    * changes into short sword
    
-   Armor of the Old Soldier
+   Armour of the Old Soldier
    -- +4 medium fortification splint mail
    -- sustains Str, Con
    -- staff spells - haste, slow, mending
@@ -7175,8 +7175,8 @@ Enervation
      name script -- if NA_LONG, include ", the Bringer of War",
        otherwise just "Magellin"
      Great Flail +5 of Wounding and Withering
-     damages armor?
-     -- staff spells: fireball, spirit armor, true strike
+     damages armour?
+     -- staff spells: fireball, spirit armour, true strike
      Sustains Strength, grants +5 magic to Str
      -- causes conflict, aggrivates monsters
    
@@ -7409,10 +7409,10 @@ and EA_GRANT                                                       \
       the Archmagi also carry great risk with them. They must be   \
       properly matched to a character's alignment (white for good, \
       grey for neutral and black for evil) to function, and if the \
-      color of the robes directly opposes the wearer's alignment,  \
+      colour of the robes directly opposes the wearer's alignment,  \
       they catch fire and burn, becoming cursed in the process.\n  \
       __For a suitable wearer, however, they grant a 50~ magic     \
-      resistance, bestow an armor rating of 5 in all catagories,   \
+      resistance, bestow an armour rating of 5 in all catagories,   \
       grant a +3 magic bonus to saving throws and allow the wearer \
       to use the feat Spell Penetration."; }                       \                                  
   
@@ -7498,7 +7498,7 @@ and EA_GRANT
       * BASE_ITEM $"robes;magic";
   }
   
-AI_WONDER Effect "Robe of Scintillating Colors" : EA_GRANT
+AI_WONDER Effect "Robe of Scintillating Colours" : EA_GRANT
   { SC_ENC; SC_ILL; Level: 4;
     xval: MISS_CHANCE; yval: MISS_FULL; pval: 20;
     Flags: EF_CASTER_IMMUNE, EF_MENTAL, EF_ACTIVATE, 
@@ -7510,19 +7510,19 @@ and EA_INFLICT
     aval: AR_MFIELD; lval: 3; cval: COL_RAINBOW; xval: ADJUST_CIRC;
     yval: A_AID; pval: -4;
     Desc: "When activated, this robe flows and ripples with hypnotic,
-      distracting colors, giving anyone within 5 squares of the wearer
+      distracting colours, giving anyone within 5 squares of the wearer
       a -4 circumstance penalty to all actions, and granting the wearer
       a 20% miss chance against all attacks. You can't hide while this
       effect is active.";
     On Event 
       EV_WIELD
-        "A nimbus of hypnotic, distracting colors appears around you." /
-        "A nimbus of hypnotic, distracting colors appears around the <EActor>.",
+        "A nimbus of hypnotic, distracting colours appears around you." /
+        "A nimbus of hypnotic, distracting colours appears around the <EActor>.",
       EV_FIELDON
-        "Wow, those shifting colors are so pretty!" /
+        "Wow, those shifting colours are so pretty!" /
         "The <EActor> is fascinated.",
       EV_FIELDOFF
-        "At this distance, the colors no longer affect you." /
+        "At this distance, the colours no longer affect you." /
         "The <EActor> seems clearer-headed now.";
     Constants:
       * BASE_ITEM $"robes;magic";
@@ -7794,7 +7794,7 @@ AI_RING Effect "Elemental Disjunction" : EA_GRANT
       Undead will additionally affect Elementals and their kind.
       Unfortunately, bearing this item will also cause such creatures to
       view you with marked disdain. Ekliazeh, Immotian, Kysul and Sabine 
-      favor such devices, but any they can be useful in the hands of a
+      favour such devices, but any they can be useful in the hands of a
       devout priest of any faith.";
   } and EA_GRANT { xval: ENEMY_TO; yval: MA_ELEMENTAL; }
 
@@ -7805,7 +7805,7 @@ AI_STONE Effect "Theryan Inviolability" : EA_GRANT
       Undead will additionally affect Outsiders. 
       Unfortunately, bearing this item will also cause such creatures to
       view you with marked disdain. Ekliazeh, Immotian and Kysul all 
-      favor such devices.";
+      favour such devices.";
   } and EA_GRANT { xval: ENEMY_TO; yval: MA_OUTSIDER; }
 
 AI_BRACERS Effect "Purity" : EA_GRANT

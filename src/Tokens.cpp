@@ -547,15 +547,15 @@ TextVal Keywords2[] = {
   { ATTACK, "Attk" },       { AVAL, "aval",  },       { BASE, "Base" },
   { BLESSED, "Blessed" },   { BRAWL, "Brawl" },       { BRIGHT, "Bright" },
   { CHANCE, "Chance" },     { CLASS, "class",  },     { CASTER, "caster" },
-  { WORD_COLOR, "Color" },  { CONSTANTS, "Constants" }, { CAPACITY, "capacity" },
+  { WORD_COLOR, "Colour" },  { CONSTANTS, "Constants" }, { CAPACITY, "capacity" },
   { COST, "Cost" },         { DMG, "damage",  },      { COVERAGE, "Coverage" },
   { COVERAGE, "Cov" },      { CTYPE, "CType" },       { WORD_FILE, "File" },
   { WORD_CR, "CR" },        { CRIT, "Crit" },         { CURSED, "Cursed" },
   { CVAL, "cval" },         { DMG, "Dam" },           { DARK, "Dark" },
   { DAY, "Day" },           { WORD_DC, "DC" },        { DEF, "Def" },
   { WORD_DESC, "desc" },    { DEPTH, "Depth" },       { DISEASE, "Disease" },
-  { DOOR, "door" },         { DMG, "Dmg" },           { FAVORED, "Favored" },
-  { FAVORED, "Favoured" },  { FLAVOR, "Flavor" },
+  { DOOR, "door" },         { DMG, "Dmg" },           { FAVORED, "Favoured" },
+  { FAVORED, "Favoured" },  { FLAVOR, "Flavour" },
   { DOMAINS, "domains" },   { DOMAIN, "domain" },     { DUNGEON, "Dungeon" },
   { DVAL, "dval" },         { EFFECT, "Effect" },     { EXPORT, "Export" },
   { WORD_ENCOUNTER, "Encounter"},{ BEHAVIOUR, "Behaviour" }, { PARTS, "Parts" },
@@ -619,7 +619,7 @@ TextVal DirWords[] = {
   { SOUTHEAST, "Southeast"},{SOUTHWEST, "Southwest"},{ UP, "Up" },
   { DOWN, "Down" },         { CENTER, "Center" },     { 0, NULL } };
 
-TextVal ColorWords[] = {
+TextVal ColourWords[] = {
   { BLACK, "black" },       { GREY, "grey" },         { GREY, "gray" },
   { WHITE, "white" },       { BLUE, "blue" },         { GREEN, "green" },
   { RED,   "red"   },       { PURPLE, "purple" },     { CYAN, "cyan" },
@@ -667,9 +667,9 @@ YYSTYPE DoKeywords(const char *text)
         if (stricmp(text,AttrWords[i].Text)==0)
           { yylval = AttrWords[i].Val; return ATTRIBUTE; }
 
-      for (i=0;ColorWords[i].Text;i++)
-        if (stricmp(text,ColorWords[i].Text)==0)
-          { yylval = ColorWords[i].Val; return COLOR; }
+      for (i=0;ColourWords[i].Text;i++)
+        if (stricmp(text,ColourWords[i].Text)==0)
+          { yylval = ColourWords[i].Val; return COLOR; }
       
       for (i=0;DirWords[i].Text;i++)
         if (stricmp(text,DirWords[i].Text)==0)
@@ -906,16 +906,12 @@ yy_match:
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 232 );
+		while ( yy_current_state != 123 );
+		yy_cp = yy_last_accepting_cpos;
+		yy_current_state = yy_last_accepting_state;
 
 yy_find_action:
 		yy_act = yy_accept[yy_current_state];
-		if ( yy_act == 0 )
-			{ /* have to back up */
-			yy_cp = yy_last_accepting_cpos;
-			yy_current_state = yy_last_accepting_state;
-			yy_act = yy_accept[yy_current_state];
-			}
 
 		YY_DO_BEFORE_ACTION;
 
@@ -1451,7 +1447,7 @@ YY_RULE_SETUP
 #line 434 ".\\lang\\Tokens.Lex"
 ECHO;
 	YY_BREAK
-#line 1455 ".\\SRC\\tokens.cpp"
+#line 1451 ".\\SRC\\tokens.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(com):
 case YY_STATE_EOF(string):
@@ -1520,7 +1516,8 @@ case YY_STATE_EOF(string):
 
 			else
 				{
-				yy_cp = yy_c_buf_p;
+				yy_cp = yy_last_accepting_cpos;
+				yy_current_state = yy_last_accepting_state;
 				goto yy_find_action;
 				}
 			}

@@ -108,11 +108,11 @@ extern rID Candidates[2048];
 extern int16 nCandidates;
 
 extern int16 FavEnemies[], MonGroupRarities[];
-extern uint8 BlastColorSets[];
+extern uint8 BlastColourSets[];
 
 
 extern int16 s_racial, s_enhance, s_feat, s_domain, s_item, s_train, s_syn,
-      s_armor, s_comp, s_circ, s_inh, s_size, s_kit, s_focus, s_ins;    
+      s_armour, s_comp, s_circ, s_inh, s_size, s_kit, s_focus, s_ins;    
 extern int16 Studies[9][4];
 extern int32 EncumValues[4];
 
@@ -122,7 +122,7 @@ extern int8 ManaMultiplier[],
             GoodSave[], 
             PoorSave[], 
             ChargeBonusTable[10][30],
-            ArmorTable[33][16],
+            ArmourTable[33][16],
             AbsorbTable[17][16];
 
 extern const char *KeyBindings,

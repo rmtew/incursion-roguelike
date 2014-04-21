@@ -75,7 +75,7 @@ Text "help::intro"
      on their own. Fail, and they will boil across the surface of Therya like
      a plague upon the land. Even should you succeed, you must escape with
      your life and return to the surface world. Do these things and you will
-     receive the fame and glory of a hero of legend, but beware! Rumors claim
+     receive the fame and glory of a hero of legend, but beware! Rumours claim
      Murgash is dealing with things far fouler then just goblinoids in the
      shadowed caverns deep beneath the stone...\n\n
 
@@ -166,17 +166,17 @@ Text "help::intro"
       random equipment you had at the beginning of the last game. A character
       can only be reincarnated if they died before reaching character level 5 and
       before descending to dungeon level 5.\n
-      __<14>7. <6> Armor and shields both work substantially differently than they
-      do in any of Incursion's parent systems. Armor gives a character truly 
+      __<14>7. <6> Armour and shields both work substantially differently than they
+      do in any of Incursion's parent systems. Armour gives a character truly 
       significant protection, but has significant costs associated with it as well.
       Shields are /very/ strong, but also take up a character's active hand,
       preventing two-weapon fighting or wielding a weapon two-handed for increased
       damage. When you create a Warrior, consider very carefully what /kind/ of
       warrior you want to create. Incursion automatically starts very Dexterity-
-      dependant characters with light armor, and very Strength-dependant ones with
-      heavier armor.\n
+      dependant characters with light armour, and very Strength-dependant ones with
+      heavier armour.\n
       __Read the combat chapter in the manual carefully to understand all the
-      implications of the armor system.\n
+      implications of the armour system.\n
       __<14>8. <6> Gods are useful. Very useful. Cultivating a relationship with
       one in the early game will strongly help you in the later game, both in
       terms of the permanent forms of blessings and bonuses you recieve from your
@@ -217,7 +217,7 @@ Text "help::intro"
 	    __As it stands, if this version of Incursion proves difficult or
 	    unplayably hard due to game balance limitations, the wizard mode can
 	    be used to adjust the difficulty of gameplay by obtaining needed items 
-	    or otherwise skewing the game in favor of the player. The primary intent
+	    or otherwise skewing the game in favour of the player. The primary intent
 	    of this release is not to be a fully polished game, but to stand as a
 	    proof of concept for Incursion's overall design, and to provide a
 	    teaser for what's to come in the future. I encourage players to 
@@ -350,8 +350,8 @@ Text "help::intro"
      IncursionScript compiler, and he too deserves credit, if only for
      delivering me from the purgatory of shift/reduce conflicts.\n
      __<14>*<6>_Jeff Heikkinen and Bradd W. Szonye developed a system for
-	   handling armor in a tabletop RPG, <7>Draft Armor System for Cytherea<6>,
-	   that heavily influenced how Incursion's armor works. I want to thank
+	   handling armour in a tabletop RPG, <7>Draft Armour System for Cytherea<6>,
+	   that heavily influenced how Incursion's armour works. I want to thank
 	   them for sharing this.\n
 	   __<14>*<6>_Many friendly people on the rec.games.roguelike.development
      newsgroup have offered both technical advice and moral support to the
@@ -386,7 +386,7 @@ Text "help::chargen"
          -- {CH} __Charisma\n
          -- {LU} __Luck\n
          -- {F}  Feats\n
-         -- {P}  Personality Architype\n
+         -- {P}  Personality Archetype\n
          -- {E}  Starting Equipment\n
          -- {CT} Calculated Traits\n
          -- {CS} The Character Sheet\n
@@ -409,11 +409,11 @@ Text "help::chargen"
      a particular aptitude for. These skills are treated as if they were
      class skills for every class the character has. Some races also grant
      racial bonuses to certain skills.\n
-     __<13>Favored Classes:<5> Each race (except humans) have two classes
-     as their favored classes. If a multiclass character's highest class
-     (or one of his equally high classes) is not a racial favored class, then
+     __<13>Favoured Classes:<5> Each race (except humans) have two classes
+     as their favoured classes. If a multiclass character's highest class
+     (or one of his equally high classes) is not a racial favoured class, then
      she receives a 20~ penalty to all experience points earned.\n
-     __Humans treat all classes as favored classes, and thus never receive
+     __Humans treat all classes as favoured classes, and thus never receive
      an experience penalty for multiclassing.\n
      __<13>Special Abilities:<5> Each race offers a few unique powers or
      abilities; examples include a gnome's innate illusion magic, an elf's
@@ -495,7 +495,7 @@ Text "help::chargen"
      your raw physical power. It increases your ability to hit with melee
      weapons, and high strength improves the damage you inflict with all
      weapons (other than firearms, of course). Strength also determines the
-     amount by which armor reduces damage from your blows -- higher Strength
+     amount by which armour reduces damage from your blows -- higher Strength
      means greater penetration and more damage. Strength also determines the
      level of encumbrance you face from a given load, which can be very
      important in play, as encumbrance gives a wide variety of penalties
@@ -607,7 +607,7 @@ Text "help::chargen"
      <13>PERSONALITY ARCHETYPE {P}\n
      =====================<5>\n
      __Finally, you are prompted to choose a personality archetype from a list
-     of 16 options. Currently, this is purely a color choice; in future versions
+     of 16 options. Currently, this is purely a colour choice; in future versions
      of Incursion, it will impact which NPCs are willing to join your group,
      which quests and guilds are available and how different plotlines conclude
      for your character.
@@ -616,9 +616,9 @@ Text "help::chargen"
      <13>STARTING EQUIPMENT {E}\n
          ==================<5>\n
      __A character's starting equipment is defined by her race, class and perks.
-     Characters proficient with armor begin with armor suitable to their character
-     build -- a Dexterity-based finesse warrior will recieve light armor despite
-     being proficient with all armor. Characters that take two-weapon fighting
+     Characters proficient with armour begin with armour suitable to their character
+     build -- a Dexterity-based finesse warrior will recieve light armour despite
+     being proficient with all armour. Characters that take two-weapon fighting
      feats will recieve an offhand weapon, and those with shield-related feats
      will start with a kite shield. If a character's perks grant her a powerful
      weapon, that may subsume some of the abilities of her class-based initial
@@ -691,7 +691,7 @@ Text "help::chargen"
      base, attribute, magic (a.k.a. enhancement), sacred, morale, insight, artifact,
      feat, weapon, negative (i.e., negative levels), competence, size, deflection,
      damage (i.e., attribute damage penalty), rage, status, inherent, grace, dodge,
-     armor, natural, skill, dual, fatigue, template, circumstance, shield, luck,
+     armour, natural, skill, dual, fatigue, template, circumstance, shield, luck,
      encumbrance and resistance."; }
 
 Text "help::interface"
@@ -740,7 +740,7 @@ Text "help::interface"
      penalty and red if damaged by an attribute-damage attack.\n
      __Beneath your attributes are listed your combat values: combat mode,
      to-hit bonus, damage, attack speed, encumbrance level, defense class
-     (and armor coverage, if applicable), armor ratings and movement rate.
+     (and armour coverage, if applicable), armour ratings and movement rate.
      The meaning of all these terms is defined in depth in the combat 
      chapter. Beneath the combat values is displayed a legend of all the
      creatures and objects currently within your line of sight, showing
@@ -1310,7 +1310,7 @@ Text "help::commands"
      <15>Wizard Mode Options ('<13>w<15>')<6> {W}
      \n__If you are not in wizard mode, this command brings up a prompt
      offering you the option of entering wizard mode. If you are, it
-     brings up a menu allowing you to influence the behavior of the
+     brings up a menu allowing you to influence the behaviour of the
      game on a direct level -- viewing creatures stats, identifying
      items automatically, creating game objects and even viewing dumps
      of the assembly code the script engine runs. Wizard mode can be
@@ -1558,17 +1558,17 @@ Text "help::adventuring"
         and getting poisoned or diseased all cost a character Fatigue Points.
         Some spells and supernatural abilities also drain fatigue.\n
         __Further, characters also lose fatigue gradually over time as a result
-        of swinging a weapon in combat. An unarmored character loses
+        of swinging a weapon in combat. An unarmoured character loses
         a fraction of a fatigue point equal to [(10 + weapon weight) /
         10000] with every swing; when the total loss adds up to a whole
         fatigue point, a message will be displayed stating that your
         character feels more fatigued from fighting.
-          Armored characters gain fatigue much more quickly based on
-        the type of armor they wear; instead of the fatigue point
+          Armoured characters gain fatigue much more quickly based on
+        the type of armour they wear; instead of the fatigue point
         fraction having a denominator of 10000, the denominator is
-        specified by the armor. Armor with the featherlight quality
+        specified by the armour. Armour with the featherlight quality
         has a denominator three times greater than normal, meaning
-        characters in featherlight armor gain fatigue three times
+        characters in featherlight armour gain fatigue three times
         more slowly.\n\n
 
          <9>TERRAIN AND MOVEMENT {TM}\n
@@ -1607,7 +1607,7 @@ Text "help::adventuring"
         she lands on a hard surface. The Balance skill, the Slow Fall ability possessed
         by monks and the <9>feather fall<1> spell all help to reduce falling damage.\n
         __If the area of the level directly above the character corresponding to her
-        location on her current level has a chasm, normal floor squares will be colored
+        location on her current level has a chasm, normal floor squares will be coloured
         light cyan to indicate this, and the Location line will include the text 
         '(open above)'. In these areas, a character with the Climb skill can attempt
         to ascend to the level above her, as described in that skill's writeup; Climb
@@ -2055,7 +2055,7 @@ Text "help::adventuring"
          effects of a <9>web<1> spell, for example) trains Strength.\n
          __<3>*<1>_Adventuring while your encumbrance is Heavy trains strength; doing so
          while it is Extreme trains it even further.\n
-         __<3>*<1>_Adventuring while wearing heavy armor trains both Strength and
+         __<3>*<1>_Adventuring while wearing heavy armour trains both Strength and
          Constitution, but abuses Dexterity.\n
          \n
          <3>Dexterity<1>\n
@@ -2076,7 +2076,7 @@ Text "help::adventuring"
          Constitution if you have the Fasting class ability. However, starvation abuses
          Constitution, as does being Satiated (weakly) or Bloated (strongly).\n
          __<3>*<1>_Spending fatigue points through conscious actions trains Constitution.\n
-         __<3>*<1>_Adventuring while wearing heavy armor trains both Strength and
+         __<3>*<1>_Adventuring while wearing heavy armour trains both Strength and
          Constitution, but abuses Dexterity.\n
          \n
          <3>Intelligence<1>\n
@@ -2247,7 +2247,7 @@ Text "help::adventuring"
          capable of good in mind, and lawful evil characters preserve the laws
          of society because they recognize them as the root of their own power.
          The dominant society of Theyra emphasizes a code of conduct based on 
-         chivalty, warrior's honor, respect for the structure of the class system 
+         chivalty, warrior's honour, respect for the structure of the class system 
          and support for the community as a whole, as strongly influenced by the f
          aith of Immotian.\n
          __The following actions contravene a Lawful alignment:\n
@@ -2256,7 +2256,7 @@ Text "help::adventuring"
          unlawful act. Drow are an exempt from this stricture, as poisonings are
          considered to be part of the proper order of their society.\n
          __<3>*<1> Attacking cowering or fleeing people is considered to be a
-         base act and a strong breach of honor, and condemned accordingly. If
+         base act and a strong breach of honour, and condemned accordingly. If
          terms have been offered and refused, however, a fugitive can be
          slain lawfully.\n
          __<3>*<1> Attacking creatures who have surrendered to you is also a
@@ -2269,7 +2269,7 @@ Text "help::adventuring"
          creature not considered a person under law. Cannibalism is an especially
          serious form of this. Orcs can eat other orcs without suffering any
          penalty, due to the unique standards of their society -- eating a
-         fallen foe is considered an honorable act, because their soul lives
+         fallen foe is considered an honourable act, because their soul lives
          on within you and shares in your glories.\n
          __<3>*<1> Stealing from those legally considered 'people' is always an 
          unlawful act, regardless of the victim's alignment.\n
@@ -2286,7 +2286,7 @@ Text "help::adventuring"
          combatants -- the Theyran nobility would never hobble their armies that
          way. Instead, they only apply to characters considered to be knights or
          participants in noble combat under law: paladins, worshippers of Erich
-         and characters who are either mounted or wearing heavy armor (which is
+         and characters who are either mounted or wearing heavy armour (which is
          traditionally reserved for nobles).\n
          
          <3>The Applicability of Law<1>\n
@@ -2336,7 +2336,7 @@ Text "help::adventuring"
          
          <9>CHANGING ALIGNMENT<1>\n
          __When you desire to change alignment and have stated a new alignment,
-         you must begin working up a tally of acts in favor of that alignment.
+         you must begin working up a tally of acts in favour of that alignment.
          The presence of inherantly aligned creatures in Incursion is especially
          valuable for this purpose. Killing an inherantly aligned creature such
          as a demon or modron when you desire the opposite alignment will move
@@ -2380,7 +2380,7 @@ Text "help::adventuring"
          Allied creatures are much more likely to turn
          on a chaotic evil associate than they are to turn
          on a neutral evil one, who can use the structure
-         of society, trust and honor to ease others' fears
+         of society, trust and honour to ease others' fears
          when it benefits him to do so.\n\n   
                   
          <9>PRAYER AND ALTARS {PA}\n
@@ -2426,8 +2426,8 @@ Text "help::adventuring"
          than their current one. Most gods have alignment restrictions, and some have
          racial or other restrictions. Furthermore, no god will accept a petitioner
          whom she is angry at. Finally, some gods require followers to accrue a
-         certain minimum level of favor with them before allowing a petitioner to
-         convert; this favor is lost upon conversion. If all the requirements are
+         certain minimum level of favour with them before allowing a petitioner to
+         convert; this favour is lost upon conversion. If all the requirements are
          met, the character is not a devoted follower of the altar's god, and can
          pray to that god without needing an altar.\n\n
          
@@ -2460,7 +2460,7 @@ Text "help::adventuring"
          check is failed, the time and fatigue is lost, but nothing else occurs and
          the attempt may be made again. The second roll represents a contest of the
          petitioner's faith against the altar's current god, and is represented in
-         the game by a 1d20 roll, to which is added the petitioner's Favor Level
+         the game by a 1d20 roll, to which is added the petitioner's Favour Level
          with her god (rated from 0 to 10) and her Wisdom modifier, against a DC of
          15. If the altar's current god is friendly to the petitioner's god, and is
          also not a jealous god, he may choose to cede the altar, granting a +4 bonus
@@ -2473,14 +2473,14 @@ Text "help::adventuring"
          will explode, vanishing and inflicting 2d10 blunt damage and 2d10 fire
          damage to the petitioner.\n\n
          
-         <9>Sacrifice and Favor<1>\n
+         <9>Sacrifice and Favour<1>\n
          __A character's stature in their god's eyes is measured by a quantity
-         called favor. The player cannot directly see her character's favor rating,
+         called favour. The player cannot directly see her character's favour rating,
          but internally to the game it functions in much the same way as experience
-         points do. Favor can be gained in a number of ways specific to a given
+         points do. Favour can be gained in a number of ways specific to a given
          god -- Asherath appreuciates winning difficult fights, Erich approves of
          the slaughter of goblinoids, Hesani likes characters resolving conflicts
-         -- but the most common way to gain favor with a diety is to offer
+         -- but the most common way to gain favour with a diety is to offer
          sacrifices to that diety.\n
          __Most of the gods of Theyra, good and evil,
          accept blood sacrifices made at their altars; those that do not typically
@@ -2489,7 +2489,7 @@ Text "help::adventuring"
          not take any kind of altar sacrifices whatsoever. Making a sacrifice 
          requires an altar, and the sacrifice can only be made to the god the
          altar is associated with.\n
-         __The system of sacrifice and favor in Incursion is designed to avoid
+         __The system of sacrifice and favour in Incursion is designed to avoid
          repetition and monotony while still providing a strong challenge. Each
          god has (on average) six 'slots' to recieve sacrifices in, each with a
          weight assigned to it. Erich, for
@@ -2501,50 +2501,50 @@ Text "help::adventuring"
          creatures; the perversions, being far rarer, are weighted much more
          heavily than generic evil creatures. The value of
          a sacrificed creature is usually based on its Challenge Rating and the 
-         value of a sacrificed item is based on its market value. The favor with 
+         value of a sacrificed item is based on its market value. The favour with 
          a god that a character recieves from sacrifice is based on the best 
          possible sacrifces fit into those slots, so quality of sacrifices matters
          whereas, by and large, quantity does not. When a character makes a sacrifice
-         it is placed in the slot where it would grant the most favor; weak 
+         it is placed in the slot where it would grant the most favour; weak 
          sacrifices never over-write stronger ones, which means that if all
          suitable slots are filled with better sacrifices, a new sacrifice will
-         not increase a character's favor at all. When a sacrifice increases favor,
+         not increase a character's favour at all. When a sacrifice increases favour,
          the game will tell you that the god is 'impressed'; when it is a suitable
-         sacrifice but does not increase favor, the god will be 'satisfied'.\n
+         sacrifice but does not increase favour, the god will be 'satisfied'.\n
          __In order to make a sacrifice, a character must carry a creature's corpse
          to the altar; as a result of this, Strength plays a part in gaining divine
-         favor, by design. However, for very weak characters, and for gods who
-         favor the sacrifice of creatures that do not normally leave corpses (such
-         as the Multitude, who favor incorporeal undead sacrifices), there is an
+         favour, by design. However, for very weak characters, and for gods who
+         favour the sacrifice of creatures that do not normally leave corpses (such
+         as the Multitude, who favour incorporeal undead sacrifices), there is an
          alternative. If a creature is slain while it is standing exactly on a
          square containing an altar, that creature will automatically be considered
          to a a sacrifice to the altar's god by its killer. This is referred to as
          <9>live sacrifice<1>; it can be very difficult to conduct, but also very
-         rewarding in terms of favor. Note that live sacrifice occurs any time a
+         rewarding in terms of favour. Note that live sacrifice occurs any time a
          player character kills a creature standing on an altar, even if the player
          may not want to offer a sacrifice to that altar's god; this can make live
          sacrifice very much a double-edged sword!\n
          __When a god is angry, a suitable sacrifice can also be used as a form of
          penitence, lessening or removing completely the divine anger. Suitable
-         sacrifices made to an angry god do not increase favor, instead lessening
+         sacrifices made to an angry god do not increase favour, instead lessening
          the god's anger. Sacrifices made to decrease anger do not have to be potent
-         enough to increase favor, but they do have to be notable relative to the
+         enough to increase favour, but they do have to be notable relative to the
          character level of the character making them.\n
-         __<9>Favor Levels and Permanent Blessings:<1> When characters make sacrifices 
-         (or gain favor, for gods that do not accept sacrifices), their total favor 
-         is recalculated and compared to an internal favor table specific to each god. 
+         __<9>Favour Levels and Permanent Blessings:<1> When characters make sacrifices 
+         (or gain favour, for gods that do not accept sacrifices), their total favour 
+         is recalculated and compared to an internal favour table specific to each god. 
          This table works much like the experience table, determining a character's 
-         favor level. If the total is enough for them to be at a higher favor level
+         favour level. If the total is enough for them to be at a higher favour level
          than they are, the god in question will grant them a permanent blessing. This
          works in many ways like gaining a level in a prestige class: the character
-         gains certain special abilities for their new favor level, though favor does
+         gains certain special abilities for their new favour level, though favour does
          not grant base qualities such as BAB, hit dice or saving throw modifiers.
-         There are ten levels of favor possible with each god; characters can only be
-         raised above the third level of favor with the god they have specifically
-         devoted themselves to. Your current level of favor with your god is
+         There are ten levels of favour possible with each god; characters can only be
+         raised above the third level of favour with the god they have specifically
+         devoted themselves to. Your current level of favour with your god is
          indicated by a line on the 'Spiritual State' section of the character
          sheet, as follows:\n
-         __<3>*<1>_'[God] is noncommital.' (no favor level)\n
+         __<3>*<1>_'[God] is noncommital.' (no favour level)\n
          __<3>*<1>_'[God] has noticed your worship.' (level 1)\n
          __<3>*<1>_'[God] is cautiously pleased with your worship.' (level 2)\n
          __<3>*<1>_'[God] is pleased with your worship.' (level 3)\n
@@ -2555,10 +2555,10 @@ Text "help::adventuring"
          __<3>*<1>_'You are among the greatest of [God]'s champions.' (level 8)\n
          __<3>*<1>_'You are the hand of [God] on Theyra.' (level 9)\n
          __<3>*<1>_'You have been crowned by [God].' (level 10)\n
-         __At present, the highest level of favor one can recieve with a god
-         is favor level 9; characters will be able to be crowned in <9>Return of
+         __At present, the highest level of favour one can recieve with a god
+         is favour level 9; characters will be able to be crowned in <9>Return of
          the Forsaken<1>. Also note that it is, by design, considerably harder to 
-         attain favor level 9 with many gods than it is to defeat Murgash and
+         attain favour level 9 with many gods than it is to defeat Murgash and
          beat the game!\n\n
          
          <9>Conduct and Penance<1>\n
@@ -2596,7 +2596,7 @@ Text "help::adventuring"
          stripping all their blessings from her and leaving her to fend for
          herself, usually also consistantly sending negative interventions
          against her without surcease.\n
-         __<9>'Risk-Taking':<1> Some gods grant favor or become angry on the
+         __<9>'Risk-Taking':<1> Some gods grant favour or become angry on the
          basis of the degree of risk aversion or patience a follower shows.
          This manifests in game terms by gauging the characer level a character
          reaches before descending to a given dungeon level. The baseline is
@@ -2628,7 +2628,7 @@ Text "help::adventuring"
          nor do gods react to it in any way. It is 'safe'. Successfully gleaning
          insight requires a Knowledge (Theology) skill check against DC 15.
          Success reveals whether the god is question is angry, how they would
-         aid you in a time of need and how strongly they favor you. If the check
+         aid you in a time of need and how strongly they favour you. If the check
          is failed, it can be re-attempted after resting.\n
          __Some gods will also identify some or all magical items as divine
          aid when a follower seeks insight. The game will ask whether you want
@@ -2650,13 +2650,13 @@ Text "help::adventuring"
          upon how severe a situation is (for example, only healing the character
          if she is severely wounded, or only teleporting her away if she is
          badly outnumbered); furthermore, most gods require characters to
-         attain a certain level of favor before they will give specific forms
+         attain a certain level of favour before they will give specific forms
          of aid to the character. A character can learn exactly what forms of
          aid are available to them at present by using the seek insight option
          on the pray command. Each god writeup lists the forms of aid a diety
          is capable of giving, whereas the insight option will tell you what
          your diety would be willing to give you now, at your current level of
-         favor.\n 
+         favour.\n 
          __There are many different forms of divine aid; most are self-explanatory
          based on their message in the seek insight results. <9>Clearing you mind<1>
          refers to removing stunning, confusion, enchantment and paralysis, and also
@@ -2672,8 +2672,8 @@ Text "help::adventuring"
          __Divine aid comes with a price, however; the gods help those who help
          themselves, and bless most highly those servants who call upon their
          aid only rarely. Whenever you pray and recieve aid (or are protected
-         from a crit), a percentile penalty is applied to your total favor with the diety
-         in question, culmulative with all such penalties in the past. Your favor 
+         from a crit), a percentile penalty is applied to your total favour with the diety
+         in question, culmulative with all such penalties in the past. Your favour 
          level never goes down, but the more you rely on divine aid, the harder 
          it becomes to gain further permanent blessings from your god. This
          penalty can never exceed 100~; if recieving aid would make it do so,
@@ -2690,37 +2690,37 @@ Text "help::adventuring"
          (any amount of) experience -- and as a result it cannot be 'waited out'; 
          the player will have to continue adventuring to run out the prayer 
          timeout and again be eligable to recieve divine aid.\n
-         __<9>Ressurection:<1> For an especially favored servant, the gods will
+         __<9>Ressurection:<1> For an especially favoured servant, the gods will
          even raise the dead. This is essentially just a special case of divine
          aid; it is recieved when a character dies rather than when she prays
-         for aid. In addition to the normal minimum favor requirement, characters
+         for aid. In addition to the normal minimum favour requirement, characters
          must be of a certain minimum character level (determined by their god)
          to be important enough to be ressurected. Ressurection usually carries
-         a stiffer percentile favor penalty than other forms of divine aid.\n
+         a stiffer percentile favour penalty than other forms of divine aid.\n
          __A ressurected character loses a full character level and re-appears
          on the first level of the dungeon with a limited supply of emergency
          equipment and a new, fully healed body. Their normal equipment remains 
          with their corpse at the location they died, unless the monsters they
          were fighting pick it up and make use of it. A character can theoretically
          be raised in this manner any number of times, provided that doing so will 
-         not put her favor penalty above 100~. However, there is a chance that a 
+         not put her favour penalty above 100~. However, there is a chance that a 
          character will not survive repeated ressurections...\n\n
          
          <9>Blessing Items<1>\n
-         __Characters with at least minimal favor with a god can also use an altar to 
+         __Characters with at least minimal favour with a god can also use an altar to 
          bless items. To do this, drop one or more items on the altar, pray and select 
          the blessing option. The items will glow with a silvery light, and become blessed.
          This, like ressurection, is a specialized form of divine aid, and increases
-         the character's percentile penalty to favor by one percent for each item
+         the character's percentile penalty to favour by one percent for each item
          so blessed. Blessing a stack of items accords a penalty of 1~ plus 1~ per
          five items in the stack.\n
-         __Characters with stronger favor with their god may be able to have a weapon
+         __Characters with stronger favour with their god may be able to have a weapon
          divinely enchanted with a special quality specific to the god in question.
-         Mara, for example, favors keen weapons, whereas Immotian favors flaming ones.
-         Whether this occurs depends on the petitioner's favor level with the altar's
+         Mara, for example, favours keen weapons, whereas Immotian favours flaming ones.
+         Whether this occurs depends on the petitioner's favour level with the altar's
          god, the petitioner's Wisdom modifier, the power of the quality and the depth 
          the item would typically be found at: it's harder for a god to grant a quality
-         to a +5 sword than to a +1 sword. Gods are more favorable to enchanting their
+         to a +5 sword than to a +1 sword. Gods are more favourable to enchanting their
          chosen weapons; conversely, some qualities cannot belong to some weapons: only
          bladed weapons can be keen, for example.\n\n
          
@@ -2728,7 +2728,7 @@ Text "help::adventuring"
          __In addition to sending divine aid when implored by an adventurer, the
          gods all (except Asherath) interact with their mortal followers on their
          own initiative. When a character has a god angry at her, she will recieve
-         negative interventions; when she is in favor with her diety, she will
+         negative interventions; when she is in favour with her diety, she will
          instead recieve beneficial interventions. (Maeve is something of an
          capricious exception, being fond of doing obnoxious things to her
          followers even if they haven't done anything to anger her, and conversely
@@ -2737,7 +2737,7 @@ Text "help::adventuring"
          are timed with 'xp clicks' and randomness in the same manner as the
          prayer timeout described above.\n
          __Every god has different interventions. Erich is famous for giving his
-         followers magical arms and armor when pleased with them, while Kysul
+         followers magical arms and armour when pleased with them, while Kysul
          shows anger by causing her followers' bodies to decompose!\n\n
 
           <9>ALLIES AND LEADERSHIP {AL}\n
@@ -2895,7 +2895,7 @@ Text "help::adventuring"
          are bartering with. Most people won't be interested in most items,
          however. Roark Ironbeard will always buy the valuable gems gained
          from mining, however, and will also purchase powerful magical arms
-         and armor from persuasive characters -- those with a Diplomacy
+         and armour from persuasive characters -- those with a Diplomacy
          rating modified by any social modifiers of +12 or higher.\n
          __Shopkeepers will only purchase a finite number of items from any
          given character over the course of an entire game. This prevents
@@ -2915,7 +2915,7 @@ Text "help::combat"
          -- {RC} Ranged Combat\n
          -- {TT} Timing Table\n 
          -- {EF} Exploring and Fighting\n 
-         -- {AR} Armor and Resistances\n
+         -- {AR} Armour and Resistances\n
          -- {FP} Fatigue Points\n
          -- {SB} The Strength Bonus\n
          -- {CR} Critical Hits\n
@@ -2927,7 +2927,7 @@ Text "help::combat"
          -- {MC} Mounted Combat\n
          -- {CH} Charging\n
          -- {WT} Weapon Table\n
-         -- {AT} Armor Table\n
+         -- {AT} Armour Table\n
          -- {MM:mainmenu} Return to Main Help Menu\n
       <3>__Combat in Incursion is resolved in much the same way as it
       is in its parent OGL system, but with the distinct differences
@@ -3081,35 +3081,35 @@ Text "help::combat"
       but also to any high-Dexterity character.\n 
 
       \n<11>
-      \nARMOR AND RESISTANCES {AR}\n
+      \nARMOUR AND RESISTANCES {AR}\n
       =====================<3>\n
-      __In Incursion, armor reduces damage rather then just adding a set value
-      to defense that must be beaten on the attack roll. Every type of armor
+      __In Incursion, armour reduces damage rather then just adding a set value
+      to defense that must be beaten on the attack roll. Every type of armour
       has three ratings -- resistance to slashing, piercing and blunt damage.
       Similarly, all weapons inflict one of these types of damage, determining
-      which armor value is used against them. Some weapons inflict two types
+      which armour value is used against them. Some weapons inflict two types
       of damage -- slashing and piercing, for example. In this case, whichever
       damage type is more beneficial to the attacker is used.\n
-      __The amount of damage a given armor type removes is calculated based on
+      __The amount of damage a given armour type removes is calculated based on
       an internal table by the game. In practice, you can quickly get a feel
-      for how much damage armor of a given type will protect you from. Note 
-      that armors of lower ratings are less effective against greater amounts
-      of damage -- an armor level that takes 50% of the damage off of a 27-point
+      for how much damage armour of a given type will protect you from. Note 
+      that armours of lower ratings are less effective against greater amounts
+      of damage -- an armour level that takes 50% of the damage off of a 27-point
       hit might only take 30% off of a 46-point hit.\n
       __Resistances are gained from magical items. They work exactly the same
-      as armor ratings, but instead of applying against slashing, piercing or
+      as armour ratings, but instead of applying against slashing, piercing or
       blunt damage, resistances lower damage from the elemental types: fire,
       cold, acid, lightning, toxic damage or sonic damage. Resistances are 
-      typically a little higher then armor values, simply because elemental
+      typically a little higher then armour values, simply because elemental
       damage is usually doled out in larger amounts at once, coming from sources
       such as a wizard's spell or a dragon's breath weapon, and thus needs a
       higher value to protect against it effectively.\n
-      __<11>Stacking Armor:<3> Armor and resistances can be gained from multiple
+      __<11>Stacking Armour:<3> Armour and resistances can be gained from multiple
       sources in Incursion -- for example, a lizardman in a chainmail hauberk 
-      has both his natural armor rating and the armor values of the chainmail.
+      has both his natural armour rating and the armour values of the chainmail.
       Similarly, a mage might have fire resistance both from an amulet he wears
       and from a spell he just cast. In these cases, the final applicable value
-      is determined by taking the largest armor or resistance value and adding 
+      is determined by taking the largest armour or resistance value and adding 
       to it half of the second largest value, a third of the third largest, a
       fourth of the fourth largest, and so forth.\n
       __Note that like all things in Incursion, values from similar sources 
@@ -3119,26 +3119,26 @@ Text "help::combat"
       of a Ring of Fire Resistance does not stack with a second ring, but it
       would stack with a Resist Fire spell.\n
       __<11>Coverage:<3> Coverage is an addition to defense class that describes
-      the amount of the body covered by armor. Every suit of armor has a coverage
+      the amount of the body covered by armour. Every suit of armour has a coverage
       rating, and coverage can be increased by wearing protective items such as
-      armored helmets and boots. If an attack roll exceeds the sum of the armor
-      wearer's defense class and coverage, that attack has bypassed the armor
-      completely, and the armor ratings from physical armor are ignored when 
-      calculating damage. Natural armor and other sources of resistance to physical
+      armoured helmets and boots. If an attack roll exceeds the sum of the armour
+      wearer's defense class and coverage, that attack has bypassed the armour
+      completely, and the armour ratings from physical armour are ignored when 
+      calculating damage. Natural armour and other sources of resistance to physical
       damage still apply normally, however.\n
       __<11>Penetration:<3> While energy is energy, weapons are driven by their
-      wielder's strength, and a powerful blow can cleave through armor's protection.
-      In game terms, a positive secondary Strength modifier reduces armor's effective
+      wielder's strength, and a powerful blow can cleave through armour's protection.
+      In game terms, a positive secondary Strength modifier reduces armour's effective
       protection by its magnitude, to a maximum reduction of half. For example, if a
       character with 20 Strength (secondary modifier +4) strikes a character with 5
-      points of armor rating against the relevant type of damage, that character has
-      an effective armor of 3 after Penetration is factored in.\n
-      __Certain weapons are able to penetrate armor (natural or otherwise) more
+      points of armour rating against the relevant type of damage, that character has
+      an effective armour of 3 after Penetration is factored in.\n
+      __Certain weapons are able to penetrate armour (natural or otherwise) more
       effectively then most. These weapons grant a +2 bonus to Penetration, and this
       bonus is applied after the half-only cap is applied, meaning that such a weapon
-      can negate more than half of an enemy's armor rating.\n\n
+      can negate more than half of an enemy's armour rating.\n\n
       
-      <11>Armor vs. Special Attacks<3>\n
+      <11>Armour vs. Special Attacks<3>\n
       __If a physical attack (a claw or sting, for example) carries with it
       a special form of damage or deleterious effect (such as poison, experience
       or attribute draining or so forth -- but not elemental damage), the
@@ -3146,7 +3146,7 @@ Text "help::combat"
       higher than the victim's Defense Class + (Coverage - 4). If the attack
       roll is higher than DC but not DC + (Coverage - 4), then the attack
       will inflict only hit point damage.\n
-      __If a character has armor with the <11>sacred<3> quality, that armor
+      __If a character has armour with the <11>sacred<3> quality, that armour
       will block touch attacks with special effects the same way it blocks
       claws and other physical attacks.
 
@@ -3440,7 +3440,7 @@ Text "help::combat"
       __<11>Grapple:<3> You grab your opponent and initiate a grapple with him. Grappling 
       is resolved with grapple checks, which are opposed contests of Brawl attack bonus 
       plus Strength modifier plus or minus 4 for every divergence in size category, 
-      favoring the larger character. To begin grappling, however, you must hit your
+      favouring the larger character. To begin grappling, however, you must hit your
       target's DC as per a normal attack. Initiating a grapple provokes an attack of 
       opportunity from your target.\n
       __<11>Great Blow:<3> You execute a titanically powerful blow with your weapon, 
@@ -3462,7 +3462,7 @@ Text "help::combat"
       damage, plus one point per square the enemy is thrown.\n
       __<11>Trip:<3> You attempt to knock an opponent prone. You must first make a 
       successful attack roll against his DC, and then you make a Strength check opposed 
-      by his Strength or Dexterity,  whichever favors him more. Success knocks the target 
+      by his Strength or Dexterity,  whichever favours him more. Success knocks the target 
       prone. Failure allows the target to make an immediate, free attempt to trip you in
       return. Some weapons grant a bonus to trip attempts, such as the quarterstaff.\n
       __Note that if you have them, the Spring Attack and Whirlwind Attack feats
@@ -3590,7 +3590,7 @@ Text "help::combat"
       __The following table summarizes the traits of the various weapons found in
       Incursion. Type specifies the type of damage inflicted; [S]lashing, [P]iercing
       or [B]lunt; weapons that can inflict multiple types of damage are always
-      treated as inflicting the most favorable type. SDmg is the base damage against
+      treated as inflicting the most favourable type. SDmg is the base damage against
       creatures of Medium size or smaller; LDmg is the damage against Large or larger
       creatures. Acc is a modifier to the attack roll, while Parry is a modifier to
       the wielder's Def against attacks made with slashing weapons. Speed is a percentile
@@ -3687,7 +3687,7 @@ Text "help::magic"
      is adjusted by +/-5~ for every point of your primary Intelligence modifier,
      and +2~ for every caster level you have above the minimum caster level required
      to cast the given spell. The spell success chance for arcane spells is heavily
-     penalized by wearing armor, and conditions that make it difficult to concentrate
+     penalized by wearing armour, and conditions that make it difficult to concentrate
      (such as being grappled, or being inside the area of effect of an <9>insect plague<3>
      spell) penalize spellcasting of all types.\n
      __If the final chance of spell success is above 90~, it is adjusted downward.
@@ -3771,7 +3771,7 @@ Text "help::magic"
     ================\n
     <3>__Arcane magic in Incursion is grouped into nine schools, of which a
     mage character may choose to specialize in one. Every school choice
-    makes for a mage with a distinctly different flavor.\n\n
+    makes for a mage with a distinctly different flavour.\n\n
 
     <11>Spell Failure Modifiers\n
     =======================\n
@@ -3918,7 +3918,7 @@ Text "help::magic"
     __Long viewed as the darkest of the schools, this profane art relates
     to the manipulation of negative energy -- the causes and effects of
     death, and the creation of undead. Necromancers are widely feared, but
-    they are also tremendously useful -- much of the manual labor on Therya
+    they are also tremendously useful -- much of the manual labour on Therya
     is performed by raised undead, no matter how much the Church of Immotian
     might protest. Thus, like the mortician that came before him, the 
     Necromancer is a scorned but nonetheless essential element of modern 
@@ -4063,20 +4063,20 @@ Text "help::magic"
     __In addition to determining what spells a character can place in her spell
     slots, spell access determines what restrictions a character has on casting
     those spells. For example, clerics must have a holy symbol to cast a spell,
-    but can cast spells in armor, while mages suffer severe penalties for casting
-    spells in armor, have their success chances adjusted by specialist modifiers
+    but can cast spells in armour, while mages suffer severe penalties for casting
+    spells in armour, have their success chances adjusted by specialist modifiers
     and must possess a spellbook with the spell in it to cast it. So consider the
     cast of a priest 1/mage 1 who knows <9>chromatic orb<3>, <9>bless<3> and
     <9>magic weapon<3>. <9>Chromatic orb<3> is a mage spell, so she must have a spellbook
     to cast it, gains the specialist modifier regardless of whether it's good or
-    bad and suffers penalties to her casting if she does it in armor. When she
+    bad and suffers penalties to her casting if she does it in armour. When she
     casts <9>bless<3>, however, she gains no specialist bonus or penalty, is
-    able to cast freely in armor and needs a holy symbol.\n
+    able to cast freely in armour and needs a holy symbol.\n
     __<9>Magic weapon<3> is an odd case, since it is on both the mage and priest
     spell lists as a 1st-level spell. When this is the case, the caster gains
-    the best of both (or all) worlds -- she can cast the spell in armor without
+    the best of both (or all) worlds -- she can cast the spell in armour without
     penalty, gains either her mage specialist modifier or a 0~ modifier (whichever
-    favors her more) and can choose to use either a spellbook or a holy symbol as
+    favours her more) and can choose to use either a spellbook or a holy symbol as
     her focus for the spell.\n\n
     
     <15>Practical Examples<3>\n
@@ -4154,19 +4154,19 @@ Text "help::magic"
     function with a greater magnitude -- more damage, higher DCs to saving
     throws, more powerful creatures summoned, etc.\n\n
     
-    <15>Weapons, Armor and Shields<3>\n
-    __In order to benefit from a magical weapon or suit of armor, all that
+    <15>Weapons, Armour and Shields<3>\n
+    __In order to benefit from a magical weapon or suit of armour, all that
     you need to do is equip the item in the proper inventory slot, and their
-    benefit will last until the item is removed. Some weapons or armor only 
+    benefit will last until the item is removed. Some weapons or armour only 
     grant their benefits to a wielder or wearer who is proficient with the
-    weapon or class of armor in question.\n
+    weapon or class of armour in question.\n
     __The plus of a magical weapon is added directly to attack and damage
     rolls made with that weapon, making the wielder more likely to hit foes
     and causing her to inflict more damage when she does. The magical plus
-    of armor is added to the armor rating of the armor in all three categories.
+    of armour is added to the armour rating of the armour in all three categories.
     The magical plus of a shield is added to the Def bonus it grants.\n
     __The information below concerning worn items can also apply to weapons
-    and armor in some cases.\n\n
+    and armour in some cases.\n\n
     
     <15>Helms, Bracers, Boots, Cloaks, Lenses, Headbands, Rings, etc.<3>\n
     __Most wearable items are activated simply by putting an item on. If you
@@ -4189,7 +4189,7 @@ Text "help::magic"
     hand), and cloaks and robes (the character can wear either a magical cloak
     <11>or<3> a magical robe, not both, despite there being different inventory
     slots for each).\n
-    __A few powerful worn items (often rings, armor or weapons) grant benefits
+    __A few powerful worn items (often rings, armour or weapons) grant benefits
     that do not take effect until the character has rested with them on, or
     worn them for a full day, or what have you -- their benefits would be too
     easy to exploit if they could be easily swapped in and out with other
@@ -4209,7 +4209,7 @@ Text "help::magic"
     potions are meant for other uses than drinking, however, and drinking them
     at the very least wastes them and can have a detrimental effect on the
     character. The most common case of this is Oils, which are meant to be
-    applied to weapons or armor to enhance their function. These can be used
+    applied to weapons or armour to enhance their function. These can be used
     by selecting the Apply option from the Yuse ('y') menu.\n\n
     
     <15>Scrolls<3>\n
@@ -4408,13 +4408,13 @@ Text "help::feats"
       <13>PROFICIENCY FEATS\n
       =================\n<5>
       __These feats expand a character's combat capabilities by giving her
-      proficiencies in weapons, armor or equipment not granted naturally
+      proficiencies in weapons, armour or equipment not granted naturally
       by her class.<7>\n\n
 
-      * Armor Proficiency, Light\n
-      ____Armor Proficiency, Medium\n
-      ______Armor Proficiency, Heavy\n
-      ________Armor Optimization\n
+      * Armour Proficiency, Light\n
+      ____Armour Proficiency, Medium\n
+      ______Armour Proficiency, Heavy\n
+      ________Armour Optimization\n
       * Weapon Proficiency\n
       * Exotic Weapon\n
       * Combat Casting <6>(Caster Level 1+)<7>\n
@@ -4481,7 +4481,7 @@ Text "help::feats"
       other feats. Only characters with the ability to turn undead can
       gain divine feats. All also require a minimum Charisma of 13.<7>\n\n
       
-      * Divine Armor\n
+      * Divine Armour\n
       * Divine Might <6>(Power Attack)<7>\n
       * Divine Resistance <6>(Endurance)<7>\n
       * Divine Vigor\n\n
@@ -4530,7 +4530,7 @@ Text "help::feats"
       __The agile fighter may be a swashbuckler, a martial artist or
       a street-bred scrapper, but nobody is faster or, more importantly,
       harder to hit, then he is. Most agile fighters don't wear heavy
-      armor, to avoid mitigating the benefit their Dexterity grants to
+      armour, to avoid mitigating the benefit their Dexterity grants to
       defense.<7>\n\n
       
       * Combat Reflexes <6>(Dex 13+)<7>\n
@@ -4595,7 +4595,7 @@ Text "help::feats"
       advanced maneuvers, tactical advantage and reasoned combat skill.
       <7>\n\n
       * Expertise <6>(Int 13+)<7>\n
-      ____Chink in the Armor <6>(Find Weakness 10+)<7>\n
+      ____Chink in the Armour <6>(Find Weakness 10+)<7>\n
       ______Aim for the Eyes\n
       ____Deft Opportunist <6>(or Combat Reflexes)<7>\n
       ____Expert Tactician <6>(Melee BAB 3+)<7>\n
@@ -4794,7 +4794,7 @@ Text "help::skills"
      character can invest up to their character level in ranks (maximum 5)
      in any of these skills, even if they do not have that skill as a class
      skill. Multiclass characters use their normally calculated max ranks
-     or their character level, whichever favors them more, but the allowed
+     or their character level, whichever favours them more, but the allowed
      ranks from familiarity do not stack with the rank cap from having the
      skill as a class skill.\n\n
 
@@ -4812,7 +4812,7 @@ Text "help::skills"
      that skill.\n
      __Other bonuses or penalties may apply. For example, Kobolds have a
      +4 racial bonus to Handle Device skill checks. As a second example,
-     wearing full plate armor will apply a -6 armor penalty to Balance
+     wearing full plate armour will apply a -6 armour penalty to Balance
      skill checks.\n
      __When you try to perform an action based on a skill, the game will
      roll 1d20 and add your skill rating, comparing the result to a set
@@ -5039,7 +5039,7 @@ material by E. Gary Gygax and Dave Arneson.\n
 <12>-----------<4>\n
 __All of the game mechanics used in Incursion, along with the names
 of monsters, items and spells, are designated as open game content.
-The setting, plot and flavor text, as well as the computer code used to
+The setting, plot and flavour text, as well as the computer code used to
 intrepret and apply the game mechanics, are considered to be Product
 Identity of Incursion and are not released under the OGL.\n
 __All Incursion Product Identity may be freely distributed provided

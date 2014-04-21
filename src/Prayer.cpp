@@ -131,7 +131,7 @@ EvReturn Character::PrePray(EventInfo &e)
               ReThrow(EV_RETRIBUTION,e);
               return DONE;
             }
-          if (calcFavor(e.eID) > 100)         
+          if (calcFavour(e.eID) > 100)         
             for (it=m->FItemAt(x,y);it;it=m->NItemAt(x,y))
               {
                 e.EItem = it;
@@ -215,11 +215,11 @@ EvReturn Character::Insight(EventInfo &e)
       GodMessage(e.eID, MSG_IS_ANGRY2);
     else if (Anger[e.godNum] > tol)
       GodMessage(e.eID, MSG_IS_ANGRY);
-    /*else if (FavorLev[e.godNum] >= 8)
+    /*else if (FavourLev[e.godNum] >= 8)
       GodMessage(e.eID, MSG_PLEASED3);
-    else if (FavorLev[e.godNum] >= 5)
+    else if (FavourLev[e.godNum] >= 5)
       GodMessage(e.eID, MSG_PLEASED2);
-    else if (FavorLev[e.godNum] >= 2)
+    else if (FavourLev[e.godNum] >= 2)
       GodMessage(e.eID, MSG_PLEASED);
     else 
       GodMessage(e.eID, MSG_NEUTRAL);*/
@@ -232,7 +232,7 @@ EvReturn Character::Insight(EventInfo &e)
     TGOD(e.eID)->GetList(AID_CHART,aidChart,64);
     A = ""; B = "";
     for (i=0;aidChart[i];i+=3)
-      if (calcFavor(e.eID) >= aidChart[i+2] /
+      if (calcFavour(e.eID) >= aidChart[i+2] /
              (e.eID == GodID ? 1 : TEFF(e.eID)->GetConst(LAY_MULTIPLIER)))
         {
 
@@ -278,7 +278,7 @@ EvReturn Character::Insight(EventInfo &e)
        
     for (i=0;aidChart[i];i+=3)
       if (aidChart[i] == AID_IDENTIFY && 
-           calcFavor(e.eID) >= aidChart[i+2] /
+           calcFavour(e.eID) >= aidChart[i+2] /
              (e.eID == GodID ? 1 : TEFF(GodID)->GetConst(LAY_MULTIPLIER)))
         {
           if (first) {
@@ -311,7 +311,7 @@ EvReturn Character::Sacrifice(EventInfo &e)
   {
     int16 i, sacType, sacCat, sacMult; 
     rID SacList[20];
-    int32 sacVal, newVal, lowestVal, oldFavor; bool isImpressed;
+    int32 sacVal, newVal, lowestVal, oldFavour; bool isImpressed;
     
     /* VERY IMPORTANT for live-sacs, which don't go through 
        PrePray() */
@@ -338,7 +338,7 @@ EvReturn Character::Sacrifice(EventInfo &e)
     sacType = -1;
 
     if (isPlayer() && thisp->WizardMode)
-      oldFavor = calcFavor(e.eID);
+      oldFavour = calcFavour(e.eID);
 
     setGodFlags(e.eID,GS_INVOLVED);
 
@@ -477,15 +477,15 @@ EvReturn Character::Sacrifice(EventInfo &e)
       Exercise(A_WIS,Dice::Roll(1,4),EWIS_PRAYER,25);
       }
         
-    gainedFavor(e.eID);
+    gainedFavour(e.eID);
     
     if (isPlayer() && thisp->WizardMode) {
-      int32 Favor; rID Levs[15];
-      Favor = calcFavor(e.eID);
-      TGOD(e.eID)->GetList(FAVOR_CHART,Levs,15);
-      IPrint(Format("(sacVal %d, gained %d, favor %d, lev %d, next %d.)",
-        sacVal, Favor - oldFavor, Favor, FavorLev[e.godNum], 
-        Levs[FavorLev[e.godNum]]));
+      int32 Favour; rID Levs[15];
+      Favour = calcFavour(e.eID);
+      TGOD(e.eID)->GetList(FAVOUR_CHART,Levs,15);
+      IPrint(Format("(sacVal %d, gained %d, favour %d, lev %d, next %d.)",
+        sacVal, Favour - oldFavour, Favour, FavourLev[e.godNum], 
+        Levs[FavourLev[e.godNum]]));
       }
     
     return DONE;
@@ -575,7 +575,7 @@ EvReturn Character::Jealousy(EventInfo &e)
     return DONE;
   }
 
-void Character::gainFavor(rID gID, int32 amt, bool advance, bool stack)
+void Character::gainFavour(rID gID, int32 amt, bool advance, bool stack)
   {
     if (stack)
       SacVals[theGame->GodNum(gID)][MAX_SAC_CATS+1] += amt;
@@ -584,13 +584,13 @@ void Character::gainFavor(rID gID, int32 amt, bool advance, bool stack)
         SacVals[theGame->GodNum(gID)][MAX_SAC_CATS]);
     
     if (advance && gID == GodID)
-      gainedFavor(gID);
+      gainedFavour(gID);
   }
 
-void Character::gainedFavor(rID gID)
+void Character::gainedFavour(rID gID)
   {
     int16 lv, godNum; EvReturn r;
-    int32 fav; rID favorChart[15];
+    int32 fav; rID favourChart[15];
 
     /* HACKFIX */
     //if (gID != GodID)
@@ -599,14 +599,14 @@ void Character::gainedFavor(rID gID)
 
 
     godNum = theGame->GodNum(gID);
-    lv = FavorLev[godNum];
-    fav = calcFavor(gID);
-    TGOD(gID)->GetList(FAVOR_CHART,favorChart,15);
+    lv = FavourLev[godNum];
+    fav = calcFavour(gID);
+    TGOD(gID)->GetList(FAVOUR_CHART,favourChart,15);
 
     if (lv >= 9)
       return;
 
-    if (fav > favorChart[lv])
+    if (fav > favourChart[lv])
       {
         SetSilence();
         if (!isWorthyOf(gID,false)) {
@@ -614,43 +614,43 @@ void Character::gainedFavor(rID gID)
           return;
           }
         UnsetSilence();
-        FavorLev[godNum]++;
-        PEVENT(EV_BLESSING,this,gID,e.EParam = FavorLev[godNum],r);
+        FavourLev[godNum]++;
+        PEVENT(EV_BLESSING,this,gID,e.EParam = FavourLev[godNum],r);
         if (r == ABORT)
           {
-            FavorLev[godNum]--;
+            FavourLev[godNum]--;
             return;
           }
-        GodMessage(gID,MSG_BLESSING1 + (FavorLev[godNum] - 1));
-        AddAbilities(gID,FavorLev[godNum]);
+        GodMessage(gID,MSG_BLESSING1 + (FavourLev[godNum] - 1));
+        AddAbilities(gID,FavourLev[godNum]);
       }
   
   }
 
-int32 Character::calcFavor(rID gID)
+int32 Character::calcFavour(rID gID)
   {
-    int32 Favor; int16 i, godNum;
+    int32 Favour; int16 i, godNum;
     godNum = theGame->GodNum(gID);
     
-    Favor = 0;
+    Favour = 0;
     for (i=0;i!=MAX_SAC_CATS+2;i++)
-      Favor += SacVals[godNum][i];
+      Favour += SacVals[godNum][i];
     
     EventInfo e;
     e.Clear();
-    e.EParam = Favor;
+    e.EParam = Favour;
     e.EActor = this;
     e.EVictim = this;
     e.eID = gID;
     e.godNum = godNum;
-    ReThrow(EV_CALC_FAVOR,e);
-    Favor = e.EParam;
+    ReThrow(EV_CALC_FAVOUR,e);
+    Favour = e.EParam;
     
-    Favor = (Favor * (100 - FavPenalty[e.godNum])) / 100;
+    Favour = (Favour * (100 - FavPenalty[e.godNum])) / 100;
     
-    // Favor *= 3;
+    // Favour *= 3;
     
-    return Favor;
+    return Favour;
   }
 
 
@@ -1028,7 +1028,7 @@ int16 AidPairs[22][2] = {
 
 EvReturn Character::Pray(EventInfo &e) {
     TGod *tg = TGOD(e.eID);
-    int16 retry, i, j, k, cFavor;
+    int16 retry, i, j, k, cFavour;
     int16 *Troubles; rID aidChart[64];
     bool doneSomething;
     String je;
@@ -1083,7 +1083,7 @@ EvReturn Character::Pray(EventInfo &e) {
 
     Troubles = getTroubles();
     tg->GetList(AID_CHART,aidChart,64);
-    cFavor = calcFavor(e.eID);
+    cFavour = calcFavour(e.eID);
     doneSomething = false;
 
     if (HasAbility(CA_DOMAINS) ||
@@ -1096,7 +1096,7 @@ EvReturn Character::Pray(EventInfo &e) {
         for (j=0;aidChart[j];j+=3) {
             if (aidChart[j+1] > (Troubles[i] / 256))
                 continue;
-            if (aidChart[j+2] > cFavor / (e.eID == GodID ? 1 : 5))
+            if (aidChart[j+2] > cFavour / (e.eID == GodID ? 1 : 5))
                 continue;
             for (k=0;AidPairs[k][0];k++)
                 if (AidPairs[k][1] == aidChart[j] &&
@@ -1134,7 +1134,7 @@ EvReturn Character::Pray(EventInfo &e) {
   
 EvReturn Character::Convert(EventInfo &e)
   {
-    int16 neededFavor, i; 
+    int16 neededFavour, i; 
     bool isPaladin, isWorthy;
     EvReturn r; rID gID = e.eID;
   
@@ -1180,15 +1180,15 @@ EvReturn Character::Convert(EventInfo &e)
       }
     
     
-    neededFavor = TGOD(e.eID)->GetConst(MIN_CONVERT_FAVOR);
+    neededFavour = TGOD(e.eID)->GetConst(MIN_CONVERT_FAVOUR);
     
     if (getGodFlags(e.eID) & GS_FORSAKEN)
-      neededFavor = max(neededFavor*5,5000);
+      neededFavour = max(neededFavour*5,5000);
     
     if (!GodID)
-      neededFavor /= 10;
+      neededFavour /= 10;
     
-    if (calcFavor(e.eID) < neededFavor)
+    if (calcFavour(e.eID) < neededFavour)
       {
         if (getGodFlags(e.eID) & GS_FORSAKEN)
           GodMessage(e.eID,MSG_FORSAKEN);
@@ -1202,14 +1202,14 @@ EvReturn Character::Convert(EventInfo &e)
     setGodFlags(e.eID,GS_INVOLVED);
     GrantSymbol(e.eID);
     
-    /* Lose favor with the god you convert away from -- later, if
+    /* Lose favour with the god you convert away from -- later, if
        the god is friendly, just halve it. */
     if (GodID) {
       setGodFlags(e.eID,GS_ABANDONED);
       e.godNum = theGame->GodNum(GodID);
       for (i=0;i!=10;i++)
         SacVals[e.godNum][i] = 0;
-      /* This is an ugly, nonsensical kludge. The idea of the favor
+      /* This is an ugly, nonsensical kludge. The idea of the favour
          penalty is that if you need a lot of help from your god,
          that god is less likely to make you a champion. The game-
          world logic falls apart in the face of conversion, however:
@@ -1230,7 +1230,7 @@ EvReturn Character::Convert(EventInfo &e)
 
       }
      
-    /* Lose all favor with god you are converting to -- you need to
+    /* Lose all favour with god you are converting to -- you need to
        re-earn it to move up with him again. */
     e.godNum = theGame->GodNum(e.eID);
     for (i=0;i!=10;i++)
@@ -1287,10 +1287,10 @@ EvReturn Character::ConvertAltar(EventInfo &e)
       }
       
     
-    bonus = FavorLev[theGame->GodNum(GodID)];
+    bonus = FavourLev[theGame->GodNum(GodID)];
     bonus += Mod(A_WIS);
-    nums = Format("%cAltar Conversion:%c 1d20 (%d) %+d favor %+d Wis ",
-                   -14, -7, roll, FavorLev[theGame->GodNum(GodID)], Mod(A_WIS));
+    nums = Format("%cAltar Conversion:%c 1d20 (%d) %+d favour %+d Wis ",
+                   -14, -7, roll, FavourLev[theGame->GodNum(GodID)], Mod(A_WIS));
     isCeded = false;               
     if (rel == 0 && !TGOD(altarID)->HasFlag(GF_JEALOUS)) {
       IPrint("Based on <str> respect for <Res>, <Res> cedes the "
@@ -1379,7 +1379,7 @@ EvReturn Character::GodDeflect(EventInfo &e)
     TGOD(GodID)->GetList(AID_CHART,aidChart,64);
     for (i=0;aidChart[i];i+=3)
       if (aidChart[i] == AID_DEFLECT)
-        if (calcFavor(e.eID) >= aidChart[i+2])
+        if (calcFavour(e.eID) >= aidChart[i+2])
           goto DoDeflect;
           
     return NOTHING;
@@ -1387,7 +1387,7 @@ EvReturn Character::GodDeflect(EventInfo &e)
     DoDeflect:
     e.vDmg /= e.vCrit;
     VPrint(e,"<14>Part of the power of the blow is miraculously deflected! "
-             "You feel favored!<7>", "Some force deflected part of the force "
+             "You feel favoured!<7>", "Some force deflected part of the force "
              "of that blow!");
     AddJournalEntry(XPrint("<Res> shielded you from a critical hit.", GodID));
 
@@ -1432,7 +1432,7 @@ EvReturn Player::GodRaise(EventInfo &e)
     TGOD(e.eID)->GetList(AID_CHART,aidChart,64);
     for (i=0;aidChart[i];i+=3)
       if (aidChart[i] == AID_RESSURECT)
-        if (calcFavor(e.eID) >= aidChart[i+2])
+        if (calcFavour(e.eID) >= aidChart[i+2])
           goto DoRessurect;
           
     return NOTHING;
@@ -1531,8 +1531,8 @@ EvReturn Character::IBlessing(EventInfo &e)
       qual = TGOD(e.eID)->GetConst(CHOSEN_WEAPON_QUALITY);
     else if (e.EItem->isType(T_SHIELD))
       qual = TGOD(e.eID)->GetConst(CHOSEN_SHIELD_QUALITY);
-    else if (e.EItem->isType(T_ARMOR))
-      qual = TGOD(e.eID)->GetConst(CHOSEN_ARMOR_QUALITY);
+    else if (e.EItem->isType(T_ARMOUR))
+      qual = TGOD(e.eID)->GetConst(CHOSEN_ARMOUR_QUALITY);
 
     isChosen = (e.EItem->iID == TGOD(e.eID)->GetConst(CHOSEN_WEAPON));
     
@@ -1549,7 +1549,7 @@ EvReturn Character::IBlessing(EventInfo &e)
       goto SkipQuality;
       
     e.EItem->AddQuality(qual);
-    if (e.EItem->ItemLevel() > FavorLev[theGame->GodNum(e.eID)] + 
+    if (e.EItem->ItemLevel() > FavourLev[theGame->GodNum(e.eID)] + 
                                Mod(A_WIS) + isChosen*4)
       {
         e.EItem->RemoveQuality(qual);
@@ -1725,7 +1725,7 @@ void Character::GodMessage(rID gID, int16 msgnum, ...)
       { MSG_NOT_WORTHY, "A voice booms, |Thou art not worthy of my gifts!|" },
       { MSG_BAD_PRAY, "A voice booms, |Thou darest call upon me?!|" },
       { MSG_JEALOUSY, "A voice booms, |Thou darest spurn me?!|" },
-      { MSG_CONVERT, "|Honor my name and my covenant, and thou shalt attain great glory!|" },
+      { MSG_CONVERT, "|Honour my name and my covenant, and thou shalt attain great glory!|" },
       
       
       
@@ -1865,10 +1865,10 @@ void Character::GodMessage(rID gID, int16 msgnum, ...)
           }
     
     msg2 = ""; quoted = false;
-    col = TGOD(gID)->GetConst(VOICE_COLOR);
+    col = TGOD(gID)->GetConst(VOICE_COLOUR);
     for (i=0;msg[i];i++)
       {
-        tcol = BlastColorSets[col*4 + random(4)];
+        tcol = BlastColourSets[col*4 + random(4)];
         if (msg[i] == '|')
           {
             quoted = !quoted;
@@ -1975,9 +1975,9 @@ void Character::SwapAttributes(int16 n)
     CalcValues();
   }
 
-/* Support Function for Essiah's Favor */
+/* Support Function for Essiah's Favour */
 
-int32 Character::TotalExploreFavor()
+int32 Character::TotalExploreFavour()
   {
     int32 fav; int16 open, explored, lev, i, j, x, y;
     rID dunID; Map *M;

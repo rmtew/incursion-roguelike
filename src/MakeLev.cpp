@@ -1328,7 +1328,7 @@ void Map::WriteMap(Rect &r,rID regID)
       dr->SetImage();
 
   uint32 ColorList[16], c;
-  if (TREG(regID)->GetList(WALL_COLORS,ColorList,16)) {
+  if (TREG(regID)->GetList(WALL_COLOURS,ColorList,16)) {
     for(c=0;ColorList[c];c++)
       ;
     for(x=0;x<m->sx;x++) 
@@ -2978,10 +2978,10 @@ void Map::DrawPanel(uint8 px, uint8 py, rID regID)
        a simple room guaranteed to contain the stairs. */
 
     
-    /* Rooms with colored/changed walls or floors */
+    /* Rooms with coloured/changed walls or floors */
 
     uint32 ColorList[16];
-    if (TREG(regID)->GetList(FLOOR_COLORS,ColorList,16)) {
+    if (TREG(regID)->GetList(FLOOR_COLOURS,ColorList,16)) {
       for(c=0;ColorList[c];c++)
         ;
       FloorID = TREG(regID)->Floor;
@@ -2994,7 +2994,7 @@ void Map::DrawPanel(uint8 px, uint8 py, rID regID)
               At(x,y).Shade = true;
             }
       }
-    if (TREG(regID)->GetList(WALL_COLORS,ColorList,16)) {
+    if (TREG(regID)->GetList(WALL_COLOURS,ColorList,16)) {
       for(c=0;ColorList[c];c++)
         ;
       WallID = TREG(regID)->Walls;
@@ -3821,7 +3821,7 @@ WriteCorridor:
       At(x,y).Connected = true;
 #if 0
     /* Highlight the two types of corridors' paths in different
-       colors, for purposes of debugging the dungeon design
+       colours, for purposes of debugging the dungeon design
        algorithm. */
     if (TFlags & TT_CONNECT) {
       At(x,y).Glyph = GLYPH_FLOOR2 | PINK*256;

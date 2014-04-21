@@ -608,8 +608,8 @@ void TextTerm::ShowTraits()
     else
       Write(Format("Def:%d\r",p->KAttr[A_DEF]));
     
-    Write(Format("Arm:%c%2d Slash\r    %2d Pierce\r    %2d Blunt%c\r", (p->InSlot(SL_ARMOR) 
-            && p->WepSkill(p->InSlot(SL_ARMOR)) == WS_NOT_PROF) ? -4 : -7,
+    Write(Format("Arm:%c%2d Slash\r    %2d Pierce\r    %2d Blunt%c\r", (p->InSlot(SL_ARMOUR) 
+            && p->WepSkill(p->InSlot(SL_ARMOUR)) == WS_NOT_PROF) ? -4 : -7,
           p->ResistLevel(AD_SLASH),p->ResistLevel(AD_PIERCE),p->ResistLevel(AD_BLUNT),-7));
     if (theGame->InPlay() && p->m) {
       int32 attr = p->MoveAttr(p->x,p->y);
@@ -810,9 +810,9 @@ void Map::Update(int16 x,int16 y)
       }
       #if 0
       else if (!(g & 0xF000)) {
-        /* If the glyph foreground has the same color as the map
-           background, change the glyph's foreground color. Then,
-           apply the background color. */
+        /* If the glyph foreground has the same colour as the map
+           background, change the glyph's foreground colour. Then,
+           apply the background colour. */
       #endif
       else {
         if ((mg & 0xF000) == (g & 0x0F00) << 4)
@@ -843,7 +843,7 @@ void Map::Update(int16 x,int16 y)
     g = (g & 0xF000) | GLYPH_UNKNOWN | (SHADOW*256);
   }
 
-  /* If the background and foreground are the same color,
+  /* If the background and foreground are the same colour,
      change the foreground so that the glyph is visible. */
   if ((g & 0xF000) == ((g & 0x0F00) << 4))
     g = (g & 0x0F00) ? (g & 0xF0FF) : (g | 0x0800);
@@ -1465,7 +1465,7 @@ BadChar:
               if (m->SolidAt(wx,wy)) continue; // couldn't walk here
               Door * d = m->FDoorAt(wx,wy);
               if (d && d->DoorFlags & DF_SECRET) continue; 
-              // now check neighbors
+              // now check neighbours
               bool foundUnexplored = false; 
               for (int i=0;i<8;i++) {
                 if (! m->At(wx + DirX[i], wy + DirY[i]).Memory &&
@@ -1516,7 +1516,7 @@ BadChar:
 static int16 ViewListPriorityMod(Thing *t)
   {
     if (t->isItem()) {
-      if (t->isType(T_WEAPON) || t->isType(T_ARMOR))
+      if (t->isType(T_WEAPON) || t->isType(T_ARMOUR))
         {
           if ((!((Item*)t)->Inscrip.GetLength()) ||
               ((Item*)t)->Inscrip == "{mundane}")
@@ -2678,7 +2678,7 @@ Thing* TextTerm::AcquisitionPrompt(int8 Reason, int8 minlev, int8 maxlev, int8 M
                 { xID = FIND(DungeonItems[i].Prototype); goto FoundProto; }
               if (DungeonItems[i].Source == AI_WEAPON)
                 { xID = FIND("short sword"); goto FoundProto; }
-              if (DungeonItems[i].Source == AI_ARMOR)
+              if (DungeonItems[i].Source == AI_ARMOUR)
                 { xID = FIND("chainmail"); goto FoundProto; }
               if (DungeonItems[i].Source == AI_SHIELD)
                 { xID = FIND("kite shield"); goto FoundProto; }

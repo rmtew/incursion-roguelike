@@ -245,7 +245,7 @@ Class "Alienist"
            their father, Kysul.
 
           \n\n<10>CLASS REQUIREMENTS<2>\n
-          __The alienist is a prestige class. It counts as a favored class
+          __The alienist is a prestige class. It counts as a favoured class
           for all characters. In order to become an alienist, you must have:\n
           __*_<7>Skills Levels<2> -- Knowledge (Planes) +10.\n
           __*_<7>Known Spells<2> -- Seven total spell levels of Weavecraft spells.\n
@@ -261,7 +261,7 @@ Class "Alienist"
           Use Magic.
           
           \n\n<10>CLASS FEATURES<2>\n
-          __*_<7>Proficiencies<2> -- Alienists gain no additional weapon or armor
+          __*_<7>Proficiencies<2> -- Alienists gain no additional weapon or armour
           proficiencies.\n
           __*_<7>Spellcasting<2> -- At every level except 1st and 4th, alienists
           gain a new caster level. They continue to advance in arcane spell access
@@ -373,7 +373,7 @@ Class "Alienist"
       Stati[SUSTAIN,A_WIS,+5]            at 8th level,
       Stati[SUSTAIN,A_CHA,+5]            at 8th level,
       Stati[TRAP_EVENT,POST(EV_CAST)]    at 9th level;
-   Flags: CF_PRESTIGE, CF_GOOD_FORT, CF_GOOD_WILL, CF_FAVORED;
+   Flags: CF_PRESTIGE, CF_GOOD_FORT, CF_GOOD_WILL, CF_FAVOURED;
    Lists:
      * SPELL_LIST
        1 $"grease" $"obscurement" $"spiritwrack" $"true strike"
@@ -497,7 +497,7 @@ Class "Assassin"
       redeeming qualities within their guild.\n
 
       \n\n<10>CLASS REQUIREMENTS<2>\n
-      __The Assassin is a prestige class. It counts as a favored class
+      __The Assassin is a prestige class. It counts as a favoured class
       for all characters. In order to become an Assassin, you must have:\n
       __*_<7>Skills Levels<2> -- Disguise +10, Poison Use +10, Hide in
       Shadows +7, Move Silently +7.\n
@@ -599,7 +599,7 @@ Class "Assassin"
         }
       return NOTHING;
       };
-    Flags: CF_GOOD_REF, CF_FAVORED, CF_PRESTIGE;
+    Flags: CF_GOOD_REF, CF_FAVOURED, CF_PRESTIGE;
     Lists:
       * SPELL_LIST
           1 $"change self" $"convulsion" $"expeditious retreat" $"magic weapon"
@@ -734,7 +734,7 @@ Class "Blackguard"
       and demon princes of the Lower Planes directly.
       
       \n\n<10>CLASS REQUIREMENTS<2>\n
-      __The blackguard is a prestige class. It counts as a favored class for
+      __The blackguard is a prestige class. It counts as a favoured class for
       all characters. In order to become a blackguard, you must have:\n
       __*_<7>Alignment<2> -- Obviously, any character who wishes to become a
       blackguard must be utterly Evil. Changing to a non-evil alignment causes
@@ -758,11 +758,11 @@ Class "Blackguard"
 
       \n\n<10>CLASS FEATURES<2>\n
       __*_<7>Proficiencies<2> -- The blackguard is proficient with blades,
-      impact weapons, polearms and spears, and with all classes of armor.\n
+      impact weapons, polearms and spears, and with all classes of armour.\n
       __*_<7>Spellcasting<2> -- Blackguards practice certain diabolical magic.
       They gain one caster level for every even blackguard level, and choose
       their spells from the special blackguard list. Blackguards cast spells
-      just like priests do, being able to cast in any armor freely, but
+      just like priests do, being able to cast in any armour freely, but
       needing to have a holy symbol equipped (if they have a god).\n
       __*_<7>Unholy Grace<2> -- Just as a paladin does, a blackguard may add
       his Charisma bonus to all of his saving throws as a grace bonus.\n
@@ -845,7 +845,7 @@ Class "Blackguard"
           GREEN*256+GLYPH_FLOOR2,-1,$"aura of despair",EActor);        
       return NOTHING;
       };
-    Flags: CF_PRESTIGE, CF_FAVORED, CF_GOOD_FORT;
+    Flags: CF_PRESTIGE, CF_FAVOURED, CF_GOOD_FORT;
     Lists:
       * SPELL_LIST
           1 $"bane" $"cause fear" $"convulsion" $"cure light wounds"
@@ -930,10 +930,10 @@ Class "Bladesinger"
   {
     Desc: "<12>*** NOT FINISHED YET ***\n<15>HitDie:_<1>d6__<15>Mana:<1>_d10__<15>Skills:<1>_4_<15>Saves:<1>_f<9>RW<1>_<15>Defense:_<1>1/2\n
       <15>+toHit: <1>Archery <9>50~<1>, Brawl <9>50~<1>, Melee <9>75~<1>, Thrown <9>50~<1>\n
-      <2>\n__[ Flavor Text ]
+      <2>\n__[ Flavour Text ]
 
       \n\n<10>CLASS REQUIREMENTS<2>\n
-      __The bladesinger is a prestige class. It counts as a favored class
+      __The bladesinger is a prestige class. It counts as a favoured class
       for all characters. In order to become a bladesinger, you must have:\n
       __*_<7>Race<2> -- Only elves (not drow) may become bladesingers.\n
       __*_<7>BAB<2> -- Melee BAB +4.\n
@@ -951,13 +951,13 @@ Class "Bladesinger"
       __*_<7>Proficiencies<2> -- Bladesingers are proficient with the long
       sword.\n
       __*_<7>Spellcasting<2> -- Bladesingers cast spells just as bards do,
-      being able to cast in light armor and not requiring spellbooks. They
+      being able to cast in light armour and not requiring spellbooks. They
       cast spells from the bladesinger spell list and recieve one caster
       level for every even bladesinger level. They can also continue to
       learn spells from whatever casting class qualified them to be a
       bladesinger, though they must follow the restrictions of that class
       in casting those spells -- a warrior/mage/bladesinger, for example,
-      cannot wear armor and must use spellbooks when casting spells on the
+      cannot wear armour and must use spellbooks when casting spells on the
       mage list but not on the bladesinger list.\n
       __*_<7>Acrobatic Fighting<2> -- Bladesingers recieve a level of the
       Acrobatic Fighting ability (as described under the duelist prestige
@@ -984,11 +984,11 @@ Class "Bladesinger"
 
       <10>SPELL LIST<2>\n
       <15>__1st level -- <1> burning hands, charm person, chromatic orb,
-      color spray, enthrall, force bolt, magic missile, magic weapon, phase
+      colour spray, enthrall, force bolt, magic missile, magic weapon, phase
       door, sleep, true strike, wall of fog.\n
       <15>__2nd level -- <1> apportation, bladethirst, cat's grace, eagle's
       splendour, ethereal blade, glitterdust, gust of wind, hypnotic pattern, 
-      mage armor, mirror image, phantasmal force, see invisibility, shield\n
+      mage armour, mirror image, phantasmal force, see invisibility, shield\n
       <15>__3rd level -- <1> adamant facade, blink, conjure vortex, dimension
       door, dispel magic, displacement, flame arrow, fly, haste, heroism, ice
       lance, illusionary stance, improved phantasmal force, insightful stroke, 
@@ -996,7 +996,7 @@ Class "Bladesinger"
       <15>__4th level -- <1> charm monster, confusion, dismissal, evard's black 
       tentacles, force missiles, ice storm, phantasmal killer, premonition, 
       spectral force.\n
-      <15>__5th level -- <1> color burst, cone of cold, fire lotus, lesser 
+      <15>__5th level -- <1> colour burst, cone of cold, fire lotus, lesser 
       symbol, lower resistance, misdirection, mooncloak, teleport, telekinesis, 
       watery double.\n
       <15>__6th level -- <1> immortal grandeur, true seeing.\n
@@ -1036,7 +1036,7 @@ Class "Bladesinger"
     Skills[0]: 0;
     Grants:
       ;
-    Flags: CF_PRESTIGE, CF_FAVORED;
+    Flags: CF_PRESTIGE, CF_FAVOURED;
     Lists:
       * SPELL_LIST
           0;
@@ -1047,10 +1047,10 @@ Class "Celestial Initiate"
   {
     Desc: "<12>*** NOT FINISHED YET ***\n<15>HitDie:_<1>d8__<15>Mana:<1>_d12__<15>Skills:<1>_4_<15>Saves:<1>_<9>FRW<1>_<15>Defense:_<1>1/2\n
       <15>+toHit: <1>Archery <9>75~<1>, Brawl <9>75~<1>, Melee <9>75~<1>, Thrown <9>75~<1>\n
-      <2>\n__[ Flavor Text ]
+      <2>\n__[ Flavour Text ]
 
       \n\n<10>CLASS REQUIREMENTS<2>\n
-      __The celestial initiate is a prestige class. It counts as a favored class
+      __The celestial initiate is a prestige class. It counts as a favoured class
       for all characters. In order to become a celestial initiate, you must have:\n
       __*_<7>Skills Levels<2> -- Knowledge (Theology) +12.\n
       __*_<7>Alignment<2> -- Zealously Good (or zealously lawful for Immotian).\n
@@ -1066,7 +1066,7 @@ Class "Celestial Initiate"
 
       \n\n<10>CLASS FEATURES<2>\n
       __*_<7>Proficiencies<2> -- Celestial initiates gain proficiency with
-      long blades, all types of armor and shields.\n
+      long blades, all types of armour and shields.\n
       __*_<7>Smite Evil<2> -- The celestial initiate gains the ability to
       smite evil just as a paladin does. Levels of this ability from
       paladin and celestial initiate stack.\n
@@ -1140,7 +1140,7 @@ Class "Celestial Initiate"
     Skills[0]: 0;
     Grants:
       ;
-    Flags: CF_PRESTIGE, CF_FAVORED;
+    Flags: CF_PRESTIGE, CF_FAVOURED;
     Lists:
       * SPELL_LIST
           0;
@@ -1150,10 +1150,10 @@ Class "Crimson Adept"
   {
     Desc: "<12>*** NOT FINISHED YET ***\n<15>HitDie:_<1>d8__<15>Mana:<1>_d12__<15>Skills:<1>_4_<15>Saves:<1>_<9>F<1>r<9>W<1>_<15>Defense:_<1>1/4\n
       <15>+toHit: <1>Archery <9>50~<1>, Brawl <9>50~<1>, Melee <9>50~<1>, Thrown <9>50~<1>\n
-      <2>\n__[ Flavor Text ]
+      <2>\n__[ Flavour Text ]
 
       \n\n<10>CLASS REQUIREMENTS<2>\n
-      __The crimson adept is a prestige class. It counts as a favored class
+      __The crimson adept is a prestige class. It counts as a favoured class
       for all characters. In order to become a crimson adept, you must have:\n
       __*_<7>Skills Levels<2> -- Alchemy +12, Concentration +12.\n
       __*_<7>Known Spells<2> -- Ten combined spell levels of Thaumaturgy and
@@ -1258,7 +1258,7 @@ Class "Crimson Adept"
     Skills[0]: 0;
     Grants:
       ;
-    Flags: CF_PRESTIGE, CF_FAVORED;
+    Flags: CF_PRESTIGE, CF_FAVOURED;
     Lists:
       * SPELL_LIST
           0;
@@ -1269,10 +1269,10 @@ Class "Duelist"
   
     Desc: "<12>*** NOT FINISHED YET ***\n<15>HitDie:_<1>d6__<15>Mana:<1>_d6__<15>Skills:<1>_6_<15>Saves:<1>_f<9>R<1>w_<15>Defense:_<1>1/2\n
       <15>+toHit: <1>Archery <9>50~<1>, Brawl <9>50~<1>, Melee <9>100~<1>, Thrown <9>50~<1>\n
-      <2>\n__[ Flavor Text ]
+      <2>\n__[ Flavour Text ]
 
       \n\n<10>CLASS REQUIREMENTS<2>\n
-      __The duelist is a prestige class. It counts as a favored class
+      __The duelist is a prestige class. It counts as a favoured class
       for all characters. In order to become a duelist, you must have:\n
       __*_<7>BAB<2> -- Melee BAB +3.\n
       __*_<7>Skills Levels<2> -- Tumble +10.\n
@@ -1287,8 +1287,8 @@ Class "Duelist"
       and short blades weapon groups, and with the long sword.\n
       __*_<7>Canny Defense<2> -- Starting at 1st level, duelists add the
       lower of their duelist level or their primary Intelligence modifier
-      as an insight bonus to their armor class, when wearing medium or
-      lighter armor. Note that as an insight bonus, this does not stack 
+      as an insight bonus to their armour class, when wearing medium or
+      lighter armour. Note that as an insight bonus, this does not stack 
       with Zen Defense.\n
         [ Implementation note: use this as an excuse to do EV_CALC_VALUES
       and export AddBonus as an IncursionScript function -- it's about
@@ -1297,7 +1297,7 @@ Class "Duelist"
       as a bonus feat at 2nd level.\n
       __*_<7>Acrobatic Fighting<2> -- This ability grants a number of
       related benefits to a duelist, starting at 2nd level. Its benefits
-      apply only when a character is wearing light or no armor, and is
+      apply only when a character is wearing light or no armour, and is
       lightly encombered or less. Levels of this ability gained from
       duelist and bladesinger.\n
       __<3>Grace:<2> At 2nd level, the duelist recieves a +2 bonus to
@@ -1332,7 +1332,7 @@ Class "Duelist"
       that she is wielding a short blade or long sword as her primary weapon.\n
       __<3>Mantis Leap:<2> A character with 6 levels of acrobatic fighting is
       treated as possessing the Mantis Leap feat when she is wielding a short
-      blade or long sword and wearing light or no armor.\n 
+      blade or long sword and wearing light or no armour.\n 
       __<3>Free Tumble:<2> With 8 levels of acrobatic fighting (i.e., a 9th-level
       duelist), the character gains the ability to use the Tumble skill without
       paying fatigue points. She may tumble for free once per day per two levels
@@ -1353,7 +1353,7 @@ Class "Duelist"
       bonus feat at 8th level. The character is treated as having these
       feats only when wielding a magical short blade or long sword one-
       handed in her weapon hand with which her attack speed is 250~ or
-      higher, and wearing light or no armor.\n 
+      higher, and wearing light or no armour.\n 
       __*_<7>Luck of the Daring<2> -- The duelist recieves the Unearthly
       Luck ability at 6th level, allowing her to add her primary Luck
       modifier to all saving throws. Halfling duelists, who already have
@@ -1394,7 +1394,7 @@ Class "Duelist"
     Skills[0]: 0;
     Grants:
       ;
-    Flags: CF_PRESTIGE, CF_FAVORED;
+    Flags: CF_PRESTIGE, CF_FAVOURED;
     Lists:
       * SPELL_LIST
           0;
@@ -1465,7 +1465,7 @@ Class "Earthsinger"
       the requisites to become Earthsingers.\n
 
       \n\n<10>CLASS REQUIREMENTS<2>\n
-      __The Earthsinger is a prestige class. It counts as a favored class for
+      __The Earthsinger is a prestige class. It counts as a favoured class for
       all characters. In order to become an Earthsinger, you must have:\n
       __*_<7>Race<2> -- All known Earthsingers are dwarves. An aspirant must be
       a dwarf, or a member of a race with similarly strong bonds to the earth,
@@ -1485,12 +1485,12 @@ Class "Earthsinger"
       Perform, Search and Spot. 
 
       \n\n<10>CLASS FEATURES<2>\n
-      __*_<7>Proficiencies<2> -- The Earthsinger gains no weapon or armor
+      __*_<7>Proficiencies<2> -- The Earthsinger gains no weapon or armour
       proficiencies.\n
       __*_<7>Stonebody<2> -- As an Earthsinger becomes closer and closer
       to the spiritual nature of elemental earth, her skin begins to take
       on a rocky texture and grows harder and harder. Every odd level of
-      this class gives the Earthsinger a +1 natural armor bonus.\n 
+      this class gives the Earthsinger a +1 natural armour bonus.\n 
       __*_<7>Earth Magic<2> -- By speaking to the stone itself using the
       Earthsong, the singer can learn from it, shape it, animate it and
       even take on its properties. In game terms, the character gains a
@@ -1558,7 +1558,7 @@ Class "Earthsinger"
         ThrowEff(EV_EFFECT,$"Grounded Stance",EActor,EActor);
       return NOTHING;
       };
-    Flags: CF_PRESTIGE, CF_FAVORED, CF_GOOD_WILL, CF_GOOD_FORT;
+    Flags: CF_PRESTIGE, CF_FAVOURED, CF_GOOD_WILL, CF_GOOD_FORT;
   }
       
 Effect "Grounded Stance" : EA_INFLICT
@@ -1608,10 +1608,10 @@ Class "Elementalist"
   {
     Desc: "<12>*** NOT FINISHED YET ***\n<15>HitDie:_<1>d8__<15>Mana:<1>_d12__<15>Skills:<1>_4_<15>Saves:<1>_fr<9>W<1>_<15>Defense:_<1>1/4\n
       <15>+toHit: <1>Archery <9>50~<1>, Brawl <9>50~<1>, Melee <9>50~<1>, Thrown <9>50~<1>\n
-      <2>\n__[ Flavor Text ]
+      <2>\n__[ Flavour Text ]
 
       \n\n<10>CLASS REQUIREMENTS<2>\n
-      __The elementalist is a prestige class. It counts as a favored class
+      __The elementalist is a prestige class. It counts as a favoured class
       for all characters. When you attempt entry into the class, you must
       choose one of the four classical elements (earth, air, fire or water)
       to focus on. Once you have gained your first elementalist level, this
@@ -1645,8 +1645,8 @@ Class "Elementalist"
       can cast their newly accessable spells with the same rules the class
       whose spell access is still advancing has. In other words, priest-
       elementalists need holy symbols to use their elemental spells, but
-      can cast in heavy armor; druid elementalists cannot cast elemental
-      spells in metal armor, etc. The one exception is mage/elementalists,
+      can cast in heavy armour; druid elementalists cannot cast elemental
+      spells in metal armour, etc. The one exception is mage/elementalists,
       who do not need spellbooks for their elemental spells.\n
       __Elementalists gain a new caster level at every elementalist level
       except 1st and 5th.\n
@@ -1756,7 +1756,7 @@ Class "Elementalist"
     Skills[0]: 0;
     Grants:
       ;
-    Flags: CF_PRESTIGE, CF_FAVORED;
+    Flags: CF_PRESTIGE, CF_FAVOURED;
     Lists:
       * SPELL_LIST
           0;
@@ -1784,7 +1784,7 @@ Class "Horizon Walker"
     Skills[0]: 0;
     Grants:
       ;
-    Flags: CF_PRESTIGE, CF_FAVORED;
+    Flags: CF_PRESTIGE, CF_FAVOURED;
     Lists:
       * SPELL_LIST
           0;
@@ -1794,10 +1794,10 @@ Class "Inquisitor"
   {
     Desc: "<12>*** NOT FINISHED YET ***\n<15>HitDie:_<1>d6__<15>Mana:<1>_d10__<15>Skills:<1>_8_<15>Saves:<1>_<9>F<1>r<9>W<1>_<15>Defense:_<1>1/3\n
       <15>+toHit: <1>Archery <9>50~<1>, Brawl <9>50~<1>, Melee <9>75~<1>, Thrown <9>50~<1>\n
-      <2>\n__[ Flavor Text ]
+      <2>\n__[ Flavour Text ]
 
       \n\n<10>CLASS REQUIREMENTS<2>\n
-      __The inquisitor is a prestige class. It counts as a favored class
+      __The inquisitor is a prestige class. It counts as a favoured class
       for all characters. In order to become an inquisitor, you must have:\n
       __*_<7>Skills Levels<2> -- Intimidate +12.\n
       __*_<7>Alignment<2> -- Zealously Lawful.\n
@@ -1828,10 +1828,10 @@ Class "Inquisitor"
       undead ability for every inquisitor class level; this stacks with
       the levels gained from being a priest or paladin.\n
       __*_<7>Zealous Mettle<2> -- The inquisitor learns to trust in zeal
-      and endurance alone to protect them. When unarmored, she adds a
+      and endurance alone to protect them. When unarmoured, she adds a
       sacred bonus to all of her saving throws equal to her inquisitor
       class level. At 9th level she recieves Toughness as a bonus feat
-      as long as she is unarmored; at 10th level, she recieves Resilience
+      as long as she is unarmoured; at 10th level, she recieves Resilience
       likewise.\n
       __*_<7>Grim Reputation<2> -- The agents of the Purified Office of the
       Sacred Inquisition are rightly feared for their political power and
@@ -1843,7 +1843,7 @@ Class "Inquisitor"
       1st level, they gain <9>detect corruption<2> as an innate spell-like
       ability; this functions as <9>detect evil<2>, save that it detects
       both evil and chaotic creatures, and does not reveal those who have
-      Immotian's favor regardless of alignment.\n
+      Immotian's favour regardless of alignment.\n
       __*_<7>Smite Corruption<2> -- An inquisitor can smite corrupt creatures
       just as a paladin smites evil creatures. Additionally, the inquisition
       thrives on mob justice; for every allied creature the inquisitor has
@@ -1868,7 +1868,7 @@ Class "Inquisitor"
       __Immotian offers a powerful incentive to those inquisitors who 
       bring wealth to the church. Starting at 3rd level, an inquisitor
       can offer coins as a sacrifice to Immotian. While this does not
-      increase divine favor -- the coins are not a 'true' sacrifice --
+      increase divine favour -- the coins are not a 'true' sacrifice --
       the inquisitor does recieve 1 experience point for every 25 gold
       pieces worth of riches offered in this manner.\n 
       __Using this ability funds an evil organization and is therefore
@@ -1932,7 +1932,7 @@ Class "Inquisitor"
     Skills[0]: 0;
     Grants:
       ;
-    Flags: CF_PRESTIGE, CF_FAVORED;
+    Flags: CF_PRESTIGE, CF_FAVOURED;
     Lists:
       * SPELL_LIST
           0;
@@ -1996,7 +1996,7 @@ Class "Loremaster"
       monastaries in the desert in which to preserve vast stores of ancient books.\n
 
       \n\n<10>CLASS REQUIREMENTS<2>\n
-      __The Loremaster is a prestige class. It counts as a favored class for
+      __The Loremaster is a prestige class. It counts as a favoured class for
       all characters. In order to become a Loremaster, you must have:\n
       __*_<7>Skills Levels<2> -- 4 Knowledge skills at +10.\n
       __*_<7>Feats<2> -- Scribe Scroll.\n
@@ -2010,7 +2010,7 @@ Class "Loremaster"
       Spellcraft and Use Magic.
 
       \n\n<10>CLASS FEATURES<2>\n
-      __*_<7>Proficiencies<2> -- The Loremaster gains no weapon or armor
+      __*_<7>Proficiencies<2> -- The Loremaster gains no weapon or armour
       proficiencies.\n
       __*_<7>Spellcasting<2> -- The Loremaster gains one spellcasting level for every
       Loremaster level after the 1st. Additionally, she continues to gain access to new
@@ -2151,7 +2151,7 @@ Class "Loremaster"
         EActor->IncEffStatiMag(SPELL_ACCESS,$"Paladin",SS_CLAS,NULL,+1);
       return NOTHING;
       };
-    Flags: CF_GOOD_WILL, CF_FAVORED, CF_PRESTIGE;
+    Flags: CF_GOOD_WILL, CF_FAVOURED, CF_PRESTIGE;
   }
 
 
@@ -2219,7 +2219,7 @@ Class "Master Archer"
       the Master Archer class as well.\n
       
       \n\n<10>CLASS REQUIREMENTS<2>\n
-      __The Master Archer is a prestige class. It counts as a favored class for
+      __The Master Archer is a prestige class. It counts as a favoured class for
       all characters. In order to become a Master Archer, you must have:\n
       __*_<7>Skills Levels<2> -- Concentration +10.\n
       __*_<7>Feats<2> -- Point Blank Shot, Rapid Shot, Zen Archery, Weapon
@@ -2236,7 +2236,7 @@ Class "Master Archer"
       and Wilderness Lore.
       
       \n\n<10>CLASS FEATURES<2>\n
-      __*_<7>Proficiencies<2> -- The Master Archer gains no weapon or armor
+      __*_<7>Proficiencies<2> -- The Master Archer gains no weapon or armour
       proficiencies.\n
       __*_<7>Arrowstorm<2> -- The primary ability of the Master Archer is to fire
       arrows at a truly staggering rate as a result of their transcendent focus and
@@ -2300,7 +2300,7 @@ Class "Master Archer"
         ThrowEff(EV_EFFECT,$"Opportune Shot",EActor,EActor);
       };  
     
-    Flags: CF_GOOD_REF, CF_GOOD_WILL, CF_FAVORED, CF_PRESTIGE;
+    Flags: CF_GOOD_REF, CF_GOOD_WILL, CF_FAVOURED, CF_PRESTIGE;
   } 
   
 Effect "Ranged Sneak Attack" : EA_INFLICT
@@ -2386,7 +2386,7 @@ Class "Sentinel"
       end up as sentinels.\n
 
       \n\n<10>CLASS REQUIREMENTS<2>\n
-      __The Sentinel is a prestige class. It counts as a favored class for
+      __The Sentinel is a prestige class. It counts as a favoured class for
       all characters. In order to become a
       sentinel, you must have:\n
       __*_<7>Skills Levels<2> -- Listen 10, Search 10, Spot 10.\n
@@ -2398,7 +2398,7 @@ Class "Sentinel"
       Lockpicking, Pick Pockets, Search, and Spot.
 
       \n\n<10>CLASS FEATURES<2>\n
-      __*_<7>Proficiencies<2> -- The sentinel gains no weapon or armor
+      __*_<7>Proficiencies<2> -- The sentinel gains no weapon or armour
       proficiencies.\n
       __*_<6>1st Level: <7>Superior Senses<2> -- The sentinel gains a
       +2 insight bonus to all Spot, Search and Listen skills. The sentinel
@@ -2445,7 +2445,7 @@ Class "Sentinel"
       Feat[FT_ACUTE_SENSES]             at 3rd level,
       Ability[CA_BLINDSIGHT,+12]            at 4th level,
       Ability[CA_UNCANNY_DODGE,+1]     at every level starting at 4th;
-    Flags: CF_GOOD_REF, CF_FAVORED, CF_PRESTIGE;
+    Flags: CF_GOOD_REF, CF_FAVOURED, CF_PRESTIGE;
   } 
 
 Class "Shadowdancer"
@@ -2487,11 +2487,11 @@ Class "Shadowdancer"
       form a mystical bond with shadow, learning to use shadows for protection,
       travel and even allies. Shadowdancers are a diverse society, travelling
       across Theyra in tropes and staging elaborate, sinister dances for adoring
-      audiences -- their order harbors many secrets but is not, ultimately, a
+      audiences -- their order harbours many secrets but is not, ultimately, a
       malignant force in the world.\n
 
       \n\n<10>CLASS REQUIREMENTS<2>\n
-      __The shadowdancer is a prestige class. It counts as a favored class
+      __The shadowdancer is a prestige class. It counts as a favoured class
       for all characters. In order to become a
       shadowdancer, you must have:\n
       __*_<7>Skills Levels<2> -- Move Silently +8, Hide +12, Perform +10,
@@ -2506,7 +2506,7 @@ Class "Shadowdancer"
       \n\n<10>CLASS FEATURES<2>\n
       __*_<7>Proficiencies<2> -- The shadowdancer is proficient with all
       simple weapons, daggers, blades, thrown weapons, flexible weapons,
-      archery and light armor.\n
+      archery and light armour.\n
       __*_<7>Evasion<2> -- A shadowdancer that makes a Reflex
       save to avoid an area-effect attack takes no damage. Levels of this
       ability from shadowdancer and other classes stack toward gaining
@@ -2536,17 +2536,17 @@ Class "Shadowdancer"
       her level as a shadowdancer.\n
       __*_<7>Defensive Roll<2> -- If you have this ability, you are able to 
       move with the impact from blows, lessening their effect even if they do 
-      hit you. This ability does not function in heavy armor. When you are 
+      hit you. This ability does not function in heavy armour. When you are 
       struck by a creature that needs a 15 or greater to hit you, you only 
       suffer a certain fraction of the damage, starting at 5/6th. The number 
       of sixths of the total damage can be further reduced in the following 
       circumstances, to a minimum of 1/6th:\n
       __* You are Small and your foe is Medium-sized or larger (-1/6th).\n
       __* Your foe can only hit you on a natural 20 (-1/6th).\n
-      __* You are unarmored (-2/6ths) or in light armor (-1/6th).\n
+      __* You are unarmoured (-2/6ths) or in light armour (-1/6th).\n
       __This ability does not function if you have spells active which
-      simulate the effect of heavy armor (such as Spirit Armor) and
-      Mage Armor is treated as medium armor for this purpose.\n
+      simulate the effect of heavy armour (such as Spirit Armour) and
+      Mage Armour is treated as medium armour for this purpose.\n
       __*_<7>Improved Uncanny Dodge<2> -- A shadowdancer
       can no longer be flanked except by a rogue four levels higher.
       
@@ -2573,7 +2573,7 @@ Class "Shadowdancer"
            S_THROWN   75,
            S_ARCHERY  75;    
     Proficiencies: WG_SIMPLE, WG_DAGGERS, WG_SBLADES, WG_THROWN, 
-      WG_FLEXIBLE, WG_ARCHERY, WG_LARMOR;
+      WG_FLEXIBLE, WG_ARCHERY, WG_LARMOUR;
     Skills[8]: SK_BALANCE, SK_BLUFF, SK_DECIPHER, SK_ESCAPE_ART, SK_HIDE, 
       SK_JUMP, SK_LISTEN, SK_MOVE_SIL, SK_PERFORM, SK_SEARCH, SK_SPOT, 
       SK_PICK_POCKET, SK_TUMBLE; 
@@ -2592,7 +2592,7 @@ Class "Shadowdancer"
       Ability[CA_INNATE_SPELL,$"mirror image"]  at 7th level,
       Ability[CA_INFRAVISION,+2]                at 9th level,
       Ability[CA_INNATE_SPELL,$"shadow monsters"] at 10th level;
-    Flags: CF_GOOD_REF, CF_FAVORED, CF_PRESTIGE;
+    Flags: CF_GOOD_REF, CF_FAVOURED, CF_PRESTIGE;
   }
   
 Effect "Shadow Companion" : EA_SUMMON
@@ -2623,7 +2623,7 @@ Effect "Shadow Step" : EA_TRAVEL
     Purpose: EP_ESCAPE; xval: TRAVEL_ANYWHERE; Flags: EF_SPECABIL;
     Desc: "This ability allows you to meld into a shadow, stepping out
       of any other shadow within 1d12 + (shadowdancer level x 2) squares
-      away. In cannot be used in areas of bright light. Favor with Aiswin
+      away. In cannot be used in areas of bright light. Favour with Aiswin
       can replace shadowdancer levels in strengthening this ability.";
     On Event EV_MAGIC_HIT
       "You dissolve into the shadows." /
@@ -2686,7 +2686,7 @@ Class "Tattoo Mystic"
       the supernatural inks used for tattooing.
 
       \n\n<10>CLASS REQUIREMENTS<2>\n
-      __The tattoo mystic is a prestige class. It counts as a favored
+      __The tattoo mystic is a prestige class. It counts as a favoured
       class for all characters. In order to become a tattoo mystic, 
       a character must have must have:\n
       __*_<7>Skills Levels<2> -- The understanding of the complex metaphors,
@@ -2705,7 +2705,7 @@ Class "Tattoo Mystic"
 
       \n\n<10>CLASS FEATURES<2>\n
       __*_<7>Proficiencies<2> -- Tattoo mystics recieve no additional weapon
-      or armor proficiencies.\n
+      or armour proficiencies.\n
       __*_<7>Monk Abilities<2> -- A tattoo mystic continues to advance his 
       existing Unarmed Attack, Increased Move and Stun Attack abilities just as
       if he were taking monk levels, so a monk 5/tattoo mystic 3 has the base
@@ -2749,7 +2749,7 @@ Class "Tattoo Mystic"
       Ability[CA_INCREASED_MOVE,+2]  at every level starting at 1st,
       Ability[CA_STUN_ATTACK]        at every level starting at 1st,
       Ability[CA_TATTOOS]            at every 2nd level starting at 2nd;
-    Flags: CF_GOOD_FORT, CF_GOOD_REF, CF_GOOD_WILL, CF_FAVORED, CF_PRESTIGE;
+    Flags: CF_GOOD_FORT, CF_GOOD_REF, CF_GOOD_WILL, CF_FAVOURED, CF_PRESTIGE;
   }
       
 Class "Twilight Huntsman"
@@ -2783,12 +2783,12 @@ Class "Twilight Huntsman"
     Desc: "
       <15>HitDie:_<1>d6__<15>Mana:<1>_d6__<15>Skills:<1>_6_<15>Saves:<1>_<9>FR<1>w_<15>Defense:_<1>1/4\n
       <15>+toHit: <1>Archery <9>100~<1>, Brawl <9>50~<1>, Melee <9>100~<1>, Thrown <9>100~<1>\n
-      <2>\n\tMaeve honors the most skilled huntsmen of the faerie and mortal
+      <2>\n\tMaeve honours the most skilled huntsmen of the faerie and mortal
       relms by making them members of her Twilight Hunt, also called the Wild
       Hunt. Twilight huntsmen promote her chaotic plans.\n
 
       \n\n<10>CLASS REQUIREMENTS<2>\n
-      __The Twilight huntsman is a prestige class. It counts as a favored class
+      __The Twilight huntsman is a prestige class. It counts as a favoured class
       for all characters. In order to become a twilight huntsman, you must have:\n
       __*_<7>Skills Levels<2> -- Move Silently 5, Animal Empathy 5, 
         Hide 5, Atheltics 8, Ride 8.\n
@@ -2801,7 +2801,7 @@ Class "Twilight Huntsman"
       Swim, and Wilderness Lore. 
 
       \n\n<10>CLASS FEATURES<2>\n
-      __*_<7>Proficiencies<2> -- The twilight huntsman gains no weapon or armor
+      __*_<7>Proficiencies<2> -- The twilight huntsman gains no weapon or armour
       proficiencies.\n
       __*_<7>Low-Light Vision<2> -- At 1st level, the twilight huntsman gains
       40 feet (4 squares) of low-light vision.\n
@@ -2819,8 +2819,8 @@ Class "Twilight Huntsman"
       magic to aid them in their mission. A twilight huntsman gains one caster
       level for every even class level, and they draw spells from their own
       spell list. Twilight huntsmen cast as priests do, being able to cast in
-      armor and not depending on spellbooks, but needing a holy symbol and
-      the favor of their diety.\n
+      armour and not depending on spellbooks, but needing a holy symbol and
+      the favour of their diety.\n
       __*_<7>Smite Law<2> -- At 3rd level, the twilight huntsman gains
       the ability to smite lawful creatures, exactly as a paladin smites
       evil creatures; she gains +2 damage on such smite attacks at 3rd
@@ -2857,7 +2857,7 @@ Class "Twilight Huntsman"
       requirements for that feat.
 
       \n\n<10>SPELL LIST<2>\n
-      <15>__1st level -- <1>bane, change self, charm person, color spray, doom, 
+      <15>__1st level -- <1>bane, change self, charm person, colour spray, doom, 
       enthrall, faerie fire, inflict light wounds, longstrider, malignance, 
       phantasmal force, slow poison, true strike.\n
       <15>__2nd level -- <1>animate rope, bladethirst, globe of shadow, heal 
@@ -2870,7 +2870,7 @@ Class "Twilight Huntsman"
       <15>__4th level -- <1>crushing despair, dimensional anchor, enervation, 
       hallucinatory terrain, improved spectral force, inflict critical wounds, 
       mooncloak, music of the spheres, phantasmal killer, thornwrack.\n
-      <15>__5th level -- <1>advanced illusion, color burst, divine agility, 
+      <15>__5th level -- <1>advanced illusion, colour burst, divine agility, 
       dream, hold monster, insect plague, lower resistance, nightmare, 
       symbol of pain, symbol of sleep.\n
       <15>__6th level -- <1>animate objects, harm, immortal grandeur.
@@ -2913,10 +2913,10 @@ Class "Twilight Huntsman"
       Ability[CA_INNATE_SPELL,$"spook"] at 8th level,
       Ability[CA_FEED_UPON_PAIN,+1] at 9th level,
       Feat[FT_ONE_BODY_ONE_SOUL]    at 10th level;
-    Flags: CF_GOOD_REF, CF_GOOD_FORT, CF_FAVORED, CF_PRESTIGE;
+    Flags: CF_GOOD_REF, CF_GOOD_FORT, CF_FAVOURED, CF_PRESTIGE;
     Lists:
       * SPELL_LIST
-        1 $"bane" $"change self" $"charm person" $"color spray" $"doom"
+        1 $"bane" $"change self" $"charm person" $"colour spray" $"doom"
           $"enthrall" $"faerie fire" $"inflict light wounds" $"longstrider"
           $"malignance" $"phantasmal force" $"slow poison" $"true strike"
         2 $"animate rope" $"bladethirst" $"globe of shadow" $"heal mount"
@@ -2930,7 +2930,7 @@ Class "Twilight Huntsman"
           $"hallucinatory terrain" $"improved spectral force"
           $"inflict critical wounds" $"mooncloak" $"music of the spheres"
           $"phantasmal killer" $"thornwrack"
-        5 $"advanced illusion" $"color burst" $"divine agility" $"dream"
+        5 $"advanced illusion" $"colour burst" $"divine agility" $"dream"
           $"hold monster" $"insect plague" $"lower resistance" $"nightmare;spell"
           $"symbol of pain" $"symbol of sleep"
         6 $"animate objects" $"harm" $"immortal grandeur";
@@ -2959,7 +2959,7 @@ Class "Undead Slayer"
     Skills[0]: 0;
     Grants:
       ;
-    Flags: CF_PRESTIGE, CF_FAVORED;
+    Flags: CF_PRESTIGE, CF_FAVOURED;
     Lists:
       * SPELL_LIST
           0;
@@ -3019,7 +3019,7 @@ Class "Underdark Warrior"
       darkness.
 
       \n\n<10>CLASS REQUIREMENTS<2>\n
-      __The Underdark Warrior is a prestige class. It counts as a favored
+      __The Underdark Warrior is a prestige class. It counts as a favoured
       class for all characters. In order to become an underdark warrior, 
       you must have:\n
       __*_<7>Race<2> -- You must be of a race native to the Underdark -- drow,
@@ -3039,7 +3039,7 @@ Class "Underdark Warrior"
 
       \n\n<10>CLASS FEATURES<2>\n
       __*_<7>Proficiencies<2> -- Underdark warriors do not gain and additional
-      weapon or armor proficiencies.\n
+      weapon or armour proficiencies.\n
       __*_<7>Tremorsense<2> -- The underdark warrior learns to feel vibrations
       in stone in exactly the same manner that some monsters do, developing the
       Tremorsense ability with a range in squares equal to twice her class 
@@ -3094,7 +3094,7 @@ Class "Underdark Warrior"
       Ability[CA_UNCANNY_DODGE,+1]       at every level starting at 2nd,
       Ability[CA_STONEWORK_SENSE,+1]     at 4th,
       Ability[CA_DEFENSIVE_ROLL,+1]      at 5th;
-    Flags: CF_GOOD_FORT, CF_FAVORED, CF_PRESTIGE;
+    Flags: CF_GOOD_FORT, CF_FAVOURED, CF_PRESTIGE;
     Constants:
       * TOTAL_CLASS_LEVELS 5;
   }

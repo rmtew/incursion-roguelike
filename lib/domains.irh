@@ -259,7 +259,7 @@ Domain "Evil" : 0 {
     Spells:
       $"Malignance", 
       $"Desecrate",
-      $"Armor of Darkness",
+      $"Armour of Darkness",
       $"Unholy Blight",
       $"Fiendform";
       /* Torment,
@@ -539,7 +539,7 @@ Domain "Mysticism" : 0
     Grants:
       Stati[SEE_INVIS] at 1st level;
     Spells: 
-      $"Divine Favor", /* 1 */
+      $"Divine Favour", /* 1 */
       $"Hypnotism", /* 2 */
       $"displacement", /* 3 */
       $"Lesser Aspect of Divinity", /* 4 */
@@ -583,7 +583,7 @@ Domain "Nobility" : 0
     Spells:
       $"Mount",
       $"Enthrall",
-      $"Phantom Steed", /* Spirit Armor? */
+      $"Phantom Steed", /* Spirit Armour? */
       $"Dismissal",
       $"Righteous Might";
     /* Greater Command,
@@ -873,7 +873,7 @@ Domain "Trickery" : 0 {
 
 Domain "War" : 0 
   {
-    Desc: "__<15>Granted Power:<7> You gain proficiency with heavy armor and
+    Desc: "__<15>Granted Power:<7> You gain proficiency with heavy armour and
       shields, as well as a free weapon focus in your diety's chosen weapon.
       You recieve a bonus feat from the Warrior list at 7th, 14th and 20th
       levels.";
@@ -889,7 +889,7 @@ Domain "War" : 0
           if (EActor->WepSkill(wID) < WS_FOCUSED)
             EActor->GainPermStati(WEP_SKILL,NULL,SS_CLAS,WS_FOCUSED,0,wID);
         }
-      EActor->Proficiencies |= WG_HARMOR | WG_SHIELDS;
+      EActor->Proficiencies |= WG_HARMOUR | WG_SHIELDS;
       return NOTHING;
       };
     Spells: 

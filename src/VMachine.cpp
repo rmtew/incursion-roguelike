@@ -119,7 +119,7 @@ inline bool WithinRect(Rect r, int16 x, int16 y)
    ingly. */
 #define ItemWeight Weight
 #define rnd random
-#define ArmorPenalty Penalty
+#define ArmourPenalty Penalty
 #define TFlags Flags
 #define ieID eID
 #define WriteXY Write
@@ -179,7 +179,7 @@ inline void ClearCandidates()
 
 #undef ItemWeight
 #undef rnd
-#undef ArmorPenalty
+#undef ArmourPenalty
 #undef TFlags
 #undef isImmune
 #undef isResist

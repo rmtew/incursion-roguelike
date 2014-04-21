@@ -129,10 +129,10 @@ size_t typeSize(int8 Type)
         case T_MISSILE:  case T_BOW:
         case T_WEAPON:   case T_STAFF:
                          return sizeof(Weapon);
-        case T_ARMOR:    case T_SHIELD:
+        case T_ARMOUR:    case T_SHIELD:
         case T_GAUNTLETS:
         case T_BOOTS:    
-                         return sizeof(Armor);
+                         return sizeof(Armour);
 
         case T_ANNOT:    return sizeof(Annotation);
         //case T_CONSTRUCT:return sizeof(Construct);
@@ -647,10 +647,10 @@ int16 Registry::LoadGroup(Term &t, hObj hGroup, bool use_lz)
             case T_CORPSE:   new(o) Corpse(this); break;
             case T_MISSILE:  case T_BOW:
             case T_WEAPON:   new(o) Weapon(this); break;
-            case T_ARMOR:    case T_SHIELD:
+            case T_ARMOUR:    case T_SHIELD:
             case T_GAUNTLETS:
             case T_BOOTS:    
-                             new(o) Armor(this); break;
+                             new(o) Armour(this); break;
 
             //case T_CONSTRUCT:new(o) Construct(this); break;
             //case T_ILLUSION: new(o) Illusion(this); break;

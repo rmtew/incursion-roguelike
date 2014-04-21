@@ -738,12 +738,12 @@ race_entry:
       { theRace->AddAbility(AbT,Abil,p,l1,l2); } )* ';'
   | MONSTER (':')? res_ref<rr> ';' { theRace->mID = rr; }
   | FAVORED (CLASS)? (':')? res_ref<rr> ',' res_ref<rr2> ';'   
-                                { theRace->FavoredClass[0] = rr;
-                                  theRace->FavoredClass[1] = rr2; }
+                                { theRace->FavouredClass[0] = rr;
+                                  theRace->FavouredClass[1] = rr2; }
   | FAVORED (CLASS)? (':')? res_ref<rr> ',' res_ref<rr2> ',' res_ref<rr3> ';'   
-                                { theRace->FavoredClass[0] = rr;
-                                  theRace->FavoredClass[1] = rr2; 
-                                  theRace->FavoredClass[2] = rr3; }
+                                { theRace->FavouredClass[0] = rr;
+                                  theRace->FavouredClass[1] = rr2; 
+                                  theRace->FavouredClass[2] = rr3; }
   | SKILLS (':')? {int8 skn = 0;}
       ( cexpr3<sk> { theRace->Skills[skn++] = sk; } (',')? )* ';'
   | cexpr3<n> (':')? LITERAL<lv> ';' { switch(n) {

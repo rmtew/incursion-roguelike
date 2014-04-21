@@ -757,14 +757,14 @@ Monster "succubus" : MA_DEMON
     Desc: "Appearing to mortals as breathtakingly beautiful, demure women 
       or men of great magnetism and sensuality, succubi and incubi are the
       social agents and sexual predators of the tanar'ri. They procure
-      favors from powerful mortals, move unseen among the highest levels
+      favours from powerful mortals, move unseen among the highest levels
       of society and leads the world into darkness, chaos and corruption
       through its carnal desires.\n
       __The true form of a succubus is a woman with small horns and bat
       wings, while an incubus has tiny horns and cloven hooves. Both breeds
       prefer congress to combat, and will avoid melee unless they have an
       overwhelming advantage. Despite their non-combative nature many
-      demons frequently owe these creatures favors, and they are feared
+      demons frequently owe these creatures favours, and they are feared
       in the Abyss for their ability to summon aid well outside the range
       of their personal power."; 
     On Event PRE(EV_NATTACK), PRE(EV_WATTACK) {
@@ -794,7 +794,7 @@ Monster "succubus" : MA_DEMON
       30% $"whip" else
         15% $"whip" of random 3 to 6 else
         20% $"spiked chain" of random 3 to 8,
-      35% $"leather armor" of random 3 to 6,
+      35% $"leather armour" of random 3 to 6,
       1d3 $"potion" of $"healing";
   }
   
@@ -870,7 +870,7 @@ Monster "buleazu" : MA_DEMON
       Their massively muscled hands and heavy arms allow them to
       wield weapons larger than they would normally be able to as a
       function of their race. Their hides are most frequently covered
-      with weeping sores and discolored patches, and their bloodshot
+      with weeping sores and discoloured patches, and their bloodshot
       eyes burn with an unnatural, undying hatred of all things.";
   }
 
@@ -1016,7 +1016,7 @@ Monster "hezrou" : MA_DEMON
       are repellent, squat demons with frog-like bodies, flat heads and
       greedy, leering eyes. Rows of spines run along their back, and
       their legs are short, thick and muscular. Triple rows of heavy,
-      blunt teeth line their mouths -- a hezrou's bite pulps armor and
+      blunt teeth line their mouths -- a hezrou's bite pulps armour and
       flesh alike. Their most notable feature, however, is their stench
       -- a hezrou's body produces a musk-like phereomone that coats the
       horror when it fights, the scent of which can render mortals all
@@ -1157,7 +1157,7 @@ Effect "Nightmare Smite" : EA_INFLICT
     Desc: "Nalfeshnee have the ability to draw forth the most secret
       fears and nightmares of others, forcing anyone nearby to experience
       these horrors. When the demon activates this ability, brilliant beams
-      of rainbow-colored light play around its body for the remainder of 
+      of rainbow-coloured light play around its body for the remainder of 
       the current turn and the duration of the next, gathering the power
       for this effect. Then, this nimbus of unholy light explodes outwards,
       and any creatures in the area take 10d6 points of unholy damage, 3d6
@@ -1246,7 +1246,7 @@ Monster "nupperibo" : MA_DEVIL
       instead of lemures. Obese and amorphious, much like the
       lemures, nupperibo possess a greater degree of physical
       power then the lemures -- though they are still mindless --
-      and are sometimes used as hard laborers or press gangs in
+      and are sometimes used as hard labourers or press gangs in
       the hells. Their bodies are sticky to the touch, and they
       are eager to devour and absorb any other beings in order
       to increase their own station.";
@@ -1425,7 +1425,7 @@ Monster "black abishai" : MA_DEVIL
       M_HUMANOID, M_NEUTER, M_NO_CORPSE, M_CLOSEID;
     Desc: "Abishai look like gothic gargoyles, with large wings and long,
       barbed prehensile tails. They carry with them the scent of vinegar,
-      and the air warms in their presence. In baatezu society, the color
+      and the air warms in their presence. In baatezu society, the colour
       of an abishai determines its station: black is lowest, then green,
       with red being the highest.";
   }
@@ -1467,7 +1467,7 @@ Monster "green abishai" : MA_DEVIL
       M_HUMANOID, M_NEUTER, M_NO_CORPSE, M_CLOSEID;
     Desc: "Abishai look like gothic gargoyles, with large wings and long,
       barbed prehensile tails. They carry with them the scent of vinegar,
-      and the air warms in their presence. In baatezu society, the color
+      and the air warms in their presence. In baatezu society, the colour
       of an abishai determines its station: black is lowest, then green,
       with red being the highest.";
   }
@@ -1508,7 +1508,7 @@ Monster "red abishai" : MA_DEVIL
       M_HUMANOID, M_NEUTER, M_NO_CORPSE, M_CLOSEID;
     Desc: "Abishai look like gothic gargoyles, with large wings and long,
       barbed prehensile tails. They carry with them the scent of vinegar,
-      and the air warms in their presence. In baatezu society, the color
+      and the air warms in their presence. In baatezu society, the colour
       of an abishai determines its station: black is lowest, then green,
       with red being the highest.";
   }
@@ -1723,7 +1723,7 @@ Monster "amnizu" : MA_DEVIL
     Gear:
       // 33% $"ring" +3 of $"protection" else
         50% $"bracers" +3 of $"defense" else
-          $"amulet" of $"natural armor",
+          $"amulet" of $"natural armour",
       50% $"ring" of $"evasion",
       /* 50% $"wand" of $"paralysis",
          50% $"wand" of $"polymorph", */
@@ -1858,22 +1858,22 @@ Monster "narzugon" : MA_DEVIL
     Spells: $"desecrate", $"hold person", $"produce flame", $"haste",
             $"bestow curse", $"unholy blight";
     Desc: "The elite cavalry of the Nine Hells, narzugons are famous
-      for their zeal and twisted honor. Riding nightmares, fiendish
+      for their zeal and twisted honour. Riding nightmares, fiendish
       dire boars, young chromatic dragons or more horrific mounts
       still, the narzugons are sent out of Baator to retrive anyone
       or anything that escapes. They harry the fugitive to exhaustion,
-      then close in for the kill. Rumors claim that the gaze of the
+      then close in for the kill. Rumours claim that the gaze of the
       narzugon eclipses reason and brings death. Narzugons appear as
       humanoids with coal-black eyes and leathery grey skin, but their
       bodies are rarely seen beneath their iconic spiked full plate
-      armor.";
+      armour.";
     Gear:
       33% $"cloak" of random 2 to 6,
       33% $"ring" of random 2 to 6,
       33% $"boots" of random 2 to 6,
       33% $"helm" of random 2 to 6,
       33% $"girdle" of random 2 to 6,
-      $"field plate armor" of random 5 to 8,
+      $"field plate armour" of random 5 to 8,
       50% $"greatsword" of random 3 to 6 else
         50% $"scimitar" of random 4 to 7 else
             $"long sword" of random 4 to 7,
@@ -2035,7 +2035,7 @@ Monster "yeth hound" : MA_OUTSIDER, MA_DOG, MA_DEVIL
 /* Each elemental type has a strong advantage: air elementals
    are FAST, fire elementals have a fire aura and generally
    deal a lot more damage, earth elementals have strong natural
-   armor and water elementals regenerate. */
+   armour and water elementals regenerate. */
 
 #define AIR_ELEM(word,size,cr,hd,def,arm,st,dx,cn,dmg,dc,ft1,ft2,ft3,desc)            \
                                                                                       \
@@ -2198,7 +2198,7 @@ Monster word  " earth elemental" : MA_ELEMENTAL                                 
     Desc: "An earth elemental is the spiritual personification of the base element "    \
       "of earth, dwelling on the elemental plane of earth but occasionally summoned by "\
       "wizards and creatures of magic to the prime plane. Earth elementals "            \
-      "are primal, traditional, honorable and patient, given to long periods of "       \
+      "are primal, traditional, honourable and patient, given to long periods of "       \
       "slumber and contemplation. A "  word  " earth elemental is about the size "  \
       "of a "  desc  ".";                                                          \
     On Event EVICTIM(EV_DEATH) {                                                      \
@@ -2421,11 +2421,11 @@ Monster "fire mephit" : MA_OUTSIDER, MA_FIRE, MA_IMPKIN
            M_HOSTILE;
     Desc: "These tiny winged humanoids are the pages and gofers
       of the inner and outer planes. Possessed of a distinctly
-      spiteful sense of humor, they enjoy tormenting humans and
+      spiteful sense of humour, they enjoy tormenting humans and
       the few other creatures they see that are (on average)
       weaker then them.\n
       __Fire mephits look like red-skinned, puckish devils, and
-      have a malicious sense of humor to suit.";
+      have a malicious sense of humour to suit.";
   }
 
 Monster "ice mephit" : MA_OUTSIDER, MA_COLD, MA_IMPKIN
@@ -2448,7 +2448,7 @@ Monster "ice mephit" : MA_OUTSIDER, MA_COLD, MA_IMPKIN
            M_HOSTILE;
     Desc: "These tiny winged humanoids are the pages and gofers
       of the inner and outer planes. Possessed of a distinctly
-      spiteful sense of humor, they enjoy tormenting humans and
+      spiteful sense of humour, they enjoy tormenting humans and
       the few other creatures they see that are (on average)
       weaker then them.\n
       __Ice mephits are blue-skinned, with sharp features and
@@ -2478,11 +2478,11 @@ Monster "water mephit" : MA_OUTSIDER, MA_IMPKIN
            M_HOSTILE, M_AMPHIB;
     Desc: "These tiny winged humanoids are the pages and gofers
       of the inner and outer planes. Possessed of a distinctly
-      spiteful sense of humor, they enjoy tormenting humans and
+      spiteful sense of humour, they enjoy tormenting humans and
       the few other creatures they see that are (on average)
       weaker then them.\n
       __Resembling tiny fish people, water mephits have cheerful
-      (if callous) senses of humor; their enthusiasm gets on the
+      (if callous) senses of humour; their enthusiasm gets on the
       nerves of everyone around them.";
     On Event MSG_BLASTNAME "jet of water";
   }
@@ -2507,7 +2507,7 @@ Monster "dust mephit" : MA_OUTSIDER, MA_IMPKIN
            M_HOSTILE;
     Desc: "These tiny winged humanoids are the pages and gofers
       of the inner and outer planes. Possessed of a distinctly
-      spiteful sense of humor, they enjoy tormenting humans and
+      spiteful sense of humour, they enjoy tormenting humans and
       the few other creatures they see that are (on average)
       weaker then them.\n
       __Wizened, gaunt and wrinkly grey skinned humanoids, dust 
@@ -2536,7 +2536,7 @@ Monster "ooze mephit" : MA_OUTSIDER, MA_IMPKIN
            M_HOSTILE, M_EARTH;
     Desc: "These tiny winged humanoids are the pages and gofers
       of the inner and outer planes. Possessed of a distinctly
-      spiteful sense of humor, they enjoy tormenting humans and
+      spiteful sense of humour, they enjoy tormenting humans and
       the few other creatures they see that are (on average)
       weaker then them.\n
       __Ooze mephits are squat humanoids with eternally greasy
@@ -2564,7 +2564,7 @@ Monster "earth mephit" : MA_OUTSIDER, MA_IMPKIN
            M_HOSTILE, M_EARTH;
     Desc: "These tiny winged humanoids are the pages and gofers
       of the inner and outer planes. Possessed of a distinctly
-      spiteful sense of humor, they enjoy tormenting humans and
+      spiteful sense of humour, they enjoy tormenting humans and
       the few other creatures they see that are (on average)
       weaker then them.\n
       __Stocky and broad-shouldered, earth mephits have a stubborn
@@ -2592,11 +2592,11 @@ Monster "salt mephit" : MA_OUTSIDER, MA_IMPKIN
            M_HOSTILE, M_AIR;
     Desc: "These tiny winged humanoids are the pages and gofers
       of the inner and outer planes. Possessed of a distinctly
-      spiteful sense of humor, they enjoy tormenting humans and
+      spiteful sense of humour, they enjoy tormenting humans and
       the few other creatures they see that are (on average)
       weaker then them.\n
       __Salt mephits appear as albino humanoids with bleary eyes
-      and a bored and apathetic demeanor.";
+      and a bored and apathetic demeanour.";
     On Event MSG_BLASTNAME "spray of salt crystals";
   }
   
@@ -2634,7 +2634,7 @@ Monster "air mephit" : MA_OUTSIDER, MA_IMPKIN
            M_HOSTILE;
     Desc: "These tiny winged humanoids are the pages and gofers
       of the inner and outer planes. Possessed of a distinctly
-      spiteful sense of humor, they enjoy tormenting humans and
+      spiteful sense of humour, they enjoy tormenting humans and
       the few other creatures they see that are (on average)
       weaker then them.\n
       __Air mephits are thin, graceful creatures resembling a
@@ -2657,12 +2657,12 @@ Monster "fog mephit" : MA_OUTSIDER, MA_IMPKIN
     Resists: DF_MAGC, DF_FIRE;
     Feats: SK_SPOT, SK_HIDE, SK_MOVE_SIL,
            FT_DODGE;
-    Spells: $"obscurement", $"color spray";
+    Spells: $"obscurement", $"colour spray";
     Flags: M_HUMANOID, M_FLYER, M_GREEDY, M_AIR, M_NO_CORPSE,
            M_HOSTILE, M_WATER;
     Desc: "These tiny winged humanoids are the pages and gofers
       of the inner and outer planes. Possessed of a distinctly
-      spiteful sense of humor, they enjoy tormenting humans and
+      spiteful sense of humour, they enjoy tormenting humans and
       the few other creatures they see that are (on average)
       weaker then them.\n
       __Fog mephits are plump and ponderous, slow to act and
@@ -2723,7 +2723,7 @@ Monster "djinni" : MA_GENIE, MA_AIR
            SK_LISTEN, SK_SPELLCRAFT, SK_MOVE_SIL, SK_RIDE, SK_APPRAISE,
            SK_SPOT;
     Immune: DF_ACID, DF_ELEC;
-    Gear: random T_ARMOR of random 1 to 2,
+    Gear: random T_ARMOUR of random 1 to 2,
           random T_POTION of random 1 to 2,
           random T_POTION of random 1 to 2;
     Spells: $"invisibility", $"obscurement", $"create food and water";
@@ -2753,7 +2753,7 @@ Monster "efreeti" : MA_GENIE, MA_FIRE
            SK_LISTEN, SK_SPELLCRAFT, SK_MOVE_SIL, SK_RIDE, SK_APPRAISE,
            SK_SPOT;
     Immune: DF_FIRE;
-    Gear: random T_ARMOR of random 2 to 3,
+    Gear: random T_ARMOUR of random 2 to 3,
           random T_POTION of random 1 to 6,
           random T_POTION of random 1 to 6,
           random T_POTION of random 1 to 6;
@@ -2779,7 +2779,7 @@ Monster "azer" : MA_ELEMENTALKIN, MA_ADVENTURER, MA_DWARF
 	MAGIC_RES(40);
     Immune: DF_FIRE;
     Feats: FT_POWER_ATTACK, SK_CLIMB, SK_CRAFT, SK_LISTEN,
-           FT_ARMOR_OPTIMIZATION;
+           FT_ARMOUR_OPTIMIZATION;
     Spells: $"flame blade"; 
     Flags: M_HUMANOID, M_FIRE, M_LAWFUL;
     Desc: "An offshoot of dwarves native to the elemnental plane of
@@ -2789,7 +2789,7 @@ Monster "azer" : MA_ELEMENTALKIN, MA_ADVENTURER, MA_DWARF
       their faces where a beard would normally rest.";
     Gear: 33% $"dwarven waraxe" else 50% $"battleaxe" else $"warhammer",
           33% $"banded mail" else 
-            50% $"breastplate" else $"field plate armor",
+            50% $"breastplate" else $"field plate armour",
           $"kite shield";
     On Event EV_INITIALIZE {
       hObj h;
@@ -2810,7 +2810,7 @@ Monster "azerkin" : MA_ELEMENTALKIN, MA_ADVENTURER, MA_DWARF
 	ABILITY(CA_INFRAVISION,6);
     Immune: DF_FIRE;
     Feats: FT_POWER_ATTACK, SK_CLIMB, SK_CRAFT, SK_LISTEN,
-           FT_ARMOR_OPTIMIZATION;
+           FT_ARMOUR_OPTIMIZATION;
     Flags: M_HUMANOID, M_FIRE, M_LAWFUL;
     Desc: "An offshoot of dwarves native to the elemnental plane of
       fire, the azer are a highly structured and authoritarian race.
@@ -2822,7 +2822,7 @@ Monster "azerkin" : MA_ELEMENTALKIN, MA_ADVENTURER, MA_DWARF
       innate melee defense.";
     Gear: 33% $"dwarven waraxe" else 50% $"battleaxe" else $"warhammer",
           33% $"banded mail" else 
-            50% $"breastplate" else $"field plate armor",
+            50% $"breastplate" else $"field plate armour",
           $"kite shield";
     On Event EV_INITIALIZE {
       hObj h;
@@ -3121,7 +3121,7 @@ Monster "protectar" : MA_CELESTIAL, MA_ADVENTURER
           $"scale mail";
     Desc: "Protectars form the rank and file of celestial armies.
       They are the blessed souls of dead warriors of light: brave,
-      loyal, honest, moral and honorable. They appear as idealized
+      loyal, honest, moral and honourable. They appear as idealized
       humans with white feathered wings.";
   }  
 
@@ -3178,7 +3178,7 @@ Monster "ramadeen" : MA_CELESTIAL, MA_ADVENTURER
         else $"scimitar", 
       $"plate mail";
     Desc: "Ramadeen are second-tier celestial warriors with features
-      derived from humans and rams. Clad in heavy armor and wielding
+      derived from humans and rams. Clad in heavy armour and wielding
       scimitars forged from divine steel, they lead divine charges
       and rally the heavenly armies of protectars.";
     On Event MSG_SPECABIL
@@ -3289,7 +3289,7 @@ Monster "lillend" : MA_CELESTIAL, MA_SNAKE
       __A lillend has the head, torso and arms of a beautiful woman,
       a serpentine lower body tapering off to a feathered tail and
       great, hawklike wings. Their hair, wings and tail all have the
-      same coloration -- a shifting, nearly hypnotic spectrum of
+      same colouration -- a shifting, nearly hypnotic spectrum of
       radiant greens, purples and violets.";
     /* Bard Spell List */
     Lists:
@@ -3315,7 +3315,7 @@ Monster "lillend" : MA_CELESTIAL, MA_SNAKE
             $"wind wall" $"nondetection" $"fly"
           4 $"cure critical wounds" $"dimension door" $"dominate person" 
             $"hallucinatory terrain" $"hold monster" $"improved invisibility" 
-            $"rainbow pattern" $"color burst" $"neutralize poison" $"shout" 
+            $"rainbow pattern" $"colour burst" $"neutralize poison" $"shout" 
             $"monster summoning IV" $"dismissal" $"endure the elements" $"wandwierd"
             $"solid fog" $"detect magic" $"premonition" $"track monster" $"ice storm"
             $"phantasmal killer" $"evard's black tentacles"
@@ -3381,7 +3381,7 @@ Monster "greater barghest" : MA_OUTSIDER, MA_DOG, MA_LYCANTHROPE
     greater barghest. These creatures can change shape into a goblinlike
     creature of Large size (about 8 feet tall and 400 pounds) or a winter
     wolf. In hobgoblin form, a greater barghest cannot use its natural weapons
-    but can wield weapons and wear armor."; 
+    but can wield weapons and wear armour."; 
     Gear: 
         10% random T_WEAPON of random 2 to 3;
   }

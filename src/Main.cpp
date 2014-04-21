@@ -1519,11 +1519,11 @@ RestartTerra:
         m1->GainPermStati(EXTRA_FEAT,NULL,SS_CLAS,FT_EXOTIC_WEAPON);
         m2->GainPermStati(EXTRA_FEAT,NULL,SS_CLAS,FT_EXOTIC_WEAPON);
         m1->GainItem(i1,true);
-        m1->GainItem(new Armor(arm), true);
-        m1->GainItem(new Armor(shield), true);
+        m1->GainItem(new Armour(arm), true);
+        m1->GainItem(new Armour(shield), true);
         m2->GainItem(i2,true);
-        m2->GainItem(new Armor(arm), true);
-        m2->GainItem(new Armor(shield), true);
+        m2->GainItem(new Armour(arm), true);
+        m2->GainItem(new Armour(shield), true);
 
 
         /* 
@@ -1693,9 +1693,9 @@ void Game::CheckConsistency(void)
 
   T1->Write(Format(" done\n"));
 
-  T1->Write(Format("Checking for non-flavor duplicates.\n"));
+  T1->Write(Format("Checking for non-flavour duplicates.\n"));
 
-  Report = "Non-Flavor Duplicate Resources:\n";
+  Report = "Non-Flavour Duplicate Resources:\n";
 
   for (i=0; i<total_resources-1; i++) {
     ASSERT(r[i])

@@ -1205,7 +1205,7 @@ SkipQueueAdd:;
                   if (e.eID)
                       ReThrow(EV_EFFECT,e);
 
-                  if (isType(T_ARMOR)) {
+                  if (isType(T_ARMOUR)) {
                       int16 q;
                       for (i=0;i!=8;i++)
                           if (q = GetQuality(i)) {

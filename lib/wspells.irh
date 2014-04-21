@@ -10,7 +10,7 @@
  * Div: Practical Divinings, Unearthly Readings, Higher Mysteries,
           Book of Revelations, Paths of Enlightenment
           
- * Enc: Charms and Favors, Tome of Beguiling, Book of Glamour,
+ * Enc: Charms and Favours, Tome of Beguiling, Book of Glamour,
           
  * Evo: Energy Magicks, Power over Elements, Ars Bellicus, Spellfire,
           Wrath of the Mystic, Tome of Destruction, Secrets of Balefire
@@ -125,12 +125,12 @@
 /* ============================================================= 
  *                   Level One ARCANE Spells
  * =============================================================
- * Abj: Endure X, Mage Armor, Prot. Evil, Endure [Element]
+ * Abj: Endure X, Mage Armour, Prot. Evil, Endure [Element]
  * Arc: Grease, Knock, Unseen Servant, Wall of Fog, Wizlock, Mending
  * Div: Detect Monsters, Detect Stairs, Know Align, True Strike
  * Enc: Cause Fear, Charm Person, Friends, Sleep
  * Evo: Force Bolt, Magic Missile, Shield, Shocking Grasp
- * Ill: Chromantic Orb, Color Spray, Phantasmal Force, Ventril.
+ * Ill: Chromantic Orb, Colour Spray, Phantasmal Force, Ventril.
  * Nec: Chill Touch, Halt Undead, Prot. Undead, Rigor Mortis
  * Tha: Enlarge, Expeditious Retreat, False Life, Reduce
  * Wea: Alarm, Mount, Phase Door, Monster Summoning I
@@ -171,25 +171,25 @@ Wizard Spell "Endure Sound" : EA_INFLICT
 /* I changed the visual on this so that it truly feels like an
    Abjuration spell, rather than an Evocation hammered into the
    Abjuration school for game balance. Evokers get shield; let
-   Abjurers be the best at the Shield + Mage Armor combo. Also,
+   Abjurers be the best at the Shield + Mage Armour combo. Also,
    EVERY mage uses this spell, and while it's cool as a specific
-   gimmick (i.e., spirit armor), I don't want every single
-   mage to be a guy in conjured plate armor, thematically. */
-Wizard Spell "Mage Armor" : EA_INFLICT
+   gimmick (i.e., spirit armour), I don't want every single
+   mage to be a guy in conjured plate armour, thematically. */
+Wizard Spell "Mage Armour" : EA_INFLICT
   { SC_ABJ; IS_A_BUFF(COST_1X); Level: 1; qval: 0;
-    Flags: EF_NO_BONUS_DMG, EF_MARMOR;
+    Flags: EF_NO_BONUS_DMG, EF_MARMOUR;
     xval: ADJUST_ARM; yval: A_ARM; pval: 15d1 + (LEVEL_1PER3);
-    Desc: "This euphamistically-named spell created a ward around the
+    Desc: "This euphemistically-named spell created a ward around the
       mage's body which mystically dampens the lethality of attacks,
       manifesting through luck and coincidence (with no physical form)
       to protect her from harm. This effect is represented in game
-      terms by granting the caster [4 + Luck modifier] levels armor in 
-      each armor catagory, or [6 + Luck modifier] if the caster is an
-      Abjurer. Mage Armor is not compatible with real armor, and counts
-      as medium armor for the purpose of abilities like defensive roll
+      terms by granting the caster [4 + Luck modifier] levels armour in 
+      each armour catagory, or [6 + Luck modifier] if the caster is an
+      Abjurer. Mage Armour is not compatible with real armour, and counts
+      as medium armour for the purpose of abilities like defensive roll
       and Zen Defense.";
     On Event MSG_STATINAME 
-      "Mage Armor" / "MArm", 
+      "Mage Armour" / "MArm", 
     EV_MAGIC_HIT
       "You feel safe." /
       "The <EVictim> seems more solid, somehow.",
@@ -205,19 +205,19 @@ Wizard Spell "Mage Armor" : EA_INFLICT
         SetPVal(e,4 + EActor->Mod(A_LUC));
       },
     PRE(EV_EFFECT) {
-      if (EActor->InSlot(SL_ARMOR) != NULL_OBJ)
+      if (EActor->InSlot(SL_ARMOUR) != NULL_OBJ)
         {
-          EActor->IPrint("You cannot combine <9>mage armor<7> with
-            conventional armor.");
+          EActor->IPrint("You cannot combine <9>mage armour<7> with
+            conventional armour.");
           return ABORT;
         }
       return NOTHING;
       },
     META(POST(EV_WIELD)) {
-      if (EActor->InSlot(SL_ARMOR) != NULL_OBJ)
+      if (EActor->InSlot(SL_ARMOUR) != NULL_OBJ)
         {
-          EActor->IPrint("Your <9>mage armor<7> is cancelled.");
-          EActor->RemoveEffStati($"mage armor");
+          EActor->IPrint("Your <9>mage armour<7> is cancelled.");
+          EActor->RemoveEffStati($"mage armour");
         }
       return NOTHING;
       };
@@ -805,13 +805,13 @@ Wizard Spell "Daggerspell" : EA_INFLICT
       with a dowsing rod), the mage attunes the dagger to
       seek out flaws and weaknesses. In the hands of a mage
       with this spell, a dagger is drawn intuitively to the
-      flaws in a structure or enemy's armor.\n
+      flaws in a structure or enemy's armour.\n
       __A specialist Diviner recieves an insight bonus to damage
       rolls equal to her Intelligence bonus when using a dagger;
       for other mages, this bonus caps out at +2. In any mage's 
       hands the base threat range of the weapon is treated as 
       being 18-20. When using a dagger, she can halve the hardness
-      of an object when she attacks it, and an armor-wearing
+      of an object when she attacks it, and an armour-wearing
       enemy's Coverage is reduced by 4 against her attacks.\n
       __Creatures with Nondetection are unaffected by this spell,
       and the caster gains no extra damage or increased threat
@@ -900,7 +900,7 @@ Wizard Spell "Friends" : EA_INFLICT
     SC_ENC; Level: 1; IS_A_BUFF(COST_1X);
     xval: SOCIAL_MOD; yval: MA_ALL; pval: 2;
     Desc: "Casting this spell imbues you with an aura of affiability
-      and good candor, causing other creatures to react favorably
+      and good candor, causing other creatures to react favourably
       to you. You recieve a +2 (+4 for specialist Enchanters) social
       modifier to all social actions taken against other characters,
       and shop prices are calculated for you as if your Diplomacy
@@ -925,7 +925,7 @@ Wizard Spell "Nystrom's Magical Aura" : EA_INFLICT
       tool-using monsters will seek to acquire this item, and will 
       equip it in preferance to others if this possess it. Thus, 
       this spell can be used as a kind of trap, causing monsters 
-      to not use their real magical equipment in favor of fakes, or
+      to not use their real magical equipment in favour of fakes, or
       as a thrown lure to draw a monster to a specific location.\n
       __The item is also much more desirable to thieves and pickpockets 
       than a normal item of its type would be, but most merchants have
@@ -1199,8 +1199,8 @@ Wizard / Scroll Spell "Chromatic Orb" : EA_GENERIC
       i += EActor->Mod(A_WIS);
 
       TPrint(e,"Your orb strikes an <EVictim>!",
-               "A colored orb strikes you!",
-               "A colored orb strikes the <EVictim>!");
+               "A coloured orb strikes you!",
+               "A coloured orb strikes the <EVictim>!");
           
       switch(ch) {
         case 'c':
@@ -1251,8 +1251,8 @@ Wizard / Scroll Spell "Chromatic Orb" : EA_GENERIC
       return DONE; 
       },
     MSG_BLASTNAME 
-      "colored orb";
-    Desc: "__Creates orbs of various color that inflict 1d8 points of damage (of
+      "coloured orb";
+    Desc: "__Creates orbs of various colour that inflict 1d8 points of damage (of
       varying types, or 1d6 for the white orb) per odd caster level and cause various 
       special effects on a failed saving throw. A ranged touch attack determines if 
       the orb hits a desired target or not.\n
@@ -1268,7 +1268,7 @@ Wizard / Scroll Spell "Chromatic Orb" : EA_GENERIC
 	    2d8 rounds if they fail a Will save.";
   }
 
-Wizard Spell "Color Spray" : EA_GENERIC
+Wizard Spell "Colour Spray" : EA_GENERIC
   {
     SC_ILL|SC_EVO|SC_LIGHT; Base: SP_MEDIUM; Cost: 3; Level: 1; 
     qval: Q_DIR | Q_TAR;
@@ -1286,9 +1286,9 @@ Wizard Spell "Color Spray" : EA_GENERIC
       return SHOULD_CAST_IT;
       },
 	  EV_MAGIC_STRIKE 
-      "Your spray of colors strikes an <EVictim>." /
-      "The <EActor>'s spray of colors strikes you." /
-      "The <EActor>'s spray of colors strikes an <EVictim>.",
+      "Your spray of colours strikes an <EVictim>." /
+      "The <EActor>'s spray of colours strikes you." /
+      "The <EActor>'s spray of colours strikes an <EVictim>.",
     EV_MAGIC_HIT {
       if (EVictim->ChallengeRating() < (e.vCasterLev / 2)) {
         EVictim->GainTempStati(STUNNED, NULL, 2d6, SS_ENCH, -1, -1);
@@ -1303,7 +1303,7 @@ Wizard Spell "Color Spray" : EA_GENERIC
 		    }
       return DONE;
       };
-    Desc: "This spell projects a splash of multicolored light that may 
+    Desc: "This spell projects a splash of multicoloured light that may 
       blind or stun creatures it strikes -- creatures whose CR is less
       than half the caster's level are blinded and stunned for 2d6
       turns, other creatures whose CR is lower than the caster's
@@ -3067,7 +3067,7 @@ Wizard Spell "Visage of Death": EA_GENERIC
     } ;
   }
 
-/* fjm: Changed name slightly to avoid similarity to Spirit Armor
+/* fjm: Changed name slightly to avoid similarity to Spirit Armour
      and the psionic Death Field */
 Wizard Spell "Aura of Death" : EA_INFLICT
   { SC_NEC; IS_A_BUFF(COST_2); Level: 2; 
@@ -3619,7 +3619,7 @@ Wizard Spell "Transposition" : EA_GENERIC
       caster level, and you gain a similar amount -- up to a maximum 
       of whatever the target had to lose. A Will save allows the 
       target to halve the mana loss. Mana Theft cannot replace mana
-      allocated to persistant spells like Mage Armor, and any mana
+      allocated to persistant spells like Mage Armour, and any mana
       above the caster's normal maximum fades after a brief period
       -- although mana stolen from a victim does not regenerate.\n
       __Channeling magical energies in this manner is draining and
@@ -3713,7 +3713,7 @@ Wizard Spell "Ethereal Blade" : EA_INFLICT
  * Enc: Hold Person, Keen Edge, Suggestion, Minor Malison
  * Evo: Fireball, Lightning Bolt, Deeper Darkness
  * Ill: Phantom Steed, Displacement, Group Invisibility, (Illus. Wall)
- * Nec: Spirit Armor, Vampiric Touch, Blackmantle (Gentle Repose)
+ * Nec: Spirit Armour, Vampiric Touch, Blackmantle (Gentle Repose)
  * Tha: Haste, Slow, Polymorph Self, Water Walk, (Gaseous Form)
  * Wea: Blink, Dimension Door, Monster Summoning III, (Rope Trick)
  * =============================================================
@@ -4995,12 +4995,12 @@ Wizard / Scroll Spell "Vampiric Touch" : EA_DRAIN
       "The <EActor>'s hands glow with a throbbing red aura.";
   }
 
-Wizard / Scroll Spell "Spirit Armor" : EA_INFLICT
+Wizard / Scroll Spell "Spirit Armour" : EA_INFLICT
   { SC_NEC; IS_A_BUFF(COST_3X); Level: 3; 
-    Flags: EF_NO_BONUS_DMG, EF_HARMOR;
+    Flags: EF_NO_BONUS_DMG, EF_HARMOUR;
     xval: ADJUST; yval: A_ARM; pval: 9d1 + (LEVEL_1PER3); 
     On Event EV_EFFECT {
-      ThrowDmg(EV_DAMAGE,AD_NORM,3d6,"casting spirit armor",EActor,EActor);
+      ThrowDmg(EV_DAMAGE,AD_NORM,3d6,"casting spirit armour",EActor,EActor);
       if (EActor->Flags & F_DELETE)
         return DONE;
       return NOTHING;
@@ -5009,27 +5009,27 @@ Wizard / Scroll Spell "Spirit Armor" : EA_INFLICT
       "A shimmering azure aura appears around you." /
       "A shimmering azure aura appears around the <EActor>.",
     PRE(EV_EFFECT) {
-      if (EActor->InSlot(SL_ARMOR) != NULL_OBJ)
+      if (EActor->InSlot(SL_ARMOUR) != NULL_OBJ)
         {
-          EActor->IPrint("You cannot combine <9>spirit armor<7> with
-            conventional armor.");
+          EActor->IPrint("You cannot combine <9>spirit armour<7> with
+            conventional armour.");
           return ABORT;
         }
       return NOTHING;
       },
     META(POST(EV_WIELD)) {
-      if (EActor->InSlot(SL_ARMOR) != NULL_OBJ)
+      if (EActor->InSlot(SL_ARMOUR) != NULL_OBJ)
         {
-          EActor->IPrint("Your <9>spirit armor<7> is cancelled.");
-          EActor->RemoveEffStati($"spirit armor");
+          EActor->IPrint("Your <9>spirit armour<7> is cancelled.");
+          EActor->RemoveEffStati($"spirit armour");
         }
       return NOTHING;
       };
     Desc: "Forges a protective shield out of your own life essence, giving
-      you defenses similar to plate armor (9 + 1/3 caster levels armor rating) 
-      but costing you 3d6 of your own hit points. Spirit Armor counts as hwavy
-      armor for the purposes of abilities like Defensive Roll, and is not
-      compatable with mundane physical armor.";
+      you defenses similar to plate armour (9 + 1/3 caster levels armour rating) 
+      but costing you 3d6 of your own hit points. Spirit Armour counts as hwavy
+      armour for the purposes of abilities like Defensive Roll, and is not
+      compatable with mundane physical armour.";
   }
 and EA_INFLICT
   { xval: TRAP_EVENT; yval: POST(EV_WIELD); }
@@ -6958,7 +6958,7 @@ Wizard / Scroll Spell "Evard's Black Tentacles" : EA_GENERIC
       other surface and lash out mindlessly to entangle whatever
       might be nearby. The tentacles have Strength 18, Dexterity
       18, 3 hit dice, a +3 base attack bonus and are DC 13 with
-      +5 natural armor. The tentacles cannot move from the spot
+      +5 natural armour. The tentacles cannot move from the spot
       they first appear, which will be within 50 feet of the 
       spell's chosen point of origin.\n
       __The tentacles are <9>not<1> summoned creatures -- they
@@ -7167,7 +7167,7 @@ Wizard Spell "Lesser Planar Conjuration" : EA_SUMMON
  * Div: Wizard Sight, Contact Other Plane?, PW: Stop, Dream
  * Enc: Dominate Person, Hold Monster, Mind Fog, Feeblemind, Preserve Item
  * Evo: Cone of Cold, Interposing Hand, Wall of Force, Sighing Chain
- * Ill: Color Burst, Dream, Nightmare, Shadow Evocation, Persistant Illusion 
+ * Ill: Colour Burst, Dream, Nightmare, Shadow Evocation, Persistant Illusion 
  * Nec: Eldritch Bolt, Magic Jar, Wraithform, Spiritwall, Fleshshiver
  * Tha: Force Shapechange, Fleshshiver, Claws of the Umber Hulk, Blood Lightning
  * Wea: Summon Monster V, Teleport, Synostodwenomer, Shift Level
@@ -7500,7 +7500,7 @@ Wizard / Scroll Spell "Major Creation" : EA_GENERIC
     SC_ARC; Base: SP_EASY; Cost: 15; Level: 5; Purpose: EP_PLAYER_ONLY;
     Desc: "This spell functions similarly to <9>minor creation<1>, but
       the restrictions on items which may be created are less severe.
-      The mage can now conjure crafted metal, including swords, armor
+      The mage can now conjure crafted metal, including swords, armour
       and other steelworks. She may also create exceptionally rare
       special materials like adamant, silver, gold or mithril -- but
       doing so increases the experience cost of the spell based on
@@ -7901,7 +7901,7 @@ Wizard Spell "Advanced Illusion" : EA_ILLUSION
   }
 
 
-Wizard / Sorcerer Spell "Color Burst" : EA_GENERIC
+Wizard / Sorcerer Spell "Colour Burst" : EA_GENERIC
   {
     SC_ILL|SC_LIGHT; Base: SP_MEDIUM; Cost: 9; Level: 5; sval: REF;
     Purpose: EP_ATTACK (VS_GENERAL); lval: 8;
@@ -7919,9 +7919,9 @@ Wizard / Sorcerer Spell "Color Burst" : EA_GENERIC
 	    return SHOULD_CAST_IT;
       },
   	EV_MAGIC_STRIKE {
-      TPrint(e,"Your spray of colors strikes an <EVictim>.",
-               "The <EActor>'s spray of colors strikes you.",
-               "The <EActor>'s spray of colors strikes an <EVictim>.");
+      TPrint(e,"Your spray of colours strikes an <EVictim>.",
+               "The <EActor>'s spray of colours strikes you.",
+               "The <EActor>'s spray of colours strikes an <EVictim>.");
 	    return NOTHING;
 	    },
     EV_MAGIC_HIT {
@@ -7943,7 +7943,7 @@ Wizard / Sorcerer Spell "Color Burst" : EA_GENERIC
 		    }
       return DONE;
       };
-    Desc: "Projects a burst of multicolored light that may blind or stun
+    Desc: "Projects a burst of multicoloured light that may blind or stun
       creatures it strikes briefly, dependant on their CR in contrast
       to the spell's caster level. The spell is selective -- the caster
       and her allies are immune, but neutral creatures are not.";
@@ -8141,7 +8141,7 @@ Wizard Spell "Vampirism" : EA_GENERIC
     The caster gains +9 strength, +6 dexterity, +3 intelligence and wisdom,
     and +6 charisma. The caster also gains four hit dice, a +5 bonus to
     hit, a +6 bonus to defense, and casts spells as if two levels higher. 
-    The caster gains a +10 natural armor bonus. The caster gains a
+    The caster gains a +10 natural armour bonus. The caster gains a
     vampire's draining bite, fearsome gaze, gaseous form, regeneration (5
     hit points per round), 120 foot infravision, and racial skill bonuses
     to Bluff, Hide, Listen, Move Silently, Search and Spot (+8 to each) as
@@ -8499,7 +8499,7 @@ Wizard / Scroll Spell "Chain Lightning" : EA_BLAST
 /* This spell isn't as unfair or arbitrary as it looks at
    first; there's lots of possible defenses for a prepared
    player:
-   * Fortification Armor
+   * Fortification Armour
    * Spell Immunity
    * Spellblade (disintegrate)
    * Stoneskin
@@ -8537,11 +8537,11 @@ Wizard / Scroll Spell "Disintegrate" : EA_BLAST
       negate it. Huge or larger creatures lose 10 cubic feet
       of mass on a failed save, suffering 20d6 points of untyped
       damage and possibly losing limbs or being otherwise maimed.
-      Creatures wearing armor with the Fortification quality are
+      Creatures wearing armour with the Fortification quality are
       resistant to this spell -- a creature with Light Fortification
       takes 20d6 (and possible maiming) on a failed save, Medium 
       Fortification reduces this to half, and a creature wearing
-      Heavy Fortification armor is immune to disintegration.
+      Heavy Fortification armour is immune to disintegration.
       This spell is not a death effect, however.\n
       __Disintegrate cancels, and is cancelled by, <9>stoneskin<1>;
       this occurs before the saving throw.\n
@@ -8615,7 +8615,7 @@ Wizard / Scroll Spell "Disintegrate" : EA_BLAST
       else
         isKill = true;
         
-      /* Add here a case that high divine favor can save a player
+      /* Add here a case that high divine favour can save a player
          from disintigration when we do gods. */
         
       if (isKill)
@@ -8696,8 +8696,8 @@ Wizard / Scroll Spell "Tevlar's Transformation" : EA_GRANT
       combat juggernaut. She adds her Wisdom modifier as a magic
       bonus to her Strength and Constitution, her Intelligence
       modifier as a magic bonus to Dexterity, and her Charisma
-      bonus becomes a natural bonus to armor, overlapping any
-      natural armor she might already possess. She also gains
+      bonus becomes a natural bonus to armour, overlapping any
+      natural armour she might already possess. She also gains
       1d10 temporary hit points per caster level.\n
       __These great benefits come at a price. While this spell
       is active, the mage cannot cast spells, read scrolls,
@@ -9234,7 +9234,7 @@ and EA_INFLICT
       question are automatically friendly to you, and can be 
       influenced just as kobolds do vermin. In addition, the 
       specific aura chosen grants unique benefits as follows:
-      \n__<9>Earth:<1> You gain ten levels of natural armor,
+      \n__<9>Earth:<1> You gain ten levels of natural armour,
       the ability to phase through earth just like a xorn and
       gain a +6 natural bonus to Strength.
       \n__<9>Air:<1> You can fly, and are immune to any attacks

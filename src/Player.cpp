@@ -903,7 +903,7 @@ CastSpell:
         MyTerm->LOption("Trip",A_TRIP,"You attempt to knock an opponent prone."
             " You must first make a successful attack roll against his DC, and"
             " then you make a Strength check opposed by his Strength or Dexterity,"
-            " whichever favors him more. Success knocks the target prone. Failure"
+            " whichever favours him more. Success knocks the target prone. Failure"
             " allows the target to make an immediate, free attempt to trip you in"
             " return. Some weapons grant a bonus to trip attempts, such as the"
             " quarterstaff. If you do not have the Improved Trip feat, you provoke"
@@ -1427,9 +1427,9 @@ void Player::UseItemMenu(const char *which, const char *haveno, int16 itype)
       
 
   for(n=0;n!=SL_LAST;n++)
-    if (n == SL_ARMOR || n == SL_READY)
+    if (n == SL_ARMOUR || n == SL_READY)
       if (it = InSlot(n))
-        if (it->isType(T_ARMOR) || it->isType(T_SHIELD))
+        if (it->isType(T_ARMOUR) || it->isType(T_SHIELD))
         {
           for (i=0;i!=8;i++)
             if (((QItem*)it)->Qualities[i])
@@ -2036,8 +2036,8 @@ EvReturn Player::Rest(EventInfo &e)
     if (HasStati(MOUNTED))
       IPrint("You dismount to rest.");
     
-    if (InSlot(SL_ARMOR) && !InSlot(SL_ARMOR)->isCursed())
-      IPrint("You take off your armor to rest.");
+    if (InSlot(SL_ARMOUR) && !InSlot(SL_ARMOUR)->isCursed())
+      IPrint("You take off your armour to rest.");
 
     theGame->SetAutoSaveFlag();
 
@@ -2262,9 +2262,9 @@ EvReturn Player::Rest(EventInfo &e)
                 else
                   t->cFP += 1;
                 }
-              if (t->InSlot(SL_ARMOR) && t->InSlot(SL_ARMOR)->isCursed())
+              if (t->InSlot(SL_ARMOUR) && t->InSlot(SL_ARMOUR)->isCursed())
                 {
-                  t->IPrint("Resting in your cursed armor prevents decent sleep.");
+                  t->IPrint("Resting in your cursed armour prevents decent sleep.");
                   t->cFP = min(t->cFP,-1);
                 }
 
@@ -2321,9 +2321,9 @@ EvReturn Player::Rest(EventInfo &e)
         RemoveStati(DEFENSIVE);
         if (HasStati(MOUNTED))
           ThrowVal(EV_DISMOUNT,DSM_SILENT,this);
-        if (InSlot(SL_ARMOR) && !InSlot(SL_ARMOR)->isCursed())
+        if (InSlot(SL_ARMOUR) && !InSlot(SL_ARMOUR)->isCursed())
           {
-            Item *ar = InSlot(SL_ARMOR);
+            Item *ar = InSlot(SL_ARMOUR);
             ar->Remove(false);
             ar->PlaceAt(m,x,y);
           }
@@ -2392,8 +2392,8 @@ EvReturn Player::Rest(EventInfo &e)
     if (!(e.EParam & REST_NOMSG))
       IPrint("You awaken feeling well rested and recovered.");
     
-    if (InSlot(SL_ARMOR) && !InSlot(SL_ARMOR)->isCursed())
-      IPrint("You put your armor back on.");
+    if (InSlot(SL_ARMOUR) && !InSlot(SL_ARMOUR)->isCursed())
+      IPrint("You put your armour back on.");
     if (HasStati(MOUNTED))
       IPrint("You get back on your mount.");
     
@@ -2578,7 +2578,7 @@ RestartTerra:
                               repetition. */
                               for (it=cr->FirstInv();it;it=cr->NextInv())
                                   if (it->isMagic() && it->ItemLevel() > min(Depth / 2, Depth - 4)) {
-                                      if (it->isType(T_WEAPON) || it->isType(T_ARMOR) ||
+                                      if (it->isType(T_WEAPON) || it->isType(T_ARMOUR) ||
                                           it->isType(T_SHIELD) || it->isType(T_MISSILE) ||
                                           it->isType(T_CONTAIN))
                                       { it->eID = 0; it->SetInherantPlus(0);

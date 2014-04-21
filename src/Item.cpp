@@ -2,7 +2,7 @@
      Contains all the member functions for the Item class that
    do not thematically fit elsewhere (GenItem in Encounter.Cpp),
    as well as the member functions for derived classes Weapon,
-   Armor, Food, Corpse, etc.
+   Armour, Food, Corpse, etc.
 
      Item::Item(rID _iID,int8 _Type)
      Item::Item(Item *i)
@@ -35,9 +35,9 @@
      EvReturn Food::Event(EventInfo &e)
      EvReturn Weapon::Event(EventInfo &e)
      EvReturn Creature::LoadCrossbow(EventInfo &e)
-     EvReturn Armor::Event(EventInfo &e)
-     int16 Armor::ArmVal(int16 typ)
-     uint32 Creature::ArmorType()
+     EvReturn Armour::Event(EventInfo &e)
+     int16 Armour::ArmVal(int16 typ)
+     uint32 Creature::ArmourType()
      Dice Weapon::SDmg()
      Dice Weapon::LDmg()
      bool Item::HasSpell(uint16 sp)
@@ -208,7 +208,7 @@ void Item::ReApply()
         xe.eID = eID;
         ReThrow(EV_EFFECT,xe);
       }
-    if (isType(T_ARMOR)) {
+    if (isType(T_ARMOUR)) {
       String str;
       for (int16 i=0;i!=8;i++)
         if (GetQuality(i))
@@ -265,11 +265,11 @@ Item* Item::Create(rID iID)
         case T_CHEST:
           it = new Container(iID);
          break;
-        case T_ARMOR:
+        case T_ARMOUR:
         case T_BOOTS:
         case T_GAUNTLETS:
         case T_SHIELD:
-          it = new Armor(iID,ti->IType);
+          it = new Armour(iID,ti->IType);
          break;
         case T_AMULET:
         case T_BOOK:
@@ -320,19 +320,19 @@ void Game::SetFlavors()
       if (DungeonItems[i].Flavored)
         {
           c = 0;
-          /* List all the flavors for the item type in Candidates */
+          /* List all the flavours for the item type in Candidates */
           for (m=0;theGame->Modules[m];m++)
             for (j=0;j!=theGame->Modules[m]->szFla;j++)
               if ((theGame->Modules[m]->QFla+j)->IType == DungeonItems[i].Source) {
                 Candidates[c++] = theGame->Modules[m]->FlavorID(j);
                 if (c >= 2000)
-                  Fatal("Too many flavors!");
+                  Fatal("Too many flavours!");
                 }
           if (!c)
             continue;
 
           /* Scroll through every effect in the game that has the
-             given source and assign it a flavor */
+             given source and assign it a flavour */
           for (m=0;theGame->Modules[m];m++)
             for (j=0;j!=theGame->Modules[m]->szEff;j++) 
               if ((theGame->Modules[m]->QEff+j)->
@@ -341,7 +341,7 @@ void Game::SetFlavors()
                   /* Determine the Effect ID */
                   eID = theGame->Modules[m]->EffectID(j);
                   
-                  /* Pick a random unused flavor */
+                  /* Pick a random unused flavour */
                   k = _k = random(c);
                   while (!Candidates[k]) {
                     k = (++k) % c;
@@ -349,7 +349,7 @@ void Game::SetFlavors()
                       break; 
                     }
                   if (!Candidates[k])
-                    Error(Format("Insufficient flavors of type %s!",
+                    Error(Format("Insufficient flavours of type %s!",
                       Lookup(AI_CONSTNAMES, DungeonItems[i].Source)));
                   fID = Candidates[k];
                   Candidates[k] = 0;
@@ -399,11 +399,11 @@ Item* Item::TakeOne()
             i = new Coin(this); 
            break;
 
-          case T_ARMOR:
+          case T_ARMOUR:
           case T_BOOTS:
           case T_GAUNTLETS:
           case T_SHIELD:
-            i = new Armor(this);
+            i = new Armour(this);
            break;
           case T_CLOTHES:
           case T_HELMET:
@@ -498,7 +498,7 @@ bool Item::operator==(Item &i)
           easyStack = true;
         case T_WEAPON:
         case T_BOW:
-        case T_ARMOR:
+        case T_ARMOUR:
           for (int16 c=0;c!=8;c++)
             if (GetQuality(c) != i.GetQuality(c))
               return false;
@@ -741,7 +741,7 @@ EvReturn Item::Event(EventInfo &e)
             ReThrow(EV_EFFECT,e);
           
           
-          if (isType(T_ARMOR)) {
+          if (isType(T_ARMOUR)) {
             int16 q, i;
             for (i=0;i!=8;i++)
               if (q = GetQuality(i))
@@ -991,8 +991,8 @@ bool Item::allowedSlot(int16 slot, Creature *me)
           return Type == T_GIRDLE;
         case SL_EYES:
           return Type == T_EYES;
-        case SL_ARMOR:
-          return Type == T_ARMOR;
+        case SL_ARMOUR:
+          return Type == T_ARMOUR;
         case SL_CLOTHES:
           return Type == T_CLOTHES;
         case SL_BOOTS:
@@ -1053,8 +1053,8 @@ bool Item::activeSlot(int16 slot)
           return Type == T_EYES;
         case SL_CLOTHES:
           return Type == T_CLOTHES;
-        case SL_ARMOR:
-          return Type == T_ARMOR;
+        case SL_ARMOUR:
+          return Type == T_ARMOUR;
         case SL_BOOTS:
           return Type == T_BOOTS;
         case SL_CLOAK:
@@ -1316,7 +1316,7 @@ EvReturn Item::Damage(EventInfo &e)
 
   if (owner)
     if ((e.DType != AD_SLASH && e.DType != AD_BLUNT &&
-         e.DType != AD_PIERCE) || (owner->InSlot(SL_ARMOR) &&
+         e.DType != AD_PIERCE) || (owner->InSlot(SL_ARMOUR) &&
          (owner->InSlot(SL_AMULET) == this ||
           owner->InSlot(SL_BRACERS) == this ||
           owner->InSlot(SL_BELT) == this)))
@@ -1905,7 +1905,7 @@ EvReturn Creature::LoadCrossbow(EventInfo &e)
     return DONE;
   }
 
-EvReturn Armor::Event(EventInfo &e)
+EvReturn Armour::Event(EventInfo &e)
 	{
     int16 i; String str; bool id;
     switch (e.Event)
@@ -2018,25 +2018,25 @@ int16 Item::ArmVal(int16 typ, bool knownOnly) { return 0; }
 int16 Item::CovVal(Creature *c, bool knownOnly) { return 0; }
 int16 Item::DefVal(Creature *c, bool knownOnly) { return 0; }
 
-int16 Armor::ArmVal(int16 typ, bool knownOnly)
+int16 Armour::ArmVal(int16 typ, bool knownOnly)
 { 
   TItem * ti = TITEM(iID);
   if (!ti) return 0; 
   int val = 0; 
-  if (isType(T_ARMOR)) val = ti->u.a.Arm[typ];
+  if (isType(T_ARMOUR)) val = ti->u.a.Arm[typ];
   if (knownOnly || Known & KN_PLUS)
     val += GetPlus();
   // ww: adamant from the SRD 
   if (HasQuality(IQ_ADAMANT)) {
-    if (GetGroup() & WG_HARMOR) val += 3; 
-    else if (GetGroup() & WG_MARMOR || isType(T_SHIELD)) val += 2; 
-    else if (GetGroup() & WG_LARMOR) val += 1; 
+    if (GetGroup() & WG_HARMOUR) val += 3; 
+    else if (GetGroup() & WG_MARMOUR || isType(T_SHIELD)) val += 2; 
+    else if (GetGroup() & WG_LARMOUR) val += 1; 
   } 
   if (HasQuality(IQ_ORCISH) || HasQuality(IQ_DWARVEN)) val += 1;
   return max(0,val);
 }
 
-int16 Armor::CovVal(Creature *c, bool knownOnly) 
+int16 Armour::CovVal(Creature *c, bool knownOnly) 
 { 
   if (isType(T_SHIELD)) {
     int sSize = Size();
@@ -2059,7 +2059,7 @@ int16 Armor::CovVal(Creature *c, bool knownOnly)
   }
 }
 
-int16 Armor::DefVal(Creature *c, bool knownOnly) 
+int16 Armour::DefVal(Creature *c, bool knownOnly) 
 {
   if (isType(T_SHIELD)) {
     int sSize = Size();
@@ -2082,9 +2082,9 @@ int16 Armor::DefVal(Creature *c, bool knownOnly)
 
 // ww: since things like adamant affect this and multiple places (e.g.,
 // describe and calcvalues) need this, let's factor it out here
-int16 Armor::PenaltyVal(Creature * c, bool for_skills)
+int16 Armour::PenaltyVal(Creature * c, bool for_skills)
 { 
-  // note that penalties are stored negative, so 'cord armor' has '-2'
+  // note that penalties are stored negative, so 'cord armour' has '-2'
   TItem * ti = TITEM(iID);
   if (!ti) return 0; 
   int val = 0; 
@@ -2099,7 +2099,7 @@ int16 Armor::PenaltyVal(Creature * c, bool for_skills)
     if (sSize > cSize) val *= 2; 
   } else val = ti->u.a.Penalty; 
   if (for_skills) val += 2; 
-  // ww: magical plusses specifically don't make the armor more limber
+  // ww: magical plusses specifically don't make the armour more limber
   if (HasQuality(AQ_GRACEFUL)) 
     val /= 2;
   if (HasQuality(IQ_ELVEN))
@@ -2110,11 +2110,11 @@ int16 Armor::PenaltyVal(Creature * c, bool for_skills)
     // ww: from the SRD, penalty reduced by 2
     val += 2;
   if (HasQuality(IQ_MITHRIL)) 
-    // ww: mithral from the SRD, armor check penalties reduced by 3
+    // ww: mithral from the SRD, armour check penalties reduced by 3
     val += 3; 
   if (HasQuality(AQ_AGILITY)) 
     val = 0;
-  if (for_skills && c && c->HasFeat(FT_ARMOR_OPTIMIZATION))
+  if (for_skills && c && c->HasFeat(FT_ARMOUR_OPTIMIZATION))
     val = (val-2)/3; 
   return min(0,val);
 }
@@ -2128,11 +2128,11 @@ int32 QItem::GetGroup(void)
   int val = ti->Group;
   if (HasQuality(IQ_MITHRIL)) {
     // www: srd: mithril shifts heavy->med and med->light
-    if (val & WG_MARMOR) {
-      val |= WG_LARMOR; val &= ~WG_MARMOR;
+    if (val & WG_MARMOUR) {
+      val |= WG_LARMOUR; val &= ~WG_MARMOUR;
     } 
-    if (val & WG_HARMOR) {
-      val |= WG_MARMOR; val &= ~WG_HARMOR;
+    if (val & WG_HARMOUR) {
+      val |= WG_MARMOUR; val &= ~WG_HARMOUR;
     } 
   } 
   return val;
@@ -2147,18 +2147,18 @@ int32 Item::GetGroup(void)
 
 // ww: this should really be a separate field associated with the TItem,
 // but we'll just use the Penalty for now
-int16 Armor::MaxDexBonus(Creature * c)
+int16 Armour::MaxDexBonus(Creature * c)
 {
   int pen = PenaltyVal(c,false);
   return max(0, 9 + pen);
 }
 
-uint32 Creature::ArmorType()
+uint32 Creature::ArmourType()
   {
     uint32 at = 0;
     for(uint8 i=0;i!=SL_LAST;i++)
       if (InSlot(i))
-        if (InSlot(i)->Type == T_ARMOR)
+        if (InSlot(i)->Type == T_ARMOUR)
           if (InSlot(i)->GetGroup() > at)
             at = InSlot(i)->GetGroup();
     return at;
@@ -2261,7 +2261,7 @@ int16 Weapon::ItemLevel(bool bounded)
     return base;
   }
 
-int16 Armor::ItemLevel(bool bounded)
+int16 Armour::ItemLevel(bool bounded)
   {
     int16 i,j,QPlus,base, last; 
     int8 PlusLevels[] =
@@ -2272,7 +2272,7 @@ int16 Armor::ItemLevel(bool bounded)
        qualities into account. */
     if (eID)
       return base;
-    if (Type != T_ARMOR && Type != T_SHIELD)
+    if (Type != T_ARMOUR && Type != T_SHIELD)
       return base; 
     QPlus = Plus;
     for(i=0;i!=8;i++)
@@ -2302,7 +2302,7 @@ int16 QItem::ItemLevel(bool bounded)
       { 0, 0, 1, 2, 3, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 
         13, 14, 15, 16, 17, 18, 19, 20 };
     base = Item::ItemLevel(bounded);
-    if (Type != T_ARMOR && Type != T_SHIELD)
+    if (Type != T_ARMOUR && Type != T_SHIELD)
       return base; 
     QPlus = Plus;
     for(i=0;i!=8;i++)
@@ -2321,7 +2321,7 @@ int16 QItem::ItemLevel(bool bounded)
 bool Weapon::isMagic() {
   return Item::isMagic() || ItemLevel() > Item::ItemLevel();
 }
-bool Armor::isMagic() {
+bool Armour::isMagic() {
   return Item::isMagic() || ItemLevel() > Item::ItemLevel();
 }
 // ww: can you use your Strength bonus with this weapon? 
@@ -2556,8 +2556,8 @@ bool QItem::QualityOK(uint32 q,uint8 lev)
     case IQ_ADAMANT:
       // ww: by magic fiat, you can make almost anything out of silver --
       // "mitrhil longbow", "silver spear", "adamant sling bullet" --
-      // they all make sense. However, "silver hide armor" and
-      // "adamant leather armor", "mitrhil void" don't work. 
+      // they all make sense. However, "silver hide armour" and
+      // "adamant leather armour", "mitrhil void" don't work. 
       
       /* fjm: However, we want to rule out "silver robes", "adamant
          copper wand", "mithril embroidered cloak", etc. */
@@ -2568,7 +2568,7 @@ bool QItem::QualityOK(uint32 q,uint8 lev)
           isType(T_POTION) || !stricmp(NAME(iID),"hat"))
         return false;
       
-      if (isWooden() && TITEM(iID)->Type==T_ARMOR)
+      if (isWooden() && TITEM(iID)->Type==T_ARMOUR)
         return false; 
       {
         switch (Material()) {
@@ -2594,7 +2594,7 @@ bool QItem::QualityOK(uint32 q,uint8 lev)
     case IQ_ELVEN:
     case IQ_DWARVEN:
     case IQ_ORCISH:
-      if (!(isType(T_WEAPON) || isType(T_ARMOR) || isType(T_BOW) ||
+      if (!(isType(T_WEAPON) || isType(T_ARMOUR) || isType(T_BOW) ||
             isType(T_SHIELD) || isType(T_MISSILE)))
         return false;
       if (HasIFlag(WT_RACIAL))
@@ -2617,7 +2617,7 @@ bool QItem::QualityOK(uint32 q,uint8 lev)
 }
 
 
-bool Armor::QualityOK(uint32 q,uint8 lev)
+bool Armour::QualityOK(uint32 q,uint8 lev)
   {
     if (Qualities[7])
       return false;
@@ -2685,7 +2685,7 @@ bool Armor::QualityOK(uint32 q,uint8 lev)
         case AQ_AGILITY:
           if (isType(T_SHIELD))
             return false;
-          if (TITEM(iID)->Group != WG_LARMOR)
+          if (TITEM(iID)->Group != WG_LARMOUR)
             return false;
          break;
 

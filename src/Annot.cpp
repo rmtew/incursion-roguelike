@@ -696,7 +696,7 @@ void Resource::GrantGear(Creature *c, rID xID, bool doRanged)
                 eID = theGame->GetEffectID(PUR_EQUIP,a->u.eq.eID%256,a->u.eq.eID/256,sc);
                 if (!eID)
                   eID = theGame->GetEffectID(PUR_EQUIP,0,5,sc);
-                if ((!eID) && (iID && (TITEM(iID)->IType == T_ARMOR ||
+                if ((!eID) && (iID && (TITEM(iID)->IType == T_ARMOUR ||
                              TITEM(iID)->IType == T_WEAPON ||
                              TITEM(iID)->IType == T_SHIELD ||
                              TITEM(iID)->IType == T_MISSILE ||
@@ -857,7 +857,7 @@ void Character::GainItem(Item *it, bool starting)
 //    case T_GEM:    prefslot = SL_RSHOULDER; break;
       case T_MISSILE:prefslot = SL_BELT3; break;
       case T_TOOL:   prefslot = it->ItemLevel() ? SL_BELT4 : SL_BELT5; break;
-      case T_ARMOR:  prefslot = SL_ARMOR; break;
+      case T_ARMOUR:  prefslot = SL_ARMOUR; break;
       case T_BRACERS:prefslot = SL_BRACERS; break;
       case T_CONTAIN:/*if (its a quiver)
                        prefslot = SL_LSHOULDER;*/

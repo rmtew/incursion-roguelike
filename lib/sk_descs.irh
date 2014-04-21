@@ -201,7 +201,7 @@ Text "help::bluff"
       not easily be able to percieve her alignment. Such a character
       suffers alignment-based penalties or hostility only if the subject
       creature's Sense Motive skill exceeds her Bluff skill. If it does
-      not, creatures percieve her as whatever alignment favors her most
+      not, creatures percieve her as whatever alignment favours her most
       -- devils will percieve her as Lawful Evil, for example, and thus
       be non-hostile to her and eager to deal.\n
       __<15>* <11>Trick Magic (Passive):<3> A rogue's special ability
@@ -336,7 +336,7 @@ Text "help::climb"
     use the Climb skill to climb up on top of any building or barrier,
     including the city walls (which is counted as criminal if the
     city guard sees you). Climbing buildings may also allow you to
-    enter some buildings by upper floor windows, which it rumored to
+    enter some buildings by upper floor windows, which it rumoured to
     be the only way to enter certain locations (such as the thieves'
     guild and some wizards' towers). The DC of the Climb check is 
     determined by the structure in question.\n
@@ -393,7 +393,7 @@ Text "help::concentration"
       __<7>Flight:<3> Characters who are levitating or flying suffer a -15~ 
       penalty to spellcasting.\n
       __Note that Concentration does <11>not<3> cancel penalties to spell
-      success chance from wearing armor, low Intelligence or fighting
+      success chance from wearing armour, low Intelligence or fighting
       defensively.\n
       __<15>* <11>Reduce Penalties (Passive):<3> An exceptional Concentration
       skill gives a character a heightened ability to resist pain, and a
@@ -472,32 +472,32 @@ Text "help::craft"
     __Only long blades, short blades and daggers can be tempered.
     As always, working with metallic items requires a forge.\n
     __<15>* <11>Dwarven Weaponcraft (Active):<3> The dwarven ability
-    to create magical weapons and armor is limited by the Crafts
+    to create magical weapons and armour is limited by the Crafts
     skill. A dwarf using this ability can create items roughly equal
     to what would be found at a depth equal to her Craft skill rating
     -- a dwarf with Crafts +8 could create items typically found on
     dungeon level 8. Note that the <11>best<3> items found on a given
     level of the dungeon are typically somewhat 'out of depth', being
     excepyional for the depth they are found at.\n
-    __<15>* <11>Craft Dragon-Armor (Active, <4>Unimplemented<11>):<3>
+    __<15>* <11>Craft Dragon-Armour (Active, <4>Unimplemented<11>):<3>
     If a character exceptionally skilled with Craft should be fortunate 
     enough to slay a dragon of young adult age or older, she can use
-    her skill to craft dragon scale mail armor from the beast's remains.
+    her skill to craft dragon scale mail armour from the beast's remains.
     Doing this requires that the dragon corpse be dissected in order to
     obtain dragon scales, and then a forge found at which the character
     can work. Creating dragon scale mail requires a Craft skill of at
     least +15, eight hours of work and a Craft check against a DC of 20
     plus the dragon's age category. Failing this check causes the dragon
-    scales to be wasted and the attempt to create armor fails.\n
-    __If the check is successful, the armor gains the base traits of
-    normal scale mail, but its base armor values are increased by +1
+    scales to be wasted and the attempt to create armour fails.\n
+    __If the check is successful, the armour gains the base traits of
+    normal scale mail, but its base armour values are increased by +1
     per age category of the dragon; additionally, it conveys either a
     saving throw bonus or an elemental resistance equal is magnitude to
     twice the dragon's age category -- for example, scale mail made from
     the hide of an adult red dragon would grant Fire Resistance 12.\n
     __Dragonskin is supple and almost infinitely adaptable in the hands
     of a truly skilled craftsman. For every three points the base DC is
-    beaten by, the mail's armor check penalty decreases by one, to a
+    beaten by, the mail's armour check penalty decreases by one, to a
     minimum of 0.";
   }
   
@@ -553,7 +553,7 @@ Text "help::diplomacy"
       Diplomacy score above +5 for it to impact your PCR;
       every full +5 after the first increases the maximum
       possible size of your party by 100~.\n
-      __Creatures whose Personality Architypes or
+      __Creatures whose Personality Archetypes or
       alignments conflict with your own or with other
       members of your party have an inflated effective
       CR when it comes to determining their role in the
@@ -599,7 +599,7 @@ Text "help::diplomacy"
       __The DC for a Diplomacy check to convince a
       creature to do something depends on your race,
       the creature's race, the request given, your
-      Personality Architype, the creature's alignment
+      Personality Archetype, the creature's alignment
       and so forth. The one factor that always applies, 
       however, is CR -- the target creature's CR is
       always added to the DC of an Issue Request check.
@@ -614,13 +614,13 @@ Text "help::diplomacy"
       purchase items often depends on a character's base
       Diplomacy skill rating, modified by the normal
       social modifiers. For example, Roark Ironbeard
-      will purchase powerful magical weapons and armor
+      will purchase powerful magical weapons and armour
       only from characters with an adjusted Diplomacy
       rating of +12.\n
       __<15>* <11>Enlist Aid (Talking):<3> When you ask
       a named character to join your party, a Diplomacy
       check determines if they are willing, modified by
-      personality archetypes, alignment, race, etc. You
+      Personality Archetypes, alignment, race, etc. You
       only get one check against a given character in
       this circumstance, <11>ever<3>.\n
       __Unlike most Diplomacy checks, this one cannot
@@ -815,10 +815,10 @@ Text "help::find weakness"
 Text "help::gather information"
   {
     "__Learning this skill represents attuning yourself
-    to the flow of information and rumor in a town or
+    to the flow of information and rumour in a town or
     city; it can be applied at taverns, certain guilds
     and similar locales. It has the following use:\n
-    __<15>* <11>Discover Rumors (Active):<3> A character with this skill
+    __<15>* <11>Discover Rumours (Active):<3> A character with this skill
     can go to a tavern and attempt to uncover knowledge
     about the whereabouts of a specific legendary
     magical item. With a successful Gather Information
@@ -1047,7 +1047,7 @@ Text "help::intuition"
     of hunch about it, and the Intuition check will be made immediately after
     the character rests a full night. However, there is a Character Generation
     Option that allows intuition to take place when an item is first percieved;
-    by default, this option applies only to weapons and armor.\n
+    by default, this option applies only to weapons and armour.\n
     __The Intuition check is a standard skill check with staggered results. If
     the result exceeds DC 5, the character learns whether items are magical or
     not. If the result exceeds DC 10, the character will learn which schools of
@@ -1379,9 +1379,9 @@ Text "help::mining"
       Mining skill rating in squares; this range is extended by 3 squares for
       characters with the Stonework Sense ability. These deposits appear on
       screen as rock glyphs, usually isolated islands in the middle of solid
-      stone, that are colored differently then the normal rock that composes
+      stone, that are coloured differently then the normal rock that composes
       the dungeon -- bright white for diamonds, silver or mithril, yellow for
-      gold, various bright colors for gemstones, dark grey for adamant, etc.\n
+      gold, various bright colours for gemstones, dark grey for adamant, etc.\n
       __Characters that do not have the Mining skill cannot percieve deposits,
       even if they have a significant untrained skill rating. Furthermore, only
       digging releases the mineral treasure from a deposit -- since the metals
@@ -1498,7 +1498,7 @@ Text "help::pick pockets"
     +10 bonus due to distraction.
     __A Pick Pockets attempt takes (40 - skill level) segments,
     to a minimum of 15. It is not possible to use the Pick 
-    Pockets skill to remove worn armor.\n
+    Pockets skill to remove worn armour.\n
     __<15>* <11>Apportation (Passive):<3> The mage spell <9>apportation<3>
     has an effect similar to the Pick Pockets skill, save for
     being usable at range, and it function depends upon the Pick

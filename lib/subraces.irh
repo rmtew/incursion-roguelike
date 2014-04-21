@@ -25,7 +25,7 @@ Monster "gnome, deep;temp" : MA_ADVENTURER
 Race "Gnome, Deep;race" : $"gnome;race"
   {
     Str -2, Dex +2, Con 0, Int 0, Wis +2, Cha -4, Luc 0;
-    Monster: $"gnome, deep;temp"; Favored: $"priest", $"rogue";
+    Monster: $"gnome, deep;temp"; Favoured: $"priest", $"rogue";
     Skills: 
       SK_CRAFT, SK_HANDLE_DEV, SK_MINING,
       SK_LISTEN, SK_HIDE;
@@ -44,7 +44,7 @@ Race "Gnome, Deep;race" : $"gnome;race"
       Ability[CA_INNATE_SPELL,$"confusion"] at 7th;
 
     Desc: "<15>Str:<1>-2 <15>Dex:<1>+2 <15>Con:<1>-- <15>Int:<1>-- <15>Wis:<1>+2 <15>Cha:<1>-4 <15>Luc:<1>--
-      \n<15>Favored Classes:<2> Priest, Rogue
+      \n<15>Favoured Classes:<2> Priest, Rogue
       \n<12>Experimental:<2> Deep Gnomes are not a Core Incursion race.
       \n
       \nDeep gnomes have been altered somewhat by having lived so
@@ -54,7 +54,7 @@ Race "Gnome, Deep;race" : $"gnome;race"
       abilities, and like many Underdark creatures are also highly
       resistant to magic.
       \nUnlike their surface brothers, Deep Gnomes eschew tinkering with
-      magical devices and arcane spells in favor of a more traditional
+      magical devices and arcane spells in favour of a more traditional
       approach based on stealth and faith. Deep Gnomes are typically quite
       devout but usually feel no particular allegiance to Essiah.
       \n__Deep Gnomes are a Gnomish subrace, and share all Gnomish traits,
@@ -154,7 +154,7 @@ Monster "Dwarf, Gray;temp" : MA_DWARF, MA_ADVENTURER
 	ABILITY(CA_INFRAVISION,12);
 
         Flags: M_CARNI, M_HERBI, M_HUMANOID, M_NOGEN, M_NOPOLY;
-        Feats: FT_TOUGHNESS, FT_LOADBEARER, FT_ARMOR_OPTIMIZATION; 
+        Feats: FT_TOUGHNESS, FT_LOADBEARER, FT_ARMOUR_OPTIMIZATION; 
         Immune: DF_POIS, DF_PLYS;
         Desc: "Dwarf, Gray Player Race"; 
       Stati[SAVE_BONUS,SN_MAGIC,+2];
@@ -165,14 +165,14 @@ Monster "Dwarf, Gray;temp" : MA_DWARF, MA_ADVENTURER
 Race "Dwarf, Gray;race" : $"dwarf;race"
   {
     Str 0, Dex +2, Con +2, Int -2, Wis -2, Cha -4, Luc 0;
-    Monster: $"dwarf, gray;temp"; Favored: $"warrior", $"rogue";
+    Monster: $"dwarf, gray;temp"; Favoured: $"warrior", $"rogue";
     Skills: SK_MINING, SK_CRAFT, SK_MOVE_SIL;
     Grants:
       Ability[CA_INNATE_SPELL,$"enlarge"] at 1st,
       Ability[CA_INNATE_SPELL,$"invisibility"] at 1st,
       Ability[CA_GIANT_KILLER] at 1st level,
       Ability[CA_STONEWORK_SENSE,+2] at 1st level,
-      Feat[FT_CRAFT_ARMOR] at 7th level,
+      Feat[FT_CRAFT_ARMOUR] at 7th level,
       Feat[FT_CRAFT_WEAPON] at 7th level,
       Stati[SAVE_BONUS,SN_MAGIC,+1] at every 6th level starting at 6th level,
       Stati[SAVE_BONUS,SN_KNOCKDOWN,+4] at every level;
@@ -183,11 +183,11 @@ Race "Dwarf, Gray;race" : $"dwarf;race"
           EItem->AddQuality(IQ_ADAMANT);
     };
     Desc: "<15>Str:<1>-- <15>Dex:<1>+2 <15>Con:<1>+2 <15>Int:<1>-2 <15>Wis:<1>-2 <15>Cha:<1>-4 <15>Luc:<1>--
-      \n<15>Favored Classes:<2> Warrior, Rogue 
+      \n<15>Favoured Classes:<2> Warrior, Rogue 
       \n<12>Experimental:<2> Gray Dwarves are not a Core Incursion race.
       \n
       \n__Gray dwarves are a degenerate and evil dwarven subrace, with a very
-      limited intelligence and no concept of honor or nobility. They tend to
+      limited intelligence and no concept of honour or nobility. They tend to
       dwell deep in the Underdark and possess potent innate magics. Gray dwarves
       are psychologically weak and craven, and it is said that they compose
       the portion of the dwarven race that did not have the strength of
@@ -222,10 +222,10 @@ Race "Dwarf, Gray;race" : $"dwarf;race"
       <9>invisibility<2> as innate spell-like abilities.
       \n__*_<7>Starting Equipment<2> -- Gray Dwarves start with a medium
       backpack, food rations, some poison, a battleaxe, warhammer and
-      pickaxe. All initial armor and weapons are assumed to be
+      pickaxe. All initial armour and weapons are assumed to be
       dwarven-forged (hard, heavy and protective). All metal items are assumed
-      to be forged from adamnt (very hard and protective). Gray Dwarf
-      starting armor and shields are the strongest in the game.\n";
+      to be forged from adamant (very hard and protective). Gray Dwarf
+      starting armour and shields are the strongest in the game.\n";
     MALE_NAMES: "Barendd/Brottor/Eberk/Einkil/Oskar/Rurik/Taklinn/Traubon/
       Ulfgar/Veit/Balderk/Dankil/Gorunn/Holderhek/Loderr/Lutgehr/Ungart";
     FEMALE_NAMES: "Artin/Audhild/Dagnal/Diesa/Gunnloda/Hlin/Ilde/Liftrasa/Sannl/
@@ -268,9 +268,9 @@ Monster "elf, gray;temp" : MA_ELF, MA_ADVENTURER
 Race "Elf, Gray;race" : $"elf;race"
   {
     Str -3, Dex +3, Con -3, Int +3, Wis +4, Cha +2, Luc 0;
-    Monster: $"elf, gray;temp"; Favored: $"priest", $"mage";
+    Monster: $"elf, gray;temp"; Favoured: $"priest", $"mage";
     Desc: "<15>Str:<1>-3 <15>Dex:<1>+3 <15>Con:<1>-3 <15>Int:<1>+3 <15>Wis:<1>+4 <15>Cha:<1>+2 <15>Luc:<1>--
-      \n<15>Favored Classes:<2> Mage, Priest
+      \n<15>Favoured Classes:<2> Mage, Priest
       \n<12>Experimental:<2> Gray Elves are not a Core Incursion race.
       \n\n
       __Gray elves are reclusive and frail, physically weak but possessed of
@@ -367,7 +367,7 @@ Race "Elf, Gray;race" : $"elf;race"
       __*_<7>Starting Equipment<2> -- Gray Elves start with a medium
       backpack, elven waybread, a bow, a thinblade, and
       torches. They also start with antitoxins because they are notoriously
-      vulnerable to poisons. Starting weapons and armor are assumed to be
+      vulnerable to poisons. Starting weapons and armour are assumed to be
       of Elven make and thus light, fast and less restrictive than the
       norm. Starting metal items are made of silver (out of homage to
       Maeve) when possible.\n"; 
@@ -414,7 +414,7 @@ Race "Elf, Gray;race" : $"elf;race"
       EActor->Proficiencies |= (WG_SBLADES | WG_LBLADES | WG_AXES | WG_ARCHERY |
         WG_STAVES | WG_IMPACT | WG_THROWN | WG_POLEARMS | WG_SPEARS |
         WG_LANCES | WG_DAGGERS | WG_MARTIAL | WG_FLEXIBLE | WG_FLAILS |
-        WG_LIGHT | WG_LARMOR | WG_MARMOR | WG_HARMOR); 
+        WG_LIGHT | WG_LARMOUR | WG_MARMOUR | WG_HARMOUR); 
       };
     MALE_NAMES: "Aramil/Aust/Enialis/Heian/Ivellios/Laucian/
       Quarion/Sethwin/Selasia/Faridhir/Semirathis/Agorna/Disead/
@@ -442,9 +442,9 @@ Race "Elf, Gray;race" : $"elf;race"
 Race "Elf, Wood;race" : $"elf;race"
   {
     Str +1, Dex +2, Con +1, Int 0, Wis 0, Cha +1, Luc -1;
-    Monster: $"elf;temp"; Favored: $"barbarian", $"ranger", $"druid";
+    Monster: $"elf;temp"; Favoured: $"barbarian", $"ranger", $"druid";
     Desc: "<15>Str:<1>+1 <15>Dex:<1>+2 <15>Con:<1>+1 <15>Int:<1>-- <15>Wis:<1>-- <15>Cha:<1>+1 <15>Luc:<1>-1
-      \n<15>Favored Classes:<2> Barbarian, Ranger, Druid
+      \n<15>Favoured Classes:<2> Barbarian, Ranger, Druid
       \n<12>Experimental:<2> Wood Elves are not a Core Incursion race.
       \n
       \n__Wood elves are the least civilized of the elven peoples, possessed
@@ -474,7 +474,7 @@ Race "Elf, Wood;race" : $"elf;race"
       Wood Elves can see through dense trees and obscuring terrain.
       \n__*_<7>Starting Equipment<2> -- Wood Elves start with a medium
       backpack, elven waybread, a bow, a long sword or a handaxe, and
-      torches. Starting weapons and armor are assumed to be of
+      torches. Starting weapons and armour are assumed to be of
       Elven make and thus light, fast and less restrictive than the norm.
       Starting wooden items are instead made out of deep-forest darkwood,
       and are thus twice as strong.\n"; 
@@ -521,7 +521,7 @@ Race "Elf, Wood;race" : $"elf;race"
 Race "Drow (female);race" : $"drow;race"
   {
     Str +1, Dex +2, Con 0, Int 0, Wis 0, Cha +1, Luc -2;
-    Monster: $"drow;temp"; Favored: $"rogue", $"priest";
+    Monster: $"drow;temp"; Favoured: $"rogue", $"priest";
     Skills: SK_MOVE_SIL, SK_BLUFF, SK_POISON_USE, SK_APPRAISE;
     Grants:
       /* Light Aversion from template */
@@ -583,7 +583,7 @@ Race "Halfling, Stoutheart;race" : $"halfling;race"
   {
     Str -2, Dex +2, Con 0, Int 0, Wis +2, Cha +2, Luc +2;
     Monster: $"halfling, stoutheart;temp"; 
-    Favored Class: $"paladin", $"priest";
+    Favoured Class: $"paladin", $"priest";
     Skills: 
       SK_KNOW_THEO, SK_APPRAISE, SK_RIDE, SK_INTUITION, SK_HIDE, SK_DIPLOMACY;
     Grants:      
@@ -593,7 +593,7 @@ Race "Halfling, Stoutheart;race" : $"halfling;race"
       Ability[CA_STRONG_SOUL] at every 3rd level starting at 1st,
       Ability[CA_UNEARTHLY_LUCK] at 1st level;  
     Desc: "<15>Str:<1>-2 <15>Dex:<1>+2 <15>Con:<1>-- <15>Int:<1>-- <15>Wis:<1>+2 <15>Cha:<1>+2 <15>Luc:<1>+2
-      \n<15>Favored Classes:<2> Paladin, Priest
+      \n<15>Favoured Classes:<2> Paladin, Priest
       \n<12>Experimental:<2> Stoutheart Halflings are not a Core Incursion race.
       \n\n__Stoutheart halflings are the strongest-willed of their race, with a
       great devotion to the ideals of family and community. They despise
@@ -614,7 +614,7 @@ Race "Halfling, Stoutheart;race" : $"halfling;race"
       __*_<7>Racial Attributes<2> -- Stoutheart Halflings have stronger
       will than their cousins but are somewhat less phenominally lucky.\n
       __*_<7>Throwing<2> -- Stoutheart Halflings, being more interested
-      in adventuring, do not favor thrown rocks or slings. 
+      in adventuring, do not favour thrown rocks or slings. 
       __*_<7>Warcraft<2> -- Stoutheart Halflings begin with the Combat
       Finesse feat, allowing them to use their Dexterity modifier instead
       of their Strength modifier in combat. \n
@@ -669,7 +669,7 @@ Monster "Dragonkin;temp" : MA_REPTILE, MA_HUMANOID, MA_ADVENTURER
 Race "Lizardfolk, Dragonkin;race" : $"lizardfolk;race"
   {
     Str +2, Dex +2, Con +2, Int -1, Wis 0, Cha -2, Luc -4;
-    Monster: $"Dragonkin;temp"; Favored Class: $"barbarian", $"warrior";
+    Monster: $"Dragonkin;temp"; Favoured Class: $"barbarian", $"warrior";
     Skills: 
       SK_JUMP,
       SK_WILD_LORE,
@@ -683,7 +683,7 @@ Race "Lizardfolk, Dragonkin;race" : $"lizardfolk;race"
       Ability[CA_DEVOURING] at 1st level;
     Desc: "<15>Str:<1>+2 <15>Dex:<1>+2 <15>Con:<1>+2 <15>Int:<1>-1 
       <15>Wis:<1>-- <15>Cha:<1>-2 <15>Luc:<1>-4
-      \n<15>Favored Classes:<2> Barbarian, Warrior
+      \n<15>Favoured Classes:<2> Barbarian, Warrior
       \n<12>Experimental:<2> Dragonkin Lizardfolk are not a Core Incursion race.
       \n\n__The Dragonkin are a line of lizardfolk who have interbred with
       the dragons over the centuries, gaining certain of the advantages
@@ -780,7 +780,7 @@ Monster "Orc, Black;temp" : MA_ORC, MA_ADVENTURER
 Race "Orc, Black;race" : $"orc;race"
   {
     Str 0, Dex 0, Con 0, Int 0, Wis +3, Cha -1, Luc 0; 
-    Monster: $"orc, black;temp"; Favored Class: $"mage", $"priest";
+    Monster: $"orc, black;temp"; Favoured Class: $"mage", $"priest";
     Skills: SK_SPELLCRAFT, SK_KNOW_THEO, SK_CONCENTRATION;
     Grants:
       Stati[NEUTRAL_TO,MA_UNDEAD] at 1st level,
@@ -802,7 +802,7 @@ Race "Orc, Black;race" : $"orc;race"
     } ;
     Desc: "<15>Str:<1>-- <15>Dex:<1>-- <15>Con:<1>-- <15>Int:<1>-- 
       <15>Wis:<1>+3 <15>Cha:<1>-1 <15>Luc:<1>--
-      \n<15>Favored Classes:<2> Priest, Mage
+      \n<15>Favoured Classes:<2> Priest, Mage
       \n<12>Experimental:<2> Black Orcs are not a Core Incursion race.\n
       \n__Black orcs were bred and engineered by Azakram the Black millenia
       ago in his campaign for conquest of the Kinlands during the Mage

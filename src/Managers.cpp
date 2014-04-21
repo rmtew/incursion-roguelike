@@ -452,7 +452,7 @@ const char * SlotLetters =
   "abcefghijklmnopqrtuvwyz";
 
 int16 itemGroups[] = 
-  { T_WEAPON, T_BOW, T_MISSILE, T_ARMOR, T_SHIELD,
+  { T_WEAPON, T_BOW, T_MISSILE, T_ARMOUR, T_SHIELD,
     T_POTION, T_SCROLL, T_WAND, T_TOOL, T_COIN, T_FOOD, T_ITEM, 0 };
 
 inline int16 sortOrder(Item *it)
@@ -578,8 +578,8 @@ void TextTerm::InvShowSlots(bool changed)
                   Color(YELLOW);
                   if (itemGroups[sortOrder(Contents[j])] == T_ITEM)
                     SWrite(0,y,"Other Items");
-                  else if (itemGroups[sortOrder(Contents[j])] == T_ARMOR)
-                    SWrite(0,y,"Suits of Armor");
+                  else if (itemGroups[sortOrder(Contents[j])] == T_ARMOUR)
+                    SWrite(0,y,"Suits of Armour");
                   else
                     SWrite(0,y,Lookup(ITypeNames,itemGroups[sortOrder(Contents[j])]));
                   Color(GREY);

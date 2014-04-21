@@ -804,7 +804,7 @@ EvReturn Trap::TriggerTrap(EventInfo &e, bool foundBefore)
           /* If your trap killed a hostile monster, get kill XP... */
           if (e.EActor->isDead()) {
             cr->KillXP(e.EActor);
-            cr->gainFavor(FIND("Semirath"),e.EActor->ChallengeRating()*50,false,true);
+            cr->gainFavour(FIND("Semirath"),e.EActor->ChallengeRating()*50,false,true);
             }
           /* ...but most traps don't kill, they weaken, so give a
              special trap award for using them -- but only give it
@@ -812,7 +812,7 @@ EvReturn Trap::TriggerTrap(EventInfo &e, bool foundBefore)
           if (!HasStati(XP_GAINED,-1,cr))
             {
               cr->GainXP(100 + 25*e.EActor->ChallengeRating());
-              cr->gainFavor(FIND("Semirath"),e.EActor->ChallengeRating()*50,false,true);
+              cr->gainFavour(FIND("Semirath"),e.EActor->ChallengeRating()*50,false,true);
               GainPermStati(XP_GAINED,cr,SS_MISC);
             }
         }
@@ -1067,7 +1067,7 @@ void Feature::StatiOn(Status s)
   {
     int16 col;
     if (s.Nature == MY_GOD && (Flags & F_ALTAR))
-      if (col = TGOD(s.eID)->GetConst(ALTAR_COLOR))
+      if (col = TGOD(s.eID)->GetConst(ALTAR_COLOUR))
       {
         Image &= 0xFF;
         Image |= col * 256;

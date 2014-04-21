@@ -1451,11 +1451,11 @@ void Creature::DoTurn()
                 Exercise(A_STR,1,ESTR_BURDEN,30);
              break;            
           }
-        if (InSlot(SL_ARMOR) && InSlot(SL_ARMOR)->isGroup(WG_HARMOR))
+        if (InSlot(SL_ARMOUR) && InSlot(SL_ARMOUR)->isGroup(WG_HARMOUR))
           if (oldXP < GetXP())
             {
-              Exercise(A_STR,random(2)+1,ESTR_ARMOR,50);
-              Exercise(A_CON,1,ECON_ARMOR,35);
+              Exercise(A_STR,random(2)+1,ESTR_ARMOUR,50);
+              Exercise(A_CON,1,ECON_ARMOUR,35);
               Abuse(A_DEX,1);
             }
         if (m && m->Depth > ChallengeRating())
@@ -1589,7 +1589,7 @@ void Creature::DoTurn()
          * 
          * It now takes X turns to regenerate 1% of your mana if you are at
          * 99%. It takes 2X to regenerate 1% if you are at 98%, etc.
-         * The old system dramatically favored low-mana mages. This new one
+         * The old system dramatically favoured low-mana mages. This new one
          * hurts them. To equalize, we "shift" the curve to the right by
          * padding current and total mana by a constant displacement. (See
          * examples below). 
@@ -2135,7 +2135,7 @@ bool Creature::LoseFatigue(int16 amt,bool avoid)
     
     /* Hardcoded Essiah Fatigue Clause */
     if (avoid && cFP < 0 && isCharacter() && isThreatened() && isMType(MA_GOOD))
-      thisc->gainFavor(FIND("Essiah"),25 * abs(cFP - min(0,oFP)));
+      thisc->gainFavour(FIND("Essiah"),25 * abs(cFP - min(0,oFP)));
     
     if (cFP <= 0 && oFP > 0)
       stat_change = true;
@@ -2594,8 +2594,8 @@ void Creature::AddTemplate(rID tID)
 
     if (isMonster()) {
       if (HasMFlag(M_MAGE))
-        if (InSlot(SL_ARMOR))
-          InSlot(SL_ARMOR)->IFlags &= ~IF_WORN;     
+        if (InSlot(SL_ARMOUR))
+          InSlot(SL_ARMOUR)->IFlags &= ~IF_WORN;     
       thism->Inventory();
       Timeout = 0; 
     } 
@@ -2934,14 +2934,14 @@ int16 Creature::AbilityLevel(int16 n)
 
 int16 Creature::Mod(int8 a)  { 
   int res = Attr[a] ? (Attr[a]-10)/2 : 0; 
-  if (a == A_DEX && InSlot(SL_ARMOR) && InSlot(SL_ARMOR)->Type == T_ARMOR) 
-    res = min(res, ((Armor *)InSlot(SL_ARMOR))->MaxDexBonus(this));
+  if (a == A_DEX && InSlot(SL_ARMOUR) && InSlot(SL_ARMOUR)->Type == T_ARMOUR) 
+    res = min(res, ((Armour *)InSlot(SL_ARMOUR))->MaxDexBonus(this));
   return res;
 } 
 int16 Creature::Mod2(int8 a) { 
   int res = Attr[a] ? (Attr[a]-11)/2 : 0; 
-  if (a == A_DEX && InSlot(SL_ARMOR) && InSlot(SL_ARMOR)->Type == T_ARMOR) 
-    res = min(res, ((Armor *)InSlot(SL_ARMOR))->MaxDexBonus(this));
+  if (a == A_DEX && InSlot(SL_ARMOUR) && InSlot(SL_ARMOUR)->Type == T_ARMOUR) 
+    res = min(res, ((Armour *)InSlot(SL_ARMOUR))->MaxDexBonus(this));
   return res;
 }
 
@@ -2950,14 +2950,14 @@ int16 Creature::KMod2(int8 a)  { return Mod2(a); }
 
 int16 Character::KMod(int8 a)  { 
   int res = Attr[a] ? (KAttr[a]-10)/2 : 0; 
-  if (a == A_DEX && InSlot(SL_ARMOR)) 
-    res = min(res, ((Armor *)InSlot(SL_ARMOR))->MaxDexBonus(this));
+  if (a == A_DEX && InSlot(SL_ARMOUR)) 
+    res = min(res, ((Armour *)InSlot(SL_ARMOUR))->MaxDexBonus(this));
   return res;
 } 
 int16 Character::KMod2(int8 a) { 
   int res = Attr[a] ? (KAttr[a]-11)/2 : 0; 
-  if (a == A_DEX && InSlot(SL_ARMOR)) 
-    res = min(res, ((Armor *)InSlot(SL_ARMOR))->MaxDexBonus(this));
+  if (a == A_DEX && InSlot(SL_ARMOUR)) 
+    res = min(res, ((Armour *)InSlot(SL_ARMOUR))->MaxDexBonus(this));
   return res;
 }
 
@@ -3051,7 +3051,7 @@ int32 Creature::ChargeBonus()
        *   Charging Goblin on Warg:     (500+1500)*(300)/150,000 =      +4
        *   Charging Ogre:                     4000*(240)/150,000 =      +6
        *   Charging Man on Warhorse:   (1500+4000)*(350)/150,000 =     +12
-       *   Good Man Rider, Armor, Warhorse:   6500*(375)/150,000 =     +16
+       *   Good Man Rider, Armour, Warhorse:   6500*(375)/150,000 =     +16
        *   Charging Man on Huge Dragon:(1500+10000)*(400)/150000 =     +30
        *
        * To me, this seems more realistic: it should be very difficult to

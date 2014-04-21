@@ -278,7 +278,7 @@ const char* __XPrint(Player *POV, const char *msg,va_list args)
                  "the player will stop an extended run-action.\n\n" },
               { OPC_DISPLAY, "<15>OUTPUT OPTIONS<5>\n"
                  "__The Output options describe how the game map is rendered on the screen, "
-                 "how glyphs representing creatures will be colored to convey information "
+                 "how glyphs representing creatures will be coloured to convey information "
                  "to the player, which dice rolls will be displayed where and how status "
                  "information and messages will be shown onscreen.\n\n" }, 
               { OPC_TACTICAL, "<15>TACTICS AND COMBAT OPTIONS<5>\n"
@@ -1221,13 +1221,13 @@ String & Item::Name(int16 Flags)
       if (KnownQuality(i) || (HasQuality(i) && Flags & NA_IDENT)) {
         if (LookupOnly(GenericPreQualNames,i)) {
           xe.nPrequal += Lookup(GenericPreQualNames,i); xe.nPrequal += " "; 
-        } else if (Type == T_ARMOR || Type == T_SHIELD) {
+        } else if (Type == T_ARMOUR || Type == T_SHIELD) {
           if (LookupOnly(APostQualNames,i)) 
             ofWords[ofCount++] = Lookup(APostQualNames,i);
           else { 
             xe.nPrequal += Lookup(APreQualNames,i); xe.nPrequal += " "; 
           }
-        } else { // not Armor
+        } else { // not Armour
           if (LookupOnly(PostQualNames,i)) {
             if (i == WQ_SLAYING && GetBane() != -2)
               ofWords[ofCount++] = SC(Lookup(MTypeNames,GetBane())) 
@@ -1247,7 +1247,7 @@ String & Item::Name(int16 Flags)
     flav = "rune-covered";
 
   if (flav.GetLength())
-    xe.nFlavor += flav + SC(" ");
+    xe.nFlavour += flav + SC(" ");
 
 
 
@@ -1279,7 +1279,7 @@ String & Item::Name(int16 Flags)
   
 
   if (((Known & KN_PLUS || Flags & NA_IDENT) || HasStati(BOOST_PLUS)) && GetPlus() /*&&
-      (Type == T_WEAPON || Type == T_ARMOR || Type == T_TOME || 
+      (Type == T_WEAPON || Type == T_ARMOUR || Type == T_TOME || 
        Type == T_SHIELD || Type == T_BOW || Type == T_MISSILE ||
        (TEFF(eID) && TEFF(eID)->HasFlag(EF_NEEDS_PLUS)))*/)
   {
@@ -1389,7 +1389,7 @@ String & Item::Name(int16 Flags)
     String t;
     t = xe.nAdjective + xe.nCursed + xe.nPrequal;
     if ((xe.EParam & NA_FLAVOR) || !(isKnown(KN_MAGIC) || (xe.EParam & NA_IDENT)))
-      t += xe.nFlavor;
+      t += xe.nFlavour;
     t += xe.nBase;
     if (strchr("aeiou",tolower(Trim(t)[0])) &&
          (!TITEM(iID)->HasFlag(IT_PLURAL)))
@@ -1400,7 +1400,7 @@ String & Item::Name(int16 Flags)
          (!eID || !TEFF(eID)->HasFlag(EF_NAMEONLY)
            || strstr(NAME(eID),"Gloves")))
       switch (TITEM(iID)->IType) {
-        case T_ARMOR:
+        case T_ARMOUR:
           xe.nArticle += "suit of ";
           break;  
         case T_BRACERS: 
@@ -1429,7 +1429,7 @@ String & Item::Name(int16 Flags)
       s += xe.nCursed; 
       s += xe.nPrequal;
       if ((xe.EParam & NA_FLAVOR) || !(isKnown(KN_MAGIC) || (xe.EParam & NA_IDENT)))
-        s += xe.nFlavor;
+        s += xe.nFlavour;
       if (Quantity > 1 && !(xe.EParam & NA_SINGLE) && !HasIFlag(IT_ROPE))
         s += Pluralize(xe.nBase,iID);
       else

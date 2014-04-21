@@ -123,7 +123,7 @@ struct TAttack
 
 struct EffectValues
   {
-    /* These are the same, regardless of architype */
+    /* These are the same, regardless of archetype */
     int8  eval;       /* effect value   (basic archetype) */
     int8  dval;       /* distance value (range of effect) */
     int8  aval;       /* area value  (area of effect) */
@@ -131,8 +131,8 @@ struct EffectValues
     int8  qval;       /* query value (prompt flags) */
     int8  sval;       /* save value (saving throw) */
     int8  lval;       /* level value (i.e., max HD, radius, etc.) */
-    int8  cval;       /* color of blast effect */
-    /* These vary meaning based on the effect architype */
+    int8  cval;       /* colour of blast effect */
+    /* These vary meaning based on the effect archetype */
     rID   rval;       /* resource value (or extra flags) */
     uint8 xval;       /* misc. value (stati #, DType, etc.) */
     int16 yval;       /* second misc. value (Stati Val, etc.) */
@@ -334,7 +334,7 @@ class TMonster: public Resource
       TMonster() : Resource(T_TMONSTER)  {}
 
       
-			Glyph Image;               //The Glyph & Color
+			Glyph Image;               //The Glyph & Colour
 			uint32 Terrains;
 			int8 CR, Depth;
 			int32 MType[3];         //Monster's Level, Type
@@ -536,7 +536,7 @@ class TRace: public Resource
     public:
       TRace() : Resource(T_TRACE) { }
     rID mID; rID BaseRace;
-    rID FavoredClass[3];
+    rID FavouredClass[3];
 		int8 AttrAdj[8];
 		int8 Skills[12];
     hText MNames, FNames, SNames;

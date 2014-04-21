@@ -72,44 +72,44 @@ Monster "Universal Gear" : 0
       if (EActor->HasFeat(FT_TWO_WEAPON_STYLE))
         $"stiletto",
      
-      /* Fighter-types want the best armor they can use, UNLESS
+      /* Fighter-types want the best armour they can use, UNLESS
         they are light fighters, in which case they want light
-        armor by preference. */
-      if (!(EActor->Proficiencies & WG_LARMOR))
+        armour by preference. */
+      if (!(EActor->Proficiencies & WG_LARMOUR))
         $"gold piece" else
       if (EActor->LevelAs($"druid"))
-        50% $"bark armor" else
+        50% $"bark armour" else
       if (EActor->LevelAs($"druid"))
-        $"cord armor" else
+        $"cord armour" else
       if (EActor->isMType(MA_ELF) && EActor->LevelAs($"paladin"))
         $"chainmail" with [IQ_ELVEN, IQ_FEATHERLIGHT] else
       if (LIGHT_FIGHTER && EActor->LevelAs($"paladin"))
-        $"leather armor" +3 else
+        $"leather armour" +3 else
       if (LIGHT_FIGHTER)
-        50% $"leather armor" else
+        50% $"leather armour" else
       if (LIGHT_FIGHTER)
         $"studded leather" else
       if (EActor->LevelAs($"barbarian") && !(EActor->isMType(MA_DWARF) 
             || EActor->isMType(MA_ELF) || EActor->isMType(MA_DROW)))
-        $"hide armor" else
+        $"hide armour" else
       if (EActor->LevelAs($"paladin"))
-        $"field plate armor" else
-      if (EActor->Proficiencies & WG_HARMOR)
+        $"field plate armour" else
+      if (EActor->Proficiencies & WG_HARMOUR)
         25% $"plate mail" else
-      if (EActor->Proficiencies & WG_HARMOR)
+      if (EActor->Proficiencies & WG_HARMOUR)
         33% $"splint mail" else
-      if (EActor->Proficiencies & WG_HARMOR)
+      if (EActor->Proficiencies & WG_HARMOUR)
         50% $"banded mail" else
-      if (EActor->Proficiencies & WG_HARMOR)
-        $"lamellar armor" else
-      if (EActor->Proficiencies & WG_MARMOR)
+      if (EActor->Proficiencies & WG_HARMOUR)
+        $"lamellar armour" else
+      if (EActor->Proficiencies & WG_MARMOUR)
         50% $"coat of plates" else
-      if (EActor->Proficiencies & WG_MARMOR)
+      if (EActor->Proficiencies & WG_MARMOUR)
         $"breastplate" else
-      if (EActor->Proficiencies & WG_LARMOR)
+      if (EActor->Proficiencies & WG_LARMOUR)
         50% $"studded leather" else
-      if (EActor->Proficiencies & WG_LARMOR)  
-        $"leather armor";
+      if (EActor->Proficiencies & WG_LARMOUR)  
+        $"leather armour";
     On Event EV_BIRTH {
       hObj hSymbol;
       if (EActor->GodID == NULL_ID)
@@ -162,7 +162,7 @@ Race "Human;race"
       
       \n\n<10>HUMAN RACIAL TRAITS<2>
       \n__*_<7>Racial Weapons<2> -- Humans are diverse and have no special
-      or favored racial weapons.
+      or favoured racial weapons.
       \n__*_<7>Inherant Potential<2> -- While elves are on average more
       graceful than humans, dwarves hardier and orcs stronger, there
       exist legendary heros from within the human race that exceed the
@@ -176,7 +176,7 @@ Race "Human;race"
       They gain bonus feats at 1st, 5th, 10th, 15th and 20th level -- these
       being chosen from the full list of feats in the game. Humans also gain
       an additional 2 skill points at every level they advance. Finally,
-      humans consider every class to be a favored class, and can thus
+      humans consider every class to be a favoured class, and can thus
       multiclass freely without fear of an experience penalty.
       \n__*_<7>Starting Equipment<2> -- Humans start with food rations, a
       medium backpack and torches.";
@@ -266,7 +266,7 @@ Race "Kobold;race"
   {
     Str -4, Dex +4, Con 0, Int +2, Wis 0, Cha -2, Luc 0; 
     Monster: $"kobold;temp"; 
-    Favored: $"rogue", $"mage"; 
+    Favoured: $"rogue", $"mage"; 
     Skills: SK_CLIMB, SK_FIND_WEAKNESS, SK_HIDE, SK_MINING, SK_POISON_USE, SK_HANDLE_DEV,
             SK_FIND_WEAKNESS;     
     Grants:
@@ -278,7 +278,7 @@ Race "Kobold;race"
       Feat[FT_SWARM] at 1st level,
       Feat[FT_WEAPON_FINESSE] at 1st level;
     Desc: "<15>Str:<1>-4 <15>Dex:<1>+4 <15>Con:<1>-- <15>Int:<1>+2 <15>Wis:<1>-- <15>Cha:<1>-2 <15>Luc:<1>--
-      \n<15>Favored Classes:<2> Rogue, Mage\n
+      \n<15>Favoured Classes:<2> Rogue, Mage\n
       \n__In ancient gnomish legends, a 'kobold' is a demon of the mines;
       a creature who poisons wells, snuffs out lantern flames, kidnaps
       children and pricks captured maidens with a thousand pins. In this
@@ -326,7 +326,7 @@ Race "Kobold;race"
       never fit into.\n
       __*_<7>Racial Weapons<2> -- Most kobolds gain some experience
       with weapons that highlight trickery and cunning. The whip is
-      favored for its ability to disarm opponents that rely on weapons
+      favoured for its ability to disarm opponents that rely on weapons
       and the bolas are used to incapacitate foes so that they can
       be dispatched later. Kobolds proficient with the Flexible or
       Simple weapon groups are automatically proficient with the whip,
@@ -458,7 +458,7 @@ Monster "gnome;temp" : MA_GNOME, MA_ADVENTURER
 Race "Gnome;race"
   {
     Str -1, Dex 0, Con 0, Int +2, Wis -2, Cha +1, Luc 0;
-    Monster: $"gnome;temp"; Favored: $"mage", $"bard";
+    Monster: $"gnome;temp"; Favoured: $"mage", $"bard";
     Skills: SK_ALCHEMY, SK_CRAFT, SK_HANDLE_DEV, SK_MINING, SK_USE_MAGIC;
     Grants:
       Stati[SAVE_BONUS,SN_ILLUS,+2] at 1st level,
@@ -474,7 +474,7 @@ Race "Gnome;race"
       Ability[CA_INNATE_SPELL,$"Mirror Image"] at 3rd,
       Ability[CA_INNATE_SPELL,$"Displacement"] at 7th;
     Desc: "<15>Str:<1>-1 <15>Dex:<1>-- <15>Con:<1>-- <15>Int:<1>+2 <15>Wis:<1>-2 <15>Cha:<1>+1 <15>Luc:<1>--
-      \n<15>Favored Classes:<2> Mage, Bard
+      \n<15>Favoured Classes:<2> Mage, Bard
       \n
       \n__Jovial, optimistic and deeply passionate, gnomes have adapted extremely
       well to the modern world of Therya. Like halflings, they blend seamlessly
@@ -489,7 +489,7 @@ Race "Gnome;race"
       cousins, the dwarves, are stoic and reserved. Their easygoing candor makes
       them a welcome addition to most social circles, and their penchant for
       pranks and practical jokes is generally benevolent in cast. Gnomes do not
-      have the strong ties of clan and honor that bind dwarves (though they are
+      have the strong ties of clan and honour that bind dwarves (though they are
       fiercely loyal to the much-revered king of their race), and treat friendship
       as the highest bond one can possess.\n
       __Gnomes have an inherant love of process, of the hows and whys of any kind
@@ -556,7 +556,7 @@ Race "Gnome;race"
       determination of Elves or Dwarves, but their crafty minds are well
       suited to lateral thinking, especially on a mystical level. Three
       times per day, they may discern a way to slip a spell past a foe's
-      defenses, finding a metaphysical chink in their armor and increasing
+      defenses, finding a metaphysical chink in their armour and increasing
       the save DC of the spell in question by +8.\n    
       __*_<7>Burrow Kinship<2> -- Gnomes have a certain kinship with burrowing
       mammals: rabbits, foxes, badgers and so forth. The can communicate with
@@ -575,11 +575,11 @@ Race "Gnome;race"
       centuries, and their perpetual cheer is dampened by the fact that just
       about every gnome has lost someone to a kobold ambush or prank at one
       time or another. Gnomes have studied kobolds in great detail, and
-      recieve the favored enemy bonuses against them in melee.\n
+      recieve the favoured enemy bonuses against them in melee.\n
       __*_<7>Freedom of Movement<2> -- Gnomes are inherantly immune to all
       magical effects that paralyze them, entangle them, petrify them, or
       otherwise slow or limit their movement. This is said to be a special
-      sign of favor from the goddess Essiah.\n
+      sign of favour from the goddess Essiah.\n
       __*_<7>Scent<2> -- Like orcs, gnomes have a highly developed sense of
       smell, and can track enemies by smell and locate them when they are
       within 20 feet (2 squares).
@@ -697,7 +697,7 @@ Monster "dwarf;temp" : MA_DWARF, MA_ADVENTURER
 Race "Dwarf;race"
   {
     Str 0, Dex 0, Con +2, Int 0, Wis 0, Cha -2, Luc 0;
-    Monster: $"dwarf;temp"; Favored: $"warrior", $"priest";
+    Monster: $"dwarf;temp"; Favoured: $"warrior", $"priest";
     Skills: SK_MINING, SK_CRAFT;
     Grants:
       Ability[CA_DWARVEN_FOCUS] at every level,
@@ -713,7 +713,7 @@ Race "Dwarf;race"
         EItem->AddQuality(IQ_DWARVEN);
     } ;
     Desc: "<15>Str:<1>-- <15>Dex:<1>-- <15>Con:<1>+2 <15>Int:<1>-- <15>Wis:<1>-- <15>Cha:<1>-2 <15>Luc:<1>--
-      \n<15>Favored Classes:<2> Warrior, Priest
+      \n<15>Favoured Classes:<2> Warrior, Priest
       \n
       \n__Stubborn, driven, stoic and devoted -- these are the traits
       the dwarven people are most known for. A warrior race, dwarves
@@ -721,7 +721,7 @@ Race "Dwarf;race"
       and other monsterous threats that plague civilization. Ironically,
       this very devotion has ultimately put them at odds with the very
       world they strove to protect -- dwarves are a highly conservative
-      people, with a great regard for the status quo and the honor of
+      people, with a great regard for the status quo and the honour of
       the clans, and as such they do not tend to interact well with the
       modern, metropolitan human cities that dot Therya's surface. The
       dwarves respond to a world they no longer understand with 
@@ -731,7 +731,7 @@ Race "Dwarf;race"
       the throngs of major cities, and their cultural development has
       all but stagnated as a result.\n
       __Dwarven society is highly traditional (some would say hidebound),
-      patriarchal (misogynistic), honor-conscious (warlike) and ritualistic
+      patriarchal (misogynistic), honour-conscious (warlike) and ritualistic
       (obsessive-compulsive). The sheer unbending willfulness that gave
       them the strength to fight on when other races had fled in less
       civilized times may now turn them into a barrier that humanity --
@@ -806,19 +806,19 @@ Race "Dwarf;race"
       penalty, and the focus is of course finished.\n
       __*_<7>Infravision<2> -- Dwarves are naturally able to see clearly in
       perfect darkness, having infravision to a range of 60 feet (6 squares).\n
-      __*_<7>Weaponcraft<2> -- While magical arms and armor are usually
+      __*_<7>Weaponcraft<2> -- While magical arms and armour are usually
       crafted by spellcasters arcane or divine, dwarves without any other
       magical skill have been known to craft such items, simply as a result
       of the deep spiritual tie that exists between a dwarven weaponsmith
       and his craft.  In game terms, dwarves recieve the Craft Magical Arms
-      and Armor feat for free at 7th level, and may use their base attack
+      and Armour feat for free at 7th level, and may use their base attack
       bonus in lieu of a caster level when forging such items.\n
-      __*_<7>Armor Use<2> -- For dwarves, wearing encumbering armor is a
-      way of life. All dwarves have the Armor Proficiency (Heavy) feat for
+      __*_<7>Armour Use<2> -- For dwarves, wearing encumbering armour is a
+      way of life. All dwarves have the Armour Proficiency (Heavy) feat for
       free. Dwarves who gain one or more levels as a paladin, warrior or 
-      priest gain the Armor Optimization feat for free and suffer
+      priest gain the Armour Optimization feat for free and suffer
       only one-third of the normal Skill Check and Movement Rate penalties
-      when wearing armor. They are not particularly agile, but dwarves are
+      when wearing armour. They are not particularly agile, but dwarves are
       hardly helpless when covered in metal.\n
       __*_<7>Racial Weapons<2> -- Dwarves who are proficient with the Axes
       weapon group are automatically considered to be proficient with the
@@ -838,7 +838,7 @@ Race "Dwarf;race"
       \n__*_<7>Starting Equipment<2> -- Dwarves start with a medium
       backpack, food rations and a pickaxe. Dwarven warriors and barbarians
       start with a dwarven waraxe, while other dwarves proficient with
-      impact weapons start with a warhammer. All starting weapons and armor 
+      impact weapons start with a warhammer. All starting weapons and armour 
       are assumed to be dwarven-forged: heavy, hard and protective.  
       \n\n
       <10>DWARF SUBRACES <5>(Unimplemented)<2>\n
@@ -848,7 +848,7 @@ Race "Dwarf;race"
       dwarves belong to one specific subrace.)\n
       __Forge dwarves have a special affinity for fire and metalcraft, and
       tend to dwell in iron citadels close to active magma flows. They are
-      the most rigid and driven of all the dwarven subraces, laboring under
+      the most rigid and driven of all the dwarven subraces, labouring under
       a secret shame their subrace supposedly bears from the primordial
       history of the dwarves. (The Azer are an offshoot of forge dwarves,
       taking the nature of their race to an even greater extreme.)\n
@@ -858,12 +858,12 @@ Race "Dwarf;race"
       they carve from solid stone. They have a strong aptitude for leadership
       and inspiration.\n
       __Jungle dwarves are almost unseen in the Kinlands, hailing from far-off
-      Angla Maua. They are primitive and tribal, though every bit as honorable
+      Angla Maua. They are primitive and tribal, though every bit as honourable
       and ritualistic as any other dwarves, and are renouned for their skill
       in wilderness survival and woodcraft, having a strong prediliction toward
       the ranger class.\n
       __Gray dwarves are a degenerate and evil dwarven subrace, with a very
-      limited intelligence and no concept of honor or nobility. They tend to
+      limited intelligence and no concept of honour or nobility. They tend to
       dwell deep in the Underdark and possess potent innate magics. Gray dwarves
       are psychologically weak and craven, and it is said that they compose
       the portion of the dwarven race that did not have the strength of
@@ -887,10 +887,10 @@ Race "Dwarf;race"
         $"warhammer",
       $"pickaxe";
     On Event EV_ADVANCE {
-      EActor->Proficiencies |= WG_HARMOR;
+      EActor->Proficiencies |= WG_HARMOUR;
       if ((EActor->LevelAs($"paladin") || EActor->LevelAs($"priest") ||
-          EActor->LevelAs($"warrior")) && !EActor->HasFeat(FT_ARMOR_OPTIMIZATION))
-        EActor->GainFeat(FT_ARMOR_OPTIMIZATION);
+          EActor->LevelAs($"warrior")) && !EActor->HasFeat(FT_ARMOUR_OPTIMIZATION))
+        EActor->GainFeat(FT_ARMOUR_OPTIMIZATION);
     
       if (EActor->Proficiencies & WG_AXES)
         if (EActor->WepSkill($"dwarven waraxe") == WS_NOT_PROF)
@@ -964,9 +964,9 @@ Monster "elf;temp" : MA_ELF, MA_ADVENTURER
 Race "Elf;race"
   {
     Str -1, Dex +2, Con -1, Int +1, Wis +2, Cha +2, Luc 0;
-    Monster: $"elf;temp"; Favored: $"mage", $"ranger";
+    Monster: $"elf;temp"; Favoured: $"mage", $"ranger";
     Desc: "<15>Str:<1>-1 <15>Dex:<1>+2 <15>Con:<1>-1 <15>Int:<1>+1 <15>Wis:<1>+2 <15>Cha:<1>+2 <15>Luc:<1>--
-      \n<15>Favored Classes:<2> Mage, Ranger
+      \n<15>Favoured Classes:<2> Mage, Ranger
       \n
       \n__The most secretive of the common races, elves are only very
       rarely seen in human settlements, and their lack of common presence
@@ -1051,7 +1051,7 @@ Race "Elf;race"
       tiring, costing the elf a full 5 Fatigue Points to use.\n
       __*_<7>Wrought Iron<2> -- Wrought Iron is an anathema to elves and
       their fae nature. Any wrought iron weapon that strikes an elf deals
-      and additional 2d6 points of damage (which bypasses armor). Orcs
+      and additional 2d6 points of damage (which bypasses armour). Orcs
       are known to craft and carry wrought iron weapons. \n
       __*_<7>Reverie<2> -- Elves do not sleep as humans do; part of their
       pact with Maeve bars them forever from the realm of dreams. Instead,
@@ -1097,7 +1097,7 @@ Race "Elf;race"
       backpack, elven waybread, a bow, a long sword or rapier, and torches. 
       They begin play with a magical ring -- elves excel at the crafting of
       rings -- as well as equal chance of either a cloak or boots of 
-      elvenkind. Starting armor and weapons are assumed to be of Elven make 
+      elvenkind. Starting armour and weapons are assumed to be of Elven make 
       and are thus ligher, faster and less restrictive than normal.\n
       __Elves also start out worshipping Maeve unless their choice of class
       allows them to pick a god. If it does, then choosing a god other than
@@ -1237,7 +1237,7 @@ Monster "drow;temp" : MA_DROW, MA_ADVENTURER
 Race "Drow;race"
   {
     Str -1, Dex +2, Con 0, Int +2, Wis 0, Cha +2, Luc -2;
-    Monster: $"drow;temp"; Favored: $"rogue", $"mage";
+    Monster: $"drow;temp"; Favoured: $"rogue", $"mage";
     Skills: SK_MOVE_SIL, SK_BLUFF, SK_POISON_USE, SK_APPRAISE;
     Grants:
       /* Light Aversion from template */
@@ -1283,10 +1283,10 @@ Race "Drow;race"
         return NOTHING;
         }*/;
     Desc: "<15>Str:<1>-1 <15>Dex:<1>+2 <15>Con:<1>-- <15>Int:<1>+2 <15>Wis:<1>-- <15>Cha:<1>+2 <15>Luc:<1>-2
-      \n<15>Favored Classes:<2> Rogue, Mage
+      \n<15>Favoured Classes:<2> Rogue, Mage
       \n
       \n__No race, save perhaps the kobolds, is more widely despised then
-      the drow. Trecherous, decietful, chaotic, power-hungry and supremely
+      the drow. Treacherous, deceitful, chaotic, power-hungry and supremely
       skillful, the drow are an offshoot of elves who sought freedom from
       Maeve through pacts with tanari and other profane powers. Living deep
       beneath the earth in the depths of the Underdark, the only mention of
@@ -1326,7 +1326,7 @@ Race "Drow;race"
       constant agility training and the allure of true evil.\n
       __As an extention of their natural agility, all drow are ambidexterous
       and recieve the Ambidexterity feat at 1st level. Because of this, drow
-      warriors traditionally favor fighting with two weapons.\n
+      warriors traditionally favour fighting with two weapons.\n
       __*_<7>+2 Intelligence<2> -- Drow think on their feet -- one has to,
       in order to remain alive in their society. This intellectual might is
       not equalled in spiritual wisdom, however; for all that their people
@@ -1374,7 +1374,7 @@ Race "Drow;race"
       __Drow females are stronger then men, having normal human Strength,
       and also possess several inherant magical talents that males do not --
       reading thoughts, scrying and dispelling magic. They also add priest
-      to their list of favored classes. (Later, the default Favored Classes
+      to their list of favoured classes. (Later, the default Favoured Classes
       of drow will be Rogue and Wizard, plus Priest for the women.)";
     MALE_NAMES: "Adinirahc/Amalica/Belgos/Antatlab/Calimar/Dipree/Duagloth/
       Elkantar/Filraen/Gelroos/Gomph/Houndaer/Ilmryn/Ilphrin/Istolil/
@@ -1433,7 +1433,7 @@ Monster "halfling;temp" : MA_HALFLING, MA_ADVENTURER
 Race "Halfling;race"
   {
     Str -2, Dex +2, Con 0, Int 0, Wis 0, Cha +2, Luc +4;
-    Monster: $"halfling;temp"; Favored Class: $"rogue", $"bard";
+    Monster: $"halfling;temp"; Favoured Class: $"rogue", $"bard";
     Skills: SK_HIDE, SK_TUMBLE, SK_CLIMB, SK_DIPLOMACY, 
       SK_APPRAISE, SK_INTUITION;
     Grants:      
@@ -1447,7 +1447,7 @@ Race "Halfling;race"
       EActor->Proficiencies |= WG_THROWN;
       };
     Desc: "<15>Str:<1>-2 <15>Dex:<1>+2 <15>Con:<1>-- <15>Int:<1>-- <15>Wis:<1>-- <15>Cha:<1>+2 <15>Luc:<1>+4
-      \n<15>Favored Classes:<2> Rogue, Bard\n 
+      \n<15>Favoured Classes:<2> Rogue, Bard\n 
       \n__Halflings are cute, clever, endearing, friendly, sociable and in 
       control of approximately a third of the Kinlands' wealth. Opportunistic 
       and ambitious, the hin have carved out a niche for themselves as the 
@@ -1561,7 +1561,7 @@ Race "Halfling;race"
       most hin, possessing a string streak of wanderlust.\n
       __The Tallfellows are the largest of the halfling subraces, and also the
       strongest, nearly matching gnomes in size and build. They are a rural
-      people, disliking the bustle and diversity of cities and favoring a
+      people, disliking the bustle and diversity of cities and favouring a
       simpler life on their farms. They have natural green thumbs, and an
       affinity for plants of all kinds.\n
       __Treedancer halflings are adept scouts and climbers hailing from Angla
@@ -1652,20 +1652,20 @@ Monster "lizardman;temp" : MA_REPTILE, MA_LIZARDFOLK, MA_ADVENTURER
 Race "Lizardfolk;race"
   {
     Str +2, Dex 0, Con +2, Int -2, Wis 0, Cha 0, Luc -2;
-    Monster: $"lizardman;temp"; Favored Class: $"druid", $"warrior";
+    Monster: $"lizardman;temp"; Favoured Class: $"druid", $"warrior";
     Skills: SK_BALANCE, SK_CONCENT, SK_SWIM, 
       SK_WILD_LORE, SK_INTUITION, SK_KNOW_MAGIC, SK_JUMP ; 
       // ww: most lizards are amazing jumpers in real life
     Grants:
       /* Natural Weapon from template */
-      /* Natural Armor from template */
+      /* Natural Armour from template */
       /* Cold Blooded (immune to Infra.) from MA_REPTILE */
       Ability[CA_ANCESTRAL_MEMORY] at 1st level,
       Stati[DETECTING,MA_REPTILE,18] at 1st level,
       Ability[CA_SPECIES_AFFINITY,MA_REPTILE,+1] at every level starting at 1st;
     Desc: "<15>Str:<1>+2 <15>Dex:<1>-- <15>Con:<1>+2 <15>Int:<1>-2 
       <15>Wis:<1>-- <15>Cha:<1>-- <15>Luc:<1>-2
-      \n<15>Favored Classes:<2> Druid, Warrior\n\n 
+      \n<15>Favoured Classes:<2> Druid, Warrior\n\n 
       
       __The lizardfolk are a dispassionate, patient and focused race with
       a mindset highly distant from the more humanlike races. Concerned
@@ -1674,7 +1674,7 @@ Race "Lizardfolk;race"
       lizardfolk can seem ruthless or callous to mammalian races. Appearing
       as large, humanoid lizards with opposable thumbs and other biological
       adaptations to sentience, lizardfolk are strong and hardy warriors,
-      and as such their favor is often sought by kings, warlords and other
+      and as such their favour is often sought by kings, warlords and other
       human rulers. The lizardfolk dislike this -- if they seem ruthless to
       humans, then accordingly the selfishness and wasteful conflict of human 
       politics seems incredibly degenerate and unnatural to the lizardfolk.\n
@@ -1718,7 +1718,7 @@ Race "Lizardfolk;race"
       __*_<7>Natural Weapons<2> -- Lizardfolk have the benefit of natural
       weapons -- their natural attack sequence is to claw for 1d4+1 points of
       slashing damage, claw for 1d4+1 points of slashing damage and bite for
-      1d4 points of piercing damage. They also have a natural armor rating of 
+      1d4 points of piercing damage. They also have a natural armour rating of 
       5 against slashing, piercing and blunt damage.\n
       __*_<7>Reptilian Empathy<2> -- Lizardfolk are not entirely individual
       creatures, having a strong, shared instinctive racial empathy with each
@@ -1861,7 +1861,7 @@ Monster "orc;temp" : MA_ORC, MA_ADVENTURER
 Race "Orc;race"
   {
     Str +4, Dex 0, Con 0, Int -2, Wis +2, Cha -2, Luc 0; /* shaman */
-    Monster: $"orc;temp"; Favored Class: $"barbarian", $"priest";
+    Monster: $"orc;temp"; Favoured Class: $"barbarian", $"priest";
     Skills: SK_ATHLETICS, SK_INTIMIDATE;
     Grants:
       /* Light Aversion from template */
@@ -1887,7 +1887,7 @@ Race "Orc;race"
       };
     Desc: "<15>Str:<1>+4 <15>Dex:<1>-- <15>Con:<1>-- <15>Int:<1>-2 
       <15>Wis:<1>+2 <15>Cha:<1>-2 <15>Luc:<1>--
-      \n<15>Favored Classes:<2> Barbarian, Priest\n
+      \n<15>Favoured Classes:<2> Barbarian, Priest\n
       
       \n__Brutal, crass and stupid, orcs are commonly seen as a plague
       upon the land by the more civilized races. Huge, muscular humanoids

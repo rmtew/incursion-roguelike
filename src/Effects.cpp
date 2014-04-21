@@ -1,6 +1,6 @@
 /* EFFECTS.CPP -- Copyright (c) 1999-2003 Julian Mensch
      Code implementing the various specific prebuilt magical
-   effect architypes of the Incursion engine. The code for
+   effect archetypes of the Incursion engine. The code for
    executing spells and items in general is contained in 
    Magic.Cpp.
 
@@ -189,7 +189,7 @@ SkipWeather:
     if (e.EVictim->SavingThrow(save_type,e.saveDC)) {
       e.Resist = true;
       if (e.EVictim->AbilityLevel(CA_EVASION) && save_type == REF &&
-          e.EVictim->ArmorType() <= WG_LARMOR)
+          e.EVictim->ArmourType() <= WG_LARMOUR)
       {
         VPrint(e,"You dodge the blast.",
             "The <EVictim> dodges the blast.");
@@ -201,7 +201,7 @@ SkipWeather:
       }
     }
     else if (e.EVictim->AbilityLevel(CA_EVASION) > 9 && save_type == REF &&
-        e.EVictim->ArmorType() <= WG_LARMOR)
+        e.EVictim->ArmourType() <= WG_LARMOUR)
     {
       VPrint(e,"You partially dodge the blast.",
           "An <EVictim> partially dodges the blast.");
@@ -377,10 +377,10 @@ SkipMessage:
     {
       Item *it = NULL; int16 c;
       /* 1/3 chance of damaging the weapon, 1/3 chance of damaging
-         the armor, otherwise damage a randomly chosen EXPOSED item. */
+         the armour, otherwise damage a randomly chosen EXPOSED item. */
       if ((it = e.EVictim->InSlot(SL_WEAPON)) && !random(3))
         ;
-      else if ((it = e.EVictim->InSlot(SL_ARMOR)) && !random(2))
+      else if ((it = e.EVictim->InSlot(SL_ARMOUR)) && !random(2))
         ;
       else {
         // ww: not polymorphed equipment, etc.  
@@ -820,7 +820,7 @@ bool TMonster::HasSlot(int16 sl)
         -M_NOBODY,  /* BELT */
         -M_BLIND,   /* EYES */
         M_HUMANOID, /* CLOTHES */
-        M_HUMANOID, /* ARMOR */
+        M_HUMANOID, /* ARMOUR */
         -M_NOLIMBS, /* BOOTS */
         -M_NOBODY,  /* CLOAK */
         -M_NOHANDS, /* LRING */
@@ -965,8 +965,8 @@ void Creature::Shapeshift(rID _mID, bool merge, Item* PolySource)
   if (n->Size > c->Size)
   {
     static int8 SizedSlots[] =
-    { SL_ARMOR, SL_GAUNTLETS, SL_BRACERS, SL_BOOTS, 0 };
-    /* If In Armor, either
+    { SL_ARMOUR, SL_GAUNTLETS, SL_BRACERS, SL_BOOTS, 0 };
+    /* If In Armour, either
      * It Breaks
      * It Sizes Automatically
      * It "phases away" (artifacts)

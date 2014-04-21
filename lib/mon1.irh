@@ -874,7 +874,7 @@ Monster "blue dragon" : MA_DRAGON
       M_HOARD, M_FLYER, M_AIR, M_ELEC, M_AIR, M_DESERT, M_PLAINS;
     Desc: "Perhaps the most truly humanistic of chromatic dragonkind 
       (as opposed to the purples, who are the most human-seeming), the blue
-      dragons have a curious kind of warrior's honor. Valuing the strength
+      dragons have a curious kind of warrior's honour. Valuing the strength
       of the group above their own well-being, blue dragons are the only
       chromatics known for ever making selfless sacrifices, and there is no
       confirmable instance of one of these dragons ever breaking their
@@ -944,7 +944,7 @@ Monster "shadow ur-dragon" : MA_DRAGON, MA_VERMIN
     With large, wide scales like interlocking chitin, forward-facing
     horns like mandibles, and a sinuous movement style the seem to combine
     the most fearsome aspects of insects and snakes. Ur-Dragons are
-    typically associated with an element or essence rather than a color or
+    typically associated with an element or essence rather than a colour or
     ideal. However, these associations are largely conjecture by Kinland
     scholars: their real motives remain unknown.
 
@@ -1011,7 +1011,7 @@ Monster "brilliant ur-dragon" : MA_DRAGON, MA_VERMIN
     With large, wide scales like interlocking chitin, forward-facing
     horns like mandibles, and a sinuous movement style the seem to combine
     the most fearsome aspects of insects and snakes. Ur-Dragons are
-    typically associated with an element or essence rather than a color or
+    typically associated with an element or essence rather than a colour or
     ideal. However, these associations are largely conjecture by Kinland
     scholars: their real motives remain unknown.
 
@@ -1080,7 +1080,7 @@ Monster "shattering ur-dragon" : MA_DRAGON, MA_VERMIN
     With large, wide scales like interlocking chitin, forward-facing
     horns like mandibles, and a sinuous movement style the seem to combine
     the most fearsome aspects of insects and snakes. Ur-Dragons are
-    typically associated with an element or essence rather than a color or
+    typically associated with an element or essence rather than a colour or
     ideal. However, these associations are largely conjecture by Kinland
     scholars: their real motives remain unknown.
 
@@ -1145,7 +1145,7 @@ Monster "plant ur-dragon" : MA_DRAGON, MA_SYLVAN, MA_VERMIN
     With large, wide scales like interlocking chitin, forward-facing
     horns like mandibles, and a sinuous movement style the seem to combine
     the most fearsome aspects of insects and snakes. Ur-Dragons are
-    typically associated with an element or essence rather than a color or
+    typically associated with an element or essence rather than a colour or
     ideal. However, these associations are largely conjecture by Kinland
     scholars: their real motives remain unknown.
 
@@ -1206,14 +1206,14 @@ Monster "water ur-dragon" : MA_DRAGON, MA_VERMIN
     With large, wide scales like interlocking chitin, forward-facing
     horns like mandibles, and a sinuous movement style the seem to combine
     the most fearsome aspects of insects and snakes. Ur-Dragons are
-    typically associated with an element or essence rather than a color or
+    typically associated with an element or essence rather than a colour or
     ideal. However, these associations are largely conjecture by Kinland
     scholars: their real motives remain unknown.
 
     Water Ur-Dragons would form the basis for a number of sailing horror
     stories ... if only they were not so thankfully rare.  Water ur-dragons
     are feared for their ability to create turbulent whirlpools out of thin
-    air, drowning heavily-armored fighters. Water ur-dragons actually
+    air, drowning heavily-armoured fighters. Water ur-dragons actually
     appear to have their bodies formed from a combination of scales and
     slime. They are the only ur-dragons that slowly regenerate over time."; 
     On Event MSG_BLASTNAME "cone of caustic water";
@@ -1289,7 +1289,7 @@ Template "very young" : TM_AGECAT for MA_DRAGON
 	  Gear: 30% random T_RING of random 1 to 2,
           30% random T_WAND of random 1 to 2,
           30% random T_WEAPON of random 1 to 2,
-          30% random T_ARMOR of random 1 to 2,
+          30% random T_ARMOUR of random 1 to 2,
           30% random T_POTION of random 1 to 2;
     Str 64% (min 7), Dex 100%, Con 81%, Int 75%, Wis 69% (min 9), Cha 75% (min 6);
     Mov: 40%; Arm: 30%; HitDice: 35%; Caster Level = 0; Hit: 25%;
@@ -1311,7 +1311,7 @@ Template "young" : TM_AGECAT for MA_DRAGON
 	  Gear: 40% random T_RING of random 2 to 3,
           40% random T_WAND of random 2 to 3,
           40% random T_WEAPON of random 2 to 3,
-          40% random T_ARMOR of random 2 to 3,
+          40% random T_ARMOUR of random 2 to 3,
           40% random T_POTION of random 2 to 3;
     Str 76% (min 7), Dex 100%, Con 81%, Int 75%, Wis 69% (min 9), Cha 75% (min 6);
     Mov: 50%; Arm: 50%; HitDice: 50%; Caster Level = 0; Hit: 40%;
@@ -1331,7 +1331,7 @@ Template "juvenile" : TM_AGECAT for MA_DRAGON
 	  Gear: 50% random T_RING of random 3 to 4,
           50% random T_WAND of random 3 to 4,
           50% random T_WEAPON of random 3 to 4,
-          50% random T_ARMOR of random 3 to 4,
+          50% random T_ARMOUR of random 3 to 4,
           50% random T_POTION of random 3 to 4;
     Str 88% (min 7), Dex 100%, Con 91%, Int 88%, Wis 79% (min 9), Cha 88% (min 6);
     Mov: 60%; Arm: 70%; HitDice: 75%; Caster Level -6; Hit: 60%;
@@ -1351,7 +1351,7 @@ Template "young adult" : TM_AGECAT for MA_DRAGON
   	Gear: 60% random T_RING of random 4 to 5,
           60% random T_WAND of random 4 to 5,
           60% random T_WEAPON of random 4 to 5,
-          60% random T_ARMOR of random 4 to 5,
+          60% random T_ARMOUR of random 4 to 5,
           60% random T_POTION of random 4 to 5;
     Str 94% (min 7), Dex 100%, Con 100%, Int 88%, Wis 79% (min 9), Cha 88% (min 6);
     Mov: 70%; Arm: 85%; HitDice: 120%; Caster Level -3; Hit: 80%;
@@ -1372,7 +1372,7 @@ Template "adult" : TM_AGECAT for MA_DRAGON
 	  Gear: 70% random T_RING of random 5 to 6,
           70% random T_WAND of random 5 to 6,
           70% random T_WEAPON of random 5 to 6,
-          70% random T_ARMOR of random 5 to 6,
+          70% random T_ARMOUR of random 5 to 6,
           70% random T_POTION of random 5 to 6;
     Str 100%, Dex 100%, Con 100%, Int 100%, Wis 100%, Cha 100%;
     Mov: 100%; Arm: 100%; HitDice: 150%; Caster Level +0; Hit: 100%;
@@ -1391,7 +1391,7 @@ Template "half-red dragon" : TM_DESCENT for MA_NLIVING
       humanoids and many other creatures. Half-dragons are the result of
       these unions -- powerful creatures who are gifted with some of the
       innate abilities of a dragon. They resemble the base creature, but
-      have regions of scales in their parent dragon's color, and most
+      have regions of scales in their parent dragon's colour, and most
       often also have vast, reptilian wings.";
     Attk: A_CLAW for 1d4 AD_SLASH,
           A_CLAW for 1d4 AD_SLASH,
@@ -1437,7 +1437,7 @@ Monster "blast drake" : MA_REPTILIAN
     Desc: "Blast drakes are small, distant relatives of dragons.  They
     resemble tiny green dragons and are sometimes kept as pets by more
     powerful creatures. In some ways, they are the draconic equivalent of
-    pets. Their behavior tends to reflect the alignment/desires of their
+    pets. Their behaviour tends to reflect the alignment/desires of their
     master. In combat, blast drakes usually begin an attack on the wing,
     using their breath weapon as they close, then flailing at a target with
     bite, claws, and tail, breathing as frequently as possible.";
@@ -1464,7 +1464,7 @@ Monster "caustic drake" : MA_REPTILIAN
     Desc: "Caustic drakes are small, distant relatives of dragons.  They
     resemble tiny black dragons and are sometimes kept as pets by more
     powerful creatures. In some ways, they are the draconic equivalent of
-    pets. Their behavior tends to reflect the alignment/desires of their
+    pets. Their behaviour tends to reflect the alignment/desires of their
     master. In combat, caustic drakes usually begin an attack on the wing,
     using their breath weapon as they close, then flailing at a target with
     bite, claws, and tail, breathing as frequently as possible.";
@@ -1491,7 +1491,7 @@ Monster "flame drake" : MA_REPTILIAN
     Desc: "Flame drakes are small, distant relatives of dragons.  They
     resemble tiny red dragons and are sometimes kept as pets by more
     powerful creatures. In some ways, they are the draconic equivalent of
-    pets. Their behavior tends to reflect the alignment/desires of their
+    pets. Their behaviour tends to reflect the alignment/desires of their
     master. In combat, flame drakes usually begin an attack on the wing,
     using their breath weapon as they close, then flailing at a target with
     bite, claws, and tail, breathing as frequently as possible.";
@@ -1517,7 +1517,7 @@ Monster "force drake" : MA_REPTILIAN
     Desc: "Force drakes are small, distant relatives of dragons.  They
     resemble tiny purple dragons and are sometimes kept as pets by more
     powerful creatures. In some ways, they are the draconic equivalent of
-    pets. Their behavior tends to reflect the alignment/desires of their
+    pets. Their behaviour tends to reflect the alignment/desires of their
     master. In combat, force drakes usually begin an attack on the wing,
     using their breath weapon as they close, then flailing at a target with
     bite, claws, and tail, breathing as frequently as possible.";
@@ -1637,7 +1637,7 @@ Monster "dragonne" : MA_MYTHIC, MA_BEAST, MA_REPTILIAN
       noble beasts are both terrifying and beautiful. They have a lion's
       face, paws and flanks, with draconic wings and a 'mane' of serpentine
       brass scales trailing off to their tail. Their entire body is a rich
-      gold color, and their eyes seem filled with majesty. Despite this,
+      gold colour, and their eyes seem filled with majesty. Despite this,
       however, they are still beasts, and are highly dangerous if they are
       surprised, hungry or defending their territory.";
   }
@@ -1655,7 +1655,7 @@ Monster "griffon" : MA_MYTHIC, MA_BEAST
     Flags: M_CARNI, M_NATURAL, M_MOUNTABLE, M_NOHANDS,  
            M_HOSTILE, M_FLYER, M_GROUP;
     Desc: "A hybrid of hawks and lions, these noble beasts have been
-      symbols of regency, honor and nobility since time immemorial.
+      symbols of regency, honour and nobility since time immemorial.
       Despite this, however, they are cunning predators with a peculiar
       taste for horseflesh. Powerful knights and warlords sometimes
       manage to tame griffons to use as mounts.";
@@ -1834,7 +1834,7 @@ Monster "pirahna bird" : MA_MYTHIC, MA_BIRD
       M_FLYER, M_HOSTILE, M_GROUP;
     Feats: FT_DODGE, FT_SWARM, SK_LISTEN, SK_SPOT; 
     Desc: "A magical hybrid of a pirahna and a parrot, pirahna birds are 
-      avian creatures with colorful plumes and bodies that resemble those
+      avian creatures with colourful plumes and bodies that resemble those
       of piranhas. They are sometimes encountered alone, but are most
       dangerous when they attack in swarms.";
   }
@@ -2172,7 +2172,7 @@ Monster "behir" : MA_BEAST, MA_REPTILIAN, MA_SNAKE
     or use its dozen legs to move with considerable speed. A behir is about
     40 feet long and weighs about 4,000 pounds. It can fold its limbs close
     to its long, narrow body and slither in snake fashion if it desires.
-    The coloration of behirs ranges from ultramarine to deep blue with
+    The colouration of behirs ranges from ultramarine to deep blue with
     bands of gray-brown. The belly is pale blue. The two large horns
     curving back over the head look dangerous but are actually used for
     preening the creature's scales, not for fighting.";
@@ -2275,7 +2275,7 @@ Monster "couatl" : MA_SNAKE, MA_OUTSIDER
       from the Upper Planes that enjoys spending time on the Prime
       Material. It's intelligence, magic, virtue and beauty make
       it a revered vistor in whatever region it inhabits. Its wings
-      have feathers in all the colors of the rainbow, and its total
+      have feathers in all the colours of the rainbow, and its total
       wingspan is about 15 feet.";
     Lists:
       * SPELL_LIST
@@ -2418,7 +2418,7 @@ Monster "deathshroud" : MA_TRAPPER, MA_BEAST
       ceiling of its subterranian enviornment and then dropping over its
       victims' heads with unerring accuracy. Its tentacles are coated
       with a contact poison that induces an artificial slumber in victim. 
-      Most creatures put to sleep by a deathshroud never awaken. Rumor has
+      Most creatures put to sleep by a deathshroud never awaken. Rumour has
       it that the drow harvest deathshrouds for use in making elfshot.
       Deathshrouds cannot be detected by Scent or Tremorsense."; 
     On Event POST(EV_STRIKE) {
@@ -2765,7 +2765,7 @@ Monster "froghemoth" : MA_BEAST, MA_REPTILIAN
       Any valuables possessed by a froghemoth's victims will be scattered 
       thoughout the swamp nearby, usually sunk deep in the mud or beneath 
       the waters of a freshwater lake.\n
-      __[ Flavor text taken from a conversion by James O'Rance. ]";
+      __[ Flavour text taken from a conversion by James O'Rance. ]";
     
   }
 
@@ -2822,8 +2822,8 @@ Monster "owlbear" : MA_BEAST
     Flags: M_NOHANDS, M_CARNI, M_NATURAL, M_HOSTILE, M_CLOSEID;
     Feats: FT_ALERTNESS, FT_NATURAL_GRAB,
         SK_LISTEN, SK_SPOT;
-    Desc: "An owlbear's coat ranges in color from brown-black to yellowish
-      brown; its beak is a dull ivory color. A full-grown male can stand as
+    Desc: "An owlbear's coat ranges in colour from brown-black to yellowish
+      brown; its beak is a dull ivory colour. A full-grown male can stand as
       tall as 8 feet and weigh up to 1,500 pounds. Adventurers who have
       survived encounters with the creature often speak of the bestial
       madness they glimpsed in its red-rimmed eyes.";
@@ -3131,7 +3131,7 @@ Monster "winged snake" : MA_SNAKE, MA_BEAST, MA_SYLVAN
            SK_CLIMB;
     Flags: M_NOHANDS, M_NOLIMBS, M_NATURAL, M_CARNI, 
            M_HERBI, M_ELEC, M_FOREST, M_NATURAL, M_GROUP;
-    Desc: "Winged snakes are colorful reptiles who may be distant
+    Desc: "Winged snakes are colourful reptiles who may be distant
       relatives of the couatl. Though their acidic bite is powerful,
       they are most feared for their ability to build up a charge
       of static electricity by beating their wings in the air, then
@@ -3360,7 +3360,7 @@ Template "of Legend" : TM_NATURE for MA_NLIVING
          innate poison (legendary venom) conferred through its bite or claws
          or the ability to cast divine magic as a priest of a level equal to
          its challenge rating. It also gains three of the following special
-         abilities: a +5 enhancement bonus to natural armor, immunity to
+         abilities: a +5 enhancement bonus to natural armour, immunity to
          weapons of +3 or lower enchantment, regeneration of 5 hit points
          per round, a constant <9>haste<7> effect, two innate immunities
          (fire, cold, acid, lightning, poison, necromantic damage, sonic
@@ -3557,7 +3557,7 @@ Monster "blazing terror" : MA_CAT, MA_BEAST
         Unlike the great cats, the blazing terror does not
       use its padded feet in combat. Instead it relies on a
       razor-sharp beak that is capable of cutting through
-      armor or bone.
+      armour or bone.
         A blazing terror cannot consume flesh that is not
       frozen and so will not generally hunt warm-blooded
       creatures for food. However, for reasons not fully
@@ -3686,7 +3686,7 @@ Monster "leopard" : MA_CAT, MA_ANIMAL
     These cats have an elongate and muscular body. Their paws are broad and
     their ears are short. In tropical regions their coats tend to be
     shorter and sleeker, whereas in colder climates their fur is longer and
-    denser. The coloration varies from the color of straw to grayish to
+    denser. The colouration varies from the colour of straw to grayish to
     even chesnut. The backs of the ears are black except for a spot either
     located centrally or near the tips. These appear to other animals as
     eyes. The throat, chest, belly, and the insides of the limbs are white.
@@ -3741,7 +3741,7 @@ a brief tail. It stands three feet in height at the
 shoulders, with a mass of well over 450 lbs. 
 However, the front quarters are heavier, the
 hindquarters lighter, and the tail is bobbed.
-The favorite prey of this cat were large, thickskinned
+The favourite prey of this cat were large, thickskinned
 animals like the mammoths that carry a lot
 of meat. In particular they preferred to prey on
 young mammoths. Once these huge creatures died
@@ -3837,7 +3837,7 @@ Monster "elven cat" : MA_CAT, MA_ANIMAL, MA_SYLVAN
             $"cat's grace", $"spook", $"phantasmal force";
     Desc: "The much-beloved housepets of ancient elves, elven cats
       resemble normal housecats but are unnaturally sleek and often
-      have fur of an odd color, such as silver. They are of limited
+      have fur of an odd colour, such as silver. They are of limited
       intelligence but great cunning and will, and while they are
       haughty creatures, they are also fierce opponents of evil
       and loyal bond-companions to any master they find worthy of
@@ -3898,7 +3898,7 @@ Monster "bat" : MA_BAT, MA_ANIMAL
       individuals. They often choose the same spot to roost, at certain
       times of the year, for many consecutive years. While hanging from
       their feet in their roosts, they will isolate themselves from their
-      neighbors by short distances. While roosting, they remain relatively
+      neighbours by short distances. While roosting, they remain relatively
       quiet, and do not move very much. They make it a point to not intrude
       on each other's space.";
 	}
@@ -3912,7 +3912,7 @@ Monster "bison" : MA_ANIMAL, MA_QUADRUPED
     Feats: SK_LISTEN;
     Flags: M_NATURAL, M_HERBI, M_NOHANDS, M_PLAINS;
     Desc: "Two distinctive features of
-    the bisons are the shoulder hump and their huge head. The color of the
+    the bisons are the shoulder hump and their huge head. The colour of the
     bison is brown, varying slightly from the front and back of the animal.
     The hair is longer in the front than in the rear of the bison. The
     distinction between hair length is more noticeable in males than
@@ -3933,10 +3933,10 @@ Monster "black bear" : MA_ANIMAL, MA_QUADRUPED
     Feats: SK_CLIMB, SK_SPOT, SK_SWIM;
     Flags: M_NATURAL, M_CARNI, M_NOHANDS, M_BURROW, M_FOREST,
            M_MOUNTABLE;
-    Desc: "Black bears are usually black in color.  They usually have a
+    Desc: "Black bears are usually black in colour.  They usually have a
     pale muzzle which contrasts with their darker fur and may sometimes
     have a white chest spot. Western populations are usually lighter in
-    color, being more often brown, cinnamon, or blonde.  Throughout their
+    colour, being more often brown, cinnamon, or blonde.  Throughout their
     ranges, black bears consume primarily grasses and forbs in spring, soft
     mast in the form of shrub and tree-borne fruits in summer, and a
     mixture of hard and soft mast in fall. However, the availability of
@@ -4305,7 +4305,7 @@ Monster "fox" : MA_ANIMAL, MA_BURROW
     Larger dens may be dug and used during the winter and during birth and
     rearing of the young. The same den is often used over a number of
     generations. Pathways throughout the home range connect the main den
-    with other resting sites, favored hunting grounds and food storage
+    with other resting sites, favoured hunting grounds and food storage
     areas. Foxes are terrestrial and either nocturnal or crepuscular.
     In the autumn following birth, the pups of the litter will disperse to
     their own territories.  Animals remain in the same home range for
@@ -4605,7 +4605,7 @@ Monster "deinonychus" : MA_REPTILE, MA_DINOSAUR
         SK_HIDE, SK_JUMP, SK_LISTEN, SK_SPOT, SK_WILDERNESS;
     Flags: M_NATURAL, M_CARNI, M_HOSTILE, M_NOHANDS;
     Desc: "A deinonychus is bright green along its back and flanks, with a
-    much lighter shade of the same color on its underside. The body has
+    much lighter shade of the same colour on its underside. The body has
     darker spots or stripes. Its tail extends straight out behind itself,
     held aloft by an intricate structure of bony supports, thus allowing
     its weight to be carried entirely by the back legs. It weighs about 600
@@ -4654,7 +4654,7 @@ Monster "cave ankylosaurus" : MA_REPTILE, MA_DINOSAUR
     Feats: FT_ENDURANCE, FT_TOUGHNESS, FT_DEFT_OPPORTUNIST,
            SK_LISTEN, SK_SPOT;
     Flags: M_NATURAL, M_CARNI, M_NOHANDS, M_MOUNTABLE;
-    Desc: "The ankylosaurus is a huge, heavily armored dinosaur
+    Desc: "The ankylosaurus is a huge, heavily armoured dinosaur
       with a vaguely turtle-shaped body, known best for the
       bone club on its tail. They are irascable and just plain
       mean beasts. This particular line of ankylosaurus has
@@ -4787,7 +4787,7 @@ Monster "senmurv" : MA_DOG, MA_BEAST, MA_AVIAN
     Spells: $"detect evil";
     Desc: "The senmurv are a race of bipedal, winged anthropomorphic
       wolves. Fierce champions of the cause of good, their rich fur
-      cascades through every color in the rainbow and their wings
+      cascades through every colour in the rainbow and their wings
       resemble those of a hawk, albiet with their distinctive rainbow
       plumage. Senmurv are reclusive sylvan creatures, dwelling in
       peaceful tribes with no hierarchy or status. Rarely, they will
@@ -4835,7 +4835,7 @@ Monster "horse" : MA_QUADRUPED, MA_ANIMAL
       extensive variability in their size and weight. The general body
       pattern is that of long limbs, barrel shaped body, and a long neck
       supporting a large head. Vision and hearing are key senses for these
-      animals, as suggested by their large eyes and ears. Coloration is
+      animals, as suggested by their large eyes and ears. Colouration is
       also hightly variable due to breeding, and individuals range from
       pure white, tan, brown or black to patches of oranges and browns on
       white. The tail is relatively short but has long hairs coming off it
@@ -4973,7 +4973,7 @@ Monster "pony" : MA_QUADRUPED, MA_ANIMAL
       extensive variability in their size and weight. The general body
       pattern is that of long limbs, barrel shaped body, and a long neck
       supporting a large head. Vision and hearing are key senses for these
-      animals, as suggested by their large eyes and ears. Coloration is
+      animals, as suggested by their large eyes and ears. Colouration is
       also hightly variable due to breeding, and individuals range from
       pure white, tan, brown or black to patches of oranges and browns on
       white. The tail is relatively short but has long hairs coming off it

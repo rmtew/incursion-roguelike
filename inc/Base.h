@@ -221,7 +221,7 @@ struct MVal
 #define oMonster(h)   ( (Monster*)   (theRegistry->GetCreature(h)) )
 #define oContain(h)   ( (Container*) (theRegistry->GetItem(h)) )
 #define oWeapon(h)    ( (Weapon*)    (theRegistry->GetItem(h)) )
-#define oArmor(h)     ( (Armor*)     (theRegistry->GetItem(h)) )
+#define oArmour(h)     ( (Armour*)     (theRegistry->GetItem(h)) )
 #define oFeature(h)   ( (Feature*)   (theRegistry->GetThing(h)) )
 #define oPortal(h)    ( (Portal*)    (theRegistry->GetThing(h)) )
 #define oDoor(h)      ( (Door*)      (theRegistry->GetThing(h)) )
@@ -477,7 +477,7 @@ class Object
                          || Type == T_TRAP || Type == T_FEATURE; }
     bool isItem()     { return Type>=T_FIRSTITEM && Type<=T_LASTITEM; }
     virtual bool isWeapon() { return false; } 
-    virtual bool isArmor() { return false; } 
+    virtual bool isArmour() { return false; } 
     bool isPlayer()   { return Type == T_PLAYER; }
     bool isMonster()  { return Type == T_MONSTER; }
     bool isCharacter(){ return Type == T_PLAYER || Type == T_NPC; }

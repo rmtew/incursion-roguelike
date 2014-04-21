@@ -296,7 +296,7 @@ typedef signed long       hObj;
 /* The Items */
 #define T_FIRSTITEM 20
 #define T_AMULET    20
-#define T_ARMOR     21
+#define T_ARMOUR     21
 #define T_BOOK      22
 #define T_BOOTS      23
 #define T_BOW       24
@@ -433,7 +433,7 @@ typedef signed long       hObj;
 #define SL_BELT      6 /*Make belts containers? */
 #define SL_EYES      7
 #define SL_CLOTHES   8
-#define SL_ARMOR     9
+#define SL_ARMOUR     9
 #define SL_BOOTS     10
 #define SL_CLOAK     11
 #define SL_LRING     12
@@ -516,7 +516,7 @@ typedef signed long       hObj;
 #define WT_SUPER_DISARM      19 /* good for disarming */
 #define WT_REACH             20 /* Reach Weapon; one square */
 #define WT_STRIKE_NEAR       21 /* Reach Weapon; two squares */
-#define WT_PENETRATING       22 /* Less Impact for real armor  */
+#define WT_PENETRATING       22 /* Less Impact for real armour  */
 #define WT_ENTANGLE          23 /* Can entangle a target  */
 #define WT_SUBDUAL           24 /* Inflicts subdual damage */
 #define WT_CHARGE            25 /* Double Damage on Change */
@@ -608,7 +608,7 @@ typedef signed long       hObj;
 #define AI_WAND       3 
 #define AI_STAFF      4 
 #define AI_ROD        5 
-#define AI_ARMOR      6 
+#define AI_ARMOUR      6 
 #define AI_GAUNTLETS  7 
 #define AI_HELM       8 
 #define AI_BOOTS      9 
@@ -739,7 +739,7 @@ typedef signed long       hObj;
 #define CF_GOOD_REF   7
 #define CF_GOOD_WILL  8
 #define CF_PALADIN    9
-#define CF_FAVORED    10 /* counts as a favored class (Prestige Classes) */
+#define CF_FAVOURED    10 /* counts as a favoured class (Prestige Classes) */
 #define CF_PRESTIGE   11
 #define CF_PSEUDO     12
 #define CF_NONGOOD    13
@@ -1381,7 +1381,7 @@ typedef signed long       hObj;
 #define PA_EMPATHIC_NURTURER           6
 #define PA_ETERNAL_ROMANTIC            7
 #define PA_GENTLEMAN_ADVENTURER        8
-#define PA_HONORBOUND_SERVANT          9
+#define PA_HONOURBOUND_SERVANT          9
 #define PA_ICONOCLASTIC_REBEL          10
 #define PA_INTROSPECTIVE_VISIONARY     11
 #define PA_MANIPULATIVE_PLOTTER        12
@@ -1435,7 +1435,7 @@ typedef signed long       hObj;
 #define ESTR_MINING  5
 #define ESTR_UNSTUCK 6
 #define ESTR_BURDEN  7   /* Encumbrance Pulse */
-#define ESTR_ARMOR   8
+#define ESTR_ARMOUR   8
 
 #define EDEX_TUMBLE    1
 #define EDEX_CRIT      2
@@ -1448,7 +1448,7 @@ typedef signed long       hObj;
 #define ECON_CRIT      2 /* surviving enemy crit */
 #define ECON_FOOD      3 /* specially healthy food */
 #define ECON_HUNGER    4 /* hunger pulse */
-#define ECON_ARMOR     5 /* heavy armor pulse */
+#define ECON_ARMOUR     5 /* heavy armour pulse */
 #define ECON_FATIGUE   6 /* spending fatigue up to 0 */
 #define ECON_ESSIAH    7
 
@@ -1730,7 +1730,7 @@ typedef signed long       hObj;
 #define A_HIT_MELEE   14   /* Melee +toHit */
 #define A_HIT_THROWN  15   /* Thrown +toHit */
 #define A_HIT_OFFHAND 16   /* Offhand +toHit */
-#define A_ARM         17   /* Bonuses to overall Armor */
+#define A_ARM         17   /* Bonuses to overall Armour */
 #define A_MR          18   /* Magic Resistance */
 #define A_XXX         19   /* Unused */
 #define A_DMG_ARCHERY 20   /* Archery +toDmg */
@@ -1752,7 +1752,7 @@ typedef signed long       hObj;
 #define A_THP         36   /* Temporary Hit Points */
 #define A_MAN         37   /* Temporary Mana Adjust */
 #define A_FAT         38   /* Maximum Fatigue Points */
-#define A_COV         39   /* Armor Coverage Level */
+#define A_COV         39   /* Armour Coverage Level */
 #define A_CDEF        40
 #define ATTR_LAST     41
 
@@ -2083,9 +2083,9 @@ typedef signed long       hObj;
 #define WG_LIGHT         0x00010000 /* Light-weight weapons */
 #define WG_FLAILS        0x00020000
 #define WG_SHIELDS       0x10000000
-#define WG_LARMOR        0x20000000
-#define WG_MARMOR        0x40000000
-#define WG_HARMOR        0x80000000
+#define WG_LARMOUR        0x20000000
+#define WG_MARMOUR        0x40000000
+#define WG_HARMOUR        0x80000000
 
 #define WQ_HOLY          1
 #define WQ_UNHOLY        2
@@ -2266,7 +2266,7 @@ typedef signed long       hObj;
 #define FT_AP_MEDIUM           (FT_AB + 12)
 #define FT_AP_HEAVY            (FT_AB + 13)
 #define FT_ARTIFICER           (FT_AB + 14)
-#define FT_ARMOR_OPTIMIZATION  (FT_AB + 15)
+#define FT_ARMOUR_OPTIMIZATION  (FT_AB + 15)
 #define FT_ARTERIAL_STRIKE     (FT_AB + 16)
 #define FT_ATHLETIC            (FT_AB + 17)
 #define FT_AUGMENT_HEALING     (FT_AB + 18)
@@ -2289,7 +2289,7 @@ typedef signed long       hObj;
 #define FT_CAPTIVATING         (FT_CD + 0)
 #define FT_CENTERED            (FT_CD + 1)
 #define FT_CHI_STRIKE          (FT_CD + 2)
-#define FT_CHINK_IN_THE_ARMOR  (FT_CD + 3)
+#define FT_CHINK_IN_THE_ARMOUR  (FT_CD + 3)
 #define FT_CHOKE_HOLD          (FT_CD + 4)
 #define FT_CIRCLE_KICK         (FT_CD + 5)
 #define FT_CLEAR_MINDED        (FT_CD + 6)
@@ -2304,7 +2304,7 @@ typedef signed long       hObj;
 #define FT_CONSECRATE_SPELL    (FT_CD + 15)
 #define FT_CONTROL_SPELL       (FT_CD + 16)
 #define FT_COORDINATED_TACTICS (FT_CD + 17)
-#define FT_CRAFT_ARMOR         (FT_CD + 18)
+#define FT_CRAFT_ARMOUR         (FT_CD + 18)
 #define FT_CRAFT_WEAPON        (FT_CD + 19)
 #define FT_DANCE_OF_TUKIMA     (FT_CD + 20)
 #define FT_DASH                (FT_CD + 21)
@@ -2323,7 +2323,7 @@ typedef signed long       hObj;
 #define FT_DIEHARD             (FT_CD + 34)
 #define FT_DIRTY_FIGHTING      (FT_CD + 35)
 #define FT_DIVINE_AEGIS        (FT_CD + 37)
-#define FT_DIVINE_ARMOR        (FT_CD + 38)
+#define FT_DIVINE_ARMOUR        (FT_CD + 38)
 #define FT_DIVINE_CLEANSING    (FT_CD + 39)
 #define FT_DIVINE_MIGHT        (FT_CD + 40)
 #define FT_DIVINE_RESISTANCE   (FT_CD + 41)
@@ -2727,7 +2727,7 @@ typedef signed long       hObj;
 #define YU_REVERSE    0x0001
 
 /* Bonus types do not match up exactly to the d20 system here. Instead,
- * several d20 types are missing due to the division between armor
+ * several d20 types are missing due to the division between armour
  * rating and defense rating (both rolled into AC in d20), while others
  * are added that are implicit in d20 (feat, skill, weapon, class). 
  * Because Luck is an Attribute, there is no "luck" bonus. */
@@ -2755,8 +2755,8 @@ typedef signed long       hObj;
 #define BONUS_INHERANT 20 /* Inherant Attr Bonuses */
 #define BONUS_GRACE   21 /* Paladin's "Divine Grace" Power */
 #define BONUS_DODGE   22 /* d20 "dodge" bonus */
-#define BONUS_NATURAL 23 /* Stat modifiers; "natural armor" */
-#define BONUS_ARMOR   24 /* Armor */
+#define BONUS_NATURAL 23 /* Stat modifiers; "natural armour" */
+#define BONUS_ARMOUR   24 /* Armour */
 #define BONUS_SKILL   25 /* Weapon Focus/Specialization/etc. */
 #define BONUS_DUAL    26 /* Two-Weapon Fighting Modifiers */
 #define BONUS_FATIGUE 27 /* Fatigue modifiers */
@@ -3155,9 +3155,9 @@ typedef signed long       hObj;
 #define EF_DLONG    25
 #define EF_DXLONG   26
 #define EF_SAFE     27  
-#define EF_LARMOR   28  
-#define EF_MARMOR   29  
-#define EF_HARMOR   30  
+#define EF_LARMOUR   28  
+#define EF_MARMOUR   29  
+#define EF_HARMOUR   30  
 #define EF_FSTUN    31  /* Failure Stuns */
 #define EF_COMMON   32  
 #define EF_MUNDANE  33  /* Random Component */
@@ -3362,13 +3362,13 @@ typedef signed long       hObj;
 #define AR_CHAIN     16 /* Chain Lightning! */
 #define AR_CONE      17 
 
-/* Color Sets for Effect Overlays */
+/* Colour Sets for Effect Overlays */
 #define COL_FIRE     16
 #define COL_COLD     17
 #define COL_MAGIC    18
 #define COL_NECRO    19
 #define COL_ELEC     20
-#define COL_RAINBOW  21 /* Color Spray, Prismatic X */
+#define COL_RAINBOW  21 /* Colour Spray, Prismatic X */
 #define COL_LIGHT    22
 #define COL_POISON   23
 #define COL_ACID     24
@@ -3511,8 +3511,8 @@ typedef signed long       hObj;
 #define ROOM_WEIGHTS          4
 #define STREAMER_WEIGHTS      5
 #define FURNISHINGS           6
-#define WALL_COLORS           7
-#define FLOOR_COLORS          8
+#define WALL_COLOURS          7
+#define FLOOR_COLOURS         8
 #define MONSTER_LIST          9
 #define ENCOUNTER_LIST        10
 #define CORRIDOR_WEIGHTS      11
@@ -3535,13 +3535,13 @@ typedef signed long       hObj;
 #define ITEM_COST             25
 
 #define SACRIFICE_LIST        26
-#define FAVOR_CHART           27
+#define FAVOUR_CHART           27
 #define GODSPEAK_LIST         28
 #define CROWNING_GIFTS        29
 #define AID_CHART             30
 #define GOD_RELATIONS         31
   #define REL_DEFAULT         (-20)
-#define FAVORED_SKILLS        32
+#define FAVOURED_SKILLS        32
 #define ALLOWED_GODS          33
 #define TEXT_LIST             34
 
@@ -3661,13 +3661,13 @@ typedef signed long       hObj;
 #define MIN_XCR_MULT          115
 #define MIN_XCR               116
 
-#define VOICE_COLOR           120
-#define ALTAR_COLOR           121
+#define VOICE_COLOUR          120
+#define ALTAR_COLOUR          121
 #define INTERVENTION_COST     122
 #define RESSURECTION_COST     123
 #define PRAYER_TIMEOUT        124
 #define MIN_RAISE_LEVEL       125
-#define MIN_CONVERT_FAVOR     126
+#define MIN_CONVERT_FAVOUR     126
 #define PRAYER_DC             127
 #define LEVEL_BLEEDOFF        128
 #define TOLERANCE_VAL         129
@@ -3678,7 +3678,7 @@ typedef signed long       hObj;
 #define LAY_MULTIPLIER        134
 #define CHOSEN_WEAPON         135
 #define CHOSEN_WEAPON_QUALITY 136
-#define CHOSEN_ARMOR_QUALITY  137
+#define CHOSEN_ARMOUR_QUALITY  137
 #define CHOSEN_SHIELD_QUALITY 138
 #define PERSONAL_ALIGN        139
 #define STICK_TYPE            140
@@ -3885,7 +3885,7 @@ typedef signed long       hObj;
 #define thism ((Monster*)this)
 #define thisi ((Item*)this)
 #define thisw ((Weapon*)this)
-#define thisa ((Armor*)this)
+#define thisa ((Armour*)this)
 
 #define INP_LINE 1
 #define INP_CHAR 2
@@ -3942,7 +3942,7 @@ typedef signed long       hObj;
 #define OPT_GENDER              107
 #define OPT_MON_MAX_HP          108
 #define OPT_ATTR_FIRST          109
-#define OPT_FAVORED_CLASS       110
+#define OPT_FAVOURED_CLASS       110
 #define OPT_ATTR_ON_LEVEL       111
 #define OPT_SUBRACES            112
 #define OPT_EASY_INTUIT         113
@@ -4115,9 +4115,9 @@ typedef signed long       hObj;
 #define GLYPH_CORPSE    '%'
 #define GLYPH_BOOK      254
 #define GLYPH_TORCH     '}'
-#define GLYPH_LARMOR    228
-#define GLYPH_MARMOR    228
-#define GLYPH_HARMOR    228
+#define GLYPH_LARMOUR    228
+#define GLYPH_MARMOUR    228
+#define GLYPH_HARMOUR    228
 #define GLYPH_SHIELD    ']'
 #define GLYPH_GAUNTLETS 229
 #define GLYPH_HELMET    155
@@ -4242,7 +4242,7 @@ typedef signed long       hObj;
 
 #define LITERAL_CHAR -20
 #define WRAP_BREAK   -21
-#define BACK_COLOR   -22
+#define BACK_COLOUR  -22
 #define WRAP_INDENT  -23
 
 
@@ -4424,7 +4424,7 @@ typedef signed long       hObj;
 #define EV_RETRIBUTION 138
 #define EV_GODPULSE    139
 #define EV_JEALOUSY    140
-#define EV_CALC_FAVOR  141
+#define EV_CALC_FAVOUR  141
 #define EV_GIVE_AID    142
 #define EV_RATE_SAC    143
 #define EV_INSIGHT     144

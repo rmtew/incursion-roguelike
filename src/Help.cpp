@@ -1291,7 +1291,7 @@ void HelpWeaponTable(String &helpText)
       "<15>C:<3> This weapon deals double damage when used in a charge attack.\n"
       "<15>M:<3> This weapon can only be used while mounted unless you are one size "
                     "larger than it is.\n"
-      "<15>P:<3> This weapon grants a x2 bonus to penetrating armor.\n"
+      "<15>P:<3> This weapon grants a x2 bonus to penetrating armour.\n"
       "<15>T:<3> This weapon grants a +4 bonus to trip attempts.\n"
       "<15>D:<3> This weapon grants a +4 bonus to disarm attempts.\n"
       "<15>2:<3> This is a double weapon, and may be used as if wielding two "
@@ -2382,7 +2382,7 @@ String & Monster::Describe(Player *p)
         -14,tm->Hit,-7,-14, tm->Def,-7);
       
       if (tm->Arm)
-        str += Format("It has a natural armor rating of %c%d%c. ", -14, tm->Arm, -7);
+        str += Format("It has a natural armour rating of %c%d%c. ", -14, tm->Arm, -7);
 
       }
 
@@ -3000,7 +3000,7 @@ String & Monster::Describe(Player *p)
           DESCRIBE_TEMPLATE_MOD(HitDice,"hit dice")
           DESCRIBE_TEMPLATE_MOD(Hit,"attack bonus")
           DESCRIBE_TEMPLATE_MOD(Def,"defense class")
-          DESCRIBE_TEMPLATE_MOD(Arm,"natural armor")
+          DESCRIBE_TEMPLATE_MOD(Arm,"natural armour")
           DESCRIBE_TEMPLATE_MOD(Mov,"movement rate")
           DESCRIBE_TEMPLATE_MOD(Spd,"natural speed")
           DESCRIBE_TEMPLATE_MOD(Size,"size category")
@@ -3528,7 +3528,7 @@ String & Item::Describe(Player *p)
   if (isKnown(KN_BLESS) && isBlessed()) 
     Desc += XPrint("__<14>Blessed:<7> A blessed item cannot be picked "
         "up by undead, demons, devils, or lycanthropes. "
-        "A blessed shield or suit of armor cumulatively "
+        "A blessed shield or suit of armour cumulatively "
         "increases your Defense by +2 against the touch attacks of "
         "such creatures. A blessed weapon strikes true against such creatures, "
         "even if they have weapon immunity. A blessed weapon also strikes "
@@ -3645,10 +3645,10 @@ String & QItem::Describe(Player *p)
 {
   String Desc, tmp; int16 i;
 
-  bool isArmor = false; 
+  bool isArmour = false; 
   bool isWeapon = false; 
   switch (TITEM(iID)->IType) {
-    case T_SHIELD: case T_ARMOR: isArmor = true; break;
+    case T_SHIELD: case T_ARMOUR: isArmour = true; break;
     case T_WEAPON: case T_BOW: isWeapon = true; break; 
   } 
 
@@ -3658,15 +3658,15 @@ String & QItem::Describe(Player *p)
 
     if (LookupOnly(GenericPreQualNames,Qualities[i]))
       tmp = Format("__%c%s:%c ",-14,Lookup(GenericPreQualNames,Qualities[i]),-7);
-    else if (LookupOnly(isArmor ? APreQualNames : PreQualNames,Qualities[i]))
-      tmp = Format("__%c%s:%c ",-14,Lookup(isArmor ? APreQualNames : PreQualNames,Qualities[i]),-7);
+    else if (LookupOnly(isArmour ? APreQualNames : PreQualNames,Qualities[i]))
+      tmp = Format("__%c%s:%c ",-14,Lookup(isArmour ? APreQualNames : PreQualNames,Qualities[i]),-7);
     else
-      tmp = Format("__%c%s:%c ",-14,Lookup(isArmor ? APostQualNames : PostQualNames,Qualities[i]),-7);
+      tmp = Format("__%c%s:%c ",-14,Lookup(isArmour ? APostQualNames : PostQualNames,Qualities[i]),-7);
     tmp.SetAt(3,toupper(tmp[3]));
     if (LookupOnly(GenericQualityDescs,Qualities[i]))
       Desc += tmp + Lookup(GenericQualityDescs,Qualities[i]); 
     else 
-      Desc += tmp + Format(Lookup(isArmor ? AQualityDescs : QualityDescs,Qualities[i]),ItemLevel()); 
+      Desc += tmp + Format(Lookup(isArmour ? AQualityDescs : QualityDescs,Qualities[i]),ItemLevel()); 
     Desc += "\n";
   }
 
@@ -3674,15 +3674,15 @@ String & QItem::Describe(Player *p)
     {
       if (LookupOnly(GenericPreQualNames,S->Val))
         tmp = Format("__%c%s:%c ",-14,Lookup(GenericPreQualNames,S->Val),-7);
-      else if (LookupOnly(isArmor ? APreQualNames : PreQualNames,S->Val))
-        tmp = Format("__%c%s:%c ",-14,Lookup(isArmor ? APreQualNames : PreQualNames,S->Val),-7);
+      else if (LookupOnly(isArmour ? APreQualNames : PreQualNames,S->Val))
+        tmp = Format("__%c%s:%c ",-14,Lookup(isArmour ? APreQualNames : PreQualNames,S->Val),-7);
       else
-        tmp = Format("__%c%s:%c ",-14,Lookup(isArmor ? APostQualNames : PostQualNames,S->Val),-7);
+        tmp = Format("__%c%s:%c ",-14,Lookup(isArmour ? APostQualNames : PostQualNames,S->Val),-7);
       tmp.SetAt(3,toupper(tmp[3]));
       if (LookupOnly(GenericQualityDescs,Qualities[S->Val]))
         Desc += tmp + Lookup(GenericQualityDescs,S->Val); 
       else 
-        Desc += tmp + Lookup(isArmor ? AQualityDescs : QualityDescs,S->Val); 
+        Desc += tmp + Lookup(isArmour ? AQualityDescs : QualityDescs,S->Val); 
       Desc += "\n";
     }
   StatiIterEnd(this)
@@ -3767,7 +3767,7 @@ String & Food::Describe(Player *p)
   return *tmpstr(XPrint(Desc));
 }
 
-String & Armor::Describe(Player *p)
+String & Armour::Describe(Player *p)
 {
   String Desc; 
   TItem * ti = TITEM(iID);
@@ -3788,7 +3788,7 @@ String & Armor::Describe(Player *p)
           CovVal(NULL,true));
 
       if (ArmVal(0,isKnown(KN_PLUS)))
-        Desc += Format(" This powerful shield also absorbs damage, providing an armor bonus of <11>%+d<7>.",ArmVal(0,isKnown(KN_PLUS)));
+        Desc += Format(" This powerful shield also absorbs damage, providing an armour bonus of <11>%+d<7>.",ArmVal(0,isKnown(KN_PLUS)));
 
       if (Size(p) > p->Attr[A_SIZ]) {
         Desc += Format(" This shield is so large for you that it provides portable cover: attacks against you have a 50~ chance of missing.");
@@ -3807,15 +3807,15 @@ String & Armor::Describe(Player *p)
       break; 
     }  
 
-    case T_ARMOR: {
-      if (TITEM(iID)->Group & WG_LARMOR) Desc += " light";
-      else if (TITEM(iID)->Group & WG_MARMOR) Desc += " medium";
-      else if (TITEM(iID)->Group & WG_HARMOR) Desc += " heavy";
+    case T_ARMOUR: {
+      if (TITEM(iID)->Group & WG_LARMOUR) Desc += " light";
+      else if (TITEM(iID)->Group & WG_MARMOUR) Desc += " medium";
+      else if (TITEM(iID)->Group & WG_HARMOUR) Desc += " heavy";
 
-      Desc += Format(" armor. It provides a coverage value of <11>%+d<7>.",
+      Desc += Format(" armour. It provides a coverage value of <11>%+d<7>.",
           CovVal(p,true));
 
-      Desc += Format(" Your maximum dexterity bonus while wearing this armor is <11>%d<7>.", ((Armor *)this)->MaxDexBonus(p));
+      Desc += Format(" Your maximum dexterity bonus while wearing this armour is <11>%d<7>.", ((Armour *)this)->MaxDexBonus(p));
 
       if (penalty) {
         Desc += Format(" While wearing it, your base movement rate is reduced by <11>%d~<7>, certain skills suffer a <11>%+d<7> penalty and your arcane spell failure rate increases by <11>%d~<7>.",
@@ -3825,7 +3825,7 @@ String & Armor::Describe(Player *p)
       } 
 
       if (ArmVal(0,true) || ArmVal(1,true) || ArmVal(2, true))
-        Desc += Format(" It provides an armor rating of <11>%d<7> against slashing "
+        Desc += Format(" It provides an armour rating of <11>%d<7> against slashing "
                        "damage, <11>%d<7> against piercing damage and <11>%d<7> against "
                        "blunt damage.", ArmVal(0,true), ArmVal(1, true), ArmVal(2, true));
 
@@ -3834,9 +3834,9 @@ String & Armor::Describe(Player *p)
       
       #if 0
       /* I'm not sure this is true; it seems misleadingly simple to the
-         player in comparison to how armor actually works, being scaled
+         player in comparison to how armour actually works, being scaled
          with damage. I'll add a section to the online help defining
-         exactly what an armor rating means and does. */
+         exactly what an armour rating means and does. */
       static const char * dmg_types[3] = { "Slashing", "Piercing", "Blunt" } ; 
       for (int i=0; i<=2; i++) {
         int val = ArmVal(i,true); 
@@ -3845,7 +3845,7 @@ String & Armor::Describe(Player *p)
             dmg_types[i],
             val,
             AbsorbTable[min(val,16)][2],
-            ArmorTable[min(val,32)][2]);
+            ArmourTable[min(val,32)][2]);
         }
       #endif
 
@@ -3856,7 +3856,7 @@ String & Armor::Describe(Player *p)
   }
 
   if (((Creature *)p)->WepSkill((Item *)this) == WS_NOT_PROF && penalty) {
-    Desc += Format("\n__Due to your <4>lack of proficiency<7> with this armor, your base weapon speed is reduced by <11>%d~<7> and you suffer a skill penalty of <11>%d<7> to your hit rolls and Reflex saving throws.\n", 
+    Desc += Format("\n__Due to your <4>lack of proficiency<7> with this armour, your base weapon speed is reduced by <11>%d~<7> and you suffer a skill penalty of <11>%d<7> to your hit rolls and Reflex saving throws.\n", 
         (-5 * penalty),
         penalty);
   }
@@ -3988,7 +3988,7 @@ String & Weapon::Describe(Player *p)
     if (TITEM(iID)->HasFlag(WT_SUBDUAL))
       Desc += " This weapon inflicts <11>subdual<7> damage instead of normal damage.";
     if (TITEM(iID)->HasFlag(WT_PENETRATING))
-      Desc += " This weapon grants a x2 bonus to <11>penetrating<7> armor.";
+      Desc += " This weapon grants a x2 bonus to <11>penetrating<7> armour.";
     if (TITEM(iID)->HasFlag(WT_SUPER_TRIP))
       Desc += " This weapon grants a +4 bonus to <11>trip<7> attempts.";
     if (TITEM(iID)->HasFlag(WT_SUPER_DISARM))

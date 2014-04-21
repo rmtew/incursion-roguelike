@@ -187,11 +187,11 @@ int16 getChivalryBreech(EventInfo &e)
         breech |= AL_NONLAWFUL;
       }
          
-    /* Only paladins, heavy armor wearers, mounted fighters and followers
+    /* Only paladins, heavy armour wearers, mounted fighters and followers
        of Erich are subject to the code of chivalry... */
     if (e.EActor->HasAbility(CA_LAY_ON_HANDS) || e.EActor->HasStati(MOUNTED) ||
-        !stricmp(NAME(e.EActor->getGod()),"Erich") || (e.EActor->InSlot(SL_ARMOR)
-        && e.EActor->InSlot(SL_ARMOR)->isGroup(WG_HARMOR)))
+        !stricmp(NAME(e.EActor->getGod()),"Erich") || (e.EActor->InSlot(SL_ARMOUR)
+        && e.EActor->InSlot(SL_ARMOUR)->isGroup(WG_HARMOUR)))
       {
         if (vicUnready)
           if (isLegalPerson && !e.EVictim->HasStati(HIT_WHILE_UNREADY,-1,e.EActor))
@@ -727,7 +727,7 @@ EvReturn Creature::RAttack(EventInfo &e)
   lx=sx=cx=e.EActor->x*2;
   ly=sy=cy=e.EActor->y*2;
 
-  // glyph (color set below) 
+  // glyph (colour set below) 
   int16 g = 15 ;
   int16 Color = TITEM(e.EItem2->iID)->Image >> 8; 
 
@@ -3343,15 +3343,15 @@ EvReturn Creature::PreStrike(EventInfo &e) /* this == EActor */
       int bonusHit = 0;
       int bonusBless = 0; 
 
-      static int armorSlots[] = {
-        SL_ARMOR, SL_READY, SL_WEAPON, 0
+      static int armourSlots[] = {
+        SL_ARMOUR, SL_READY, SL_WEAPON, 0
       } ;
-      for (int j=0; armorSlots[j]; j++) {
+      for (int j=0; armourSlots[j]; j++) {
         Item *it = NULL;
-        i = armorSlots[j];
+        i = armourSlots[j];
         if ((it = e.EVictim->EInSlot(i)) && it->activeSlot(i)) {
           if (it->isBlessed() && (it->isType(T_SHIELD) ||
-              it->isType(T_ARMOR)))
+              it->isType(T_ARMOUR)))
             bonusBless += 2; 
           if (it->isGhostTouch()) continue;
           else if (it->isType(T_SHIELD)) 
@@ -3746,8 +3746,8 @@ EvReturn Creature::PreStrike(EventInfo &e) /* this == EActor */
 
     if (e.actIncor) {
       // srd: An incorporeal creature's attacks pass through (ignore)
-      // natural armor, armor, and shields, although deflection bonuses and
-      // force effects (such as mage armor) work normally against it. 
+      // natural armour, armour, and shields, although deflection bonuses and
+      // force effects (such as mage armour) work normally against it. 
       e.isBypass = true; 
     } 
 
@@ -3874,8 +3874,8 @@ EvReturn Creature::PreStrike(EventInfo &e) /* this == EActor */
         }
 
     if ( 
-        ((e.EVictim->EInSlot(SL_ARMOR) &&
-           e.EVictim->EInSlot(SL_ARMOR)->Material() == MAT_SILVER) ||
+        ((e.EVictim->EInSlot(SL_ARMOUR) &&
+           e.EVictim->EInSlot(SL_ARMOUR)->Material() == MAT_SILVER) ||
           (e.EVictim->EInSlot(SL_READY) &&
            e.EVictim->EInSlot(SL_READY)->isType(T_SHIELD) && 
            e.EVictim->EInSlot(SL_READY)->Material() == MAT_SILVER)) &&
@@ -4308,9 +4308,9 @@ EvReturn Creature::Strike(EventInfo &e) /* this == EActor */
       if (e.EVictim->GetStatiMag(FORTIFICATION) >= random(100)+1)
         {
           e.isCrit = false; it = (Item*)GetStatiObj(FORTIFICATION);
-          if (it && it->isType(T_ARMOR))
-            VPrint(e,"Your armor negates the critical!",
-                     "The <EVictim>'s armor negates the critical!");
+          if (it && it->isType(T_ARMOUR))
+            VPrint(e,"Your armour negates the critical!",
+                     "The <EVictim>'s armour negates the critical!");
           else if (it && it->isType(T_SHIELD))
             VPrint(e,"Your shield negates the critical!",
                      "The <EVictim>'s shield negates the critical!");
@@ -4474,7 +4474,7 @@ EvReturn Creature::Strike(EventInfo &e) /* this == EActor */
     // ww: handle Riposte!
     if (!e.ADied && !e.isHit && !e.isSurprise && 
         e.EVictim->isBeside(e.EActor) && e.EVictim->HasFeat(FT_RIPOSTE) && 
-        (e.EVictim->ArmorType() == 0 || e.EVictim->ArmorType() & WG_LARMOR) &&
+        (e.EVictim->ArmourType() == 0 || e.EVictim->ArmourType() & WG_LARMOUR) &&
         e.EVictim->Encumbrance() <= EN_LIGHT) {
       e.EVictim->IPrint("You riposte!");
       e.EActor->IPrint(Format("%s ripostes!",(const char*)e.EVictim->Name(NA_THE)));
@@ -4506,14 +4506,14 @@ EvReturn Creature::Strike(EventInfo &e) /* this == EActor */
         if (e.EActor->InSlot(SL_READY) && 
             e.EActor->InSlot(SL_READY)->isType(T_SHIELD))
           N += e.EActor->InSlot(SL_READY)->Weight()/5;
-        ar = e.EActor->InSlot(SL_ARMOR);
+        ar = e.EActor->InSlot(SL_ARMOUR);
         if (!ar)
           L = 10000;
-        else if (ar->isGroup(WG_HARMOR))
+        else if (ar->isGroup(WG_HARMOUR))
           L = 1000;
-        else if (ar->isGroup(WG_MARMOR))
+        else if (ar->isGroup(WG_MARMOUR))
           L = 2000;
-        else if (ar->isGroup(WG_LARMOR))
+        else if (ar->isGroup(WG_LARMOUR))
           L = 5000;
         
         if (ar && ar->HasQuality(IQ_FEATHERLIGHT))
@@ -5225,7 +5225,7 @@ AfterEffects:
         if (i > 0) {
           e.xDmg += i;
           // ww: let's try making sneak attack damage 'AD_NORM' --
-          // otherwise the other guy's armor tends to block it ... 
+          // otherwise the other guy's armour tends to block it ... 
           // which makes life tricky for the low-level rogue ...
           ThrowDmg(EV_DAMAGE,AD_NORM,i,XPrint("an <Obj>'s sneak attack",e.EActor),
               e.EActor,e.EVictim,e.EItem,e.EItem2);
@@ -5274,7 +5274,7 @@ AfterEffects:
       dfDmg.Number = 1; 
       dfDmg.Sides  = 8; 
       i = dfDmg.Roll(); 
-      // ww: just for fun and flavor, let's have Noble Aegis block Dirty
+      // ww: just for fun and flavour, let's have Noble Aegis block Dirty
       // Fighting
       i -= e.EVictim->AbilityLevel(CA_NOBLE_AEGIS);
       if (e.EVictim->AbilityLevel(CA_NOBLE_AEGIS))
@@ -5382,7 +5382,7 @@ AfterEffects:
             }      
         }
         
-      Item *ar = e.EVictim->InSlot(SL_ARMOR);
+      Item *ar = e.EVictim->InSlot(SL_ARMOUR);
       if (ar && ar->swingCount < 30 && !ar->isKnown(KN_MAGIC|KN_CURSE|KN_PLUS)) 
         if (e.EVictim->AbilityLevel(CA_LORE_OF_ARMS) >= 3)
         {
@@ -5589,7 +5589,7 @@ EvReturn Creature::Damage(EventInfo &e)
         if (r != NOTHING) return r; }
 
     {
-      Item *ar = e.EVictim->InSlot(SL_ARMOR);
+      Item *ar = e.EVictim->InSlot(SL_ARMOUR);
       if (e.AType > 0 && e.AType <= A_LAST_STANDARD && ar)
         if (e.DType == AD_DREX || e.DType == AD_BLND ||
             e.DType == AD_STUN || e.DType == AD_SLOW ||
@@ -5602,8 +5602,8 @@ EvReturn Creature::Damage(EventInfo &e)
           if (e.AType != A_TUCH || (ar && ar->HasQuality(AQ_SACRED)))
             if (e.vHit < e.vDef + (e.EVictim->GetAttr(A_COV)-4))
               {
-                VPrint(e, "Your armor blocks the <str>!",
-                          "The <EVictim>'s armor blocks the <str>!",
+                VPrint(e, "Your armour blocks the <str>!",
+                          "The <EVictim>'s armour blocks the <str>!",
                           (const char*)Lower(Lookup(DTypeNames,e.DType)));
                 return DONE;
               } 
@@ -5614,12 +5614,12 @@ EvReturn Creature::Damage(EventInfo &e)
         if (e.EVictim->Mod(A_CON) > 0)
           {
             int16 mod, percent;
-            Armor *ar = (Armor*) e.EVictim->InSlot(SL_ARMOR);
+            Armour *ar = (Armour*) e.EVictim->InSlot(SL_ARMOUR);
             mod = max(0,e.EVictim->Mod(A_CON));
             percent = (e.EVictim->AbilityLevel(CA_TOUGH_AS_HELL) * 100) /
                         (max(1,e.EVictim->ChallengeRating()) + ((!ar) ? 0 :
-                        ar->isGroup(WG_HARMOR) ? 9 :
-                        (ar->isGroup(WG_MARMOR) ? 6 : 3)));
+                        ar->isGroup(WG_HARMOUR) ? 9 :
+                        (ar->isGroup(WG_MARMOUR) ? 6 : 3)));
             mod = (mod * percent) / 100;
             if (mod > 0)
               {
@@ -5633,7 +5633,7 @@ EvReturn Creature::Damage(EventInfo &e)
       if (e.AType && (e.EActor != e.EVictim))
         if (e.DType == AD_SLASH || e.DType == AD_BLUNT)
           if (e.EVictim->HasFeat(FT_REED_IN_THE_WIND))
-            if (!(e.EVictim->getArmorType(false) & (WG_MARMOR|WG_HARMOR)))
+            if (!(e.EVictim->getArmourType(false) & (WG_MARMOUR|WG_HARMOUR)))
               if (!e.EVictim->HasStati(PRONE) &&
                   e.EVictim->HasMFlag(M_HUMANOID))
                 if (e.EVictim->isMonster() || e.EVictim->yn(Format(
@@ -5680,7 +5680,7 @@ EvReturn Creature::Damage(EventInfo &e)
         e.EPActor->statiChanged = true;
       }
     // ww: this was AType, which was a mistake, I believe -- "flame
-    // hobgoblins" would take full damage (+1, actually, from the -1 armor) 
+    // hobgoblins" would take full damage (+1, actually, from the -1 armour) 
     // from fire bolts, etc. 
     if (e.EVictim->ResistLevel(e.DType) == -1)
       {
@@ -5850,16 +5850,16 @@ EvReturn Creature::Damage(EventInfo &e)
 
           if (is_wepdmg(EDType) && e.vRoll && e.EVictim->Attr[A_COV]) {
             /* On a critical hit, we use the critical roll, rather than the
-               attack roll, to determine if armor is bypassed. This can 
+               attack roll, to determine if armour is bypassed. This can 
                (very rarely) lead to the illogical situation where a lower
                threat range is better, because you would rather bypass the
-               tough armor on a roll of a 19 rather than "just" score a
+               tough armour on a roll of a 19 rather than "just" score a
                critical hit. This is sufficiently rare as to not be a serious
                issue.
-                 The reason crits don't automatically bypass armor is that
+                 The reason crits don't automatically bypass armour is that
                this pushes them too far into the range of being stupid player
                instakills -- they can end up doing x4 or x5 damage on average
-               to a heavily armored player.
+               to a heavily armoured player.
             */
             if (e.vHit + (e.isCrit ? e.vtRoll : e.vRoll) + e.vPenetrateBonus >= 
                    e.vDef + e.EVictim->Attr[A_COV])
@@ -5904,19 +5904,19 @@ EvReturn Creature::Damage(EventInfo &e)
             // kinda rare -- high STR, magical great maul, critical hit
             // x4). I just did it now, so it's possible. Anyway, that's
             // enough force to kill about 30 normal humans (say, 5 hp
-            // each). And yet, something with armor 8 (plate mail, say)
-            // can completely resist this blow ArmorTable[8][15] = 24%
-            // of the time. One fourth of the time your plate armor reduces
+            // each). And yet, something with armour 8 (plate mail, say)
+            // can completely resist this blow ArmourTable[8][15] = 24%
+            // of the time. One fourth of the time your plate armour reduces
             // to nothing enough force to kill 30 men? I think not. Note
             // that the plate mail's chance of reducing a hit for 1 point
-            // of damage to 0 here is ArmorTable[8][0] = 43% ... one
-            // conclusion here is that the ArmorTable[i] does not drop off
-            // fast enough. However, ArmorTable is big and I don't want to
+            // of damage to 0 here is ArmourTable[8][0] = 43% ... one
+            // conclusion here is that the ArmourTable[i] does not drop off
+            // fast enough. However, ArmourTable is big and I don't want to
             // change that. What I will do here is say that you can only
-            // completely absorb an attack with mag <= your armor rating x
+            // completely absorb an attack with mag <= your armour rating x
             // 2. 
             // fjm: I upped the minAmount a bit, from vArm to 10 + vArm*2,
-            // so that armor can absorb small and medium blows instead of
+            // so that armour can absorb small and medium blows instead of
             // just small blows. I think that's still in the realm of
             // believability.
             Percent = AbsorbTable[min(e.vArm,16)][Col];
@@ -5928,9 +5928,9 @@ EvReturn Creature::Damage(EventInfo &e)
               Percent /= 2;
               minAmount /= 2; 
             }
-            /* Later, this should be altered to make /actual/ armor
+            /* Later, this should be altered to make /actual/ armour
                count more for absorbing blows then magic bonuses, and
-               barbarian natural armor should not absorb blows at all. */
+               barbarian natural armour should not absorb blows at all. */
             if (Dice::Roll(1,100) <= Percent && e.vDmg <= minAmount) { 
 Absorbed:
               e.Absorb = true;
@@ -5940,9 +5940,9 @@ Absorbed:
                 e.Resist = true;
               if (!e.Terse) {
                 if ((EDType == AD_SLASH || e.DType == AD_PIERCE
-                      || EDType == AD_BLUNT) && e.EVictim->EInSlot(SL_ARMOR))
-                  VPrint(e,"Your <Str>armor absorbs the attack!",
-                      "The <EVictim>'s <Str>armor absorbs the attack!",
+                      || EDType == AD_BLUNT) && e.EVictim->EInSlot(SL_ARMOUR))
+                  VPrint(e,"Your <Str>armour absorbs the attack!",
+                      "The <EVictim>'s <Str>armour absorbs the attack!",
                       e.isBypass ? "natural " : "");
                 else VPrint(e,"You resist completely!",
                     "The <EVictim> resists completely!");
@@ -5950,7 +5950,7 @@ Absorbed:
               return DONE;
             }
 
-            Percent = ArmorTable[min(e.vArm,32)][Col];
+            Percent = ArmourTable[min(e.vArm,32)][Col];
             if (e.EItem && e.EItem->isItem() && 
                 e.EItem->HasIFlag(WT_PENETRATING))
               Percent /= 2;
@@ -5973,14 +5973,14 @@ Absorbed:
             if (e.vDef > e.vHit + 14)
               if (e.EVictim->HasAbility(CA_DEFENSIVE_ROLL))
                 {
-                  uint32 at = getArmorType(false);
+                  uint32 at = getArmourType(false);
                   
-                  if (at & WG_HARMOR)
+                  if (at & WG_HARMOUR)
                     goto CantRoll;
                   
                   e.vDefRoll = 5;
                   
-                  if (at & WG_MARMOR)
+                  if (at & WG_MARMOUR)
                     ;
                   else if (at)
                     e.vDefRoll -= 1;
@@ -6661,7 +6661,7 @@ Absorbed:
           } 
           // fall through!
         case AD_RUST:
-          /* 1/4 chance of damaging: weapon, shield, armor, random 
+          /* 1/4 chance of damaging: weapon, shield, armour, random 
            * unexposed item */
         { 
           // ww: bugfix: if you are a wild-shaped druid and your equipment
@@ -6670,7 +6670,7 @@ Absorbed:
             ;
           if ((it = e.EVictim->EInSlot(SL_READY)) && it->Hardness(e.DType) != -1 && !random(3))
             ;
-          else if ((it = e.EVictim->EInSlot(SL_ARMOR)) && it->Hardness(e.DType) != -1 && !random(2))
+          else if ((it = e.EVictim->EInSlot(SL_ARMOUR)) && it->Hardness(e.DType) != -1 && !random(2))
             ;
           else {
             TMonster * tm = TMON(e.EVictim->mID);
@@ -6730,7 +6730,7 @@ Absorbed:
           if (e.EVictim->SavingThrow(REF,e.saveDC,SA_THEFT)) 
             { e.Resist = true; break; }
           for(c=0,it=e.EVictim->FirstInv();it;it=e.EVictim->NextInv())
-            if (it != EInSlot(SL_PACK) && it != EInSlot(SL_ARMOR) && it != EInSlot(SL_WEAPON) &&
+            if (it != EInSlot(SL_PACK) && it != EInSlot(SL_ARMOUR) && it != EInSlot(SL_WEAPON) &&
                   it->GetParent() == e.EVictim && it != EInSlot(SL_BRACERS) && it !=
                   EInSlot(SL_BOOTS)) 
               Candidates[c++] = it->myHandle;
@@ -8040,7 +8040,7 @@ EvReturn Creature::AttackMsg(EventInfo &e)
       String s0; 
 
       switch (e.AType) {
-        /* XPrint Needed here for color extension below */
+        /* XPrint Needed here for colour extension below */
         case A_BULL: s0 = XPrint("<13>Bull Rush:<7> "); break;
         case A_THRO: s0 = XPrint("<14>Grapple:<7> "); break;
         case A_GRAB: s0 = XPrint("<14>Grapple:<7> "); break;
@@ -8275,9 +8275,9 @@ SkipDamage:
   else if (e.isBypass) {
     /* Kludge, but it works (for single player). */
     if (e.EVictim->isPlayer())
-      prelude = "Bypassing your armor, ";
+      prelude = "Bypassing your armour, ";
     else
-      prelude = XPrint("Bypassing <his:Obj> armor, ",e.EVictim);
+      prelude = XPrint("Bypassing <his:Obj> armour, ",e.EVictim);
   }
   else if (e.isOffhand) {
     if (e.EActor->isPlayer())

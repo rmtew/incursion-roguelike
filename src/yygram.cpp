@@ -3709,8 +3709,8 @@ int race_entry ()
       res_ref(&rr2);
       get_lexval();
 #line 740 "grammar.acc"
- theRace->FavoredClass[0] = rr;
-                                  theRace->FavoredClass[1] = rr2; 
+ theRace->FavouredClass[0] = rr;
+                                  theRace->FavouredClass[1] = rr2; 
 # line 3679 "yygram.cpp"
       } break;
    case 197: {
@@ -3734,9 +3734,9 @@ int race_entry ()
       res_ref(&rr3);
       get_lexval();
 #line 743 "grammar.acc"
- theRace->FavoredClass[0] = rr;
-                                  theRace->FavoredClass[1] = rr2; 
-                                  theRace->FavoredClass[2] = rr3; 
+ theRace->FavouredClass[0] = rr;
+                                  theRace->FavouredClass[1] = rr2; 
+                                  theRace->FavouredClass[2] = rr3; 
 # line 3705 "yygram.cpp"
       } break;
    case 198: {

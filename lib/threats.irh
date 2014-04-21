@@ -483,7 +483,7 @@ Feature "trap" : T_TRAP
     Mat: MAT_GRANITE;
   }
 
-/* Traps are now color-coded by "general effect":
+/* Traps are now colour-coded by "general effect":
  *
  * poison dart, poison needle, weakening
  * physical damage
