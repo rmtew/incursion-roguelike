@@ -2463,14 +2463,14 @@ char TextTerm::ChoicePrompt(const char*msg,const char*choices,int8 col1, int8 co
     CursorOff();
     Clear();
   
+    if (ch == KY_ESC)
+      ch = -1;
     if (Mode == MO_CREATE)
       {
         strncpy(RInf.Rsp[RInf.nRsp].Question,msg,31);
         RInf.Rsp[RInf.nRsp].Answer = ch;
         RInf.nRsp++;
       }
-    if (ch == KY_ESC)
-      return -1;
     return ch;
   }     
 int32 TextTerm::MonsterTypePrompt(const char * prompt, int minCount, int maxCount)
