@@ -549,27 +549,32 @@ IgnoreCreature:
           }
         }
 
-      if (HasStati(ELEVATED,ELEV_TREE) && !m->TreeAt(tx,ty))
-        {
-          rID res = 0;
-          if (m->FFeatureAt(x,y))
-            res = m->FFeatureAt(x,y)->fID;
-          if (!res) 
-            res = m->TerrainAt(x,y);
-          DPrint(e,"You climb down from the <res>.", 
-            "The <EActor> climbs down from the <res>.", res);
-          RemoveStati(ELEVATED);
-          if (!HasFeat(FT_BRACHIATION)) 
-            Timeout += 15;
-          return DONE;
-        }
-      
-      if (!SkillCheck(SK_CLIMB,e.Event == EV_JUMP ? 25 : 13,false))
-        {
-          ClimbFall(); 
-          Timeout += 10;
-          return DONE;
-        }
+      {
+          bool skillcheck = true;
+
+          if (HasStati(ELEVATED,ELEV_TREE)) {
+              if (!m->TreeAt(tx,ty)) {
+                  rID res = 0;
+                  if (m->FFeatureAt(x,y))
+                      res = m->FFeatureAt(x,y)->fID;
+                  if (!res) 
+                      res = m->TerrainAt(x,y);
+                  DPrint(e,"You climb down from the <res>.", 
+                      "The <EActor> climbs down from the <res>.", res);
+                  RemoveStati(ELEVATED);
+                  if (!HasFeat(FT_BRACHIATION)) 
+                      Timeout += 15;
+                  return DONE;
+              }
+              skillcheck = !HasFeat(FT_BRACHIATION);
+          }
+
+          if (skillcheck && !SkillCheck(SK_CLIMB,e.Event == EV_JUMP ? 25 : 13,false)) {
+              ClimbFall(); 
+              Timeout += 10;
+              return DONE;
+          }
+      }
         
       NoLongerElevated:
       ;
