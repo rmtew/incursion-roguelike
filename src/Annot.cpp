@@ -287,145 +287,150 @@ Tile* Resource::GetTile(char ch)
   }
 
 
-bool Resource::GetList(int16 ln, rID *lv,int16 max)
-  {
+bool Resource::GetList(int16 ln, rID *lv,int16 max) {
     Annotation *a; int32 i, q; 
     bool found = false; rID xID, endID, *ls = lv;
     static uint32 RM_Weights[] = {
-      RM_NORMAL,   10,
-      RM_NOROOM,   1,
-      RM_LARGE,    1,
-      RM_CROSS,    1,
-      RM_OVERLAP,  1,
-      RM_ADJACENT, 1,
-      RM_AD_ROUND, 2,
-      RM_AD_MIXED, 2,
-      RM_CIRCLE,   4,
-      RM_OCTAGON,  5,
-      RM_DIAMONDS, 4,
-      RM_DOUBLE,   2, 
-      RM_PILLARS,  3,
-      //RM_CASTLE, 3, 
-      RM_CHECKER,  1,
-      RM_BUILDING, 3,
-      //RM_DESTROYED, 1,
-      RM_GRID,     1,
-      RM_LIFECAVE, 10,
-      RM_RCAVERN,  4,
-      RM_MAZE,     2,   
-      RM_LCIRCLE,  1,
-      RM_SHAPED,   2,
-      //RM_2ROOMS,  3,
-      //RM_3ROOMS,  4,
-      0,           0 };
+        RM_NORMAL,   10,
+        RM_NOROOM,   1,
+        RM_LARGE,    1,
+        RM_CROSS,    1,
+        RM_OVERLAP,  1,
+        RM_ADJACENT, 1,
+        RM_AD_ROUND, 2,
+        RM_AD_MIXED, 2,
+        RM_CIRCLE,   4,
+        RM_OCTAGON,  5,
+        RM_DIAMONDS, 4,
+        RM_DOUBLE,   2, 
+        RM_PILLARS,  3,
+        //RM_CASTLE, 3, 
+        RM_CHECKER,  1,
+        RM_BUILDING, 3,
+        //RM_DESTROYED, 1,
+        RM_GRID,     1,
+        RM_LIFECAVE, 10,
+        RM_RCAVERN,  4,
+        RM_MAZE,     2,   
+        RM_LCIRCLE,  1,
+        RM_SHAPED,   2,
+        //RM_2ROOMS,  3,
+        //RM_3ROOMS,  4,
+        0,           0
+    };
     uint32 RC_Weights[] = {
-      RC_EMPTY,    1,
-      RC_SINGLE,   4,
-      RC_SINGLE_T, 2,
-      RC_DIRTY,    1,
-      RC_MULTI,    1,
-      0,           0 };
-    uint32 EmptyList[] = {
-      0,0,0,0 };
-
+        RC_EMPTY,    1,
+        RC_SINGLE,   4,
+        RC_SINGLE_T, 2,
+        RC_DIRTY,    1,
+        RC_MULTI,    1,
+        0,           0
+    };
+    uint32 EmptyList[] = { 0,0,0,0 };
 
     max--; max--; max--;
     if (AnHead == 0)
-      goto DoDefaults;
+        goto DoDefaults;
+
     a = Annot(AnHead);
     ASSERT(max > 0)
     do {
-      if (a->AnType == AN_DUNLIST && a->u.dl.Const == ln)
-        for(i=0;i!=7 && max;i++)
-          //if (a->u.dl.xID[I(i,7)])
+        if (a->AnType == AN_DUNLIST && a->u.dl.Const == ln)
+            for(i=0;i!=7 && max;i++)
+                //if (a->u.dl.xID[I(i,7)])
             { *lv++ = a->u.dl.xID[I(i,7)]; max--; found = true; }
-      a = Annot(a->Next);
-      }
-    while(a && max);
+            a = Annot(a->Next);
+    } while(a && max);
+
     if (found) {
-      /* We want to make sure that every list has at least
-         three terminating zeros, because certain loops use
-         values three at a time. */
-      ListLength = 0;
-      for (i=0;(ls[i] || ls[i+1] || ls[i+2]) && i <= (lv-ls);i++)
-        ListLength++;
-      *lv++ =0; *lv++ =0; *lv++ =0;
-      return true;
-      }
-    DoDefaults:
-    switch(ln)
-      {
-        case RM_WEIGHTS: 
-          memcpy(lv,RM_Weights,min(max*sizeof(rID),sizeof(RM_Weights)));
-          ListLength = min(max,sizeof(RM_Weights)/sizeof(rID));
-          return true;
-        case RC_WEIGHTS:
-          memcpy(lv,RC_Weights,min(max*sizeof(rID),sizeof(RC_Weights)));
-          ListLength = min(max,sizeof(RC_Weights)/sizeof(rID));
-          return true;
-        case ROOM_WEIGHTS:
-          for (q=0;q!=MAX_MODULES;q++)
+        /* We want to make sure that every list has at least
+        three terminating zeros, because certain loops use
+        values three at a time. */
+        ListLength = 0;
+        for (i=0;(ls[i] || ls[i+1] || ls[i+2]) && i <= (lv-ls);i++)
+            ListLength++;
+        *lv++ =0; *lv++ =0; *lv++ =0;
+        return true;
+    }
+
+DoDefaults:
+    switch(ln) {
+    case RM_WEIGHTS: 
+        memcpy(lv,RM_Weights,min(max*sizeof(rID),sizeof(RM_Weights)));
+        ListLength = min(max,sizeof(RM_Weights)/sizeof(rID));
+        return true;
+    case RC_WEIGHTS:
+        memcpy(lv,RC_Weights,min(max*sizeof(rID),sizeof(RC_Weights)));
+        ListLength = min(max,sizeof(RC_Weights)/sizeof(rID));
+        return true;
+    case ROOM_WEIGHTS:
+        for (q=0;q!=MAX_MODULES;q++)
             if (theGame->Modules[I(q,MAX_MODULES)]) {
-              xID = xID=theGame->Modules[I(q,MAX_MODULES)]->RegionID(0);
-              endID = xID + theGame->Modules[I(q,MAX_MODULES)]->szReg;
-              for(;xID!=endID && max;xID++)
-                if (TREG(xID)->HasFlag(RF_ROOM))
-                  if (!TREG(xID)->HasFlag(RF_NOGEN))
-                    { *lv++ = xID; *lv++ = 1; max--; }
-              }
-          ListLength = lv - ls;
-          *lv++ = 0; *lv++ = 0; *lv++ = 0; 
-          return true;
-        case CORRIDOR_WEIGHTS:
-          for (q=0;q!=MAX_MODULES;q++)
+                xID = xID=theGame->Modules[I(q,MAX_MODULES)]->RegionID(0);
+                endID = xID + theGame->Modules[I(q,MAX_MODULES)]->szReg;
+                for(;xID!=endID && max;xID++)
+                    if (TREG(xID)->HasFlag(RF_ROOM))
+                        if (!TREG(xID)->HasFlag(RF_NOGEN)) {
+                            *lv++ = xID;
+                            *lv++ = 1;
+                            max--;
+                        }
+            }
+        ListLength = lv - ls;
+        *lv++ = 0; *lv++ = 0; *lv++ = 0; 
+        return true;
+    case CORRIDOR_WEIGHTS:
+        for (q=0;q!=MAX_MODULES;q++)
             if (theGame->Modules[I(q,MAX_MODULES)]) {
-              xID = xID=theGame->Modules[I(q,MAX_MODULES)]->RegionID(0);
-              endID = xID + theGame->Modules[I(q,MAX_MODULES)]->szReg;
-              for(;xID!=endID && max;xID++)
-                if (TREG(xID)->HasFlag(RF_CORRIDOR))
-                  if (!TREG(xID)->HasFlag(RF_NOGEN))
-                    { *lv++ = xID; 
-                      *lv++ = TREG(xID)->HasFlag(RF_STAPLE) ? 16 : 1;
-                      1; max--; }
-              }
-          ListLength = lv - ls;
-          *lv++ = 0; *lv++ = 0; *lv++ = 0; 
-          return true;
-        case VAULT_WEIGHTS:
-          for (q=0;q!=MAX_MODULES;q++)
+                xID = xID=theGame->Modules[I(q,MAX_MODULES)]->RegionID(0);
+                endID = xID + theGame->Modules[I(q,MAX_MODULES)]->szReg;
+                for(;xID!=endID && max;xID++)
+                    if (TREG(xID)->HasFlag(RF_CORRIDOR))
+                        if (!TREG(xID)->HasFlag(RF_NOGEN)) {
+                            *lv++ = xID; 
+                            *lv++ = TREG(xID)->HasFlag(RF_STAPLE) ? 16 : 1;
+                            1;
+                            max--; 
+                        }
+            }
+        ListLength = lv - ls;
+        *lv++ = 0; *lv++ = 0; *lv++ = 0; 
+        return true;
+    case VAULT_WEIGHTS:
+        for (q=0;q!=MAX_MODULES;q++)
             if (theGame->Modules[I(q,MAX_MODULES)]) {
-              xID = xID=theGame->Modules[I(q,MAX_MODULES)]->RegionID(0);
-              endID = xID + theGame->Modules[I(q,MAX_MODULES)]->szReg;
-              for(;xID!=endID && max;xID++)
-                if (TREG(xID)->HasFlag(RF_VAULT))
-                  if (!TREG(xID)->HasFlag(RF_NOGEN))
-                    { *lv++ = xID; max--; }
-              }
-          ListLength = lv - ls;
-          *lv++ = 0; *lv++ = 0; *lv++ = 0; 
-          return true;
-        case STREAMER_WEIGHTS:
-          for (q=0;q!=MAX_MODULES;q++)
+                xID = xID=theGame->Modules[I(q,MAX_MODULES)]->RegionID(0);
+                endID = xID + theGame->Modules[I(q,MAX_MODULES)]->szReg;
+                for(;xID!=endID && max;xID++)
+                    if (TREG(xID)->HasFlag(RF_VAULT))
+                        if (!TREG(xID)->HasFlag(RF_NOGEN))
+                        { *lv++ = xID; max--; }
+            }
+        ListLength = lv - ls;
+        *lv++ = 0; *lv++ = 0; *lv++ = 0; 
+        return true;
+    case STREAMER_WEIGHTS:
+        for (q=0;q!=MAX_MODULES;q++)
             if (theGame->Modules[I(q,MAX_MODULES)]) {
-              xID = xID=theGame->Modules[I(q,MAX_MODULES)]->RegionID(0);
-              endID = xID + theGame->Modules[I(q,MAX_MODULES)]->szReg;
-              for(;xID!=endID && max;xID++)
-                if (TREG(xID)->HasFlag(RF_RIVER) || 
-                      TREG(xID)->HasFlag(RF_ROCKTYPE) ||
+                xID = xID=theGame->Modules[I(q,MAX_MODULES)]->RegionID(0);
+                endID = xID + theGame->Modules[I(q,MAX_MODULES)]->szReg;
+                for(;xID!=endID && max;xID++)
+                    if (TREG(xID)->HasFlag(RF_RIVER) || 
+                        TREG(xID)->HasFlag(RF_ROCKTYPE) ||
                         TREG(xID)->HasFlag(RF_STREAMER) ||
-                          TREG(xID)->HasFlag(RF_CHASM))
-                  if (!TREG(xID)->HasFlag(RF_NOGEN))
-                    { *lv++ = xID; *lv++ = 1; max--; }
-              }
-          ListLength = lv - ls;
-          *lv++ = 0; *lv++ = 0; *lv++ = 0; 
-          return true;
-        default:
-          memcpy(lv,EmptyList,min(max*sizeof(rID),sizeof(EmptyList)));
-          ListLength = 0;
-          return false;
-      }
-  }
+                        TREG(xID)->HasFlag(RF_CHASM))
+                        if (!TREG(xID)->HasFlag(RF_NOGEN))
+                        { *lv++ = xID; *lv++ = 1; max--; }
+            }
+        ListLength = lv - ls;
+        *lv++ = 0; *lv++ = 0; *lv++ = 0; 
+        return true;
+    default:
+        memcpy(lv,EmptyList,min(max*sizeof(rID),sizeof(EmptyList)));
+        ListLength = 0;
+        return false;
+    }
+}
 
 bool Resource::HasList(int16 ln)
   {
