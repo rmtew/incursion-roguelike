@@ -1,4 +1,4 @@
-Incursion (open source) 0.6.9Y7: INSERT DATE
+Incursion (open source) 0.6.9Y7: 2014-04-22
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/33/: Fixed error message encountered when either creating a character, or reincarnating it, depending on whether 'Flooded Cavern' region is placed in the generated dungeon.  This region had 'aboleth, with slaves' defined as a possible encounter, but sadly we have no aboleth (with or without slaves).  Reported by holsety_s, but let's be honest we were all getting it and ignoring it.
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/58/: Attacking a door would calculate final damage before applying material hardness bonuses (i.e. wizlock).  Reported by Frumple.
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/62/: If one weapon was ranged, all weapons would get the ranged tag in their description.  Reported by Frumple.
@@ -10,6 +10,7 @@ Incursion (open source) 0.6.9Y7: INSERT DATE
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/86/: Added 'Heightened Senses' to the 'Mortal Coil' spellbook.  Reported by Frumple.
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/88/: Change 'Chameleon Shifting' from an INFLICT (which has saving throws) to a GRANT (which has none).  Specify the hide skill bonus should be +10, not unspecified which is a +0.  Reported by Frumple.
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/90/: Fixed crash where attacker standing on magma dies from magma damage incurred by attack/strike action, before actual strike action starts.  Reported by Frumple.
+* https://bitbucket.org/rmtew/incursion-roguelike/issue/93/: Ordering one summoned ally to return to their home plane resulted in all summoned allies returning to their home plane.
 * Slipping on a pool of grease would incur some damage, and give a message that the acting entity fell.  However, whatever action was in progress would be allowed to proceed.  Now the action is aborted, in line with the acting entity falling over (and consistent with other slipping types).
 * Pressing escape in character creation when selecting gender would cause a crash when the character was later reincarnated.  Now it is harmless.
 * Using English instead of American spelling, because if they speak in English accents in Game of Thrones, it's how they must do it in all fantasy worlds.
