@@ -2067,7 +2067,7 @@ void Character::UseAbility(uint8 ab,int16 pa)
                         if (c->HasMFlag(M_DEAF) || c->HasMFlag(M_MINDLESS) ||
                              m->FieldAt(c->x,c->y,FI_SILENCE))
                           continue;
-                        c->IDPrint("You feel valorous!",
+                        c->IDPrint("You feel valourous!",
                                    "The <Obj> seems inspired!", c);
                         c->RemoveStati(AFRAID);
                         c->GainPermStati(IMMUNITY,this,SS_SONG,AD_FEAR);

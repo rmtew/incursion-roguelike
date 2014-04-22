@@ -203,15 +203,15 @@ void Thing::PlaceAt(Map*_m,int16 _x,int16 _y, bool share_square)
       for(i=0;i!=fc;i++)
         m->NewField(MyFields[i].FType,x,y,MyFields[i].rad,MyFields[i].Image,
           MyFields[i].Dur, MyFields[i].eID,(Creature*)this);
-      if (thisc->HasAbility(CA_AURA_OF_VALOR)) {
-        rID vID = FIND("Aura of Valor");
+      if (thisc->HasAbility(CA_AURA_OF_VALOUR)) {
+        rID vID = FIND("Aura of Valour");
         ASSERT(vID);
         for(i=0;m->Fields[i];i++)
           if (m->Fields[i]->Creator == myHandle)
             if (m->Fields[i]->eID == vID)
-              goto ValorExists;
+              goto ValourExists;
         m->NewField(FI_MOBILE|FI_MODIFIER,x,y,3,(15*256) | GLYPH_FLOOR2,-1,vID,thisc);
-        ValorExists:;
+        ValourExists:;
         }
       if (m == NULL)
         return;
@@ -382,7 +382,7 @@ void Thing::PlaceNear(int16 x,int16 y)
        place to put ourselves. */
      if (isPlayer())
       {
-        IPrint("[ Deleting obsticles. ]");
+        IPrint("[ Deleting obstacles. ]");
         while (m->FirstAt(x,y))
           m->FirstAt(x,y)->Remove(true);
         Move(x,y);

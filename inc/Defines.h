@@ -1904,7 +1904,7 @@ typedef signed long       hObj;
 #define CA_ANCESTRAL_MEMORY  1
 #define CA_ANIMAL_COMP       2
 #define CA_AURA_OF_MENACE    4
-#define CA_AURA_OF_VALOR     5
+#define CA_AURA_OF_VALOUR     5
 #define CA_BARDIC_MUSIC      6 /* 1-5 */
 #define CA_BEGUILING_MAGIC   7
 #define CA_BERSERK_RAGE      8

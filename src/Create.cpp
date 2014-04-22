@@ -2485,7 +2485,7 @@ void Character::PaladinFall()
     Abilities[CA_SACRED_MOUNT] = 0;
     Abilities[CA_DIVINE_GRACE] = 0;
     Abilities[CA_LAY_ON_HANDS] = 0;
-    Abilities[CA_AURA_OF_VALOR] = 0;
+    Abilities[CA_AURA_OF_VALOUR] = 0;
 
     Spells[theGame->SpellNum(FIND("Mount"))] &= ~(SP_INNATE);
     Spells[theGame->SpellNum(FIND("Cure Disease"))] &= ~(SP_INNATE);
@@ -3013,7 +3013,7 @@ void Player::GainAbility(int16 ab,uint32 pa, rID sourceID,int16 statiSource)
 
     switch (ab)
     {
-    case CA_AURA_OF_VALOR:
+    case CA_AURA_OF_VALOUR:
         Map *om; int16 ox,oy;
         Abilities[ab] += pa;
         /* Refresh the field */

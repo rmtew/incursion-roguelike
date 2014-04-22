@@ -477,7 +477,7 @@ Druid Spell "Log of Everburning" : EA_GENERIC
       * SERVICE_SPELL_COST 10;
   }
 
-Priest / Sorcerer  Spell "Valor" : EA_INFLICT
+Priest / Sorcerer  Spell "Valour" : EA_INFLICT
   { SC_ABJ; IS_A_BUFF(COST_1); Level: 1; aval: AR_GLOBE; 
     tval: MA_ALLIES; 
     xval: SAVE_BONUS; yval: SN_FEAR; pval: +5;

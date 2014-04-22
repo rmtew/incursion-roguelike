@@ -626,7 +626,7 @@ void TextTerm::CreateCharSheet(CharSheet &cs)
     
     /* This is for effects that are actually constant, non-
        spell-like special abilities, such as a paladin's 
-       Aura of Valor, a rogue's Crippling Strike, a 
+       Aura of Valour, a rogue's Crippling Strike, a 
        celestial's Aura of Menace, etc. */
     if (S->eID && (RES(S->eID)->Type == T_TEFFECT))
       if (TEFF(S->eID)->HasFlag(EF_SPECABIL))

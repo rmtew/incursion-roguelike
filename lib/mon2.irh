@@ -4707,7 +4707,7 @@ Template "paladin;template" : TM_CLASS for MA_SAPIENT
     Spells: $"detect evil";
 	  ABILITY(CA_SMITE,2);
 	  ABILITY(CA_DIVINE_GRACE,1);
-	  ABILITY(CA_AURA_OF_VALOR,2);
+	  ABILITY(CA_AURA_OF_VALOUR,2);
 	  ABILITY(CA_LAY_ON_HANDS,2);
     Immune: DF_DISE, DF_FEAR;
     Flags: M_LAWFUL, M_GOOD, M_IALIGN, M_CLOSEID, M_RIDER;

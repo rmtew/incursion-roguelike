@@ -312,7 +312,7 @@ Class "Bard"
       spellcasting (barring the use of Vocalize Spell) and imposes a -2 
       circumstance penalty to attack and defense. You automatically stop singing 
       whenever you change map screens as well.
-      \n__<10>Inspire Courage (1st):<2> The bard is able to inspire great valor in 
+      \n__<10>Inspire Courage (1st):<2> The bard is able to inspire great valour in 
       her allies and friends. When this bardsong is sung, all allies are freed
       from the effects of the <7>Afraid<2> status, and gain a morale bonus
       to attack and damage rolls equal to the bard's Charisma modifier; for
@@ -1528,7 +1528,7 @@ Class "Paladin"
       against an evil creature, he adds his Charisma bonus (if any) to the attack
       roll, and if he hits he also adds his paladin level to the damage that he
       inflicts.
-      \n__*_<7>Aura of Valor<2> -- Starting at second level, a paladin is immune to
+      \n__*_<7>Aura of Valour<2> -- Starting at second level, a paladin is immune to
       fear, and grants any allies within 3 squares of him a +1 bonus to save versus
       fear effects for every even paladin level he possesses. This ability is innate
       and always active.
@@ -1568,7 +1568,7 @@ Class "Paladin"
       ____1____+0____+2___+0___+2__Lay on Hands,\n
       _____________________________Smite Evil, Immune\n
       _____________________________to Diseases\n
-      ____2____+0____+3___+0___+3__Aura of Valor,\n
+      ____2____+0____+3___+0___+3__Aura of Valour,\n
       _____________________________Divine Grace\n
       ____3____+0____+3___+1___+3__Turn Undead,\n
       _____________________________Cure Disease\n
@@ -1598,7 +1598,7 @@ Class "Paladin"
       Feat[FT_SHIELD_PROFICIENCY]             at 1st level,
       Ability[CA_INNATE_SPELL,$"detect evil"] at 1st level,
       Ability[CA_LAY_ON_HANDS]      at 1st level,
-      Ability[CA_AURA_OF_VALOR]     at every level starting at 2nd,
+      Ability[CA_AURA_OF_VALOUR]     at every level starting at 2nd,
       Ability[CA_DIVINE_GRACE]      at 2nd level,
       Ability[CA_TURNING,MA_UNDEAD] at every level starting at 3rd,
       Ability[CA_SMITE,MA_EVIL]     at every level,
@@ -1721,7 +1721,7 @@ Class "Paladin"
             
   }
 
-0 Effect "Aura of Valor" : EA_GRANT
+0 Effect "Aura of Valour" : EA_GRANT
   { aval: AR_MFIELD; lval: 3; cval: WHITE;
     xval: SAVE_BONUS; yval: SN_FEAR; pval: +4; 
     tval: MA_ALLIES; rval: FI_MOBILE|FI_MODIFIER;
@@ -1733,10 +1733,10 @@ Class "Paladin"
       EV_REMOVED
         {
           if (GetHandle(EActor) != GetHandle(EVictim))
-            EVictim->IPrint("The unearthly valor passes.");
+            EVictim->IPrint("The unearthly valour passes.");
           return NOTHING;
         },
-      MSG_STATINAME "AValor";
+      MSG_STATINAME "AValour";
   }
 
 Class "Priest"

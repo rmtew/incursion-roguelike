@@ -1107,7 +1107,7 @@ AI_POTION Effect "Fury" : EA_INFLICT
     Desc: "This potion drives you into a mad fury, allowing you to
       rage as a barbarian does (+4 Str, +4 Con, +2 Will saves)."; }
 
-AI_POTION Effect "Valor;potion" : EA_INFLICT
+AI_POTION Effect "Valour;potion" : EA_INFLICT
   { SC_ENC; xval: IMMUNITY; yval: AD_FEAR; Level: 1;
     Flags: EF_USERID, EF_DLONG, EF_NOTBAD; Purpose: EP_COUNTER (VS_FEAR); }
   and EA_HEALING

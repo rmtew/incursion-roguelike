@@ -3413,7 +3413,7 @@ TextVal ClassAbilities[] = {
   { CA_ANIMAL_COMP, "Animal Companions" },
   { CA_ARCANE_TRICKERY, "Arcane Trickery" },
   { CA_AURA_OF_MENACE, "Aura of Menace" },
-  { CA_AURA_OF_VALOR, "Aura of Valor" },
+  { CA_AURA_OF_VALOUR, "Aura of Valour" },
   { CA_BARDIC_MUSIC, "Bardic Music" },
   { CA_BEGUILING_MAGIC, "Beguiling Magic" },
   { CA_BERSERK_RAGE, "Berserk Rage" },

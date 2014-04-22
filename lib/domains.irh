@@ -109,7 +109,7 @@ Domain "Community" : 0
       Ability[CA_SHIELD_GROUP,+2] at 1st level,
       Ability[CA_SHIELD_GROUP,+1] at every 3rd level starting at 3rd;
     Spells:
-      $"Valor", 
+      $"Valour", 
       $"Chant",
       $"Prayer",
       $"Invocation",
@@ -471,7 +471,7 @@ Domain "Liberation" : 0
     Grants:
       Ability[CA_UNBIND] at every level starting at 1st;
     Spells:
-      $"Valor",
+      $"Valour",
       $"Passwall",
       $"Free Action;spell",
       $"Restoration",
