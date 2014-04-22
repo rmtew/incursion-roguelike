@@ -78,6 +78,8 @@
 				SuppressStartupBanner="true"
 				AdditionalLibraryDirectories="&quot;_dependencies\libtcod\makefiles\Release&quot;;&quot;_dependencies\google-breakpad\src\client\windows\Release\lib&quot;;_dependencies\sdl2\VisualC\SDL\Release"
 				IgnoreDefaultLibraryNames=""
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile=".\Release/Incursion.pdb"
 				SubSystem="1"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"

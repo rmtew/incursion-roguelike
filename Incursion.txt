@@ -1,4 +1,4 @@
-Incursion 0.6.9Y6
+Incursion 0.6.9Y7
 -----------------
 
  1. Introduction.
