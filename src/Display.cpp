@@ -446,6 +446,11 @@ void Player::NotifyGone(hObj h)
       Inv[0] = 0;
   }
 
+/* rmt: I think this is to deal with the fallout of a bug when remove(isDelete=true) was called
+   and only mobile fields were removed.  That made sense for remove(isDelete=false) of course.
+   TODO: Work out if this ever serves a purpose anymore.  It was buggy anyhow, as the creator
+   no longer existed which meant that the event could not go out as there was no way to set the
+   EActor value to the originating creator object. */
 void Map::NotifyGone(hObj h)
   { 
     int16 i;
@@ -1112,9 +1117,7 @@ FoundAndRemoved2:
     if (m)
         for (i=0;m->Fields[i];i++)
             if (m->Fields[i]->Creator == myHandle || (mount && m->Fields[i]->Creator == mount->myHandle))
-                if (m->Fields[i]->FType & FI_MOBILE) {
-                    /*if (i == false)
-                    Error("Remove(false) with hanging fields!"); */
+                if (isDelete || m->Fields[i]->FType & FI_MOBILE) {
                     m->RemoveField(m->Fields[i]);
                     i--;
                 }
