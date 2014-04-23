@@ -7162,7 +7162,7 @@ EvReturn Creature::Death(EventInfo &e)
         Creature *cr; int16 pen, bonus;
         pen = (e.EActor->SkillLevel(SK_INTIMIDATE)-5)/5;
         MapIterate(m,cr,i)
-          if (cr->isCreature() && cr->isFriendlyTo(this))
+          if (cr->isCreature() && !cr->HasMFlag(M_MINDLESS) && cr->isFriendlyTo(this))
             if (cr != this && cr->Percieves(e.EActor) && !cr->isPlayer())
               {
                 if (cr->ResistLevel(AD_FEAR) == -1)
