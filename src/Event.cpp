@@ -409,33 +409,29 @@ EvReturn Throw(int16 Ev, Object *p1, Object *p2, Object*p3,Object *p4) {
     return r;
 }
 
-EvReturn ThrowField(int16 Ev,Field *f,Object *p1, Object *p2, Object*p3,Object *p4)
-	{
-		EvReturn r;
-
+EvReturn ThrowField(int16 Ev,Field *f,Object *p1, Object *p2, Object*p3,Object *p4) {
+    EvReturn r;
     EventSP++;
     CHECK_OVERFLOW; 
     EventStack[EventSP].Clear();
     EventStack[EventSP].Event = Ev;
-		EventStack[EventSP].p[0].o = p1;
+    EventStack[EventSP].p[0].o = p1;
     EventStack[EventSP].p[1].o = p2;
     EventStack[EventSP].p[2].o = p3;
     EventStack[EventSP].p[3].o = p4;
     EventStack[EventSP].EField = f;
     r=RealThrow(EventStack[EventSP]);
     EventSP--;
-		return r;
-	}
+    return r;
+}
 
-EvReturn ThrowDir(int16 Ev,Dir d, Object *p1, Object *p2,Object*p3,
-	Object *p4)
-	{
-		EvReturn r;
+EvReturn ThrowDir(int16 Ev,Dir d, Object *p1, Object *p2,Object*p3,Object *p4) {
+    EvReturn r;
     EventSP++;
     CHECK_OVERFLOW; 
     EventStack[EventSP].Clear();
     EventStack[EventSP].Event = Ev;
-		EventStack[EventSP].p[0].o = p1;
+    EventStack[EventSP].p[0].o = p1;
     EventStack[EventSP].p[1].o = p2;
     EventStack[EventSP].p[2].o = p3;
     EventStack[EventSP].p[3].o = p4;
@@ -443,18 +439,16 @@ EvReturn ThrowDir(int16 Ev,Dir d, Object *p1, Object *p2,Object*p3,
     EventStack[EventSP].isDir = true;
     r=RealThrow(EventStack[EventSP]);
     EventSP--;
-		return r;
-	}
+    return r;
+}
 
-
-EvReturn ThrowXY(int16 Ev,int16 x,int16 y,Object *p1, Object *p2, Object*p3, Object *p4)
-	{
-		EvReturn r;
+EvReturn ThrowXY(int16 Ev,int16 x,int16 y,Object *p1, Object *p2, Object*p3, Object *p4) {
+    EvReturn r;
     EventSP++;
     CHECK_OVERFLOW; 
     EventStack[EventSP].Clear();
     EventStack[EventSP].Event = Ev;
-		EventStack[EventSP].p[0].o = p1;
+    EventStack[EventSP].p[0].o = p1;
     EventStack[EventSP].p[1].o = p2;
     EventStack[EventSP].p[2].o = p3;
     EventStack[EventSP].p[3].o = p4;
@@ -463,54 +457,48 @@ EvReturn ThrowXY(int16 Ev,int16 x,int16 y,Object *p1, Object *p2, Object*p3, Obj
     EventStack[EventSP].isLoc = true;
     r=RealThrow(EventStack[EventSP]);
     EventSP--;
-		return r;
-	}
+    return r;
+}
 
-EvReturn ThrowVal(int16 Ev,int16 n, Object *p1, Object *p2,Object*p3,
-	Object *p4)
-	{
-		EvReturn r;
+EvReturn ThrowVal(int16 Ev,int16 n, Object *p1, Object *p2,Object*p3,Object *p4) {
+    EvReturn r;
     EventSP++;
     CHECK_OVERFLOW; 
     EventStack[EventSP].Clear();
     EventStack[EventSP].Event = Ev;
-		EventStack[EventSP].p[0].o = p1;
+    EventStack[EventSP].p[0].o = p1;
     EventStack[EventSP].p[1].o = p2;
     EventStack[EventSP].p[2].o = p3;
     EventStack[EventSP].p[3].o = p4;
     EventStack[EventSP].EParam = n;
     r=RealThrow(EventStack[EventSP]);
     EventSP--;
-		return r;
-	}
+    return r;
+}
 
-  
-EvReturn ThrowEff(int16 Ev,rID eID,Object *p1, Object *p2, Object*p3, Object *p4)
-	{
-		EvReturn r;
+EvReturn ThrowEff(int16 Ev,rID eID,Object *p1, Object *p2, Object*p3, Object *p4) {
+    EvReturn r;
     EventSP++;    
     CHECK_OVERFLOW; 
     EventStack[EventSP].Clear();
     EventStack[EventSP].Event = Ev;
-		EventStack[EventSP].p[0].o = p1;
+    EventStack[EventSP].p[0].o = p1;
     EventStack[EventSP].p[1].o = p2;
     EventStack[EventSP].p[2].o = p3;
     EventStack[EventSP].p[3].o = p4;
     EventStack[EventSP].eID = eID;
     r=RealThrow(EventStack[EventSP]);
     EventSP--;
-		return r;
-	}
+    return r;
+}
 
-
-EvReturn ThrowEffDir(int16 Ev,rID eID,Dir d,Object *p1, Object *p2, Object*p3, Object *p4)
-	{
-		EvReturn r;
+EvReturn ThrowEffDir(int16 Ev,rID eID,Dir d,Object *p1, Object *p2, Object*p3, Object *p4) {
+    EvReturn r;
     EventSP++;
     CHECK_OVERFLOW; 
     EventStack[EventSP].Clear();
     EventStack[EventSP].Event = Ev;
-		EventStack[EventSP].p[0].o = p1;
+    EventStack[EventSP].p[0].o = p1;
     EventStack[EventSP].p[1].o = p2;
     EventStack[EventSP].p[2].o = p3;
     EventStack[EventSP].p[3].o = p4;
@@ -519,17 +507,16 @@ EvReturn ThrowEffDir(int16 Ev,rID eID,Dir d,Object *p1, Object *p2, Object*p3, O
     EventStack[EventSP].isDir = true;
     r=RealThrow(EventStack[EventSP]);
     EventSP--;
-		return r;
-	}
+    return r;
+}
 
-EvReturn ThrowEffXY(int16 Ev,rID eID,int16 x,int16 y,Object *p1, Object *p2, Object*p3, Object *p4)
-	{
-		EvReturn r;
+EvReturn ThrowEffXY(int16 Ev,rID eID,int16 x,int16 y,Object *p1, Object *p2, Object*p3, Object *p4) {
+    EvReturn r;
     EventSP++;
     CHECK_OVERFLOW; 
     EventStack[EventSP].Clear();
     EventStack[EventSP].Event = Ev;
-		EventStack[EventSP].p[0].o = p1;
+    EventStack[EventSP].p[0].o = p1;
     EventStack[EventSP].p[1].o = p2;
     EventStack[EventSP].p[2].o = p3;
     EventStack[EventSP].p[3].o = p4;
@@ -539,8 +526,8 @@ EvReturn ThrowEffXY(int16 Ev,rID eID,int16 x,int16 y,Object *p1, Object *p2, Obj
     EventStack[EventSP].isLoc = true;
     r=RealThrow(EventStack[EventSP]);
     EventSP--;
-		return r;
-	}
+    return r;
+}
 	
 /*   This if specifically for triggering one effect within another.
    We want the outer event's data to propagate to the inner event,
