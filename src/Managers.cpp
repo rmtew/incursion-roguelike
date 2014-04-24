@@ -54,6 +54,8 @@ Redraw:
     SetWin(WIN_SPELLS); 
     SizeWin(WIN_CUSTOM,2,WinBottom()-8,WinSizeX()-2,WinBottom()-3);
 
+    FeatKeys = "";
+    FeatList = "";
     if (p->HasFeat(FT_AMPLIFY_SPELL))
     { FeatKeys += "A"; FeatList += "<15>A<9>mplify/"; }
     if (p->HasFeat(FT_AUGMENT_SUMMONING))

@@ -1,6 +1,7 @@
 Incursion (open source) 0.6.9Y8: ..........
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/91/: When an object was removed (and deleted), it would remove all fields (e.g. modify objects within range) it had created which moved with it.  This would leak the non-moving fields, which would get removed later with a hack, but because the creating object no longer existed the effects of the field could not be unapplied so it didn't bother.  Reported by Frumple.
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/94/: Creatures who see their friends get killed could have gotten afraid.  Now mindless creatures in general are excluded from this.  Reported by Joseph Kerr.
+* https://bitbucket.org/rmtew/incursion-roguelike/issue/97/: Refreshing the spell manager rebuilt the feat list, which added onto the last time it was rebuilt, showing a more extended mangled doubled list each refresh.  Reported by Karagy.
 
 Incursion (open source) 0.6.9Y7: 2014-04-22
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/33/: Fixed error message encountered when either creating a character, or reincarnating it, depending on whether 'Flooded Cavern' region is placed in the generated dungeon.  This region had 'aboleth, with slaves' defined as a possible encounter, but sadly we have no aboleth (with or without slaves).  Reported by holsety_s, but let's be honest we were all getting it and ignoring it.
