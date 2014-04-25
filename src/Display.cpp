@@ -373,60 +373,53 @@ void Thing::PlaceNear(int16 x,int16 y)
           } 
       }
       
-    if (!isRetry)
-      { 
+    if (!isRetry) { 
         isRetry = true; 
-        goto TryAgain; }
+        goto TryAgain;
+    }
       
     /* So we've finished the loop and have not found any good
-       place to put ourselves. */
-     if (isPlayer())
-      {
+    place to put ourselves. */
+    if (isPlayer()) {
         IPrint("[ Deleting obstacles. ]");
         while (m->FirstAt(x,y))
-          m->FirstAt(x,y)->Remove(true);
+            m->FirstAt(x,y)->Remove(true);
         Move(x,y);
-      }
-    else {
-      /*
-      if (theGame->GetPlayer(0)->WizardMode)
+    } else {
+        /*
+        if (theGame->GetPlayer(0)->WizardMode)
         theGame->GetPlayer(0)->IPrint("You hear a disturbing *crunch*. (<Str> "
-            "deleted due to lack of open space to place it.)",(const char *)Name(0));        
-      */
-      Remove(true);
-      }
+        "deleted due to lack of open space to place it.)",(const char *)Name(0));        
+        */
+        Remove(true);
+    }
     return;
       
-    FoundGoodPlace:
+FoundGoodPlace:
     if (isBig)
-      for (i=0;i!=dc;i++)
-        Displace[i]->Remove(false);
+        for (i=0;i!=dc;i++)
+            Displace[i]->Remove(false);
     Move(tx,ty);
     
     // ww: this can cause a stack overflow when PlaceAt calls
     // PlaceNear calls PlaceAt -> perhaps two big creatures
     // ping-ponging each other? 
     if (isBig && dc) {
-      for (i=0;i!=dc;i++)
-        {
-          ASSERT(Displace[i]->GetAttr(A_SIZ) < SZ_HUGE);
-          Displace[i]->PlaceAt(m,tx,ty);
+        for (i=0;i!=dc;i++) {
+            ASSERT(Displace[i]->GetAttr(A_SIZ) < SZ_HUGE);
+            Displace[i]->PlaceAt(m,tx,ty);
         }
-      }
+    }
     
     {
-      Thing *il; int16 i;
-      for(i=0;backRefs[i];i++)
-        if (theRegistry->Exists(backRefs[i]))
-          if ((il = oThing(backRefs[i]))->isIllusion())
-            if (il->GetStatiObj(ILLUSION) == this)
-              il->IllusionLOSCheck(false);
-
+        Thing *il; int16 i;
+        for(i=0;backRefs[i];i++)
+            if (theRegistry->Exists(backRefs[i]))
+                if ((il = oThing(backRefs[i]))->isIllusion())
+                    if (il->GetStatiObj(ILLUSION) == this)
+                        il->IllusionLOSCheck(false);
     }
-
-
-
-  }
+}
 
 Map::Map() : Object(T_MAP), ov(myHandle)
 	{
