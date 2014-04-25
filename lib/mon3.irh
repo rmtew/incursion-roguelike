@@ -2599,7 +2599,7 @@ Monster "bloodbloater" : MA_JELLY
     Flags: M_NOHANDS, M_NOLIMBS, M_NOHEAD, M_NEUTER, M_AMORPH, M_GROUP,
            M_AQUATIC, M_MINDLESS, M_BLIND, M_HAS_BLOOD, M_CARNI;
     Desc: "An aquatic ooze a foot in diameter, the bloodbloater appears
-      not unlike an egg, with a globular, translucent red yolk surronded
+      not unlike an egg, with a globular, translucent red yolk surrounded
       by a clear, thin disc shot through with red veins. It latches on
       to a victim's body and begins to suck their blood just like a
       lamprey or leech.";

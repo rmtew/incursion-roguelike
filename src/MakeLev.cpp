@@ -2234,7 +2234,7 @@ StartAgain:
         }
 
   /* Here, we find instances of the terrain "shallow water", and if it is
-     surronded on all sides by "shallow water", we replace it with "deep
+     surrounded on all sides by "shallow water", we replace it with "deep
      water". Generally, we avoid refering to terrain types directly, but
      in this case the speed factor (scanning the entire map) justifies not
      messing around with flags or somesuch. */

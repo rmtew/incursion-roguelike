@@ -3099,7 +3099,7 @@ Effect "Venom of Khasrach" : EA_BLAST
 
 AI_SYMBOL Effect "Kysul;symbol" : EA_GENERIC
    { Flags: EF_NOGEN; 
-   Desc: "Kysul's holy symbol is a wide, lidless eye surronded by a corona
+   Desc: "Kysul's holy symbol is a wide, lidless eye surrounded by a corona
    of tentacles."; }
 
 God "Kysul"
@@ -3152,7 +3152,7 @@ God "Kysul"
       and sacrifices in Kysul's name, harkening back to the ancient history of
       their race, even though Kysul no longer responds to such entreaties. It
       offers to its clerics the domains of Fate, Good, Mysticism, Planning, Slime
-      and Water. Its holy symbol is a wide, lidless eye surronded by a corona of
+      and Water. Its holy symbol is a wide, lidless eye surrounded by a corona of
       tentacles, and its chosen weapon is the trident. It frequently grants its 
       chosen followers access to a wide variety of ancient artifacts long 
       forgotten by history.\n
@@ -4302,8 +4302,8 @@ God "Maeve"
             EActor->GainItem(h,false);
             return DONE;
           case 8:
-            EActor->IDPrint("You are surronded in a corona of rainbow
-              light!", "The <hObj> is surronded in a corona of rainbow
+            EActor->IDPrint("You are surrounded in a corona of rainbow
+              light!", "The <hObj> is surrounded in a corona of rainbow
               light!", EActor);
             for (h=EMap->FirstThing();h;h=EMap->NextThing())
               if (h->isCreature() && h->isHostileTo(EActor))

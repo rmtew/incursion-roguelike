@@ -530,7 +530,7 @@ Priest / Druid Spell "Sanctuary" : EA_GENERIC
       },
     EV_MAGIC_HIT
       "You feel safe." /
-      "The <EActor> is surronded by a warm aura.",
+      "The <EActor> is surrounded by a warm aura.",
     EV_REMOVED
       "You feel less safe." /
       "The <EActor>'s warm aura fades.",
@@ -2662,7 +2662,7 @@ Effect "Zeal" : EA_GENERIC
       },
     EV_MAGIC_HIT
       "You invoke a holy zeal." /
-      "The <EActor> is surronded by a brilliant golden aura.",
+      "The <EActor> is surrounded by a brilliant golden aura.",
     EV_REMOVED
       "You feel less safe." /
       "The <EActor>'s golden aura fades.",
@@ -4593,7 +4593,7 @@ and EA_INFLICT
   { xval: ADJUST_NAT; yval: A_ARM; pval: 3d1 + LEVEL_1PER5;
     On Event EV_MAGIC_HIT
       "You grow huge, and feel a righteous power come upon you." /
-      "The <EVictim> grows enormous, and is surronded by an aura of righteousness!",
+      "The <EVictim> grows enormous, and is surrounded by an aura of righteousness!",
 	  EV_REMOVED {
 	    EActor->IDPrint("You feel the righetous might leave you.",
 	                    "The <EActor> shrinks back to normal size.");

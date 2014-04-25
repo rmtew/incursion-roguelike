@@ -1578,7 +1578,7 @@ Wizard / Priest / Scroll Spell "Protection from Undead" : EA_GENERIC
       },
     EV_MAGIC_HIT
       "You feel safe." /
-      "The <EActor> is surronded by a warm aura.",
+      "The <EActor> is surrounded by a warm aura.",
     EV_REMOVED
       "You feel less safe." /
       "The <EActor>'s warm aura fades.",

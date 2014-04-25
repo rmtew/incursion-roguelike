@@ -1741,7 +1741,7 @@ void Character::GodMessage(rID gID, int16 msgnum, ...)
       
       /* Invoking Aid Messages */
       { MSG_TIMEOUT, "A voice booms, |Thou hast invoked my aid far too casually, mortal!|" },
-      { MSG_PRAYER, "You are surronded in a column of shimmering light." },
+      { MSG_PRAYER, "You are surrounded in a column of shimmering light." },
       { MSG_NOAID, "A voice speaks solemnly in your mind: |That which you pray for is "
                      "outside of my dominion.|" },
       { MSG_OUT_OF_AID, "A voice speaks solemnly, |Thou must journey on thine own now. "

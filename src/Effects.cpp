@@ -1147,7 +1147,7 @@ EvReturn Magic::Dispel(EventInfo &e)
               if (it)
                 TPrint(e,e.EActor == e.EVictim ? NULL :
                   "The <EVictim>'s <Obj> is surrounded with a dull grey aura.",
-                  "Your <Obj> is surronded with a dull grey aura.",
+                  "Your <Obj> is surrounded with a dull grey aura.",
                   "The <EVictim>'s <Obj> is surrounded with a dull grey aura.",it);
               else if (e.EActor != e.EVictim)
                 e.EActor->IPrint("The <Obj>'s <5><Res><7> spell is dispelled.",

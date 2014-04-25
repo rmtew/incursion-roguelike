@@ -1181,8 +1181,8 @@ Effect "Nightmare Smite" : EA_INFLICT
       return SHOULD_CAST_IT;
       },
     MSG_CAST
-      "You are surronded by a nimbus of unholy, coruscating light!" /
-      "The <EActor> is surronded by a nimbus of unholy, coruscating light!";
+      "You are surrounded by a nimbus of unholy, coruscating light!" /
+      "The <EActor> is surrounded by a nimbus of unholy, coruscating light!";
   }
 
 Effect "Nightmare smite;actual blast" : EA_BLAST
