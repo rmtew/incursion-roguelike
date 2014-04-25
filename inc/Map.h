@@ -488,6 +488,17 @@ extern Map* TheMainMap;
 #define ADDED_SIZE      128
 
                                 
+#define Stati_RemoveInline_(s, targ, logic) {             \
+    Status sCopy = *s;                                    \
+    targ->__Stati.Removed++;                              \
+    s->Nature = 0; s->eID = 0; FixupBackrefs(&sCopy,targ);\
+    s->h = NULL;                                          \
+    logic;                                                \
+    targ->StatiOff(sCopy);                                \
+}
+
+#define Stati_RemoveInline(s, targ)                    \
+    Stati_RemoveInline_(s, targ, ;)
 
 #define StatiIter(targ)                                \
   { Status *S; int16 __i; targ->__Stati.Nested++;      \
@@ -504,39 +515,26 @@ extern Map* TheMainMap;
           !targ->__Stati.Nested)                       \
       targ->_FixupStati();                             \
     }
-    
-#define StatiIter_RemoveCurrent(targ)                 \
-   { if (S->eID && RES(S->eID)->Type == T_TEFFECT)    \
-       targ->RemoveEffStati(S->eID, EV_REMOVED);      \
-     else {                                           \
-     Status s; s = *S;                                \
-     targ->__Stati.Removed++;                         \
-     S->Nature = 0; S->eID = 0; FixupBackrefs(S,targ);\
-     targ->StatiOff(s); } }                          
 
 #define StatiIter_IfNothingRemoved(targ)              \
     if (targ->__Stati.Removed == 0)
 
-/* HACKFIX */
-#define StatiIter_DispelCurrent(targ)                 \
-   { if (S->eID && RES(S->eID)->Type == T_TEFFECT)    \
-       targ->RemoveEffStati(S->eID, EV_DISPELLED);    \
-     else {                                           \
-     Status s; s = *S;                                \
-     targ->__Stati.Removed++;                         \
-     S->Nature = 0; S->eID = 0; FixupBackrefs(S,targ);\
-     targ->StatiOff(s); } }                          
-    
+#define StatiIter_RemoveCurrent_(targ, _EV) {         \
+    if (S->eID && RES(S->eID)->Type == T_TEFFECT)     \
+        targ->RemoveEffStati(S->eID, _EV);            \
+    else                                              \
+        Stati_RemoveInline(S, targ);                  \
+}
 
-#define StatiIter_ElapseCurrent(targ)                  \
-   { if (S->eID && RES(S->eID)->Type == T_TEFFECT)     \
-       targ->RemoveEffStati(S->eID,EV_ELAPSED);        \
-     else {                                           \
-     Status s; s = *S;                                \
-     targ->__Stati.Removed++;                         \
-     S->Nature = 0; S->eID = 0; FixupBackrefs(S,targ);\
-     targ->StatiOff(s,true); } }           
-                                
+#define StatiIter_RemoveCurrent(targ)                 \
+    StatiIter_RemoveCurrent_(targ, EV_REMOVED)
+
+#define StatiIter_DispelCurrent(targ)                 \
+    StatiIter_RemoveCurrent_(targ, EV_DISPELLED)
+
+#define StatiIter_ElapseCurrent(targ)                 \
+    StatiIter_RemoveCurrent_(targ, EV_ELAPSED)
+
                                 
 #define is_adj(n) ((n) >= ADJUST && (n) <= ADJUST_LAST)
 
@@ -769,7 +767,7 @@ class Thing: public Object
       inline Field* inField(int32 FType = -1)
         {
           if (x < 0 || y < 0 || !m)
-            return false;
+            return NULL;
           if (!m->At(x,y).hasField)
             return NULL;
           for(int i=0;m->Fields[i];i++)
@@ -777,15 +775,6 @@ class Thing: public Object
               if ((FType == -1) || (FType & m->Fields[i]->FType))
                 return m->Fields[i];
           return NULL;
-          /*
-          for(int16 i=0;m->Fields[i];i++)
-            if (abs(m->Fields[i]->cx - x) <= m->Fields[i]->rad)
-              if (abs(m->Fields[i]->cy - y) <= m->Fields[i]->rad)
-                if (m->Fields[i]->inArea(x,y))
-                  if (FType == -1 || FType == m->Fields[i]->FType)
-                    return m->Fields[i];
-          return NULL;
-          */
         }
       /*inline*/ int16 DistFromPlayer();
 			EvReturn Event(EventInfo &e);
@@ -795,8 +784,8 @@ class Thing: public Object
         { return NOTHING; }
       virtual bool inGroup(hObj h);
 
-		  void GainPermStati(int16 n,Thing *t,int8 Cause,int16 Val=-1,int16 Mag=-1, rID eID = 0, int8 clev=0);
-		  void GainTempStati(int16 n,Thing *t,int16 Duration,int8 Cause,int16 Val=-1,int16 Mag=-1, rID eID = 0, int8 clev=0);
+	  void GainPermStati(int16 n,Thing *t,int8 Cause,int16 Val=-1,int16 Mag=-1, rID eID = 0, int8 clev=0);
+	  void GainTempStati(int16 n,Thing *t,int16 Duration,int8 Cause,int16 Val=-1,int16 Mag=-1, rID eID = 0, int8 clev=0);
       void CopyStati(Thing *t, int16 n);
       void RemoveStati(int16 n,int8 Cause=-1, int16 Val=-1,int16 Mag=-1, Thing *t=NULL);		  
       void RemoveEffStati(rID xID, int16 ev = EV_REMOVED, int16 butNotNature = 0);
@@ -808,7 +797,7 @@ class Thing: public Object
       inline bool HasStati(int16 n,int16 Val=-1,Thing *t=NULL);
       inline bool HasEffStati(int16 n,rID eID, int16 Val=-1, Thing *t=NULL);
       bool HasEffField(rID eID);
-      bool        HasStatiFrom(Thing *t);
+      bool HasStatiFrom(Thing *t);
       Status* GetStati(int16 n,int16 Val=-1,Thing *t=NULL);
       Status* GetEffStati(int16 n,rID xID, int16 Val=-1, Thing *t=NULL);
       inline int16 CountStati(int16 n,int16 Val=-1,Thing *t=NULL);
@@ -892,9 +881,7 @@ class Thing: public Object
       void SetEffStatiCause(int16 n,rID xID,uint8 Cause, int16 Val=-1, Thing *t=NULL)
         { Status *s = GetEffStati(n,xID,Val,t);
           if (s) s->Source = Cause; }
-      void SetEffStatiObj(int16 n,rID xID,Thing *t, int16 Val=-1)
-        { Status *s = GetEffStati(n,xID,Val);
-          if (s) s->h = t ? t->myHandle : 0; }
+      void SetEffStatiObj(int16 n,rID xID,Thing *t, int16 Val=-1);
       void SetEffStatiDur(int16 n,rID xID,int16 Dur, int16 Val=-1, Thing *t=NULL)
         { Status *s = GetEffStati(n,xID,Val,t);
           if (s) s->Duration = Dur; }
@@ -907,6 +894,7 @@ class Thing: public Object
             }
           else
             s->Mag += Inc; }
+      void __StatiRemoval(Status *S, Thing *t);
  
       inline bool containsAllStatiFrom(Thing *other, const uint8 *IgnoreNatures);
       inline bool hasSameStati(Thing *t, const uint8 *IgnoreNatures)
@@ -947,12 +935,33 @@ inline Status * SNBN(int16 i, Thing *targ, int16 count, int16 n)
       return &(targ->__Stati.Added[(i) - count]);
   }
 
-inline void FixupBackrefs(Status *S, Thing *targ)
-  {
-    /*
-    if (S->h && theRegistry->Exists(S->h))            
-      if (!targ->HasStatiFrom(oThing(S->h)))          
-        oThing(S->h)->backRefs.RemoveItem(            
-                                targ->myHandle); 
-    */
-  }
+inline bool RemoveBackrefByHandle(hObj hReferee, Thing *tReferrer) {
+    for (int32 i=0;tReferrer->backRefs[i];i++)
+        if (tReferrer->backRefs[i] == hReferee) {
+            tReferrer->backRefs.Remove(i);
+            return true;
+        }
+    return false;
+}
+
+inline bool RemoveBackref(Thing *hReferee, Thing *hReferrer) {
+    return RemoveBackrefByHandle(hReferee->myHandle, hReferrer);
+}
+
+inline void FixupBackrefs(Status *S, Thing *tReferee) {
+    if (S->h != tReferee->myHandle)
+        if (S->h && theRegistry->Exists(S->h)) {
+            Thing *tReferrer = oThing(S->h);
+            String eName;
+            if (S->eID == NULL)
+                eName = "?";
+            else
+                eName = NAME(S->eID);
+            if (!RemoveBackref(tReferee, tReferrer))
+                Error("%s->SetEffStatiObj(EFFECT[%s],NATURE[%d],REFERRER[%s]) failed",
+                    (const char *)tReferee->Name(0),
+                    (const char *)eName,
+                    S->Nature,
+                    (const char *)tReferrer->Name(0));
+        }
+}

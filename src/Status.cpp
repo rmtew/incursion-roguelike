@@ -4,19 +4,21 @@
    Stati for maps) are aqlso included here.
 
      void Thing::UpdateStati()
-     void Thing::GainTempStati(int16 n, Thing *t, int16 Duration, int8 Cause, 
-                                   int16 Val, int16 Mag, rID eID, int8 clev)
-     void Thing::GainPermStati(int16 n,Thing *t,int8 Cause, int16 Val,int16 Mag,
-                                   rID eID, int8 clev)
-     void Thing::RemoveStati(int16 n,int8 Cause, int8 Val, int16 Mag,Thing *t, 
-                                   bool elapsed)
+     void Thing::GainTempStati(int16 n,Thing *t,int16 Duration,int8 Cause,int16 Val,int16 Mag,rID eID,int8 clev)
+     void Thing::GainPermStati(int16 n,Thing *t,int8 Cause, int16 Val,int16 Mag,rID eID, int8 clev)
+     void Thing::CopyStati(Thing *t, int16 n)
+     void Thing::_FixupStati()
+     void Thing::RemoveStati(int16 n,int8 Cause, int8 Val, int16 Mag,Thing *t,bool elapsed)
      void Thing::RemoveOnceStati(int16 n, int16 Val)
      void Thing::RemoveEffStati(rID eID, int16 ev)
      void Thing::RemoveStatiFrom(Thing *t)
+     bool Thing::HasStatiFrom(Thing *t)
      bool Thing::__HasStati(int16 n,int8 Val, Thing *t)
+     void Thing::CleanupRefedStati()
+     void Thing::__StatiRemoval(Status *S, Thing *t)
      Status* Thing::GetStati(int16 n,int8 Val, Thing *t)
      Status* Thing::GetEffStati(int16 n,rID xID)
-     void Thing::CleanupRefedStati()
+     void Thing::SetEffStatiObj(int16 n,rID xID,Thing *t, int16 Val)
      void Creature::StatiOn(Status *s)
      void Creature::StatiOff(Status *s)                            
      void Item::StatiOn(Status *s)
@@ -25,8 +27,7 @@
 
      void Map::UpdateFields()
      void Map::RemoveField(Field *f)
-     void Map::NewField(int16 FType, int16 x, int16 y, uint8 rad,
-                          Glyph Img, int16 Dur, rID eID, Creature *Creator)
+     void Map::NewField(int16 FType,int16 x,int16 y,uint8 rad,Glyph Img,int16 Dur,rID eID,Creature *Creator)
      uint8 Field::FieldDC()
      EvReturn Map::MoveField(Field *f,int16 _cx, int16 _cy, bool is_walk)
      EvReturn Creature::FieldOn(EventInfo &e)
@@ -251,7 +252,7 @@ void Thing::_FixupStati() {
 
     /* Merge both lists, if needed */
     if (__Stati.Added) {
-        int16 num, i, newSize;
+        int16 num, newSize;
 
         num = 0;
         for (i=0;i!=ADDED_SIZE;i++)
@@ -307,7 +308,7 @@ SkipMerge:
             __Stati.Idx[nat] = i; 
             last = nat; 
         } 
-    } 
+    }
 
     /* special kludge for ADJUST, to make StatIterAdjust work */
     for (i=ADJUST;i <= ADJUST_LAST; i++)
@@ -325,15 +326,14 @@ SkipMerge:
 void Thing::RemoveStati(int16 n,int8 Cause,int16 Val,int16 Mag,Thing *t) {
     ASSERT(n > 0 && n < LAST_STATI);
 
-    int16 oNested = __Stati.Nested, c;
-    c = 0;
+    int16 oNested = __Stati.Nested;
     StatiIterNature(this,n)
         if ((S->Val == Val || Val == -1) &&
             (S->Mag == Mag || Mag == -1) &&
             (S->Source == Cause || Cause == -1) &&
             (!t || t->myHandle == S->h)) {
-                StatiIter_RemoveCurrent(this); c++;
-        } 
+                StatiIter_RemoveCurrent(this);
+        }
     StatiIterEnd(this)
     ASSERT(oNested == __Stati.Nested);  
 }
@@ -368,8 +368,7 @@ void Thing::RemoveOnceStati(int16 n, int16 Val) {
 
 void Thing::RemoveEffStati(rID eID, int16 ev, int16 butNotNature) {
     bool msg = false; 
-    int16 oNested = __Stati.Nested, c;
-    c = 0;
+    int16 oNested = __Stati.Nested;
 
     StatiIter(this)
         if (S->Nature == INNATE_SPELL || S->Nature == butNotNature) 
@@ -401,18 +400,8 @@ void Thing::RemoveEffStati(rID eID, int16 ev, int16 butNotNature) {
                 if (r == NOTHING && isCreature())
                     thisc->StatiMessage(S->Nature,S->Val,true);                  
                 msg = true; 
-            } 
-            /* We need to do this manually, because we want to send S with the
-            eID intact to StatiOff, but StatiIter_RemoveCurrent calls 
-            RemoveEffStati if S->eID is a TEffect, resulting in an infinite
-            loop. */
-            Status _S;
-            _S = *S;
-            __Stati.Removed++;      
-            S->Nature = 0; 
-            S->eID = 0;
-            FixupBackrefs(S,this);
-            StatiOff(_S);           
+            }
+            Stati_RemoveInline(S, this);
         } 
     StatiIterEnd(this);
     ASSERT(oNested == __Stati.Nested);
@@ -435,34 +424,22 @@ void Thing::RemoveStatiSource(uint8 ss) {
 
 void Thing::RemoveStatiFrom(Thing *t, int16 ev) {
     int16 c,i; 
-    static Status sLog[64]; 
+    Status sLog[64]; 
     bool msg; 
     c = 0;
     StatiIter(this)
-        if (S->h == t->myHandle) {
-            /* This is cut and pasted from StatiIter_RemoveCurrent, which we
-            can't use here because it will automatically redirect us to
-            RemoveEffStati, and this function is used to handle the wierd
-            "two stones of channeling with different plusses" case. */
-            Status s; s = *S;                                
-            __Stati.Removed++;                         
-            S->Nature = 0; 
-            S->eID = 0; 
-            FixupBackrefs(S,this);
-
-            for (i=0;i!=c;i++)
-                if (sLog[i].eID == s.eID)
-                    break;
-            if (i == c) 
-                sLog[c++] = s;
-
-            StatiOff(s);
-        } 
+        if (S->h == t->myHandle)
+            Stati_RemoveInline_(S, this,
+                for (i=0;i!=c;i++)
+                    if (sLog[i].eID == sCopy.eID)
+                        break;
+                if (i == c) 
+                    sLog[c++] = sCopy;
+                );
     StatiIterEnd(this)
 
     for (i=0;i!=c;i++) {
-        EvReturn r;
-        r = NOTHING;
+        EvReturn r = NOTHING;
 
         if (sLog[i].eID) {
             PEVENT(ev,this,sLog[i].eID,
@@ -512,48 +489,51 @@ void Thing::CleanupRefedStati() {
     from Wiz. Complex, no? */
     flag = 1;
 
-    StatiIter(this)
-        FixupBackrefs(S,this);
-    StatiIterEnd(this)
-
 Restart:
     for (i=0;backRefs[i];i++) {
         if (theRegistry->Exists(backRefs[i]))
             if (!((t = oThing(backRefs[i]))->Flags & F_DELETE)) {
                 StatiIter(t)
-                    if (S->h == myHandle)
-                        switch (S->Nature) {
-                        /* There are surely going to be some cases where
-                        we want to "genericize" the Stati instead of
-                        removing it absolutely, by setting S->h = 0 
-                        so we still have the Stati but don't have a
-                        dangling, invalid hObj reference. I can't 
-                        think what these might be right now, though,
-                        so leave it as is for now and implement them
-                        when the undesired behaviour shows up in play. */
-                        default:
-                            /* SS_ATTK stati come from the side effects of
-                            attacks, and non-magical after-effects of
-                            spells (choking on a cloud of conjured dust.
-                            You don't stop being blind when you kill the
-                            serpent that spat venom in your eyes, so we
-                            genericize, rather than remove, the Stati. */
-                            if (S->Source == SS_ATTK && (S->Nature != GRAPPLED &&
-                                S->Nature != STUCK && S->Nature != GRABBED &&
-                                S->Nature != GRAPPLING))
-                                S->h = 0;
-                            else {
-                                StatiIter_RemoveCurrent(t); 
-                            }                       
+                    if (S->h == myHandle) {
+                        __StatiRemoval(S, t);
+                        StatiIterBreakout(t,goto Restart);
                     }
                 StatiIterEnd(t)
-                backRefs.Remove(i);
-                goto Restart;
+                Error(Format("CleanupRefedStati found leaked backref to %s",t->Name(0)));
+                backRefs.Remove(i--);
             }
     }
 
     backRefs.Clear();     
     flag = 0;
+}
+
+void Thing::__StatiRemoval(Status *S, Thing *t) {
+    switch (S->Nature) {
+    /* There are surely going to be some cases where
+    we want to "genericize" the Stati instead of
+    removing it absolutely, by setting S->h = 0 
+    so we still have the Stati but don't have a
+    dangling, invalid hObj reference. I can't 
+    think what these might be right now, though,
+    so leave it as is for now and implement them
+    when the undesired behaviour shows up in play. */
+    default:
+        /* SS_ATTK stati come from the side effects of
+        attacks, and non-magical after-effects of
+        spells (choking on a cloud of conjured dust.
+        You don't stop being blind when you kill the
+        serpent that spat venom in your eyes, so we
+        genericize, rather than remove, the Stati. */
+        if (S->Source == SS_ATTK && (S->Nature != GRAPPLED &&
+            S->Nature != STUCK && S->Nature != GRABBED &&
+            S->Nature != GRAPPLING)) {
+            RemoveBackrefByHandle(S->h,t);
+            S->h = 0;
+        } else {
+            StatiIter_RemoveCurrent(t); 
+        }
+    }
 }
 
 Status* Thing::GetStati(int16 n,int16 Val, Thing *t) {
@@ -582,6 +562,27 @@ Status* Thing::GetEffStati(int16 n,rID xID, int16 Val, Thing *t) {
         StatiIterEnd(this)
     } 
     return NULL;
+}
+
+void Thing::SetEffStatiObj(int16 n,rID xID,Thing *t, int16 Val) {
+    int32 i;
+    Status *ES = GetEffStati(n,xID,Val);
+    Thing *et;
+    if (ES) {
+        if (ES->h && theRegistry->Exists(ES->h)) {
+            Thing *tReferer = oThing(ES->h);
+            /* Remove the backref for the existing stati object. */
+            if (!RemoveBackref(this, tReferer))
+                Error("%s->SetEffStatiObj(effect='%s',nature='%s',referrer='%s') failed",
+                    this->Name(0),
+                    NAME(xID),
+                    Lookup(STATI_CONSTNAMES,n),
+                    tReferer->Name(0));
+        }
+        ES->h = t ? t->myHandle : NULL;
+        if (t && t != this)
+            oThing(ES->h)->backRefs.Add(myHandle);
+    }
 }
 
 void Creature::StatiOn(Status s) {
