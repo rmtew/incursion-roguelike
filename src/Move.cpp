@@ -597,15 +597,15 @@ IgnoreCreature:
       return ABORT;
   
   if (isPlayer()) {
-    Thing *il; int16 i;
-    for(i=0;backRefs[i];i++)
-      if (theRegistry->Exists(backRefs[i]))
-        if ((il = oThing(backRefs[i]))->isIllusion())
-          if (il->GetStatiObj(ILLUSION) == this)
-            if (il->IllusionLOSCheck(true,il->x,il->y,tx,ty))
-              if (!yn(XPrint("Confirm break LOS with your <Obj>?",il)))
-                return ABORT;
-    }
+      Thing *il; int16 i;
+      for(i=0;backRefs[i];i++)
+          if (theRegistry->Exists(backRefs[i]))
+              if ((il = oThing(backRefs[i]))->isIllusion())
+                  if (il->GetStatiObj(ILLUSION) == this)
+                      if (il->IllusionLOSCheck(true,il->x,il->y,tx,ty))
+                          if (!yn(XPrint("Confirm break LOS with your <Obj>?",il)))
+                              return ABORT;
+  }
 
 SkipConfirms:
 
@@ -1164,13 +1164,12 @@ RepeatPrompt:
   
 
   {
-    Thing *il; int16 i;
-    for(i=0;backRefs[i];i++)
-      if (theRegistry->Exists(backRefs[i]))
-        if ((il = oThing(backRefs[i]))->isIllusion())
-          if (il->GetStatiObj(ILLUSION) == this)
-            il->IllusionLOSCheck(false,il->x,il->y,tx,ty);
-
+      Thing *il; int16 i;
+      for(i=0;backRefs[i];i++)
+          if (theRegistry->Exists(backRefs[i]))
+              if ((il = oThing(backRefs[i]))->isIllusion())
+                  if (il->GetStatiObj(ILLUSION) == this)
+                      il->IllusionLOSCheck(false,il->x,il->y,tx,ty);
   }
 
 
