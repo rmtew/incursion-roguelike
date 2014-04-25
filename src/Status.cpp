@@ -35,46 +35,44 @@
 
 #include "Incursion.h"
 
-void Thing::UpdateStati()
-{
-  static EventInfo xe;
-  int16 i, j; Status s; s.Nature = 0;
+void Thing::UpdateStati() {
+    static EventInfo xe;
+    int16 i, j; Status s; s.Nature = 0;
 
-  StatiIter(this)
-    // ww: we can die while updating stati, and then we end up 
-    // placing something, but since our "m" field is null, we'll have
-    // trouble placing it (this happened Thu Jan 15 10:16:04 PST 2004)
-    if (isCreature() && (isDead() || !m || x == -1)) 
-      StatiIterBreakout(this,return)
-    if (S->Duration > 0) { 
-      // ww: I've gotten an invalid object handle on the oThing() below,
-      // so we add this sanity check 
-      if (theRegistry->Exists(S->h) && 
-          HasStati(PERIODIC,-1,oThing(S->h)))
-        continue;
-      if (S->Nature == POISONED)
-        if (HasStati(SLOW_POISON))
-          continue;
-      if (S->Nature == HUNGER && isCreature())
-        thisc->GetHungrier(1);
-      else  
-        S->Duration--;
-      if (S->Duration <= 0) {
-        if (S->Nature == ACTING) {
-          s = *S;
-          if (s.h && oThing(s.h)->isCreature()) 
-            Throw(s.Val,this,oCreature(s.h));
-          else {
-            if (s.Mag)
-              ThrowDir(s.Val,s.Mag,this,NULL,oThing(s.h));
-            else
-              Throw(s.Val,this,NULL,oThing(s.h));
+    StatiIter(this)
+        // ww: we can die while updating stati, and then we end up 
+        // placing something, but since our "m" field is null, we'll have
+        // trouble placing it (this happened Thu Jan 15 10:16:04 PST 2004)
+        if (isCreature() && (isDead() || !m || x == -1)) 
+            StatiIterBreakout(this,return)
+        if (S->Duration > 0) { 
+            // ww: I've gotten an invalid object handle on the oThing() below,
+            // so we add this sanity check 
+            if (theRegistry->Exists(S->h) && HasStati(PERIODIC,-1,oThing(S->h)))
+                continue;
+            if (S->Nature == POISONED && HasStati(SLOW_POISON))
+                continue;
+            if (S->Nature == HUNGER && isCreature())
+                thisc->GetHungrier(1);
+            else  
+                S->Duration--;
+
+            if (S->Duration <= 0) {
+                if (S->Nature == ACTING) {
+                    s = *S;
+                    if (s.h && oThing(s.h)->isCreature()) 
+                        Throw(s.Val,this,oCreature(s.h));
+                    else {
+                        if (s.Mag)
+                            ThrowDir(s.Val,s.Mag,this,NULL,oThing(s.h));
+                        else
+                            Throw(s.Val,this,NULL,oThing(s.h));
+                    }
+                }
+                StatiIter_ElapseCurrent(this);
             }
-          }
-        StatiIter_ElapseCurrent(this);
         }
-      }
-  StatiIterEnd(this)
+    StatiIterEnd(this)
 }
 
 int32 __max = 0;
@@ -390,58 +388,56 @@ void Thing::RemoveOnceStati(int16 n, int16 Val)
     }
 }
 
-void Thing::RemoveEffStati(rID eID, int16 ev, int16 butNotNature)
-{
-  bool msg = false; 
-  int16 oNested = __Stati.Nested, c;
-  c = 0;
-  StatiIter(this)
-    if (S->Nature == INNATE_SPELL || S->Nature == butNotNature) 
-      continue; 
-    if (S->Source != SS_MONI && S->eID == eID && 
-          (S->h == 0 || butNotNature != -1)) {
-      if (S->Nature == PERIODIC && isCreature())
-        if (oThing(S->h) && oThing(S->h)->isItem() &&
-              !EventStack[EventSP].isRemove)
-          continue;
-        
-      if (!msg) {
-            EvReturn r;
-            PEVENT(ev,this,eID,
-              e.EParam = S->Nature; 
-              e.vVal = S->Val; 
-              e.vMag = S->Mag;
-              e.vObj = S->h,r);
-            if (r == ABORT)
-              StatiIterBreakout(this,return)
-            if (r == NOTHING && ev != EV_REMOVED) {
-              PEVENT(EV_REMOVED,this,eID,
-                e.EParam = S->Nature; 
-                e.vVal = S->Val; 
-                e.vMag = S->Mag;
-                e.vObj = S->h,r);
-              
-              if (r == ABORT)
-                StatiIterBreakout(this,return)
-            }
-            if (r == NOTHING && isCreature())
-              thisc->StatiMessage(S->Nature,S->Val,true);                  
-            msg = true; 
+void Thing::RemoveEffStati(rID eID, int16 ev, int16 butNotNature) {
+    bool msg = false; 
+    int16 oNested = __Stati.Nested, c;
+    c = 0;
+
+    StatiIter(this)
+        if (S->Nature == INNATE_SPELL || S->Nature == butNotNature) 
+            continue; 
+        if (S->Source != SS_MONI && S->eID == eID && (S->h == 0 || butNotNature != -1)) {
+            if (S->Nature == PERIODIC && isCreature())
+                if (oThing(S->h) && oThing(S->h)->isItem() && !EventStack[EventSP].isRemove)
+                    continue;
+
+            if (!msg) {
+                EvReturn r;
+                PEVENT(ev,this,eID,
+                    e.EParam = S->Nature; 
+                    e.vVal = S->Val; 
+                    e.vMag = S->Mag;
+                    e.vObj = S->h,r);
+                if (r == ABORT)
+                    StatiIterBreakout(this,return)
+
+                if (r == NOTHING && ev != EV_REMOVED) {
+                    PEVENT(EV_REMOVED,this,eID,
+                        e.EParam = S->Nature; 
+                        e.vVal = S->Val; 
+                        e.vMag = S->Mag;
+                        e.vObj = S->h,r);
+                    if (r == ABORT)
+                        StatiIterBreakout(this,return)
+                }
+                if (r == NOTHING && isCreature())
+                    thisc->StatiMessage(S->Nature,S->Val,true);                  
+                msg = true; 
+            } 
+            /* We need to do this manually, because we want to send S with the
+            eID intact to StatiOff, but StatiIter_RemoveCurrent calls 
+            RemoveEffStati if S->eID is a TEffect, resulting in an infinite
+            loop. */
+            Status _S;
+            _S = *S;
+            __Stati.Removed++;      
+            S->Nature = 0; 
+            S->eID = 0;
+            FixupBackrefs(S,this);
+            StatiOff(_S);           
         } 
-      /* We need to do this manually, because we want to send S with the
-         eID intact to StatiOff, but StatiIter_RemoveCurrent calls 
-         RemoveEffStati if S->eID is a TEffect, resulting in an infinite
-         loop. */
-      Status _S;
-      _S = *S;
-      __Stati.Removed++;      
-      S->Nature = 0; 
-      S->eID = 0;
-      FixupBackrefs(S,this);
-      StatiOff(_S);           
-      } 
-  StatiIterEnd(this)
-  ASSERT(oNested == __Stati.Nested);
+    StatiIterEnd(this);
+    ASSERT(oNested == __Stati.Nested);
 }
 
 bool Thing::HasStatiFrom(Thing *t)
