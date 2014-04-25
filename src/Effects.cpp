@@ -1352,34 +1352,29 @@ EvReturn Magic::Reveal(EventInfo &e)
 
 extern Creature* CandidateCreatures[2048];
 
-EvReturn Magic::Summon(EventInfo &e)
-  {
+EvReturn Magic::Summon(EventInfo &e) {
     String opt[20], desc[20];
     Monster *c; rID mID; Creature *cr; int16 i, j, n, k;
 
     if (!e.isLoc) {
-      e.EXVal = e.ETarget ? e.ETarget->x : e.EActor->x;
-      e.EYVal = e.ETarget ? e.ETarget->y : e.EActor->y;
-      }
+        e.EXVal = e.ETarget ? e.ETarget->x : e.EActor->x;
+        e.EYVal = e.ETarget ? e.ETarget->y : e.EActor->y;
+    }
 
     /* Note that the Depth is still dependant upon the actual map;
        the player will never meet a ghoul at 50', even if Asomdeus
        himself is doing the summoning. */
 
-    if (TEFF(e.eID)->HasFlag(EF_XSUMMON))
-      {
+    if (TEFF(e.eID)->HasFlag(EF_XSUMMON)) {
         Thing *t;
         for (i=0;e.EActor->backRefs[i];i++)
-          if (theRegistry->Exists(e.EActor->backRefs[i]))
-            if (!oThing(e.EActor->backRefs[i])->isDead())
-              if (oThing(e.EActor->backRefs[i])->
-                    HasEffStati(SUMMONED,e.eID))
-                {
-                  ReThrow(MSG_XSUMMON,e);
-                  return ABORT;
-                }
-      }
-              
+            if (theRegistry->Exists(e.EActor->backRefs[i]))
+                if (!oThing(e.EActor->backRefs[i])->isDead())
+                    if (oThing(e.EActor->backRefs[i])->HasEffStati(SUMMONED,e.eID)) {
+                        ReThrow(MSG_XSUMMON,e);
+                        return ABORT;
+                    }
+    }              
     
     if (e.MM & MM_CONTROL) {
       Creature *cr[20][20];
