@@ -917,12 +917,10 @@ inline Status * SN(int16 i, Thing *targ)
   {
     if (i < targ->__Stati.Last)
       return &(targ->__Stati.S[i]);
-    else if (i - targ->__Stati.Last >= 
-                 targ->__Stati.szAdded)
+    else if (i - targ->__Stati.Last >= targ->__Stati.szAdded)
       return NULL;
     else
-      return &(targ->__Stati.Added[i -
-               targ->__Stati.Last]);
+      return &(targ->__Stati.Added[i - targ->__Stati.Last]);
   }    
 
 inline Status * SNBN(int16 i, Thing *targ, int16 count, int16 n)
@@ -935,17 +933,13 @@ inline Status * SNBN(int16 i, Thing *targ, int16 count, int16 n)
       return &(targ->__Stati.Added[(i) - count]);
   }
 
-inline bool RemoveBackrefByHandle(hObj hReferee, Thing *tReferrer) {
+inline bool RemoveBackref(hObj hReferee, Thing *tReferrer) {
     for (int32 i=0;tReferrer->backRefs[i];i++)
         if (tReferrer->backRefs[i] == hReferee) {
             tReferrer->backRefs.Remove(i);
             return true;
         }
     return false;
-}
-
-inline bool RemoveBackref(Thing *hReferee, Thing *hReferrer) {
-    return RemoveBackrefByHandle(hReferee->myHandle, hReferrer);
 }
 
 inline void FixupBackrefs(Status *S, Thing *tReferee) {
@@ -957,7 +951,7 @@ inline void FixupBackrefs(Status *S, Thing *tReferee) {
                 eName = "?";
             else
                 eName = NAME(S->eID);
-            if (!RemoveBackref(tReferee, tReferrer))
+            if (!RemoveBackref(tReferee->myHandle, tReferrer))
                 Error("%s->SetEffStatiObj(EFFECT[%s],NATURE[%d],REFERRER[%s]) failed",
                     (const char *)tReferee->Name(0),
                     (const char *)eName,

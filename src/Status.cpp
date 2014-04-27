@@ -478,8 +478,6 @@ void Thing::RemoveStatiFrom(Thing *t, int16 ev) {
 
 void Thing::CleanupRefedStati() {
     int32 i, j; Thing *t;
-    static int32 flag = 0;
-    bool removed_flag = false;
 
     /* We have to start again on every find, because removing
     a Stati from X may cause X to remove a Stati from us.
@@ -487,7 +485,6 @@ void Thing::CleanupRefedStati() {
     nearby spellcasters. Wiz dies, so creature winks out
     of existence, in the process removing the granted buff
     from Wiz. Complex, no? */
-    flag = 1;
 
 Restart:
     for (i=0;backRefs[i];i++) {
@@ -505,7 +502,6 @@ Restart:
     }
 
     backRefs.Clear();     
-    flag = 0;
 }
 
 void Thing::__StatiRemoval(Status *S, Thing *t) {
@@ -528,7 +524,7 @@ void Thing::__StatiRemoval(Status *S, Thing *t) {
         if (S->Source == SS_ATTK && (S->Nature != GRAPPLED &&
             S->Nature != STUCK && S->Nature != GRABBED &&
             S->Nature != GRAPPLING)) {
-            RemoveBackrefByHandle(S->h,t);
+            RemoveBackref(S->h,t);
             S->h = 0;
         } else {
             StatiIter_RemoveCurrent(t); 
@@ -572,7 +568,7 @@ void Thing::SetEffStatiObj(int16 n,rID xID,Thing *t, int16 Val) {
         if (ES->h && theRegistry->Exists(ES->h)) {
             Thing *tReferer = oThing(ES->h);
             /* Remove the backref for the existing stati object. */
-            if (!RemoveBackref(this, tReferer))
+            if (!RemoveBackref(myHandle, tReferer))
                 Error("%s->SetEffStatiObj(effect='%s',nature='%s',referrer='%s') failed",
                     this->Name(0),
                     NAME(xID),

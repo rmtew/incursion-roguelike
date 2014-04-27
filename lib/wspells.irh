@@ -7617,13 +7617,11 @@ Wizard Spell "Watery Double" : EA_GENERIC
       return SHOULD_CAST_IT;
       },
     EV_EFFECT {
-      if (EActor->HasEffStati(EFF_FLAG1,$"Watery Double"))
-        {
-          EActor->IPrint("You can only sustain one watery double
-            at a time.");
+      if (EActor->HasEffStati(EFF_FLAG1,$"Watery Double")) {
+          EActor->IPrint("You can only sustain one watery double at a time.");
           return ABORT;
         }
-      EActor->GainPermStati(EFF_FLAG1,EVictim,SS_MISC);
+      EActor->GainPermStati(EFF_FLAG1,EVictim,SS_MISC,0,0,$"Watery Double");
       return NOTHING;
       },
     EV_MAGIC_HIT {
@@ -7632,8 +7630,7 @@ Wizard Spell "Watery Double" : EA_GENERIC
       hDouble->CopyStati(EVictim,TEMPLATE);
       hDouble->AddTemplate($"aqueous");
       hDouble->TurnHostileTo(EVictim);
-      hDouble->GainTempStati(EFF_FLAG2,EActor,e.vDuration,
-        SS_ENCH,0,0,$"Watery Double");
+      hDouble->GainTempStati(EFF_FLAG2,EActor,e.vDuration,SS_ENCH,0,0,$"Watery Double");
       hDouble->PlaceAt(EMap,EVictim->x,EVictim->y);
       hDouble->Initialize();
       EVictim->IDPrint("A duplicate of you rises up, formed out of the water!",
