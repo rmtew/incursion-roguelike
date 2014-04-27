@@ -106,7 +106,7 @@ Redraw:
     { FeatKeys += "Y"; FeatList += "Vile/"; }
     if (p->HasFeat(FT_WARP_SPELL))
     { FeatKeys += "W"; FeatList += "<15>W<9>arp/"; }
-    if (FeatList) {
+    if (FeatList.GetLength()) {
         FeatList = FeatList.Left(FeatList.GetLength()-1);
         FeatList = XPrint(Format("[%s] %s Spell",
             (const char*)FeatKeys, (const char*)FeatList));
