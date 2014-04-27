@@ -13,6 +13,9 @@
 #pragma warning (disable : 4661)
 
 //#define DEBUG_MEMORY_CORRUPTION
+//#ifdef DEBUG_MEMORY_CORRUPTION
+//#define INTENSIVE_MEMORY_DEBUG
+//#endif
 
 #include <memory.h>
 #include <malloc.h>
@@ -32,13 +35,13 @@
 void * _malloc(size_t sz);
 void * _realloc(void *vp, size_t sz);
 void   _free(void *vp);
-char*  _strdup(const char *str);
+char*  _incursion_strdup(const char *str);
 long  array_index(long x,long y);
 
 
 #define malloc  _malloc
 #define free    _free
-#define strdup  _strdup
+#define strdup  _incursion_strdup
 #define realloc _realloc
 #define calloc(a,b) _malloc((a)*(b))
 #define I(x,y)  array_index(x,y)

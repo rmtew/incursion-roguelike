@@ -41,117 +41,133 @@
 
 #define SAFETY_SIZE 48
 
-int32  BlockCount = 0;
-
 #ifdef INTENSIVE_MEMORY_DEBUG
-void*      Blocks[2000000L];
-int32   BlockSize[2000000L];
-bool   BlockFreed[2000000L];
+int32 BlockCount = 0;
+void* Blocks[2000000L];
+int32 BlockSize[2000000L];
+bool BlockFreed[2000000L];
+int32 AmtAlloced;
 #endif
 
-void * _malloc(size_t sz)
-  {
-    void *vp; char *cp; static int32 i;
-
+void * _malloc(size_t sz) {
+    void *vp;
+    char *cp;
 
     vp = malloc(sz + SAFETY_SIZE*2);
     memset(vp,0xAA,sz + SAFETY_SIZE*2);
 
     cp = (char*)vp;
-
     cp += SAFETY_SIZE;
 
-    #ifdef INTENSIVE_MEMORY_DEBUG
+#ifdef INTENSIVE_MEMORY_DEBUG
     Blocks[BlockCount] = (void*)cp;
     BlockSize[BlockCount] = sz;
     BlockFreed[BlockCount] = false;
     BlockCount++;
     ASSERT(BlockCount < 1999000);
-    #endif
+    AmtAlloced += sz;
+#endif
 
     return (void*) cp;
-  }
+}
 
-void _free(void *vp)
-  {
-    char *cp; static int32 i,c;
+void _free(void *vp) {
+    char *cp;
+    int32 i,c;
 
     c = 0;
-    #ifdef INTENSIVE_MEMORY_DEBUG
+#ifdef INTENSIVE_MEMORY_DEBUG
     for (i=0;i!=BlockCount;i++)
-      if (!BlockFreed[i])
-        if (Blocks[i] == vp)
-          { c++; BlockFreed[i] = true; }
-    ASSERT(c == 1);
-    #endif
+        if (!BlockFreed[i])
+            if (Blocks[i] == vp) {
+                c++;
+                BlockFreed[i] = true;
+                AmtAlloced -= BlockSize[i];
+            }
+            ASSERT(c == 1);
+#endif
 
     cp = (char*) vp;
-
     cp -= SAFETY_SIZE;
 
     free((void*)cp);
-  }
+}
 
-char* _strdup(const char* str)
-  {
-    int32 len; char *nstr;
-    
-    len = strlen(str);
-
-    nstr = (char*) _malloc(len+1);
-
+char* _incursion_strdup(const char* str) {
+    int32 len = strlen(str);
+    char *nstr = (char*)_malloc(len+1);
     strcpy(nstr,str);
-
     return nstr;
-  }
+}
 
-void* _realloc(void *vp, size_t sz)
-  {
-    char *cp; static int32 i, c;
+void* _realloc(void *vp, size_t sz) {
+    char *cp;
+    int32 i, c;
 
-    #ifdef INTENSIVE_MEMORY_DEBUG
+#ifdef INTENSIVE_MEMORY_DEBUG
     c = 0;
     for (i=0;i!=BlockCount;i++)
-      if (!BlockFreed[i])
-        if (Blocks[i] == vp)
-          { c++; BlockFreed[i] = true; }
+        if (!BlockFreed[i])
+            if (Blocks[i] == vp) {
+                c++;
+                BlockFreed[i] = true;
+                AmtAlloced -= BlockSize[i];
+            }
     ASSERT(c == 1);
-    #endif
+#endif
 
     cp = (char*)vp;
-
     cp -= SAFETY_SIZE;
-    
+
     cp = (char*)realloc(cp,sz + SAFETY_SIZE*2);
-                                  
     cp += SAFETY_SIZE;
 
-    #ifdef INTENSIVE_MEMORY_DEBUG
+#ifdef INTENSIVE_MEMORY_DEBUG
     Blocks[BlockCount] = (void*)cp;
     BlockSize[BlockCount] = sz;
     BlockFreed[BlockCount] = false;
     BlockCount++;
     ASSERT(BlockCount < 1999000);
-    #endif
+    AmtAlloced += sz;
+#endif
 
     return (void*) cp;
+}
 
-  }
+void *operator new(size_t size) {
+  //...
+    void *p = _malloc(size);
+    if(!p)
+        throw "error calling new";
+    return p;
+}
+
+void operator delete(void * p) throw() {
+    _free(p);
+}
+
+void *operator new[](size_t size) {
+    void *p = _malloc(size);
+    if (!p) 
+        throw "error calling new[]";
+    return p;
+}
+
+void operator delete[](void *p) {
+    _free(p);
+}
 
 #define malloc  _malloc
 #define free    _free
 #define realloc _realloc
-#define strdup  _strdup
+#define strdup  _incursion_strdup
 
-long array_index(long index, long size)
-  {
+long array_index(long index, long size) {
     ASSERT(index >= 0)
     ASSERT(size  >  0)
     ASSERT(size > index)
     return max(0,min(index,size));
-  }
-
-
+}
 
 #endif
 
