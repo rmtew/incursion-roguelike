@@ -2526,25 +2526,27 @@ EvReturn Map::enBuildMon(EventInfo &e)
             mt->ts.addCreatureTarget(true_leader,TargetMaster);
           }
         }
-        
-      if (e.EActor && e.EActor->isPlayer() && !(e.enFlags & EN_HOSTILE)) {
-        mn->MakeCompanion(e.EPActor,PHD_MAGIC);
-        if (mt)
-          mt->MakeCompanion(e.EPActor,PHD_MAGIC);
-        }
-      else {
-        mn->PartyID = e.EActor->PartyID;
-        if (mt)
-          mt->PartyID = e.EActor->PartyID;
-        }
-        
-      if (e.enFlags & EN_HOSTILE) {
-        mn->TurnHostileTo(e.EActor);
-        if (mt)
-          mt->TurnHostileTo(e.EActor);
-        }
-        
+
+      if (e.EActor) {
+          if (e.EActor->isPlayer() && !(e.enFlags & EN_HOSTILE)) {
+              mn->MakeCompanion(e.EPActor,PHD_MAGIC);
+              if (mt)
+                  mt->MakeCompanion(e.EPActor,PHD_MAGIC);
+          }
+          else {
+              mn->PartyID = e.EActor->PartyID;
+              if (mt)
+                  mt->PartyID = e.EActor->PartyID;
+          }
+
+          if (e.enFlags & EN_HOSTILE) {
+              mn->TurnHostileTo(e.EActor);
+              if (mt)
+                  mt->TurnHostileTo(e.EActor);
+          }
       }
+
+    }
       
     CandidateCreatures[e.cMember] = mn;
     Candidates[e.cMember] = mn->myHandle;
