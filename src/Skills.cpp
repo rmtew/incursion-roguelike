@@ -4306,8 +4306,8 @@ EvReturn Creature::Mount(EventInfo &e) {
         } else if (e.EVictim->onPlane() != e.EActor->onPlane()) { 
             IPrint("You cannot ride a creature on another plane.");
             return ABORT; 
-        } else if (e.EVictim->HasStati(PRONE) || e.EVictim->HasStati(STUCK) || e.EVictim->HasStati(GRAPPLED)) { 
-            IPrint("You cannot ride a creature that is prone, stuck or grappled.");
+        } else if (e.EVictim->HasStati(PRONE) || e.EVictim->HasStati(STUCK) || e.EVictim->HasStati(GRAPPLED) || e.EVictim->HasStati(ASLEEP)) { 
+            IPrint("You cannot ride a creature that is prone, stuck, grappled or asleep.");
             return ABORT; 
         } else if (e.EVictim->isPlayer()) {
             IPrint("You cannot use another player character as a mount.");
