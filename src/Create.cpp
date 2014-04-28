@@ -331,7 +331,7 @@ RepeatClass:
         goto RepeatClass;
     }
     if (TCLASS(ClassID[0])->PEvent(EV_ISTARGET,this,ClassID[0]) == ABORT) {
-        MyTerm->Message("You do not meet the requiments for that class.");
+        MyTerm->Message("You do not meet the requirements for that class.");
         goto RepeatClass;
     } 
     CalcValues(true);
