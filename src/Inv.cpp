@@ -798,53 +798,53 @@ Item* Creature::FindBestItemOrCreate(rID iID)
   return best; 
 }
 
-Item* Character::GetInv(bool first)
-  {
+Item* Character::GetInv(bool first) {
     static Item *it, *it2; 
     static int8 sl;
     Thing *t;
 
-    if (first)
-      { sl = 0; it = oItem(Inv[sl]); }
-    
-    if (!it)
-      {
-        if (sl == SL_LAST)
-          return NULL;
-        do
-          sl++;
-        while ( (sl != SL_LAST && !Inv[sl]) ||
-            // ww: previously we would return a two-handed weapon twice!
-                (sl == SL_READY && Inv[sl] == Inv[sl+1]) );
-        if (sl == SL_LAST)
-          return NULL;
+    if (first) {
+        sl = 0;
         it = oItem(Inv[sl]);
-      }
+    }
+
+    if (!it) {
+        if (sl == SL_LAST)
+            return NULL;
+
+        do {
+            sl++;
+        } while ( (sl != SL_LAST && !Inv[sl]) ||
+            // ww: previously we would return a two-handed weapon twice!
+            (sl == SL_READY && Inv[sl] == Inv[sl+1]) );
+        if (sl == SL_LAST)
+            return NULL;
+        it = oItem(Inv[sl]);
+    }
 
     it2 = it;
     if (it->isType(T_CONTAIN) && ((Container*)it)->Contents) {
-      it = oItem(((Container*)it)->Contents);
-      return it2;
-      }
+        it = oItem(((Container*)it)->Contents);
+        return it2;
+    }
 
     if (it->Next) {
-      it = oItem(it->Next);
-      return it2;
-      }
+        it = oItem(it->Next);
+        return it2;
+    }
 
-    t = oThing(it->Parent);
-    
+    t = oThing(it->Parent);    
     if (!t)
-      it = NULL;
+        it = NULL;
     else if (t->isItem())
-      it = oItem(t->Next);
+        it = oItem(t->Next);
     else if (t->isCharacter())
-      it = NULL;
+        it = NULL;
     else
-      Error("Glitch in Character::GetInv!");
+        Error("Glitch in Character::GetInv!");
 
     return it2;
-  }
+}
 
 void Character::Exchange()
   {
