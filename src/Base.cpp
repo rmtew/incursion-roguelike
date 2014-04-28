@@ -464,8 +464,8 @@ void PurgeStrings()
         //delete (StrBufDelQueue[i]);
         /* Keep Purify Happy! */
         StrBufDelQueue[i]->Empty();
-        free(StrBufDelQueue[i]);
-        SkipThisFree:;
+        delete StrBufDelQueue[i];
+SkipThisFree:
         StrBufDelQueue[i] = NULL;
       }
     iStrBufDelQueue = 0;

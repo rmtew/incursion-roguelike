@@ -674,23 +674,19 @@ SkipConfirms:
       return DONE;
       
     if (onPlane() == PHASE_MATERIAL && !HasAbility(CA_EARTHMELD)) {
-      if (TREG(m->RegionAt(tx,ty))->Size < GetAttr(A_SIZ))
-        {
-          IPrint("You are too large to enter the <Res>.",m->RegionAt(tx,ty));
-          return ABORT;
+        if (TREG(m->RegionAt(tx,ty))->Size < GetAttr(A_SIZ)) {
+            IPrint("You are too large to enter the <Res>.",m->RegionAt(tx,ty));
+            return ABORT;
+        } else if (TREG(m->RegionAt(tx,ty))->Size == GetAttr(A_SIZ) && TREG(m->RegionAt(x,y))->Size > GetAttr(A_SIZ))
+            szChange = -1;
+        else if (TREG(m->RegionAt(x,y))->Size == GetAttr(A_SIZ) && TREG(m->RegionAt(tx,ty))->Size > GetAttr(A_SIZ))
+            szChange = 1;
+
+        if (szChange == -1 && HasStati(MOUNTED)) {
+            IPrint("That passage is too tiny to enter while mounted.");
+            return ABORT;
         }
-      else if (TREG(m->RegionAt(tx,ty))->Size == GetAttr(A_SIZ) &&
-              TREG(m->RegionAt(x,y))->Size > GetAttr(A_SIZ))
-        szChange = -1;
-      else if (TREG(m->RegionAt(x,y))->Size == GetAttr(A_SIZ) &&
-              TREG(m->RegionAt(tx,ty))->Size > GetAttr(A_SIZ))
-        szChange = 1;
-      if (szChange == -1 && HasStati(MOUNTED))
-        {
-          IPrint("That passage is too tiny to enter while mounted.");
-          return ABORT;
-        }
-      }
+    }
     
     
     /* isCharacter() is just an optimization -- non-player
