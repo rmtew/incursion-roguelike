@@ -4275,94 +4275,73 @@ EvReturn Creature::Descend(EventInfo &e)
     return ABORT;
   }
 
-EvReturn Creature::Mount(EventInfo &e)
-  {
-    if (HasStati(MOUNTED))
-      {
+EvReturn Creature::Mount(EventInfo &e) {
+    if (HasStati(MOUNTED)) {
         IPrint("You're already mounted.");
         return ABORT;
-      }
-  
-    if (!(e.EVictim && e.EVictim->isCreature() &&
-        e.EActor != e.EVictim)) { 
-    IPrint("Don't be ridiculous!"); 
-    return ABORT; 
-  } else if (e.EVictim->m && e.EVictim->x != -1) {
-    // ww: else we are mounting something in a script somewhere (e.g., to
-    // make a death knight or a paladin), so ignore all of this flim-flam
+    }
 
-    if (!HasSkill(SK_RIDE)) { 
-      IPrint("You don't know how to ride!");
-      return ABORT; 
-      } 
-    else if (!HasMFlag(M_HUMANOID) || HasMFlag(M_NOLIMBS)) {
-      IPrint("You can't ride in this form.");
-      return ABORT; 
-      } 
-    else if (!e.EVictim->HasMFlag(M_MOUNTABLE)) { 
-      IPrint("That sort of creature cannot be ridden.");
-      return ABORT; 
-      } 
-    else if (e.EVictim->isMType(MA_VERMIN) && 
-             !e.EActor->isMType(MA_KOBOLD) &&
-             !(e.EVictim->isMType(MA_SPIDER) &&
-               e.EActor->isMType(MA_DROW))) {
-      IPrint("Only kobolds can ride vermin.");
-      return ABORT;
-      }
-    else if (e.EVictim->m && e.EVictim->isHostileTo(this)) { 
-      IPrint("You cannot ride a hostile creature.");
-      return ABORT; 
-      } 
-    else if (e.EVictim->onPlane() != e.EActor->onPlane()) { 
-      IPrint("You cannot ride a creature on another plane.");
-      return ABORT; 
-      } 
-    else if (e.EVictim->HasStati(PRONE) ||
-        e.EVictim->HasStati(STUCK) ||
-        e.EVictim->HasStati(GRAPPLED)) { 
-      IPrint("You cannot ride a creature that is prone, stuck or grappled.");
-      return ABORT; 
-      } 
-    else if (e.EVictim->isPlayer()) {
-      IPrint("You cannot use another player character as a mount.");
-      return ABORT; 
+    if (!(e.EVictim && e.EVictim->isCreature() && e.EActor != e.EVictim)) { 
+        IPrint("Don't be ridiculous!"); 
+        return ABORT; 
+    } else if (e.EVictim->m && e.EVictim->x != -1) {
+        // ww: else we are mounting something in a script somewhere (e.g., to
+        // make a death knight or a paladin), so ignore all of this flim-flam
+
+        if (!HasSkill(SK_RIDE)) { 
+            IPrint("You don't know how to ride!");
+            return ABORT; 
+        } else if (!HasMFlag(M_HUMANOID) || HasMFlag(M_NOLIMBS)) {
+            IPrint("You can't ride in this form.");
+            return ABORT; 
+        } else if (!e.EVictim->HasMFlag(M_MOUNTABLE)) { 
+            IPrint("That sort of creature cannot be ridden.");
+            return ABORT; 
+        } else if (e.EVictim->isMType(MA_VERMIN) && !e.EActor->isMType(MA_KOBOLD) && !(e.EVictim->isMType(MA_SPIDER) && e.EActor->isMType(MA_DROW))) {
+            IPrint("Only kobolds can ride vermin.");
+            return ABORT;
+        } else if (e.EVictim->m && e.EVictim->isHostileTo(this)) { 
+            IPrint("You cannot ride a hostile creature.");
+            return ABORT; 
+        } else if (e.EVictim->onPlane() != e.EActor->onPlane()) { 
+            IPrint("You cannot ride a creature on another plane.");
+            return ABORT; 
+        } else if (e.EVictim->HasStati(PRONE) || e.EVictim->HasStati(STUCK) || e.EVictim->HasStati(GRAPPLED)) { 
+            IPrint("You cannot ride a creature that is prone, stuck or grappled.");
+            return ABORT; 
+        } else if (e.EVictim->isPlayer()) {
+            IPrint("You cannot use another player character as a mount.");
+            return ABORT; 
+        } else if (e.EVictim->m && !(e.EVictim->isMType(MA_ANIMAL) || e.EVictim->isFriendlyTo(this))) {
+            /* You can ride any neutral horse you find, but just because you meet
+             * a friendly gold dragon (on the basis of matching alignment) does not
+             * mean that you can claim it as a mount! Checking "m" is a kludge for
+             * narzugons and other monsters created with a mount, so that they can
+             * get on their mounts before we've calculated the monster
+             * hostilities.*/
+            IPrint("The <Obj1> will not let you ride <him:Obj1>, at least not yet.", e.EVictim); return ABORT; 
+        } else if (e.EVictim->ChallengeRating() > 2 && e.EVictim->ChallengeRating() > max(1,SkillLevel(SK_RIDE)/2) && !(e.EVictim->GetStatiObj(ANIMAL_COMPANION) == this)) { 
+            IPrint("You fear that creature is too mighty to be handled well with your current degree of riding skill."); 
+            return ABORT; 
+        } else if (e.EVictim->GetAttr(A_SIZ) <= e.EActor->GetAttr(A_SIZ) &&
+                   (e.EVictim->GetAttr(A_SIZ) != SZ_SMALL || e.EActor->GetAttr(A_SIZ) != SZ_SMALL) &&
+                   !(e.EVictim->GetAttr(A_SIZ) == SZ_MEDIUM && e.EActor->isMType(MA_DWARF))) { 
+            IPrint(Format("That %s %s is not large enough to support your (%s) weight.",
+                Lookup(SizeNames,e.EVictim->GetAttr(A_SIZ)),
+                (const char*)e.EVictim->Name(0),
+                Lookup(SizeNames,e.EActor->GetAttr(A_SIZ))));
+            return ABORT; 
+        } else if (e.EVictim->GetAttr(A_SIZ) > e.EActor->GetAttr(A_SIZ)+1 && e.EVictim->isMType(MA_ANIMAL) && e.EVictim->isMType(MA_QUADRUPED)) { 
+            /* Anyone can ride dragons, gryphons, et al., but halflings and kobolds
+             * must use warponies or war dogs instead of warhorses. Maybe this should
+             * just be a penalty of some kind? */
+            IPrint("That kind of animal is too large for you to ride effectively.");
+            return ABORT; 
+        } else if (TREG(e.EActor->m->RegionAt(e.EActor->x,e.EActor->y))->Size <= e.EActor->GetAttr(A_SIZ)) {
+            IPrint("Space is too limited here to allow mounting.");
+            return ABORT;
+        }
     }
-    /* You can ride any neutral horse you find, but just because you meet
-     * a friendly gold dragon (on the basis of matching alignment) does not
-     * mean that you can claim it as a mount! Checking "m" is a kludge for
-     * narzugons and other monsters created with a mount, so that they can
-     * get on their mounts before we've calculated the monster
-     * hostilities.*/
-    else if (e.EVictim->m && !(e.EVictim->isMType(MA_ANIMAL) || e.EVictim->isFriendlyTo(this))) { 
-      IPrint("The <Obj1> will not let you ride <him:Obj1>, at "
-                      "least not yet.", e.EVictim); return ABORT; 
-    } else if (e.EVictim->ChallengeRating() > 2 &&
-        e.EVictim->ChallengeRating() > max(1,SkillLevel(SK_RIDE)/2) &&
-        !(e.EVictim->GetStatiObj(ANIMAL_COMPANION) == this)) { 
-      IPrint("You fear that creature is too mighty to be handled "
-          "well with your current degree of riding skill."); 
-      return ABORT; 
-    } else if (e.EVictim->GetAttr(A_SIZ) <= e.EActor->GetAttr(A_SIZ) &&
-               (e.EVictim->GetAttr(A_SIZ) != SZ_SMALL ||
-                e.EActor->GetAttr(A_SIZ) != SZ_SMALL) &&
-                !(e.EVictim->GetAttr(A_SIZ) == SZ_MEDIUM &&
-                 e.EActor->isMType(MA_DWARF))) { 
-      IPrint(Format("That %s %s is not large enough to support your (%s) weight.",
-                        Lookup(SizeNames,e.EVictim->GetAttr(A_SIZ)),
-                        (const char*)e.EVictim->Name(0),
-                        Lookup(SizeNames,e.EActor->GetAttr(A_SIZ))));
-      return ABORT; 
-    }
-    /* Anyone can ride dragons, gryphons, et al., but halflings and kobolds
-       must use warponies or war dogs instead of warhorses. Maybe this should
-       just be a penalty of some kind? */
-    else if (e.EVictim->GetAttr(A_SIZ) > e.EActor->GetAttr(A_SIZ)+1 &&
-        e.EVictim->isMType(MA_ANIMAL) && e.EVictim->isMType(MA_QUADRUPED)) { 
-      IPrint("That kind of animal is too large for you to ride effectively.");
-      return ABORT; 
-    }
-  }
 
     e.EVictim->Remove(false);
     e.EVictim->x = x;
@@ -4373,20 +4352,20 @@ EvReturn Creature::Mount(EventInfo &e)
     e.EActor->GainPermStati(MOUNTED,e.EVictim,SS_MISC,0,0);
     //Throw(EV_INIT_FIELDS,e.EVictim);
     if (e.EVictim->ts.getLeader() != e.EActor) {
-      /* VERY IMPORTANT CORRECTION -- add the mount target only if
-         we are riding a creature that is neutral to us, so that
-         we are its master for only so long as we ride it. Do NOT
-         add the mount target to creatures who were are allies
-         already before we rode them! */
-      if (!e.EVictim->ts.GetTarget(e.EActor))
-      e.EVictim->ts.addCreatureTarget(e.EActor, TargetMount);
-      e.EVictim->ts.Retarget(e.EVictim);
-      e.EVictim->SetImage();
-      }
+        /* VERY IMPORTANT CORRECTION -- add the mount target only if
+        we are riding a creature that is neutral to us, so that
+        we are its master for only so long as we ride it. Do NOT
+        add the mount target to creatures who were are allies
+        already before we rode them! */
+        if (!e.EVictim->ts.GetTarget(e.EActor))
+            e.EVictim->ts.addCreatureTarget(e.EActor, TargetMount);
+        e.EVictim->ts.Retarget(e.EVictim);
+        e.EVictim->SetImage();
+    }
     DPrint(e,"You mount the <EVictim>.",
-             "The <EActor> mounts the <EVictim>.");
+        "The <EActor> mounts the <EVictim>.");
     return DONE;
-  }
+}
 
 EvReturn Creature::Dismount(EventInfo &e)
   {         
