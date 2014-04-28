@@ -832,6 +832,9 @@ struct FeatInfoStruct FeatInfo[] = {
 
   { FT_AMPLIFY_SPELL, FF_UNIMP|FF_META|FF_WIZARD, "Amplify Spell",
     "An amplified spell reduces a target creature's magic resistance by 25%." },
+  { FT_AUGMENT_SUMMONING, FF_META|FF_WIZARD, "Augment Summoning",
+    "Your summoned creatures are more powerful than most, gaining a +4 magic bonus "
+    "to Strength and Constitution, and [10 + (Spell Level x 5)] additional hit points." }, 
   { FT_BIND_SPELL, FF_META|FF_WIZARD, "Bind Spell",
     "A bound spell has no effect on the caster, even if he would normally "
                   "be caught within the area of effect." },
@@ -923,10 +926,6 @@ struct FeatInfoStruct FeatInfo[] = {
      {{{FP_CASTER_LEVEL,1,0}}} }, 
   { FT_SPELL_PENETRATION, FF_WIZARD, "Spell Penetration",
     "You add 4 to you caster level (or 20%) when trying to overcome magic resistance.",
-     {{{FP_CASTER_LEVEL,1,0}}} }, 
-  { FT_AUGMENT_SUMMONING, FF_WIZARD, "Augment Summoning",
-    "Your summoned creatures are more powerful than most, gaining a +4 magic bonus "
-    "to Strength and Constitution, and [10 + (Spell Level x 5)] additional hit points.",
      {{{FP_CASTER_LEVEL,1,0}}} }, 
   { FT_GUARDED_INVOCATION, 0, "Guarded Invocation",
       "You know how to use your innate spell-like abilities without "
