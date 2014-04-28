@@ -1540,68 +1540,50 @@ void Player::UseItemMenu(const char *which, const char *haveno, int16 itype)
   ReThrow(ev, e);
 }
 
-void Player::YuseMenu(int32 SelectedIndex)
-  {
+void Player::YuseMenu(int32 SelectedIndex) {
     int16 i, c;
     EventInfo e;
 
-    if (SelectedIndex)
-      { c = SelectedIndex;
-        goto DoYuse; }
+    if (SelectedIndex) {
+        c = SelectedIndex;
+        goto DoYuse;
+    }
 
     for (i=0;i!=5;i++)
-      if (RecentVerbs[i] != -1)
-        MyTerm->LOption(YuseCommands[RecentVerbs[i]].Verb,RecentVerbs[i]);
-    
+        if (RecentVerbs[i] != -1)
+            MyTerm->LOption(YuseCommands[RecentVerbs[i]].Verb,RecentVerbs[i]);
+
     for (i=0;YuseCommands[i].Event;i++)
-      if (i != RecentVerbs[0] && i != RecentVerbs[1] && i != RecentVerbs[2]
-            && i != RecentVerbs[4] && i != RecentVerbs[4])
-        MyTerm->LOption(YuseCommands[i].Verb,i);
+        if (i != RecentVerbs[0] && i != RecentVerbs[1] && i != RecentVerbs[2]
+        && i != RecentVerbs[4] && i != RecentVerbs[4])
+            MyTerm->LOption(YuseCommands[i].Verb,i);
 
     MyTerm->SetQKeyType(QuickKeys,QKY_VERB);
-    c = MyTerm->LMenu(MENU_3COLS|MENU_ESC|MENU_BORDER|MENU_QKEY,
-      "What do you want to do?");
-
+    c = MyTerm->LMenu(MENU_3COLS|MENU_ESC|MENU_BORDER|MENU_QKEY,"What do you want to do?");
     if (c == -1)
-      return;
-      
-    DoYuse:
+        return;
 
+DoYuse:
     e.Clear();
     e.EActor = this;
     e.EMap = m;
 
-    if (YuseCommands[c].Flags & YU_REVERSE) 
-      {
-        if (!YusePrompt(YuseCommands[c].QItem2,
-                        YuseCommands[c].I2Msg,
-                        e, 3))
-          return;
-        if (!YusePrompt(YuseCommands[c].QItem1,
-                        YuseCommands[c].I1Msg,
-                        e, 2))
-          return;
-        if (!YusePrompt(YuseCommands[c].QTarget,
-                        YuseCommands[c].TMsg,
-                        e, 1))
-          return;
-      }
-    else
-      {
-        if (!YusePrompt(YuseCommands[c].QTarget,
-                        YuseCommands[c].TMsg,
-                        e, 1))
-          return;
-        if (!YusePrompt(YuseCommands[c].QItem1,
-                        YuseCommands[c].I1Msg,
-                        e, 2))
-          return;
-        if (!YusePrompt(YuseCommands[c].QItem2,
-                        YuseCommands[c].I2Msg,
-                        e, 3))
-          return;
-      }
-      
+    if (YuseCommands[c].Flags & YU_REVERSE) {
+        if (!YusePrompt(YuseCommands[c].QItem2,YuseCommands[c].I2Msg,e, 3))
+            return;
+        if (!YusePrompt(YuseCommands[c].QItem1,YuseCommands[c].I1Msg,e, 2))
+            return;
+        if (!YusePrompt(YuseCommands[c].QTarget,YuseCommands[c].TMsg,e, 1))
+            return;
+    } else {
+        if (!YusePrompt(YuseCommands[c].QTarget,YuseCommands[c].TMsg,e, 1))
+            return;
+        if (!YusePrompt(YuseCommands[c].QItem1,YuseCommands[c].I1Msg,e, 2))
+            return;
+        if (!YusePrompt(YuseCommands[c].QItem2,YuseCommands[c].I2Msg,e, 3))
+            return;
+    }
+
     if (YuseCommands[c].Event == EV_SURRENDER ||
         YuseCommands[c].Event == EV_ENLIST ||
         YuseCommands[c].Event == EV_TALK ||
@@ -1612,52 +1594,49 @@ void Player::YuseMenu(int32 SelectedIndex)
         YuseCommands[c].Event == EV_DISMISS ||
         YuseCommands[c].Event == EV_FAST_TALK ||
         YuseCommands[c].Event == EV_DISTRACT)
-      if (!e.ETarget || !e.ETarget->isCreature())
-        { IPrint("Don't socialize with the furniture.");
-          return; }
-      
+        if (!e.ETarget || !e.ETarget->isCreature()) {
+            IPrint("Don't socialize with the furniture.");
+            return;
+        }
+
     if (e.ETarget && !e.EItem)
-      if (e.ETarget->isItem()) {
-        e.EItem = (Item*) e.ETarget;
-        e.ETarget = NULL;
+        if (e.ETarget->isItem()) {
+            e.EItem = (Item*) e.ETarget;
+            e.ETarget = NULL;
         }
 
     e.isVerb = true;
     ReThrow(YuseCommands[c].Event,e);
 
     if (RecentVerbs[0] == c)
-      return;
+        return;
 
     for(i=0;i!=5;i++)
-      if (RecentVerbs[i] == c)
-        {          
-          if (i != 4)
-            memmove(&RecentVerbs[i], &RecentVerbs[i+1], (4-i) * sizeof(RecentVerbs[0]));
-          RecentVerbs[4] = -1;
+        if (RecentVerbs[i] == c) {          
+            if (i != 4)
+                memmove(&RecentVerbs[i], &RecentVerbs[i+1], (4-i) * sizeof(RecentVerbs[0]));
+            RecentVerbs[4] = -1;
         }
-    
+
     memmove(&RecentVerbs[1],&RecentVerbs[0],4 * sizeof(RecentVerbs[0]));
-    RecentVerbs[0] = c;  
+    RecentVerbs[0] = c;
+}
 
-  }
-
-bool Player::YusePrompt(int16 qval, const char *msg, EventInfo &e, int8 p)
-  {
+bool Player::YusePrompt(int16 qval, const char *msg, EventInfo &e, int8 p) {
     Thing *t, *t2;
 
     if (!qval)
-      return true;
+        return true;
 
     t = e.ETarget;
     if (!MyTerm->EffectPrompt(e,qval,false,msg))
-      return false;
+        return false;
 
     t2 = e.ETarget;
     e.ETarget = t;
     e.p[p].t = t2;
     return true;
-  }
-  
+}
 
 EvReturn Creature::HandleVerb(EventInfo &e)
   {
