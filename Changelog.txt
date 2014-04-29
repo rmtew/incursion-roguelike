@@ -7,6 +7,7 @@ Incursion (open source) 0.6.9Y8: ..........
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/109/: Prevent mounting on a tile where it would not be possible to move to when mounted anyway.  Reported by Frumple.
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/110/: Logic in the encounter generation badly checked if there was an actor involved.  I do not understand this game system, but this code is obviously bad.  Reported by Frumple. 
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/116/: Using static variables for inventory enumeration state means that if the logic in the loop which is enumerating the inventory calls something which in turn reenumerates the inventory before returning, then the inventory enumeration state will be at it's end and the loop will prematurely exit.
+* https://bitbucket.org/rmtew/incursion-roguelike/issue/117/: Could not use the escape key to exit the y key use menu.  The code supported handling an escape press already, but the flag to pay attention to escape at a lower level was not passed.
 
 Incursion (open source) 0.6.9Y7: 2014-04-22
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/33/: Fixed error message encountered when either creating a character, or reincarnating it, depending on whether 'Flooded Cavern' region is placed in the generated dungeon.  This region had 'aboleth, with slaves' defined as a possible encounter, but sadly we have no aboleth (with or without slaves).  Reported by holsety_s, but let's be honest we were all getting it and ignoring it.
