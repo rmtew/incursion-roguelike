@@ -1592,6 +1592,17 @@ void Container::Sort(int comparison(const void *,const void *))
    return;
 }
 
+int16 Creature::GetEnumeratedInv(Thing *list[]) {
+    Thing *th;
+    int16 cnt = 0;
+
+    if (th = this->FirstInv())
+        do {
+            list[cnt++] = th;
+        } while (th = this->NextInv());
+
+    return cnt;
+}
 
 Item* Creature::RandInv()
   {

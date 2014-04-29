@@ -1832,7 +1832,7 @@ inline String & DescribeResource(rID xID)
   }
 
 bool TextTerm::EffectPrompt(EventInfo &e,uint16 fl,bool is_look, const char* PromptText) {
-    int16 i, ch, t, dist, best, bestd, typ, mod, tx, ty, range;
+    int16 i, j, ch, t, dist, best, bestd, typ, mod, tx, ty, range;
     Thing *th, *cr; hObj hi; String Prompt; Item *wp;
     bool first = true, found, cycled; 
     bool isEngulfed = p->HasStati(ENGULFED);
@@ -1853,8 +1853,6 @@ Reprompt:
     if (!typ)
         return true;
 
-
-
     if (is_look)
         Prompt = Format("%cLooking [rfmoxltn%s*?]:%c ",-9,Arrows,-7);
     else {
@@ -1866,16 +1864,16 @@ SelectTarget:
                 fl & Q_ALL ? "a" : "", -7);
             mod = Q_TAR; cr = p;
         } else if (typ == Q_INV) {
+            Thing *things[100];
 SelectItem:
-            found = false;
-            for (th = p->FirstInv();th;th = p->NextInv())
+            i = p->GetEnumeratedInv(things);
+            for (j=0; j<i; j++) {
+                th = things[j];
                 if (ThrowEff(EV_RATETARG,e.eID,th,th,th,th) != ABORT)
-                    //if (((Item*)th)->Parent == p->myHandle)
-                {
                     LOption(th->Name(NA_MECH|NA_LONG),th->myHandle);
-                    found = true;
-                }
-            if (!found) {
+            }
+
+            if (i == 0) {
                 Box("You have nothing suitable in your inventory to use that on.");
                 if (typ != Q_INV) 
                     goto Reprompt;
@@ -1884,7 +1882,7 @@ SelectItem:
             }
             if (typ != Q_INV)
                 LOption("(non-inventory target)",-2);
-            hi = LMenu(MENU_BORDER,PromptText ? PromptText : "Choose an item:",WIN_MENUBOX);
+            hi = LMenu(MENU_BORDER|MENU_ESC,PromptText ? PromptText : "Choose an item:",WIN_MENUBOX);
             if (hi == -2)
                 goto Reprompt;
             if (hi == -1) {
