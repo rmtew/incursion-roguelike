@@ -44,7 +44,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="0"
+				Optimization="3"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="inc;_dependencies\libtcod\include;_dependencies\sdl2\include;&quot;_dependencies\google-breakpad\src&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;LIBTCOD_TERM;TCOD_SDL2"
@@ -81,6 +81,7 @@
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile=".\Release/Incursion.pdb"
 				SubSystem="1"
+				LinkTimeCodeGeneration="0"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
 				TargetMachine="1"
