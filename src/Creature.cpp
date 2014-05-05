@@ -48,7 +48,7 @@
 
 #include "Incursion.h"
 
-Creature::Creature(rID _mID, int8 _Type):
+Creature::Creature(rID _mID, int16 _Type):
     Thing(0,_Type)
 {
   tmID = mID = _mID;

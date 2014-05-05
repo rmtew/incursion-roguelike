@@ -6,8 +6,8 @@
    animal companions and party HD totals, and the options
    and switches subsystem.
 
-     Player::Player(Term *t,int8 _Type)
-     Character::Character(rID mID,int8 _Type)
+     Player::Player(Term *t,int16 _Type)
+     Character::Character(rID mID,int16 _Type)
      void Player::ChooseAction()
      EvReturn Player::Event(EventInfo &e)
      EvReturn Player::Rest(EventInfo &e)
@@ -23,7 +23,7 @@
 #endif
 
 
-Player::Player(Term *t,int8 _Type)
+Player::Player(Term *t,int16 _Type)
 	: Character(FIND("human;temp"),_Type)
 {
   int16 i;
@@ -131,7 +131,7 @@ void Player::ResetOptions()
     MyTerm->Close();
   }    
 
-Character::Character(rID mID,int8 _Type)
+Character::Character(rID mID,int16 _Type)
 	: Creature(mID,_Type)
 	{
 

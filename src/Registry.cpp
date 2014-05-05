@@ -201,7 +201,7 @@ bool Registry::Exists(hObj h)
     if (h < -1)
       return false;
     if (h < 128)
-      return theGame->VM.GetSystemObject(h);
+      return (theGame->VM.GetSystemObject(h) != 0);
     
     while(r) {
       if (r->pObj)
@@ -551,8 +551,6 @@ int16 Registry::LoadGroup(Term &t, hObj hGroup, bool use_lz)
     fileHeader fh;
     groupHeader gh;
     OArray<Object*,10,10> LoadedObjects;
-    RegNode *r;
-    DataNode *d;
     Object *o; void *pData;
     int8 oType; int32 i;
     hObj   DataOwner;
@@ -759,7 +757,7 @@ failed:
           SaveFile.Empty(); 
       }
 
-Retry:
+//Retry:
       base = p.Named;
       while (base.strchr(' '))
           base = base.Left(base.strchr(' '));
@@ -824,7 +822,7 @@ Retry:
 
 
   bool Game::LoadGame(bool backup) {
-      Player *pp; hObj h; int32 i;
+      int32 i;
       String Filenames[128], Filedescs[128], fn; 
       fileHeader fh; bool found;
       int patternsize = backup ? strlen(SAVE_BACKUP_PATTERN) : strlen(SAVE_PATTERN);
@@ -852,7 +850,6 @@ NoSaved:
           i = 0;
           found = false;
           do {
-              struct stat statbuf;
               T1->FRead(&fh,sizeof(fh));
               T1->Close();
               if (stricmp(VERSION_STRING,fh.Version))

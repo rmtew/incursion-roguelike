@@ -1277,7 +1277,7 @@ EvReturn Magic::MagicXY(EventInfo &e,int16 tx,int16 ty)
   }
 
 #if 0
-Construct::Construct(int8 _Type, Creature *_Creator,rID _mID,
+Construct::Construct(int16 _Type, Creature *_Creator,rID _mID,
   rID _spID, int16 _Duration)
   : Monster(_mID)
   {

@@ -67,7 +67,7 @@
 
 void TextTerm::ShowStatus()
 	{
-    int16 i,j, mColor, statiLen; rID spID;
+    int16 i,j, mColor, statiLen;
 		String LStatLine, MStatLine, SStatLine, Loc, *sp, add;
     
     if (Mode != MO_PLAY && Mode != MO_INV && Mode != MO_CREATE &&
@@ -319,7 +319,7 @@ void TextTerm::ShowStatus()
 
 void TextTerm::ShowTraits()
   {
-    int i; bool SuperSneak;
+    int i;
     String FName, s, form, attks, dstr;
 
     if (Mode != MO_PLAY && Mode != MO_INV && Mode != MO_CREATE &&
@@ -712,7 +712,7 @@ inline int16 Priority(int16 t)
 
 void Map::Update(int16 x,int16 y)
 {
-  int16 i; uint8 items, creatures, players; bool hi = false;
+  int16 i; uint8 items, creatures; bool hi = false;
   int16 Pri; Thing *t, *bt = NULL;
   uint16 Vis, CVis; Player *p = oPlayer(pl[0]);
   Glyph g,hg,mg;
@@ -777,7 +777,7 @@ void Map::Update(int16 x,int16 y)
         goto DoDraw;
       }
       
-  Nowhere:
+//Nowhere:
 
   for(t=oThing(At(x,y).Contents);t;t=oThing(t->Next)) {
     CVis = p->Percieves(t);
@@ -885,7 +885,7 @@ DoOverlay:
 
 void TextTerm::ShowMap()
 {
-  int16 x,y,i;
+  int16 x,y;
   Glyph g;
   if (Mode != MO_PLAY || !p->m) 
     return; 
@@ -1036,8 +1036,7 @@ void TextTerm::AdjustMap(int16 vx, int16 vy,bool newmap)
 
 void TextTerm::ShowThings()
 	{
-		int16 i,fx,fy, Per; Thing *t; bool tracked; 
-    double slope; int16 yint;
+		int16 i,fx,fy, Per; Thing *t;
     Rect ViewRange(max(XOff-15,0),max(YOff-15,0),
       min(XOff+MSizeX()+15,m->SizeX()),min(YOff+MSizeY()+15,m->SizeY()));
     Rect ScreenRect(XOff,YOff,XOff+MSizeX(),YOff+MSizeY());
@@ -1245,8 +1244,8 @@ Glyph TextTerm::GetGlyph(int16 x, int16 y)
 void TextTerm::ShowMapOverview()
 {
   int16 sx, sy, x, y, mx, my, x1, x2, y1, y2, vx, vy, tx, ty;
-  bool open, seen, onmap; int16 ch, mag, magn; uint16 xy;
-  Glyph force; Creature *mn;
+  bool open, seen, onmap; int16 ch, mag, magn;
+  Glyph force;
   int force_priority;
 
   bool wizsight = p && p->Opt(OPT_WIZ_SIGHT); 
@@ -1533,7 +1532,7 @@ static int16 ViewListPriorityMod(Thing *t)
     else if (t->isFeature())
       {
         if ((t->isType(T_DOOR)) ||
-            (t->Image & 0xFF == GLYPH_STATUE))
+            ((t->Image & 0xFF) == GLYPH_STATUE))
           return 20;
         return 7;
       }
@@ -1834,7 +1833,7 @@ inline String & DescribeResource(rID xID)
 bool TextTerm::EffectPrompt(EventInfo &e,uint16 fl,bool is_look, const char* PromptText) {
     int16 i, j, ch, t, dist, best, bestd, typ, mod, tx, ty, range;
     Thing *th, *cr; hObj hi; String Prompt; Item *wp;
-    bool first = true, found, cycled; 
+    bool first = true, cycled; 
     bool isEngulfed = p->HasStati(ENGULFED);
     cr = NULL; cycled = false;
 
@@ -1857,7 +1856,7 @@ Reprompt:
         Prompt = Format("%cLooking [rfmoxltn%s*?]:%c ",-9,Arrows,-7);
     else {
         if (typ == Q_TAR) {
-SelectTarget:
+//SelectTarget:
             Prompt = Format("%cChoose your target",-9,Arrows,-7);
             Prompt += Format(": [%s%s%s%s%s%s%s]%c ", Arrows, "*", (fl & Q_DIR) ? "d" : "", 
                 fl & Q_LOC ? "l" : "", fl & Q_TAR ? "tn" : "", fl & Q_INV ? "i" : "",
@@ -1892,7 +1891,7 @@ SelectItem:
             e.ETarget = oItem(hi);
             return e.ETarget ? true : false;
         } else if (typ == Q_LOC) {
-SelectLocation:
+//SelectLocation:
             Prompt = Format("%cChoose a location",-9);
             Prompt += Format(": [%s%s%s%s%s%s%s]%c ", Arrows, "*", (fl & Q_DIR) ? "d" : "", 
                 fl & Q_LOC ? "l" : "", fl & Q_TAR ? "tn" : "", fl & Q_INV ? "i" : "",

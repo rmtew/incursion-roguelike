@@ -550,7 +550,7 @@ class TextTerm: public Term
       int16 cx, cy, cWrap;
       uint16 attr;
       bool ClearMsgOK, isHelp;
-      int8 Mode;
+      int16 Mode;
       
       /* Inventory Variables */
   		int8 CurrSlot;
@@ -710,9 +710,9 @@ class TextTerm: public Term
       
       
       /* Inline Functions */
-      virtual bool ShiftDown()  { return ControlKeys & SHIFT; }
-      virtual bool CtrlDown()   { return ControlKeys & CONTROL; }
-      virtual bool AltDown()    { return ControlKeys & ALT; }
+      virtual bool ShiftDown()  { return (ControlKeys & SHIFT) != 0; }
+      virtual bool CtrlDown()   { return (ControlKeys & CONTROL) != 0; }
+      virtual bool AltDown()    { return (ControlKeys & ALT) != 0; }
       
       /* Low-Level Read/Write (platform-specific) */
       virtual void Update()=0;

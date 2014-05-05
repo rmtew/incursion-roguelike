@@ -282,7 +282,7 @@ void Creature::CalcValues(bool KnownOnly, Item *thrown)
 {
 #define XMod(a) (KnownOnly ? KMod(a) : Mod(a))
 #define XMod2(a) (KnownOnly ? KMod2(a) : Mod2(a))
-  int16 i,j, tsav, oFP, oHP, oMana, oldSize; Item *it;
+  int16 i,j, tsav, oFP, oHP, oldSize; Item *it;
   bool isHalted = false; static int16 MRVals[BONUS_LAST], MRC;
   int restart_count = 0; 
   oldSize = Attr[A_SIZ];
@@ -1652,7 +1652,7 @@ bool Creature::InherentCreatureReach() {
 
 void Character::CalcValues(bool KnownOnly, Item *thrown)
 {
-  int16 i,j; Status *s;
+  int16 i,j;
   bool one_body = HasFeat(FT_ONE_BODY_ONE_SOUL) ||
        (Attr[A_CON] == 0);
        
@@ -1839,7 +1839,7 @@ int16 Creature::ResistLevel(int16 DType, bool bypass_armour)
   {
     uint32 Res = TMON(mID)->Res, Imm = TMON(mID)->Imm;
     uint8  StatiResists[16]; int16 i,highest,highval,total;
-    Status *s; Item *it;
+    Item *it;
     ResistCount = 0;
 
     if (isIllusion())
@@ -2152,7 +2152,7 @@ void Creature::CalcHP()
 
 int16 Creature::GetPower(int16 base)
   {
-    int16 i,p;
+    int16 p;
     p = base;
     StatiIterNature(this,TEMPLATE)
         p = TTEM(S->eID)->Power.Adjust(base);
@@ -2211,7 +2211,6 @@ bool Creature::isMType(int32 mt)
      then mID, TEMPLATE Stati, Attr[A_INT] and Attr[A_SIZ] without
      making sure that MonGroup::isMType is modified accordingly. */
 
-  int16 i;
   if (!mt)
     return true;
 

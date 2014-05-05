@@ -41,7 +41,7 @@ class Item: public Thing, public Magic
       Item(Item *i);
 
       /* General Functions */
-			Item(rID iID,int8 _Type);
+			Item(rID iID,int16 _Type);
       virtual void Initialize(bool in_play = false);
       virtual bool isQItem() { return false; }
       virtual void ChangeIID(rID _iID, bool mult=false);
@@ -127,9 +127,9 @@ class Item: public Thing, public Magic
       virtual bool operator==(Item &i);
 
       /* Properties */
-      bool isBlessed() { return IFlags & IF_BLESSED; }
-      bool isCursed()  { return IFlags & IF_CURSED;  }
-      bool isMaster()  { return IFlags & IF_MASTERWORK; }
+      bool isBlessed() { return (IFlags & IF_BLESSED) != 0; }
+      bool isCursed()  { return (IFlags & IF_CURSED) != 0;  }
+      bool isMaster()  { return (IFlags & IF_MASTERWORK) != 0; }
       bool isKnown(uint16 kn = KN_MAGIC)
         { return (Known & kn) == kn; }
       int8 GetPlus()   { 
@@ -144,11 +144,11 @@ class Item: public Thing, public Magic
           return max(Plus,HighStatiMag(BOOST_PLUS)); }
       int8 GetInherantPlus()
         { return Plus; }
-      void SetInherantPlus(int16 i)
+      void SetInherantPlus(int8 i)
         { int32 dmg;
           dmg = (cHP*1000) / MaxHP();
           Plus = i; 
-          cHP =  (dmg * MaxHP())/1000;
+          cHP =  (int16)((dmg * MaxHP())/1000);
           ReApply(); }
       
       virtual int8 Material() {
@@ -199,8 +199,7 @@ class QItem: public Item
     friend void Player::UseItemMenu(const char*, const char*, int16);
     friend Item* Item::GenItem(uint16 Flags, rID xID, int16 Depth, int8 Luck, ItemGen *Gen);
     public:
-      QItem(rID _iID, int8 _Type)
-        : Item(_iID,_Type) {}
+      QItem(rID _iID, int16 _Type) : Item(_iID,_Type) {}
       QItem(Item*i) : Item(i) 
         { memcpy(Qualities,((QItem*)i)->Qualities,8);
         KnownQualities = ((QItem*)i)->KnownQualities; }
@@ -261,7 +260,7 @@ class Food: public QItem
 			int16 Eaten;
 		public:
       virtual void Dump();
-			Food(rID iID,int8 _Type = T_FOOD) :
+			Food(rID iID,int16 _Type = T_FOOD) :
         QItem(iID,_Type) { Eaten = Age = 0; }
       String & Describe(Player *p);
       Food(Item*i) : QItem(i) 
@@ -285,8 +284,8 @@ class Corpse: public Food
       virtual void Dump();
       virtual void SetImage();
       EvReturn Event(EventInfo &e);
-      Corpse(Creature *c, int8 _Type=T_CORPSE);
-      Corpse(rID iID, int8 _Type) : Food(iID,_Type) {} 
+      Corpse(Creature *c, int16 _Type=T_CORPSE);
+      Corpse(rID iID, int16 _Type) : Food(iID,_Type) {} 
       Corpse(Item*i) : Food(i) { mID = ((Corpse*)i)->mID; }
       virtual String & Name(int16 Flags=0);
       virtual rID GetCorpseType() { return mID; }
@@ -316,8 +315,7 @@ class Container: public QItem
   	public:
       hObj Contents;
       virtual void Dump();
-    	Container(rID iID) :
-        QItem(iID,TITEM(iID)->IType) { Contents = 0; }
+      Container(rID iID) : QItem(iID,TITEM(iID)->IType) { Contents = 0; }
       Container(Item*i) : QItem(i) { Contents = 0; }
       String & Describe(Player *p);
       void Unlist(Item *);
@@ -341,7 +339,7 @@ class Container: public QItem
 class Weapon: public QItem
 	{
 		public:
-			Weapon(rID iID,int8 _Type = T_WEAPON) :
+			Weapon(rID iID,int16 _Type = T_WEAPON) :
         QItem(iID,_Type) { }
       Weapon(Item*i) : QItem(i) {}
       virtual bool isWeapon() { return true; } 
@@ -353,7 +351,7 @@ class Weapon: public QItem
       void QualityDmgSingle(EventInfo &e, int32 q);
       void DoQualityDmgSingle(EventInfo &e, int32 skip = -1);
       virtual bool betterFor(Creature *c, Item *curr);
-      virtual bool isGroup(uint32 gr) { return TITEM(iID)->Group & gr; }
+      virtual bool isGroup(uint32 gr) { return (TITEM(iID)->Group & gr) != 0; }
       virtual bool thrownOnly() { return !(TITEM(iID)->Group & ~(WG_THROWN|WG_EXOTIC|WG_ARCHERY)); }
       virtual bool canFinesse();
       virtual bool QualityOK(uint32 q,uint8 lev=200);
@@ -386,7 +384,7 @@ class Coin: public Item
 	{
   	public:
       Coin(Item*i) : Item(i) {}
-    	Coin(rID iID,int8 _Type = T_COIN) :
+    	Coin(rID iID,int16 _Type = T_COIN) :
         Item(iID,_Type) {}
       Coin(Inventory*i,rID iID);
       EvReturn Event(EventInfo &e);
@@ -398,7 +396,7 @@ class Coin: public Item
 class Armour: public QItem
 	{
 		public:
-			Armour(rID iID,int8 _Type = T_ARMOUR) :
+			Armour(rID iID,int16 _Type = T_ARMOUR) :
         QItem(iID,_Type) {}
       Armour(Item*i) : QItem(i) {}
 			EvReturn Event(EventInfo &e);
@@ -410,7 +408,7 @@ class Armour: public QItem
       virtual int16 DefVal(Creature *c, bool knownOnly = false);
       virtual int16 PenaltyVal(Creature *c, bool for_skill);
       virtual int16 MaxDexBonus(Creature *c);
-      virtual bool isGroup(uint32 gr) { return TITEM(iID)->Group & gr; }
+      virtual bool isGroup(uint32 gr) { return (TITEM(iID)->Group & gr) != 0; }
       virtual bool betterFor(Creature *c, Item *curr);
       virtual bool QualityOK(uint32 q,uint8 lev=200);
       virtual bool isMagic();

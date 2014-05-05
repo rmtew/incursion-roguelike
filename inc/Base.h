@@ -28,16 +28,16 @@ template<class S, int32 Initial, int32 Delta>
 			void Enlarge();
 			void Reduce();
     protected:
-      S* _Paren(int32 index);
+      S* _Paren(uint32 index);
 
 		public:
 			Array();
 			~Array() { if (Items) free(Items); }
       void Serialize(hObj myObj);
-      void Set(S&,int32 idx);
+      void Set(S&,uint32 idx);
 			int32 Add(S&);
 			int32 Total() { return Count; }
-      void Remove(int32 i);
+      void Remove(uint32 i);
       S*   NewItem();
       void Serialize(Registry &r);
       void Clear() { Count = 0; }; 
@@ -465,7 +465,7 @@ class Archive;
 class Object 
   {
     public:
-    Object(int8 _Type); 
+    Object(int16 _Type); 
     Object(Registry *r) {}
     ~Object();
     virtual String & Name(int16 Flags=0) { return *tmpstr("<object>"); }

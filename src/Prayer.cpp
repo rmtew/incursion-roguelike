@@ -665,7 +665,7 @@ int16 Creature::worstTrouble()
 
 int16* Creature::getTroubles() 
   {
-    int16 i, n; Item *it;
+    int16 n; Item *it;
     static int16 Troubles[40];
     if (!mHP) {
       Troubles[0] = 0;
@@ -840,7 +840,7 @@ void Creature::PlaceSomewhereSafe()
 
 EvReturn Character::GiveAid(EventInfo &e)
   {
-    int16 i, n, nx, ny, sx, sy, gained; 
+    int16 i, n, gained; 
     Item *it; rID spBooks[128], bkID;
     rID gID;
     gID = theGame->GodID(e.godNum);
@@ -1137,8 +1137,7 @@ EvReturn Character::Pray(EventInfo &e) {
 EvReturn Character::Convert(EventInfo &e)
   {
     int16 neededFavour, i; 
-    bool isPaladin, isWorthy;
-    EvReturn r; rID gID = e.eID;
+    rID gID = e.eID;
   
     if (HasAbility(CA_DOMAINS))
       {
@@ -1356,7 +1355,7 @@ EvReturn Character::Retribution(EventInfo &e)
 
 EvReturn Character::GodDeflect(EventInfo &e)
   {
-    int16 i; rID aidChart[64]; Item *it;
+    int16 i; rID aidChart[64];
     if (!GodID)
       return NOTHING;
       
@@ -1962,7 +1961,7 @@ void Character::GodMessage(rID gID, int16 msgnum, ...)
 
 void Character::SwapAttributes(int16 n)
   {
-    int16 i, j, v, a, b;
+    int16 i, v, a, b;
     for (i=0;i!=n;i++)
       {
         a = random(7);
@@ -1981,8 +1980,8 @@ void Character::SwapAttributes(int16 n)
 
 int32 Character::TotalExploreFavour()
   {
-    int32 fav; int16 open, explored, lev, i, j, x, y;
-    rID dunID; Map *M;
+    int32 fav; int16 open, explored, i, j, x, y;
+    Map *M;
     
     fav = 0;
     

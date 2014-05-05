@@ -454,7 +454,7 @@ void* x_realloc(void *block, size_t unit, size_t sz, size_t osz)
   
 void PurgeStrings()
   {
-    int32 i,j;
+    int32 i;
     if (iStrBufDelQueue < 256)
       return;
     for (i=0;StrBufDelQueue[i];i++)
@@ -518,7 +518,7 @@ template<class S,int32 Initial,int32 Delta>
   }
 
 template<class S,int32 Initial,int32 Delta>
-  void Array<S,Initial,Delta>::Remove(int32 n)
+  void Array<S,Initial,Delta>::Remove(uint32 n)
 	{
 		if (n>Count-1 || n < 0)
 			Fatal("List::Remove bounds error!");
@@ -560,9 +560,7 @@ template<class S,int32 Initial,int32 Delta>
 
 template<class S,int32 Initial,int32 Delta>
   void Array<S,Initial,Delta>::Reduce()
-	{
-		void **Temp;
-		
+	{		
     /*if (Count-Delta-1 > Size)
 			return;                                 
     Items = (S*) x_realloc(Items,sizeof(S),Size-Delta,Size);
@@ -572,7 +570,7 @@ template<class S,int32 Initial,int32 Delta>
 	}
 
 template<class S,int32 Initial, int32 Delta>
-  void Array<S,Initial,Delta>::Set(S&s,int32 idx)
+  void Array<S,Initial,Delta>::Set(S&s,uint32 idx)
   {
     ASSERT(idx >= 0)
     while(Size <= idx+1)
@@ -584,7 +582,7 @@ template<class S,int32 Initial, int32 Delta>
   }
 
 template<class S,int32 Initial,int32 Delta>
-S* Array<S,Initial,Delta>::_Paren(int32 index)
+S* Array<S,Initial,Delta>::_Paren(uint32 index)
 	{
 		ASSERT(index>=0); 
     if (index >= Count)

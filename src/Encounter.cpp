@@ -1801,7 +1801,7 @@ EvReturn Map::enChooseMID(EventInfo &e)
   
 EvReturn Map::enGenMount(EventInfo &e)
   {
-    rID wtList[512], xID; int16 mtIdxList[512];
+    rID wtList[512]; int16 mtIdxList[512];
     int32 mtWeights[512]; TMonster *tm;
     int16 cWeight, cFreaky, nMount, i, j, x, Idx;
     int16 maxCR, lowCR, highCR, lowIdx, highIdx;
@@ -2823,7 +2823,7 @@ void UpdateAlignRestrict(EventInfo &e)
 
 EvReturn Map::enGenAlign(EventInfo &e)
   {
-    int16 align, i;
+    int16 align;
     Creature *mn = e.EActor;
     mn->RemoveStati(ALIGNMENT);
     
@@ -3014,12 +3014,12 @@ static void MakeMagicWeaponArmour(Item *it, int _plusLevel,
 
 Item* Item::GenItem(uint16 Flags, rID xID, int16 Depth, int8 Luck, ItemGen *Gen)
   {
-    int16 i,j,k, minlev, maxlev, adjlev, restart_count, roll, IType = 0;
+    int16 i, minlev, maxlev, adjlev, restart_count, roll, IType = 0;
     uint32 mag; bool proto = false; String s;
     int16 magicLevel = 0;
     bool trulyCursed = false; /* generates EF_CURSED eID */
     bool isCursed = false; /* generates IF_CURSED item */
-    rID iID, eID, aID; 
+    rID iID, eID; 
     Item* theItem;
     int16 qv = 0;
 

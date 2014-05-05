@@ -3107,7 +3107,7 @@ int effect_def ()
             get_lexval();
             cexpr3(&n);
 #line 658 "grammar.acc"
-  Annotation *a; EffectValues tmp; int16 t;
+  Annotation *a; EffectValues tmp; int32 t;
                                ESTABLISH_VALS
 							                 memcpy(&tmp,theVals,sizeof(EffectValues));
                                if (!theEff->AnHead) {

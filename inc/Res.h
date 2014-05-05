@@ -155,7 +155,7 @@ struct Tile
 struct Annotation
   {
     Annotation() { memset(this,0,sizeof(Annotation)); }
-    int16 Next; uint8 AnType;
+    int32 Next; uint8 AnType;
 	  void AddToMap(Map *m, uint16 dx=0,uint16 dy=0);
     union
       {
@@ -215,20 +215,20 @@ struct Annotation
   };
     
 
-class Resource 
-	{
-		public:
-      int8   Type, ModNum;
+class Resource {
+	public:
+      int16 Type;
+      int8 ModNum;
       uint16 EventMask;
       static Annotation *cAnnot, *cAnnot2;
       static String EvMsg[64];
-      Resource(int8 _Type)  { Type = _Type; AnHead = 0; }
+      Resource(int16 _Type)  { Type = _Type; AnHead = 0; }
       bool isType(int16 rt) { /*if (rt == T_TRESOURCE)
                                 return true;*/
                               return rt == Type; }
       void Dump();
 			hText Name, Desc;
-      int16 AnHead;
+      int32 AnHead;
 
       String & GetName(uint16 fl);
 
@@ -276,7 +276,7 @@ class Resource
       String*  GetMessages(int16 ev);
       String & RandMessage(int16 ev);
 
-      Annotation * Annot(int16 i);
+      Annotation * Annot(int32 i);
       Annotation * FAnnot()
         { cAnnot = Annot(AnHead); return cAnnot; }
       Annotation * NAnnot()
@@ -287,7 +287,7 @@ class Resource
       Annotation * NAnnot2()
         { cAnnot2 = (cAnnot2 && cAnnot2->Next) ? Annot(cAnnot2->Next) : NULL;
           return cAnnot2; }
-      Annotation * NewAnnot(int8 at,int16*num, int16 *num2=NULL);
+      Annotation * NewAnnot(int8 at,int32*num, int32 *num2=NULL);
       /*virtual bool inGroup(hObj h);*/
       void* operator new(size_t sz)
         {
@@ -384,7 +384,7 @@ class TMonster: public Resource
         }
       void SetFlag(uint16 fl)   { Flags[fl/8] |=  (1 << (fl % 8)); }
       void UnsetFlag(uint16 fl) { Flags[fl/8] &= ~(1 << (fl % 8)); }
-      bool inline HasFlag(uint16 fl)   { return Flags[fl/8] & (1 << (fl % 8)); }
+      bool inline HasFlag(uint16 fl)   { return (Flags[fl/8] & (1 << (fl % 8))) != 0; }
       bool HasSlot(int16 sl);
       bool GainStati(uint8 Nature, int16 Val = 0, int16 Mag = 0, rID rr = 0)
         {
@@ -409,7 +409,7 @@ class TMonster: public Resource
         return 
           (MTypeCache[(mtype%256)/8] & (1 << ((mtype%256) % 8))) &&
           (MTypeCache[(mtype/256)/8] & (1 << ((mtype/256) % 8)));
-      return MTypeCache[mtype/8] & (1 << (mtype % 8));
+      return (MTypeCache[mtype/8] & (1 << (mtype % 8))) != 0;
     }
     void InitializeMTypeCache(rID tmid); 
 	 };
@@ -420,7 +420,7 @@ class TItem: public Resource
       TItem() : Resource(T_TITEM) { u.w.Crit = 2; u.w.Threat = 1; }
       void SetFlag(uint16 fl)   { Flags[fl/8] |=  (1 << (fl % 8)); }
       void UnsetFlag(uint16 fl) { Flags[fl/8] &= ~(1 << (fl % 8)); }
-      bool inline HasFlag(uint16 fl)   { return Flags[fl/8] & (1 << (fl % 8)); }
+      bool inline HasFlag(uint16 fl)   { return (Flags[fl/8] & (1 << (fl % 8))) != 0; }
 			int16 Image;
 			int16 IType;
 			int8  Level, Depth;
@@ -489,7 +489,7 @@ class TEffect: public Resource
     uint8 ManaCost, BaseChance, SaveType; int8 Level;
     void SetFlag(uint16 fl)   { EFlags[fl/8] |=  (1 << (fl % 8)); }
     void UnsetFlag(uint16 fl) { EFlags[fl/8] &= ~(1 << (fl % 8)); }
-    bool HasFlag(uint16 fl)   { return EFlags[fl/8] & (1 << (fl % 8)); }
+    bool HasFlag(uint16 fl)   { return (EFlags[fl/8] & (1 << (fl % 8))) != 0; }
     uint8 EFlags[(EF_LAST/8)+1]; /* Effect Flags */
     EffectValues ef;
   };
@@ -503,7 +503,7 @@ class TQuest: public Resource
     TQuest() : Resource(T_TQUEST) { }
     void SetFlag(uint16 fl)   { Flags[fl/8] |=  (1 << (fl % 8)); }
     void UnsetFlag(uint16 fl) { Flags[fl/8] &= ~(1 << (fl % 8)); }
-    bool HasFlag(uint16 fl)   { return Flags[fl/8] & (1 << (fl % 8)); }
+    bool HasFlag(uint16 fl)   { return (Flags[fl/8] & (1 << (fl % 8))) != 0; }
     uint8 Flags[2];
 
   };
@@ -520,7 +520,7 @@ class TClass: public Resource
       uint32 Proficiencies;
       void SetFlag(uint16 fl)   { Flags[fl/8] |=  (1 << (fl % 8)); }
       void UnsetFlag(uint16 fl) { Flags[fl/8] &= ~(1 << (fl % 8)); }
-      bool HasFlag(uint16 fl)   { return Flags[fl/8] & (1 << (fl % 8)); }
+      bool HasFlag(uint16 fl)   { return (Flags[fl/8] & (1 << (fl % 8))) != 0; }
       bool HasSkill(int16 sk) 
         { int16 i;
           for(i=0;i!=40;i++)
@@ -542,7 +542,7 @@ class TRace: public Resource
     hText MNames, FNames, SNames;
     void SetFlag(uint16 fl)   { Flags[fl/8] |=  (1 << (fl % 8)); }
     void UnsetFlag(uint16 fl) { Flags[fl/8] &= ~(1 << (fl % 8)); }
-    bool HasFlag(uint16 fl)   { return Flags[fl/8] & (1 << (fl % 8)); }
+    bool HasFlag(uint16 fl)   { return (Flags[fl/8] & (1 << (fl % 8))) != 0; }
     bool HasSkill(int16 sk) 
       { int16 i;
         for(i=0;i!=6;i++)
@@ -594,7 +594,7 @@ class TArtifact: public Resource
       uint8  Sustains;
       void SetFlag(uint16 fl)   { Flags[fl/8] |=  (1 << (fl % 8)); }
       void UnsetFlag(uint16 fl) { Flags[fl/8] &= ~(1 << (fl % 8)); }
-      bool HasFlag(uint16 fl)   { return Flags[fl/8] & (1 << (fl % 8)); }
+      bool HasFlag(uint16 fl)   { return (Flags[fl/8] & (1 << (fl % 8))) != 0; }
       uint8 Flags[(AF_LAST/8)+1];
   };
 
@@ -606,7 +606,7 @@ class TDomain: public Resource
       rID  Spells[9];
       void SetFlag(uint16 fl)   { Flags[fl/8] |=  (1 << (fl % 8)); }
       void UnsetFlag(uint16 fl) { Flags[fl/8] &= ~(1 << (fl % 8)); }
-      bool HasFlag(uint16 fl)   { return Flags[fl/8] & (1 << (fl % 8)); }
+      bool HasFlag(uint16 fl)   { return (Flags[fl/8] & (1 << (fl % 8))) != 0; }
 			uint8 Flags[(DOF_LAST/8)+1];
       String & Describe(bool DescribeDomainSpells = false); 
   };
@@ -621,7 +621,7 @@ class TGod: public Resource
       rID Artifacts[6];
       void SetFlag(uint16 fl)   { Flags[fl/8] |=  (1 << (fl % 8)); }
       void UnsetFlag(uint16 fl) { Flags[fl/8] &= ~(1 << (fl % 8)); }
-      bool HasFlag(uint16 fl)   { return Flags[fl/8] & (1 << (fl % 8)); }
+      bool HasFlag(uint16 fl)   { return (Flags[fl/8] & (1 << (fl % 8))) != 0; }
 			uint8 Flags[(GF_LAST/8)+1];
       String & Describe(); 
   };
@@ -638,7 +638,7 @@ class TRegion: public Resource
       uint8 sx,sy; hText Grid;
       void SetFlag(uint16 fl)   { Flags[fl/8] |=  (1 << (fl % 8)); }
       void UnsetFlag(uint16 fl) { Flags[fl/8] &= ~(1 << (fl % 8)); }
-      bool HasFlag(uint16 fl)   { return Flags[fl/8] & (1 << (fl % 8)); }
+      bool HasFlag(uint16 fl)   { return (Flags[fl/8] & (1 << (fl % 8))) != 0; }
 			uint8 Flags[(RF_LAST/8)+1];
   };
 
@@ -654,7 +654,7 @@ class TTerrain: public Resource
       void SetFlag(uint16 fl)   { Flags[fl/8] |=  (1 << (fl % 8)); }
       void UnsetFlag(uint16 fl) { Flags[fl/8] &= ~(1 << (fl % 8)); }
 
-      bool HasFlag(uint16 fl)   { return Flags[fl/8] & (1 << (fl % 8)); }
+      bool HasFlag(uint16 fl)   { return (Flags[fl/8] & (1 << (fl % 8))) != 0; }
 			uint8 Flags[(TF_LAST/8)+1];
       inline bool TerrainHasFlag(uint16 fl) { return HasFlag(fl); } 
   };
@@ -698,11 +698,11 @@ class TTemplate: public Resource
                                   Flags[fl/8] &= ~(1 << (fl % 8)); }
       bool HasFlag(int16 fl)   { ASSERT(abs(fl) < abs(TMF_LAST)); 
                                  if (fl < 0) fl = -fl;
-                                 return Flags[fl/8] & (1 << (fl % 8)); }
+                                 return (Flags[fl/8] & (1 << (fl % 8))) != 0; }
       bool AddsFlag(int16 fl)   { ASSERT(fl >= 0 && fl < M_LAST);
-                                  return AddFlags[fl/8] & (1 << (fl % 8)); }
+                                  return (AddFlags[fl/8] & (1 << (fl % 8))) != 0; }
       bool SubsFlag(int16 fl)   { ASSERT(fl >= 0 && fl < M_LAST);
-                                  return SubFlags[fl/8] & (1 << (fl % 8)); }
+                                  return (SubFlags[fl/8] & (1 << (fl % 8))) != 0; }
       uint32 AddImm, SubImm;
       uint16 AddRes, SubRes;
       bool HasFeat(int16 ft) {
@@ -770,7 +770,7 @@ class TBehaviour: public Resource
       uint32 Conditions;
       void SetFlag(uint16 fl)   { Flags[fl/8] |=  (1 << (fl % 8)); }
       void UnsetFlag(uint16 fl) { Flags[fl/8] &= ~(1 << (fl % 8)); }
-      bool HasFlag(uint16 fl)   { return Flags[fl/8] & (1 << (fl % 8)); }
+      bool HasFlag(uint16 fl)   { return (Flags[fl/8] & (1 << (fl % 8))) != 0; }
 			uint8 Flags[(BF_LAST/8)+1];
 	};
 	
@@ -796,7 +796,7 @@ class TEncounter: public Resource
       EncPart Parts[MAX_PARTS];
       void SetFlag(uint16 fl)   { Flags[fl/8] |=  (1 << (fl % 8)); }
       void UnsetFlag(uint16 fl) { Flags[fl/8] &= ~(1 << (fl % 8)); }
-      bool HasFlag(uint16 fl)   { return Flags[fl/8] & (1 << (fl % 8)); }
+      bool HasFlag(uint16 fl)   { return (Flags[fl/8] & (1 << (fl % 8))) != 0; }
 			uint8 Flags[(NF_LAST/8)+1];
   };
 
@@ -804,8 +804,8 @@ class Module : public Object
   {
     friend class Magic;
     friend class VMachine;
-    friend Annotation* Resource::Annot(int16 i);
-    friend Annotation* Resource::NewAnnot(int8 at,int16 *num, int16 *num2);
+    friend Annotation* Resource::Annot(int32 i);
+    friend Annotation* Resource::NewAnnot(int8 at,int32 *num, int32 *num2);
     friend String* Resource::GetMessages(int16 ev);
     friend String & Resource::RandMessage(int16 ev);
     friend EvReturn Resource::Event(EventInfo &e, rID xID, int16 context);
@@ -1054,8 +1054,8 @@ class Game : public Object
     friend class Thing;
     friend class Magic;
     friend class VMachine;
-    friend Annotation* Resource::Annot(int16 i);
-    friend Annotation* Resource::NewAnnot(int8 at,int16 *num, int16 *num2);
+    friend Annotation* Resource::Annot(int32 i);
+    friend Annotation* Resource::NewAnnot(int8 at,int32 *num, int32 *num2);
     friend String* Resource::GetMessages(int16 ev);
     friend String & Resource::RandMessage(int16 ev);
     friend EvReturn Resource::Event(EventInfo &e, rID xID, int16 context);

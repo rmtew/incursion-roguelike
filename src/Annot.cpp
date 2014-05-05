@@ -75,7 +75,7 @@ void Resource::AddResID(int8 at,rID sID)
 
 void Resource::AddAbility(int8 AbType,int16 Abil,uint32 Param,int8 Lev1,int8 Lev2)
   {
-    Annotation *a; int8 i; int16 x;                 
+    Annotation *a; int8 i;
     //return;
     if (!AnHead) {
       a = NewAnnot(AN_ABILITY,&AnHead);
@@ -574,8 +574,8 @@ void Resource::GrantGear(Creature *c, rID xID, bool doRanged)
   {
     time_t t;
     rID unID = FIND("unimplemented");
-    rID iID, eID; int16 minlev, maxlev; 
-    Annotation *a, *a2; Item *it, *itl[256]; 
+    rID iID, eID;
+    Annotation *a; Item *it, *itl[256]; 
     int16 sc, plus,ic,i; int16 seed;
 
     bool last_given = true;
@@ -829,7 +829,7 @@ void Resource::GrantGear(Creature *c, rID xID, bool doRanged)
 
 void Character::GainItem(Item *it, bool starting)
   {
-    int8 prefslot,i; bool oldSil; 
+    int8 prefslot,i;
     Item *cn, *it2; EvReturn r;
     if (!it)
       return;
@@ -1172,7 +1172,7 @@ String* Resource::GetMessages(int16 ev)
   {
     Annotation *a; 
     int8 MsgNum = false;
-    int16 i; uint32 res;
+    int16 i;
     if (!(EventMask & BIT((ev%16)+1)))
       {
         EvMsg[I(0,64)].Empty();
@@ -1207,7 +1207,7 @@ String & Resource::RandMessage(int16 ev)
   {
     Annotation *a; 
     int8 MsgNum = false;
-    int16 i; uint32 res;
+    int16 i;
     if (!(EventMask & BIT((ev%16)+1)))
       {
         EvMsg[I(0,64)].Empty();
@@ -1301,7 +1301,7 @@ void Resource::AddParam(int8 p,int16 v) {}
 void Resource::AddArray(int8 p,int16 *list) {}
 void Resource::AddSpecial(rID xID, int16 Chance, int16 Lev) 
   {
-    Annotation *a; int8 i; int16 x;                 
+    Annotation *a; int8 i;
     if (!AnHead) {
       a = NewAnnot(AN_DUNSPEC,&AnHead);
       goto Found;
@@ -1333,7 +1333,7 @@ void Resource::AddSpecial(rID xID, int16 Chance, int16 Lev)
 
 void Resource::AddSpecial(rID xID, int16 Chance, Dice& Lev)
   {
-    Annotation *a; int8 i; int16 x;                 
+    Annotation *a; int8 i;
     if (!AnHead) {
       a = NewAnnot(AN_DUNSPEC,&AnHead);
       goto Found;

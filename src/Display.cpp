@@ -41,7 +41,7 @@
 
 #include "Incursion.h"
 
-Thing::Thing(Glyph _Image,int8 _Type)
+Thing::Thing(Glyph _Image,int16 _Type)
     : Object(_Type)
   {
     x=y=-1;

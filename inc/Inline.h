@@ -17,10 +17,10 @@
      inline Glyph Map::FieldGlyph(int16 x,int16 y, Glyph og) 
      inline void Player::ShowStats()
      inline bool Player::yn(const char*msg,bool def)
-     inline Annotation* Resource::Annot(int16 i)
+     inline Annotation* Resource::Annot(int32 i)
      inline Annotation * Resource::NewAnnot(int8 at,int16 *num)
      inline Player* Game::GetPlayer(int8 n)
-     inline Object::Object(int8 _Type)
+     inline Object::Object(int16 _Type)
      inline Object::~Object()
      inline void Game::StopTime(Creature *caster)
      inline Dir OppositeDir(Dir d)
@@ -502,10 +502,10 @@ inline void Player::ShowStats()
 inline bool Player::yn(const char*msg,bool def)
   { return MyTerm->yn(msg); }
 
-inline Annotation* Resource::Annot(int16 i)
+inline Annotation* Resource::Annot(int32 i)
   { return i ? theGame->Modules[ModNum]->Annotations[i] : NULL; }
 
-inline Annotation * Resource::NewAnnot(int8 at,int16 *num, int16 *num2)
+inline Annotation * Resource::NewAnnot(int8 at,int32 *num, int32 *num2)
   { *num = theGame->Modules[ModNum]->Annotations.Total();
     if (num2)
       *num2 = *num; 
@@ -516,7 +516,7 @@ inline Annotation * Resource::NewAnnot(int8 at,int16 *num, int16 *num2)
 inline Player* Game::GetPlayer(int8 n)
   { return isValidHandle(p[n]) ? oPlayer(p[n]) : NULL; }
 
-inline Object::Object(int8 _Type)
+inline Object::Object(int16 _Type)
   {
     Type = _Type;
     #ifdef DEBUG
@@ -728,7 +728,7 @@ inline bool Thing::HasStatiFromSource(uint8 src)
 inline bool Thing::containsAllStatiFrom(Thing *t, const uint8 *IgnoreNatures)
   {
     bool missing, found; Status *S2;
-    int16 n; missing = false;
+    missing = false;
     StatiIter(this)
       if (strchr((const char*)IgnoreNatures,S->Nature))
         continue;

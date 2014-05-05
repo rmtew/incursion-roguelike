@@ -262,7 +262,7 @@ YYSTYPE DoKeywords(const char *text)
 
 
 
-"{:"   { char ch1, ch2; int16 MapPos = 0, ln = yypos, sz = -1, szl = 0;
+"{:"  { char ch1, ch2; int16 MapPos = 0, sz = -1, szl = 0; long ln = yypos;
          bool warned = false; char *c, *g;
          while ((ch1 = yyinput()) != ':' && ch1!=EOF) {
            ReenterMapLoop:

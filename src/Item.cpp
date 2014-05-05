@@ -4,7 +4,7 @@
    as well as the member functions for derived classes Weapon,
    Armour, Food, Corpse, etc.
 
-     Item::Item(rID _iID,int8 _Type)
+     Item::Item(rID _iID,int16 _Type)
      Item::Item(Item *i)
      Item* Item::Create(rID iID)
      void Item::SetFlavors()
@@ -28,7 +28,7 @@
      bool Item::isOrganic()
      EvReturn Item::Damage(EventInfo &e)
 
-     Corpse::Corpse(Creature *c, int8 _Type)
+     Corpse::Corpse(Creature *c, int16 _Type)
      int32 Corpse::Weight()
      EvReturn Food::Eat(EventInfo &e)
      EvReturn Corpse::Event(EventInfo &e)
@@ -63,7 +63,7 @@
 int16 CorpseNut[] = 
   { 0, 1, 10, 25, 50, 100, 300, 500, 800 };
 
-Item::Item(rID _iID,int8 _Type)
+Item::Item(rID _iID,int16 _Type)
 	: Thing(0,_Type)
 	{
     ASSERT(TITEM(_iID));
@@ -1577,7 +1577,7 @@ EvReturn Item::Damage(EventInfo &e)
 //                          Specific Types of Items                        //
 /////////////////////////////////////////////////////////////////////////////
 
-Corpse::Corpse(Creature *c, int8 _Type)
+Corpse::Corpse(Creature *c, int16 _Type)
 	: Food(FIND("corpse"),_Type)
   {
     int i, t = 0;
@@ -1605,7 +1605,7 @@ Corpse::Corpse(Creature *c, int8 _Type)
   }
 
 /*
-Corpse::Corpse(rID iID, int8 _Type)
+Corpse::Corpse(rID iID, int16 _Type)
   : Food(iID,_Type)
   {
     mID = FIND("human");

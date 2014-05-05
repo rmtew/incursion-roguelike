@@ -5,7 +5,7 @@
    fairly self-contained. The monster memory is then crammed
    in at the very bottom.
 
-     Monster::Monster(rID _mID,int8 _Type)
+     Monster::Monster(rID _mID,int16 _Type)
      void Monster::ChooseAction()
      void Monster::Retarget()
      void Monster::AlertNew(Thing *nt)
@@ -284,7 +284,7 @@ bool denySpell(Monster *m, rID eID)
     return false;
   }
 
-Monster::Monster(rID _mID,int8 _Type)
+Monster::Monster(rID _mID,int16 _Type)
 	:Creature(_mID,_Type)
 	{
     ASSERT(mID);

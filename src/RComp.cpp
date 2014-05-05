@@ -272,7 +272,7 @@ String & Game::CompileStatistics()
           
 bool Game::ResourceCompiler()
 {
-   bool done; char CmdLine[80]; String fn;
+   String fn;
   time_t theTime;
    
    #ifdef DEBUG
@@ -342,7 +342,7 @@ bool Game::ResourceCompiler()
    if (!yyin)
      goto PreprocError;
 
-   ProcessFile:
+//ProcessFile:
    if (setjmp(jb))
      {
        T1->Color(GREY);
@@ -743,7 +743,7 @@ void Module::AddDebugInfo(int32 ID, Binding *b)
 void GenerateDispatch()
   {
     int16 i,j,k; FILE *fp; String After;
-    BMemFunc *b; BMemVar *b2; bool first;
+    BMemFunc *b; BMemVar *b2;
     BResFunc *rb; BResMem *rb2;
     
     const char *ResTypes[] = { "T_TMONSTER", "T_TITEM", "T_TFEATURE", "T_TEFFECT",

@@ -15,7 +15,7 @@ class Feature: public Thing
     int16 cHP, mHP; 
 		rID fID;
     int8 MoveMod; 
-    Feature(int16 Image,rID _fID, int8 _Type) : Thing(Image, _Type) 
+    Feature(int16 Image,rID _fID, int16 _Type) : Thing(Image, _Type) 
     { 
       fID = _fID; 
       Timeout = -1; 

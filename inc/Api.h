@@ -268,7 +268,7 @@ system void   T_THING::SetStatiCause(int16 n, int16 val, hObj:T_THING t,uint8 Ca
 system void   T_THING::SetStatiObj(int16 n, int16 val, hObj:T_THING t);
 system void   T_THING::SetStatiDur(int16 n, int16 val, hObj:T_THING t, int16 Dur);
 system void   T_THING::SetStatiEID(int16 n, int16 val, hObj:T_THING t,rID eID);
-system void   T_THING::IncStatiMag(int16 n, int16 Cause,int16 Val, hObj:T_THING t, int16 Inc);
+system void   T_THING::IncStatiMag(int16 n, int8 Cause,int16 Val, hObj:T_THING t, int16 Inc);
       
 
 system int8   T_THING::GetEffStatiVal(int16 n, rID xID, int16 Val=-1, hObj:T_THING t=0);
@@ -282,7 +282,7 @@ system void   T_THING::SetEffStatiMag(int16 n, rID xID,int16 Mag, int16 Val=-1, 
 system void   T_THING::SetEffStatiCause(int16 n, rID xID,uint8 Cause, int16 Val=-1, hObj:T_THING t=0);
 system void   T_THING::SetEffStatiObj(int16 n, rID xID, hObj:T_THING t, int16 Val=-1);
 system void   T_THING::SetEffStatiDur(int16 n, rID xID, int16 Dur, int16 Val=-1, hObj:T_THING t=0);
-system void   T_THING::IncEffStatiMag(int16 n,rID xID, int16 Cause,hObj:T_THING t,int16 Inc, int16 Val=-1);
+system void   T_THING::IncEffStatiMag(int16 n,rID xID, int8 Cause,hObj:T_THING t,int16 Inc, int16 Val=-1);
       
 system int16  T_THING::SumStatiMag(int16 n, int16 val=-1, hObj:T_THING t = 0);
 system int16  T_THING::HighStatiMag(int16 n, int16 val=-1, hObj:T_THING t = 0);
@@ -619,8 +619,8 @@ system bool    T_PORTAL::EnterDir(int16 dir);
    rudimentry function calls here. */
 
 system void    T_TERM::StopWatch(int16 milli);
-system void    T_TERM::SetMode(int8 mode);
-system int8    T_TERM::GetMode();
+system void    T_TERM::SetMode(int16 mode);
+system int16   T_TERM::GetMode();
 //system int16   T_TERM::SizeX();
 //system int16   T_TERM::SizeY();
 system int16   T_TERM::OffsetX();

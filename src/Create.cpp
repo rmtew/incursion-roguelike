@@ -564,7 +564,7 @@ SkipThisFocus:;
         }
 #endif
 
-DoneShield:
+//DoneShield:
     if (GodID)
         RES(GodID)->PEvent((EV_BIRTH),this,ClassID[0]);
     TRACE(RaceID)->PEvent(EV_BIRTH,this,RaceID);
@@ -1344,14 +1344,13 @@ static void GrantPerks(PerkSet& p, Player *target)
 
 void Player::RollAttributes()
 {
-    int16 oResponses, nPerks; bool do_redraw;
-    int16 ch, wanted; Dice d; bool perk_warn = 0;
-    int8 BestStats[7][5],i,j,k,l,c,tot,best, Points, PCost;
+    int16 nPerks; bool do_redraw;
+    int16 ch, wanted; bool perk_warn = 0;
+    int8 BestStats[7][5],i,j,k,l,c,tot,Points, PCost;
     int8 PointCosts[] = { 0, 0, 0, -5, -4, -3, -2, -1, 0, 1,
         2, 3, 4, 5, 6, 8, 10, 13, 16 
     };
     PerkSet PerkSets[5];
-    int16 Canary[32];
     do_redraw = false;
 
     if (MyTerm->GetMode() == MO_RECREATE)
@@ -1769,7 +1768,7 @@ void Player::ChooseDomains()
 
 void Character::AddAbilities(rID resID,int16 Lev)
 {
-    Annotation *a; int16 i, ss; int16 j;
+    Annotation *a; int16 i, ss;
     Resource *r = RES(resID);
     /* No FAnnot / NAnnot here, because it can be called recursively
     when processing Domains. */
@@ -2094,7 +2093,7 @@ void Creature::ThiefXP(rID regID)
 
     int16 i, mc, percent; 
     Monster *mn, *ml[2048]; 
-    Thing *t, *t2;
+    Thing *t;
     Container *cn;
     Item *it;
 
@@ -2182,7 +2181,7 @@ void Player::ChooseGod(bool required)
         UnsetSilence();
         if (!worthy)
             continue;
-skip_align_checks: 
+//skip_align_checks: 
         Candidates[i] = xID;
         desc = DESC(xID);
         for (int d=0;d<6;d++) {
@@ -2221,7 +2220,7 @@ int16 TotalClassLevels(rID clID)
 
 void Player::AdvanceLevel()
 {
-    int16 c,i, q, j; TClass *tc; rID xID, endID;
+    int16 c,i, j; TClass *tc;
     if (TotalLevel() >= MAX_CHAR_LEVEL)
     {
         IPrint(Format("The maximum character level in this "
@@ -2650,7 +2649,7 @@ SelectedFeat:
     if (feat != FT_WEAPON_PROFICIENCY || OneFeat)
         Feats[feat/8] |= 1 << (feat%8);
 
-ChooseParam:
+//ChooseParam:
 
     switch(feat)
     {
@@ -2999,14 +2998,14 @@ ChooseExotic:
 
 void Player::GainAbility(int16 ab,uint32 pa, rID sourceID,int16 statiSource)
 {
-    Status *s; int16 st; const char* MTypePrompt;
+    int16 st; const char* MTypePrompt;
     /* New spell levels -- the caster level at which a player
     recieves access to a new level of spells. */
     static int16 NSL[] = { 0, 1, 0, 2, 0, 3, 0, 4, 0, 5, 0,
         0, 6, 0, 7, 0, 8, 0, 9, 0, 0 };
     String desc, category;
 
-    int16 i,j, fa;
+    int16 i,j;
 
     if (ab != CA_SMITE)
         pa = max(pa,1);
@@ -3036,7 +3035,6 @@ void Player::GainAbility(int16 ab,uint32 pa, rID sourceID,int16 statiSource)
             ChooseDomains();
         Abilities[ab] += pa;
         ASSERT(GodID)
-            TDomain *td;
         StatiIterNature(this,HAS_DOMAIN)
             TDomain *td = TDOM(S->eID);
         if (td->Spells[NSL[Abilities[ab]]-1])
@@ -3424,7 +3422,7 @@ uint16 Character::getEligableStudies()
     uint16 eli;
     int16 clev = TotalLevel();
     int16 mlev = ((clev*4)+4)/5;
-    int16 i, j, k;
+    int16 i, j;
 
     /* If you want to tweak the numbers for Intensive
     study, make sure they match both here and in
@@ -3467,7 +3465,7 @@ int8 Character::WepSkill(Item *it)
 
 int8 Character::WepSkill(rID wID, bool ignore_str)
 {     
-    int16 i, mstr;
+    int16 mstr;
     int16 best = 0;
 
     if (wID && !ignore_str) {
@@ -3885,7 +3883,7 @@ FoundFocus:
             s_circ -= 2;
 
         if (SkillInfo[sk].armour_penalty) {
-            Item *it, *ar; 
+            Item *it; 
             static int16 armourSlots[] = {
                 SL_ARMOUR, SL_READY, SL_WEAPON, 0
             } ;
@@ -4267,7 +4265,7 @@ SkipThisAdd2:
 void Player::LearnSpell(bool left)
 {
     bool areSpells, areBookSpells, noBook; 
-    int16 i,j,c,Ab; Item *it;
+    int16 i,j,c; Item *it;
     LearnableSpell *ls = CalcSpellAccess();
     String menu_name, typ_str;
 

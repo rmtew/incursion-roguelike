@@ -656,7 +656,7 @@ effect_def:                         { theRes = theEff; theEff->ef.sval = NOSAVE;
   ':' cexpr3<n>                     { theValsIdx = 0; 
                                       theEff->ef.eval = n; }
   '{' (eff_entry)* '}'
-  ( AND cexpr3<n>           {  Annotation *a; EffectValues tmp; int16 t;
+  ( AND cexpr3<n>           {  Annotation *a; EffectValues tmp; int32 t;
                                ESTABLISH_VALS
 							                 memcpy(&tmp,theVals,sizeof(EffectValues));
                                if (!theEff->AnHead) {

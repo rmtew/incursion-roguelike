@@ -188,7 +188,7 @@ class Creature: public Thing, public Magic
            NatureSight; // ww: also used
     public:
       /* General Stuff */
-		  Creature(rID mID,int8 _Type);
+		  Creature(rID mID,int16 _Type);
 		  int32 cMana() { return max(0,(mMana+(GetAttr(A_MAN)*5)-(uMana+hMana))); }
 	    int32 tMana() { return mMana + GetAttr(A_MAN)*5; }
       void  LoseMana(int32 amt, bool hold=false)
@@ -299,7 +299,7 @@ class Creature: public Thing, public Magic
             !(this->m->At(x,y).Visibility & VI_VISIBLE) ||
             !f->inArea(x,y))
           return false; 
-        bool need_to_see = f->FType & (FI_SIZE|FI_SHADOW|FI_ITERRAIN);
+        bool need_to_see = (f->FType & (FI_SIZE|FI_SHADOW|FI_ITERRAIN)) != 0;
         if (!need_to_see || 
             !f->Creator || this->Percieves(oThing(f->Creator))) 
           return true;
@@ -308,7 +308,7 @@ class Creature: public Thing, public Magic
       } 
 
       bool   XPerceives(Thing *t)
-        { return (Percieves(t) & (~(PER_SHADOW|PER_SCENT|PER_DETECT))); }
+        { return (Percieves(t) & (~(PER_SHADOW|PER_SCENT|PER_DETECT))) != 0; }
       virtual bool isShadowShape() { return TMON(mID)->Size >= SZ_SMALL; }
       bool isBeside(Thing *t, int extra_dist = 0);
       bool isAerial();
@@ -646,7 +646,7 @@ class Character: public Creature
       uint16 desiredAlign;
       uint32 Proficiencies;
       /* General Stuff */
-	    Character(rID mID,int8 _Type);
+	    Character(rID mID,int16 _Type);
       virtual String & Describe(Player* p);
       virtual void Dump();
       virtual void CalcValues(bool KnownOnly=false, Item *thrown=NULL);
@@ -797,7 +797,7 @@ class Character: public Creature
         { return FavourLev[theGame->GodNum(gID)]; }
       int16 getGodAnger(rID gID) /* HACKFIX */
         { int16 ang = Anger[theGame->GodNum(gID)];
-          ang -= TGOD(gID)->GetConst(TOLERANCE_VAL);
+          ang -= (int16)TGOD(gID)->GetConst(TOLERANCE_VAL);
           return max(0,ang); }
       
 
@@ -993,7 +993,7 @@ class Player: public Character
       int32 deathCount, rerollCount;
       int16 statMethod;
       /* General Functions */
-      Player(Term *t,int8 _Type=T_PLAYER);
+      Player(Term *t,int16 _Type=T_PLAYER);
       ~Player();
       void UpdateOptions(bool specific_game);
       void LoadOptions(bool new_game);
@@ -1080,7 +1080,7 @@ class Player: public Character
 	    bool Seen(int16 x,int16 y);
       void ToggleMM(uint32 mm,int16 sp);
       bool HasMM(uint32 mm,int16 sp)
-        { return MMArray[sp] & mm; }
+        { return (MMArray[sp] & mm) != 0; }
       virtual uint32 MMFeats(uint32 sp) { return MMArray[sp]; }
 
       /* Functions for Performing Actions */
@@ -1134,7 +1134,7 @@ class Monster: public Creature
              hasInnateSpellStati, isMount; 
     public:
 			hObj GetInvHead() { return Inv; }
-      Monster(rID mID,int8 _Type=T_MONSTER);
+      Monster(rID mID,int16 _Type=T_MONSTER);
 			EvReturn Event(EventInfo &e);
       virtual void Dump();
       virtual String & Describe(Player *p);

@@ -611,8 +611,8 @@ typedef struct StatiCollection {
       Last = 
         Removed = 
         Allocated = 
-        Nested = 
         szAdded = 0;
+        Nested = 0;
       S = NULL;
       Idx = NULL;
       Added = NULL;
@@ -661,7 +661,7 @@ class Thing: public Object
       StatiCollection __Stati; 
       NArray<hObj,10,20> backRefs;
 		 public:
-      Thing(Glyph _Image,int8 _Type);
+      Thing(Glyph _Image,int16 _Type);
       virtual String & Name(int16 Flags=0) { return *tmpstr("<Thing>"); }
       virtual void SetImage() { }
       virtual void Initialize(bool in_play = false) { }
@@ -703,7 +703,7 @@ class Thing: public Object
       virtual int16 onPlane();
       int16 GetX() {return x;}
       int16 GetY() {return y;}
-      virtual bool isDead() { return Flags & F_DELETE; }
+      virtual bool isDead() { return (Flags & F_DELETE) != 0; }
       virtual void Dump();
 			void Show();
 			void Move(int16,int16, bool is_walk=false);
@@ -843,7 +843,7 @@ class Thing: public Object
       void SetStatiEID(int16 n,int16 Val,Thing *t,rID eID)
         { Status *s = GetStati(n,Val,t);
           if (s) s->eID = eID; }
-      void IncStatiMag(int16 n,int16 Source,int16 Val,Thing *t,int16 Inc)
+      void IncStatiMag(int16 n,int8 Source,int16 Val,Thing *t,int16 Inc)
         { Status *s = GetStati(n,Val,t);
           if (!s)
             {
@@ -885,7 +885,7 @@ class Thing: public Object
       void SetEffStatiDur(int16 n,rID xID,int16 Dur, int16 Val=-1, Thing *t=NULL)
         { Status *s = GetEffStati(n,xID,Val,t);
           if (s) s->Duration = Dur; }
-      void IncEffStatiMag(int16 n,rID xID,int16 Source,Thing *t,int16 Inc, int16 Val=-1)
+      void IncEffStatiMag(int16 n,rID xID,int8 Source,Thing *t,int16 Inc, int16 Val=-1)
         { Status *s = GetEffStati(n,xID,Val,t);
           if (!s)
             {

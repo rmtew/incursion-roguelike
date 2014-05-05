@@ -790,9 +790,6 @@ PRIVATE void combi_ambiguity(int i, int d, int l, int s)
       else {
 	 /* annotation == undef */
 
-
-	 int old_sub, old_left;
-
 	 printf("\n");
 	 printf("GRAMMAR DEBUG INFORMATION\n");
 	 printf("\n");
@@ -879,7 +876,7 @@ PRIVATE void simple_ambiguity(int i, int d, int l, int s)
    T1->Clear(); T1->GotoXY(0,0);
    T1->CursorOn();
 
-   int sub1, sub2, rule1, rule2, prio1, prio2;
+   int sub1, sub2, prio1, prio2;
 
 #if TRACE
    printf("simple amiguity\n");

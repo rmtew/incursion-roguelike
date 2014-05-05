@@ -11,6 +11,8 @@
    http://msdn.microsoft.com/en-us/library/1k7k17za.aspx
 */
 #pragma warning (disable : 4661)
+/* posix names differ for c++ iso */
+#pragma warning (disable : 4996)
 
 //#define DEBUG_MEMORY_CORRUPTION
 //#ifdef DEBUG_MEMORY_CORRUPTION

@@ -377,7 +377,7 @@ bool Player::Seen(int16 x,int16 y)
 // something. 
 uint16 Creature::Percieves(Thing *t, bool assertLOS)
 {
-  int16 Range, i, tx, ty; 
+  int16 i, tx, ty; 
   uint16 Per; bool isBlind;
   static int16 limit = 0; 
   // ww: somewhat like a mutex to prevent infinite recursion

@@ -395,7 +395,7 @@ void TextTerm::DrawBorder(int16 wn, int16 border)
 
 void TextTerm::Box(int16 win, int16 flags, int16 cbor, int16 ctxt, const char*text)
   {
-    int16 LineLength, BoxLength, Avail, Lines, SpaceAt, x, y, c, i, real_c, in;
+    int16 LineLength, BoxLength, Avail, Lines, SpaceAt, y, c, i, real_c, in;
     char *ch; int8 saveMode; bool done;
     ASSERT(strlen(text) < sizeof(lbuff) - 20)
     SetWin(win);
@@ -527,7 +527,7 @@ void TextTerm::Box(int16 win, int16 flags, int16 cbor, int16 ctxt, const char*te
 
   int16 TextTerm::WrapWrite(int16 x,int16 y,const char* _s, int16 x2, int16 maxlines) {
       String l, v, s; s = _s;
-      int i, pos, lines;
+      int pos, lines;
       /* Trim Trailing Returns */
       while (s.GetLength() && s[s.GetLength()-1] == '\n')
           s = s.Left(s.GetLength()-1);
@@ -574,7 +574,7 @@ void TextTerm::Box(int16 win, int16 flags, int16 cbor, int16 ctxt, const char*te
 
 void TextTerm::UpdateScrollArea(int16 _offset, int16 wn)
   {
-    int16 x,y;
+    int16 y;
     SetWin(wn);
     Clear();
     offset = _offset == -2 ? offset : _offset;
@@ -598,7 +598,7 @@ void TextTerm::UpdateScrollArea(int16 _offset, int16 wn)
 
 void TextTerm::HyperTab(int16 wn)
   {
-    int16 CurrLine, i, dist, ln, sx, sy;
+    int16 CurrLine, i, ln, sx, sy;
     bool isLink;
     /* Assumptions:
        * There is only one hyper-link per line.
@@ -811,7 +811,7 @@ int16 TextTerm::SWrapWrite(int16 x, int16 y, const char* _s, int16 x2, int16 wn)
   {
     String l, v, s; s = _s; bool cr;
     
-    int i, pos, lines;
+    int pos, lines;
     
     x2 = min(SCROLL_WIDTH,x2);
     
@@ -897,9 +897,8 @@ int32 TextTerm::LMenu(uint16 fl, const char*_title,int8 MWin,const char*help, in
         (theGame->Opt(OPT_ROGUELIKE)) ? 
         "acdefgimopqrstvwxzACDEFGIMOPQRSTVWXZ                  " :
         "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ  ";
-    int16 ch, i,c,p,tcol, qk, szCol, Rows, Cols, Width, Height, DY;
-    char buff[60], let[5]; int16 vStart, vRows;
-    const char *itm;
+    int16 ch, i,c,p,qk, szCol, Rows, Cols, Width, Height, DY;
+    char let[5]; int16 vStart, vRows;
     String title = _title;
     if (Mode == MO_RECREATE) {
         ASSERT(strncmp(RInf.Rsp[RInf.cRsp].Question,title,31) == 0);
@@ -1199,9 +1198,9 @@ InvalidChar:
 bool TextTerm::LMultiSelect(uint16 fl, const char* _title,int8 MWin,const char*help,
                             int8 pos)
 {
-    int16 ch, i,j,c,p,tcol, qk, szCol, Rows, Cols, Width, Height, DY, barlen;
-    char buff[60], let[5]; int16 vStart, vRows;
-    const char *itm; String title;
+    int16 ch, i,j,c,p,szCol, Rows, Cols, Width, Height, DY, barlen;
+    int16 vStart, vRows;
+    String title;
     title = _title;
 
     barlen = 5;

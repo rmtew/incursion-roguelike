@@ -251,7 +251,7 @@ class VBlock
 
 struct PExp
   {
-    PExp() { Type = Storage = Value = 0; Code = NULL; }
+    PExp() { Type = Storage = 0; Value = 0; Code = NULL; }
     VBlock* Code;
     int8 Type, Storage;
     int32 Value;
@@ -259,8 +259,11 @@ struct PExp
 
 struct LExp
   {
-    void PExp() { Type = Storage = Value = 0; 
-             RCode = WCode = NULL; }
+    void PExp() {
+        Type = Storage = 0;
+        Value = 0; 
+        RCode = WCode = NULL;
+    }
     VBlock *RCode, *WCode;
     int8 Type, Storage;
     int32 Value;

@@ -55,6 +55,8 @@
 
 #ifdef LIBTCOD_TERM
 
+#define _CRT_SECURE_NO_WARNINGS
+
 #undef TRACE
 #undef MIN
 #undef MAX
@@ -567,7 +569,6 @@ void libtcodTerm::StopWatch(int16 milli)
 void Fatal(const char*fmt,...) {
 	va_list argptr; 
 	va_start(argptr, fmt);
-	char ch; 
 	if (!T1)
 		{ printf(__buffer); exit(1); }
 	T1->Clear();
@@ -764,8 +765,6 @@ RetryFont:
 
 
 void libtcodTerm::Initialize() {
-    int16 i;
-    
     p = NULL; m = NULL; isHelp = false;
     ActionsSinceLastAutoSave = 0;
     cx = cy = 0;
@@ -895,7 +894,7 @@ int16 libtcodTerm::GetCharCmd()
 int16 libtcodTerm::GetCharCmd(KeyCmdMode mode) {
     KeySetItem * keyset = theGame->Opt(OPT_ROGUELIKE) ? RoguelikeKeySet : StandardKeySet;
     int16 keyset_start, keyset_delta, keyset_last;
-    int16 i, ox, oy, ch; int scancode; 
+    int16 i, ox, oy, ch;
     TextWin *wn;
 	uint32 ticks_last;
 
@@ -1157,7 +1156,7 @@ void libtcodTerm::PrePrompt() {
 \*****************************************************************************/
 
 bool libtcodTerm::Exists(const char *fn) {
-    return TCOD_sys_file_exists(fn);
+    return (TCOD_sys_file_exists(fn) != 0);
 }
 
 void libtcodTerm::Delete(const char *fn)
@@ -1262,7 +1261,7 @@ bool libtcodTerm::FirstFile(char * filespec) {
     alf_it = (int32 *)TCOD_list_begin(alf);
     try {
         OpenRead((const char *)*alf_it);
-    } catch (int error_number) {
+    } catch (int) {
         fp = NULL;
         return false;
     }
@@ -1279,7 +1278,7 @@ Retry:
     }
     try {
         OpenRead((const char *)*alf_it);
-    } catch (int error_number) {
+    } catch (int) {
         fp = NULL;
         goto Retry;
     }
