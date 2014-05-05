@@ -122,14 +122,13 @@ EvReturn Creature::PreTalk(EventInfo &e)
       {
         /* Animals can't talk, but rangers can still give orders
            to their animal companions. */
-        if (e.EVictim->isFriendlyTo(e.EActor))
+        if (e.ETarget->isCreature() && e.EVictim->isFriendlyTo(e.EActor))
           {
             e.EParam = EV_ORDER;
             return NOTHING;
           }
         
-        IPrint("The <Obj> can't talk, <Obj>.", 
-          e.EVictim, e.EActor);
+        IPrint("The <Obj> can't talk, <Obj>.", e.EVictim, e.EActor);
         return ABORT;
       }
 
