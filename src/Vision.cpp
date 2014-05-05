@@ -265,6 +265,7 @@ void Player::CalcVision()
 
 void Map::VisionThing(int16 pn, Creature *c, bool do_clear)
 {
+    int8 pn8 = (int8)pn;
   int16 i,cx,cy;
   Player *p = oPlayer(pl[pn]);
 
@@ -303,26 +304,26 @@ void Map::VisionThing(int16 pn, Creature *c, bool do_clear)
   }
 
   if (SightRange) { 
-    MarkAsSeen(pn,sx,sy,0,SightRange,LightRange,ShadowRange);
+    MarkAsSeen(pn8,sx,sy,0,SightRange,LightRange,ShadowRange);
     for (cx=x1;cx<=x2;cx+=1) {
-      VisionPath(pn,sx,sy,cx,y1,c,SightRange,LightRange,ShadowRange);
-      VisionPath(pn,sx,sy,cx,y2,c,SightRange,LightRange,ShadowRange);
+      VisionPath(pn8,sx,sy,cx,y1,c,SightRange,LightRange,ShadowRange);
+      VisionPath(pn8,sx,sy,cx,y2,c,SightRange,LightRange,ShadowRange);
     }
     for (cy=y1;cy<=y2;cy+=1) {
-      VisionPath(pn,sx,sy,x1,cy,c,SightRange,LightRange,ShadowRange);
-      VisionPath(pn,sx,sy,x2,cy,c,SightRange,LightRange,ShadowRange);
+      VisionPath(pn8,sx,sy,x1,cy,c,SightRange,LightRange,ShadowRange);
+      VisionPath(pn8,sx,sy,x2,cy,c,SightRange,LightRange,ShadowRange);
     }
   }
 
   if (BlindRange) {
-    MarkAsSeen(pn,sx,sy,0,0,0,BlindRange);
+    MarkAsSeen(pn8,sx,sy,0,0,0,BlindRange);
     for (cx=x1;cx<=x2;cx+=1) {
-      BlindsightVisionPath(pn,sx,sy,cx,y1,c,BlindRange);
-      BlindsightVisionPath(pn,sx,sy,cx,y2,c,BlindRange);
+      BlindsightVisionPath(pn8,sx,sy,cx,y1,c,BlindRange);
+      BlindsightVisionPath(pn8,sx,sy,cx,y2,c,BlindRange);
     }
     for (cy=y1;cy<=y2;cy+=1) {
-      BlindsightVisionPath(pn,sx,sy,x1,cy,c,BlindRange);
-      BlindsightVisionPath(pn,sx,sy,x2,cy,c,BlindRange);
+      BlindsightVisionPath(pn8,sx,sy,x1,cy,c,BlindRange);
+      BlindsightVisionPath(pn8,sx,sy,x2,cy,c,BlindRange);
     }
   } 
 

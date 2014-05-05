@@ -3608,7 +3608,7 @@ EvReturn Item::ReadScroll(EventInfo &e)
         goto Failed;
       }
 
-    DoScroll:
+//DoScroll:
     if (LastSkillCheckResult > 20 + sLevel && !random(2)) {
       e.EActor->IPrint("You manage to preserve the power within the ancient writing!");
       preserved = true;
@@ -3630,9 +3630,8 @@ EvReturn Item::ReadScroll(EventInfo &e)
     if (!e.EItem->isKnown(KN_MAGIC) && e.EActor->HasSkill(SK_KNOW_MAGIC))
       if (e.EActor->SkillCheck(SK_KNOW_MAGIC,10 + e.EItem->ItemLevel(),true))
         e.EActor->IdentByTrial(e.EItem);
-        
-    Failed:
 
+Failed:
     e.EActor->Timeout += max(10,50 - cLevel*2);
 
     if (e.EActor->SpellRating(eID) <= 0)

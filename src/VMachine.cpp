@@ -100,15 +100,15 @@ inline bool mID_isMType(rID mID, uint32 mt)
   
 inline void SetPVal(EventInfo &e, int16 b, int16 n=0, int16 s=0)
   { if (e.EMagic) {
-      e.EMagic->pval.Number = n;
-      e.EMagic->pval.Sides = s;
-      e.EMagic->pval.Bonus = b;
+      e.EMagic->pval.Number = (int8)n;
+      e.EMagic->pval.Sides = (int8)s;
+      e.EMagic->pval.Bonus = (int8)b;
       }
   }
 
 inline bool WithinRect(Rect r, int16 x, int16 y)
 {
-  return r.Within(x,y);
+  return r.Within((int8)x,(int8)y);
 } 
 
 /* We had to rename some functions in the script engine,
@@ -456,7 +456,7 @@ int32 VMachine::Execute(EventInfo *e, rID _xID, hCode CP)
           case MOD: REGS(0) = Value1(vc) % Value2(vc);  break;
           case INC: *LValue1(vc) += Value2(vc); break;
           case DEC: *LValue1(vc) -= Value2(vc); break;
-          case ROLL: REGS(0) = Dice::Roll(Value1(vc),Value2(vc)); break;
+          case ROLL: REGS(0) = Dice::Roll((int8)Value1(vc),(int8)Value2(vc)); break;
           case MIN:  REGS(0) = min(Value1(vc),Value2(vc)); break;
           case MAX:  REGS(0) = max(Value1(vc),Value2(vc)); break;
           case MOV: *LValue1(vc) = Value2(vc);         break;
@@ -470,9 +470,9 @@ int32 VMachine::Execute(EventInfo *e, rID _xID, hCode CP)
           case CMLT: REGS(0) = (Value1(vc) < Value2(vc)); break;
           case CMLE: REGS(0) = (Value1(vc) <= Value2(vc)); break;
           case CMGE: REGS(0) = (Value1(vc) >= Value2(vc)); break;
-          case CMEM: CallMemberFunc(Value2(vc),Value1(vc),0); xID = _xID; break;
-          case GVAR: GetMemberVar(Value2(vc),Value1(vc),0); break;
-          case SVAR: SetMemberVar(Value2(vc),Value1(vc),REGS(0)); break;
+          case CMEM: CallMemberFunc((int16)Value2(vc),(hObj)Value1(vc),0); xID = _xID; break;
+          case GVAR: GetMemberVar((int16)Value2(vc),(hObj)Value1(vc),0); break;
+          case SVAR: SetMemberVar((int16)Value2(vc),(hObj)Value1(vc),(int32)REGS(0)); break;
           case NOT: REGS(0) = !Value1(vc);          break;
           case NEG: REGS(0) = ~Value1(vc);          break;
           case BAND: REGS(0) = Value1(vc) & Value2(vc); break;
@@ -497,7 +497,7 @@ int32 VMachine::Execute(EventInfo *e, rID _xID, hCode CP)
           case JBRK: if (bsp) vc = BreakStack[--bsp]; break;
           case JTAB: 
             val        = Value1(vc);
-            table_size = Value2(vc);
+            table_size = (int8)Value2(vc);
             ovc = vc; vc++;
             //if (xID == 16778068 && e->Event == EV_EFFECT)
             //  __asm int 3;

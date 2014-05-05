@@ -367,16 +367,17 @@ String & String::Lower()
     for (i=0;s->Buffer[i];i++)
       s->Buffer[i] = tolower(s->Buffer[i]);
     return *s; 
-  }
+}
   
-int16 String::TrueLength()
-  { int32 i,len;
-    if (!Buffer) return 0;
-    for (i=0,len=0;Buffer[i];i++)
-      if (Buffer[i] < 127 && Buffer[i] > 0)
-        len++;
+int16 String::TrueLength() {
+    int16 len = 0;
+    if (Buffer) {
+        for (int32 i=0;Buffer[i];i++)
+            if (Buffer[i] < 127 && Buffer[i] > 0)
+                len++;
+    }
     return len; 
-  }
+}
   
 String & String::Decolorize()
   { 
@@ -652,9 +653,9 @@ int16 Dice::Roll(int8 Number, int8 Sides, int8 Bonus,int8 e)
 Dice& Dice::LevelAdjust(int16 level, int16 spec)
   {
     static Dice d;
-    d.Bonus  = ::LevelAdjust(Bonus,level,spec);
-    d.Number = ::LevelAdjust(Number,level,spec);
-    d.Sides  = ::LevelAdjust(Sides,level,spec);
+    d.Bonus  = (int8)::LevelAdjust(Bonus,level,spec);
+    d.Number = (int8)::LevelAdjust(Number,level,spec);
+    d.Sides  = (int8)::LevelAdjust(Sides,level,spec);
     return d;
   }
 
@@ -662,10 +663,9 @@ Dice& Dice::LevelAdjust(int16 level, int16 spec)
 
 String & Pluralize(const char *_s, rID iID)
   {
-    int16 i, l; bool isCap;
-    String s;
-    s = _s;
-    l = s.GetLength();
+    int16 i; bool isCap;
+    String s = _s;
+    size_t l = s.GetLength();
     /* later, not only " of " but also:
        " labeled ", " called ", " named ",
        " versus ", " from ", " in ", " on ",
@@ -790,7 +790,7 @@ String & Pluralize(const char *_s, rID iID)
       if (l >= strlen(Plurals[i]))
         if (stricmp(Plurals[i],s.Right(strlen(Plurals[i]))) == 0)
           {
-            isCap = isupper(s[l - strlen(Plurals[i])]);
+            isCap = isupper(s[l - strlen(Plurals[i])]) != 0;
             s =  s.Left(l - strlen(Plurals[i]));
             s += Plurals[i + 1];
             if (isCap)

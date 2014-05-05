@@ -158,11 +158,11 @@ void Item::Initialize(bool in_play)
         else if (TITEM(iID)->IType == T_WONDER)
           Error("T_WONDER item %s has no BASE_ITEM.",NAME(eID));
         if (TEFF(eID)->GetConst(INITIAL_PLUS))
-          Plus = TEFF(eID)->GetConst(INITIAL_PLUS);
+          Plus = (int8)TEFF(eID)->GetConst(INITIAL_PLUS);
         if (TEFF(eID)->GetList(ITEM_QUALITIES,QualList,32))
           {
             for (i=0;i!=32 && QualList[i];i++)
-              AddQuality((int16)QualList[i]);
+              AddQuality((int8)QualList[i]);
           }
         if (isWeapon() && TEFF(eID)->GetList(BANE_LIST,QualList,32))
           SetBane(-2);
@@ -455,8 +455,8 @@ Item* Item::TryStack(Item*i)
           if (GetStatiMag(POISONED) != i->GetStatiMag(POISONED))
             {
               int16 chance;
-              chance = random(Quantity);
-              if (i->Quantity > chance)
+              chance = random((int16)Quantity);
+              if ((int16)i->Quantity > chance)
                 SetStatiMag(POISONED,-1,NULL,i->GetStatiMag(POISONED));
             }
           i->Remove(true);
@@ -579,10 +579,10 @@ bool Item::operator==(Item &i)
          * potions {weak}" and all new pasty potions you pick up fail to
          * merge */
 
-        if ((bool)Inscrip && !((bool)i.Inscrip))
-          i.Inscrip = Inscrip;
-        else if ((bool)i.Inscrip)
-          Inscrip = i.Inscrip;
+        if (Inscrip.GetLength() && !(i.Inscrip.GetLength()))
+            i.Inscrip = Inscrip;
+        else if (i.Inscrip.GetLength())
+            Inscrip = i.Inscrip;
         return true; 
 
       } 
@@ -593,10 +593,10 @@ void Item::MakeMagical(rID _eID, int16 spe)
 	{
 	
     if (_eID > 0) {
-      int32 dmg;
-      dmg = (GetHP() * 1000) / MaxHP();
-		  eID = _eID;
-		  cHP = (dmg * MaxHP()) / 1000;
+        int32 dmg = (GetHP() * 1000) / MaxHP();
+        eID = _eID;
+		cHP = (int16)((dmg * MaxHP()) / 1000);
+
       if (TEFF(eID)->HasFlag(EF_CURSED))
         IFlags |= IF_CURSED;
       if (TEFF(eID)->HasFlag(EF_HALF_CURSED))
@@ -604,7 +604,7 @@ void Item::MakeMagical(rID _eID, int16 spe)
           IFlags |= IF_CURSED;
       }
     if (spe > 0) 
-      SetInherantPlus(spe);
+      SetInherantPlus((int8)spe);
     
     if (eID) {
       EffMem *em = EFFMEM(eID,theGame->GetPlayer(0));
@@ -649,7 +649,7 @@ void Item::MakeKnown(uint8 k)
 
 void Item::VisibleID(Creature *user)
   {
-    int16 i; uint16 v; Player *p;
+    int8 i; uint16 v; Player *p;
     ASSERT(user && this);
     // ww: This seems to fire when the player is nowhere nearby ... 
     // commenting it out for now. 
@@ -1280,7 +1280,7 @@ bool Item::isGhostTouch()
 
 EvReturn Item::Damage(EventInfo &e)
 {
-  int16 hard, dcount, avg, dmg, i, ox, oy; Map *om;
+  int16 hard, dcount, i, ox, oy; Map *om;
   const char *damage, *destroy, *name, *oname;
   String pre, s;
   int posthard;
@@ -1416,7 +1416,7 @@ EvReturn Item::Damage(EventInfo &e)
       dcount = 0; 
     } 
   } else { 
-    int oldQuantity = Quantity; 
+    uint32 oldQuantity = Quantity; 
     Quantity = (totalHP + (MaxHP()-1))/ MaxHP(); 
     cHP = totalHP - (Quantity * MaxHP());
     if (cHP <= 0) cHP = MaxHP(); 
@@ -1580,7 +1580,7 @@ EvReturn Item::Damage(EventInfo &e)
 Corpse::Corpse(Creature *c, int16 _Type)
 	: Food(FIND("corpse"),_Type)
   {
-    int i, t = 0;
+    int t = 0;
     Image &= 0x00FF;
     if (c) {
       mID=c->tmID;
@@ -2219,7 +2219,7 @@ int16 Item::ItemLevel(bool bounded)
 
 int16 Weapon::ItemLevel(bool bounded)
   {
-    int16 i,j,QPlus,base, last; 
+    int16 i,j,QPlus,base; 
     /* This is HUGELY generous by the standards of the original
        OGL system. It means that by the time a PC of 7th level
        has finished completely to the 10th level of the dungeon,
@@ -2263,7 +2263,7 @@ int16 Weapon::ItemLevel(bool bounded)
 
 int16 Armour::ItemLevel(bool bounded)
   {
-    int16 i,j,QPlus,base, last; 
+    int16 i,j,QPlus,base; 
     int8 PlusLevels[] =
       { 0, 0, 1, 2, 3, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 
         13, 14, 15, 16, 17, 18, 19, 20 };
@@ -2297,7 +2297,7 @@ int16 Armour::ItemLevel(bool bounded)
 
 int16 QItem::ItemLevel(bool bounded)
   {
-    int16 i,j,QPlus,base, last; 
+    int16 i,j,QPlus,base; 
     int8 PlusLevels[] =
       { 0, 0, 1, 2, 3, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 
         13, 14, 15, 16, 17, 18, 19, 20 };
@@ -2336,8 +2336,7 @@ bool Weapon::useInGrapple(Creature *c) {
       (c->HasStati(ENGULFED) && Size(c) <= c->Attr[A_SIZ]));
 }
 
-bool Weapon::QualityOK(uint32 q,uint8 lev)
-  {
+bool Weapon::QualityOK(uint32 q,uint8 lev) {
 
     /*
   theGame->GetPlayer(0)->IPrint(Format("Weapon::QOK(%d) %s HasQuality(q) = %d, IQ_SILV = %d.", q, (const char*)Name(), HasQuality(q), HasQuality(IQ_SILVER)));
@@ -2521,13 +2520,14 @@ bool Weapon::QualityOK(uint32 q,uint8 lev)
             return false;
           break; 
 
-      }
+    }
+    // TODO: Should this be pointless?
     Qualities[7] = q;
     if (ItemLevel() > lev)
       { Qualities[7] = 0; return false; }
     Qualities[7] = 0;
     return true;
-  }
+}
 
 bool QItem::QualityOK(uint32 q,uint8 lev)
 {
@@ -2616,96 +2616,93 @@ bool QItem::QualityOK(uint32 q,uint8 lev)
   } 
 }
 
-
-bool Armour::QualityOK(uint32 q,uint8 lev)
-  {
+bool Armour::QualityOK(uint32 q,uint8 lev) {
     if (Qualities[7])
-      return false;
+        return false;
     if (HasQuality(q))
-      return false;
-    switch (q)
-      {
-        case AQ_FEARSOME:
-        case AQ_SHIFTING:
-        case AQ_BANEBLIND:
-        case AQ_SPIKED:
-        case AQ_MAGIC_RES:
-          return false; // ww: not yet implemented
+        return false;
 
+    switch (q) {
+    case AQ_FEARSOME:
+    case AQ_SHIFTING:
+    case AQ_BANEBLIND:
+    case AQ_SPIKED:
+    case AQ_MAGIC_RES:
+        return false; // ww: not yet implemented
+        break;
+    case AQ_LIGHT_FOR:
+    case AQ_MEDIUM_FOR:
+    case AQ_HEAVY_FOR:
+        if (HasQuality(AQ_LIGHT_FOR) || HasQuality(AQ_MEDIUM_FOR) || HasQuality(AQ_HEAVY_FOR))
+            return false;
+        // TODO: Should this fall through?
+    case AQ_ETHEREALNESS:
+    case AQ_SLICK:
+    case AQ_MIGHT:
+    case AQ_ENDURANCE:
+    case AQ_HEALING:
+    case AQ_STABILITY:
+    case AQ_COMMAND:
+    case AQ_RADIANT:
+        if (isType(T_SHIELD))
+            return false;
+        break;
+    case AQ_GRACEFUL: // shield OK 
+        break; 
+    case AQ_ARROW_DEF:
+    case AQ_ANIMATED:
+    case AQ_BASHING:
+    case AQ_REFLECTION:
+        if (!isType(T_SHIELD))
+            return false;
+        return false; // ww: not yet implemented 
+        break;
+    case AQ_SHADOW:
+        if (isType(T_SHIELD))
+            return false;
+        // TODO: Should this fall through?
+    case AQ_BLINDING:
+        if (HasQuality(AQ_BLINDING) || HasQuality(AQ_SHADOW))
+            return false;
+        break;
+    case AQ_INVULN:
+    case AQ_GREAT_INV:
+        if (isType(T_SHIELD))
+            return false;
+        if (HasQuality(AQ_INVULN) || HasQuality(AQ_GREAT_INV))
+            return false;
+        break;
+    case AQ_SILENT:
+    case AQ_AGILITY:
+        if (isType(T_SHIELD))
+            return false;
+        if (TITEM(iID)->Group != WG_LARMOUR)
+            return false;
+        break;
+    case IQ_SILVER:
+    case IQ_MITHRIL:
+    case IQ_ADAMANT:
+    case IQ_IRONWOOD:
+    case IQ_DARKWOOD: 
+    case IQ_ELVEN:
+    case IQ_DWARVEN:
+    case IQ_ORCISH:
+        if (!QItem::QualityOK(q,lev))
+            return false;
+        break; 
+    }
 
-        case AQ_LIGHT_FOR:
-        case AQ_MEDIUM_FOR:
-        case AQ_HEAVY_FOR:
-          if (HasQuality(AQ_LIGHT_FOR) ||
-              HasQuality(AQ_MEDIUM_FOR) ||
-              HasQuality(AQ_HEAVY_FOR))
-            return false;
-        case AQ_ETHEREALNESS:
-        case AQ_SLICK:
-        case AQ_MIGHT:
-        case AQ_ENDURANCE:
-        case AQ_HEALING:
-        case AQ_STABILITY:
-        case AQ_COMMAND:
-        case AQ_RADIANT:
-          if (isType(T_SHIELD))
-            return false;
-         break;
-        case AQ_GRACEFUL: // shield OK 
-         break; 
-
-        case AQ_ARROW_DEF:
-        case AQ_ANIMATED:
-        case AQ_BASHING:
-        case AQ_REFLECTION:
-          if (!isType(T_SHIELD))
-            return false;
-         return false; // ww: not yet implemented 
-         break;
-
-        case AQ_SHADOW:
-          if (isType(T_SHIELD))
-            return false;
-        case AQ_BLINDING:
-          if (HasQuality(AQ_BLINDING) ||
-              HasQuality(AQ_SHADOW))
-            return false;
-         break;
-
-        case AQ_INVULN:
-        case AQ_GREAT_INV:
-          if (isType(T_SHIELD))
-            return false;
-          if (HasQuality(AQ_INVULN) ||
-              HasQuality(AQ_GREAT_INV))
-            return false;
-         break;
-
-        case AQ_SILENT:
-        case AQ_AGILITY:
-          if (isType(T_SHIELD))
-            return false;
-          if (TITEM(iID)->Group != WG_LARMOUR)
-            return false;
-         break;
-
-    case IQ_SILVER: case IQ_MITHRIL: case IQ_ADAMANT:
-    case IQ_IRONWOOD: case IQ_DARKWOOD: 
-    case IQ_ELVEN: case IQ_DWARVEN: case IQ_ORCISH:
-          if (!QItem::QualityOK(q,lev))
-            return false;
-          break; 
-      }
-    Qualities[7] = q;
-    if (ItemLevel() > lev)
-      { Qualities[7] = 0; return false; }
+    // TODO: Should be pointless?
+    Qualities[7] = (int8)q;
+    if (ItemLevel() > lev) {
+        Qualities[7] = 0;
+        return false;
+    }
     Qualities[7] = 0;
     return true;
+}
 
-  }
-
-void QItem::RemoveQuality(int8 q)
-{
+void QItem::RemoveQuality(int8 q) {
   switch (q)
     {
       case IQ_MASTERWORK:
@@ -2945,7 +2942,7 @@ int32 QItem::Weight(bool psych_might)
 
 int16 QItem::Hardness(int8 DType)
   {
-    int8 hd = Item::Hardness(DType);
+    int16 hd = Item::Hardness(DType);
     if (hd <= 0) {
       if (DType == AD_RUST && hd == 0 && GetPlus() > 0)
         hd += GetPlus() * 5;

@@ -264,7 +264,7 @@ uint8 Target::Y()
     case TargetItem:
     case TargetMount:
     case OrderAttackTarget:
-      return GetThing()->y;
+      return (uint8)GetThing()->y;
 
     case TargetArea:
     case TargetWander:
@@ -289,7 +289,7 @@ uint8 Target::X()
     case TargetItem:
     case TargetMount:
     case OrderAttackTarget:
-      return GetThing()->x;
+      return (uint8)GetThing()->x;
 
     case TargetArea:
     case TargetWander:
@@ -1401,7 +1401,7 @@ void TargetSystem::ItHitMe(Creature *me, Creature *t, int16 damage)
 
     targ->data.Creature.damageDoneToMe += damage; 
 
-    int limit = 0;
+    uint32 limit = 0;
 
     switch (targ->type) {
       case TargetInvalid: 

@@ -247,7 +247,7 @@ static int StatiSort(const void *a, const void *b) {
 }
 
 void Thing::_FixupStati() {
-    int32 i;
+    int8 i8;
     ASSERT(__Stati.Nested == 0); 
 
     /* Merge both lists, if needed */
@@ -255,9 +255,9 @@ void Thing::_FixupStati() {
         int16 num, newSize;
 
         num = 0;
-        for (i=0;i!=ADDED_SIZE;i++)
-            if (__Stati.Added[i].Nature)
-                num = (i+1);
+        for (i8=0;i8!=ADDED_SIZE;i8++)
+            if (__Stati.Added[i8].Nature)
+                num = (i8+1);
 
         /* Odd case -- Stati is added inside a loop, then deleted
         in the same loop, therefore nothing to merge, but we
@@ -302,18 +302,18 @@ SkipMerge:
     /* rebuild the index */
     memset(__Stati.Idx,-1,sizeof(__Stati.Idx[0]) * LAST_STATI);
     int last = -1; 
-    for (i = 0; i < __Stati.Last; i++) {
-        if (__Stati.S[i].Nature != last) {
-            int nat = __Stati.S[i].Nature; 
-            __Stati.Idx[nat] = i; 
+    for (i8 = 0; i8 < __Stati.Last; i8++) {
+        if (__Stati.S[i8].Nature != last) {
+            int nat = __Stati.S[i8].Nature; 
+            __Stati.Idx[nat] = i8; 
             last = nat; 
         } 
     }
 
     /* special kludge for ADJUST, to make StatIterAdjust work */
-    for (i=ADJUST;i <= ADJUST_LAST; i++)
-        if (__Stati.Idx[i] != 255) {
-            __Stati.Idx[ADJUST_IDX] = __Stati.Idx[i];
+    for (i8=ADJUST;i8 <= ADJUST_LAST; i8++)
+        if (__Stati.Idx[i8] != 255) {
+            __Stati.Idx[ADJUST_IDX] = __Stati.Idx[i8];
             break;
         }    
 

@@ -23,7 +23,7 @@ class Item: public Thing, public Magic
     protected:
 			uint16 Known;
 			int8 Plus, Charges, DmgType; 
-      uint8 GenNum;
+      int16 GenNum;
       
       hObj Parent;
       rID  homeID;
