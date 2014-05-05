@@ -447,6 +447,9 @@ void libtcodTerm::CursorOff() {
 }
   
 void libtcodTerm::BlinkCursor() {
+    // Sometimes the windows may leave the cursor off the RHS.
+    if (cx >= sizeX)
+        return;
     cursorPulse = !cursorPulse;
     if (cursorPulse) {
         int16 c = attr & 0x000F;
