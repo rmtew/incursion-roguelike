@@ -458,7 +458,7 @@ void HelpOtherSpells(String & helpText)
               !stricmp(NAME(clID),"weaver"))
             continue;
           p->RemoveStati(SPELL_ACCESS);
-          p->GainPermStati(SPELL_ACCESS,NULL,SS_MISC,0xFFFF,20,clID);
+          p->GainPermStati(SPELL_ACCESS,NULL,SS_MISC,-1,20,clID);
           ls = p->CalcSpellAccess();
           
           

@@ -935,7 +935,7 @@ EvReturn Creature::Greet(EventInfo &e)
             cFP = min(GetAttr(A_FAT),cFP+2);
            break;
         }
-    e.EVictim->GainPermStati(TRIED,e.EActor,SS_MISC,SK_DIPLOMACY+EV_GREET*1000);
+    e.EVictim->GainPermStati(TRIED,e.EActor,SS_MISC,SK_DIPLOMACY+EV_GREET*100);
     return DONE;
   }
 
@@ -2120,9 +2120,10 @@ void Creature::LoseMoneyTo(int32 amt, Creature *cr)
    
   }
   
-int32 Item::getShopCost(Creature *Buyer, Creature *Seller)
-  {
-    double cost, i; bool plusPriced; 
+int32 Item::getShopCost(Creature *Buyer, Creature *Seller) {
+    double cost;
+    int16 i;
+    bool plusPriced; 
     int32 priceList[10];
     
     plusPriced = false;
@@ -2176,7 +2177,7 @@ int32 Item::getShopCost(Creature *Buyer, Creature *Seller)
     cost /= 3;
     
     if (!Seller || !Buyer)
-      return cost;
+      return (int32)cost;
       
     int32 mod;
     double ShopPrices[] = { 

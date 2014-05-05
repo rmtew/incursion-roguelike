@@ -377,12 +377,14 @@ EvReturn Character::Sacrifice(EventInfo &e)
     sacCat = -1;
     
     lowestVal = 100000000L;
-    for (i=0;i!=20 && SacList[i];i+=2)
-      if ((sacType == SacList[i]) ||
-          (sacType == -1 && e.EVictim && e.EVictim->isMType(SacList[i])) ||
-          (sacType == -1 && !e.EVictim && e.EItem->isType(-SacList[i])))
+    for (i=0;i!=20 && SacList[i];i+=2) {
+        int16 sacValue = SacList[i];
+      if ((sacType == sacValue) ||
+          (sacType == -1 && e.EVictim && e.EVictim->isMType(sacValue)) ||
+          (sacType == -1 && !e.EVictim && e.EItem->isType(-sacValue)))
         if (SacVals[e.godNum][i/2] < lowestVal)
           { sacCat = i/2; lowestVal = SacVals[e.godNum][i/2]; }
+    }
         
     if (sacCat == -1)
       {

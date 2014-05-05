@@ -1754,7 +1754,7 @@ EvReturn Food::Eat(EventInfo &e)
       Corpse * c = (Corpse *)this;
       
       if (TMON(c->mID)->isMType(c->mID,MA_SAPIENT) && !TMON(c->mID)->isMType(c->mID,MA_ORC) &&
-          !c->HasStati(TRIED,SK_WILD_LORE + 1000*EV_ALIGNED,e.EActor))
+          !c->HasStati(TRIED,SK_WILD_LORE + 100*EV_ALIGNED,e.EActor))
         {
           bool isCannibal;
           isCannibal = false;
@@ -1768,7 +1768,7 @@ EvReturn Food::Eat(EventInfo &e)
               (e.EActor->isMType(MA_REPTILE) && TMON(c->mID)->isMType(c->mID,MA_REPTILE)
                  && TMON(c->mID)->isMType(c->mID,MA_HUMANOID)))
             isCannibal = true;
-          c->GainPermStati(TRIED,e.EActor,SS_MISC,SK_WILD_LORE + 1000*EV_ALIGNED);
+          c->GainPermStati(TRIED,e.EActor,SS_MISC,SK_WILD_LORE + 100*EV_ALIGNED);
           e.EActor->AlignedAct(AL_NONLAWFUL,2 + isCannibal*3,
             isCannibal ? "cannibalism" : "eating sapient creatures");
         } 

@@ -1827,18 +1827,18 @@ EvReturn Map::enGenMount(EventInfo &e)
       
     RES(e.chSource)->GetList(e.chList,wtList,511);
     nMount = 0; cWeight = 10;
-    for(i=0;wtList[i] || wtList[i+1];i++)
-      {
-        if (((int32)wtList[i]) <= -10) 
-          cFreaky = -wtList[i];
-        else if (wtList[i] < 0x01000000)
-          cWeight = wtList[i];
-        else if (RES(wtList[i])->Type == T_TTEMPLATE)
+    for(i=0;wtList[i] || wtList[i+1];i++) {
+        int32 wtValue = wtList[i];
+        if (wtValue <= -10) 
+          cFreaky = -wtValue;
+        else if (wtValue < 0x01000000)
+          cWeight = wtValue;
+        else if (RES(wtValue)->Type == T_TTEMPLATE)
           continue;
-        else if (RES(wtList[i])->Type == T_TMONSTER)
+        else if (RES(wtValue)->Type == T_TMONSTER)
           {
             int16 theCR;
-            theCR = TMON(wtList[i])->CR;
+            theCR = TMON(wtValue)->CR;
             for (j=i-1;j>=0;j--)
               {
                 if ((wtList[j] < 0x01000000) || 
