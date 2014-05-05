@@ -69,70 +69,64 @@ Item* Monster::InSlot(int8 slot, bool eff)
   return NULL;
 }
 
-EvReturn Monster::Wield(EventInfo &e)
-  {
+EvReturn Monster::Wield(EventInfo &e) {
     Item *it;
-    if (!TMON(mID)->HasSlot(e.EParam))
-      return ABORT;
-    if (e.EParam == SL_WEAPON || e.EParam == SL_ARCHERY)
-      if (e.EItem->Size(this) > e.EActor->GetAttr(A_SIZ)+1)
+    int8 paramslot = (int8)e.EParam;
+    if (!TMON(mID)->HasSlot(paramslot))
         return ABORT;
-      
-    if (e.EItem->GetQuantity() > 1 && e.EItem->activeSlot(e.EParam) && 
-         !e.EItem->isGroup(WG_THROWN))
-      {
+    if (paramslot == SL_WEAPON || paramslot == SL_ARCHERY)
+        if (e.EItem->Size(this) > e.EActor->GetAttr(A_SIZ)+1)
+            return ABORT;
+
+    if (e.EItem->GetQuantity() > 1 && e.EItem->activeSlot(paramslot) && !e.EItem->isGroup(WG_THROWN)) {
         it = e.EItem->TakeOne();
         it->Next = Inv;
         Inv = it->myHandle;
         it->SetOwner(e.EActor->myHandle);
         it->IFlags &= ~IF_WORN;
         e.EItem = it;
-      }
-    if (it = InSlot(e.EParam))
-      {
+    }
+    if (it = InSlot(paramslot)) {
         if (Throw(EV_TAKEOFF,this,NULL,it) == ABORT)
-          return ABORT;
-        ASSERT(!InSlot(e.EParam))
-      }
-    
+            return ABORT;
+        ASSERT(!InSlot(paramslot))
+    }
 
-    if (e.EParam == SL_ARMOUR && m && isThreatened())
-      {
+    if (paramslot == SL_ARMOUR && m && isThreatened()) {
         IPrint("You cannot put on armour while threatened by hostile creatures.");
         return ABORT;
-      }
+    }
 
     /* Monsters can only wield things in their active slots,
-       which is fine because that's all they need. We don't
-       keep track of whether Joe kobold has his Wand of Striking
-       in his belt slot or his ready hand slot -- we just want
-       to make sure he can't get the benefit of two suits of
-       armour at once. */
-    if (!e.EItem->activeSlot(e.EParam))
-      return DONE;
-    
+    which is fine because that's all they need. We don't
+    keep track of whether Joe kobold has his Wand of Striking
+    in his belt slot or his ready hand slot -- we just want
+    to make sure he can't get the benefit of two suits of
+    armour at once. */
+    if (!e.EItem->activeSlot(paramslot))
+        return DONE;
+
     DPrint(e,NULL,"An <EActor> readies an <EItem>."); 
     e.EItem->IFlags |= IF_WORN;
-		if (HasFeat(FT_SOULBLADE) && e.EItem->activeSlot(e.EParam))
-		  wieldSoulblade(e.EItem);
-    
-    if (e.EItem->eID && e.EItem->activeSlot(e.EParam)) {
-      e.eID = e.EItem->eID;
-      e.isWield = true;  
-      if (TEFF(e.EItem->eID)->HasFlag(EF_CURSED)) {
-        if (e.EItem->isKnown(KN_MAGIC|KN_BLESS)) 
-          e.EActor->IPrint("The <EITem> curses itself!");
-        e.EItem->IFlags &= ~(IF_BLESSED);
-        e.EItem->IFlags |= (IF_CURSED);
-        } 
-      ReThrow(EV_EFFECT,e);
-      ASSERT(e.EActor); 
-      } 
+    if (HasFeat(FT_SOULBLADE) && e.EItem->activeSlot(paramslot))
+        wieldSoulblade(e.EItem);
 
+    if (e.EItem->eID && e.EItem->activeSlot(paramslot)) {
+        e.eID = e.EItem->eID;
+        e.isWield = true;  
+        if (TEFF(e.EItem->eID)->HasFlag(EF_CURSED)) {
+            if (e.EItem->isKnown(KN_MAGIC|KN_BLESS)) 
+                e.EActor->IPrint("The <EITem> curses itself!");
+            e.EItem->IFlags &= ~(IF_BLESSED);
+            e.EItem->IFlags |= (IF_CURSED);
+        } 
+        ReThrow(EV_EFFECT,e);
+        ASSERT(e.EActor); 
+    } 
 
     Timeout += QD(2000) / (100 + 10 * Mod(A_DEX));
     return DONE;
-  }
+}
 
 EvReturn Monster::TakeOff(EventInfo &e)
   {
@@ -215,9 +209,7 @@ EvReturn Monster::PickUp(EventInfo &e)
     return DONE;
   }
 
-EvReturn Monster::Drop(EventInfo &e)
-{
-  Item *it;
+EvReturn Monster::Drop(EventInfo &e) {
   if (HasMFlag(M_NOHANDS))
     return ABORT;
   /* Take off the item, if necessary */
@@ -300,21 +292,22 @@ Item* Character::InSlot(int8 sl, bool eff)
   }
 
 EvReturn Character::Wield(EventInfo &e) {
-    if (!TMON(mID)->HasSlot(e.EParam)) {
+    int8 paramslot = (int8)e.EParam;
+    if (!TMON(mID)->HasSlot(paramslot)) {
         IPrint("You can't use that inventory slot in your current form.");
         return ABORT;
     }
-    if (e.EItem->GetQuantity() > 1 && e.EItem->activeSlot(e.EParam) && !e.EItem->isGroup(WG_THROWN)) {
+    if (e.EItem->GetQuantity() > 1 && e.EItem->activeSlot(paramslot) && !e.EItem->isGroup(WG_THROWN)) {
         IPrint("You can't wield multiple items in an active slot.");
         return ABORT;
     }
-    if (e.EItem->isType(T_CLOTHES) && e.EParam == SL_CLOTHES && e.EItem->eID)
+    if (e.EItem->isType(T_CLOTHES) && paramslot == SL_CLOTHES && e.EItem->eID)
         if (InSlot(SL_CLOAK) && InSlot(SL_CLOAK)->eID) {
             IPrint("You can't wear both a magical cloak and magical "
                 "clothing; both occupy the same metaphysical 'niche'.");
             return ABORT;
         }
-    if (e.EItem->isType(T_CLOAK) && e.EParam == SL_CLOAK && e.EItem->eID)
+    if (e.EItem->isType(T_CLOAK) && paramslot == SL_CLOAK && e.EItem->eID)
         if (InSlot(SL_CLOTHES) && InSlot(SL_CLOTHES)->eID) {
             IPrint("You can't wear both a magical cloak and magical "
                 "clothing; both occupy the same metaphysical 'niche'.");
@@ -322,8 +315,8 @@ EvReturn Character::Wield(EventInfo &e) {
         }
 
     Item *other;
-    if ((e.EParam == SL_WEAPON && (other = InSlot(SL_READY))) ||
-        (e.EParam == SL_READY && (other = InSlot(SL_WEAPON))))
+    if ((paramslot == SL_WEAPON && (other = InSlot(SL_READY))) ||
+        (paramslot == SL_READY && (other = InSlot(SL_WEAPON))))
         if (e.EItem->HasIFlag(WT_REACH) != other->HasIFlag(WT_REACH))
             if (e.EItem->isType(T_WEAPON) && other->isType(T_WEAPON))
             {
@@ -331,11 +324,11 @@ EvReturn Character::Wield(EventInfo &e) {
                 return ABORT;
             }
 
-    if (e.EParam == SL_ARMOUR && m && isThreatened()) {
+    if (paramslot == SL_ARMOUR && m && isThreatened()) {
         IPrint("You cannot put on armour while threatened by hostile creatures.");
         return ABORT;
     }
-    if (e.EParam == SL_ARMOUR && m && (HasStati(STUCK) || HasStati(PRONE))) {
+    if (paramslot == SL_ARMOUR && m && (HasStati(STUCK) || HasStati(PRONE))) {
         IPrint("You cannot put on armour while stuck or prone.");
         return ABORT;
     }
@@ -360,16 +353,15 @@ EvReturn Character::Wield(EventInfo &e) {
         } 
     }
 
-    if (e.EParam == SL_ARCHERY)
+    if (paramslot == SL_ARCHERY)
         Error("Character attempting to use the fake SL_ARCHERY slot!");
-    if (e.EParam == SL_WEAPON || e.EParam == SL_READY) 
+    if (paramslot == SL_WEAPON || paramslot == SL_READY) 
         if (e.EItem->isType(T_WEAPON) || e.EItem->isType(T_BOW) || e.EItem->isType(T_SHIELD)) {
             if (e.EItem->Size(this) > Attr[A_SIZ]+1) {
                 IPrint("The <Obj> is too large for you to wield effectively.",e.EItem);
                 return ABORT;
             }
-            if ((TITEM(e.EItem->iID)->HasFlag(WT_EXOTIC_1H) &&
-                !HasEffStati(WEP_SKILL,e.EItem->iID)) ||
+            if ((TITEM(e.EItem->iID)->HasFlag(WT_EXOTIC_1H) && !HasEffStati(WEP_SKILL,e.EItem->iID)) ||
                 (e.EItem->Size(this) + 
                 TITEM(e.EItem->iID)->HasFlag(WT_TWO_HANDED) 
                 > (Attr[A_SIZ]+
@@ -388,9 +380,9 @@ EvReturn Character::Wield(EventInfo &e) {
             }
         }
 
-    Inv[e.EParam] = e.EItem->myHandle;
+    Inv[paramslot] = e.EItem->myHandle;
     e.EItem->SetOwner(e.EActor->myHandle);
-    if (e.EItem->activeSlot(e.EParam))
+    if (e.EItem->activeSlot(paramslot))
         e.EItem->IFlags |= IF_WORN;
     if (theGame->InPlay()) {
         Timeout += QD(2000) / (100 + 10 * Mod(A_DEX));
@@ -405,10 +397,10 @@ EvReturn Character::Wield(EventInfo &e) {
         IPrint("Wielding the <Obj> makes you feel uneasy.",e.EItem);
     }
 
-    if (HasFeat(FT_SOULBLADE) && e.EItem->activeSlot(e.EParam))
+    if (HasFeat(FT_SOULBLADE) && e.EItem->activeSlot(paramslot))
         wieldSoulblade(e.EItem);		  
 
-    if (e.EItem->eID && e.EItem->activeSlot(e.EParam)) {
+    if (e.EItem->eID && e.EItem->activeSlot(paramslot)) {
         e.eID = e.EItem->eID;
         e.isWield = true;  
         if (TEFF(e.EItem->eID)->HasFlag(EF_CURSED)) {
@@ -421,7 +413,7 @@ EvReturn Character::Wield(EventInfo &e) {
         ASSERT(e.EActor); 
     }
 
-    if (e.EParam == SL_LIGHT && isPlayer())
+    if (paramslot == SL_LIGHT && isPlayer())
         thisp->UpdateMap = true;
     return DONE;
 }
@@ -848,7 +840,8 @@ Item* Character::GetInv(bool first) {
 
 void Character::Exchange()
   {
-    Item *new1, *new2, *old1, *old2, *it; int16 i, sl1, sl2;
+    Item *new1, *new2, *old1, *old2;
+    int8 si, sl1, sl2;
 
     if (!theRegistry->Exists(defMelee))   defMelee = 0;
     if (!theRegistry->Exists(defOffhand)) defOffhand = 0;
@@ -882,9 +875,9 @@ void Character::Exchange()
     if (Inv[SL_WEAPON] == defMelee) {
       /* Try to switch to ranged */
       if (defRanged) {  
-        for (i=0;i!=SL_LAST;i++)
-          if (Inv[i] == defRanged)
-            { sl1 = i; goto foundRanged; }
+        for (si=0;si!=SL_LAST;si++)
+          if (Inv[si] == defRanged)
+            { sl1 = si; goto foundRanged; }
         IPrint("Your default ranged weapon isn't easily accessible right now.");
         goto XAbort;
 
@@ -904,18 +897,18 @@ void Character::Exchange()
       }
     else {
       if (defMelee) {
-        for (i=0;i!=SL_LAST;i++)
-          if (Inv[i] == defMelee)
-            { sl1 = i; goto foundMelee; }
+        for (si=0;si!=SL_LAST;si++)
+          if (Inv[si] == defMelee)
+            { sl1 = si; goto foundMelee; }
         IPrint("Your default melee weapon isn't easily accessible right now.");
         goto XAbort;
 
         foundMelee:
         if (!defOffhand)
           goto foundBoth;
-        for (i=0;i!=SL_LAST;i++)
-          if (Inv[i] == defOffhand)
-            { sl2 = i; goto foundBoth; }
+        for (si=0;si!=SL_LAST;si++)
+          if (Inv[si] == defOffhand)
+            { sl2 = si; goto foundBoth; }
         IPrint("Your default offhand weapon isn't easily accessible right now.");
         goto XAbort;
 
@@ -932,9 +925,9 @@ void Character::Exchange()
 
         if (!defOffhand)
           goto foundOffOnly;
-        for (i=0;i!=SL_LAST;i++)
-          if (Inv[i] == defOffhand)
-            { sl2 = i; goto foundOffOnly; }
+        for (si=0;si!=SL_LAST;si++)
+          if (Inv[si] == defOffhand)
+            { sl2 = si; goto foundOffOnly; }
         IPrint("Your default offhand weapon isn't easily accessible right now.");
         goto XAbort;
 
@@ -972,26 +965,26 @@ void Character::Exchange()
     if (old1) {
 
       if (!Inv[SL_LSHOULDER] && old1->allowedSlot(SL_LSHOULDER,this))
-        i = SL_LSHOULDER;
+        si = SL_LSHOULDER;
       else if (!Inv[SL_RSHOULDER] && old1->allowedSlot(SL_RSHOULDER,this))
-        i = SL_RSHOULDER;
+        si = SL_RSHOULDER;
       else if (!Inv[SL_BELT1] && old1->allowedSlot(SL_BELT1,this))
-        i = SL_BELT1;
+        si = SL_BELT1;
       else if (!Inv[SL_BELT2] && old1->allowedSlot(SL_BELT2,this))
-        i = SL_BELT2;
+        si = SL_BELT2;
       else if (!Inv[SL_BELT3] && old1->allowedSlot(SL_BELT3,this))
-        i = SL_BELT3;
+        si = SL_BELT3;
       else if (!Inv[SL_BELT4] && old1->allowedSlot(SL_BELT4,this))
-        i = SL_BELT4;
+        si = SL_BELT4;
       else if (!Inv[SL_BELT5] && old1->allowedSlot(SL_BELT5,this))
-        i = SL_BELT5;
+        si = SL_BELT5;
       else {
         IPrint("You have no slot open to hold your <Obj>.",old1);
         goto XAbort;
         }
       if (!Swap(SL_WEAPON))
         goto XAbort;
-      if (!Swap(i))
+      if (!Swap(si))
         { Swap(SL_WEAPON);
           goto XAbort; }
       }
@@ -1002,21 +995,20 @@ void Character::Exchange()
 
     /* Find some place to put the second old weapon */
     if (old2) {
-
       if (!Inv[SL_LSHOULDER] && old2->allowedSlot(SL_LSHOULDER,this))
-        i = SL_LSHOULDER;
+        si = SL_LSHOULDER;
       else if (!Inv[SL_RSHOULDER] && old2->allowedSlot(SL_RSHOULDER,this))
-        i = SL_RSHOULDER;
+        si = SL_RSHOULDER;
       else if (!Inv[SL_BELT1] && old2->allowedSlot(SL_BELT1,this))
-        i = SL_BELT1;
+        si = SL_BELT1;
       else if (!Inv[SL_BELT2] && old2->allowedSlot(SL_BELT2,this))
-        i = SL_BELT2;
+        si = SL_BELT2;
       else if (!Inv[SL_BELT3] && old2->allowedSlot(SL_BELT3,this))
-        i = SL_BELT3;
+        si = SL_BELT3;
       else if (!Inv[SL_BELT4] && old2->allowedSlot(SL_BELT4,this))
-        i = SL_BELT4;
+        si = SL_BELT4;
       else if (!Inv[SL_BELT5] && old2->allowedSlot(SL_BELT5,this))
-        i = SL_BELT5;
+        si = SL_BELT5;
       else {
         IPrint("You have no slot open to hold your <Obj>!",old2);
         goto XAbort;
@@ -1024,7 +1016,7 @@ void Character::Exchange()
 
       if (!Swap(SL_READY))
         goto XAbort;
-      if (!Swap(i))
+      if (!Swap(si))
         { Swap(SL_READY);
           goto XAbort; }
       }
@@ -1070,14 +1062,12 @@ void Character::Exchange()
       thisp->MyTerm->ShowTraits();
     return;
 
-    Abort:
-
+Abort:
     Timeout += 3000 / (100 + 10 * Mod(A_DEX));
     if (HasFeat(FT_QUICK_DRAW))
       Timeout /= 4;
       
-    XAbort:
-
+XAbort:
     /* Put everything back where it was by the brute force method. */
     IPrint("You fumble the items you were trying to exchange, dropping them!");
     if (old1)
@@ -1090,8 +1080,7 @@ void Character::Exchange()
       new2->PlaceAt(m,x,y);
     isExchange = false;
     return;
-
-  }
+}
 
 
 /*****************************************************************************\
