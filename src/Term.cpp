@@ -1866,11 +1866,9 @@ Reprompt:
             Thing *things[100];
 SelectItem:
             i = p->GetEnumeratedInv(things);
-            for (j=0; j<i; j++) {
-                th = things[j];
+            for (j=0; th = things[j]; j++)
                 if (ThrowEff(EV_RATETARG,e.eID,th,th,th,th) != ABORT)
                     LOption(th->Name(NA_MECH|NA_LONG),th->myHandle);
-            }
 
             if (i == 0) {
                 Box("You have nothing suitable in your inventory to use that on.");
@@ -2468,10 +2466,10 @@ char TextTerm::ChoicePrompt(const char*msg,const char*choices,int8 col1, int8 co
         RInf.Rsp[RInf.nRsp].Answer = ch;
         RInf.nRsp++;
       }
-    return ch;
-  }     
-int32 TextTerm::MonsterTypePrompt(const char * prompt, int minCount, int maxCount)
-{
+    return (char)ch;
+}
+
+int32 TextTerm::MonsterTypePrompt(const char * prompt, int minCount, int maxCount) {
   int i; String desc;
   for (i=1; i<=MA_LAST_REAL; i++) {
     desc = "";
@@ -2615,7 +2613,7 @@ Thing* TextTerm::AcquisitionPrompt(int8 Reason, int8 minlev, int8 maxlev, int8 M
         { Write(Lookup(ITypeNames,Glyphs[cp*2+1]));  }
 
       if (cp != ocp) {
-        n = xID = 0; ocp = cp;
+        n = 0; xID = 0; ocp = cp;
         memset(Candidates,0,sizeof(rID)*2047);
         if (strchr("ahxBCKORX",Glyphs[cp*2]) || Glyphs[cp*2] == GLYPH_LDEMON ||
              Glyphs[cp*2] == GLYPH_LDEVIL || Glyphs[cp*2] == GLYPH_GDEMON ||
@@ -2628,22 +2626,22 @@ Thing* TextTerm::AcquisitionPrompt(int8 Reason, int8 minlev, int8 maxlev, int8 M
         
           switch(Reason) {
             case ACQ_ANY_ITEM: 
-              if (k == T_TRAP)
+              if ((k & 0xFF) == T_TRAP)
                 { 
                   xID = FIND("trap");          
                   theGame->GetEffectID(PUR_ACQUIRE + PUR_LISTING,minlev,maxlev,AI_TRAP);
                 }
               else
-                theGame->GetItemID(-1,minlev,maxlev,k); 
+                theGame->GetItemID(-1,minlev,maxlev,k & 0xFF); 
              break;
             case ACQ_ACQUIRE: 
-              theGame->GetItemID(PUR_ACQUIRE + PUR_LISTING,minlev,maxlev,k); break;
+              theGame->GetItemID(PUR_ACQUIRE + PUR_LISTING,minlev,maxlev,k & 0xFF); break;
             case ACQ_MINOR: 
-              theGame->GetItemID(PUR_MINOR + PUR_LISTING,minlev,maxlev,k); break;
+              theGame->GetItemID(PUR_MINOR + PUR_LISTING,minlev,maxlev,k & 0xFF); break;
             case ACQ_MAJOR: 
-              theGame->GetItemID(PUR_MAJOR + PUR_LISTING,minlev,maxlev,k); break;
+              theGame->GetItemID(PUR_MAJOR + PUR_LISTING,minlev,maxlev,k & 0xFF); break;
             case ACQ_CRAFT: 
-              theGame->GetItemID(PUR_CRAFT + PUR_LISTING,minlev,maxlev,k); break;
+              theGame->GetItemID(PUR_CRAFT + PUR_LISTING,minlev,maxlev,k & 0xFF); break;
             case ACQ_IDENT_ALL: 
               Candidates[0] = 0; break;
             case ACQ_RECALL:
@@ -2845,7 +2843,7 @@ const char* TextTerm::ReadLine(int16 x,int16 y,int16 first_ch)
     SetWin(WIN_SCREEN);
     Write(x,y,"                                                                        ");
     if (first_ch)
-      { Input[0] = first_ch; loc = 1;
+      { Input[0] = (char)first_ch; loc = 1;
         PutChar(x,y,Input[0]);
       }
     else
@@ -2868,7 +2866,7 @@ const char* TextTerm::ReadLine(int16 x,int16 y,int16 first_ch)
         return (const char*) &(Input[0]);
         }
       else if (isprint(ch) || ch==' ' || ch=='.' || ch=='_' || ch=='\'')
-        Input[loc++] = ch;
+        Input[loc++] = (char)ch;
       if (loc)
         PutChar((x+loc)-1,y,Input[loc-1]);
       PutChar(x+loc,y,' ');
@@ -2919,7 +2917,7 @@ bool TextTerm::yn(const char*msg)
     if (Mode == MO_RECREATE)
       {
         ASSERT(strncmp(RInf.Rsp[RInf.cRsp].Question,msg,31) == 0);
-        return RInf.Rsp[RInf.cRsp++].Answer;
+        return RInf.Rsp[RInf.cRsp++].Answer != 0;
       }
     Update();
     PrePrompt();
@@ -3180,22 +3178,22 @@ CFile::~CFile()
 
 void CFile::FWrite(const void *vp,size_t sz)
   {
-    if (pos + sz > alloc)
+    if (pos + (int32)sz > alloc)
       {
       
         alloc = (((pos+sz-1)/CFILE_DELTA)+1) * CFILE_DELTA;
         data = realloc(data,alloc);
       }
     memcpy(&bytes[pos], vp, sz);
-    size = max(size,pos+sz);
+    size = max(size,pos+(int32)sz);
     pos += sz;
   }
   
 void CFile::FRead(void *vp,size_t sz)
   {
     memset(vp,0,sz);
-    memcpy(vp,&bytes[pos],min(sz,size - pos));
-    pos = min(size,pos+sz);
+    memcpy(vp,&bytes[pos],min((int32)sz,size - pos));
+    pos = min(size,pos+(int32)sz);
   }
 
 void CFile::Seek(int32 val, int8 typ)

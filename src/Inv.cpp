@@ -1600,6 +1600,7 @@ int16 Creature::GetEnumeratedInv(Thing *list[]) {
         do {
             list[cnt++] = th;
         } while (th = this->NextInv());
+    list[cnt] = NULL;
 
     return cnt;
 }
