@@ -1668,8 +1668,8 @@ void TextTerm::ShowViewList()
           Write("\nEquipment:\n");
           y = 2; Color(GREY);
           for(i=0;i!=SL_LAST;i++) 
-            if (p->InSlot(i) && p->InSlot(i)->activeSlot(i)) {
-              Write(Format("  %s",(const char*)p->InSlot(i)->Name(0)).Left(WinSizeX()-1));
+            if (p->InSlot((int8)i) && p->InSlot((int8)i)->activeSlot(i)) {
+              Write(Format("  %s",(const char*)p->InSlot((int8)i)->Name(0)).Left(WinSizeX()-1));
               Write("\n");
               y++;
               if (y > activeWin->Bottom)
@@ -2441,7 +2441,7 @@ char TextTerm::ChoicePrompt(const char*msg,const char*choices,int8 col1, int8 co
     if (Mode == MO_RECREATE)
       {
         ASSERT(strncmp(RInf.Rsp[RInf.cRsp].Question,msg,31) == 0);
-        return RInf.Rsp[RInf.cRsp++].Answer;
+        return (char)RInf.Rsp[RInf.cRsp++].Answer;
       }
     str = Format("<%d>%s [<%d>%s<%d>] ",col1,msg,col2,choices,col1);
     Redraw:
