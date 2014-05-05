@@ -1322,8 +1322,8 @@ EvReturn Container::Insert(EventInfo &e, bool force)
   e.EItem2->Parent = myHandle;
 
 Done:
-  if (e.EActor && !packrat); 
-  e.EActor->Timeout += ti->u.c.Timeout;
+  if (e.EActor && !packrat)
+    e.EActor->Timeout += ti->u.c.Timeout;
   Sort(NULL);
 
   return DONE;
@@ -1499,7 +1499,7 @@ EvReturn Container::PourInContents(EventInfo &e)
 
     Thing * it = e.EItem2; 
     int count = 0; 
-    int32 origTimeout = e.EPActor->Timeout; 
+    int16 origTimeout = e.EPActor->Timeout; 
     EvReturn ret; 
 
     while (it) { 
