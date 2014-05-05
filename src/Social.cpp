@@ -664,7 +664,7 @@ EvReturn Creature::Distract(EventInfo &e)
   
 EvReturn Creature::Enlist(EventInfo &e)
   {
-    int16 CheckDC, mod, smod, Total; 
+    int16 CheckDC, smod, Total; 
     bool hasClass;
     
     if (!e.EVictim->isMonster())
@@ -864,7 +864,7 @@ EvReturn Creature::FastTalk(EventInfo &e)
   
 EvReturn Creature::Greet(EventInfo &e)
   {
-    const char *str; Creature *cr, *best;
+    Creature *cr, *best;
     Item *it; String a, b; int16 i;
 
     if (!doSocialSanity(EV_GREET,e.EVictim))
@@ -1095,7 +1095,7 @@ SingleTarget:
 EvReturn Creature::Quell(EventInfo &e)
   {
     int16 sk, dmg, CheckDC, c, i; Target *t; Item *it;
-    bool isREnemy, wasDamaged, wasAlly, wantsTribute;
+    bool isREnemy, wasDamaged, wantsTribute;
     Creature *cr;
     
     if (!doSocialSanity(EV_QUELL,e.EVictim))
@@ -2012,7 +2012,7 @@ bool Creature::doSocialSanity(int16 ev, Creature *cr)
   
 int32 Creature::getTotalMoney()
   {
-    Item *it; int32 cp, cv;
+    Item *it; int32 cp;
     
     cp = 0;
     for (it=FirstInv();it;it=NextInv())
@@ -2179,7 +2179,6 @@ int32 Item::getShopCost(Creature *Buyer, Creature *Seller) {
     if (!Seller || !Buyer)
       return (int32)cost;
       
-    int32 mod;
     double ShopPrices[] = { 
       /* -10 to -6*/
       5000, 4750, 4500, 4250, 4000, 
@@ -2410,7 +2409,7 @@ void Player::SummonDruidAnimal()
     if (c->isMonster())          
       if (c->HasStati(IS_DRUID_ANIMAL,TA_LEADER,this))
       {
-        s = Format("Dismiss %s, your current Druid Animal?",c->Name(0));
+        s = Format("Dismiss %s, your current Druid Animal?",(const char *)c->Name(0));
         if (yn(s,false)) {
           // shouldn't really be death, but this is easier for now ...
           ThrowDmg(EV_DEATH,AD_NORM,0,"Druidic whim",c,c);
@@ -2442,7 +2441,7 @@ void Player::SummonDruidAnimal()
 
 void Player::InitCompanions()
   {
-    int16 MaxCR,i; rID mID; Monster *mn;
+    rID mID; Monster *mn;
     TClass * tc = TCLASS(ClassID[0]);
     if (tc->HasFlag(CF_PALADIN)) { 
       if (isMType(MA_DROW) || isMType(MA_LIZARDFOLK))
@@ -2484,7 +2483,7 @@ extern const char* alliesShouldntCast[];
 
 bool Monster::MakeCompanion(Player *p, int16 CompType)
   {
-    int16 Total,i; Creature *c; rID eID;
+    int16 Total,i; rID eID;
 
     if (eID = GetStatiEID(SUMMONED))
       if (TEFF(eID)->HasFlag(EF_XSUMMON))
@@ -2584,7 +2583,7 @@ bool Monster::MakeCompanion(Player *p, int16 CompType)
 
 int32 Player::GetGroupXCR(int16 CompType, int16 AddCR)
   {
-    int32 i,j,ct; Creature *c; int32 CRCubed, tmp;
+    int32 i,j,ct; Creature *c; int32 CRCubed;
 
     #define CUBE(v) (tmp=v+2,tmp*tmp*tmp)
     
@@ -2668,7 +2667,7 @@ int32 Player::MaxGroupXCR(int16 CompType)
   
 int16 Player::MaxGroupCR(int16 CompType)
   {
-    int16 MaxCR, bonus;
+    int16 bonus;
     switch (CompType)
       {
         case PHD_PARTY:  bonus = ((SkillLevel(SK_DIPLOMACY) - 5) / 5 ) * 2;

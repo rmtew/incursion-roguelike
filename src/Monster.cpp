@@ -296,10 +296,10 @@ Monster::Monster(rID _mID,int16 _Type)
 
 void Monster::ChooseAction()
 {
-  int32 i,j,k,best,tc, tr; 
-  rID newForm, sp; int16 mtp, rtp, ev;
+  int32 i,j,k,best,tr; 
+  int16 mtp, rtp, ev;
   Item *it; rID form1, form2; int8 res;
-  Creature *c, *bc, *charmer; Thing *t;
+  Creature *c, *bc, *charmer;
   static int16 aCandidates[1024];
   static rID   sCandidates[1024];
 
@@ -338,7 +338,7 @@ void Monster::ChooseAction()
         }
     StatiIterEnd(this)
 
-RestartLoop:
+//RestartLoop:
   inMelee = false; isAfraid = false;
   isSick = false; isBlind = false; isPoisoned = false;
   isParalyzed = false; hasHunger = false; isDiseased = false;
@@ -909,7 +909,7 @@ SkipShifting:
           else 
             AddAct(ACT_RATTACK,P_HIGH,rtarg);
           }
-        CantShoot:
+//CantShoot:
 
         /* Any Blast Spells */
         if (rtarg)
@@ -1170,7 +1170,7 @@ NothingToDo:
                   if (!(TEFF(Effs[i].eID)->Schools & SC_FORCE))
                     goto UnusableEffect;*/
                 sCandidates[k++] = i;
-                UnusableEffect:;
+//UnusableEffect:;
                 } 
           if (k == 0)
           {
@@ -1285,7 +1285,6 @@ NothingToDo:
                   int anyAllies = 0;
                   int anyEnemies = 0;
                   bool hitMe = false; 
-                  Target targ;
                   for (int i = 0; i<numVic ;i++) 
                     if (victim[i] == this) hitMe = true; 
                     else switch (ts.SpecificHostility(this,victim[i]).quality) {
@@ -1374,7 +1373,6 @@ NothingToDo:
    monster, and assign new TARGET stati if necessary. */
 void Monster::AlertNew(Thing *nt)
 {
-  Creature *c; int16 i,r;
   if (!theGame->InPlay() || !nt->m)
     return;
 
@@ -1392,8 +1390,6 @@ void Monster::AlertNew(Thing *nt)
 
 void Monster::Initialize(bool in_play)
   {
-    Player *p; int16 i; 
-
     if (HasFeat(FT_IMPROVED_INITIATIVE))  // why not? 
       FFCount = 0;
     else 
@@ -1596,7 +1592,7 @@ Dir Monster::SmartDirTo(int16 tx, int16 ty, bool is_pet)
         (theGame->Opt(OPT_MON_DJIKSTRA) == 2 && is_pet)) {
       if (m->LineOfFire(x,y,tx,ty,this))
         return DirTo(tx,ty);
-      bool blocked; int16 dx, dy, i;
+      bool blocked; int16 dx, dy;
       blocked = !m->ShortestPath(x,y,tx,ty,this,0,thePath);
       if (blocked)
         return CENTER;
@@ -1648,7 +1644,7 @@ EvReturn Monster::Movement() {
     are the two rules immediately above.
 
     */
-    int32 wx, wy; int8 tx,ty; Dir r;
+    int32 wx, wy; int8 tx,ty;
 
     static Dir EastDirs[] = 
     { EAST, SOUTHEAST, NORTHEAST, SOUTH, NORTH, NORTHWEST, SOUTHWEST, WEST, -1 };
@@ -1993,7 +1989,7 @@ EvReturn Monster::OpenDoor(Door *d)
 
 uint32 Monster::BadFields()
   {
-    uint32 bf; int16 i;
+    uint32 bf;
     bf = FI_BAD;
 
     if ((HasMFlag(M_CASTER) && !HasFeat(FT_VOCALIZE_SPELL)) ||
@@ -2013,8 +2009,8 @@ uint32 Monster::BadFields()
 void Monster::ListEffects()
   {
     TMonster *tm = TMON(tmID); Annotation *a;
-    TAttack *at; TEffect *te; rID spList[512];
-    int16 i,j,ns,r,c,casterlev; Item *it;
+    TEffect *te; rID spList[512];
+    int16 i,j,ns,c; Item *it;
 
     bool is_caster = false;
     int8 SpellLev[] = {

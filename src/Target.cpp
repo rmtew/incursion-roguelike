@@ -1144,7 +1144,7 @@ static int TargetSort(const void *a, const void *b)
 void TargetSystem::ForgetOrders(Creature *me, int ofType)
 {
   Target   targets[1024]; 
-  int      count = 0, i = 0, j; 
+  int      count = 0, i = 0; 
   for (i=0;i<tCount;i++) {
     targets[count++] = t[i];
     if (t[i].why.type == TargetOrderedTo) {

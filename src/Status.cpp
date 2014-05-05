@@ -38,7 +38,7 @@
 
 void Thing::UpdateStati() {
     static EventInfo xe;
-    int16 i, j; Status s; s.Nature = 0;
+    Status s; s.Nature = 0;
 
     StatiIter(this)
         // ww: we can die while updating stati, and then we end up 
@@ -425,7 +425,6 @@ void Thing::RemoveStatiSource(uint8 ss) {
 void Thing::RemoveStatiFrom(Thing *t, int16 ev) {
     int16 c,i; 
     Status sLog[64]; 
-    bool msg; 
     c = 0;
     StatiIter(this)
         if (S->h == t->myHandle)
@@ -477,7 +476,7 @@ void Thing::RemoveStatiFrom(Thing *t, int16 ev) {
    Stati". */
 
 void Thing::CleanupRefedStati() {
-    int32 i, j; Thing *t;
+    int32 i; Thing *t;
 
     /* We have to start again on every find, because removing
     a Stati from X may cause X to remove a Stati from us.
@@ -496,7 +495,7 @@ Restart:
                         StatiIterBreakout(t,goto Restart);
                     }
                 StatiIterEnd(t)
-                Error(Format("CleanupRefedStati found leaked backref to %s",t->Name(0)));
+                Error(Format("CleanupRefedStati found leaked backref to %s",(const char *)t->Name(0)));
                 backRefs.Remove(i--);
             }
     }
@@ -505,7 +504,7 @@ Restart:
 }
 
 void Thing::__StatiRemoval(Status *S, Thing *t) {
-    switch (S->Nature) {
+    //switch (S->Nature) {
     /* There are surely going to be some cases where
     we want to "genericize" the Stati instead of
     removing it absolutely, by setting S->h = 0 
@@ -514,7 +513,7 @@ void Thing::__StatiRemoval(Status *S, Thing *t) {
     think what these might be right now, though,
     so leave it as is for now and implement them
     when the undesired behaviour shows up in play. */
-    default:
+    //default:
         /* SS_ATTK stati come from the side effects of
         attacks, and non-magical after-effects of
         spells (choking on a cloud of conjured dust.
@@ -529,7 +528,7 @@ void Thing::__StatiRemoval(Status *S, Thing *t) {
         } else {
             StatiIter_RemoveCurrent(t); 
         }
-    }
+    //}
 }
 
 Status* Thing::GetStati(int16 n,int16 Val, Thing *t) {
@@ -561,9 +560,7 @@ Status* Thing::GetEffStati(int16 n,rID xID, int16 Val, Thing *t) {
 }
 
 void Thing::SetEffStatiObj(int16 n,rID xID,Thing *t, int16 Val) {
-    int32 i;
     Status *ES = GetEffStati(n,xID,Val);
-    Thing *et;
     if (ES) {
         if (ES->h && theRegistry->Exists(ES->h)) {
             Thing *tReferer = oThing(ES->h);
@@ -583,7 +580,6 @@ void Thing::SetEffStatiObj(int16 n,rID xID,Thing *t, int16 Val) {
 
 void Creature::StatiOn(Status s) {
     int16 i; Creature *c;
-    EventInfo *e;
 
     if (isPlayer())
         thisp->statiChanged = true;
@@ -842,9 +838,8 @@ void Creature::StatiOn(Status s) {
               
 
 void Creature::StatiOff(Status s, bool elapsed) {
-    EventInfo *e; Thing *t;
-    int16 i,j; Creature *c;
-    Status _s; Item *it;
+    int16 i; Creature *c;
+    Item *it;
 
     switch(s.Nature) {
     case STONING:
@@ -969,7 +964,6 @@ RestartDropItems:
             thisp->UpdateMap = true;
         break;
     case SINGING:
-        bool removed; int16 n;
         MapIterate(m,c,i) {
             StatiIter(c)
                 if (S->h == myHandle && S->Source == SS_SONG) {
@@ -1332,7 +1326,7 @@ void Creature::StatiMessage(int16 n,int16 val, bool ending) {
 /////////////////////////////////////////////////////////////////////////
 
 void Map::UpdateFields() {
-    Field *f; int16 i;
+    int16 i;
     for(i=0;Fields[i];i++) {
         /* Avoid permanent and persistent fields, whose duration is constant and negative. */
         if (Fields[i]->Dur > 1)
@@ -1414,7 +1408,7 @@ void Map::NewField(int32 FType, int16 x, int16 y, uint8 rad,Glyph Img, int16 Dur
     ASSERT(f)
 
     f->FType = FType;
-    f->cx = x; f->cy = y;
+    f->cx = (uint8)x; f->cy = (uint8)y;
     f->rad = rad;
     f->Image = Img;
     f->eID = eID;
@@ -1570,7 +1564,7 @@ Restart:
 
     /* Set up the coordinates... */
     ox = f->cx; oy = f->cy;
-    f->cx = _cx; f->cy = _cy;
+    f->cx = (uint8)_cx; f->cy = (uint8)_cy;
 
     /* Remove the old field markers... */
     for(ix = max(0,ox - f->rad);ix!=min(sizeX,ox + f->rad + 1);ix++)

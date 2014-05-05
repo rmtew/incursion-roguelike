@@ -25,7 +25,7 @@ int16 TextTerm::SpellManager(int16 Purpose) {
     String FeatList, FeatKeys; EventInfo e; String sch, the_name, desc; int16 Key, abKey;
     static const char * SaveNames[] = { "Fort", "Ref ", "Will", "----" };
     static const char * WinTitle = " == Spell Manager == ";
-    int16 NumSpells, Line,i,j,k,z,sp,curr,offset, mult, mana, mm_lev, oldMode;
+    int16 NumSpells, Line,i,j,k,z,sp,curr,offset, mana, oldMode;
     char ch; int16 Spells[1024];
     NumSpells = 0;
     rID autobuffID = FIND("Autobuff");
@@ -644,8 +644,8 @@ void TextTerm::InvShowSlots(bool changed)
 
 int16 TextTerm::InventoryManager(bool first, Container *_theChest) {
     uint8 ch; int8 cs, ocs;
-    int8 sl, digit = 0, num;
-    Item *i; bool changed;
+    int8 digit = 0, num;
+    bool changed;
     bool conCursor = theGame->Opt(OPT_CONTAINER_CURSOR);
 
 #define INV(sl) (sl < NUM_SLOTS ? p->Inv[sl] : Contents[sl-NUM_SLOTS]->myHandle)
@@ -694,7 +694,6 @@ int16 TextTerm::InventoryManager(bool first, Container *_theChest) {
     * that cold hold our up-in-the-air item */
     if (p->Inv[SL_INAIR] && first) {
         Item *inair = oItem(p->Inv[SL_INAIR]);
-        int match_slot;
         for (CurrSlot=SL_LAST-1; 
             CurrSlot > 1 && 
             ((!inair->allowedSlot(CurrSlot,p)) || INV(CurrSlot)) ;
@@ -1133,8 +1132,8 @@ Item* OneSomeAll(Item *it, Creature *cr, bool assume_some)
 
 void TextTerm::BarterManager(Creature *Seller)
   {
-    hObj Wares[500]; rID ssList[128]; Item *it; rID spID;
-    int16 i, j, c, n, width, lItem, lSpell, off, curr;
+    hObj Wares[500]; Item *it; rID spID;
+    int16 i, c, n, width, lItem, lSpell, curr;
     String ShopName, SellerName; int16 ch, digit; 
     static String WareNames[500];
     int32 cost;
@@ -1545,7 +1544,7 @@ void TextTerm::BarterManager(Creature *Seller)
 void TextTerm::SkillManager(bool initial)
   {
     #define SKILLS_SHOWN 15
-    int8 height, width, cc, i,j,k, x1, x2, y1, y2,n, sl,ln, old_curr, usp[6];
+    int8 height, width, cc, i,j,k, x1, x2, y1, y2,sl,ln, old_curr, usp[6];
     int8 Alloc[SK_LAST][6], Ranks[SK_LAST], Show[SK_LAST*2],
            MRanks[SK_LAST], Spent[6], offset,
            last_class, last_universal, last_imp;
@@ -2164,7 +2163,7 @@ void TextTerm::OptionManager(int16 start_cat)
 void TextTerm::DisplayCharSheet()
 {
   CharSheet cs; String s; Monster *mn;
-  int16 i, y, y1, y2, y3, q; rID xID, endID; 
+  int16 i, y, y1, y2, q; rID xID, endID; 
   int update = 1;  /* ww: recalculate character sheet? */
   
   do {

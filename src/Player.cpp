@@ -141,7 +141,7 @@ Character::Character(rID mID,int16 _Type)
 
 void Player::ChooseAction()
 {
-  int16 k,ch,sp,cdir,n,itype,ev,gx,gy; int16 dx,dy; const char *which, *haveno;
+  int16 k,ch,sp,cdir,n,gx,gy; int16 dx,dy;
   Item *i; Thing *targ; Feature *feat; bool found; String oName, s; hObj h;
   static int16 oldHP; String str, msg;
   EventInfo e; static int16 LastAutoSave = 0;
@@ -706,7 +706,7 @@ FoundDefAmmo:
               i = oItem(h); 
           } else if (!(i=m->FItemAt(gx,gy)))
               break;
-ChosenGetItem:
+//ChosenGetItem:
           if (i->GetQuantity() > 1 && MyTerm->AltDown())
               i = OneSomeAll(i,this);
           if (Throw(EV_PICKUP,this,NULL,i)!=ABORT) {
@@ -1434,7 +1434,7 @@ void Player::UseItemMenu(const char *which, const char *haveno, int16 itype)
           for (i=0;i!=8;i++)
             if (((QItem*)it)->Qualities[i])
             {
-              String str; rID eID;
+              String str;
               str = "quality::";
               if (LookupOnly(APreQualNames,((QItem*)it)->Qualities[i]))
                 str += Lookup(APreQualNames,((QItem*)it)->Qualities[i]);
@@ -1892,7 +1892,7 @@ void Character::RestEncounterChance(int16 maxDist,
 EvReturn Player::SpendHours(int16 minHours, int16 maxHours, int16 &hoursSpent, bool isHeal)
   {
     int32 AwakeTime, AllowedTime;
-    Creature *in_sight; int16 Chance, pc, PartyID; 
+    Creature *in_sight; int16 Chance, PartyID; 
     
     
     if ((!isHeal) && (HasStati(POISONED) || 
@@ -1956,9 +1956,9 @@ EvReturn Player::SpendHours(int16 minHours, int16 maxHours, int16 &hoursSpent, b
 
 EvReturn Player::Rest(EventInfo &e)
   {
-    int16 i,j,pc,tx,ty, num,Roll, Chance, Percent; 
+    int16 i,j,pc,Roll, Chance, Percent; 
     Creature *in_sight = NULL; const char* wakeSafely;
-    Creature *c; Thing *t; Item *it; uint32 sch;
+    Creature *c; Item *it;
     Chance = pc = 0; int16 PartyID;
     wakeSafely = NULL;
 
@@ -2295,7 +2295,6 @@ EvReturn Player::Rest(EventInfo &e)
 
     if ((Roll < Chance) && !(e.EParam & REST_SAFE))
       {
-        rID xID;
         IPrint("An encounter!");
         RemoveStati(DEFENSIVE);
         if (HasStati(MOUNTED))
@@ -2382,7 +2381,7 @@ EvReturn Player::Rest(EventInfo &e)
 
 void Map::DaysPassed() {
       int16 i, c, j, k, x, y, x2, y2, n, pc, MonCount, Tries, MonEquil, numRegen; 
-      Thing *t; bool removed; Item *it; Player *p[MAX_PLAYERS]; Creature *cr;
+      Thing *t; Item *it; Player *p[MAX_PLAYERS]; Creature *cr;
       static Thing *list[2048];
       /* This function updates the map when the player rests, adding new
       monsters and such. */

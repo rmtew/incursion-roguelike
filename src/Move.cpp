@@ -23,10 +23,9 @@ bool isSimilarDir(Dir d, Dir d2)
 
 EvReturn Creature::Walk(EventInfo &e)
 	{
-		int16 tx,ty,ox,oy; Feature *fe; Thing *t; Status *s; int8 szChange = 0;
+		int16 tx,ty,ox,oy; Feature *fe; Thing *t; int8 szChange = 0;
     String Buff; int16 i; bool jcheck; Trap *tr;
-    Creature *cr, *dis; char ch, MoveSilRoll; int16 max_range, range, CloseDC,
-                                                                      SizeMod;
+    Creature *cr, *dis; char ch, MoveSilRoll; int16 max_range, CloseDC,SizeMod;
     static Creature *ClosingWith[8]; int8 cwc, DC; bool CloseConfirm = false;
     Door *d; bool found, think;
 
@@ -827,7 +826,7 @@ SkipConfirms:
 
   bool failed = false;
   int8 myHit, crHit; ch = 0;
-RestartThreatCalc:
+//RestartThreatCalc:
   for(i=0;i!=8;i++)
     for (cr=m->FCreatureAt(x+DirX[i],y+DirY[i]);cr && !isDead();
                cr=m->NCreatureAt(x+DirX[i],y+DirY[i]))

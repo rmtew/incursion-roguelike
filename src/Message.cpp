@@ -883,7 +883,7 @@ String & GetFirstName(const char* _Fullname)
 
 String & Creature::Name(int16 Flags)
 	{
-		String s; int8 mt; int16 i;
+		String s;
     
     if (!(Flags & NA_LONG) && Named.GetLength() && (StateFlags & MS_KNOWN))
       { s = GetFirstName(Named); goto Done; }
@@ -1091,7 +1091,7 @@ String & Trap::Name(int16 Flags)
 
 String & Item::Name(int16 Flags)
 {
-  TEffect *te; uint8 i, ofCount; EffMem *em;
+  uint8 i, ofCount; EffMem *em;
   String s, d, flav, pre, post, ofWords[8];
   EventInfo xe; bool NamedOnly;
   xe.Clear();

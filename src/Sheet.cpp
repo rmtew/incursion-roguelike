@@ -1102,7 +1102,7 @@ void TextTerm::CreateCharSheet(CharSheet &cs)
   for (i=-1;i!=nGods;i++)
     {
       rID gID, favChart[15]; 
-      int16 lev; int32 fv, fl;
+      int32 fv, fl;
       if (i==-1)
         gID = p->GodID;
       else if (GodIDList[i] == p->GodID)

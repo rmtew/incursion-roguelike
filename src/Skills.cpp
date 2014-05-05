@@ -33,7 +33,7 @@ int16 LastSkillCheckResult = 0;
 /* Elf, Grey -> Grey Elf */
 String & DeSubrace(const char *RaceName)
   {
-    int16 l; const char *c;
+    int16 l;
     if (!strstr(RaceName,", "))
       return *tmpstr(RaceName);
     l = strstr(RaceName,", ") - RaceName;
@@ -130,7 +130,7 @@ String & DescribeSkill(int16 sk)
 
 void Player::UseMenu(int32 SuppliedIndex)
   {
-    int32 i = 0,j,k; bool found = false;
+    int32 i = 0,j; bool found = false;
     EventInfo e; String str;
     
     if (SuppliedIndex)
@@ -776,7 +776,7 @@ int8 Creature::SkillKitMod(int16 sk)
 
 bool Creature::HasSkillKit(int16 sk)
   {
-    Item *it; int16 mod, best;
+    Item *it;
     
     /* These frequently rolled skills have no skill kit
        that modifies them, so let's avoid gratuitous
@@ -826,7 +826,7 @@ void Character::UseSkill(uint8 sk)
         case SK_LISTEN: 
           {
             Creature *posse[500], *in_sight = NULL;
-            int16 Nearest[50], j, k, spec, ll;
+            int16 Nearest[50], j, spec, ll;
             int8 DirToGroup[50]; 
             Creature* Heard[50], *cr;
             TextVal Sounds[] = {
@@ -1273,7 +1273,7 @@ void Character::UseSkill(uint8 sk)
          break;  
         case SK_HEAL:
         {
-          int16 healDC, a, b, i, choice, amt;
+          int16 healDC, i, choice, amt;
           TEffect *te; const char *ab;
           bool found = false, failed = false;
           
@@ -1747,11 +1747,10 @@ bool PossiblyPause(Term *T1, int x, int y, int timeout);
 
 void Character::UseAbility(uint8 ab,int16 pa)
   {
-    int16 i,j,k, cx, cy, sp, fc;
+    int16 i,j,k, cx, cy, fc;
     Thing *targ;
     Creature *c;
     EventInfo e;
-    bool did_one;
     String msg1, msg2;
     k = 0; // ww: previously used before defined in TRACKING
     switch(ab)
@@ -3174,7 +3173,7 @@ void Creature::Devour(Corpse * c)
 */
 EvReturn Character::CraftItem(int16 abil)
   {
-    int16 i, old_plus, new_lev, c, max_lev, qual, old_lev, 
+    int16 i, new_lev, c, max_lev, qual, old_lev, 
       repairDC, craftDC, itemType, itemSource, acqVal,
       useSkill, minSkill, hours, quan; int32 gpCost, XPCost;
     Feature *ft; hObj hItem; char ch; Item *it, *it2;
@@ -3942,7 +3941,7 @@ void Character::RecalcCraftFormulas()
 
 int16 Creature::getFavEnemyBonus(Creature *cr)
   {
-    int16 bonus = 0, v, i;
+    int16 bonus = 0, v;
    
     StatiIterNature(this,FAV_ENEMY)  
       if (cr->isMType(S->Val))
@@ -4078,8 +4077,8 @@ EvReturn Creature::Ascend(EventInfo &e)
       {
         Map *m2 = theGame->GetDungeonMap(
           m->dID,m->Depth-1,oPlayer(m->pl[0]),NULL);
-        int16 r, tx, ty, c, ox, oy;
-        int16 cx[64], cy[64]; Item *Rope;
+        int16 r, tx, ty, ox, oy;
+        Item *Rope;
 
         if (m->TreeAt(x,y)) {
           char ch = ChoicePrompt("Climb tree or ascend level?","tl",'t');
@@ -4198,7 +4197,7 @@ EvReturn Creature::Ascend(EventInfo &e)
 
 EvReturn Creature::Descend(EventInfo &e)
   {
-    Map *nm; int16 i;
+    int16 i;
     Feature *ft;
     
     if (HasStati(STUCK) || HasStati(GRAPPLED) || HasStati(ENGULFED) ||
@@ -4369,7 +4368,6 @@ EvReturn Creature::Mount(EventInfo &e) {
 
 EvReturn Creature::Dismount(EventInfo &e)
   {         
-    Target *t;
     e.ETarget = GetStatiObj(MOUNTED);
     if (!e.EVictim)
       { if (e.EParam == DSM_CHOICE)
@@ -4696,7 +4694,7 @@ EvReturn Creature::Phase(EventInfo &e)
     const char * Planes[8] = { "material plane", "astral plane", 
       "etherial plane", "plane of shadow", "negative energy plane",
       "positive energy plane", "???", "???" };       
-    Creature *c; int16 i; bool vis[MAX_PLAYERS];
+    int16 i; bool vis[MAX_PLAYERS];
     int8 phase_type = AbilityLevel(CA_PHASE);
     ASSERT(phase_type);
     if (HasStati(PHASED,phase_type))
@@ -5138,8 +5136,6 @@ void Player::WildShape()
     IPrint("You need three druid levels to assume a Wild Shape!");
     return;
   } 
-  int i;
-  Creature *c;
 
   for (int modIdx = 0; modIdx < 1; modIdx++) {
     Module *mod = theGame->Modules[modIdx];
@@ -5195,8 +5191,8 @@ void Player::SummonAnimalCompanion(bool mount)
   if (lev <= 0) return; 
   int16 ft_bonus = HasFeat(mount ? FT_IMPROVED_MOUNT : FT_ANIMAL_BOND) ? 
                       max(0,Mod(A_CHA) / 3) : (mount ? 0 : -2); 
-  int16 i, diff, n, j;
-  Creature *c; Monster *mon;
+  int16 i, n, j;
+  Creature *c;
   rID tID = mount ? FIND("celestial") : FIND("dire");
 
   // have we already done this today? 

@@ -439,7 +439,7 @@ void Map::WriteWalls(Rect &r,rID regID)
 void Map::WriteLifeCave(Rect &r, rID regID)
 {
   uint8 x,y,i,j;
-  rID FloorID, WallID, RockID;
+  rID FloorID, WallID;
   FloorID = TREG(regID)->Floor;
   WallID  = TREG(regID)->Walls;
 
@@ -574,7 +574,7 @@ void Map::WriteCastle(Rect &r, rID regID)
       
 void Map::WriteRCavern(Rect &r, rID regID)
 {
-  int16 i,j,k,l,x,y,sx,sy;
+  int16 i,j,k,x,y,sx,sy;
   const int buffer = 3; 
   sx = (r.x2 - r.x1) - buffer;
   sy = (r.y2 - r.y1) - buffer; 
@@ -731,7 +731,7 @@ void Map::WriteDiamond(int16 x, int16 y, rID regID)
 
 void Map::WriteCross(Rect &r, rID regID)
   {
-    int16 i,k; Rect r1,r2;
+    int16 k; Rect r1,r2;
     k = random(2) ? 5 : 3;
     while ((r.x2 - r.x1) % k)
       if (random(2))
@@ -892,9 +892,9 @@ void Map::WriteMaze(Rect &r,rID regID, int16 inset_count,...)
 
 void Map::WriteStreamer(Rect &r, uint8 sx, uint8 sy, Dir d, rID regID)
 {
-  int16 rx,ry,Width,MWidth,i; int16 DepthCR;
+  int16 rx,ry,Width,MWidth; int16 DepthCR;
   int16 ix,iy,mx,my; bool isRiver, isWater;   
-  rID terID = TREG(regID)->Floor, aquaID;
+  rID terID = TREG(regID)->Floor;
   isWater = TTER(terID)->HasFlag(TF_WATER);
 
   if (TREG(regID)->HasFlag(RF_RIVER)) {
@@ -1020,7 +1020,7 @@ void Map::WriteBlobs(Rect &r, rID regID, rID bID)
 void Map::WriteMap(Rect &r,rID regID)
 {
   TRegion *m = TREG(regID); Creature *mn; Item *it; Feature *ft;
-  Annotation *an; int16 i,x,y,maxlev, PartyID; Tile *t;
+  int16 i,x,y,maxlev, PartyID; Tile *t;
   int16 DepthCR = maxlev = AdjustCR(Con[INITIAL_CR] + (Depth*Con[DUN_SPEED])/100 - 1); 
 
   const char *gr = theGame->GetText(regID,TREG(regID)->Grid);
@@ -1429,11 +1429,11 @@ void Map::LoadFixedMap(rID mID, int16 _Depth, Map *Above, int8 _Luck)
 
 void Map::Generate(rID _dID, int16 _Depth, Map *Above,int8 Luck)
 {
-  int16 i, j, n, tries; Thing *t, *t2; Portal *st; 
-  rID Rock, StreamID, xtID, sID, xID; uint16 xy; Rect r;
-  int16 x, y, sx,sy,dx,dy,cx,cy,px,py,dir, Streamers, Tries; 
-  int16 fCount, eCount, ofCount, tot, c; int8 abort_count = 0;
-  bool NarrowChasm = false; Annotation *a; Monster *mn; Item *it;
+  int16 i, j, n; Thing *t, *t2; Portal *st; 
+  rID xtID, sID, xID; Rect r;
+  int16 x, y, sx,sy,dx,dy,cx,cy,px,py, Streamers, Tries; 
+  int16 fCount, tot, c; int8 abort_count = 0;
+  bool NarrowChasm = false; Annotation *a; Item *it;
   bool extraLevs = (theGame->Opt(OPT_DIFFICULTY) >= DIFF_CHALLENGE);
   if (RES(_dID)->Type == T_TREGION)
     {
