@@ -247,7 +247,7 @@ static int StatiSort(const void *a, const void *b) {
 }
 
 void Thing::_FixupStati() {
-    int8 i8;
+    uint8 i8;
     ASSERT(__Stati.Nested == 0); 
 
     /* Merge both lists, if needed */
