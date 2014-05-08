@@ -495,7 +495,9 @@ Restart:
                         StatiIterBreakout(t,goto Restart);
                     }
                 StatiIterEnd(t)
+#ifdef DEBUG
                 Error(Format("CleanupRefedStati found leaked backref to %s",(const char *)t->Name(0)));
+#endif
                 backRefs.Remove(i--);
             }
     }

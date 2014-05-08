@@ -70,12 +70,14 @@
 #include <malloc.h>
 
 #ifndef DEBUG
+#ifdef USE_CRASHPAD
 /* Google Breakpad. */
 #include "client/windows/handler/exception_handler.h"
 #undef ERROR
 #undef MIN
 #undef MAX
 #undef EV_BREAK
+#endif
 #endif
 
 #include "Incursion.h"
@@ -103,7 +105,9 @@
 #define INPUT_IDLE_MS 50
 
 #ifndef DEBUG
+#ifdef USE_CRASHPAD
 using google_breakpad::ExceptionHandler;
+#endif
 #endif
 
 
@@ -313,7 +317,9 @@ static int16 kbPolish[][3] = {
 Term *T1;
 libtcodTerm *AT1;
 #ifndef DEBUG
+#ifdef USE_CRASHPAD
 ExceptionHandler* crashdumpHandler;
+#endif
 #endif
 
 /*****************************************************************************\
@@ -357,6 +363,7 @@ int main(int argc, char *argv[]) {
      * Debug builds get the option to break out into the debugger, which makes it
      * superfluous in that case. */
 #ifndef DEBUG
+#ifdef USE_CRASHPAD
     std::wstring wsExecutablePath(strlen(executablePath), 0);
     mbstowcs(&wsExecutablePath[0],executablePath,strlen(executablePath));
     crashdumpHandler = new ExceptionHandler(wsExecutablePath,
@@ -364,6 +371,7 @@ int main(int argc, char *argv[]) {
                            NULL /* &callback */,
                            NULL,
                            ExceptionHandler::HANDLER_ALL);
+#endif
 #endif
     theGame = new Game();
     {
@@ -599,8 +607,10 @@ void Error(const char*fmt,...) {
 #ifdef DEBUG
 	sprintf(__buff2, "Error: %s\n[B]reak, [E]xit or [C]ontinue?",__buffer);
 #else
+#ifdef USE_CRASHPAD
 	crashdumpHandler->WriteMinidump();
 	sprintf(__buff2, "Error: %s\n[E]xit or [C]ontinue?",__buffer);
+#endif
 #endif
 	((libtcodTerm*)T1)->Save();
 	((libtcodTerm*)T1)->Box(WIN_SCREEN,BOX_NOPAUSE|BOX_NOSAVE,RED,PINK,__buff2);
