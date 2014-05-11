@@ -1865,10 +1865,12 @@ Reprompt:
         } else if (typ == Q_INV) {
             Thing *things[100];
 SelectItem:
-            i = p->GetEnumeratedInv(things);
-            for (j=0; th = things[j]; j++)
-                if (ThrowEff(EV_RATETARG,e.eID,th,th,th,th) != ABORT)
+            p->GetEnumeratedInv(things);
+            for (i=0, j=0; th = things[j]; j++)
+                if (ThrowEff(EV_RATETARG,e.eID,th,th,th,th) != ABORT) {
                     LOption(th->Name(NA_MECH|NA_LONG),th->myHandle);
+                    i++;
+                }
 
             if (i == 0) {
                 Box("You have nothing suitable in your inventory to use that on.");

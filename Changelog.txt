@@ -1,3 +1,7 @@
+Incursion (open source) 0.6.9Y10: 2014-05-..
+* https://bitbucket.org/rmtew/incursion-roguelike/issue/106/: Fix a bug where potion of mending could be applied to anything regardless of that anything being a valid target.
+* https://bitbucket.org/rmtew/incursion-roguelike/issue/106/: Fix a bug where trying to apply something to an inventory items would crash when there were no items suitable to apply it to.
+
 Incursion (open source) 0.6.9Y9: 2014-05-08
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/126/: Google Breakpad caused crashes.
 

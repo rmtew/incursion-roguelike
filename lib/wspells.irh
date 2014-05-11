@@ -646,6 +646,15 @@ Potion / Wizard / Scroll Spell "Mending" : EA_GENERIC
         }
         return CAN_CAST_IT; 
       } ,
+      EV_RATETARG {
+        if (!EVictim->isType(T_ITEM))
+          return ABORT;
+        if (!EVictim->isMetallic())
+          return ABORT;
+        if (EVictim->GetHP() >= EVictim->MaxHP())
+          return ABORT;
+        return NOTHING;
+      },
       EV_MAGIC_STRIKE {
         if (EVictim->GetHP() < EVictim->MaxHP()) {
           EVictim->MendHP(e.vDmg);
