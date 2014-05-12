@@ -10,13 +10,9 @@ Support the development
 
 If you wish to support the development..
 
-You can donate money via:
+You can donate money via: [Paypal](http://disinterest.org/donate.html)
 
-  [Paypal](http://disinterest.org/donate.html)
-
-You can donate bitcoin via:
-
-  [16F6d1F82qrhXaR67NHczQbu4eUie7QJui](https://blockchain.info/address/16F6d1F82qrhXaR67NHczQbu4eUie7QJui)
+You can donate bitcoin via: [16F6d1F82qrhXaR67NHczQbu4eUie7QJui](https://blockchain.info/address/16F6d1F82qrhXaR67NHczQbu4eUie7QJui)
 
 Windows build instructions
 --------------------------
