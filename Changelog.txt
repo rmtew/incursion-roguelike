@@ -1,6 +1,7 @@
 Incursion (open source) 0.6.9Y10: 2014-05-..
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/106/: Fix a bug where potion of mending could be applied to anything regardless of that anything being a valid target.
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/106/: Fix a bug where trying to apply something to an inventory items would crash when there were no items suitable to apply it to.
+* https://bitbucket.org/rmtew/incursion-roguelike/issue/111/: If you summon a phantom steed and it does not like you, it would go away.  But the message to tell you that, was muted because of a previous message output muting in the spell script which hadn't been correspondingly unmuted in this case.
 
 Incursion (open source) 0.6.9Y9: 2014-05-08
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/126/: Google Breakpad caused crashes.

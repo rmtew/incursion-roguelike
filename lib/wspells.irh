@@ -1787,10 +1787,10 @@ Wizard / Scroll Spell "Phantom Steed" : EA_GENERIC
       if (EActor->isPlayer())
         hMount->MakeCompanion(EActor,PHD_MAGIC);
       hMount->CalcValues();
-      if (!hMount->isFriendlyTo(EActor))
-        {
+      if (!hMount->isFriendlyTo(EActor)) {
           hMount->Remove(true);
-          APrint(e,"The mount vanishes.");
+          UnsetSilence();
+          APrint(e,"The mount vanishes because it does not like you.");
           return DONE;
         }
       Throw(EV_MOUNT,EActor,hMount);
