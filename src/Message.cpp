@@ -593,28 +593,25 @@ void Hear(EventInfo &e, int16 range, const char* msg,...)
 		va_end(ap);
   }
 
-void TPrint(EventInfo &e, const char* msg1, const char* msg2,
-  const char* msg3,...)
-  {
-		va_list ap; Player *p;
-		va_start(ap, msg3);
+void TPrint(EventInfo &e, const char* msg1, const char* msg2, const char* msg3, ...) {
+    va_list ap; Player *p;
+    va_start(ap, msg3);
     ev = &e;
-    
+
     if (msg1 && e.EActor && e.EActor != e.EVictim)
-      e.EActor->__IPrint(msg1,ap);
+        e.EActor->__IPrint(msg1,ap);
     if (msg2 && e.EVictim)
-      e.EVictim->__IPrint(msg2,ap);
-		
+        e.EVictim->__IPrint(msg2,ap);
+
     if (msg3 && e.EMap)
-      for(int16 i=0;i!=MAX_PLAYERS;i++)
-        if (p = oPlayer(e.EMap->pl[i]))
-          if (p != e.EActor && p != e.EVictim)
-            if ((e.EActor && p->XPerceives(e.EActor)) && 
-                  (!e.EVictim || p->XPerceives(e.EVictim)))
-              p->__IPrint(msg3,ap);
+        for(int16 i=0;i!=MAX_PLAYERS;i++)
+            if (p = oPlayer(e.EMap->pl[i]))
+                if (p != e.EActor && p != e.EVictim)
+                    if ((e.EActor && p->XPerceives(e.EActor)) &&  (!e.EVictim || p->XPerceives(e.EVictim)))
+                        p->__IPrint(msg3,ap);
 
     va_end(ap);
-  }
+}
 
 void Map::SetQueue(int16 Queue)
   { 

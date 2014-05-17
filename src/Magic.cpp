@@ -2921,8 +2921,11 @@ int SortBySpellcraftCheck(const void *a, const void *b) {
 } 
   
 EvReturn Creature::Counterspell(EventInfo &e, Counterspeller *csp) {
-    int16 cc, i, sn, DC, lv, mCost; rID csID, xID, dispID;
-    bool isDispel; Counterspeller _csp[64]; Creature *c;
+    int16 cc, i, sn, DC, lv, mCost;
+    bool isDispel;
+    rID csID, xID, dispID;
+    Counterspeller _csp[64];
+    Creature *c;
 
     if (csp) {    
         cc = 0;
@@ -3035,7 +3038,6 @@ DoNotCounter:;
     return NOTHING;
 
 Counterspelled:
-
     EventInfo xe;
     xe.Clear();
     xe.EActor = csp[i].cr;
@@ -3058,6 +3060,7 @@ Counterspelled:
                     e.EVictim = e.EActor;
                     return NOTHING;
                 }
+
     return ABORT;
 }
    
