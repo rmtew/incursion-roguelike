@@ -2916,161 +2916,150 @@ EvReturn Creature::Invoke(EventInfo &e)
 
   }
   
-int SortBySpellcraftCheck(const void *a, const void *b)
-  {
+int SortBySpellcraftCheck(const void *a, const void *b) {
     return ((Counterspeller*)b)->Check - ((Counterspeller*)a)->Check;
-  } 
+} 
   
-EvReturn Creature::Counterspell(EventInfo &e, Counterspeller *csp)
-  {
+EvReturn Creature::Counterspell(EventInfo &e, Counterspeller *csp) {
     int16 cc, i, sn, DC, lv, mCost; rID csID, xID, dispID;
     bool isDispel; Counterspeller _csp[64]; Creature *c;
 
-    if (csp)
-      {    
-        cc=0;
+    if (csp) {    
+        cc = 0;
         while(csp[cc].cr)
-          cc++;
-      }
-    else
-      {
-        csp = _csp; cc = 0;
+            cc++;
+    } else {
+        cc = 0;
+        csp = _csp;
+
         MapIterate(m,c,i)
-        if (c->isCreature() && c != this)
-          if (c->Percieves(this)) 
-            if (c->HasSkill(SK_SPELLCRAFT)) {
-              if (e.Event != EV_CAST && !c->HasFeat(FT_BROAD_COUNTERSPELL))
-                continue;
-              c->SkillCheck(SK_SPELLCRAFT,0,true);
-              if (cc < 62) {
-                csp[cc].Check = LastSkillCheckResult;
-                csp[cc].cr = c;
-                cc++;
-                }
-            }
+            if (c->isCreature() && c != this)
+                if (c->Percieves(this)) 
+                    if (c->HasSkill(SK_SPELLCRAFT)) {
+                        if (e.Event != EV_CAST && !c->HasFeat(FT_BROAD_COUNTERSPELL))
+                            continue;
+
+                        c->SkillCheck(SK_SPELLCRAFT,0,true);
+                        if (cc < 62) {
+                            csp[cc].Check = LastSkillCheckResult;
+                            csp[cc].cr = c;
+                            cc++;
+                        }
+                    }
+
         csp[cc].cr = NULL;
         csp[cc].Check = 0;
-      }
-      
+    }
+
     qsort(csp,cc,sizeof(Counterspeller),&SortBySpellcraftCheck);
-    
+
     lv = TEFF(e.eID)->Level + (e.MM & MM_FORTIFY ? 3 : 0);
-    
     dispID = FIND("dispel magic");
-    
-    for (i=0;csp[i].cr;i++)
-      {
-      
+
+    for (i=0;csp[i].cr;i++) {
         if (!(csp[i].cr->isHostileTo(this)))
-          continue;
-      
+            continue;
+
         /* For now, monsters only counterspell 33% of the time.
-           Why? Because they know ALL the spells they have the
-           caster level to cast, which would be tremendously
-           unfair to a PC mage -- and the messages would just
-           serve to hilight this fudge. */
+        Why? Because they know ALL the spells they have the
+        caster level to cast, which would be tremendously
+        unfair to a PC mage -- and the messages would just
+        serve to hilight this fudge. */
         if (random(3) && !csp[i].cr->isPlayer())
-          continue;
-        
+            continue;
+
         /* We need to recheck this below -- this is an optimization. */
         if (!(csp[i].Check > 15 + TEFF(e.eID)->Level))
-          continue;
-        
-        csID = 0; isDispel = false;
+            continue;
+
+        csID = 0;
+        isDispel = false;
         for (sn=0;sn!=theGame->LastSpell();sn++)
-          if (csp[i].cr->getSpellFlags(xID = theGame->SpellID(sn))  & SP_KNOWN)
-            if (TEFF(xID)->Level >= lv)
-              if (TEFF(xID)->Schools & TEFF(e.eID)->Schools & 
-                   (SC_ABJ|SC_ARC|SC_DIV|SC_ENC|SC_EVO|SC_ILL|SC_NEC|SC_THA|SC_WEA))
-                if (csID == 0 || TEFF(xID)->ManaCost < TEFF(csID)->ManaCost)
-                  { csID = xID; mCost = max(TEFF(csID)->ManaCost, TEFF(e.eID)->ManaCost); }
-        
+            if (csp[i].cr->getSpellFlags(xID = theGame->SpellID(sn))  & SP_KNOWN)
+                if (TEFF(xID)->Level >= lv)
+                    if (TEFF(xID)->Schools & TEFF(e.eID)->Schools & (SC_ABJ|SC_ARC|SC_DIV|SC_ENC|SC_EVO|SC_ILL|SC_NEC|SC_THA|SC_WEA))
+                        if (csID == 0 || TEFF(xID)->ManaCost < TEFF(csID)->ManaCost) {
+                            csID = xID; mCost = max(TEFF(csID)->ManaCost, TEFF(e.eID)->ManaCost);
+                        }
+
         if (!csID)
-          if ((csp[i].cr->getSpellFlags(dispID) & SP_KNOWN))
-            { isDispel = true; mCost = 
-                max(TEFF(dispID)->ManaCost, TEFF(e.eID)->ManaCost); }
-        
+            if ((csp[i].cr->getSpellFlags(dispID) & SP_KNOWN)) {
+                isDispel = true; mCost = max(TEFF(dispID)->ManaCost, TEFF(e.eID)->ManaCost);
+            }
+
         if (!csID)
-          continue;   
-          
+            continue;   
+
         if (!(csp[i].Check > 15 + TEFF(e.eID)->Level + (isDispel ? 5 : 0)))
-          continue;
-        
+            continue;
+
         if (csp[i].cr->SkillLevel(SK_SPELLCRAFT) >= 25)
-          mCost = mCost / 3;
+            mCost = mCost / 3;
         else if (csp[i].cr->SkillLevel(SK_SPELLCRAFT) >= 20)
-          mCost = mCost / 2;
+            mCost = mCost / 2;
         else if (csp[i].cr->SkillLevel(SK_SPELLCRAFT) >= 15)
-          mCost = (mCost * 2) / 3;
-          
-        switch (csp[i].cr->isPlayer() ? 
-          ((Player*)csp[i].cr)->Opt(OPT_COUNTERSPELL) : 3)
-          {
-            case 0:  // do not counterspell
-              goto DoNotCounter;
-            case 1:  // always counterspell
-              goto DoCounterspell;
-            case 2:  // ask player
-              if (csp[i].cr->yn(XPrint("Best opt. is <9><Res><5> (mana <Num>). Timeout <Num>. Counter?",
-                    csID, mCost, Timeout)))
+            mCost = (mCost * 2) / 3;
+
+        switch (csp[i].cr->isPlayer() ? ((Player*)csp[i].cr)->Opt(OPT_COUNTERSPELL) : 3) {
+        case 0:  // do not counterspell
+            goto DoNotCounter;
+        case 1:  // always counterspell
+            goto DoCounterspell;
+        case 2:  // ask player
+            if (csp[i].cr->yn(XPrint("Best opt. is <9><Res><5> (mana <Num>). Timeout <Num>. Counter?", csID, mCost, Timeout)))
                 goto DoCounterspell;
-              else
+            else
                 goto DoNotCounter;
-            case 3: // smart choice
-              if (csp[i].cr->cMana() - mCost >= nhMana() / 2)
+        case 3: // smart choice
+            if (csp[i].cr->cMana() - mCost >= nhMana() / 2)
                 if (e.EActor->Timeout < 50)
-                  goto DoCounterspell;
-              goto DoNotCounter;
-          }
-                      
-        DoCounterspell:
-        if (csp[i].cr->cMana() < TEFF(csID)->ManaCost)
-          {
+                    goto DoCounterspell;
+            goto DoNotCounter;
+        }
+
+DoCounterspell:
+        if (csp[i].cr->cMana() < TEFF(csID)->ManaCost) {
             csp[i].cr->IPrint("You lack the mana to counterspell.");
             continue;
-          }          
-        if (csp[i].cr->Timeout > 80)
-          {
+        }          
+        if (csp[i].cr->Timeout > 80) {
             csp[i].cr->IPrint("You're too busy to counterspell.");
             continue;
-          }
-        
+        }
+
         goto Counterspelled;
-        DoNotCounter:;
-      } 
-    
+DoNotCounter:;
+    } 
+
     // nobody's able to counterspell
     return NOTHING;
-    
-    Counterspelled:
-    
+
+Counterspelled:
+
     EventInfo xe;
     xe.Clear();
     xe.EActor = csp[i].cr;
     xe.EVictim = this;
     TPrint(xe,"You mutter a quick counterspell using <9><Res><7>.",
-              "The <EActor> counters your spell with <9><Res><7>.",
-              "The <EActor> mutters a quick counterspell!", csID);
-    
-    csp[i].cr->Timeout += min(3, (isDispel ? 20 : 15) - 
-      csp[i].cr->SkillLevel(SK_SPELLCRAFT));
+        "The <EActor> counters your spell with <9><Res><7>.",
+        "The <EActor> mutters a quick counterspell!", csID);
+
+    csp[i].cr->Timeout += min(3, (isDispel ? 20 : 15) - csp[i].cr->SkillLevel(SK_SPELLCRAFT));
     LoseMana(mCost);
-    
+
     if (csp[i].cr->HasFeat(FT_REFLECTIVE_COUNTERSPELL))
-      if (e.EActor != e.EVictim && e.EVictim != NULL)
-        if (e.EXVal != e.EActor->x || 
-            e.EYVal != e.EActor->y)
-          if (TEFF(e.eID)->Purpose & (EP_ATTACK|EP_CURSE))
-            {
-              TPrint(xe, "Your counterspell turns the magic back on the <EVictim>!",
+        if (e.EActor != e.EVictim && e.EVictim != NULL)
+            if (e.EXVal != e.EActor->x ||  e.EYVal != e.EActor->y)
+                if (TEFF(e.eID)->Purpose & (EP_ATTACK|EP_CURSE)) {
+                    TPrint(xe, "Your counterspell turns the magic back on the <EVictim>!",
                         "The <EActor>'s counterspell turns your magic back on you!",
                         "The <EActor>'s counterspell turns the <EVictim>'s magic "
                         "back on <him:EVictim>.");
-              e.EVictim = e.EActor;
-              return NOTHING;
-            }
+                    e.EVictim = e.EActor;
+                    return NOTHING;
+                }
     return ABORT;
-  }
+}
    
 
 int16 Creature::SpellRating(rID eID, uint32 mm, bool percieved)
