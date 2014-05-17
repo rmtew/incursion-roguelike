@@ -2775,137 +2775,133 @@ void Player::AddJournalEntry(const char* s)
 }
 
 /* pick up all items that would stack with something we are carrying */
-void Player::AutoPickupFloor()
-{
-  Thing * t;
-  Item * i; 
-  Container *pack;
-  int j;
-  int ap = Opt(OPT_AUTOPICKUP);
-  int kc = Opt(OPT_KILL_CHEST); 
-  int oc = Opt(OPT_AUTOCHEST); 
-  bool did_anything = false; 
+void Player::AutoPickupFloor() {
+    Thing * t;
+    Item * i; 
+    Container *pack;
+    int j;
+    int ap = Opt(OPT_AUTOPICKUP);
+    int kc = Opt(OPT_KILL_CHEST); 
+    int oc = Opt(OPT_AUTOCHEST); 
+    bool did_anything = false; 
 
-  if (!ap) return;  
-  
-  if (HasStati(RAGING) || HasMFlag(M_NOHANDS) ||
-      isThreatened())
-    return;  
-  
-  if (!m->InBounds(x,y)) return; 
+    if (!ap)
+        return;  
+
+    if (HasStati(RAGING) || HasMFlag(M_NOHANDS) || isThreatened())
+        return;  
+
+    if (!m->InBounds(x,y))
+        return; 
 
 start_again: 
 
-  for (t = m->FirstAt(x,y) ; t ; t = m->NextAt(x,y))  {
- 
-    if (t->isIllusion())
-      continue;
- 
-    /* Don't autopickup really heavy things; more notably, quit
-       trying to autostow fountains and thrones! */
-    if (t->isItem() && t->Type != T_CHEST)
-      if (((Item*)t)->Weight(false) > 1000)
-        continue;
-        
-    if (t->HasStati(DROPPED,-1,this))
-      continue;
- 
-    if (t->isItem() && t->Type == T_CHEST) {
-      Container *c = (Container *)oItem(t->myHandle); 
-      if (c->Contents == 0) {
-        if (kc) { 
-          IPrint("KillChest: <Obj>.",c);
-          t->Remove(true);
-          goto start_again;
-        }
-      } else if (oc) {
-        EventInfo e;
-        e.Clear();
-        e.EPActor = this;
-        if (c->DumpOutContents(e) == DONE) goto start_again;
-      } 
-    } 
+    for (t = m->FirstAt(x,y) ; t ; t = m->NextAt(x,y))  { 
+        if (t->isIllusion())
+            continue;
 
-    if (t->isItem() && t->Type != T_LIGHT &&
-         !t->isType(T_TOOL) && !t->isType(T_SYMBOL) &&
-         !t->isType(T_SHIELD)) {
-      i = oItem(t->myHandle);
-      int checkSlots[] = { 
-        SL_LSHOULDER ,
-        SL_RSHOULDER ,
-        SL_BELT1     ,
-        SL_BELT2     ,
-        SL_BELT3     ,
-        SL_BELT4     ,
-        SL_BELT5     ,
-        0
-      } ;
-      for (int jj=0;checkSlots[jj];jj++) {
-        j = checkSlots[jj];
-        if (InSlot(j) && *InSlot(j) == *i) {
-          IPrint("AutoPickup: <Obj>.",i);
-          SetSilence();
-          if (Throw(EV_PICKUP,this,NULL,i) == ABORT)
-            UnsetSilence(); // return;
-          else { 
-          did_anything = true; 
-            UnsetSilence();
-            LegendIdent(i);
-          goto start_again; // because Remove() will change the linked 
-          } 
-          // list of items here 
-        } 
-      }
-      if (ap == 2 && Inv[SL_PACK] && 
-          oItem(Inv[SL_PACK])->Type == T_CONTAIN && InSlot(SL_PACK)) { 
-              // also check pack
-        pack = (Container*)oItem(Inv[SL_PACK]);
-        if (pack)
-         for (j=0; (*pack)[j] != NULL; j++) {
-           if (*((*pack)[j]) == *i) {
-             IPrint("AutoPickup: <Obj>.",i);
-             SetSilence();
-             if (Throw(EV_PICKUP,this,NULL,i) == ABORT)
-               UnsetSilence(); // return;
-             else { 
-               UnsetSilence(); // return;
-               did_anything = true; 
-               LegendIdent(i);
-               goto start_again; // because Remove() will change the linked 
-             } 
-              // list of items here 
-           }
-         } 
-      }
-    }
-    if (t->isItem()) {
-      i = oItem(t->myHandle);
-      if (i->PItemLevel(this) >= 0 && i->eID &&
-          !i->isKnown()) {
-        if (ap == 2 && Inv[SL_PACK] && 
-            oItem(Inv[SL_PACK])->Type == T_CONTAIN &&
-            (InSlot(SL_PACK) || AbilityLevel(CA_WILD_SHAPE))) { 
-          pack = (Container*)oItem(Inv[SL_PACK]);
-          if (pack) {
-            IPrint("AutoStowing: <Obj>.",i);
-             SetSilence();
-            if (Throw(EV_INSERT,this,NULL,pack,i) == ABORT) {
-              UnsetSilence(); // return;
-              IPrint("AutoStowing failed.");
-              }
-            else { 
-              UnsetSilence(); // return;
-              did_anything = true; 
-              LegendIdent(i);
-              goto start_again; // because Remove() will change the linked 
+        /* Don't autopickup really heavy things; more notably, quit
+        trying to autostow fountains and thrones! */
+        if (t->isItem() && t->Type != T_CHEST)
+            if (((Item*)t)->Weight(false) > 1000)
+                continue;
+
+        if (t->HasStati(DROPPED,-1,this))
+            continue;
+
+        if (t->isItem() && t->Type == T_CHEST) {
+            Container *c = (Container *)oItem(t->myHandle); 
+            if (c->Contents == 0) {
+                if (kc) { 
+                    IPrint("KillChest: <Obj>.",c);
+                    t->Remove(true);
+                    goto start_again;
+                }
+            } else if (oc) {
+                EventInfo e;
+                e.Clear();
+                e.EPActor = this;
+                if (c->DumpOutContents(e) == DONE)
+                    goto start_again;
             } 
-          } 
-        }
-      } 
-      LegendIdent(i);
-    }
+        } 
 
-  }
+        if (t->isItem() && t->Type != T_LIGHT && !t->isType(T_TOOL) && !t->isType(T_SYMBOL) && !t->isType(T_SHIELD)) {
+            i = oItem(t->myHandle);
+            int checkSlots[] = { 
+                SL_LSHOULDER ,
+                SL_RSHOULDER ,
+                SL_BELT1,
+                SL_BELT2,
+                SL_BELT3,
+                SL_BELT4,
+                SL_BELT5,
+                0
+            };
+
+            for (int jj=0;checkSlots[jj];jj++) {
+                j = checkSlots[jj];
+                if (InSlot(j) && *InSlot(j) == *i) {
+                    IPrint("AutoPickup: <Obj>.",i);
+                    SetSilence();
+                    if (Throw(EV_PICKUP,this,NULL,i) == ABORT)
+                        UnsetSilence(); // return;
+                    else { 
+                        did_anything = true; 
+                        UnsetSilence();
+                        LegendIdent(i);
+                        goto start_again; // because Remove() will change the linked 
+                    } 
+                    // list of items here 
+                } 
+            }
+
+            if (ap == 2 && Inv[SL_PACK] && oItem(Inv[SL_PACK])->Type == T_CONTAIN && InSlot(SL_PACK)) { 
+                // also check pack
+                pack = (Container*)oItem(Inv[SL_PACK]);
+                if (pack)
+                    for (j=0; (*pack)[j] != NULL; j++) {
+                        if (*((*pack)[j]) == *i) {
+                            IPrint("AutoPickup: <Obj>.",i);
+                            SetSilence();
+                            if (Throw(EV_PICKUP,this,NULL,i) == ABORT)
+                                UnsetSilence(); // return;
+                            else { 
+                                UnsetSilence(); // return;
+                                did_anything = true; 
+                                LegendIdent(i);
+                                goto start_again; // because Remove() will change the linked 
+                            } 
+                            // list of items here 
+                        }
+                    } 
+            }
+        }
+
+        if (t->isItem()) {
+            i = oItem(t->myHandle);
+
+            if (i->PItemLevel(this) >= 0 && i->eID && !i->isKnown()) {
+                if (ap == 2 && Inv[SL_PACK] && oItem(Inv[SL_PACK])->Type == T_CONTAIN && (InSlot(SL_PACK) || AbilityLevel(CA_WILD_SHAPE))) { 
+                    pack = (Container*)oItem(Inv[SL_PACK]);
+                    if (pack) {
+                        IPrint("AutoStowing: <Obj>.",i);
+                        SetSilence();
+                        if (Throw(EV_INSERT,this,NULL,pack,i) == ABORT) {
+                            UnsetSilence(); // return;
+                            IPrint("AutoStowing failed.");
+                        } else { 
+                            UnsetSilence(); // return;
+                            did_anything = true; 
+                            LegendIdent(i);
+                            goto start_again; // because Remove() will change the linked 
+                        } 
+                    } 
+                }
+            } 
+            LegendIdent(i);
+        }
+    }
 }
 
 #include <time.h>
