@@ -999,6 +999,7 @@ TextVal MTypeNames[] = {
   { MA_REPTILIAN, "Reptilian Creature" },
   { MA_SUMMONED, "Summoned Creature" },
   { MA_LIVING, "Living Creature" },
+  { MA_NLIVING, "Natural Living Creature" },
   { MA_BREATHER, "Breathing Creature" },
   { MA_AQUATIC, "Aquatic Creature" },
 //  { MA_MAGICAL, "Magical Creature" },
