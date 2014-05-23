@@ -2618,118 +2618,105 @@ bool Armour::betterFor(Creature *c, Item *curr)
     return rat > crat;
   }
 
-
-
-
-EvReturn Monster::Event(EventInfo &e)
-  {
+EvReturn Monster::Event(EventInfo &e) {
     Thing *t;
-		switch(e.Event) {
+    switch(e.Event) {
       case POST(EV_MAGIC_HIT):
-        // ww: this check is of critical importance! otherwise spellcasters
-        // always end up getting killed by their friends!
-        if (e.eID && TEFF(e.eID)->Purpose & (EP_BUFF|EP_FIX_TROUBLE))
-          return NOTHING;
-        if (e.eID && TEFF(e.eID)->HasFlag(EF_NOTBAD))
-          return NOTHING;
-        
-        if (isFriendlyTo(e.EActor)) {
-          if (e.isSharedSpell)
-            return NOTHING;
-          if (!(e.eID && TEFF(e.eID)->Purpose & (EP_ATTACK|EP_CURSE)))
-            return NOTHING;
+          // ww: this check is of critical importance! otherwise spellcasters
+          // always end up getting killed by their friends!
+          if (e.eID && TEFF(e.eID)->Purpose & (EP_BUFF|EP_FIX_TROUBLE))
+              return NOTHING;
+          if (e.eID && TEFF(e.eID)->HasFlag(EF_NOTBAD))
+              return NOTHING;
+
+          if (isFriendlyTo(e.EActor)) {
+              if (e.isSharedSpell)
+                  return NOTHING;
+              if (!(e.eID && TEFF(e.eID)->Purpose & (EP_ATTACK|EP_CURSE)))
+                  return NOTHING;
           }
-        
+
       case POST(EV_HIT):
       case EV_MISS:
       case POST(EV_DAMAGE):
-          if (!e.EActor ||
-              e.EVictim != this ||
-              e.EActor == e.EVictim ||
-              e.EVictim->isDead())
-            return NOTHING;
-          else if (StateFlags & MS_PEACEFUL)
-            if (e.Event == EV_MAGIC_HIT)
+          if (!e.EActor || e.EVictim != this || e.EActor == e.EVictim || e.EVictim->isDead())
               return NOTHING;
+          else if (StateFlags & MS_PEACEFUL && e.Event == EV_MAGIC_HIT)
+                  return NOTHING;
+
           if (e.EActor != e.EVictim && !e.isTrap && !e.isActOfGod)
-            if (!e.eID || (!e.EVictim->HasEffStati(CHARMED,e.eID)
-                  && !TEFF(e.eID)->HasFlag(EF_NOTBAD)))
-              if (!(isFriendlyTo(e.EActor) && e.eID && 
-                      TEFF(e.eID)->ef.aval == AR_FIELD))
-                ts.ItHitMe(e.EVictim,e.EActor,e.vDmg+1);
+              if (!e.eID || (!e.EVictim->HasEffStati(CHARMED,e.eID) && !TEFF(e.eID)->HasFlag(EF_NOTBAD)))
+                  if (!(isFriendlyTo(e.EActor) && e.eID && TEFF(e.eID)->ef.aval == AR_FIELD))
+                      ts.ItHitMe(e.EVictim,e.EActor,e.vDmg+1);
           if (e.EActor && !e.EActor->isDead() && !Percieves(e.EActor)) {
-            if (e.AType == A_FIRE || e.AType == A_HURL || 
-                 (e.EMagic && e.EMagic->eval == EA_BLAST))
-              if (e.Event == POST(EV_DAMAGE) || e.Event == EV_MISS)
-                IDPrint(NULL,Format("%s looks for an unseen foe.",
-                      (const char*)Name(NA_THE)));
-            StateFlags &= ~MS_GUARDING; 
-            ts.Wanderlust(this, e.EActor); 
+              if (e.AType == A_FIRE || e.AType == A_HURL || (e.EMagic && e.EMagic->eval == EA_BLAST))
+                  if (e.Event == POST(EV_DAMAGE) || e.Event == EV_MISS)
+                      IDPrint(NULL,Format("%s looks for an unseen foe.",(const char*)Name(NA_THE)));
+              StateFlags &= ~MS_GUARDING; 
+              ts.Wanderlust(this, e.EActor); 
           } 
           return NOTHING;
-
       case PRE(EV_NATTACK):
       case PRE(EV_WATTACK):
-        // ww: without this check you couldn't attack a monster that was
-        // wielding a cursed bow, 'cause they'd ABORT on your PRE(WATTACK).
-        if (e.EActor != this) return NOTHING; 
-        if (InSlot(SL_ARCHERY))
-          if (InSlot(SL_ARCHERY)->isCursed())
-            return ABORT;
-        if (StateFlags & MS_BOW_ACTIVE) {
-          StateFlags &= ~MS_BOW_ACTIVE;
-          if (HasFeat(FT_QUICK_DRAW))
-            Timeout += 4;
-          else
-            Timeout += 16;
+          // ww: without this check you couldn't attack a monster that was
+          // wielding a cursed bow, 'cause they'd ABORT on your PRE(WATTACK).
+          if (e.EActor != this) return NOTHING; 
+          if (InSlot(SL_ARCHERY))
+              if (InSlot(SL_ARCHERY)->isCursed())
+                  return ABORT;
+          if (StateFlags & MS_BOW_ACTIVE) {
+              StateFlags &= ~MS_BOW_ACTIVE;
+              if (HasFeat(FT_QUICK_DRAW))
+                  Timeout += 4;
+              else
+                  Timeout += 16;
           }
-        return NOTHING;
+          return NOTHING;
       case PRE(EV_RATTACK):
-        // ww: without this check you couldn't attack a monster that was
-        // wielding a cursed bow, 'cause they'd ABORT on your PRE(WATTACK).
-        if (e.EActor != this) return NOTHING; 
-        if (InSlot(SL_WEAPON))
-          if (InSlot(SL_WEAPON)->isCursed())
-            return ABORT;
-        if (!(StateFlags & MS_BOW_ACTIVE)) {
-          StateFlags |= MS_BOW_ACTIVE;
-          if (HasFeat(FT_QUICK_DRAW))
-            Timeout += 4;
-          else
-            Timeout += 16;
+          // ww: without this check you couldn't attack a monster that was
+          // wielding a cursed bow, 'cause they'd ABORT on your PRE(WATTACK).
+          if (e.EActor != this) return NOTHING; 
+          if (InSlot(SL_WEAPON))
+              if (InSlot(SL_WEAPON)->isCursed())
+                  return ABORT;
+          if (!(StateFlags & MS_BOW_ACTIVE)) {
+              StateFlags |= MS_BOW_ACTIVE;
+              if (HasFeat(FT_QUICK_DRAW))
+                  Timeout += 4;
+              else
+                  Timeout += 16;
           }
-        return NOTHING;
+          return NOTHING;
       case PRE(EV_CAST):
       case PRE(EV_DRINK):
       case PRE(EV_ACTIVATE):
       case PRE(EV_READ):
       case PRE(EV_INVOKE):
       case PRE(EV_ZAP):
-        if (e.EActor != this)
-          return NOTHING;
-        if (denySpell(this,e.eID))
-          return ABORT;
-        /* This code protects against extraneous spell use by monsters.
-           It's simpler to put it here rather then in ChooseAction's
-           already convoluted casting sequence. For example, it prevents
-           an illithid from mind-blasting a target that's already stunned,
-           or a novice mage from casting Bull's Strength twice in a row.
-        */
-        t = e.ETarget ? e.ETarget : this;
-        if (t->HasEffStati(-1,e.eID))
-          return ABORT;
-        /* Technically, this is broken for multi-segment spells. In practice,
-           it should catch every important case and not have any unexpected
-           results. */
-        if (TEFF(e.eID)->ef.eval == EA_INFLICT || TEFF(e.eID)->ef.eval == EA_GRANT) 
-          {
-            if (t->HasStati(TEFF(e.eID)->ef.xval))
+          if (e.EActor != this)
+              return NOTHING;
+          if (denySpell(this,e.eID))
               return ABORT;
+          /* This code protects against extraneous spell use by monsters.
+          It's simpler to put it here rather then in ChooseAction's
+          already convoluted casting sequence. For example, it prevents
+          an illithid from mind-blasting a target that's already stunned,
+          or a novice mage from casting Bull's Strength twice in a row.
+          */
+          t = e.ETarget ? e.ETarget : this;
+          if (t->HasEffStati(-1,e.eID))
+              return ABORT;
+          /* Technically, this is broken for multi-segment spells. In practice,
+          it should catch every important case and not have any unexpected
+          results. */
+          if (TEFF(e.eID)->ef.eval == EA_INFLICT || TEFF(e.eID)->ef.eval == EA_GRANT) {
+              if (t->HasStati(TEFF(e.eID)->ef.xval))
+                  return ABORT;
           }
-       break;
-      }    
+          break;
+    }    
     return NOTHING;
-	}
+}
 
 int16 Monster::RateAsTarget(Thing *t)
   {

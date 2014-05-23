@@ -1365,115 +1365,105 @@ void TargetSystem::Liberate(Creature *me, Creature *lib)
     summ->IPrint("You feel your control over the <Obj> snap!",me);
   }
 
-void TargetSystem::ItHitMe(Creature *me, Creature *t, int16 damage)
-{
-  Target *targ; Creature *cr, *leader; int16 i;
-  
-  /* Horrid kludge -- this should *really* take an EventInfo! */
-  EventInfo &e = EventStack[EventSP];
+void TargetSystem::ItHitMe(Creature *me, Creature *t, int16 damage) {
+    Target *targ; Creature *cr, *leader; int16 i;
 
-  if (me->isDead() || me->isPlayer()) return; 
+    /* Horrid kludge -- this should *really* take an EventInfo! */
+    EventInfo &e = EventStack[EventSP];
 
-  if (t->isIllusion() && !t->isRealTo(me))
-    return;
-
-  /* When one ally attacks another, give the PC a chance
-     to "mend fences".
-  */
-  if (leader = me->getLeader())
-    if (leader == t->getLeader() && leader != t) {
-      if (me->HasStati(SUMMONED) ||
-          me->HasStati(ILLUSION))
-        return;
-      if (leader->SkillCheck(SK_DIPLOMACY,15,true))
-        {
-          leader->IPrint("You diffuse the <Obj>'s anger at "
-            "the <Obj>'s inadvertant attack.", me, t);
-          return;
-        }
-      }
-      
-  if (e.AType != A_GAZE && e.DType != AD_CHRM && e.DType != AD_SPE1
-        && e.DType != AD_SPE2)
-    me->RemoveStati(CHARMED,-1,CH_CHARM,-1,t);
-
-  if (targ = GetTarget(t)) {
-
-    targ->data.Creature.damageDoneToMe += damage; 
-
-    uint32 limit = 0;
-
-    switch (targ->type) {
-      case TargetInvalid: 
-      case TargetArea: 
-      case TargetWander: 
-      case TargetItem: 
-        Fatal("ItHitMe: bad Target type");
-        break; 
-
-      case TargetEnemy:         // already hate you
-      case TargetMaster:        // can never hate you 
+    if (me->isDead() || me->isPlayer())
         return;
 
-      case TargetAlly:          limit = 5 + t->Mod(A_CHA)*2; break;
-      case TargetLeader:        limit = 10 + t->Mod(A_CHA)*2; break; 
-      case TargetMount:         limit = 10 + t->Mod(A_CHA)*2; break;
-      case TargetSummoner:      limit = 15 + t->Mod(A_CHA)*2; break; 
-      }
-    if (targ->data.Creature.damageDoneToMe > limit) {
-      // OK, we hate you now! 
-      targ->type = TargetEnemy;
-      targ->why.Set(TargetHitMe);
-      String msg;
-      if (t->isPlayer())
-        msg = Format("%s snaps and turns on you!",(const char*)me->Name(NA_THE));
-      else
-        msg = Format("%s snaps and turns on %s!",(const char*)me->Name(NA_THE),
-            (const char*)t->Name(NA_THE));
-      t->IDPrint(msg,msg);
-    } 
-    goto HorseCheck; 
-  }
-  
-  Hostility h;
-  h = SpecificHostility(me,t);
-  if (h.quality == Enemy)          // already hate you 
-    goto HorseCheck;
-  if (h.quality == Ally && !t->isPlayer())        
-    goto HorseCheck; 
-  // until we refine the system more, allies are fast friends ... 
-  // example: krenshar wailing might cause all of its allies to turn on it!
+    if (t->isIllusion() && !t->isRealTo(me))
+        return;
 
-  // OK, we don't like you any more!
-  
-  MapIterate(me->m,cr,i)
-    if (cr->isCreature())
-      if (cr->isFriendlyTo(me) && !cr->isHostileTo(t))
-        {
-          Target newT;
-          newT.type = TargetEnemy;
-          newT.priority = 20;
-          newT.why.Set(TargetHitMe);
-          newT.data.Creature.c = t->myHandle;
-          newT.data.Creature.damageDoneToMe = damage;
-          cr->ts.addTarget(newT);
-          cr->ts.ForgetOrders(cr,-1);
-          String msg;
-          if (t->isPlayer())
-            msg = Format("%s becomes angry at you!",(const char*)cr->Name(NA_THE));
-          else
-            msg = Format("%s becomes angry at %s!",(const char*)cr->Name(NA_THE),
-                (const char*)t->Name(NA_THE));
-          if (!cr->isDead())
-            cr->IDPrint(msg,msg);
-          cr->GainPermStati(WAS_FRIENDLY,t,SS_MONI, h.quality == Ally);
+    /* When one ally attacks another, give the PC a chance to "mend fences". */
+    if (leader = me->getLeader())
+        if (leader == t->getLeader() && leader != t) {
+            if (me->HasStati(SUMMONED) || me->HasStati(ILLUSION))
+                return;
+            if (leader->SkillCheck(SK_DIPLOMACY,15,true)) {
+                leader->IPrint("You diffuse the <Obj>'s anger at the <Obj>'s inadvertant attack.", me, t);
+                return;
+            }
         }
-        
-    HorseCheck:
-    if (me->HasStati(MOUNT))
-      if (me->GetStatiObj(MOUNT) == t)
+
+    if (e.AType != A_GAZE && e.DType != AD_CHRM && e.DType != AD_SPE1 && e.DType != AD_SPE2)
+        me->RemoveStati(CHARMED,-1,CH_CHARM,-1,t);
+
+    if (targ = GetTarget(t)) {
+        uint32 limit = 0;
+
+        targ->data.Creature.damageDoneToMe += damage; 
+
+        switch (targ->type) {
+          case TargetInvalid: 
+          case TargetArea: 
+          case TargetWander: 
+          case TargetItem: 
+              Fatal("ItHitMe: bad Target type");
+              break; 
+
+          case TargetEnemy:         // already hate you
+          case TargetMaster:        // can never hate you 
+              return;
+
+          case TargetAlly:          limit = 5 + t->Mod(A_CHA)*2; break;
+          case TargetLeader:        limit = 10 + t->Mod(A_CHA)*2; break; 
+          case TargetMount:         limit = 10 + t->Mod(A_CHA)*2; break;
+          case TargetSummoner:      limit = 15 + t->Mod(A_CHA)*2; break; 
+        }
+
+        if (targ->data.Creature.damageDoneToMe > limit) {
+            String msg;
+            // OK, we hate you now! 
+            targ->type = TargetEnemy;
+            targ->why.Set(TargetHitMe);
+            if (t->isPlayer())
+                msg = Format("%s snaps and turns on you!",(const char*)me->Name(NA_THE));
+            else
+                msg = Format("%s snaps and turns on %s!",(const char*)me->Name(NA_THE),(const char*)t->Name(NA_THE));
+            t->IDPrint(msg,msg);
+        } 
+        goto HorseCheck; 
+    }
+
+    Hostility h;
+    h = SpecificHostility(me,t);
+    if (h.quality == Enemy)          // already hate you 
+        goto HorseCheck;
+    if (h.quality == Ally && !t->isPlayer())        
+        goto HorseCheck; 
+    // until we refine the system more, allies are fast friends ... 
+    // example: krenshar wailing might cause all of its allies to turn on it!
+
+    // OK, we don't like you any more!
+
+    MapIterate(me->m,cr,i)
+        if (cr->isCreature())
+            if (cr->isFriendlyTo(me) && !cr->isHostileTo(t)) {
+                Target newT;
+                newT.type = TargetEnemy;
+                newT.priority = 20;
+                newT.why.Set(TargetHitMe);
+                newT.data.Creature.c = t->myHandle;
+                newT.data.Creature.damageDoneToMe = damage;
+                cr->ts.addTarget(newT);
+                cr->ts.ForgetOrders(cr,-1);
+                String msg;
+                if (t->isPlayer())
+                    msg = Format("%s becomes angry at you!",(const char*)cr->Name(NA_THE));
+                else
+                    msg = Format("%s becomes angry at %s!",(const char*)cr->Name(NA_THE), (const char*)t->Name(NA_THE));
+                if (!cr->isDead())
+                    cr->IDPrint(msg,msg);
+                cr->GainPermStati(WAS_FRIENDLY,t,SS_MONI, h.quality == Ally);
+            }
+
+HorseCheck:
+    if (me->HasStati(MOUNT) && me->GetStatiObj(MOUNT) == t)
         ThrowVal(EV_DISMOUNT,DSM_THROWN,t);
-  }
+}
 
 void TargetSystem::MissedShapechange(Creature *me, Creature *t)
 {

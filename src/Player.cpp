@@ -2780,12 +2780,12 @@ void Player::AutoPickupFloor() {
     Item * i; 
     Container *pack;
     int j;
-    int ap = Opt(OPT_AUTOPICKUP);
-    int kc = Opt(OPT_KILL_CHEST); 
-    int oc = Opt(OPT_AUTOCHEST); 
+    int auto_pickup = Opt(OPT_AUTOPICKUP);
+    int destroy_empty_chests = Opt(OPT_KILL_CHEST); 
+    int auto_open_chests = Opt(OPT_AUTOCHEST); 
     bool did_anything = false; 
 
-    if (!ap)
+    if (auto_pickup == 0)
         return;  
 
     if (HasStati(RAGING) || HasMFlag(M_NOHANDS) || isThreatened())
@@ -2800,8 +2800,7 @@ start_again:
         if (t->isIllusion())
             continue;
 
-        /* Don't autopickup really heavy things; more notably, quit
-        trying to autostow fountains and thrones! */
+        /* Don't autopickup really heavy things; more notably, quit trying to autostow fountains and thrones! */
         if (t->isItem() && t->Type != T_CHEST)
             if (((Item*)t)->Weight(false) > 1000)
                 continue;
@@ -2812,12 +2811,12 @@ start_again:
         if (t->isItem() && t->Type == T_CHEST) {
             Container *c = (Container *)oItem(t->myHandle); 
             if (c->Contents == 0) {
-                if (kc) { 
+                if (destroy_empty_chests) { 
                     IPrint("KillChest: <Obj>.",c);
                     t->Remove(true);
                     goto start_again;
                 }
-            } else if (oc) {
+            } else if (auto_open_chests) {
                 EventInfo e;
                 e.Clear();
                 e.EPActor = this;
@@ -2826,63 +2825,61 @@ start_again:
             } 
         } 
 
-        if (t->isItem() && t->Type != T_LIGHT && !t->isType(T_TOOL) && !t->isType(T_SYMBOL) && !t->isType(T_SHIELD)) {
-            i = oItem(t->myHandle);
-            int checkSlots[] = { 
-                SL_LSHOULDER ,
-                SL_RSHOULDER ,
-                SL_BELT1,
-                SL_BELT2,
-                SL_BELT3,
-                SL_BELT4,
-                SL_BELT5,
-                0
-            };
-
-            for (int jj=0;checkSlots[jj];jj++) {
-                j = checkSlots[jj];
-                if (InSlot(j) && *InSlot(j) == *i) {
-                    IPrint("AutoPickup: <Obj>.",i);
-                    SetSilence();
-                    if (Throw(EV_PICKUP,this,NULL,i) == ABORT)
-                        UnsetSilence(); // return;
-                    else { 
-                        did_anything = true; 
-                        UnsetSilence();
-                        LegendIdent(i);
-                        goto start_again; // because Remove() will change the linked 
-                    } 
-                    // list of items here 
-                } 
-            }
-
-            if (ap == 2 && Inv[SL_PACK] && oItem(Inv[SL_PACK])->Type == T_CONTAIN && InSlot(SL_PACK)) { 
-                // also check pack
-                pack = (Container*)oItem(Inv[SL_PACK]);
-                if (pack)
-                    for (j=0; (*pack)[j] != NULL; j++) {
-                        if (*((*pack)[j]) == *i) {
-                            IPrint("AutoPickup: <Obj>.",i);
-                            SetSilence();
-                            if (Throw(EV_PICKUP,this,NULL,i) == ABORT)
-                                UnsetSilence(); // return;
-                            else { 
-                                UnsetSilence(); // return;
-                                did_anything = true; 
-                                LegendIdent(i);
-                                goto start_again; // because Remove() will change the linked 
-                            } 
-                            // list of items here 
-                        }
-                    } 
-            }
-        }
-
         if (t->isItem()) {
-            i = oItem(t->myHandle);
+            if (t->Type != T_LIGHT && !t->isType(T_TOOL) && !t->isType(T_SYMBOL) && !t->isType(T_SHIELD)) {
+                i = oItem(t->myHandle);
+                int checkSlots[] = { 
+                    SL_LSHOULDER ,
+                    SL_RSHOULDER ,
+                    SL_BELT1,
+                    SL_BELT2,
+                    SL_BELT3,
+                    SL_BELT4,
+                    SL_BELT5,
+                    0
+                };
+
+                for (int jj=0;checkSlots[jj];jj++) {
+                    j = checkSlots[jj];
+                    if (InSlot(j) && *InSlot(j) == *i) {
+                        IPrint("AutoPickup: <Obj>.",i);
+                        SetSilence();
+                        if (Throw(EV_PICKUP,this,NULL,i) == ABORT)
+                            UnsetSilence(); // return;
+                        else { 
+                            did_anything = true; 
+                            UnsetSilence();
+                            LegendIdent(i);
+                            goto start_again; // because Remove() will change the linked 
+                        } 
+                        // list of items here 
+                    } 
+                }
+
+                if (auto_pickup == 2 && Inv[SL_PACK] && oItem(Inv[SL_PACK])->Type == T_CONTAIN && InSlot(SL_PACK)) { 
+                    // also check pack
+                    pack = (Container*)oItem(Inv[SL_PACK]);
+                    if (pack)
+                        for (j=0; (*pack)[j] != NULL; j++) {
+                            if (*((*pack)[j]) == *i) {
+                                IPrint("AutoPickup: <Obj>.",i);
+                                SetSilence();
+                                if (Throw(EV_PICKUP,this,NULL,i) == ABORT)
+                                    UnsetSilence(); // return;
+                                else { 
+                                    UnsetSilence(); // return;
+                                    did_anything = true; 
+                                    LegendIdent(i);
+                                    goto start_again; // because Remove() will change the linked 
+                                } 
+                                // list of items here 
+                            }
+                        } 
+                }
+            }
 
             if (i->PItemLevel(this) >= 0 && i->eID && !i->isKnown()) {
-                if (ap == 2 && Inv[SL_PACK] && oItem(Inv[SL_PACK])->Type == T_CONTAIN && (InSlot(SL_PACK) || AbilityLevel(CA_WILD_SHAPE))) { 
+                if (auto_pickup == 2 && Inv[SL_PACK] && oItem(Inv[SL_PACK])->Type == T_CONTAIN && (InSlot(SL_PACK) || AbilityLevel(CA_WILD_SHAPE))) { 
                     pack = (Container*)oItem(Inv[SL_PACK]);
                     if (pack) {
                         IPrint("AutoStowing: <Obj>.",i);
