@@ -2455,7 +2455,7 @@ Druid Spell "Forestation" : EA_TERRAFORM
     Purpose: EP_CURSE | EP_FOIL_PURSUIT | AIM_AT_ENEMY; /* Flags: EF_DLONG;  */
     xval: TERRA_FLOOR; rval: $"tree"; aval: AR_GLOBE; lval: 4;
     Desc: "Creates a grove of trees to spring up on open ground. The
-      trees block normal sight, slighlty hinder movement and can be used
+      trees block normal sight, slightly hinder movement and can be used
       by any other spells that require trees or plants to be present."; 
     On Event MSG_CAST
       "A grove of trees appears!";
