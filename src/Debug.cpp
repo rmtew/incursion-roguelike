@@ -920,12 +920,11 @@ Restart:
         break;
     case 36:
         e.Clear();
-        if (MyTerm->EffectPrompt(e,Q_LOC,false,"Change where?") == false)
-        { 
+        if (MyTerm->EffectPrompt(e,Q_LOC,false,"Change where?") == false) { 
             IPrint("Aborting terrain type change.");
             break; 
         }
-        xID = theGame->Find("curtain of flame");
+        xID = MyTerm->ChooseResource("Which terrain type?",T_TTERRAIN,NULL);
         m->WriteTerra(e.EXVal,e.EYVal,xID);
         // mn->PlaceAt(m,e.EXVal,e.EYVal);
     }

@@ -2905,6 +2905,8 @@ rID TextTerm::ChooseResource(const char*prompt, int16 RType, rID eID)
       MAKE_LIST(ItemID,szItm)
     else if (RType == T_TFEATURE) 
       MAKE_LIST(FeatureID,szFea)
+    else if (RType == T_TTERRAIN)
+      MAKE_LIST(TerrainID,szTer)
           
     xID = LMenu(MENU_3COLS|MENU_SORTED|MENU_ESC|MENU_BORDER,prompt);
     
