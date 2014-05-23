@@ -687,6 +687,8 @@ void TextTerm::HyperTab(int16 wn)
 void TextTerm::ClearScroll() {
     SClear();
     ScrollLines = 0;
+    offset = 0;
+    scx = scy = 0;
     LinkCount = 0;
     SelectedLink = -1;
 }
