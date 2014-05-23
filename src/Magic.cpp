@@ -2707,16 +2707,12 @@ ContinueCasting:
     if (e.EActor->HasStati(INVIS))
         if (!(e.EActor->GetStatiVal(INVIS) == INV_IMPROVED)) 
             if ((TEFF(e.eID)->Purpose & (EP_ATTACK|EP_CURSE|EP_SUMMON)) ||
-                !((e.EVictim && e.EVictim->isCreature() && 
-                e.EVictim->isFriendlyTo(e.EActor)) ||
-                TEFF(e.eID)->HasFlag(EF_NOTBAD)))    
+                !((e.EVictim && e.EVictim->isCreature() && e.EVictim->isFriendlyTo(e.EActor)) || TEFF(e.eID)->HasFlag(EF_NOTBAD)))
                 RemoveStati(INVIS);
     StatiIterNature(e.EActor,INVIS_TO)
         if (S->Val != INV_IMPROVED)
             if ((TEFF(e.eID)->Purpose & (EP_ATTACK|EP_CURSE|EP_SUMMON)) ||
-                !((e.EVictim && e.EVictim->isCreature() && 
-                e.EVictim->isFriendlyTo(e.EActor)) ||
-                TEFF(e.eID)->HasFlag(EF_NOTBAD)))    
+                !((e.EVictim && e.EVictim->isCreature() && e.EVictim->isFriendlyTo(e.EActor)) || TEFF(e.eID)->HasFlag(EF_NOTBAD)))
                 StatiIter_RemoveCurrent(e.EActor);
     StatiIterEnd(e.EActor)     
 
