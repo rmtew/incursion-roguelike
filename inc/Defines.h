@@ -3150,10 +3150,10 @@ typedef signed long       hObj;
 #define EF_NAMEONLY 20  /*  Spellblade vs. Sword of Spellblade */
 #define EF_CHAOTIC  21  /* Use is a chaotic act, alignment affects power */
 #define EF_LAWFUL   22  /* Ditto */
-#define EF_DSHORT   23
-#define EF_D1ROUND  24
-#define EF_DLONG    25
-#define EF_DXLONG   26
+#define EF_DSHORT   23  /* Duration between 1-4 rounds. */
+#define EF_D1ROUND  24  /* Duration of exactly 1 round. */
+#define EF_DLONG    25  /* 100 + (10 * casterlevel) rounds */
+#define EF_DXLONG   26  /* 1000 + (100 * casterlevel) rounds */
 #define EF_SAFE     27  
 #define EF_LARMOUR   28  
 #define EF_MARMOUR   29  
