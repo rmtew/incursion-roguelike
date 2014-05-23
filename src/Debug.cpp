@@ -925,8 +925,8 @@ Restart:
             break; 
         }
         xID = MyTerm->ChooseResource("Which terrain type?",T_TTERRAIN,NULL);
-        m->WriteTerra(e.EXVal,e.EYVal,xID);
-        // mn->PlaceAt(m,e.EXVal,e.EYVal);
+        if (xID != -1)
+            m->WriteTerra(e.EXVal,e.EYVal,xID);
     }
     MyTerm->RefreshMap();
 }
