@@ -17,7 +17,7 @@ Monster "fiend" : MA_DRAGON
     Image: red GLYPH_FIEND; Size: SZ_MEDIUM;
     Desc: "Fiends are sadistic and monsterous creatures from worlds far
       beyond Theyra. Some, demons, are aligned with chaos, while others
-      (devils) are lawful in temperment, but all are inheranty evil, and
+      (devils) are lawful in temperment, but all are inherenty evil, and
       in fact are the living personification of all-consuming darkness.
       Destroying a fiend is a good act for a creature aspiring to a good
       alignment, though there are plenty of selfish reasons to kill them
@@ -452,7 +452,7 @@ Monster "nabassu" : MA_DEMON
       their more serious responsibilities as adult demons come into 
       play. Nabassu are, quite literally, death-dealers -- they possess
       the magical ability to steal the deaths of living creatures and
-      pass them on to others. Many nabassu cultivate this inherant
+      pass them on to others. Many nabassu cultivate this inherent
       magic by becoming powerful necromancers or respected assasion,
       and they are known in the Abyss as the undisputed experts of all
       things thanatoic.\n
@@ -4099,7 +4099,7 @@ Template "celestial" : TM_PLANAR for MA_NLIVING
   Flags: M_GOOD, !M_EVIL, TMF_OBVIOUS;
   Desc: "Celestial creatures are the versions of normal creatures
       that dwell on the Upper Planes, and benefit from some of the
-      same inherant traits that true celestials do.";
+      same inherent traits that true celestials do.";
     On Event EV_ISTARGET {
       if (EActor->isMType(MA_FUNGI) || EActor->isMType(MA_PLANT) ||
           EActor->isMType(MA_OOZE) || EActor->isMType(MA_UNDEAD))
@@ -4120,7 +4120,7 @@ Template "fiendish" : TM_PLANAR for MA_NLIVING
     Flags: !M_GOOD, M_EVIL, TMF_OBVIOUS;
     Desc: "Fiendish creatures are the versions of normal creatures
       that dwell on the Lower Planes, and benefit from some of the
-      same inherant traits that true fiends do.";
+      same inherent traits that true fiends do.";
     On Event EV_ISTARGET {
       if (EActor->isMType(MA_FUNGI) || EActor->isMType(MA_PLANT) ||
           EActor->isMType(MA_OOZE) || EActor->isMType(MA_UNDEAD))

@@ -2752,7 +2752,7 @@ typedef signed long       hObj;
 #define BONUS_DAMAGE  17 /* d20 attribute damage */
 #define BONUS_RAGE    18 /* Barbarian Rage */
 #define BONUS_STATUS  19 /* stunned/confused */
-#define BONUS_INHERANT 20 /* Inherant Attr Bonuses */
+#define BONUS_INHERANT 20 /* Inherent Attr Bonuses */
 #define BONUS_GRACE   21 /* Paladin's "Divine Grace" Power */
 #define BONUS_DODGE   22 /* d20 "dodge" bonus */
 #define BONUS_NATURAL 23 /* Stat modifiers; "natural armour" */

@@ -504,7 +504,7 @@ class Creature: public Thing, public Magic
       virtual void MakeNoise(int16 radius);
       virtual void IdentByTrial(Item *it,int16 Quality=0) {}
       virtual bool ItemPrereq(rID xID, int16 ReqLevel, int16 TrickDC);
-      virtual void GainInherantBonus(int16 at, int16 mag, bool msg=true);
+      virtual void GainInherentBonus(int16 at, int16 mag, bool msg=true);
       virtual void GetHungrier(int16 amt);
       virtual int16 getBestKnowSkill(Creature *cr, bool isCombat);
 

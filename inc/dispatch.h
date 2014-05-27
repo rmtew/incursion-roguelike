@@ -1296,9 +1296,9 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n)
         oCreature(h)->IdentByTrial(oItem(STACK(1)));
        return;
       case 251:
-        VERIFY(h,T_CREATURE,"GainInherantBonus")
+        VERIFY(h,T_CREATURE,"GainInherentBonus")
        ASSERT(REGS(63) >= 3)
-        oCreature(h)->GainInherantBonus(STACK(1), STACK(2), STACK(3));
+        oCreature(h)->GainInherentBonus(STACK(1), STACK(2), STACK(3));
        return;
       case 252:
         VERIFY(h,T_CREATURE,"Reveal")
@@ -1922,14 +1922,14 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n)
         REGS(n) = oItem(h)->GetPlus();
        return;
       case 374:
-        VERIFY(h,T_ITEM,"GetInherantPlus")
+        VERIFY(h,T_ITEM,"GetInherentPlus")
        ASSERT(REGS(63) >= 0)
-        REGS(n) = oItem(h)->GetInherantPlus();
+        REGS(n) = oItem(h)->GetInherentPlus();
        return;
       case 375:
-        VERIFY(h,T_ITEM,"SetInherantPlus")
+        VERIFY(h,T_ITEM,"SetInherentPlus")
        ASSERT(REGS(63) >= 1)
-        oItem(h)->SetInherantPlus(STACK(1));
+        oItem(h)->SetInherentPlus(STACK(1));
        return;
       case 376:
         VERIFY(h,T_ITEM,"ArmVal")

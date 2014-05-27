@@ -3060,7 +3060,7 @@ void Creature::DevourMonster(Monster * m)
             if (SumStatiMag(ADJUST_INH,i) >= 
                             5 + AbilityLevel(CA_INHERANT_POTENTIAL))
               continue;
-            GainInherantBonus(i,+1,true);
+            GainInherentBonus(i,+1,true);
           }
 
     /* we can now figure out the dragon age category */
@@ -3367,7 +3367,7 @@ EvReturn Character::CraftItem(int16 abil)
     Augment:
     for (c=0,it=FirstInv();it;it=NextInv())
       {
-        if (improveOnly && !it->GetInherantPlus())
+        if (improveOnly && !it->GetInherentPlus())
           continue;
         if (!it->isKnown(KN_MAGIC|KN_PLUS|KN_BLESS))
           continue;
@@ -3375,7 +3375,7 @@ EvReturn Character::CraftItem(int16 abil)
           continue;
         if (it->isType(T_POTION) || it->isType(T_SCROLL))
           continue;
-        if (it->GetInherantPlus() >= 5)
+        if (it->GetInherentPlus() >= 5)
           continue;
         if (weaponsOnly && !(it->isType(T_WEAPON) || 
                              it->isType(T_ARMOUR) ||
@@ -3465,8 +3465,8 @@ EvReturn Character::CraftItem(int16 abil)
     if (addQuality)
       it2->AddQuality(qual);
     else
-      it2->SetInherantPlus(
-        it->GetInherantPlus() + 1);
+      it2->SetInherentPlus(
+        it->GetInherentPlus() + 1);
     
     if (it2->ItemLevel() > 20)
       {
@@ -3538,8 +3538,8 @@ EvReturn Character::CraftItem(int16 abil)
       }
     else
       {
-        it->SetInherantPlus(
-          it->GetInherantPlus() + 1);
+        it->SetInherentPlus(
+          it->GetInherentPlus() + 1);
       }
       
     return DONE;
@@ -3574,7 +3574,7 @@ EvReturn Character::CraftItem(int16 abil)
     
     if (acqVal != ACQ_CRAFT)
       if (it->eID && TEFF(it->eID)->HasFlag(EF_NEEDS_PLUS))
-        it->SetInherantPlus(MaxItemPlus(max_lev,it->eID));
+        it->SetInherentPlus(MaxItemPlus(max_lev,it->eID));
     
     if (acqVal == ACQ_CRAFT) {
       minSkill = 0;
@@ -3632,7 +3632,7 @@ EvReturn Character::CraftItem(int16 abil)
     XPCost = XPCostTable[min(20,max(it->ItemLevel(),1))];
     rID icList[10];
     if (it->eID && TEFF(it->eID)->GetList(ITEM_COST,icList,9))
-      XPCost = icList[max(0,it->GetInherantPlus()-1)] / 25;
+      XPCost = icList[max(0,it->GetInherentPlus()-1)] / 25;
     
     if (itemType == T_MISSILE)
       XPCost /= 20;
@@ -3965,7 +3965,7 @@ void Creature::wieldSoulblade(Item *blade)
     if (blade->isCursed())
       return;
       
-    plus = blade->GetInherantPlus();
+    plus = blade->GetInherentPlus();
   
     if (!HasFeat(FT_GREATER_SOULBLADE))  
       {

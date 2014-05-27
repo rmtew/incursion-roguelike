@@ -74,10 +74,10 @@ Text "help::athletics"
       skill maintains a regular program of calisthenics, dietary
       management, body training and so forth in order to improve her
       physical prowess. In game terms, this makes it easier for her
-      to exercise her physical Attributes to gain inherant Attribute
+      to exercise her physical Attributes to gain inherent Attribute
       bonuses. A character that has the Athletics skill needs only
       [100 - Skill Rating] percentile points to successfully gain a
-      +1 inherant bonus to Strength, Dexterity or Constitution rather
+      +1 inherent bonus to Strength, Dexterity or Constitution rather
       than the full 100.";
       /*
       __<15>* <11>Recover Attributes (Passive):<3> Athletic characters are sometimes
@@ -170,7 +170,7 @@ Text "help::bluff"
       who began friendly or neutral and became hostile as a result of 
       later events. The DC for this ability varies based on many 
       different circumstances. Exploitation is an evil act -- unless
-      it is used on an inherantly evil creature.\n
+      it is used on an inherently evil creature.\n
       __<15>* <11>Create Distraction (Active):<3> The Bluff skill can
       be used to create a distraction, misleading creatures observing
       the skill user. If this use is successful, creatures watching
@@ -572,7 +572,7 @@ Text "help::diplomacy"
       __Orders that can be given vary. NPCs can be
       asked to give the PC items that they picked up
       in the dungeon (this is difficult), but not
-      items that are part of their inherant equipment.
+      items that are part of their inherent equipment.
       NPCs can also be persuaded to attack other
       creatures that are already hostile to them --
       in other words, their priority of enemies can
@@ -687,7 +687,7 @@ Text "help::diplomacy"
       __<15>* <11>Resolve Conflict (Active):<3> A Diplomacy check can
       be used to convince a hostile character to become neutral in some
       circumstances. The DC for this differs wildly -- it's not hard to
-      calm down an angry goblin, but inherantly evil and vicious creatures
+      calm down an angry goblin, but inherently evil and vicious creatures
       like demons can be very hard to make peace with. In some circumstances,
       a creature will want something -- often a bribe -- in order to stop
       attacking you.\n
@@ -1116,7 +1116,7 @@ Text "help::knowledge (magic)"
       of the curse. Success lifts the effect. You must have Knowledge (Magic)
       as a class skill to research curses.\n
       __<15>* <11>Identify Monsters (Passive):<3> The Knowledge (Magic) skill
-      can be used to identify inherantly magical monsters as well as those whose
+      can be used to identify inherently magical monsters as well as those whose
       origins lie with magical experimentation, as described under Sense Motive.\n
       __<15>* <11>Identify Scrolls (Passive):<3> When your character successfully
       reads an unknown scroll (using the Decipher Script skill), and the effect
@@ -1277,7 +1277,7 @@ Text "help::knowledge (undead)"
   {
     "__The dead hate the living, and the living often return the 
     sentiment. A character with this skill is a trained undead 
-    slayer or master necromancer, well versed in the inherant 
+    slayer or master necromancer, well versed in the inherent 
     abilities and weaknesses of the Damned. This skill has the
     following uses:\n
     __<15>* <11>Fighting Undead (Passive):<3> By using a thorough 

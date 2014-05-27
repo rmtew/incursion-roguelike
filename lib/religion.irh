@@ -340,7 +340,7 @@ God "Aiswin"
             if (i == 100)
               break;
             it->SetKnown(0);
-            it->SetInherantPlus(0);
+            it->SetInherentPlus(0);
             it->IFlags = 0;
             it->SetQuantity(1);
             s1 = Pluralize(it->Name(NA_FLAVOR));
@@ -440,7 +440,7 @@ God "Asherath"
       murderers may pay homage to him, those who he sees fit to grant his
       blessings are neither sadistic nor compassionate, but simply scarred,
       resolute and unfeeling.  Asherath's ethos demands a certain
-      callousness, a complete acceptance of the inherant brutality of life;
+      callousness, a complete acceptance of the inherent brutality of life;
       his clergy tend to be bitter and more than a little nihilistic. They
       are among the strongest supporters of Empire, valuing the impact it
       has on history, but also show respect for and sometimes even aid
@@ -474,7 +474,7 @@ God "Asherath"
       Domains of Knowledge, Planning, Strength, Time, Trickery and War.\n
       __<10>Worship:<2> Asherath is a pragmatic god who has little use for
       sacrifices. Worshippers gain favour with him when they triumph over their
-      betters in combat, and as they improve their own inherant abilities (in
+      betters in combat, and as they improve their own inherent abilities (in
       the manner at which humans specifically excel). He is a lenient god, but 
       obvious stupidity draws anger from him (for example, the use of unidentified 
       items that turn out to be cursed). Followers of Asherath are sworn never to
@@ -986,11 +986,11 @@ God "Ekliazeh"
           if (h == NULL_OBJ)
             return DONE;
           if (h->isMetallic() &&
-              h->GetInherantPlus() &&
-              h->GetInherantPlus() <
+              h->GetInherentPlus() &&
+              h->GetInherentPlus() <
                 min(5,EActor->getGodLevel($"Ekliazeh") - 2))
             {
-              h->SetInherantPlus(h->GetInherantPlus() + 1);
+              h->SetInherentPlus(h->GetInherentPlus() + 1);
               EActor->IPrint("Your <hObj> glows with a brilliant silver light!", h);
               EActor->GodMessage($"Ekliazeh",MSG_CUSTOM3);
               return DONE;
@@ -3580,7 +3580,7 @@ God "Mara"
       Respecting the dead in this manner pleases Mara greatly.\n
       __Mara is deeply offended by her clerics killing any friendly 
       creatures; however, she is pleased when her clerics put to 
-      rest the tormented souls of inherantly evil undead (and gravely 
+      rest the tormented souls of inherently evil undead (and gravely 
       displeased if her clerics create such beings, though she has no 
       objection to undead in general). Evil acts in general also
       offend Mara, while good acts grant favour with her. Leading
@@ -4019,7 +4019,7 @@ God "Maeve"
       raise truly treasured playthings from the dead.\n
       __More permanent blessings from Maeve imclude increased grace and beauty,
       talent as a performer, magic being more difficult to resist, friendship
-      from the Fair Folk and inherant magic for sowing discord, conjuring
+      from the Fair Folk and inherent magic for sowing discord, conjuring
       beautiful (but destructive) music and similat abilities. Some of her
       most treasured followers are said to be able to use any magic items
       regardless of restrictions, just as rogues do.\n
@@ -4252,8 +4252,8 @@ God "Maeve"
           case 5:
             first = false;
             for (h=EActor->FirstInv();h;h=EActor->NextInv()) {
-              if (h->isMagic() && (!h->isCursed()) && (h->GetInherantPlus() != 0) &&
-                    (h->GetInherantPlus() < 5)) {
+              if (h->isMagic() && (!h->isCursed()) && (h->GetInherentPlus() != 0) &&
+                    (h->GetInherentPlus() < 5)) {
                 if (h->ItemLevel() <= (3 + EActor->getGodLevel($"Maeve")*2 +
                                           EActor->Mod(A_CHA)))
                   {
@@ -4262,7 +4262,7 @@ God "Maeve"
                       EActor->GodMessage($"Maeve",MSG_CUSTOM4);
                       }
                     EActor->IPrint("Your <hObj> glows with a silvery light!", h);
-                    h->SetInherantPlus(h->GetInherantPlus()+1);
+                    h->SetInherentPlus(h->GetInherentPlus()+1);
                   }
                 }
               }
@@ -4873,7 +4873,7 @@ God "Semirath"
       incredible luck and grace in combat. He has also been known to
       ressurect those that have served him more loyally still.\n
       __His permanent blessings include the ability to develop certain
-      larcenous skills, inherant magic suited to trickery and pranks
+      larcenous skills, inherent magic suited to trickery and pranks
       and augmented agility and intellect.";
     Flags: GF_GOOD, GF_FORGIVING, GF_COMBAT_PULSE, GF_COMBAT_ANGER;
     Lists:
@@ -6115,7 +6115,7 @@ God "The Multitude"
       of the High Guilds.\n
       __The holy symbols used by demon ghosts are twisted runes with a 
       strange, alien shape to them; each ghost has a unique rune all to
-      itself. The demon ghosts are utterly and inherantly Chaotic Evil,
+      itself. The demon ghosts are utterly and inherently Chaotic Evil,
       and unlike those true gods of Therya, they don't hide or whitewash
       that fact in any way. An aspiring cultist has better be ready to
       stomach what their worship entails. 
@@ -6154,7 +6154,7 @@ God "The Multitude"
       a truly favoured follower.\n
       __The demon ghosts are truly diverse beings, no two alike. As such,
       the more permanent blessings they grant to followers are very
-      diverse. These usually take the form of inherant magical abilities
+      diverse. These usually take the form of inherent magical abilities
       similar to spells, chosen randomly based on the areas a specific
       evil ghost has influence over. The more loyal the worshipper,
       however, the more powerful the granted abilities have the potential

@@ -117,7 +117,7 @@ Monster "black orc" : MA_ORC, MA_ADVENTURER
           33% 2d4 $"javelin" else 1d2 $"shotput",
           25% $"strip of cured meat"; 
     Desc: "Black orcs are a subspecies of orcs magically altered by
-      Azakram the Black in order to have an inherant magical affinity
+      Azakram the Black in order to have an inherent magical affinity
       for blood, and the innate ability to manipulate it."; 
     On Event EV_INITIALIZE {
       hObj h;
@@ -957,7 +957,7 @@ Monster "aasimar" : MA_PLANETOUCHED, MA_ADVENTURER
       generations back rather than an immediate ancestor. They
       retain free will from their (demi)human side, but their
       ancestry gives them strong predilictions as well as some
-      measure of inherant magic and supernatural abilities.\n
+      measure of inherent magic and supernatural abilities.\n
       __Aasimar are descended from humans and celestials. Like
       one would expect, they tend to be noble, beautiful and wise,
       but also regal and distant, given to abstractions of ethics
@@ -990,7 +990,7 @@ Monster "tiefling" : MA_PLANETOUCHED, MA_ADVENTURER
       generations back rather than an immediate ancestor. They
       retain free will from their (demi)human side, but their
       ancestry gives them strong predilictions as well as some
-      measure of inherant magic and supernatural abilities.\n
+      measure of inherent magic and supernatural abilities.\n
       __Tieflings are descended from humans and fiends. They tend
       to be treacherous and opportunistic, but while many are
       truly depraved many others are not. They do have a collective
@@ -1021,7 +1021,7 @@ Monster "air genasi" : MA_PLANETOUCHED, MA_ADVENTURER
       generations back rather than an immediate ancestor. They
       retain free will from their (demi)human side, but their
       ancestry gives them strong predilictions as well as some
-      measure of inherant magic and supernatural abilities.\n
+      measure of inherent magic and supernatural abilities.\n
       __Genasi are descended from elemental creatures -- usually
       genies -- and men or women.";
     On Event POST(EV_INVOKE) {
@@ -1049,7 +1049,7 @@ Monster "earth genasi" : MA_PLANETOUCHED, MA_ADVENTURER
       generations back rather than an immediate ancestor. They
       retain free will from their (demi)human side, but their
       ancestry gives them strong predilictions as well as some
-      measure of inherant magic and supernatural abilities.\n
+      measure of inherent magic and supernatural abilities.\n
       __Genasi are descended from elemental creatures -- usually
       genies -- and men or women.";
     On Event POST(EV_INVOKE) {
@@ -1077,7 +1077,7 @@ Monster "fire genasi" : MA_PLANETOUCHED, MA_ADVENTURER
       generations back rather than an immediate ancestor. They
       retain free will from their (demi)human side, but their
       ancestry gives them strong predilictions as well as some
-      measure of inherant magic and supernatural abilities.\n
+      measure of inherent magic and supernatural abilities.\n
       __Genasi are descended from elemental creatures -- usually
       genies -- and men or women.";
     On Event POST(EV_INVOKE) {
@@ -1105,7 +1105,7 @@ Monster "water genasi" : MA_PLANETOUCHED, MA_ADVENTURER
       generations back rather than an immediate ancestor. They
       retain free will from their (demi)human side, but their
       ancestry gives them strong predilictions as well as some
-      measure of inherant magic and supernatural abilities.\n
+      measure of inherent magic and supernatural abilities.\n
       __Genasi are descended from elemental creatures -- usually
       genies -- and men or women.";
     On Event POST(EV_INVOKE) {
@@ -2183,7 +2183,7 @@ and EA_GRANT
       a special magical stone containing a fragment of the night hag's
       heart. To a night hag, this stone conveys a +2 resistance bonus
       to saving throws and immunity to disease, as well as being an
-      essential component of their inherant ethereal travel abilities.
+      essential component of their inherent ethereal travel abilities.
       To any wielder other than a night hag (or a high-level rogue),
       the stone conveys only the saving throw bonus.";
     On Event EV_MAGIC_HIT {

@@ -2446,7 +2446,7 @@ AI_FOUNTAIN Effect "fountain;effect" : EA_GENERIC
                   break;
                 }
             if (EItem->ItemLevel() > EItem2->ItemLevel() + 3 ||
-                  EItem->GetInherantPlus() >= 5)
+                  EItem->GetInherentPlus() >= 5)
               {
                 APrint(e, "The <EItem> gives off a silvery glow, but it quickly
                   fades -- this fountain does not seem to be a powerful enough
@@ -2454,7 +2454,7 @@ AI_FOUNTAIN Effect "fountain;effect" : EA_GENERIC
                 return DONE;
               }
             APrint(e, "The <EItem> glows with a silvery light!");
-            EItem->SetInherantPlus(EItem->GetInherantPlus() + 1);
+            EItem->SetInherentPlus(EItem->GetInherentPlus() + 1);
             forceDry = true;
             break;
         }

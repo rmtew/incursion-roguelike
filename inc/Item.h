@@ -142,9 +142,9 @@ class Item: public Thing, public Magic
           */
         else
           return max(Plus,HighStatiMag(BOOST_PLUS)); }
-      int8 GetInherantPlus()
+      int8 GetInherentPlus()
         { return Plus; }
-      void SetInherantPlus(int8 i)
+      void SetInherentPlus(int8 i)
         { int32 dmg;
           dmg = (cHP*1000) / MaxHP();
           Plus = i; 

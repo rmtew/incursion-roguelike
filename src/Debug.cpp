@@ -417,7 +417,7 @@ void Player::WizardOptions() {
     case 4:
         it = (Item*)MyTerm->AcquisitionPrompt(ACQ_ANY_ITEM,0,20,0);
         if (it) {
-            if (it->isItem() && it->GetInherantPlus()) {
+            if (it->isItem() && it->GetInherentPlus()) {
                 MyTerm->SetWin(WIN_INPUT);
                 MyTerm->Color(YELLOW);
                 MyTerm->Write(0,0,"Enter Item Level: ");
@@ -426,7 +426,7 @@ void Player::WizardOptions() {
                 MyTerm->Clear();
                 i = atoi(MyTerm->GetTypedString());
                 if (i)
-                    it->SetInherantPlus(i);
+                    it->SetInherentPlus(i);
             }
             if (it->isType(T_TRAP))
                 it->PlaceAt(m,x,y-1);

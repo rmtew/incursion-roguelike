@@ -992,7 +992,7 @@ Monster "quylthulg" : MA_QUYLTHULG, MA_ABERRATION
         innately invisible.";
     Desc: "When these strange and naturally invisible creatures are 
       actually seen, they appear as a pulsing mound of flesh crusted
-      with odd fleshy orbs. They are inherantly magical, defending
+      with odd fleshy orbs. They are inherently magical, defending
       themselves by innate invisibility, teleportation and calling
       other creatures to their aid.";
   }

@@ -735,8 +735,8 @@ void Resource::GrantGear(Creature *c, rID xID, bool doRanged)
                 if (!it)
                   continue;
                 while (!(it->IFlags & IF_CURSED) && it->ItemLevel() < min_lev &&
-                        it->GetInherantPlus() < 5) 
-                  it->SetInherantPlus(it->GetInherantPlus() + 1);
+                        it->GetInherentPlus() < 5) 
+                  it->SetInherentPlus(it->GetInherentPlus() + 1);
               } 
             else if (iID == unID)
               ;
@@ -764,7 +764,7 @@ void Resource::GrantGear(Creature *c, rID xID, bool doRanged)
               continue;
 
             plus = a->u.eq.Spec;
-            it->MakeMagical(eID, it->GetInherantPlus() + plus);
+            it->MakeMagical(eID, it->GetInherentPlus() + plus);
             it->SetQuantity(a->u.eq.Amount.Roll());
             if (a->u.eq.Flags & GF_CURSED)
               it->IFlags |= IF_CURSED;

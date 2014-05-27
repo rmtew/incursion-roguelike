@@ -2128,7 +2128,7 @@ int32 Item::getShopCost(Creature *Buyer, Creature *Seller) {
     plusPriced = false;
     cost = TITEM(iID)->Cost;
     if (TITEM(iID)->GetList(ITEM_COST,(rID*)priceList,10))
-      { cost = priceList[GetInherantPlus()] * 100L; 
+      { cost = priceList[GetInherentPlus()] * 100L; 
         plusPriced = true; }
     else if (isType(T_BOOK))
       {
@@ -2150,10 +2150,10 @@ int32 Item::getShopCost(Creature *Buyer, Creature *Seller) {
       }
 
 
-    if (eID || (GetInherantPlus() && !plusPriced))
+    if (eID || (GetInherentPlus() && !plusPriced))
       {
         if (eID && TEFF(eID)->GetList(ITEM_COST,(rID*)priceList,10))
-          cost += priceList[GetInherantPlus()] * 100;
+          cost += priceList[GetInherentPlus()] * 100;
         else {
           double defCost[] = {
             500, 1000, 2000, 3000, 4000, 6000, 8000,

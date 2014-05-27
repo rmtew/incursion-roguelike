@@ -498,7 +498,7 @@ Wizard Spell "Erase" : EA_GENERIC
       if (GetHandle(ETarget) != NULL_OBJ && ETarget->isType(T_ITEM))
         {
           if (ETarget->isType(T_SCROLL) || ETarget->isType(T_TOME))
-            { ETarget->ieID = (rID)0; ETarget->SetInherantPlus(0); }
+            { ETarget->ieID = (rID)0; ETarget->SetInherentPlus(0); }
           else if (ETarget->isType(T_BOOK))
             ETarget->ChangeIID($"blank spellbook");
           else
@@ -1007,7 +1007,7 @@ Wizard / Scroll Spell "Force Bolt" : EA_BLAST
       victim back, and if the victim fails the Reflex save for half
       damage, they are also stunned for one round. Force bolt is a
       weapon-like spell and requires an attack roll to hit. This
-      spell has an inherant +6 bonus to its save DC."; 
+      spell has an inherent +6 bonus to its save DC."; 
     On Event MSG_BLASTNAME "force bolt"; }
       
 
@@ -3353,8 +3353,8 @@ Monster "spectral hand;mon" : MA_UNDEAD, MA_CONSTRUCT, MA_FORCE_D4
         A_DEX, EActor->GetStatiObj(SUMMONED)->GetAttr(A_INT)-10,NULL_ID);
       },
     MSG_SPECABIL
-      "It has an inherant bonus to its attack roll equal to its
-        creator's caster level, and an inherant modifier to its
+      "It has an inherent bonus to its attack roll equal to its
+        creator's caster level, and an inherent modifier to its
         Dexterity making that attribute equal to it's creator's
         Intelligence.",
     MSG_SPE1DESC
@@ -7700,7 +7700,7 @@ Wizard / Scroll Spell "Power Word: Stop" : EA_INFLICT
     Purpose: EP_CURSE; xval: TRAP_EVENT; yval: PRE(EV_MOVE);
     Flags: EF_SOUND, EF_BLIND_PROMPT; sval: NOSAVE;
     Desc: "Power words are ancient pieces of the sorcerous truespeak
-      from the dawn times of the world. They are inherantly unknowable,
+      from the dawn times of the world. They are inherently unknowable,
       and creatures who hear one spoken irresistably forget the exact
       structure of its syllables immediately after hearing it. They
       can not be recorded, transcribed or preverved by any mortal
@@ -7762,7 +7762,7 @@ Wizard / Priest / Scroll Spell "Lower Resistance" : EA_INFLICT
     xval: ADJUST_DMG; yval: A_MR; Purpose: EP_CURSE;
     Flags: EF_ALLIES_IMMUNE;
     Desc: "This dwenomer strips outsiders, creatures of the Underdark
-      and powerful supernatural horrors like hags of their inherant
+      and powerful supernatural horrors like hags of their inherent
       resistance to magic. The spell must first penetrate that resistance
       to take effect, but once it does no saving throw applies and the
       creature's Magic Resistance is halved; this is a damage penalty.
@@ -8760,7 +8760,7 @@ and EA_GRANT {
 
 Wizard / Scroll Spell "Fiendform" : EA_POLYMORPH
   { SC_THA; Base: SP_HARD; Cost: 20; Level: 6; Flags: EF_CANCEL, EF_EVIL;
-    Desc: "By casting this inherantly evil spell, you polymorph yourself
+    Desc: "By casting this inherently evil spell, you polymorph yourself
       into one of the following six forms, randomly chosen: osyluth,
       barbazu, hamatula, babau, jovoc or palrethee."; Purpose: EP_BUFF;
       On Event PRE(EV_MAGIC_HIT) {
@@ -8980,7 +8980,7 @@ Wizard / Scroll Spell "Power Word: Stun" : EA_INFLICT
     Purpose: EP_CURSE; xval: STUNNED;
     Flags: EF_SOUND, EF_BLIND_PROMPT; sval: NOSAVE;
     Desc: "Power words are ancient pieces of the sorcerous truespeak
-      from the dawn times of the world. They are inherantly unknowable,
+      from the dawn times of the world. They are inherently unknowable,
       and creatures who hear one spoken irresistably forget the exact
       structure of its syllables immediately after hearing it. They
       can not be recorded, transcribed or preverved by any mortal
@@ -9105,7 +9105,7 @@ Wizard / Priest Spell "True Seeing" : EA_INFLICT
   { 
     SC_DIV; IS_A_BUFF(COST_6X); Level: 6;
     Desc: "This august divination shatters all deceptions, causing
-      the caster to inherantly see through every spell of the
+      the caster to inherently see through every spell of the
       Illusion school -- the effect is automatic and uncontested,
       unless the creator of the illusion has a <9>false vision<1>
       spell active. Shadow creatures and effects still affect the 
@@ -9252,7 +9252,7 @@ and EA_INFLICT
       damage from blunt attacks, fire or electricity. Cold
       damage does you no harm, but may <9>slow<1> you if you
       fail a saving throw. Oozes and aquatic creature are
-      inherantly friendly to you, along with water elementals,
+      inherently friendly to you, along with water elementals,
       and you can breathe water naturally.";
       
       

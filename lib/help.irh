@@ -261,7 +261,7 @@ Text "help::intro"
 	 As as result, Incursion runs very, very slowly	at this stage in its development. 
 	 Now that the game engine is reasonably complete, greater effort will be placed 
 	 toward making it run faster.\n
-	 __There's nothing <14>inherantly<6> slow about Incursion's structure, it's
+	 __There's nothing <14>inherently<6> slow about Incursion's structure, it's
 	 just that code was written with an eye to clarity over speed, and 'lazy
 	 algorithms' make the game nearly unplayable on slower computers. If your
 	 processor speed is below 400 MHz, chances are that the game will become
@@ -467,7 +467,7 @@ Text "help::chargen"
      of your choice, and then adjustments are applied to them based on
      the race you choose. Attributes can be raised in several different
      manners during the game -- every four character levels, you gain
-     a +1 inherant bonus to increase a single attribute as you wish. Your god might
+     a +1 inherent bonus to increase a single attribute as you wish. Your god might
      increase attributes related to his portfolio if you've been a loyal follower, and 
      in the full-release version of Incursion, you
      can train attributes in places in the city, such as the gymnasium
@@ -1424,9 +1424,9 @@ Text "help::adventuring"
          competant but comparatively weak young adventurer and develops through
          experience over time into a very powerful, legendary hero -- provided
          she can stay alive for that long! Incursion differs from many roguelikes
-         in that an Incursion character's inherant abilities are more significant
+         in that an Incursion character's inherent abilities are more significant
          to her overall power level than her magical equipment, which is more
-         transient. A character's overall inherant competance is reffered to as 
+         transient. A character's overall inherent competance is reffered to as 
          her <9>level<1>, which begins at 1 and increases over time.\n
          __Creating an Incursion character has already been discussed in the
          previous chapter. Once a character has been created, he is placed into 
@@ -1577,7 +1577,7 @@ Text "help::adventuring"
         by their Size: Small races have a base 75~, while Medium races have a base
         100~ movement. Dwarves are the exception, having the base movement of a 
         Small race even though they are Medium-sized. Barbarians and monks both
-        gain inherant increases to their movement rate; there are also spells and
+        gain inherent increases to their movement rate; there are also spells and
         magical items that affect movement rate, and encumbrance and fatigue can
         both lessen it. The exact manner in which your current movement rate has
         been calculated is shown on the character sheet, as with all other
@@ -1976,27 +1976,27 @@ Text "help::adventuring"
          as they are worn. Most of these forms of magic grant a magic bonus
          to an attribute, and are both impermanent and external to the
          character. For this reason (and also because they stack with magic
-         bonuses), it's desirable to seek out inherant bonuses to attributes.
-         Inherant bonuses represent a growth to the character's internal
-         capabilities; once gained, they are permanent and nonmagical. Inherant
+         bonuses), it's desirable to seek out inherent bonuses to attributes.
+         Inherent bonuses represent a growth to the character's internal
+         capabilities; once gained, they are permanent and nonmagical. Inherent
          attribute bonuses cannot be dispelled or stolen by circumstance.\n
-         __There are several ways to gain inherant bonuses. Rare magical tomes
+         __There are several ways to gain inherent bonuses. Rare magical tomes
          might grant them when read, barbarians gain them just for being
          barbarians and advancing in level, and orcs can sometimes gain them
          by devouring the bodies of slain foes. However, the most reliable
          way to gain them is simply through adventuring and development -- as
          a character performs actions which strain and push her attributes,
-         she works her way toward higher inherant bonuses. Unlike most types
-         of bonuses, inherant bonuses stack with each other -- a single character
-         can gain a large inherant bonus from a mixture of training, tomes,
+         she works her way toward higher inherent bonuses. Unlike most types
+         of bonuses, inherent bonuses stack with each other -- a single character
+         can gain a large inherent bonus from a mixture of training, tomes,
          class features and eating monster corpses. However, there is an
-         absolute limit on how high the inherant bonus to a single attribute can
+         absolute limit on how high the inherent bonus to a single attribute can
          reach; this limit is +5 for most characters, and +8 for humans.\n\n
          
          <9>Percentile Attributes<1>\n
          __To represent the continued pushing and development of an attribute,
          characters have a percentile score indicating how close they are to
-         gaining their next inherant +1 to that attribute. This percentile score
+         gaining their next inherent +1 to that attribute. This percentile score
          is listed immediately after the attribute on the character sheet. Actions
          which challenge and leverage the attribute increase this percentile score
          over time. Conversely, it decreases with the passage of time -- every day
@@ -2011,7 +2011,7 @@ Text "help::adventuring"
          These skills are Athletics, Perform, Concentration and the highest
          Knowledge skill the character has. The character's skill rating is
          subtracted from 100 to determine how many percentile points the
-         character must gain in order to merit the gaining of a +1 inherant bonus
+         character must gain in order to merit the gaining of a +1 inherent bonus
          to the attribute in question.\n
          __This is described in greater detail in the writeup to the Athletics
          skill.\n\n
@@ -2027,7 +2027,7 @@ Text "help::adventuring"
          must seek out other sources to increase her Dexterity. Many actions have
          a much lower minimum than this, so characters need diverse activities
          that depend on a given attribute rather than just one activity to gain
-         inherant bonuses reliably. Most activities that can be repeated over
+         inherent bonuses reliably. Most activities that can be repeated over
          and over again have low maximum point gains, and some activities require
          that they character be at risk (i.e., be near hostile monsters) when she
          performs them, otherwise they merit no gain.\n\n
@@ -2164,7 +2164,7 @@ Text "help::adventuring"
          metaphysical forces with direct supernatural effects on the world.
          A magical sword wounds Chaotic creatures especially deeply, a warding
          circle might keep out only Evil creatures, and so forth.\n
-         __Certain spells and magical items are inherantly good, evil, lawful
+         __Certain spells and magical items are inherently good, evil, lawful
          or chaotic. Using items of this nature that conflict with a character's
          alignment will inevitably draw that character toward the item's 
          alignment, even if the item is used in a manner that otherwise reflects
@@ -2189,7 +2189,7 @@ Text "help::adventuring"
          characters benefit from unholy ones, because good character most
          typically fight against evil monsters, while evil character most
          typically also fight evil monsters, or fight amongst themselves.\n
-         __A good alignment is strengthened by killing inherantly evil creatures
+         __A good alignment is strengthened by killing inherently evil creatures
          such as demons and devils, healing neutral creatures and giving gold to
          the needy. The following acts contravene a good alignment:\n
          __<3>*<1> Good characters must not hurt or kill non-hostile creatures, even
@@ -2301,8 +2301,8 @@ Text "help::adventuring"
          __Likewise, to goblinoids, only other goblinoids are considered people;
          the lizardfolk, however, recognize all thinking beings as people, just
          as lawful good characters must.\n
-         __Inherantly evil creatures -- fiends, energy-draining undead and so
-         forth -- are recognized as inherantly destructive to all societies, and
+         __Inherently evil creatures -- fiends, energy-draining undead and so
+         forth -- are recognized as inherently destructive to all societies, and
          no society (other then devils) awards such beings protection under
          law.\n\n
          
@@ -2337,12 +2337,12 @@ Text "help::adventuring"
          <9>CHANGING ALIGNMENT<1>\n
          __When you desire to change alignment and have stated a new alignment,
          you must begin working up a tally of acts in favour of that alignment.
-         The presence of inherantly aligned creatures in Incursion is especially
-         valuable for this purpose. Killing an inherantly aligned creature such
+         The presence of inherently aligned creatures in Incursion is especially
+         valuable for this purpose. Killing an inherently aligned creature such
          as a demon or modron when you desire the opposite alignment will move
          you closer to your desired alignment. Killing any hostile creature of 
          opposing alignment is useful in moving toward a new alignment, but 
-         risking your life to kill an inherantly aligned creature is far more 
+         risking your life to kill an inherently aligned creature is far more 
          valuable than doing so to kill a mortal being whose alignment simply
          happens to oppose your own.\n\n
                   
@@ -3752,7 +3752,7 @@ Text "help::magic"
      cost of metamagicked spells. The number of metamagic levels that each feat adds
      are shown in the following table:<15>
      \n__Metamagic Feat_________Lev__Metamagic Feat_________Lev<1>
-     \n__Amplify Spell___________2___Inherant Spell__________1
+     \n__Amplify Spell___________2___Inherent Spell__________1
      \n__Augment Summoning_______2___Maximize Spell__________3
      \n__Bind Spell______________1___Persistant Spell________3
      \n__Consecrate Spell________2___Project Spell___________2
@@ -4295,8 +4295,8 @@ Text "help::magic"
      read once, and vanish once read. However, they are much treasured
      because they grant permanent benefit to a character in the form
      of innate abilities, free experience points, or most commonly
-     inherant bonuses to an attribute. Any given attribute cannot have
-     an inherant bonus exceeding +5, regardless of the number of tomes
+     inherent bonuses to an attribute. Any given attribute cannot have
+     an inherent bonus exceeding +5, regardless of the number of tomes
      read -- unless the reader is human, in which case the maximum
      bonus rises to +8.\n\n
      

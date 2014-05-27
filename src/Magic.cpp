@@ -3819,7 +3819,7 @@ EvReturn Item::ZapWand(EventInfo &e)
     if (Supercharge) {
       IPrint("It was a <str> shot!",
         Supercharge == 1 ? "good" : "great");
-      e.EItem->SetInherantPlus(e.EItem->GetInherantPlus() + Supercharge);
+      e.EItem->SetInherentPlus(e.EItem->GetInherentPlus() + Supercharge);
       }
 
     csr = e.EActor->Counterspell(e,NULL);
@@ -3828,7 +3828,7 @@ EvReturn Item::ZapWand(EventInfo &e)
     else
       r = DONE;
       
-    e.EItem->SetInherantPlus(e.EItem->GetInherantPlus() - Supercharge);
+    e.EItem->SetInherentPlus(e.EItem->GetInherentPlus() - Supercharge);
     
     //if (!Charges) { IPrint("The worn-out wand disappears!"); Remove(true); }
 

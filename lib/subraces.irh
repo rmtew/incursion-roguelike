@@ -68,7 +68,7 @@ Race "Gnome, Deep;race" : $"gnome;race"
       __*_<7>Racial Attributes<2> -- Deep Gnomes are not as clever,
       innovative or soulful as their surface brothers. They are smaller, 
       weaker, quicker and decidedly less forceful of personality.\n
-      __*_<7>Magic Resistance<2> -- Deep Gnomes have an inherant 55~
+      __*_<7>Magic Resistance<2> -- Deep Gnomes have an inherent 55~
       resistance to magic and gain an additional 5~ per level. They also
       have a natural +2 bonus to all saving throws.\n
       __*_<7>Racially Skilled<2> -- Deep Gnomes gain a +2 racial bonus to
@@ -308,7 +308,7 @@ Race "Elf, Gray;race" : $"elf;race"
       but frail husks. Gray Elves lose a point of Constitution at every
       even level and a point of Strength at every odd level (starting at
       3rd). Starting at 10th level they lose a point of each with every
-      advancement. This loss is an inherant penalty and can only be
+      advancement. This loss is an inherent penalty and can only be
       addressed directly by magical tomes or other truly supernatural
       powers.\n
       __*_<7>Magical Nature<2> -- Representing the pinnacle of magical
@@ -355,7 +355,7 @@ Race "Elf, Gray;race" : $"elf;race"
       personal experience and less to do with flat, inborn powers. 
       They have a low 25~ natural magic resistance associated with their
       gray elven physiology and gain a +5~
-      inherant bonus for every character level gained.\n
+      inherent bonus for every character level gained.\n
       __*_<7>Inner Grief<2> -- Even more maudlin than normal elves,
       gray elves feel the touch of Maeve in their daily lives and racial
       destiny. Her aegis seems inescapable, and gray elves, with their

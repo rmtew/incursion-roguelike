@@ -27,7 +27,7 @@
 
 /* Item Level Precedents:       Item Level        Bonus    Item Cost                  
    Generic Stat Enhance Item    PLUS_3PER1        Plus     Level Chart x10
-   Generic Inherant Bonus Tome  PLUS_3PER1_ADD3   Plus     Level Chart x20
+   Generic Inherent Bonus Tome  PLUS_3PER1_ADD3   Plus     Level Chart x20
    Generic Elemental Resist     PLUS_2PER1        Plus x3  Level Chart x5
    Generic Elemental Immunity   15                --       Level Chart x15
    Generic Skill Enhancer       PLUS_2PER1        Plus     Level Chart x3   
@@ -47,7 +47,7 @@ AI_TOME Effect "Manual of Gainful Exercise" : EA_GENERIC
       if (EActor->HasAbility(CA_INHERANT_POTENTIAL))
         e.vDmg += 1d2;
       */
-      EActor->GainInherantBonus(A_STR,e.vDmg,true);
+      EActor->GainInherentBonus(A_STR,e.vDmg,true);
       EActor->IdentByTrial(EItem);
       EItem->Remove(true);
       EActor->IPrint("The tome vanishes!");
@@ -66,7 +66,7 @@ AI_TOME Effect "Treatise of Efficious Celerity" : EA_GENERIC
       if (EActor->HasAbility(CA_INHERANT_POTENTIAL))
         e.vDmg += 1d2;
       */
-      EActor->GainInherantBonus(A_DEX,e.vDmg,true);
+      EActor->GainInherentBonus(A_DEX,e.vDmg,true);
       EActor->IdentByTrial(EItem);
       EItem->Remove(true);
       EActor->IPrint("The tome vanishes!");
@@ -85,14 +85,14 @@ AI_TOME Effect "Libram of Bodily Health" : EA_GENERIC
       if (EActor->HasAbility(CA_INHERANT_POTENTIAL))
         e.vDmg += 1d2;
       */
-      EActor->GainInherantBonus(A_CON,e.vDmg,true);
+      EActor->GainInherentBonus(A_CON,e.vDmg,true);
       EActor->IdentByTrial(EItem);
       EItem->Remove(true);
       EActor->IPrint("The tome vanishes!");
       return DONE;
       };
 		Desc: "This libram describes an esoteric process by which a
-		  person can acquire supernatural, inherant toughness and
+		  person can acquire supernatural, inherent toughness and
 			health.";
   }
 
@@ -104,7 +104,7 @@ AI_TOME Effect "Clear Thought" : EA_GENERIC
       if (EActor->HasAbility(CA_INHERANT_POTENTIAL))
         e.vDmg += 1d2;
       */
-      EActor->GainInherantBonus(A_INT,e.vDmg,true);
+      EActor->GainInherentBonus(A_INT,e.vDmg,true);
       EActor->IdentByTrial(EItem);
       EItem->Remove(true);
       EActor->IPrint("The tome vanishes!");
@@ -123,7 +123,7 @@ AI_TOME Effect "Treatise of Revealed Enlightenment" : EA_GENERIC
       if (EActor->HasAbility(CA_INHERANT_POTENTIAL))
         e.vDmg += 1d2;
       */
-      EActor->GainInherantBonus(A_WIS,e.vDmg,true);
+      EActor->GainInherentBonus(A_WIS,e.vDmg,true);
       EActor->IdentByTrial(EItem);
       EItem->Remove(true);
       EActor->IPrint("The tome vanishes!");
@@ -142,7 +142,7 @@ AI_TOME Effect "Leadership and Influence" : EA_GENERIC
       if (EActor->HasAbility(CA_INHERANT_POTENTIAL))
         e.vDmg += 1d2;
       */
-      EActor->GainInherantBonus(A_CHA,e.vDmg,true);
+      EActor->GainInherentBonus(A_CHA,e.vDmg,true);
       EActor->IdentByTrial(EItem);
       EItem->Remove(true);
       EActor->IPrint("The tome vanishes!");
@@ -161,7 +161,7 @@ AI_TOME Effect "Manual of Fortuitous Methodology" : EA_GENERIC
       if (EActor->HasAbility(CA_INHERANT_POTENTIAL))
         e.vDmg += 1d2;
       */
-      EActor->GainInherantBonus(A_LUC,e.vDmg,true);
+      EActor->GainInherentBonus(A_LUC,e.vDmg,true);
       EActor->IdentByTrial(EItem);
       EItem->Remove(true);
       EActor->IPrint("The tome vanishes!");
@@ -818,7 +818,7 @@ AI_SCROLL Effect "Enchant Armour" : EA_GENERIC
           EActor->MakeKnown(KN_CURSE);
           return DONE;
         }
-      if (Ar->GetInherantPlus() >= 5 ||
+      if (Ar->GetInherentPlus() >= 5 ||
             Ar->ItemLevel() > lev)
         {
           EActor->IDPrint("Your armour glows white, but the glow soon fades.",
@@ -828,7 +828,7 @@ AI_SCROLL Effect "Enchant Armour" : EA_GENERIC
         }
       EActor->IDPrint("Your armour glows white!",
                       "The <hObj>'s armour glows white!", EActor);
-      Ar->SetInherantPlus(Ar->GetInherantPlus()+1);
+      Ar->SetInherentPlus(Ar->GetInherentPlus()+1);
       return DONE;
       };
   }      
@@ -1424,7 +1424,7 @@ AI_POTION Effect "Faerie;potion" : EA_INFLICT
   {
     xval: MANIFEST; Level: 4;
     Desc: "A potion of faerie, distilled from the blood of fae creatures,
-      duplicates the inherant elven ability of manifestation, enhancing
+      duplicates the inherent elven ability of manifestation, enhancing
       the imbiber's Charisma and allowing her to exist on all planes at
       once for 3d6 turns.";
     Flags: EF_AUTOID;
@@ -1759,7 +1759,7 @@ AI_EYES Effect "Precision;eyes" : EA_GRANT
  *   level 3 wands put together, and thus a much "better" item.
  *   "Suboptimal" is fine for magical items, because A) you might
  *   never find the optimal choice, and B) you don't sacrifice
- *   anything inherant to your character by throwing away a sub-
+ *   anything inherent to your character by throwing away a sub-
  *   optimal wand (or any other item).
  * Eventually, once we have a better idea how they influence game-
  *   play, I'll ad EF_GOOD and EF_GREAT to these, so that lucky
@@ -2602,7 +2602,7 @@ AI_WAND Effect "Negation" : EA_INFLICT
     Flags: EF_NEEDS_PLUS, EF_HARDSAVE4, EF_PERSISTANT;  
     Purpose: EP_CURSE; sval: FORT;
     Desc: "When the beam from this baleful wand strikes a
-      creature, all the magic inherant to that creature is
+      creature, all the magic inherent to that creature is
       suppressed for a day unless they succeed in a Fortitude
       save. This includes innate spell-like abilities, special
       powers like a lantern archon's light ray or a vrock's
@@ -3125,7 +3125,7 @@ AI_STAFF Effect "the Spider" : EA_GRANT
       swarm<7>; it also sustains its wielder's Dexterity. If its
       wielder meets the above requirement and is also a drow, it
       grants a +2 bonus to Poison Use and a +2 bonus to saving
-      throws against poison, as well as making spiders inherantly
+      throws against poison, as well as making spiders inherently
       friendly to the wielder.";
   }
 and EA_GRANT
@@ -3930,38 +3930,38 @@ AI_BRACERS Effect "Springblade Bracers" : EA_GENERIC
       switch (type)
         {
           case 1:
-            nhBlade1->SetInherantPlus(2);
+            nhBlade1->SetInherentPlus(2);
             nhBlade1->AddQuality(WQ_KEEN);      
-            nhBlade2->SetInherantPlus(1);
+            nhBlade2->SetInherentPlus(1);
             nhBlade2->AddQuality(WQ_KEEN);
            break;
           case 2:
-            nhBlade1->SetInherantPlus(3);
-            nhBlade2->SetInherantPlus(3);
+            nhBlade1->SetInherentPlus(3);
+            nhBlade2->SetInherentPlus(3);
            break;
           case 3:
-            nhBlade1->SetInherantPlus(2);
+            nhBlade1->SetInherentPlus(2);
             nhBlade1->AddQuality(WQ_FLAMING);      
-            nhBlade2->SetInherantPlus(2);
+            nhBlade2->SetInherentPlus(2);
             nhBlade2->AddQuality(WQ_FROST);
            break;
           case 4:
-            nhBlade1->SetInherantPlus(2);
+            nhBlade1->SetInherentPlus(2);
             nhBlade1->AddQuality(WQ_SHOCKING);      
-            nhBlade2->SetInherantPlus(1);
+            nhBlade2->SetInherentPlus(1);
             nhBlade2->AddQuality(WQ_PAIN);
            break;
           case 5:
-            nhBlade1->SetInherantPlus(1);
+            nhBlade1->SetInherentPlus(1);
             nhBlade1->AddQuality(WQ_VENOM);   
             nhBlade1->GainPermStati(POISONED,NULL,SS_MISC,
                          0,0, $"lich dust");   
-            nhBlade2->SetInherantPlus(3);
+            nhBlade2->SetInherentPlus(3);
            break;
           case 6:
-            nhBlade1->SetInherantPlus(1);
+            nhBlade1->SetInherentPlus(1);
             nhBlade1->AddQuality(WQ_WEAKENING);      
-            nhBlade2->SetInherantPlus(1);
+            nhBlade2->SetInherentPlus(1);
             nhBlade2->AddQuality(WQ_NUMBING);
            break;
         }      
@@ -4042,7 +4042,7 @@ AI_GAUNTLETS Effect "Lightning;gauntlets" : EA_GRANT
         return NOTHING;
       EActor->IDPrint("Your gauntlets crackle!",
                       "The <hObj>'s gauntlets crackle!",EActor);
-      ThrowDmg(EV_DAMAGE,AD_ELEC,(gl->GetInherantPlus())d4,"lightning gauntlets",EActor,EVictim);
+      ThrowDmg(EV_DAMAGE,AD_ELEC,(gl->GetInherentPlus())d4,"lightning gauntlets",EActor,EVictim);
       EActor->IdentByTrial(gl);
       }; 
     Desc: "When you make a natural attack (e.g., a punch, a kick, a claw
@@ -5631,14 +5631,14 @@ AI_ROD Effect "Rod of Lordly Might" : EA_GENERIC
             EActor->RemoveEffStati($"climbing pole;RoLM");
             EItem->ChangeIID($"rod");
             EItem->PurgeAllQualities();
-            EItem->SetInherantPlus(1);
+            EItem->SetInherentPlus(1);
             EActor->CalcValues();
            break;
           case 5:
             EActor->RemoveEffStati($"climbing pole;RoLM");
             EItem->ChangeIID($"light mace");
             EItem->PurgeAllQualities();
-            EItem->SetInherantPlus(2);
+            EItem->SetInherentPlus(2);
             EActor->CalcValues();
            break;
           case 6:
@@ -5646,34 +5646,34 @@ AI_ROD Effect "Rod of Lordly Might" : EA_GENERIC
             EItem->ChangeIID($"long sword");
             EItem->PurgeAllQualities();
             EItem->AddQuality(WQ_FLAMING);
-            EItem->SetInherantPlus(2);
+            EItem->SetInherentPlus(2);
             EActor->CalcValues();
            break;
           case 7:
             EActor->RemoveEffStati($"climbing pole;RoLM");
             EItem->ChangeIID($"battleaxe");
             EItem->PurgeAllQualities();
-            EItem->SetInherantPlus(4);
+            EItem->SetInherentPlus(4);
             EActor->CalcValues();
            break;
           case 8:
             EActor->RemoveEffStati($"climbing pole;RoLM");
             EItem->ChangeIID($"shortspear");
             EItem->PurgeAllQualities();
-            EItem->SetInherantPlus(3);
+            EItem->SetInherentPlus(3);
             EActor->CalcValues();
            break;          
           case 9:
             EActor->RemoveEffStati($"climbing pole;RoLM");
             EItem->ChangeIID($"longspear");
             EItem->PurgeAllQualities();
-            EItem->SetInherantPlus(3);
+            EItem->SetInherentPlus(3);
             EActor->CalcValues();
            break;                
           case 10:
             EItem->ChangeIID($"climbing pole;RoLM");
             EItem->PurgeAllQualities();
-            EItem->SetInherantPlus(0);
+            EItem->SetInherentPlus(0);
             EActor->GainPermStati(SKILL_BONUS,EItem,SS_MISC,SK_CLIMB,10,
                $"climbing pole;RoLM",12);           
             EActor->CalcValues();
@@ -5993,14 +5993,14 @@ and EA_GENERIC
   { On Event EV_MAGIC_HIT {
       if (!e.isActivation)
         return NOTHING;
-      if (EItem->GetInherantPlus() <= 0)
+      if (EItem->GetInherentPlus() <= 0)
         {
           EActor->IPrint("There are no wishes left.");
           return DONE;
         }
      
       /* Consume one Plus permanently. */
-      EItem->SetInherantPlus(EItem->GetInherantPlus() - 1);
+      EItem->SetInherentPlus(EItem->GetInherentPlus() - 1);
       
       /* Awkward kludge so the plus goes down without having to wield
          and unwield the damn sword. */
@@ -6040,7 +6040,7 @@ AI_WEAPON Effect "Holy Avenger" : EA_GRANT
            EActor->ItemPrereq(MTYPE_VAL + MA_LAWFUL,1,30) &&
            EActor->ItemPrereq(MTYPE_VAL + MA_GOOD,1,30) )
         {
-          EItem->SetInherantPlus(5);
+          EItem->SetInherentPlus(5);
           EItem->PurgeAllQualities();
           EItem->AddQuality(WQ_HOLY);
           EItem->AddQuality(WQ_SMITING);
@@ -6051,7 +6051,7 @@ AI_WEAPON Effect "Holy Avenger" : EA_GRANT
         }
       else
         {
-          EItem->SetInherantPlus(2);
+          EItem->SetInherentPlus(2);
           EItem->PurgeAllQualities();
           EItem->AddQuality(WQ_HOLY);
           EItem->AddQuality(IQ_ADAMANT);
@@ -6066,7 +6066,7 @@ AI_WEAPON Effect "Holy Avenger" : EA_GRANT
         return NOTHING;
       
       /* Dispel only in a paladin's hands. */
-      if (EItem->GetInherantPlus() < 5)
+      if (EItem->GetInherentPlus() < 5)
         return NOTHING;
       
       /* Don't dispel corpses. */
@@ -6201,15 +6201,15 @@ AI_WEAPON Effect "Hornblade" : EA_GENERIC
         {
           case 1:
             EItem->ChangeIID($"small hornblade");
-            EItem->SetInherantPlus(1);
+            EItem->SetInherentPlus(1);
            break; 
           case 2:
             EItem->ChangeIID($"medium hornblade");
-            EItem->SetInherantPlus(2);
+            EItem->SetInherentPlus(2);
            break; 
           case 3:
             EItem->ChangeIID($"large hornblade");
-            EItem->SetInherantPlus(3);
+            EItem->SetInherentPlus(3);
            break; 
         }
       return NOTHING;
@@ -6252,7 +6252,7 @@ AI_WEAPON Effect "Dwarven Thrower" : EA_GRANT
       if (EActor->ItemPrereq(MTYPE_VAL + MA_DWARF,1,25))
         {
           EItem->PurgeAllQualities();
-          EItem->SetInherantPlus(4);
+          EItem->SetInherentPlus(4);
           /*EItem->AddQuality(WQ_THROWING);*/
           EItem->AddQuality(WQ_RETURNING);
           EItem->AddQuality(WQ_IMPACT);
@@ -6261,7 +6261,7 @@ AI_WEAPON Effect "Dwarven Thrower" : EA_GRANT
       else
         {
           EItem->PurgeAllQualities();
-          EItem->SetInherantPlus(2);
+          EItem->SetInherentPlus(2);
           /*EItem->AddQuality(WQ_THROWING);*/
           EItem->AddQuality(WQ_BANE);
           return DONE;
@@ -6422,7 +6422,7 @@ AI_WEAPON Effect "Bloodspear" : EA_GRANT
       if (EActor->ItemPrereq(MTYPE_VAL + MA_ORC,1,25))
         {
           EItem->PurgeAllQualities();
-          EItem->SetInherantPlus(+4);
+          EItem->SetInherentPlus(+4);
           EItem->AddQuality(WQ_KEEN);
           EItem->AddQuality(WQ_WOUNDING);
           EItem->AddQuality(WQ_WEAKENING);
@@ -6434,14 +6434,14 @@ AI_WEAPON Effect "Bloodspear" : EA_GRANT
                EActor->isMType(MA_KOBOLD))
         {
           EItem->PurgeAllQualities();
-          EItem->SetInherantPlus(+3);
+          EItem->SetInherentPlus(+3);
           EItem->AddQuality(WQ_WOUNDING);
           EItem->AddQuality(WQ_BANE);
         }
       else
         {
           EItem->PurgeAllQualities();
-          EItem->SetInherantPlus(+2);
+          EItem->SetInherentPlus(+2);
         }
       return NOTHING;
       },
@@ -6532,7 +6532,7 @@ AI_WEAPON Effect "Sword of the Planes" : EA_GENERIC
       demons, devils or celestials, the sword has a bonus of +4."; 
     On Event EITEM(PRE(EV_WATTACK)) {
       int16 oldBonus, newBonus;
-      oldBonus = EItem->GetInherantPlus();
+      oldBonus = EItem->GetInherentPlus();
       newBonus = 1;
       if (EVictim->isMType(MA_DEMON) ||
           EVictim->isMType(MA_DEVIL) ||
@@ -6555,20 +6555,20 @@ AI_WEAPON Effect "Sword of the Planes" : EA_GENERIC
           /* This is a recalc EVERY SINGLE TIME you hit an
              outsider. I don't like that performance-wise,
              but it doesn't seem avoidable. */
-          EItem->SetInherantPlus(newBonus);
+          EItem->SetInherentPlus(newBonus);
           EActor->CalcValues();
         }
       return NOTHING;
       },
     EITEM(POST(EV_WATTACK)), EITEM(EV_WIELD), EITEM(EV_REMOVE) {
       int16 oldBonus2, newBonus2;
-      oldBonus2 = EItem->GetInherantPlus();
+      oldBonus2 = EItem->GetInherentPlus();
       newBonus2 = 1;
       if (EActor->HasStati(PHASED))
         newBonus2 = max(newBonus2,3);
       if (oldBonus2 != newBonus2)
         {
-          EItem->SetInherantPlus(newBonus2);
+          EItem->SetInherentPlus(newBonus2);
           EActor->CalcValues();
         }
       return NOTHING;
@@ -6927,20 +6927,20 @@ AI_WEAPON Effect "Oathbow" : EA_GRANT
     On Event EV_WIELD {
       if (EActor->ItemPrereq(MTYPE_VAL + MA_ELF,1,25))
         {
-          EItem->SetInherantPlus(3);
+          EItem->SetInherentPlus(3);
           EItem->AddQuality(WQ_THUNDERING);
           EItem->AddQuality(WQ_ACCURACY);
         }
       else
         {
-          EItem->SetInherantPlus(2);
+          EItem->SetInherentPlus(2);
           EItem->RemoveQuality(WQ_THUNDERING);
           EItem->RemoveQuality(WQ_ACCURACY);
         }
       return NOTHING;
       },
     EV_REMOVE {
-      EItem->SetInherantPlus(2);
+      EItem->SetInherentPlus(2);
       EItem->RemoveQuality(WQ_THUNDERING);
       EItem->RemoveQuality(WQ_ACCURACY);
       },

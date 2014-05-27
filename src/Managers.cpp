@@ -280,7 +280,7 @@ ProcessSpells:
                     if (p->HasMM(MM_FOCUS,i)) myline +=  " Fc";/* Focused Spell */
                     if (p->HasMM(MM_FORTIFY,i)) myline +=  " Fr";/* Fortify Spell */
                     if (p->HasMM(MM_HEIGHTEN,i)) myline +=  " He";/* Heighten Spell */
-                    if (p->HasMM(MM_INHERANT,i)) myline +=  " In";/* Inherant Spell */
+                    if (p->HasMM(MM_INHERANT,i)) myline +=  " In";/* Inherent Spell */
                     if (p->HasMM(MM_JUDICIOUS,i)) myline +=  " Ju";/* Judicious Spell */
                     if (p->HasMM(MM_MAXIMIZE,i)) myline +=  " Ma";/* Maximize Spell */
                     if (p->HasMM(MM_PROJECT,i)) myline +=  " Pr";/* Project Spell */

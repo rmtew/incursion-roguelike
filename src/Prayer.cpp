@@ -1540,7 +1540,7 @@ EvReturn Character::IBlessing(EventInfo &e)
     if (!qual)
       goto SkipQuality;
     
-    if (!e.EItem->GetInherantPlus())
+    if (!e.EItem->GetInherentPlus())
       goto SkipQuality;
     
     if (e.EItem->HasQuality(qual))

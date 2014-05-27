@@ -3410,7 +3410,7 @@ Effect "Armour of Darkness" : EA_GRANT
           return ABORT;
         }
       it = CreateItem($"armour of darkness;item");
-      it->SetInherantPlus(4);
+      it->SetInherentPlus(4);
       it->GainTempStati(SUMMONED,EActor,-2,SS_ENCH,0,0,
          $"Armour of Darkness", e.vCasterLev);
       it->AddQuality(IQ_FEATHERLIGHT);
@@ -3508,7 +3508,7 @@ Effect "Bolts of Glory" : EA_GENERIC
       number equal to her caster level or cancelled the
       spell. The bolts inflict 1d8 points of holy damage
       (which only affects evil creatures) per odd caster level,
-      and cause fear in inherantly evil creatures if a Will 
+      and cause fear in inherently evil creatures if a Will 
       saving throw is failed. Hitting a target with a bolt of 
       glory requires a ranged attack roll.";
     On Event META(EV_TURN) {
@@ -3768,7 +3768,7 @@ Priest Spell "Divine Power" : EA_INFLICT
       hit sufficient to raise you Base Attack Bonus to that of a 
       warrior of similar character level, a sacred bonus to 
       Strength sufficient to give you a Strength score of 18 (not 
-      counting any bonuses other than inherant ones) and 2 temporary
+      counting any bonuses other than inherent ones) and 2 temporary
       hit points per caster level. If your Strength is already 18,
       you gain the benefit of the Power Attack feat as well; if you
       already have this feat and 18+ Strength, you gain Knock Prone 
@@ -4366,7 +4366,7 @@ Priest Spell "Dispel Evil" : EA_GENERIC
     Desc: "Casting this spell empowers you to drive away evil influences
       with a touch. It has a tripartate effect:\n
       __<9>1._<1>You gain a +4 deflection bonus to DC against attacks by
-      evil creatures, which increases to +6 against <9>inherantly<1>
+      evil creatures, which increases to +6 against <9>inherently<1>
       evil creatures.\n
       __<9>2._<1>You are empowered with a touch attack which can banish
       evil outsiders of Challenge Rating equal to or lower than your

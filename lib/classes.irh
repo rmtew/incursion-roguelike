@@ -9,7 +9,7 @@ Class "Barbarian"
       humid jungles of Angla Maua. Regardless, the Barbarian is a fierce
       berzerker-warrior, well-trained in brutal combat and wilderness
       survival, but not as accustomed to the subtle intrigues and unseen
-      dangers of the civilized world. Uncivilized inherantly makes the 
+      dangers of the civilized world. Uncivilized inherently makes the 
       barbarian neither stupid nor evil, though of course many members
       of this breed may be both. At his (or her) noblest, the barbarian
       is the champion of a simpler time, when might did not make right,
@@ -93,13 +93,13 @@ Class "Barbarian"
       surviving brutal raids and inhospitable terrain that would break weaker
       men and women. This constant forcing of their bodies to the limit ends
       up tempering them into beings of incredible physical prowess.\n
-      __In game terms, barbarians receive a +1 inherant bonus to either Strength
+      __In game terms, barbarians receive a +1 inherent bonus to either Strength
       or Constitution at every even level, chosen randomly, up to the maximum
-      possible inherant bonus for their race (+5 for most characters, or +8 
+      possible inherent bonus for their race (+5 for most characters, or +8 
       for humans). Barbarians of a Small race naturally improve their Dexterity
       in this manner as well.\n
       __Characters who start play as barbarians have assumed to have lived
-      this lifestyle all their life, and therefore have a +1d2 inherant bonus
+      this lifestyle all their life, and therefore have a +1d2 inherent bonus
       to Strength and Constitution (and Dexterity, for Small barbarians) from
       the very start of their career. (This is balanced by the fact that
       barbarians have the weakest starting equipment of an class.)\n
@@ -137,7 +137,7 @@ Class "Barbarian"
       __*_<7>Starting Benefits<2> -- Barbarians start with a racially-determined 
       heavy weapon, a loincloth and potentially hide armour. Their starting
       equipment is the weakest of any class, which balances the powerful
-      inherant bonus a character who enters play as a barbarian gains.\n\n
+      inherent bonus a character who enters play as a barbarian gains.\n\n
       <10>THE BARBARIAN<15>\n
       __Level__Def__Fort_Refl_Will_Move_Special Abilities<1>\n
       ____1____+0____+2___+0___+0___--__Rage (+4/+20~/+2)   \n
@@ -213,12 +213,12 @@ Class "Barbarian"
       if (EActor->TotalLevel() == 1 &&
           EActor->LevelAs($"barbarian") == 1)
         {
-          EActor->GainInherantBonus(A_STR,1d2,false);
-          EActor->GainInherantBonus(A_CON,1d2,false);
+          EActor->GainInherentBonus(A_STR,1d2,false);
+          EActor->GainInherentBonus(A_CON,1d2,false);
           /*if (EActor->tmID->isMType(MA_KOBOLD) ||
               EActor->tmID->isMType(MA_GNOME) ||
               EActor->tmID->isMType(MA_HALFLING) )
-            EActor->GainInherantBonus(A_DEX,1d2,true);*/
+            EActor->GainInherentBonus(A_DEX,1d2,true);*/
           return NOTHING;
         }
                 
@@ -242,7 +242,7 @@ Class "Barbarian"
                 (5 + EActor->AbilityLevel(CA_INHERANT_POTENTIAL)))
             continue;
             
-          EActor->GainInherantBonus(att,1,true);
+          EActor->GainInherentBonus(att,1,true);
           return NOTHING;
         }
       /* All possible attributes maxed! */
@@ -1289,7 +1289,7 @@ Class "Monk"
       damage with their bare-hand attacks, as shown on the class table below.
       Monks that have a natural attack sequence (i.e., lizardfolk and kobolds)
       can choose to punch and kick as human monks do, or to use their natural
-      attack sequence and gain a +1 inherant bonus to hit and damage using their
+      attack sequence and gain a +1 inherent bonus to hit and damage using their
       natural attacks every even monk level. This choice is made on the tactical
       options panel.\n
       __*_<7>Stun Attack<2> -- A monk's attacks have a chance of stunning their
@@ -1302,7 +1302,7 @@ Class "Monk"
       martial weapons, by 100~ for (10 + Wisdom modifier) rounds. The monk suffers a
       -2 penalty to her attacks while flurrying; this decreases to -1 at 5th level
       and to nothing at 9th.\n
-      __*_<7>Increased Move<2> -- Monks inherantly move faster than other creatures.
+      __*_<7>Increased Move<2> -- Monks inherently move faster than other creatures.
       A monk receives a +20~ bonus to her movement rate at every odd level starting
       at 3rd.\n
       __*_<7>Evasion<2> -- Starting at 1st level, when a monk successfully
@@ -1336,7 +1336,7 @@ Class "Monk"
       body to the extent that she is completely immune to poisons of all kinds.\n
       __*_<7>Abundant Step<2> -- At 11th level, the monk gains the ability to use
       <9>dimension door<2> at will as a spell-like ability.\n
-      __*_<7>Transcendant Sight<2> -- at 12th level, the monk gains the inherant
+      __*_<7>Transcendant Sight<2> -- at 12th level, the monk gains the inherent
       ability to see invisible creatures.\n
       __*_<7>Small Monks<2> -- Starting at 3rd level, monks of races who are
       naturally Small size (kobolds, gnomes and halflings) learn to use the size of
@@ -1553,7 +1553,7 @@ Class "Paladin"
       resolute fortitude isn't the best match for their usual methodology. To
       offset this weakness, the gods grant a special boon to members of the
       Small races who show the courage and resilience to become paladins, granting
-      them a +1 sacred bonus to melee damage and inherant armour at 2nd, 4th, 6th, 
+      them a +1 sacred bonus to melee damage and inherent armour at 2nd, 4th, 6th, 
       9th, 12th and 16th levels.
       __Small races also receive the Defensive Roll ability (from the rogue's
       higher-level special ability list) upon attaining four combined levels of 
@@ -1638,13 +1638,13 @@ Class "Paladin"
             h->AddQuality(WQ_HOLY);
             h->IFlags |= IF_BLESSED;
             given = true;
-            h->SetInherantPlus(max(1,h->GetInherantPlus()));
+            h->SetInherentPlus(max(1,h->GetInherentPlus()));
           }
         }
       if (EActor->isMType(MA_ELF) && !given) {
         for(h=EActor->FirstInv();h;h=EActor->NextInv()) 
           if (h->isType(T_BOW) && !given) {
-            h->SetInherantPlus(max(1,h->GetInherantPlus()));
+            h->SetInherentPlus(max(1,h->GetInherentPlus()));
             h->AddQuality(WQ_HOLY);
             h->IFlags |= IF_BLESSED;
             given = true;
@@ -1653,7 +1653,7 @@ Class "Paladin"
       else if (EActor->isMType(MA_DWARF) && !given) {
         for(h=EActor->FirstInv();h;h=EActor->NextInv()) 
           if (h->isGroup(WG_AXES|WG_IMPACT) && !given && (h->iID != $"pickaxe")) {
-            h->SetInherantPlus(max(1,h->GetInherantPlus()));
+            h->SetInherentPlus(max(1,h->GetInherentPlus()));
             h->AddQuality(WQ_HOLY);
             h->IFlags |= IF_BLESSED;
             given = true;
@@ -1662,7 +1662,7 @@ Class "Paladin"
       if (!given)
         for(h=EActor->FirstInv();h;h=EActor->NextInv()) 
           if (h->isGroup(WG_LBLADES) && !given) {
-            h->SetInherantPlus(max(1,h->GetInherantPlus()));
+            h->SetInherentPlus(max(1,h->GetInherentPlus()));
             h->AddQuality(WQ_HOLY);
             h->IFlags |= IF_BLESSED;
             given = true;
@@ -2010,7 +2010,7 @@ Class "Ranger"
       __*_<7>Combat Style<2> -- Starting at 1st level, rangers must choose one
       of the three ranger combat styles: archery, skirmish or two-weapon. Based
       on their choice, they receive pre-set bonus feats at 1st, 3rd, 7th, 11th
-      and 15th level. If they already have a feat inherantly, they receive the
+      and 15th level. If they already have a feat inherently, they receive the
       next one in the progression; if the progression is complete and the ranger
       gains a bonus feat, they will gain one of the following instad: Woodsman,
       Endurance, Alertness, Toughness. Rangers do not need to meet the prerequisites 
@@ -2138,22 +2138,22 @@ Class "Ranger"
           h = EActor->getPrimaryRanged();
           if (h->QualityOK(WQ_QUICK_LOADING)) {
             h->AddQuality(WQ_QUICK_LOADING);
-            h->SetInherantPlus(max(1,
-                h->GetInherantPlus()));
+            h->SetInherentPlus(max(1,
+                h->GetInherentPlus()));
             }
           else {
             if (h->QualityOK(WQ_MIGHTY) && EActor->GetAttr(A_STR) >= 15)
               h->AddQuality(WQ_MIGHTY);
-              h->SetInherantPlus(max(2,
-                h->GetInherantPlus()));
+              h->SetInherentPlus(max(2,
+                h->GetInherentPlus()));
             }  
           for (h=EActor->FirstInv();h;h=EActor->NextInv())
             if (h->iID == $"sheaf arrow" ||
                 h->iID == $"flight arrow" ||
                 h->iID == $"crossbow bolt" ||
                 h->iID == $"hand crossbow dart")
-              h->SetInherantPlus(max(1,
-                  h->GetInherantPlus()));      
+              h->SetInherentPlus(max(1,
+                  h->GetInherentPlus()));      
         }   
       return NOTHING;
       },
@@ -2433,7 +2433,7 @@ Class "Rogue"
       a +6 bonus to her Reflex saves.\n
       __<10>Peerless Accuracy:<2> When a rogue learns this ability, she
       becomes a master of thrown weapons -- she never misses. Well, almost
-      never. She gains a permanent and inherant +5 bonus to hit when using
+      never. She gains a permanent and inherent +5 bonus to hit when using
       thrown weapons. This does <10>not<2> apply to archery.\n
       __<10>Defensive Roll:<2> If you have this ability, you are able to 
       move with the impact from blows, lessening their effect even if they do 
@@ -2619,7 +2619,7 @@ Class "Rogue"
             ETerm->LOption("Peerless Accuracy",8,
                "When a rogue learns this ability, she
                 becomes a master of thrown weapons -- she never misses. Well, almost
-                never. She gains a permanent and inherant +5 bonus to hit when using
+                never. She gains a permanent and inherent +5 bonus to hit when using
                 thrown weapons. This does <10>not<2> apply to archery.");
           if (!EActor->HasAbility(CA_DEFENSIVE_ROLL))
             ETerm->LOption("Defensive Roll", 9,
@@ -2880,7 +2880,7 @@ Class "Warrior"
       }
       h = EActor->getPrimaryMelee();
       if (h && EActor->rateMeleeWeapon() > 1) {
-        if (h->GetInherantPlus() < 1)
+        if (h->GetInherentPlus() < 1)
           h->MakeMagical(NULL_ID,+1);
         if ((EActor->HasFeat(FT_CLEAVE) ||
                   EActor->HasFeat(FT_GREAT_CLEAVE) ||
@@ -2900,7 +2900,7 @@ Class "Warrior"
            break;
           case 5: h->AddQuality(IQ_GHOST_TOUCH); break;
           case 6: 
-            if (h->GetInherantPlus() < 1)
+            if (h->GetInherentPlus() < 1)
               h->MakeMagical(NULL_ID,+2);
           } 
         }

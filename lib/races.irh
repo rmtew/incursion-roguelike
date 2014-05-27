@@ -163,13 +163,13 @@ Race "Human;race"
       \n\n<10>HUMAN RACIAL TRAITS<2>
       \n__*_<7>Racial Weapons<2> -- Humans are diverse and have no special
       or favoured racial weapons.
-      \n__*_<7>Inherant Potential<2> -- While elves are on average more
+      \n__*_<7>Inherent Potential<2> -- While elves are on average more
       graceful than humans, dwarves hardier and orcs stronger, there
       exist legendary heros from within the human race that exceed the
       capacity of all the other races. In game terms, humans can gain
-      increased benefit from inherant adjustments to their ability
-      scores. While the other races can gain a maximum inherant bonus
-      to any one ability score of +5, humans can gain inherant bonuses
+      increased benefit from inherent adjustments to their ability
+      scores. While the other races can gain a maximum inherent bonus
+      to any one ability score of +5, humans can gain inherent bonuses
       to a single ability totalling +8.
       \n__*_<7>Versatility<2> -- Humans are the quickest learners, and
       the most adaptable to new situations, of any race living on Therya.
@@ -308,7 +308,7 @@ Race "Kobold;race"
       \n\n
       <10>KOBOLD RACIAL TRAITS<2>\n
       __*_<7>-4 Strength, -2 Charisma<2> -- Kobolds are simply weak and
-      cowardly creatures; they inherantly possess neither force of body
+      cowardly creatures; they inherently possess neither force of body
       nor force of personality, and are well-known for fleeing from any
       encounter they cannot overcome through trickery.\n
       __*_<7>+4 Dexterity<2> -- Kobolds are agile for their size, with a
@@ -492,14 +492,14 @@ Race "Gnome;race"
       have the strong ties of clan and honour that bind dwarves (though they are
       fiercely loyal to the much-revered king of their race), and treat friendship
       as the highest bond one can possess.\n
-      __Gnomes have an inherant love of process, of the hows and whys of any kind
+      __Gnomes have an inherent love of process, of the hows and whys of any kind
       of system -- mechanical, social or even cosmological. Gnomish religion
       depicts the universe as a massive blueprint, sacred not only for its beauty
       but for the focused intent of its design and the complex interdependancy of
       all its subsystems. While ancient gnomish society was theorically a monarchy,
       in practice it has historically been more of a republic, a vast bureaucracy
       which intertwines the complex castes and clans of gnome society. Just as
-      halflings seem inherantly drawn to the merchant houses of Therya, so are
+      halflings seem inherently drawn to the merchant houses of Therya, so are
       gnomes involved with government and civic management, finding work as various
       sorts of civil servants more frequently then in any other niche. (This has
       led to a friendly, but still competitive, rivalry between the two demihuman
@@ -576,7 +576,7 @@ Race "Gnome;race"
       about every gnome has lost someone to a kobold ambush or prank at one
       time or another. Gnomes have studied kobolds in great detail, and
       receive the favoured enemy bonuses against them in melee.\n
-      __*_<7>Freedom of Movement<2> -- Gnomes are inherantly immune to all
+      __*_<7>Freedom of Movement<2> -- Gnomes are inherently immune to all
       magical effects that paralyze them, entangle them, petrify them, or
       otherwise slow or limit their movement. This is said to be a special
       sign of favour from the goddess Essiah.\n
@@ -591,7 +591,7 @@ Race "Gnome;race"
       broadsword.\n\n
       
       <10>GNOME SUBRACES <5>(Unimplemented)<2>\n
-      __Rock gnomes' inherant magic is tied more to stone then to
+      __Rock gnomes' inherent magic is tied more to stone then to
       illusion; they speak with it as if it were a living force in
       and of itself. They tend to live in isolated mountain settlements,
       have developed a shamantic religion around the worship of their
@@ -600,7 +600,7 @@ Race "Gnome;race"
       across Theyra's surface.\n
       __Forest gnomes are sylvan creatures, possession an affinity
       toward things faerie without having fallen into Queen Maeve's
-      thrall. They have an inherant kinship and empathy with forest
+      thrall. They have an inherent kinship and empathy with forest
       creatures.\n
       __Deep gnomes have been altered somewhat by having lived so
       long in the depths of the Underdark. They have no affinity for
@@ -1007,7 +1007,7 @@ Race "Elf;race"
       Listen, Move Silently and Perform.
       \n\n
       <10>ELVEN RACIAL TRAITS<2>\n
-      __*_<7>+2 Dexterity<2> -- Elves are inherantly graceful in their
+      __*_<7>+2 Dexterity<2> -- Elves are inherently graceful in their
       motions, both as a result of superior physical motor control and
       through living in a culture that teaches elegance in movement as
       an essential part of social station. Elves excel at archery,
@@ -1031,7 +1031,7 @@ Race "Elf;race"
       races like the humans, dwarves or lizardmen.\n
       __*_<7>Racial Weapons<2> -- All elves are familiar with the use
       of the long bow, short bow, long sword and rapier.\n
-  	  __*_<7>Magical Nature<2> -- As inherantly magical creatures with a
+  	  __*_<7>Magical Nature<2> -- As inherently magical creatures with a
 	    far greater attunement to the tapestry of life then humans, elves
 	    receive an extra 5 mana points at the start of the game, and an
 	    extra point for every character level they achieve above 1st.\n
@@ -1208,7 +1208,7 @@ Race "Elf;race"
    * Drow are not banned from Necromancy. (desired)
    * Drow are not eligable to use weapons designed specifically
        for elves. (desired).
-   * Things that are inherantly friendly to elves are not
+   * Things that are inherently friendly to elves are not
        so to drow (/very/ desired).
 */
 
@@ -1346,16 +1346,16 @@ Race "Drow;race"
       out to a range of 120 feet (12 squares) when in absolute darkness.\n
       __*_<7>Innate Magic<2> -- Living amidst the magical radiations of the
       Underdark, the same power that produced the aberrations, and having
-      make pacts with countless demons, drow have developed some inherant
+      make pacts with countless demons, drow have developed some inherent
       magical abilities. All drow may cast the spell <9>faerie fire<2> at
       will. They gain <9>globe of shadow<2> at 2rd level, and upon reaching
       3rd level they can also use <9>levitation<2> at will.\n
       __*_<7>Magic Resistance<2> -- For similar reasons, drow have developed
-      an inherant magic resistance similar to that of their outer-planar
+      an inherent magic resistance similar to that of their outer-planar
       patrons. Far more powerful then the dwarven ability, drow do not
       resist so much as simply negate magical effects cast at them. They
       have a natural 50~ magic resistance associated with their drow
-      physiology and gain a +2~ inherant bonus with every character
+      physiology and gain a +2~ inherent bonus with every character
       level.\n
       __*_<7>Sharp Senses<2> -- Drow have senses as acute as any other elf's,
       and receive identical bonuses to conventional elves in this area.
@@ -1372,7 +1372,7 @@ Race "Drow;race"
       females have certain additional abilities men do not, and thus are
       treated mechanically as if they were a subrace.\n
       __Drow females are stronger then men, having normal human Strength,
-      and also possess several inherant magical talents that males do not --
+      and also possess several inherent magical talents that males do not --
       reading thoughts, scrying and dispelling magic. They also add priest
       to their list of favoured classes. (Later, the default Favoured Classes
       of drow will be Rogue and Wizard, plus Priest for the women.)";
@@ -1488,7 +1488,7 @@ Race "Halfling;race"
       being quick learners, socially dexterous and naturally agile as
       well. The full list of halfling racial skills is Appraise, Climb, 
       Diplomacy, Hide, Intuition and Tumble.\n
-      __Halflings also receive certain inherant racial bonus to skills.
+      __Halflings also receive certain inherent racial bonus to skills.
       They have a +2 racial bonus to Hide, Tumble and Climb; their Hide
       racial bonus stacks with the +2 size bonus they receive to the
       Hide skill due to being Small creatures.
@@ -1703,7 +1703,7 @@ Race "Lizardfolk;race"
       \n 
       <10>LIZARDFOLK RACIAL SKILLS<2>\n
       __The lizardfolk racial skills are not based on culture or training, but
-      on the inherant aptitudes, instincts and physiology of their race. They
+      on the inherent aptitudes, instincts and physiology of their race. They
       receive Balance, Concentration, Intuition, Jump,
       Knowledge (Magic), Swim and Wilderness Lore as racial skills.
       \n\n         
@@ -1735,7 +1735,7 @@ Race "Lizardfolk;race"
       character of their level in any single skill - or a +4 insight bonus,
       whichever raises their total skill rating in that skill higher -- for
       a very short period of time.\n
-      __*_<7>Fire Resistance<2> -- As reptiles, lizardfolk are inherantly
+      __*_<7>Fire Resistance<2> -- As reptiles, lizardfolk are inherently
       much less affected by heat, and their specific physiology enhances this
       effect even further. They enter play with fire resistance 5, and it
       increases by one point every odd level after 1st.\n
@@ -1786,7 +1786,7 @@ Race "Lizardfolk;race"
       but also becoming cursed with a ravenous hunger that makes them greatly feared
       and viewed as degenerate among their own race.\n
       __Their troubles pale when compared to the Nietzol Ashadrach, however. Born
-      wrong, these lizardfolk lack the inherant racial empathy that most members of
+      wrong, these lizardfolk lack the inherent racial empathy that most members of
       their race possess, these wretched folk are viewed as soulless and outcast
       from the lizardfolk community. They have a greater ability to adapt to human
       society as a result, and are often mistakenly called 'half-lizardfolk' by
@@ -1988,9 +1988,9 @@ Race "Orc;race"
       has an innate elemental resistance to a given damage type may
       develop or increase that resistance himself, provided that the
       creature's resistance level is greater then the orc's current
-      inherant rating in that type of resistance.\n
+      inherent rating in that type of resistance.\n
       __Furthermore, certain rare monsters that are the allegorical
-      representation of a given ability score can convey an inherant
+      representation of a given ability score can convey an inherent
       bonus to that ability when their corpses are devoured. Giants
       are so tied to Strength, elves to Dexterity, trolls to Constitution, 
       mind flayers to Intelligence, nagas to Wisdom, faeries to Charisma 

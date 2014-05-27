@@ -203,7 +203,7 @@ Wizard Spell "Create Corporeal Undead" : EA_GENERIC
     Desc: "Casting this animates a single humanoid corpse as a type of greater 
       corporeal undead. Based of the caster's caster level, she may choose
       to create different forms of undead. Certain types are available only
-      to Marists, while others are inherantly evil.\n
+      to Marists, while others are inherently evil.\n
       __There are two metaphysical powers that can be invoked on Theyra to
       animate the dead. The first is various archfiends, notably Orcus --
       the demon lord of undead. The second is the goddess of death, Mara.
@@ -331,7 +331,7 @@ Wizard Spell "Create Spectral Undead" : EA_GENERIC
       the remains of a single humanoid corpse. Based of the caster's 
       caster level, she may choose to create different forms of spectral 
       undead. Certain types are available only to Marists, while others 
-      are inherantly evil.\n
+      are inherently evil.\n
       __There are two metaphysical powers that can be invoked on Theyra to
       animate the dead. The first is various archfiends, notably Orcus --
       the demon lord of undead. The second is the goddess of death, Mara.
@@ -506,7 +506,7 @@ Monster "leucrotta" : MA_MYTHIC, MA_QUADRUPED, MA_ABERRATION
 	   combines the legs and hooves of a great stag, the trunk and 
 	   neck of a lion, the head of a prehistoric badger -- and the 
 	   voice, intellect and capacity for malice of a human being. 
-	   Inherantly cruel, the leucrotta possesses
+	   Inherently cruel, the leucrotta possesses
 	   no volition of its own, instead seeming to exist as a
 	   symbolic personification of deceit. It can mimic nearly
 	   any sound, using these unearthly noises to lure prey to

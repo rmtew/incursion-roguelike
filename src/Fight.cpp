@@ -140,19 +140,19 @@ bool isLegalPersonTo(Creature *Actor, Creature *Victim)
   }
 
 /* Determines both breach of chivalry and attacking fleeing foe */
-int16 getChivalryBreech(EventInfo &e)
+int16 getChivalryBreach(EventInfo &e)
   {
     Creature *l;
-    int16 i, breech;
+    int16 i, breach;
     bool givenTerms, isLegalPerson,
          vicFleeing, vicUnready;
     
-    breech = 0;
+    breach = 0;
     
     if (!e.EVictim)
-      return breech;
+      return breach;
     if (!e.EVictim->isCreature())
-      return breech;
+      return breach;
     
     vicFleeing = e.EVictim->HasStati(AFRAID) &&
                  e.EVictim->GetStatiVal(AFRAID) != FEAR_SKIRMISH;
@@ -172,7 +172,7 @@ int16 getChivalryBreech(EventInfo &e)
     
     /* Inherently evil creatures are not subject to law or good. */
     if (e.EVictim->isMType(MA_EVIL) && e.EVictim->HasMFlag(M_IALIGN))
-      return breech;
+      return breach;
       
     isLegalPerson = isLegalPersonTo(e.EActor,e.EVictim);
     givenTerms = e.EVictim && 
@@ -182,9 +182,9 @@ int16 getChivalryBreech(EventInfo &e)
       
     if (vicFleeing && !givenTerms && 
             e.EVictim->isMType(MA_SAPIENT)) {
-      breech |= AL_NONGOOD;
+      breach |= AL_NONGOOD;
       if (isLegalPerson)
-        breech |= AL_NONLAWFUL;
+        breach |= AL_NONLAWFUL;
       }
          
     /* Only paladins, heavy armour wearers, mounted fighters and followers
@@ -195,26 +195,26 @@ int16 getChivalryBreech(EventInfo &e)
       {
         if (vicUnready)
           if (isLegalPerson && !e.EVictim->HasStati(HIT_WHILE_UNREADY,-1,e.EActor))
-            breech |= AL_NONLAWFUL;
+            breach |= AL_NONLAWFUL;
       }    
-    return breech;
+    return breach;
   }
   
 bool attackSanity(EventInfo &e)
   {
     bool doAlignWarning; 
-    int16 breech;
+    int16 breach;
     Creature *l;
     
-    breech = getChivalryBreech(e);
+    breach = getChivalryBreach(e);
     doAlignWarning = false;
     if (e.EActor->isMType(MA_LAWFUL) || (e.EActor->isCharacter() && 
            e.EPActor->desiredAlign & AL_LAWFUL))
-      if (breech & AL_NONLAWFUL)
+      if (breach & AL_NONLAWFUL)
         doAlignWarning = true;
     if (e.EActor->isMType(MA_GOOD) || (e.EActor->isCharacter() && 
            e.EPActor->desiredAlign & AL_GOOD))
-      if (breech & AL_NONGOOD)
+      if (breach & AL_NONGOOD)
         doAlignWarning = true;
         
     if (doAlignWarning)
@@ -231,11 +231,11 @@ bool attackSanity(EventInfo &e)
     l = e.EActor->getLeader();
     if (l && (l != e.EActor) && (l->isMType(MA_LAWFUL) || (l->isCharacter() && 
            ((Player*)l)->desiredAlign & AL_LAWFUL)))
-      if (breech & AL_NONLAWFUL)
+      if (breach & AL_NONLAWFUL)
         return false;
     if (l && (l != e.EActor) && (l->isMType(MA_GOOD) || (l->isCharacter() && 
            ((Player*)l)->desiredAlign & AL_GOOD)))
-      if (breech & AL_NONGOOD)
+      if (breach & AL_NONGOOD)
         return false;
 
     return true;
@@ -514,13 +514,13 @@ DoCleave:
               if (CleaveList[j] == c)
                 goto SkipThisTarget;
             {
-              int breech;
+              int breach;
               EventInfo xe;
               xe = e;
               xe.ETarget = c;
-              breech = getChivalryBreech(xe);
-              if (((breech & AL_NONGOOD) && e.EActor->isMType(MA_GOOD)) ||
-                  ((breech & AL_NONLAWFUL) && e.EActor->isMType(MA_LAWFUL)))
+              breach = getChivalryBreach(xe);
+              if (((breach & AL_NONGOOD) && e.EActor->isMType(MA_GOOD)) ||
+                  ((breach & AL_NONLAWFUL) && e.EActor->isMType(MA_LAWFUL)))
                 if (!yn(XPrint("Unchivalrously cleave <Obj>?",c)))
                   continue;
             }
@@ -5566,10 +5566,10 @@ EvReturn Creature::Damage(EventInfo &e)
       if (!e.EActor->isMType(MA_DROW))
         e.EActor->AlignedAct(AL_NONLAWFUL,2,"using poison");
       
-    if (int16 breech = getChivalryBreech(e))
-      e.EActor->AlignedAct(breech, 1,
-        (breech == (AL_NONLAWFUL|AL_NONGOOD)) ? "unchivalrous, merciless attack" :
-        ((breech == AL_NONLAWFUL) ? "unchivalrous attack" : "merciless attack"),
+    if (int16 breach = getChivalryBreach(e))
+      e.EActor->AlignedAct(breach, 1,
+        (breach == (AL_NONLAWFUL|AL_NONGOOD)) ? "unchivalrous, merciless attack" :
+        ((breach == AL_NONLAWFUL) ? "unchivalrous attack" : "merciless attack"),
         e.EVictim);
     
     if (e.EVictim->HasStati(TRIED,SK_DIPLOMACY+EV_SURRENDER*100,e.EActor))

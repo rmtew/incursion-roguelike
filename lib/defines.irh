@@ -80,8 +80,8 @@
     
 #define ANIMATION_MORALITY(corpse, undead)                              \
   if (undead->isMType(MA_EVIL) && undead->HasMFlag(M_IALIGN))           \
-    { EActor->Transgress($"mara",5,false,"creating inherantly evil undead");  \
-      EActor->AlignedAct(AL_NONGOOD|AL_EVIL,3,"creating inherantly evil undead"); } \
+    { EActor->Transgress($"mara",5,false,"creating inherently evil undead");  \
+      EActor->AlignedAct(AL_NONGOOD|AL_EVIL,3,"creating inherently evil undead"); } \
   else if (undead->isMType(MA_EVIL) && !EActor->isMType(MA_EVIL) &&     \
             EActor->isCharacter() && isMarist)                          \
     undead->GainPermStati(ALIGNMENT,NULL,SS_MISC,AL_GOOD|AL_LAWFUL);    \

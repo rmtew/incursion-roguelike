@@ -140,8 +140,8 @@ void Item::ChangeIID(rID _iID, bool mult) {
   
 int16 Item::MaxHP()
  { return TITEM(iID)->hp + 
-     GetInherantPlus()*10 + (
-     (eID && !GetInherantPlus() &&
+     GetInherentPlus()*10 + (
+     (eID && !GetInherentPlus() &&
       Type != T_SCROLL && Type != T_POTION) ?
        TEFF(eID)->Level*5 : 0); }
 
@@ -604,7 +604,7 @@ void Item::MakeMagical(rID _eID, int16 spe)
           IFlags |= IF_CURSED;
       }
     if (spe > 0) 
-      SetInherantPlus((int8)spe);
+      SetInherentPlus((int8)spe);
     
     if (eID) {
       EffMem *em = EFFMEM(eID,theGame->GetPlayer(0));

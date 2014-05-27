@@ -22,7 +22,7 @@
      EvReturn Character::Event(EventInfo &e)
      bool Creature::isBoosted(int8 at)
      bool Creature::isDrained(int8 at)
-     void Creature::GainInherantBonus(int16 at, int16 mag, bool msg)
+     void Creature::GainInherentBonus(int16 at, int16 mag, bool msg)
      int16 Creature::HungerState()
      int16 Creature::ChallengeRating()
      bool Creature::LoseFatigue(int16 amt,bool avoid)
@@ -1909,7 +1909,7 @@ bool Creature::isDrained(int8 at)
     return false;
   }
 
-void Creature::GainInherantBonus(int16 at, int16 mag, bool msg)
+void Creature::GainInherentBonus(int16 at, int16 mag, bool msg)
   {
     int16 MaxBonus, CurrBonus;
 

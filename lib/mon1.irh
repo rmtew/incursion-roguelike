@@ -417,7 +417,7 @@ Effect "Summon Djinni" : EA_SUMMON
   { 
     SC_WEA; rval: $"djinni"; pval: 8; Cost: 32; Purpose: EP_SUMMON;
     Flags: EF_XSUMMON, EF_DLONG, EF_SPECABIL;
-    Desc: "This inherant ability allows a brass dragon to summon a
+    Desc: "This inherent ability allows a brass dragon to summon a
       djinni from the Elemental Plane of Air to aid it in a time of
       need. A given brass dragon can only have one such djinni summoned
       at a time, but it will aid him to the best of its ability.";
@@ -578,7 +578,7 @@ Monster "red dragon" : MA_DRAGON
       $"track monster", $"emotion";
     Desc: "These dragons embody the consuming power of flame, for they are
       ever hungry -- for gold and treasure, and for less tangible treasures
-      like arcane secrets and political power. It is part of their inherant
+      like arcane secrets and political power. It is part of their inherent
       nature as a race to covet, to burn with greed, and the primal impulse
       toward acquisition and horde-mongering is of an intensity unknown among
       the humanoid peoples. If power and wealth were food, red dragons are
@@ -1739,7 +1739,7 @@ Monster "pegasus" : MA_QUADRUPED, MA_SYLVAN, MA_MYTHIC
     Desc: "A magnificent winged horse, the pegasus has wings
       like a dove's and a mane of white feathers, but otherwise
       resembles a snow-white horse of the highest quality. They
-      are intelligent and good beings with an inherant aura of
+      are intelligent and good beings with an inherent aura of
       nobility about them, and are treasured by paladins and
       other champions as mounts.";
   }

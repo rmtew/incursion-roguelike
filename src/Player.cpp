@@ -2559,7 +2559,7 @@ RestartTerra:
                                       if (it->isType(T_WEAPON) || it->isType(T_ARMOUR) ||
                                           it->isType(T_SHIELD) || it->isType(T_MISSILE) ||
                                           it->isType(T_CONTAIN))
-                                      { it->eID = 0; it->SetInherantPlus(0);
+                                      { it->eID = 0; it->SetInherentPlus(0);
                                       it->IFlags &= ~IF_CURSED;
                                       it->PurgeAllQualities();
                                       it->MendHP(1000); }
@@ -3027,7 +3027,7 @@ void Character::Exercise(int16 at, int16 amt, int16 col, int16 cap)
         for (i=0;i!=15;i++)
           GainAttr[at][i] = 0;
         
-        GainInherantBonus(at,+1,true);
+        GainInherentBonus(at,+1,true);
       }
       
     GainAttr[at][col] += amt;

@@ -1122,11 +1122,11 @@ void CreatePerk(PerkSet& Perks, int i, PerkType type, Player *p)
                     */
                     // redo = 1;
 
-                    it->SetInherantPlus(min(3,it->GetInherantPlus()));
+                    it->SetInherentPlus(min(3,it->GetInherentPlus()));
 
                     while ((!it->eID) && it->ItemLevel() <= 5 &&
                         it->GetPlus() < 5)
-                        it->SetInherantPlus(it->GetInherantPlus()+1);
+                        it->SetInherentPlus(it->GetInherentPlus()+1);
 
                     if (it->isType(T_MISSILE))
                         it->SetQuantity(30);
@@ -1141,11 +1141,11 @@ void CreatePerk(PerkSet& Perks, int i, PerkType type, Player *p)
                     !it->isType(T_ARMOUR) &&
                     !it->isType(T_BOW) &&
                     !it->isType(T_MISSILE)) 
-                    it->SetInherantPlus(MaxItemPlus(6,it->eID));
+                    it->SetInherentPlus(MaxItemPlus(6,it->eID));
                 else if (it->GetPlus() && it->ItemLevel() <= 5)
-                    it->SetInherantPlus(it->GetPlus()+1);
+                    it->SetInherentPlus(it->GetPlus()+1);
                 Perks.elt[I(i,3)].p.i.iID    = it->iID;
-                Perks.elt[I(i,3)].p.i.Plus   = it->GetInherantPlus();
+                Perks.elt[I(i,3)].p.i.Plus   = it->GetInherentPlus();
                 Perks.elt[I(i,3)].p.i.eID    = it->eID;
                 for (int16 q=0;q!=8;q++)
                     Perks.elt[I(i,3)].p.i.q[I(q,8)] = it->GetQuality(i);
@@ -2327,7 +2327,7 @@ GodIsOkay:;
             } 
             if (foundOne) {
                 i = MyTerm->LMenu(MENU_2COLS,"-- Gain A Bonus To Which Attribute --");
-                GainInherantBonus(i,1,true); 
+                GainInherentBonus(i,1,true); 
                 CalcValues(); 
             }
     }
