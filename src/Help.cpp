@@ -2138,7 +2138,7 @@ String & Monster::Describe(Player *p)
       //{ CA_SPAWN, "A living creature it kills will later rise as a %s. " },
       { CA_STALKER, "It will pursue its quarry, even across levels. " },
       { CA_TELEPATHY, "It has telepathy to a range of %d0 ft. " },
-      { CA_TOUGH_AS_HELL, "It is recieves double Con bonus to hit points, like a barbarian does. " },
+      { CA_TOUGH_AS_HELL, "It is receives double Con bonus to hit points, like a barbarian does. " },
       { CA_TREMORSENSE, "It has tremorsense to a range of %d0 ft. " },
       { CA_TUNNEL, "It can burrow through earth and stone. " },
       { CA_TURNING, "It can turn undead as a level %d cleric would. " },
@@ -2854,7 +2854,7 @@ String & Monster::Describe(Player *p)
     if (Inv) {
       h = Inv; lc = 0;
       while (h) {
-        if (p && p->Percieves(oThing(h)))
+        if (p && p->Perceives(oThing(h)))
           {
             if (oItem(h)->IFlags & IF_WORN)
               List[lc] = Format("%c%s (equipped)%c",-11,(const char*)oThing(h)->Name(NA_A),-7);
@@ -3539,7 +3539,7 @@ String & Item::Describe(Player *p)
         "treated as a negative penalty rather than a bonus.\n");
   if (HasStati(MASTERWORK))
     Desc += XPrint("__<11>Masterwork:<7> This item has been tempered by a "
-        "master craftsman, and recieves a +<Num> bonus to damage. It will "
+        "master craftsman, and receives a +<Num> bonus to damage. It will "
         "remain perfectly honed for <Num> more strokes.\n", 
         GetStatiVal(MASTERWORK),
         GetStatiMag(MASTERWORK));

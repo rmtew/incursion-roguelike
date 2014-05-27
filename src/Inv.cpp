@@ -178,7 +178,7 @@ EvReturn Monster::PickUp(EventInfo &e)
         
         /* This warrants a disbelief check! */
         MapIterate(m,t,i)
-          if (t->isCreature() && ((Creature*)t)->Percieves(e.EItem))
+          if (t->isCreature() && ((Creature*)t)->Perceives(e.EItem))
             e.EItem->DisbeliefCheck((Creature*)t);
         e.EItem->Remove(true);
         if (!HasFeat(FT_FASTER_THAN_THE_EYE)) {
@@ -504,7 +504,7 @@ EvReturn Character::PickUp(EventInfo &e) {
 
         /* This warrants a disbelief check! */
         MapIterate(m,t,i)
-            if (t->isCreature() && ((Creature*)t)->Percieves(e.EItem))
+            if (t->isCreature() && ((Creature*)t)->Perceives(e.EItem))
                 e.EItem->DisbeliefCheck((Creature*)t);
         e.EItem->Remove(true);
         if (!HasFeat(FT_FASTER_THAN_THE_EYE)) {

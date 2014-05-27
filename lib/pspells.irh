@@ -860,12 +860,12 @@ Druid Spell "Warp Wood" : EA_GENERIC
                 return SHOULD_CAST_IT;
       for(h=EMap->FirstThing();h;h=EMap->NextThing()) {
         if (h->isType(T_DOOR) && (!(h->DoorFlags & (DF_OPEN|DF_SECRET))) && 
-            h->isWooden() && EActor->Percieves(h) && 
+            h->isWooden() && EActor->Perceives(h) && 
             dist(EActor->x,EActor->y,h->x,h->y) <= 4)
           return SHOULD_CAST_IT; 
         else if ((h->isType(T_CONTAIN) || h->isType(T_CHEST)) &&
              h->isWooden() && 
-            (h->HasStati(LOCKED)) && EActor->Percieves(h) &&  
+            (h->HasStati(LOCKED)) && EActor->Perceives(h) &&  
             dist(EActor->x,EActor->y,h->x,h->y) <= 4)
           return SHOULD_CAST_IT; 
         }
@@ -902,7 +902,7 @@ Druid Spell "Warp Wood" : EA_GENERIC
     Desc: "Magically warps wooden objects within a 40-foot radius, inflicting
       1d6 points of damage per caster level. Doors are instead broken open in
       their frame, and chests are forcibly unlocked. The caster is unaffected,
-      and any other creatures recieve a Will save to prevent damage to
+      and any other creatures receive a Will save to prevent damage to
       their wooden items."; 
   }
    
@@ -1287,7 +1287,7 @@ and EA_GRANT
       around you, exposing your fundamental goodness and
       encouraging other creatures to deal honestly and fairly
       with you, knowing you will do likewise. The caster thus
-      recieves a bonus to Diplomacy and Appraise equal to
+      receives a bonus to Diplomacy and Appraise equal to
       her caster level (minimum +5).";
     On Event MSG_STATINAME "Benevolence" / "Ben"; }
 
@@ -1299,7 +1299,7 @@ and EA_GRANT
     Desc: "Casting this spell evokes an air of hatefulness
       and malice around the caster, making her seem sinister
       and terrifying while obscuring her true intentions.
-      The caster thus recieves a bonus to Bluff and Intimidate
+      The caster thus receives a bonus to Bluff and Intimidate
       equal to her caster level (minimum +5).";
     On Event MSG_STATINAME "Malignance" / "Mal"; }
 
@@ -2340,7 +2340,7 @@ Druid Spell "Flame Blade" : EA_GENERIC
     __<9>Conjure Flame Blade:<1> A 3-foot-long, blazing beam of red-hot fire springs 
     forth from your hand. You wield this bladelike beam as if it were a scimitar.
     The flame blade inflicts 3d8 points of fire damage otherwise has statistics
-    identical to a scimitar - save that you do not recieve a Strength bonus on the
+    identical to a scimitar - save that you do not receive a Strength bonus on the
     damage, since the blade is immaterial.\n
     __<9>Augment Existing Blade:<1> You augment any one weapon from the Short Blades
     or Long Blades group, granting it the Flaming weapon quality. A weapon that already
@@ -4878,7 +4878,7 @@ Effect "Mark of Justice" : EA_INFLICT
       that causes a tattoo-like mark to appear on the
       touched creature's body, visible only to creatures
       who can see invisible or ethereal creatures. The
-      caster recieves only one touch, but there is no
+      caster receives only one touch, but there is no
       saving throw to resist the placement of the mark.
       The mark is a curse and can be removed using a
       <9>remove curse<1> spell. Neither version of this
@@ -4886,7 +4886,7 @@ Effect "Mark of Justice" : EA_INFLICT
       cannot understand law due to not being sapient.\n
       __<9>Mark of Transgression:<1> This version of the
       spell marks the subject creature as an inveterate
-      criminal, and causes any lawful creatures who percieve
+      criminal, and causes any lawful creatures who perceive
       him to be automatically hostile to him. There is no
       saving throw involved in this version of the spell.\n
       __<9>Mark of Punishment:<1> This more corrective
@@ -4900,7 +4900,7 @@ Effect "Mark of Justice" : EA_INFLICT
       act, not breaks the whole spell.\n
       __In addition to the effects of a specific Mark,
       a priest who places a Mark of Justice can always
-      percieve the creature that it was placed on, even
+      perceive the creature that it was placed on, even
       if walls or other barriers seperate them, as if
       that creature were the subject of a detection spell.";
     On Event PRE(EV_EFFECT) {
@@ -4923,7 +4923,7 @@ Effect "Mark of Justice" : EA_INFLICT
     POST(EV_MAGIC_HIT) {
       hObj cr;
       for (cr=EMap->FirstThing();cr;cr=EMap->NextThing())
-        if (cr->isCreature() && cr->Percieves(EVictim))
+        if (cr->isCreature() && cr->Perceives(EVictim))
           if (cr->onPlane() == PHASE_ETHERIAL ||
               cr->HasStati(SEE_INVIS) || cr->HasMFlag(M_SEE_INVIS))
             {
@@ -4964,7 +4964,7 @@ Effect "Mark of Punishment" : EA_INFLICT
     POST(EV_MAGIC_HIT) {
       hObj cr;
       for (cr=EMap->FirstThing();cr;cr=EMap->NextThing())
-        if (cr->isCreature() && cr->Percieves(EVictim))
+        if (cr->isCreature() && cr->Perceives(EVictim))
           if (cr->onPlane() == PHASE_ETHERIAL || 
               cr->HasStati(SEE_INVIS) || cr->HasMFlag(M_SEE_INVIS))
             {
@@ -5584,8 +5584,8 @@ Priest Spell "Righteous Wrath of the Faithful" : EA_INFLICT
   { aval: AR_GLOBE; lval: 12; tval: MA_ALLIES;
     xval: ADJUST_SAC; yval: A_THP;  pval: (LEVEL_1PER2)d8;
     Desc: "Inspires a holy fury in you and all your allies, such
-      that they recieve a +4 sacred bonus to all rolls, gain a +50%
-      sacred bonus to speed and recieve 1d8 temporary hit points
+      that they receive a +4 sacred bonus to all rolls, gain a +50%
+      sacred bonus to speed and receive 1d8 temporary hit points
       for every odd level you possess."; }
 
 Priest Spell "Unceasing Vigilance of the Holy Sentinel" : EA_INFLICT

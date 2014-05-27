@@ -26,8 +26,8 @@
 
      EvReturn Creature::Cast(EventInfo &e)
      EvReturn Creature::Invoke(EventInfo &e)
-     int16 Creature::SpellRating(rID eID, uint32 mm, bool percieved)
-     int16 Character::SpellRating(rID eID, uint32 mm, bool percieved)
+     int16 Creature::SpellRating(rID eID, uint32 mm, bool perceived)
+     int16 Character::SpellRating(rID eID, uint32 mm, bool perceived)
      EvReturn Item::DrinkPotion(EventInfo &e)
      EvReturn Item::ReadScroll(EventInfo &e)
      EvReturn Item::Activate(EventInfo &e)
@@ -2059,7 +2059,7 @@ EvReturn Magic::ABallBeamBolt(EventInfo &e)
       cr = (Creature*) TargetList[j];
       if (e.EMagic && (e.EMagic->aval == AR_BOLT || e.EMagic->aval == AR_RAY))
         if (cr->isCreature() && cr->HasFeat(FT_DEFLECT_MAGIC))
-          if (cr->AoO && cr->Percieves(e.EActor) && !cr->isFlatFooted())
+          if (cr->AoO && cr->Perceives(e.EActor) && !cr->isFlatFooted())
             if (cr->SavingThrow(REF,15))
               {
                 cr->AoO--;
@@ -2668,7 +2668,7 @@ ContinueCasting:
     cc = 0;
     MapIterate(m,c,i)
         if (c->isCreature() && c != this)
-            if (c->Percieves(this)) {
+            if (c->Perceives(this)) {
                 if (c->HasSkill(SK_SPELLCRAFT) && c->SkillCheck(SK_SPELLCRAFT,10+TEFF(e.eID)->Level,true)) {
                     c->IPrint("The <Obj> begins casting <Str><Str><5><Res><7><Str>.",this,
                         MMStr.GetLength() ? "a ":"", (const char*)MMStr,e.eID,
@@ -2933,7 +2933,7 @@ EvReturn Creature::Counterspell(EventInfo &e, Counterspeller *csp) {
 
         MapIterate(m,c,i)
             if (c->isCreature() && c != this)
-                if (c->Percieves(this)) 
+                if (c->Perceives(this)) 
                     if (c->HasSkill(SK_SPELLCRAFT)) {
                         if (e.Event != EV_CAST && !c->HasFeat(FT_BROAD_COUNTERSPELL))
                             continue;
@@ -3061,7 +3061,7 @@ Counterspelled:
 }
    
 
-int16 Creature::SpellRating(rID eID, uint32 mm, bool percieved)
+int16 Creature::SpellRating(rID eID, uint32 mm, bool perceived)
   {
     int16 Chance, i;
 
@@ -3099,7 +3099,7 @@ int16 p_base, p_int, p_lev, p_conc,
 String ps_circ;
 const char* ps_perfect, *ps_calc;
 
-int16 Character::SpellRating(rID eID, uint32 mm, bool percieved)
+int16 Character::SpellRating(rID eID, uint32 mm, bool perceived)
   {
     int16 Chance,j; uint32 i;
     int16 concentLeft;
@@ -3191,7 +3191,7 @@ int16 Character::SpellRating(rID eID, uint32 mm, bool percieved)
     
 
     int16 *at;
-    if (percieved) 
+    if (perceived) 
       at = KAttr;
     else
       at = Attr;

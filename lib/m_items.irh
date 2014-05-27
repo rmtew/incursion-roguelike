@@ -645,7 +645,7 @@ Effect "quality::bashing" : EA_GENERIC { }
 Effect "quality::blinding" : EA_GRANT
   { xval: TRAP_EVENT; yval: EVICTIM(EV_STRIKE); 
     On Event META(EVICTIM(EV_STRIKE)) {
-      if (EActor->Percieves(EVictim) & PER_VISUAL)
+      if (EActor->Perceives(EVictim) & PER_VISUAL)
         {
           e.vDef += 2;
           e.strDef += " +2 glint";
@@ -3217,7 +3217,7 @@ AI_STAFF Effect "Exorcism" : EA_GRANT
       3+) mage or priest of good alignment access to the spells <9>aura 
       of abjuration<7>, <9>bless<7>, <9>detect evil<7>, <9>dispel
       evil<7>, <9>dispel magic<7>, <9>remove curse<7> and
-      <9>spiritwrack<7>. Worthy bearers also recieve a +2 sacred
+      <9>spiritwrack<7>. Worthy bearers also receive a +2 sacred
       bonus to all their saving throws.";
   }
 and EA_GRANT
@@ -3443,7 +3443,7 @@ AI_STAFF Effect "the Fiery Citadel" : EA_GRANT
       gemstones of unidentifyable quality, this staff
       is said to give a spellcaster authority over the
       power of flame itself. When anyone grasps it,
-      they recieve the benefit of the Endurance feat
+      they receive the benefit of the Endurance feat
       and a Cold Resistance of 5. If the bearer is also
       a spellcaster with three or more caster levels,
       she gains access to the spells of <9>burning
@@ -3637,7 +3637,7 @@ AI_BOOTS Effect "the Spur" : EA_GRANT
         }
       return NOTHING;
       };
-    Desc: "When kicking while wearing these boots, you recieve a
+    Desc: "When kicking while wearing these boots, you receive a
       magic bonus to the attack roll equal to the boots' magic
       plus, and a magic bonus to the kick's damage equal to twice
       their plus. In addition, they provide a magical bonus to your
@@ -4318,7 +4318,7 @@ AI_RING / AI_EYES Effect "Penetrating Sight" : EA_GRANT
   { SC_DIV; xval: PERCEPTION; yval: 1; pval: PLUS_2PER1; 
     Level: PLUS_2PER1_ADD7; Flags: EF_NEEDS_PLUS; 
     Desc: "This item allows its wearer to see through solid matter,
-      percieving all things within 20 feet per magical plus it
+      perceiving all things within 20 feet per magical plus it
       possesses, even if they would normally be obstructed by a
       wall or other barrier."; }
 
@@ -5771,7 +5771,7 @@ Effect "fear;RoLM" : EA_INFLICT
     xval: AFRAID; yval: FEAR_MAGIC;
     Flags: EF_NAMEONLY, EF_NOGEN, EF_FEAR, EF_CASTER_IMMUNE;
     On Event EV_ISTARGET {
-      if (EVictim->Percieves(EActor))
+      if (EVictim->Perceives(EActor))
         return SHOULD_CAST_IT;
       return CANNOT_CAST_IT;
       };

@@ -795,7 +795,7 @@ int16* Creature::getTroubles()
               if (cr->onPlane() == PHASE_ETHERIAL ||
                   cr->HasStati(INVIS))
                 if (m->LineOfFire(x,y,cr->x,cr->y,cr) &&
-                      cr->isHostileTo(this) && !Percieves(cr))
+                      cr->isHostileTo(this) && !Perceives(cr))
                   {
                     Troubles[n++] = TROUBLE_HAUNTED + P_EXTREME*256;
                     break;
@@ -1000,7 +1000,7 @@ void Character::GrantSymbol(rID gID)
   
 /* IMPORTANT IDEA -- PRAYER_TIMEOUT is the number of times
    you have gained any single amount of experience between
-   now and your last prayer. It starts at 0 (you can recieve
+   now and your last prayer. It starts at 0 (you can receive
    divine aid from the beginning of the game) and gets
    decrimented in GainXP. */
 

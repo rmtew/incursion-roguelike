@@ -496,7 +496,7 @@ DoCleave:
             continue;
           for (c=m->FCreatureAt(xx,yy);c;c=m->NCreatureAt(xx,yy)) {
             if (c == e.EActor) continue; 
-            if (!e.EActor->Percieves(c)) continue;
+            if (!e.EActor->Perceives(c)) continue;
             if (!e.EActor->isHostileTo(c)) continue;
             if (!m->LineOfFire(e.EActor->x,e.EActor->y,xx,yy,e.EActor) &&
                 e.EActor->onPlane() == PHASE_MATERIAL) continue; 
@@ -672,13 +672,13 @@ EvReturn Creature::RAttack(EventInfo &e)
   if (e.isLoc) {
     Intended = NULL; bool no_per = false; int16 c = 0; Creature *cr;
     /* If you shoot at a spot with multiple creatures, you're shooting at
-       the largest creature you percieve in that spot. But you might be
-       shooting at a spot with no percieved creatures, because you suspect
+       the largest creature you perceive in that spot. But you might be
+       shooting at a spot with no perceived creatures, because you suspect
        that there's an invisible creature there, in which case your intended
        target is one of the largest invisible creatures, hostile or otherwise. */
     RetryIntendedSearch:
     for (cr=m->FCreatureAt(e.EXVal,e.EYVal);cr;cr=m->NCreatureAt(e.EXVal,e.EYVal))
-      if (no_per || e.EActor->Percieves(cr))
+      if (no_per || e.EActor->Perceives(cr))
         if (no_per || cr->isHostileTo(e.EActor))
           {
             /* Smaller creatures aren't candidates. */
@@ -1106,7 +1106,7 @@ EvReturn Creature::NAttack(EventInfo &e) /* this == EActor */
               IPrint("You don't have a clear line of fire!");
               return ABORT;
             }
-          if (!(e.EActor->Percieves(e.ETarget) & (PER_VISUAL|PER_INFRA|PER_BLIND)))
+          if (!(e.EActor->Perceives(e.ETarget) & (PER_VISUAL|PER_INFRA|PER_BLIND)))
             {
               IPrint("You can only telekinese things you can see!");
               return ABORT;
@@ -2791,7 +2791,7 @@ bool Creature::isThreatened(bool perceived_only)
     MapIterate(m,cr,i)
       if (cr->isCreature() && cr->DistFrom(this) <= 16)
         if (cr->isHostileTo(this) && 
-            ((!perceived_only) || Percieves(cr)))
+            ((!perceived_only) || Perceives(cr)))
           if (m->LineOfFire(cr->x,cr->y,x,y,cr))
             return true;
     return false;
@@ -2848,7 +2848,7 @@ void Creature::ProvokeAoO(Creature *c, bool from_move)
       for (c=m->FCreatureAt(x+DirX[i],y+DirY[i]);c;c=m->NCreatureAt(x+DirX[i],y+DirY[i])) 
         if (c->isHostileTo(this) || this->isHostileTo(c))
           if ((!needFlight) || c->isAerial())
-            if (c->Percieves(this))
+            if (c->Perceives(this))
               if (!(c->StateFlags & MS_REACH_ONLY)) {
                 if (c->AoO)  {
                   EventInfo e;
@@ -2866,7 +2866,7 @@ void Creature::ProvokeAoO(Creature *c, bool from_move)
       for (c=m->FCreatureAt(x+ReachX[i],y+ReachY[i]);c;c=m->NCreatureAt(x+ReachX[i],y+ReachY[i])) 
         if ((c->StateFlags & MS_HAS_REACH) && c->isHostileTo(this)) 
           if ((!needFlight) || c->isAerial())
-            if (c->Percieves(this))
+            if (c->Perceives(this))
               if (m->LineOfFire(x,y,c->x,c->y,this)) {
                 if (c->AoO) {
                   EventInfo e;
@@ -2895,7 +2895,7 @@ bool Creature::canChargeInDir(Dir d)
            can charge north, northeast or northwest. */
         if (isSimilarDir(d,d2))
           if (cr->isHostileTo(this) && cr != this)
-            if (Percieves(cr) && m->LineOfFire(x,y,cr->x,cr->y,this))
+            if (Perceives(cr) && m->LineOfFire(x,y,cr->x,cr->y,this))
               return true;
         }
     return false;
@@ -2918,8 +2918,8 @@ void Creature::DoGazeAttack()
         if (c != this)
           if (dist(c->x,c->y,x,y) <= 6)
             if (isHostileTo(c) && !c->isBlind())
-              if (Percieves(c) &&
-                  (c->Percieves(this) & (PER_VISUAL|PER_INFRA))) {
+              if (Perceives(c) &&
+                  (c->Perceives(this) & (PER_VISUAL|PER_INFRA))) {
                 if (cMana() < 2)
                   return;
                 if (c->HasStati(CHARMED,-1,this))
@@ -2947,7 +2947,7 @@ void Creature::DoProxAttack()
           if (isBeside(c)) {
             ThrowVal(EV_SATTACK,A_PROX,this,c);
             if ( (isHostileTo(c) || c->isHostileTo(this)) &&
-                 Percieves(c) ) {
+                 Perceives(c) ) {
               ThrowVal(EV_SATTACK,A_CPRX,this,c);
             }
           }
@@ -3127,7 +3127,7 @@ EvReturn Creature::PreStrike(EventInfo &e) /* this == EActor */
     
 
     // ww: I think is hiding/surprise/unseen logic can get a lot simpler:
-    if (!e.EVictim->Percieves(e.EActor) && 
+    if (!e.EVictim->Perceives(e.EActor) && 
         !e.EVictim->HasFeat(FT_BLIND_FIGHT)) {
       e.actUnseen = true;
       e.isSurprise = true;
@@ -3150,7 +3150,7 @@ EvReturn Creature::PreStrike(EventInfo &e) /* this == EActor */
           StatiIter_RemoveCurrent(e.EActor)
     StatiIterEnd(e.EActor)
        
-    if (!e.EActor->Percieves(e.EVictim) 
+    if (!e.EActor->Perceives(e.EVictim) 
         || (e.EActor->HasStati(EYES_AVERTED) && random(100) < 50)
        // && !e.EActor->HasFeat(FT_BLIND_FIGHT)
        // ww: blindfight is handled later
@@ -5541,7 +5541,7 @@ EvReturn Creature::Damage(EventInfo &e)
             e.DType == AD_PIERCE ||
             e.DType == AD_BLUNT)
           mag++;
-        if (e.EActor->Percieves(e.EVictim))
+        if (e.EActor->Perceives(e.EVictim))
           mag++;
           
         /* Allowance for clipping people with area spells for
@@ -7163,7 +7163,7 @@ EvReturn Creature::Death(EventInfo &e)
         pen = (e.EActor->SkillLevel(SK_INTIMIDATE)-5)/5;
         MapIterate(m,cr,i)
           if (cr->isCreature() && !cr->HasMFlag(M_MINDLESS) && cr->isFriendlyTo(this))
-            if (cr != this && cr->Percieves(e.EActor) && !cr->isPlayer())
+            if (cr != this && cr->Perceives(e.EActor) && !cr->isPlayer())
               {
                 if (cr->ResistLevel(AD_FEAR) == -1)
                   continue;
@@ -7206,7 +7206,7 @@ EvReturn Creature::Death(EventInfo &e)
         Creature *cr; int16 i, dur;
         MapIterate(e.EActor->m,cr,i)
           if (cr->isCreature() && cr->DistFrom(e.EActor) < 13)
-            if (cr->isFriendlyTo(e.EActor) && cr->Percieves(e.EActor) &&
+            if (cr->isFriendlyTo(e.EActor) && cr->Perceives(e.EActor) &&
                   cr != e.EActor)
               {
                 int16 curMod, curDur;
@@ -7966,7 +7966,7 @@ EvReturn Creature::AttackMsg(EventInfo &e)
   {
     Player *p; int16 dis; Dir d;
     p = theGame->GetPlayer(0);
-    if (!(p->Percieves(e.EActor) || p->Percieves(e.EVictim)) &&
+    if (!(p->Perceives(e.EActor) || p->Perceives(e.EVictim)) &&
           p->m == m && p->x > 0)
       {
         static TextVal DirNames[] = {
@@ -7996,7 +7996,7 @@ EvReturn Creature::AttackMsg(EventInfo &e)
     if (!e.EActor->isBeside(e.EVictim) || 
           e.AType == A_FIRE || e.AType == A_HURL)
       if (!e.EVictim->isPlayer())
-        if (!e.EActor->Percieves(e.EVictim))
+        if (!e.EActor->Perceives(e.EVictim))
           if (e.EVictim->onPlane() != e.EActor->onPlane())
             {
               if (e.EActor && e.EActor->m)

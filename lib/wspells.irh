@@ -244,7 +244,7 @@ Wizard / Priest / Scroll Spell "Protection from Evil" : EA_INFLICT
   { xval: SAVE_BONUS; yval: SN_ENCH; pval: +4;
     Desc: "Shields you from evil's influence with a tripartite
       effect: evil creatures suffer a -2 penalty to attack you,
-      you recieve a +4 bonus to save against enchantment spell 
+      you receive a +4 bonus to save against enchantment spell 
       effects and summoned creatures cannot physically attack 
       you."; 
     On Event MSG_STATINAME "ProEvil" / "PEvil"; }
@@ -267,7 +267,7 @@ Wizard Spell "Protection from Good" : EA_INFLICT
   { xval: SAVE_BONUS; yval: SN_ENCH; pval: +4;
     Desc: "Shields you from good's influence with a tripartite
       effect: good creatures suffer a -2 penalty to attack you,
-      you recieve a +4 bonus to save against enchantment spell 
+      you receive a +4 bonus to save against enchantment spell 
       effects and summoned creatures cannot physically attack 
       you."; 
     Flags: EF_EVIL;
@@ -291,7 +291,7 @@ Wizard Spell "Protection from Law" : EA_INFLICT
   { xval: SAVE_BONUS; yval: SN_ENCH; pval: +4;
     Desc: "Shields you from law's influence with a tripartite
       effect: lawful creatures suffer a -2 penalty to attack you,
-      you recieve a +4 bonus to save against enchantment spell 
+      you receive a +4 bonus to save against enchantment spell 
       effects and summoned creatures cannot physically attack 
       you."; 
     Flags: EF_CHAOTIC;
@@ -315,7 +315,7 @@ Wizard Spell "Protection from Chaos" : EA_INFLICT
   { xval: SAVE_BONUS; yval: SN_ENCH; pval: +4;
     Desc: "Shields you from chaos's influence with a tripartite
       effect: chaotic creatures suffer a -2 penalty to attack you,
-      you recieve a +4 bonus to save against enchantment spell 
+      you receive a +4 bonus to save against enchantment spell 
       effects and summoned creatures cannot physically attack 
       you."; 
     Flags: EF_LAWFUL;
@@ -605,7 +605,7 @@ Wizard / Scroll Spell "Knock" : EA_GENERIC
     On Event EV_ISTARGET {
       for(h=EMap->FirstThing();h;h=EMap->NextThing()) {
         if (h->isType(T_DOOR) && (!(h->DoorFlags & (DF_OPEN|DF_SECRET))) && 
-            EActor->Percieves(h))
+            EActor->Perceives(h))
           return SHOULD_CAST_IT;
       } 
       return CANNOT_CAST_IT; 
@@ -691,13 +691,13 @@ Wizard / Scroll Spell "Wizard Lock" : EA_GENERIC
     hObj h;  
     On Event EV_ISTARGET {
       for(h=EMap->FirstThing();h;h=EMap->NextThing()) 
-        if (h->isType(T_DOOR) && !h->HasStati(WIZLOCK) && EActor->Percieves(h))
+        if (h->isType(T_DOOR) && !h->HasStati(WIZLOCK) && EActor->Perceives(h))
           return SHOULD_CAST_IT; 
       return CANNOT_CAST_IT; 
     } ;
     On Event EV_MAGIC_HIT {
       for(h=EMap->FirstThing();h;h=EMap->NextThing()) {
-        if (h->isType(T_DOOR) && !h->HasStati(WIZLOCK) && EActor->Percieves(h)){
+        if (h->isType(T_DOOR) && !h->HasStati(WIZLOCK) && EActor->Perceives(h)){
           h->DoorFlags &= ~DF_OPEN;
           h->DoorFlags |= DF_LOCKED;
           h->GainTempStati(WIZLOCK,EActor,e.vDuration,SS_MISC,0,e.saveDC,$"Wizard Lock");
@@ -815,7 +815,7 @@ Wizard Spell "Daggerspell" : EA_INFLICT
       seek out flaws and weaknesses. In the hands of a mage
       with this spell, a dagger is drawn intuitively to the
       flaws in a structure or enemy's armour.\n
-      __A specialist Diviner recieves an insight bonus to damage
+      __A specialist Diviner receives an insight bonus to damage
       rolls equal to her Intelligence bonus when using a dagger;
       for other mages, this bonus caps out at +2. In any mage's 
       hands the base threat range of the weapon is treated as 
@@ -910,7 +910,7 @@ Wizard Spell "Friends" : EA_INFLICT
     xval: SOCIAL_MOD; yval: MA_ALL; pval: 2;
     Desc: "Casting this spell imbues you with an aura of affiability
       and good candor, causing other creatures to react favourably
-      to you. You recieve a +2 (+4 for specialist Enchanters) social
+      to you. You receive a +2 (+4 for specialist Enchanters) social
       modifier to all social actions taken against other characters,
       and shop prices are calculated for you as if your Diplomacy
       skill rating was that much higher.";
@@ -1704,7 +1704,7 @@ Wizard Spell "Convulsion" : EA_INFLICT
       inducing a brief state of system shock where the victim's muscles clench
       and she suffers a kind of seizure. Creatures with Constitution 12
       or less are automatically affected, whereas those with Constitution
-      scores of 13 or higher recieve a Fortitude saving throw to negate the
+      scores of 13 or higher receive a Fortitude saving throw to negate the
       effect. The effect lasts for only 1d4 rounds, causing the victim to
       suffer a -6 circumstance penalty to all rolls.";
     On Event EV_CALC_EFFECT {
@@ -2912,7 +2912,7 @@ Wizard / Scroll Spell "Mirror Image" : EA_INFLICT
       if (EActor->HasStati(TRUE_SIGHT))
         return NOTHING;
 
-      per = EActor->Percieves(EVictim);
+      per = EActor->Perceives(EVictim);
       if (per & (PER_TREMOR | PER_BLIND | PER_PERCEPT | PER_TELE))
         return NOTHING;
 
@@ -3567,7 +3567,7 @@ Wizard Spell "Transposition" : EA_GENERIC
     Desc: "This specialized form of <9>phase door<1> allows the caster to
       swap locations with any other creature within [Caster Level
       + Wisdom Modifier] x 10 feet of her. A Fortitude saving throw
-      on the target's part negates the effect; the save recieves
+      on the target's part negates the effect; the save receives
       a +4 circumstance bonus if the caster is standing on dangerous
       terrain (including dry land for aquatic creatures), and this
       modifier raises to +8 if the caster is flying or levitating
@@ -4729,7 +4729,7 @@ Wizard Spell "Illusory Stance" : EA_INFLICT
   { SC_ILL; Base: SP_MEDIUM; IS_A_BUFF(COST_3); Level: 3;
     Desc: "Casting this spell causes the caster's body to become a
       confusing blur of afterimages, making it difficult for
-      foes to percieve the real positioning of her arms and
+      foes to perceive the real positioning of her arms and
       legs and the location of her melee attacks. She gains a
       +2 bonus to hit, and for every melee attack foes must
       make a successful opposed Spot test against her Illusioncraft
@@ -4922,7 +4922,7 @@ Wizard Spell "Adamant Facade" : EA_INFLICT
           if (EMap->InBounds(x,y))
             for(hAlly=EMap->FCreatureAt(x,y);hAlly;
                   hAlly=EMap->NCreatureAt(x,y))
-              if (hAlly->isFriendlyTo(hLeader) && hAlly->Percieves(EVictim))
+              if (hAlly->isFriendlyTo(hLeader) && hAlly->Perceives(EVictim))
               {
                 count++;
                 SetSilence();
@@ -6050,7 +6050,7 @@ Wizard Spell "Nemesis Spell" : EA_GENERIC
       Material plane -- outsiders are not influenced by fate in the sense
       this spell affects. Once cast, for the next 13 rounds the wizard 
       gains such exceptional insight into the target creature that she
-      recieves a +5 bonus to hit and damage that creature, and a +5 bonus 
+      receives a +5 bonus to hit and damage that creature, and a +5 bonus 
       to defense class against that creature's attacks.\n
       __However, this power comes at a price. All attacks made against
       other creatures while the spell is active suffer a -5 penalty to
@@ -6713,7 +6713,7 @@ Wizard Spell "Shadow Magic" : EA_ILLUSION
     Desc: "This spell draws forth matter from the Demiplane of Shadows in order
       to create a blast of elemental force duplicating certain wizard evocation
       spells of 3rd or 4th level. However, the magic, created from shadow, is
-      only 30~ real, and all creatures who are subject to it recieve an immediate
+      only 30~ real, and all creatures who are subject to it receive an immediate
       chance to disbelieve. All creatures suffer 30~ of the duplicated spell's
       normal damage; creatures who fail the disbelief check also suffer the
       remaining 70~ as psychosomatic damage."; 
@@ -7070,7 +7070,7 @@ Wizard Spell "Shift Level" : EA_GENERIC
 Wizard Spell "Lesser Planar Conjuration" : EA_SUMMON
   {
     SC_WEA; Base: SP_HARD; Cost: 65; Level: 4; Purpose: EP_PLAYER_ONLY;
-    Desc: "This spell -- the first hint young mages recieve of the true
+    Desc: "This spell -- the first hint young mages receive of the true
       art of conjuration -- allows a caster to summon a powerful creature
       with a CR of up to (6 + caster's Charisma mod) from the outer planes 
       in order to serve her for a full day. This kind of summoning is
@@ -7669,7 +7669,7 @@ Wizard Spell "Watery Double" : EA_GENERIC
 Wizard / Scroll Spell "Wizard Sight" : EA_INFLICT
   { SC_DIV; IS_A_BUFF(COST_5X); Level: 5; 
     xval: PERCEPTION; pval: 6; 
-    Desc: "Allows the caster to percieve everything within 60 feet
+    Desc: "Allows the caster to perceive everything within 60 feet
             of himself, even through walls.";
           On Event MSG_STATINAME "Wizard Sight" / "WizSi"; }
 
@@ -8053,9 +8053,9 @@ Wizard Spell "Misdirection" : EA_INFLICT
       potentially including their teammates -- believing them 
       to be you. The delusion affects all enemies within a 90 
       foot radius field that moves with you, but if the only 
-      creature in the field percieved by a given enemy is you, 
+      creature in the field perceived by a given enemy is you, 
       that enemy will target you normally.\n
-      __Intelligent enemies recieve a chance to disbelieve this
+      __Intelligent enemies receive a chance to disbelieve this
       spell when they hit the wrong target; this chance is 5% per
       point of Intelligence about 12.";
     aval: AR_MFIELD; cval: EMERALD; lval: 9; rval: FI_MODIFIER;
@@ -8093,7 +8093,7 @@ Wizard Spell "Misdirection" : EA_INFLICT
       
       EMap->SetQueue(QUEUE_DAMAGE_MSG);
       
-      if (hCaster->Percieves(EActor))
+      if (hCaster->Perceives(EActor))
         hCaster->IPrint("The <hObj>'s attack is misdirected!",EActor);
         
       if (1d100 <= (EActor->GetAttr(A_INT)-12)*5)
@@ -8483,7 +8483,7 @@ Wizard / Scroll Spell "Chain Lightning" : EA_BLAST
       __Note that the lightning can concievably hit a creature more 
       than once in the process of arcing from creature to creature
       (but it only *arcs to* any given creature once); furthermore,
-      it can strike creatures the player does not percieve, for
+      it can strike creatures the player does not perceive, for
       example turning 90 degrees to strike a hiding creature further 
       down an unexplored hallway."; 
     aval: AR_CHAIN; cval: YELLOW; xval: AD_ELEC;
@@ -8534,7 +8534,7 @@ Wizard / Scroll Spell "Disintegrate" : EA_BLAST
       cubic feet of matter and leaving behind only a tiny
       trace remnant of grey dust. If a creature, or an item
       in a creature's possession, is the target of this spell,
-      the victim recieves a Fortitude save to negate the
+      the victim receives a Fortitude save to negate the
       effect. Since disintegration utterly destroys the target,
       no body remains for ressurection.\n
       __There are some other defenses against disintegration,
@@ -8908,7 +8908,7 @@ Wizard Spell "Immortal Grandeur" : EA_GENERIC
           return NOTHING;
       if (EActor->ResistLevel(AD_FEAR) == -1)
         return NOTHING;
-      if (!EActor->Percieves(EVictim))
+      if (!EActor->Perceives(EVictim))
         return NOTHING;      
       EActor->LoseFatigue(1,false);
       saveDC = EVictim->GetEffStatiVal(TRAP_EVENT,$"Immortal Grandeur");
@@ -9115,7 +9115,7 @@ Wizard / Priest Spell "True Seeing" : EA_INFLICT
       polymorphed or disguised creatures as they truly are, to
       discern creatures which initially appear as other creatures
       (such as rats and plague rats) and, if the caster is a priest,
-      to percieve the alignment of all creatures around her."; */
+      to perceive the alignment of all creatures around her."; */
     xval: TRUE_SIGHT;
     On Event MSG_STATINAME "TrueSight" / "TS";
   }

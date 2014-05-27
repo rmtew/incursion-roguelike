@@ -323,7 +323,7 @@ void Monster::ChooseAction()
     for (int16 yy=y-6;yy<=y+6;yy++)
       if (m->InBounds(xx,yy) && m->At(xx,yy).Contents)
         for (c = m->FCreatureAt(xx,yy);c;c=m->NCreatureAt(xx,yy))
-          if (isHostileTo(c) && Percieves(c))
+          if (isHostileTo(c) && Perceives(c))
             if (!ts.hasTargetThing(c))
               ts.Retarget(this);
 
@@ -393,7 +393,7 @@ RestartTargetLoop:
             ts.RemoveTargetNumber(i);
             goto RestartTargetLoop;
           }
-          ts.t[i].vis = Percieves(it);
+          ts.t[i].vis = Perceives(it);
         }
         break;
 
@@ -408,7 +408,7 @@ RestartTargetLoop:
             ts.RemoveTargetNumber(i);
             goto RestartTargetLoop;
             }*/
-          ts.t[i].vis = Percieves(it);
+          ts.t[i].vis = Perceives(it);
         }
         break; 
 
@@ -423,7 +423,7 @@ RestartTargetLoop:
             ts.RemoveTargetNumber(i);
             goto RestartTargetLoop;
           }
-          ts.t[i].vis = Percieves(it);
+          ts.t[i].vis = Perceives(it);
           if (ts.t[i].vis && it != charmer) {
             hasTarget = true; 
             if ((isBeside(it) && (StateFlags & MS_REACH_ONLY)))
@@ -722,7 +722,7 @@ SkipShifting:
       MapIterate(m,c,i)
         if (c->isCreature())
           if (c->PartyID == PartyID)
-            if (Percieves(c))
+            if (Perceives(c))
               if (j = c->worstTrouble())
                 if (j > best)
                 {
@@ -2648,7 +2648,7 @@ EvReturn Monster::Event(EventInfo &e) {
               if (!e.eID || (!e.EVictim->HasEffStati(CHARMED,e.eID) && !TEFF(e.eID)->HasFlag(EF_NOTBAD)))
                   if (!(isFriendlyTo(e.EActor) && e.eID && TEFF(e.eID)->ef.aval == AR_FIELD))
                       ts.ItHitMe(e.EVictim,e.EActor,e.vDmg+1);
-          if (e.EActor && !e.EActor->isDead() && !Percieves(e.EActor)) {
+          if (e.EActor && !e.EActor->isDead() && !Perceives(e.EActor)) {
               if (e.AType == A_FIRE || e.AType == A_HURL || (e.EMagic && e.EMagic->eval == EA_BLAST))
                   if (e.Event == POST(EV_DAMAGE) || e.Event == EV_MISS)
                       IDPrint(NULL,Format("%s looks for an unseen foe.",(const char*)Name(NA_THE)));

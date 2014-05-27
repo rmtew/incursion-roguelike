@@ -191,7 +191,7 @@ Wizard Spell "Create Corporeal Undead" : EA_GENERIC
     EV_ISTARGET {
       hObj h; rID cmID;
       for (h=EMap->FirstThing();h;h=EMap->NextThing())
-        if (h->isType(T_CORPSE) && EActor->Percieves(h) &&
+        if (h->isType(T_CORPSE) && EActor->Perceives(h) &&
               EActor->DistFrom(h) <= 6) {
           cmID = h->GetCorpseType();
           if (ResourceHasFlag(cmID,M_HUMANOID) && cmID->MSize <= SZ_MEDIUM ||
@@ -318,7 +318,7 @@ Wizard Spell "Create Spectral Undead" : EA_GENERIC
     EV_ISTARGET {
       hObj h; rID cmID;
       for (h=EMap->FirstThing();h;h=EMap->NextThing())
-        if (h->isType(T_CORPSE) && EActor->Percieves(h) &&
+        if (h->isType(T_CORPSE) && EActor->Perceives(h) &&
               EActor->DistFrom(h) <= 6) {
           cmID = h->GetCorpseType();
           if (ResourceHasFlag(cmID,M_HUMANOID) && cmID->MSize <= SZ_MEDIUM ||
@@ -528,7 +528,7 @@ Monster "leucrotta" : MA_MYTHIC, MA_QUADRUPED, MA_ABERRATION
 	      h = theGame->GetPlayer(0);
 	      if (h == NULL_OBJ)
 	        return NOTHING;
-	      if (h->Percieves(EActor)) {
+	      if (h->Perceives(EActor)) {
 	        if (h->HasEffStati(-1,$"leucrotta")) {
 	          h->IPrint("You realize the strange noises you heard were the
 	            charms of a leucrotta, luring prey into its ambush!");

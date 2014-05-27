@@ -1354,7 +1354,7 @@ void Creature::Dump()
     Thing *t;
     if (m != 0 && x != -1)  {
     MapIterate(m,t,i) {
-      if (t != this && t->isCreature() && Percieves(t)) {
+      if (t != this && t->isCreature() && Perceives(t)) {
         Hostility h;
         h = ts.SpecificHostility(this,(Creature *)t);
         T1->SWrite(Format("%s: %s\n",

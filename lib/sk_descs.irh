@@ -19,7 +19,7 @@ Text "help::appraise"
     in Shadows and you examine a creature, the game will tell you if that
     creature is aware or unaware of your presence if your [Appraise - 4]
     is equal to or higher than the subject's Bluff. Otherwise, you do not
-    recieve any indication.\n
+    receive any indication.\n
     __<15>* <11>Identify Monsters (Passive):<3> The primary utility of Appraise
     is the ability to appraise monsters. By carefully observing other
     creatures and noting tell-tale signs in their behaviour, a character with
@@ -198,11 +198,11 @@ Text "help::bluff"
       alignment based on her reputation and past actions -- however, a
       character with Bluff as a class skill is assumed to be covert
       enough in her behaviour and activities that other creatures will
-      not easily be able to percieve her alignment. Such a character
+      not easily be able to perceive her alignment. Such a character
       suffers alignment-based penalties or hostility only if the subject
       creature's Sense Motive skill exceeds her Bluff skill. If it does
-      not, creatures percieve her as whatever alignment favours her most
-      -- devils will percieve her as Lawful Evil, for example, and thus
+      not, creatures perceive her as whatever alignment favours her most
+      -- devils will perceive her as Lawful Evil, for example, and thus
       be non-hostile to her and eager to deal.\n
       __<15>* <11>Trick Magic (Passive):<3> A rogue's special ability
       to use class or race-specific magic is based on the sum of her
@@ -411,7 +411,7 @@ Text "help::concentration"
       __<15>* <11>Break Paralysis (Passive):<3> Characters with a 15+ rating
       in Concentration are able to overcome paralysis effects through sheer
       force of will. If they fail a saving throw against a paralysis effect,
-      they recieve an additional Fortitude save against DC 18 every turn
+      they receive an additional Fortitude save against DC 18 every turn
       until they have beaten the effect.\n
       __Characters with this ability are also able to move when paralyzed 
       and truly, deeply desperate just enough that they cannot be subjected
@@ -453,7 +453,7 @@ Text "help::craft"
     repair this item.\n
     __Repairing an item normally takes two hour, but if the craftsman
     values the item highly, she may decide to work slowly, taking 8
-    hours instead and recieving a +4 bonus to the skill check. A
+    hours instead and receiving a +4 bonus to the skill check. A
     successful Craft check repairs a number of hit points of damage
     to equal to 2d8 + 1/3rd of the crafter's Craft skill rating.
     __Failing a repair DC by 5 or more actually damages the item
@@ -584,7 +584,7 @@ Text "help::diplomacy"
       elves vs. drow, good vs. evil, etc. -- and
       allow the NPC to fight the player's battles
       for him. Once a player has successfully used
-      Diplomacy on a given NPC, he recieves half of
+      Diplomacy on a given NPC, he receives half of
       the experience for all the creatures that NPC
       kills, for the remainder of the day Diplomacy
       was used in. However, creatures that the
@@ -754,7 +754,7 @@ Text "help::disguise"
     under that skill.\n 
     __<15>* <11>Shop Prices:<3> Many shop-keepers in
     Incursion are racist, and adjust their prices based
-    on the percieved race of their customers. Thus, you
+    on the perceived race of their customers. Thus, you
     can use the Disguise skill to get lower prices in
     the shops by altering your race.";
   }
@@ -779,7 +779,7 @@ Text "help::escape artist"
      __<15>* <11>Break Paralysis (Passive):<3> Characters with a 15+ rating
       in Escape Artist are able to overcome paralysis effects through sheer
       mental chicanery. If they fail a saving throw against a paralysis effect,
-      they recieve an additional Fortitude save against DC 18 every turn
+      they receive an additional Fortitude save against DC 18 every turn
       until they have beaten the effect.\n
       __Characters with this ability are also able to move when paralyzed 
       and truly, deeply desperate just enough that they cannot be subjected
@@ -851,9 +851,9 @@ Text "help::handle device"
     it presents, but other creatures -- even those native to
     the area the trap is found in -- may fall victim to its
     effects. If the trap kills a hostile creature, the player
-    character who set is recieves the experience. Even if it
+    character who set is receives the experience. Even if it
     is triggered and does not kill its victim, the player will
-    recieve some experience.\n
+    receive some experience.\n
     __Traps can only be reset if they have been disarmed. If
     they have been triggered, most aren't usable -- though
     some traps are multi-use and can be reset and triggered
@@ -887,7 +887,7 @@ Text "help::handle device"
     possess te skill are proficient with any kind of mechanical
     weapon that they have the appropriate normal weapon group
     proficiency for.\n
-    __Additionally, characters with this skill recieve bonuses of
+    __Additionally, characters with this skill receive bonuses of
     various kinds when using mechanical weapons, as follows:\n
     __<7>Polearms:<3> Mechanical polearms have spring-loaded telescoping
     hafts that can change length freely to accomodate their user's
@@ -978,18 +978,18 @@ Text "help::hide in shadows"
     in dimly lit areas of the dungeon at will. This slows your movement rate by 50~, and 
     the invisibility is broken the second that you attack, use a light source stronger 
     than a torch or otherwise draw attention to yourself. You can only Hide when you are 
-    out of sight of all monsters hostile to you. You will recieve a warning if you are
+    out of sight of all monsters hostile to you. You will receive a warning if you are
     about to move into a brightly lit area, ending your hiding.\n
     __There is no Hide skill check; instead, when a character hides, a random adjustment
     between -5 and +5 is assigned to their Hide skill, and this adjustment is compared
     to the Spot skill of creatures nearby them; if an observer's Spot skill rating exceeds
-    the character's adjusted Hide, that creature can then percieve the hiding character.\n
+    the character's adjusted Hide, that creature can then perceive the hiding character.\n
     __When a hiding creature steps next to a hostile creature, they may be given away by
     sound (as described under Move Silently), and which point they are no longer hiding 
     and become visible to everyone -- presumably the creature they stepped close to speaks
     or takes actions that make their presence apparent. Hiding creatures who do not step
     next to hostile creatures do not risk being exposed by noise.\n
-    __Hiding and invisibility overlap. To percieve an invisible, hiding character, one
+    __Hiding and invisibility overlap. To perceive an invisible, hiding character, one
     must both be able to see invisible creatures, and must have sufficient Spot to be
     able to see the hiding creature.";
   }
@@ -1046,7 +1046,7 @@ Text "help::intuition"
     character must have possessed an item for at least a day to gain this kind
     of hunch about it, and the Intuition check will be made immediately after
     the character rests a full night. However, there is a Character Generation
-    Option that allows intuition to take place when an item is first percieved;
+    Option that allows intuition to take place when an item is first perceived;
     by default, this option applies only to weapons and armour.\n
     __The Intuition check is a standard skill check with staggered results. If
     the result exceeds DC 5, the character learns whether items are magical or
@@ -1107,7 +1107,7 @@ Text "help::knowledge (magic)"
       items. If you can succeed in a Knowledge (Magic) check against a DC of 10 + 
       twice the dungeon depth the item would typically be found at, you will
       be able to fully identify it as per the <9>identify<3> spell. This research
-      requires two hours, but if you choose to devote 8 hours to it, you recieve
+      requires two hours, but if you choose to devote 8 hours to it, you receive
       a +3 circumstance bonus on the skill check. You must have Knowledge (Magic)
       as a class skill to research items.\n
       __<15>* <11>Research Curses (Active):<3> Similarly to researching items, you
@@ -1349,7 +1349,7 @@ Text "help::move silently"
   { "__The Move Silently skill has the following uses:\n
      __<15>* <11>Stealth:<3> When a character is hiding (using the Hide
      in Shadows skill) or invisible due to magic, or when she cannot be
-     visually percieved for any other reason, the Move Silently skill
+     visually perceived for any other reason, the Move Silently skill
      comes into play. As long as she stays at least 10 feet (one square)
      away from all other creatures, her existing methods of imperceptibility
      are sufficient. However, when she moves directly beside another creature
@@ -1373,7 +1373,7 @@ Text "help::mining"
         __<15>* <11>Discern Value (Passive):<3> In addition to actual mining, the 
       Mining skill allows you to discern the location of deposits of diamonds, 
       gold, gemstones and valuable magical metals such as adamant, orichalcum or
-      mithril -- your character is able to percieve where these deposits lie
+      mithril -- your character is able to perceive where these deposits lie
       by analyzing the composition and formations of the stone around her.
       This perception is automatic and reaches out to a range of 1/2 your
       Mining skill rating in squares; this range is extended by 3 squares for
@@ -1382,7 +1382,7 @@ Text "help::mining"
       stone, that are coloured differently then the normal rock that composes
       the dungeon -- bright white for diamonds, silver or mithril, yellow for
       gold, various bright colours for gemstones, dark grey for adamant, etc.\n
-      __Characters that do not have the Mining skill cannot percieve deposits,
+      __Characters that do not have the Mining skill cannot perceive deposits,
       even if they have a significant untrained skill rating. Furthermore, only
       digging releases the mineral treasure from a deposit -- since the metals
       or gemstones are essentially part of the stone, catching a deposit in the
@@ -1581,7 +1581,7 @@ Text "help::poison use"
     rating.\n 
     __<15>* <11>Save Bonuses (Passive):<3> A solid knowledge of
     poisons also increases a character's ability to treat poisoning,
-    and she recieves a bonus to her saving throws against poison equal
+    and she receives a bonus to her saving throws against poison equal
     to 1/4th of her skill rating.";
   }
 
@@ -1593,7 +1593,7 @@ Text "help::Ride"
     rate, +5~ per two levels of her total Ride rating.\n 
     __<15>* <11>Elevation Bonuses (Passive):<3> A mounted rider has
     a significant advantage over a footman, provided he's sufficiently
-    skilled at handling his mount. A mounted character recieves an
+    skilled at handling his mount. A mounted character receives an
     elevation bonus to Defense equal to two plus a sixth of his Ride
     skill, an elevation bonus to melee attack rolls equal to one plus
     a fifth of his Ride skill, and an elevation bonus to melee damage
@@ -1710,7 +1710,7 @@ Text "help::spellcraft"
 Text "help::spot"
   { "__The Spot skill has these practical applications:\n
       __<15>* <11>Discern Hiding Creatures (Passive):<3> The Spot
-      skill is used to percieve creatures that are using the Hide
+      skill is used to perceive creatures that are using the Hide
       in Shadows skill, as described under Hide in Shadows.\n
       __<15>* <11>Spot Invisible Creatures (Passive):<3> A DC 20
       Spot skill test is used to discern the slight shimmering
@@ -1782,7 +1782,7 @@ Text "help::tumble"
       Success allows her to land gracefully, halving the falling damage
       and preventing her from becoming prone.\n
       __<15>* <11>Defensive Roll (Passive):<3> A Tumble skill total of
-      15+ is the prerequisite to character that do not recieve Defensive
+      15+ is the prerequisite to character that do not receive Defensive
       Roll as a class feature gaining it as a feat.\n
       __<15>* <11>Reflex Saving Throw (Passive):<3> In addition to the
       active benefit, characters with Tumble as a class skill and a rating

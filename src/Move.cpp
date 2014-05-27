@@ -263,7 +263,7 @@ EvReturn Creature::Walk(EventInfo &e) {
         if (blocked_by) {
             if (blocked_by->isCreature()) {
                 cr = (Creature *)blocked_by; 
-                if (!Percieves(cr)) {
+                if (!Perceives(cr)) {
                     if (cr->HasStati(HIDING)) {
                         /* Presumably, you turn in the direction you want to move,
                         and then you are directly facing the concealed creature,
@@ -275,7 +275,7 @@ EvReturn Creature::Walk(EventInfo &e) {
                         // invisible creatures ...
                     }
                     String msg; 
-                    if (!Percieves(cr)) {
+                    if (!Perceives(cr)) {
                         msg = "You bump into something you cannot see! Attack?";
                         Timeout += 10;
                     } else {
@@ -380,7 +380,7 @@ IgnoreCreature:
                 }
             } else if (!(tr->TrapFlags & TS_SEARCHED)) {
                 if (SkillCheck(SK_SEARCH,20 + TEFF(tr->tID)->Level + (-5 * (TEFF(tr->tID)->HasFlag(EF_MUNDANE))),true,tr->GetStatiMag(RETRY_BONUS,SK_SEARCH,this),"retry")) {
-                    if (oPlayer(m->pl[0])->Percieves(this))
+                    if (oPlayer(m->pl[0])->Perceives(this))
                         tr->TrapFlags |= TS_FOUND;
                     IDPrint("You find an <Obj2>!",
                         "The <Obj> finds an <Obj2>!",this,tr);
@@ -692,14 +692,14 @@ SkipConfirms:
         for (cr=m->FCreatureAt(tx+DirX[i],ty+DirY[i]);cr;cr=m->NCreatureAt(tx+DirX[i],ty+DirY[i]))
             if ((cr->StateFlags & MS_HAS_REACH) && !cr->HasStati(CHARGING) && cr->InSlot(SL_WEAPON) && cr->InSlot(SL_WEAPON)->HasIFlag(WT_REACH))
                 if (cr != this && cr->canMakeAoO(this) && (cr->isHostileTo(this) || this->isHostileTo(cr)) && cr->onPlane() == this->onPlane())
-                    if (cr->Percieves(this) & ~(PER_SHADOW)) {
+                    if (cr->Perceives(this) & ~(PER_SHADOW)) {
                         if (cr->isIllusion())
                             if (!cr->isRealTo(this))
                                 continue;
 
                         ClosingWith[cwc++] = cr;
                         e.EVictim = cr;
-                        if (Percieves(cr) && (!CloseConfirm) && e.Event == EV_MOVE)
+                        if (Perceives(cr) && (!CloseConfirm) && e.Event == EV_MOVE)
                             if (!yn(XPrint("Confirm close with the <Obj>?",cr),true))
                                 return ABORT;
                         CloseConfirm = true;
@@ -743,7 +743,7 @@ SkipConfirms:
                             SizeMod = (cr->GetAttr(A_SIZ) - GetAttr(A_SIZ))*4;
                             if (CloseDC > 0 && !SavingThrow(REF,CloseDC,SA_CLOSE,SizeMod,"size")) {
                                 e.EVictim = cr;
-                                if (Percieves(cr))
+                                if (Perceives(cr))
                                     TPrint(e, (const char*)Format(
                                     "You fail to close with the <EVictim> (DC %d).",
                                     CloseDC),
@@ -788,7 +788,7 @@ SkipConfirms:
     for(i=0;i!=8;i++)
         for (cr=m->FCreatureAt(x+DirX[i],y+DirY[i]);cr && !isDead(); cr=m->NCreatureAt(x+DirX[i],y+DirY[i]))
             if (sdist(tx,ty,cr) > 1) 
-                if (cr->isHostileTo(this) && !cr->HasStati(HIDING) && cr->Percieves(this) &&
+                if (cr->isHostileTo(this) && !cr->HasStati(HIDING) && cr->Perceives(this) &&
                     !cr->HasStati(PRONE) && !cr->HasStati(SLEEPING) && !cr->HasStati(STUNNED) &&
                     !cr->HasStati(GRAPPLING) && !cr->HasStati(GRAPPLED) && !cr->HasStati(GRABBED) &&
                     !cr->HasStati(PARALYSIS) && !cr->isBlind() && !cr->HasStati(AFRAID)) {
@@ -801,7 +801,7 @@ SkipConfirms:
 
                             if (isPlayer() && !HasStati(CHARGING)) {
 RepeatPrompt:
-                                if (e.Event != EV_MOVE || !e.EActor->Percieves(cr))
+                                if (e.Event != EV_MOVE || !e.EActor->Perceives(cr))
                                     ch = 'f';
                                 else
                                     ch = thisp->MyTerm->ChoicePrompt("You are in a threatened area. Abort, Flee or Disengage?", "afd?");
@@ -924,9 +924,9 @@ RepeatPrompt:
         e.EVictim = dis;
         if (!(dis->isIllusion() && !dis->isRealTo(this)) && !dis->onPlane() != onPlane() && !dis->isFriendlyTo(this)) {
             /* You're moving into the same square as dis. */
-            if (!Percieves(dis))
+            if (!Perceives(dis))
                 ; /* No message -- don't give away dis's presence */
-            else if (!dis->Percieves(this))
+            else if (!dis->Perceives(this))
                 IPrint("You slip past the <Obj> unnoticed.", dis);
             else if (!dis->isHostileTo(this))
                 IPrint("You walk past an <Obj>.", dis);
@@ -967,7 +967,7 @@ RepeatPrompt:
         ProvokeAoO(ClosingWith[i],true);
         if ((Flags & F_DELETE) || !m)
             return DONE;
-        if (!(ClosingWith[i]->Flags & F_DELETE) && Percieves(ClosingWith[i]))
+        if (!(ClosingWith[i]->Flags & F_DELETE) && Perceives(ClosingWith[i]))
             TPrint(e,"You close with the <EVictim>.",
             "The <EActor> slips past your defenses!",
             "The <EActor> slips past the <EVictim>'s defenses.");
@@ -988,7 +988,7 @@ RepeatPrompt:
                 if (onPlane() == cr->onPlane())
                     if (cr->SkillLevel(SK_LISTEN) + Dice::Roll(1,20,0) > MoveSilRoll) {
                         if (HasStati(HIDING)) {
-                            if (!Percieves(cr))
+                            if (!Perceives(cr))
                                 IPrint("You catch a flash of movement -- something unseen heard you!");
                             else
                                 IPrint("The <Obj> hears you!", cr);
@@ -1134,7 +1134,7 @@ RepeatPrompt:
                     /* Mark it as not secret, so we can check if we *would* see
                     it if it weren't secret, then put the flag back to normal. */
                     d->DoorFlags &= ~DF_SECRET;
-                    if (!Percieves(d))
+                    if (!Perceives(d))
                         continue;
                     d->DoorFlags |= DF_SECRET;
 
@@ -1185,7 +1185,7 @@ RepeatPrompt:
                     dist(x,y,cx,cy) <= sz))
                     for (cr=m->FCreatureAt(cx,cy);cr;cr=m->NCreatureAt(cx,cy))
                         if (cr!=this && !(cr->StateFlags & MS_SEEN_CLOSE))
-                            if (Percieves(cr) & (~PER_SHADOW)) {
+                            if (Perceives(cr) & (~PER_SHADOW)) {
                                 cr->StateFlags |= MS_SEEN_CLOSE;
                                 if (TMON(cr->tmID)->HasFlag(M_CLOSEID))
                                     cr->IdentifyMon();
@@ -1197,7 +1197,7 @@ RepeatPrompt:
 
     } else if (DistFrom(theGame->GetPlayer(0)) <= 1 + FaceRadius[ GetAttr(A_SIZ) ] + FaceRadius[ theGame->GetPlayer(0)->GetAttr(A_SIZ) ]) {
         if (!(StateFlags & MS_SEEN_CLOSE))
-            if (theGame->GetPlayer(0)->Percieves(this) & (~PER_SHADOW)) {
+            if (theGame->GetPlayer(0)->Perceives(this) & (~PER_SHADOW)) {
                 StateFlags |= MS_SEEN_CLOSE;
                 if (TMON(tmID)->HasFlag(M_CLOSEID))
                     IdentifyMon();
@@ -1315,7 +1315,7 @@ void Creature::TerrainEffects()
             Thing *t; int16 i;
             MapIterate(m,t,i)
               if (t->isPlayer() && t != this)
-                if (((Player*)t)->Percieves(this))
+                if (((Player*)t)->Perceives(this))
                   t->IPrint(m->TerrainAt(x,y) == m->PTerrainAt(x,y,(Player*)t) ?
                     "An <Obj1> falls into the <Res1>!" :
                     "An <Obj1> falls through the <Res2>!",
@@ -1397,7 +1397,7 @@ void Creature::TerrainEffects()
           if (cr->isFriendlyTo(this))
             pet = true;
           if (cr->isHostileTo(this))
-            if (Percieves(cr))
+            if (Perceives(cr))
               hostile = true;
           }
         if (pet && !hostile)

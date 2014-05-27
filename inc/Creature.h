@@ -181,7 +181,7 @@ class Creature: public Thing, public Magic
       static int8 AttrAdj[ATTR_LAST][BONUS_LAST];
       static Item *meleeWep, *offhandWep, 
                     *missileWep, *thrownWep, *myShield;
-      /* These precalcs are used to speed up Percieves() */
+      /* These precalcs are used to speed up Perceives() */
       uint8 TremorRange, SightRange, LightRange, BlindRange,
            InfraRange, PercepRange, TelepRange,
            ScentRange, ShadowRange,
@@ -288,8 +288,8 @@ class Creature: public Thing, public Magic
       virtual void ThiefXP(rID regID);
       virtual uint32 XPDrained() { return 0; }
       virtual void RestoreXP(uint32 xp) { return; }
-      uint16 Percieves(Thing*, bool assertLOS);
-      uint16 Percieves(Thing* t) { return Percieves(t, false); } 
+      uint16 Perceives(Thing*, bool assertLOS);
+      uint16 Perceives(Thing* t) { return Perceives(t, false); } 
       virtual bool isThreatened(bool perceived_only=true);
       virtual rID getGod() { return 0; }
       virtual const char* ActingVerb();
@@ -301,14 +301,14 @@ class Creature: public Thing, public Magic
           return false; 
         bool need_to_see = (f->FType & (FI_SIZE|FI_SHADOW|FI_ITERRAIN)) != 0;
         if (!need_to_see || 
-            !f->Creator || this->Percieves(oThing(f->Creator))) 
+            !f->Creator || this->Perceives(oThing(f->Creator))) 
           return true;
         else 
           return false; 
       } 
 
       bool   XPerceives(Thing *t)
-        { return (Percieves(t) & (~(PER_SHADOW|PER_SCENT|PER_DETECT))) != 0; }
+        { return (Perceives(t) & (~(PER_SHADOW|PER_SCENT|PER_DETECT))) != 0; }
       virtual bool isShadowShape() { return TMON(mID)->Size >= SZ_SMALL; }
       bool isBeside(Thing *t, int extra_dist = 0);
       bool isAerial();
@@ -415,7 +415,7 @@ class Creature: public Thing, public Magic
 
 
       /* Spell and Innate Ability Functions */
-      virtual int16 SpellRating(rID eID,uint32 mm=0,bool percieved=false);
+      virtual int16 SpellRating(rID eID,uint32 mm=0,bool perceived=false);
       virtual int16 getSpellDC(rID spID, bool isTrick, bool isHeight);
       virtual int16 getSpellMana(rID spID, uint32 MM, int16 *specMod2);
       virtual uint32 getStoredMM(rID spID);
@@ -733,7 +733,7 @@ class Character: public Creature
       virtual int16 KMod2(int8 a);
       virtual void Exercise(int16 at, int16 amt, int16 col, int16 cap);
       /* Spell and Innate Ability Functions */
-      virtual int16 SpellRating(rID eID, uint32 mm=0,bool percieved=false);
+      virtual int16 SpellRating(rID eID, uint32 mm=0,bool perceived=false);
       virtual uint16 getSpellFlags(rID spID) 
                        { return Spells[theGame->SpellNum(spID)]; }
       virtual void   setSpellFlags(rID spID, uint16 fl) 
@@ -1117,7 +1117,7 @@ class Player: public Character
 class Monster: public Creature
 	{
     friend class Item;
-    friend uint16 Creature::Percieves(Thing*, bool);
+    friend uint16 Creature::Perceives(Thing*, bool);
 		protected:
 			hObj Inv;
       int8 BuffCount, FoilCount;

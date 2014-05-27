@@ -65,7 +65,7 @@ Class "Barbarian"
       as soon as the rage ends, if applicable.\n
       __A raging character may not cast spells, don or remove armour or clothing,
       pick locks or search through a container (such as his backpack) for items.\n
-      __*_<7>Tough as Hell<2> -- A barbarian recieves double the normal
+      __*_<7>Tough as Hell<2> -- A barbarian receives double the normal
       number of bonus hit points from a high Constitution score for all of
       his barbarian levels.\n 
       __When struck for physical damage, an unarmoured,
@@ -93,7 +93,7 @@ Class "Barbarian"
       surviving brutal raids and inhospitable terrain that would break weaker
       men and women. This constant forcing of their bodies to the limit ends
       up tempering them into beings of incredible physical prowess.\n
-      __In game terms, barbarians recieve a +1 inherant bonus to either Strength
+      __In game terms, barbarians receive a +1 inherant bonus to either Strength
       or Constitution at every even level, chosen randomly, up to the maximum
       possible inherant bonus for their race (+5 for most characters, or +8 
       for humans). Barbarians of a Small race naturally improve their Dexterity
@@ -113,24 +113,24 @@ Class "Barbarian"
       immediately as the encounter begins. At 5th level and above, she suffers no
       ill effects from having enemies on either side and is effectively
       immune to flanking. Starting at 6th level and above, the barbarian
-      recieves gradually increasing bonuses to all saving throws against
+      receives gradually increasing bonuses to all saving throws against
       traps -- her instincts tell her exactly when to dodge or pull back.\n
       __Levels of this ability from the barbarian and rogue classes stack.\n
-      __*_<7>Spellbreaker<2> -- Barbarians recieve experience points for
+      __*_<7>Spellbreaker<2> -- Barbarians receive experience points for
       the destruction of magical items other then weapons or armour. When
-      they destroy such an item, they recieve experience equal to that
+      they destroy such an item, they receive experience equal to that
       gained from killing a creature with a CR two below the item's level.
-      Multiclass barbarians recieve a fraction of the experience proporational
-      to their barbarian levels -- a barbarian 2/warrior 3 would recieve 2/5ths
+      Multiclass barbarians receive a fraction of the experience proporational
+      to their barbarian levels -- a barbarian 2/warrior 3 would receive 2/5ths
       of the normal experience for breaking an item. Use the Break verb on
       the [Y]use menu to break items in your inventory.\n
-      __Characters with arcane spellcasting ability recieve no experience for
+      __Characters with arcane spellcasting ability receive no experience for
       destroying magical items.\n
       __*_<7>Mighty Stroke<2> -- Starting at 3rd level performing a Great Blow
       costs a barbarian only one fatigue point. When they achieve 6th level,
       they can perform this maneuver without expending any fatigue at all.\n
       __*_<7>Small Barbarians<2> -- In addition to the changes to the Berserk
-      Rage ability listed above, barbarians from Small races also recieve the 
+      Rage ability listed above, barbarians from Small races also receive the 
       Defensive Roll ability (from the rogue's higher-level special ability 
       list) upon attaining four combined levels of warrior, ranger, paladin, 
       monk or barbarian.\n
@@ -293,7 +293,7 @@ Class "Bard"
       having no need for spellbooks or paraphenelia. Their spell list
       lacks the raw power of the primary casters, but it is very diverse, 
       including enchantments, illusions, minor evocations and even
-      low-grade healing spells. Bards recieve one sorcerous spell level at
+      low-grade healing spells. Bards receive one sorcerous spell level at
       every even class level, and start with a single, bonus 1st-level spell
       slot at 1st level. Bardic spells are not negatively impacted by light
       armour or shields. 
@@ -580,7 +580,7 @@ Class "Druid"
       Concentration, Craft, Heal, Knowledge (Nature), 
       Knowledge (Oceans), Knowledge (Theyra), Ride, Spellcraft, Swim 
       and Wilderness Lore.\n
-      __Druids recieve Bluff and Diplomacy as class skills at 9th level,
+      __Druids receive Bluff and Diplomacy as class skills at 9th level,
       when they take on the full formal title of Druid and begin moving
       within the worldwide hierarchy of the Druidic Enclaves.
 
@@ -605,7 +605,7 @@ Class "Druid"
       poisons, or as magical treasures in their own right.\n
       __*_<7>Animal Companions<2> -- Druids can tame animals using their
       Animal Empathy class skill, and if successful add those companions
-      to their adventuring party. A druid character recieves a free 'buffer'
+      to their adventuring party. A druid character receives a free 'buffer'
       of (approximately) two hit dice per druid level for animal companions; 
       these hit dice worth of animals do not count toward the total hit dice 
       of the party for purposes of party loyalty checks or gaining new party 
@@ -619,7 +619,7 @@ Class "Druid"
       spell (which is not currently implemented) will make it effectively
       impossible for encounters to chase after a character on the wilderness
       screen.\n
-      __*_<7>Vitality of Life<2> -- At 4th level and above, druids recieve a
+      __*_<7>Vitality of Life<2> -- At 4th level and above, druids receive a
       +2 bonus to saving throws versus necromantic damage and effects.\n
       __*_<7>Sylvan Affinity<2> -- Also starting at 4th level, true faeries
       and faerie creatures (not mere elves) will never attack the druid
@@ -789,7 +789,7 @@ Class "Mage"
       __All of the following are class features of the mage.\n
       __*_<7>Proficiencies<2> -- The mage is proficient only with daggers
       and staves. Few mages rely upon material weapons with any regularity.\n
-      __*_<7>Spells<2> -- Mages recieve one spellcasting level for
+      __*_<7>Spells<2> -- Mages receive one spellcasting level for
       every mage class level they possess. Mage spells must be studied
       and cast from spellbooks, and are all but impossible to cast while
       wearing armour. However, the mage spell list is the most flexible
@@ -804,10 +804,10 @@ Class "Mage"
       __*_<7>Arcane Will<2> -- The spellcasting power of elder mages exceeds
       that of any other class. The arcane will ability represents this superior
       power by increasing the DC of saving throws against all mage spells cast
-      by the character in question. Mages recieve a +1 arcane will at 8th, +2
+      by the character in question. Mages receive a +1 arcane will at 8th, +2
       at 11th, +3 at 13th, +4 at 17th and +5 at 19th.\n
       __*_<7>Skill Benefits<2> -- Representing their supreme mastery of the
-      magical arts, mages recieve a +1 competance bonus to Decipher Script,
+      magical arts, mages receive a +1 competance bonus to Decipher Script,
       Metamagic, Spellcraft and Use Magic every level starting at 10th level.\n 
       __*_<7>School Specialist<2> -- All mages choose one of nine
       schools of magic (Abjuration, Arcana, Divination, Enchantment, Evocation,
@@ -817,8 +817,8 @@ Class "Mage"
       highest modifier going to the mage's school of choice. Specialization
       also determines what the third spellbook the mage enters play with is,
       which has a strong influence on spell selection in the early game.\n
-      __*_<7>Bonus Feats<2> -- All mages recieve the Scribe Scroll feat for
-      free at 1st level. In addition, mages recieve a bonus feat chosen from 
+      __*_<7>Bonus Feats<2> -- All mages receive the Scribe Scroll feat for
+      free at 1st level. In addition, mages receive a bonus feat chosen from 
       either the Metamagic or Item Creation feat lists at every 5th level -- 
       5th, 10th, 15th, 20th and so forth.
       \n__*_<7>Starting Benefits<2> -- Mages start with a quarterstaff 
@@ -1303,7 +1303,7 @@ Class "Monk"
       -2 penalty to her attacks while flurrying; this decreases to -1 at 5th level
       and to nothing at 9th.\n
       __*_<7>Increased Move<2> -- Monks inherantly move faster than other creatures.
-      A monk recieves a +20~ bonus to her movement rate at every odd level starting
+      A monk receives a +20~ bonus to her movement rate at every odd level starting
       at 3rd.\n
       __*_<7>Evasion<2> -- Starting at 1st level, when a monk successfully
       makes a Reflex saving throw against an area-effect attack that allows
@@ -1311,17 +1311,17 @@ Class "Monk"
       mage's <9>lightning bolt<2>), he takes no damage at all. At 9th level
       and above, the monk takes only half damage on a failed Saving Throw.\n
       __Levels of this ability from the monk and rogue classes stack.\n
-      __*_<7>Zen Defense<2> -- At 1st level, the monk recieves the Zen Defense feat
+      __*_<7>Zen Defense<2> -- At 1st level, the monk receives the Zen Defense feat
       for free. This allows her to add her Wisdom modifier, if positive, to her
       defense class.\n
-      __*_<7>Deflect Arrows<2> -- At 2nd level, the monk recieves the Deflect Arrows
+      __*_<7>Deflect Arrows<2> -- At 2nd level, the monk receives the Deflect Arrows
       feat for free, even if she does not meet the normal prerequisites.\n
       __*_<7>Still Mind<2> -- At 3rd level, the monk gains a +2 bonus to saving throws
       versus enchantment effects, representing her superior mental discipline.\n
       __*_<7>Slow Fall<2> -- Starting at 4th level, the monk gains the ability to
       avoid or reduce falling damage. She takes 5 points off of all falling damage
       at 4th level, and an additional 5 points every even level thereafter.\n
-      __*_<7>Master Trip, Disarm<2> -- The monk recieves the Master Trip
+      __*_<7>Master Trip, Disarm<2> -- The monk receives the Master Trip
       and Master Disarm feats for free at 5th level.\n
       __*_<7>Purity of Body<2> -- Upon reaching 6th level, the monk learns to purify
       her body completely, and is forever after completely immune to diseases.\n
@@ -1340,11 +1340,11 @@ Class "Monk"
       ability to see invisible creatures.\n
       __*_<7>Small Monks<2> -- Starting at 3rd level, monks of races who are
       naturally Small size (kobolds, gnomes and halflings) learn to use the size of
-      other races against them, and recieve the Redirect Attack feat for free. Monks
+      other races against them, and receive the Redirect Attack feat for free. Monks
       that are Medium-sized or larger do not gain this benefit.\n
       __Small monks also never suffer a penalty to damage when fighting unarmed
       as a result of a low Strength score.\n      
-      __Finally, Small races recieve the Defensive Roll ability (from the rogue's
+      __Finally, Small races receive the Defensive Roll ability (from the rogue's
       higher-level special ability list) upon attaining four combined levels of 
       warrior, ranger, paladin, monk or barbarian.
       __*_<7>Starting Benefits<2> -- Monks start with a sizable stock of potions of 
@@ -1535,7 +1535,7 @@ Class "Paladin"
       \n__*_<7>Turn Undead<2> -- Starting at third level, a paladin may turn undead
       just as a priest of two levels lower does.
       \n__*_<7>Divine Magic<2> -- Starting at 4th level, the paladin is able to cast
-      a limited number of divine spells. He recieves one divine casting level for
+      a limited number of divine spells. He receives one divine casting level for
       every even paladin level thereafter.
       \n__*_<7>Sacred Mount<2> -- Starting at 5th level, the paladin can summon a
       specially-bonded mount from the Upper Planes to serve him in the corporeal
@@ -1544,8 +1544,8 @@ Class "Paladin"
       warhorse (or something similar as suits their race) for a sacred mount. If
       the mount is slain in combat, it vanishes rather than truly dying, and can
       be summoned back by the paladin after resting.\n
-      __At 7th, 9th and 11th level, the paladin recieves the ability to summon
-      superior, mythic creatures as mounts. The creature the paladin recieves is
+      __At 7th, 9th and 11th level, the paladin receives the ability to summon
+      superior, mythic creatures as mounts. The creature the paladin receives is
       fixed based on his race, but rumours speak of holy knights riding upon even
       young dragons as their steeds...
       \n__*_<7>Small Paladins<2> -- It's unusual for members of the Small races
@@ -1555,7 +1555,7 @@ Class "Paladin"
       Small races who show the courage and resilience to become paladins, granting
       them a +1 sacred bonus to melee damage and inherant armour at 2nd, 4th, 6th, 
       9th, 12th and 16th levels.
-      __Small races also recieve the Defensive Roll ability (from the rogue's
+      __Small races also receive the Defensive Roll ability (from the rogue's
       higher-level special ability list) upon attaining four combined levels of 
       warrior, ranger, paladin, monk or barbarian.
       \n__*_<7>Starting Benefits<2> -- Paladins start with a +1 sword (a small long 
@@ -1765,7 +1765,7 @@ Class "Priest"
       \n\n<10>CLASS SKILLS<2>\n
       __The class skills of the priest are Appraise, Concentration, Craft, 
       Diplomacy, Healing, Metamagic, Seneschal, Spellcraft, and Theology.
-      Priest characters may also recieve certain bonus class skills, if their
+      Priest characters may also receive certain bonus class skills, if their
       god offers them one or more Domains that grant such.
        
       \n\n<10>CLASS FEATURES<2>\n
@@ -1776,7 +1776,7 @@ Class "Priest"
       diety.\n
       __*_<7>Spellcasting<2> -- Priests cast divine spells from the priest
       spell list, which focuses on healing, divination, protection and the
-      augmentation of combat ability. They recieve one spellcasting level
+      augmentation of combat ability. They receive one spellcasting level
       for every class level, and learn spells simply by praying -- priests
       have no need for spellbooks. A priest
       must have his holy symbol equipped in the amulet slot or in a hand
@@ -1819,7 +1819,7 @@ Class "Priest"
       ___10__+2___+7___+3___+7__7+3_6+3_4+3_3+3_2+3__-___-\n
       ___11__+2___+7___+3___+7__7+3_7+3_5+3_4+3_3+3__-___-\n
       ___12__+3___+8___+4___+8__7+3_7+3_5+3_4+3_4+3_1+3__-\n
-      __(Note that priests do recieve 8th and 9th level
+      __(Note that priests do receive 8th and 9th level
       spells at the same rate mages do, along with three
       bonus 8th and three bonus 9th level spells -- there
       just isn't room to show this on the chart.)\n";
@@ -1969,7 +1969,7 @@ Class "Ranger"
       staves and spears, and with light armour and shields.\n
       __*_<7>Animal Companions<2> -- Rangers can tame animals using their
       Animal Empathy class skill, and if successful add those companions
-      to their adventuring party. A ranger character recieves a free 'buffer'
+      to their adventuring party. A ranger character receives a free 'buffer'
       of (approximately) two hit dice per ranger level for animal companions; 
       these hit dice worth of animals do not count toward the total hit dice 
       of the party for purposes of party loyalty checks or gaining new party 
@@ -2009,8 +2009,8 @@ Class "Ranger"
       with brambles, hedges, rubble or webbing).\n
       __*_<7>Combat Style<2> -- Starting at 1st level, rangers must choose one
       of the three ranger combat styles: archery, skirmish or two-weapon. Based
-      on their choice, they recieve pre-set bonus feats at 1st, 3rd, 7th, 11th
-      and 15th level. If they already have a feat inherantly, they recieve the
+      on their choice, they receive pre-set bonus feats at 1st, 3rd, 7th, 11th
+      and 15th level. If they already have a feat inherantly, they receive the
       next one in the progression; if the progression is complete and the ranger
       gains a bonus feat, they will gain one of the following instad: Woodsman,
       Endurance, Alertness, Toughness. Rangers do not need to meet the prerequisites 
@@ -2032,15 +2032,15 @@ Class "Ranger"
       __*_<7>Fasting<2> -- Being well accustomed to the harsh ways of the
       wilderness, rangers are able to survive for extended periods on much less
       food than other creatures; they get hungry at 1/3rd the rate of other
-      characters. Multi-classed rangers recieve this advantage in proportion
+      characters. Multi-classed rangers receive this advantage in proportion
       to the amount of their total levels that are ranger levels.\n
       __*_<7>Size Advantage<2> -- Much like Small warriors, Small rangers
       train to fight larger creatures by exploiting their vulnerabilities,
       and thus gain reduced threat ranges just as warriors do. For rangers,
-      this training is delayed by two levels, so they recieve a -1 threat
+      this training is delayed by two levels, so they receive a -1 threat
       range at 3rd level, -2 at 5th and so forth.\n
       __Warrior and ranger levels in this ability stack.\n
-      __Small races also recieve the Defensive Roll ability (from the rogue's
+      __Small races also receive the Defensive Roll ability (from the rogue's
       higher-level special ability list) upon attaining four combined levels of 
       warrior, ranger, paladin, monk or barbarian.\n
       __*_<7>Starting Benefits<2> -- Rangers start with a mighty long bow +2
@@ -2310,7 +2310,7 @@ Class "Rogue"
       characters would be helpless.
       \n\tRogues have only a d6 for Hit Dice and mediocre combat skills
       (though they can be quite proficient as archers or using thrown
-      weapons) but they recieve the most skill points, and the widest
+      weapons) but they receive the most skill points, and the widest
       selection of class skills, of any class in the game. This means
       that if they can survive the dungeon, they have a lot of unusual
       options open to them for advancing, and for gaining valuable magic
@@ -2327,7 +2327,7 @@ Class "Rogue"
       Jump, Knowledge (all), Listen, Lockpicking, Move Silently, Perform, Pick Pocket,
       Poison Use, Searching, Spot, Tumble and Use Magic
       Device.\n
-      __Like all classes that recieve 8 or more base skill points per level,
+      __Like all classes that receive 8 or more base skill points per level,
       the Rogue doubles his Intelligence bonus for determining skill points
       gained every level.
        
@@ -2383,13 +2383,13 @@ Class "Rogue"
       flat-footed, vulnerable to Coup de Grace attacks and being able to act
       immediately as the encounter begins. At 6th level and above, she suffers no
       ill effects from having enemies on either side and is effectively
-      immune to flanking. Starting at 9th level and above, the rogue recieves
+      immune to flanking. Starting at 9th level and above, the rogue receives
       gradually increasing bonuses to all saving throws against traps -- her
       instincts tell her exactly when to dodge or pull back.\n
       __Levels of this ability from the barbarian and rogue classes stack.\n
       __*_<7>Stealth<2> -- While rangers and, in truth, members of any class
       can gain skill with stealth, rogues excel at it beyond all others. 
-      They recieve a +1 class bonus to Hide in Shadows and Move Silently at
+      They receive a +1 class bonus to Hide in Shadows and Move Silently at
       8th level and this bonus increases by 1 for every even level thereafter.\n
       __*_<7>Special Abilities<2> -- Starting at 6th level, and then every third
       level thereafter (at 6th, 9th, 12th, 15th and 18th), a rogue can choose 
@@ -2429,7 +2429,7 @@ Class "Rogue"
       inside that surface's volume. This causes her to be effectively invisible
       to tremorsense, and is a constant, permanent and non-magical ability.\n
       __<10>Unearthly Reflexes:<2> A rogue who chooses this special ability
-      has training her reaction time to a nearly inhuman degree, and recieves
+      has training her reaction time to a nearly inhuman degree, and receives
       a +6 bonus to her Reflex saves.\n
       __<10>Peerless Accuracy:<2> When a rogue learns this ability, she
       becomes a master of thrown weapons -- she never misses. Well, almost
@@ -2456,7 +2456,7 @@ Class "Rogue"
       to avoid the killing entirely. If a single-classed rogue enters a region 
       and handles every single magical item within that region, and then leaves 
       without the monsters or NPCs who dwell there being even slightly aware of 
-      her presence, she will recieve experience for every enemy in the room just 
+      her presence, she will receive experience for every enemy in the room just 
       as if she had killed them normally. In this context, handling an item means 
       holding it in one's hands -- the rogue can then decide if she want to keep 
       it or leave it where she finds it to remain unburdened.\n
@@ -2613,7 +2613,7 @@ Class "Rogue"
           if (!EActor->HasEffStati(ADJUST_COMP,$"rogue",A_SAV_REF))
             ETerm->LOption("Unearthly Reflexes",7,
                "A rogue who chooses this special ability
-                has training her reaction time to a nearly inhuman degree, and recieves
+                has training her reaction time to a nearly inhuman degree, and receives
                 a +6 bonus to her Reflex saves.");
           if (!EActor->HasEffStati(TRAP_EVENT,$"Peerless Accuracy"))
             ETerm->LOption("Peerless Accuracy",8,
@@ -2778,7 +2778,7 @@ Class "Warrior"
       __*_<7>Weapon Skill<2> -- Warriors can develop exceptional degrees of
       skill with specific weapons, becoming eligable for special feats that
       represent such as they rise in level. They must still buy these feats
-      normally, of course. At 1st level, all warriors recieve a free 
+      normally, of course. At 1st level, all warriors receive a free 
       Weapon Focus in a weapon of their choice. \n
       __Starting at 3rd level, the warrior is eligable to buy the Weapon
       Specialization feat in any weapon which he is focused in. At 7th level,
@@ -2815,7 +2815,7 @@ Class "Warrior"
       characters who become Small-sized as a result of magic, or to Small
       warriors who become human-sized (or giant-sized, or even tinier than they
       usually are) as a result of magic.\n
-      __Small races also recieve the Defensive Roll ability (from the rogue's
+      __Small races also receive the Defensive Roll ability (from the rogue's
       higher-level special ability list) upon attaining four combined levels of 
       warrior, ranger, paladin, monk or barbarian.\n
       __*_<7>Starting Benefits<2> -- Warriors start with a +1 version of the

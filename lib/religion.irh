@@ -775,7 +775,7 @@ God "Ekliazeh"
       non-hostile creatures that are not traditional enemies of the dwarves. He
       is also gravely angered when a follower kills a dwarf or a member of their
       family, for any reason. Any character (other than goblinoids, elves, drow or 
-      lizardfolk) can worship Ekliazeh, but dwarves recieve the greatest favour in 
+      lizardfolk) can worship Ekliazeh, but dwarves receive the greatest favour in 
       his eyes.\n
       __<10>Blessings:<2> Ekliazeh will heal his followers, purify their bodies,
       cure blindness or maiming quite casually and lift curses or smite enemies with
@@ -818,7 +818,7 @@ God "Ekliazeh"
                you, my child.|"
           MSG_OUT_OF_AID
             "A deep voice speaks sorrowfully, |I have given you all the aid even a
-               champion may recieve in one lifetime!|"
+               champion may receive in one lifetime!|"
           MSG_NEARLY_OUT
             "A deep voice speaks sorrowfully, |Soon I will no longer be able to aid
                you, my child. Be ready!|"
@@ -1491,7 +1491,7 @@ God "Essiah"
       could care less. Her priesthood has no formal temples or ranks,
       gathering together in the wilderness on nights of a full moon for
       wild baccanals where stories of exotic lands are shared and priests
-      drive themselves into an ecstatic state in the hopes of recieving a
+      drive themselves into an ecstatic state in the hopes of receiving a
       vision from their goddess.
       \n__Essiah asks that her clerics constantly seek out new experiences,
       always yearning for the land that can be seen on the horizon. The
@@ -1540,11 +1540,11 @@ God "Essiah"
       arts (that they might manufacture herbal contraceptives and 
       abortifacients to gain control over their own bodies), and the 
       ability to understand other people, making them better able to give 
-      and recieve consent and be empathetic lovers. She gifts more
+      and receive consent and be empathetic lovers. She gifts more
       experienced followers with magically swift movement and freedom
       of action, preventing them from being restrained or paralyzed.
       (Since she has already given this gift as a racial blessing to
-      the gnomish race, gnomes recieve bonus feats instead.) She is
+      the gnomish race, gnomes receive bonus feats instead.) She is
       also known to grant beauty, wisdom and influence over dreams.";
     Flags: GF_GOOD; 
     Lists:
@@ -2214,7 +2214,7 @@ God "Immotian"
       such acts, individual clerics of Immotian have been known to commit hate
       crimes against elves, and to openly advocate the genocide of all the
       darkling races (drow, orcs, goblins, kobolds, etc). Clerics of Immotian
-      adventure in the hopes of scouring (whatever they percieve as) evil from
+      adventure in the hopes of scouring (whatever they perceive as) evil from
       the planet utterly and relentlessly.\n
       __The church of Immotian is centered around the ideal of community, and
       attempts to involve everyone nearby in its services and rituals. The
@@ -3124,7 +3124,7 @@ God "Kysul"
       \n__Kysul is nothing if not a long-term planner. Patient beyond human
       imagining, it has spent the last six milennia subtly nudging forward its
       eldritch master plan to save Therya from a metaphysical armageddon that most
-      humans would not even percieve, let alone understand. Often, the actions
+      humans would not even perceive, let alone understand. Often, the actions
       and objectives of this plan are not comprehensible to Kysul's followers,
       let alone casual observers, but they are none the less necessary. The Watcher 
       has access to a font of gnosis from its old world, a source of secret 
@@ -3132,7 +3132,7 @@ God "Kysul"
       being. Indeed, Kysul's mere presence, and the rituals and ceremonies of its 
       clergy, have been known to cause madness in the uninitiated. For this reason, 
       its clerics form tiny, secretive cults, dwelling in the shadows outside of 
-      mundane sight, in order to recieve Kysul's revelations at whatever rate their
+      mundane sight, in order to receive Kysul's revelations at whatever rate their
       minds can withstand the strain. There is an extremely strict ethical code
       among followers of Kysul concerning exposing mundanes to the many things its
       followers deal with that could damage minds.
@@ -3143,8 +3143,8 @@ God "Kysul"
       demons and devils, and his relations with celestials, surprisingly, are not
       that much better. The reason for its extreme mistrust of the Higher Planes
       is unknown. Sailors and seamen often use scraps of old chants and arcane
-      gestures to propitiate Kysul, in the hopes of recieving smooth weather for
-      a journey. When it percieves these, it obliges as best it can, but Kysul is
+      gestures to propitiate Kysul, in the hopes of receiving smooth weather for
+      a journey. When it perceives these, it obliges as best it can, but Kysul is
       a very alien, primordial being, and any interaction it has with humanity is
       severely limited by the radical differences in perspective.
       \n__Kysul is Lawful Good, and accepts worshippers of any non-evil alignment.
@@ -4307,7 +4307,7 @@ God "Maeve"
               light!", EActor);
             for (h=EMap->FirstThing();h;h=EMap->NextThing())
               if (h->isCreature() && h->isHostileTo(EActor))
-                if (h->Percieves(EActor) && h->DistFrom(EActor) <= 12)
+                if (h->Perceives(EActor) && h->DistFrom(EActor) <= 12)
                   if (!h->isMType(MA_CONSTRUCT) && h->ResistLevel(AD_MIND) != -1)
                     {
                       h->IPrint("The <hObj>'s heart is forever ensnared!", h);
@@ -4446,7 +4446,7 @@ God "Sabine"
 	authority over the weather on Therya, both good and bad. His priests
 	call themselves Stormbringers, and are most frequently either sailors
 	or athletes of some kind. Sabine will grant visions of the future to
-	those who are willing, but recieving these revelations from him requires
+	those who are willing, but receiving these revelations from him requires
 	great ordeal and physical exertion, driving one's body to its limits in
 	order to induce a fugue state. In Theryan mythology, Sabine plays the
 	role of Cassandra: he is predestined to destroy the world at the end of
@@ -5522,7 +5522,7 @@ God "Xel"
       the majority of priests have a distinct bias toward nobility -- that's
       where the majority of the affluence is to be had, after all -- Xel's
       priests have always been the champions of the everyman, the poor and
-      the downtrodden. Even lepers recieve the favour of this diety -- indeed,
+      the downtrodden. Even lepers receive the favour of this diety -- indeed,
       Xel's followers have a very special place in their hearts for the
       diseased. Yet, in spite of all of this, there is a sinister meaning
       hidden within Xel's playful children's songs that does not escape the

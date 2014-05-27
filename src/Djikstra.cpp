@@ -224,7 +224,7 @@ uint16 Map::RunOver(uint8 x, uint8 y, bool memonly, Creature *c,
   if (At(x,y).Contents) {
     Creature *ca; Trap *tr; Door *dr;
     for (ca=FCreatureAt(x,y);ca;ca=NCreatureAt(x,y))
-      if (ca && c->Percieves(ca) && ca->isHostileTo(c))
+      if (ca && c->Perceives(ca) && ca->isHostileTo(c))
         return 0;
     for (tr=FTrapAt(x,y);tr;tr=NTrapAt(x,y)) {
       if (tr->TrapFlags & TS_FOUND)

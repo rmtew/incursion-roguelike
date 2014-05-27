@@ -772,7 +772,7 @@ void SinglePrintXY(EventInfo &e,const char *msg,...)
       for(i=0;i!=MAX_PLAYERS;i++)
         if (p = oPlayer(e.EMap->pl[i])) 
           if ((e.isLoc && e.EMap->At(e.EXVal,e.EYVal).Visibility & VI_VISIBLE << i*4) ||
-              (!e.isLoc && e.EActor && p->Percieves(e.EActor)) )
+              (!e.isLoc && e.EActor && p->Perceives(e.EActor)) )
             p->__IPrint(msg,ap);
   }
 
@@ -999,7 +999,7 @@ String & Creature::Name(int16 Flags)
       Player *p = theGame->GetPlayer(0); 
       if (p->HasStati(HIDING))
         if (p->SkillLevel(SK_APPRAISE) - 4 >= SkillLevel(SK_BLUFF))
-          s = SC((Percieves(p) ? "aware " : "unaware ")) + s;
+          s = SC((Perceives(p) ? "aware " : "unaware ")) + s;
       }
       if (isFriendlyTo(theGame->GetPlayer(0)) && !isPlayer())
         s = SC("allied ") + s;

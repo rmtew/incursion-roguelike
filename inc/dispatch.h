@@ -1056,9 +1056,9 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n)
         oCreature(h)->DevourMonster(oMonster(STACK(1)));
        return;
       case 204:
-        VERIFY(h,T_CREATURE,"Percieves")
+        VERIFY(h,T_CREATURE,"Perceives")
        ASSERT(REGS(63) >= 1)
-        REGS(n) = oCreature(h)->Percieves(oThing(STACK(1)));
+        REGS(n) = oCreature(h)->Perceives(oThing(STACK(1)));
        return;
       case 205:
         VERIFY(h,T_CREATURE,"isBeside")

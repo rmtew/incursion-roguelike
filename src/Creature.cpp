@@ -934,7 +934,7 @@ void Creature::ExtendedAction()
       if (dist(c->x,c->y,x,y) <= 18) {
         if (c->isCreature() && c != this) 
           if (m->At(c->x,c->y).Visibility & VI_DEFINED)
-            if (Percieves(c) & (PER_VISUAL|PER_INFRA|PER_BLIND|PER_TREMOR) &&
+            if (Perceives(c) & (PER_VISUAL|PER_INFRA|PER_BLIND|PER_TREMOR) &&
                 c->m->LineOfFire(x,y,c->x,c->y,this)) {
               if (c->isHostileTo(this) && !c->HasStati(ASLEEP) &&
                   c->Attr[A_MOV] > 0)
@@ -951,7 +951,7 @@ void Creature::ExtendedAction()
               } 
             }
         if (c->isType(T_PORTAL) && s->Val == EV_MOVE)
-          if (Percieves(c))
+          if (Perceives(c))
             if (isPlayer() && thisp->Opt(OPT_STOP_STAIRS))
             {
               HaltAction("stairs",true);
@@ -2229,7 +2229,7 @@ bool Thing::isRealTo(Creature *watcher)
     if (!(s->Val & IL_IMPROVED))
       {
         int32 P;
-        P = watcher->Percieves(this);
+        P = watcher->Perceives(this);
         
         if (P & (PER_SCENT|PER_BLIND|PER_TREMOR))
           return false;
@@ -2271,7 +2271,7 @@ void Thing::DisbeliefCheck(Creature *watcher)
           if (watcher->isCreature())
             if (watcher != this)
               if (watcher->DistFrom(this) <= 10)
-                if (watcher->Percieves(this))
+                if (watcher->Perceives(this))
                   DisbeliefCheck(watcher);
         return;
       }
@@ -2295,7 +2295,7 @@ void Thing::DisbeliefCheck(Creature *watcher)
       {
         watcher->IPrint("You realize that the <Obj> is an illusion.", this);
         if (s->h && oThing(s->h)->isCreature())
-          if (oCreature(s->h)->Percieves(watcher))
+          if (oCreature(s->h)->Perceives(watcher))
             oCreature(s->h)->IPrint("The <Obj> disbelieves your <Obj>.",
               watcher, this);
         watcher->GainTempStati(DISBELIEVED, this, -2, SS_MISC);
@@ -2356,7 +2356,7 @@ void Map::TerrainDisbelief(int16 x, int16 y, Creature * watcher)
               watcher->IPrint("You realize that the <Res> is an illusion.", 
                                 PTerrainAt(x,y,NULL));
               if (s->h && oThing(s->h)->isCreature())
-                if (oCreature(s->h)->Percieves(watcher))
+                if (oCreature(s->h)->Perceives(watcher))
                   oCreature(s->h)->IPrint("The <Obj> disbelieves your <Res>.",
                     watcher, PTerrainAt(x,y,NULL));
               watcher->GainTempStati(DISB_TERRAIN, 
@@ -3136,10 +3136,10 @@ SkipSolidityTest:
   for (cr=m->FCreatureAt(tx,ty);cr;cr=m->NCreatureAt(tx,ty)) {
     if (cr->isIllusion() && !cr->isRealTo(this))
       ;
-    else if (cr->HasStati(HIDING) && !Percieves(cr) && 
+    else if (cr->HasStati(HIDING) && !Perceives(cr) && 
                cr->GetAttr(A_SIZ) < SZ_LARGE && GetAttr(A_SIZ) < SZ_LARGE)
       ;
-    else if (HasStati(HIDING) && !cr->Percieves(this)  && 
+    else if (HasStati(HIDING) && !cr->Perceives(this)  && 
                cr->GetAttr(A_SIZ) < SZ_LARGE && GetAttr(A_SIZ) < SZ_LARGE)
       ;
     else if (HasStati(ELEVATED) != cr->HasStati(ELEVATED)  && 

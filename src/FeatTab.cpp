@@ -41,7 +41,7 @@ struct FeatInfoStruct FeatInfo[] = {
 \******************************************************************************/
 
   { FT_ALLURING,  0, "Alluring", 
-    "You recieve a +3 circumstance bonus on social checks against members "
+    "You receive a +3 circumstance bonus on social checks against members "
                   "of the opposite gender and similar genotype to yourself;"
                   "demihuman and human characters can be attractive to other "
                   "humans and demihumans; reptilian characters can be "
@@ -49,7 +49,7 @@ struct FeatInfoStruct FeatInfo[] = {
                   "goblinoids can be attractive to other orcs, kobolds or "
                   "goblins." },
   { FT_SKILL_FOCUS, FF_MULTIPLE, "Skill Focus", 
-    "You recieve a +2 competence bonus to any one skill of your "
+    "You receive a +2 competence bonus to any one skill of your "
                   "choice. This bonus stacks with the bonuses from other skill "
                   "enhancer feats. Additionally, when you perform a skill check "
                   "for that skill, you roll twice and take the better result. If "
@@ -66,10 +66,10 @@ struct FeatInfoStruct FeatInfo[] = {
 \******************************************************************************/
 
   { FT_ALERTNESS, 0, "Alertness",
-    "You are exceptionally alert, recieving a +3 circumstance bonus on "
+    "You are exceptionally alert, receiving a +3 circumstance bonus on "
     "all Spot and Listen checks." },
   { FT_ACROBATIC, 0, "Acrobatic",
-    "You have a natural agility and grace in motion, and recieve a +3 "
+    "You have a natural agility and grace in motion, and receive a +3 "
     "skill bonus to all Jump and Tumble checks. Additionally, you do not "
     "provoke attacks of opportunity by foes beside you when you jump."  },
   { FT_ATHLETIC,  0, "Athletic",
@@ -77,7 +77,7 @@ struct FeatInfoStruct FeatInfo[] = {
     "a +3 skill bonus on Athletics, Climb and Swim checks. In addition, you "
     "gain a +1 competence bonus to your Fortitude Saving Throw." },
   { FT_ARTIFICER, 0, "Artificer",
-    "You have a natural talent for intricate craftwork, and recieve a +3 "
+    "You have a natural talent for intricate craftwork, and receive a +3 "
     "skill bonus to Craft and Handle Device checks; you also require only "
     "2/3rds of the normal XP when crafting items that require spending "
     "experience." },
@@ -98,7 +98,7 @@ struct FeatInfoStruct FeatInfo[] = {
     "giving you a +3 bonus to Diplomacy and Perform, and gain 250 "
     "gp added starting wealth." },
   { FT_SNEAKY,    0, "Sneaky",
-    "Stealth is second-nature to you, and you recieve a +3 skill bonus to Hide "
+    "Stealth is second-nature to you, and you receive a +3 skill bonus to Hide "
     "and Move Silently checks. In addition, you can move at full speed (rather "
     "than half) while hiding in shadows." },
   { FT_WOODSMAN,  0, "Woodsman", "You have great experience in the wilderness, and this "
@@ -224,7 +224,7 @@ struct FeatInfoStruct FeatInfo[] = {
     {{{ FP_FEAT, FT_QUICK_DRAW, 0}}} },
 
   { FT_RUN,        0, "Run",
-    "You recieve a 20% feat bonus to your Movement Rate. In addition, you are not "
+    "You receive a 20% feat bonus to your Movement Rate. In addition, you are not "
     "denied your Dexterity bonus to defense when charging and not mounted." },
 
   { FT_SCRIBE_SCROLL, 0, "Scribe Scroll",
@@ -312,7 +312,7 @@ struct FeatInfoStruct FeatInfo[] = {
     {{{FP_ABILITY,CA_STUN_ATTACK,1,
        FP_ATTR,A_WIS,15}}}},
   { FT_LIGHTNING_FISTS, 0, "Lightning Fists",
-    "You recieve a 5% bonus to the Speed of your unarmed "
+    "You receive a 5% bonus to the Speed of your unarmed "
     "strikes for every point of your Dexterity bonus." ,
     {{{FP_ATTR,A_DEX,13,
        FP_ABILITY,CA_UNARMED_STRIKE,1},
@@ -321,7 +321,7 @@ struct FeatInfoStruct FeatInfo[] = {
   { FT_FISTS_OF_IRON, 0, "Fists of Iron",
     "You suffer only half damage from the act of attacking something with your "
     "natural attack sequence (e.g., you will be burned less by punching a fire "
-    "elemental). Additionally, you recieve a +1 bonus to damage with unarmed "
+    "elemental). Additionally, you receive a +1 bonus to damage with unarmed "
     "attacks.",
     {{{FP_BAB,S_BRAWL,2}}}},
   { FT_IRON_SKIN, 0, "Iron Skin", 
@@ -393,7 +393,7 @@ struct FeatInfoStruct FeatInfo[] = {
     "on a living humanoid with less than half their hit points, that "
     "creature must make a Fortitude save against the grappler's stunning "
     "fist DC or be rendered unconscious for an extended period. Characters "
-    "recieve experience for foes felled in this manner.",
+    "receive experience for foes felled in this manner.",
     {{{ FP_ABILITY, CA_UNARMED_STRIKE, 1,
         FP_FEAT, FT_MASTER_GRAPPLE, 0,
         FP_BAB, S_BRAWL, 4 },
@@ -477,14 +477,14 @@ struct FeatInfoStruct FeatInfo[] = {
 \******************************************************************************/
 
   { FT_IMPROVED_STRENGTH, 0, "Improved Strength", 
-    "Your might is truly legendary -- you recieve a +1 feat bonus "
+    "Your might is truly legendary -- you receive a +1 feat bonus "
                   "to your Strength score." },
   { FT_IMPROVED_DEXTERITY, 0, "Improved Dexterity", 
-    "Your agility is peerless; you recieve a +1 feat bonus to your "
+    "Your agility is peerless; you receive a +1 feat bonus to your "
                   "Dexterity score." },
   { FT_IMPROVED_CONSTITUTION, 0, "Improved Constitution", 
     "You are a peak physical specimen of your race, and you "
-                  "recieve a +1 feat bonus to your Constitution score." },
+                  "receive a +1 feat bonus to your Constitution score." },
   { FT_IMPROVED_INTELLIGENCE, 0, "Improved Intelligence", 
     "Your intellect is unparalleled, giving you a +1 feat bonus "
                   "to your Intelligence score." },
@@ -661,10 +661,10 @@ struct FeatInfoStruct FeatInfo[] = {
 
 
   { FT_LIGHTNING_REFLEXES, 0, "Lightning Reflexes", 
-    "You have unearthly reflexes, and thus recieve a +3 feat "
+    "You have unearthly reflexes, and thus receive a +3 feat "
                   "bonus to all Reflex saving throws." },
   { FT_GREAT_FORTITUDE, 0, "Great Fortitude", 
-    "You're tougher than nails, and thus recieve a +3 feat bonus "
+    "You're tougher than nails, and thus receive a +3 feat bonus "
                   "to all Fortitude saving throws." },
   { FT_IRON_WILL, 0, "Iron Will",
     "You have a resolute psyche, and thus gain a +3 feat bonus to all "
@@ -774,18 +774,18 @@ struct FeatInfoStruct FeatInfo[] = {
       "naturally due to your class or classes, you can choose one "
       "additional non-Exotic weapon with which you are proficient." },
   { FT_WEAPON_FOCUS, FF_MULTIPLE|FF_WARRIOR, "Weapon Focus", 
-    "You are particulairly skilled with a specific weapon, and recieve "
+    "You are particulairly skilled with a specific weapon, and receive "
       "a +1 skill bonus to hit when you use that weapon." },
   { FT_WEAPON_SPECIALIST, FF_MULTIPLE|FF_WARRIOR, "Weapon Specialist",
     "You have studied the use of a given weapon in great detail, "
-      "and thus you recieve a +1 skill bonus to hit, +2 skill bonus to "
+      "and thus you receive a +1 skill bonus to hit, +2 skill bonus to "
       "damage and a +10% skill bonus to Speed when using it.",
     {{{FP_WEP_SKILL,WS_FOCUSED,0,
        FP_ABILITY,CA_WEAPON_SKILL, 1}}}
   },
   { FT_WEAPON_MASTERY, FF_MULTIPLE|FF_WARRIOR, "Weapon Mastery",
     "You have mastered every possible intricacy of a single weapon, "
-      "and thus you recieve a +2 skill bonus to hit, +2 skill bonus to "
+      "and thus you receive a +2 skill bonus to hit, +2 skill bonus to "
       "damage and +20% skill bonus to Speed when using it. In addition, "
       "the weapon inflicts the next highest possible die type of damage "
       "-- for example, a long sword inflicts 1d10 base damage instead "
@@ -794,7 +794,7 @@ struct FeatInfoStruct FeatInfo[] = {
     {{{FP_WEP_SKILL,WS_SPECIALIST,0,
        FP_ABILITY,CA_WEAPON_SKILL, 2}}}},
   { FT_WEAPON_HIGH_MASTERY, FF_MULTIPLE|FF_WARRIOR, "Weapon High Mastery",
-    "Your skill with your chosen weapon is the stuff of legends. You recieve a "
+    "Your skill with your chosen weapon is the stuff of legends. You receive a "
     "+2 skill bonus to hit, a +3 skill bonus to damage, and a +30~ skill bonus to "
     "speed when using it. You gain a +3 skill bonus to melee defense. Your critical "
     "hit damage multiplier for the weapon is increased by one. Your range increment "
@@ -805,7 +805,7 @@ struct FeatInfoStruct FeatInfo[] = {
        FP_ABILITY,CA_WEAPON_SKILL, 3}}}},
   { FT_WEAPON_GRAND_MASTERY, FF_MULTIPLE|FF_WARRIOR, "Weapon Grand Mastery",
     "Your skill with your chosen weapon is rumoured to make the gods envious. You "
-    "recieve a +3 skill bonus to hit, a +4 skill bonus to damage, and a +50~ skill "
+    "receive a +3 skill bonus to hit, a +4 skill bonus to damage, and a +50~ skill "
     "bonus to speed when using it. You gain a +4 skill bonus to melee defense. Your "
     "critical hit damage multiplier for the weapon is increased by one and your "
     "critical threat range is doubled. Your range increment is tripled. Finally, the "
@@ -873,7 +873,7 @@ struct FeatInfoStruct FeatInfo[] = {
     "A focused spell has an area of effect 1/3rd of the normal size." },
   { FT_FORTIFY_SPELL, FF_META|FF_WIZARD, "Fortify Spell",
     "A fortified spell is much more difficult to dispel -- your effective "
-      "caster level recieves a +5 bonus for purposes of the dispel check a "
+      "caster level receives a +5 bonus for purposes of the dispel check a "
       "hostile caster makes against it." },
   { FT_HEIGHTEN_SPELL, FF_META|FF_WIZARD, "Heighten Spell",
     "A heightened spell has the DC of its saving throw increased by "
@@ -989,7 +989,7 @@ struct FeatInfoStruct FeatInfo[] = {
 \******************************************************************************/
 
   { FT_TWO_WEAPON_STYLE, FF_WARRIOR, "Two-Weapon Style",
-    "Whatever penalties you recieve for fighting with two weapons "
+    "Whatever penalties you receive for fighting with two weapons "
       "are reduced by two for each hand." },
   { FT_DOUBLE_WEAPON_FIGHTING, FF_WARRIOR, "Double Weapon Fighting",
     "You've learned to fight effectively with both ends of a double weapon. "
@@ -1012,7 +1012,7 @@ struct FeatInfoStruct FeatInfo[] = {
       "fighting with two weapons." ,
     {{{FP_ATTR,A_DEX,15}}}},
   { FT_TWIN_WEAPON_STYLE, FF_WARRIOR, "Florentine Style",
-    "When fighting with two weapons, you recieve no additional penalty "
+    "When fighting with two weapons, you receive no additional penalty "
       "if your offhand weapon is the same size as you are -- that is, a human "
       "could wield two long swords rather than a long sword and a dagger." ,
     {{{FP_FEAT,FT_TWO_WEAPON_STYLE}}}},
@@ -1157,7 +1157,7 @@ struct FeatInfoStruct FeatInfo[] = {
 
 
   { FT_DODGE,      FF_AGILE|FF_WARRIOR, "Dodge",
-    "You recieve a +1 feat bonus to your Defense, or a +3 bonus if you "
+    "You receive a +1 feat bonus to your Defense, or a +3 bonus if you "
       "wear Light or lighter armour and have Light or lighter encumbrance.",
     {{{FP_ATTR,A_DEX,13}}}},
     
@@ -1191,7 +1191,7 @@ struct FeatInfoStruct FeatInfo[] = {
        FP_ATTR,A_DEX,13}}}},
        
   { FT_MOBILITY,   FF_AGILE|FF_WARRIOR, "Mobility",
-    "You recieve a +4 bonus to Defense versus attacks of opportunity caused by "
+    "You receive a +4 bonus to Defense versus attacks of opportunity caused by "
     "moving out of an enemy's threatened area.",
     {{{FP_FEAT,FT_DODGE}}}},
     
@@ -1243,7 +1243,7 @@ struct FeatInfoStruct FeatInfo[] = {
        FP_FEAT,FT_ENDURANCE, 0}}}},
 
   { FT_TOUGHNESS,  FF_TOUGH|FF_WARRIOR, "Toughness",
-    "You are extraordinarily resilient, and recieve a 25% bonus to your "
+    "You are extraordinarily resilient, and receive a 25% bonus to your "
       "total hit points.",
     {{{FP_ATTR,A_CON,13,
        FP_FEAT,FT_ENDURANCE, 0,
@@ -1277,7 +1277,7 @@ struct FeatInfoStruct FeatInfo[] = {
   { FT_RESILIENT,  FF_TOUGH|FF_WARRIOR, "Resilient",
     "As long as you are not more severely damaged than [(Con modifier + 3) x 5%] of "
     "your HP, you recover damage at a rate of 1 point per 3 turns -- the "
-    "injuries you recieved are easily recovered from, since they are assumed "
+    "injuries you received are easily recovered from, since they are assumed "
     "to just be scrapes and bruises once you get your breath back.",
     {{{FP_ATTR,A_CON,13,
        FP_FEAT,FT_ENDURANCE, 0,
@@ -1322,7 +1322,7 @@ struct FeatInfoStruct FeatInfo[] = {
     
   { FT_DEFT_OPPORTUNIST, FF_SMART|FF_AGILE, "Deft Opportunist",
     "You are especially adept at making attacks of opportunity, and "
-    "recieve a +4 bonus to the attack roll on all such attacks.",
+    "receive a +4 bonus to the attack roll on all such attacks.",
     {{{FP_FEAT, FT_EXPERTISE, 0},
       {FP_FEAT, FT_COMBAT_REFLEXES, 0}}}},
 
@@ -1373,7 +1373,7 @@ struct FeatInfoStruct FeatInfo[] = {
     {{{FP_FEAT,FT_EXPERTISE}}}},
     
   { FT_TACTICAL_WITHDRAWL, FF_SMART|FF_WARRIOR, "Tactical Withdrawl",
-    "You recieve a +8 bonus to the disengagement contest needed to leave "
+    "You receive a +8 bonus to the disengagement contest needed to leave "
       "an enemy's threatened area safety.",
     {{{FP_FEAT,FT_EXPERTISE}}}},
     
@@ -1420,7 +1420,7 @@ struct FeatInfoStruct FeatInfo[] = {
     "any one magical bolt or ray directed against you, such as the effects of "
     "a <9>magic missile<7>, <9>searing light<7>, <9>ray of enfeeblement<7> or "
     "<9>disintegrate<7> spell. This costs you one of your attacks of opportunity "
-    "for the current round, and you must be able to percieve the attacker and "
+    "for the current round, and you must be able to perceive the attacker and "
     "must not be flat-footed.\n",
     {{{FP_ATTR, A_DEX, 13,
        FP_ATTR, A_WIS, 13,

@@ -642,7 +642,7 @@ void Item::MakeKnown(uint8 k)
           EFFMEM(eID,theGame->GetPlayer(0))->PKnown = true;
       }  
     if (theGame->GetPlayer(0))
-      if (theGame->GetPlayer(0)->Percieves(this))
+      if (theGame->GetPlayer(0)->Perceives(this))
         theGame->GetPlayer(0)->JournalNoteItem(this);
   }
 
@@ -656,14 +656,14 @@ void Item::VisibleID(Creature *user)
     for (i=0;i!=MAX_PLAYERS && (p = theGame->GetPlayer(i));i++) {
       if (p->x == -1)
         continue;
-      v = p->Percieves(user);
+      v = p->Perceives(user);
       /*
         This seems to be the root of the "This must be a
           Potion of Fire Breath" messages that appear
           intermittedly with no discernable reason.
       
       if (!(Flags & F_DELETE))
-        v |= p->Percieves(this);*/
+        v |= p->Perceives(this);*/
         
       // ww: parens are really needed here ...
       if ((v & PER_DETECT) || (v & ~PER_SHADOW))

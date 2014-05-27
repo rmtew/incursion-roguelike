@@ -1967,7 +1967,7 @@ Monster "sea hag" : MA_HAG, MA_ADVENTURER
               for (hTarget=EMap->FCreatureAt(x,y);hTarget;hTarget = EMap->NCreatureAt(x,y))
                 {
                   if (hTarget != GetHandle(EActor))
-                    if (hTarget->Percieves(EActor) && (!hTarget->isBlind()) &&
+                    if (hTarget->Perceives(EActor) && (!hTarget->isBlind()) &&
                           hTarget->isMType(MA_SAPIENT))
                     {
                       #if 0
@@ -2406,7 +2406,7 @@ Monster "hill giant" : MA_GIANT
       return NOTHING;
       },
     MSG_SPECABIL
-      "It recieves Weapon Focus with thrown boulders as a racial
+      "It receives Weapon Focus with thrown boulders as a racial
         feat. If a boulder or large rock is thrown at it, it can
         try to catch the rock, negating the attack as a reflexive
         action, with a Reflex save (DC 20).";
@@ -2448,7 +2448,7 @@ Monster "stone giant" : MA_GIANT
       return NOTHING;
       },
     MSG_SPECABIL
-      "It recieves Weapon Focus with thrown boulders as a racial
+      "It receives Weapon Focus with thrown boulders as a racial
         feat. If a boulder or large rock is thrown at it, it can
         try to catch the rock, negating the attack as a reflexive
         action, with a Reflex save (DC 20).";
@@ -2496,7 +2496,7 @@ Monster "frost giant" : MA_GIANT
       return NOTHING;
       },
     MSG_SPECABIL
-      "It recieves Weapon Focus with thrown boulders as a racial
+      "It receives Weapon Focus with thrown boulders as a racial
         feat. If a boulder or large rock is thrown at it, it can
         try to catch the rock, negating the attack as a reflexive
         action, with a Reflex save (DC 20).";
@@ -2546,7 +2546,7 @@ Monster "fire giant" : MA_GIANT
       return NOTHING;
       },
     MSG_SPECABIL
-      "It recieves Weapon Focus with thrown boulders as a racial
+      "It receives Weapon Focus with thrown boulders as a racial
         feat. If a boulder or large rock is thrown at it, it can
         try to catch the rock, negating the attack as a reflexive
         action, with a Reflex save (DC 20).";
@@ -3249,7 +3249,7 @@ Monster "nymph" : MA_FAERIE, MA_SYLVAN, MA_ADVENTURER
         return CANNOT_CAST_IT;
       if (!EVictim->isMType(MA_NLIVING))
         return CANNOT_CAST_IT;
-      if (!(EVictim->Percieves(EActor) & (PER_VISUAL|PER_INFRA)))
+      if (!(EVictim->Perceives(EActor) & (PER_VISUAL|PER_INFRA)))
         return CANNOT_CAST_IT;
       if (EActor->DistFrom(EVictim) > 3)
         return CANNOT_CAST_IT;

@@ -179,7 +179,7 @@ Text "help::intro"
       implications of the armour system.\n
       __<14>8. <6> Gods are useful. Very useful. Cultivating a relationship with
       one in the early game will strongly help you in the later game, both in
-      terms of the permanent forms of blessings and bonuses you recieve from your
+      terms of the permanent forms of blessings and bonuses you receive from your
       diety, and in terms of being able to pray for divine aid if you ever find
       yourself in a truly difficult situation. Understand the religion system,
       and remember that in Incursion, a few quality sacrifices count a great deal,
@@ -202,7 +202,7 @@ Text "help::intro"
       what you do with the character once built. Before you choose to advance in
       level (which you must actively do -- it doesn't just happen when you get 
       enough experience), you should already know where any feats and skill points
-      you will recieve will be placed. If you don't, you're either still learning
+      you will receive will be placed. If you don't, you're either still learning
       the game, or you haven't thought ahead enough.\n\n
      
 	 <7>A Note on Balance and Stability<6>\n
@@ -617,9 +617,9 @@ Text "help::chargen"
          ==================<5>\n
      __A character's starting equipment is defined by her race, class and perks.
      Characters proficient with armour begin with armour suitable to their character
-     build -- a Dexterity-based finesse warrior will recieve light armour despite
+     build -- a Dexterity-based finesse warrior will receive light armour despite
      being proficient with all armour. Characters that take two-weapon fighting
-     feats will recieve an offhand weapon, and those with shield-related feats
+     feats will receive an offhand weapon, and those with shield-related feats
      will start with a kite shield. If a character's perks grant her a powerful
      weapon, that may subsume some of the abilities of her class-based initial
      weapons -- for example, a paladin starting with the Perk: +3 scimitar of
@@ -803,7 +803,7 @@ Text "help::interface"
      other cases, the numbers shown will not match the actual result of an
      action in game -- for example, if a player is wearing an unidentified magical
      item that grants her a +4 bonus to Strength (and thus a +2 bonus to melee
-     attack rolls), a percieved attack roll result of 13 will hit a monster with
+     attack rolls), a perceived attack roll result of 13 will hit a monster with
      a defense class of 15 -- the increased Strength will be taken into account
      by the game even though the character is unaware of it. This information 
      might be useful to character seeking to determine the function of unknown 
@@ -1593,7 +1593,7 @@ Text "help::adventuring"
         __Fog obscures vision but not movement (though some claim there are special
         magical fogs which impede movement as well). Characters cannot see further
         than 10 feet (one square) past a square with fog in it. Thus, they can
-        percieve creatures they are in melee with, but not anything more than one
+        perceive creatures they are in melee with, but not anything more than one
         square distant from them. Fog does not (normally) impede tremorsense,
         blindsight, telepathy or magical detection abilities.\n\n
         
@@ -1635,7 +1635,7 @@ Text "help::adventuring"
         <9>Tight Spaces<1>\n
         __Some areas of the dungeon, such as the warrens wherein kobolds live, can
         be very constricting to human-sized characters. When such characters enter
-        a confined space, they recieve a message warning them of such, and then
+        a confined space, they receive a message warning them of such, and then
         lose their Dexterity bonus to their defense class. In addition to losing
         their bonus, such characters are subject to the Sneak Attack special ability
         of rogues and some monsters. This penalty ends as soon as the character
@@ -1703,7 +1703,7 @@ Text "help::adventuring"
         rest while poisoned, but can rest while diseased. If a character chooses
         to rest while diseased, a single iteration of the disease's effects
         automatically occurs, regardless of the number of turns left before the
-        next normal iteration, but the character recieves a +4 rest bonus to the
+        next normal iteration, but the character receives a +4 rest bonus to the
         Fortitude saving throw.\n
         __Certain spells can be used to cure diseases and poisons; the Heal skill
         also allows them to be treated. You can always view the exact game effects
@@ -2095,7 +2095,7 @@ Text "help::adventuring"
          <3>Wisdom<1>\n
          __<3>*<1>_Successfully turning or commanding undead (or other creatures) trains 
          Wisdom.\n
-         __<3>*<1>_Praying and recieving a divine blessing trains Wisdom.\n
+         __<3>*<1>_Praying and receiving a divine blessing trains Wisdom.\n
          __<3>*<1>_Angering your god or violating his edicts abuses Wisdom.\n
          __<3>*<1>_Trying to resolve conflict with other creatures trains Wisdom, whether
          it is successful or not.\n
@@ -2356,23 +2356,23 @@ Text "help::adventuring"
          __Good characters are deeply offended by cruelty,
          hatred and narrow-minded malice, and that righteous
          anger bleeds through when they enter combat: they
-         recieve a morale bonus to hit evil creatures, or a
+         receive a morale bonus to hit evil creatures, or a
          bonus to the save DC of spells cast at evil creatures.\n
          __Lawful characters follow a strict code of conduct
          imposed by society, and in so doing develop a greater
          degree of self-discipline and focus then other
          characters, allowing them to devote their will more
-         fully to improving themselves -- they recieve a small
+         fully to improving themselves -- they receive a small
          bonus to experience gained upon reaching character 
          level 3.\n
          __Chaotic characters believe in the freedom of the
          individual and the sacred value of liberty, and these
          values give them a greater strength when fighting to
-         resist coercion: they recieve a morale bonus to their
+         resist coercion: they receive a morale bonus to their
          Will saving throw.\n
-         __Evil characters recieve no special bonuses, but then
+         __Evil characters receive no special bonuses, but then
          also have few or no restrictions on their actions.
-         Chaotic evil characters recieve the chaotic bonus without
+         Chaotic evil characters receive the chaotic bonus without
          having to adhere to the normal chaotic restrictions, but
          have a corresponding penalty: they have difficulty
          inspiring trust in others due to their vicious,
@@ -2393,11 +2393,11 @@ Text "help::adventuring"
          transparent to the player, by design.\n\n
 
          <9>Choosing a God<1>\n
-         __Characters in Incursion can make sacrifices to, and recieve
+         __Characters in Incursion can make sacrifices to, and receive
          blessings from, more than one god. However, they must choose one
          specific god (or none) to devote themselves to. This chosen god
          is the one who will answer any prayers they make when they are
-         not standing over an altar; to recieve aid or blessings from any
+         not standing over an altar; to receive aid or blessings from any
          other god requires access to the appropriate altar.\n
          __Certain classes -- priests, paladins and monks -- begin
          play devoted to a specific god which they will be allowed to choose
@@ -2416,7 +2416,7 @@ Text "help::adventuring"
          a god, having to convert in gameplay. However, dwarves and orcs have
          the elective of worshipping Ekliazeh or Khasrach respectively if they
          choose a class that does not offer a choice of gods. Elves begin play
-         worshipping Maeve if they choose an irreligious class; if they recieve
+         worshipping Maeve if they choose an irreligious class; if they receive
          a choice of gods from their class and do not pick Maeve, they begin the
          game with her angry at them.\n
          __<9>Personal Conversion:<1> Characters who do not have a god, or wish to convert
@@ -2491,7 +2491,7 @@ Text "help::adventuring"
          altar is associated with.\n
          __The system of sacrifice and favour in Incursion is designed to avoid
          repetition and monotony while still providing a strong challenge. Each
-         god has (on average) six 'slots' to recieve sacrifices in, each with a
+         god has (on average) six 'slots' to receive sacrifices in, each with a
          weight assigned to it. Erich, for
          example, has four slots: one for dragons, one for beasts, one for
          chaotic humanoids and one for evil outsiders, with the dragons and
@@ -2502,7 +2502,7 @@ Text "help::adventuring"
          heavily than generic evil creatures. The value of
          a sacrificed creature is usually based on its Challenge Rating and the 
          value of a sacrificed item is based on its market value. The favour with 
-         a god that a character recieves from sacrifice is based on the best 
+         a god that a character receives from sacrifice is based on the best 
          possible sacrifces fit into those slots, so quality of sacrifices matters
          whereas, by and large, quantity does not. When a character makes a sacrifice
          it is placed in the slot where it would grant the most favour; weak 
@@ -2555,7 +2555,7 @@ Text "help::adventuring"
          __<3>*<1>_'You are among the greatest of [God]'s champions.' (level 8)\n
          __<3>*<1>_'You are the hand of [God] on Theyra.' (level 9)\n
          __<3>*<1>_'You have been crowned by [God].' (level 10)\n
-         __At present, the highest level of favour one can recieve with a god
+         __At present, the highest level of favour one can receive with a god
          is favour level 9; characters will be able to be crowned in <9>Return of
          the Forsaken<1>. Also note that it is, by design, considerably harder to 
          attain favour level 9 with many gods than it is to defeat Murgash and
@@ -2569,7 +2569,7 @@ Text "help::adventuring"
          still bail you out of trouble (as much as they usually would, anyway)
          when you pray for aid. Once transgressions cross a certain line,
          however, the god will be fully angered,
-          making it impossible to recieve aid from her and causing
+          making it impossible to receive aid from her and causing
          her to send negative interventions instead of positive. The specific
          rules that each god places before her followers are listed in the
          'Worship' section of each god's writeup. Some rules may apply only to
@@ -2613,7 +2613,7 @@ Text "help::adventuring"
          __The pantheon of Theyra has complex dynamics among itself; some members
          are close friends and allies, while others are bitter enemies. Characters
          can pray to any god, given a suitable altar, as well as making sacrifces
-         and recieving aid and blessings. Some gods offer very useful services to
+         and receiving aid and blessings. Some gods offer very useful services to
          characters who do not worship them directly: Immotian will cure diseases,
          Xavias can identify items and so forth. However, praying to a god other
          than your patron can anger your patron if the god you are praying to is
@@ -2634,7 +2634,7 @@ Text "help::adventuring"
          aid when a follower seeks insight. The game will ask whether you want
          to seek insight into your possessions when you seek insight in general;
          if you do the god you pray to will identify some or all of your items,
-         with all the normal penalties for recieving divine aid.\n
+         with all the normal penalties for receiving divine aid.\n
          
          <9>Divine Aid<1>\n
          __Any character devoted to a specific diety can pray for divine aid
@@ -2671,28 +2671,28 @@ Text "help::adventuring"
          non-critical damage level, but does not add to prayer timeout.\n
          __Divine aid comes with a price, however; the gods help those who help
          themselves, and bless most highly those servants who call upon their
-         aid only rarely. Whenever you pray and recieve aid (or are protected
+         aid only rarely. Whenever you pray and receive aid (or are protected
          from a crit), a percentile penalty is applied to your total favour with the diety
          in question, culmulative with all such penalties in the past. Your favour 
          level never goes down, but the more you rely on divine aid, the harder 
          it becomes to gain further permanent blessings from your god. This
-         penalty can never exceed 100~; if recieving aid would make it do so,
+         penalty can never exceed 100~; if receiving aid would make it do so,
          your god is no longer able to give you aid. Some gods lower this penalty
          whenever you gain a character level as a kind of 'aid allowance', while 
          others do not. In Wizard Mode, you can see this penalty listed in the
          Spiritual State section of the character sheet.\n
          __Furthermore, the gods can offer aid only infrequently; when a player
-         calls upon a god's aid, they will not be able to recieve further aid
+         calls upon a god's aid, they will not be able to receive further aid
          for a pre-set time period, referred to as a <9>prayer timeout<1>. This
          period varies from god to god; a player can determine if they currently
          are in a prayer timeout using the seek insight option. Prayer timeout is
          measured in 'XP clicks' -- individual instances of the character gaining
          (any amount of) experience -- and as a result it cannot be 'waited out'; 
          the player will have to continue adventuring to run out the prayer 
-         timeout and again be eligable to recieve divine aid.\n
+         timeout and again be eligable to receive divine aid.\n
          __<9>Ressurection:<1> For an especially favoured servant, the gods will
          even raise the dead. This is essentially just a special case of divine
-         aid; it is recieved when a character dies rather than when she prays
+         aid; it is received when a character dies rather than when she prays
          for aid. In addition to the normal minimum favour requirement, characters
          must be of a certain minimum character level (determined by their god)
          to be important enough to be ressurected. Ressurection usually carries
@@ -2727,9 +2727,9 @@ Text "help::adventuring"
          <9>Divine Interventions<1>\n
          __In addition to sending divine aid when implored by an adventurer, the
          gods all (except Asherath) interact with their mortal followers on their
-         own initiative. When a character has a god angry at her, she will recieve
+         own initiative. When a character has a god angry at her, she will receive
          negative interventions; when she is in favour with her diety, she will
-         instead recieve beneficial interventions. (Maeve is something of an
+         instead receive beneficial interventions. (Maeve is something of an
          capricious exception, being fond of doing obnoxious things to her
          followers even if they haven't done anything to anger her, and conversely
          rarely doing beneficial things for followers who have angered her.) 
@@ -2789,7 +2789,7 @@ Text "help::adventuring"
           merely afraid, and thus do not count toward any pool.\n\n
           
           <3>The Undead Horde Pool<1>\n
-          __In addition to the magic pool, specialist necromancers recieve a second
+          __In addition to the magic pool, specialist necromancers receive a second
           pool that applies only to animated undead. This pool has a CR equal to 
           the character's Mage level. Animated undead subtract PCR first from this
           pool, then from the magic pool, and finally from the general party pool.
@@ -2797,7 +2797,7 @@ Text "help::adventuring"
           undead creatures...\n\n
           
           <3>The Animal Companion Pool<1>\n
-          __Characters with the Animal Companion ability recieve a pool that can
+          __Characters with the Animal Companion ability receive a pool that can
           only be used for animal companions; this pool is equal in CR to the
           character's rating in the Animal Companion ability -- usually the sum
           of the character's ranger and druid levels.\n
@@ -2809,17 +2809,17 @@ Text "help::adventuring"
           <3>The Diplomacy Bonus<1>\n
           __The Diplomacy skill does not grant a seperate pool like the above
           abilities; instead, for every +5 by which your Diplomacy rating
-          exceeds +5, you recieve a +2 bonus to the CR of your base party
+          exceeds +5, you receive a +2 bonus to the CR of your base party
           pool. Thus, Diplomacy +10 increases your base PCR by +2, Diplomacy
           +15 increases it by +4, and so forth.\n\n
 
           <3>That Special Heroic Quality<1>\n
           __Incursion does not currently include a monster experience system
           -- allies do not advance. Thus, to make companions gained with the
-          Diplomacy skill viable medium-term allies, they recieve the same
+          Diplomacy skill viable medium-term allies, they receive the same
           'heroic quality' that player characters have, giving them 20 base
           hit points in addition to those gained from Hit Dice and Constitution
-          bonus. This benefit only applies to races that can recieve class
+          bonus. This benefit only applies to races that can receive class
           templates, not to monsterous creatures, and does not apply to
           animal companions, summoned creatures, illusions, animated dead,
           and so forth. This helps to balance the fact that other types of
@@ -2863,7 +2863,7 @@ Text "help::adventuring"
          __When an NPC is able to cast such a spell, that spell will appear
          along with their gear in the bartering window, and can be purchased
          accordingly. When you purchase a service spell, it will be cast 
-         immediately, and you will recieve an effect prompt to target it
+         immediately, and you will receive an effect prompt to target it
          when the barter screen closes -- so make sure that whatever or
          whoever you want it cast on is in range!\n\n
           
@@ -3065,14 +3065,14 @@ Text "help::combat"
       \n<11>SURPRISE ATTACKS {SA}\n
         ================<3>\n
       __When a character attacks another character, and the victim is 
-      cannot percieve the attacker -- as a result of invisibility, hiding
+      cannot perceive the attacker -- as a result of invisibility, hiding
       in shadows, the victim being blind or any other cause -- an opposed 
       Move Silently versus Listen check is made. If the victim succeeds, 
       she hears the attacker and negates surprise. If the attacker 
       succeeds, however, she has scored a surprise attack. Any attack
       made against a sleeping creature is also considered a surprise
       attack.\n
-      __Surprise attacks recieve a +4 surprise bonus to hit, and the
+      __Surprise attacks receive a +4 surprise bonus to hit, and the
       attacker can substitute her Dexterity for Strength when determining
       damage, if doing so benefits her. The victim is also denied her
       Dexterity bonus to defense, as with being flat-footed above --
@@ -3307,10 +3307,10 @@ Text "help::combat"
       an attack of opportunity from all creatures threatening them, unless they have
       the Guarded Invocation feat.\n
       __<15>*<3>_When a creature attacks an enemy who is wielding a weapon two or more
-      size categories larger than her own, the enemy recieves an attack of opportunity
+      size categories larger than her own, the enemy receives an attack of opportunity
       -- it is hard to fight a sword-wielder with a dagger! This does not apply if the
       attacker uses a martial arts weapon, or the defender is surprised, caught flat-
-      footed or unable to percieve the attacker.
+      footed or unable to perceive the attacker.
       __Note that Incursion is slightly nicer about attacks of opportunity then its
       parent system: using magic items generally does not provoke an attack of
       opportunity, nor does moving around within another creature's threatened area,
@@ -3539,7 +3539,7 @@ Text "help::combat"
       __As you charge, you accumulate a Charge Bonus shown at the bottom of
       the screen in the Status Window. This bonus increases the more squares
       you charge. When you make an attack at the end of a charge, you will
-      recieve a flat +2 bonus to hit; if you do hit, this charge bonus will
+      receive a flat +2 bonus to hit; if you do hit, this charge bonus will
       be added to your damage.\n
       __While charging, you can only move in the direction you started the
       charge in and the two directions immediately next to that direction
@@ -3817,13 +3817,13 @@ Text "help::magic"
     __<11>Specialist Bonus:<3> Abjurers gain a +1 insight bonus to all
     three of their saving throws at 4th, 8th, 12th, 16th and 20th levels.
     Additionally, because of the defensive and protective nature of their
-    magic, Abjurers recieve access to several spells from the priest spell
+    magic, Abjurers receive access to several spells from the priest spell
     list: <9>sanctuary<3>, <9>detect evil<3>, <9>shield other<3>, <9>glyph
     of warding<3>, <9>remove curse<3> (as a 3rd-level spell), <9>negative
     plane protection<3>, <9>death ward<3>, <9>free action<3>, <9>spell
     immunity<3>, <9>magic resistance<3>, <9>dispel evil<3>, <9>antilife
     shell<3> and <9>glyph of warding, greater<3>. They cast these spells
-    as arcane spells, recieving a special spellbook containing them at the
+    as arcane spells, receiving a special spellbook containing them at the
     beginning of the game.\n\n
 
     <11>Arcana<3> {AR}\n
@@ -3853,7 +3853,7 @@ Text "help::magic"
     __Diviners also excel at spells of Weavecraft, Arcana and Thaumaturgy, 
     but are mediocre when handling Evocations and Illusions.\n
     __<11>Specialist Bonus:<3> Drawn from the ranks of sages and scholars,
-    Diviners recieve three extra skill points at every mage level, and gain
+    Diviners receive three extra skill points at every mage level, and gain
     a +1 insight bonus to Intelligence at 4th, 8th, 12th, 16th and 20th
     levels. They gain access to the spell <9>detect monsters<3> as a 2nd,
     not 3rd, level spell. (Once more priestly Divinations are implemented, the
@@ -3909,7 +3909,7 @@ Text "help::magic"
     __Illusionists excel at Weavecraft, Divination, Arcana and Enchantment, 
     but are weaker in the schools of Evocation, Necromancy and Thaumaturgy.\n
     __<11>Specialist Ability:<3> To complement their penchant for trickery and
-    ability to utilize <9>invisibility<3>, Illusionists recieve Bluff, Move
+    ability to utilize <9>invisibility<3>, Illusionists receive Bluff, Move
     Silently, Pick Pockets and Disguise as bonus mage class skills. They also
     receive a +1 competence bonus to the Illusioncraft skill every even mage
     level.\n\n
@@ -3926,11 +3926,11 @@ Text "help::magic"
     <9>horrid wilting<3> and of course, <9>animate dead<3>.\n
     __Necromancers are strong in Thaumaturgy and Divination, and weaker only
     in Enchantment, Illusion and Abjuration.\n
-    __<11>Specialist Bonus:<3> Necromancers recieve a bonus pool of hit dice
+    __<11>Specialist Bonus:<3> Necromancers receive a bonus pool of hit dice
     worth of created undead they can control that do not count toward the
     normal maximum of summoned/charmed/animated/etc. creatures a mage may
     have under his control before they start to break free. Necromancers
-    also recieve a +1 bonus to save vs. death magic at every 3rd level, gain
+    also receive a +1 bonus to save vs. death magic at every 3rd level, gain
     a +2 bonus to save vs. fear at 1st level (due to the exceptionally...
     grim situations they are exposed to and treat Poison Use as a bonus 
     class skill.\n
@@ -4748,13 +4748,13 @@ Text "help::skills"
      regardless of whether it comes from race, class or feat.\n
      __In addition to the binary state of either having a skill or not,
      every skill has a skill rating associated with it, being a sum total
-     of various bonuses associated with the skill. Characters recieve a
+     of various bonuses associated with the skill. Characters receive a
      +2 training bonus to every skill they have; if they have a given
      skill as both a race and class skill, this bonus increases to +3.\n\n
 
      <14>Skill Ranks and Points<6>\n
      __For every level a character has in
-     a class, they recieve an alottment of skill points that may be distributed
+     a class, they receive an alottment of skill points that may be distributed
      among the skills of that class, or any class-independant skills the
      character has from race or feats. The base number of available skill
      points gained per level in a class in then adjusted by the character's
@@ -4832,7 +4832,7 @@ Text "help::skills"
      skill checks can be very valuable in a roguelike game.\n\n
 
      <14>Synergy Bonuses<6>\n    
-     __Characters recieve synergy bonuses to skills based on having invested
+     __Characters receive synergy bonuses to skills based on having invested
      ranks in skills related to the skill in question -- for example,
      learning Jump improves one's ability to Tumble as well. The synergy
      bonus is taken by taking the skill ranks of the influencing skill,

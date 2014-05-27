@@ -420,7 +420,7 @@ RepeatClass:
         "to have generated a reputation for you, and NPCs will react accordingly."
         "Good, lawful and to a lesser extent chaotic alignments essentially "
         "operate as conducts in Incursion -- you must be very careful what actions "
-        "you take, and you recieve bonuses or holding to this code. As such, "
+        "you take, and you receive bonuses or holding to this code. As such, "
         "new players might find it best to play True Neutral or Neutral Evil "
         "characters until they have a firm grasp on what things good and lawful "
         "characters are proscribed from doing. Press '?' to view the manual "
@@ -3000,7 +3000,7 @@ void Player::GainAbility(int16 ab,uint32 pa, rID sourceID,int16 statiSource)
 {
     int16 st; const char* MTypePrompt;
     /* New spell levels -- the caster level at which a player
-    recieves access to a new level of spells. */
+    receives access to a new level of spells. */
     static int16 NSL[] = { 0, 1, 0, 2, 0, 3, 0, 4, 0, 5, 0,
         0, 6, 0, 7, 0, 8, 0, 9, 0, 0 };
     String desc, category;
@@ -3653,7 +3653,7 @@ bool Character::HasSkill(int16 sk, bool check_allies)
             if (cr->isCreature() && cr != this)
                 if (DistFrom(cr) < 6 && cr->HasSkill(sk))
                     if (cr->isFriendlyTo(this))
-                        if (Percieves(this) &&
+                        if (Perceives(this) &&
                             m->LineOfFire(x,y,cr->x,cr->y,cr))
                             return true;
 

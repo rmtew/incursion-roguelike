@@ -915,7 +915,7 @@ void Character::UseSkill(uint8 sk)
                 posse[pc++] = cr;
             for (i=0;i<pc;i++) {
               /* For clarity, exclude what you see clearly */
-              if (Percieves(posse[i]) & ~PER_SHADOW)
+              if (Perceives(posse[i]) & ~PER_SHADOW)
                 continue;
               /* First, do you hear it? */
               int16 DC = posse[i]->SkillLevel(SK_MOVE_SIL) +
@@ -1064,7 +1064,7 @@ void Character::UseSkill(uint8 sk)
           
           MapIterate(m,t,i)
             if (t->isType(T_TRAP) && (tr = (Trap*)t))
-              if (isBeside(tr) && Percieves(tr))
+              if (isBeside(tr) && Perceives(tr))
                 if (DisarmTrap(tr,true)) 
                   return; 
           if (HasStati(TELEKINETIC))
@@ -1505,7 +1505,7 @@ Creature * Creature::MostSkilledAlly(int16 sk)
       if (cr->isCreature() && cr != this)
         if (DistFrom(cr) < 6 && cr->HasSkill(sk))
           if (cr->isFriendlyTo(this))
-            if (Percieves(this) &&
+            if (Perceives(this) &&
                  m->LineOfFire(x,y,cr->x,cr->y,cr))
               if (cr->SkillLevel(sk) > blev)
                 { best = cr; blev = cr->SkillLevel(sk); }
@@ -2130,7 +2130,7 @@ void Character::UseAbility(uint8 ab,int16 pa)
                   continue;
                 if (!c->isHostileTo(this))
                   continue;
-                if (!(c->Percieves(this) & (PER_VISUAL|PER_INFRA))) {
+                if (!(c->Perceives(this) & (PER_VISUAL|PER_INFRA))) {
                   if (XPerceives(c))
                     IPrint("The <Obj> cannot see you, and is thus unaffected.");
                   continue;
@@ -2698,7 +2698,7 @@ EvReturn Creature::PickPocket(EventInfo &e)
                GetStatiMag(TRIED,SK_PICK_POCKET,e.EVictim) +
                (e.EVictim->HasStati(DISTRACTED) ? -10 : 0);
                
-    if (!e.EVictim->Percieves(e.EActor))
+    if (!e.EVictim->Perceives(e.EActor))
       { DC1 -= 5; DC2 -= 5; }
     
     c = 0;
@@ -2840,7 +2840,7 @@ EvReturn Creature::Hide(EventInfo &e)
           if (c != this)
             if (c->isCreature())
               if (c->DistFrom(this) < 15)
-                if (c->Percieves(this) && !c->HasStati(DISTRACTED,-1,this))
+                if (c->Perceives(this) && !c->HasStati(DISTRACTED,-1,this))
                   if (c->isHostileTo(this) || (c->isPlayer() && !isLedBy(c)))
                     {
                       IPrint("You can't hide when in plain view to hostile creatures.");
@@ -2895,7 +2895,7 @@ EvReturn Creature::Search(EventInfo &e)
             /* Mark it as not secret, so we can check if we *would* see
                it if it weren't secret, then put the flag back to normal. */
             ((Door*)t)->DoorFlags &= ~DF_SECRET;
-            if (!Percieves(t))
+            if (!Perceives(t))
               continue;
             ((Door*)t)->DoorFlags |= DF_SECRET;
 
@@ -4702,12 +4702,12 @@ EvReturn Creature::Phase(EventInfo &e)
         IPrint("You return to the material plane.");
         for (i=0;i!=MAX_PLAYERS;i++)
           if (m->pl[i] && m->pl[i] != myHandle)
-            vis[i] = oCreature(m->pl[i])->Percieves(this);
+            vis[i] = oCreature(m->pl[i])->Perceives(this);
         RemoveStati(PHASED);
         SetImage();
         for (i=0;i!=MAX_PLAYERS;i++)
           if (m->pl[i] && m->pl[i] != myHandle)
-            if (oCreature(m->pl[i])->Percieves(this))
+            if (oCreature(m->pl[i])->Perceives(this))
               oCreature(m->pl[i])->IPrint( vis[i] ?
                 "The <Obj> shifts back to the material plane." :
                 "An <Obj> appears out of nowhere!", this );
@@ -4724,14 +4724,14 @@ EvReturn Creature::Phase(EventInfo &e)
 
     for (i=0;i!=MAX_PLAYERS;i++)
       if (m->pl[i] && m->pl[i] != myHandle)
-        vis[i] = oCreature(m->pl[i])->Percieves(this);
+        vis[i] = oCreature(m->pl[i])->Perceives(this);
     
     GainPermStati(PHASED, NULL, SS_MISC, phase_type);
     SetImage();
     for (i=0;i!=MAX_PLAYERS;i++)
       if (m->pl[i] && m->pl[i] != myHandle)
         if (vis[i])
-          oCreature(m->pl[i])->IPrint( oCreature(m->pl[i])->Percieves(this) ?
+          oCreature(m->pl[i])->IPrint( oCreature(m->pl[i])->Perceives(this) ?
             "The <Obj> shifts into the <Str>." :
             "An <Obj> winks out of existence!", this , Planes[phase_type] );
     

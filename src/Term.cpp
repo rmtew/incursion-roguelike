@@ -95,7 +95,7 @@ void TextTerm::ShowStatus()
       if (p->LightRange == 0 || p->isBlind())
         ;
       else if (TTER(m->PTerrainAt(p->x,p->y,p))->HasFlag(TF_SHOWNAME) && 
-            (p->Next && p->Percieves(oThing(p->Next))))
+            (p->Next && p->Perceives(oThing(p->Next))))
         Loc += Format(" (%s; %s)",NAME(m->PTerrainAt(p->x,p->y,p)), 
           (const char*)oThing(p->Next)->Name(NA_INSC));
       else if (TTER(m->PTerrainAt(p->x,p->y,p))->HasFlag(TF_SHOWNAME))
@@ -771,7 +771,7 @@ void Map::Update(int16 x,int16 y)
       for (i=0;Fields[i];i++)
         if (Fields[i]->FType & FI_SIZE)
           if (Fields[i]->inArea(x,y))
-            if (p->Percieves(oThing(Fields[i]->Creator)))
+            if (p->Perceives(oThing(Fields[i]->Creator)))
               found = true;
       if (found && ((!At(x,y).Contents) || (!oThing(At(x,y).Contents)->isCreature())))
         goto DoDraw;
@@ -780,7 +780,7 @@ void Map::Update(int16 x,int16 y)
 //Nowhere:
 
   for(t=oThing(At(x,y).Contents);t;t=oThing(t->Next)) {
-    CVis = p->Percieves(t);
+    CVis = p->Perceives(t);
     if (t->isMonster())
       if (!(((Creature*)t)->StateFlags & MS_SCRUTINIZED))
         if (CVis & (~(PER_SHADOW|PER_DETECT|PER_SCENT)))
@@ -1093,7 +1093,7 @@ void TextTerm::ShowThings()
         if(ViewRange.Within(t->x, t->y) || (t->Flags & F_HILIGHT)) {
           m->Update(fx,fy);
         } else if ((t->isCreature() || (t->Flags & F_HILIGHT)) && 
-            (Per = p->Percieves(t)))
+            (Per = p->Perceives(t)))
         {
           ASSERT(0);
           /* A preemptive fix to Angband's "off-screen breathers"
@@ -1732,7 +1732,7 @@ void TextTerm::WViewThing(Thing *t, int32 dist, bool assertSeen)
     } 
     } 
   if (t) {
-    int per = p->Percieves(t,assertSeen);
+    int per = p->Perceives(t,assertSeen);
     if (!(per & ~PER_SHADOW)) 
       return; 
   } 
@@ -1982,17 +1982,17 @@ SelectItem:
         SetWin(WIN_MESSAGE); Clear();
         linenum = linepos = 0;
         if (cr && (mod == Q_LOC || mod == Q_TAR)) {
-            if (p->Percieves(cr) & (~PER_SHADOW)) {
+            if (p->Perceives(cr) & (~PER_SHADOW)) {
                 Write(cr->Name(NA_CAPS|NA_A|NA_LONG|NA_MECH|(is_look ? NA_STATI : 0)));
                 if (cr->isCreature() && ((Creature*)cr)->StateFlags & MS_HAS_REACH)
                     Write(" (reach)");
             }
-            else if (p->Percieves(cr) & PER_SHADOW)
+            else if (p->Perceives(cr) & PER_SHADOW)
                 Write(cr->Name(NA_CAPS|NA_A|NA_SHADOW));
             else
                 goto CantSee;
             if ((p->HasStati(LIFESIGHT)) && cr->isCreature()
-                && p->Percieves(cr)) 
+                && p->Perceives(cr)) 
                 Write(Format(" (%d/%d %d/%d)",
                 ((Creature*)cr)->cHP,
                 ((Creature*)cr)->mHP+((Creature*)cr)->Attr[A_THP],
@@ -2001,17 +2001,17 @@ SelectItem:
                 ));
             Write(0, 1, "  ");
 
-            if (cr->HasStati(MOUNTED) && (p->Percieves(cr) & (~PER_SHADOW)))
+            if (cr->HasStati(MOUNTED) && (p->Perceives(cr) & (~PER_SHADOW)))
                 Write(Format("(riding %s)",(const char*)cr->GetStatiObj(MOUNTED)->
                 Name(NA_A|NA_LONG|NA_MECH|(is_look ? NA_STATI : 0))));
-            else if (cr->HasStati(MOUNTED) && (p->Percieves(cr) & PER_SHADOW))
+            else if (cr->HasStati(MOUNTED) && (p->Perceives(cr) & PER_SHADOW))
                 Write("(riding something)");
-            if (cr->isCreature() && (wp=((Creature*)cr)->InSlot(SL_WEAPON)) && p->Percieves(wp))
+            if (cr->isCreature() && (wp=((Creature*)cr)->InSlot(SL_WEAPON)) && p->Perceives(wp))
                 Write(XPrint("(wielding a <Obj>)", wp));
 
             Write(0,2,"");
             if (p->Opt(OPT_SHOW_HOW_SEE) && p != cr) {
-                int per = p->Percieves(cr); 
+                int per = p->Perceives(cr); 
                 bool first_mode = true;
                 Write(0,2,XPrint("<14>Seen With:<7> "));
                 for (int i=1; i<=PER_TRACK ; i<<=1) {
@@ -2114,7 +2114,7 @@ CantSee:
             mod = Q_DIR;
         else if (ch == KY_CMD_EXAMINE && isEngulfed) {
             if (cr)
-                if (p->Percieves(cr) & ~PER_SHADOW)
+                if (p->Perceives(cr) & ~PER_SHADOW)
                     Box(WIN_SCREEN,0,EMERALD, GREY, cr->Describe(p));
         } else if (ch == KY_CMD_EXAMINE && cr)
             ExamineSquare(cr->x,cr->y);
@@ -2189,10 +2189,10 @@ CantSee:
                             continue;
 
                         if (m->FCreatureAt(cr->x,cr->y))
-                            if (p->Percieves(m->FCreatureAt(cr->x,cr->y))) 
+                            if (p->Perceives(m->FCreatureAt(cr->x,cr->y))) 
                                 cr = m->FCreatureAt(cr->x,cr->y);
 
-                        if (!p->Percieves(cr))
+                        if (!p->Perceives(cr))
                             continue;
                         e.EActor = p;
                         if (e.eID && (!TEFF(e.eID)->HasFlag(EF_BLIND_PROMPT))) {
@@ -2263,13 +2263,13 @@ TargetChosen:
                 MapIterate(m,th,i)
                     if (XOff < th->x && YOff < th->y)
                         if (XOff+Windows[WIN_MAP].Right >= th->x && YOff+(Windows[WIN_MAP].Bottom-Windows[WIN_MAP].Top) >= th->y)
-                            if ((p->Percieves(th) || (m->At(th->x,th->y).Visibility & VI_DEFINED)))
+                            if ((p->Perceives(th) || (m->At(th->x,th->y).Visibility & VI_DEFINED)))
                                 if ((th->Image & 0x00FF) != GLYPH_TREE &&
                                     (th->Image & 0x00FF) != GLYPH_FLOOR2 &&
                                     (::dist(p->x,p->y,th->x,th->y) <= range ||
                                     /* Kludge for reach weapons */
                                     (range == 2 && abs(p->x-th->x) <= 2 && abs(p->y-th->y) <= 2))) {
-                                    if (!p->Percieves(th))
+                                    if (!p->Perceives(th))
                                         continue;
                                     if (!(th->isCreature() || !e.eID || p->isTarget(e,th)))
                                         continue;
@@ -2363,7 +2363,7 @@ Thing * TextTerm::ExamineSquare(int x, int y)
   Thing * t = oThing(m->At(x,y).Contents);
   while (t) {
     if (t->isCreature()) {
-      if (p->Percieves(t) & ~PER_SHADOW) {
+      if (p->Perceives(t) & ~PER_SHADOW) {
         retvals[c] = t;
         LOption(Format("%s",(const char*)t->Name()),c++,t->Describe(p),0);
         }
@@ -2373,7 +2373,7 @@ Thing * TextTerm::ExamineSquare(int x, int y)
   t = oThing(m->At(x,y).Contents);
   while (t) {
     if (t->isItem()) {
-      if (p->Percieves(t) & ~PER_SHADOW) {
+      if (p->Perceives(t) & ~PER_SHADOW) {
         retvals[c] = t; 
         LOption(Format("%s",(const char*)t->Name()),c++,((Item *)t)->DescribeWithTitle(p),1);
         }
@@ -2388,7 +2388,7 @@ Thing * TextTerm::ExamineSquare(int x, int y)
       else if (t->Type == T_DOOR && (((Door *)t)->DoorFlags & DF_SECRET))
         ;
       else {
-        if (p->Percieves(t) & ~PER_SHADOW) {
+        if (p->Perceives(t) & ~PER_SHADOW) {
           retvals[c] = t;
           LOption(Format("%s",(const char*)t->Name()),c++,t->Describe(p),2);
           }

@@ -578,7 +578,7 @@ bool Map::PMultiAt(int16 x, int16 y, Creature *POV)
     Thing *t = oThing(At(x,y).Contents); 
     int16 cc = 0;
     while (t) {
-      if (t->isCreature() && POV->Percieves(t))
+      if (t->isCreature() && POV->Perceives(t))
         cc++;
       if (cc >= 2)
         return true;

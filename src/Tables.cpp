@@ -2045,8 +2045,8 @@ Option OptionList[] = {
   { OPT_ATTR_ON_LEVEL, "Gain Attributes With Levels", "NO/YES", 1, 0, 0,
       "__If this option is set you gain a single-point inherent attribute bonus (your choice) at levels 4, 8, 12, etc." }, 
   { OPT_EASY_INTUIT, "Allow Rapid Intuition", "NO/YES/WEAPONS", 2, 2, 0,
-      "__If this option is set, you recieve Intuition information about an item immediately "
-      "after picking it up, whereas normally you must rest to recieve Intuition 'hunches' "
+      "__If this option is set, you receive Intuition information about an item immediately "
+      "after picking it up, whereas normally you must rest to receive Intuition 'hunches' "
       "about magical items. The WEAPONS option -- the default -- allows rapid intuition only "
       "for weapons, armour, bows and missiles -- types of items non-spellcasting classes depend "
       "on that cannot easily be ID'd by flavour like potions. Setting this switch on YES "
@@ -2171,7 +2171,7 @@ Option OptionList[] = {
   { OPT_LOWHP_WARN, "Low Hit Point Warning", 
       "None/10~/20~/30~/40~/50~/60~/70~/80~/90~", 9, 3, 0,
       "__This option determines what percentage of hit points the player "
-      "must have lost in order to recieve a low hit point warning message." },
+      "must have lost in order to receive a low hit point warning message." },
   { OPT_LOWHP_AGG, "Aggressive Low HP Warning", "NO/YES", 1, 0, 0,
       "__When this option is active, the player must explicitly press "
       "[ENTER] to get rid of the low HP warning message." },

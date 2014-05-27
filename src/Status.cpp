@@ -651,7 +651,7 @@ void Creature::StatiOn(Status s) {
     case POLYMORPH:
         if (m) {
             MapIterate(m,c,i)
-                if (c->isCreature() && !c->Percieves(this))
+                if (c->isCreature() && !c->Perceives(this))
                     c->ts.MissedShapechange(c,this);
         }
         /* When player changes MType, redraw the whole map to
@@ -932,7 +932,7 @@ RestartDropItems:
             thisp->polyTicks = 0;
         Shapeshift(tmID,false,NULL);
         MapIterate(m,c,i)
-            if (c->isCreature() && !c->Percieves(this))
+            if (c->isCreature() && !c->Perceives(this))
                 c->ts.MissedShapechange(c,this);
         /* When player changes MType, redraw the whole map to
         account for INVIS_TO. */

@@ -520,7 +520,7 @@ Class "Assassin"
       __*_<7>Death Attack<2> -- An assassin who has had time to study her
       target (in game terms, being out of combat long enough to be considered
       Exploring rather than Fighting) and attacks that target by complete 
-      surprise in a situation where the target cannot percieve the Assassin, 
+      surprise in a situation where the target cannot perceive the Assassin, 
       is considered to have made a death attack and has a chance to slay that 
       target outright. A death attack can only be made against a target within
       30 feet; greater distance negates the needed precision.\n
@@ -628,8 +628,8 @@ Effect "Death Attack" : EA_GENERIC
           return NOTHING;
         okForDA = false;
         if (EActor->isFlatFooted() && EVictim->isFlatFooted())
-          if (!EVictim->Percieves(EActor))
-            if (EActor->Percieves(EVictim))
+          if (!EVictim->Perceives(EActor))
+            if (EActor->Perceives(EVictim))
               okForDA = true;
         return NOTHING;
       },   
@@ -952,19 +952,19 @@ Class "Bladesinger"
       sword.\n
       __*_<7>Spellcasting<2> -- Bladesingers cast spells just as bards do,
       being able to cast in light armour and not requiring spellbooks. They
-      cast spells from the bladesinger spell list and recieve one caster
+      cast spells from the bladesinger spell list and receive one caster
       level for every even bladesinger level. They can also continue to
       learn spells from whatever casting class qualified them to be a
       bladesinger, though they must follow the restrictions of that class
       in casting those spells -- a warrior/mage/bladesinger, for example,
       cannot wear armour and must use spellbooks when casting spells on the
       mage list but not on the bladesinger list.\n
-      __*_<7>Acrobatic Fighting<2> -- Bladesingers recieve a level of the
+      __*_<7>Acrobatic Fighting<2> -- Bladesingers receive a level of the
       Acrobatic Fighting ability (as described under the duelist prestige
       class) at every odd bladesinger level, starting at 3rd. Levels of
-      this ability recieved from bladesinger and duelist stack.\n
+      this ability received from bladesinger and duelist stack.\n
       __*_<7>Bladesong Style<2> -- Starting at 1st level, a bladesinger
-      recieves a dodge bonus to her defense class equal to the lower of 
+      receives a dodge bonus to her defense class equal to the lower of 
       her Intelligence bonus or her total levels in the bladesong ability, 
       when wielding a rapier or long sword in her weapon hand and
       nothing in her ready hand. Every even level of bladesong
@@ -1071,7 +1071,7 @@ Class "Celestial Initiate"
       smite evil just as a paladin does. Levels of this ability from
       paladin and celestial initiate stack.\n
       __*_<7>Resist Poison<2> -- At 1st level, the celestial initiate
-      recieves a +4 bonus to saving throws versus poison. At 7th level,
+      receives a +4 bonus to saving throws versus poison. At 7th level,
       she becomes immune to poison.\n
       __*_<7>Elemental Resistances<2> -- At 2nd level, the celestial
       initiate gains resistances to two types of elemental damage, based
@@ -1084,7 +1084,7 @@ Class "Celestial Initiate"
       initiate gains the ability to use <9>call light<2> as an innate
       spell-like ability.\n    
       __*_<7>Ability Increases<2> -- At 4th level, the celestial initiate
-      recieves a +2 sacred bonus to Wisdom and Charisma; this bonus  
+      receives a +2 sacred bonus to Wisdom and Charisma; this bonus  
       increases to +4 at 7th level and +6 at 10th level.\n
       __*_<7>Wings<2> -- At 5th level, the celestial initiate grows a
       vestigal pair of feathery white wings that allow her to control
@@ -1173,7 +1173,7 @@ Class "Crimson Adept"
       __*_<7>Proficiencies<2> -- Crimson adepts gain proficiency with the
       whip.\n
       __*_<7>Spellcasting<2> -- At 2nd, 3rd, 5th, 6th, 8th and 9th levels, the
-      crimson adept recieves a new spellcasting chart level, and advances her
+      crimson adept receives a new spellcasting chart level, and advances her
       progress in another class's spell list in this order of priority: mage,
       priest, ranger, druid, paladin.\n
       __If the crimson adept has Domains, she continues to advance those as well,
@@ -1293,14 +1293,14 @@ Class "Duelist"
         [ Implementation note: use this as an excuse to do EV_CALC_VALUES
       and export AddBonus as an IncursionScript function -- it's about
       time! ]\n
-      __*_<7>Scoundrel's Charm<2> -- Duelists recieve the Alluring feat
+      __*_<7>Scoundrel's Charm<2> -- Duelists receive the Alluring feat
       as a bonus feat at 2nd level.\n
       __*_<7>Acrobatic Fighting<2> -- This ability grants a number of
       related benefits to a duelist, starting at 2nd level. Its benefits
       apply only when a character is wearing light or no armour, and is
       lightly encombered or less. Levels of this ability gained from
       duelist and bladesinger.\n
-      __<3>Grace:<2> At 2nd level, the duelist recieves a +2 bonus to
+      __<3>Grace:<2> At 2nd level, the duelist receives a +2 bonus to
       reflex saving throws, and to the skills Athletics, Balance, Jump and Tumble,
       provided she meets the conditions described above. This bonus increases 
       by +1 for every three further acrobatic fighting levels -- +3 at 5th, 
@@ -1348,16 +1348,16 @@ Class "Duelist"
       __When the duelist reaches 7th level, this ability functions on 1 in 4
       attacks; at 10th, it functions on 1 in 3. This ability does not function
       if either attacker or victim is in a region of magical silence.\n
-      __*_<7>Flashing Blade<2> -- The duelist recieves Deflect Arrows as
+      __*_<7>Flashing Blade<2> -- The duelist receives Deflect Arrows as
       a conditional bonus feat at 5th level and Deflect Magic as a conditional
       bonus feat at 8th level. The character is treated as having these
       feats only when wielding a magical short blade or long sword one-
       handed in her weapon hand with which her attack speed is 250~ or
       higher, and wearing light or no armour.\n 
-      __*_<7>Luck of the Daring<2> -- The duelist recieves the Unearthly
+      __*_<7>Luck of the Daring<2> -- The duelist receives the Unearthly
       Luck ability at 6th level, allowing her to add her primary Luck
       modifier to all saving throws. Halfling duelists, who already have
-      this ability from their race, recieve two bonus feats from the
+      this ability from their race, receive two bonus feats from the
       warrior feat list instead.
         
             
@@ -1688,7 +1688,7 @@ Class "Elementalist"
       contact with earth or stone -- for example, when flying, levitating, climbing
       in trees, wearing boots or mounted. Air elementalists suffer a similar penalty 
       whenever they are not airbourne, or when they are grappled.\n
-      __*_<7>Elemental Boost<2> -- Elementalists recieve a magic bonus to two
+      __*_<7>Elemental Boost<2> -- Elementalists receive a magic bonus to two
       attributes as they advance. This bonus is +1/+0 at 2nd level, +1/+1 at
       4th level, +2/+2 at 7th level and +3/+3 at 10th level. The attributes are
       Strength and Constitution for earth elementalists, Dexterity and Luck for
@@ -1703,7 +1703,7 @@ Class "Elementalist"
       the wind itself, gaining Uncanny Dodge as a rogue of their elementalist
       level, Evasion at 5th and Improved Evasion at 8th.\n 
       __Fire elementalists gain fire resistance equal to three times their
-      elementalist level, until they recieve complete immunity to fire at
+      elementalist level, until they receive complete immunity to fire at
       8th level. Water elementalists move sinuously, their bodies flowing
       like water -- they add their elementalist level to their Swim skill
       rating, gain the ability to breathe water at 5th level and a +4 magic
@@ -1820,7 +1820,7 @@ Class "Inquisitor"
       inquisitor gains a spellcasting chart level. The inquisitor also
       treats inquisitor levels as if they were priest levels for the purpose
       of improving her access to the priest spell list. Inquisitors also
-      have their own spell list, which they recieve access to at one
+      have their own spell list, which they receive access to at one
       spell level per inquisitor level.\n
       __The inquisitor does not gain new domain spells or improve the
       abilities granted by domains for her inquisitor levels, however.\n
@@ -1830,8 +1830,8 @@ Class "Inquisitor"
       __*_<7>Zealous Mettle<2> -- The inquisitor learns to trust in zeal
       and endurance alone to protect them. When unarmoured, she adds a
       sacred bonus to all of her saving throws equal to her inquisitor
-      class level. At 9th level she recieves Toughness as a bonus feat
-      as long as she is unarmoured; at 10th level, she recieves Resilience
+      class level. At 9th level she receives Toughness as a bonus feat
+      as long as she is unarmoured; at 10th level, she receives Resilience
       likewise.\n
       __*_<7>Grim Reputation<2> -- The agents of the Purified Office of the
       Sacred Inquisition are rightly feared for their political power and
@@ -1853,7 +1853,7 @@ Class "Inquisitor"
       once.\n
       __*_<7>Purge Magic<2> -- Inquisitors, like all of Immotian's clergy,
       view arcane magic as unclean; they are taught special methods of
-      purging magical influences from an area, person or object, and recieve
+      purging magical influences from an area, person or object, and receive
       a +1 bonus to caster level checks for <9>dispel magic<2> and related
       efffect at 2nd level, +1 for every inquisitor level thereafter.\n
       __*_<7>Blessed Tithe<2> -- At its root, the inquisition exists not
@@ -1869,7 +1869,7 @@ Class "Inquisitor"
       bring wealth to the church. Starting at 3rd level, an inquisitor
       can offer coins as a sacrifice to Immotian. While this does not
       increase divine favour -- the coins are not a 'true' sacrifice --
-      the inquisitor does recieve 1 experience point for every 25 gold
+      the inquisitor does receive 1 experience point for every 25 gold
       pieces worth of riches offered in this manner.\n 
       __Using this ability funds an evil organization and is therefore
       an evil act.\n
@@ -2262,7 +2262,7 @@ Class "Master Archer"
       target outside her line of sight. There must be a clear path to the target
       traversing fewer squares than the outside limit of her bow's range, and the
       shot is made at a -4 penalty, not including any range modifier. The archer
-      must have some ability to percieve her target without a clear line of sight,
+      must have some ability to perceive her target without a clear line of sight,
       such as the blindsight ability above.
       
       \n\n<10>THE MASTER ARCHER<15>\n
@@ -2704,7 +2704,7 @@ Class "Tattoo Mystic"
       Listen, Move Silently, Poison Use, Spot and Tumble.
 
       \n\n<10>CLASS FEATURES<2>\n
-      __*_<7>Proficiencies<2> -- Tattoo mystics recieve no additional weapon
+      __*_<7>Proficiencies<2> -- Tattoo mystics receive no additional weapon
       or armour proficiencies.\n
       __*_<7>Monk Abilities<2> -- A tattoo mystic continues to advance his 
       existing Unarmed Attack, Increased Move and Stun Attack abilities just as
@@ -3062,7 +3062,7 @@ Class "Underdark Warrior"
       develop a sense for stonework identical to the ability possessed by dwarves
       and gnomes. If they already have this ability, its depth increases by one
       square.\n
-      __*_<7>Defensive Roll<2> -- At 5th level, the underdark warrior recieves
+      __*_<7>Defensive Roll<2> -- At 5th level, the underdark warrior receives
       the Defensive Roll ability, which functions identically to the rogue special
       ability of the same name.
 

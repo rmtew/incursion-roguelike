@@ -40,7 +40,7 @@ Domain "Beauty" : 0
   {
     Desc: "__<15>Granted Power:<7> You have the power of beguiling magic -- you
       add your Charisma bonus (if any) to the DC of all of your mental
-      spells. You also recieve a permanant sacred bonus to your Charisma - +1 
+      spells. You also receive a permanant sacred bonus to your Charisma - +1 
       for every three priest levels.";
     Grants:
       Ability[CA_BEGUILING_MAGIC] at 1st level,
@@ -576,7 +576,7 @@ Domain "Nobility" : 0
      a noble aegis, receiving a +4 bonus to your defense class against 
      surprise attacks. Against you, the bonus damage from a rogue's sneak 
      attack is reduced by two points per priest level, to a minimum of 
-     zero. Additionally, you recieve Ride as a priest class skill.";
+     zero. Additionally, you receive Ride as a priest class skill.";
     Grants:
       Ability[CA_NOBLE_AEGIS] at every level starting at 1st,
       Stati[EXTRA_SKILL,SK_RIDE] at 1st;
@@ -633,7 +633,7 @@ Domain "Planning" : 0
     Desc: "__<15>Granted Power:<7> You are able to prepare buff spells more
       effectively then most spellcasters -- every even priest level 
       reduces the mana cost of buffs by 5%, to a maximum of 25% reduction at
-      10th level. You also recieve the Extend Spell feat for free at 1st
+      10th level. You also receive the Extend Spell feat for free at 1st
       level.";
     Grants:
       Feat[FT_EXTEND_SPELL] at 1st,
@@ -875,7 +875,7 @@ Domain "War" : 0
   {
     Desc: "__<15>Granted Power:<7> You gain proficiency with heavy armour and
       shields, as well as a free weapon focus in your diety's chosen weapon.
-      You recieve a bonus feat from the Warrior list at 7th, 14th and 20th
+      You receive a bonus feat from the Warrior list at 7th, 14th and 20th
       levels.";
     Grants:
       Feat[FT_WARRIOR_LIST] at 7th level,

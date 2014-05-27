@@ -1092,7 +1092,7 @@ void TargetSystem::RateAsTarget(Creature *me, Thing *t, Target & newT)
     // unless a lot of things happen, we don't care about this creature
     newT.type = TargetInvalid;
 
-    uint16 per = me->Percieves(t);
+    uint16 per = me->Perceives(t);
 
     if (per) { // we can see it! 
       Hostility h = SpecificHostility(me, (Creature *)t);
@@ -1349,14 +1349,14 @@ void TargetSystem::Liberate(Creature *me, Creature *lib)
           t[i].type = TargetInvalid;
 
 
-    if (lib->Percieves(me))
+    if (lib->Perceives(me))
       {
-        if (lib->Percieves(summ))
+        if (lib->Perceives(summ))
           lib->IPrint("You free the <Obj> from the <Obj>'s control!",me,summ);
         else
           lib->IPrint("You free the <Obj> from its summoner's control!",me);
       }
-    if (me->Percieves(lib))
+    if (me->Perceives(lib))
       me->IPrint("The <Obj> frees you from the <Obj>'s control!",lib,summ);
     else
       me->IPrint("You are freed from the <Obj>'s control!",summ);

@@ -947,7 +947,7 @@ EvReturn Creature::Order(EventInfo &e) {
         bool found = false;
         MapIterate(m,c,i)
             if (c->isCreature() && c != e.EActor && c->isLedBy(e.EActor))
-                if (e.EActor->Percieves(c))
+                if (e.EActor->Perceives(c))
                     found = true;
         if (!found) {
             IPrint("You have no visible allies.");
@@ -1043,7 +1043,7 @@ EvReturn Creature::Order(EventInfo &e) {
 RestartScan:
     MapIterate(m,c,i) {
         if (c->isCreature() && c != this) {
-            if (c->isLedBy(this) && Percieves(c)) {
+            if (c->isLedBy(this) && Perceives(c)) {
 SingleTarget:
                 switch (n) {
                 case TargetMaster: 
@@ -1286,14 +1286,14 @@ EvReturn Creature::Request(EventInfo &e)
       
         tm->LOption("Follow After Me", OrderWalkNearMe,
             "Base DC 10. Convince an NPC to follow you for a brief period, usually to lead "
-            "them to monsters they will be hostile against. You recieve half the "
+            "them to monsters they will be hostile against. You receive half the "
             "experience for his kills after successfully using this request.");
         tm->LOption("Fight Against Enemy", OrderAttackTarget,
             "Base DC 15. Convince the NPC to fight against a specific enemy of your choosing, "
-            "becoming hostile to that creature and its allies. You recieve half "
+            "becoming hostile to that creature and its allies. You receive half "
             "of the experience for his kills after successfully using this request.");
         tm->LOption("Go To Location", OrderWalkToPoint,
-            "Base DC 20. Convince the NPC to go to a specific location on the map. You recieve "
+            "Base DC 20. Convince the NPC to go to a specific location on the map. You receive "
             "half the experience for his kills after successfully using this request.");
         tm->LOption("Stop Fighting Unless Attacked", OrderBeFriendly,
             "Base DC 15. Convince an NPC to stop fighting and treat the creatures around it as "
@@ -1742,7 +1742,7 @@ int16 Creature::getComparativeStrengthMod(Creature *targ)
        
     MapIterate(m,cr,i)
       if (cr->isCreature() && cr->isFriendlyTo(this))
-        if (targ->Percieves(cr) || (cr == this))
+        if (targ->Perceives(cr) || (cr == this))
           {
             crXCR = XCR(cr->ChallengeRating());
             if (!cr->HasEffStati(-1,adamantID)) 

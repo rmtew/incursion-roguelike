@@ -1451,7 +1451,7 @@ AI_MACRO Effect "AutoLoot" : EA_GENERIC
    in response. To do this, a psychic attacker must choose to forego the
    normal detrimental effects of psionic combat (attribute damage, stunning,
    etc.) and try merely for tangents. This can only be done if the victim
-   is either not hostile to the attacker, or cannot currently percieve the
+   is either not hostile to the attacker, or cannot currently perceive the
    attacker. To see if the intrusion is detected, the attacker makes a
    Bluff check opposed by a Sense Motive check made by the defender;
    non-sapient psionic beasts may substitute their [CR + Wisdom modifier]
@@ -1524,7 +1524,7 @@ AI_MACRO Effect "AutoLoot" : EA_GENERIC
    -- nonpsionic creatures have closed minds, and you need normal line
       of sight to contact them, and they get Will saves to resist. 
       Wild talents and psionics have open minds, and can be contacted
-      by any psi that can percieve them, even using clairvoyance to do
+      by any psi that can perceive them, even using clairvoyance to do
       so through walls, etc. This means that 
    -- Wild talent as double-edged sword -- neat power, but you end up
       in psi-combat with things you don't want to be.
@@ -1744,7 +1744,7 @@ AI_PSIONIC Effect "Telepathic Awareness" : EA_GRANT
     Desc: "The entry-point to the psionic Discipline of Telepathy,
       this power allows a psionicist to sense the presence of other
       minds around him. Telepathic Awareness allows the manifester
-      to automatically percieve the presence, identity and location of 
+      to automatically perceive the presence, identity and location of 
       any non-mindless, non-shielded creatures within 60 feet of her 
       while it is active.";
   }      
@@ -1757,7 +1757,7 @@ AI_PSIONIC Effect "Ballistic Attack" : EA_INFLICT
       accelerate any thrown weapon to such a velocity that it becomes
       a terrifying, bullet-like blast. The effect lasts for only one
       attack, which must be made shortly after the power is activated;
-      if it hits this attack recieves a +10 bonus to damage.";
+      if it hits this attack receives a +10 bonus to damage.";
   }
   
 AI_PSIONIC Effect "Detonate" : EA_BLAST
@@ -2103,7 +2103,7 @@ AI_PSIONIC Effect "Mental Invisibility" : EA_INFLICT
   { xval: INVIS_TO; yval: MA_SAPIENT; Purpose: EP_STEALTH;
     Flags: EF_NOTBAD, EF_SHOWNAME, EF_DLONG, EF_CANCEL, EF_MUNDANE;
     Desc: "Using this power, the manifester can cloud the minds of those
-      around her, rendering them unable to percieve her presence. This
+      around her, rendering them unable to perceive her presence. This
       only affects creatures that have a mind and whose Will save modifier
       does not exceed 5 + your CR. Attacking ends the effect.\n
       __Activating this power costs 2 fatigue points if your Fortitude
@@ -2600,7 +2600,7 @@ and EA_GRANT
       
 AI_TATTOO Effect "Demon" : EA_GRANT
   {
-    Desc: "One of the darker tattoos a tattoo mystic can recieve, the demon allows
+    Desc: "One of the darker tattoos a tattoo mystic can receive, the demon allows
       its bearer to grow strong by feeding on the pain of others -- the mystic
       regains one hit points for every ten hit points of damage she inflicts.";
     xval: EXTRA_ABILITY; yval: CA_FEED_UPON_PAIN; pval: 1;
@@ -2656,7 +2656,7 @@ AI_TATTOO Effect "Sun;tattoo" : EA_GRANT
       activated to illuminate a 60-foot area around the mystic with
       brilliant golden light for a brief period, with the same effects
       as a <9>call light<7> spell. A tattoo mystic must be Good-aligned 
-      to recieve this tattoo.";
+      to receive this tattoo.";
     xval: TRAP_EVENT; yval: PRE(EV_HIT);
     On Event META(PRE(EV_HIT)) {
       int16 xd;

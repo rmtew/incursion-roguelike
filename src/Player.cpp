@@ -1289,7 +1289,7 @@ CastSpell:
             if (k == 2 && !(StateFlags & MS_REACH_ONLY) && !m->FCreatureAt(x+dx*k,y+dy*k))
               k = 1;
             if (m->InBounds(x+dx*k,y+dy*k) && (targ = m->FCreatureAt(x+dx*k,y+dy*k)))
-              if (Percieves(targ) && !((Creature*)targ)->isFriendlyTo(this) && !MyTerm->CtrlDown()) {
+              if (Perceives(targ) && !((Creature*)targ)->isFriendlyTo(this) && !MyTerm->CtrlDown()) {
 NormalAttack:
                 if (targ->isCreature() && !((Creature*)targ)->isHostileToPartyOf(this))
                   if (!yn(XPrint("Confirm attack the <Obj>?",targ),true))
@@ -1836,7 +1836,7 @@ void Character::RestEncounterChance(int16 maxDist,
         // fjm: This had previously made it impossible to have
         // encounters at all. I think this is what you actually
         // wanted it to do.
-        if (Percieves(c) & ~(PER_TELE|PER_DETECT|PER_PERCEPT|PER_TRACK))
+        if (Perceives(c) & ~(PER_TELE|PER_DETECT|PER_PERCEPT|PER_TRACK))
           if (m->LineOfSight(x,y,c->x,c->y,this)) {                
             in_sight = c; 
             continue; 
@@ -2030,7 +2030,7 @@ EvReturn Player::Rest(EventInfo &e)
       MapIterate(m,cr,i)
         if (cr->isCreature() && cr != this)
           if (cr->DistFrom(this) <= 6)
-            if (Percieves(cr))
+            if (Perceives(cr))
               if (cr->getLeader() == this || 
                   cr->ts.hasTargetOfType(OrderTakeWatches))
                 {

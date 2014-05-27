@@ -755,7 +755,7 @@ EvReturn Trap::TriggerTrap(EventInfo &e, bool foundBefore)
     if (!foundBefore) 
       for (int i=0;i!=MAX_PLAYERS;i++)
         if (theGame->GetPlayer(i))
-          if (theGame->GetPlayer(i)->Percieves(e.EActor))
+          if (theGame->GetPlayer(i)->Perceives(e.EActor))
           {
             TrapFlags |= TS_FOUND;
             SetImage();

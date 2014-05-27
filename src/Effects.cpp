@@ -1035,7 +1035,7 @@ void Creature::Shapeshift(rID _mID, bool merge, Item* PolySource)
     }
   
   if (isMonster())
-    if (theGame->GetPlayer(0)->Percieves(this))
+    if (theGame->GetPlayer(0)->Perceives(this))
       StateFlags |= MS_POLY_KNOWN;
   
   
@@ -1214,7 +1214,7 @@ EvReturn Magic::Reveal(EventInfo &e)
 
     if (e.EItem && e.EItem->isItem())
       if (!e.EItem->isKnown(KN_MAGIC)) {
-        e.EActor->IPrint("You recieve knowledge magically...");
+        e.EActor->IPrint("You receive knowledge magically...");
         e.EActor->IdentByTrial(e.EItem);
       }
 
@@ -2100,7 +2100,7 @@ EvReturn Magic::Detect(EventInfo &e)
     uint16 tot,i; Thing *t;
     if (e.EItem)
       if (!e.EItem->isKnown(KN_MAGIC)) {
-        e.EActor->IPrint("You recieve knowledge magically...");
+        e.EActor->IPrint("You receive knowledge magically...");
         e.EActor->IdentByTrial(e.EItem);
       }
     if (e.EActor->HasStati(DETECTING)) {

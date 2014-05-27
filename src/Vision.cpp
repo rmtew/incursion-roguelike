@@ -9,7 +9,7 @@
       void Player::CalcVision()
       void Map::VisionThing(int16 pn)
       bool Player::Seen(int16 x,int16 y)
-      uint16 Creature::Percieves(Thing *t)
+      uint16 Creature::Perceives(Thing *t)
 */
 
 #include "Incursion.h"
@@ -376,7 +376,7 @@ bool Player::Seen(int16 x,int16 y)
 // If 'assertLOS' is true, we are sure that 'this' can see the square that
 // 't' is standing on ... but 't' might still be hiding or invisible or
 // something. 
-uint16 Creature::Percieves(Thing *t, bool assertLOS)
+uint16 Creature::Perceives(Thing *t, bool assertLOS)
 {
   int16 i, tx, ty; 
   uint16 Per; bool isBlind;
@@ -389,7 +389,7 @@ uint16 Creature::Percieves(Thing *t, bool assertLOS)
     return 0;
     
   if (t->HasStati(MOUNT))
-    return (Percieves(t->GetStatiObj(MOUNT),assertLOS));
+    return (Perceives(t->GetStatiObj(MOUNT),assertLOS));
     
   if (m && t->m && (t->m != m))
     return 0;
@@ -414,7 +414,7 @@ uint16 Creature::Percieves(Thing *t, bool assertLOS)
     {
       Creature *cr;
       cr = (Creature*) GetStatiObj(ILLUSION);
-      return cr->Percieves(t,assertLOS);
+      return cr->Perceives(t,assertLOS);
     } 
    
 
@@ -536,7 +536,7 @@ uint16 Creature::Percieves(Thing *t, bool assertLOS)
       { theGame->inPerceive--; return PER_VISUAL; }
     if (((Item*)t)->Owner() == NULL)
       { theGame->inPerceive--; return PER_VISUAL; }
-    if (Per |= Percieves(((Item*)t)->Owner()))
+    if (Per |= Perceives(((Item*)t)->Owner()))
       { theGame->inPerceive--; return Per; }
     theGame->inPerceive--; return 0;
   }
@@ -593,7 +593,7 @@ uint16 Creature::Percieves(Thing *t, bool assertLOS)
   if (isPlayer()) {
     if (anim && !(anim->isDead()) && !limit) {
       limit = 1;
-      uint16 res = anim->Percieves(t);
+      uint16 res = anim->Perceives(t);
       if (res) Per |= res | PER_SHARED; 
       limit = 0;
     }
@@ -607,7 +607,7 @@ uint16 Creature::Percieves(Thing *t, bool assertLOS)
   } else {
     if (druid && !(druid->isDead()) && !limit)  {
       limit = 1;
-      uint16 res = druid->Percieves(t);
+      uint16 res = druid->Perceives(t);
       if (res) Per |= res | PER_SHARED; 
       limit = 0;
     }

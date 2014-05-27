@@ -721,7 +721,7 @@ Monster "black dragon" : MA_DRAGON
       engage in their proclivity for refined social sadism. By human
       standards, the average black dragon is irreprably damaged --
       filled with insane hatred, emotional scars and the unceasing
-      thirst for vengeance upon anyone they percieve as having wronged
+      thirst for vengeance upon anyone they perceive as having wronged
       them.";
     On Event MSG_BLASTNAME "stream of acid";
     Lists:
@@ -1933,7 +1933,7 @@ Monster "cavefish" : MA_ANIMAL
     RACIAL_SKILL(SK_SWIM,+8);
     Desc: "Many varieties of predatory fish have adapted to
       life in deep caves or the Underdark. They are blind,
-      though many retain vestigal eyes, and percieve their
+      though many retain vestigal eyes, and perceive their
       world by sensing vibrations in the water.";
   }
 

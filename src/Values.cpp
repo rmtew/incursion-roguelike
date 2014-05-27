@@ -1302,7 +1302,7 @@ Restart:
     } 
   } 
   
-  /* Animal Companions recieve a bonus to Movement Rate when
+  /* Animal Companions receive a bonus to Movement Rate when
      not being ridden, so they can keep up. */
   if (HasStati(ANIMAL_COMPANION) && !HasStati(MOUNT))
     AddBonus(BONUS_CLASS,A_MOV,15);
