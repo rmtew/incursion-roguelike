@@ -204,6 +204,7 @@ class libtcodTerm: public TextTerm
       virtual void Reset();
       virtual bool hideOption(int16 opt) { return false; }
       virtual void SetDebugText(const char *text);
+      virtual void Title();
       
       /* Scroll Buffer */
       virtual void SPutChar(int16 x, int16 y, Glyph g);
@@ -817,6 +818,33 @@ void libtcodTerm::SetIncursionDirectory(const char *s) {
     IncursionDirectory = (const char *)s;
 }
 
+/* Draw the intro screen header and display the start of game libtcod-specific
+ * stuff in the footer area below it. */
+void libtcodTerm::Title() {
+    uint8 done_rendering = 0;
+    TCOD_key_t key = { TCODK_NONE, 0 };
+    int credits_x, credits_y;
+
+    // Draw the intro screen header.
+    TextTerm::Title();
+    // At this point the selected window should be the footer area, which
+    // TextTerm::Title() defined for it (and it should be cleared).
+    // Show donation text.
+    Write(0, WinSizeY()/2-1,
+        "    > Support development.\n"
+        "    > Encourage work on elements of interest to you.\n"
+        "    > Read 'Incursion.txt' for details.");
+    // Render the libtcod credits then move to the menu.
+    credits_x = WinLeft() + (WinSizeX()*3)/4;
+    credits_y = WinTop() + (WinSizeY()*2)/4;
+    while (!done_rendering && !TCOD_console_is_window_closed() && key.vk == TCODK_NONE) {
+        key = readkey(0);
+        done_rendering = TCOD_console_credits_render_to(bScreen,credits_x,credits_y,0);
+        Update();
+    }
+    // Clear the footer area.
+    Clear();
+}
 
 /*****************************************************************************\
 *                                 libtcodTerm                                  *

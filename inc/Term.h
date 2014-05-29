@@ -438,7 +438,7 @@ class Term
       /* Splash Screens (Term.Cpp) */
       virtual void DisplayLegend() = 0;
       virtual void DisplayKnownItems()=0;
-		  virtual void Title() = 0; 
+      virtual void Title() {};
 
       /* Character Sheet (Sheet.cpp) */
       virtual void CreateCharSheet(CharSheet &cs) = 0;

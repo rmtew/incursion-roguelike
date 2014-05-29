@@ -21,9 +21,11 @@ of 0.6.9I.  The missing differences are unknown.
 Support the development
 =======================
 
-If you wish to support the development, you can donate bitcoin to:
+Want to support development?  Want to encourage work on certain aspects?
 
-  [16F6d1F82qrhXaR67NHczQbu4eUie7QJui](https://blockchain.info/address/16F6d1F82qrhXaR67NHczQbu4eUie7QJui)
+You can donate money via: [Paypal](http://disinterest.org/donate.html)
+
+You can donate bitcoin via: [16F6d1F82qrhXaR67NHczQbu4eUie7QJui](https://blockchain.info/address/16F6d1F82qrhXaR67NHczQbu4eUie7QJui)
 
 Project goals
 =============
