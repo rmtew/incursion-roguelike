@@ -8,7 +8,7 @@ At this time building is only supported on Windows, using Visual Studio 2008.  Y
 Support the development
 -----------------------
 
-If you wish to support the development..
+Want to support development?  Want to encourage work on certain aspects?
 
 You can donate money via: [Paypal](http://disinterest.org/donate.html)
 

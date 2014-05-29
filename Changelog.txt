@@ -7,7 +7,8 @@ Incursion (open source) 0.6.9Y10: 2014-05-..
 er the same even if something different was displayed in the scroll area. Reported by Karagy.
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/131/: The Lifesight priest spell affects natural living creatures, otherwise known codewise as MA_NLIVING.  There was no type name defined for this value, so when looked up it would print as 'Undefined 91'.  Now it is mapped to 'Natural Living Creature'.  Reported by Karagy.
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/133/: The Forestation druid spell changes the terrain type, but turned allies hostile.  This is a general reaction that happens to friendlies who are affected by an effect with EP_CURSE purpose.  Forestation now has an additional purpose of EP_FIX_TROUBLE which ensures allies do not become hostile when affected by this.  Reported by Karagy.
-* Wizard menu: 'Change terrain type' option now has a menu of terrain types to select from rather than just always changing selected tile to 'wall of flame' or whatever it was.
+* https://bitbucket.org/rmtew/incursion-roguelike/issue/137/: Add libtcod credit animation to the startup screen.  Add some donation text to accompany it.
+* https://bitbucket.org/rmtew/incursion-roguelike/issue/138/: 'Change terrain type' option now has a menu of terrain types to select from rather than just always changing selected tile to 'wall of flame' or whatever it was.
 
 Incursion (open source) 0.6.9Y9: 2014-05-08
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/126/: Google Breakpad caused crashes.
