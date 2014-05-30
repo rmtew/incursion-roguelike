@@ -308,6 +308,7 @@ TextVal T_CONSTNAMES[] = {
 { T_ITEM, "T_ITEM" },
 { T_EVENTINFO, "T_EVENTINFO" },
 { T_THING, "T_THING" },
+{ T_FOUNTAIN, "T_FOUNTAIN" },
  { NULL, 0 } };
 
 TextVal IT_CONSTNAMES[] = {
