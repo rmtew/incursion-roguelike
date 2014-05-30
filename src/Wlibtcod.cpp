@@ -444,7 +444,7 @@ void libtcodTerm::Redraw() {
 
 void libtcodTerm::CursorOn() {
     showCursor = true;
-    ticks_blink_last = SDL_GetTicks();
+    ticks_blink_last = TCOD_sys_elapsed_milli();
     ocx = ocy = 0;
 }
 
@@ -982,10 +982,10 @@ int16 libtcodTerm::GetCharCmd(KeyCmdMode mode) {
     Update();
     activeWin = wn;
     cx = ox; cy = oy;
-    ticks_last = SDL_GetTicks();
+    ticks_last = TCOD_sys_elapsed_milli();
 
     for(;;) {
-		Uint32 ticks0 = SDL_GetTicks(), ticks1;
+		Uint32 ticks0 = TCOD_sys_elapsed_milli(), ticks1;
         TCOD_key_t tcodKey;
         TCOD_event_t tcodEvent = TCOD_sys_check_for_event(TCOD_EVENT_KEY_PRESS, &tcodKey, NULL);
 
@@ -998,7 +998,7 @@ int16 libtcodTerm::GetCharCmd(KeyCmdMode mode) {
                 ShowStatus();
             }
           
-        ticks1 = SDL_GetTicks();
+        ticks1 = TCOD_sys_elapsed_milli();
         if (showCursor && ticks1 > ticks_blink_last + CURSOR_BLINK_MS) {
             BlinkCursor();
             ticks_blink_last = ticks1;
@@ -1044,7 +1044,7 @@ CtrlBreak:
             ClearMsgOK = false;
         }
         
-        ticks_blink_last = SDL_GetTicks();
+        ticks_blink_last = TCOD_sys_elapsed_milli();
 
 
         ControlKeys = 0;
