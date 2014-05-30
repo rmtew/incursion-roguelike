@@ -1987,7 +1987,7 @@ void TextTerm::OptionManager(int16 start_cat)
           }
 
         ClearScroll();
-        if (OptionList[OptsShown[c]].Desc) {
+        if (n > 0 && OptionList[OptsShown[c]].Desc) {
           Color(GREEN);
           SGotoXY(0,0);
           SWrapWrite(0,0,SC("__")+SC(XPrint(OptionList[OptsShown[c]].Desc)),WinSizeX()-2);
