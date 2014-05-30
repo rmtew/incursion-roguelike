@@ -2367,7 +2367,7 @@ AI_FOUNTAIN Effect "fountain;effect" : EA_GENERIC
       
       DPrint(e,"You dip your <EItem> in the <EItem2>.",
                "The <EActor> dips an <EItem> in the <EItem2>.");
-      
+
       switch (val)
         {
           case 1: case 2: // wastrilith
@@ -2395,7 +2395,7 @@ AI_FOUNTAIN Effect "fountain;effect" : EA_GENERIC
             break;*/
           case 9: case 10: // change into monster 
             EMap->thEnGenMTypeXY($"single monster", MA_NLIVING, EN_SINGLE,
-              EActor->ChallengeRating()+3, AL_NONGOOD, ETarget->x, ETarget->y);
+              EActor->ChallengeRating()+3, AL_NONGOOD, EActor->x, EActor->y);
             hMon = EMap->GetEncounterCreature(0);
             hMon->TurnHostileTo(EActor);
             hMon->GainPermStati(TRANSFORMED,EItem,SS_ENCH,0,0,$"fountain;effect",15);
@@ -2405,8 +2405,8 @@ AI_FOUNTAIN Effect "fountain;effect" : EA_GENERIC
           case 11: case 12: // object teleported
             APrint(e, "The <EItem> vanishes!");
             do {
-              x = 1d(EMap->SizeX());
-              y = 1d(EMap->SizeY());
+              x = random(EMap->SizeX());
+              y = random(EMap->SizeY());
               }
             while (!EMap->InBounds(x,y) || EMap->FallAt(x,y) ||
                    !EMap->SolidAt(x,y));
