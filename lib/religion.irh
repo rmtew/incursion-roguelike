@@ -5074,8 +5074,8 @@ God "Semirath"
           hItem = (hObj)GetCandidate(i);
           hItem->Remove(false);
           do {
-            x = 1d(EMap->SizeX()-1);
-            y = 1d(EMap->SizeY()-1);
+            x = random(EMap->SizeX());
+            y = random(EMap->SizeY());
             }
           while (EMap->SolidAt(x,y) || EMap->FallAt(x,y) ||
                  ResourceHasFlag(EMap->TerrainAt(x,y),TF_WARN) ||
