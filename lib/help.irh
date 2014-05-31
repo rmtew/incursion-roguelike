@@ -885,7 +885,7 @@ Text "help::interface"
      keyboard are considered Quick Keys in Incursion, and the user can bind them to
      commonly used commands, allowing those commands to be selected with a single
      keystroke. QuickKeys can be assigned to a spell in Spell Manager by moving the
-     seelction arrows so that the desired spell is selected, then pressing the number
+     selection arrows so that the desired spell is selected, then pressing the number
      key you wish to bind to that spell. Similarly, combat options or use-verbs
      (from the 'y' command) can be bound to a Quick Key by moving the menu cursor
      to that option and pressing the number key you wish to bind.\n
