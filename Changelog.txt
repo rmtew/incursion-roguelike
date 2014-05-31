@@ -11,6 +11,7 @@ er the same even if something different was displayed in the scroll area. Report
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/133/: The Forestation druid spell changes the terrain type, but turned allies hostile.  This is a general reaction that happens to friendlies who are affected by an effect with EP_CURSE purpose.  Forestation now has an additional purpose of EP_FIX_TROUBLE which ensures allies do not become hostile when affected by this.  Reported by Karagy.
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/137/: Add libtcod credit animation to the startup screen.  Add some donation text to accompany it.
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/138/: 'Change terrain type' in wizard menu implemented, replacing stub implementation which just put a 'wall of flame' tile down.
+* https://bitbucket.org/rmtew/incursion-roguelike/issue/139/: When the god Semirath gets angry, he tries to move things to random map locations, but causes a crash instead.  This is another case of bounds being exceeded, and crashing ensuing.
 
 Incursion (open source) 0.6.9Y9: 2014-05-08
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/126/: Google Breakpad caused crashes.
