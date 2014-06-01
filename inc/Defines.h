@@ -10,7 +10,7 @@
 
 #define SIGNATURE 0x1234ABCD
 #define SIGNATURE_TWO 0xF1F2F3F4
-#define VERSION_STRING "0.6.9Y9"
+#define VERSION_STRING "0.6.9Y10"
 
 #define SAVE_SUFFIX ".sav"
 #define BACKUP_SUFFIX ".backup"

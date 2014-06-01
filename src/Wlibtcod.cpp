@@ -826,23 +826,27 @@ void libtcodTerm::Title() {
     int credits_x, credits_y;
     TCOD_color_t colour_fg, colour_bg;
     static bool first_time = false;
+    char *next_page = "Press a key to skip this page";
 
     // Draw the intro screen header.
     TextTerm::Title();
     if (first_time == false) {
+        int16 body_y = WinSizeY()/4-1;
         first_time = true;
 
         // At this point the selected window should be the footer area, which
         // TextTerm::Title() defined for it (and it should be cleared).
         // Show donation text.
-        Write(0, WinSizeY()/2-1,
+        Write(0, body_y,
             "    > Support development.\n"
             "    > Encourage work on elements of interest to you.\n"
             "    > Read 'Incursion.txt' for details.");
 
+        Write((WinSizeX() - strlen(next_page))/2, body_y + 5, next_page);
+
         // Render the libtcod credits then move to the menu.
         credits_x = WinLeft() + (WinSizeX()*3)/4;
-        credits_y = WinTop() + (WinSizeY()*2)/4;
+        credits_y = WinTop() + (WinSizeY()*1)/4;
 	    colour_fg = TCOD_console_get_default_foreground(bScreen);
 	    colour_bg = TCOD_console_get_default_background(bScreen);
         while (!done_rendering && !TCOD_console_is_window_closed() && key.vk == TCODK_NONE) {

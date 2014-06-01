@@ -1,4 +1,4 @@
-Incursion (open source) 0.6.9Y10: 2014-05-..
+Incursion (open source) 0.6.9Y10: 2014-06-01
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/11/: Fix spelling mistakes ('breech'->'breach', 'percieve'->'perceive', 'inherant'->'inherent').
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/19/: In system options menu, when switching to the 'macro bindings' page, the options description was leaked from the previous page.
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/27/: Fix crash bugs which happen when dipping an item into a fountain.  The first case was where the dipped item transforms into a hostile monster at the location of the target of the dipping action, only dipping actions do not have a target but rather a first item (the dipped item) and a second item (the fountain).  The second case was where the item gets teleported somewhere on the map - only the map is larger than the bounds of the Roll() function, so a bounds error would be hit.
