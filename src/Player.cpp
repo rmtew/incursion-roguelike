@@ -2826,8 +2826,9 @@ start_again:
         } 
 
         if (t->isItem()) {
+            i = oItem(t->myHandle);
+
             if (t->Type != T_LIGHT && !t->isType(T_TOOL) && !t->isType(T_SYMBOL) && !t->isType(T_SHIELD)) {
-                i = oItem(t->myHandle);
                 int checkSlots[] = { 
                     SL_LSHOULDER ,
                     SL_RSHOULDER ,
