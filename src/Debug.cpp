@@ -384,7 +384,7 @@ void Player::WizardOptions() {
             ((TextTerm*)MyTerm)->WinSizeX()-2,
             ((TextTerm*)MyTerm)->WinSizeY()-2);
         MyTerm->Clear();
-        MyTerm->ClearScroll(); 
+        MyTerm->ClearScroll(true); 
         MyTerm->SGotoXY(0,0);
         Dump();
         MyTerm->UpdateScrollArea(0,WIN_DEBUG);
@@ -698,7 +698,7 @@ Restart:
                 ((TextTerm*)MyTerm)->WinSizeX(),
                 ((TextTerm*)MyTerm)->WinSizeY());
             MyTerm->Clear();
-            MyTerm->ClearScroll(); 
+            MyTerm->ClearScroll(true); 
             MyTerm->SGotoXY(0,0);
             oThing(h)->Dump();
             MyTerm->UpdateScrollArea(0,WIN_DEBUG);
@@ -1029,7 +1029,7 @@ Redisplay:
   //MyTerm->SizeWin(WIN_DEBUG,0,0,80,50);
   MyTerm->SetWin(WIN_DEBUG);
   MyTerm->Clear(); 
-  MyTerm->ClearScroll(); 
+  MyTerm->ClearScroll(true); 
   MyTerm->SGotoXY(0,0);
   oThing(m->Things[i])->Dump();
   MyTerm->UpdateScrollArea(0,WIN_DEBUG);

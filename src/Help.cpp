@@ -1818,7 +1818,7 @@ void TextTerm::HelpTopic(const char*topic, const char*link)
     Save();
     SizeWin(WIN_CUSTOM,WinSizeX()-16,WinSizeY()-8);
     DrawBorder(WIN_CUSTOM,MAGENTA);
-    ClearScroll();
+    ClearScroll(true);
     SetWin(WIN_CUSTOM); Color(YELLOW);
     SWrite((WinSizeX()/2)-6,0," -- HELP -- ");
     Color(GREY);
@@ -1851,7 +1851,7 @@ void TextTerm::HelpTopic(const char*topic, const char*link)
         case KY_CMD_SOUTHWEST:
           UpdateScrollArea(offset+(WinSizeY()-6),WIN_CUSTOM); break;
         case KY_ESC:           
-          ClearScroll();
+          ClearScroll(true);
           Restore();
           isHelp = false;
           SetMode(oldMode);
@@ -1873,7 +1873,7 @@ void TextTerm::HelpTopic(const char*topic, const char*link)
              }
           strcpy(TopicName,"help::");
           strcat(TopicName,HL[SelectedLink].Text);
-          ClearScroll();
+          ClearScroll(true);
           Restore();
           topic = TopicName;
           goto NewTopic;         
@@ -1893,7 +1893,7 @@ void TextTerm::HelpTopic(const char*topic, const char*link)
                     if (HL[i].Text[0])
                       { strcpy(TopicName,"help::");
                         strcat(TopicName,HL[i].Text);
-                        ClearScroll();
+                        ClearScroll(true);
                         Restore();
                         topic = TopicName;
                         goto NewTopic; }
@@ -1908,7 +1908,7 @@ void TextTerm::HelpTopic(const char*topic, const char*link)
                     if (HL[i].Text[0])
                       { strcpy(TopicName,"help::");
                         strcat(TopicName,HL[i].Text);
-                        ClearScroll();
+                        ClearScroll(true);
                         Restore();
                         topic = TopicName;
                         goto NewTopic; }

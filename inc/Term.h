@@ -373,7 +373,7 @@ class Term
       virtual void SGotoXY(int16 x, int16 y)=0;
       virtual void SWrite(const char*text, int16 wn = WIN_CUSTOM)=0;
       virtual int16 SWrapWrite(int16 x,int16 y,const char*, int16 y2=0, int16 wn = WIN_CUSTOM)=0;
-      virtual void ClearScroll()=0;
+      virtual void ClearScroll(bool full=false)=0;
 
       /* Formatted Menus (TextTerm.cpp) */
       virtual int32 LMenu(uint16 fl, const char*title,int8 MWin=WIN_MENUBOX,
@@ -613,7 +613,7 @@ class TextTerm: public Term
       virtual void HyperTab(int16 wn = WIN_CUSTOM);
       virtual void SWrite(const char*text, int16 wn = WIN_CUSTOM);
       virtual int16 SWrapWrite(int16 x,int16 y,const char* s, int16 y2, int16 wn = WIN_CUSTOM);
-      virtual void ClearScroll();
+      virtual void ClearScroll(bool full=false);
       virtual void ScrollUp(int16 wn = WIN_CUSTOM)
         { UpdateScrollArea(offset-1, wn); }
       virtual void ScrollDown(int16 wn = WIN_CUSTOM)

@@ -35,7 +35,7 @@
       //int16 libtcodTerm::SGetGlyph(int16 x, int16 y);
       void  libtcodTerm::SPutColor(int16 x, int16 y, int16 col);
       int16 libtcodTerm::SGetColor(int16 x, int16 y);
-      void  libtcodTerm::ClearScroll();
+      void  libtcodTerm::ClearScroll(bool full=false);
       void  libtcodTerm::BlitScrollLine(int16 wn, int32 buffline, int32 winline);
    File I/O
      bool libtcodTerm::Exists(const char *fn)

@@ -3117,7 +3117,7 @@ void TextTerm::DisplayKnownItems()
     Save();
     SizeWin(WIN_CUSTOM,WinSizeX()-16,WinSizeY()-8);
     DrawBorder(WIN_CUSTOM,MAGENTA);
-    ClearScroll();
+    ClearScroll(true);
     SetWin(WIN_CUSTOM); Color(YELLOW);
     SWrite((WinSizeX()/2)-18,0," -- Item Enchantment Discoveries -- ");
     Color(GREY);
@@ -3144,7 +3144,7 @@ void TextTerm::DisplayKnownItems()
          break;
         case KY_ESC:
         case KY_ENTER:
-          ClearScroll();
+          ClearScroll(true);
           Restore();
           return;
         }

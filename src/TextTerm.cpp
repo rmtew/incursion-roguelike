@@ -23,7 +23,7 @@
      int16 TextTerm::WrapWrite(int16 x,int16 y,String s, int16 x2)
    Scrolling Text
      void  TextTerm::UpdateScrollArea(int16 _offset, int16 wn)
-     void  TextTerm::ClearScroll()
+     void  TextTerm::ClearScroll(bool full=false)
      void  TextTerm::SWrite(const char *text, int16 wn)
      int16 TextTerm::SWrapWrite(int16 x, int16 y, String s, int16 x2, int16 wn)
    Formatted Menus
@@ -341,7 +341,7 @@ void TextTerm::ShowMessages()
     Save();
     SizeWin(WIN_CUSTOM,WinSizeX()-16,WinSizeY()-8);
     DrawBorder(WIN_CUSTOM,MAGENTA);
-    ClearScroll();
+    ClearScroll(true);
     SetWin(WIN_CUSTOM); Color(YELLOW);
     SWrite((WinSizeX()/2)-6,0," -- Messages -- ");
     Color(GREY);
@@ -365,7 +365,7 @@ void TextTerm::ShowMessages()
           UpdateScrollArea(offset+(WinSizeY()-6),WIN_CUSTOM); break;
 
         default: 
-          ClearScroll();
+          ClearScroll(true);
           Restore();
           SetMode(oldMode);
           return;
@@ -451,7 +451,7 @@ void TextTerm::Box(int16 win, int16 flags, int16 cbor, int16 ctxt, const char*te
     SizeWin(WIN_CUSTOM,BoxLength-1,min(40,Lines-2));
 
     DrawBorder(WIN_CUSTOM,cbor);
-    ClearScroll();
+    ClearScroll(true);
     Color(ctxt);
 
     ch = lbuff; c=1; real_c=1; buff2[0] = ' '; y = -1;
@@ -684,11 +684,13 @@ void TextTerm::HyperTab(int16 wn)
 
   }
 
-void TextTerm::ClearScroll() {
+void TextTerm::ClearScroll(bool full) {
     SClear();
     ScrollLines = 0;
-    offset = 0;
-    scx = scy = 0;
+    if (full) {
+        offset = 0;
+        scx = scy = 0;
+    }
     LinkCount = 0;
     SelectedLink = -1;
 }

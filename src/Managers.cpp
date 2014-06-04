@@ -1225,7 +1225,7 @@ void TextTerm::BarterManager(Creature *Seller)
     
     PartialRedraw:
     
-    ClearScroll();
+    ClearScroll(true);
     SetWin(WIN_INVEN);
     SizeWin(WIN_CUSTOM,WinLeft(),WinTop()+4,WinRight(),WinBottom()-3);
     SetWin(WIN_CUSTOM);
