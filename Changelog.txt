@@ -1,6 +1,7 @@
 Incursion (open source) 0.6.9Y11: 2014-06-..
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/140/: Fix bug where previous fix for scrolling position persisting in different windows that allow scrolling, broke scrolling in other locations.  Reported by Karagy.
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/142/: Fixed a crash bug where when a monster would look for nearby items to pick up, and the variable that pointed to that object was not set.  This crash is known to be present in all preceding releases at least back to and including 0.6.9H4.  Reported by Charlie G.
+* https://bitbucket.org/rmtew/incursion-roguelike/issue/146/: Fixed a bug where the error box would appear when a summoning creature reached it's time to go away, if it had items which were summoned with it.  A confluence of events would mean when an item was garbage collected, it would not find the back reference..  see the issue and linked changeset there-in for a detailed breakdown.  Reported by Hamel@Bay12.
 
 Incursion (open source) 0.6.9Y10: 2014-06-01
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/11/: Fix spelling mistakes ('breech'->'breach', 'percieve'->'perceive', 'inherant'->'inherent').

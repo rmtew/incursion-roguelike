@@ -951,11 +951,22 @@ inline void FixupBackrefs(Status *S, Thing *tReferee) {
                 eName = "?";
             else
                 eName = NAME(S->eID);
+            // When an object is removed and pending deletion, it's backrefs are cleared, but the
+            // stati the backrefs refer to are not removed if those stati are on another object
+            // who has already been removed and is pending deletion.
+            //
+            // Given that, here we are within a stati removal.  If the backref is not there, we can
+            // ignore it if the object which has it is flagged as removed and pending deletion.
             if (!RemoveBackref(tReferee->myHandle, tReferrer))
-                Error("%s->SetEffStatiObj(EFFECT[%s],NATURE[%d],REFERRER[%s]) failed",
-                    (const char *)tReferee->Name(0),
-                    (const char *)eName,
-                    S->Nature,
-                    (const char *)tReferrer->Name(0));
+#ifdef DEBUG
+                if ((tReferrer->Flags & F_DELETE) != F_DELETE)
+                    Error("%s->stati_removal_func(EFFECT[%s],NATURE[%d],REFERRER[%s]) with no backref to remove",
+                        (const char *)tReferee->Name(0),
+                        (const char *)eName,
+                        S->Nature,
+                        (const char *)tReferrer->Name(0));
+#else
+                ;
+#endif
         }
 }
