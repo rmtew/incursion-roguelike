@@ -145,7 +145,7 @@ void Thing::GainTempStati(int16 n, Thing *t, int16 Duration, int8 Cause, int16 V
                 newSize = __Stati.Allocated * 2; 
                 ASSERT(newSize); 
             } else {
-                __Stati.Idx = (uint8 *)malloc(sizeof(__Stati.Idx[0]) * LAST_STATI);
+                __Stati.Idx = (uint16 *)malloc(sizeof(__Stati.Idx[0]) * LAST_STATI);
                 ASSERT(__Stati.Idx);
             } 
             if (!__Stati.S)
@@ -248,6 +248,7 @@ static int StatiSort(const void *a, const void *b) {
 
 void Thing::_FixupStati() {
     uint8 i8;
+    int16 i16;
     ASSERT(__Stati.Nested == 0); 
 
     /* Merge both lists, if needed */
@@ -291,7 +292,7 @@ SkipMerge:
     if (__Stati.Removed >= __Stati.Last) {
         ASSERT(__Stati.Removed == __Stati.Last);
         __Stati.Removed = __Stati.Last = 0;
-        memset(__Stati.Idx,-1,sizeof(__Stati.Idx[0]) * LAST_STATI);
+        memset(__Stati.Idx,NO_STATI_ENTRY,sizeof(__Stati.Idx[0]) * LAST_STATI);
         return; 
     } 
 
@@ -300,19 +301,20 @@ SkipMerge:
         qsort(__Stati.S, __Stati.Last, sizeof(__Stati.S[0]), StatiSort);
 
     /* rebuild the index */
-    memset(__Stati.Idx,-1,sizeof(__Stati.Idx[0]) * LAST_STATI);
-    int last = -1; 
-    for (i8 = 0; i8 < __Stati.Last; i8++) {
-        if (__Stati.S[i8].Nature != last) {
-            int nat = __Stati.S[i8].Nature; 
-            __Stati.Idx[nat] = i8; 
-            last = nat; 
-        } 
+    memset(__Stati.Idx,NO_STATI_ENTRY,sizeof(__Stati.Idx[0]) * LAST_STATI);
+    int last = -1;
+    for (i16 = 0; i16 < __Stati.Last; i16++) {
+        if (__Stati.S[i16].Nature != last) {
+            int nat = __Stati.S[i16].Nature;
+            __Stati.Idx[nat] = i16;
+            last = nat;
+        }
     }
 
     /* special kludge for ADJUST, to make StatIterAdjust work */
+    /* Note the first adjust stati  */
     for (i8=ADJUST;i8 <= ADJUST_LAST; i8++)
-        if (__Stati.Idx[i8] != 255) {
+        if (__Stati.Idx[i8] != NO_STATI_ENTRY) {
             __Stati.Idx[ADJUST_IDX] = __Stati.Idx[i8];
             break;
         }    

@@ -487,6 +487,8 @@ extern Map* TheMainMap;
 
 #define ADDED_SIZE      128
 
+#define NO_STATI_ENTRY 0xFFFF
+
                                 
 #define Stati_RemoveInline_(s, targ, logic) {             \
     Status sCopy = *s;                                    \
@@ -542,7 +544,7 @@ extern Map* TheMainMap;
 #define StatiIterNature(targ,n)                        \
   { Status *S; int16 __i, __c=0; targ->__Stati.Nested++; \
     if (targ->__Stati.Idx &&                           \
-        targ->__Stati.Idx[(n)] != 255)                 \
+        targ->__Stati.Idx[(n)] != NO_STATI_ENTRY)      \
       for (__i=targ->__Stati.Idx[(n)];                 \
               __i<targ->__Stati.Last &&                \
               ((targ->__Stati.S[__i].Nature==n) ||     \
@@ -555,7 +557,7 @@ extern Map* TheMainMap;
 #define StatiIterAdjust(targ)                          \
   { Status *S; int16 __i, __c=0; targ->__Stati.Nested++; \
     if (targ->__Stati.Idx &&                           \
-        targ->__Stati.Idx[ADJUST_IDX] != 255)          \
+        targ->__Stati.Idx[ADJUST_IDX] != NO_STATI_ENTRY) \
       for (__i=targ->__Stati.Idx[ADJUST_IDX];          \
               __i<targ->__Stati.Last &&                \
               ((is_adj(targ->__Stati.S[__i].Nature)) || \
@@ -594,7 +596,7 @@ typedef struct StatiCollection {
     Status* S;
     Status* Added; 
     int16   szAdded;
-    uint8 * Idx;        // always of size LAST_STATI if allocated 
+    uint16 * Idx;        // always of size LAST_STATI if allocated 
     int16   Last;       // last used elt in array "S"
     int16   Allocated;  // allocated size of array "S"
     int16   Removed;    // # removed in this iteration sweep
@@ -630,7 +632,7 @@ typedef struct StatiCollection {
       dest->Removed = Removed;
       if (Allocated) { 
         dest->S = (Status *)malloc(sizeof(S[0]) * Allocated);
-        dest->Idx = (uint8 *)malloc(sizeof(Idx[0]) * LAST_STATI);
+        dest->Idx = (uint16 *)malloc(sizeof(Idx[0]) * LAST_STATI);
         memcpy(dest->S,S,sizeof(S[0]) * Allocated);
         memcpy(dest->Idx,Idx,sizeof(Idx[0]) * LAST_STATI);
       }
