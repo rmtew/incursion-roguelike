@@ -335,8 +335,6 @@ class Creature: public Thing, public Magic
       virtual int32 getTotalMoney();
       virtual Item* ConsumeRope(uint32 feet);
 
-
-
       /* Inventory and Stati */
       uint32 ArmourType();
       uint8 Encumbrance();

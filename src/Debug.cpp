@@ -171,9 +171,8 @@ long array_index(long index, long size) {
 
 #endif
 
-void TestEncounterGen(Term *MyTerm)
-  {
-    String str; bool mul; int16 i, mt, dp,des; rID enID;
+void TestEncounterGen(Term *MyTerm) {
+    String str; int16 i, dp,des; rID enID;
     MyTerm->SetWin(WIN_INPUT);
     MyTerm->Color(SKYBLUE);
     MyTerm->Write(0,0,"Desired # of Monsters: ");
@@ -236,7 +235,7 @@ int SortByCR(const void *A, const void *B)
 
 void Map::GenEncounterStats(Term *t)
   {
-    int16 CR, enc, i, j, q, mt; EventInfo e;
+    int16 CR, enc, i, j, mt; EventInfo e;
     String eStat;
     int32 mID_count[2048],
           mType_count[MA_LAST];
@@ -334,7 +333,7 @@ void Map::GenEncounterStats(Term *t)
           
 void Player::WizardOptions() {
     int16 i,j,k,l,ch; 
-    Item *it; Monster *mn; int16 n; rID xID; Thing *t;
+    Item *it; Monster *mn; rID xID; Thing *t;
     EventInfo e; hObj h; String str;
 
     MyTerm->LOption("Examine Player Data", 0);
@@ -426,7 +425,7 @@ void Player::WizardOptions() {
                 MyTerm->Clear();
                 i = atoi(MyTerm->GetTypedString());
                 if (i)
-                    it->SetInherentPlus(i);
+                    it->SetInherentPlus((int8)i);
             }
             if (it->isType(T_TRAP))
                 it->PlaceAt(m,x,y-1);
@@ -535,16 +534,16 @@ Restart:
         MyTerm->Color(MAGENTA);
         MyTerm->ReadLine();
         MyTerm->Clear();
-        i = LookupStr(WQ_CONSTNAMES,MyTerm->GetTypedString());
+        i = (int16)LookupStr(WQ_CONSTNAMES,MyTerm->GetTypedString());
         if (!i)
-            i = LookupStr(IQ_CONSTNAMES,MyTerm->GetTypedString());
+            i = (int16)LookupStr(IQ_CONSTNAMES,MyTerm->GetTypedString());
         if (!i)
             break;
-        if (!it->QualityOK(i)) {
+        if (!it->QualityOK((int8)i)) {
             IPrint("Unacceptable quality.");
             break;
         }
-        it->AddQuality(i);
+        it->AddQuality((int8)i);
         IPrint("Quality added.");
         break;
     case 13:
@@ -559,16 +558,16 @@ Restart:
         MyTerm->Color(MAGENTA);
         MyTerm->ReadLine();
         MyTerm->Clear();
-        i = LookupStr(AQ_CONSTNAMES,MyTerm->GetTypedString());
+        i = (int16)LookupStr(AQ_CONSTNAMES,MyTerm->GetTypedString());
         if (!i)
-            i = LookupStr(IQ_CONSTNAMES,MyTerm->GetTypedString());
+            i = (int16)LookupStr(IQ_CONSTNAMES,MyTerm->GetTypedString());
         if (!i)
             break;
-        if (!it->QualityOK(i)) {
+        if (!it->QualityOK((int8)i)) {
             IPrint("Unacceptable quality.");
             break;
         }
-        it->AddQuality(i);
+        it->AddQuality((int8)i);
         IPrint("Quality added.");
         break;
     case 14:
@@ -583,15 +582,14 @@ Restart:
         MyTerm->Color(MAGENTA);
         MyTerm->ReadLine();
         MyTerm->Clear();
-        i = LookupStr(AQ_CONSTNAMES,MyTerm->GetTypedString());
+        i = (int16)LookupStr(AQ_CONSTNAMES,MyTerm->GetTypedString());
         if (!i)
             break;
-        if (!it->QualityOK(i))
-        {
+        if (!it->QualityOK((int8)i)) {
             IPrint("Unacceptable quality.");
             break;
         }
-        it->AddQuality(i);
+        it->AddQuality((int8)i);
         IPrint("Quality added.");
         break;
     case 15:
@@ -608,7 +606,7 @@ Restart:
         MyTerm->Clear();
         i = atoi(MyTerm->GetTypedString());
         if (i < 1 || RES(m->dID)->Type != T_TDUNGEON ||
-            i > TDUN(m->dID)->GetConst(DUN_DEPTH))
+            i > (int16)TDUN(m->dID)->GetConst(DUN_DEPTH))
         {
             IPrint("Invalid depth.");
             break;
@@ -729,7 +727,7 @@ Restart:
         MyTerm->Color(MAGENTA);
         MyTerm->ReadLine();
         MyTerm->Clear();
-        i = LookupStr(T_CONSTNAMES,MyTerm->GetTypedString());
+        i = (int16)LookupStr(T_CONSTNAMES,MyTerm->GetTypedString());
         MyTerm->Color(SKYBLUE);
         MyTerm->Write(0,0,"Enter Max Level: ");
         MyTerm->Color(MAGENTA);
@@ -771,9 +769,9 @@ Restart:
         str.Empty();
         for(i=0;i!=30;i++) {
             switch (ch) {
-            case 'd': it = Item::GenItem(0,m->dID,j,l,DungeonItems); break;
-            case 's': it = Item::GenItem(0,m->dID,j,l,StapleItems); break;
-            case 'c': it = Item::GenItem(0,m->dID,j,l,ChestItems); break;
+            case 'd': it = Item::GenItem(0,m->dID,j,(int8)l,DungeonItems); break;
+            case 's': it = Item::GenItem(0,m->dID,j,(int8)l,StapleItems); break;
+            case 'c': it = Item::GenItem(0,m->dID,j,(int8)l,ChestItems); break;
             }
             it->SetKnown(0xFF);
             str += Format("\n[%d] %s", it->ItemLevel(),
@@ -1065,12 +1063,12 @@ Redisplay:
       case KY_CMD_WEST: 
         i--;
         if (i==-1)
-          i=m->Things.Total()-1;
+          i=(int16)m->Things.Total()-1;
         while (nearby && oThing(m->Things[i])->DistFromPlayer() > 10)
         {
           i--;
           if (i < 0)
-            i = m->Things.Total()-1;
+            i = (int16)m->Things.Total()-1;
         }							
         goto Redisplay;
       case KY_CMD_NORTH:
@@ -1133,7 +1131,7 @@ void Thing::Dump()
 
 void Creature::Dump()
   {
-    int16 i,j, k; String ss, ts_dump; TAttack *a; Item *it;
+    int16 i,j, k; String ss, ts_dump; Item *it;
     CalcValues();
     static TextVal PrintAttr[] = {
       { A_STR , "A_STR " },
@@ -1194,7 +1192,7 @@ void Creature::Dump()
             (i == A_DMG) ? A_DMG_ARCHERY + AttackMode() : i;
         T1->SWrite(Format(XPrint("<10>%s %3d <2>%s<7>\n"), Lookup(PrintAttr,i),
           (i == A_SPD || i == A_MOV) ? Attr[k]*5+100 : Attr[k], 
-          (const char*)BonusBreakdown(i,45)));
+          (const char*)BonusBreakdown((int8)i,45)));
         }
     
     T1->Color(AZURE); 
@@ -1665,7 +1663,7 @@ void Annotation::Dump()
       } 
       break; 
     case AN_EQUIP: 
-      if (u.eq.iID <= theRegistry->LastUsedHandle && 
+      if (u.eq.iID <= (rID)theRegistry->LastUsedHandle && 
           u.eq.iID >= 128 && 
           theRegistry->Exists(u.eq.iID))
         T1->SWrite(Format(" (%s)",NAME(u.eq.iID))); break; 
@@ -1810,8 +1808,8 @@ String & EventName(int16 Ev)
 
 void Game::DumpCode()
   {
-    Annotation *a; VCode *vc, *start; int32 pv;
-    String res, msg; rID xID; int16 i,j, pc, ev;
+    Annotation *a;
+    String res, msg; rID xID; int16 i, ev;
     // weimer: the old version of this absolutely did not work for me
     // (never displayed anything) ... which is weird, because I'm sure you
     // must have used it a million times ...
@@ -1839,7 +1837,7 @@ void Game::DumpCode()
           } 
       } 
 
-    ev = T1->LMenu(MENU_ESC|MENU_2COLS|MENU_BORDER,"Choose an event:",WIN_MENUBOX);
+    ev = (int16)T1->LMenu(MENU_ESC|MENU_2COLS|MENU_BORDER,"Choose an event:",WIN_MENUBOX);
 
     if (ev == -1) return; 
 
@@ -1917,7 +1915,7 @@ void TextTerm::TraceWindow(rID xID, int16 Event, VMachine *VM, hCode CP, bool ru
     OArray<DebugInfo,1000,1000> &sym = 
               theGame->Modules[0]->Symbols;
     VCode *start, *vc; 
-    int16 sy, y, line, i, j, pc;
+    int16 sy, y, line, i, pc;
     int32 pv; 
     Annotation *a;
     bool first_flag;
@@ -2094,8 +2092,8 @@ void TextTerm::TraceWindow(rID xID, int16 Event, VMachine *VM, hCode CP, bool ru
     
     /* Now, display the bytecode dump */
     int16 mid_screen = (sy-8)/2;
-    int16 first_line = max(0,trace_cursor - mid_screen);
-    int16 watch_size = cLocals ? (cLocals+2) : 0;
+    int16 first_line = (int16)max(0,trace_cursor - mid_screen);
+    int16 watch_size = (int16)(cLocals ? (cLocals+2) : 0);
     for(y=2;y!=(sy-(4+watch_size));y++)
       {
         line = first_line + (y - 2);
