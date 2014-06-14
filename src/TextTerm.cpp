@@ -188,7 +188,8 @@ void TextTerm::CWrite(const char* text)
     Write(text);
     if (cy >= activeWin->Bottom - 1) {
       GotoXY(0,activeWin->Bottom);
-      oattr = attr; Color(PINK);
+      oattr = (uint8)attr;
+      Color(PINK);
       Write("[MORE]");
       GetCharRaw();
       Color(oattr);
@@ -203,7 +204,7 @@ void TextTerm::Message(const char* _Msg)
 		int16 oldWin = (activeWin - &Windows[0]);
     int16 space, len; 
     int16 ch; bool isFull;
-    bool autoMore =  p ? p->Opt(OPT_AUTOMORE) : false;
+    bool autoMore =  p ? p->Opt(OPT_AUTOMORE) != 0 : false;
     Msg = _Msg;
     if (!Msg.GetTrueLength())
       return;
@@ -249,7 +250,7 @@ void TextTerm::Message(const char* _Msg)
       }
 
     /* Find a good place to break off the segment */
-    len = max(space,Msg.TrueLeft(space).GetLength());
+    len = max(space,(int16)Msg.TrueLeft(space).GetLength());
     for (; len != max(0,space-15); len--) 
       if (len > Msg.GetLength() || Msg[len] == ' ' || Msg[len] == '\n')
         break;
@@ -277,7 +278,7 @@ void TextTerm::Message(const char* _Msg)
 
     if (isFull)
       {
-        linepos += Seg.GetTrueLength() + 1;
+        linepos += (int8)Seg.GetTrueLength() + 1;
         return;
       }
     else
@@ -299,7 +300,7 @@ void TextTerm::Message(const char* _Msg)
             ch = GetCharCmd();
           while (ch >= KY_CMD_NORTH &&
                  ch <= KY_CMD_SOUTHWEST);   
-          Color(old_attr);   
+          Color((int16)old_attr);   
         } 
         ClearMsgOK = false;
         Clear();
@@ -479,7 +480,8 @@ void TextTerm::Box(int16 win, int16 flags, int16 cbor, int16 ctxt, const char*te
         ch++;
       }
     UpdateScrollArea(0,WIN_CUSTOM);
-    saveMode = Mode; Mode = MO_SPLASH;
+    saveMode = (int8)Mode;
+    Mode = MO_SPLASH;
     done = false; in = 0;
     if (!(flags & BOX_NOPAUSE))
       do {
@@ -517,7 +519,7 @@ void TextTerm::Box(int16 win, int16 flags, int16 cbor, int16 ctxt, const char*te
       while (!done);
 
     if (flags & BOX_SAVECHAR)
-      QueuedChar = in;
+      QueuedChar = (uint8)in;
     Mode = saveMode;
     if (!(flags & BOX_NOSAVE))
       Restore();
@@ -777,7 +779,7 @@ void TextTerm::SWrite(const char *text, int16 wn)
           {
             SPutChar(scx,scy,'>' + attr*256);
             scx++;
-            Color(oColor);
+            Color((int16)oColor);
             isLink = false;
             LinkCount++;
             ASSERT(LinkCount < 511);
@@ -939,7 +941,7 @@ Restart:
     if (MWin == WIN_MENUBOX) {
         szCol = 0;
         for(i=0;i!=OptionCount;i++)
-            if (strlen(Option[i].Text) > szCol)
+            if ((int16)strlen(Option[i].Text) > szCol)
                 szCol = strlen(Option[i].Text);
         szCol += 6;
         if (szCol > 76 / Cols) szCol = 76 / Cols; 
@@ -959,7 +961,7 @@ Restart:
         } else if (!title)
             Width = 4 + szCol * Cols;
         else
-            Width = 2 + max(min(45,strlen(title)),szCol*Cols);
+            Width = 2 + max(min(45,(int16)strlen(title)),szCol*Cols);
         Height = vRows + (title ? DY+1 : 0) + 1;
         if (fl & MENU_LARGEBOX) {
             SetWin(WIN_SCREEN);
@@ -1002,7 +1004,7 @@ Restart:
         DY = (MWin == WIN_MENUBOX) ? 1 : 2;
         if (title) {
             Color(15);
-            if (strlen(title) > WinSizeX()-3 || strchr(title,'\n')) {
+            if ((int16)strlen(title) > WinSizeX()-3 || strchr(title,'\n')) {
                 if (fl & MENU_SWRAPWRITE) {
                     ClearScroll(); 
                     DY += SWrapWrite(3,1,(fl & MENU_RAW) ? (const char*) title : XPrint(title),WinSizeX()-2,MWin);
@@ -1209,7 +1211,7 @@ bool TextTerm::LMultiSelect(uint16 fl, const char* _title,int8 MWin,const char*h
 
     barlen = 5;
     for (i=0;i!=OptionCount;i++)
-        barlen = max(barlen,Option[i].Text.GetTrueLength()+6);
+        barlen = max(barlen,(int16)Option[i].Text.GetTrueLength()+6);
 
 
     if (fl & MENU_SORTED)
@@ -1243,7 +1245,7 @@ Restart:
     {
         szCol = 0;
         for(i=0;i!=OptionCount;i++)
-            if (strlen(Option[i].Text) > szCol)
+            if ((int16)strlen(Option[i].Text) > szCol)
                 szCol = strlen(Option[i].Text);
         szCol += 6;
         if (szCol > 76 / Cols) szCol = 76 / Cols; 
@@ -1267,7 +1269,7 @@ Restart:
         else if (!title)
             Width = 4 + szCol * Cols;
         else
-            Width = 2 + max(min(45,strlen(title)),szCol*Cols);
+            Width = 2 + max(min(45,(int16)strlen(title)),szCol*Cols);
         Height = vRows + (title ? DY+1 : 0) + 1;
         if (fl & MENU_LARGEBOX) {
             SetWin(WIN_SCREEN);
@@ -1315,7 +1317,7 @@ Restart:
         DY = (MWin == WIN_MENUBOX) ? 1 : 2;
         if (title) {
             Color(15);
-            if (strlen(title) > WinSizeX()-3 || strchr(title,'\n')) {
+            if ((int16)strlen(title) > WinSizeX()-3 || strchr(title,'\n')) {
                 if (fl & MENU_SWRAPWRITE) {
                     ClearScroll(); 
                     DY += SWrapWrite(3,1,(fl & MENU_RAW) ? (const char*) title : XPrint(title),WinSizeX()-2,MWin);
