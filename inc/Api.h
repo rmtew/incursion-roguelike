@@ -375,7 +375,7 @@ system int8   T_CREATURE::SkillAttr(int8 sk);
 system bool   T_CREATURE::SavingThrow(int16 st, int16 SaveDC, int32 subtypes=0);
 system void   T_CREATURE::TrainAs(rID cID);
 system int16  T_CREATURE::HungerState();
-system hObj   T_CREATURE::ConsumeRope(int16 feet);
+system hObj   T_CREATURE::ConsumeRope(uint32 feet);
 system bool   T_CREATURE::LoseFatigue(int16 amt, bool avoid = false);
 system void   T_CREATURE::Shapeshift(rID mID, bool merge = false, hObj:T_ITEM PolySource = 0);
 system int16  T_CREATURE::ResistLevel(int16 DType);

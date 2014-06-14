@@ -147,18 +147,16 @@ size_t typeSize(int8 Type)
               
 
 
-inline bool hasData(int8 Type)
-  {
-    switch(Type)
-      {
-        case T_MODULE:   /* Resource arrays; text/data/code segments */
-        case T_PLAYER:  /* Name, Notes, History, other Strings */
-        case T_MAP:     /* Map Grid */
-          return true;
-        default:
-          return false;
-      }
-  }
+inline bool hasData(int16 Type) {
+    switch(Type) {
+    case T_MODULE:   /* Resource arrays; text/data/code segments */
+    case T_PLAYER:  /* Name, Notes, History, other Strings */
+    case T_MAP:     /* Map Grid */
+        return true;
+    default:
+        return false;
+    }
+}
 
 void Registry::Block(void **Block, size_t sz)
   {
@@ -386,8 +384,7 @@ void Registry::RemoveObject(Object *o)
     Error("Registry::UnlinkObject -- invalid object handle!");
   }
 
-int16 Registry::SaveGroup(Term &t, hObj hGroup, bool use_lz, bool newFile)
-  {
+int16 Registry::SaveGroup(Term &t, hObj hGroup, bool use_lz, bool newFile) {
     int32 i; uint32 sig;
     groupHeader gh; fileHeader fh;
     RegNode *r; DataNode *d;
@@ -398,122 +395,122 @@ int16 Registry::SaveGroup(Term &t, hObj hGroup, bool use_lz, bool newFile)
     t.Seek(0,SEEK_SET);   
 
     if (!newFile) {
-      t.FRead(&fh,sizeof(fh));
-      if (fh.Sig != SIGNATURE)
-        throw ENOTARC;
-      if (strcmp(fh.Version,VERSION_STRING))
-        throw EBADVER;
+        t.FRead(&fh,sizeof(fh));
+        if (fh.Sig != SIGNATURE)
+            throw ENOTARC;
+        if (strcmp(fh.Version,VERSION_STRING))
+            throw EBADVER;
 
-      /* Run through a list of group headers. When/if we find the header
-         for the block we're about to save, delete the old saved version
-         so that it's not saved twice. */
-      for(i=0;i!=fh.numGroups;i++)
-        {
-          fh.numGroups++;
-          t.Seek(0,SEEK_SET);
-          t.FWrite(&fh,sizeof(fh));
-            
-          t.FRead(&gh,sizeof(gh));
-          if (gh.Signature != SIGNATURE)
-            throw ECORRUPT;
-          if (gh.hGroup == hGroup)
-            {
-              // ww: was: t.Seek(-sizeof(gh),SEEK_CUR);
-              // unary minus applied to unsigned type still results in 
-              // unsigned type! 
-              t.Seek(0 - (signed)sizeof(gh),SEEK_CUR);
-              /* Remove the old save-image of the group */
-              t.Cut(sizeof(gh) + gh.groupSize);
-              goto DoneDeletion;
-            }
-          else
-            t.Seek(gh.groupSize,SEEK_CUR);
+        /* Run through a list of group headers. When/if we find the header
+        for the block we're about to save, delete the old saved version
+        so that it's not saved twice. */
+        for(i=0;i!=fh.numGroups;i++) {
+            fh.numGroups++;
+            t.Seek(0,SEEK_SET);
+            t.FWrite(&fh,sizeof(fh));
+
+            t.FRead(&gh,sizeof(gh));
+            if (gh.Signature != SIGNATURE)
+                throw ECORRUPT;
+            if (gh.hGroup == hGroup) {
+                // ww: was: t.Seek(-sizeof(gh),SEEK_CUR);
+                // unary minus applied to unsigned type still results in 
+                // unsigned type! 
+                t.Seek(0 - (signed)sizeof(gh),SEEK_CUR);
+                /* Remove the old save-image of the group */
+                t.Cut(sizeof(gh) + gh.groupSize);
+                goto DoneDeletion;
+            } else
+                t.Seek(gh.groupSize,SEEK_CUR);
         }
 
-      DoneDeletion:
-      ;
-      }
+DoneDeletion:
+        ;
+    }
     /* Move us right to the very end of the file, where we're going
-       to append the group we're saving right now. */
+    to append the group we're saving right now. */
     t.Seek(0,SEEK_END);
 
     /* We can't write the real group header yet, because we don't know
-       how many objects we are saving. So we'll write an undefined group
-       header to fill the space, then go back and write the real one
-       later. */ 
+    how many objects we are saving. So we'll write an undefined group
+    header to fill the space, then go back and write the real one
+    later. */ 
     ghPos = t.Tell();
-    
+
     t.FWrite(&gh,sizeof(gh));
 
     /* Initialize the Memory File */
     CFile *cf = new CFile(&t);
 
     /* Write the objects in sequential order, each with a single byte in
-       front of it to tell its type. */
-    gh.objCount = 0; saveMode = true;
-    for(i=0;i!=OBJ_TABLE_SIZE;i++)
-      {
+    front of it to tell its type. */
+    gh.objCount = 0;
+    saveMode = true;
+    for(i=0;i!=OBJ_TABLE_SIZE;i++) {
         if (ObjTable[i].pObj) {
-          r = &(ObjTable[i]);
-          while (r) {
-            if (!r->pObj->inGroup(hGroup))
-              { r = r->Next; continue; }
+            r = &(ObjTable[i]);
+            while (r) {
+                if (!r->pObj->inGroup(hGroup)) {
+                    r = r->Next;
+                    continue;
+                }
 
-            hCurrent = r->pObj->myHandle;
-            r->pObj->Serialize(*this,true);
-              
-            gh.objCount++;
-            /* Write the object type */
-            cf->FWrite(&(r->pObj->Type),1);
-            /* Write the object itself */
-            cf->FWrite(r->pObj,typeSize(r->pObj->Type));
+                hCurrent = r->pObj->myHandle;
+                r->pObj->Serialize(*this,true);
 
-             
-            r = r->Next;
+                gh.objCount++;
+                /* Write the object type */
+                cf->FWrite(&(r->pObj->Type),1);
+                /* Write the object itself */
+                cf->FWrite(r->pObj,typeSize((int8)r->pObj->Type));
+
+                r = r->Next;
             }
-          }
-      }
+        }
+    }
 
     /* We write a special signature DWORD inbetween the objects and
-       the data in order to assure that we're actually reading a
-       valid Incursion data file accurately. This is mostly paranoia,
-       but it will likely help versus otherwise-untracable bugs. */
+    the data in order to assure that we're actually reading a
+    valid Incursion data file accurately. This is mostly paranoia,
+    but it will likely help versus otherwise-untracable bugs. */
     cf->FWrite(&(sig = SIGNATURE_TWO),4);
 
     /* Now write the data, in a manner similar to how the objects were
-       written, but substituting size value for type index. */
+    written, but substituting size value for type index. */
     gh.dataCount = 0;
-    for(i=0;i!=DATA_TABLE_SIZE;i++)
-      {
+    for(i=0;i!=DATA_TABLE_SIZE;i++) {
         if (DataTable[i].pData) {
-          d = &(DataTable[i]);
-          while (d) {
-            if (!Exists(d->hOwner))
-              { d = d->Next; continue; }
-            if (!Get(d->hOwner)->inGroup(hGroup))
-              { d = d->Next; continue; }
-            gh.dataCount++;
-            ASSERT(d->hOwner > 127);
-            ASSERT(d->myHandle > 127);
-            /* Write the handle of the data */
-            cf->FWrite(&(d->myHandle),4);
-            /* Write the handle of the data's owner */
-            cf->FWrite(&(d->hOwner),4);
-            /* Write the size in bytes of the data */
-            cf->FWrite(&(d->Size),4);
-            /* And now write the data proper */
-            cf->FWrite(d->pData,d->Size); // ww: segfault here, this=0 (?)
+            d = &(DataTable[i]);
+            while (d) {
+                if (!Exists(d->hOwner)) {
+                    d = d->Next;
+                    continue;
+                }
+                if (!Get(d->hOwner)->inGroup(hGroup)) {
+                    d = d->Next;
+                    continue;
+                }
+                gh.dataCount++;
+                ASSERT(d->hOwner > 127);
+                ASSERT(d->myHandle > 127);
+                /* Write the handle of the data */
+                cf->FWrite(&(d->myHandle),4);
+                /* Write the handle of the data's owner */
+                cf->FWrite(&(d->hOwner),4);
+                /* Write the size in bytes of the data */
+                cf->FWrite(&(d->Size),4);
+                /* And now write the data proper */
+                cf->FWrite(d->pData,d->Size); // ww: segfault here, this=0 (?)
 
-            d = d->Next;
+                d = d->Next;
             }
-          }
-      }
+        }
+    }
 
-    int32 csz;
-    csz = cf->CommitCompressed(t.Tell(),use_lz);
+    int32 csz = cf->CommitCompressed(t.Tell(), use_lz);
 
     /* Now that we have all the needed information, jump back in the file
-       and write out the group header. */
+    and write out the group header. */
     gh.groupSize  = cf->FSize();
     gh.compSize   = csz;
     gh.Signature  = SIGNATURE;
@@ -521,33 +518,33 @@ int16 Registry::SaveGroup(Term &t, hObj hGroup, bool use_lz, bool newFile)
     gh.LastHandle = LastUsedHandle;
     t.Seek(ghPos,SEEK_SET);
     t.FWrite(&gh,sizeof(gh));
-    
+
     delete cf;
 
     /* Fix all the pointers in memory to data blocks, so that they point
-       properly again. */
+    properly again. */
     saveMode = 0;
-    for(i=0;i!=OBJ_TABLE_SIZE;i++)
-      {
+    for(i=0;i!=OBJ_TABLE_SIZE;i++) {
         if (ObjTable[i].pObj) {
-          r = &(ObjTable[i]);
-          while (r) {
-            if (!r->pObj->inGroup(hGroup))
-              { r = r->Next; continue; }
+            r = &(ObjTable[i]);
+            while (r) {
+                if (!r->pObj->inGroup(hGroup)) {
+                    r = r->Next;
+                    continue;
+                }
 
-            r->pObj->Serialize(*this,false);
-            r = r->Next;
+                r->pObj->Serialize(*this,false);
+                r = r->Next;
             }
-          }
-      }
+        }
+    }
 
     return 0;
-  }
+}
 
 #pragma warning(disable:4291)
 
-int16 Registry::LoadGroup(Term &t, hObj hGroup, bool use_lz)
-  {
+int16 Registry::LoadGroup(Term &t, hObj hGroup, bool use_lz) {
     fileHeader fh;
     groupHeader gh;
     OArray<Object*,10,10> LoadedObjects;
@@ -585,15 +582,12 @@ int16 Registry::LoadGroup(Term &t, hObj hGroup, bool use_lz)
     /* The chunk is missing! */
     throw ENOCHUNK;
 
-    foundGroup: 
+foundGroup:
+    CFile *cf = new CFile(&t);
+    cf->LoadCompressed(t.Tell(), gh.compSize, gh.groupSize, use_lz);
 
-    CFile *cf;
-    cf = new CFile(&t);
-    cf->LoadCompressed(t.Tell(),gh.compSize,gh.groupSize,use_lz);
-
-    LastUsedHandle = max(LastUsedHandle,gh.LastHandle);
-    for(i=0;i!=gh.objCount;i++)
-      {
+    LastUsedHandle = max(LastUsedHandle, gh.LastHandle);
+    for (i=0; i != gh.objCount; i++) {
         /* What type of object is this? */
         cf->FRead(&oType,1);                   
 
@@ -738,8 +732,8 @@ int16 Registry::LoadGroup(Term &t, hObj hGroup, bool use_lz)
           struct stat statbuf;
           if (stat(SaveFile,&statbuf)) 
             { p.MyTerm->Message("Save File Backup: Failed (#3)"); goto failed; }
-          size_t sofar;
-          for (sofar = 0; sofar < statbuf.st_size ;) {
+          off_t sofar;
+          for (sofar = 0; sofar < statbuf.st_size;) {
               size_t this_read = fread(buf,1,min(sizeof(buf),statbuf.st_size - sofar),fin);
               if (this_read == 0) 
                 { p.MyTerm->Message("Save File Backup: Failed (#4)"); goto failed; }
@@ -795,7 +789,7 @@ failed:
 
       // weimer: I'm not sure how to hack this in, but it should happen
       // before we serialize the player
-      theGame->GetPlayer(0)->StoreLevelStats(theGame->GetPlayer(0)->m->Depth);
+      theGame->GetPlayer(0)->StoreLevelStats((uint8)(theGame->GetPlayer(0)->m->Depth));
 
       try {  
           T1->OpenWrite(fn);
@@ -996,77 +990,71 @@ void Game::SaveModule(int16 mn)
     return;
   }
 
-bool Game::LoadModules()
-  {
-    String fn; ModuleRecord mr; int16 sl, i;
+bool Game::LoadModules() {
+    String fn;
+    ModuleRecord mr;
+    uint8 sl, i;
     /* Later, this function will scan all the relevant directories for
-       module files and add them to the new game. For now it just loads
-       the one file, Incursion.Mod. */
-    
+    module files and add them to the new game. For now it just loads
+    the one file, Incursion.Mod. */
+
     Cleanup();
-  
+
     T1->ChangeDirectory(T1->ModuleSubDir());
 
-    #ifndef WIN32
+#ifndef WIN32
     system("mv *.Mod *.mod");
     system("mv *.MOD *.mod");
-    #endif
+#endif
 
     theRegistry = &ResourceRegistry;
     try {
-    if (!T1->FirstFile("*.Mod")) {
-      Fatal(Format("%s\nCan't find any game data modules!",
-            (const char*)T1->ModuleSubDir()));
-    }
-      do {
-        strcpy(mr.FName,T1->GetFileName());
-        ResourceRegistry.LoadGroup(*T1,0,true);
-        T1->Close();
-        mr.hMod = ResourceRegistry.GetModuleHandle();
-        if (!oModule(mr.hMod))
-          throw EHANDLE;
-        if (oModule(mr.hMod)->Slot == -1) {
-          for(i=255;i!=64;i++)
-            if (!Modules[i])
-              break;
-          if (i == 64)
-            { 
-              Error("Only 192 free-slot modules can be loaded at once!");
-              delete oModule(mr.hMod);
-              continue;
-            }
-            sl = i;
-          }
-        else {
-          sl = oModule(mr.hMod)->Slot;
-          if (Modules[sl]) {
-            Error("Two fixed-slot modules (%s and %s) conflict over slot %d!",
-              oModule(mr.hMod)->GetText(oModule(mr.hMod)->Name),
-              Modules[sl]->GetText(Modules[sl]->Name),sl);
-            delete oModule(mr.hMod); 
-            continue;
-            }
-          }
-        Modules[sl] = oModule(mr.hMod);
-        mr.Slot = sl;
-        ModFiles.Add(mr);
+        if (!T1->FirstFile("*.Mod")) {
+            Fatal(Format("%s\nCan't find any game data modules!",(const char*)T1->ModuleSubDir()));
         }
-    while (T1->NextFile());
-      }
-    catch (int error_number) {
-      Error("Error loading module '%s' (%s).",
-        mr.FName,
-        Lookup(FileErrors,error_number));
-      theRegistry = &MainRegistry;
-    T1->ChangeDirectory(T1->IncursionDirectory);
-      return false;
-      }
+
+        do {
+            strcpy(mr.FName,T1->GetFileName());
+            ResourceRegistry.LoadGroup(*T1,0,true);
+            T1->Close();
+            mr.hMod = ResourceRegistry.GetModuleHandle();
+            if (!oModule(mr.hMod))
+                throw EHANDLE;
+
+            if (oModule(mr.hMod)->Slot == -1) {
+                for(i=0; i<MAX_MODULES; i++)
+                    if (!Modules[i])
+                        break;
+                if (i == MAX_MODULES) { 
+                    Error("Only 192 free-slot modules can be loaded at once!");
+                    delete oModule(mr.hMod);
+                    continue;
+                }
+                sl = i;
+            } else {
+                sl = (uint8)oModule(mr.hMod)->Slot;
+                if (Modules[sl]) {
+                    Error("Two fixed-slot modules (%s and %s) conflict over slot %d!",
+                        oModule(mr.hMod)->GetText(oModule(mr.hMod)->Name),
+                        Modules[sl]->GetText(Modules[sl]->Name),sl);
+                    delete oModule(mr.hMod); 
+                    continue;
+                }
+            }
+
+            Modules[sl] = oModule(mr.hMod);
+            mr.Slot = sl;
+            ModFiles.Add(mr);
+        } while (T1->NextFile());
+    } catch (int error_number) {
+        Error("Error loading module '%s' (%s).", mr.FName, Lookup(FileErrors,error_number));
+        theRegistry = &MainRegistry;
+        T1->ChangeDirectory(T1->IncursionDirectory);
+        return false;
+    }
     theRegistry = &MainRegistry;
-  T1->ChangeDirectory(T1->IncursionDirectory);
+    T1->ChangeDirectory(T1->IncursionDirectory);
     InitGodArrays();
-    
 
-    
     return true;
-  }
-
+}

@@ -50,8 +50,8 @@
      void FRead(void*,size_t sz);
      void FWrite(const void*,size_t sz);
      void Seek(int32,int8);
-     void CommitCompressed(int16 offset, const char *fn);
-     void LoadCompressed(int16 offset, const char *fn);
+     void CommitCompressed(int32 offset, const char *fn);
+     void LoadCompressed(int32 offset, const char *fn);
 
 */
 
@@ -3217,7 +3217,7 @@ void CFile::Seek(int32 val, int8 typ)
     size = max(pos,size);
   }
       
-int32 CFile::CommitCompressed(int16 offset, bool use_lz)
+int32 CFile::CommitCompressed(int32 offset, bool use_lz)
   {
     void *comped, *temp; int32 csize;
     
@@ -3243,8 +3243,7 @@ int32 CFile::CommitCompressed(int16 offset, bool use_lz)
     return csize;
   }
 
-void CFile::LoadCompressed(int16 offset, int32 csz, int32 sz, bool use_lz)
-  {
+void CFile::LoadCompressed(int32 offset, int32 csz, int32 sz, bool use_lz) {
     void *comped; 
     
     t->Seek(offset,SEEK_SET);

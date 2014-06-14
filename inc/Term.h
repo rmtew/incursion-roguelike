@@ -798,8 +798,8 @@ class CFile
       void FRead(void*,size_t sz);
       void FWrite(const void*,size_t sz);
       void Seek(int32,int8);
-      int32 CommitCompressed(int16 offset, bool use_lz);
-      void LoadCompressed(int16 offset, int32 csz, int32 sz, bool use_lz);
+      int32 CommitCompressed(int32 offset, bool use_lz);
+      void LoadCompressed(int32 offset, int32 csz, int32 sz, bool use_lz);
       int32 Tell() { return pos; }
       int32 FSize() { return size; }
   };

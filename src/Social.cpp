@@ -1091,161 +1091,146 @@ SingleTarget:
     return DONE; 
 }
   
-EvReturn Creature::Quell(EventInfo &e)
-  {
-    int16 sk, dmg, CheckDC, c, i; Target *t; Item *it;
+EvReturn Creature::Quell(EventInfo &e) {
+    int16 sk, dmg, CheckDC, c, i;
+    Target *t;
+    Item *it;
     bool isREnemy, wasDamaged, wantsTribute;
     Creature *cr;
-    
+
     if (!doSocialSanity(EV_QUELL,e.EVictim))
-      return ABORT;    
-    
-    if (!HasSkill(SK_DIPLOMACY))
-      {
+        return ABORT;    
+
+    if (!HasSkill(SK_DIPLOMACY)) {
         IPrint("You need the Diplomacy skill to resolve conflicts.");
         return ABORT;
-      }
-    
-    if (!e.EVictim->isHostileTo(e.EActor))
-      {
+    }
+
+    if (!e.EVictim->isHostileTo(e.EActor)) {
         e.EActor->IPrint("That creature isn't hostile to you.");
         return ABORT;
-      }
-      
-    if (e.EVictim->HasStati(TRIED,SK_DIPLOMACY+EV_QUELL*100,e.EActor))
-      {
+    }
+
+    if (e.EVictim->HasStati(TRIED,SK_DIPLOMACY+EV_QUELL*100,e.EActor)) {
         IPrint("You've already tried to quell that creature, or "
-          "one of his allies.");
+            "one of his allies.");
         return ABORT;
-      }
+    }
 
     if (checkEndgameStuff(e))
-      return DONE;
-      
-    /* Trying to talk things out is almost always a wise action,
-       whether it succeeds or fails. */
+        return DONE;
+
+    /* Trying to talk things out is almost always a wise action, whether it succeeds or fails. */
     Exercise(A_WIS,random(4)+1,EWIS_PERSUADE,25);
-      
-      
+
     Timeout += 30;
-    
+
     t = e.EVictim->ts.GetTarget(e.EActor);
-    
+
     wasDamaged = false;
     isREnemy = e.EVictim->ts.RacialHostility(e.EVictim,e.EActor).quality == Enemy;
 
     if (!t)
-      wasDamaged = false;
-    else if (t->why.type == TargetHitMe || t->why.type == TargetSpelledMe)
-      { wasDamaged = true; dmg = t->data.Creature.damageDoneToMe; }
-    
+        wasDamaged = false;
+    else if (t->why.type == TargetHitMe || t->why.type == TargetSpelledMe) {
+        wasDamaged = true;
+        dmg = (int16)t->data.Creature.damageDoneToMe;
+    }
+
     sk = SK_DIPLOMACY;
     if (isREnemy) {
-      /* Resolving Conflicts */
-      if (!e.EVictim->isMType(MA_EVIL))
-        e.EActor->AlignedAct(AL_GOOD,3,"resolving conflict");
-      }
-    else if (wasDamaged) {
-      /* Exploitation */
-      if (!e.EActor->yn("Confirm use exploitation?"))
-        return ABORT;
-      sk = SK_BLUFF;
-      e.EActor->AlignedAct(AL_EVIL,1,"exploitation");
-      e.EActor->Transgress(FIND("Essiah"),5,false,"exploitation");
-      }
-      
+        /* Resolving Conflicts */
+        if (!e.EVictim->isMType(MA_EVIL))
+            e.EActor->AlignedAct(AL_GOOD,3,"resolving conflict");
+    } else if (wasDamaged) {
+        /* Exploitation */
+        if (!e.EActor->yn("Confirm use exploitation?"))
+            return ABORT;
+        sk = SK_BLUFF;
+        e.EActor->AlignedAct(AL_EVIL,1,"exploitation");
+        e.EActor->Transgress(FIND("Essiah"),5,false,"exploitation");
+    }
+
     CheckDC = 15 + max(0,e.EVictim->ChallengeRating())*3;
-    
-    
     if (wasDamaged)
-      CheckDC += 5 + ((dmg*10)/e.EVictim->mHP);
-    
+        CheckDC += 5 + ((dmg*10) / e.EVictim->mHP);
+
     if ((e.EVictim->isMType(MA_GOBLINOID) ||
-         e.EVictim->isMType(MA_OUTSIDER) ||
-         e.EVictim->isMType(MA_ILLITHID) ||
-         e.EVictim->isMType(MA_DRAGON)) &&
-         e.EVictim->isMType(MA_EVIL) &&
-         e.EActor->RandGoodInv(100 + max(1,e.EVictim->ChallengeRating())) )
-      { CheckDC -= 7; wantsTribute = true; }
-    else
-      wantsTribute = false;
-    int16 smod; smod = getSocialMod(e.EVictim,true);
-    if (SkillCheck(sk,CheckDC,true,smod,modBreakdown))
-      {
-        if (wantsTribute && LastSkillCheckResult < CheckDC + 10)
-          {
-            if (SkillCheck(SK_BLUFF,11+e.EVictim->SkillLevel(SK_APPRAISE),false))
-              {
+        e.EVictim->isMType(MA_OUTSIDER) ||
+        e.EVictim->isMType(MA_ILLITHID) ||
+        e.EVictim->isMType(MA_DRAGON)) &&
+        e.EVictim->isMType(MA_EVIL) &&
+        e.EActor->RandGoodInv(100 + max(1,e.EVictim->ChallengeRating()))) {
+            CheckDC -= 7;
+            wantsTribute = true;
+    } else
+        wantsTribute = false;
+
+    int16 smod = getSocialMod(e.EVictim, true);
+    if (SkillCheck(sk,CheckDC,true,smod,modBreakdown)) {
+        if (wantsTribute && LastSkillCheckResult < CheckDC + 10) {
+            if (SkillCheck(SK_BLUFF,11+e.EVictim->SkillLevel(SK_APPRAISE),false)) {
                 IPrint("The <Obj> wants tribute, but you convince "
-                  "him you have nothing appropriate to give.",e.EVictim);
+                    "him you have nothing appropriate to give.",e.EVictim);
                 goto Success;
-              }
+            }
             it = e.EActor->RandGoodInv(100 + max(1,e.EVictim->ChallengeRating()));
-            if (!it)
-              {
+            if (!it) {
                 TPrint(e,"The <EVictim> wants tribute, but you have nothing "
-                         "of sufficient value to offer.", "You demand tribute, "
-                         "but the <EActor> has nothing suitable to give!",
-                         "The <EVictim> wants tribute, but the <EActor> has nothing "
-                         "of sufficient value to offer.");
+                    "of sufficient value to offer.", "You demand tribute, "
+                    "but the <EActor> has nothing suitable to give!",
+                    "The <EVictim> wants tribute, but the <EActor> has nothing "
+                    "of sufficient value to offer.");
                 goto Failure;
-              }
-            IPrint("The <Obj1> demands your <Obj2> as tribute!",
-              e.EVictim, it);
-            if (yn("Accept the demand?",true))
-              {
+            }
+            IPrint("The <Obj1> demands your <Obj2> as tribute!", e.EVictim, it);
+            if (yn("Accept the demand?",true)) {
                 TPrint(e,"You give your <Obj> to the <EVictim>.",
-                         "The <EActor> gives <his:EActor> <Obj> to you.",
-                         "The <EActor> gives <his:EActor> <Obj> to the <EVictim>.",
-                         it);
+                    "The <EActor> gives <his:EActor> <Obj> to you.",
+                    "The <EActor> gives <his:EActor> <Obj> to the <EVictim>.",
+                    it);
                 it->Remove(false);
                 e.EVictim->GainItem(it,false);
                 goto Success;
-              }
-            else
-              goto Failure;
-          }
-        Success:
+            } else
+                goto Failure;
+        }
+Success:
         c = 0;
         MapIterate(m,cr,i)
-          if (cr->isCreature())
-            if (cr->isFriendlyTo(e.EVictim))
-              {
-                cr->ts.TurnNeutralTo(cr, e.EActor);
-                if (isMType(MA_GOOD))
-                  KillXP(cr,100);
-                else
-                  KillXP(cr,50);
-                c++;
-              }
+            if (cr->isCreature())
+                if (cr->isFriendlyTo(e.EVictim)) {
+                    cr->ts.TurnNeutralTo(cr, e.EActor);
+                    if (isMType(MA_GOOD))
+                        KillXP(cr,100);
+                    else
+                        KillXP(cr,50);
+                    c++;
+                }
         if (c > 1)
-          IPrint("You resolve the conflict with the <Obj1> and <his:Obj1> allies.", e.EVictim);
+            IPrint("You resolve the conflict with the <Obj1> and <his:Obj1> allies.", e.EVictim);
         else
-          IPrint("You resolve the conflict with the <Obj1>.", e.EVictim);
-        
-      }
-    else {
-      Failure:
-      c = 0;
-      MapIterate(m,cr,i)
-        if (cr->isCreature())
-          if (cr->isFriendlyTo(e.EVictim))
-            c++;
-      if (c > 1)
-        IPrint("You fail to resolve the conflict with the <Obj1> and <his:Obj1> allies.", e.EVictim);
-      else
-        IPrint("You fail to resolve the conflict with the <Obj1>.", e.EVictim);
-      }
+            IPrint("You resolve the conflict with the <Obj1>.", e.EVictim);
+    } else {
+Failure:
+        c = 0;
+        MapIterate(m,cr,i)
+            if (cr->isCreature())
+                if (cr->isFriendlyTo(e.EVictim))
+                    c++;
+        if (c > 1)
+            IPrint("You fail to resolve the conflict with the <Obj1> and <his:Obj1> allies.", e.EVictim);
+        else
+            IPrint("You fail to resolve the conflict with the <Obj1>.", e.EVictim);
+    }
     MapIterate(m,cr,i)
-      if (cr->isCreature())
-        if (cr->PartyID == e.EVictim->PartyID)
-          cr->GainPermStati(TRIED,e.EActor,SS_MISC,
-                SK_DIPLOMACY + EV_QUELL*100);
+        if (cr->isCreature())
+            if (cr->PartyID == e.EVictim->PartyID)
+                cr->GainPermStati(TRIED,e.EActor,SS_MISC, SK_DIPLOMACY + EV_QUELL*100);
     return DONE;
-  }
-  
-EvReturn Creature::Request(EventInfo &e)
-  {
+}
+
+EvReturn Creature::Request(EventInfo &e) {
     int16 sk, DC, i, c, BestCR, smod; TargetType n; 
     Creature *cr; bool doGroup; EventInfo xe;
     Term *tm;
@@ -2027,97 +2012,88 @@ int SortMoney(const void *a, const void *b)
     
     return TITEM(B->iID)->Cost -
              TITEM(A->iID)->Cost;
-  }
-    
+}
 
-void Creature::LoseMoneyTo(int32 amt, Creature *cr)
-  {
+void Creature::LoseMoneyTo(int32 amt, Creature *cr) {
     /* Assumptions: money is not cursed. It does not do wierd
-       things when you gain, lose, wield or unequip it. There
-       is no magic that changes the value of money, and no
-       coins with an eID or magical plus. */
-    #define VALUE(it) (TITEM(it->iID)->Cost * it->GetQuantity())
-    #define VONE(it)  (TITEM(it->iID)->Cost)
+    things when you gain, lose, wield or unequip it. There
+    is no magic that changes the value of money, and no
+    coins with an eID or magical plus. */
+#define VALUE(it) (TITEM(it->iID)->Cost * it->GetQuantity())
+#define VONE(it)  (TITEM(it->iID)->Cost)
     Item *Stacks[64], *Money[64], *it, *it2; 
-    int16 nStacks, nCoins; int32 needed, n, i, j;
+    int16 nStacks, nCoins;
+    int32 needed, n, i, j;
     bool exact_change = true;
-    
+
     amt *= 100;
-    
+
     if (getTotalMoney() < amt)
-      amt = getTotalMoney();
+        amt = getTotalMoney();
     if (!amt)
-      return;
-    
-    
+        return;
 
     /* Get all the creature's money */
     nCoins=0;
     for (it=FirstInv();it;it=NextInv())
-      if (it->isType(T_COIN) && !it->eID)
-        Money[nCoins++] = it;
-        
-    /* sort it by size of denomination */
-    qsort(Money,nCoins,sizeof(Item*),SortMoney);
+        if (it->isType(T_COIN) && !it->eID)
+            Money[nCoins++] = it;
 
-    nStacks = 0; needed = amt;
+    /* sort it by size of denomination */
+    qsort(Money, nCoins, sizeof(Item*), SortMoney);
+
+    nStacks = 0;
+    needed = amt;
     /* Cycle through all stacks, starting with those
-       with the largest denomination -- platinum first,
-       then gold, etc. */
-    for(i=0;i!=nCoins;i++)
-      {
+    with the largest denomination -- platinum first,
+    then gold, etc. */
+    for(i=0; i!=nCoins; i++) {
         it = Money[i];
-        if (VALUE(it) <= needed)
-          {
+        if (needed - VALUE(it) >= 0) {
             Stacks[nStacks++] = it;
             needed -= VALUE(it);
-          }
-        else if (VONE(it) > needed)
-          continue;
+        } else if (VONE(it) - needed > 0)
+            continue;
         else {
-          n = needed / VONE(it);
-          it2 = it->TakeOne();
-          it2->SetQuantity(n);
-          it->SetQuantity(it->GetQuantity() - (n-1));
-          Stacks[nStacks++] = it2;
-          needed -= VALUE(it2);
-          }
-      }
-      
+            n = needed / VONE(it);
+            it2 = it->TakeOne();
+            it2->SetQuantity(n);
+            it->SetQuantity(it->GetQuantity() - (n-1));
+            Stacks[nStacks++] = it2;
+            needed -= VALUE(it2);
+        }
+    }
+
     /* Okay, so now the player has payed everything he can
-       without overpaying, starting with the biggest coins
-       first. Now, if there's anything left over, we want to 
-       pay the remainder with a SINGLE coin of a smallest
-       demonination the player has. */
+    without overpaying, starting with the biggest coins
+    first. Now, if there's anything left over, we want to 
+    pay the remainder with a SINGLE coin of a smallest
+    demonination the player has. */
     if (!needed)
-      goto GiveStacks;
-    
-    for (i=nCoins-1;i!=-1;i--)
-      {
+        goto GiveStacks;
+
+    for (i=nCoins-1;i!=-1;i--) {
         bool isStack = false;
         for (j=0;j!=nStacks;j++)
-          if (Stacks[j] == Money[i])
-            isStack = true;
-        if (!isStack)
-          {
+            if (Stacks[j] == Money[i])
+                isStack = true;
+        if (!isStack) {
             it = Money[i];
             Stacks[nStacks++] = it->TakeOne();
             break;
-          }
-      }
-    
-    GiveStacks:
-    for (i=0;i!=nStacks;i++)
-      {
+        }
+    }
+
+GiveStacks:
+    for (i=0;i!=nStacks;i++) {
         if (cr == NULL)
-          Stacks[i]->Remove(true);
+            Stacks[i]->Remove(true);
         else {
-          Stacks[i]->Remove(false);
-          cr->GainItem(Stacks[i],false);
-          }
-      }
-   
-  }
+            Stacks[i]->Remove(false);
+            cr->GainItem(Stacks[i],false);
+        }
+    }
+}
   
 int32 Item::getShopCost(Creature *Buyer, Creature *Seller) {
     double cost;

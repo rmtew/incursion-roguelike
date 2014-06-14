@@ -68,11 +68,11 @@ Creature::Creature(rID _mID, int16 _Type):
                                     
 void Creature::SetImage()         
   {
-    int16 i, j;
+    int16 i;
     Player *pl = m ? oPlayer(m->pl[0]) : theGame->GetPlayer(0);
     Glyph oImg = Image;
-    int16 oFlags = Flags;
-    Image=TMON(mID)->Image;
+    int16 oFlags = (int16)Flags;
+    Image = TMON(mID)->Image;
 
     if (isPlayer() && !HasStati(POLYMORPH))
       Image = GLYPH_PLAYER | (Image & 0xFF00);
@@ -222,7 +222,7 @@ void Creature::IdentifyMon()
     IsSeen:
 
     if (!(StateFlags & MS_KNOWN)) {
-      IsUnknown:
+//IsUnknown:
       oldname = Name(0);
       StateFlags |= MS_KNOWN;
       SetImage();
@@ -232,64 +232,60 @@ void Creature::IdentifyMon()
       }
   }
   
-Item* Creature::ConsumeRope(int16 feet)
-  {
-    Item *it; int16 c; bool found; 
-    found = false; c = 0;
+Item* Creature::ConsumeRope(uint32 feet) {
+    Item *it;
+    int16 c;
+    bool found; 
+
+    found = false;
+    c = 0;
     ASSERT(feet % 5 == 0);
+
     for (it=FirstInv();it;it=NextInv())
-      if (TITEM(it->iID)->HasFlag(IT_ROPE)) {
-        found = true;
-        if (it->Quantity*5 >= feet)
-          {
-            Candidates[c++] = it->myHandle;
-            if (isPlayer())
-              thisp->MyTerm->LOption(it->Name(NA_LONG|NA_MECH),it->myHandle);
-          }
+        if (TITEM(it->iID)->HasFlag(IT_ROPE)) {
+            found = true;
+            if (it->Quantity*5 >= feet) {
+                Candidates[c++] = it->myHandle;
+                if (isPlayer())
+                    thisp->MyTerm->LOption(it->Name(NA_LONG|NA_MECH),it->myHandle);
+            }
         }
-    if (c == 0)
-      {
+
+    if (c == 0) {
         IPrint(found ? "You don't have enough contiguous rope." :
-          "You don't have any rope.");
+            "You don't have any rope.");
         return NULL;
-      }
-    if (c == 1)
-      {
+    }
+    if (c == 1) {
         if (isPlayer())
-          thisp->MyTerm->LOptionClear();
+            thisp->MyTerm->LOptionClear();
         it = oItem(Candidates[0]);
         goto FoundRope;
-      }
-    if (isPlayer())
-      { 
+    }
+    if (isPlayer()) { 
         hObj hRope;
         hRope = thisp->MyTerm->LMenu(MENU_ESC|MENU_BORDER, "Choose a Rope:");
         if (hRope == -1)
-          return NULL;
+            return NULL;
         it = oItem(hRope);
-      }
-    else
-      it = oItem(Candidates[random(c)]);
-      
-    FoundRope:
-    
-    if (it->Quantity*5 > feet)
-      {
+    } else
+        it = oItem(Candidates[random(c)]);
+
+FoundRope:
+    if (it->Quantity*5 > feet) {
         Item *it2;
         it2 = it->TakeOne();
         it2->SetQuantity(feet/5);
         it->SetQuantity(it->GetQuantity() + 1 - (feet/5));
         it = it2;
-      }
-    
+    }
+
     it->Remove(false);
     return it;
-  }
+}
     
 
-void Creature::IdentifyTemp(rID tID)
-  {
-    int16 i;
+void Creature::IdentifyTemp(rID tID) {
     StatiIterNature(this,TEMPLATE)
       if (S->eID == tID)
         if (S->Mag == 0) {
@@ -330,14 +326,14 @@ void Map::MakeNoiseXY(int16 x, int16 y, int16 radius)
         cr->Awaken(SLEEP_NATURAL);
         /* Reveal location to monsters */
         if (!cr->HasStati(ASLEEP))
-          cr->ts.HearNoise(cr,x,y);
+          cr->ts.HearNoise(cr,(uint8)x,(uint8)y);
       }
     }
   }
     
 void Creature::MakeNoise(int16 radius)
   {
-    Creature *c; int16 i;
+    Creature *c;
     if (Flags & F_DELETE)
       return;
     c = (Creature *)GetStatiObj(MOUNT);
@@ -407,7 +403,7 @@ void Creature::RippleCheck(int16 range)
 
 void Creature::Multiply(int16 val, bool split, bool msg)
   { 
-    int16 i, c;
+    int16 c;
     Monster *mn;
     if (!m)
       return;
@@ -562,7 +558,6 @@ bool Creature::isFlanking(Creature *c)
 
 int16 Creature::GetAgeCatagory()
   {
-    int16 i;
     StatiIterNature(this,TEMPLATE)
         if (TTEM(S->eID)->TType == TM_AGECAT)
           StatiIterBreakout(this,return 
@@ -578,7 +573,6 @@ int16 Creature::GetAgeCatagory()
   }
 
 EvReturn Creature::Event(EventInfo &e) {
-    int16 i;
     EvReturn res;
 
     if (e.EVictim == this) {
@@ -622,7 +616,7 @@ EvReturn Creature::Event(EventInfo &e) {
         return NOTHING;
     case EV_TALK:
         if (e.EActor == this && e.EParam)
-            return ReThrow(e.EParam,e);
+            return ReThrow((int16)e.EParam,e);
         return NOTHING;
     case EV_BARTER:
         if (e.EActor == this)
@@ -920,7 +914,7 @@ EvReturn Creature::Event(EventInfo &e) {
 void Creature::ExtendedAction()
   {
     EvReturn r; String why;
-    Creature *c; int16 i, n, d; uint16 xy;  
+    Creature *c; int16 i, d; uint16 xy;  
     Status *s = GetStati(ACTING);
     
     if (isPlayer())
@@ -1016,8 +1010,8 @@ void Creature::ExtendedAction()
         if (m->SolidAt(x,y) != m->SolidAt(x+DirX[s->Mag],y+DirY[s->Mag])) {
           bool incor = onPlane() != PHASE_MATERIAL;
           bool meld = HasAbility(CA_EARTHMELD);
-          if (m->RunOver(x,y,false,this,DF_ALL_SAFE,incor,meld) &&
-              m->RunOver(x+DirX[s->Mag],y+DirY[s->Mag],false,this,DF_ALL_SAFE,incor,meld)) { 
+          if (m->RunOver((uint8)x,(uint8)y,false,this,DF_ALL_SAFE,incor,meld) &&
+              m->RunOver((uint8)(x+DirX[s->Mag]),(uint8)(y+DirY[s->Mag]),false,this,DF_ALL_SAFE,incor,meld)) { 
             HaltAction("phase boundary", true);
             return;
           }
@@ -1181,7 +1175,7 @@ void Creature::ExtendedAction()
         if (!xy)
           { RemoveStati(ACTING); return; }
         i = DirTo(xy%256,xy/256);
-        r = ThrowDir(s->Val,i,this,NULL,oThing(s->h));
+        r = ThrowDir(s->Val,(Dir)i,this,NULL,oThing(s->h));
         s->Mag++;
         }
       else if (s->Mag || s->Val == EV_MOVE)
@@ -1203,9 +1197,7 @@ const char* Creature::ActingVerb()
     return s;
   }
 
-void Creature::HaltAction(const char *why, bool force_halt)
-  {
-    rID eID; 
+void Creature::HaltAction(const char *why, bool force_halt) {
     ASSERT(HasStati(ACTING));
     if (!force_halt) {
       if (!yn(XPrint("Do you want to stop <Str> (<Str>)?",
@@ -1234,9 +1226,9 @@ bool Player::RunTo(int16 tx, int16 ty)
   {
     if (HasStati(ACTING))
       return false;
-    if (!m->ShortestPath(x,y,tx,ty,this,DF_ALL_SAFE) &&
-        !m->ShortestPath(x,y,tx,ty,this,DF_IGNORE_TRAPS) &&
-        !m->ShortestPath(x,y,tx,ty,this,DF_IGNORE_TRAPS|DF_IGNORE_TERRAIN))
+    if (!m->ShortestPath((uint8)x,(uint8)y,(uint8)tx,(uint8)ty,this,DF_ALL_SAFE) &&
+        !m->ShortestPath((uint8)x,(uint8)y,(uint8)tx,(uint8)ty,this,DF_IGNORE_TRAPS) &&
+        !m->ShortestPath((uint8)x,(uint8)y,(uint8)tx,(uint8)ty,this,DF_IGNORE_TRAPS|DF_IGNORE_TERRAIN))
       return false;
     GainPermStati(ACTING,NULL,SS_MISC,EV_MOVE,50,0);
     Timeout++;
@@ -1269,9 +1261,9 @@ bool Player::RunTo(int16 tx, int16 ty)
 
 void Creature::DoTurn()
   {
-    int16 i,j; Status *s; uint8 dmg; 
+    int16 i,j;
     bool isEngulfed = HasStati(ENGULFED);
-    hObj h; Item *it;
+    Item *it;
     if (!m || x == -1)
       return;
 
@@ -1410,7 +1402,7 @@ void Creature::DoTurn()
 
     if (!random(30) && isCharacter())
       {
-        static int oldXP = 0;
+        static uint32 oldXP = 0;
         switch (HungerState())
           {
             case SATIATED:
@@ -1493,9 +1485,8 @@ void Creature::DoTurn()
           goto NoIntervention;
           
         gNum = theGame->GodNum(gID);
-        isAnger = (thisp->Anger[gNum] > TGOD(gID)->GetConst(TOLERANCE_VAL));
-        interval = TGOD(gID)->GetConst(isAnger ?
-          GODANGER_INTERVAL : GODPULSE_INTERVAL);
+        isAnger = (thisp->Anger[gNum] > (int16)TGOD(gID)->GetConst(TOLERANCE_VAL));
+        interval = (int16)TGOD(gID)->GetConst(isAnger ? GODANGER_INTERVAL : GODPULSE_INTERVAL);
         
         if (thisp->xpTicks - thisp->lastPulse[gNum] < interval *
                ((gID == thisp->GodID) ? 1 : 5))
@@ -1673,17 +1664,15 @@ void Creature::DoTurn()
               {
                 te = TEFF(m->Fields[i]->eID);
                 j = 0;
-                while (te->Vals(j)->aval != AR_FIELD && 
-                          te->Vals(j)->aval != AR_MFIELD)
-                  {
+                while (te->Vals((int8)j)->aval != AR_FIELD && te->Vals((int8)j)->aval != AR_MFIELD) {
                     j++;
-                    ASSERT(te->Vals(j));
-                  }
+                    ASSERT(te->Vals((int8)j));
+                }
                 e.Clear();
                 e.EActor = oCreature(m->Fields[i]->Creator);
                 e.EVictim = this;
                 e.eID = m->Fields[i]->eID;
-                e.efNum = j;
+                e.efNum = (int8)j;
                 ReThrow(EV_MAGIC_STRIKE,e);
               }
       }
@@ -1960,13 +1949,13 @@ bool Creature::hasAccessToSpell(rID spID)
               if (SAL(lv) <= CasterLev())
                 StatiIterBreakout(this,return true);
             if (spList[i] >= 1 && spList[i] <= 9)
-              lv = spList[i];
+              lv = (int16)spList[i];
             if (spList[i] >= 1000 && spList[i] <= 2000)
-              if (TEFF(spID)->HasSource(spList[i]-1000))
+              if (TEFF(spID)->HasSource((int8)spList[i]-1000))
                 if (CasterLev() >= SAL(TEFF(spID)->Level))
                   StatiIterBreakout(this,return true);
             if (spList[i] == 100) {
-              if (TEFF(spID)->HasSource(spList[i+1]))
+              if (TEFF(spID)->HasSource((int8)spList[i+1]))
                 if (TEFF(spID)->Schools & spList[i+2])
                   StatiIterBreakout(this,return true);
               i += 2;
@@ -1991,13 +1980,13 @@ bool Creature::hasAccessToSpell(rID spID)
             if (SAL(lv) <= CasterLev())
               return true;
           if (spList[i] >= 1 && spList[i] <= 9)
-            lv = spList[i];
+            lv = (int16)spList[i];
           if (spList[i] >= 1000 && spList[i] <= 2000)
-            if (TEFF(spID)->HasSource(spList[i]-1000))
+            if (TEFF(spID)->HasSource((int8)spList[i]-1000))
               if (CasterLev() >= SAL(TEFF(spID)->Level))
                 return true;
           if (spList[i] == 100) {
-            if (TEFF(spID)->HasSource(spList[i+1]))
+            if (TEFF(spID)->HasSource((int8)spList[i+1]))
               if (TEFF(spID)->Schools & spList[i+2])
                 return true;
             i += 2;
@@ -2064,7 +2053,7 @@ int16 Creature::HungerState()
 
 int16 Creature::ChallengeRating(bool allow_neg)
   {
-    int16 CR = TMON(mID)->CR, i;
+    int16 CR = TMON(mID)->CR;
     StatiIterNature(this,TEMPLATE)
       CR = TTEM(S->eID)->CR.Adjust(CR);
     StatiIterEnd(this)
@@ -2439,12 +2428,12 @@ uint8 Creature::Encumbrance()
     Burden=0;
     for(i=0;i!=SL_LAST;i++)
       // ww: support for floating disk
-      if (InSlot(i) && !HasStati(IGNORE_SLOT_WEIGHT,i,NULL))
-        Burden += InSlot(i)->Weight(psych_might);
+      if (InSlot((int8)i) && !HasStati(IGNORE_SLOT_WEIGHT,i,NULL))
+        Burden += (uint16)(InSlot((int8)i)->Weight(psych_might));
 
         // don't count it twice just because we're using two hands ...
     if (InSlot(SL_WEAPON) && InSlot(SL_WEAPON) == InSlot(SL_READY))
-        Burden -= InSlot(SL_WEAPON)->Weight(psych_might); 
+        Burden -= (uint16)InSlot(SL_WEAPON)->Weight(psych_might); 
 
     if (HasMFlag(M_NO_CARRY_LOADS)) {
       Burden *= 4; 
@@ -2469,7 +2458,7 @@ uint8 Creature::Encumbrance()
 
 int32 Creature::MaxPress()
   {
-    int16 i, Mult, Div, EStr;
+    int16 Mult, Div, EStr;
     EStr = Attr[A_STR]; 
     Mult = 2;
 
@@ -2674,7 +2663,7 @@ int Creature::ListAttacks(TAttack * buf, int max)
   
 TAttack* Creature::GetAttk(int8 typ)
   {
-    int16 i,j;
+    int16 j;
     if (!HasStati(POLYMORPH))
       {
         StatiIterNature(this,TEMPLATE)
@@ -2691,7 +2680,7 @@ TAttack* Creature::GetAttk(int8 typ)
       SacredAura.DType = AD_HOLY;
       SacredAura.u.a.DC = 0;
       SacredAura.u.a.Dmg.Set(
-        AbilityLevel(CA_SACRED_AURA),4,max(0,Mod(A_CHA)));
+        (int8)AbilityLevel(CA_SACRED_AURA),4,(int8)max(0,Mod(A_CHA)));
       //Fatal("ww: returning the address of a local stack variable");
       return &SacredAura;
       }
@@ -2752,7 +2741,7 @@ bool Creature::HasMFlag(int16 fl)
 
 bool Creature::HasFeat(int16 n, bool inh, bool list)
   {
-    int16 i; bool b = false;
+    bool b = false;
     bool hasPoly = false; 
 
     if (inh)
@@ -2775,10 +2764,7 @@ bool Creature::HasFeat(int16 n, bool inh, bool list)
 
     
 
-bool Creature::HasAbility(int16 n, bool inh)
-  {
-    int16 i;
-
+bool Creature::HasAbility(int16 n, bool inh) {
     if (n == CA_SPELLCASTING)
       return AbilityLevel(n) > 0;
 
@@ -2852,7 +2838,7 @@ bool Creature::HasAbility(int16 n, bool inh)
 
 int16 Creature::AbilityLevel(int16 n) 
   {
-    int16 lv = 0, i;
+    int16 lv = 0;
 
     if (isCharacter()) {
       if (n == CA_TURNING)
@@ -3408,13 +3394,13 @@ inline bool Creature::SavingThrow(int16 type, int16 DC, uint32 Subtype,
         die /= 3;
       switch (type) {
         case FORT:
-          Exercise(A_CON,Dice::Roll(1,die),col,cap);
+          Exercise(A_CON,Dice::Roll(1,(int8)die),col,cap);
          break;
         case REF:
-          Exercise(A_DEX,Dice::Roll(1,die),col,cap);
+          Exercise(A_DEX,Dice::Roll(1,(int8)die),col,cap);
          break;
         case WILL:
-          Exercise(A_WIS,Dice::Roll(1,die),col,cap);
+          Exercise(A_WIS,Dice::Roll(1,(int8)die),col,cap);
          break;
         }
     }

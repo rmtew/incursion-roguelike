@@ -333,7 +333,7 @@ class Creature: public Thing, public Magic
       virtual void LoseMoneyTo(int32 amt, Creature *cr);
       virtual bool doSocialSanity(int16 ev, Creature *cr);
       virtual int32 getTotalMoney();
-      virtual Item* ConsumeRope(int16 feet);
+      virtual Item* ConsumeRope(uint32 feet);
 
 
 

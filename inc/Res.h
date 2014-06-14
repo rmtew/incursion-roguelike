@@ -429,7 +429,7 @@ class TItem: public Resource
       int16 Weight;
       uint16 hp; 
       int8 Size;
-			uint32 Cost, Group;
+	  uint32 Cost, Group;
       union {
         struct {
           Dice SDmg, LDmg;

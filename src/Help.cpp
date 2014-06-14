@@ -133,9 +133,9 @@ static void HelpTClass(String & helpText, TClass *tc)
 
 void HelpSpells(String & helpText, int32 source, Player *p)
 {
-  const char *Levs[] = { "ZERO", "ONE", "TWO", "THREE", "FOUR", "FIVE",
-                         "SIX", "SEVEN", "EIGHT", "NINE", "EPIC" };
-  TEffect * array[2048]; char ch; String a, b, Header;
+  const char *Levs[] = { "ZERO", "ONE", "TWO", "THREE", "FOUR", "FIVE","SIX", "SEVEN", "EIGHT", "NINE", "EPIC" };
+  TEffect * array[2048];
+  String a, b, Header;
   int16 count = 0;
 
   for (int mIdx=0;theGame->Modules[mIdx];mIdx++) {
@@ -144,7 +144,7 @@ void HelpSpells(String & helpText, int32 source, Player *p)
     for (int i=0; i<m->szEff; i++) {
       rID id = m->EffectID(i);
       TEffect * eff = TEFF(id);
-      if (eff->HasSource(source)) 
+      if (eff->HasSource((int8)source)) 
         array[count++] = eff;
       ASSERT(count < 2040);
     } 
@@ -245,7 +245,7 @@ void HelpSpellIndex(String &helpText)
           {
             sID = theGame->SpellID(j);
             if (Groups[i].Val < 0)
-              if (TEFF(sID)->HasSource(-Groups[i].Val))
+              if (TEFF(sID)->HasSource((int8)-Groups[i].Val))
                 Spells[c++] = sID;
             if (Groups[i].Val > 0)
               if (TEFF(sID)->HasSource(AI_WIZARDRY) || Groups[i].Val > SC_WEA)
@@ -395,8 +395,10 @@ void HelpOtherSpells(String & helpText)
   {
     const char *Levs[] = { "ZERO", "ONE", "TWO", "THREE", "FOUR", "FIVE",
                            "SIX", "SEVEN", "EIGHT", "NINE", "EPIC" };    
-    Player *p; int16 i, m, j, lv, q; bool link; 
-    rID spID, clID, lcID, spList[64], UnimpID;
+    Player *p;
+    int16 i, j, lv, q;
+    bool link; 
+    rID clID, lcID, spList[64], UnimpID;
     LearnableSpell *ls; String s;
     p = new Player(NULL,T_PLAYER);
     UnimpID = FIND("Unimplemented");
@@ -518,15 +520,14 @@ void HelpPowers(String & helpText)
           s += "\n\n";
           s += -3;
           c = 0;
-          for (n=0;n!=theGame->LastSpell();n++)
-            { 
+          for (n=0;n!=theGame->LastSpell();n++) { 
               tID = theGame->SpellID(n);
-              if (!(TEFF(tID)->HasSource(types[i].Val) ||
+              if (!(TEFF(tID)->HasSource((int8)types[i].Val) ||
                     (types[i].Val == AI_POISON && 
                     TEFF(tID)->ef.aval == AR_POISON)))
                 continue;
               Effs[c++] = TEFF(tID);
-            }
+          }
           Effs[c] = NULL;
           qsort(Effs,c,sizeof(Effs[0]),HelpEffectFlatSort);
           for (n=0;n!=c;n++)
@@ -543,7 +544,7 @@ void HelpPowers(String & helpText)
 bool HelpDomains(String & helpText)
 {
   String a, b, c, c2, Contents;
-  int16 mIdx, i, j, k, count; 
+  int16 mIdx, i, j, count; 
   rID dID, gID, spID, UnimpID, RetribID, ProtectID;
   rID dsID[256]; int16 cds;
   if (theGame->Opt(OPT_HELP_MODE))
@@ -628,7 +629,7 @@ bool HelpDomains(String & helpText)
       c2.Empty(); count = 0;
       for (mIdx=0;theGame->Modules[mIdx];mIdx++) {
         Module * m = theGame->Modules[mIdx];
-        for (int32 i=0; i<m->szDom; i++) {
+        for (int16 i=0; i<m->szDom; i++) {
           dID = m->DomainID(i);
           rList[count++] = dID;
           }
@@ -673,7 +674,7 @@ bool HelpDomains(String & helpText)
       UnimpID = FIND("Unimplemented"); cds = 0;
       for (mIdx=0;theGame->Modules[mIdx];mIdx++) {
         Module * m = theGame->Modules[mIdx];
-        for (int32 i=0; i<m->szDom; i++) {
+        for (int16 i=0; i<m->szDom; i++) {
           dID = m->DomainID(i);
           for (int16 n=0;n!=9;n++)
             if ((spID = TDOM(dID)->Spells[n]) && (spID != UnimpID))
@@ -731,7 +732,7 @@ static bool HelpRaces(String & helpText)
       n2.Empty(); count = 0;
       for (mIdx=0;theGame->Modules[mIdx];mIdx++) {
         Module * m = theGame->Modules[mIdx];
-        for (int32 i=0; i<m->szRac; i++) {
+        for (int16 i=0; i<m->szRac; i++) {
           xID = m->RaceID(i);
           if (TRACE(xID)->BaseRace)
             continue;
@@ -781,7 +782,7 @@ static bool HelpRaces(String & helpText)
       n2.Empty(); count = 0;
       for (mIdx=0;theGame->Modules[mIdx];mIdx++) {
         Module * m = theGame->Modules[mIdx];
-        for (int32 i=0; i<m->szRac; i++) {
+        for (int16 i=0; i<m->szRac; i++) {
           xID = m->RaceID(i);
           if (!TRACE(xID)->BaseRace)
             continue;
@@ -862,7 +863,7 @@ static bool HelpClasses(String & helpText)
       n2.Empty(); count = 0;
       for (mIdx=0;theGame->Modules[mIdx];mIdx++) {
         Module * m = theGame->Modules[mIdx];
-        for (int32 i=0; i<m->szCla; i++) {
+        for (int16 i=0; i<m->szCla; i++) {
           xID = m->ClassID(i);
           if (TCLASS(xID)->HasFlag(CF_PRESTIGE) ||
               TCLASS(xID)->HasFlag(CF_PSEUDO))
@@ -913,7 +914,7 @@ static bool HelpClasses(String & helpText)
       n2.Empty(); count = 0;
       for (mIdx=0;theGame->Modules[mIdx];mIdx++) {
         Module * m = theGame->Modules[mIdx];
-        for (int32 i=0; i<m->szCla; i++) {
+        for (int16 i=0; i<m->szCla; i++) {
           xID = m->ClassID(i);
           if (!TCLASS(xID)->HasFlag(CF_PRESTIGE) ||
                TCLASS(xID)->HasFlag(CF_PSEUDO))
@@ -1012,7 +1013,7 @@ static bool HelpPantheon(String & helpText)
       c2.Empty(); count = 0;
       for (mIdx=0;theGame->Modules[mIdx];mIdx++) {
         Module * m = theGame->Modules[mIdx];
-        for (int32 i=0; i<m->szGod; i++) {
+        for (int16 i=0; i<m->szGod; i++) {
           gID = m->GodID(i);
           rList[count++] = gID;
           }
@@ -1543,7 +1544,7 @@ static void DescribeKeys(String &s)
                   { 
                     if (ks[j].raw_key >= 200)
                       goto PrintSpecialKey;
-                    Keys[n] += ks[j].raw_key; 
+                    Keys[n] += (char)ks[j].raw_key; 
                     goto DoneKey; 
                   }
                 if (ks[j].raw_key_flags & KY_FLAG_CONTROL)
@@ -1691,7 +1692,7 @@ void TextTerm::GetHelp(String & helpText, const char *topic)
 
 void TextTerm::HelpTopic(const char*topic, const char*link)
   {
-    rID tID, xID = 0; char ln[3], xln[2];
+    rID xID = 0; char ln[3], xln[2];
     int32 ch; char TopicName[52];
 
     String helpText, s; 
@@ -1884,7 +1885,7 @@ void TextTerm::HelpTopic(const char*topic, const char*link)
             {
               int16 i;
               ln[0] = ln[1];
-              ln[1] = ch;
+              ln[1] = (char)ch;
               ln[2] = 0;
               JumpToLink:
               for (i=LinkCount-1;i!=-1;i--)
@@ -1900,7 +1901,7 @@ void TextTerm::HelpTopic(const char*topic, const char*link)
                     UpdateScrollArea(HL[i].LineNo, WIN_CUSTOM);
                     break;
                   }
-              xln[0] = ch;
+              xln[0] = (char)ch;
               xln[1] = 0;
               for (i=LinkCount-1;i!=-1;i--)
                 if (!stricmp(HL[i].Link,xln))
@@ -2108,8 +2109,9 @@ const char* LookupDType(int16 DType, rID xID)
 String & Monster::Describe(Player *p)
   {
     String str, s2, s3, *sl;
-    static String List[512]; rID sID, xID; Dice d; int16 st; hObj h;
-    int8 MType1, MType2, MType3, lc, i,j,k, sv, n, feats,skills,CR;
+    static String List[512]; rID sID, xID; Dice d; hObj h;
+    int8 MType1, MType2, MType3, lc, sv, n, feats,skills,CR;
+    uint8 i;
     String groupStr; 
     /* HACKFIX */
     static MonMem PerfectMem = {
@@ -2241,9 +2243,9 @@ String & Monster::Describe(Player *p)
     if (tm->HasFlag(M_NATURAL))
       str += "natural ";
 
-    MType1 = tm->MType[0];
-    MType2 = tm->MType[1];
-    MType3 = tm->MType[2];
+    MType1 = (int8)tm->MType[0];
+    MType2 = (int8)tm->MType[1];
+    MType3 = (int8)tm->MType[2];
 
     s2 = Lower(Lookup(MTypeNames,MType1));
     
@@ -2397,11 +2399,11 @@ String & Monster::Describe(Player *p)
                     "%c%d~%c speed with natural attacks. ",-14,tm->Mov*5+100,-7,-14,tm->Spd*5+100,-7);
 
     /* Saving Throws */
-    sv = MonGoodSaves(tm->MType[0]);
+    sv = MonGoodSaves((int8)tm->MType[0]);
     if (tm->MType[1])
-      sv |= MonGoodSaves(tm->MType[1]);
+      sv |= MonGoodSaves((int8)tm->MType[1]);
     if (tm->MType[2])
-      sv |= MonGoodSaves(tm->MType[2]);
+      sv |= MonGoodSaves((int8)tm->MType[2]);
     str += "It has ";
     if (sv) {
       str += "naturally strong ";
@@ -2473,9 +2475,9 @@ String & Monster::Describe(Player *p)
           case A_INT: str += " intelligence"; break;
           case A_WIS: str += " wisdom"; break;
           case A_CHA: str += " charisma"; break;
-          }
+        }
 
-        if (mm->Kills >= 20+i*2 && tm->Attr[i] != 0)
+        if (mm->Kills - (20+i*2) >= 0 && tm->Attr[i] != 0)
           str += Format(" (%d)",tm->Attr[i]);
         str += Format("%c",-7);
 
@@ -2534,8 +2536,8 @@ String & Monster::Describe(Player *p)
               if (mm->Kills > 20)
                 str += Format(" (%+d)",SkillLevel(tm->Feats[i]) - 
                                        ChallengeRating() + CR -
-                                       Mod(SkillAttr(tm->Feats[i])) +
-                                       (tm->Attr[SkillAttr(tm->Feats[i])]-10)/2);
+                                       Mod((int8)SkillAttr(tm->Feats[i])) +
+                                       (tm->Attr[(int8)SkillAttr(tm->Feats[i])]-10)/2);
               lc++;
               if (lc >= 511)
                 break;
@@ -2741,7 +2743,7 @@ String & Monster::Describe(Player *p)
         }
     
     int16 fearDC;
-    if (fearDC = tm->GetConst(DRAGON_FEAR_DC))
+    if (fearDC = (int16)tm->GetConst(DRAGON_FEAR_DC))
       str += Format("Saving throws against its fear attack are %s by %+d. ",
                fearDC > 0 ? "increased" : "decreased", fearDC);
 
@@ -2754,7 +2756,7 @@ String & Monster::Describe(Player *p)
 
     for (i=0;AbilDescs[i].Val;i++)
       if (AbilDescs[i].Val < 0)
-        if (TMON(mID)->HasFlag(-AbilDescs[i].Val))
+        if (TMON(mID)->HasFlag((uint16)-AbilDescs[i].Val))
           str += AbilDescs[i].Text;
               
       
@@ -3484,13 +3486,12 @@ String & MaterialHardnessDesc(int8 mat)
 
 String & Item::Describe(Player *p)
 {
-  String Desc; int16 i;
+  String Desc;
   TItem *ti = TITEM(iID);
 
   if (isType(T_BOOK) && ti->FirstRes(AN_SPELLS)) {
     int16 Illegible = 0; 
     rID sID;
-    int16 i; 
     bool second; 
     String sn;
 
@@ -3869,7 +3870,8 @@ String & Armour::Describe(Player *p)
 
 String & Weapon::Describe(Player *p)
   {
-    String Desc, tmp; int16 th, Crit, i;
+    String Desc, tmp;
+    int16 th, Crit;
                                               
     Desc += Format("__It is a %s weapon that inflicts <11>%s<7>",
         Lookup(SizeNames,Size(p)),
@@ -3922,7 +3924,7 @@ String & Weapon::Describe(Player *p)
 
     Desc += Format(" It has a base speed of <11>%d~<7>, an accuracy modifier of <11>%+d<7>, and a parry modifier of <11>%+d<7>.", 
         100 + (TITEM(iID)->u.w.Spd) * 5, TITEM(iID)->u.w.Acc,
-        ParryVal(p,Known & KN_PLUS));
+        ParryVal(p, (Known & KN_PLUS) != 0));
 
     if (p->AbilityLevel(CA_SNEAK_ATTACK))
       Desc += Format(" On a sneak attack, you inflict <11>+%dd%d<7> damage with it.",
@@ -4143,234 +4145,223 @@ String & Door::Describe(Player *p)
   return *tmpstr(Desc); 
 }
 
-
 extern String ps_circ;
-String & TEffect::Describe(Player *p)
-{
-  String s, s2, descs, levs; bool dual = false, first = false;
-  int8 Sources[] = { AI_WIZARDRY, AI_THEURGY, AI_DRUIDIC, 0 };
-  int i,j, fl, mIdx; rID spID, dID, spList[MAX_SPELLS+1], clID, osf;
-  
-  spID = theGame->SpellID(this - theGame->Modules[0]->QEff);
-  //ASSERT(this == TEFF(spID));
-  
-  if (TEFF(spID)->HasSource(AI_TATTOO))
-    {
-      s = Format("<5>%s<7> (<2>%s Tattoo<7>)\n__%s",
+
+String & TEffect::Describe(Player *p) {
+    String s, s2, descs, levs; bool dual = false, first = false;
+    int8 Sources[] = { AI_WIZARDRY, AI_THEURGY, AI_DRUIDIC, 0 };
+    int i,j, mIdx; rID spID, dID, spList[MAX_SPELLS+1], clID;
+    uint16 osf;
+
+    spID = theGame->SpellID(this - theGame->Modules[0]->QEff);
+    //ASSERT(this == TEFF(spID));
+
+    if (TEFF(spID)->HasSource(AI_TATTOO)) {
+        s = Format("<5>%s<7> (<2>%s Tattoo<7>)\n__%s",
             (const char*) Upper(NAME(spID)), 
             (TEFF(spID)->HasFlag(EF_ACTIVATE) ||
-             TEFF(spID)->HasFlag(EF_ACTIVATE2) ||
-             TEFF(spID)->HasFlag(EF_ACTIVATE3) ||
-             TEFF(spID)->HasFlag(EF_ACTIVATE4) ||
-             TEFF(spID)->HasFlag(EF_ACTIVATE5)) ?
-             "Active" : "Passive",
+            TEFF(spID)->HasFlag(EF_ACTIVATE2) ||
+            TEFF(spID)->HasFlag(EF_ACTIVATE3) ||
+            TEFF(spID)->HasFlag(EF_ACTIVATE4) ||
+            TEFF(spID)->HasFlag(EF_ACTIVATE5)) ?
+            "Active" : "Passive",
             DESC(spID));
-      return *tmpstr(s);
+        return *tmpstr(s);
     }
 
-  if (TEFF(spID)->HasSource(AI_ALCHEMY))
-    {
-      s = Format("<5>%s<7>\n__%s",
+    if (TEFF(spID)->HasSource(AI_ALCHEMY)) {
+        s = Format("<5>%s<7>\n__%s",
             (const char*) Upper(NAME(spID)), 
             DESC(spID));
-      return *tmpstr(s);
+        return *tmpstr(s);
     }
 
-  if (TEFF(spID)->ef.aval == AR_POISON ||
-      TEFF(spID)->ef.aval == AR_DISEASE)
-    {
-      s = Format("__<9>%s<7>: %s",
+    if (TEFF(spID)->ef.aval == AR_POISON || TEFF(spID)->ef.aval == AR_DISEASE) {
+        s = Format("__<9>%s<7>: %s",
             (const char*) Capitalize(NAME(spID),true), 
             DESC(spID));
-      return *tmpstr(s);
+        return *tmpstr(s);
     }
 
-  s += Format("<14>%s<7> (",NAME(spID)); 
-  if (HasSource(AI_PSIONIC))
-    s += "<4>Psionic Power<7>)";
-  else if (Schools && Level) {
-    for (i=0; SchoolNames[i].Val; i++) 
-      if ((Schools & SchoolNames[i].Val) == SchoolNames[i].Val) {
-        if (SchoolNames[i].Val > SC_NAT)
-          descs += Format(" %c[%s]",-7, (const char*)Upto(SchoolNames[i].Text," "));
-        else            
-          s += Format("%s<4>%s<7>",dual ? "/" : "", SchoolNames[i].Text);
-        dual = true;
-        }
-    for (i=0;i!=theGame->Modules[0]->szCla;i++)
-      {
-        int16 lv = 0;
-        clID = theGame->Modules[0]->ClassID(i);
-        TCLASS(clID)->GetList(SPELL_LIST,spList,MAX_SPELLS);
-        for(j=0;spList[j] || spList[j+1] || spList[j+2];j++)
-          {
-            if (spList[j] > 0 && spList[j] < 20)
-              lv = spList[j];
-            if (spList[j] == spID)
-              levs += Format(", <1>%s <9>%d<7>",
-                NAME(clID), lv);
-          }
-      } 
-    for (mIdx=0;theGame->Modules[mIdx];mIdx++) {
-      Module * m = theGame->Modules[mIdx];
-      for (int32 i=0; i<m->szDom; i++) {
-        dID = m->DomainID(i);
-        for (int16 n=0;n!=9;n++)
-          if (spID == TDOM(dID)->Spells[n])
-            levs = Format(", <1>%s <9>%d<7>", NAME(dID), n+1) + levs;
-        }
-      }
-      
-    s += ")";
-          
-    }
-  else
-    s += "<4>Special Ability<7>)";
-    
-  if (Vals(0)->eval == EA_NOTIMP)
-    s += "\n<13> * * * NOT IMPLEMENTED YET * * *<7>"; 
+    s += Format("<14>%s<7> (",NAME(spID)); 
+    if (HasSource(AI_PSIONIC))
+        s += "<4>Psionic Power<7>)";
+    else if (Schools && Level) {
+        for (i=0; SchoolNames[i].Val; i++) 
+            if ((Schools & SchoolNames[i].Val) == SchoolNames[i].Val) {
+                if (SchoolNames[i].Val > SC_NAT)
+                    descs += Format(" %c[%s]",-7, (const char*)Upto(SchoolNames[i].Text," "));
+                else            
+                    s += Format("%s<4>%s<7>",dual ? "/" : "", SchoolNames[i].Text);
+                dual = true;
+            }
 
-  for (i=0;Sources[i];i++)
-    if (HasSource(Sources[i]))
-      {
-        switch(Sources[i])
-          {
+        for (i=0;i!=theGame->Modules[0]->szCla;i++) {
+            int16 lv = 0;
+            clID = theGame->Modules[0]->ClassID(i);
+            TCLASS(clID)->GetList(SPELL_LIST, spList, MAX_SPELLS);
+            for(j=0;spList[j] || spList[j+1] || spList[j+2];j++) {
+                if (spList[j] > 0 && spList[j] < 20)
+                    lv = (int16)spList[j];
+                if (spList[j] == spID)
+                    levs += Format(", <1>%s <9>%d<7>",
+                    NAME(clID), lv);
+            }
+        }
+
+        for (mIdx=0;theGame->Modules[mIdx];mIdx++) {
+            Module * m = theGame->Modules[mIdx];
+            for (uint16 i=0; i<m->szDom; i++) {
+                dID = m->DomainID(i);
+                for (int16 n=0;n!=9;n++)
+                    if (spID == TDOM(dID)->Spells[n])
+                        levs = Format(", <1>%s <9>%d<7>", NAME(dID), n+1) + levs;
+            }
+        }
+
+        s += ")";
+    } else
+        s += "<4>Special Ability<7>)";
+
+    if (Vals(0)->eval == EA_NOTIMP)
+        s += "\n<13> * * * NOT IMPLEMENTED YET * * *<7>"; 
+
+    for (i=0;Sources[i];i++)
+        if (HasSource(Sources[i])) {
+            switch(Sources[i]) {
             case AI_WIZARDRY: s2 = "Mage"; break;
             case AI_THEURGY: s2 = "Priest"; break;
             case AI_DRUIDIC: s2 = "Druid"; break;
-          }
-        if (levs.GetLength())
-          if (strstr(levs,s2))
-            continue;
-        levs = Format(", <1>%s <9>%d<7>", (const char*)s2, Level) + levs;
-      }
-      
-  if (HasFlag(EF_EVIL))
-    descs += " [Evil]";
-  if (HasFlag(EF_GOOD))
-    descs += " [Good]";
-  if (HasFlag(EF_LAWFUL))
-    descs += " [Lawful]";      
-  if (HasFlag(EF_CHAOTIC))
-    descs += " [Chaotic]";      
+            }
+            if (levs.GetLength())
+                if (strstr(levs,s2))
+                    continue;
+            levs = Format(", <1>%s <9>%d<7>", (const char*)s2, Level) + levs;
+        }
 
-  if (HasFlag(EF_FEAR))
-    descs += " [Fear]";      
-  if (HasFlag(EF_DEATH))
-    descs += " [Death]";      
-  if (HasFlag(EF_SOUND))
-    descs += " [Sound-Based]";      
-  if (HasFlag(EF_MENTAL))
-    descs += " [Mind-Affecting]";      
-  if (HasFlag(EF_COMPULSION))
-    descs += " [Compulsion]";      
-    
-  if (descs.GetLength())
-    s += descs;
-  s += "\n";
-  if (levs.GetLength()) {
-    levs = levs.Right(levs.GetLength() - 2);
-    s += Format("%cLevel: %s\n",-7, (const char*)levs);
+    if (HasFlag(EF_EVIL))
+        descs += " [Evil]";
+    if (HasFlag(EF_GOOD))
+        descs += " [Good]";
+    if (HasFlag(EF_LAWFUL))
+        descs += " [Lawful]";      
+    if (HasFlag(EF_CHAOTIC))
+        descs += " [Chaotic]";      
+
+    if (HasFlag(EF_FEAR))
+        descs += " [Fear]";      
+    if (HasFlag(EF_DEATH))
+        descs += " [Death]";      
+    if (HasFlag(EF_SOUND))
+        descs += " [Sound-Based]";      
+    if (HasFlag(EF_MENTAL))
+        descs += " [Mind-Affecting]";      
+    if (HasFlag(EF_COMPULSION))
+        descs += " [Compulsion]";      
+
+    if (descs.GetLength())
+        s += descs;
+    s += "\n";
+    if (levs.GetLength()) {
+        levs = levs.Right(levs.GetLength() - 2);
+        s += Format("%cLevel: %s\n",-7, (const char*)levs);
     }
 
 
-  switch (ef.sval) {
+    switch (ef.sval) {
     case FORT:
-      s += HasFlag(EF_PARTIAL) ? "<5>Fortitude<7> partial. " : "<5>Fortitude<7> negates. ";
-     break;
+        s += HasFlag(EF_PARTIAL) ? "<5>Fortitude<7> partial. " : "<5>Fortitude<7> negates. ";
+        break;
     case REF:
-      s += HasFlag(EF_PARTIAL) ? "<5>Reflex<7> partial. " : "<5>Reflex<7> negates. ";
-     break;
+        s += HasFlag(EF_PARTIAL) ? "<5>Reflex<7> partial. " : "<5>Reflex<7> negates. ";
+        break;
     case WILL:
-      s += HasFlag(EF_PARTIAL) ? "<5>Will<7> partial. " : "<5>Will<7> negates. ";
-     break;
+        s += HasFlag(EF_PARTIAL) ? "<5>Will<7> partial. " : "<5>Will<7> negates. ";
+        break;
     }
-  if (HasFlag(EF_VARMANA))
-    s += Format("Mana: <11>Variable<7>. ");
-  else if (ManaCost && p)
-    s += Format("Mana: <11>%d <7>(base %d). ",
-           p->getSpellMana(spID,0,NULL), ManaCost);
-  else if (ManaCost)
-    s += Format("Mana: <11>%d<7>. ",ManaCost);
-  else
-    s += "Mana: <11>None<7>. ";
+    if (HasFlag(EF_VARMANA))
+        s += Format("Mana: <11>Variable<7>. ");
+    else if (ManaCost && p)
+        s += Format("Mana: <11>%d <7>(base %d). ",
+        p->getSpellMana(spID,0,NULL), ManaCost);
+    else if (ManaCost)
+        s += Format("Mana: <11>%d<7>. ",ManaCost);
+    else
+        s += "Mana: <11>None<7>. ";
 
-  if (HasFlag(EF_D1ROUND)) s += ("1 round duration. ");
-  else if (HasFlag(EF_DSHORT)) s += ("Short duration. ");
-  else if (HasFlag(EF_DLONG)) s += ("Long duration. ");
-  else if (HasFlag(EF_DXLONG)) s += ("Extended duration. ");
-  else if (HasFlag(EF_PERSISTANT)) s += ("Persistant. ");
-  if (HasFlag(EF_NO_BONUS_DMG)) s += ("No bonus damage. ");
-  if (HasFlag(EF_DEFENSIVE)) s += "No AoO. ";
+    if (HasFlag(EF_D1ROUND)) s += ("1 round duration. ");
+    else if (HasFlag(EF_DSHORT)) s += ("Short duration. ");
+    else if (HasFlag(EF_DLONG)) s += ("Long duration. ");
+    else if (HasFlag(EF_DXLONG)) s += ("Extended duration. ");
+    else if (HasFlag(EF_PERSISTANT)) s += ("Persistant. ");
+    if (HasFlag(EF_NO_BONUS_DMG)) s += ("No bonus damage. ");
+    if (HasFlag(EF_DEFENSIVE)) s += "No AoO. ";
 
-  if (BaseChance)
-    s += Format("Base Success: <11>%d~<7>.\n__<1>",BaseChance);
-  else
-    s += "\n__<1>";
+    if (BaseChance)
+        s += Format("Base Success: <11>%d~<7>.\n__<1>",BaseChance);
+    else
+        s += "\n__<1>";
 
-  s += theGame->GetText((ModNum+1)*0x01000000,Desc); 
+    s += theGame->GetText((ModNum+1)*0x01000000,Desc); 
 
-  if (p)
-    {
-      osf = p->getSpellFlags(spID);
-      p->setSpellFlags(spID, p->getSpellFlags(spID) | SP_KNOWN);
-      int16 sc = p->SpellRating(spID,p->MMFeats(
-        theGame->SpellNum(spID)),true);
-      p->setSpellFlags(spID,osf);
-      if (ps_perfect)
+    if (p) {
+        osf = p->getSpellFlags(spID);
+        p->setSpellFlags(spID, p->getSpellFlags(spID) | SP_KNOWN);
+        int16 sc = p->SpellRating(spID,p->MMFeats(theGame->SpellNum(spID)),true);
+        p->setSpellFlags(spID,osf);
+        if (ps_perfect)
         {
-          s += Format("\n<11>Chance: 100%% (%s)", ps_perfect);
+            s += Format("\n<11>Chance: 100%% (%s)", ps_perfect);
         }
-      else
+        else
         {
-          s += Format("\n<11>Chance: <7>%d%% base", p_base);
-          if (p->HasStati(SPECIALTY_SCHOOL))
-            s += Format(" %+d%% specialist", p_spec);
-          if (p_int)
-            s += Format(" %+d%% Int", p_int);
-          if (p_lev)
-            s += Format(" %+d%% level", p_lev);
-          if (p_calc)
-            s += Format(" %+d%% %s", p_calc, ps_calc);
-          if (p_meta)
-            s += Format(" %+d%% meta", p_meta);
-          if (p_circ)
-            s += Format(" %+d%% circ (%s)", p_circ,
-              (const char*) ps_circ.Left(ps_circ.GetLength()-1));
-          if (p_conc)
-            s += Format(" %+d%% concent", p_conc);
-           
-          s += Format(" = <11>%d%%<7>", sc);
+            s += Format("\n<11>Chance: <7>%d%% base", p_base);
+            if (p->HasStati(SPECIALTY_SCHOOL))
+                s += Format(" %+d%% specialist", p_spec);
+            if (p_int)
+                s += Format(" %+d%% Int", p_int);
+            if (p_lev)
+                s += Format(" %+d%% level", p_lev);
+            if (p_calc)
+                s += Format(" %+d%% %s", p_calc, ps_calc);
+            if (p_meta)
+                s += Format(" %+d%% meta", p_meta);
+            if (p_circ)
+                s += Format(" %+d%% circ (%s)", p_circ,
+                (const char*) ps_circ.Left(ps_circ.GetLength()-1));
+            if (p_conc)
+                s += Format(" %+d%% concent", p_conc);
+
+            s += Format(" = <11>%d%%<7>", sc);
         }
-      if (ef.sval != NOSAVE)
+        if (ef.sval != NOSAVE)
         {
-          int16 saveDC;
-          saveDC = p->getSpellDC(spID,false,p->MMFeats(
-            theGame->SpellNum(spID)) & MM_HEIGHTEN);
-          s += Format("\n<11>Save DC: <7>%d base", dc_base);
-          if (dc_lev)
-            s += Format(" %+d level", dc_lev);
-          if (dc_attr)
-            s += Format(" %+d %s", dc_attr, dcs_attr);
-          if (dc_beguile)
-            s += Format(" %+d Cha", dc_beguile);
-          if (dc_trick)
-            s += Format(" %+d trick", dc_trick);
-          if (dc_height)
-            s += Format(" %+d heighten", dc_height);
-          if (dc_hard)
-            s += Format(" %+d spell", dc_hard);
-          if (dc_focus)
-            s += Format(" %+d focus", dc_focus);
-          if (dc_will)
-            s += Format(" %+d will", dc_will);
-          if (dc_will)
-            s += Format(" %+d affinity", dc_affinity);
-          s += Format(" = DC <11>%d<7>",saveDC);
+            int16 saveDC;
+            saveDC = p->getSpellDC(spID,false,(p->MMFeats(theGame->SpellNum(spID)) & MM_HEIGHTEN) != 0);
+            s += Format("\n<11>Save DC: <7>%d base", dc_base);
+            if (dc_lev)
+                s += Format(" %+d level", dc_lev);
+            if (dc_attr)
+                s += Format(" %+d %s", dc_attr, dcs_attr);
+            if (dc_beguile)
+                s += Format(" %+d Cha", dc_beguile);
+            if (dc_trick)
+                s += Format(" %+d trick", dc_trick);
+            if (dc_height)
+                s += Format(" %+d heighten", dc_height);
+            if (dc_hard)
+                s += Format(" %+d spell", dc_hard);
+            if (dc_focus)
+                s += Format(" %+d focus", dc_focus);
+            if (dc_will)
+                s += Format(" %+d will", dc_will);
+            if (dc_will)
+                s += Format(" %+d affinity", dc_affinity);
+            s += Format(" = DC <11>%d<7>",saveDC);
         }
     }
-  //PurgeStrings();
-  return *tmpstr(s); 
+    //PurgeStrings();
+    return *tmpstr(s); 
 }
 
 String & TDomain::Describe(bool DescribeDomainSpells)
@@ -4459,7 +4450,6 @@ String & DescribeFeat(int16 ft)
         s += (" <2>[Multiple]<7>");
       if (FeatInfo[i].flags & FF_MONSTER) 
         s += (" <2>[Bestial]<7>");
-      bool listed; 
       if (FeatInfo[i].flags & FF_WARRIOR) 
         s += (" <2>[Warrior]<7>");
       
@@ -4504,7 +4494,7 @@ String & DescribeFeat(int16 ft)
             if (c > 0) 
               s += ", ";
             switch (fc->elt) {
-              case FP_FEAT: s += Format("<6>%s<7>",FeatName(fc->arg)); break; 
+              case FP_FEAT: s += Format("<6>%s<7>",FeatName((int16)fc->arg)); break; 
               case FP_ABILITY: 
                             s += Format("<3>%s", Lookup(ClassAbilities,fc->arg)); 
                             if (fc->val) 

@@ -47,8 +47,7 @@ Game * theGame;
 extern String * StrBufDelQueue[STRING_QUEUE_SIZE];
 extern int32    iStrBufDelQueue;
 
-Game::Game() : Object(T_GAME)
-  {
+Game::Game() : Object(T_GAME) {
     memset(StrBufDelQueue,0,sizeof(String*)*STRING_QUEUE_SIZE);
     iStrBufDelQueue = 0;
 
@@ -65,7 +64,7 @@ Game::Game() : Object(T_GAME)
     ItemGenNum = 10;
     DestroyCount = 0;
     srand((unsigned)time(NULL));
-  }
+}
 
 
 extern hObj excessItems[30];

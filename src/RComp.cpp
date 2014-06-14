@@ -265,210 +265,198 @@ String & Game::CompileStatistics()
     
     DoneStats:
     return *tmpstr(s);
-  } 
+} 
 
-          
-          
-          
-bool Game::ResourceCompiler()
-{
-   String fn;
-  time_t theTime;
-   
-   #ifdef DEBUG
-   
-   preprocFilename[0] = 0;
+bool Game::ResourceCompiler() {
+    String fn;
+    time_t theTime;
 
-   if (sizeof(Dice) > sizeof(YYSTYPE))
-     {
-       /* This should /never/ be true, but I am putting the test
+#ifdef DEBUG
+    preprocFilename[0] = 0;
+
+    if (sizeof(Dice) > sizeof(YYSTYPE)) {
+        /* This should /never/ be true, but I am putting the test
         * here in case a wierd compiler assembles the Dice struct
         * wrong, or struct alignment options cause a problem. 
         * Without the test, this would result in wierd memory
         * bugs due to the kludgy way yyDice is defined.
         */
-      Fatal("Strange compiler-level struct alignment error!");
+        Fatal("Strange compiler-level struct alignment error!");
     }
 
-   char * file_to_open = NULL;
+    char * file_to_open = NULL;
 
-  T1->ChangeDirectory(T1->LibrarySubDir());
+    T1->ChangeDirectory(T1->LibrarySubDir());
 
-   do {
-     yyin = NULL;
-     Unresolved.Empty();
-     T1->SetWin(WIN_SCREEN); T1->Color(EMERALD); T1->Clear();
-     T1->Write(0,0,"Incursion Resource Compiler\n");
-     T1->GotoXY(0,2); T1->Color(WHITE);
-    T1->Write("Module Resource Files:\n"); T1->Color(GREY);
-    file_to_open = T1->MenuListFiles("*.irc",MENU_ESC,"Compile Which Module?");
-    T1->SetWin(WIN_SCREEN);
-    if (!file_to_open) {
-      T1->ChangeDirectory(T1->IncursionDirectory);
-      return false; 
+    do {
+        yyin = NULL;
+        Unresolved.Empty();
+        T1->SetWin(WIN_SCREEN); T1->Color(EMERALD); T1->Clear();
+        T1->Write(0,0,"Incursion Resource Compiler\n");
+        T1->GotoXY(0,2); T1->Color(WHITE);
+        T1->Write("Module Resource Files:\n"); T1->Color(GREY);
+        file_to_open = T1->MenuListFiles("*.irc",MENU_ESC,"Compile Which Module?");
+        T1->SetWin(WIN_SCREEN);
+        if (!file_to_open) {
+            T1->ChangeDirectory(T1->IncursionDirectory);
+            return false; 
+        }
+        yyin = fopen(file_to_open, "rt");
+        T1->GotoXY(0,6); 
+    } while (!yyin);
+    fclose(yyin);
+    if (setjmp(jb)) {
+        T1->Color(GREY);
+        T1->Write("\n\nPress any key to continue...");
+        T1->GetCharRaw(); T1->Clear();
+        T1->ChangeDirectory(T1->IncursionDirectory);
+        return false;
     }
-     yyin = fopen(file_to_open, "rt");
-     T1->GotoXY(0,6); 
-   }
-   while (!yyin);
-   fclose(yyin);
-   if (setjmp(jb))
-     {
-       T1->Color(GREY);
-       T1->Write("\n\nPress any key to continue...");
-       T1->GetCharRaw(); T1->Clear();
-    T1->ChangeDirectory(T1->IncursionDirectory);
-       return false;
-     }
 
-  time(&theTime); T1->Write(Format("%s: Preprocessing ...\n",
-        ctime(&theTime))); T1->Update();
-   #ifdef WIN32
-   if (!Preprocess(file_to_open,"program.i"))
-   #else
-   if (0)
-   #endif
-     {
-       PreprocError:
-       T1->Color(RED);
-       T1->Write("[Unknown Preprocessor Error.]\n");
-       T1->GetCharRaw();
-       T1->ChangeDirectory(T1->IncursionDirectory);
-       return false;
-     }
-  time(&theTime);T1->Write(Format("%s: Reading preprocessed file ...\n",
-      ctime(&theTime))); T1->Update();
-  yyin = fopen("program.i","rt");
-   if (!yyin)
-     goto PreprocError;
+    time(&theTime);
+    T1->Write(Format("%s: Preprocessing ...\n", ctime(&theTime)));
+    T1->Update();
+#ifdef WIN32
+    if (!Preprocess(file_to_open,"program.i")) {
+#else
+    if (0) {
+#endif
+PreprocError:
+        T1->Color(RED);
+        T1->Write("[Unknown Preprocessor Error.]\n");
+        T1->GetCharRaw();
+        T1->ChangeDirectory(T1->IncursionDirectory);
+        return false;
+    }
+    time(&theTime);
+    T1->Write(Format("%s: Reading preprocessed file ...\n", ctime(&theTime)));
+    T1->Update();
+    yyin = fopen("program.i","rt");
+    if (!yyin)
+        goto PreprocError;
 
-//ProcessFile:
-   if (setjmp(jb))
-     {
-       T1->Color(GREY);
-       T1->Write("\n\nPress any key to continue...");
-       T1->GetCharRaw(); T1->Clear();
-    T1->ChangeDirectory(T1->IncursionDirectory);
-       return false;
-     }
-   Errors = 0;
-   fseek(yyin,0,SEEK_SET);
-   yyrestart(yyin);
-   Modules[0] = new Module;
-   theModule = Modules[0];
-   theModule->Slot = -1;
+    //ProcessFile:
+    if (setjmp(jb)) {
+        T1->Color(GREY);
+        T1->Write("\n\nPress any key to continue...");
+        T1->GetCharRaw(); T1->Clear();
+        T1->ChangeDirectory(T1->IncursionDirectory);
+        return false;
+    }
 
-  time(&theTime); T1->Write(Format(
-        "%s: Counting and naming resources ...\n",ctime(&theTime))); T1->Update();
-   CountResources();
-   theMon = firstMon = theModule->QMon;
-   theItem = firstItem = theModule->QItm;
-   theFeat = firstFeat = theModule->QFea;
-   theEff = firstEff = theModule->QEff;
-   theArti = firstArti = theModule->QArt;
-   theQuest = firstQuest = theModule->QQue;
-   theDgn = firstDgn = theModule->QDgn;
-   theRou = firstRou = theModule->QRou;
-   theNPC = firstNPC = theModule->QNPC;
-   theClass = firstClass = theModule->QCla;
-   theRace = firstRace = theModule->QRac;
-   theDom = firstDom = theModule->QDom;
-   theGod = firstGod = theModule->QGod;
-   theReg = firstReg = theModule->QReg;
-   theTer = firstTer = theModule->QTer;
-   theTxt = firstTxt = theModule->QTxt;
-   theVar = firstVar = theModule->QVar;
-   theTemp = firstTemp = theModule->QTem;
-   theFlavor = firstFlavor = theModule->QFla;
-   theBev = firstBev = theModule->QBev;
-   theEnc = firstEnc = theModule->QEnc;
-   theText = firstText = theModule->QTxt;
-   theCodeSeg.Clear();
-   memset(RegsInUse,0,sizeof(int8)*64);
+    Errors = 0;
+    fseek(yyin,0,SEEK_SET);
+    yyrestart(yyin);
 
-   if (!Errors) {
-     yypos = 1;
-     fseek(yyin,0,SEEK_SET);
-     yyrestart(yyin);
+    Modules[0] = new Module;
+    theModule = Modules[0];
+    theModule->Slot = -1;
 
-     T1->Color(GREY);
-     theSymTab.Empty();
-     time(&theTime); T1->Write(Format("%s: Parsing resources ...\n",
-          ctime(&theTime))); T1->Update();
-     brace_level = 0;
-     decl_state = false;
-     yyparse();
-     time(&theTime); T1->Write((const char*)Format(
-          "%s: Parsed [%s] into [%s] ...\n",
-          ctime(&theTime),
-          file_to_open,
-          theModule->GetText(theModule->Name)));
-     if (!theModule->Name)
-       yyerror("Module has no name.");
-     if (!theModule->FName)
-       yyerror("Module has no filename.");
-     }
-   else
-     {
-       T1->Color(RED);
-       T1->Write("[Compilation Aborted.]\n");
-     }
+    time(&theTime);
+    T1->Write(Format("%s: Counting and naming resources ...\n", ctime(&theTime)));
+    T1->Update();
+    CountResources();
+    theMon = firstMon = theModule->QMon;
+    theItem = firstItem = theModule->QItm;
+    theFeat = firstFeat = theModule->QFea;
+    theEff = firstEff = theModule->QEff;
+    theArti = firstArti = theModule->QArt;
+    theQuest = firstQuest = theModule->QQue;
+    theDgn = firstDgn = theModule->QDgn;
+    theRou = firstRou = theModule->QRou;
+    theNPC = firstNPC = theModule->QNPC;
+    theClass = firstClass = theModule->QCla;
+    theRace = firstRace = theModule->QRac;
+    theDom = firstDom = theModule->QDom;
+    theGod = firstGod = theModule->QGod;
+    theReg = firstReg = theModule->QReg;
+    theTer = firstTer = theModule->QTer;
+    theTxt = firstTxt = theModule->QTxt;
+    theVar = firstVar = theModule->QVar;
+    theTemp = firstTemp = theModule->QTem;
+    theFlavor = firstFlavor = theModule->QFla;
+    theBev = firstBev = theModule->QBev;
+    theEnc = firstEnc = theModule->QEnc;
+    theText = firstText = theModule->QTxt;
+    theCodeSeg.Clear();
+    memset(RegsInUse,0,sizeof(int8)*64);
 
-   theCodeSeg.Generate(HALT);
-   theModule->szCodeSeg = theCodeSeg.GetSize();
-   theModule->QCodeSeg = (VCode*)calloc(sizeof(VCode), theModule->szCodeSeg + 1);
-   new VCode[theModule->szCodeSeg + 1];
-   memcpy(theModule->QCodeSeg,theCodeSeg.GetCode(),
-     theModule->szCodeSeg*sizeof(VCode));
-   theCodeSeg.Clear();
-    
-    if (Unresolved.GetLength())
-      {
+    if (!Errors) {
+        yypos = 1;
+        fseek(yyin,0,SEEK_SET);
+        yyrestart(yyin);
+
+        T1->Color(GREY);
+        theSymTab.Empty();
+        time(&theTime);
+        T1->Write(Format("%s: Parsing resources ...\n", ctime(&theTime)));
+        T1->Update();
+        brace_level = 0;
+        decl_state = false;
+        yyparse();
+        time(&theTime);
+        T1->Write((const char*)Format("%s: Parsed [%s] into [%s] ...\n",ctime(&theTime),file_to_open,theModule->GetText(theModule->Name)));
+        if (!theModule->Name)
+            yyerror("Module has no name.");
+        if (!theModule->FName)
+            yyerror("Module has no filename.");
+    } else {
+        T1->Color(RED);
+        T1->Write("[Compilation Aborted.]\n");
+    }
+
+    theCodeSeg.Generate(HALT);
+    theModule->szCodeSeg = theCodeSeg.GetSize();
+    theModule->QCodeSeg = (VCode*)calloc(sizeof(VCode), theModule->szCodeSeg + 1);
+    new VCode[theModule->szCodeSeg + 1];
+    memcpy(theModule->QCodeSeg,theCodeSeg.GetCode(), theModule->szCodeSeg*sizeof(VCode));
+    theCodeSeg.Clear();
+
+    if (Unresolved.GetLength()) {
         T1->Color(CYAN);
         T1->Write("Warning -- Unresolved References:\n__");
         T1->Color(GREY);
         T1->Write(Unresolved);
         T1->Write("\n\n");
-      } 
-    
-  time(&theTime); T1->Write(Format("%s: Caching TMonster MTypes ...\n",
-        ctime(&theTime))); T1->Update();
-  for (int i=0; i<theModule->szMon; i++) {
-    rID mID = theModule->MonsterID(i); 
-    theModule->QMon[i].InitializeMTypeCache(mID); 
     } 
-  
-   
-   /* Don't save when we're only test-compiling one file for syntax */
-   if (FIND("mage") && FIND("shocker lizard") && !Errors) {
-     time(&theTime);T1->Write(Format("%s: Generating dispatch tables ...\n",
-          ctime(&theTime))); T1->Update();
-     T1->ChangeDirectory(T1->IncursionDirectory);
-     GenerateDispatch();
-     theSymTab.Empty();
-     time(&theTime); T1->Write(Format("%s: Saving module ...\n",
-     ctime(&theTime))); T1->Update();
-     theGame->SaveModule(0);
-     }
-   else {
-     time(&theTime); T1->Write(Format("%s: Forgoing save.\n",
-     ctime(&theTime))); T1->Update();
-     }
-     
-  
-   
-   T1->Color(EMERALD);
-   time(&theTime); T1->Write(Format("\n%s: Press any key to continue...",
-        ctime(&theTime)));
-   T1->GetCharRaw();
-   Cleanup();
-   T1->Clear();
-   T1->SetWin(WIN_SCREEN); 
-   T1->Clear();
-   #endif
-   return (!Errors); 
-}
 
+    time(&theTime);
+    T1->Write(Format("%s: Caching TMonster MTypes ...\n", ctime(&theTime)));
+    T1->Update();
+    for (int i=0; i<theModule->szMon; i++) {
+        rID mID = theModule->MonsterID(i); 
+        theModule->QMon[i].InitializeMTypeCache(mID); 
+    } 
+
+    /* Don't save when we're only test-compiling one file for syntax */
+    if (FIND("mage") && FIND("shocker lizard") && !Errors) {
+        time(&theTime);
+        T1->Write(Format("%s: Generating dispatch tables ...\n", ctime(&theTime)));
+        T1->Update();
+        T1->ChangeDirectory(T1->IncursionDirectory);
+        GenerateDispatch();
+        theSymTab.Empty();
+        time(&theTime);
+        T1->Write(Format("%s: Saving module ...\n", ctime(&theTime)));
+        T1->Update();
+        theGame->SaveModule(0);
+    } else {
+        time(&theTime);
+        T1->Write(Format("%s: Forgoing save.\n", ctime(&theTime)));
+        T1->Update();
+    }
+
+    T1->Color(EMERALD);
+    time(&theTime);
+    T1->Write(Format("\n%s: Press any key to continue...", ctime(&theTime)));
+    T1->GetCharRaw();
+    Cleanup();
+    T1->Clear();
+    T1->SetWin(WIN_SCREEN); 
+    T1->Clear();
+#endif
+    return (!Errors); 
+}
 
 /* void Game::CountResources()
  * 
