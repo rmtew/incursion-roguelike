@@ -235,7 +235,7 @@ class Resource {
       void AddResID(int8 at, rID sID);
                                                                              
       void AddAbility(int8 at,int16 ab,uint32 p,int8 l1,int8 l2);
-      void AddElement(rID eID,int16 x,int16 y,uint16 fl);
+      void AddElement(rID eID,int8 x,int8 y,uint16 fl);
       void AddEvent(int16 ev, uint32 moc);
       void AddChatter(uint8,const char*m1,const char*m2,const char*m3,
                               const char*m4,const char*m5);
@@ -245,8 +245,8 @@ class Resource {
       Tile* GetTile(char ch);
       void AddParam(int8 p,int16 v);
       void AddArray(int8 p,int16 *list);
-      void AddConstant(int16 con,int32 val);
-      void AddList(int16 ln, uint32 *lv);
+      void AddConstant(int8 con,int32 val);
+      void AddList(int8 ln, uint32 *lv);
       void AddSpecial(rID xID,int16 Chance, int16 lev);
       void AddSpecial(rID xID,int16 Chance, Dice& lev);
       void AddPower(int8 apt,int8 pw,uint32 x,int16 pa,Dice*charge);

@@ -6,10 +6,10 @@
      
      void Resource::AddResID(int8 at,rID sID)
      void Resource::AddAbility(int8 AbType,int8 Abil,uint32 Param,int8 Lev1,int8 Lev2)
-     void Resource::AddElement(rID xID,int16 x,int16 y,uint16 fl)
+     void Resource::AddElement(rID xID,int8 x,int8 y,uint16 fl)
      void Resource::AddEquip(uint8 Chance,Dice amt,rID iID,rID eID,int8 spec,uint32 qual,uint8 fl)
-     void Resource::AddConstant(int16 con,int16 val) 
-     void Resource::AddList(int16 ln, rID *lv)
+     void Resource::AddConstant(int8 con,int16 val) 
+     void Resource::AddList(int8 ln, rID *lv)
      void Resource::AddTile(char ch, Glyph img, uint8 fl, rID tID, rID xID, rID xID2)
      Tile* Resource::GetTile(char ch)
      bool Resource::GetList(int16 ln, rID *lv,int16 max)
@@ -108,7 +108,7 @@ void Resource::AddAbility(int8 AbType,int16 Abil,uint32 Param,int8 Lev1,int8 Lev
     goto Found;
   }
 
-void Resource::AddElement(rID xID,int16 x,int16 y,uint16 fl)
+void Resource::AddElement(rID xID,int8 x,int8 y,uint16 fl)
   {
     Annotation *a = Annot(AnHead); int8 i;
     while(a)
@@ -161,7 +161,7 @@ void Resource::AddEquip(uint8 Chance,Dice amt,rID iID,rID eID,int8 spec,
     a->u.eq.Condition = cond;
   }
 
-void Resource::AddConstant(int16 con,int32 val) 
+void Resource::AddConstant(int8 con,int32 val) 
   {
     Annotation *a; int8 i;
     if (!AnHead)
@@ -195,7 +195,7 @@ void Resource::AddConstant(int16 con,int32 val)
       }
   }
 
-void Resource::AddList(int16 ln, rID *lv)
+void Resource::AddList(int8 ln, rID *lv)
   {
     Annotation *a; int8 i;
     do {
@@ -576,7 +576,8 @@ void Resource::GrantGear(Creature *c, rID xID, bool doRanged)
     rID unID = FIND("unimplemented");
     rID iID, eID;
     Annotation *a; Item *it, *itl[256]; 
-    int16 sc, plus,ic,i; int16 seed;
+    int16 plus, ic, i, seed;
+    int8 sc;
 
     bool last_given = true;
     bool random_depth_effect = false; 
@@ -589,7 +590,7 @@ void Resource::GrantGear(Creature *c, rID xID, bool doRanged)
       {
         case MO_CREATE:
           seed = t % 100;
-          RInf.EquipRolls[RInf.cEquipRolls++] = seed;
+          RInf.EquipRolls[RInf.cEquipRolls++] = (int8)seed;
           srand(seed);
           ASSERT(RInf.cEquipRolls < 256);
          break;
@@ -636,7 +637,7 @@ void Resource::GrantGear(Creature *c, rID xID, bool doRanged)
                 {
                   case MO_CREATE:
                     roll = random(100)+1;
-                    RInf.EquipRolls[RInf.cEquipRolls++] = roll;
+                    RInf.EquipRolls[RInf.cEquipRolls++] = (int8)roll;
                     ASSERT(RInf.cEquipRolls < 256);
                    break;
                   case MO_RECREATE:
@@ -670,7 +671,7 @@ void Resource::GrantGear(Creature *c, rID xID, bool doRanged)
                 int trials = 20;
                 do { 
                   if (a->u.eq.iID) {
-                    iID = theGame->GetItemID(PUR_EQUIP,0,20,a->u.eq.iID);
+                    iID = theGame->GetItemID(PUR_EQUIP,0,20,a->u.eq.iID & 0xFF);
                   } else
                     iID = theGame->GetItemID(PUR_EQUIP,0,20,-1);     
                 } while (trials-- > 0 && !c->isPlayer() && (!iID ||
@@ -698,7 +699,7 @@ void Resource::GrantGear(Creature *c, rID xID, bool doRanged)
                 /* THIS IS THE SOURCE OF THE GENERIC ITEM BUG. It needs to be
                    examined in more detail, and i.e. expanded to create magic
                    weapons as granted gear. */
-                eID = theGame->GetEffectID(PUR_EQUIP,a->u.eq.eID%256,a->u.eq.eID/256,sc);
+                eID = theGame->GetEffectID(PUR_EQUIP,a->u.eq.eID%256,(a->u.eq.eID/256)&0xFF,sc);
                 if (!eID)
                   eID = theGame->GetEffectID(PUR_EQUIP,0,5,sc);
                 if ((!eID) && (iID && (TITEM(iID)->IType == T_ARMOUR ||
@@ -749,8 +750,8 @@ void Resource::GrantGear(Creature *c, rID xID, bool doRanged)
                 xe.Clear();
                 xe.ETarget = it;
                 xe.EItem   = it;
-                xe.vDepth  = a->u.eq.eID/256;
-                xe.vLevel  = a->u.eq.eID/256;
+                xe.vDepth  = (a->u.eq.eID/256) & 0xFFFF;
+                xe.vLevel  = (a->u.eq.eID/256) & 0xFFFF;
                 xe.Event   = EV_GENITEM;
                 switch (TITEM(iID)->Event(xe,iID))
                   {
@@ -1295,73 +1296,43 @@ rID Resource::GetRes(int16 at, bool first)
           
         
       
-void Resource::AddChatter(uint8,const char*m1,const char*m2,const char*m3,
-                              const char*m4,const char*m5) {}
+void Resource::AddChatter(uint8,const char*m1,const char*m2,const char*m3,const char*m4,const char*m5) {}
 void Resource::AddParam(int8 p,int16 v) {}
 void Resource::AddArray(int8 p,int16 *list) {}
-void Resource::AddSpecial(rID xID, int16 Chance, int16 Lev) 
-  {
-    Annotation *a; int8 i;
-    if (!AnHead) {
-      a = NewAnnot(AN_DUNSPEC,&AnHead);
-      goto Found;
-      }
-    a = Annot(AnHead);
-    while(a)
-      {
-        if (a->AnType == AN_DUNSPEC)
-          if (!a->u.ds[I(3,4)].xID)
-            {
-              Found:
-              for (i=0;i!=4;i++)
-                if (!a->u.ds[I(i,4)].xID)
-                  {
-                    a->u.ds[I(i,4)].xID     = xID;
-                    a->u.ds[I(i,4)].Chance  = Chance;
-                    a->u.ds[I(i,4)].Lev.Set(0,0,Lev);
-                    return;
-                  }
-              Fatal("Fatal: Annotation wierdness.");
-            }
-        if (!a->Next)
-          break;
-        a = Annot(a->Next);
-      }
-    a = NewAnnot(AN_DUNSPEC,&a->Next);
-    goto Found;
-  }
 
-void Resource::AddSpecial(rID xID, int16 Chance, Dice& Lev)
-  {
-    Annotation *a; int8 i;
+void Resource::AddSpecial(rID xID, int16 Chance, int16 Lev) {
+    Dice d;
+    d.Set(0,0,Lev&0xFF);
+    AddSpecial(xID, Chance, d);
+}
+
+void Resource::AddSpecial(rID xID, int16 Chance, Dice& Lev) {
+    Annotation *a;
     if (!AnHead) {
-      a = NewAnnot(AN_DUNSPEC,&AnHead);
-      goto Found;
-      }
+        a = NewAnnot(AN_DUNSPEC,&AnHead);
+        goto Found;
+    }
     a = Annot(AnHead);
-    while(a)
-      {
+    while(a) {
         if (a->AnType == AN_DUNSPEC)
-          if (!a->u.ds[I(3,4)].xID)
-            {
-              Found:
-              for (i=0;i!=4;i++)
-                if (!a->u.ds[I(i,4)].xID)
-                  {
-                    a->u.ds[I(i,4)].xID     = xID;
-                    a->u.ds[I(i,4)].Chance  = Chance;
-                    a->u.ds[I(i,4)].Lev     = Lev;
-                    return;
-                  }
-              Fatal("Fatal: Annotation wierdness.");
+            if (!a->u.ds[I(3,4)].xID) {
+Found:
+                for (int8 i=0;i!=4;i++)
+                    if (!a->u.ds[I(i,4)].xID) {
+                        a->u.ds[I(i,4)].xID     = xID;
+                        a->u.ds[I(i,4)].Chance  = Chance & 0xFF;
+                        a->u.ds[I(i,4)].Lev     = Lev;
+                        return;
+                    }
+                Fatal("Fatal: Annotation wierdness.");
             }
         if (!a->Next)
-          break;
+            break;
         a = Annot(a->Next);
-      }
+    }
     a = NewAnnot(AN_DUNSPEC,&a->Next);
     goto Found;
-  }
+}
 
 void Resource::AddPower(int8 apt,int8 pw,uint32 x,int16 pa,Dice*charge) {}
 

@@ -23,7 +23,7 @@
 #ifdef __cplusplus
 
 #include <stdlib.h>
-//#include <unistd.h>
+// #include <unistd.h>
 
 /* Use prototypes in function declarations. */
 #define YY_USE_PROTOS
@@ -906,16 +906,12 @@ yy_match:
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 232 );
+		while ( yy_current_state != 123 );
+		yy_cp = yy_last_accepting_cpos;
+		yy_current_state = yy_last_accepting_state;
 
 yy_find_action:
 		yy_act = yy_accept[yy_current_state];
-		if ( yy_act == 0 )
-			{ /* have to back up */
-			yy_cp = yy_last_accepting_cpos;
-			yy_current_state = yy_last_accepting_state;
-			yy_act = yy_accept[yy_current_state];
-			}
 
 		YY_DO_BEFORE_ACTION;
 
@@ -1451,7 +1447,7 @@ YY_RULE_SETUP
 #line 434 ".\\lang\\Tokens.Lex"
 ECHO;
 	YY_BREAK
-#line 1455 ".\\SRC\\tokens.cpp"
+#line 1451 ".\\SRC\\tokens.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(com):
 case YY_STATE_EOF(string):
@@ -1520,7 +1516,8 @@ case YY_STATE_EOF(string):
 
 			else
 				{
-				yy_cp = yy_c_buf_p;
+				yy_cp = yy_last_accepting_cpos;
+				yy_current_state = yy_last_accepting_state;
 				goto yy_find_action;
 				}
 			}
