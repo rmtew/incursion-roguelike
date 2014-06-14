@@ -32,8 +32,7 @@
 
 #include "Incursion.h"
 
-EvReturn Feature::Event(EventInfo &e)
-	{
+EvReturn Feature::Event(EventInfo &e) {
     EvReturn res;
     res = TFEAT(fID)->Event(e,fID);
     if (res == DONE || res == ERROR)
@@ -102,7 +101,7 @@ EvReturn Feature::Event(EventInfo &e)
         
       hard = MaterialHardness(TFEAT(fID)->Material,e.DType);
       if (hard <= -1) {
-        Immune:
+//Immune:
         e.EActor->IPrint("The <Obj> is immune to <Str>.",
             this,Lookup(DTypeNames,e.DType));
         return DONE; 
@@ -237,7 +236,7 @@ EvReturn Portal::Event(EventInfo &e)
 EvReturn Portal::Enter(EventInfo &e)
   {
     int8 DepthMod = 1; Map * new_m; 
-    EvReturn res; Creature *c;
+    EvReturn res;
     
     res = TFEAT(fID)->Event(e,fID);
     if (res == DONE || res == ERROR)
@@ -850,11 +849,11 @@ void Game::EnterLimbo(hObj h, uint8 x, uint8 y, rID mID,
     oThing(h)->Remove(false);
   }
 
-void Game::LimboCheck(Map *m)
-  {
-    int16 i,mn; Player *p;
+void Game::LimboCheck(Map *m) {
+    int16 i;
+    Player *p;
 
-    Restart:
+Restart:
     for(i=0;Limbo[i];i++)
       if (Limbo[i]->Arrival >= Turn) {
         if (Limbo[i]->Target)
@@ -890,7 +889,7 @@ void Player::MoveDepth(int16 NewDepth, bool safe)
   {
     static Thing *GoWith[64]; Creature *c;
     rID mID; Map *new_m = NULL; int16 nx,ny,i, gwc;
-    StoreLevelStats(m->Depth);
+    StoreLevelStats((uint8)m->Depth);
     { theGame->SaveGame(*this); }
 
     RemoveStati(SPRINTING);
@@ -911,7 +910,7 @@ void Player::MoveDepth(int16 NewDepth, bool safe)
         if (!mID)
           return;       
         if (RES(mID)->Type == T_TDUNGEON) {
-          NewDepth += RES(mID)->GetConst(DUN_DEPTH);
+          NewDepth += (int16)(RES(mID)->GetConst(DUN_DEPTH));
           new_m = theGame->GetDungeonMap(mID,NewDepth,this);
           }
         else if (RES(mID)->Type == T_TREGION)
@@ -920,8 +919,8 @@ void Player::MoveDepth(int16 NewDepth, bool safe)
           Error("Strange resource as ABOVE_DUNGEON in MoveDepth!");          
       }
     else if (RES(m->dID)->GetConst(DUN_DEPTH) &&
-      RES(m->dID)->GetConst(DUN_DEPTH) < NewDepth) {
-        NewDepth -= RES(m->dID)->GetConst(DUN_DEPTH);
+      (int16)(RES(m->dID)->GetConst(DUN_DEPTH)) < NewDepth) {
+        NewDepth -= (int16)(RES(m->dID)->GetConst(DUN_DEPTH));
         mID = RES(m->dID)->GetConst(BELOW_DUNGEON);
         if (RES(mID)->Type == T_TDUNGEON)
           new_m = theGame->GetDungeonMap(mID,NewDepth,this);
@@ -1027,7 +1026,7 @@ Map* Game::GetDungeonMap(rID dID, int16 Depth, Player *pl, Map*TownLevel)
       Fatal("Too deep in dungeon; MAX_DUNGEON_LEVELS is %d.",MAX_DUNGEON_LEVELS);
 
     DungeonID[i] = dID;
-    DungeonSize[i] = min(MAX_DUNGEON_LEVELS, RES(dID)->GetConst(DUN_DEPTH));
+    DungeonSize[i] = min(MAX_DUNGEON_LEVELS, (int16)(RES(dID)->GetConst(DUN_DEPTH)));
     DungeonLevels[i] = (hObj*)malloc(sizeof(hObj)*min(MAX_DUNGEON_LEVELS,
                           RES(dID)->GetConst(DUN_DEPTH)+1));
     memset(DungeonLevels[i],0,sizeof(hObj)*(RES(dID)->GetConst(DUN_DEPTH)+1));
@@ -1050,7 +1049,7 @@ Map* Game::GetDungeonMap(rID dID, int16 Depth, Player *pl, Map*TownLevel)
         {
           m = new Map();
           DungeonLevels[n][i] = m->myHandle;
-          m->Generate(dID,i,oMap(DungeonLevels[n][i-1]),pl->GetAttr(A_LUC));
+          m->Generate(dID,i,oMap(DungeonLevels[n][i-1]),(int8)pl->GetAttr(A_LUC));
         }
 
     /*
@@ -1067,7 +1066,7 @@ void Feature::StatiOn(Status s)
   {
     int16 col;
     if (s.Nature == MY_GOD && (Flags & F_ALTAR))
-      if (col = TGOD(s.eID)->GetConst(ALTAR_COLOUR))
+      if (col = (int16)TGOD(s.eID)->GetConst(ALTAR_COLOUR))
       {
         Image &= 0xFF;
         Image |= col * 256;

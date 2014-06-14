@@ -52,8 +52,10 @@ void InitGodArrays()
 EvReturn ThrowTo(EventInfo &e,Object*);
 
 EvReturn ThrowEvent(EventInfo &e) {
-    int16 i,j, oEv, tx, ty; EvReturn res; 
-    Thing *sub; Map *m; rID xID, gID;
+    int16 i, oEv, tx, ty;
+    EvReturn res; 
+    Thing *sub;
+    rID xID;
 
     sub = (e.Event == EV_DAMAGE || e.Event == EV_DEATH)
         ? e.EVictim : e.EActor;
@@ -590,7 +592,7 @@ EvReturn ThrowDmg(int16 Ev,int16 DType,int16 DmgVal, const char*s,Object *p1, Ob
     EventStack[EventSP].p[1].o = p2;
     EventStack[EventSP].p[2].o = p3;
     EventStack[EventSP].p[3].o = p4;
-    EventStack[EventSP].DType = DType;
+    EventStack[EventSP].DType = (int8)DType;
     EventStack[EventSP].vDmg = DmgVal;
     EventStack[EventSP].GraveText = s;
     r=RealThrow(EventStack[EventSP]);
@@ -599,65 +601,59 @@ EvReturn ThrowDmg(int16 Ev,int16 DType,int16 DmgVal, const char*s,Object *p1, Ob
 	}
 
 // ww: only works when the victim is standing on the terrain ...
-EvReturn ThrowTerraDmg(int16 Ev,int16 DType, int16 DmgVal, const char*s,Object *victim, rID trID)
-{
-  EvReturn r; Map *m;
-  if ( !victim ||
-       (!((Thing *)victim)->m) )
-    return DONE; 
-    
-  ASSERT(victim); 
-  EventSP++;
-  CHECK_OVERFLOW; 
-  EventStack[EventSP].Clear();
-  EventStack[EventSP].Event = Ev;
-  EventStack[EventSP].EMap = m = ((Thing *)victim)->m;
-  EventStack[EventSP].p[0].o = ((Thing *)victim)->m->GetTerraCreator(
-      ((Thing *)victim)->x,((Thing *)victim)->y);
-  if (!EventStack[EventSP].p[0].o)
-    EventStack[EventSP].p[0].o = victim;
-  EventStack[EventSP].p[1].o = victim;
-  EventStack[EventSP].DType = DType;
-  EventStack[EventSP].vDmg = DmgVal;
-  EventStack[EventSP].GraveText = s;
-  
-  
-  
-  if (trID != m->TerrainAt(((Thing *)victim)->x,((Thing *)victim)->y))
-    {
-      int16 i;
-      if (Ev == EV_DAMAGE)
-        EventStack[EventSP].effIllusion = true;
-      for (i=0;m->Fields[i];i++)
-        if (m->Fields[i]->FType & FI_ITERRAIN)
-          if (m->Fields[i]->inArea(((Thing *)victim)->x,((Thing *)victim)->y))
-            EventStack[EventSP].p[0].o = oThing(m->Fields[i]->Creator);           
-    }
-  
-  r=RealThrow(EventStack[EventSP]);
-  EventSP--;
-  return r;
-}
+EvReturn ThrowTerraDmg(int16 Ev, int16 DType, int16 DmgVal, const char*s, Object *victim, rID trID) {
+    EvReturn r; Map *m;
+    if ( !victim || (!((Thing *)victim)->m) )
+        return DONE; 
 
-
-EvReturn ThrowDmgEff(int16 Ev,int16 DType,int16 DmgVal, const char*s, rID eID, Object *p1, Object *p2,Object*p3, Object *p4)
-  {
-		EvReturn r;
+    ASSERT(victim); 
     EventSP++;
     CHECK_OVERFLOW; 
     EventStack[EventSP].Clear();
     EventStack[EventSP].Event = Ev;
-		EventStack[EventSP].p[0].o = p1;
+    EventStack[EventSP].EMap = m = ((Thing *)victim)->m;
+    EventStack[EventSP].p[0].o = ((Thing *)victim)->m->GetTerraCreator(
+        ((Thing *)victim)->x,((Thing *)victim)->y);
+    if (!EventStack[EventSP].p[0].o)
+        EventStack[EventSP].p[0].o = victim;
+    EventStack[EventSP].p[1].o = victim;
+    EventStack[EventSP].DType = (int8)DType;
+    EventStack[EventSP].vDmg = DmgVal;
+    EventStack[EventSP].GraveText = s;
+
+    if (trID != m->TerrainAt(((Thing *)victim)->x,((Thing *)victim)->y)) {
+        int16 i;
+        if (Ev == EV_DAMAGE)
+            EventStack[EventSP].effIllusion = true;
+        for (i=0;m->Fields[i];i++)
+            if (m->Fields[i]->FType & FI_ITERRAIN)
+                if (m->Fields[i]->inArea(((Thing *)victim)->x,((Thing *)victim)->y))
+                    EventStack[EventSP].p[0].o = oThing(m->Fields[i]->Creator);           
+    }
+
+    r=RealThrow(EventStack[EventSP]);
+    EventSP--;
+    return r;
+}
+
+
+EvReturn ThrowDmgEff(int16 Ev,int16 DType,int16 DmgVal, const char*s, rID eID, Object *p1, Object *p2,Object*p3, Object *p4) {
+	EvReturn r;
+    EventSP++;
+    CHECK_OVERFLOW; 
+    EventStack[EventSP].Clear();
+    EventStack[EventSP].Event = Ev;
+	EventStack[EventSP].p[0].o = p1;
     EventStack[EventSP].p[1].o = p2;
     EventStack[EventSP].p[2].o = p3;
     EventStack[EventSP].p[3].o = p4;
     EventStack[EventSP].eID = eID;
-    EventStack[EventSP].DType = DType;
+    EventStack[EventSP].DType = (int8)DType;
     EventStack[EventSP].vDmg = DmgVal;
     EventStack[EventSP].GraveText = s;
     r=RealThrow(EventStack[EventSP]);
     EventSP--;
-		return r;
-	}
+	return r;
+}
 
 

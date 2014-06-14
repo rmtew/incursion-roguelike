@@ -272,7 +272,7 @@ void Thing::PlaceNear(int16 x,int16 y)
   {
     static Creature* Displace[64], *cr; 
     bool isBig = false;
-    uint8 range,i,j,ix, iy, sz, dc = 0;
+    uint8 i, ix, iy, sz, dc = 0;
     int16 r, tx, ty, c, cx[120], cy[120];
     
     ASSERT(m); 
@@ -288,7 +288,7 @@ void Thing::PlaceNear(int16 x,int16 y)
             thisc->CalcValues();
         if (thisc->GetAttr(A_SIZ) >= SZ_HUGE)
           { isBig = true;
-            sz = thisc->GetAttr(A_SIZ); }
+            sz = (uint8)thisc->GetAttr(A_SIZ); }
       }
 
     bool isRetry = false;

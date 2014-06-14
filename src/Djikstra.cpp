@@ -118,8 +118,8 @@ bool Map::ShortestPath(uint8 sx, uint8 sy, uint8 tx, uint8 ty,
     while ((xy = PQPeekMin()) != -1)
       {
         PQPopMin();
-        x = xy % 256;
-        y = xy / 256;
+        x = (int16)(xy % 256);
+        y = (int16)(xy / 256);
 
         for (i=0;i!=8;i++) {
           nx = x + DirX[i];
@@ -130,7 +130,7 @@ bool Map::ShortestPath(uint8 sx, uint8 sy, uint8 tx, uint8 ty,
             continue;
           if (!InBounds(nx,ny))
             continue;
-          int baseCost = RunOver(nx,ny,true,runner,dangerFactor,Incor,Meld);
+          int baseCost = RunOver(nx&0xFF,ny&0xFF,true,runner,dangerFactor,Incor,Meld);
           if (!baseCost)
             continue;
           if (DirX[i] && DirY[i])
@@ -168,8 +168,8 @@ bool Map::ShortestPath(uint8 sx, uint8 sy, uint8 tx, uint8 ty,
     do {
       c++;
       xy = Parent[x][y];
-      x = xy % 256;
-      y = xy / 256;
+      x = (int16)(xy % 256);
+      y = (int16)(xy / 256);
       }
     while (xy);
 
@@ -179,8 +179,8 @@ bool Map::ShortestPath(uint8 sx, uint8 sy, uint8 tx, uint8 ty,
     do {
       ThePath[c - i] = x + y*256;
       xy = Parent[x][y];
-      x = xy % 256;
-      y = xy / 256;
+      x = (int16)(xy % 256);
+      y = (int16)(xy / 256);
       i++;
       }
     while (xy);
