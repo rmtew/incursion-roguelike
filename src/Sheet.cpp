@@ -81,8 +81,7 @@ void TextTerm::CreateCharSheet(CharSheet &cs)
 
   cs.Basics += "\n" ; 
 
-  for(i=0;i!=7;i++)
-    {
+  for(int8 i=0;i!=7;i++) {
       int16 percentile, j;
       percentile = 0;
       for (j=0;j!=10;j++)
@@ -341,7 +340,7 @@ void TextTerm::CreateCharSheet(CharSheet &cs)
     }  
 
   int a_wis = A_WIS;
-  if (one_body & p->Mod(A_CON) > p->Mod(A_WIS))
+  if (one_body && p->Mod(A_CON) > p->Mod(A_WIS))
     a_wis = A_CON;
 
   if (p->Mod(a_wis))
@@ -902,7 +901,7 @@ void TextTerm::CreateCharSheet(CharSheet &cs)
     if (!SkillInfo[i].name)
       continue;
     j = p->SkillLevel(i);
-    if (j != p->Mod2(p->SkillAttr(i)) &&
+    if (j != p->Mod2((int8)p->SkillAttr(i)) &&
         (SkillInfo[i].imp || 1)) {
         int color; 
         if (j > 25) color = 15;
@@ -925,9 +924,9 @@ void TextTerm::CreateCharSheet(CharSheet &cs)
               p->MaxRanks(i) ? -15 : -14) : -6,
              p->SkillRanks[i], -6);
 
-        if (p->Mod2(p->SkillAttr(i)))
+        if (p->Mod2((int8)p->SkillAttr(i)))
           cs.sSkills += Format(", %+d %s",
-            p->Mod2(p->SkillAttr(i)),
+            p->Mod2((int8)p->SkillAttr(i)),
             AttrTitle[p->SkillAttr(i)] );
 
         if (s_train)
@@ -1255,7 +1254,7 @@ void ListInventory(String &is, Item *i, int depth, bool descend)
 
 String & Detable(const char*_s, int8 mode)
   {
-    String s, s2; int16 i;
+    String s, s2; int32 i;
     s = _s;
     Again:
     i = max(s.strchr(WRAP_INDENT),s.strchr(WRAP_BREAK));
@@ -1361,7 +1360,7 @@ void TextTerm::CreateCharDump(String &str)
                       TEFF(theGame->SpellID(ii))->Level, 
                       j, mana, 
                       (const char*)
-                      (TEFF(theGame->SpellID(ii))->Power(p->CasterLev(),p,theGame->SpellID(ii)))
+                      (TEFF(theGame->SpellID(ii))->Power((int8)p->CasterLev(),p,theGame->SpellID(ii)))
                   );
         }
 

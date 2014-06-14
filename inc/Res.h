@@ -1088,7 +1088,8 @@ class Game : public Object
             ccStatiNat[256],
             ccStatiVal[256];
     public: /* Debugging Hack; 'private' later */
-      uint32 Turn, Day; String SaveFile;
+      int16 Day;
+      uint32 Turn; String SaveFile;
       static Module *Modules[MAX_MODULES];
       char   *MDataSeg[MAX_MODULES];
       uint32 MDataSegSize[MAX_MODULES];

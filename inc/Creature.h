@@ -3,6 +3,7 @@
    Character, Player and Monster. 
 */
 
+#include <time.h>
 
 struct ActionInfo 
   {
@@ -844,7 +845,7 @@ typedef struct LevelTimeInfo
     uint32      turns;          // game time
     uint32      actions;        // game actions (ChooseAction)
     uint32      keystrokes;     // keypresses
-    long        seconds;        // wall clock real world time
+    time_t      seconds;        // wall clock real world time
     int32       xp;             // xp gained
   } LevelTimeInfo;
 
@@ -854,7 +855,7 @@ typedef struct GameTimeInfoType
     uint32              start_turn;          // on this level
     uint32              actions; 
     uint32              keystrokes;
-    long                start_second;
+    time_t              start_second;
     int32               start_xp; 
   } GameTimeInfo;
 

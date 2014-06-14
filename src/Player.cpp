@@ -524,10 +524,9 @@ DoOpen:
         break;
       case KY_CMD_FIRE:
 ShiftDirFire:
-        if (cdir != -1)
-        {
-          if (HasStati(AUTO_CHARGE))
-            ;
+        if (cdir != -1) {
+          //if (HasStati(AUTO_CHARGE))
+          //  ;
           if (!yn("Break off your charge?"))
             continue;
           IDPrint(NULL,"The <Obj1> breaks off <his:Obj1> charge.",this);
@@ -536,8 +535,7 @@ ShiftDirFire:
         e.Clear();
         e.EActor = this;
         found = false;
-        if (ch >= KY_CMD_FIRST_ARROW && ch <= KY_CMD_LAST_ARROW)
-        {
+        if (ch >= KY_CMD_FIRST_ARROW && ch <= KY_CMD_LAST_ARROW) {
           if (!defAmmo) {
             IPrint("You must select a default projectile before using the ranged attack shortcut.");
             break;
@@ -597,12 +595,12 @@ FoundDefAmmo:
               }
 
             for(n=0;n!=SL_LAST;n++)
-              if (EInSlot(n) && EInSlot(n)->isType(T_MISSILE))
-                if (TITEM(EInSlot(SL_WEAPON)->iID)->HasRes(EInSlot(n)->iID,AN_FIRES))
+              if (EInSlot((int8)n) && EInSlot((int8)n)->isType(T_MISSILE))
+                if (TITEM(EInSlot(SL_WEAPON)->iID)->HasRes(EInSlot((int8)n)->iID,AN_FIRES))
                 {
                   foundCount++;
-                  foundItem = EInSlot(n);
-                  MyTerm->LOption(InSlot(n)->Name(0),EInSlot(n)->myHandle);
+                  foundItem = EInSlot((int8)n);
+                  MyTerm->LOption(InSlot((int8)n)->Name(0),EInSlot((int8)n)->myHandle);
                 }
 
             if (foundCount == 0) {
@@ -624,11 +622,11 @@ FoundDefAmmo:
           else
           {
             for(n=0;n!=SL_LAST;n++)
-              if (EInSlot(n) && (InSlot(n)->HasIFlag(IT_THROWABLE) ||
-                    (EInSlot(n)->RangeInc(this) && !EInSlot(n)->isType(T_BOW))))
+              if (EInSlot((int8)n) && (InSlot((int8)n)->HasIFlag(IT_THROWABLE) ||
+                    (EInSlot((int8)n)->RangeInc(this) && !EInSlot((int8)n)->isType(T_BOW))))
               {
                 found = true;
-                MyTerm->LOption(EInSlot(n)->Name(0),EInSlot(n)->myHandle);
+                MyTerm->LOption(EInSlot((int8)n)->Name(0),EInSlot((int8)n)->myHandle);
               }
 
             if (!found)
@@ -677,7 +675,7 @@ FoundDefAmmo:
           }
           if (HasStati(TELEKINETIC)) {
               e.Clear();
-              e.vRange = GetStatiMag(TELEKINETIC);
+              e.vRange = (int8)GetStatiMag(TELEKINETIC);
               if (thisp->MyTerm->EffectPrompt(e,Q_LOC,false,"Get an item:"))
                   { gx = e.EXVal; gy = e.EYVal; }
               else
@@ -939,7 +937,7 @@ CastSpell:
         /* Read Opponent */
 
         MyTerm->SetQKeyType(QuickKeys,QKY_TACTIC);
-        n = MyTerm->LMenu(MENU_ESC|MENU_DESC|MENU_2COLS|MENU_BORDER|MENU_QKEY,
+        n = (int16)MyTerm->LMenu(MENU_ESC|MENU_DESC|MENU_2COLS|MENU_BORDER|MENU_QKEY,
             " -- Tactical Options -- ",WIN_MENUBOX);
         if (n == -1)
           break; 
@@ -949,7 +947,7 @@ CastSpell:
           case A_MOVE:
             if (!MyTerm->EffectPrompt(e,Q_DIR,false,"Movement Direction"))
               break;
-            ThrowDir(EV_MOVE,e.EDir,this);
+            ThrowDir(EV_MOVE,(Dir)e.EDir,this);
             break;
           case A_TRIP:
           case A_THRO:
@@ -962,7 +960,7 @@ CastSpell:
           case A_SWNG:
           case A_PREC:
             if (HasStati(TELEKINETIC)) {
-              e.vRange = HighStatiMag(TELEKINETIC);
+              e.vRange = (int8)HighStatiMag(TELEKINETIC);
               if (!MyTerm->EffectPrompt(e,Q_TAR|Q_CRE))
                 break;
               goto FindNonReachVictim;
@@ -1091,7 +1089,7 @@ CastSpell:
             if (!MyTerm->EffectPrompt(e,Q_DIR))
               break;
             DigMode = false;
-            if (!canChargeInDir(e.EDir))
+            if (!canChargeInDir((Dir)e.EDir))
               {
                 IPrint("There's nothing to charge at in that direction!");
                 break;
@@ -1188,7 +1186,7 @@ CastSpell:
           e.Clear();
           if (!MyTerm->EffectPrompt(e,Q_DIR,false,"Run"))
             break;
-          RunDir(e.EDir);
+          RunDir((Dir)e.EDir);
           break;
       case KY_CMD_EXCHANGE:
           Exchange();
@@ -1213,11 +1211,11 @@ CastSpell:
                   YuseMenu(QuickKeys[ch-'0'].Value);
                   break;
                 case QKY_SPELL:
-                  sp = QuickKeys[ch-'0'].Value;
+                  sp = (int16)QuickKeys[ch-'0'].Value;
                   goto CastSpell;
                   break;
                 case QKY_TACTIC:
-                  n = QuickKeys[ch-'0'].Value;
+                  n = (int16)QuickKeys[ch-'0'].Value;
                   goto DoTacticalOption;
               }
             break;
@@ -1248,7 +1246,7 @@ CastSpell:
             }
             dx = DirX[DIR_OF_KY_CMD(ch)];
             dy = DirY[DIR_OF_KY_CMD(ch)];
-            if (cdir != -1 && !isSimilarDir(DIR_OF_KY_CMD(ch),cdir) && (cdir != CENTER || 
+            if (cdir != -1 && !isSimilarDir(DIR_OF_KY_CMD(ch),(Dir)cdir) && (cdir != CENTER || 
                         !m->FCreatureAt(x+dx,y+dy)))
             {
               if (cdir != CENTER) {
@@ -1428,7 +1426,7 @@ void Player::UseItemMenu(const char *which, const char *haveno, int16 itype)
 
   for(n=0;n!=SL_LAST;n++)
     if (n == SL_ARMOUR || n == SL_READY)
-      if (it = InSlot(n))
+      if (it = InSlot((int8)n))
         if (it->isType(T_ARMOUR) || it->isType(T_SHIELD))
         {
           for (i=0;i!=8;i++)
@@ -1469,7 +1467,7 @@ void Player::UseItemMenu(const char *which, const char *haveno, int16 itype)
     return;
   }
 
-  n = MyTerm->LMenu(MENU_SORTED|MENU_ESC|MENU_BORDER,which,WIN_MENUBOX);
+  n = (int16)MyTerm->LMenu(MENU_SORTED|MENU_ESC|MENU_BORDER,which,WIN_MENUBOX);
   if (n == -1)
     return;
   it = iList[n];
@@ -1545,7 +1543,7 @@ void Player::YuseMenu(int32 SelectedIndex) {
     EventInfo e;
 
     if (SelectedIndex) {
-        c = SelectedIndex;
+        c = (int16)SelectedIndex;
         goto DoYuse;
     }
 
@@ -1559,7 +1557,7 @@ void Player::YuseMenu(int32 SelectedIndex) {
             MyTerm->LOption(YuseCommands[i].Verb,i);
 
     MyTerm->SetQKeyType(QuickKeys,QKY_VERB);
-    c = MyTerm->LMenu(MENU_3COLS|MENU_ESC|MENU_BORDER|MENU_QKEY,"What do you want to do?");
+    c = (int16)MyTerm->LMenu(MENU_3COLS|MENU_ESC|MENU_BORDER|MENU_QKEY,"What do you want to do?");
     if (c == -1)
         return;
 
@@ -1802,7 +1800,7 @@ void Character::RestEncounterChance(int16 maxDist,
 {
   int16 PartyID[64], cParty, bParty;
   int32 PartyXCR[64], bXCR;
-  int32 i, j, tx; 
+  int32 i, j;
   Thing * t; 
   Creature *c;
 
@@ -1811,7 +1809,7 @@ void Character::RestEncounterChance(int16 maxDist,
   Chance = 0; 
   cParty = 0;
 
-  for(tx=0;tx!=m->SizeX();tx++)
+  for(int16 tx=0;tx!=m->SizeX();tx++)
     for(int16 ty=0;ty!=m->SizeY();ty++)
       m->At(tx,ty).Visibility = 0;
 
@@ -1859,14 +1857,14 @@ void Character::RestEncounterChance(int16 maxDist,
           
         PartyID[i] = c->PartyID;
         PartyXCR[i] = XCR(c->ChallengeRating());
-        cParty = i + 1;         
+        cParty = (int16)i + 1;         
         
         Grouped:
         Chance += (250 + c->ChallengeRating() * 10 + c->Mod(A_INT) * 20) /
           dist(x,y,c->x,c->y);
       }
 
-  for(tx=0;tx!=m->SizeX();tx++)
+  for(int16 tx=0;tx!=m->SizeX();tx++)
     for(int16 ty=0;ty!=m->SizeY();ty++)
       m->At(tx,ty).Visibility = 0;
     
@@ -1878,7 +1876,8 @@ void Character::RestEncounterChance(int16 maxDist,
     return;
     }
 
-  bParty = bXCR = 0;
+  bParty = 0;
+  bXCR = 0;
   for (i=0;i!=cParty;i++)
     if (PartyXCR[i] > bXCR)
       { bXCR = PartyXCR[i];
@@ -1942,7 +1941,7 @@ EvReturn Player::SpendHours(int16 minHours, int16 maxHours, int16 &hoursSpent, b
         return ABORT;
       }
     
-    hoursSpent = min(maxHours,(AllowedTime - AwakeTime) / HOUR_TURNS);
+    hoursSpent = min(maxHours,(int16)((AllowedTime - AwakeTime) / HOUR_TURNS));
     
     theGame->Turn += hoursSpent * HOUR_TURNS;
     if (hoursSpent == 1)
@@ -2232,12 +2231,11 @@ EvReturn Player::Rest(EventInfo &e)
                   // point back per rest, and resting 10 times is *way*
                   // boring. New theory: a full night's sleep always gets
                   // you back to at least 1 point of fatigue. 
-                  t->cFP = (min(t->Attr[A_FAT],t->cFP+max(1,t->Mod(a_hp))));
+                  t->cFP = (min(t->Attr[A_FAT],t->cFP+max(1,t->Mod((int8)a_hp))));
               }
               else {                          /* Exhausted */
                 if (Percent == 100)
-                  t->cFP =
-                    max(min(t->Attr[A_FAT],t->cFP+max(1,t->Mod(a_hp))),1);
+                  t->cFP = max(min(t->Attr[A_FAT],t->cFP+max(1,t->Mod((int8)a_hp))),1);
                 else
                   t->cFP += 1;
                 }
@@ -2385,8 +2383,7 @@ void Map::DaysPassed() {
       static Thing *list[2048];
       /* This function updates the map when the player rests, adding new
       monsters and such. */
-      int8 DepthCR = TDUN(dID)->GetConst(INITIAL_CR) + 
-          (Depth*TDUN(dID)->GetConst(DUN_SPEED))/100 - 1; 
+      int8 DepthCR = (int8)(TDUN(dID)->GetConst(INITIAL_CR)) + (Depth * (int8)(TDUN(dID)->GetConst(DUN_SPEED)))/100 - 1; 
 
       if (Day == theGame->Day)
           return;
@@ -2470,8 +2467,8 @@ RestartTerra:
           goto SkipMonUpdate;
 
       if (dID) {
-          MonEquil = TDUN(dID)->GetConst(MONSTER_EQUILIBRIUM_BASE) +
-              Depth * TDUN(dID)->GetConst(MONSTER_EQUILIBRIUM_INC);
+          MonEquil = (int16)TDUN(dID)->GetConst(MONSTER_EQUILIBRIUM_BASE) +
+              Depth * (int16)TDUN(dID)->GetConst(MONSTER_EQUILIBRIUM_INC);
 
           numRegen = max(3,DepthCR);
 
@@ -2733,7 +2730,7 @@ found_it: ;
 
 void Player::AddJournalEntry(const char* s)
 {
-    uint8 hour, min, sec, day; 
+    uint32 hour, min, sec, day; 
     String when, where, stat, best;
     hour = (theGame->GetTurn()/18000) % 24;
     min  = (theGame->GetTurn()/300) % 60;
