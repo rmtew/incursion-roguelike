@@ -10,6 +10,7 @@
 
 #include "Incursion.h"
 extern Attack Punch;
+
 int8 DirX[] = { 0,  0, 1,-1,  1, -1, 1,-1, 0 };
 int8 DirY[] = { -1, 1, 0, 0, -1, -1, 1, 1, 0 };
 
@@ -20,11 +21,18 @@ bool isSimilarDir(Dir d, Dir d2) {
 }
 
 EvReturn Creature::Walk(EventInfo &e) {
-    int16 tx,ty,ox,oy; Feature *fe; Thing *t; int8 szChange = 0;
-    String Buff; int16 i; bool jcheck; Trap *tr;
-    Creature *cr, *dis; char ch, MoveSilRoll; int16 max_range, CloseDC,SizeMod;
-    static Creature *ClosingWith[8]; int8 cwc, DC; bool CloseConfirm = false;
-    Door *d; bool found, think;
+    bool jcheck, found, think, CloseConfirm = false;
+    char ch, MoveSilRoll;
+    int8 cwc, DC, szChange = 0;
+    int16 tx, ty, ox, oy, i, max_range, CloseDC, SizeMod;
+    EvReturn ret;
+    String Buff;
+    Feature *fe;
+    Thing *t;
+    Trap *tr;
+    Creature *cr, *dis;
+    static Creature *ClosingWith[8];
+    Door *d;
 
     dis = NULL;
 
@@ -33,16 +41,16 @@ EvReturn Creature::Walk(EventInfo &e) {
         if (e.Event != EV_MOVE)
             return ABORT;
         e.ETarget = GetStatiObj(MOUNT);
-        i = ReThrow(EV_MOVE,e);
+        ret = ReThrow(EV_MOVE,e);
         e.ETarget->Timeout = Timeout;
         Timeout = 0;
         e.ETarget = this;
-        return i;
+        return ret;
     }
 
     if (e.Event != EV_PUSH) {
         if (e.isDir) 
-            LastMoveDir = e.EDir;
+            LastMoveDir = (Dir)e.EDir;
         else if (e.isLoc)
             LastMoveDir = DirTo(e.EXVal,e.EYVal);
     }
@@ -825,10 +833,10 @@ RepeatPrompt:
                                 if (isDead()) return ABORT; 
                             }
                         } else {
-                            myHit = max(Attr[A_HIT_BRAWL],Attr[A_HIT_MELEE]);
+                            myHit = max((int8)Attr[A_HIT_BRAWL],(int8)Attr[A_HIT_MELEE]);
                             if (HasFeat(FT_TACTICAL_WITHDRAWL))
                                 myHit += 8;
-                            crHit = max(cr->Attr[A_HIT_BRAWL],cr->Attr[A_HIT_MELEE]);
+                            crHit = max((int8)cr->Attr[A_HIT_BRAWL], (int8)cr->Attr[A_HIT_MELEE]);
                             if (myHit + (random(20)+1) >= crHit + 11) 
                                 /* Give the player a hope of actually escaping. */
                                 cr->Timeout = max(cr->Timeout,15);
@@ -1031,7 +1039,7 @@ RepeatPrompt:
                 IPrint("You step carefully over your <Obj>.", tr);
                 Timeout += 15;
             } else if (!(tr->TrapFlags & TS_DISARMED)) {
-                int foundBefore = tr->TrapFlags & TS_FOUND;
+                bool foundBefore = (tr->TrapFlags & TS_FOUND) != 0;
                 tr->TriggerTrap(e,foundBefore);
                 if (Flags & F_DELETE)
                     return DONE;
@@ -1053,9 +1061,8 @@ RepeatPrompt:
     case EV_MOVE:
         {
             int32 needed_timeout = MoveTimeout(ox,oy);
-            needed_timeout = min (needed_timeout,
-            max(12, needed_timeout - StoredMovementTimeout)); 
-            Timeout += needed_timeout; 
+            needed_timeout = min(needed_timeout, max(12, needed_timeout-StoredMovementTimeout)); 
+            Timeout += (int16)needed_timeout; 
             StoredMovementTimeout = 0; 
         }
         break;
@@ -1429,11 +1436,11 @@ void Creature::TerrainEffects()
 
   }
 
-void Creature::ClimbFall()
-  {
+void Creature::ClimbFall() {
     if (!HasStati(ELEVATED))
       return;
-    int8 typ = GetStatiVal(ELEVATED);
+
+    int16 typ = GetStatiVal(ELEVATED);
     IDPrint("You fall!","The <Obj> falls!",this);
     RemoveStati(ELEVATED);
     

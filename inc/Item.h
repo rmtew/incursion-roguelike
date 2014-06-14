@@ -106,7 +106,7 @@ class Item: public Thing, public Magic
       virtual void SetBane(int16 _Bane) { Error("SetBane on non-Weapon."); }
       virtual int16 GetBane() { return 0; }
       virtual void RandomBane() { }
-      virtual bool QualityOK(uint32 q,uint8 lev=200) {return false; }
+      virtual bool QualityOK(int8 q,uint8 lev=200) {return false; }
       virtual int16 GetQuality(int16 i) { return 0; }
       virtual int32 getShopCost(Creature *Buyer, Creature *Seller);
       virtual bool isBaneOf(int16 MType) { return false; }
@@ -235,7 +235,7 @@ class QItem: public Item
       virtual void AddQuality(int8 q, int16 param=0); 
       virtual void RemoveQuality(int8 q); 
       virtual void PurgeAllQualities() ;
-      virtual bool QualityOK(uint32 q,uint8 lev=200);
+      virtual bool QualityOK(int8 q,uint8 lev=200);
       virtual int8 Material();
       virtual bool isQItem() { return true; }
       virtual int32 Weight(bool psych_might = false);
@@ -354,7 +354,7 @@ class Weapon: public QItem
       virtual bool isGroup(uint32 gr) { return (TITEM(iID)->Group & gr) != 0; }
       virtual bool thrownOnly() { return !(TITEM(iID)->Group & ~(WG_THROWN|WG_EXOTIC|WG_ARCHERY)); }
       virtual bool canFinesse();
-      virtual bool QualityOK(uint32 q,uint8 lev=200);
+      virtual bool QualityOK(int8 q,uint8 lev=200);
       virtual int16 ItemLevel(bool bounded=true);
       virtual int16 ParryVal(Creature *c, bool knownOnly = false);
       virtual Dice SDmg();
@@ -410,7 +410,7 @@ class Armour: public QItem
       virtual int16 MaxDexBonus(Creature *c);
       virtual bool isGroup(uint32 gr) { return (TITEM(iID)->Group & gr) != 0; }
       virtual bool betterFor(Creature *c, Item *curr);
-      virtual bool QualityOK(uint32 q,uint8 lev=200);
+      virtual bool QualityOK(int8 q,uint8 lev=200);
       virtual bool isMagic();
       virtual String & Describe(Player *p);
       virtual int16 ItemLevel(bool bounded=true);

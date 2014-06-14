@@ -566,7 +566,7 @@ system bool    T_ITEM::useStrength();
 system bool    T_ITEM::HasSpell(int16 sp);
 system bool    T_ITEM::HasQuality(int32 q);
 system bool    T_ITEM::KnownQuality(int32 q);
-system bool    T_ITEM::QualityOK(int32 q,int16 lv=200);
+system bool    T_ITEM::QualityOK(int8 q,int16 lv=200);
 system void    T_ITEM::AddQuality(int8 q, int8 param=0);
 system void    T_ITEM::RemoveQuality(int8 q); 
 system void    T_ITEM::PurgeAllQualities();

@@ -618,7 +618,7 @@ void Map::SetQueue(int16 Queue)
     QueueSP++; 
     if (QueueSP > (sizeof(QueueStack) / sizeof(QueueStack[0])))
       Error("Queue Stack Overflow!");
-    QueueStack[QueueSP] = Queue; 
+    QueueStack[QueueSP] = (int8)Queue; 
   }   
          
 void Map::UnsetQueue(int16 Queue) 
@@ -1128,7 +1128,7 @@ String & Item::Name(int16 Flags)
     }
   }
 
-  bool terse_blessed = theGame->Opt(OPT_TERSE_BLESSED);
+  bool terse_blessed = theGame->Opt(OPT_TERSE_BLESSED) ? true : false;
   if (Flags & NA_NO_TERSE)
     terse_blessed = false; 
 
@@ -1624,153 +1624,142 @@ Done:
  ********************************************************************/
 
 
-String Game::BuildText(EventInfo &e, rID tID)
-  {
-    int32 tBuff[2048], ln;
+String Game::BuildText(EventInfo &e, rID tID) {
+    int16 ln = 0;
+    int32 tBuff[2048];
     TText *tt = TTEX(tID);
     tt->GetList(TEXT_LIST,(rID*)tBuff,2048);
-    ln = 0;
     while (tBuff[ln++])
-      ;
+        ;
     return *tmpstr(RecursiveParse(e,tID,tBuff,ln));
-  } 
+} 
     
-String Game::RecursiveParse(EventInfo &e, rID tID, int32 *tBuff, int16 len)
-  {
+String Game::RecursiveParse(EventInfo &e, rID tID, int32 *tBuff, int16 len) {
     String Text; hCode hc; 
     int16 i, n, c,orPos[30],nest,start;
-    
+
     if (len <= 0)
-      return *tmpstr("");
-    
+        return *tmpstr("");
+
     /* Step 1: Choose 'Or' Segment */
-    i = 0; c = 1; orPos[0] = 0;
+    i = 0;
+    c = 1;
+    orPos[0] = 0;
+
     while (tBuff[i] && i < len) {
-      switch (tBuff[i])
-        {
-          case TC_RPAREN:
+        switch (tBuff[i]) {
+        case TC_RPAREN:
             Error("Mismatched parenthesis in dynamic text <Res>.",tID);
             return *tmpstr("Error building text.");
-          case TC_LPAREN:                             
+        case TC_LPAREN:                             
             nest = 1;
-            while (nest && tBuff[i])
-              {
+            while (nest && tBuff[i]) {
                 i++;
                 if (tBuff[i] == TC_LPAREN)
-                  nest++;
+                    nest++;
                 else if (tBuff[i] == TC_RPAREN)
-                  nest--;
-              }
+                    nest--;
+            }
             if (nest) {
-              Error("Closing parenthesis missing in dynamic text <Res>.",tID);
-              return *tmpstr("Error building text.");
-              }
-           break;
-          case TC_CHOICE:
+                Error("Closing parenthesis missing in dynamic text <Res>.",tID);
+                return *tmpstr("Error building text.");
+            }
+            break;
+        case TC_CHOICE:
             Error("Choice bar found after choice filtering!");
-           break;
+            break;
         }
-      }
+    }
     orPos[c] = 0;
-    if (c > 1)
-      {
-        int16 choice;
-        choice = random(c);
+    if (c > 1) {
+        int16 choice = random(c);
         Text = RecursiveParse(e,tID,&tBuff[orPos[choice]+1],
-                 (orPos[choice+1] ? orPos[choice+1] : len) - orPos[choice]);
+            (orPos[choice+1] ? orPos[choice+1] : len) - orPos[choice]);
         return *tmpstr(Text);
-      }
-    
+    }
+
     Text = "";
     while (tBuff[i] && i < len) {
-      switch (tBuff[i])
-        {
-          case TC_RPAREN:
+        switch (tBuff[i]) {
+        case TC_RPAREN:
             Error("Mismatched parenthesis in dynamic text <Res>.",tID);
             return *tmpstr("Error building text.");
-          case TC_LPAREN:                             
-            nest++; start = i;
-            while (nest && tBuff[i])
-              {
+        case TC_LPAREN:                             
+            nest++;
+            start = i;
+            while (nest && tBuff[i]) {
                 i++;
                 if (tBuff[i] == TC_LPAREN)
-                  nest++;
+                    nest++;
                 else if (tBuff[i] == TC_RPAREN)
-                  nest--;
-              }
+                    nest--;
+            }
             if (nest) {
-              Error("Closing parenthesis missing in dynamic text <Res>.",tID);
-              return *tmpstr("Error building text.");
-              }
+                Error("Closing parenthesis missing in dynamic text <Res>.",tID);
+                return *tmpstr("Error building text.");
+            }
             if (i == start+1)
-              ;
+                ;
             else
-              Text += RecursiveParse(e,tID,&tBuff[start+1],i-(start+1));
-           break;
-          case TC_CHOICE:
+                Text += RecursiveParse(e,tID,&tBuff[start+1],i-(start+1));
+            break;
+        case TC_CHOICE:
             orPos[c++] = i;
-           break;
-          case TC_CASE:
+            break;
+        case TC_CASE:
             hc = tBuff[i+1];
-            n = i+2; nest = 0;
-            while (tBuff[n])
-              {
+            n = i+2;
+            nest = 0;
+            while (tBuff[n]) {
                 if (tBuff[n] == TC_LPAREN)
-                  nest++;
+                    nest++;
                 else if (tBuff[n] == TC_RPAREN)
-                  nest--;
+                    nest--;
                 else if (tBuff[n] == TC_TERM && !nest)
-                  break;
+                    break;
                 n++;
-              }
-            if (tBuff[n] != TC_TERM || nest)
-              {
+            }
+            if (tBuff[n] != TC_TERM || nest) {
                 Error("Unterminated dynamic text case in <Res>.", tID);
                 return *tmpstr("Error building text.");
-              }
+            }
             if (theGame->VM.Execute(&e, tID, hc))
-              Text += RecursiveParse(e,tID,&tBuff[i+2],n-(i+2));
+                Text += RecursiveParse(e,tID,&tBuff[i+2],n-(i+2));
             i = n;
-           break;
-          case TC_ACTION:
+            break;
+        case TC_ACTION:
             hc = tBuff[++i];
             e.Text = "";
             theGame->VM.Execute(&e, tID, hc);
             Text += e.Text;
-           break;
-          case TC_WCHOICE:
-            c = tBuff[i+1];
+            break;
+        case TC_WCHOICE:
+            c = (int16)(tBuff[i+1]);
             n = i+2; nest = 0;
-            while (tBuff[n])
-              {
+            while (tBuff[n]) {
                 if (tBuff[n] == TC_LPAREN)
-                  nest++;
+                    nest++;
                 else if (tBuff[n] == TC_RPAREN)
-                  nest--;
+                    nest--;
                 else if (tBuff[n] == TC_TERM && !nest)
-                  break;
+                    break;
                 n++;
-              }
-            if (tBuff[n] != TC_TERM || nest)
-              {
+            }
+            if (tBuff[n] != TC_TERM || nest) {
                 Error("Unterminated dynamic text case in <Res>.", tID);
                 return *tmpstr("Error building text.");
-              }
+            }
             if (random(100) <= c)
-              Text += RecursiveParse(e,tID,&tBuff[i+2],n-(i+2));
+                Text += RecursiveParse(e,tID,&tBuff[i+2],n-(i+2));
             i = n;
-           break;
-          default:
+            break;
+        default:
             if (tBuff[i] >= 0x01000000)
-              Text += BuildText(e,(rID)(tBuff[i]));
+                Text += BuildText(e,(rID)(tBuff[i]));
             else
-              Text += (GetText(tID,tBuff[i]));
-           break;
+                Text += (GetText(tID,tBuff[i]));
+            break;
         }
-      }
+    }
     return *tmpstr(Text);
-  }    
-        
-         
-            
-            
+}    

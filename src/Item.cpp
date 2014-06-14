@@ -60,16 +60,13 @@
 
 #include "Incursion.h"
 
-int16 CorpseNut[] = 
-  { 0, 1, 10, 25, 50, 100, 300, 500, 800 };
+int16 CorpseNut[] = { 0, 1, 10, 25, 50, 100, 300, 500, 800 };
 
-Item::Item(rID _iID,int16 _Type)
-	: Thing(0,_Type)
-	{
+Item::Item(rID _iID,int16 _Type) : Thing(0,_Type) {
     ASSERT(TITEM(_iID));
     iID=_iID; Timeout = -1;
     cHP = MaxHP();
-		Image=TITEM(iID)->Image;
+	Image=TITEM(iID)->Image;
     eID = 0; Quantity = 1;
     Known = IFlags = 0;
     Inscrip = NULL; Plus = 0;
@@ -1278,301 +1275,299 @@ bool Item::isGhostTouch()
 } 
 
 
-EvReturn Item::Damage(EventInfo &e)
-{
-  int16 hard, dcount, i, ox, oy; Map *om;
-  const char *damage, *destroy, *name, *oname;
-  String pre, s;
-  int posthard;
-  bool plural = false, destroyed = false;
+EvReturn Item::Damage(EventInfo &e) {
+    int16 hard, dcount, i, ox, oy; Map *om;
+    const char *damage, *destroy, *name, *oname;
+    String pre, s;
+    int posthard;
+    bool plural = false, destroyed = false;
 
-  if (!isCorporeal())
-    return DONE;
-  
-  bool no_msg;
-  no_msg = false;
-  if (e.EActor == Owner())
-    if (e.EActor->GetStatiObj(ACTING) == this)
-      no_msg = true;
-    
-  if (isType(T_WEAPON))
-    if (HasQuality(WQ_ENERGY))
-      return DONE;
+    if (!isCorporeal())
+        return DONE;
 
-  ox = x;
-  oy = y;
-  om = m;
+    bool no_msg = false;
+    if (e.EActor == Owner() && e.EActor->GetStatiObj(ACTING) == this)
+        no_msg = true;
 
-  Creature * owner = Owner();
+    if (isType(T_WEAPON) && HasQuality(WQ_ENERGY))
+        return DONE;
 
-  if (owner) {
-    if (e.DType == AD_SOAK || e.DType == AD_RUST ||
-        e.DType == AD_DCAY)
-      if (owner->ResistLevel(e.DType) == -1)
-        return DONE; 
-  }
+    ox = x;
+    oy = y;
+    om = m;
 
-  hard = Hardness(e.DType);
-
-  if (owner)
-    if ((e.DType != AD_SLASH && e.DType != AD_BLUNT &&
-         e.DType != AD_PIERCE) || (owner->InSlot(SL_ARMOUR) &&
-         (owner->InSlot(SL_AMULET) == this ||
-          owner->InSlot(SL_BRACERS) == this ||
-          owner->InSlot(SL_BELT) == this)))
-      {
-        if (owner->ResistLevel(e.DType) == -1)
-          return DONE;
-        hard += owner->ResistLevel(e.DType);
-      }
-
-  if (e.ignoreHardness == true)
-    hard = 0;
-  else if (e.halfHardness == true)
-    hard /= 2;
-
-  posthard = e.vDmg - hard; 
-
-  /* If you are attacking your own items, ignore their hardness. */
-  if ((e.EActor == owner) && !e.isTrap && !e.eID)
-    { posthard = e.vDmg; hard = 0; }
-
-  /*
-  if (owner && owner->HasFeat(FT_SIGNATURE_ITEMS)) {
-    if (posthard <= 1 || owner->SavingThrow(REF,posthard)) {
-      owner->IDPrint((const char*)Format("You avoid harm to your %s.",
-            (const char*)Name()),
-          (const char*)Format("%s avoids harm to %s.",
-                         (const char*)owner->Name(NA_THE),
-                         (const char*)Name(NA_THE)));
-      return DONE; 
-    } 
-    owner->IDPrint((const char*)Format("You reduce the damage to your %s.",
-          (const char*)Name()),
-        (const char*)Format("%s reduces the damage to %s.",
-                       (const char*)owner->Name(NA_THE),
-                       (const char*)Name(NA_THE)));
-    posthard /= 2; 
-  } 
-  */
-
-  if ((e.EActor && e.EActor->isPlayer()) || (owner && owner->isPlayer()))
-    {
-      s = Format("%c%s:%c %s%s %s",-13,(const char*)(Name(0).Capitalize()),
-          -7,
-          (e.Dmg.Number == 0 && e.Dmg.Sides == 0 && e.Dmg.Bonus == 0) ?
-            "Residual" : (const char*)e.Dmg.Str(),
-                e.strDmg ? (const char*)e.strDmg : "",
-          Lookup(DTypeNames,e.DType));
-
-      //if (owner && owner->HasFeat(FT_SIGNATURE_ITEMS)) 
-      //  s += " / 2"; 
-
-      s += Format(" = %d",e.vDmg);
-
-      if (hard == -1) 
-        s += Format(" vs. Immune (%s)",(const char*)Lookup(MaterialDescs,Material()));
-      else 
-        s += Format(" vs. %d (%s)",hard,(const char*)Lookup(MaterialDescs,Material()));
-
-      e.aDmg = posthard; 
-
-      s += Format(" <%d>[%s]<7>",
-          (e.vDmg > hard) && (hard != -1) ? PINK : EMERALD,
-          (e.vDmg > hard) && (hard != -1) ? (const char*)Format("%d damage",e.aDmg) : "unhurt");
-
-      if (e.EActor && e.EActor->isPlayer())
-        {
-          e.EPActor->MyTerm->SetWin(WIN_NUMBERS);
-          e.EPActor->MyTerm->Clear();
-          e.EPActor->MyTerm->Write(0,0,XPrint(s));
-        }
-      else if (owner && owner->isPlayer())
-        { 
-          ((Player*)owner)->MyTerm->SetWin(WIN_NUMBERS);
-          ((Player*)owner)->MyTerm->Clear();
-          ((Player*)owner)->MyTerm->Write(0,0,XPrint(s));
-        }
+    Creature *owner = Owner();
+    if (owner) {
+        if (e.DType == AD_SOAK || e.DType == AD_RUST || e.DType == AD_DCAY)
+            if (owner->ResistLevel(e.DType) == -1)
+                return DONE; 
     }
 
-  if (hard >= e.vDmg || hard == -1)
-    return DONE;
+    hard = Hardness(e.DType);
 
-  int totalHP = cHP + ((Quantity-1)*MaxHP()); 
-
-  ASSERT(Quantity >= 1); 
-  ASSERT(MaxHP()); 
-
-  totalHP -= e.aDmg; 
-
-  if (totalHP <= 0) {
-    dcount = Quantity; 
-  } else if (Quantity == 1) {
-    if (totalHP < 1) {
-      cHP = 0;
-      dcount = 1;
-    } else {
-      cHP = totalHP;
-      dcount = 0; 
-    } 
-  } else { 
-    uint32 oldQuantity = Quantity; 
-    Quantity = (totalHP + (MaxHP()-1))/ MaxHP(); 
-    cHP = totalHP - (Quantity * MaxHP());
-    if (cHP <= 0) cHP = MaxHP(); 
-    dcount = oldQuantity - Quantity; 
-  } 
-
-  if (dcount == 0) { 
-    destroyed = false; plural = Quantity > 1; pre = ""; 
-  } else if (dcount == Quantity) { 
-    destroyed = true; plural = dcount > 1; pre = ""; 
-  } else { 
-    pre = XPrint("<Num> of ",dcount); 
-    destroyed = true; plural = dcount > 1; 
-  }
-
-    damage = plural ? "are damaged" : "is damaged";
-    destroy = plural ? "are destroyed" : "is destroyed";
-
-    if (e.DType == AD_SONI || isType(T_POTION))
-      {
-        damage = plural ? "crack" : "cracks";
-        destroy = plural ? "shatter" : "shatters";
-      }
-
-    if (e.DType == AD_FIRE)
-      {
-        if (isType(T_POTION))
-          {
-            damage = plural ? "boil" : "boils";
-            destroy = plural ? "boil and explode" : "boils and explodes";
-          }
-        else if (isMetallic()) {
-          damage = plural ? "melt" : "melts";
-          destroy = plural ? "melt into slag" : "melts into slag";
-          }
-        else {
-          damage = plural ? "burn" : "burns";
-          destroy = plural ? "burn up" : "burns up";
-          }
-      }
-
-    if (e.DType == AD_ACID)
-      {                
-        damage = plural ? "melt" : "melts";
-        destroy = plural ? "melt away" : "melts away";
-      }
-
-    if (e.DType == AD_DISN)
-      destroy = plural ? "disintegrate" : "disintegrates";
-
-    if (e.DType == AD_NECR)
-      {
-        damage = plural ? "wither" : "withers";
-        destroy = plural ? "wither away" : "withers away";
-      }
-
-    if (e.DType == AD_RUST)
-      {
-        damage = plural ? "rust" : "rusts";
-        destroy = plural ? "rust away completely" : "rusts away completely";
-      }
-
-    /* Get the item name, but cut off the initial number */
-    oname = name = strdup(Name());
-    while(isdigit(name[0]) || name[0] == ' ')
-      name++;
-
-    if (destroyed)
-      no_msg = false;
-
-    if (Owner())
-      Owner()->IDPrint(no_msg ? NULL : "<Str1>your <Str3> <Str4>.",
-                       "<Str1>the <Obj2>'s <Str3> <Str4>.",
-                        (const char*)pre,Owner(),name,
-                        destroyed ? destroy : damage);
-    else
-      IDPrint(NULL,"<Str>the <Str> <Str>.",
-                   (const char*)pre,name,
-                   destroyed ? destroy : damage);
-
-    free((void*)oname);
-                       
-  if (dcount == Quantity) {
-
-    if ((isType(T_CONTAIN) || isType(T_CHEST)) && 
-        ((Container*)this)->Contents) {
-      hObj h = ((Container *)this)->Contents;
-      int dmg = Hardness(e.DType) * 3 / 2; 
-      if (h) {
-        e.ETarget = this; 
-        if (e.EActor)
-          e.EActor->IPrint("The <hObj>'s contents are damaged and spill out.",myHandle);
-      } 
-      while (h) {
-        Item *it = oItem(h);
-        it->Remove(false);
-        it->PlaceAt(owner ? owner->m : om,
-                    owner ? owner->x : ox,
-                    owner ? owner->y : oy);
-        if (dmg > 0) { 
-          EventInfo eCopy = e;
-          eCopy.Dmg.Number = eCopy.Dmg.Sides = eCopy.Dmg.Bonus = 0; 
-          eCopy.ETarget = it; 
-          eCopy.vDmg = dmg; 
-          ReThrow(EV_DAMAGE,eCopy);
-        }
-        h = ((Container *)this)->Contents; 
-      }
-    } 
-
-    e.Died = true; 
-    
-    /* Animated Object Crash Prevention */
-    for (i=0;backRefs[i];i++)
-      if (isValidHandle(backRefs[i]))
-        if (oThing(backRefs[i])->HasStati(TRANSFORMED,-1,this))
-          {
-            Flags |= F_DELETE;
-            oThing(backRefs[i])->RemoveStati(TRANSFORMED);
-            Flags &= ~F_DELETE;
-            break;
-          }
-    Remove(true);
-  } 
-
-    if (DmgType == 0)
-      DmgType = e.DType;
-    else if (DmgType == e.DType)
-      ;
-    else
-      DmgType = -1;
-
-    if (e.Died && e.EActor && e.EActor->isCharacter())
-      if (e.EActor->HasAbility(CA_SPELLBREAKER))
+    if (owner)
+        if ((e.DType != AD_SLASH && e.DType != AD_BLUNT &&
+            e.DType != AD_PIERCE) || (owner->InSlot(SL_ARMOUR) &&
+            (owner->InSlot(SL_AMULET) == this ||
+            owner->InSlot(SL_BRACERS) == this ||
+            owner->InSlot(SL_BELT) == this)))
         {
-          int32 Percent = (e.EActor->AbilityLevel(
-            CA_SPELLBREAKER) * 100) / e.EPActor->TotalLevel();
-          int32 GainedXP[] = { 2, 5, 10, 25, 50, 100, 250, 500, 1000,
-                             2500, 5000 };
-          int16 Factor;
-          Factor = (ItemLevel() + 2) - e.EPActor->TotalLevel();
-          Factor = min(Factor,10);
-          if (Factor >= 0) {
-            if (isType(T_POTION) || isType(T_SCROLL))
-              e.EActor->GainXP((GainedXP[Factor] * Percent) / 1000);
-            else
-              e.EActor->GainXP((GainedXP[Factor] * Percent) / 100);
-            }  
+            if (owner->ResistLevel(e.DType) == -1)
+                return DONE;
+            hard += owner->ResistLevel(e.DType);
         }
 
-    if (GetHP() != MaxHP())
-      RemoveStati(MASTERWORK);
+        if (e.ignoreHardness == true)
+            hard = 0;
+        else if (e.halfHardness == true)
+            hard /= 2;
 
-    return DONE;
+        posthard = e.vDmg - hard; 
 
-  }
+        /* If you are attacking your own items, ignore their hardness. */
+        if ((e.EActor == owner) && !e.isTrap && !e.eID) {
+            posthard = e.vDmg;
+            hard = 0;
+        }
+
+        /*
+        if (owner && owner->HasFeat(FT_SIGNATURE_ITEMS)) {
+        if (posthard <= 1 || owner->SavingThrow(REF,posthard)) {
+        owner->IDPrint((const char*)Format("You avoid harm to your %s.",
+        (const char*)Name()),
+        (const char*)Format("%s avoids harm to %s.",
+        (const char*)owner->Name(NA_THE),
+        (const char*)Name(NA_THE)));
+        return DONE; 
+        } 
+        owner->IDPrint((const char*)Format("You reduce the damage to your %s.",
+        (const char*)Name()),
+        (const char*)Format("%s reduces the damage to %s.",
+        (const char*)owner->Name(NA_THE),
+        (const char*)Name(NA_THE)));
+        posthard /= 2; 
+        } 
+        */
+
+        if ((e.EActor && e.EActor->isPlayer()) || (owner && owner->isPlayer())) {
+            s = Format("%c%s:%c %s%s %s",-13,(const char*)(Name(0).Capitalize()),
+                -7,
+                (e.Dmg.Number == 0 && e.Dmg.Sides == 0 && e.Dmg.Bonus == 0) ?
+                "Residual" : (const char*)e.Dmg.Str(),
+                e.strDmg ? (const char*)e.strDmg : "",
+                Lookup(DTypeNames,e.DType));
+
+            //if (owner && owner->HasFeat(FT_SIGNATURE_ITEMS)) 
+            //  s += " / 2"; 
+
+            s += Format(" = %d",e.vDmg);
+            if (hard == -1) 
+                s += Format(" vs. Immune (%s)",(const char*)Lookup(MaterialDescs,Material()));
+            else 
+                s += Format(" vs. %d (%s)",hard,(const char*)Lookup(MaterialDescs,Material()));
+
+            e.aDmg = posthard; 
+
+            s += Format(" <%d>[%s]<7>",
+                (e.vDmg > hard) && (hard != -1) ? PINK : EMERALD,
+                (e.vDmg > hard) && (hard != -1) ? (const char*)Format("%d damage",e.aDmg) : "unhurt");
+
+            if (e.EActor && e.EActor->isPlayer()) {
+                e.EPActor->MyTerm->SetWin(WIN_NUMBERS);
+                e.EPActor->MyTerm->Clear();
+                e.EPActor->MyTerm->Write(0,0,XPrint(s));
+            } else if (owner && owner->isPlayer()) { 
+                ((Player*)owner)->MyTerm->SetWin(WIN_NUMBERS);
+                ((Player*)owner)->MyTerm->Clear();
+                ((Player*)owner)->MyTerm->Write(0,0,XPrint(s));
+            }
+        }
+
+        if (hard >= e.vDmg || hard == -1)
+            return DONE;
+
+        int totalHP = cHP + ((Quantity-1)*MaxHP()); 
+
+        ASSERT(Quantity >= 1); 
+        ASSERT(MaxHP()); 
+
+        totalHP -= e.aDmg; 
+
+        if (totalHP <= 0) {
+            dcount = (int16)Quantity; 
+        } else if (Quantity == 1) {
+            if (totalHP < 1) {
+                cHP = 0;
+                dcount = 1;
+            } else {
+                cHP = totalHP;
+                dcount = 0; 
+            } 
+        } else { 
+            uint32 oldQuantity = Quantity; 
+            Quantity = (totalHP + (MaxHP()-1))/ MaxHP(); 
+            cHP = (int16)(totalHP - (Quantity * MaxHP()));
+            if (cHP <= 0)
+                cHP = MaxHP(); 
+            dcount = (int16)(oldQuantity - Quantity); 
+        } 
+
+        if (dcount == 0) { 
+            destroyed = false;
+            plural = Quantity > 1;
+            pre = ""; 
+        } else if (dcount == Quantity) { 
+            destroyed = true;
+            plural = dcount > 1;
+            pre = ""; 
+        } else { 
+            pre = XPrint("<Num> of ",dcount); 
+            destroyed = true;
+            plural = dcount > 1; 
+        }
+
+        damage = plural ? "are damaged" : "is damaged";
+        destroy = plural ? "are destroyed" : "is destroyed";
+
+        if (e.DType == AD_SONI || isType(T_POTION))
+        {
+            damage = plural ? "crack" : "cracks";
+            destroy = plural ? "shatter" : "shatters";
+        }
+
+        if (e.DType == AD_FIRE)
+        {
+            if (isType(T_POTION))
+            {
+                damage = plural ? "boil" : "boils";
+                destroy = plural ? "boil and explode" : "boils and explodes";
+            }
+            else if (isMetallic()) {
+                damage = plural ? "melt" : "melts";
+                destroy = plural ? "melt into slag" : "melts into slag";
+            }
+            else {
+                damage = plural ? "burn" : "burns";
+                destroy = plural ? "burn up" : "burns up";
+            }
+        }
+
+        if (e.DType == AD_ACID)
+        {                
+            damage = plural ? "melt" : "melts";
+            destroy = plural ? "melt away" : "melts away";
+        }
+
+        if (e.DType == AD_DISN)
+            destroy = plural ? "disintegrate" : "disintegrates";
+
+        if (e.DType == AD_NECR)
+        {
+            damage = plural ? "wither" : "withers";
+            destroy = plural ? "wither away" : "withers away";
+        }
+
+        if (e.DType == AD_RUST)
+        {
+            damage = plural ? "rust" : "rusts";
+            destroy = plural ? "rust away completely" : "rusts away completely";
+        }
+
+        /* Get the item name, but cut off the initial number */
+        oname = name = strdup(Name());
+        while(isdigit(name[0]) || name[0] == ' ')
+            name++;
+
+        if (destroyed)
+            no_msg = false;
+
+        if (Owner())
+            Owner()->IDPrint(no_msg ? NULL : "<Str1>your <Str3> <Str4>.",
+            "<Str1>the <Obj2>'s <Str3> <Str4>.",
+            (const char*)pre,Owner(),name,
+            destroyed ? destroy : damage);
+        else
+            IDPrint(NULL,"<Str>the <Str> <Str>.",
+            (const char*)pre,name,
+            destroyed ? destroy : damage);
+
+        free((void*)oname);
+
+        if (dcount == Quantity) {
+
+            if ((isType(T_CONTAIN) || isType(T_CHEST)) && 
+                ((Container*)this)->Contents) {
+                    hObj h = ((Container *)this)->Contents;
+                    int dmg = Hardness(e.DType) * 3 / 2; 
+                    if (h) {
+                        e.ETarget = this; 
+                        if (e.EActor)
+                            e.EActor->IPrint("The <hObj>'s contents are damaged and spill out.",myHandle);
+                    } 
+                    while (h) {
+                        Item *it = oItem(h);
+                        it->Remove(false);
+                        it->PlaceAt(owner ? owner->m : om,
+                            owner ? owner->x : ox,
+                            owner ? owner->y : oy);
+                        if (dmg > 0) { 
+                            EventInfo eCopy = e;
+                            eCopy.Dmg.Number = eCopy.Dmg.Sides = eCopy.Dmg.Bonus = 0; 
+                            eCopy.ETarget = it; 
+                            eCopy.vDmg = dmg; 
+                            ReThrow(EV_DAMAGE,eCopy);
+                        }
+                        h = ((Container *)this)->Contents; 
+                    }
+            } 
+
+            e.Died = true; 
+
+            /* Animated Object Crash Prevention */
+            for (i=0;backRefs[i];i++)
+                if (isValidHandle(backRefs[i]))
+                    if (oThing(backRefs[i])->HasStati(TRANSFORMED,-1,this))
+                    {
+                        Flags |= F_DELETE;
+                        oThing(backRefs[i])->RemoveStati(TRANSFORMED);
+                        Flags &= ~F_DELETE;
+                        break;
+                    }
+                    Remove(true);
+        } 
+
+        if (DmgType == 0)
+            DmgType = e.DType;
+        else if (DmgType == e.DType)
+            ;
+        else
+            DmgType = -1;
+
+        if (e.Died && e.EActor && e.EActor->isCharacter())
+            if (e.EActor->HasAbility(CA_SPELLBREAKER))
+            {
+                int32 Percent = (e.EActor->AbilityLevel(
+                    CA_SPELLBREAKER) * 100) / e.EPActor->TotalLevel();
+                int32 GainedXP[] = { 2, 5, 10, 25, 50, 100, 250, 500, 1000,
+                    2500, 5000 };
+                int16 Factor;
+                Factor = (ItemLevel() + 2) - e.EPActor->TotalLevel();
+                Factor = min(Factor,10);
+                if (Factor >= 0) {
+                    if (isType(T_POTION) || isType(T_SCROLL))
+                        e.EActor->GainXP((GainedXP[Factor] * Percent) / 1000);
+                    else
+                        e.EActor->GainXP((GainedXP[Factor] * Percent) / 100);
+                }  
+            }
+
+            if (GetHP() != MaxHP())
+                RemoveStati(MASTERWORK);
+
+            return DONE;
+
+}
+
 /////////////////////////////////////////////////////////////////////////////
 //                          Specific Types of Items                        //
 /////////////////////////////////////////////////////////////////////////////
@@ -1811,7 +1806,7 @@ EvReturn Food::Eat(EventInfo &e)
 
     return DONE;
 
-    StopEating:                                
+StopEating:                                
     confirm = false;
     e.EActor->RemoveStati(ACTING);     
     if (Owner() != e.EActor) {
@@ -1821,30 +1816,25 @@ EvReturn Food::Eat(EventInfo &e)
         e.EActor->GainItem(this,false);     
       }
     return DONE;
+}
 
-  }
-
-EvReturn Corpse::Event(EventInfo &e)
-	{
+EvReturn Corpse::Event(EventInfo &e) {
     return NOTHING;
-	}
+}
 	
-bool Corpse::isFresh()
-  { 
+bool Corpse::isFresh() { 
     return (theGame->Turn - TurnCreated) / HOUR_TURNS < 12; 
-  }
+}
   
-bool Corpse::fullyDecayed()
-  {
-    int16 hours;
-    hours = (theGame->Turn - TurnCreated) / HOUR_TURNS;
+bool Corpse::fullyDecayed() {
+    uint32 hours = (theGame->Turn - TurnCreated) / HOUR_TURNS;
     /* Takes two weeks for a corpse to decay fully. */
     return hours > 24 * 14;
-  }
+}
    
-int16 Corpse::noDiseaseDC()
-  { 
-    int16 baseDC, hours;
+int16 Corpse::noDiseaseDC() { 
+    int16 baseDC;
+    uint32 hours;
     
     if (TMON(mID)->isMType(mID,MA_ANIMAL))
       baseDC = 8;
@@ -1858,17 +1848,15 @@ int16 Corpse::noDiseaseDC()
       baseDC = 15;
     
     StatiIterNature(this,TEMPLATE)
-      if (TTEM(S->eID)->TType & TM_UNDEAD)
-        baseDC = max(baseDC,25);
+        if (TTEM(S->eID)->TType & TM_UNDEAD)
+            baseDC = max(baseDC,25);
     StatiIterEnd(this)
         
     hours = (theGame->Turn - TurnCreated) / HOUR_TURNS;
-    
     if (hours <= 6)
-      return baseDC;
-      
-    return baseDC + (hours - 6) / 2; 
-  }
+        return baseDC;
+    return (int16)(baseDC + (hours - 6) / 2); 
+}
 
 EvReturn Food::Event(EventInfo &e)
 	{
@@ -1905,13 +1893,11 @@ EvReturn Creature::LoadCrossbow(EventInfo &e)
     return DONE;
   }
 
-EvReturn Armour::Event(EventInfo &e)
-	{
+EvReturn Armour::Event(EventInfo &e) {
     int16 i; String str; bool id;
-    switch (e.Event)
-      {
+    switch (e.Event) {
         case POST(EV_WIELD):
-          if (!activeSlot(e.EParam))
+          if (!activeSlot((int16)e.EParam))
             return NOTHING;
           if (!(IFlags & IF_WORN))
             return NOTHING;    
@@ -2153,16 +2139,15 @@ int16 Armour::MaxDexBonus(Creature * c)
   return max(0, 9 + pen);
 }
 
-uint32 Creature::ArmourType()
-  {
-    uint32 at = 0;
+uint32 Creature::ArmourType() {
+    int32 at = 0;
     for(uint8 i=0;i!=SL_LAST;i++)
       if (InSlot(i))
         if (InSlot(i)->Type == T_ARMOUR)
           if (InSlot(i)->GetGroup() > at)
             at = InSlot(i)->GetGroup();
     return at;
-  }
+}
 
 Dice Weapon::SDmg()
   {
@@ -2336,7 +2321,7 @@ bool Weapon::useInGrapple(Creature *c) {
       (c->HasStati(ENGULFED) && Size(c) <= c->Attr[A_SIZ]));
 }
 
-bool Weapon::QualityOK(uint32 q,uint8 lev) {
+bool Weapon::QualityOK(int8 q,uint8 lev) {
 
     /*
   theGame->GetPlayer(0)->IPrint(Format("Weapon::QOK(%d) %s HasQuality(q) = %d, IQ_SILV = %d.", q, (const char*)Name(), HasQuality(q), HasQuality(IQ_SILVER)));
@@ -2529,7 +2514,7 @@ bool Weapon::QualityOK(uint32 q,uint8 lev) {
     return true;
 }
 
-bool QItem::QualityOK(uint32 q,uint8 lev)
+bool QItem::QualityOK(int8 q,uint8 lev)
 {
   if (isType(T_COIN) || isType(T_BOOK))
     return false;
@@ -2616,7 +2601,7 @@ bool QItem::QualityOK(uint32 q,uint8 lev)
   } 
 }
 
-bool Armour::QualityOK(uint32 q,uint8 lev) {
+bool Armour::QualityOK(int8 q,uint8 lev) {
     if (Qualities[7])
         return false;
     if (HasQuality(q))
