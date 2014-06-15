@@ -130,7 +130,9 @@ String & DescribeSkill(int16 sk)
 
 void Player::UseMenu(int32 SuppliedIndex)
   {
-    int32 i = 0,j; bool found = false;
+    int32 i = 0;
+    uint16 j;
+    bool found = false;
     EventInfo e; String str;
     
     if (SuppliedIndex)
@@ -253,7 +255,7 @@ void Player::UseMenu(int32 SuppliedIndex)
     HasSuppliedIndex:
 
     switch((ActiveTraits[i%1000] / 1000)*1000) {
-      case ABIL_VAL:  UseAbility(ActiveTraits[i%1000] % 1000,i/1000); return;
+      case ABIL_VAL:  UseAbility((uint8)(ActiveTraits[i%1000] % 1000),(uint8)(i/1000)); return;
       case FEAT_VAL:  UseFeat(ActiveTraits[i%1000] % 1000); return;
       case SKILL_VAL: UseSkill(ActiveTraits[i%1000] % 1000); return;
       case ATTK_VAL:
@@ -739,7 +741,7 @@ int8 Creature::SkillKitMod(int16 sk)
 
     if (sk == SK_KNOW_THEO)
       {
-        int16 sl;
+        int8 sl;
         if (getGod())
           for (sl=0;sl!=SL_LAST;sl++)
             if (InSlot(sl) && InSlot(sl)->isType(T_SYMBOL))
@@ -751,7 +753,7 @@ int8 Creature::SkillKitMod(int16 sk)
     for (it=FirstInv();it;it=NextInv()) {
       if (TEFF(it->iID)->ListHasItem(SKILL_KIT_FOR,sk))
         {
-          mod = TEFF(it->iID)->GetConst(SKILL_KIT_MOD) + it->GetPlus();
+          mod = (int16)TEFF(it->iID)->GetConst(SKILL_KIT_MOD) + it->GetPlus();
           if (mod > best)
             best = mod;
         }
@@ -760,11 +762,11 @@ int8 Creature::SkillKitMod(int16 sk)
           for (i=0;i!=cKit;i++)
             if (kits[i] == it->iID)
               continue;
-          sec += TEFF(it->iID)->GetConst(SKILL_KIT_MOD) + it->GetPlus();
+          sec += (int16)TEFF(it->iID)->GetConst(SKILL_KIT_MOD) + it->GetPlus();
           kits[cKit++] = it->iID;
         }
       if (sk == SK_CLIMB && it->HasIFlag(IT_ROPE))
-        rope_mod = max(rope_mod,TITEM(it->iID)->
+        rope_mod = max(rope_mod,(int16)TITEM(it->iID)->
           GetConst(SKILL_KIT_MOD));
       }
 
@@ -797,7 +799,7 @@ bool Creature::HasSkillKit(int16 sk)
 void Character::UseSkill(uint8 sk)
   {
     EventInfo e; Trap *tr; int16 i, PartyID; Thing *t; String s;
-    int8 Check = Dice::Roll(1,20,SkillLevel(sk)), DC;
+    int8 Check = (int8)Dice::Roll(1,20,(int8)SkillLevel(sk)), DC;
     /* Skill Check: 7 + 1d20 (15) = 22 vs. DC 25 (failure) */
     int16 NeedKitFor[] = { SK_HEAL, SK_DISGUISE, SK_ALCHEMY,
                            SK_MINING, SK_CRAFT, SK_LOCKPICKING, 0 };
@@ -964,7 +966,7 @@ void Character::UseSkill(uint8 sk)
                 Creature *m; 
                 if (!first) {
                   s += ",";
-                  ll = s.GetLength();
+                  ll = (int16)s.GetLength();
                   }
                 s += " ";
                 
@@ -998,8 +1000,8 @@ void Character::UseSkill(uint8 sk)
                   continue;
                 if (!first) {
                   s += ",";
-                  ll = s.GetLength();
-                  }
+                  ll = (int16)s.GetLength();
+                }
                 s += " ";
                 s += Sounds[i].Text;
                 s += " ";
@@ -1070,7 +1072,7 @@ void Character::UseSkill(uint8 sk)
           if (HasStati(TELEKINETIC))
             {
               e.Clear();
-              e.vRange = GetStatiMag(TELEKINETIC);
+              e.vRange = (int8)GetStatiMag(TELEKINETIC);
               if (thisp->MyTerm->EffectPrompt(e,Q_TAR,false,"Disarm a trap:"))
                 if (e.ETarget->isType(T_TRAP))
                   if (DisarmTrap(tr,true))
@@ -1085,7 +1087,7 @@ void Character::UseSkill(uint8 sk)
           e.Clear();
           e.EActor = this;
           e.EMap = e.EActor->m;
-          Check = Dice::Roll(1,20);
+          Check = (int8)Dice::Roll(1,20);
           if (isPlayer()) {
             if (!thisp->MyTerm->EffectPrompt(e,Q_TAR|Q_CRE))
               return /*ABORT*/;
@@ -1195,7 +1197,7 @@ void Character::UseSkill(uint8 sk)
                   e.ETarget->GainTempStati(ANIMAL_EMP_TRIED,this,500,SS_MISC,0,0,0);
                   }
                 else {
-                  e.EVictim->GainTempStati(AFRAID,NULL,5+e.EParam*2,SS_MISC,FEAR_PANIC);
+                  e.EVictim->GainTempStati(AFRAID,NULL,(int8)(5+e.EParam*2),SS_MISC,FEAR_PANIC);
                   VPrint(e,NULL,"The <EVictim> turns to flee.");
                   }
                break;   
@@ -1325,16 +1327,17 @@ void Character::UseSkill(uint8 sk)
                     found = true; }                  
           
           if (HasStati(STONING))
-            if (!HasStati(HEAL_TIMEOUT, AD_STON))
-              { thisp->MyTerm->LOption("Forestall Petrification",AD_STON);  
-                found = true; }
+            if (!HasStati(HEAL_TIMEOUT, AD_STON)) {
+                thisp->MyTerm->LOption("Forestall Petrification",AD_STON);  
+                found = true;
+            }
           
-          if (!found)
-            { IPrint("You have no untreated ailments at present.");
-              return; }
+          if (!found) {
+              IPrint("You have no untreated ailments at present.");
+              return;
+          }
           
-          choice = thisp->MyTerm->LMenu(MENU_ESC|MENU_BORDER,
-            "What do you want to do?", WIN_MENUBOX);
+          choice = (int16)thisp->MyTerm->LMenu(MENU_ESC|MENU_BORDER,"What do you want to do?", WIN_MENUBOX);
           if (choice == -1)
             return;
           
@@ -1698,9 +1701,9 @@ bool Creature::SkillCheck(int16 sk, int16 DC, bool show, int16 mod1,
               for (i=1;SkillInfo[i].name;i++)
                 if (SkillInfo[i].sk == sk && die >= 1)
                   {
-                    Exercise(SkillInfo[i].attr1,Dice::Roll(1,die),col,cap);
+                    Exercise(SkillInfo[i].attr1,Dice::Roll(1,(int8)die),col,cap);
                     if (SkillInfo[i].attr2 != SkillInfo[i].attr1)
-                      Exercise(SkillInfo[i].attr2,Dice::Roll(1,die),col,cap);
+                        Exercise(SkillInfo[i].attr2,Dice::Roll(1,(int8)die),col,cap);
                   }
               for (i=0;GodIDList[i];i++)
                 {
@@ -2020,7 +2023,7 @@ void Character::UseAbility(uint8 ab,int16 pa)
               thisp->MyTerm->LOption("Spellbreaker Chant",BARD_SPELLBREAK);
             
             
-            song = thisp->MyTerm->LMenu(MENU_ESC|MENU_BORDER," -- Bardic Music -- ",WIN_MENUBOX,"bard");
+            song = (int16)thisp->MyTerm->LMenu(MENU_ESC|MENU_BORDER," -- Bardic Music -- ",WIN_MENUBOX,"bard");
             if (song == -1)
               return;
             }
@@ -2285,7 +2288,7 @@ void Character::UseAbility(uint8 ab,int16 pa)
               thisp->MyTerm->LOption(SkillInfo[i].name,
                                      SkillInfo[i].sk,
                                      DescribeSkill(SkillInfo[i].sk));
-          j = thisp->MyTerm->LMenu(MENU_SORTED|MENU_3COLS|MENU_DESC|MENU_BORDER,
+          j = (int16)thisp->MyTerm->LMenu(MENU_SORTED|MENU_3COLS|MENU_DESC|MENU_BORDER,
                   "Choose a skill to augment:",WIN_MENUBOX,"help::skills");
           if (j == -1)
             return;
@@ -2541,8 +2544,10 @@ EvReturn Creature::Research(EventInfo &e)
         case 'c':
           cCount = 0; cLevel = 0;
           StatiIter(this)
-            if (S->Source == SS_CURS)
-              { cLevel = max(cLevel,S->CLev); cCount++; }
+            if (S->Source == SS_CURS) {
+                cLevel = max(cLevel,(int16)S->CLev);
+                cCount++;
+            }
           StatiIterEnd(this)
           
           for (it=FirstInv();it;it=NextInv())
@@ -2805,9 +2810,10 @@ EvReturn Creature::PickPocket(EventInfo &e)
             
              
 
-EvReturn Creature::Hide(EventInfo &e)
-  {
-    uint16 i,j; Creature *c;
+EvReturn Creature::Hide(EventInfo &e) {
+    uint16 i;
+    Creature *c;
+
     if (HasStati(HIDING)) {
       IPrint("You're already hiding!");
       return ABORT;
@@ -2860,7 +2866,7 @@ EvReturn Creature::Hide(EventInfo &e)
     }
 
     Timeout += 15;
-    GainPermStati(HIDING,NULL,SS_CLAS,e.EParam,SkillLevel(SK_HIDE));
+    GainPermStati(HIDING,NULL,SS_CLAS,(int16)e.EParam,SkillLevel(SK_HIDE));
     HideVal = random(11)-5;
     return DONE;
   }
@@ -3171,9 +3177,9 @@ void Creature::Devour(Corpse * c)
      Craft (create item), etc.
      
 */
-EvReturn Character::CraftItem(int16 abil)
-  {
-    int16 i, new_lev, c, max_lev, qual, old_lev, 
+EvReturn Character::CraftItem(int16 abil) {
+    int8 i;
+    int16 new_lev, c, max_lev, qual, old_lev, 
       repairDC, craftDC, itemType, itemSource, acqVal,
       useSkill, minSkill, hours, quan; int32 gpCost, XPCost;
     Feature *ft; hObj hItem; char ch; Item *it, *it2;
@@ -3449,7 +3455,7 @@ EvReturn Character::CraftItem(int16 abil)
               Lookup(desc,i));
           }
             
-        qual = thisp->MyTerm->LMenu(MENU_DESC|MENU_BORDER|MENU_ESC|MENU_3COLS,
+        qual = (int16)thisp->MyTerm->LMenu(MENU_DESC|MENU_BORDER|MENU_ESC|MENU_3COLS,
           "Pick a quality to imbue:", WIN_MENUBOX);
         if (qual == -1)
           return ABORT;
@@ -3463,19 +3469,16 @@ EvReturn Character::CraftItem(int16 abil)
     it->Quantity++;
     it2 = it->TakeOne();
     if (addQuality)
-      it2->AddQuality(qual);
+        it2->AddQuality((int8)qual);
     else
-      it2->SetInherentPlus(
-        it->GetInherentPlus() + 1);
+        it2->SetInherentPlus(it->GetInherentPlus() + 1);
     
-    if (it2->ItemLevel() > 20)
-      {
+    if (it2->ItemLevel() > 20) {
         IPrint("That enchantment is beyond the ability of mortal magics.");
         delete it2;
         return ABORT;
-      }
-    XPCost = XPCostTable[it2->ItemLevel()] -
-               XPCostTable[it->ItemLevel()];
+    }
+    XPCost = XPCostTable[it2->ItemLevel()] - XPCostTable[it->ItemLevel()];
     new_lev = it2->ItemLevel();
     ASSERT(XPCost > 0);
     delete it2;
@@ -3497,7 +3500,7 @@ EvReturn Character::CraftItem(int16 abil)
       }
     else
       {
-        if (XPCost > (XP - XP_Drained))
+        if ((uint32)XPCost > (XP - XP_Drained))
           {
             IPrint(Format("You don't have enough available experience; "
               "you have %d and need %d.",(XP - XP_Drained),XPCost));
@@ -3534,7 +3537,7 @@ EvReturn Character::CraftItem(int16 abil)
     
     if (addQuality)
       {
-        it->AddQuality(qual);
+        it->AddQuality((int8)qual);
       }
     else
       {
@@ -3564,9 +3567,7 @@ EvReturn Character::CraftItem(int16 abil)
       it = Item::Create(iID)
     else*/
     
-    
-    
-    it = (Item*) thisp->MyTerm->AcquisitionPrompt(acqVal,0,max_lev,itemSource);
+    it = (Item*) thisp->MyTerm->AcquisitionPrompt((int8)acqVal,0,(int8)max_lev,(int8)itemSource);
     if (!it)
       return ABORT;
     
@@ -3574,13 +3575,13 @@ EvReturn Character::CraftItem(int16 abil)
     
     if (acqVal != ACQ_CRAFT)
       if (it->eID && TEFF(it->eID)->HasFlag(EF_NEEDS_PLUS))
-        it->SetInherentPlus(MaxItemPlus(max_lev,it->eID));
+        it->SetInherentPlus((int8)MaxItemPlus(max_lev,it->eID));
     
     if (acqVal == ACQ_CRAFT) {
       minSkill = 0;
-      minSkill = max(minSkill,TITEM(it->iID)->GetConst(MIN_CRAFT_LEVEL));
+      minSkill = max(minSkill,(int16)TITEM(it->iID)->GetConst(MIN_CRAFT_LEVEL));
       if (it->eID)
-        minSkill = max(minSkill,TITEM(it->eID)->GetConst(MIN_CRAFT_LEVEL));   
+        minSkill = max(minSkill,(int16)TITEM(it->eID)->GetConst(MIN_CRAFT_LEVEL));   
       if (it->isMetallic()) {
         minSkill = max(minSkill, 10);
         if (!foundForge)
@@ -3669,7 +3670,7 @@ EvReturn Character::CraftItem(int16 abil)
     if (HasFeat(FT_ARTIFICER))
       XPCost = (XPCost * 2) / 3;
     
-    if (XPCost > (XP - XP_Drained))
+    if ((uint32)XPCost > (XP - XP_Drained))
       {
         IPrint(Format("You don't have enough available experience; "
           "you have %d and need %d.",(XP - XP_Drained),XPCost));
@@ -3893,7 +3894,7 @@ void Character::RecalcCraftFormulas()
         for (j=0;j!=last;j++)
           {
             te = TEFF(theGame->SpellID(j));
-            if (te->HasSource(src)) {
+            if (te->HasSource((int8)src)) {
               /* If you know the actual spell as a spellcaster,
                  you automatically are able to scribe a scroll
                  of it, and it should not count as one of your
@@ -3915,7 +3916,7 @@ void Character::RecalcCraftFormulas()
                 for (j=0;j!=last;j++)
                   {
                     te = TEFF(theGame->SpellID(j));
-                    if (te->HasSource(src))
+                    if (te->HasSource((int8)src))
                       if (!(Spells[j] & (SP_CREATE|SP_KNOWN)))
                         Candidates[c++] = j;
                   }
@@ -3936,7 +3937,7 @@ void Character::RecalcCraftFormulas()
     //if (outOfFormulas)
     //  IPrint("Out of formulas!");
     time(&t);
-    srand(t);
+    srand((unsigned long)t);
   }  
 
 int16 Creature::getFavEnemyBonus(Creature *cr)
@@ -4016,7 +4017,7 @@ void Creature::Awaken(int32 st)
     if (Flags & F_DELETE)
       return;
 
-  if (HasStati(SLEEPING,st)) {
+  if (HasStati(SLEEPING,(int16)st)) {
     if (HasStati(SLEEPING,SLEEP_PSYCH) ||
         HasStati(SLEEPING,SLEEP_DEEP))
       return;
@@ -4695,14 +4696,14 @@ EvReturn Creature::Phase(EventInfo &e)
       "etherial plane", "plane of shadow", "negative energy plane",
       "positive energy plane", "???", "???" };       
     int16 i; bool vis[MAX_PLAYERS];
-    int8 phase_type = AbilityLevel(CA_PHASE);
+    int8 phase_type = (int8)AbilityLevel(CA_PHASE);
     ASSERT(phase_type);
     if (HasStati(PHASED,phase_type))
       {
         IPrint("You return to the material plane.");
         for (i=0;i!=MAX_PLAYERS;i++)
           if (m->pl[i] && m->pl[i] != myHandle)
-            vis[i] = oCreature(m->pl[i])->Perceives(this);
+            vis[i] = oCreature(m->pl[i])->Perceives(this) != 0;
         RemoveStati(PHASED);
         SetImage();
         for (i=0;i!=MAX_PLAYERS;i++)
@@ -4724,7 +4725,7 @@ EvReturn Creature::Phase(EventInfo &e)
 
     for (i=0;i!=MAX_PLAYERS;i++)
       if (m->pl[i] && m->pl[i] != myHandle)
-        vis[i] = oCreature(m->pl[i])->Perceives(this);
+        vis[i] = oCreature(m->pl[i])->Perceives(this) != 0;
     
     GainPermStati(PHASED, NULL, SS_MISC, phase_type);
     SetImage();
@@ -4837,7 +4838,7 @@ EvReturn Creature::Dig(EventInfo &e)
     ThrowXY(EV_MINE,tx,ty,this);
     m->At(tx,ty).Memory = 0;
     Rect r;
-    r.Set(tx,ty,tx,ty);
+    r.Set((uint8)tx,(uint8)ty,(uint8)tx,(uint8)ty);
     m->WriteAt(r,tx,ty,terID,regID,100,true);
     m->At(tx,ty).Memory = 0;
     m->VUpdate(tx,ty);
@@ -5243,7 +5244,7 @@ void Player::SummonAnimalCompanion(bool mount)
             { tc = 0; continue; }
           if(MountList[i] < 50)
             {
-              if (AbilityLevel(CA_SACRED_MOUNT) < MountList[i])
+              if (AbilityLevel(CA_SACRED_MOUNT) < (int16)MountList[i])
                 skip=true;
               else
                 skip=false;
@@ -5283,7 +5284,7 @@ void Player::SummonAnimalCompanion(bool mount)
                  "list.");
           return;
         }    
-      i = MyTerm->LMenu(MENU_ESC|MENU_DESC|MENU_2COLS|MENU_SORTED,
+      i = (int16)MyTerm->LMenu(MENU_ESC|MENU_DESC|MENU_2COLS|MENU_SORTED,
           mount ? "What type of Bonded Mount?" :
                   "What Type of Animal Companion?", WIN_MAP,0);
       if (i == -1) return;
@@ -5360,7 +5361,7 @@ void Player::SummonAnimalCompanion(bool mount)
       IPrint("There are no suitable creatures for you to summon.");
       return;
     }
-  n = MyTerm->LMenu(MENU_ESC|MENU_DESC|MENU_2COLS|MENU_SORTED,
+  n = (int16)MyTerm->LMenu(MENU_ESC|MENU_DESC|MENU_2COLS|MENU_SORTED,
       mount ? "What type of Bonded Mount?" :
               "What Type of Animal Companion?", WIN_MAP,0);
   if (n == -1) return;
@@ -5606,17 +5607,17 @@ bool Creature::ItemPrereq(rID xID, int16 ReqLevel, int16 TrickDC)
         return true;
   
     if (IS_VAL(xID,ABIL_VAL))
-      if (HasAbility(xID - ABIL_VAL))
-        if (AbilityLevel(xID - ABIL_VAL) >= ReqLevel)
+      if (HasAbility((int16)(xID - ABIL_VAL)))
+        if (AbilityLevel((int16)(xID - ABIL_VAL)) >= ReqLevel)
           return true;
           
     if (IS_VAL(xID,FEAT_VAL))
-      if (HasFeat(xID - FEAT_VAL))
+      if (HasFeat((int16)(xID - FEAT_VAL)))
         return true;
         
     if (IS_VAL(xID,SKILL_VAL))
-      if (HasSkill(xID - SKILL_VAL))
-        if (SkillLevel(xID - SKILL_VAL) >= ReqLevel)
+      if (HasSkill((int16)(xID - SKILL_VAL)))
+        if (SkillLevel((int16)(xID - SKILL_VAL)) >= ReqLevel)
           return true;
     
     if (IS_VAL(xID,MTYPE_VAL))
@@ -5624,13 +5625,13 @@ bool Creature::ItemPrereq(rID xID, int16 ReqLevel, int16 TrickDC)
         return true;
         
     if (IS_VAL(xID,MFLAG_VAL))
-      if (HasMFlag(xID - MFLAG_VAL))
+      if (HasMFlag((int16)(xID - MFLAG_VAL)))
         return true;
         
     if (IS_VAL(xID,ATTR_VAL))
       {
         ASSERT((xID - ATTR_VAL) <= A_LUC)
-        return GetAttr(xID - ATTR_VAL) >= ReqLevel;
+        return GetAttr((int8)(xID - ATTR_VAL)) >= ReqLevel;
       }
       
     if (IS_VAL(xID,CLEV_VAL)) {

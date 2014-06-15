@@ -337,7 +337,7 @@ void TextTerm::ShowTraits()
 
     if (!p->Opt(OPT_SIDEBAR)) {
       FName = p->Named;
-      if (FName.strchr(' ') && strlen(FName) > (WinSizeX()-1))
+      if (FName.strchr(' ') && strlen(FName) > (size_t)(WinSizeX()-1))
         if (stricmp(NAME(p->ClassID[0]),"Monk"))
           FName = FName.Left(FName.strchr(' '));
       FName = FName.Left(WinSizeX()-1);
@@ -347,7 +347,7 @@ void TextTerm::ShowTraits()
 	    else
 	      Write(Format("%c%s%c\n",-((p->Image & 0x0F00)/256),(const char*)FName,-7));
       if (p->RaceID) {
-        if (strlen(NAME(p->RaceID)) >= WinSizeX() - 7)
+        if (strlen(NAME(p->RaceID)) >= (size_t)(WinSizeX() - 7))
           Write(Format("%s %s\n",p->StateFlags & MS_FEMALE ? "F" : "M",NAME(p->RaceID)));
         else
 	        Write(Format("%s %s\n",p->StateFlags & MS_FEMALE ? "Female" : "Male",NAME(p->RaceID)));
@@ -634,7 +634,7 @@ void TextTerm::ShowTime()
     hour = (turn/18000) % 24;
     min  = (turn/300) % 60;
     sec  = (turn/5) % 60;
-    day  = (turn/432000L);
+    day  = (uint8)(turn/432000L);
     SetWin(WIN_TRAITS); Color(GREY);
     switch (p->Opt(OPT_PRECISE_TIME)) {
       case 0:  // minutes 
@@ -852,7 +852,7 @@ void Map::Update(int16 x,int16 y)
   if(!((At(x,y).Visibility & VI_VISIBLE) || Vis) &&
         T1->getMap() == this) /*later, >> player*4 */
   {
-    g = hi ? hg : (isEngulfed ? 0 : At(x,y).Memory);
+    g = hi ? hg : (isEngulfed ? 0 : (Glyph)At(x,y).Memory);
     if (g)
       T1->PutGlyph(x,y,g);
     else
@@ -944,7 +944,7 @@ void TextTerm::ShowMap()
         WViewThing(m->FirstAt(x+XOff,y+YOff) , 
             dist(x+XOff,y+YOff,p->x,p->y), true);
       } else {
-        g = mAt.Memory;
+        g = (Glyph)mAt.Memory;
         if (g) {
           PutGlyph(x+XOff,y+YOff,g);
           WViewThing(m->FirstAt(x+XOff,y+YOff), 
@@ -1039,7 +1039,7 @@ void TextTerm::ShowThings()
 		int16 i,fx,fy, Per; Thing *t;
     Rect ViewRange(max(XOff-15,0),max(YOff-15,0),
       min(XOff+MSizeX()+15,m->SizeX()),min(YOff+MSizeY()+15,m->SizeY()));
-    Rect ScreenRect(XOff,YOff,XOff+MSizeX(),YOff+MSizeY());
+    Rect ScreenRect((uint8)XOff,(uint8)YOff,(uint8)(XOff+MSizeX()),(uint8)(YOff+MSizeY()));
      
     /* TODO: Allow Selection of Offscreen Glyphs with EffectPrompt:
          The Term object will contain an array of 64 OffscreenGlyph
@@ -1090,7 +1090,7 @@ void TextTerm::ShowThings()
          */
         fx = x+XOff;
         fy = y+YOff;
-        if(ViewRange.Within(t->x, t->y) || (t->Flags & F_HILIGHT)) {
+        if(ViewRange.Within((uint8)t->x, (uint8)t->y) || (t->Flags & F_HILIGHT)) {
           m->Update(fx,fy);
         } else if ((t->isCreature() || (t->Flags & F_HILIGHT)) && 
             (Per = p->Perceives(t)))
@@ -1131,8 +1131,8 @@ void TextTerm::ShowThings()
           else
             PutGlyph(fx,fy,(t->Image & 0x0FFF) | 0x4000);
           if (OffscreenC < 64) {
-            OffscreenX[OffscreenC] = fx;
-            OffscreenY[OffscreenC] = fy;
+            OffscreenX[OffscreenC] = (uint8)fx;
+            OffscreenY[OffscreenC] = (uint8)fy;
             OffscreenC++;
           }
         }
@@ -1196,7 +1196,7 @@ Glyph TextTerm::FloorShading(int16 x, int16 y, Glyph g)
     // else if (abs(p->x - x) <= p->LightRange/2 && abs(p->y - y) <= p->LightRange/2)
     else if (Dist <= p->LightRange / 2)
       c = BrightenOnce[c];
-    return ((g & 0x00FF) + (c * 256)) | b;
+    return (Glyph)(((g & 0x00FF) + (c * 256)) | b);
 
     /*
     if (abs(p->x - x) <= 1 && abs(p->y - y) <= 1 && p->LightRange >= 3)
@@ -1303,7 +1303,7 @@ void TextTerm::ShowMapOverview()
             /* ww: show stairs (portals) over doors, etc. */
             if (m->At(x,y).Memory && m->KnownFeatureAt(x,y)) {
               force_priority = m->KnownFeatureAt(x,y)->Type ;
-              force = m->At(x,y).Memory ;
+              force = (Glyph)m->At(x,y).Memory ;
             } else if (wizsight && m->KnownFeatureAt(x,y)) {
               force_priority = m->KnownFeatureAt(x,y)->Type ;
               force = m->KnownFeatureAt(x,y)->Image;
@@ -1311,10 +1311,10 @@ void TextTerm::ShowMapOverview()
 
             /* if all else fails, show walls and floors */
             if (force_priority == T_LAST && !force && wizsight)
-              force = m->At(x,y).Glyph;
+              force = (Glyph)m->At(x,y).Glyph;
 
             if (force_priority == T_LAST && !force)
-              force = m->At(x,y).Memory;
+                force = (Glyph)m->At(x,y).Memory;
           }
 
         if ((onmap && seen) || force)
