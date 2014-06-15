@@ -491,10 +491,11 @@ int sortItemsAlpha(const void *a, const void *b)
 void TextTerm::InvShowSlots(bool changed)
 	{
     Container *con;
-		int16 i,j,k,y;
-		String str, wgt;
-		bool psych_might = p->HasAbility(CA_PSYCH_MIGHT),
-		     isGrouped = theGame->Opt(OPT_ORG_CONTAIN);
+	int16 i,j,y;
+    int32 k;
+	String str, wgt;
+	bool psych_might = p->HasAbility(CA_PSYCH_MIGHT),
+		 isGrouped = theGame->Opt(OPT_ORG_CONTAIN) != 0;
     SetWin(WIN_INVEN); 
     if (changed)
       Clear(); 
@@ -530,7 +531,7 @@ void TextTerm::InvShowSlots(bool changed)
 
 				Write(2,0+i,str);
         if (wgt)
-          Write(WinSizeX()-wgt.GetLength(),0+i,wgt);
+          Write(WinSizeX()-(int16)wgt.GetLength(),0+i,wgt);
         PurgeStrings();
 
 
@@ -595,7 +596,7 @@ void TextTerm::InvShowSlots(bool changed)
             if (str.GetLength() > WinSizeX() - wgt.GetLength())
               str = str.Left((WinSizeX()-3)-wgt.GetLength()) + Format("...%c",-7);
             SWrite(0,y,str);          
-            SWrite(WinSizeX()-wgt.GetLength(),y,wgt);
+            SWrite(WinSizeX()-(int16)wgt.GetLength(),y,wgt);
             yContents[j] = y;
             if (j == 98)
               goto StopListing;
@@ -646,7 +647,7 @@ int16 TextTerm::InventoryManager(bool first, Container *_theChest) {
     uint8 ch; int8 cs, ocs;
     int8 digit = 0, num;
     bool changed;
-    bool conCursor = theGame->Opt(OPT_CONTAINER_CURSOR);
+    bool conCursor = theGame->Opt(OPT_CONTAINER_CURSOR) != 0;
 
 #define INV(sl) (sl < NUM_SLOTS ? p->Inv[sl] : Contents[sl-NUM_SLOTS]->myHandle)
 
@@ -733,7 +734,7 @@ ResetCurrCon:
         InvShowSlots(changed);
         p->CalcValues();
         ClearKeyBuff();
-        ch=GetCharRaw();
+        ch=(uint8)GetCharRaw();
         PurgeStrings();
         if (!isdigit(ch))
             digit = 0;
@@ -1114,7 +1115,7 @@ Item* OneSomeAll(Item *it, Creature *cr, bool assume_some)
           
           if (it->HasIFlag(IT_ROPE))
             n = (n+4)/5;
-          if (n < 1 || n > it->GetQuantity())
+          if (n < 1 || n > (int32)it->GetQuantity())
             {
               cr->IPrint("Invalid input.");
               goto Retry;
@@ -1203,10 +1204,10 @@ void TextTerm::BarterManager(Creature *Seller)
       }
     SetWin(WIN_INVEN);
     
-    GotoXY(width/2 - ShopName.GetLength()/2,0);
+    GotoXY(width/2 - (int16)ShopName.GetLength()/2,0);
     Color(EMERALD);
     Write(ShopName);
-    GotoXY(width/2 - SellerName.GetLength()/2,1);
+    GotoXY(width/2 - (int16)SellerName.GetLength()/2,1);
     Color(YELLOW);
     Write(SellerName);
     GotoXY(2,3);
@@ -1311,9 +1312,9 @@ void TextTerm::BarterManager(Creature *Seller)
               return;
             case 'x':
               if (curr <= lItem) {
-                uint32 k; Item *it;
-                it = oItem(Wares[curr]);
-                k = it->Known; 
+                uint8 k;
+                Item *it = oItem(Wares[curr]);
+                k = (uint8)it->Known; 
                 it->SetKnown(0xFF);
                 Box(oItem(Wares[curr])->Describe(p));
                 it->SetKnown(k);
@@ -1567,12 +1568,12 @@ void TextTerm::SkillManager(bool initial)
       usp[3] = usp[4] = usp[5] = 0;
 
 
-    usp[0] = p->UnspentSP(0);
-    usp[1] = p->UnspentSP(1);
-    usp[2] = p->UnspentSP(2);
-    usp[3] = p->UnspentSP(3);
-    usp[4] = p->UnspentSP(4);
-    usp[5] = p->UnspentSP(5);
+    usp[0] = (int8)p->UnspentSP(0);
+    usp[1] = (int8)p->UnspentSP(1);
+    usp[2] = (int8)p->UnspentSP(2);
+    usp[3] = (int8)p->UnspentSP(3);
+    usp[4] = (int8)p->UnspentSP(4);
+    usp[5] = (int8)p->UnspentSP(5);
 
     Recount:
     /* Count the total number of skills that can ever be displayed
@@ -2182,7 +2183,7 @@ void TextTerm::DisplayCharSheet()
     SetWin(WIN_CSHEET);
     Clear();
     ClearScroll();
-    SWrite(WinSizeX()/2-cs.Banner.GetLength()/2,0,cs.Banner,WIN_CSHEET);
+    SWrite(WinSizeX()/2-(int16)cs.Banner.GetLength()/2,0,cs.Banner,WIN_CSHEET);
     y = 2;    
     y1 = y + SWrapWrite(1,y,cs.Basics,25,WIN_CSHEET);
     y2 = y; 
@@ -2303,7 +2304,7 @@ void TextTerm::DisplayCharSheet()
       case 'D':
         for (i=0;i!=9;i++)
           LOption(AlignmentInfo[i].name,i,XPrint(AlignmentInfo[i].desc));
-        i = LMenu(MENU_ESC|MENU_BORDER|MENU_3COLS|MENU_DESC, "Desired Alignment",
+        i = (int16)LMenu(MENU_ESC|MENU_BORDER|MENU_3COLS|MENU_DESC, "Desired Alignment",
               WIN_MENUBOX, "State the alignment your character aspires "
               "to live in accord with and Incursion will evaluate your "
               "actions in that context.");
@@ -2357,8 +2358,7 @@ void TextTerm::DisplayCharSheet()
             }
         if (!i)
           break;
-        i = LMenu(MENU_ESC|MENU_DESC|MENU_3COLS|MENU_BORDER|MENU_LARGEBOX,
-            "Choose a class:", WIN_MENUBOX);
+        i = (int16)LMenu(MENU_ESC|MENU_DESC|MENU_3COLS|MENU_BORDER|MENU_LARGEBOX,"Choose a class:", WIN_MENUBOX);
 
         if (i == -1)
           break;
@@ -2437,7 +2437,7 @@ void TextTerm::DisplayCharSheet()
         if (!p->GetJournal().GetLength())
           Message("You have no journal entries yet.");
         else {
-          p->StoreLevelStats(m->Depth); 
+          p->StoreLevelStats((uint8)m->Depth); 
           String s = p->GetJournal() + p->GetLevelStats();
           Box(WIN_SCREEN,BOX_WIDEBOX,EMERALD,GREY,XPrint(s));
         }

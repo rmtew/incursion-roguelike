@@ -416,7 +416,7 @@ void Map::enAddMon(EventInfo &e)
     EncMem[cEncMem].htID2 = e.ep_htID2;
     EncMem[cEncMem].pID   = e.ep_pID;
     EncMem[cEncMem].iID   = e.ep_iID;
-    EncMem[cEncMem].Part =  e.cPart;
+    EncMem[cEncMem].Part =  (int8)e.cPart;
     cEncMem++;
   }
 
@@ -474,7 +474,7 @@ void Map::enCalcCurrPartXCR(EventInfo &e)
       e.ep_monCR = TTEM(e.ep_tID2)->CR.Adjust(e.ep_monCR);
     if (e.ep_tID3)
       e.ep_monCR = TTEM(e.ep_tID3)->CR.Adjust(e.ep_monCR);
-    e.epCurrXCR = XCR(e.ep_monCR);
+    e.epCurrXCR = (int16)XCR(e.ep_monCR);
     
     if (e.ep_hmID) {
       e.ep_mountCR = TMON(e.ep_hmID)->CR;
@@ -482,13 +482,13 @@ void Map::enCalcCurrPartXCR(EventInfo &e)
         e.ep_mountCR = TTEM(e.ep_htID)->CR.Adjust(e.ep_mountCR);
       if (e.ep_htID2)
         e.ep_mountCR = TTEM(e.ep_htID2)->CR.Adjust(e.ep_mountCR);
-      e.epCurrXCR += XCR(e.ep_mountCR);
+      e.epCurrXCR += (int16)XCR(e.ep_mountCR);
       }
       
     if (e.ep_pID)
-      e.epCurrXCR += XCR(TEFF(e.ep_pID)->Level-2);
+      e.epCurrXCR += (int16)XCR(TEFF(e.ep_pID)->Level-2);
     if (e.ep_iID)
-      e.epCurrXCR += XCR(TEFF(e.ep_iID)->Level-2);
+      e.epCurrXCR += (int16)XCR(TEFF(e.ep_iID)->Level-2);
   }
 
 
@@ -510,9 +510,9 @@ int16 maxAmtByCR(int16 CR)
       }
   }
 
-EvReturn Map::enGenerate(EventInfo &e)
-  {
-    int32 q, c, i, w, j, n, enWeight[1024], tWeight;
+EvReturn Map::enGenerate(EventInfo &e) {
+    int16 i, j;
+    int32 q, c, w, n, enWeight[1024], tWeight;
     int16 nParts, regTries; uint16 old_enAlign;
     rID enList[1024], xID, wgtCurve[30]; 
     
@@ -588,9 +588,9 @@ EvReturn Map::enGenerate(EventInfo &e)
                 ASSERT(RES(wtList[i+1])->Type == T_TENCOUNTER);
                 if (TENC(wtList[i+1])->minCR > e.enCR)
                   { i += 4; continue; }
-                if (wtList[i+3] > e.enCR)
+                if ((int16)wtList[i+3] > e.enCR)
                   { i += 4; continue; }
-                if (wtList[i+4] < e.enCR)
+                if ((int16)wtList[i+4] < e.enCR)
                   { i += 4; continue; }
                 if (AlignConflict(TENC(wtList[i+1])->Align,e.enAlign,true))
                   { i += 3; continue; }
@@ -616,7 +616,7 @@ EvReturn Map::enGenerate(EventInfo &e)
               }
           }
         if (n) {
-          w = random(enWeight[n]);
+          w = random((int16)enWeight[n]);
           for (i=0;i!=n;i++)
             if (enWeight[i+1] > w)
               {
@@ -700,7 +700,7 @@ EvReturn Map::enGenerate(EventInfo &e)
       }      
   
     //********* Stage 3: Choose Encounter from Weighted List
-    w = random(enWeight[c]);
+    w = random((int16)enWeight[c]);
     for (i=0;i!=c;i++)
       if (enWeight[i+1] > w)
         {
@@ -766,8 +766,8 @@ EvReturn Map::enGenerate(EventInfo &e)
         for (i=0;i!=(e.enDesAmt / 3);i++)
           e.enSleep = max(e.enSleep,random(100)+1);
       }
-    e.enXCR = max(e.enXCR, XCR(e.enCR) * te->GetConst(MIN_XCR_MULT));
-    e.enXCR = max(e.enXCR, te->GetConst(MIN_XCR));
+    e.enXCR = max(e.enXCR, XCR(e.enCR) * (int32)te->GetConst(MIN_XCR_MULT));
+    e.enXCR = max(e.enXCR, (int32)te->GetConst(MIN_XCR));
     
     tWeight = 0;
     for(i=0;i!=nParts;i++)
@@ -786,7 +786,6 @@ EvReturn Map::enGenerate(EventInfo &e)
     /* Some universal preparations for building the encounter */
     if (te->GetList(UNIVERSAL_TEMPLATE,enList,1020))
       {
-        rID tID;
         XTHROW(EV_ENCHOOSE_TEMP,xe,
           e.chList = UNIVERSAL_TEMPLATE;
           e.chType = 0;
@@ -911,9 +910,9 @@ EvReturn Map::enGenerate(EventInfo &e)
           CR = TTEM(EncMem[i].tID3)->CR.Adjust(CR);
         totXCR += XCR(CR);
       }
-    Deviance = (abs(e.enXCR-totXCR) * 100L) / e.enXCR;
+    Deviance = (int16)((abs(e.enXCR-totXCR) * 100L) / e.enXCR);
     if (e.enDesAmt)
-      Deviance += max(0,((abs(e.enDesAmt-cEncMem)*100L)/e.enDesAmt)-50);
+      Deviance += (int16)max(0,((abs(e.enDesAmt-cEncMem)*100L)/e.enDesAmt)-50);
     if (cEncMem > maxAmtByCR(e.enCR))
       Deviance += (cEncMem - maxAmtByCR(e.enCR))*100 / maxAmtByCR(e.enCR);
     if (Deviance > 50 && e.enTries < 5)
@@ -1084,7 +1083,7 @@ EvReturn Map::enGenerate(EventInfo &e)
         Thing *targ = e.ETarget;
         for (i=0;i<cEncMem;i++)
           {
-            e.cMember = i;
+            e.cMember = (int16)i;
             ASSERT(i < MAX_ENC_MEMBERS);
             ReThrow(EV_ENBUILD_MON,e);
           }
@@ -1093,18 +1092,18 @@ EvReturn Map::enGenerate(EventInfo &e)
         Creature *leader, *best;
         int16 bestCR;
         bestCR = -6; best = NULL; leader = NULL;
-        for (i=0;i!=cEncMem;i++)
-          {
+        for (i=0;i!=cEncMem;i++) {
             Creature *mn = oCreature(EncMem[i].hMon);
-            if (te->Parts[EncMem[i].Part].Flags & EP_LEADER)
-              { 
+            if (te->Parts[EncMem[i].Part].Flags & EP_LEADER) { 
                 leader = mn;
                 break;
-              }
-            if (mn->ChallengeRating() > bestCR);
-              if (mn->isMType(MA_SAPIENT))
-                { best = mn; bestCR = mn->ChallengeRating(); }
-          }
+            }
+            if (mn->ChallengeRating() > bestCR)
+                if (mn->isMType(MA_SAPIENT)) {
+                    best = mn;
+                    bestCR = mn->ChallengeRating();
+                }
+        }
         if (best && !leader)
           leader = best;
           
@@ -1155,9 +1154,7 @@ bool okDesAmt(TEncounter *te, int16 des)
     return false;
   }
 
-int16 getMinCR(EventInfo &_e)
-  {
-    int16 i;
+int16 getMinCR(EventInfo &_e) {
     EventInfo e;
     e.Clear();
     e = _e;
@@ -1183,7 +1180,6 @@ int16 getMinCR(EventInfo &_e)
 
 int16 getMaxCR(EventInfo &_e)
   {
-    int16 i;
     EventInfo e;
     e.Clear();
     e = _e;
@@ -1279,7 +1275,7 @@ EvReturn Map::enGenPart(EventInfo &e)
         if (minCR == maxCR)
           {
             e.eimXCR = XCR(minCR);
-            e.epAmt = max(1,e.epXCR / e.eimXCR);
+            e.epAmt = (int16)max(1,e.epXCR / e.eimXCR);
             if (e.epMaxAmt)
               if (e.epAmt > e.epMaxAmt)
                 e.epAmt = e.epMaxAmt;
@@ -1296,7 +1292,7 @@ EvReturn Map::enGenPart(EventInfo &e)
             else
               e.eimXCR = (XCR(minCR)*2+XCR(maxCR)*2)/4;
             e.eimXCR = min(XCR(e.enCR),e.eimXCR);
-            e.epAmt = max(1,e.epXCR / e.eimXCR);
+            e.epAmt = (int16)max(1,e.epXCR / e.eimXCR);
             
             if (e.epMaxAmt)
               if (e.epAmt > e.epMaxAmt)
@@ -1488,12 +1484,12 @@ EvReturn Map::enChooseMID(EventInfo &e)
   {
     TEncounter *te = TENC(e.enID);
     EncPart *ep = &te->Parts[e.cPart];  
-    rID wmList[512], monList[512], xID;
+    rID wmList[512], monList[512];
     int32 monWeights[512];
     int16 cWeight, nMon, i, q, x, j;
     nMon = 0;
     bool isSingle = te->HasFlag(NF_SINGLE);
-    Restart:
+//Restart:
     int16 maxCR = XCRtoCR(e.eimXCR);
     
     /* Kludge: leave room for class template! */
@@ -1586,14 +1582,14 @@ EvReturn Map::enChooseMID(EventInfo &e)
           if (e.chResult = enUniformGet(e.cPart))
             return DONE;
           
-        if (te->GetList(ep->xID,wmList,510)) {
+        if (te->GetList((int16)ep->xID,wmList,510)) {
           monWeights[0] = 0; nMon = 0; cWeight = 10;
           bool isAquatic = te->HasFlag(NF_AQUATIC) ||
                            e.isAquaticContext ||
                          e.enConstraint == MA_AQUATIC;
           if ((ep->xID2 > 0x01000000) && !stricmp(NAME(ep->xID2),"aqueous"))
             isAquatic = false;
-          e.chList = ep->xID;
+          e.chList = (uint16)ep->xID;
           for(i=0;wmList[i] || wmList[i+1];i++)
             {
               if (wmList[i] == -1) // ANY TM_PLANAR
@@ -1646,7 +1642,7 @@ EvReturn Map::enChooseMID(EventInfo &e)
                   e.chList = 0;
                 }
               else if (wmList[i] < 0x01000000)
-                cWeight = wmList[i];
+                cWeight = (int16)wmList[i];
               else 
                 {
                   TMonster *tm = TMON(wmList[i]);
@@ -1769,7 +1765,7 @@ EvReturn Map::enChooseMID(EventInfo &e)
         int16 bestCR, j; rID bestID;
         bestID = 0; bestCR = -100;
         for (j=0;j!=4;j++) {
-          x = random(monWeights[nMon]);
+          x = random((int16)monWeights[nMon]);
           for (i=0;monWeights[i+1];i++)
             if (monWeights[i+1]>x) {
               if (TMON(monList[i])->CR > bestCR)
@@ -1783,7 +1779,7 @@ EvReturn Map::enChooseMID(EventInfo &e)
       }
     else
       {
-        x = random(monWeights[nMon]);
+        x = random((int16)monWeights[nMon]);
         for (i=0;monWeights[i+1];i++)
           if (monWeights[i+1]>x)
             { e.chResult = monList[i]; 
@@ -1830,9 +1826,9 @@ EvReturn Map::enGenMount(EventInfo &e)
     for(i=0;wtList[i] || wtList[i+1];i++) {
         int32 wtValue = wtList[i];
         if (wtValue <= -10) 
-          cFreaky = -wtValue;
+          cFreaky = (int16)-wtValue;
         else if (wtValue < 0x01000000)
-          cWeight = wtValue;
+          cWeight = (int16)wtValue;
         else if (RES(wtValue)->Type == T_TTEMPLATE)
           continue;
         else if (RES(wtValue)->Type == T_TMONSTER)
@@ -1887,7 +1883,7 @@ EvReturn Map::enGenMount(EventInfo &e)
       {
         //
       }     
-    x = random(mtWeights[nMount]);
+    x = random((int16)mtWeights[nMount]);
     for (i=0;mtWeights[i+1];i++)
       if (mtWeights[i+1]>x)
         {
@@ -1973,7 +1969,9 @@ EvReturn Map::enSelectTemps(EventInfo &e)
           template adjustments and allowed XCR.
     
     */
-    rID tID, tmList[512]; int32 q, i, c, chance;
+    rID tID, tmList[512];
+    uint16 i;
+    int32 q, c, chance;
     TEncounter *te = TENC(e.enID); bool isRider, hasRide;
     EncPart *ep = &(te->Parts[e.cPart]);
     bool isDragon = TMON(e.ep_mID)->isMType(e.ep_mID,MA_DRAGON);
@@ -2027,13 +2025,13 @@ EvReturn Map::enSelectTemps(EventInfo &e)
               enAddTemp(e,bestID);
           }
         else if (c) 
-          enAddTemp(e,tmList[random(c)]);
+          enAddTemp(e,tmList[random((int16)c)]);
         else
           e.epFailed = true;
       }  
     else if (ep->xID2)
       {
-        e.chList = ep->xID2;
+        e.chList = (uint16)ep->xID2;
         e.chType = 0;
         e.chCriteria = NULL;
         e.chMaximize = false;
@@ -2218,7 +2216,7 @@ EvReturn Map::enChooseTemp(EventInfo &e)
             if (wtList[i] == -1) // ANY TM_PLANAR
               { i++; Error("ANY in TEMP_LIST not implemented!"); }
             else if (wtList[i] < 0x01000000)
-              cWeight = wtList[i];
+              cWeight = (int16)wtList[i];
             else if (enTemplateOk(e, wtList[i]))
               {
                 tmList[nTemp++] = wtList[i];
@@ -2308,7 +2306,7 @@ EvReturn Map::enChooseTemp(EventInfo &e)
         enUniformAdd(((e.chList+e.cPart*10000) | 0x0D000000), e.chResult);
         return DONE;
       }     
-    x = random(tmWeights[nTemp]);
+    x = random((int16)tmWeights[nTemp]);
     for (i=0;tmWeights[i+1];i++)
       if (tmWeights[i+1]>x)
         {
@@ -3085,9 +3083,9 @@ Item* Item::GenItem(uint16 Flags, rID xID, int16 Depth, int8 Luck, ItemGen *Gen)
       minlev = max(0,maxlev-4);
     else {
       if (xID && RES(xID)->Type == T_TDUNGEON)
-        if (random(100)+1 < TDUN(xID)->GetConst(CURSED_CHANCE)) {
+        if (random(100)+1 < (int16)TDUN(xID)->GetConst(CURSED_CHANCE)) {
           isCursed = true;
-        } else if (random(100)+1 < TDUN(xID)->GetConst(CURSED_CHANCE)) {
+        } else if (random(100)+1 < (int16)TDUN(xID)->GetConst(CURSED_CHANCE)) {
           isCursed = true;
           trulyCursed = true; 
         }
@@ -3146,9 +3144,9 @@ Item* Item::GenItem(uint16 Flags, rID xID, int16 Depth, int8 Luck, ItemGen *Gen)
     if (Gen[i].Prototype)
       { iID = FIND(Gen[i].Prototype); proto = true; }
     else if (Flags & IG_STAPLE)
-      iID = theGame->GetItemID(PUR_STAPLE,0,maxlev,Gen[i].Type);
+      iID = theGame->GetItemID(PUR_STAPLE,0,(int8)maxlev,(int8)Gen[i].Type);
     else
-      iID = theGame->GetItemID(PUR_DUNGEON,0,maxlev,Gen[i].Type);
+      iID = theGame->GetItemID(PUR_DUNGEON,0,(int8)maxlev,(int8)Gen[i].Type);
     mag   = Gen[i].Source;
 
     if (!iID)
@@ -3172,7 +3170,7 @@ Item* Item::GenItem(uint16 Flags, rID xID, int16 Depth, int8 Luck, ItemGen *Gen)
         theItem->Quantity = val;
         /* Don't generate 1,000,000 cp on dlev 10! */
         int32 maxCoins[] = {25000, 10000, 5000, 2500} ;
-        if (theItem->Quantity > maxCoins[random(4)])
+        if (theItem->Quantity > (uint32)maxCoins[random(4)])
           {
             delete theItem;
             goto RetryCoinType;
@@ -3240,14 +3238,14 @@ Item* Item::GenItem(uint16 Flags, rID xID, int16 Depth, int8 Luck, ItemGen *Gen)
       {
         GrantEffect:
         if (trulyCursed) 
-          eID = theGame->GetEffectID(PUR_CURSED,minlev,maxlev,mag);
+          eID = theGame->GetEffectID(PUR_CURSED,(int8)minlev,(int8)maxlev,(int8)mag);
         else if (Flags & IG_STAPLE)
-          eID = theGame->GetEffectID(PUR_STAPLE,minlev,maxlev,mag);
+          eID = theGame->GetEffectID(PUR_STAPLE,(int8)minlev,(int8)maxlev,(int8)mag);
         else if (mag == AI_WEAPON || mag == AI_ARMOUR) 
           /* Specific Weapons ALWAYS have maxlev adjusted by luck. */
-          eID = theGame->GetEffectID(PUR_DUNGEON,minlev,adjlev,mag);
+          eID = theGame->GetEffectID(PUR_DUNGEON,(int8)minlev,(int8)adjlev,(int8)mag);
         else
-          eID = theGame->GetEffectID(PUR_DUNGEON,minlev,maxlev,mag);
+          eID = theGame->GetEffectID(PUR_DUNGEON,(int8)minlev,(int8)maxlev,(int8)mag);
         
         if (mag == AI_ARMOUR)
           if (eID && !TEFF(eID)->HasSource(AI_ARMOUR))
@@ -3280,7 +3278,7 @@ Item* Item::GenItem(uint16 Flags, rID xID, int16 Depth, int8 Luck, ItemGen *Gen)
       theItem->MakeMagical(eID,theItem->Plus);
       
     if (theItem->eID || theItem->Plus)
-      if (random(theItem->eID ? 150 : 100) < (xID ? TDUN(xID)->GetConst(CURSED_CHANCE) : 25))
+      if (random(theItem->eID ? 150 : 100) < (xID ? (int16)TDUN(xID)->GetConst(CURSED_CHANCE) : 25))
         if (!(theItem->isType(T_POTION) || theItem->isType(T_SCROLL) || theItem->isType(T_WAND) ||
                 theItem->isType(T_COIN) || theItem->isType(T_TOOL) || theItem->isType(T_TOME)))
           theItem->IFlags |= IF_CURSED;
