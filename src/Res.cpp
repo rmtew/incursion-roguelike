@@ -98,114 +98,113 @@ inline Resource* Module::GetResource(rID r)
     return res;
   } 
 
-inline Resource* Module::__GetResource(rID r)
-  {
-    r &= 0x00FFFFFF;
-    if (r < szMon)
+inline Resource* Module::__GetResource(rID r_) {
+    uint32 r = r_ & 0x00FFFFFF;
+
+    if (r < (uint32)szMon)
       return &QMon[r];
     else
       r -= szMon;
 
-    if (r < szItm)
+    if (r < (uint32)szItm)
       return &QItm[r];
     else
       r -= szItm;
 
-    if (r < szFea)
+    if (r < (uint32)szFea)
       return &QFea[r];
     else
       r -= szFea;
 
-    if (r < szEff)
+    if (r < (uint32)szEff)
       return &QEff[r];
     else
       r -= szEff;
 
-    if (r < szArt)
+    if (r < (uint32)szArt)
       return &QArt[r];
     else
       r -= szArt;
 
-    if (r < szQue)
+    if (r < (uint32)szQue)
       return &QQue[r];
     else
       r -= szQue;
 
-    if (r < szDgn)
+    if (r < (uint32)szDgn)
       return &QDgn[r];
     else
       r -= szDgn;
 
-    if (r < szRou)
+    if (r < (uint32)szRou)
       return &QRou[r];
     else
       r -= szRou;
 
-    if (r < szNPC)
+    if (r < (uint32)szNPC)
       return &QNPC[r];
     else
       r -= szNPC;
 
-    if (r < szCla)
+    if (r < (uint32)szCla)
       return &QCla[r];
     else
       r -= szCla;
 
-    if (r < szRac)
+    if (r < (uint32)szRac)
       return &QRac[r];
     else
       r -= szRac;
 
-    if (r < szDom)
+    if (r < (uint32)szDom)
       return &QDom[r];
     else
       r -= szDom;
 
-    if (r < szGod)
+    if (r < (uint32)szGod)
       return &QGod[r];
     else
       r -= szGod;
 
-    if (r < szReg)
+    if (r < (uint32)szReg)
       return &QReg[r];
     else
       r -= szReg;
 
-    if (r < szTer)
+    if (r < (uint32)szTer)
       return &QTer[r];
     else
       r -= szTer;
 
-    if (r < szTxt)
+    if (r < (uint32)szTxt)
       return &QTxt[r];
     else
       r -= szTxt;
 
-    if (r < szVar)
+    if (r < (uint32)szVar)
       return &QVar[r];
     else
       r -= szVar;
 
-    if (r < szTem)
+    if (r < (uint32)szTem)
       return &QTem[r];
     else
       r -= szTem;
 
-    if (r < szFla)
+    if (r < (uint32)szFla)
       return &QFla[r];
     else
       r -= szFla;
 
-    if (r < szBev)
+    if (r < (uint32)szBev)
       return &QBev[r];
     else
       r -= szBev;
 
-    if (r < szEnc)
+    if (r < (uint32)szEnc)
       return &QEnc[r];
     else
       r -= szEnc;
-
 
     /*
     if (r < szQue)
@@ -669,15 +668,14 @@ rID Module::RandomResource(uint8 RType, int8 Level, int8 Range)
 
 void* Game::GetMemory(rID xID,Player *pl)
   {
-    int16 i;
+    int8 i;
     for (i=0;i!=MAX_PLAYERS;i++)
       if (p[i] == pl->myHandle)
         goto Found;
     Error("Unregistered player asking for resource memory!");
     return theGame->MDataSeg[(xID >> 24)-1];
     Found:
-    return theGame->MDataSeg[(xID >> 24)-1] + theGame->Modules[(xID >> 24)-1]->
-      GetMemoryPtr(xID,i);
+    return theGame->MDataSeg[(xID >> 24)-1] + theGame->Modules[(xID >> 24)-1]->GetMemoryPtr(xID,i);
   }
 
 uint32 Module::GetMemoryPtr(rID xID,int8 pn)
@@ -796,7 +794,7 @@ void Game::Cleanup()
     if (Modules[0])
       for(i=0;i!=MAX_DUNGEONS;i++)
         if (DungeonID[i]) {
-          n = TDUN(DungeonID[i])->GetConst(DUN_DEPTH);
+          n = (int16)TDUN(DungeonID[i])->GetConst(DUN_DEPTH);
           for(j=0;j!=n;j++) {
             //if (theRegistry->GroupInMemory(DungeonLevels[i][j]))
             if (theRegistry->Exists(DungeonLevels[i][j]))
