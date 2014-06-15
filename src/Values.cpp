@@ -65,7 +65,7 @@ void Creature::StackBonus(int8 btype, int8 attr,int16 bonus)
           else
             {
               bonus += (concentTotal - concentUsed);
-              concentUsed = concentTotal;
+              concentUsed = (int8)concentTotal;
             }
         }
   
@@ -250,14 +250,17 @@ void Creature::AddBonus(int8 btype,int8 attr,int16 bonus)
       }
   }
 
+/*
+at:
+tm: 
+*/
 #define APPLY_TEMPLATE_MODIFIER(at,tm)                                                  \
-   if (tm.VType == MVAL_SET) {                                                          \
-     AttrAdj[at][BONUS_BASE] = tm.Value;                                                \
-     AttrAdj[at][BONUS_TEMP] = 0;                                                       \
-     }                                                                                  \
-   else if (tm.VType == MVAL_PERCENT && percent_attr(at))                               \
-     AttrAdj[at][BONUS_TEMP] = ((((AttrAdj[at][BONUS_TEMP]*5+100L)*                     \
-                                  ((long)tm.Adjust(100))) / 100L) - 100) / 5;                    \
+    if (tm.VType == MVAL_SET) {                                                         \
+        AttrAdj[at][BONUS_BASE] = (int8)tm.Value;                                       \
+        AttrAdj[at][BONUS_TEMP] = 0;                                                    \
+     } else if (tm.VType == MVAL_PERCENT && percent_attr(at))                           \
+        AttrAdj[at][BONUS_TEMP] = (int8)(((((AttrAdj[at][BONUS_TEMP]*5+100L)*           \
+                                  ((long)tm.Adjust(100))) / 100L) - 100) / 5);          \
    else                                                                                 \
      AttrAdj[at][BONUS_TEMP] = tm.Adjust(AttrAdj[at][BONUS_BASE]                         \
        + AttrAdj[at][BONUS_TEMP]) - (AttrAdj[at][BONUS_BASE] /*+ AttrAdj[at][BONUS_TEMP]*/);  
@@ -282,7 +285,8 @@ void Creature::CalcValues(bool KnownOnly, Item *thrown)
 {
 #define XMod(a) (KnownOnly ? KMod(a) : Mod(a))
 #define XMod2(a) (KnownOnly ? KMod2(a) : Mod2(a))
-  int16 i,j, tsav, oFP, oHP, oldSize; Item *it;
+  int16 j, tsav, oFP, oHP, oldSize; Item *it;
+  int8 i;
   bool isHalted = false; static int16 MRVals[BONUS_LAST], MRC;
   int restart_count = 0; 
   oldSize = Attr[A_SIZ];
@@ -467,9 +471,9 @@ Restart:
 
     StackBonus(BONUS_NATURAL,A_SPD,TMON(mID)->Spd);      
     /* Account for template here... */
-    tsav = MonGoodSaves(TMON(mID)->MType[0]) |
-      MonGoodSaves(TMON(mID)->MType[1]) |
-      MonGoodSaves(TMON(mID)->MType[2]);
+    tsav = MonGoodSaves((int8)TMON(mID)->MType[0]) |
+      MonGoodSaves((int8)TMON(mID)->MType[1]) |
+      MonGoodSaves((int8)TMON(mID)->MType[2]);
 
     if (tsav & XBIT(FORT))
       AddBonus(BONUS_BASE,A_SAV_FORT, GoodSave[max(ChallengeRating(),0)]);
@@ -1167,7 +1171,7 @@ Restart:
   }
 
     if (HasFeat(FT_EXPERTISE)) {
-      int8 a, b = 0;
+      int16 a, b = 0;
       // ww: a +10 sword should be better at parrying than a +0 sword
       if (meleeWep) 
         a = meleeWep->ParryVal(this); 
@@ -1495,7 +1499,7 @@ Restart:
     ScentRange   = AbilityLevel(CA_SCENT) + 
       (HasFeat(FT_WILD_SHAPE_SCENT) ? 3 : 0);
     if (LightRange) LightRange   += AbilityLevel(CA_LOWLIGHT);
-    InfraRange   = AbilityLevel(CA_INFRAVISION);
+    InfraRange   = (uint8)AbilityLevel(CA_INFRAVISION);
     if (isBlind()) {
       SightRange = ShadowRange = InfraRange = 0;  
     }
@@ -1505,8 +1509,8 @@ Restart:
       InfraRange  = (InfraRange * 3) / 2;
       ScentRange  = (ScentRange * 3) / 2; 
     } 
-    TelepRange   = AbilityLevel(CA_TELEPATHY);
-    TremorRange  = AbilityLevel(CA_TREMORSENSE);
+    TelepRange   = (uint8)AbilityLevel(CA_TELEPATHY);
+    TremorRange  = (uint8)AbilityLevel(CA_TREMORSENSE);
     BlindRange   = AbilityLevel(CA_BLINDSIGHT) + HasFeat(FT_BLINDSIGHT);
     if (BlindRange) {
       if ( m && m->InBounds(x,y) && m->FieldAt(x,y,FI_SILENCE))
@@ -1530,7 +1534,7 @@ Restart:
       BlindRange = max(1,BlindRange);
     }
     NatureSight  = HasAbility(CA_NATURE_SENSE);
-    PercepRange  = HighStatiMag(PERCEPTION);
+    PercepRange  = (uint8)HighStatiMag(PERCEPTION);
     /* We're assuming for now that animals don't need light to see, so
        that they can exist in the dungeon as effective companions to
        druids and rangers. */
@@ -1674,7 +1678,7 @@ void Character::CalcValues(bool KnownOnly, Item *thrown)
 
   theGame->inCalcVal++;
 
-  int16 a_hp = A_CON;
+  int8 a_hp = A_CON;
   if (one_body && Mod(A_WIS) > Mod(A_CON))
       a_hp = A_WIS; 
 
@@ -1768,7 +1772,7 @@ void Character::CalcValues(bool KnownOnly, Item *thrown)
     
   mMana *= ManaMultiplier[TotalLevel()];
   mMana += 10;
-  mMana += Mod(a_mana) * TotalLevel();
+  mMana += Mod((int8)a_mana) * TotalLevel();
     
   mMana += AbilityLevel(CA_MAGICAL_NATURE);
 
@@ -2076,14 +2080,14 @@ void Creature::CalcHP()
   HDType = BestHDType(); 
 
   if (mID)
-    HD = TMON(mID)->HitDice; 
+    HD = (int8)TMON(mID)->HitDice; 
   else 
-    HD = TMON(tmID)->HitDice;
+    HD = (int8)TMON(tmID)->HitDice;
 
   // IDPrint(NULL,Format("%s has %d hit dice.",(const char*)Name(NA_THE),HD));
 
   StatiIterNature(this,TEMPLATE)
-    HD = TTEM(S->eID)->HitDice.Adjust(HD);
+    HD = (int8)TTEM(S->eID)->HitDice.Adjust(HD);
   StatiIterEnd(this)
 
   // ww: just like the "player max hp" option, we have a "monster max hp"
@@ -2115,7 +2119,7 @@ void Creature::CalcHP()
       default:mMana += ManaMultiplier[i] * Dice::Roll(1,manaDie); break; 
     }
   }
-  int a_hp = A_CON;
+  int8 a_hp = A_CON;
   if (one_body && Mod(A_WIS) > Mod(A_CON))
     a_hp = A_WIS;
 
@@ -2140,10 +2144,9 @@ void Creature::CalcHP()
   /* Knowledge skills give bonuses to summoned creatures'
      hit points. */
   if (Creature *summ = (Creature*) GetStatiObj(SUMMONED))
-    if (int32 sr = summ->getBestKnowSkill(this,false))
-      {
-        mHP += (mHP * sr * 5) / 100;
-      }
+    if (int32 sr = summ->getBestKnowSkill(this,false)) {
+        mHP += (mHP * (int16)sr * 5) / 100;
+    }
       
   if (HasStati(HEROIC_QUALITY))
     mHP += 20;
@@ -2361,19 +2364,19 @@ bool Creature::isMType(int32 mt)
 
     case MA_EVIL:
       if (HasStati(ALIGNMENT)) 
-        return GetStatiVal(ALIGNMENT) & AL_EVIL;
+        return (GetStatiVal(ALIGNMENT) & AL_EVIL) != AL_EVIL;
       else return HasMFlag(M_EVIL);
     case MA_GOOD:
       if (HasStati(ALIGNMENT)) 
-        return GetStatiVal(ALIGNMENT) & AL_GOOD;
+        return (GetStatiVal(ALIGNMENT) & AL_GOOD) != AL_GOOD;
       else return HasMFlag(M_GOOD);
     case MA_LAWFUL:
       if (HasStati(ALIGNMENT)) 
-        return GetStatiVal(ALIGNMENT) & AL_LAWFUL;
+        return (GetStatiVal(ALIGNMENT) & AL_LAWFUL) != AL_LAWFUL;
       else return HasMFlag(M_LAWFUL);
     case MA_CHAOTIC:
       if (HasStati(ALIGNMENT)) 
-        return GetStatiVal(ALIGNMENT) & AL_CHAOTIC;
+        return (GetStatiVal(ALIGNMENT) & AL_CHAOTIC) != AL_CHAOTIC;
       else return HasMFlag(M_CHAOTIC);
     case MA_NEUTRAL:
       return (!isMType(MA_GOOD) &&
