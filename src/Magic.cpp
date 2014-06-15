@@ -43,7 +43,7 @@
 
 bool effectGivesStati(rID eID)
   {
-    EffectValues *ev; int16 i;
+    EffectValues *ev; int8 i;
     TEffect *te = TEFF(eID);
     for(i=0,ev=te->Vals(i);ev;ev=te->Vals(++i))
       if (ev->eval == EA_GRANT || ev->eval == EA_INFLICT ||
@@ -145,7 +145,7 @@ String & TEffect::Power(int8 Mod, Creature *Caster, rID spID, Item *it)
     e.eID = spID;
     e.vCasterLev = Mod;
     str = "";
-    for(int16 i=0;ef = Vals(i);i++)
+    for(int8 i=0;ef = Vals(i);i++)
       {
         e.EMagic = ef;
         e.efNum = i;
@@ -268,13 +268,14 @@ EffectValues* TEffect::Vals(int8 num)
    event, for ease of use. Perhaps two overloaded functions? c.f.
    Thing::Event for PRE(EV_FIELDON/OFF) */
 
-bool Magic::isTarget(EventInfo &_e, Thing *t)
-  {
-    EventInfo e; e = _e; e.ETarget = t;
-    Creature *c; TEffect *te = TEFF(e.eID);
-    Thing *ot; 
-      if (!te) return true; 
-      int16 lev, mt;
+bool Magic::isTarget(EventInfo &_e, Thing *t) {
+    EventInfo e = _e;
+    e.ETarget = t;
+    Creature *c;
+    TEffect *te = TEFF(e.eID);
+    int16 lev, mt;
+    if (!te)
+        return true; 
     if (e.EMagic == NULL)
       e.EMagic = &TEFF(e.eID)->ef;
     // ww: no matter what, there must be open air between you and the other
@@ -414,7 +415,7 @@ bool Magic::isTarget(EventInfo &_e, Thing *t)
 
   void Magic::CalcEffect(EventInfo &e) {
       TEffect *te = TEFF(e.eID); 
-      int32 sp_flags = 0, i;
+      int32 sp_flags = 0;
       int16 efNum;
 
       efNum = te->Vals(e.efNum) ? e.efNum : 0;
@@ -450,19 +451,19 @@ bool Magic::isTarget(EventInfo &_e, Thing *t)
       } else if ((e.AType == A_BREA || e.AType == A_SPIT ||
           e.DType == AD_SPE1 || e.DType == AD_SPE2) &&
           e.EActor->HasAttk(e.AType)) {
-          e.saveDC = e.EActor->GetPower(e.EActor->GetAttk(e.AType)->u.a.DC);
+          e.saveDC = (int8)e.EActor->GetPower(e.EActor->GetAttk(e.AType)->u.a.DC);
       } else if (e.isTrap || !e.EActor)
           e.saveDC = 10 + te->Level;
       else if (TEFF(e.eID)->HasFlag(EF_SPECABIL))
           e.saveDC = 10 + e.EActor->ChallengeRating() + e.EActor->Mod(A_CHA);
       else 
-          e.saveDC = e.EActor->getSpellDC(e.eID, e.isArcaneTrickery,e.MM & MM_HEIGHTEN);
+          e.saveDC = (int8)e.EActor->getSpellDC(e.eID, e.isArcaneTrickery,(e.MM & MM_HEIGHTEN) == MM_HEIGHTEN);
 
       if (e.isItem && e.EItem && e.EItem->isType(T_SCROLL))
           e.vCasterLev = max(TEFF(e.EItem->eID)->Level*2-1,e.EActor->SkillLevel(SK_DECIPHER) - 2); 
 
       if (e.isItem && e.EItem && e.EItem->isItem())
-          e.vCasterLev = e.EItem->ItemLevel();
+          e.vCasterLev = (int8)e.EItem->ItemLevel();
       else if (!e.EActor)
           e.vCasterLev = te->Level;
       else if (e.isTrap) 
@@ -472,7 +473,7 @@ bool Magic::isTarget(EventInfo &_e, Thing *t)
       else if (sp_flags & SP_INNATE) 
           e.vCasterLev = max(1,e.EActor->ChallengeRating());
       else
-          e.vCasterLev = e.EActor->CasterLev();
+          e.vCasterLev = (int8)e.EActor->CasterLev();
 
       StatiIterNature(e.EActor,BONUS_SCHOOL_CASTING_LEVEL) {
           if (S->Val & te->Schools)
@@ -494,10 +495,10 @@ bool Magic::isTarget(EventInfo &_e, Thing *t)
           if (e.EActor->isPlayer())
               e.vCasterLev += ((Player*)e.EActor)->Opt(OPT_OVERCAST); 
 
-      e.vRange = (te->ef.lval && !te->ef.aval) ? LevelAdjust(te->Vals(efNum)->lval,
+      e.vRange = (te->ef.lval && !te->ef.aval) ? LevelAdjust(te->Vals((int8)efNum)->lval,
           e.vCasterLev, (e.EItem && e.EItem->isItem()) ? abs(e.EItem->GetPlus()) : 0) :
           5 + e.vCasterLev/2;
-      e.vRadius = te->ef.lval ? LevelAdjust(te->Vals(efNum)->lval,
+      e.vRadius = te->ef.lval ? LevelAdjust(te->Vals((int8)efNum)->lval,
           e.vCasterLev, (e.EItem && e.EItem->isItem()) ? abs(e.EItem->GetPlus()) : 0) : 5;
       if (e.MM & MM_ENLARGE)
           e.vRadius *= 2;
@@ -540,10 +541,10 @@ bool Magic::isTarget(EventInfo &_e, Thing *t)
           case 'p': e.DType = AD_TOXI; break;
           case 's': e.DType = AD_SONI; break;
           }
-      } else if (TEFF(e.eID)->Vals(efNum)->eval == EA_BLAST)
-          e.DType = TEFF(e.eID)->Vals(efNum)->xval;
+      } else if (TEFF(e.eID)->Vals((int8)efNum)->eval == EA_BLAST)
+          e.DType = TEFF(e.eID)->Vals((int8)efNum)->xval;
 
-      e.Dmg = TEFF(e.eID)->Vals(efNum)->pval.LevelAdjust(e.vCasterLev,
+      e.Dmg = TEFF(e.eID)->Vals((int8)efNum)->pval.LevelAdjust(e.vCasterLev,
           ((e.EItem && e.EItem->isItem())) ? e.EItem->GetPlus() : 0);
       if (e.isSpell || (e.isItem && e.EItem->isType(T_SCROLL))) { 
           if (e.EMagic->eval == EA_BLAST || e.EMagic->eval == EA_DRAIN)
@@ -579,7 +580,7 @@ bool Magic::isTarget(EventInfo &_e, Thing *t)
       e.vDmg based on new e.Dmg, but otherwise let EV_CALC_EFFECT set
       e.vDmg on its own and don't overwrite. */
       if (!(od == e.Dmg)) {
-          e.Dmg = TEFF(e.eID)->Vals(efNum)->pval.LevelAdjust(e.vCasterLev,
+          e.Dmg = TEFF(e.eID)->Vals((int8)efNum)->pval.LevelAdjust(e.vCasterLev,
               ((e.EItem && e.EItem->isItem())) ? e.EItem->GetPlus() : 0);
           if (e.MM & MM_MAXIMIZE)
               e.vDmg = e.Dmg.Number * e.Dmg.Sides + e.Dmg.Bonus;
@@ -687,7 +688,7 @@ Nothing:
 
 
       while (e.EMagic = te->Vals(e.efNum)) {
-SkipLoop:
+//SkipLoop:
 
           CalcEffect(e);
 
@@ -860,8 +861,8 @@ EvReturn Magic::MagicStrike(EventInfo &e)
         /* This is a kludge to represent the fact that we can't get
            Base Attack Bonus easily -- it should be the character's
            BAB that's applied here. */
-        e.vHit    = e.EActor->GetBAB(S_ARCHERY);
-        e.vDef    = e.EVictim->GetAttr(A_DEF);
+        e.vHit    = (int8)e.EActor->GetBAB(S_ARCHERY);
+        e.vDef    = (int8)e.EVictim->GetAttr(A_DEF);
         e.vThreat = 20;
         return ReThrow(EV_STRIKE,e);
       }
@@ -1271,7 +1272,7 @@ EvReturn Magic::MagicXY(EventInfo &e,int16 tx,int16 ty)
     while (TEFF(e.eID)->Vals(e.efNum) &&
            TEFF(e.eID)->Vals(e.efNum)->aval ==
              TEFF(e.eID)->Vals(e.efNum-1)->aval);
-    e.efNum = o_efNum; 
+    e.efNum = (int8)o_efNum; 
     
     return r2;
   }
@@ -1321,7 +1322,7 @@ EvReturn Magic::AGlobe(EventInfo &e)
   {
     Map *m; Thing *t; Glyph g;
       TEffect *te = TEFF(e.eID);
-    int16 i, cx,cy,x, y, x1,x2,y1, _efNum = e.efNum;
+    int16 i, cx,cy,x, y,_efNum = e.efNum;
     m = e.EActor->m;
     if (e.isLoc)
       { cx = e.EXVal; cy = e.EYVal; }
@@ -1367,8 +1368,9 @@ EvReturn Magic::AGlobe(EventInfo &e)
       return DONE;
 
     MapIterate(m,t,i)
-        if (dist(t->x,t->y,cx,cy) < e.vRadius)
-        { e.ETarget = t; e.efNum = _efNum;
+        if (dist(t->x,t->y,cx,cy) < (int16)e.vRadius) {
+            e.ETarget = t;
+            e.efNum = (int8)_efNum;
             if (t == e.EActor && te && te->HasFlag(EF_CASTER_IMMUNE))
               ;
             else 
@@ -1503,7 +1505,7 @@ EvReturn Magic::ABarrier(EventInfo &e)
 
 EvReturn Magic::AField(EventInfo &e)
   {
-    Glyph g; int16 tx,ty,i, x, y;
+    Glyph g; int16 tx,ty,x, y;
     if (!e.EActor || !e.EActor->m) return ABORT;
     
       /* Later, figure out if blast, hit, target, self, etc. */
@@ -1528,7 +1530,7 @@ EvReturn Magic::AField(EventInfo &e)
     tx = e.EXVal ? e.EXVal : e.ETarget ? e.ETarget->x : e.EActor->x;
     ty = e.EYVal ? e.EYVal : e.ETarget ? e.ETarget->y : e.EActor->y;
 
-    e.vRadius = LevelAdjust(e.EMagic->lval,e.vCasterLev,(e.EItem && e.EItem->isItem()) ? e.EItem->GetPlus() : 0);
+    e.vRadius = (int8)LevelAdjust(e.EMagic->lval,e.vCasterLev,(e.EItem && e.EItem->isItem()) ? e.EItem->GetPlus() : 0);
     e.vRadius = abs(e.vRadius); 
     if (e.MM & MM_ENLARGE)
       e.vRadius *= 2;
@@ -1621,7 +1623,7 @@ EvReturn Magic::ABallBeamBolt(EventInfo &e)
   if (e.eID) te = TEFF(e.eID);
 
   // ww: WarpCount 
-  int16 WarpCount, ChainCount;
+  int16 WarpCount;
   if (e.MM & MM_WARP)
     WarpCount = max(2,3+e.EActor->Mod(A_INT));
   else
@@ -1992,7 +1994,7 @@ EvReturn Magic::ABallBeamBolt(EventInfo &e)
             MagicXY(eCopy,eCopy.EXVal,eCopy.EYVal);
             if (!m.At(OListX[i] + DirX[j],OListY[i] + DirY[j]).Solid)                          
               {     
-                NotSolidAfterAll:                                                             
+//NotSolidAfterAll:                                                             
                 for (ft=m.FFeatureAt(OListX[i] + DirX[j],OListY[i] + DirY[j]);ft;
                         ft=m.NFeatureAt(OListX[i] + DirX[j],OListY[i] + DirY[j])) {                    
                   ADD_TARGET(ft);            
@@ -2313,9 +2315,9 @@ EvReturn Magic::ATouch(EventInfo &e)
 }
 
 EvReturn Creature::Cast(EventInfo &e) {
-    int16 k, mCost, dmgMod, rating, dmg_pen, roll; 
+    int16 mCost, rating, dmg_pen, roll; 
     EvReturn res; Item *it; bool dmgFail, wasThreatened;
-    int16 i, j, oHP, fc, sc, sr, cpen; Creature *c; String MMStr;
+    int16 i, j, oHP, fc, sc; Creature *c; String MMStr;
     int16 castingTimeout = 
         3000 / max(25,100+10*(1 + e.EActor->Mod(A_INT) -
         TEFF(e.eID)->Level));
@@ -2414,7 +2416,7 @@ EvReturn Creature::Cast(EventInfo &e) {
     if (isPlayer())
         e.MM = MMFeats(e.sp);
     else
-        e.MM = thism->SetMetamagic(e.eID,e.ETarget,TEFF(e.eID)->Purpose);
+        e.MM = thism->SetMetamagic(e.eID,e.ETarget,(uint16)TEFF(e.eID)->Purpose);
 
     /* ww: are stuck in no-cast webbing or somesuch? */
     if (TTER(m->TerrainAt(x,y))->Event(e,m->TerrainAt(x,y)) == ABORT)
@@ -2808,8 +2810,8 @@ SpellFails:
                 GetEffStatiDur(-1,e.eID),
                 SS_ENCH,
                 e.MM & 0x0000FFFF,
-                (e.MM & 0xFFFF0000) << 16,
-                e.eID, GetEffStatiCLev(-1,e.eID));    
+                (e.MM & 0xFFFF0000) >> 16,
+                e.eID, (int8)GetEffStatiCLev(-1,e.eID));    
 
     if (isCharacter() && wasThreatened) {
         if (TEFF(e.eID)->BaseChance <= 30) // SP_VERY_HARD
@@ -2917,7 +2919,7 @@ int SortBySpellcraftCheck(const void *a, const void *b) {
 } 
   
 EvReturn Creature::Counterspell(EventInfo &e, Counterspeller *csp) {
-    int16 cc, i, sn, DC, lv, mCost;
+    int16 cc, i, sn, lv, mCost;
     bool isDispel;
     rID csID, xID, dispID;
     Counterspeller _csp[64];
@@ -3063,7 +3065,7 @@ Counterspelled:
 
 int16 Creature::SpellRating(rID eID, uint32 mm, bool perceived)
   {
-    int16 Chance, i;
+    int16 Chance;
 
     if (isMType(MA_ELF) && (TEFF(eID)->Schools & SC_NEC)
                         && !(TEFF(eID)->Schools & SC_ABJ))
@@ -3252,7 +3254,7 @@ const char *dcs_attr;
   
 int16 Creature::getSpellDC(rID spID, bool isTrick, bool isHeight)
   {
-    int32 i, sp_flags;
+    int32 sp_flags;
     dc_base = 10;
     
     dc_lev = TEFF(spID)->Level;
@@ -3391,16 +3393,14 @@ int16 Creature::getSpellMana(rID spID, uint32 MM, int16 *specMod2)
     return mCost;
   }
 
-uint32 Creature::getStoredMM(rID spID)
-  {
-    uint32 MM;
-    MM = 0;
+uint32 Creature::getStoredMM(rID spID) {
+    uint32 MM = 0;
     StatiIterNature(this,STORED_MM)
-      if (S->eID == spID)
-        MM |= (S->Val + S->Mag >> 16);
+        if (S->eID == spID)
+            MM |= (S->Val + (S->Mag << 16));
     StatiIterEnd(this)
     return MM;
-  }
+}
 
 void Creature::getBuffInfo(int16 *pBuffCount, int16 *pManaCost, rID **pBuffList)
   {
@@ -3463,7 +3463,7 @@ void Character::RecalcStaffSpells()
             }
           else
             if (S->h && oThing(S->h)->isType(T_ITEM))
-              if (oItem(S->h)->GetPlus() < StaffSpellList[j])
+              if ((int32)oItem(S->h)->GetPlus() < (int32)StaffSpellList[j])
                 goto FinishedThisList;
           SkipNecro:
           if (!(StaffSpellList[j] ||
@@ -3477,7 +3477,7 @@ void Character::RecalcStaffSpells()
        
 int16 Creature::GetStaffFatigueCost(rID spID)
   {
-    int16 i, j, cost; Item *it;
+    int16 j, cost; Item *it;
     rID StaffSpellList[64];
     
     if (!HasStati(STAFF_SPELLS))
@@ -3494,7 +3494,7 @@ int16 Creature::GetStaffFatigueCost(rID spID)
       cost = 1;
       for (j=0;j!=60;j++) {
         if (StaffSpellList[j] < 256)
-          cost = StaffSpellList[j];
+          cost = (int16)StaffSpellList[j];
         else if (StaffSpellList[j] == spID)
           StatiIterBreakout(this,return cost);
         if (!(StaffSpellList[j] ||
@@ -3562,9 +3562,7 @@ EvReturn Item::ReadScroll(EventInfo &e)
         }
 
     sLevel = TEFF(eID)->Level*2-1;
-    
-    
-    cLevel = e.EActor->SkillLevel(SK_DECIPHER);
+    cLevel = (int8)e.EActor->SkillLevel(SK_DECIPHER);
 
     /*
     if (!cLevel) {
@@ -3721,7 +3719,7 @@ EvReturn Item::ZapWand(EventInfo &e)
           if ((e.EItem->isKnown(KN_PLUS|KN_MAGIC)) && e.EActor->yn("Fire it anyway?",true))
             {
               ThrowDmg(EV_DAMAGE,AD_NORM,Dice::Roll(TEFF(e.eID)->ManaCost - 
-                e.EActor->cMana(), 4,0),"wand drain",NULL,e.EActor,e.EItem);
+                (int16)e.EActor->cMana(), 4,0),"wand drain",NULL,e.EActor,e.EItem);
               e.EActor->LoseMana(Cost,TEFF(e.eID)->HasFlag(EF_LOSEMANA));
               goto Success;
             }
