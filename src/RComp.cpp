@@ -97,8 +97,9 @@ String & Game::CompileStatistics()
       { -AI_DRUIDIC, "Druidic......." },
       { -AI_THEURGY, "Theurgy......." },
       { 0, NULL } };
-    String s, s2; rID eID;  int32 j;
-    int32 i, monCount, temCount, trapCount,
+    String s, s2; rID eID;
+    uint16 i, j;
+    int32 monCount, temCount, trapCount,
              poiCount, disCount, domCount, 
              enchCount, divCount, druCount,
              terCount, regCount, spCount,
@@ -194,7 +195,7 @@ String & Game::CompileStatistics()
       tCount = fCount = dCount = 
       sCount = niCount = 0;
     
-    fCount = m->Fields.Total();
+    fCount = (int16)m->Fields.Total();
     for (t=m->FirstThing();t;t=m->NextThing())
       {
         if (t->isCreature())
@@ -241,7 +242,7 @@ String & Game::CompileStatistics()
         for(j=0;j!=theGame->LastSpell();j++)
           {
             TEffect *te = TEFF(theGame->SpellID(j));
-            if (ST[i].Val < 0 ? te->HasSource(-ST[i].Val) :
+            if (ST[i].Val < 0 ? te->HasSource((int8)(-ST[i].Val)) :
                  (te->HasSource(AI_WIZARDRY) && 
                    (te->Schools & ST[i].Val)))
               Levels[te->Level]++;
@@ -1187,7 +1188,7 @@ PExp & CodeAssignment(int16 op, LExp &p1, PExp *p2)
     /* Post-increment/decrement */
     if (op == 'i' || op == 'd') {
       if (p1.Storage == RT_REGISTER)
-        FreeRegister(p1.Value);
+        FreeRegister((int16)(p1.Value));
       }
     else {
       ex.Storage = p1.Storage;
@@ -1200,7 +1201,7 @@ PExp & CodeAssignment(int16 op, LExp &p1, PExp *p2)
         yyerror(Format("Type mismatch: %s assigned to %s.",
           Lookup(DataTypeNames, p2->Type), Lookup(DataTypeNames,p1.Type))); 
       if (p2->Storage & RT_REGISTER)
-        FreeRegister(p2->Value);
+        FreeRegister((int16)(p2->Value));
       }
     ex.Code = new VBlock;
     
@@ -1215,7 +1216,7 @@ PExp & CodeAssignment(int16 op, LExp &p1, PExp *p2)
           ex.Type    = DT_STRING;
           if (p2->Storage == RT_CONSTANT)
             if (p2->Value < 0)
-              FreeString(-p2->Value);
+              FreeString((int16)(-p2->Value));
           goto Done;
          break;
         case ASSIGN_ADD:
@@ -1228,7 +1229,7 @@ PExp & CodeAssignment(int16 op, LExp &p1, PExp *p2)
           ex.Type    = DT_STRING;
           if (p2->Storage == RT_CONSTANT)
             if (p2->Value < 0)
-              FreeString(-p2->Value);
+              FreeString((int16)(-p2->Value));
           goto Done;
          break;
         default:
@@ -1312,9 +1313,9 @@ PExp & CodeOperator(int16 op, PExp &p1, PExp &p2)
     bool unary = false, assign = false;
     
     if (p1.Storage & RT_REGISTER)
-      FreeRegister(p1.Value);
+      FreeRegister((int16)p1.Value);
     if (p2.Storage & RT_REGISTER)
-      FreeRegister(p2.Value);    
+      FreeRegister((int16)p2.Value);    
 
     ex.Storage = RT_REGISTER;
     ex.Value   = AllocRegister();
@@ -1457,7 +1458,7 @@ PExp & CodeOperator(int16 op, PExp &p1, PExp &p2)
           ex.Type = DT_BOOL;
          break;
         case ':': /* Always Unary */
-          ex.Code->Generate(ex.Storage,ex.Value,p1.Storage,p1.Value);
+          ex.Code->Generate(ex.Storage,(int8)ex.Value,p1.Storage,(int8)p1.Value);
           ex.Code->Generate(CMGE,ex.Storage,ex.Value,RT_CONSTANT,0);          
           ex.Code->Generate(JTRU,RT_REGISTER,0,RT_CONSTANT,2);
           ex.Code->Generate(SUB,RT_CONSTANT,0,ex.Storage,ex.Value);
@@ -1500,7 +1501,7 @@ PExp& CodeRectMember(PExp *rect, int16 id)
     ex.Code->Generate(BAND,rect->Storage,rect->Value,RT_CONSTANT,mask);
     ex.Code->Generate(BSHL,RT_REGISTER,0,RT_CONSTANT,shift);
     if (rect->Storage == RT_REGISTER)
-      FreeRegister(rect->Value);
+      FreeRegister((int16)rect->Value);
     ex.Storage = RT_REGISTER;
     ex.Value   = AllocRegister();
     ex.Code->Generate(MOV,ex.Storage,ex.Value,RT_REGISTER,0);
@@ -1530,7 +1531,7 @@ LExp& CodeRectLVal(LExp *rect,int16 id)
     lv.RCode->Generate(BAND,rect->Storage,rect->Value,RT_CONSTANT,mask);
     lv.RCode->Generate(BSHL,RT_REGISTER,0,RT_CONSTANT,shift);
     if (rect->Storage == RT_REGISTER)
-      FreeRegister(rect->Value);
+      FreeRegister((int16)rect->Value);
     lv.Storage = RT_REGISTER;
     lv.Value   = AllocRegister();
     lv.RCode->Generate(MOV,lv.Storage,lv.Value,RT_REGISTER,0);

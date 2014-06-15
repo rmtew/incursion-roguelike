@@ -71,8 +71,8 @@ extern hObj excessItems[30];
 
 void Game::NewGame(rID mID, bool reincarnate)
   {
-		int16 x,y,i,j; 
-    Thing *t; Map *mp; Player *pp; Item *it;
+		int16 x,y,i; 
+    Map *mp; Player *pp;
     rID dID;
     char ch = 0;
 
@@ -173,7 +173,7 @@ void Game::NewGame(rID mID, bool reincarnate)
 
 void Game::Play()
   {
-    Thing *t, *t2; int16 i,j,c; char ch;
+    Thing *t, *t2; int16 i,j,c;
     uint32 relative_turn; time_t tm;
     int16 MaxDist;
     Map    *mp = oMap(m[0]);
@@ -200,10 +200,9 @@ void Game::Play()
     pp->MyTerm->RefreshMap();
     
     time(&tm);
-    srand(tm);
+    srand((unsigned long)tm);
     
-		do
-			{
+	do {
         /* If the player changed maps, we follow him around rather then
          * continuing to run through turns for a map that has only monsters
          * on it. We can cache the old map to disk at this point, if needed.
@@ -326,7 +325,7 @@ void Game::Play()
            the copying of the DestroyQueue into a new array and such -- the
            original DestroyQueue might be refilled at the same time as the
            cDestroyQueue is emptied. */
-        bool skip_delete = Opt(OPT_NO_FREE);
+        bool skip_delete = Opt(OPT_NO_FREE) != 0;
         while(DestroyCount && !skip_delete)
           {
             memcpy(cDestroyQueue,DestroyQueue,sizeof(Thing*)*min(20048,DestroyCount+1));
@@ -622,7 +621,7 @@ void Game::MonsterEvaluation(void)
         while (mp->Fields[0]) {
           mp->Fields.Remove(0); 
         } 
-RestartTerra:
+//RestartTerra:
         while (mp->TerraList[0]) {
           mp->RemoveTerra(mp->TerraList[0]->key); 
         }
@@ -826,7 +825,7 @@ done_jump: ;
       best_CR_cost));
   T1->Write(Format("Existing CR for %s is %d.\n", NAME(mID), TMON(mID)->CR));
 
-done: 
+//done: 
   Cleanup();
   Silence = 0 ; 
   T1->Color(GREY);
@@ -907,7 +906,7 @@ void Game::MonsterEvaluationCR(void)
     }
   } 
 
-  int8 the_CR = T1->LMenu(MENU_DESC|MENU_ESC,
+  int8 the_CR = (int8)T1->LMenu(MENU_DESC|MENU_ESC,
       "Choose A Monster CR To Disambiguate", WIN_SCREEN);
 
   if (the_CR == -1) 
@@ -924,7 +923,7 @@ void Game::MonsterEvaluationCR(void)
     }
   } 
 
-  int8 the_CR2 = T1->LMenu(MENU_DESC|MENU_ESC,
+  int8 the_CR2 = (int8)T1->LMenu(MENU_DESC|MENU_ESC,
       "Choose A Second Monster CR To Disambiguate", WIN_SCREEN);
 
   the_CR2 -= 10; 
@@ -1043,7 +1042,7 @@ void Game::MonsterEvaluationCR(void)
         while (mp->Fields[0]) {
           mp->Fields.Remove(0); 
         } 
-RestartTerra:
+//RestartTerra:
         while (mp->TerraList[0]) {
           mp->RemoveTerra(mp->TerraList[0]->key); 
         }
@@ -1262,10 +1261,10 @@ RestartTerra:
   T1->LOption((const char*)Format("--- %d above of %d total ---",total_fighters - fighters_halfway, total_fighters),-total_fighters,below_desc);
 
 
-  int8 foo = T1->LMenu(MENU_DESC|MENU_ESC,
+  int8 foo = (int8)T1->LMenu(MENU_DESC|MENU_ESC,
       (const char*)Format("CR %d and %d Results",the_CR,the_CR2), WIN_SCREEN);
 
-done: 
+//done: 
   Cleanup();
   Silence = 0 ; 
   T1->Color(GREY);
@@ -1437,7 +1436,7 @@ void Game::WeaponEvaluation(void)
         while (mp->Fields[0]) {
           mp->Fields.Remove(0); 
         } 
-RestartTerra:
+//RestartTerra:
         while (mp->TerraList[0]) {
           mp->RemoveTerra(mp->TerraList[0]->key); 
         }
@@ -1627,7 +1626,7 @@ RestartTerra:
   T1->Write(40,5,Format("%s won ...",NAME(mID)));
   T1->Write(40,6,Format("%d%% of its battles.",
         (100 * total_wins) / (total_wins + total_losses)));
-done: 
+//done: 
   Cleanup();
   Silence = 0 ; 
   T1->Color(GREY);
@@ -1838,7 +1837,7 @@ done:
 void Game::GenerateRarityTable()
   {
 
-    int16 fe_count, i, j, k, num[256];
+    int16 i, j, k, num[256];
     rID dID; Map *mp; Player *pp;
 
     memset(num,0,sizeof(num[0])*256);
@@ -2032,7 +2031,7 @@ void Game::ListItemsByLevel()
               
               IsAnItem:
               
-              if (!te->HasSource(IType[t]))
+              if (!te->HasSource((int8)IType[t]))
                 continue;
               
               if (IType[t] == AI_WAND)               
@@ -2082,10 +2081,7 @@ void Game::ListItemsByLevel()
 extern void TestEncounterGen(Term *t);
 
 void Game::StartMenu() {                                      
-    FILE *f;
-    Thing *t;
-    int16 i,j;            
-    Player *pl;
+    int16 i;
 
 Redraw:
     do {
@@ -2106,7 +2102,7 @@ Redraw:
 #ifdef DEBUG
         T1->LOption("(Debugging Commands)",99);
 #endif
-        switch(i = T1->LMenu(MENU_2COLS|MENU_REDRAW,"-- Initial Choices -- ",WIN_CUSTOM)) {
+        switch(i = (int16)T1->LMenu(MENU_2COLS|MENU_REDRAW,"-- Initial Choices -- ",WIN_CUSTOM)) {
         case 99:
             T1->LOption("Monster Evaluation",2);
             T1->LOption("Check Module Consistency",1);
@@ -2271,7 +2267,7 @@ void Player::Gravestone()
     char buff[40], ch = 'g';
     MyTerm->SetMode(MO_SPLASH);
 
-    theGame->GetPlayer(0)->StoreLevelStats(m->Depth);
+    theGame->GetPlayer(0)->StoreLevelStats((uint8)m->Depth);
 
     TouchGallery(false);
 
@@ -2322,7 +2318,7 @@ void Player::Gravestone()
           if (!GraveText.GetLength())
             GraveText = "causes unknown";
           GraveText = GraveText.Left(30);
-          MyTerm->Write(23-GraveText.GetLength()/2,20,GraveText);
+          MyTerm->Write((int16)(23-GraveText.GetLength()/2),20,GraveText);
           sprintf(buff,"12th of Suntide");
           MyTerm->Write(23-strlen(buff)/2,24,buff);
           if (VictoryFlag) {
@@ -2364,7 +2360,7 @@ void Player::Gravestone()
       MyTerm->Write(0,MyTerm->WinSizeY()-1,Format("Dump character, reView Messages, Main menu, Quit or Scoreboard? [dvmqs%c%c] ",
         24,25));
       MyTerm->CursorOn();
-      while (!strchr("dmvqs",ch = MyTerm->GetCharRaw()))
+      while (!strchr("dmvqs",ch = (char)MyTerm->GetCharRaw()))
         ;
       MyTerm->CursorOff();
     }

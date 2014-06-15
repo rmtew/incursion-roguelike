@@ -296,8 +296,8 @@ Monster::Monster(rID _mID,int16 _Type)
 
 void Monster::ChooseAction()
 {
-  int32 i,j,k,best,tr; 
-  int16 mtp, rtp, ev;
+  int32 j,k,best,tr; 
+  int16 mtp, rtp, ev, i;
   Item *it; rID form1, form2; int8 res;
   Creature *c, *bc, *charmer;
   static int16 aCandidates[1024];
@@ -531,9 +531,9 @@ RestartTargetLoop:
 
     if (tr = worstTrouble()) {
       if (isAfraid /* && !targVis */)
-        AddAct(ACT_CAST,(tr/256)+1,NULL,EP_FIX_TROUBLE + ((tr & 0xFF)<<16));
+        AddAct(ACT_CAST,(int8)((tr/256)+1),NULL,EP_FIX_TROUBLE + ((tr & 0xFF)<<16));
       else
-        AddAct(ACT_CAST,(tr/256)-1,NULL,EP_FIX_TROUBLE + ((tr & 0xFF)<<16));
+        AddAct(ACT_CAST,(int8)((tr/256)-1),NULL,EP_FIX_TROUBLE + ((tr & 0xFF)<<16));
     }
     ASSERT(x!=-1);               
 
@@ -768,7 +768,7 @@ SkipShifting:
           }
       /* Cast something to impede its ability to pursue */                        
       if (best < 30)
-        AddAct(ACT_CAST,(best/6)+1,c,EP_FOIL_PURSUIT);
+        AddAct(ACT_CAST,(int8)((best/6)+1),c,EP_FOIL_PURSUIT);
     }
 
     /*
@@ -813,11 +813,12 @@ SkipShifting:
       if (hasEffFor & EP_DISPEL)
         if (mtarg->hMana > 30 || mtarg->isPlayer())
           {
-            int16 manaCost, buffCount, sl;
+            int16 manaCost, buffCount;
+            int8 sl;
             /*static int16 slots[] = { SL_AMULET, SL_LRING, SL_RRING,
                               SL_BRACERS, SL_READY, SL_WEAPON,
                               SL_CLOAK, SL_GAUNTLETS, SL_HELM }; */ 
-            sl = random(9);
+            sl = (int8)random(9);
             mtarg->getBuffInfo(&buffCount,&manaCost,NULL);
             if (buffCount && manaCost > 150 && !random(2))
               AddAct(ACT_CAST,P_OVERRIDE,mtarg,EP_DISPEL);
@@ -918,11 +919,12 @@ SkipShifting:
         if (hasEffFor & EP_DISPEL)
           if (rtarg->hMana > 30 || rtarg->isPlayer())
             {
-              int16 manaCost, buffCount, sl;
+              int16 manaCost, buffCount;
+              int8 sl;
               /*static slots[] = { SL_AMULET, SL_LRING, SL_RRING,
                                 SL_BRACERS, SL_READY, SL_WEAPON,
                                 SL_CLOAK, SL_GAUNTLETS, SL_HELM }; */
-              sl = random(9);
+              sl = (int8)random(9);
               rtarg->getBuffInfo(&buffCount,&manaCost,NULL);
               if (buffCount && manaCost > 150 && !random(2))
                 AddAct(ACT_CAST,P_OVERRIDE,rtarg,EP_DISPEL);
@@ -1018,7 +1020,7 @@ NothingToDo:
     }
     // ww: now mCandidates has a priority-weighted list of things to try
     const int maxCandidate = j; 
-    int curCandidate = random(j); 
+    int curCandidate = random((int16)j); 
     int trialsLeft = j + 1; 
     
     while (1) { 
@@ -1124,10 +1126,10 @@ NothingToDo:
           res = Throw(EV_RATTACK,this,Acts[j].Tar,NULL,it);
           break;
         case ACT_SATTACK:
-          res = ThrowVal(EV_SATTACK,Acts[j].Val,this,Acts[j].Tar);
+          res = ThrowVal(EV_SATTACK,(int16)Acts[j].Val,this,Acts[j].Tar);
           break;
         case ACT_HIDE:
-          res = ThrowVal(EV_HIDE,Acts[j].Val,this);
+          res = ThrowVal(EV_HIDE,(int16)Acts[j].Val,this);
           break;
         case ACT_SHIFT:
           switch (Acts[j].Val) {                                       
@@ -1177,7 +1179,7 @@ NothingToDo:
             res = ABORT;
             break;
           }
-          k = sCandidates[random(k)];
+          k = (int32)sCandidates[random((int16)k)];
 
           /*
           if (Effs[k].eID == FIND("command"))
@@ -1275,9 +1277,9 @@ NothingToDo:
                   Creature * victim[1024];
                   int16 numVic;
                   if (ev == EV_INVOKE)
-                    xe.vCasterLev = ChallengeRating();
+                    xe.vCasterLev = (int8)ChallengeRating();
                   else if (ev == EV_CAST)
-                    xe.vCasterLev = CasterLev();
+                    xe.vCasterLev = (int8)CasterLev();
                   xe.vRange = xe.EMagic->lval;
                   CalcEffect(xe);
                   Magic::PredictVictimsOfBallBeamBolt(xe, isBeam, 
@@ -1593,7 +1595,7 @@ Dir Monster::SmartDirTo(int16 tx, int16 ty, bool is_pet)
       if (m->LineOfFire(x,y,tx,ty,this))
         return DirTo(tx,ty);
       bool blocked; int16 dx, dy;
-      blocked = !m->ShortestPath(x,y,tx,ty,this,0,thePath);
+      blocked = !m->ShortestPath((uint8)x,(uint8)y,(uint8)tx,(uint8)ty,this,0,thePath);
       if (blocked)
         return CENTER;
       dx = thePath[1] % 256;
@@ -1906,7 +1908,7 @@ DoneFollow:
         */
 
         Dir cdir;
-        if ((cdir = GetStatiVal(CHARGING)) != -1)
+        if ((cdir = (Dir)GetStatiVal(CHARGING)) != -1)
             if (!isSimilarDir(cdir,*dirlist)) {
                 RemoveStati(CHARGING);
                 //IDPrint("","The <Obj1> breaks off <his:Obj1> charge.", this);
@@ -1948,8 +1950,8 @@ DoneMove:
     Recent[1] = Recent[3];
     Recent[2] = Recent[4];
     Recent[3] = Recent[5];
-    Recent[4] = x;
-    Recent[5] = y;
+    Recent[4] = (uint8)x;
+    Recent[5] = (uint8)y;
 
     return DONE;
 }
@@ -2041,8 +2043,8 @@ void Monster::ListEffects()
               ;
             else if (spList[i] < 50)
               {
-                lev = spList[i];
-                if (spList[i] > SpellLev[clev])
+                lev = (int16)spList[i];
+                if ((int8)spList[i] > SpellLev[clev])
                   skip = true;
                 else
                   skip = false;
@@ -2050,13 +2052,13 @@ void Monster::ListEffects()
               }
             else if (spList[i] > 1000 && spList[i] < 2000)
               {
-                int16 Source = spList[i] - 1000;
+                int16 Source = (int16)(spList[i] - 1000);
                 for(sp=0;sp!=theGame->LastSpell();sp++)
                   {
                     spID = theGame->SpellID(sp);
                     if (TEFF(spID)->Level > SpellLev[clev])
                       continue;
-                    if (TEFF(spID)->HasSource(Source))
+                    if (TEFF(spID)->HasSource((int8)Source))
                       {
                         for (j=0;spList[j];j++)
                           if (spList[j] == spID)
@@ -2075,7 +2077,7 @@ void Monster::ListEffects()
                     spID = theGame->SpellID(sp);
                     if (TEFF(spID)->Level > SpellLev[clev])
                       continue;
-                    if (TEFF(spID)->HasSource(spList[i+1]))
+                    if (TEFF(spID)->HasSource((int8)spList[i+1]))
                       if (TEFF(spID)->Schools & spList[i+2])
                         {
                           for (j=0;spList[j];j++)
@@ -2105,8 +2107,8 @@ void Monster::ListEffects()
             ;
           else if (spList[i] < 50)
             {
-              lev = spList[i];
-              if (spList[i] > SpellLev[clev])
+              lev = (int16)spList[i];
+              if ((int8)spList[i] > SpellLev[clev])
                 skip = true;
               else
                 skip = false;
@@ -2114,13 +2116,13 @@ void Monster::ListEffects()
             }
           else if (spList[i] > 1000 && spList[i] < 2000)
             {
-              int16 Source = spList[i] - 1000;
+              int16 Source = (int16)(spList[i] - 1000);
               for(sp=0;sp!=theGame->LastSpell();sp++)
                 {
                   spID = theGame->SpellID(sp);
                   if (TEFF(spID)->Level > SpellLev[clev])
                     continue;
-                  if (TEFF(spID)->HasSource(Source))
+                  if (TEFF(spID)->HasSource((int8)Source))
                     {
                       for (j=0;spList[j];j++)
                         if (spList[j] == spID)
@@ -2139,7 +2141,7 @@ void Monster::ListEffects()
                   spID = theGame->SpellID(sp);
                   if (TEFF(spID)->Level > SpellLev[clev])
                     continue;
-                  if (TEFF(spID)->HasSource(spList[i+1]))
+                  if (TEFF(spID)->HasSource((int8)spList[i+1]))
                     if (TEFF(spID)->Schools & spList[i+2])
                       {
                         for (j=0;spList[j];j++)
@@ -2298,7 +2300,7 @@ void Monster::AddEffect(TEffect *te, rID eID, Item *src) {
         if (te->ManaCost > cMana())
           return;
 
-        i = (te->ManaCost*100)/max(1,cMana());
+        i = (int16)((te->ManaCost*100) / max(1,cMana()));
         rat -= (i*rat)/100;    
       }
     
@@ -2379,7 +2381,7 @@ uint32 Monster::SetMetamagic(rID eID, Thing *tar, uint16 Pur)
     uint32 MM; TEffect *te = TEFF(eID);
     // ww: Fri Jan 16 20:19:03 PST 2004
     // I got a division by 0 on the next line. 
-    int16 pMana = (cMana()*100)/ max(tMana(),1);
+    int16 pMana = (int16)((cMana()*100) / max(tMana(),1));
 
     /* Right now, this can lead to monsters with lots of different
        MM feats using many at once, wasting mana and casting spells
@@ -2917,11 +2919,11 @@ int16 Monster::RateAsTarget(Thing *t)
 int8 Creature::BestHDType()
 {
   TMonster * tm = TMON(mID);
-  int8 b = max(max(MonHDType(tm->MType[0]), MonHDType(tm->MType[1])),
-              MonHDType(tm->MType[2]));
+  int8 b = max(max(MonHDType((int8)tm->MType[0]), MonHDType((int8)tm->MType[1])),
+              MonHDType((int8)tm->MType[2]));
   // ww: now check all templates! 
   StatiIterNature(this,TEMPLATE)
-      int8 newType = TTEM(S->eID)->AddMType;
+      int8 newType = (int8)TTEM(S->eID)->AddMType;
       if (newType) b = max(b, MonHDType(newType));
   StatiIterEnd(this)
   return (b % 100); 
