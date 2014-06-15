@@ -136,7 +136,7 @@ RedoOptions:
         MyTerm->SetMode(MO_CREATE);
         memset(&RInf,0,sizeof(ReincarnationInfo)); 
         time(&tm);
-        formulaSeed = RInf.formulaSeed = tm;
+        formulaSeed = RInf.formulaSeed = (int32)tm;
     } else {
         MyTerm->SetMode(MO_RECREATE);
         formulaSeed = RInf.formulaSeed;
@@ -200,7 +200,7 @@ RepeatRace:
         }
     if (!i)
         Fatal("No core races to choose from among the loaded resources!");
-    i = MyTerm->LMenu(MENU_3COLS | MENU_DESC,
+    i = (int16)MyTerm->LMenu(MENU_3COLS | MENU_DESC,
         "<15>  Your race grants you a number of special abilities in the game, "
         "including modifiers to your Attributes, additional skills and "
         "often potent supernatural powers. Newer players are recommended "
@@ -248,7 +248,7 @@ RepeatRace:
         MyTerm->LOptionClear();
         goto SkipSubraces;
     }
-    i = MyTerm->LMenu(MENU_2COLS | MENU_DESC,
+    i = (int16)MyTerm->LMenu(MENU_2COLS | MENU_DESC,
         "<15>__Subraces provide additional permutations of the existing "
         "set of races, opening new challenges and play styles for advanced "
         "players. The race you have chosen has one or more available subraces "
@@ -262,7 +262,7 @@ SkipSubraces:
     mID  = TRACE(RaceID)->mID;
     tmID = TRACE(RaceID)->mID;
     GainStatiFromBody(mID);
-    resChance = TRACE(RaceID)->GetConst(RES_SURVIVAL_CHANCE);
+    resChance = (int16)TRACE(RaceID)->GetConst(RES_SURVIVAL_CHANCE);
     if (!resChance)
         resChance = 100;
 
@@ -307,7 +307,7 @@ RepeatClass:
         }
     if (!i)
         Fatal("No classes to choose from among the loaded resources!");
-    i = MyTerm->LMenu(MENU_3COLS | MENU_DESC,
+    i = (int16)MyTerm->LMenu(MENU_3COLS | MENU_DESC,
         "<15>  Your class describes the fundamental abilities your character "
         "possesses, and will determine your overall strategy in the game. "
         "Incursion characters can become multi-classed later in the game, "
@@ -411,7 +411,7 @@ RepeatClass:
         MyTerm->LOption(AlignmentInfo[i].name,i,AlignmentInfo[i].desc);
     } 
 
-    i = MyTerm->LMenu(MENU_3COLS|MENU_DESC,"__Alignment determines a character's "
+    i = (int16)MyTerm->LMenu(MENU_3COLS|MENU_DESC,"__Alignment determines a character's "
         "moral and ethical outlook on the world. In the game, many different "
         "actions influence alignment, and alignment in turn impacts how gods "
         "react to your character, the prerequisites or certain classes, feats "
@@ -456,7 +456,8 @@ RepeatClass:
         SpentSP[5] = TotalSP[5];
     }
 
-    mHP = cHP = mMana = uMana = 0;
+    mHP = cHP = 0;
+    mMana = uMana = 0;
     CalcValues(true);
     MyTerm->ShowTraits(); MyTerm->ShowStatus();
     MyTerm->SetWin(WIN_CREATION);
@@ -664,7 +665,7 @@ SkipThisFocus:;
     MyTerm->SetMode(MO_PLAY);
 
     time(&tm);
-    storeSeed = tm;
+    storeSeed = (int32)tm;
 
     if (reincarnate) {
         Named = RInf.Name;
@@ -673,7 +674,7 @@ SkipThisFocus:;
         storeSeed = RInf.storeSeed;
         rerolledPerks = RInf.rerolledPerks;
         rerollCount = RInf.rerollCount;
-        statMethod = RInf.statMethod;
+        statMethod = (int16)RInf.statMethod;
         MyTerm->ShowStatus();
         MyTerm->ShowTraits();
     } else {
@@ -689,7 +690,7 @@ SkipThisFocus:;
 
         strncpy(RInf.Name,Named,31);
         for(i=0;i!=7;i++)
-            RInf.Attr[i] = BAttr[i];
+            RInf.Attr[i] = (int8)BAttr[i];
         time(&RInf.Touched);
         time(&RInf.Created);
         MyTerm->ChangeDirectory(
@@ -754,7 +755,7 @@ bool Player::Reincarnate()
     }
     MyTerm->OpenRead("gallery.dat");
     MyTerm->Seek(0,SEEK_END);
-    sz = MyTerm->Tell() / sizeof(ReincarnationInfo);
+    sz = (int16)(MyTerm->Tell() / sizeof(ReincarnationInfo));
     MyTerm->Seek(0,SEEK_SET);
     ri = new ReincarnationInfo[sz];
     MyTerm->FRead(ri,sz * sizeof(ReincarnationInfo));
@@ -794,8 +795,7 @@ bool Player::Reincarnate()
             MyTerm->LOption(ri[i].Name,i,desc);
     }
 
-    if (!found)
-    {
+    if (!found) {
         IPrint("All of the characters in your gallery are either "
             "currently being played, or have advanced beyond the level "
             "suitable for reincarnation and then died. You'll have to "
@@ -803,8 +803,7 @@ bool Player::Reincarnate()
         delete[] ri;
         return false;  
     }
-    i = MyTerm->LMenu(MENU_DESC|MENU_ESC|MENU_BORDER|MENU_WIDE|MENU_2COLS,
-        "Choose a character:",WIN_MENUBOX);
+    i = (int16)MyTerm->LMenu(MENU_DESC|MENU_ESC|MENU_BORDER|MENU_WIDE|MENU_2COLS,"Choose a character:",WIN_MENUBOX);
 
     if (i == -1)
     {
@@ -862,7 +861,7 @@ void Player::TouchGallery(bool active)
 
     MyTerm->OpenRead("gallery.dat");
     MyTerm->Seek(0,SEEK_END);
-    sz = MyTerm->Tell() / sizeof(ReincarnationInfo);
+    sz = (int16)(MyTerm->Tell() / sizeof(ReincarnationInfo));
     MyTerm->Seek(0,SEEK_SET);
     ri = new ReincarnationInfo[sz];
     MyTerm->FRead(ri,sz * sizeof(ReincarnationInfo));
@@ -891,7 +890,7 @@ void Player::DisableReincarnation()
         return;
     MyTerm->OpenRead("gallery.dat");
     MyTerm->Seek(0,SEEK_END);
-    sz = MyTerm->Tell() / sizeof(ReincarnationInfo);
+    sz = (int16)(MyTerm->Tell() / sizeof(ReincarnationInfo));
     MyTerm->Seek(0,SEEK_SET);
     ri = new ReincarnationInfo[sz];
     MyTerm->FRead(ri,sz * sizeof(ReincarnationInfo));
@@ -947,7 +946,7 @@ static void NamePerk(Perk& p, String& str)
         it->IFlags &= (~IF_CURSED);
         for (int16 q=0;q!=7;q++)
             if (p.p.i.q[q])
-                it->AddQuality(p.p.i.q[q]);
+                it->AddQuality((int8)p.p.i.q[q]);
         if (p.p.i.Bane)
             it->SetBane(p.p.i.Bane); 
         if (it->isType(T_MISSILE))
@@ -1069,10 +1068,10 @@ void CreatePerk(PerkSet& Perks, int i, PerkType type, Player *p)
 
             /* fjm: Don't give away things gotten from race/class */
             if (Perks.elt[I(i,3)].p.resist > 0)
-                if (p->ResistLevel(Perks.elt[I(i,3)].p.resist) != 0)
+                if (p->ResistLevel((int16)Perks.elt[I(i,3)].p.resist) != 0)
                     redo = 1;
             if (Perks.elt[I(i,3)].p.resist < 0)
-                if (p->HasStati(SAVE_BONUS,-Perks.elt[I(i,3)].p.resist))
+                if (p->HasStati(SAVE_BONUS,(int16)-Perks.elt[I(i,3)].p.resist))
                     redo = 1;
 
         } while (redo); 
@@ -1081,9 +1080,8 @@ void CreatePerk(PerkSet& Perks, int i, PerkType type, Player *p)
         /* start with a random item that might be found around depth 50' */
     case PERK_ITEM: 
         while (1) {
-            Item * it = Item::GenItem(IG_KNOWN|IG_GOOD|IG_GREAT, 
-                0, 5, p->Attr[A_LUC], DungeonItems);
-            TItem * ti = TITEM(it->iID);
+            Item *it = Item::GenItem(IG_KNOWN|IG_GOOD|IG_GREAT,0,5,(int8)p->Attr[A_LUC],DungeonItems);
+            TItem *ti = TITEM(it->iID);
 
             redo = 0;
             if (it->isCursed())
@@ -1141,7 +1139,7 @@ void CreatePerk(PerkSet& Perks, int i, PerkType type, Player *p)
                     !it->isType(T_ARMOUR) &&
                     !it->isType(T_BOW) &&
                     !it->isType(T_MISSILE)) 
-                    it->SetInherentPlus(MaxItemPlus(6,it->eID));
+                    it->SetInherentPlus((int8)MaxItemPlus(6,it->eID));
                 else if (it->GetPlus() && it->ItemLevel() <= 5)
                     it->SetInherentPlus(it->GetPlus()+1);
                 Perks.elt[I(i,3)].p.i.iID    = it->iID;
@@ -1293,7 +1291,7 @@ static void GrantPerks(PerkSet& p, Player *target)
           ASSERT(it->GetHP() == it->MaxHP());
           for (int16 q=0;q!=7;q++)
               if (p.elt[i].p.i.q[q])
-                  it->AddQuality(p.elt[I(i,3)].p.i.q[q]);
+                  it->AddQuality((int8)p.elt[I(i,3)].p.i.q[q]);
           if (p.elt[I(i,3)].p.i.Bane)
               it->SetBane(p.elt[I(i,3)].p.i.Bane); 
           ASSERT(it->GetHP() == it->MaxHP());
@@ -1327,13 +1325,13 @@ static void GrantPerks(PerkSet& p, Player *target)
 
       case PERK_RESIST: 
           if (p.elt[i].p.resist < 0)
-              target->GainPermStati(SAVE_BONUS,NULL,SS_PERM,-p.elt[I(i,3)].p.resist,4,0);
+              target->GainPermStati(SAVE_BONUS,NULL,SS_PERM,(int16)-p.elt[I(i,3)].p.resist,4,0);
           else
-              target->GainPermStati(RESIST,NULL,SS_PERM,p.elt[I(i,3)].p.resist,10,0);
+              target->GainPermStati(RESIST,NULL,SS_PERM,(int16)p.elt[I(i,3)].p.resist,10,0);
           break; 
 
       case PERK_IMMUNE: 
-          target->GainPermStati(IMMUNITY,NULL,SS_PERM,p.elt[I(i,3)].p.immune,0,0);
+          target->GainPermStati(IMMUNITY,NULL,SS_PERM,(int16)p.elt[I(i,3)].p.immune,0,0);
           break; 
         } 
     } 
@@ -1429,7 +1427,7 @@ RerollThisOne:
             while (tot < 95 || tot > 100 || j < 100);
 
             for (j=0;j!=7;j++) {
-                BestStats[j][i] = BAttr[j];
+                BestStats[j][i] = (int8)BAttr[j];
                 /* We need to load the stat set into the player's data so that
                 FeatPrereq() works properly with the bonus feats gained by
                 perks. Thus, for example, a stat+perk set that has Strength
@@ -1683,7 +1681,7 @@ Done:
     MyTerm->Clear();
 
     for (i=0;i!=7;i++)
-        RInf.Attr[i] = BAttr[i];
+        RInf.Attr[i] = (int8)BAttr[i];
     RInf.rerollCount = rerollCount;
     RInf.rerolledPerks = rerolledPerks;
     RInf.statMethod = statMethod;
@@ -1747,8 +1745,7 @@ void Player::ChooseDomains()
     for (i=0;i!=choices;i++) {
         for (j=0;j!=12;j++)
             if (TGOD(GodID)->Domains[j])
-                if (!HasEffStati(HAS_DOMAIN,god->Domains[j]))
-                {
+                if (!HasEffStati(HAS_DOMAIN,god->Domains[j])) {
                     if (TDOM(god->Domains[j])->PEvent(EV_PREREQ,this,
                         god->Domains[j]) == -1)
                         continue;
@@ -1757,11 +1754,8 @@ void Player::ChooseDomains()
                     MyTerm->LOption(name,j,desc);
                 }
 
-                n = MyTerm->LMenu(MENU_3COLS|MENU_DESC,
-                    "Choose a Domain:",WIN_CREATION,"help::domains");
-
-                GainPermStati(HAS_DOMAIN,this,SS_CLAS,0,0,
-                    god->Domains[n]);
+        n = (int16)MyTerm->LMenu(MENU_3COLS|MENU_DESC,"Choose a Domain:",WIN_CREATION,"help::domains");
+        GainPermStati(HAS_DOMAIN,this,SS_CLAS,0,0,god->Domains[n]);
     }
 }
 
@@ -1816,9 +1810,9 @@ void Character::AddAbilities(rID resID,int16 Lev)
                                 }
                                 StatiIterEnd(this)
                                     GainPermStati(
-                                    a->u.ab[i].Ability, /* n */
+                                    (int16)a->u.ab[i].Ability, /* n */
                                     NULL, /* Thing */
-                                    ss, /* Cause */
+                                    (int8)ss, /* Cause */
                                     a->u.ab[i].Param & 0xFFFF, /* Val */
                                     a->u.ab[i].Param & 0xFFFF0000 ? 
                                     a->u.ab[i].Param >> 16 : 0, /* Mag */
@@ -1914,7 +1908,7 @@ void Character::GainXP(uint32 _XP)
     }  
 
     if ((XP - XP_Drained) > NextLevXP())
-        if ((XP - XP_Drained) > ExperienceChart[NotifiedLevel+1])
+        if ((XP - XP_Drained) > (uint32)ExperienceChart[NotifiedLevel+1])
         { 
             msg = Format("You have enough experience to advance to level %s.", NumberNames[NotifiedLevel+1]); 
             IPrint(msg);
@@ -2073,7 +2067,7 @@ void Character::DrainXP(int32 amt)
         return;
     }
     lev = 0;
-    while ((XP - XP_Drained) >= ExperienceChart[lev+1])
+    while ((XP - XP_Drained) >= (uint32)ExperienceChart[lev+1])
         lev++;
     if (lev < TotalLevel()) {
         neglev = TotalLevel() - lev;
@@ -2212,7 +2206,7 @@ void Player::ChooseGod(bool required)
 int16 TotalClassLevels(rID clID)
 {
     int16 tl;
-    tl = TCLASS(clID)->GetConst(TOTAL_CLASS_LEVELS);
+    tl = (int16)TCLASS(clID)->GetConst(TOTAL_CLASS_LEVELS);
     if (tl)
         return tl;
     return TCLASS(clID)->HasFlag(CF_PRESTIGE) ? 10 : 20;
@@ -2234,7 +2228,7 @@ void Player::AdvanceLevel()
         if(ClassID[2])
             MyTerm->LOption(NAME(ClassID[2]),2);
 
-        c = MyTerm->LMenu(MENU_3COLS | (TotalLevel() ? MENU_ESC : 0) | MENU_BORDER,
+        c = (int16)MyTerm->LMenu(MENU_3COLS | (TotalLevel() ? MENU_ESC : 0) | MENU_BORDER,
             "Which class do you wish to advance in?",WIN_MENUBOX,"help::chargen,C");
         if (c == -1)
             return; 
@@ -2326,7 +2320,7 @@ GodIsOkay:;
                 } 
             } 
             if (foundOne) {
-                i = MyTerm->LMenu(MENU_2COLS,"-- Gain A Bonus To Which Attribute --");
+                i = (int16)MyTerm->LMenu(MENU_2COLS,"-- Gain A Bonus To Which Attribute --");
                 GainInherentBonus(i,1,true); 
                 CalcValues(); 
             }
@@ -2426,8 +2420,8 @@ GodIsOkay:;
         HD = 8;
 
     switch (Opt(OPT_MAX_HP)) {
-      case 1: /* half */ hpRolls[c][Level[c]-1] = HD / 2; break; 
-      case 2: /* full */ hpRolls[c][Level[c]-1] = HD ; break; 
+      case 1: /* half */ hpRolls[c][Level[c]-1] = (int8)(HD / 2); break; 
+      case 2: /* full */ hpRolls[c][Level[c]-1] = (int8)HD ; break; 
       default: /* no */
           hpRolls[c][Level[c]-1] = max(random(HD)+1,(HD/2));
     }
@@ -2440,9 +2434,8 @@ GodIsOkay:;
     } 
 
     for (i=0;GodIDList[i];i++)
-        if (j = TGOD(GodIDList[i])->GetConst(LEVEL_BLEEDOFF))
-            FavPenalty[theGame->GodNum(GodIDList[i])] = max(0,
-            FavPenalty[theGame->GodNum(GodIDList[i])] - j);
+        if (j = (int16)TGOD(GodIDList[i])->GetConst(LEVEL_BLEEDOFF))
+            FavPenalty[theGame->GodNum(GodIDList[i])] = max(0,FavPenalty[theGame->GodNum(GodIDList[i])] - j);
 
     CalcValues();
     {
@@ -2626,9 +2619,7 @@ FoundFeat:
     if (!OneFeat) /* No Feats on list available! */
         return;
 
-    feat = MyTerm->LMenu(MENU_SORTED|MENU_3COLS|MENU_DESC| 
-        (Win == WIN_MENUBOX ? MENU_BORDER : 0),
-        title,Win,"help::feats");
+    feat = (int16)MyTerm->LMenu(MENU_SORTED|MENU_3COLS|MENU_DESC|(Win == WIN_MENUBOX ? MENU_BORDER : 0),title,Win,"help::feats");
 
     if (feat == -1) {
         showAll = !showAll;
@@ -2658,7 +2649,7 @@ SelectedFeat:
         break;
     case FT_SKILL_FOCUS:
         if (param) 
-            i = param;
+            i = (int16)param;
         else {
             Found = false;
             for(i=1;i!=SK_LAST;i++)
@@ -2685,14 +2676,14 @@ SelectedFeat:
                         feat = FT_FULL_LIST;
                     goto Restart; 
                 }
-                i = MyTerm->LMenu(MENU_SORTED|MENU_3COLS|MENU_DESC|MENU_BORDER,
+                i = (int16)MyTerm->LMenu(MENU_SORTED|MENU_3COLS|MENU_DESC|MENU_BORDER,
                     "Choose a skill:",WIN_MENUBOX,"help::skills");
         }
         GainPermStati(SKILL_BONUS,this,SS_PERM,i,2,0);
         break;
     case FT_NATURAL_APTITUDE:
         if (param) 
-            i = param;
+            i = (int16)param;
         else {
             Found = false;
             for(i=0;i!=SK_LAST;i++)
@@ -2709,8 +2700,7 @@ SelectedFeat:
                     feat = FT_FULL_LIST;
                 goto Restart; 
             }
-            i = MyTerm->LMenu(MENU_SORTED|MENU_3COLS|MENU_BORDER|MENU_DESC,
-                "Choose a skill:",WIN_MENUBOX,"help::skills");
+            i = (int16)MyTerm->LMenu(MENU_SORTED|MENU_3COLS|MENU_BORDER|MENU_DESC,"Choose a skill:",WIN_MENUBOX,"help::skills");
         }
         GainPermStati(EXTRA_SKILL,NULL,SS_CLAS,i,0,0);
         break;
@@ -2726,15 +2716,14 @@ SelectedFeat:
                 if (eli & XBIT(StudyNames[i].Val))
                     MyTerm->LOption(StudyNames[i].Text, 
                     StudyNames[i].Val);
-            choice = MyTerm->LMenu(MENU_SORTED|MENU_BORDER,
-                "Choose an area to improve:",WIN_MENUBOX);
+            choice = (uint16)MyTerm->LMenu(MENU_SORTED|MENU_BORDER,"Choose an area to improve:",WIN_MENUBOX);
 ChosenStudy:
             IntStudy[choice]++;
             tStoryPluses = AbilityLevel(CA_STORYCRAFT);
             break;
     case FT_SCHOOL_FOCUS:
         if (param)
-            i = param;
+            i = (int16)param;
         else {
             if (!HasEffStati(SCHOOL_FOCUS,SC_ABJ))
                 MyTerm->LOption("Abjuration",SC_ABJ);
@@ -2754,7 +2743,7 @@ ChosenStudy:
                 MyTerm->LOption("Thaumaturgy",SC_THA);
             if (!HasEffStati(SCHOOL_FOCUS,SC_WEA))
                 MyTerm->LOption("Weavecraft",SC_WEA);
-            i = MyTerm->LMenu(MENU_3COLS|MENU_BORDER,"Choose a focus school:",
+            i = (int16)MyTerm->LMenu(MENU_3COLS|MENU_BORDER,"Choose a focus school:",
                 WIN_MENUBOX,"help::magic,SC");
         }
         GainPermStati(SCHOOL_FOCUS,NULL,SS_MISC,0,i,0);
@@ -3014,14 +3003,14 @@ void Player::GainAbility(int16 ab,uint32 pa, rID sourceID,int16 statiSource)
     {
     case CA_AURA_OF_VALOUR:
         Map *om; int16 ox,oy;
-        Abilities[ab] += pa;
+        Abilities[ab] += (uint8)pa;
         /* Refresh the field */
         om = m; ox = x; oy = y;
         Remove(false);
         PlaceAt(om,ox,oy);
         break;
     case CA_SPELLCASTING:
-        Abilities[ab] += pa;
+        Abilities[ab] += (uint8)pa;
         for(i=0;i!=9;i++) {
             if (SpellTable[Abilities[ab]][i] > SpellSlots[i])
                 SpellSlots[i]++;
@@ -3033,7 +3022,7 @@ void Player::GainAbility(int16 ab,uint32 pa, rID sourceID,int16 statiSource)
         /* Learn the Spells */
         if (!Abilities[ab])
             ChooseDomains();
-        Abilities[ab] += pa;
+        Abilities[ab] += (uint8)pa;
         ASSERT(GodID)
         StatiIterNature(this,HAS_DOMAIN)
             TDomain *td = TDOM(S->eID);
@@ -3055,8 +3044,8 @@ void Player::GainAbility(int16 ab,uint32 pa, rID sourceID,int16 statiSource)
             Spells[i] |= SP_INNATE;
         break;
     case CA_STORYCRAFT:
-        tStoryPluses += pa;
-        Abilities[ab] += pa;
+        tStoryPluses += (int16)pa;
+        Abilities[ab] += (uint8)pa;
         break; 
     case CA_TATTOOS:
         {
@@ -3200,7 +3189,7 @@ Found:
                                 MyTerm->LOption(category,FavEnemies[i],desc);
                         }
                     } 
-                    j = MyTerm->LMenu(MENU_SORTED|MENU_2COLS|MENU_DESC|MENU_BORDER,MTypePrompt);
+                    j = (int16)MyTerm->LMenu(MENU_SORTED|MENU_2COLS|MENU_DESC|MENU_BORDER,MTypePrompt);
 #if 0
                     do { 
                         j = MyTerm->MonsterTypePrompt(MTypePrompt,10,50);
@@ -3209,7 +3198,7 @@ Found:
 #endif
                 }
                 else
-                    j = pa;                                                      
+                    j = (int16)pa;                                                      
             /* was sourceID */
             /* ww: this looks a little wrong to me ... 
             * The source isn't kept correctly, yada yada. 
@@ -3217,11 +3206,11 @@ Found:
             (pa & 0xFFFF0000) ? (pa >> 16) : 1,0);
             */
             if (pa >= MA_CHOICE1 && pa <= MA_CHOICE5)
-                GainPermStati(st,NULL,statiSource,j,
+                GainPermStati(st,NULL,(int8)statiSource,j,
                 (pa & 0xFFFF0000) ? (pa >> 16) : 1,sourceID,
-                (pa - MA_CHOICE1 + 1));
+                (int8)(pa - MA_CHOICE1 + 1));
             else
-                GainPermStati(st,NULL,statiSource,j,
+                GainPermStati(st,NULL,(int8)statiSource,j,
                 (pa & 0xFFFF0000) ? (pa >> 16) : 1,sourceID,0);
             // GetStati(st,j)->Duration = (pa & 0xFFFF);
             break;
@@ -3232,19 +3221,19 @@ Found:
                     continue;
                 MyTerm->LOption(Lookup(SchoolNames,XBIT(i)),i,"");
             }
-            i = MyTerm->LMenu(MENU_3COLS,
+            i = (int16)MyTerm->LMenu(MENU_3COLS,
                 "__As a Wizard, you are entitled to choose "
                 "one of the nine schools of magic to be your special area of "
                 "focus. Every specialty makes for a distinctly different style "
                 "of spellcaster, so choose carefully. Type '?' for a description "
                 "of the various specialties and their impact on spellcasting.",WIN_CREATION,
                 "help::magic,SC");
-            GainPermStati(SPECIALTY_SCHOOL,NULL,statiSource,i,0,sourceID);
+            GainPermStati(SPECIALTY_SCHOOL,NULL,(int8)statiSource,i,0,sourceID);
         }
-        Abilities[ab] += pa;
+        Abilities[ab] += (uint8)pa;
         break;    
     case CA_UNCANNY_DODGE:
-        Abilities[ab] += pa;
+        Abilities[ab] += (uint8)pa;
         if (Abilities[ab] >= 6 && (Abilities[ab] % 3 == 0))
         {
             StatiIterNature(this,SAVE_BONUS)
@@ -3255,7 +3244,7 @@ Found:
                         StatiIterBreakout(this,goto DoneTrapBonus)         
                     }
                     StatiIterEnd(this)
-                        GainPermStati(SAVE_BONUS,NULL,statiSource,SN_TRAPS,1);
+                        GainPermStati(SAVE_BONUS,NULL,(int8)statiSource,SN_TRAPS,1);
 DoneTrapBonus:;
         }
         break;
@@ -3267,7 +3256,7 @@ DoneTrapBonus:;
         Abilities[ab] = 0;
         break;
     default:
-        Abilities[ab] += pa;
+        Abilities[ab] += (uint8)pa;
         break;
     }
 }
@@ -3352,16 +3341,18 @@ bool Character::FeatPrereq(int16 feat, bool fail_if_feat_requires_a_feat)
                     if (fc->elt == FP_ALWAYS) break; 
                     switch (fc->elt) {
               case FP_FEAT: 
-                  if (fail_if_feat_requires_a_feat) all_true_so_far = false;
-                  else if (!IHasFeat(fc->arg)) all_true_so_far = false; 
+                  if (fail_if_feat_requires_a_feat)
+                      all_true_so_far = false;
+                  else if (!IHasFeat((int16)fc->arg))
+                      all_true_so_far = false; 
                   break;
               case FP_ABILITY:
-                  if ( (!IHasAbility(fc->arg)) ||
-                      (AbilityLevel(fc->arg) < fc->val) )
+                  if ( (!IHasAbility((int16)fc->arg)) ||
+                      (AbilityLevel((int16)fc->arg) < fc->val) )
                       all_true_so_far = false; 
                   break; 
               case FP_BAB: 
-                  if (GetBAB(fc->arg) < fc->val) 
+                  if (GetBAB((int16)fc->arg) < fc->val) 
                       all_true_so_far = false;
                   break; 
               case FP_NOT_PROF:
@@ -3379,11 +3370,11 @@ bool Character::FeatPrereq(int16 feat, bool fail_if_feat_requires_a_feat)
               case FP_ATTR: 
                   /* Do *not* let a player put on a Headband of Intellect
                   just long enough to learn a feat! */
-                  if (IAttr(fc->arg) < fc->val)
+                  if (IAttr((int8)fc->arg) < fc->val)
                       all_true_so_far = false;
                   break;
               case FP_SKILL: 
-                  if (ISkillLevel(fc->arg) < fc->val) 
+                  if (ISkillLevel((int16)fc->arg) < fc->val) 
                       all_true_so_far = false;
                   break; 
               case FP_CASTER_LEVEL: 
@@ -3391,11 +3382,11 @@ bool Character::FeatPrereq(int16 feat, bool fail_if_feat_requires_a_feat)
                       all_true_so_far = false;
                   break;
               case FP_WEP_SKILL: 
-                  if (!HasStati(WEP_SKILL,fc->arg))
+                  if (!HasStati(WEP_SKILL,(int16)fc->arg))
                       all_true_so_far = false;
                   break;
               case FP_ATTACK: 
-                  if (!TMON(tmID)->HasAttk(fc->arg))
+                  if (!TMON(tmID)->HasAttk((int8)fc->arg))
                       all_true_so_far = false;
                   break;
               case FP_MTYPE: 
@@ -3466,7 +3457,7 @@ int8 Character::WepSkill(Item *it)
 int8 Character::WepSkill(rID wID, bool ignore_str)
 {     
     int16 mstr;
-    int16 best = 0;
+    int8 best = 0;
 
     if (wID && !ignore_str) {
         mstr = 5;
@@ -3889,7 +3880,7 @@ FoundFocus:
             } ;
             for (j=0; armourSlots[j]; j++) {
                 i = armourSlots[j];
-                if ((it = InSlot(i)) && it->activeSlot(i))  {
+                if ((it = InSlot((int8)i)) && it->activeSlot(i))  {
                     /* count a two-handed shield only once! */
                     if (i == SL_WEAPON) 
                         if (InSlot(SL_READY) == InSlot(SL_WEAPON))
@@ -3907,7 +3898,7 @@ FoundFocus:
 
         sr += s_racial + s_feat + s_enhance + s_domain + s_item + s_ins + s_syn + 
             s_comp + s_circ + s_inh + s_size + s_armour + s_train + s_kit + s_focus;
-        sr += Mod2(SkillAttr(sk)); 
+        sr += Mod2((int8)SkillAttr(sk)); 
 
         return sr;
 }
@@ -3923,10 +3914,10 @@ int16 Creature::ISkillLevel(int16 sk)
         s_size + s_circ + s_comp + s_item);
 
     /* Remove Attribute Mod */
-    sr -= Mod2(SkillAttr(sk));
+    sr -= Mod2((int8)SkillAttr(sk));
 
     /* Add Inherent Attribute Mod */
-    sr += (IAttr(SkillAttr(sk))-11)/2;
+    sr += (IAttr((int8)SkillAttr(sk))-11)/2;
 
     return sr;
 }
@@ -4126,6 +4117,11 @@ LearnableSpell* Character::CalcSpellAccess()
     then obscure memory corruption errors. */
     ls = (LearnableSpell*) malloc(sizeof(LearnableSpell) * (MAX_SPELLS+1)*4);
 
+/*
+sp: rID
+lv: uint8
+typ: uint8
+*/
 #define ADD_SPELL(sp,lv,typ)                    \
     {                                             \
     Spells[theGame->SpellNum(sp)] |= typ;       \
@@ -4170,8 +4166,8 @@ LearnableSpell* Character::CalcSpellAccess()
                         ;
                     else if (SpellList[i] < 50)
                     {
-                        lev = SpellList[i];
-                        if (SpellList[i] > S->Mag)
+                        lev = (int16)SpellList[i];
+                        if ((int)SpellList[i] > S->Mag)
                             skip = true;
                         else
                             skip = false;
@@ -4179,13 +4175,13 @@ LearnableSpell* Character::CalcSpellAccess()
                     }
                     else if (SpellList[i] > 1000 && SpellList[i] < 2000)
                     {
-                        int16 Source = SpellList[i] - 1000;
+                        int16 Source = (int16)SpellList[i] - 1000;
                         for(sp=0;sp!=theGame->LastSpell();sp++)
                         {
                             spID = theGame->SpellID(sp);
                             if (TEFF(spID)->Level > S->Mag)
                                 continue;
-                            if (TEFF(spID)->HasSource(Source))
+                            if (TEFF(spID)->HasSource((int8)Source))
                             {
                                 /* If the spell is mentioned elsewhere on *this* list,
                                 we want to avoid adding it twice. The rationale for
@@ -4214,7 +4210,7 @@ SkipThisAdd:
                             spID = theGame->SpellID(sp);
                             if (TEFF(spID)->Level > S->Mag)
                                 continue;
-                            if (TEFF(spID)->HasSource(SpellList[i+1]))
+                            if (TEFF(spID)->HasSource((int8)SpellList[i+1]))
                                 if (TEFF(spID)->Schools & SpellList[i+2])
                                 {
                                     /* If the spell is mentioned elsewhere on *this* list,
@@ -4240,7 +4236,7 @@ SkipThisAdd2:
                     }
                     else if (SpellList[i] && !skip)
                     {
-                        ADD_SPELL(SpellList[i],lev,S->Val)
+                        ADD_SPELL(SpellList[i],(uint8)lev,(uint8)S->Val)
                     }
                 }
             }          
@@ -4421,8 +4417,7 @@ OpenSlot:
     else
         prompt = "Learn which spell?";
 
-    i = MyTerm->LMenu(MENU_SORTED|MENU_3COLS|MENU_ESC|MENU_DESC|MENU_BORDER,
-        prompt, WIN_MENUBOX,"help::magic,LE");    
+    i = (int16)MyTerm->LMenu(MENU_SORTED|MENU_3COLS|MENU_ESC|MENU_DESC|MENU_BORDER,prompt,WIN_MENUBOX,"help::magic,LE");    
 
     if (i == -1)
         return;

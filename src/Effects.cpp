@@ -49,10 +49,11 @@ EvReturn Magic::Vision(EventInfo &e)
     e.vRange *= 5;
 
     t = ((Player*)e.EActor)->MyTerm;
-    int16 ViewpointX = ox = e.EActor->x;
-    int16 ViewpointY = oy = e.EActor->y;
-    thisp->ShadowRange = thisp->SightRange =
-                  e.EMagic->yval;
+    int16 ViewpointX = e.EActor->x;
+    int16 ViewpointY = e.EActor->y;
+    ox = (uint8)e.EActor->x;
+    oy = (uint8)e.EActor->y;
+    thisp->ShadowRange = thisp->SightRange = (uint8)e.EMagic->yval;
     thisp->LightRange  = 100;
     
     do {
@@ -63,8 +64,9 @@ EvReturn Magic::Vision(EventInfo &e)
       t->ShowMap();
       t->ShowViewList();
       t->PutGlyph(ViewpointX,ViewpointY,GLYPH_VIEWPOINT | SKYBLUE<<8);
-      ovx = ViewpointX; ovy = ViewpointY;                           
-      ch = t->GetCharCmd(KY_CMD_ARROW_MODE);
+      ovx = (uint8)ViewpointX;
+      ovy = (uint8)ViewpointY;                           
+      ch = (uint8)t->GetCharCmd(KY_CMD_ARROW_MODE);
       switch(ch) {
         case KY_CMD_NORTH:     ViewpointY--; break;
         case KY_CMD_NORTHEAST: ViewpointY--; ViewpointX++; break;
@@ -112,10 +114,10 @@ EvReturn Magic::Vision(EventInfo &e)
 
 EvReturn Magic::Blast(EventInfo &e)
 {
-  String bdesc, msg, *pstr; uint8 save_type, oDType;
-  char buff[20]; uint8 i; bool noadj = false;
+  String bdesc, msg, *pstr; uint8 save_type;
+  uint8 i; bool noadj = false;
   const char *verb1, *verb2; bool plural = false;
-  uint8 num_missles; int16 dmg, tdmg, tdtype; 
+  uint8 num_missles; int16 tdtype; 
   bool IEvade = false, incor = false;
   save_type = NOSAVE;
   
@@ -137,7 +139,7 @@ EvReturn Magic::Blast(EventInfo &e)
       (!(e.EActor->isBeside(e.EVictim))) &&
       (e.EActor->HasStati(HIDING)) ) {
     if (e.EVictim->isCreature())
-    e.EVictim->ts.HearNoise(e.EVictim,e.EActor->x,e.EActor->y);
+        e.EVictim->ts.HearNoise(e.EVictim,(uint8)e.EActor->x,(uint8)e.EActor->y);
   } else 
     e.EActor->Reveal(true);
   if (e.EVictim->isCreature())
@@ -254,7 +256,7 @@ SkipSave:
         ReThrow(EV_DAMAGE,eCopy);
       }
       e.saveDC = i;
-      e.DType = tdtype; 
+      e.DType = (int8)tdtype; 
       ReThrow(EV_DAMAGE,e); 
 /*      ThrowDmg(EV_DAMAGE,e.DType,e.vDmg,NULL,
           e.EActor, e.EVictim, e.EItem, e.EItem2); */
@@ -295,7 +297,7 @@ SkipSave:
       } 
     }
 
-SkipDamage:
+//SkipDamage:
     ;
   }
   else if (e.EVictim->isItem()) {
@@ -417,7 +419,7 @@ EvReturn Magic::Drain(EventInfo &e)
     e.DType = e.EMagic->xval;
     oDC = e.saveDC; e.saveDC = -1;
     ReThrow(EV_DAMAGE,e);
-    e.saveDC = oDC;
+    e.saveDC = (int8)oDC;
     return DONE;
   }
 
@@ -534,8 +536,6 @@ EvReturn Magic::Grant(EventInfo &e) {
 
 
 EvReturn Magic::Inflict(EventInfo &e) {
-    int16 i;
-
     if (e.isRemove || e.isLeave) {
         e.ETarget->RemoveEffStati(e.eID);
         e.Terse = true; 
@@ -706,7 +706,7 @@ EvReturn Magic::Override(EventInfo &e)
 
 EvReturn Magic::Polymorph(EventInfo &e)
   {
-    rID mID; uint16 q,i,c; TMonster *tm;
+    rID mID; uint16 i;
     /* Choose Monster */
 
     /* Later, allow:
@@ -756,7 +756,7 @@ EvReturn Magic::Polymorph(EventInfo &e)
         else if (e.EActor->isPlayer()) {
           for(i=0;i!=n;i++)
             e.EPActor->MyTerm->LOption(NAME(Candidates[i]),i);
-          best = e.EPActor->MyTerm->LMenu(MENU_BORDER,"Choose a form:");
+          best = (int16)e.EPActor->MyTerm->LMenu(MENU_BORDER,"Choose a form:");
           }
         mID = Candidates[best];
       }
@@ -778,7 +778,7 @@ EvReturn Magic::Polymorph(EventInfo &e)
       VPrint(e,"You change into a <Str1>!",
         "The <EVictim> changes into a <Str1>!", NAME(mID));
 
-    e.EVictim->Shapeshift(mID,e.EMagic->xval,(e.EItem && e.EItem->isItem()) ? e.EItem : NULL);
+    e.EVictim->Shapeshift(mID,e.EMagic->xval!=0,(e.EItem && e.EItem->isItem()) ? e.EItem : NULL);
     e.EVictim->GainTempStati(POLYMORPH,e.isItem ? e.EItem : NULL,e.vDuration,SS_ENCH,1,0,e.eID);
 
     if (e.EItem && e.EItem->isItem())
@@ -931,7 +931,7 @@ void Creature::Planeshift()
 
 void Creature::Shapeshift(rID _mID, bool merge, Item* PolySource)
   {
-    TMonster *c, *n; Item *it; int16 i,j;
+    TMonster *c, *n; Item *it;
     
   if (tmID != mID && tmID != _mID) {
     SetSilence();
@@ -980,7 +980,7 @@ void Creature::Shapeshift(rID _mID, bool merge, Item* PolySource)
   
   bool incor_msg = false;
   if (n->HasFlag(M_INCOR) && !merge) {
-    for(i=0;i!=SL_LAST;i++)
+    for(int8 i=0;i!=SL_LAST;i++)
       if (it=InSlot(i))
         if (it!=PolySource)
         {
@@ -995,7 +995,7 @@ void Creature::Shapeshift(rID _mID, bool merge, Item* PolySource)
           Throw(EV_DROP,this,NULL,it);
         }
         else if (n->HasFlag(M_AMORPH) && !merge)
-          for(i=0;i!=SL_LAST;i++)
+          for(int8 i=0;i!=SL_LAST;i++)
             if (InSlot(i))
               if (InSlot(i) != PolySource)
               {
@@ -1016,7 +1016,7 @@ void Creature::Shapeshift(rID _mID, bool merge, Item* PolySource)
      to have an item in the slot of the index. Negative values mean
      you must *not* have the flag in question. */
   
-  for(i=0;i!=SL_LAST;i++)
+  for(int8 i=0;i!=SL_LAST;i++)
     if (InSlot(i) && !n->HasSlot(i))
     {
       it = InSlot(i);
@@ -1053,9 +1053,9 @@ EvReturn Magic::Dispel(EventInfo &e)
   {
     static rID Resisted[512], Dispelled[512];
     hObj   oResisted[512], oDispelled[512]; 
-    int16 eCasterLev, rc, dc, i, j, bon; 
+    int16 eCasterLev, rc, dc, j, bon; 
     bool  Something, msg;
-    Status *s; Item *it;
+    Item *it;
 
     bon = e.EActor->AbilityLevel(CA_PURGE_MAGIC);
 
@@ -1243,8 +1243,10 @@ EvReturn Magic::Reveal(EventInfo &e)
     MapIterate(m,t,i)
       if (t->isCreature())
         // if (((Creature*)t)->isHostileTo(e.EActor))
-        if (((Creature*)t)->ChallengeRating() > high)
-          { o = t; high = ((Creature*)o)->ChallengeRating(); }
+        if (((Creature*)t)->ChallengeRating() > high) {
+            o = t;
+            high = (int8)((Creature*)o)->ChallengeRating();
+        }
     if (o == NULL)
       {
         Text += "Little adversity awaits you on this conquest. ";
@@ -1317,9 +1319,10 @@ EvReturn Magic::Reveal(EventInfo &e)
     MapIterate(m,t,i)
       if (t->isCreature()) {
         // later, scan creatures' inventories
-        }
-      else if (((Item*)m->Things[i])->ItemLevel() > high)
-        { o = t; high = ((Item*)o)->ItemLevel(); }
+      } else if (((Item*)m->Things[i])->ItemLevel() > high) {
+          o = t;
+          high = (int8)((Item*)o)->ItemLevel();
+      }
 
     if (o == NULL)
       {
@@ -1354,7 +1357,7 @@ extern Creature* CandidateCreatures[2048];
 
 EvReturn Magic::Summon(EventInfo &e) {
     String opt[20], desc[20];
-    Monster *c; rID mID; Creature *cr; int16 i, j, n, k;
+    Creature *cr; int16 i, j, n, k;
 
     if (!e.isLoc) {
         e.EXVal = e.ETarget ? e.ETarget->x : e.EActor->x;
@@ -1366,7 +1369,6 @@ EvReturn Magic::Summon(EventInfo &e) {
        himself is doing the summoning. */
 
     if (TEFF(e.eID)->HasFlag(EF_XSUMMON)) {
-        Thing *t;
         for (i=0;e.EActor->backRefs[i];i++)
             if (theRegistry->Exists(e.EActor->backRefs[i]))
                 if (!oThing(e.EActor->backRefs[i])->isDead())
@@ -1425,7 +1427,7 @@ EvReturn Magic::Summon(EventInfo &e) {
           T1->LOption(opt[i],i,desc[i]);
         }
           
-      k = T1->LMenu(MENU_DESC|MENU_BORDER,"Choose Summoned Creatures:");
+      k = (int16)T1->LMenu(MENU_DESC|MENU_BORDER,"Choose Summoned Creatures:");
       for (i=0;i!=n;i++)
         for (j=0;cr[i][j];j++)
           {
@@ -1515,7 +1517,8 @@ EvReturn Magic::Terraform(EventInfo &e)
           e.EYVal = e.ETarget->y;
           }
       }
-    x = e.EXVal; y = e.EYVal;
+    x = (uint8)e.EXVal;
+    y = (uint8)e.EYVal;
     if (!e.EActor) return ABORT; 
     m = e.EActor->m;
     if (!m) return ABORT; 
@@ -1618,15 +1621,15 @@ EvReturn Magic::Terraform(EventInfo &e)
      
     MTerrain *mt;
     mt = m->TerraXY.NewItem();
-    mt->x = e.EXVal;
-    mt->y = e.EYVal;
+    mt->x = (uint8)e.EXVal;
+    mt->y = (uint8)e.EYVal;
     mt->old = m->At(x,y).Terrain;
     mt->key = e.terraKey;
 
     m->At(x,y).Terrain = e.terrainListIndex;
 
     if (TEFF(e.eID)->HasFlag(EF_ADJUST_GLYPH))
-      m->At(x,y).Glyph   = AdjustGlyphDir(tt->Image,e.EDir);
+      m->At(x,y).Glyph   = AdjustGlyphDir(tt->Image,(Dir)e.EDir);
     else  
       m->At(x,y).Glyph   = tt->Image;
     
@@ -1672,7 +1675,7 @@ void Map::UpdateTerra()
 // ww: who made that Wall of Fire? 
 Creature * Map::GetTerraCreator(int16 x,int16 y)
   {
-    int16 i,j;
+    int32 i,j;
     if (!InBounds(x,y)) return NULL; 
     for(i=(TerraXY.Total()-1);i>=0;i--)
       if (TerraXY[i]->x == x)
@@ -1692,7 +1695,7 @@ Creature * Map::GetTerraCreator(int16 x,int16 y)
 
 int8 Map::GetTerraDC(int16 x,int16 y)
   {
-    int16 i,j;
+    int32 i,j;
     for(i=(TerraXY.Total()-1);i>=0;i--)
       if (TerraXY[i]->x == x)
         if (TerraXY[i]->y == y) {
@@ -1706,7 +1709,7 @@ int8 Map::GetTerraDC(int16 x,int16 y)
 
 int8 Map::GetTerraDType(int16 x,int16 y)
   {
-    int16 i,j;
+    int32 i,j;
     for(i=(TerraXY.Total()-1);i>=0;i--)
       if (TerraXY[i]->x == x)
         if (TerraXY[i]->y == y) {
@@ -1721,7 +1724,7 @@ int8 Map::GetTerraDType(int16 x,int16 y)
 
 int16 Map::GetTerraDmg(int16 x, int16 y)
   {
-    int16 i,j;
+    int32 i,j;
     for(i=(TerraXY.Total()-1);i>=0;i--)
       if (TerraXY[i]->x == x)
         if (TerraXY[i]->y == y) {
@@ -1873,7 +1876,7 @@ FoundTerrain:;
 EvReturn Magic::Illusion(EventInfo &e)
   {
     rID spList[64]; EvReturn r;
-    char ch; rID mID, spID, oldID; Thing *t, *il; int16 i;
+    char ch; rID spID; Thing *il; int16 i;
     
     // avoid inexplicable crashes until
     // the illusion system is stable.
@@ -2000,7 +2003,7 @@ EvReturn Magic::Illusion(EventInfo &e)
 
 EvReturn Magic::Creation(EventInfo &e)
   {
-    Thing *t; int16 i, sl; rID xID, iID; 
+    Thing *t; int16 i; rID xID, iID; 
     if (e.EMagic->rval) {
       xID = e.EMagic->rval;
       switch (RES(xID)->Type) 
@@ -2028,8 +2031,7 @@ EvReturn Magic::Creation(EventInfo &e)
                   if (DungeonItems[i].Prototype)
                     iID = FIND(DungeonItems[i].Prototype);
                   else
-                    iID = theGame->GetItemID(PUR_ACQUIRE,e.vDmg,-2,
-                        DungeonItems[i].Type);
+                    iID = theGame->GetItemID(PUR_ACQUIRE,(int8)e.vDmg,-2,(int8)DungeonItems[i].Type);
                   if (!iID)
                     return ABORT;
                   t = Item::Create(iID);
@@ -2140,7 +2142,7 @@ EvReturn Magic::Detect(EventInfo &e)
 
 EvReturn Magic::Travel(EventInfo &e)
   {
-    int16 i, _x, _y; Thing *t;
+    int16 i, _x, _y;
     e.vDmg = max(e.vDmg,7);
 
     if (!e.EActor || e.EActor->isDead() || !e.EActor->m)
@@ -2185,7 +2187,7 @@ EvReturn Magic::Travel(EventInfo &e)
           {
             if (e.EActor->isMonster())
               goto TravelTarg;
-            e.vRange = e.vDmg;
+            e.vRange = (int8)e.vDmg;
             Thing *t = e.EVictim;
             if (!T1->EffectPrompt(e,Q_LOC))
               goto Failed;
@@ -2257,7 +2259,7 @@ EvReturn Magic::Travel(EventInfo &e)
 
 EvReturn Magic::Healing(EventInfo &e)
   {
-    int16 curr; int16 i, amt;
+    int16 i, amt;
     bool id = false, recalc = false;
 
 
@@ -2281,7 +2283,7 @@ EvReturn Magic::Healing(EventInfo &e)
       if (e.EVictim->cHP < e.EVictim->mHP+e.EVictim->Attr[A_THP] ||
             e.EVictim->isMType(MA_UNDEAD)) {
         if (e.EMagic->yval)
-          amt = (e.EActor->cMana()*e.EMagic->yval)/10;
+          amt = (int16)((e.EActor->cMana()*e.EMagic->yval)/10);
         else
           amt = 5000;
         amt = min(e.vDmg,amt);

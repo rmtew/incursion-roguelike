@@ -140,9 +140,7 @@ bool isLegalPersonTo(Creature *Actor, Creature *Victim)
   }
 
 /* Determines both breach of chivalry and attacking fleeing foe */
-int16 getChivalryBreach(EventInfo &e)
-  {
-    Creature *l;
+int16 getChivalryBreach(EventInfo &e) {
     int16 i, breach;
     bool givenTerms, isLegalPerson,
          vicFleeing, vicUnready;
@@ -243,7 +241,7 @@ bool attackSanity(EventInfo &e)
 
 EvReturn Creature::WAttack(EventInfo &e)
 {
-    int8 CleaveCount,i,j; Creature *CleaveList[64], *c;
+    int8 CleaveCount,j; Creature *CleaveList[64], *c;
     bool isTWF = false; TAttack *at; String s;
     bool startedAfraid = HasStati(AFRAID);
     /* Watch out for Traps in EItem! */ 
@@ -435,7 +433,7 @@ DoCleave:
       e.ETarget->isCreature() && (e.EVictim->GetAttr(A_SIZ) > SZ_MEDIUM));
     ASSERT(e.Dmg.Sides >= 0); 
     ASSERT(e.Dmg.Number >= 0); 
-    e.vHit    = Attr[A_HIT_MELEE];
+    e.vHit    = (int8)Attr[A_HIT_MELEE];
     e.vDef    = e.ETarget->isCreature() ? e.EVictim->getDef() : 0;
     // Mighty Cleaving weapons give you free criticals (A_COUP here doesn't
     // have all of the "if they live, make another save" effects) for
@@ -445,9 +443,9 @@ DoCleave:
       e.isCrit = true; 
     } else 
       e.AType = A_SWNG;
-    e.DType   = e.EItem->DamageType(e.EVictim); 
-    e.vThreat = e.EItem->Threat(e.EActor);
-    e.vCrit   = e.EItem->CritMult(e.EActor);
+    e.DType   = (int8)e.EItem->DamageType(e.EVictim); 
+    e.vThreat = (int8)e.EItem->Threat(e.EActor);
+    e.vCrit   = (int8)e.EItem->CritMult(e.EActor);
 
     bool wasProneBefore = e.ETarget->HasStati(PRONE);
     if (ReThrow(EV_STRIKE, e) == ABORT)
@@ -460,12 +458,12 @@ DoCleave:
           e.EItem   = EInSlot(SL_READY);
           e.Dmg     = e.EActor->DmgVal(S_DUAL, e.ETarget->isCreature() && 
               (e.EVictim->GetAttr(A_SIZ) > SZ_MEDIUM));
-          e.vHit    = Attr[A_HIT_OFFHAND];
+          e.vHit    = (int8)Attr[A_HIT_OFFHAND];
           e.vDef    = e.ETarget->isCreature() ? e.EVictim->getDef() : 0;
           e.AType   = A_SWNG;
-          e.DType   = e.EItem->DamageType(e.EVictim); 
-          e.vThreat = e.EItem->Threat(e.EActor);
-          e.vCrit   = e.EItem->CritMult(e.EActor);
+          e.DType   = (int8)e.EItem->DamageType(e.EVictim); 
+          e.vThreat = (int8)e.EItem->Threat(e.EActor);
+          e.vCrit   = (int8)e.EItem->CritMult(e.EActor);
           if (ReThrow(EV_STRIKE, e) == ABORT)
             return ABORT;
           e.isOffhand = false;
@@ -539,11 +537,11 @@ SkipThisTarget:;
           
           e.EItem     = NULL;
           e.EItem2    = NULL;
-          e.vHit      = Attr[A_HIT_BRAWL];
+          e.vHit      = (int8)Attr[A_HIT_BRAWL];
           e.vDef    = e.ETarget->isCreature() ? e.EVictim->getDef() : 0;
           e.Dmg       = at->u.a.Dmg;
           e.Dmg.Bonus += e.EActor->Attr[A_DMG_BRAWL]; 
-          e.saveDC    = e.EActor->GetPower(at->u.a.DC);
+          e.saveDC    = (int8)e.EActor->GetPower(at->u.a.DC);
           e.AType     = at->AType;
           e.DType     = at->DType;
           e.vThreat   = 20;
@@ -573,7 +571,8 @@ SkipThisTarget:;
 
 EvReturn Creature::RAttack(EventInfo &e)
 {
-  int16 oldSlot, i;
+  int8 oldSlot;
+  int8 i;
   bool startedAfraid = HasStati(AFRAID);
   if (!e.EItem2)
     return ABORT;
@@ -820,7 +819,7 @@ EvReturn Creature::RAttack(EventInfo &e)
     if (e.isDir) {
       cx += DirX[e.EDir]*2;
       cy += DirY[e.EDir]*2;
-      g = AdjustGlyphDir(TITEM(e.EItem2->iID)->Image,e.EDir);
+      g = AdjustGlyphDir(TITEM(e.EItem2->iID)->Image,(Dir)e.EDir);
     }
     else if (!AdjustDone && dist(cx/2,cy/2,e.EXVal,e.EYVal)==1) {
       AdjustDone = true;
@@ -904,7 +903,7 @@ hitNow:
         e.Dmg.Number += d2.Number;
         e.Dmg.Sides += d2.Sides;
         e.Dmg.Bonus += d2.Bonus;
-        e.vHit    = Attr[A_HIT_ARCHERY]; 
+        e.vHit    = (int8)Attr[A_HIT_ARCHERY]; 
         e.Dmg.Bonus += Attr[A_DMG_ARCHERY];
         e.AType   = A_FIRE;
         // ww: +4 arrows give you +4 to hit and +4 to damage
@@ -921,14 +920,14 @@ hitNow:
       else {
         // ww: very important, otherwise this stuff never gets calculated
         e.EActor->CalcValues(false,e.EItem2); 
-        e.vHit       = Attr[A_HIT_THROWN]; 
+        e.vHit       = (int8)Attr[A_HIT_THROWN]; 
         e.Dmg.Bonus += Attr[A_DMG_THROWN];
         e.AType      = A_HURL;
       }
-      e.vDef    = e.ETarget->isCreature () ? e.EVictim->getDef() : 0;
-      e.DType   = (e.EItem ? e.EItem : e.EItem2)->DamageType(e.EVictim);
-      e.vThreat = (e.EItem ? e.EItem : e.EItem2)->Threat(e.EActor);
-      e.vCrit   = (e.EItem ? e.EItem : e.EItem2)->CritMult(e.EActor);
+      e.vDef    = (int8)(e.ETarget->isCreature () ? e.EVictim->getDef() : 0);
+      e.DType   = (int8)(e.EItem ? e.EItem : e.EItem2)->DamageType(e.EVictim);
+      e.vThreat = (int8)(e.EItem ? e.EItem : e.EItem2)->Threat(e.EActor);
+      e.vCrit   = (int8)(e.EItem ? e.EItem : e.EItem2)->CritMult(e.EActor);
       if (ReThrow(EV_STRIKE, e) == ABORT)
         break;
       if (e.isHit)
@@ -1015,7 +1014,7 @@ SkipAttack:
 
 EvReturn Creature::NAttack(EventInfo &e) /* this == EActor */
 {
-  Dice *d; TAttack* at; String s;
+  TAttack* at; String s;
   int8 HitCount = 0, ClawCount = 0;
   bool OneAttack = false, isFF = false;
   bool startedAfraid = HasStati(AFRAID);
@@ -1181,7 +1180,7 @@ EvReturn Creature::NAttack(EventInfo &e) /* this == EActor */
   {
     OneAttack = true;
     e.EItem   = NULL;
-    e.vHit    = Attr[A_HIT_BRAWL];
+    e.vHit    = (int8)Attr[A_HIT_BRAWL];
     e.vDef      = e.ETarget->isCreature() ? e.EVictim->getDef() : 0;
     e.Dmg.Set(0,0,0);
     e.saveDC = 0;
@@ -1224,14 +1223,14 @@ EvReturn Creature::NAttack(EventInfo &e) /* this == EActor */
         if (at->AType == A_ALSO)
           continue;
         e.EItem     = NULL;
-        e.vHit      = Attr[A_HIT_BRAWL];
+        e.vHit      = (int8)Attr[A_HIT_BRAWL];
         e.vDef      = e.ETarget->isCreature() ? e.EVictim->getDef() : 0;
         e.Dmg       = at->u.a.Dmg;
         // ww: this check seems necessary, otherwise fire damage is
         // related to STR and whatnot ...
         if (at->DType >= AD_SLASH && at->DType <= AD_BLUNT) 
           e.Dmg.Bonus += e.EActor->Attr[A_DMG_BRAWL];
-       e.saveDC = e.EActor->GetPower(at->u.a.DC);
+       e.saveDC = (int8)e.EActor->GetPower(at->u.a.DC);
         e.AType   = at->AType;
         e.DType   = at->DType;
         e.vThreat = 20;
@@ -1264,7 +1263,7 @@ EvReturn Creature::NAttack(EventInfo &e) /* this == EActor */
         e.MagicRes = e.Resist = e.isWImmune = e.isEvaded = 
         e.isPartiallyEvaded = false;  
       e.EItem     = NULL;
-      e.vHit      = Attr[A_HIT_BRAWL];
+      e.vHit      = (int8)Attr[A_HIT_BRAWL];
       if (OneAttack && !(isFF && e.EActor->HasFeat(FT_POUNCE)))
         e.vHit -= e.EActor->HasFeat(FT_MULTIATTACK) ? 2 : 5;
       e.vDef      = e.ETarget->isCreature() ? e.EVictim->getDef() : 0;
@@ -1275,7 +1274,7 @@ EvReturn Creature::NAttack(EventInfo &e) /* this == EActor */
       // related to STR and whatnot ...
       if (at->DType >= AD_SLASH && at->DType <= AD_BLUNT) 
         e.Dmg.Bonus += e.EActor->Attr[A_DMG_BRAWL];
-      e.saveDC = e.EActor->GetPower(at->u.a.DC);
+      e.saveDC = (int8)e.EActor->GetPower(at->u.a.DC);
       e.AType   = at->AType;
       e.DType   = at->DType;
       e.vThreat = 20; /* HasFeat(FT_IMPROVED_CRITICAL_BITE), etc. */
@@ -1330,11 +1329,11 @@ EvReturn Creature::NAttack(EventInfo &e) /* this == EActor */
     at = e.EActor->GetAttk(A_CLAW);
     ASSERT(at);
     e.EItem     = NULL;
-    e.vHit      = Attr[A_HIT_BRAWL];
+    e.vHit      = (int8)Attr[A_HIT_BRAWL];
     e.vDef = e.ETarget->isCreature() ? e.EVictim->getDef() : 0;
     e.Dmg       = at->u.a.Dmg;
     e.Dmg.Bonus += e.EActor->Attr[A_DMG_BRAWL]; 
-    e.saveDC = e.EActor->GetPower(at->u.a.DC);
+    e.saveDC = (int8)e.EActor->GetPower(at->u.a.DC);
     e.AType   = A_RAKE;
     e.DType   = at->DType;
     e.vThreat = 20; /* HasFeat(FT_IMPROVED_CRITICAL_BITE), etc. */
@@ -1359,10 +1358,10 @@ EvReturn Creature::NAttack(EventInfo &e) /* this == EActor */
 
   if (e.EActor->HasFeat(FT_TRAMPLE) && e.EVictim->HasStati(PRONE) && !e.isTelekinetic) {
     e.EItem     = NULL;
-    e.vHit      = Attr[A_HIT_BRAWL];
+    e.vHit      = (int8)Attr[A_HIT_BRAWL];
     e.vDef = e.ETarget->isCreature() ? e.EVictim->getDef() : 0;
-    e.Dmg.Set(1,12,e.EActor->Attr[A_DMG_BRAWL]);
-    e.saveDC = e.EActor->GetPower(10 + e.EActor->ChallengeRating());
+    e.Dmg.Set(1,12,(int8)e.EActor->Attr[A_DMG_BRAWL]);
+    e.saveDC = (int8)e.EActor->GetPower(10 + e.EActor->ChallengeRating());
     e.AType   = A_TRAM;
     e.DType   = AD_BLUNT;
     e.vThreat = 20; /* HasFeat(FT_IMPROVED_CRITICAL_TRAMPLE) ? 18 : 20. */
@@ -1397,13 +1396,13 @@ DoneSequence:
 
 EvReturn Creature::SAttack(EventInfo &e) /* this == EActor */
 { 
-  static EffectValues ef; char ch;
+  static EffectValues ef;
   TEffect *te; EvReturn r;
-  Thing *t; int16 i,r1,r2, max;
+  Thing *t; int16 i, max;
   bool startedAfraid = HasStati(AFRAID);
      
   if (!e.AType)
-    e.AType = e.EParam; 
+    e.AType = (int8)e.EParam; 
   e.vThreat = 20;
   TAttack *ta = TMON(mID)->GetAttk(e.AType);
 
@@ -1575,7 +1574,7 @@ EvReturn Creature::SAttack(EventInfo &e) /* this == EActor */
         e.Dmg    = ta->u.a.Dmg;
         e.AType  = ta->AType;
         e.DType  = ta->DType;
-        e.saveDC = e.EActor->GetPower(ta->u.a.DC);
+        e.saveDC = (int8)e.EActor->GetPower(ta->u.a.DC);
         ReThrow(EV_ATTACKMSG,e);
         MapIterate(m,t,i) 
           if (t->isCreature())
@@ -1596,7 +1595,7 @@ EvReturn Creature::SAttack(EventInfo &e) /* this == EActor */
           e.Dmg.Bonus += (e.EActor->Mod(A_STR)*3)/2;
         e.AType  = ta->AType;
         e.DType  = ta->DType;
-        e.saveDC = e.EActor->GetPower(ta->u.a.DC);
+        e.saveDC = (int8)e.EActor->GetPower(ta->u.a.DC);
         e.isHit  = true;
         ReThrow(EV_HIT,e);
         ReThrow(EV_ATTACKMSG,e);
@@ -1642,7 +1641,7 @@ EvReturn Creature::SAttack(EventInfo &e) /* this == EActor */
                       e.Dmg    = ta->u.a.Dmg;
                       e.vDmg   = max(1,e.Dmg.Roll());
                       e.DType  = ta->DType;
-                      e.saveDC = e.EActor->GetPower(ta->u.a.DC);
+                      e.saveDC = (int8)e.EActor->GetPower(ta->u.a.DC);
                       e.isHit = true; 
                       ReThrow(EV_HIT,e);
                       if (j++ == max) break; 
@@ -1683,7 +1682,7 @@ EvReturn Creature::SAttack(EventInfo &e) /* this == EActor */
               e2.vDmg   = max(1,e2.Dmg.Roll());
               e2.strDmg = Format(" (%d) (proximity)",e2.vDmg);
               e2.DType  = ta->DType;
-              e2.saveDC = e2.EActor->GetPower(ta->u.a.DC);
+              e2.saveDC = (int8)e2.EActor->GetPower(ta->u.a.DC);
               e2.isHit = true; 
               e2.isNAttack = true;
               ReThrow(EV_DAMAGE,e2);
@@ -1728,7 +1727,7 @@ EvReturn Creature::SAttack(EventInfo &e) /* this == EActor */
               e.Dmg    = ta->u.a.Dmg;
               e.vDmg   = max(1,e.Dmg.Roll());
               e.DType  = ta->DType;
-              e.saveDC = e.EActor->GetPower(ta->u.a.DC);
+              e.saveDC = (int8)e.EActor->GetPower(ta->u.a.DC);
               e.strDmg = ""; 
               e.isHit = true; 
               e.Resist = e.Immune = false; 
@@ -1813,7 +1812,7 @@ EvReturn Creature::SAttack(EventInfo &e) /* this == EActor */
         e2.DType  = ta->DType;
         e2.isHit = true; 
         e2.strDmg = ""; 
-        e2.saveDC = e2.EActor->GetPower(ta->u.a.DC);
+        e2.saveDC = (int8)e2.EActor->GetPower(ta->u.a.DC);
         it = e.EItem2;
         if (!it) it = e.EItem;
         if (!it) {
@@ -1874,8 +1873,8 @@ EvReturn Creature::SAttack(EventInfo &e) /* this == EActor */
             return ABORT;
           }
           e.EItem   = NULL;
-          e.vHit    = Attr[A_HIT_BRAWL];
-          e.vDef    = e.EVictim->getDef();
+          e.vHit    = (int8)Attr[A_HIT_BRAWL];
+          e.vDef    = (int8)e.EVictim->getDef();
           e.Dmg     = DmgVal(S_BRAWL,e.EVictim->GetAttr(A_SIZ) > SZ_MEDIUM);
           e.AType   = TMON(mID)->Attk[0].AType;
           e.DType   = TMON(mID)->Attk[0].DType;
@@ -1887,12 +1886,12 @@ EvReturn Creature::SAttack(EventInfo &e) /* this == EActor */
           e.EItem    = EInSlot(SL_WEAPON);
           e.Dmg      = e.EActor->DmgVal(S_MELEE, 
               e.EVictim->GetAttr(A_SIZ) > SZ_MEDIUM);
-          e.vHit     = Attr[A_HIT_MELEE]; /*+ e.EItem->ToHit() */
-          e.vDef     = e.EVictim->getDef();
+          e.vHit     = (int8)Attr[A_HIT_MELEE]; /*+ e.EItem->ToHit() */
+          e.vDef     = (int8)e.EVictim->getDef();
           e.AType    = A_SWNG;
-          e.DType    = e.EItem->DamageType(e.EVictim);
+          e.DType    = (int8)e.EItem->DamageType(e.EVictim);
           e.vThreat  = e.EItem->Threat(e.EActor)-3;
-          e.vCrit    = e.EItem->CritMult(e.EActor);
+          e.vCrit    = (int8)e.EItem->CritMult(e.EActor);
         }
         e.isGreatBlow = true;
         if (ReThrow(EV_STRIKE, e) == ABORT)
@@ -1931,8 +1930,8 @@ EvReturn Creature::SAttack(EventInfo &e) /* this == EActor */
             return ABORT;
           }
           e.EItem   = NULL;
-          e.vHit    = Attr[A_HIT_BRAWL];
-          e.vDef    = e.EVictim->getDef();
+          e.vHit    = (int8)Attr[A_HIT_BRAWL];
+          e.vDef    = (int8)e.EVictim->getDef();
           e.Dmg     = DmgVal(S_BRAWL,e.EVictim->GetAttr(A_SIZ) > SZ_MEDIUM);
           e.AType   = TMON(mID)->Attk[0].AType;
           e.DType   = TMON(mID)->Attk[0].DType;
@@ -1944,12 +1943,12 @@ EvReturn Creature::SAttack(EventInfo &e) /* this == EActor */
           e.EItem    = EInSlot(SL_WEAPON);
           e.Dmg      = e.EActor->DmgVal(S_MELEE, 
               e.EVictim->GetAttr(A_SIZ) > SZ_MEDIUM);
-          e.vHit     = Attr[A_HIT_MELEE]; 
-          e.vDef     = e.EVictim->getDef();
+          e.vHit     = (int8)Attr[A_HIT_MELEE]; 
+          e.vDef     = (int8)e.EVictim->getDef();
           e.AType    = A_SWNG;
-          e.DType    = e.EItem->DamageType(e.EVictim);
+          e.DType    = (int8)e.EItem->DamageType(e.EVictim);
           e.vThreat  = e.EItem->Threat(e.EActor)-3;
-          e.vCrit    = e.EItem->CritMult(e.EActor);
+          e.vCrit    = (int8)e.EItem->CritMult(e.EActor);
         }
         e.isPrecision = true;
         if (ReThrow(EV_STRIKE, e) == ABORT)
@@ -1995,8 +1994,8 @@ EvReturn Creature::SAttack(EventInfo &e) /* this == EActor */
           return ABORT;
 
         e.Dmg.Set(0,0,0);
-        e.vHit  = Attr[A_HIT_BRAWL];
-        e.vDef  = e.EVictim->getDef();
+        e.vHit  = (int8)Attr[A_HIT_BRAWL];
+        e.vDef  = (int8)e.EVictim->getDef();
         e.DType = AD_BLUNT;
 
         if (!HasFeat(FT_MASTER_BULL_RUSH))
@@ -2046,12 +2045,12 @@ EvReturn Creature::SAttack(EventInfo &e) /* this == EActor */
           break; 
         } 
         else if (e.EActor->AttackMode() == S_MELEE) {
-          e.vHit = e.EActor->Attr[A_HIT_MELEE];
+          e.vHit = (int8)e.EActor->Attr[A_HIT_MELEE];
           e.EItem = e.EActor->EInSlot(SL_WEAPON);
         }
         else
-          e.vHit = e.EActor->Attr[A_HIT_BRAWL];
-        e.vDef = e.EVictim->getDef();
+          e.vHit = (int8)e.EActor->Attr[A_HIT_BRAWL];
+        e.vDef = (int8)e.EVictim->getDef();
         e.DType = AD_TRIP; e.saveDC = -1;
         e.Dmg.Set(0,0,0);
 
@@ -2098,12 +2097,12 @@ EvReturn Creature::SAttack(EventInfo &e) /* this == EActor */
         }
 
         if (e.EActor->AttackMode() == S_MELEE) {
-          e.vHit = e.EActor->Attr[A_HIT_MELEE];
+          e.vHit = (int8)e.EActor->Attr[A_HIT_MELEE];
           e.EItem = e.EActor->EInSlot(SL_WEAPON);
           }
         else
-          e.vHit = e.EActor->Attr[A_HIT_BRAWL];
-        e.vDef = e.EVictim->getDef();
+          e.vHit = (int8)e.EActor->Attr[A_HIT_BRAWL];
+        e.vDef = (int8)e.EVictim->getDef();
         e.DType = AD_DISA; e.saveDC = -1;
         e.Dmg.Set(0,0,0);
 
@@ -2168,8 +2167,8 @@ EvReturn Creature::SAttack(EventInfo &e) /* this == EActor */
           IPrint("You cannot grapple a creature on another plane!"); 
           break; 
         } 
-        e.vHit = e.EActor->Attr[A_HIT_BRAWL];
-        e.vDef = e.EVictim->getDef();
+        e.vHit = (int8)e.EActor->Attr[A_HIT_BRAWL];
+        e.vDef = (int8)e.EVictim->getDef();
         e.DType = AD_GRAB; e.saveDC = -1;
         e.Dmg.Set(0,0,0);
         if (!e.EActor->HasFeat(FT_MASTER_GRAPPLE) && 
@@ -2214,7 +2213,7 @@ EvReturn Creature::SAttack(EventInfo &e) /* this == EActor */
         {
           int checkStati[] = { GRAPPLED, GRABBED, 0 };
           Creature *Grapplers[64];
-          int16 j, c;
+          int16 j;
           memset(Grapplers,0,sizeof(Creature*)*64);
           j = 0;
           for (i=0;checkStati[i];i++) 
@@ -2267,7 +2266,7 @@ EvReturn Creature::SAttack(EventInfo &e) /* this == EActor */
         if (!HasMFlag(M_HUMANOID) && !isMType(MA_QUADRUPED) && !e.isTelekinetic)
         { IPrint("You can't kick effectively in this form."); 
           return ABORT; }
-          e.vHit = e.EActor->Attr[A_HIT_BRAWL];
+          e.vHit = (int8)e.EActor->Attr[A_HIT_BRAWL];
           e.vDef = e.ETarget->isCreature() ? e.EVictim->getDef() : 0;
           e.DType = AD_BLUNT;
           e.saveDC = -1;
@@ -2327,10 +2326,10 @@ EvReturn Creature::SAttack(EventInfo &e) /* this == EActor */
           e.EItem = EInSlot(SL_WEAPON);
           if (e.EItem) {
             e.Dmg   = DmgVal(S_MELEE, e.EVictim->GetAttr(A_SIZ) > SZ_MEDIUM);
-            e.vHit  = e.EActor->Attr[A_HIT_MELEE];
-            e.DType    = e.EItem->DamageType(e.EVictim);
-            e.vThreat = e.EItem->Threat(e.EActor);
-            e.vCrit   = e.EItem->CritMult(e.EActor);
+            e.vHit  = (int8)e.EActor->Attr[A_HIT_MELEE];
+            e.DType    = (int8)e.EItem->DamageType(e.EVictim);
+            e.vThreat = (int8)e.EItem->Threat(e.EActor);
+            e.vCrit   = (int8)e.EItem->CritMult(e.EActor);
           } else { 
             TAttack buf[1024];
             TAttack * at = NULL;
@@ -2345,16 +2344,16 @@ EvReturn Creature::SAttack(EventInfo &e) /* this == EActor */
               return ABORT;
             } 
             e.EItem     = NULL;
-            e.vHit      = Attr[A_HIT_BRAWL];
+            e.vHit      = (int8)Attr[A_HIT_BRAWL];
             e.Dmg       = at->u.a.Dmg;
             e.Dmg.Bonus += e.EActor->Attr[A_DMG_BRAWL]; 
-            e.saveDC = e.EActor->GetPower(at->u.a.DC);
+            e.saveDC = (int8)e.EActor->GetPower(at->u.a.DC);
             e.DType   = at->DType;
             e.vThreat = 20; /* HasFeat(FT_IMPROVED_CRITICAL_BITE), etc. */
             e.vCrit   = 2;
             e.isNAttack = true;
           } 
-          e.vDef  = e.EVictim->getDef();
+          e.vDef  = (int8)e.EVictim->getDef();
           if (e.EVictim->ResistLevel(AD_CRIT) != -1 ||
               (e.EVictim->isMType(MA_UNDEAD) && e.EActor->HasFeat(FT_NECROPHYSIOLOGY)))
             e.isCrit = true; 
@@ -2399,7 +2398,7 @@ EvReturn Creature::SAttack(EventInfo &e) /* this == EActor */
           if (e.EActor->isDead())
             return DONE;
 
-          e.vHit = e.EActor->Attr[A_HIT_BRAWL];
+          e.vHit = (int8)e.EActor->Attr[A_HIT_BRAWL];
           e.vDef = e.ETarget->isCreature() ? e.EVictim->getDef() : 0;
           e.DType = AD_KNOC; e.saveDC = -1;
           e.Dmg.Set(1,max(1,e.EActor->Mod(A_STR) + 1),0);
@@ -2439,8 +2438,8 @@ EvReturn Creature::SAttack(EventInfo &e) /* this == EActor */
                   return ABORT;
                 }
                 e.EItem   = NULL;
-                e.vHit    = Attr[A_HIT_BRAWL];
-                e.vDef    = e.EVictim->getDef();
+                e.vHit    = (int8)Attr[A_HIT_BRAWL];
+                e.vDef    = (int8)e.EVictim->getDef();
                 e.Dmg     = TMON(mID)->Attk[0].u.a.Dmg;
                 e.Dmg.Bonus += e.EActor->Attr[A_DMG_BRAWL]; 
                 e.AType   = TMON(mID)->Attk[0].AType;
@@ -2453,12 +2452,12 @@ EvReturn Creature::SAttack(EventInfo &e) /* this == EActor */
                 e.EItem    = EInSlot(SL_WEAPON);
                 e.Dmg      = e.EActor->DmgVal(S_MELEE, 
                     e.EVictim->GetAttr(A_SIZ) > SZ_MEDIUM);
-                e.vHit     = Attr[A_HIT_MELEE]; /*+ e.EItem->ToHit() */
-                e.vDef     = e.EVictim->getDef();
+                e.vHit     = (int8)Attr[A_HIT_MELEE]; /*+ e.EItem->ToHit() */
+                e.vDef     = (int8)e.EVictim->getDef();
                 e.AType    = A_SWNG;
-                e.DType    = e.EItem->DamageType(e.EVictim);
-                e.vThreat  = e.EItem->Threat(e.EActor);
-                e.vCrit    = e.EItem->CritMult(e.EActor);
+                e.DType    = (int8)e.EItem->DamageType(e.EVictim);
+                e.vThreat  = (int8)e.EItem->Threat(e.EActor);
+                e.vCrit    = (int8)e.EItem->CritMult(e.EActor);
               }
               if (ReThrow(EV_STRIKE, e) == ABORT)
                 continue;
@@ -2560,16 +2559,16 @@ EvReturn Creature::SAttack(EventInfo &e) /* this == EActor */
             e.EActor->ProvokeAoO(e.EVictim);
             if (e.EActor->isDead()) return ABORT; 
           }
-          e.vHit    = e.EActor->Attr[A_HIT_MELEE] - 4;
-          e.vDef    = e.EVictim->getDef();
+          e.vHit    = (int8)(e.EActor->Attr[A_HIT_MELEE] - 4);
+          e.vDef    = (int8)e.EVictim->getDef();
           e.saveDC  = -1;
           e.EItem   = EInSlot(SL_WEAPON);
           e.EItem2  = e.EVictim->EInSlot(SL_WEAPON);
           e.Dmg     = e.EActor->DmgVal(S_MELEE, 
               e.EVictim->GetAttr(A_SIZ) > SZ_MEDIUM);
-          e.DType   = e.EItem->DamageType(e.EVictim); 
-          e.vThreat = e.EItem->Threat(e.EActor);
-          e.vCrit   = e.EItem->CritMult(e.EActor);
+          e.DType   = (int8)e.EItem->DamageType(e.EVictim); 
+          e.vThreat = (int8)e.EItem->Threat(e.EActor);
+          e.vCrit   = (int8)e.EItem->CritMult(e.EActor);
           if (ReThrow(EV_STRIKE,e) == ABORT)
             return ABORT;
           Timeout += 3000 / max((100 + Attr[A_SPD_MELEE]*5),10);
@@ -2624,8 +2623,8 @@ EvReturn Creature::SAttack(EventInfo &e) /* this == EActor */
           e.DType = ta->DType;
           e.saveDC = ta->u.a.DC;
           e.Dmg = ta->u.a.Dmg;
-          e.vHit    = e.EActor->GetAttr(A_HIT_BRAWL);
-          e.vDef    = e.EVictim->getDef();
+          e.vHit    = (int8)e.EActor->GetAttr(A_HIT_BRAWL);
+          e.vDef    = (int8)e.EVictim->getDef();
           e.vThreat = 20;
           e.vCrit   = 2;
           return ReThrow(EV_STRIKE,e);
@@ -2745,8 +2744,8 @@ EvReturn Creature::OAttack(EventInfo &e)
           return ABORT;
 
         e.EItem   = NULL;
-        e.vHit    = Attr[A_HIT_BRAWL];
-        e.vDef    = e.EVictim->getDef();
+        e.vHit    = (int8)Attr[A_HIT_BRAWL];
+        e.vDef    = (int8)e.EVictim->getDef();
         e.AType   = 0;
         e.isNAttack = true;
         e.vThreat = 20;
@@ -2771,12 +2770,12 @@ EvReturn Creature::OAttack(EventInfo &e)
         e.EItem    = EInSlot(SL_WEAPON);
         e.Dmg      = e.EActor->DmgVal(S_MELEE, 
             e.EVictim->GetAttr(A_SIZ) > SZ_MEDIUM);
-        e.vHit     = Attr[A_HIT_MELEE]; /*+ e.EItem->ToHit() */
-        e.vDef     = e.EVictim->getDef();
+        e.vHit     = (int8)Attr[A_HIT_MELEE]; /*+ e.EItem->ToHit() */
+        e.vDef     = (int8)e.EVictim->getDef();
         e.AType    = A_SWNG;
-        e.DType    = e.EItem->DamageType(e.EVictim);
-        e.vThreat  = e.EItem->Threat(e.EActor);
-        e.vCrit    = e.EItem->CritMult(e.EActor);
+        e.DType    = (int8)e.EItem->DamageType(e.EVictim);
+        e.vThreat  = (int8)e.EItem->Threat(e.EActor);
+        e.vCrit    = (int8)e.EItem->CritMult(e.EActor);
         Item * it = EInSlot(SL_WEAPON); 
        	if (ReThrow(EV_STRIKE, e) == ABORT)
           return ABORT;
@@ -3087,7 +3086,7 @@ EvReturn Creature::PreStrike(EventInfo &e) /* this == EActor */
         (e.EItem2 && e.EItem2->HasQuality(WQ_SEEKING))) 
       e.isSeeking = true; 
     
-    e.modStr = e.EActor->Mod(A_STR); 
+    e.modStr = (int8)e.EActor->Mod(A_STR); 
     if (e.EItem && (e.AType == A_SWNG || e.AType == A_FIRE ||
                      e.AType == A_GREA || e.AType == A_HURL)) {
       if (e.EActor->InSlot(SL_READY) == e.EActor->InSlot(SL_WEAPON) &&
@@ -3348,12 +3347,12 @@ EvReturn Creature::PreStrike(EventInfo &e) /* this == EActor */
       } ;
       for (int j=0; armourSlots[j]; j++) {
         Item *it = NULL;
-        i = armourSlots[j];
-        if ((it = e.EVictim->EInSlot(i)) && it->activeSlot(i)) {
-          if (it->isBlessed() && (it->isType(T_SHIELD) ||
-              it->isType(T_ARMOUR)))
+        int8 ii = armourSlots[j];
+        if ((it = e.EVictim->EInSlot(ii)) && it->activeSlot(ii)) {
+          if (it->isBlessed() && (it->isType(T_SHIELD) || it->isType(T_ARMOUR)))
             bonusBless += 2; 
-          if (it->isGhostTouch()) continue;
+          if (it->isGhostTouch())
+              continue;
           else if (it->isType(T_SHIELD)) 
               bonusHit += it->DefVal(e.EVictim,false);
         } 
@@ -3575,7 +3574,6 @@ EvReturn Creature::PreStrike(EventInfo &e) /* this == EActor */
       e.subStr = true;
 
     if (e.isGreatBlow) {
-      Status *s;
       e.vHit += 2;
       e.bDmg += 2;
       if (e.isGhostTouch || !e.vicIncor)
@@ -3735,7 +3733,7 @@ EvReturn Creature::PreStrike(EventInfo &e) /* this == EActor */
     if (e.isAoO && e.isMoveAoO && e.EVictim->HasStati(CHARGING)) {
       int32 bonus = max(e.EVictim->ChargeBonus(),1); 
       if (bonus) { 
-        e.bDmg += bonus;
+        e.bDmg += (int16)bonus;
         e.strDmg += Format (" %+d charge",bonus);
       }
       if (e.EActor->HasFeat(FT_GUARDED_STANCE)) {
@@ -3954,7 +3952,7 @@ EvReturn Creature::PreStrike(EventInfo &e) /* this == EActor */
 
 EvReturn Creature::Strike(EventInfo &e) /* this == EActor */
 	{
-    int16 gt,i, tx, ty; bool isSilent; Item *it;
+    int16 i, tx, ty; bool isSilent; Item *it;
 
     isSilent = Silence != 0;
 
@@ -4162,7 +4160,7 @@ EvReturn Creature::Strike(EventInfo &e) /* this == EActor */
          (e.EActor->HasFeat(FT_SHOOT_FROM_COVER)) &&
          (!(e.EActor->isBeside(e.EVictim))) &&
          (e.EActor->HasStati(HIDING)) )) {
-      e.EVictim->ts.HearNoise(e.EVictim,e.EActor->x,e.EActor->y);
+      e.EVictim->ts.HearNoise(e.EVictim,(uint8)e.EActor->x,(uint8)e.EActor->y);
     } else 
       e.EActor->Reveal(true);
     e.EVictim->Reveal(false);
@@ -4235,10 +4233,8 @@ EvReturn Creature::Strike(EventInfo &e) /* this == EActor */
          automatic hit. Thus, 1st level fighters with rapiers hit
          Great Wyrms 5% of the time, not 15%.
     */        
-    
-    
 
-    if (e.AType == A_HURL & e.EVictim->HasSkill(SK_PICK_POCKET))
+    if (e.AType == A_HURL && e.EVictim->HasSkill(SK_PICK_POCKET))
       if (e.EVictim->SkillLevel(SK_PICK_POCKET) >= 15)
         if (e.EItem2 && e.EItem2->Size() <= SZ_SMALL)
           {
@@ -4391,7 +4387,7 @@ EvReturn Creature::Strike(EventInfo &e) /* this == EActor */
                 eCopy.Dmg    = at->u.a.Dmg;
                 eCopy.Immune = false;
                 eCopy.Resist = false;
-                eCopy.saveDC = e.EActor->GetPower(at->u.a.DC);
+                eCopy.saveDC = (int8)e.EActor->GetPower(at->u.a.DC);
                 ReThrow(EV_HIT,eCopy);
               }
             } 
@@ -4452,10 +4448,10 @@ EvReturn Creature::Strike(EventInfo &e) /* this == EActor */
           e2.EVictim = e.EActor;
           e2.EItem   = e.EItem; // handy for A_DEQU
           e2.EItem2  = e.EItem2;
-          e2.vHit    = e.EVictim->Attr[A_HIT_BRAWL];
-          e2.vDef    = e.EActor->getDef();
+          e2.vHit    = (int8)e.EVictim->Attr[A_HIT_BRAWL];
+          e2.vDef    = (int8)e.EActor->getDef();
           e2.Dmg     = at->u.a.Dmg;
-          e2.saveDC = e.EActor->GetPower(at->u.a.DC);
+          e2.saveDC = (int8)e.EActor->GetPower(at->u.a.DC);
           e2.AType   = at->AType;
           e2.DType   = at->DType;
           e2.vThreat = 20; 
@@ -4499,13 +4495,13 @@ EvReturn Creature::Strike(EventInfo &e) /* this == EActor */
       {
         int16 N, L; Item *ar;
         N = 10;
-        N += e.EItem ? e.EItem->Weight()/10 : 10;
+        N += (int16)(e.EItem ? e.EItem->Weight()/10 : 10);
         if (e.EItem && e.EItem->HasQuality(IQ_FEATHERLIGHT))
           N = 10;
         
         if (e.EActor->InSlot(SL_READY) && 
             e.EActor->InSlot(SL_READY)->isType(T_SHIELD))
-          N += e.EActor->InSlot(SL_READY)->Weight()/5;
+          N += (int16)(e.EActor->InSlot(SL_READY)->Weight()/5);
         ar = e.EActor->InSlot(SL_ARMOUR);
         if (!ar)
           L = 10000;
@@ -4539,8 +4535,8 @@ EvReturn Creature::Strike(EventInfo &e) /* this == EActor */
 bool Creature::ManeuverCheck(EventInfo &e)
   {
     int8 r1, r2, v1, v2, i;
-    r1 = Dice::Roll(1,20,0);
-    r2 = Dice::Roll(1,20,0);
+    r1 = (int8)Dice::Roll(1,20,0);
+    r2 = (int8)Dice::Roll(1,20,0);
     e.vOpp1 = r1;
     e.vOpp2 = r2;        
         
@@ -4548,14 +4544,14 @@ bool Creature::ManeuverCheck(EventInfo &e)
     if ((e.AType == A_TRIP || e.AType == A_DISA) && 
         (e.EActor->AttackMode() == S_MELEE ||
          e.EActor->AttackMode() == S_DUAL))
-      v1 = e.EActor->GetBAB(S_MELEE);
+      v1 = (int8)e.EActor->GetBAB(S_MELEE);
     else 
-      v1 = e.EActor->GetBAB(S_MELEE);
+      v1 = (int8)e.EActor->GetBAB(S_MELEE);
     
     if (e.EVictim->InSlot(SL_WEAPON))
-      v2 = max(e.EVictim->GetBAB(S_MELEE),e.EVictim->GetBAB(S_BRAWL));
+      v2 = (int8)max(e.EVictim->GetBAB(S_MELEE),e.EVictim->GetBAB(S_BRAWL));
     else
-      v2 = e.EVictim->GetBAB(S_BRAWL);
+      v2 = (int8)e.EVictim->GetBAB(S_BRAWL);
 
     if (!v1)
       e.strOpp1 = Format("1d20 (%d)",r1);
@@ -4585,7 +4581,7 @@ bool Creature::ManeuverCheck(EventInfo &e)
 
       case A_GRAB:
         size4 = true; 
-        if ((i = e.EVictim->GetStatiMag(SAVE_BONUS,SN_GRAB))) {
+        if ((i = (int8)e.EVictim->GetStatiMag(SAVE_BONUS,SN_GRAB))) {
           e.vOpp2 += i;
           e.strOpp2 += Format(" %+d vs. grab",i);
         }
@@ -4601,7 +4597,7 @@ bool Creature::ManeuverCheck(EventInfo &e)
         size4 = true; 
         i = e.EActor->SkillLevel(SK_ESCAPE_ART) - 
           // ww: we'll be adding in your dex/str bonus later
-          e.EActor->Mod2(SkillAttr(SK_ESCAPE_ART));
+          e.EActor->Mod2((int8)SkillAttr(SK_ESCAPE_ART));
         if (i > 0) { 
           e.vOpp1 += i;
           e.strOpp1 += Format(" %+d skill",i);
@@ -4610,7 +4606,7 @@ bool Creature::ManeuverCheck(EventInfo &e)
           e.vOpp1 += 6;
           e.strOpp1 += " +6 slipaway";
           } 
-        if ((i = e.EActor->GetStatiMag(SAVE_BONUS,SN_GRAB))) {
+        if ((i = (int8)e.EActor->GetStatiMag(SAVE_BONUS,SN_GRAB))) {
           e.vOpp1 += i;
           e.strOpp1 += Format(" %+d vs. grab",i);
           }
@@ -4776,7 +4772,7 @@ EvReturn Creature::Hit(EventInfo &e) /* this == EVictim!! */
           e.AType = at->AType; 
           e.DType  = at->DType;
           e.Dmg    = at->u.a.Dmg;
-          e.saveDC = e.EActor->GetPower(at->u.a.DC);
+          e.saveDC = (int8)e.EActor->GetPower(at->u.a.DC);
           e.EMap->SetQueue(QUEUE_DAMAGE_MSG);
           ReThrow(EV_HIT,e);
           e.EMap->UnsetQueue(QUEUE_DAMAGE_MSG);
@@ -4866,8 +4862,8 @@ EvReturn Creature::Hit(EventInfo &e) /* this == EVictim!! */
       vb = e.Dmg.Bonus;
       vn = vn * (5 + e.vCrit*5);
       vb = vb * (5 + e.vCrit*5);
-      e.Dmg.Number = max(2,vn/10);
-      e.Dmg.Bonus  = (vb / 10);
+      e.Dmg.Number = (int8)max(2,vn/10);
+      e.Dmg.Bonus  = (int8)(vb / 10);
       }
     else {
       e.Dmg.Number *= e.vCrit;
@@ -4887,14 +4883,14 @@ EvReturn Creature::Hit(EventInfo &e) /* this == EVictim!! */
     int32 mult = 1 + ( (HasFeat(FT_SPIRITED_CHARGE) && HasStati(MOUNTED)) ||
                        (HasFeat(FT_FLYING_KICK) && e.AType == A_KICK) );
     if (e.EItem && e.EItem->HasIFlag(WT_CHARGE)) mult++;
-    e.vDmg *= mult; 
+    e.vDmg *= (int16)mult; 
   } 
   {
     Creature * rider = (Creature *)GetStatiObj(MOUNT);
     if (rider && rider->GetStatiMag(CHARGING)) {
       int32 mult = 1; 
       if (e.EItem && e.EItem->HasIFlag(WT_CHARGE)) mult++;
-      e.vDmg *= mult; 
+      e.vDmg *= (int16)mult; 
     } 
   }
 
@@ -4902,7 +4898,7 @@ EvReturn Creature::Hit(EventInfo &e) /* this == EVictim!! */
     int32 mult = 1; 
     if (e.EItem && e.EItem->HasIFlag(WT_CHARGE)) {
       mult++;
-      e.vDmg *= mult; 
+      e.vDmg *= (int16)mult; 
       e.vicCharging = true; 
       // vic will be dead by AttackMsg, so record this mult now! 
     }
@@ -4964,12 +4960,12 @@ AfterEffects:
                         && !e.EVictim->isDead())
   {
     e.eID = e.EActor->GetStatiEID(TOUCH_ATTACK);
-    for(i=0;;i++) {
-      ASSERT(TEFF(e.eID)->Vals(i))
-        if (TEFF(e.eID)->Vals(i)->aval == AR_TOUCH)
+    for(int8 ii=0;;ii++) {
+      ASSERT(TEFF(e.eID)->Vals(ii))
+        if (TEFF(e.eID)->Vals(ii)->aval == AR_TOUCH)
           break;
     }
-    e.efNum = i;
+    e.efNum = (int8)i;
     e.isSpell = true; 
     ReThrow(EV_MAGIC_STRIKE,e);
     /* If this touch spell allows multiple uses, reduce the
@@ -5127,7 +5123,7 @@ AfterEffects:
           if (!e.EVictim->SavingThrow(FORT, e.EActor->StunAttackDC(),0))
             {
               int16 lMana;
-              lMana = Dice::Roll(e.vDmg,8);
+              lMana = Dice::Roll((int8)e.vDmg,8);
               LoseMana(lMana,true);
               VPrint(e,"Mana bleeds out of your chi gates!",
                   "Mana bleeds out of the <EVictim>'s chi gates!");
@@ -5205,7 +5201,7 @@ AfterEffects:
       {
         Dice saDmg; 
         saDmg.Bonus = 0;
-        saDmg.Number = AbilityLevel(CA_SNEAK_ATTACK);
+        saDmg.Number = (int8)AbilityLevel(CA_SNEAK_ATTACK);
         saDmg.Sides  = /* e.EActor->HasFeat(FT_MARTIAL_MASTERY) ||
                           e.EActor->HasStati(POLYMORPH) ? */ 6 /* : 4*/;
 
@@ -5306,8 +5302,7 @@ AfterEffects:
     if (e.isHit && e.EItem && e.EActor->HasStati(CHARGING)) {
       int32 bonus = e.EActor->ChargeBonus(); 
       if (bonus > 0 && !random(4)) 
-        ThrowDmg(EV_DAMAGE,AD_BLUNT,bonus,"the strain of being used in a charge",
-            e.EActor,e.EItem);
+        ThrowDmg(EV_DAMAGE,AD_BLUNT,(int16)bonus,"the strain of being used in a charge",e.EActor,e.EItem);
     } 
 
   DoneHit:
@@ -5495,7 +5490,7 @@ EvReturn Creature::Miss(EventInfo &e)
 EvReturn Creature::Damage(EventInfo &e)
 	{
     int8 subtype = 0, lv, at, Percent; 
-    uint8 Col; uint32 n; int16 EDType;
+    uint8 Col; int16 n; int16 EDType;
     EvReturn r; rID xID; String why;
     Item *it = NULL; int16 c; bool coll;
 
@@ -5871,7 +5866,7 @@ EvReturn Creature::Damage(EventInfo &e)
 
             }
 
-          e.vArm = e.EVictim->ResistLevel(EDType,e.isBypass);
+          e.vArm = (int8)e.EVictim->ResistLevel(EDType,e.isBypass);
 
           /* ww: replaced for now by the weimer alternate penetration system 
           if (is_wepdmg(e.DType)) {
@@ -6133,7 +6128,7 @@ Absorbed:
           if (cHP < n)
             if (e.EActor->mHP+e.EActor->Attr[A_THP] > e.EActor->cHP) {
               if (e.EActor->mHP+e.EActor->Attr[A_THP] > e.EActor->cHP + (n-cHP)) 
-                e.EActor->cHP += n-cHP;
+                e.EActor->cHP += (int16)n-cHP;
               else
                 e.EActor->cHP = e.EActor->mHP+e.EActor->Attr[A_THP];
               DPrint(e,"Your wounds heal<Str>!", "The <EActor>'s wounds heal<Str>!",
@@ -6207,12 +6202,11 @@ Absorbed:
           if (e.EVictim->HasStati(AFRAID))
             return ABORT;          
           if (e.AType == A_PROX)
-            e.saveDC += TMON(e.EVictim->tmID)->GetConst(DRAGON_FEAR_DC);
+            e.saveDC += (int8)TMON(e.EVictim->tmID)->GetConst(DRAGON_FEAR_DC);
           if (!e.EVictim->SavingThrow(WILL,e.saveDC,SA_FEAR)) {
             if (!e.Terse)
               VPrint(e,"You are terrified!", "The <EVictim> seems terrified!"); 
-            e.EVictim->GainTempStati(AFRAID,   e.EActor,  SS_ATTK, e.vDmg,
-                                       FEAR_MAGIC);
+            e.EVictim->GainTempStati(AFRAID,e.EActor,SS_ATTK,(int8)e.vDmg,FEAR_MAGIC);
             }
           else
             e.Resist = true;
@@ -6255,7 +6249,7 @@ Absorbed:
             if (!e.Terse)
               e.EVictim->StatiMessage(STUCK,0,false);
             
-            e.EVictim->GainTempStati(STUCK,e.EActor,e.vDmg,SS_ATTK,e.EParam);
+            e.EVictim->GainTempStati(STUCK,e.EActor,e.vDmg,SS_ATTK,(int16)e.EParam);
           } else e.Resist = true;
          break;
         case AD_SLOW:
@@ -6443,7 +6437,7 @@ Absorbed:
          break;
         case AD_DREX:
           if (e.EVictim->HasStati(SUSTAIN,A_AID)) {
-            lv = e.EVictim->SumStatiMag(SUSTAIN,A_AID);
+            lv = (int8)e.EVictim->SumStatiMag(SUSTAIN,A_AID);
             if (lv*3 >= e.vDmg) {
               e.Immune = true;
               break;
@@ -6504,7 +6498,7 @@ Absorbed:
               Error(XPrint("Creature <Res> has an AD_DISE attack, but no diseases!",e.EActor->mID));
               return DONE;
             }
-          xID = Candidates[random(n)];
+          xID = Candidates[random((int16)n)];
           if (e.EVictim->HasEffStati(DISEASED,xID))
             break;
           if (!e.EVictim->SavingThrow(FORT,e.saveDC)) {
@@ -6547,7 +6541,8 @@ Absorbed:
               /*
               Error(XPrint("Creature <Res> has an AD_POIS attack for <Res>, but no poisons!",e.EActor->mID, e.EVictim->mID));
               */
-            } else xID = Candidates[random(n)];
+            } else
+                xID = Candidates[random((int16)n)];
           if (e.EVictim->HasEffStati(POISONED,xID))
             break;
           if (e.saveDC == 0)
@@ -6629,7 +6624,7 @@ Absorbed:
           e.EDir = e.EActor ? e.EActor->DirTo(e.EVictim) : random(8);
           if (e.eID || !e.EVictim->SavingThrow(FORT,e.saveDC,SA_KNOCKDOWN)) {
             for(i=0;i!=e.vDmg;i++)
-              if (ThrowDir(EV_PUSH,e.EDir,e.EVictim,e.EActor) == ABORT)
+              if (ThrowDir(EV_PUSH,(Dir)e.EDir,e.EVictim,e.EActor) == ABORT)
                 {
                   /* Later, Inflict Impact Damage? */
                   break;
@@ -6667,12 +6662,12 @@ Absorbed:
           // ww: bugfix: if you are a wild-shaped druid and your equipment
           // has merged with your body, it won't rust! 
           if ((it = e.EVictim->EInSlot(SL_WEAPON)) && it->Hardness(e.DType) != -1 && !random(4))
-            ;
-          if ((it = e.EVictim->EInSlot(SL_READY)) && it->Hardness(e.DType) != -1 && !random(3))
-            ;
-          else if ((it = e.EVictim->EInSlot(SL_ARMOUR)) && it->Hardness(e.DType) != -1 && !random(2))
-            ;
-          else {
+            (void)0;
+          if ((it = e.EVictim->EInSlot(SL_READY)) && it->Hardness(e.DType) != -1 && !random(3)) {
+            (void)0;
+          } else if ((it = e.EVictim->EInSlot(SL_ARMOUR)) && it->Hardness(e.DType) != -1 && !random(2)) {
+            (void)0;
+          } else {
             TMonster * tm = TMON(e.EVictim->mID);
             for(c=0,it=e.EVictim->FirstInv();it;it=e.EVictim->NextInv())
               if (it->Hardness(e.DType) != -1 && it->GetParent() == e.EVictim){
@@ -6712,7 +6707,7 @@ Absorbed:
               /* average water elemental soak = 3d4, average torch
                * age = 3000, getting soaked once should destroy your
                * torch */
-              it->Age -= (dmg * 400) / it->Quantity; 
+              it->Age -= (int16)((dmg * 400) / it->Quantity); 
               if (it->Age <= 1) {
                 IDPrint("Your <Obj2> is soaked and destroyed!",
                     "The <Obj1>'s <Obj2> is soaked destroyed!",this,it);
@@ -6736,8 +6731,7 @@ Absorbed:
               Candidates[c++] = it->myHandle;
           if (c) {
             it = oItem(Candidates[random(c)]);
-            if (it->Quantity > e.vDmg)
-              {
+            if (it->Quantity > (uint32)e.vDmg) {
                 it->Quantity = it->Quantity - e.vDmg + 1;
                 it = it->TakeOne();
                 it->Quantity = e.vDmg;
@@ -6760,7 +6754,7 @@ Absorbed:
           if (!e.EVictim->SavingThrow(FORT,e.saveDC,SA_PARA)) {
             if (!e.Terse)
               VPrint(e,"You are stunned!", "The <EVictim> is stunned!"); 
-            e.EVictim->GainTempStati(STUNNED,0,SS_ATTK, e.vDmg);
+            e.EVictim->GainTempStati(STUNNED,0,SS_ATTK,(int8)e.vDmg);
             }
           else
             e.Resist = true;
@@ -7031,7 +7025,7 @@ EvReturn Creature::BullRush(EventInfo &e)
 EvReturn Creature::Death(EventInfo &e)
 {
   int16 ox = x,oy = y, i; Map *om = m;
-  Item *it; Corpse *c;
+  Corpse *c;
   c = NULL;
   if (e.EVictim->isDead())
     return ABORT;
@@ -7520,7 +7514,8 @@ ElemQuality:
           n = CritMult(e.EActor) * 10; 
           e.strXDmg += Format(" +%d %s",n,txt4);
         } else { 
-          n = Dice::Roll(CritMult(e.EActor),10); e.xDmg += n;
+          n = Dice::Roll((int8)CritMult(e.EActor),10);
+          e.xDmg += n;
           e.strXDmg += Format(" +%dd10 %s",CritMult(e.EActor),txt4);
         }
         e.xDmg += n;
@@ -7580,7 +7575,7 @@ ElemQuality:
       if (e.EVictim->GetAttr(A_SIZ) <= e.EActor->GetAttr(A_SIZ)) {
         if (!(e.EVictim->SavingThrow(FORT,20,SA_KNOCKDOWN))) {
           e.EDir = e.EActor->DirTo(e.EVictim);
-          if (ThrowDir(EV_PUSH,e.EDir,e.EVictim,e.EActor) == ABORT) {
+          if (ThrowDir(EV_PUSH,(Dir)e.EDir,e.EVictim,e.EActor) == ABORT) {
             ThrowDmg(EV_DAMAGE,AD_TRIP,20,"knockback attack",
                 e.EActor,e.EVictim,e.EItem,e.EItem2);
           } else {
@@ -7693,7 +7688,7 @@ ElemQuality:
       e.Dmg.Number = 1;
       e.Dmg.Sides = 6;
       e.Dmg.Bonus = 0; 
-      e.DType = AD_DAST + (q - WQ_WEAKENING);
+      e.DType = AD_DAST + ((int8)q - WQ_WEAKENING);
       ReThrow(EV_DAMAGE,e);
       e.DType = DmgType;
       id = true;
@@ -7718,10 +7713,8 @@ void Weapon::DoQualityDmgSingle(EventInfo &e, int32 skip)
   StatiIterEnd(this)
 } 
 
-EvReturn Weapon::QualityDmg(EventInfo &e)
-{
-  int8 DmgType; 
-  int16 i,n; 
+EvReturn Weapon::QualityDmg(EventInfo &e) {
+  int16 n; 
 
   /* ww: some weapon qualities must work even if the victim is now dead */
   if (HasQuality(WQ_VAMPIRIC))
@@ -7821,10 +7814,7 @@ int16 Creature::WeaponSaveDC(Item *wp, int16 at)
       break;
       case WT_STUNNING: 
       case WT_KNOCKDOWN:
-        DC += Mod2(A_STR) + 
-          min(wp->Weight() / (40 * wp->Quantity), 5) + 
-          ((ti->Size - SZ_MEDIUM) * 2)
-          ;
+        DC += Mod2(A_STR) + (int16)(min(wp->Weight() / (40 * wp->Quantity), 5) + ((ti->Size - SZ_MEDIUM) * 2));
         break; 
       default:  
         Error("Unknown type of Weapon Save DC");
@@ -7858,9 +7848,7 @@ int8 Creature::AttackMode()
 
 Dice& Creature::DmgVal(int16 type, bool is_large)
 {
-  int16 i;
   Item *it;
-  rID wID;
   static Dice d, d2;
   switch(type)
   {
@@ -7875,7 +7863,7 @@ Dice& Creature::DmgVal(int16 type, bool is_large)
         {
           d = it->SDmg();
           d.Bonus += Attr[A_DMG_ARCHERY];
-          for (i=0;i!=SL_LAST;i++)
+          for (int8 i=0;i!=SL_LAST;i++)
             if (it = EInSlot(i))
               if (it->isType(T_MISSILE))
               {
@@ -7912,10 +7900,10 @@ Dice& Creature::DmgVal(int16 type, bool is_large)
       if(it->Type!=T_WEAPON || it->thrownOnly())
       {
         //Something other than a weapon in your hand;
-NotMeleeWeapon:
+//NotMeleeWeapon:
         d.Number=1;
         d.Sides=3;
-        d.Bonus = Attr[A_DMG_MELEE];
+        d.Bonus = (int8)Attr[A_DMG_MELEE];
         return d;
       }
       d = is_large ? it->LDmg() : it->SDmg();
@@ -7924,7 +7912,7 @@ NotMeleeWeapon:
         d.Sides += 2;
       break;
     case S_THROWN:
-      for (i=0;i!=SL_LAST;i++)
+      for (int8 i=0;i!=SL_LAST;i++)
         if (it = EInSlot(i))
           if (it->RangeInc(this))
           {
@@ -7934,7 +7922,7 @@ NotMeleeWeapon:
               d.Sides += 2;
             return d;
           }
-      d.Set(1,3,Attr[A_DMG_THROWN]);
+      d.Set(1,3,(int8)Attr[A_DMG_THROWN]);
       return d;
     default:
       Error("Unimplemented combat type!");
