@@ -94,7 +94,7 @@ EvReturn Map::Event(EventInfo &e)
   {
     #define SEND_TO(xxx) \
     if (e.xxx) { \
-      int16 res; \
+      EvReturn res; \
       res = TENC(e.xxx)->Event(e,e.xxx); \
       if (res == DONE || res == ERROR || res == ABORT) \
         return res; \
@@ -133,9 +133,10 @@ EvReturn Map::Event(EventInfo &e)
 
 void Map::calcLight(Rect &r)
   {
-    int16 x, y, t, l;
+    uint8 x,y;
+    int16 t, l;
     if (r.x2 >= sizeX)
-      r.x2 = sizeX;
+      r.x2 = (uint8)sizeX;
     for(x=r.x1;x<=r.x2;x++)
       for(y=r.y1;y<=r.y2;y++)
         At(x,y).Lit = TTER(TerrainAt(x,y))->HasFlag(TF_LOCAL_LIGHT);
@@ -177,7 +178,7 @@ int16 Map::isTorched(uint8 x,uint8 y,int16 t)
     ty = TorchList[t] / 256;
     if (abs(x - tx) < 8)
       if (abs(y - ty) < 8)               
-        if ((d=dist(x,y,tx,ty)) < 8)
+        if ((d=(uint8)dist(x,y,tx,ty)) < 8)
           if (LineOfVisualSight(x,y,tx,ty,NULL)) {
             if (d < 3)
               return 3;
@@ -198,13 +199,13 @@ void Map::LightPanel(Rect &r, rID regID)
   if (tr->HasFlag(RF_NEVER_LIT))
     return;
 
-  if (random(100)+1 > (Con[ROOM_LIT_CHANCE] - Con[LIT_CHANCE_DEPTH_MOD]))
+  if (random(100)+1 > (int16)(Con[ROOM_LIT_CHANCE] - Con[LIT_CHANCE_DEPTH_MOD]))
     if (!tr->HasFlag(RF_ALWAYS_LIT))
       return;
 
-  Den = tr->GetConst(TORCH_DENSITY);
+  Den = (int16)tr->GetConst(TORCH_DENSITY);
   if (!Den)
-    Den = Con[TORCH_DENSITY];
+    Den = (int16)Con[TORCH_DENSITY];
 
   for (x = r.x1; x != r.x2; x++)
     for (y = r.y1; y != r.y2; y++)
@@ -265,7 +266,7 @@ void Map::WriteAt(Rect &r, int16 x, int16 y,rID terID,rID regID,
     return; 
   } 
 
-  if (At(x,y).Priority > Pri && !Force)
+  if (At(x,y).Priority > (uint32)Pri && !Force)
       return;
   if (x == 0 || y == 0 || x == sizeX -1 || y == sizeY - 1)
     if (!Force && Pri < PRIO_MAX && !(RES(dID)->Type == T_TREGION))
@@ -274,8 +275,8 @@ void Map::WriteAt(Rect &r, int16 x, int16 y,rID terID,rID regID,
   t = TTER(terID);
   if (OpenC < 2048 && !t->HasFlag(TF_SOLID))
   {
-    OpenX[OpenC] = x;
-    OpenY[OpenC] = y;
+    OpenX[OpenC] = (uint8)x;
+    OpenY[OpenC] = (uint8)y;
     OpenC++;
   }
 
@@ -451,7 +452,7 @@ void Map::WriteLifeCave(Rect &r, rID regID)
 
   for (x=r.x1+buffer;x<=r.x2-buffer;x++)
     for (y=r.y1+buffer;y<=r.y2-buffer;y++)         
-      At(x,y).Visibility = (random(100) > Con[LIFE_PERCENT]-1) ? 0 : 1;
+      At(x,y).Visibility = (random(100) > (int16)Con[LIFE_PERCENT]-1) ? 0 : 1;
 
   for(i=0;i!=20;i++) {
     for (x=r.x1+buffer;x<=r.x2-buffer;x++)
@@ -817,10 +818,10 @@ void Map::WriteMaze(Rect &r,rID regID, int16 inset_count,...)
       if (dirs) {
         visits--;
         dirs = random(dirs);
-        At(x,y).Visibility |= XBIT(paths[dirs]);
+        At(x,y).Visibility |= XBIT((Dir)paths[dirs]);
         x += DirX[paths[dirs]]; 
         y += DirY[paths[dirs]];
-        At(x,y).Visibility |= XBIT(OppositeDir(paths[dirs]));
+        At(x,y).Visibility |= XBIT(OppositeDir((Dir)paths[dirs]));
         }
       else do {
         x++;
@@ -885,7 +886,7 @@ void Map::WriteMaze(Rect &r,rID regID, int16 inset_count,...)
       while (trials++ < 500);
       if (!At(x,y).Solid)
         continue;
-      MakeSecretDoor(x,y,tr->Door);
+      MakeSecretDoor((uint8)x,(uint8)y,tr->Door);
     }
      
   }
@@ -913,7 +914,7 @@ void Map::WriteStreamer(Rect &r, uint8 sx, uint8 sy, Dir d, rID regID)
   }
   else {
     Width = 1; isRiver = false;
-    MWidth = 2 + random(Con[MAX_STREAMER_WIDTH]);
+    MWidth = 2 + random((int16)Con[MAX_STREAMER_WIDTH]);
     if (d == -1)
       d = !random(4) ? SOUTHEAST :
         !random(3) ? SOUTHWEST :
@@ -954,9 +955,9 @@ void Map::WriteStreamer(Rect &r, uint8 sx, uint8 sy, Dir d, rID regID)
             TREG(regID)->HasFlag(RF_RIVER))
           prio = PRIO_RIVER_STREAMER; 
         WriteAt(r,ix,iy,terID,regID, prio);
-        if ((!random(Con[STREAMER_MON_DENSITY])) && InBounds(ix,iy) &&
+        if ((!random((int16)Con[STREAMER_MON_DENSITY])) && InBounds(ix,iy) &&
               TREG(regID)->HasList(ENCOUNTER_LIST)) {
-          DepthCR = AdjustCR(Con[INITIAL_CR] + (Depth*Con[DUN_SPEED])/100 - 1); 
+          DepthCR = AdjustCR((int16)Con[INITIAL_CR] + (Depth*(int16)Con[DUN_SPEED])/100 - 1); 
           THROW(EV_ENGEN,
             xe.EMap = this;
             xe.enFlags = EN_STREAMER|(isWater ? EN_AQUATIC : 0);
@@ -977,7 +978,7 @@ void Map::WriteBlobs(Rect &r, rID regID, rID bID)
 
   for (x=r.x1+1;x<=r.x2-1;x++)
     for (y=r.y1+1;y<=r.y2-1;y++)     
-      At(x,y).Visibility = (random(100) > Con[LIFE_PERCENT]-1) ? 0 : 1;
+      At(x,y).Visibility = (random(100) > (int16)Con[LIFE_PERCENT]-1) ? 0 : 1;
 
   for(i=0;i!=20;i++) {
     for (x=r.x1+1;x<r.x2;x++)
@@ -1021,7 +1022,7 @@ void Map::WriteMap(Rect &r,rID regID)
 {
   TRegion *m = TREG(regID); Creature *mn; Item *it; Feature *ft;
   int16 i,x,y,maxlev, PartyID; Tile *t;
-  int16 DepthCR = maxlev = AdjustCR(Con[INITIAL_CR] + (Depth*Con[DUN_SPEED])/100 - 1); 
+  int16 DepthCR = maxlev = AdjustCR((int16)(Con[INITIAL_CR] + (Depth*Con[DUN_SPEED])/100 - 1)); 
 
   const char *gr = theGame->GetText(regID,TREG(regID)->Grid);
   rID WallID   = m->Walls,
@@ -1037,7 +1038,7 @@ void Map::WriteMap(Rect &r,rID regID)
   PartyID = MAX_PLAYERS + 10 + random(200);
 
   for(i=0;i!=127;i++)
-    MapLetterArray[i] = m->GetTile(i);
+    MapLetterArray[i] = m->GetTile((char)i);
 
 
   /* The default meanings of map-definition characters:
@@ -1068,8 +1069,8 @@ void Map::WriteMap(Rect &r,rID regID)
    * '*' Call script EV_MAPSYMBOL
    */
 
-  bool flipHoriz = random(2);
-  bool flipVert = random(2);
+  bool flipHoriz = random(2) != 0;
+  bool flipVert = random(2) != 0;
 
 
   for(x=0;x<m->sx;x++) 
@@ -1094,13 +1095,13 @@ void Map::WriteMap(Rect &r,rID regID)
           At(r.x1 + x,r.y1 + y).Glyph &= 0xFF00;
           At(r.x1 + x,r.y1 + y).Glyph |= t->Image;
         }
-        if (t->Image & 0xFF00 != 0x0700)
+        if ((t->Image & 0xFF00) != 0x0700)
           At(r.x1 + x,r.y1 + y).Shade = false;
         if (t->fl & TILE_ITEM || (!(t->fl & TILE_MONSTER) && 
               RES(t->xID) && RES(t->xID)->Type == T_TITEM))
         {
           if (t->fl & TILE_RANDOM)
-            xID = theGame->GetItemID(PUR_DUNGEON,-2,DepthCR+4,t->xID ? t->xID : -1);
+            xID = theGame->GetItemID(PUR_DUNGEON,-2,(int8)(DepthCR+4),(int8)(t->xID ? t->xID : -1));
           else
             xID = t->xID;
 
@@ -1108,12 +1109,12 @@ void Map::WriteMap(Rect &r,rID regID)
           if ((TITEM(xID)->IType == T_STATUE || TITEM(xID)->IType == T_CORPSE ||
                 TITEM(xID)->IType == T_FIGURE) && (t->fl & TILE_RANDOM_EFF)) {
             do { 
-              xID2 = theGame->GetMonID(PUR_DUNGEON,0,DepthCR,DepthCR,0);
+              xID2 = theGame->GetMonID(PUR_DUNGEON,0,(int8)DepthCR,(int8)DepthCR,0);
             } while (TMON(xID2)->HasFlag(M_NO_CORPSE) ||
                 TMON(xID2)->isMType(xID2,MA_DRAGON));
           }
           else if (t->fl & TILE_RANDOM_EFF)
-            xID2 = theGame->GetEffectID(PUR_DUNGEON,t->xID2 % 256,t->xID2 / 256);
+            xID2 = theGame->GetEffectID(PUR_DUNGEON,(int8)(t->xID2 % 256),(int8)(t->xID2 / 256));
           else
             xID2 = t->xID2;
 
@@ -1135,7 +1136,7 @@ void Map::WriteMap(Rect &r,rID regID)
 #endif
           it = Item::Create(xID);
           if (t->fl & TILE_QUALITY)
-            it->AddQuality(xID2);
+            it->AddQuality((int8)xID2);
           else if (it->Type == T_CORPSE || it->Type == T_FIGURE ||
               it->Type == T_STATUE)
             ((Corpse*)it)->SetCorpseType(xID2);
@@ -1251,14 +1252,14 @@ void Map::WriteMap(Rect &r,rID regID)
           maxlev = DepthCR + (ch-'0')*2; /* Later, by map constants */
           while (((50 - mLuck*3) > (random(100)+1)))
             maxlev++;
-          mID = theGame->GetMonID(PUR_DUNGEON,max(0,maxlev-5),maxlev,DepthCR);
+          mID = theGame->GetMonID(PUR_DUNGEON,(int8)max(0,maxlev-5),(int8)maxlev,(int8)DepthCR);
           if (mID) {
             mn = new Monster(mID);
             mn->PartyID = PartyID;
             TMON(mID)->GrantGear(mn,mID,true);
             TMON(mID)->PEvent(EV_BIRTH,mn,mID);
             if (mn->isMType(MA_DRAGON)) {
-              xID = theGame->GetTempID(TM_AGECAT,mn->mID,maxlev);
+              xID = theGame->GetTempID(TM_AGECAT,mn->mID,(int8)maxlev);
               if (!xID)
                 xID = FIND("young adult");
               mn->AddTemplate(xID);
@@ -1324,7 +1325,7 @@ void Map::WriteMap(Rect &r,rID regID)
   /* Reset the doors after all the walls are drawn. */
   Thing *dr;
   MapIterate(this,dr,i)
-    if (dr->isType(T_DOOR) && r.Within(dr->x,dr->y))
+    if (dr->isType(T_DOOR) && r.Within((uint8)dr->x,(uint8)dr->y))
       dr->SetImage();
 
   uint32 ColorList[16], c;
@@ -1337,8 +1338,7 @@ void Map::WriteMap(Rect &r,rID regID)
         if (TerrainAt(r.x1+x,r.y1+y) == WallID &&
             (At(r.x1+x,r.y1+y).Priority == PRIO_ROOM_WALL ||
              At(r.x1+x,r.y1+y).Priority == PRIO_VAULT)) {
-          At(r.x1+x,r.y1+y).Glyph = (At(r.x1+x,r.y1+y).Glyph & 0x00FF) |
-            (ColorList[random(c)] << 8);
+          At(r.x1+x,r.y1+y).Glyph = (At(r.x1+x,r.y1+y).Glyph & 0x00FF) | (ColorList[random((int16)c)] << 8);
           At(r.x1+x,r.y1+y).Shade = false;
         }
       }
@@ -1414,7 +1414,7 @@ void Map::LoadFixedMap(rID mID, int16 _Depth, Map *Above, int8 _Luck)
       Fatal("Error allocating map grid!");
     memset(Grid,0,sizeof(LocationInfo) * (sizeX * sizeY + 1));
   
-    Rect r(0,0,sizeX,sizeY);
+    Rect r(0,0,(uint8)sizeX,(uint8)sizeY);
     
     WriteMap(r,mID);    
 
@@ -1451,7 +1451,7 @@ void Map::Generate(rID _dID, int16 _Depth, Map *Above,int8 Luck)
   for(i=0;i!=LAST_DUNCONST;i++)
     Con[i] = TDUN(dID)->GetConst(i);
 
-  int16 DepthCR = AdjustCR(Con[INITIAL_CR] + (Depth*Con[DUN_SPEED])/100 - 1); 
+  int16 DepthCR = AdjustCR((int16)Con[INITIAL_CR] + (Depth*(int16)Con[DUN_SPEED])/100 - 1); 
 
   TDUN(dID)->GetList(RC_WEIGHTS,RC_Weights,RC_LAST*2);
   TDUN(dID)->GetList(STREAMER_WEIGHTS,StreamWeights,1024);
@@ -1464,10 +1464,10 @@ void Map::Generate(rID _dID, int16 _Depth, Map *Above,int8 Luck)
 
   if (Con[LEVEL_SIZEY] % Con[PANEL_SIZEY])
     Fatal("Mismatch between LEVEL_SIZEY and PANEL_SIZEY.");
-  sizeX = Con[LEVEL_SIZEX];
-  sizeY = Con[LEVEL_SIZEY];
-  panelsX = Con[LEVEL_SIZEX] / Con[PANEL_SIZEX];
-  panelsY = Con[LEVEL_SIZEY] / Con[PANEL_SIZEY];
+  sizeX = (int16)Con[LEVEL_SIZEX];
+  sizeY = (int16)Con[LEVEL_SIZEY];
+  panelsX = (int8)(Con[LEVEL_SIZEX] / Con[PANEL_SIZEX]);
+  panelsY = (int8)(Con[LEVEL_SIZEY] / Con[PANEL_SIZEY]);
   if (panelsX > 32 || panelsY >32)
     Fatal("Panel grid exceeds maximum of 32 x 32.");
 
@@ -1512,36 +1512,34 @@ void Map::Generate(rID _dID, int16 _Depth, Map *Above,int8 Luck)
 
   /* Step 2: Place Streamers */
   Streamers = 0; sID = 0;
-  while (Streamers < Con[MIN_STREAMERS] || (random(100) < Con[STREAMER_CHANCE]
-        && Streamers < Con[MAX_STREAMERS]))
-  {
+  while (Streamers < (int16)Con[MIN_STREAMERS] || (random(100) < (int16)Con[STREAMER_CHANCE] && Streamers < (int16)Con[MAX_STREAMERS])) {
     GeneratePrompt();
-    sx = 1 + random(Con[LEVEL_SIZEX]-2);
-    sy = 1 + random(Con[LEVEL_SIZEY]-2);
+    sx = 1 + random((int16)Con[LEVEL_SIZEX]-2);
+    sy = 1 + random((int16)Con[LEVEL_SIZEY]-2);
     if (sID && random(10) > 5)
       goto SecondStreamerSame;
     tot=0;
     for(i=0;StreamWeights[i*2+1];i++)
-      tot += StreamWeights[i*2+1];
+      tot += (int16)StreamWeights[i*2+1];
     if (!tot) /* No Streamers Available */
       break;
     for (j=0;j!=20;j++)
     {
       c = random(tot); 
       for(i=0;StreamWeights[i*2+1];i++)
-        if (c < StreamWeights[i*2+1])
+        if (c < (int16)StreamWeights[i*2+1])
           goto StreamChosen;
         else
-          c -= StreamWeights[i*2+1];
+          c -= (int16)StreamWeights[i*2+1];
       Fatal("Strange Error in room weights algorithm.");
 StreamChosen:
       sID = StreamWeights[i*2];
 
 
-      if (Depth < Con[MIN_RIVER_DEPTH])
+      if (Depth < (int16)Con[MIN_RIVER_DEPTH])
         if (TREG(sID)->HasFlag(RF_RIVER))
           continue;
-      if (Depth < Con[MIN_CHASM_DEPTH])
+      if (Depth < (int16)Con[MIN_CHASM_DEPTH])
         if (TREG(sID)->HasFlag(RF_CHASM))
           continue;
       /* No chasms on the last dungeon level, because there
@@ -1555,7 +1553,7 @@ StreamChosen:
       break;
 
 SecondStreamerSame:
-    WriteStreamer(r,sx,sy,-1,sID);
+    WriteStreamer(r,(uint8)sx,(uint8)sy,-1,sID);
     Streamers++;
 
 
@@ -1570,7 +1568,7 @@ SecondStreamerSame:
      decreases with depth, of course...
    */
   GeneratePrompt();
-  if (random(100) < Con[REDUCE_CHASM_CHANCE])
+  if (random(100) < (int16)Con[REDUCE_CHASM_CHANCE])
     NarrowChasm = true;
   if (Above && (Depth != Con[DUN_DEPTH]))
     for(x=0;x<sizeX;x++)
@@ -1609,7 +1607,7 @@ SecondStreamerSame:
             if (SpecialsLevels[n] == -1) {
               if (random(100)+1 > a->u.ds[i].Chance)
               { SpecialsLevels[n] = -10; continue; }
-              SpecialsLevels[n] = a->u.ds[i].Lev.Roll();
+              SpecialsLevels[n] = (int8)a->u.ds[i].Lev.Roll();
             }
             if (Depth != (extraLevs ? (SpecialsLevels[n]*3)/2 :
                            SpecialsLevels[n]))
@@ -1631,19 +1629,19 @@ SecondStreamerSame:
                     { Error("Special room larger than map!"); continue; }
                 
                   /* Number of panels it will take up */
-                  cx = 1 + (sx+2) / Con[PANEL_SIZEX];
-                  cy = 1 + (sy+2) / Con[PANEL_SIZEY];
+                  cx = 1 + (sx+2) / (int16)Con[PANEL_SIZEX];
+                  cy = 1 + (sy+2) / (int16)Con[PANEL_SIZEY];
                   Tries = 0;
                   NewLocation:
                   /* Displacement into top-left panel */
-                  dx = 1 + random(Con[PANEL_SIZEX]*cx - (sx+2));
-                  dy = 1 + random(Con[PANEL_SIZEY]*cy - (sy+2));
+                  dx = 1 + random((int16)Con[PANEL_SIZEX]*cx - (sx+2));
+                  dy = 1 + random((int16)Con[PANEL_SIZEY]*cy - (sy+2));
                   /* Location of top-left panel */
                   px = random(panelsX - (cx-1));
                   py = random(panelsY - (cy-1));
                   /* Write the special region */
-                  r.x1 = px*Con[PANEL_SIZEX] + dx;
-                  r.y1 = py*Con[PANEL_SIZEY] + dy;
+                  r.x1 = (uint8)(px*Con[PANEL_SIZEX] + dx);
+                  r.y1 = (uint8)(py*Con[PANEL_SIZEY] + dy);
                   r.x2 = r.x1 + sx;
                   r.y2 = r.y1 + sy;
                   /* Avoid placing a special room where the up-stairs
@@ -1653,7 +1651,7 @@ SecondStreamerSame:
                     MapIterate(Above,t,j)
                       if (t->Type == T_PORTAL)
                         if (((Portal*)t)->isDownStairs())
-                          if (r.Within(t->x,t->y))
+                          if (r.Within((uint8)t->x,(uint8)t->y))
                             if (Tries < 100)
                             { Tries++; goto NewLocation; }
                   // ww: no vault overlap! (or vault / entrance
@@ -1681,14 +1679,14 @@ SecondStreamerSame:
                   }
                 else {
                   int16 xg,yg;
-                  xg = (SizeX() + 1) / Con[PANEL_SIZEX];
-                  yg = (SizeY() + 1) / Con[PANEL_SIZEY];
+                  xg = (SizeX() + 1) / (int16)Con[PANEL_SIZEX];
+                  yg = (SizeY() + 1) / (int16)Con[PANEL_SIZEY];
                   do {
                     px = random(xg);
                     py = random(yg);
                     }
                   while (PanelsDrawn[py] & (1 << px));
-                  DrawPanel(px,py,regID);                
+                  DrawPanel((uint8)px,(uint8)py,regID);                
                   }
                 break;
               default:
@@ -1711,7 +1709,7 @@ SecondStreamerSame:
       if (!(PanelsDrawn[y] & (1 << x)))
       {
         GeneratePrompt();
-        DrawPanel(x,y);
+        DrawPanel((uint8)x,(uint8)y);
         PanelsDrawn[y] |= (1 << x);
       } 
 
@@ -1737,10 +1735,10 @@ SecondStreamerSame:
       for (py=0;py<panelsY;py++) {
         GeneratePrompt();
         int panelNum = py * panelsX + px; 
-        for (int xx=0;xx<Con[PANEL_SIZEX];xx++)
-          for (int yy=0;yy<Con[PANEL_SIZEY];yy++) {
-            x = px * Con[PANEL_SIZEX] + xx;
-            y = py * Con[PANEL_SIZEY] + yy;
+        for (int16 xx=0;xx<(int16)Con[PANEL_SIZEX];xx++)
+          for (int16 yy=0;yy<(int16)Con[PANEL_SIZEY];yy++) {
+            x = px * (int16)Con[PANEL_SIZEX] + xx;
+            y = py * (int16)Con[PANEL_SIZEY] + yy;
             if (!SolidAt(x,y)) { 
               int count = 
                 (!SolidAt(x-1,y)) +
@@ -1874,7 +1872,7 @@ SecondStreamerSame:
     for (x=1;x<sizeX;x++)
       for (y=1;y<sizeY;y++) {
         if (!SolidAt(x,y) && !At(x,y).Connected) {
-          fCount = FloodConnectA(x,y,fCount);
+          fCount = (int16)FloodConnectA(x,y,fCount);
           x = sizeX;
           y = sizeY; 
         }
@@ -1964,7 +1962,7 @@ SecondStreamerSame:
         Tunnel(best[mi].sx, best[mi].sy,
             best[mi].dx, best[mi].dy,
             TT_DIRECT|TT_WANDER,-1,trials);
-        fCount = FloodConnectA(best[mi].sx,best[mi].sy,0);
+        fCount = (int16)FloodConnectA((int16)best[mi].sx,(int16)best[mi].sy,0);
       } 
 
     }
@@ -1993,14 +1991,14 @@ SecondStreamerSame:
   /* Step 6: Place Stairs & Required Monsters/Items */
   GeneratePrompt();    
 
-  if (Con[MAX_STAIRS] && Depth < Con[DUN_DEPTH]) {
-    j = Con[MIN_STAIRS] + random(Con[MAX_STAIRS] - Con[MIN_STAIRS]);
+  if ((int16)Con[MAX_STAIRS] && Depth < (int16)Con[DUN_DEPTH]) {
+    j = (int16)Con[MIN_STAIRS] + random((int16)(Con[MAX_STAIRS] - Con[MIN_STAIRS]));
     for (i=0;i!=j;i++)
     {
       Tries = 0;
       do {
-        x = random(Con[LEVEL_SIZEX]);
-        y = random(Con[LEVEL_SIZEY]);
+        x = random((int16)Con[LEVEL_SIZEX]);
+        y = random((int16)Con[LEVEL_SIZEY]);
         if (Tries++ > 500)
           break;
         bool already = false; 
@@ -2031,7 +2029,7 @@ SecondStreamerSame:
             if (SpecialsLevels[n] == -1) {
               if (random(100)+1 > a->u.ds[i].Chance)
               { SpecialsLevels[n] = -10; continue; }
-              SpecialsLevels[n] = a->u.ds[i].Lev.Roll();
+              SpecialsLevels[n] = (int8)a->u.ds[i].Lev.Roll();
             }
             if (SpecialsLevels[n] != Depth)
               continue;
@@ -2039,8 +2037,8 @@ SecondStreamerSame:
               continue;
             Tries = 0;
             do {
-              x = random(Con[LEVEL_SIZEX]);
-              y = random(Con[LEVEL_SIZEY]);
+              x = random((int16)Con[LEVEL_SIZEX]);
+              y = random((int16)Con[LEVEL_SIZEY]);
               if (Tries++ > 100)
                 break;
             }
@@ -2087,7 +2085,7 @@ SecondStreamerSame:
             if (SpecialsLevels[n] == -1) {
               if (random(100)+1 > a->u.ds[i].Chance)
               { SpecialsLevels[n] = -10; continue; }
-              SpecialsLevels[n] = a->u.ds[i].Lev.Roll();
+              SpecialsLevels[n] = (int8)a->u.ds[i].Lev.Roll();
             }
             if (SpecialsLevels[n] != Depth)
               continue;
@@ -2258,8 +2256,8 @@ StartAgain:
 
   GeneratePrompt();
 
-  for(x=0;x<Con[LEVEL_SIZEX];x++)
-    for(y=0;y<Con[LEVEL_SIZEY];y++) {
+  for(x=0;x<(int16)Con[LEVEL_SIZEX];x++)
+    for(y=0;y<(int16)Con[LEVEL_SIZEY];y++) {
       if (!FDoorAt(x,y)) {
         At(x,y).Solid = TTER(TerrainAt(x,y))->HasFlag(TF_SOLID);
       }
@@ -2283,8 +2281,8 @@ StartAgain:
 
   /* fjm: Modified May 14 2006 so that corridors don't have deep water
      (or other "deep" terrains) in them for ease of gameplay. */ 
-  for(x=0;x<Con[LEVEL_SIZEX];x++)
-    for(y=0;y<Con[LEVEL_SIZEY];y++)
+  for(x=0;x<(int16)Con[LEVEL_SIZEX];x++)
+    for(y=0;y<(int16)Con[LEVEL_SIZEY];y++)
       for (i=0;i<3;i++) 
         if (TerrainAt(x,y) == shID[i] && !TREG(RegionAt(x,y))->HasFlag(RF_CORRIDOR))
           if (!InBounds(x-1,y-1) || TerrainAt(x-1,y-1) == shID[i] || TerrainAt(x-1,y-1) == deID[i] || At(x-1,y-1).Solid)
@@ -2309,10 +2307,10 @@ StartAgain:
    * (where the T was assumed to be empty before). Theory: Kobolds are
    * smart, they'll trap bottlenecks. 
    */
-  for(x=1;x<Con[LEVEL_SIZEX]-1;x++)
-    for(y=1;y<Con[LEVEL_SIZEY]-1;y++) {
-      if (FDoorAt(x,y) && (random(Con[TRAP_CHANCE]) <= (DepthCR+10))) {
-        rID tID = theGame->GetEffectID(PUR_DUNGEON,0,DepthCR,AI_TRAP);
+  for(x=1;x<(int16)Con[LEVEL_SIZEX]-1;x++)
+    for(y=1;y<(int16)Con[LEVEL_SIZEY]-1;y++) {
+      if (FDoorAt(x,y) && (random((int16)Con[TRAP_CHANCE]) <= (int16)(DepthCR+10))) {
+        rID tID = theGame->GetEffectID(PUR_DUNGEON,0,(int8)DepthCR,AI_TRAP);
         if (tID) {
           Trap * tr = new Trap(FIND("trap"),tID);
           tr->PlaceAt(this,x,y);
@@ -2326,8 +2324,8 @@ StartAgain:
           right =       At(x+1,y).Solid && !FDoorAt(x+1,y);
           if ((!up && !down && left && right) ||
               (up && down && !left &&!right)) {
-            if (random(Con[TRAP_CHANCE]) <= (DepthCR+2)/3)  {
-              rID tID = theGame->GetEffectID(PUR_DUNGEON,0,DepthCR,AI_TRAP);
+            if (random((int16)Con[TRAP_CHANCE]) <= (int16)((DepthCR+2)/3))  {
+              rID tID = theGame->GetEffectID(PUR_DUNGEON,0,(int8)DepthCR,AI_TRAP);
               if (tID) {
                 Trap * tr = new Trap(FIND("trap"),tID);
                 tr->PlaceAt(this,x,y);
@@ -2343,14 +2341,14 @@ StartAgain:
 
   /* Place Treasure Deposits for Miners */
   int16 cDeposits;
-  cDeposits = Dice::Roll(1,4,Depth);
+  cDeposits = Dice::Roll(1,4,(int8)Depth);
   for (n=0;n!=cDeposits;n++)
     {
       rID depID;
       do {
         x = 1 + random(sizeX-1);
         y = 1 + random(sizeY-1);
-        if (TTER(TerrainAt(x,y))->Image & 0xFF != GLYPH_ROCK)
+        if ((TTER(TerrainAt(x,y))->Image & 0xFF) != GLYPH_ROCK)
           goto TryAgain;
         for (j=0;j!=8;j++)
           if (InBounds(x+DirX[j],y+DirY[j]) && 
@@ -2367,7 +2365,7 @@ StartAgain:
         for (i=0; i<theGame->Modules[mIdx]->szTer; i++) {
           depID = theGame->Modules[mIdx]->TerrainID(i);
           if (TTER(depID)->HasFlag(TF_DEPOSIT))
-            if (TTER(depID)->GetConst(DEPOSIT_DEPTH) <= Depth)
+            if ((int16)TTER(depID)->GetConst(DEPOSIT_DEPTH) <= Depth)
               Candidates[nCandidates++] = depID;
           }
       if (!nCandidates)
@@ -2479,12 +2477,12 @@ void Map::DrawPanel(uint8 px, uint8 py, rID regID)
     static Rect NULL_RECT(0,0,0,0);
     static EventInfo xe;
 
-    int16 DepthCR = AdjustCR(Con[INITIAL_CR] + (Depth*Con[DUN_SPEED])/100 - 1); 
+    int16 DepthCR = AdjustCR((int16)(Con[INITIAL_CR] + (Depth*Con[DUN_SPEED])/100 - 1)); 
 
-    cPanel.x1 = px * Con[PANEL_SIZEX];
-    cPanel.y1 = py * Con[PANEL_SIZEY];
-    cPanel.x2 = cPanel.x1 + Con[PANEL_SIZEX] - 1;
-    cPanel.y2 = cPanel.y1 + Con[PANEL_SIZEY] - 1;
+    cPanel.x1 = px * (uint8)Con[PANEL_SIZEX];
+    cPanel.y1 = py * (uint8)Con[PANEL_SIZEY];
+    cPanel.x2 = cPanel.x1 + (uint8)Con[PANEL_SIZEX] - 1;
+    cPanel.y2 = cPanel.y1 + (uint8)Con[PANEL_SIZEY] - 1;
     PanelsDrawn[py] |= 1 << px;
     OpenC = 0;
     nCorners = 0;
@@ -2526,16 +2524,16 @@ void Map::DrawPanel(uint8 px, uint8 py, rID regID)
 
     tot=0;
     for(i=0;RM_Weights[i*2+1];i++)
-      tot += max(0,RM_Weights[i*2+1]);
+      tot += (int16)max(0,RM_Weights[i*2+1]);
     c = random(tot); 
     for(i=0;RM_Weights[i*2+1];i++)
-      if (c < RM_Weights[i*2+1])
+      if (c < (int16)RM_Weights[i*2+1])
         goto RM_Chosen;
       else
-        c -= RM_Weights[i*2+1];
+        c -= (int16)RM_Weights[i*2+1];
     Fatal("Strange Error in room weights algorithm.");
     RM_Chosen:
-    RType = RM_Weights[i*2];
+    RType = (int16)RM_Weights[i*2];
     RM_Weights[i*2+1] = -1;
     /* Choose Region Type (ignoring weights for now) */
     for(i=c=0;RoomWeights[i*2];i++)
@@ -2543,7 +2541,7 @@ void Map::DrawPanel(uint8 px, uint8 py, rID regID)
             (TREG(RoomWeights[i*2])->RoomTypes & BIT(RType)))
         if (DepthCR >= TREG(RoomWeights[i*2])->Depth)
           if (!TREG(RoomWeights[i*2])->HasFlag(RF_VAULT) ||
-            DepthCR >= Con[MIN_VAULT_DEPTH]) {
+            DepthCR >= (int16)Con[MIN_VAULT_DEPTH]) {
             if (!TREG(RoomWeights[i*2])->HasFlag(RF_CORRIDOR))  
               Candidates[c++] = RoomWeights[i*2];
           }
@@ -2592,55 +2590,55 @@ void Map::DrawPanel(uint8 px, uint8 py, rID regID)
           return;
         case RM_NORMAL:
           DoBasicRoom:
-          sx = Con[ROOM_MINX] + random(Con[ROOM_MAXX] - Con[ROOM_MINX]);
-          sy = Con[ROOM_MINY] + random(Con[ROOM_MAXY] - Con[ROOM_MINY]);
+          sx = (int16)(Con[ROOM_MINX] + random((int16)(Con[ROOM_MAXX] - Con[ROOM_MINX])));
+          sy = (int16)(Con[ROOM_MINY] + random((int16)(Con[ROOM_MAXY] - Con[ROOM_MINY])));
           if (TREG(regID)->HasFlag(RF_ODD_WIDTH) && !(sx % 2))
             { if (sx == Con[ROOM_MAXX]) sx--; else sx++; }
           if (TREG(regID)->HasFlag(RF_ODD_HEIGHT) && !(sy % 2))
             { if (sx == Con[ROOM_MAXY]) sy--; else sy++; }
-          r = cPanel.PlaceWithinSafely(sx,sy);          
+          r = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);          
           WriteRoom(r,regID);
           xe.cRoom = r;
          break; 
         case RM_CIRCLE:
-          sx = Con[ROOM_MINX] + random(Con[ROOM_MAXX] - Con[ROOM_MINX]);
-          sy = Con[ROOM_MINY] + random(Con[ROOM_MAXY] - Con[ROOM_MINY]);
+          sx = (int16)(Con[ROOM_MINX] + random((int16)(Con[ROOM_MAXX] - Con[ROOM_MINX])));
+          sy = (int16)(Con[ROOM_MINY] + random((int16)(Con[ROOM_MAXY] - Con[ROOM_MINY])));
           if (TREG(regID)->HasFlag(RF_ODD_WIDTH) && !(sx % 2))
             { if (sx == Con[ROOM_MAXX]) sx--; else sx++; }
           if (TREG(regID)->HasFlag(RF_ODD_HEIGHT) && !(sy % 2))
             { if (sx == Con[ROOM_MAXY]) sy--; else sy++; }
-          r = cPanel.PlaceWithinSafely(sx,sy);
+          r = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);
           WriteCircle(r,regID);
           WriteWalls(r,regID);
           xe.cRoom = r;
          break; 
         case RM_LCIRCLE:
-          sx = max(Con[PANEL_SIZEX]/2,Con[PANEL_SIZEX] - (random(5)+5));
-          sy = max(Con[PANEL_SIZEY]/2,Con[PANEL_SIZEY] - (random(5)+5));          
+          sx = (int16)max(Con[PANEL_SIZEX]/2,Con[PANEL_SIZEX] - (random(5)+5));
+          sy = (int16)max(Con[PANEL_SIZEY]/2,Con[PANEL_SIZEY] - (random(5)+5));          
           if (TREG(regID)->HasFlag(RF_ODD_WIDTH) && !(sx % 2))
             sx++;
           if (TREG(regID)->HasFlag(RF_ODD_HEIGHT) && !(sy % 2))
             sy++;
-          r = cPanel.PlaceWithinSafely(sx,sy);
+          r = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);
           WriteCircle(r,regID);
           WriteWalls(r,regID);
           xe.cRoom = r;
          break; 
        case RM_LARGE:
-          sx = max(Con[PANEL_SIZEX]/2,Con[PANEL_SIZEX] - (random(8)+2));
-          sy = max(Con[PANEL_SIZEY]/2,Con[PANEL_SIZEY] - (random(8)+2));
+          sx = (int16)max(Con[PANEL_SIZEX]/2,Con[PANEL_SIZEX] - (random(8)+2));
+          sy = (int16)max(Con[PANEL_SIZEY]/2,Con[PANEL_SIZEY] - (random(8)+2));
           if (TREG(regID)->HasFlag(RF_ODD_WIDTH) && !(sx % 2))
             sx++;
           if (TREG(regID)->HasFlag(RF_ODD_HEIGHT) && !(sy % 2))
             sy++;
-          r = cPanel.PlaceWithinSafely(sx,sy);
+          r = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);
           WriteRoom(r,regID);
           xe.cRoom = r;
          break;
        case RM_MAZE:
-          sx = max(Con[PANEL_SIZEX]/2,Con[PANEL_SIZEX] - (random(8)+2));
-          sy = max(Con[PANEL_SIZEY]/2,Con[PANEL_SIZEY] - (random(8)+2));
-          r = cPanel.PlaceWithinSafely(sx,sy);
+          sx = (int16)max(Con[PANEL_SIZEX]/2,Con[PANEL_SIZEX] - (random(8)+2));
+          sy = (int16)max(Con[PANEL_SIZEY]/2,Con[PANEL_SIZEY] - (random(8)+2));
+          r = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);
           WriteMaze(r,regID);
           xe.cRoom = r;
          break;
@@ -2659,20 +2657,20 @@ void Map::DrawPanel(uint8 px, uint8 py, rID regID)
                         |     ___|
                         |____|
           */
-          r.x2 = r2.x1 = r3.x2 = r4.x1 = cPanel.x1 + Con[PANEL_SIZEX]/2;
-          r.y2 = r2.y2 = r3.y1 = r4.y1 = cPanel.y1 + Con[PANEL_SIZEY]/2;
+          r.x2 = r2.x1 = r3.x2 = r4.x1 = cPanel.x1 + (uint8)Con[PANEL_SIZEX]/2;
+          r.y2 = r2.y2 = r3.y1 = r4.y1 = cPanel.y1 + (uint8)Con[PANEL_SIZEY]/2;
           
-          r.x1 = cPanel.x1 + random(Con[PANEL_SIZEX]/4); 
-          r.y1 = cPanel.y1 + random(Con[PANEL_SIZEY]/4);
+          r.x1 = cPanel.x1 + (uint8)random((int16)Con[PANEL_SIZEX]/4); 
+          r.y1 = cPanel.y1 + (uint8)random((int16)Con[PANEL_SIZEY]/4);
 
-          r2.x2 = cPanel.x2 - random(Con[PANEL_SIZEX]/4);
-          r2.y1 = cPanel.y1 + random(Con[PANEL_SIZEY]/4);
+          r2.x2 = cPanel.x2 - (uint8)random((int16)Con[PANEL_SIZEX]/4);
+          r2.y1 = cPanel.y1 + (uint8)random((int16)Con[PANEL_SIZEY]/4);
 
-          r3.x1 = cPanel.x1 + random(Con[PANEL_SIZEX]/4);
-          r3.y2 = cPanel.y2 - random(Con[PANEL_SIZEY]/4);
+          r3.x1 = cPanel.x1 + (uint8)random((int16)Con[PANEL_SIZEX]/4);
+          r3.y2 = cPanel.y2 - (uint8)random((int16)Con[PANEL_SIZEY]/4);
 
-          r4.x2 = cPanel.x2 - random(Con[PANEL_SIZEX]/4);
-          r4.y2 = cPanel.y2 - random(Con[PANEL_SIZEY]/4);
+          r4.x2 = cPanel.x2 - (uint8)random((int16)Con[PANEL_SIZEX]/4);
+          r4.y2 = cPanel.y2 - (uint8)random((int16)Con[PANEL_SIZEY]/4);
 
           r.x1 += 2;
           r.y1 += 2;
@@ -2727,63 +2725,63 @@ void Map::DrawPanel(uint8 px, uint8 py, rID regID)
 
          break;
         case RM_OVERLAP:
-          sx = ((Con[ROOM_MINX] + random(Con[ROOM_MAXX] - Con[ROOM_MINX]))*2)/3;
-          sy = ((Con[ROOM_MINY] + random(Con[ROOM_MAXY] - Con[ROOM_MINY]))*2)/3;
+          sx = (int16)((Con[ROOM_MINX] + random((int16)(Con[ROOM_MAXX] - Con[ROOM_MINX])))*2)/3;
+          sy = (int16)((Con[ROOM_MINY] + random((int16)(Con[ROOM_MAXY] - Con[ROOM_MINY])))*2)/3;
           if (TREG(regID)->HasFlag(RF_ODD_WIDTH) && !(sx % 2))
             { if (sx == Con[ROOM_MAXX]) sx--; else sx++; }
           if (TREG(regID)->HasFlag(RF_ODD_HEIGHT) && !(sy % 2))
             { if (sx == Con[ROOM_MAXY]) sy--; else sy++; }
-          r = cPanel.PlaceWithinSafely(sx,sy);
+          r = cPanel.PlaceWithinSafely((int8)sx,(int8)sy);
           WriteRoom(r,regID);
             
-          sx = ((Con[ROOM_MINX] + random(Con[ROOM_MAXX] - Con[ROOM_MINX]))*2)/3;
-          sy = ((Con[ROOM_MINY] + random(Con[ROOM_MAXY] - Con[ROOM_MINY]))*2)/3;
+          sx = (int16)((Con[ROOM_MINX] + random((int16)(Con[ROOM_MAXX] - Con[ROOM_MINX])))*2)/3;
+          sy = (int16)((Con[ROOM_MINY] + random((int16)(Con[ROOM_MAXY] - Con[ROOM_MINY])))*2)/3;
           if (TREG(regID)->HasFlag(RF_ODD_WIDTH) && !(sx % 2))
             { if (sx == Con[ROOM_MAXX]) sx--; else sx++; }
           if (TREG(regID)->HasFlag(RF_ODD_HEIGHT) && !(sy % 2))
             { if (sx == Con[ROOM_MAXY]) sy--; else sy++; }
           do
-            r2 = cPanel.PlaceWithinSafely(sx,sy);
+            r2 = cPanel.PlaceWithinSafely((int8)sx,(int8)sy);
           while (!r.Overlaps(r2));
           WriteRoom(r2,regID);
           if (!random(3))
             break;
 
-          sx = ((Con[ROOM_MINX] + random(Con[ROOM_MAXX] - Con[ROOM_MINX]))*2)/3;
-          sy = ((Con[ROOM_MINY] + random(Con[ROOM_MAXY] - Con[ROOM_MINY]))*2)/3;
+          sx = (int16)((Con[ROOM_MINX] + random((int16)(Con[ROOM_MAXX] - Con[ROOM_MINX])))*2)/3;
+          sy = (int16)((Con[ROOM_MINY] + random((int16)(Con[ROOM_MAXY] - Con[ROOM_MINY])))*2)/3;
           if (TREG(regID)->HasFlag(RF_ODD_WIDTH) && !(sx % 2))
             { if (sx == Con[ROOM_MAXX]) sx--; else sx++; }
           if (TREG(regID)->HasFlag(RF_ODD_HEIGHT) && !(sy % 2))
             { if (sx == Con[ROOM_MAXY]) sy--; else sy++; }
           do
-            r3 = cPanel.PlaceWithinSafely(sx,sy);
+            r3 = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);
           while (!r.Overlaps(r3) && !r2.Overlaps(r3));
           WriteRoom(r3,regID);
           if(!random(2))
             break;
 
-          sx = ((Con[ROOM_MINX] + random(Con[ROOM_MAXX] - Con[ROOM_MINX]))*2)/3;
-          sy = ((Con[ROOM_MINY] + random(Con[ROOM_MAXY] - Con[ROOM_MINY]))*2)/3;
+          sx = (int16)((Con[ROOM_MINX] + random((int16)(Con[ROOM_MAXX] - Con[ROOM_MINX])))*2)/3;
+          sy = (int16)((Con[ROOM_MINY] + random((int16)(Con[ROOM_MAXY] - Con[ROOM_MINY])))*2)/3;
           if (TREG(regID)->HasFlag(RF_ODD_WIDTH) && !(sx % 2))
             { if (sx == Con[ROOM_MAXX]) sx--; else sx++; }
           if (TREG(regID)->HasFlag(RF_ODD_HEIGHT) && !(sy % 2))
             { if (sx == Con[ROOM_MAXY]) sy--; else sy++; }
           do
-            r4 = cPanel.PlaceWithinSafely(sx,sy);
+            r4 = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);
           while (!r.Overlaps(r4) && !r2.Overlaps(r4) && !r3.Overlaps(r4));
           WriteRoom(r4,regID);
 
          break;
         case RM_OCTAGON:
-          sx = Con[ROOM_MINX] + random(Con[ROOM_MAXX] - Con[ROOM_MINX]) + 3;
-          sy = Con[ROOM_MINY] + random(Con[ROOM_MAXY] - Con[ROOM_MINY]) + 3;
+          sx = (int16)(Con[ROOM_MINX] + random((int16)(Con[ROOM_MAXX] - Con[ROOM_MINX])) + 3);
+          sy = (int16)(Con[ROOM_MINY] + random((int16)(Con[ROOM_MAXY] - Con[ROOM_MINY])) + 3);
           sx = max(sx, 9);
           sy = max(sy, 9);
           if (TREG(regID)->HasFlag(RF_ODD_WIDTH) && !(sx % 2))
             { if (sx == Con[ROOM_MAXX]) sx--; else sx++; }
           if (TREG(regID)->HasFlag(RF_ODD_HEIGHT) && !(sy % 2))
             { if (sx == Con[ROOM_MAXY]) sy--; else sy++; }
-          r = cPanel.PlaceWithinSafely(sx,sy);
+          r = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);
           WriteOctagon(r,regID);
           WriteWalls(r,regID);
           xe.cRoom = r;
@@ -2815,7 +2813,7 @@ void Map::DrawPanel(uint8 px, uint8 py, rID regID)
                   dy[dc] = sy;
                   dc++;
                   WriteAt(cPanel,sx,sy,TREG(regID)->Floor,regID,25,true);
-                  MakeDoor(sx,sy,TREG(regID)->Door); 
+                  MakeDoor((uint8)sx,(uint8)sy,TREG(regID)->Door); 
                 }
             }
           while (c != i);
@@ -2832,9 +2830,9 @@ void Map::DrawPanel(uint8 px, uint8 py, rID regID)
         case RM_CASTLE:
           IndividualRooms = random(2) ? true : false;
           /* Later, Castles will have corridors *and* rooms. */
-          sx = max(Con[PANEL_SIZEX]/2,Con[PANEL_SIZEX] - (random(6)+2));
-          sy = max(Con[PANEL_SIZEY]/2,Con[PANEL_SIZEY] - (random(6)+2));
-          r = cPanel.PlaceWithinSafely(sx,sy);
+          sx = (int16)max(Con[PANEL_SIZEX]/2,Con[PANEL_SIZEX] - (random(6)+2));
+          sy = (int16)max(Con[PANEL_SIZEY]/2,Con[PANEL_SIZEY] - (random(6)+2));
+          r = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);
           WriteRoom(r,regID);
           cRectPop = 0;
           WriteCastle(r,regID);
@@ -2842,9 +2840,9 @@ void Map::DrawPanel(uint8 px, uint8 py, rID regID)
           xe.cRoom = r;
          break;
         case RM_CHECKER:
-          sx = Con[ROOM_MINX] + random(Con[ROOM_MAXX] - Con[ROOM_MINX]) + 2;
-          sy = Con[ROOM_MINY] + random(Con[ROOM_MAXY] - Con[ROOM_MINY]) + 2;
-          r = cPanel.PlaceWithinSafely(sx,sy);
+          sx = (int16)(Con[ROOM_MINX] + random((int16)(Con[ROOM_MAXX] - Con[ROOM_MINX])) + 2);
+          sy = (int16)(Con[ROOM_MINY] + random((int16)(Con[ROOM_MAXY] - Con[ROOM_MINY])) + 2);
+          r = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);
           WriteRoom(r,regID);
           WallID = TREG(regID)->Walls;
           if (WallID)
@@ -2855,13 +2853,13 @@ void Map::DrawPanel(uint8 px, uint8 py, rID regID)
           xe.cRoom = r;
          break; 
         case RM_PILLARS: case RM_GRID:
-          sx = Con[ROOM_MINX] + random(Con[ROOM_MAXX] - Con[ROOM_MINX]) + 3;
-          sy = Con[ROOM_MINY] + random(Con[ROOM_MAXY] - Con[ROOM_MINY]) + 3;
+          sx = (int16)(Con[ROOM_MINX] + random((int16)(Con[ROOM_MAXX] - Con[ROOM_MINX])) + 3);
+          sy = (int16)(Con[ROOM_MINY] + random((int16)(Con[ROOM_MAXY] - Con[ROOM_MINY])) + 3);
           if (TREG(regID)->HasFlag(RF_ODD_WIDTH) && !(sx % 2))
             { if (sx == Con[ROOM_MAXX]) sx--; else sx++; }
           if (TREG(regID)->HasFlag(RF_ODD_HEIGHT) && !(sy % 2))
             { if (sx == Con[ROOM_MAXY]) sy--; else sy++; }
-          r = cPanel.PlaceWithinSafely(sx,sy);
+          r = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);
           if (((r.x2-r.x1) % 2))
             r.x2--;
           if (((r.y2-r.y1) % 2))
@@ -2881,13 +2879,13 @@ void Map::DrawPanel(uint8 px, uint8 py, rID regID)
           xe.cRoom = r;
          break;
         case RM_CROSS:
-          sx = max(Con[PANEL_SIZEX]/2,Con[PANEL_SIZEX] - (random(8)+5));
-          sy = max(Con[PANEL_SIZEY]/2,Con[PANEL_SIZEY] - (random(8)+5));
+          sx = (int16)max(Con[PANEL_SIZEX]/2,Con[PANEL_SIZEX] - (random(8)+5));
+          sy = (int16)max(Con[PANEL_SIZEY]/2,Con[PANEL_SIZEY] - (random(8)+5));
           if (TREG(regID)->HasFlag(RF_ODD_WIDTH) && !(sx % 2))
             { if (sx == Con[ROOM_MAXX]) sx--; else sx++; }
           if (TREG(regID)->HasFlag(RF_ODD_HEIGHT) && !(sy % 2))
             { if (sx == Con[ROOM_MAXY]) sy--; else sy++; }
-          r = cPanel.PlaceWithinSafely(sx,sy);
+          r = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);
           WriteCross(r,regID);
           WriteWalls(r,regID);
           xe.cRoom = r;
@@ -2904,13 +2902,13 @@ void Map::DrawPanel(uint8 px, uint8 py, rID regID)
         case RM_DOUBLE:
           //sx = max(Con[PANEL_SIZEX]/2,Con[PANEL_SIZEX] - (random(8)+5));
           //sy = max(Con[PANEL_SIZEY]/2,Con[PANEL_SIZEY] - (random(8)+5));
-          sx = Con[ROOM_MINX] + random(Con[ROOM_MAXX] - Con[ROOM_MINX]) + 3;
-          sy = Con[ROOM_MINY] + random(Con[ROOM_MAXY] - Con[ROOM_MINY]) + 3;
+          sx = (int16)(Con[ROOM_MINX] + random((int16)(Con[ROOM_MAXX] - Con[ROOM_MINX])) + 3);
+          sy = (int16)(Con[ROOM_MINY] + random((int16)(Con[ROOM_MAXY] - Con[ROOM_MINY])) + 3);
           if (TREG(regID)->HasFlag(RF_ODD_WIDTH) && !(sx % 2))
             { if (sx == Con[ROOM_MAXX]) sx--; else sx++; }
           if (TREG(regID)->HasFlag(RF_ODD_HEIGHT) && !(sy % 2))
             { if (sx == Con[ROOM_MAXY]) sy--; else sy++; }
-          r = cPanel.PlaceWithinSafely(sx,sy);
+          r = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);
           WriteRoom(r,regID);
           xe.cRoom = r;
           if (random(2))
@@ -2924,7 +2922,7 @@ void Map::DrawPanel(uint8 px, uint8 py, rID regID)
               r.y1 += 2; r.y2 -= 2;
               sx -= 4 + random(5); 
               sy -= 4 + random(5); 
-              r = r.PlaceWithin(sx,sy);
+              r = r.PlaceWithin((uint8)sx,(uint8)sy);
             }
           if (r.x1 + 1 == r.x2) {
             if (random(2)) r.x1 --; else r.x2++;
@@ -2952,7 +2950,7 @@ void Map::DrawPanel(uint8 px, uint8 py, rID regID)
             else
               { x = r.x1 + random(r.x2 - r.x1);
                 y = random(2) ? r.y1 : r.y2; }
-            MakeDoor(x,y,TREG(regID)->Door);
+            MakeDoor((uint8)x,(uint8)y,TREG(regID)->Door);
             if (FDoorAt(x,y))
               WriteAt(r,x,y,TREG(regID)->Floor,regID,PRIO_FEATURE_FLOOR);
           } while(random(3));
@@ -2960,7 +2958,7 @@ void Map::DrawPanel(uint8 px, uint8 py, rID regID)
         case RM_SHAPED:
           sx = TREG(regID)->sx;
           sy = TREG(regID)->sy;
-          r = cPanel.PlaceWithinSafely(sx,sy);
+          r = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);
           WriteMap(r,regID);
           xe.cRoom = r;
          break;
@@ -3079,15 +3077,14 @@ void Map::DrawPanel(uint8 px, uint8 py, rID regID)
     }
   }
 
-void Map::PopulateChest(Container *ch)
-{
-  int16 DepthCR = Con[INITIAL_CR] + (Depth*Con[DUN_SPEED])/100 - 1; 
+void Map::PopulateChest(Container *ch) {
+  int16 DepthCR = (int16)(Con[INITIAL_CR] + (Depth*Con[DUN_SPEED])/100 - 1); 
   int i, j = Con[CHEST_MIN_ITEMS];
-  j += random((Con[CHEST_MAX_ITEMS] - j) + (mLuck-10)/2)+1;
+  j += random((int16)((Con[CHEST_MAX_ITEMS] - j) + (mLuck-10)/2))+1;
   Item *it; 
   for (i=0;i!=j;i++)
     {
-    if (random(100)+1 <= Con[TREASURE_CHANCE])
+    if (random(100)+1 <= (int16)Con[TREASURE_CHANCE])
       it = Item::GenItem(IG_CHEST|IG_GOOD,dID,DepthCR+3,mLuck,ChestItems);
     else
       it = Item::GenItem(IG_CHEST,dID,DepthCR,mLuck,ChestItems);
@@ -3126,12 +3123,11 @@ void Map::PopulateChest(Container *ch)
 
 void Map::FurnishArea(Rect &r)
 	{
-    Item *it, *ch; Creature *mn; Feature *ft;
-		int16 x,y,c,i,j,k,l,maxlev, MType, sz, tx, ty; 
-    rID mID, regID, iID; 
-    int16 DepthCR = Con[INITIAL_CR] + (Depth*Con[DUN_SPEED])/100 - 1; 
+    Item *it, *ch; Feature *ft;
+	int16 x,y,c,i,j,k,maxlev, sz, tx, ty; 
+    rID regID, iID; 
+    int16 DepthCR = (int16)(Con[INITIAL_CR] + (Depth*Con[DUN_SPEED])/100 - 1); 
     static rID furn[32]; int32 roCount;
-    uint16 fl;
 
     /* Macro to _quickly_ give us a random open point
        in the room or subroom we're supposed to fill. */
@@ -3194,7 +3190,7 @@ void Map::FurnishArea(Rect &r)
               it->isType(T_STATUE)) {            \
             rID cID;                             \
             do {                                 \
-              cID = theGame->GetMonID(PUR_DUNGEON,0,DepthCR,DepthCR,0); \
+              cID = theGame->GetMonID(PUR_DUNGEON,0,(int8)DepthCR,(int8)DepthCR,0); \
             } while (TMON(cID)->HasFlag(M_NO_CORPSE) ||  \
                      TMON(cID)->isMType(cID,MA_DRAGON)    ); \
             ((Corpse*)it)->SetCorpseType(cID);   \
@@ -3388,7 +3384,7 @@ void Map::FurnishArea(Rect &r)
             }
          break;
         case FU_RANDOM:
-          RandomByDefault:
+//RandomByDefault:
           RANDOM_OPEN;
           if (x != -1)
             { DRAW_FURNISHING; }
@@ -3400,9 +3396,9 @@ void Map::FurnishArea(Rect &r)
       }
 
  
-    if (random(100)+1 < Con[CHEST_CHANCE] + (1 * (mLuck-10)))
+    if (random(100)+1 < (int16)Con[CHEST_CHANCE] + (1 * (mLuck-10)))
        {         
-         iID = theGame->GetItemID(PUR_DUNGEON,0,DepthCR,T_CHEST);
+         iID = theGame->GetItemID(PUR_DUNGEON,0,(int8)DepthCR,T_CHEST);
          ch = Item::Create(iID);
          ASSERT(ch);
          PopulateChest((Container *)ch);
@@ -3412,9 +3408,9 @@ void Map::FurnishArea(Rect &r)
          else
            ch->Remove(true);   
        }
-    else if (random(100)+1 <= Con[TREASURE_CHANCE]) 
+    else if (random(100)+1 <= (int16)Con[TREASURE_CHANCE]) 
       {
-        if (random(100)+1 <= Con[CURSED_CHANCE])
+        if (random(100)+1 <= (int16)Con[CURSED_CHANCE])
           it = Item::GenItem(IG_CURSED,dID,DepthCR,mLuck,DungeonItems);
         else
           it = Item::GenItem(IG_GOOD,dID,DepthCR,mLuck,DungeonItems);
@@ -3423,9 +3419,7 @@ void Map::FurnishArea(Rect &r)
           it->PlaceAt(this,x,y);
         else
           it->Remove(true);
-      }
-    else if (random(100)+1 < 50)
-      {
+      } else if (random(100)+1 < 50) {
         /* Generate a poor item */
         it = Item::GenItem(0,dID,max(0,DepthCR/2-4),10,DungeonItems);
         if (it) {
@@ -3437,8 +3431,7 @@ void Map::FurnishArea(Rect &r)
           }
       }
 
-    if (random(100)+1 <= Con[STAPLE_CHANCE])
-      {
+    if (random(100)+1 <= (int16)Con[STAPLE_CHANCE]) {
         it = Item::GenItem(IG_STAPLE,dID,DepthCR,10,DungeonItems);
         RANDOM_OPEN_NEAR_SOLID;
         if (x != -1)
@@ -3447,15 +3440,15 @@ void Map::FurnishArea(Rect &r)
           it->Remove(true);
       }
 
-    DepthCR = maxlev = AdjustCR(Con[INITIAL_CR] + (Depth*Con[DUN_SPEED])/100 - 1); 
+    DepthCR = maxlev = AdjustCR((int16)(Con[INITIAL_CR] + (Depth*Con[DUN_SPEED])/100 - 1)); 
 
     if (r.x2) {
       OpenC = 0;
       for(int16 ix=r.x1;ix<=r.x2;ix++)
         for(int16 iy=r.y1;iy<=r.y2;iy++)
           {
-            OpenX[OpenC] = ix;
-            OpenY[OpenC] = iy;
+            OpenX[OpenC] = (uint8)ix;
+            OpenY[OpenC] = (uint8)iy;
             OpenC++;
           }
       }
@@ -3467,9 +3460,8 @@ void Map::FurnishArea(Rect &r)
   }
   
 /* HACKFIX */
-void Map::PopulatePanel(Rect &r, uint16 extraFlags)
-	{ 
-    int16 DepthCR = Con[INITIAL_CR] + (Depth*Con[DUN_SPEED])/100 - 1; 
+void Map::PopulatePanel(Rect &r, uint16 extraFlags) { 
+    int16 DepthCR = (int16)(Con[INITIAL_CR] + (Depth*Con[DUN_SPEED])/100 - 1); 
     int16 realCR;
     rID regID = RegionAt(OpenX[0],OpenY[0]);
     if ((random(100) < 22 - mLuck) && DepthCR > 1 && theGame->Opt(OPT_OOD_MONSTERS))
@@ -3587,8 +3579,8 @@ bool Map::FindOpenAreas(Rect r, rID regID, int16 Flags)
             if (TerrainAt(x,y) != TREG(RegionAt(x,y))->Floor)
               continue;
         
-          OpenX[OpenC] = x;
-          OpenY[OpenC] = y;
+          OpenX[OpenC] = (uint8)x;
+          OpenY[OpenC] = (uint8)y;
           OpenC++;
           if (OpenC == 2048)
             return true;
@@ -3607,15 +3599,14 @@ uint16 Map::GetOpenXY()
     return OpenX[n] + OpenY[n]*256;
   }
 
-uint16 Map::Tunnel(uint8 sx, uint8 sy, uint8 dx, uint8 dy, 
-                    uint8 TFlags, Dir StartDir, int8 TType)
-{
-  int16 i,x,y,ox,oy,vx,vy; int16 ThisCorridorLength = 0, segLength = 0;
+uint16 Map::Tunnel(uint8 sx, uint8 sy, uint8 dx, uint8 dy, uint8 TFlags, Dir StartDir, int8 TType) {
+  int16 i,x,y,ox,oy;
+  int16 ThisCorridorLength = 0, segLength = 0;
   int32 n;
   int16 regionConsts[] = {
     TURN_CHANCE, STUBBORN_CORRIDOR, 
     SEGMENT_MINLEN, SEGMENT_MAXLEN, 0 
-    };
+  };
 
   rID regID = Con[CORRIDOR_REGION];  
 
@@ -3623,7 +3614,7 @@ uint16 Map::Tunnel(uint8 sx, uint8 sy, uint8 dx, uint8 dy,
   if (dist(sx,sy,dx,dy) > 5) { 
     int c=0;
     for (i=0; CorridorWeights[i*2]; i++)
-      for (x=0; x<CorridorWeights[i*2+1]; x++)
+      for (x=0; x < (int16)CorridorWeights[i*2+1]; x++)
         Candidates[c++] = CorridorWeights[i*2];
     if (c)  {
       int trials = 0;
@@ -3644,8 +3635,8 @@ reselect:
 
 
   Dir CurrDir,OldDir; int16 RoomsFound = 0; uint16 *Corr; int16 cc;
-  bool stop_flag=0,force_turn=0, startConnected; Trap *tr; rID tID;
-  int16 DepthCR = Con[INITIAL_CR] + (Depth*Con[DUN_SPEED])/100 - 1; 
+  bool stop_flag=0,force_turn=0, startConnected;
+  int16 DepthCR = (int16)(Con[INITIAL_CR] + (Depth*Con[DUN_SPEED])/100 - 1); 
   ASSERT(regID);
 #define NEXTX (x + DirX[CurrDir])
 #define NEXTY (y + DirY[CurrDir])
@@ -3670,7 +3661,7 @@ reselect:
   }
   Corr = new uint16[MAX_CORRIDOR_LENGTH*sizeof(uint16)];
 RestartTunnel:
-  startConnected = At(sx,sy).Connected;
+  startConnected = At(sx,sy).Connected != 0;
   CurrDir = StartDir;
   x = sx; y = sy;
 
@@ -3697,7 +3688,7 @@ RestartTunnel:
     segLength++;
 
     if (TFlags & TT_CONNECT)
-      if ((bool)(At(x,y).Connected) != startConnected)
+      if ((At(x,y).Connected != 0) != startConnected)
         if (!At(x,y).Solid)
           stop_flag = true;
 
@@ -3731,7 +3722,7 @@ RestartTunnel:
       /* Intersecting Room Wall */
     {
       if (!random(2))
-        MakeDoor(x,y,TREG(RegionAt(NEXTX,NEXTY))->Door);
+        MakeDoor((uint8)x,(uint8)y,TREG(RegionAt(NEXTX,NEXTY))->Door);
       else 
         MakeDoor(NEXTX,NEXTY,TREG(RegionAt(NEXTX,NEXTY))->Door);
 
@@ -3743,17 +3734,14 @@ RestartTunnel:
     if (y == dy && DirY[CurrDir])
       force_turn = true;
 
-    if (segLength > Con[SEGMENT_MAXLEN])
+    if (segLength > (int16)Con[SEGMENT_MAXLEN])
       force_turn = true;
 
-    if (force_turn || (segLength > Con[SEGMENT_MINLEN] && 
-          (random(100) < Con[TURN_CHANCE])))
-    {
+    if (force_turn || (segLength > (int16)Con[SEGMENT_MINLEN] && (random(100) < (int16)Con[TURN_CHANCE]))) {
       segLength = 0;
-      if(TFlags & TT_DIRECT || random(100) > Con[STUBBORN_CORRIDOR])
+      if(TFlags & TT_DIRECT || random(100) > (int16)Con[STUBBORN_CORRIDOR])
         CurrDir = CorrectDir(x,y,dx,dy,CurrDir);
-      else
-      {
+      else {
         OldDir=CurrDir;
         while(CurrDir==OldDir)
           CurrDir = !random(4) ? EAST :
@@ -3880,8 +3868,8 @@ int32 Map::FloodConnectA(int16 x, int16 y,int32 fCount)
     uint8 *FloodSP = FloodStack;
 
     
-    FloodSP[0] = x;
-    FloodSP[1] = y;
+    FloodSP[0] = (uint8)x;
+    FloodSP[1] = (uint8)y;
 
     DoCall:
     x = FloodSP[0];
@@ -3902,8 +3890,8 @@ int32 Map::FloodConnectA(int16 x, int16 y,int32 fCount)
 
     At(x,y).Connected = true;
     //At(x,y).Glyph = GLYPH_FLOOR2 + PINK*256;
-    FloodArray[fCount*2]   = x;
-    FloodArray[fCount*2+1] = y;
+    FloodArray[fCount*2]   = (uint8)x;
+    FloodArray[fCount*2+1] = (uint8)y;
     fCount++;
 
 
@@ -3937,8 +3925,8 @@ int32 Map::FloodConnectB(int16 x, int16 y)
 
     FloodSP = FloodStack;
 
-    FloodSP[0] = x;
-    FloodSP[1] = y;
+    FloodSP[0] = (uint8)x;
+    FloodSP[1] = (uint8)y;
 
     MapIterate(this,t,i)
       if (t->isType(T_DOOR))
@@ -3972,8 +3960,8 @@ int32 Map::FloodConnectB(int16 x, int16 y)
     At(x,y).Shade = 0;           */
 
 
-    FloodArray[fCount*2]   = x;
-    FloodArray[fCount*2+1] = y;
+    FloodArray[fCount*2]   = (uint8)x;
+    FloodArray[fCount*2+1] = (uint8)y;
     fCount++;
     
     for(FloodSP[2]=0;FloodSP[2]!=8;FloodSP[2]++)    
