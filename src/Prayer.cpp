@@ -124,7 +124,7 @@ EvReturn Character::PrePray(EventInfo &e)
           return ReThrow(EV_INSIGHT, e);
          break; 
         case 'b':
-          if (Anger[e.godNum] > TGOD(e.eID)->GetConst(TOLERANCE_VAL))
+          if (Anger[e.godNum] > (int16)TGOD(e.eID)->GetConst(TOLERANCE_VAL))
             {
               GodMessage(e.eID,MSG_BAD_PRAY);
               e.EParam = Anger[e.godNum] - TGOD(e.eID)->GetConst(TOLERANCE_VAL);
@@ -203,7 +203,7 @@ EvReturn Character::Insight(EventInfo &e)
         return DONE;
       }
       
-    tol = TGOD(e.eID)->GetConst(TOLERANCE_VAL);
+    tol = (int16)TGOD(e.eID)->GetConst(TOLERANCE_VAL);
     
     if (getGodFlags(e.eID) & GS_FORSAKEN)
       GodMessage(e.eID, MSG_FORSAKEN);
@@ -232,12 +232,12 @@ EvReturn Character::Insight(EventInfo &e)
     TGOD(e.eID)->GetList(AID_CHART,aidChart,64);
     A = ""; B = "";
     for (i=0;aidChart[i];i+=3)
-      if (calcFavour(e.eID) >= aidChart[i+2] /
-             (e.eID == GodID ? 1 : TEFF(e.eID)->GetConst(LAY_MULTIPLIER)))
+      if (calcFavour(e.eID) >= (int32)aidChart[i+2] /
+             (e.eID == GodID ? 1 : (int32)TEFF(e.eID)->GetConst(LAY_MULTIPLIER)))
         {
 
          if (aidChart[i] == AID_RESSURECT)
-           if (TotalLevel() < TEFF(GodID)->GetConst(MIN_RAISE_LEVEL) ||
+           if (TotalLevel() < (int16)TEFF(GodID)->GetConst(MIN_RAISE_LEVEL) ||
                  e.eID != GodID)
              continue;
          
@@ -278,8 +278,8 @@ EvReturn Character::Insight(EventInfo &e)
        
     for (i=0;aidChart[i];i+=3)
       if (aidChart[i] == AID_IDENTIFY && 
-           calcFavour(e.eID) >= aidChart[i+2] /
-             (e.eID == GodID ? 1 : TEFF(GodID)->GetConst(LAY_MULTIPLIER)))
+           calcFavour(e.eID) >= (int32)aidChart[i+2] /
+             (e.eID == GodID ? 1 : (int32)TEFF(GodID)->GetConst(LAY_MULTIPLIER)))
         {
           if (first) {
             if (!yn("Do you want to seek divine insight into your possessions?"))
@@ -290,9 +290,9 @@ EvReturn Character::Insight(EventInfo &e)
               return DONE;    
             GodMessage(e.eID,MSG_AID + AID_IDENTIFY);
             first = false;
-            PrayerTimeout[e.godNum] = TGOD(e.eID)->GetConst(PRAYER_TIMEOUT) + 
+            PrayerTimeout[e.godNum] = (int16)TGOD(e.eID)->GetConst(PRAYER_TIMEOUT) + 
                                     TotalLevel() + random(5);
-            FavPenalty[e.godNum] += TGOD(e.eID)->GetConst(INTERVENTION_COST);
+            FavPenalty[e.godNum] += (int16)TGOD(e.eID)->GetConst(INTERVENTION_COST);
       
             if (FavPenalty[e.godNum] > 70 && FavPenalty[e.godNum] - 
                   TGOD(e.eID)->GetConst(INTERVENTION_COST) <= 70)
@@ -361,7 +361,7 @@ EvReturn Character::Sacrifice(EventInfo &e)
         case SAC_UNWORTHY:
           goto Unworthy;
         default:
-          sacType = e.EParam;
+          sacType = (int16)e.EParam;
           goto FoundCat;
       }
       
@@ -378,7 +378,7 @@ EvReturn Character::Sacrifice(EventInfo &e)
     
     lowestVal = 100000000L;
     for (i=0;i!=20 && SacList[i];i+=2) {
-        int16 sacValue = SacList[i];
+        int16 sacValue = (int16)SacList[i];
       if ((sacType == sacValue) ||
           (sacType == -1 && e.EVictim && e.EVictim->isMType(sacValue)) ||
           (sacType == -1 && !e.EVictim && e.EItem->isType(-sacValue)))
@@ -406,7 +406,7 @@ EvReturn Character::Sacrifice(EventInfo &e)
         case SAC_UNWORTHY:    goto Unworthy;
         default:
           if (SacList[sacCat*2+1] > 0)
-            sacMult = SacList[sacCat*2+1];
+              sacMult = (int16)SacList[sacCat*2+1];
       }
     
     if (e.vMag)
@@ -439,7 +439,7 @@ EvReturn Character::Sacrifice(EventInfo &e)
       }
     
     int16 sacAlign;
-    sacAlign = TGOD(e.eID)->GetConst(PERSONAL_ALIGN);
+    sacAlign = (int16)TGOD(e.eID)->GetConst(PERSONAL_ALIGN);
     sacAlign &= desiredAlign;
     if (sacAlign & AL_EVIL)
       sacAlign |= AL_NONGOOD;
@@ -536,23 +536,21 @@ int16 getGodRelation(rID fromID, rID toID, bool * doWrath)
     TGOD(fromID)->GetList(GOD_RELATIONS,relList,100);
     
     for (i=0;relList[i];i+=3)
-      if (relList[i] == REL_DEFAULT)
-        {
-          mag = relList[i+1];
-          if (doWrath)
-            *doWrath = relList[i+2];
-          break;
+        if (relList[i] == REL_DEFAULT) {
+            mag = (int16)relList[i+1];
+            if (doWrath)
+                *doWrath = relList[i+2] != 0;
+            break;
         }
     
     for (i=0;relList[i] || relList[i+1] || relList[i+2];i++)
-      if (relList[i] == toID)
-        {
-          while (relList[i+1] > 0x00010000)
-            i++;
-          mag = relList[i+1];
-          if (doWrath)
-            *doWrath = relList[i+2];
-          break;
+        if (relList[i] == toID) {
+            while (relList[i+1] > 0x00010000)
+                i++;
+            mag = (int16)relList[i+1];
+            if (doWrath)
+                *doWrath = relList[i+2] != 0;
+            break;
         }
     return mag;
   }
@@ -608,7 +606,7 @@ void Character::gainedFavour(rID gID)
     if (lv >= 9)
       return;
 
-    if (fav > favourChart[lv])
+    if (fav > (int32)favourChart[lv])
       {
         SetSilence();
         if (!isWorthyOf(gID,false)) {
@@ -840,16 +838,16 @@ void Creature::PlaceSomewhereSafe()
 
 EvReturn Character::GiveAid(EventInfo &e)
   {
-    int16 i, n, gained; 
+    int16 n, gained; 
+    int8 i;
     Item *it; rID spBooks[128], bkID;
     rID gID;
     gID = theGame->GodID(e.godNum);
     setGodFlags(gID,GS_INVOLVED);
 
     if (e.EParam != AID_IDENTIFY)
-      GodMessage(gID,MSG_AID + e.EParam);
-    switch (e.EParam)
-      {
+        GodMessage(gID,(int16)(MSG_AID + e.EParam));
+    switch (e.EParam) {
         case AID_HEAL:
           cHP = mHP + GetAttr(A_THP);
          break;
@@ -969,7 +967,7 @@ EvReturn Character::GiveAid(EventInfo &e)
         case AID_IDENTIFY:
           SetSilence();
           for (it=FirstInv();it;it=NextInv())
-            if (it->isType(e.EParam2))
+            if (it->isType((int16)e.EParam2))
               it->MakeKnown(KN_MAGIC|KN_NATURE|KN_PLUS|KN_CURSE|KN_IDENTIFIED);
           UnsetSilence();
          break;
@@ -1040,7 +1038,7 @@ EvReturn Character::Pray(EventInfo &e) {
     Timeout += 30;
 
     retry = GetStatiMag(TRIED,SK_KNOW_THEO+1000);
-    if (!SkillCheck(SK_KNOW_THEO,tg->GetConst(PRAYER_DC),true,-retry, retry ? "retry" : "")) {
+    if (!SkillCheck(SK_KNOW_THEO,(int16)tg->GetConst(PRAYER_DC),true,-retry, retry ? "retry" : "")) {
         RemoveStati(TRIED,-1,SK_KNOW_THEO+1000);
         GainTempStati(TRIED,NULL,-2,SS_MISC,SK_KNOW_THEO+1000,retry+2);
         IPrint("You fail to recite the ritual prayers and invocations correctly.");
@@ -1056,7 +1054,7 @@ EvReturn Character::Pray(EventInfo &e) {
     if (Flags & F_DELETE)
         return DONE;
 
-    if (Anger[e.godNum] > TGOD(e.eID)->GetConst(TOLERANCE_VAL)) {
+    if (Anger[e.godNum] > (int16)TGOD(e.eID)->GetConst(TOLERANCE_VAL)) {
         GodMessage(e.eID,MSG_BAD_PRAY);
         je += "The result was divine retribution.";
         AddJournalEntry(je);
@@ -1070,7 +1068,7 @@ EvReturn Character::Pray(EventInfo &e) {
         je += "You called for aid too soon after your last prayer.";
         AddJournalEntry(je);
         Transgress(e.eID,1,true,"prayer during timeout");
-        PrayerTimeout[e.godNum] += tg->GetConst(PRAYER_TIMEOUT);
+        PrayerTimeout[e.godNum] += (int16)tg->GetConst(PRAYER_TIMEOUT);
         return DONE;
     }
 
@@ -1085,7 +1083,7 @@ EvReturn Character::Pray(EventInfo &e) {
 
     Troubles = getTroubles();
     tg->GetList(AID_CHART,aidChart,64);
-    cFavour = calcFavour(e.eID);
+    cFavour = (int16)calcFavour(e.eID);
     doneSomething = false;
 
     if (HasAbility(CA_DOMAINS) ||
@@ -1096,9 +1094,9 @@ EvReturn Character::Pray(EventInfo &e) {
 
     for (i=0;Troubles[i];i++)
         for (j=0;aidChart[j];j+=3) {
-            if (aidChart[j+1] > (Troubles[i] / 256))
+            if ((int16)aidChart[j+1] > (Troubles[i] / 256))
                 continue;
-            if (aidChart[j+2] > cFavour / (e.eID == GodID ? 1 : 5))
+            if ((int16)aidChart[j+2] > cFavour / (e.eID == GodID ? 1 : 5))
                 continue;
             for (k=0;AidPairs[k][0];k++)
                 if (AidPairs[k][1] == aidChart[j] &&
@@ -1120,8 +1118,8 @@ EvReturn Character::Pray(EventInfo &e) {
         return DONE;
     }
 
-    PrayerTimeout[e.godNum] = tg->GetConst(PRAYER_TIMEOUT) + TotalLevel() + random(5);
-    FavPenalty[e.godNum] += tg->GetConst(INTERVENTION_COST);
+    PrayerTimeout[e.godNum] = (int16)tg->GetConst(PRAYER_TIMEOUT) + TotalLevel() + random(5);
+    FavPenalty[e.godNum] += (int16)tg->GetConst(INTERVENTION_COST);
 
     if (FavPenalty[e.godNum] > 70 && FavPenalty[e.godNum] - tg->GetConst(INTERVENTION_COST) <= 70) {
         GodMessage(e.eID,MSG_NEARLY_OUT);
@@ -1164,25 +1162,21 @@ EvReturn Character::Convert(EventInfo &e)
     AddJournalEntry(XPrint("You attempted conversion to <Res>.", e.eID));
 
     if (e.eID != GodID)
-      ReThrow(EV_JEALOUSY,e);
+        ReThrow(EV_JEALOUSY,e);
     if (Flags & F_DELETE)
-      return DONE;      
+        return DONE;      
     
-    if (getGodFlags(e.eID) & GS_ANATHEMA)
-      {
+    if (getGodFlags(e.eID) & GS_ANATHEMA) {
         GodMessage(e.eID,MSG_FORSAKE);
         return DONE;
-      }
+    }
     
-    if (getGodAnger(e.eID))
-      {
+    if (getGodAnger(e.eID)) {
         GodMessage(e.eID,MSG_ANGER);
         return DONE;
-      }
+    }
     
-    
-    neededFavour = TGOD(e.eID)->GetConst(MIN_CONVERT_FAVOUR);
-    
+    neededFavour = (int16)TGOD(e.eID)->GetConst(MIN_CONVERT_FAVOUR);    
     if (getGodFlags(e.eID) & GS_FORSAKEN)
       neededFavour = max(neededFavour*5,5000);
     
@@ -1371,7 +1365,7 @@ EvReturn Character::GodDeflect(EventInfo &e)
     if (FavPenalty[e.godNum] + TGOD(GodID)->GetConst(INTERVENTION_COST) > 100)
       return NOTHING;
       
-    if (Anger[e.godNum] > max(3,TGOD(GodID)->GetConst(TOLERANCE_VAL)))
+    if (Anger[e.godNum] > max(3,(int16)TGOD(GodID)->GetConst(TOLERANCE_VAL)))
       return NOTHING;
       
     if (getGodFlags(GodID) & (GS_ANATHEMA|GS_FORSAKEN))
@@ -1380,7 +1374,7 @@ EvReturn Character::GodDeflect(EventInfo &e)
     TGOD(GodID)->GetList(AID_CHART,aidChart,64);
     for (i=0;aidChart[i];i+=3)
       if (aidChart[i] == AID_DEFLECT)
-        if (calcFavour(e.eID) >= aidChart[i+2])
+        if (calcFavour(e.eID) >= (int32)aidChart[i+2])
           goto DoDeflect;
           
     return NOTHING;
@@ -1399,7 +1393,7 @@ EvReturn Character::GodDeflect(EventInfo &e)
       }
 
     /* Intervention Penalty */
-    FavPenalty[e.godNum] += TGOD(GodID)->GetConst(INTERVENTION_COST);
+    FavPenalty[e.godNum] += (int16)TGOD(GodID)->GetConst(INTERVENTION_COST);
     return DONE;
     
   }
@@ -1418,13 +1412,13 @@ EvReturn Player::GodRaise(EventInfo &e)
     if (FavPenalty[e.godNum] + TGOD(e.eID)->GetConst(RESSURECTION_COST) > 100)
       return NOTHING;
       
-    if (Anger[e.godNum] > max(3,TGOD(e.eID)->GetConst(TOLERANCE_VAL)))
+    if (Anger[e.godNum] > max(3,(int16)TGOD(e.eID)->GetConst(TOLERANCE_VAL)))
       return NOTHING;
       
     if (getGodFlags(e.eID) & (GS_ANATHEMA|GS_FORSAKEN))
       return NOTHING;
     
-    if (TotalLevel() < TGOD(e.eID)->GetConst(MIN_RAISE_LEVEL))
+    if (TotalLevel() < (int16)TGOD(e.eID)->GetConst(MIN_RAISE_LEVEL))
       return NOTHING;
       
     if (BAttr[A_CON] <= 3)
@@ -1433,7 +1427,7 @@ EvReturn Player::GodRaise(EventInfo &e)
     TGOD(e.eID)->GetList(AID_CHART,aidChart,64);
     for (i=0;aidChart[i];i+=3)
       if (aidChart[i] == AID_RESSURECT)
-        if (calcFavour(e.eID) >= aidChart[i+2])
+        if (calcFavour(e.eID) >= (int32)aidChart[i+2])
           goto DoRessurect;
           
     return NOTHING;
@@ -1462,7 +1456,7 @@ EvReturn Player::GodRaise(EventInfo &e)
     resChance -= max(0,(10 - Mod(A_CON)));
     
     /* Intervention Penalty */
-    FavPenalty[e.godNum] += TGOD(GodID)->GetConst(RESSURECTION_COST);
+    FavPenalty[e.godNum] += (int16)TGOD(GodID)->GetConst(RESSURECTION_COST);
     
     /* You have enough XP for the level right below the one you are
        currently at -- simulate losing a level. */
@@ -1524,16 +1518,17 @@ EvReturn Player::GodRaise(EventInfo &e)
   
 EvReturn Character::IBlessing(EventInfo &e)
   {
-    int16 qual, i;
+    int8 qual;
+    int16 i;
     bool isChosen;
 
     qual = 0;
     if (e.EItem->isType(T_WEAPON))
-      qual = TGOD(e.eID)->GetConst(CHOSEN_WEAPON_QUALITY);
+      qual = (int8)TGOD(e.eID)->GetConst(CHOSEN_WEAPON_QUALITY);
     else if (e.EItem->isType(T_SHIELD))
-      qual = TGOD(e.eID)->GetConst(CHOSEN_SHIELD_QUALITY);
+      qual = (int8)TGOD(e.eID)->GetConst(CHOSEN_SHIELD_QUALITY);
     else if (e.EItem->isType(T_ARMOUR))
-      qual = TGOD(e.eID)->GetConst(CHOSEN_ARMOUR_QUALITY);
+      qual = (int8)TGOD(e.eID)->GetConst(CHOSEN_ARMOUR_QUALITY);
 
     isChosen = (e.EItem->iID == TGOD(e.eID)->GetConst(CHOSEN_WEAPON));
     
@@ -1564,7 +1559,7 @@ EvReturn Character::IBlessing(EventInfo &e)
     for (i=0;QualityMods[i][0];i++)
       if (QualityMods[i][0] == qual)
         FavPenalty[theGame->GodNum(e.eID)] +=
-          (QualityMods[i][1] * 3) + (e.EItem->GetQuantity() / 5);
+          (QualityMods[i][1] * 3) + (int16)(e.EItem->GetQuantity() / 5);
     return DONE;
 
     SkipQuality:
@@ -1576,7 +1571,7 @@ EvReturn Character::IBlessing(EventInfo &e)
     e.isSomething = true;
     e.EItem->IFlags &= ~IF_CURSED;
     e.EItem->IFlags |= IF_BLESSED;
-    FavPenalty[theGame->GodNum(e.eID)] += 1 + e.EItem->GetQuantity() / 5;
+    FavPenalty[theGame->GodNum(e.eID)] += 1 + (int16)(e.EItem->GetQuantity() / 5);
           
     return DONE;
   }    
@@ -1618,7 +1613,7 @@ void Character::Transgress(rID gID, int16 mag, bool doWrath, const char *reason)
     e.Clear();
     
     if (doWrath && Anger[theGame->GodNum(gID)] >
-                     TGOD(gID)->GetConst(TOLERANCE_VAL))
+                     (int16)TGOD(gID)->GetConst(TOLERANCE_VAL))
       {
         EventInfo e;
         e.Clear();
@@ -1651,7 +1646,7 @@ void Character::Transgress(rID gID, int16 mag, bool doWrath, const char *reason)
         setGodFlags(gID,GS_KNOWN_ANGER);
       } 
     if (gID == GodID)
-      Abuse(A_WIS,Dice::Roll(mag,10));
+      Abuse(A_WIS,Dice::Roll((int8)mag,10));
   }  
   
 void Character::Forsake()
@@ -1670,7 +1665,7 @@ void Character::Forsake()
           goto realForsake;
         GodMessage(GodID,MSG_PENANCE);
         Anger[theGame->GodNum(GodID)] = max(10 +
-          TGOD(GodID)->GetConst(TOLERANCE_VAL),
+          (int16)TGOD(GodID)->GetConst(TOLERANCE_VAL),
           Anger[theGame->GodNum(GodID)]);
         
         setGodFlags(GodID, GS_PENANCE);
@@ -1680,7 +1675,7 @@ void Character::Forsake()
     realForsake:
     GodMessage(GodID,MSG_FORSAKE);
     Anger[theGame->GodNum(GodID)] = max(10 +
-      TGOD(GodID)->GetConst(TOLERANCE_VAL),
+      (int16)TGOD(GodID)->GetConst(TOLERANCE_VAL),
       Anger[theGame->GodNum(GodID)]);
     setGodFlags(GodID, GS_FORSAKEN);    
     GodID = 0;
@@ -1866,7 +1861,7 @@ void Character::GodMessage(rID gID, int16 msgnum, ...)
           }
     
     msg2 = ""; quoted = false;
-    col = TGOD(gID)->GetConst(VOICE_COLOUR);
+    col = (int16)TGOD(gID)->GetConst(VOICE_COLOUR);
     for (i=0;msg[i];i++)
       {
         tcol = BlastColourSets[col*4 + random(4)];
@@ -2047,31 +2042,31 @@ EvReturn Character::AlignedAct(EventInfo &e)
     
     if (cAlign & AL_GOOD) {
       if (e.EParam & AL_NONGOOD) {
-        alignGE = (alignGE * (10 - e.vMag)) / 10;
+        alignGE = (alignGE * (10 - (int16)e.vMag)) / 10;
         isGuilty = true;
         }
       else if (e.EParam & AL_GOOD)
-        alignGE -= e.vMag;
+        alignGE -= (int16)e.vMag;
       if (!(dAlign & AL_GOOD))
         alignGE = max(-30, alignGE);
       }
     else if (cAlign & AL_EVIL) {
       if (e.EParam & AL_NONEVIL) {
-        alignGE = (alignGE * (10 - e.vMag)) / 10;
+        alignGE = (alignGE * (10 - (int16)e.vMag)) / 10;
         isFoolish = true;
         }
       else if (e.EParam & AL_EVIL)
-        alignGE += e.vMag;
+        alignGE += (int16)e.vMag;
       if (!(dAlign & AL_EVIL))
         alignGE = min(30, alignGE);
       }
     else if (e.EParam & AL_GOOD) {
-      alignGE -= e.vMag;
+      alignGE -= (int16)e.vMag;
       if (!(dAlign & AL_GOOD))
         alignGE = max(alignGE,0);
       }
     else if (e.EParam & AL_EVIL)
-      alignGE += e.vMag;
+      alignGE += (int16)e.vMag;
       
     if (alignGE > -20)
       nAlign &= (~AL_GOOD);
@@ -2085,37 +2080,37 @@ EvReturn Character::AlignedAct(EventInfo &e)
 
     if (cAlign & AL_LAWFUL) {
       if (e.EParam & AL_NONLAWFUL) {
-        alignLC = (alignLC * (10 - e.vMag)) / 10;
+        alignLC = (alignLC * (10 - (int16)e.vMag)) / 10;
         if (cAlign & AL_EVIL)
           isFoolish = true;
         else
           isGuilty = true;
         }
       else if (e.EParam & AL_LAWFUL)
-        alignLC -= e.vMag;
+        alignLC -= (int16)e.vMag;
       if (!(dAlign & AL_LAWFUL))
         alignLC = max(-30, alignLC);
       }
     else if (cAlign & AL_CHAOTIC) {
       if (e.EParam & AL_NONCHAOTIC) {
-        alignLC = (alignLC * (10 - e.vMag)) / 10;
+        alignLC = (alignLC * (10 - (int16)e.vMag)) / 10;
         if (cAlign & AL_EVIL)
           isFoolish = true;
         else
           isGuilty = true;
         }
       else if (e.EParam & AL_CHAOTIC)
-        alignLC += e.vMag;
+        alignLC += (int16)e.vMag;
       if (!(dAlign & AL_CHAOTIC))
         alignLC = max(30, alignLC);
       }
     else if (e.EParam & AL_LAWFUL) {
-      alignLC -= e.vMag;
+      alignLC -= (int16)e.vMag;
       if (!(dAlign & AL_LAWFUL))
         alignLC = max(alignLC,0);
       }
     else if (e.EParam & AL_CHAOTIC) {
-      alignLC -= e.vMag;
+      alignLC -= (int16)e.vMag;
       if (!(dAlign & AL_CHAOTIC))
         alignLC = min(alignLC,0);
       }
