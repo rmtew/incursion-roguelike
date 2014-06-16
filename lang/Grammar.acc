@@ -120,6 +120,7 @@ EffectValues * ChillShieldSeg3 = NULL;
 
 EffectValues ValArray[32];
 
+/* function should return a value; 'void' return type assumed */
 #pragma warning (disable : 4508)
 
 int yyerror(const char*msg) {
@@ -344,8 +345,8 @@ event_desc:
   ON EVENT event_entry (',' event_entry)*  ';'
   ;
 
-event_entry: 
-                          { int16 EvList[32]; int16 i, cEvent = 0; hCode hc; }
+event_entry:
+                          { int16 EvList[32]; int16 i, cEvent = 0; }
   cexpr<n>                { EvList[cEvent++] = n; theEvent = n; }
   (',' cexpr<n>           { EvList[cEvent++] = n; } )*
   ( LITERAL <lv>          { for(i=0;i!=cEvent;i++)
@@ -1730,7 +1731,8 @@ fund_expr<PExp ex>:
     }
   | fund_expr<obj> ('.'|MEMBER_OP) IDENT<id>
     {
-      int8 reg; BMemVar *b; BResMem *b2;
+      BMemVar *b;
+	  BResMem *b2;
       if (obj.Type == DT_RID) {
         if (!(b2 = GETBIND_RESMEM(id))) {
           yyerror(Format("Expected resource member in place of '%s'",theSymTab[id]));
@@ -1928,7 +1930,8 @@ lvalue<LExp lv>:
     }
   | fund_expr<obj> ('.'|MEMBER_OP) IDENT<id>
     {
-      int8 reg, i; BMemVar *b;
+      int8 i;
+	  BMemVar *b;
       if (obj.Type != DT_HOBJ)
         yyerror("Type mismatch: non-hObj on left side of '.' operator.");
       if (!(b = GETBIND_MEMVAR(id))) {

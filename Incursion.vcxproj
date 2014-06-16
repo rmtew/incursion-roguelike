@@ -471,11 +471,10 @@
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="lang\grammar.acc">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">cd %(RootDir)%(Directory)
-$(ProjectDir)modaccent_d %(Filename)%(Extension)
-move /Y yygram.cpp ..\src\
-move /Y yygram.h ..\inc\
-cd $(ProjectDir)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">cd $(ProjectDir)
+modaccent_d %(Identity) src inc
+rem move /Y yygram.cpp $(ProjectDir)\src\
+rem move /Y yygram.h $(ProjectDir)\inc\
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">src\yygram.cpp;inc\yygram.h;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">cd %(RootDir)%(Directory)

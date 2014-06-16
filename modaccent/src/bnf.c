@@ -1378,7 +1378,7 @@ yyv_L2 = yy_5_2;
 yy_6_1 = yyv_L2;
 grammarcode_rulelist(yy_6_1);
 lexinfo();
-yy_8_1 = ((yy)"yygram.cpp");
+GetDestCodeFileName(&yy_8_1);
 OpenOutput(yy_8_1);
 put_actions();
 ENCODE();
