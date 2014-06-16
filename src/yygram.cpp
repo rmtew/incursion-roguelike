@@ -205,7 +205,7 @@ int resource ()
       cexpr3(&n);
       get_lexval();
 #line 198 "lang/grammar.acc"
- theModule->Slot = n; 
+ theModule->Slot = (int16)n; 
 # line 210 "src/yygram.cpp"
       } break;
    case 4: {
@@ -536,7 +536,7 @@ int dice_val (Dice *d)
       get_lexval();
       cexpr4(&bon);
 #line 273 "lang/grammar.acc"
- d->Number = num; d->Sides = sid; d->Bonus = bon; 
+ d->Number = (int8)num; d->Sides = (int8)sid; d->Bonus = (int8)bon; 
 # line 541 "src/yygram.cpp"
       } break;
    case 50: {
@@ -547,7 +547,7 @@ int dice_val (Dice *d)
       get_lexval();
       cexpr4(&bon);
 #line 275 "lang/grammar.acc"
- d->Number = num; d->Sides = sid; d->Bonus = -bon; 
+ d->Number = (int8)num; d->Sides = (int8)sid; d->Bonus = (int8)-bon; 
 # line 552 "src/yygram.cpp"
       } break;
    case 51: {
@@ -555,13 +555,13 @@ int dice_val (Dice *d)
       get_lexval();
       cexpr4(&sid);
 #line 277 "lang/grammar.acc"
- d->Number = num; d->Sides = sid; d->Bonus = 0; 
+ d->Number = (int8)num; d->Sides = (int8)sid; d->Bonus = 0; 
 # line 560 "src/yygram.cpp"
       } break;
    case 52: {
       cexpr3(&x);
 #line 279 "lang/grammar.acc"
- d->Number = 0; d->Sides = 0; d->Bonus = x; 
+ d->Number = 0; d->Sides = 0; d->Bonus = (int8)x; 
 # line 566 "src/yygram.cpp"
       } break;
    }
@@ -581,7 +581,7 @@ int dice_only (Dice *d)
       get_lexval();
       cexpr4(&bon);
 #line 284 "lang/grammar.acc"
- d->Number = num; d->Sides = sid; d->Bonus = bon; 
+ d->Number = (int8)num; d->Sides = (int8)sid; d->Bonus = (int8)bon; 
 # line 586 "src/yygram.cpp"
       } break;
    case 54: {
@@ -589,7 +589,7 @@ int dice_only (Dice *d)
       get_lexval();
       cexpr4(&sid);
 #line 286 "lang/grammar.acc"
- d->Number = num; d->Sides = sid; d->Bonus = 0; 
+ d->Number = (int8)num; d->Sides = (int8)sid; d->Bonus = 0; 
 # line 594 "src/yygram.cpp"
       } break;
    }
@@ -610,19 +610,24 @@ int gear_entry (int16 *chance, Dice *amt, rID *iID, rID *eID, uint16 *spec, uint
    switch(yyselect()) {
    case 55: {
 #line 291 "lang/grammar.acc"
- *chance = *iID = *eID = *spec = *qual = *fl = *cond = 0; 
+
     int16 q; q=0;
+    *chance = 0;
+    *spec = 0;
+    *qual = *fl = 0;
+    *cond = 0;
+    *iID = *eID = 0;
     amt->Set(1,1,0); 
-# line 617 "src/yygram.cpp"
+# line 622 "src/yygram.cpp"
       switch (yyselect()) {
       case 480: {
          get_lexval();
          get_lexval();
          sep_expr(&hc);
          get_lexval();
-#line 294 "lang/grammar.acc"
+#line 299 "lang/grammar.acc"
  *cond = hc; 
-# line 626 "src/yygram.cpp"
+# line 631 "src/yygram.cpp"
          } break;
       default: ;
       }
@@ -631,49 +636,49 @@ int gear_entry (int16 *chance, Dice *amt, rID *iID, rID *eID, uint16 *spec, uint
          get_lexval();
          n = yylval;
          get_lexval();
-#line 295 "lang/grammar.acc"
- *chance = n; 
-# line 637 "src/yygram.cpp"
+#line 300 "lang/grammar.acc"
+ *chance = (int16)n; 
+# line 642 "src/yygram.cpp"
          } break;
       default: ;
       }
       switch (yyselect()) {
       case 482: {
          dice_only(&dv);
-#line 296 "lang/grammar.acc"
+#line 301 "lang/grammar.acc"
  *amt = yyDice(dv); 
-# line 646 "src/yygram.cpp"
+# line 651 "src/yygram.cpp"
          } break;
       default: ;
       }
       switch (yyselect()) {
       case 483: {
          get_lexval();
-#line 297 "lang/grammar.acc"
+#line 302 "lang/grammar.acc"
  *fl |= GF_CURSED; 
-# line 655 "src/yygram.cpp"
+# line 660 "src/yygram.cpp"
          } break;
       case 484: {
          get_lexval();
-#line 298 "lang/grammar.acc"
+#line 303 "lang/grammar.acc"
  *fl |= GF_BLESSED; 
-# line 661 "src/yygram.cpp"
+# line 666 "src/yygram.cpp"
          } break;
       default: ;
       }
       switch (yyselect()) {
       case 485: {
          res_ref(&rr);
-#line 299 "lang/grammar.acc"
+#line 304 "lang/grammar.acc"
  *iID = rr; 
-# line 670 "src/yygram.cpp"
+# line 675 "src/yygram.cpp"
          } break;
       case 486: {
          get_lexval();
          cexpr3(&n);
-#line 300 "lang/grammar.acc"
+#line 305 "lang/grammar.acc"
  *iID = n; *fl |= GF_RANDOM_ITEM; 
-# line 677 "src/yygram.cpp"
+# line 682 "src/yygram.cpp"
          } break;
       default: printf("???\n"); exit(1);
       }
@@ -682,17 +687,17 @@ int gear_entry (int16 *chance, Dice *amt, rID *iID, rID *eID, uint16 *spec, uint
          get_lexval();
          get_lexval();
          n = yylval;
-#line 301 "lang/grammar.acc"
- *spec = n; 
-# line 688 "src/yygram.cpp"
+#line 306 "lang/grammar.acc"
+ *spec = (uint16)n; 
+# line 693 "src/yygram.cpp"
          } break;
       case 488: {
          get_lexval();
          get_lexval();
          n = yylval;
-#line 301 "lang/grammar.acc"
- *spec = -n; 
-# line 696 "src/yygram.cpp"
+#line 306 "lang/grammar.acc"
+ *spec = (uint16)-n; 
+# line 701 "src/yygram.cpp"
          } break;
       default: ;
       }
@@ -711,12 +716,12 @@ int gear_entry (int16 *chance, Dice *amt, rID *iID, rID *eID, uint16 *spec, uint
                      } break;
                   default: ;
                   }
-#line 302 "lang/grammar.acc"
+#line 307 "lang/grammar.acc"
  if (q >= 4)
                                    yyerror("Max 4 qualities in gear lists!");
                                 else
-                                  ((uint8*)qual)[q++] = wq;
-# line 720 "src/yygram.cpp"
+                                  ((uint8*)qual)[q++] = (uint8)wq;
+# line 725 "src/yygram.cpp"
                   } break;
                default: goto yy3;
                }
@@ -727,9 +732,9 @@ int gear_entry (int16 *chance, Dice *amt, rID *iID, rID *eID, uint16 *spec, uint
          case 492: {
             get_lexval();
             res_ref(&rr);
-#line 306 "lang/grammar.acc"
+#line 311 "lang/grammar.acc"
  *eID = rr; 
-# line 733 "src/yygram.cpp"
+# line 738 "src/yygram.cpp"
             } break;
          case 493: {
             get_lexval();
@@ -737,24 +742,24 @@ int gear_entry (int16 *chance, Dice *amt, rID *iID, rID *eID, uint16 *spec, uint
             cexpr3(&a);
             get_lexval();
             cexpr3(&b);
-#line 308 "lang/grammar.acc"
+#line 313 "lang/grammar.acc"
  *eID = a + b*256; *fl |= GF_RANDOM_EFFECT; 
-# line 743 "src/yygram.cpp"
+# line 748 "src/yygram.cpp"
             } break;
          case 494: {
             get_lexval();
             get_lexval();
             cexpr3(&b);
-#line 310 "lang/grammar.acc"
+#line 315 "lang/grammar.acc"
  *eID = b*256; *fl |= GF_RANDOM_EFFECT; 
-# line 751 "src/yygram.cpp"
+# line 756 "src/yygram.cpp"
             } break;
          case 495: {
             get_lexval();
             get_lexval();
-#line 312 "lang/grammar.acc"
+#line 317 "lang/grammar.acc"
  *eID = 0; *fl |= GF_RANDOM_EFFECT; 
-# line 758 "src/yygram.cpp"
+# line 763 "src/yygram.cpp"
             } break;
          case 496: {
             get_lexval();
@@ -785,9 +790,9 @@ int gear_desc ()
    hCode cond;
    switch(yyselect()) {
    case 56: {
-#line 318 "lang/grammar.acc"
+#line 323 "lang/grammar.acc"
  int16 is_else = 0; 
-# line 791 "src/yygram.cpp"
+# line 796 "src/yygram.cpp"
       get_lexval();
       switch (yyselect()) {
       case 497: {
@@ -799,21 +804,21 @@ int gear_desc ()
          switch (yyselect()) {
          case 500: {
             gear_entry(&chance, &amt, &iID, &eID, &spec, &qual, &fl, &cond);
-#line 321 "lang/grammar.acc"
- theRes->AddEquip(chance,amt,iID,eID,spec,(uint8*)(&qual),fl | is_else,cond); 
-# line 805 "src/yygram.cpp"
+#line 326 "lang/grammar.acc"
+ theRes->AddEquip((uint8)chance,amt,iID,eID,(int8)spec,(uint8*)(&qual),(uint8)(fl | is_else),cond); 
+# line 810 "src/yygram.cpp"
             switch (yyselect()) {
             case 498: {
                get_lexval();
-#line 322 "lang/grammar.acc"
+#line 327 "lang/grammar.acc"
  is_else = 0; 
-# line 811 "src/yygram.cpp"
+# line 816 "src/yygram.cpp"
                } break;
             case 499: {
                get_lexval();
-#line 322 "lang/grammar.acc"
+#line 327 "lang/grammar.acc"
  is_else = GF_ELSE; 
-# line 817 "src/yygram.cpp"
+# line 822 "src/yygram.cpp"
                } break;
             default: printf("???\n"); exit(1);
             }
@@ -823,9 +828,9 @@ int gear_desc ()
       }
       yy4: ;
       gear_entry(&chance, &amt, &iID, &eID, &spec, &qual, &fl, &cond);
-#line 324 "lang/grammar.acc"
- theRes->AddEquip(chance,amt,iID,eID,spec,(uint8*)(&qual),fl | is_else,cond); 
-# line 829 "src/yygram.cpp"
+#line 329 "lang/grammar.acc"
+ theRes->AddEquip((uint8)chance,amt,iID,eID,(int8)spec,(uint8*)(&qual),(uint8)(fl | is_else),cond); 
+# line 834 "src/yygram.cpp"
       get_lexval();
       } break;
    }
@@ -854,15 +859,15 @@ int glyph_entry (uint16 *img)
          } break;
       default: ;
       }
-#line 328 "lang/grammar.acc"
+#line 333 "lang/grammar.acc"
  *img = 15 << 8; 
-# line 860 "src/yygram.cpp"
+# line 865 "src/yygram.cpp"
       switch (yyselect()) {
       case 504: {
          color(&col);
-#line 329 "lang/grammar.acc"
- *img = col << 8; 
-# line 866 "src/yygram.cpp"
+#line 334 "lang/grammar.acc"
+ *img = (uint16)(col << 8); 
+# line 871 "src/yygram.cpp"
          } break;
       default: ;
       }
@@ -870,16 +875,16 @@ int glyph_entry (uint16 *img)
       case 505: {
          get_lexval();
          n = yylval;
-#line 330 "lang/grammar.acc"
+#line 335 "lang/grammar.acc"
  *img |= n; 
-# line 876 "src/yygram.cpp"
+# line 881 "src/yygram.cpp"
          } break;
       case 506: {
          get_lexval();
          n = yylval;
-#line 331 "lang/grammar.acc"
+#line 336 "lang/grammar.acc"
  *img |= n; 
-# line 883 "src/yygram.cpp"
+# line 888 "src/yygram.cpp"
          } break;
       default: printf("???\n"); exit(1);
       }
@@ -887,9 +892,9 @@ int glyph_entry (uint16 *img)
       case 507: {
          get_lexval();
          color(&back);
-#line 333 "lang/grammar.acc"
+#line 338 "lang/grammar.acc"
  *img |= back << 12; 
-# line 893 "src/yygram.cpp"
+# line 898 "src/yygram.cpp"
          } break;
       default: ;
       }
@@ -906,15 +911,15 @@ int glyph_desc (uint16 *img)
    YYSTYPE back;
    switch(yyselect()) {
    case 58: {
-#line 337 "lang/grammar.acc"
+#line 342 "lang/grammar.acc"
  *img = 15 << 8; 
-# line 912 "src/yygram.cpp"
+# line 917 "src/yygram.cpp"
       switch (yyselect()) {
       case 508: {
          color(&col);
-#line 338 "lang/grammar.acc"
- *img = col << 8; 
-# line 918 "src/yygram.cpp"
+#line 343 "lang/grammar.acc"
+ *img = (uint16)(col << 8); 
+# line 923 "src/yygram.cpp"
          } break;
       default: ;
       }
@@ -922,16 +927,16 @@ int glyph_desc (uint16 *img)
       case 509: {
          get_lexval();
          n = yylval;
-#line 339 "lang/grammar.acc"
+#line 344 "lang/grammar.acc"
  *img |= n; 
-# line 928 "src/yygram.cpp"
+# line 933 "src/yygram.cpp"
          } break;
       case 510: {
          get_lexval();
          n = yylval;
-#line 340 "lang/grammar.acc"
+#line 345 "lang/grammar.acc"
  *img |= n; 
-# line 935 "src/yygram.cpp"
+# line 940 "src/yygram.cpp"
          } break;
       default: printf("???\n"); exit(1);
       }
@@ -939,9 +944,9 @@ int glyph_desc (uint16 *img)
       case 511: {
          get_lexval();
          color(&back);
-#line 341 "lang/grammar.acc"
+#line 346 "lang/grammar.acc"
  *img |= back << 12; 
-# line 945 "src/yygram.cpp"
+# line 950 "src/yygram.cpp"
          } break;
       default: ;
       }
@@ -980,21 +985,21 @@ int event_entry ()
    VBlock vc;
    switch(yyselect()) {
    case 60: {
-#line 349 "lang/grammar.acc"
+#line 354 "lang/grammar.acc"
  int16 EvList[32]; int16 i, cEvent = 0; 
-# line 986 "src/yygram.cpp"
+# line 991 "src/yygram.cpp"
       cexpr(&n);
-#line 350 "lang/grammar.acc"
- EvList[cEvent++] = n; theEvent = n; 
-# line 990 "src/yygram.cpp"
+#line 355 "lang/grammar.acc"
+ EvList[cEvent++] = (int16)n; theEvent = n; 
+# line 995 "src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 513: {
             get_lexval();
             cexpr(&n);
-#line 351 "lang/grammar.acc"
- EvList[cEvent++] = n; 
-# line 998 "src/yygram.cpp"
+#line 356 "lang/grammar.acc"
+ EvList[cEvent++] = (int16)n; 
+# line 1003 "src/yygram.cpp"
             } break;
          default: goto yy6;
          }
@@ -1004,20 +1009,20 @@ int event_entry ()
       case 515: {
          get_lexval();
          lv = yylval;
-#line 352 "lang/grammar.acc"
+#line 357 "lang/grammar.acc"
  for(i=0;i!=cEvent;i++)
                               theRes->AddEvent(-EvList[i],lv); 
-# line 1011 "src/yygram.cpp"
+# line 1016 "src/yygram.cpp"
          while (1) {
             switch (yyselect()) {
             case 514: {
                get_lexval();
                get_lexval();
                lv = yylval;
-#line 354 "lang/grammar.acc"
+#line 359 "lang/grammar.acc"
  for(i=0;i!=cEvent;i++)
                               theRes->AddEvent(-EvList[i],lv); 
-# line 1021 "src/yygram.cpp"
+# line 1026 "src/yygram.cpp"
                } break;
             default: goto yy7;
             }
@@ -1026,13 +1031,13 @@ int event_entry ()
          } break;
       case 516: {
          routine(&vc);
-#line 359 "lang/grammar.acc"
+#line 364 "lang/grammar.acc"
  hCode hc = theCodeSeg.Add(&vc);
                             theCodeSeg.Generate(HALT);
                             for(i=0;i!=cEvent;i++)
                               theRes->AddEvent(EvList[i],hc);
                             theEvent = 0; 
-# line 1036 "src/yygram.cpp"
+# line 1041 "src/yygram.cpp"
          } break;
       default: printf("???\n"); exit(1);
       }
@@ -1046,17 +1051,17 @@ int sep_expr (hCode *hc)
    PExp ex;
    switch(yyselect()) {
    case 61: {
-#line 368 "lang/grammar.acc"
+#line 373 "lang/grammar.acc"
  theEvent = EV_CONDITION; 
-# line 1052 "src/yygram.cpp"
+# line 1057 "src/yygram.cpp"
       expr(&ex);
-#line 370 "lang/grammar.acc"
+#line 375 "lang/grammar.acc"
  *hc = theCodeSeg.Add(ex.Code);
       theCodeSeg.Generate(RET,ex.Storage,ex.Value); 
-# line 1057 "src/yygram.cpp"
-#line 372 "lang/grammar.acc"
+# line 1062 "src/yygram.cpp"
+#line 377 "lang/grammar.acc"
  theEvent = 0; 
-# line 1060 "src/yygram.cpp"
+# line 1065 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -1067,17 +1072,17 @@ int sep_stat (hCode *hc)
    VBlock st;
    switch(yyselect()) {
    case 62: {
-#line 376 "lang/grammar.acc"
+#line 381 "lang/grammar.acc"
  theEvent = EV_CONDITION; 
-# line 1073 "src/yygram.cpp"
+# line 1078 "src/yygram.cpp"
       statement(&st);
-#line 378 "lang/grammar.acc"
+#line 383 "lang/grammar.acc"
  *hc = theCodeSeg.Add(&st);
       theCodeSeg.Generate(RET,0,0); 
-# line 1078 "src/yygram.cpp"
-#line 380 "lang/grammar.acc"
+# line 1083 "src/yygram.cpp"
+#line 385 "lang/grammar.acc"
  theEvent = 0; 
-# line 1081 "src/yygram.cpp"
+# line 1086 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -1088,9 +1093,9 @@ int mval (MVal *mv)
    YYSTYPE n;
    switch(yyselect()) {
    case 63: {
-#line 384 "lang/grammar.acc"
+#line 389 "lang/grammar.acc"
  mv->BType = mv->Bound = 0; 
-# line 1094 "src/yygram.cpp"
+# line 1099 "src/yygram.cpp"
       switch (yyselect()) {
       case 518: {
          switch (yyselect()) {
@@ -1100,30 +1105,30 @@ int mval (MVal *mv)
          default: ;
          }
          cexpr4(&n);
-#line 385 "lang/grammar.acc"
+#line 390 "lang/grammar.acc"
  mv->Value = n;  mv->VType = MVAL_ADD; 
-# line 1106 "src/yygram.cpp"
+# line 1111 "src/yygram.cpp"
          } break;
       case 519: {
          get_lexval();
          cexpr4(&n);
-#line 386 "lang/grammar.acc"
+#line 391 "lang/grammar.acc"
  mv->Value = -n; mv->VType = MVAL_ADD; 
-# line 1113 "src/yygram.cpp"
+# line 1118 "src/yygram.cpp"
          } break;
       case 520: {
          get_lexval();
          cexpr4(&n);
-#line 387 "lang/grammar.acc"
+#line 392 "lang/grammar.acc"
  mv->Value = n;  mv->VType = MVAL_SET; 
-# line 1120 "src/yygram.cpp"
+# line 1125 "src/yygram.cpp"
          } break;
       case 521: {
          cexpr3(&n);
          get_lexval();
-#line 388 "lang/grammar.acc"
+#line 393 "lang/grammar.acc"
  mv->Value = n;  mv->VType = MVAL_PERCENT; 
-# line 1127 "src/yygram.cpp"
+# line 1132 "src/yygram.cpp"
          } break;
       default: printf("???\n"); exit(1);
       }
@@ -1134,23 +1139,23 @@ int mval (MVal *mv)
          case 522: {
             get_lexval();
             cexpr4(&n);
-#line 390 "lang/grammar.acc"
+#line 395 "lang/grammar.acc"
  mv->Bound = n;  mv->BType = MBOUND_MIN; 
-# line 1140 "src/yygram.cpp"
+# line 1145 "src/yygram.cpp"
             } break;
          case 523: {
             get_lexval();
             cexpr4(&n);
-#line 391 "lang/grammar.acc"
+#line 396 "lang/grammar.acc"
  mv->Bound = n;  mv->BType = MBOUND_MAX; 
-# line 1147 "src/yygram.cpp"
+# line 1152 "src/yygram.cpp"
             } break;
          case 524: {
             get_lexval();
             cexpr4(&n);
-#line 392 "lang/grammar.acc"
+#line 397 "lang/grammar.acc"
  mv->Bound = n;  mv->BType = MBOUND_NEAR; 
-# line 1154 "src/yygram.cpp"
+# line 1159 "src/yygram.cpp"
             } break;
          default: printf("???\n"); exit(1);
          }
@@ -1172,36 +1177,36 @@ int monster_def ()
    switch(yyselect()) {
    case 64: {
       get_lexval();
-#line 397 "lang/grammar.acc"
+#line 402 "lang/grammar.acc"
  theMon->Attr[0] = theMon->Attr[1] =
                        theMon->Attr[2] = theMon->Attr[3] =
                          theMon->Attr[4] = theMon->Attr[5] =
                          0; CurrAttk = 0; CurrFeat = 0; theRes = theMon; 
-# line 1181 "src/yygram.cpp"
-      get_lexval();
-      name = yylval;
-#line 401 "lang/grammar.acc"
- theMon->Name = name; 
 # line 1186 "src/yygram.cpp"
       get_lexval();
-      cexpr3(&n);
-#line 402 "lang/grammar.acc"
- theMon->MType[0] = n; 
+      name = yylval;
+#line 406 "lang/grammar.acc"
+ theMon->Name = name; 
 # line 1191 "src/yygram.cpp"
+      get_lexval();
+      cexpr3(&n);
+#line 407 "lang/grammar.acc"
+ theMon->MType[0] = n; 
+# line 1196 "src/yygram.cpp"
       switch (yyselect()) {
       case 527: {
          get_lexval();
          cexpr3(&n2);
-#line 403 "lang/grammar.acc"
+#line 408 "lang/grammar.acc"
  theMon->MType[1] = n2; 
-# line 1198 "src/yygram.cpp"
+# line 1203 "src/yygram.cpp"
          switch (yyselect()) {
          case 526: {
             get_lexval();
             cexpr3(&n3);
-#line 404 "lang/grammar.acc"
+#line 409 "lang/grammar.acc"
  theMon->MType[2] = n3; 
-# line 1205 "src/yygram.cpp"
+# line 1210 "src/yygram.cpp"
             } break;
          default: ;
          }
@@ -1219,9 +1224,9 @@ int monster_def ()
       }
       yy8: ;
       get_lexval();
-#line 406 "lang/grammar.acc"
+#line 411 "lang/grammar.acc"
  theMon++; 
-# line 1225 "src/yygram.cpp"
+# line 1230 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -1253,9 +1258,9 @@ int mon_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 409 "lang/grammar.acc"
+#line 414 "lang/grammar.acc"
  theMon->Desc = lv; 
-# line 1259 "src/yygram.cpp"
+# line 1264 "src/yygram.cpp"
       } break;
    case 66: {
       get_lexval();
@@ -1267,9 +1272,9 @@ int mon_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 410 "lang/grammar.acc"
- theMon->Depth = n; 
-# line 1273 "src/yygram.cpp"
+#line 415 "lang/grammar.acc"
+ theMon->Depth = (int8)n; 
+# line 1278 "src/yygram.cpp"
       } break;
    case 67: {
       switch (yyselect()) {
@@ -1289,9 +1294,9 @@ int mon_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 411 "lang/grammar.acc"
- theMon->CR = n; 
-# line 1295 "src/yygram.cpp"
+#line 416 "lang/grammar.acc"
+ theMon->CR = (int8)n; 
+# line 1300 "src/yygram.cpp"
       } break;
    case 68: {
       switch (yyselect()) {
@@ -1313,11 +1318,11 @@ int mon_entry ()
       get_lexval();
       cexpr3(&n1);
       get_lexval();
-#line 413 "lang/grammar.acc"
+#line 418 "lang/grammar.acc"
  if (n2 != 1 || n1 > 8 || n1 < 2)
                                         yyerror("Fractional CR error!");
-                                      theMon->CR = (-n1) + 2; 
-# line 1321 "src/yygram.cpp"
+                                      theMon->CR = (int8)((-n1) + 2); 
+# line 1326 "src/yygram.cpp"
       } break;
    case 69: {
       get_lexval();
@@ -1328,17 +1333,17 @@ int mon_entry ()
       default: ;
       }
       cexpr(&n);
-#line 416 "lang/grammar.acc"
+#line 421 "lang/grammar.acc"
  theMon->Terrains |= n; 
-# line 1334 "src/yygram.cpp"
+# line 1339 "src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 538: {
             get_lexval();
             cexpr(&n);
-#line 417 "lang/grammar.acc"
+#line 422 "lang/grammar.acc"
  theMon->Terrains |= n; 
-# line 1342 "src/yygram.cpp"
+# line 1347 "src/yygram.cpp"
             } break;
          default: goto yy9;
          }
@@ -1356,9 +1361,9 @@ int mon_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 418 "lang/grammar.acc"
- theMon->HitDice = n; 
-# line 1362 "src/yygram.cpp"
+#line 423 "lang/grammar.acc"
+ theMon->HitDice = (int16)n; 
+# line 1367 "src/yygram.cpp"
       } break;
    case 71: {
       get_lexval();
@@ -1370,10 +1375,10 @@ int mon_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 419 "lang/grammar.acc"
- theMon->HitDice = n; 
+#line 424 "lang/grammar.acc"
+ theMon->HitDice = (int16)n; 
                                        theMon->SetFlag(M_FIXED_HP); 
-# line 1377 "src/yygram.cpp"
+# line 1382 "src/yygram.cpp"
       } break;
    case 72: {
       switch (yyselect()) {
@@ -1391,15 +1396,15 @@ int mon_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 421 "lang/grammar.acc"
- theMon->Hit = n; 
-# line 1397 "src/yygram.cpp"
+#line 426 "lang/grammar.acc"
+ theMon->Hit = (int8)n; 
+# line 1402 "src/yygram.cpp"
       } break;
    case 73: {
       glyph_entry(&img);
-#line 422 "lang/grammar.acc"
+#line 427 "lang/grammar.acc"
  theMon->Image = img; 
-# line 1403 "src/yygram.cpp"
+# line 1408 "src/yygram.cpp"
       } break;
    case 74: {
       get_lexval();
@@ -1407,9 +1412,9 @@ int mon_entry ()
       cexpr3(&st);
       get_lexval();
       get_lexval();
-#line 424 "lang/grammar.acc"
- if (!theMon->GainStati(st)) yyerror("too many Stati in monster"); 
-# line 1413 "src/yygram.cpp"
+#line 429 "lang/grammar.acc"
+ if (!theMon->GainStati((uint8)st)) yyerror("too many Stati in monster"); 
+# line 1418 "src/yygram.cpp"
       } break;
    case 75: {
       get_lexval();
@@ -1419,9 +1424,9 @@ int mon_entry ()
       cexpr3(&stV);
       get_lexval();
       get_lexval();
-#line 426 "lang/grammar.acc"
- if (!theMon->GainStati(st,stV)) yyerror("too many Stati in monster"); 
-# line 1425 "src/yygram.cpp"
+#line 431 "lang/grammar.acc"
+ if (!theMon->GainStati((uint8)st,(int16)stV)) yyerror("too many Stati in monster"); 
+# line 1430 "src/yygram.cpp"
       } break;
    case 76: {
       get_lexval();
@@ -1433,10 +1438,10 @@ int mon_entry ()
       cexpr3(&stM);
       get_lexval();
       get_lexval();
-#line 428 "lang/grammar.acc"
- if (!theMon->GainStati(st,stV,stM)) 
+#line 433 "lang/grammar.acc"
+ if (!theMon->GainStati((uint8)st,(int16)stV,(int16)stM)) 
         yyerror("too many Stati in monster"); 
-# line 1440 "src/yygram.cpp"
+# line 1445 "src/yygram.cpp"
       } break;
    case 77: {
       get_lexval();
@@ -1450,10 +1455,10 @@ int mon_entry ()
       res_ref(&rr);
       get_lexval();
       get_lexval();
-#line 431 "lang/grammar.acc"
- if (!theMon->GainStati(st,stV,stM,rr)) 
+#line 436 "lang/grammar.acc"
+ if (!theMon->GainStati((uint8)st,(int16)stV,(int16)stM,rr)) 
         yyerror("too many Stati in monster"); 
-# line 1457 "src/yygram.cpp"
+# line 1462 "src/yygram.cpp"
       } break;
    case 78: {
       get_lexval();
@@ -1467,9 +1472,9 @@ int mon_entry ()
          switch (yyselect()) {
          case 545: {
             cexpr3(&res);
-#line 434 "lang/grammar.acc"
+#line 439 "lang/grammar.acc"
  theMon->Res |= res; 
-# line 1473 "src/yygram.cpp"
+# line 1478 "src/yygram.cpp"
             switch (yyselect()) {
             case 544: {
                get_lexval();
@@ -1495,9 +1500,9 @@ int mon_entry ()
          switch (yyselect()) {
          case 548: {
             cexpr3(&imm);
-#line 435 "lang/grammar.acc"
+#line 440 "lang/grammar.acc"
  theMon->Imm |= imm; 
-# line 1501 "src/yygram.cpp"
+# line 1506 "src/yygram.cpp"
             switch (yyselect()) {
             case 547: {
                get_lexval();
@@ -1537,24 +1542,24 @@ int mon_entry ()
       get_lexval();
       l = yylval;
       get_lexval();
-#line 437 "lang/grammar.acc"
+#line 442 "lang/grammar.acc"
  for(TMonster*m=firstMon;m!=theMon;m++)
                                          if(stricmp(theModule->GetText(l),theModule->GetText(m->Name))==0)
                                            { memcpy(theMon,m,sizeof(TMonster));
                                              goto DoneCopy; }
                                        Fatal("Monster '%s' not found!",theModule->GetText(l));
                                        DoneCopy:; 
-# line 1548 "src/yygram.cpp"
+# line 1553 "src/yygram.cpp"
       } break;
    case 82: {
       get_lexval();
       cexpr3(&n);
       get_lexval();
-#line 443 "lang/grammar.acc"
+#line 448 "lang/grammar.acc"
  if (n > (theMon - firstMon) || n < 0)
                                          Fatal("Bad number in Monster:as!");
                                        memcpy(theMon,&(firstMon[n]),sizeof(TMonster)); 
-# line 1558 "src/yygram.cpp"
+# line 1563 "src/yygram.cpp"
       } break;
    case 83: {
       get_lexval();
@@ -1566,9 +1571,9 @@ int mon_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 446 "lang/grammar.acc"
- theMon->Def = n; 
-# line 1572 "src/yygram.cpp"
+#line 451 "lang/grammar.acc"
+ theMon->Def = (int8)n; 
+# line 1577 "src/yygram.cpp"
       } break;
    case 84: {
       get_lexval();
@@ -1580,9 +1585,9 @@ int mon_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 447 "lang/grammar.acc"
- theMon->Arm = n; 
-# line 1586 "src/yygram.cpp"
+#line 452 "lang/grammar.acc"
+ theMon->Arm = (int8)n; 
+# line 1591 "src/yygram.cpp"
       } break;
    case 85: {
       get_lexval();
@@ -1594,9 +1599,9 @@ int mon_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 448 "lang/grammar.acc"
- theMon->Mana = n; 
-# line 1600 "src/yygram.cpp"
+#line 453 "lang/grammar.acc"
+ theMon->Mana = (int16)n; 
+# line 1605 "src/yygram.cpp"
       } break;
    case 86: {
       get_lexval();
@@ -1611,12 +1616,12 @@ int mon_entry ()
          case 555: {
             cexpr3(&n);
             get_lexval();
-#line 449 "lang/grammar.acc"
- theMon->Feats[CurrFeat++] = n; 
+#line 454 "lang/grammar.acc"
+ theMon->Feats[CurrFeat++] = (uint16)n; 
     if (CurrFeat > 16) Fatal("Too many feats for '%s' (max 16)",
                                 theModule->QTextSeg + theMon->Name);
     
-# line 1620 "src/yygram.cpp"
+# line 1625 "src/yygram.cpp"
             } break;
          default: goto yy13;
          }
@@ -1624,12 +1629,12 @@ int mon_entry ()
       yy13: ;
       cexpr3(&n);
       get_lexval();
-#line 453 "lang/grammar.acc"
- theMon->Feats[CurrFeat++] = n; 
+#line 458 "lang/grammar.acc"
+ theMon->Feats[CurrFeat++] = (uint16)n; 
     if (CurrFeat > 16) Fatal("Too many feats for '%s' (max 16)",
                                 theModule->QTextSeg + theMon->Name);
     
-# line 1633 "src/yygram.cpp"
+# line 1638 "src/yygram.cpp"
       } break;
    case 87: {
       get_lexval();
@@ -1674,9 +1679,9 @@ int mon_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 459 "lang/grammar.acc"
- theMon->Size = n; 
-# line 1680 "src/yygram.cpp"
+#line 464 "lang/grammar.acc"
+ theMon->Size = (int8)n; 
+# line 1685 "src/yygram.cpp"
       } break;
    case 90: {
       get_lexval();
@@ -1694,9 +1699,9 @@ int mon_entry ()
       default: ;
       }
       get_lexval();
-#line 460 "lang/grammar.acc"
- theMon->Spd = (n-100)/5; 
-# line 1700 "src/yygram.cpp"
+#line 465 "lang/grammar.acc"
+ theMon->Spd = (int8)((n-100)/5); 
+# line 1705 "src/yygram.cpp"
       } break;
    case 91: {
       get_lexval();
@@ -1714,9 +1719,9 @@ int mon_entry ()
       default: ;
       }
       get_lexval();
-#line 461 "lang/grammar.acc"
- theMon->Mov = (n-100)/5; 
-# line 1720 "src/yygram.cpp"
+#line 466 "lang/grammar.acc"
+ theMon->Mov = (int8)((n-100)/5); 
+# line 1725 "src/yygram.cpp"
       } break;
    case 92: {
       get_lexval();
@@ -1730,10 +1735,10 @@ int mon_entry ()
          switch (yyselect()) {
          case 566: {
             res_ref(&rr);
-#line 462 "lang/grammar.acc"
+#line 467 "lang/grammar.acc"
  theMon->SetFlag(M_INNATE);
                                        theMon->AddResID(AN_INNATE, rr); 
-# line 1737 "src/yygram.cpp"
+# line 1742 "src/yygram.cpp"
             switch (yyselect()) {
             case 565: {
                get_lexval();
@@ -1759,9 +1764,9 @@ int mon_entry ()
          switch (yyselect()) {
          case 569: {
             res_ref(&rr);
-#line 465 "lang/grammar.acc"
+#line 470 "lang/grammar.acc"
  theMon->AddResID(AN_DISEASE, rr); 
-# line 1765 "src/yygram.cpp"
+# line 1770 "src/yygram.cpp"
             switch (yyselect()) {
             case 568: {
                get_lexval();
@@ -1787,9 +1792,9 @@ int mon_entry ()
          switch (yyselect()) {
          case 572: {
             res_ref(&rr);
-#line 467 "lang/grammar.acc"
+#line 472 "lang/grammar.acc"
  theMon->AddResID(AN_POISON, rr); 
-# line 1793 "src/yygram.cpp"
+# line 1798 "src/yygram.cpp"
             switch (yyselect()) {
             case 571: {
                get_lexval();
@@ -1826,33 +1831,33 @@ int color (YYSTYPE *col)
    case 99: {
       get_lexval();
       n = yylval;
-#line 476 "lang/grammar.acc"
+#line 481 "lang/grammar.acc"
  *col = n; 
-# line 1832 "src/yygram.cpp"
+# line 1837 "src/yygram.cpp"
       } break;
    case 100: {
       get_lexval();
       get_lexval();
       n = yylval;
-#line 477 "lang/grammar.acc"
+#line 482 "lang/grammar.acc"
  *col = n | 8; 
-# line 1840 "src/yygram.cpp"
+# line 1845 "src/yygram.cpp"
       } break;
    case 101: {
       get_lexval();
       get_lexval();
       n = yylval;
-#line 478 "lang/grammar.acc"
+#line 483 "lang/grammar.acc"
  *col = n | 8; 
-# line 1848 "src/yygram.cpp"
+# line 1853 "src/yygram.cpp"
       } break;
    case 102: {
       get_lexval();
       get_lexval();
       n = yylval;
-#line 479 "lang/grammar.acc"
+#line 484 "lang/grammar.acc"
  *col = n & ~8; 
-# line 1856 "src/yygram.cpp"
+# line 1861 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -1871,34 +1876,34 @@ int attack_entry ()
    YYSTYPE dt;
    switch(yyselect()) {
    case 103: {
-#line 483 "lang/grammar.acc"
+#line 488 "lang/grammar.acc"
  uint8 dt = AD_NORM; dam.Set(0,0,0);
                                  theMon->Attk[CurrAttk].u.a.Dmg.Set(0,0,0); 
-# line 1878 "src/yygram.cpp"
+# line 1883 "src/yygram.cpp"
       cexpr3(&at);
       get_lexval();
       switch (yyselect()) {
       case 573: {
          dice_only(&dam);
-#line 486 "lang/grammar.acc"
+#line 491 "lang/grammar.acc"
  theMon->Attk[CurrAttk].u.a.Dmg = yyDice(dam); 
-# line 1886 "src/yygram.cpp"
+# line 1891 "src/yygram.cpp"
          } break;
       case 574: {
          cexpr4(&chance);
          get_lexval();
-#line 487 "lang/grammar.acc"
- theMon->Attk[CurrAttk].u.a.Dmg.Bonus = chance; 
-# line 1893 "src/yygram.cpp"
+#line 492 "lang/grammar.acc"
+ theMon->Attk[CurrAttk].u.a.Dmg.Bonus = (int8)chance; 
+# line 1898 "src/yygram.cpp"
          } break;
       default: ;
       }
       switch (yyselect()) {
       case 575: {
          cexpr4(&n);
-#line 488 "lang/grammar.acc"
- dt = n; 
-# line 1902 "src/yygram.cpp"
+#line 493 "lang/grammar.acc"
+ dt = (uint8)n; 
+# line 1907 "src/yygram.cpp"
          } break;
       default: ;
       }
@@ -1924,15 +1929,15 @@ int attack_entry ()
          default: printf("???\n"); exit(1);
          }
          cexpr3(&dc);
-#line 491 "lang/grammar.acc"
- theMon->Attk[CurrAttk].u.a.DC = dc; 
-# line 1930 "src/yygram.cpp"
+#line 496 "lang/grammar.acc"
+ theMon->Attk[CurrAttk].u.a.DC = (int8)dc; 
+# line 1935 "src/yygram.cpp"
          get_lexval();
          } break;
       default: ;
       }
-#line 492 "lang/grammar.acc"
- theMon->Attk[CurrAttk].AType = at;
+#line 497 "lang/grammar.acc"
+ theMon->Attk[CurrAttk].AType = (int8)at;
                                  theMon->Attk[CurrAttk].DType = dt;
                                  /*
 
@@ -1947,29 +1952,29 @@ int attack_entry ()
                                  if (CurrAttk >= 32)
                                    yyerror("> 32 attacks on a single monster!");
                                
-# line 1951 "src/yygram.cpp"
+# line 1956 "src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 588: {
             get_lexval();
-#line 503 "lang/grammar.acc"
+#line 508 "lang/grammar.acc"
  dt = AD_NORM; dam2.Set(0,0,0); theMon->Attk[CurrAttk].u.a.Dmg.Set(0,0,0); 
-# line 1958 "src/yygram.cpp"
+# line 1963 "src/yygram.cpp"
             switch (yyselect()) {
             case 581: {
                dice_only(&dam2);
-#line 504 "lang/grammar.acc"
+#line 509 "lang/grammar.acc"
  theMon->Attk[CurrAttk].u.a.Dmg = yyDice(dam2); 
-# line 1964 "src/yygram.cpp"
+# line 1969 "src/yygram.cpp"
                } break;
             default: ;
             }
             switch (yyselect()) {
             case 582: {
                cexpr3(&n2);
-#line 505 "lang/grammar.acc"
- dt = n2; 
-# line 1973 "src/yygram.cpp"
+#line 510 "lang/grammar.acc"
+ dt = (uint8)n2; 
+# line 1978 "src/yygram.cpp"
                } break;
             default: ;
             }
@@ -1995,21 +2000,21 @@ int attack_entry ()
                default: printf("???\n"); exit(1);
                }
                cexpr3(&dc);
-#line 507 "lang/grammar.acc"
- theMon->Attk[CurrAttk].u.a.DC = dc; 
-# line 2001 "src/yygram.cpp"
+#line 512 "lang/grammar.acc"
+ theMon->Attk[CurrAttk].u.a.DC = (int8)dc; 
+# line 2006 "src/yygram.cpp"
                get_lexval();
                } break;
             default: ;
             }
-#line 508 "lang/grammar.acc"
+#line 513 "lang/grammar.acc"
  theMon->Attk[CurrAttk].AType = A_ALSO;
                                  theMon->Attk[CurrAttk].DType = dt;
                                  CurrAttk++;
                                  if (CurrAttk >= 12)
                                    Fatal("> 12 attacks on a single monster!");
                                
-# line 2013 "src/yygram.cpp"
+# line 2018 "src/yygram.cpp"
             } break;
          default: goto yy19;
          }
@@ -2020,26 +2025,26 @@ int attack_entry ()
       cexpr3(&at);
       get_lexval();
       res_ref(&rr);
-#line 515 "lang/grammar.acc"
- theMon->Attk[CurrAttk].AType = at;
+#line 520 "lang/grammar.acc"
+ theMon->Attk[CurrAttk].AType = (int8)at;
                                   theMon->Attk[CurrAttk].u.xID = rr; 
-# line 2027 "src/yygram.cpp"
+# line 2032 "src/yygram.cpp"
       switch (yyselect()) {
       case 589: {
          cexpr3(&dt);
-#line 517 "lang/grammar.acc"
- theMon->Attk[CurrAttk].DType = dt; 
-# line 2033 "src/yygram.cpp"
+#line 522 "lang/grammar.acc"
+ theMon->Attk[CurrAttk].DType = (int8)dt; 
+# line 2038 "src/yygram.cpp"
          } break;
       default: ;
       }
-#line 518 "lang/grammar.acc"
+#line 523 "lang/grammar.acc"
 
                                  CurrAttk++;
                                  if (CurrAttk >= 32)
                                    yyerror("> 32 attacks on a single monster!");
                                
-# line 2043 "src/yygram.cpp"
+# line 2048 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -2057,9 +2062,9 @@ int mflag_entry ()
          } break;
       default: ;
       }
-#line 526 "lang/grammar.acc"
- theMon->SetFlag(mf); 
-# line 2063 "src/yygram.cpp"
+#line 531 "lang/grammar.acc"
+ theMon->SetFlag((uint16)mf); 
+# line 2068 "src/yygram.cpp"
       } break;
    case 106: {
       get_lexval();
@@ -2070,9 +2075,9 @@ int mflag_entry ()
          } break;
       default: ;
       }
-#line 527 "lang/grammar.acc"
- theMon->UnsetFlag(mf); 
-# line 2076 "src/yygram.cpp"
+#line 532 "lang/grammar.acc"
+ theMon->UnsetFlag((uint16)mf); 
+# line 2081 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -2093,9 +2098,9 @@ int attrib_entry ()
       default: ;
       }
       cexpr3(&v);
-#line 531 "lang/grammar.acc"
- theMon->Attr[at] = v; 
-# line 2099 "src/yygram.cpp"
+#line 536 "lang/grammar.acc"
+ theMon->Attr[at] = (int8)v; 
+# line 2104 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -2108,22 +2113,22 @@ int item_def ()
    switch(yyselect()) {
    case 108: {
       get_lexval();
-#line 535 "lang/grammar.acc"
+#line 540 "lang/grammar.acc"
  theRes = theItem; 
                                theItem->u.w.Crit = 2; 
                                theItem->u.w.Threat = 1; 
                                theItem->hp = 15; 
-# line 2117 "src/yygram.cpp"
-      get_lexval();
-      name = yylval;
-#line 539 "lang/grammar.acc"
- theItem->Name = name; 
 # line 2122 "src/yygram.cpp"
       get_lexval();
-      cexpr3(&n);
-#line 540 "lang/grammar.acc"
- theItem->IType = n; 
+      name = yylval;
+#line 544 "lang/grammar.acc"
+ theItem->Name = name; 
 # line 2127 "src/yygram.cpp"
+      get_lexval();
+      cexpr3(&n);
+#line 545 "lang/grammar.acc"
+ theItem->IType = (int16)n; 
+# line 2132 "src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -2135,9 +2140,9 @@ int item_def ()
       }
       yy20: ;
       get_lexval();
-#line 541 "lang/grammar.acc"
+#line 546 "lang/grammar.acc"
  theItem++; 
-# line 2141 "src/yygram.cpp"
+# line 2146 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -2164,9 +2169,9 @@ int item_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 545 "lang/grammar.acc"
+#line 550 "lang/grammar.acc"
  theItem->Desc = lv; 
-# line 2170 "src/yygram.cpp"
+# line 2175 "src/yygram.cpp"
       } break;
    case 110: {
       get_lexval();
@@ -2178,15 +2183,15 @@ int item_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 546 "lang/grammar.acc"
- theItem->Level = n; 
-# line 2184 "src/yygram.cpp"
+#line 551 "lang/grammar.acc"
+ theItem->Level = (int8)n; 
+# line 2189 "src/yygram.cpp"
       } break;
    case 111: {
       glyph_entry(&img);
-#line 547 "lang/grammar.acc"
+#line 552 "lang/grammar.acc"
  theItem->Image = img; 
-# line 2190 "src/yygram.cpp"
+# line 2195 "src/yygram.cpp"
       } break;
    case 112: {
       get_lexval();
@@ -2198,9 +2203,9 @@ int item_entry ()
       }
       dice_val(&dv);
       get_lexval();
-#line 548 "lang/grammar.acc"
+#line 553 "lang/grammar.acc"
  theItem->u.w.SDmg = yyDice(dv); 
-# line 2204 "src/yygram.cpp"
+# line 2209 "src/yygram.cpp"
       } break;
    case 113: {
       get_lexval();
@@ -2212,9 +2217,9 @@ int item_entry ()
       }
       dice_val(&dv);
       get_lexval();
-#line 549 "lang/grammar.acc"
+#line 554 "lang/grammar.acc"
  theItem->u.w.LDmg = yyDice(dv); 
-# line 2218 "src/yygram.cpp"
+# line 2223 "src/yygram.cpp"
       } break;
    case 114: {
       get_lexval();
@@ -2226,9 +2231,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 550 "lang/grammar.acc"
- theItem->u.w.Crit = n; 
-# line 2232 "src/yygram.cpp"
+#line 555 "lang/grammar.acc"
+ theItem->u.w.Crit = (int8)n; 
+# line 2237 "src/yygram.cpp"
       } break;
    case 115: {
       get_lexval();
@@ -2240,9 +2245,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 551 "lang/grammar.acc"
- theItem->u.w.Threat = n; 
-# line 2246 "src/yygram.cpp"
+#line 556 "lang/grammar.acc"
+ theItem->u.w.Threat = (int8)n; 
+# line 2251 "src/yygram.cpp"
       } break;
    case 116: {
       get_lexval();
@@ -2254,9 +2259,9 @@ int item_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 552 "lang/grammar.acc"
- theItem->u.w.Acc = n; 
-# line 2260 "src/yygram.cpp"
+#line 557 "lang/grammar.acc"
+ theItem->u.w.Acc = (int8)n; 
+# line 2265 "src/yygram.cpp"
       } break;
    case 117: {
       get_lexval();
@@ -2268,9 +2273,9 @@ int item_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 553 "lang/grammar.acc"
- theItem->u.w.Spd = n; 
-# line 2274 "src/yygram.cpp"
+#line 558 "lang/grammar.acc"
+ theItem->u.w.Spd = (int8)n; 
+# line 2279 "src/yygram.cpp"
       } break;
    case 118: {
       get_lexval();
@@ -2283,9 +2288,9 @@ int item_entry ()
       cexpr4(&n);
       get_lexval();
       get_lexval();
-#line 554 "lang/grammar.acc"
- theItem->u.w.Spd = n > 0 ? ((n-100)/5) : n/5; 
-# line 2289 "src/yygram.cpp"
+#line 559 "lang/grammar.acc"
+ theItem->u.w.Spd = (int8)(n > 0 ? ((n-100)/5) : n/5); 
+# line 2294 "src/yygram.cpp"
       } break;
    case 119: {
       get_lexval();
@@ -2299,9 +2304,9 @@ int item_entry ()
       cexpr4(&n);
       get_lexval();
       get_lexval();
-#line 555 "lang/grammar.acc"
- theItem->u.w.Spd = n/5; 
-# line 2305 "src/yygram.cpp"
+#line 560 "lang/grammar.acc"
+ theItem->u.w.Spd = (int8)(n/5); 
+# line 2310 "src/yygram.cpp"
       } break;
    case 120: {
       get_lexval();
@@ -2313,9 +2318,9 @@ int item_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 556 "lang/grammar.acc"
- theItem->u.w.ParryMod = n; 
-# line 2319 "src/yygram.cpp"
+#line 561 "lang/grammar.acc"
+ theItem->u.w.ParryMod = (int8)n; 
+# line 2324 "src/yygram.cpp"
       } break;
    case 121: {
       get_lexval();
@@ -2327,9 +2332,9 @@ int item_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 557 "lang/grammar.acc"
- theItem->u.w.RangeInc = n; 
-# line 2333 "src/yygram.cpp"
+#line 562 "lang/grammar.acc"
+ theItem->u.w.RangeInc = (int8)n; 
+# line 2338 "src/yygram.cpp"
       } break;
    case 122: {
       get_lexval();
@@ -2341,9 +2346,9 @@ int item_entry ()
       }
       cexpr3(&m);
       get_lexval();
-#line 558 "lang/grammar.acc"
- theItem->Material = m; 
-# line 2347 "src/yygram.cpp"
+#line 563 "lang/grammar.acc"
+ theItem->Material = (int8)m; 
+# line 2352 "src/yygram.cpp"
       } break;
    case 123: {
       get_lexval();
@@ -2354,13 +2359,13 @@ int item_entry ()
       default: ;
       }
       cexpr3(&n);
-#line 559 "lang/grammar.acc"
+#line 564 "lang/grammar.acc"
  theItem->Cost = n * 100; 
-# line 2360 "src/yygram.cpp"
+# line 2365 "src/yygram.cpp"
       switch (yyselect()) {
       case 608: {
          cexpr3(&unit);
-#line 560 "lang/grammar.acc"
+#line 565 "lang/grammar.acc"
  switch (unit)
                                          { case PLATINUM: theItem->Cost *= 5; break;
                                            case GOLD:     break;
@@ -2370,7 +2375,7 @@ int item_entry ()
                                            
                                          }
                                      
-# line 2374 "src/yygram.cpp"
+# line 2379 "src/yygram.cpp"
          } break;
       default: ;
       }
@@ -2386,8 +2391,8 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 570 "lang/grammar.acc"
- theItem->Weight = n; 
+#line 575 "lang/grammar.acc"
+ theItem->Weight = (int16)n; 
     /* ww: according to the SRD, one inch (thickness) of iron has 30
 
      * hit point. We assume that the canonical long sword (at 4 lbs = 40
@@ -2395,9 +2400,9 @@ int item_entry ()
      * weight) is 1/2 inch thick. So a base weight of 80 gets you 30 hit
 
      * points. */
-                               theItem->hp = (n * 30) / 80; 
+                               theItem->hp = (uint16)((n * 30) / 80); 
                                if (theItem->hp < 1) theItem->hp = 1; 
-# line 2401 "src/yygram.cpp"
+# line 2406 "src/yygram.cpp"
       } break;
    case 125: {
       get_lexval();
@@ -2409,9 +2414,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 577 "lang/grammar.acc"
- theItem->Size = n; 
-# line 2415 "src/yygram.cpp"
+#line 582 "lang/grammar.acc"
+ theItem->Size = (int8)n; 
+# line 2420 "src/yygram.cpp"
       } break;
    case 126: {
       get_lexval();
@@ -2423,9 +2428,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 578 "lang/grammar.acc"
- theItem->Nutrition = n; 
-# line 2429 "src/yygram.cpp"
+#line 583 "lang/grammar.acc"
+ theItem->Nutrition = (int8)n; 
+# line 2434 "src/yygram.cpp"
       } break;
    case 127: {
       get_lexval();
@@ -2437,9 +2442,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 579 "lang/grammar.acc"
- theItem->u.a.Def = n; 
-# line 2443 "src/yygram.cpp"
+#line 584 "lang/grammar.acc"
+ theItem->u.a.Def = (int8)n; 
+# line 2448 "src/yygram.cpp"
       } break;
    case 128: {
       get_lexval();
@@ -2451,9 +2456,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 580 "lang/grammar.acc"
- theItem->u.a.Cov = n; 
-# line 2457 "src/yygram.cpp"
+#line 585 "lang/grammar.acc"
+ theItem->u.a.Cov = (int8)n; 
+# line 2462 "src/yygram.cpp"
       } break;
    case 129: {
       get_lexval();
@@ -2465,9 +2470,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 581 "lang/grammar.acc"
- theItem->u.a.Penalty = n; 
-# line 2471 "src/yygram.cpp"
+#line 586 "lang/grammar.acc"
+ theItem->u.a.Penalty = (int8)n; 
+# line 2476 "src/yygram.cpp"
       } break;
    case 130: {
       get_lexval();
@@ -2498,9 +2503,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 583 "lang/grammar.acc"
- theItem->hp = n; 
-# line 2504 "src/yygram.cpp"
+#line 588 "lang/grammar.acc"
+ theItem->hp = (uint16)n; 
+# line 2509 "src/yygram.cpp"
       } break;
    case 132: {
       get_lexval();
@@ -2514,9 +2519,9 @@ int item_entry ()
          switch (yyselect()) {
          case 620: {
             res_ref(&rr);
-#line 584 "lang/grammar.acc"
+#line 589 "lang/grammar.acc"
  theItem->AddResID(AN_SPELLS, rr); 
-# line 2520 "src/yygram.cpp"
+# line 2525 "src/yygram.cpp"
             switch (yyselect()) {
             case 619: {
                get_lexval();
@@ -2542,9 +2547,9 @@ int item_entry ()
          switch (yyselect()) {
          case 623: {
             res_ref(&rr);
-#line 586 "lang/grammar.acc"
+#line 591 "lang/grammar.acc"
  theItem->AddResID(AN_FIRES, rr); 
-# line 2548 "src/yygram.cpp"
+# line 2553 "src/yygram.cpp"
             switch (yyselect()) {
             case 622: {
                get_lexval();
@@ -2598,9 +2603,9 @@ int item_entry ()
                } break;
             default: ;
             }
-#line 589 "lang/grammar.acc"
+#line 594 "lang/grammar.acc"
  theItem->Group |= n; 
-# line 2604 "src/yygram.cpp"
+# line 2609 "src/yygram.cpp"
             } break;
          default: goto yy25;
          }
@@ -2618,9 +2623,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 590 "lang/grammar.acc"
- theItem->u.c.Capacity = n; 
-# line 2624 "src/yygram.cpp"
+#line 595 "lang/grammar.acc"
+ theItem->u.c.Capacity = (int8)n; 
+# line 2629 "src/yygram.cpp"
       } break;
    case 137: {
       get_lexval();
@@ -2632,9 +2637,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 591 "lang/grammar.acc"
- theItem->u.c.WeightLim = n; 
-# line 2638 "src/yygram.cpp"
+#line 596 "lang/grammar.acc"
+ theItem->u.c.WeightLim = (int16)n; 
+# line 2643 "src/yygram.cpp"
       } break;
    case 138: {
       get_lexval();
@@ -2646,9 +2651,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 592 "lang/grammar.acc"
- theItem->u.c.WeightMod = n; 
-# line 2652 "src/yygram.cpp"
+#line 597 "lang/grammar.acc"
+ theItem->u.c.WeightMod = (int8)n; 
+# line 2657 "src/yygram.cpp"
       } break;
    case 139: {
       get_lexval();
@@ -2660,9 +2665,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 593 "lang/grammar.acc"
- theItem->u.c.MaxSize = n; 
-# line 2666 "src/yygram.cpp"
+#line 598 "lang/grammar.acc"
+ theItem->u.c.MaxSize = (int8)n; 
+# line 2671 "src/yygram.cpp"
       } break;
    case 140: {
       get_lexval();
@@ -2674,9 +2679,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 594 "lang/grammar.acc"
- theItem->u.c.Timeout = n; 
-# line 2680 "src/yygram.cpp"
+#line 599 "lang/grammar.acc"
+ theItem->u.c.Timeout = (int8)n; 
+# line 2685 "src/yygram.cpp"
       } break;
    case 141: {
       get_lexval();
@@ -2688,9 +2693,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 595 "lang/grammar.acc"
- theItem->u.c.CType = n; 
-# line 2694 "src/yygram.cpp"
+#line 600 "lang/grammar.acc"
+ theItem->u.c.CType = (int8)n; 
+# line 2699 "src/yygram.cpp"
       } break;
    case 142: {
       get_lexval();
@@ -2703,9 +2708,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 596 "lang/grammar.acc"
- theItem->u.l.LightRange = n; 
-# line 2709 "src/yygram.cpp"
+#line 601 "lang/grammar.acc"
+ theItem->u.l.LightRange = (int8)n; 
+# line 2714 "src/yygram.cpp"
       } break;
    case 143: {
       get_lexval();
@@ -2717,9 +2722,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 597 "lang/grammar.acc"
- theItem->u.l.Lifespan = n; 
-# line 2723 "src/yygram.cpp"
+#line 602 "lang/grammar.acc"
+ theItem->u.l.Lifespan = (int16)n; 
+# line 2728 "src/yygram.cpp"
       } break;
    case 144: {
       get_lexval();
@@ -2731,9 +2736,9 @@ int item_entry ()
       }
       res_ref(&rr);
       get_lexval();
-#line 598 "lang/grammar.acc"
+#line 603 "lang/grammar.acc"
  theItem->u.l.Fuel = rr; 
-# line 2737 "src/yygram.cpp"
+# line 2742 "src/yygram.cpp"
       } break;
    case 145: {
       dconst_entry();
@@ -2761,12 +2766,12 @@ int arm_entry ()
          } break;
       default: ;
       }
-#line 605 "lang/grammar.acc"
- if (theItem->u.a.Arm[0] == 0) theItem->u.a.Arm[0] = n;
-                            if (theItem->u.a.Arm[1] == 0) theItem->u.a.Arm[1] = n;
-                            if (theItem->u.a.Arm[2] == 0) theItem->u.a.Arm[2] = n;
+#line 610 "lang/grammar.acc"
+ if (theItem->u.a.Arm[0] == 0) theItem->u.a.Arm[0] = (int8)n;
+                            if (theItem->u.a.Arm[1] == 0) theItem->u.a.Arm[1] = (int8)n;
+                            if (theItem->u.a.Arm[2] == 0) theItem->u.a.Arm[2] = (int8)n;
                          
-# line 2770 "src/yygram.cpp"
+# line 2775 "src/yygram.cpp"
       } break;
    case 149: {
       get_lexval();
@@ -2778,9 +2783,9 @@ int arm_entry ()
          } break;
       default: ;
       }
-#line 609 "lang/grammar.acc"
- theItem->u.a.Arm[wt] = n; 
-# line 2784 "src/yygram.cpp"
+#line 614 "lang/grammar.acc"
+ theItem->u.a.Arm[wt] = (int8)n; 
+# line 2789 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -2798,9 +2803,9 @@ int iflag_entry ()
          } break;
       default: ;
       }
-#line 613 "lang/grammar.acc"
- theItem->SetFlag(itf); 
-# line 2804 "src/yygram.cpp"
+#line 618 "lang/grammar.acc"
+ theItem->SetFlag((uint16)itf); 
+# line 2809 "src/yygram.cpp"
       } break;
    case 151: {
       get_lexval();
@@ -2811,9 +2816,9 @@ int iflag_entry ()
          } break;
       default: ;
       }
-#line 614 "lang/grammar.acc"
- theItem->UnsetFlag(itf); 
-# line 2817 "src/yygram.cpp"
+#line 619 "lang/grammar.acc"
+ theItem->UnsetFlag((uint16)itf); 
+# line 2822 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -2828,14 +2833,14 @@ int feature_def ()
       get_lexval();
       get_lexval();
       name = yylval;
-#line 620 "lang/grammar.acc"
+#line 625 "lang/grammar.acc"
  theRes = theFeat; theFeat->Name = name; theRes = theFeat; 
-# line 2834 "src/yygram.cpp"
+# line 2839 "src/yygram.cpp"
       get_lexval();
       cexpr3(&n);
-#line 621 "lang/grammar.acc"
- theFeat->FType = n; 
-# line 2839 "src/yygram.cpp"
+#line 626 "lang/grammar.acc"
+ theFeat->FType = (uint8)n; 
+# line 2844 "src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -2847,9 +2852,9 @@ int feature_def ()
       }
       yy26: ;
       get_lexval();
-#line 622 "lang/grammar.acc"
+#line 627 "lang/grammar.acc"
  theFeat++; 
-# line 2853 "src/yygram.cpp"
+# line 2858 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -2876,9 +2881,9 @@ int feat_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 626 "lang/grammar.acc"
+#line 631 "lang/grammar.acc"
  theFeat->Desc = lv; 
-# line 2882 "src/yygram.cpp"
+# line 2887 "src/yygram.cpp"
       } break;
    case 154: {
       get_lexval();
@@ -2890,15 +2895,15 @@ int feat_entry ()
       }
       cexpr3(&m);
       get_lexval();
-#line 627 "lang/grammar.acc"
- theFeat->Material = m; 
-# line 2896 "src/yygram.cpp"
+#line 632 "lang/grammar.acc"
+ theFeat->Material = (int8)m; 
+# line 2901 "src/yygram.cpp"
       } break;
    case 155: {
       glyph_entry(&img);
-#line 628 "lang/grammar.acc"
+#line 633 "lang/grammar.acc"
  theFeat->Image = img; 
-# line 2902 "src/yygram.cpp"
+# line 2907 "src/yygram.cpp"
       } break;
    case 156: {
       get_lexval();
@@ -2911,9 +2916,9 @@ int feat_entry ()
       cexpr3(&mov);
       get_lexval();
       get_lexval();
-#line 629 "lang/grammar.acc"
- theFeat->MoveMod = (mov-100)/5; 
-# line 2917 "src/yygram.cpp"
+#line 634 "lang/grammar.acc"
+ theFeat->MoveMod = (int8)((mov-100)/5); 
+# line 2922 "src/yygram.cpp"
       } break;
    case 157: {
       get_lexval();
@@ -2925,9 +2930,9 @@ int feat_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 630 "lang/grammar.acc"
- theFeat->hp = n; 
-# line 2931 "src/yygram.cpp"
+#line 635 "lang/grammar.acc"
+ theFeat->hp = (uint16)n; 
+# line 2936 "src/yygram.cpp"
       } break;
    case 158: {
       get_lexval();
@@ -2950,9 +2955,9 @@ int feat_entry ()
                } break;
             default: ;
             }
-#line 631 "lang/grammar.acc"
+#line 636 "lang/grammar.acc"
  theFeat->Flags |= n; 
-# line 2956 "src/yygram.cpp"
+# line 2961 "src/yygram.cpp"
             } break;
          default: goto yy27;
          }
@@ -2978,9 +2983,9 @@ int feat_entry ()
       }
       res_ref(&rr);
       get_lexval();
-#line 632 "lang/grammar.acc"
+#line 637 "lang/grammar.acc"
  theFeat->xID = rr; 
-# line 2984 "src/yygram.cpp"
+# line 2989 "src/yygram.cpp"
       } break;
    case 160: {
       get_lexval();
@@ -2992,9 +2997,9 @@ int feat_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 633 "lang/grammar.acc"
- theFeat->xval = n; 
-# line 2998 "src/yygram.cpp"
+#line 638 "lang/grammar.acc"
+ theFeat->xval = (int16)n; 
+# line 3003 "src/yygram.cpp"
       } break;
    case 161: {
       get_lexval();
@@ -3006,9 +3011,9 @@ int feat_entry ()
       }
       dice_val(&d);
       get_lexval();
-#line 634 "lang/grammar.acc"
+#line 639 "lang/grammar.acc"
  theFeat->Factor = d; 
-# line 3012 "src/yygram.cpp"
+# line 3017 "src/yygram.cpp"
       } break;
    case 162: {
       event_desc();
@@ -3029,23 +3034,23 @@ int effect_def ()
    YYSTYPE name;
    switch(yyselect()) {
    case 165: {
-#line 640 "lang/grammar.acc"
+#line 645 "lang/grammar.acc"
  theRes = theEff; theEff->ef.sval = NOSAVE; 
-# line 3035 "src/yygram.cpp"
+# line 3040 "src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 658: {
             cexpr3(&n);
-#line 641 "lang/grammar.acc"
+#line 646 "lang/grammar.acc"
  if (theEff->Sources[2])
-                                        theEff->Sources[3] = n;
+                                        theEff->Sources[3] = (int8)n;
                                       else if (theEff->Sources[1])
-                                        theEff->Sources[2] = n;
+                                        theEff->Sources[2] = (int8)n;
                                       else if (theEff->Sources[0])
-                                        theEff->Sources[1] = n; 
+                                        theEff->Sources[1] = (int8)n; 
                                       else
-                                        theEff->Sources[0] = n; 
-# line 3049 "src/yygram.cpp"
+                                        theEff->Sources[0] = (int8)n; 
+# line 3054 "src/yygram.cpp"
             switch (yyselect()) {
             case 657: {
                get_lexval();
@@ -3066,29 +3071,29 @@ int effect_def ()
          } break;
       case 661: {
          get_lexval();
-#line 651 "lang/grammar.acc"
+#line 656 "lang/grammar.acc"
  theEff->ef.aval = AR_POISON; 
-# line 3072 "src/yygram.cpp"
+# line 3077 "src/yygram.cpp"
          } break;
       case 662: {
          get_lexval();
-#line 652 "lang/grammar.acc"
+#line 657 "lang/grammar.acc"
  theEff->ef.aval = AR_DISEASE; 
-# line 3078 "src/yygram.cpp"
+# line 3083 "src/yygram.cpp"
          } break;
       default: printf("???\n"); exit(1);
       }
       get_lexval();
       name = yylval;
-#line 653 "lang/grammar.acc"
+#line 658 "lang/grammar.acc"
  theEff->Name = name; 
-# line 3086 "src/yygram.cpp"
+# line 3091 "src/yygram.cpp"
       get_lexval();
       cexpr3(&n);
-#line 654 "lang/grammar.acc"
+#line 659 "lang/grammar.acc"
  theValsIdx = 0; 
-                                      theEff->ef.eval = n; 
-# line 3092 "src/yygram.cpp"
+                                      theEff->ef.eval = (int8)n; 
+# line 3097 "src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -3105,7 +3110,7 @@ int effect_def ()
          case 665: {
             get_lexval();
             cexpr3(&n);
-#line 657 "lang/grammar.acc"
+#line 662 "lang/grammar.acc"
   Annotation *a; EffectValues tmp; int32 t;
                                ESTABLISH_VALS
 							                 memcpy(&tmp,theVals,sizeof(EffectValues));
@@ -3124,9 +3129,9 @@ int effect_def ()
                                  }
                                a->Next = 0;
                                memcpy(&(a->u.ef),&tmp,sizeof(EffectValues));
-                               a->u.ef.eval = n;
+                               a->u.ef.eval = (int8)n;
                              
-# line 3130 "src/yygram.cpp"
+# line 3135 "src/yygram.cpp"
             get_lexval();
             while (1) {
                switch (yyselect()) {
@@ -3143,9 +3148,9 @@ int effect_def ()
          }
       }
       yy30: ;
-#line 679 "lang/grammar.acc"
+#line 684 "lang/grammar.acc"
  theEff++; 
-# line 3149 "src/yygram.cpp"
+# line 3154 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -3172,16 +3177,16 @@ int eff_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 683 "lang/grammar.acc"
+#line 688 "lang/grammar.acc"
  theEff->Desc = lv; 
-# line 3178 "src/yygram.cpp"
+# line 3183 "src/yygram.cpp"
       } break;
    case 167: {
       cexpr(&sc);
       get_lexval();
-#line 684 "lang/grammar.acc"
+#line 689 "lang/grammar.acc"
  theEff->Schools |= sc; 
-# line 3185 "src/yygram.cpp"
+# line 3190 "src/yygram.cpp"
       } break;
    case 168: {
       get_lexval();
@@ -3193,9 +3198,9 @@ int eff_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 685 "lang/grammar.acc"
- theEff->Level = n; 
-# line 3199 "src/yygram.cpp"
+#line 690 "lang/grammar.acc"
+ theEff->Level = (int8)n; 
+# line 3204 "src/yygram.cpp"
       } break;
    case 169: {
       get_lexval();
@@ -3207,9 +3212,9 @@ int eff_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 686 "lang/grammar.acc"
- theEff->ManaCost = n; 
-# line 3213 "src/yygram.cpp"
+#line 691 "lang/grammar.acc"
+ theEff->ManaCost = (uint8)n; 
+# line 3218 "src/yygram.cpp"
       } break;
    case 170: {
       get_lexval();
@@ -3233,9 +3238,9 @@ int eff_entry ()
       default: ;
       }
       get_lexval();
-#line 687 "lang/grammar.acc"
- theEff->BaseChance = n; 
-# line 3239 "src/yygram.cpp"
+#line 692 "lang/grammar.acc"
+ theEff->BaseChance = (uint8)n; 
+# line 3244 "src/yygram.cpp"
       } break;
    case 171: {
       get_lexval();
@@ -3246,17 +3251,17 @@ int eff_entry ()
       default: ;
       }
       cexpr(&n);
-#line 688 "lang/grammar.acc"
+#line 693 "lang/grammar.acc"
  theEff->Purpose = n; 
-# line 3252 "src/yygram.cpp"
+# line 3257 "src/yygram.cpp"
       switch (yyselect()) {
       case 673: {
          get_lexval();
          cexpr(&n2);
          get_lexval();
-#line 689 "lang/grammar.acc"
+#line 694 "lang/grammar.acc"
  theEff->Purpose |= n2<<16; 
-# line 3260 "src/yygram.cpp"
+# line 3265 "src/yygram.cpp"
          } break;
       default: ;
       }
@@ -3274,16 +3279,16 @@ int eff_entry ()
       switch (yyselect()) {
       case 675: {
          get_lexval();
-#line 690 "lang/grammar.acc"
+#line 695 "lang/grammar.acc"
  theEff->SetFlag(EF_PARTIAL); 
-# line 3280 "src/yygram.cpp"
+# line 3285 "src/yygram.cpp"
          } break;
       default: ;
       }
       get_lexval();
-#line 691 "lang/grammar.acc"
- ESTABLISH_VALS; theVals->sval = sv; 
-# line 3287 "src/yygram.cpp"
+#line 696 "lang/grammar.acc"
+ ESTABLISH_VALS; theVals->sval = (int8)sv; 
+# line 3292 "src/yygram.cpp"
       } break;
    case 173: {
       get_lexval();
@@ -3295,9 +3300,9 @@ int eff_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 692 "lang/grammar.acc"
- ESTABLISH_VALS; theVals->qval = n; 
-# line 3301 "src/yygram.cpp"
+#line 697 "lang/grammar.acc"
+ ESTABLISH_VALS; theVals->qval = (int8)n; 
+# line 3306 "src/yygram.cpp"
       } break;
    case 174: {
       get_lexval();
@@ -3309,9 +3314,9 @@ int eff_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 693 "lang/grammar.acc"
- ESTABLISH_VALS; theVals->xval = n; 
-# line 3315 "src/yygram.cpp"
+#line 698 "lang/grammar.acc"
+ ESTABLISH_VALS; theVals->xval = (uint8)n; 
+# line 3320 "src/yygram.cpp"
       } break;
    case 175: {
       get_lexval();
@@ -3323,9 +3328,9 @@ int eff_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 694 "lang/grammar.acc"
- ESTABLISH_VALS; theVals->yval = n; 
-# line 3329 "src/yygram.cpp"
+#line 699 "lang/grammar.acc"
+ ESTABLISH_VALS; theVals->yval = (int16)n; 
+# line 3334 "src/yygram.cpp"
       } break;
    case 176: {
       get_lexval();
@@ -3337,9 +3342,9 @@ int eff_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 695 "lang/grammar.acc"
- ESTABLISH_VALS; theVals->dval = n; 
-# line 3343 "src/yygram.cpp"
+#line 700 "lang/grammar.acc"
+ ESTABLISH_VALS; theVals->dval = (int8)n; 
+# line 3348 "src/yygram.cpp"
       } break;
    case 177: {
       get_lexval();
@@ -3351,9 +3356,9 @@ int eff_entry ()
       }
       dice_val(&d);
       get_lexval();
-#line 696 "lang/grammar.acc"
+#line 701 "lang/grammar.acc"
  ESTABLISH_VALS; theVals->pval = d; 
-# line 3357 "src/yygram.cpp"
+# line 3362 "src/yygram.cpp"
       } break;
    case 178: {
       get_lexval();
@@ -3365,9 +3370,9 @@ int eff_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 697 "lang/grammar.acc"
- ESTABLISH_VALS; theVals->aval = n; 
-# line 3371 "src/yygram.cpp"
+#line 702 "lang/grammar.acc"
+ ESTABLISH_VALS; theVals->aval = (int8)n; 
+# line 3376 "src/yygram.cpp"
       } break;
    case 179: {
       get_lexval();
@@ -3379,9 +3384,9 @@ int eff_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 698 "lang/grammar.acc"
- ESTABLISH_VALS; theVals->lval = n; 
-# line 3385 "src/yygram.cpp"
+#line 703 "lang/grammar.acc"
+ ESTABLISH_VALS; theVals->lval = (int8)n; 
+# line 3390 "src/yygram.cpp"
       } break;
    case 180: {
       get_lexval();
@@ -3393,9 +3398,9 @@ int eff_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 699 "lang/grammar.acc"
- ESTABLISH_VALS; theVals->tval = n; 
-# line 3399 "src/yygram.cpp"
+#line 704 "lang/grammar.acc"
+ ESTABLISH_VALS; theVals->tval = (int8)n; 
+# line 3404 "src/yygram.cpp"
       } break;
    case 181: {
       get_lexval();
@@ -3407,9 +3412,9 @@ int eff_entry ()
       }
       res_ref(&rr);
       get_lexval();
-#line 700 "lang/grammar.acc"
+#line 705 "lang/grammar.acc"
  ESTABLISH_VALS; theVals->rval = rr; 
-# line 3413 "src/yygram.cpp"
+# line 3418 "src/yygram.cpp"
       } break;
    case 182: {
       get_lexval();
@@ -3421,9 +3426,9 @@ int eff_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 701 "lang/grammar.acc"
+#line 706 "lang/grammar.acc"
  ESTABLISH_VALS; theVals->rval = n; 
-# line 3427 "src/yygram.cpp"
+# line 3432 "src/yygram.cpp"
       } break;
    case 183: {
       get_lexval();
@@ -3435,9 +3440,9 @@ int eff_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 702 "lang/grammar.acc"
- ESTABLISH_VALS; theVals->cval = n; 
-# line 3441 "src/yygram.cpp"
+#line 707 "lang/grammar.acc"
+ ESTABLISH_VALS; theVals->cval = (int8)n; 
+# line 3446 "src/yygram.cpp"
       } break;
    case 184: {
       get_lexval();
@@ -3450,9 +3455,9 @@ int eff_entry ()
       get_lexval();
       n = yylval;
       get_lexval();
-#line 703 "lang/grammar.acc"
- ESTABLISH_VALS; theVals->cval = n; 
-# line 3456 "src/yygram.cpp"
+#line 708 "lang/grammar.acc"
+ ESTABLISH_VALS; theVals->cval = (int8)n; 
+# line 3461 "src/yygram.cpp"
       } break;
    case 185: {
       get_lexval();
@@ -3466,9 +3471,9 @@ int eff_entry ()
          switch (yyselect()) {
          case 691: {
             cexpr3(&n);
-#line 704 "lang/grammar.acc"
- theEff->SetFlag(n); 
-# line 3472 "src/yygram.cpp"
+#line 709 "lang/grammar.acc"
+ theEff->SetFlag((uint16)n); 
+# line 3477 "src/yygram.cpp"
             switch (yyselect()) {
             case 689: {
                get_lexval();
@@ -3503,16 +3508,16 @@ int numlist (YYSTYPE *val)
    YYSTYPE n;
    switch(yyselect()) {
    case 189: {
-#line 711 "lang/grammar.acc"
+#line 716 "lang/grammar.acc"
  *val = 0; 
-# line 3509 "src/yygram.cpp"
+# line 3514 "src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 694: {
             cexpr3(&n);
-#line 712 "lang/grammar.acc"
+#line 717 "lang/grammar.acc"
  *val |= n; 
-# line 3516 "src/yygram.cpp"
+# line 3521 "src/yygram.cpp"
             switch (yyselect()) {
             case 692: {
                get_lexval();
@@ -3551,20 +3556,20 @@ int race_def ()
       get_lexval();
       get_lexval();
       name = yylval;
-#line 721 "lang/grammar.acc"
+#line 726 "lang/grammar.acc"
  theRes = theRace; theRace->Name = name;
                                     theRace->BaseRace = 0; 
-# line 3558 "src/yygram.cpp"
+# line 3563 "src/yygram.cpp"
       switch (yyselect()) {
       case 695: {
          get_lexval();
          res_ref(&base);
-#line 723 "lang/grammar.acc"
+#line 728 "lang/grammar.acc"
  TRace tr; 
                                     theRace->BaseRace = base;                                        
                                     if (TRACE(base) > theRace)
                                       Fatal("Subrace definition before def of base race!"); 
-# line 3568 "src/yygram.cpp"
+# line 3573 "src/yygram.cpp"
          } break;
       default: ;
       }
@@ -3579,9 +3584,9 @@ int race_def ()
       }
       yy34: ;
       get_lexval();
-#line 728 "lang/grammar.acc"
+#line 733 "lang/grammar.acc"
  theRace++; 
-# line 3585 "src/yygram.cpp"
+# line 3590 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -3614,9 +3619,9 @@ int race_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 732 "lang/grammar.acc"
+#line 737 "lang/grammar.acc"
  theRace->Desc = lv; 
-# line 3620 "src/yygram.cpp"
+# line 3625 "src/yygram.cpp"
       } break;
    case 193: {
       while (1) {
@@ -3631,9 +3636,9 @@ int race_entry ()
             default: ;
             }
             cexpr(&v);
-#line 733 "lang/grammar.acc"
- theRace->AttrAdj[at] = v; 
-# line 3637 "src/yygram.cpp"
+#line 738 "lang/grammar.acc"
+ theRace->AttrAdj[at] = (int8)v; 
+# line 3642 "src/yygram.cpp"
             switch (yyselect()) {
             case 699: {
                get_lexval();
@@ -3665,9 +3670,9 @@ int race_entry ()
                } break;
             default: ;
             }
-#line 736 "lang/grammar.acc"
- theRace->AddAbility(AbT,Abil,p,l1,l2); 
-# line 3671 "src/yygram.cpp"
+#line 741 "lang/grammar.acc"
+ theRace->AddAbility((int8)AbT,(int16)Abil,p,(int8)l1,(int8)l2); 
+# line 3676 "src/yygram.cpp"
             } break;
          default: goto yy36;
          }
@@ -3685,9 +3690,9 @@ int race_entry ()
       }
       res_ref(&rr);
       get_lexval();
-#line 737 "lang/grammar.acc"
+#line 742 "lang/grammar.acc"
  theRace->mID = rr; 
-# line 3691 "src/yygram.cpp"
+# line 3696 "src/yygram.cpp"
       } break;
    case 196: {
       get_lexval();
@@ -3707,10 +3712,10 @@ int race_entry ()
       get_lexval();
       res_ref(&rr2);
       get_lexval();
-#line 739 "lang/grammar.acc"
+#line 744 "lang/grammar.acc"
  theRace->FavouredClass[0] = rr;
                                   theRace->FavouredClass[1] = rr2; 
-# line 3714 "src/yygram.cpp"
+# line 3719 "src/yygram.cpp"
       } break;
    case 197: {
       get_lexval();
@@ -3732,11 +3737,11 @@ int race_entry ()
       get_lexval();
       res_ref(&rr3);
       get_lexval();
-#line 742 "lang/grammar.acc"
+#line 747 "lang/grammar.acc"
  theRace->FavouredClass[0] = rr;
                                   theRace->FavouredClass[1] = rr2; 
                                   theRace->FavouredClass[2] = rr3; 
-# line 3740 "src/yygram.cpp"
+# line 3745 "src/yygram.cpp"
       } break;
    case 198: {
       get_lexval();
@@ -3746,16 +3751,16 @@ int race_entry ()
          } break;
       default: ;
       }
-#line 745 "lang/grammar.acc"
+#line 750 "lang/grammar.acc"
 int8 skn = 0;
-# line 3752 "src/yygram.cpp"
+# line 3757 "src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 711: {
             cexpr3(&sk);
-#line 746 "lang/grammar.acc"
- theRace->Skills[skn++] = sk; 
-# line 3759 "src/yygram.cpp"
+#line 751 "lang/grammar.acc"
+ theRace->Skills[skn++] = (int8)sk; 
+# line 3764 "src/yygram.cpp"
             switch (yyselect()) {
             case 710: {
                get_lexval();
@@ -3780,14 +3785,14 @@ int8 skn = 0;
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 747 "lang/grammar.acc"
+#line 752 "lang/grammar.acc"
  switch(n) {
                                          case MALE_NAMES  : theRace-> MNames = lv; break;
                                          case FEMALE_NAMES: theRace-> FNames = lv; break;
                                          case FAMILY_NAMES: theRace-> SNames = lv; break;
                                          default: yyerror("Illegal name const in race!");
                                          } 
-# line 3791 "src/yygram.cpp"
+# line 3796 "src/yygram.cpp"
       } break;
    case 200: {
       get_lexval();
@@ -3810,9 +3815,9 @@ int8 skn = 0;
                } break;
             default: ;
             }
-#line 753 "lang/grammar.acc"
- theRace->SetFlag(n); 
-# line 3816 "src/yygram.cpp"
+#line 758 "lang/grammar.acc"
+ theRace->SetFlag((uint16)n); 
+# line 3821 "src/yygram.cpp"
             } break;
          default: goto yy38;
          }
@@ -3844,9 +3849,9 @@ int class_def ()
       get_lexval();
       get_lexval();
       name = yylval;
-#line 761 "lang/grammar.acc"
+#line 766 "lang/grammar.acc"
  theRes = theClass; theClass->Name = name; 
-# line 3850 "src/yygram.cpp"
+# line 3855 "src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -3858,9 +3863,9 @@ int class_def ()
       }
       yy39: ;
       get_lexval();
-#line 762 "lang/grammar.acc"
+#line 767 "lang/grammar.acc"
  theClass++; 
-# line 3864 "src/yygram.cpp"
+# line 3869 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -3893,9 +3898,9 @@ int class_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 766 "lang/grammar.acc"
+#line 771 "lang/grammar.acc"
  theClass->Desc = lv; 
-# line 3899 "src/yygram.cpp"
+# line 3904 "src/yygram.cpp"
       } break;
    case 207: {
       get_lexval();
@@ -3913,9 +3918,9 @@ int class_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 767 "lang/grammar.acc"
- theClass->HitDie = n; 
-# line 3919 "src/yygram.cpp"
+#line 772 "lang/grammar.acc"
+ theClass->HitDie = (uint8)n; 
+# line 3924 "src/yygram.cpp"
       } break;
    case 208: {
       get_lexval();
@@ -3933,9 +3938,9 @@ int class_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 768 "lang/grammar.acc"
- theClass->ManaDie = n; 
-# line 3939 "src/yygram.cpp"
+#line 773 "lang/grammar.acc"
+ theClass->ManaDie = (uint8)n; 
+# line 3944 "src/yygram.cpp"
       } break;
    case 209: {
       get_lexval();
@@ -3949,10 +3954,10 @@ int class_entry ()
       get_lexval();
       cexpr3(&n);
       get_lexval();
-#line 769 "lang/grammar.acc"
- theClass->DefMod = n;
+#line 774 "lang/grammar.acc"
+ theClass->DefMod = (uint8)n;
                                              if (x != 1) yyerror("class defense mod must by 1 per N."); 
-# line 3956 "src/yygram.cpp"
+# line 3961 "src/yygram.cpp"
       } break;
    case 210: {
       get_lexval();
@@ -3967,9 +3972,9 @@ int class_entry ()
          case 726: {
             cexpr3(&typ);
             cexpr3(&l);
-#line 772 "lang/grammar.acc"
- theClass->AttkVal[typ] = l; 
-# line 3973 "src/yygram.cpp"
+#line 777 "lang/grammar.acc"
+ theClass->AttkVal[typ] = (uint8)l; 
+# line 3978 "src/yygram.cpp"
             switch (yyselect()) {
             case 725: {
                get_lexval();
@@ -3996,9 +4001,9 @@ int class_entry ()
          case 729: {
             cexpr3(&typ);
             cexpr3(&l);
-#line 774 "lang/grammar.acc"
- theClass->Saves[typ] = l; 
-# line 4002 "src/yygram.cpp"
+#line 779 "lang/grammar.acc"
+ theClass->Saves[typ] = (uint8)l; 
+# line 4007 "src/yygram.cpp"
             switch (yyselect()) {
             case 728: {
                get_lexval();
@@ -4030,9 +4035,9 @@ int class_entry ()
                } break;
             default: ;
             }
-#line 776 "lang/grammar.acc"
- theClass->AddAbility(AbT,Abil,p,l1,l2); 
-# line 4036 "src/yygram.cpp"
+#line 781 "lang/grammar.acc"
+ theClass->AddAbility((int8)AbT,(int16)Abil,p,(int8)l1,(int8)l2); 
+# line 4041 "src/yygram.cpp"
             } break;
          default: goto yy42;
          }
@@ -4055,9 +4060,9 @@ int class_entry ()
          } break;
       default: printf("???\n"); exit(1);
       }
-#line 777 "lang/grammar.acc"
- theClass->SkillPoints = sp; int8 skn = 0; 
-# line 4061 "src/yygram.cpp"
+#line 782 "lang/grammar.acc"
+ theClass->SkillPoints = (uint8)sp; int8 skn = 0; 
+# line 4066 "src/yygram.cpp"
       switch (yyselect()) {
       case 735: {
          get_lexval();
@@ -4068,9 +4073,9 @@ int class_entry ()
          switch (yyselect()) {
          case 737: {
             cexpr3(&sk);
-#line 778 "lang/grammar.acc"
- theClass->Skills[skn++] = sk; 
-# line 4074 "src/yygram.cpp"
+#line 783 "lang/grammar.acc"
+ theClass->Skills[skn++] = (uint8)sk; 
+# line 4079 "src/yygram.cpp"
             switch (yyselect()) {
             case 736: {
                get_lexval();
@@ -4096,9 +4101,9 @@ int class_entry ()
          switch (yyselect()) {
          case 740: {
             cexpr3(&pr);
-#line 780 "lang/grammar.acc"
+#line 785 "lang/grammar.acc"
  theClass->Proficiencies |= pr; 
-# line 4102 "src/yygram.cpp"
+# line 4107 "src/yygram.cpp"
             switch (yyselect()) {
             case 739: {
                get_lexval();
@@ -4133,9 +4138,9 @@ int class_entry ()
                } break;
             default: ;
             }
-#line 781 "lang/grammar.acc"
- theClass->SetFlag(n); 
-# line 4139 "src/yygram.cpp"
+#line 786 "lang/grammar.acc"
+ theClass->SetFlag((uint16)n); 
+# line 4144 "src/yygram.cpp"
             } break;
          default: goto yy45;
          }
@@ -4169,73 +4174,73 @@ int special_ability (YYSTYPE *AbT, YYSTYPE *Abil, YYSTYPE *p, YYSTYPE *l1, YYSTY
    YYSTYPE ft;
    switch(yyselect()) {
    case 220: {
-#line 789 "lang/grammar.acc"
+#line 794 "lang/grammar.acc"
  *p = 0; 
-# line 4175 "src/yygram.cpp"
+# line 4180 "src/yygram.cpp"
       get_lexval();
       get_lexval();
       cexpr3(&ca);
       switch (yyselect()) {
       case 745: {
          abil_param(&xp);
-#line 789 "lang/grammar.acc"
+#line 794 "lang/grammar.acc"
  *p = xp; 
-# line 4184 "src/yygram.cpp"
+# line 4189 "src/yygram.cpp"
          } break;
       default: ;
       }
       get_lexval();
       get_lexval();
       abil_level(&xl1, &xl2);
-#line 790 "lang/grammar.acc"
+#line 795 "lang/grammar.acc"
  *AbT = AB_ABILITY; *Abil = ca; *l1 =xl1; *l2 = xl2; 
-# line 4193 "src/yygram.cpp"
+# line 4198 "src/yygram.cpp"
       } break;
    case 221: {
-#line 791 "lang/grammar.acc"
+#line 796 "lang/grammar.acc"
  *p = 0; 
-# line 4198 "src/yygram.cpp"
+# line 4203 "src/yygram.cpp"
       get_lexval();
       get_lexval();
       cexpr3(&st);
       switch (yyselect()) {
       case 746: {
          abil_param(&xp);
-#line 791 "lang/grammar.acc"
+#line 796 "lang/grammar.acc"
  *p = xp; 
-# line 4207 "src/yygram.cpp"
+# line 4212 "src/yygram.cpp"
          } break;
       default: ;
       }
       get_lexval();
       get_lexval();
       abil_level(&xl1, &xl2);
-#line 792 "lang/grammar.acc"
+#line 797 "lang/grammar.acc"
  *AbT = AB_STATI;   *Abil = st; *l1 = xl1; *l2 = xl2; 
-# line 4216 "src/yygram.cpp"
+# line 4221 "src/yygram.cpp"
       } break;
    case 222: {
-#line 793 "lang/grammar.acc"
+#line 798 "lang/grammar.acc"
  *p = 0; 
-# line 4221 "src/yygram.cpp"
+# line 4226 "src/yygram.cpp"
       get_lexval();
       get_lexval();
       cexpr3(&ft);
       switch (yyselect()) {
       case 747: {
          abil_param(&xp);
-#line 793 "lang/grammar.acc"
+#line 798 "lang/grammar.acc"
  *p = xp; 
-# line 4230 "src/yygram.cpp"
+# line 4235 "src/yygram.cpp"
          } break;
       default: ;
       }
       get_lexval();
       get_lexval();
       abil_level(&xl1, &xl2);
-#line 794 "lang/grammar.acc"
+#line 799 "lang/grammar.acc"
  *AbT = AB_FEAT;    *Abil = ft; *l1 = xl1; *l2 = xl2; 
-# line 4239 "src/yygram.cpp"
+# line 4244 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -4250,25 +4255,25 @@ int abil_param (YYSTYPE *p)
    case 223: {
       get_lexval();
       cexpr3(&pa);
-#line 798 "lang/grammar.acc"
+#line 803 "lang/grammar.acc"
  *p = pa; 
-# line 4256 "src/yygram.cpp"
+# line 4261 "src/yygram.cpp"
       } break;
    case 224: {
       get_lexval();
       res_ref(&rr);
-#line 799 "lang/grammar.acc"
+#line 804 "lang/grammar.acc"
  *p = rr; 
-# line 4263 "src/yygram.cpp"
+# line 4268 "src/yygram.cpp"
       } break;
    case 225: {
       get_lexval();
       cexpr3(&pa);
       get_lexval();
       cexpr3(&pa2);
-#line 800 "lang/grammar.acc"
+#line 805 "lang/grammar.acc"
  *p = pa | (pa2 << 16); 
-# line 4272 "src/yygram.cpp"
+# line 4277 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -4287,24 +4292,24 @@ int abil_level (YYSTYPE *l1, YYSTYPE *l2)
          } break;
       default: ;
       }
-#line 805 "lang/grammar.acc"
+#line 810 "lang/grammar.acc"
  *l1 = xl1; *l2 = 0; 
-# line 4293 "src/yygram.cpp"
+# line 4298 "src/yygram.cpp"
       } break;
    case 227: {
       get_lexval();
       cexpr3(&xl2);
       get_lexval();
-#line 807 "lang/grammar.acc"
+#line 812 "lang/grammar.acc"
  *l1 = 1;  *l2 = xl2; 
-# line 4301 "src/yygram.cpp"
+# line 4306 "src/yygram.cpp"
       } break;
    case 228: {
       get_lexval();
       get_lexval();
-#line 809 "lang/grammar.acc"
+#line 814 "lang/grammar.acc"
  *l1 = 1;  *l2 = 1; 
-# line 4308 "src/yygram.cpp"
+# line 4313 "src/yygram.cpp"
       } break;
    case 229: {
       get_lexval();
@@ -4318,9 +4323,9 @@ int abil_level (YYSTYPE *l1, YYSTYPE *l2)
          } break;
       default: ;
       }
-#line 811 "lang/grammar.acc"
+#line 816 "lang/grammar.acc"
  *l1 = xl1; *l2 = 1; 
-# line 4324 "src/yygram.cpp"
+# line 4329 "src/yygram.cpp"
       } break;
    case 230: {
       get_lexval();
@@ -4335,9 +4340,9 @@ int abil_level (YYSTYPE *l1, YYSTYPE *l2)
          } break;
       default: ;
       }
-#line 813 "lang/grammar.acc"
+#line 818 "lang/grammar.acc"
  *l1 = xl1; *l2 = xl2; 
-# line 4341 "src/yygram.cpp"
+# line 4346 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -4351,9 +4356,9 @@ int dungeon_def ()
       get_lexval();
       get_lexval();
       name = yylval;
-#line 817 "lang/grammar.acc"
+#line 822 "lang/grammar.acc"
  theRes = theDgn; theDgn->Name = name; 
-# line 4357 "src/yygram.cpp"
+# line 4362 "src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -4365,9 +4370,9 @@ int dungeon_def ()
       }
       yy46: ;
       get_lexval();
-#line 818 "lang/grammar.acc"
+#line 823 "lang/grammar.acc"
  theDgn++; 
-# line 4371 "src/yygram.cpp"
+# line 4376 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -4388,9 +4393,9 @@ int dun_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 822 "lang/grammar.acc"
+#line 827 "lang/grammar.acc"
  theDgn->Desc = lv; 
-# line 4394 "src/yygram.cpp"
+# line 4399 "src/yygram.cpp"
       } break;
    case 233: {
       dconst_entry();
@@ -4428,9 +4433,9 @@ int dconst_entry ()
             get_lexval();
             cexpr3(&con);
             cexpr3(&val);
-#line 830 "lang/grammar.acc"
- theRes->AddConstant(con,val); 
-# line 4434 "src/yygram.cpp"
+#line 835 "lang/grammar.acc"
+ theRes->AddConstant((int8)con,val); 
+# line 4439 "src/yygram.cpp"
             switch (yyselect()) {
             case 754: {
                get_lexval();
@@ -4442,9 +4447,9 @@ int dconst_entry ()
             get_lexval();
             cexpr3(&con);
             res_ref(&rr);
-#line 831 "lang/grammar.acc"
- theRes->AddConstant(con,rr); 
-# line 4448 "src/yygram.cpp"
+#line 836 "lang/grammar.acc"
+ theRes->AddConstant((int8)con,rr); 
+# line 4453 "src/yygram.cpp"
             switch (yyselect()) {
             case 756: {
                get_lexval();
@@ -4471,9 +4476,9 @@ int dconst_entry ()
          case 762: {
             get_lexval();
             cexpr4(&lis);
-#line 834 "lang/grammar.acc"
+#line 839 "lang/grammar.acc"
  TempListLoc = 0; 
-# line 4477 "src/yygram.cpp"
+# line 4482 "src/yygram.cpp"
             while (1) {
                switch (yyselect()) {
                case 759: {
@@ -4492,13 +4497,13 @@ int dconst_entry ()
                } break;
             default: printf("???\n"); exit(1);
             }
-#line 835 "lang/grammar.acc"
+#line 840 "lang/grammar.acc"
  TempList[TempListLoc++] = 0;
         TempList[TempListLoc++] = 0;
         TempList[TempListLoc++] = 0;
         ASSERT(TempListLoc < 1023);
-        theRes->AddList(lis,TempList); 
-# line 4502 "src/yygram.cpp"
+        theRes->AddList((int8)lis,TempList); 
+# line 4507 "src/yygram.cpp"
             } break;
          default: goto yy48;
          }
@@ -4516,17 +4521,17 @@ int dconst_entry ()
       while (1) {
          switch (yyselect()) {
          case 769: {
-#line 842 "lang/grammar.acc"
+#line 847 "lang/grammar.acc"
  int16 Chance = 100; 
-# line 4522 "src/yygram.cpp"
+# line 4527 "src/yygram.cpp"
             get_lexval();
             switch (yyselect()) {
             case 764: {
                cexpr4(&n);
                get_lexval();
-#line 842 "lang/grammar.acc"
- Chance = n; 
-# line 4530 "src/yygram.cpp"
+#line 847 "lang/grammar.acc"
+ Chance = (int16)n; 
+# line 4535 "src/yygram.cpp"
                } break;
             default: ;
             }
@@ -4536,27 +4541,27 @@ int dconst_entry ()
                get_lexval();
                get_lexval();
                cexpr3(&n);
-#line 843 "lang/grammar.acc"
- theRes->AddSpecial(rr,Chance,n); 
-# line 4542 "src/yygram.cpp"
+#line 848 "lang/grammar.acc"
+ theRes->AddSpecial(rr,Chance,(int16)n); 
+# line 4547 "src/yygram.cpp"
                } break;
             case 766: {
                res_ref(&rr);
                get_lexval();
                cexpr3(&n);
                get_lexval();
-#line 844 "lang/grammar.acc"
- theRes->AddSpecial(rr,Chance,n); 
-# line 4551 "src/yygram.cpp"
+#line 849 "lang/grammar.acc"
+ theRes->AddSpecial(rr,Chance,(int16)n); 
+# line 4556 "src/yygram.cpp"
                } break;
             case 767: {
                res_ref(&rr);
                get_lexval();
                get_lexval();
                dice_only(&dv);
-#line 845 "lang/grammar.acc"
+#line 850 "lang/grammar.acc"
  theRes->AddSpecial(rr,Chance,yyDice(dv)); 
-# line 4560 "src/yygram.cpp"
+# line 4565 "src/yygram.cpp"
                } break;
             default: printf("???\n"); exit(1);
             }
@@ -4585,22 +4590,22 @@ int list_entry ()
    switch(yyselect()) {
    case 239: {
       res_ref(&rr);
-#line 850 "lang/grammar.acc"
+#line 855 "lang/grammar.acc"
  TempList[TempListLoc++] = rr; ASSERT(TempListLoc < 1023); 
-# line 4591 "src/yygram.cpp"
+# line 4596 "src/yygram.cpp"
       } break;
    case 240: {
       cexpr4(&n);
-#line 851 "lang/grammar.acc"
+#line 856 "lang/grammar.acc"
  TempList[TempListLoc++] = n;  ASSERT(TempListLoc < 1023); 
-# line 4597 "src/yygram.cpp"
+# line 4602 "src/yygram.cpp"
       } break;
    case 241: {
       get_lexval();
       text = yylval;
-#line 852 "lang/grammar.acc"
+#line 857 "lang/grammar.acc"
  TempList[TempListLoc++] = text; ASSERT(TempListLoc < 1023); 
-# line 4604 "src/yygram.cpp"
+# line 4609 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -4614,9 +4619,9 @@ int artifact_def ()
       get_lexval();
       get_lexval();
       name = yylval;
-#line 856 "lang/grammar.acc"
+#line 861 "lang/grammar.acc"
  theRes = theArti; theArti->Name = name; 
-# line 4620 "src/yygram.cpp"
+# line 4625 "src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -4628,9 +4633,9 @@ int artifact_def ()
       }
       yy51: ;
       get_lexval();
-#line 857 "lang/grammar.acc"
+#line 862 "lang/grammar.acc"
  theArti++; 
-# line 4634 "src/yygram.cpp"
+# line 4639 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -4656,9 +4661,9 @@ int arti_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 861 "lang/grammar.acc"
+#line 866 "lang/grammar.acc"
  theRes = theArti; theArti->Desc = lv; 
-# line 4662 "src/yygram.cpp"
+# line 4667 "src/yygram.cpp"
       } break;
    case 244: {
       get_lexval();
@@ -4670,9 +4675,9 @@ int arti_entry ()
       }
       res_ref(&rr);
       get_lexval();
-#line 862 "lang/grammar.acc"
+#line 867 "lang/grammar.acc"
  theArti->iID = rr; 
-# line 4676 "src/yygram.cpp"
+# line 4681 "src/yygram.cpp"
       } break;
    case 245: {
       while (1) {
@@ -4687,9 +4692,9 @@ int arti_entry ()
             default: ;
             }
             cexpr3(&v);
-#line 863 "lang/grammar.acc"
- theArti->AttrAdjLow[at] = v; 
-# line 4693 "src/yygram.cpp"
+#line 868 "lang/grammar.acc"
+ theArti->AttrAdjLow[at] = (int8)v; 
+# line 4698 "src/yygram.cpp"
             switch (yyselect()) {
             case 774: {
                get_lexval();
@@ -4715,9 +4720,9 @@ int arti_entry ()
          switch (yyselect()) {
          case 778: {
             cexpr3(&res);
-#line 864 "lang/grammar.acc"
+#line 869 "lang/grammar.acc"
  theArti->Resists |= res; 
-# line 4721 "src/yygram.cpp"
+# line 4726 "src/yygram.cpp"
             switch (yyselect()) {
             case 777: {
                get_lexval();
@@ -4744,9 +4749,9 @@ int arti_entry ()
          case 781: {
             get_lexval();
             at = yylval;
-#line 865 "lang/grammar.acc"
+#line 870 "lang/grammar.acc"
  theArti->Sustains |= 1 << (at-1); 
-# line 4750 "src/yygram.cpp"
+# line 4755 "src/yygram.cpp"
             switch (yyselect()) {
             case 780: {
                get_lexval();
@@ -4772,9 +4777,9 @@ int arti_entry ()
          switch (yyselect()) {
          case 784: {
             cexpr3(&qu);
-#line 866 "lang/grammar.acc"
+#line 871 "lang/grammar.acc"
  theArti->Qualities |= qu; 
-# line 4778 "src/yygram.cpp"
+# line 4783 "src/yygram.cpp"
             switch (yyselect()) {
             case 783: {
                get_lexval();
@@ -4790,9 +4795,9 @@ int arti_entry ()
       } break;
    case 249: {
       get_lexval();
-#line 868 "lang/grammar.acc"
+#line 873 "lang/grammar.acc"
  ArtPowerType = AN_ART_EQUIP; 
-# line 4796 "src/yygram.cpp"
+# line 4801 "src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -4813,9 +4818,9 @@ int arti_entry ()
       } break;
    case 250: {
       get_lexval();
-#line 869 "lang/grammar.acc"
+#line 874 "lang/grammar.acc"
  ArtPowerType = AN_ART_WIELD; 
-# line 4819 "src/yygram.cpp"
+# line 4824 "src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -4836,9 +4841,9 @@ int arti_entry ()
       } break;
    case 251: {
       get_lexval();
-#line 870 "lang/grammar.acc"
+#line 875 "lang/grammar.acc"
  ArtPowerType = AN_ART_HIT;   
-# line 4842 "src/yygram.cpp"
+# line 4847 "src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -4859,9 +4864,9 @@ int arti_entry ()
       } break;
    case 252: {
       get_lexval();
-#line 871 "lang/grammar.acc"
+#line 876 "lang/grammar.acc"
  ArtPowerType = AN_ART_INVOKE;
-# line 4865 "src/yygram.cpp"
+# line 4870 "src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -4906,18 +4911,18 @@ int art_power ()
       get_lexval();
       cexpr3(&p);
       get_lexval();
-#line 878 "lang/grammar.acc"
- theArti->AddPower(ArtPowerType,AB_STATI,st,p,NULL); 
-# line 4912 "src/yygram.cpp"
+#line 883 "lang/grammar.acc"
+ theArti->AddPower((int8)ArtPowerType,AB_STATI,st,(int16)p,NULL); 
+# line 4917 "src/yygram.cpp"
       } break;
    case 256: {
       get_lexval();
       get_lexval();
       cexpr3(&st);
       get_lexval();
-#line 880 "lang/grammar.acc"
- theArti->AddPower(ArtPowerType,AB_STATI,st,0,NULL); 
-# line 4921 "src/yygram.cpp"
+#line 885 "lang/grammar.acc"
+ theArti->AddPower((int8)ArtPowerType,AB_STATI,st,0,NULL); 
+# line 4926 "src/yygram.cpp"
       } break;
    case 257: {
       res_ref(&rr);
@@ -4928,18 +4933,18 @@ int art_power ()
          } break;
       default: ;
       }
-#line 882 "lang/grammar.acc"
- theArti->AddPower(ArtPowerType,AB_EFFECT,rr,0,NULL); 
-# line 4934 "src/yygram.cpp"
+#line 887 "lang/grammar.acc"
+ theArti->AddPower((int8)ArtPowerType,AB_EFFECT,rr,0,NULL); 
+# line 4939 "src/yygram.cpp"
       } break;
    case 258: {
       res_ref(&rr);
       get_lexval();
       dice_val(&dv);
       get_lexval();
-#line 884 "lang/grammar.acc"
- theArti->AddPower(ArtPowerType,AB_EFFECT,rr,0,&yyDice(dv)); 
-# line 4943 "src/yygram.cpp"
+#line 889 "lang/grammar.acc"
+ theArti->AddPower((int8)ArtPowerType,AB_EFFECT,rr,0,&yyDice(dv)); 
+# line 4948 "src/yygram.cpp"
       } break;
    case 259: {
       res_ref(&rr);
@@ -4954,10 +4959,10 @@ int art_power ()
       default: printf("???\n"); exit(1);
       }
       get_lexval();
-#line 886 "lang/grammar.acc"
- Dice d; d.Set(0,n,1);
-        theArti->AddPower(ArtPowerType,AB_EFFECT,rr,0,&d); 
-# line 4961 "src/yygram.cpp"
+#line 891 "lang/grammar.acc"
+ Dice d; d.Set(0,(int8)n,1);
+        theArti->AddPower((int8)ArtPowerType,AB_EFFECT,rr,0,&d); 
+# line 4966 "src/yygram.cpp"
       } break;
    case 260: {
       res_ref(&rr);
@@ -4972,24 +4977,24 @@ int art_power ()
       default: printf("???\n"); exit(1);
       }
       get_lexval();
-#line 889 "lang/grammar.acc"
- Dice d; d.Set(0,n,7);
-        theArti->AddPower(ArtPowerType,AB_EFFECT,rr,0,&d); 
-# line 4979 "src/yygram.cpp"
+#line 894 "lang/grammar.acc"
+ Dice d; d.Set(0,(int8)n,7);
+        theArti->AddPower((int8)ArtPowerType,AB_EFFECT,rr,0,&d); 
+# line 4984 "src/yygram.cpp"
       } break;
    case 261: {
       get_lexval();
       res_ref(&rr);
-#line 892 "lang/grammar.acc"
- theArti->AddPower(ArtPowerType,AB_INNATE,rr,0,NULL); 
-# line 4986 "src/yygram.cpp"
+#line 897 "lang/grammar.acc"
+ theArti->AddPower((int8)ArtPowerType,AB_INNATE,rr,0,NULL); 
+# line 4991 "src/yygram.cpp"
       } break;
    case 262: {
       get_lexval();
       cexpr3(&ft);
-#line 894 "lang/grammar.acc"
- theArti->AddPower(ArtPowerType,AB_FEAT,ft,0,NULL); 
-# line 4993 "src/yygram.cpp"
+#line 899 "lang/grammar.acc"
+ theArti->AddPower((int8)ArtPowerType,AB_FEAT,ft,0,NULL); 
+# line 4998 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -5006,9 +5011,9 @@ int domain_def ()
       name = yylval;
       get_lexval();
       cexpr3(&type);
-#line 898 "lang/grammar.acc"
- theRes = theDom; theDom->Name = name; theDom->DType = type; 
-# line 5012 "src/yygram.cpp"
+#line 903 "lang/grammar.acc"
+ theRes = theDom; theDom->Name = name; theDom->DType = (int8)type; 
+# line 5017 "src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -5020,9 +5025,9 @@ int domain_def ()
       }
       yy60: ;
       get_lexval();
-#line 900 "lang/grammar.acc"
+#line 905 "lang/grammar.acc"
  theDom++; 
-# line 5026 "src/yygram.cpp"
+# line 5031 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -5039,9 +5044,9 @@ int domain_entry ()
    YYSTYPE lv;
    switch(yyselect()) {
    case 264: {
-#line 904 "lang/grammar.acc"
+#line 909 "lang/grammar.acc"
  int8 sp = 0; 
-# line 5045 "src/yygram.cpp"
+# line 5050 "src/yygram.cpp"
       get_lexval();
       switch (yyselect()) {
       case 799: {
@@ -5053,9 +5058,9 @@ int domain_entry ()
          switch (yyselect()) {
          case 801: {
             res_ref(&rr);
-#line 905 "lang/grammar.acc"
+#line 910 "lang/grammar.acc"
  theDom->Spells[min(sp,8)] = rr; sp++; 
-# line 5059 "src/yygram.cpp"
+# line 5064 "src/yygram.cpp"
             switch (yyselect()) {
             case 800: {
                get_lexval();
@@ -5068,11 +5073,11 @@ int domain_entry ()
       }
       yy61: ;
       get_lexval();
-#line 906 "lang/grammar.acc"
+#line 911 "lang/grammar.acc"
  if (sp > 9) 
       { yyerror(Format("Error: Domain %s has %d spells; must have at most nine.",
         theModule->QTextSeg + theDom->Name,sp)); } 
-# line 5076 "src/yygram.cpp"
+# line 5081 "src/yygram.cpp"
       } break;
    case 265: {
       get_lexval();
@@ -5092,9 +5097,9 @@ int domain_entry ()
                } break;
             default: ;
             }
-#line 910 "lang/grammar.acc"
- theDom->AddAbility(AbT,Abil,p,l1,l2); 
-# line 5098 "src/yygram.cpp"
+#line 915 "lang/grammar.acc"
+ theDom->AddAbility((int8)AbT,(int16)Abil,p,(int8)l1,(int8)l2); 
+# line 5103 "src/yygram.cpp"
             } break;
          default: goto yy62;
          }
@@ -5113,9 +5118,9 @@ int domain_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 911 "lang/grammar.acc"
+#line 916 "lang/grammar.acc"
  theDom->Desc = lv; 
-# line 5119 "src/yygram.cpp"
+# line 5124 "src/yygram.cpp"
       } break;
    case 267: {
       event_desc();
@@ -5138,9 +5143,9 @@ int god_def ()
       get_lexval();
       get_lexval();
       name = yylval;
-#line 917 "lang/grammar.acc"
+#line 922 "lang/grammar.acc"
  theRes = theGod; theGod->Name = name; 
-# line 5144 "src/yygram.cpp"
+# line 5149 "src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -5152,9 +5157,9 @@ int god_def ()
       }
       yy63: ;
       get_lexval();
-#line 919 "lang/grammar.acc"
+#line 924 "lang/grammar.acc"
  theGod++; 
-# line 5158 "src/yygram.cpp"
+# line 5163 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -5172,9 +5177,9 @@ int god_entry ()
    YYSTYPE l2;
    switch(yyselect()) {
    case 271: {
-#line 923 "lang/grammar.acc"
+#line 928 "lang/grammar.acc"
  int8 dm = 0; 
-# line 5178 "src/yygram.cpp"
+# line 5183 "src/yygram.cpp"
       get_lexval();
       switch (yyselect()) {
       case 807: {
@@ -5186,9 +5191,9 @@ int god_entry ()
          switch (yyselect()) {
          case 809: {
             res_ref(&rr);
-#line 924 "lang/grammar.acc"
+#line 929 "lang/grammar.acc"
  theGod->Domains[min(dm,5)] = rr; dm++; 
-# line 5192 "src/yygram.cpp"
+# line 5197 "src/yygram.cpp"
             switch (yyselect()) {
             case 808: {
                get_lexval();
@@ -5201,11 +5206,11 @@ int god_entry ()
       }
       yy64: ;
       get_lexval();
-#line 925 "lang/grammar.acc"
+#line 930 "lang/grammar.acc"
  if (dm < 3 || dm > 6) 
       { yyerror(Format("Error: God %s has %d domains; must have between 3 and 6.",
         theModule->QTextSeg + theGod->Name,dm)); } 
-# line 5209 "src/yygram.cpp"
+# line 5214 "src/yygram.cpp"
       } break;
    case 272: {
       get_lexval();
@@ -5232,9 +5237,9 @@ int god_entry ()
                } break;
             default: ;
             }
-#line 929 "lang/grammar.acc"
- theGod->SetFlag(n); 
-# line 5238 "src/yygram.cpp"
+#line 934 "lang/grammar.acc"
+ theGod->SetFlag((uint16)n); 
+# line 5243 "src/yygram.cpp"
             } break;
          default: goto yy65;
          }
@@ -5253,9 +5258,9 @@ int god_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 930 "lang/grammar.acc"
+#line 935 "lang/grammar.acc"
  theGod->Desc = lv; 
-# line 5259 "src/yygram.cpp"
+# line 5264 "src/yygram.cpp"
       } break;
    case 275: {
       get_lexval();
@@ -5275,9 +5280,9 @@ int god_entry ()
                } break;
             default: ;
             }
-#line 932 "lang/grammar.acc"
- theGod->AddAbility(AbT,Abil,p,l1,l2); 
-# line 5281 "src/yygram.cpp"
+#line 937 "lang/grammar.acc"
+ theGod->AddAbility((int8)AbT,(int16)Abil,p,(int8)l1,(int8)l2); 
+# line 5286 "src/yygram.cpp"
             } break;
          default: goto yy66;
          }
@@ -5306,10 +5311,10 @@ int terrain_def ()
       get_lexval();
       get_lexval();
       name = yylval;
-#line 938 "lang/grammar.acc"
+#line 943 "lang/grammar.acc"
  theRes = theTer; 
                                       theTer->Name = name; 
-# line 5313 "src/yygram.cpp"
+# line 5318 "src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -5321,9 +5326,9 @@ int terrain_def ()
       }
       yy67: ;
       get_lexval();
-#line 941 "lang/grammar.acc"
+#line 946 "lang/grammar.acc"
  theTer++; 
-# line 5327 "src/yygram.cpp"
+# line 5332 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -5349,15 +5354,15 @@ int terrain_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 945 "lang/grammar.acc"
+#line 950 "lang/grammar.acc"
  theTer->Desc = lv; 
-# line 5355 "src/yygram.cpp"
+# line 5360 "src/yygram.cpp"
       } break;
    case 281: {
       glyph_entry(&img);
-#line 946 "lang/grammar.acc"
+#line 951 "lang/grammar.acc"
  theTer->Image = img; 
-# line 5361 "src/yygram.cpp"
+# line 5366 "src/yygram.cpp"
       } break;
    case 282: {
       get_lexval();
@@ -5370,9 +5375,9 @@ int terrain_entry ()
       cexpr3(&mov);
       get_lexval();
       get_lexval();
-#line 947 "lang/grammar.acc"
- theTer->MoveMod = (mov-100)/5; 
-# line 5376 "src/yygram.cpp"
+#line 952 "lang/grammar.acc"
+ theTer->MoveMod = (int8)((mov-100)/5); 
+# line 5381 "src/yygram.cpp"
       } break;
    case 283: {
       get_lexval();
@@ -5384,9 +5389,9 @@ int terrain_entry ()
       }
       cexpr3(&pen);
       get_lexval();
-#line 948 "lang/grammar.acc"
- theTer->Penalty = pen; 
-# line 5390 "src/yygram.cpp"
+#line 953 "lang/grammar.acc"
+ theTer->Penalty = (int8)pen; 
+# line 5395 "src/yygram.cpp"
       } break;
    case 284: {
       get_lexval();
@@ -5398,9 +5403,9 @@ int terrain_entry ()
       }
       cexpr3(&mat);
       get_lexval();
-#line 949 "lang/grammar.acc"
- theTer->Material = mat; 
-# line 5404 "src/yygram.cpp"
+#line 954 "lang/grammar.acc"
+ theTer->Material = (int8)mat; 
+# line 5409 "src/yygram.cpp"
       } break;
    case 285: {
       get_lexval();
@@ -5423,9 +5428,9 @@ int terrain_entry ()
                } break;
             default: ;
             }
-#line 950 "lang/grammar.acc"
- theTer->SetFlag(n); 
-# line 5429 "src/yygram.cpp"
+#line 955 "lang/grammar.acc"
+ theTer->SetFlag((uint16)n); 
+# line 5434 "src/yygram.cpp"
             } break;
          default: goto yy68;
          }
@@ -5457,10 +5462,10 @@ int region_def ()
       name = yylval;
       get_lexval();
       cexpr3(&regflag);
-#line 957 "lang/grammar.acc"
- theRes = theReg; theReg->Name = name; theReg->SetFlag(regflag); 
+#line 962 "lang/grammar.acc"
+ theRes = theReg; theReg->Name = name; theReg->SetFlag((uint16)regflag); 
     theReg->Size = SZ_COLLOSAL; 
-# line 5464 "src/yygram.cpp"
+# line 5469 "src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -5472,9 +5477,9 @@ int region_def ()
       }
       yy69: ;
       get_lexval();
-#line 960 "lang/grammar.acc"
+#line 965 "lang/grammar.acc"
  theReg++; 
-# line 5478 "src/yygram.cpp"
+# line 5483 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -5503,9 +5508,9 @@ int region_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 964 "lang/grammar.acc"
+#line 969 "lang/grammar.acc"
  theReg->Desc = lv; 
-# line 5509 "src/yygram.cpp"
+# line 5514 "src/yygram.cpp"
       } break;
    case 291: {
       get_lexval();
@@ -5517,9 +5522,9 @@ int region_entry ()
       }
       res_ref(&rr);
       get_lexval();
-#line 965 "lang/grammar.acc"
+#line 970 "lang/grammar.acc"
  theReg->Walls = rr; 
-# line 5523 "src/yygram.cpp"
+# line 5528 "src/yygram.cpp"
       } break;
    case 292: {
       get_lexval();
@@ -5531,9 +5536,9 @@ int region_entry ()
       }
       res_ref(&rr);
       get_lexval();
-#line 966 "lang/grammar.acc"
+#line 971 "lang/grammar.acc"
  theReg->Floor = rr; 
-# line 5537 "src/yygram.cpp"
+# line 5542 "src/yygram.cpp"
       } break;
    case 293: {
       get_lexval();
@@ -5545,9 +5550,9 @@ int region_entry ()
       }
       res_ref(&rr);
       get_lexval();
-#line 967 "lang/grammar.acc"
+#line 972 "lang/grammar.acc"
  theReg->Door = rr; 
-# line 5551 "src/yygram.cpp"
+# line 5556 "src/yygram.cpp"
       } break;
    case 294: {
       get_lexval();
@@ -5559,9 +5564,9 @@ int region_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 968 "lang/grammar.acc"
- theReg->Depth = n; 
-# line 5565 "src/yygram.cpp"
+#line 973 "lang/grammar.acc"
+ theReg->Depth = (int8)n; 
+# line 5570 "src/yygram.cpp"
       } break;
    case 295: {
       get_lexval();
@@ -5573,9 +5578,9 @@ int region_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 969 "lang/grammar.acc"
- theReg->Size = n; 
-# line 5579 "src/yygram.cpp"
+#line 974 "lang/grammar.acc"
+ theReg->Size = (int8)n; 
+# line 5584 "src/yygram.cpp"
       } break;
    case 296: {
       get_lexval();
@@ -5589,9 +5594,9 @@ int region_entry ()
          switch (yyselect()) {
          case 837: {
             cexpr3(&n);
-#line 970 "lang/grammar.acc"
+#line 975 "lang/grammar.acc"
  theReg->RoomTypes |= BIT(n); 
-# line 5595 "src/yygram.cpp"
+# line 5600 "src/yygram.cpp"
             switch (yyselect()) {
             case 835: {
                get_lexval();
@@ -5629,9 +5634,9 @@ int region_entry ()
                } break;
             default: ;
             }
-#line 972 "lang/grammar.acc"
- theReg->SetFlag(n); 
-# line 5635 "src/yygram.cpp"
+#line 977 "lang/grammar.acc"
+ theReg->SetFlag((uint16)n); 
+# line 5640 "src/yygram.cpp"
             } break;
          default: goto yy71;
          }
@@ -5645,11 +5650,11 @@ int region_entry ()
       get_lexval();
       mg = yylval;
       get_lexval();
-#line 973 "lang/grammar.acc"
+#line 978 "lang/grammar.acc"
  theReg->sx   = yyMapSize[currMap] % 256; 
                                     theReg->sy   = yyMapSize[currMap++] / 256;
                                     theReg->Grid = mg; 
-# line 5653 "src/yygram.cpp"
+# line 5658 "src/yygram.cpp"
       } break;
    case 299: {
       get_lexval();
@@ -5657,35 +5662,35 @@ int region_entry ()
       while (1) {
          switch (yyselect()) {
          case 854: {
-#line 976 "lang/grammar.acc"
+#line 981 "lang/grammar.acc"
  rID tID, xID, xID2; Glyph Img; uint8 fl; 
                                     tID = xID = xID2 = 0; Img = 0; fl = 0; 
-# line 5664 "src/yygram.cpp"
+# line 5669 "src/yygram.cpp"
             get_lexval();
             ch = yylval;
             get_lexval();
             res_ref(&rr);
-#line 978 "lang/grammar.acc"
+#line 983 "lang/grammar.acc"
  tID = rr; 
-# line 5671 "src/yygram.cpp"
+# line 5676 "src/yygram.cpp"
             while (1) {
                switch (yyselect()) {
                case 842: {
                   get_lexval();
                   cexpr(&n);
                   get_lexval();
-#line 979 "lang/grammar.acc"
+#line 984 "lang/grammar.acc"
  fl |= n; 
-# line 5680 "src/yygram.cpp"
+# line 5685 "src/yygram.cpp"
                   } break;
                case 851: {
                   get_lexval();
                   switch (yyselect()) {
                   case 843: {
                      res_ref(&rr);
-#line 980 "lang/grammar.acc"
+#line 985 "lang/grammar.acc"
  xID = rr; 
-# line 5689 "src/yygram.cpp"
+# line 5694 "src/yygram.cpp"
                      } break;
                   case 845: {
                      get_lexval();
@@ -5693,15 +5698,15 @@ int region_entry ()
                      switch (yyselect()) {
                      case 844: {
                         cexpr(&v);
-#line 981 "lang/grammar.acc"
+#line 986 "lang/grammar.acc"
  xID = v; 
-# line 5699 "src/yygram.cpp"
+# line 5704 "src/yygram.cpp"
                         } break;
                      default: ;
                      }
-#line 982 "lang/grammar.acc"
+#line 987 "lang/grammar.acc"
  fl |= TILE_RANDOM | TILE_ITEM; 
-# line 5705 "src/yygram.cpp"
+# line 5710 "src/yygram.cpp"
                      } break;
                   case 847: {
                      get_lexval();
@@ -5709,15 +5714,15 @@ int region_entry ()
                      switch (yyselect()) {
                      case 846: {
                         cexpr(&v);
-#line 983 "lang/grammar.acc"
+#line 988 "lang/grammar.acc"
  xID = v; 
-# line 5715 "src/yygram.cpp"
+# line 5720 "src/yygram.cpp"
                         } break;
                      default: ;
                      }
-#line 984 "lang/grammar.acc"
+#line 989 "lang/grammar.acc"
  fl |= TILE_RANDOM | TILE_MONSTER; 
-# line 5721 "src/yygram.cpp"
+# line 5726 "src/yygram.cpp"
                      } break;
                   default: printf("???\n"); exit(1);
                   }
@@ -5725,9 +5730,9 @@ int region_entry ()
                   case 848: {
                      get_lexval();
                      res_ref(&rr2);
-#line 985 "lang/grammar.acc"
+#line 990 "lang/grammar.acc"
  xID2 = rr2; 
-# line 5731 "src/yygram.cpp"
+# line 5736 "src/yygram.cpp"
                      } break;
                   case 849: {
                      get_lexval();
@@ -5735,16 +5740,16 @@ int region_entry ()
                      cexpr(&v);
                      get_lexval();
                      cexpr(&v2);
-#line 987 "lang/grammar.acc"
+#line 992 "lang/grammar.acc"
  fl |= TILE_RANDOM_EFF; xID2 = v+v2*256; 
-# line 5741 "src/yygram.cpp"
+# line 5746 "src/yygram.cpp"
                      } break;
                   case 850: {
                      get_lexval();
                      cexpr(&v);
-#line 988 "lang/grammar.acc"
+#line 993 "lang/grammar.acc"
  xID2 = v; 
-# line 5748 "src/yygram.cpp"
+# line 5753 "src/yygram.cpp"
                      } break;
                   default: ;
                   }
@@ -5752,17 +5757,17 @@ int region_entry ()
                case 852: {
                   get_lexval();
                   glyph_desc(&g);
-#line 989 "lang/grammar.acc"
+#line 994 "lang/grammar.acc"
  Img = g; 
-# line 5758 "src/yygram.cpp"
+# line 5763 "src/yygram.cpp"
                   } break;
                default: goto yy73;
                }
             }
             yy73: ;
-#line 990 "lang/grammar.acc"
- theReg->AddTile(ch,Img,fl,tID,xID,xID2); 
-# line 5766 "src/yygram.cpp"
+#line 995 "lang/grammar.acc"
+ theReg->AddTile((char)ch,Img,fl,tID,xID,xID2); 
+# line 5771 "src/yygram.cpp"
             switch (yyselect()) {
             case 853: {
                get_lexval();
@@ -5825,21 +5830,21 @@ int template_def ()
       get_lexval();
       get_lexval();
       name = yylval;
-#line 1000 "lang/grammar.acc"
+#line 1005 "lang/grammar.acc"
  theRes = theTemp; theTemp->Name = name; CurrFeat = 0; CurrAttk = 0; 
-# line 5831 "src/yygram.cpp"
+# line 5836 "src/yygram.cpp"
       get_lexval();
       cexpr3(&ty);
-#line 1001 "lang/grammar.acc"
- theTemp->TType = ty; 
-# line 5836 "src/yygram.cpp"
+#line 1006 "lang/grammar.acc"
+ theTemp->TType = (uint16)ty; 
+# line 5841 "src/yygram.cpp"
       switch (yyselect()) {
       case 857: {
          get_lexval();
          cexpr3(&mt);
-#line 1002 "lang/grammar.acc"
+#line 1007 "lang/grammar.acc"
  theTemp->ForMType = mt; 
-# line 5843 "src/yygram.cpp"
+# line 5848 "src/yygram.cpp"
          } break;
       default: ;
       }
@@ -5854,9 +5859,9 @@ int template_def ()
       }
       yy76: ;
       get_lexval();
-#line 1004 "lang/grammar.acc"
+#line 1009 "lang/grammar.acc"
  theTemp++; 
-# line 5860 "src/yygram.cpp"
+# line 5865 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -5888,9 +5893,9 @@ int template_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 1008 "lang/grammar.acc"
+#line 1013 "lang/grammar.acc"
  theTemp->Desc = lv; 
-# line 5894 "src/yygram.cpp"
+# line 5899 "src/yygram.cpp"
       } break;
    case 307: {
       get_lexval();
@@ -5902,9 +5907,9 @@ int template_entry ()
       }
       cexpr3(&mt);
       get_lexval();
-#line 1009 "lang/grammar.acc"
+#line 1014 "lang/grammar.acc"
  theTemp->ForMType = mt; 
-# line 5908 "src/yygram.cpp"
+# line 5913 "src/yygram.cpp"
       } break;
    case 308: {
       get_lexval();
@@ -5916,15 +5921,15 @@ int template_entry ()
       }
       cexpr3(&mt);
       get_lexval();
-#line 1010 "lang/grammar.acc"
+#line 1015 "lang/grammar.acc"
  theTemp->AddMType = mt; 
-# line 5922 "src/yygram.cpp"
+# line 5927 "src/yygram.cpp"
       } break;
    case 309: {
       glyph_entry(&img);
-#line 1011 "lang/grammar.acc"
+#line 1016 "lang/grammar.acc"
  theTemp->NewImage = img; 
-# line 5928 "src/yygram.cpp"
+# line 5933 "src/yygram.cpp"
       } break;
    case 310: {
       switch (yyselect()) {
@@ -5944,9 +5949,9 @@ int template_entry ()
       }
       mval(&mv);
       get_lexval();
-#line 1012 "lang/grammar.acc"
+#line 1017 "lang/grammar.acc"
  theTemp->CR = mv; 
-# line 5950 "src/yygram.cpp"
+# line 5955 "src/yygram.cpp"
       } break;
    case 311: {
       get_lexval();
@@ -5958,9 +5963,9 @@ int template_entry ()
       }
       mval(&mv);
       get_lexval();
-#line 1013 "lang/grammar.acc"
+#line 1018 "lang/grammar.acc"
  theTemp->HitDice = mv; 
-# line 5964 "src/yygram.cpp"
+# line 5969 "src/yygram.cpp"
       } break;
    case 312: {
       get_lexval();
@@ -5972,9 +5977,9 @@ int template_entry ()
       }
       mval(&mv);
       get_lexval();
-#line 1014 "lang/grammar.acc"
+#line 1019 "lang/grammar.acc"
  theTemp->Hit = mv; 
-# line 5978 "src/yygram.cpp"
+# line 5983 "src/yygram.cpp"
       } break;
    case 313: {
       get_lexval();
@@ -5986,9 +5991,9 @@ int template_entry ()
       }
       mval(&mv);
       get_lexval();
-#line 1015 "lang/grammar.acc"
+#line 1020 "lang/grammar.acc"
  theTemp->Def = mv; 
-# line 5992 "src/yygram.cpp"
+# line 5997 "src/yygram.cpp"
       } break;
    case 314: {
       get_lexval();
@@ -6000,9 +6005,9 @@ int template_entry ()
       }
       mval(&mv);
       get_lexval();
-#line 1016 "lang/grammar.acc"
+#line 1021 "lang/grammar.acc"
  theTemp->Arm = mv; 
-# line 6006 "src/yygram.cpp"
+# line 6011 "src/yygram.cpp"
       } break;
    case 315: {
       get_lexval();
@@ -6014,9 +6019,9 @@ int template_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 1017 "lang/grammar.acc"
- theTemp->DmgMod = n; 
-# line 6020 "src/yygram.cpp"
+#line 1022 "lang/grammar.acc"
+ theTemp->DmgMod = (int8)n; 
+# line 6025 "src/yygram.cpp"
       } break;
    case 316: {
       get_lexval();
@@ -6028,9 +6033,9 @@ int template_entry ()
       }
       mval(&mv);
       get_lexval();
-#line 1018 "lang/grammar.acc"
+#line 1023 "lang/grammar.acc"
  theTemp->Power = mv; 
-# line 6034 "src/yygram.cpp"
+# line 6039 "src/yygram.cpp"
       } break;
    case 317: {
       get_lexval();
@@ -6043,9 +6048,9 @@ int template_entry ()
       }
       mval(&mv);
       get_lexval();
-#line 1019 "lang/grammar.acc"
+#line 1024 "lang/grammar.acc"
  theTemp->CasterLev = mv; 
-# line 6049 "src/yygram.cpp"
+# line 6054 "src/yygram.cpp"
       } break;
    case 318: {
       get_lexval();
@@ -6057,9 +6062,9 @@ int template_entry ()
       }
       mval(&mv);
       get_lexval();
-#line 1020 "lang/grammar.acc"
+#line 1025 "lang/grammar.acc"
  theTemp->Size = mv; 
-# line 6063 "src/yygram.cpp"
+# line 6068 "src/yygram.cpp"
       } break;
    case 319: {
       get_lexval();
@@ -6071,9 +6076,9 @@ int template_entry ()
       }
       mval(&mv);
       get_lexval();
-#line 1021 "lang/grammar.acc"
+#line 1026 "lang/grammar.acc"
  theTemp->Spd = mv; 
-# line 6077 "src/yygram.cpp"
+# line 6082 "src/yygram.cpp"
       } break;
    case 320: {
       get_lexval();
@@ -6085,9 +6090,9 @@ int template_entry ()
       }
       mval(&mv);
       get_lexval();
-#line 1022 "lang/grammar.acc"
+#line 1027 "lang/grammar.acc"
  theTemp->Mov = mv; 
-# line 6091 "src/yygram.cpp"
+# line 6096 "src/yygram.cpp"
       } break;
    case 321: {
       get_lexval();
@@ -6108,9 +6113,9 @@ int template_entry ()
          } break;
       default: printf("???\n"); exit(1);
       }
-#line 1023 "lang/grammar.acc"
+#line 1028 "lang/grammar.acc"
  theTemp->Attr[at] = mv; 
-# line 6114 "src/yygram.cpp"
+# line 6119 "src/yygram.cpp"
       } break;
    case 322: {
       get_lexval();
@@ -6139,9 +6144,9 @@ int template_entry ()
       cexpr3(&st);
       get_lexval();
       get_lexval();
-#line 1027 "lang/grammar.acc"
- if (!theTemp->GainStati(st)) yyerror("too many Stati in template"); 
-# line 6145 "src/yygram.cpp"
+#line 1032 "lang/grammar.acc"
+ if (!theTemp->GainStati((uint8)st)) yyerror("too many Stati in template"); 
+# line 6150 "src/yygram.cpp"
       } break;
    case 324: {
       get_lexval();
@@ -6151,9 +6156,9 @@ int template_entry ()
       cexpr3(&stV);
       get_lexval();
       get_lexval();
-#line 1029 "lang/grammar.acc"
- if (!theTemp->GainStati(st,stV)) yyerror("too many Stati in template"); 
-# line 6157 "src/yygram.cpp"
+#line 1034 "lang/grammar.acc"
+ if (!theTemp->GainStati((uint8)st,(int16)stV)) yyerror("too many Stati in template"); 
+# line 6162 "src/yygram.cpp"
       } break;
    case 325: {
       get_lexval();
@@ -6165,10 +6170,10 @@ int template_entry ()
       cexpr3(&stM);
       get_lexval();
       get_lexval();
-#line 1031 "lang/grammar.acc"
- if (!theTemp->GainStati(st,stV,stM)) 
+#line 1036 "lang/grammar.acc"
+ if (!theTemp->GainStati((uint8)st,(int16)stV,(int16)stM)) 
         yyerror("too many Stati in template"); 
-# line 6172 "src/yygram.cpp"
+# line 6177 "src/yygram.cpp"
       } break;
    case 326: {
       get_lexval();
@@ -6182,10 +6187,10 @@ int template_entry ()
       res_ref(&rr);
       get_lexval();
       get_lexval();
-#line 1034 "lang/grammar.acc"
- if (!theTemp->GainStati(st,stV,stM,rr)) 
+#line 1039 "lang/grammar.acc"
+ if (!theTemp->GainStati((uint8)st,(int16)stV,(int16)stM,rr)) 
         yyerror("too many Stati in template"); 
-# line 6189 "src/yygram.cpp"
+# line 6194 "src/yygram.cpp"
       } break;
    case 327: {
       get_lexval();
@@ -6201,9 +6206,9 @@ int template_entry ()
             switch (yyselect()) {
             case 881: {
                cexpr3(&res);
-#line 1037 "lang/grammar.acc"
+#line 1042 "lang/grammar.acc"
  theTemp->AddRes |= res; 
-# line 6207 "src/yygram.cpp"
+# line 6212 "src/yygram.cpp"
                } break;
             case 884: {
                switch (yyselect()) {
@@ -6216,9 +6221,9 @@ int template_entry ()
                default: printf("???\n"); exit(1);
                }
                cexpr3(&res);
-#line 1038 "lang/grammar.acc"
+#line 1043 "lang/grammar.acc"
  theTemp->SubRes |= res; 
-# line 6222 "src/yygram.cpp"
+# line 6227 "src/yygram.cpp"
                } break;
             default: printf("???\n"); exit(1);
             }
@@ -6249,9 +6254,9 @@ int template_entry ()
             switch (yyselect()) {
             case 888: {
                cexpr3(&res);
-#line 1040 "lang/grammar.acc"
+#line 1045 "lang/grammar.acc"
  theTemp->AddImm |= res; 
-# line 6255 "src/yygram.cpp"
+# line 6260 "src/yygram.cpp"
                } break;
             case 891: {
                switch (yyselect()) {
@@ -6264,9 +6269,9 @@ int template_entry ()
                default: printf("???\n"); exit(1);
                }
                cexpr3(&res);
-#line 1041 "lang/grammar.acc"
+#line 1046 "lang/grammar.acc"
  theTemp->SubImm |= res; 
-# line 6270 "src/yygram.cpp"
+# line 6275 "src/yygram.cpp"
                } break;
             default: printf("???\n"); exit(1);
             }
@@ -6296,9 +6301,9 @@ int template_entry ()
          case 895: {
             cexpr3(&n);
             get_lexval();
-#line 1043 "lang/grammar.acc"
- theTemp->NewFeats[CurrFeat++] = n; 
-# line 6302 "src/yygram.cpp"
+#line 1048 "lang/grammar.acc"
+ theTemp->NewFeats[CurrFeat++] = (uint16)n; 
+# line 6307 "src/yygram.cpp"
             } break;
          default: goto yy80;
          }
@@ -6306,9 +6311,9 @@ int template_entry ()
       yy80: ;
       cexpr3(&n);
       get_lexval();
-#line 1044 "lang/grammar.acc"
- theTemp->NewFeats[CurrFeat++] = n; 
-# line 6312 "src/yygram.cpp"
+#line 1049 "lang/grammar.acc"
+ theTemp->NewFeats[CurrFeat++] = (uint16)n; 
+# line 6317 "src/yygram.cpp"
       } break;
    case 330: {
       get_lexval();
@@ -6322,10 +6327,10 @@ int template_entry ()
          switch (yyselect()) {
          case 898: {
             res_ref(&rr);
-#line 1045 "lang/grammar.acc"
+#line 1050 "lang/grammar.acc"
  theTemp->AddsFlag(M_INNATE);
                                        theTemp->AddResID(AN_INNATE, rr); 
-# line 6329 "src/yygram.cpp"
+# line 6334 "src/yygram.cpp"
             switch (yyselect()) {
             case 897: {
                get_lexval();
@@ -6351,9 +6356,9 @@ int template_entry ()
          switch (yyselect()) {
          case 901: {
             res_ref(&rr);
-#line 1048 "lang/grammar.acc"
+#line 1053 "lang/grammar.acc"
  theTemp->AddResID(AN_DISEASE, rr); 
-# line 6357 "src/yygram.cpp"
+# line 6362 "src/yygram.cpp"
             switch (yyselect()) {
             case 900: {
                get_lexval();
@@ -6379,9 +6384,9 @@ int template_entry ()
          switch (yyselect()) {
          case 904: {
             res_ref(&rr);
-#line 1050 "lang/grammar.acc"
+#line 1055 "lang/grammar.acc"
  theTemp->AddResID(AN_POISON, rr); 
-# line 6385 "src/yygram.cpp"
+# line 6390 "src/yygram.cpp"
             switch (yyselect()) {
             case 903: {
                get_lexval();
@@ -6409,13 +6414,13 @@ int template_entry ()
             switch (yyselect()) {
             case 906: {
                cexpr3(&fl);
-#line 1053 "lang/grammar.acc"
+#line 1058 "lang/grammar.acc"
  if (fl < 0) 
                                          theTemp->Flags[(-fl)/8] |= 1 << ((-fl)%8);
                                        else
                                          theTemp->AddFlags[fl/8] |= 1 << (fl % 8); 
                                      
-# line 6419 "src/yygram.cpp"
+# line 6424 "src/yygram.cpp"
                } break;
             case 909: {
                switch (yyselect()) {
@@ -6428,9 +6433,9 @@ int template_entry ()
                default: printf("???\n"); exit(1);
                }
                cexpr3(&fl);
-#line 1058 "lang/grammar.acc"
+#line 1063 "lang/grammar.acc"
  theTemp->SubFlags[fl/8] |= 1 << (fl % 8); 
-# line 6434 "src/yygram.cpp"
+# line 6439 "src/yygram.cpp"
                } break;
             default: printf("???\n"); exit(1);
             }
@@ -6478,34 +6483,34 @@ int temp_attack_entry ()
    YYSTYPE dt;
    switch(yyselect()) {
    case 338: {
-#line 1066 "lang/grammar.acc"
+#line 1071 "lang/grammar.acc"
  uint8 dt = AD_NORM; dam.Set(0,0,0);
                                  theTemp->NewAttk[CurrAttk].u.a.Dmg.Set(0,0,0);
-# line 6485 "src/yygram.cpp"
+# line 6490 "src/yygram.cpp"
       cexpr3(&at);
       get_lexval();
       switch (yyselect()) {
       case 913: {
          dice_only(&dam);
-#line 1069 "lang/grammar.acc"
+#line 1074 "lang/grammar.acc"
  theTemp->NewAttk[CurrAttk].u.a.Dmg = yyDice(dam); 
-# line 6493 "src/yygram.cpp"
+# line 6498 "src/yygram.cpp"
          } break;
       case 914: {
          cexpr3(&chance);
          get_lexval();
-#line 1070 "lang/grammar.acc"
- theTemp->NewAttk[CurrAttk].u.a.Dmg.Bonus = chance; 
-# line 6500 "src/yygram.cpp"
+#line 1075 "lang/grammar.acc"
+ theTemp->NewAttk[CurrAttk].u.a.Dmg.Bonus = (int8)chance; 
+# line 6505 "src/yygram.cpp"
          } break;
       default: ;
       }
       switch (yyselect()) {
       case 915: {
          cexpr3(&n);
-#line 1071 "lang/grammar.acc"
- dt = n; 
-# line 6509 "src/yygram.cpp"
+#line 1076 "lang/grammar.acc"
+ dt = (uint8)n; 
+# line 6514 "src/yygram.cpp"
          } break;
       default: ;
       }
@@ -6531,15 +6536,15 @@ int temp_attack_entry ()
          default: printf("???\n"); exit(1);
          }
          cexpr3(&dc);
-#line 1074 "lang/grammar.acc"
- theTemp->NewAttk[CurrAttk].u.a.DC = dc; 
-# line 6537 "src/yygram.cpp"
+#line 1079 "lang/grammar.acc"
+ theTemp->NewAttk[CurrAttk].u.a.DC = (int8)dc; 
+# line 6542 "src/yygram.cpp"
          get_lexval();
          } break;
       default: ;
       }
-#line 1075 "lang/grammar.acc"
- theTemp->NewAttk[CurrAttk].AType = at;
+#line 1080 "lang/grammar.acc"
+ theTemp->NewAttk[CurrAttk].AType = (int8)at;
                                  theTemp->NewAttk[CurrAttk].DType = dt;
                                  /*
 
@@ -6554,29 +6559,29 @@ int temp_attack_entry ()
                                  if (CurrAttk >= 16)
                                    yyerror("> 16 attacks on a single template!");
                                
-# line 6558 "src/yygram.cpp"
+# line 6563 "src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 928: {
             get_lexval();
-#line 1086 "lang/grammar.acc"
+#line 1091 "lang/grammar.acc"
  dt = AD_NORM; theTemp->NewAttk[CurrAttk].u.a.Dmg.Set(0,0,0); dam2.Set(0,0,0); 
-# line 6565 "src/yygram.cpp"
+# line 6570 "src/yygram.cpp"
             switch (yyselect()) {
             case 921: {
                dice_only(&dam2);
-#line 1087 "lang/grammar.acc"
+#line 1092 "lang/grammar.acc"
  theTemp->NewAttk[CurrAttk].u.a.Dmg = yyDice(dam2); 
-# line 6571 "src/yygram.cpp"
+# line 6576 "src/yygram.cpp"
                } break;
             default: ;
             }
             switch (yyselect()) {
             case 922: {
                cexpr3(&n2);
-#line 1088 "lang/grammar.acc"
- dt = n2; 
-# line 6580 "src/yygram.cpp"
+#line 1093 "lang/grammar.acc"
+ dt = (uint8)n2; 
+# line 6585 "src/yygram.cpp"
                } break;
             default: ;
             }
@@ -6602,14 +6607,14 @@ int temp_attack_entry ()
                default: printf("???\n"); exit(1);
                }
                cexpr3(&dc);
-#line 1090 "lang/grammar.acc"
- theTemp->NewAttk[CurrAttk].u.a.DC = dc; 
-# line 6608 "src/yygram.cpp"
+#line 1095 "lang/grammar.acc"
+ theTemp->NewAttk[CurrAttk].u.a.DC = (int8)dc; 
+# line 6613 "src/yygram.cpp"
                get_lexval();
                } break;
             default: ;
             }
-#line 1091 "lang/grammar.acc"
+#line 1096 "lang/grammar.acc"
  theTemp->NewAttk[CurrAttk].AType = A_ALSO;
                                  theTemp->NewAttk[CurrAttk].DType = dt;
                                  theTemp->NewAttk[CurrAttk].u.a.Dmg = yyDice(dam2);
@@ -6617,7 +6622,7 @@ int temp_attack_entry ()
                                  if (CurrAttk >= 16)
                                    Fatal("> 16 attacks on a single monster!");
                                
-# line 6621 "src/yygram.cpp"
+# line 6626 "src/yygram.cpp"
             } break;
          default: goto yy85;
          }
@@ -6628,16 +6633,16 @@ int temp_attack_entry ()
       cexpr3(&at);
       get_lexval();
       res_ref(&rr);
-#line 1099 "lang/grammar.acc"
- theTemp->NewAttk[CurrAttk].AType = at;
+#line 1104 "lang/grammar.acc"
+ theTemp->NewAttk[CurrAttk].AType = (int8)at;
                                   theTemp->NewAttk[CurrAttk].u.xID = rr; 
-# line 6635 "src/yygram.cpp"
+# line 6640 "src/yygram.cpp"
       switch (yyselect()) {
       case 929: {
          cexpr3(&dt);
-#line 1101 "lang/grammar.acc"
- theTemp->NewAttk[CurrAttk].DType = dt; 
-# line 6641 "src/yygram.cpp"
+#line 1106 "lang/grammar.acc"
+ theTemp->NewAttk[CurrAttk].DType = (int8)dt; 
+# line 6646 "src/yygram.cpp"
          } break;
       default: ;
       }
@@ -6667,14 +6672,14 @@ int flavor_def ()
       name = yylval;
       get_lexval();
       cexpr3(&it);
-#line 1108 "lang/grammar.acc"
+#line 1113 "lang/grammar.acc"
  theRes = theFlavor; 
                                          theFlavor->Name = name;
-                                         theFlavor->IType = it;
+                                         theFlavor->IType = (int8)it;
                                          theFlavor->Material = -1;
                                          theFlavor->Color = -1;
                                          theFlavor->Weight = 20; 
-# line 6678 "src/yygram.cpp"
+# line 6683 "src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -6686,9 +6691,9 @@ int flavor_def ()
       }
       yy86: ;
       get_lexval();
-#line 1114 "lang/grammar.acc"
+#line 1119 "lang/grammar.acc"
  theFlavor++; 
-# line 6692 "src/yygram.cpp"
+# line 6697 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -6711,9 +6716,9 @@ int flavor_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 1118 "lang/grammar.acc"
+#line 1123 "lang/grammar.acc"
  theFlavor->Desc     = lv; 
-# line 6717 "src/yygram.cpp"
+# line 6722 "src/yygram.cpp"
       } break;
    case 343: {
       get_lexval();
@@ -6725,9 +6730,9 @@ int flavor_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 1119 "lang/grammar.acc"
- theFlavor->Material = n; 
-# line 6731 "src/yygram.cpp"
+#line 1124 "lang/grammar.acc"
+ theFlavor->Material = (int8)n; 
+# line 6736 "src/yygram.cpp"
       } break;
    case 344: {
       get_lexval();
@@ -6739,9 +6744,9 @@ int flavor_entry ()
       }
       color(&col);
       get_lexval();
-#line 1120 "lang/grammar.acc"
- theFlavor->Color    = col; 
-# line 6745 "src/yygram.cpp"
+#line 1125 "lang/grammar.acc"
+ theFlavor->Color    = (int8)col; 
+# line 6750 "src/yygram.cpp"
       } break;
    case 345: {
       get_lexval();
@@ -6754,9 +6759,9 @@ int flavor_entry ()
       cexpr3(&n);
       get_lexval();
       get_lexval();
-#line 1121 "lang/grammar.acc"
- theFlavor->Weight   = n/5; 
-# line 6760 "src/yygram.cpp"
+#line 1126 "lang/grammar.acc"
+ theFlavor->Weight   = (int8)(n/5); 
+# line 6765 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -6769,22 +6774,22 @@ int encounter_def ()
    switch(yyselect()) {
    case 346: {
       get_lexval();
-#line 1126 "lang/grammar.acc"
+#line 1131 "lang/grammar.acc"
  theRes = theEnc; 
                      theEnc->Weight = 10; 
-# line 6776 "src/yygram.cpp"
+# line 6781 "src/yygram.cpp"
       get_lexval();
       name = yylval;
-#line 1128 "lang/grammar.acc"
+#line 1133 "lang/grammar.acc"
  theEnc->Name = name; 
-# line 6781 "src/yygram.cpp"
+# line 6786 "src/yygram.cpp"
       switch (yyselect()) {
       case 935: {
          get_lexval();
          cexpr3(&n);
-#line 1129 "lang/grammar.acc"
+#line 1134 "lang/grammar.acc"
  theEnc->Terrain |= n; 
-# line 6788 "src/yygram.cpp"
+# line 6793 "src/yygram.cpp"
          } break;
       default: ;
       }
@@ -6799,9 +6804,9 @@ int encounter_def ()
       }
       yy87: ;
       get_lexval();
-#line 1132 "lang/grammar.acc"
+#line 1137 "lang/grammar.acc"
  theEnc++; 
-# line 6805 "src/yygram.cpp"
+# line 6810 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -6817,36 +6822,36 @@ int encounter_entry ()
       get_lexval();
       cexpr(&n);
       get_lexval();
-#line 1135 "lang/grammar.acc"
+#line 1140 "lang/grammar.acc"
  theEnc->Terrain |= n; 
-# line 6823 "src/yygram.cpp"
+# line 6828 "src/yygram.cpp"
       } break;
    case 348: {
       get_lexval();
       get_lexval();
       cexpr3(&n);
       get_lexval();
-#line 1136 "lang/grammar.acc"
- theEnc->Depth = n; 
-# line 6832 "src/yygram.cpp"
+#line 1141 "lang/grammar.acc"
+ theEnc->Depth = (int16)n; 
+# line 6837 "src/yygram.cpp"
       } break;
    case 349: {
       get_lexval();
       get_lexval();
       cexpr3(&n);
       get_lexval();
-#line 1137 "lang/grammar.acc"
- theEnc->Weight = n; 
-# line 6841 "src/yygram.cpp"
+#line 1142 "lang/grammar.acc"
+ theEnc->Weight = (int16)n; 
+# line 6846 "src/yygram.cpp"
       } break;
    case 350: {
       get_lexval();
       get_lexval();
       cexpr3(&n);
       get_lexval();
-#line 1138 "lang/grammar.acc"
- theEnc->minCR = theEnc->maxCR = n; 
-# line 6850 "src/yygram.cpp"
+#line 1143 "lang/grammar.acc"
+ theEnc->minCR = theEnc->maxCR = (int16)n; 
+# line 6855 "src/yygram.cpp"
       } break;
    case 351: {
       get_lexval();
@@ -6854,9 +6859,9 @@ int encounter_entry ()
       cexpr3(&n);
       get_lexval();
       get_lexval();
-#line 1139 "lang/grammar.acc"
- theEnc->minCR = n; theEnc->maxCR = 36; 
-# line 6860 "src/yygram.cpp"
+#line 1144 "lang/grammar.acc"
+ theEnc->minCR = (int16)n; theEnc->maxCR = 36; 
+# line 6865 "src/yygram.cpp"
       } break;
    case 352: {
       get_lexval();
@@ -6873,25 +6878,25 @@ int encounter_entry ()
       }
       cexpr3(&n2);
       get_lexval();
-#line 1141 "lang/grammar.acc"
- theEnc->minCR = n; theEnc->maxCR = n2; 
-# line 6879 "src/yygram.cpp"
+#line 1146 "lang/grammar.acc"
+ theEnc->minCR = (int16)n; theEnc->maxCR = (int16)n2; 
+# line 6884 "src/yygram.cpp"
       } break;
    case 353: {
       get_lexval();
       get_lexval();
       cexpr3(&n);
       get_lexval();
-#line 1142 "lang/grammar.acc"
- theEnc->Align = n; 
-# line 6888 "src/yygram.cpp"
+#line 1147 "lang/grammar.acc"
+ theEnc->Align = (int16)n; 
+# line 6893 "src/yygram.cpp"
       } break;
    case 354: {
       get_lexval();
       get_lexval();
-#line 1143 "lang/grammar.acc"
+#line 1148 "lang/grammar.acc"
  currPart = 0; 
-# line 6895 "src/yygram.cpp"
+# line 6900 "src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 939: {
@@ -6915,9 +6920,9 @@ int encounter_entry ()
          switch (yyselect()) {
          case 943: {
             cexpr3(&n);
-#line 1146 "lang/grammar.acc"
- theEnc->SetFlag(n); 
-# line 6921 "src/yygram.cpp"
+#line 1151 "lang/grammar.acc"
+ theEnc->SetFlag((uint16)n); 
+# line 6926 "src/yygram.cpp"
             switch (yyselect()) {
             case 941: {
                get_lexval();
@@ -6959,38 +6964,38 @@ int encounter_part ()
    rID rr;
    switch(yyselect()) {
    case 360: {
-#line 1155 "lang/grammar.acc"
+#line 1160 "lang/grammar.acc"
  ASSERT(currPart < MAX_PARTS); 
-# line 6965 "src/yygram.cpp"
+# line 6970 "src/yygram.cpp"
       switch (yyselect()) {
       case 944: {
          get_lexval();
          } break;
       case 945: {
          get_lexval();
-#line 1157 "lang/grammar.acc"
+#line 1162 "lang/grammar.acc"
  theEnc->Parts[currPart].Flags |= EP_ELSE; 
-# line 6974 "src/yygram.cpp"
+# line 6979 "src/yygram.cpp"
          } break;
       case 946: {
          get_lexval();
-#line 1158 "lang/grammar.acc"
+#line 1163 "lang/grammar.acc"
  theEnc->Parts[currPart].Flags |= EP_OR; 
-# line 6980 "src/yygram.cpp"
+# line 6985 "src/yygram.cpp"
          } break;
       default: printf("???\n"); exit(1);
       }
-#line 1160 "lang/grammar.acc"
+#line 1165 "lang/grammar.acc"
  theEnc->Parts[currPart].Weight = 10; 
-# line 6986 "src/yygram.cpp"
+# line 6991 "src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 947: {
             cexpr4(&n);
             get_lexval();
-#line 1162 "lang/grammar.acc"
- theEnc->Parts[currPart].Chance = n; 
-# line 6994 "src/yygram.cpp"
+#line 1167 "lang/grammar.acc"
+ theEnc->Parts[currPart].Chance = (uint8)n; 
+# line 6999 "src/yygram.cpp"
             } break;
          case 948: {
             get_lexval();
@@ -6998,25 +7003,25 @@ int encounter_part ()
             cexpr4(&n);
             get_lexval();
             get_lexval();
-#line 1163 "lang/grammar.acc"
- theEnc->Parts[currPart].minCR = n; 
-# line 7004 "src/yygram.cpp"
+#line 1168 "lang/grammar.acc"
+ theEnc->Parts[currPart].minCR = (uint8)n; 
+# line 7009 "src/yygram.cpp"
             } break;
          case 949: {
             get_lexval();
             cexpr4(&n);
             get_lexval();
-#line 1164 "lang/grammar.acc"
- theEnc->Parts[currPart].Weight = n; 
-# line 7012 "src/yygram.cpp"
+#line 1169 "lang/grammar.acc"
+ theEnc->Parts[currPart].Weight = (uint8)n; 
+# line 7017 "src/yygram.cpp"
             } break;
          case 950: {
             get_lexval();
             sep_expr(&hc);
             get_lexval();
-#line 1165 "lang/grammar.acc"
+#line 1170 "lang/grammar.acc"
  theEnc->Parts[currPart].Condition = hc; 
-# line 7020 "src/yygram.cpp"
+# line 7025 "src/yygram.cpp"
             } break;
          case 953: {
             cexpr4(&n);
@@ -7030,34 +7035,34 @@ int encounter_part ()
             default: printf("???\n"); exit(1);
             }
             cexpr4(&n2);
-#line 1166 "lang/grammar.acc"
- theEnc->Parts[currPart].Amt.Number = n;
-                                      theEnc->Parts[currPart].Amt.Bonus  = n2;
+#line 1171 "lang/grammar.acc"
+ theEnc->Parts[currPart].Amt.Number = (int8)n;
+                                      theEnc->Parts[currPart].Amt.Bonus  = (int8)n2;
                                       theEnc->Parts[currPart].Amt.Sides  = 0; 
-# line 7038 "src/yygram.cpp"
+# line 7043 "src/yygram.cpp"
             } break;
          case 954: {
             cexpr4(&n);
-#line 1169 "lang/grammar.acc"
- theEnc->Parts[currPart].Amt.Number = n;
-                                      theEnc->Parts[currPart].Amt.Bonus  = n;
+#line 1174 "lang/grammar.acc"
+ theEnc->Parts[currPart].Amt.Number = (int8)n;
+                                      theEnc->Parts[currPart].Amt.Bonus  = (int8)n;
                                       theEnc->Parts[currPart].Amt.Sides  = 0; 
-# line 7046 "src/yygram.cpp"
+# line 7051 "src/yygram.cpp"
             } break;
          case 955: {
             cexpr4(&n);
             get_lexval();
-#line 1172 "lang/grammar.acc"
- theEnc->Parts[currPart].Amt.Number = n;
-                                      theEnc->Parts[currPart].Amt.Bonus  = n+50;
+#line 1177 "lang/grammar.acc"
+ theEnc->Parts[currPart].Amt.Number = (int8)n;
+                                      theEnc->Parts[currPart].Amt.Bonus  = (int8)(n+50);
                                       theEnc->Parts[currPart].Amt.Sides  = 0; 
-# line 7055 "src/yygram.cpp"
+# line 7060 "src/yygram.cpp"
             } break;
          case 956: {
             dice_only(&d);
-#line 1175 "lang/grammar.acc"
+#line 1180 "lang/grammar.acc"
  theEnc->Parts[currPart].Amt        = d; 
-# line 7061 "src/yygram.cpp"
+# line 7066 "src/yygram.cpp"
             } break;
          default: goto yy90;
          }
@@ -7067,46 +7072,46 @@ int encounter_part ()
       switch (yyselect()) {
       case 957: {
          res_ref(&rr);
-#line 1181 "lang/grammar.acc"
+#line 1186 "lang/grammar.acc"
  theEnc->Parts[currPart].xID = rr; 
-# line 7073 "src/yygram.cpp"
+# line 7078 "src/yygram.cpp"
          } break;
       case 958: {
          cexpr3(&n);
-#line 1182 "lang/grammar.acc"
+#line 1187 "lang/grammar.acc"
  theEnc->Parts[currPart].xID = n; 
-# line 7079 "src/yygram.cpp"
+# line 7084 "src/yygram.cpp"
          } break;
       case 959: {
          get_lexval();
          cexpr3(&n);
-#line 1183 "lang/grammar.acc"
+#line 1188 "lang/grammar.acc"
  theEnc->Parts[currPart].xID = n;
                                       theEnc->Parts[currPart].Flags |= EP_ANYMON; 
-# line 7087 "src/yygram.cpp"
+# line 7092 "src/yygram.cpp"
          } break;
       default: printf("???\n"); exit(1);
       }
       switch (yyselect()) {
       case 960: {
          res_ref(&rr);
-#line 1187 "lang/grammar.acc"
+#line 1192 "lang/grammar.acc"
  theEnc->Parts[currPart].xID2 = rr; 
-# line 7096 "src/yygram.cpp"
+# line 7101 "src/yygram.cpp"
          } break;
       case 961: {
          cexpr3(&n);
-#line 1188 "lang/grammar.acc"
+#line 1193 "lang/grammar.acc"
  theEnc->Parts[currPart].xID2 = n; 
-# line 7102 "src/yygram.cpp"
+# line 7107 "src/yygram.cpp"
          } break;
       case 962: {
          get_lexval();
          cexpr3(&n);
-#line 1189 "lang/grammar.acc"
+#line 1194 "lang/grammar.acc"
  theEnc->Parts[currPart].xID = n;
                                       theEnc->Parts[currPart].Flags |= EP_ANYTEMP; 
-# line 7110 "src/yygram.cpp"
+# line 7115 "src/yygram.cpp"
          } break;
       default: ;
       }
@@ -7114,9 +7119,9 @@ int encounter_part ()
       case 966: {
          get_lexval();
          cexpr3(&n);
-#line 1193 "lang/grammar.acc"
+#line 1198 "lang/grammar.acc"
  theEnc->Parts[currPart].Flags |= n; 
-# line 7120 "src/yygram.cpp"
+# line 7125 "src/yygram.cpp"
          while (1) {
             switch (yyselect()) {
             case 965: {
@@ -7130,9 +7135,9 @@ int encounter_part ()
                default: printf("???\n"); exit(1);
                }
                cexpr3(&n);
-#line 1194 "lang/grammar.acc"
+#line 1199 "lang/grammar.acc"
  theEnc->Parts[currPart].Flags |= n; 
-# line 7136 "src/yygram.cpp"
+# line 7141 "src/yygram.cpp"
                } break;
             default: goto yy91;
             }
@@ -7142,9 +7147,9 @@ int encounter_part ()
          } break;
       default: ;
       }
-#line 1197 "lang/grammar.acc"
+#line 1202 "lang/grammar.acc"
  currPart++; 
-# line 7148 "src/yygram.cpp"
+# line 7153 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -7161,11 +7166,11 @@ int behaviour_def ()
       name = yylval;
       get_lexval();
       cexpr3(&c);
-#line 1201 "lang/grammar.acc"
+#line 1206 "lang/grammar.acc"
  theRes = theBev; 
                                            theBev->Name = name;
                                            theBev->Conditions = c; 
-# line 7169 "src/yygram.cpp"
+# line 7174 "src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -7177,9 +7182,9 @@ int behaviour_def ()
       }
       yy92: ;
       get_lexval();
-#line 1204 "lang/grammar.acc"
+#line 1209 "lang/grammar.acc"
  theBev++; 
-# line 7183 "src/yygram.cpp"
+# line 7188 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -7200,9 +7205,9 @@ int behaviour_entry ()
       }
       res_ref(&rr);
       get_lexval();
-#line 1208 "lang/grammar.acc"
+#line 1213 "lang/grammar.acc"
  theBev->spID = rr; 
-# line 7206 "src/yygram.cpp"
+# line 7211 "src/yygram.cpp"
       } break;
    case 363: {
       get_lexval();
@@ -7225,9 +7230,9 @@ int behaviour_entry ()
                } break;
             default: ;
             }
-#line 1209 "lang/grammar.acc"
- theBev->SetFlag(n); 
-# line 7231 "src/yygram.cpp"
+#line 1214 "lang/grammar.acc"
+ theBev->SetFlag((uint16)n); 
+# line 7236 "src/yygram.cpp"
             } break;
          default: goto yy93;
          }
@@ -7259,79 +7264,79 @@ int text_def ()
       get_lexval();
       get_lexval();
       name = yylval;
-#line 1216 "lang/grammar.acc"
+#line 1221 "lang/grammar.acc"
  theRes = theText;
                          theText->Name = name;
                          cText = 0; 
-# line 7267 "src/yygram.cpp"
+# line 7272 "src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 973: {
             get_lexval();
             text = yylval;
-#line 1219 "lang/grammar.acc"
+#line 1224 "lang/grammar.acc"
  TempList[cText++] = text; 
-# line 7275 "src/yygram.cpp"
+# line 7280 "src/yygram.cpp"
             } break;
          case 974: {
             res_ref(&rr);
-#line 1220 "lang/grammar.acc"
+#line 1225 "lang/grammar.acc"
  TempList[cText++] = rr; 
-# line 7281 "src/yygram.cpp"
+# line 7286 "src/yygram.cpp"
             } break;
          case 975: {
             get_lexval();
-#line 1221 "lang/grammar.acc"
+#line 1226 "lang/grammar.acc"
  TempList[cText++] = TC_LPAREN; 
-# line 7287 "src/yygram.cpp"
+# line 7292 "src/yygram.cpp"
             } break;
          case 976: {
             get_lexval();
-#line 1222 "lang/grammar.acc"
+#line 1227 "lang/grammar.acc"
  TempList[cText++] = TC_RPAREN; 
-# line 7293 "src/yygram.cpp"
+# line 7298 "src/yygram.cpp"
             } break;
          case 977: {
             get_lexval();
-#line 1223 "lang/grammar.acc"
+#line 1228 "lang/grammar.acc"
  TempList[cText++] = TC_CHOICE; 
-# line 7299 "src/yygram.cpp"
+# line 7304 "src/yygram.cpp"
             } break;
          case 978: {
             get_lexval();
-#line 1224 "lang/grammar.acc"
+#line 1229 "lang/grammar.acc"
  TempList[cText++] = TC_TERM; 
-# line 7305 "src/yygram.cpp"
+# line 7310 "src/yygram.cpp"
             } break;
          case 979: {
             get_lexval();
             sep_expr(&hc);
             get_lexval();
             get_lexval();
-#line 1226 "lang/grammar.acc"
+#line 1231 "lang/grammar.acc"
  TempList[cText++] = TC_CASE;
                       TempList[cText++] = hc; 
-# line 7315 "src/yygram.cpp"
+# line 7320 "src/yygram.cpp"
             } break;
          case 980: {
             get_lexval();
             sep_stat(&hc);
             get_lexval();
-#line 1229 "lang/grammar.acc"
+#line 1234 "lang/grammar.acc"
  TempList[cText++] = TC_ACTION;
                       TempList[cText++] = hc; 
-# line 7324 "src/yygram.cpp"
+# line 7329 "src/yygram.cpp"
             } break;
          default: goto yy94;
          }
       }
       yy94: ;
       get_lexval();
-#line 1231 "lang/grammar.acc"
+#line 1236 "lang/grammar.acc"
  TempList[cText] = 0;
              theText->AddList(TEXT_LIST,TempList);
              theText++; 
-# line 7335 "src/yygram.cpp"
+# line 7340 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -7352,51 +7357,51 @@ int type_name (YYSTYPE *ty)
    switch(yyselect()) {
    case 369: {
       get_lexval();
-#line 1239 "lang/grammar.acc"
+#line 1244 "lang/grammar.acc"
  *ty = DT_VOID; 
-# line 7358 "src/yygram.cpp"
+# line 7363 "src/yygram.cpp"
       } break;
    case 370: {
       get_lexval();
-#line 1240 "lang/grammar.acc"
+#line 1245 "lang/grammar.acc"
  *ty = DT_INT16; 
-# line 7364 "src/yygram.cpp"
+# line 7369 "src/yygram.cpp"
       } break;
    case 371: {
       get_lexval();
-#line 1241 "lang/grammar.acc"
+#line 1246 "lang/grammar.acc"
  *ty = DT_INT32; 
-# line 7370 "src/yygram.cpp"
+# line 7375 "src/yygram.cpp"
       } break;
    case 372: {
       get_lexval();
-#line 1242 "lang/grammar.acc"
+#line 1247 "lang/grammar.acc"
  *ty = DT_HOBJ; 
-# line 7376 "src/yygram.cpp"
+# line 7381 "src/yygram.cpp"
       } break;
    case 373: {
       get_lexval();
-#line 1243 "lang/grammar.acc"
+#line 1248 "lang/grammar.acc"
  *ty = DT_HTEXT; 
-# line 7382 "src/yygram.cpp"
+# line 7387 "src/yygram.cpp"
       } break;
    case 374: {
       get_lexval();
-#line 1244 "lang/grammar.acc"
+#line 1249 "lang/grammar.acc"
  *ty = DT_RID; 
-# line 7388 "src/yygram.cpp"
+# line 7393 "src/yygram.cpp"
       } break;
    case 375: {
       get_lexval();
-#line 1245 "lang/grammar.acc"
+#line 1250 "lang/grammar.acc"
  *ty = DT_STRING; 
-# line 7394 "src/yygram.cpp"
+# line 7399 "src/yygram.cpp"
       } break;
    case 376: {
       get_lexval();
-#line 1246 "lang/grammar.acc"
+#line 1251 "lang/grammar.acc"
  *ty = DT_RECT; 
-# line 7400 "src/yygram.cpp"
+# line 7405 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -7415,9 +7420,9 @@ int s_prototype ()
    YYSTYPE ot_n;
    switch(yyselect()) {
    case 377: {
-#line 1250 "lang/grammar.acc"
+#line 1255 "lang/grammar.acc"
  BSysFunc *b; 
-# line 7421 "src/yygram.cpp"
+# line 7426 "src/yygram.cpp"
       get_lexval();
       type_name(&ty);
       cexpr3(&ot);
@@ -7425,12 +7430,12 @@ int s_prototype ()
       get_lexval();
       fn = yylval;
       get_lexval();
-#line 1252 "lang/grammar.acc"
+#line 1257 "lang/grammar.acc"
  if (is_res(ot)) {
         if (theSymTab.GetBinding(fn,0,0,RES_FUNC))
           if (GETBIND_RESFUNC(fn)->RType == ot)
             yyerror(Format("Resource member function '%s' declared for same resource type twice!",theSymTab[fn]));
-        b = new BResFunc(MemFuncID++,ty,ot);
+        b = new BResFunc((int16)MemFuncID++,(int8)ty,(int8)ot);
         theSymTab.Bind(fn,b);
         }
       else {
@@ -7439,11 +7444,11 @@ int s_prototype ()
         /*else if (theSymTab.GetBinding(fn,1,0,ANY))
 
           yyerror(Format("Identifier conflict: '%s'.", theSymTab[fn]));*/
-        b = new BMemFunc(MemFuncID++,ty,ot);
+        b = new BMemFunc((int16)MemFuncID++,(int8)ty,(int8)ot);
         theSymTab.Bind(fn,b); 
       }
     
-# line 7447 "src/yygram.cpp"
+# line 7452 "src/yygram.cpp"
       switch (yyselect()) {
       case 988: {
          type_name(&ty_1);
@@ -7451,15 +7456,15 @@ int s_prototype ()
          case 981: {
             get_lexval();
             cexpr3(&ot_1);
-#line 1268 "lang/grammar.acc"
- b->ParamOType[0] = ot_1; 
-# line 7457 "src/yygram.cpp"
+#line 1273 "lang/grammar.acc"
+ b->ParamOType[0] = (int8)ot_1; 
+# line 7462 "src/yygram.cpp"
             } break;
          default: ;
          }
-#line 1269 "lang/grammar.acc"
- b->ParamType[0] = ty_1; b->ParamCount++; 
-# line 7463 "src/yygram.cpp"
+#line 1274 "lang/grammar.acc"
+ b->ParamType[0] = (int8)ty_1; b->ParamCount++; 
+# line 7468 "src/yygram.cpp"
          switch (yyselect()) {
          case 982: {
             get_lexval();
@@ -7471,9 +7476,9 @@ int s_prototype ()
          case 983: {
             get_lexval();
             cexpr(&def);
-#line 1270 "lang/grammar.acc"
- b->Default[0] = def; b->HasDefault |= BIT(2); 
-# line 7477 "src/yygram.cpp"
+#line 1275 "lang/grammar.acc"
+ b->Default[0] = (int8)def; b->HasDefault |= BIT(2); 
+# line 7482 "src/yygram.cpp"
             } break;
          default: ;
          }
@@ -7486,15 +7491,15 @@ int s_prototype ()
                case 984: {
                   get_lexval();
                   cexpr3(&ot_n);
-#line 1272 "lang/grammar.acc"
- b->ParamOType[b->ParamCount] = ot_n; 
-# line 7492 "src/yygram.cpp"
+#line 1277 "lang/grammar.acc"
+ b->ParamOType[b->ParamCount] = (int8)ot_n; 
+# line 7497 "src/yygram.cpp"
                   } break;
                default: ;
                }
-#line 1273 "lang/grammar.acc"
- b->ParamType[b->ParamCount] = ty_n; b->ParamCount++; 
-# line 7498 "src/yygram.cpp"
+#line 1278 "lang/grammar.acc"
+ b->ParamType[b->ParamCount] = (int8)ty_n; b->ParamCount++; 
+# line 7503 "src/yygram.cpp"
                switch (yyselect()) {
                case 985: {
                   get_lexval();
@@ -7506,9 +7511,9 @@ int s_prototype ()
                case 986: {
                   get_lexval();
                   cexpr(&def);
-#line 1274 "lang/grammar.acc"
- b->Default[b->ParamCount] = def; b->HasDefault |= BIT(1+b->ParamCount); 
-# line 7512 "src/yygram.cpp"
+#line 1279 "lang/grammar.acc"
+ b->Default[b->ParamCount] = (int8)def; b->HasDefault |= BIT(1+b->ParamCount); 
+# line 7517 "src/yygram.cpp"
                   } break;
                default: ;
                }
@@ -7524,9 +7529,9 @@ int s_prototype ()
       case 989: {
          get_lexval();
          get_lexval();
-#line 1276 "lang/grammar.acc"
+#line 1281 "lang/grammar.acc"
  b->isVarParam = true; 
-# line 7530 "src/yygram.cpp"
+# line 7535 "src/yygram.cpp"
          } break;
       default: ;
       }
@@ -7549,22 +7554,22 @@ int sg_prototype ()
    YYSTYPE ot_n;
    switch(yyselect()) {
    case 378: {
-#line 1279 "lang/grammar.acc"
+#line 1284 "lang/grammar.acc"
  BSysFunc *b; 
-# line 7555 "src/yygram.cpp"
+# line 7560 "src/yygram.cpp"
       get_lexval();
       type_name(&ty);
       get_lexval();
       fn = yylval;
       get_lexval();
-#line 1281 "lang/grammar.acc"
+#line 1286 "lang/grammar.acc"
  if (theSymTab.GetBinding(fn,0,0,SYS_FUNC))
         yyerror(Format("System global function '%s' declared twice!",theSymTab[fn]));
       else if (theSymTab.GetBinding(fn,0,1,ANY))
         yyerror(Format("Identifier conflict: '%s'.", theSymTab[fn]));
-      b = new BSysFunc(MemFuncID++,ty);
+      b = new BSysFunc((int16)MemFuncID++,(int8)ty);
       theSymTab.Bind(fn,b); 
-# line 7568 "src/yygram.cpp"
+# line 7573 "src/yygram.cpp"
       switch (yyselect()) {
       case 997: {
          type_name(&ty_1);
@@ -7572,15 +7577,15 @@ int sg_prototype ()
          case 990: {
             get_lexval();
             cexpr3(&ot_1);
-#line 1287 "lang/grammar.acc"
- b->ParamOType[0] = ot_1; 
-# line 7578 "src/yygram.cpp"
+#line 1292 "lang/grammar.acc"
+ b->ParamOType[0] = (int8)ot_1; 
+# line 7583 "src/yygram.cpp"
             } break;
          default: ;
          }
-#line 1288 "lang/grammar.acc"
- b->ParamType[0] = ty_1; b->ParamCount++; 
-# line 7584 "src/yygram.cpp"
+#line 1293 "lang/grammar.acc"
+ b->ParamType[0] = (int8)ty_1; b->ParamCount++; 
+# line 7589 "src/yygram.cpp"
          switch (yyselect()) {
          case 991: {
             get_lexval();
@@ -7592,9 +7597,9 @@ int sg_prototype ()
          case 992: {
             get_lexval();
             cexpr(&def);
-#line 1289 "lang/grammar.acc"
- b->Default[0] = def; b->HasDefault |= BIT(2); 
-# line 7598 "src/yygram.cpp"
+#line 1294 "lang/grammar.acc"
+ b->Default[0] = (int8)def; b->HasDefault |= BIT(2); 
+# line 7603 "src/yygram.cpp"
             } break;
          default: ;
          }
@@ -7607,15 +7612,15 @@ int sg_prototype ()
                case 993: {
                   get_lexval();
                   cexpr3(&ot_n);
-#line 1291 "lang/grammar.acc"
- b->ParamOType[b->ParamCount] = ot_n; 
-# line 7613 "src/yygram.cpp"
+#line 1296 "lang/grammar.acc"
+ b->ParamOType[b->ParamCount] = (int8)ot_n; 
+# line 7618 "src/yygram.cpp"
                   } break;
                default: ;
                }
-#line 1292 "lang/grammar.acc"
- b->ParamType[b->ParamCount] = ty_n; b->ParamCount++; 
-# line 7619 "src/yygram.cpp"
+#line 1297 "lang/grammar.acc"
+ b->ParamType[b->ParamCount] = (int8)ty_n; b->ParamCount++; 
+# line 7624 "src/yygram.cpp"
                switch (yyselect()) {
                case 994: {
                   get_lexval();
@@ -7627,9 +7632,9 @@ int sg_prototype ()
                case 995: {
                   get_lexval();
                   cexpr(&def);
-#line 1293 "lang/grammar.acc"
- b->Default[b->ParamCount] = def; b->HasDefault |= BIT(1+b->ParamCount); 
-# line 7633 "src/yygram.cpp"
+#line 1298 "lang/grammar.acc"
+ b->Default[b->ParamCount] = (int8)def; b->HasDefault |= BIT(1+b->ParamCount); 
+# line 7638 "src/yygram.cpp"
                   } break;
                default: ;
                }
@@ -7645,9 +7650,9 @@ int sg_prototype ()
       case 998: {
          get_lexval();
          get_lexval();
-#line 1295 "lang/grammar.acc"
+#line 1300 "lang/grammar.acc"
  b->isVarParam = true; 
-# line 7651 "src/yygram.cpp"
+# line 7656 "src/yygram.cpp"
          } break;
       default: ;
       }
@@ -7665,9 +7670,9 @@ int s_declaration ()
    YYSTYPE vn;
    switch(yyselect()) {
    case 379: {
-#line 1298 "lang/grammar.acc"
+#line 1303 "lang/grammar.acc"
  BMemVar *b; BResMem *b2; 
-# line 7671 "src/yygram.cpp"
+# line 7676 "src/yygram.cpp"
       get_lexval();
       type_name(&ty);
       cexpr3(&ot);
@@ -7675,16 +7680,16 @@ int s_declaration ()
       get_lexval();
       vn = yylval;
       get_lexval();
-#line 1300 "lang/grammar.acc"
+#line 1305 "lang/grammar.acc"
  
       if (is_res(ot)) {
         if (theSymTab.GetBinding(vn,0,RES_MEM))
           if (((BResMem*)theSymTab.GetBinding(vn,0,0,RES_MEM))->RType == ot)
             yyerror(Format("System resource member '%s' declared twice!",theSymTab[vn]));
         b2 = new BResMem();
-        b2->varid = MemVarID++;
-        b2->VarType = ty;
-        b2->RType = ot;
+        b2->varid = (int16)MemVarID++;
+        b2->VarType = (int8)ty;
+        b2->RType = (int8)ot;
         b2->xID   = 0;
         b2->Event = 1;
         b2->type  = RES_MEM;
@@ -7696,16 +7701,16 @@ int s_declaration ()
         else if (theSymTab.GetBinding(vn,0,1,ANY))
           yyerror(Format("Identifier conflict: '%s'.", theSymTab[vn]));
         b = new BMemVar();
-        b->varid = MemVarID++; 
-        b->VarType = ty; 
-        b->OType = ot;
+        b->varid = (int16)MemVarID++; 
+        b->VarType = (int8)ty; 
+        b->OType = (int8)ot;
         b->xID   = 0;
         b->Event = 1;
         b->type  = MEM_VAR;
         theSymTab.Bind(vn,b); 
         }
     
-# line 7709 "src/yygram.cpp"
+# line 7714 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -7718,9 +7723,9 @@ int s_object_decl ()
    YYSTYPE oid;
    switch(yyselect()) {
    case 380: {
-#line 1331 "lang/grammar.acc"
+#line 1336 "lang/grammar.acc"
  BSysObj *b; 
-# line 7724 "src/yygram.cpp"
+# line 7729 "src/yygram.cpp"
       get_lexval();
       cexpr3(&ot);
       get_lexval();
@@ -7728,19 +7733,19 @@ int s_object_decl ()
       get_lexval();
       cexpr3(&oid);
       get_lexval();
-#line 1333 "lang/grammar.acc"
+#line 1338 "lang/grammar.acc"
  if (theSymTab.GetBinding(oname,0,0,SYS_OBJ))
         yyerror(Format("System object '%s' declared twice!",theSymTab[oname]));
       else if (theSymTab.GetBinding(oname,0,1,ANY))
         yyerror(Format("Identifier conflict: '%s'.", theSymTab[oname]));
       b = new BSysObj();
-      b->ObjNum = oid;
-      b->OType  = ot;
+      b->ObjNum = (int16)oid;
+      b->OType  = (int8)ot;
       b->xID   = 0;
       b->Event = 0;
       b->type  = SYS_OBJ;
       theSymTab.Bind(oname,b); 
-# line 7744 "src/yygram.cpp"
+# line 7749 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -7752,13 +7757,13 @@ int g_declaration ()
    YYSTYPE vn;
    switch(yyselect()) {
    case 381: {
-#line 1347 "lang/grammar.acc"
+#line 1352 "lang/grammar.acc"
  BGlobalVar *b; 
-# line 7758 "src/yygram.cpp"
+# line 7763 "src/yygram.cpp"
       type_name(&ty);
       get_lexval();
       vn = yylval;
-#line 1349 "lang/grammar.acc"
+#line 1354 "lang/grammar.acc"
  if (ty == DT_STRING)
         Error("Global variables of type String cannot be created!");
       if (theSymTab.GetBinding(vn,0,0,GLOB_VAR))
@@ -7766,33 +7771,33 @@ int g_declaration ()
       else if (theSymTab.GetBinding(vn,0,1,ANY))
         yyerror(Format("Identifier conflict: '%s'.", theSymTab[vn]));
       b = new BGlobalVar();
-      b->VarType = ty; 
+      b->VarType = (int8)ty; 
       b->Address = HeapHead++;
       b->xID     = 0;
       b->Event   = 0;
       
       b->type    = GLOB_VAR;
       theSymTab.Bind(vn,b); 
-# line 7777 "src/yygram.cpp"
+# line 7782 "src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 999: {
             get_lexval();
             get_lexval();
             vn = yylval;
-#line 1364 "lang/grammar.acc"
+#line 1369 "lang/grammar.acc"
  if (theSymTab.GetBinding(vn,0,0,GLOB_VAR))
         Error("Global variable '%s' declared twice!",theSymTab[vn]);
       else if (theSymTab.GetBinding(vn,0,1,ANY))
         yyerror(Format("Identifier conflict: '%s'.", theSymTab[vn]));
       b = new BGlobalVar();
-      b->VarType = ty; 
+      b->VarType = (int8)ty; 
       b->Address = HeapHead++;
       b->xID     = 0;
       b->Event   = 0;
       b->type    = GLOB_VAR;
       theSymTab.Bind(vn,b); 
-# line 7796 "src/yygram.cpp"
+# line 7801 "src/yygram.cpp"
             } break;
          default: goto yy97;
          }
@@ -7810,21 +7815,21 @@ int l_declaration (VBlock *code)
    YYSTYPE vn;
    switch(yyselect()) {
    case 382: {
-#line 1377 "lang/grammar.acc"
- BLocalVar *b; int32 scope, i; String scope_id; 
-# line 7816 "src/yygram.cpp"
+#line 1382 "lang/grammar.acc"
+ BLocalVar *b; int16 i; String scope_id; 
+# line 7821 "src/yygram.cpp"
       type_name(&ty);
       get_lexval();
       vn = yylval;
-#line 1379 "lang/grammar.acc"
+#line 1384 "lang/grammar.acc"
  b = new BLocalVar();
       b->xID   = FIND(theModule->GetText(theRes->Name));
       ASSERT(theEvent);
-      b->Event = theEvent;
+      b->Event = (int16)theEvent;
       if (theSymTab.GetBinding(vn,b->xID,b->Event,LOC_VAR))
         Error("Local variable '%s' declared twice!",theSymTab[vn]);
-      b->VarType = ty; 
-      b->StackOffset = ++StackHead;
+      b->VarType = (int8)ty; 
+      b->StackOffset = (int16)++StackHead;
       b->type    = LOC_VAR;
       if (ty == DT_STRING) {
         i = AllocString();
@@ -7833,22 +7838,22 @@ int l_declaration (VBlock *code)
         code->Generate(ESTR,RT_CONSTANT,-i);
         }
       theSymTab.Bind(vn,b); 
-# line 7837 "src/yygram.cpp"
+# line 7842 "src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 1000: {
             get_lexval();
             get_lexval();
             vn = yylval;
-#line 1396 "lang/grammar.acc"
+#line 1401 "lang/grammar.acc"
  b = new BLocalVar();
       b->xID   = FIND(theModule->GetText(theRes->Name));
       ASSERT(theEvent);
-      b->Event = theEvent;
+      b->Event = (int16)theEvent;
       if (theSymTab.GetBinding(vn,b->xID,b->Event,LOC_VAR))
         Error("Local variable '%s' declared twice!",theSymTab[vn]);
-      b->VarType = ty; 
-      b->StackOffset = ++StackHead;
+      b->VarType = (int8)ty; 
+      b->StackOffset = (int16)++StackHead;
       b->type    = LOC_VAR;
       if (ty == DT_STRING) {
         i = AllocString();
@@ -7857,7 +7862,7 @@ int l_declaration (VBlock *code)
         code->Generate(ESTR,RT_CONSTANT,-i);
         }
       theSymTab.Bind(vn,b); 
-# line 7861 "src/yygram.cpp"
+# line 7866 "src/yygram.cpp"
             } break;
          default: goto yy98;
          }
@@ -7875,13 +7880,13 @@ int r_declaration ()
    YYSTYPE vn;
    switch(yyselect()) {
    case 383: {
-#line 1414 "lang/grammar.acc"
- BResVar *b; int32 scope; String scope_id; 
-# line 7881 "src/yygram.cpp"
+#line 1419 "lang/grammar.acc"
+ BResVar *b; String scope_id; 
+# line 7886 "src/yygram.cpp"
       type_name(&ty);
       get_lexval();
       vn = yylval;
-#line 1416 "lang/grammar.acc"
+#line 1421 "lang/grammar.acc"
  if (ty == DT_STRING)
         yyerror("Resource variables of type String cannot be allocated.");
       b = new BResVar();
@@ -7889,28 +7894,28 @@ int r_declaration ()
       b->Event = 0;
       if (theSymTab.GetBinding(vn,b->xID,b->Event,RES_VAR))
         Error("Resource variable '%s' declared twice!",theSymTab[vn]);
-      b->VarType = ty; 
+      b->VarType = (int8)ty; 
       b->Address = HeapHead++;
       b->type    = RES_VAR;
       theSymTab.Bind(vn,b); 
-# line 7897 "src/yygram.cpp"
+# line 7902 "src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 1001: {
             get_lexval();
             get_lexval();
             vn = yylval;
-#line 1428 "lang/grammar.acc"
+#line 1433 "lang/grammar.acc"
  b = new BResVar();
       b->xID   = FIND(theModule->GetText(theRes->Name));
       b->Event = 0;
       if (theSymTab.GetBinding(vn,b->xID,b->Event,RES_VAR))
         Error("Resource variable '%s' declared twice!",theSymTab[vn]);
-      b->VarType = ty; 
+      b->VarType = (int8)ty; 
       b->Address = HeapHead++;
       b->type    = RES_VAR;
       theSymTab.Bind(vn,b); 
-# line 7914 "src/yygram.cpp"
+# line 7919 "src/yygram.cpp"
             } break;
          default: goto yy99;
          }
@@ -7938,18 +7943,18 @@ int statement (VBlock *st)
    case 384: {
       expr(&ex);
       get_lexval();
-#line 1442 "lang/grammar.acc"
+#line 1447 "lang/grammar.acc"
 
       st->Add(ex.Code);
       if (ex.Storage == RT_REGISTER) {
         st->TrimGratuitousMOV();
-        FreeRegister(ex.Value);
+        FreeRegister((int16)ex.Value);
         }
       if (ex.Type == DT_STRING && ex.Storage == RT_CONSTANT)
         if (ex.Value < -1)
-          FreeString(-ex.Value);
+          FreeString((int16)-ex.Value);
     
-# line 7953 "src/yygram.cpp"
+# line 7958 "src/yygram.cpp"
       } break;
    case 385: {
       get_lexval();
@@ -7959,7 +7964,7 @@ int statement (VBlock *st)
       statement(&st1);
       get_lexval();
       statement(&st2);
-#line 1453 "lang/grammar.acc"
+#line 1458 "lang/grammar.acc"
 
       st->Add(ex.Code);
       /* Here, we compute the address to include the size
@@ -7971,12 +7976,12 @@ int statement (VBlock *st)
         RT_CONSTANT, st1.GetSize()+ (st2.GetSize()+1> 511?
           3 : 2));
       if (ex.Storage == RT_REGISTER)
-        FreeRegister(ex.Value);                  
+        FreeRegister((int16)ex.Value);                  
       st->Add(&st1);                            
       st->Generate(JUMP, RT_CONSTANT, st2.GetSize()+1);
       st->Add(&st2);
     
-# line 7980 "src/yygram.cpp"
+# line 7985 "src/yygram.cpp"
       } break;
    case 386: {
       get_lexval();
@@ -7984,16 +7989,16 @@ int statement (VBlock *st)
       expr(&ex);
       get_lexval();
       statement(&st1);
-#line 1468 "lang/grammar.acc"
+#line 1473 "lang/grammar.acc"
 
       st->Add(ex.Code);
       st->Generate(JFAL, ex.Storage, ex.Value, 
         RT_CONSTANT, st1.GetSize()+1);
       if (ex.Storage == RT_REGISTER)
-        FreeRegister(ex.Value);
+        FreeRegister((int16)ex.Value);
       st->Add(&st1);
     
-# line 7997 "src/yygram.cpp"
+# line 8002 "src/yygram.cpp"
       } break;
    case 387: {
       get_lexval();
@@ -8005,15 +8010,15 @@ int statement (VBlock *st)
       expr(&ex3);
       get_lexval();
       statement(&st1);
-#line 1478 "lang/grammar.acc"
+#line 1483 "lang/grammar.acc"
 
       int16 jumpback;
       ex1.Code->TrimGratuitousMOV();
       ex3.Code->TrimGratuitousMOV();
       st->Add(ex1.Code);
       if (ex1.Storage == RT_REGISTER)
-        FreeRegister(ex1.Value);
-      jumpback = st->GetSize();
+        FreeRegister((int16)ex1.Value);
+      jumpback = (int16)st->GetSize();
       st->Add(ex2.Code);
       /* Here again, we compensate for the fact that the lower JUMP
 
@@ -8025,15 +8030,15 @@ int statement (VBlock *st)
         (st1.GetSize() + (ex3.Code ? ex3.Code->GetSize() : 0) + 
                          (ex2.Code ? ex2.Code->GetSize() : 0) > 511 ? 3 : 2));
       if (ex2.Storage == RT_REGISTER)
-        FreeRegister(ex2.Value);
+        FreeRegister((int16)ex2.Value);
       st1.ProcessContinues();
       st->Add(&st1);
       st->Add(ex3.Code);
       if (ex3.Storage == RT_REGISTER)
-        FreeRegister(ex3.Value);
+        FreeRegister((int16)ex3.Value);
       st->Generate(JUMP,RT_CONSTANT,jumpback - st->GetSize());
     
-# line 8037 "src/yygram.cpp"
+# line 8042 "src/yygram.cpp"
       } break;
    case 388: {
       get_lexval();
@@ -8041,7 +8046,7 @@ int statement (VBlock *st)
       expr(&ex);
       get_lexval();
       get_lexval();
-#line 1504 "lang/grammar.acc"
+#line 1509 "lang/grammar.acc"
 
         int16 CaseAddr[256], DefaultAddr;
         int32 CaseVal[256];
@@ -8051,7 +8056,7 @@ int statement (VBlock *st)
         DefaultAddr = 0;
         CaseAddr[0] = 0; 
       
-# line 8055 "src/yygram.cpp"
+# line 8060 "src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 1005: {
@@ -8062,42 +8067,41 @@ int statement (VBlock *st)
                } break;
             case 1003: {
                res_ref(&rr);
-#line 1513 "lang/grammar.acc"
+#line 1518 "lang/grammar.acc"
  val = rr; 
-# line 8068 "src/yygram.cpp"
+# line 8073 "src/yygram.cpp"
                } break;
             default: printf("???\n"); exit(1);
             }
             get_lexval();
-#line 1514 "lang/grammar.acc"
+#line 1519 "lang/grammar.acc"
  CaseCode[CaseCount] = new VBlock; 
-# line 8075 "src/yygram.cpp"
+# line 8080 "src/yygram.cpp"
             while (1) {
                switch (yyselect()) {
                case 1004: {
-#line 1515 "lang/grammar.acc"
+#line 1520 "lang/grammar.acc"
  st_n.Clear(); 
-# line 8081 "src/yygram.cpp"
+# line 8086 "src/yygram.cpp"
                   statement(&st_n);
-#line 1515 "lang/grammar.acc"
+#line 1520 "lang/grammar.acc"
  CaseCode[CaseCount]->Add(&st_n);  
-# line 8085 "src/yygram.cpp"
+# line 8090 "src/yygram.cpp"
                   } break;
                default: goto yy101;
                }
             }
             yy101: ;
-#line 1516 "lang/grammar.acc"
+#line 1521 "lang/grammar.acc"
 
         /* We know where *this* case ends, which is synonimous with where
 
            the *next* case starts... */
-        CaseAddr[CaseCount + 1] = CaseAddr[CaseCount] +
-          CaseCode[CaseCount]->GetSize();
+        CaseAddr[CaseCount + 1] = CaseAddr[CaseCount] + (int16)CaseCode[CaseCount]->GetSize();
         CaseVal[CaseCount] = val;
         CaseCount++;  
       
-# line 8101 "src/yygram.cpp"
+# line 8105 "src/yygram.cpp"
             } break;
          default: goto yy100;
          }
@@ -8107,35 +8111,35 @@ int statement (VBlock *st)
       case 1007: {
          get_lexval();
          get_lexval();
-#line 1525 "lang/grammar.acc"
+#line 1529 "lang/grammar.acc"
  DefaultCode = new VBlock; 
-# line 8113 "src/yygram.cpp"
+# line 8117 "src/yygram.cpp"
          while (1) {
             switch (yyselect()) {
             case 1006: {
-#line 1526 "lang/grammar.acc"
+#line 1530 "lang/grammar.acc"
  st_n.Clear(); 
-# line 8119 "src/yygram.cpp"
-               statement(&st_n);
-#line 1526 "lang/grammar.acc"
- DefaultCode->Add(&st_n);  
 # line 8123 "src/yygram.cpp"
+               statement(&st_n);
+#line 1530 "lang/grammar.acc"
+ DefaultCode->Add(&st_n);  
+# line 8127 "src/yygram.cpp"
                } break;
             default: goto yy102;
             }
          }
          yy102: ;
-#line 1527 "lang/grammar.acc"
+#line 1531 "lang/grammar.acc"
  
         DefaultAddr = CaseAddr[CaseCount]; 
-        CaseAddr[CaseCount] = DefaultAddr + DefaultCode->GetSize(); 
+        CaseAddr[CaseCount] = DefaultAddr + (int16)DefaultCode->GetSize(); 
       
-# line 8134 "src/yygram.cpp"
+# line 8138 "src/yygram.cpp"
          } break;
       default: ;
       }
       get_lexval();
-#line 1534 "lang/grammar.acc"
+#line 1538 "lang/grammar.acc"
 
         /* Now we code the *entire* switch statement! */
         
@@ -8157,7 +8161,7 @@ int statement (VBlock *st)
         st->GenDWord((DefaultAddr ? DefaultAddr : CaseAddr[i]) + (CaseCount*2+1));
 
         if (ex.Storage == RT_REGISTER)
-          FreeRegister(ex.Value);
+          FreeRegister((int16)ex.Value);
 
         /* Copy in each case's code, in order */
         for (i=0;i!=CaseCount;i++)
@@ -8176,25 +8180,25 @@ int statement (VBlock *st)
         st->Generate(FBRK);
         
       
-# line 8180 "src/yygram.cpp"
+# line 8184 "src/yygram.cpp"
       } break;
    case 389: {
       get_lexval();
       get_lexval();
-#line 1575 "lang/grammar.acc"
+#line 1579 "lang/grammar.acc"
 
         st->Generate(JBRK);
       
-# line 8189 "src/yygram.cpp"
+# line 8193 "src/yygram.cpp"
       } break;
    case 390: {
       get_lexval();
       get_lexval();
-#line 1579 "lang/grammar.acc"
+#line 1583 "lang/grammar.acc"
 
         st->Generate(CONT);
       
-# line 8198 "src/yygram.cpp"
+# line 8202 "src/yygram.cpp"
       } break;
    case 391: {
       get_lexval();
@@ -8204,16 +8208,16 @@ int statement (VBlock *st)
       expr(&ex);
       get_lexval();
       get_lexval();
-#line 1583 "lang/grammar.acc"
+#line 1587 "lang/grammar.acc"
 
         st->Add(&st1);
         st->Add(ex.Code);
         st->Generate(JTRU,ex.Storage,ex.Value,
           RT_CONSTANT, -st->GetSize());
         if (ex.Storage == RT_REGISTER)
-          FreeRegister(ex.Value);
+          FreeRegister((int16)ex.Value);
       
-# line 8217 "src/yygram.cpp"
+# line 8221 "src/yygram.cpp"
       } break;
    case 392: {
       get_lexval();
@@ -8221,7 +8225,7 @@ int statement (VBlock *st)
       expr(&ex);
       get_lexval();
       statement(&st1);
-#line 1592 "lang/grammar.acc"
+#line 1596 "lang/grammar.acc"
 
         st->Add(ex.Code);
         st->Generate(JFAL,ex.Storage,ex.Value,
@@ -8230,23 +8234,23 @@ int statement (VBlock *st)
         st->Add(&st1);
         st->Generate(JUMP,RT_CONSTANT, - st->GetSize());
         if (ex.Storage == RT_REGISTER)
-          FreeRegister(ex.Value);
+          FreeRegister((int16)ex.Value);
       
-# line 8236 "src/yygram.cpp"
+# line 8240 "src/yygram.cpp"
       } break;
    case 393: {
       block(&bl);
-#line 1603 "lang/grammar.acc"
+#line 1607 "lang/grammar.acc"
  
         st->Add(&bl); 
       
-# line 8244 "src/yygram.cpp"
+# line 8248 "src/yygram.cpp"
       } break;
    case 394: {
       get_lexval();
       expr(&ex);
       get_lexval();
-#line 1607 "lang/grammar.acc"
+#line 1611 "lang/grammar.acc"
 
         st->Add(ex.Code);
         if (StackHead) {
@@ -8257,20 +8261,20 @@ int statement (VBlock *st)
         else
           st->Generate(RET,ex.Storage,ex.Value);
         if (ex.Storage == RT_REGISTER)
-          FreeRegister(ex.Value);
+          FreeRegister((int16)ex.Value);
       
-# line 8263 "src/yygram.cpp"
+# line 8267 "src/yygram.cpp"
       } break;
    case 395: {
       get_lexval();
       get_lexval();
-#line 1620 "lang/grammar.acc"
+#line 1624 "lang/grammar.acc"
 
         if (StackHead)
           st->Generate(DEC,RT_REGISTER,63,RT_CONSTANT,StackHead);
         st->Generate(RET);
       
-# line 8274 "src/yygram.cpp"
+# line 8278 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -8285,13 +8289,13 @@ int block (VBlock *bl)
       while (1) {
          switch (yyselect()) {
          case 1008: {
-#line 1628 "lang/grammar.acc"
+#line 1632 "lang/grammar.acc"
  st.Clear(); 
-# line 8291 "src/yygram.cpp"
-            statement(&st);
-#line 1628 "lang/grammar.acc"
- bl->Add(&st); 
 # line 8295 "src/yygram.cpp"
+            statement(&st);
+#line 1632 "lang/grammar.acc"
+ bl->Add(&st); 
+# line 8299 "src/yygram.cpp"
             } break;
          default: goto yy103;
          }
@@ -8309,20 +8313,20 @@ int routine (VBlock *bl)
    VBlock st;
    switch(yyselect()) {
    case 397: {
-#line 1632 "lang/grammar.acc"
+#line 1636 "lang/grammar.acc"
  VBlock decl_code; StackHead = 0; ClearStrings(); 
-# line 8315 "src/yygram.cpp"
+# line 8319 "src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
          case 1009: {
-#line 1633 "lang/grammar.acc"
+#line 1637 "lang/grammar.acc"
  code.Clear(); 
-# line 8322 "src/yygram.cpp"
-            l_declaration(&code);
-#line 1633 "lang/grammar.acc"
- decl_code.Add(&code); 
 # line 8326 "src/yygram.cpp"
+            l_declaration(&code);
+#line 1637 "lang/grammar.acc"
+ decl_code.Add(&code); 
+# line 8330 "src/yygram.cpp"
             } break;
          case 1010: {
             get_lexval();
@@ -8332,28 +8336,28 @@ int routine (VBlock *bl)
          }
       }
       yy104: ;
-#line 1635 "lang/grammar.acc"
+#line 1639 "lang/grammar.acc"
  if (StackHead)
           bl->Generate(INC,RT_REGISTER,63,RT_CONSTANT,StackHead);
         bl->Add(&decl_code); 
-# line 8340 "src/yygram.cpp"
+# line 8344 "src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 1011: {
-#line 1638 "lang/grammar.acc"
+#line 1642 "lang/grammar.acc"
  st.Clear(); 
-# line 8346 "src/yygram.cpp"
-            statement(&st);
-#line 1638 "lang/grammar.acc"
- bl->Add(&st); 
 # line 8350 "src/yygram.cpp"
+            statement(&st);
+#line 1642 "lang/grammar.acc"
+ bl->Add(&st); 
+# line 8354 "src/yygram.cpp"
             } break;
          default: goto yy105;
          }
       }
       yy105: ;
       get_lexval();
-#line 1639 "lang/grammar.acc"
+#line 1643 "lang/grammar.acc"
  if (StackHead)
           bl->Generate(DEC,RT_REGISTER,63,RT_CONSTANT,StackHead); 
       
@@ -8370,7 +8374,7 @@ int routine (VBlock *bl)
         for (i=0;i!=64;i++)
           FreeRegister(i);
       
-# line 8374 "src/yygram.cpp"
+# line 8378 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -8393,66 +8397,66 @@ int fund_expr (PExp *ex)
    case 398: {
       get_lexval();
       n = yylval;
-#line 1675 "lang/grammar.acc"
+#line 1679 "lang/grammar.acc"
  ex->Type = DT_INT32; ex->Storage = RT_CONSTANT; ex->Value = n; ex->Code = NULL; 
-# line 8399 "src/yygram.cpp"
+# line 8403 "src/yygram.cpp"
       } break;
    case 399: {
       get_lexval();
       n = yylval;
-#line 1677 "lang/grammar.acc"
+#line 1681 "lang/grammar.acc"
  ex->Type = DT_INT32; ex->Storage = RT_CONSTANT; ex->Value = n; ex->Code = NULL; 
-# line 8406 "src/yygram.cpp"
+# line 8410 "src/yygram.cpp"
       } break;
    case 400: {
       get_lexval();
       lv = yylval;
-#line 1679 "lang/grammar.acc"
+#line 1683 "lang/grammar.acc"
  ex->Type = DT_HTEXT; ex->Storage = RT_CONSTANT; ex->Value = lv; ex->Code = NULL; 
-# line 8413 "src/yygram.cpp"
+# line 8417 "src/yygram.cpp"
       } break;
    case 401: {
       get_lexval();
-#line 1681 "lang/grammar.acc"
+#line 1685 "lang/grammar.acc"
  ex->Type = DT_BOOL; ex->Storage = RT_CONSTANT; ex->Value = 1; ex->Code = NULL; 
-# line 8419 "src/yygram.cpp"
+# line 8423 "src/yygram.cpp"
       } break;
    case 402: {
       get_lexval();
-#line 1683 "lang/grammar.acc"
+#line 1687 "lang/grammar.acc"
  ex->Type = DT_BOOL; ex->Storage = RT_CONSTANT; ex->Value = 0; ex->Code = NULL; 
-# line 8425 "src/yygram.cpp"
+# line 8429 "src/yygram.cpp"
       } break;
    case 403: {
       get_lexval();
-#line 1685 "lang/grammar.acc"
+#line 1689 "lang/grammar.acc"
  ex->Type = DT_UNKNOWN; ex->Storage = RT_CONSTANT; ex->Value = 0; ex->Code = NULL; 
-# line 8431 "src/yygram.cpp"
+# line 8435 "src/yygram.cpp"
       } break;
    case 404: {
       res_ref(&rr);
-#line 1687 "lang/grammar.acc"
+#line 1691 "lang/grammar.acc"
  ex->Type = DT_RID;   ex->Storage = RT_CONSTANT; ex->Value = rr; ex->Code = NULL; 
-# line 8437 "src/yygram.cpp"
+# line 8441 "src/yygram.cpp"
       } break;
    case 405: {
       get_lexval();
       expr(&ex2);
       get_lexval();
-#line 1689 "lang/grammar.acc"
+#line 1693 "lang/grammar.acc"
  ex->Code = ex2.Code; 
       ex->Type = ex2.Type; ex->Storage = ex2.Storage; ex->Value = ex2.Value; 
-# line 8446 "src/yygram.cpp"
+# line 8450 "src/yygram.cpp"
       } break;
    case 406: {
       get_lexval();
       id = yylval;
-#line 1692 "lang/grammar.acc"
+#line 1696 "lang/grammar.acc"
  BGlobalVar *b; BLocalVar *b2; BSysObj *b3; BResVar *b4; rID resID;
       resID = FIND(theModule->GetText(theRes->Name));
       ASSERT(resID);
       ASSERT(theEvent);
-      if (b2 = GETBIND_LOCALVAR(id,resID,theEvent))
+      if (b2 = GETBIND_LOCALVAR(id,resID,(int16)theEvent))
         {
           ex->Type = b2->VarType;
           ex->Storage = RT_MEMORY;
@@ -8488,7 +8492,7 @@ int fund_expr (PExp *ex)
 
         }
     
-# line 8492 "src/yygram.cpp"
+# line 8496 "src/yygram.cpp"
       } break;
    case 407: {
       fund_expr(&obj);
@@ -8503,7 +8507,7 @@ int fund_expr (PExp *ex)
       }
       get_lexval();
       id = yylval;
-#line 1733 "lang/grammar.acc"
+#line 1737 "lang/grammar.acc"
 
       BMemVar *b;
 	  BResMem *b2;
@@ -8518,7 +8522,7 @@ int fund_expr (PExp *ex)
           ex->Code = obj.Code;
           ex->Type = b2->VarType;
           if (obj.Storage == RT_REGISTER)
-            FreeRegister(obj.Value);
+            FreeRegister((int16)obj.Value);
           ex->Value = AllocRegister();
           ex->Storage = RT_REGISTER;
           if (!ex->Code)
@@ -8541,7 +8545,7 @@ int fund_expr (PExp *ex)
           ex->Code = obj.Code;
           ex->Type = b->VarType;
           if (obj.Storage == RT_REGISTER)
-            FreeRegister(obj.Value);
+            FreeRegister((int16)obj.Value);
 
           if (!ex->Code)
             ex->Code = new VBlock;
@@ -8560,7 +8564,7 @@ int fund_expr (PExp *ex)
           }
         }
     
-# line 8564 "src/yygram.cpp"
+# line 8568 "src/yygram.cpp"
       } break;
    case 408: {
       fund_expr(&obj);
@@ -8575,7 +8579,7 @@ int fund_expr (PExp *ex)
       }
       get_lexval();
       fn = yylval;
-#line 1790 "lang/grammar.acc"
+#line 1794 "lang/grammar.acc"
  BSysFunc *b;
         if (obj.Type == DT_RID) {
           if (!(b = GETBIND_RESFUNC(fn)))
@@ -8602,11 +8606,11 @@ int fund_expr (PExp *ex)
               obj.Value = j;
             }          
       
-# line 8606 "src/yygram.cpp"
+# line 8610 "src/yygram.cpp"
       get_lexval();
       param_list(b, fn, &bl, &narg);
       get_lexval();
-#line 1817 "lang/grammar.acc"
+#line 1821 "lang/grammar.acc"
 
         if (obj.Code)
           ex->Code->Add(obj.Code);
@@ -8635,23 +8639,23 @@ int fund_expr (PExp *ex)
           ex->Code->Generate(MOV,RT_REGISTER,ex->Value,RT_REGISTER,0);
           }
       
-# line 8639 "src/yygram.cpp"
+# line 8643 "src/yygram.cpp"
       } break;
    case 409: {
       get_lexval();
       fn = yylval;
-#line 1845 "lang/grammar.acc"
+#line 1849 "lang/grammar.acc"
  BSysFunc *b;
         if (!(b = GETBIND_SYSFUNC(fn)))
           yyerror(Format("Expected: global function name before '(' (%s).",
             theSymTab[fn]));
         ex->Code = new VBlock;
       
-# line 8651 "src/yygram.cpp"
+# line 8655 "src/yygram.cpp"
       get_lexval();
       param_list(b, fn, &bl, &narg);
       get_lexval();
-#line 1852 "lang/grammar.acc"
+#line 1856 "lang/grammar.acc"
 
         ex->Code->Add(&bl);
         /* Call the Function */
@@ -8670,21 +8674,21 @@ int fund_expr (PExp *ex)
           ex->Code->Generate(MOV,RT_REGISTER,ex->Value,RT_REGISTER,0);
           }
       
-# line 8674 "src/yygram.cpp"
+# line 8678 "src/yygram.cpp"
       } break;
    case 410: {
       fund_expr(&rect);
       get_lexval();
       get_lexval();
       id = yylval;
-#line 1871 "lang/grammar.acc"
+#line 1875 "lang/grammar.acc"
 
       if (rect.Type != DT_RECT)
         yyerror("Type mismatch: '@' operator used on non-Rect target.");
-      *ex = CodeRectMember(&rect,id);
+      *ex = CodeRectMember(&rect,(int16)id);
       
     
-# line 8688 "src/yygram.cpp"
+# line 8692 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -8699,13 +8703,13 @@ int lvalue (LExp *lv)
    case 411: {
       get_lexval();
       id = yylval;
-#line 1881 "lang/grammar.acc"
+#line 1885 "lang/grammar.acc"
  BGlobalVar *b; BLocalVar *b2; BResVar *b3; rID resID;
       resID = FIND(theModule->GetText(theRes->Name));
       ASSERT(resID);
       ASSERT(theEvent);
       
-      if (b2 = GETBIND_LOCALVAR(id,resID,theEvent))
+      if (b2 = GETBIND_LOCALVAR(id,resID,(int16)theEvent))
         {
           lv->Type = b2->VarType;
           lv->Storage = RT_MEMORY;
@@ -8744,20 +8748,20 @@ int lvalue (LExp *lv)
 
         }
     
-# line 8748 "src/yygram.cpp"
+# line 8752 "src/yygram.cpp"
       } break;
    case 412: {
       lvalue(&rect);
       get_lexval();
       get_lexval();
       id = yylval;
-#line 1926 "lang/grammar.acc"
+#line 1930 "lang/grammar.acc"
 
       if (rect.Type != DT_RECT)
         yyerror("Type mismatch: '@' operator used on non-Rect target.");
-      *lv = CodeRectLVal(&rect,id);
+      *lv = CodeRectLVal(&rect,(int16)id);
     
-# line 8761 "src/yygram.cpp"
+# line 8765 "src/yygram.cpp"
       } break;
    case 413: {
       fund_expr(&obj);
@@ -8772,7 +8776,7 @@ int lvalue (LExp *lv)
       }
       get_lexval();
       id = yylval;
-#line 1932 "lang/grammar.acc"
+#line 1936 "lang/grammar.acc"
 
       int8 i;
 	  BMemVar *b;
@@ -8787,7 +8791,7 @@ int lvalue (LExp *lv)
       else {
         lv->Type = b->VarType;
         if (obj.Storage == RT_REGISTER)
-          FreeRegister(obj.Value);
+          FreeRegister((int16)obj.Value);
         lv->RCode = new VBlock;
         lv->RCode->Add(obj.Code);
         lv->RCode->Generate(GVAR,obj.Storage,obj.Value,
@@ -8811,7 +8815,7 @@ int lvalue (LExp *lv)
           RT_CONSTANT, b->varid);
         }
     
-# line 8815 "src/yygram.cpp"
+# line 8819 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -8826,16 +8830,16 @@ int expr10 (PExp *ex)
    case 414: {
       lvalue(&lv);
       get_lexval();
-#line 1975 "lang/grammar.acc"
+#line 1979 "lang/grammar.acc"
  *ex = CodeAssignment('i',lv,NULL); 
-# line 8832 "src/yygram.cpp"
+# line 8836 "src/yygram.cpp"
       } break;
    case 415: {
       lvalue(&lv);
       get_lexval();
-#line 1977 "lang/grammar.acc"
+#line 1981 "lang/grammar.acc"
  *ex = CodeAssignment('d',lv,NULL); 
-# line 8839 "src/yygram.cpp"
+# line 8843 "src/yygram.cpp"
       } break;
    case 416: {
       get_lexval();
@@ -8844,9 +8848,9 @@ int expr10 (PExp *ex)
       get_lexval();
       expr150(&ex2);
       get_lexval();
-#line 1979 "lang/grammar.acc"
+#line 1983 "lang/grammar.acc"
  *ex = CodeOperator('m',ex1,ex2); 
-# line 8850 "src/yygram.cpp"
+# line 8854 "src/yygram.cpp"
       } break;
    case 417: {
       get_lexval();
@@ -8855,15 +8859,15 @@ int expr10 (PExp *ex)
       get_lexval();
       expr150(&ex2);
       get_lexval();
-#line 1981 "lang/grammar.acc"
+#line 1985 "lang/grammar.acc"
  *ex = CodeOperator('M',ex1,ex2); 
-# line 8861 "src/yygram.cpp"
+# line 8865 "src/yygram.cpp"
       } break;
    case 418: {
       fund_expr(&ex1);
-#line 1983 "lang/grammar.acc"
+#line 1987 "lang/grammar.acc"
  *ex = ex1; 
-# line 8867 "src/yygram.cpp"
+# line 8871 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -8877,58 +8881,58 @@ int expr20 (PExp *ex)
    case 419: {
       get_lexval();
       lvalue(&lv);
-#line 1988 "lang/grammar.acc"
+#line 1992 "lang/grammar.acc"
  *ex = CodeAssignment('I',lv,NULL); 
-# line 8883 "src/yygram.cpp"
+# line 8887 "src/yygram.cpp"
       } break;
    case 420: {
       get_lexval();
       lvalue(&lv);
-#line 1990 "lang/grammar.acc"
+#line 1994 "lang/grammar.acc"
  *ex = CodeAssignment('D',lv,NULL); 
-# line 8890 "src/yygram.cpp"
+# line 8894 "src/yygram.cpp"
       } break;
    case 421: {
       get_lexval();
       expr20(&ex1);
-#line 1992 "lang/grammar.acc"
+#line 1996 "lang/grammar.acc"
  *ex = ex1; 
-# line 8897 "src/yygram.cpp"
+# line 8901 "src/yygram.cpp"
       } break;
    case 422: {
       get_lexval();
       expr20(&ex1);
-#line 1994 "lang/grammar.acc"
+#line 1998 "lang/grammar.acc"
  *ex = CodeOperator('-',ex1,ex1); 
-# line 8904 "src/yygram.cpp"
+# line 8908 "src/yygram.cpp"
       } break;
    case 423: {
       get_lexval();
       expr20(&ex1);
-#line 1996 "lang/grammar.acc"
+#line 2000 "lang/grammar.acc"
  *ex = CodeOperator('!',ex1,ex1); 
-# line 8911 "src/yygram.cpp"
+# line 8915 "src/yygram.cpp"
       } break;
    case 424: {
       get_lexval();
       expr20(&ex1);
-#line 1998 "lang/grammar.acc"
+#line 2002 "lang/grammar.acc"
  *ex = CodeOperator('~',ex1,ex1); 
-# line 8918 "src/yygram.cpp"
+# line 8922 "src/yygram.cpp"
       } break;
    case 425: {
       get_lexval();
       expr20(&ex1);
       get_lexval();
-#line 2000 "lang/grammar.acc"
+#line 2004 "lang/grammar.acc"
  *ex = CodeOperator(':',ex1,ex1); 
-# line 8926 "src/yygram.cpp"
+# line 8930 "src/yygram.cpp"
       } break;
    case 426: {
       expr10(&ex1);
-#line 2002 "lang/grammar.acc"
+#line 2006 "lang/grammar.acc"
  *ex = ex1; 
-# line 8932 "src/yygram.cpp"
+# line 8936 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -8943,15 +8947,15 @@ int expr30 (PExp *ex)
       expr20(&ex1);
       get_lexval();
       expr20(&ex2);
-#line 2007 "lang/grammar.acc"
+#line 2011 "lang/grammar.acc"
  *ex = CodeOperator('d',ex1,ex2); 
-# line 8949 "src/yygram.cpp"
+# line 8953 "src/yygram.cpp"
       } break;
    case 428: {
       expr20(&ex1);
-#line 2009 "lang/grammar.acc"
+#line 2013 "lang/grammar.acc"
  *ex = ex1; 
-# line 8955 "src/yygram.cpp"
+# line 8959 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -8967,15 +8971,15 @@ int expr40 (PExp *ex)
       type_name(&tn);
       get_lexval();
       expr40(&ex1);
-#line 2014 "lang/grammar.acc"
- *ex = ex1; ex->Type = tn; 
-# line 8973 "src/yygram.cpp"
+#line 2018 "lang/grammar.acc"
+ *ex = ex1; ex->Type = (int8)tn; 
+# line 8977 "src/yygram.cpp"
       } break;
    case 430: {
       expr30(&ex1);
-#line 2016 "lang/grammar.acc"
+#line 2020 "lang/grammar.acc"
  *ex = ex1; 
-# line 8979 "src/yygram.cpp"
+# line 8983 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -8990,31 +8994,31 @@ int expr50 (PExp *ex)
       expr50(&ex1);
       get_lexval();
       expr40(&ex2);
-#line 2022 "lang/grammar.acc"
+#line 2026 "lang/grammar.acc"
  *ex = CodeOperator('*',ex1,ex2); 
-# line 8996 "src/yygram.cpp"
+# line 9000 "src/yygram.cpp"
       } break;
    case 432: {
       expr50(&ex1);
       get_lexval();
       expr40(&ex2);
-#line 2024 "lang/grammar.acc"
+#line 2028 "lang/grammar.acc"
  *ex = CodeOperator('/',ex1,ex2); 
-# line 9004 "src/yygram.cpp"
+# line 9008 "src/yygram.cpp"
       } break;
    case 433: {
       expr50(&ex1);
       get_lexval();
       expr40(&ex2);
-#line 2026 "lang/grammar.acc"
+#line 2030 "lang/grammar.acc"
  *ex = CodeOperator('%',ex1,ex2); 
-# line 9012 "src/yygram.cpp"
+# line 9016 "src/yygram.cpp"
       } break;
    case 434: {
       expr40(&ex1);
-#line 2028 "lang/grammar.acc"
+#line 2032 "lang/grammar.acc"
  *ex = ex1; 
-# line 9018 "src/yygram.cpp"
+# line 9022 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -9029,23 +9033,23 @@ int expr60 (PExp *ex)
       expr60(&ex1);
       get_lexval();
       expr50(&ex2);
-#line 2033 "lang/grammar.acc"
+#line 2037 "lang/grammar.acc"
  *ex = CodeOperator('+',ex1,ex2); 
-# line 9035 "src/yygram.cpp"
+# line 9039 "src/yygram.cpp"
       } break;
    case 436: {
       expr60(&ex1);
       get_lexval();
       expr50(&ex2);
-#line 2035 "lang/grammar.acc"
+#line 2039 "lang/grammar.acc"
  *ex = CodeOperator('-',ex1,ex2); 
-# line 9043 "src/yygram.cpp"
+# line 9047 "src/yygram.cpp"
       } break;
    case 437: {
       expr50(&ex1);
-#line 2037 "lang/grammar.acc"
+#line 2041 "lang/grammar.acc"
  *ex = ex1; 
-# line 9049 "src/yygram.cpp"
+# line 9053 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -9060,23 +9064,23 @@ int expr70 (PExp *ex)
       expr70(&ex1);
       get_lexval();
       expr60(&ex2);
-#line 2042 "lang/grammar.acc"
+#line 2046 "lang/grammar.acc"
  *ex = CodeOperator(LSHIFT_OP,ex1,ex2); 
-# line 9066 "src/yygram.cpp"
+# line 9070 "src/yygram.cpp"
       } break;
    case 439: {
       expr70(&ex1);
       get_lexval();
       expr60(&ex2);
-#line 2044 "lang/grammar.acc"
+#line 2048 "lang/grammar.acc"
  *ex = CodeOperator(RSHIFT_OP,ex1,ex2); 
-# line 9074 "src/yygram.cpp"
+# line 9078 "src/yygram.cpp"
       } break;
    case 440: {
       expr60(&ex1);
-#line 2046 "lang/grammar.acc"
+#line 2050 "lang/grammar.acc"
  *ex = ex1; 
-# line 9080 "src/yygram.cpp"
+# line 9084 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -9091,55 +9095,55 @@ int expr80 (PExp *ex)
       expr80(&ex1);
       get_lexval();
       expr70(&ex2);
-#line 2055 "lang/grammar.acc"
+#line 2059 "lang/grammar.acc"
  *ex = CodeOperator('<',ex1,ex2); 
-# line 9097 "src/yygram.cpp"
+# line 9101 "src/yygram.cpp"
       } break;
    case 442: {
       expr80(&ex1);
       get_lexval();
       expr70(&ex2);
-#line 2057 "lang/grammar.acc"
+#line 2061 "lang/grammar.acc"
  *ex = CodeOperator('>',ex1,ex2); 
-# line 9105 "src/yygram.cpp"
+# line 9109 "src/yygram.cpp"
       } break;
    case 443: {
       expr80(&ex1);
       get_lexval();
       expr70(&ex2);
-#line 2059 "lang/grammar.acc"
+#line 2063 "lang/grammar.acc"
  *ex = CodeOperator(GE_OP,ex1,ex2); 
-# line 9113 "src/yygram.cpp"
+# line 9117 "src/yygram.cpp"
       } break;
    case 444: {
       expr80(&ex1);
       get_lexval();
       expr70(&ex2);
-#line 2061 "lang/grammar.acc"
+#line 2065 "lang/grammar.acc"
  *ex = CodeOperator(LE_OP,ex1,ex2); 
-# line 9121 "src/yygram.cpp"
+# line 9125 "src/yygram.cpp"
       } break;
    case 445: {
       expr80(&ex1);
       get_lexval();
       expr70(&ex2);
-#line 2063 "lang/grammar.acc"
+#line 2067 "lang/grammar.acc"
  *ex = CodeOperator(EQ_OP,ex1,ex2); 
-# line 9129 "src/yygram.cpp"
+# line 9133 "src/yygram.cpp"
       } break;
    case 446: {
       expr80(&ex1);
       get_lexval();
       expr70(&ex2);
-#line 2065 "lang/grammar.acc"
+#line 2069 "lang/grammar.acc"
  *ex = CodeOperator(NE_OP,ex1,ex2); 
-# line 9137 "src/yygram.cpp"
+# line 9141 "src/yygram.cpp"
       } break;
    case 447: {
       expr70(&ex1);
-#line 2067 "lang/grammar.acc"
+#line 2071 "lang/grammar.acc"
  *ex = ex1; 
-# line 9143 "src/yygram.cpp"
+# line 9147 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -9154,15 +9158,15 @@ int expr90 (PExp *ex)
       expr90(&ex1);
       get_lexval();
       expr80(&ex2);
-#line 2072 "lang/grammar.acc"
+#line 2076 "lang/grammar.acc"
  *ex = CodeOperator('&',ex1,ex2); 
-# line 9160 "src/yygram.cpp"
+# line 9164 "src/yygram.cpp"
       } break;
    case 449: {
       expr80(&ex1);
-#line 2074 "lang/grammar.acc"
+#line 2078 "lang/grammar.acc"
  *ex = ex1; 
-# line 9166 "src/yygram.cpp"
+# line 9170 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -9177,15 +9181,15 @@ int expr100 (PExp *ex)
       expr100(&ex1);
       get_lexval();
       expr90(&ex2);
-#line 2079 "lang/grammar.acc"
+#line 2083 "lang/grammar.acc"
  *ex = CodeOperator('^',ex1,ex2); 
-# line 9183 "src/yygram.cpp"
+# line 9187 "src/yygram.cpp"
       } break;
    case 451: {
       expr90(&ex1);
-#line 2081 "lang/grammar.acc"
+#line 2085 "lang/grammar.acc"
  *ex = ex1; 
-# line 9189 "src/yygram.cpp"
+# line 9193 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -9200,15 +9204,15 @@ int expr110 (PExp *ex)
       expr110(&ex1);
       get_lexval();
       expr100(&ex2);
-#line 2086 "lang/grammar.acc"
+#line 2090 "lang/grammar.acc"
  *ex = CodeOperator('|',ex1,ex2); 
-# line 9206 "src/yygram.cpp"
+# line 9210 "src/yygram.cpp"
       } break;
    case 453: {
       expr100(&ex1);
-#line 2088 "lang/grammar.acc"
+#line 2092 "lang/grammar.acc"
  *ex = ex1; 
-# line 9212 "src/yygram.cpp"
+# line 9216 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -9223,15 +9227,15 @@ int expr120 (PExp *ex)
       expr120(&ex1);
       get_lexval();
       expr110(&ex2);
-#line 2093 "lang/grammar.acc"
+#line 2097 "lang/grammar.acc"
  *ex = CodeOperator(AND_OP,ex1,ex2); 
-# line 9229 "src/yygram.cpp"
+# line 9233 "src/yygram.cpp"
       } break;
    case 455: {
       expr110(&ex1);
-#line 2095 "lang/grammar.acc"
+#line 2099 "lang/grammar.acc"
  *ex = ex1; 
-# line 9235 "src/yygram.cpp"
+# line 9239 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -9246,15 +9250,15 @@ int expr130 (PExp *ex)
       expr130(&ex1);
       get_lexval();
       expr120(&ex2);
-#line 2100 "lang/grammar.acc"
+#line 2104 "lang/grammar.acc"
  *ex = CodeOperator(OR_OP,ex1,ex2); 
-# line 9252 "src/yygram.cpp"
+# line 9256 "src/yygram.cpp"
       } break;
    case 457: {
       expr120(&ex1);
-#line 2102 "lang/grammar.acc"
+#line 2106 "lang/grammar.acc"
  *ex = ex1; 
-# line 9258 "src/yygram.cpp"
+# line 9262 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -9272,7 +9276,7 @@ int expr140 (PExp *ex)
       expr(&ex2);
       get_lexval();
       expr140(&ex3);
-#line 2107 "lang/grammar.acc"
+#line 2111 "lang/grammar.acc"
 
       VBlock bl;
       if (!AllowedCast(ex1.Type,DT_BOOL))
@@ -9300,9 +9304,9 @@ int expr140 (PExp *ex)
         ex->Code->Generate(JUMP,RT_CONSTANT,1 + bl.GetSize());
         ex->Code->Add(&bl);
         if (ex2.Storage == RT_CONSTANT && ex2.Type == DT_STRING && ex2.Value < -1)
-          FreeString(-ex2.Value);
+          FreeString((int16)-ex2.Value);
         if (ex3.Storage == RT_CONSTANT && ex3.Type == DT_STRING && ex3.Value < -1)
-          FreeString(-ex3.Value);
+          FreeString((int16)-ex3.Value);
         }
       else {
         ex->Storage = RT_REGISTER;
@@ -9318,17 +9322,17 @@ int expr140 (PExp *ex)
         ex->Code->Add(&bl);
         }        
       if (ex2.Storage == RT_REGISTER)
-        FreeRegister(ex2.Value);
+        FreeRegister((int16)ex2.Value);
       if (ex3.Storage == RT_REGISTER)
-        FreeRegister(ex3.Value);
+        FreeRegister((int16)ex3.Value);
     
-# line 9326 "src/yygram.cpp"
+# line 9330 "src/yygram.cpp"
       } break;
    case 459: {
       expr130(&ex1);
-#line 2157 "lang/grammar.acc"
+#line 2161 "lang/grammar.acc"
  *ex = ex1; 
-# line 9332 "src/yygram.cpp"
+# line 9336 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -9344,95 +9348,95 @@ int expr150 (PExp *ex)
       lvalue(&lv);
       get_lexval();
       expr140(&ex2);
-#line 2165 "lang/grammar.acc"
+#line 2169 "lang/grammar.acc"
  *ex = CodeAssignment('=',lv,&ex2); 
-# line 9350 "src/yygram.cpp"
+# line 9354 "src/yygram.cpp"
       } break;
    case 461: {
       lvalue(&lv);
       get_lexval();
       expr140(&ex2);
-#line 2167 "lang/grammar.acc"
+#line 2171 "lang/grammar.acc"
  *ex = CodeAssignment(ASSIGN_ADD,lv,&ex2); 
-# line 9358 "src/yygram.cpp"
+# line 9362 "src/yygram.cpp"
       } break;
    case 462: {
       lvalue(&lv);
       get_lexval();
       expr140(&ex2);
-#line 2169 "lang/grammar.acc"
+#line 2173 "lang/grammar.acc"
  *ex = CodeAssignment(ASSIGN_SUB,lv,&ex2); 
-# line 9366 "src/yygram.cpp"
+# line 9370 "src/yygram.cpp"
       } break;
    case 463: {
       lvalue(&lv);
       get_lexval();
       expr140(&ex2);
-#line 2171 "lang/grammar.acc"
+#line 2175 "lang/grammar.acc"
  *ex = CodeAssignment(ASSIGN_MULT,lv,&ex2); 
-# line 9374 "src/yygram.cpp"
+# line 9378 "src/yygram.cpp"
       } break;
    case 464: {
       lvalue(&lv);
       get_lexval();
       expr140(&ex2);
-#line 2173 "lang/grammar.acc"
+#line 2177 "lang/grammar.acc"
  *ex = CodeAssignment(ASSIGN_DIV,lv,&ex2); 
-# line 9382 "src/yygram.cpp"
+# line 9386 "src/yygram.cpp"
       } break;
    case 465: {
       lvalue(&lv);
       get_lexval();
       expr140(&ex2);
-#line 2175 "lang/grammar.acc"
+#line 2179 "lang/grammar.acc"
  *ex = CodeAssignment(ASSIGN_MOD,lv,&ex2); 
-# line 9390 "src/yygram.cpp"
+# line 9394 "src/yygram.cpp"
       } break;
    case 466: {
       lvalue(&lv);
       get_lexval();
       expr140(&ex2);
-#line 2177 "lang/grammar.acc"
+#line 2181 "lang/grammar.acc"
  *ex = CodeAssignment(ASSIGN_AND,lv,&ex2); 
-# line 9398 "src/yygram.cpp"
+# line 9402 "src/yygram.cpp"
       } break;
    case 467: {
       lvalue(&lv);
       get_lexval();
       expr140(&ex2);
-#line 2179 "lang/grammar.acc"
+#line 2183 "lang/grammar.acc"
  *ex = CodeAssignment(ASSIGN_OR,lv,&ex2); 
-# line 9406 "src/yygram.cpp"
+# line 9410 "src/yygram.cpp"
       } break;
    case 468: {
       lvalue(&lv);
       get_lexval();
       expr140(&ex2);
-#line 2181 "lang/grammar.acc"
+#line 2185 "lang/grammar.acc"
  *ex = CodeAssignment(ASSIGN_LSHIFT,lv,&ex2); 
-# line 9414 "src/yygram.cpp"
+# line 9418 "src/yygram.cpp"
       } break;
    case 469: {
       lvalue(&lv);
       get_lexval();
       expr140(&ex2);
-#line 2183 "lang/grammar.acc"
+#line 2187 "lang/grammar.acc"
  *ex = CodeAssignment(ASSIGN_RSHIFT,lv,&ex2); 
-# line 9422 "src/yygram.cpp"
+# line 9426 "src/yygram.cpp"
       } break;
    case 470: {
       lvalue(&lv);
       get_lexval();
       expr140(&ex2);
-#line 2185 "lang/grammar.acc"
+#line 2189 "lang/grammar.acc"
  *ex = CodeAssignment(ASSIGN_NEG,lv,&ex2); 
-# line 9430 "src/yygram.cpp"
+# line 9434 "src/yygram.cpp"
       } break;
    case 471: {
       expr140(&ex1);
-#line 2187 "lang/grammar.acc"
+#line 2191 "lang/grammar.acc"
  *ex = ex1; 
-# line 9436 "src/yygram.cpp"
+# line 9440 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -9447,7 +9451,7 @@ int expr (PExp *ex)
       expr(&ex1);
       get_lexval();
       expr150(&ex2);
-#line 2192 "lang/grammar.acc"
+#line 2196 "lang/grammar.acc"
 
       ex->Code = ex1.Code;
       if (!ex->Code)
@@ -9460,13 +9464,13 @@ int expr (PExp *ex)
       ex->Value   = ex1.Value;
       ex->Type    = ex1.Type;
     
-# line 9464 "src/yygram.cpp"
+# line 9468 "src/yygram.cpp"
       } break;
    case 473: {
       expr150(&ex1);
-#line 2205 "lang/grammar.acc"
+#line 2209 "lang/grammar.acc"
  *ex = ex1; 
-# line 9470 "src/yygram.cpp"
+# line 9474 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -9477,14 +9481,14 @@ int param_list (pBSysFunc b, YYSTYPE fn, VBlock *bl, int *narg)
    PExp p;
    switch(yyselect()) {
    case 474: {
-#line 2213 "lang/grammar.acc"
+#line 2217 "lang/grammar.acc"
  *narg = 0; int16 i,j; bl->Clear();
     int16 PStorage[10]; int32 PValue[10]; 
-# line 9484 "src/yygram.cpp"
+# line 9488 "src/yygram.cpp"
       switch (yyselect()) {
       case 1019: {
          expr150(&p);
-#line 2216 "lang/grammar.acc"
+#line 2220 "lang/grammar.acc"
 
       if (!b)
         ;
@@ -9497,7 +9501,7 @@ int param_list (pBSysFunc b, YYSTYPE fn, VBlock *bl, int *narg)
         bl->Add(p.Code);
         if (p.Type == DT_STRING && p.Storage == RT_CONSTANT)
           if (p.Value < 0)
-            FreeString(-p.Value);
+            FreeString((int16)-p.Value);
         if (p.Storage == RT_MEMORY && p.Value < 0) {
           j = AllocRegister();
           bl->Generate(MOV,RT_REGISTER,j,p.Storage,p.Value);
@@ -9511,13 +9515,13 @@ int param_list (pBSysFunc b, YYSTYPE fn, VBlock *bl, int *narg)
         (*narg)++;
         }
     
-# line 9515 "src/yygram.cpp"
+# line 9519 "src/yygram.cpp"
          while (1) {
             switch (yyselect()) {
             case 1018: {
                get_lexval();
                expr150(&p);
-#line 2243 "lang/grammar.acc"
+#line 2247 "lang/grammar.acc"
 
       if (!b)
         ;
@@ -9537,7 +9541,7 @@ int param_list (pBSysFunc b, YYSTYPE fn, VBlock *bl, int *narg)
           bl->Add(p.Code);
           if (p.Type == DT_STRING && p.Storage == RT_CONSTANT)
             if (p.Value < 0)
-              FreeString(-p.Value);
+              FreeString((int16)-p.Value);
           if (p.Storage == RT_MEMORY && p.Value < 0) {
             j = AllocRegister();
             bl->Generate(MOV,RT_REGISTER,j,p.Storage,p.Value);
@@ -9552,7 +9556,7 @@ int param_list (pBSysFunc b, YYSTYPE fn, VBlock *bl, int *narg)
         (*narg)++;
         }
     
-# line 9556 "src/yygram.cpp"
+# line 9560 "src/yygram.cpp"
                } break;
             default: goto yy106;
             }
@@ -9561,7 +9565,7 @@ int param_list (pBSysFunc b, YYSTYPE fn, VBlock *bl, int *narg)
          } break;
       default: ;
       }
-#line 2278 "lang/grammar.acc"
+#line 2282 "lang/grammar.acc"
 
       if ((*narg) <= b->ParamCount)
         for(i=b->ParamCount;i!=(*narg);i--) {
@@ -9574,14 +9578,14 @@ int param_list (pBSysFunc b, YYSTYPE fn, VBlock *bl, int *narg)
             }
           }
       for(i=(*narg)-1;i!=-1;i--) {
-        bl->Generate(PUSH,PStorage[i],PValue[i]);
+        bl->Generate(PUSH,(int8)PStorage[i],PValue[i]);
         if (PStorage[i] == RT_REGISTER)
-          FreeRegister(PValue[i]);
+          FreeRegister((int16)PValue[i]);
         }
       *narg = max(*narg,b->ParamCount);
       Done:;
       
-# line 9585 "src/yygram.cpp"
+# line 9589 "src/yygram.cpp"
       } break;
    }
 return 0;
@@ -23419,6439 +23423,6439 @@ int yycoordinate[] = {
 /* 298 */ 9999,
 /* 299 */ 285010,
 /* 300 */ 9999,
-/* 301 */ 294003,
-/* 302 */ 295003,
-/* 303 */ 296003,
-/* 304 */ 297003,
-/* 305 */ 299003,
-/* 306 */ 301003,
-/* 307 */ 302003,
+/* 301 */ 299003,
+/* 302 */ 300003,
+/* 303 */ 301003,
+/* 304 */ 302003,
+/* 305 */ 304003,
+/* 306 */ 306003,
+/* 307 */ 307003,
 /* 308 */ 9999,
 /* 309 */ 291003,
 /* 310 */ 9999,
 /* 311 */ 9999,
 /* 312 */ 9999,
-/* 313 */ 294011,
+/* 313 */ 299011,
 /* 314 */ 9999,
 /* 315 */ 9999,
-/* 316 */ 294005,
+/* 316 */ 299005,
 /* 317 */ 9999,
 /* 318 */ 9999,
-/* 319 */ 294005,
+/* 319 */ 299005,
 /* 320 */ 9999,
 /* 321 */ 9999,
 /* 322 */ 9999,
 /* 323 */ 9999,
-/* 324 */ 295009,
+/* 324 */ 300009,
 /* 325 */ 9999,
 /* 326 */ 9999,
-/* 327 */ 295009,
+/* 327 */ 300009,
 /* 328 */ 9999,
-/* 329 */ 296004,
+/* 329 */ 301004,
 /* 330 */ 9999,
-/* 331 */ 296012,
+/* 331 */ 301012,
 /* 332 */ 9999,
 /* 333 */ 9999,
-/* 334 */ 296012,
+/* 334 */ 301012,
 /* 335 */ 9999,
 /* 336 */ 9999,
 /* 337 */ 9999,
-/* 338 */ 297009,
+/* 338 */ 302009,
 /* 339 */ 9999,
 /* 340 */ 9999,
 /* 341 */ 9999,
-/* 342 */ 298012,
+/* 342 */ 303012,
 /* 343 */ 9999,
 /* 344 */ 9999,
-/* 345 */ 298012,
+/* 345 */ 303012,
 /* 346 */ 9999,
-/* 347 */ 299004,
+/* 347 */ 304004,
 /* 348 */ 9999,
-/* 349 */ 299010,
+/* 349 */ 304010,
 /* 350 */ 9999,
 /* 351 */ 9999,
-/* 352 */ 300013,
+/* 352 */ 305013,
 /* 353 */ 9999,
-/* 354 */ 300011,
+/* 354 */ 305011,
 /* 355 */ 9999,
 /* 356 */ 9999,
 /* 357 */ 9999,
 /* 358 */ 9999,
-/* 359 */ 301005,
+/* 359 */ 306005,
 /* 360 */ 9999,
 /* 361 */ 9999,
 /* 362 */ 9999,
 /* 363 */ 9999,
-/* 364 */ 301036,
+/* 364 */ 306044,
 /* 365 */ 9999,
 /* 366 */ 9999,
-/* 367 */ 301036,
+/* 367 */ 306044,
 /* 368 */ 9999,
 /* 369 */ 9999,
 /* 370 */ 9999,
-/* 371 */ 302013,
+/* 371 */ 307013,
 /* 372 */ 9999,
-/* 373 */ 302007,
+/* 373 */ 307007,
 /* 374 */ 9999,
-/* 375 */ 302007,
+/* 375 */ 307007,
 /* 376 */ 9999,
 /* 377 */ 9999,
-/* 378 */ 306009,
-/* 379 */ 306007,
+/* 378 */ 311009,
+/* 379 */ 311007,
 /* 380 */ 9999,
-/* 381 */ 306007,
+/* 381 */ 311007,
 /* 382 */ 9999,
 /* 383 */ 9999,
 /* 384 */ 9999,
-/* 385 */ 307016,
+/* 385 */ 312016,
 /* 386 */ 9999,
-/* 387 */ 307029,
-/* 388 */ 307007,
+/* 387 */ 312029,
+/* 388 */ 312007,
 /* 389 */ 9999,
-/* 390 */ 307007,
+/* 390 */ 312007,
 /* 391 */ 9999,
 /* 392 */ 9999,
 /* 393 */ 9999,
-/* 394 */ 309016,
-/* 395 */ 309007,
+/* 394 */ 314016,
+/* 395 */ 314007,
 /* 396 */ 9999,
-/* 397 */ 309007,
+/* 397 */ 314007,
 /* 398 */ 9999,
 /* 399 */ 9999,
 /* 400 */ 9999,
-/* 401 */ 311007,
+/* 401 */ 316007,
 /* 402 */ 9999,
-/* 403 */ 311007,
+/* 403 */ 316007,
 /* 404 */ 9999,
 /* 405 */ 9999,
 /* 406 */ 9999,
-/* 407 */ 313013,
+/* 407 */ 318013,
 /* 408 */ 9999,
-/* 409 */ 313027,
+/* 409 */ 318027,
 /* 410 */ 9999,
-/* 411 */ 313007,
+/* 411 */ 318007,
 /* 412 */ 9999,
-/* 413 */ 313007,
+/* 413 */ 318007,
 /* 414 */ 9999,
 /* 415 */ 9999,
-/* 416 */ 313007,
+/* 416 */ 318007,
 /* 417 */ 9999,
-/* 418 */ 302014,
-/* 419 */ 302024,
-/* 420 */ 302018,
+/* 418 */ 307014,
+/* 419 */ 307024,
+/* 420 */ 307018,
 /* 421 */ 9999,
-/* 422 */ 302018,
+/* 422 */ 307018,
 /* 423 */ 9999,
 /* 424 */ 9999,
-/* 425 */ 302018,
+/* 425 */ 307018,
 /* 426 */ 9999,
 /* 427 */ 9999,
 /* 428 */ 9999,
-/* 429 */ 302025,
+/* 429 */ 307025,
 /* 430 */ 9999,
 /* 431 */ 9999,
-/* 432 */ 302025,
+/* 432 */ 307025,
 /* 433 */ 9999,
 /* 434 */ 9999,
-/* 435 */ 319008,
-/* 436 */ 320005,
-/* 437 */ 323006,
+/* 435 */ 324008,
+/* 436 */ 325005,
+/* 437 */ 328006,
 /* 438 */ 9999,
 /* 439 */ 9999,
-/* 440 */ 318004,
+/* 440 */ 323004,
 /* 441 */ 9999,
 /* 442 */ 9999,
 /* 443 */ 9999,
-/* 444 */ 319009,
+/* 444 */ 324009,
 /* 445 */ 9999,
-/* 446 */ 320007,
-/* 447 */ 322007,
-/* 448 */ 320016,
+/* 446 */ 325007,
+/* 447 */ 327007,
+/* 448 */ 325016,
 /* 449 */ 9999,
-/* 450 */ 320016,
+/* 450 */ 325016,
 /* 451 */ 9999,
 /* 452 */ 9999,
-/* 453 */ 320016,
+/* 453 */ 325016,
 /* 454 */ 9999,
 /* 455 */ 9999,
 /* 456 */ 9999,
-/* 457 */ 322008,
+/* 457 */ 327008,
 /* 458 */ 9999,
 /* 459 */ 9999,
 /* 460 */ 9999,
-/* 461 */ 322034,
+/* 461 */ 327034,
 /* 462 */ 9999,
-/* 463 */ 328003,
-/* 464 */ 328017,
-/* 465 */ 329005,
-/* 466 */ 330008,
-/* 467 */ 333005,
+/* 463 */ 333003,
+/* 464 */ 333017,
+/* 465 */ 334005,
+/* 466 */ 335008,
+/* 467 */ 338005,
 /* 468 */ 9999,
 /* 469 */ 9999,
-/* 470 */ 328003,
+/* 470 */ 333003,
 /* 471 */ 9999,
 /* 472 */ 9999,
 /* 473 */ 9999,
-/* 474 */ 328008,
+/* 474 */ 333008,
 /* 475 */ 9999,
 /* 476 */ 9999,
 /* 477 */ 9999,
-/* 478 */ 328014,
+/* 478 */ 333014,
 /* 479 */ 9999,
 /* 480 */ 9999,
 /* 481 */ 9999,
-/* 482 */ 328018,
+/* 482 */ 333018,
 /* 483 */ 9999,
 /* 484 */ 9999,
-/* 485 */ 328018,
+/* 485 */ 333018,
 /* 486 */ 9999,
-/* 487 */ 329006,
+/* 487 */ 334006,
 /* 488 */ 9999,
-/* 489 */ 329010,
+/* 489 */ 334010,
 /* 490 */ 9999,
 /* 491 */ 9999,
-/* 492 */ 329010,
+/* 492 */ 334010,
 /* 493 */ 9999,
 /* 494 */ 9999,
 /* 495 */ 9999,
-/* 496 */ 330018,
+/* 496 */ 335018,
 /* 497 */ 9999,
 /* 498 */ 9999,
 /* 499 */ 9999,
-/* 500 */ 331012,
+/* 500 */ 336012,
 /* 501 */ 9999,
 /* 502 */ 9999,
-/* 503 */ 333009,
+/* 503 */ 338009,
 /* 504 */ 9999,
-/* 505 */ 333007,
+/* 505 */ 338007,
 /* 506 */ 9999,
 /* 507 */ 9999,
-/* 508 */ 333007,
+/* 508 */ 338007,
 /* 509 */ 9999,
-/* 510 */ 338003,
-/* 511 */ 339003,
-/* 512 */ 341003,
+/* 510 */ 343003,
+/* 511 */ 344003,
+/* 512 */ 346003,
 /* 513 */ 9999,
-/* 514 */ 337038,
+/* 514 */ 342038,
 /* 515 */ 9999,
-/* 516 */ 338005,
+/* 516 */ 343005,
 /* 517 */ 9999,
-/* 518 */ 338009,
+/* 518 */ 343009,
 /* 519 */ 9999,
 /* 520 */ 9999,
-/* 521 */ 338009,
+/* 521 */ 343009,
 /* 522 */ 9999,
 /* 523 */ 9999,
 /* 524 */ 9999,
-/* 525 */ 339013,
+/* 525 */ 344013,
 /* 526 */ 9999,
 /* 527 */ 9999,
 /* 528 */ 9999,
-/* 529 */ 340012,
+/* 529 */ 345012,
 /* 530 */ 9999,
 /* 531 */ 9999,
-/* 532 */ 341007,
+/* 532 */ 346007,
 /* 533 */ 9999,
-/* 534 */ 341005,
+/* 534 */ 346005,
 /* 535 */ 9999,
 /* 536 */ 9999,
-/* 537 */ 341005,
+/* 537 */ 346005,
 /* 538 */ 9999,
 /* 539 */ 9999,
 /* 540 */ 9999,
-/* 541 */ 345012,
-/* 542 */ 345024,
+/* 541 */ 350012,
+/* 542 */ 350024,
 /* 543 */ 9999,
 /* 544 */ 9999,
-/* 545 */ 345004,
+/* 545 */ 350004,
 /* 546 */ 9999,
 /* 547 */ 9999,
-/* 548 */ 345029,
-/* 549 */ 345025,
+/* 548 */ 350029,
+/* 549 */ 350025,
 /* 550 */ 9999,
-/* 551 */ 345025,
+/* 551 */ 350025,
 /* 552 */ 9999,
 /* 553 */ 9999,
-/* 554 */ 345025,
+/* 554 */ 350025,
 /* 555 */ 9999,
-/* 556 */ 350003,
-/* 557 */ 351003,
-/* 558 */ 352003,
+/* 556 */ 355003,
+/* 557 */ 356003,
+/* 558 */ 357003,
 /* 559 */ 9999,
-/* 560 */ 349027,
+/* 560 */ 354027,
 /* 561 */ 9999,
 /* 562 */ 9999,
-/* 563 */ 351008,
-/* 564 */ 351004,
+/* 563 */ 356008,
+/* 564 */ 356004,
 /* 565 */ 9999,
-/* 566 */ 351004,
+/* 566 */ 356004,
 /* 567 */ 9999,
 /* 568 */ 9999,
-/* 569 */ 351004,
+/* 569 */ 356004,
 /* 570 */ 9999,
 /* 571 */ 9999,
-/* 572 */ 354005,
+/* 572 */ 359005,
 /* 573 */ 9999,
-/* 574 */ 352011,
+/* 574 */ 357011,
 /* 575 */ 9999,
-/* 576 */ 359007,
+/* 576 */ 364007,
 /* 577 */ 9999,
-/* 578 */ 359013,
+/* 578 */ 364013,
 /* 579 */ 9999,
 /* 580 */ 9999,
 /* 581 */ 9999,
-/* 582 */ 354007,
+/* 582 */ 359007,
 /* 583 */ 9999,
-/* 584 */ 354007,
+/* 584 */ 359007,
 /* 585 */ 9999,
 /* 586 */ 9999,
-/* 587 */ 354007,
+/* 587 */ 359007,
 /* 588 */ 9999,
-/* 589 */ 369003,
+/* 589 */ 374003,
 /* 590 */ 9999,
-/* 591 */ 368003,
+/* 591 */ 373003,
 /* 592 */ 9999,
-/* 593 */ 377003,
+/* 593 */ 382003,
 /* 594 */ 9999,
-/* 595 */ 376003,
+/* 595 */ 381003,
 /* 596 */ 9999,
-/* 597 */ 385003,
-/* 598 */ 389003,
+/* 597 */ 390003,
+/* 598 */ 394003,
 /* 599 */ 9999,
-/* 600 */ 384003,
+/* 600 */ 389003,
 /* 601 */ 9999,
-/* 602 */ 385007,
-/* 603 */ 385014,
+/* 602 */ 390007,
+/* 603 */ 390014,
 /* 604 */ 9999,
-/* 605 */ 385007,
+/* 605 */ 390007,
 /* 606 */ 9999,
 /* 607 */ 9999,
-/* 608 */ 386011,
+/* 608 */ 391011,
 /* 609 */ 9999,
-/* 610 */ 386007,
+/* 610 */ 391007,
 /* 611 */ 9999,
 /* 612 */ 9999,
-/* 613 */ 387011,
+/* 613 */ 392011,
 /* 614 */ 9999,
-/* 615 */ 387007,
+/* 615 */ 392007,
 /* 616 */ 9999,
-/* 617 */ 388007,
+/* 617 */ 393007,
 /* 618 */ 9999,
 /* 619 */ 9999,
-/* 620 */ 388012,
+/* 620 */ 393012,
 /* 621 */ 9999,
 /* 622 */ 9999,
 /* 623 */ 9999,
-/* 624 */ 385008,
+/* 624 */ 390008,
 /* 625 */ 9999,
 /* 626 */ 9999,
-/* 627 */ 385008,
+/* 627 */ 390008,
 /* 628 */ 9999,
 /* 629 */ 9999,
-/* 630 */ 389009,
+/* 630 */ 394009,
 /* 631 */ 9999,
 /* 632 */ 9999,
-/* 633 */ 389005,
+/* 633 */ 394005,
 /* 634 */ 9999,
 /* 635 */ 9999,
-/* 636 */ 389005,
+/* 636 */ 394005,
 /* 637 */ 9999,
 /* 638 */ 9999,
-/* 639 */ 390016,
+/* 639 */ 395016,
 /* 640 */ 9999,
-/* 641 */ 390014,
+/* 641 */ 395014,
 /* 642 */ 9999,
 /* 643 */ 9999,
-/* 644 */ 391016,
+/* 644 */ 396016,
 /* 645 */ 9999,
-/* 646 */ 391014,
+/* 646 */ 396014,
 /* 647 */ 9999,
 /* 648 */ 9999,
-/* 649 */ 392012,
+/* 649 */ 397012,
 /* 650 */ 9999,
-/* 651 */ 392010,
+/* 651 */ 397010,
 /* 652 */ 9999,
 /* 653 */ 9999,
 /* 654 */ 9999,
 /* 655 */ 9999,
-/* 656 */ 402009,
-/* 657 */ 403005,
+/* 656 */ 407009,
+/* 657 */ 408005,
 /* 658 */ 9999,
-/* 659 */ 405009,
+/* 659 */ 410009,
 /* 660 */ 9999,
 /* 661 */ 9999,
-/* 662 */ 397009,
+/* 662 */ 402009,
 /* 663 */ 9999,
 /* 664 */ 9999,
-/* 665 */ 403011,
-/* 666 */ 404005,
+/* 665 */ 408011,
+/* 666 */ 409005,
 /* 667 */ 9999,
-/* 668 */ 403007,
+/* 668 */ 408007,
 /* 669 */ 9999,
 /* 670 */ 9999,
-/* 671 */ 403007,
+/* 671 */ 408007,
 /* 672 */ 9999,
 /* 673 */ 9999,
-/* 674 */ 404011,
+/* 674 */ 409011,
 /* 675 */ 9999,
-/* 676 */ 404007,
+/* 676 */ 409007,
 /* 677 */ 9999,
 /* 678 */ 9999,
-/* 679 */ 404007,
+/* 679 */ 409007,
 /* 680 */ 9999,
-/* 681 */ 405010,
-/* 682 */ 405018,
+/* 681 */ 410010,
+/* 682 */ 410018,
 /* 683 */ 9999,
-/* 684 */ 405018,
+/* 684 */ 410018,
 /* 685 */ 9999,
 /* 686 */ 9999,
-/* 687 */ 405018,
+/* 687 */ 410018,
 /* 688 */ 9999,
 /* 689 */ 9999,
-/* 690 */ 409015,
+/* 690 */ 414015,
 /* 691 */ 9999,
 /* 692 */ 9999,
 /* 693 */ 9999,
-/* 694 */ 409013,
+/* 694 */ 414013,
 /* 695 */ 9999,
 /* 696 */ 9999,
-/* 697 */ 410011,
-/* 698 */ 410018,
+/* 697 */ 415011,
+/* 698 */ 415018,
 /* 699 */ 9999,
 /* 700 */ 9999,
-/* 701 */ 410009,
+/* 701 */ 415009,
 /* 702 */ 9999,
-/* 703 */ 411005,
-/* 704 */ 411028,
-/* 705 */ 411035,
+/* 703 */ 416005,
+/* 704 */ 416028,
+/* 705 */ 416035,
 /* 706 */ 9999,
 /* 707 */ 9999,
-/* 708 */ 411005,
+/* 708 */ 416005,
 /* 709 */ 9999,
-/* 710 */ 412005,
-/* 711 */ 412028,
-/* 712 */ 412035,
+/* 710 */ 417005,
+/* 711 */ 417028,
+/* 712 */ 417035,
 /* 713 */ 9999,
-/* 714 */ 412050,
+/* 714 */ 417050,
 /* 715 */ 9999,
 /* 716 */ 9999,
-/* 717 */ 412005,
+/* 717 */ 417005,
 /* 718 */ 9999,
 /* 719 */ 9999,
-/* 720 */ 416013,
-/* 721 */ 416020,
-/* 722 */ 417018,
+/* 720 */ 421013,
+/* 721 */ 421020,
+/* 722 */ 422018,
 /* 723 */ 9999,
 /* 724 */ 9999,
-/* 725 */ 416011,
+/* 725 */ 421011,
 /* 726 */ 9999,
 /* 727 */ 9999,
-/* 728 */ 418013,
-/* 729 */ 418020,
+/* 728 */ 423013,
+/* 729 */ 423020,
 /* 730 */ 9999,
 /* 731 */ 9999,
-/* 732 */ 418011,
+/* 732 */ 423011,
 /* 733 */ 9999,
 /* 734 */ 9999,
-/* 735 */ 419015,
-/* 736 */ 419022,
+/* 735 */ 424015,
+/* 736 */ 424022,
 /* 737 */ 9999,
 /* 738 */ 9999,
-/* 739 */ 419013,
+/* 739 */ 424013,
 /* 740 */ 9999,
-/* 741 */ 421005,
+/* 741 */ 426005,
 /* 742 */ 9999,
-/* 743 */ 421016,
-/* 744 */ 421023,
+/* 743 */ 426016,
+/* 744 */ 426023,
 /* 745 */ 9999,
 /* 746 */ 9999,
-/* 747 */ 421005,
+/* 747 */ 426005,
 /* 748 */ 9999,
-/* 749 */ 422005,
+/* 749 */ 427005,
 /* 750 */ 9999,
-/* 751 */ 422015,
+/* 751 */ 427015,
 /* 752 */ 9999,
 /* 753 */ 9999,
 /* 754 */ 9999,
-/* 755 */ 423015,
+/* 755 */ 428015,
 /* 756 */ 9999,
 /* 757 */ 9999,
 /* 758 */ 9999,
-/* 759 */ 423009,
+/* 759 */ 428009,
 /* 760 */ 9999,
 /* 761 */ 9999,
 /* 762 */ 9999,
-/* 763 */ 425015,
+/* 763 */ 430015,
 /* 764 */ 9999,
-/* 765 */ 425030,
+/* 765 */ 430030,
 /* 766 */ 9999,
 /* 767 */ 9999,
 /* 768 */ 9999,
-/* 769 */ 425009,
+/* 769 */ 430009,
 /* 770 */ 9999,
 /* 771 */ 9999,
 /* 772 */ 9999,
-/* 773 */ 427015,
+/* 773 */ 432015,
 /* 774 */ 9999,
-/* 775 */ 427030,
+/* 775 */ 432030,
 /* 776 */ 9999,
-/* 777 */ 427046,
+/* 777 */ 432046,
 /* 778 */ 9999,
 /* 779 */ 9999,
 /* 780 */ 9999,
-/* 781 */ 427009,
+/* 781 */ 432009,
 /* 782 */ 9999,
 /* 783 */ 9999,
 /* 784 */ 9999,
-/* 785 */ 430015,
+/* 785 */ 435015,
 /* 786 */ 9999,
-/* 787 */ 430030,
+/* 787 */ 435030,
 /* 788 */ 9999,
-/* 789 */ 430046,
+/* 789 */ 435046,
 /* 790 */ 9999,
-/* 791 */ 430062,
+/* 791 */ 435062,
 /* 792 */ 9999,
 /* 793 */ 9999,
 /* 794 */ 9999,
-/* 795 */ 430009,
+/* 795 */ 435009,
 /* 796 */ 9999,
 /* 797 */ 9999,
-/* 798 */ 434013,
-/* 799 */ 434020,
+/* 798 */ 439013,
+/* 799 */ 439020,
 /* 800 */ 9999,
 /* 801 */ 9999,
-/* 802 */ 434011,
+/* 802 */ 439011,
 /* 803 */ 9999,
 /* 804 */ 9999,
-/* 805 */ 435012,
-/* 806 */ 435019,
+/* 805 */ 440012,
+/* 806 */ 440019,
 /* 807 */ 9999,
 /* 808 */ 9999,
-/* 809 */ 435010,
+/* 809 */ 440010,
 /* 810 */ 9999,
 /* 811 */ 9999,
-/* 812 */ 436012,
-/* 813 */ 436019,
-/* 814 */ 436032,
+/* 812 */ 441012,
+/* 813 */ 441019,
+/* 814 */ 441032,
 /* 815 */ 9999,
 /* 816 */ 9999,
-/* 817 */ 436010,
+/* 817 */ 441010,
 /* 818 */ 9999,
 /* 819 */ 9999,
 /* 820 */ 9999,
 /* 821 */ 9999,
 /* 822 */ 9999,
-/* 823 */ 437006,
+/* 823 */ 442006,
 /* 824 */ 9999,
 /* 825 */ 9999,
-/* 826 */ 443008,
+/* 826 */ 448008,
 /* 827 */ 9999,
 /* 828 */ 9999,
-/* 829 */ 443006,
+/* 829 */ 448006,
 /* 830 */ 9999,
 /* 831 */ 9999,
-/* 832 */ 446009,
-/* 833 */ 446016,
+/* 832 */ 451009,
+/* 833 */ 451016,
 /* 834 */ 9999,
 /* 835 */ 9999,
-/* 836 */ 446007,
+/* 836 */ 451007,
 /* 837 */ 9999,
 /* 838 */ 9999,
-/* 839 */ 447009,
-/* 840 */ 447016,
+/* 839 */ 452009,
+/* 840 */ 452016,
 /* 841 */ 9999,
 /* 842 */ 9999,
-/* 843 */ 447007,
+/* 843 */ 452007,
 /* 844 */ 9999,
 /* 845 */ 9999,
-/* 846 */ 448010,
-/* 847 */ 448017,
+/* 846 */ 453010,
+/* 847 */ 453017,
 /* 848 */ 9999,
 /* 849 */ 9999,
-/* 850 */ 448008,
+/* 850 */ 453008,
 /* 851 */ 9999,
 /* 852 */ 9999,
-/* 853 */ 449011,
-/* 854 */ 449018,
-/* 855 */ 453019,
+/* 853 */ 454011,
+/* 854 */ 454018,
+/* 855 */ 458019,
 /* 856 */ 9999,
 /* 857 */ 9999,
-/* 858 */ 449009,
+/* 858 */ 454009,
 /* 859 */ 9999,
 /* 860 */ 9999,
-/* 861 */ 457011,
-/* 862 */ 457018,
+/* 861 */ 462011,
+/* 862 */ 462018,
 /* 863 */ 9999,
 /* 864 */ 9999,
-/* 865 */ 457009,
+/* 865 */ 462009,
 /* 866 */ 9999,
-/* 867 */ 458005,
-/* 868 */ 458018,
+/* 867 */ 463005,
+/* 868 */ 463018,
 /* 869 */ 9999,
 /* 870 */ 9999,
-/* 871 */ 458016,
+/* 871 */ 463016,
 /* 872 */ 9999,
 /* 873 */ 9999,
-/* 874 */ 459010,
-/* 875 */ 459017,
+/* 874 */ 464010,
+/* 875 */ 464017,
 /* 876 */ 9999,
 /* 877 */ 9999,
-/* 878 */ 459008,
+/* 878 */ 464008,
 /* 879 */ 9999,
 /* 880 */ 9999,
-/* 881 */ 460011,
-/* 882 */ 460018,
-/* 883 */ 460028,
+/* 881 */ 465011,
+/* 882 */ 465018,
+/* 883 */ 465028,
 /* 884 */ 9999,
 /* 885 */ 9999,
-/* 886 */ 460009,
+/* 886 */ 465009,
 /* 887 */ 9999,
 /* 888 */ 9999,
-/* 889 */ 461010,
-/* 890 */ 461017,
-/* 891 */ 461027,
+/* 889 */ 466010,
+/* 890 */ 466017,
+/* 891 */ 466027,
 /* 892 */ 9999,
 /* 893 */ 9999,
-/* 894 */ 461008,
+/* 894 */ 466008,
 /* 895 */ 9999,
 /* 896 */ 9999,
-/* 897 */ 462012,
-/* 898 */ 462019,
+/* 897 */ 467012,
+/* 898 */ 467019,
 /* 899 */ 9999,
 /* 900 */ 9999,
-/* 901 */ 462010,
+/* 901 */ 467010,
 /* 902 */ 9999,
 /* 903 */ 9999,
-/* 904 */ 465013,
-/* 905 */ 465020,
+/* 904 */ 470013,
+/* 905 */ 470020,
 /* 906 */ 9999,
 /* 907 */ 9999,
-/* 908 */ 465011,
+/* 908 */ 470011,
 /* 909 */ 9999,
 /* 910 */ 9999,
-/* 911 */ 467012,
-/* 912 */ 467019,
+/* 911 */ 472012,
+/* 912 */ 472019,
 /* 913 */ 9999,
 /* 914 */ 9999,
-/* 915 */ 467010,
+/* 915 */ 472010,
 /* 916 */ 9999,
-/* 917 */ 469005,
+/* 917 */ 474005,
 /* 918 */ 9999,
-/* 919 */ 469013,
+/* 919 */ 474013,
 /* 920 */ 9999,
-/* 921 */ 470005,
+/* 921 */ 475005,
 /* 922 */ 9999,
-/* 923 */ 470014,
+/* 923 */ 475014,
 /* 924 */ 9999,
-/* 925 */ 471005,
+/* 925 */ 476005,
 /* 926 */ 9999,
-/* 927 */ 471016,
+/* 927 */ 476016,
 /* 928 */ 9999,
-/* 929 */ 472005,
+/* 929 */ 477005,
 /* 930 */ 9999,
-/* 931 */ 472017,
+/* 931 */ 477017,
 /* 932 */ 9999,
 /* 933 */ 9999,
 /* 934 */ 9999,
-/* 935 */ 409016,
+/* 935 */ 414016,
 /* 936 */ 9999,
 /* 937 */ 9999,
-/* 938 */ 409016,
+/* 938 */ 414016,
 /* 939 */ 9999,
 /* 940 */ 9999,
 /* 941 */ 9999,
-/* 942 */ 410012,
+/* 942 */ 415012,
 /* 943 */ 9999,
 /* 944 */ 9999,
-/* 945 */ 410012,
+/* 945 */ 415012,
 /* 946 */ 9999,
 /* 947 */ 9999,
 /* 948 */ 9999,
-/* 949 */ 411015,
+/* 949 */ 416015,
 /* 950 */ 9999,
 /* 951 */ 9999,
 /* 952 */ 9999,
-/* 953 */ 411025,
+/* 953 */ 416025,
 /* 954 */ 9999,
 /* 955 */ 9999,
 /* 956 */ 9999,
-/* 957 */ 411029,
+/* 957 */ 416029,
 /* 958 */ 9999,
 /* 959 */ 9999,
-/* 960 */ 411029,
+/* 960 */ 416029,
 /* 961 */ 9999,
 /* 962 */ 9999,
 /* 963 */ 9999,
-/* 964 */ 412015,
+/* 964 */ 417015,
 /* 965 */ 9999,
 /* 966 */ 9999,
 /* 967 */ 9999,
-/* 968 */ 412025,
+/* 968 */ 417025,
 /* 969 */ 9999,
 /* 970 */ 9999,
 /* 971 */ 9999,
-/* 972 */ 412029,
+/* 972 */ 417029,
 /* 973 */ 9999,
 /* 974 */ 9999,
-/* 975 */ 412029,
+/* 975 */ 417029,
 /* 976 */ 9999,
 /* 977 */ 9999,
 /* 978 */ 9999,
-/* 979 */ 416014,
+/* 979 */ 421014,
 /* 980 */ 9999,
 /* 981 */ 9999,
-/* 982 */ 416014,
+/* 982 */ 421014,
 /* 983 */ 9999,
 /* 984 */ 9999,
-/* 985 */ 417024,
-/* 986 */ 417020,
+/* 985 */ 422024,
+/* 986 */ 422020,
 /* 987 */ 9999,
-/* 988 */ 417020,
+/* 988 */ 422020,
 /* 989 */ 9999,
 /* 990 */ 9999,
-/* 991 */ 417020,
+/* 991 */ 422020,
 /* 992 */ 9999,
 /* 993 */ 9999,
 /* 994 */ 9999,
-/* 995 */ 418014,
+/* 995 */ 423014,
 /* 996 */ 9999,
 /* 997 */ 9999,
-/* 998 */ 418014,
+/* 998 */ 423014,
 /* 999 */ 9999,
 /* 1000 */ 9999,
 /* 1001 */ 9999,
-/* 1002 */ 419016,
+/* 1002 */ 424016,
 /* 1003 */ 9999,
 /* 1004 */ 9999,
-/* 1005 */ 419016,
+/* 1005 */ 424016,
 /* 1006 */ 9999,
 /* 1007 */ 9999,
 /* 1008 */ 9999,
-/* 1009 */ 421006,
+/* 1009 */ 426006,
 /* 1010 */ 9999,
 /* 1011 */ 9999,
-/* 1012 */ 421006,
+/* 1012 */ 426006,
 /* 1013 */ 9999,
 /* 1014 */ 9999,
 /* 1015 */ 9999,
-/* 1016 */ 421017,
+/* 1016 */ 426017,
 /* 1017 */ 9999,
 /* 1018 */ 9999,
-/* 1019 */ 421017,
+/* 1019 */ 426017,
 /* 1020 */ 9999,
 /* 1021 */ 9999,
 /* 1022 */ 9999,
-/* 1023 */ 434014,
+/* 1023 */ 439014,
 /* 1024 */ 9999,
 /* 1025 */ 9999,
-/* 1026 */ 434014,
+/* 1026 */ 439014,
 /* 1027 */ 9999,
-/* 1028 */ 434021,
-/* 1029 */ 434057,
-/* 1030 */ 434026,
+/* 1028 */ 439021,
+/* 1029 */ 439057,
+/* 1030 */ 439026,
 /* 1031 */ 9999,
-/* 1032 */ 434026,
+/* 1032 */ 439026,
 /* 1033 */ 9999,
 /* 1034 */ 9999,
-/* 1035 */ 434026,
+/* 1035 */ 439026,
 /* 1036 */ 9999,
 /* 1037 */ 9999,
 /* 1038 */ 9999,
-/* 1039 */ 434058,
+/* 1039 */ 439058,
 /* 1040 */ 9999,
 /* 1041 */ 9999,
-/* 1042 */ 434058,
+/* 1042 */ 439058,
 /* 1043 */ 9999,
 /* 1044 */ 9999,
 /* 1045 */ 9999,
-/* 1046 */ 435013,
+/* 1046 */ 440013,
 /* 1047 */ 9999,
 /* 1048 */ 9999,
-/* 1049 */ 435013,
+/* 1049 */ 440013,
 /* 1050 */ 9999,
-/* 1051 */ 435020,
-/* 1052 */ 435056,
-/* 1053 */ 435025,
+/* 1051 */ 440020,
+/* 1052 */ 440056,
+/* 1053 */ 440025,
 /* 1054 */ 9999,
-/* 1055 */ 435025,
+/* 1055 */ 440025,
 /* 1056 */ 9999,
 /* 1057 */ 9999,
-/* 1058 */ 435025,
+/* 1058 */ 440025,
 /* 1059 */ 9999,
 /* 1060 */ 9999,
 /* 1061 */ 9999,
-/* 1062 */ 435057,
+/* 1062 */ 440057,
 /* 1063 */ 9999,
 /* 1064 */ 9999,
-/* 1065 */ 435057,
+/* 1065 */ 440057,
 /* 1066 */ 9999,
 /* 1067 */ 9999,
 /* 1068 */ 9999,
-/* 1069 */ 436013,
+/* 1069 */ 441013,
 /* 1070 */ 9999,
 /* 1071 */ 9999,
-/* 1072 */ 436013,
+/* 1072 */ 441013,
 /* 1073 */ 9999,
 /* 1074 */ 9999,
-/* 1075 */ 436037,
-/* 1076 */ 436033,
+/* 1075 */ 441037,
+/* 1076 */ 441033,
 /* 1077 */ 9999,
-/* 1078 */ 436033,
+/* 1078 */ 441033,
 /* 1079 */ 9999,
 /* 1080 */ 9999,
-/* 1081 */ 436033,
+/* 1081 */ 441033,
 /* 1082 */ 9999,
 /* 1083 */ 9999,
 /* 1084 */ 9999,
-/* 1085 */ 446010,
+/* 1085 */ 451010,
 /* 1086 */ 9999,
 /* 1087 */ 9999,
-/* 1088 */ 446010,
+/* 1088 */ 451010,
 /* 1089 */ 9999,
 /* 1090 */ 9999,
 /* 1091 */ 9999,
-/* 1092 */ 447010,
+/* 1092 */ 452010,
 /* 1093 */ 9999,
 /* 1094 */ 9999,
-/* 1095 */ 447010,
+/* 1095 */ 452010,
 /* 1096 */ 9999,
 /* 1097 */ 9999,
 /* 1098 */ 9999,
-/* 1099 */ 448011,
+/* 1099 */ 453011,
 /* 1100 */ 9999,
 /* 1101 */ 9999,
-/* 1102 */ 448011,
+/* 1102 */ 453011,
 /* 1103 */ 9999,
 /* 1104 */ 9999,
 /* 1105 */ 9999,
-/* 1106 */ 449012,
+/* 1106 */ 454012,
 /* 1107 */ 9999,
 /* 1108 */ 9999,
-/* 1109 */ 449012,
+/* 1109 */ 454012,
 /* 1110 */ 9999,
-/* 1111 */ 449019,
+/* 1111 */ 454019,
 /* 1112 */ 9999,
-/* 1113 */ 449024,
+/* 1113 */ 454024,
 /* 1114 */ 9999,
-/* 1115 */ 449024,
+/* 1115 */ 454024,
 /* 1116 */ 9999,
 /* 1117 */ 9999,
-/* 1118 */ 449024,
+/* 1118 */ 454024,
 /* 1119 */ 9999,
 /* 1120 */ 9999,
 /* 1121 */ 9999,
-/* 1122 */ 457012,
+/* 1122 */ 462012,
 /* 1123 */ 9999,
 /* 1124 */ 9999,
-/* 1125 */ 457012,
+/* 1125 */ 462012,
 /* 1126 */ 9999,
-/* 1127 */ 457019,
-/* 1128 */ 457029,
+/* 1127 */ 462019,
+/* 1128 */ 462029,
 /* 1129 */ 9999,
-/* 1130 */ 457029,
+/* 1130 */ 462029,
 /* 1131 */ 9999,
 /* 1132 */ 9999,
-/* 1133 */ 457029,
+/* 1133 */ 462029,
 /* 1134 */ 9999,
 /* 1135 */ 9999,
-/* 1136 */ 458023,
-/* 1137 */ 458019,
+/* 1136 */ 463023,
+/* 1137 */ 463019,
 /* 1138 */ 9999,
-/* 1139 */ 458019,
+/* 1139 */ 463019,
 /* 1140 */ 9999,
 /* 1141 */ 9999,
-/* 1142 */ 458019,
+/* 1142 */ 463019,
 /* 1143 */ 9999,
 /* 1144 */ 9999,
 /* 1145 */ 9999,
-/* 1146 */ 459011,
+/* 1146 */ 464011,
 /* 1147 */ 9999,
 /* 1148 */ 9999,
-/* 1149 */ 459011,
+/* 1149 */ 464011,
 /* 1150 */ 9999,
 /* 1151 */ 9999,
 /* 1152 */ 9999,
-/* 1153 */ 460012,
+/* 1153 */ 465012,
 /* 1154 */ 9999,
 /* 1155 */ 9999,
-/* 1156 */ 460012,
+/* 1156 */ 465012,
 /* 1157 */ 9999,
 /* 1158 */ 9999,
 /* 1159 */ 9999,
-/* 1160 */ 460029,
+/* 1160 */ 465029,
 /* 1161 */ 9999,
 /* 1162 */ 9999,
-/* 1163 */ 460029,
+/* 1163 */ 465029,
 /* 1164 */ 9999,
 /* 1165 */ 9999,
 /* 1166 */ 9999,
-/* 1167 */ 461011,
+/* 1167 */ 466011,
 /* 1168 */ 9999,
 /* 1169 */ 9999,
-/* 1170 */ 461011,
+/* 1170 */ 466011,
 /* 1171 */ 9999,
 /* 1172 */ 9999,
 /* 1173 */ 9999,
-/* 1174 */ 461028,
+/* 1174 */ 466028,
 /* 1175 */ 9999,
 /* 1176 */ 9999,
-/* 1177 */ 461028,
+/* 1177 */ 466028,
 /* 1178 */ 9999,
 /* 1179 */ 9999,
 /* 1180 */ 9999,
-/* 1181 */ 462013,
+/* 1181 */ 467013,
 /* 1182 */ 9999,
 /* 1183 */ 9999,
-/* 1184 */ 462013,
+/* 1184 */ 467013,
 /* 1185 */ 9999,
-/* 1186 */ 462021,
-/* 1187 */ 464006,
-/* 1188 */ 462027,
+/* 1186 */ 467021,
+/* 1187 */ 469006,
+/* 1188 */ 467027,
 /* 1189 */ 9999,
-/* 1190 */ 462027,
+/* 1190 */ 467027,
 /* 1191 */ 9999,
 /* 1192 */ 9999,
-/* 1193 */ 462027,
+/* 1193 */ 467027,
 /* 1194 */ 9999,
 /* 1195 */ 9999,
 /* 1196 */ 9999,
-/* 1197 */ 464007,
+/* 1197 */ 469007,
 /* 1198 */ 9999,
 /* 1199 */ 9999,
-/* 1200 */ 464007,
+/* 1200 */ 469007,
 /* 1201 */ 9999,
 /* 1202 */ 9999,
 /* 1203 */ 9999,
-/* 1204 */ 465014,
+/* 1204 */ 470014,
 /* 1205 */ 9999,
 /* 1206 */ 9999,
-/* 1207 */ 465014,
+/* 1207 */ 470014,
 /* 1208 */ 9999,
-/* 1209 */ 465022,
-/* 1210 */ 466006,
-/* 1211 */ 465028,
+/* 1209 */ 470022,
+/* 1210 */ 471006,
+/* 1211 */ 470028,
 /* 1212 */ 9999,
-/* 1213 */ 465028,
+/* 1213 */ 470028,
 /* 1214 */ 9999,
 /* 1215 */ 9999,
-/* 1216 */ 465028,
+/* 1216 */ 470028,
 /* 1217 */ 9999,
 /* 1218 */ 9999,
 /* 1219 */ 9999,
-/* 1220 */ 466007,
+/* 1220 */ 471007,
 /* 1221 */ 9999,
 /* 1222 */ 9999,
-/* 1223 */ 466007,
+/* 1223 */ 471007,
 /* 1224 */ 9999,
 /* 1225 */ 9999,
 /* 1226 */ 9999,
-/* 1227 */ 467013,
+/* 1227 */ 472013,
 /* 1228 */ 9999,
 /* 1229 */ 9999,
-/* 1230 */ 467013,
+/* 1230 */ 472013,
 /* 1231 */ 9999,
-/* 1232 */ 467021,
-/* 1233 */ 468006,
-/* 1234 */ 467027,
+/* 1232 */ 472021,
+/* 1233 */ 473006,
+/* 1234 */ 472027,
 /* 1235 */ 9999,
-/* 1236 */ 467027,
+/* 1236 */ 472027,
 /* 1237 */ 9999,
 /* 1238 */ 9999,
-/* 1239 */ 467027,
+/* 1239 */ 472027,
 /* 1240 */ 9999,
 /* 1241 */ 9999,
 /* 1242 */ 9999,
-/* 1243 */ 468007,
+/* 1243 */ 473007,
 /* 1244 */ 9999,
 /* 1245 */ 9999,
-/* 1246 */ 468007,
+/* 1246 */ 473007,
 /* 1247 */ 9999,
 /* 1248 */ 9999,
 /* 1249 */ 9999,
-/* 1250 */ 476007,
+/* 1250 */ 481007,
 /* 1251 */ 9999,
 /* 1252 */ 9999,
 /* 1253 */ 9999,
 /* 1254 */ 9999,
-/* 1255 */ 477010,
+/* 1255 */ 482010,
 /* 1256 */ 9999,
 /* 1257 */ 9999,
 /* 1258 */ 9999,
 /* 1259 */ 9999,
-/* 1260 */ 478009,
+/* 1260 */ 483009,
 /* 1261 */ 9999,
 /* 1262 */ 9999,
 /* 1263 */ 9999,
 /* 1264 */ 9999,
-/* 1265 */ 479008,
+/* 1265 */ 484008,
 /* 1266 */ 9999,
-/* 1267 */ 485003,
+/* 1267 */ 490003,
 /* 1268 */ 9999,
-/* 1269 */ 486005,
-/* 1270 */ 488003,
-/* 1271 */ 490003,
-/* 1272 */ 491005,
-/* 1273 */ 503003,
+/* 1269 */ 491005,
+/* 1270 */ 493003,
+/* 1271 */ 495003,
+/* 1272 */ 496005,
+/* 1273 */ 508003,
 /* 1274 */ 9999,
-/* 1275 */ 483032,
+/* 1275 */ 488032,
 /* 1276 */ 9999,
-/* 1277 */ 515005,
+/* 1277 */ 520005,
 /* 1278 */ 9999,
-/* 1279 */ 515020,
-/* 1280 */ 517019,
+/* 1279 */ 520020,
+/* 1280 */ 522019,
 /* 1281 */ 9999,
-/* 1282 */ 515010,
+/* 1282 */ 520010,
 /* 1283 */ 9999,
-/* 1284 */ 486007,
+/* 1284 */ 491007,
 /* 1285 */ 9999,
-/* 1286 */ 486015,
+/* 1286 */ 491015,
 /* 1287 */ 9999,
-/* 1288 */ 487009,
+/* 1288 */ 492009,
 /* 1289 */ 9999,
 /* 1290 */ 9999,
-/* 1291 */ 487014,
+/* 1291 */ 492014,
 /* 1292 */ 9999,
 /* 1293 */ 9999,
-/* 1294 */ 487014,
+/* 1294 */ 492014,
 /* 1295 */ 9999,
-/* 1296 */ 488004,
+/* 1296 */ 493004,
 /* 1297 */ 9999,
-/* 1298 */ 488009,
+/* 1298 */ 493009,
 /* 1299 */ 9999,
 /* 1300 */ 9999,
-/* 1301 */ 488009,
+/* 1301 */ 493009,
 /* 1302 */ 9999,
 /* 1303 */ 9999,
 /* 1304 */ 9999,
-/* 1305 */ 490006,
+/* 1305 */ 495006,
 /* 1306 */ 9999,
 /* 1307 */ 9999,
-/* 1308 */ 490006,
+/* 1308 */ 495006,
 /* 1309 */ 9999,
 /* 1310 */ 9999,
-/* 1311 */ 491011,
-/* 1312 */ 491040,
+/* 1311 */ 496011,
+/* 1312 */ 496040,
 /* 1313 */ 9999,
 /* 1314 */ 9999,
-/* 1315 */ 491007,
+/* 1315 */ 496007,
 /* 1316 */ 9999,
 /* 1317 */ 9999,
-/* 1318 */ 491007,
+/* 1318 */ 496007,
 /* 1319 */ 9999,
 /* 1320 */ 9999,
 /* 1321 */ 9999,
-/* 1322 */ 491018,
+/* 1322 */ 496018,
 /* 1323 */ 9999,
 /* 1324 */ 9999,
 /* 1325 */ 9999,
-/* 1326 */ 491026,
+/* 1326 */ 496026,
 /* 1327 */ 9999,
 /* 1328 */ 9999,
 /* 1329 */ 9999,
-/* 1330 */ 491037,
+/* 1330 */ 496037,
 /* 1331 */ 9999,
 /* 1332 */ 9999,
-/* 1333 */ 504005,
-/* 1334 */ 505005,
-/* 1335 */ 506005,
-/* 1336 */ 507005,
-/* 1337 */ 503006,
+/* 1333 */ 509005,
+/* 1334 */ 510005,
+/* 1335 */ 511005,
+/* 1336 */ 512005,
+/* 1337 */ 508006,
 /* 1338 */ 9999,
-/* 1339 */ 503006,
+/* 1339 */ 508006,
 /* 1340 */ 9999,
 /* 1341 */ 9999,
-/* 1342 */ 503006,
+/* 1342 */ 508006,
 /* 1343 */ 9999,
-/* 1344 */ 504007,
+/* 1344 */ 509007,
 /* 1345 */ 9999,
-/* 1346 */ 504015,
+/* 1346 */ 509015,
 /* 1347 */ 9999,
 /* 1348 */ 9999,
-/* 1349 */ 504015,
+/* 1349 */ 509015,
 /* 1350 */ 9999,
-/* 1351 */ 505006,
+/* 1351 */ 510006,
 /* 1352 */ 9999,
-/* 1353 */ 505011,
+/* 1353 */ 510011,
 /* 1354 */ 9999,
 /* 1355 */ 9999,
-/* 1356 */ 505011,
+/* 1356 */ 510011,
 /* 1357 */ 9999,
 /* 1358 */ 9999,
 /* 1359 */ 9999,
-/* 1360 */ 506008,
+/* 1360 */ 511008,
 /* 1361 */ 9999,
 /* 1362 */ 9999,
-/* 1363 */ 506008,
+/* 1363 */ 511008,
 /* 1364 */ 9999,
 /* 1365 */ 9999,
-/* 1366 */ 507011,
-/* 1367 */ 507040,
+/* 1366 */ 512011,
+/* 1367 */ 512040,
 /* 1368 */ 9999,
 /* 1369 */ 9999,
-/* 1370 */ 507007,
+/* 1370 */ 512007,
 /* 1371 */ 9999,
 /* 1372 */ 9999,
-/* 1373 */ 507007,
+/* 1373 */ 512007,
 /* 1374 */ 9999,
 /* 1375 */ 9999,
 /* 1376 */ 9999,
-/* 1377 */ 507018,
+/* 1377 */ 512018,
 /* 1378 */ 9999,
 /* 1379 */ 9999,
 /* 1380 */ 9999,
-/* 1381 */ 507026,
+/* 1381 */ 512026,
 /* 1382 */ 9999,
 /* 1383 */ 9999,
 /* 1384 */ 9999,
-/* 1385 */ 507037,
+/* 1385 */ 512037,
 /* 1386 */ 9999,
-/* 1387 */ 517021,
+/* 1387 */ 522021,
 /* 1388 */ 9999,
-/* 1389 */ 517026,
+/* 1389 */ 522026,
 /* 1390 */ 9999,
 /* 1391 */ 9999,
-/* 1392 */ 517026,
+/* 1392 */ 522026,
 /* 1393 */ 9999,
-/* 1394 */ 526003,
-/* 1395 */ 526015,
+/* 1394 */ 531003,
+/* 1395 */ 531015,
 /* 1396 */ 9999,
-/* 1397 */ 526008,
+/* 1397 */ 531008,
 /* 1398 */ 9999,
 /* 1399 */ 9999,
-/* 1400 */ 527009,
-/* 1401 */ 527020,
+/* 1400 */ 532009,
+/* 1401 */ 532020,
 /* 1402 */ 9999,
-/* 1403 */ 527005,
+/* 1403 */ 532005,
 /* 1404 */ 9999,
 /* 1405 */ 9999,
 /* 1406 */ 9999,
-/* 1407 */ 526016,
+/* 1407 */ 531016,
 /* 1408 */ 9999,
 /* 1409 */ 9999,
-/* 1410 */ 526016,
+/* 1410 */ 531016,
 /* 1411 */ 9999,
 /* 1412 */ 9999,
 /* 1413 */ 9999,
-/* 1414 */ 527021,
+/* 1414 */ 532021,
 /* 1415 */ 9999,
 /* 1416 */ 9999,
-/* 1417 */ 527021,
+/* 1417 */ 532021,
 /* 1418 */ 9999,
 /* 1419 */ 9999,
-/* 1420 */ 531017,
-/* 1421 */ 531024,
+/* 1420 */ 536017,
+/* 1421 */ 536024,
 /* 1422 */ 9999,
-/* 1423 */ 531011,
+/* 1423 */ 536011,
 /* 1424 */ 9999,
 /* 1425 */ 9999,
 /* 1426 */ 9999,
-/* 1427 */ 531018,
+/* 1427 */ 536018,
 /* 1428 */ 9999,
 /* 1429 */ 9999,
-/* 1430 */ 531018,
+/* 1430 */ 536018,
 /* 1431 */ 9999,
 /* 1432 */ 9999,
 /* 1433 */ 9999,
 /* 1434 */ 9999,
-/* 1435 */ 540009,
+/* 1435 */ 545009,
 /* 1436 */ 9999,
-/* 1437 */ 541009,
+/* 1437 */ 546009,
 /* 1438 */ 9999,
 /* 1439 */ 9999,
-/* 1440 */ 535006,
+/* 1440 */ 540006,
 /* 1441 */ 9999,
-/* 1442 */ 541010,
-/* 1443 */ 541019,
+/* 1442 */ 546010,
+/* 1443 */ 546019,
 /* 1444 */ 9999,
-/* 1445 */ 541019,
+/* 1445 */ 546019,
 /* 1446 */ 9999,
 /* 1447 */ 9999,
-/* 1448 */ 541019,
+/* 1448 */ 546019,
 /* 1449 */ 9999,
 /* 1450 */ 9999,
-/* 1451 */ 545015,
+/* 1451 */ 550015,
 /* 1452 */ 9999,
 /* 1453 */ 9999,
 /* 1454 */ 9999,
-/* 1455 */ 545013,
+/* 1455 */ 550013,
 /* 1456 */ 9999,
 /* 1457 */ 9999,
-/* 1458 */ 546017,
-/* 1459 */ 546024,
+/* 1458 */ 551017,
+/* 1459 */ 551024,
 /* 1460 */ 9999,
 /* 1461 */ 9999,
-/* 1462 */ 546015,
+/* 1462 */ 551015,
 /* 1463 */ 9999,
-/* 1464 */ 547005,
+/* 1464 */ 552005,
 /* 1465 */ 9999,
-/* 1466 */ 547015,
+/* 1466 */ 552015,
 /* 1467 */ 9999,
 /* 1468 */ 9999,
-/* 1469 */ 548010,
-/* 1470 */ 548017,
+/* 1469 */ 553010,
+/* 1470 */ 553017,
 /* 1471 */ 9999,
 /* 1472 */ 9999,
-/* 1473 */ 548008,
+/* 1473 */ 553008,
 /* 1474 */ 9999,
 /* 1475 */ 9999,
-/* 1476 */ 549010,
-/* 1477 */ 549017,
+/* 1476 */ 554010,
+/* 1477 */ 554017,
 /* 1478 */ 9999,
 /* 1479 */ 9999,
-/* 1480 */ 549008,
+/* 1480 */ 554008,
 /* 1481 */ 9999,
 /* 1482 */ 9999,
-/* 1483 */ 550010,
-/* 1484 */ 550017,
+/* 1483 */ 555010,
+/* 1484 */ 555017,
 /* 1485 */ 9999,
 /* 1486 */ 9999,
-/* 1487 */ 550008,
+/* 1487 */ 555008,
 /* 1488 */ 9999,
 /* 1489 */ 9999,
-/* 1490 */ 551012,
-/* 1491 */ 551019,
+/* 1490 */ 556012,
+/* 1491 */ 556019,
 /* 1492 */ 9999,
 /* 1493 */ 9999,
-/* 1494 */ 551010,
+/* 1494 */ 556010,
 /* 1495 */ 9999,
 /* 1496 */ 9999,
-/* 1497 */ 552009,
-/* 1498 */ 552016,
+/* 1497 */ 557009,
+/* 1498 */ 557016,
 /* 1499 */ 9999,
 /* 1500 */ 9999,
-/* 1501 */ 552007,
+/* 1501 */ 557007,
 /* 1502 */ 9999,
 /* 1503 */ 9999,
-/* 1504 */ 553011,
-/* 1505 */ 553018,
+/* 1504 */ 558011,
+/* 1505 */ 558018,
 /* 1506 */ 9999,
 /* 1507 */ 9999,
-/* 1508 */ 553009,
+/* 1508 */ 558009,
 /* 1509 */ 9999,
 /* 1510 */ 9999,
-/* 1511 */ 554011,
-/* 1512 */ 554018,
+/* 1511 */ 559011,
+/* 1512 */ 559018,
 /* 1513 */ 9999,
 /* 1514 */ 9999,
 /* 1515 */ 9999,
-/* 1516 */ 554009,
+/* 1516 */ 559009,
 /* 1517 */ 9999,
 /* 1518 */ 9999,
-/* 1519 */ 555011,
+/* 1519 */ 560011,
 /* 1520 */ 9999,
-/* 1521 */ 555022,
+/* 1521 */ 560022,
 /* 1522 */ 9999,
 /* 1523 */ 9999,
 /* 1524 */ 9999,
-/* 1525 */ 555009,
+/* 1525 */ 560009,
 /* 1526 */ 9999,
 /* 1527 */ 9999,
-/* 1528 */ 556011,
-/* 1529 */ 556018,
+/* 1528 */ 561011,
+/* 1529 */ 561018,
 /* 1530 */ 9999,
 /* 1531 */ 9999,
-/* 1532 */ 556009,
+/* 1532 */ 561009,
 /* 1533 */ 9999,
 /* 1534 */ 9999,
-/* 1535 */ 557011,
-/* 1536 */ 557018,
+/* 1535 */ 562011,
+/* 1536 */ 562018,
 /* 1537 */ 9999,
 /* 1538 */ 9999,
-/* 1539 */ 557009,
+/* 1539 */ 562009,
 /* 1540 */ 9999,
 /* 1541 */ 9999,
-/* 1542 */ 558014,
-/* 1543 */ 558021,
+/* 1542 */ 563014,
+/* 1543 */ 563021,
 /* 1544 */ 9999,
 /* 1545 */ 9999,
-/* 1546 */ 558012,
+/* 1546 */ 563012,
 /* 1547 */ 9999,
 /* 1548 */ 9999,
-/* 1549 */ 559010,
-/* 1550 */ 559017,
-/* 1551 */ 560005,
+/* 1549 */ 564010,
+/* 1550 */ 564017,
+/* 1551 */ 565005,
 /* 1552 */ 9999,
 /* 1553 */ 9999,
-/* 1554 */ 559008,
+/* 1554 */ 564008,
 /* 1555 */ 9999,
 /* 1556 */ 9999,
-/* 1557 */ 570012,
-/* 1558 */ 570019,
+/* 1557 */ 575012,
+/* 1558 */ 575019,
 /* 1559 */ 9999,
 /* 1560 */ 9999,
-/* 1561 */ 570010,
+/* 1561 */ 575010,
 /* 1562 */ 9999,
 /* 1563 */ 9999,
-/* 1564 */ 577010,
-/* 1565 */ 577017,
+/* 1564 */ 582010,
+/* 1565 */ 582017,
 /* 1566 */ 9999,
 /* 1567 */ 9999,
-/* 1568 */ 577008,
+/* 1568 */ 582008,
 /* 1569 */ 9999,
 /* 1570 */ 9999,
-/* 1571 */ 578015,
-/* 1572 */ 578022,
+/* 1571 */ 583015,
+/* 1572 */ 583022,
 /* 1573 */ 9999,
 /* 1574 */ 9999,
-/* 1575 */ 578013,
+/* 1575 */ 583013,
 /* 1576 */ 9999,
 /* 1577 */ 9999,
-/* 1578 */ 579009,
-/* 1579 */ 579016,
+/* 1578 */ 584009,
+/* 1579 */ 584016,
 /* 1580 */ 9999,
 /* 1581 */ 9999,
-/* 1582 */ 579007,
+/* 1582 */ 584007,
 /* 1583 */ 9999,
 /* 1584 */ 9999,
-/* 1585 */ 580014,
-/* 1586 */ 580021,
+/* 1585 */ 585014,
+/* 1586 */ 585021,
 /* 1587 */ 9999,
 /* 1588 */ 9999,
-/* 1589 */ 580012,
+/* 1589 */ 585012,
 /* 1590 */ 9999,
 /* 1591 */ 9999,
-/* 1592 */ 581013,
-/* 1593 */ 581020,
+/* 1592 */ 586013,
+/* 1593 */ 586020,
 /* 1594 */ 9999,
 /* 1595 */ 9999,
-/* 1596 */ 581011,
+/* 1596 */ 586011,
 /* 1597 */ 9999,
 /* 1598 */ 9999,
-/* 1599 */ 582009,
-/* 1600 */ 582016,
+/* 1599 */ 587009,
+/* 1600 */ 587016,
 /* 1601 */ 9999,
 /* 1602 */ 9999,
-/* 1603 */ 582007,
+/* 1603 */ 587007,
 /* 1604 */ 9999,
 /* 1605 */ 9999,
-/* 1606 */ 583015,
-/* 1607 */ 583022,
+/* 1606 */ 588015,
+/* 1607 */ 588022,
 /* 1608 */ 9999,
 /* 1609 */ 9999,
-/* 1610 */ 583013,
+/* 1610 */ 588013,
 /* 1611 */ 9999,
 /* 1612 */ 9999,
-/* 1613 */ 584012,
-/* 1614 */ 584019,
+/* 1613 */ 589012,
+/* 1614 */ 589019,
 /* 1615 */ 9999,
 /* 1616 */ 9999,
-/* 1617 */ 584010,
+/* 1617 */ 589010,
 /* 1618 */ 9999,
 /* 1619 */ 9999,
-/* 1620 */ 586011,
-/* 1621 */ 586018,
+/* 1620 */ 591011,
+/* 1621 */ 591018,
 /* 1622 */ 9999,
 /* 1623 */ 9999,
-/* 1624 */ 586009,
+/* 1624 */ 591009,
 /* 1625 */ 9999,
 /* 1626 */ 9999,
-/* 1627 */ 588011,
-/* 1628 */ 588018,
+/* 1627 */ 593011,
+/* 1628 */ 593018,
 /* 1629 */ 9999,
 /* 1630 */ 9999,
-/* 1631 */ 588009,
+/* 1631 */ 593009,
 /* 1632 */ 9999,
 /* 1633 */ 9999,
-/* 1634 */ 589011,
-/* 1635 */ 589018,
+/* 1634 */ 594011,
+/* 1635 */ 594018,
 /* 1636 */ 9999,
 /* 1637 */ 9999,
-/* 1638 */ 589009,
+/* 1638 */ 594009,
 /* 1639 */ 9999,
 /* 1640 */ 9999,
-/* 1641 */ 590014,
-/* 1642 */ 590021,
+/* 1641 */ 595014,
+/* 1642 */ 595021,
 /* 1643 */ 9999,
 /* 1644 */ 9999,
-/* 1645 */ 590012,
+/* 1645 */ 595012,
 /* 1646 */ 9999,
 /* 1647 */ 9999,
-/* 1648 */ 591016,
-/* 1649 */ 591023,
+/* 1648 */ 596016,
+/* 1649 */ 596023,
 /* 1650 */ 9999,
 /* 1651 */ 9999,
-/* 1652 */ 591014,
+/* 1652 */ 596014,
 /* 1653 */ 9999,
 /* 1654 */ 9999,
-/* 1655 */ 592016,
-/* 1656 */ 592023,
+/* 1655 */ 597016,
+/* 1656 */ 597023,
 /* 1657 */ 9999,
 /* 1658 */ 9999,
-/* 1659 */ 592014,
+/* 1659 */ 597014,
 /* 1660 */ 9999,
 /* 1661 */ 9999,
-/* 1662 */ 593014,
-/* 1663 */ 593021,
+/* 1662 */ 598014,
+/* 1663 */ 598021,
 /* 1664 */ 9999,
 /* 1665 */ 9999,
-/* 1666 */ 593012,
+/* 1666 */ 598012,
 /* 1667 */ 9999,
 /* 1668 */ 9999,
-/* 1669 */ 594013,
-/* 1670 */ 594020,
+/* 1669 */ 599013,
+/* 1670 */ 599020,
 /* 1671 */ 9999,
 /* 1672 */ 9999,
-/* 1673 */ 594011,
+/* 1673 */ 599011,
 /* 1674 */ 9999,
 /* 1675 */ 9999,
-/* 1676 */ 595011,
-/* 1677 */ 595018,
+/* 1676 */ 600011,
+/* 1677 */ 600018,
 /* 1678 */ 9999,
 /* 1679 */ 9999,
-/* 1680 */ 595009,
+/* 1680 */ 600009,
 /* 1681 */ 9999,
 /* 1682 */ 9999,
 /* 1683 */ 9999,
-/* 1684 */ 596017,
-/* 1685 */ 596024,
+/* 1684 */ 601017,
+/* 1685 */ 601024,
 /* 1686 */ 9999,
 /* 1687 */ 9999,
-/* 1688 */ 596009,
+/* 1688 */ 601009,
 /* 1689 */ 9999,
 /* 1690 */ 9999,
-/* 1691 */ 597014,
-/* 1692 */ 597021,
+/* 1691 */ 602014,
+/* 1692 */ 602021,
 /* 1693 */ 9999,
 /* 1694 */ 9999,
-/* 1695 */ 597012,
+/* 1695 */ 602012,
 /* 1696 */ 9999,
 /* 1697 */ 9999,
-/* 1698 */ 598010,
-/* 1699 */ 598017,
+/* 1698 */ 603010,
+/* 1699 */ 603017,
 /* 1700 */ 9999,
 /* 1701 */ 9999,
-/* 1702 */ 598008,
+/* 1702 */ 603008,
 /* 1703 */ 9999,
-/* 1704 */ 599005,
+/* 1704 */ 604005,
 /* 1705 */ 9999,
-/* 1706 */ 599016,
+/* 1706 */ 604016,
 /* 1707 */ 9999,
-/* 1708 */ 600005,
+/* 1708 */ 605005,
 /* 1709 */ 9999,
-/* 1710 */ 600014,
+/* 1710 */ 605014,
 /* 1711 */ 9999,
-/* 1712 */ 601005,
+/* 1712 */ 606005,
 /* 1713 */ 9999,
-/* 1714 */ 601017,
+/* 1714 */ 606017,
 /* 1715 */ 9999,
 /* 1716 */ 9999,
 /* 1717 */ 9999,
-/* 1718 */ 545016,
+/* 1718 */ 550016,
 /* 1719 */ 9999,
 /* 1720 */ 9999,
-/* 1721 */ 545016,
+/* 1721 */ 550016,
 /* 1722 */ 9999,
 /* 1723 */ 9999,
 /* 1724 */ 9999,
-/* 1725 */ 546018,
+/* 1725 */ 551018,
 /* 1726 */ 9999,
 /* 1727 */ 9999,
-/* 1728 */ 546018,
+/* 1728 */ 551018,
 /* 1729 */ 9999,
 /* 1730 */ 9999,
 /* 1731 */ 9999,
-/* 1732 */ 548011,
+/* 1732 */ 553011,
 /* 1733 */ 9999,
 /* 1734 */ 9999,
-/* 1735 */ 548011,
+/* 1735 */ 553011,
 /* 1736 */ 9999,
 /* 1737 */ 9999,
 /* 1738 */ 9999,
-/* 1739 */ 549011,
+/* 1739 */ 554011,
 /* 1740 */ 9999,
 /* 1741 */ 9999,
-/* 1742 */ 549011,
+/* 1742 */ 554011,
 /* 1743 */ 9999,
 /* 1744 */ 9999,
 /* 1745 */ 9999,
-/* 1746 */ 550011,
+/* 1746 */ 555011,
 /* 1747 */ 9999,
 /* 1748 */ 9999,
-/* 1749 */ 550011,
+/* 1749 */ 555011,
 /* 1750 */ 9999,
 /* 1751 */ 9999,
 /* 1752 */ 9999,
-/* 1753 */ 551013,
+/* 1753 */ 556013,
 /* 1754 */ 9999,
 /* 1755 */ 9999,
-/* 1756 */ 551013,
+/* 1756 */ 556013,
 /* 1757 */ 9999,
 /* 1758 */ 9999,
 /* 1759 */ 9999,
-/* 1760 */ 552010,
+/* 1760 */ 557010,
 /* 1761 */ 9999,
 /* 1762 */ 9999,
-/* 1763 */ 552010,
+/* 1763 */ 557010,
 /* 1764 */ 9999,
 /* 1765 */ 9999,
 /* 1766 */ 9999,
-/* 1767 */ 553012,
+/* 1767 */ 558012,
 /* 1768 */ 9999,
 /* 1769 */ 9999,
-/* 1770 */ 553012,
+/* 1770 */ 558012,
 /* 1771 */ 9999,
 /* 1772 */ 9999,
 /* 1773 */ 9999,
-/* 1774 */ 554012,
+/* 1774 */ 559012,
 /* 1775 */ 9999,
 /* 1776 */ 9999,
-/* 1777 */ 554012,
+/* 1777 */ 559012,
 /* 1778 */ 9999,
 /* 1779 */ 9999,
 /* 1780 */ 9999,
-/* 1781 */ 555012,
+/* 1781 */ 560012,
 /* 1782 */ 9999,
 /* 1783 */ 9999,
-/* 1784 */ 555012,
+/* 1784 */ 560012,
 /* 1785 */ 9999,
 /* 1786 */ 9999,
 /* 1787 */ 9999,
-/* 1788 */ 556012,
+/* 1788 */ 561012,
 /* 1789 */ 9999,
 /* 1790 */ 9999,
-/* 1791 */ 556012,
+/* 1791 */ 561012,
 /* 1792 */ 9999,
 /* 1793 */ 9999,
 /* 1794 */ 9999,
-/* 1795 */ 557012,
+/* 1795 */ 562012,
 /* 1796 */ 9999,
 /* 1797 */ 9999,
-/* 1798 */ 557012,
+/* 1798 */ 562012,
 /* 1799 */ 9999,
 /* 1800 */ 9999,
 /* 1801 */ 9999,
-/* 1802 */ 558015,
+/* 1802 */ 563015,
 /* 1803 */ 9999,
 /* 1804 */ 9999,
-/* 1805 */ 558015,
+/* 1805 */ 563015,
 /* 1806 */ 9999,
 /* 1807 */ 9999,
 /* 1808 */ 9999,
-/* 1809 */ 559011,
+/* 1809 */ 564011,
 /* 1810 */ 9999,
 /* 1811 */ 9999,
-/* 1812 */ 559011,
+/* 1812 */ 564011,
 /* 1813 */ 9999,
-/* 1814 */ 560007,
+/* 1814 */ 565007,
 /* 1815 */ 9999,
-/* 1816 */ 560012,
+/* 1816 */ 565012,
 /* 1817 */ 9999,
 /* 1818 */ 9999,
-/* 1819 */ 560012,
+/* 1819 */ 565012,
 /* 1820 */ 9999,
 /* 1821 */ 9999,
 /* 1822 */ 9999,
-/* 1823 */ 570013,
+/* 1823 */ 575013,
 /* 1824 */ 9999,
 /* 1825 */ 9999,
-/* 1826 */ 570013,
+/* 1826 */ 575013,
 /* 1827 */ 9999,
 /* 1828 */ 9999,
 /* 1829 */ 9999,
-/* 1830 */ 577011,
+/* 1830 */ 582011,
 /* 1831 */ 9999,
 /* 1832 */ 9999,
-/* 1833 */ 577011,
+/* 1833 */ 582011,
 /* 1834 */ 9999,
 /* 1835 */ 9999,
 /* 1836 */ 9999,
-/* 1837 */ 578016,
+/* 1837 */ 583016,
 /* 1838 */ 9999,
 /* 1839 */ 9999,
-/* 1840 */ 578016,
+/* 1840 */ 583016,
 /* 1841 */ 9999,
 /* 1842 */ 9999,
 /* 1843 */ 9999,
-/* 1844 */ 579010,
+/* 1844 */ 584010,
 /* 1845 */ 9999,
 /* 1846 */ 9999,
-/* 1847 */ 579010,
+/* 1847 */ 584010,
 /* 1848 */ 9999,
 /* 1849 */ 9999,
 /* 1850 */ 9999,
-/* 1851 */ 580015,
+/* 1851 */ 585015,
 /* 1852 */ 9999,
 /* 1853 */ 9999,
-/* 1854 */ 580015,
+/* 1854 */ 585015,
 /* 1855 */ 9999,
 /* 1856 */ 9999,
 /* 1857 */ 9999,
-/* 1858 */ 581014,
+/* 1858 */ 586014,
 /* 1859 */ 9999,
 /* 1860 */ 9999,
-/* 1861 */ 581014,
+/* 1861 */ 586014,
 /* 1862 */ 9999,
 /* 1863 */ 9999,
 /* 1864 */ 9999,
-/* 1865 */ 582010,
+/* 1865 */ 587010,
 /* 1866 */ 9999,
 /* 1867 */ 9999,
-/* 1868 */ 582010,
+/* 1868 */ 587010,
 /* 1869 */ 9999,
-/* 1870 */ 582017,
-/* 1871 */ 582025,
+/* 1870 */ 587017,
+/* 1871 */ 587025,
 /* 1872 */ 9999,
-/* 1873 */ 582025,
+/* 1873 */ 587025,
 /* 1874 */ 9999,
 /* 1875 */ 9999,
-/* 1876 */ 582025,
+/* 1876 */ 587025,
 /* 1877 */ 9999,
 /* 1878 */ 9999,
 /* 1879 */ 9999,
-/* 1880 */ 583016,
+/* 1880 */ 588016,
 /* 1881 */ 9999,
 /* 1882 */ 9999,
-/* 1883 */ 583016,
+/* 1883 */ 588016,
 /* 1884 */ 9999,
 /* 1885 */ 9999,
 /* 1886 */ 9999,
-/* 1887 */ 584013,
+/* 1887 */ 589013,
 /* 1888 */ 9999,
 /* 1889 */ 9999,
-/* 1890 */ 584013,
+/* 1890 */ 589013,
 /* 1891 */ 9999,
-/* 1892 */ 584021,
-/* 1893 */ 585006,
-/* 1894 */ 584027,
+/* 1892 */ 589021,
+/* 1893 */ 590006,
+/* 1894 */ 589027,
 /* 1895 */ 9999,
-/* 1896 */ 584027,
+/* 1896 */ 589027,
 /* 1897 */ 9999,
 /* 1898 */ 9999,
-/* 1899 */ 584027,
+/* 1899 */ 589027,
 /* 1900 */ 9999,
 /* 1901 */ 9999,
 /* 1902 */ 9999,
-/* 1903 */ 585007,
+/* 1903 */ 590007,
 /* 1904 */ 9999,
 /* 1905 */ 9999,
-/* 1906 */ 585007,
+/* 1906 */ 590007,
 /* 1907 */ 9999,
 /* 1908 */ 9999,
 /* 1909 */ 9999,
-/* 1910 */ 586012,
+/* 1910 */ 591012,
 /* 1911 */ 9999,
 /* 1912 */ 9999,
-/* 1913 */ 586012,
+/* 1913 */ 591012,
 /* 1914 */ 9999,
-/* 1915 */ 586020,
-/* 1916 */ 587006,
-/* 1917 */ 586026,
+/* 1915 */ 591020,
+/* 1916 */ 592006,
+/* 1917 */ 591026,
 /* 1918 */ 9999,
-/* 1919 */ 586026,
+/* 1919 */ 591026,
 /* 1920 */ 9999,
 /* 1921 */ 9999,
-/* 1922 */ 586026,
+/* 1922 */ 591026,
 /* 1923 */ 9999,
 /* 1924 */ 9999,
 /* 1925 */ 9999,
-/* 1926 */ 587007,
+/* 1926 */ 592007,
 /* 1927 */ 9999,
 /* 1928 */ 9999,
-/* 1929 */ 587007,
+/* 1929 */ 592007,
 /* 1930 */ 9999,
 /* 1931 */ 9999,
 /* 1932 */ 9999,
-/* 1933 */ 588012,
+/* 1933 */ 593012,
 /* 1934 */ 9999,
 /* 1935 */ 9999,
-/* 1936 */ 588012,
+/* 1936 */ 593012,
 /* 1937 */ 9999,
-/* 1938 */ 588019,
-/* 1939 */ 588029,
+/* 1938 */ 593019,
+/* 1939 */ 593029,
 /* 1940 */ 9999,
-/* 1941 */ 588029,
+/* 1941 */ 593029,
 /* 1942 */ 9999,
 /* 1943 */ 9999,
-/* 1944 */ 588029,
+/* 1944 */ 593029,
 /* 1945 */ 9999,
 /* 1946 */ 9999,
 /* 1947 */ 9999,
-/* 1948 */ 589012,
+/* 1948 */ 594012,
 /* 1949 */ 9999,
 /* 1950 */ 9999,
-/* 1951 */ 589012,
+/* 1951 */ 594012,
 /* 1952 */ 9999,
-/* 1953 */ 589020,
-/* 1954 */ 589030,
-/* 1955 */ 589025,
+/* 1953 */ 594020,
+/* 1954 */ 594030,
+/* 1955 */ 594025,
 /* 1956 */ 9999,
-/* 1957 */ 589025,
+/* 1957 */ 594025,
 /* 1958 */ 9999,
 /* 1959 */ 9999,
-/* 1960 */ 589025,
+/* 1960 */ 594025,
 /* 1961 */ 9999,
 /* 1962 */ 9999,
 /* 1963 */ 9999,
-/* 1964 */ 589031,
+/* 1964 */ 594031,
 /* 1965 */ 9999,
 /* 1966 */ 9999,
 /* 1967 */ 9999,
-/* 1968 */ 589035,
+/* 1968 */ 594035,
 /* 1969 */ 9999,
 /* 1970 */ 9999,
-/* 1971 */ 589035,
+/* 1971 */ 594035,
 /* 1972 */ 9999,
 /* 1973 */ 9999,
 /* 1974 */ 9999,
-/* 1975 */ 590015,
+/* 1975 */ 595015,
 /* 1976 */ 9999,
 /* 1977 */ 9999,
-/* 1978 */ 590015,
+/* 1978 */ 595015,
 /* 1979 */ 9999,
 /* 1980 */ 9999,
 /* 1981 */ 9999,
-/* 1982 */ 591017,
+/* 1982 */ 596017,
 /* 1983 */ 9999,
 /* 1984 */ 9999,
-/* 1985 */ 591017,
+/* 1985 */ 596017,
 /* 1986 */ 9999,
 /* 1987 */ 9999,
 /* 1988 */ 9999,
-/* 1989 */ 592017,
+/* 1989 */ 597017,
 /* 1990 */ 9999,
 /* 1991 */ 9999,
-/* 1992 */ 592017,
+/* 1992 */ 597017,
 /* 1993 */ 9999,
 /* 1994 */ 9999,
 /* 1995 */ 9999,
-/* 1996 */ 593015,
+/* 1996 */ 598015,
 /* 1997 */ 9999,
 /* 1998 */ 9999,
-/* 1999 */ 593015,
+/* 1999 */ 598015,
 /* 2000 */ 9999,
 /* 2001 */ 9999,
 /* 2002 */ 9999,
-/* 2003 */ 594014,
+/* 2003 */ 599014,
 /* 2004 */ 9999,
 /* 2005 */ 9999,
-/* 2006 */ 594014,
+/* 2006 */ 599014,
 /* 2007 */ 9999,
 /* 2008 */ 9999,
 /* 2009 */ 9999,
-/* 2010 */ 595012,
+/* 2010 */ 600012,
 /* 2011 */ 9999,
 /* 2012 */ 9999,
-/* 2013 */ 595012,
+/* 2013 */ 600012,
 /* 2014 */ 9999,
 /* 2015 */ 9999,
 /* 2016 */ 9999,
-/* 2017 */ 596018,
+/* 2017 */ 601018,
 /* 2018 */ 9999,
 /* 2019 */ 9999,
-/* 2020 */ 596018,
+/* 2020 */ 601018,
 /* 2021 */ 9999,
 /* 2022 */ 9999,
 /* 2023 */ 9999,
-/* 2024 */ 597015,
+/* 2024 */ 602015,
 /* 2025 */ 9999,
 /* 2026 */ 9999,
-/* 2027 */ 597015,
+/* 2027 */ 602015,
 /* 2028 */ 9999,
 /* 2029 */ 9999,
 /* 2030 */ 9999,
-/* 2031 */ 598011,
+/* 2031 */ 603011,
 /* 2032 */ 9999,
 /* 2033 */ 9999,
-/* 2034 */ 598011,
+/* 2034 */ 603011,
 /* 2035 */ 9999,
-/* 2036 */ 605003,
-/* 2037 */ 605014,
+/* 2036 */ 610003,
+/* 2037 */ 610014,
 /* 2038 */ 9999,
-/* 2039 */ 605008,
+/* 2039 */ 610008,
 /* 2040 */ 9999,
 /* 2041 */ 9999,
-/* 2042 */ 609018,
-/* 2043 */ 609028,
+/* 2042 */ 614018,
+/* 2043 */ 614028,
 /* 2044 */ 9999,
-/* 2045 */ 609012,
+/* 2045 */ 614012,
 /* 2046 */ 9999,
 /* 2047 */ 9999,
 /* 2048 */ 9999,
-/* 2049 */ 605015,
+/* 2049 */ 610015,
 /* 2050 */ 9999,
 /* 2051 */ 9999,
-/* 2052 */ 605015,
+/* 2052 */ 610015,
 /* 2053 */ 9999,
 /* 2054 */ 9999,
 /* 2055 */ 9999,
-/* 2056 */ 609029,
+/* 2056 */ 614029,
 /* 2057 */ 9999,
 /* 2058 */ 9999,
-/* 2059 */ 609029,
+/* 2059 */ 614029,
 /* 2060 */ 9999,
-/* 2061 */ 613005,
-/* 2062 */ 613018,
+/* 2061 */ 618005,
+/* 2062 */ 618018,
 /* 2063 */ 9999,
-/* 2064 */ 613010,
+/* 2064 */ 618010,
 /* 2065 */ 9999,
 /* 2066 */ 9999,
-/* 2067 */ 614009,
-/* 2068 */ 614021,
+/* 2067 */ 619009,
+/* 2068 */ 619021,
 /* 2069 */ 9999,
-/* 2070 */ 614005,
+/* 2070 */ 619005,
 /* 2071 */ 9999,
 /* 2072 */ 9999,
 /* 2073 */ 9999,
-/* 2074 */ 613019,
+/* 2074 */ 618019,
 /* 2075 */ 9999,
 /* 2076 */ 9999,
-/* 2077 */ 613019,
+/* 2077 */ 618019,
 /* 2078 */ 9999,
 /* 2079 */ 9999,
 /* 2080 */ 9999,
-/* 2081 */ 614022,
+/* 2081 */ 619022,
 /* 2082 */ 9999,
 /* 2083 */ 9999,
-/* 2084 */ 614022,
+/* 2084 */ 619022,
 /* 2085 */ 9999,
 /* 2086 */ 9999,
 /* 2087 */ 9999,
 /* 2088 */ 9999,
-/* 2089 */ 621007,
+/* 2089 */ 626007,
 /* 2090 */ 9999,
-/* 2091 */ 622007,
+/* 2091 */ 627007,
 /* 2092 */ 9999,
 /* 2093 */ 9999,
-/* 2094 */ 619009,
+/* 2094 */ 624009,
 /* 2095 */ 9999,
-/* 2096 */ 622008,
-/* 2097 */ 622017,
+/* 2096 */ 627008,
+/* 2097 */ 627017,
 /* 2098 */ 9999,
-/* 2099 */ 622017,
+/* 2099 */ 627017,
 /* 2100 */ 9999,
 /* 2101 */ 9999,
-/* 2102 */ 622017,
+/* 2102 */ 627017,
 /* 2103 */ 9999,
 /* 2104 */ 9999,
-/* 2105 */ 626016,
+/* 2105 */ 631016,
 /* 2106 */ 9999,
 /* 2107 */ 9999,
 /* 2108 */ 9999,
-/* 2109 */ 626014,
+/* 2109 */ 631014,
 /* 2110 */ 9999,
 /* 2111 */ 9999,
-/* 2112 */ 627015,
-/* 2113 */ 627022,
+/* 2112 */ 632015,
+/* 2113 */ 632022,
 /* 2114 */ 9999,
 /* 2115 */ 9999,
-/* 2116 */ 627013,
+/* 2116 */ 632013,
 /* 2117 */ 9999,
-/* 2118 */ 628005,
+/* 2118 */ 633005,
 /* 2119 */ 9999,
-/* 2120 */ 628015,
+/* 2120 */ 633015,
 /* 2121 */ 9999,
 /* 2122 */ 9999,
-/* 2123 */ 629010,
-/* 2124 */ 629017,
+/* 2123 */ 634010,
+/* 2124 */ 634017,
 /* 2125 */ 9999,
 /* 2126 */ 9999,
 /* 2127 */ 9999,
-/* 2128 */ 629008,
+/* 2128 */ 634008,
 /* 2129 */ 9999,
 /* 2130 */ 9999,
-/* 2131 */ 630015,
-/* 2132 */ 630022,
+/* 2131 */ 635015,
+/* 2132 */ 635022,
 /* 2133 */ 9999,
 /* 2134 */ 9999,
-/* 2135 */ 630013,
+/* 2135 */ 635013,
 /* 2136 */ 9999,
 /* 2137 */ 9999,
-/* 2138 */ 631011,
-/* 2139 */ 631019,
+/* 2138 */ 636011,
+/* 2139 */ 636019,
 /* 2140 */ 9999,
 /* 2141 */ 9999,
-/* 2142 */ 631009,
+/* 2142 */ 636009,
 /* 2143 */ 9999,
-/* 2144 */ 632005,
-/* 2145 */ 632028,
-/* 2146 */ 632035,
+/* 2144 */ 637005,
+/* 2145 */ 637028,
+/* 2146 */ 637035,
 /* 2147 */ 9999,
 /* 2148 */ 9999,
-/* 2149 */ 632005,
+/* 2149 */ 637005,
 /* 2150 */ 9999,
 /* 2151 */ 9999,
-/* 2152 */ 633010,
-/* 2153 */ 633017,
+/* 2152 */ 638010,
+/* 2153 */ 638017,
 /* 2154 */ 9999,
 /* 2155 */ 9999,
-/* 2156 */ 633008,
+/* 2156 */ 638008,
 /* 2157 */ 9999,
 /* 2158 */ 9999,
-/* 2159 */ 634012,
-/* 2160 */ 634019,
+/* 2159 */ 639012,
+/* 2160 */ 639019,
 /* 2161 */ 9999,
 /* 2162 */ 9999,
-/* 2163 */ 634010,
+/* 2163 */ 639010,
 /* 2164 */ 9999,
-/* 2165 */ 635005,
+/* 2165 */ 640005,
 /* 2166 */ 9999,
-/* 2167 */ 635014,
+/* 2167 */ 640014,
 /* 2168 */ 9999,
-/* 2169 */ 636005,
+/* 2169 */ 641005,
 /* 2170 */ 9999,
-/* 2171 */ 636016,
+/* 2171 */ 641016,
 /* 2172 */ 9999,
-/* 2173 */ 637005,
+/* 2173 */ 642005,
 /* 2174 */ 9999,
-/* 2175 */ 637017,
+/* 2175 */ 642017,
 /* 2176 */ 9999,
 /* 2177 */ 9999,
 /* 2178 */ 9999,
-/* 2179 */ 626017,
+/* 2179 */ 631017,
 /* 2180 */ 9999,
 /* 2181 */ 9999,
-/* 2182 */ 626017,
+/* 2182 */ 631017,
 /* 2183 */ 9999,
 /* 2184 */ 9999,
 /* 2185 */ 9999,
-/* 2186 */ 627016,
+/* 2186 */ 632016,
 /* 2187 */ 9999,
 /* 2188 */ 9999,
-/* 2189 */ 627016,
+/* 2189 */ 632016,
 /* 2190 */ 9999,
 /* 2191 */ 9999,
 /* 2192 */ 9999,
-/* 2193 */ 629011,
+/* 2193 */ 634011,
 /* 2194 */ 9999,
 /* 2195 */ 9999,
-/* 2196 */ 629011,
+/* 2196 */ 634011,
 /* 2197 */ 9999,
 /* 2198 */ 9999,
 /* 2199 */ 9999,
-/* 2200 */ 630016,
+/* 2200 */ 635016,
 /* 2201 */ 9999,
 /* 2202 */ 9999,
-/* 2203 */ 630016,
+/* 2203 */ 635016,
 /* 2204 */ 9999,
 /* 2205 */ 9999,
 /* 2206 */ 9999,
-/* 2207 */ 631012,
+/* 2207 */ 636012,
 /* 2208 */ 9999,
 /* 2209 */ 9999,
-/* 2210 */ 631012,
+/* 2210 */ 636012,
 /* 2211 */ 9999,
-/* 2212 */ 631020,
-/* 2213 */ 631030,
-/* 2214 */ 631025,
+/* 2212 */ 636020,
+/* 2213 */ 636030,
+/* 2214 */ 636025,
 /* 2215 */ 9999,
-/* 2216 */ 631025,
+/* 2216 */ 636025,
 /* 2217 */ 9999,
 /* 2218 */ 9999,
-/* 2219 */ 631025,
+/* 2219 */ 636025,
 /* 2220 */ 9999,
 /* 2221 */ 9999,
 /* 2222 */ 9999,
-/* 2223 */ 631031,
+/* 2223 */ 636031,
 /* 2224 */ 9999,
 /* 2225 */ 9999,
 /* 2226 */ 9999,
-/* 2227 */ 631037,
+/* 2227 */ 636037,
 /* 2228 */ 9999,
 /* 2229 */ 9999,
-/* 2230 */ 631037,
+/* 2230 */ 636037,
 /* 2231 */ 9999,
 /* 2232 */ 9999,
 /* 2233 */ 9999,
-/* 2234 */ 632016,
+/* 2234 */ 637016,
 /* 2235 */ 9999,
 /* 2236 */ 9999,
 /* 2237 */ 9999,
-/* 2238 */ 632025,
+/* 2238 */ 637025,
 /* 2239 */ 9999,
 /* 2240 */ 9999,
 /* 2241 */ 9999,
-/* 2242 */ 632029,
+/* 2242 */ 637029,
 /* 2243 */ 9999,
 /* 2244 */ 9999,
-/* 2245 */ 632029,
+/* 2245 */ 637029,
 /* 2246 */ 9999,
 /* 2247 */ 9999,
 /* 2248 */ 9999,
-/* 2249 */ 633011,
+/* 2249 */ 638011,
 /* 2250 */ 9999,
 /* 2251 */ 9999,
-/* 2252 */ 633011,
+/* 2252 */ 638011,
 /* 2253 */ 9999,
 /* 2254 */ 9999,
 /* 2255 */ 9999,
-/* 2256 */ 634013,
+/* 2256 */ 639013,
 /* 2257 */ 9999,
 /* 2258 */ 9999,
-/* 2259 */ 634013,
+/* 2259 */ 639013,
 /* 2260 */ 9999,
-/* 2261 */ 641003,
-/* 2262 */ 650003,
+/* 2261 */ 646003,
+/* 2262 */ 655003,
 /* 2263 */ 9999,
 /* 2264 */ 9999,
-/* 2265 */ 654007,
+/* 2265 */ 659007,
 /* 2266 */ 9999,
-/* 2267 */ 656007,
+/* 2267 */ 661007,
 /* 2268 */ 9999,
-/* 2269 */ 657003,
+/* 2269 */ 662003,
 /* 2270 */ 9999,
-/* 2271 */ 640037,
+/* 2271 */ 645037,
 /* 2272 */ 9999,
-/* 2273 */ 641005,
-/* 2274 */ 649005,
-/* 2275 */ 641010,
+/* 2273 */ 646005,
+/* 2274 */ 654005,
+/* 2275 */ 646010,
 /* 2276 */ 9999,
-/* 2277 */ 641010,
+/* 2277 */ 646010,
 /* 2278 */ 9999,
 /* 2279 */ 9999,
-/* 2280 */ 641010,
+/* 2280 */ 646010,
 /* 2281 */ 9999,
 /* 2282 */ 9999,
 /* 2283 */ 9999,
-/* 2284 */ 649006,
+/* 2284 */ 654006,
 /* 2285 */ 9999,
 /* 2286 */ 9999,
-/* 2287 */ 649006,
+/* 2287 */ 654006,
 /* 2288 */ 9999,
 /* 2289 */ 9999,
 /* 2290 */ 9999,
-/* 2291 */ 650008,
+/* 2291 */ 655008,
 /* 2292 */ 9999,
 /* 2293 */ 9999,
 /* 2294 */ 9999,
-/* 2295 */ 650017,
+/* 2295 */ 655017,
 /* 2296 */ 9999,
 /* 2297 */ 9999,
 /* 2298 */ 9999,
-/* 2299 */ 651012,
+/* 2299 */ 656012,
 /* 2300 */ 9999,
 /* 2301 */ 9999,
 /* 2302 */ 9999,
-/* 2303 */ 652013,
+/* 2303 */ 657013,
 /* 2304 */ 9999,
-/* 2305 */ 656008,
-/* 2306 */ 656016,
+/* 2305 */ 661008,
+/* 2306 */ 661016,
 /* 2307 */ 9999,
-/* 2308 */ 656016,
+/* 2308 */ 661016,
 /* 2309 */ 9999,
 /* 2310 */ 9999,
-/* 2311 */ 656016,
+/* 2311 */ 661016,
 /* 2312 */ 9999,
 /* 2313 */ 9999,
-/* 2314 */ 657009,
+/* 2314 */ 662009,
 /* 2315 */ 9999,
-/* 2316 */ 678008,
+/* 2316 */ 683008,
 /* 2317 */ 9999,
-/* 2318 */ 657007,
+/* 2318 */ 662007,
 /* 2319 */ 9999,
-/* 2320 */ 657007,
+/* 2320 */ 662007,
 /* 2321 */ 9999,
 /* 2322 */ 9999,
-/* 2323 */ 657007,
+/* 2323 */ 662007,
 /* 2324 */ 9999,
-/* 2325 */ 678009,
-/* 2326 */ 678017,
+/* 2325 */ 683009,
+/* 2326 */ 683017,
 /* 2327 */ 9999,
-/* 2328 */ 678017,
+/* 2328 */ 683017,
 /* 2329 */ 9999,
 /* 2330 */ 9999,
-/* 2331 */ 678017,
+/* 2331 */ 683017,
 /* 2332 */ 9999,
 /* 2333 */ 9999,
-/* 2334 */ 683015,
+/* 2334 */ 688015,
 /* 2335 */ 9999,
 /* 2336 */ 9999,
 /* 2337 */ 9999,
-/* 2338 */ 683013,
+/* 2338 */ 688013,
 /* 2339 */ 9999,
-/* 2340 */ 684005,
+/* 2340 */ 689005,
 /* 2341 */ 9999,
 /* 2342 */ 9999,
-/* 2343 */ 684009,
+/* 2343 */ 689009,
 /* 2344 */ 9999,
 /* 2345 */ 9999,
-/* 2346 */ 685016,
-/* 2347 */ 685023,
+/* 2346 */ 690016,
+/* 2347 */ 690023,
 /* 2348 */ 9999,
 /* 2349 */ 9999,
-/* 2350 */ 685014,
+/* 2350 */ 690014,
 /* 2351 */ 9999,
 /* 2352 */ 9999,
-/* 2353 */ 686010,
-/* 2354 */ 686017,
+/* 2353 */ 691010,
+/* 2354 */ 691017,
 /* 2355 */ 9999,
 /* 2356 */ 9999,
-/* 2357 */ 686008,
+/* 2357 */ 691008,
 /* 2358 */ 9999,
 /* 2359 */ 9999,
-/* 2360 */ 687010,
-/* 2361 */ 687020,
-/* 2362 */ 687027,
-/* 2363 */ 687037,
+/* 2360 */ 692010,
+/* 2361 */ 692020,
+/* 2362 */ 692027,
+/* 2363 */ 692037,
 /* 2364 */ 9999,
 /* 2365 */ 9999,
-/* 2366 */ 687008,
+/* 2366 */ 692008,
 /* 2367 */ 9999,
 /* 2368 */ 9999,
-/* 2369 */ 688013,
-/* 2370 */ 688020,
-/* 2371 */ 689007,
+/* 2369 */ 693013,
+/* 2370 */ 693020,
+/* 2371 */ 694007,
 /* 2372 */ 9999,
 /* 2373 */ 9999,
-/* 2374 */ 688011,
+/* 2374 */ 693011,
 /* 2375 */ 9999,
 /* 2376 */ 9999,
-/* 2377 */ 690010,
-/* 2378 */ 690017,
-/* 2379 */ 690027,
+/* 2377 */ 695010,
+/* 2378 */ 695017,
+/* 2379 */ 695027,
 /* 2380 */ 9999,
 /* 2381 */ 9999,
-/* 2382 */ 690008,
+/* 2382 */ 695008,
 /* 2383 */ 9999,
 /* 2384 */ 9999,
-/* 2385 */ 692010,
-/* 2386 */ 692017,
+/* 2385 */ 697010,
+/* 2386 */ 697017,
 /* 2387 */ 9999,
 /* 2388 */ 9999,
-/* 2389 */ 692008,
+/* 2389 */ 697008,
 /* 2390 */ 9999,
 /* 2391 */ 9999,
-/* 2392 */ 693010,
-/* 2393 */ 693017,
+/* 2392 */ 698010,
+/* 2393 */ 698017,
 /* 2394 */ 9999,
 /* 2395 */ 9999,
-/* 2396 */ 693008,
+/* 2396 */ 698008,
 /* 2397 */ 9999,
 /* 2398 */ 9999,
-/* 2399 */ 694010,
-/* 2400 */ 694017,
+/* 2399 */ 699010,
+/* 2400 */ 699017,
 /* 2401 */ 9999,
 /* 2402 */ 9999,
-/* 2403 */ 694008,
+/* 2403 */ 699008,
 /* 2404 */ 9999,
 /* 2405 */ 9999,
-/* 2406 */ 695010,
-/* 2407 */ 695017,
+/* 2406 */ 700010,
+/* 2407 */ 700017,
 /* 2408 */ 9999,
 /* 2409 */ 9999,
-/* 2410 */ 695008,
+/* 2410 */ 700008,
 /* 2411 */ 9999,
 /* 2412 */ 9999,
-/* 2413 */ 696010,
-/* 2414 */ 696017,
+/* 2413 */ 701010,
+/* 2414 */ 701017,
 /* 2415 */ 9999,
 /* 2416 */ 9999,
-/* 2417 */ 696008,
+/* 2417 */ 701008,
 /* 2418 */ 9999,
 /* 2419 */ 9999,
-/* 2420 */ 697010,
-/* 2421 */ 697017,
+/* 2420 */ 702010,
+/* 2421 */ 702017,
 /* 2422 */ 9999,
 /* 2423 */ 9999,
-/* 2424 */ 697008,
+/* 2424 */ 702008,
 /* 2425 */ 9999,
 /* 2426 */ 9999,
-/* 2427 */ 698010,
-/* 2428 */ 698017,
+/* 2427 */ 703010,
+/* 2428 */ 703017,
 /* 2429 */ 9999,
 /* 2430 */ 9999,
-/* 2431 */ 698008,
+/* 2431 */ 703008,
 /* 2432 */ 9999,
 /* 2433 */ 9999,
-/* 2434 */ 699010,
-/* 2435 */ 699017,
+/* 2434 */ 704010,
+/* 2435 */ 704017,
 /* 2436 */ 9999,
 /* 2437 */ 9999,
-/* 2438 */ 699008,
+/* 2438 */ 704008,
 /* 2439 */ 9999,
 /* 2440 */ 9999,
-/* 2441 */ 700010,
-/* 2442 */ 700017,
+/* 2441 */ 705010,
+/* 2442 */ 705017,
 /* 2443 */ 9999,
 /* 2444 */ 9999,
-/* 2445 */ 700008,
+/* 2445 */ 705008,
 /* 2446 */ 9999,
 /* 2447 */ 9999,
-/* 2448 */ 701010,
-/* 2449 */ 701017,
+/* 2448 */ 706010,
+/* 2449 */ 706017,
 /* 2450 */ 9999,
 /* 2451 */ 9999,
-/* 2452 */ 701008,
+/* 2452 */ 706008,
 /* 2453 */ 9999,
 /* 2454 */ 9999,
-/* 2455 */ 702010,
-/* 2456 */ 702017,
+/* 2455 */ 707010,
+/* 2456 */ 707017,
 /* 2457 */ 9999,
 /* 2458 */ 9999,
-/* 2459 */ 702008,
+/* 2459 */ 707008,
 /* 2460 */ 9999,
 /* 2461 */ 9999,
-/* 2462 */ 703010,
+/* 2462 */ 708010,
 /* 2463 */ 9999,
 /* 2464 */ 9999,
 /* 2465 */ 9999,
-/* 2466 */ 703008,
+/* 2466 */ 708008,
 /* 2467 */ 9999,
 /* 2468 */ 9999,
-/* 2469 */ 704011,
-/* 2470 */ 704018,
+/* 2469 */ 709011,
+/* 2470 */ 709018,
 /* 2471 */ 9999,
 /* 2472 */ 9999,
-/* 2473 */ 704009,
+/* 2473 */ 709009,
 /* 2474 */ 9999,
-/* 2475 */ 706005,
+/* 2475 */ 711005,
 /* 2476 */ 9999,
-/* 2477 */ 706014,
+/* 2477 */ 711014,
 /* 2478 */ 9999,
-/* 2479 */ 707005,
+/* 2479 */ 712005,
 /* 2480 */ 9999,
-/* 2481 */ 707017,
+/* 2481 */ 712017,
 /* 2482 */ 9999,
-/* 2483 */ 708005,
+/* 2483 */ 713005,
 /* 2484 */ 9999,
-/* 2485 */ 708016,
+/* 2485 */ 713016,
 /* 2486 */ 9999,
 /* 2487 */ 9999,
 /* 2488 */ 9999,
-/* 2489 */ 683016,
+/* 2489 */ 688016,
 /* 2490 */ 9999,
 /* 2491 */ 9999,
-/* 2492 */ 683016,
+/* 2492 */ 688016,
 /* 2493 */ 9999,
 /* 2494 */ 9999,
 /* 2495 */ 9999,
-/* 2496 */ 685017,
+/* 2496 */ 690017,
 /* 2497 */ 9999,
 /* 2498 */ 9999,
-/* 2499 */ 685017,
+/* 2499 */ 690017,
 /* 2500 */ 9999,
 /* 2501 */ 9999,
 /* 2502 */ 9999,
-/* 2503 */ 686011,
+/* 2503 */ 691011,
 /* 2504 */ 9999,
 /* 2505 */ 9999,
-/* 2506 */ 686011,
+/* 2506 */ 691011,
 /* 2507 */ 9999,
 /* 2508 */ 9999,
 /* 2509 */ 9999,
-/* 2510 */ 687016,
+/* 2510 */ 692016,
 /* 2511 */ 9999,
 /* 2512 */ 9999,
-/* 2513 */ 687016,
+/* 2513 */ 692016,
 /* 2514 */ 9999,
 /* 2515 */ 9999,
 /* 2516 */ 9999,
-/* 2517 */ 687021,
+/* 2517 */ 692021,
 /* 2518 */ 9999,
 /* 2519 */ 9999,
-/* 2520 */ 687021,
+/* 2520 */ 692021,
 /* 2521 */ 9999,
 /* 2522 */ 9999,
 /* 2523 */ 9999,
-/* 2524 */ 687038,
+/* 2524 */ 692038,
 /* 2525 */ 9999,
 /* 2526 */ 9999,
-/* 2527 */ 687038,
+/* 2527 */ 692038,
 /* 2528 */ 9999,
 /* 2529 */ 9999,
 /* 2530 */ 9999,
-/* 2531 */ 688014,
+/* 2531 */ 693014,
 /* 2532 */ 9999,
 /* 2533 */ 9999,
-/* 2534 */ 688014,
+/* 2534 */ 693014,
 /* 2535 */ 9999,
 /* 2536 */ 9999,
-/* 2537 */ 689013,
+/* 2537 */ 694013,
 /* 2538 */ 9999,
 /* 2539 */ 9999,
-/* 2540 */ 689009,
+/* 2540 */ 694009,
 /* 2541 */ 9999,
 /* 2542 */ 9999,
-/* 2543 */ 689009,
+/* 2543 */ 694009,
 /* 2544 */ 9999,
 /* 2545 */ 9999,
 /* 2546 */ 9999,
-/* 2547 */ 690011,
+/* 2547 */ 695011,
 /* 2548 */ 9999,
 /* 2549 */ 9999,
-/* 2550 */ 690011,
+/* 2550 */ 695011,
 /* 2551 */ 9999,
 /* 2552 */ 9999,
 /* 2553 */ 9999,
-/* 2554 */ 690035,
+/* 2554 */ 695035,
 /* 2555 */ 9999,
 /* 2556 */ 9999,
-/* 2557 */ 690035,
+/* 2557 */ 695035,
 /* 2558 */ 9999,
 /* 2559 */ 9999,
 /* 2560 */ 9999,
-/* 2561 */ 692011,
+/* 2561 */ 697011,
 /* 2562 */ 9999,
 /* 2563 */ 9999,
-/* 2564 */ 692011,
+/* 2564 */ 697011,
 /* 2565 */ 9999,
 /* 2566 */ 9999,
 /* 2567 */ 9999,
-/* 2568 */ 693011,
+/* 2568 */ 698011,
 /* 2569 */ 9999,
 /* 2570 */ 9999,
-/* 2571 */ 693011,
+/* 2571 */ 698011,
 /* 2572 */ 9999,
 /* 2573 */ 9999,
 /* 2574 */ 9999,
-/* 2575 */ 694011,
+/* 2575 */ 699011,
 /* 2576 */ 9999,
 /* 2577 */ 9999,
-/* 2578 */ 694011,
+/* 2578 */ 699011,
 /* 2579 */ 9999,
 /* 2580 */ 9999,
 /* 2581 */ 9999,
-/* 2582 */ 695011,
+/* 2582 */ 700011,
 /* 2583 */ 9999,
 /* 2584 */ 9999,
-/* 2585 */ 695011,
+/* 2585 */ 700011,
 /* 2586 */ 9999,
 /* 2587 */ 9999,
 /* 2588 */ 9999,
-/* 2589 */ 696011,
+/* 2589 */ 701011,
 /* 2590 */ 9999,
 /* 2591 */ 9999,
-/* 2592 */ 696011,
+/* 2592 */ 701011,
 /* 2593 */ 9999,
 /* 2594 */ 9999,
 /* 2595 */ 9999,
-/* 2596 */ 697011,
+/* 2596 */ 702011,
 /* 2597 */ 9999,
 /* 2598 */ 9999,
-/* 2599 */ 697011,
+/* 2599 */ 702011,
 /* 2600 */ 9999,
 /* 2601 */ 9999,
 /* 2602 */ 9999,
-/* 2603 */ 698011,
+/* 2603 */ 703011,
 /* 2604 */ 9999,
 /* 2605 */ 9999,
-/* 2606 */ 698011,
+/* 2606 */ 703011,
 /* 2607 */ 9999,
 /* 2608 */ 9999,
 /* 2609 */ 9999,
-/* 2610 */ 699011,
+/* 2610 */ 704011,
 /* 2611 */ 9999,
 /* 2612 */ 9999,
-/* 2613 */ 699011,
+/* 2613 */ 704011,
 /* 2614 */ 9999,
 /* 2615 */ 9999,
 /* 2616 */ 9999,
-/* 2617 */ 700011,
+/* 2617 */ 705011,
 /* 2618 */ 9999,
 /* 2619 */ 9999,
-/* 2620 */ 700011,
+/* 2620 */ 705011,
 /* 2621 */ 9999,
 /* 2622 */ 9999,
 /* 2623 */ 9999,
-/* 2624 */ 701011,
+/* 2624 */ 706011,
 /* 2625 */ 9999,
 /* 2626 */ 9999,
-/* 2627 */ 701011,
+/* 2627 */ 706011,
 /* 2628 */ 9999,
 /* 2629 */ 9999,
 /* 2630 */ 9999,
-/* 2631 */ 702011,
+/* 2631 */ 707011,
 /* 2632 */ 9999,
 /* 2633 */ 9999,
-/* 2634 */ 702011,
+/* 2634 */ 707011,
 /* 2635 */ 9999,
 /* 2636 */ 9999,
 /* 2637 */ 9999,
-/* 2638 */ 703011,
+/* 2638 */ 708011,
 /* 2639 */ 9999,
 /* 2640 */ 9999,
-/* 2641 */ 703011,
+/* 2641 */ 708011,
 /* 2642 */ 9999,
 /* 2643 */ 9999,
 /* 2644 */ 9999,
-/* 2645 */ 704012,
+/* 2645 */ 709012,
 /* 2646 */ 9999,
 /* 2647 */ 9999,
-/* 2648 */ 704012,
+/* 2648 */ 709012,
 /* 2649 */ 9999,
-/* 2650 */ 704019,
-/* 2651 */ 705005,
-/* 2652 */ 704024,
+/* 2650 */ 709019,
+/* 2651 */ 710005,
+/* 2652 */ 709024,
 /* 2653 */ 9999,
-/* 2654 */ 704024,
+/* 2654 */ 709024,
 /* 2655 */ 9999,
 /* 2656 */ 9999,
-/* 2657 */ 704024,
+/* 2657 */ 709024,
 /* 2658 */ 9999,
 /* 2659 */ 9999,
 /* 2660 */ 9999,
-/* 2661 */ 705006,
+/* 2661 */ 710006,
 /* 2662 */ 9999,
 /* 2663 */ 9999,
 /* 2664 */ 9999,
-/* 2665 */ 705012,
+/* 2665 */ 710012,
 /* 2666 */ 9999,
 /* 2667 */ 9999,
-/* 2668 */ 705012,
+/* 2668 */ 710012,
 /* 2669 */ 9999,
-/* 2670 */ 712003,
+/* 2670 */ 717003,
 /* 2671 */ 9999,
-/* 2672 */ 711015,
+/* 2672 */ 716015,
 /* 2673 */ 9999,
-/* 2674 */ 712004,
-/* 2675 */ 712029,
-/* 2676 */ 712009,
+/* 2674 */ 717004,
+/* 2675 */ 717029,
+/* 2676 */ 717009,
 /* 2677 */ 9999,
-/* 2678 */ 712009,
+/* 2678 */ 717009,
 /* 2679 */ 9999,
 /* 2680 */ 9999,
-/* 2681 */ 712009,
+/* 2681 */ 717009,
 /* 2682 */ 9999,
 /* 2683 */ 9999,
 /* 2684 */ 9999,
-/* 2685 */ 712030,
+/* 2685 */ 717030,
 /* 2686 */ 9999,
 /* 2687 */ 9999,
 /* 2688 */ 9999,
-/* 2689 */ 712036,
+/* 2689 */ 717036,
 /* 2690 */ 9999,
 /* 2691 */ 9999,
-/* 2692 */ 712036,
+/* 2692 */ 717036,
 /* 2693 */ 9999,
 /* 2694 */ 9999,
 /* 2695 */ 9999,
-/* 2696 */ 718009,
+/* 2696 */ 723009,
 /* 2697 */ 9999,
 /* 2698 */ 9999,
 /* 2699 */ 9999,
-/* 2700 */ 723005,
+/* 2700 */ 728005,
 /* 2701 */ 9999,
-/* 2702 */ 728007,
+/* 2702 */ 733007,
 /* 2703 */ 9999,
 /* 2704 */ 9999,
-/* 2705 */ 721006,
+/* 2705 */ 726006,
 /* 2706 */ 9999,
 /* 2707 */ 9999,
-/* 2708 */ 723011,
+/* 2708 */ 728011,
 /* 2709 */ 9999,
-/* 2710 */ 723007,
+/* 2710 */ 728007,
 /* 2711 */ 9999,
 /* 2712 */ 9999,
-/* 2713 */ 723007,
+/* 2713 */ 728007,
 /* 2714 */ 9999,
-/* 2715 */ 728008,
-/* 2716 */ 728017,
+/* 2715 */ 733008,
+/* 2716 */ 733017,
 /* 2717 */ 9999,
-/* 2718 */ 728017,
+/* 2718 */ 733017,
 /* 2719 */ 9999,
 /* 2720 */ 9999,
-/* 2721 */ 728017,
+/* 2721 */ 733017,
 /* 2722 */ 9999,
 /* 2723 */ 9999,
-/* 2724 */ 732014,
+/* 2724 */ 737014,
 /* 2725 */ 9999,
 /* 2726 */ 9999,
 /* 2727 */ 9999,
-/* 2728 */ 732012,
+/* 2728 */ 737012,
 /* 2729 */ 9999,
-/* 2730 */ 733004,
+/* 2730 */ 738004,
 /* 2731 */ 9999,
 /* 2732 */ 9999,
-/* 2733 */ 733004,
+/* 2733 */ 738004,
 /* 2734 */ 9999,
 /* 2735 */ 9999,
-/* 2736 */ 735012,
-/* 2737 */ 735019,
+/* 2736 */ 740012,
+/* 2737 */ 740019,
 /* 2738 */ 9999,
 /* 2739 */ 9999,
-/* 2740 */ 735010,
+/* 2740 */ 740010,
 /* 2741 */ 9999,
 /* 2742 */ 9999,
-/* 2743 */ 737013,
-/* 2744 */ 737020,
+/* 2743 */ 742013,
+/* 2744 */ 742020,
 /* 2745 */ 9999,
 /* 2746 */ 9999,
-/* 2747 */ 737011,
+/* 2747 */ 742011,
 /* 2748 */ 9999,
 /* 2749 */ 9999,
-/* 2750 */ 738013,
-/* 2751 */ 738022,
-/* 2752 */ 738029,
+/* 2750 */ 743013,
+/* 2751 */ 743022,
+/* 2752 */ 743029,
 /* 2753 */ 9999,
-/* 2754 */ 738045,
+/* 2754 */ 743045,
 /* 2755 */ 9999,
 /* 2756 */ 9999,
-/* 2757 */ 738011,
+/* 2757 */ 743011,
 /* 2758 */ 9999,
 /* 2759 */ 9999,
-/* 2760 */ 741013,
-/* 2761 */ 741022,
-/* 2762 */ 741029,
+/* 2760 */ 746013,
+/* 2761 */ 746022,
+/* 2762 */ 746029,
 /* 2763 */ 9999,
-/* 2764 */ 741045,
+/* 2764 */ 746045,
 /* 2765 */ 9999,
-/* 2766 */ 741062,
+/* 2766 */ 746062,
 /* 2767 */ 9999,
 /* 2768 */ 9999,
-/* 2769 */ 741011,
+/* 2769 */ 746011,
 /* 2770 */ 9999,
 /* 2771 */ 9999,
-/* 2772 */ 745012,
-/* 2773 */ 746007,
+/* 2772 */ 750012,
+/* 2773 */ 751007,
 /* 2774 */ 9999,
 /* 2775 */ 9999,
-/* 2776 */ 745010,
+/* 2776 */ 750010,
 /* 2777 */ 9999,
-/* 2778 */ 747005,
-/* 2779 */ 747015,
+/* 2778 */ 752005,
+/* 2779 */ 752015,
 /* 2780 */ 9999,
 /* 2781 */ 9999,
 /* 2782 */ 9999,
-/* 2783 */ 747010,
+/* 2783 */ 752010,
 /* 2784 */ 9999,
 /* 2785 */ 9999,
-/* 2786 */ 753011,
-/* 2787 */ 753019,
+/* 2786 */ 758011,
+/* 2787 */ 758019,
 /* 2788 */ 9999,
 /* 2789 */ 9999,
-/* 2790 */ 753009,
+/* 2790 */ 758009,
 /* 2791 */ 9999,
-/* 2792 */ 754005,
+/* 2792 */ 759005,
 /* 2793 */ 9999,
-/* 2794 */ 754013,
+/* 2794 */ 759013,
 /* 2795 */ 9999,
-/* 2796 */ 755005,
+/* 2796 */ 760005,
 /* 2797 */ 9999,
-/* 2798 */ 755016,
+/* 2798 */ 760016,
 /* 2799 */ 9999,
-/* 2800 */ 756005,
+/* 2800 */ 761005,
 /* 2801 */ 9999,
-/* 2802 */ 756014,
+/* 2802 */ 761014,
 /* 2803 */ 9999,
-/* 2804 */ 757005,
+/* 2804 */ 762005,
 /* 2805 */ 9999,
-/* 2806 */ 757017,
+/* 2806 */ 762017,
 /* 2807 */ 9999,
 /* 2808 */ 9999,
 /* 2809 */ 9999,
-/* 2810 */ 732015,
+/* 2810 */ 737015,
 /* 2811 */ 9999,
 /* 2812 */ 9999,
-/* 2813 */ 732015,
+/* 2813 */ 737015,
 /* 2814 */ 9999,
 /* 2815 */ 9999,
-/* 2816 */ 733019,
-/* 2817 */ 733026,
-/* 2818 */ 734003,
-/* 2819 */ 733013,
+/* 2816 */ 738019,
+/* 2817 */ 738026,
+/* 2818 */ 739003,
+/* 2819 */ 738013,
 /* 2820 */ 9999,
-/* 2821 */ 733013,
+/* 2821 */ 738013,
 /* 2822 */ 9999,
 /* 2823 */ 9999,
-/* 2824 */ 733013,
+/* 2824 */ 738013,
 /* 2825 */ 9999,
 /* 2826 */ 9999,
 /* 2827 */ 9999,
-/* 2828 */ 733020,
+/* 2828 */ 738020,
 /* 2829 */ 9999,
 /* 2830 */ 9999,
-/* 2831 */ 733020,
+/* 2831 */ 738020,
 /* 2832 */ 9999,
 /* 2833 */ 9999,
 /* 2834 */ 9999,
-/* 2835 */ 734004,
+/* 2835 */ 739004,
 /* 2836 */ 9999,
 /* 2837 */ 9999,
-/* 2838 */ 734004,
+/* 2838 */ 739004,
 /* 2839 */ 9999,
 /* 2840 */ 9999,
 /* 2841 */ 9999,
-/* 2842 */ 735013,
+/* 2842 */ 740013,
 /* 2843 */ 9999,
 /* 2844 */ 9999,
-/* 2845 */ 735013,
+/* 2845 */ 740013,
 /* 2846 */ 9999,
-/* 2847 */ 735020,
-/* 2848 */ 735054,
-/* 2849 */ 735034,
+/* 2847 */ 740020,
+/* 2848 */ 740054,
+/* 2849 */ 740034,
 /* 2850 */ 9999,
-/* 2851 */ 735034,
+/* 2851 */ 740034,
 /* 2852 */ 9999,
 /* 2853 */ 9999,
-/* 2854 */ 735034,
+/* 2854 */ 740034,
 /* 2855 */ 9999,
 /* 2856 */ 9999,
 /* 2857 */ 9999,
-/* 2858 */ 735055,
+/* 2858 */ 740055,
 /* 2859 */ 9999,
 /* 2860 */ 9999,
-/* 2861 */ 735055,
+/* 2861 */ 740055,
 /* 2862 */ 9999,
 /* 2863 */ 9999,
 /* 2864 */ 9999,
-/* 2865 */ 737014,
+/* 2865 */ 742014,
 /* 2866 */ 9999,
 /* 2867 */ 9999,
-/* 2868 */ 737014,
+/* 2868 */ 742014,
 /* 2869 */ 9999,
 /* 2870 */ 9999,
 /* 2871 */ 9999,
-/* 2872 */ 738018,
+/* 2872 */ 743018,
 /* 2873 */ 9999,
 /* 2874 */ 9999,
-/* 2875 */ 738018,
+/* 2875 */ 743018,
 /* 2876 */ 9999,
 /* 2877 */ 9999,
 /* 2878 */ 9999,
-/* 2879 */ 738023,
+/* 2879 */ 743023,
 /* 2880 */ 9999,
 /* 2881 */ 9999,
-/* 2882 */ 738023,
+/* 2882 */ 743023,
 /* 2883 */ 9999,
 /* 2884 */ 9999,
 /* 2885 */ 9999,
-/* 2886 */ 741018,
+/* 2886 */ 746018,
 /* 2887 */ 9999,
 /* 2888 */ 9999,
-/* 2889 */ 741018,
+/* 2889 */ 746018,
 /* 2890 */ 9999,
 /* 2891 */ 9999,
 /* 2892 */ 9999,
-/* 2893 */ 741023,
+/* 2893 */ 746023,
 /* 2894 */ 9999,
 /* 2895 */ 9999,
-/* 2896 */ 741023,
+/* 2896 */ 746023,
 /* 2897 */ 9999,
 /* 2898 */ 9999,
 /* 2899 */ 9999,
-/* 2900 */ 745013,
+/* 2900 */ 750013,
 /* 2901 */ 9999,
 /* 2902 */ 9999,
-/* 2903 */ 745013,
+/* 2903 */ 750013,
 /* 2904 */ 9999,
-/* 2905 */ 746009,
-/* 2906 */ 746053,
-/* 2907 */ 746014,
+/* 2905 */ 751009,
+/* 2906 */ 751059,
+/* 2907 */ 751014,
 /* 2908 */ 9999,
-/* 2909 */ 746014,
+/* 2909 */ 751014,
 /* 2910 */ 9999,
 /* 2911 */ 9999,
-/* 2912 */ 746014,
+/* 2912 */ 751014,
 /* 2913 */ 9999,
 /* 2914 */ 9999,
 /* 2915 */ 9999,
-/* 2916 */ 746054,
+/* 2916 */ 751060,
 /* 2917 */ 9999,
 /* 2918 */ 9999,
-/* 2919 */ 746054,
+/* 2919 */ 751060,
 /* 2920 */ 9999,
 /* 2921 */ 9999,
 /* 2922 */ 9999,
-/* 2923 */ 747016,
+/* 2923 */ 752016,
 /* 2924 */ 9999,
 /* 2925 */ 9999,
-/* 2926 */ 747016,
+/* 2926 */ 752016,
 /* 2927 */ 9999,
 /* 2928 */ 9999,
 /* 2929 */ 9999,
-/* 2930 */ 753012,
+/* 2930 */ 758012,
 /* 2931 */ 9999,
 /* 2932 */ 9999,
-/* 2933 */ 753012,
+/* 2933 */ 758012,
 /* 2934 */ 9999,
-/* 2935 */ 753020,
-/* 2936 */ 753030,
-/* 2937 */ 753025,
+/* 2935 */ 758020,
+/* 2936 */ 758030,
+/* 2937 */ 758025,
 /* 2938 */ 9999,
-/* 2939 */ 753025,
+/* 2939 */ 758025,
 /* 2940 */ 9999,
 /* 2941 */ 9999,
-/* 2942 */ 753025,
+/* 2942 */ 758025,
 /* 2943 */ 9999,
 /* 2944 */ 9999,
 /* 2945 */ 9999,
-/* 2946 */ 753031,
+/* 2946 */ 758031,
 /* 2947 */ 9999,
 /* 2948 */ 9999,
 /* 2949 */ 9999,
-/* 2950 */ 753037,
+/* 2950 */ 758037,
 /* 2951 */ 9999,
 /* 2952 */ 9999,
-/* 2953 */ 753037,
+/* 2953 */ 758037,
 /* 2954 */ 9999,
 /* 2955 */ 9999,
 /* 2956 */ 9999,
 /* 2957 */ 9999,
-/* 2958 */ 762007,
+/* 2958 */ 767007,
 /* 2959 */ 9999,
 /* 2960 */ 9999,
-/* 2961 */ 761007,
+/* 2961 */ 766007,
 /* 2962 */ 9999,
-/* 2963 */ 762008,
-/* 2964 */ 762018,
+/* 2963 */ 767008,
+/* 2964 */ 767018,
 /* 2965 */ 9999,
-/* 2966 */ 762018,
+/* 2966 */ 767018,
 /* 2967 */ 9999,
 /* 2968 */ 9999,
-/* 2969 */ 762018,
+/* 2969 */ 767018,
 /* 2970 */ 9999,
 /* 2971 */ 9999,
-/* 2972 */ 766015,
+/* 2972 */ 771015,
 /* 2973 */ 9999,
 /* 2974 */ 9999,
 /* 2975 */ 9999,
-/* 2976 */ 766013,
+/* 2976 */ 771013,
 /* 2977 */ 9999,
 /* 2978 */ 9999,
-/* 2979 */ 767013,
-/* 2980 */ 767020,
-/* 2981 */ 767027,
+/* 2979 */ 772013,
+/* 2980 */ 772020,
+/* 2981 */ 772027,
 /* 2982 */ 9999,
 /* 2983 */ 9999,
-/* 2984 */ 767011,
+/* 2984 */ 772011,
 /* 2985 */ 9999,
 /* 2986 */ 9999,
-/* 2987 */ 768010,
-/* 2988 */ 768017,
-/* 2989 */ 768024,
+/* 2987 */ 773010,
+/* 2988 */ 773017,
+/* 2989 */ 773024,
 /* 2990 */ 9999,
 /* 2991 */ 9999,
-/* 2992 */ 768008,
+/* 2992 */ 773008,
 /* 2993 */ 9999,
 /* 2994 */ 9999,
-/* 2995 */ 769009,
-/* 2996 */ 769016,
+/* 2995 */ 774009,
+/* 2996 */ 774016,
 /* 2997 */ 9999,
-/* 2998 */ 769030,
+/* 2998 */ 774030,
 /* 2999 */ 9999,
 /* 3000 */ 9999,
-/* 3001 */ 769007,
+/* 3001 */ 774007,
 /* 3002 */ 9999,
 /* 3003 */ 9999,
-/* 3004 */ 771012,
-/* 3005 */ 772007,
+/* 3004 */ 776012,
+/* 3005 */ 777007,
 /* 3006 */ 9999,
 /* 3007 */ 9999,
-/* 3008 */ 771010,
+/* 3008 */ 776010,
 /* 3009 */ 9999,
 /* 3010 */ 9999,
-/* 3011 */ 773011,
-/* 3012 */ 774007,
+/* 3011 */ 778011,
+/* 3012 */ 779007,
 /* 3013 */ 9999,
 /* 3014 */ 9999,
-/* 3015 */ 773009,
+/* 3015 */ 778009,
 /* 3016 */ 9999,
 /* 3017 */ 9999,
-/* 3018 */ 775012,
-/* 3019 */ 775019,
+/* 3018 */ 780012,
+/* 3019 */ 780019,
 /* 3020 */ 9999,
 /* 3021 */ 9999,
-/* 3022 */ 775010,
+/* 3022 */ 780010,
 /* 3023 */ 9999,
 /* 3024 */ 9999,
-/* 3025 */ 777012,
-/* 3026 */ 777018,
-/* 3027 */ 777029,
-/* 3028 */ 778007,
-/* 3029 */ 778014,
+/* 3025 */ 782012,
+/* 3026 */ 782018,
+/* 3027 */ 782029,
+/* 3028 */ 783007,
+/* 3029 */ 783014,
 /* 3030 */ 9999,
 /* 3031 */ 9999,
-/* 3032 */ 777010,
+/* 3032 */ 782010,
 /* 3033 */ 9999,
 /* 3034 */ 9999,
-/* 3035 */ 779019,
-/* 3036 */ 780007,
+/* 3035 */ 784019,
+/* 3036 */ 785007,
 /* 3037 */ 9999,
 /* 3038 */ 9999,
-/* 3039 */ 779017,
+/* 3039 */ 784017,
 /* 3040 */ 9999,
 /* 3041 */ 9999,
-/* 3042 */ 781011,
-/* 3043 */ 781019,
+/* 3042 */ 786011,
+/* 3043 */ 786019,
 /* 3044 */ 9999,
 /* 3045 */ 9999,
-/* 3046 */ 781009,
+/* 3046 */ 786009,
 /* 3047 */ 9999,
-/* 3048 */ 782005,
+/* 3048 */ 787005,
 /* 3049 */ 9999,
-/* 3050 */ 782013,
+/* 3050 */ 787013,
 /* 3051 */ 9999,
-/* 3052 */ 783005,
+/* 3052 */ 788005,
 /* 3053 */ 9999,
-/* 3054 */ 783014,
+/* 3054 */ 788014,
 /* 3055 */ 9999,
-/* 3056 */ 784005,
+/* 3056 */ 789005,
 /* 3057 */ 9999,
-/* 3058 */ 784016,
+/* 3058 */ 789016,
 /* 3059 */ 9999,
-/* 3060 */ 785005,
+/* 3060 */ 790005,
 /* 3061 */ 9999,
-/* 3062 */ 785017,
+/* 3062 */ 790017,
 /* 3063 */ 9999,
 /* 3064 */ 9999,
 /* 3065 */ 9999,
-/* 3066 */ 766016,
+/* 3066 */ 771016,
 /* 3067 */ 9999,
 /* 3068 */ 9999,
-/* 3069 */ 766016,
+/* 3069 */ 771016,
 /* 3070 */ 9999,
 /* 3071 */ 9999,
 /* 3072 */ 9999,
-/* 3073 */ 767014,
+/* 3073 */ 772014,
 /* 3074 */ 9999,
 /* 3075 */ 9999,
-/* 3076 */ 767014,
+/* 3076 */ 772014,
 /* 3077 */ 9999,
 /* 3078 */ 9999,
 /* 3079 */ 9999,
-/* 3080 */ 767021,
+/* 3080 */ 772021,
 /* 3081 */ 9999,
 /* 3082 */ 9999,
-/* 3083 */ 767021,
+/* 3083 */ 772021,
 /* 3084 */ 9999,
 /* 3085 */ 9999,
 /* 3086 */ 9999,
-/* 3087 */ 768011,
+/* 3087 */ 773011,
 /* 3088 */ 9999,
 /* 3089 */ 9999,
-/* 3090 */ 768011,
+/* 3090 */ 773011,
 /* 3091 */ 9999,
 /* 3092 */ 9999,
 /* 3093 */ 9999,
-/* 3094 */ 768018,
+/* 3094 */ 773018,
 /* 3095 */ 9999,
 /* 3096 */ 9999,
-/* 3097 */ 768018,
+/* 3097 */ 773018,
 /* 3098 */ 9999,
 /* 3099 */ 9999,
 /* 3100 */ 9999,
-/* 3101 */ 769010,
+/* 3101 */ 774010,
 /* 3102 */ 9999,
 /* 3103 */ 9999,
-/* 3104 */ 769010,
+/* 3104 */ 774010,
 /* 3105 */ 9999,
 /* 3106 */ 9999,
 /* 3107 */ 9999,
-/* 3108 */ 771013,
+/* 3108 */ 776013,
 /* 3109 */ 9999,
 /* 3110 */ 9999,
-/* 3111 */ 771013,
+/* 3111 */ 776013,
 /* 3112 */ 9999,
-/* 3113 */ 772008,
-/* 3114 */ 772020,
-/* 3115 */ 772062,
-/* 3116 */ 772013,
+/* 3113 */ 777008,
+/* 3114 */ 777020,
+/* 3115 */ 777069,
+/* 3116 */ 777013,
 /* 3117 */ 9999,
-/* 3118 */ 772013,
+/* 3118 */ 777013,
 /* 3119 */ 9999,
 /* 3120 */ 9999,
-/* 3121 */ 772013,
+/* 3121 */ 777013,
 /* 3122 */ 9999,
 /* 3123 */ 9999,
 /* 3124 */ 9999,
-/* 3125 */ 772063,
+/* 3125 */ 777070,
 /* 3126 */ 9999,
 /* 3127 */ 9999,
-/* 3128 */ 772063,
+/* 3128 */ 777070,
 /* 3129 */ 9999,
 /* 3130 */ 9999,
 /* 3131 */ 9999,
-/* 3132 */ 773012,
+/* 3132 */ 778012,
 /* 3133 */ 9999,
 /* 3134 */ 9999,
-/* 3135 */ 773012,
+/* 3135 */ 778012,
 /* 3136 */ 9999,
-/* 3137 */ 774008,
-/* 3138 */ 774020,
-/* 3139 */ 774060,
-/* 3140 */ 774013,
+/* 3137 */ 779008,
+/* 3138 */ 779020,
+/* 3139 */ 779067,
+/* 3140 */ 779013,
 /* 3141 */ 9999,
-/* 3142 */ 774013,
+/* 3142 */ 779013,
 /* 3143 */ 9999,
 /* 3144 */ 9999,
-/* 3145 */ 774013,
+/* 3145 */ 779013,
 /* 3146 */ 9999,
 /* 3147 */ 9999,
 /* 3148 */ 9999,
-/* 3149 */ 774061,
+/* 3149 */ 779068,
 /* 3150 */ 9999,
 /* 3151 */ 9999,
-/* 3152 */ 774061,
+/* 3152 */ 779068,
 /* 3153 */ 9999,
 /* 3154 */ 9999,
 /* 3155 */ 9999,
-/* 3156 */ 775013,
+/* 3156 */ 780013,
 /* 3157 */ 9999,
 /* 3158 */ 9999,
-/* 3159 */ 775013,
+/* 3159 */ 780013,
 /* 3160 */ 9999,
-/* 3161 */ 775020,
-/* 3162 */ 775054,
-/* 3163 */ 775034,
+/* 3161 */ 780020,
+/* 3162 */ 780054,
+/* 3163 */ 780034,
 /* 3164 */ 9999,
-/* 3165 */ 775034,
+/* 3165 */ 780034,
 /* 3166 */ 9999,
 /* 3167 */ 9999,
-/* 3168 */ 775034,
+/* 3168 */ 780034,
 /* 3169 */ 9999,
 /* 3170 */ 9999,
 /* 3171 */ 9999,
-/* 3172 */ 775055,
+/* 3172 */ 780055,
 /* 3173 */ 9999,
 /* 3174 */ 9999,
-/* 3175 */ 775055,
+/* 3175 */ 780055,
 /* 3176 */ 9999,
 /* 3177 */ 9999,
 /* 3178 */ 9999,
-/* 3179 */ 777013,
+/* 3179 */ 782013,
 /* 3180 */ 9999,
 /* 3181 */ 9999,
 /* 3182 */ 9999,
-/* 3183 */ 777030,
+/* 3183 */ 782030,
 /* 3184 */ 9999,
 /* 3185 */ 9999,
 /* 3186 */ 9999,
-/* 3187 */ 778008,
+/* 3187 */ 783008,
 /* 3188 */ 9999,
 /* 3189 */ 9999,
-/* 3190 */ 778008,
+/* 3190 */ 783008,
 /* 3191 */ 9999,
-/* 3192 */ 778016,
-/* 3193 */ 778061,
-/* 3194 */ 778021,
+/* 3192 */ 783016,
+/* 3193 */ 783068,
+/* 3194 */ 783021,
 /* 3195 */ 9999,
-/* 3196 */ 778021,
+/* 3196 */ 783021,
 /* 3197 */ 9999,
 /* 3198 */ 9999,
-/* 3199 */ 778021,
+/* 3199 */ 783021,
 /* 3200 */ 9999,
 /* 3201 */ 9999,
 /* 3202 */ 9999,
-/* 3203 */ 778062,
+/* 3203 */ 783069,
 /* 3204 */ 9999,
 /* 3205 */ 9999,
-/* 3206 */ 778062,
+/* 3206 */ 783069,
 /* 3207 */ 9999,
 /* 3208 */ 9999,
 /* 3209 */ 9999,
-/* 3210 */ 779020,
+/* 3210 */ 784020,
 /* 3211 */ 9999,
 /* 3212 */ 9999,
-/* 3213 */ 779020,
+/* 3213 */ 784020,
 /* 3214 */ 9999,
-/* 3215 */ 780008,
-/* 3216 */ 780054,
-/* 3217 */ 780013,
+/* 3215 */ 785008,
+/* 3216 */ 785054,
+/* 3217 */ 785013,
 /* 3218 */ 9999,
-/* 3219 */ 780013,
+/* 3219 */ 785013,
 /* 3220 */ 9999,
 /* 3221 */ 9999,
-/* 3222 */ 780013,
+/* 3222 */ 785013,
 /* 3223 */ 9999,
 /* 3224 */ 9999,
 /* 3225 */ 9999,
-/* 3226 */ 780055,
+/* 3226 */ 785055,
 /* 3227 */ 9999,
 /* 3228 */ 9999,
-/* 3229 */ 780055,
+/* 3229 */ 785055,
 /* 3230 */ 9999,
 /* 3231 */ 9999,
 /* 3232 */ 9999,
-/* 3233 */ 781012,
+/* 3233 */ 786012,
 /* 3234 */ 9999,
 /* 3235 */ 9999,
-/* 3236 */ 781012,
+/* 3236 */ 786012,
 /* 3237 */ 9999,
-/* 3238 */ 781020,
-/* 3239 */ 781030,
-/* 3240 */ 781025,
+/* 3238 */ 786020,
+/* 3239 */ 786030,
+/* 3240 */ 786025,
 /* 3241 */ 9999,
-/* 3242 */ 781025,
+/* 3242 */ 786025,
 /* 3243 */ 9999,
 /* 3244 */ 9999,
-/* 3245 */ 781025,
+/* 3245 */ 786025,
 /* 3246 */ 9999,
 /* 3247 */ 9999,
 /* 3248 */ 9999,
-/* 3249 */ 781031,
+/* 3249 */ 786031,
 /* 3250 */ 9999,
 /* 3251 */ 9999,
 /* 3252 */ 9999,
-/* 3253 */ 781037,
+/* 3253 */ 786037,
 /* 3254 */ 9999,
 /* 3255 */ 9999,
-/* 3256 */ 781037,
+/* 3256 */ 786037,
 /* 3257 */ 9999,
 /* 3258 */ 9999,
 /* 3259 */ 9999,
-/* 3260 */ 789027,
-/* 3261 */ 789038,
+/* 3260 */ 794027,
+/* 3261 */ 794038,
 /* 3262 */ 9999,
 /* 3263 */ 9999,
-/* 3264 */ 789076,
+/* 3264 */ 794076,
 /* 3265 */ 9999,
-/* 3266 */ 789003,
+/* 3266 */ 794003,
 /* 3267 */ 9999,
 /* 3268 */ 9999,
 /* 3269 */ 9999,
-/* 3270 */ 791029,
-/* 3271 */ 791040,
+/* 3270 */ 796029,
+/* 3271 */ 796040,
 /* 3272 */ 9999,
 /* 3273 */ 9999,
-/* 3274 */ 791078,
+/* 3274 */ 796078,
 /* 3275 */ 9999,
-/* 3276 */ 791005,
+/* 3276 */ 796005,
 /* 3277 */ 9999,
 /* 3278 */ 9999,
 /* 3279 */ 9999,
-/* 3280 */ 793029,
-/* 3281 */ 793040,
+/* 3280 */ 798029,
+/* 3281 */ 798040,
 /* 3282 */ 9999,
 /* 3283 */ 9999,
-/* 3284 */ 793078,
+/* 3284 */ 798078,
 /* 3285 */ 9999,
-/* 3286 */ 793005,
+/* 3286 */ 798005,
 /* 3287 */ 9999,
-/* 3288 */ 789039,
+/* 3288 */ 794039,
 /* 3289 */ 9999,
-/* 3290 */ 789048,
+/* 3290 */ 794048,
 /* 3291 */ 9999,
 /* 3292 */ 9999,
-/* 3293 */ 789048,
+/* 3293 */ 794048,
 /* 3294 */ 9999,
-/* 3295 */ 791041,
+/* 3295 */ 796041,
 /* 3296 */ 9999,
-/* 3297 */ 791050,
+/* 3297 */ 796050,
 /* 3298 */ 9999,
 /* 3299 */ 9999,
-/* 3300 */ 791050,
+/* 3300 */ 796050,
 /* 3301 */ 9999,
-/* 3302 */ 793041,
+/* 3302 */ 798041,
 /* 3303 */ 9999,
-/* 3304 */ 793050,
+/* 3304 */ 798050,
 /* 3305 */ 9999,
 /* 3306 */ 9999,
-/* 3307 */ 793050,
+/* 3307 */ 798050,
 /* 3308 */ 9999,
 /* 3309 */ 9999,
-/* 3310 */ 798007,
+/* 3310 */ 803007,
 /* 3311 */ 9999,
-/* 3312 */ 798003,
+/* 3312 */ 803003,
 /* 3313 */ 9999,
 /* 3314 */ 9999,
-/* 3315 */ 799009,
+/* 3315 */ 804009,
 /* 3316 */ 9999,
-/* 3317 */ 799005,
+/* 3317 */ 804005,
 /* 3318 */ 9999,
 /* 3319 */ 9999,
-/* 3320 */ 800009,
+/* 3320 */ 805009,
 /* 3321 */ 9999,
-/* 3322 */ 800024,
+/* 3322 */ 805024,
 /* 3323 */ 9999,
-/* 3324 */ 800005,
+/* 3324 */ 805005,
 /* 3325 */ 9999,
-/* 3326 */ 804003,
-/* 3327 */ 804015,
+/* 3326 */ 809003,
+/* 3327 */ 809015,
 /* 3328 */ 9999,
-/* 3329 */ 804008,
+/* 3329 */ 809008,
 /* 3330 */ 9999,
 /* 3331 */ 9999,
-/* 3332 */ 806011,
+/* 3332 */ 811011,
 /* 3333 */ 9999,
 /* 3334 */ 9999,
-/* 3335 */ 806009,
+/* 3335 */ 811009,
 /* 3336 */ 9999,
 /* 3337 */ 9999,
 /* 3338 */ 9999,
 /* 3339 */ 9999,
-/* 3340 */ 808009,
+/* 3340 */ 813009,
 /* 3341 */ 9999,
 /* 3342 */ 9999,
 /* 3343 */ 9999,
 /* 3344 */ 9999,
 /* 3345 */ 9999,
-/* 3346 */ 810034,
-/* 3347 */ 810046,
+/* 3346 */ 815034,
+/* 3347 */ 815046,
 /* 3348 */ 9999,
-/* 3349 */ 810009,
+/* 3349 */ 815009,
 /* 3350 */ 9999,
 /* 3351 */ 9999,
-/* 3352 */ 812011,
+/* 3352 */ 817011,
 /* 3353 */ 9999,
 /* 3354 */ 9999,
 /* 3355 */ 9999,
-/* 3356 */ 812046,
-/* 3357 */ 812058,
+/* 3356 */ 817046,
+/* 3357 */ 817058,
 /* 3358 */ 9999,
-/* 3359 */ 812009,
+/* 3359 */ 817009,
 /* 3360 */ 9999,
 /* 3361 */ 9999,
 /* 3362 */ 9999,
-/* 3363 */ 804025,
+/* 3363 */ 809025,
 /* 3364 */ 9999,
 /* 3365 */ 9999,
-/* 3366 */ 804025,
+/* 3366 */ 809025,
 /* 3367 */ 9999,
 /* 3368 */ 9999,
 /* 3369 */ 9999,
-/* 3370 */ 810056,
+/* 3370 */ 815056,
 /* 3371 */ 9999,
 /* 3372 */ 9999,
-/* 3373 */ 810056,
+/* 3373 */ 815056,
 /* 3374 */ 9999,
 /* 3375 */ 9999,
 /* 3376 */ 9999,
-/* 3377 */ 812068,
+/* 3377 */ 817068,
 /* 3378 */ 9999,
 /* 3379 */ 9999,
-/* 3380 */ 812068,
+/* 3380 */ 817068,
 /* 3381 */ 9999,
 /* 3382 */ 9999,
 /* 3383 */ 9999,
 /* 3384 */ 9999,
-/* 3385 */ 818007,
+/* 3385 */ 823007,
 /* 3386 */ 9999,
 /* 3387 */ 9999,
-/* 3388 */ 817009,
+/* 3388 */ 822009,
 /* 3389 */ 9999,
-/* 3390 */ 818008,
-/* 3391 */ 818016,
+/* 3390 */ 823008,
+/* 3391 */ 823016,
 /* 3392 */ 9999,
-/* 3393 */ 818016,
+/* 3393 */ 823016,
 /* 3394 */ 9999,
 /* 3395 */ 9999,
-/* 3396 */ 818016,
+/* 3396 */ 823016,
 /* 3397 */ 9999,
 /* 3398 */ 9999,
-/* 3399 */ 822015,
+/* 3399 */ 827015,
 /* 3400 */ 9999,
 /* 3401 */ 9999,
 /* 3402 */ 9999,
-/* 3403 */ 822013,
+/* 3403 */ 827013,
 /* 3404 */ 9999,
-/* 3405 */ 823005,
+/* 3405 */ 828005,
 /* 3406 */ 9999,
-/* 3407 */ 823016,
+/* 3407 */ 828016,
 /* 3408 */ 9999,
-/* 3409 */ 824005,
+/* 3409 */ 829005,
 /* 3410 */ 9999,
-/* 3411 */ 824014,
+/* 3411 */ 829014,
 /* 3412 */ 9999,
-/* 3413 */ 825005,
+/* 3413 */ 830005,
 /* 3414 */ 9999,
-/* 3415 */ 825017,
+/* 3415 */ 830017,
 /* 3416 */ 9999,
 /* 3417 */ 9999,
 /* 3418 */ 9999,
-/* 3419 */ 822016,
+/* 3419 */ 827016,
 /* 3420 */ 9999,
 /* 3421 */ 9999,
-/* 3422 */ 822016,
+/* 3422 */ 827016,
 /* 3423 */ 9999,
 /* 3424 */ 9999,
-/* 3425 */ 829013,
-/* 3426 */ 830005,
+/* 3425 */ 834013,
+/* 3426 */ 835005,
 /* 3427 */ 9999,
 /* 3428 */ 9999,
-/* 3429 */ 829011,
+/* 3429 */ 834011,
 /* 3430 */ 9999,
 /* 3431 */ 9999,
-/* 3432 */ 833011,
-/* 3433 */ 834005,
+/* 3432 */ 838011,
+/* 3433 */ 839005,
 /* 3434 */ 9999,
-/* 3435 */ 833009,
+/* 3435 */ 838009,
 /* 3436 */ 9999,
 /* 3437 */ 9999,
-/* 3438 */ 841014,
-/* 3439 */ 842005,
+/* 3438 */ 846014,
+/* 3439 */ 847005,
 /* 3440 */ 9999,
 /* 3441 */ 9999,
-/* 3442 */ 841012,
+/* 3442 */ 846012,
 /* 3443 */ 9999,
 /* 3444 */ 9999,
 /* 3445 */ 9999,
-/* 3446 */ 829014,
+/* 3446 */ 834014,
 /* 3447 */ 9999,
 /* 3448 */ 9999,
-/* 3449 */ 829014,
+/* 3449 */ 834014,
 /* 3450 */ 9999,
 /* 3451 */ 9999,
-/* 3452 */ 830011,
-/* 3453 */ 830023,
-/* 3454 */ 830071,
-/* 3455 */ 830007,
+/* 3452 */ 835011,
+/* 3453 */ 835023,
+/* 3454 */ 835077,
+/* 3455 */ 835007,
 /* 3456 */ 9999,
-/* 3457 */ 830007,
+/* 3457 */ 835007,
 /* 3458 */ 9999,
 /* 3459 */ 9999,
-/* 3460 */ 831011,
-/* 3461 */ 831023,
-/* 3462 */ 831070,
-/* 3463 */ 831007,
+/* 3460 */ 836011,
+/* 3461 */ 836023,
+/* 3462 */ 836076,
+/* 3463 */ 836007,
 /* 3464 */ 9999,
-/* 3465 */ 831007,
+/* 3465 */ 836007,
 /* 3466 */ 9999,
 /* 3467 */ 9999,
-/* 3468 */ 831007,
+/* 3468 */ 836007,
 /* 3469 */ 9999,
 /* 3470 */ 9999,
 /* 3471 */ 9999,
-/* 3472 */ 830072,
+/* 3472 */ 835078,
 /* 3473 */ 9999,
 /* 3474 */ 9999,
-/* 3475 */ 830072,
+/* 3475 */ 835078,
 /* 3476 */ 9999,
 /* 3477 */ 9999,
 /* 3478 */ 9999,
-/* 3479 */ 831071,
+/* 3479 */ 836077,
 /* 3480 */ 9999,
 /* 3481 */ 9999,
-/* 3482 */ 831071,
+/* 3482 */ 836077,
 /* 3483 */ 9999,
 /* 3484 */ 9999,
 /* 3485 */ 9999,
-/* 3486 */ 833012,
+/* 3486 */ 838012,
 /* 3487 */ 9999,
 /* 3488 */ 9999,
-/* 3489 */ 833012,
+/* 3489 */ 838012,
 /* 3490 */ 9999,
 /* 3491 */ 9999,
-/* 3492 */ 834011,
-/* 3493 */ 834044,
-/* 3494 */ 834058,
-/* 3495 */ 834007,
+/* 3492 */ 839011,
+/* 3493 */ 839044,
+/* 3494 */ 839058,
+/* 3495 */ 839007,
 /* 3496 */ 9999,
-/* 3497 */ 834007,
+/* 3497 */ 839007,
 /* 3498 */ 9999,
 /* 3499 */ 9999,
-/* 3500 */ 834007,
+/* 3500 */ 839007,
 /* 3501 */ 9999,
-/* 3502 */ 834045,
-/* 3503 */ 834054,
+/* 3502 */ 839045,
+/* 3503 */ 839054,
 /* 3504 */ 9999,
-/* 3505 */ 834054,
+/* 3505 */ 839054,
 /* 3506 */ 9999,
 /* 3507 */ 9999,
-/* 3508 */ 834054,
+/* 3508 */ 839054,
 /* 3509 */ 9999,
 /* 3510 */ 9999,
 /* 3511 */ 9999,
-/* 3512 */ 834059,
+/* 3512 */ 839059,
 /* 3513 */ 9999,
 /* 3514 */ 9999,
 /* 3515 */ 9999,
-/* 3516 */ 834063,
+/* 3516 */ 839063,
 /* 3517 */ 9999,
 /* 3518 */ 9999,
 /* 3519 */ 9999,
-/* 3520 */ 841015,
+/* 3520 */ 846015,
 /* 3521 */ 9999,
 /* 3522 */ 9999,
-/* 3523 */ 841015,
+/* 3523 */ 846015,
 /* 3524 */ 9999,
 /* 3525 */ 9999,
-/* 3526 */ 842035,
-/* 3527 */ 843007,
-/* 3528 */ 846011,
-/* 3529 */ 842007,
+/* 3526 */ 847035,
+/* 3527 */ 848007,
+/* 3528 */ 851011,
+/* 3529 */ 847007,
 /* 3530 */ 9999,
-/* 3531 */ 842007,
+/* 3531 */ 847007,
 /* 3532 */ 9999,
 /* 3533 */ 9999,
-/* 3534 */ 842007,
+/* 3534 */ 847007,
 /* 3535 */ 9999,
-/* 3536 */ 842037,
+/* 3536 */ 847037,
 /* 3537 */ 9999,
 /* 3538 */ 9999,
-/* 3539 */ 842042,
+/* 3539 */ 847042,
 /* 3540 */ 9999,
 /* 3541 */ 9999,
-/* 3542 */ 842042,
+/* 3542 */ 847042,
 /* 3543 */ 9999,
-/* 3544 */ 843011,
+/* 3544 */ 848011,
 /* 3545 */ 9999,
 /* 3546 */ 9999,
-/* 3547 */ 843037,
+/* 3547 */ 848037,
 /* 3548 */ 9999,
-/* 3549 */ 843017,
+/* 3549 */ 848017,
 /* 3550 */ 9999,
-/* 3551 */ 844011,
+/* 3551 */ 849011,
 /* 3552 */ 9999,
-/* 3553 */ 844026,
+/* 3553 */ 849026,
 /* 3554 */ 9999,
 /* 3555 */ 9999,
-/* 3556 */ 844017,
+/* 3556 */ 849017,
 /* 3557 */ 9999,
-/* 3558 */ 845011,
+/* 3558 */ 850011,
 /* 3559 */ 9999,
 /* 3560 */ 9999,
-/* 3561 */ 845037,
+/* 3561 */ 850037,
 /* 3562 */ 9999,
-/* 3563 */ 845017,
+/* 3563 */ 850017,
 /* 3564 */ 9999,
 /* 3565 */ 9999,
 /* 3566 */ 9999,
-/* 3567 */ 846012,
+/* 3567 */ 851012,
 /* 3568 */ 9999,
 /* 3569 */ 9999,
-/* 3570 */ 846012,
+/* 3570 */ 851012,
 /* 3571 */ 9999,
-/* 3572 */ 850005,
+/* 3572 */ 855005,
 /* 3573 */ 9999,
-/* 3574 */ 850011,
+/* 3574 */ 855011,
 /* 3575 */ 9999,
-/* 3576 */ 851005,
+/* 3576 */ 856005,
 /* 3577 */ 9999,
-/* 3578 */ 851010,
+/* 3578 */ 856010,
 /* 3579 */ 9999,
 /* 3580 */ 9999,
 /* 3581 */ 9999,
-/* 3582 */ 852011,
+/* 3582 */ 857011,
 /* 3583 */ 9999,
 /* 3584 */ 9999,
 /* 3585 */ 9999,
 /* 3586 */ 9999,
-/* 3587 */ 857007,
+/* 3587 */ 862007,
 /* 3588 */ 9999,
 /* 3589 */ 9999,
-/* 3590 */ 856010,
+/* 3590 */ 861010,
 /* 3591 */ 9999,
-/* 3592 */ 857008,
-/* 3593 */ 857017,
+/* 3592 */ 862008,
+/* 3593 */ 862017,
 /* 3594 */ 9999,
-/* 3595 */ 857017,
+/* 3595 */ 862017,
 /* 3596 */ 9999,
 /* 3597 */ 9999,
-/* 3598 */ 857017,
+/* 3598 */ 862017,
 /* 3599 */ 9999,
 /* 3600 */ 9999,
-/* 3601 */ 861015,
+/* 3601 */ 866015,
 /* 3602 */ 9999,
 /* 3603 */ 9999,
 /* 3604 */ 9999,
-/* 3605 */ 861013,
+/* 3605 */ 866013,
 /* 3606 */ 9999,
 /* 3607 */ 9999,
-/* 3608 */ 862010,
-/* 3609 */ 862017,
+/* 3608 */ 867010,
+/* 3609 */ 867017,
 /* 3610 */ 9999,
 /* 3611 */ 9999,
-/* 3612 */ 862008,
+/* 3612 */ 867008,
 /* 3613 */ 9999,
-/* 3614 */ 863005,
+/* 3614 */ 868005,
 /* 3615 */ 9999,
 /* 3616 */ 9999,
-/* 3617 */ 863005,
+/* 3617 */ 868005,
 /* 3618 */ 9999,
 /* 3619 */ 9999,
-/* 3620 */ 864013,
-/* 3621 */ 864020,
+/* 3620 */ 869013,
+/* 3621 */ 869020,
 /* 3622 */ 9999,
 /* 3623 */ 9999,
-/* 3624 */ 864011,
+/* 3624 */ 869011,
 /* 3625 */ 9999,
 /* 3626 */ 9999,
-/* 3627 */ 865014,
-/* 3628 */ 865021,
+/* 3627 */ 870014,
+/* 3628 */ 870021,
 /* 3629 */ 9999,
 /* 3630 */ 9999,
-/* 3631 */ 865012,
+/* 3631 */ 870012,
 /* 3632 */ 9999,
 /* 3633 */ 9999,
-/* 3634 */ 866015,
-/* 3635 */ 866022,
+/* 3634 */ 871015,
+/* 3635 */ 871022,
 /* 3636 */ 9999,
 /* 3637 */ 9999,
-/* 3638 */ 866013,
+/* 3638 */ 871013,
 /* 3639 */ 9999,
 /* 3640 */ 9999,
 /* 3641 */ 9999,
-/* 3642 */ 868049,
+/* 3642 */ 873049,
 /* 3643 */ 9999,
 /* 3644 */ 9999,
-/* 3645 */ 868009,
+/* 3645 */ 873009,
 /* 3646 */ 9999,
 /* 3647 */ 9999,
 /* 3648 */ 9999,
-/* 3649 */ 869049,
+/* 3649 */ 874049,
 /* 3650 */ 9999,
 /* 3651 */ 9999,
-/* 3652 */ 869009,
+/* 3652 */ 874009,
 /* 3653 */ 9999,
 /* 3654 */ 9999,
 /* 3655 */ 9999,
-/* 3656 */ 870049,
+/* 3656 */ 875049,
 /* 3657 */ 9999,
 /* 3658 */ 9999,
-/* 3659 */ 870007,
+/* 3659 */ 875007,
 /* 3660 */ 9999,
 /* 3661 */ 9999,
 /* 3662 */ 9999,
-/* 3663 */ 871049,
+/* 3663 */ 876049,
 /* 3664 */ 9999,
 /* 3665 */ 9999,
-/* 3666 */ 871010,
+/* 3666 */ 876010,
 /* 3667 */ 9999,
-/* 3668 */ 872005,
+/* 3668 */ 877005,
 /* 3669 */ 9999,
-/* 3670 */ 872014,
+/* 3670 */ 877014,
 /* 3671 */ 9999,
-/* 3672 */ 873005,
+/* 3672 */ 878005,
 /* 3673 */ 9999,
-/* 3674 */ 873017,
+/* 3674 */ 878017,
 /* 3675 */ 9999,
 /* 3676 */ 9999,
 /* 3677 */ 9999,
-/* 3678 */ 861016,
+/* 3678 */ 866016,
 /* 3679 */ 9999,
 /* 3680 */ 9999,
-/* 3681 */ 861016,
+/* 3681 */ 866016,
 /* 3682 */ 9999,
 /* 3683 */ 9999,
 /* 3684 */ 9999,
-/* 3685 */ 862011,
+/* 3685 */ 867011,
 /* 3686 */ 9999,
 /* 3687 */ 9999,
-/* 3688 */ 862011,
+/* 3688 */ 867011,
 /* 3689 */ 9999,
 /* 3690 */ 9999,
-/* 3691 */ 863020,
-/* 3692 */ 863027,
-/* 3693 */ 863070,
-/* 3694 */ 863014,
+/* 3691 */ 868020,
+/* 3692 */ 868027,
+/* 3693 */ 868076,
+/* 3694 */ 868014,
 /* 3695 */ 9999,
-/* 3696 */ 863014,
+/* 3696 */ 868014,
 /* 3697 */ 9999,
 /* 3698 */ 9999,
-/* 3699 */ 863014,
+/* 3699 */ 868014,
 /* 3700 */ 9999,
 /* 3701 */ 9999,
 /* 3702 */ 9999,
-/* 3703 */ 863021,
+/* 3703 */ 868021,
 /* 3704 */ 9999,
 /* 3705 */ 9999,
-/* 3706 */ 863021,
+/* 3706 */ 868021,
 /* 3707 */ 9999,
 /* 3708 */ 9999,
 /* 3709 */ 9999,
-/* 3710 */ 863071,
+/* 3710 */ 868077,
 /* 3711 */ 9999,
 /* 3712 */ 9999,
-/* 3713 */ 863071,
+/* 3713 */ 868077,
 /* 3714 */ 9999,
 /* 3715 */ 9999,
 /* 3716 */ 9999,
-/* 3717 */ 864014,
+/* 3717 */ 869014,
 /* 3718 */ 9999,
 /* 3719 */ 9999,
-/* 3720 */ 864014,
+/* 3720 */ 869014,
 /* 3721 */ 9999,
-/* 3722 */ 864021,
-/* 3723 */ 864062,
-/* 3724 */ 864026,
+/* 3722 */ 869021,
+/* 3723 */ 869062,
+/* 3724 */ 869026,
 /* 3725 */ 9999,
-/* 3726 */ 864026,
+/* 3726 */ 869026,
 /* 3727 */ 9999,
 /* 3728 */ 9999,
-/* 3729 */ 864026,
+/* 3729 */ 869026,
 /* 3730 */ 9999,
 /* 3731 */ 9999,
 /* 3732 */ 9999,
-/* 3733 */ 864063,
+/* 3733 */ 869063,
 /* 3734 */ 9999,
 /* 3735 */ 9999,
-/* 3736 */ 864063,
+/* 3736 */ 869063,
 /* 3737 */ 9999,
 /* 3738 */ 9999,
 /* 3739 */ 9999,
-/* 3740 */ 865015,
+/* 3740 */ 870015,
 /* 3741 */ 9999,
 /* 3742 */ 9999,
-/* 3743 */ 865015,
+/* 3743 */ 870015,
 /* 3744 */ 9999,
 /* 3745 */ 9999,
-/* 3746 */ 865074,
-/* 3747 */ 865030,
+/* 3746 */ 870074,
+/* 3747 */ 870030,
 /* 3748 */ 9999,
-/* 3749 */ 865030,
+/* 3749 */ 870030,
 /* 3750 */ 9999,
 /* 3751 */ 9999,
-/* 3752 */ 865030,
+/* 3752 */ 870030,
 /* 3753 */ 9999,
 /* 3754 */ 9999,
 /* 3755 */ 9999,
-/* 3756 */ 865075,
+/* 3756 */ 870075,
 /* 3757 */ 9999,
 /* 3758 */ 9999,
-/* 3759 */ 865075,
+/* 3759 */ 870075,
 /* 3760 */ 9999,
 /* 3761 */ 9999,
 /* 3762 */ 9999,
-/* 3763 */ 866016,
+/* 3763 */ 871016,
 /* 3764 */ 9999,
 /* 3765 */ 9999,
-/* 3766 */ 866016,
+/* 3766 */ 871016,
 /* 3767 */ 9999,
-/* 3768 */ 866023,
-/* 3769 */ 866064,
-/* 3770 */ 866028,
+/* 3768 */ 871023,
+/* 3769 */ 871064,
+/* 3770 */ 871028,
 /* 3771 */ 9999,
-/* 3772 */ 866028,
+/* 3772 */ 871028,
 /* 3773 */ 9999,
 /* 3774 */ 9999,
-/* 3775 */ 866028,
+/* 3775 */ 871028,
 /* 3776 */ 9999,
 /* 3777 */ 9999,
 /* 3778 */ 9999,
-/* 3779 */ 866065,
+/* 3779 */ 871065,
 /* 3780 */ 9999,
 /* 3781 */ 9999,
-/* 3782 */ 866065,
+/* 3782 */ 871065,
 /* 3783 */ 9999,
-/* 3784 */ 868050,
-/* 3785 */ 868060,
-/* 3786 */ 868058,
+/* 3784 */ 873050,
+/* 3785 */ 873060,
+/* 3786 */ 873058,
 /* 3787 */ 9999,
-/* 3788 */ 868058,
+/* 3788 */ 873058,
 /* 3789 */ 9999,
 /* 3790 */ 9999,
-/* 3791 */ 868058,
+/* 3791 */ 873058,
 /* 3792 */ 9999,
 /* 3793 */ 9999,
 /* 3794 */ 9999,
-/* 3795 */ 868061,
+/* 3795 */ 873061,
 /* 3796 */ 9999,
-/* 3797 */ 869050,
-/* 3798 */ 869060,
-/* 3799 */ 869058,
+/* 3797 */ 874050,
+/* 3798 */ 874060,
+/* 3799 */ 874058,
 /* 3800 */ 9999,
-/* 3801 */ 869058,
+/* 3801 */ 874058,
 /* 3802 */ 9999,
 /* 3803 */ 9999,
-/* 3804 */ 869058,
+/* 3804 */ 874058,
 /* 3805 */ 9999,
 /* 3806 */ 9999,
 /* 3807 */ 9999,
-/* 3808 */ 869061,
+/* 3808 */ 874061,
 /* 3809 */ 9999,
-/* 3810 */ 870050,
-/* 3811 */ 870060,
-/* 3812 */ 870058,
+/* 3810 */ 875050,
+/* 3811 */ 875060,
+/* 3812 */ 875058,
 /* 3813 */ 9999,
-/* 3814 */ 870058,
+/* 3814 */ 875058,
 /* 3815 */ 9999,
 /* 3816 */ 9999,
-/* 3817 */ 870058,
+/* 3817 */ 875058,
 /* 3818 */ 9999,
 /* 3819 */ 9999,
 /* 3820 */ 9999,
-/* 3821 */ 870061,
+/* 3821 */ 875061,
 /* 3822 */ 9999,
-/* 3823 */ 871050,
-/* 3824 */ 871060,
-/* 3825 */ 871058,
+/* 3823 */ 876050,
+/* 3824 */ 876060,
+/* 3825 */ 876058,
 /* 3826 */ 9999,
-/* 3827 */ 871058,
+/* 3827 */ 876058,
 /* 3828 */ 9999,
 /* 3829 */ 9999,
-/* 3830 */ 871058,
+/* 3830 */ 876058,
 /* 3831 */ 9999,
 /* 3832 */ 9999,
 /* 3833 */ 9999,
-/* 3834 */ 871061,
+/* 3834 */ 876061,
 /* 3835 */ 9999,
 /* 3836 */ 9999,
 /* 3837 */ 9999,
-/* 3838 */ 877015,
+/* 3838 */ 882015,
 /* 3839 */ 9999,
-/* 3840 */ 877030,
+/* 3840 */ 882030,
 /* 3841 */ 9999,
 /* 3842 */ 9999,
-/* 3843 */ 877009,
+/* 3843 */ 882009,
 /* 3844 */ 9999,
 /* 3845 */ 9999,
 /* 3846 */ 9999,
-/* 3847 */ 879015,
+/* 3847 */ 884015,
 /* 3848 */ 9999,
 /* 3849 */ 9999,
-/* 3850 */ 879009,
+/* 3850 */ 884009,
 /* 3851 */ 9999,
-/* 3852 */ 881005,
-/* 3853 */ 881017,
+/* 3852 */ 886005,
+/* 3853 */ 886017,
 /* 3854 */ 9999,
-/* 3855 */ 881011,
+/* 3855 */ 886011,
 /* 3856 */ 9999,
-/* 3857 */ 883005,
+/* 3857 */ 888005,
 /* 3858 */ 9999,
-/* 3859 */ 883023,
+/* 3859 */ 888023,
 /* 3860 */ 9999,
 /* 3861 */ 9999,
-/* 3862 */ 883011,
+/* 3862 */ 888011,
 /* 3863 */ 9999,
-/* 3864 */ 885005,
-/* 3865 */ 885017,
-/* 3866 */ 885027,
+/* 3864 */ 890005,
+/* 3865 */ 890017,
+/* 3866 */ 890027,
 /* 3867 */ 9999,
 /* 3868 */ 9999,
-/* 3869 */ 885011,
+/* 3869 */ 890011,
 /* 3870 */ 9999,
-/* 3871 */ 888005,
-/* 3872 */ 888017,
-/* 3873 */ 888027,
+/* 3871 */ 893005,
+/* 3872 */ 893017,
+/* 3873 */ 893027,
 /* 3874 */ 9999,
 /* 3875 */ 9999,
-/* 3876 */ 888011,
+/* 3876 */ 893011,
 /* 3877 */ 9999,
 /* 3878 */ 9999,
-/* 3879 */ 891012,
+/* 3879 */ 896012,
 /* 3880 */ 9999,
-/* 3881 */ 891010,
+/* 3881 */ 896010,
 /* 3882 */ 9999,
 /* 3883 */ 9999,
-/* 3884 */ 893010,
+/* 3884 */ 898010,
 /* 3885 */ 9999,
-/* 3886 */ 893008,
+/* 3886 */ 898008,
 /* 3887 */ 9999,
 /* 3888 */ 9999,
 /* 3889 */ 9999,
 /* 3890 */ 9999,
-/* 3891 */ 881019,
+/* 3891 */ 886019,
 /* 3892 */ 9999,
 /* 3893 */ 9999,
-/* 3894 */ 881019,
+/* 3894 */ 886019,
 /* 3895 */ 9999,
 /* 3896 */ 9999,
 /* 3897 */ 9999,
-/* 3898 */ 885028,
+/* 3898 */ 890028,
 /* 3899 */ 9999,
 /* 3900 */ 9999,
 /* 3901 */ 9999,
-/* 3902 */ 885034,
+/* 3902 */ 890034,
 /* 3903 */ 9999,
 /* 3904 */ 9999,
 /* 3905 */ 9999,
-/* 3906 */ 888028,
+/* 3906 */ 893028,
 /* 3907 */ 9999,
 /* 3908 */ 9999,
 /* 3909 */ 9999,
-/* 3910 */ 888034,
+/* 3910 */ 893034,
 /* 3911 */ 9999,
 /* 3912 */ 9999,
 /* 3913 */ 9999,
 /* 3914 */ 9999,
-/* 3915 */ 897038,
+/* 3915 */ 902038,
 /* 3916 */ 9999,
-/* 3917 */ 899007,
+/* 3917 */ 904007,
 /* 3918 */ 9999,
 /* 3919 */ 9999,
-/* 3920 */ 897018,
+/* 3920 */ 902018,
 /* 3921 */ 9999,
-/* 3922 */ 899008,
-/* 3923 */ 899019,
+/* 3922 */ 904008,
+/* 3923 */ 904019,
 /* 3924 */ 9999,
-/* 3925 */ 899019,
+/* 3925 */ 904019,
 /* 3926 */ 9999,
 /* 3927 */ 9999,
-/* 3928 */ 899019,
+/* 3928 */ 904019,
 /* 3929 */ 9999,
 /* 3930 */ 9999,
-/* 3931 */ 905010,
-/* 3932 */ 905017,
+/* 3931 */ 910010,
+/* 3932 */ 910017,
 /* 3933 */ 9999,
 /* 3934 */ 9999,
-/* 3935 */ 904003,
+/* 3935 */ 909003,
 /* 3936 */ 9999,
 /* 3937 */ 9999,
-/* 3938 */ 909012,
-/* 3939 */ 909019,
+/* 3938 */ 914012,
+/* 3939 */ 914019,
 /* 3940 */ 9999,
 /* 3941 */ 9999,
-/* 3942 */ 909010,
+/* 3942 */ 914010,
 /* 3943 */ 9999,
 /* 3944 */ 9999,
-/* 3945 */ 911015,
+/* 3945 */ 916015,
 /* 3946 */ 9999,
 /* 3947 */ 9999,
 /* 3948 */ 9999,
-/* 3949 */ 911013,
+/* 3949 */ 916013,
 /* 3950 */ 9999,
-/* 3951 */ 912005,
+/* 3951 */ 917005,
 /* 3952 */ 9999,
-/* 3953 */ 912014,
+/* 3953 */ 917014,
 /* 3954 */ 9999,
-/* 3955 */ 913005,
+/* 3955 */ 918005,
 /* 3956 */ 9999,
-/* 3957 */ 913016,
+/* 3957 */ 918016,
 /* 3958 */ 9999,
-/* 3959 */ 914005,
+/* 3959 */ 919005,
 /* 3960 */ 9999,
-/* 3961 */ 914017,
+/* 3961 */ 919017,
 /* 3962 */ 9999,
 /* 3963 */ 9999,
 /* 3964 */ 9999,
-/* 3965 */ 905011,
+/* 3965 */ 910011,
 /* 3966 */ 9999,
 /* 3967 */ 9999,
-/* 3968 */ 905011,
+/* 3968 */ 910011,
 /* 3969 */ 9999,
-/* 3970 */ 905018,
-/* 3971 */ 905072,
-/* 3972 */ 905024,
+/* 3970 */ 910018,
+/* 3971 */ 910072,
+/* 3972 */ 910024,
 /* 3973 */ 9999,
-/* 3974 */ 905024,
+/* 3974 */ 910024,
 /* 3975 */ 9999,
 /* 3976 */ 9999,
-/* 3977 */ 905024,
+/* 3977 */ 910024,
 /* 3978 */ 9999,
 /* 3979 */ 9999,
 /* 3980 */ 9999,
-/* 3981 */ 905073,
+/* 3981 */ 910073,
 /* 3982 */ 9999,
 /* 3983 */ 9999,
-/* 3984 */ 905073,
+/* 3984 */ 910073,
 /* 3985 */ 9999,
 /* 3986 */ 9999,
 /* 3987 */ 9999,
-/* 3988 */ 909013,
+/* 3988 */ 914013,
 /* 3989 */ 9999,
 /* 3990 */ 9999,
-/* 3991 */ 909013,
+/* 3991 */ 914013,
 /* 3992 */ 9999,
-/* 3993 */ 909020,
-/* 3994 */ 909054,
-/* 3995 */ 909034,
+/* 3993 */ 914020,
+/* 3994 */ 914054,
+/* 3995 */ 914034,
 /* 3996 */ 9999,
-/* 3997 */ 909034,
+/* 3997 */ 914034,
 /* 3998 */ 9999,
 /* 3999 */ 9999,
-/* 4000 */ 909034,
+/* 4000 */ 914034,
 /* 4001 */ 9999,
 /* 4002 */ 9999,
 /* 4003 */ 9999,
-/* 4004 */ 909055,
+/* 4004 */ 914055,
 /* 4005 */ 9999,
 /* 4006 */ 9999,
-/* 4007 */ 909055,
+/* 4007 */ 914055,
 /* 4008 */ 9999,
 /* 4009 */ 9999,
 /* 4010 */ 9999,
-/* 4011 */ 911016,
+/* 4011 */ 916016,
 /* 4012 */ 9999,
 /* 4013 */ 9999,
-/* 4014 */ 911016,
+/* 4014 */ 916016,
 /* 4015 */ 9999,
 /* 4016 */ 9999,
 /* 4017 */ 9999,
 /* 4018 */ 9999,
-/* 4019 */ 918007,
+/* 4019 */ 923007,
 /* 4020 */ 9999,
 /* 4021 */ 9999,
-/* 4022 */ 917012,
+/* 4022 */ 922012,
 /* 4023 */ 9999,
-/* 4024 */ 918008,
-/* 4025 */ 918016,
+/* 4024 */ 923008,
+/* 4025 */ 923016,
 /* 4026 */ 9999,
-/* 4027 */ 918016,
+/* 4027 */ 923016,
 /* 4028 */ 9999,
 /* 4029 */ 9999,
-/* 4030 */ 918016,
+/* 4030 */ 923016,
 /* 4031 */ 9999,
 /* 4032 */ 9999,
-/* 4033 */ 924011,
-/* 4034 */ 924018,
+/* 4033 */ 929011,
+/* 4034 */ 929018,
 /* 4035 */ 9999,
 /* 4036 */ 9999,
-/* 4037 */ 923003,
+/* 4037 */ 928003,
 /* 4038 */ 9999,
 /* 4039 */ 9999,
 /* 4040 */ 9999,
 /* 4041 */ 9999,
-/* 4042 */ 928013,
+/* 4042 */ 933013,
 /* 4043 */ 9999,
 /* 4044 */ 9999,
-/* 4045 */ 929011,
-/* 4046 */ 929018,
+/* 4045 */ 934011,
+/* 4046 */ 934018,
 /* 4047 */ 9999,
 /* 4048 */ 9999,
-/* 4049 */ 929009,
+/* 4049 */ 934009,
 /* 4050 */ 9999,
 /* 4051 */ 9999,
-/* 4052 */ 930015,
+/* 4052 */ 935015,
 /* 4053 */ 9999,
 /* 4054 */ 9999,
 /* 4055 */ 9999,
-/* 4056 */ 930013,
+/* 4056 */ 935013,
 /* 4057 */ 9999,
 /* 4058 */ 9999,
-/* 4059 */ 931012,
-/* 4060 */ 931019,
+/* 4059 */ 936012,
+/* 4060 */ 936019,
 /* 4061 */ 9999,
 /* 4062 */ 9999,
-/* 4063 */ 931010,
+/* 4063 */ 936010,
 /* 4064 */ 9999,
-/* 4065 */ 933005,
+/* 4065 */ 938005,
 /* 4066 */ 9999,
-/* 4067 */ 933014,
+/* 4067 */ 938014,
 /* 4068 */ 9999,
-/* 4069 */ 934005,
+/* 4069 */ 939005,
 /* 4070 */ 9999,
-/* 4071 */ 934016,
+/* 4071 */ 939016,
 /* 4072 */ 9999,
-/* 4073 */ 935005,
+/* 4073 */ 940005,
 /* 4074 */ 9999,
-/* 4075 */ 935017,
+/* 4075 */ 940017,
 /* 4076 */ 9999,
 /* 4077 */ 9999,
 /* 4078 */ 9999,
-/* 4079 */ 924012,
+/* 4079 */ 929012,
 /* 4080 */ 9999,
 /* 4081 */ 9999,
-/* 4082 */ 924012,
+/* 4082 */ 929012,
 /* 4083 */ 9999,
-/* 4084 */ 924019,
-/* 4085 */ 924074,
-/* 4086 */ 924025,
+/* 4084 */ 929019,
+/* 4085 */ 929074,
+/* 4086 */ 929025,
 /* 4087 */ 9999,
-/* 4088 */ 924025,
+/* 4088 */ 929025,
 /* 4089 */ 9999,
 /* 4090 */ 9999,
-/* 4091 */ 924025,
+/* 4091 */ 929025,
 /* 4092 */ 9999,
 /* 4093 */ 9999,
 /* 4094 */ 9999,
-/* 4095 */ 924075,
+/* 4095 */ 929075,
 /* 4096 */ 9999,
 /* 4097 */ 9999,
-/* 4098 */ 924075,
+/* 4098 */ 929075,
 /* 4099 */ 9999,
 /* 4100 */ 9999,
 /* 4101 */ 9999,
-/* 4102 */ 929012,
+/* 4102 */ 934012,
 /* 4103 */ 9999,
 /* 4104 */ 9999,
-/* 4105 */ 929012,
+/* 4105 */ 934012,
 /* 4106 */ 9999,
-/* 4107 */ 929019,
-/* 4108 */ 929029,
-/* 4109 */ 929024,
+/* 4107 */ 934019,
+/* 4108 */ 934029,
+/* 4109 */ 934024,
 /* 4110 */ 9999,
-/* 4111 */ 929024,
+/* 4111 */ 934024,
 /* 4112 */ 9999,
 /* 4113 */ 9999,
-/* 4114 */ 929024,
+/* 4114 */ 934024,
 /* 4115 */ 9999,
 /* 4116 */ 9999,
 /* 4117 */ 9999,
-/* 4118 */ 929030,
+/* 4118 */ 934030,
 /* 4119 */ 9999,
 /* 4120 */ 9999,
 /* 4121 */ 9999,
-/* 4122 */ 929036,
+/* 4122 */ 934036,
 /* 4123 */ 9999,
 /* 4124 */ 9999,
-/* 4125 */ 929036,
+/* 4125 */ 934036,
 /* 4126 */ 9999,
 /* 4127 */ 9999,
 /* 4128 */ 9999,
-/* 4129 */ 930016,
+/* 4129 */ 935016,
 /* 4130 */ 9999,
 /* 4131 */ 9999,
-/* 4132 */ 930016,
+/* 4132 */ 935016,
 /* 4133 */ 9999,
 /* 4134 */ 9999,
 /* 4135 */ 9999,
-/* 4136 */ 931013,
+/* 4136 */ 936013,
 /* 4137 */ 9999,
 /* 4138 */ 9999,
-/* 4139 */ 931013,
+/* 4139 */ 936013,
 /* 4140 */ 9999,
-/* 4141 */ 931020,
-/* 4142 */ 931054,
-/* 4143 */ 931034,
+/* 4141 */ 936020,
+/* 4142 */ 936054,
+/* 4143 */ 936034,
 /* 4144 */ 9999,
-/* 4145 */ 931034,
+/* 4145 */ 936034,
 /* 4146 */ 9999,
 /* 4147 */ 9999,
-/* 4148 */ 931034,
+/* 4148 */ 936034,
 /* 4149 */ 9999,
 /* 4150 */ 9999,
 /* 4151 */ 9999,
-/* 4152 */ 931055,
+/* 4152 */ 936055,
 /* 4153 */ 9999,
 /* 4154 */ 9999,
-/* 4155 */ 931055,
+/* 4155 */ 936055,
 /* 4156 */ 9999,
 /* 4157 */ 9999,
 /* 4158 */ 9999,
 /* 4159 */ 9999,
-/* 4160 */ 940007,
+/* 4160 */ 945007,
 /* 4161 */ 9999,
 /* 4162 */ 9999,
-/* 4163 */ 938020,
+/* 4163 */ 943020,
 /* 4164 */ 9999,
-/* 4165 */ 940008,
-/* 4166 */ 940020,
+/* 4165 */ 945008,
+/* 4166 */ 945020,
 /* 4167 */ 9999,
-/* 4168 */ 940020,
+/* 4168 */ 945020,
 /* 4169 */ 9999,
 /* 4170 */ 9999,
-/* 4171 */ 940020,
+/* 4171 */ 945020,
 /* 4172 */ 9999,
 /* 4173 */ 9999,
-/* 4174 */ 945015,
+/* 4174 */ 950015,
 /* 4175 */ 9999,
 /* 4176 */ 9999,
 /* 4177 */ 9999,
-/* 4178 */ 945013,
+/* 4178 */ 950013,
 /* 4179 */ 9999,
-/* 4180 */ 946005,
+/* 4180 */ 951005,
 /* 4181 */ 9999,
-/* 4182 */ 946015,
+/* 4182 */ 951015,
 /* 4183 */ 9999,
 /* 4184 */ 9999,
-/* 4185 */ 947010,
-/* 4186 */ 947017,
+/* 4185 */ 952010,
+/* 4186 */ 952017,
 /* 4187 */ 9999,
 /* 4188 */ 9999,
 /* 4189 */ 9999,
-/* 4190 */ 947008,
+/* 4190 */ 952008,
 /* 4191 */ 9999,
 /* 4192 */ 9999,
-/* 4193 */ 948013,
-/* 4194 */ 948020,
+/* 4193 */ 953013,
+/* 4194 */ 953020,
 /* 4195 */ 9999,
 /* 4196 */ 9999,
-/* 4197 */ 948011,
+/* 4197 */ 953011,
 /* 4198 */ 9999,
 /* 4199 */ 9999,
-/* 4200 */ 949014,
-/* 4201 */ 949021,
+/* 4200 */ 954014,
+/* 4201 */ 954021,
 /* 4202 */ 9999,
 /* 4203 */ 9999,
-/* 4204 */ 949012,
+/* 4204 */ 954012,
 /* 4205 */ 9999,
 /* 4206 */ 9999,
-/* 4207 */ 950011,
-/* 4208 */ 950019,
+/* 4207 */ 955011,
+/* 4208 */ 955019,
 /* 4209 */ 9999,
 /* 4210 */ 9999,
-/* 4211 */ 950009,
+/* 4211 */ 955009,
 /* 4212 */ 9999,
-/* 4213 */ 951005,
+/* 4213 */ 956005,
 /* 4214 */ 9999,
-/* 4215 */ 951016,
+/* 4215 */ 956016,
 /* 4216 */ 9999,
-/* 4217 */ 952005,
+/* 4217 */ 957005,
 /* 4218 */ 9999,
-/* 4219 */ 952014,
+/* 4219 */ 957014,
 /* 4220 */ 9999,
-/* 4221 */ 953005,
+/* 4221 */ 958005,
 /* 4222 */ 9999,
-/* 4223 */ 953017,
+/* 4223 */ 958017,
 /* 4224 */ 9999,
 /* 4225 */ 9999,
 /* 4226 */ 9999,
-/* 4227 */ 945016,
+/* 4227 */ 950016,
 /* 4228 */ 9999,
 /* 4229 */ 9999,
-/* 4230 */ 945016,
+/* 4230 */ 950016,
 /* 4231 */ 9999,
 /* 4232 */ 9999,
 /* 4233 */ 9999,
-/* 4234 */ 947011,
+/* 4234 */ 952011,
 /* 4235 */ 9999,
 /* 4236 */ 9999,
-/* 4237 */ 947011,
+/* 4237 */ 952011,
 /* 4238 */ 9999,
 /* 4239 */ 9999,
 /* 4240 */ 9999,
-/* 4241 */ 948014,
+/* 4241 */ 953014,
 /* 4242 */ 9999,
 /* 4243 */ 9999,
-/* 4244 */ 948014,
+/* 4244 */ 953014,
 /* 4245 */ 9999,
 /* 4246 */ 9999,
 /* 4247 */ 9999,
-/* 4248 */ 949015,
+/* 4248 */ 954015,
 /* 4249 */ 9999,
 /* 4250 */ 9999,
-/* 4251 */ 949015,
+/* 4251 */ 954015,
 /* 4252 */ 9999,
 /* 4253 */ 9999,
 /* 4254 */ 9999,
-/* 4255 */ 950012,
+/* 4255 */ 955012,
 /* 4256 */ 9999,
 /* 4257 */ 9999,
-/* 4258 */ 950012,
+/* 4258 */ 955012,
 /* 4259 */ 9999,
-/* 4260 */ 950020,
-/* 4261 */ 950030,
-/* 4262 */ 950025,
+/* 4260 */ 955020,
+/* 4261 */ 955030,
+/* 4262 */ 955025,
 /* 4263 */ 9999,
-/* 4264 */ 950025,
+/* 4264 */ 955025,
 /* 4265 */ 9999,
 /* 4266 */ 9999,
-/* 4267 */ 950025,
+/* 4267 */ 955025,
 /* 4268 */ 9999,
 /* 4269 */ 9999,
 /* 4270 */ 9999,
-/* 4271 */ 950031,
+/* 4271 */ 955031,
 /* 4272 */ 9999,
 /* 4273 */ 9999,
 /* 4274 */ 9999,
-/* 4275 */ 950037,
+/* 4275 */ 955037,
 /* 4276 */ 9999,
 /* 4277 */ 9999,
-/* 4278 */ 950037,
+/* 4278 */ 955037,
 /* 4279 */ 9999,
 /* 4280 */ 9999,
 /* 4281 */ 9999,
 /* 4282 */ 9999,
-/* 4283 */ 956038,
+/* 4283 */ 961038,
 /* 4284 */ 9999,
-/* 4285 */ 959007,
+/* 4285 */ 964007,
 /* 4286 */ 9999,
 /* 4287 */ 9999,
-/* 4288 */ 956018,
+/* 4288 */ 961018,
 /* 4289 */ 9999,
-/* 4290 */ 959008,
-/* 4291 */ 959019,
+/* 4290 */ 964008,
+/* 4291 */ 964019,
 /* 4292 */ 9999,
-/* 4293 */ 959019,
+/* 4293 */ 964019,
 /* 4294 */ 9999,
 /* 4295 */ 9999,
-/* 4296 */ 959019,
+/* 4296 */ 964019,
 /* 4297 */ 9999,
 /* 4298 */ 9999,
-/* 4299 */ 964015,
+/* 4299 */ 969015,
 /* 4300 */ 9999,
 /* 4301 */ 9999,
 /* 4302 */ 9999,
-/* 4303 */ 964013,
+/* 4303 */ 969013,
 /* 4304 */ 9999,
 /* 4305 */ 9999,
-/* 4306 */ 965011,
-/* 4307 */ 965018,
+/* 4306 */ 970011,
+/* 4307 */ 970018,
 /* 4308 */ 9999,
 /* 4309 */ 9999,
-/* 4310 */ 965009,
+/* 4310 */ 970009,
 /* 4311 */ 9999,
 /* 4312 */ 9999,
-/* 4313 */ 966011,
-/* 4314 */ 966018,
+/* 4313 */ 971011,
+/* 4314 */ 971018,
 /* 4315 */ 9999,
 /* 4316 */ 9999,
-/* 4317 */ 966009,
+/* 4317 */ 971009,
 /* 4318 */ 9999,
 /* 4319 */ 9999,
-/* 4320 */ 967011,
-/* 4321 */ 967018,
+/* 4320 */ 972011,
+/* 4321 */ 972018,
 /* 4322 */ 9999,
 /* 4323 */ 9999,
-/* 4324 */ 967008,
+/* 4324 */ 972008,
 /* 4325 */ 9999,
 /* 4326 */ 9999,
-/* 4327 */ 968011,
-/* 4328 */ 968018,
+/* 4327 */ 973011,
+/* 4328 */ 973018,
 /* 4329 */ 9999,
 /* 4330 */ 9999,
-/* 4331 */ 968009,
+/* 4331 */ 973009,
 /* 4332 */ 9999,
 /* 4333 */ 9999,
-/* 4334 */ 969011,
-/* 4335 */ 969018,
+/* 4334 */ 974011,
+/* 4335 */ 974018,
 /* 4336 */ 9999,
 /* 4337 */ 9999,
-/* 4338 */ 969008,
+/* 4338 */ 974008,
 /* 4339 */ 9999,
 /* 4340 */ 9999,
-/* 4341 */ 970015,
-/* 4342 */ 970022,
+/* 4341 */ 975015,
+/* 4342 */ 975022,
 /* 4343 */ 9999,
 /* 4344 */ 9999,
-/* 4345 */ 970013,
+/* 4345 */ 975013,
 /* 4346 */ 9999,
 /* 4347 */ 9999,
-/* 4348 */ 972011,
-/* 4349 */ 972019,
+/* 4348 */ 977011,
+/* 4349 */ 977019,
 /* 4350 */ 9999,
 /* 4351 */ 9999,
-/* 4352 */ 972009,
+/* 4352 */ 977009,
 /* 4353 */ 9999,
 /* 4354 */ 9999,
 /* 4355 */ 9999,
 /* 4356 */ 9999,
 /* 4357 */ 9999,
 /* 4358 */ 9999,
-/* 4359 */ 973008,
+/* 4359 */ 978008,
 /* 4360 */ 9999,
 /* 4361 */ 9999,
 /* 4362 */ 9999,
-/* 4363 */ 976015,
+/* 4363 */ 981015,
 /* 4364 */ 9999,
 /* 4365 */ 9999,
-/* 4366 */ 976009,
+/* 4366 */ 981009,
 /* 4367 */ 9999,
 /* 4368 */ 9999,
 /* 4369 */ 9999,
-/* 4370 */ 992017,
+/* 4370 */ 997017,
 /* 4371 */ 9999,
-/* 4372 */ 992011,
+/* 4372 */ 997011,
 /* 4373 */ 9999,
 /* 4374 */ 9999,
 /* 4375 */ 9999,
-/* 4376 */ 993017,
+/* 4376 */ 998017,
 /* 4377 */ 9999,
-/* 4378 */ 993011,
+/* 4378 */ 998011,
 /* 4379 */ 9999,
-/* 4380 */ 994005,
+/* 4380 */ 999005,
 /* 4381 */ 9999,
-/* 4382 */ 994016,
+/* 4382 */ 999016,
 /* 4383 */ 9999,
-/* 4384 */ 995005,
+/* 4384 */ 1000005,
 /* 4385 */ 9999,
-/* 4386 */ 995014,
+/* 4386 */ 1000014,
 /* 4387 */ 9999,
-/* 4388 */ 996005,
+/* 4388 */ 1001005,
 /* 4389 */ 9999,
-/* 4390 */ 996017,
+/* 4390 */ 1001017,
 /* 4391 */ 9999,
 /* 4392 */ 9999,
 /* 4393 */ 9999,
-/* 4394 */ 964016,
+/* 4394 */ 969016,
 /* 4395 */ 9999,
 /* 4396 */ 9999,
-/* 4397 */ 964016,
+/* 4397 */ 969016,
 /* 4398 */ 9999,
 /* 4399 */ 9999,
 /* 4400 */ 9999,
-/* 4401 */ 965012,
+/* 4401 */ 970012,
 /* 4402 */ 9999,
 /* 4403 */ 9999,
-/* 4404 */ 965012,
+/* 4404 */ 970012,
 /* 4405 */ 9999,
 /* 4406 */ 9999,
 /* 4407 */ 9999,
-/* 4408 */ 966012,
+/* 4408 */ 971012,
 /* 4409 */ 9999,
 /* 4410 */ 9999,
-/* 4411 */ 966012,
+/* 4411 */ 971012,
 /* 4412 */ 9999,
 /* 4413 */ 9999,
 /* 4414 */ 9999,
-/* 4415 */ 967012,
+/* 4415 */ 972012,
 /* 4416 */ 9999,
 /* 4417 */ 9999,
-/* 4418 */ 967012,
+/* 4418 */ 972012,
 /* 4419 */ 9999,
 /* 4420 */ 9999,
 /* 4421 */ 9999,
-/* 4422 */ 968012,
+/* 4422 */ 973012,
 /* 4423 */ 9999,
 /* 4424 */ 9999,
-/* 4425 */ 968012,
+/* 4425 */ 973012,
 /* 4426 */ 9999,
 /* 4427 */ 9999,
 /* 4428 */ 9999,
-/* 4429 */ 969012,
+/* 4429 */ 974012,
 /* 4430 */ 9999,
 /* 4431 */ 9999,
-/* 4432 */ 969012,
+/* 4432 */ 974012,
 /* 4433 */ 9999,
 /* 4434 */ 9999,
 /* 4435 */ 9999,
-/* 4436 */ 970016,
+/* 4436 */ 975016,
 /* 4437 */ 9999,
 /* 4438 */ 9999,
-/* 4439 */ 970016,
+/* 4439 */ 975016,
 /* 4440 */ 9999,
-/* 4441 */ 970023,
-/* 4442 */ 971006,
-/* 4443 */ 970028,
+/* 4441 */ 975023,
+/* 4442 */ 976006,
+/* 4443 */ 975028,
 /* 4444 */ 9999,
-/* 4445 */ 970028,
+/* 4445 */ 975028,
 /* 4446 */ 9999,
 /* 4447 */ 9999,
-/* 4448 */ 970028,
+/* 4448 */ 975028,
 /* 4449 */ 9999,
 /* 4450 */ 9999,
 /* 4451 */ 9999,
-/* 4452 */ 971007,
+/* 4452 */ 976007,
 /* 4453 */ 9999,
 /* 4454 */ 9999,
 /* 4455 */ 9999,
-/* 4456 */ 971013,
+/* 4456 */ 976013,
 /* 4457 */ 9999,
 /* 4458 */ 9999,
-/* 4459 */ 971013,
+/* 4459 */ 976013,
 /* 4460 */ 9999,
 /* 4461 */ 9999,
 /* 4462 */ 9999,
-/* 4463 */ 972012,
+/* 4463 */ 977012,
 /* 4464 */ 9999,
 /* 4465 */ 9999,
-/* 4466 */ 972012,
+/* 4466 */ 977012,
 /* 4467 */ 9999,
-/* 4468 */ 972020,
-/* 4469 */ 972030,
-/* 4470 */ 972025,
+/* 4468 */ 977020,
+/* 4469 */ 977030,
+/* 4470 */ 977025,
 /* 4471 */ 9999,
-/* 4472 */ 972025,
+/* 4472 */ 977025,
 /* 4473 */ 9999,
 /* 4474 */ 9999,
-/* 4475 */ 972025,
+/* 4475 */ 977025,
 /* 4476 */ 9999,
 /* 4477 */ 9999,
 /* 4478 */ 9999,
-/* 4479 */ 972031,
+/* 4479 */ 977031,
 /* 4480 */ 9999,
 /* 4481 */ 9999,
 /* 4482 */ 9999,
-/* 4483 */ 972037,
+/* 4483 */ 977037,
 /* 4484 */ 9999,
 /* 4485 */ 9999,
-/* 4486 */ 972037,
+/* 4486 */ 977037,
 /* 4487 */ 9999,
 /* 4488 */ 9999,
 /* 4489 */ 9999,
-/* 4490 */ 978025,
-/* 4491 */ 979006,
-/* 4492 */ 991003,
-/* 4493 */ 976035,
+/* 4490 */ 983025,
+/* 4491 */ 984006,
+/* 4492 */ 996003,
+/* 4493 */ 981035,
 /* 4494 */ 9999,
-/* 4495 */ 976035,
+/* 4495 */ 981035,
 /* 4496 */ 9999,
 /* 4497 */ 9999,
-/* 4498 */ 976035,
+/* 4498 */ 981035,
 /* 4499 */ 9999,
 /* 4500 */ 9999,
-/* 4501 */ 979014,
+/* 4501 */ 984014,
 /* 4502 */ 9999,
-/* 4503 */ 979010,
+/* 4503 */ 984010,
 /* 4504 */ 9999,
-/* 4505 */ 979010,
+/* 4505 */ 984010,
 /* 4506 */ 9999,
 /* 4507 */ 9999,
-/* 4508 */ 980015,
-/* 4509 */ 985010,
-/* 4510 */ 980013,
+/* 4508 */ 985015,
+/* 4509 */ 990010,
+/* 4510 */ 985013,
 /* 4511 */ 9999,
-/* 4512 */ 980013,
+/* 4512 */ 985013,
 /* 4513 */ 9999,
 /* 4514 */ 9999,
-/* 4515 */ 989013,
-/* 4516 */ 989011,
+/* 4515 */ 994013,
+/* 4516 */ 994011,
 /* 4517 */ 9999,
-/* 4518 */ 989011,
+/* 4518 */ 994011,
 /* 4519 */ 9999,
 /* 4520 */ 9999,
-/* 4521 */ 989011,
+/* 4521 */ 994011,
 /* 4522 */ 9999,
-/* 4523 */ 980017,
+/* 4523 */ 985017,
 /* 4524 */ 9999,
-/* 4525 */ 980023,
+/* 4525 */ 985023,
 /* 4526 */ 9999,
 /* 4527 */ 9999,
 /* 4528 */ 9999,
-/* 4529 */ 981031,
+/* 4529 */ 986031,
 /* 4530 */ 9999,
-/* 4531 */ 981024,
+/* 4531 */ 986024,
 /* 4532 */ 9999,
 /* 4533 */ 9999,
 /* 4534 */ 9999,
-/* 4535 */ 983034,
+/* 4535 */ 988034,
 /* 4536 */ 9999,
-/* 4537 */ 983024,
+/* 4537 */ 988024,
 /* 4538 */ 9999,
-/* 4539 */ 981032,
+/* 4539 */ 986032,
 /* 4540 */ 9999,
-/* 4541 */ 981036,
+/* 4541 */ 986036,
 /* 4542 */ 9999,
 /* 4543 */ 9999,
-/* 4544 */ 981036,
+/* 4544 */ 986036,
 /* 4545 */ 9999,
-/* 4546 */ 983035,
+/* 4546 */ 988035,
 /* 4547 */ 9999,
-/* 4548 */ 983039,
+/* 4548 */ 988039,
 /* 4549 */ 9999,
 /* 4550 */ 9999,
-/* 4551 */ 983039,
+/* 4551 */ 988039,
 /* 4552 */ 9999,
 /* 4553 */ 9999,
-/* 4554 */ 985014,
+/* 4554 */ 990014,
 /* 4555 */ 9999,
-/* 4556 */ 985012,
+/* 4556 */ 990012,
 /* 4557 */ 9999,
 /* 4558 */ 9999,
 /* 4559 */ 9999,
-/* 4560 */ 986023,
+/* 4560 */ 991023,
 /* 4561 */ 9999,
-/* 4562 */ 986035,
+/* 4562 */ 991035,
 /* 4563 */ 9999,
-/* 4564 */ 986014,
+/* 4564 */ 991014,
 /* 4565 */ 9999,
 /* 4566 */ 9999,
-/* 4567 */ 988016,
+/* 4567 */ 993016,
 /* 4568 */ 9999,
-/* 4569 */ 988014,
+/* 4569 */ 993014,
 /* 4570 */ 9999,
 /* 4571 */ 9999,
-/* 4572 */ 988014,
+/* 4572 */ 993014,
 /* 4573 */ 9999,
 /* 4574 */ 9999,
 /* 4575 */ 9999,
-/* 4576 */ 991004,
+/* 4576 */ 996004,
 /* 4577 */ 9999,
 /* 4578 */ 9999,
-/* 4579 */ 991004,
+/* 4579 */ 996004,
 /* 4580 */ 9999,
-/* 4581 */ 992018,
-/* 4582 */ 992029,
+/* 4581 */ 997018,
+/* 4582 */ 997029,
 /* 4583 */ 9999,
-/* 4584 */ 992029,
+/* 4584 */ 997029,
 /* 4585 */ 9999,
 /* 4586 */ 9999,
-/* 4587 */ 992029,
+/* 4587 */ 997029,
 /* 4588 */ 9999,
-/* 4589 */ 993018,
-/* 4590 */ 993029,
+/* 4589 */ 998018,
+/* 4590 */ 998029,
 /* 4591 */ 9999,
-/* 4592 */ 993029,
+/* 4592 */ 998029,
 /* 4593 */ 9999,
 /* 4594 */ 9999,
-/* 4595 */ 993029,
+/* 4595 */ 998029,
 /* 4596 */ 9999,
 /* 4597 */ 9999,
 /* 4598 */ 9999,
 /* 4599 */ 9999,
-/* 4600 */ 1001009,
-/* 4601 */ 1002005,
+/* 4600 */ 1006009,
+/* 4601 */ 1007005,
 /* 4602 */ 9999,
-/* 4603 */ 1003007,
+/* 4603 */ 1008007,
 /* 4604 */ 9999,
 /* 4605 */ 9999,
-/* 4606 */ 999027,
+/* 4606 */ 1004027,
 /* 4607 */ 9999,
 /* 4608 */ 9999,
-/* 4609 */ 1002010,
+/* 4609 */ 1007010,
 /* 4610 */ 9999,
-/* 4611 */ 1002008,
+/* 4611 */ 1007008,
 /* 4612 */ 9999,
 /* 4613 */ 9999,
-/* 4614 */ 1002008,
+/* 4614 */ 1007008,
 /* 4615 */ 9999,
-/* 4616 */ 1003008,
-/* 4617 */ 1003021,
+/* 4616 */ 1008008,
+/* 4617 */ 1008021,
 /* 4618 */ 9999,
-/* 4619 */ 1003021,
+/* 4619 */ 1008021,
 /* 4620 */ 9999,
 /* 4621 */ 9999,
-/* 4622 */ 1003021,
+/* 4622 */ 1008021,
 /* 4623 */ 9999,
 /* 4624 */ 9999,
-/* 4625 */ 1008015,
+/* 4625 */ 1013015,
 /* 4626 */ 9999,
 /* 4627 */ 9999,
 /* 4628 */ 9999,
-/* 4629 */ 1008013,
+/* 4629 */ 1013013,
 /* 4630 */ 9999,
 /* 4631 */ 9999,
-/* 4632 */ 1009009,
-/* 4633 */ 1009016,
+/* 4632 */ 1014009,
+/* 4633 */ 1014016,
 /* 4634 */ 9999,
 /* 4635 */ 9999,
-/* 4636 */ 1009007,
+/* 4636 */ 1014007,
 /* 4637 */ 9999,
 /* 4638 */ 9999,
-/* 4639 */ 1010011,
-/* 4640 */ 1010018,
+/* 4639 */ 1015011,
+/* 4640 */ 1015018,
 /* 4641 */ 9999,
 /* 4642 */ 9999,
-/* 4643 */ 1010009,
+/* 4643 */ 1015009,
 /* 4644 */ 9999,
-/* 4645 */ 1011005,
+/* 4645 */ 1016005,
 /* 4646 */ 9999,
-/* 4647 */ 1011015,
+/* 4647 */ 1016015,
 /* 4648 */ 9999,
-/* 4649 */ 1012005,
-/* 4650 */ 1012028,
-/* 4651 */ 1012035,
+/* 4649 */ 1017005,
+/* 4650 */ 1017028,
+/* 4651 */ 1017035,
 /* 4652 */ 9999,
 /* 4653 */ 9999,
-/* 4654 */ 1012005,
+/* 4654 */ 1017005,
 /* 4655 */ 9999,
 /* 4656 */ 9999,
-/* 4657 */ 1013013,
-/* 4658 */ 1013020,
+/* 4657 */ 1018013,
+/* 4658 */ 1018020,
 /* 4659 */ 9999,
 /* 4660 */ 9999,
-/* 4661 */ 1013011,
+/* 4661 */ 1018011,
 /* 4662 */ 9999,
 /* 4663 */ 9999,
-/* 4664 */ 1014013,
-/* 4665 */ 1014020,
+/* 4664 */ 1019013,
+/* 4665 */ 1019020,
 /* 4666 */ 9999,
 /* 4667 */ 9999,
-/* 4668 */ 1014007,
+/* 4668 */ 1019007,
 /* 4669 */ 9999,
 /* 4670 */ 9999,
-/* 4671 */ 1015013,
-/* 4672 */ 1015020,
+/* 4671 */ 1020013,
+/* 4672 */ 1020020,
 /* 4673 */ 9999,
 /* 4674 */ 9999,
-/* 4675 */ 1015007,
+/* 4675 */ 1020007,
 /* 4676 */ 9999,
 /* 4677 */ 9999,
-/* 4678 */ 1016013,
-/* 4679 */ 1016020,
+/* 4678 */ 1021013,
+/* 4679 */ 1021020,
 /* 4680 */ 9999,
 /* 4681 */ 9999,
-/* 4682 */ 1016007,
+/* 4682 */ 1021007,
 /* 4683 */ 9999,
 /* 4684 */ 9999,
-/* 4685 */ 1017013,
-/* 4686 */ 1017020,
+/* 4685 */ 1022013,
+/* 4686 */ 1022020,
 /* 4687 */ 9999,
 /* 4688 */ 9999,
-/* 4689 */ 1017007,
+/* 4689 */ 1022007,
 /* 4690 */ 9999,
 /* 4691 */ 9999,
-/* 4692 */ 1018013,
-/* 4693 */ 1018020,
+/* 4692 */ 1023013,
+/* 4693 */ 1023020,
 /* 4694 */ 9999,
 /* 4695 */ 9999,
-/* 4696 */ 1018009,
+/* 4696 */ 1023009,
 /* 4697 */ 9999,
 /* 4698 */ 9999,
 /* 4699 */ 9999,
-/* 4700 */ 1019024,
-/* 4701 */ 1019031,
+/* 4700 */ 1024024,
+/* 4701 */ 1024031,
 /* 4702 */ 9999,
 /* 4703 */ 9999,
-/* 4704 */ 1019010,
+/* 4704 */ 1024010,
 /* 4705 */ 9999,
 /* 4706 */ 9999,
-/* 4707 */ 1020013,
-/* 4708 */ 1020020,
+/* 4707 */ 1025013,
+/* 4708 */ 1025020,
 /* 4709 */ 9999,
 /* 4710 */ 9999,
-/* 4711 */ 1020008,
+/* 4711 */ 1025008,
 /* 4712 */ 9999,
 /* 4713 */ 9999,
-/* 4714 */ 1021013,
-/* 4715 */ 1021020,
+/* 4714 */ 1026013,
+/* 4715 */ 1026020,
 /* 4716 */ 9999,
 /* 4717 */ 9999,
-/* 4718 */ 1021009,
+/* 4718 */ 1026009,
 /* 4719 */ 9999,
 /* 4720 */ 9999,
-/* 4721 */ 1022013,
-/* 4722 */ 1022020,
+/* 4721 */ 1027013,
+/* 4722 */ 1027020,
 /* 4723 */ 9999,
 /* 4724 */ 9999,
-/* 4725 */ 1022008,
+/* 4725 */ 1027008,
 /* 4726 */ 9999,
 /* 4727 */ 9999,
-/* 4728 */ 1023019,
-/* 4729 */ 1023026,
-/* 4730 */ 1023035,
+/* 4728 */ 1028019,
+/* 4729 */ 1028026,
+/* 4730 */ 1028035,
 /* 4731 */ 9999,
-/* 4732 */ 1023013,
+/* 4732 */ 1028013,
 /* 4733 */ 9999,
 /* 4734 */ 9999,
-/* 4735 */ 1024012,
-/* 4736 */ 1024019,
-/* 4737 */ 1024037,
+/* 4735 */ 1029012,
+/* 4736 */ 1029019,
+/* 4737 */ 1029037,
 /* 4738 */ 9999,
 /* 4739 */ 9999,
-/* 4740 */ 1024010,
+/* 4740 */ 1029010,
 /* 4741 */ 9999,
 /* 4742 */ 9999,
 /* 4743 */ 9999,
-/* 4744 */ 1026015,
+/* 4744 */ 1031015,
 /* 4745 */ 9999,
 /* 4746 */ 9999,
 /* 4747 */ 9999,
-/* 4748 */ 1026009,
+/* 4748 */ 1031009,
 /* 4749 */ 9999,
 /* 4750 */ 9999,
 /* 4751 */ 9999,
-/* 4752 */ 1028015,
+/* 4752 */ 1033015,
 /* 4753 */ 9999,
-/* 4754 */ 1028030,
+/* 4754 */ 1033030,
 /* 4755 */ 9999,
 /* 4756 */ 9999,
 /* 4757 */ 9999,
-/* 4758 */ 1028009,
+/* 4758 */ 1033009,
 /* 4759 */ 9999,
 /* 4760 */ 9999,
 /* 4761 */ 9999,
-/* 4762 */ 1030015,
+/* 4762 */ 1035015,
 /* 4763 */ 9999,
-/* 4764 */ 1030030,
+/* 4764 */ 1035030,
 /* 4765 */ 9999,
-/* 4766 */ 1030046,
+/* 4766 */ 1035046,
 /* 4767 */ 9999,
 /* 4768 */ 9999,
 /* 4769 */ 9999,
-/* 4770 */ 1030009,
+/* 4770 */ 1035009,
 /* 4771 */ 9999,
 /* 4772 */ 9999,
 /* 4773 */ 9999,
-/* 4774 */ 1033015,
+/* 4774 */ 1038015,
 /* 4775 */ 9999,
-/* 4776 */ 1033030,
+/* 4776 */ 1038030,
 /* 4777 */ 9999,
-/* 4778 */ 1033046,
+/* 4778 */ 1038046,
 /* 4779 */ 9999,
-/* 4780 */ 1033062,
+/* 4780 */ 1038062,
 /* 4781 */ 9999,
 /* 4782 */ 9999,
 /* 4783 */ 9999,
-/* 4784 */ 1033009,
+/* 4784 */ 1038009,
 /* 4785 */ 9999,
 /* 4786 */ 9999,
-/* 4787 */ 1037013,
-/* 4788 */ 1037020,
+/* 4787 */ 1042013,
+/* 4788 */ 1042020,
 /* 4789 */ 9999,
 /* 4790 */ 9999,
-/* 4791 */ 1037011,
+/* 4791 */ 1042011,
 /* 4792 */ 9999,
 /* 4793 */ 9999,
-/* 4794 */ 1040013,
-/* 4795 */ 1040020,
+/* 4794 */ 1045013,
+/* 4795 */ 1045020,
 /* 4796 */ 9999,
 /* 4797 */ 9999,
-/* 4798 */ 1040010,
+/* 4798 */ 1045010,
 /* 4799 */ 9999,
 /* 4800 */ 9999,
-/* 4801 */ 1043011,
-/* 4802 */ 1043018,
-/* 4803 */ 1044019,
+/* 4801 */ 1048011,
+/* 4802 */ 1048018,
+/* 4803 */ 1049019,
 /* 4804 */ 9999,
 /* 4805 */ 9999,
-/* 4806 */ 1043009,
+/* 4806 */ 1048009,
 /* 4807 */ 9999,
 /* 4808 */ 9999,
-/* 4809 */ 1045012,
-/* 4810 */ 1045019,
+/* 4809 */ 1050012,
+/* 4810 */ 1050019,
 /* 4811 */ 9999,
 /* 4812 */ 9999,
-/* 4813 */ 1045010,
+/* 4813 */ 1050010,
 /* 4814 */ 9999,
 /* 4815 */ 9999,
-/* 4816 */ 1048013,
-/* 4817 */ 1048020,
+/* 4816 */ 1053013,
+/* 4817 */ 1053020,
 /* 4818 */ 9999,
 /* 4819 */ 9999,
-/* 4820 */ 1048011,
+/* 4820 */ 1053011,
 /* 4821 */ 9999,
 /* 4822 */ 9999,
-/* 4823 */ 1050012,
-/* 4824 */ 1050019,
+/* 4823 */ 1055012,
+/* 4824 */ 1055019,
 /* 4825 */ 9999,
 /* 4826 */ 9999,
-/* 4827 */ 1050010,
+/* 4827 */ 1055010,
 /* 4828 */ 9999,
 /* 4829 */ 9999,
-/* 4830 */ 1052011,
-/* 4831 */ 1052018,
+/* 4830 */ 1057011,
+/* 4831 */ 1057018,
 /* 4832 */ 9999,
-/* 4833 */ 1052009,
+/* 4833 */ 1057009,
 /* 4834 */ 9999,
-/* 4835 */ 1060005,
+/* 4835 */ 1065005,
 /* 4836 */ 9999,
-/* 4837 */ 1060013,
+/* 4837 */ 1065013,
 /* 4838 */ 9999,
-/* 4839 */ 1061005,
+/* 4839 */ 1066005,
 /* 4840 */ 9999,
-/* 4841 */ 1061014,
+/* 4841 */ 1066014,
 /* 4842 */ 9999,
-/* 4843 */ 1062005,
+/* 4843 */ 1067005,
 /* 4844 */ 9999,
-/* 4845 */ 1062016,
+/* 4845 */ 1067016,
 /* 4846 */ 9999,
-/* 4847 */ 1063005,
+/* 4847 */ 1068005,
 /* 4848 */ 9999,
-/* 4849 */ 1063017,
+/* 4849 */ 1068017,
 /* 4850 */ 9999,
 /* 4851 */ 9999,
 /* 4852 */ 9999,
-/* 4853 */ 1008016,
+/* 4853 */ 1013016,
 /* 4854 */ 9999,
 /* 4855 */ 9999,
-/* 4856 */ 1008016,
+/* 4856 */ 1013016,
 /* 4857 */ 9999,
 /* 4858 */ 9999,
 /* 4859 */ 9999,
-/* 4860 */ 1009010,
+/* 4860 */ 1014010,
 /* 4861 */ 9999,
 /* 4862 */ 9999,
-/* 4863 */ 1009010,
+/* 4863 */ 1014010,
 /* 4864 */ 9999,
 /* 4865 */ 9999,
 /* 4866 */ 9999,
-/* 4867 */ 1010012,
+/* 4867 */ 1015012,
 /* 4868 */ 9999,
 /* 4869 */ 9999,
-/* 4870 */ 1010012,
+/* 4870 */ 1015012,
 /* 4871 */ 9999,
 /* 4872 */ 9999,
 /* 4873 */ 9999,
-/* 4874 */ 1012015,
+/* 4874 */ 1017015,
 /* 4875 */ 9999,
 /* 4876 */ 9999,
 /* 4877 */ 9999,
-/* 4878 */ 1012025,
+/* 4878 */ 1017025,
 /* 4879 */ 9999,
 /* 4880 */ 9999,
 /* 4881 */ 9999,
-/* 4882 */ 1012029,
+/* 4882 */ 1017029,
 /* 4883 */ 9999,
 /* 4884 */ 9999,
-/* 4885 */ 1012029,
+/* 4885 */ 1017029,
 /* 4886 */ 9999,
 /* 4887 */ 9999,
 /* 4888 */ 9999,
-/* 4889 */ 1013014,
+/* 4889 */ 1018014,
 /* 4890 */ 9999,
 /* 4891 */ 9999,
-/* 4892 */ 1013014,
+/* 4892 */ 1018014,
 /* 4893 */ 9999,
 /* 4894 */ 9999,
 /* 4895 */ 9999,
-/* 4896 */ 1014014,
+/* 4896 */ 1019014,
 /* 4897 */ 9999,
 /* 4898 */ 9999,
-/* 4899 */ 1014014,
+/* 4899 */ 1019014,
 /* 4900 */ 9999,
 /* 4901 */ 9999,
 /* 4902 */ 9999,
-/* 4903 */ 1015014,
+/* 4903 */ 1020014,
 /* 4904 */ 9999,
 /* 4905 */ 9999,
-/* 4906 */ 1015014,
+/* 4906 */ 1020014,
 /* 4907 */ 9999,
 /* 4908 */ 9999,
 /* 4909 */ 9999,
-/* 4910 */ 1016014,
+/* 4910 */ 1021014,
 /* 4911 */ 9999,
 /* 4912 */ 9999,
-/* 4913 */ 1016014,
+/* 4913 */ 1021014,
 /* 4914 */ 9999,
 /* 4915 */ 9999,
 /* 4916 */ 9999,
-/* 4917 */ 1017014,
+/* 4917 */ 1022014,
 /* 4918 */ 9999,
 /* 4919 */ 9999,
-/* 4920 */ 1017014,
+/* 4920 */ 1022014,
 /* 4921 */ 9999,
 /* 4922 */ 9999,
 /* 4923 */ 9999,
-/* 4924 */ 1018014,
+/* 4924 */ 1023014,
 /* 4925 */ 9999,
 /* 4926 */ 9999,
-/* 4927 */ 1018014,
+/* 4927 */ 1023014,
 /* 4928 */ 9999,
 /* 4929 */ 9999,
 /* 4930 */ 9999,
-/* 4931 */ 1019025,
+/* 4931 */ 1024025,
 /* 4932 */ 9999,
 /* 4933 */ 9999,
-/* 4934 */ 1019025,
+/* 4934 */ 1024025,
 /* 4935 */ 9999,
 /* 4936 */ 9999,
 /* 4937 */ 9999,
-/* 4938 */ 1020014,
+/* 4938 */ 1025014,
 /* 4939 */ 9999,
 /* 4940 */ 9999,
-/* 4941 */ 1020014,
+/* 4941 */ 1025014,
 /* 4942 */ 9999,
 /* 4943 */ 9999,
 /* 4944 */ 9999,
-/* 4945 */ 1021014,
+/* 4945 */ 1026014,
 /* 4946 */ 9999,
 /* 4947 */ 9999,
-/* 4948 */ 1021014,
+/* 4948 */ 1026014,
 /* 4949 */ 9999,
 /* 4950 */ 9999,
 /* 4951 */ 9999,
-/* 4952 */ 1022014,
+/* 4952 */ 1027014,
 /* 4953 */ 9999,
 /* 4954 */ 9999,
-/* 4955 */ 1022014,
+/* 4955 */ 1027014,
 /* 4956 */ 9999,
 /* 4957 */ 9999,
 /* 4958 */ 9999,
-/* 4959 */ 1023020,
+/* 4959 */ 1028020,
 /* 4960 */ 9999,
 /* 4961 */ 9999,
-/* 4962 */ 1023020,
+/* 4962 */ 1028020,
 /* 4963 */ 9999,
 /* 4964 */ 9999,
 /* 4965 */ 9999,
-/* 4966 */ 1023036,
+/* 4966 */ 1028036,
 /* 4967 */ 9999,
 /* 4968 */ 9999,
 /* 4969 */ 9999,
-/* 4970 */ 1023040,
+/* 4970 */ 1028040,
 /* 4971 */ 9999,
 /* 4972 */ 9999,
 /* 4973 */ 9999,
-/* 4974 */ 1024013,
+/* 4974 */ 1029013,
 /* 4975 */ 9999,
 /* 4976 */ 9999,
-/* 4977 */ 1024013,
+/* 4977 */ 1029013,
 /* 4978 */ 9999,
 /* 4979 */ 9999,
-/* 4980 */ 1024042,
-/* 4981 */ 1024038,
+/* 4980 */ 1029042,
+/* 4981 */ 1029038,
 /* 4982 */ 9999,
-/* 4983 */ 1024038,
+/* 4983 */ 1029038,
 /* 4984 */ 9999,
 /* 4985 */ 9999,
-/* 4986 */ 1024038,
+/* 4986 */ 1029038,
 /* 4987 */ 9999,
 /* 4988 */ 9999,
 /* 4989 */ 9999,
-/* 4990 */ 1037014,
+/* 4990 */ 1042014,
 /* 4991 */ 9999,
 /* 4992 */ 9999,
-/* 4993 */ 1037014,
+/* 4993 */ 1042014,
 /* 4994 */ 9999,
-/* 4995 */ 1037021,
-/* 4996 */ 1039007,
-/* 4997 */ 1037021,
+/* 4995 */ 1042021,
+/* 4996 */ 1044007,
+/* 4997 */ 1042021,
 /* 4998 */ 9999,
-/* 4999 */ 1037021,
+/* 4999 */ 1042021,
 /* 5000 */ 9999,
 /* 5001 */ 9999,
-/* 5002 */ 1037021,
+/* 5002 */ 1042021,
 /* 5003 */ 9999,
-/* 5004 */ 1037023,
+/* 5004 */ 1042023,
 /* 5005 */ 9999,
-/* 5006 */ 1037028,
+/* 5006 */ 1042028,
 /* 5007 */ 9999,
-/* 5008 */ 1038015,
-/* 5009 */ 1038025,
+/* 5008 */ 1043015,
+/* 5009 */ 1043025,
 /* 5010 */ 9999,
-/* 5011 */ 1038015,
+/* 5011 */ 1043015,
 /* 5012 */ 9999,
 /* 5013 */ 9999,
 /* 5014 */ 9999,
-/* 5015 */ 1038016,
+/* 5015 */ 1043016,
 /* 5016 */ 9999,
 /* 5017 */ 9999,
 /* 5018 */ 9999,
-/* 5019 */ 1038020,
+/* 5019 */ 1043020,
 /* 5020 */ 9999,
 /* 5021 */ 9999,
 /* 5022 */ 9999,
-/* 5023 */ 1039008,
+/* 5023 */ 1044008,
 /* 5024 */ 9999,
 /* 5025 */ 9999,
-/* 5026 */ 1039008,
+/* 5026 */ 1044008,
 /* 5027 */ 9999,
 /* 5028 */ 9999,
 /* 5029 */ 9999,
-/* 5030 */ 1040014,
+/* 5030 */ 1045014,
 /* 5031 */ 9999,
 /* 5032 */ 9999,
-/* 5033 */ 1040014,
+/* 5033 */ 1045014,
 /* 5034 */ 9999,
-/* 5035 */ 1040021,
-/* 5036 */ 1042007,
-/* 5037 */ 1040021,
+/* 5035 */ 1045021,
+/* 5036 */ 1047007,
+/* 5037 */ 1045021,
 /* 5038 */ 9999,
-/* 5039 */ 1040021,
+/* 5039 */ 1045021,
 /* 5040 */ 9999,
 /* 5041 */ 9999,
-/* 5042 */ 1040021,
+/* 5042 */ 1045021,
 /* 5043 */ 9999,
-/* 5044 */ 1040023,
+/* 5044 */ 1045023,
 /* 5045 */ 9999,
-/* 5046 */ 1040028,
+/* 5046 */ 1045028,
 /* 5047 */ 9999,
-/* 5048 */ 1041015,
-/* 5049 */ 1041025,
+/* 5048 */ 1046015,
+/* 5049 */ 1046025,
 /* 5050 */ 9999,
-/* 5051 */ 1041015,
+/* 5051 */ 1046015,
 /* 5052 */ 9999,
 /* 5053 */ 9999,
 /* 5054 */ 9999,
-/* 5055 */ 1041016,
+/* 5055 */ 1046016,
 /* 5056 */ 9999,
 /* 5057 */ 9999,
 /* 5058 */ 9999,
-/* 5059 */ 1041020,
+/* 5059 */ 1046020,
 /* 5060 */ 9999,
 /* 5061 */ 9999,
 /* 5062 */ 9999,
-/* 5063 */ 1042008,
+/* 5063 */ 1047008,
 /* 5064 */ 9999,
 /* 5065 */ 9999,
-/* 5066 */ 1042008,
+/* 5066 */ 1047008,
 /* 5067 */ 9999,
 /* 5068 */ 9999,
 /* 5069 */ 9999,
-/* 5070 */ 1043012,
+/* 5070 */ 1048012,
 /* 5071 */ 9999,
 /* 5072 */ 9999,
-/* 5073 */ 1043012,
+/* 5073 */ 1048012,
 /* 5074 */ 9999,
-/* 5075 */ 1043019,
+/* 5075 */ 1048019,
 /* 5076 */ 9999,
-/* 5077 */ 1043024,
+/* 5077 */ 1048024,
 /* 5078 */ 9999,
-/* 5079 */ 1043024,
+/* 5079 */ 1048024,
 /* 5080 */ 9999,
 /* 5081 */ 9999,
-/* 5082 */ 1043024,
+/* 5082 */ 1048024,
 /* 5083 */ 9999,
 /* 5084 */ 9999,
 /* 5085 */ 9999,
-/* 5086 */ 1045013,
+/* 5086 */ 1050013,
 /* 5087 */ 9999,
 /* 5088 */ 9999,
-/* 5089 */ 1045013,
+/* 5089 */ 1050013,
 /* 5090 */ 9999,
-/* 5091 */ 1045021,
-/* 5092 */ 1047006,
-/* 5093 */ 1045027,
+/* 5091 */ 1050021,
+/* 5092 */ 1052006,
+/* 5093 */ 1050027,
 /* 5094 */ 9999,
-/* 5095 */ 1045027,
+/* 5095 */ 1050027,
 /* 5096 */ 9999,
 /* 5097 */ 9999,
-/* 5098 */ 1045027,
+/* 5098 */ 1050027,
 /* 5099 */ 9999,
 /* 5100 */ 9999,
 /* 5101 */ 9999,
-/* 5102 */ 1047007,
+/* 5102 */ 1052007,
 /* 5103 */ 9999,
 /* 5104 */ 9999,
-/* 5105 */ 1047007,
+/* 5105 */ 1052007,
 /* 5106 */ 9999,
 /* 5107 */ 9999,
 /* 5108 */ 9999,
-/* 5109 */ 1048014,
+/* 5109 */ 1053014,
 /* 5110 */ 9999,
 /* 5111 */ 9999,
-/* 5112 */ 1048014,
+/* 5112 */ 1053014,
 /* 5113 */ 9999,
-/* 5114 */ 1048022,
-/* 5115 */ 1049006,
-/* 5116 */ 1048028,
+/* 5114 */ 1053022,
+/* 5115 */ 1054006,
+/* 5116 */ 1053028,
 /* 5117 */ 9999,
-/* 5118 */ 1048028,
+/* 5118 */ 1053028,
 /* 5119 */ 9999,
 /* 5120 */ 9999,
-/* 5121 */ 1048028,
+/* 5121 */ 1053028,
 /* 5122 */ 9999,
 /* 5123 */ 9999,
 /* 5124 */ 9999,
-/* 5125 */ 1049007,
+/* 5125 */ 1054007,
 /* 5126 */ 9999,
 /* 5127 */ 9999,
-/* 5128 */ 1049007,
+/* 5128 */ 1054007,
 /* 5129 */ 9999,
 /* 5130 */ 9999,
 /* 5131 */ 9999,
-/* 5132 */ 1050013,
+/* 5132 */ 1055013,
 /* 5133 */ 9999,
 /* 5134 */ 9999,
-/* 5135 */ 1050013,
+/* 5135 */ 1055013,
 /* 5136 */ 9999,
-/* 5137 */ 1050021,
-/* 5138 */ 1051006,
-/* 5139 */ 1050027,
+/* 5137 */ 1055021,
+/* 5138 */ 1056006,
+/* 5139 */ 1055027,
 /* 5140 */ 9999,
-/* 5141 */ 1050027,
+/* 5141 */ 1055027,
 /* 5142 */ 9999,
 /* 5143 */ 9999,
-/* 5144 */ 1050027,
+/* 5144 */ 1055027,
 /* 5145 */ 9999,
 /* 5146 */ 9999,
 /* 5147 */ 9999,
-/* 5148 */ 1051007,
+/* 5148 */ 1056007,
 /* 5149 */ 9999,
 /* 5150 */ 9999,
-/* 5151 */ 1051007,
+/* 5151 */ 1056007,
 /* 5152 */ 9999,
 /* 5153 */ 9999,
 /* 5154 */ 9999,
-/* 5155 */ 1052012,
+/* 5155 */ 1057012,
 /* 5156 */ 9999,
 /* 5157 */ 9999,
-/* 5158 */ 1052012,
+/* 5158 */ 1057012,
 /* 5159 */ 9999,
-/* 5160 */ 1052020,
-/* 5161 */ 1059006,
-/* 5162 */ 1052020,
+/* 5160 */ 1057020,
+/* 5161 */ 1064006,
+/* 5162 */ 1057020,
 /* 5163 */ 9999,
-/* 5164 */ 1052020,
+/* 5164 */ 1057020,
 /* 5165 */ 9999,
 /* 5166 */ 9999,
-/* 5167 */ 1052020,
+/* 5167 */ 1057020,
 /* 5168 */ 9999,
-/* 5169 */ 1053006,
+/* 5169 */ 1058006,
 /* 5170 */ 9999,
-/* 5171 */ 1053011,
+/* 5171 */ 1058011,
 /* 5172 */ 9999,
-/* 5173 */ 1058008,
-/* 5174 */ 1058018,
+/* 5173 */ 1063008,
+/* 5174 */ 1063018,
 /* 5175 */ 9999,
-/* 5176 */ 1058008,
+/* 5176 */ 1063008,
 /* 5177 */ 9999,
 /* 5178 */ 9999,
 /* 5179 */ 9999,
-/* 5180 */ 1058009,
+/* 5180 */ 1063009,
 /* 5181 */ 9999,
 /* 5182 */ 9999,
 /* 5183 */ 9999,
-/* 5184 */ 1058013,
+/* 5184 */ 1063013,
 /* 5185 */ 9999,
 /* 5186 */ 9999,
 /* 5187 */ 9999,
-/* 5188 */ 1059007,
+/* 5188 */ 1064007,
 /* 5189 */ 9999,
 /* 5190 */ 9999,
 /* 5191 */ 9999,
-/* 5192 */ 1059011,
+/* 5192 */ 1064011,
 /* 5193 */ 9999,
-/* 5194 */ 1068003,
+/* 5194 */ 1073003,
 /* 5195 */ 9999,
-/* 5196 */ 1069005,
-/* 5197 */ 1071003,
-/* 5198 */ 1073003,
-/* 5199 */ 1074005,
-/* 5200 */ 1086003,
+/* 5196 */ 1074005,
+/* 5197 */ 1076003,
+/* 5198 */ 1078003,
+/* 5199 */ 1079005,
+/* 5200 */ 1091003,
 /* 5201 */ 9999,
-/* 5202 */ 1066032,
+/* 5202 */ 1071032,
 /* 5203 */ 9999,
-/* 5204 */ 1099005,
+/* 5204 */ 1104005,
 /* 5205 */ 9999,
-/* 5206 */ 1099020,
-/* 5207 */ 1101019,
+/* 5206 */ 1104020,
+/* 5207 */ 1106019,
 /* 5208 */ 9999,
-/* 5209 */ 1099010,
+/* 5209 */ 1104010,
 /* 5210 */ 9999,
-/* 5211 */ 1069007,
+/* 5211 */ 1074007,
 /* 5212 */ 9999,
-/* 5213 */ 1069015,
+/* 5213 */ 1074015,
 /* 5214 */ 9999,
-/* 5215 */ 1070009,
+/* 5215 */ 1075009,
 /* 5216 */ 9999,
 /* 5217 */ 9999,
-/* 5218 */ 1070014,
+/* 5218 */ 1075014,
 /* 5219 */ 9999,
 /* 5220 */ 9999,
-/* 5221 */ 1070014,
+/* 5221 */ 1075014,
 /* 5222 */ 9999,
-/* 5223 */ 1071004,
+/* 5223 */ 1076004,
 /* 5224 */ 9999,
-/* 5225 */ 1071009,
+/* 5225 */ 1076009,
 /* 5226 */ 9999,
 /* 5227 */ 9999,
-/* 5228 */ 1071009,
+/* 5228 */ 1076009,
 /* 5229 */ 9999,
 /* 5230 */ 9999,
 /* 5231 */ 9999,
-/* 5232 */ 1073006,
+/* 5232 */ 1078006,
 /* 5233 */ 9999,
 /* 5234 */ 9999,
-/* 5235 */ 1073006,
+/* 5235 */ 1078006,
 /* 5236 */ 9999,
 /* 5237 */ 9999,
-/* 5238 */ 1074011,
-/* 5239 */ 1074040,
+/* 5238 */ 1079011,
+/* 5239 */ 1079040,
 /* 5240 */ 9999,
 /* 5241 */ 9999,
-/* 5242 */ 1074007,
+/* 5242 */ 1079007,
 /* 5243 */ 9999,
 /* 5244 */ 9999,
-/* 5245 */ 1074007,
+/* 5245 */ 1079007,
 /* 5246 */ 9999,
 /* 5247 */ 9999,
 /* 5248 */ 9999,
-/* 5249 */ 1074018,
+/* 5249 */ 1079018,
 /* 5250 */ 9999,
 /* 5251 */ 9999,
 /* 5252 */ 9999,
-/* 5253 */ 1074026,
+/* 5253 */ 1079026,
 /* 5254 */ 9999,
 /* 5255 */ 9999,
 /* 5256 */ 9999,
-/* 5257 */ 1074037,
+/* 5257 */ 1079037,
 /* 5258 */ 9999,
 /* 5259 */ 9999,
-/* 5260 */ 1087005,
-/* 5261 */ 1088005,
-/* 5262 */ 1089005,
-/* 5263 */ 1090005,
-/* 5264 */ 1086006,
+/* 5260 */ 1092005,
+/* 5261 */ 1093005,
+/* 5262 */ 1094005,
+/* 5263 */ 1095005,
+/* 5264 */ 1091006,
 /* 5265 */ 9999,
-/* 5266 */ 1086006,
+/* 5266 */ 1091006,
 /* 5267 */ 9999,
 /* 5268 */ 9999,
-/* 5269 */ 1086006,
+/* 5269 */ 1091006,
 /* 5270 */ 9999,
-/* 5271 */ 1087007,
+/* 5271 */ 1092007,
 /* 5272 */ 9999,
-/* 5273 */ 1087015,
+/* 5273 */ 1092015,
 /* 5274 */ 9999,
 /* 5275 */ 9999,
-/* 5276 */ 1087015,
+/* 5276 */ 1092015,
 /* 5277 */ 9999,
-/* 5278 */ 1088006,
+/* 5278 */ 1093006,
 /* 5279 */ 9999,
-/* 5280 */ 1088011,
+/* 5280 */ 1093011,
 /* 5281 */ 9999,
 /* 5282 */ 9999,
-/* 5283 */ 1088011,
+/* 5283 */ 1093011,
 /* 5284 */ 9999,
 /* 5285 */ 9999,
 /* 5286 */ 9999,
-/* 5287 */ 1089008,
+/* 5287 */ 1094008,
 /* 5288 */ 9999,
 /* 5289 */ 9999,
-/* 5290 */ 1089008,
+/* 5290 */ 1094008,
 /* 5291 */ 9999,
 /* 5292 */ 9999,
-/* 5293 */ 1090011,
-/* 5294 */ 1090040,
+/* 5293 */ 1095011,
+/* 5294 */ 1095040,
 /* 5295 */ 9999,
 /* 5296 */ 9999,
-/* 5297 */ 1090007,
+/* 5297 */ 1095007,
 /* 5298 */ 9999,
 /* 5299 */ 9999,
-/* 5300 */ 1090007,
+/* 5300 */ 1095007,
 /* 5301 */ 9999,
 /* 5302 */ 9999,
 /* 5303 */ 9999,
-/* 5304 */ 1090018,
+/* 5304 */ 1095018,
 /* 5305 */ 9999,
 /* 5306 */ 9999,
 /* 5307 */ 9999,
-/* 5308 */ 1090026,
+/* 5308 */ 1095026,
 /* 5309 */ 9999,
 /* 5310 */ 9999,
 /* 5311 */ 9999,
-/* 5312 */ 1090037,
+/* 5312 */ 1095037,
 /* 5313 */ 9999,
-/* 5314 */ 1101021,
+/* 5314 */ 1106021,
 /* 5315 */ 9999,
-/* 5316 */ 1101026,
+/* 5316 */ 1106026,
 /* 5317 */ 9999,
 /* 5318 */ 9999,
-/* 5319 */ 1101026,
+/* 5319 */ 1106026,
 /* 5320 */ 9999,
 /* 5321 */ 9999,
 /* 5322 */ 9999,
-/* 5323 */ 1105018,
+/* 5323 */ 1110018,
 /* 5324 */ 9999,
 /* 5325 */ 9999,
 /* 5326 */ 9999,
 /* 5327 */ 9999,
-/* 5328 */ 1108028,
+/* 5328 */ 1113028,
 /* 5329 */ 9999,
-/* 5330 */ 1114007,
+/* 5330 */ 1119007,
 /* 5331 */ 9999,
 /* 5332 */ 9999,
-/* 5333 */ 1108008,
+/* 5333 */ 1113008,
 /* 5334 */ 9999,
-/* 5335 */ 1114008,
-/* 5336 */ 1114019,
+/* 5335 */ 1119008,
+/* 5336 */ 1119019,
 /* 5337 */ 9999,
-/* 5338 */ 1114019,
+/* 5338 */ 1119019,
 /* 5339 */ 9999,
 /* 5340 */ 9999,
-/* 5341 */ 1114019,
+/* 5341 */ 1119019,
 /* 5342 */ 9999,
 /* 5343 */ 9999,
-/* 5344 */ 1118016,
+/* 5344 */ 1123016,
 /* 5345 */ 9999,
 /* 5346 */ 9999,
 /* 5347 */ 9999,
-/* 5348 */ 1118013,
+/* 5348 */ 1123013,
 /* 5349 */ 9999,
 /* 5350 */ 9999,
-/* 5351 */ 1119016,
-/* 5352 */ 1119023,
+/* 5351 */ 1124016,
+/* 5352 */ 1124023,
 /* 5353 */ 9999,
 /* 5354 */ 9999,
-/* 5355 */ 1119012,
+/* 5355 */ 1124012,
 /* 5356 */ 9999,
 /* 5357 */ 9999,
-/* 5358 */ 1120016,
-/* 5359 */ 1120023,
+/* 5358 */ 1125016,
+/* 5359 */ 1125023,
 /* 5360 */ 9999,
 /* 5361 */ 9999,
-/* 5362 */ 1120014,
+/* 5362 */ 1125014,
 /* 5363 */ 9999,
 /* 5364 */ 9999,
-/* 5365 */ 1121016,
-/* 5366 */ 1121023,
+/* 5365 */ 1126016,
+/* 5366 */ 1126023,
 /* 5367 */ 9999,
 /* 5368 */ 9999,
 /* 5369 */ 9999,
-/* 5370 */ 1121010,
+/* 5370 */ 1126010,
 /* 5371 */ 9999,
 /* 5372 */ 9999,
 /* 5373 */ 9999,
-/* 5374 */ 1118017,
+/* 5374 */ 1123017,
 /* 5375 */ 9999,
 /* 5376 */ 9999,
-/* 5377 */ 1118017,
+/* 5377 */ 1123017,
 /* 5378 */ 9999,
 /* 5379 */ 9999,
 /* 5380 */ 9999,
-/* 5381 */ 1119017,
+/* 5381 */ 1124017,
 /* 5382 */ 9999,
 /* 5383 */ 9999,
-/* 5384 */ 1119017,
+/* 5384 */ 1124017,
 /* 5385 */ 9999,
 /* 5386 */ 9999,
 /* 5387 */ 9999,
-/* 5388 */ 1120017,
+/* 5388 */ 1125017,
 /* 5389 */ 9999,
 /* 5390 */ 9999,
-/* 5391 */ 1120017,
+/* 5391 */ 1125017,
 /* 5392 */ 9999,
 /* 5393 */ 9999,
 /* 5394 */ 9999,
-/* 5395 */ 1121017,
+/* 5395 */ 1126017,
 /* 5396 */ 9999,
 /* 5397 */ 9999,
-/* 5398 */ 1121017,
+/* 5398 */ 1126017,
 /* 5399 */ 9999,
 /* 5400 */ 9999,
 /* 5401 */ 9999,
-/* 5402 */ 1129005,
+/* 5402 */ 1134005,
 /* 5403 */ 9999,
-/* 5404 */ 1131009,
+/* 5404 */ 1136009,
 /* 5405 */ 9999,
 /* 5406 */ 9999,
-/* 5407 */ 1126016,
+/* 5407 */ 1131016,
 /* 5408 */ 9999,
 /* 5409 */ 9999,
-/* 5410 */ 1129011,
+/* 5410 */ 1134011,
 /* 5411 */ 9999,
-/* 5412 */ 1129007,
+/* 5412 */ 1134007,
 /* 5413 */ 9999,
 /* 5414 */ 9999,
-/* 5415 */ 1129007,
+/* 5415 */ 1134007,
 /* 5416 */ 9999,
-/* 5417 */ 1131010,
-/* 5418 */ 1131024,
+/* 5417 */ 1136010,
+/* 5418 */ 1136024,
 /* 5419 */ 9999,
-/* 5420 */ 1131024,
+/* 5420 */ 1136024,
 /* 5421 */ 9999,
 /* 5422 */ 9999,
-/* 5423 */ 1131024,
+/* 5423 */ 1136024,
 /* 5424 */ 9999,
 /* 5425 */ 9999,
 /* 5426 */ 9999,
-/* 5427 */ 1135017,
+/* 5427 */ 1140017,
 /* 5428 */ 9999,
 /* 5429 */ 9999,
-/* 5430 */ 1135011,
+/* 5430 */ 1140011,
 /* 5431 */ 9999,
 /* 5432 */ 9999,
 /* 5433 */ 9999,
-/* 5434 */ 1136015,
+/* 5434 */ 1141015,
 /* 5435 */ 9999,
 /* 5436 */ 9999,
-/* 5437 */ 1136009,
+/* 5437 */ 1141009,
 /* 5438 */ 9999,
 /* 5439 */ 9999,
 /* 5440 */ 9999,
-/* 5441 */ 1137016,
+/* 5441 */ 1142016,
 /* 5442 */ 9999,
 /* 5443 */ 9999,
-/* 5444 */ 1137010,
+/* 5444 */ 1142010,
 /* 5445 */ 9999,
 /* 5446 */ 9999,
 /* 5447 */ 9999,
-/* 5448 */ 1138017,
+/* 5448 */ 1143017,
 /* 5449 */ 9999,
 /* 5450 */ 9999,
-/* 5451 */ 1138011,
+/* 5451 */ 1143011,
 /* 5452 */ 9999,
 /* 5453 */ 9999,
 /* 5454 */ 9999,
-/* 5455 */ 1139017,
+/* 5455 */ 1144017,
 /* 5456 */ 9999,
 /* 5457 */ 9999,
 /* 5458 */ 9999,
-/* 5459 */ 1139011,
+/* 5459 */ 1144011,
 /* 5460 */ 9999,
 /* 5461 */ 9999,
 /* 5462 */ 9999,
-/* 5463 */ 1140017,
-/* 5464 */ 1140027,
-/* 5465 */ 1141030,
+/* 5463 */ 1145017,
+/* 5464 */ 1145027,
+/* 5465 */ 1146030,
 /* 5466 */ 9999,
 /* 5467 */ 9999,
-/* 5468 */ 1140011,
+/* 5468 */ 1145011,
 /* 5469 */ 9999,
 /* 5470 */ 9999,
 /* 5471 */ 9999,
-/* 5472 */ 1142015,
+/* 5472 */ 1147015,
 /* 5473 */ 9999,
 /* 5474 */ 9999,
-/* 5475 */ 1142009,
+/* 5475 */ 1147009,
 /* 5476 */ 9999,
 /* 5477 */ 9999,
 /* 5478 */ 9999,
-/* 5479 */ 1144006,
+/* 5479 */ 1149006,
 /* 5480 */ 9999,
 /* 5481 */ 9999,
-/* 5482 */ 1143009,
+/* 5482 */ 1148009,
 /* 5483 */ 9999,
 /* 5484 */ 9999,
-/* 5485 */ 1146011,
-/* 5486 */ 1146018,
+/* 5485 */ 1151011,
+/* 5486 */ 1151018,
 /* 5487 */ 9999,
 /* 5488 */ 9999,
-/* 5489 */ 1146009,
+/* 5489 */ 1151009,
 /* 5490 */ 9999,
-/* 5491 */ 1148005,
+/* 5491 */ 1153005,
 /* 5492 */ 9999,
-/* 5493 */ 1148013,
+/* 5493 */ 1153013,
 /* 5494 */ 9999,
-/* 5495 */ 1149005,
+/* 5495 */ 1154005,
 /* 5496 */ 9999,
-/* 5497 */ 1149014,
+/* 5497 */ 1154014,
 /* 5498 */ 9999,
-/* 5499 */ 1150005,
+/* 5499 */ 1155005,
 /* 5500 */ 9999,
-/* 5501 */ 1150016,
+/* 5501 */ 1155016,
 /* 5502 */ 9999,
-/* 5503 */ 1151005,
+/* 5503 */ 1156005,
 /* 5504 */ 9999,
-/* 5505 */ 1151017,
+/* 5505 */ 1156017,
 /* 5506 */ 9999,
 /* 5507 */ 9999,
 /* 5508 */ 9999,
-/* 5509 */ 1140029,
+/* 5509 */ 1145029,
 /* 5510 */ 9999,
 /* 5511 */ 9999,
 /* 5512 */ 9999,
-/* 5513 */ 1140031,
+/* 5513 */ 1145031,
 /* 5514 */ 9999,
-/* 5515 */ 1144007,
-/* 5516 */ 1144020,
+/* 5515 */ 1149007,
+/* 5516 */ 1149020,
 /* 5517 */ 9999,
-/* 5518 */ 1144020,
+/* 5518 */ 1149020,
 /* 5519 */ 9999,
 /* 5520 */ 9999,
-/* 5521 */ 1144020,
+/* 5521 */ 1149020,
 /* 5522 */ 9999,
 /* 5523 */ 9999,
 /* 5524 */ 9999,
-/* 5525 */ 1146012,
+/* 5525 */ 1151012,
 /* 5526 */ 9999,
 /* 5527 */ 9999,
-/* 5528 */ 1146012,
+/* 5528 */ 1151012,
 /* 5529 */ 9999,
-/* 5530 */ 1146019,
-/* 5531 */ 1147005,
-/* 5532 */ 1146024,
+/* 5530 */ 1151019,
+/* 5531 */ 1152005,
+/* 5532 */ 1151024,
 /* 5533 */ 9999,
-/* 5534 */ 1146024,
+/* 5534 */ 1151024,
 /* 5535 */ 9999,
 /* 5536 */ 9999,
-/* 5537 */ 1146024,
+/* 5537 */ 1151024,
 /* 5538 */ 9999,
 /* 5539 */ 9999,
 /* 5540 */ 9999,
-/* 5541 */ 1147006,
+/* 5541 */ 1152006,
 /* 5542 */ 9999,
 /* 5543 */ 9999,
 /* 5544 */ 9999,
-/* 5545 */ 1147012,
+/* 5545 */ 1152012,
 /* 5546 */ 9999,
 /* 5547 */ 9999,
-/* 5548 */ 1147012,
+/* 5548 */ 1152012,
 /* 5549 */ 9999,
-/* 5550 */ 1156003,
-/* 5551 */ 1161003,
+/* 5550 */ 1161003,
+/* 5551 */ 1166003,
 /* 5552 */ 9999,
-/* 5553 */ 1181003,
-/* 5554 */ 1187003,
-/* 5555 */ 1193003,
+/* 5553 */ 1186003,
+/* 5554 */ 1192003,
+/* 5555 */ 1198003,
 /* 5556 */ 9999,
-/* 5557 */ 1155003,
+/* 5557 */ 1160003,
 /* 5558 */ 9999,
 /* 5559 */ 9999,
 /* 5560 */ 9999,
-/* 5561 */ 1156007,
+/* 5561 */ 1161007,
 /* 5562 */ 9999,
 /* 5563 */ 9999,
 /* 5564 */ 9999,
-/* 5565 */ 1157010,
+/* 5565 */ 1162010,
 /* 5566 */ 9999,
 /* 5567 */ 9999,
 /* 5568 */ 9999,
-/* 5569 */ 1158007,
+/* 5569 */ 1163007,
 /* 5570 */ 9999,
-/* 5571 */ 1162007,
+/* 5571 */ 1167007,
 /* 5572 */ 9999,
-/* 5573 */ 1162012,
+/* 5573 */ 1167012,
 /* 5574 */ 9999,
-/* 5575 */ 1162012,
+/* 5575 */ 1167012,
 /* 5576 */ 9999,
 /* 5577 */ 9999,
 /* 5578 */ 9999,
-/* 5579 */ 1163019,
+/* 5579 */ 1168019,
 /* 5580 */ 9999,
 /* 5581 */ 9999,
-/* 5582 */ 1163007,
+/* 5582 */ 1168007,
 /* 5583 */ 9999,
-/* 5584 */ 1163007,
+/* 5584 */ 1168007,
 /* 5585 */ 9999,
 /* 5586 */ 9999,
-/* 5587 */ 1164011,
+/* 5587 */ 1169011,
 /* 5588 */ 9999,
-/* 5589 */ 1164007,
+/* 5589 */ 1169007,
 /* 5590 */ 9999,
-/* 5591 */ 1164007,
+/* 5591 */ 1169007,
 /* 5592 */ 9999,
 /* 5593 */ 9999,
-/* 5594 */ 1165011,
+/* 5594 */ 1170011,
 /* 5595 */ 9999,
-/* 5596 */ 1165007,
+/* 5596 */ 1170007,
 /* 5597 */ 9999,
-/* 5598 */ 1165007,
+/* 5598 */ 1170007,
 /* 5599 */ 9999,
-/* 5600 */ 1166007,
-/* 5601 */ 1166017,
-/* 5602 */ 1166026,
-/* 5603 */ 1166012,
+/* 5600 */ 1171007,
+/* 5601 */ 1171017,
+/* 5602 */ 1171026,
+/* 5603 */ 1171012,
 /* 5604 */ 9999,
-/* 5605 */ 1166012,
+/* 5605 */ 1171012,
 /* 5606 */ 9999,
-/* 5607 */ 1169007,
-/* 5608 */ 1169012,
+/* 5607 */ 1174007,
+/* 5608 */ 1174012,
 /* 5609 */ 9999,
-/* 5610 */ 1169012,
+/* 5610 */ 1174012,
 /* 5611 */ 9999,
-/* 5612 */ 1172007,
+/* 5612 */ 1177007,
 /* 5613 */ 9999,
-/* 5614 */ 1172012,
+/* 5614 */ 1177012,
 /* 5615 */ 9999,
-/* 5616 */ 1172012,
+/* 5616 */ 1177012,
 /* 5617 */ 9999,
-/* 5618 */ 1175007,
-/* 5619 */ 1175015,
+/* 5618 */ 1180007,
+/* 5619 */ 1180015,
 /* 5620 */ 9999,
-/* 5621 */ 1175015,
+/* 5621 */ 1180015,
 /* 5622 */ 9999,
 /* 5623 */ 9999,
-/* 5624 */ 1175015,
+/* 5624 */ 1180015,
 /* 5625 */ 9999,
 /* 5626 */ 9999,
 /* 5627 */ 9999,
-/* 5628 */ 1166018,
+/* 5628 */ 1171018,
 /* 5629 */ 9999,
 /* 5630 */ 9999,
 /* 5631 */ 9999,
-/* 5632 */ 1166023,
+/* 5632 */ 1171023,
 /* 5633 */ 9999,
-/* 5634 */ 1181007,
+/* 5634 */ 1186007,
 /* 5635 */ 9999,
-/* 5636 */ 1181013,
+/* 5636 */ 1186013,
 /* 5637 */ 9999,
-/* 5638 */ 1182007,
+/* 5638 */ 1187007,
 /* 5639 */ 9999,
-/* 5640 */ 1182012,
+/* 5640 */ 1187012,
 /* 5641 */ 9999,
 /* 5642 */ 9999,
-/* 5643 */ 1183016,
+/* 5643 */ 1188016,
 /* 5644 */ 9999,
-/* 5645 */ 1183014,
+/* 5645 */ 1188014,
 /* 5646 */ 9999,
-/* 5647 */ 1187007,
+/* 5647 */ 1192007,
 /* 5648 */ 9999,
-/* 5649 */ 1187013,
+/* 5649 */ 1192013,
 /* 5650 */ 9999,
-/* 5651 */ 1188007,
+/* 5651 */ 1193007,
 /* 5652 */ 9999,
-/* 5653 */ 1188012,
+/* 5653 */ 1193012,
 /* 5654 */ 9999,
 /* 5655 */ 9999,
-/* 5656 */ 1189016,
+/* 5656 */ 1194016,
 /* 5657 */ 9999,
-/* 5658 */ 1189014,
+/* 5658 */ 1194014,
 /* 5659 */ 9999,
 /* 5660 */ 9999,
-/* 5661 */ 1189014,
+/* 5661 */ 1194014,
 /* 5662 */ 9999,
 /* 5663 */ 9999,
-/* 5664 */ 1193009,
-/* 5665 */ 1194006,
+/* 5664 */ 1198009,
+/* 5665 */ 1199006,
 /* 5666 */ 9999,
 /* 5667 */ 9999,
-/* 5668 */ 1193005,
+/* 5668 */ 1198005,
 /* 5669 */ 9999,
 /* 5670 */ 9999,
-/* 5671 */ 1193005,
+/* 5671 */ 1198005,
 /* 5672 */ 9999,
-/* 5673 */ 1194008,
-/* 5674 */ 1194018,
-/* 5675 */ 1194008,
+/* 5673 */ 1199008,
+/* 5674 */ 1199018,
+/* 5675 */ 1199008,
 /* 5676 */ 9999,
-/* 5677 */ 1194008,
+/* 5677 */ 1199008,
 /* 5678 */ 9999,
 /* 5679 */ 9999,
-/* 5680 */ 1194008,
+/* 5680 */ 1199008,
 /* 5681 */ 9999,
 /* 5682 */ 9999,
 /* 5683 */ 9999,
-/* 5684 */ 1194009,
+/* 5684 */ 1199009,
 /* 5685 */ 9999,
 /* 5686 */ 9999,
 /* 5687 */ 9999,
-/* 5688 */ 1194013,
+/* 5688 */ 1199013,
 /* 5689 */ 9999,
 /* 5690 */ 9999,
 /* 5691 */ 9999,
 /* 5692 */ 9999,
-/* 5693 */ 1201031,
+/* 5693 */ 1206031,
 /* 5694 */ 9999,
-/* 5695 */ 1204007,
+/* 5695 */ 1209007,
 /* 5696 */ 9999,
 /* 5697 */ 9999,
-/* 5698 */ 1201011,
+/* 5698 */ 1206011,
 /* 5699 */ 9999,
-/* 5700 */ 1204008,
-/* 5701 */ 1204022,
+/* 5700 */ 1209008,
+/* 5701 */ 1209022,
 /* 5702 */ 9999,
-/* 5703 */ 1204022,
+/* 5703 */ 1209022,
 /* 5704 */ 9999,
 /* 5705 */ 9999,
-/* 5706 */ 1204022,
+/* 5706 */ 1209022,
 /* 5707 */ 9999,
 /* 5708 */ 9999,
-/* 5709 */ 1208012,
-/* 5710 */ 1208019,
+/* 5709 */ 1213012,
+/* 5710 */ 1213019,
 /* 5711 */ 9999,
 /* 5712 */ 9999,
-/* 5713 */ 1208009,
+/* 5713 */ 1213009,
 /* 5714 */ 9999,
 /* 5715 */ 9999,
-/* 5716 */ 1209011,
-/* 5717 */ 1209019,
+/* 5716 */ 1214011,
+/* 5717 */ 1214019,
 /* 5718 */ 9999,
 /* 5719 */ 9999,
-/* 5720 */ 1209009,
+/* 5720 */ 1214009,
 /* 5721 */ 9999,
-/* 5722 */ 1210005,
+/* 5722 */ 1215005,
 /* 5723 */ 9999,
-/* 5724 */ 1210014,
+/* 5724 */ 1215014,
 /* 5725 */ 9999,
-/* 5726 */ 1211005,
+/* 5726 */ 1216005,
 /* 5727 */ 9999,
-/* 5728 */ 1211016,
+/* 5728 */ 1216016,
 /* 5729 */ 9999,
-/* 5730 */ 1212005,
+/* 5730 */ 1217005,
 /* 5731 */ 9999,
-/* 5732 */ 1212017,
+/* 5732 */ 1217017,
 /* 5733 */ 9999,
 /* 5734 */ 9999,
 /* 5735 */ 9999,
-/* 5736 */ 1208013,
+/* 5736 */ 1213013,
 /* 5737 */ 9999,
 /* 5738 */ 9999,
-/* 5739 */ 1208013,
+/* 5739 */ 1213013,
 /* 5740 */ 9999,
 /* 5741 */ 9999,
 /* 5742 */ 9999,
-/* 5743 */ 1209012,
+/* 5743 */ 1214012,
 /* 5744 */ 9999,
 /* 5745 */ 9999,
-/* 5746 */ 1209012,
+/* 5746 */ 1214012,
 /* 5747 */ 9999,
-/* 5748 */ 1209020,
-/* 5749 */ 1209030,
-/* 5750 */ 1209025,
+/* 5748 */ 1214020,
+/* 5749 */ 1214030,
+/* 5750 */ 1214025,
 /* 5751 */ 9999,
-/* 5752 */ 1209025,
+/* 5752 */ 1214025,
 /* 5753 */ 9999,
 /* 5754 */ 9999,
-/* 5755 */ 1209025,
+/* 5755 */ 1214025,
 /* 5756 */ 9999,
 /* 5757 */ 9999,
 /* 5758 */ 9999,
-/* 5759 */ 1209031,
+/* 5759 */ 1214031,
 /* 5760 */ 9999,
 /* 5761 */ 9999,
 /* 5762 */ 9999,
-/* 5763 */ 1209037,
+/* 5763 */ 1214037,
 /* 5764 */ 9999,
 /* 5765 */ 9999,
-/* 5766 */ 1209037,
+/* 5766 */ 1214037,
 /* 5767 */ 9999,
 /* 5768 */ 9999,
 /* 5769 */ 9999,
-/* 5770 */ 1219004,
+/* 5770 */ 1224004,
 /* 5771 */ 9999,
 /* 5772 */ 9999,
-/* 5773 */ 1216008,
+/* 5773 */ 1221008,
 /* 5774 */ 9999,
 /* 5775 */ 9999,
-/* 5776 */ 1219013,
+/* 5776 */ 1224013,
 /* 5777 */ 9999,
-/* 5778 */ 1219013,
+/* 5778 */ 1224013,
 /* 5779 */ 9999,
-/* 5780 */ 1220007,
-/* 5781 */ 1220013,
+/* 5780 */ 1225007,
+/* 5781 */ 1225013,
 /* 5782 */ 9999,
-/* 5783 */ 1220013,
+/* 5783 */ 1225013,
 /* 5784 */ 9999,
 /* 5785 */ 9999,
-/* 5786 */ 1221007,
+/* 5786 */ 1226007,
 /* 5787 */ 9999,
-/* 5788 */ 1221007,
+/* 5788 */ 1226007,
 /* 5789 */ 9999,
 /* 5790 */ 9999,
-/* 5791 */ 1222007,
+/* 5791 */ 1227007,
 /* 5792 */ 9999,
-/* 5793 */ 1222007,
+/* 5793 */ 1227007,
 /* 5794 */ 9999,
 /* 5795 */ 9999,
-/* 5796 */ 1223007,
+/* 5796 */ 1228007,
 /* 5797 */ 9999,
-/* 5798 */ 1223007,
+/* 5798 */ 1228007,
 /* 5799 */ 9999,
 /* 5800 */ 9999,
-/* 5801 */ 1224007,
+/* 5801 */ 1229007,
 /* 5802 */ 9999,
-/* 5803 */ 1224007,
+/* 5803 */ 1229007,
 /* 5804 */ 9999,
 /* 5805 */ 9999,
-/* 5806 */ 1225011,
+/* 5806 */ 1230011,
 /* 5807 */ 9999,
 /* 5808 */ 9999,
-/* 5809 */ 1225007,
+/* 5809 */ 1230007,
 /* 5810 */ 9999,
-/* 5811 */ 1225007,
+/* 5811 */ 1230007,
 /* 5812 */ 9999,
 /* 5813 */ 9999,
-/* 5814 */ 1228011,
+/* 5814 */ 1233011,
 /* 5815 */ 9999,
-/* 5816 */ 1228007,
+/* 5816 */ 1233007,
 /* 5817 */ 9999,
-/* 5818 */ 1228007,
+/* 5818 */ 1233007,
 /* 5819 */ 9999,
 /* 5820 */ 9999,
-/* 5821 */ 1228007,
+/* 5821 */ 1233007,
 /* 5822 */ 9999,
 /* 5823 */ 9999,
 /* 5824 */ 9999,
-/* 5825 */ 1236018,
+/* 5825 */ 1241018,
 /* 5826 */ 9999,
 /* 5827 */ 9999,
 /* 5828 */ 9999,
-/* 5829 */ 1239008,
+/* 5829 */ 1244008,
 /* 5830 */ 9999,
 /* 5831 */ 9999,
 /* 5832 */ 9999,
-/* 5833 */ 1240009,
+/* 5833 */ 1245009,
 /* 5834 */ 9999,
 /* 5835 */ 9999,
 /* 5836 */ 9999,
-/* 5837 */ 1241009,
+/* 5837 */ 1246009,
 /* 5838 */ 9999,
 /* 5839 */ 9999,
 /* 5840 */ 9999,
-/* 5841 */ 1242008,
+/* 5841 */ 1247008,
 /* 5842 */ 9999,
 /* 5843 */ 9999,
 /* 5844 */ 9999,
-/* 5845 */ 1243009,
+/* 5845 */ 1248009,
 /* 5846 */ 9999,
 /* 5847 */ 9999,
 /* 5848 */ 9999,
-/* 5849 */ 1244007,
+/* 5849 */ 1249007,
 /* 5850 */ 9999,
 /* 5851 */ 9999,
 /* 5852 */ 9999,
-/* 5853 */ 1245010,
+/* 5853 */ 1250010,
 /* 5854 */ 9999,
 /* 5855 */ 9999,
 /* 5856 */ 9999,
-/* 5857 */ 1246013,
+/* 5857 */ 1251013,
 /* 5858 */ 9999,
 /* 5859 */ 9999,
-/* 5860 */ 1251010,
-/* 5861 */ 1251024,
+/* 5860 */ 1256010,
+/* 5861 */ 1256024,
 /* 5862 */ 9999,
 /* 5863 */ 9999,
 /* 5864 */ 9999,
-/* 5865 */ 1268003,
-/* 5866 */ 1276004,
+/* 5865 */ 1273003,
+/* 5866 */ 1281004,
 /* 5867 */ 9999,
 /* 5868 */ 9999,
 /* 5869 */ 9999,
-/* 5870 */ 1250015,
+/* 5870 */ 1255015,
 /* 5871 */ 9999,
-/* 5872 */ 1268005,
-/* 5873 */ 1268021,
-/* 5874 */ 1270005,
-/* 5875 */ 1270025,
-/* 5876 */ 1272005,
+/* 5872 */ 1273005,
+/* 5873 */ 1273021,
+/* 5874 */ 1275005,
+/* 5875 */ 1275025,
+/* 5876 */ 1277005,
 /* 5877 */ 9999,
-/* 5878 */ 1268013,
+/* 5878 */ 1273013,
 /* 5879 */ 9999,
 /* 5880 */ 9999,
-/* 5881 */ 1268013,
+/* 5881 */ 1273013,
 /* 5882 */ 9999,
 /* 5883 */ 9999,
-/* 5884 */ 1268026,
+/* 5884 */ 1273026,
 /* 5885 */ 9999,
-/* 5886 */ 1268022,
+/* 5886 */ 1273022,
 /* 5887 */ 9999,
 /* 5888 */ 9999,
-/* 5889 */ 1268022,
+/* 5889 */ 1273022,
 /* 5890 */ 9999,
 /* 5891 */ 9999,
 /* 5892 */ 9999,
-/* 5893 */ 1270010,
+/* 5893 */ 1275010,
 /* 5894 */ 9999,
 /* 5895 */ 9999,
-/* 5896 */ 1270010,
+/* 5896 */ 1275010,
 /* 5897 */ 9999,
 /* 5898 */ 9999,
-/* 5899 */ 1270031,
+/* 5899 */ 1275031,
 /* 5900 */ 9999,
-/* 5901 */ 1270027,
+/* 5901 */ 1275027,
 /* 5902 */ 9999,
 /* 5903 */ 9999,
-/* 5904 */ 1270027,
+/* 5904 */ 1275027,
 /* 5905 */ 9999,
 /* 5906 */ 9999,
-/* 5907 */ 1272010,
-/* 5908 */ 1272026,
-/* 5909 */ 1274007,
-/* 5910 */ 1274027,
-/* 5911 */ 1272006,
+/* 5907 */ 1277010,
+/* 5908 */ 1277026,
+/* 5909 */ 1279007,
+/* 5910 */ 1279027,
+/* 5911 */ 1277006,
 /* 5912 */ 9999,
-/* 5913 */ 1272006,
+/* 5913 */ 1277006,
 /* 5914 */ 9999,
 /* 5915 */ 9999,
-/* 5916 */ 1272006,
+/* 5916 */ 1277006,
 /* 5917 */ 9999,
 /* 5918 */ 9999,
-/* 5919 */ 1272031,
+/* 5919 */ 1277031,
 /* 5920 */ 9999,
-/* 5921 */ 1272027,
+/* 5921 */ 1277027,
 /* 5922 */ 9999,
 /* 5923 */ 9999,
-/* 5924 */ 1272027,
+/* 5924 */ 1277027,
 /* 5925 */ 9999,
 /* 5926 */ 9999,
 /* 5927 */ 9999,
-/* 5928 */ 1274012,
+/* 5928 */ 1279012,
 /* 5929 */ 9999,
 /* 5930 */ 9999,
-/* 5931 */ 1274012,
+/* 5931 */ 1279012,
 /* 5932 */ 9999,
 /* 5933 */ 9999,
-/* 5934 */ 1274033,
+/* 5934 */ 1279033,
 /* 5935 */ 9999,
-/* 5936 */ 1274029,
+/* 5936 */ 1279029,
 /* 5937 */ 9999,
 /* 5938 */ 9999,
-/* 5939 */ 1274029,
+/* 5939 */ 1279029,
 /* 5940 */ 9999,
 /* 5941 */ 9999,
 /* 5942 */ 9999,
 /* 5943 */ 9999,
-/* 5944 */ 1276005,
+/* 5944 */ 1281005,
 /* 5945 */ 9999,
 /* 5946 */ 9999,
-/* 5947 */ 1276005,
+/* 5947 */ 1281005,
 /* 5948 */ 9999,
 /* 5949 */ 9999,
-/* 5950 */ 1280010,
+/* 5950 */ 1285010,
 /* 5951 */ 9999,
 /* 5952 */ 9999,
-/* 5953 */ 1287003,
-/* 5954 */ 1295004,
+/* 5953 */ 1292003,
+/* 5954 */ 1300004,
 /* 5955 */ 9999,
 /* 5956 */ 9999,
 /* 5957 */ 9999,
-/* 5958 */ 1279016,
+/* 5958 */ 1284016,
 /* 5959 */ 9999,
-/* 5960 */ 1287005,
-/* 5961 */ 1287021,
-/* 5962 */ 1289005,
-/* 5963 */ 1289025,
-/* 5964 */ 1291005,
+/* 5960 */ 1292005,
+/* 5961 */ 1292021,
+/* 5962 */ 1294005,
+/* 5963 */ 1294025,
+/* 5964 */ 1296005,
 /* 5965 */ 9999,
-/* 5966 */ 1287013,
+/* 5966 */ 1292013,
 /* 5967 */ 9999,
 /* 5968 */ 9999,
-/* 5969 */ 1287013,
+/* 5969 */ 1292013,
 /* 5970 */ 9999,
 /* 5971 */ 9999,
-/* 5972 */ 1287026,
+/* 5972 */ 1292026,
 /* 5973 */ 9999,
-/* 5974 */ 1287022,
+/* 5974 */ 1292022,
 /* 5975 */ 9999,
 /* 5976 */ 9999,
-/* 5977 */ 1287022,
+/* 5977 */ 1292022,
 /* 5978 */ 9999,
 /* 5979 */ 9999,
 /* 5980 */ 9999,
-/* 5981 */ 1289010,
+/* 5981 */ 1294010,
 /* 5982 */ 9999,
 /* 5983 */ 9999,
-/* 5984 */ 1289010,
+/* 5984 */ 1294010,
 /* 5985 */ 9999,
 /* 5986 */ 9999,
-/* 5987 */ 1289031,
+/* 5987 */ 1294031,
 /* 5988 */ 9999,
-/* 5989 */ 1289027,
+/* 5989 */ 1294027,
 /* 5990 */ 9999,
 /* 5991 */ 9999,
-/* 5992 */ 1289027,
+/* 5992 */ 1294027,
 /* 5993 */ 9999,
 /* 5994 */ 9999,
-/* 5995 */ 1291010,
-/* 5996 */ 1291026,
-/* 5997 */ 1293007,
-/* 5998 */ 1293027,
-/* 5999 */ 1291006,
+/* 5995 */ 1296010,
+/* 5996 */ 1296026,
+/* 5997 */ 1298007,
+/* 5998 */ 1298027,
+/* 5999 */ 1296006,
 /* 6000 */ 9999,
-/* 6001 */ 1291006,
+/* 6001 */ 1296006,
 /* 6002 */ 9999,
 /* 6003 */ 9999,
-/* 6004 */ 1291006,
+/* 6004 */ 1296006,
 /* 6005 */ 9999,
 /* 6006 */ 9999,
-/* 6007 */ 1291031,
+/* 6007 */ 1296031,
 /* 6008 */ 9999,
-/* 6009 */ 1291027,
+/* 6009 */ 1296027,
 /* 6010 */ 9999,
 /* 6011 */ 9999,
-/* 6012 */ 1291027,
+/* 6012 */ 1296027,
 /* 6013 */ 9999,
 /* 6014 */ 9999,
 /* 6015 */ 9999,
-/* 6016 */ 1293012,
+/* 6016 */ 1298012,
 /* 6017 */ 9999,
 /* 6018 */ 9999,
-/* 6019 */ 1293012,
+/* 6019 */ 1298012,
 /* 6020 */ 9999,
 /* 6021 */ 9999,
-/* 6022 */ 1293033,
+/* 6022 */ 1298033,
 /* 6023 */ 9999,
-/* 6024 */ 1293029,
+/* 6024 */ 1298029,
 /* 6025 */ 9999,
 /* 6026 */ 9999,
-/* 6027 */ 1293029,
+/* 6027 */ 1298029,
 /* 6028 */ 9999,
 /* 6029 */ 9999,
 /* 6030 */ 9999,
 /* 6031 */ 9999,
-/* 6032 */ 1295005,
+/* 6032 */ 1300005,
 /* 6033 */ 9999,
 /* 6034 */ 9999,
-/* 6035 */ 1295005,
+/* 6035 */ 1300005,
 /* 6036 */ 9999,
 /* 6037 */ 9999,
-/* 6038 */ 1299010,
-/* 6039 */ 1299024,
+/* 6038 */ 1304010,
+/* 6039 */ 1304024,
 /* 6040 */ 9999,
 /* 6041 */ 9999,
 /* 6042 */ 9999,
 /* 6043 */ 9999,
-/* 6044 */ 1298016,
+/* 6044 */ 1303016,
 /* 6045 */ 9999,
 /* 6046 */ 9999,
-/* 6047 */ 1332010,
+/* 6047 */ 1337010,
 /* 6048 */ 9999,
 /* 6049 */ 9999,
-/* 6050 */ 1332040,
+/* 6050 */ 1337040,
 /* 6051 */ 9999,
 /* 6052 */ 9999,
-/* 6053 */ 1331016,
+/* 6053 */ 1336016,
 /* 6054 */ 9999,
-/* 6055 */ 1348003,
+/* 6055 */ 1353003,
 /* 6056 */ 9999,
-/* 6057 */ 1363003,
+/* 6057 */ 1368003,
 /* 6058 */ 9999,
 /* 6059 */ 9999,
-/* 6060 */ 1347016,
+/* 6060 */ 1352016,
 /* 6061 */ 9999,
 /* 6062 */ 9999,
 /* 6063 */ 9999,
-/* 6064 */ 1363004,
+/* 6064 */ 1368004,
 /* 6065 */ 9999,
-/* 6066 */ 1363004,
+/* 6066 */ 1368004,
 /* 6067 */ 9999,
 /* 6068 */ 9999,
-/* 6069 */ 1363004,
+/* 6069 */ 1368004,
 /* 6070 */ 9999,
-/* 6071 */ 1378003,
+/* 6071 */ 1383003,
 /* 6072 */ 9999,
-/* 6073 */ 1395003,
+/* 6073 */ 1400003,
 /* 6074 */ 9999,
 /* 6075 */ 9999,
-/* 6076 */ 1377029,
+/* 6076 */ 1382029,
 /* 6077 */ 9999,
 /* 6078 */ 9999,
 /* 6079 */ 9999,
-/* 6080 */ 1395004,
+/* 6080 */ 1400004,
 /* 6081 */ 9999,
-/* 6082 */ 1395004,
+/* 6082 */ 1400004,
 /* 6083 */ 9999,
 /* 6084 */ 9999,
-/* 6085 */ 1395004,
+/* 6085 */ 1400004,
 /* 6086 */ 9999,
-/* 6087 */ 1415003,
+/* 6087 */ 1420003,
 /* 6088 */ 9999,
-/* 6089 */ 1427003,
+/* 6089 */ 1432003,
 /* 6090 */ 9999,
 /* 6091 */ 9999,
-/* 6092 */ 1414016,
+/* 6092 */ 1419016,
 /* 6093 */ 9999,
 /* 6094 */ 9999,
 /* 6095 */ 9999,
-/* 6096 */ 1427004,
+/* 6096 */ 1432004,
 /* 6097 */ 9999,
-/* 6098 */ 1427004,
+/* 6098 */ 1432004,
 /* 6099 */ 9999,
 /* 6100 */ 9999,
-/* 6101 */ 1427004,
+/* 6101 */ 1432004,
 /* 6102 */ 9999,
-/* 6103 */ 1441003,
+/* 6103 */ 1446003,
 /* 6104 */ 9999,
 /* 6105 */ 9999,
-/* 6106 */ 1441006,
+/* 6106 */ 1446006,
 /* 6107 */ 9999,
 /* 6108 */ 9999,
 /* 6109 */ 9999,
-/* 6110 */ 1452012,
+/* 6110 */ 1457012,
 /* 6111 */ 9999,
-/* 6112 */ 1452025,
+/* 6112 */ 1457025,
 /* 6113 */ 9999,
-/* 6114 */ 1452045,
+/* 6114 */ 1457045,
 /* 6115 */ 9999,
-/* 6116 */ 1452006,
+/* 6116 */ 1457006,
 /* 6117 */ 9999,
 /* 6118 */ 9999,
 /* 6119 */ 9999,
-/* 6120 */ 1467012,
+/* 6120 */ 1472012,
 /* 6121 */ 9999,
-/* 6122 */ 1467025,
+/* 6122 */ 1472025,
 /* 6123 */ 9999,
-/* 6124 */ 1467006,
+/* 6124 */ 1472006,
 /* 6125 */ 9999,
 /* 6126 */ 9999,
 /* 6127 */ 9999,
-/* 6128 */ 1476013,
+/* 6128 */ 1481013,
 /* 6129 */ 9999,
-/* 6130 */ 1476027,
+/* 6130 */ 1481027,
 /* 6131 */ 9999,
-/* 6132 */ 1476041,
+/* 6132 */ 1481041,
 /* 6133 */ 9999,
-/* 6134 */ 1477007,
+/* 6134 */ 1482007,
 /* 6135 */ 9999,
-/* 6136 */ 1476007,
+/* 6136 */ 1481007,
 /* 6137 */ 9999,
 /* 6138 */ 9999,
 /* 6139 */ 9999,
-/* 6140 */ 1503016,
+/* 6140 */ 1508016,
 /* 6141 */ 9999,
 /* 6142 */ 9999,
-/* 6143 */ 1513005,
-/* 6144 */ 1525005,
+/* 6143 */ 1518005,
+/* 6144 */ 1529005,
 /* 6145 */ 9999,
 /* 6146 */ 9999,
-/* 6147 */ 1503010,
+/* 6147 */ 1508010,
 /* 6148 */ 9999,
 /* 6149 */ 9999,
 /* 6150 */ 9999,
 /* 6151 */ 9999,
-/* 6152 */ 1574009,
+/* 6152 */ 1578009,
 /* 6153 */ 9999,
 /* 6154 */ 9999,
 /* 6155 */ 9999,
 /* 6156 */ 9999,
-/* 6157 */ 1578012,
+/* 6157 */ 1582012,
 /* 6158 */ 9999,
 /* 6159 */ 9999,
-/* 6160 */ 1582008,
+/* 6160 */ 1586008,
 /* 6161 */ 9999,
 /* 6162 */ 9999,
-/* 6163 */ 1582033,
+/* 6163 */ 1586033,
 /* 6164 */ 9999,
 /* 6165 */ 9999,
 /* 6166 */ 9999,
-/* 6167 */ 1582006,
+/* 6167 */ 1586006,
 /* 6168 */ 9999,
 /* 6169 */ 9999,
 /* 6170 */ 9999,
-/* 6171 */ 1591015,
+/* 6171 */ 1595015,
 /* 6172 */ 9999,
-/* 6173 */ 1591028,
+/* 6173 */ 1595028,
 /* 6174 */ 9999,
-/* 6175 */ 1591009,
+/* 6175 */ 1595009,
 /* 6176 */ 9999,
-/* 6177 */ 1602005,
+/* 6177 */ 1606005,
 /* 6178 */ 9999,
-/* 6179 */ 1602009,
+/* 6179 */ 1606009,
 /* 6180 */ 9999,
 /* 6181 */ 9999,
-/* 6182 */ 1606012,
+/* 6182 */ 1610012,
 /* 6183 */ 9999,
 /* 6184 */ 9999,
-/* 6185 */ 1606010,
+/* 6185 */ 1610010,
 /* 6186 */ 9999,
 /* 6187 */ 9999,
 /* 6188 */ 9999,
 /* 6189 */ 9999,
-/* 6190 */ 1619010,
+/* 6190 */ 1623010,
 /* 6191 */ 9999,
 /* 6192 */ 9999,
-/* 6193 */ 1513012,
+/* 6193 */ 1518012,
 /* 6194 */ 9999,
-/* 6195 */ 1515007,
-/* 6196 */ 1513010,
+/* 6195 */ 1520007,
+/* 6196 */ 1518010,
 /* 6197 */ 9999,
-/* 6198 */ 1513010,
+/* 6198 */ 1518010,
 /* 6199 */ 9999,
 /* 6200 */ 9999,
-/* 6201 */ 1513010,
+/* 6201 */ 1518010,
 /* 6202 */ 9999,
-/* 6203 */ 1513014,
+/* 6203 */ 1518014,
 /* 6204 */ 9999,
-/* 6205 */ 1513018,
+/* 6205 */ 1518018,
 /* 6206 */ 9999,
-/* 6207 */ 1513027,
+/* 6207 */ 1518027,
 /* 6208 */ 9999,
-/* 6209 */ 1513033,
+/* 6209 */ 1518033,
 /* 6210 */ 9999,
-/* 6211 */ 1515027,
-/* 6212 */ 1515009,
+/* 6211 */ 1520027,
+/* 6212 */ 1520009,
 /* 6213 */ 9999,
-/* 6214 */ 1515009,
+/* 6214 */ 1520009,
 /* 6215 */ 9999,
 /* 6216 */ 9999,
-/* 6217 */ 1515009,
+/* 6217 */ 1520009,
 /* 6218 */ 9999,
 /* 6219 */ 9999,
 /* 6220 */ 9999,
-/* 6221 */ 1526007,
+/* 6221 */ 1530007,
 /* 6222 */ 9999,
-/* 6223 */ 1525013,
+/* 6223 */ 1529013,
 /* 6224 */ 9999,
 /* 6225 */ 9999,
-/* 6226 */ 1525013,
+/* 6226 */ 1529013,
 /* 6227 */ 9999,
-/* 6228 */ 1526027,
-/* 6229 */ 1526009,
+/* 6228 */ 1530027,
+/* 6229 */ 1530009,
 /* 6230 */ 9999,
-/* 6231 */ 1526009,
+/* 6231 */ 1530009,
 /* 6232 */ 9999,
 /* 6233 */ 9999,
-/* 6234 */ 1526009,
+/* 6234 */ 1530009,
 /* 6235 */ 9999,
 /* 6236 */ 9999,
-/* 6237 */ 1628007,
+/* 6237 */ 1632007,
 /* 6238 */ 9999,
 /* 6239 */ 9999,
-/* 6240 */ 1628003,
+/* 6240 */ 1632003,
 /* 6241 */ 9999,
-/* 6242 */ 1628025,
-/* 6243 */ 1628009,
+/* 6242 */ 1632025,
+/* 6243 */ 1632009,
 /* 6244 */ 9999,
-/* 6245 */ 1628009,
+/* 6245 */ 1632009,
 /* 6246 */ 9999,
 /* 6247 */ 9999,
-/* 6248 */ 1628009,
+/* 6248 */ 1632009,
 /* 6249 */ 9999,
 /* 6250 */ 9999,
-/* 6251 */ 1633007,
-/* 6252 */ 1638007,
+/* 6251 */ 1637007,
+/* 6252 */ 1642007,
 /* 6253 */ 9999,
 /* 6254 */ 9999,
-/* 6255 */ 1632004,
+/* 6255 */ 1636004,
 /* 6256 */ 9999,
-/* 6257 */ 1633027,
-/* 6258 */ 1633009,
+/* 6257 */ 1637027,
+/* 6258 */ 1637009,
 /* 6259 */ 9999,
-/* 6260 */ 1633009,
+/* 6260 */ 1637009,
 /* 6261 */ 9999,
 /* 6262 */ 9999,
-/* 6263 */ 1634018,
-/* 6264 */ 1634016,
+/* 6263 */ 1638018,
+/* 6264 */ 1638016,
 /* 6265 */ 9999,
-/* 6266 */ 1634016,
+/* 6266 */ 1638016,
 /* 6267 */ 9999,
 /* 6268 */ 9999,
-/* 6269 */ 1634016,
+/* 6269 */ 1638016,
 /* 6270 */ 9999,
-/* 6271 */ 1638025,
-/* 6272 */ 1638009,
+/* 6271 */ 1642025,
+/* 6272 */ 1642009,
 /* 6273 */ 9999,
-/* 6274 */ 1638009,
+/* 6274 */ 1642009,
 /* 6275 */ 9999,
 /* 6276 */ 9999,
-/* 6277 */ 1638009,
+/* 6277 */ 1642009,
 /* 6278 */ 9999,
 /* 6279 */ 9999,
 /* 6280 */ 9999,
-/* 6281 */ 1674010,
+/* 6281 */ 1678010,
 /* 6282 */ 9999,
 /* 6283 */ 9999,
 /* 6284 */ 9999,
-/* 6285 */ 1676014,
+/* 6285 */ 1680014,
 /* 6286 */ 9999,
 /* 6287 */ 9999,
 /* 6288 */ 9999,
-/* 6289 */ 1678011,
+/* 6289 */ 1682011,
 /* 6290 */ 9999,
 /* 6291 */ 9999,
 /* 6292 */ 9999,
-/* 6293 */ 1680013,
+/* 6293 */ 1684013,
 /* 6294 */ 9999,
 /* 6295 */ 9999,
 /* 6296 */ 9999,
-/* 6297 */ 1682014,
+/* 6297 */ 1686014,
 /* 6298 */ 9999,
 /* 6299 */ 9999,
 /* 6300 */ 9999,
-/* 6301 */ 1684013,
+/* 6301 */ 1688013,
 /* 6302 */ 9999,
-/* 6303 */ 1686005,
+/* 6303 */ 1690005,
 /* 6304 */ 9999,
-/* 6305 */ 1686011,
+/* 6305 */ 1690011,
 /* 6306 */ 9999,
 /* 6307 */ 9999,
-/* 6308 */ 1688009,
+/* 6308 */ 1692009,
 /* 6309 */ 9999,
 /* 6310 */ 9999,
-/* 6311 */ 1688005,
+/* 6311 */ 1692005,
 /* 6312 */ 9999,
 /* 6313 */ 9999,
 /* 6314 */ 9999,
-/* 6315 */ 1691009,
+/* 6315 */ 1695009,
 /* 6316 */ 9999,
-/* 6317 */ 1732005,
-/* 6318 */ 1732020,
+/* 6317 */ 1736005,
+/* 6318 */ 1736020,
 /* 6319 */ 9999,
 /* 6320 */ 9999,
-/* 6321 */ 1732013,
+/* 6321 */ 1736013,
 /* 6322 */ 9999,
-/* 6323 */ 1789005,
-/* 6324 */ 1789020,
+/* 6323 */ 1793005,
+/* 6324 */ 1793020,
 /* 6325 */ 9999,
 /* 6326 */ 9999,
-/* 6327 */ 1816009,
+/* 6327 */ 1820009,
 /* 6328 */ 9999,
 /* 6329 */ 9999,
-/* 6330 */ 1789013,
+/* 6330 */ 1793013,
 /* 6331 */ 9999,
 /* 6332 */ 9999,
 /* 6333 */ 9999,
-/* 6334 */ 1851009,
+/* 6334 */ 1855009,
 /* 6335 */ 9999,
 /* 6336 */ 9999,
-/* 6337 */ 1844009,
+/* 6337 */ 1848009,
 /* 6338 */ 9999,
-/* 6339 */ 1870005,
+/* 6339 */ 1874005,
 /* 6340 */ 9999,
 /* 6341 */ 9999,
 /* 6342 */ 9999,
-/* 6343 */ 1870013,
+/* 6343 */ 1874013,
 /* 6344 */ 9999,
 /* 6345 */ 9999,
 /* 6346 */ 9999,
-/* 6347 */ 1732021,
+/* 6347 */ 1736021,
 /* 6348 */ 9999,
 /* 6349 */ 9999,
 /* 6350 */ 9999,
-/* 6351 */ 1732033,
+/* 6351 */ 1736033,
 /* 6352 */ 9999,
 /* 6353 */ 9999,
 /* 6354 */ 9999,
-/* 6355 */ 1789021,
+/* 6355 */ 1793021,
 /* 6356 */ 9999,
 /* 6357 */ 9999,
 /* 6358 */ 9999,
-/* 6359 */ 1789033,
+/* 6359 */ 1793033,
 /* 6360 */ 9999,
 /* 6361 */ 9999,
 /* 6362 */ 9999,
-/* 6363 */ 1880007,
+/* 6363 */ 1884007,
 /* 6364 */ 9999,
-/* 6365 */ 1925005,
+/* 6365 */ 1929005,
 /* 6366 */ 9999,
 /* 6367 */ 9999,
 /* 6368 */ 9999,
-/* 6369 */ 1925010,
+/* 6369 */ 1929010,
 /* 6370 */ 9999,
-/* 6371 */ 1931005,
-/* 6372 */ 1931020,
+/* 6371 */ 1935005,
+/* 6372 */ 1935020,
 /* 6373 */ 9999,
 /* 6374 */ 9999,
-/* 6375 */ 1931013,
+/* 6375 */ 1935013,
 /* 6376 */ 9999,
 /* 6377 */ 9999,
 /* 6378 */ 9999,
-/* 6379 */ 1931021,
+/* 6379 */ 1935021,
 /* 6380 */ 9999,
 /* 6381 */ 9999,
 /* 6382 */ 9999,
-/* 6383 */ 1931033,
+/* 6383 */ 1935033,
 /* 6384 */ 9999,
-/* 6385 */ 1974005,
+/* 6385 */ 1978005,
 /* 6386 */ 9999,
 /* 6387 */ 9999,
-/* 6388 */ 1974010,
+/* 6388 */ 1978010,
 /* 6389 */ 9999,
-/* 6390 */ 1976005,
+/* 6390 */ 1980005,
 /* 6391 */ 9999,
 /* 6392 */ 9999,
-/* 6393 */ 1976010,
+/* 6393 */ 1980010,
 /* 6394 */ 9999,
 /* 6395 */ 9999,
 /* 6396 */ 9999,
-/* 6397 */ 1978018,
+/* 6397 */ 1982018,
 /* 6398 */ 9999,
-/* 6399 */ 1978035,
+/* 6399 */ 1982035,
 /* 6400 */ 9999,
 /* 6401 */ 9999,
-/* 6402 */ 1978012,
+/* 6402 */ 1982012,
 /* 6403 */ 9999,
 /* 6404 */ 9999,
 /* 6405 */ 9999,
-/* 6406 */ 1980018,
+/* 6406 */ 1984018,
 /* 6407 */ 9999,
-/* 6408 */ 1980035,
+/* 6408 */ 1984035,
 /* 6409 */ 9999,
 /* 6410 */ 9999,
-/* 6411 */ 1980012,
+/* 6411 */ 1984012,
 /* 6412 */ 9999,
-/* 6413 */ 1982005,
+/* 6413 */ 1986005,
 /* 6414 */ 9999,
-/* 6415 */ 1982013,
+/* 6415 */ 1986013,
 /* 6416 */ 9999,
 /* 6417 */ 9999,
-/* 6418 */ 1987018,
+/* 6418 */ 1991018,
 /* 6419 */ 9999,
-/* 6420 */ 1987016,
+/* 6420 */ 1991016,
 /* 6421 */ 9999,
 /* 6422 */ 9999,
-/* 6423 */ 1989018,
+/* 6423 */ 1993018,
 /* 6424 */ 9999,
-/* 6425 */ 1989016,
+/* 6425 */ 1993016,
 /* 6426 */ 9999,
 /* 6427 */ 9999,
-/* 6428 */ 1991009,
+/* 6428 */ 1995009,
 /* 6429 */ 9999,
-/* 6430 */ 1991005,
+/* 6430 */ 1995005,
 /* 6431 */ 9999,
 /* 6432 */ 9999,
-/* 6433 */ 1993009,
+/* 6433 */ 1997009,
 /* 6434 */ 9999,
-/* 6435 */ 1993005,
+/* 6435 */ 1997005,
 /* 6436 */ 9999,
 /* 6437 */ 9999,
-/* 6438 */ 1995009,
+/* 6438 */ 1999009,
 /* 6439 */ 9999,
-/* 6440 */ 1995005,
+/* 6440 */ 1999005,
 /* 6441 */ 9999,
 /* 6442 */ 9999,
-/* 6443 */ 1997009,
+/* 6443 */ 2001009,
 /* 6444 */ 9999,
-/* 6445 */ 1997005,
+/* 6445 */ 2001005,
 /* 6446 */ 9999,
 /* 6447 */ 9999,
-/* 6448 */ 1999009,
+/* 6448 */ 2003009,
 /* 6449 */ 9999,
 /* 6450 */ 9999,
-/* 6451 */ 1999005,
+/* 6451 */ 2003005,
 /* 6452 */ 9999,
-/* 6453 */ 2001005,
+/* 6453 */ 2005005,
 /* 6454 */ 9999,
-/* 6455 */ 2001010,
+/* 6455 */ 2005010,
 /* 6456 */ 9999,
-/* 6457 */ 2006005,
+/* 6457 */ 2010005,
 /* 6458 */ 9999,
-/* 6459 */ 2006021,
+/* 6459 */ 2010021,
 /* 6460 */ 9999,
-/* 6461 */ 2006010,
+/* 6461 */ 2010010,
 /* 6462 */ 9999,
-/* 6463 */ 2008005,
+/* 6463 */ 2012005,
 /* 6464 */ 9999,
-/* 6465 */ 2008010,
+/* 6465 */ 2012010,
 /* 6466 */ 9999,
 /* 6467 */ 9999,
-/* 6468 */ 2013009,
+/* 6468 */ 2017009,
 /* 6469 */ 9999,
-/* 6470 */ 2013027,
+/* 6470 */ 2017027,
 /* 6471 */ 9999,
-/* 6472 */ 2013005,
+/* 6472 */ 2017005,
 /* 6473 */ 9999,
-/* 6474 */ 2015005,
+/* 6474 */ 2019005,
 /* 6475 */ 9999,
-/* 6476 */ 2015010,
+/* 6476 */ 2019010,
 /* 6477 */ 9999,
-/* 6478 */ 2021005,
+/* 6478 */ 2025005,
 /* 6479 */ 9999,
-/* 6480 */ 2021021,
+/* 6480 */ 2025021,
 /* 6481 */ 9999,
-/* 6482 */ 2021010,
+/* 6482 */ 2025010,
 /* 6483 */ 9999,
-/* 6484 */ 2023005,
+/* 6484 */ 2027005,
 /* 6485 */ 9999,
-/* 6486 */ 2023021,
+/* 6486 */ 2027021,
 /* 6487 */ 9999,
-/* 6488 */ 2023010,
+/* 6488 */ 2027010,
 /* 6489 */ 9999,
-/* 6490 */ 2025005,
+/* 6490 */ 2029005,
 /* 6491 */ 9999,
-/* 6492 */ 2025021,
+/* 6492 */ 2029021,
 /* 6493 */ 9999,
-/* 6494 */ 2025010,
+/* 6494 */ 2029010,
 /* 6495 */ 9999,
-/* 6496 */ 2027005,
+/* 6496 */ 2031005,
 /* 6497 */ 9999,
-/* 6498 */ 2027010,
+/* 6498 */ 2031010,
 /* 6499 */ 9999,
-/* 6500 */ 2032005,
+/* 6500 */ 2036005,
 /* 6501 */ 9999,
-/* 6502 */ 2032021,
+/* 6502 */ 2036021,
 /* 6503 */ 9999,
-/* 6504 */ 2032010,
+/* 6504 */ 2036010,
 /* 6505 */ 9999,
-/* 6506 */ 2034005,
+/* 6506 */ 2038005,
 /* 6507 */ 9999,
-/* 6508 */ 2034021,
+/* 6508 */ 2038021,
 /* 6509 */ 9999,
-/* 6510 */ 2034010,
+/* 6510 */ 2038010,
 /* 6511 */ 9999,
-/* 6512 */ 2036005,
+/* 6512 */ 2040005,
 /* 6513 */ 9999,
-/* 6514 */ 2036010,
+/* 6514 */ 2040010,
 /* 6515 */ 9999,
-/* 6516 */ 2041005,
+/* 6516 */ 2045005,
 /* 6517 */ 9999,
-/* 6518 */ 2041027,
+/* 6518 */ 2045027,
 /* 6519 */ 9999,
-/* 6520 */ 2041010,
+/* 6520 */ 2045010,
 /* 6521 */ 9999,
-/* 6522 */ 2043005,
+/* 6522 */ 2047005,
 /* 6523 */ 9999,
-/* 6524 */ 2043027,
+/* 6524 */ 2047027,
 /* 6525 */ 9999,
-/* 6526 */ 2043010,
+/* 6526 */ 2047010,
 /* 6527 */ 9999,
-/* 6528 */ 2045005,
+/* 6528 */ 2049005,
 /* 6529 */ 9999,
-/* 6530 */ 2045010,
+/* 6530 */ 2049010,
 /* 6531 */ 9999,
-/* 6532 */ 2054005,
+/* 6532 */ 2058005,
 /* 6533 */ 9999,
-/* 6534 */ 2054021,
+/* 6534 */ 2058021,
 /* 6535 */ 9999,
-/* 6536 */ 2054010,
+/* 6536 */ 2058010,
 /* 6537 */ 9999,
-/* 6538 */ 2056005,
+/* 6538 */ 2060005,
 /* 6539 */ 9999,
-/* 6540 */ 2056021,
+/* 6540 */ 2060021,
 /* 6541 */ 9999,
-/* 6542 */ 2056010,
+/* 6542 */ 2060010,
 /* 6543 */ 9999,
-/* 6544 */ 2058005,
+/* 6544 */ 2062005,
 /* 6545 */ 9999,
-/* 6546 */ 2058023,
+/* 6546 */ 2062023,
 /* 6547 */ 9999,
-/* 6548 */ 2058010,
+/* 6548 */ 2062010,
 /* 6549 */ 9999,
-/* 6550 */ 2060005,
+/* 6550 */ 2064005,
 /* 6551 */ 9999,
-/* 6552 */ 2060023,
+/* 6552 */ 2064023,
 /* 6553 */ 9999,
-/* 6554 */ 2060010,
+/* 6554 */ 2064010,
 /* 6555 */ 9999,
-/* 6556 */ 2062005,
+/* 6556 */ 2066005,
 /* 6557 */ 9999,
-/* 6558 */ 2062023,
+/* 6558 */ 2066023,
 /* 6559 */ 9999,
-/* 6560 */ 2062010,
+/* 6560 */ 2066010,
 /* 6561 */ 9999,
-/* 6562 */ 2064005,
+/* 6562 */ 2068005,
 /* 6563 */ 9999,
-/* 6564 */ 2064023,
+/* 6564 */ 2068023,
 /* 6565 */ 9999,
-/* 6566 */ 2064010,
+/* 6566 */ 2068010,
 /* 6567 */ 9999,
-/* 6568 */ 2066005,
+/* 6568 */ 2070005,
 /* 6569 */ 9999,
-/* 6570 */ 2066010,
+/* 6570 */ 2070010,
 /* 6571 */ 9999,
-/* 6572 */ 2071005,
+/* 6572 */ 2075005,
 /* 6573 */ 9999,
-/* 6574 */ 2071021,
+/* 6574 */ 2075021,
 /* 6575 */ 9999,
-/* 6576 */ 2071010,
+/* 6576 */ 2075010,
 /* 6577 */ 9999,
-/* 6578 */ 2073005,
+/* 6578 */ 2077005,
 /* 6579 */ 9999,
-/* 6580 */ 2073010,
+/* 6580 */ 2077010,
 /* 6581 */ 9999,
-/* 6582 */ 2078005,
+/* 6582 */ 2082005,
 /* 6583 */ 9999,
-/* 6584 */ 2078022,
+/* 6584 */ 2082022,
 /* 6585 */ 9999,
-/* 6586 */ 2078011,
+/* 6586 */ 2082011,
 /* 6587 */ 9999,
-/* 6588 */ 2080005,
+/* 6588 */ 2084005,
 /* 6589 */ 9999,
-/* 6590 */ 2080010,
+/* 6590 */ 2084010,
 /* 6591 */ 9999,
-/* 6592 */ 2085005,
+/* 6592 */ 2089005,
 /* 6593 */ 9999,
-/* 6594 */ 2085022,
+/* 6594 */ 2089022,
 /* 6595 */ 9999,
-/* 6596 */ 2085011,
+/* 6596 */ 2089011,
 /* 6597 */ 9999,
-/* 6598 */ 2087005,
+/* 6598 */ 2091005,
 /* 6599 */ 9999,
-/* 6600 */ 2087011,
+/* 6600 */ 2091011,
 /* 6601 */ 9999,
-/* 6602 */ 2092005,
+/* 6602 */ 2096005,
 /* 6603 */ 9999,
-/* 6604 */ 2092025,
+/* 6604 */ 2096025,
 /* 6605 */ 9999,
-/* 6606 */ 2092011,
+/* 6606 */ 2096011,
 /* 6607 */ 9999,
-/* 6608 */ 2094005,
+/* 6608 */ 2098005,
 /* 6609 */ 9999,
-/* 6610 */ 2094011,
+/* 6610 */ 2098011,
 /* 6611 */ 9999,
-/* 6612 */ 2099005,
+/* 6612 */ 2103005,
 /* 6613 */ 9999,
-/* 6614 */ 2099024,
+/* 6614 */ 2103024,
 /* 6615 */ 9999,
-/* 6616 */ 2099011,
+/* 6616 */ 2103011,
 /* 6617 */ 9999,
-/* 6618 */ 2101005,
+/* 6618 */ 2105005,
 /* 6619 */ 9999,
-/* 6620 */ 2101011,
+/* 6620 */ 2105011,
 /* 6621 */ 9999,
-/* 6622 */ 2106003,
+/* 6622 */ 2110003,
 /* 6623 */ 9999,
-/* 6624 */ 2106020,
+/* 6624 */ 2110020,
 /* 6625 */ 9999,
-/* 6626 */ 2106034,
+/* 6626 */ 2110034,
 /* 6627 */ 9999,
-/* 6628 */ 2106009,
+/* 6628 */ 2110009,
 /* 6629 */ 9999,
-/* 6630 */ 2156005,
+/* 6630 */ 2160005,
 /* 6631 */ 9999,
-/* 6632 */ 2156011,
+/* 6632 */ 2160011,
 /* 6633 */ 9999,
-/* 6634 */ 2164005,
+/* 6634 */ 2168005,
 /* 6635 */ 9999,
-/* 6636 */ 2164020,
+/* 6636 */ 2168020,
 /* 6637 */ 9999,
-/* 6638 */ 2164010,
+/* 6638 */ 2168010,
 /* 6639 */ 9999,
-/* 6640 */ 2166005,
+/* 6640 */ 2170005,
 /* 6641 */ 9999,
-/* 6642 */ 2166027,
+/* 6642 */ 2170027,
 /* 6643 */ 9999,
-/* 6644 */ 2166010,
+/* 6644 */ 2170010,
 /* 6645 */ 9999,
-/* 6646 */ 2168005,
+/* 6646 */ 2172005,
 /* 6647 */ 9999,
-/* 6648 */ 2168027,
+/* 6648 */ 2172027,
 /* 6649 */ 9999,
-/* 6650 */ 2168010,
+/* 6650 */ 2172010,
 /* 6651 */ 9999,
-/* 6652 */ 2170005,
+/* 6652 */ 2174005,
 /* 6653 */ 9999,
-/* 6654 */ 2170028,
+/* 6654 */ 2174028,
 /* 6655 */ 9999,
-/* 6656 */ 2170010,
+/* 6656 */ 2174010,
 /* 6657 */ 9999,
-/* 6658 */ 2172005,
+/* 6658 */ 2176005,
 /* 6659 */ 9999,
-/* 6660 */ 2172027,
+/* 6660 */ 2176027,
 /* 6661 */ 9999,
-/* 6662 */ 2172010,
+/* 6662 */ 2176010,
 /* 6663 */ 9999,
-/* 6664 */ 2174005,
+/* 6664 */ 2178005,
 /* 6665 */ 9999,
-/* 6666 */ 2174027,
+/* 6666 */ 2178027,
 /* 6667 */ 9999,
-/* 6668 */ 2174010,
+/* 6668 */ 2178010,
 /* 6669 */ 9999,
-/* 6670 */ 2176005,
+/* 6670 */ 2180005,
 /* 6671 */ 9999,
-/* 6672 */ 2176027,
+/* 6672 */ 2180027,
 /* 6673 */ 9999,
-/* 6674 */ 2176010,
+/* 6674 */ 2180010,
 /* 6675 */ 9999,
-/* 6676 */ 2178005,
+/* 6676 */ 2182005,
 /* 6677 */ 9999,
-/* 6678 */ 2178026,
+/* 6678 */ 2182026,
 /* 6679 */ 9999,
-/* 6680 */ 2178010,
+/* 6680 */ 2182010,
 /* 6681 */ 9999,
-/* 6682 */ 2180005,
+/* 6682 */ 2184005,
 /* 6683 */ 9999,
-/* 6684 */ 2180030,
+/* 6684 */ 2184030,
 /* 6685 */ 9999,
-/* 6686 */ 2180010,
+/* 6686 */ 2184010,
 /* 6687 */ 9999,
-/* 6688 */ 2182005,
+/* 6688 */ 2186005,
 /* 6689 */ 9999,
-/* 6690 */ 2182030,
+/* 6690 */ 2186030,
 /* 6691 */ 9999,
-/* 6692 */ 2182010,
+/* 6692 */ 2186010,
 /* 6693 */ 9999,
-/* 6694 */ 2184005,
+/* 6694 */ 2188005,
 /* 6695 */ 9999,
-/* 6696 */ 2184027,
+/* 6696 */ 2188027,
 /* 6697 */ 9999,
-/* 6698 */ 2184010,
+/* 6698 */ 2188010,
 /* 6699 */ 9999,
-/* 6700 */ 2186005,
+/* 6700 */ 2190005,
 /* 6701 */ 9999,
-/* 6702 */ 2186011,
+/* 6702 */ 2190011,
 /* 6703 */ 9999,
-/* 6704 */ 2191003,
+/* 6704 */ 2195003,
 /* 6705 */ 9999,
-/* 6706 */ 2191017,
+/* 6706 */ 2195017,
 /* 6707 */ 9999,
-/* 6708 */ 2191006,
+/* 6708 */ 2195006,
 /* 6709 */ 9999,
-/* 6710 */ 2204005,
+/* 6710 */ 2208005,
 /* 6711 */ 9999,
-/* 6712 */ 2204011,
+/* 6712 */ 2208011,
 /* 6713 */ 9999,
-/* 6714 */ 2215003,
+/* 6714 */ 2219003,
 /* 6715 */ 9999,
-/* 6716 */ 2213003,
+/* 6716 */ 2217003,
 /* 6717 */ 9999,
-/* 6718 */ 2215005,
-/* 6719 */ 2242003,
+/* 6718 */ 2219005,
+/* 6719 */ 2246003,
 /* 6720 */ 9999,
-/* 6721 */ 2215011,
+/* 6721 */ 2219011,
 /* 6722 */ 9999,
 /* 6723 */ 9999,
-/* 6724 */ 2215011,
+/* 6724 */ 2219011,
 /* 6725 */ 9999,
 /* 6726 */ 9999,
-/* 6727 */ 2242009,
-/* 6728 */ 2242005,
+/* 6727 */ 2246009,
+/* 6728 */ 2246005,
 /* 6729 */ 9999,
-/* 6730 */ 2242005,
+/* 6730 */ 2246005,
 /* 6731 */ 9999,
 /* 6732 */ 9999,
-/* 6733 */ 2242005,
+/* 6733 */ 2246005,
 0
 };
 /* only for BIGHASH (see art.c)
@@ -35880,6 +35884,7 @@ int yytransparent(int n)
       case 6717: return 1; break;
       case 6725: return 1; break;
    }
+   return 0;
 }
 char * yyprintname(int n)
 {

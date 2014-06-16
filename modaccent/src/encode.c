@@ -2364,6 +2364,9 @@ write_transparent()
         yy_11_1 = ((yy)"   }");
         Put(yy_11_1);
         Nl();
+        yy_11_1 = ((yy)"   return 0;");
+        Put(yy_11_1);
+        Nl();
         yy_13_1 = ((yy)"}");
         Put(yy_13_1);
         Nl();
