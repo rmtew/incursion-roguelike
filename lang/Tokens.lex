@@ -435,7 +435,7 @@ YYSTYPE DoKeywords(const char *text)
   
 void CatLiteral(const char*str)
   {
-    int32 i;
+    yy_size_t i;
     for(i=0;i<yyleng;i++)
       if (str[i] != '\"')
         {

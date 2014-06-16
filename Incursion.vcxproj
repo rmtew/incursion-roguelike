@@ -486,7 +486,7 @@ cd $(ProjectDir)
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">src\yygram.cpp;src\yygram.h;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="lang\tokens.lex">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">FLEX -B -i -o.\SRC\tokens.cpp .\lang\Tokens.Lex
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">FLEX --wincompat -B -i -o.\SRC\tokens.cpp .\lang\Tokens.Lex
 
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\SRC\tokens.cpp;%(Outputs)</Outputs>

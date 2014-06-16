@@ -24,8 +24,8 @@ Windows build instructions
 
 *Dependencies:*
 
-  * libtcod.dll: [bitbucket project](https://bitbucket.org/jice/libtcod).
-  * flex.exe: [flex-2.5.4a-1-bin.zip](http://gnuwin32.sourceforge.net/downlinks/flex-bin-zip.php) 0.2 MB ([hosting web page](http://gnuwin32.sourceforge.net/packages/flex.htm)).
+  * libtcod.dll: [libtcod@bitbucket](https://bitbucket.org/jice/libtcod).
+  * flex.exe: [winflexbison@sourceforge](http://sourceforge.net/projects/winflexbison/) 0.7 MB (extract and rename it).
 
 *Compilation instructions:*
 
