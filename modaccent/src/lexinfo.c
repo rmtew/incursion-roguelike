@@ -324,7 +324,7 @@ yy yy_16_5_1;
 yy yy_16_6_1;
 yy yy_16_8_1;
 yy yy_16_8_2;
-yy_1_1 = ((yy)"yygrammar.h");
+yy_1_1 = ((yy)"yygram.h");
 OpenOutput(yy_1_1);
 yy_2_1 = ((yy)"#ifndef YYSTYPE");
 Put(yy_2_1);
