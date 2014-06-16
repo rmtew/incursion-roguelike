@@ -304,6 +304,8 @@ put_actions_LHSKEY(yyin_1)
             yy_2_1_2_2_3 = ((yy)yy_2_1_2_2[3]);
             yyv_FP = yy_2_1_2_2_3;
             Nl();
+            yy_2_1_6_1 = ((yy)"int ");
+            Put(yy_2_1_6_1);
             /* Write the function name. */
             yy_2_1_4_1 = yyv_Id;
             id_to_string(yy_2_1_4_1, &yy_2_1_4_2);
@@ -317,6 +319,7 @@ put_actions_LHSKEY(yyin_1)
             handle_formal_params_1(yy_2_1_7_1);
             yy_2_1_8_1 = ((yy)")");
             Put(yy_2_1_8_1);
+            Nl();
 
             yy_2_1_10 = yyb + 0;
             yy_2_1_10[0] = 2;
@@ -330,7 +333,7 @@ put_actions_LHSKEY(yyin_1)
             if (yy_2_1_12 == (yy) yyu) yyErr(1,121);
             yyv_Clauses = yy_2_1_12;
 
-            yy_2_1_13_1 = ((yy)" {");
+            yy_2_1_13_1 = ((yy)"{");
             Put(yy_2_1_13_1);
             Nl();
 
@@ -388,6 +391,9 @@ yysl_5_1_2_1_21 : ;
             yy_2_1_22_1 = (yy)(-((long)yy_2_1_22_1_1));
             indentation(yy_2_1_22_1);
             indent();
+            yy_2_1_24_1 = ((yy)"return 0;");
+            Put(yy_2_1_24_1);
+            Nl();
             yy_2_1_24_1 = ((yy)"}");
             Put(yy_2_1_24_1);
             Nl();

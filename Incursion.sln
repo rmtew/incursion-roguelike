@@ -1,6 +1,11 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual C++ Express 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Incursion", "Incursion.vcxproj", "{9040FAAA-3DBF-41E9-BF70-4FACC525DC84}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8CBF1412-2722-4FC4-9801-44943CC0BCB2} = {8CBF1412-2722-4FC4-9801-44943CC0BCB2}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "modaccent", "modaccent\modaccent.vcxproj", "{8CBF1412-2722-4FC4-9801-44943CC0BCB2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,6 +17,10 @@ Global
 		{9040FAAA-3DBF-41E9-BF70-4FACC525DC84}.Debug|Win32.Build.0 = Debug|Win32
 		{9040FAAA-3DBF-41E9-BF70-4FACC525DC84}.Release|Win32.ActiveCfg = Release|Win32
 		{9040FAAA-3DBF-41E9-BF70-4FACC525DC84}.Release|Win32.Build.0 = Release|Win32
+		{8CBF1412-2722-4FC4-9801-44943CC0BCB2}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8CBF1412-2722-4FC4-9801-44943CC0BCB2}.Debug|Win32.Build.0 = Debug|Win32
+		{8CBF1412-2722-4FC4-9801-44943CC0BCB2}.Release|Win32.ActiveCfg = Release|Win32
+		{8CBF1412-2722-4FC4-9801-44943CC0BCB2}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

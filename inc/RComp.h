@@ -18,7 +18,8 @@ enum btype { SYS_OBJ, LOC_VAR, MOD_FUNC, GLOB_VAR, MEM_VAR, MEM_FUNC,
 #define DT_STRING 6
 #define DT_BOOL   7
 #define DT_RECT   8
-#define DT_UNKNOWN 9
+#define DT_INT16  9
+#define DT_UNKNOWN 10
 
 
 #define RT_CONSTANT    0

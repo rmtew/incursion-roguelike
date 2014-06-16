@@ -303,6 +303,7 @@ TextVal ActionVerbs[] = {
 
 TextVal DataTypeNames[] = {
   { DT_VOID, "void" },
+  { DT_INT16, "int16" },
   { DT_INT32, "int32" },
   { DT_HOBJ, "hObj" },
   { DT_RID, "rID" },

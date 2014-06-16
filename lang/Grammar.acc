@@ -122,23 +122,20 @@ EffectValues ValArray[32];
 
 #pragma warning (disable : 4508)
 
-yyerror(const char*msg)
-{
+int yyerror(const char*msg) {
    Errors++;
    T1->Color(RED);
    T1->CWrite(Format("\"%s\" (%d): %s\n", preprocFilename, yypos, msg));
    longjmp(jb,1);
 }
 
-yywarning(const char*msg)
-{
+void yywarning(const char*msg) {
    T1->Color(GREY);
    T1->CWrite(Format("\"%s\" (%d): %s\n", preprocFilename,  yypos, msg));
 }
 
 
-extern "C" yywrap()
-{
+extern "C" int yywrap() {
    return 1;
 }
 
@@ -1239,6 +1236,7 @@ prototype: NOTDONE;
 
 type_name<ty>: 
     VOID          { *ty = DT_VOID; }
+  | INT16         { *ty = DT_INT16; }
   | INT32         { *ty = DT_INT32; }
   | HOBJ          { *ty = DT_HOBJ; }
   | HTEXT         { *ty = DT_HTEXT; }
@@ -1248,7 +1246,7 @@ type_name<ty>:
   ;
 
                                                      
-s_prototype:  { BSysFunc *b; }
+s_prototype:  { BSysFunc *b; } 
   SYSTEM type_name<ty> cexpr3<ot> SCOPE_OPER IDENT<fn> '('
     { if (is_res(ot)) {
         if (theSymTab.GetBinding(fn,0,0,RES_FUNC))

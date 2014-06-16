@@ -568,7 +568,7 @@ ENCODE()
         yy_65_1 = ((yy)"];");
         Put(yy_65_1);
         Nl();
-        yy_67_1 = ((yy)"init_dirsets() {");
+        yy_67_1 = ((yy)"void init_dirsets() {");
         Put(yy_67_1);
         Nl();
         yy_69_1 = yyv_LhsKeys;
@@ -580,11 +580,8 @@ ENCODE()
         yy_73_1 = ((yy)"extern int yydirset();");
         Put(yy_73_1);
         Nl();
-        yy_75_1 = ((yy)"int yydirset(i,j)");
+        yy_75_1 = ((yy)"int yydirset(int i, int j)");
         Put(yy_75_1);
-        Nl();
-        yy_77_1 = ((yy)"   int i,j;");
-        Put(yy_77_1);
         Nl();
         yy_79_1 = ((yy)"{");
         Put(yy_79_1);
@@ -2352,11 +2349,8 @@ write_transparent()
         yy_1 = yyglov_LHS_List;
         if (yy_1 == (yy) yyu) yyErr(1,607);
         yyv_LhsKeys = yy_1;
-        yy_2_1 = ((yy)"int yytransparent(n)");
+        yy_2_1 = ((yy)"int yytransparent(int n)");
         Put(yy_2_1);
-        Nl();
-        yy_4_1 = ((yy)"   int n;");
-        Put(yy_4_1);
         Nl();
         yy_6_1 = ((yy)"{");
         Put(yy_6_1);
@@ -2833,11 +2827,8 @@ write_printnames()
         yy_1 = yyglov_LHS_List;
         if (yy_1 == (yy) yyu) yyErr(1,711);
         yyv_LhsKeys = yy_1;
-        yy_2_1 = ((yy)"char * yyprintname(n)");
+        yy_2_1 = ((yy)"char * yyprintname(int n)");
         Put(yy_2_1);
-        Nl();
-        yy_4_1 = ((yy)"   int n;");
-        Put(yy_4_1);
         Nl();
         yy_6_1 = ((yy)"{");
         Put(yy_6_1);

@@ -45,7 +45,7 @@ system T_GAME      theGame  == SOBJ_GAME;
  *                                Class Object                               *
  *****************************************************************************/
 
-system string  T_OBJECT::Name(int32 fl=0);
+system string  T_OBJECT::Name(int16 fl=0);
 system string  T_OBJECT::Describe(hObj:T_PLAYER);
 
 /*****************************************************************************
