@@ -1,0 +1,32 @@
+typedef struct {long attr[2];} yyATTRIBUTES;
+#define YYSTYPE yyATTRIBUTES
+extern YYSTYPE yylval;
+
+#define Ident 257
+#define Char 258
+#define Number 259
+#define CodeBlock 260
+#define yytk_PERCENT_g_BLANK_e_BLANK_n_BLANK_t_BLANK_l_BLANK_e_BLANK 261
+#define yytk_PERCENT_z_BLANK_e_BLANK_r_BLANK_o_BLANK 262
+#define yytk_PERCENT_o_BLANK_u_BLANK_t_BLANK 263
+#define yytk_PERCENT_i_BLANK_n_BLANK 264
+#define yytk_GREATER 265
+#define yytk_LESS 266
+#define yytk_PERCENT_c_BLANK_o_BLANK_n_BLANK_f_BLANK_i_BLANK_l_BLANK_t_BLANK_e_BLANK_r_BLANK 267
+#define yytk_PERCENT_l_BLANK_o_BLANK_n_BLANK_g_BLANK 268
+#define yytk_PERCENT_s_BLANK_h_BLANK_o_BLANK_r_BLANK_t_BLANK 269
+#define yytk_PERCENT_t_BLANK_a_BLANK_i_BLANK_l_BLANK 270
+#define yytk_RPAREN 271
+#define yytk_RPAREN_ASTERISK 272
+#define yytk_RPAREN_QUESTIONM 273
+#define yytk_LPAREN 274
+#define yytk_PERCENT_d_BLANK_i_BLANK_s_BLANK_f_BLANK_i_BLANK_l_BLANK_t_BLANK_e_BLANK_r_BLANK 275
+#define yytk_PERCENT_p_BLANK_r_BLANK_i_BLANK_o_BLANK 276
+#define yytk_BAR 277
+#define yytk_COLON 278
+#define yytk_PERCENT_n_BLANK_o_BLANK_d_BLANK_e_BLANK_f_BLANK_a_BLANK_u_BLANK_l_BLANK_t_BLANK 279
+#define yytk_PERCENT_d_BLANK_e_BLANK_f_BLANK_a_BLANK_u_BLANK_l_BLANK_t_BLANK 280
+#define yytk_COMMA 281
+#define yytk_SEMICOLON 282
+#define yytk_PERCENT_t_BLANK_o_BLANK_k_BLANK_e_BLANK_n_BLANK 283
+#define yytk_PERCENT_p_BLANK_r_BLANK_e_BLANK_l_BLANK_u_BLANK_d_BLANK_e_BLANK 284
