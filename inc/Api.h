@@ -16,7 +16,7 @@
 
 #define char       int32
 #define bool       int32
-#define int16      int32
+//#define int16      int32
 #define int8       int32
 #define EvReturn   int32
 #define uint32     int32
@@ -55,19 +55,19 @@ system string  T_OBJECT::Describe(hObj:T_PLAYER);
 system rID     T_MAP::dID;
 system int32   T_MAP::Depth;
 
-system bool    T_MAP::InBounds(int32 x,int32 y);
-system int32   T_MAP::GlyphAt(int32 x, int32 y);
-system int32   T_MAP::FlagsAt(int32 x, int32 y);
-system bool    T_MAP::SolidAt(int32 x, int32 y);
-system bool    T_MAP::TreeAt(int32 x, int32 y);
-system bool    T_MAP::FallAt(int32 x, int32 y);
-system bool    T_MAP::OpaqueAt(int32 x, int32 y);
-system bool    T_MAP::LightAt(int32 x, int32 y);
-system bool    T_MAP::BrightAt(int32 x, int32 y);
-system rID     T_MAP::RegionAt(int32 x, int32 y);
-system rID     T_MAP::TerrainAt(int32 x, int32 y);
-system int32   T_MAP::SizeX();
-system int32   T_MAP::SizeY();
+system bool    T_MAP::InBounds(int16 x,int16 y);
+system int32   T_MAP::GlyphAt(int16 x, int16 y);
+system int32   T_MAP::FlagsAt(int16 x, int16 y);
+system bool    T_MAP::SolidAt(int16 x, int16 y);
+system bool    T_MAP::TreeAt(int16 x, int16 y);
+system bool    T_MAP::FallAt(int16 x, int16 y);
+system bool    T_MAP::OpaqueAt(int16 x, int16 y);
+system bool    T_MAP::LightAt(int16 x, int16 y);
+system bool    T_MAP::BrightAt(int16 x, int16 y);
+system rID     T_MAP::RegionAt(int16 x, int16 y);
+system rID     T_MAP::TerrainAt(int16 x, int16 y);
+system int16   T_MAP::SizeX();
+system int16   T_MAP::SizeY();
 
 system hObj    T_MAP::FirstAt(int16 x, int16 y);
 system hObj    T_MAP::NextAt(int16 x, int16 y);

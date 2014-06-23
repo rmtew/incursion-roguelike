@@ -171,11 +171,7 @@ inline bool WithinRect(Rect r, int16 x, int16 y)
 inline void ClearCandidates()
   { memset(Candidates,0,sizeof(hObj)*2048); nCandidates = 0; }
 
-#ifdef WIN32
 #include "dispatch.h"
-#else
-#include "dispatch.h"
-#endif
 
 #undef ItemWeight
 #undef rnd

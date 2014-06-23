@@ -778,6 +778,7 @@ Repeat:
                 fprintf(fp,"        ");
                 break;
             case DT_RID:
+            case DT_INT16:
             case DT_INT32:
             case DT_HTEXT:
                 fprintf(fp,"        REGS(n) = ");
@@ -816,6 +817,9 @@ Repeat:
                     fprintf(fp,", ");
                 j = k+1;
                 switch(b->ParamType[k]) {
+                case DT_BOOL:
+                    fprintf(fp,"STACK(%d)!=0",j);
+                    break;
                 case DT_INT16:
                     fprintf(fp,"(int16)STACK(%d)",j);
                     break;
@@ -886,6 +890,7 @@ Repeat:
                     break;
                 case DT_RID:
                 case DT_INT32:
+                case DT_INT16:
                 case DT_HTEXT:
                     fprintf(fp,"          { REGS(n) = ");
                     break;
@@ -903,6 +908,12 @@ Repeat:
                         fprintf(fp,", ");
                     j = k+1;
                     switch(rb->ParamType[k]) {
+                    case DT_BOOL:
+                        fprintf(fp,"STACK(%d)!=0",j);
+                        break;
+                    case DT_INT16:
+                        fprintf(fp,"(int16)STACK(%d)",j);
+                        break;
                     case DT_RID:
                     case DT_INT32:
                         fprintf(fp,"STACK(%d)",j);
@@ -1168,7 +1179,7 @@ bool AllowedCast(int16 from, int16 to)
       return true;                          
     if (from != DT_STRING && from != DT_VOID && to == DT_BOOL)
       return true;
-    if (from == DT_HOBJ || from == DT_RID || from == DT_INT32)
+    if (from == DT_HOBJ || from == DT_RID || from == DT_INT32 || from == DT_INT16)
       if (to == DT_BOOL)
         return true;    
     if (from == DT_HTEXT || from == DT_HOBJ || from == DT_STRING
