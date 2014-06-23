@@ -151,7 +151,7 @@ extern "C" int yywrap() {
     NOTDONE, SCOPE_OPER,
 
   HOBJ, VOID, INT8, INT16, INT32, UINT8, UINT16, UINT32, 
-    HTEXT, RID, STRING,
+    HTEXT, RID, STRING, BOOL,
 
   COLOR, WEP_TYPE, ATTRIBUTE, DIRECTION, STYPE,
     OPCODE, REGNAME,
@@ -1242,6 +1242,8 @@ prototype: NOTDONE;
 
 type_name<ty>: 
     VOID          { *ty = DT_VOID; }
+  | BOOL          { *ty = DT_BOOL; }
+  | INT8          { *ty = DT_INT8; }
   | INT16         { *ty = DT_INT16; }
   | INT32         { *ty = DT_INT32; }
   | HOBJ          { *ty = DT_HOBJ; }

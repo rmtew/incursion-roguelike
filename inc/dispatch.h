@@ -218,7 +218,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 38:
         VERIFY(h,T_MAP,"WriteAt")
         ASSERT(REGS(63) >= 7)
-        oMap(h)->WriteAt(CAST_RECT(STACK(1)), STACK(2), STACK(3), STACK(4), STACK(5), STACK(6), STACK(7));
+        oMap(h)->WriteAt(CAST_RECT(STACK(1)), (int16)STACK(2), (int16)STACK(3), STACK(4), STACK(5), STACK(6), STACK(7)!=0);
         return;
     case 39:
         VERIFY(h,T_MAP,"WriteBox")
@@ -288,7 +288,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 52:
         VERIFY(h,T_MAP,"Generate")
         ASSERT(REGS(63) >= 4)
-        oMap(h)->Generate(STACK(1), STACK(2), oMap(STACK(3)), STACK(4));
+        oMap(h)->Generate(STACK(1), (int16)STACK(2), oMap(STACK(3)), (int8)STACK(4));
         return;
     case 53:
         VERIFY(h,T_MAP,"DrawPanel")
@@ -303,7 +303,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 55:
         VERIFY(h,T_MAP,"Tunnel")
         ASSERT(REGS(63) >= 7)
-        REGS(n) = oMap(h)->Tunnel(STACK(1), STACK(2), STACK(3), STACK(4), STACK(5), STACK(6), STACK(7));
+        REGS(n) = oMap(h)->Tunnel(STACK(1), STACK(2), STACK(3), STACK(4), STACK(5), STACK(6), (int8)STACK(7));
         return;
     case 56:
         VERIFY(h,T_MAP,"MakeDoor")
@@ -333,22 +333,22 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 61:
         VERIFY(h,T_MAP,"LineOfSight")
         ASSERT(REGS(63) >= 5)
-        REGS(n) = oMap(h)->LineOfSight(STACK(1), STACK(2), STACK(3), STACK(4), oCreature(STACK(5)));
+        REGS(n) = oMap(h)->LineOfSight((int16)STACK(1), (int16)STACK(2), (int16)STACK(3), (int16)STACK(4), oCreature(STACK(5)));
         return;
     case 62:
         VERIFY(h,T_MAP,"Update")
         ASSERT(REGS(63) >= 2)
-        oMap(h)->Update(STACK(1), STACK(2));
+        oMap(h)->Update((int16)STACK(1), (int16)STACK(2));
         return;
     case 63:
         VERIFY(h,T_MAP,"VUpdate")
         ASSERT(REGS(63) >= 2)
-        oMap(h)->VUpdate(STACK(1), STACK(2));
+        oMap(h)->VUpdate((int16)STACK(1), (int16)STACK(2));
         return;
     case 64:
         VERIFY(h,T_MAP,"MarkAsSeen")
         ASSERT(REGS(63) >= 4)
-        oMap(h)->MarkAsSeen(STACK(1), (int16)STACK(2), (int16)STACK(3), (int16)STACK(4));
+        oMap(h)->MarkAsSeen((int8)STACK(1), (int16)STACK(2), (int16)STACK(3), (int16)STACK(4));
         return;
     case 473:
         ASSERT(REGS(63) >= 4)
@@ -357,12 +357,12 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 65:
         VERIFY(h,T_MAP,"NewField")
         ASSERT(REGS(63) >= 8)
-        oMap(h)->NewField(STACK(1), STACK(2), STACK(3), STACK(4), STACK(5), STACK(6), STACK(7), oCreature(STACK(8)));
+        oMap(h)->NewField(STACK(1), (int16)STACK(2), (int16)STACK(3), STACK(4), STACK(5), (int16)STACK(6), STACK(7), oCreature(STACK(8)));
         return;
     case 66:
         VERIFY(h,T_MAP,"FieldAt")
         ASSERT(REGS(63) >= 3)
-        REGS(n) = oMap(h)->FieldAt(STACK(1), STACK(2), STACK(3));
+        REGS(n) = oMap(h)->FieldAt((int16)STACK(1), (int16)STACK(2), STACK(3));
         return;
     case 67:
         VERIFY(h,T_MAP,"RemoveEffField")
@@ -387,17 +387,17 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 71:
         VERIFY(h,T_MAP,"SetQueue")
         ASSERT(REGS(63) >= 1)
-        oMap(h)->SetQueue(STACK(1));
+        oMap(h)->SetQueue((int16)STACK(1));
         return;
     case 72:
         VERIFY(h,T_MAP,"UnsetQueue")
         ASSERT(REGS(63) >= 1)
-        oMap(h)->UnsetQueue(STACK(1));
+        oMap(h)->UnsetQueue((int16)STACK(1));
         return;
     case 73:
         VERIFY(h,T_MAP,"PrintQueue")
         ASSERT(REGS(63) >= 1)
-        oMap(h)->PrintQueue(STACK(1));
+        oMap(h)->PrintQueue((int16)STACK(1));
         return;
     case 74:
         VERIFY(h,T_MAP,"QueueNum")
@@ -484,7 +484,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 90:
         VERIFY(h,T_MAP,"enTemplateOk")
         ASSERT(REGS(63) >= 3)
-        REGS(n) = oMap(h)->enTemplateOk(*pe, STACK(2), STACK(3));
+        REGS(n) = oMap(h)->enTemplateOk(*pe, STACK(2), STACK(3)!=0);
         return;
     case 91:
         VERIFY(h,T_MAP,"enWarn")
@@ -495,57 +495,57 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 92:
         VERIFY(h,T_MAP,"thEnGen")
         ASSERT(REGS(63) >= 4)
-        REGS(n) = oMap(h)->thEnGen(STACK(1), STACK(2), STACK(3), STACK(4));
+        REGS(n) = oMap(h)->thEnGen(STACK(1), STACK(2), (int8)STACK(3), STACK(4));
         return;
     case 93:
         VERIFY(h,T_MAP,"thEnGenXY")
         ASSERT(REGS(63) >= 6)
-        REGS(n) = oMap(h)->thEnGenXY(STACK(1), STACK(2), STACK(3), STACK(4), (int16)STACK(5), (int16)STACK(6));
+        REGS(n) = oMap(h)->thEnGenXY(STACK(1), STACK(2), (int8)STACK(3), STACK(4), (int16)STACK(5), (int16)STACK(6));
         return;
     case 94:
         VERIFY(h,T_MAP,"thEnGenSummXY")
         ASSERT(REGS(63) >= 7)
-        REGS(n) = oMap(h)->thEnGenSummXY(STACK(1), STACK(2), STACK(3), STACK(4), oCreature(STACK(5)), (int16)STACK(6), (int16)STACK(7));
+        REGS(n) = oMap(h)->thEnGenSummXY(STACK(1), STACK(2), (int8)STACK(3), STACK(4), oCreature(STACK(5)), (int16)STACK(6), (int16)STACK(7));
         return;
     case 95:
         VERIFY(h,T_MAP,"thEnGenMon")
         ASSERT(REGS(63) >= 5)
-        REGS(n) = oMap(h)->thEnGenMon(STACK(1), STACK(2), STACK(3), STACK(4), STACK(5));
+        REGS(n) = oMap(h)->thEnGenMon(STACK(1), STACK(2), STACK(3), (int8)STACK(4), STACK(5));
         return;
     case 96:
         VERIFY(h,T_MAP,"thEnGenMonXY")
         ASSERT(REGS(63) >= 7)
-        REGS(n) = oMap(h)->thEnGenMonXY(STACK(1), STACK(2), STACK(3), STACK(4), STACK(5), (int16)STACK(6), (int16)STACK(7));
+        REGS(n) = oMap(h)->thEnGenMonXY(STACK(1), STACK(2), STACK(3), (int8)STACK(4), STACK(5), (int16)STACK(6), (int16)STACK(7));
         return;
     case 97:
         VERIFY(h,T_MAP,"thEnGenMType")
         ASSERT(REGS(63) >= 5)
-        REGS(n) = oMap(h)->thEnGenMType(STACK(1), (int16)STACK(2), STACK(3), STACK(4), STACK(5));
+        REGS(n) = oMap(h)->thEnGenMType(STACK(1), (int16)STACK(2), STACK(3), (int8)STACK(4), STACK(5));
         return;
     case 98:
         VERIFY(h,T_MAP,"thEnGenMTypeXY")
         ASSERT(REGS(63) >= 7)
-        REGS(n) = oMap(h)->thEnGenMTypeXY(STACK(1), (int16)STACK(2), STACK(3), STACK(4), STACK(5), (int16)STACK(6), (int16)STACK(7));
+        REGS(n) = oMap(h)->thEnGenMTypeXY(STACK(1), (int16)STACK(2), STACK(3), (int8)STACK(4), STACK(5), (int16)STACK(6), (int16)STACK(7));
         return;
     case 99:
         VERIFY(h,T_MAP,"thEnGenMonSummXY")
         ASSERT(REGS(63) >= 8)
-        REGS(n) = oMap(h)->thEnGenMonSummXY(STACK(1), STACK(2), STACK(3), STACK(4), STACK(5), oCreature(STACK(6)), (int16)STACK(7), (int16)STACK(8));
+        REGS(n) = oMap(h)->thEnGenMonSummXY(STACK(1), STACK(2), STACK(3), (int8)STACK(4), STACK(5), oCreature(STACK(6)), (int16)STACK(7), (int16)STACK(8));
         return;
     case 100:
         VERIFY(h,T_MAP,"thEnGenMTypeSummXY")
         ASSERT(REGS(63) >= 8)
-        REGS(n) = oMap(h)->thEnGenMTypeSummXY(STACK(1), (int16)STACK(2), STACK(3), STACK(4), STACK(5), oCreature(STACK(6)), (int16)STACK(7), (int16)STACK(8));
+        REGS(n) = oMap(h)->thEnGenMTypeSummXY(STACK(1), (int16)STACK(2), STACK(3), (int8)STACK(4), STACK(5), oCreature(STACK(6)), (int16)STACK(7), (int16)STACK(8));
         return;
     case 101:
         VERIFY(h,T_MAP,"rtEnGen")
         ASSERT(REGS(63) >= 5)
-        REGS(n) = oMap(h)->rtEnGen(*pe, STACK(2), STACK(3), STACK(4), STACK(5));
+        REGS(n) = oMap(h)->rtEnGen(*pe, STACK(2), STACK(3), (int8)STACK(4), STACK(5));
         return;
     case 102:
         VERIFY(h,T_OBJECT,"isType")
         ASSERT(REGS(63) >= 1)
-        REGS(n) = oObject(h)->isType(STACK(1));
+        REGS(n) = oObject(h)->isType((int16)STACK(1));
         return;
     case 103:
         VERIFY(h,T_THING,"isCreature")
@@ -615,7 +615,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 116:
         VERIFY(h,T_THING,"Initialize")
         ASSERT(REGS(63) >= 1)
-        oThing(h)->Initialize(STACK(1));
+        oThing(h)->Initialize(STACK(1)!=0);
         return;
     case 117:
         VERIFY(h,T_THING,"SetImage")
@@ -697,7 +697,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 132:
         VERIFY(h,T_THING,"Remove")
         ASSERT(REGS(63) >= 1)
-        oThing(h)->Remove(STACK(1));
+        oThing(h)->Remove(STACK(1)!=0);
         return;
     case 133:
         VERIFY(h,T_THING,"DirTo")
@@ -742,12 +742,12 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 141:
         VERIFY(h,T_THING,"GainPermStati")
         ASSERT(REGS(63) >= 7)
-        oThing(h)->GainPermStati((int16)STACK(1), oThing(STACK(2)), STACK(3), (int16)STACK(4), STACK(5), STACK(6), STACK(7));
+        oThing(h)->GainPermStati((int16)STACK(1), oThing(STACK(2)), (int8)STACK(3), (int16)STACK(4), (int16)STACK(5), STACK(6), (int8)STACK(7));
         return;
     case 142:
         VERIFY(h,T_THING,"GainTempStati")
         ASSERT(REGS(63) >= 8)
-        oThing(h)->GainTempStati((int16)STACK(1), oThing(STACK(2)), (int16)STACK(3), STACK(4), (int16)STACK(5), STACK(6), STACK(7), STACK(8));
+        oThing(h)->GainTempStati((int16)STACK(1), oThing(STACK(2)), (int16)STACK(3), (int8)STACK(4), (int16)STACK(5), (int16)STACK(6), STACK(7), (int8)STACK(8));
         return;
     case 143:
         VERIFY(h,T_THING,"CopyStati")
@@ -757,7 +757,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 144:
         VERIFY(h,T_THING,"RemoveStati")
         ASSERT(REGS(63) >= 5)
-        oThing(h)->RemoveStati((int16)STACK(1), STACK(2), (int16)STACK(3), STACK(4), oThing(STACK(5)));
+        oThing(h)->RemoveStati((int16)STACK(1), (int8)STACK(2), (int16)STACK(3), (int16)STACK(4), oThing(STACK(5)));
         return;
     case 145:
         VERIFY(h,T_THING,"RemoveEffStati")
@@ -868,7 +868,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 166:
         VERIFY(h,T_THING,"IncStatiMag")
         ASSERT(REGS(63) >= 5)
-        oThing(h)->IncStatiMag((int16)STACK(1), STACK(2), (int16)STACK(3), oThing(STACK(4)), (int16)STACK(5));
+        oThing(h)->IncStatiMag((int16)STACK(1), (int8)STACK(2), (int16)STACK(3), oThing(STACK(4)), (int16)STACK(5));
         return;
     case 167:
         VERIFY(h,T_THING,"GetEffStatiVal")
@@ -929,7 +929,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 178:
         VERIFY(h,T_THING,"IncEffStatiMag")
         ASSERT(REGS(63) >= 6)
-        oThing(h)->IncEffStatiMag((int16)STACK(1), STACK(2), STACK(3), oThing(STACK(4)), (int16)STACK(5), (int16)STACK(6));
+        oThing(h)->IncEffStatiMag((int16)STACK(1), STACK(2), (int8)STACK(3), oThing(STACK(4)), (int16)STACK(5), (int16)STACK(6));
         return;
     case 179:
         VERIFY(h,T_THING,"SumStatiMag")
@@ -979,7 +979,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 188:
         VERIFY(h,T_CREATURE,"LoseMana")
         ASSERT(REGS(63) >= 2)
-        oCreature(h)->LoseMana(STACK(1), STACK(2));
+        oCreature(h)->LoseMana(STACK(1), STACK(2)!=0);
         return;
     case 189:
         VERIFY(h,T_CREATURE,"GainMana")
@@ -994,12 +994,12 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 191:
         VERIFY(h,T_CREATURE,"GetAttr")
         ASSERT(REGS(63) >= 1)
-        REGS(n) = oCreature(h)->GetAttr(STACK(1));
+        REGS(n) = oCreature(h)->GetAttr((int8)STACK(1));
         return;
     case 192:
         VERIFY(h,T_CREATURE,"KnownAttr")
         ASSERT(REGS(63) >= 1)
-        REGS(n) = oCreature(h)->KnownAttr(STACK(1));
+        REGS(n) = oCreature(h)->KnownAttr((int8)STACK(1));
         return;
     case 193:
         VERIFY(h,T_CREATURE,"Exercise")
@@ -1029,7 +1029,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 198:
         VERIFY(h,T_CREATURE,"ChallengeRating")
         ASSERT(REGS(63) >= 1)
-        REGS(n) = oCreature(h)->ChallengeRating(STACK(1));
+        REGS(n) = oCreature(h)->ChallengeRating(STACK(1)!=0);
         return;
     case 199:
         VERIFY(h,T_CREATURE,"GainXP")
@@ -1079,7 +1079,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 208:
         VERIFY(h,T_CREATURE,"yn")
         ASSERT(REGS(63) >= 2)
-        REGS(n) = oCreature(h)->yn(GETSTR(STACK(1)), STACK(2));
+        REGS(n) = oCreature(h)->yn(GETSTR(STACK(1)), STACK(2)!=0);
         return;
     case 209:
         VERIFY(h,T_CREATURE,"canTalk")
@@ -1099,12 +1099,12 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 212:
         VERIFY(h,T_CREATURE,"HasAttk")
         ASSERT(REGS(63) >= 1)
-        REGS(n) = oCreature(h)->HasAttk(STACK(1));
+        REGS(n) = oCreature(h)->HasAttk((int8)STACK(1));
         return;
     case 213:
         VERIFY(h,T_CREATURE,"HasMFlag")
         ASSERT(REGS(63) >= 1)
-        REGS(n) = oCreature(h)->HasMFlag(STACK(1));
+        REGS(n) = oCreature(h)->HasMFlag((int16)STACK(1));
         return;
     case 214:
         VERIFY(h,T_CREATURE,"HasFeat")
@@ -1144,7 +1144,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 221:
         VERIFY(h,T_CREATURE,"SkillCheck")
         ASSERT(REGS(63) >= 4)
-        REGS(n) = oCreature(h)->SkillCheck((int16)STACK(1), (int16)STACK(2), STACK(3), (int16)STACK(4));
+        REGS(n) = oCreature(h)->SkillCheck((int16)STACK(1), (int16)STACK(2), STACK(3)!=0, (int16)STACK(4));
         return;
     case 222:
         VERIFY(h,T_CREATURE,"WepSkill")
@@ -1164,27 +1164,27 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 225:
         VERIFY(h,T_CREATURE,"Mod")
         ASSERT(REGS(63) >= 1)
-        REGS(n) = oCreature(h)->Mod(STACK(1));
+        REGS(n) = oCreature(h)->Mod((int8)STACK(1));
         return;
     case 226:
         VERIFY(h,T_CREATURE,"Mod2")
         ASSERT(REGS(63) >= 1)
-        REGS(n) = oCreature(h)->Mod2(STACK(1));
+        REGS(n) = oCreature(h)->Mod2((int8)STACK(1));
         return;
     case 227:
         VERIFY(h,T_CREATURE,"KMod")
         ASSERT(REGS(63) >= 1)
-        REGS(n) = oCreature(h)->KMod(STACK(1));
+        REGS(n) = oCreature(h)->KMod((int8)STACK(1));
         return;
     case 228:
         VERIFY(h,T_CREATURE,"KMod2")
         ASSERT(REGS(63) >= 1)
-        REGS(n) = oCreature(h)->KMod2(STACK(1));
+        REGS(n) = oCreature(h)->KMod2((int8)STACK(1));
         return;
     case 229:
         VERIFY(h,T_CREATURE,"SkillAttr")
         ASSERT(REGS(63) >= 1)
-        REGS(n) = oCreature(h)->SkillAttr(STACK(1));
+        REGS(n) = oCreature(h)->SkillAttr((int16)STACK(1));
         return;
     case 230:
         VERIFY(h,T_CREATURE,"SavingThrow")
@@ -1210,12 +1210,12 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 234:
         VERIFY(h,T_CREATURE,"LoseFatigue")
         ASSERT(REGS(63) >= 2)
-        REGS(n) = oCreature(h)->LoseFatigue((int16)STACK(1), STACK(2));
+        REGS(n) = oCreature(h)->LoseFatigue((int16)STACK(1), STACK(2)!=0);
         return;
     case 235:
         VERIFY(h,T_CREATURE,"Shapeshift")
         ASSERT(REGS(63) >= 3)
-        oCreature(h)->Shapeshift(STACK(1), STACK(2), oItem(STACK(3)));
+        oCreature(h)->Shapeshift(STACK(1), STACK(2)!=0, oItem(STACK(3)));
         return;
     case 236:
         VERIFY(h,T_CREATURE,"ResistLevel")
@@ -1225,7 +1225,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 237:
         VERIFY(h,T_CREATURE,"SpellRating")
         ASSERT(REGS(63) >= 3)
-        REGS(n) = oCreature(h)->SpellRating(STACK(1), STACK(2), STACK(3));
+        REGS(n) = oCreature(h)->SpellRating(STACK(1), STACK(2), STACK(3)!=0);
         return;
     case 238:
         VERIFY(h,T_CREATURE,"CasterLev")
@@ -1250,7 +1250,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 242:
         VERIFY(h,T_CREATURE,"InSlot")
         ASSERT(REGS(63) >= 1)
-        t = oCreature(h)->InSlot(STACK(1));
+        t = oCreature(h)->InSlot((int8)STACK(1));
         REGS(n) = t ? t->myHandle : 0;
         return;
     case 243:
@@ -1289,7 +1289,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 249:
         VERIFY(h,T_CREATURE,"GainItem")
         ASSERT(REGS(63) >= 2)
-        oCreature(h)->GainItem(oItem(STACK(1)), STACK(2));
+        oCreature(h)->GainItem(oItem(STACK(1)), STACK(2)!=0);
         return;
     case 250:
         VERIFY(h,T_CREATURE,"IdentByTrial")
@@ -1299,12 +1299,12 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 251:
         VERIFY(h,T_CREATURE,"GainInherentBonus")
         ASSERT(REGS(63) >= 3)
-        oCreature(h)->GainInherentBonus((int16)STACK(1), (int16)STACK(2), STACK(3));
+        oCreature(h)->GainInherentBonus((int16)STACK(1), (int16)STACK(2), STACK(3)!=0);
         return;
     case 252:
         VERIFY(h,T_CREATURE,"Reveal")
         ASSERT(REGS(63) >= 1)
-        oCreature(h)->Reveal(STACK(1));
+        oCreature(h)->Reveal(STACK(1)!=0);
         return;
     case 253:
         VERIFY(h,T_CREATURE,"ProvokeAoO")
@@ -1361,7 +1361,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 263:
         VERIFY(h,T_CREATURE,"Transgress")
         ASSERT(REGS(63) >= 4)
-        oCreature(h)->Transgress(STACK(1), (int16)STACK(2), STACK(3), GETSTR(STACK(4)));
+        oCreature(h)->Transgress(STACK(1), (int16)STACK(2), STACK(3)!=0, GETSTR(STACK(4)));
         return;
     case 264:
         VERIFY(h,T_CREATURE,"IdentifyMon")
@@ -1391,7 +1391,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 269:
         VERIFY(h,T_CREATURE,"ChoicePrompt")
         ASSERT(REGS(63) >= 5)
-        REGS(n) = oCreature(h)->ChoicePrompt(GETSTR(STACK(1)), GETSTR(STACK(2)), STACK(3), STACK(4), STACK(5));
+        REGS(n) = oCreature(h)->ChoicePrompt(GETSTR(STACK(1)), GETSTR(STACK(2)), (int8)STACK(3), (int8)STACK(4), (int8)STACK(5));
         return;
     case 270:
         VERIFY(h,T_CREATURE,"AddTemplate")
@@ -1411,7 +1411,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 273:
         VERIFY(h,T_CREATURE,"getSocialMod")
         ASSERT(REGS(63) >= 2)
-        REGS(n) = oCreature(h)->getSocialMod(oCreature(STACK(1)), STACK(2));
+        REGS(n) = oCreature(h)->getSocialMod(oCreature(STACK(1)), STACK(2)!=0);
         return;
     case 274:
         VERIFY(h,T_CREATURE,"MakeNoise")
@@ -1421,12 +1421,12 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 275:
         VERIFY(h,T_CREATURE,"Multiply")
         ASSERT(REGS(63) >= 3)
-        oCreature(h)->Multiply((int16)STACK(1), STACK(2), STACK(3));
+        oCreature(h)->Multiply((int16)STACK(1), STACK(2)!=0, STACK(3)!=0);
         return;
     case 276:
         VERIFY(h,T_CREATURE,"StatiMessage")
         ASSERT(REGS(63) >= 3)
-        oCreature(h)->StatiMessage((int16)STACK(1), (int16)STACK(2), STACK(3));
+        oCreature(h)->StatiMessage((int16)STACK(1), (int16)STACK(2), STACK(3)!=0);
         return;
     case 277:
         VERIFY(h,T_CREATURE,"RandInv")
@@ -1465,7 +1465,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 283:
         VERIFY(h,T_CREATURE,"HaltAction")
         ASSERT(REGS(63) >= 2)
-        oCreature(h)->HaltAction(GETSTR(STACK(1)), STACK(2));
+        oCreature(h)->HaltAction(GETSTR(STACK(1)), STACK(2)!=0);
         return;
     case 284:
         VERIFY(h,T_CHARACTER,"kcMana")
@@ -1480,7 +1480,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 286:
         VERIFY(h,T_CHARACTER,"Swap")
         ASSERT(REGS(63) >= 1)
-        REGS(n) = oCharacter(h)->Swap(STACK(1));
+        REGS(n) = oCharacter(h)->Swap((int8)STACK(1));
         return;
     case 287:
         VERIFY(h,T_CHARACTER,"AddAbilities")
@@ -1495,7 +1495,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 289:
         VERIFY(h,T_CHARACTER,"GainAbility")
         ASSERT(REGS(63) >= 4)
-        oCharacter(h)->GainAbility((int16)STACK(1), STACK(2), STACK(3), STACK(4));
+        oCharacter(h)->GainAbility((int16)STACK(1), STACK(2), STACK(3), (int16)STACK(4));
         return;
     case 290:
         VERIFY(h,T_CHARACTER,"GainBonusSkills")
@@ -1530,7 +1530,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 296:
         VERIFY(h,T_CHARACTER,"IAttr")
         ASSERT(REGS(63) >= 1)
-        REGS(n) = oCharacter(h)->IAttr(STACK(1));
+        REGS(n) = oCharacter(h)->IAttr((int8)STACK(1));
         return;
     case 297:
         VERIFY(h,T_CHARACTER,"LevelAs")
@@ -1596,7 +1596,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 309:
         VERIFY(h,T_CHARACTER,"gainFavour")
         ASSERT(REGS(63) >= 4)
-        oCharacter(h)->gainFavour(STACK(1), STACK(2), STACK(3), STACK(4));
+        oCharacter(h)->gainFavour(STACK(1), STACK(2), STACK(3)!=0, STACK(4)!=0);
         return;
     case 310:
         VERIFY(h,T_CHARACTER,"lowerAnger")
@@ -1641,7 +1641,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 318:
         VERIFY(h,T_CHARACTER,"isWorthyOf")
         ASSERT(REGS(63) >= 2)
-        REGS(n) = oCharacter(h)->isWorthyOf(STACK(1), STACK(2));
+        REGS(n) = oCharacter(h)->isWorthyOf(STACK(1), STACK(2)!=0);
         return;
     case 319:
         VERIFY(h,T_CHARACTER,"getAnger")
@@ -1711,7 +1711,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 332:
         VERIFY(h,T_PLAYER,"BonusBreakdown")
         ASSERT(REGS(63) >= 2)
-        GETSTR(-1) = oPlayer(h)->BonusBreakdown(STACK(1), STACK(2));
+        GETSTR(-1) = oPlayer(h)->BonusBreakdown((int8)STACK(1), (int16)STACK(2));
         return;
     case 333:
         VERIFY(h,T_PLAYER,"Seen")
@@ -1726,7 +1726,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 335:
         VERIFY(h,T_MONSTER,"AddAct")
         ASSERT(REGS(63) >= 4)
-        oMonster(h)->AddAct(STACK(1), STACK(2), oThing(STACK(3)), (int16)STACK(4));
+        oMonster(h)->AddAct((int8)STACK(1), (int8)STACK(2), oThing(STACK(3)), (int16)STACK(4));
         return;
     case 336:
         VERIFY(h,T_ITEM,"Owner")
@@ -1823,27 +1823,27 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 354:
         VERIFY(h,T_ITEM,"HasQuality")
         ASSERT(REGS(63) >= 1)
-        REGS(n) = oItem(h)->HasQuality(STACK(1));
+        REGS(n) = oItem(h)->HasQuality((int16)STACK(1));
         return;
     case 355:
         VERIFY(h,T_ITEM,"KnownQuality")
         ASSERT(REGS(63) >= 1)
-        REGS(n) = oItem(h)->KnownQuality(STACK(1));
+        REGS(n) = oItem(h)->KnownQuality((int16)STACK(1));
         return;
     case 356:
         VERIFY(h,T_ITEM,"QualityOK")
         ASSERT(REGS(63) >= 2)
-        REGS(n) = oItem(h)->QualityOK(STACK(1), (int16)STACK(2));
+        REGS(n) = oItem(h)->QualityOK((int8)STACK(1), (int16)STACK(2));
         return;
     case 357:
         VERIFY(h,T_ITEM,"AddQuality")
         ASSERT(REGS(63) >= 2)
-        oItem(h)->AddQuality(STACK(1), STACK(2));
+        oItem(h)->AddQuality((int8)STACK(1), (int16)STACK(2));
         return;
     case 358:
         VERIFY(h,T_ITEM,"RemoveQuality")
         ASSERT(REGS(63) >= 1)
-        oItem(h)->RemoveQuality(STACK(1));
+        oItem(h)->RemoveQuality((int8)STACK(1));
         return;
     case 359:
         VERIFY(h,T_ITEM,"PurgeAllQualities")
@@ -1930,7 +1930,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 375:
         VERIFY(h,T_ITEM,"SetInherentPlus")
         ASSERT(REGS(63) >= 1)
-        oItem(h)->SetInherentPlus(STACK(1));
+        oItem(h)->SetInherentPlus((int8)STACK(1));
         return;
     case 376:
         VERIFY(h,T_ITEM,"ArmVal")
@@ -1940,12 +1940,12 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 377:
         VERIFY(h,T_ITEM,"ArmourPenalty")
         ASSERT(REGS(63) >= 1)
-        REGS(n) = oItem(h)->ArmourPenalty(STACK(1));
+        REGS(n) = oItem(h)->ArmourPenalty(STACK(1)!=0);
         return;
     case 378:
         VERIFY(h,T_ITEM,"Hardness")
         ASSERT(REGS(63) >= 1)
-        REGS(n) = oItem(h)->Hardness(STACK(1));
+        REGS(n) = oItem(h)->Hardness((int8)STACK(1));
         return;
     case 379:
         VERIFY(h,T_ITEM,"MaxHP")
@@ -1991,7 +1991,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 387:
         VERIFY(h,T_TRAP,"TriggerTrap")
         ASSERT(REGS(63) >= 2)
-        REGS(n) = oTrap(h)->TriggerTrap(*pe, STACK(2));
+        REGS(n) = oTrap(h)->TriggerTrap(*pe, STACK(2)!=0);
         return;
     case 388:
         VERIFY(h,T_TRAP,"TrapLevel")
@@ -2078,16 +2078,16 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
         return;
     case 408:
         ASSERT(REGS(63) >= 4)
-        REGS(n) = T1->EffectPrompt(*pe, (int16)STACK(2), STACK(3), GETSTR(STACK(4)));
+        REGS(n) = T1->EffectPrompt(*pe, (int16)STACK(2), STACK(3)!=0, GETSTR(STACK(4)));
         return;
     case 409:
         ASSERT(REGS(63) >= 4)
-        t = T1->AcquisitionPrompt(STACK(1), STACK(2), STACK(3), STACK(4));
+        t = T1->AcquisitionPrompt((int8)STACK(1), (int8)STACK(2), (int8)STACK(3), (int8)STACK(4));
         REGS(n) = t ? t->myHandle : 0;
         return;
     case 410:
         ASSERT(REGS(63) >= 2)
-        GETSTR(-1) = T1->StringPrompt(STACK(1), GETSTR(STACK(2)));
+        GETSTR(-1) = T1->StringPrompt((int8)STACK(1), GETSTR(STACK(2)));
         return;
     case 411:
         ASSERT(REGS(63) >= 3)
@@ -2135,27 +2135,27 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
         return;
     case 422:
         ASSERT(REGS(63) >= 2)
-        T1->InventoryManager(STACK(1), oContain(STACK(2)));
+        T1->InventoryManager(STACK(1)!=0, oContain(STACK(2)));
         return;
     case 423:
         VERIFY(h,T_GAME,"GetEffectID")
         ASSERT(REGS(63) >= 4)
-        REGS(n) = oGame(h)->GetEffectID((int16)STACK(1), STACK(2), STACK(3), STACK(4));
+        REGS(n) = oGame(h)->GetEffectID((int16)STACK(1), (int8)STACK(2), (int8)STACK(3), (int8)STACK(4));
         return;
     case 424:
         VERIFY(h,T_GAME,"GetMonID")
         ASSERT(REGS(63) >= 5)
-        REGS(n) = oGame(h)->GetMonID((int16)STACK(1), STACK(2), STACK(3), STACK(4), (int16)STACK(5));
+        REGS(n) = oGame(h)->GetMonID((int16)STACK(1), (int8)STACK(2), (int8)STACK(3), (int8)STACK(4), (int16)STACK(5));
         return;
     case 425:
         VERIFY(h,T_GAME,"GetItemID")
         ASSERT(REGS(63) >= 4)
-        REGS(n) = oGame(h)->GetItemID((int16)STACK(1), STACK(2), STACK(3), (int16)STACK(4));
+        REGS(n) = oGame(h)->GetItemID((int16)STACK(1), (int8)STACK(2), (int8)STACK(3), (int16)STACK(4));
         return;
     case 426:
         VERIFY(h,T_GAME,"GetMapID")
         ASSERT(REGS(63) >= 3)
-        REGS(n) = oGame(h)->GetMapID(STACK(1), STACK(2), STACK(3));
+        REGS(n) = oGame(h)->GetMapID((int16)STACK(1), STACK(2), (int8)STACK(3));
         return;
     case 427:
         VERIFY(h,T_GAME,"GetTempID")
@@ -2171,7 +2171,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 429:
         VERIFY(h,T_GAME,"EnterLimbo")
         ASSERT(REGS(63) >= 8)
-        oGame(h)->EnterLimbo(STACK(1), STACK(2), STACK(3), STACK(4), STACK(5), STACK(6), STACK(7), GETSTR(STACK(8)));
+        oGame(h)->EnterLimbo(STACK(1), STACK(2), STACK(3), STACK(4), (int8)STACK(5), (int8)STACK(6), STACK(7), GETSTR(STACK(8)));
         return;
     case 430:
         VERIFY(h,T_GAME,"SpellNum")
@@ -2226,11 +2226,11 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
         ASSERT(0 > h);
         ASSERT(h > -63);
         ASSERT(REGS(63) >= 1)
-        GETSTR(-1) = GETSTR(-h).Capitalize(STACK(1));
+        GETSTR(-1) = GETSTR(-h).Capitalize(STACK(1)!=0);
         return;
     case 440:
         ASSERT(REGS(63) >= 2)
-        GETSTR(-1) = Capitalize(GETSTR(STACK(1)), STACK(2));
+        GETSTR(-1) = Capitalize(GETSTR(STACK(1)), STACK(2)!=0);
         return;
     case 443:
         ASSERT(0 > h);
@@ -2252,7 +2252,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
         ASSERT(0 > h);
         ASSERT(h > -63);
         ASSERT(REGS(63) >= 1)
-        REGS(n) = GETSTR(-h).strchr(STACK(1));
+        REGS(n) = GETSTR(-h).strchr((int8)STACK(1));
         return;
     case 446:
         ASSERT(0 > h);
@@ -2526,7 +2526,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
         return;
     case 507:
         ASSERT(REGS(63) >= 6)
-        REGS(n) = ThrowDir((int16)STACK(1), STACK(2), oObject(STACK(3)), oObject(STACK(4)), oObject(STACK(5)), oObject(STACK(6)));
+        REGS(n) = ThrowDir((int16)STACK(1), (int8)STACK(2), oObject(STACK(3)), oObject(STACK(4)), oObject(STACK(5)), oObject(STACK(6)));
         return;
     case 508:
         ASSERT(REGS(63) >= 6)
@@ -2534,7 +2534,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
         return;
     case 509:
         ASSERT(REGS(63) >= 7)
-        REGS(n) = ThrowEffDir((int16)STACK(1), STACK(2), STACK(3), oObject(STACK(4)), oObject(STACK(5)), oObject(STACK(6)), oObject(STACK(7)));
+        REGS(n) = ThrowEffDir((int16)STACK(1), STACK(2), (int8)STACK(3), oObject(STACK(4)), oObject(STACK(5)), oObject(STACK(6)), oObject(STACK(7)));
         return;
     case 510:
         ASSERT(REGS(63) >= 8)
@@ -3392,13 +3392,13 @@ void VMachine::SetMemberVar(int16 varid, hObj h, int32 val)
           oMap(h)->dID = val;
          break;
         case 1:
-          oMap(h)->Depth = val;
+          oMap(h)->Depth = (int16)val;
          break;
         case 4:
-          oThing(h)->x = val;
+          oThing(h)->x = (int16)val;
          break;
         case 5:
-          oThing(h)->y = val;
+          oThing(h)->y = (int16)val;
          break;
         case 10:
           oCreature(h)->mID = val;
@@ -3416,7 +3416,7 @@ void VMachine::SetMemberVar(int16 varid, hObj h, int32 val)
           oTrap(h)->tID = val;
          break;
         case 174:
-          pe->enAlign = val;
+          pe->enAlign = (int16)val;
          break;
         case 2:
           oThing(h)->m = oMap(val);
@@ -3428,7 +3428,7 @@ void VMachine::SetMemberVar(int16 varid, hObj h, int32 val)
           oThing(h)->Image = val;
          break;
         case 7:
-          oThing(h)->Timeout = val;
+          oThing(h)->Timeout = (int16)val;
          break;
         case 9:
           oThing(h)->Named = GETSTR(val);
@@ -3437,19 +3437,19 @@ void VMachine::SetMemberVar(int16 varid, hObj h, int32 val)
           oCreature(h)->tmID = val;
          break;
         case 12:
-          oCreature(h)->PartyID = val;
+          oCreature(h)->PartyID = (int16)val;
          break;
         case 13:
-          oCreature(h)->cHP = val;
+          oCreature(h)->cHP = (int16)val;
          break;
         case 14:
-          oCreature(h)->mHP = val;
+          oCreature(h)->mHP = (int16)val;
          break;
         case 15:
-          oCreature(h)->Subdual = val;
+          oCreature(h)->Subdual = (int16)val;
          break;
         case 16:
-          oCreature(h)->cFP = val;
+          oCreature(h)->cFP = (int16)val;
          break;
         case 17:
           oCreature(h)->mMana = val;
@@ -3464,40 +3464,40 @@ void VMachine::SetMemberVar(int16 varid, hObj h, int32 val)
           oCreature(h)->AoO = val;
          break;
         case 21:
-          oCreature(h)->FFCount = val;
+          oCreature(h)->FFCount = (int16)val;
          break;
         case 22:
-          oCreature(h)->StateFlags = val;
+          oCreature(h)->StateFlags = (int16)val;
          break;
         case 52:
-          pe->DType = val;
+          pe->DType = (int16)val;
          break;
         case 36:
           oItem(h)->iID = val;
          break;
         case 23:
-          oCreature(h)->SightRange = val;
+          oCreature(h)->SightRange = (int16)val;
          break;
         case 24:
-          oCreature(h)->LightRange = val;
+          oCreature(h)->LightRange = (int16)val;
          break;
         case 25:
-          oCreature(h)->ShadowRange = val;
+          oCreature(h)->ShadowRange = (int16)val;
          break;
         case 26:
-          oCreature(h)->InfraRange = val;
+          oCreature(h)->InfraRange = (int16)val;
          break;
         case 27:
-          oCreature(h)->TremorRange = val;
+          oCreature(h)->TremorRange = (int16)val;
          break;
         case 28:
-          oCreature(h)->BlindRange = val;
+          oCreature(h)->BlindRange = (int16)val;
          break;
         case 29:
-          oCreature(h)->TelepRange = val;
+          oCreature(h)->TelepRange = (int16)val;
          break;
         case 30:
-          oCreature(h)->PercepRange = val;
+          oCreature(h)->PercepRange = (int16)val;
          break;
         case 31:
           oCharacter(h)->Proficiencies = val;
@@ -3506,28 +3506,28 @@ void VMachine::SetMemberVar(int16 varid, hObj h, int32 val)
           oCharacter(h)->GodID = val;
          break;
         case 72:
-          pe->sp = val;
+          pe->sp = (int16)val;
          break;
         case 33:
           oPlayer(h)->RaceID = val;
          break;
         case 34:
-          oPlayer(h)->WizardMode = val;
+          oPlayer(h)->WizardMode = val!=0;
          break;
         case 35:
           oPlayer(h)->formulaSeed = val;
          break;
         case 175:
-          pe->enCR = val;
+          pe->enCR = (int16)val;
          break;
         case 37:
           oItem(h)->ieID = val;
          break;
         case 38:
-          oItem(h)->IFlags = val;
+          oItem(h)->IFlags = (int16)val;
          break;
         case 39:
-          oItem(h)->Age = val;
+          oItem(h)->Age = (int16)val;
          break;
         case 40:
           oDoor(h)->DoorFlags = val;
@@ -3536,262 +3536,262 @@ void VMachine::SetMemberVar(int16 varid, hObj h, int32 val)
           oTrap(h)->TrapFlags = val;
          break;
         case 44:
-          pe->Event = val;
+          pe->Event = (int16)val;
          break;
         case 45:
-          pe->EXVal = val;
+          pe->EXVal = (int16)val;
          break;
         case 46:
-          pe->EYVal = val;
+          pe->EYVal = (int16)val;
          break;
         case 47:
-          pe->ESpellNum = val;
+          pe->ESpellNum = (int16)val;
          break;
         case 48:
-          pe->EParam = val;
+          pe->EParam = (int16)val;
          break;
         case 49:
-          pe->EDir = val;
+          pe->EDir = (int16)val;
          break;
         case 50:
-          pe->vRoll = val;
+          pe->vRoll = (int16)val;
          break;
         case 51:
-          pe->AType = val;
+          pe->AType = (int16)val;
          break;
         case 53:
-          pe->vHit = val;
+          pe->vHit = (int16)val;
          break;
         case 54:
-          pe->vDef = val;
+          pe->vDef = (int16)val;
          break;
         case 55:
-          pe->vThreat = val;
+          pe->vThreat = (int16)val;
          break;
         case 56:
-          pe->vCrit = val;
+          pe->vCrit = (int16)val;
          break;
         case 57:
-          pe->vPenetrateBonus = val;
+          pe->vPenetrateBonus = (int16)val;
          break;
         case 58:
-          pe->vRange = val;
+          pe->vRange = (int16)val;
          break;
         case 59:
-          pe->vRadius = val;
+          pe->vRadius = (int16)val;
          break;
         case 60:
-          pe->vDuration = val;
+          pe->vDuration = (int16)val;
          break;
         case 61:
-          pe->vCasterLev = val;
+          pe->vCasterLev = (int16)val;
          break;
         case 62:
-          pe->vAlchemy = val;
+          pe->vAlchemy = (int16)val;
          break;
         case 63:
-          pe->vChainCount = val;
+          pe->vChainCount = (int16)val;
          break;
         case 64:
-          pe->vChainMax = val;
+          pe->vChainMax = (int16)val;
          break;
         case 65:
-          pe->efNum = val;
+          pe->efNum = (int16)val;
          break;
         case 66:
-          pe->saveDC = val;
+          pe->saveDC = (int16)val;
          break;
         case 67:
-          pe->vDmg = val;
+          pe->vDmg = (int16)val;
          break;
         case 68:
-          pe->bDmg = val;
+          pe->bDmg = (int16)val;
          break;
         case 69:
-          pe->aDmg = val;
+          pe->aDmg = (int16)val;
          break;
         case 70:
-          pe->xDmg = val;
+          pe->xDmg = (int16)val;
          break;
         case 71:
-          pe->vMult = val;
+          pe->vMult = (int16)val;
          break;
         case 74:
-          pe->isHit = val;
+          pe->isHit = val!=0;
          break;
         case 75:
-          pe->isCrit = val;
+          pe->isCrit = val!=0;
          break;
         case 76:
-          pe->isFumble = val;
+          pe->isFumble = val!=0;
          break;
         case 77:
-          pe->isBypass = val;
+          pe->isBypass = val!=0;
          break;
         case 78:
-          pe->Died = val;
+          pe->Died = val!=0;
          break;
         case 79:
-          pe->ADied = val;
+          pe->ADied = val!=0;
          break;
         case 80:
-          pe->Blocked = val;
+          pe->Blocked = val!=0;
          break;
         case 81:
-          pe->Saved = val;
+          pe->Saved = val!=0;
          break;
         case 82:
-          pe->Immune = val;
+          pe->Immune = val!=0;
          break;
         case 83:
-          pe->Resist = val;
+          pe->Resist = val!=0;
          break;
         case 84:
-          pe->wasFriendly = val;
+          pe->wasFriendly = val!=0;
          break;
         case 85:
-          pe->actUnseen = val;
+          pe->actUnseen = val!=0;
          break;
         case 86:
-          pe->vicUnseen = val;
+          pe->vicUnseen = val!=0;
          break;
         case 87:
-          pe->Whirlwind = val;
+          pe->Whirlwind = val!=0;
          break;
         case 88:
-          pe->Graze = val;
+          pe->Graze = val!=0;
          break;
         case 89:
-          pe->Stun = val;
+          pe->Stun = val!=0;
          break;
         case 90:
-          pe->actIncor = val;
+          pe->actIncor = val!=0;
          break;
         case 91:
-          pe->vicIncor = val;
+          pe->vicIncor = val!=0;
          break;
         case 92:
-          pe->Ranged = val;
+          pe->Ranged = val!=0;
          break;
         case 93:
-          pe->vicHeld = val;
+          pe->vicHeld = val!=0;
          break;
         case 94:
-          pe->isDir = val;
+          pe->isDir = val!=0;
          break;
         case 95:
-          pe->isLoc = val;
+          pe->isLoc = val!=0;
          break;
         case 96:
-          pe->isActivation = val;
+          pe->isActivation = val!=0;
          break;
         case 97:
-          pe->isSomething = val;
+          pe->isSomething = val!=0;
          break;
         case 98:
-          pe->isWield = val;
+          pe->isWield = val!=0;
          break;
         case 99:
-          pe->isRemove = val;
+          pe->isRemove = val!=0;
          break;
         case 100:
-          pe->isPeriodic = val;
+          pe->isPeriodic = val!=0;
          break;
         case 101:
-          pe->isAoO = val;
+          pe->isAoO = val!=0;
          break;
         case 102:
-          pe->isCleave = val;
+          pe->isCleave = val!=0;
          break;
         case 103:
-          pe->isSurprise = val;
+          pe->isSurprise = val!=0;
          break;
         case 104:
-          pe->isFlatFoot = val;
+          pe->isFlatFoot = val!=0;
          break;
         case 105:
-          pe->isFlanking = val;
+          pe->isFlanking = val!=0;
          break;
         case 106:
-          pe->isGhostTouch = val;
+          pe->isGhostTouch = val!=0;
          break;
         case 107:
-          pe->actIllusion = val;
+          pe->actIllusion = val!=0;
          break;
         case 108:
-          pe->vicIllusion = val;
+          pe->vicIllusion = val!=0;
          break;
         case 109:
-          pe->effIllusion = val;
+          pe->effIllusion = val!=0;
          break;
         case 110:
-          pe->illType = val;
+          pe->illType = val!=0;
          break;
         case 111:
-          pe->isSeeking = val;
+          pe->isSeeking = val!=0;
          break;
         case 112:
-          pe->isFirstBlastXY = val;
+          pe->isFirstBlastXY = val!=0;
          break;
         case 113:
-          pe->isRepeatSpell = val;
+          pe->isRepeatSpell = val!=0;
          break;
         case 114:
-          pe->isEBlessed = val;
+          pe->isEBlessed = val!=0;
          break;
         case 115:
-          pe->isECursed = val;
+          pe->isECursed = val!=0;
          break;
         case 116:
-          pe->isConf = val;
+          pe->isConf = val!=0;
          break;
         case 117:
-          pe->isHallu = val;
+          pe->isHallu = val!=0;
          break;
         case 118:
-          pe->isItem = val;
+          pe->isItem = val!=0;
          break;
         case 119:
-          pe->isTrap = val;
+          pe->isTrap = val!=0;
          break;
         case 120:
-          pe->isActOfGod = val;
+          pe->isActOfGod = val!=0;
          break;
         case 121:
-          pe->isOffhand = val;
+          pe->isOffhand = val!=0;
          break;
         case 122:
-          pe->isEvaded = val;
+          pe->isEvaded = val!=0;
          break;
         case 123:
-          pe->isSneakAttack = val;
+          pe->isSneakAttack = val!=0;
          break;
         case 124:
-          pe->isWildMiss = val;
+          pe->isWildMiss = val!=0;
          break;
         case 125:
-          pe->ignoreHardness = val;
+          pe->ignoreHardness = val!=0;
          break;
         case 126:
-          pe->halfHardness = val;
+          pe->halfHardness = val!=0;
          break;
         case 127:
-          pe->Silence = val;
+          pe->Silence = val!=0;
          break;
         case 128:
-          pe->Terse = val;
+          pe->Terse = val!=0;
          break;
         case 129:
           pe->MM = val;
          break;
         case 130:
-          pe->vDepth = val;
+          pe->vDepth = (int16)val;
          break;
         case 131:
-          pe->vLevel = val;
+          pe->vLevel = (int16)val;
          break;
         case 132:
-          pe->vAlign = val;
+          pe->vAlign = (int16)val;
          break;
         case 133:
           pe->GraveText = GETSTR(val);
@@ -3863,34 +3863,34 @@ void VMachine::SetMemberVar(int16 varid, hObj h, int32 val)
           pe->Text = GETSTR(val);
          break;
         case 156:
-          pe->eval = val;
+          pe->eval = (int16)val;
          break;
         case 157:
-          pe->dval = val;
+          pe->dval = (int16)val;
          break;
         case 158:
-          pe->aval = val;
+          pe->aval = (int16)val;
          break;
         case 159:
-          pe->tval = val;
+          pe->tval = (int16)val;
          break;
         case 160:
-          pe->qval = val;
+          pe->qval = (int16)val;
          break;
         case 161:
-          pe->sval = val;
+          pe->sval = (int16)val;
          break;
         case 162:
-          pe->lval = val;
+          pe->lval = (int16)val;
          break;
         case 163:
-          pe->cval = val;
+          pe->cval = (int16)val;
          break;
         case 164:
           pe->xval = val;
          break;
         case 165:
-          pe->yval = val;
+          pe->yval = (int16)val;
          break;
         case 166:
           pe->rval = val;
@@ -3914,55 +3914,55 @@ void VMachine::SetMemberVar(int16 varid, hObj h, int32 val)
           pe->vObj = val;
          break;
         case 173:
-          pe->cPart = val;
+          pe->cPart = (int16)val;
          break;
         case 176:
-          pe->enDepth = val;
+          pe->enDepth = (int16)val;
          break;
         case 177:
-          pe->enFreaky = val;
+          pe->enFreaky = (int16)val;
          break;
         case 178:
-          pe->enPurpose = val;
+          pe->enPurpose = (int16)val;
          break;
         case 179:
-          pe->enSleep = val;
+          pe->enSleep = (int16)val;
          break;
         case 180:
           pe->enTerrain = val;
          break;
         case 181:
-          pe->enDesAmt = val;
+          pe->enDesAmt = (int16)val;
          break;
         case 182:
-          pe->enType = val;
+          pe->enType = (int16)val;
          break;
         case 183:
-          pe->epMinAmt = val;
+          pe->epMinAmt = (int16)val;
          break;
         case 184:
-          pe->epMaxAmt = val;
+          pe->epMaxAmt = (int16)val;
          break;
         case 185:
-          pe->epAmt = val;
+          pe->epAmt = (int16)val;
          break;
         case 186:
-          pe->epFreaky = val;
+          pe->epFreaky = (int16)val;
          break;
         case 187:
-          pe->epWeight = val;
+          pe->epWeight = (int16)val;
          break;
         case 188:
-          pe->epMType = val;
+          pe->epMType = (int16)val;
          break;
         case 189:
-          pe->epSkillRoll = val;
+          pe->epSkillRoll = (int16)val;
          break;
         case 190:
-          pe->epClassRoll = val;
+          pe->epClassRoll = (int16)val;
          break;
         case 191:
-          pe->epCurrXCR = val;
+          pe->epCurrXCR = (int16)val;
          break;
         case 192:
           pe->enID = val;
@@ -4010,13 +4010,13 @@ void VMachine::SetMemberVar(int16 varid, hObj h, int32 val)
           pe->enConstraint = val;
          break;
         case 207:
-          pe->chMaximize = val;
+          pe->chMaximize = val!=0;
          break;
         case 208:
-          pe->chBestOfTwo = val;
+          pe->chBestOfTwo = val!=0;
          break;
         case 209:
-          pe->chList = val;
+          pe->chList = (int16)val;
          break;
         case 210:
           pe->chSource = val;
@@ -4025,7 +4025,7 @@ void VMachine::SetMemberVar(int16 varid, hObj h, int32 val)
           pe->chResult = val;
          break;
         case 212:
-          pe->isAquaticContext = val;
+          pe->isAquaticContext = val!=0;
          break;
       default:
         Error("Illegal member variable access!");

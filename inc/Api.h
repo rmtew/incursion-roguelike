@@ -15,9 +15,9 @@
    rewrite this file (much) when it gets more advanced. */
 
 #define char       int32
-#define bool       int32
+//#define bool       int32
 //#define int16      int32
-#define int8       int32
+//#define int8       int32
 #define EvReturn   int32
 #define uint32     int32
 #define uint16     int32
@@ -53,7 +53,7 @@ system string  T_OBJECT::Describe(hObj:T_PLAYER);
  *****************************************************************************/
 
 system rID     T_MAP::dID;
-system int32   T_MAP::Depth;
+system int16   T_MAP::Depth;
 
 system bool    T_MAP::InBounds(int16 x,int16 y);
 system int32   T_MAP::GlyphAt(int16 x, int16 y);
@@ -102,7 +102,7 @@ system bool    T_MAP::MChestAt(int16 x, int16 y);
 system hObj    T_MAP::FirstThing();
 system hObj    T_MAP::NextThing();
 
-system void    T_MAP::WriteAt(Rect r,int32 x, int32 y, rID terID, rID regID, int32 Pri, bool Force);
+system void    T_MAP::WriteAt(Rect r,int16 x, int16 y, rID terID, rID regID, int32 Pri, bool Force);
 system void    T_MAP::WriteBox(Rect r, rID regID);
 system void    T_MAP::WriteRoom(Rect r, rID regID);
 system void    T_MAP::WriteCircle(Rect r, rID regID);
@@ -116,34 +116,33 @@ system void    T_MAP::WriteMaze(Rect r, rID regID);
 system void    T_MAP::WriteCross(Rect r, rID regID);
 system void    T_MAP::WriteMap(Rect r, rID mID);
 system void    T_MAP::WriteBlobs(Rect r, rID regID, rID bID);
-system void    T_MAP::Generate(rID dunID, int32 Depth, hObj:T_MAP above, int32 Luck); 
-system void    T_MAP::DrawPanel(int32 x, int32 y);
+system void    T_MAP::Generate(rID dunID, int16 Depth, hObj:T_MAP above, int8 Luck); 
+system void    T_MAP::DrawPanel(uint8 x, uint8 y);
 system void    T_MAP::PopulatePanel(Rect r,uint16 extraFlags=0);
-system int32   T_MAP::Tunnel(int32 sx, int32 sy, int32 dx, int32 dy, int32 TFlags, 
-                        int32 StartDir, int32 TType);
+system int32   T_MAP::Tunnel(uint8 sx, uint8 sy, uint8 dx, int32 dy, uint8 TFlags, int32 StartDir, int8 TType);
 system void    T_MAP::MakeDoor(int32 x, int32 y, rID fID);
 system bool    T_MAP::FindOpenAreas(Rect Area, uint16 Flags=0);
 system void    T_MAP::SetGlyphAt(int16 x, int16 y, uint16 g);
 system void    T_MAP::SetRegion(Rect r, rID regID);
 system uint16  T_MAP::GetOpenXY();
 
-system bool    T_MAP::LineOfSight(int32 sx, int32 sy, int32 tx, int32 ty, hObj:T_CREATURE c); 
-system void    T_MAP::Update(int32 x,int32 y);
-system void    T_MAP::VUpdate(int32 x, int32 y);
+system bool    T_MAP::LineOfSight(int16 sx, int16 sy, int16 tx, int16 ty, hObj:T_CREATURE c); 
+system void    T_MAP::Update(int16 x,int16 y);
+system void    T_MAP::VUpdate(int16 x, int16 y);
 system void    T_MAP::MarkAsSeen(int8 pn, int16 x, int16 y, int16 dist);
 
-system void    T_MAP::NewField(int32 FType, int32 x, int32 y, int32 rad,
-                          int32 img, int32 dur, rID eID, hObj:T_CREATURE Creator);
-system bool    T_MAP::FieldAt(int32 x,int32 y, int32 FType=-1);
+system void    T_MAP::NewField(int32 FType, int16 x, int16 y, uint8 rad,
+                          int32 img, int16 dur, rID eID, hObj:T_CREATURE Creator);
+system bool    T_MAP::FieldAt(int16 x,int16 y, int32 FType=-1);
 system void    T_MAP::RemoveEffField(rID eID);
 system void    T_MAP::RemoveFieldFrom(hObj h);
 system void    T_MAP::RemoveEffFieldFrom(rID eID, hObj h);
 system bool    T_MAP::DispelField(int16 x, int16 y, uint32 FType, rID eID, int16 clev);
 
-system void    T_MAP::SetQueue(int32 Queue);
-system void    T_MAP::UnsetQueue(int32 Queue);
-system void    T_MAP::PrintQueue(int32 Queue);
-system int32   T_MAP::QueueNum();
+system void    T_MAP::SetQueue(int16 Queue);
+system void    T_MAP::UnsetQueue(int16 Queue);
+system void    T_MAP::PrintQueue(int16 Queue);
+system int16   T_MAP::QueueNum();
 
 system int8    T_MAP::GetTerraDC(int16 x,int16 y);
 system hObj    T_MAP::GetTerraCreator(int16 x,int16 y);
@@ -185,7 +184,7 @@ system EvReturn T_MAP::rtEnGen(hObj:T_EVENTINFO e, rID xID, uint32 fl, int8 CR, 
 
 /* Technically in Object, not Thing, but who cares? */
               
-system bool   T_OBJECT::isType(int8 ty);
+system bool   T_OBJECT::isType(int16 ty);
 system bool   T_THING::isCreature();
 system bool   T_THING::isDead();
 system bool   T_THING::isPlayer();
@@ -207,10 +206,10 @@ system bool    T_THING::isCorporeal();
 
 system hObj   T_THING::m;
 system hObj   T_THING::Next;
-system int32  T_THING::x;
-system int32  T_THING::y;
+system int16  T_THING::x;
+system int16  T_THING::y;
 system int32  T_THING::Image;
-system int32  T_THING::Timeout;
+system int16  T_THING::Timeout;
 system int32  T_THING::Flags;
 system string T_THING::Named;
 
@@ -241,10 +240,10 @@ system bool   T_THING::isRealTo(hObj:T_CREATURE);
 system int16  T_THING::onPlane();
 
 system bool   T_THING::inField(int16 FType = -1);
-system void   T_THING::GainPermStati(int16 n,hObj:T_THING h, int8 Cause, int16 Val=-1,int8 Mag=-1,rID eID=0, int8 clev=0);
-system void   T_THING::GainTempStati(int16 n,hObj:T_THING h, int16 Duration, int8 Cause, int16 Val=-1,int8 Mag=-1,rID eID=0, int8 clev=0);
+system void   T_THING::GainPermStati(int16 n,hObj:T_THING h, int8 Cause, int16 Val=-1,int16 Mag=-1,rID eID=0, int8 clev=0);
+system void   T_THING::GainTempStati(int16 n,hObj:T_THING h, int16 Duration, int8 Cause, int16 Val=-1,int16 Mag=-1,rID eID=0, int8 clev=0);
 system void   T_THING::CopyStati(hObj:T_THING h, int16 n);
-system void   T_THING::RemoveStati(int16 n, int8 Cause=-1, int16 val=-1, int8 Mag=-1, hObj:T_THING h = 0);
+system void   T_THING::RemoveStati(int16 n, int8 Cause=-1, int16 val=-1, int16 Mag=-1, hObj:T_THING h = 0);
 system void   T_THING::RemoveEffStati(rID xID);
 system void   T_THING::RemoveStatiFrom(hObj:T_THING);
 system void   T_THING::RemoveStatiSource(uint8 src);
@@ -313,11 +312,11 @@ Currently Broken:
 
 system rID    T_CREATURE::mID;
 system rID    T_CREATURE::tmID;
-system int32  T_CREATURE::PartyID;
-system int32  T_CREATURE::cHP;
-system int32  T_CREATURE::mHP;
-system int32  T_CREATURE::Subdual;
-system int32  T_CREATURE::cFP;
+system int16  T_CREATURE::PartyID;
+system int16  T_CREATURE::cHP;
+system int16  T_CREATURE::mHP;
+system int16  T_CREATURE::Subdual;
+system int16  T_CREATURE::cFP;
 system int32  T_CREATURE::mMana;
 system int32  T_CREATURE::uMana;
 system int32  T_CREATURE::hMana;
@@ -328,7 +327,7 @@ system void   T_CREATURE::LoseMana(int32 amt, bool hold=false);
 system void   T_CREATURE::GainMana(int32 amt);
 system int32  T_CREATURE::AoO;
 system int16  T_CREATURE::FFCount;
-system int32  T_CREATURE::StateFlags;
+system int16  T_CREATURE::StateFlags;
 
 system int32  T_CREATURE::AttackMode();
 system int32  T_CREATURE::GetAttr(int8 att);
@@ -355,7 +354,7 @@ system bool   T_CREATURE::canTalk();
 system int32  T_CREATURE::ArmourType();
 system int32  T_CREATURE::Encumbrance();
 system bool   T_CREATURE::HasAttk(int8 att);
-system bool   T_CREATURE::HasMFlag(int8 mf);
+system bool   T_CREATURE::HasMFlag(int16 mf);
 system bool   T_CREATURE::HasFeat(int16 ft);
 system bool   T_CREATURE::HasAbility(int16 ft);
 system bool   T_CREATURE::IHasFeat(int16 ft);
@@ -371,7 +370,7 @@ system int16  T_CREATURE::Mod(int8 a);
 system int16  T_CREATURE::Mod2(int8 a);
 system int16  T_CREATURE::KMod(int8 a);
 system int16  T_CREATURE::KMod2(int8 a);
-system int8   T_CREATURE::SkillAttr(int8 sk);
+system int8   T_CREATURE::SkillAttr(int16 sk);
 system bool   T_CREATURE::SavingThrow(int16 st, int16 SaveDC, int32 subtypes=0);
 system void   T_CREATURE::TrainAs(rID cID);
 system int16  T_CREATURE::HungerState();
@@ -456,7 +455,7 @@ system rID    T_CHARACTER::GodID;
 system bool   T_CHARACTER::Swap(int8 sl);
 system void   T_CHARACTER::AddAbilities(rID xID,int16 lv);
 system void   T_CHARACTER::GainFeat(int16 ft);
-system void   T_CHARACTER::GainAbility(int16 ab, int32 pa, rID sourceID,int8 statiSource);
+system void   T_CHARACTER::GainAbility(int16 ab, int32 pa, rID sourceID,int16 statiSource);
 system void   T_CHARACTER::GainBonusSkills(rID cID, int16 sp);
 system void   T_CHARACTER::FeatPrereq(int16 ft);
 system int32  T_CHARACTER::NextLevXP();
@@ -523,7 +522,7 @@ system int16  T_PLAYER::getMaxDepth(rID dID);
    as possible, after all. Here are a few functions to handle the
    special cases that apply only to a player. */
 
-system string  T_PLAYER::BonusBreakdown(int8 a, int8 maxlen);
+system string  T_PLAYER::BonusBreakdown(int8 a, int16 maxlen);
 system bool    T_PLAYER::Seen(int16 x, int16 y);
 system bool    T_PLAYER::Opt(int16 option);
 
@@ -564,10 +563,10 @@ system int16   T_ITEM::Weight();          /* == Item::Weight() */
 system bool    T_ITEM::HasIFlag(int16 fl);
 system bool    T_ITEM::useStrength();
 system bool    T_ITEM::HasSpell(int16 sp);
-system bool    T_ITEM::HasQuality(int32 q);
-system bool    T_ITEM::KnownQuality(int32 q);
+system bool    T_ITEM::HasQuality(int16 q);
+system bool    T_ITEM::KnownQuality(int16 q);
 system bool    T_ITEM::QualityOK(int8 q,int16 lv=200);
-system void    T_ITEM::AddQuality(int8 q, int8 param=0);
+system void    T_ITEM::AddQuality(int8 q, int16 param=0);
 system void    T_ITEM::RemoveQuality(int8 q); 
 system void    T_ITEM::PurgeAllQualities();
 system int16   T_ITEM::ItemLevel();
@@ -638,7 +637,7 @@ system void    T_TERM::WriteXY(int16 x,int16 y, string msg);
 system void    T_TERM::CursorOn();
 system void    T_TERM::CursorOff();
 system hObj    T_TERM::ChooseTarget(String prompt,int16 rType = 0);
-system bool    T_TERM::EffectPrompt(hObj:T_EVENTINFO,int16 qv,int8 islook, String str);
+system bool    T_TERM::EffectPrompt(hObj:T_EVENTINFO,int16 qv,bool islook, String str);
 system hObj    T_TERM::AcquisitionPrompt(int8 Reason, int8 minlev, int8 maxlev, int8 MType);
 system string  T_TERM::StringPrompt(int8 col, string msg);
 system rID     T_TERM::ChooseResource(string prompt, int16 RType, rID eID);
@@ -666,7 +665,7 @@ system int16   T_TERM::WinSizeY();
 system rID     T_GAME::GetEffectID(int16 pur, int8 minlev, int8 maxlev, int8 Source=0);
 system rID     T_GAME::GetMonID(int16 pur, int8 minlev, int8 maxlev, int8 Depth, int16 MType=-1);
 system rID     T_GAME::GetItemID(int16 pur, int8 minlev, int8 maxlev, int16 IType=-1);
-system rID     T_GAME::GetMapID(uint8 Purpose, int8 depth, int8 MType=-1);
+system rID     T_GAME::GetMapID(int16 Purpose, uint8 depth, int8 MType=-1);
 system rID     T_GAME::GetTempID(uint16 Types,rID mID, int16 MaxCR);
 
 system hObj    T_GAME::GetPlayer(int16 n);
@@ -701,7 +700,7 @@ system int8    T_EVENTINFO::vCrit;
 system int8    T_EVENTINFO::vPenetrateBonus;
 system int8    T_EVENTINFO::vRange;
 system int8    T_EVENTINFO::vRadius;
-system int8    T_EVENTINFO::vDuration;
+system int16   T_EVENTINFO::vDuration;
 system int8    T_EVENTINFO::vCasterLev;
 system int8    T_EVENTINFO::vAlchemy;
 system int8    T_EVENTINFO::vChainCount;
@@ -815,8 +814,8 @@ system int8    T_EVENTINFO::qval;
 system int8    T_EVENTINFO::sval;
 system int8    T_EVENTINFO::lval;
 system int8    T_EVENTINFO::cval;
-system int8    T_EVENTINFO::xval;
-system int8    T_EVENTINFO::yval;
+system uint8   T_EVENTINFO::xval;
+system int16   T_EVENTINFO::yval;
 system rID     T_EVENTINFO::rval;
 /*system void    T_EVENTINFO::SetEFlag(int16 fl);
 system void    T_EVENTINFO::UnsetEFlag(int16 fl);
@@ -849,7 +848,7 @@ system int16   T_EVENTINFO::epWeight;
 system int16   T_EVENTINFO::epMType;
 system int16   T_EVENTINFO::epSkillRoll;
 system int16   T_EVENTINFO::epClassRoll;
-system int32   T_EVENTINFO::epCurrXCR;
+system int16   T_EVENTINFO::epCurrXCR;
 system rID     T_EVENTINFO::enID;
 system rID     T_EVENTINFO::ep_mID;
 system rID     T_EVENTINFO::ep_tID;

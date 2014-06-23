@@ -448,7 +448,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="INC\api.h" />
+    <ClInclude Include="INC\api.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="INC\BASE.H" />
     <ClInclude Include="inc\ConstNam.h" />
     <ClInclude Include="INC\CREATURE.H" />

@@ -55,7 +55,7 @@ extern SymbolTable theSymTab;
    strange, but works well in practice. */
 
 TextVal Keywords1[] = {
-  { ABS, "abs" },           { CONTINUE, "continue" },
+  { ABS, "abs" },           { CONTINUE, "continue" }, { BOOL, "bool" },
   { BREAK, "break" },       { CASE, "case" },         { DEFAULT, "default" },
   { DO, "do" },             { ELSE, "else" },         { WORD_FALSE, "false" },
   { FOR, "for" },           { HOBJ, "hObj" },         { HTEXT, "hText" },
@@ -176,7 +176,8 @@ YYSTYPE DoKeywords(const char *text)
             if (Keywords1[i].Val == INT16 || Keywords1[i].Val == INT8 ||
                 Keywords1[i].Val == INT32 || Keywords1[i].Val == STRING ||
                 Keywords1[i].Val == HTEXT || Keywords1[i].Val == HOBJ ||
-                Keywords1[i].Val == RID || Keywords1[i].Val == WORD_RECT)
+                Keywords1[i].Val == RID || Keywords1[i].Val == WORD_RECT ||
+				Keywords1[i].Val == BOOL)
               decl_state = true;
             if (Keywords1[i].Val == IF && brace_level < 2)
               if_cond = 1;
