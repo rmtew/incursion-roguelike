@@ -17,7 +17,8 @@
 #define char       int32
 #define EvReturn   int32
 #define uint32     int32
-//#define uint16     int32
+#define Dir        int8
+#define GlyphType  uint16
 #define NULL_ID    ((rID)0)
 #define NULL_RECT  ((Rect)0)
 #define NULL_OBJ   ((hObj)0)
@@ -115,7 +116,7 @@ system void    T_MAP::WriteBlobs(Rect r, rID regID, rID bID);
 system void    T_MAP::Generate(rID dunID, int16 Depth, hObj:T_MAP above, int8 Luck); 
 system void    T_MAP::DrawPanel(uint8 x, uint8 y);
 system void    T_MAP::PopulatePanel(Rect r,uint16 extraFlags=0);
-system uint16  T_MAP::Tunnel(uint8 sx, uint8 sy, uint8 dx, uint8 dy, uint8 TFlags, int32 StartDir, int8 TType);
+system uint16  T_MAP::Tunnel(uint8 sx, uint8 sy, uint8 dx, uint8 dy, uint8 TFlags, Dir StartDir, int8 TType);
 system void    T_MAP::MakeDoor(uint8 x, uint8 y, rID fID);
 system bool    T_MAP::FindOpenAreas(Rect Area, uint16 Flags=0);
 system void    T_MAP::SetGlyphAt(int16 x, int16 y, uint16 g);
@@ -127,8 +128,7 @@ system void    T_MAP::Update(int16 x,int16 y);
 system void    T_MAP::VUpdate(int16 x, int16 y);
 system void    T_MAP::MarkAsSeen(int8 pn, int16 x, int16 y, int16 dist);
 
-system void    T_MAP::NewField(int32 FType, int16 x, int16 y, uint8 rad,
-                          int32 img, int16 dur, rID eID, hObj:T_CREATURE Creator);
+system void    T_MAP::NewField(int32 FType, int16 x, int16 y, uint8 rad, GlyphType img, int16 dur, rID eID, hObj:T_CREATURE Creator);
 system bool    T_MAP::FieldAt(int16 x,int16 y, int32 FType=-1);
 system void    T_MAP::RemoveEffField(rID eID);
 system void    T_MAP::RemoveFieldFrom(hObj h);
@@ -204,7 +204,7 @@ system hObj   T_THING::m;
 system hObj   T_THING::Next;
 system int16  T_THING::x;
 system int16  T_THING::y;
-system int32  T_THING::Image;
+system GlyphType  T_THING::Image;
 system int16  T_THING::Timeout;
 system int32  T_THING::Flags;
 system string T_THING::Named;
@@ -603,7 +603,7 @@ system EvReturn T_TRAP::TriggerTrap(hObj:T_EVENTINFO, bool found_before=false);
 system int16   T_TRAP::TrapLevel();
 system rID     T_FEATURE::fID;
 
-system bool    T_PORTAL::EnterDir(int16 dir);
+system bool    T_PORTAL::EnterDir(Dir dir);
 
 /*****************************************************************************
  *                               Class Term                                  *
@@ -622,8 +622,8 @@ system int16   T_TERM::OffsetX();
 system int16   T_TERM::OffsetY();
 system void    T_TERM::SetWin(int16 win);
 system int16   T_TERM::GetCharRaw();
-system void    T_TERM::PutChar(int16 x,int16 y, int32 g);
-system void    T_TERM::PutGlyph(int16 x,int16 y, int32 g);
+system void    T_TERM::PutChar(int16 x,int16 y, GlyphType g);
+system void    T_TERM::PutGlyph(int16 x,int16 y, GlyphType g);
 system int32   T_TERM::GetGlyph(int16 x,int16 y);
 system void    T_TERM::GotoXY(int16 x, int16 y);
 system void    T_TERM::Clear();

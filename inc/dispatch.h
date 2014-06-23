@@ -303,7 +303,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 55:
         VERIFY(h,T_MAP,"Tunnel")
         ASSERT(REGS(63) >= 7)
-        REGS(n) = oMap(h)->Tunnel((uint8)STACK(1), (uint8)STACK(2), (uint8)STACK(3), (uint8)STACK(4), (uint8)STACK(5), STACK(6), (int8)STACK(7));
+        REGS(n) = oMap(h)->Tunnel((uint8)STACK(1), (uint8)STACK(2), (uint8)STACK(3), (uint8)STACK(4), (uint8)STACK(5), (int8)STACK(6), (int8)STACK(7));
         return;
     case 56:
         VERIFY(h,T_MAP,"MakeDoor")
@@ -357,7 +357,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 65:
         VERIFY(h,T_MAP,"NewField")
         ASSERT(REGS(63) >= 8)
-        oMap(h)->NewField(STACK(1), (int16)STACK(2), (int16)STACK(3), (uint8)STACK(4), STACK(5), (int16)STACK(6), STACK(7), oCreature(STACK(8)));
+        oMap(h)->NewField(STACK(1), (int16)STACK(2), (int16)STACK(3), (uint8)STACK(4), (uint16)STACK(5), (int16)STACK(6), STACK(7), oCreature(STACK(8)));
         return;
     case 66:
         VERIFY(h,T_MAP,"FieldAt")
@@ -2001,7 +2001,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 389:
         VERIFY(h,T_PORTAL,"EnterDir")
         ASSERT(REGS(63) >= 1)
-        REGS(n) = oPortal(h)->EnterDir((int16)STACK(1));
+        REGS(n) = oPortal(h)->EnterDir((int8)STACK(1));
         return;
     case 390:
         ASSERT(REGS(63) >= 1)
@@ -2033,11 +2033,11 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
         return;
     case 397:
         ASSERT(REGS(63) >= 3)
-        T1->PutChar((int16)STACK(1), (int16)STACK(2), STACK(3));
+        T1->PutChar((int16)STACK(1), (int16)STACK(2), (uint16)STACK(3));
         return;
     case 398:
         ASSERT(REGS(63) >= 3)
-        T1->PutGlyph((int16)STACK(1), (int16)STACK(2), STACK(3));
+        T1->PutGlyph((int16)STACK(1), (int16)STACK(2), (uint16)STACK(3));
         return;
     case 399:
         ASSERT(REGS(63) >= 2)
@@ -3425,7 +3425,7 @@ void VMachine::SetMemberVar(int16 varid, hObj h, int32 val)
           oThing(h)->Next = val;
          break;
         case 6:
-          oThing(h)->Image = val;
+          oThing(h)->Image = (uint16)val;
          break;
         case 7:
           oThing(h)->Timeout = (int16)val;
