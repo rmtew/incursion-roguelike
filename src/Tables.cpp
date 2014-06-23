@@ -306,6 +306,7 @@ TextVal DataTypeNames[] = {
   { DT_INT8, "int8" },
   { DT_UINT8, "uint8" },
   { DT_INT16, "int16" },
+  { DT_UINT16, "uint16" },
   { DT_INT32, "int32" },
   { DT_HOBJ, "hObj" },
   { DT_RID, "rID" },

@@ -782,6 +782,7 @@ Repeat:
             case DT_INT8:
             case DT_UINT8:
             case DT_INT16:
+            case DT_UINT16:
             case DT_INT32:
             case DT_HTEXT:
                 fprintf(fp,"        REGS(n) = ");
@@ -832,13 +833,14 @@ Repeat:
                 case DT_INT16:
                     fprintf(fp,"(int16)STACK(%d)",j);
                     break;
+                case DT_UINT16:
+                    fprintf(fp,"(uint16)STACK(%d)",j);
+                    break;
                 case DT_RID:
                 case DT_INT32:
                     fprintf(fp,"STACK(%d)",j);
                     break;
                 case DT_STRING:
-                    fprintf(fp,"GETSTR(STACK(%d))",j);
-                    break;
                 case DT_HTEXT:
                     fprintf(fp,"GETSTR(STACK(%d))",j);
                     break;
@@ -901,6 +903,7 @@ Repeat:
                 case DT_RID:
                 case DT_INT32:
                 case DT_INT16:
+                case DT_UINT16:
                 case DT_INT8:
                 case DT_UINT8:
                 case DT_HTEXT:
@@ -931,6 +934,9 @@ Repeat:
                         break;
                     case DT_INT16:
                         fprintf(fp,"(int16)STACK(%d)",j);
+                        break;
+                    case DT_UINT16:
+                        fprintf(fp,"(uint16)STACK(%d)",j);
                         break;
                     case DT_RID:
                     case DT_INT32:
@@ -1087,6 +1093,9 @@ Repeat:
                 case DT_INT16:
                     fprintf (fp, "->%s = (int16)val;\n         break;\n",theSymTab[i]);
                     break;
+                case DT_UINT16:
+                    fprintf (fp, "->%s = (uint16)val;\n         break;\n",theSymTab[i]);
+                    break;
                 case DT_STRING:
                     fprintf (fp, "->%s = GETSTR(val);\n         break;\n",theSymTab[i]);
                     break;
@@ -1217,7 +1226,7 @@ bool AllowedCast(int16 from, int16 to)
     if (from != DT_STRING && from != DT_VOID && to == DT_BOOL)
       return true;
     if (from == DT_HOBJ || from == DT_RID || from == DT_INT32 || from == DT_INT16 ||
-        from == DT_INT8 || from == DT_UINT8)
+        from == DT_INT8 || from == DT_UINT8 || from == DT_UINT16)
       if (to == DT_BOOL)
         return true;    
     if (from == DT_HTEXT || from == DT_HOBJ || from == DT_STRING

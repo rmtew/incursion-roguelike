@@ -1244,6 +1244,7 @@ type_name<ty>:
     VOID          { *ty = DT_VOID; }
   | BOOL          { *ty = DT_BOOL; }
   | UINT8         { *ty = DT_UINT8; }
+  | UINT16        { *ty = DT_UINT16; }
   | INT8          { *ty = DT_INT8; }
   | INT16         { *ty = DT_INT16; }
   | INT32         { *ty = DT_INT32; }

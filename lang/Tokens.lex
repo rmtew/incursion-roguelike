@@ -65,7 +65,8 @@ TextVal Keywords1[] = {
   { STATIC, "static" },     { STRING, "string" },     { STRING, "String" },
   { SWITCH, "switch" },     { WORD_TRUE, "true" },    { WORD_NULL, "NULL" },
   { VOID, "void",  },       { WHILE, "while" },       { WORD_RECT, "rect" },
-  { WORD_RECT, "Rect" },    { UINT8, "uint8" },       { 0, NULL } };
+  { WORD_RECT, "Rect" },    { UINT8, "uint8" },       { UINT16, "uint16" },
+  { 0, NULL } };
 
   
 TextVal Keywords2[] = {
@@ -177,7 +178,8 @@ YYSTYPE DoKeywords(const char *text)
                 Keywords1[i].Val == INT32 || Keywords1[i].Val == STRING ||
                 Keywords1[i].Val == HTEXT || Keywords1[i].Val == HOBJ ||
                 Keywords1[i].Val == RID || Keywords1[i].Val == WORD_RECT ||
-				Keywords1[i].Val == BOOL || Keywords1[i].Val == UINT8)
+				Keywords1[i].Val == BOOL || Keywords1[i].Val == UINT8 ||
+				Keywords1[i].Val == UINT16)
               decl_state = true;
             if (Keywords1[i].Val == IF && brace_level < 2)
               if_cond = 1;

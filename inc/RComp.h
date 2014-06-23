@@ -21,6 +21,7 @@ enum btype { SYS_OBJ, LOC_VAR, MOD_FUNC, GLOB_VAR, MEM_VAR, MEM_FUNC,
 #define DT_INT16    9
 #define DT_INT8    10
 #define DT_UINT8   11
+#define DT_UINT16  12
 #define DT_UNKNOWN 12
 
 

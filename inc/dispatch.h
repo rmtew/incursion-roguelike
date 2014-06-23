@@ -298,7 +298,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 54:
         VERIFY(h,T_MAP,"PopulatePanel")
         ASSERT(REGS(63) >= 2)
-        oMap(h)->PopulatePanel(CAST_RECT(STACK(1)), STACK(2));
+        oMap(h)->PopulatePanel(CAST_RECT(STACK(1)), (uint16)STACK(2));
         return;
     case 55:
         VERIFY(h,T_MAP,"Tunnel")
@@ -313,12 +313,12 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 57:
         VERIFY(h,T_MAP,"FindOpenAreas")
         ASSERT(REGS(63) >= 2)
-        REGS(n) = oMap(h)->FindOpenAreas(CAST_RECT(STACK(1)), STACK(2));
+        REGS(n) = oMap(h)->FindOpenAreas(CAST_RECT(STACK(1)), (uint16)STACK(2));
         return;
     case 58:
         VERIFY(h,T_MAP,"SetGlyphAt")
         ASSERT(REGS(63) >= 3)
-        oMap(h)->SetGlyphAt((int16)STACK(1), (int16)STACK(2), STACK(3));
+        oMap(h)->SetGlyphAt((int16)STACK(1), (int16)STACK(2), (uint16)STACK(3));
         return;
     case 59:
         VERIFY(h,T_MAP,"SetRegion")
@@ -495,52 +495,52 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 92:
         VERIFY(h,T_MAP,"thEnGen")
         ASSERT(REGS(63) >= 4)
-        REGS(n) = oMap(h)->thEnGen(STACK(1), STACK(2), (int8)STACK(3), STACK(4));
+        REGS(n) = oMap(h)->thEnGen(STACK(1), STACK(2), (int8)STACK(3), (uint16)STACK(4));
         return;
     case 93:
         VERIFY(h,T_MAP,"thEnGenXY")
         ASSERT(REGS(63) >= 6)
-        REGS(n) = oMap(h)->thEnGenXY(STACK(1), STACK(2), (int8)STACK(3), STACK(4), (int16)STACK(5), (int16)STACK(6));
+        REGS(n) = oMap(h)->thEnGenXY(STACK(1), STACK(2), (int8)STACK(3), (uint16)STACK(4), (int16)STACK(5), (int16)STACK(6));
         return;
     case 94:
         VERIFY(h,T_MAP,"thEnGenSummXY")
         ASSERT(REGS(63) >= 7)
-        REGS(n) = oMap(h)->thEnGenSummXY(STACK(1), STACK(2), (int8)STACK(3), STACK(4), oCreature(STACK(5)), (int16)STACK(6), (int16)STACK(7));
+        REGS(n) = oMap(h)->thEnGenSummXY(STACK(1), STACK(2), (int8)STACK(3), (uint16)STACK(4), oCreature(STACK(5)), (int16)STACK(6), (int16)STACK(7));
         return;
     case 95:
         VERIFY(h,T_MAP,"thEnGenMon")
         ASSERT(REGS(63) >= 5)
-        REGS(n) = oMap(h)->thEnGenMon(STACK(1), STACK(2), STACK(3), (int8)STACK(4), STACK(5));
+        REGS(n) = oMap(h)->thEnGenMon(STACK(1), STACK(2), STACK(3), (int8)STACK(4), (uint16)STACK(5));
         return;
     case 96:
         VERIFY(h,T_MAP,"thEnGenMonXY")
         ASSERT(REGS(63) >= 7)
-        REGS(n) = oMap(h)->thEnGenMonXY(STACK(1), STACK(2), STACK(3), (int8)STACK(4), STACK(5), (int16)STACK(6), (int16)STACK(7));
+        REGS(n) = oMap(h)->thEnGenMonXY(STACK(1), STACK(2), STACK(3), (int8)STACK(4), (uint16)STACK(5), (int16)STACK(6), (int16)STACK(7));
         return;
     case 97:
         VERIFY(h,T_MAP,"thEnGenMType")
         ASSERT(REGS(63) >= 5)
-        REGS(n) = oMap(h)->thEnGenMType(STACK(1), (int16)STACK(2), STACK(3), (int8)STACK(4), STACK(5));
+        REGS(n) = oMap(h)->thEnGenMType(STACK(1), (int16)STACK(2), STACK(3), (int8)STACK(4), (uint16)STACK(5));
         return;
     case 98:
         VERIFY(h,T_MAP,"thEnGenMTypeXY")
         ASSERT(REGS(63) >= 7)
-        REGS(n) = oMap(h)->thEnGenMTypeXY(STACK(1), (int16)STACK(2), STACK(3), (int8)STACK(4), STACK(5), (int16)STACK(6), (int16)STACK(7));
+        REGS(n) = oMap(h)->thEnGenMTypeXY(STACK(1), (int16)STACK(2), STACK(3), (int8)STACK(4), (uint16)STACK(5), (int16)STACK(6), (int16)STACK(7));
         return;
     case 99:
         VERIFY(h,T_MAP,"thEnGenMonSummXY")
         ASSERT(REGS(63) >= 8)
-        REGS(n) = oMap(h)->thEnGenMonSummXY(STACK(1), STACK(2), STACK(3), (int8)STACK(4), STACK(5), oCreature(STACK(6)), (int16)STACK(7), (int16)STACK(8));
+        REGS(n) = oMap(h)->thEnGenMonSummXY(STACK(1), STACK(2), STACK(3), (int8)STACK(4), (uint16)STACK(5), oCreature(STACK(6)), (int16)STACK(7), (int16)STACK(8));
         return;
     case 100:
         VERIFY(h,T_MAP,"thEnGenMTypeSummXY")
         ASSERT(REGS(63) >= 8)
-        REGS(n) = oMap(h)->thEnGenMTypeSummXY(STACK(1), (int16)STACK(2), STACK(3), (int8)STACK(4), STACK(5), oCreature(STACK(6)), (int16)STACK(7), (int16)STACK(8));
+        REGS(n) = oMap(h)->thEnGenMTypeSummXY(STACK(1), (int16)STACK(2), STACK(3), (int8)STACK(4), (uint16)STACK(5), oCreature(STACK(6)), (int16)STACK(7), (int16)STACK(8));
         return;
     case 101:
         VERIFY(h,T_MAP,"rtEnGen")
         ASSERT(REGS(63) >= 5)
-        REGS(n) = oMap(h)->rtEnGen(*pe, STACK(2), STACK(3), (int8)STACK(4), STACK(5));
+        REGS(n) = oMap(h)->rtEnGen(*pe, STACK(2), STACK(3), (int8)STACK(4), (uint16)STACK(5));
         return;
     case 102:
         VERIFY(h,T_OBJECT,"isType")
@@ -1555,7 +1555,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 301:
         VERIFY(h,T_CHARACTER,"setSpellFlags")
         ASSERT(REGS(63) >= 2)
-        oCharacter(h)->setSpellFlags(STACK(1), STACK(2));
+        oCharacter(h)->setSpellFlags(STACK(1), (uint16)STACK(2));
         return;
     case 302:
         VERIFY(h,T_CHARACTER,"GetSkillRanks")
@@ -1606,7 +1606,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 311:
         VERIFY(h,T_CHARACTER,"AlignedAct")
         ASSERT(REGS(63) >= 3)
-        oCharacter(h)->AlignedAct(STACK(1), (int16)STACK(2), GETSTR(STACK(3)));
+        oCharacter(h)->AlignedAct((uint16)STACK(1), (int16)STACK(2), GETSTR(STACK(3)));
         return;
     case 312:
         VERIFY(h,T_CHARACTER,"getGodFlags")
@@ -1626,12 +1626,12 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 315:
         VERIFY(h,T_CHARACTER,"setGodFlags")
         ASSERT(REGS(63) >= 2)
-        oCharacter(h)->setGodFlags(STACK(1), STACK(2));
+        oCharacter(h)->setGodFlags(STACK(1), (uint16)STACK(2));
         return;
     case 316:
         VERIFY(h,T_CHARACTER,"resetGodFlags")
         ASSERT(REGS(63) >= 2)
-        oCharacter(h)->resetGodFlags(STACK(1), STACK(2));
+        oCharacter(h)->resetGodFlags(STACK(1), (uint16)STACK(2));
         return;
     case 317:
         VERIFY(h,T_CHARACTER,"Forsake")
@@ -1878,7 +1878,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 365:
         VERIFY(h,T_ITEM,"SetQuantity")
         ASSERT(REGS(63) >= 1)
-        oItem(h)->SetQuantity(STACK(1));
+        oItem(h)->SetQuantity((uint16)STACK(1));
         return;
     case 366:
         VERIFY(h,T_ITEM,"TakeOne")
@@ -2160,7 +2160,7 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
     case 427:
         VERIFY(h,T_GAME,"GetTempID")
         ASSERT(REGS(63) >= 3)
-        REGS(n) = oGame(h)->GetTempID(STACK(1), STACK(2), (int8)STACK(3));
+        REGS(n) = oGame(h)->GetTempID((uint16)STACK(1), STACK(2), (int8)STACK(3));
         return;
     case 428:
         VERIFY(h,T_GAME,"GetPlayer")
@@ -2596,12 +2596,12 @@ void VMachine::CallMemberFunc(int16 funcid, hObj h, int8 n) {
         return;
     case 523:
         ASSERT(REGS(63) >= 4)
-        t = GenDungeonItem(STACK(1), STACK(2), (int16)STACK(3), (int8)STACK(4));
+        t = GenDungeonItem((uint16)STACK(1), STACK(2), (int16)STACK(3), (int8)STACK(4));
         REGS(n) = t ? t->myHandle : 0;
         return;
     case 524:
         ASSERT(REGS(63) >= 4)
-        t = GenChestItem(STACK(1), STACK(2), (int16)STACK(3), (int8)STACK(4));
+        t = GenChestItem((uint16)STACK(1), STACK(2), (int16)STACK(3), (int8)STACK(4));
         REGS(n) = t ? t->myHandle : 0;
         return;
     case 525:

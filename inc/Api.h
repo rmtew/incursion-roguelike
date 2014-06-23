@@ -17,8 +17,7 @@
 #define char       int32
 #define EvReturn   int32
 #define uint32     int32
-#define uint16     int32
-//#define uint8      int32
+//#define uint16     int32
 #define NULL_ID    ((rID)0)
 #define NULL_RECT  ((Rect)0)
 #define NULL_OBJ   ((hObj)0)
