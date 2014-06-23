@@ -15,13 +15,10 @@
    rewrite this file (much) when it gets more advanced. */
 
 #define char       int32
-//#define bool       int32
-//#define int16      int32
-//#define int8       int32
 #define EvReturn   int32
 #define uint32     int32
 #define uint16     int32
-#define uint8      int32
+//#define uint8      int32
 #define NULL_ID    ((rID)0)
 #define NULL_RECT  ((Rect)0)
 #define NULL_OBJ   ((hObj)0)
@@ -119,8 +116,8 @@ system void    T_MAP::WriteBlobs(Rect r, rID regID, rID bID);
 system void    T_MAP::Generate(rID dunID, int16 Depth, hObj:T_MAP above, int8 Luck); 
 system void    T_MAP::DrawPanel(uint8 x, uint8 y);
 system void    T_MAP::PopulatePanel(Rect r,uint16 extraFlags=0);
-system int32   T_MAP::Tunnel(uint8 sx, uint8 sy, uint8 dx, int32 dy, uint8 TFlags, int32 StartDir, int8 TType);
-system void    T_MAP::MakeDoor(int32 x, int32 y, rID fID);
+system uint16  T_MAP::Tunnel(uint8 sx, uint8 sy, uint8 dx, uint8 dy, uint8 TFlags, int32 StartDir, int8 TType);
+system void    T_MAP::MakeDoor(uint8 x, uint8 y, rID fID);
 system bool    T_MAP::FindOpenAreas(Rect Area, uint16 Flags=0);
 system void    T_MAP::SetGlyphAt(int16 x, int16 y, uint16 g);
 system void    T_MAP::SetRegion(Rect r, rID regID);
@@ -325,8 +322,8 @@ system int32  T_CREATURE::tMana();
 system int32  T_CREATURE::nhMana();
 system void   T_CREATURE::LoseMana(int32 amt, bool hold=false);
 system void   T_CREATURE::GainMana(int32 amt);
-system int32  T_CREATURE::AoO;
-system int16  T_CREATURE::FFCount;
+system int8  T_CREATURE::AoO;
+system int8  T_CREATURE::FFCount;
 system int16  T_CREATURE::StateFlags;
 
 system int32  T_CREATURE::AttackMode();
@@ -475,8 +472,8 @@ system void   T_CHARACTER::SetInvSlot(int16 sl, hObj:T_ITEM it);
   /* CasterLev() et al. awaiting revision */
 
 system void   T_CHARACTER::UseFeat(int16 ft);
-system void   T_CHARACTER::UseSkill(int16 sk);
-system void   T_CHARACTER::UseAbility(int16 ab,int16 pa);
+system void   T_CHARACTER::UseSkill(uint8 sk);
+system void   T_CHARACTER::UseAbility(uint8 ab,int16 pa);
 
 system void   T_CHARACTER::GodMessage(rID gID, int16 msg,...);
 system int32  T_CHARACTER::calcFavour(rID gID);
@@ -553,19 +550,19 @@ system void    T_ITEM::ChangeIID(rID xID);
 system bool    T_ITEM::allowedSlot(int16 sl, hObj:T_CREATURE);
 system bool    T_ITEM::activeSlot(int16 sl);
 system int8    T_ITEM::GetCharges();
-system void    T_ITEM::SetCharges(int16 ch);
-system void    T_ITEM::MakeKnown(int16 k);
-system void    T_ITEM::SetKnown(int16 k);
+system void    T_ITEM::SetCharges(int8 ch);
+system void    T_ITEM::MakeKnown(uint8 k);
+system void    T_ITEM::SetKnown(uint8 k);
 system bool    T_ITEM::isEdible(hObj:T_CREATURE);
 system bool    T_ITEM::isMagic();
 system void    T_ITEM::MakeMagical(rID eID, int16 plus=0);
 system int16   T_ITEM::Weight();          /* == Item::Weight() */
-system bool    T_ITEM::HasIFlag(int16 fl);
+system bool    T_ITEM::HasIFlag(uint8 fl);
 system bool    T_ITEM::useStrength();
 system bool    T_ITEM::HasSpell(int16 sp);
 system bool    T_ITEM::HasQuality(int16 q);
 system bool    T_ITEM::KnownQuality(int16 q);
-system bool    T_ITEM::QualityOK(int8 q,int16 lv=200);
+system bool    T_ITEM::QualityOK(int8 q,uint8 lv=200);
 system void    T_ITEM::AddQuality(int8 q, int16 param=0);
 system void    T_ITEM::RemoveQuality(int8 q); 
 system void    T_ITEM::PurgeAllQualities();
@@ -600,8 +597,8 @@ system int16   T_ITEM::GetBane();
 
 system hObj    T_CONTAIN::getItem(int16 n);
 
-system int32   T_DOOR::DoorFlags;
-system int32   T_TRAP::TrapFlags;
+system int8    T_DOOR::DoorFlags;
+system uint8   T_TRAP::TrapFlags;
 system rID     T_TRAP::tID; 
 system EvReturn T_TRAP::TriggerTrap(hObj:T_EVENTINFO, bool found_before=false);
 system int16   T_TRAP::TrapLevel();
@@ -643,8 +640,8 @@ system string  T_TERM::StringPrompt(int8 col, string msg);
 system rID     T_TERM::ChooseResource(string prompt, int16 RType, rID eID);
 system void    T_TERM::LOption(string txt, int16 val, string des=0);
 system void    T_TERM::LOptionClear();
-system int32   T_TERM::LMenu(int16 fl, string title, int16 MWin=WIN_MENUBOX,string help=0);
-system bool    T_TERM::LMultiSelect(int16 fl, string title, int16 MWin=WIN_MENUBOX,string help=0);
+system int32   T_TERM::LMenu(int16 fl, string title, int8 MWin=WIN_MENUBOX,string help=0);
+system bool    T_TERM::LMultiSelect(int16 fl, string title, int8 MWin=WIN_MENUBOX,string help=0);
 system int32   T_TERM::FirstSelected();
 system int32   T_TERM::NextSelected();
 system void    T_TERM::HelpTopic(string topic);
@@ -664,11 +661,11 @@ system int16   T_TERM::WinSizeY();
 
 system rID     T_GAME::GetEffectID(int16 pur, int8 minlev, int8 maxlev, int8 Source=0);
 system rID     T_GAME::GetMonID(int16 pur, int8 minlev, int8 maxlev, int8 Depth, int16 MType=-1);
-system rID     T_GAME::GetItemID(int16 pur, int8 minlev, int8 maxlev, int16 IType=-1);
+system rID     T_GAME::GetItemID(int16 pur, int8 minlev, int8 maxlev, int8 IType=-1);
 system rID     T_GAME::GetMapID(int16 Purpose, uint8 depth, int8 MType=-1);
-system rID     T_GAME::GetTempID(uint16 Types,rID mID, int16 MaxCR);
+system rID     T_GAME::GetTempID(uint16 Types,rID mID, int8 MaxCR);
 
-system hObj    T_GAME::GetPlayer(int16 n);
+system hObj    T_GAME::GetPlayer(int8 n);
 system void    T_GAME::EnterLimbo(hObj h, uint8 x, uint8 y, rID mID, int8 Depth,
                  int8 OldDepth, int32 Arrival, String msg);
 
@@ -898,7 +895,7 @@ system int16   T_TITEM::RIType;
 system uint16  T_TFEATURE::Image;
 
 system uint32  T_TEFFECT::Schools;
-system bool    T_TEFFECT::HasSource(int16 src);
+system bool    T_TEFFECT::HasSource(int8 src);
 system uint32  T_TEFFECT::Purpose;
 system int16   T_TEFFECT::Level;
 system bool    T_TEFFECT::HasFlag(int16 tf);
@@ -1049,8 +1046,8 @@ system hObj   CreateFeature(rID fID);
 system hObj   CreateDoor(rID fID);
 system hObj   CreatePortal(rID fID);
 system hObj   CreateTrap(rID fID, rID tID);
-system hObj   GenDungeonItem(uint16 fl, rID xID, int16 Depth, int16 Luck);
-system hObj   GenChestItem(uint16 fl, rID xID, int16 Depth, int16 Luck);
+system hObj   GenDungeonItem(uint16 fl, rID xID, int16 Depth, int8 Luck);
+system hObj   GenChestItem(uint16 fl, rID xID, int16 Depth, int8 Luck);
 system hObj   InitShopkeeper(rID mID, int32 gold);
 system void   SystemBreak();
 

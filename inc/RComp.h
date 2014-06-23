@@ -10,17 +10,18 @@
 enum btype { SYS_OBJ, LOC_VAR, MOD_FUNC, GLOB_VAR, MEM_VAR, MEM_FUNC, 
              RES_VAR, SYS_FUNC, RES_MEM, RES_FUNC, ANY };
 
-#define DT_VOID   1
-#define DT_INT32  2
-#define DT_HOBJ   3
-#define DT_HTEXT  4
-#define DT_RID    5
-#define DT_STRING 6
-#define DT_BOOL   7
-#define DT_RECT   8
-#define DT_INT16  9
-#define DT_INT8  10
-#define DT_UNKNOWN 11
+#define DT_VOID     1
+#define DT_INT32    2
+#define DT_HOBJ     3
+#define DT_HTEXT    4
+#define DT_RID      5
+#define DT_STRING   6
+#define DT_BOOL     7
+#define DT_RECT     8
+#define DT_INT16    9
+#define DT_INT8    10
+#define DT_UINT8   11
+#define DT_UNKNOWN 12
 
 
 #define RT_CONSTANT    0
