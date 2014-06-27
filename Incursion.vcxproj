@@ -479,21 +479,17 @@ rem move /Y yygram.cpp $(ProjectDir)\src\
 rem move /Y yygram.h $(ProjectDir)\inc\
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">src\yygram.cpp;inc\yygram.h;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">cd %(RootDir)%(Directory)
-$(ProjectDir)modaccent %(Filename)%(Extension)
-move /Y yygram.cpp ..\src\
-move /Y yygram.h ..\inc\
-cd $(ProjectDir)
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">cd $(ProjectDir)
+modaccent %(Identity) src inc
+rem move /Y yygram.cpp $(ProjectDir)\src\
+rem move /Y yygram.h $(ProjectDir)\inc\
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">src\yygram.cpp;src\yygram.h;%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="lang\tokens.lex">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">FLEX --wincompat -B -i -o.\SRC\tokens.cpp .\lang\Tokens.Lex
-
-</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">FLEX --wincompat -B -i -o.\SRC\tokens.cpp .\lang\Tokens.Lex</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\SRC\tokens.cpp;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">FLEX -i -o.\SRC\tokens.cpp .\lang\Tokens.Lex
-</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">FLEX --wincompat -B -i -o.\SRC\tokens.cpp .\lang\Tokens.Lex</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\SRC\tokens.cpp;%(Outputs)</Outputs>
     </CustomBuild>
     <None Include="ChangeLog.txt" />
