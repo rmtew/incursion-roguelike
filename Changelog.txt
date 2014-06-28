@@ -1,5 +1,7 @@
-Incursion (open source) 0.6.9Y..: 2014-06-..
-* ...
+Incursion (open source) 0.6.9Y12: 2014-06-28 UNSTABLE
+* This release is an interim one.  Hundreds of compiler warnings were fixed, and while most were benign explicit type casting, three were bugs.  Do not ask me what they were, as I was too stupid to note them down, and they are hidden amongst all the others.  These changes are possibly unstable, and might cause this release to be unreliable.
+* I recreated the missing accent compiler compiler source code.  This allows changes to the IncursionScript language.
+* Added typing support to the IncursionScript grammar for things like int8, int16 and so forth.  Previously all data typing was int32.  This was primarily to remove the warnings when compiling the generated IncursionScript engine to game engine method and function call access API code.
 
 Incursion (open source) 0.6.9Y11: 2014-06-10
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/140/: Fix bug where previous fix for scrolling position persisting in different windows that allow scrolling, broke scrolling in other locations.  Reported by Karagy.
