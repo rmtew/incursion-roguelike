@@ -873,27 +873,7 @@ void  libtcodTerm::SPutChar(int16 x, int16 y, Glyph g) {
 }
 
 Glyph libtcodTerm::SGetChar(int16 x, int16 y) {
-    Glyph g = TCOD_console_get_char(bScreen,x,y);
-    int16 i;
-    TCOD_color_t fgcolor, bgcolor;
-    int32 fi = -1, bi = -1;
-    fgcolor = TCOD_console_get_char_foreground(bScroll,x,y);
-    for (i=0;i<MAX_COLORS;i++)
-        if (Colors[i].r == fgcolor.r && Colors[i].g == fgcolor.g && Colors[i].b == fgcolor.b) {
-            fi = i;
-            break;
-        }
-    bgcolor = TCOD_console_get_char_background(bScroll,x,y);
-    for (i=0;i<MAX_COLORS;i++)
-        if (Colors[i].r == bgcolor.r && Colors[i].g == bgcolor.g && Colors[i].b == bgcolor.b) {
-            bi = i;
-            break;
-        }
-    if (bi != -1)
-        g |= bi * 256 * 16;
-    if (fi != -1)
-        g |= fi * 256;
-    return g;
+    return TCOD_console_get_char(bScroll,x,y);
 }
 
 void libtcodTerm::SPutColor(int16 x, int16 y, int16 col) {
@@ -920,7 +900,7 @@ int16 libtcodTerm::SGetColor(int16 x, int16 y) {
         }
     i = 0;
     if (bi != -1)
-        i |= bi * 256;
+        i |= bi << 4;
     if (fi != -1)
         i |= fi;
     return i;

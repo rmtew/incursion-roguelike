@@ -626,12 +626,13 @@ void TextTerm::HyperTab(int16 wn)
       CurrLine = HL[SelectedLink].LineNo;
 
     /* De-highlight the old link */
-    if (SelectedLink != -1)
-      {
-        for(i=0;i!=80;i++)
-          if (SGetColor(i,HL[SelectedLink].LineNo) == 15*16)
-            SPutColor(i,HL[SelectedLink].LineNo, 15);
-      }
+    if (SelectedLink != -1) {
+        for(i=0;i<sx;i++) {
+            SGetChar(i, HL[SelectedLink].LineNo);
+            if (SGetColor(i,HL[SelectedLink].LineNo) == WHITE*16)
+                SPutColor(i,HL[SelectedLink].LineNo, WHITE);
+        }
+    }
         
     /* Find a link further down. */ 
     ln = -1;   
@@ -670,13 +671,13 @@ void TextTerm::HyperTab(int16 wn)
     /* Found the Link; Highlight It. */
     Found:
     isLink = false;
-    for(i=0;i!=80;i++)
+    for(i=0;i<sx;i++)
       {
-        if (SGetChar(HL[ln].LineNo,i) == '<')
+        if (SGetChar(i, HL[ln].LineNo) == '<')
           isLink = true;
         if (isLink)
-          SPutColor(HL[ln].LineNo,i,WHITE*16);
-        if (SGetChar(HL[ln].LineNo,i) == '>')
+          SPutColor(i, HL[ln].LineNo,WHITE*16);
+        if (SGetChar(i, HL[ln].LineNo) == '>')
           isLink = false;
       }
     

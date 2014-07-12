@@ -1,3 +1,6 @@
+Incursion (open source) 0.6.9Y13: 2014-0?-??
+* https://bitbucket.org/rmtew/incursion-roguelike/issue/168/: The tabbing between links in the help system causes crashes.  Legacy bug where code was looking for information using X as Y coordinate and Y as X coordinate.  Also a Y1 bug where looking up the character at a screen coordinate was incorrectly implemented.
+
 Incursion (open source) 0.6.9Y12: 2014-06-28 UNSTABLE
 * This release is an interim one.  Hundreds of compiler warnings were fixed, and while most were benign explicit type casting, three were bugs.  Do not ask me what they were, as I was too stupid to note them down, and they are hidden amongst all the others.  These changes are possibly unstable, and might cause this release to be unreliable.
 * I recreated the missing accent compiler compiler source code.  This allows changes to the IncursionScript language.
