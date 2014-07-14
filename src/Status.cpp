@@ -498,7 +498,9 @@ Restart:
                     }
                 StatiIterEnd(t)
 #ifdef DEBUG
-                Error(Format("CleanupRefedStati found leaked backref to %s",(const char *)t->Name(0)));
+                Error(Format("Backref leak from %s/%d to %s/%d",
+                    (const char *)this->Name(0),this->myHandle,
+                    (const char *)t->Name(0),t->myHandle));
 #endif
                 backRefs.Remove(i--);
             }
@@ -527,8 +529,8 @@ void Thing::__StatiRemoval(Status *S, Thing *t) {
         if (S->Source == SS_ATTK && (S->Nature != GRAPPLED &&
             S->Nature != STUCK && S->Nature != GRABBED &&
             S->Nature != GRAPPLING)) {
-            RemoveBackref(S->h,t);
-            S->h = 0;
+                RemoveBackref(t->myHandle,this);
+                S->h = 0;
         } else {
             StatiIter_RemoveCurrent(t); 
         }
