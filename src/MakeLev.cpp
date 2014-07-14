@@ -1425,1048 +1425,1006 @@ void Map::LoadFixedMap(rID mID, int16 _Depth, Map *Above, int8 _Luck)
       for (y=0;y<sizeY;y++)
         At(x,y).Priority = 0;
     
-  }
+}
 
-void Map::Generate(rID _dID, int16 _Depth, Map *Above,int8 Luck)
-{
-  int16 i, j, n; Thing *t, *t2; Portal *st; 
-  rID xtID, sID, xID; Rect r;
-  int16 x, y, sx,sy,dx,dy,cx,cy,px,py, Streamers, Tries; 
-  int16 fCount, tot, c; int8 abort_count = 0;
-  bool NarrowChasm = false; Annotation *a; Item *it;
-  bool extraLevs = (theGame->Opt(OPT_DIFFICULTY) >= DIFF_CHALLENGE);
-  if (RES(_dID)->Type == T_TREGION)
-    {
-      LoadFixedMap(_dID,_Depth,Above,Luck);
-      return;
+void Map::Generate(rID _dID, int16 _Depth, Map *Above,int8 Luck) {
+    int16 i, j, n; Thing *t, *t2; Portal *st; 
+    rID xtID, sID, xID; Rect r;
+    int16 x, y, sx,sy,dx,dy,cx,cy,px,py, Streamers, Tries; 
+    int16 fCount, tot, c; int8 abort_count = 0;
+    bool NarrowChasm = false; Annotation *a; Item *it;
+    bool extraLevs = (theGame->Opt(OPT_DIFFICULTY) >= DIFF_CHALLENGE);
+
+    if (RES(_dID)->Type == T_TREGION) {
+        LoadFixedMap(_dID,_Depth,Above,Luck);
+        return;
     }
-    
-  inGenerate = true;
 
-  /* Step 1: Initialize the map */
-  dID = _dID; Depth = _Depth; mLuck = Luck;
+    inGenerate = true;
 
-  GeneratePrompt();
+    /* Step 1: Initialize the map */
+    dID = _dID;
+    Depth = _Depth;
+    mLuck = Luck;
 
-  for(i=0;i!=LAST_DUNCONST;i++)
-    Con[i] = TDUN(dID)->GetConst(i);
-
-  int16 DepthCR = AdjustCR((int16)Con[INITIAL_CR] + (Depth*(int16)Con[DUN_SPEED])/100 - 1); 
-
-  TDUN(dID)->GetList(RC_WEIGHTS,RC_Weights,RC_LAST*2);
-  TDUN(dID)->GetList(STREAMER_WEIGHTS,StreamWeights,1024);
-  TDUN(dID)->GetList(CORRIDOR_WEIGHTS,CorridorWeights,1024);
-  TDUN(dID)->GetList(ROOM_WEIGHTS,RoomWeights,1024);
-  TDUN(dID)->GetList(VAULT_WEIGHTS,VaultWeights,1024);
-
-  if (Con[LEVEL_SIZEX] % Con[PANEL_SIZEX])
-    Fatal("Mismatch between LEVEL_SIZEX and PANEL_SIZEX.");
-
-  if (Con[LEVEL_SIZEY] % Con[PANEL_SIZEY])
-    Fatal("Mismatch between LEVEL_SIZEY and PANEL_SIZEY.");
-  sizeX = (int16)Con[LEVEL_SIZEX];
-  sizeY = (int16)Con[LEVEL_SIZEY];
-  panelsX = (int8)(Con[LEVEL_SIZEX] / Con[PANEL_SIZEX]);
-  panelsY = (int8)(Con[LEVEL_SIZEY] / Con[PANEL_SIZEY]);
-  if (panelsX > 32 || panelsY >32)
-    Fatal("Panel grid exceeds maximum of 32 x 32.");
-
-  /* Displacement of this level relative to the one above it. */
-  if (Above) {
-    disX = (sizeX - Above->sizeX) / 2;
-    disY = (sizeY - Above->sizeY) / 2;
-  }
-  else
-    disX = disY = 0;
-
-  Grid = (LocationInfo*) malloc(sizeof(LocationInfo) * (sizeX * sizeY + 1));
-  GridBackup = (LocationInfo*) malloc(sizeof(LocationInfo) * (sizeX * sizeY + 1));
-  if (Grid == NULL || GridBackup == NULL)
-    Fatal("Error allocating map grid!");
-  memset(Grid,0,sizeof(LocationInfo) * (sizeX * sizeY + 1));
-  memset(RoomsTouched,0,sizeof(int32)*32);
-  memset(PanelsDrawn ,0,sizeof(int32)*32);
-  memset(TerrainList,0,sizeof(rID)*255);
-  memset(RegionList,0,sizeof(rID)*255);
-  /* Yikes! We're allocating up to 448K here (for a worst-case scenario
-   * of a 256 x 256 level) of temporary storage for the floodfilling.
-   * This would be wasteful if we didn't immediately deallocate it after
-   * doing the floodfill tunneling. As it is, on most Win32 systems, it's
-   * not too big a deal.
-   */
-  FloodArray = new uint8[sizeX * sizeY * 2];
-  EmptyArray = new uint8[sizeX * sizeY * 2];
-  FloodStack = new uint8[sizeX * sizeY * 3];
-  OpenC = 0;
-
-  GeneratePrompt();
-
-  for(x=0;x<sizeX;x++)
-    for(y=0;y<sizeY;y++)
-      if (!x || !y || x==sizeX-1 || y ==sizeY-1)
-        WriteAt(r,x,y,Con[TERRAIN_MAPEDGE],Con[BASE_REGION],PRIO_MAX,true);
-      else
-        WriteAt(r,x,y,Con[TERRAIN_ROCK],Con[BASE_REGION],PRIO_EMPTY,true);
-
-  /* Copy or create Dungeon-Specials depth/rID list */
-
-  /* Step 2: Place Streamers */
-  Streamers = 0; sID = 0;
-  while (Streamers < (int16)Con[MIN_STREAMERS] || (random(100) < (int16)Con[STREAMER_CHANCE] && Streamers < (int16)Con[MAX_STREAMERS])) {
     GeneratePrompt();
-    sx = 1 + random((int16)Con[LEVEL_SIZEX]-2);
-    sy = 1 + random((int16)Con[LEVEL_SIZEY]-2);
-    if (sID && random(10) > 5)
-      goto SecondStreamerSame;
-    tot=0;
-    for(i=0;StreamWeights[i*2+1];i++)
-      tot += (int16)StreamWeights[i*2+1];
-    if (!tot) /* No Streamers Available */
-      break;
-    for (j=0;j!=20;j++)
-    {
-      c = random(tot); 
-      for(i=0;StreamWeights[i*2+1];i++)
-        if (c < (int16)StreamWeights[i*2+1])
-          goto StreamChosen;
-        else
-          c -= (int16)StreamWeights[i*2+1];
-      Fatal("Strange Error in room weights algorithm.");
+
+    for (i=0; i!=LAST_DUNCONST; i++)
+        Con[i] = TDUN(dID)->GetConst(i);
+
+    int16 DepthCR = AdjustCR((int16)Con[INITIAL_CR] + (Depth*(int16)Con[DUN_SPEED])/100 - 1); 
+
+    TDUN(dID)->GetList(RC_WEIGHTS,RC_Weights,RC_LAST*2);
+    TDUN(dID)->GetList(STREAMER_WEIGHTS,StreamWeights,1024);
+    TDUN(dID)->GetList(CORRIDOR_WEIGHTS,CorridorWeights,1024);
+    TDUN(dID)->GetList(ROOM_WEIGHTS,RoomWeights,1024);
+    TDUN(dID)->GetList(VAULT_WEIGHTS,VaultWeights,1024);
+
+    if (Con[LEVEL_SIZEX] % Con[PANEL_SIZEX])
+        Fatal("Mismatch between LEVEL_SIZEX and PANEL_SIZEX.");
+
+    if (Con[LEVEL_SIZEY] % Con[PANEL_SIZEY])
+        Fatal("Mismatch between LEVEL_SIZEY and PANEL_SIZEY.");
+
+    sizeX = (int16)Con[LEVEL_SIZEX];
+    sizeY = (int16)Con[LEVEL_SIZEY];
+    panelsX = (int8)(Con[LEVEL_SIZEX] / Con[PANEL_SIZEX]);
+    panelsY = (int8)(Con[LEVEL_SIZEY] / Con[PANEL_SIZEY]);
+    if (panelsX > 32 || panelsY >32)
+        Fatal("Panel grid exceeds maximum of 32 x 32.");
+
+    /* Displacement of this level relative to the one above it. */
+    if (Above) {
+        disX = (sizeX - Above->sizeX) / 2;
+        disY = (sizeY - Above->sizeY) / 2;
+    } else
+        disX = disY = 0;
+
+    Grid = (LocationInfo*) malloc(sizeof(LocationInfo) * (sizeX * sizeY + 1));
+    GridBackup = (LocationInfo*) malloc(sizeof(LocationInfo) * (sizeX * sizeY + 1));
+    if (Grid == NULL || GridBackup == NULL)
+        Fatal("Error allocating map grid!");
+
+    memset(Grid,0,sizeof(LocationInfo) * (sizeX * sizeY + 1));
+    memset(RoomsTouched,0,sizeof(int32)*32);
+    memset(PanelsDrawn ,0,sizeof(int32)*32);
+    memset(TerrainList,0,sizeof(rID)*255);
+    memset(RegionList,0,sizeof(rID)*255);
+    /* Yikes! We're allocating up to 448K here (for a worst-case scenario
+    * of a 256 x 256 level) of temporary storage for the floodfilling.
+    * This would be wasteful if we didn't immediately deallocate it after
+    * doing the floodfill tunneling. As it is, on most Win32 systems, it's
+    * not too big a deal.
+    */
+    FloodArray = new uint8[sizeX * sizeY * 2];
+    EmptyArray = new uint8[sizeX * sizeY * 2];
+    FloodStack = new uint8[sizeX * sizeY * 3];
+    OpenC = 0;
+
+    GeneratePrompt();
+
+    for (x = 0; x < sizeX; x++)
+        for (y = 0; y < sizeY; y++)
+            if (!x || !y || x==sizeX-1 || y ==sizeY-1)
+                WriteAt(r,x,y,Con[TERRAIN_MAPEDGE],Con[BASE_REGION],PRIO_MAX,true);
+            else
+                WriteAt(r,x,y,Con[TERRAIN_ROCK],Con[BASE_REGION],PRIO_EMPTY,true);
+
+    /* Copy or create Dungeon-Specials depth/rID list */
+
+    /* Step 2: Place Streamers */
+    Streamers = 0;
+    sID = 0;
+    while (Streamers < (int16)Con[MIN_STREAMERS] || (random(100) < (int16)Con[STREAMER_CHANCE] && Streamers < (int16)Con[MAX_STREAMERS])) {
+        GeneratePrompt();
+        sx = 1 + random((int16)Con[LEVEL_SIZEX]-2);
+        sy = 1 + random((int16)Con[LEVEL_SIZEY]-2);
+        if (sID && random(10) > 5)
+            goto SecondStreamerSame;
+
+        tot=0;
+        for(i=0;StreamWeights[i*2+1];i++)
+            tot += (int16)StreamWeights[i*2+1];
+        if (!tot) /* No Streamers Available */
+            break;
+
+        for (j=0; j!=20; j++) {
+            c = random(tot); 
+            for(i=0;StreamWeights[i*2+1];i++)
+                if (c < (int16)StreamWeights[i*2+1])
+                    goto StreamChosen;
+                else
+                    c -= (int16)StreamWeights[i*2+1];
+            Fatal("Strange Error in room weights algorithm.");
+
 StreamChosen:
-      sID = StreamWeights[i*2];
-
-
-      if (Depth < (int16)Con[MIN_RIVER_DEPTH])
-        if (TREG(sID)->HasFlag(RF_RIVER))
-          continue;
-      if (Depth < (int16)Con[MIN_CHASM_DEPTH])
-        if (TREG(sID)->HasFlag(RF_CHASM))
-          continue;
-      /* No chasms on the last dungeon level, because there
-         is nowhere to fall to! */
-      if (Depth == Con[DUN_DEPTH])
-        if (TREG(sID)->HasFlag(RF_CHASM))
-          continue;
-      break;
-    }
-    if (j == 20)
-      break;
+            sID = StreamWeights[i*2];
+            if (Depth < (int16)Con[MIN_RIVER_DEPTH])
+                if (TREG(sID)->HasFlag(RF_RIVER))
+                    continue;
+            if (Depth < (int16)Con[MIN_CHASM_DEPTH])
+                if (TREG(sID)->HasFlag(RF_CHASM))
+                    continue;
+            /* No chasms on the last dungeon level, because there is nowhere to fall to! */
+            if (Depth == Con[DUN_DEPTH])
+                if (TREG(sID)->HasFlag(RF_CHASM))
+                    continue;
+            break;
+        }
+        if (j == 20)
+            break;
 
 SecondStreamerSame:
-    WriteStreamer(r,(uint8)sx,(uint8)sy,-1,sID);
-    Streamers++;
+        WriteStreamer(r,(uint8)sx,(uint8)sy,-1,sID);
+        Streamers++;
+    }
 
+    /* multi-level chasms: if last level has a chasm here, 1 in 2 chance
+    of chasms narrowing for the entire level. If they do, put a chasm
+    here only if the chasm Above has chasms all around it. Otherwise,
+    put a chasm here automatically if there is one above. When we are
+    later tunneling, there is a good chance a tunnel will turn into a
+    rickety bridge, rope bridge, etc. as we cross the chasm. This chance
+    decreases with depth, of course...
+    */
+    GeneratePrompt();
+    if (random(100) < (int16)Con[REDUCE_CHASM_CHANCE])
+        NarrowChasm = true;
 
-  }
-
-  /* multi-level chasms: if last level has a chasm here, 1 in 2 chance
-     of chasms narrowing for the entire level. If they do, put a chasm
-     here only if the chasm Above has chasms all around it. Otherwise,
-     put a chasm here automatically if there is one above. When we are
-     later tunneling, there is a good chance a tunnel will turn into a
-     rickety bridge, rope bridge, etc. as we cross the chasm. This chance
-     decreases with depth, of course...
-   */
-  GeneratePrompt();
-  if (random(100) < (int16)Con[REDUCE_CHASM_CHANCE])
-    NarrowChasm = true;
-  if (Above && (Depth != Con[DUN_DEPTH]))
-    for(x=0;x<sizeX;x++)
-      for(y=0;y<sizeY;y++) {
-        xtID = Above->RegionAt(x,y);
-        if (TREG(xtID)->HasFlag(RF_CHASM))
-        {
-          if (NarrowChasm) {
-            if (Above->RegionAt(x,y+1) != xtID || Above->RegionAt(x+1,y) != xtID ||
-                Above->RegionAt(x,y-1) != xtID || Above->RegionAt(x-1,y) != xtID)
-              continue;
-          }
-          WriteAt(r,x,y,Above->TerrainAt(x,y),Above->RegionAt(x,y),PRIO_RIVER_STREAMER);
-        }
-      }
-  /* Count Chasm squares; if a lot, avoid making any new chasms
-     this level. */
-
-  /* Step 3: Place Large Submaps */
-  if (Above)
-    memcpy(SpecialsLevels,Above->SpecialsLevels,64);
-  else
-    memset(SpecialsLevels,-1,64);
-
-  if (dID) {
-    a = TDUN(dID)->Annot(TDUN(dID)->AnHead);
-    n=-1;
-    while (a) 
-    {
-      if (a->AnType == AN_DUNSPEC)
-        for(i=0;i!=4;i++)
-          if (a->u.ds[i].xID)
-          {
-            rID regID;
-            n++;
-            if (SpecialsLevels[n] == -1) {
-              if (random(100)+1 > a->u.ds[i].Chance)
-              { SpecialsLevels[n] = -10; continue; }
-              SpecialsLevels[n] = (int8)a->u.ds[i].Lev.Roll();
-            }
-            if (Depth != (extraLevs ? (SpecialsLevels[n]*3)/2 :
-                           SpecialsLevels[n]))
-              continue;
-            switch(RES(a->u.ds[i].xID)->Type)
-            {
-              case T_TMONSTER:
-              case T_TITEM:               
-              case T_TFEATURE:
-                /* These are added later. */
-                break;
-              case T_TREGION:
-                /* Size of the special room */
-                regID = a->u.ds[i].xID;
-                if (TREG(regID)->Grid) {
-                  sx = TREG(regID)->sx;
-                  sy = TREG(regID)->sy;
-                  if ((sx+2) > sizeX || (sy+2) > sizeY)
-                    { Error("Special room larger than map!"); continue; }
-                
-                  /* Number of panels it will take up */
-                  cx = 1 + (sx+2) / (int16)Con[PANEL_SIZEX];
-                  cy = 1 + (sy+2) / (int16)Con[PANEL_SIZEY];
-                  Tries = 0;
-                  NewLocation:
-                  /* Displacement into top-left panel */
-                  dx = 1 + random((int16)Con[PANEL_SIZEX]*cx - (sx+2));
-                  dy = 1 + random((int16)Con[PANEL_SIZEY]*cy - (sy+2));
-                  /* Location of top-left panel */
-                  px = random(panelsX - (cx-1));
-                  py = random(panelsY - (cy-1));
-                  /* Write the special region */
-                  r.x1 = (uint8)(px*Con[PANEL_SIZEX] + dx);
-                  r.y1 = (uint8)(py*Con[PANEL_SIZEY] + dy);
-                  r.x2 = r.x1 + sx;
-                  r.y2 = r.y1 + sy;
-                  /* Avoid placing a special room where the up-stairs
-                    need to go to match the down stairs on the level
-                    above us. */
-                  if (Above)
-                    MapIterate(Above,t,j)
-                      if (t->Type == T_PORTAL)
-                        if (((Portal*)t)->isDownStairs())
-                          if (r.Within((uint8)t->x,(uint8)t->y))
-                            if (Tries < 100)
-                            { Tries++; goto NewLocation; }
-                  // ww: no vault overlap! (or vault / entrance
-                  // overlaps, or whatever
-                  for (x=0;x<sx;x++)
-                    for (y=0;y<sy;y++)
-                      if (At(r.x1+x,r.y1+y).isVault && Tries < 100)
-                      { Tries++; goto NewLocation; }
-                  WriteMap(r,a->u.ds[i].xID);
-                  /* Touch the used panels */
-                  for (x = px ; x != px+cx ; x++)
-                    for (y = py ; y != py+cy ; y++)
-                      PanelsDrawn[y] |= (1 << x);
-                      {
-                        EventInfo xe;
-                        xe.Clear();
-                        xe.EMap = this;
-                        xe.cPanel = r;
-                        xe.EXVal = (r.x2 + r.x1) / 2; 
-                        xe.EYVal = (r.y2 + r.y1) / 2; 
-                        xe.Event = EV_BIRTH;
-                        rID regID = a->u.ds[i].xID;
-                        TREG(regID)->Event(xe,regID);
-                      }
-                  }
-                else {
-                  int16 xg,yg;
-                  xg = (SizeX() + 1) / (int16)Con[PANEL_SIZEX];
-                  yg = (SizeY() + 1) / (int16)Con[PANEL_SIZEY];
-                  do {
-                    px = random(xg);
-                    py = random(yg);
+    if (Above && (Depth != Con[DUN_DEPTH]))
+        for (x=0;x<sizeX;x++)
+            for (y=0;y<sizeY;y++) {
+                xtID = Above->RegionAt(x,y);
+                if (TREG(xtID)->HasFlag(RF_CHASM)) {
+                    if (NarrowChasm) {
+                        if (Above->RegionAt(x,y+1) != xtID || Above->RegionAt(x+1,y) != xtID ||
+                            Above->RegionAt(x,y-1) != xtID || Above->RegionAt(x-1,y) != xtID)
+                            continue;
                     }
-                  while (PanelsDrawn[py] & (1 << px));
-                  DrawPanel((uint8)px,(uint8)py,regID);                
-                  }
-                break;
-              default:
-                Error("Strange resource type as dungeon special!");
-            }
-          }
-      a = TDUN(dID)->Annot(a->Next);
-    }
-  }
-
-
-
-  /* Place Predefined Submaps for Dungeon */
-
-  /* See if we place random Submaps as well. */
-
-  /* Step 4: Draw Each Panel */
-  for (x=0;x<panelsX;x++)
-    for (y=0;y<panelsY;y++)
-      if (!(PanelsDrawn[y] & (1 << x)))
-      {
-        GeneratePrompt();
-        DrawPanel((uint8)x,(uint8)y);
-        PanelsDrawn[y] |= (1 << x);
-      } 
-
-  /* Step 5: Connect Each Panel */
-  {
-    int numPanels = panelsX * panelsY;
-    struct Point {
-      int x;
-      int y;
-    };
-    struct PanelInfo {
-      struct Point * O;
-      int count;
-    } * PI; 
-    PI = (struct PanelInfo *)malloc(sizeof(struct PanelInfo) * numPanels);
-    for (i=0;i<numPanels;i++) {
-      PI[i].O = (struct Point*)malloc(sizeof(struct Point) *
-          Con[PANEL_SIZEX] * Con[PANEL_SIZEY]);
-      PI[i].count = 0; 
-    }
-    /* Find Open Spaces In Each Panel */
-    for (px=0;px<panelsX;px++)
-      for (py=0;py<panelsY;py++) {
-        GeneratePrompt();
-        int panelNum = py * panelsX + px; 
-        for (int16 xx=0;xx<(int16)Con[PANEL_SIZEX];xx++)
-          for (int16 yy=0;yy<(int16)Con[PANEL_SIZEY];yy++) {
-            x = px * (int16)Con[PANEL_SIZEX] + xx;
-            y = py * (int16)Con[PANEL_SIZEY] + yy;
-            if (!SolidAt(x,y)) { 
-              int count = 
-                (!SolidAt(x-1,y)) +
-                (!SolidAt(x+1,y)) +
-                (!SolidAt(x,y+1)) +
-                (!SolidAt(x,y-1));
-              if (count < 4) { 
-                PI[panelNum].O[PI[panelNum].count].x = x;
-                PI[panelNum].O[PI[panelNum].count].y = y;
-                PI[panelNum].count++; 
-              }
-            }
-          }
-      } 
-
-    for (px=0;px<panelsX;px++)
-      for (py=0;py<panelsY;py++) {
-        GeneratePrompt();
-        int pn1 = py * panelsX + px; 
-
-        int n[3];
-        int nc = 0; 
-        if (px > 0) n[nc++] = py * panelsX + (px -1);
-        if (py > 0) n[nc++] = (py-1) * panelsX + px;
-        if (py > 1 && px > 1 
-           ) n[nc++] = (py-1) * panelsX + (px -1);
-
-        for (int k = 0; k<nc; k++) {
-          int pn2 = n[k]; 
-          int sx, sy, dx, dy;
-          int bestDist = sizeX * sizeY; 
-
-          /* find points to connect Panel pn1 to Panel pn2 */
-          for (i=0;i<PI[pn1].count;i++)
-            for (j=0;j<PI[pn2].count;j++) { 
-              int thisDist = dist(
-                  PI[pn1].O[i].x,
-                  PI[pn1].O[i].y,
-                  PI[pn2].O[j].x,
-                  PI[pn2].O[j].y);
-              if (thisDist < bestDist) { 
-                sx = PI[pn1].O[i].x;
-                sy = PI[pn1].O[i].y;
-                dx = PI[pn2].O[j].x;
-                dy = PI[pn2].O[j].y;
-                bestDist = thisDist; 
-              } 
-            } 
-          if (bestDist < sizeX * sizeY) {
-            Tunnel(sx,sy,dx,dy,TT_DIRECT|TT_WANDER,-1,0);
-          }
-        }
-      }
-    for (i=0;i<numPanels;i++)
-      free(PI[i].O);
-    free(PI);
-  }
-
-  /* ww: don't put all the stairs in the same room */
-  rID stairsAt[1024] = { 0, } ; 
-
-  if (Above)
-    MapIterate(Above,t,i)
-      if (t->Type == T_PORTAL)
-        if (((Portal*)t)->isDownStairs()) {
-          /* Paranoia, such as for the not-impossible case of two or
-             more staircases on the same panel. */
-#if WEIMER_TUNNEL
-          if (At(t->x,t->y).Solid) {
-            do {
-              dx = random(sizeX);
-              dy = random(sizeY);
-            }
-            while(At(dx,dy).Solid);
-            Tunnel(t->x,t->y,dx,dy,true,random(2) ? NORTH : EAST,TU_NORMAL);
-            /* Make it not a dead-end at the stairs. */
-            if (random(3)) {
-              do {
-                dx = random(sizeX);
-                dy = random(sizeY);
-              }
-              while(At(dx,dy).Solid);
-              Tunnel(t->x,t->y,dx,dy,true,random(2) ? SOUTH : WEST,TU_NORMAL);
-            }
-          }
-#endif
-          st = new Portal(Con[STAIRS_UP]);
-          ASSERT(st);
-          if (SolidAt(t->x,t->y)) {
-            WriteAt(r,t->x,t->y,FIND("floor"),RegionAt(t->x,t->y),PRIO_FEATURE_FLOOR);
-            ASSERT(At(t->x,t->y).Solid == 0);
-            for (j=0;j<8;j++)
-              WriteAt(r,t->x+DirX[j],t->y+DirY[j],
-                  FIND("dungeon wall"),RegionAt(t->x,t->y),PRIO_CORRIDOR_WALL);
-          } 
-          st->PlaceAt(this,t->x,t->y);
-          if (RegionAt(t->x,t->y))  {
-            for (j=0;stairsAt[j];j++)
-              ;
-            stairsAt[j] = RegionAt(t->x,t->y);
-          }
-        }
-
-
-
-  /* Step 5: Final, Fix-Up Tunneling */
-  { 
-    struct P {
-      int x;
-      int y;
-    } *C, *U; 
-    struct Pair {
-      int sx, sy;
-      int dx, dy;
-      int dist; 
-      rID reg;
-    } *best; 
-
-    C = (struct P *)calloc(sizeof(C[0]),sizeX*sizeY);
-    U = (struct P *)calloc(sizeof(U[0]),sizeX*sizeY);
-    best = (struct Pair *)calloc(sizeof(best[0]),sizeX);
-    ASSERT(C);
-    ASSERT(U);
-    ASSERT(best);
-    int trials = 0;
-    for (x=0;x<sizeX;x++)
-      for (y=0;y<sizeY;y++) 
-        At(x,y).Connected = false; 
-
-    fCount = 0; 
-    for (x=1;x<sizeX;x++)
-      for (y=1;y<sizeY;y++) {
-        if (!SolidAt(x,y) && !At(x,y).Connected) {
-          fCount = (int16)FloodConnectA(x,y,fCount);
-          x = sizeX;
-          y = sizeY; 
-        }
-      } 
-
-    while (trials++ < 26) {
-      GeneratePrompt();
-      int cCount = 0; 
-      int uCount = 0; 
-      int bestCount = 0;
-      int k;
-
-      for (i=0;i<2;i++)
-        best[i].reg = -1; 
-
-      for (x=1;x<sizeX-1;x++)
-        for (y=1;y<sizeY-1;y++) 
-          if (!SolidAt(x,y)) {
-            if (At(x,y).Connected) {
-              int count = 
-                (At(x-1,y).Connected != 0) +
-                (At(x+1,y).Connected != 0) +
-                (At(x,y+1).Connected != 0) +
-                (At(x,y-1).Connected != 0);
-              if (count < 4) {
-                C[cCount].x = x;
-                C[cCount++].y = y;
-              }
-            } else {
-              int count = 
-                (!SolidAt(x-1,y)) +
-                (!SolidAt(x+1,y)) +
-                (!SolidAt(x,y+1)) +
-                (!SolidAt(x,y-1));
-              if (count < 4) { 
-                U[uCount].x = x;
-                U[uCount++].y = y; 
-                bool found = false;
-                rID thisReg = RegionAt(x,y);
-                for (k=0; !found && k < bestCount; k++)
-                  if (best[k].reg == thisReg)
-                    found = true;
-                if (!found) {
-                  best[bestCount].reg = thisReg;
-                  best[bestCount].dist = sizeX * sizeY; 
-                  bestCount++;
+                    WriteAt(r,x,y,Above->TerrainAt(x,y),Above->RegionAt(x,y),PRIO_RIVER_STREAMER);
                 }
-              }
-            } 
-          }
-
-      if (uCount == 0) break; 
-
-      for (i=0;i<cCount;i++)
-        for (j=0;j<uCount;j++) { 
-          rID r = RegionAt(U[j].x,U[j].y);
-          for (k=0;k<bestCount;k++)
-            if (best[k].reg == r) {
-              int thisDist = dist(C[i].x,C[i].y,U[j].x,U[j].y);
-              if (thisDist < best[k].dist) {
-                best[k].sx = C[i].x;
-                best[k].sy = C[i].y;
-                best[k].dx = U[j].x;
-                best[k].dy = U[j].y;
-                best[k].dist = thisDist;
-              } 
-            } 
-        }
-
-      for (i=0;i<3;i++) {
-        int md = sizeX * sizeY;
-        int mi = -1;
-        for (j=0;j<bestCount;j++)
-          if (best[j].dist < md) {
-            md = best[j].dist;
-            mi = j;
-          }
-        if (mi == -1) break;
-
-        best[mi].dist = sizeX * sizeY;
-        At(best[mi].sx,best[mi].sy).Connected = false; 
-        /*
-           theGame->GetPlayer(0)->IPrint("<Res> -> <Res2>.",
-           RegionAt(best[mi].sx,best[mi].sy),
-           RegionAt(best[mi].dx,best[mi].dy));
-         */
-        Tunnel(best[mi].sx, best[mi].sy,
-            best[mi].dx, best[mi].dy,
-            TT_DIRECT|TT_WANDER,-1,trials);
-        fCount = (int16)FloodConnectA((int16)best[mi].sx,(int16)best[mi].sy,0);
-      } 
-
-    }
-
-    free(C);
-    free(U);
-    free(best);
-
-  }
-
-  /*
-  for(x=1;x<sizeX-1;x++)
-    for(y=1;y<sizeY-1;y++)
-      if (At(x,y).Connected == false)
-        if (!At(x,y).Solid)
-        {
-          At(x,y).Shade = 0;
-          At(x,y).Glyph |= 0xB000;
-        }
-        */
-
-  for(x=1;x<sizeX-1;x++)
-    for(y=1;y<sizeY-1;y++)
-      At(x,y).Connected = false;
-
-  /* Step 6: Place Stairs & Required Monsters/Items */
-  GeneratePrompt();    
-
-  if ((int16)Con[MAX_STAIRS] && Depth < (int16)Con[DUN_DEPTH]) {
-    j = (int16)Con[MIN_STAIRS] + random((int16)(Con[MAX_STAIRS] - Con[MIN_STAIRS]));
-    for (i=0;i!=j;i++)
-    {
-      Tries = 0;
-      do {
-        x = random((int16)Con[LEVEL_SIZEX]);
-        y = random((int16)Con[LEVEL_SIZEY]);
-        if (Tries++ > 500)
-          break;
-        bool already = false; 
-        for (int k=0;stairsAt[k];k++)
-          if (RegionAt(x,y) == stairsAt[k])
-            already = true;
-        if (already) continue; 
-      }
-      while(At(x,y).Solid || (At(x,y).Priority > PRIO_ROOM_FLOOR) ||
-          TTER(TerrainAt(x,y))->HasFlag(TF_WATER) ||
-          TTER(TerrainAt(x,y))->HasFlag(TF_FALL));
-      st = new Portal(Con[STAIRS_DOWN]);
-      ASSERT(st)
-        st->PlaceAt(this,x,y);
-    }
-  }
-
-  if (dID) {
-    a = TDUN(dID)->Annot(TDUN(dID)->AnHead);
-    n=-1;
-    while (a) 
-    {
-      if (a->AnType == AN_DUNSPEC)
-        for(i=0;i!=4;i++)
-          if (a->u.ds[i].xID)
-          {
-            n++;
-            if (SpecialsLevels[n] == -1) {
-              if (random(100)+1 > a->u.ds[i].Chance)
-              { SpecialsLevels[n] = -10; continue; }
-              SpecialsLevels[n] = (int8)a->u.ds[i].Lev.Roll();
             }
-            if (SpecialsLevels[n] != Depth)
-              continue;
-            if (RES(a->u.ds[i].xID)->Type == T_TREGION)
-              continue;
+
+    /* Count Chasm squares; if a lot, avoid making any new chasms this level. */
+
+    /* Step 3: Place Large Submaps */
+    if (Above)
+        memcpy(SpecialsLevels,Above->SpecialsLevels,64);
+    else
+        memset(SpecialsLevels,-1,64);
+
+    if (dID) {
+        a = TDUN(dID)->Annot(TDUN(dID)->AnHead);
+        n=-1;
+        while (a) {
+            if (a->AnType == AN_DUNSPEC)
+                for(i=0;i!=4;i++)
+                    if (a->u.ds[i].xID) {
+                        rID regID;
+                        n++;
+                        if (SpecialsLevels[n] == -1) {
+                            if (random(100)+1 > a->u.ds[i].Chance) {
+                                SpecialsLevels[n] = -10;
+                                continue;
+                            }
+                            SpecialsLevels[n] = (int8)a->u.ds[i].Lev.Roll();
+                        }
+                        if (Depth != (extraLevs ? (SpecialsLevels[n]*3)/2 : SpecialsLevels[n]))
+                            continue;
+                        switch(RES(a->u.ds[i].xID)->Type) {
+                        case T_TMONSTER:
+                        case T_TITEM:               
+                        case T_TFEATURE:
+                            /* These are added later. */
+                            break;
+                        case T_TREGION:
+                            /* Size of the special room */
+                            regID = a->u.ds[i].xID;
+                            if (TREG(regID)->Grid) {
+                                sx = TREG(regID)->sx;
+                                sy = TREG(regID)->sy;
+                                if ((sx+2) > sizeX || (sy+2) > sizeY) {
+                                    Error("Special room larger than map!");
+                                    continue;
+                                }
+
+                                /* Number of panels it will take up */
+                                cx = 1 + (sx+2) / (int16)Con[PANEL_SIZEX];
+                                cy = 1 + (sy+2) / (int16)Con[PANEL_SIZEY];
+                                Tries = 0;
+NewLocation:
+                                /* Displacement into top-left panel */
+                                dx = 1 + random((int16)Con[PANEL_SIZEX]*cx - (sx+2));
+                                dy = 1 + random((int16)Con[PANEL_SIZEY]*cy - (sy+2));
+                                /* Location of top-left panel */
+                                px = random(panelsX - (cx-1));
+                                py = random(panelsY - (cy-1));
+                                /* Write the special region */
+                                r.x1 = (uint8)(px*Con[PANEL_SIZEX] + dx);
+                                r.y1 = (uint8)(py*Con[PANEL_SIZEY] + dy);
+                                r.x2 = r.x1 + sx;
+                                r.y2 = r.y1 + sy;
+                                /* Avoid placing a special room where the up-stairs
+                                need to go to match the down stairs on the level
+                                above us. */
+                                if (Above)
+                                    MapIterate(Above,t,j)
+                                        if (t->Type == T_PORTAL && ((Portal*)t)->isDownStairs() && r.Within((uint8)t->x,(uint8)t->y))
+                                            if (Tries < 100) {
+                                                Tries++;
+                                                goto NewLocation;
+                                            }
+                                // ww: no vault overlap! (or vault / entrance overlaps, or whatever)
+                                for (x=0;x<sx;x++)
+                                    for (y=0;y<sy;y++)
+                                        if (At(r.x1+x,r.y1+y).isVault && Tries < 100) {
+                                            Tries++;
+                                            goto NewLocation;
+                                        }
+
+                                WriteMap(r,a->u.ds[i].xID);
+                                /* Touch the used panels */
+                                for (x = px; x != px+cx; x++)
+                                    for (y = py; y != py+cy; y++)
+                                        PanelsDrawn[y] |= (1 << x);
+                                {
+                                    EventInfo xe;
+                                    xe.Clear();
+                                    xe.EMap = this;
+                                    xe.cPanel = r;
+                                    xe.EXVal = (r.x2 + r.x1) / 2; 
+                                    xe.EYVal = (r.y2 + r.y1) / 2; 
+                                    xe.Event = EV_BIRTH;
+                                    rID regID = a->u.ds[i].xID;
+                                    TREG(regID)->Event(xe,regID);
+                                }
+                            } else {
+                                int16 xg,yg;
+                                xg = (SizeX() + 1) / (int16)Con[PANEL_SIZEX];
+                                yg = (SizeY() + 1) / (int16)Con[PANEL_SIZEY];
+                                do {
+                                    px = random(xg);
+                                    py = random(yg);
+                                } while (PanelsDrawn[py] & (1 << px));
+                                DrawPanel((uint8)px,(uint8)py,regID);                
+                            }
+                            break;
+                        default:
+                            Error("Strange resource type as dungeon special!");
+                        }
+                    }
+            a = TDUN(dID)->Annot(a->Next);
+        }
+    }
+
+    /* Place Predefined Submaps for Dungeon */
+    /* See if we place random Submaps as well. */
+
+    /* Step 4: Draw Each Panel */
+    for (x=0;x<panelsX;x++)
+        for (y=0;y<panelsY;y++)
+            if (!(PanelsDrawn[y] & (1 << x))) {
+                GeneratePrompt();
+                DrawPanel((uint8)x,(uint8)y);
+                PanelsDrawn[y] |= (1 << x);
+            } 
+
+    /* Step 5: Connect Each Panel */
+    {
+        int numPanels = panelsX * panelsY;
+        struct Point {
+            int x;
+            int y;
+        };
+        struct PanelInfo {
+            struct Point * O;
+            int count;
+        } *PI;
+
+        PI = (struct PanelInfo *)malloc(sizeof(struct PanelInfo) * numPanels);
+        for (i=0;i<numPanels;i++) {
+            PI[i].O = (struct Point*)malloc(sizeof(struct Point) * Con[PANEL_SIZEX] * Con[PANEL_SIZEY]);
+            PI[i].count = 0; 
+        }
+
+        /* Find Open Spaces In Each Panel */
+        for (px=0;px<panelsX;px++)
+            for (py=0;py<panelsY;py++) {
+                GeneratePrompt();
+                int panelNum = py * panelsX + px; 
+                for (int16 xx=0;xx<(int16)Con[PANEL_SIZEX];xx++)
+                    for (int16 yy=0;yy<(int16)Con[PANEL_SIZEY];yy++) {
+                        x = px * (int16)Con[PANEL_SIZEX] + xx;
+                        y = py * (int16)Con[PANEL_SIZEY] + yy;
+                        if (!SolidAt(x,y)) { 
+                            int count = 
+                                (!SolidAt(x-1,y)) +
+                                (!SolidAt(x+1,y)) +
+                                (!SolidAt(x,y+1)) +
+                                (!SolidAt(x,y-1));
+                            if (count < 4) { 
+                                PI[panelNum].O[PI[panelNum].count].x = x;
+                                PI[panelNum].O[PI[panelNum].count].y = y;
+                                PI[panelNum].count++; 
+                            }
+                        }
+                    }
+            } 
+
+        for (px=0;px<panelsX;px++)
+            for (py=0;py<panelsY;py++) {
+                GeneratePrompt();
+                int pn1 = py * panelsX + px;
+                int n[3];
+                int nc = 0; 
+                if (px > 0)
+                    n[nc++] = py * panelsX + (px -1);
+                if (py > 0)
+                    n[nc++] = (py-1) * panelsX + px;
+                if (py > 1 && px > 1)
+                    n[nc++] = (py-1) * panelsX + (px -1);
+
+                for (int k = 0; k<nc; k++) {
+                    int pn2 = n[k]; 
+                    int sx, sy, dx, dy;
+                    int bestDist = sizeX * sizeY; 
+
+                    /* find points to connect Panel pn1 to Panel pn2 */
+                    for (i=0;i<PI[pn1].count;i++)
+                        for (j=0;j<PI[pn2].count;j++) { 
+                            int thisDist = dist(
+                                PI[pn1].O[i].x,
+                                PI[pn1].O[i].y,
+                                PI[pn2].O[j].x,
+                                PI[pn2].O[j].y);
+                            if (thisDist < bestDist) { 
+                                sx = PI[pn1].O[i].x;
+                                sy = PI[pn1].O[i].y;
+                                dx = PI[pn2].O[j].x;
+                                dy = PI[pn2].O[j].y;
+                                bestDist = thisDist; 
+                            } 
+                        } 
+                    if (bestDist < sizeX * sizeY) {
+                        Tunnel(sx,sy,dx,dy,TT_DIRECT|TT_WANDER,-1,0);
+                    }
+                }
+            }
+
+        for (i=0;i<numPanels;i++)
+            free(PI[i].O);
+        free(PI);
+    }
+
+    /* ww: don't put all the stairs in the same room */
+    rID stairsAt[1024] = { 0, } ; 
+
+    if (Above)
+        MapIterate(Above,t,i)
+            if (t->Type == T_PORTAL)
+                if (((Portal*)t)->isDownStairs()) {
+                    /* Paranoia, such as for the not-impossible case of two or
+                    more staircases on the same panel. */
+#if WEIMER_TUNNEL
+                    if (At(t->x,t->y).Solid) {
+                        do {
+                            dx = random(sizeX);
+                            dy = random(sizeY);
+                        }
+                        while(At(dx,dy).Solid);
+                        Tunnel(t->x,t->y,dx,dy,true,random(2) ? NORTH : EAST,TU_NORMAL);
+                        /* Make it not a dead-end at the stairs. */
+                        if (random(3)) {
+                            do {
+                                dx = random(sizeX);
+                                dy = random(sizeY);
+                            }
+                            while(At(dx,dy).Solid);
+                            Tunnel(t->x,t->y,dx,dy,true,random(2) ? SOUTH : WEST,TU_NORMAL);
+                        }
+                    }
+#endif
+                    st = new Portal(Con[STAIRS_UP]);
+                    ASSERT(st);
+                    if (SolidAt(t->x,t->y)) {
+                        WriteAt(r,t->x,t->y,FIND("floor"),RegionAt(t->x,t->y),PRIO_FEATURE_FLOOR);
+                        ASSERT(At(t->x,t->y).Solid == 0);
+                        for (j=0;j<8;j++)
+                            WriteAt(r,t->x+DirX[j],t->y+DirY[j],
+                            FIND("dungeon wall"),RegionAt(t->x,t->y),PRIO_CORRIDOR_WALL);
+                    } 
+                    st->PlaceAt(this,t->x,t->y);
+                    if (RegionAt(t->x,t->y))  {
+                        for (j=0;stairsAt[j];j++)
+                            ;
+                        stairsAt[j] = RegionAt(t->x,t->y);
+                    }
+                }
+
+
+
+    /* Step 5: Final, Fix-Up Tunneling */
+    { 
+        struct P {
+            int x;
+            int y;
+        } *C, *U; 
+        struct Pair {
+            int sx, sy;
+            int dx, dy;
+            int dist; 
+            rID reg;
+        } *best; 
+
+        C = (struct P *)calloc(sizeof(C[0]),sizeX*sizeY);
+        U = (struct P *)calloc(sizeof(U[0]),sizeX*sizeY);
+        best = (struct Pair *)calloc(sizeof(best[0]),sizeX);
+        ASSERT(C);
+        ASSERT(U);
+        ASSERT(best);
+        int trials = 0;
+        for (x=0;x<sizeX;x++)
+            for (y=0;y<sizeY;y++) 
+                At(x,y).Connected = false; 
+
+        fCount = 0; 
+        for (x=1;x<sizeX;x++)
+            for (y=1;y<sizeY;y++) {
+                if (!SolidAt(x,y) && !At(x,y).Connected) {
+                    fCount = (int16)FloodConnectA(x,y,fCount);
+                    x = sizeX;
+                    y = sizeY; 
+                }
+            } 
+
+        while (trials++ < 26) {
+            GeneratePrompt();
+            int cCount = 0; 
+            int uCount = 0; 
+            int bestCount = 0;
+            int k;
+
+            for (i=0;i<2;i++)
+                best[i].reg = -1; 
+
+            for (x=1;x<sizeX-1;x++)
+                for (y=1;y<sizeY-1;y++) 
+                    if (!SolidAt(x,y)) {
+                        if (At(x,y).Connected) {
+                            int count = 
+                                (At(x-1,y).Connected != 0) +
+                                (At(x+1,y).Connected != 0) +
+                                (At(x,y+1).Connected != 0) +
+                                (At(x,y-1).Connected != 0);
+                            if (count < 4) {
+                                C[cCount].x = x;
+                                C[cCount++].y = y;
+                            }
+                        } else {
+                            int count = 
+                                (!SolidAt(x-1,y)) +
+                                (!SolidAt(x+1,y)) +
+                                (!SolidAt(x,y+1)) +
+                                (!SolidAt(x,y-1));
+                            if (count < 4) { 
+                                U[uCount].x = x;
+                                U[uCount++].y = y; 
+                                bool found = false;
+                                rID thisReg = RegionAt(x,y);
+                                for (k=0; !found && k < bestCount; k++)
+                                    if (best[k].reg == thisReg)
+                                        found = true;
+                                if (!found) {
+                                    best[bestCount].reg = thisReg;
+                                    best[bestCount].dist = sizeX * sizeY; 
+                                    bestCount++;
+                                }
+                            }
+                        } 
+                    }
+
+            if (uCount == 0) break; 
+
+            for (i=0;i<cCount;i++)
+                for (j=0;j<uCount;j++) { 
+                    rID r = RegionAt(U[j].x,U[j].y);
+                    for (k=0;k<bestCount;k++)
+                        if (best[k].reg == r) {
+                            int thisDist = dist(C[i].x,C[i].y,U[j].x,U[j].y);
+                            if (thisDist < best[k].dist) {
+                                best[k].sx = C[i].x;
+                                best[k].sy = C[i].y;
+                                best[k].dx = U[j].x;
+                                best[k].dy = U[j].y;
+                                best[k].dist = thisDist;
+                            } 
+                        } 
+                }
+
+            for (i=0;i<3;i++) {
+                int md = sizeX * sizeY;
+                int mi = -1;
+                for (j=0;j<bestCount;j++)
+                    if (best[j].dist < md) {
+                        md = best[j].dist;
+                        mi = j;
+                    }
+                if (mi == -1)
+                    break;
+
+                best[mi].dist = sizeX * sizeY;
+                At(best[mi].sx,best[mi].sy).Connected = false; 
+                /*
+                theGame->GetPlayer(0)->IPrint("<Res> -> <Res2>.",
+                RegionAt(best[mi].sx,best[mi].sy),
+                RegionAt(best[mi].dx,best[mi].dy));
+                */
+                Tunnel(best[mi].sx, best[mi].sy,best[mi].dx, best[mi].dy,TT_DIRECT|TT_WANDER,-1,trials);
+                fCount = (int16)FloodConnectA((int16)best[mi].sx,(int16)best[mi].sy,0);
+            }
+        }
+
+        free(C);
+        free(U);
+        free(best);
+    }
+
+    /*
+    for(x=1;x<sizeX-1;x++)
+    for(y=1;y<sizeY-1;y++)
+    if (At(x,y).Connected == false)
+    if (!At(x,y).Solid)
+    {
+    At(x,y).Shade = 0;
+    At(x,y).Glyph |= 0xB000;
+    }
+    */
+
+    for(x=1;x<sizeX-1;x++)
+        for(y=1;y<sizeY-1;y++)
+            At(x,y).Connected = false;
+
+    /* Step 6: Place Stairs & Required Monsters/Items */
+    GeneratePrompt();    
+
+    if ((int16)Con[MAX_STAIRS] && Depth < (int16)Con[DUN_DEPTH]) {
+        j = (int16)Con[MIN_STAIRS] + random((int16)(Con[MAX_STAIRS] - Con[MIN_STAIRS]));
+        for (i=0;i!=j;i++)
+        {
             Tries = 0;
             do {
-              x = random((int16)Con[LEVEL_SIZEX]);
-              y = random((int16)Con[LEVEL_SIZEY]);
-              if (Tries++ > 100)
-                break;
+                x = random((int16)Con[LEVEL_SIZEX]);
+                y = random((int16)Con[LEVEL_SIZEY]);
+                if (Tries++ > 500)
+                    break;
+                bool already = false; 
+                for (int k=0;stairsAt[k];k++)
+                    if (RegionAt(x,y) == stairsAt[k])
+                        already = true;
+                if (already) continue; 
             }
-            while(At(x,y).Solid || 
-                (At(x,y).Priority > PRIO_ROOM_FLOOR) ||
+            while(At(x,y).Solid || (At(x,y).Priority > PRIO_ROOM_FLOOR) ||
                 TTER(TerrainAt(x,y))->HasFlag(TF_WATER) ||
                 TTER(TerrainAt(x,y))->HasFlag(TF_FALL));
-            if (RES(a->u.ds[i].xID)->Type == T_TMONSTER)
-            {
-              THROW(EV_ENGEN,
-                xe.enID = FIND("unique encounter");
-                xe.enCR = DepthCR;
-                xe.enDepth = DepthCR;
-                xe.enRegID = dID;
-                xe.enConstraint = a->u.ds[i].xID;
-                xe.EXVal = x;
-                xe.EYVal = y;
-                xe.isLoc = true;
-                );
-            }
-            else if (RES(a->u.ds[i].xID)->Type == T_TITEM)
-            {
-              it = Item::Create(a->u.ds[i].xID);
-              if (!it)
-                continue;
-              it->PlaceAt(this,x,y);
-            }
-
-          }
-      a = TDUN(dID)->Annot(a->Next);
-    }
-  }
-
-  if (dID) {
-    a = TDUN(dID)->Annot(TDUN(dID)->AnHead);
-    n=-1;
-    while (a) 
-    {
-      if (a->AnType == AN_DUNSPEC)
-        for(i=0;i!=4;i++)
-          if (a->u.ds[i].xID)
-          {
-            n++; xID = a->u.ds[i].xID;
-            if (SpecialsLevels[n] == -1) {
-              if (random(100)+1 > a->u.ds[i].Chance)
-              { SpecialsLevels[n] = -10; continue; }
-              SpecialsLevels[n] = (int8)a->u.ds[i].Lev.Roll();
-            }
-            if (SpecialsLevels[n] != Depth)
-              continue;
-            switch(RES(xID)->Type)
-            {
-              case T_TMONSTER:
-              case T_TITEM:               
-              case T_TFEATURE:
-                do {
-                  x = 2 + random(sizeX-4);
-                  y = 2 + random(sizeY-4);
-                  if (At(x,y).Solid)
-                    continue;
-                  if (FFeatureAt(x,y))
-                    continue;
-                  if (FCreatureAt(x,y))
-                    continue;
-                  if (At(x,y).isVault)
-                    continue;
-                  if (TTER(TerrainAt(x,y))->HasFlag(TF_WATER))
-                    continue;
-                  if (TTER(TerrainAt(x,y))->HasFlag(TF_WARN))
-                    continue;
-                  break;
-                }
-                while (1);
-                t=NULL;
-                if (RES(xID)->Type == T_TFEATURE) {
-                  if (TFEAT(xID)->FType == T_PORTAL)
-                    t = new Portal(xID);
-                  else if (TFEAT(xID)->FType == T_TRAP)
-                    t = new Trap(xID,0);
-                  else
-                    t = new Feature(TFEAT(xID)->Image,xID,T_FEATURE);
-                }
-                else
-                  Error("Unimplemented dungeon special!");
-                if (t) {
-                  t->PlaceAt(this,x,y);
-                }
-                break;   
-
-
-
-
-              case T_TREGION:
-                /* These have been done already. */
-                break;
-            }
-          }
-      a = TDUN(dID)->Annot(a->Next);
-    }
-  }
-
-
-
-  GeneratePrompt();
-  /* Validate the stairs */
-  MapIterate(this,t,i)
-    if (t->Type == T_PORTAL) {
-      ASSERT(At(t->x,t->y).Solid == false);
-      while (t->Next) {
-        oThing(t->Next)->Remove(false);
-      } 
-    } 
-    
-  /* Validate the traps -- we don't want traps in water for aesthetic
-     reasons, and also because water deals somewhat unfairly with
-     dropped items at the moment. */
-  ValidateTraps:
-  MapIterate(this,t,i)
-    if (t->Type == T_TRAP || t->Type == T_FOUNTAIN)
-      if (TTER(TerrainAt(t->x,t->y))->HasFlag(TF_WATER) ||
-          TTER(TerrainAt(t->x,t->y))->HasFlag(TF_DEEP_LIQ))
-        {
-          t->Remove(true);
-          goto ValidateTraps;
+            st = new Portal(Con[STAIRS_DOWN]);
+            ASSERT(st)
+                st->PlaceAt(this,x,y);
         }
-  
+    }
 
-  GeneratePrompt();
-  /* Validate the doors */
+    if (dID) {
+        a = TDUN(dID)->Annot(TDUN(dID)->AnHead);
+        n=-1;
+        while (a) {
+            if (a->AnType == AN_DUNSPEC)
+                for(i=0;i!=4;i++)
+                    if (a->u.ds[i].xID) {
+                        n++;
+                        if (SpecialsLevels[n] == -1) {
+                            if (random(100)+1 > a->u.ds[i].Chance) {
+                                SpecialsLevels[n] = -10;
+                                continue;
+                            }
+                            SpecialsLevels[n] = (int8)a->u.ds[i].Lev.Roll();
+                        }
+                        if (SpecialsLevels[n] != Depth)
+                            continue;
+                        if (RES(a->u.ds[i].xID)->Type == T_TREGION)
+                            continue;
+                        Tries = 0;
+                        do {
+                            x = random((int16)Con[LEVEL_SIZEX]);
+                            y = random((int16)Con[LEVEL_SIZEY]);
+                            if (Tries++ > 100)
+                                break;
+                        }
+                        while(At(x,y).Solid || 
+                            (At(x,y).Priority > PRIO_ROOM_FLOOR) ||
+                            TTER(TerrainAt(x,y))->HasFlag(TF_WATER) ||
+                            TTER(TerrainAt(x,y))->HasFlag(TF_FALL));
+                        if (RES(a->u.ds[i].xID)->Type == T_TMONSTER) {
+                            THROW(EV_ENGEN,
+                                xe.enID = FIND("unique encounter");
+                                xe.enCR = DepthCR;
+                                xe.enDepth = DepthCR;
+                                xe.enRegID = dID;
+                                xe.enConstraint = a->u.ds[i].xID;
+                                xe.EXVal = x;
+                                xe.EYVal = y;
+                                xe.isLoc = true;
+                            );
+                        } else if (RES(a->u.ds[i].xID)->Type == T_TITEM) {
+                            it = Item::Create(a->u.ds[i].xID);
+                            if (!it)
+                                continue;
+                            it->PlaceAt(this,x,y);
+                        }
+                    }
+            a = TDUN(dID)->Annot(a->Next);
+        }
+    }
+
+    if (dID) {
+        a = TDUN(dID)->Annot(TDUN(dID)->AnHead);
+        n=-1;
+        while (a) {
+            if (a->AnType == AN_DUNSPEC)
+                for (i=0;i!=4;i++)
+                    if (a->u.ds[i].xID) {
+                        n++;
+                        xID = a->u.ds[i].xID;
+                        if (SpecialsLevels[n] == -1) {
+                            if (random(100)+1 > a->u.ds[i].Chance) {
+                                SpecialsLevels[n] = -10;
+                                continue;
+                            }
+                            SpecialsLevels[n] = (int8)a->u.ds[i].Lev.Roll();
+                        }
+                        if (SpecialsLevels[n] != Depth)
+                            continue;
+                        switch(RES(xID)->Type) {
+                        case T_TMONSTER:
+                        case T_TITEM:               
+                        case T_TFEATURE:
+                            do {
+                                x = 2 + random(sizeX-4);
+                                y = 2 + random(sizeY-4);
+                                if (At(x,y).Solid)
+                                    continue;
+                                if (FFeatureAt(x,y))
+                                    continue;
+                                if (FCreatureAt(x,y))
+                                    continue;
+                                if (At(x,y).isVault)
+                                    continue;
+                                if (TTER(TerrainAt(x,y))->HasFlag(TF_WATER))
+                                    continue;
+                                if (TTER(TerrainAt(x,y))->HasFlag(TF_WARN))
+                                    continue;
+                                break;
+                            } while (1);
+                            t=NULL;
+                            if (RES(xID)->Type == T_TFEATURE) {
+                                if (TFEAT(xID)->FType == T_PORTAL)
+                                    t = new Portal(xID);
+                                else if (TFEAT(xID)->FType == T_TRAP)
+                                    t = new Trap(xID,0);
+                                else
+                                    t = new Feature(TFEAT(xID)->Image,xID,T_FEATURE);
+                            } else
+                                Error("Unimplemented dungeon special!");
+                            if (t) {
+                                t->PlaceAt(this,x,y);
+                            }
+                            break;   
+                        case T_TREGION:
+                            /* These have been done already. */
+                            break;
+                        }
+                    }
+            a = TDUN(dID)->Annot(a->Next);
+        }
+    }
+
+    GeneratePrompt();
+    /* Validate the stairs */
+    MapIterate(this,t,i)
+        if (t->Type == T_PORTAL) {
+            ASSERT(At(t->x,t->y).Solid == false);
+            while (t->Next) {
+                oThing(t->Next)->Remove(false);
+            } 
+        } 
+
+    /* Validate the traps -- we don't want traps in water for aesthetic
+    reasons, and also because water deals somewhat unfairly with
+    dropped items at the moment. */
+ValidateTraps:
+    MapIterate(this,t,i)
+        if (t->Type == T_TRAP || t->Type == T_FOUNTAIN)
+            if (TTER(TerrainAt(t->x,t->y))->HasFlag(TF_WATER) || TTER(TerrainAt(t->x,t->y))->HasFlag(TF_DEEP_LIQ)) {
+                t->Remove(true);
+                goto ValidateTraps;
+            }
+
+    GeneratePrompt();
+    /* Validate the doors */
 StartAgain:
-  MapIterate(this,t,i)
-    if (t->Type == T_DOOR) {
-      if (!At(t->x-1,t->y).Solid || !At(t->x+1,t->y).Solid)
-        if (!At(t->x,t->y-1).Solid || !At(t->x,t->y+1).Solid)
-        {
-          At(t->x,t->y).Solid = 
-            TTER(TerrainAt(t->x,t->y))->HasFlag(TF_SOLID);
-          t->Remove(false);
-          delete t;
-          goto StartAgain;
-        }
-      for(j=0;j!=8;j++)
-        if (t2 = FDoorAt(t->x+DirX[j],t->y+DirY[j]))
-          {
-            At(t->x,t->y).Solid = 
-              TTER(TerrainAt(t->x,t->y))->HasFlag(TF_SOLID);
-            At(t2->x,t2->y).Solid = 
-              TTER(TerrainAt(t2->x,t2->y))->HasFlag(TF_SOLID);
-            t2->Remove(false);
-            delete t2;
-            t->Remove(false);
-            delete t;
-            goto StartAgain;
-          }
-      WriteAt(r,t->x,t->y,TREG(RegionAt(t->x,t->y))->Floor ? 
-          TREG(RegionAt(t->x,t->y))->Floor : FIND("floor"),
-          RegionAt(t->x,t->y),PRIO_FEATURE_FLOOR);
-      ((Door*)t)->SetImage();
-    }
-    else if (((t->Image & 0xFF) == '<') && Depth <= 5)
-    {
-      /* Remove all secret doors near the up stairs,
-         to prevent the player from being 'boxed in'
-         and starving on a new level. */
-      MapIterate(this,t2,j)
-        if (t2->isType(T_DOOR))
-          if (dist(t->x,t->y,t2->x,t2->y) <= 17)
-          {
-            ((Door*)t2)->DoorFlags &= ~DF_SECRET;
-            t2->SetImage();
-          }
-    }
-
-  /* Assign Gods to unassigned altars */
-  Thing *altar;
-  for(altar=FirstThing();altar;altar=NextThing())
-    if (altar->isFeature() && (altar->Flags & F_ALTAR))
-      if (!altar->HasStati(MY_GOD)) {
-        rID gID;
-        switch(random(8))
-          {
-            case 0: gID = FIND("Asherath"); break;
-            case 1: gID = FIND("Khasrach"); break;
-            case 2: gID = FIND("Xel"); break;
-            case 3: gID = FIND("Aiswin"); break;
-            case 4: gID = FIND("Zurvash"); break;
-            case 5: gID = FIND("Kysul"); break;
-            default: gID = FIND("the Multitude"); break;
-          }
-        altar->GainPermStati(MY_GOD,NULL,SS_MISC,0,0,gID);
+    MapIterate(this,t,i)
+        if (t->Type == T_DOOR) {
+            if (!At(t->x-1,t->y).Solid || !At(t->x+1,t->y).Solid)
+                if (!At(t->x,t->y-1).Solid || !At(t->x,t->y+1).Solid) {
+                    At(t->x,t->y).Solid = TTER(TerrainAt(t->x,t->y))->HasFlag(TF_SOLID);
+                    t->Remove(false);
+                    delete t;
+                    goto StartAgain;
+                }
+            for(j=0;j!=8;j++)
+                if (t2 = FDoorAt(t->x+DirX[j],t->y+DirY[j])) {
+                    At(t->x,t->y).Solid =  TTER(TerrainAt(t->x,t->y))->HasFlag(TF_SOLID);
+                    At(t2->x,t2->y).Solid = TTER(TerrainAt(t2->x,t2->y))->HasFlag(TF_SOLID);
+                    t2->Remove(false);
+                    delete t2;
+                    t->Remove(false);
+                    delete t;
+                    goto StartAgain;
+                }
+            WriteAt(r, t->x, t->y,
+                TREG(RegionAt(t->x,t->y))->Floor ? TREG(RegionAt(t->x,t->y))->Floor : FIND("floor"),
+                RegionAt(t->x,t->y),PRIO_FEATURE_FLOOR);
+            ((Door*)t)->SetImage();
+        } else if (((t->Image & 0xFF) == '<') && Depth <= 5) {
+            /* Remove all secret doors near the up stairs,
+            to prevent the player from being 'boxed in'
+            and starving on a new level. */
+            MapIterate(this,t2,j)
+                if (t2->isType(T_DOOR))
+                    if (dist(t->x,t->y,t2->x,t2->y) <= 17) {
+                        ((Door*)t2)->DoorFlags &= ~DF_SECRET;
+                        t2->SetImage();
+                    }
         }
 
-  /* Here, we find instances of the terrain "shallow water", and if it is
-     surrounded on all sides by "shallow water", we replace it with "deep
-     water". Generally, we avoid refering to terrain types directly, but
-     in this case the speed factor (scanning the entire map) justifies not
-     messing around with flags or somesuch. */
-  GeneratePrompt();
-  rID shID[3], deID[3];
-  shID[0] = FIND("shallow water");
-  deID[0] = FIND("deep water");
-  // ww: and also with brimstone and magma
-  shID[1] = FIND("brimstone");
-  deID[1] = FIND("magma");
-  rID fireWall = FIND("solid igneous rock"); 
-
-  shID[2] = FIND("smooth igneous rock");
-  deID[2] = FIND("obsidian");
-  ASSERT(shID[0]);
-  ASSERT(shID[1]);
-  ASSERT(shID[2]);
-  ASSERT(deID[0]);
-  ASSERT(deID[1]);
-  ASSERT(deID[2]);
-
-  GeneratePrompt();
-
-  for(x=0;x<(int16)Con[LEVEL_SIZEX];x++)
-    for(y=0;y<(int16)Con[LEVEL_SIZEY];y++) {
-      if (!FDoorAt(x,y)) {
-        At(x,y).Solid = TTER(TerrainAt(x,y))->HasFlag(TF_SOLID);
-      }
-      if (TTER(TerrainAt(x,y))->HasFlag(TF_WALL)) {
-        bool found = false; 
-        for (int z=0;z<9 && !found;z++) {
-          if (InBounds(x+DirX[z],y+DirY[z])) {
-            rID t = TerrainAt(x+DirX[z],y+DirY[z]);
-            if (t == shID[1] || t == deID[1] ||
-                t == shID[2] || t == deID[2])
-              found = true;
-          } 
-        } 
-        if (found) {
-          WriteAt(r,x,y,fireWall,RegionAt(x,y),PRIO_ROOM_WALL_MODIFIER);  
-        } 
-      }
-    }
-
-  GeneratePrompt();
-
-  /* fjm: Modified May 14 2006 so that corridors don't have deep water
-     (or other "deep" terrains) in them for ease of gameplay. */ 
-  for(x=0;x<(int16)Con[LEVEL_SIZEX];x++)
-    for(y=0;y<(int16)Con[LEVEL_SIZEY];y++)
-      for (i=0;i<3;i++) 
-        if (TerrainAt(x,y) == shID[i] && !TREG(RegionAt(x,y))->HasFlag(RF_CORRIDOR))
-          if (!InBounds(x-1,y-1) || TerrainAt(x-1,y-1) == shID[i] || TerrainAt(x-1,y-1) == deID[i] || At(x-1,y-1).Solid)
-            if (!InBounds(x-1,y) || TerrainAt(x-1,y  ) == shID[i] || TerrainAt(x-1,y  ) == deID[i] || At(x-1,y  ).Solid)
-              if (!InBounds(x-1,y+1) || TerrainAt(x-1,y+1) == shID[i] || TerrainAt(x-1,y+1) == deID[i] || At(x-1,y+1).Solid)
-                if (!InBounds(x  ,y+1) || TerrainAt(x  ,y+1) == shID[i] || TerrainAt(x  ,y+1) == deID[i] || At(x  ,y+1).Solid)
-                  if (!InBounds(x+1,y+1) || TerrainAt(x+1,y+1) == shID[i] || TerrainAt(x+1,y+1) == deID[i] || At(x+1,y+1).Solid)
-                    if (!InBounds(x+1,y) || TerrainAt(x+1,y  ) == shID[i] || TerrainAt(x+1,y  ) == deID[i] || At(x+1,y  ).Solid)
-                      if (!InBounds(x+1,y-1) || TerrainAt(x+1,y-1) == shID[i] || TerrainAt(x+1,y-1) == deID[i] || At(x+1,y-1).Solid)
-                        if (!InBounds(x  ,y-1) || TerrainAt(x  ,y-1) == shID[i] || TerrainAt(x  ,y-1) == deID[i] || At(x  ,y-1).Solid)
-                          WriteAt(r,x,y,deID[i],RegionAt(x,y),At(x,y).Priority,true);  
-#ifndef OLD_TRAP_METHOD
-  /* We put the trap at the T in the following places:
-   *  .
-   * #T#
-   *  .
-   *
-   *  #
-   * .T.
-   *  #
-   *
-   * (where the T was assumed to be empty before). Theory: Kobolds are
-   * smart, they'll trap bottlenecks. 
-   */
-  for(x=1;x<(int16)Con[LEVEL_SIZEX]-1;x++)
-    for(y=1;y<(int16)Con[LEVEL_SIZEY]-1;y++) {
-      if (FDoorAt(x,y) && (random((int16)Con[TRAP_CHANCE]) <= (int16)(DepthCR+10))) {
-        rID tID = theGame->GetEffectID(PUR_DUNGEON,0,(int8)DepthCR,AI_TRAP);
-        if (tID) {
-          Trap * tr = new Trap(FIND("trap"),tID);
-          tr->PlaceAt(this,x,y);
-        }
-      } else 
-        if (!At(x,y).Solid && !FFeatureAt(x,y)) {
-          bool up,down,left,right;
-          up =          At(x,y-1).Solid && !FDoorAt(x,y-1);
-          down =        At(x,y+1).Solid && !FDoorAt(x,y+1);
-          left =        At(x-1,y).Solid && !FDoorAt(x-1,y);
-          right =       At(x+1,y).Solid && !FDoorAt(x+1,y);
-          if ((!up && !down && left && right) ||
-              (up && down && !left &&!right)) {
-            if (random((int16)Con[TRAP_CHANCE]) <= (int16)((DepthCR+2)/3))  {
-              rID tID = theGame->GetEffectID(PUR_DUNGEON,0,(int8)DepthCR,AI_TRAP);
-              if (tID) {
-                Trap * tr = new Trap(FIND("trap"),tID);
-                tr->PlaceAt(this,x,y);
-              }
+    /* Assign Gods to unassigned altars */
+    Thing *altar;
+    for(altar=FirstThing();altar;altar=NextThing())
+        if (altar->isFeature() && (altar->Flags & F_ALTAR))
+            if (!altar->HasStati(MY_GOD)) {
+                rID gID;
+                switch(random(8)) {
+                case 0: gID = FIND("Asherath"); break;
+                case 1: gID = FIND("Khasrach"); break;
+                case 2: gID = FIND("Xel"); break;
+                case 3: gID = FIND("Aiswin"); break;
+                case 4: gID = FIND("Zurvash"); break;
+                case 5: gID = FIND("Kysul"); break;
+                default: gID = FIND("the Multitude"); break;
+                }
+                altar->GainPermStati(MY_GOD,NULL,SS_MISC,0,0,gID);
             }
-          }
+
+    /* Here, we find instances of the terrain "shallow water", and if it is
+    surrounded on all sides by "shallow water", we replace it with "deep
+    water". Generally, we avoid refering to terrain types directly, but
+    in this case the speed factor (scanning the entire map) justifies not
+    messing around with flags or somesuch. */
+    GeneratePrompt();
+    rID shID[3], deID[3];
+    shID[0] = FIND("shallow water");
+    deID[0] = FIND("deep water");
+    // ww: and also with brimstone and magma
+    shID[1] = FIND("brimstone");
+    deID[1] = FIND("magma");
+    rID fireWall = FIND("solid igneous rock"); 
+
+    shID[2] = FIND("smooth igneous rock");
+    deID[2] = FIND("obsidian");
+    ASSERT(shID[0]);
+    ASSERT(shID[1]);
+    ASSERT(shID[2]);
+    ASSERT(deID[0]);
+    ASSERT(deID[1]);
+    ASSERT(deID[2]);
+
+    GeneratePrompt();
+
+    for(x=0;x<(int16)Con[LEVEL_SIZEX];x++)
+        for(y=0;y<(int16)Con[LEVEL_SIZEY];y++) {
+            if (!FDoorAt(x,y)) {
+                At(x,y).Solid = TTER(TerrainAt(x,y))->HasFlag(TF_SOLID);
+            }
+            if (TTER(TerrainAt(x,y))->HasFlag(TF_WALL)) {
+                bool found = false; 
+                for (int z=0;z<9 && !found;z++) {
+                    if (InBounds(x+DirX[z],y+DirY[z])) {
+                        rID t = TerrainAt(x+DirX[z],y+DirY[z]);
+                        if (t == shID[1] || t == deID[1] || t == shID[2] || t == deID[2])
+                            found = true;
+                    } 
+                } 
+                if (found) {
+                    WriteAt(r,x,y,fireWall,RegionAt(x,y),PRIO_ROOM_WALL_MODIFIER);  
+                } 
+            }
         }
-    } 
+
+    GeneratePrompt();
+
+    /* fjm: Modified May 14 2006 so that corridors don't have deep water
+    (or other "deep" terrains) in them for ease of gameplay. */ 
+    for(x=0;x<(int16)Con[LEVEL_SIZEX];x++)
+        for(y=0;y<(int16)Con[LEVEL_SIZEY];y++)
+            for (i=0;i<3;i++) 
+                if (TerrainAt(x,y) == shID[i] && !TREG(RegionAt(x,y))->HasFlag(RF_CORRIDOR))
+                    if (!InBounds(x-1,y-1) || TerrainAt(x-1,y-1) == shID[i] || TerrainAt(x-1,y-1) == deID[i] || At(x-1,y-1).Solid)
+                        if (!InBounds(x-1,y) || TerrainAt(x-1,y  ) == shID[i] || TerrainAt(x-1,y  ) == deID[i] || At(x-1,y  ).Solid)
+                            if (!InBounds(x-1,y+1) || TerrainAt(x-1,y+1) == shID[i] || TerrainAt(x-1,y+1) == deID[i] || At(x-1,y+1).Solid)
+                                if (!InBounds(x  ,y+1) || TerrainAt(x  ,y+1) == shID[i] || TerrainAt(x  ,y+1) == deID[i] || At(x  ,y+1).Solid)
+                                    if (!InBounds(x+1,y+1) || TerrainAt(x+1,y+1) == shID[i] || TerrainAt(x+1,y+1) == deID[i] || At(x+1,y+1).Solid)
+                                        if (!InBounds(x+1,y) || TerrainAt(x+1,y  ) == shID[i] || TerrainAt(x+1,y  ) == deID[i] || At(x+1,y  ).Solid)
+                                            if (!InBounds(x+1,y-1) || TerrainAt(x+1,y-1) == shID[i] || TerrainAt(x+1,y-1) == deID[i] || At(x+1,y-1).Solid)
+                                                if (!InBounds(x  ,y-1) || TerrainAt(x  ,y-1) == shID[i] || TerrainAt(x  ,y-1) == deID[i] || At(x  ,y-1).Solid)
+                                                    WriteAt(r,x,y,deID[i],RegionAt(x,y),At(x,y).Priority,true);  
+
+#ifndef OLD_TRAP_METHOD
+    /* We put the trap at the T in the following places:
+    *  .
+    * #T#
+    *  .
+    *
+    *  #
+    * .T.
+    *  #
+    *
+    * (where the T was assumed to be empty before). Theory: Kobolds are
+    * smart, they'll trap bottlenecks. 
+    */
+    for(x=1;x<(int16)Con[LEVEL_SIZEX]-1;x++)
+        for(y=1;y<(int16)Con[LEVEL_SIZEY]-1;y++) {
+            if (FDoorAt(x,y) && (random((int16)Con[TRAP_CHANCE]) <= (int16)(DepthCR+10))) {
+                rID tID = theGame->GetEffectID(PUR_DUNGEON,0,(int8)DepthCR,AI_TRAP);
+                if (tID) {
+                    Trap * tr = new Trap(FIND("trap"),tID);
+                    tr->PlaceAt(this,x,y);
+                }
+            } else if (!At(x,y).Solid && !FFeatureAt(x,y)) {
+                bool up,down,left,right;
+                up =          At(x,y-1).Solid && !FDoorAt(x,y-1);
+                down =        At(x,y+1).Solid && !FDoorAt(x,y+1);
+                left =        At(x-1,y).Solid && !FDoorAt(x-1,y);
+                right =       At(x+1,y).Solid && !FDoorAt(x+1,y);
+                if ((!up && !down && left && right) || (up && down && !left &&!right)) {
+                    if (random((int16)Con[TRAP_CHANCE]) <= (int16)((DepthCR+2)/3))  {
+                        rID tID = theGame->GetEffectID(PUR_DUNGEON,0,(int8)DepthCR,AI_TRAP);
+                        if (tID) {
+                            Trap * tr = new Trap(FIND("trap"),tID);
+                            tr->PlaceAt(this,x,y);
+                        }
+                    }
+                }
+            }
+        } 
 
 #endif
-  GeneratePrompt();
+    GeneratePrompt();
 
+    /* Place Treasure Deposits for Miners */
+    int16 cDeposits;
+    cDeposits = Dice::Roll(1,4,(int8)Depth);
+    for (n=0;n!=cDeposits;n++) {
+        rID depID;
+        do {
+            x = 1 + random(sizeX-1);
+            y = 1 + random(sizeY-1);
+            if ((TTER(TerrainAt(x,y))->Image & 0xFF) != GLYPH_ROCK)
+                goto TryAgain;
+            for (j=0;j!=8;j++)
+                if (InBounds(x+DirX[j],y+DirY[j]) && !SolidAt(x+DirX[j],y+DirY[j]))
+                    goto TryAgain;
+            if ((TerrainAt(x,y) == Con[TERRAIN_ROCK]) && random(7))
+                goto TryAgain;
+            break;
+TryAgain:;
+        } while (1);
 
-  /* Place Treasure Deposits for Miners */
-  int16 cDeposits;
-  cDeposits = Dice::Roll(1,4,(int8)Depth);
-  for (n=0;n!=cDeposits;n++)
-    {
-      rID depID;
-      do {
-        x = 1 + random(sizeX-1);
-        y = 1 + random(sizeY-1);
-        if ((TTER(TerrainAt(x,y))->Image & 0xFF) != GLYPH_ROCK)
-          goto TryAgain;
-        for (j=0;j!=8;j++)
-          if (InBounds(x+DirX[j],y+DirY[j]) && 
-                !SolidAt(x+DirX[j],y+DirY[j]))
-            goto TryAgain;
-        if ((TerrainAt(x,y) == Con[TERRAIN_ROCK]) && random(7))
-          goto TryAgain;
-        break;
-        TryAgain:;
-        }
-      while (1);
-      nCandidates = 0;
-      for (int mIdx=0;theGame->Modules[mIdx];mIdx++)
-        for (i=0; i<theGame->Modules[mIdx]->szTer; i++) {
-          depID = theGame->Modules[mIdx]->TerrainID(i);
-          if (TTER(depID)->HasFlag(TF_DEPOSIT))
-            if ((int16)TTER(depID)->GetConst(DEPOSIT_DEPTH) <= Depth)
-              Candidates[nCandidates++] = depID;
-          }
-      if (!nCandidates)
-        break;
-      depID = Candidates[random(nCandidates)];
-     
-      WriteAt(r,x,y,depID,RegionAt(x,y),PRIO_DEPOSIT);
-    }
-      
-  /* Calculate light */
-  r.Set(0,0,sizeX-1,sizeY-1);
-  calcLight(r);
-  
-  /* Mark Skylights */
-  if (Depth > 1 && Above)
-    {
-      rID trID; bool isChasm;
-      trID = 0;
-      for (x=0;x!=sizeX;x++)
-        for (y=0;y!=sizeY;y++)
-          {
-            if (trID != Above->TerrainAt(x,y))
-              {
-                trID = Above->TerrainAt(x,y);
-                isChasm = TTER(trID)->HasFlag(TF_FALL);
-              }
-            if (isChasm)
-              {
-                At(x,y).isSkylight = true;
-                if ((At(x,y).Glyph & 0xFF) == GLYPH_FLOOR)
-                  {
-                    At(x,y).Glyph &= 0xF0FF;
-                    At(x,y).Glyph |= CYAN * 256;
-                    At(x,y).Shade = false;
-                  }
-              }
-            else
-              At(x,y).isSkylight = false;
-          }
-    }
-  else
-    {
-      for (x=0;x!=sizeX;x++)
-        for (y=0;y!=sizeY;y++)
-          At(x,y).isSkylight = false;
-    }
-    
-  /* Step 7: Deallocation & Return */
-  free(GridBackup);
-  delete[] FloodArray;
-  delete[] FloodStack;
-  delete[] EmptyArray;
-  GeneratePrompt();
-  MapIterate(this,t,i) 
-    if (t->isType(T_MONSTER)) 
-      ((Monster*)t)->Initialize();
-  GeneratePrompt();        
-  /* Remove Temporary Priority Values */
-  for (x=0;x<sizeX;x++)
-    for (y=0;y<sizeY;y++)
-      At(x,y).Priority = 0;
+        nCandidates = 0;
+        for (int mIdx=0;theGame->Modules[mIdx];mIdx++)
+            for (i=0; i<theGame->Modules[mIdx]->szTer; i++) {
+                depID = theGame->Modules[mIdx]->TerrainID(i);
+                if (TTER(depID)->HasFlag(TF_DEPOSIT))
+                    if ((int16)TTER(depID)->GetConst(DEPOSIT_DEPTH) <= Depth)
+                        Candidates[nCandidates++] = depID;
+            }
+            if (!nCandidates)
+                break;
+            depID = Candidates[random(nCandidates)];
 
-  /* HACKFIX */
-  int16 capCR = Depth + (theGame->Opt(OPT_OOD_MONSTERS) ? 3 : 1);
-  rID campID = FIND("The Goblin Encampment");
-  RestartVerifyMon:
-  if (theGame->Opt(OPT_DIFFICULTY) != DIFF_NIGHTMARE) {
-    MapIterate(this,t,i)
-      if (t->isType(T_MONSTER))
-        if (((Creature*)t)->ChallengeRating() > capCR)
-          {
-            if (theGame->GetPlayer(0))
-              if (((Creature*)t)->isFriendlyTo(theGame->GetPlayer(0)))
-                continue;
-            if (RegionAt(t->x,t->y) == campID)
-              continue;
-            t->Remove(true);
-            goto RestartVerifyMon;
-          }
+            WriteAt(r,x,y,depID,RegionAt(x,y),PRIO_DEPOSIT);
     }
 
-  /* Kludge to make sure that no fortress enemies are neutral */
-  if (Depth == 10)
-    {
-      Creature *cr; int32 i;
-      MapIterate(this,cr,i)
-        if (cr->isCreature() && RegionAt(cr->x,cr->y) == campID)
-          {
-            cr->RemoveStati(ALIGNMENT);
-            cr->StateFlags &= ~(MS_PEACEFUL);
-            cr->GainPermStati(ALIGNMENT,NULL,SS_MISC,
-              AL_LAWFUL|AL_EVIL,AL_LAWFUL|AL_EVIL,0,0);
-            cr->ts.Retarget(cr,true);
-          }
+    /* Calculate light */
+    r.Set(0,0,sizeX-1,sizeY-1);
+    calcLight(r);
+
+    /* Mark Skylights */
+    if (Depth > 1 && Above) {
+        rID trID; bool isChasm;
+        trID = 0;
+
+        for (x=0;x!=sizeX;x++)
+            for (y=0;y!=sizeY;y++) {
+                if (trID != Above->TerrainAt(x,y)) {
+                    trID = Above->TerrainAt(x,y);
+                    isChasm = TTER(trID)->HasFlag(TF_FALL);
+                }
+                if (isChasm) {
+                    At(x,y).isSkylight = true;
+                    if ((At(x,y).Glyph & 0xFF) == GLYPH_FLOOR) {
+                        At(x,y).Glyph &= 0xF0FF;
+                        At(x,y).Glyph |= CYAN * 256;
+                        At(x,y).Shade = false;
+                    }
+                }
+                else
+                    At(x,y).isSkylight = false;
+            }
+    } else {
+        for (x=0;x!=sizeX;x++)
+            for (y=0;y!=sizeY;y++)
+                At(x,y).isSkylight = false;
     }
-      
-  inGenerate = false;
 
-  T1->SetWin(WIN_INPUT);
-  T1->Clear();
+    /* Step 7: Deallocation & Return */
+    free(GridBackup);
+    delete[] FloodArray;
+    delete[] FloodStack;
+    delete[] EmptyArray;
 
+    GeneratePrompt();
+    MapIterate(this,t,i) 
+        if (t->isType(T_MONSTER)) 
+            ((Monster*)t)->Initialize();
+
+    GeneratePrompt();        
+    /* Remove Temporary Priority Values */
+    for (x=0;x<sizeX;x++)
+        for (y=0;y<sizeY;y++)
+            At(x,y).Priority = 0;
+
+    /* HACKFIX */
+    int16 capCR = Depth + (theGame->Opt(OPT_OOD_MONSTERS) ? 3 : 1);
+    rID campID = FIND("The Goblin Encampment");
+RestartVerifyMon:
+    if (theGame->Opt(OPT_DIFFICULTY) != DIFF_NIGHTMARE) {
+        MapIterate(this,t,i)
+            if (t->isType(T_MONSTER))
+                if (((Creature*)t)->ChallengeRating() > capCR) {
+                    if (theGame->GetPlayer(0))
+                        if (((Creature*)t)->isFriendlyTo(theGame->GetPlayer(0)))
+                            continue;
+                    if (RegionAt(t->x,t->y) == campID)
+                        continue;
+                    t->Remove(true);
+                    goto RestartVerifyMon;
+                }
+    }
+
+    /* Kludge to make sure that no fortress enemies are neutral */
+    if (Depth == 10) {
+        Creature *cr; int32 i;
+        MapIterate(this,cr,i)
+            if (cr->isCreature() && RegionAt(cr->x,cr->y) == campID) {
+                cr->RemoveStati(ALIGNMENT);
+                cr->StateFlags &= ~(MS_PEACEFUL);
+                cr->GainPermStati(ALIGNMENT,NULL,SS_MISC, AL_LAWFUL|AL_EVIL,AL_LAWFUL|AL_EVIL,0,0);
+                cr->ts.Retarget(cr,true);
+            }
+    }
+
+    inGenerate = false;
+
+    T1->SetWin(WIN_INPUT);
+    T1->Clear();
 }
 
 void Map::DrawPanel(uint8 px, uint8 py, rID regID)
@@ -3863,30 +3821,28 @@ Dir Map::CorrectDir(int16 x, int16 y, int16 dx,int16 dy,Dir Curr)
 			return Option1;
 	}
 
-int32 Map::FloodConnectA(int16 x, int16 y,int32 fCount)
-  {
+int32 Map::FloodConnectA(int16 x, int16 y,int32 fCount) {
     uint8 *FloodSP = FloodStack;
 
-    
     FloodSP[0] = (uint8)x;
     FloodSP[1] = (uint8)y;
 
-    DoCall:
+DoCall:
     x = FloodSP[0];
     y = FloodSP[1];
     ASSERT(FloodSP+6 < FloodStack+(sizeX*sizeY*3)); 
     /* Special Kludge: treat both inner 'building' walls and terrain
-       streamers like chasms as open with regard to flood-connection. */
+    streamers like chasms as open with regard to flood-connection. */
 #if 0
     if(!InBounds(x,y) || 
         At(x,y).Solid && (At(x,y).Priority < 60 
-          || At(x,y).Priority == 100))
+        || At(x,y).Priority == 100))
 #endif
-    // ww: this is intentionally not "SolidAt" for Features
-    if(At(x,y).Solid && !FDoorAt(x,y))
-      goto DoReturn;
-    if(At(x,y).Connected)
-      goto DoReturn;
+        // ww: this is intentionally not "SolidAt" for Features
+        if(At(x,y).Solid && !FDoorAt(x,y))
+            goto DoReturn;
+    if (At(x,y).Connected)
+        goto DoReturn;
 
     At(x,y).Connected = true;
     //At(x,y).Glyph = GLYPH_FLOOR2 + PINK*256;
@@ -3894,28 +3850,26 @@ int32 Map::FloodConnectA(int16 x, int16 y,int32 fCount)
     FloodArray[fCount*2+1] = (uint8)y;
     fCount++;
 
-
-    
-    for(FloodSP[2]=0;FloodSP[2]!=8;FloodSP[2]++)    
-      {
+    for(FloodSP[2]=0;FloodSP[2]!=8;FloodSP[2]++) {
         FloodSP += 3;
         FloodSP[0] = DirX[FloodSP[-1]] + x;
         FloodSP[1] = DirY[FloodSP[-1]] + y;
         goto DoCall;
-        ReturnAddress:
+
+ReturnAddress:
         FloodSP -= 3;
         x = FloodSP[0];
         y = FloodSP[1];
-      }
-    
-    DoReturn:
-    if (FloodSP == FloodStack)
-      return fCount;
-    goto ReturnAddress;
-  }
+    }
 
-int32 Map::FloodConnectB(int16 x, int16 y)
-  {
+DoReturn:
+    if (FloodSP == FloodStack)
+        return fCount;
+
+    goto ReturnAddress;
+}
+
+int32 Map::FloodConnectB(int16 x, int16 y) {
     Thing *t; int16 i;
     uint8 *FloodSP; int32 fCount = 0;
 
@@ -3929,30 +3883,32 @@ int32 Map::FloodConnectB(int16 x, int16 y)
     FloodSP[1] = (uint8)y;
 
     MapIterate(this,t,i)
-      if (t->isType(T_DOOR))
-        {
-          /* Later, percentile chance that each door "holds". */
-          if (((Door*)t)->DoorFlags & DF_LOCKED)
-            { if (!random(5)) continue; }
-          else if (((Door*)t)->DoorFlags & DF_STUCK)
-            { if (!random(3)) continue; }
-          else if (!(((Door*)t)->DoorFlags & DF_OPEN))
-            { if (!random(2)) continue; }
-          else
-            continue;
-          At(t->x,t->y).Solid = true;
+        if (t->isType(T_DOOR)) {
+            /* Later, percentile chance that each door "holds". */
+            if (((Door*)t)->DoorFlags & DF_LOCKED) {
+                if (!random(5))
+                    continue;
+            } else if (((Door*)t)->DoorFlags & DF_STUCK) {
+                if (!random(3))
+                    continue;
+            } else if (!(((Door*)t)->DoorFlags & DF_OPEN)) {
+                if (!random(2))
+                    continue;
+            } else
+                continue;
+            At(t->x,t->y).Solid = true;
         }
 
-    DoCall:
+DoCall:
     x = FloodSP[0];
     y = FloodSP[1];
 
     ASSERT(FloodSP+6 < FloodStack+(sizeX*sizeY*3)); 
 
     if (!InBounds(x,y))
-      goto DoReturn;
+        goto DoReturn;
     if(At(x,y).Solid || At(x,y).Visibility)
-      goto DoReturn;
+        goto DoReturn;
 
     At(x,y).Connected = true;
     /*At(x,y).Glyph &= 0x00FF;
@@ -3963,37 +3919,33 @@ int32 Map::FloodConnectB(int16 x, int16 y)
     FloodArray[fCount*2]   = (uint8)x;
     FloodArray[fCount*2+1] = (uint8)y;
     fCount++;
-    
-    for(FloodSP[2]=0;FloodSP[2]!=8;FloodSP[2]++)    
-      {
+
+    for(FloodSP[2]=0;FloodSP[2]!=8;FloodSP[2]++) {
         FloodSP += 3;
         FloodSP[0] = DirX[FloodSP[-1]] + x;
         FloodSP[1] = DirY[FloodSP[-1]] + y;
         goto DoCall;
-        ReturnAddress:
+
+ReturnAddress:
         FloodSP -= 3;
         x = FloodSP[0];
         y = FloodSP[1];
-      }
-    
-    DoReturn:
-    if (FloodSP == FloodStack)
-      {
+    }
+
+DoReturn:
+    if (FloodSP == FloodStack) {
         delete FloodStack;
         delete FloodArray;
         MapIterate(this,t,i)
-          if (t->isType(T_DOOR))
-            {
-              /* ASSUMPTION: Doors never exist in solid squares */
-              At(t->x,t->y).Solid = false;
+            if (t->isType(T_DOOR)) {
+                /* ASSUMPTION: Doors never exist in solid squares */
+                At(t->x,t->y).Solid = false;
             }
         return fCount;
-      }
+    }
 
     goto ReturnAddress;
-  }
-
-
+}
 
 bool Map::TreeAt(int16 x, int16 y)
 { 
