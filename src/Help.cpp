@@ -3717,7 +3717,7 @@ String & Container::Describe(Player *p)
 
   if (HasStati(LOCKED))
     Desc += Format("__<14>Locked:<7> Picking its lock requires a Skill Check against a DC of <11>%d<7>.",
-        19 + m->Depth);
+        19 + p->m->Depth);
 
   if (HasStati(TRIED, SK_LOCKPICKING, p))
     Desc += Format("__<14>Tried:<7> You have already tried to pick its lock today.\n");
