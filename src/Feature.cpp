@@ -235,8 +235,8 @@ EvReturn Portal::Event(EventInfo &e)
 
 EvReturn Portal::Enter(EventInfo &e)
   {
-    int8 DepthMod = 1; Map * new_m; 
-    EvReturn res;
+    int8 DepthMod; Map * new_m; 
+    EvReturn res; Creature *c;
     
     res = TFEAT(fID)->Event(e,fID);
     if (res == DONE || res == ERROR)
@@ -246,18 +246,29 @@ EvReturn Portal::Enter(EventInfo &e)
 
     e.EActor->Timeout += 30;
 
-    switch(TFEAT(fID)->xval)
-      {
-        case POR_UP_STAIR:
-          DepthMod = -1;
+    switch(TFEAT(fID)->xval) {
         case POR_DOWN_STAIR:
-          if (!m->dID)
-            {
-              Error("Up/down stairs located outside dungeon!");
-              return ABORT;
+        case POR_UP_STAIR:
+            DepthMod = TFEAT(fID)->xval == POR_DOWN_STAIR ? 1 : -1;
+            if (!m->dID) {
+                Error("Up/down stairs located outside dungeon!");
+                return ABORT;
             }
-          e.EActor->MoveDepth(m->Depth + DepthMod,true);
-          return DONE;
+            if (e.EActor->isPlayer() && DepthMod == 1) {
+                new_m = theGame->GetDungeonMap(m->dID,m->Depth+DepthMod,e.EPActor,NULL);
+                if (new_m != NULL){
+                    int16 nx = e.EActor->x, ny = e.EActor->y;
+                    /* Out of bounds will result in random placement. Should be safe. HACK ALERT. */
+                    if (new_m->InBounds(nx, ny)) {
+                        //if ((TTER(new_m->PTerrainAt(nx,ny,e.EActor))->PEvent(EV_MON_CONSIDER,e.EActor,new_m->TerrainAt(nx,ny)) == ABORT))
+                            if (!e.EActor->yn(XPrint("The stair leads to <Res>. Confirm unsafe action?",new_m->TerrainAt(nx,ny)),true))
+                                return ABORT;
+                    }
+                }
+            }
+
+            e.EActor->MoveDepth(m->Depth + DepthMod,true);
+            return DONE;
         case POR_DUN_ENTRY:
           if (!e.EActor->isPlayer())
             return ABORT;
