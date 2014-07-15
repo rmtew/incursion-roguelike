@@ -1803,23 +1803,21 @@ NewLocation:
         MapIterate(Above,t,i)
             if (t->Type == T_PORTAL)
                 if (((Portal*)t)->isDownStairs()) {
-                    /* Paranoia, such as for the not-impossible case of two or
-                    more staircases on the same panel. */
+                    /* Paranoia, such as for the not-impossible case of two or more staircases on the same panel. */
 #if WEIMER_TUNNEL
                     if (At(t->x,t->y).Solid) {
                         do {
                             dx = random(sizeX);
                             dy = random(sizeY);
-                        }
-                        while(At(dx,dy).Solid);
+                        } while(At(dx,dy).Solid);
                         Tunnel(t->x,t->y,dx,dy,true,random(2) ? NORTH : EAST,TU_NORMAL);
+
                         /* Make it not a dead-end at the stairs. */
                         if (random(3)) {
                             do {
                                 dx = random(sizeX);
                                 dy = random(sizeY);
-                            }
-                            while(At(dx,dy).Solid);
+                            } while(At(dx,dy).Solid);
                             Tunnel(t->x,t->y,dx,dy,true,random(2) ? SOUTH : WEST,TU_NORMAL);
                         }
                     }
@@ -1830,8 +1828,7 @@ NewLocation:
                         WriteAt(r,t->x,t->y,FIND("floor"),RegionAt(t->x,t->y),PRIO_FEATURE_FLOOR);
                         ASSERT(At(t->x,t->y).Solid == 0);
                         for (j=0;j<8;j++)
-                            WriteAt(r,t->x+DirX[j],t->y+DirY[j],
-                            FIND("dungeon wall"),RegionAt(t->x,t->y),PRIO_CORRIDOR_WALL);
+                            WriteAt(r,t->x+DirX[j],t->y+DirY[j],FIND("dungeon wall"),RegionAt(t->x,t->y),PRIO_CORRIDOR_WALL);
                     } 
                     st->PlaceAt(this,t->x,t->y);
                     if (RegionAt(t->x,t->y))  {
@@ -1840,8 +1837,6 @@ NewLocation:
                         stairsAt[j] = RegionAt(t->x,t->y);
                     }
                 }
-
-
 
     /* Step 5: Final, Fix-Up Tunneling */
     { 
@@ -1989,8 +1984,7 @@ NewLocation:
 
     if ((int16)Con[MAX_STAIRS] && Depth < (int16)Con[DUN_DEPTH]) {
         j = (int16)Con[MIN_STAIRS] + random((int16)(Con[MAX_STAIRS] - Con[MIN_STAIRS]));
-        for (i=0;i!=j;i++)
-        {
+        for (i=0;i!=j;i++) {
             Tries = 0;
             do {
                 x = random((int16)Con[LEVEL_SIZEX]);
@@ -2008,7 +2002,7 @@ NewLocation:
                 TTER(TerrainAt(x,y))->HasFlag(TF_FALL));
             st = new Portal(Con[STAIRS_DOWN]);
             ASSERT(st)
-                st->PlaceAt(this,x,y);
+            st->PlaceAt(this,x,y);
         }
     }
 
