@@ -226,7 +226,7 @@ Text "help::intro"
 	    __<6>Incursion is still is very early alpha testing. It has several known
 	    game stability bugs that cause it to crash, hopefully elegantly enough to
 	    bring up a registry error dialog box, but sometimes badly enough to crash
-	    completely. Fortunatly, Incursion does not delete save files until it is
+	    completely. Fortunately, Incursion does not delete save files until it is
 	    ready to overwrite them, so if Incursion does crash (at some place other
 	    then in the save game routines), you can recover your game from the last
 	    place you saved. What this means is that it is also in your benefit to 
