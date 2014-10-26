@@ -1523,19 +1523,19 @@ void Map::Generate(rID _dID, int16 _Depth, Map *Above,int8 Luck) {
             goto SecondStreamerSame;
 
         tot=0;
-        for(i=0;StreamWeights[i*2+1];i++)
+        for(i=0; StreamWeights[i*2+1]; i++)
             tot += (int16)StreamWeights[i*2+1];
         if (!tot) /* No Streamers Available */
             break;
 
         for (j=0; j!=20; j++) {
-            c = random(tot); 
-            for(i=0;StreamWeights[i*2+1];i++)
+            c = random(tot);
+            for(i=0; StreamWeights[i*2+1]; i++)
                 if (c < (int16)StreamWeights[i*2+1])
                     goto StreamChosen;
                 else
                     c -= (int16)StreamWeights[i*2+1];
-            Fatal("Strange Error in room weights algorithm.");
+            Fatal("Room weights error B, %d %d %d.", i, c, (int16)StreamWeights[i*2+1]);
 
 StreamChosen:
             sID = StreamWeights[i*2];
@@ -2421,9 +2421,8 @@ RestartVerifyMon:
     T1->Clear();
 }
 
-void Map::DrawPanel(uint8 px, uint8 py, rID regID)
-  {
-    int16 i,c,tot,sx,sy,RType,Tries,x,y; 
+void Map::DrawPanel(uint8 px, uint8 py, rID regID) {
+    int16 i,c,tot,sx,sy,RType,Tries,x,y,weight;
     Rect cPanel, r,r2,r3,r4; 
     rID WallID, FloorID, xID;
     static Rect NULL_RECT(0,0,0,0);
@@ -2442,592 +2441,572 @@ void Map::DrawPanel(uint8 px, uint8 py, rID regID)
     PurgeStrings();
 
     if (regID) {
-      int16 RTypes[32], c;
-      c = 0;
-      for (i=0;i!=32;i++)
-        if (BIT(i) & TREG(regID)->RoomTypes)
-          RTypes[c++] = i;
-      if (!c)
-        return;
-      RType = RTypes[random(c)];
-      goto PresetRegion;
-      }
-          
-    Tries = 0;
+        int16 RTypes[32], c;
+        c = 0;
+        for (i=0;i!=32;i++)
+            if (BIT(i) & TREG(regID)->RoomTypes)
+                RTypes[c++] = i;
+        if (!c)
+            return;
+        RType = RTypes[random(c)];
+        goto PresetRegion;
+    }
 
+    Tries = 0;
     TDUN(dID)->GetList(RM_WEIGHTS,RM_Weights,RM_LAST*2);
 
-    Reselect:
-
-  
-
+Reselect:
     r.x1 = r2.x1 = r3.x1 = r4.x1 = -1; 
     r.x2 = r2.x2 = r3.x2 = r4.x2 = 0; 
 
     if (Tries >= 200) {
-      if (usedInThisLevel[0]) {
-        if (theGame->GetPlayer(0)->WizardMode)
-          theGame->GetPlayer(0)->IPrint("The air seems to shift.");
-        memset(usedInThisLevel,0,sizeof(usedInThisLevel));
-      } else { 
-        Error("Two hundred tries and no viable room/region combo.");
-      }
+        if (usedInThisLevel[0]) {
+            if (theGame->GetPlayer(0)->WizardMode)
+                theGame->GetPlayer(0)->IPrint("The air seems to shift.");
+            memset(usedInThisLevel,0,sizeof(usedInThisLevel));
+        } else { 
+            Error("Two hundred tries and no viable room/region combo.");
+        }
     }
 
-    tot=0;
-    for(i=0;RM_Weights[i*2+1];i++)
-      tot += (int16)max(0,RM_Weights[i*2+1]);
+    tot = 0;
+    for(i=0; RM_Weights[i*2+1]; i++)
+        tot += (int16)max(0, RM_Weights[i*2+1]);
+
     c = random(tot); 
-    for(i=0;RM_Weights[i*2+1];i++)
-      if (c < (int16)RM_Weights[i*2+1])
-        goto RM_Chosen;
-      else
-        c -= (int16)RM_Weights[i*2+1];
-    Fatal("Strange Error in room weights algorithm.");
-    RM_Chosen:
+    for(i=0; RM_Weights[i*2+1]; i++) {
+        weight = (int16)max(0, RM_Weights[i*2+1]);
+        if (c < weight)
+            goto RM_Chosen;
+        else
+            c -= weight;
+    }
+    Fatal("Room weights error A, %d %d %d %d.", i, c, weight, Tries);
+
+RM_Chosen:
     RType = (int16)RM_Weights[i*2];
     RM_Weights[i*2+1] = -1;
+
     /* Choose Region Type (ignoring weights for now) */
     for(i=c=0;RoomWeights[i*2];i++)
-      if (!TREG(RoomWeights[i*2])->RoomTypes || 
-            (TREG(RoomWeights[i*2])->RoomTypes & BIT(RType)))
-        if (DepthCR >= TREG(RoomWeights[i*2])->Depth)
-          if (!TREG(RoomWeights[i*2])->HasFlag(RF_VAULT) ||
-            DepthCR >= (int16)Con[MIN_VAULT_DEPTH]) {
-            if (!TREG(RoomWeights[i*2])->HasFlag(RF_CORRIDOR))  
-              Candidates[c++] = RoomWeights[i*2];
-          }
+        if (!TREG(RoomWeights[i*2])->RoomTypes || (TREG(RoomWeights[i*2])->RoomTypes & BIT(RType)))
+            if (DepthCR >= TREG(RoomWeights[i*2])->Depth)
+                if (!TREG(RoomWeights[i*2])->HasFlag(RF_VAULT) || DepthCR >= (int16)Con[MIN_VAULT_DEPTH]) {
+                    if (!TREG(RoomWeights[i*2])->HasFlag(RF_CORRIDOR))  
+                        Candidates[c++] = RoomWeights[i*2];
+                }
 
-    if (!c)
-      { Tries++; goto Reselect; }
+    if (!c) {
+        Tries++;
+        goto Reselect;
+    }
+
     regID = Candidates[random(c)];
+    for (i=0; usedInThisLevel[i]; i++)
+        if (usedInThisLevel[i] == regID) {
+            Tries++;
+            goto Reselect; 
+        } 
 
-
-    for (i=0; usedInThisLevel[i]; i++) {
-      if (usedInThisLevel[i] == regID) {
-        Tries++; goto Reselect; 
-      } 
-    } 
-    
     usedInThisLevel[i] = regID;
 
     /*regID = FIND("ice matrix");
     RType = RM_CASTLE;*/
 
-    PresetRegion:
-
-    
-
+PresetRegion:
     xe.Clear();
     xe.EMap = this;
     xe.cPanel = cPanel;
     xe.cRoom = NULL_RECT;
 
     for(x=cPanel.x1;x<=cPanel.x2;x++)
-      for(y=cPanel.y1;y<=cPanel.y2;y++) {
-        Thing * t;
-        while (t = FirstAt(x,y))
-          t->Remove(true);
-      }
+        for(y=cPanel.y1;y<=cPanel.y2;y++) {
+            Thing *t;
+            while (t = FirstAt(x,y))
+                t->Remove(true);
+        }
 
     r.x1 = r2.x1 = r3.x1 = r4.x1 = -1; 
     r.x2 = r2.x2 = r3.x2 = r4.x2 = 0; 
 
-    switch(RType)
-      {
-        case RM_NOROOM:
-          /* Simple, no? Remember that it doesn't need to be touched,
-             though. */
-          RoomsTouched[py] |= (1 << px);
-          return;
-        case RM_NORMAL:
-          DoBasicRoom:
-          sx = (int16)(Con[ROOM_MINX] + random((int16)(Con[ROOM_MAXX] - Con[ROOM_MINX])));
-          sy = (int16)(Con[ROOM_MINY] + random((int16)(Con[ROOM_MAXY] - Con[ROOM_MINY])));
-          if (TREG(regID)->HasFlag(RF_ODD_WIDTH) && !(sx % 2))
-            { if (sx == Con[ROOM_MAXX]) sx--; else sx++; }
-          if (TREG(regID)->HasFlag(RF_ODD_HEIGHT) && !(sy % 2))
-            { if (sx == Con[ROOM_MAXY]) sy--; else sy++; }
-          r = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);          
-          WriteRoom(r,regID);
-          xe.cRoom = r;
-         break; 
-        case RM_CIRCLE:
-          sx = (int16)(Con[ROOM_MINX] + random((int16)(Con[ROOM_MAXX] - Con[ROOM_MINX])));
-          sy = (int16)(Con[ROOM_MINY] + random((int16)(Con[ROOM_MAXY] - Con[ROOM_MINY])));
-          if (TREG(regID)->HasFlag(RF_ODD_WIDTH) && !(sx % 2))
-            { if (sx == Con[ROOM_MAXX]) sx--; else sx++; }
-          if (TREG(regID)->HasFlag(RF_ODD_HEIGHT) && !(sy % 2))
-            { if (sx == Con[ROOM_MAXY]) sy--; else sy++; }
-          r = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);
-          WriteCircle(r,regID);
-          WriteWalls(r,regID);
-          xe.cRoom = r;
-         break; 
-        case RM_LCIRCLE:
-          sx = (int16)max(Con[PANEL_SIZEX]/2,Con[PANEL_SIZEX] - (random(5)+5));
-          sy = (int16)max(Con[PANEL_SIZEY]/2,Con[PANEL_SIZEY] - (random(5)+5));          
-          if (TREG(regID)->HasFlag(RF_ODD_WIDTH) && !(sx % 2))
+    switch(RType) {
+    case RM_NOROOM:
+        /* Simple, no? Remember that it doesn't need to be touched, though. */
+        RoomsTouched[py] |= (1 << px);
+        return;
+    case RM_NORMAL:
+DoBasicRoom:
+        sx = (int16)(Con[ROOM_MINX] + random((int16)(Con[ROOM_MAXX] - Con[ROOM_MINX])));
+        sy = (int16)(Con[ROOM_MINY] + random((int16)(Con[ROOM_MAXY] - Con[ROOM_MINY])));
+        if (TREG(regID)->HasFlag(RF_ODD_WIDTH) && !(sx % 2))
+        { if (sx == Con[ROOM_MAXX]) sx--; else sx++; }
+        if (TREG(regID)->HasFlag(RF_ODD_HEIGHT) && !(sy % 2))
+        { if (sx == Con[ROOM_MAXY]) sy--; else sy++; }
+        r = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);          
+        WriteRoom(r,regID);
+        xe.cRoom = r;
+        break; 
+    case RM_CIRCLE:
+        sx = (int16)(Con[ROOM_MINX] + random((int16)(Con[ROOM_MAXX] - Con[ROOM_MINX])));
+        sy = (int16)(Con[ROOM_MINY] + random((int16)(Con[ROOM_MAXY] - Con[ROOM_MINY])));
+        if (TREG(regID)->HasFlag(RF_ODD_WIDTH) && !(sx % 2))
+        { if (sx == Con[ROOM_MAXX]) sx--; else sx++; }
+        if (TREG(regID)->HasFlag(RF_ODD_HEIGHT) && !(sy % 2))
+        { if (sx == Con[ROOM_MAXY]) sy--; else sy++; }
+        r = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);
+        WriteCircle(r,regID);
+        WriteWalls(r,regID);
+        xe.cRoom = r;
+        break; 
+    case RM_LCIRCLE:
+        sx = (int16)max(Con[PANEL_SIZEX]/2,Con[PANEL_SIZEX] - (random(5)+5));
+        sy = (int16)max(Con[PANEL_SIZEY]/2,Con[PANEL_SIZEY] - (random(5)+5));          
+        if (TREG(regID)->HasFlag(RF_ODD_WIDTH) && !(sx % 2))
             sx++;
-          if (TREG(regID)->HasFlag(RF_ODD_HEIGHT) && !(sy % 2))
+        if (TREG(regID)->HasFlag(RF_ODD_HEIGHT) && !(sy % 2))
             sy++;
-          r = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);
-          WriteCircle(r,regID);
-          WriteWalls(r,regID);
-          xe.cRoom = r;
-         break; 
-       case RM_LARGE:
-          sx = (int16)max(Con[PANEL_SIZEX]/2,Con[PANEL_SIZEX] - (random(8)+2));
-          sy = (int16)max(Con[PANEL_SIZEY]/2,Con[PANEL_SIZEY] - (random(8)+2));
-          if (TREG(regID)->HasFlag(RF_ODD_WIDTH) && !(sx % 2))
+        r = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);
+        WriteCircle(r,regID);
+        WriteWalls(r,regID);
+        xe.cRoom = r;
+        break; 
+    case RM_LARGE:
+        sx = (int16)max(Con[PANEL_SIZEX]/2,Con[PANEL_SIZEX] - (random(8)+2));
+        sy = (int16)max(Con[PANEL_SIZEY]/2,Con[PANEL_SIZEY] - (random(8)+2));
+        if (TREG(regID)->HasFlag(RF_ODD_WIDTH) && !(sx % 2))
             sx++;
-          if (TREG(regID)->HasFlag(RF_ODD_HEIGHT) && !(sy % 2))
+        if (TREG(regID)->HasFlag(RF_ODD_HEIGHT) && !(sy % 2))
             sy++;
-          r = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);
-          WriteRoom(r,regID);
-          xe.cRoom = r;
-         break;
-       case RM_MAZE:
-          sx = (int16)max(Con[PANEL_SIZEX]/2,Con[PANEL_SIZEX] - (random(8)+2));
-          sy = (int16)max(Con[PANEL_SIZEY]/2,Con[PANEL_SIZEY] - (random(8)+2));
-          r = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);
-          WriteMaze(r,regID);
-          xe.cRoom = r;
-         break;
-        case RM_ADJACENT:
-        case RM_AD_ROUND:
-        case RM_AD_MIXED:
-          bool DrawnAny;
-          /* Four boxes with a shared center-point compose a
-             single room; one or more may be circles instead.
-                          ___
-                          |  |_______
-                          |r        |
-                          |      r2 |
-                        ---  +   ----
-                        | r3   r4|  
-                        |     ___|
-                        |____|
-          */
-          r.x2 = r2.x1 = r3.x2 = r4.x1 = cPanel.x1 + (uint8)Con[PANEL_SIZEX]/2;
-          r.y2 = r2.y2 = r3.y1 = r4.y1 = cPanel.y1 + (uint8)Con[PANEL_SIZEY]/2;
-          
-          r.x1 = cPanel.x1 + (uint8)random((int16)Con[PANEL_SIZEX]/4); 
-          r.y1 = cPanel.y1 + (uint8)random((int16)Con[PANEL_SIZEY]/4);
+        r = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);
+        WriteRoom(r,regID);
+        xe.cRoom = r;
+        break;
+    case RM_MAZE:
+        sx = (int16)max(Con[PANEL_SIZEX]/2,Con[PANEL_SIZEX] - (random(8)+2));
+        sy = (int16)max(Con[PANEL_SIZEY]/2,Con[PANEL_SIZEY] - (random(8)+2));
+        r = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);
+        WriteMaze(r,regID);
+        xe.cRoom = r;
+        break;
+    case RM_ADJACENT:
+    case RM_AD_ROUND:
+    case RM_AD_MIXED:
+        bool DrawnAny;
+        /* Four boxes with a shared center-point compose a
+        single room; one or more may be circles instead.
+        ___
+        |  |_______
+        |r        |
+        |      r2 |
+        ---  +   ----
+        | r3   r4|  
+        |     ___|
+        |____|
+        */
+        r.x2 = r2.x1 = r3.x2 = r4.x1 = cPanel.x1 + (uint8)Con[PANEL_SIZEX]/2;
+        r.y2 = r2.y2 = r3.y1 = r4.y1 = cPanel.y1 + (uint8)Con[PANEL_SIZEY]/2;
 
-          r2.x2 = cPanel.x2 - (uint8)random((int16)Con[PANEL_SIZEX]/4);
-          r2.y1 = cPanel.y1 + (uint8)random((int16)Con[PANEL_SIZEY]/4);
+        r.x1 = cPanel.x1 + (uint8)random((int16)Con[PANEL_SIZEX]/4); 
+        r.y1 = cPanel.y1 + (uint8)random((int16)Con[PANEL_SIZEY]/4);
 
-          r3.x1 = cPanel.x1 + (uint8)random((int16)Con[PANEL_SIZEX]/4);
-          r3.y2 = cPanel.y2 - (uint8)random((int16)Con[PANEL_SIZEY]/4);
+        r2.x2 = cPanel.x2 - (uint8)random((int16)Con[PANEL_SIZEX]/4);
+        r2.y1 = cPanel.y1 + (uint8)random((int16)Con[PANEL_SIZEY]/4);
 
-          r4.x2 = cPanel.x2 - (uint8)random((int16)Con[PANEL_SIZEX]/4);
-          r4.y2 = cPanel.y2 - (uint8)random((int16)Con[PANEL_SIZEY]/4);
+        r3.x1 = cPanel.x1 + (uint8)random((int16)Con[PANEL_SIZEX]/4);
+        r3.y2 = cPanel.y2 - (uint8)random((int16)Con[PANEL_SIZEY]/4);
 
-          r.x1 += 2;
-          r.y1 += 2;
+        r4.x2 = cPanel.x2 - (uint8)random((int16)Con[PANEL_SIZEX]/4);
+        r4.y2 = cPanel.y2 - (uint8)random((int16)Con[PANEL_SIZEY]/4);
 
-          r2.x2 -= 2;
-          r2.y1 += 2;
+        r.x1 += 2;
+        r.y1 += 2;
 
-          r3.x1 += 2;
-          r3.y2 -= 2;
+        r2.x2 -= 2;
+        r2.y1 += 2;
 
-          r4.x2 -= 2;
-          r4.y2 -= 2;
+        r3.x1 += 2;
+        r3.y2 -= 2;
 
-          DrawnAny = false;
-          while (!DrawnAny) {
+        r4.x2 -= 2;
+        r4.y2 -= 2;
 
+        DrawnAny = false;
+        while (!DrawnAny) {
             if (random(4)) {
-              DrawnAny = true;
-              if (RType != RM_ADJACENT && (RType == RM_AD_ROUND || !random(2)))
-                WriteCircle(r,regID);
-              else
-                WriteBox(r,regID);
-              }
-            
-            if (random(4)) {
-              DrawnAny = true;
-              if (RType != RM_ADJACENT && (RType == RM_AD_ROUND || !random(2)))
-                WriteCircle(r2,regID);
-              else
-                WriteBox(r2,regID);
-              }
-
-            if (random(4)) {
-              DrawnAny = true;
-              if (RType != RM_ADJACENT && (RType == RM_AD_ROUND || !random(2)))
-                WriteCircle(r3,regID);
-              else
-                WriteBox(r3,regID);
-              }
-            
-            if (random(4)) {
-              DrawnAny = true;
-              if (RType != RM_ADJACENT && (RType == RM_AD_ROUND || !random(2)))
-                WriteCircle(r4,regID);
-              else
-                WriteBox(r4,regID);
-              }
-          
+                DrawnAny = true;
+                if (RType != RM_ADJACENT && (RType == RM_AD_ROUND || !random(2)))
+                    WriteCircle(r,regID);
+                else
+                    WriteBox(r,regID);
             }
-          WriteWalls(cPanel,regID);
 
+            if (random(4)) {
+                DrawnAny = true;
+                if (RType != RM_ADJACENT && (RType == RM_AD_ROUND || !random(2)))
+                    WriteCircle(r2,regID);
+                else
+                    WriteBox(r2,regID);
+            }
 
-         break;
-        case RM_OVERLAP:
-          sx = (int16)((Con[ROOM_MINX] + random((int16)(Con[ROOM_MAXX] - Con[ROOM_MINX])))*2)/3;
-          sy = (int16)((Con[ROOM_MINY] + random((int16)(Con[ROOM_MAXY] - Con[ROOM_MINY])))*2)/3;
-          if (TREG(regID)->HasFlag(RF_ODD_WIDTH) && !(sx % 2))
-            { if (sx == Con[ROOM_MAXX]) sx--; else sx++; }
-          if (TREG(regID)->HasFlag(RF_ODD_HEIGHT) && !(sy % 2))
-            { if (sx == Con[ROOM_MAXY]) sy--; else sy++; }
-          r = cPanel.PlaceWithinSafely((int8)sx,(int8)sy);
-          WriteRoom(r,regID);
-            
-          sx = (int16)((Con[ROOM_MINX] + random((int16)(Con[ROOM_MAXX] - Con[ROOM_MINX])))*2)/3;
-          sy = (int16)((Con[ROOM_MINY] + random((int16)(Con[ROOM_MAXY] - Con[ROOM_MINY])))*2)/3;
-          if (TREG(regID)->HasFlag(RF_ODD_WIDTH) && !(sx % 2))
-            { if (sx == Con[ROOM_MAXX]) sx--; else sx++; }
-          if (TREG(regID)->HasFlag(RF_ODD_HEIGHT) && !(sy % 2))
-            { if (sx == Con[ROOM_MAXY]) sy--; else sy++; }
-          do
-            r2 = cPanel.PlaceWithinSafely((int8)sx,(int8)sy);
-          while (!r.Overlaps(r2));
-          WriteRoom(r2,regID);
-          if (!random(3))
+            if (random(4)) {
+                DrawnAny = true;
+                if (RType != RM_ADJACENT && (RType == RM_AD_ROUND || !random(2)))
+                    WriteCircle(r3,regID);
+                else
+                    WriteBox(r3,regID);
+            }
+
+            if (random(4)) {
+                DrawnAny = true;
+                if (RType != RM_ADJACENT && (RType == RM_AD_ROUND || !random(2)))
+                    WriteCircle(r4,regID);
+                else
+                    WriteBox(r4,regID);
+            }
+
+        }
+        WriteWalls(cPanel,regID);
+
+        break;
+    case RM_OVERLAP:
+        sx = (int16)((Con[ROOM_MINX] + random((int16)(Con[ROOM_MAXX] - Con[ROOM_MINX])))*2)/3;
+        sy = (int16)((Con[ROOM_MINY] + random((int16)(Con[ROOM_MAXY] - Con[ROOM_MINY])))*2)/3;
+        if (TREG(regID)->HasFlag(RF_ODD_WIDTH) && !(sx % 2))
+        { if (sx == Con[ROOM_MAXX]) sx--; else sx++; }
+        if (TREG(regID)->HasFlag(RF_ODD_HEIGHT) && !(sy % 2))
+        { if (sx == Con[ROOM_MAXY]) sy--; else sy++; }
+        r = cPanel.PlaceWithinSafely((int8)sx,(int8)sy);
+        WriteRoom(r,regID);
+
+        sx = (int16)((Con[ROOM_MINX] + random((int16)(Con[ROOM_MAXX] - Con[ROOM_MINX])))*2)/3;
+        sy = (int16)((Con[ROOM_MINY] + random((int16)(Con[ROOM_MAXY] - Con[ROOM_MINY])))*2)/3;
+        if (TREG(regID)->HasFlag(RF_ODD_WIDTH) && !(sx % 2))
+        { if (sx == Con[ROOM_MAXX]) sx--; else sx++; }
+        if (TREG(regID)->HasFlag(RF_ODD_HEIGHT) && !(sy % 2))
+        { if (sx == Con[ROOM_MAXY]) sy--; else sy++; }
+        do
+        r2 = cPanel.PlaceWithinSafely((int8)sx,(int8)sy);
+        while (!r.Overlaps(r2));
+        WriteRoom(r2,regID);
+        if (!random(3))
             break;
 
-          sx = (int16)((Con[ROOM_MINX] + random((int16)(Con[ROOM_MAXX] - Con[ROOM_MINX])))*2)/3;
-          sy = (int16)((Con[ROOM_MINY] + random((int16)(Con[ROOM_MAXY] - Con[ROOM_MINY])))*2)/3;
-          if (TREG(regID)->HasFlag(RF_ODD_WIDTH) && !(sx % 2))
-            { if (sx == Con[ROOM_MAXX]) sx--; else sx++; }
-          if (TREG(regID)->HasFlag(RF_ODD_HEIGHT) && !(sy % 2))
-            { if (sx == Con[ROOM_MAXY]) sy--; else sy++; }
-          do
-            r3 = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);
-          while (!r.Overlaps(r3) && !r2.Overlaps(r3));
-          WriteRoom(r3,regID);
-          if(!random(2))
+        sx = (int16)((Con[ROOM_MINX] + random((int16)(Con[ROOM_MAXX] - Con[ROOM_MINX])))*2)/3;
+        sy = (int16)((Con[ROOM_MINY] + random((int16)(Con[ROOM_MAXY] - Con[ROOM_MINY])))*2)/3;
+        if (TREG(regID)->HasFlag(RF_ODD_WIDTH) && !(sx % 2))
+        { if (sx == Con[ROOM_MAXX]) sx--; else sx++; }
+        if (TREG(regID)->HasFlag(RF_ODD_HEIGHT) && !(sy % 2))
+        { if (sx == Con[ROOM_MAXY]) sy--; else sy++; }
+        do
+        r3 = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);
+        while (!r.Overlaps(r3) && !r2.Overlaps(r3));
+        WriteRoom(r3,regID);
+        if(!random(2))
             break;
 
-          sx = (int16)((Con[ROOM_MINX] + random((int16)(Con[ROOM_MAXX] - Con[ROOM_MINX])))*2)/3;
-          sy = (int16)((Con[ROOM_MINY] + random((int16)(Con[ROOM_MAXY] - Con[ROOM_MINY])))*2)/3;
-          if (TREG(regID)->HasFlag(RF_ODD_WIDTH) && !(sx % 2))
-            { if (sx == Con[ROOM_MAXX]) sx--; else sx++; }
-          if (TREG(regID)->HasFlag(RF_ODD_HEIGHT) && !(sy % 2))
-            { if (sx == Con[ROOM_MAXY]) sy--; else sy++; }
-          do
-            r4 = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);
-          while (!r.Overlaps(r4) && !r2.Overlaps(r4) && !r3.Overlaps(r4));
-          WriteRoom(r4,regID);
+        sx = (int16)((Con[ROOM_MINX] + random((int16)(Con[ROOM_MAXX] - Con[ROOM_MINX])))*2)/3;
+        sy = (int16)((Con[ROOM_MINY] + random((int16)(Con[ROOM_MAXY] - Con[ROOM_MINY])))*2)/3;
+        if (TREG(regID)->HasFlag(RF_ODD_WIDTH) && !(sx % 2))
+        { if (sx == Con[ROOM_MAXX]) sx--; else sx++; }
+        if (TREG(regID)->HasFlag(RF_ODD_HEIGHT) && !(sy % 2))
+        { if (sx == Con[ROOM_MAXY]) sy--; else sy++; }
+        do
+        r4 = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);
+        while (!r.Overlaps(r4) && !r2.Overlaps(r4) && !r3.Overlaps(r4));
+        WriteRoom(r4,regID);
 
-         break;
-        case RM_OCTAGON:
-          sx = (int16)(Con[ROOM_MINX] + random((int16)(Con[ROOM_MAXX] - Con[ROOM_MINX])) + 3);
-          sy = (int16)(Con[ROOM_MINY] + random((int16)(Con[ROOM_MAXY] - Con[ROOM_MINY])) + 3);
-          sx = max(sx, 9);
-          sy = max(sy, 9);
-          if (TREG(regID)->HasFlag(RF_ODD_WIDTH) && !(sx % 2))
-            { if (sx == Con[ROOM_MAXX]) sx--; else sx++; }
-          if (TREG(regID)->HasFlag(RF_ODD_HEIGHT) && !(sy % 2))
-            { if (sx == Con[ROOM_MAXY]) sy--; else sy++; }
-          r = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);
-          WriteOctagon(r,regID);
-          WriteWalls(r,regID);
-          xe.cRoom = r;
-         break; 
-        case RM_DIAMONDS:
-          int16 d, i, c, dx[8], dy[8], dc;
-          r.x1 = cPanel.x1 + 7;
-          r.y1 = cPanel.y1 + 7;
-          r.x2 = cPanel.x2 - 7;
-          r.y2 = cPanel.y2 - 7;
-          x = r.x1 + random(r.x2 - r.x1);
-          y = r.y1 + random(r.y2 - r.y1);
-          i = 1 + random(7); c = 0; dc = 0;
-          do
-            {
-              WriteDiamond(x,y,regID);
-              c++;
-              do 
-                d = NORTHEAST + random(4);
-              while (!r.Within(x + DirX[d]*6, y + DirY[d]*6));
+        break;
+    case RM_OCTAGON:
+        sx = (int16)(Con[ROOM_MINX] + random((int16)(Con[ROOM_MAXX] - Con[ROOM_MINX])) + 3);
+        sy = (int16)(Con[ROOM_MINY] + random((int16)(Con[ROOM_MAXY] - Con[ROOM_MINY])) + 3);
+        sx = max(sx, 9);
+        sy = max(sy, 9);
+        if (TREG(regID)->HasFlag(RF_ODD_WIDTH) && !(sx % 2))
+        { if (sx == Con[ROOM_MAXX]) sx--; else sx++; }
+        if (TREG(regID)->HasFlag(RF_ODD_HEIGHT) && !(sy % 2))
+        { if (sx == Con[ROOM_MAXY]) sy--; else sy++; }
+        r = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);
+        WriteOctagon(r,regID);
+        WriteWalls(r,regID);
+        xe.cRoom = r;
+        break; 
+    case RM_DIAMONDS:
+        int16 d, i, c, dx[8], dy[8], dc;
+        r.x1 = cPanel.x1 + 7;
+        r.y1 = cPanel.y1 + 7;
+        r.x2 = cPanel.x2 - 7;
+        r.y2 = cPanel.y2 - 7;
+        x = r.x1 + random(r.x2 - r.x1);
+        y = r.y1 + random(r.y2 - r.y1);
+        i = 1 + random(7); c = 0; dc = 0;
+        do {
+            WriteDiamond(x,y,regID);
+            c++;
+            do 
+            d = NORTHEAST + random(4);
+            while (!r.Within(x + DirX[d]*6, y + DirY[d]*6));
 
-              x += DirX[d]*6;
-              y += DirY[d]*6;
-              if (c!=i)
-                {
-                  sx = x - DirX[d]*3;
-                  sy = y - DirY[d]*3;
-                  dx[dc] = sx;
-                  dy[dc] = sy;
-                  dc++;
-                  WriteAt(cPanel,sx,sy,TREG(regID)->Floor,regID,25,true);
-                  MakeDoor((uint8)sx,(uint8)sy,TREG(regID)->Door); 
-                }
+            x += DirX[d]*6;
+            y += DirY[d]*6;
+            if (c!=i) {
+                sx = x - DirX[d]*3;
+                sy = y - DirY[d]*3;
+                dx[dc] = sx;
+                dy[dc] = sy;
+                dc++;
+                WriteAt(cPanel,sx,sy,TREG(regID)->Floor,regID,25,true);
+                MakeDoor((uint8)sx,(uint8)sy,TREG(regID)->Door); 
             }
-          while (c != i);
-          WriteWalls(cPanel,regID);
-          /* Now, make the inner walls immutable. */
-          for (i=0;i!=dc;i++)
+        } while (c != i);
+
+        WriteWalls(cPanel,regID);
+        /* Now, make the inner walls immutable. */
+        for (i=0;i!=dc;i++)
             for (sx = dx[i] - 2; sx <= dx[i] + 2; sx++)
-              for (sy = dy[i] - 2; sy <= dy[i] + 2; sy++)
-                if (At(sx,sy).Solid)
-                  At(sx,sy).Memory = 60;
-          xe.cRoom = cPanel;
-         break; 
-        case RM_BUILDING:
-        case RM_CASTLE:
-          IndividualRooms = random(2) ? true : false;
-          /* Later, Castles will have corridors *and* rooms. */
-          sx = (int16)max(Con[PANEL_SIZEX]/2,Con[PANEL_SIZEX] - (random(6)+2));
-          sy = (int16)max(Con[PANEL_SIZEY]/2,Con[PANEL_SIZEY] - (random(6)+2));
-          r = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);
-          WriteRoom(r,regID);
-          cRectPop = 0;
-          WriteCastle(r,regID);
-          FindOpenAreas(r,0,FOA_ALLOW_WATER|FOA_ALLOW_WARN|FOA_ALLOW_FALL|FOA_ALLOW_SPEC);
-          xe.cRoom = r;
-         break;
-        case RM_CHECKER:
-          sx = (int16)(Con[ROOM_MINX] + random((int16)(Con[ROOM_MAXX] - Con[ROOM_MINX])) + 2);
-          sy = (int16)(Con[ROOM_MINY] + random((int16)(Con[ROOM_MAXY] - Con[ROOM_MINY])) + 2);
-          r = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);
-          WriteRoom(r,regID);
-          WallID = TREG(regID)->Walls;
-          if (WallID)
+                for (sy = dy[i] - 2; sy <= dy[i] + 2; sy++)
+                    if (At(sx,sy).Solid)
+                        At(sx,sy).Memory = 60;
+        xe.cRoom = cPanel;
+        break; 
+    case RM_BUILDING:
+    case RM_CASTLE:
+        IndividualRooms = random(2) ? true : false;
+        /* Later, Castles will have corridors *and* rooms. */
+        sx = (int16)max(Con[PANEL_SIZEX]/2,Con[PANEL_SIZEX] - (random(6)+2));
+        sy = (int16)max(Con[PANEL_SIZEY]/2,Con[PANEL_SIZEY] - (random(6)+2));
+        r = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);
+        WriteRoom(r,regID);
+        cRectPop = 0;
+        WriteCastle(r,regID);
+        FindOpenAreas(r,0,FOA_ALLOW_WATER|FOA_ALLOW_WARN|FOA_ALLOW_FALL|FOA_ALLOW_SPEC);
+        xe.cRoom = r;
+        break;
+    case RM_CHECKER:
+        sx = (int16)(Con[ROOM_MINX] + random((int16)(Con[ROOM_MAXX] - Con[ROOM_MINX])) + 2);
+        sy = (int16)(Con[ROOM_MINY] + random((int16)(Con[ROOM_MAXY] - Con[ROOM_MINY])) + 2);
+        r = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);
+        WriteRoom(r,regID);
+        WallID = TREG(regID)->Walls;
+        if (WallID)
             for (x=r.x1+1;x<r.x2;x++)
-              for (y=r.y1+1;y<r.y2;y++)
-                if ((x+y)%2)
-                  WriteAt(r,x,y,WallID,regID,PRIO_PILLARS);
-          xe.cRoom = r;
-         break; 
-        case RM_PILLARS: case RM_GRID:
-          sx = (int16)(Con[ROOM_MINX] + random((int16)(Con[ROOM_MAXX] - Con[ROOM_MINX])) + 3);
-          sy = (int16)(Con[ROOM_MINY] + random((int16)(Con[ROOM_MAXY] - Con[ROOM_MINY])) + 3);
-          if (TREG(regID)->HasFlag(RF_ODD_WIDTH) && !(sx % 2))
-            { if (sx == Con[ROOM_MAXX]) sx--; else sx++; }
-          if (TREG(regID)->HasFlag(RF_ODD_HEIGHT) && !(sy % 2))
-            { if (sx == Con[ROOM_MAXY]) sy--; else sy++; }
-          r = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);
-          if (((r.x2-r.x1) % 2))
+                for (y=r.y1+1;y<r.y2;y++)
+                    if ((x+y)%2)
+                        WriteAt(r,x,y,WallID,regID,PRIO_PILLARS);
+        xe.cRoom = r;
+        break; 
+    case RM_PILLARS: case RM_GRID:
+        sx = (int16)(Con[ROOM_MINX] + random((int16)(Con[ROOM_MAXX] - Con[ROOM_MINX])) + 3);
+        sy = (int16)(Con[ROOM_MINY] + random((int16)(Con[ROOM_MAXY] - Con[ROOM_MINY])) + 3);
+        if (TREG(regID)->HasFlag(RF_ODD_WIDTH) && !(sx % 2))
+        { if (sx == Con[ROOM_MAXX]) sx--; else sx++; }
+        if (TREG(regID)->HasFlag(RF_ODD_HEIGHT) && !(sy % 2))
+        { if (sx == Con[ROOM_MAXY]) sy--; else sy++; }
+        r = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);
+        if (((r.x2-r.x1) % 2))
             r.x2--;
-          if (((r.y2-r.y1) % 2))
+        if (((r.y2-r.y1) % 2))
             r.y2--;
 
-          WriteRoom(r,regID);
-          WallID = RType == RM_PILLARS ? Con[TERRAIN_PILLAR] : 
-                    TREG(regID)->Furnishings[0];
-          if (WallID)
+        WriteRoom(r,regID);
+        WallID = RType == RM_PILLARS ? Con[TERRAIN_PILLAR] : 
+            TREG(regID)->Furnishings[0];
+        if (WallID)
             if (RES(WallID)->Type == T_TTERRAIN)
-              for (x=r.x1+1;x<r.x2;x++)
-                for (y=r.y1+1;y<r.y2;y++)
-                  // ww: a few missing pillars will add variety
-                  if (!((x-r.x1)%2) && !((y-r.y1)%2) && random(100) < 95)
-                    if (!SolidAt(x,y))
-                      WriteAt(r,x,y,WallID,regID,PRIO_PILLARS);
-          xe.cRoom = r;
-         break;
-        case RM_CROSS:
-          sx = (int16)max(Con[PANEL_SIZEX]/2,Con[PANEL_SIZEX] - (random(8)+5));
-          sy = (int16)max(Con[PANEL_SIZEY]/2,Con[PANEL_SIZEY] - (random(8)+5));
-          if (TREG(regID)->HasFlag(RF_ODD_WIDTH) && !(sx % 2))
-            { if (sx == Con[ROOM_MAXX]) sx--; else sx++; }
-          if (TREG(regID)->HasFlag(RF_ODD_HEIGHT) && !(sy % 2))
-            { if (sx == Con[ROOM_MAXY]) sy--; else sy++; }
-          r = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);
-          WriteCross(r,regID);
-          WriteWalls(r,regID);
-          xe.cRoom = r;
-         break;
-        case RM_RCAVERN:
-          WriteRCavern(cPanel,regID);
-          //WriteWalls(cPanel,regID);
-         break;
-        case RM_LIFECAVE:
-          WriteLifeCave(cPanel,regID);
-          WriteWalls(cPanel,regID);
-         break;
-
-        case RM_DOUBLE:
-          //sx = max(Con[PANEL_SIZEX]/2,Con[PANEL_SIZEX] - (random(8)+5));
-          //sy = max(Con[PANEL_SIZEY]/2,Con[PANEL_SIZEY] - (random(8)+5));
-          sx = (int16)(Con[ROOM_MINX] + random((int16)(Con[ROOM_MAXX] - Con[ROOM_MINX])) + 3);
-          sy = (int16)(Con[ROOM_MINY] + random((int16)(Con[ROOM_MAXY] - Con[ROOM_MINY])) + 3);
-          if (TREG(regID)->HasFlag(RF_ODD_WIDTH) && !(sx % 2))
-            { if (sx == Con[ROOM_MAXX]) sx--; else sx++; }
-          if (TREG(regID)->HasFlag(RF_ODD_HEIGHT) && !(sy % 2))
-            { if (sx == Con[ROOM_MAXY]) sy--; else sy++; }
-          r = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);
-          WriteRoom(r,regID);
-          xe.cRoom = r;
-          if (random(2))
-            {
-              r.x1 += 2; r.y1 += 2;
-              r.x2 -= 2; r.y2 -= 2;
-            }
-          else
-            {
-              r.x1 += 2; r.x2 -= 2;
-              r.y1 += 2; r.y2 -= 2;
-              sx -= 4 + random(5); 
-              sy -= 4 + random(5); 
-              r = r.PlaceWithin((uint8)sx,(uint8)sy);
-            }
-          if (r.x1 + 1 == r.x2) {
+                for (x=r.x1+1;x<r.x2;x++)
+                    for (y=r.y1+1;y<r.y2;y++)
+                        // ww: a few missing pillars will add variety
+                        if (!((x-r.x1)%2) && !((y-r.y1)%2) && random(100) < 95)
+                            if (!SolidAt(x,y))
+                                WriteAt(r,x,y,WallID,regID,PRIO_PILLARS);
+        xe.cRoom = r;
+        break;
+    case RM_CROSS:
+        sx = (int16)max(Con[PANEL_SIZEX]/2,Con[PANEL_SIZEX] - (random(8)+5));
+        sy = (int16)max(Con[PANEL_SIZEY]/2,Con[PANEL_SIZEY] - (random(8)+5));
+        if (TREG(regID)->HasFlag(RF_ODD_WIDTH) && !(sx % 2))
+        { if (sx == Con[ROOM_MAXX]) sx--; else sx++; }
+        if (TREG(regID)->HasFlag(RF_ODD_HEIGHT) && !(sy % 2))
+        { if (sx == Con[ROOM_MAXY]) sy--; else sy++; }
+        r = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);
+        WriteCross(r,regID);
+        WriteWalls(r,regID);
+        xe.cRoom = r;
+        break;
+    case RM_RCAVERN:
+        WriteRCavern(cPanel,regID);
+        //WriteWalls(cPanel,regID);
+        break;
+    case RM_LIFECAVE:
+        WriteLifeCave(cPanel,regID);
+        WriteWalls(cPanel,regID);
+        break;
+    case RM_DOUBLE:
+        //sx = max(Con[PANEL_SIZEX]/2,Con[PANEL_SIZEX] - (random(8)+5));
+        //sy = max(Con[PANEL_SIZEY]/2,Con[PANEL_SIZEY] - (random(8)+5));
+        sx = (int16)(Con[ROOM_MINX] + random((int16)(Con[ROOM_MAXX] - Con[ROOM_MINX])) + 3);
+        sy = (int16)(Con[ROOM_MINY] + random((int16)(Con[ROOM_MAXY] - Con[ROOM_MINY])) + 3);
+        if (TREG(regID)->HasFlag(RF_ODD_WIDTH) && !(sx % 2))
+        { if (sx == Con[ROOM_MAXX]) sx--; else sx++; }
+        if (TREG(regID)->HasFlag(RF_ODD_HEIGHT) && !(sy % 2))
+        { if (sx == Con[ROOM_MAXY]) sy--; else sy++; }
+        r = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);
+        WriteRoom(r,regID);
+        xe.cRoom = r;
+        if (random(2)) {
+            r.x1 += 2; r.y1 += 2;
+            r.x2 -= 2; r.y2 -= 2;
+        } else {
+            r.x1 += 2; r.x2 -= 2;
+            r.y1 += 2; r.y2 -= 2;
+            sx -= 4 + random(5); 
+            sy -= 4 + random(5); 
+            r = r.PlaceWithin((uint8)sx,(uint8)sy);
+        }
+        if (r.x1 + 1 == r.x2) {
             if (random(2)) r.x1 --; else r.x2++;
-          } 
-          if (r.y1 + 1 == r.y2) {
+        } 
+        if (r.y1 + 1 == r.y2) {
             if (random(2)) r.y1 --; else r.y2++;
-          }
+        }
 
-          WallID = TREG(regID)->Walls;
-          for(x=r.x1;x<=r.x2;x++)
-            {
-              WriteAt(r,x,r.y1,WallID,regID,PRIO_PILLARS);
-              WriteAt(r,x,r.y2,WallID,regID,PRIO_PILLARS);
-            }
-          for(y=r.y1;y<=r.y2;y++)
-            {
-              WriteAt(r,r.x1,y,WallID,regID,PRIO_PILLARS);
-              WriteAt(r,r.x2,y,WallID,regID,PRIO_PILLARS);
-            }
+        WallID = TREG(regID)->Walls;
+        for(x=r.x1;x<=r.x2;x++) {
+            WriteAt(r,x,r.y1,WallID,regID,PRIO_PILLARS);
+            WriteAt(r,x,r.y2,WallID,regID,PRIO_PILLARS);
+        }
+        for(y=r.y1;y<=r.y2;y++) {
+            WriteAt(r,r.x1,y,WallID,regID,PRIO_PILLARS);
+            WriteAt(r,r.x2,y,WallID,regID,PRIO_PILLARS);
+        }
 
-          do {
+        do {
             if (random(2))
-              { x = random(2) ? r.x1 : r.x2;
-                y = r.y1 + random(r.y2 - r.y1); }
+            { x = random(2) ? r.x1 : r.x2;
+            y = r.y1 + random(r.y2 - r.y1); }
             else
-              { x = r.x1 + random(r.x2 - r.x1);
-                y = random(2) ? r.y1 : r.y2; }
+            { x = r.x1 + random(r.x2 - r.x1);
+            y = random(2) ? r.y1 : r.y2; }
             MakeDoor((uint8)x,(uint8)y,TREG(regID)->Door);
             if (FDoorAt(x,y))
-              WriteAt(r,x,y,TREG(regID)->Floor,regID,PRIO_FEATURE_FLOOR);
-          } while(random(3));
-         break;
-        case RM_SHAPED:
-          sx = TREG(regID)->sx;
-          sy = TREG(regID)->sy;
-          r = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);
-          WriteMap(r,regID);
-          xe.cRoom = r;
-         break;
-        case RM_RANDTOWN:
-        case RM_DESTROYED:
-          goto DoBasicRoom;
-        default:
-          Error("Unimplemented room type in DrawPanel!");
-          goto DoBasicRoom;
-      }
+                WriteAt(r,x,y,TREG(regID)->Floor,regID,PRIO_FEATURE_FLOOR);
+        } while(random(3));
+        break;
+    case RM_SHAPED:
+        sx = TREG(regID)->sx;
+        sy = TREG(regID)->sy;
+        r = cPanel.PlaceWithinSafely((uint8)sx,(uint8)sy);
+        WriteMap(r,regID);
+        xe.cRoom = r;
+        break;
+    case RM_RANDTOWN:
+    case RM_DESTROYED:
+        goto DoBasicRoom;
+    default:
+        Error("Unimplemented room type in DrawPanel!");
+        goto DoBasicRoom;
+    }
 
     /* Now, check to be sure that we haven't buried the stairs. If we have,
-       1 in 3 chance that we let it stand and corridor away from them later,
-       otherwise we redo the room, filling the panel with rock and making it
-       a simple room guaranteed to contain the stairs. */
+    1 in 3 chance that we let it stand and corridor away from them later,
+    otherwise we redo the room, filling the panel with rock and making it
+    a simple room guaranteed to contain the stairs. */
 
-    
+
     /* Rooms with coloured/changed walls or floors */
 
     uint32 ColorList[16];
     if (TREG(regID)->GetList(FLOOR_COLOURS,ColorList,16)) {
-      for(c=0;ColorList[c];c++)
-        ;
-      FloorID = TREG(regID)->Floor;
-      for(x=cPanel.x1;x<=cPanel.x2;x++)
-        for(y=cPanel.y1;y<=cPanel.y2;y++)
-          if (TerrainAt(x,y) == FloorID) 
-            {
-              At(x,y).Glyph = (At(x,y).Glyph & 0x00FF) |
-                (ColorList[random(c)] << 8);
-              At(x,y).Shade = true;
-            }
-      }
+        for(c=0;ColorList[c];c++)
+            ;
+        FloorID = TREG(regID)->Floor;
+        for(x=cPanel.x1;x<=cPanel.x2;x++)
+            for(y=cPanel.y1;y<=cPanel.y2;y++)
+                if (TerrainAt(x,y) == FloorID) {
+                    At(x,y).Glyph = (At(x,y).Glyph & 0x00FF) |
+                        (ColorList[random(c)] << 8);
+                    At(x,y).Shade = true;
+                }
+    }
     if (TREG(regID)->GetList(WALL_COLOURS,ColorList,16)) {
-      for(c=0;ColorList[c];c++)
-        ;
-      WallID = TREG(regID)->Walls;
-      for(x=cPanel.x1;x<=cPanel.x2;x++)
-        for(y=cPanel.y1;y<=cPanel.y2;y++)
-          if (TerrainAt(x,y) == WallID) 
-            {
-              At(x,y).Glyph = (At(x,y).Glyph & 0x00FF) |
-                (ColorList[random(c)] << 8);
-              At(x,y).Shade = false;
-            }
-      }
+        for(c=0;ColorList[c];c++)
+            ;
+        WallID = TREG(regID)->Walls;
+        for(x=cPanel.x1;x<=cPanel.x2;x++)
+            for(y=cPanel.y1;y<=cPanel.y2;y++)
+                if (TerrainAt(x,y) == WallID) {
+                    At(x,y).Glyph = (At(x,y).Glyph & 0x00FF) |
+                        (ColorList[random(c)] << 8);
+                    At(x,y).Shade = false;
+                }
+    }
 
     xe.EXVal = (cPanel.x2 + cPanel.x1) / 2; 
     xe.EYVal = (cPanel.y2 + cPanel.y1) / 2; 
     xe.Event = PRE(EV_BIRTH);
-    switch (TREG(regID)->Event(xe,regID))
-      {
-        case ABORT:
-          /* Abort Creation of the room and retry. */
-          for(x=cPanel.x1;x>=cPanel.x2;x++)
+    switch (TREG(regID)->Event(xe,regID)) {
+    case ABORT:
+        /* Abort Creation of the room and retry. */
+        for(x=cPanel.x1;x>=cPanel.x2;x++)
             for(y=cPanel.y1;y>=cPanel.y2;y++)
-              WriteAt(r,x,y,Con[TERRAIN_ROCK],Con[BASE_REGION],PRIO_EMPTY,true);
-          goto Reselect;
-        case NOTHING:
-          /* Populate the Panel */
-          if (xID = TREG(regID)->GetConst(BLOB_WITH)) 
+                WriteAt(r,x,y,Con[TERRAIN_ROCK],Con[BASE_REGION],PRIO_EMPTY,true);
+        goto Reselect;
+    case NOTHING:
+        /* Populate the Panel */
+        if (xID = TREG(regID)->GetConst(BLOB_WITH)) 
             WriteBlobs(cPanel,regID,xID);
-    
-          if (RType == RM_SHAPED)
+
+        if (RType == RM_SHAPED)
             break;
 
-          LightPanel(cPanel,regID);
+        LightPanel(cPanel,regID);
 
-          if ((RType == RM_CASTLE || RType == RM_BUILDING) /*&& IndividualRooms*/)
-            {
-              for (i=0;i!=cRectPop;i++)
-                {
-                  if (TREG(regID)->HasList(ENCOUNTER_LIST))
+        if ((RType == RM_CASTLE || RType == RM_BUILDING) /*&& IndividualRooms*/) {
+            for (i=0;i!=cRectPop;i++) {
+                if (TREG(regID)->HasList(ENCOUNTER_LIST))
                     if (random(3))
-                      continue;
-                  FindOpenAreas(PopulateQueue[i],regID,
+                        continue;
+                FindOpenAreas(PopulateQueue[i],regID,
                     FOA_ALLOW_WATER|FOA_ALLOW_WARN|FOA_ALLOW_FALL|FOA_ALLOW_SPEC);
-                  /* HACKFIX */
-                  PopulatePanel(PopulateQueue[i],EN_SINGLE);
-                }
-              break; /* Encounters set up in WriteCastle. */
+                /* HACKFIX */
+                PopulatePanel(PopulateQueue[i],EN_SINGLE);
             }
-          {
-          bool anything = false; 
-          FindOpenAreas(cPanel,regID,0);
-          if (r.x1 < r.x2) { anything = true; FurnishArea(r); }
-          if (r2.x1 < r2.x2) { anything = true; FurnishArea(r2);}
-          if (r3.x1 < r3.x2) { anything = true; FurnishArea(r3); }
-          if (r4.x1 < r4.x2) { anything = true; FurnishArea(r4); }
-          
-          
-          if (!anything) 
-            FurnishArea(NULL_RECT);
-          FindOpenAreas(cPanel,regID,
-            FOA_ALLOW_WATER|FOA_ALLOW_WARN|FOA_ALLOW_FALL|FOA_ALLOW_SPEC);
-          PopulatePanel(cPanel);
-          
-          }
-         break;
-        case DONE:
-          /* Script Populated it for us. */
-         break;
-      }
+            break; /* Encounters set up in WriteCastle. */
+        }
+        {
+            bool anything = false; 
+            FindOpenAreas(cPanel,regID,0);
+            if (r.x1 < r.x2) { anything = true; FurnishArea(r); }
+            if (r2.x1 < r2.x2) { anything = true; FurnishArea(r2);}
+            if (r3.x1 < r3.x2) { anything = true; FurnishArea(r3); }
+            if (r4.x1 < r4.x2) { anything = true; FurnishArea(r4); }
+
+
+            if (!anything) 
+                FurnishArea(NULL_RECT);
+            FindOpenAreas(cPanel,regID,
+                FOA_ALLOW_WATER|FOA_ALLOW_WARN|FOA_ALLOW_FALL|FOA_ALLOW_SPEC);
+            PopulatePanel(cPanel);
+
+        }
+        break;
+    case DONE:
+        /* Script Populated it for us. */
+        break;
+    }
 
     xe.Event = EV_BIRTH;
     TREG(regID)->Event(xe,regID);
 
     { // ww: if there are two rooms in the castle, they should not be 
-      // at war with each other! 
-      int16 PartyID = MAX_PLAYERS + 10 + random(200);
-      for(x=cPanel.x1;x<=cPanel.x2;x++)
-        for(y=cPanel.y1;y<=cPanel.y2;y++)
-          if (InBounds(x,y))
-            for(Creature *cr=FCreatureAt(x,y);cr;cr=NCreatureAt(x,y))
-              cr->PartyID = PartyID;
+        // at war with each other! 
+        int16 PartyID = MAX_PLAYERS + 10 + random(200);
+        for(x=cPanel.x1;x<=cPanel.x2;x++)
+            for(y=cPanel.y1;y<=cPanel.y2;y++)
+                if (InBounds(x,y))
+                    for(Creature *cr=FCreatureAt(x,y);cr;cr=NCreatureAt(x,y))
+                        cr->PartyID = PartyID;
     }
-  }
+}
 
 void Map::PopulateChest(Container *ch) {
   int16 DepthCR = (int16)(Con[INITIAL_CR] + (Depth*Con[DUN_SPEED])/100 - 1); 
