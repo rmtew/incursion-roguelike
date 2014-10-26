@@ -169,10 +169,9 @@ void Game::NewGame(rID mID, bool reincarnate)
         }
     
 		test=3;
-  }
+}
 
-void Game::Play()
-  {
+void Game::Play() {
     Thing *t, *t2; int16 i,j,c;
     uint32 relative_turn; time_t tm;
     int16 MaxDist;
@@ -184,259 +183,259 @@ void Game::Play()
     doSave = false;
     doLoad = true;
     doAutoSave = false;
-    
-    Ressurected:
-    
+
+Ressurected:
     PlayMode = true;
     //T1->RecreateViewList();
-    
-    
+
     MapIterate(mp,t,i)
-      if (t->isCreature())
-        ((Creature*)t)->CalcValues();
-        
+        if (t->isCreature())
+            ((Creature*)t)->CalcValues();
+
     pp->MyTerm->SetMode(MO_PLAY);
-    pp->Timeout = 0; MaxDist = 30;
+    pp->Timeout = 0;
+    MaxDist = 30;
     pp->MyTerm->RefreshMap();
-    
+
     time(&tm);
     srand((unsigned long)tm);
-    
-	do {
+
+    do {
         /* If the player changed maps, we follow him around rather then
-         * continuing to run through turns for a map that has only monsters
-         * on it. We can cache the old map to disk at this point, if needed.
-         * The map the player is going to visit should already have been
-         * loaded by whatever moved the player.
-         */
+        * continuing to run through turns for a map that has only monsters
+        * on it. We can cache the old map to disk at this point, if needed.
+        * The map the player is going to visit should already have been
+        * loaded by whatever moved the player.
+        */
         PurgeStrings();
         if (pp->m != mp) {
-          /* GameRegistry->UnloadGroup(m[0]); */
-          m[0] = pp->m->myHandle;
-          mp   = pp->m;
-          }
+            /* GameRegistry->UnloadGroup(m[0]); */
+            m[0] = pp->m->myHandle;
+            mp   = pp->m;
+        }
         TheMainMap = mp;
-          
-				pp->MyTerm->AdjustMap(pp->x,pp->y);
+
+        pp->MyTerm->AdjustMap(pp->x,pp->y);
 
         if (doAutoSave) {
-          doAutoSave = false;
-          pp->IPrint("Autosave... ");
-          pp->MyTerm->Update();
-          if (!SaveGame(*pp))
-            pp->IPrint("failed.");
-          else
-            pp->IPrint("done.");
-          }
+            doAutoSave = false;
+            pp->IPrint("Autosave... ");
+            pp->MyTerm->Update();
+            if (!SaveGame(*pp))
+                pp->IPrint("failed.");
+            else
+                pp->IPrint("done.");
+        }
 
         pp->MyTerm->ShowTime();
         if (pp->HasStati(PARALYSIS))
-          pp->MyTerm->Update();
+            pp->MyTerm->Update();
 
         if ((pp->Flags & F_DELETE) || doSave)
-          break;
+            break;
 
-				MapIterate(mp,t,i)
-          {
+        MapIterate(mp,t,i) {
             if (Timestopper || doSave)
-              break;
-            
+                break;
+
             if (doLoad && !t->isPlayer())
-              continue;
-              
+                continue;
+
             doLoad = false;
-            
-        	  Silence = 0;
+
+            Silence = 0;
             if (!t->m || t->x == -1)
-              continue;
+                continue;
             ASSERT(theGame->inPerceive == 0);
             ASSERT(theGame->inCalcVal == 0);
-            
-            if((!(t->Flags & F_DELETE)) && dist(t->x,t->y,pp->x,pp->y)<MaxDist)
-						  {
+
+            if ((!(t->Flags & F_DELETE)) && dist(t->x,t->y,pp->x,pp->y) < MaxDist) {
                 if (t->Timeout < 0)
-                  continue;
+                    continue;
                 if (t->isPlayer()) {
-                  memset(MonsterDensity,0,128*sizeof(int16));
-                  MapIterate(mp,t2,j)
-                    if (t2->Type == T_MONSTER)
-                      MonsterDensity[t2->DistFromPlayer()]++;
-                  c = 0;
-                  for(j=0;j!=60;j++) {
-                    c += MonsterDensity[j];
-                    if (c > MAX_MONSTER_ACTIONS)
-                      break;
+                    memset(MonsterDensity,0,128*sizeof(int16));
+                    MapIterate(mp,t2,j)
+                        if (t2->Type == T_MONSTER)
+                            MonsterDensity[t2->DistFromPlayer()]++;
+
+                    c = 0;
+                    for(j=0;j!=60;j++) {
+                        c += MonsterDensity[j];
+                        if (c > MAX_MONSTER_ACTIONS)
+                            break;
                     }
-                  MaxDist = j;
-                  }
-                NowDoTheMount:
+
+                    MaxDist = j;
+                }
+NowDoTheMount:
                 if (t->Timeout) {
-                  t->Timeout--;
-                  /*
-                  t->IPrint(Format("%s->Timeout = %d.",(const char*)t->Name() ,
+                    t->Timeout--;
+                    /*
+                    t->IPrint(Format("%s->Timeout = %d.",(const char*)t->Name() ,
                     t->Timeout));
-                  */
-                  }
-                else if (t->isCreature()) {
-                  t->RemoveStati(TELEPORTED);
-                  if (((Creature*)t)->AttrDeath) {
-                    ((Creature*)t)->DoAttrDeath();
-                    goto FauxContinue;
+                    */
+                } else if (t->isCreature()) {
+                    t->RemoveStati(TELEPORTED);
+                    if (((Creature*)t)->AttrDeath) {
+                        ((Creature*)t)->DoAttrDeath();
+                        goto FauxContinue;
                     }
-                  if ((t->HasStati(PARALYSIS) && !t->isPlayer()) ||
-                       t->HasStati(SLEEPING))
-                    goto FauxContinue;
-                  if (t->HasStati(ACTING)) 
-                    ((Creature*)t)->ExtendedAction();
-                  else if (t->isMonster() && pp->Opt(OPT_FREEZE_MON))
-                    t->Timeout += 30; 
-                  else do {
-                    ASSERT(t->__Stati.Nested == 0);
-							 	    ((Creature*)t)->ChooseAction();
-                    ASSERT(t->__Stati.Nested == 0);
-							 	    }
-                  while (t->Type == T_PLAYER && !t->Timeout && !t->HasStati(ACTING));
-                  
-                  }
-                FauxContinue:
-                if (t->HasStati(MOUNTED))
-                  { t = t->GetStatiObj(MOUNTED);
-                    goto NowDoTheMount; }
-						  }
-          }
+
+                    if ((t->HasStati(PARALYSIS) && !t->isPlayer()) || t->HasStati(SLEEPING))
+                        goto FauxContinue;
+
+                    if (t->HasStati(ACTING)) 
+                        ((Creature*)t)->ExtendedAction();
+                    else if (t->isMonster() && pp->Opt(OPT_FREEZE_MON))
+                        t->Timeout += 30; 
+                    else do {
+                        ASSERT(t->__Stati.Nested == 0);
+                        ((Creature*)t)->ChooseAction();
+                        ASSERT(t->__Stati.Nested == 0);
+                    } while (t->Type == T_PLAYER && !t->Timeout && !t->HasStati(ACTING));
+                }
+FauxContinue:
+                if (t->HasStati(MOUNTED)) {
+                    t = t->GetStatiObj(MOUNTED);
+                    goto NowDoTheMount;
+                }
+            }
+        }
 
         if (Timestopper) {
-          relative_turn = 0;
-          while(oCreature(Timestopper)->HasStati(TIMESTOP)) {
-            Silence = 0;
-            oCreature(Timestopper)->ChooseAction();
-            relative_turn += oCreature(Timestopper)->Timeout;
-            while (relative_turn > 10) {
-              relative_turn -= 10;
-              Throw(EV_TURN, oCreature(Timestopper));
-              }
+            relative_turn = 0;
+
+            while(oCreature(Timestopper)->HasStati(TIMESTOP)) {
+                Silence = 0;
+                oCreature(Timestopper)->ChooseAction();
+                relative_turn += oCreature(Timestopper)->Timeout;
+
+                while (relative_turn > 10) {
+                    relative_turn -= 10;
+                    Throw(EV_TURN, oCreature(Timestopper));
+                }
             }
-          Timestopper = 0;
-          }
+            Timestopper = 0;
+        }
 
         /* We needed to update this to prevent crashes when accounting for
-           recursive object destruction -- i.e., destroying a monster also
-           destroys everything that it has summoned (in RemoveStati). Hence
-           the copying of the DestroyQueue into a new array and such -- the
-           original DestroyQueue might be refilled at the same time as the
-           cDestroyQueue is emptied. */
+        recursive object destruction -- i.e., destroying a monster also
+        destroys everything that it has summoned (in RemoveStati). Hence
+        the copying of the DestroyQueue into a new array and such -- the
+        original DestroyQueue might be refilled at the same time as the
+        cDestroyQueue is emptied. */
         bool skip_delete = Opt(OPT_NO_FREE) != 0;
-        while(DestroyCount && !skip_delete)
-          {
+        while(DestroyCount && !skip_delete) {
             memcpy(cDestroyQueue,DestroyQueue,sizeof(Thing*)*min(20048,DestroyCount+1));
             cDestroyCount = DestroyCount;
             DestroyCount = 0;            
-            while (cDestroyCount)
-              {
-                cDestroyCount--; j = -1;
+            while (cDestroyCount) {
+                cDestroyCount--;
+                j = -1;
                 if (!cDestroyQueue[cDestroyCount])
-                  continue;
+                    continue;
+
                 MapIterate(mp,t,i) {
-                  if (t == cDestroyQueue[cDestroyCount])
-                    j = i;
-                  ASSERT(cDestroyQueue[cDestroyCount])
-                  t->NotifyGone(cDestroyQueue[cDestroyCount]->myHandle);
-                  ASSERT(cDestroyQueue[cDestroyCount])
-                  }
+                    if (t == cDestroyQueue[cDestroyCount])
+                        j = i;
+                    ASSERT(cDestroyQueue[cDestroyCount])
+                    t->NotifyGone(cDestroyQueue[cDestroyCount]->myHandle);
+                    ASSERT(cDestroyQueue[cDestroyCount])
+                }
+
                 mp->NotifyGone(cDestroyQueue[cDestroyCount]->myHandle);
                 if (j!=-1)
-                  mp->Things.Remove(j);
+                    mp->Things.Remove(j);
                 T1->NotifyGone(cDestroyQueue[cDestroyCount]->myHandle);
                 delete cDestroyQueue[cDestroyCount];
                 cDestroyQueue[cDestroyCount] = NULL;
 
 #if 0
-/* Wes, I think you fixed the same bug I did? */
+                /* Wes, I think you fixed the same bug I did? */
 
 restartDestroyCount: 
-            DestroyCount--; j = -1;
-            if (!DestroyQueue[DestroyCount])
-              continue;
-            MapIterate(mp,t,i) {
-              if (t == DestroyQueue[DestroyCount])
-                j = i;
-              ASSERT(DestroyQueue[DestroyCount]);
-              t->NotifyGone(DestroyQueue[DestroyCount]->myHandle);
-              if (!DestroyQueue[DestroyCount])
-                goto restartDestroyCount; 
+                DestroyCount--; j = -1;
+                if (!DestroyQueue[DestroyCount])
+                    continue;
+                MapIterate(mp,t,i) {
+                    if (t == DestroyQueue[DestroyCount])
+                        j = i;
+                    ASSERT(DestroyQueue[DestroyCount]);
+                    t->NotifyGone(DestroyQueue[DestroyCount]->myHandle);
+                    if (!DestroyQueue[DestroyCount])
+                        goto restartDestroyCount; 
 #endif
-              }
-          }
+            }
+        }
 
-        if(!(Turn%60)) { // refill AoO's; Terrain SPFX 
-          mp->UpdateFields();
-          mp->UpdateTerra();          
-          for(i=0;mp->Things[i];i++) 
-          	Throw(EV_TURN, oThing(mp->Things[i]));
-          }
+        if (!(Turn%60)) { // refill AoO's; Terrain SPFX 
+            mp->UpdateFields();
+            mp->UpdateTerra();          
+            for(i=0;mp->Things[i];i++) 
+                Throw(EV_TURN, oThing(mp->Things[i]));
+        }
 
         Turn++;
-
-			}
-    while(1);
+    } while(1);
 
     PlayMode = false;
     Silence = 0;
     pp->UpdateOptions(true);
     pp->Timeout = 0;
-    if (doSave) {
-      pp->IPrint("Saving game... ");
-      pp->MyTerm->Update();
-      if (!SaveGame(*pp)) {
-        T1->Clear();
-        return;
-        }
-      pp->IPrint("done.");
-      pp->MyTerm->SetWin(WIN_INPUT);
-      pp->MyTerm->Color(WHITE);
-      if (theGame->getQuitFlag())
-        {
-          T1->ShutDown();
-          exit(0);
-        }
-      pp->MyTerm->CursorOn();
-      pp->MyTerm->Write(0,0,"Press [ENTER] to continue... ");
-      while(pp->MyTerm->GetCharRaw() != KY_ENTER)
-        pp->MyTerm->SetWin(WIN_SCREEN);
-      pp->MyTerm->Clear();
-      return;
-      }
-    else {
-      if (pp->VictoryFlag)
-        { pp->IPrint("<14>You have won...<7>"); }
-      else
-        pp->IPrint("You die...");
-      pp->MyTerm->SetWin(WIN_INPUT);
-      pp->MyTerm->Color(WHITE);
 
-      pp->MyTerm->Write("Press [ENTER] to continue... ");
-      pp->MyTerm->CursorOn();
-      while(pp->MyTerm->GetCharRaw() != KY_ENTER)
-        ;
-      pp->MyTerm->CursorOff();
-      if (!(pp->VictoryFlag || pp->QuitFlag)) {
-        int16 res = NOTHING;
-        if (pp->getGod())
-          res = ThrowEff(EV_GOD_RAISE,pp->getGod(),pp);
-        for(i=0;res == NOTHING && i != nGods;i++)
-          if (GodIDList[i] != pp->getGod())
-            res = ThrowEff(EV_GOD_RAISE,GodIDList[i],pp);
+    if (doSave) {
+        pp->IPrint("Saving game... ");
+        pp->MyTerm->Update();
+        if (!SaveGame(*pp)) {
+            T1->Clear();
+            return;
         }
-      if (!(pp->Flags & F_DELETE))
-        goto Ressurected;
-        
-      if (SaveFile.GetLength()) { 
-        T1->ChangeDirectory(T1->SaveSubDir());
-        T1->Delete(SaveFile);
-        T1->ChangeDirectory(T1->IncursionDirectory);
-        SaveFile.Empty(); 
+        pp->IPrint("done.");
+
+        pp->MyTerm->SetWin(WIN_INPUT);
+        pp->MyTerm->Color(WHITE);
+        if (theGame->getQuitFlag()) {
+            T1->ShutDown();
+            exit(0);
         }
-      pp->Gravestone();
+
+        pp->MyTerm->CursorOn();
+        pp->MyTerm->Write(0,0,"Press [ENTER] to continue... ");
+        while(pp->MyTerm->GetCharRaw() != KY_ENTER)
+            pp->MyTerm->SetWin(WIN_SCREEN);
+        pp->MyTerm->Clear();
+        return;
+    } else {
+        if (pp->VictoryFlag) {
+            pp->IPrint("<14>You have won...<7>");
+        } else
+            pp->IPrint("You die...");
+        pp->MyTerm->SetWin(WIN_INPUT);
+        pp->MyTerm->Color(WHITE);
+
+        pp->MyTerm->Write("Press [ENTER] to continue... ");
+        pp->MyTerm->CursorOn();
+        while(pp->MyTerm->GetCharRaw() != KY_ENTER)
+            ;
+        pp->MyTerm->CursorOff();
+        if (!(pp->VictoryFlag || pp->QuitFlag)) {
+            int16 res = NOTHING;
+            if (pp->getGod())
+                res = ThrowEff(EV_GOD_RAISE,pp->getGod(),pp);
+            for(i=0;res == NOTHING && i != nGods;i++)
+                if (GodIDList[i] != pp->getGod())
+                    res = ThrowEff(EV_GOD_RAISE,GodIDList[i],pp);
+        }
+        if (!(pp->Flags & F_DELETE))
+            goto Ressurected;
+
+        if (SaveFile.GetLength()) { 
+            T1->ChangeDirectory(T1->SaveSubDir());
+            T1->Delete(SaveFile);
+            T1->ChangeDirectory(T1->IncursionDirectory);
+            SaveFile.Empty(); 
+        }
+        pp->Gravestone();
     }
 }
 
