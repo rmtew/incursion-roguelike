@@ -236,7 +236,7 @@ EvReturn Portal::Event(EventInfo &e)
 EvReturn Portal::Enter(EventInfo &e)
   {
     int8 DepthMod; Map * new_m; 
-    EvReturn res; Creature *c;
+    EvReturn res;
     
     res = TFEAT(fID)->Event(e,fID);
     if (res == DONE || res == ERROR)
