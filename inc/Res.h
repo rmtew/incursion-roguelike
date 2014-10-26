@@ -626,21 +626,20 @@ class TGod: public Resource
       String & Describe(); 
   };
 
-class TRegion: public Resource
-  {
+class TRegion: public Resource {
     public:
-      TRegion() : Resource (T_TREGION) { }
-      int8 Depth, Size; 
-      rID Walls, Floor, Door;
-      int8 MTypes[4];
-      rID Furnishings[6];
-      uint32 RoomTypes; 
-      uint8 sx,sy; hText Grid;
-      void SetFlag(uint16 fl)   { Flags[fl/8] |=  (1 << (fl % 8)); }
-      void UnsetFlag(uint16 fl) { Flags[fl/8] &= ~(1 << (fl % 8)); }
-      bool HasFlag(uint16 fl)   { return (Flags[fl/8] & (1 << (fl % 8))) != 0; }
-			uint8 Flags[(RF_LAST/8)+1];
-  };
+        TRegion() : Resource (T_TREGION) { }
+        int8 Depth, Size; 
+        rID Walls, Floor, Door;
+        int8 MTypes[4];
+        rID Furnishings[6];
+        uint32 RoomTypes; 
+        uint8 sx,sy; hText Grid;
+        void SetFlag(uint16 fl)   { Flags[fl/8] |=  (1 << (fl % 8)); }
+        void UnsetFlag(uint16 fl) { Flags[fl/8] &= ~(1 << (fl % 8)); }
+        bool HasFlag(uint16 fl)   { return (Flags[fl/8] & (1 << (fl % 8))) != 0; }
+        uint8 Flags[(RF_LAST/8)+1];
+};
 
 class TTerrain: public Resource
   {
