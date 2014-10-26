@@ -98,7 +98,6 @@ extern int16 Silence;
 extern int16 __spentHours;
 
 extern int16 LastSkillCheckResult;
-extern int16 ListLength;
 
 extern Game* theGame;
 extern Registry* theRegistry;
