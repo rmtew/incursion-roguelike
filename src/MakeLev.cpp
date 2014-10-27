@@ -1428,11 +1428,15 @@ void Map::LoadFixedMap(rID mID, int16 _Depth, Map *Above, int8 _Luck)
 }
 
 void Map::Generate(rID _dID, int16 _Depth, Map *Above,int8 Luck) {
-    int16 i, j, n; Thing *t, *t2; Portal *st; 
-    rID xtID, sID, xID; Rect r;
+    int16 i, j, n, fCount, tot, c;
     int16 x, y, sx,sy,dx,dy,cx,cy,px,py, Streamers, Tries; 
-    int16 fCount, tot, c; int8 abort_count = 0;
-    bool NarrowChasm = false; Annotation *a; Item *it;
+    rID xtID, sID, xID;
+    Rect r;
+    Annotation *a;
+    Thing *t, *t2;
+    Item *it;
+    Portal *st; 
+    bool NarrowChasm = false;
     bool extraLevs = (theGame->Opt(OPT_DIFFICULTY) >= DIFF_CHALLENGE);
 
     if (RES(_dID)->Type == T_TREGION) {
@@ -1535,7 +1539,7 @@ void Map::Generate(rID _dID, int16 _Depth, Map *Above,int8 Luck) {
                     goto StreamChosen;
                 else
                     c -= (int16)StreamWeights[i*2+1];
-            Fatal("Room weights error B, %d %d %d.", i, c, (int16)StreamWeights[i*2+1]);
+            Fatal("Room weights error B, %d %d/%d %d.", i, c, tot, (int16)StreamWeights[i*2+1]);
 
 StreamChosen:
             sID = StreamWeights[i*2];
@@ -2422,8 +2426,9 @@ RestartVerifyMon:
 }
 
 void Map::DrawPanel(uint8 px, uint8 py, rID regID) {
-    int16 i,c,tot,sx,sy,RType,Tries,x,y,weight;
-    Rect cPanel, r,r2,r3,r4; 
+    int16 i,j,c,sx,sy,RType,Tries,x,y,weight,RM_WeightIndex;
+    int16 weighting_sum;
+    Rect cPanel, r,r2,r3,r4;
     rID WallID, FloorID, xID;
     static Rect NULL_RECT(0,0,0,0);
     static EventInfo xe;
@@ -2456,58 +2461,72 @@ void Map::DrawPanel(uint8 px, uint8 py, rID regID) {
     TDUN(dID)->GetList(RM_WEIGHTS,RM_Weights,RM_LAST*2);
 
 Reselect:
+    if (Tries >= 200) {
+        Error("Two hundred tries and no viable room/region combo.");
+    }
+
     r.x1 = r2.x1 = r3.x1 = r4.x1 = -1; 
     r.x2 = r2.x2 = r3.x2 = r4.x2 = 0; 
 
-    if (Tries >= 200) {
+    // Sum up all the room type weightings.
+    weighting_sum = 0;
+    for(i=0; RM_Weights[i*2+1]; i++)
+        weighting_sum += (int16)max(0, RM_Weights[i*2+1]);
+
+    // If all room types are used up, free them all up for reuse.
+    if (weighting_sum == 0) {
         if (usedInThisLevel[0]) {
             if (theGame->GetPlayer(0)->WizardMode)
                 theGame->GetPlayer(0)->IPrint("The air seems to shift.");
             memset(usedInThisLevel,0,sizeof(usedInThisLevel));
-        } else { 
-            Error("Two hundred tries and no viable room/region combo.");
+        } else {
+            // None to use, none to reuse.  No recovery from this.
+            Fatal("Complete failure to generate a room.");
         }
     }
 
-    tot = 0;
-    for(i=0; RM_Weights[i*2+1]; i++)
-        tot += (int16)max(0, RM_Weights[i*2+1]);
-
-    c = random(tot); 
+    // Pick a room type, leave the selection index in 'i'.
+    c = random(weighting_sum);
     for(i=0; RM_Weights[i*2+1]; i++) {
         weight = (int16)max(0, RM_Weights[i*2+1]);
-        if (c < weight)
+        if (c < weight) {
+            RM_WeightIndex = i*2;
             goto RM_Chosen;
-        else
+        } else
             c -= weight;
     }
     Fatal("Room weights error A, %d %d %d %d.", i, c, weight, Tries);
 
 RM_Chosen:
-    RType = (int16)RM_Weights[i*2];
-    RM_Weights[i*2+1] = -1;
+    RType = (int16)RM_Weights[RM_WeightIndex+0];
 
     /* Choose Region Type (ignoring weights for now) */
-    for(i=c=0;RoomWeights[i*2];i++)
+    for(i=c=0;RoomWeights[i*2];i++) {
         if (!TREG(RoomWeights[i*2])->RoomTypes || (TREG(RoomWeights[i*2])->RoomTypes & BIT(RType)))
             if (DepthCR >= TREG(RoomWeights[i*2])->Depth)
                 if (!TREG(RoomWeights[i*2])->HasFlag(RF_VAULT) || DepthCR >= (int16)Con[MIN_VAULT_DEPTH]) {
-                    if (!TREG(RoomWeights[i*2])->HasFlag(RF_CORRIDOR))  
+                    if (!TREG(RoomWeights[i*2])->HasFlag(RF_CORRIDOR)) {
+                        for (j=0; usedInThisLevel[j]; j++) {
+                            if (usedInThisLevel[j] == RoomWeights[i*2])
+                                goto SkipCandidate;
+                        }
                         Candidates[c++] = RoomWeights[i*2];
+                    }
                 }
+SkipCandidate:
+        ;
+    }
 
     if (!c) {
+        // No candidates left, disregard this room type from selection.
+        RM_Weights[RM_WeightIndex+1] = -1;
         Tries++;
         goto Reselect;
     }
 
     regID = Candidates[random(c)];
     for (i=0; usedInThisLevel[i]; i++)
-        if (usedInThisLevel[i] == regID) {
-            Tries++;
-            goto Reselect; 
-        } 
-
+        ;
     usedInThisLevel[i] = regID;
 
     /*regID = FIND("ice matrix");
