@@ -585,6 +585,7 @@ void Fatal(const char*fmt,...) {
 		{ printf(__buffer); exit(1); }
 	T1->Clear();
 	vsprintf(__buffer, fmt, argptr);
+	va_end(argptr);
 	sprintf(__buff2, "Fatal Error: %s\nPress [ENTER] to exit...",__buffer);
 	((libtcodTerm*)T1)->Box(WIN_SCREEN,BOX_NOPAUSE|BOX_NOSAVE,RED,PINK,__buff2);
 	T1->Update();
@@ -594,7 +595,6 @@ void Fatal(const char*fmt,...) {
 #endif
 	T1->ShutDown();
 	exit(1);
-	va_end(argptr);
 }
 
 void Error(const char*fmt,...) {
@@ -931,7 +931,7 @@ int16 libtcodTerm::GetCharCmd()
 
 int16 libtcodTerm::GetCharCmd(KeyCmdMode mode) {
     KeySetItem * keyset = theGame->Opt(OPT_ROGUELIKE) ? RoguelikeKeySet : StandardKeySet;
-    int16 keyset_start, keyset_delta, keyset_last;
+    int16 keyset_start = 0, keyset_delta = 0, keyset_last;
     int16 i, ox, oy, ch;
     TextWin *wn;
 	uint32 ticks_last;
