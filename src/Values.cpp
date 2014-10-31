@@ -2364,19 +2364,19 @@ bool Creature::isMType(int32 mt)
 
     case MA_EVIL:
       if (HasStati(ALIGNMENT)) 
-        return (GetStatiVal(ALIGNMENT) & AL_EVIL) != AL_EVIL;
+        return (GetStatiVal(ALIGNMENT) & AL_EVIL) != 0;
       else return HasMFlag(M_EVIL);
     case MA_GOOD:
       if (HasStati(ALIGNMENT)) 
-        return (GetStatiVal(ALIGNMENT) & AL_GOOD) != AL_GOOD;
+        return (GetStatiVal(ALIGNMENT) & AL_GOOD) != 0;
       else return HasMFlag(M_GOOD);
     case MA_LAWFUL:
       if (HasStati(ALIGNMENT)) 
-        return (GetStatiVal(ALIGNMENT) & AL_LAWFUL) != AL_LAWFUL;
+        return (GetStatiVal(ALIGNMENT) & AL_LAWFUL) != 0;
       else return HasMFlag(M_LAWFUL);
     case MA_CHAOTIC:
       if (HasStati(ALIGNMENT)) 
-        return (GetStatiVal(ALIGNMENT) & AL_CHAOTIC) != AL_CHAOTIC;
+        return (GetStatiVal(ALIGNMENT) & AL_CHAOTIC) != 0;
       else return HasMFlag(M_CHAOTIC);
     case MA_NEUTRAL:
       return (!isMType(MA_GOOD) &&

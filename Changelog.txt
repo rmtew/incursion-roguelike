@@ -1,3 +1,6 @@
+Incursion (open source) 0.6.9Y14: 2014-1?-?? UNSTABLE
+* https://bitbucket.org/rmtew/incursion-roguelike/issue/176/: Compilation warning fixes broke alignment checks, resulting in penalties and restrictions for the wrong alignments.  Reported by John Olender, with patch.
+
 Incursion (open source) 0.6.9Y13: 2014-10-27 UNSTABLE
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/167/: Sometimes when level areas are being generated, the selection of room types failed, and a fatal error put allowed the player to win the game of failed level area generation.  This game is not about the player winning, so the relevant code has been altered to better handle problem situations.
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/168/: The tabbing between links in the help system causes crashes.  Legacy bug where code was looking for information using X as Y coordinate and Y as X coordinate.  Also a Y1 bug where looking up the character at a screen coordinate was incorrectly implemented.
