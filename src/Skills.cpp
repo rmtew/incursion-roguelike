@@ -128,155 +128,150 @@ String & DescribeSkill(int16 sk)
   return *tmpstr(res); 
 } 
 
-void Player::UseMenu(int32 SuppliedIndex)
-  {
+void Player::UseMenu(int32 SuppliedIndex) {
     int32 i = 0;
     uint16 j;
     bool found = false;
     EventInfo e; String str;
-    
-    if (SuppliedIndex)
-      { i = SuppliedIndex;
-        goto HasSuppliedIndex; }
-    
+
+    if (SuppliedIndex) {
+        i = SuppliedIndex;
+        goto HasSuppliedIndex;
+    }
+
     while(ActiveTraits[i]) {
-      switch((ActiveTraits[i] / 1000)*1000) {
+        switch((ActiveTraits[i] / 1000)*1000) {
         case ABIL_VAL: /* Class Ability */
-          if (ActiveTraits[i] == CA_TURNING + ABIL_VAL) {
-            StatiIterNature(this,TURN_ABILITY)
-                str = "Turn "; str += Pluralize(Lookup(MTypeNames,S->Val));
-                MyTerm->LOption(str,i+(S->Val*1000L)); found = true;
-            StatiIterEnd(this)
-            }
-          else if (ActiveTraits[i] == CA_COMMAND + ABIL_VAL) {
-            StatiIterNature(this,COMMAND_ABILITY)
-                str = "Command "; str += Pluralize(Lookup(MTypeNames,S->Val));
-                MyTerm->LOption(str,i+(S->Val*1000L)); found = true;
-            StatiIterEnd(this)
-            }
-          else if (ActiveTraits[i] == CA_GREATER_TURNING + ABIL_VAL) {
-            StatiIterNature(this,GTURN_ABILITY)
-                if (S->Val == MA_UNDEAD)
-                  str = "Greater Turning";
-                else
-                  { str = "Greater Turning: "; 
+            if (ActiveTraits[i] == CA_TURNING + ABIL_VAL) {
+                StatiIterNature(this,TURN_ABILITY)
+                    str = "Turn "; str += Pluralize(Lookup(MTypeNames,S->Val));
+                    MyTerm->LOption(str,i+(S->Val*1000L)); found = true;
+                StatiIterEnd(this)
+            } else if (ActiveTraits[i] == CA_COMMAND + ABIL_VAL) {
+                StatiIterNature(this,COMMAND_ABILITY)
+                    str = "Command "; str += Pluralize(Lookup(MTypeNames,S->Val));
+                    MyTerm->LOption(str,i+(S->Val*1000L)); found = true;
+                StatiIterEnd(this)
+            } else if (ActiveTraits[i] == CA_GREATER_TURNING + ABIL_VAL) {
+                StatiIterNature(this,GTURN_ABILITY)
+                    if (S->Val == MA_UNDEAD)
+                        str = "Greater Turning";
+                    else
+                    { str = "Greater Turning: "; 
                     str += Lookup(MTypeNames,S->Val); }
-                MyTerm->LOption(str,i+(S->Val*1000L)); found = true;
-            StatiIterEnd(this)
-            }
-          else if (ActiveTraits[i] == CA_ARCANE_TRICKERY + ABIL_VAL) {
-              int16 total = AbilityLevel(CA_ARCANE_TRICKERY); 
-              if (!total)
+                    MyTerm->LOption(str,i+(S->Val*1000L)); found = true;
+                StatiIterEnd(this)
+            } else if (ActiveTraits[i] == CA_ARCANE_TRICKERY + ABIL_VAL) {
+                int16 total = AbilityLevel(CA_ARCANE_TRICKERY); 
+                if (!total)
                 { i++; continue; }
-              MyTerm->LOption(Format("%s (%d left)", 
-                Lookup(ClassAbilities,ActiveTraits[i] % 1000),
-                  total - GetStatiMag(SPEC_TIMEOUT,ABIL_VAL + CA_ARCANE_TRICKERY)),i);
-            }
-          else if (ActiveTraits[i] == CA_SACRED_MOUNT + ABIL_VAL) {
-              if (AbilityLevel(CA_SACRED_MOUNT) < 5)
+                MyTerm->LOption(Format("%s (%d left)", 
+                    Lookup(ClassAbilities,ActiveTraits[i] % 1000),
+                    total - GetStatiMag(SPEC_TIMEOUT,ABIL_VAL + CA_ARCANE_TRICKERY)),i);
+            } else if (ActiveTraits[i] == CA_SACRED_MOUNT + ABIL_VAL) {
+                if (AbilityLevel(CA_SACRED_MOUNT) < 5)
                 { i++; continue; }
-              MyTerm->LOption("Summon Sacred Mount",i);
-            }
-          else if (ActiveTraits[i] == CA_FLAWLESS_DODGE + ABIL_VAL) {
-              int16 total = AbilityLevel(CA_FLAWLESS_DODGE) + Mod(A_DEX); 
-              if (total == Mod(A_DEX))
+                MyTerm->LOption("Summon Sacred Mount",i);
+            } else if (ActiveTraits[i] == CA_FLAWLESS_DODGE + ABIL_VAL) {
+                int16 total = AbilityLevel(CA_FLAWLESS_DODGE) + Mod(A_DEX); 
+                if (total == Mod(A_DEX))
                 { i++; continue; }
-              MyTerm->LOption(Format("%s (%d left)", 
-                Lookup(ClassAbilities,ActiveTraits[i] % 1000),
-                  total - GetStatiMag(FLAWLESS_DODGE)),i);
+                MyTerm->LOption(Format("%s (%d left)", 
+                    Lookup(ClassAbilities,ActiveTraits[i] % 1000),
+                    total - GetStatiMag(FLAWLESS_DODGE)),i);
+            } else if (ActiveTraits[i] == CA_INNATE_SPELL + ABIL_VAL) {
+                for(j=0;j!=MAX_SPELLS;j++)
+                    if (Spells[j] & SP_INNATE) {
+                        str = "Innate <6>";
+                        str += NAME(theGame->SpellID(j));
+                        str += "<7>";
+                        MyTerm->LOption(XPrint(str),i+j*1000);
+                    }
+                if (HasStati(POLYMORPH)) {
+                    TMonster * tm = TMON(mID);
+                    for(rID sID = tm->FirstRes(AN_INNATE); sID; 
+                        sID = tm->NextRes(AN_INNATE)) {
+                            j = theGame->SpellNum(sID);
+                            str = Format("Innate (%s) <6>",NAME(mID));
+                            str += NAME(theGame->SpellID(j));
+                            str += "<7>";
+                            MyTerm->LOption(XPrint(str),i+j*1000);
+                    } 
+                } 
+            } else if (HasAbility(ActiveTraits[i] % 1000)) {
+                MyTerm->LOption(Lookup(ClassAbilities,ActiveTraits[i] % 1000),i);
+                found = true;
             }
-          else if (ActiveTraits[i] == CA_INNATE_SPELL + ABIL_VAL) {
-            for(j=0;j!=MAX_SPELLS;j++)
-              if (Spells[j] & SP_INNATE) {
-                str = "Innate <6>";
-                str += NAME(theGame->SpellID(j));
-                str += "<7>";
-                MyTerm->LOption(XPrint(str),i+j*1000);
-                }
-            if (HasStati(POLYMORPH)) {
-              TMonster * tm = TMON(mID);
-              for(rID sID = tm->FirstRes(AN_INNATE); sID; 
-                  sID = tm->NextRes(AN_INNATE)) {
-                j = theGame->SpellNum(sID);
-                str = Format("Innate (%s) <6>",NAME(mID));
-                str += NAME(theGame->SpellID(j));
-                str += "<7>";
-                MyTerm->LOption(XPrint(str),i+j*1000);
-              } 
-            } 
-            }                 
-          else if (HasAbility(ActiveTraits[i] % 1000)) {
-            MyTerm->LOption(Lookup(ClassAbilities,ActiveTraits[i] % 1000),i);
-            found = true; }
-         break;
+            break;
         case FEAT_VAL: /* Active Feat */
-          if (HasFeat(ActiveTraits[i] % 1000)) {
-            MyTerm->LOption(FeatName(ActiveTraits[i] % 1000),i);
-            found = true; }
-         break;
+            if (HasFeat(ActiveTraits[i] % 1000)) {
+                MyTerm->LOption(FeatName(ActiveTraits[i] % 1000),i);
+                found = true; }
+            break;
         case SKILL_VAL: /* Active Skill */
-          int16 sk;
-          sk = ActiveTraits[i] % 1000;
-          if (HasSkill(sk, sk==SK_HEALING || sk == SK_HANDLE_DEV)) 
-            if (ActiveTraits[i] % 1000 != SK_BALANCE ||
-                 SkillLevel(SK_BALANCE) >= 10) {
-              MyTerm->LOption(
-                SkillInfo[ ActiveTraits[i] % 1000 ].name,i);
-              found = true; }
-         break;
+            int16 sk;
+            sk = ActiveTraits[i] % 1000;
+            if (HasSkill(sk, sk==SK_HEALING || sk == SK_HANDLE_DEV)) 
+                if (ActiveTraits[i] % 1000 != SK_BALANCE ||
+                    SkillLevel(SK_BALANCE) >= 10) {
+                        MyTerm->LOption(SkillInfo[ ActiveTraits[i] % 1000 ].name,i);
+                        found = true; }
+                break;
         case ATTK_VAL: /* Polymorph Attack */
-          if (HasAttk(ActiveTraits[i] % 1000)) {
-            if (ActiveTraits[i] % 1000 == A_ROAR) {
-              String verb = TMON(mID)->GetMessages(MSG_ROARVERB)[0];
-              if (verb.GetLength())
-                { MyTerm->LOption(Capitalize(verb,true),i); break; }
-              }
-            else
-              MyTerm->LOption(Lookup(ATypeNames,ActiveTraits[i] % 1000),i);
-            found = true; }
-         break;
+            if (HasAttk(ActiveTraits[i] % 1000)) {
+                if (ActiveTraits[i] % 1000 == A_ROAR) {
+                    String verb = TMON(mID)->GetMessages(MSG_ROARVERB)[0];
+                    if (verb.GetLength()) {
+                        MyTerm->LOption(Capitalize(verb,true),i);
+                        break;
+                    }
+                } else
+                    MyTerm->LOption(Lookup(ATypeNames,ActiveTraits[i] % 1000),i);
+                found = true;
+            }
+            break;
         default:
-          Fatal("Something strange in ActiveTraits[] array!");
+            Fatal("Something strange in ActiveTraits[] array!");
         }
-      i++;
-      }
+        i++;
+    }
 
     if (!found) {
-      IPrint("You have no active abilities, feats or skills.");
-      return;
-      }
-    
+        IPrint("You have no active abilities, feats or skills.");
+        return;
+    }
+
     MyTerm->SetQKeyType(QuickKeys, QKY_SKILL);
     i = MyTerm->LMenu(MENU_SORTED|MENU_ESC|MENU_BORDER|MENU_QKEY,
-                      "Use which skill, feat or ability?",WIN_MENUBOX);
+        "Use which skill, feat or ability?",WIN_MENUBOX);
     if (i == -1)
-      return;
-      
-    HasSuppliedIndex:
+        return;
+
+HasSuppliedIndex:
 
     switch((ActiveTraits[i%1000] / 1000)*1000) {
-      case ABIL_VAL:  UseAbility((uint8)(ActiveTraits[i%1000] % 1000),(uint8)(i/1000)); return;
-      case FEAT_VAL:  UseFeat(ActiveTraits[i%1000] % 1000); return;
-      case SKILL_VAL: UseSkill(ActiveTraits[i%1000] % 1000); return;
-      case ATTK_VAL:
+    case ABIL_VAL:  UseAbility((uint8)(ActiveTraits[i%1000] % 1000),(int16)(i/1000)); return;
+    case FEAT_VAL:  UseFeat(ActiveTraits[i%1000] % 1000); return;
+    case SKILL_VAL: UseSkill(ActiveTraits[i%1000] % 1000); return;
+    case ATTK_VAL:
         e.Clear();
         e.EActor = this;
         e.EParam   = ActiveTraits[i] % 1000;
         switch (ActiveTraits[i] % 1000) {
-          case A_BREA:
-          case A_BRE2:
+        case A_BREA:
+        case A_BRE2:
             if (!MyTerm->EffectPrompt(e,Q_DIR|Q_TAR|Q_LOC))
-              return;
+                return;
             ReThrow(EV_SATTACK,e);
-           break;
-          case A_ROAR:
+            break;
+        case A_ROAR:
             ReThrow(EV_SATTACK,e);
-           break;
-          default:
+            break;
+        default:
             Error("Unimplemented PC polymorph attack!");
-          }
-      }
-  }
+        }
+    }
+}
 
 void Player::CancelMenu() {
   /* The cancel menu lists:
@@ -1748,581 +1743,540 @@ void Character::UseFeat(uint16 ft)
 
 bool PossiblyPause(Term *T1, int x, int y, int timeout);
 
-void Character::UseAbility(uint8 ab,int16 pa)
-  {
+void Character::UseAbility(uint8 ab,int16 pa) {
     int16 i,j,k, cx, cy, fc;
     Thing *targ;
     Creature *c;
     EventInfo e;
     String msg1, msg2;
     k = 0; // ww: previously used before defined in TRACKING
-    switch(ab)
-      {
-        case CA_ANIMAL_COMP: 
-          if (isPlayer()) {
+    switch(ab) {
+    case CA_ANIMAL_COMP: 
+        if (isPlayer())
             thisp->SummonAnimalCompanion(false);
-          } 
-          break; 
-        case CA_SACRED_MOUNT:
-          if (isPlayer()) {
+        break; 
+    case CA_SACRED_MOUNT:
+        if (isPlayer())
             thisp->SummonAnimalCompanion(true);
-          } 
-          break; 
-
-        case CA_SOOTHING_WORD:
-          j = 10 + AbilityLevel(CA_SOOTHING_WORD)/2 + Mod(A_CHA);
-          if (!LoseFatigue(3,true))
+        break;
+    case CA_SOOTHING_WORD:
+        j = 10 + AbilityLevel(CA_SOOTHING_WORD)/2 + Mod(A_CHA);
+        if (!LoseFatigue(3,true))
             break;
-          IDPrint("You speak a word of indescribable peace.",
-                  "The <Obj> speaks a word that moves your spirit.",this);
-          MapIterate(m,c,i)
+
+        IDPrint("You speak a word of indescribable peace.",
+            "The <Obj> speaks a word that moves your spirit.",this);
+        MapIterate(m,c,i)
             if (c->isCreature() && c->isHostileTo(this))
                 if (c->isMType(MA_LIVING) && !c->isMType(MA_SAPIENT))
-                  if (dist(x,y,c->x,c->y) <= 6) {
-                    if (!c->SavingThrow(WILL,j,SA_ENCH|SA_MAGIC))
-                      {
-                        c->ts.Pacify(c,this);
-                        c->StateFlags |= MS_PEACEFUL;
-                        if (c->isCreature())
-                          ((Creature*)c)->ts.Retarget((Creature *)c);
-                        c->IDPrint("You feel your hostility drain away.",
-                                  "The <Obj> calms and ceases attacking.",c);
-                      }
-                    else
-                      c->IDPrint("You resist the effects.",
-                                 "The <Obj> resists the effects.",c);
+                    if (dist(x,y,c->x,c->y) <= 6) {
+                        if (!c->SavingThrow(WILL,j,SA_ENCH|SA_MAGIC)) {
+                            c->ts.Pacify(c,this);
+                            c->StateFlags |= MS_PEACEFUL;
+                            if (c->isCreature())
+                                ((Creature*)c)->ts.Retarget((Creature *)c);
+                            c->IDPrint("You feel your hostility drain away.",
+                                "The <Obj> calms and ceases attacking.",c);
+                        } else
+                            c->IDPrint("You resist the effects.",
+                            "The <Obj> resists the effects.",c);
                     }
-
-         break;
-        case CA_LAY_ON_HANDS:
-          e.Clear();
-          e.EActor = this;
-          if (!thisp->MyTerm->EffectPrompt(e,Q_TAR|Q_NEAR|Q_CRE))
+                    break;
+    case CA_LAY_ON_HANDS:
+        e.Clear();
+        e.EActor = this;
+        if (!thisp->MyTerm->EffectPrompt(e,Q_TAR|Q_NEAR|Q_CRE))
             return;
-          if (!e.EVictim->isCreature())
+        if (!e.EVictim->isCreature())
             return;
-          if (!e.EActor->LoseFatigue(2,true))
+        if (!e.EActor->LoseFatigue(2,true))
             return;
-          e.EActor->Timeout += 30;
-          if (e.EVictim == e.EActor)
+        e.EActor->Timeout += 30;
+        if (e.EVictim == e.EActor)
             DPrint(e,"You lay hands upon yourself.",
-                     "The <EActor> lays hands upon <him:EActor>self.");
-          else
+            "The <EActor> lays hands upon <him:EActor>self.");
+        else
             TPrint(e,"You lay hands upon the <EVictim>.",
-                     "The <EActor> lays hands upon you.",
-                     "The <EActor> lays hands upon the <EVictim>.");                     
-          if (e.EVictim->isMType(MA_UNDEAD)) {
+            "The <EActor> lays hands upon you.",
+            "The <EActor> lays hands upon the <EVictim>.");                     
+        if (e.EVictim->isMType(MA_UNDEAD)) {
             VPrint(e,"Holy energy sears you!",
-                     "Holy energy sears the <EVictim>!");
+                "Holy energy sears the <EVictim>!");
             ThrowDmg(EV_DAMAGE,AD_HOLY,Dice::Roll(2,6) + max(1,2+Mod(A_CHA))*AbilityLevel(CA_LAY_ON_HANDS),
-              "a paladin's touch",this,e.EVictim);
-            }
-          else if (e.EVictim->isMType(MA_LIVING) && 
-              e.EVictim->cHP != (e.EVictim->mHP+e.EVictim->Attr[A_THP])) {
-            e.EVictim->cHP = min(e.EVictim->mHP+e.EVictim->Attr[A_THP],
-              e.EVictim->cHP + Dice::Roll(2,6) + max(1,2+Mod(A_CHA))*AbilityLevel(CA_LAY_ON_HANDS));
-            VPrint(e,"Your wounds heal<Str>!", "The <EVictim>'s wounds heal<Str>!",
-              e.EVictim->cHP == e.EVictim->mHP+e.EVictim->Attr[A_THP] ? " fully" : "");
-            }
-          else
+                "a paladin's touch",this,e.EVictim);
+        } else if (e.EVictim->isMType(MA_LIVING) && 
+            e.EVictim->cHP != (e.EVictim->mHP+e.EVictim->Attr[A_THP])) {
+                e.EVictim->cHP = min(e.EVictim->mHP+e.EVictim->Attr[A_THP],
+                    e.EVictim->cHP + Dice::Roll(2,6) + max(1,2+Mod(A_CHA))*AbilityLevel(CA_LAY_ON_HANDS));
+                VPrint(e,"Your wounds heal<Str>!", "The <EVictim>'s wounds heal<Str>!",
+                    e.EVictim->cHP == e.EVictim->mHP+e.EVictim->Attr[A_THP] ? " fully" : "");
+        } else
             DPrint(e,"Nothing happens.", "Nothing happens.");
-          return;          
-        case CA_INNATE_SPELL:
-          e.Clear();
-          e.EActor = this;
-          e.EMap = m;
-          e.eID = theGame->SpellID(pa);
-          if (TEFF(e.eID)->ef.qval)
+        return;          
+    case CA_INNATE_SPELL:
+        e.Clear();
+        e.EActor = this;
+        e.EMap = m;
+        e.eID = theGame->SpellID(pa);
+        if (TEFF(e.eID)->ef.qval)
             if (!thisp->MyTerm->EffectPrompt(e,TEFF(e.eID)->ef.qval))
-              return;
-          ReThrow(EV_INVOKE,e);
-         break;
-        case CA_BERSERK_RAGE:
-          fc = 3;
-          if (!InSlot(SL_ARMOUR))
+                return;
+        ReThrow(EV_INVOKE,e);
+        break;
+    case CA_BERSERK_RAGE:
+        fc = 3;
+        if (!InSlot(SL_ARMOUR))
             fc = 1;
-          else if (InSlot(SL_ARMOUR)->isGroup(WG_HARMOUR))
+        else if (InSlot(SL_ARMOUR)->isGroup(WG_HARMOUR))
             fc = 4;
-          else if (InSlot(SL_ARMOUR)->isGroup(WG_MARMOUR))
+        else if (InSlot(SL_ARMOUR)->isGroup(WG_MARMOUR))
             fc = 3;
-          else if (InSlot(SL_ARMOUR)->isGroup(WG_LARMOUR))
+        else if (InSlot(SL_ARMOUR)->isGroup(WG_LARMOUR))
             fc = 2;
-          else
+        else
             Error("Armour is neither Light, Medium nor Heavy?!");
-            
-          if (HasStati(AFRAID))
-            {
-              IPrint("You cannot rage while afraid!");
-              break;
-            }
-            
-          if (AbilityLevel(CA_BERSERK_RAGE) >= 4)
-            fc -= 1;
-          if (fc == 0)
-            if (!(Dice::Roll(1,20) + Mod(A_CON) > 20))
-              fc = 1;    
-          
-          if (fc)
-            if (!LoseFatigue(fc,true))
-              break;
-          if (AbilityLevel(CA_BERSERK_RAGE) >= 16)
-            i = 8;
-          else if (AbilityLevel(CA_BERSERK_RAGE) >= 10)
-            i = 6;
-          else if (AbilityLevel(CA_BERSERK_RAGE) >= 3 || !Level[1])
-            i = 4;
-          else 
-            i = 2;
-          //Timeout += 6;
-          //GainPermStati(RAGING,NULL,SS_MISC,i,AbilityLevel(CA_BERSERK_RAGE));
-          GainTempStati(RAGING,NULL,10+AbilityLevel(CA_BERSERK_RAGE)*3,SS_MISC,i,
-                                       AbilityLevel(CA_BERSERK_RAGE));
-          FFCount = 0;
-          IDPrint("You drive yourself into a killing fury.",
-                  "The <Obj> flies into a killing fury!",this);
-         break;
-        case CA_TRACKING:
-          j = max(1,Mod(A_WIS)+1+(AbilityLevel(CA_TRACKING)/5));
-          k = 0;
-          StatiIter(this)
-            if (S->Nature == TRACKING)
-              k++;
-          StatiIterEnd(this)
-          if (k >= j)
-            {
-              IPrint("You are tracking too many targets already.");
-              return;
-            }
-          targ = thisp->MyTerm->ChooseTarget();
-          if (targ == NULL || targ == this)
+
+        if (HasStati(AFRAID)) {
+            IPrint("You cannot rage while afraid!");
             break;
-          GainPermStati(TRACKING,targ,SS_MISC,0,min(125,40 + AbilityLevel(CA_TRACKING)*5));
-          m->Update(targ->x,targ->y);
-         break;
-        case CA_MANIFESTATION:
-          if (!LoseFatigue(3,true))
+        }
+
+        if (AbilityLevel(CA_BERSERK_RAGE) >= 4)
+            fc -= 1;
+        if (fc == 0)
+            if (!(Dice::Roll(1,20) + Mod(A_CON) > 20))
+                fc = 1;    
+
+        if (fc)
+            if (!LoseFatigue(fc,true))
+                break;
+        if (AbilityLevel(CA_BERSERK_RAGE) >= 16)
+            i = 8;
+        else if (AbilityLevel(CA_BERSERK_RAGE) >= 10)
+            i = 6;
+        else if (AbilityLevel(CA_BERSERK_RAGE) >= 3 || !Level[1])
+            i = 4;
+        else 
+            i = 2;
+        //Timeout += 6;
+        //GainPermStati(RAGING,NULL,SS_MISC,i,AbilityLevel(CA_BERSERK_RAGE));
+        GainTempStati(RAGING,NULL,10+AbilityLevel(CA_BERSERK_RAGE)*3,SS_MISC,i,
+            AbilityLevel(CA_BERSERK_RAGE));
+        FFCount = 0;
+        IDPrint("You drive yourself into a killing fury.",
+            "The <Obj> flies into a killing fury!",this);
+        break;
+    case CA_TRACKING:
+        j = max(1,Mod(A_WIS)+1+(AbilityLevel(CA_TRACKING)/5));
+        k = 0;
+        StatiIter(this)
+            if (S->Nature == TRACKING)
+                k++;
+        StatiIterEnd(this)
+        if (k >= j) {
+            IPrint("You are tracking too many targets already.");
             return;
-          IDPrint("Your mind travels back to the ancient ages of faerie, and you "
-                  "feel eldritch power well up within you...",
-                  "The <Obj> becomes a spectable of searing, terrible majesty...");
-          GainTempStati(MANIFEST,NULL,Dice::Roll(1,4,TotalLevel()/3),SS_MISC,0,0,0);
-         break;                     
-        case CA_PROTECTIVE_WARD:
-          if (!LoseFatigue(2,true))
+        }
+        targ = thisp->MyTerm->ChooseTarget();
+        if (targ == NULL || targ == this)
+            break;
+        GainPermStati(TRACKING,targ,SS_MISC,0,min(125,40 + AbilityLevel(CA_TRACKING)*5));
+        m->Update(targ->x,targ->y);
+        break;
+    case CA_MANIFESTATION:
+        if (!LoseFatigue(3,true))
             return;
-          IPrint("You call upon divine aid to ward away harm.");
-          GainTempStati(ADJUST_SAC,this,20+AbilityLevel(CA_PROTECTIVE_WARD)*3,
+        IDPrint("Your mind travels back to the ancient ages of faerie, and you "
+            "feel eldritch power well up within you...",
+            "The <Obj> becomes a spectable of searing, terrible majesty...");
+        GainTempStati(MANIFEST,NULL,Dice::Roll(1,4,TotalLevel()/3),SS_MISC,0,0,0);
+        break;                     
+    case CA_PROTECTIVE_WARD:
+        if (!LoseFatigue(2,true))
+            return;
+        IPrint("You call upon divine aid to ward away harm.");
+        GainTempStati(ADJUST_SAC,this,20+AbilityLevel(CA_PROTECTIVE_WARD)*3,
             SS_ONCE,A_SAV,AbilityLevel(CA_PROTECTIVE_WARD),FIND("protective ward"));
-         break;  
-        case CA_FEAT_OF_STRENGTH:
-          if (!LoseFatigue(4,true))
+        break;  
+    case CA_FEAT_OF_STRENGTH:
+        if (!LoseFatigue(4,true))
             return;
-          IPrint("You push your strength to the limit!");
-          GainTempStati(ADJUST_SAC,this,1,SS_MISC,A_STR,AbilityLevel(CA_FEAT_OF_STRENGTH),
-                                                           FIND("feat of strength"));
-         break;
-        case CA_UNBIND:
-          Glyph g;
-          if (!LoseFatigue(2,true))
+        IPrint("You push your strength to the limit!");
+        GainTempStati(ADJUST_SAC,this,1,SS_MISC,A_STR,AbilityLevel(CA_FEAT_OF_STRENGTH),
+            FIND("feat of strength"));
+        break;
+    case CA_UNBIND:
+        Glyph g;
+        if (!LoseFatigue(2,true))
             return;
-          e.Clear();
-          e.EActor = this;
-          e.EVictim = NULL;
-          DPrint(e,"You invoke the liberating power of <Str>!",
-                   "<Obj2> invokes the power of <Str> to free the enslaved!",
-                   isCharacter() ? NAME(thisp->GodID) : "Semirath",this);
-          i = max(1,AbilityLevel(CA_UNBIND) + Mod(A_CHA));
-          
-          if (PossiblyPause(T1,x,y,0)) {
+        e.Clear();
+        e.EActor = this;
+        e.EVictim = NULL;
+        DPrint(e,"You invoke the liberating power of <Str>!",
+            "<Obj2> invokes the power of <Str> to free the enslaved!",
+            isCharacter() ? NAME(thisp->GodID) : "Semirath",this);
+        i = max(1,AbilityLevel(CA_UNBIND) + Mod(A_CHA));
+
+        if (PossiblyPause(T1,x,y,0)) {
             for(cx = x-i; cx <= x+i; cx++)
-              for(cy = y-i; cy <= y+i; cy++)
-                if ((dist(cx,cy,x,y) <= i) && m->InBounds(cx,cy))
-                  {
-                    g = T1->GetGlyph(cx,cy);
-                    g = (g & 0x00FF) | AZURE<<8;
-                    T1->PutGlyph(cx,cy,g);
-                  }
-            T1->Update();
-            PossiblyPause(T1,x,y, isPlayer() ? 1500 : 500);
-            T1->RefreshMap();
-            T1->Update();
-            }
-          MapIterate(m,targ,i)
+                for(cy = y-i; cy <= y+i; cy++)
+                    if ((dist(cx,cy,x,y) <= i) && m->InBounds(cx,cy))
+                    {
+                        g = T1->GetGlyph(cx,cy);
+                        g = (g & 0x00FF) | AZURE<<8;
+                        T1->PutGlyph(cx,cy,g);
+                    }
+                    T1->Update();
+                    PossiblyPause(T1,x,y, isPlayer() ? 1500 : 500);
+                    T1->RefreshMap();
+                    T1->Update();
+        }
+        MapIterate(m,targ,i)
             if (dist(x,y,targ->x,targ->y) <= i)
-              if (targ->isCreature())
-                if (targ->HasStati(SUMMONED))
-                  {
-                    c = (Creature*)targ->GetStatiObj(SUMMONED);
-                    if (c && c->isCreature())
-                      {
-                        if (((Creature*)targ)->isHostileTo(c))
-                          continue;
-                        int16 jm, km;
-                        j = random(20)+1;
-                        k = random(20)+1;
-                        jm = j + Mod(A_CHA);
-                        km = k + c->Mod(A_CHA);
-                        if (isPlayer())
-                          {                           
-                            thisp->MyTerm->SetWin(WIN_NUMBERS3);
-                            thisp->MyTerm->Clear();
-                            msg1 = Format("%cUnbind Check (%s %s):%c ",
-                              -YELLOW,
-                              (const char*)c->Name(NA_POSS|NA_THE),
-                              (const char*)targ->Name(0),
-                              -GREY);
-                            msg2 = Format("1d20 [%d] + %d Cha vs. 1d20 [%d] + %d Cha %c[%s]%c",
-                              j, Mod(A_CHA), k, c->Mod(A_CHA),
-                              jm >= km ? (-EMERALD) : (-PINK),
-                              jm >= km ? "success" : "failure",
-                              -GREY);
-                            thisp->MyTerm->Write(0,0,msg1);
-                            thisp->MyTerm->Write(2,1,msg2);
-                            if (thisp->Opt(OPT_STORE_ROLLS))
-                              thisp->MyTerm->AddMessage(msg1 + msg2);
-                          }
-                        if (jm >= km) {
-                          if (targ->isMonster())
+                if (targ->isCreature())
+                    if (targ->HasStati(SUMMONED)) {
+                        c = (Creature*)targ->GetStatiObj(SUMMONED);
+                        if (c && c->isCreature()) {
+                            if (((Creature*)targ)->isHostileTo(c))
+                                continue;
+                            int16 jm, km;
+                            j = random(20)+1;
+                            k = random(20)+1;
+                            jm = j + Mod(A_CHA);
+                            km = k + c->Mod(A_CHA);
+                            if (isPlayer()) {                           
+                                thisp->MyTerm->SetWin(WIN_NUMBERS3);
+                                thisp->MyTerm->Clear();
+                                msg1 = Format("%cUnbind Check (%s %s):%c ",
+                                    -YELLOW,
+                                    (const char*)c->Name(NA_POSS|NA_THE),
+                                    (const char*)targ->Name(0),
+                                    -GREY);
+                                msg2 = Format("1d20 [%d] + %d Cha vs. 1d20 [%d] + %d Cha %c[%s]%c",
+                                    j, Mod(A_CHA), k, c->Mod(A_CHA),
+                                    jm >= km ? (-EMERALD) : (-PINK),
+                                    jm >= km ? "success" : "failure",
+                                    -GREY);
+                                thisp->MyTerm->Write(0,0,msg1);
+                                thisp->MyTerm->Write(2,1,msg2);
+                                if (thisp->Opt(OPT_STORE_ROLLS))
+                                    thisp->MyTerm->AddMessage(msg1 + msg2);
+                            }
+                            if (jm >= km) {
+                                if (targ->isMonster())
+                                    ((Monster*)targ)->ts.Liberate((Monster*)targ,this);  
+                            } else
+                                IPrint("The <Obj1> retains control of <his:Obj1> <Obj2>!",
+                                c, targ);
+                        } else if (targ->isMonster())
                             ((Monster*)targ)->ts.Liberate((Monster*)targ,this);  
-                          }
-                        else
-                          IPrint("The <Obj1> retains control of <his:Obj1> <Obj2>!",
-                            c, targ);
-                      }
-                    else if (targ->isMonster())
-                      ((Monster*)targ)->ts.Liberate((Monster*)targ,this);  
-                  }          
-         break;
-        case CA_BARDIC_MUSIC:
-          int16 range, bonus, song; 
-          range = SkillLevel(SK_PERFORM) + 2;
-          if (HasStati(SINGING)) {
+                    }
+        break;
+    case CA_BARDIC_MUSIC:
+        int16 range, bonus, song; 
+        range = SkillLevel(SK_PERFORM) + 2;
+        if (HasStati(SINGING)) {
             if (yn("You already have a song in progress. Cut it off?"))
-              RemoveStati(SINGING);
+                RemoveStati(SINGING);
             else
-              return;
-            }
-          if (m->FieldAt(x,y,FI_SILENCE))
-            {
-              IPrint("You can't sing in an area of magical silence.");
-              return;
-            }
-          if (isPlayer()) {
+                return;
+        }
+        if (m->FieldAt(x,y,FI_SILENCE)) {
+            IPrint("You can't sing in an area of magical silence.");
+            return;
+        }
+        if (isPlayer()) {
             thisp->MyTerm->LOption("Inspire Courage",BARD_COURAGE);
             if (AbilityLevel(ab) >= 3)
-              thisp->MyTerm->LOption("Fascination",BARD_FASCINATE);
+                thisp->MyTerm->LOption("Fascination",BARD_FASCINATE);
             if (AbilityLevel(ab) >= 5)
-              thisp->MyTerm->LOption("Countersong",BARD_COUNTER);
+                thisp->MyTerm->LOption("Countersong",BARD_COUNTER);
             if (AbilityLevel(ab) >= 7)
-              thisp->MyTerm->LOption("Inspire Competence",BARD_COMP);
+                thisp->MyTerm->LOption("Inspire Competence",BARD_COMP);
             if (AbilityLevel(ab) >= 9)
-              thisp->MyTerm->LOption("Hymn of the Phoenix Arisen",BARD_PHOENIX);
+                thisp->MyTerm->LOption("Hymn of the Phoenix Arisen",BARD_PHOENIX);
             if (AbilityLevel(ab) >= 10)
-              thisp->MyTerm->LOption("Mass Fascination",BARD_MASS);
+                thisp->MyTerm->LOption("Mass Fascination",BARD_MASS);
             if (AbilityLevel(ab) >= 11)
-              thisp->MyTerm->LOption("Spellbreaker Chant",BARD_SPELLBREAK);
-            
-            
+                thisp->MyTerm->LOption("Spellbreaker Chant",BARD_SPELLBREAK);
+
             song = (int16)thisp->MyTerm->LMenu(MENU_ESC|MENU_BORDER," -- Bardic Music -- ",WIN_MENUBOX,"bard");
             if (song == -1)
-              return;
-            }
-          else
-            song = pa;
-          if (!LoseFatigue(1,true))
-            return;
-          Timeout += 15;
-          
-          bonus = max(1,Mod(A_CHA));
-          if (isCharacter())
-            if (thisp->Level[1] || thisp->Level[2])
-              bonus = max(bonus,thisp->LevelAs(FIND("bard")));
-          
-          GainTempStati(SINGING,NULL,5+(max(0,Mod(A_CON))+SkillLevel(SK_PERFORM))*3,SS_MISC,
-            song,range,0);
-          switch (song) {
-            case BARD_COURAGE:
-            case BARD_COMP:
-              IDPrint("You begin an awesome, uplifting song.",
-                "The <Obj> sings an awe-inspiring song!"); break;
-            case BARD_PHOENIX:
-              IDPrint("You begin a rousing, vital ballad.",
-                "The <Obj> sings an awe-inspiring song!"); break;
-            case BARD_SPELLBREAK:
-              IDPrint("You begin a sonorous, rhythmic chant.",
-                "The <Obj> sings an awe-inspiring song!"); break;
-            case BARD_FASCINATE:
-            case BARD_MASS:
-              IDPrint("You begin a lilting, hypnotic melody.",
-                "The <Obj> sings an awe-inspiring song!"); break;
-            case BARD_COUNTER:
-              IDPrint("You begin singing an aggressive, engulfing crescendo.",
-                "The <Obj> sings an awe-inspiring song!"); break;
-            }
-          switch(song) {
-            case BARD_COURAGE:
-              MapIterate(m,c,i)
-                if (c->isCreature() && c != this)
-                  if (dist(x,y,c->x,c->y) <= range)
-                    if (!c->isHostileTo(this))
-                      {
-                        if (c->HasMFlag(M_DEAF) || c->HasMFlag(M_MINDLESS) ||
-                             m->FieldAt(c->x,c->y,FI_SILENCE))
-                          continue;
-                        c->IDPrint("You feel valourous!",
-                                   "The <Obj> seems inspired!", c);
-                        c->RemoveStati(AFRAID);
-                        c->GainPermStati(IMMUNITY,this,SS_SONG,AD_FEAR);
-                        c->GainPermStati(ADJUST_MOR,this,SS_SONG,A_HIT,bonus);
-                        c->GainPermStati(ADJUST_MOR,this,SS_SONG,A_DMG,bonus);
-                      }
-             break;
-            case BARD_COUNTER:
-            case BARD_SPELLBREAK:
-              /* This is handled in Creature::SAttack & Creature::Cast. */
-             break;
-            case BARD_PHOENIX:
-              MapIterate(m,c,i)
-                if (c->isCreature())
-                  if (dist(x,y,c->x,c->y) <= range)
-                    if (!c->isHostileTo(this))
-                      {
-                        if (c->HasMFlag(M_DEAF) || c->HasMFlag(M_MINDLESS) ||
-                             m->FieldAt(c->x,c->y,FI_SILENCE))
-                          continue;
-                        c->IDPrint("You feel uplifted!",
-                                    "The <Obj> seems revitalized!", c);                                 
-                        c->GainPermStati(RESIST,this,SS_SONG,AD_FIRE,range-2);
-                        c->GainPermStati(ADJUST_CIRC,this,SS_SONG,A_FAT,6);
-                      }
-             break;
-            case BARD_FASCINATE:
-              GetTarget:
-              c = (Creature*) thisp->MyTerm->ChooseTarget(NULL,T_CREATURE);
-              if (!c)
                 return;
-              if (!c->isCreature())    
+        } else
+            song = pa;
+        if (!LoseFatigue(1,true))
+            return;
+        Timeout += 15;
+
+        bonus = max(1,Mod(A_CHA));
+        if (isCharacter())
+            if (thisp->Level[1] || thisp->Level[2])
+                bonus = max(bonus,thisp->LevelAs(FIND("bard")));
+
+        GainTempStati(SINGING,NULL,5+(max(0,Mod(A_CON))+SkillLevel(SK_PERFORM))*3,SS_MISC,song,range,0);
+
+        switch (song) {
+        case BARD_COURAGE:
+        case BARD_COMP:
+            IDPrint("You begin an awesome, uplifting song.",
+                "The <Obj> sings an awe-inspiring song!"); break;
+        case BARD_PHOENIX:
+            IDPrint("You begin a rousing, vital ballad.",
+                "The <Obj> sings an awe-inspiring song!"); break;
+        case BARD_SPELLBREAK:
+            IDPrint("You begin a sonorous, rhythmic chant.",
+                "The <Obj> sings an awe-inspiring song!"); break;
+        case BARD_FASCINATE:
+        case BARD_MASS:
+            IDPrint("You begin a lilting, hypnotic melody.",
+                "The <Obj> sings an awe-inspiring song!"); break;
+        case BARD_COUNTER:
+            IDPrint("You begin singing an aggressive, engulfing crescendo.",
+                "The <Obj> sings an awe-inspiring song!"); break;
+        }
+        switch(song) {
+        case BARD_COURAGE:
+            MapIterate(m,c,i)
+                if (c->isCreature() && c != this)
+                    if (dist(x,y,c->x,c->y) <= range)
+                        if (!c->isHostileTo(this)) {
+                            if (c->HasMFlag(M_DEAF) || c->HasMFlag(M_MINDLESS) ||
+                                m->FieldAt(c->x,c->y,FI_SILENCE))
+                                continue;
+                            c->IDPrint("You feel valourous!",
+                                "The <Obj> seems inspired!", c);
+                            c->RemoveStati(AFRAID);
+                            c->GainPermStati(IMMUNITY,this,SS_SONG,AD_FEAR);
+                            c->GainPermStati(ADJUST_MOR,this,SS_SONG,A_HIT,bonus);
+                            c->GainPermStati(ADJUST_MOR,this,SS_SONG,A_DMG,bonus);
+                        }
+            break;
+        case BARD_COUNTER:
+        case BARD_SPELLBREAK:
+            /* This is handled in Creature::SAttack & Creature::Cast. */
+            break;
+        case BARD_PHOENIX:
+            MapIterate(m,c,i)
+                if (c->isCreature())
+                    if (dist(x,y,c->x,c->y) <= range)
+                        if (!c->isHostileTo(this)) {
+                            if (c->HasMFlag(M_DEAF) || c->HasMFlag(M_MINDLESS) || m->FieldAt(c->x,c->y,FI_SILENCE))
+                                continue;
+                            c->IDPrint("You feel uplifted!", "The <Obj> seems revitalized!", c);                                 
+                            c->GainPermStati(RESIST,this,SS_SONG,AD_FIRE,range-2);
+                            c->GainPermStati(ADJUST_CIRC,this,SS_SONG,A_FAT,6);
+                        }
+            break;
+        case BARD_FASCINATE:
+GetTarget:
+            c = (Creature*) thisp->MyTerm->ChooseTarget(NULL,T_CREATURE);
+            if (!c)
+                return;
+            if (!c->isCreature())    
                 goto GetTarget;          
-              if (dist(x,y,c->x,c->y) > range)
+            if (dist(x,y,c->x,c->y) > range)
                 goto GetTarget;
-              if (c->HasMFlag(M_DEAF) || c->HasMFlag(M_MINDLESS) ||
-                  m->FieldAt(c->x,c->y,FI_SILENCE) ||
-                  c->ResistLevel(AD_PLYS) == -1 || dist(x,y,c->x,c->y) > range)
-                {
-                  c->IDPrint("You are unaffected.","The <Obj> is unaffected.",c);
-                  break;
-                }
-              if (!c->SavingThrow(WILL,10+AbilityLevel(CA_BARDIC_MUSIC)/2+Mod(A_CHA),SA_ENCH|SA_PARA))
-                {
-                  c->IDPrint("You are transfixed by the music!",
-                          "The <Obj> is transfixed by the music!",c);
-                  c->GainPermStati(PARALYSIS,this,SS_SONG,1);
-                }
-              else
-                {
-                  c->IDPrint("You resist the song's effects.",
-                              "The <Obj> resists the song's effects.",c);
-                  RemoveStati(SINGING);
-                }
-             break;
-            case BARD_MASS:
-              MapIterate(m,c,i) {
+            if (c->HasMFlag(M_DEAF) || c->HasMFlag(M_MINDLESS) || m->FieldAt(c->x,c->y,FI_SILENCE) ||
+                c->ResistLevel(AD_PLYS) == -1 || dist(x,y,c->x,c->y) > range) {
+                c->IDPrint("You are unaffected.","The <Obj> is unaffected.",c);
+                break;
+            }
+            if (!c->SavingThrow(WILL,10+AbilityLevel(CA_BARDIC_MUSIC)/2+Mod(A_CHA),SA_ENCH|SA_PARA)) {
+                c->IDPrint("You are transfixed by the music!",
+                    "The <Obj> is transfixed by the music!",c);
+                c->GainPermStati(PARALYSIS,this,SS_SONG,1);
+            } else {
+                c->IDPrint("You resist the song's effects.",
+                    "The <Obj> resists the song's effects.",c);
+                RemoveStati(SINGING);
+            }
+            break;
+        case BARD_MASS:
+            MapIterate(m,c,i) {
                 if (!c->isCreature())    
-                  continue;          
+                    continue;          
                 if (dist(x,y,c->x,c->y) > range)
-                  continue;
+                    continue;
                 if (!c->isHostileTo(this))
-                  continue;
+                    continue;
                 if (!(c->Perceives(this) & (PER_VISUAL|PER_INFRA))) {
-                  if (XPerceives(c))
-                    IPrint("The <Obj> cannot see you, and is thus unaffected.");
-                  continue;
-                  }
+                    if (XPerceives(c))
+                        IPrint("The <Obj> cannot see you, and is thus unaffected.");
+                    continue;
+                }
                 if (c->HasMFlag(M_DEAF) || c->HasMFlag(M_MINDLESS) || 
                     m->FieldAt(c->x,c->y,FI_SILENCE) ||
                     c->ResistLevel(AD_PLYS) == -1 || dist(x,y,c->x,c->y) > range)
-                  {
+                {
                     c->IDPrint("You are unaffected.","The <Obj> is unaffected.",c);
                     continue;
-                  }
-                if (!c->SavingThrow(WILL,10+AbilityLevel(CA_BARDIC_MUSIC)/2+Mod(A_CHA),SA_ENCH|SA_PARA))
-                  {
-                    c->IDPrint("You are transfixed by the music!",
-                            "The <Obj> is transfixed by the music!",c);
-                    c->GainPermStati(PARALYSIS,this,SS_SONG,1);
-                  }
-                else
-                  {
-                    c->IDPrint("You resist the song's effects.",
-                                "The <Obj> resists the song's effects.",c);
-                    RemoveStati(SINGING);
-                  }
                 }
-             break;
-            case BARD_COMP:
-              MapIterate(m,c,i)
+                if (!c->SavingThrow(WILL,10+AbilityLevel(CA_BARDIC_MUSIC)/2+Mod(A_CHA),SA_ENCH|SA_PARA)) {
+                    c->IDPrint("You are transfixed by the music!",
+                        "The <Obj> is transfixed by the music!",c);
+                    c->GainPermStati(PARALYSIS,this,SS_SONG,1);
+                } else {
+                    c->IDPrint("You resist the song's effects.",
+                        "The <Obj> resists the song's effects.",c);
+                    RemoveStati(SINGING);
+                }
+            }
+            break;
+        case BARD_COMP:
+            MapIterate(m,c,i)
                 if (c->isCreature() && c != this)
-                  if (dist(x,y,c->x,c->y) <= range)
-                    if (!c->isHostileTo(this))
-                      {
-                        if (c->HasMFlag(M_DEAF) || c->HasMFlag(M_MINDLESS))
-                          continue;
-                        c->IPrint("You feel skillful!",
-                                  "The <Obj> takes on a determined look!", c);
-                        c->GainPermStati(ADJUST_COMP,this,SS_SONG,A_HIT,bonus);
-                        c->GainPermStati(ADJUST_COMP,this,SS_SONG,A_SPD,bonus*3);
-                        c->GainPermStati(ADJUST_COMP,this,SS_SONG,A_DEF,bonus*2);
-                        c->GainPermStati(ADJUST_COMP,this,SS_SONG,A_SAV,bonus);
-                      }
-               break;
-            default:
-              IPrint("That bardic music facet isn't implemented yet."); 
-            }
-         return;
-        case CA_TURNING:
-        case CA_GREATER_TURNING:
-        case CA_COMMAND:
-          e.Clear();
-          e.EParam = pa;
-          e.AType = ab;
-          e.EActor = this;
-          e.vDmg = SumStatiMag(ab == CA_COMMAND ? COMMAND_ABILITY : TURN_ABILITY,pa);                            
-          ReThrow(EV_TURNING,e);
-         break;
-        case CA_PHASE: 
-          Throw(EV_PHASE,this);
-         return;
-        case CA_DWARVEN_FOCUS:
-          targ = thisp->MyTerm->ChooseTarget();
-          if (targ == NULL || targ == this)
+                    if (dist(x,y,c->x,c->y) <= range)
+                        if (!c->isHostileTo(this)) {
+                            if (c->HasMFlag(M_DEAF) || c->HasMFlag(M_MINDLESS))
+                                continue;
+                            c->IPrint("You feel skillful!", "The <Obj> takes on a determined look!", c);
+                            c->GainPermStati(ADJUST_COMP,this,SS_SONG,A_HIT,bonus);
+                            c->GainPermStati(ADJUST_COMP,this,SS_SONG,A_SPD,bonus*3);
+                            c->GainPermStati(ADJUST_COMP,this,SS_SONG,A_DEF,bonus*2);
+                            c->GainPermStati(ADJUST_COMP,this,SS_SONG,A_SAV,bonus);
+                        }
             break;
-          if (!targ->isCreature())
-            {
-              IPrint("There is no honour in slaying inanimate opponents.");
-              break;
-            }
-          if (ChallengeRating() < ((Creature*)targ)->ChallengeRating())
-            {
-              IPrint("That's hardly a worthy foe for you!");
-              break;
-            }
-          
-          if (HasStati(DWARVEN_FOCUS))
-            {
-              IPrint(GetStatiObj(DWARVEN_FOCUS) ? "You already have a focus at this time." :
-                                                  "You need to rest before choosing another focus.");
-              break;
-            }
-          GainPermStati(DWARVEN_FOCUS,targ,SS_MISC,0,0,0);
-          targ->Flags |= F_HILIGHT;
-          IPrint("You swear a vow to slay the <Obj>.",targ);
-         break;
-        case CA_WHOLENESS_OF_BODY:
-          if (cHP == mHP+Attr[A_THP])
-            {
-              IPrint("You're already fully healed.");
-              return;
-            }
-          if (!LoseFatigue(1,true))
-            return;
-          cHP = min(mHP+Attr[A_THP],cHP+TotalLevel()*3);
-          IPrint("Your wounds heal<Str>.", (cHP == mHP+Attr[A_THP]) ? " fully" : "");
-          IDPrint(NULL,"The <Obj>'s wounds heal<Str>.", this,
-            (cHP == mHP+Attr[A_THP]) ? " fully" : "");
-         break;      
-        case CA_FLURRY_OF_BLOWS:
-          if (HasStati(FLURRYING))
-            {
-              IPrint("You're already performing a flurry.");
-              return;
-            }
-          if (!LoseFatigue(1,true))
-            return;
-          GainTempStati(FLURRYING,NULL,10+max(0,Mod(A_CON)),SS_MISC);
-          return;   
-        case CA_WILD_SHAPE:
-          if (isPlayer())
-            thisp->WildShape(); 
-         break;
-        case CA_SPECIES_AFFINITY:
-          UseSkill(SK_ANIMAL_EMP);
-         break;
-        case CA_ARCANE_TRICKERY:
-          int16 sp;
-          if (!HasStati(SPEC_TIMEOUT,CA_ARCANE_TRICKERY))
-            GainPermStati(SPEC_TIMEOUT,NULL,SS_MISC,0,0);
-          i = GetStatiMag(SPEC_TIMEOUT,CA_ARCANE_TRICKERY);
-          if (i >= 3)
-            {
-              IPrint("You've already expended all your uses of Arcane " \
-                "Trickery for the day.");
-              return;
-            }
-
-          ASSERT(isPlayer());
-          sp = thisp->MyTerm->SpellManager(SM_CAST|SM_TRICKERY);
-          if (sp == -1)
-            return;
-          SetStatiMag(SPEC_TIMEOUT,CA_ARCANE_TRICKERY,NULL,i+1);
-          
-          e.Clear();
-          e.EActor = this;
-          e.eID = theGame->SpellID(sp);
-          e.isArcaneTrickery = true;
-          if (!thisp->MyTerm->EffectPrompt(e,TEFF(e.eID)->ef.qval |
-                ((MMFeats(sp) & MM_PROJECT) ? Q_DIR : 0)))
-            break;
-          if (Spells[sp] & SP_INNATE) 
-            ReThrow(EV_INVOKE,e);
-          else 
-            ReThrow(EV_CAST,e);
-          return;
-        case CA_ANCESTRAL_MEMORY:
-          if (HasStati(ANC_MEM))
-            {
-              IPrint("You're already in an ancestral trance.");
-              return;
-            }
-          for (i=1;i!=SK_LAST;i++)
-            if (SkillInfo[i].imp)
-              thisp->MyTerm->LOption(SkillInfo[i].name,
-                                     SkillInfo[i].sk,
-                                     DescribeSkill(SkillInfo[i].sk));
-          j = (int16)thisp->MyTerm->LMenu(MENU_SORTED|MENU_3COLS|MENU_DESC|MENU_BORDER,
-                  "Choose a skill to augment:",WIN_MENUBOX,"help::skills");
-          if (j == -1)
-            return;
-          if (!LoseFatigue(2,true))
-            return;
-          IDPrint("You center yourself and call upon the talents of "
-                  "those who came before you...", "The <Obj1> closes "
-                  "<his:Obj1> eyes and meditates for a period.", this);
-          GainTempStati(ANC_MEM,NULL, 30 + SkillLevel(SK_CONCENT)*5, SS_MISC,j,0,0,0); 
-         break;
-        case CA_FLAWLESS_DODGE:
-          if (!HasStati(FLAWLESS_DODGE))
-            GainPermStati(FLAWLESS_DODGE,NULL,SS_MISC,1,0);
-          else if (GetStatiMag(FLAWLESS_DODGE) >=
-                     AbilityLevel(CA_FLAWLESS_DODGE) + Mod(A_DEX))
-            { IPrint("You have no flawless dodges left today.");
-              break; }
-          else if (HasStati(FLAWLESS_DODGE,1))
-            { IPrint("You're already dodging.");
-              break; }
-          else 
-            SetStatiVal(FLAWLESS_DODGE,NULL,1);
-          IPrint("You drop into a dangerous, fluid pose...");
-         break;
-        case CA_STORYCRAFT:
-          CraftItem(CA_STORYCRAFT + ABIL_VAL);
-         break; 
-        case CA_WEAPONCRAFT:
-          CraftItem(CA_WEAPONCRAFT + ABIL_VAL);
-         break; 
         default:
-          IPrint("That ability isn't implemented yet.");
-      }
-  }
+            IPrint("That bardic music facet isn't implemented yet."); 
+        }
+        return;
+    case CA_TURNING:
+    case CA_GREATER_TURNING:
+    case CA_COMMAND:
+        e.Clear();
+        e.EParam = pa;
+        e.AType = ab;
+        e.EActor = this;
+        e.vDmg = SumStatiMag(ab == CA_COMMAND ? COMMAND_ABILITY : TURN_ABILITY,pa);                            
+        ReThrow(EV_TURNING,e);
+        break;
+    case CA_PHASE: 
+        Throw(EV_PHASE,this);
+        return;
+    case CA_DWARVEN_FOCUS:
+        targ = thisp->MyTerm->ChooseTarget();
+        if (targ == NULL || targ == this)
+            break;
+        if (!targ->isCreature()) {
+            IPrint("There is no honour in slaying inanimate opponents.");
+            break;
+        }
+        if (ChallengeRating() < ((Creature*)targ)->ChallengeRating()) {
+            IPrint("That's hardly a worthy foe for you!");
+            break;
+        }
+
+        if (HasStati(DWARVEN_FOCUS)) {
+            IPrint(GetStatiObj(DWARVEN_FOCUS) ? "You already have a focus at this time." :
+                "You need to rest before choosing another focus.");
+            break;
+        }
+        GainPermStati(DWARVEN_FOCUS,targ,SS_MISC,0,0,0);
+        targ->Flags |= F_HILIGHT;
+        IPrint("You swear a vow to slay the <Obj>.",targ);
+        break;
+    case CA_WHOLENESS_OF_BODY:
+        if (cHP == mHP+Attr[A_THP]) {
+            IPrint("You're already fully healed.");
+            return;
+        }
+        if (!LoseFatigue(1,true))
+            return;
+        cHP = min(mHP+Attr[A_THP],cHP+TotalLevel()*3);
+        IPrint("Your wounds heal<Str>.", (cHP == mHP+Attr[A_THP]) ? " fully" : "");
+        IDPrint(NULL,"The <Obj>'s wounds heal<Str>.", this,
+            (cHP == mHP+Attr[A_THP]) ? " fully" : "");
+        break;      
+    case CA_FLURRY_OF_BLOWS:
+        if (HasStati(FLURRYING)) {
+            IPrint("You're already performing a flurry.");
+            return;
+        }
+        if (!LoseFatigue(1,true))
+            return;
+        GainTempStati(FLURRYING,NULL,10+max(0,Mod(A_CON)),SS_MISC);
+        return;   
+    case CA_WILD_SHAPE:
+        if (isPlayer())
+            thisp->WildShape(); 
+        break;
+    case CA_SPECIES_AFFINITY:
+        UseSkill(SK_ANIMAL_EMP);
+        break;
+    case CA_ARCANE_TRICKERY:
+        int16 sp;
+        if (!HasStati(SPEC_TIMEOUT,CA_ARCANE_TRICKERY))
+            GainPermStati(SPEC_TIMEOUT,NULL,SS_MISC,0,0);
+        i = GetStatiMag(SPEC_TIMEOUT,CA_ARCANE_TRICKERY);
+        if (i >= 3) {
+            IPrint("You've already expended all your uses of Arcane " \
+                "Trickery for the day.");
+            return;
+        }
+
+        ASSERT(isPlayer());
+        sp = thisp->MyTerm->SpellManager(SM_CAST|SM_TRICKERY);
+        if (sp == -1)
+            return;
+        SetStatiMag(SPEC_TIMEOUT,CA_ARCANE_TRICKERY,NULL,i+1);
+
+        e.Clear();
+        e.EActor = this;
+        e.eID = theGame->SpellID(sp);
+        e.isArcaneTrickery = true;
+        if (!thisp->MyTerm->EffectPrompt(e,TEFF(e.eID)->ef.qval |
+            ((MMFeats(sp) & MM_PROJECT) ? Q_DIR : 0)))
+            break;
+        if (Spells[sp] & SP_INNATE) 
+            ReThrow(EV_INVOKE,e);
+        else 
+            ReThrow(EV_CAST,e);
+        return;
+    case CA_ANCESTRAL_MEMORY:
+        if (HasStati(ANC_MEM)) {
+            IPrint("You're already in an ancestral trance.");
+            return;
+        }
+        for (i=1;i!=SK_LAST;i++)
+            if (SkillInfo[i].imp)
+                thisp->MyTerm->LOption(SkillInfo[i].name,
+                SkillInfo[i].sk,
+                DescribeSkill(SkillInfo[i].sk));
+        j = (int16)thisp->MyTerm->LMenu(MENU_SORTED|MENU_3COLS|MENU_DESC|MENU_BORDER,
+            "Choose a skill to augment:",WIN_MENUBOX,"help::skills");
+        if (j == -1)
+            return;
+        if (!LoseFatigue(2,true))
+            return;
+        IDPrint("You center yourself and call upon the talents of "
+            "those who came before you...", "The <Obj1> closes "
+            "<his:Obj1> eyes and meditates for a period.", this);
+        GainTempStati(ANC_MEM,NULL, 30 + SkillLevel(SK_CONCENT)*5, SS_MISC,j,0,0,0); 
+        break;
+    case CA_FLAWLESS_DODGE:
+        if (!HasStati(FLAWLESS_DODGE))
+            GainPermStati(FLAWLESS_DODGE,NULL,SS_MISC,1,0);
+        else if (GetStatiMag(FLAWLESS_DODGE) >= AbilityLevel(CA_FLAWLESS_DODGE) + Mod(A_DEX)) {
+            IPrint("You have no flawless dodges left today.");
+            break;
+        } else if (HasStati(FLAWLESS_DODGE,1)) {
+            IPrint("You're already dodging.");
+            break;
+        } else 
+            SetStatiVal(FLAWLESS_DODGE,NULL,1);
+        IPrint("You drop into a dangerous, fluid pose...");
+        break;
+    case CA_STORYCRAFT:
+        CraftItem(CA_STORYCRAFT + ABIL_VAL);
+        break; 
+    case CA_WEAPONCRAFT:
+        CraftItem(CA_WEAPONCRAFT + ABIL_VAL);
+        break; 
+    default:
+        IPrint("That ability isn't implemented yet.");
+    }
+}
 
 bool Creature::UseLimitedFA()
   {
