@@ -2471,7 +2471,7 @@ Reselect:
     // Sum up all the room type weightings.
     weighting_sum = 0;
     for(i=0; RM_Weights[i*2+1]; i++)
-        weighting_sum += (int16)max(0, RM_Weights[i*2+1]);
+        weighting_sum += max(0, (int16)RM_Weights[i*2+1]);
 
     // If all room types are used up, free them all up for reuse.
     if (weighting_sum == 0) {
@@ -2479,6 +2479,9 @@ Reselect:
             if (theGame->GetPlayer(0)->WizardMode)
                 theGame->GetPlayer(0)->IPrint("The air seems to shift.");
             memset(usedInThisLevel,0,sizeof(usedInThisLevel));
+            /* Reset the weightings (which must be all marked invalid). */
+            TDUN(dID)->GetList(RM_WEIGHTS,RM_Weights,RM_LAST*2);
+            goto Reselect;
         } else {
             // None to use, none to reuse.  No recovery from this.
             Fatal("Complete failure to generate a room.");
@@ -2488,7 +2491,8 @@ Reselect:
     // Pick a room type, leave the selection index in 'i'.
     c = random(weighting_sum);
     for(i=0; RM_Weights[i*2+1]; i++) {
-        weight = (int16)max(0, RM_Weights[i*2+1]);
+        weight = max(0, (int16)RM_Weights[i*2+1]);
+        ASSERT(weight != -1)
         if (c < weight) {
             RM_WeightIndex = i*2;
             goto RM_Chosen;
