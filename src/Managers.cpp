@@ -2438,7 +2438,7 @@ void TextTerm::DisplayCharSheet()
           Message("You have no journal entries yet.");
         else {
           p->StoreLevelStats((uint8)m->Depth); 
-          String s = p->GetJournal() + p->GetLevelStats();
+          String s = p->GetLevelStats() + p->GetJournal();
           Box(WIN_SCREEN,BOX_WIDEBOX,EMERALD,GREY,XPrint(s));
         }
        break;

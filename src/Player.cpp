@@ -2768,7 +2768,7 @@ void Player::AddJournalEntry(const char* s)
       JournalInfo.bestItemVal = -1; 
     }
 
-    Journal = Journal + (when + where + stat + best + SC(s) + SC("\n"));
+    Journal = (when + where + stat + best + SC(s) + SC("\n")) + Journal;
 }
 
 /* pick up all items that would stack with something we are carrying */
