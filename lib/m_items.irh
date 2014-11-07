@@ -4003,7 +4003,7 @@ AI_GAUNTLETS Effect "Rust;gauntlet" : EA_GRANT
     Desc: "This magical item grants you total immunity to rust
     attacks (such as those from a Rust Monster or rust trap), water
     splashes (such as those from a Water Elemental or deep water) and
-    organic decay attacks (such as those from a Bornw Pudding or a decay
+    organic decay attacks (such as those from a Brown Pudding or a decay
     trap)."; }
   and EA_GENERIC
   { aval: AR_TOUCH;
