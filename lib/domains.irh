@@ -414,7 +414,8 @@ Domain "Knowledge" : 0
       Stati[EXTRA_SKILL,SK_KNOW_MYTH] at 1st level,
       Stati[EXTRA_SKILL,SK_KNOW_PLANES] at 1st level,
       Stati[EXTRA_SKILL,SK_KNOW_OCEANS] at 1st level,
-      Stati[EXTRA_SKILL,SK_KNOW_NATURE] at 1st level;
+      Stati[EXTRA_SKILL,SK_KNOW_NATURE] at 1st level,
+      Feat[FT_SCRIBE_SCROLL] at 1st level;
     Spells:
       $"Read Magic",
       $"Identify",
