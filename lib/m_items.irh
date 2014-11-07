@@ -4004,7 +4004,8 @@ AI_GAUNTLETS Effect "Rust;gauntlet" : EA_GRANT
     attacks (such as those from a Rust Monster or rust trap), water
     splashes (such as those from a Water Elemental or deep water) and
     organic decay attacks (such as those from a Brown Pudding or a decay
-    trap)."; }
+    trap).  They can also be used as a rusting grasp up to three times
+	per day."; }
   and EA_GENERIC
   { aval: AR_TOUCH;
     xval: AD_RUST; pval: 8d6; Purpose: EP_ATTACK;
