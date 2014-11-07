@@ -1832,10 +1832,12 @@ inline String & DescribeResource(rID xID)
 
 bool TextTerm::EffectPrompt(EventInfo &e,uint16 fl,bool is_look, const char* PromptText) {
     int16 i, j, ch, t, dist, best, bestd, typ, mod, tx, ty, range;
-    Thing *th, *cr; hObj hi; String Prompt; Item *wp;
-    bool first = true, cycled; 
+    Thing *th, *cr = NULL;
+    hObj hi;
+    String Prompt;
+    Item *wp;
+    bool first = true, cycled = false; 
     bool isEngulfed = p->HasStati(ENGULFED);
-    cr = NULL; cycled = false;
 
     if (fl == 0 && e.eID && RES(e.eID)->Type == T_TEFFECT)
         fl = TEFF(e.eID)->ef.qval;
@@ -1979,41 +1981,56 @@ SelectItem:
             m->Update(cr->x,cr->y);
             PutGlyph(cr->x,cr->y, (GetGlyph(cr->x,cr->y) & 0xFF) | 0xF000);
         }
-        SetWin(WIN_MESSAGE); Clear();
+
+        SetWin(WIN_MESSAGE);
+        Clear();
         linenum = linepos = 0;
         if (cr && (mod == Q_LOC || mod == Q_TAR)) {
+            int cy0 = cy, wcy = 0;
+
+            /* Print the name. */
             if (p->Perceives(cr) & (~PER_SHADOW)) {
                 Write(cr->Name(NA_CAPS|NA_A|NA_LONG|NA_MECH|(is_look ? NA_STATI : 0)));
                 if (cr->isCreature() && ((Creature*)cr)->StateFlags & MS_HAS_REACH)
                     Write(" (reach)");
-            }
-            else if (p->Perceives(cr) & PER_SHADOW)
+            } else if (p->Perceives(cr) & PER_SHADOW)
                 Write(cr->Name(NA_CAPS|NA_A|NA_SHADOW));
             else
                 goto CantSee;
-            if ((p->HasStati(LIFESIGHT)) && cr->isCreature()
-                && p->Perceives(cr)) 
-                Write(Format(" (%d/%d %d/%d)",
-                ((Creature*)cr)->cHP,
-                ((Creature*)cr)->mHP+((Creature*)cr)->Attr[A_THP],
-                ((Creature*)cr)->cMana(),
-                ((Creature*)cr)->tMana()
-                ));
-            Write(0, 1, "  ");
 
+            /* Print lifesight information. */
+            if ((p->HasStati(LIFESIGHT)) && cr->isCreature() && p->Perceives(cr)) 
+                Write(Format(" (%d/%d %d/%d)",
+                    ((Creature*)cr)->cHP,
+                    ((Creature*)cr)->mHP+((Creature*)cr)->Attr[A_THP],
+                    ((Creature*)cr)->cMana(),
+                    ((Creature*)cr)->tMana()
+                    ));
+
+            /* Print riding/wielding information. */
+            if (wcy == cy - cy0)
+                Write(0, ++wcy, "  ");
+            else {
+                Write(" ");
+                wcy += cy - cy0;
+            }
             if (cr->HasStati(MOUNTED) && (p->Perceives(cr) & (~PER_SHADOW)))
-                Write(Format("(riding %s)",(const char*)cr->GetStatiObj(MOUNTED)->
-                Name(NA_A|NA_LONG|NA_MECH|(is_look ? NA_STATI : 0))));
+                Write(Format("(riding %s)",(const char*)cr->GetStatiObj(MOUNTED)->Name(NA_A|NA_LONG|NA_MECH|(is_look ? NA_STATI : 0))));
             else if (cr->HasStati(MOUNTED) && (p->Perceives(cr) & PER_SHADOW))
                 Write("(riding something)");
             if (cr->isCreature() && (wp=((Creature*)cr)->InSlot(SL_WEAPON)) && p->Perceives(wp))
                 Write(XPrint("(wielding a <Obj>)", wp));
 
-            Write(0,2,"");
+            if (wcy == cy - cy0)
+                Write(0, ++wcy, "");
+            else {
+                Write(" ");
+                wcy += cy - cy0;
+            }
             if (p->Opt(OPT_SHOW_HOW_SEE) && p != cr) {
                 int per = p->Perceives(cr); 
                 bool first_mode = true;
-                Write(0,2,XPrint("<14>Seen With:<7> "));
+                Write(XPrint("<14>Seen With:<7> "));
                 for (int i=1; i<=PER_TRACK ; i<<=1) {
                     if (per & i) {
                         if (!first_mode)

@@ -104,7 +104,7 @@ const char* __XPrint(Player *POV, const char *msg,va_list args)
         break;
       if (*cc == '<' && (cc == msg || (*(cc-1) != LITERAL_CHAR))) {
         tag = Tag1; ts = cc; cc++; Tag2[0] = 0;
-        Repeat:
+Repeat:
         i = 0;
         while(*cc && *cc != ':' && *cc != '>' && i!=23)
           { *tag++ = tolower(*cc++); i++; }
