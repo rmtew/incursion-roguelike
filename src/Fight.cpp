@@ -5124,7 +5124,7 @@ AfterEffects:
             {
               int16 lMana;
               lMana = Dice::Roll((int8)e.vDmg,8);
-              LoseMana(lMana,true);
+              e.EVictim->LoseMana(lMana,true);
               VPrint(e,"Mana bleeds out of your chi gates!",
                   "Mana bleeds out of the <EVictim>'s chi gates!");
             }
