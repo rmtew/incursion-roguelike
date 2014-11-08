@@ -2397,7 +2397,7 @@ Class "Rogue"
       __<10>Trick Magic:<2> A Rogue possessed of this ability can use her
       Bluff and Use Magic skills in conjunct to 'trick' a magic item normally
       reserved for a specific race, class or alignment into accepting her as a
-      legitimite wielder. The strength of this ability is based on the sum of
+      legitimate wielder. The strength of this ability is based on the sum of
       her Use Magic and Bluff skill ratings, with a total of 30 or higher
       allowing her to use nearly any item she might find.\n
       __<10>Skill Mastery:<2> This rogue has achieved such a transcendant mastery
@@ -2569,7 +2569,7 @@ Class "Rogue"
                "A Rogue possessed of this ability can use her
                 Bluff and Use Magic skills in conjunct to 'trick' a magic item normally
                 reserved for a specific race, class or alignment into accepting her as a
-                legitimite wielder. The strength of this ability is based on the sum of
+                legitimate wielder. The strength of this ability is based on the sum of
                 her Use Magic and Bluff skill ratings, with a total of 30 or higher
                 allowing her to use nearly any item she might find.");
           if (!EActor->HasAbility(CA_SKILL_MASTERY))
