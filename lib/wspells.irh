@@ -3,7 +3,7 @@
 /* ============================================================= 
  *                       Arcane Spellbooks
  * =============================================================
- * Abj: Etherial Wardings, Resistance of Scabracities, Mystic
+ * Abj: Ethereal Wardings, Resistance of Scabracities, Mystic
           Authority, Phylactery against Perils, Spells of Sealinge
  * Arc: Tome of Magic, Unearthed Arcana, Mastery of Matter,
           Words of Power
@@ -2542,7 +2542,7 @@ Wizard / Scroll Spell "See Invisibility" : EA_INFLICT
     On Event MSG_STATINAME "See Invis" / "SI"; 
     Desc: "Casting this spell allows the caster to see invisible 
       creatures normally; it also renders visible creatures on
-      the etherial plane, who normally cannot be seen by observers
+      the ethereal plane, who normally cannot be seen by observers
       from the material plane.";
   }
 
@@ -5345,7 +5345,7 @@ Wizard / Scroll Spell "Gaseous Form" : EA_NOTIMP
 Wizard / Scroll Spell "Blink" : EA_INFLICT
   { SC_WEA; IS_A_BUFF(COST_3X); Level: 3; 
     xval: MISS_CHANCE; yval: MISS_FULL; pval: 50; 
-    Desc: "Causes the caster to flicker in and out of the etherial
+    Desc: "Causes the caster to flicker in and out of the ethereal
       plane, giving attacks against him a 50~ miss chance. Creatures
       that can see invisible or are using a ghost touch weapon ssuffer only a 
 	  25~ miss chance, and creatures who can do both do not suffer 
@@ -7219,7 +7219,7 @@ pray for whatever reason -- but the risks are grave indeed,
 including insanity (i.e., potentially lethal damage to mental
 attributes), summoning of hostile creatures and other effects.
   The caster may choose to contact an inner (elemental) plane,
-the etherial plane, the astral plane or an outer plane -- the
+the ethereal plane, the astral plane or an outer plane -- the
 risks and rewards both increase in the order those planes are
 listed. 
   Each casting of this spell costs the caster five mana permanently.

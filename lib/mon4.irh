@@ -3563,7 +3563,7 @@ Monster "phase spider" : MA_SPIDER, MA_OUTSIDER
     Immune: DF_STUK;
     Flags: M_DEAF, M_NOHANDS, M_CARNI, M_SKIRMISH;
     Desc: "As large as a small wagon, the phase spider is a fearsome
-      arachnid with the ability to slip in and out of the etherial
+      arachnid with the ability to slip in and out of the ethereal
       plane at will. Its light grey body is covered with deep navy
       splotches and markings, the pattern unique to each individual
       spider.";

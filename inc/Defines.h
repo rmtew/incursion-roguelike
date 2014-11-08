@@ -234,7 +234,7 @@ typedef signed long       hObj;
 #define LUC LUCK
 
 #define F_SOLID          0x0001 /* Prevents Travel            */
-#define F_XSOLID         0x0002 /* Prevents Etherial Travel   */
+#define F_XSOLID         0x0002 /* Prevents Ethereal Travel   */
 #define F_INVIS          0x0004
 #define F_DELETE         0x0008 /* Marked for deletion        */
 #define F_UPDATE         0x0010 /* Glyph changed this turn    */

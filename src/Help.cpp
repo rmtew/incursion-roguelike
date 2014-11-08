@@ -2714,7 +2714,7 @@ String & Monster::Describe(Player *p)
           else if (S->Val == CA_PHASE)
             str += Format(s2,S->Mag == PHASE_ASTRAL ?
               "astral plane" : S->Mag == PHASE_ETHEREAL ?
-              "etherial plane" : "plane of shadow");
+              "ethereal plane" : "plane of shadow");
           else if (S->Val == CA_WEAPON_IMMUNITY) {
             s2 = S->Mag <= 1 ? "mundane" :
               Format("%+d or lower",S->Mag-1);
@@ -3255,7 +3255,7 @@ String & Monster::Describe(Player *p)
                 else if (tt->Stati[i].Val == CA_PHASE)
                   str += Format(s2,tt->Stati[i].Mag == PHASE_ASTRAL ?
                     "astral plane" : tt->Stati[i].Mag == PHASE_ETHEREAL ?
-                    "etherial plane" : "plane of shadow");
+                    "ethereal plane" : "plane of shadow");
                 else
                   str += Format(s2,tt->Stati[i].Mag);
                 }

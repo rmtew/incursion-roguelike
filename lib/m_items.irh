@@ -1546,7 +1546,7 @@ AI_POTION Effect "See Invisibility;potion" : EA_INFLICT
     On Event MSG_STATINAME "See Invis" / "SI"; 
     Desc: "Drinking this potion allows the imbiber to see invisible 
       creatures normally; it also renders visible creatures on
-      the etherial plane, who normally cannot be seen by observers
+      the ethereal plane, who normally cannot be seen by observers
       from the material plane.";
     On Event 
       MSG_CAST

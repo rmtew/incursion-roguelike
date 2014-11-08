@@ -4647,7 +4647,7 @@ EvReturn Creature::Turn(EventInfo &e)
 EvReturn Creature::Phase(EventInfo &e)
   {               
     const char * Planes[8] = { "material plane", "astral plane", 
-      "etherial plane", "plane of shadow", "negative energy plane",
+      "ethereal plane", "plane of shadow", "negative energy plane",
       "positive energy plane", "???", "???" };       
     int16 i; bool vis[MAX_PLAYERS];
     int8 phase_type = (int8)AbilityLevel(CA_PHASE);

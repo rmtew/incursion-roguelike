@@ -998,7 +998,7 @@ Race "Elf;race"
       really true; even the elves themselves often have no understanding
       of the overall design behind their goals and actions.
       \n__Perhaps humanity is wise to be fearful, as well as fascinated,
-      by these strange and etherial beings. 
+      by these strange and ethereal beings. 
       \n\n 
       <10>ELVEN RACIAL SKILLS<2>\n
       __The elves are a civilized peoples with great regard for culture
@@ -1043,7 +1043,7 @@ Race "Elf;race"
       that she gains a +2 awe bonus to Defense versus foes that are not
       blind or mindless, and she radiates light and warmth with an effect
       identical to the <9>faerie fire<2> spell. Most importantly, however,
-      a manifest elf exists in all three worlds (corporeal, etherial and
+      a manifest elf exists in all three worlds (corporeal, ethereal and
       astral) at once, and thus can strike (and be struck by) incorporeal
       creatures with full effect.\n
       __Manifestation only lasts for a short time (1d4 rounds, plus one
@@ -1116,7 +1116,7 @@ Race "Elf;race"
       the ways of humanity and blaming mankind for the travails of their
       race.\n
       __Twilight elves are born with more of Faerie in their veins then most,
-      literally slipping in and out of the etherial plane as a natural facet
+      literally slipping in and out of the ethereal plane as a natural facet
       of their existance, but vulnerable to the light of the sun and given
       over to periods of irrational behaviour."; 
     Skills: SK_KNOW_MAGIC, SK_MOVE_SIL, SK_LISTEN, SK_PERFORM;
