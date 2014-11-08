@@ -537,7 +537,7 @@ EvReturn Character::PickUp(EventInfo &e) {
     if(onPlane() != e.EItem->onPlane()) {
         TextVal PhaseDesc2[] = {
             { PHASE_MATERIAL, "material" },
-            { PHASE_ETHERIAL, "ethereal" },
+            { PHASE_ETHEREAL, "ethereal" },
             { PHASE_ASTRAL,   "astral" },
             { PHASE_SHADOW,   "in the Demiplane of Shadows" },
             { PHASE_NEGATIVE, "in the Negative Material Plane" },

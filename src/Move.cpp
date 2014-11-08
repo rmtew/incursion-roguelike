@@ -1123,7 +1123,7 @@ RepeatPrompt:
     } 
 
     if (HasStati(INVIS) || HasStati(INVIS_TO) ||
-        onPlane() == PHASE_ETHERIAL)
+        onPlane() == PHASE_ETHEREAL)
         RippleCheck(3);
 
     /* Elves and drow sense secret doors just by walking past. */

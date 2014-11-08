@@ -649,7 +649,7 @@ void Creature::StatiOn(Status s) {
         // note fall-through
     case PHASED:
         Planeshift();
-        if (onPlane() == PHASE_ETHERIAL)
+        if (onPlane() == PHASE_ETHEREAL)
             RippleCheck(15);
         break;
     case POLYMORPH:

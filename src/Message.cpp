@@ -1161,7 +1161,7 @@ String & Item::Name(int16 Flags)
 
   TextVal PhaseDesc[] = {
     { PHASE_MATERIAL, "material " },
-    { PHASE_ETHERIAL, "ethereal " },
+    { PHASE_ETHEREAL, "ethereal " },
     { PHASE_ASTRAL,   "astral " },
     { PHASE_SHADOW,   "umbral " },
     { PHASE_NEGATIVE, "negative-material " },

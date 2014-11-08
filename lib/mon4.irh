@@ -742,7 +742,7 @@ Monster "succubus" : MA_DEMON
           A_GATE for 10% MA_DEMON (CR 15); 
     ABILITY(CA_INFRAVISION,6);
     ABILITY(CA_TELEPATHY,10);
-    ABILITY(CA_PHASE,PHASE_ETHERIAL);
+    ABILITY(CA_PHASE,PHASE_ETHEREAL);
     MAGIC_RES(25);
     Spells: $"charm person", $"friends", $"deeper darkness", $"desecrate",
             $"doom", $"suggestion", $"teleport", $"unholy blight", $"hypnotism", 
@@ -3543,7 +3543,7 @@ Monster "nightmare" : MA_QUADRUPED, MA_OUTSIDER
           A_BITE for 1d8+2 AD_PIERCE;
 	ABILITY(CA_INFRAVISION,6);
 	ABILITY(CA_PHASE,PHASE_ASTRAL);
-	ABILITY(CA_PHASE,PHASE_ETHERIAL);
+	ABILITY(CA_PHASE,PHASE_ETHEREAL);
     Feats: SK_LISTEN, SK_SPOT, SK_SEARCH,
         FT_ALERTNESS, FT_RUN;
     Flags: M_NATURAL, M_HERBI, M_NOHANDS, M_NO_CORPSE,
@@ -3556,7 +3556,7 @@ Monster "phase spider" : MA_SPIDER, MA_OUTSIDER
     CR: OPT_CR(4,5); HD: 5; Def: 13; Hit: +4; Mov: 150%; Spd: 120%;
     Str 17, Dex 17, Con 16, Int 7, Wis 13, Cha 10;
     Attk: A_BITE for 1d6 AD_PIERCE and AD_POIS (DC 15);
-	ABILITY(CA_PHASE,PHASE_ETHERIAL);
+	ABILITY(CA_PHASE,PHASE_ETHEREAL);
 	ABILITY(CA_INFRAVISION,6);
     Feats: FT_LIGHTNING_REFLEXES, SK_CLIMB, SK_MOVE_SIL, SK_SPOT,
       FT_CLOSE_QUARTERS_FIGHTER;

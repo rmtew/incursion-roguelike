@@ -506,7 +506,7 @@ uint16 Creature::Perceives(Thing *t, bool assertLOS)
   const bool t_HasStati_PARALYSIS = t->HasStati(PARALYSIS);
   const bool t_HasStati_HIDING = t->HasStati(HIDING);
   const bool t_HasStati_INVIS = t->HasStati(INVIS) || 
-              ((t->onPlane() == PHASE_ETHERIAL) && (onPlane() != PHASE_ETHERIAL)
+              ((t->onPlane() == PHASE_ETHEREAL) && (onPlane() != PHASE_ETHEREAL)
                  && !HasStati(MANIFEST));
   const bool t_HasStati_INVIS_TO = t->HasStati(INVIS_TO);
   const bool t_HasStati_ILLUMINATED = t->HasStati(ILLUMINATED);

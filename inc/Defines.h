@@ -2945,7 +2945,7 @@ typedef signed long       hObj;
   #define PHASE_MATERIAL     0
   #define PHASE_VORTEX       1
   #define PHASE_ASTRAL       2
-  #define PHASE_ETHERIAL     3
+  #define PHASE_ETHEREAL     3
   #define PHASE_SHADOW       4
   #define PHASE_NEGATIVE     5
 #define POLYMORPH     103

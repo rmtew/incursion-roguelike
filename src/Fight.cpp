@@ -7118,7 +7118,7 @@ EvReturn Creature::Death(EventInfo &e)
           else if (HasMFlag(M_ASTRAL))
             plane = PHASE_ASTRAL;
           else
-            plane = PHASE_ETHERIAL;
+            plane = PHASE_ETHEREAL;
           }
         else if (isMType(MA_OUTSIDER))
           plane = AbilityLevel(CA_PHASE);

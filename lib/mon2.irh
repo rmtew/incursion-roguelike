@@ -2081,7 +2081,7 @@ Monster "night hag" : MA_HAG, MA_OUTSIDER
           A_SEEM for $"human";
     ABILITY(CA_INFRAVISION,6);
     ABILITY(CA_WEAPON_IMMUNITY,+1);
-    ABILITY(CA_PHASE,PHASE_ETHERIAL);
+    ABILITY(CA_PHASE,PHASE_ETHEREAL);
     MAGIC_RES(75);
     Immune: DF_FIRE, DF_COLD, DF_FEAR, DF_SLEE;
     Feats: FT_ALERTNESS, FT_BLIND_FIGHT, FT_GUARDED_INVOCATION,
@@ -2147,7 +2147,7 @@ Monster "night hag" : MA_HAG, MA_OUTSIDER
       },
     EV_PHASE {
       hObj hHeart;
-      if (EActor->onPlane() == PHASE_ETHERIAL)
+      if (EActor->onPlane() == PHASE_ETHEREAL)
         return NOTHING;
       for (hHeart=EActor->FirstInv();hHeart;
               hHeart=EActor->NextInv())

@@ -668,7 +668,7 @@ Effect "quality::blinding" : EA_GRANT
   }
   
 Effect "quality::etherealness" : EA_INFLICT
-  { xval: PHASED; yval: PHASE_ETHERIAL; 
+  { xval: PHASED; yval: PHASE_ETHEREAL; 
     Flags: EF_ACTIVATE, EF_CANCEL, EF_PERMANANT, EF_3PERDAY;
     On Event POST(EV_EFFECT) {
       if (e.isActivation)

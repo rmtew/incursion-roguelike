@@ -159,7 +159,7 @@ void Creature::SetImage()
           !isMType(MA_WRAITH)) || pl->onPlane() != PHASE_MATERIAL)
         switch (onPlane())
           {
-            case PHASE_ETHERIAL:
+            case PHASE_ETHEREAL:
               Image = (Image & 0xF0FF) + (BROWN * 256);
             break;
             case PHASE_ASTRAL:
@@ -175,7 +175,7 @@ void Creature::SetImage()
               Image = (Image & 0xF0FF) + (SHADOW * 256);
             break;
           }
-      if (pl->Opt(OPT_HIGH_INVIS) && onPlane() == PHASE_ETHERIAL)
+      if (pl->Opt(OPT_HIGH_INVIS) && onPlane() == PHASE_ETHEREAL)
         if (!(Image & 0xF000))
           Image |= 0x1000;
       }
@@ -351,7 +351,7 @@ void Creature::MakeNoise(int16 radius)
 void Creature::RippleCheck(int16 range)
   {
     int16 cx, cy; Creature *cr;
-    if (HasStati(INVIS) || (onPlane() == PHASE_ETHERIAL))
+    if (HasStati(INVIS) || (onPlane() == PHASE_ETHEREAL))
       for (cx=x-range;cx!=(x+1+range);cx++)
         for (cy=y-range;cy!=(y+1+range);cy++)
           if (m && m->InBounds(cx,cy))
@@ -365,7 +365,7 @@ void Creature::RippleCheck(int16 range)
                   if (cr->HasStati(TRIED,SK_SPOT,this))
                     continue;
                   if (!HasStati(INVIS))
-                    if (cr->onPlane() == PHASE_ETHERIAL)
+                    if (cr->onPlane() == PHASE_ETHEREAL)
                       continue;
                   if (cr->SkillCheck(SK_SPOT,20,true)) {
                     IPrint("The <Obj> spots your ripple!", cr);
@@ -1306,7 +1306,7 @@ void Creature::DoTurn()
             }
             
     if (HasStati(INVIS) || HasStati(INVIS_TO) ||
-          onPlane() == PHASE_ETHERIAL)
+          onPlane() == PHASE_ETHEREAL)
       RippleCheck(3);
         
     if (isEngulfed)
@@ -2143,14 +2143,14 @@ int16 Creature::onPlane()
       return GetStatiVal(PHASED);
     if (HasMFlag(M_INCOR)) {
       if (isMType(MA_SPIRIT))
-        return PHASE_ETHERIAL;
+        return PHASE_ETHEREAL;
       if (isMType(MA_UNDEAD))
         return PHASE_NEGATIVE;
       if (HasMFlag(M_ASTRAL))
         return PHASE_ASTRAL;
       if (isMType(MA_VORTEX))
         return PHASE_VORTEX;
-      return PHASE_ETHERIAL;
+      return PHASE_ETHEREAL;
       }
     return PHASE_MATERIAL;
   }

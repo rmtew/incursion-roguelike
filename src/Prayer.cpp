@@ -790,7 +790,7 @@ int16* Creature::getTroubles()
           Creature *cr; int16 i;
           MapIterate(m,cr,i)
             if (cr->isCreature())
-              if (cr->onPlane() == PHASE_ETHERIAL ||
+              if (cr->onPlane() == PHASE_ETHEREAL ||
                   cr->HasStati(INVIS))
                 if (m->LineOfFire(x,y,cr->x,cr->y,cr) &&
                       cr->isHostileTo(this) && !Perceives(cr))
@@ -910,7 +910,7 @@ EvReturn Character::GiveAid(EventInfo &e)
             Creature *cr; int16 i;
             MapIterate(m,cr,i)
               if (cr->isCreature())
-                if (cr->onPlane() == PHASE_ETHERIAL ||
+                if (cr->onPlane() == PHASE_ETHEREAL ||
                     cr->HasStati(INVIS))
                   if (m->LineOfFire(x,y,cr->x,cr->y,cr) &&
                        cr->isHostileTo(this))

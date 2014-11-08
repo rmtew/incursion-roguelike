@@ -3820,7 +3820,7 @@ Priest Spell "Ethereal Jaunt" : EA_INFLICT
       of time. While ethereal, the caster is incorporeal and
       invisible with regard to creatures on the material plane, 
       but can interact physically with other ethereal creatures.";
-    xval: PHASED; yval: PHASE_ETHERIAL; 
+    xval: PHASED; yval: PHASE_ETHEREAL; 
     Flags: EF_CANCEL, EF_SHOWNAME; 
     On Event EV_MAGIC_HIT
       "You cross into the ethereal plane.",
@@ -4924,7 +4924,7 @@ Effect "Mark of Justice" : EA_INFLICT
       hObj cr;
       for (cr=EMap->FirstThing();cr;cr=EMap->NextThing())
         if (cr->isCreature() && cr->Perceives(EVictim))
-          if (cr->onPlane() == PHASE_ETHERIAL ||
+          if (cr->onPlane() == PHASE_ETHEREAL ||
               cr->HasStati(SEE_INVIS) || cr->HasMFlag(M_SEE_INVIS))
             {
               if (cr == GetHandle(EVictim))
@@ -4965,7 +4965,7 @@ Effect "Mark of Punishment" : EA_INFLICT
       hObj cr;
       for (cr=EMap->FirstThing();cr;cr=EMap->NextThing())
         if (cr->isCreature() && cr->Perceives(EVictim))
-          if (cr->onPlane() == PHASE_ETHERIAL || 
+          if (cr->onPlane() == PHASE_ETHEREAL || 
               cr->HasStati(SEE_INVIS) || cr->HasMFlag(M_SEE_INVIS))
             {
               if (cr == GetHandle(EVictim))
@@ -5394,7 +5394,7 @@ Priest Spell "Etherealness" : EA_INFLICT
       the spell. While ethereal, the caster is incorporeal and
       invisible with regard to creatures on the material plane, 
       but can interact physically with other ethereal creatures.";
-    xval: PHASED; yval: PHASE_ETHERIAL; 
+    xval: PHASED; yval: PHASE_ETHEREAL; 
     Flags: EF_CANCEL, EF_SHOWNAME, EF_PERMANANT, EF_LIM_MTYPE; 
     On Event EV_MAGIC_HIT
       "You cross into the ethereal plane.",
