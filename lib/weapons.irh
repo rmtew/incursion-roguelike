@@ -676,7 +676,7 @@ Item "kukri" : T_WEAPON
     Flags: WT_SLASHING, WT_SUPER_SNEAK; 
     Desc: "This weapon hails from exotic Northern lands, and features
       a blade that slants upward into a large, flat cutting surface.
-      It is often used by assasins."; }
+      It is often used by assassins."; }
 
 
 /************************************************************************\
@@ -807,7 +807,7 @@ Item "chakram" : T_WEAPON
     Desc: "The chakram is a hollow circular disc with a bladed edge,
       often with a stylized grip bar running through the center. It
       is used by certain monk groups, tribes in Ahavdi Dih and many
-      assasins' guilds."; }
+      assassins' guilds."; }
 
 Item "boomerang" : T_WEAPON
   { Image: brown GLYPH_WEAPON; Group: WG_THROWN | WG_EXOTIC;
@@ -879,8 +879,8 @@ Item "shuriken" : T_WEAPON
       they are so light, they have little force of impact and do not
       carry through the power of the thrower's strength; however, they
       are an ideal method for delivering poison, due to their speed.
-      Shuriken thus have a cultural association with assasins and
-      assasination."; }
+      Shuriken thus have a cultural association with assassins and
+      assassination."; }
 
 Item "tiger claws" : T_WEAPON
   { Image: purple GLYPH_WEAPON; Group: WG_SIMPLE | WG_MARTIAL | WG_LIGHT;
@@ -890,7 +890,7 @@ Item "tiger claws" : T_WEAPON
     Flags: WT_SLASHING, WT_SUPER_SNEAK, IT_PLURAL; 
     Desc: "Similar in make to contemporary brass knuckles, but
       with inch-long curved blades sprouting from each 'knuckle',
-      these weapons are favoured by theieves and assasins because
+      these weapons are favoured by theieves and assassins because
       their small size makes it easy to get them into places
       where weapons aren't supposed to be."; }
 
@@ -1015,7 +1015,7 @@ Item "hand crossbow" : T_BOW
     Fires: $"hand crossbow dart";
     Desc: "This weapon was created by the drow, and is only superficially
       similar to the human crossbows. It is an intricate mechanism that
-      projects a tiny metal dart at high speeds; as an assasin's weapon,
+      projects a tiny metal dart at high speeds; as an assassin's weapon,
       it lacks the power of normal crossbows, but its bolts are often
       coated with drow sleep poison. Because it has many precision parts
       that must stand up under stress, it must be made from mithril,

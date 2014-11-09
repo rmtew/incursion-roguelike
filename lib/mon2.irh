@@ -3373,7 +3373,7 @@ Template "half-fey" : TM_DESCENT for MA_HUMANOID
     
       While most nagas are concerned with discovering secrets, dark nagas
     are rather more interested in preserving the communal secrets of the
-    naga race. They are the assasins and spies of their species, operating
+    naga race. They are the assassins and spies of their species, operating
     from the shadows and answering to unseen lords and masters. They have
     a complex and ritualistic secret society of their own, to which they
     are fanatically loyal, and they follow arcane codes of honour dating
@@ -3504,7 +3504,7 @@ Monster "dark naga" : MA_NAGA, MA_SNAKE
     Stati[NONDETECTION,PER_TELE]; 
     Desc: "While most nagas are concerned with discovering secrets, dark nagas
     are rather more interested in preserving the communal secrets of the
-    naga race. They are the assasins and spies of their species, operating
+    naga race. They are the assassins and spies of their species, operating
     from the shadows and answering to unseen lords and masters. They have
     a complex and ritualistic secret society of their own, to which they
     are fanatically loyal, and they follow arcane codes of honour dating
