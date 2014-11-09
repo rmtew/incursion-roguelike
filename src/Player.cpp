@@ -1343,199 +1343,184 @@ NormalAttack:
   while(!Timeout);
 }
 
-void Player::UseItemMenu(const char *which, const char *haveno, int16 itype)
-{
-  EventInfo e; String str, desc; Item *it;
-  int16 ev,i,n,c; Item *iList[64];
-  rID eList[64], qID; 
-  Thing *th;
+void Player::UseItemMenu(const char *which, const char *haveno, int16 itype) {
+    EventInfo e;
+    String str, desc;
+    int16 ev, i, n, c = 0;
+    rID eList[64], qID; 
+    Item *iList[64], *it;
+    Thing *th;
 
-  e.Clear();
-  e.isItem = true;
-  e.EActor = this;
-  c=0;  
-  // ww: so far this only allows the *first* item on a square ...
-  for (th = m->FirstAt(x,y) ; th ; th = m->NextAt(x,y))
-    if (th->isItem()) {
-      it = (Item *)th;
-      if((isMType(MA_DEMON) || isMType(MA_LYCANTHROPE) ||
-            isMType(MA_DEVIL) || isMType(MA_UNDEAD))) {
-        if (it->Material() == MAT_SILVER ||
-            it->isBlessed())
-          continue;
-      }
-      if(onPlane() != PHASE_MATERIAL) 
-        if (!it->isGhostTouch())
-          continue; 
+    e.Clear();
+    e.isItem = true;
+    e.EActor = this;
 
-      if (it->isType(itype) || 
-          (itype == -1 && it->isActivatable()) ||
-          (itype == -2 && it->isEdible(this)) ||
-          (it->isType(T_FOUNTAIN) && itype == T_POTION) ||
-          (it->isType(T_STAFF) && itype == T_WAND)) {
+    // ww: so far this only allows the *first* item on a square ...
+    for (th = m->FirstAt(x,y); th; th = m->NextAt(x,y))
+        if (th->isItem()) {
+            it = (Item *)th;
+            if ((isMType(MA_DEMON) || isMType(MA_LYCANTHROPE) || isMType(MA_DEVIL) || isMType(MA_UNDEAD))) {
+                if (it->Material() == MAT_SILVER || it->isBlessed())
+                    continue;
+            }
+            if (onPlane() != PHASE_MATERIAL) 
+                if (!it->isGhostTouch())
+                    continue; 
 
-        desc = Format("(ground) %s",(const char*)it->Name(NA_LONG));
-        MyTerm->LOption(desc,c,NULL,it->Named.GetLength() ? 1 : 997);
-        iList[c] = it; eList[c] = it->eID; c++;
-        /* ww: otherwise you couldn't eat something on the
-         * ground unless you also had something in the pack
-         * *AND* the thing on the ground would be added as
-         * a menu option to the next menu that came up! 
-         */ 
-      }
-    }
-    
-  RestartInvScan:
-  for (it = FirstInv() ; it ; it = NextInv())
-    if ((itype > 0 && it->isType(itype)) ||
-        (itype == -1 && it->isActivatable()) ||
-        (itype == -2 && it->isEdible(this)) ||
-        (it->Type == T_TOME && itype == T_SCROLL))
-    {
-      for (i=0;i!=c;i++)
-        if (iList[i] == it)
-          goto AlreadyDone;
-      if (itype == -1)
-        if ( !(it->IFlags & IF_WORN) &&
-            (it->isType(T_CLOAK) ||
-             it->isType(T_BOOTS) ||
-             it->isType(T_AMULET) ||
-             it->isType(T_RING) ||
-             it->isType(T_ROD) ||
-             it->isType(T_BRACERS) ||
-             it->isType(T_HELMET)) )
-          continue;
-      if (it->GetParent() == this)
-        MyTerm->LOption(it->Name(NA_LONG),c,NULL,it->Named.GetLength()?1:996);
-      else {
-        desc = Format("(in pack) %s",(const char*)it->Name(NA_LONG));
-        MyTerm->LOption(desc,c,NULL,it->Named.GetLength()?1:998);
-      }
-      iList[c] = it; eList[c] = it->eID; c++;
-      goto RestartInvScan;
-      AlreadyDone:;
-    }
-    
-  /* Non-Item Activations */
-  if (itype == -1)
-    StatiIterNature(this,ACTIVATION)
-      MyTerm->LOption(NAME(S->eID),c);
-      iList[c] = NULL; eList[c] = S->eID; c++;
-    StatiIterEnd(this)
-      
+            if (it->isType(itype) || 
+                (itype == -1 && it->isActivatable()) ||
+                (itype == -2 && it->isEdible(this)) ||
+                (it->isType(T_FOUNTAIN) && itype == T_POTION) ||
+                (it->isType(T_STAFF) && itype == T_WAND)) {
 
-  for(n=0;n!=SL_LAST;n++)
-    if (n == SL_ARMOUR || n == SL_READY)
-      if (it = InSlot((int8)n))
-        if (it->isType(T_ARMOUR) || it->isType(T_SHIELD))
-        {
-          for (i=0;i!=8;i++)
-            if (((QItem*)it)->Qualities[i])
-            {
-              String str;
-              str = "quality::";
-              if (LookupOnly(APreQualNames,((QItem*)it)->Qualities[i]))
-                str += Lookup(APreQualNames,((QItem*)it)->Qualities[i]);
-              else
-                str += Lookup(APostQualNames,((QItem*)it)->Qualities[i]);
-              qID = FIND(str);
-              if (!qID)
-                continue;
-              if (TEFF(qID)->HasFlag(EF_ACTIVATE) ||
-                  TEFF(qID)->HasFlag(EF_ACTIVATE2) ||
-                  TEFF(qID)->HasFlag(EF_ACTIVATE3) ||
-                  TEFF(qID)->HasFlag(EF_ACTIVATE4) ||
-                  TEFF(qID)->HasFlag(EF_ACTIVATE5) )
-              {
-                str = it->Name(NA_LONG);
-                str += " (";
-                if (LookupOnly(APreQualNames,((QItem*)it)->Qualities[i]))
-                  str += Lookup(APreQualNames,((QItem*)it)->Qualities[i]);
-                else
-                  str += Lookup(APostQualNames,((QItem*)it)->Qualities[i]);
-                str += ")";
-                MyTerm->LOption(str,c,NULL,it->Named.GetLength()?1:996);
-                iList[c] = it; eList[c] = qID; c++;
-              }
+                    desc = Format("(ground) %s",(const char*)it->Name(NA_LONG));
+                    MyTerm->LOption(desc,c,NULL,it->Named.GetLength() ? 1 : 997);
+                    iList[c] = it; eList[c] = it->eID; c++;
+                    /* ww: otherwise you couldn't eat something on the
+                    * ground unless you also had something in the pack
+                    * *AND* the thing on the ground would be added as
+                    * a menu option to the next menu that came up! 
+                    */ 
             }
         }
 
+RestartInvScan:
+    for (it = FirstInv(); it; it = NextInv())
+        if ((itype > 0 && it->isType(itype)) ||
+            (itype == -1 && it->isActivatable()) ||
+            (itype == -2 && it->isEdible(this)) ||
+            (it->Type == T_TOME && itype == T_SCROLL)) {
+            for (i=0;i!=c;i++)
+                if (iList[i] == it)
+                    goto AlreadyDone;
+            if (itype == -1)
+                if (!(it->IFlags & IF_WORN) &&
+                    (it->isType(T_CLOAK) ||
+                    it->isType(T_BOOTS) ||
+                    it->isType(T_AMULET) ||
+                    it->isType(T_RING) ||
+                    it->isType(T_ROD) ||
+                    it->isType(T_BRACERS) ||
+                    it->isType(T_HELMET)))
+                    continue;
+            if (it->GetParent() == this)
+                MyTerm->LOption(it->Name(NA_LONG),c,NULL,it->Named.GetLength()?1:996);
+            else {
+                desc = Format("(in pack) %s",(const char*)it->Name(NA_LONG));
+                MyTerm->LOption(desc,c,NULL,it->Named.GetLength()?1:998);
+            }
+            iList[c] = it; eList[c] = it->eID; c++;
+            goto RestartInvScan;
+AlreadyDone:;
+        }
 
-  if (!c)            
-  {
-    IPrint(haveno);
-    return;
-  }
+    /* Non-Item Activations */
+    if (itype == -1)
+        StatiIterNature(this,ACTIVATION)
+            MyTerm->LOption(NAME(S->eID),c);
+            iList[c] = NULL; eList[c] = S->eID; c++;
+        StatiIterEnd(this)
 
-  n = (int16)MyTerm->LMenu(MENU_SORTED|MENU_ESC|MENU_BORDER,which,WIN_MENUBOX);
-  if (n == -1)
-    return;
-  it = iList[n];
-  if (it && it->GetParent() != this && it->GetParent() && 
-      it->GetParent()->Type == T_CONTAIN)
-    Timeout += TITEM( ((Item *)it->GetParent())->iID)->u.c.Timeout;
+    for (n=0;n!=SL_LAST;n++)
+        if (n == SL_ARMOUR || n == SL_READY)
+            if (it = InSlot((int8)n))
+                if (it->isType(T_ARMOUR) || it->isType(T_SHIELD)) {
+                    for (i=0;i!=8;i++)
+                        if (((QItem*)it)->Qualities[i]) {
+                            String str;
+                            str = "quality::";
+                            if (LookupOnly(APreQualNames,((QItem*)it)->Qualities[i]))
+                                str += Lookup(APreQualNames,((QItem*)it)->Qualities[i]);
+                            else
+                                str += Lookup(APostQualNames,((QItem*)it)->Qualities[i]);
+                            qID = FIND(str);
+                            if (!qID)
+                                continue;
+                            if (TEFF(qID)->HasFlag(EF_ACTIVATE) ||
+                                TEFF(qID)->HasFlag(EF_ACTIVATE2) ||
+                                TEFF(qID)->HasFlag(EF_ACTIVATE3) ||
+                                TEFF(qID)->HasFlag(EF_ACTIVATE4) ||
+                                TEFF(qID)->HasFlag(EF_ACTIVATE5) )
+                            {
+                                str = it->Name(NA_LONG);
+                                str += " (";
+                                if (LookupOnly(APreQualNames,((QItem*)it)->Qualities[i]))
+                                    str += Lookup(APreQualNames,((QItem*)it)->Qualities[i]);
+                                else
+                                    str += Lookup(APostQualNames,((QItem*)it)->Qualities[i]);
+                                str += ")";
+                                MyTerm->LOption(str,c,NULL,it->Named.GetLength()?1:996);
+                                iList[c] = it; eList[c] = qID; c++;
+                            }
+                        }
+                }
 
-  /*
-     if (it == m->ItemAt(x,y)) {
-     if (it->Weight() < MaxPress() || itype != -2)      
-     if(Throw(EV_PICKUP,this,NULL,it)==ABORT)
-     return;
-     }
-   */
-   
-  e.EItem = it;
-  
-  
-  switch (itype) {
+    if (!c) {
+        IPrint(haveno);
+        return;
+    }
+
+    n = (int16)MyTerm->LMenu(MENU_SORTED|MENU_ESC|MENU_BORDER,which,WIN_MENUBOX);
+    if (n == -1)
+        return;
+
+    it = iList[n];
+    if (it && it->GetParent() != this && it->GetParent() && it->GetParent()->Type == T_CONTAIN)
+        Timeout += TITEM( ((Item *)it->GetParent())->iID)->u.c.Timeout;
+
+    /*
+    if (it == m->ItemAt(x,y)) {
+        if (it->Weight() < MaxPress() || itype != -2)      
+            if(Throw(EV_PICKUP,this,NULL,it)==ABORT)
+            return;
+    }
+    */
+
+    e.EItem = it;
+
+    switch (itype) {
     case T_POTION: ev = EV_DRINK; break;
     case T_WAND:   ev = EV_ZAP; break;
     case T_SCROLL: ev = EV_READ; break;
     case -1:       ev = EV_ACTIVATE; break;
     case -2:
-                   if (it->GetQuantity() > 1)
-                     it = it->TakeOne();
-                   GainPermStati(ACTING,it,SS_MISC,EV_EAT); 
-                   Timeout++;
-                   return;
-  }
-
-  e.eID = eList[n];
-
-  if (ev == EV_ACTIVATE && !it)
-    {
-      ev = EV_EFFECT;
-      e.isActivation = true;
-      e.isItem = false;
+        if (it->GetQuantity() > 1)
+            it = it->TakeOne();
+        GainPermStati(ACTING,it,SS_MISC,EV_EAT); 
+        Timeout++;
+        return;
     }
 
-  if (it && !it->isKnown(KN_MAGIC) && it->Type == T_WAND) 
-  {
-    if(!MyTerm->EffectPrompt(e,Q_DIR))
-      return;
-  }
-  else if (it && it->Type == T_POTION) 
-  {
-    /* I guess I put the "& (Q_DIR|Q_INV)" in on the assumption
-       that potions can't be used on targets, but doing so badly
-       messed up the Remove Curse potion, preventing it from
-       working on inherent curses, so don't uncomment this
-       without addressing that! */
-    if (it->eID && (TEFF(it->eID)->ef.qval /*& (Q_DIR|Q_INV)*/))
-      if(!MyTerm->EffectPrompt(e,TEFF(it->eID)->ef.qval /*& (Q_DIR|Q_INV)*/))
-        return;
-  }
-  else 
-  {
-    if(e.eID && !MyTerm->EffectPrompt(e,TEFF(e.eID)->ef.qval))
-      return;
-  }                  
+    e.eID = eList[n];
 
-  e.EActor = this;
-  e.EItem  = it;
-  e.eID    = eList[n];
-  
-  
-  ReThrow(ev, e);
+    if (ev == EV_ACTIVATE && !it) {
+        ev = EV_EFFECT;
+        e.isActivation = true;
+        e.isItem = false;
+    }
+
+    if (it && !it->isKnown(KN_MAGIC) && it->Type == T_WAND) {
+        if(!MyTerm->EffectPrompt(e,Q_DIR))
+            return;
+    } else if (it && it->Type == T_POTION) {
+        /* I guess I put the "& (Q_DIR|Q_INV)" in on the assumption
+        that potions can't be used on targets, but doing so badly
+        messed up the Remove Curse potion, preventing it from
+        working on inherent curses, so don't uncomment this
+        without addressing that! */
+        if (it->eID && (TEFF(it->eID)->ef.qval /*& (Q_DIR|Q_INV)*/))
+            if(!MyTerm->EffectPrompt(e,TEFF(it->eID)->ef.qval /*& (Q_DIR|Q_INV)*/))
+                return;
+    } else {
+        if(e.eID && !MyTerm->EffectPrompt(e,TEFF(e.eID)->ef.qval))
+            return;
+    }                  
+
+    e.EActor = this;
+    e.EItem  = it;
+    e.eID    = eList[n];
+
+    ReThrow(ev, e);
 }
 
 void Player::YuseMenu(int32 SelectedIndex) {

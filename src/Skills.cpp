@@ -303,28 +303,29 @@ Later:
                 if (oItem(S->h)->Owner() != this)
                     continue;    
 
-            if (!TEFF(S->eID)->HasFlag(EF_CANCEL)) continue; 
+            if (!TEFF(S->eID)->HasFlag(EF_CANCEL))
+                continue; 
 
             bool found = false; 
             for (i=0; i<num_spell; i++)
                 if (spells[i] == S->eID)
                     found = true;
-            if (found) continue; 
+            if (found)
+                continue; 
 
             spells[num_spell] = S->eID;
 
-            MyTerm->LOption(XPrint("Drop <9><Str><7>",
-                NAME(S->eID)),num_spell); 
+            MyTerm->LOption(XPrint("Drop <9><Str><7>", NAME(S->eID)),num_spell); 
 
-            num_spell++; c++;
+            num_spell++;
+            c++;
         } else
             switch (S->Nature) {
             case TUMBLING: c++;
                 MyTerm->LOption("Stop Tumbling",0-S->Nature);
                 break;
             case MOUNTED: c++;
-                MyTerm->LOption(Format("Dismount %s",
-                    (const char*)(oThing(S->h))->Name(NA_THE)),0-S->Nature);
+                MyTerm->LOption(Format("Dismount %s", (const char*)(oThing(S->h))->Name(NA_THE)),0-S->Nature);
                 break;
             case CHARGING: c++;
                 MyTerm->LOption("Break off your charge",0-S->Nature);
@@ -364,7 +365,7 @@ Later:
                 break;
             case BLINDNESS:
                 if (S->Val == BLIND_EYES_CLOSED) { c++;
-                MyTerm->LOption("Open Your Eyes",0-S->Nature);
+                    MyTerm->LOption("Open Your Eyes",0-S->Nature);
                 } 
                 break; 
             case SPRINTING: c++;

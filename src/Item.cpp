@@ -683,229 +683,221 @@ rID Item::GetCurrentRegion()
      }
    return 0;
  }
-      
 
-EvReturn Item::Event(EventInfo &e)
-{
-  EvReturn res; static String str;
+EvReturn Item::Event(EventInfo &e) {
+    EvReturn res;
+    static String str;
 
-  if (eID && eID != e.eID) {
-    e.Event = EITEM(e.Event);
-    res = TEFF(eID)->Event(e,eID);
-    e.Event -= EITEM(0);
-    if (res == DONE || res == ERROR)
-      return res;
+    if (eID && eID != e.eID) {
+        e.Event = EITEM(e.Event);
+        res = TEFF(eID)->Event(e,eID);
+        e.Event -= EITEM(0);
+        if (res == DONE || res == ERROR)
+            return res;
+        if (res == NOMSG)
+            e.Terse = true;
+    }
+    res = TITEM(iID)->Event(e,iID);
+    if (res != NOTHING)
+        return res;
     if (res == NOMSG)
-      e.Terse = true;
-  }
-  res = TITEM(iID)->Event(e,iID);
-  if (res != NOTHING)
-    return res;
-  if (res == NOMSG)
-    e.Terse = true;
+        e.Terse = true;
 
-  switch(e.Event)
-  {
+    switch(e.Event) {
     case EV_PICKLOCK:
-      if (e.EItem == this)
-        if (isType(T_CONTAIN) || isType(T_CHEST))
-          return ((Container*)this)->PickLock(e);
-      break;
+        if (e.EItem == this)
+            if (isType(T_CONTAIN) || isType(T_CHEST))
+                return ((Container*)this)->PickLock(e);
+        break;
     case EV_DAMAGE:
-      if (e.ETarget == this)
-        return Damage(e);
-      break;
+        if (e.ETarget == this)
+            return Damage(e);
+        break;
     case EV_EFFECT:
-      res = MagicEvent(e);
-      return res;
+        res = MagicEvent(e);
+        return res;
     case EV_MAGIC_HIT:
-      return MagicHit(e);
+        return MagicHit(e);
     case EV_LOSEITEM:
     case EV_REMOVE:
         if (isCursed() && e.Event == EV_REMOVE)
-          break;
+            break;
         if (IFlags & IF_WORN) {
-          EventInfo e;
-          e.Clear();
-          
-          e.eID = eID;
-          e.EActor = Owner();
-          e.EItem = this;
-          e.isRemove = true;
-          e.isItem = true;
-          e.efNum = 0;
-          if (e.eID)
-            ReThrow(EV_EFFECT,e);
-          
-          
-          if (isType(T_ARMOUR)) {
-            int16 q, i;
-            for (i=0;i!=8;i++)
-              if (q = GetQuality(i))
-                {
-                  str = "quality::";
-                  if (LookupOnly(APreQualNames,q))
-                    str += Lookup(APreQualNames,q);
-                  else
-                    str += Lookup(APostQualNames,q);
-                  e.eID = FIND(str);
-                  if (!e.eID)
-                    continue;
-                  e.isRemove = true;  
-                  e.isItem = true;
-                  e.efNum = 0;
-                  ReThrow(EV_EFFECT,e);
-                }
+            EventInfo e;
+            e.Clear();
+
+            e.eID = eID;
+            e.EActor = Owner();
+            e.EItem = this;
+            e.isRemove = true;
+            e.isItem = true;
+            e.efNum = 0;
+            if (e.eID)
+                ReThrow(EV_EFFECT,e);
+
+            if (isType(T_ARMOUR)) {
+                int16 q, i;
+                for (i=0;i!=8;i++)
+                    if (q = GetQuality(i)) {
+                        str = "quality::";
+                        if (LookupOnly(APreQualNames,q))
+                            str += Lookup(APreQualNames,q);
+                        else
+                            str += Lookup(APostQualNames,q);
+                        e.eID = FIND(str);
+                        if (!e.eID)
+                            continue;
+                        e.isRemove = true;  
+                        e.isItem = true;
+                        e.efNum = 0;
+                        ReThrow(EV_EFFECT,e);
+                    }
             }
-          /* If you get disarmed, lose the parry bonus! */
-          e.EActor->CalcValues();                    
-          }    
-      return NOTHING;
+            /* If you get disarmed, lose the parry bonus! */
+            e.EActor->CalcValues();                    
+        }    
+        return NOTHING;
     case EV_PLACE:
     case POST(EV_LOSEITEM):
-      IFlags &= ~IF_PROPERTY;
-      return NOTHING;
+        IFlags &= ~IF_PROPERTY;
+        return NOTHING;
     case EV_ZAP:
-      if (Type == T_WAND)
-        return ZapWand(e);
-      if (Type == T_STAFF)
-        return UseStaff(e);
-      e.EActor->IPrint("That can't be zapped.");
-      return ABORT;
+        if (Type == T_WAND)
+            return ZapWand(e);
+        if (Type == T_STAFF)
+            return UseStaff(e);
+        e.EActor->IPrint("That can't be zapped.");
+        return ABORT;
     case EV_DRINK:
-      if (Type == T_POTION)
-        return DrinkPotion(e);
-      if (Type == T_FOUNTAIN)
-        return ReThrow(EV_EFFECT, e);
-      e.EActor->IPrint("That can't be drank.");
-      return ABORT;
+        if (Type == T_POTION)
+            return DrinkPotion(e);
+        if (Type == T_FOUNTAIN)
+            return ReThrow(EV_EFFECT, e);
+        e.EActor->IPrint("That can't be drank.");
+        return ABORT;
     case EV_READ:
-      if (Type == T_SCROLL)
-        return ReadScroll(e);
-      if (Type == T_BOOK)
-      {
-        /*
-           if (yn("Do you want to learn new spells?",false))
-           {
-           thisp->LearnSpells(e.EItem);
-           return DONE;
-           }
-           Examine(e.EItem);
-         */
-        return DONE;
-      }
-      e.EActor->IPrint("That's not readable.");
-      return ABORT;
+        if (Type == T_SCROLL)
+            return ReadScroll(e);
+        if (Type == T_BOOK) {
+            /*
+            if (yn("Do you want to learn new spells?",false))
+            {
+            thisp->LearnSpells(e.EItem);
+            return DONE;
+            }
+            Examine(e.EItem);
+            */
+            return DONE;
+        }
+        e.EActor->IPrint("That's not readable.");
+        return ABORT;
     case EV_ACTIVATE:
-      if (e.EActor->inField(FI_SILENCE))
-      { e.EActor->IPrint("You can't say the command word in this silence!");
-        return ABORT; }
+        if (e.EActor->inField(FI_SILENCE)) {
+            e.EActor->IPrint("You can't say the command word in this silence!");
+            return ABORT;
+        }
         if (isActivatable() || e.eID)
-          return Activate(e);
+            return Activate(e);
         e.EActor->IPrint("That can't be activated.");
         return ABORT;
     case POST(EV_EFFECT):
         if (eID && TEFF(eID)->HasFlag(EF_USERID))
-          e.EActor->IdentByTrial(this);
+            e.EActor->IdentByTrial(this);
         if (eID && TEFF(eID)->HasFlag(EF_AUTOID))
-          VisibleID(e.EActor);
-        if (eID && e.EActor->isPlayer() && !(Known & KN_MAGIC))
-        {
-          /* Single-Player Kludge */
-          if (isType(T_POTION))
-            EFFMEM(eID,theGame->GetPlayer(0))->PTried = true;
-          else
-            EFFMEM(eID,theGame->GetPlayer(0))->Tried = true;
-          if (!Inscrip.GetLength())
-            Inscrip = "tried";
+            VisibleID(e.EActor);
+        if (eID && e.EActor->isPlayer() && !(Known & KN_MAGIC)) {
+            /* Single-Player Kludge */
+            if (isType(T_POTION))
+                EFFMEM(eID,theGame->GetPlayer(0))->PTried = true;
+            else
+                EFFMEM(eID,theGame->GetPlayer(0))->Tried = true;
+            if (!Inscrip.GetLength())
+                Inscrip = "tried";
         }
         return NOTHING;   
     case POST(EV_MAGIC_HIT):
         if (eID && TEFF(eID)->HasFlag(EF_STRIKEID))
-          if (!e.Resist && !e.Immune)
-            VisibleID(e.EActor);
+            if (!e.Resist && !e.Immune)
+                VisibleID(e.EActor);
         break;                                  
     case POST(EV_REMOVE):
-      swingCount = 0;
-      return NOTHING;
+        swingCount = 0;
+        return NOTHING;
     case EV_STRIKE:
-      if (e.ETarget == this) {
-        bool is_acting = e.EActor->HasStati(ACTING);
-        if (isCursed() && (IFlags & IF_WORN) && Owner() == e.EActor)
-          {
-            IPrint("Strangely, you have no desire to damage that item.");
-            MakeKnown(KN_CURSE);
-            e.EActor->RemoveStati(ACTING);
-            return DONE;
-          }
-        if (e.AType == A_KICK) {
-          DPrint(e,is_acting ? "WHAMM!" : "You kick the <Obj>.",
-                    "The <EActor> kicks the <Obj>.",this);
-        }
-        else if (e.eID) {
-          String bname;
-          bname = TEFF(e.eID)->GetMessages(MSG_BLASTNAME)[0];
-          if (!bname.GetLength())
-            bname = "blast";
-          DPrint(e,"Your <str> strikes the <ETarget>.",
-                   "The <EActor>'s <str> strikes the <ETarget>.",
-                   (const char*) bname);
-          } 
-        else if (e.EItem)
-          DPrint(e,is_acting ? "THWACK!" : "You strike the <ETarget> with your <EItem>.",
-              "The <EActor> strikes the <ETarget> with his <EItem>.");
-        else
-          DPrint(e, is_acting ? "RRRACK!" : "You <Str> the <ETarget>.",
-              "The <EActor> <Str2> the <ETarget>.", 
-              Lookup(AttkVerbs1,e.AType), 
-              Lookup(AttkVerbs2,e.AType));
-
-        e.vDmg = e.Dmg.Roll();
-        if (e.EActor->HasFeat(FT_SUNDER)) {
-          e.vDmg *= 2; 
-          e.strDmg += " (x2 Sunder)"; 
-        }
-        if (e.EItem && e.EItem->isWeapon() && 
-            ((Weapon *)e.EItem)->HasQuality(WQ_SUNDERING)) {
-          e.vDmg *= 2; 
-          e.strDmg += " (x2 Sundering)"; 
-        } 
-        ReThrow(EV_DAMAGE,e);
-        if (e.EItem2 && e.EItem2->isWeapon())  
-          ((Weapon *)e.EItem2)->DoQualityDmgSingle(e);
-        if (e.EItem && e.EItem->isWeapon())  
-          ((Weapon *)e.EItem)->DoQualityDmgSingle(e);
-        e.EActor->MakeNoise(max(10 - (e.EActor->SkillLevel(SK_MOVE_SIL) / 2),1));
-        if (cHP <= 0) {
-          e.Died = true; 
-          e.EActor->RemoveStati(ACTING); 
-        } else {
-          if (e.EActor->isPlayer() && e.EPActor->Opt(OPT_REPEAT_KICK) &&
-               (e.AType == A_KICK || e.AType == A_SWNG) && !e.EActor->GetStatiEID(ACTING)) {
-            if (!e.EActor->HasStati(ACTING)) {
-              e.EActor->GainPermStati(ACTING,this,SS_MISC,EV_SATTACK,20);
-            } else {
-              int16 mag = e.EActor->GetStatiMag(ACTING);
-              if (mag <= 0) {
-                e.EActor->HaltAction("not broken after 20 attacks", false); 
-                if (e.EActor->HasStati(ACTING)) {
-                  e.EActor->RemoveStati(ACTING); 
-                  e.EActor->GainPermStati(ACTING,this,SS_MISC,EV_SATTACK,20);
-                } else return ABORT;
-              } else {
-                e.EActor->SetStatiMag(ACTING,-1,NULL,mag-1);
-              } 
+        if (e.ETarget == this) {
+            bool is_acting = e.EActor->HasStati(ACTING);
+            if (isCursed() && (IFlags & IF_WORN) && Owner() == e.EActor) {
+                IPrint("Strangely, you have no desire to damage that item.");
+                MakeKnown(KN_CURSE);
+                e.EActor->RemoveStati(ACTING);
+                return DONE;
             }
-          } 
-          
-        } 
-        return DONE;
-      } else return NOTHING; 
+            if (e.AType == A_KICK) {
+                DPrint(e,is_acting ? "WHAMM!" : "You kick the <Obj>.",
+                    "The <EActor> kicks the <Obj>.",this);
+            } else if (e.eID) {
+                String bname;
+                bname = TEFF(e.eID)->GetMessages(MSG_BLASTNAME)[0];
+                if (!bname.GetLength())
+                    bname = "blast";
+                DPrint(e,"Your <str> strikes the <ETarget>.",
+                    "The <EActor>'s <str> strikes the <ETarget>.",
+                    (const char*) bname);
+            } else if (e.EItem)
+                DPrint(e,is_acting ? "THWACK!" : "You strike the <ETarget> with your <EItem>.",
+                    "The <EActor> strikes the <ETarget> with his <EItem>.");
+            else
+                DPrint(e, is_acting ? "RRRACK!" : "You <Str> the <ETarget>.",
+                    "The <EActor> <Str2> the <ETarget>.", 
+                    Lookup(AttkVerbs1,e.AType), 
+                    Lookup(AttkVerbs2,e.AType));
+
+            e.vDmg = e.Dmg.Roll();
+            if (e.EActor->HasFeat(FT_SUNDER)) {
+                e.vDmg *= 2; 
+                e.strDmg += " (x2 Sunder)"; 
+            }
+            if (e.EItem && e.EItem->isWeapon() && 
+                ((Weapon *)e.EItem)->HasQuality(WQ_SUNDERING)) {
+                    e.vDmg *= 2; 
+                    e.strDmg += " (x2 Sundering)"; 
+            } 
+            ReThrow(EV_DAMAGE,e);
+            if (e.EItem2 && e.EItem2->isWeapon())  
+                ((Weapon *)e.EItem2)->DoQualityDmgSingle(e);
+            if (e.EItem && e.EItem->isWeapon())  
+                ((Weapon *)e.EItem)->DoQualityDmgSingle(e);
+            e.EActor->MakeNoise(max(10 - (e.EActor->SkillLevel(SK_MOVE_SIL) / 2),1));
+            if (cHP <= 0) {
+                e.Died = true; 
+                e.EActor->RemoveStati(ACTING); 
+            } else {
+                if (e.EActor->isPlayer() && e.EPActor->Opt(OPT_REPEAT_KICK) && (e.AType == A_KICK || e.AType == A_SWNG) && !e.EActor->GetStatiEID(ACTING)) {
+                    if (!e.EActor->HasStati(ACTING)) {
+                        e.EActor->GainPermStati(ACTING,this,SS_MISC,EV_SATTACK,20);
+                    } else {
+                        int16 mag = e.EActor->GetStatiMag(ACTING);
+                        if (mag <= 0) {
+                            e.EActor->HaltAction("not broken after 20 attacks", false); 
+                            if (e.EActor->HasStati(ACTING)) {
+                                e.EActor->RemoveStati(ACTING); 
+                                e.EActor->GainPermStati(ACTING,this,SS_MISC,EV_SATTACK,20);
+                            } else
+                                return ABORT;
+                        } else {
+                            e.EActor->SetStatiMag(ACTING,-1,NULL,mag-1);
+                        } 
+                    }
+                } 
+            } 
+            return DONE;
+        } else
+            return NOTHING; 
 
     default:
         return NOTHING;
-  }
-  return NOTHING; 
+    }
+    return NOTHING; 
 }
 
 bool Item::isActivatable()
