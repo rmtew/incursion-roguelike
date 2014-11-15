@@ -3552,7 +3552,7 @@ AI_STAFF Effect "the Abyss" : EA_GRANT
       of its bearer in order to re-create the creature, costing him
       7500 experience points permanently.\n
       __Despite these incredible risks, these staves continue to
-      turn a brisk trade in the assasins markets and the dark
+      turn a brisk trade in the assassins markets and the dark
       circles of necromancers and diabolists."; }
 and EA_GENERIC  
   { On Event EV_MAGIC_HIT {
@@ -3853,7 +3853,7 @@ AI_BRACERS Effect "Springblade Bracers" : EA_GENERIC
   { SC_ARC; SC_ENC; Level: 3; 
     Flags: EF_NAMEONLY, EF_ACTIVATE, EF_CANCEL, EF_MUNDANE;
     Desc: "These crafty mechanical bracers are favoured by gnomes
-      and assasins. Mounted carefully inside them are two spring-loaded
+      and assassins. Mounted carefully inside them are two spring-loaded
       telescoping mithril blades, that when fully extended are not
       unlike those of a short sword. Activating the bracers causes
       the blades to snap out; this takes no time, but does require
