@@ -269,10 +269,10 @@ String & Game::CompileStatistics()
 } 
 
 bool Game::ResourceCompiler() {
+#if ENABLE_MODDING
     String fn;
     time_t theTime;
 
-#ifdef DEBUG
     preprocFilename[0] = 0;
 
     if (sizeof(Dice) > sizeof(YYSTYPE)) {
@@ -472,8 +472,8 @@ PreprocError:
  *  we have no idea how many resources of each type we'll be reading
  *  in until the first pass is finished.
  */
-void Game::CountResources()
-  {
+void Game::CountResources() {
+#if ENABLE_MODDING
     int16 brack = 0, i;
     NArray<hText,30,30> MonNames, ItemNames,
       FeatNames, EffNames, ArtNames, QuestNames,
@@ -675,7 +675,8 @@ void Game::CountResources()
 
     firstTile = new LocationInfo[127];
     currMap = 0;
-  }
+#endif
+}
 
 const char* AllocTextSeg()
   {

@@ -1181,13 +1181,9 @@ class Game : public Object
       String BuildText(EventInfo &e, rID tID);
       String RecursiveParse(EventInfo &e, rID tID, int32 *t, int16 len);
 
-      #ifndef NO_COMP
       bool ResourceCompiler();
       void CountResources();
-      void ComposeMap();
-      #endif
-
-  };
+};
 
 inline int16 Game::SpellNum (rID sID)        { return Modules[0]->SpellNum(TEFF(sID)); }
 inline int16 Game::SpellNum (Resource *r)    { return Modules[0]->SpellNum(r); }

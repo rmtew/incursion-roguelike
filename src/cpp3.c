@@ -63,17 +63,10 @@ setincdirs()
  * Called only when cpp is started.
  */
 {
-  #ifdef WIN32
-	*incend++ = "..\\inc";
-  *incend++ = "..\\lib";
-	*incend++ = ".\\inc";
-  *incend++ = ".\\lib";
-  #else
   *incend++ = "../inc";
   *incend++ = "../lib";
   *incend++ = "./inc";
   *incend++ = "./lib";
-  #endif
 }
 
 

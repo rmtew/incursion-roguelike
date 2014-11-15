@@ -10,7 +10,11 @@
 
 #define SIGNATURE 0x1234ABCD
 #define SIGNATURE_TWO 0xF1F2F3F4
-#define VERSION_STRING "0.6.9Y13"
+#define VERSION_STRING "0.6.9Y14"
+
+#ifdef DEBUG
+#define ENABLE_MODDING 1
+#endif
 
 #define SAVE_SUFFIX ".sav"
 #define BACKUP_SUFFIX ".backup"
@@ -61,12 +65,9 @@ typedef signed long       hObj;
   #undef ASSERT
 #endif
 
-//#ifdef DEBUG
-  #define ASSERT(a) if (!(a)) Error("ASSERT failed: '" #a \
+#define ASSERT(a) if (!(a)) Error("ASSERT failed: '" #a \
     "' in file %s, line %d.", __FILE__, __LINE__);
-//#else
-//  #define ASSERT(a) ;
-//#endif
+
 #define MYABS(n) ((n)>0 ? (n) : -(n))
 
 #endif
