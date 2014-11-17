@@ -1,3 +1,6 @@
+Incursion (open source) 0.6.9Y15: 2014-??-??
+* ?
+
 Incursion (open source) 0.6.9Y14: 2014-11-15
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/129/: Journal entries are now listed in order of most recent to oldest.  Level stats are put first, instead of last.  This is to put the most relevant information in the most accessible place.  Reported by golgepapaz, with patch.
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/135/: Lost symbols for wrapped messages.  This was observable through looking at monsters with lifesight cast.  Any wrapped text in the generated description would be overwritten in some cases.  Reported by Karagy.

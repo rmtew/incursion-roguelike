@@ -8,7 +8,7 @@ At this time building is only supported on Windows, using Visual Studio 2010.  Y
 Recent Changes
 --------------
 
-Click on the bitbucket Source button, and then click on 'Changelog.txt'.
+Click on the bitbucket Source button, and then click on 'Changelog.txt'.  This gives a more readable and relevant form of the Bitbucket project's recent activity listing.
 
 Support the development
 -----------------------
@@ -18,6 +18,12 @@ Want to support development?  Want to encourage work on certain aspects?
 You can donate money via: [Paypal](http://disinterest.org/donate.html)
 
 You can donate bitcoin via: [16F6d1F82qrhXaR67NHczQbu4eUie7QJui](https://blockchain.info/address/16F6d1F82qrhXaR67NHczQbu4eUie7QJui)
+
+Links
+-----
+
+ * Page on [Rogue Basin](http://www.roguebasin.com/index.php?title=Incursion).
+ * Thread on [Bay12](http://bay12forums.com/smf/index.php?topic=139289).
 
 Windows build instructions
 --------------------------
