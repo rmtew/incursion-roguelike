@@ -7,7 +7,8 @@
 # Windows build & dependencies
 Debug
 Release
-allegro
+modaccent
+_dependencies
 _dependencies/libtcod
 _dependencies/sdl2
 _dependencies/google-breakpad
@@ -19,5 +20,7 @@ logs/*.txt
 logs/*.html
 mod/Incursion.Mod
 save/*.sav
-save/*.sav.backup
+save/*.backup
+save/*.zip
+save/*.7z
 *.dat
