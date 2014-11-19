@@ -1844,7 +1844,7 @@ EvReturn Creature::SAttack(EventInfo &e) /* this == EActor */
           if (e.saveDC > 0)
             if (e.EVictim->SavingThrow(REF,e.saveDC)) {
               VPrint(e2,"You avoid harm to your <EItem>.",
-                  "The <EActor> protects <his:EActor> <EItem>.");
+                  "The <EVictim> protects <his:EVictim> <EItem>.");
               return DONE;
             }
           ReThrow(EV_DAMAGE,e2);
