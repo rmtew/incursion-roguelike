@@ -911,281 +911,264 @@ EvReturn Creature::Event(EventInfo &e) {
     return NOTHING;
 }
 
-void Creature::ExtendedAction()
-  {
+void Creature::ExtendedAction() {
     EvReturn r; String why;
     Creature *c; int16 i, d; uint16 xy;  
     Status *s = GetStati(ACTING);
-    
+
     if (isPlayer())
-      if (thisp->MyTerm->CheckEscape()) {
-        HaltAction("pressed escape",false);
-        if (!HasStati(ACTING))
-          return;
+        if (thisp->MyTerm->CheckEscape()) {
+            HaltAction("pressed escape",false);
+            if (!HasStati(ACTING))
+                return;
         }
-    
+
     MapIterate(m,c,i) {
-      if (dist(c->x,c->y,x,y) <= 18) {
-        if (c->isCreature() && c != this) 
-          if (m->At(c->x,c->y).Visibility & VI_DEFINED)
-            if (Perceives(c) & (PER_VISUAL|PER_INFRA|PER_BLIND|PER_TREMOR) &&
-                c->m->LineOfFire(x,y,c->x,c->y,this)) {
-              if (c->isHostileTo(this) && !c->HasStati(ASLEEP) &&
-                  c->Attr[A_MOV] > 0)
-              {
-                why = Format("hostile %s",(const char*)c->Name(0));
-                HaltAction(why,true);
-                return;
-              }
-              else if (this->isHostileTo(c) && !c->HasStati(ASLEEP)) 
-              {
-                why = Format("hostile to %s",(const char*)c->Name(0));
-                HaltAction(why,true);
-                return;
-              } 
-            }
-        if (c->isType(T_PORTAL) && s->Val == EV_MOVE)
-          if (Perceives(c))
-            if (isPlayer() && thisp->Opt(OPT_STOP_STAIRS))
-            {
-              HaltAction("stairs",true);
-              return;
-            }
-      }
+        if (dist(c->x,c->y,x,y) <= 18) {
+            if (c->isCreature() && c != this) 
+                if (m->At(c->x,c->y).Visibility & VI_DEFINED)
+                    if (Perceives(c) & (PER_VISUAL|PER_INFRA|PER_BLIND|PER_TREMOR) && c->m->LineOfFire(x,y,c->x,c->y,this)) {
+                        if (c->isHostileTo(this) && !c->HasStati(ASLEEP) && c->Attr[A_MOV] > 0) {
+                            why = Format("hostile %s",(const char*)c->Name(0));
+                            HaltAction(why,true);
+                            return;
+                        } else if (this->isHostileTo(c) && !c->HasStati(ASLEEP)) {
+                            why = Format("hostile to %s",(const char*)c->Name(0));
+                            HaltAction(why,true);
+                            return;
+                        } 
+                    }
+            if (c->isType(T_PORTAL) && s->Val == EV_MOVE)
+                if (Perceives(c))
+                    if (isPlayer() && thisp->Opt(OPT_STOP_STAIRS)) {
+                        HaltAction("stairs",true);
+                        return;
+                    }
+        }
     }
 
     if (HungerState() <= STARVING)
-      if (s->Val != EV_EAT)
-        { HaltAction("starving",true); return; }
-    
-    if (s->Duration)
-      { Timeout += 10; return; }
+        if (s->Val != EV_EAT) {
+            HaltAction("starving",true);
+            return;
+        }
+
+    if (s->Duration) {
+        Timeout += 10;
+        return;
+    }
 
     if (s->Val == EV_REST) {
-      int badStati[] = {
-        CONFUSED,
-        STUNNED,
-        AFRAID,
-        HALLU,
-        EXPOSED,
-        BLIND,
-        NAUSEA,
-        0
-      };
+        int badStati[] = {
+            CONFUSED,
+            STUNNED,
+            AFRAID,
+            HALLU,
+            EXPOSED,
+            BLIND,
+            NAUSEA,
+            0
+        };
 
-      StatiIter(this)
-        if (S->Duration > 0 && S->Duration < 1000) {
-          for (int j=0;badStati[j];j++)
-            if (S->Nature == badStati[j]) {
-              Timeout += 10; 
-              StatiIterBreakout(this,return)
-            }
-          if ((S->Nature == POLYMORPH && S->h != myHandle) ||
-              (S->Nature != WEP_SKILL && S->eID && 
-               !TEFF(S->eID)->HasFlag(EF_NOTBAD))) {
-            Timeout += 10; 
-            StatiIterBreakout(this,return)
-          }
+        StatiIter(this)
+            if (S->Duration > 0 && S->Duration < 1000) {
+                for (int j=0;badStati[j];j++)
+                    if (S->Nature == badStati[j]) {
+                        Timeout += 10; 
+                        StatiIterBreakout(this,return)
+                    }
+                    if ((S->Nature == POLYMORPH && S->h != myHandle) || (S->Nature != WEP_SKILL && S->eID && !TEFF(S->eID)->HasFlag(EF_NOTBAD))) {
+                        Timeout += 10; 
+                        StatiIterBreakout(this,return)
+                    }
+            } 
+        StatiIterEnd(this)
+
+        if (!(uMana*2 >= nhMana())) { 
+            HaltAction("too little mana to rest", true); 
+            return; 
+        }
+        if (uMana == 0) { 
+            HaltAction("mana fully recovered", true); 
+            return; 
         } 
-      StatiIterEnd(this)
-      
-      if (!(uMana*2 >= nhMana())) { 
-        HaltAction("too little mana to rest", true); 
-        return; 
-      }
-      if (uMana == 0) { 
-        HaltAction("mana fully recovered", true); 
-        return; 
-      } 
-      Timeout += 10;
-      return;
-      }
+        Timeout += 10;
+        return;
+    }
 
     /* Running into Corners and Intersections */
     if (s->Val == EV_MOVE && s->Mag < 50) {
-      if (isPlayer())
-        thisp->AutoPickupFloor();
+        if (isPlayer())
+            thisp->AutoPickupFloor();
 
-      if (isPlayer() && thisp->Opt(OPT_STOP_PHASE)) {
-        if (m->SolidAt(x,y) != m->SolidAt(x+DirX[s->Mag],y+DirY[s->Mag])) {
-          bool incor = onPlane() != PHASE_MATERIAL;
-          bool meld = HasAbility(CA_EARTHMELD);
-          if (m->RunOver((uint8)x,(uint8)y,false,this,DF_ALL_SAFE,incor,meld) &&
-              m->RunOver((uint8)(x+DirX[s->Mag]),(uint8)(y+DirY[s->Mag]),false,this,DF_ALL_SAFE,incor,meld)) { 
-            HaltAction("phase boundary", true);
-            return;
-          }
-        }
-      }
-
-      if (!m->RunOver(x + DirX[s->Mag], y + DirY[s->Mag], false, this,
-                      DF_ALL_SAFE, false, false))
-        {
-          if (isPlayer() && !thisp->Opt(OPT_STOP_CORNER)) {
-            int16 diag_count, straight_count;
-            d = -1; diag_count = straight_count = 0;
-            for(i=0;i!=8;i++) 
-              if (i != OppositeDir(s->Mag))
-                if (m->RunOver(x+DirX[i],y+DirY[i], false, this, DF_ALL_SAFE,
-                      false, false))
-                  {
-                    /* If diagonal movement is possible (i.e.,
-                       we ran up against the wall of an open
-                       space like a room), stop running. */
-                    if (i >= 4)
-                      diag_count++;
-                    else { 
-                      straight_count++;
-                      d = i;
-                      }
-                    
-                  }
-            if (d == -1 && !diag_count) {
-              /* Dead End; stop running */
-              HaltAction("dead end", true);
-              return;
-              }
-            else if (diag_count > 1 || d == -1) {
-              HaltAction("direction needed", true);
-              return;
-              }
-            else if (straight_count > 1) {
-              HaltAction("fork in the tunnel", true);
-              return;
-              }
-            s->Mag = d;
+        if (isPlayer() && thisp->Opt(OPT_STOP_PHASE)) {
+            if (m->SolidAt(x,y) != m->SolidAt(x+DirX[s->Mag],y+DirY[s->Mag])) {
+                bool incor = onPlane() != PHASE_MATERIAL;
+                bool meld = HasAbility(CA_EARTHMELD);
+                if (m->RunOver((uint8)x,(uint8)y,false,this,DF_ALL_SAFE,incor,meld) &&
+                    m->RunOver((uint8)(x+DirX[s->Mag]),(uint8)(y+DirY[s->Mag]),false,this,DF_ALL_SAFE,incor,meld)) { 
+                        HaltAction("phase boundary", true);
+                        return;
+                }
             }
         }
-      else if (isPlayer() && thisp->Opt(OPT_STOP_INTER) && 
-           TREG(m->RegionAt(x,y))->HasFlag(RF_CORRIDOR))
-        {
-          d = 0;
-          for (i=0;i!=4;i++)
-            if (i != s->Mag && i != OppositeDir(s->Mag)) {
-              if (!m->SolidAt(x+DirX[i],y+DirY[i]))
-                d = 1;
-              if (m->FDoorAt(x+DirX[i],y+DirY[i]))
-                if (!(m->FDoorAt(x+DirX[i],y+DirY[i])->DoorFlags & DF_SECRET))
-                  d = 1;
-              }
-          if (d) {
-            /* Intersection; stop running */
-            HaltAction("intersection", true);
-            return;
+
+        if (!m->RunOver(x + DirX[s->Mag], y + DirY[s->Mag], false, this, DF_ALL_SAFE, false, false)) {
+            if (isPlayer() && !thisp->Opt(OPT_STOP_CORNER)) {
+                int16 diag_count, straight_count;
+                d = -1; diag_count = straight_count = 0;
+                for(i=0;i!=8;i++) 
+                    if (i != OppositeDir(s->Mag))
+                        if (m->RunOver(x+DirX[i],y+DirY[i], false, this, DF_ALL_SAFE, false, false)) {
+                            /* If diagonal movement is possible (i.e.,
+                            we ran up against the wall of an open
+                            space like a room), stop running. */
+                            if (i >= 4)
+                                diag_count++;
+                            else { 
+                                straight_count++;
+                                d = i;
+                            }
+
+                        }
+                if (d == -1 && !diag_count) {
+                    /* Dead End; stop running */
+                    HaltAction("dead end", true);
+                    return;
+                } else if (diag_count > 1 || d == -1) {
+                    HaltAction("direction needed", true);
+                    return;
+                } else if (straight_count > 1) {
+                    HaltAction("fork in the tunnel", true);
+                    return;
+                }
+                s->Mag = d;
+            }
+        } else if (isPlayer() && thisp->Opt(OPT_STOP_INTER) && TREG(m->RegionAt(x,y))->HasFlag(RF_CORRIDOR)) {
+            d = 0;
+            for (i=0;i!=4;i++)
+                if (i != s->Mag && i != OppositeDir(s->Mag)) {
+                    if (!m->SolidAt(x+DirX[i],y+DirY[i]))
+                        d = 1;
+                    if (m->FDoorAt(x+DirX[i],y+DirY[i]))
+                        if (!(m->FDoorAt(x+DirX[i],y+DirY[i])->DoorFlags & DF_SECRET))
+                            d = 1;
+                }
+            if (d) {
+                /* Intersection; stop running */
+                HaltAction("intersection", true);
+                return;
             }
         }
-      if (isPlayer() && thisp->Opt(OPT_STOP_REGION))
-        if (m->RegionAt(x,y) != m->RegionAt(x+DirX[s->Mag],y+DirY[s->Mag]))
-          {
-            /* At Region Boundary; stop running */
-            HaltAction("region boundary", true);
+        if (isPlayer() && thisp->Opt(OPT_STOP_REGION))
+            if (m->RegionAt(x,y) != m->RegionAt(x+DirX[s->Mag],y+DirY[s->Mag])) {
+                /* At Region Boundary; stop running */
+                HaltAction("region boundary", true);
+                return;
+            }
+    } else if (s->Val == EV_ZAP) {
+        // ww: wand-identify items
+        Item * wand = NULL, *target = NULL;
+        Item * th;
+        rID ident = FIND("identify;wand"); // HACK
+        for (th = FirstInv();th && !wand;th = NextInv()) 
+            if (th->eID == ident && th->isKnown(KN_MAGIC) && th->Type == T_WAND)
+                wand = th;
+        if (!wand) {
+            HaltAction("no Wands of Identify", true);
             return;
-          }
-      }
-    else if (s->Val == EV_ZAP) {
-      // ww: wand-identify items
-      Item * wand = NULL, *target = NULL;
-      Item * th;
-      rID ident = FIND("identify;wand"); // HACK
-      for (th = FirstInv();th && !wand;th = NextInv()) 
-        if (th->eID == ident && th->isKnown(KN_MAGIC) &&
-            th->Type == T_WAND) wand = th;
-      if (!wand) {
-        HaltAction("no Wands of Identify", true);
-        return;
-      } 
-      for (th = FirstInv();th && !target;th = NextInv()) 
-        if (ThrowEff(EV_RATETARG,ident,th,th,th,th) != ABORT)
-          target = th;
-      if (!target) {
-        HaltAction("nothing left to identify", true);
-        return;
-      }
-      r = ThrowEff(EV_ZAP, ident, this, target, wand); 
-      if (r == ABORT)
-        HaltAction("failed to zap wand", true);
-      return; 
+        } 
+        for (th = FirstInv();th && !target;th = NextInv()) 
+            if (ThrowEff(EV_RATETARG,ident,th,th,th,th) != ABORT)
+                target = th;
+        if (!target) {
+            HaltAction("nothing left to identify", true);
+            return;
+        }
+        r = ThrowEff(EV_ZAP, ident, this, target, wand); 
+        if (r == ABORT)
+            HaltAction("failed to zap wand", true);
+        return; 
     } else if (s->Val == EV_CAST) {
-      // ww: 
-      // ww: cast all "detect" spells
-      if (!isPlayer()) {
-        HaltAction("only players can use this feature", true);
-        return;
-      } 
-      if (cMana() > nhMana()/2) { 
-        // look for detect spells
-        for(i=0;i!=theGame->LastSpell();i++)
-          if (SpellRating(theGame->SpellID(i),0,true) != -1) {
-            rID eID = theGame->SpellID(i); 
-            TEffect * te = TEFF(eID); 
-            EffectValues * ef = te->Vals(0); 
-            if (ef && (te->ManaCost < cMana()) && 
-                ((ef->eval == EA_INFLICT && ef->xval == DETECTING &&
-                  !HasStati(DETECTING,ef->yval)) ||
-                (te->Purpose & EP_BUFF && 
-                 (te->HasFlag(EF_DLONG) || te->HasFlag(EF_DXLONG) ||
-                 te->HasFlag(EF_PERSISTANT)) &&
-                 !HasEffStati(-1,eID) &&
-                 te->PEvent(EV_ISTARGET,this,eID) == SHOULD_CAST_IT))
-                ) 
-                {
-              // we have a winner!
-              EventInfo e; 
-              EvReturn r; 
-              e.Clear();
-              e.EActor = this;
-              e.eID = eID; 
-              ASSERT(cMana() >= te->ManaCost); 
-              if (thisp->Spells[i] & SP_INNATE) 
-                r =ReThrow(EV_INVOKE,e);
-              else 
-                r = ReThrow(EV_CAST,e);
-              if (r == ABORT) {
-                HaltAction(Format("unable to cast %s",NAME(eID)),false);
-              } 
-              return; 
-            } 
-          } 
-        HaltAction("no more detection or buffing spells", true); 
-        return; 
-      } else { 
-        // wait for more mana
-        Timeout += 10;
-        return; 
-      } 
+        // ww: 
+        // ww: cast all "detect" spells
+        if (!isPlayer()) {
+            HaltAction("only players can use this feature", true);
+            return;
+        } 
+        if (cMana() > nhMana()/2) { 
+            // look for detect spells
+            for(i=0;i!=theGame->LastSpell();i++)
+                if (SpellRating(theGame->SpellID(i),0,true) != -1) {
+                    rID eID = theGame->SpellID(i); 
+                    TEffect * te = TEFF(eID); 
+                    EffectValues * ef = te->Vals(0); 
+                    if (ef && (te->ManaCost < cMana()) && 
+                        ((ef->eval == EA_INFLICT && ef->xval == DETECTING &&
+                        !HasStati(DETECTING,ef->yval)) ||
+                        (te->Purpose & EP_BUFF && 
+                        (te->HasFlag(EF_DLONG) || te->HasFlag(EF_DXLONG) ||
+                        te->HasFlag(EF_PERSISTANT)) &&
+                        !HasEffStati(-1,eID) &&
+                        te->PEvent(EV_ISTARGET,this,eID) == SHOULD_CAST_IT))
+                        ) 
+                    {
+                        // we have a winner!
+                        EventInfo e; 
+                        EvReturn r; 
+                        e.Clear();
+                        e.EActor = this;
+                        e.eID = eID; 
+                        ASSERT(cMana() >= te->ManaCost); 
+                        if (thisp->Spells[i] & SP_INNATE) 
+                            r =ReThrow(EV_INVOKE,e);
+                        else 
+                            r = ReThrow(EV_CAST,e);
+                        if (r == ABORT) {
+                            HaltAction(Format("unable to cast %s",NAME(eID)),false);
+                        } 
+                        return; 
+                    } 
+                } 
+            HaltAction("no more detection or buffing spells", true); 
+            return; 
+        } else { 
+            // wait for more mana
+            Timeout += 10;
+            return; 
+        } 
     } 
-    
+
     if (s->Val == EV_MACRO) {
-      r = ThrowEff(EV_MACRO,s->eID,this);
-      if (r == ABORT)
-        RemoveStati(ACTING);
-      if (T1->GetMode() == MO_INV)
-        ChooseAction();
-      return;
-      }
-    
+        r = ThrowEff(EV_MACRO,s->eID,this);
+        if (r == ABORT)
+            RemoveStati(ACTING);
+        if (T1->GetMode() == MO_INV)
+            ChooseAction();
+        return;
+    }
+
     if (s->Val == EV_SATTACK) {
-      r = TryToDestroyThing(oThing(s->h));
+        r = TryToDestroyThing(oThing(s->h));
         // ThrowVal(s->Val,A_KICK,this,oThing(s->h));
     } else if (s->h && oThing(s->h)->isCreature()) 
-      r = Throw(s->Val,this,oCreature(s->h));
+        r = Throw(s->Val,this,oCreature(s->h));
     else {
-      if (s->Val == EV_MOVE && s->Mag >= 50) {
-        xy = m->PathPoint(s->Mag-50);
-        if (!xy)
-          { RemoveStati(ACTING); return; }
-        i = DirTo(xy%256,xy/256);
-        r = ThrowDir(s->Val,(Dir)i,this,NULL,oThing(s->h));
-        s->Mag++;
-        }
-      else if (s->Mag || s->Val == EV_MOVE)
-        r = ThrowDir(s->Val,s->Mag,this,NULL,oThing(s->h));
-      else
-        r = Throw(s->Val,this,NULL,oThing(s->h));
-      }
+        if (s->Val == EV_MOVE && s->Mag >= 50) {
+            xy = m->PathPoint(s->Mag-50);
+            if (!xy)
+            { RemoveStati(ACTING); return; }
+            i = DirTo(xy%256,xy/256);
+            r = ThrowDir(s->Val,(Dir)i,this,NULL,oThing(s->h));
+            s->Mag++;
+        } else if (s->Mag || s->Val == EV_MOVE)
+            r = ThrowDir(s->Val,s->Mag,this,NULL,oThing(s->h));
+        else
+            r = Throw(s->Val,this,NULL,oThing(s->h));
+    }
     if (r == ABORT)
-      RemoveStati(ACTING);
-  }
+        RemoveStati(ACTING);
+}
 
 const char* Creature::ActingVerb()
   {
