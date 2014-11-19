@@ -1129,7 +1129,7 @@ CtrlBreak:
             case TCODK_F11:         ch = KY_CMD_MACRO11; break;
             case TCODK_F12:         ch = KY_CMD_MACRO12; break;
             case TCODK_CHAR:
-                if (ControlKeys & (CONTROL|ALT))
+                if (ControlKeys & (CONTROL|ALT|SHIFT))
                     break;
             default:
                 continue;

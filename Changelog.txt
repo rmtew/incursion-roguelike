@@ -1,5 +1,6 @@
 Incursion (open source) 0.6.9Y15: 2014-??-??
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/185/: The victim oriented message shown to bystanders when an attack attempt was towards a weapon, rather than it's wielder, was about the actor rather than the victim.   This meant a mud elemental attacking a weapon would result in a message describing the weapon to be the mud elemental's rather than the wielders.
+* https://bitbucket.org/rmtew/incursion-roguelike/issue/183/: If the user set 'Roguelike Keyset' to 'ON' and 'Shift Arrow Keys' to 'Run', shift and any of the 'vi keys' would not result in the player running.  This is an artifact of the move from Allegro to libtcod.  There's a special place in hell reserved for the SDL developers and their new API which goes lowest common denominator in order to cram in support for the mobile experience.  If someone presses 'h' it is a text event, if someone presses shift+'h' it is a key event with the shift modifier.  Ugh.
 
 Incursion (open source) 0.6.9Y14: 2014-11-15
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/129/: Journal entries are now listed in order of most recent to oldest.  Level stats are put first, instead of last.  This is to put the most relevant information in the most accessible place.  Reported by golgepapaz, with patch.
