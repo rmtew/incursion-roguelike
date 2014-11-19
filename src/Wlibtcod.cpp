@@ -1043,13 +1043,12 @@ CtrlBreak:
         
         ticks_blink_last = TCOD_sys_elapsed_milli();
 
-
-        ControlKeys = 0;
         if (tcodKey.vk == TCODK_TEXT) {
             ch = tcodKey.text[0];
         } else {
             ch = tcodKey.c;
 
+            ControlKeys = 0;
             if (tcodKey.lctrl || tcodKey.rctrl)
                 ControlKeys |= CONTROL;
             if (tcodKey.shift)
@@ -1129,7 +1128,7 @@ CtrlBreak:
             case TCODK_F11:         ch = KY_CMD_MACRO11; break;
             case TCODK_F12:         ch = KY_CMD_MACRO12; break;
             case TCODK_CHAR:
-                if (ControlKeys & (CONTROL|ALT|SHIFT))
+                if (ControlKeys & (CONTROL|ALT))
                     break;
             default:
                 continue;
