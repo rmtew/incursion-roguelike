@@ -455,7 +455,7 @@ class Creature: public Thing, public Magic
       virtual void     DropAll() = 0;
 		  virtual Item*    InSlot(int8 slot, bool effective=false) = 0;
 		  virtual Item*    EInSlot(int8 slot) { return InSlot(slot,true); }
-      int16 GetEnumeratedInv(Thing *list[]);
+      Thing** GetEnumeratedInv();
       virtual Item*    GetInv(bool first) = 0;
       Item* FirstInv() { return GetInv(true); }
       Item* NextInv()  { return GetInv(false); }

@@ -1581,17 +1581,23 @@ void Container::Sort(int comparison(const void *,const void *))
    return;
 }
 
-int16 Creature::GetEnumeratedInv(Thing *list[]) {
-    Thing *th;
-    int16 cnt = 0;
+Thing** Creature::GetEnumeratedInv() {
+    size_t thing_count = 100;
+    Thing **list = (Thing**)malloc(sizeof(Thing*) * thing_count);
+    Thing *thing;
+    int32 cnt = 0;
 
-    if (th = this->FirstInv())
+    if (thing = this->FirstInv())
         do {
-            list[cnt++] = th;
-        } while (th = this->NextInv());
+            list[cnt++] = thing;
+            if (cnt == thing_count) {
+                thing_count *= 2;
+                list = (Thing**)realloc(list, sizeof(Thing*) * thing_count);
+            }
+        } while (thing = this->NextInv());
     list[cnt] = NULL;
 
-    return cnt;
+    return list;
 }
 
 Item* Creature::RandInv()
