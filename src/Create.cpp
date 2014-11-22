@@ -3929,10 +3929,10 @@ int16 Creature::SkillAttr(int16 sk) {
     if (HasFeat(FT_ONE_BODY_ONE_SOUL) || (Attr[A_CON] == 0))  {
         if (Attr[A_WIS] > Attr[A_CON]) {
             if (attr1 == A_CON) attr1 = A_WIS;
-            if (attr2 == A_CON) attr1 = A_WIS;
+            if (attr2 == A_CON) attr2 = A_WIS;
         } else {
             if (attr1 == A_WIS) attr1 = A_CON;
-            if (attr2 == A_WIS) attr1 = A_CON;
+            if (attr2 == A_WIS) attr2 = A_CON;
         } 
     } 
     if (attr1 == attr2) 
