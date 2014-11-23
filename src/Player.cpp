@@ -131,1216 +131,1157 @@ void Player::ResetOptions()
     MyTerm->Close();
   }    
 
-Character::Character(rID mID,int16 _Type)
-	: Creature(mID,_Type)
-	{
+Character::Character(rID mID,int16 _Type) : Creature(mID,_Type) {
+}
 
-	}
+void Player::ChooseAction() {
+    int16 k,ch,sp,cdir,n,gx,gy; int16 dx,dy;
+    Item *i;
+    Thing *targ;
+    Feature *feat;
+    bool found;
+    String oName, s;
+    String str, msg;
+    hObj h;
+    EventInfo e;
+    static int16 LastAutoSave = 0;
+    static int16 oldHP;
+    int16 look_dx = 0, look_dy = 0;
 
+    GameTimeInfo.actions++; 
 
+    //IPrint(Format("Chill Shield: %d/%d %d %d.",
+    //  TEFF(FIND("chill shield")) - theGame->Modules[0]->QEff,
+    //  TEFF(FIND("chill shield"))->Vals(0)->aval,
+    //  TEFF(FIND("chill shield"))->Vals(1)->aval,
+    //  TEFF(FIND("chill shield"))->Vals(2)->aval));
 
-void Player::ChooseAction()
-{
-  int16 k,ch,sp,cdir,n,gx,gy; int16 dx,dy;
-  Item *i; Thing *targ; Feature *feat; bool found; String oName, s; hObj h;
-  static int16 oldHP; String str, msg;
-  EventInfo e; static int16 LastAutoSave = 0;
-
-  int16 look_dx = 0, look_dy = 0;
-
-  GameTimeInfo.actions++; 
-
-  //IPrint(Format("Chill Shield: %d/%d %d %d.",
-  //  TEFF(FIND("chill shield")) - theGame->Modules[0]->QEff,
-  //  TEFF(FIND("chill shield"))->Vals(0)->aval,
-  //  TEFF(FIND("chill shield"))->Vals(1)->aval,
-  //  TEFF(FIND("chill shield"))->Vals(2)->aval));
-
-  // ww: one problem with the old approach was that you could spend five
-  // minutes shuffling your backpack but not have it count as any "moves" 
-  // now we save every keystroke, which is closer to saving ever 2 minutes
-  // or whatnot
-  MyTerm->ActionsSinceLastAutoSave++;
-  if (MyTerm->ActionsSinceLastAutoSave >= 200) {
-    MyTerm->ActionsSinceLastAutoSave = 0;
-    // AddJournalEntry("Checkpoint.");
-    theGame->SetAutoSaveFlag();
+    // ww: one problem with the old approach was that you could spend five
+    // minutes shuffling your backpack but not have it count as any "moves" 
+    // now we save every keystroke, which is closer to saving ever 2 minutes
+    // or whatnot
+    MyTerm->ActionsSinceLastAutoSave++;
+    if (MyTerm->ActionsSinceLastAutoSave >= 200) {
+        MyTerm->ActionsSinceLastAutoSave = 0;
+        // AddJournalEntry("Checkpoint.");
+        theGame->SetAutoSaveFlag();
     } 
-  
-  memset(AngerThisTurn,0,sizeof(AngerThisTurn[0])*MAX_GODS);
-  
-  e.Clear();
-  SinglePrintXY(e,NULL);
 
-  // ww: each option gradient is 10% 
-  bool lowHP = cHP * 10 <= (mHP + Attr[A_THP]) * Opt(OPT_LOWHP_WARN);
-  if (lowHP) {
-    str = Format("Low Hitpoint Warning! \n%d / %d = %d%% ",
-        cHP, (mHP + Attr[A_THP]),
-        100 * cHP / (mHP + Attr[A_THP]));
-    if (Opt(OPT_LOWHP_AGG)) {
-      str += "\n\nPress [ENTER] to continue.";
-      MyTerm->Box(WIN_SCREEN,BOX_MUST_PRESS_ENTER,RED,GREY,str);
-      oldHP = cHP;
-      } 
-    else if (oldHP != cHP) {
-      MyTerm->Box(WIN_SCREEN,0,RED,GREY,str);
-      oldHP = cHP;
-      }
-    } 
-  if (!EInSlot(SL_WEAPON) && Opt(OPT_WARN_EMPTY_HAND)) {
-    if (HasAbility(CA_UNARMED_STRIKE) || HasStati(POLYMORPH))
-      ;
-    else {
-      MyTerm->Box(WIN_SCREEN,BOX_MUST_PRESS_ENTER,RED,GREY,
-          "You are empty-handed!\n\nPress [ENTER] to continue.");
-    } 
-  } 
+    memset(AngerThisTurn,0,sizeof(AngerThisTurn[0])*MAX_GODS);
 
-  if (HasStati(CHARMED,CH_COMPEL))
-    StatiIterNature(this,CHARMED)
-      if (S->Val == CH_COMPEL)
-        {
-          EvReturn r;
-          PEVENT(EV_COMPULSION,this,S->eID,0,r);
-          if (Timeout)
-            return;
+    e.Clear();
+    SinglePrintXY(e,NULL);
+
+    // ww: each option gradient is 10% 
+    bool lowHP = cHP * 10 <= (mHP + Attr[A_THP]) * Opt(OPT_LOWHP_WARN);
+    if (lowHP) {
+        str = Format("Low Hitpoint Warning! \n%d / %d = %d%% ",
+            cHP, (mHP + Attr[A_THP]),
+            100 * cHP / (mHP + Attr[A_THP]));
+        if (Opt(OPT_LOWHP_AGG)) {
+            str += "\n\nPress [ENTER] to continue.";
+            MyTerm->Box(WIN_SCREEN,BOX_MUST_PRESS_ENTER,RED,GREY,str);
+            oldHP = cHP;
+        } else if (oldHP != cHP) {
+            MyTerm->Box(WIN_SCREEN,0,RED,GREY,str);
+            oldHP = cHP;
         }
-    StatiIterEnd(this)
+    } 
 
-  if (HasStati(PARALYSIS)) {
-    IsParalyzed:
-    switch(ChoicePrompt("You are paralyzed. Pray, magic or wait 10/20/30?", "pm123", '1'))
-      {
+    if (!EInSlot(SL_WEAPON) && Opt(OPT_WARN_EMPTY_HAND)) {
+        if (HasAbility(CA_UNARMED_STRIKE) || HasStati(POLYMORPH))
+            ;
+        else {
+            MyTerm->Box(WIN_SCREEN,BOX_MUST_PRESS_ENTER,RED,GREY,
+                "You are empty-handed!\n\nPress [ENTER] to continue.");
+        } 
+    } 
+
+    if (HasStati(CHARMED,CH_COMPEL))
+        StatiIterNature(this,CHARMED)
+            if (S->Val == CH_COMPEL) {
+                EvReturn r;
+                PEVENT(EV_COMPULSION,this,S->eID,0,r);
+                if (Timeout)
+                    return;
+            }
+        StatiIterEnd(this)
+
+    if (HasStati(PARALYSIS)) {
+IsParalyzed:
+        switch(ChoicePrompt("You are paralyzed. Pray, magic or wait 10/20/30?", "pm123", '1')) {
         case 'p': goto DoPrayer;
         case 'm': goto DoMagic;
         case '1': Timeout += 10; return;
         case '2': Timeout += 20; return;
         case '3': Timeout += 30; return;
         case -1:
-          goto IsParalyzed;
-      }
-    return;
-    }
-
-  if (InSlot(SL_INAIR))
-    MyTerm->SetMode(MO_INV);
-
-  if (MyTerm->GetMode() == MO_INV)
-    {
-      MyTerm->InventoryManager(false);
-      if (Timeout)
-        return;
-    }
-    
-  if (Opt(OPT_AUTOHIDE) && HasSkill(SK_HIDE) && !HasStati(HIDING)
-       && !m->BrightAt(x,y) && !HasStati(ILLUMINATED)
-       && !(TTER(m->TerrainAt(x,y))->HasFlag(TF_WATER) ||
-               HasFeat(FT_FEATHERFOOT))
-       && !HasStati(MANIFEST))
-    {
-      Creature *cr; int32 i;
-      /* Replacement isThreatened() prevents you from AutoHiding
-         when obsreved by enemies you can't see. */
-      MapIterate(m,cr,i)
-        if (cr->isCreature() && cr->DistFrom(this) <= 16)
-          if (cr->isHostileTo(this))
-            if (m->LineOfFire(cr->x,cr->y,x,y,cr))
-              goto SkipAutoHide;
-
-      IPrint("AutoHide:");
-      ThrowVal(EV_HIDE,HI_SHADOWS,this);
-      if (Timeout)
-        return;
-      SkipAutoHide:;
-    }
-
-  do
-  {
-    if (HasStati(PARALYSIS))
-      goto IsParalyzed;
-    AutoPickupFloor();
-    // MyTerm->RecreateViewList();
-
-    MyTerm->ShowStatus();
-    MyTerm->ShowViewList();
-    if (shownFF != isFlatFooted())
-      MyTerm->ShowTraits();
-    if (Flags & F_DELETE)
-    {
-      Timeout += 1;
-      return;
-    }
-    if (HungerShown != HungerState()) {
-      HungerShown = HungerState();
-      MyTerm->ShowTraits();
-    }
-    Silence = 0;
-    if (m && m->QueueNum())
-    Error("Messages (still) queued at beginning of turn.");
-    MyTerm->ClearKeyBuff();
-    ch = MyTerm->GetCharCmd();
-    if (StateFlags & MS_CASTING)
-      {
-        StateFlags &= ~(MS_CASTING|MS_STILL_CAST);
-        statiChanged = true;
-      }
-    cdir = -1;
-    if (HasStati(CHARGING)) {
-      cdir = GetStati(CHARGING)->Val;
-      if ((ch < KY_CMD_FIRST_ARROW || ch > KY_CMD_LAST_ARROW) && ch != KY_ESC && 
-          ch != KY_SPACE && ch != KY_CMD_NAME && KY_CMD_WIZMODE &&
-          ch != KY_CMD_SHOW_MESSAGES && ch != KY_CMD_CHAR_SHEET && ch != KY_CMD_HELP 
-          && ch != KY_CMD_OPTIONS && ch != KY_CMD_ATTACK_MENU)
-      {
-        if (HasStati(AUTO_CHARGE))
-          ;
-        else if (!yn("Break off your charge?"))
-          continue;
-        IDPrint(NULL,"The <Obj1> breaks off <his:Obj1> charge.",this);
-        RemoveStati(CHARGING);
-      }
-    }                     
-    switch (ch)
-    {
-      case KY_CMD_LOOK_NORTH: 
-      case KY_CMD_LOOK_NORTHWEST: 
-      case KY_CMD_LOOK_NORTHEAST: 
-      case KY_CMD_LOOK_SOUTH: 
-      case KY_CMD_LOOK_SOUTHWEST: 
-      case KY_CMD_LOOK_SOUTHEAST: 
-      case KY_CMD_LOOK_EAST: 
-      case KY_CMD_LOOK_WEST: 
-              look_dx += DirX[DIR_OF_KY_CMD_LOOK(ch)] * 5;
-              look_dy += DirY[DIR_OF_KY_CMD_LOOK(ch)] * 5;
-              MyTerm->AdjustMap(x + look_dx, y + look_dy, true); 
-              break; 
-
-      case KY_CMD_NAME:
-        e.Clear();
-        if (!MyTerm->EffectPrompt(e,Q_TAR | Q_INV))
-          break;
-        if (!(targ = e.ETarget))
-          break;
-        if (targ->Named.GetLength())
-          if (!yn(Format("Confirm rename %s? [yn]",(const char*)targ->Named),true))
-            break;
-        if (targ->isCreature()) {
-          if (TMON(((Creature*)targ)->mID)->HasFlag(M_PROPER) ||
-              TMON(((Creature*)targ)->mID)->HasFlag(M_PROPER))
-          {
-            IPrint("<Obj> already has a name.",targ);
-            break;
-          } 
-        } 
-        if (targ->isItem()) {
-          /*if (((Item*)targ)->aID || TEFF(((Item*)targ)->eID)->HasFlag(EF_UNIQUE))
-            {
-            IPrint("<Obj> already has a name.",targ);
-            break;
-            } 
-            */ }
-          oName = MyTerm->StringPrompt(YELLOW,XPrint("What do you want to name the <Obj>? ",targ));
-        if (oName.GetLength())
-        {
-          oName.SetAt(0,toupper(oName[0]));
-          targ->Named = oName;
+            goto IsParalyzed;
         }
-        break;
-      case KY_CMD_JOURNAL:
-          oName = MyTerm->StringPrompt(YELLOW,"Journal Entry? ");
-        if (oName.GetLength())
-          AddJournalEntry(oName);
-        break; 
-      case KY_CMD_UP:
-        Throw(EV_ASCEND,this);
-        break;
-      case KY_CMD_DOWN:
-        Throw(EV_DESCEND,this);
-        break;
-      case KY_CMD_ENTER:
-        if (m->KnownFeatureAt(x,y))
-          if (m->KnownFeatureAt(x,y)->Type == T_PORTAL)
-            if (((Portal*)m->KnownFeatureAt(x,y))->EnterDir(CENTER))
-            {
-              if (Throw(EV_ENTER,this,m->KnownFeatureAt(x,y)) == DONE)
-                return;
-              break;
-            }
-        IPrint("You can't go in anything here.");
-        break;
-      case KY_CMD_HELP:
-        MyTerm->HelpTopic(NULL); 
-        break;
-      case KY_CMD_LEGEND: 
-        MyTerm->DisplayLegend();
-        break; 
-      /*
-      case KY_CMD_DEBUG_MESSAGES:
-        MyTerm->ShowDebugMessages();
-        break;
-      */
-      case KY_CMD_LOOK:
-        e.Clear();
-        if (isBlind())
-          // "No, see, 'cause you're *blind*."
-          MyTerm->EffectPrompt(e,Q_TAR | Q_LOC,true,"Sensing --");
-        else
-          MyTerm->EffectPrompt(e,Q_TAR | Q_LOC,true,"Looking --");
-        break; 
-      case KY_CMD_TREAT_MONSTER:
-        e.Clear();
-        if(!MyTerm->EffectPrompt(e,Q_TAR|Q_CRE))
-          break;
-        targ =e.ETarget;
-        if (!targ || !targ->isCreature()) {
-          IPrint("There's nothing there to become hostile to.");
-          break;
-        } else {
-          IPrint("You now view the <Obj> as an enemy.",targ);
-          ts.addCreatureTarget((Creature *)targ, TargetEnemy);
-          Thing *t; int i;
-          MapIterate(m,t,i) 
-            if (t->isCreature())
-              ((Creature *)t)->ts.Retarget((Creature *)t);
-        } 
-        break; 
-      case KY_CMD_TALK:
-        e.Clear();
-        if(!MyTerm->EffectPrompt(e,Q_TAR|Q_CRE|Q_ALL))
-          break;
-        if (e.isDir) {
-          targ = m->FCreatureAt(x + DirX[e.EDir], y + DirY[e.EDir]);
-          if (!targ) {
-            IPrint("There's nothing there to talk to.");
-            break;
-            }
-          }
-        else if (e.isAllAllies) {
-          e.EActor = this;
-          ReThrow(EV_ORDER,e);
-          break;
-          }
-        else
-          targ =e.ETarget;
-          
-        Throw(EV_TALK,this,targ);
-        break;
-      case KY_CMD_EAT:
-        UseItemMenu("What do you want to eat?", "You have no comestibles.", -2);
-        break;
-      case KY_CMD_ACTIVATE:
-        UseItemMenu("Which magic item do you wish to activate?", 
-            "You have no actively usable wonderous items.", -1);
-        break;
-      case KY_CMD_READ:
-        UseItemMenu("Which scroll do you wish to read?", 
-            "You have no scrolls to read.", T_SCROLL);
-        break;
-      case KY_CMD_BLAST_WAND:
-        UseItemMenu("Which staff or wand do you wish to blast?", 
-            "You have no staves or wands to blast.", T_WAND);
-        break;
-      case KY_CMD_QUAFF:
-        UseItemMenu("Which potion do you wish to quaff?", 
-            "You have no potions to quaff.", T_POTION);
-        break;
-      case KY_CMD_YUSE:
-        YuseMenu();
-        break;
+        return;
+    }
 
-      case KY_CMD_OPEN:
-        if (HasMFlag(M_NOHANDS))
-          {
-            IPrint("But you have no hands!");
-            break;
-          }
-        if (i = m->FChestAt(x,y))  
-          if (yn("Open a container?"))
-          { // ww: unfortunately, there may be many chests
-OpenChest:
-            Thing *t = oThing(m->At(x,y).Contents); 
-            int32 ic = 1;
-            while (t) {
-              if (t->isType(T_CHEST)) {
-                LegendIdent(oItem(t->myHandle));
-                ((Item *)t)->Inscrip = NumberNames[ic++];
-              }
-              t = oThing(t->Next);
+    if (InSlot(SL_INAIR))
+        MyTerm->SetMode(MO_INV);
+
+    if (MyTerm->GetMode() == MO_INV) {
+        MyTerm->InventoryManager(false);
+        if (Timeout)
+            return;
+    }
+
+    if (Opt(OPT_AUTOHIDE) && HasSkill(SK_HIDE) && !HasStati(HIDING) && !m->BrightAt(x,y) && !HasStati(ILLUMINATED)
+        && !(TTER(m->TerrainAt(x,y))->HasFlag(TF_WATER) || HasFeat(FT_FEATHERFOOT)) && !HasStati(MANIFEST)) {
+        Creature *cr; int32 i;
+        /* Replacement isThreatened() prevents you from AutoHiding when obsreved by enemies you can't see. */
+        MapIterate(m,cr,i)
+            if (cr->isCreature() && cr->DistFrom(this) <= 16)
+                if (cr->isHostileTo(this))
+                    if (m->LineOfFire(cr->x,cr->y,x,y,cr))
+                        goto SkipAutoHide;
+
+        IPrint("AutoHide:");
+        ThrowVal(EV_HIDE,HI_SHADOWS,this);
+        if (Timeout)
+            return;
+SkipAutoHide:;
+    }
+
+    do {
+        if (HasStati(PARALYSIS))
+            goto IsParalyzed;
+        AutoPickupFloor();
+        // MyTerm->RecreateViewList();
+
+        MyTerm->ShowStatus();
+        MyTerm->ShowViewList();
+        if (shownFF != isFlatFooted())
+            MyTerm->ShowTraits();
+        if (Flags & F_DELETE) {
+            Timeout += 1;
+            return;
+        }
+        if (HungerShown != HungerState()) {
+            HungerShown = HungerState();
+            MyTerm->ShowTraits();
+        }
+        Silence = 0;
+        if (m && m->QueueNum())
+            Error("Messages (still) queued at beginning of turn.");
+        MyTerm->ClearKeyBuff();
+        ch = MyTerm->GetCharCmd();
+        if (StateFlags & MS_CASTING) {
+            StateFlags &= ~(MS_CASTING|MS_STILL_CAST);
+            statiChanged = true;
+        }
+        cdir = -1;
+        if (HasStati(CHARGING)) {
+            cdir = GetStati(CHARGING)->Val;
+            if ((ch < KY_CMD_FIRST_ARROW || ch > KY_CMD_LAST_ARROW) && ch != KY_ESC && 
+                ch != KY_SPACE && ch != KY_CMD_NAME && KY_CMD_WIZMODE &&
+                ch != KY_CMD_SHOW_MESSAGES && ch != KY_CMD_CHAR_SHEET && ch != KY_CMD_HELP 
+                && ch != KY_CMD_OPTIONS && ch != KY_CMD_ATTACK_MENU) {
+                if (HasStati(AUTO_CHARGE))
+                    ;
+                else if (!yn("Break off your charge?"))
+                    continue;
+                IDPrint(NULL,"The <Obj1> breaks off <his:Obj1> charge.",this);
+                RemoveStati(CHARGING);
             }
-            if (ic > 2) {
-              t = oThing(m->At(x,y).Contents); 
-              while (t) {
-                if (t->isType(T_CHEST))
-                  MyTerm->LOption(t->Name(NA_LONG|NA_MECH),t->myHandle,
-                                0, ic);
-                t = oThing(t->Next);
-              }
-              ic = MyTerm->LMenu(MENU_ESC|MENU_BORDER,
-                              "Loot which chest?",WIN_MENUBOX);
-              if (ic == -1) break;
-              i = theRegistry->GetItem(ic);
-            }
+        }            
+
+        switch (ch) {
+        case KY_CMD_LOOK_NORTH: 
+        case KY_CMD_LOOK_NORTHWEST: 
+        case KY_CMD_LOOK_NORTHEAST: 
+        case KY_CMD_LOOK_SOUTH: 
+        case KY_CMD_LOOK_SOUTHWEST: 
+        case KY_CMD_LOOK_SOUTHEAST: 
+        case KY_CMD_LOOK_EAST: 
+        case KY_CMD_LOOK_WEST: 
+            look_dx += DirX[DIR_OF_KY_CMD_LOOK(ch)] * 5;
+            look_dy += DirY[DIR_OF_KY_CMD_LOOK(ch)] * 5;
+            MyTerm->AdjustMap(x + look_dx, y + look_dy, true); 
+            break; 
+
+        case KY_CMD_NAME:
             e.Clear();
-            e.EActor = this; 
-            if (i) {
-              ((Container*)i)->PickLock(e); 
-              MyTerm->InventoryManager(true,(Container*)i);
-              }
-            break;
-          }
-        e.Clear();
-        e.EDir = -1;
-        for(n=0;n!=8;n++)
-          if (feat = m->FDoorAt(x + DirX[n], y + DirY[n]))
-            if (feat->Type == T_DOOR)
-            {
-              if (((Door*)feat)->DoorFlags & DF_SECRET)
-                continue;
-              if (e.EDir != -1)
-              {
-                if(!MyTerm->EffectPrompt(e,Q_DIR))
-                  break;
-
-                goto DoOpen;
-              }
-              e.EDir = n;
+            if (!MyTerm->EffectPrompt(e,Q_TAR | Q_INV))
+                break;
+            if (!(targ = e.ETarget))
+                break;
+            if (targ->Named.GetLength())
+                if (!yn(Format("Confirm rename %s? [yn]",(const char*)targ->Named),true))
+                    break;
+            if (targ->isCreature()) {
+                if (TMON(((Creature*)targ)->mID)->HasFlag(M_PROPER)) {
+                    IPrint("<Obj> already has a name.",targ);
+                    break;
+                } 
+            } 
+            // TODO: Is this worth fixing or keeping?
+            if (targ->isItem()) {
+                /*if (((Item*)targ)->aID || TEFF(((Item*)targ)->eID)->HasFlag(EF_UNIQUE))
+                {
+                IPrint("<Obj> already has a name.",targ);
+                break;
+                } 
+                */
             }
-        if (e.EDir == -1)
-        {
+            oName = MyTerm->StringPrompt(YELLOW,XPrint("What do you want to name the <Obj>? ",targ));
+            if (oName.GetLength()) {
+                oName.SetAt(0,toupper(oName[0]));
+                targ->Named = oName;
+            }
+            break;
+        case KY_CMD_JOURNAL:
+            oName = MyTerm->StringPrompt(YELLOW,"Journal Entry? ");
+            if (oName.GetLength())
+                AddJournalEntry(oName);
+            break; 
+        case KY_CMD_UP:
+            Throw(EV_ASCEND,this);
+            break;
+        case KY_CMD_DOWN:
+            Throw(EV_DESCEND,this);
+            break;
+        case KY_CMD_ENTER:
+            if (m->KnownFeatureAt(x,y))
+                if (m->KnownFeatureAt(x,y)->Type == T_PORTAL)
+                    if (((Portal*)m->KnownFeatureAt(x,y))->EnterDir(CENTER)) {
+                        if (Throw(EV_ENTER,this,m->KnownFeatureAt(x,y)) == DONE)
+                            return;
+                        break;
+                    }
+            IPrint("You can't go in anything here.");
+            break;
+        case KY_CMD_HELP:
+            MyTerm->HelpTopic(NULL); 
+            break;
+        case KY_CMD_LEGEND: 
+            MyTerm->DisplayLegend();
+            break; 
+            /*
+            case KY_CMD_DEBUG_MESSAGES:
+            MyTerm->ShowDebugMessages();
+            break;
+            */
+        case KY_CMD_LOOK:
+            e.Clear();
+            if (isBlind())
+                // "No, see, 'cause you're *blind*."
+                MyTerm->EffectPrompt(e,Q_TAR | Q_LOC,true,"Sensing --");
+            else
+                MyTerm->EffectPrompt(e,Q_TAR | Q_LOC,true,"Looking --");
+            break; 
+        case KY_CMD_TREAT_MONSTER:
+            e.Clear();
+            if(!MyTerm->EffectPrompt(e,Q_TAR|Q_CRE))
+                break;
+            targ =e.ETarget;
+            if (!targ || !targ->isCreature()) {
+                IPrint("There's nothing there to become hostile to.");
+                break;
+            } else {
+                IPrint("You now view the <Obj> as an enemy.",targ);
+                ts.addCreatureTarget((Creature *)targ, TargetEnemy);
+                Thing *t; int i;
+                MapIterate(m,t,i) 
+                    if (t->isCreature())
+                        ((Creature *)t)->ts.Retarget((Creature *)t);
+            } 
+            break; 
+        case KY_CMD_TALK:
+            e.Clear();
+            if(!MyTerm->EffectPrompt(e,Q_TAR|Q_CRE|Q_ALL))
+                break;
+            if (e.isDir) {
+                targ = m->FCreatureAt(x + DirX[e.EDir], y + DirY[e.EDir]);
+                if (!targ) {
+                    IPrint("There's nothing there to talk to.");
+                    break;
+                }
+            } else if (e.isAllAllies) {
+                e.EActor = this;
+                ReThrow(EV_ORDER,e);
+                break;
+            } else
+                targ =e.ETarget;
+
+            Throw(EV_TALK,this,targ);
+            break;
+        case KY_CMD_EAT:
+            UseItemMenu("What do you want to eat?", "You have no comestibles.", -2);
+            break;
+        case KY_CMD_ACTIVATE:
+            UseItemMenu("Which magic item do you wish to activate?", 
+                "You have no actively usable wonderous items.", -1);
+            break;
+        case KY_CMD_READ:
+            UseItemMenu("Which scroll do you wish to read?", 
+                "You have no scrolls to read.", T_SCROLL);
+            break;
+        case KY_CMD_BLAST_WAND:
+            UseItemMenu("Which staff or wand do you wish to blast?", 
+                "You have no staves or wands to blast.", T_WAND);
+            break;
+        case KY_CMD_QUAFF:
+            UseItemMenu("Which potion do you wish to quaff?", 
+                "You have no potions to quaff.", T_POTION);
+            break;
+        case KY_CMD_YUSE:
+            YuseMenu();
+            break;
+
+        case KY_CMD_OPEN:
+            if (HasMFlag(M_NOHANDS)) {
+                IPrint("But you have no hands!");
+                break;
+            }
+            if (i = m->FChestAt(x,y))  
+                if (yn("Open a container?")) {
+                    // ww: unfortunately, there may be many chests
+OpenChest:
+                    Thing *t = oThing(m->At(x,y).Contents); 
+                    int32 ic = 1;
+                    while (t) {
+                        if (t->isType(T_CHEST)) {
+                            LegendIdent(oItem(t->myHandle));
+                            ((Item *)t)->Inscrip = NumberNames[ic++];
+                        }
+                        t = oThing(t->Next);
+                    }
+                    if (ic > 2) {
+                        t = oThing(m->At(x,y).Contents); 
+                        while (t) {
+                            if (t->isType(T_CHEST))
+                                MyTerm->LOption(t->Name(NA_LONG|NA_MECH),t->myHandle,
+                                0, ic);
+                            t = oThing(t->Next);
+                        }
+                        ic = MyTerm->LMenu(MENU_ESC|MENU_BORDER,
+                            "Loot which chest?",WIN_MENUBOX);
+                        if (ic == -1) break;
+                        i = theRegistry->GetItem(ic);
+                    }
+                    e.Clear();
+                    e.EActor = this; 
+                    if (i) {
+                        ((Container*)i)->PickLock(e); 
+                        MyTerm->InventoryManager(true,(Container*)i);
+                    }
+                    break;
+                }
+                e.Clear();
+                e.EDir = -1;
+                for(n=0;n!=8;n++)
+                    if (feat = m->FDoorAt(x + DirX[n], y + DirY[n]))
+                        if (feat->Type == T_DOOR) {
+                            if (((Door*)feat)->DoorFlags & DF_SECRET)
+                                continue;
+                            if (e.EDir != -1) {
+                                if(!MyTerm->EffectPrompt(e,Q_DIR))
+                                    break;
+                                goto DoOpen;
+                            }
+                            e.EDir = n;
+                        }
+                if (e.EDir == -1)
+                {
 NoDoor:
-          IPrint("There's nothing there to open.");
-          break;
-        }
+                    IPrint("There's nothing there to open.");
+                    break;
+                }
 
 DoOpen:      
-        feat = m->FDoorAt(x + DirX[e.EDir], y + DirY[e.EDir]);
-        if (!feat)
-          goto NoDoor;
-        if (((Door*)feat)->DoorFlags & DF_OPEN)
-          Throw(EV_CLOSE,this,feat);
-        else
-          Throw(EV_OPEN,this,feat);
-        break;
-      case KY_CMD_FIRE:
-ShiftDirFire:
-        if (cdir != -1) {
-          //if (HasStati(AUTO_CHARGE))
-          //  ;
-          if (!yn("Break off your charge?"))
-            continue;
-          IDPrint(NULL,"The <Obj1> breaks off <his:Obj1> charge.",this);
-          RemoveStati(CHARGING);
-        }
-        e.Clear();
-        e.EActor = this;
-        found = false;
-        if (ch >= KY_CMD_FIRST_ARROW && ch <= KY_CMD_LAST_ARROW) {
-          if (!defAmmo) {
-            IPrint("You must select a default projectile before using the ranged attack shortcut.");
-            break;
-          }
-          for (k=0;k!=SL_LAST;k++)
-            if (defAmmo == Inv[k])
-              goto FoundDefAmmo;
-          IPrint("Your default projectile isn't easily accessible right now.");
-          break;
-FoundDefAmmo:
-          i = oItem(Inv[k]);
-          e.isDir = true;
-          e.EDir = DIR_OF_KY_CMD(ch);
-
-          if (i->isType(T_MISSILE))
-          {
-            if (!(EInSlot(SL_WEAPON) && EInSlot(SL_WEAPON)->isType(T_BOW) &&
-                  TITEM(EInSlot(SL_WEAPON)->iID)->HasRes(i->iID,AN_FIRES)))
-            {
-              IPrint("You don't have the proper weapen equipped to fire <Str>.",
-                  (const char*)i->Name(NA_A|NA_SINGLE));
-              break;
-            }
-            if (EInSlot(SL_WEAPON)->needsToBeCocked())
-              {
-                Throw(EV_LOADXBOW,this,NULL,InSlot(SL_WEAPON));
-                return;
-              }
-            e.EItem  = EInSlot(SL_WEAPON);
-            e.EItem2 = i;
-          }
-          else
-          {
-            /*
-            if (EInSlot(SL_WEAPON) && EInSlot(SL_READY))
-              if (EInSlot(SL_WEAPON) != i && EInSlot(SL_READY) != i)
-                {
-                  IPrint("You need a free hand to throw things!");
-                  return;
-                }*/
-            e.EItem  = NULL;
-            e.EItem2 = i;
-          }
-        }
-        else
-        {
-          if (EInSlot(SL_WEAPON) && EInSlot(SL_WEAPON)->isType(T_BOW))
-          {
-      // ww: in the exceptionally common case, you have only one stack of
-      // valid ammo and we can skip this question 
-            int foundCount = 0; 
-            Item * foundItem = NULL;
-            if (InSlot(SL_WEAPON)->needsToBeCocked())
-              {
-                Throw(EV_LOADXBOW,this,NULL,InSlot(SL_WEAPON));
-                return;
-              }
-
-            for(n=0;n!=SL_LAST;n++)
-              if (EInSlot((int8)n) && EInSlot((int8)n)->isType(T_MISSILE))
-                if (TITEM(EInSlot(SL_WEAPON)->iID)->HasRes(EInSlot((int8)n)->iID,AN_FIRES))
-                {
-                  foundCount++;
-                  foundItem = EInSlot((int8)n);
-                  MyTerm->LOption(InSlot((int8)n)->Name(0),EInSlot((int8)n)->myHandle);
-                }
-
-            if (foundCount == 0) {
-              IPrint("You have no projectiles ready for your <Obj>.",
-                  EInSlot(SL_WEAPON));
-              break;
-            } else if (foundCount == 1) {
-              MyTerm->LOptionClear();
-              e.EItem2 = foundItem; 
-            } else { 
-              h = MyTerm->LMenu(MENU_ESC|MENU_BORDER,XPrint("Fire what from your <Obj>?",
-                    EInSlot(SL_WEAPON)), WIN_MENUBOX, "help::commands");
-              if (h == -1)
+                feat = m->FDoorAt(x + DirX[e.EDir], y + DirY[e.EDir]);
+                if (!feat)
+                    goto NoDoor;
+                if (((Door*)feat)->DoorFlags & DF_OPEN)
+                    Throw(EV_CLOSE,this,feat);
+                else
+                    Throw(EV_OPEN,this,feat);
                 break;
-              e.EItem2 = oItem(h);
+        case KY_CMD_FIRE:
+ShiftDirFire:
+            if (cdir != -1) {
+                //if (HasStati(AUTO_CHARGE))
+                //  ;
+                if (!yn("Break off your charge?"))
+                    continue;
+                IDPrint(NULL,"The <Obj1> breaks off <his:Obj1> charge.",this);
+                RemoveStati(CHARGING);
             }
-            e.EItem  = EInSlot(SL_WEAPON);
-          }
-          else
-          {
-            for(n=0;n!=SL_LAST;n++)
-              if (EInSlot((int8)n) && (InSlot((int8)n)->HasIFlag(IT_THROWABLE) ||
-                    (EInSlot((int8)n)->RangeInc(this) && !EInSlot((int8)n)->isType(T_BOW))))
-              {
-                found = true;
-                MyTerm->LOption(EInSlot((int8)n)->Name(0),EInSlot((int8)n)->myHandle);
-              }
-
-            if (!found)
-            {
-              IPrint("You have no ranged weapons ready.");
-              break;
-            }
-            /*
-                if (EInSlot(SL_WEAPON) && EInSlot(SL_READY))
-                if (EInSlot(SL_WEAPON) != i && EInSlot(SL_READY) != i)
-                {
-                IPrint("You need a free hand to throw things!");
-                return;
+            e.Clear();
+            e.EActor = this;
+            found = false;
+            if (ch >= KY_CMD_FIRST_ARROW && ch <= KY_CMD_LAST_ARROW) {
+                if (!defAmmo) {
+                    IPrint("You must select a default projectile before using the ranged attack shortcut.");
+                    break;
                 }
-              */
-            h = MyTerm->LMenu(MENU_ESC|MENU_BORDER,"Throw what?", WIN_MENUBOX, "help::commands");
-            if (h == -1)
-              break;
-            e.EItem  = NULL;
-            e.EItem2 = oItem(h);
-          }
+                for (k=0;k!=SL_LAST;k++)
+                    if (defAmmo == Inv[k])
+                        goto FoundDefAmmo;
+                IPrint("Your default projectile isn't easily accessible right now.");
+                break;
+FoundDefAmmo:
+                i = oItem(Inv[k]);
+                e.isDir = true;
+                e.EDir = DIR_OF_KY_CMD(ch);
 
-          if (!MyTerm->EffectPrompt(e,Q_DIR | Q_TAR | Q_LOC |Q_CRE))
-            break;
-        }
+                if (i->isType(T_MISSILE)) {
+                    if (!(EInSlot(SL_WEAPON) && EInSlot(SL_WEAPON)->isType(T_BOW) && TITEM(EInSlot(SL_WEAPON)->iID)->HasRes(i->iID,AN_FIRES))) {
+                        IPrint("You don't have the proper weapen equipped to fire <Str>.",
+                            (const char*)i->Name(NA_A|NA_SINGLE));
+                        break;
+                    }
+                    if (EInSlot(SL_WEAPON)->needsToBeCocked()) {
+                        Throw(EV_LOADXBOW,this,NULL,InSlot(SL_WEAPON));
+                        return;
+                    }
+                    e.EItem  = EInSlot(SL_WEAPON);
+                    e.EItem2 = i;
+                } else {
+                    /*
+                    if (EInSlot(SL_WEAPON) && EInSlot(SL_READY))
+                    if (EInSlot(SL_WEAPON) != i && EInSlot(SL_READY) != i)
+                    {
+                    IPrint("You need a free hand to throw things!");
+                    return;
+                    }*/
+                    e.EItem  = NULL;
+                    e.EItem2 = i;
+                }
+            } else {
+                if (EInSlot(SL_WEAPON) && EInSlot(SL_WEAPON)->isType(T_BOW))
+                {
+                    // ww: in the exceptionally common case, you have only one stack of
+                    // valid ammo and we can skip this question 
+                    int foundCount = 0; 
+                    Item * foundItem = NULL;
+                    if (InSlot(SL_WEAPON)->needsToBeCocked()) {
+                        Throw(EV_LOADXBOW,this,NULL,InSlot(SL_WEAPON));
+                        return;
+                    }
 
-        ReThrow(EV_RATTACK,e);
-        return;
-      case KY_CMD_PRAY:
-        DoPrayer:
-        Throw(EV_PRAY,this);
-        break;
-      case KY_CMD_OVERVIEW_MAP:
-        MyTerm->ShowMapOverview(); 
-        break; 
+                    for(n=0;n!=SL_LAST;n++)
+                        if (EInSlot((int8)n) && EInSlot((int8)n)->isType(T_MISSILE))
+                            if (TITEM(EInSlot(SL_WEAPON)->iID)->HasRes(EInSlot((int8)n)->iID,AN_FIRES)) {
+                                foundCount++;
+                                foundItem = EInSlot((int8)n);
+                                MyTerm->LOption(InSlot((int8)n)->Name(0),EInSlot((int8)n)->myHandle);
+                            }
 
-      case KY_CMD_GET:
-          gx = x; gy = y;
-          if (HasMFlag(M_NOHANDS)) {
-              IPrint("But you have no hands!");
-              break;
-          }
-          if (i = m->FChestAt(x,y)) {
-              if (yn("Open a container?"))
-                  goto OpenChest;
-          }
-          if (HasStati(TELEKINETIC)) {
-              e.Clear();
-              e.vRange = (int8)GetStatiMag(TELEKINETIC);
-              if (thisp->MyTerm->EffectPrompt(e,Q_LOC,false,"Get an item:"))
-                  { gx = e.EXVal; gy = e.EYVal; }
-              else
-                  return;
-          }
+                            if (foundCount == 0) {
+                                IPrint("You have no projectiles ready for your <Obj>.",
+                                    EInSlot(SL_WEAPON));
+                                break;
+                            } else if (foundCount == 1) {
+                                MyTerm->LOptionClear();
+                                e.EItem2 = foundItem; 
+                            } else { 
+                                h = MyTerm->LMenu(MENU_ESC|MENU_BORDER,XPrint("Fire what from your <Obj>?",
+                                    EInSlot(SL_WEAPON)), WIN_MENUBOX, "help::commands");
+                                if (h == -1)
+                                    break;
+                                e.EItem2 = oItem(h);
+                            }
+                            e.EItem  = EInSlot(SL_WEAPON);
+                } else {
+                    for(n=0;n!=SL_LAST;n++)
+                        if (EInSlot((int8)n) && (InSlot((int8)n)->HasIFlag(IT_THROWABLE) ||
+                            (EInSlot((int8)n)->RangeInc(this) && !EInSlot((int8)n)->isType(T_BOW)))) {
+                            found = true;
+                            MyTerm->LOption(EInSlot((int8)n)->Name(0),EInSlot((int8)n)->myHandle);
+                        }
 
-          if (m->MItemAt(gx,gy)) {
-              targ = m->FItemAt(gx,gy);
-              while (targ) {
-                  if (targ->isItem()) {
-                      LegendIdent(oItem(targ->myHandle));
-                      int32 sortKey = 0;
-                      switch (Opt(OPT_SORT_PILE)) {
-                      case 1: /* type */ sortKey = targ->Type; break;
-                      case 2: /* quality */ 
-                          sortKey = -10 - ((Item *)targ)->PItemLevel(this); break; 
-                      default: /* name */ break;
-                      } 
-                      MyTerm->LOption(targ->Name(NA_LONG|NA_MECH),targ->myHandle,0,sortKey);
-                  }
-                  targ = m->NItemAt(gx,gy);
-              }
-              h = MyTerm->LMenu(MENU_ESC|MENU_SORTED|MENU_BORDER,"Pick up what?",WIN_MENUBOX);
-              if (h == -1)
-                  break;
-              i = oItem(h); 
-          } else if (!(i=m->FItemAt(gx,gy)))
-              break;
-//ChosenGetItem:
-          if (i->GetQuantity() > 1 && MyTerm->AltDown())
-              i = OneSomeAll(i,this);
-          if (Throw(EV_PICKUP,this,NULL,i)!=ABORT) {
-            if (gx!=x || gy!=y)
-                IPrint("The <Obj> flies through the air and into your grip!",i);
+                        if (!found) {
+                            IPrint("You have no ranged weapons ready.");
+                            break;
+                        }
+                        /*
+                        if (EInSlot(SL_WEAPON) && EInSlot(SL_READY))
+                        if (EInSlot(SL_WEAPON) != i && EInSlot(SL_READY) != i)
+                        {
+                        IPrint("You need a free hand to throw things!");
+                        return;
+                        }
+                        */
+                        h = MyTerm->LMenu(MENU_ESC|MENU_BORDER,"Throw what?", WIN_MENUBOX, "help::commands");
+                        if (h == -1)
+                            break;
+                        e.EItem  = NULL;
+                        e.EItem2 = oItem(h);
+                }
+
+                if (!MyTerm->EffectPrompt(e,Q_DIR | Q_TAR | Q_LOC |Q_CRE))
+                    break;
+            }
+
+            ReThrow(EV_RATTACK,e);
             return;
-          }
-          break;
-      case KY_CMD_HIDE:
-        if (HasStati(HIDING)) {
-          IPrint("You step out of the shadows.");
-          RemoveStati(HIDING,-1,-1);
-          }
-        else 
-          ThrowVal(EV_HIDE,HI_SHADOWS,this);
-        return;
-      case KY_CMD_WIZMODE:
-        if (!WizardMode)
-        {
-          #ifndef DEBUG
-          if (Opt(OPT_DISALLOW)) {
-            IPrint("Wizard mode has been disallowed in this game.");
+        case KY_CMD_PRAY:
+DoPrayer:
+            Throw(EV_PRAY,this);
+            break;
+        case KY_CMD_OVERVIEW_MAP:
+            MyTerm->ShowMapOverview(); 
+            break; 
+
+        case KY_CMD_GET:
+            gx = x; gy = y;
+            if (HasMFlag(M_NOHANDS)) {
+                IPrint("But you have no hands!");
+                break;
+            }
+            if (i = m->FChestAt(x,y)) {
+                if (yn("Open a container?"))
+                    goto OpenChest;
+            }
+            if (HasStati(TELEKINETIC)) {
+                e.Clear();
+                e.vRange = (int8)GetStatiMag(TELEKINETIC);
+                if (thisp->MyTerm->EffectPrompt(e,Q_LOC,false,"Get an item:"))
+                { gx = e.EXVal; gy = e.EYVal; }
+                else
+                    return;
+            }
+
+            if (m->MItemAt(gx,gy)) {
+                targ = m->FItemAt(gx,gy);
+                while (targ) {
+                    if (targ->isItem()) {
+                        LegendIdent(oItem(targ->myHandle));
+                        int32 sortKey = 0;
+                        switch (Opt(OPT_SORT_PILE)) {
+                        case 1: /* type */ sortKey = targ->Type; break;
+                        case 2: /* quality */ 
+                            sortKey = -10 - ((Item *)targ)->PItemLevel(this); break; 
+                        default: /* name */ break;
+                        } 
+                        MyTerm->LOption(targ->Name(NA_LONG|NA_MECH),targ->myHandle,0,sortKey);
+                    }
+                    targ = m->NItemAt(gx,gy);
+                }
+                h = MyTerm->LMenu(MENU_ESC|MENU_SORTED|MENU_BORDER,"Pick up what?",WIN_MENUBOX);
+                if (h == -1)
+                    break;
+                i = oItem(h); 
+            } else if (!(i=m->FItemAt(gx,gy)))
+                break;
+            //ChosenGetItem:
+            if (i->GetQuantity() > 1 && MyTerm->AltDown())
+                i = OneSomeAll(i,this);
+            if (Throw(EV_PICKUP,this,NULL,i)!=ABORT) {
+                if (gx!=x || gy!=y)
+                    IPrint("The <Obj> flies through the air and into your grip!",i);
+                return;
+            }
+            break;
+        case KY_CMD_HIDE:
+            if (HasStati(HIDING)) {
+                IPrint("You step out of the shadows.");
+                RemoveStati(HIDING,-1,-1);
+            } else 
+                ThrowVal(EV_HIDE,HI_SHADOWS,this);
+            return;
+        case KY_CMD_WIZMODE:
+            if (!WizardMode)
+            {
+#ifndef DEBUG
+                if (Opt(OPT_DISALLOW)) {
+                    IPrint("Wizard mode has been disallowed in this game.");
+                    break;
+                }
+#endif
+                if (!yn("Enter wizard mode?",true))
+                    break;
+                WizardMode = true;
+            }
+            WizardOptions();
+            break;
+        case KY_CMD_INVENTORY:
+            MyTerm->InventoryManager(true,NULL);
+            return;
+            break;
+        case KY_CMD_SHOW_MESSAGES:
+            MyTerm->ShowMessages();
+            break; 
+        case KY_CMD_MAGIC:
+            /* ww: true, but let them look at the spell manager anyway
+            if (inField(FI_SILENCE) && !HasFeat(FT_VOCALIZE_SPELL))
+            {
+            IPrint("You can't cast spells in areas of magical silence.");
             break;
             }
-          #endif
-          if (!yn("Enter wizard mode?",true))
-            break;
-          WizardMode = true;
-        }
-        WizardOptions();
-        break;
-      case KY_CMD_INVENTORY:
-        MyTerm->InventoryManager(true,NULL);
-        return;
-        break;
-      case KY_CMD_SHOW_MESSAGES:
-        MyTerm->ShowMessages();
-        break; 
-      case KY_CMD_MAGIC:
-        /* ww: true, but let them look at the spell manager anyway
-        if (inField(FI_SILENCE) && !HasFeat(FT_VOCALIZE_SPELL))
-        {
-          IPrint("You can't cast spells in areas of magical silence.");
-          break;
-        }
-        */
-        DoMagic:
-        sp = MyTerm->SpellManager(SM_CAST);
-        if (sp == -1)
-          return;
+            */
+DoMagic:
+            sp = MyTerm->SpellManager(SM_CAST);
+            if (sp == -1)
+                return;
 CastSpell:
-        e.Clear();
-        e.EActor = this;
-        e.eID = theGame->SpellID(sp);
-        if (!MyTerm->EffectPrompt(e,TEFF(e.eID)->ef.qval |
-              ((MMFeats(sp) & MM_PROJECT) ? Q_DIR : 0)))
-          break;
-        if (Spells[sp] & SP_INNATE) 
-          ReThrow(EV_INVOKE,e);
-        else 
-          ReThrow(EV_CAST,e);
-        return;
-      case KY_CMD_CHAR_SHEET:
-        MyTerm->DisplayCharSheet();
-        break;
-      case KY_CMD_QUICK_QUIT:
-        theGame->SetSaveFlag();
-        Timeout = 1;
-        return;
-      case KY_CMD_ESCAPE:
-        MyTerm->LOption("Save and Quit",1);
-        MyTerm->LOption("Save and Continue",2);
-        MyTerm->LOption("Quit Game",3);
-        switch (MyTerm->LMenu(MENU_ESC|MENU_BORDER,"System Menu"))
-        {
-          case 1:
+            e.Clear();
+            e.EActor = this;
+            e.eID = theGame->SpellID(sp);
+            if (!MyTerm->EffectPrompt(e,TEFF(e.eID)->ef.qval |
+                ((MMFeats(sp) & MM_PROJECT) ? Q_DIR : 0)))
+                break;
+            if (Spells[sp] & SP_INNATE) 
+                ReThrow(EV_INVOKE,e);
+            else 
+                ReThrow(EV_CAST,e);
+            return;
+        case KY_CMD_CHAR_SHEET:
+            MyTerm->DisplayCharSheet();
+            break;
+        case KY_CMD_QUICK_QUIT:
             theGame->SetSaveFlag();
             Timeout = 1;
             return;
-          case 2:
-            theGame->SetAutoSaveFlag();
-            Timeout = 1;
-            return;
-          case 3:
-            if(MyTerm->yn("Really Quit?"))
-            {
-              SetSilence();
-              Flags |= F_DELETE;
-              QuitFlag = true;
-              Timeout = 60;
-              return;
-            }
-            break;
-          default:
-            break;
-        }
-        break;
-      case KY_CMD_SEARCH:
-        GainTempStati(ACTING,NULL,25,SS_MISC,EV_SEARCH);
-        Timeout++; 
-        break;
-      case KY_CMD_ATTACK_MENU:
-        MyTerm->LOption("Attack",A_SWNG, "Use this option to perform a normal"
-            " attack against a creature who is not yet hostile to you (Walking"
-            " into these characters will normally just displace them) or is"
-            " invisible or otherwise imperceptable.");
-        MyTerm->LOption("Break Grapple",A_ESCA,"You attempt to break out of an"
-            " enemy's grab or grapple with a grapple check. If successful, this"
-            " maneuver takes no time to complete, giving you an opportunity to"
-            " get out of melee range, but if failed it takes up a full round.");
-        MyTerm->LOption("Bull Rush",A_BULL, "Attempt to force an opponent"
-            " back one square by charging into them. This is resolved with an"
-            " oppposed Strength roll modified by +4/-4 for every difference in"
-            " size category between you and your opponent. A bull rush normally"
-            " provokes an attack of oppurtonity from the target.");
-        MyTerm->LOption("Called Shot",A_CALL,XPrint("You aim an attack at a specific"
-              " part of an opponent's body, hoping to inflict a debilitating injury"
-              " rather then just going for the kill. <13>Not implemented yet.<2>"));
-#if 1
-        MyTerm->LOption("Charge",A_CHAR,
-            "__You run (or ride) in a straight line, gaining a +2 bonus to hit and "
-            "accumulating plusses to damage due to momentum as you move. Your damage "
-            "bonus is based on your mass (size, equipment and mount) times your velocity "
-            "(movement rate). These bonuses apply only to melee attacks. Some weapons "
-            "and feats double or triple the damage bonus that charging grants, and being "
-            "mounted also increases the effect. Hitting something with a weapon while "
-            "charging deals blunt damage to that weapon equal to your charge damage bonus."
-            "\n__You are always subject to Sneak Attacks while charging. You may not make "
-            "attacks of opportunity while charging. You are denied your Dexterity bonus "
-            "to Defense while charging."
-            "\n__If you charge near an opponent that has reach, it will set itself to "
-            "receive your charge, gaining a free attack of opportunity against you. In "
-            "this attack it gains your charge bonus to damage against you (momentum is "
-            "symmetric). If you take any damage in that attack, you must save versus DC "
-            "30 to avoid being tripped. If you do not take any damage, you automatically "
-            "close with that opponent.");
-#else
-        MyTerm->LOption("Charge",A_CHAR,"You run in a straight line, accumulating"
-            " plusses to hit and damage due to momentum as you move. You are considered" 
-            " to be exposed while charging, and for one turn thereafter. Some weapons"
-            " double or triple the damage bonus that charging grants, and being mounted"
-            " also increases the effect.");
-#endif
-        MyTerm->LOption("Charge, Automatic",AUTO_CHARGE,
-            " You automatically Charge when moving. Whenever you change directions you break off your current charge and start a new one. This can be convenient if you are mounted and trying to run a fleeing enemy down with a lance, for example.");
-        MyTerm->LOption("Coup de Grace",A_COUP,"Deliver a killing blow to a"
-            " paralyzed or sleeping living humanoid opponent within 5 feet of"
-            " you. The attack is an automatic critical, and even if the foe"
-            " survives the damage they must make a Fortitude save (DC 10 + half"
-            " of the damage dealt) or die anyway. Performing a Coup de Grace"
-            " provokes attacks of oppourtunity from every non-paralyzed or"
-            " sleeping enemy within 1 square.");
-        MyTerm->LOption("Disarm",A_DISA,"You cause an opponent to lose their"
-            " weapon. An opposed attack roll is made, using only Base Attack "
-            " Bonus, modified by both Strength and Dexterity, as well as +/- 4 "
-            "for weapon size differences. Success"
-            " causes the opponent to lose their weapon; failure means they are"
-            " allowed to make an immediate Disarm attempt against you, without"
-            " it costing them an action. A Disarm attempt normally provokes an"
-            " attack of opportunity.");
-        MyTerm->LOption("Fight Defensively",A_DEFN, "By devoting your full attention"
-            " to defense, you can gain a +4 circumstance bonus to your defense class"
-            " at the expense of suffering a -4 circumstance penalty to attack rolls,"
-            " -2 to damage, 75~ normal movement rate and a -20% spell success chance."
-            " Once fighting defensively, you can stop by using the 'x' command."); 
-        MyTerm->LOption("Grapple",A_GRAB,"You grab your opponent and initate a"
-            " grapple with him. Grappling is resolved with grapple checks, which"
-            " are opposed contests of Brawl attack bonus plus Strength modifier"
-            " plus or minus 4 for every divergance in size category, favouring"
-            " the larger character. To begin grappling, however, you must hit your"
-            " target's DC as per a normal attack. Initiating a grapple provokes an"
-            " attack of opportunity from your target.");
-        MyTerm->LOption("Great Blow",A_GREA,"You execute a titanically powerful"
-            " blow with your weapon, allowing you to double your Strength modifier"
-            " to damage, granting a +2 bonus to both the attack roll and damage and"
-            " lowering the threat range of your attack"
-            " by 3 (i.e., 19-20 becomes 16-20). However, a great blow takes 1 1/2 times"
-            " as long as a normal attack, costs two Fatigue points and leaves you"
-            " off-balance and Exposed for a full round after you finish it.");
-        MyTerm->LOption("Sprint",A_SPRT, "You put on a desperate burst of speed,"
-            " and increase you movement rate by 50% for [1 + Constitution modifier]"
-            " rounds (minimum 1) at the cost of one fatigue point. Since you are"
-            " running full out, Sprint also decreases your defense class by two.");
-        MyTerm->LOption("Sunder Weapon",A_SUND,"You strike an opponent's weapon"
-            " (or, at your option, any unattended object) and attempt to damage or"
-            " destroy it. This provokes an attack of opportunity from the person"
-            " using the weapon. Weapons with a magical plus can not be destroyed" 
-            " by any weapon with a lower magical plus then their own.");
-        MyTerm->LOption("Throw",A_THRO,"You throw an enemy you are grappling"
-            " with already one or more squares away from you. You must succeed"
-            " in a grapple check against them, and this action ends the grapple."
-            " You inflict your normal unarmed damage value in subdual damage, plus"
-            " one point per square the enemy is thrown.");
-        MyTerm->LOption("Trip",A_TRIP,"You attempt to knock an opponent prone."
-            " You must first make a successful attack roll against his DC, and"
-            " then you make a Strength check opposed by his Strength or Dexterity,"
-            " whichever favours him more. Success knocks the target prone. Failure"
-            " allows the target to make an immediate, free attempt to trip you in"
-            " return. Some weapons grant a bonus to trip attempts, such as the"
-            " quarterstaff. If you do not have the Improved Trip feat, you provoke"
-            " an attack of opportunity when you attempt to trip a foe.");
-        if (HasSkill(SK_FIND_WEAKNESS))
-          MyTerm->LOption("Precision Strike", A_PREC, "Facing an opponent with near-"
-              "insurmountable defenses, you cleverly gauge his defensive pattern and"
-              " search for an opening or weakness. You add 1/2 your Find Weakness "
-              " skill rating to the attack roll, but you also add 45 segments to the "
-              " attack's timecost.");
-
-        if (HasFeat(FT_SPRING_ATTACK))
-          MyTerm->LOption("Spring Attack",A_SPRI, "You are able to execute a rapid"
-              " melee attack against an opponent that is up to two squares away from"
-              " you by darting in quickly to strike. This does not provoke an attack"
-              " of opportunity the way leaving a hostile creature's threatened area"
-              " normally would.");
-        if (HasFeat(FT_WHIRLWIND_ATTACK))
-          MyTerm->LOption("Whirlwind Attack", A_WHIR, "You execute a rapid flurry"
-              " of attacks, striking every creature within one square of you at the"
-              " same time. A seperate attack is rolled against each creature at your"
-              " full normal attack bonus and damage rating. Performing a Whirlwind"
-              " Attack costs you one Fatigue point.");
-          MyTerm->LOption("Avert Eyes", A_AEYE, 
-              "You avert your eyes from all opponents and attempt instead to look at their faces, shadows, torsos, and so on. This gives all gaze attacks against you a 50~ miss chance. However, it also gives you a 50~ miss chance in combat (25~ if you have the Blind Fighting feat). ");
-          MyTerm->LOption("Close Eyes", BLINDNESS, 
-              "You close your eyes. This makes it difficult to see the dungeon around you (unless you have Stonework Sense, for example) and makes it difficult to see monsters around you (unless you have Blindsight or Telepathy or are already Tracking them, for example). It makes you immune to gaze attacks and blinding effects. It gives you a 50~ miss chance in combat (25~ if you have the Blind Fighting feat). You may not make attacks of opportunity. Unless you have the Blind Fighting feat, every attack against you is a surprise."); 
-          MyTerm->LOption("Movement", A_MOVE,
-              "Move into a square adjacent to your own. This command can be used to move into the "
-              "same square as a monster instead of attacking it as the arrow keys would. You can "
-              "only pass into the square of an incorporeal or non-hostile creature.");
-        /* Feint */
-        /* Read Opponent */
-
-        MyTerm->SetQKeyType(QuickKeys,QKY_TACTIC);
-        n = (int16)MyTerm->LMenu(MENU_ESC|MENU_DESC|MENU_2COLS|MENU_BORDER|MENU_QKEY,
-            " -- Tactical Options -- ",WIN_MENUBOX);
-        if (n == -1)
-          break; 
-        DoTacticalOption:
-        e.Clear(); 
-        switch(n) {
-          case A_MOVE:
-            if (!MyTerm->EffectPrompt(e,Q_DIR,false,"Movement Direction"))
-              break;
-            ThrowDir(EV_MOVE,(Dir)e.EDir,this);
-            break;
-          case A_TRIP:
-          case A_THRO:
-          case A_SUND:
-          case A_GREA:
-          case A_GRAB:
-          case A_BULL:
-          case A_DISA:
-          case A_COUP:
-          case A_SWNG:
-          case A_PREC:
-            if (HasStati(TELEKINETIC)) {
-              e.vRange = (int8)HighStatiMag(TELEKINETIC);
-              if (!MyTerm->EffectPrompt(e,Q_TAR|Q_CRE))
-                break;
-              goto FindNonReachVictim;
-              }
-            else if ((StateFlags & MS_HAS_REACH) && n != A_THRO &&
-                n != A_GRAB && n != A_BULL) {
-              /* ww: if you have a reach weapon, you should be
-                * able to great-blow something far away */
-              e.vRange = 2 + FaceRadius[Attr[A_SIZ]];
-              if (!MyTerm->EffectPrompt(e,Q_TAR|Q_LOC|Q_CRE))
-                break;
-              if (e.ETarget && !e.ETarget->isCreature() && !e.ETarget->isFeature() && !e.ETarget->isItem())
-                break;
-              if (!e.EVictim) 
-                e.EVictim = m->FCreatureAt(e.EXVal,e.EYVal);
-              if (!e.EVictim) 
-                e.EVictim = m->FCreatureAt(x+DirX[e.EDir],y+DirY[e.EDir]);
-              if (!e.EVictim) 
-                e.EVictim = m->FCreatureAt(x+2*DirX[e.EDir],y+2*DirY[e.EDir]);
-              if (!e.ETarget) 
-                e.ETarget = m->KnownFeatureAt(e.EXVal,e.EYVal);
-              if (!e.ETarget) 
-                e.ETarget = m->KnownFeatureAt(x+DirX[e.EDir],y+DirY[e.EDir]);
-              if (!e.ETarget) 
-                e.ETarget = m->KnownFeatureAt(x+2*DirX[e.EDir],y+2*DirY[e.EDir]);
-              if (!e.ETarget) 
-                e.ETarget = m->FChestAt(e.EXVal,e.EYVal);
-              if (!e.ETarget) 
-                e.ETarget = m->FItemAt(e.EXVal,e.EYVal);
-              if (!e.ETarget) 
-                e.ETarget = m->FChestAt(x+DirX[e.EDir],y+DirY[e.EDir]);
-              if (!e.ETarget) 
-                e.ETarget = m->FItemAt(x+DirX[e.EDir],y+DirY[e.EDir]);
-              if (!e.ETarget) 
-                e.ETarget = m->FChestAt(x+2*DirX[e.EDir],y+2*DirY[e.EDir]);
-              if (!e.ETarget) 
-                e.ETarget = m->FItemAt(x+2*DirX[e.EDir],y+2*DirY[e.EDir]);
-            }
-            else {
-              if (!MyTerm->EffectPrompt(e,Q_DIR|Q_TAR|Q_LOC|Q_CRE))
-                break;
-              if (e.ETarget && !e.ETarget->isCreature() && !e.ETarget->isFeature() && !e.ETarget->isItem())
-                break;
-              FindNonReachVictim:
-              if (!e.EVictim) 
-                e.EVictim = m->FCreatureAt(e.EXVal,e.EYVal);
-              if (!e.EVictim) 
-                e.EVictim = m->FCreatureAt(x+DirX[e.EDir],y+DirY[e.EDir]);
-              if (!e.ETarget) 
-                e.ETarget = m->KnownFeatureAt(e.EXVal,e.EYVal);
-              if (!e.ETarget) 
-                e.ETarget = m->KnownFeatureAt(x+DirX[e.EDir],y+DirY[e.EDir]);
-              if (!e.ETarget) 
-                e.ETarget = m->FChestAt(e.EXVal,e.EYVal);
-              if (!e.ETarget) 
-                e.ETarget = m->FItemAt(e.EXVal,e.EYVal);
-              if (!e.ETarget) 
-                e.ETarget = m->FChestAt(x+DirX[e.EDir],y+DirY[e.EDir]);
-              if (!e.ETarget) 
-                e.ETarget = m->FItemAt(x+DirX[e.EDir],y+DirY[e.EDir]);
-            }
-
-            if (!e.ETarget)
-              {
-                IPrint("There's nothing there to use a tactic on!");
-                break; 
-              }
-            if (!e.EVictim->isCreature())
-              if (n != A_MOVE && n != A_SWNG)
+        case KY_CMD_ESCAPE:
+            MyTerm->LOption("Save and Quit",1);
+            MyTerm->LOption("Save and Continue",2);
+            MyTerm->LOption("Quit Game",3);
+            switch (MyTerm->LMenu(MENU_ESC|MENU_BORDER,"System Menu")) {
+            case 1:
+                theGame->SetSaveFlag();
+                Timeout = 1;
+                return;
+            case 2:
+                theGame->SetAutoSaveFlag();
+                Timeout = 1;
+                return;
+            case 3:
+                if(MyTerm->yn("Really Quit?"))
                 {
-                  IPrint("That action only applies to creatures.");
-                  break;
+                    SetSilence();
+                    Flags |= F_DELETE;
+                    QuitFlag = true;
+                    Timeout = 60;
+                    return;
                 }
-            if (e.EVictim == this)
-            {
-              IPrint("Attacking oneself is counterproductive.");
-              break;
-            }
-            if (dist(x,y,e.EVictim->x,e.EVictim->y) <= 1+FaceRadius[Attr[A_SIZ]])
-              if ((StateFlags & MS_REACH_ONLY) && e.ETarget->isCreature())
-              {
-                IPrint("You cannot attack adjacent targets with that weapon.");
                 break;
-              }
-            targ = e.EVictim; 
-            if (n == A_SWNG) goto NormalAttack;
-                /* ww: Dwarven Auto-Focus */
-                if (Opt(OPT_DWARVEN_AUTOFOCUS) && 
-                e.ETarget->isCreature() && 
-                    ((Creature *)targ)->ChallengeRating() >= 
-                                        ChallengeRating() && 
-                    HasAbility(CA_DWARVEN_FOCUS) && 
-                    !GetStati(DWARVEN_FOCUS,-1,0)) {
-                  GainPermStati(DWARVEN_FOCUS,targ,SS_RACE,0,0,0);
-                  targ->Flags |= F_HILIGHT;
-                  msg = Format("You swear a vow to slay %c%s%c.",
-                      -RED, (const char*)targ->Name(NA_THE), -GREY);
-                  MyTerm->Message(msg);
-                  MyTerm->Box(msg);
-                } 
-            ThrowVal(EV_SATTACK,n,this,e.EVictim);
-            break;
-          case AUTO_CHARGE:
-            if (HasStati(AUTO_CHARGE))
-            {
-              IPrint("You're already automatically charging!");
-              break;
-            }
-            GainPermStati(AUTO_CHARGE,NULL,SS_MISC,0,0,0);
-            break;
-          case BLINDNESS: 
-            if (isBlind())
-            {
-              IPrint("You're already not seeing anything!");
-              break; 
-            } 
-            IPrint("You close your eyes."); 
-            GainPermStati(BLINDNESS,this,SS_MISC,BLIND_EYES_CLOSED,0,0);
-            break;
-          case A_CHAR:
-            if (HasStati(CHARGING))
-              {
-                IPrint("You're already charging!");
+            default:
                 break;
-              }
-            if (!MyTerm->EffectPrompt(e,Q_DIR))
-              break;
-            DigMode = false;
-            if (!canChargeInDir((Dir)e.EDir))
-              {
-                IPrint("There's nothing to charge at in that direction!");
-                break;
-              }
-            GainPermStati(CHARGING,NULL,SS_MISC,e.EDir,0,0);
+            }
             break;
-          case A_SPRI:
-            if (!MyTerm->EffectPrompt(e,Q_TAR|Q_CRE))
-              break;
-            if (dist(x,y,e.ETarget->x,e.ETarget->y) > 4)
-            {
-              IPrint("The <Obj> is too far away to Spring Attack.",e.ETarget);
-              break;
-            }
-            ThrowVal(EV_SATTACK,n,this,e.ETarget);
-            return;
-          case A_WHIR:
-          case A_ESCA:
-          case A_SPRT:
-          case A_AEYE: 
-          case A_DEFN:
-            ThrowVal(EV_SATTACK,n,this);
-            return;
-          case A_CALL:
-            IPrint("Not implemented yet.");
-            return;
-          default:
-            Error("Strange tactical option!");
-        }  
-        return;    
-      case KY_CMD_USE:
-        UseMenu();
-        break;
-      case KY_CMD_CANCEL_MENU:
-        CancelMenu();
-        break;
-      case KY_CMD_JUMP:
-        e.Clear();
-        e.EActor = this;
-        if (!MyTerm->EffectPrompt(e,Q_LOC))
-          break;
-        ReThrow(EV_JUMP,e);
-        break;
-      case KY_CMD_KICK:
-        e.Clear();
-        e.vRange = 1 + FaceRadius[Attr[A_SIZ]];
-        /* Do not change from default == Q_DIR */
-        if (!MyTerm->EffectPrompt(e, Q_DIR|Q_LOC))
-          break;
-        if (e.isDir)
-          {
-            e.x = x + DirX[e.EDir];
-            e.y = y + DirY[e.EDir];
-            e.isDir = false;
-            if (e.x < 0 || e.y < 0 || e.x > m->SizeX() || e.y > m->SizeY())
-              break;
-          }
-        
-        targ = m->FCreatureAt(e.x,e.y);
-        if (targ == this) {
-          IPrint("No need to kick yourself (it's not that bad)!");
-          break; 
-        }
-        if (!targ)
-          targ = m->FDoorAt(e.x,e.y);
-        if (!targ)
-          targ = m->KnownFeatureAt(e.x,e.y);
-        if (!targ) { 
-          IPrint("There's nothing there to kick!"); 
-          break; 
-        }
-          ThrowVal(EV_SATTACK,A_KICK,this,targ);
-          break;
-      case KY_CMD_OPTIONS:
-          MyTerm->OptionManager();
-          break; 
-      /*
-      case KY_CMD_WAND_IDENT:
-          GainPermStati(ACTING,NULL,SS_MISC,EV_ZAP);
-          Timeout++; 
-          break; 
-      case KY_CMD_CAST_DETECT_SPELLS:
-          GainPermStati(ACTING,NULL,SS_MISC,EV_CAST);
-          Timeout++; 
-          break; 
-      */
-      case KY_CMD_REST:
-          /*if (Opt(OPT_REST_BEHAVE)) 
-            GainPermStati(ACTING,NULL,SS_MISC,EV_REST);
-          else*/
-            Timeout += 15;
-          return;
-      case KY_CMD_RUN:
-          e.Clear();
-          if (!MyTerm->EffectPrompt(e,Q_DIR,false,"Run"))
+        case KY_CMD_SEARCH:
+            GainTempStati(ACTING,NULL,25,SS_MISC,EV_SEARCH);
+            Timeout++; 
             break;
-          RunDir((Dir)e.EDir);
-          break;
-      case KY_CMD_EXCHANGE:
-          Exchange();
-          return;
-      case KY_CMD_DUMP_CONTAINER:
-          MyTerm->DumpContainers();
-          break; 
-      case KY_CMD_SLEEP:
-          if (Opt(OPT_SAFEREST))
-            ThrowVal(EV_REST,REST_DUNGEON|REST_SAFE|REST_INSTANT,this);
-          else
-            ThrowVal(EV_REST,REST_DUNGEON,this);
-          break;
-      default:
-          if (isdigit(ch)) {
-            switch (QuickKeys[ch-'0'].Type)
-              {
-                case QKY_SKILL: 
-                  UseMenu(QuickKeys[ch-'0'].Value); 
-                  break;
-                case QKY_VERB:
-                  YuseMenu(QuickKeys[ch-'0'].Value);
-                  break;
-                case QKY_SPELL:
-                  sp = (int16)QuickKeys[ch-'0'].Value;
-                  goto CastSpell;
-                  break;
-                case QKY_TACTIC:
-                  n = (int16)QuickKeys[ch-'0'].Value;
-                  goto DoTacticalOption;
-              }
-            break;
-          }
-          if (ch >= KY_CMD_MACRO1 && ch <= KY_CMD_MACRO12)
-            {
-              if (!Macros[ch - KY_CMD_MACRO1])
-                break;
-              RES(Macros[ch - KY_CMD_MACRO1])->PEvent(EV_INITIALIZE,
-                this,Macros[ch - KY_CMD_MACRO1],0);
-              GainPermStati(ACTING,NULL,SS_MISC,EV_MACRO,0,Macros[ch - KY_CMD_MACRO1]);
-              Timeout++; 
-              break;
-            }
-          if (ch >= KY_CMD_FIRST_ARROW && ch <= KY_CMD_LAST_ARROW) {
-            if (HasStati(ENGULFED))
-              {
-                targ = GetStatiObj(ENGULFED);
-                goto NormalAttack;
-              }               
-            if (MyTerm->ShiftDown()) {
-              if (Opt(OPT_SHIFTARROW) == 0)
-                      goto ShiftDirFire;
-              else {
-                      RunDir(DIR_OF_KY_CMD(ch));
-                      break;
-              }
-            }
-            dx = DirX[DIR_OF_KY_CMD(ch)];
-            dy = DirY[DIR_OF_KY_CMD(ch)];
-            if (cdir != -1 && !isSimilarDir(DIR_OF_KY_CMD(ch),(Dir)cdir) && (cdir != CENTER || 
-                        !m->FCreatureAt(x+dx,y+dy)))
-            {
-              if (cdir != CENTER) {
-                if (HasStati(AUTO_CHARGE)) {
-                  // automatically break off and charge in the new
-                  // direction 
-                  RemoveStati(CHARGING);
-                  if (canChargeInDir((Dir)(DIR_OF_KY_CMD(ch)))) {
-                    if (cdir == -1)
-                      IPrint("You charge forward!");
-                    else
-                      IPrint("You swerve around and charge forward!");
-                    GainPermStati(CHARGING,NULL,SS_MISC,
-                        (Dir)(DIR_OF_KY_CMD(ch)),0,0);
-                    goto ChargeMoveOk;
-                    } 
-                } else if (!yn("Break off your charge?"))
-                  continue;
-              } 
-              IDPrint(NULL,"The <Obj1> breaks off <his:Obj1> charge.",this);
-              RemoveStati(CHARGING);
-            }
-            if (HasStati(AUTO_CHARGE) && !HasStati(CHARGING) &&
-                  canChargeInDir((Dir)(DIR_OF_KY_CMD(ch)))) {
-              GainPermStati(CHARGING,NULL,SS_MISC,
-                  (Dir)(DIR_OF_KY_CMD(ch)),0,0);
-            } 
+        case KY_CMD_ATTACK_MENU:
+            MyTerm->LOption("Attack",A_SWNG, "Use this option to perform a normal"
+                " attack against a creature who is not yet hostile to you (Walking"
+                " into these characters will normally just displace them) or is"
+                " invisible or otherwise imperceptable.");
+            MyTerm->LOption("Break Grapple",A_ESCA,"You attempt to break out of an"
+                " enemy's grab or grapple with a grapple check. If successful, this"
+                " maneuver takes no time to complete, giving you an opportunity to"
+                " get out of melee range, but if failed it takes up a full round.");
+            MyTerm->LOption("Bull Rush",A_BULL, "Attempt to force an opponent"
+                " back one square by charging into them. This is resolved with an"
+                " oppposed Strength roll modified by +4/-4 for every difference in"
+                " size category between you and your opponent. A bull rush normally"
+                " provokes an attack of oppurtonity from the target.");
+            MyTerm->LOption("Called Shot",A_CALL,XPrint("You aim an attack at a specific"
+                " part of an opponent's body, hoping to inflict a debilitating injury"
+                " rather then just going for the kill. <13>Not implemented yet.<2>"));
+#if 1
+            MyTerm->LOption("Charge",A_CHAR,
+                "__You run (or ride) in a straight line, gaining a +2 bonus to hit and "
+                "accumulating plusses to damage due to momentum as you move. Your damage "
+                "bonus is based on your mass (size, equipment and mount) times your velocity "
+                "(movement rate). These bonuses apply only to melee attacks. Some weapons "
+                "and feats double or triple the damage bonus that charging grants, and being "
+                "mounted also increases the effect. Hitting something with a weapon while "
+                "charging deals blunt damage to that weapon equal to your charge damage bonus."
+                "\n__You are always subject to Sneak Attacks while charging. You may not make "
+                "attacks of opportunity while charging. You are denied your Dexterity bonus "
+                "to Defense while charging."
+                "\n__If you charge near an opponent that has reach, it will set itself to "
+                "receive your charge, gaining a free attack of opportunity against you. In "
+                "this attack it gains your charge bonus to damage against you (momentum is "
+                "symmetric). If you take any damage in that attack, you must save versus DC "
+                "30 to avoid being tripped. If you do not take any damage, you automatically "
+                "close with that opponent.");
+#else
+            MyTerm->LOption("Charge",A_CHAR,"You run in a straight line, accumulating"
+                " plusses to hit and damage due to momentum as you move. You are considered" 
+                " to be exposed while charging, and for one turn thereafter. Some weapons"
+                " double or triple the damage bonus that charging grants, and being mounted"
+                " also increases the effect.");
+#endif
+            MyTerm->LOption("Charge, Automatic",AUTO_CHARGE,
+                " You automatically Charge when moving. Whenever you change directions you break off your current charge and start a new one. This can be convenient if you are mounted and trying to run a fleeing enemy down with a lance, for example.");
+            MyTerm->LOption("Coup de Grace",A_COUP,"Deliver a killing blow to a"
+                " paralyzed or sleeping living humanoid opponent within 5 feet of"
+                " you. The attack is an automatic critical, and even if the foe"
+                " survives the damage they must make a Fortitude save (DC 10 + half"
+                " of the damage dealt) or die anyway. Performing a Coup de Grace"
+                " provokes attacks of oppourtunity from every non-paralyzed or"
+                " sleeping enemy within 1 square.");
+            MyTerm->LOption("Disarm",A_DISA,"You cause an opponent to lose their"
+                " weapon. An opposed attack roll is made, using only Base Attack "
+                " Bonus, modified by both Strength and Dexterity, as well as +/- 4 "
+                "for weapon size differences. Success"
+                " causes the opponent to lose their weapon; failure means they are"
+                " allowed to make an immediate Disarm attempt against you, without"
+                " it costing them an action. A Disarm attempt normally provokes an"
+                " attack of opportunity.");
+            MyTerm->LOption("Fight Defensively",A_DEFN, "By devoting your full attention"
+                " to defense, you can gain a +4 circumstance bonus to your defense class"
+                " at the expense of suffering a -4 circumstance penalty to attack rolls,"
+                " -2 to damage, 75~ normal movement rate and a -20% spell success chance."
+                " Once fighting defensively, you can stop by using the 'x' command."); 
+            MyTerm->LOption("Grapple",A_GRAB,"You grab your opponent and initate a"
+                " grapple with him. Grappling is resolved with grapple checks, which"
+                " are opposed contests of Brawl attack bonus plus Strength modifier"
+                " plus or minus 4 for every divergance in size category, favouring"
+                " the larger character. To begin grappling, however, you must hit your"
+                " target's DC as per a normal attack. Initiating a grapple provokes an"
+                " attack of opportunity from your target.");
+            MyTerm->LOption("Great Blow",A_GREA,"You execute a titanically powerful"
+                " blow with your weapon, allowing you to double your Strength modifier"
+                " to damage, granting a +2 bonus to both the attack roll and damage and"
+                " lowering the threat range of your attack"
+                " by 3 (i.e., 19-20 becomes 16-20). However, a great blow takes 1 1/2 times"
+                " as long as a normal attack, costs two Fatigue points and leaves you"
+                " off-balance and Exposed for a full round after you finish it.");
+            MyTerm->LOption("Sprint",A_SPRT, "You put on a desperate burst of speed,"
+                " and increase you movement rate by 50% for [1 + Constitution modifier]"
+                " rounds (minimum 1) at the cost of one fatigue point. Since you are"
+                " running full out, Sprint also decreases your defense class by two.");
+            MyTerm->LOption("Sunder Weapon",A_SUND,"You strike an opponent's weapon"
+                " (or, at your option, any unattended object) and attempt to damage or"
+                " destroy it. This provokes an attack of opportunity from the person"
+                " using the weapon. Weapons with a magical plus can not be destroyed" 
+                " by any weapon with a lower magical plus then their own.");
+            MyTerm->LOption("Throw",A_THRO,"You throw an enemy you are grappling"
+                " with already one or more squares away from you. You must succeed"
+                " in a grapple check against them, and this action ends the grapple."
+                " You inflict your normal unarmed damage value in subdual damage, plus"
+                " one point per square the enemy is thrown.");
+            MyTerm->LOption("Trip",A_TRIP,"You attempt to knock an opponent prone."
+                " You must first make a successful attack roll against his DC, and"
+                " then you make a Strength check opposed by his Strength or Dexterity,"
+                " whichever favours him more. Success knocks the target prone. Failure"
+                " allows the target to make an immediate, free attempt to trip you in"
+                " return. Some weapons grant a bonus to trip attempts, such as the"
+                " quarterstaff. If you do not have the Improved Trip feat, you provoke"
+                " an attack of opportunity when you attempt to trip a foe.");
+            if (HasSkill(SK_FIND_WEAKNESS))
+                MyTerm->LOption("Precision Strike", A_PREC, "Facing an opponent with near-"
+                "insurmountable defenses, you cleverly gauge his defensive pattern and"
+                " search for an opening or weakness. You add 1/2 your Find Weakness "
+                " skill rating to the attack roll, but you also add 45 segments to the "
+                " attack's timecost.");
 
-            ChargeMoveOk:
-            if (!m->InBounds(x+dx*2,y+dy*2))
-              break;
-            if (m->SolidAt(x+dx,y+dy)&& DigMode)
-            {
-              ThrowXY(EV_DIG,x+dx,y+dy,this);
-              return;
-            }
-            k = ((StateFlags & MS_HAS_REACH) ? 2 : 1) + FaceRadius[Attr[A_SIZ]];
-            if (k == 2 && !(StateFlags & MS_REACH_ONLY) && !m->FCreatureAt(x+dx*k,y+dy*k))
-              k = 1;
-            if (m->InBounds(x+dx*k,y+dy*k) && (targ = m->FCreatureAt(x+dx*k,y+dy*k)))
-              if (Perceives(targ) && !((Creature*)targ)->isFriendlyTo(this) && !MyTerm->CtrlDown()) {
-NormalAttack:
-                if (targ->isCreature() && !((Creature*)targ)->isHostileToPartyOf(this))
-                  if (!yn(XPrint("Confirm attack the <Obj>?",targ),true))
+            if (HasFeat(FT_SPRING_ATTACK))
+                MyTerm->LOption("Spring Attack",A_SPRI, "You are able to execute a rapid"
+                " melee attack against an opponent that is up to two squares away from"
+                " you by darting in quickly to strike. This does not provoke an attack"
+                " of opportunity the way leaving a hostile creature's threatened area"
+                " normally would.");
+            if (HasFeat(FT_WHIRLWIND_ATTACK))
+                MyTerm->LOption("Whirlwind Attack", A_WHIR, "You execute a rapid flurry"
+                " of attacks, striking every creature within one square of you at the"
+                " same time. A seperate attack is rolled against each creature at your"
+                " full normal attack bonus and damage rating. Performing a Whirlwind"
+                " Attack costs you one Fatigue point.");
+            MyTerm->LOption("Avert Eyes", A_AEYE, 
+                "You avert your eyes from all opponents and attempt instead to look at their faces, shadows, torsos, and so on. This gives all gaze attacks against you a 50~ miss chance. However, it also gives you a 50~ miss chance in combat (25~ if you have the Blind Fighting feat). ");
+            MyTerm->LOption("Close Eyes", BLINDNESS, 
+                "You close your eyes. This makes it difficult to see the dungeon around you (unless you have Stonework Sense, for example) and makes it difficult to see monsters around you (unless you have Blindsight or Telepathy or are already Tracking them, for example). It makes you immune to gaze attacks and blinding effects. It gives you a 50~ miss chance in combat (25~ if you have the Blind Fighting feat). You may not make attacks of opportunity. Unless you have the Blind Fighting feat, every attack against you is a surprise."); 
+            MyTerm->LOption("Movement", A_MOVE,
+                "Move into a square adjacent to your own. This command can be used to move into the "
+                "same square as a monster instead of attacking it as the arrow keys would. You can "
+                "only pass into the square of an incorporeal or non-hostile creature.");
+            /* Feint */
+            /* Read Opponent */
+
+            MyTerm->SetQKeyType(QuickKeys,QKY_TACTIC);
+            n = (int16)MyTerm->LMenu(MENU_ESC|MENU_DESC|MENU_2COLS|MENU_BORDER|MENU_QKEY,
+                " -- Tactical Options -- ",WIN_MENUBOX);
+            if (n == -1)
+                break; 
+DoTacticalOption:
+            e.Clear(); 
+            switch(n) {
+            case A_MOVE:
+                if (!MyTerm->EffectPrompt(e,Q_DIR,false,"Movement Direction"))
                     break;
-                /* ww: Dwarven Auto-Focus */
-                if (targ->isCreature() && Opt(OPT_DWARVEN_AUTOFOCUS) && 
-                    ((Creature *)targ)->ChallengeRating() >= 
-                                        ChallengeRating() && 
-                    HasAbility(CA_DWARVEN_FOCUS) && 
-                    !GetStati(DWARVEN_FOCUS,-1,0)) {
-                  GainPermStati(DWARVEN_FOCUS,targ,SS_RACE,0,0,0);
-                  targ->Flags |= F_HILIGHT;
-                  msg = Format("You swear a vow to slay %c%s%c.",
-                      -RED, (const char*)targ->Name(NA_THE), -GREY);
-                  MyTerm->Message(msg);
-                  MyTerm->Box(msg);
+                ThrowDir(EV_MOVE,(Dir)e.EDir,this);
+                break;
+            case A_TRIP:
+            case A_THRO:
+            case A_SUND:
+            case A_GREA:
+            case A_GRAB:
+            case A_BULL:
+            case A_DISA:
+            case A_COUP:
+            case A_SWNG:
+            case A_PREC:
+                if (HasStati(TELEKINETIC)) {
+                    e.vRange = (int8)HighStatiMag(TELEKINETIC);
+                    if (!MyTerm->EffectPrompt(e,Q_TAR|Q_CRE))
+                        break;
+                    goto FindNonReachVictim;
+                } else if ((StateFlags & MS_HAS_REACH) && n != A_THRO && n != A_GRAB && n != A_BULL) {
+                        /* ww: if you have a reach weapon, you should be
+                        * able to great-blow something far away */
+                        e.vRange = 2 + FaceRadius[Attr[A_SIZ]];
+                        if (!MyTerm->EffectPrompt(e,Q_TAR|Q_LOC|Q_CRE))
+                            break;
+                        if (e.ETarget && !e.ETarget->isCreature() && !e.ETarget->isFeature() && !e.ETarget->isItem())
+                            break;
+                        if (!e.EVictim) 
+                            e.EVictim = m->FCreatureAt(e.EXVal,e.EYVal);
+                        if (!e.EVictim) 
+                            e.EVictim = m->FCreatureAt(x+DirX[e.EDir],y+DirY[e.EDir]);
+                        if (!e.EVictim) 
+                            e.EVictim = m->FCreatureAt(x+2*DirX[e.EDir],y+2*DirY[e.EDir]);
+                        if (!e.ETarget) 
+                            e.ETarget = m->KnownFeatureAt(e.EXVal,e.EYVal);
+                        if (!e.ETarget) 
+                            e.ETarget = m->KnownFeatureAt(x+DirX[e.EDir],y+DirY[e.EDir]);
+                        if (!e.ETarget) 
+                            e.ETarget = m->KnownFeatureAt(x+2*DirX[e.EDir],y+2*DirY[e.EDir]);
+                        if (!e.ETarget) 
+                            e.ETarget = m->FChestAt(e.EXVal,e.EYVal);
+                        if (!e.ETarget) 
+                            e.ETarget = m->FItemAt(e.EXVal,e.EYVal);
+                        if (!e.ETarget) 
+                            e.ETarget = m->FChestAt(x+DirX[e.EDir],y+DirY[e.EDir]);
+                        if (!e.ETarget) 
+                            e.ETarget = m->FItemAt(x+DirX[e.EDir],y+DirY[e.EDir]);
+                        if (!e.ETarget) 
+                            e.ETarget = m->FChestAt(x+2*DirX[e.EDir],y+2*DirY[e.EDir]);
+                        if (!e.ETarget) 
+                            e.ETarget = m->FItemAt(x+2*DirX[e.EDir],y+2*DirY[e.EDir]);
+                } else {
+                    if (!MyTerm->EffectPrompt(e,Q_DIR|Q_TAR|Q_LOC|Q_CRE))
+                        break;
+                    if (e.ETarget && !e.ETarget->isCreature() && !e.ETarget->isFeature() && !e.ETarget->isItem())
+                        break;
+FindNonReachVictim:
+                    if (!e.EVictim) 
+                        e.EVictim = m->FCreatureAt(e.EXVal,e.EYVal);
+                    if (!e.EVictim) 
+                        e.EVictim = m->FCreatureAt(x+DirX[e.EDir],y+DirY[e.EDir]);
+                    if (!e.ETarget) 
+                        e.ETarget = m->KnownFeatureAt(e.EXVal,e.EYVal);
+                    if (!e.ETarget) 
+                        e.ETarget = m->KnownFeatureAt(x+DirX[e.EDir],y+DirY[e.EDir]);
+                    if (!e.ETarget) 
+                        e.ETarget = m->FChestAt(e.EXVal,e.EYVal);
+                    if (!e.ETarget) 
+                        e.ETarget = m->FItemAt(e.EXVal,e.EYVal);
+                    if (!e.ETarget) 
+                        e.ETarget = m->FChestAt(x+DirX[e.EDir],y+DirY[e.EDir]);
+                    if (!e.ETarget) 
+                        e.ETarget = m->FItemAt(x+DirX[e.EDir],y+DirY[e.EDir]);
+                }
+
+                if (!e.ETarget) {
+                    IPrint("There's nothing there to use a tactic on!");
+                    break; 
+                }
+                if (!e.EVictim->isCreature())
+                    if (n != A_MOVE && n != A_SWNG) {
+                        IPrint("That action only applies to creatures.");
+                        break;
+                    }
+                    if (e.EVictim == this) {
+                        IPrint("Attacking oneself is counterproductive.");
+                        break;
+                    }
+                    if (dist(x,y,e.EVictim->x,e.EVictim->y) <= 1+FaceRadius[Attr[A_SIZ]])
+                        if ((StateFlags & MS_REACH_ONLY) && e.ETarget->isCreature()) {
+                            IPrint("You cannot attack adjacent targets with that weapon.");
+                            break;
+                        }
+                        targ = e.EVictim; 
+                        if (n == A_SWNG) goto NormalAttack;
+                        /* ww: Dwarven Auto-Focus */
+                        if (Opt(OPT_DWARVEN_AUTOFOCUS) && e.ETarget->isCreature() && ((Creature *)targ)->ChallengeRating() >= ChallengeRating() && 
+                            HasAbility(CA_DWARVEN_FOCUS) && !GetStati(DWARVEN_FOCUS,-1,0)) {
+                            GainPermStati(DWARVEN_FOCUS,targ,SS_RACE,0,0,0);
+                            targ->Flags |= F_HILIGHT;
+                            msg = Format("You swear a vow to slay %c%s%c.",
+                                -RED, (const char*)targ->Name(NA_THE), -GREY);
+                            MyTerm->Message(msg);
+                            MyTerm->Box(msg);
+                        } 
+                        ThrowVal(EV_SATTACK,n,this,e.EVictim);
+                        break;
+            case AUTO_CHARGE:
+                if (HasStati(AUTO_CHARGE)) {
+                    IPrint("You're already automatically charging!");
+                    break;
+                }
+                GainPermStati(AUTO_CHARGE,NULL,SS_MISC,0,0,0);
+                break;
+            case BLINDNESS: 
+                if (isBlind()) {
+                    IPrint("You're already not seeing anything!");
+                    break; 
                 } 
-                bool conf;
-                switch(AttackMode()) {
-                  case S_BRAWL:
-                    if (Opt(OPT_KICK))
-                      ThrowVal(EV_SATTACK,A_KICK,this,targ);
-                    else
-                      Throw(EV_NATTACK,this,targ);
-                    return;
-                  case S_DUAL:
-                  case S_MELEE:
-                    if (EInSlot(SL_WEAPON)->Type != T_WEAPON &&
-                        stricmp(NAME(EInSlot(SL_WEAPON)->iID),"wooden rod")) {
-                      conf = yn(XPrint("Confirm bludgeon with <Obj>?",EInSlot(SL_WEAPON)),false);
-                      if (conf == false)
-                        return;
-                      }
-                    Throw(EV_WATTACK,this,targ);
-                    return;
-                  case S_THROWN: case S_ARCHERY:
-                    conf = yn(XPrint("Confirm bludgeon with <Obj>?",EInSlot(SL_WEAPON)),false);
-                    if (conf == false)
-                      return;
-                    Throw(EV_WATTACK,this,targ);
-                    return;
-                  default:
+                IPrint("You close your eyes."); 
+                GainPermStati(BLINDNESS,this,SS_MISC,BLIND_EYES_CLOSED,0,0);
+                break;
+            case A_CHAR:
+                if (HasStati(CHARGING)) {
+                    IPrint("You're already charging!");
+                    break;
+                }
+                if (!MyTerm->EffectPrompt(e,Q_DIR))
+                    break;
+                DigMode = false;
+                if (!canChargeInDir((Dir)e.EDir)) {
+                    IPrint("There's nothing to charge at in that direction!");
+                    break;
+                }
+                GainPermStati(CHARGING,NULL,SS_MISC,e.EDir,0,0);
+                break;
+            case A_SPRI:
+                if (!MyTerm->EffectPrompt(e,Q_TAR|Q_CRE))
+                    break;
+                if (dist(x,y,e.ETarget->x,e.ETarget->y) > 4) {
+                    IPrint("The <Obj> is too far away to Spring Attack.",e.ETarget);
+                    break;
+                }
+                ThrowVal(EV_SATTACK,n,this,e.ETarget);
+                return;
+            case A_WHIR:
+            case A_ESCA:
+            case A_SPRT:
+            case A_AEYE: 
+            case A_DEFN:
+                ThrowVal(EV_SATTACK,n,this);
+                return;
+            case A_CALL:
+                IPrint("Not implemented yet.");
+                return;
+            default:
+                Error("Strange tactical option!");
+            }  
+            return;    
+        case KY_CMD_USE:
+            UseMenu();
+            break;
+        case KY_CMD_CANCEL_MENU:
+            CancelMenu();
+            break;
+        case KY_CMD_JUMP:
+            e.Clear();
+            e.EActor = this;
+            if (!MyTerm->EffectPrompt(e,Q_LOC))
+                break;
+            ReThrow(EV_JUMP,e);
+            break;
+        case KY_CMD_KICK:
+            e.Clear();
+            e.vRange = 1 + FaceRadius[Attr[A_SIZ]];
+            /* Do not change from default == Q_DIR */
+            if (!MyTerm->EffectPrompt(e, Q_DIR|Q_LOC))
+                break;
+            if (e.isDir) {
+                e.x = x + DirX[e.EDir];
+                e.y = y + DirY[e.EDir];
+                e.isDir = false;
+                if (e.x < 0 || e.y < 0 || e.x > m->SizeX() || e.y > m->SizeY())
+                    break;
+            }
+
+            targ = m->FCreatureAt(e.x,e.y);
+            if (targ == this) {
+                IPrint("No need to kick yourself (it's not that bad)!");
+                break; 
+            }
+            if (!targ)
+                targ = m->FDoorAt(e.x,e.y);
+            if (!targ)
+                targ = m->KnownFeatureAt(e.x,e.y);
+            if (!targ) { 
+                IPrint("There's nothing there to kick!"); 
+                break; 
+            }
+            ThrowVal(EV_SATTACK,A_KICK,this,targ);
+            break;
+        case KY_CMD_OPTIONS:
+            MyTerm->OptionManager();
+            break; 
+            /*
+            case KY_CMD_WAND_IDENT:
+            GainPermStati(ACTING,NULL,SS_MISC,EV_ZAP);
+            Timeout++; 
+            break; 
+            case KY_CMD_CAST_DETECT_SPELLS:
+            GainPermStati(ACTING,NULL,SS_MISC,EV_CAST);
+            Timeout++; 
+            break; 
+            */
+        case KY_CMD_REST:
+            /*if (Opt(OPT_REST_BEHAVE)) 
+            GainPermStati(ACTING,NULL,SS_MISC,EV_REST);
+            else*/
+            Timeout += 15;
+            return;
+        case KY_CMD_RUN:
+            e.Clear();
+            if (!MyTerm->EffectPrompt(e,Q_DIR,false,"Run"))
+                break;
+            RunDir((Dir)e.EDir);
+            break;
+        case KY_CMD_EXCHANGE:
+            Exchange();
+            return;
+        case KY_CMD_DUMP_CONTAINER:
+            MyTerm->DumpContainers();
+            break; 
+        case KY_CMD_SLEEP:
+            if (Opt(OPT_SAFEREST))
+                ThrowVal(EV_REST,REST_DUNGEON|REST_SAFE|REST_INSTANT,this);
+            else
+                ThrowVal(EV_REST,REST_DUNGEON,this);
+            break;
+        default:
+            if (isdigit(ch)) {
+                switch (QuickKeys[ch-'0'].Type) {
+                case QKY_SKILL: 
+                    UseMenu(QuickKeys[ch-'0'].Value); 
+                    break;
+                case QKY_VERB:
+                    YuseMenu(QuickKeys[ch-'0'].Value);
+                    break;
+                case QKY_SPELL:
+                    sp = (int16)QuickKeys[ch-'0'].Value;
+                    goto CastSpell;
+                    break;
+                case QKY_TACTIC:
+                    n = (int16)QuickKeys[ch-'0'].Value;
+                    goto DoTacticalOption;
+                }
+                break;
+            }
+            if (ch >= KY_CMD_MACRO1 && ch <= KY_CMD_MACRO12) {
+                if (!Macros[ch - KY_CMD_MACRO1])
+                    break;
+                RES(Macros[ch - KY_CMD_MACRO1])->PEvent(EV_INITIALIZE,
+                    this,Macros[ch - KY_CMD_MACRO1],0);
+                GainPermStati(ACTING,NULL,SS_MISC,EV_MACRO,0,Macros[ch - KY_CMD_MACRO1]);
+                Timeout++; 
+                break;
+            }
+            if (ch >= KY_CMD_FIRST_ARROW && ch <= KY_CMD_LAST_ARROW) {
+                if (HasStati(ENGULFED)) {
+                    targ = GetStatiObj(ENGULFED);
+                    goto NormalAttack;
+                }               
+                if (MyTerm->ShiftDown()) {
+                    if (Opt(OPT_SHIFTARROW) == 0)
+                        goto ShiftDirFire;
+                    else {
+                        RunDir(DIR_OF_KY_CMD(ch));
+                        break;
+                    }
+                }
+                dx = DirX[DIR_OF_KY_CMD(ch)];
+                dy = DirY[DIR_OF_KY_CMD(ch)];
+                if (cdir != -1 && !isSimilarDir(DIR_OF_KY_CMD(ch),(Dir)cdir) && (cdir != CENTER || !m->FCreatureAt(x+dx,y+dy))) {
+                    if (cdir != CENTER) {
+                        if (HasStati(AUTO_CHARGE)) {
+                            // automatically break off and charge in the new
+                            // direction 
+                            RemoveStati(CHARGING);
+                            if (canChargeInDir((Dir)(DIR_OF_KY_CMD(ch)))) {
+                                if (cdir == -1)
+                                    IPrint("You charge forward!");
+                                else
+                                    IPrint("You swerve around and charge forward!");
+                                GainPermStati(CHARGING,NULL,SS_MISC,
+                                    (Dir)(DIR_OF_KY_CMD(ch)),0,0);
+                                goto ChargeMoveOk;
+                            } 
+                        } else if (!yn("Break off your charge?"))
+                            continue;
+                    } 
+                    IDPrint(NULL,"The <Obj1> breaks off <his:Obj1> charge.",this);
+                    RemoveStati(CHARGING);
+                }
+                if (HasStati(AUTO_CHARGE) && !HasStati(CHARGING) &&
+                    canChargeInDir((Dir)(DIR_OF_KY_CMD(ch)))) {
+                        GainPermStati(CHARGING,NULL,SS_MISC,
+                            (Dir)(DIR_OF_KY_CMD(ch)),0,0);
+                } 
+
+ChargeMoveOk:
+                if (!m->InBounds(x+dx*2,y+dy*2))
+                    break;
+                if (m->SolidAt(x+dx,y+dy)&& DigMode) {
+                    ThrowXY(EV_DIG,x+dx,y+dy,this);
                     return;
                 }
-              }
-            if(ThrowDir(EV_MOVE,(Dir)(DIR_OF_KY_CMD(ch)),this)!=ABORT)
-              return;
-          }
-          break;
-      }
+                k = ((StateFlags & MS_HAS_REACH) ? 2 : 1) + FaceRadius[Attr[A_SIZ]];
+                if (k == 2 && !(StateFlags & MS_REACH_ONLY) && !m->FCreatureAt(x+dx*k,y+dy*k))
+                    k = 1;
+                if (m->InBounds(x+dx*k,y+dy*k) && (targ = m->FCreatureAt(x+dx*k,y+dy*k)))
+                    if (Perceives(targ) && !((Creature*)targ)->isFriendlyTo(this) && !MyTerm->CtrlDown()) {
+NormalAttack:
+                        if (targ->isCreature() && !((Creature*)targ)->isHostileToPartyOf(this))
+                            if (!yn(XPrint("Confirm attack the <Obj>?",targ),true))
+                                break;
+                        /* ww: Dwarven Auto-Focus */
+                        if (targ->isCreature() && Opt(OPT_DWARVEN_AUTOFOCUS) && 
+                            ((Creature *)targ)->ChallengeRating() >= 
+                            ChallengeRating() && 
+                            HasAbility(CA_DWARVEN_FOCUS) && 
+                            !GetStati(DWARVEN_FOCUS,-1,0)) {
+                                GainPermStati(DWARVEN_FOCUS,targ,SS_RACE,0,0,0);
+                                targ->Flags |= F_HILIGHT;
+                                msg = Format("You swear a vow to slay %c%s%c.",
+                                    -RED, (const char*)targ->Name(NA_THE), -GREY);
+                                MyTerm->Message(msg);
+                                MyTerm->Box(msg);
+                        } 
+                        bool conf;
+                        switch(AttackMode()) {
+                        case S_BRAWL:
+                            if (Opt(OPT_KICK))
+                                ThrowVal(EV_SATTACK,A_KICK,this,targ);
+                            else
+                                Throw(EV_NATTACK,this,targ);
+                            return;
+                        case S_DUAL:
+                        case S_MELEE:
+                            if (EInSlot(SL_WEAPON)->Type != T_WEAPON &&
+                                stricmp(NAME(EInSlot(SL_WEAPON)->iID),"wooden rod")) {
+                                    conf = yn(XPrint("Confirm bludgeon with <Obj>?",EInSlot(SL_WEAPON)),false);
+                                    if (conf == false)
+                                        return;
+                            }
+                            Throw(EV_WATTACK,this,targ);
+                            return;
+                        case S_THROWN: case S_ARCHERY:
+                            conf = yn(XPrint("Confirm bludgeon with <Obj>?",EInSlot(SL_WEAPON)),false);
+                            if (conf == false)
+                                return;
+                            Throw(EV_WATTACK,this,targ);
+                            return;
+                        default:
+                            return;
+                        }
+                    }
+                    if(ThrowDir(EV_MOVE,(Dir)(DIR_OF_KY_CMD(ch)),this)!=ABORT)
+                        return;
+            }
+            break;
+        }
 
     }
-  while(!Timeout);
+    while(!Timeout);
 }
 
 void Player::UseItemMenu(const char *which, const char *haveno, int16 itype) {
