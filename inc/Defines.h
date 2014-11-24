@@ -1237,7 +1237,7 @@ typedef signed long       hObj;
 #define MS_POLY_KNOWN  0x0200
 #define MS_SEEN_CLOSE  0x0400
 #define MS_CASTING     0x0800
-#define MS_HAS_REACH   0x1000
+#define MS_HAS_REACH   0x1000 /* Has extended reach, via weapon or inherent ability. */
 #define MS_REACH_ONLY  0x2000
 #define MS_THREAT2     0x4000
 #define MS_STILL_CAST  0x8000 
