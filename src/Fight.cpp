@@ -1394,388 +1394,357 @@ DoneSequence:
   return DONE;
 }
 
-EvReturn Creature::SAttack(EventInfo &e) /* this == EActor */
-{ 
-  static EffectValues ef;
-  TEffect *te; EvReturn r;
-  Thing *t; int16 i, max;
-  bool startedAfraid = HasStati(AFRAID);
-     
-  if (!e.AType)
-    e.AType = (int8)e.EParam; 
-  e.vThreat = 20;
-  TAttack *ta = TMON(mID)->GetAttk(e.AType);
+EvReturn Creature::SAttack(EventInfo &e) { /* this == EActor */
+    static EffectValues ef;
+    TEffect *te;
+    EvReturn r;
+    Thing *t;
+    int16 i, max;
+    bool startedAfraid = HasStati(AFRAID);
+
+    if (!e.AType)
+        e.AType = (int8)e.EParam; 
+    TAttack *ta = TMON(mID)->GetAttk(e.AType);
+    e.vThreat = 20;
 
     /* Watch out for Traps in EItem! */ 
     if (e.EItem && !e.EItem->isItem())
-      e.EItem = NULL;
+        e.EItem = NULL;
 
-
-  StatiIterNature(this,SPEC_TIMEOUT)
-      if (S->Val == e.AType)
-        if (!S->h || e.EVictim->myHandle == S->h) {           
-          IPrint("That ability is timed out right now.");
-          StatiIterBreakout(this,return ABORT)
-          }
-  StatiIterEnd(this)
-
-  // ww: may well get an attack from a template!
-  if (!ta) {
-    StatiIterNature(this,TEMPLATE)
-        TTemplate *tt = TTEM(S->eID);
-        ta = tt->GetNewAttk(e.AType);
+    StatiIterNature(this,SPEC_TIMEOUT)
+        if (S->Val == e.AType)
+            if (!S->h || e.EVictim->myHandle == S->h) {           
+                IPrint("That ability is timed out right now.");
+                StatiIterBreakout(this,return ABORT)
+            }
     StatiIterEnd(this)
+
+    // ww: may well get an attack from a template!
+    if (!ta) {
+        StatiIterNature(this,TEMPLATE)
+            TTemplate *tt = TTEM(S->eID);
+            ta = tt->GetNewAttk(e.AType);
+        StatiIterEnd(this)
     }
-  if (!ta) 
-    ta = TMON(tmID)->GetAttk(e.AType);
-    
-    
-  if (!m->InBounds(x,y) ||
-      (e.EVictim && e.EVictim->isCreature() && 
-       e.EActor->onPlane() == PHASE_MATERIAL &&
-       !(m->LineOfFire(x,y,e.EVictim->x,e.EVictim->y,this)))) {
-    IPrint("You do not have a clear line of attack!"); 
-    return ABORT; 
-  } 
+    if (!ta)
+        ta = TMON(tmID)->GetAttk(e.AType);
 
-  if (e.EVictim)
-    if (!attackSanity(e))
-      return ABORT;
 
-  if (e.AType == A_GRAB || e.AType == A_BULL ||
-      e.AType == A_KICK || e.AType == A_THRO ||
-      e.AType == A_DISA || e.AType == A_TRIP)
-    if (e.EActor->DistFrom(e.EVictim) > (FaceRadius[
-          e.EActor->GetAttr(A_SIZ)] + 1 + (e.EActor->
-            StateFlags & MS_HAS_REACH) +
-            (e.EVictim->isCreature() ?
-              FaceRadius[e.EVictim->GetAttr(A_SIZ)] : 0)))
-      {
-        if (e.EActor->HasStati(TELEKINETIC) && e.EActor->
-              HighStatiMag(TELEKINETIC) >= e.EActor->DistFrom(e.EVictim))
-          e.isTelekinetic = true;
-        else {
-          e.EActor->IPrint("That target is out of range for that maneuver.");
-          return ABORT;
-          }
-      }
+    if (!m->InBounds(x,y) ||
+            (e.EVictim && e.EVictim->isCreature() && e.EActor->onPlane() == PHASE_MATERIAL &&
+             !(m->LineOfFire(x,y,e.EVictim->x,e.EVictim->y,this)))) {
+        IPrint("You do not have a clear line of attack!"); 
+        return ABORT; 
+    } 
 
-  if (e.AType != A_PROX && e.AType != A_EXPL && e.AType != A_DGST &&
-      e.AType != A_DEFN && e.AType != A_AEYE && e.AType != A_CRUS &&
-      e.AType != A_SPRT && e.AType != A_DEQU && e.AType != A_AURA) {
-    if (HasStati(AFRAID) && !(e.EVictim && !e.EVictim->isCreature()) &&
-          !HasFeat(FT_LION_HEART))  {
-      e.EActor->IPrint("You're too scared to attack!");
-      return ABORT;
-      }
-    else if (e.EVictim && HasStati(CHARMED,-1,e.EVictim)) {
-      IPrint("You have no desire to hurt your dear friend!");
-      return ABORT;
-      }
-    else if (HasStati(NAUSEA)) {
-      if (HasSkill(SK_CONCENT) && SkillLevel(SK_CONCENT) >= 10)
-        if (yn("You are Nauseated. Use Concentration to attack?"))
-          {
-            if (SkillCheck(SK_CONCENT,20,true))
-              {
-                IPrint("You overcome your nausea to attack!");
-                goto OvercomeNausea;
-              }
-            else
-              {
-                IPrint("You try to attack, but only retch and vomit!");
-                ProvokeAoO();
-                Timeout += 40;
-                return DONE;
-              }
-          }
-      e.EActor->IPrint("You're too nauseated to attack!");
-      return ABORT;
-      }
-  }
-  OvercomeNausea:
-  if (HasStati(CONFUSED))
-  {
-    IPrint("You're too confused to make a non-standard attack.");
-    return ABORT;
-  }
-  else if (HasStati(NEGATED))
-    if ((r = HandleNegate(e)) != NOTHING)
-      return r;
+    if (e.EVictim)
+        if (!attackSanity(e))
+            return ABORT;
 
-  else if (e.EVictim && HasStati(CHARMED,-1,e.EVictim)) {
-    IPrint("You have no desire to hurt your dear friend!");
-    return ABORT;
-  } else if (ts.hasTargetOfType(OrderDoNotAttack)) {
-    return ABORT; 
-  }
-  else if (!m) // you can't attack if you're nowhere
-    return ABORT;
-  /* ww: are stuck in no-attack webbing or somesuch? */
-  else if (x!=-1 && 
-      TTER(m->TerrainAt(x,y))->Event(e,m->TerrainAt(x,y)) == ABORT)
-    return ABORT; 
+    if (e.AType == A_GRAB || e.AType == A_BULL || e.AType == A_KICK || e.AType == A_THRO || e.AType == A_DISA || e.AType == A_TRIP)
+        if (e.EActor->DistFrom(e.EVictim) > (FaceRadius[e.EActor->GetAttr(A_SIZ)] + 1 + (e.EActor->StateFlags & MS_HAS_REACH) +
+                (e.EVictim->isCreature() ? FaceRadius[e.EVictim->GetAttr(A_SIZ)] : 0))) {
+            if (e.EActor->HasStati(TELEKINETIC) && e.EActor-> HighStatiMag(TELEKINETIC) >= e.EActor->DistFrom(e.EVictim))
+                e.isTelekinetic = true;
+            else {
+                e.EActor->IPrint("That target is out of range for that maneuver.");
+                return ABORT;
+            }
+        }
+
+    if (e.AType != A_PROX && e.AType != A_EXPL && e.AType != A_DGST && e.AType != A_DEFN && e.AType != A_AEYE && e.AType != A_CRUS &&
+            e.AType != A_SPRT && e.AType != A_DEQU && e.AType != A_AURA) {
+        if (HasStati(AFRAID) && !(e.EVictim && !e.EVictim->isCreature()) && !HasFeat(FT_LION_HEART))  {
+            e.EActor->IPrint("You're too scared to attack!");
+            return ABORT;
+        } else if (e.EVictim && HasStati(CHARMED,-1,e.EVictim)) {
+            IPrint("You have no desire to hurt your dear friend!");
+            return ABORT;
+        } else if (HasStati(NAUSEA)) {
+            if (HasSkill(SK_CONCENT) && SkillLevel(SK_CONCENT) >= 10)
+                if (yn("You are Nauseated. Use Concentration to attack?")) {
+                    if (SkillCheck(SK_CONCENT,20,true)) {
+                        IPrint("You overcome your nausea to attack!");
+                        goto OvercomeNausea;
+                    } else {
+                        IPrint("You try to attack, but only retch and vomit!");
+                        ProvokeAoO();
+                        Timeout += 40;
+                        return DONE;
+                    }
+                }
+            e.EActor->IPrint("You're too nauseated to attack!");
+            return ABORT;
+        }
+    }
+OvercomeNausea:
+    if (HasStati(CONFUSED)) {
+        IPrint("You're too confused to make a non-standard attack.");
+        return ABORT;
+    } else if (HasStati(NEGATED))
+        if ((r = HandleNegate(e)) != NOTHING)
+            return r;
+        else if (e.EVictim && HasStati(CHARMED,-1,e.EVictim)) {
+            IPrint("You have no desire to hurt your dear friend!");
+            return ABORT;
+        } else if (ts.hasTargetOfType(OrderDoNotAttack)) {
+            return ABORT; 
+        } else if (!m) // you can't attack if you're nowhere
+            return ABORT;
+        /* ww: are stuck in no-attack webbing or somesuch? */
+        else if (x!=-1 && 
+            TTER(m->TerrainAt(x,y))->Event(e,m->TerrainAt(x,y)) == ABORT)
+            return ABORT; 
 
     if (e.EVictim && e.EVictim->isCreature())
-      if (!e.EVictim->HasStati(AFRAID) ||
-          e.EVictim->GetStatiVal(AFRAID) == FEAR_SKIRMISH ||
-          e.EVictim->HasFeat(FT_LION_HEART))
-        e.vicNotFleeing = true; 
+        if (!e.EVictim->HasStati(AFRAID) || e.EVictim->GetStatiVal(AFRAID) == FEAR_SKIRMISH || e.EVictim->HasFeat(FT_LION_HEART))
+            e.vicNotFleeing = true; 
     if (e.EVictim && e.EVictim->isCreature())
-      if (!(e.EVictim->HasStati(PRONE) ||
-            e.EVictim->HasStati(BLIND) ||
-            e.EVictim->HasStati(PARALYSIS) ||
-            e.EVictim->HasStati(STUCK)))
-        e.vicReady = true;
+        if (!(e.EVictim->HasStati(PRONE) || e.EVictim->HasStati(BLIND) || e.EVictim->HasStati(PARALYSIS) || e.EVictim->HasStati(STUCK)))
+            e.vicReady = true;
 
-  switch (e.AType) {
+    switch (e.AType) {
     case A_BREA:
     case A_BRE2:
     case A_SPIT: 
-      if (!LoseFatigue(1,true))
-        return ABORT;
-      /* This is a kludgy way to handle breath weapons, writing
-         the effects into a dummy resource in memory -- but it
-         is far, far better then the old way! */        
-      //ASSERT(e.ETarget);
-      if (e.AType == A_BREA || e.AType == A_BRE2) 
-        e.eID = FIND("Breath Weapon");
-      else 
-        e.eID = FIND("Spit Weapon");
-      te = TEFF(e.eID);
+        if (!LoseFatigue(1,true))
+            return ABORT;
+        /* This is a kludgy way to handle breath weapons, writing
+        the effects into a dummy resource in memory -- but it
+        is far, far better then the old way! */        
+        //ASSERT(e.ETarget);
+        if (e.AType == A_BREA || e.AType == A_BRE2) 
+            e.eID = FIND("Breath Weapon");
+        else 
+            e.eID = FIND("Spit Weapon");
+        te = TEFF(e.eID);
 
-      /*if (e.ETarget->x != x && e.ETarget->y != y && 
+        /*if (e.ETarget->x != x && e.ETarget->y != y && 
         abs(e.ETarget->x - x) != abs(e.ETarget->y - y))
         return ABORT; */
 
+        if (!ta) return ABORT; 
 
-      if (!ta) return ABORT; 
-      
-
-      te->ef.pval = ta->u.a.Dmg;
-      te->ef.pval.Number += e.EActor->GetPower(0)*2;
-      te->ef.pval.Number = max(1,e.Dmg.Number);
-      e.Dmg = te->ef.pval;
-      te->ef.lval = 3 + e.EActor->ChallengeRating()/2;
-      e.vRange = te->ef.lval;
-      e.DType = te->ef.xval = ta->DType;
-      e.isNAttack = true;
-      ReThrow(EV_EFFECT,e);    
-      GainTempStati(SPEC_TIMEOUT,NULL,random(4)+2,SS_MISC,e.AType);
-      Timeout += 30; /* For game balance, there is no speed on
+        te->ef.pval = ta->u.a.Dmg;
+        te->ef.pval.Number += e.EActor->GetPower(0)*2;
+        te->ef.pval.Number = max(1,e.Dmg.Number);
+        e.Dmg = te->ef.pval;
+        te->ef.lval = 3 + e.EActor->ChallengeRating()/2;
+        e.vRange = te->ef.lval;
+        e.DType = te->ef.xval = ta->DType;
+        e.isNAttack = true;
+        ReThrow(EV_EFFECT,e);    
+        GainTempStati(SPEC_TIMEOUT,NULL,random(4)+2,SS_MISC,e.AType);
+        Timeout += 30; /* For game balance, there is no speed on
                         breath weapons; they always take a full
                         10 phases. */
-      if (startedAfraid)
-        Timeout *= 2;
-      return DONE;
-      break;
+        if (startedAfraid)
+            Timeout *= 2;
+        return DONE;
+        break;
     case A_EXPL:
-        if (!ta) return ABORT; 
+        if (!ta)
+            return ABORT; 
         e.Dmg    = ta->u.a.Dmg;
         e.AType  = ta->AType;
         e.DType  = ta->DType;
         e.saveDC = (int8)e.EActor->GetPower(ta->u.a.DC);
         ReThrow(EV_ATTACKMSG,e);
         MapIterate(m,t,i) 
-          if (t->isCreature())
-            if (DistFrom(t) <= 3 && m->LineOfFire(x,y,t->x,t->y,this))
-              if (!((Creature*)t)->HasMFlag(M_BLIND) || !isMType(MA_VORTEX))
-              {
-                e.ETarget = t;
-                ReThrow(EV_HIT,e);
-              }  
+            if (t->isCreature())
+                if (DistFrom(t) <= 3 && m->LineOfFire(x,y,t->x,t->y,this))
+                    if (!((Creature*)t)->HasMFlag(M_BLIND) || !isMType(MA_VORTEX)) {
+                        e.ETarget = t;
+                        ReThrow(EV_HIT,e);
+                    }  
         e.ETarget = NULL;
         Remove(true);
         return DONE;       
-      case A_DGST:
-      case A_CRUS:
-        if (!ta) return ABORT; 
+    case A_DGST:
+    case A_CRUS:
+        if (!ta)
+            return ABORT; 
         e.Dmg    = ta->u.a.Dmg;
         if (e.AType == A_CRUS)
-          e.Dmg.Bonus += (e.EActor->Mod(A_STR)*3)/2;
+            e.Dmg.Bonus += (e.EActor->Mod(A_STR)*3)/2;
         e.AType  = ta->AType;
         e.DType  = ta->DType;
         e.saveDC = (int8)e.EActor->GetPower(ta->u.a.DC);
         e.isHit  = true;
         ReThrow(EV_HIT,e);
         ReThrow(EV_ATTACKMSG,e);
-       break; 
-      case A_ROAR: 
-      case A_GEST:
+        break; 
+    case A_ROAR: 
+    case A_GEST:
         //ASSERT(ta);
         if (!ta)
-          return ABORT;
+            return ABORT;
+
         Reveal(true);
         if (e.AType == A_ROAR)
-          MapIterate(m,t,i) 
-            if (t->isCreature() && DistFrom(t) <= 20)
-              if (t->HasStati(SINGING))
-                if (t->GetStati(SINGING)->Val == BARD_COUNTER)
-                  {
-                    e.EMap->SetQueue(QUEUE_DAMAGE_MSG);
-                    ((Creature*)t)->IDPrint("Your singing negates the effect.",
-                                            "The <Obj>'s singing negates the effect.",t);
-                    e.EMap->UnsetQueue(QUEUE_DAMAGE_MSG);
-                    goto SkipSoundAttack;
-                  }
-        
-          TAttack buf[1024];
-          max = ListAttacks(buf,1024);
-          
-          MapIterate(m,t,i) 
+            MapIterate(m,t,i) 
+                if (t->isCreature() && DistFrom(t) <= 20)
+                    if (t->HasStati(SINGING))
+                        if (t->GetStati(SINGING)->Val == BARD_COUNTER) {
+                            e.EMap->SetQueue(QUEUE_DAMAGE_MSG);
+                            ((Creature*)t)->IDPrint("Your singing negates the effect.",
+                                "The <Obj>'s singing negates the effect.",t);
+                            e.EMap->UnsetQueue(QUEUE_DAMAGE_MSG);
+                            goto SkipSoundAttack;
+                        }
+
+        TAttack buf[1024];
+        max = ListAttacks(buf,1024);
+
+        MapIterate(m,t,i) 
             if (t->isCreature())
-              if (DistFrom(t) <= 12 && m->LineOfFire(x,y,t->x,t->y,this))
-                if (!((Creature*)t)->HasMFlag(M_DEAF) &&
-                    ((Creature*)t)->ResistLevel(AD_SONI) != -1)
-                {
-                  if (e.EActor == t)
-                    continue;
-                  e.isNAttack = true;
-                  for (int j=0;j<max;j++) {
-                    TAttack * ta = &buf[j]; 
-                    if (ta->AType != e.AType) continue; 
-                    ASSERT(ta);
-                    e.ETarget = t;
-                    e.EMap->SetQueue(QUEUE_DAMAGE_MSG);
-                    do {
-                      e.Dmg    = ta->u.a.Dmg;
-                      e.vDmg   = max(1,e.Dmg.Roll());
-                      e.DType  = ta->DType;
-                      e.saveDC = (int8)e.EActor->GetPower(ta->u.a.DC);
-                      e.isHit = true; 
-                      ReThrow(EV_HIT,e);
-                      if (j++ == max) break; 
-                      ta = &buf[j];
+                if (DistFrom(t) <= 12 && m->LineOfFire(x,y,t->x,t->y,this))
+                    if (!((Creature*)t)->HasMFlag(M_DEAF) && ((Creature*)t)->ResistLevel(AD_SONI) != -1) {
+                        if (e.EActor == t)
+                            continue;
+                        e.isNAttack = true;
+                        for (int j=0;j<max;j++) {
+                            TAttack * ta = &buf[j]; 
+                            if (ta->AType != e.AType) continue; 
+                            ASSERT(ta);
+                            e.ETarget = t;
+                            e.EMap->SetQueue(QUEUE_DAMAGE_MSG);
+                            do {
+                                e.Dmg    = ta->u.a.Dmg;
+                                e.vDmg   = max(1,e.Dmg.Roll());
+                                e.DType  = ta->DType;
+                                e.saveDC = (int8)e.EActor->GetPower(ta->u.a.DC);
+                                e.isHit = true; 
+                                ReThrow(EV_HIT,e);
+                                if (j++ == max) break; 
+                                ta = &buf[j];
+                            }
+                            while ((ta->AType == A_ALSO));
+                            e.EMap->UnsetQueue(QUEUE_DAMAGE_MSG);
+                        }
                     }
-                    while ((ta->AType == A_ALSO));
-                    e.EMap->UnsetQueue(QUEUE_DAMAGE_MSG);
-              }
-            }
-        SkipSoundAttack:  
+SkipSoundAttack:  
         e.ETarget = NULL;
         e.EActor->Timeout += 30;
         if (startedAfraid)
-          Timeout *= 2;
+            Timeout *= 2;
 
         ReThrow(EV_ATTACKMSG,e);
         return DONE;       
     case A_CPRX:
     case A_PROX:
         {
-          if (!ta) return ABORT; 
-          ASSERT(e.ETarget);
-          ASSERT(ta);
-          TAttack buf[1024];
-          int max = ListAttacks(buf,1024); 
-          for (i=0;i<max;i++) {
-            TAttack * ta = &buf[i]; 
-            if ((ta->AType == e.AType) ||
-                // all normal attacks from a swarm are not
-                // proximity attacks
-                (e.EActor->HasMFlag(M_SWARM) && 
-                 (is_postgrab_attk(ta->AType) ||
-                  is_standard_attk(ta->AType) ||
-                  ta->AType == A_ALSO))) {
-              e.EActor->Reveal(true);
-              EventInfo e2 = e; 
-              e2.Dmg    = ta->u.a.Dmg;
-              e2.vDmg   = max(1,e2.Dmg.Roll());
-              e2.strDmg = Format(" (%d) (proximity)",e2.vDmg);
-              e2.DType  = ta->DType;
-              e2.saveDC = (int8)e2.EActor->GetPower(ta->u.a.DC);
-              e2.isHit = true; 
-              e2.isNAttack = true;
-              ReThrow(EV_DAMAGE,e2);
-              ReThrow(EV_ATTACKMSG,e2);
+            if (!ta)
+                return ABORT; 
+            ASSERT(e.ETarget);
+            ASSERT(ta);
+            TAttack buf[1024];
+            int max = ListAttacks(buf,1024); 
+            for (i=0;i<max;i++) {
+                TAttack * ta = &buf[i]; 
+                if ((ta->AType == e.AType) ||
+                    // all normal attacks from a swarm are not
+                    // proximity attacks
+                        (e.EActor->HasMFlag(M_SWARM) && (is_postgrab_attk(ta->AType) || is_standard_attk(ta->AType) || ta->AType == A_ALSO))) {
+                    e.EActor->Reveal(true);
+                    EventInfo e2 = e; 
+                    e2.Dmg    = ta->u.a.Dmg;
+                    e2.vDmg   = max(1,e2.Dmg.Roll());
+                    e2.strDmg = Format(" (%d) (proximity)",e2.vDmg);
+                    e2.DType  = ta->DType;
+                    e2.saveDC = (int8)e2.EActor->GetPower(ta->u.a.DC);
+                    e2.isHit = true; 
+                    e2.isNAttack = true;
+                    ReThrow(EV_DAMAGE,e2);
+                    ReThrow(EV_ATTACKMSG,e2);
+                }
             }
-        }
         }
         return DONE;
     case A_GAZE:
-        if (!ta) return ABORT; 
+        if (!ta)
+            return ABORT; 
         ASSERT(e.ETarget);
-        if (!m->LineOfVisualSight(x,y,e.ETarget->x,e.ETarget->y,this))
-        {
-          IPrint("You don't have a clear line of sight.");
-          return ABORT;
+        if (!m->LineOfVisualSight(x,y,e.ETarget->x,e.ETarget->y,this)) {
+            IPrint("You don't have a clear line of sight.");
+            return ABORT;
         }
         if (e.ETarget->HasStati(GAZE_REFLECTION,GR_REFLECT)) {
-          DPrint(e,"Your gaze is reflected back on you!",
-              "The <EActor>'s gaze is reflected!");
-          e.EVictim = e.EActor; 
+            DPrint(e,"Your gaze is reflected back on you!",
+                "The <EActor>'s gaze is reflected!");
+            e.EVictim = e.EActor; 
         } 
         if (e.ETarget->HasStati(EYES_AVERTED) && random(100) < 50) {
-          TPrint(e,"The <EVictim> averts its eyes from your gaze!",
-              "You avert your eyes from the <EVictim>'s gaze!",
-              "The <EVictim> averts its eyes from the <EActor>'s gaze!");
-          e.Immune = true;
-          return DONE; 
+            TPrint(e,"The <EVictim> averts its eyes from your gaze!",
+                "You avert your eyes from the <EVictim>'s gaze!",
+                "The <EVictim> averts its eyes from the <EActor>'s gaze!");
+            e.Immune = true;
+            return DONE; 
         } 
-        if (e.EVictim->isBlind() ||
-            e.EVictim->HasStati(GAZE_REFLECTION,GR_IMMUNE)) { 
-          DPrint(e,"The <EVictim> is immune to your gaze!",
-              "The <EVictim> is immune to the <EActor>'s gaze!");
-          e.Immune = true;
-          return DONE; 
+        if (e.EVictim->isBlind() || e.EVictim->HasStati(GAZE_REFLECTION,GR_IMMUNE)) { 
+                DPrint(e,"The <EVictim> is immune to your gaze!",
+                    "The <EVictim> is immune to the <EActor>'s gaze!");
+                e.Immune = true;
+                return DONE; 
         }
         { // quite possible to have multiple gaze attacks!
-          TAttack buf[1024];
-          int max = ListAttacks(buf,1024);
-          for (i=0;i<max;i++) {
-            TAttack * ta = &buf[i]; 
-            if (ta->AType == A_GAZE) {
-              e.Dmg    = ta->u.a.Dmg;
-              e.vDmg   = max(1,e.Dmg.Roll());
-              e.DType  = ta->DType;
-              e.saveDC = (int8)e.EActor->GetPower(ta->u.a.DC);
-              e.strDmg = ""; 
-              e.isHit = true; 
-              e.Resist = e.Immune = false; 
-              e.EMap->SetQueue(QUEUE_DAMAGE_MSG);
-              e.EActor->LoseMana(2,true);
-              ReThrow(EV_DAMAGE,e);
-              e.EMap->UnsetQueue(QUEUE_DAMAGE_MSG);
-              ReThrow(EV_ATTACKMSG,e);
-            } 
+            TAttack buf[1024];
+            int max = ListAttacks(buf,1024);
+            for (i=0;i<max;i++) {
+                TAttack * ta = &buf[i]; 
+                if (ta->AType == A_GAZE) {
+                    e.Dmg    = ta->u.a.Dmg;
+                    e.vDmg   = max(1,e.Dmg.Roll());
+                    e.DType  = ta->DType;
+                    e.saveDC = (int8)e.EActor->GetPower(ta->u.a.DC);
+                    e.strDmg = ""; 
+                    e.isHit = true; 
+                    e.Resist = e.Immune = false; 
+                    e.EMap->SetQueue(QUEUE_DAMAGE_MSG);
+                    e.EActor->LoseMana(2,true);
+                    ReThrow(EV_DAMAGE,e);
+                    e.EMap->UnsetQueue(QUEUE_DAMAGE_MSG);
+                    ReThrow(EV_ATTACKMSG,e);
+                } 
+            }
         }
-      }
         return DONE; 
     case A_GATE:
-        if (!ta) return ABORT; 
         const char *plane;
-        if (HasStati(SPEC_TIMEOUT,A_GATE))
-        {
-          IPrint("You can only use your gate ability once a day.");
-          return ABORT;
+
+        if (!ta)
+            return ABORT; 
+
+        if (HasStati(SPEC_TIMEOUT, A_GATE)) {
+            IPrint("You can only use your gate ability once a day.");
+            return ABORT;
         }
+
         GainTempStati(SPEC_TIMEOUT,NULL,600,SS_MISC,A_GATE);
         if (isMType(MA_CHAOTIC) && isMType(MA_EVIL))
-          plane = "the Abyss";
+            plane = "the Abyss";
         else if (isMType(MA_LAWFUL) && isMType(MA_EVIL))
-          plane = "the Nine Hells";
+            plane = "the Nine Hells";
         else if (isMType(MA_GOOD))
-          plane = "the Upper Planes";
+            plane = "the Upper Planes";
         else if (isMType(MA_LAWFUL))
-          plane = "Nirvana";
+            plane = "Nirvana";
         else if (isMType(MA_CHAOTIC))
-          plane = "Pandemonium";
+            plane = "Pandemonium";
         else if (isMType(MA_EVIL))
-          plane = "Hades";
+            plane = "Hades";
         else
-          plane = "the Concordant Opposition";
+            plane = "the Concordant Opposition";
 
         if (!e.Terse)
-          IDPrint("You invoke the powers of <Str>!",
-              "The <Obj2> invokes the powers of <Str1>!",plane,this);
-        if (random(100)+1 > ta->u.a.Dmg.Bonus) 
-        {
-          IDPrint("Your call remains unanswered.",
-              "<His:Obj> call remains unanswered.",this);
-        }
-        else
-        {
-          XTHROW(EV_ENGEN,e,
-            xe.enFlags = EN_SUMMON;
+            IDPrint("You invoke the powers of <Str>!",
+            "The <Obj2> invokes the powers of <Str1>!",plane,this);
+        if (random(100)+1 > ta->u.a.Dmg.Bonus) {
+            IDPrint("Your call remains unanswered.",
+                "<His:Obj> call remains unanswered.",this);
+        } else {
+            XTHROW(EV_ENGEN,e,
+                xe.enFlags = EN_SUMMON;
             xe.enID = FIND("gated outsiders");
             xe.EXVal = x;
             xe.EYVal = y;
@@ -1787,211 +1756,195 @@ EvReturn Creature::SAttack(EventInfo &e) /* this == EActor */
         Timeout += /*HasFeat(FT_RAPID_GATE) ? 30 : */ 50;
         return DONE;
     case A_AURA: 
-      {
-        if (!ta) return ABORT; 
-        EventInfo e2 = e; 
-        e2.Dmg    = ta->u.a.Dmg;
-        e2.vDmg   = e2.Dmg.Roll();
-        e2.strDmg = ""; 
-        if (e.EVictim->HasFeat(FT_FISTS_OF_IRON))
-          {
-            e2.vDmg /= 2;
-            e2.strDmg += " / 2 FoI";
-          } 
-        e2.isHit = true; 
-        ReThrow(EV_DAMAGE,e2);
-        ReThrow(EV_ATTACKMSG,e2);
-        break; 
-      }
+        {
+            if (!ta)
+                return ABORT; 
 
-    case A_DEQU:
-      {
-        if (!ta) return ABORT; 
-        Item *it;
-        EventInfo e2 = e; 
-        e2.DType  = ta->DType;
-        e2.isHit = true; 
-        e2.strDmg = ""; 
-        e2.saveDC = (int8)e2.EActor->GetPower(ta->u.a.DC);
-        it = e.EItem2;
-        if (!it) it = e.EItem;
-        if (!it) {
-          // ok, apply to attacker
-          e2.Dmg    = ta->u.a.Dmg;
-          e2.vDmg   = e2.Dmg.Roll();
-          if (e2.saveDC > 0)
-            if (e2.EVictim->SavingThrow(REF,e2.saveDC)) {
-              VPrint(e2,"You avoid harm to yourself when striking the <EActor>.",
-                  "The <EVictim> avoids harm when striking the <EActor>.");
-              return DONE;
-            }
-          if (e.EVictim->HasFeat(FT_FISTS_OF_IRON))
-            {
-              e2.vDmg /= 2;
-              e2.strDmg += " / 2 FoI";
+            EventInfo e2 = e; 
+            e2.Dmg    = ta->u.a.Dmg;
+            e2.vDmg   = e2.Dmg.Roll();
+            e2.strDmg = ""; 
+            if (e.EVictim->HasFeat(FT_FISTS_OF_IRON)) {
+                e2.vDmg /= 2;
+                e2.strDmg += " / 2 FoI";
             } 
-          ReThrow(EV_DAMAGE,e2);
-          ReThrow(EV_ATTACKMSG,e2);
-          return DONE; 
-        } else { 
-          e2.Dmg    = ta->u.a.Dmg;
-          e2.Dmg.Number *= 3; 
-          e2.Dmg.Bonus *= 3; 
-          e2.vDmg   = e2.Dmg.Roll();
-          e2.EItem = it;
-          e2.EItem2 = NULL;
-          e2.ETarget = it; 
-          if (e.saveDC > 0)
-            if (e.EVictim->SavingThrow(REF,e.saveDC)) {
-              VPrint(e2,"You avoid harm to your <EItem>.",
-                  "The <EVictim> protects <his:EVictim> <EItem>.");
-              return DONE;
-            }
-          ReThrow(EV_DAMAGE,e2);
-          ReThrow(EV_ATTACKMSG,e2);
-          return DONE;
+            e2.isHit = true; 
+            ReThrow(EV_DAMAGE,e2);
+            ReThrow(EV_ATTACKMSG,e2);
+            break; 
         }
-        break; 
-      }
-        //case A_DETH:
+    case A_DEQU:
+        {
+            if (!ta)
+                return ABORT; 
 
+            Item *it;
+            EventInfo e2 = e; 
+            e2.DType  = ta->DType;
+            e2.isHit = true; 
+            e2.strDmg = ""; 
+            e2.saveDC = (int8)e2.EActor->GetPower(ta->u.a.DC);
+            it = e.EItem2;
+            if (!it)
+                it = e.EItem;
+
+            if (!it) {
+                // ok, apply to attacker
+                e2.Dmg    = ta->u.a.Dmg;
+                e2.vDmg   = e2.Dmg.Roll();
+                if (e2.saveDC > 0)
+                    if (e2.EVictim->SavingThrow(REF,e2.saveDC)) {
+                        VPrint(e2,"You avoid harm to yourself when striking the <EActor>.",
+                            "The <EVictim> avoids harm when striking the <EActor>.");
+                        return DONE;
+                    }
+                if (e.EVictim->HasFeat(FT_FISTS_OF_IRON)) {
+                    e2.vDmg /= 2;
+                    e2.strDmg += " / 2 FoI";
+                } 
+                ReThrow(EV_DAMAGE,e2);
+                ReThrow(EV_ATTACKMSG,e2);
+                return DONE; 
+            } else { 
+                e2.Dmg    = ta->u.a.Dmg;
+                e2.Dmg.Number *= 3; 
+                e2.Dmg.Bonus *= 3; 
+                e2.vDmg   = e2.Dmg.Roll();
+                e2.EItem = it;
+                e2.EItem2 = NULL;
+                e2.ETarget = it; 
+                if (e.saveDC > 0)
+                    if (e.EVictim->SavingThrow(REF,e.saveDC)) {
+                        VPrint(e2,"You avoid harm to your <EItem>.",
+                            "The <EVictim> protects <his:EVictim> <EItem>.");
+                        return DONE;
+                    }
+                ReThrow(EV_DAMAGE,e2);
+                ReThrow(EV_ATTACKMSG,e2);
+                return DONE;
+            }
+            break; 
+        }
+    //case A_DETH:
     case A_GREA:
         int16 fc;
         if (HasStati(EXPOSED)) {
-          IPrint("You're still off balance from the last great blow.");
-          return ABORT;
+            IPrint("You're still off balance from the last great blow.");
+            return ABORT;
         }
         fc = max(0,2 - e.EActor->AbilityLevel(CA_MIGHTY_STROKE));
         if (fc && !e.EActor->LoseFatigue(fc,true))
-          return ABORT;
-
-        if (!EInSlot(SL_WEAPON))
-        {
-          if (!TMON(mID)->Attk[0].AType)
-          {
-            IPrint("You have no active method of attack in this form.");
             return ABORT;
-          }
-          e.EItem   = NULL;
-          e.vHit    = (int8)Attr[A_HIT_BRAWL];
-          e.vDef    = (int8)e.EVictim->getDef();
-          e.Dmg     = DmgVal(S_BRAWL,e.EVictim->GetAttr(A_SIZ) > SZ_MEDIUM);
-          e.AType   = TMON(mID)->Attk[0].AType;
-          e.DType   = TMON(mID)->Attk[0].DType;
-          e.vThreat = 17;
-          e.vCrit   = 2;
-        }
-        else
-        {
-          e.EItem    = EInSlot(SL_WEAPON);
-          e.Dmg      = e.EActor->DmgVal(S_MELEE, 
-              e.EVictim->GetAttr(A_SIZ) > SZ_MEDIUM);
-          e.vHit     = (int8)Attr[A_HIT_MELEE]; /*+ e.EItem->ToHit() */
-          e.vDef     = (int8)e.EVictim->getDef();
-          e.AType    = A_SWNG;
-          e.DType    = (int8)e.EItem->DamageType(e.EVictim);
-          e.vThreat  = e.EItem->Threat(e.EActor)-3;
-          e.vCrit    = (int8)e.EItem->CritMult(e.EActor);
+
+        if (!EInSlot(SL_WEAPON)) {
+            if (!TMON(mID)->Attk[0].AType) {
+                IPrint("You have no active method of attack in this form.");
+                return ABORT;
+            }
+            e.EItem   = NULL;
+            e.vHit    = (int8)Attr[A_HIT_BRAWL];
+            e.vDef    = (int8)e.EVictim->getDef();
+            e.Dmg     = DmgVal(S_BRAWL,e.EVictim->GetAttr(A_SIZ) > SZ_MEDIUM);
+            e.AType   = TMON(mID)->Attk[0].AType;
+            e.DType   = TMON(mID)->Attk[0].DType;
+            e.vThreat = 17;
+            e.vCrit   = 2;
+        } else {
+            e.EItem    = EInSlot(SL_WEAPON);
+            e.Dmg      = e.EActor->DmgVal(S_MELEE, 
+                e.EVictim->GetAttr(A_SIZ) > SZ_MEDIUM);
+            e.vHit     = (int8)Attr[A_HIT_MELEE]; /*+ e.EItem->ToHit() */
+            e.vDef     = (int8)e.EVictim->getDef();
+            e.AType    = A_SWNG;
+            e.DType    = (int8)e.EItem->DamageType(e.EVictim);
+            e.vThreat  = e.EItem->Threat(e.EActor)-3;
+            e.vCrit    = (int8)e.EItem->CritMult(e.EActor);
         }
         e.isGreatBlow = true;
         if (ReThrow(EV_STRIKE, e) == ABORT)
-          return ABORT;
+            return ABORT;
 
         if (e.EActor->HasFeat(FT_MASTER_GREAT_BLOW)) {
-          e.EActor->Timeout += 3000 / max((100 + e.EActor->Attr[e.EItem ? A_SPD_MELEE : A_SPD_BRAWL]*5),10);
-          e.EActor->GainTempStati(EXPOSED,NULL,1,SS_MISC,0,2);
+            e.EActor->Timeout += 3000 / max((100 + e.EActor->Attr[e.EItem ? A_SPD_MELEE : A_SPD_BRAWL]*5),10);
+            e.EActor->GainTempStati(EXPOSED,NULL,1,SS_MISC,0,2);
+        } else {
+            e.EActor->Timeout += 5000 / max((100 + e.EActor->Attr[e.EItem ? A_SPD_MELEE : A_SPD_BRAWL]*5),10);
+            e.EActor->GainTempStati(EXPOSED,NULL,2,SS_MISC,0,2);
         }
-        else {
-          e.EActor->Timeout += 5000 / max((100 + e.EActor->Attr[e.EItem ? A_SPD_MELEE : A_SPD_BRAWL]*5),10);
-          e.EActor->GainTempStati(EXPOSED,NULL,2,SS_MISC,0,2);
-          }
         if (startedAfraid)
-          e.EActor->Timeout *= 2;
+            e.EActor->Timeout *= 2;
         break;
     case A_PREC:
         if (HasStati(EXPOSED)) {
-          IPrint("You cannot make precision strokes while off balance.");
-          return ABORT;
-          }
-        if (HasStati(STUNNED)) {
-          IPrint("You cannot make precision strokes while stunned.");
-          return ABORT;
-          }
-        if (HasStati(PRONE)) {
-          IPrint("You cannot make precision strokes while prone.");
-          return ABORT;
-          }
-
-        if (!EInSlot(SL_WEAPON))
-        {
-          if (!TMON(mID)->Attk[0].AType)
-          {
-            IPrint("You have no active method of attack in this form.");
+            IPrint("You cannot make precision strokes while off balance.");
             return ABORT;
-          }
-          e.EItem   = NULL;
-          e.vHit    = (int8)Attr[A_HIT_BRAWL];
-          e.vDef    = (int8)e.EVictim->getDef();
-          e.Dmg     = DmgVal(S_BRAWL,e.EVictim->GetAttr(A_SIZ) > SZ_MEDIUM);
-          e.AType   = TMON(mID)->Attk[0].AType;
-          e.DType   = TMON(mID)->Attk[0].DType;
-          e.vThreat = 17;
-          e.vCrit   = 2;
         }
-        else
-        {
-          e.EItem    = EInSlot(SL_WEAPON);
-          e.Dmg      = e.EActor->DmgVal(S_MELEE, 
-              e.EVictim->GetAttr(A_SIZ) > SZ_MEDIUM);
-          e.vHit     = (int8)Attr[A_HIT_MELEE]; 
-          e.vDef     = (int8)e.EVictim->getDef();
-          e.AType    = A_SWNG;
-          e.DType    = (int8)e.EItem->DamageType(e.EVictim);
-          e.vThreat  = e.EItem->Threat(e.EActor)-3;
-          e.vCrit    = (int8)e.EItem->CritMult(e.EActor);
+        if (HasStati(STUNNED)) {
+            IPrint("You cannot make precision strokes while stunned.");
+            return ABORT;
+        }
+        if (HasStati(PRONE)) {
+            IPrint("You cannot make precision strokes while prone.");
+            return ABORT;
+        }
+
+        if (!EInSlot(SL_WEAPON)) {
+            if (!TMON(mID)->Attk[0].AType) {
+                IPrint("You have no active method of attack in this form.");
+                return ABORT;
+            }
+            e.EItem   = NULL;
+            e.vHit    = (int8)Attr[A_HIT_BRAWL];
+            e.vDef    = (int8)e.EVictim->getDef();
+            e.Dmg     = DmgVal(S_BRAWL,e.EVictim->GetAttr(A_SIZ) > SZ_MEDIUM);
+            e.AType   = TMON(mID)->Attk[0].AType;
+            e.DType   = TMON(mID)->Attk[0].DType;
+            e.vThreat = 17;
+            e.vCrit   = 2;
+        } else {
+            e.EItem    = EInSlot(SL_WEAPON);
+            e.Dmg      = e.EActor->DmgVal(S_MELEE, e.EVictim->GetAttr(A_SIZ) > SZ_MEDIUM);
+            e.vHit     = (int8)Attr[A_HIT_MELEE]; 
+            e.vDef     = (int8)e.EVictim->getDef();
+            e.AType    = A_SWNG;
+            e.DType    = (int8)e.EItem->DamageType(e.EVictim);
+            e.vThreat  = e.EItem->Threat(e.EActor)-3;
+            e.vCrit    = (int8)e.EItem->CritMult(e.EActor);
         }
         e.isPrecision = true;
         if (ReThrow(EV_STRIKE, e) == ABORT)
-          return ABORT;        
-        e.EActor->Timeout += 3000 / max((100 + 
-          e.EActor->Attr[e.EItem ? A_SPD_MELEE : A_SPD_BRAWL]*5),10);
+            return ABORT;
+        e.EActor->Timeout += 3000 / max((100 + e.EActor->Attr[e.EItem ? A_SPD_MELEE : A_SPD_BRAWL]*5),10);
         e.EActor->Timeout += 45;
         if (startedAfraid)
-          e.EActor->Timeout *= 2;
-      break;
+            e.EActor->Timeout *= 2;
+        break;
     case A_BULL:
-        if (e.EActor->HasStati(GRAPPLED) && !e.isTelekinetic)
-        {
-          e.EActor->IPrint("You can't bull rush while grappled.");
-          return ABORT;
+        if (e.EActor->HasStati(GRAPPLED) && !e.isTelekinetic) {
+            e.EActor->IPrint("You can't bull rush while grappled.");
+            return ABORT;
+        } else if (e.EVictim->HasMFlag(M_SWARM) && !e.isTelekinetic) {
+            IPrint("You can't bull rush a swarm!");
+            break;
         }
-        else if (e.EVictim->HasMFlag(M_SWARM) && !e.isTelekinetic)
-        {
-          IPrint("You can't bull rush a swarm!");
-          break;
+        if (e.EActor->HasStati(GRABBED) && !e.isTelekinetic) {
+            e.EActor->IPrint("You can't bull rush while ensnared.");
+            return ABORT;
         }
-        if (e.EActor->HasStati(GRABBED) && !e.isTelekinetic)
-        {
-          e.EActor->IPrint("You can't bull rush while ensnared.");
-          return ABORT;
+        if (e.EActor->HasStati(GRAPPLING) && !e.isTelekinetic) {
+            e.EActor->IPrint("You can't bull rush while grappling.");
+            return ABORT;
         }
-        if (e.EActor->HasStati(GRAPPLING) && !e.isTelekinetic)
-        {
-          e.EActor->IPrint("You can't bull rush while grappling.");
-          return ABORT;
-        }
-        if (e.EActor->HasStati(STUCK) && !e.isTelekinetic)
-        {
-          e.EActor->IPrint("You can't bull rush while stuck.");
-          return ABORT;
-        }
-        else if (e.EActor->onPlane() != e.EVictim->onPlane() && !e.isTelekinetic) {
-          IPrint("You cannot bull rush a creature on another plane!"); 
-          break; 
+        if (e.EActor->HasStati(STUCK) && !e.isTelekinetic) {
+            e.EActor->IPrint("You can't bull rush while stuck.");
+            return ABORT;
+        } else if (e.EActor->onPlane() != e.EVictim->onPlane() && !e.isTelekinetic) {
+            IPrint("You cannot bull rush a creature on another plane!"); 
+            break; 
         } 
         e.EParam = e.EActor->ChoicePrompt("Displace, force forward or move past?","dfm",'f');
         if (e.EParam == -1)
-          return ABORT;
+            return ABORT;
 
         e.Dmg.Set(0,0,0);
         e.vHit  = (int8)Attr[A_HIT_BRAWL];
@@ -1999,349 +1952,303 @@ EvReturn Creature::SAttack(EventInfo &e) /* this == EActor */
         e.DType = AD_BLUNT;
 
         if (!HasFeat(FT_MASTER_BULL_RUSH))
-          e.EActor->ProvokeAoO(e.EVictim);
+            e.EActor->ProvokeAoO(e.EVictim);
         if (e.EActor->isDead())
-          return DONE;        
-
+            return DONE;        
 
         if (ReThrow(EV_STRIKE,e) == ABORT)
-          return ABORT;
+            return ABORT;
 
-        e.EActor->Timeout += 3000 / 
-          max((100 + min(e.EActor->Attr[A_SPD_BRAWL],e.EActor->Attr[A_MOV])*5),
-              10);
+        e.EActor->Timeout += 3000 / max((100 + min(e.EActor->Attr[A_SPD_BRAWL],e.EActor->Attr[A_MOV])*5), 10);
         if (startedAfraid)
-          e.EActor->Timeout *= 2;
+            e.EActor->Timeout *= 2;
         return DONE;
-
     case A_TRIP:
-        if (e.EActor->HasStati(STUCK) && !e.isTelekinetic)
-        {
-          if (!e.isCounterTrip)
-            IPrint("You can't trip something while stuck.");
-          return ABORT;
-        }
-        else if (e.EVictim->isAerial())
-        {
-          if (!e.isCounterTrip)
-            IPrint("You can't trip a flying creature!");
-          break;
-        }
-        else if (e.EVictim->HasMFlag(M_SWARM))
-        {
-          if (!e.isCounterTrip)
-            IPrint("You can't trip a swarm!");
-          break;
-        }
-        else if (e.EVictim->HasStati(PRONE))
-        {
-          if (!e.isCounterTrip)
-            IPrint("<He:Obj>'s already prone!",e.EVictim);
-          break;
-        }
-        else if (e.EActor->onPlane() != e.EVictim->onPlane() && !e.isTelekinetic) {
-          if (!e.isCounterTrip)
-            IPrint("You cannot trip a creature on another plane!"); 
-          break; 
-        } 
-        else if (e.EActor->AttackMode() == S_MELEE) {
-          e.vHit = (int8)e.EActor->Attr[A_HIT_MELEE];
-          e.EItem = e.EActor->EInSlot(SL_WEAPON);
-        }
-        else
-          e.vHit = (int8)e.EActor->Attr[A_HIT_BRAWL];
+        if (e.EActor->HasStati(STUCK) && !e.isTelekinetic) {
+            if (!e.isCounterTrip)
+                IPrint("You can't trip something while stuck.");
+            return ABORT;
+        } else if (e.EVictim->isAerial()) {
+            if (!e.isCounterTrip)
+                IPrint("You can't trip a flying creature!");
+            break;
+        } else if (e.EVictim->HasMFlag(M_SWARM)) {
+            if (!e.isCounterTrip)
+                IPrint("You can't trip a swarm!");
+            break;
+        } else if (e.EVictim->HasStati(PRONE)) {
+            if (!e.isCounterTrip)
+                IPrint("<He:Obj>'s already prone!",e.EVictim);
+            break;
+        } else if (e.EActor->onPlane() != e.EVictim->onPlane() && !e.isTelekinetic) {
+            if (!e.isCounterTrip)
+                IPrint("You cannot trip a creature on another plane!"); 
+            break; 
+        } else if (e.EActor->AttackMode() == S_MELEE) {
+            e.vHit = (int8)e.EActor->Attr[A_HIT_MELEE];
+            e.EItem = e.EActor->EInSlot(SL_WEAPON);
+        } else
+            e.vHit = (int8)e.EActor->Attr[A_HIT_BRAWL];
         e.vDef = (int8)e.EVictim->getDef();
         e.DType = AD_TRIP; e.saveDC = -1;
         e.Dmg.Set(0,0,0);
 
         if (ReThrow(EV_STRIKE,e) == ABORT)
-          return ABORT;
-          
+            return ABORT;
+
         if ((e.Resist || e.Immune) && !e.isCounterTrip)
-          if (e.EActor->HasMFlag(M_HUMANOID) && !e.EVictim->HasMFlag(M_NOLIMBS))
-            {
-              EventInfo e2;
-              e2.Clear();
-              e2 = e;
-              e2.EVictim = e.EActor;
-              e2.EActor =  e.EVictim;
-              e2.isCounterTrip = true;
-              ReThrow(EV_SATTACK, e2);
+            if (e.EActor->HasMFlag(M_HUMANOID) && !e.EVictim->HasMFlag(M_NOLIMBS)) {
+                EventInfo e2;
+                e2.Clear();
+                e2 = e;
+                e2.EVictim = e.EActor;
+                e2.EActor =  e.EVictim;
+                e2.isCounterTrip = true;
+                ReThrow(EV_SATTACK, e2);
             }
-            
+
         if (e.isCounterTrip)
-          return DONE;
+            return DONE;
         if (e.EActor->AttackMode() == S_MELEE) 
-          e.EActor->Timeout = 3000 / 
-            max((100 + e.EActor->Attr[A_SPD_MELEE]*5),10);
+            e.EActor->Timeout = 3000 / max((100 + e.EActor->Attr[A_SPD_MELEE]*5),10);
         else
-          e.EActor->Timeout = 3000 / 
-            max((100 + e.EActor->Attr[A_SPD_BRAWL]*5),10);
+            e.EActor->Timeout = 3000 / max((100 + e.EActor->Attr[A_SPD_BRAWL]*5),10);
         if (startedAfraid)
-          e.EActor->Timeout *= 2;
+            e.EActor->Timeout *= 2;
 
         return DONE;      
-
     case A_DISA:
-        if (!e.EVictim->EInSlot(SL_WEAPON))
-        {
-          if (!e.isCounterTrip)
-            IPrint("You cannot disarm an unarmed creature!");
-          return ABORT; 
+        if (!e.EVictim->EInSlot(SL_WEAPON)) {
+            if (!e.isCounterTrip)
+                IPrint("You cannot disarm an unarmed creature!");
+            return ABORT; 
         }
-        if (e.EActor->HasStati(STUCK) && !e.isTelekinetic)
-        {
-          if (!e.isCounterTrip)
-            IPrint("You can't disarm something while stuck.");
-          return ABORT;
+        if (e.EActor->HasStati(STUCK) && !e.isTelekinetic) {
+            if (!e.isCounterTrip)
+                IPrint("You can't disarm something while stuck.");
+            return ABORT;
         }
 
         if (e.EActor->AttackMode() == S_MELEE) {
-          e.vHit = (int8)e.EActor->Attr[A_HIT_MELEE];
-          e.EItem = e.EActor->EInSlot(SL_WEAPON);
-          }
-        else
-          e.vHit = (int8)e.EActor->Attr[A_HIT_BRAWL];
+            e.vHit = (int8)e.EActor->Attr[A_HIT_MELEE];
+            e.EItem = e.EActor->EInSlot(SL_WEAPON);
+        } else
+            e.vHit = (int8)e.EActor->Attr[A_HIT_BRAWL];
         e.vDef = (int8)e.EVictim->getDef();
         e.DType = AD_DISA; e.saveDC = -1;
         e.Dmg.Set(0,0,0);
 
         if (!HasFeat(FT_MASTER_DISARM))
-          e.EActor->ProvokeAoO(e.EVictim);
+            e.EActor->ProvokeAoO(e.EVictim);
 
         if (e.EActor->isDead())
-          return DONE;        
+            return DONE;        
 
         if (ReThrow(EV_STRIKE,e) == ABORT)
-          return ABORT;
+            return ABORT;
 
         if ((e.Resist || e.Immune) && !e.isCounterTrip)
-          if (e.EActor->HasMFlag(M_HUMANOID) && !e.EVictim->HasMFlag(M_NOLIMBS))
-            {
-              EventInfo e2;
-              e2.Clear();
-              e2 = e;
-              e2.EVictim = e.EActor;
-              e2.EActor =  e.EVictim;
-              e2.isCounterTrip = true;
-              ReThrow(EV_SATTACK, e2);
+            if (e.EActor->HasMFlag(M_HUMANOID) && !e.EVictim->HasMFlag(M_NOLIMBS)) {
+                EventInfo e2;
+                e2.Clear();
+                e2 = e;
+                e2.EVictim = e.EActor;
+                e2.EActor =  e.EVictim;
+                e2.isCounterTrip = true;
+                ReThrow(EV_SATTACK, e2);
             }
 
         if (e.isCounterTrip)
-          return DONE;
-          
+            return DONE;
+
         if (e.EActor->AttackMode() == S_MELEE) 
-          e.EActor->Timeout += 3000 / 
-            max((100 + e.EActor->Attr[A_SPD_MELEE]*5),10);
+            e.EActor->Timeout += 3000 / max((100 + e.EActor->Attr[A_SPD_MELEE]*5),10);
         else
-          e.EActor->Timeout += 3000 / 
-            max((100 + e.EActor->Attr[A_SPD_BRAWL]*5),10);
+            e.EActor->Timeout += 3000 / max((100 + e.EActor->Attr[A_SPD_BRAWL]*5),10);
         if (startedAfraid)
-          e.EActor->Timeout *= 2;
+            e.EActor->Timeout *= 2;
         return DONE;      
     case A_GRAB:
         if (e.EActor->InSlot(SL_WEAPON) && e.EActor->InSlot(SL_READY) && !e.isTelekinetic) {
-          IPrint("You need a free hand to initiate a grapple.");
-          return ABORT;
+            IPrint("You need a free hand to initiate a grapple.");
+            return ABORT;
         }
         if (e.EActor->HasStati(GRAPPLING) && !e.isTelekinetic) {
-          IPrint("You can only grapple one target at once.");
-          return ABORT;
+            IPrint("You can only grapple one target at once.");
+            return ABORT;
+        } else if (e.EVictim->HasMFlag(M_SWARM)) {
+            IPrint("You can't grapple a swarm!");
+            break;
+        } else if (e.EActor->HasMFlag(M_SWARM)) {
+            IPrint("As a swarm, you can't grapple anything!");
+            break;
         }
-        else if (e.EVictim->HasMFlag(M_SWARM))
-        {
-          IPrint("You can't grapple a swarm!");
-          break;
-        }
-        else if (e.EActor->HasMFlag(M_SWARM))
-        {
-          IPrint("As a swarm, you can't grapple anything!");
-          break;
-        }
-        if (e.EActor->HasMFlag(M_NOHANDS) && !e.isTelekinetic &&
-            !e.EActor->HasFeat(FT_NATURAL_GRAB)) {
-          IPrint("You can't initiate grapples in this form.");
-          return ABORT;
-        }
-        else if (e.EActor->onPlane() != e.EVictim->onPlane() && !e.isTelekinetic) {
-          IPrint("You cannot grapple a creature on another plane!"); 
-          break; 
+        if (e.EActor->HasMFlag(M_NOHANDS) && !e.isTelekinetic && !e.EActor->HasFeat(FT_NATURAL_GRAB)) {
+            IPrint("You can't initiate grapples in this form.");
+            return ABORT;
+        } else if (e.EActor->onPlane() != e.EVictim->onPlane() && !e.isTelekinetic) {
+            IPrint("You cannot grapple a creature on another plane!"); 
+            break; 
         } 
         e.vHit = (int8)e.EActor->Attr[A_HIT_BRAWL];
         e.vDef = (int8)e.EVictim->getDef();
         e.DType = AD_GRAB; e.saveDC = -1;
         e.Dmg.Set(0,0,0);
-        if (!e.EActor->HasFeat(FT_MASTER_GRAPPLE) && 
-            !e.EActor->HasFeat(FT_NATURAL_GRAB))
-          e.EActor->ProvokeAoO(e.EVictim);
+        if (!e.EActor->HasFeat(FT_MASTER_GRAPPLE) && !e.EActor->HasFeat(FT_NATURAL_GRAB))
+            e.EActor->ProvokeAoO(e.EVictim);
         if (e.EActor->isDead())
-          return DONE;
+            return DONE;
         if (ReThrow(EV_STRIKE,e) == ABORT)
-          return ABORT;
+            return ABORT;
 
         if (!e.isHit)
-          e.EActor->Timeout += 3000 / 
-            max((100 + e.EActor->Attr[A_SPD_BRAWL]*5),10);
+            e.EActor->Timeout += 3000 / max((100 + e.EActor->Attr[A_SPD_BRAWL]*5),10);
         else
-          e.EActor->Timeout += 30;
+            e.EActor->Timeout += 30;
         if (startedAfraid)
-          e.EActor->Timeout *= 2;
+            e.EActor->Timeout *= 2;
         return DONE;
     case A_ESCA:
         if (e.ETarget = GetStatiObj(GRAPPLING)) 
-          if (yn(XPrint("Release the <Obj>?",e.EVictim),true))
-          {
-            e.EVictim->RemoveStati(GRAPPLED,-1,-1,-1,this);
-            e.EVictim->RemoveStati(GRABBED,-1,-1,-1,this);
-            RemoveStati(GRAPPLING,-1,-1,-1,e.EVictim);
-            if (!HasStati(GRAPPLED) && !HasStati(GRABBED))
-              return DONE;
-          }
-
-        if (!HasStati(GRAPPLED) && !HasStati(GRABBED))
-        {
-          IPrint("You aren't being grappled presently.");
-          return DONE;
-        }
-
-        if (GetAttr(A_MOV) <= -20 && HasMFlag(M_NOLIMBS))
-        {
-          IPrint("You can't break grapples in this form.");
-          return DONE;
-        }
-
-        {
-          int checkStati[] = { GRAPPLED, GRABBED, 0 };
-          Creature *Grapplers[64];
-          int16 j;
-          memset(Grapplers,0,sizeof(Creature*)*64);
-          j = 0;
-          for (i=0;checkStati[i];i++) 
-            {
-              StatiIterNature(this,checkStati[i])
-                for (j=0;Grapplers[j];j++)
-                  if (Grapplers[j] == oCreature(S->h))
-                    goto SkipRepeat;
-                Grapplers[j] = oCreature(S->h);
-                SkipRepeat:;
-              StatiIterEnd(this)
+            if (yn(XPrint("Release the <Obj>?",e.EVictim),true)) {
+                e.EVictim->RemoveStati(GRAPPLED,-1,-1,-1,this);
+                e.EVictim->RemoveStati(GRABBED,-1,-1,-1,this);
+                RemoveStati(GRAPPLING,-1,-1,-1,e.EVictim);
+                if (!HasStati(GRAPPLED) && !HasStati(GRABBED))
+                    return DONE;
             }
-          int n; n=0;
-          for (i=0;Grapplers[i];i++)
-            {
-              e.EVictim = Grapplers[i];
-              e.isHit = true;
-              e.Resist = false;
-              if (ManeuverCheck(e))
-                {
-                  e.Resist = false;
-                  RemoveStati(GRAPPLED,-1,-1,-1,e.EVictim);
-                  RemoveStati(GRABBED,-1,-1,-1,e.EVictim);
-                  e.EVictim->RemoveStati(GRAPPLING,-1,-1,-1,this);
-                  /* Delay the grappler a bit, to give the escapee time
+
+        if (!HasStati(GRAPPLED) && !HasStati(GRABBED)) {
+            IPrint("You aren't being grappled presently.");
+            return DONE;
+        }
+
+        if (GetAttr(A_MOV) <= -20 && HasMFlag(M_NOLIMBS)) {
+            IPrint("You can't break grapples in this form.");
+            return DONE;
+        }
+
+        {
+            int checkStati[] = { GRAPPLED, GRABBED, 0 };
+            Creature *Grapplers[64];
+            int16 j;
+            memset(Grapplers,0,sizeof(Creature*)*64);
+            j = 0;
+            for (i=0;checkStati[i];i++) {
+                StatiIterNature(this,checkStati[i])
+                    for (j=0;Grapplers[j];j++)
+                        if (Grapplers[j] == oCreature(S->h))
+                            goto SkipRepeat;
+                    Grapplers[j] = oCreature(S->h);
+SkipRepeat:;
+                StatiIterEnd(this)
+            }
+            int n; n=0;
+            for (i=0;Grapplers[i];i++) {
+                e.EVictim = Grapplers[i];
+                e.isHit = true;
+                e.Resist = false;
+                if (ManeuverCheck(e)) {
+                    e.Resist = false;
+                    RemoveStati(GRAPPLED,-1,-1,-1,e.EVictim);
+                    RemoveStati(GRABBED,-1,-1,-1,e.EVictim);
+                    e.EVictim->RemoveStati(GRAPPLING,-1,-1,-1,this);
+                    /* Delay the grappler a bit, to give the escapee time
                     to run at least one square away before the next
                     attempt. */
-                  e.EVictim->Timeout += 15;
-                }
-              else
-                e.Resist = true;
-              ReThrow(EV_ATTACKMSG,e);
-              if (e.Resist) 
-                e.EActor->Timeout += 30;
-              if (n++ > 250)
-                Error("Infinite grapple check loop error!");
+                    e.EVictim->Timeout += 15;
+                } else
+                    e.Resist = true;
+                ReThrow(EV_ATTACKMSG,e);
+                if (e.Resist) 
+                    e.EActor->Timeout += 30;
+                if (n++ > 250)
+                    Error("Infinite grapple check loop error!");
             } 
         }
         /* Shouldn't successfully breaking out of a grapple take time?
-           Logically, yes, but in practice it doesn't because if it did
-           the enemy would simply grapple you again on its turn, making
-           any attempt to break a grapple practically useless. */
+        Logically, yes, but in practice it doesn't because if it did
+        the enemy would simply grapple you again on its turn, making
+        any attempt to break a grapple practically useless. */
         return DONE;
-
     case A_KICK:
         if (HasAttk(A_KICK) && e.ETarget->isCreature())
-          return ReThrow(EV_NATTACK,e);
+            return ReThrow(EV_NATTACK,e);
         // ww: also check for horses and whatnot: I polymorphed into a
         // horse and was told I couldn't kick ... :-)
-        if (!HasMFlag(M_HUMANOID) && !isMType(MA_QUADRUPED) && !e.isTelekinetic)
-        { IPrint("You can't kick effectively in this form."); 
-          return ABORT; }
-          e.vHit = (int8)e.EActor->Attr[A_HIT_BRAWL];
-          e.vDef = e.ETarget->isCreature() ? e.EVictim->getDef() : 0;
-          e.DType = AD_BLUNT;
-          e.saveDC = -1;
-          e.Dmg = DmgVal(S_BRAWL, (!e.ETarget->isCreature()) || 
-              (e.EVictim->GetAttr(A_SIZ) > SZ_MEDIUM));
-          e.Dmg.Bonus += max(0,(Mod(A_STR)+1)/2);
-          if (ReThrow(EV_STRIKE,e) == ABORT)
+        if (!HasMFlag(M_HUMANOID) && !isMType(MA_QUADRUPED) && !e.isTelekinetic) {
+            IPrint("You can't kick effectively in this form."); 
             return ABORT;
-          // wow, I don't know what this massive timeout is about, but here's
-          // what it ends up doing: you kick open a door (happens now) and
-          // the monsters on the other side get 5000 units to beat you into
-          // submission while you can't react! 
-          if (e.ETarget->isCreature())
+        }
+        e.vHit = (int8)e.EActor->Attr[A_HIT_BRAWL];
+        e.vDef = e.ETarget->isCreature() ? e.EVictim->getDef() : 0;
+        e.DType = AD_BLUNT;
+        e.saveDC = -1;
+        e.Dmg = DmgVal(S_BRAWL, (!e.ETarget->isCreature()) || 
+            (e.EVictim->GetAttr(A_SIZ) > SZ_MEDIUM));
+        e.Dmg.Bonus += max(0,(Mod(A_STR)+1)/2);
+        if (ReThrow(EV_STRIKE,e) == ABORT)
+            return ABORT;
+        // wow, I don't know what this massive timeout is about, but here's
+        // what it ends up doing: you kick open a door (happens now) and
+        // the monsters on the other side get 5000 units to beat you into
+        // submission while you can't react! 
+        if (e.ETarget->isCreature())
             Timeout += 5000 / 
-              max((100 + Attr[A_SPD_BRAWL]*5),10);
-          else
+            max((100 + Attr[A_SPD_BRAWL]*5),10);
+        else
             Timeout += 1000 / 
-              max((100 + Attr[A_SPD_BRAWL]*5),10);
-          if (startedAfraid)
+            max((100 + Attr[A_SPD_BRAWL]*5),10);
+        if (startedAfraid)
             e.EActor->Timeout *= 2;
-          break;
+        break;
     case A_COUP:
-          bool kill_flag; kill_flag = false;
-          if (!EInSlot(SL_WEAPON) || !EInSlot(SL_WEAPON)->isType(T_WEAPON))
-          {
-            if ((HasAbility(CA_UNARMED_STRIKE) || HasFeat(FT_MARTIAL_MASTERY))
-                || HasStati(POLYMORPH) || !isPlayer())
-              ;
+        bool kill_flag; kill_flag = false;
+        if (!EInSlot(SL_WEAPON) || !EInSlot(SL_WEAPON)->isType(T_WEAPON)) {
+            if ((HasAbility(CA_UNARMED_STRIKE) || HasFeat(FT_MARTIAL_MASTERY)) || HasStati(POLYMORPH) || !isPlayer())
+                ;
             else {
-              IPrint("You need to wield a melee weapon to perform a coup de grace.");
-              return ABORT;
+                IPrint("You need to wield a melee weapon to perform a coup de grace.");
+                return ABORT;
             }
-          }  
-          if (e.EVictim->HasStati(SLEEPING) || 
-              (e.EVictim->HasStati(PARALYSIS,PARA_HELD) && 
-                !(max(SkillLevel(SK_CONCENT),SkillLevel(SK_ESCAPE_ART)) >= 15)) ||
-              (e.EVictim->HasStati(STUCK) && e.EVictim->HasStati(PRONE) &&
-                e.EActor->SkillLevel(SK_FIND_WEAKNESS) >= 20))
+        }  
+        if (e.EVictim->HasStati(SLEEPING) || 
+            (e.EVictim->HasStati(PARALYSIS,PARA_HELD) && !(max(SkillLevel(SK_CONCENT),SkillLevel(SK_ESCAPE_ART)) >= 15)) ||
+            (e.EVictim->HasStati(STUCK) && e.EVictim->HasStati(PRONE) && e.EActor->SkillLevel(SK_FIND_WEAKNESS) >= 20))
             ; // OK, victim cannot defend
-          else 
-          {
+        else {
             IPrint("You can only perform a coup de grace against a helpless creature.");
             return ABORT;
-          }
-          if (!e.EVictim->isMType(MA_LIVING) ||
-              (!e.EActor->HasFeat(FT_NECROPHYSIOLOGY) && e.EVictim->isMType(MA_UNDEAD)))
-          {
+        }
+        if (!e.EVictim->isMType(MA_LIVING) || (!e.EActor->HasFeat(FT_NECROPHYSIOLOGY) && e.EVictim->isMType(MA_UNDEAD))) {
             IPrint("Unliving creatures cannot be coup de graced.");
             return ABORT;
-          }
+        }
 
-          /* Coup de Grace provokes an attack of opportunity. */
-          e.EActor->ProvokeAoO();
-          if (e.EActor->isDead())
+        /* Coup de Grace provokes an attack of opportunity. */
+        e.EActor->ProvokeAoO();
+        if (e.EActor->isDead())
             return DONE;
 
-          e.EItem = EInSlot(SL_WEAPON);
-          if (e.EItem) {
+        e.EItem = EInSlot(SL_WEAPON);
+        if (e.EItem) {
             e.Dmg   = DmgVal(S_MELEE, e.EVictim->GetAttr(A_SIZ) > SZ_MEDIUM);
             e.vHit  = (int8)e.EActor->Attr[A_HIT_MELEE];
             e.DType    = (int8)e.EItem->DamageType(e.EVictim);
             e.vThreat = (int8)e.EItem->Threat(e.EActor);
             e.vCrit   = (int8)e.EItem->CritMult(e.EActor);
-          } else { 
+        } else { 
             TAttack buf[1024];
             TAttack * at = NULL;
             int max = ListAttacks(buf,1024);
             for (i=0;i<max;i++) {
-              at = &buf[i]; 
-              if (is_standard_attk(at->AType))
-                break; 
+                at = &buf[i]; 
+                if (is_standard_attk(at->AType))
+                    break; 
             } 
             if (!at) {
-              IPrint("You have no natural attack suitable for a coup de grace.");
-              return ABORT;
+                IPrint("You have no natural attack suitable for a coup de grace.");
+                return ABORT;
             } 
             e.EItem     = NULL;
             e.vHit      = (int8)Attr[A_HIT_BRAWL];
@@ -2352,287 +2259,260 @@ EvReturn Creature::SAttack(EventInfo &e) /* this == EActor */
             e.vThreat = 20; /* HasFeat(FT_IMPROVED_CRITICAL_BITE), etc. */
             e.vCrit   = 2;
             e.isNAttack = true;
-          } 
-          e.vDef  = (int8)e.EVictim->getDef();
-          if (e.EVictim->ResistLevel(AD_CRIT) != -1 ||
-              (e.EVictim->isMType(MA_UNDEAD) && e.EActor->HasFeat(FT_NECROPHYSIOLOGY)))
+        } 
+        e.vDef  = (int8)e.EVictim->getDef();
+        if (e.EVictim->ResistLevel(AD_CRIT) != -1 || (e.EVictim->isMType(MA_UNDEAD) && e.EActor->HasFeat(FT_NECROPHYSIOLOGY)))
             e.isCrit = true; 
-          e.isHit = true;
-          if (ReThrow(EV_STRIKE, e) == ABORT)
+        e.isHit = true;
+        if (ReThrow(EV_STRIKE, e) == ABORT)
             return ABORT;
-          if (!(e.EVictim->isDead()))
+        if (!(e.EVictim->isDead()))
             if (e.EVictim->ResistLevel(AD_CRIT) != -1)
-              if (!e.EVictim->SavingThrow(FORT,15 + e.EActor->Mod(A_DEX) + 
-                e.EActor->SkillLevel(SK_FIND_WEAKNESS)/2,SA_DEATH))
-              { ReThrow(EV_DEATH,e); kill_flag = true; }
-          if (!(e.EVictim->isDead()) && !kill_flag)
+                if (!e.EVictim->SavingThrow(FORT,15 + e.EActor->Mod(A_DEX) + e.EActor->SkillLevel(SK_FIND_WEAKNESS)/2,SA_DEATH)) {
+                    ReThrow(EV_DEATH,e);
+                    kill_flag = true;
+                }
+        if (!(e.EVictim->isDead()) && !kill_flag)
             VPrint(e,"Miraculously, you survive.",
-                "Miraculously, the <EVictim> is still alive.");    
-          Timeout += 50; /* a "full round action", in the base system */
-          if (startedAfraid)
+            "Miraculously, the <EVictim> is still alive.");    
+        Timeout += 50; /* a "full round action", in the base system */
+        if (startedAfraid)
             e.EActor->Timeout *= 2;
-          return DONE;
+        return DONE;
     case A_THRO:
-          if (!HasStati(GRAPPLING,-1,e.EVictim))
-          {
+        if (!HasStati(GRAPPLING,-1,e.EVictim)) {
             IPrint("You can only throw a creature you have already grappled.");
             return ABORT;
-          }
-          if (e.EActor->HasStati(STUCK))
-          {
+        }
+        if (e.EActor->HasStati(STUCK)) {
             IPrint("You can't throw a creature while stuck.");
             return ABORT;
-          }
+        }
 
-          /* Succeed or fail, end the grapple */
-          e.EVictim->RemoveStati(GRABBED,SS_ATTK,-1,-1,e.EActor);
-          e.EVictim->RemoveStati(GRAPPLED,SS_ATTK,-1,-1,e.EActor);
-          e.EActor->RemoveStati(GRAPPLING,SS_ATTK,-1,-1,e.EVictim);
+        /* Succeed or fail, end the grapple */
+        e.EVictim->RemoveStati(GRABBED,SS_ATTK,-1,-1,e.EActor);
+        e.EVictim->RemoveStati(GRAPPLED,SS_ATTK,-1,-1,e.EActor);
+        e.EActor->RemoveStati(GRAPPLING,SS_ATTK,-1,-1,e.EVictim);
 
-          /* Held by someone else? */
-          if (e.EVictim->HasStati(GRABBED) || e.EVictim->HasStati(GRAPPLING))
+        /* Held by someone else? */
+        if (e.EVictim->HasStati(GRABBED) || e.EVictim->HasStati(GRAPPLING))
             return ABORT;
 
-          /* The usual grappling AoO */
-          e.EActor->ProvokeAoO();        
-          if (e.EActor->isDead())
+        /* The usual grappling AoO */
+        e.EActor->ProvokeAoO();        
+        if (e.EActor->isDead())
             return DONE;
 
-          e.vHit = (int8)e.EActor->Attr[A_HIT_BRAWL];
-          e.vDef = e.ETarget->isCreature() ? e.EVictim->getDef() : 0;
-          e.DType = AD_KNOC; e.saveDC = -1;
-          e.Dmg.Set(1,max(1,e.EActor->Mod(A_STR) + 1),0);
+        e.vHit = (int8)e.EActor->Attr[A_HIT_BRAWL];
+        e.vDef = e.ETarget->isCreature() ? e.EVictim->getDef() : 0;
+        e.DType = AD_KNOC; e.saveDC = -1;
+        e.Dmg.Set(1,max(1,e.EActor->Mod(A_STR) + 1),0);
 
-          if (ReThrow(EV_STRIKE,e) == ABORT)
+        if (ReThrow(EV_STRIKE,e) == ABORT)
             return ABORT;
 
-          e.EActor->Timeout += 3000 / 
-            max((100 + e.EActor->Attr[A_SPD_BRAWL]*5),10);
-          if (startedAfraid)
+        e.EActor->Timeout += 3000 / max((100 + e.EActor->Attr[A_SPD_BRAWL]*5),10);
+        if (startedAfraid)
             e.EActor->Timeout *= 2;
-          return DONE;
+        return DONE;
     case A_WHIR:  
-          bool found; found = false;
-          if (!e.EActor->HasFeat(FT_WHIRLWIND_ATTACK))
+        bool found; found = false;
+        if (!e.EActor->HasFeat(FT_WHIRLWIND_ATTACK))
             return ABORT;
-          if (e.EActor->HasStati(STUCK))
-          {
+        if (e.EActor->HasStati(STUCK)) {
             IPrint("You can't execute a whirlwind of blows while stuck.");
             return ABORT;
-          }
-          for(i=0;i!=8;i++) {
+        }
+        for(i=0;i!=8;i++) {
             /* Clear away the flags from the last attack. */
-            e.Clear(); e.EActor = this;
+            e.Clear();
+            e.EActor = this;
             for (e.EVictim=m->FCreatureAt(e.EActor->x+DirX[i],e.EActor->y+DirY[i]);e.EVictim;
-                 e.EVictim=m->NCreatureAt(e.EActor->x+DirX[i],e.EActor->y+DirY[i])) {
-              if (!found) {
-                DPrint(e,"You execute a great flurry of attacks!",
-                    "The <EActor> executes a great flurry of attacks!");
-                found = true;
-              }            
-              if (!EInSlot(SL_WEAPON))
-              {
-                if (!TMON(mID)->Attk[0].AType)
-                {
-                  IPrint("You have no active method of attack in this form.");
-                  return ABORT;
+                    e.EVictim=m->NCreatureAt(e.EActor->x+DirX[i],e.EActor->y+DirY[i])) {
+                if (!found) {
+                    DPrint(e,"You execute a great flurry of attacks!",
+                        "The <EActor> executes a great flurry of attacks!");
+                    found = true;
+                }            
+                if (!EInSlot(SL_WEAPON)) {
+                    if (!TMON(mID)->Attk[0].AType) {
+                        IPrint("You have no active method of attack in this form.");
+                        return ABORT;
+                    }
+                    e.EItem   = NULL;
+                    e.vHit    = (int8)Attr[A_HIT_BRAWL];
+                    e.vDef    = (int8)e.EVictim->getDef();
+                    e.Dmg     = TMON(mID)->Attk[0].u.a.Dmg;
+                    e.Dmg.Bonus += e.EActor->Attr[A_DMG_BRAWL]; 
+                    e.AType   = TMON(mID)->Attk[0].AType;
+                    e.DType   = TMON(mID)->Attk[0].DType;
+                    e.vThreat = 20;
+                    e.vCrit   = 2;
+                } else {
+                    e.EItem    = EInSlot(SL_WEAPON);
+                    e.Dmg      = e.EActor->DmgVal(S_MELEE, 
+                        e.EVictim->GetAttr(A_SIZ) > SZ_MEDIUM);
+                    e.vHit     = (int8)Attr[A_HIT_MELEE]; /*+ e.EItem->ToHit() */
+                    e.vDef     = (int8)e.EVictim->getDef();
+                    e.AType    = A_SWNG;
+                    e.DType    = (int8)e.EItem->DamageType(e.EVictim);
+                    e.vThreat  = (int8)e.EItem->Threat(e.EActor);
+                    e.vCrit    = (int8)e.EItem->CritMult(e.EActor);
                 }
-                e.EItem   = NULL;
-                e.vHit    = (int8)Attr[A_HIT_BRAWL];
-                e.vDef    = (int8)e.EVictim->getDef();
-                e.Dmg     = TMON(mID)->Attk[0].u.a.Dmg;
-                e.Dmg.Bonus += e.EActor->Attr[A_DMG_BRAWL]; 
-                e.AType   = TMON(mID)->Attk[0].AType;
-                e.DType   = TMON(mID)->Attk[0].DType;
-                e.vThreat = 20;
-                e.vCrit   = 2;
-              }
-              else
-              {
-                e.EItem    = EInSlot(SL_WEAPON);
-                e.Dmg      = e.EActor->DmgVal(S_MELEE, 
-                    e.EVictim->GetAttr(A_SIZ) > SZ_MEDIUM);
-                e.vHit     = (int8)Attr[A_HIT_MELEE]; /*+ e.EItem->ToHit() */
-                e.vDef     = (int8)e.EVictim->getDef();
-                e.AType    = A_SWNG;
-                e.DType    = (int8)e.EItem->DamageType(e.EVictim);
-                e.vThreat  = (int8)e.EItem->Threat(e.EActor);
-                e.vCrit    = (int8)e.EItem->CritMult(e.EActor);
-              }
-              if (ReThrow(EV_STRIKE, e) == ABORT)
-                continue;
-              if (e.EActor->HasStati(STUNNED) || e.EActor->HasStati(PARALYSIS) ||
-                  e.EActor->isDead() || (e.EActor->HasStati(AFRAID) && 
-                                        !e.EActor->HasFeat(FT_LION_HEART)))
-                break;   
+                if (ReThrow(EV_STRIKE, e) == ABORT)
+                    continue;
+                if (e.EActor->HasStati(STUNNED) || e.EActor->HasStati(PARALYSIS) ||
+                    e.EActor->isDead() || (e.EActor->HasStati(AFRAID) && 
+                    !e.EActor->HasFeat(FT_LION_HEART)))
+                    break;   
             }
-          }
-          if (!found) {
+        }
+        if (!found) {
             IPrint("But there's nobody nearby!");
             return ABORT;
-          }
-          e.EActor->Timeout += 5000 / 
-            max((100 + e.EActor->Attr[
-                  EInSlot(SL_WEAPON) ? A_SPD_MELEE : A_SPD_BRAWL]*5),10);
-          if (startedAfraid)
+        }
+        e.EActor->Timeout += 5000 / max((100 + e.EActor->Attr[EInSlot(SL_WEAPON) ? A_SPD_MELEE : A_SPD_BRAWL]*5),10);
+        if (startedAfraid)
             e.EActor->Timeout *= 2;
-          break;  
+        break;  
     case A_SPRI:
-          if (HasStati(GRAPPLED) || HasStati(GRABBED))
-          {
+        if (HasStati(GRAPPLED) || HasStati(GRABBED)) {
             IPrint("You can't spring attack while ensnared.");
             return ABORT;
-          }
-          if (HasStati(GRAPPLING))
-          {
+        }
+        if (HasStati(GRAPPLING)) {
             IPrint("You can't spring attack while grappling.");
             return ABORT;
-          }
-          if (HasStati(CONFUSED))
-          {
+        }
+        if (HasStati(CONFUSED)) {
             IPrint("You can't spring attack while confused.");
             return ABORT;
-          }
-          if (HasStati(STUCK))
-          {
+        }
+        if (HasStati(STUCK)) {
             IPrint("You can't spring attack while stuck.");
             return ABORT;
-          }
-          if (dist(e.EActor->x,e.EActor->y,e.EVictim->x,e.EVictim->y) > 4)
-          {
+        }
+        if (dist(e.EActor->x,e.EActor->y,e.EVictim->x,e.EVictim->y) > 4) {
             IPrint("The <Obj> is too far away to Spring Attack!");
             return ABORT;
-          }
-          /* Later, we should use EV_PUSH to trigger traps, hit barriers,
-             etc. in the path to the monster and back. For now, we just 
-             ignore these aspects. */
-          switch (AttackMode()) {
-            case S_MELEE: case S_DUAL:
-              return ReThrow(EV_WATTACK,e);
-            case S_BRAWL:
-              return ReThrow(EV_NATTACK,e);
-            default:
-              IPrint("You can't Spring Attack with a ranged weapon!");
-          }
-          break;    
+        }
+        /* Later, we should use EV_PUSH to trigger traps, hit barriers,
+        etc. in the path to the monster and back. For now, we just 
+        ignore these aspects. */
+        switch (AttackMode()) {
+        case S_MELEE: case S_DUAL:
+            return ReThrow(EV_WATTACK,e);
+        case S_BRAWL:
+            return ReThrow(EV_NATTACK,e);
+        default:
+            IPrint("You can't Spring Attack with a ranged weapon!");
+        }
+        break;    
     case A_DEFN:
-          if (HasStati(DEFENSIVE)) {
+        if (HasStati(DEFENSIVE)) {
             IPrint("You're already fighting defensively.");
             return ABORT;
-          }
-          IDPrint("You go on the defensive.",
-              "The <Obj> goes on the defensive.",this);
-          GainPermStati(DEFENSIVE,NULL,SS_MISC,0,0,0);
-          break;         
+        }
+        IDPrint("You go on the defensive.",
+            "The <Obj> goes on the defensive.",this);
+        GainPermStati(DEFENSIVE,NULL,SS_MISC,0,0,0);
+        break;         
     case A_AEYE:
-          if (HasStati(EYES_AVERTED)) {
+        if (HasStati(EYES_AVERTED)) {
             IPrint("You're already averting your eyes.");
             return ABORT;
-          }
-          IDPrint("You avert your eyes.",
-              "The <Obj> averts its eyes.",this);
-          GainPermStati(EYES_AVERTED,NULL,SS_MISC,0,0,0);
-          break;         
+        }
+        IDPrint("You avert your eyes.",
+            "The <Obj> averts its eyes.",this);
+        GainPermStati(EYES_AVERTED,NULL,SS_MISC,0,0,0);
+        break;         
     case A_SUND:
-          if (!e.EVictim->EInSlot(SL_WEAPON))
-          {
+        if (!e.EVictim->EInSlot(SL_WEAPON)) {
             IPrint("That foe has no weapon to sunder.");
             return ABORT;
-          }
-          if (e.EActor->HasStati(STUCK))
-          {
+        }
+        if (e.EActor->HasStati(STUCK)) {
             IPrint("You can't sunder a weapon while stuck.");
             return ABORT;
-          }
-          if (!EInSlot(SL_WEAPON))
-          {
+        }
+        if (!EInSlot(SL_WEAPON)) {
             IPrint("You need a weapon yourself to sunder an enemy's.");
             return ABORT;
-          }
-          if (!e.EVictim->EInSlot(SL_WEAPON))
-          {
+        }
+        if (!e.EVictim->EInSlot(SL_WEAPON)) {
             IPrint("That creature has no weapon readied to sunder.");
             return ABORT;
-          }
-          // ww: this was forgotten! 
-          if (!HasFeat(FT_SUNDER)) {
+        }
+        // ww: this was forgotten! 
+        if (!HasFeat(FT_SUNDER)) {
             e.EActor->ProvokeAoO(e.EVictim);
             if (e.EActor->isDead()) return ABORT; 
-          }
-          e.vHit    = (int8)(e.EActor->Attr[A_HIT_MELEE] - 4);
-          e.vDef    = (int8)e.EVictim->getDef();
-          e.saveDC  = -1;
-          e.EItem   = EInSlot(SL_WEAPON);
-          e.EItem2  = e.EVictim->EInSlot(SL_WEAPON);
-          e.Dmg     = e.EActor->DmgVal(S_MELEE, 
-              e.EVictim->GetAttr(A_SIZ) > SZ_MEDIUM);
-          e.DType   = (int8)e.EItem->DamageType(e.EVictim); 
-          e.vThreat = (int8)e.EItem->Threat(e.EActor);
-          e.vCrit   = (int8)e.EItem->CritMult(e.EActor);
-          if (ReThrow(EV_STRIKE,e) == ABORT)
+        }
+        e.vHit    = (int8)(e.EActor->Attr[A_HIT_MELEE] - 4);
+        e.vDef    = (int8)e.EVictim->getDef();
+        e.saveDC  = -1;
+        e.EItem   = EInSlot(SL_WEAPON);
+        e.EItem2  = e.EVictim->EInSlot(SL_WEAPON);
+        e.Dmg     = e.EActor->DmgVal(S_MELEE, e.EVictim->GetAttr(A_SIZ) > SZ_MEDIUM);
+        e.DType   = (int8)e.EItem->DamageType(e.EVictim); 
+        e.vThreat = (int8)e.EItem->Threat(e.EActor);
+        e.vCrit   = (int8)e.EItem->CritMult(e.EActor);
+        if (ReThrow(EV_STRIKE,e) == ABORT)
             return ABORT;
-          Timeout += 3000 / max((100 + Attr[A_SPD_MELEE]*5),10);
-          if (startedAfraid)
+        Timeout += 3000 / max((100 + Attr[A_SPD_MELEE]*5),10);
+        if (startedAfraid)
             e.EActor->Timeout *= 2;
-          break;
+        break;
     case A_SPRT:
-          if (HasStati(SPRINTING))
-          {
+        if (HasStati(SPRINTING)) {
             IPrint("You're already sprinting.");
             return ABORT;
-          }
-          if (HasStati(STUCK))
-          {
+        }
+        if (HasStati(STUCK)) {
             IPrint("You can't run while stuck.");
             return ABORT;
-          }
-          if (HasStati(GRABBED) || HasStati(GRAPPLING) || HasStati(GRAPPLED))
-          {
+        }
+        if (HasStati(GRABBED) || HasStati(GRAPPLING) || HasStati(GRAPPLED)) {
             IPrint("You can't run while grappling.");
             return ABORT;
-          }
-          if (HasStati(LEVITATION))
-          {
+        }
+        if (HasStati(LEVITATION)) {
             IPrint("You can't sprint while levitating.");
             return ABORT;
-          }
-          if (HasStati(STUNNED))
-          {
+        }
+        if (HasStati(STUNNED)) {
             IPrint("You can't sprint while stunned.");
             return ABORT;
-          }
-          if (HasStati(CONFUSED))
-          {
+        }
+        if (HasStati(CONFUSED)) {
             IPrint("You can't sprint while confused.");
             return ABORT;
-          }
-          if (GetAttr(A_MOV) <= -20)
-          {
+        }
+        if (GetAttr(A_MOV) <= -20) {
             IPrint("You have no active locomotion in this form.");
             return ABORT;
-          }
-          if (!LoseFatigue(1,true))
-            return ABORT;
-          GainTempStati(SPRINTING,NULL,1 + max(0,Mod(A_CON)),SS_MISC);
-          IDPrint("You push yourself to the limit!",
-              "The <Obj> puts on a burst of speed!",this);
-          return DONE;    
-    default:
-      if (e.AType <= A_LAST_STANDARD)
-        {
-          e.DType = ta->DType;
-          e.saveDC = ta->u.a.DC;
-          e.Dmg = ta->u.a.Dmg;
-          e.vHit    = (int8)e.EActor->GetAttr(A_HIT_BRAWL);
-          e.vDef    = (int8)e.EVictim->getDef();
-          e.vThreat = 20;
-          e.vCrit   = 2;
-          return ReThrow(EV_STRIKE,e);
         }
-      IPrint(Format("Unimplemented special attack %d!",e.AType));
-      return ABORT;
-  }
-  return DONE;  
+        if (!LoseFatigue(1,true))
+            return ABORT;
+        GainTempStati(SPRINTING,NULL,1 + max(0,Mod(A_CON)),SS_MISC);
+        IDPrint("You push yourself to the limit!",
+            "The <Obj> puts on a burst of speed!",this);
+        return DONE;    
+    default:
+        if (e.AType <= A_LAST_STANDARD) {
+            e.DType = ta->DType;
+            e.saveDC = ta->u.a.DC;
+            e.Dmg = ta->u.a.Dmg;
+            e.vHit    = (int8)e.EActor->GetAttr(A_HIT_BRAWL);
+            e.vDef    = (int8)e.EVictim->getDef();
+            e.vThreat = 20;
+            e.vCrit   = 2;
+            return ReThrow(EV_STRIKE,e);
+        }
+        IPrint(Format("Unimplemented special attack %d!",e.AType));
+        return ABORT;
+    }
+    return DONE;  
 }
 
 
