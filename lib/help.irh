@@ -3977,7 +3977,7 @@ Text "help::magic"
     these differences are effectively invisible, but when playing a spellcaster
     with more than one class, understanding how to use them effectively becomes
     very important. To understand this, it's important to distinguish between
-    the following two concepts -- the difference is imperceptable to single-
+    the following two concepts -- the difference is imperceptible to single-
     classed spellcasters, but significant to multiclassed ones.\n
     __<15>Caster Levels:<3> A caster level represents one stage of skill in
     spellcasting, abstract of any specific kind of spellcasting (such as bardic
@@ -4030,7 +4030,7 @@ Text "help::magic"
     accumulated 7 caster levels from any combination of classes.\n
     __<15>Spell Access:<3> Distinct from the concept of caster levels is
     the idea of spell access, though because spell access usually advances
-    faster than caster levels this distinction is normally imperceptable to
+    faster than caster levels this distinction is normally imperceptible to
     single-class casters. While caster levels are uniform -- the same no
     matter what class they are gained from -- spell access is specific to
     a given class. Paladin magic is different from bardic magic; every class

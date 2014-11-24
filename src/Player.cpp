@@ -774,7 +774,7 @@ CastSpell:
             MyTerm->LOption("Attack",A_SWNG, "Use this option to perform a normal"
                 " attack against a creature who is not yet hostile to you (Walking"
                 " into these characters will normally just displace them) or is"
-                " invisible or otherwise imperceptable.");
+                " invisible or otherwise imperceptible.");
             MyTerm->LOption("Break Grapple",A_ESCA,"You attempt to break out of an"
                 " enemy's grab or grapple with a grapple check. If successful, this"
                 " maneuver takes no time to complete, giving you an opportunity to"
@@ -922,58 +922,37 @@ DoTacticalOption:
             case A_DISA:
             case A_COUP:
             case A_SWNG:
-            case A_PREC:
+            case A_PREC: {
+                bool checkReach = false;
                 if (HasStati(TELEKINETIC)) {
                     e.vRange = (int8)HighStatiMag(TELEKINETIC);
                     if (!MyTerm->EffectPrompt(e,Q_TAR|Q_CRE))
                         break;
                     goto FindNonReachVictim;
-                } else if ((StateFlags & MS_HAS_REACH) && n != A_THRO && n != A_GRAB && n != A_BULL) {
-                        /* ww: if you have a reach weapon, you should be
-                        * able to great-blow something far away */
+                } else {
+                    checkReach = (StateFlags & MS_HAS_REACH) == MS_HAS_REACH && n != A_THRO && n != A_GRAB && n != A_BULL;
+                    if (checkReach) {
+                        /* ww: if you have a reach weapon, you should be able to great-blow something far away */
                         e.vRange = 2 + FaceRadius[Attr[A_SIZ]];
                         if (!MyTerm->EffectPrompt(e,Q_TAR|Q_LOC|Q_CRE))
                             break;
-                        if (e.ETarget && !e.ETarget->isCreature() && !e.ETarget->isFeature() && !e.ETarget->isItem())
+                    } else {
+                        if (!MyTerm->EffectPrompt(e,Q_DIR|Q_TAR|Q_LOC|Q_CRE))
                             break;
-                        if (!e.EVictim) 
-                            e.EVictim = m->FCreatureAt(e.EXVal,e.EYVal);
-                        if (!e.EVictim) 
-                            e.EVictim = m->FCreatureAt(x+DirX[e.EDir],y+DirY[e.EDir]);
-                        if (!e.EVictim) 
-                            e.EVictim = m->FCreatureAt(x+2*DirX[e.EDir],y+2*DirY[e.EDir]);
-                        if (!e.ETarget) 
-                            e.ETarget = m->KnownFeatureAt(e.EXVal,e.EYVal);
-                        if (!e.ETarget) 
-                            e.ETarget = m->KnownFeatureAt(x+DirX[e.EDir],y+DirY[e.EDir]);
-                        if (!e.ETarget) 
-                            e.ETarget = m->KnownFeatureAt(x+2*DirX[e.EDir],y+2*DirY[e.EDir]);
-                        if (!e.ETarget) 
-                            e.ETarget = m->FChestAt(e.EXVal,e.EYVal);
-                        if (!e.ETarget) 
-                            e.ETarget = m->FItemAt(e.EXVal,e.EYVal);
-                        if (!e.ETarget) 
-                            e.ETarget = m->FChestAt(x+DirX[e.EDir],y+DirY[e.EDir]);
-                        if (!e.ETarget) 
-                            e.ETarget = m->FItemAt(x+DirX[e.EDir],y+DirY[e.EDir]);
-                        if (!e.ETarget) 
-                            e.ETarget = m->FChestAt(x+2*DirX[e.EDir],y+2*DirY[e.EDir]);
-                        if (!e.ETarget) 
-                            e.ETarget = m->FItemAt(x+2*DirX[e.EDir],y+2*DirY[e.EDir]);
-                } else {
-                    if (!MyTerm->EffectPrompt(e,Q_DIR|Q_TAR|Q_LOC|Q_CRE))
-                        break;
-                    if (e.ETarget && !e.ETarget->isCreature() && !e.ETarget->isFeature() && !e.ETarget->isItem())
-                        break;
+                    }
 FindNonReachVictim:
                     if (!e.EVictim) 
                         e.EVictim = m->FCreatureAt(e.EXVal,e.EYVal);
                     if (!e.EVictim) 
                         e.EVictim = m->FCreatureAt(x+DirX[e.EDir],y+DirY[e.EDir]);
+                    if (checkReach && !e.EVictim)
+                        e.EVictim = m->FCreatureAt(x+2*DirX[e.EDir],y+2*DirY[e.EDir]);
                     if (!e.ETarget) 
                         e.ETarget = m->KnownFeatureAt(e.EXVal,e.EYVal);
                     if (!e.ETarget) 
                         e.ETarget = m->KnownFeatureAt(x+DirX[e.EDir],y+DirY[e.EDir]);
+                    if (checkReach && !e.ETarget)
+                        e.ETarget = m->KnownFeatureAt(x+2*DirX[e.EDir],y+2*DirY[e.EDir]);
                     if (!e.ETarget) 
                         e.ETarget = m->FChestAt(e.EXVal,e.EYVal);
                     if (!e.ETarget) 
@@ -982,6 +961,12 @@ FindNonReachVictim:
                         e.ETarget = m->FChestAt(x+DirX[e.EDir],y+DirY[e.EDir]);
                     if (!e.ETarget) 
                         e.ETarget = m->FItemAt(x+DirX[e.EDir],y+DirY[e.EDir]);
+                    if (checkReach) {
+                        if (!e.ETarget) 
+                            e.ETarget = m->FChestAt(x+2*DirX[e.EDir],y+2*DirY[e.EDir]);
+                        if (!e.ETarget) 
+                            e.ETarget = m->FItemAt(x+2*DirX[e.EDir],y+2*DirY[e.EDir]);
+                    }
                 }
 
                 if (!e.ETarget) {
@@ -997,25 +982,27 @@ FindNonReachVictim:
                     IPrint("Attacking oneself is counterproductive.");
                     break;
                 }
-                if (dist(x,y,e.EVictim->x,e.EVictim->y) <= 1+FaceRadius[Attr[A_SIZ]])
+                if (dist(x,y,e.EVictim->x,e.EVictim->y) <= 1 + FaceRadius[Attr[A_SIZ]])
                     if ((StateFlags & MS_REACH_ONLY) && e.ETarget->isCreature()) {
                         IPrint("You cannot attack adjacent targets with that weapon.");
                         break;
                     }
                 targ = e.EVictim; 
-                if (n == A_SWNG) goto NormalAttack;
+                if (n == A_SWNG)
+                    goto NormalAttack;
+
                 /* ww: Dwarven Auto-Focus */
                 if (Opt(OPT_DWARVEN_AUTOFOCUS) && e.ETarget->isCreature() && ((Creature *)targ)->ChallengeRating() >= ChallengeRating() && 
-                    HasAbility(CA_DWARVEN_FOCUS) && !GetStati(DWARVEN_FOCUS,-1,0)) {
+                        HasAbility(CA_DWARVEN_FOCUS) && !GetStati(DWARVEN_FOCUS,-1,0)) {
                     GainPermStati(DWARVEN_FOCUS,targ,SS_RACE,0,0,0);
                     targ->Flags |= F_HILIGHT;
-                    msg = Format("You swear a vow to slay %c%s%c.",
-                        -RED, (const char*)targ->Name(NA_THE), -GREY);
+                    msg = Format("You swear a vow to slay %c%s%c.", -RED, (const char*)targ->Name(NA_THE), -GREY);
                     MyTerm->Message(msg);
                     MyTerm->Box(msg);
                 } 
-                ThrowVal(EV_SATTACK,n,this,e.EVictim);
-                break;
+
+                ThrowVal(EV_SATTACK,n,this,e.EVictim);                    
+            }   break;
             case AUTO_CHARGE:
                 if (HasStati(AUTO_CHARGE)) {
                     IPrint("You're already automatically charging!");
@@ -1231,20 +1218,20 @@ ChargeMoveOk:
                     if (Perceives(targ) && !((Creature*)targ)->isFriendlyTo(this) && !MyTerm->CtrlDown()) {
 NormalAttack:
                         if (targ->isCreature() && !((Creature*)targ)->isHostileToPartyOf(this))
-                            if (!yn(XPrint("Confirm attack the <Obj>?",targ),true))
+                            if (!yn(XPrint("Confirm attack the <Obj>?", targ), true))
                                 break;
+
                         /* ww: Dwarven Auto-Focus */
-                        if (targ->isCreature() && Opt(OPT_DWARVEN_AUTOFOCUS) && 
-                            ((Creature *)targ)->ChallengeRating() >= 
-                            ChallengeRating() && 
-                            HasAbility(CA_DWARVEN_FOCUS) && 
-                            !GetStati(DWARVEN_FOCUS,-1,0)) {
-                                GainPermStati(DWARVEN_FOCUS,targ,SS_RACE,0,0,0);
-                                targ->Flags |= F_HILIGHT;
-                                msg = Format("You swear a vow to slay %c%s%c.",
-                                    -RED, (const char*)targ->Name(NA_THE), -GREY);
-                                MyTerm->Message(msg);
-                                MyTerm->Box(msg);
+                        if (targ->isCreature() && Opt(OPT_DWARVEN_AUTOFOCUS)
+                                && ((Creature *)targ)->ChallengeRating() >= ChallengeRating()
+                                && HasAbility(CA_DWARVEN_FOCUS) 
+                                && !GetStati(DWARVEN_FOCUS,-1,0)) {
+                            GainPermStati(DWARVEN_FOCUS,targ,SS_RACE,0,0,0);
+                            targ->Flags |= F_HILIGHT;
+                            msg = Format("You swear a vow to slay %c%s%c.",
+                                -RED, (const char*)targ->Name(NA_THE), -GREY);
+                            MyTerm->Message(msg);
+                            MyTerm->Box(msg);
                         } 
                         bool conf;
                         switch(AttackMode()) {
