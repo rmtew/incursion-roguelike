@@ -3173,11 +3173,9 @@ EvReturn Creature::TryToDestroyThing(Thing *f)
     if (f->isType(T_DOOR))
       return ThrowVal(EV_SATTACK,A_KICK,this,f);     
     
-    if ((AttackMode() == S_MELEE || AttackMode() == S_DUAL) &&
-        isBeside(f))
+    if ((AttackMode() == S_MELEE || AttackMode() == S_DUAL) && isBeside(f))
       return ThrowVal(EV_WATTACK,A_SWNG,this,f);
-    
-    
+        
     /*else if (AttackMode() == S_ARCHERY) {
       if (isCharacter()) {
         EventInfo e;
