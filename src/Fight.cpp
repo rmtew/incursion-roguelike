@@ -1429,7 +1429,6 @@ EvReturn Creature::SAttack(EventInfo &e) { /* this == EActor */
     if (!ta)
         ta = TMON(tmID)->GetAttk(e.AType);
 
-
     if (!m->InBounds(x,y) ||
             (e.EVictim && e.EVictim->isCreature() && e.EActor->onPlane() == PHASE_MATERIAL &&
              !(m->LineOfFire(x,y,e.EVictim->x,e.EVictim->y,this)))) {
@@ -1441,16 +1440,19 @@ EvReturn Creature::SAttack(EventInfo &e) { /* this == EActor */
         if (!attackSanity(e))
             return ABORT;
 
-    if (e.AType == A_GRAB || e.AType == A_BULL || e.AType == A_KICK || e.AType == A_THRO || e.AType == A_DISA || e.AType == A_TRIP)
-        if (e.EActor->DistFrom(e.EVictim) > (FaceRadius[e.EActor->GetAttr(A_SIZ)] + 1 + (e.EActor->StateFlags & MS_HAS_REACH) +
-                (e.EVictim->isCreature() ? FaceRadius[e.EVictim->GetAttr(A_SIZ)] : 0))) {
-            if (e.EActor->HasStati(TELEKINETIC) && e.EActor-> HighStatiMag(TELEKINETIC) >= e.EActor->DistFrom(e.EVictim))
+    if (e.AType == A_GRAB || e.AType == A_BULL || e.AType == A_KICK || e.AType == A_THRO || e.AType == A_DISA || e.AType == A_TRIP) {
+        int16 reachDist = 1 + FaceRadius[e.EActor->GetAttr(A_SIZ)] + (e.EActor->StateFlags & MS_HAS_REACH ? 1 : 0);
+        if (e.EVictim->isCreature())
+            reachDist += FaceRadius[e.EVictim->GetAttr(A_SIZ)];
+        if (e.EActor->DistFrom(e.EVictim) > reachDist) {
+            if (e.EActor->HasStati(TELEKINETIC) && e.EActor->HighStatiMag(TELEKINETIC) >= e.EActor->DistFrom(e.EVictim))
                 e.isTelekinetic = true;
             else {
                 e.EActor->IPrint("That target is out of range for that maneuver.");
                 return ABORT;
             }
         }
+    }
 
     if (e.AType != A_PROX && e.AType != A_EXPL && e.AType != A_DGST && e.AType != A_DEFN && e.AType != A_AEYE && e.AType != A_CRUS &&
             e.AType != A_SPRT && e.AType != A_DEQU && e.AType != A_AURA) {
