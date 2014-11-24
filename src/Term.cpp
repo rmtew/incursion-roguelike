@@ -2245,7 +2245,7 @@ TargetChosen:
                     e.ETarget = e.ETarget->GetStatiObj(MOUNTED);
                 } else if (ch == KY_CMD_ENTER) {
                     Feature *ft = m->KnownFeatureAt(tx,ty);
-                    if (!ft || ft->Type != T_PORTAL || !((Portal*)ft)->EnterDir(CENTER)) {
+                    if (ft != NULL && ft->Type == T_PORTAL && !((Portal*)ft)->EnterDir(CENTER)) {
                         Message("You can't go in anything here.");
                         continue;
                     }
