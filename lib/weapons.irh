@@ -908,8 +908,7 @@ Item "rock" : T_WEAPON
 \************************************************************************/
 
 
-Item "long bow" : T_BOW
-  {
+Item "long bow" : T_BOW {
     Image: green ')';
     Mat: MAT_WOOD;
     SDmg: 1d8;
@@ -919,17 +918,15 @@ Item "long bow" : T_BOW
     Weight: 30; Group: WG_ARCHERY;
     Fires: $"sheaf arrow", $"flight arrow";
     Size: SZ_LARGE;
-    Flags: WT_TWO_HANDED, WT_NO_STRENGTH, WT_PIERCING, WT_WOOD_PARTS,
-           WT_NO_MELEE, WT_PIERCING;
+    Flags: WT_TWO_HANDED, WT_NO_STRENGTH, WT_PIERCING, WT_WOOD_PARTS, WT_NO_MELEE, WT_PIERCING;
     Desc: "The long bow is favoured by elven warriors for its simplicity,
       power and easy creation. It is also the staple of many of the less
       funded units of the Great Empire's armies.";/* However, among adventurers
       and the modern military, its use has largely been superceded by the
       composite long bow.";*/
-  }
+}
 
-Item "short bow" : T_BOW
-  {
+Item "short bow" : T_BOW {
     Image: green ')';
     Mat: MAT_WOOD;
     SDmg: 1d6;
@@ -944,11 +941,9 @@ Item "short bow" : T_BOW
       but not nearly as powerful. However, its primary advantage is that
       it is maneuverable enough to use effectively while mounted. It is
       thus also known as the cavalry bow or horseman's bow.";
-  }
+}
 
-
-Item "sheaf arrow" : T_MISSILE
-  {
+Item "sheaf arrow" : T_MISSILE {
     Image: green GLYPH_ARROW; Group: WG_ARCHERY; 
     Mat: MAT_WOOD; Size: SZ_SMALL; Weight: 0; Cost: 5 COPPER;
     SDmg: 0d0+1; LDmg: 0d0+1; Acc: -1; Range: -2;
@@ -956,26 +951,21 @@ Item "sheaf arrow" : T_MISSILE
     Desc: "These arrows have sharp, barbed heads. Their range and
       accuracy is not as good as that of flight arrows, but they
       increase damage inflicted by +1.";
-  }
+}
 
-Item "flight arrow" : T_MISSILE
-  {
+Item "flight arrow" : T_MISSILE {
     Image: green GLYPH_ARROW; Group: WG_ARCHERY; 
     Mat: MAT_WOOD; Size: SZ_SMALL; Weight: 0; Cost: 3 COPPER;
     SDmg: 0d0; LDmg: 0d0; Acc: 0; Range: 0;
     Flags: IT_BGROUP, WT_PIERCING;
-    Desc: "These arrows are longer, thinner and more aerodynamic. 
-      Their range and accuracy is greater than that of a sheaf
-      arrow.";
-  }
+    Desc: "These arrows are longer, thinner and more aerodynamic. Their range and accuracy is greater than that of a sheaf arrow.";
+}
 
-Item "arbalest" : T_BOW
-  {
+Item "arbalest" : T_BOW {
     Image: green ')'; Group: WG_SIMPLE | WG_ARCHERY; Range: 12;
     Mat: MAT_WOOD; Size: SZ_MEDIUM; Weight: 20; Cost: 35;
     SDmg: 1d10; LDmg: 1d4; Acc: +4; Crit: x5; Threat: 3; Spd: 135%;
-    Flags: WT_TWO_HANDED, WT_CROSSBOW, WT_PENETRATING, WT_NO_STRENGTH,
-           WT_NO_MELEE, WT_PIERCING;
+    Flags: WT_TWO_HANDED, WT_CROSSBOW, WT_PENETRATING, WT_NO_STRENGTH, WT_NO_MELEE, WT_PIERCING;
     Fires: $"crossbow bolt";
     Desc: "The arbalest, or light crossbow, is the favoured weapon of city
       militia everywhere -- it's accurate, easy to use and among the most
@@ -984,15 +974,13 @@ Item "arbalest" : T_BOW
       have can be a great weakness in a dungeon setting. Dwarves and gnomes
       tend to favour these weapons, while elves cleave to more traditional
       archery and look on crossbows with distaste.";
-  }
+}
 
-Item "cranquin" : T_BOW
-  {
+Item "cranquin" : T_BOW {
     Image: bright green ')'; Group: WG_EXOTIC; Range: 14;
     Mat: MAT_WOOD; Size: SZ_MEDIUM; Weight: 40; Cost: 35;
     SDmg: 1d12; LDmg: 1d8; Acc: +5; Crit: x5; Threat: 3; Spd: 135%;
-    Flags: WT_TWO_HANDED, WT_CROSSBOW, WT_PENETRATING, WT_NO_STRENGTH,
-           WT_NO_MELEE, WT_PIERCING, WT_STUNNING;
+    Flags: WT_TWO_HANDED, WT_CROSSBOW, WT_PENETRATING, WT_NO_STRENGTH, WT_NO_MELEE, WT_PIERCING, WT_STUNNING;
     Fires: $"crossbow bolt";
     Desc: "The cranquin, or heavy crossbow, is a crank-operated miniature
       ballista favoured by dwarven and orcish militaries. It is rather
@@ -1003,15 +991,13 @@ Item "cranquin" : T_BOW
       in a dungeon setting. Dwarves and gnomes tend to favour these weapons, 
       while elves cleave to more traditional archery and look on crossbows 
       with distaste.";
-  }
+}
 
-Item "hand crossbow" : T_BOW
-  {
+Item "hand crossbow" : T_BOW {
     Image: bright purple ')'; Group: WG_EXOTIC; Range: 8;
     Mat: MAT_MITHRIL; Size: SZ_TINY; Weight: 10; Cost: 1000;
     SDmg: 1d6; LDmg: 1d3; Acc: +5; Crit: x3; Threat: 3; Spd: 135%;
-    Flags: WT_RACIAL, WT_CROSSBOW, WT_PENETRATING, WT_NO_STRENGTH,
-     WT_WOOD_PARTS, WT_NO_MELEE, WT_PIERCING, WT_SUPER_SNEAK;
+    Flags: WT_RACIAL, WT_CROSSBOW, WT_PENETRATING, WT_NO_STRENGTH, WT_WOOD_PARTS, WT_NO_MELEE, WT_PIERCING, WT_SUPER_SNEAK;
     Fires: $"hand crossbow dart";
     Desc: "This weapon was created by the drow, and is only superficially
       similar to the human crossbows. It is an intricate mechanism that
@@ -1020,39 +1006,33 @@ Item "hand crossbow" : T_BOW
       coated with drow sleep poison. Because it has many precision parts
       that must stand up under stress, it must be made from mithril,
       making it a terribly expensive weapon.";
-  }
+}
 
-Item "hand crossbow dart" : T_MISSILE
-  {
+Item "hand crossbow dart" : T_MISSILE {
     Image: bright purple GLYPH_ARROW; Group: WG_SIMPLE;
     Mat: MAT_IRON; Size: SZ_TINY; Weight: 0; Cost: 1 SILVER;
     SDmg: 0d0; LDmg: 0d0; Acc: 0; Range: 0;
     Flags: IT_BGROUP, WT_RACIAL, WT_PIERCING, IT_NOGEN;
-    Desc: "This bolt is thin, sharp and not longer then three inches. It
-      is often coated with some type of poison.";
-  }
+    Desc: "This bolt is thin, sharp and not longer then three inches. It is often coated with some type of poison.";
+}
 
-
-Item "crossbow bolt" : T_MISSILE
-  {
+Item "crossbow bolt" : T_MISSILE {
     Image: green GLYPH_ARROW; Group: WG_SIMPLE;
     Mat: MAT_IRON; Size: SZ_TINY; Weight: 0; Cost: 1 SILVER;
     SDmg: 0d0; LDmg: 0d0; Acc: 0; Range: 0;
     Flags: IT_BGROUP, WT_PIERCING;
-    Desc: "A simple, pointed metal shaft. It can be fired from either a
-      arbalest (light crossbow) or cranquin (heavy crossbow).";
-  }
+    Desc: "A simple, pointed metal shaft. It can be fired from either an arbalest (light crossbow) or cranquin (heavy crossbow).";
+}
 
-Item "javelin" : T_WEAPON
-  { Image: green GLYPH_WEAPON; Group: WG_THROWN|WG_SPEARS; Range: 3;
+Item "javelin" : T_WEAPON {
+	Image: green GLYPH_WEAPON; Group: WG_THROWN|WG_SPEARS; Range: 3;
     Mat: MAT_IRON; Size: SZ_LARGE; Weight: 5; Cost: OPT_COST(80,1) GOLD;
     SDmg: 1d6; LDmg: 1d6; Acc: -1; Crit: x2; Threat: 2; Spd: 90%;
     Flags: WT_PIERCING, WT_WOOD_PARTS, WT_NO_MELEE, IT_GROUP;
-    Desc: "The javelin is a light spear designed purely for throwing.
-      It cannot be used effectively as a melee weapon."; }
+    Desc: "The javelin is a light spear designed purely for throwing. It cannot be used effectively as a melee weapon.";
+}
 
-Item "blowpipe" : T_BOW
-  {
+Item "blowpipe" : T_BOW {
     Image: green ')';
     Mat: MAT_WOOD;
     SDmg: 0d0+3;
@@ -1067,16 +1047,15 @@ Item "blowpipe" : T_BOW
       longer range. It is favoured in Angla Maua, especially in conjunction
       with poisoned darts, but is often rejected in favour of the bow or
       arbalest in the rest of Therya.";  
-  }
+}
 
-Item "dart" : T_MISSILE
-  { Image: green GLYPH_ARROW; Group: WG_SIMPLE | WG_THROWN; Range: 2;
+Item "dart" : T_MISSILE {
+	Image: green GLYPH_ARROW; Group: WG_SIMPLE | WG_THROWN; Range: 2;
     Mat: MAT_IRON; Size: SZ_TINY; Weight: 0; Cost: 0;
     SDmg: 1d3; LDmg: 1d4; Acc: 0; Crit: x2; Threat: 2; Spd: 150%;
     Flags: WT_PIERCING, WT_NO_MELEE, IT_BGROUP;
-    Desc: "The dart is a simple missile weapon. It may be thrown or
-    launched with a blowpipe."; 
-  }
+    Desc: "The dart is a simple missile weapon. It may be thrown or launched with a blowpipe."; 
+}
 
 Item "boulder" : T_WEAPON
   { Image: brown '*'; Group: WG_SIMPLE | WG_THROWN; Range: 2;
@@ -1087,8 +1066,7 @@ Item "boulder" : T_WEAPON
     Desc: "A huge stone boulder.";
   }
 
-Item "sling" : T_BOW
-  {
+Item "sling" : T_BOW {
     Image: green ')';
     Mat: MAT_WOOD;
     SDmg: 1d6;
@@ -1102,16 +1080,14 @@ Item "sling" : T_BOW
     Desc: "Slings are often associated with peasants and halflings,
       but despite their mundanity they can be deadly weapons in the
       hands of a crack shooter.";
-  }
+}
 
-Item "sling stone" : T_MISSILE
-  {
+Item "sling stone" : T_MISSILE {
     Image: green '*'; Group: WG_THROWN; 
     Mat: MAT_GRANITE; Size: SZ_MINISCULE; Weight: 0; Cost: 5 COPPER;
     Flags: IT_BGROUP;
-    Desc: "This tiny rock has a surprising weight for its size, and
-      has been carefully smoothed down to fly straight.";
-  }
+    Desc: "This tiny rock has a surprising weight for its size, and has been carefully smoothed down to fly straight.";
+}
 
 
 /************************************************************************\
