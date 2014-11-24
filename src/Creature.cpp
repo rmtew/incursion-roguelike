@@ -1242,521 +1242,485 @@ bool Player::RunTo(int16 tx, int16 ty)
 */
 
 
-void Creature::DoTurn()
-  {
+void Creature::DoTurn() {
     int16 i,j;
     bool isEngulfed = HasStati(ENGULFED);
     Item *it;
     if (!m || x == -1)
-      return;
+        return;
 
     /* This should really be the saving throw DC of the effect,
-       but that's a lot of extra work, so for now... */
+    but that's a lot of extra work, so for now... */
     if (HasStati(PARALYSIS) && max(SkillLevel(SK_CONCENT),SkillLevel(SK_ESCAPE_ART)) >= 15)
-      if (SavingThrow(FORT,18,SA_MAGIC|SA_PARA))
-        {
-          IPrint("You break the paralysis with Concentration!");
-          RemoveStati(PARALYSIS);
+        if (SavingThrow(FORT,18,SA_MAGIC|SA_PARA)) {
+            IPrint("You break the paralysis with Concentration!");
+            RemoveStati(PARALYSIS);
         }
-    
+
     if (m->SolidAt(x,y) && onPlane() == PHASE_MATERIAL)
-      if (!HasAbility(CA_EARTHMELD) && (!isPlayer() || !thisp->Opt(OPT_GHOSTWALK)))
-        {
-          IPrint("You are being crushed alive!");
-          ThrowDmg(EV_DAMAGE,AD_NORM,random(20)+1,"being crushed alive",this,this);
-          if (isDead())
-            return;
+        if (!HasAbility(CA_EARTHMELD) && (!isPlayer() || !thisp->Opt(OPT_GHOSTWALK))) {
+            IPrint("You are being crushed alive!");
+            ThrowDmg(EV_DAMAGE,AD_NORM,random(20)+1,"being crushed alive",this,this);
+            if (isDead())
+                return;
         }
-    
+
     if (isMType(MA_AQUATIC) && !HasMFlag(M_AMPHIB))
-      if (!TTER(m->TerrainAt(x,y))->HasFlag(TF_WATER))
-        {
-          IDPrint("You are suffocating!",
-                  "The <Obj> suffocates!", this);
-          ThrowDmg(EV_DAMAGE,AD_NORM,random(6)+1,"being a fish out of water",this,this);
-          if (isDead())
-            return;
+        if (!TTER(m->TerrainAt(x,y))->HasFlag(TF_WATER)) {
+            IDPrint("You are suffocating!",
+                "The <Obj> suffocates!", this);
+            ThrowDmg(EV_DAMAGE,AD_NORM,random(6)+1,"being a fish out of water",this,this);
+            if (isDead())
+                return;
         }
-        
+
     if ((theGame->GetTurn() / 60) % 3 == 1)
-      if (HasFeat(FT_RESILIENT))
-        if (cHP < (mHP + GetAttr(A_THP)))
-          if (cHP >= ((mHP + GetAttr(A_THP)) * (100 - (Mod(A_CON)+3)*5)) / 100)
-            {
-              cHP++;
-              if (cHP == (mHP + GetAttr(A_THP)))
-                IPrint("You shrug off the effects of sundry scrapes and bruises.");
-            }
-            
-    if (HasStati(INVIS) || HasStati(INVIS_TO) ||
-          onPlane() == PHASE_ETHEREAL)
-      RippleCheck(3);
-        
-    if (isEngulfed)
-      {
+        if (HasFeat(FT_RESILIENT))
+            if (cHP < (mHP + GetAttr(A_THP)))
+                if (cHP >= ((mHP + GetAttr(A_THP)) * (100 - (Mod(A_CON)+3)*5)) / 100) {
+                    cHP++;
+                    if (cHP == (mHP + GetAttr(A_THP)))
+                        IPrint("You shrug off the effects of sundry scrapes and bruises.");
+                }
+
+    if (HasStati(INVIS) || HasStati(INVIS_TO) || onPlane() == PHASE_ETHEREAL)
+        RippleCheck(3);
+
+    if (isEngulfed) {
         Creature *cr = (Creature*) GetStatiObj(ENGULFED);
         ASSERT (cr && cr->isCreature())
-        
-        if (onPlane() != cr->onPlane())
-          {
-            IPrint("You pass through the <Obj>'s <Str>!",
-              cr, GetStatiVal(ENGULFED) == EG_ENGULF ? "mass" : "belly");
-            cr->IPrint("The <Obj> passes through your <Str>!",
-              this, GetStatiVal(ENGULFED) == EG_ENGULF ? "mass" : "belly");
+
+        if (onPlane() != cr->onPlane()) {
+            IPrint("You pass through the <Obj>'s <Str>!", cr, GetStatiVal(ENGULFED) == EG_ENGULF ? "mass" : "belly");
+            cr->IPrint("The <Obj> passes through your <Str>!", this, GetStatiVal(ENGULFED) == EG_ENGULF ? "mass" : "belly");
             cr->DropEngulfed(this);
             goto DoneEngulf;
-          }
-        
-        if (HasSkill(SK_ESCAPE_ART))
-          if (!(HasStati(PARALYSIS) || HasStati(AFRAID) ||
-                HasStati(STUNNED) || HasStati(ASLEEP)))
-            if (SkillCheck(SK_ESCAPE_ART, max( 
-                  10 + cr->ChallengeRating()*2,
-                  10 + cr->GetAttr(A_STR) ),true,false))
-              {
-                // better messages later
-                IPrint("You escape the <Obj>!",cr);
-                cr->DropEngulfed(this);
-                goto DoneEngulf;
-              }
-         
-        
-        /* Logically, this should be in the ENGULFER's DoTurn,
-           but that would require a second HasStati call for
-           EVERY monster EVERY turn, and also not guarantee the 
-           player an Escape Artist check BEFORE suffering the
-           potentially very bad A_DGST attack. Let's avoid the
-           timing quirk there. */
-        if (cr->HasAttk(A_DGST))
-          ThrowVal(EV_SATTACK,A_DGST,cr,this);
-        if (cr->HasAttk(A_CRUS))
-          ThrowVal(EV_SATTACK,A_CRUS,cr,this);
-      }
-    DoneEngulf:
+        }
 
-    if (HasStati(GRAPPLING))
-      {
+        if (HasSkill(SK_ESCAPE_ART))
+            if (!(HasStati(PARALYSIS) || HasStati(AFRAID) || HasStati(STUNNED) || HasStati(ASLEEP)))
+                if (SkillCheck(SK_ESCAPE_ART, max(10 + cr->ChallengeRating()*2, 10 + cr->GetAttr(A_STR) ),true,false)) {
+                    // better messages later
+                    IPrint("You escape the <Obj>!",cr);
+                    cr->DropEngulfed(this);
+                    goto DoneEngulf;
+                }
+
+        /* Logically, this should be in the ENGULFER's DoTurn,
+        but that would require a second HasStati call for
+        EVERY monster EVERY turn, and also not guarantee the 
+        player an Escape Artist check BEFORE suffering the
+        potentially very bad A_DGST attack. Let's avoid the
+        timing quirk there. */
+        if (cr->HasAttk(A_DGST))
+            ThrowVal(EV_SATTACK,A_DGST,cr,this);
+        if (cr->HasAttk(A_CRUS))
+            ThrowVal(EV_SATTACK,A_CRUS,cr,this);
+    }
+DoneEngulf:
+
+    if (HasStati(GRAPPLING)) {
         EventInfo xe;
         if (HasFeat(FT_CHOKE_HOLD)) {
-          StatiIterNature(this,GRAPPLING)            
-            Creature *cr;
-            cr = oCreature(S->h);
-            if (cr->isDead() || cr->HasStati(SLEEPING))
-              continue;
-            if (!cr->HasMFlag(M_HUMANOID))
-              continue;
-            if (!cr->isMType(MA_LIVING))
-              continue;
-            if (cr->cHP*2 <= cr->mHP + cr->GetAttr(A_THP))
-              {
-                if (!cr->SavingThrow(FORT,StunAttackDC(),SA_PARA|SA_GRAB))
-                  { IPrint("You fail to render the <Obj> unconscious.", cr);
+            StatiIterNature(this,GRAPPLING)            
+                Creature *cr;
+                cr = oCreature(S->h);
+                if (cr->isDead() || cr->HasStati(SLEEPING))
+                    continue;
+                if (!cr->HasMFlag(M_HUMANOID))
+                    continue;
+                if (!cr->isMType(MA_LIVING))
+                    continue;
+                if (cr->cHP*2 <= cr->mHP + cr->GetAttr(A_THP)) {
+                    if (!cr->SavingThrow(FORT,StunAttackDC(),SA_PARA|SA_GRAB))
+                    { IPrint("You fail to render the <Obj> unconscious.", cr);
                     continue; }
-                IPrint("You knock out the <Obj> with a sleeper hold.", cr);
-                cr->IPrint("The world goes dark...");
-                cr->GainTempStati(SLEEPING,NULL,-1,SS_ATTK,SLEEP_DEEP);
-                RemoveStati(GRAPPLING,-1,-1,-1,cr);
-                cr->RemoveStati(GRAPPLED,-1,-1,-1,this);
-                KillXP(cr,100);
-              }
-          StatiIterEnd(this)
-          }
-        
-        if (HasFeat(FT_EARTHS_EMBRACE)) {
-          StatiIterNature(this,GRAPPLING)
-            
-            xe.Clear();
-            xe.Dmg = DmgVal(S_BRAWL,oCreature(S->h)->GetAttr(A_SIZ) >= SZ_LARGE);
-            xe.vDmg = xe.Dmg.Roll();
-            xe.AType = A_CRUS;
-            xe.DType = AD_BLUNT;
-            xe.isHit = true;
-            xe.EActor = this;
-            xe.EVictim = oCreature(S->h);
-            if (xe.EVictim->isDead() ||
-                xe.EVictim->HasStati(SLEEPING))
-              continue;
-            ReThrow(EV_DAMAGE,xe);
-            ReThrow(EV_ATTACKMSG,xe);
-          StatiIterEnd(this)
-          }
-      
-      }
-
-    if (!random(30) && isCharacter())
-      {
-        static uint32 oldXP = 0;
-        switch (HungerState())
-          {
-            case SATIATED:
-              if (random(10))
-                break;
-            case BLOATED:
-              Abuse(A_CON,1);
-             break;
-            case HUNGRY:
-              if (random(5))
-                break;
-              if (HasAbility(CA_FASTING))
-                {
-                  if (oldXP < GetXP())
-                    Exercise(A_CON,random(3)+1,ECON_HUNGER,45);
-                  break;
+                    IPrint("You knock out the <Obj> with a sleeper hold.", cr);
+                    cr->IPrint("The world goes dark...");
+                    cr->GainTempStati(SLEEPING,NULL,-1,SS_ATTK,SLEEP_DEEP);
+                    RemoveStati(GRAPPLING,-1,-1,-1,cr);
+                    cr->RemoveStati(GRAPPLED,-1,-1,-1,this);
+                    KillXP(cr,100);
                 }
-            
-            case WEAK:
-            case FAINTING:
-              Abuse(A_CON,random(2)+1);
-            case STARVING:
-              Abuse(A_CON, 1);
-             break;
-            default:
-              if (oldXP != GetXP() && !random(10))
+            StatiIterEnd(this)
+        }
+
+        if (HasFeat(FT_EARTHS_EMBRACE)) {
+            StatiIterNature(this,GRAPPLING)
+                xe.Clear();
+                xe.Dmg = DmgVal(S_BRAWL,oCreature(S->h)->GetAttr(A_SIZ) >= SZ_LARGE);
+                xe.vDmg = xe.Dmg.Roll();
+                xe.AType = A_CRUS;
+                xe.DType = AD_BLUNT;
+                xe.isHit = true;
+                xe.EActor = this;
+                xe.EVictim = oCreature(S->h);
+                if (xe.EVictim->isDead() || xe.EVictim->HasStati(SLEEPING))
+                    continue;
+                ReThrow(EV_DAMAGE,xe);
+                ReThrow(EV_ATTACKMSG,xe);
+            StatiIterEnd(this)
+        }
+
+    }
+
+    if (!random(30) && isCharacter()) {
+        static uint32 oldXP = 0;
+        switch (HungerState()) {
+        case SATIATED:
+            if (random(10))
+                break;
+        case BLOATED:
+            Abuse(A_CON,1);
+            break;
+        case HUNGRY:
+            if (random(5))
+                break;
+            if (HasAbility(CA_FASTING)) {
+                if (oldXP < GetXP())
+                    Exercise(A_CON,random(3)+1,ECON_HUNGER,45);
+                break;
+            }
+
+        case WEAK:
+        case FAINTING:
+            Abuse(A_CON,random(2)+1);
+        case STARVING:
+            Abuse(A_CON, 1);
+            break;
+        default:
+            if (oldXP != GetXP() && !random(10))
                 Exercise(A_CON,1,ECON_HUNGER,15);
-             break;
-          }
-        switch (Encumbrance())
-          {
-            case EN_EXTREME:
-              if (oldXP < GetXP())
+            break;
+        }
+
+        switch (Encumbrance()) {
+        case EN_EXTREME:
+            if (oldXP < GetXP())
                 Exercise(A_STR,random(3)+1,ESTR_BURDEN,50);
-             break;
-            case EN_HEAVY:
-              if (oldXP < GetXP())
+            break;
+        case EN_HEAVY:
+            if (oldXP < GetXP())
                 Exercise(A_STR,1,ESTR_BURDEN,30);
-             break;            
-          }
+            break;            
+        }
         if (InSlot(SL_ARMOUR) && InSlot(SL_ARMOUR)->isGroup(WG_HARMOUR))
-          if (oldXP < GetXP())
-            {
-              Exercise(A_STR,random(2)+1,ESTR_ARMOUR,50);
-              Exercise(A_CON,1,ECON_ARMOUR,35);
-              Abuse(A_DEX,1);
+            if (oldXP < GetXP()) {
+                Exercise(A_STR,random(2)+1,ESTR_ARMOUR,50);
+                Exercise(A_CON,1,ECON_ARMOUR,35);
+                Abuse(A_DEX,1);
             }
         if (m && m->Depth > ChallengeRating())
-          if (oldXP < GetXP())
-            Exercise(A_LUC,random((m->Depth-ChallengeRating())*5)+1,ELUC_RISK,100);
+            if (oldXP < GetXP())
+                Exercise(A_LUC,random((m->Depth-ChallengeRating())*5)+1,ELUC_RISK,100);
         oldXP = GetXP();
-      }
-    if (isCharacter() && !random(10))
-      {
-        rID gID; bool isAnger;
+    }
+
+    if (isCharacter() && !random(10)) {
+        rID gID;
+        bool isAnger;
         int16 i, gNum, interval;
-        
+
         /* Hung Intervention? */
-        if (HasStati(HUNG_PULSE) && isThreatened())
-          { gNum = GetStatiVal(HUNG_PULSE);
+        if (HasStati(HUNG_PULSE) && isThreatened()) {
+            gNum = GetStatiVal(HUNG_PULSE);
             gID = theGame->GodID(gNum);
             isAnger = (thisp->Anger[gNum] != 0);
-            goto DoIntervention; }
-        
-        
-        /* 3/4 chance of our patron god, otherwise any god you have
-           prayed to at any point in the game. */
-        i=0;
+            goto DoIntervention;
+        }
+
+        /* 75% chance of our patron god, otherwise any god you have prayed to at any point in the game. */
+        i = 0;
         if (random(4) && thisp->GodID)
-          gID = thisp->GodID;
-        else do { 
-          gID = GodIDList[random(nGods)];
-          if (thisp->getGodFlags(gID) & GS_INVOLVED)
-            break;
-          gID = 0;
-          }
-        while (i++ != 30);
-        
+            gID = thisp->GodID;
+        else
+            do { 
+                gID = GodIDList[random(nGods)];
+                if (thisp->getGodFlags(gID) & GS_INVOLVED)
+                    break;
+                gID = 0;
+            } while (i++ != 30);
+
         if (!gID)
-          goto NoIntervention;
-          
+            goto NoIntervention;
+
         gNum = theGame->GodNum(gID);
         isAnger = (thisp->Anger[gNum] > (int16)TGOD(gID)->GetConst(TOLERANCE_VAL));
         interval = (int16)TGOD(gID)->GetConst(isAnger ? GODANGER_INTERVAL : GODPULSE_INTERVAL);
-        
-        if (thisp->xpTicks - thisp->lastPulse[gNum] < interval *
-               ((gID == thisp->GodID) ? 1 : 5))
-          goto NoIntervention;
-        
-        if (thisp->Anger[gNum] && !isAnger)
-          goto NoIntervention;
-        
-        /* HACKFIX */
-        if (TGOD(gID)->HasFlag(isAnger ?
-              GF_COMBAT_ANGER : GF_COMBAT_PULSE))
-          if (!isThreatened())
-            {
-              GainPermStati(HUNG_PULSE,NULL,SS_MISC,gNum);
-              goto NoIntervention;
-            }
-        
-        DoIntervention:
-        if (!thisp->Anger[gNum])
-          if (thisp->getGodFlags(gID) & (GS_ANATHEMA|GS_FORSAKEN))
+
+        if (thisp->xpTicks - thisp->lastPulse[gNum] < interval * ((gID == thisp->GodID) ? 1 : 5))
             goto NoIntervention;
-        if (ThrowEff(isAnger ? EV_ANGER_PULSE : EV_GODPULSE,gID,this) != NOTHING)
-          {
-            thisp->lastPulse[gNum] = thisp->xpTicks;
-            if (isAnger)
-              thisp->setGodFlags(gID,GS_KNOWN_ANGER);
-            else
-              thisp->resetGodFlags(gID,GS_KNOWN_ANGER);
-            RemoveStati(HUNG_PULSE,-1,gNum);
-            /* If a god /other than/ your patron is giving anger pulses,
-               the anger /must/ reduce over time, otherwise, frex, a 
-               character who forsook Xel and turned Good is trapped
-               between sacrificing sapients for penance and being drained
-               by an increasingly angry Xel until she dies. */ 
-            if (isAnger && (gID != thisp->GodID)) {
-              thisp->Anger[gNum] = max(0,thisp->Anger[gNum] - 2);
-              if (!thisp->Anger[gNum])
-                thisp->GodMessage(gID,MSG_EXPENDED);
-              }
-          }
-        NoIntervention:;
-      }
+
+        if (thisp->Anger[gNum] && !isAnger)
+            goto NoIntervention;
+
+        /* HACKFIX */
+        if (TGOD(gID)->HasFlag(isAnger ? GF_COMBAT_ANGER : GF_COMBAT_PULSE))
+            if (!isThreatened()) {
+                if (GetStati(HUNG_PULSE, gNum) == NULL)
+                    GainPermStati(HUNG_PULSE,NULL,SS_MISC,gNum);
+                goto NoIntervention;
+            }
+
+DoIntervention:
+            if (!thisp->Anger[gNum])
+                if (thisp->getGodFlags(gID) & (GS_ANATHEMA|GS_FORSAKEN))
+                    goto NoIntervention;
+
+            if (ThrowEff(isAnger ? EV_ANGER_PULSE : EV_GODPULSE,gID,this) != NOTHING) {
+                thisp->lastPulse[gNum] = thisp->xpTicks;
+                if (isAnger)
+                    thisp->setGodFlags(gID,GS_KNOWN_ANGER);
+                else
+                    thisp->resetGodFlags(gID,GS_KNOWN_ANGER);
+                RemoveStati(HUNG_PULSE,-1,gNum);
+                /* If a god /other than/ your patron is giving anger pulses,
+                the anger /must/ reduce over time, otherwise, frex, a 
+                character who forsook Xel and turned Good is trapped
+                between sacrificing sapients for penance and being drained
+                by an increasingly angry Xel until she dies. */ 
+                if (isAnger && (gID != thisp->GodID)) {
+                    thisp->Anger[gNum] = max(0, thisp->Anger[gNum] - 2);
+                    if (!thisp->Anger[gNum])
+                        thisp->GodMessage(gID,MSG_EXPENDED);
+                }
+            }
+
+NoIntervention:;
+    }
+
     bool wasFF = isFlatFooted();
     FFCount++;
-    if (isFlatFooted())
-      {
+    if (isFlatFooted()) {
         if (isPlayer() && !wasFF)
-          thisp->statiChanged = true;
-        if (HasStati(RAGING))
-          {
+            thisp->statiChanged = true;
+        if (HasStati(RAGING)) {
             IPrint("Free of foes, your rage winds down.");
             RemoveStati(RAGING);
-          }
-        if (HasStati(FLAWLESS_DODGE,1))
-          {
+        }
+        if (HasStati(FLAWLESS_DODGE,1)) {
             IPrint("Free of foes, you cease your flawless dodge.");
             /* Don't kill the whole Stati; it has the number of dodges
-               stored in the Mag field. Instead, just set the flag to
-               zero to indicate inactive. */
+            stored in the Mag field. Instead, just set the flag to
+            zero to indicate inactive. */
             SetStatiVal(FLAWLESS_DODGE,NULL,0);
-          }
-      }
-      
+        }
+    }
+
     if (FFCount > 50) {
-      int fatRegen = AbilityLevel(CA_FATIGUE_REGEN);
-      if (fatRegen) {
-        if (FFCount > 50 + (50 / fatRegen)) {
-          if (cFP < Attr[A_FAT]) 
-            cFP++;
-          FFCount = 50; 
-        } 
-      } else  FFCount = 30;
+        int fatRegen = AbilityLevel(CA_FATIGUE_REGEN);
+        if (fatRegen) {
+            if (FFCount > 50 + (50 / fatRegen)) {
+                if (cFP < Attr[A_FAT]) 
+                    cFP++;
+                FFCount = 50; 
+            } 
+        } else  FFCount = 30;
     } 
 
     AoO = HasFeat(FT_COMBAT_REFLEXES) ? max(1,1 + Mod2(A_DEX)) : 1;
-    if (HasFeat(FT_MOBILITY)) AoO++; 
+    if (HasFeat(FT_MOBILITY))
+        AoO++; 
     if (HasAttk(A_GAZE))
-      DoGazeAttack();
+        DoGazeAttack();
     if (HasAttk(A_PROX) || HasAttk(A_CPRX))
-      DoProxAttack();
-
+        DoProxAttack();
 
     if (uMana > 0) {
-      // ww: currently the monster AI is not smart enough to conserve mana,
-      // so monster mages almost always run out of it fighting each other
-      // before you arrive ...
-      if (!isPlayer() || cMana() >= ((nhMana()*min(35+SkillLevel(SK_CONCENT)*2,80))/100)) {
-        /* 
-         * Before it took about 60 turns to get 1 point back if you were
-         * down one, and 60X turns if you were down X points. 
-         * 
-         * It now takes X turns to regenerate 1% of your mana if you are at
-         * 99%. It takes 2X to regenerate 1% if you are at 98%, etc.
-         * The old system dramatically favoured low-mana mages. This new one
-         * hurts them. To equalize, we "shift" the curve to the right by
-         * padding current and total mana by a constant displacement. (See
-         * examples below). 
-         *
-         * Thus the total time is quadratic: if you're down 5% it takes 25
-         * times as long as being down 1% to recover fully. 
-         *
-         * ManaPulse stores the number of turns until we get a point 
-         * (not a percentage point) back. 
-         */
-        if (ManaPulse > 0) {
-          ManaPulse--;
-          // IPrint(Format("ManaPulse -- %d, %d.",ManaPulse,theGame->Turn));
-        } else {
-          uMana--; 
-          // if you are down 5*N%, it takes you N turns to get back 1%
-          int N = (tMana() - (cMana() + hMana)) * 20 / max(1,tMana());
-          ManaPulse = N * 100 / max(1,tMana()); 
+        // ww: currently the monster AI is not smart enough to conserve mana,
+        // so monster mages almost always run out of it fighting each other
+        // before you arrive ...
+        if (!isPlayer() || cMana() >= ((nhMana()*min(35+SkillLevel(SK_CONCENT)*2,80))/100)) {
+            /* 
+            * Before it took about 60 turns to get 1 point back if you were
+            * down one, and 60X turns if you were down X points. 
+            * 
+            * It now takes X turns to regenerate 1% of your mana if you are at
+            * 99%. It takes 2X to regenerate 1% if you are at 98%, etc.
+            * The old system dramatically favoured low-mana mages. This new one
+            * hurts them. To equalize, we "shift" the curve to the right by
+            * padding current and total mana by a constant displacement. (See
+            * examples below). 
+            *
+            * Thus the total time is quadratic: if you're down 5% it takes 25
+            * times as long as being down 1% to recover fully. 
+            *
+            * ManaPulse stores the number of turns until we get a point 
+            * (not a percentage point) back. 
+            */
+            if (ManaPulse > 0) {
+                ManaPulse--;
+                // IPrint(Format("ManaPulse -- %d, %d.",ManaPulse,theGame->Turn));
+            } else {
+                uMana--; 
+                // if you are down 5*N%, it takes you N turns to get back 1%
+                int N = (tMana() - (cMana() + hMana)) * 20 / max(1,tMana());
+                ManaPulse = N * 100 / max(1,tMana()); 
+            } 
         } 
-      } 
     }
 
     UpdateStati();
+
     if (x == -1 || !m)
-      return;
+        return;
+
     if (!isEngulfed)
-      TerrainEffects();
-      
+        TerrainEffects();
+
     if (HasStati(ANIMAL_COMPANION) && isMonster())
-      ((Monster *)this)->ts.Retarget(this); 
-    
+        ((Monster *)this)->ts.Retarget(this); 
+
     for (it = FirstInv();it;it = NextInv()) {
-      it->UpdateStati();
-      if (it == InSlot(SL_LIGHT)) {
-        if (it->Age <= 1) {
-          IDPrint("Your <Obj2> burns out!",
-              "The <Obj1>'s <Obj2> burns out!",this,it);
-          it->Remove(true);
-          if (isPlayer())
-            thisp->UpdateMap = true;
-          }
-        else
-          it->Age--;
+        it->UpdateStati();
+        if (it == InSlot(SL_LIGHT)) {
+            if (it->Age <= 1) {
+                IDPrint("Your <Obj2> burns out!",
+                    "The <Obj1>'s <Obj2> burns out!",this,it);
+                it->Remove(true);
+                if (isPlayer())
+                    thisp->UpdateMap = true;
+            } else
+                it->Age--;
         }
-      }
-      
-    if (isPlayer() && HasStati(ACTING))
-      { 
+    }
+
+    if (isPlayer() && HasStati(ACTING)) { 
         thisp->MyTerm->ShowTraits();
         thisp->MyTerm->Update();
-      }
+    }
 
     if (HasStati(MOUNTED)) {
-      Creature *cr = (Creature*)GetStatiObj(MOUNTED);
-      if (cr && cr->HasStati(AFRAID))
-        {
-          if (SkillCheck(SK_RIDE,15 + cr->ChallengeRating()))
-            {
-              IPrint("You calm your frightened mount.");
-              cr->RemoveStati(AFRAID);
-            }
-          else
-            {
-              IPrint("You are thrown from your panicked <Obj>!",cr);
-              ThrowVal(EV_DISMOUNT,DSM_THROWN,this,cr);
+        Creature *cr = (Creature*)GetStatiObj(MOUNTED);
+        if (cr && cr->HasStati(AFRAID)) {
+            if (SkillCheck(SK_RIDE,15 + cr->ChallengeRating())) {
+                IPrint("You calm your frightened mount.");
+                cr->RemoveStati(AFRAID);
+            } else {
+                IPrint("You are thrown from your panicked <Obj>!",cr);
+                ThrowVal(EV_DISMOUNT,DSM_THROWN,this,cr);
             }
         }
-      Throw(EV_TURN,cr);
-      }
+        Throw(EV_TURN,cr);
+    }
 
-	  // ww: if a monster is generated over a chasm in a sleep encounter, 
-	  // we can get here with x=y=-1
-    if (x == -1 || !m) return;
+    // ww: if a monster is generated over a chasm in a sleep encounter, 
+    // we can get here with x=y=-1
+    if (x == -1 || !m)
+        return;
 
-    if (m->FieldAt(x,y,FI_CONTINUAL) && !isEngulfed)
-      {
+    if (m->FieldAt(x,y,FI_CONTINUAL) && !isEngulfed) {
         TEffect *te; EventInfo e;
         for(i=0;x != -1 && m && m->Fields[i];i++)
-          if (m->Fields[i]->FType & FI_CONTINUAL)
-            if (dist(x,y,m->Fields[i]->cx,m->Fields[i]->cy) <= m->Fields[i]->rad)
-              {
-                te = TEFF(m->Fields[i]->eID);
-                j = 0;
-                while (te->Vals((int8)j)->aval != AR_FIELD && te->Vals((int8)j)->aval != AR_MFIELD) {
-                    j++;
-                    ASSERT(te->Vals((int8)j));
+            if (m->Fields[i]->FType & FI_CONTINUAL)
+                if (dist(x,y,m->Fields[i]->cx,m->Fields[i]->cy) <= m->Fields[i]->rad) {
+                    te = TEFF(m->Fields[i]->eID);
+                    j = 0;
+                    while (te->Vals((int8)j)->aval != AR_FIELD && te->Vals((int8)j)->aval != AR_MFIELD) {
+                        j++;
+                        ASSERT(te->Vals((int8)j));
+                    }
+                    e.Clear();
+                    e.EActor = oCreature(m->Fields[i]->Creator);
+                    e.EVictim = this;
+                    e.eID = m->Fields[i]->eID;
+                    e.efNum = (int8)j;
+                    ReThrow(EV_MAGIC_STRIKE,e);
                 }
-                e.Clear();
-                e.EActor = oCreature(m->Fields[i]->Creator);
-                e.EVictim = this;
-                e.eID = m->Fields[i]->eID;
-                e.efNum = (int8)j;
-                ReThrow(EV_MAGIC_STRIKE,e);
-              }
-      }
+    }
 
-    if (x == -1 || !m) return;
+    if (x == -1 || !m)
+        return;
 
     StatiIterNature(this,POISONED)
-          if (HasStati(SLOW_POISON))
+        if (HasStati(SLOW_POISON))
             continue;
-          if (ResistLevel(AD_TOXI) == -1 ||
-              ResistLevel(AD_POIS) == -1)
-            {
-              RemoveStati(POISONED);
-              continue;
-            }
-          if (S->Val >= TEFF(S->eID)->ef.cval)
-            {
-              S->Val = 0;
-              if (SavingThrow(FORT,TEFF(S->eID)->ef.sval,SA_POISON))
-                {
-                  S->Mag++;
-                  if (S->Mag >= TEFF(S->eID)->ef.lval - HasFeat(FT_HARDINESS)*2)
-                    {
-                      IPrint("You have overcome the <Res>.",S->eID);
-                      Exercise(A_CON,random(12)+1,ECON_OVERCOME,50);
-                      RemoveEffStati(S->eID);
-                      break;
-                    }
-                  IPrint("You bear up under the poison.");
-                  
+        if (ResistLevel(AD_TOXI) == -1 || ResistLevel(AD_POIS) == -1) {
+            RemoveStati(POISONED);
+            continue;
+        }
+        if (S->Val >= TEFF(S->eID)->ef.cval) {
+            S->Val = 0;
+            if (SavingThrow(FORT,TEFF(S->eID)->ef.sval,SA_POISON)) {
+                S->Mag++;
+                if (S->Mag >= TEFF(S->eID)->ef.lval - HasFeat(FT_HARDINESS)*2) {
+                    IPrint("You have overcome the <Res>.",S->eID);
+                    Exercise(A_CON,random(12)+1,ECON_OVERCOME,50);
+                    RemoveEffStati(S->eID);
+                    break;
                 }
-              else {
+                IPrint("You bear up under the poison.");
+            } else {
                 if (TEFF(S->eID)->HasFlag(EF_LETHAL))
-                  S->Mag = 0;
+                    S->Mag = 0;
                 IPrint("The <Res> courses through your veins...",S->eID);
                 ThrowEff(EV_EFFECT,S->eID,this,this);
                 if (HasStati(ACTING)) HaltAction("poison",false); 
-                }
             }
-          else
+        } else
             S->Val++;
     StatiIterEnd(this)
-    
-    DiseasePulse(false, false);
-    
-    if (ResistLevel(AD_FEAR) == -1)
-      RemoveStati(AFRAID);
-    if (isMType(MA_HAS_BLOOD)) {
-      StatiIterNature(this,BLEEDING)
-          IPrint("Your wounds bleed.");
-          ThrowDmg(EV_DAMAGE,AD_NORM,S->Mag,"bleeding",this,this);
-      StatiIterEnd(this)
-      }
-    StatiIterNature(this,REGEN)
-          if (cHP < mHP+Attr[A_THP])
-            if (S->Mag > random(100))
-              cHP = min(mHP+Attr[A_THP],cHP + max(1,GetStati(REGEN)->Mag/100));
-    StatiIterEnd(this)
-    StatiIterNature(this,PERIODIC)
-      ASSERT(S->Val);
-      if (!(++S->Mag % S->Val)) {
-        S->Mag = 1;
-        EventInfo e;
-        e.Clear();
-        if (oThing(S->h) && oThing(S->h)->isItem()) {
-          SetEvent(e,EV_EFFECT,this,NULL,oItem(S->h));
-          e.isItem = true;
-          }
-        else
-          SetEvent(e,EV_EFFECT,this,oThing(S->h));
-        
-        e.isPeriodic = true;
-        e.eID = S->eID;
-        ReThrow(EV_EFFECT,e);
-        }
-    StatiIterEnd(this)
-    if ((i = AbilityLevel(CA_BURNING_HUNGER)))
-      GetHungrier(i*2);
-      
-    if (HasAbility(CA_REGEN)) {
-      // ww: constant regeneration makes you hungry!
-      int old_cHP = cHP;
-      if (AbilityLevel(CA_REGEN) > 0) { 
-        cHP = min(mHP+Attr[A_THP],cHP+AbilityLevel(CA_REGEN));
 
-        if (old_cHP < cHP) {
-          int curHunger = GetStatiDur(HUNGER);
-          if (GetStatiObj(REGEN) && GetStatiObj(REGEN)->isItem())
-           IdentByTrial((Item*)GetStatiObj(REGEN));
-          IDPrint("You regenerate<Str2>.",
-                  "The <Obj> regenerates<Str2>.",
-                  this, cHP == (mHP + Attr[A_THP]) ?
-                  " fully" : "");
-          GetHungrier(5);
-          }
+    DiseasePulse(false, false);
+
+    if (ResistLevel(AD_FEAR) == -1)
+        RemoveStati(AFRAID);
+    if (isMType(MA_HAS_BLOOD)) {
+        StatiIterNature(this,BLEEDING)
+            IPrint("Your wounds bleed.");
+            ThrowDmg(EV_DAMAGE,AD_NORM,S->Mag,"bleeding",this,this);
+        StatiIterEnd(this)
+    }
+
+    StatiIterNature(this,REGEN)
+        if (cHP < mHP+Attr[A_THP])
+            if (S->Mag > random(100))
+                cHP = min(mHP+Attr[A_THP],cHP + max(1,GetStati(REGEN)->Mag/100));
+    StatiIterEnd(this)
+
+    StatiIterNature(this,PERIODIC)
+        ASSERT(S->Val);
+        if (!(++S->Mag % S->Val)) {
+            S->Mag = 1;
+            EventInfo e;
+            e.Clear();
+            if (oThing(S->h) && oThing(S->h)->isItem()) {
+                SetEvent(e,EV_EFFECT,this,NULL,oItem(S->h));
+                e.isItem = true;
+            }
+            else
+                SetEvent(e,EV_EFFECT,this,oThing(S->h));
+
+            e.isPeriodic = true;
+            e.eID = S->eID;
+            ReThrow(EV_EFFECT,e);
         }
-      }
-  }
-  
-void Creature::DiseasePulse(bool force, bool rest)
-  {
+    StatiIterEnd(this)
+
+    if ((i = AbilityLevel(CA_BURNING_HUNGER)))
+        GetHungrier(i*2);
+
+    if (HasAbility(CA_REGEN)) {
+        // ww: constant regeneration makes you hungry!
+        int old_cHP = cHP;
+        if (AbilityLevel(CA_REGEN) > 0) { 
+            cHP = min(mHP+Attr[A_THP],cHP+AbilityLevel(CA_REGEN));
+
+            if (old_cHP < cHP) {
+                int curHunger = GetStatiDur(HUNGER);
+                if (GetStatiObj(REGEN) && GetStatiObj(REGEN)->isItem())
+                    IdentByTrial((Item*)GetStatiObj(REGEN));
+                IDPrint("You regenerate<Str2>.",
+                    "The <Obj> regenerates<Str2>.",
+                    this, cHP == (mHP + Attr[A_THP]) ?
+                    " fully" : "");
+                GetHungrier(5);
+            }
+        }
+    }
+}
+
+void Creature::DiseasePulse(bool force, bool rest) {
     if (ResistLevel(AD_DISE) == -1) {
       RemoveStati(DISEASED);
       return;
