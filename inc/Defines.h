@@ -2827,12 +2827,12 @@ typedef signed long       hObj;
   #define FEAR_SKIRMISH 4
   #define FEAR_COWED    5
 #define STUCK         11
-#define STUCK_STICKY  1
-#define STUCK_PINNED  2
-#define STUCK_WEAPON  3
-#define STUCK_VINES   4
-#define STUCK_ATTACK  5
-#define STUCK_BONDED  6
+    #define STUCK_STICKY  1
+    #define STUCK_PINNED  2
+    #define STUCK_WEAPON  3
+    #define STUCK_VINES   4
+    #define STUCK_ATTACK  5
+    #define STUCK_BONDED  6
 #define BLEEDING      12
 #define ILLUS_DMG     13
 #define CHOKING       14
