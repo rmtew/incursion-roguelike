@@ -993,29 +993,29 @@ FindNonReachVictim:
                         IPrint("That action only applies to creatures.");
                         break;
                     }
-                    if (e.EVictim == this) {
-                        IPrint("Attacking oneself is counterproductive.");
+                if (e.EVictim == this) {
+                    IPrint("Attacking oneself is counterproductive.");
+                    break;
+                }
+                if (dist(x,y,e.EVictim->x,e.EVictim->y) <= 1+FaceRadius[Attr[A_SIZ]])
+                    if ((StateFlags & MS_REACH_ONLY) && e.ETarget->isCreature()) {
+                        IPrint("You cannot attack adjacent targets with that weapon.");
                         break;
                     }
-                    if (dist(x,y,e.EVictim->x,e.EVictim->y) <= 1+FaceRadius[Attr[A_SIZ]])
-                        if ((StateFlags & MS_REACH_ONLY) && e.ETarget->isCreature()) {
-                            IPrint("You cannot attack adjacent targets with that weapon.");
-                            break;
-                        }
-                        targ = e.EVictim; 
-                        if (n == A_SWNG) goto NormalAttack;
-                        /* ww: Dwarven Auto-Focus */
-                        if (Opt(OPT_DWARVEN_AUTOFOCUS) && e.ETarget->isCreature() && ((Creature *)targ)->ChallengeRating() >= ChallengeRating() && 
-                            HasAbility(CA_DWARVEN_FOCUS) && !GetStati(DWARVEN_FOCUS,-1,0)) {
-                            GainPermStati(DWARVEN_FOCUS,targ,SS_RACE,0,0,0);
-                            targ->Flags |= F_HILIGHT;
-                            msg = Format("You swear a vow to slay %c%s%c.",
-                                -RED, (const char*)targ->Name(NA_THE), -GREY);
-                            MyTerm->Message(msg);
-                            MyTerm->Box(msg);
-                        } 
-                        ThrowVal(EV_SATTACK,n,this,e.EVictim);
-                        break;
+                    targ = e.EVictim; 
+                    if (n == A_SWNG) goto NormalAttack;
+                    /* ww: Dwarven Auto-Focus */
+                    if (Opt(OPT_DWARVEN_AUTOFOCUS) && e.ETarget->isCreature() && ((Creature *)targ)->ChallengeRating() >= ChallengeRating() && 
+                        HasAbility(CA_DWARVEN_FOCUS) && !GetStati(DWARVEN_FOCUS,-1,0)) {
+                        GainPermStati(DWARVEN_FOCUS,targ,SS_RACE,0,0,0);
+                        targ->Flags |= F_HILIGHT;
+                        msg = Format("You swear a vow to slay %c%s%c.",
+                            -RED, (const char*)targ->Name(NA_THE), -GREY);
+                        MyTerm->Message(msg);
+                        MyTerm->Box(msg);
+                    } 
+                    ThrowVal(EV_SATTACK,n,this,e.EVictim);
+                    break;
             case AUTO_CHARGE:
                 if (HasStati(AUTO_CHARGE)) {
                     IPrint("You're already automatically charging!");
