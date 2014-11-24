@@ -1440,7 +1440,7 @@ EvReturn Creature::SAttack(EventInfo &e) { /* this == EActor */
         if (!attackSanity(e))
             return ABORT;
 
-    if (e.AType == A_GRAB || e.AType == A_BULL || e.AType == A_KICK || e.AType == A_THRO || e.AType == A_DISA || e.AType == A_TRIP) {
+    if (e.AType == A_GRAB || e.AType == A_BULL || e.AType == A_KICK || e.AType == A_THRO || e.AType == A_DISA || e.AType == A_TRIP || e.AType == A_PREC) {
         int16 reachDist = 1 + FaceRadius[e.EActor->GetAttr(A_SIZ)] + (e.EActor->StateFlags & MS_HAS_REACH ? 1 : 0);
         if (e.EVictim->isCreature())
             reachDist += FaceRadius[e.EVictim->GetAttr(A_SIZ)];
@@ -1484,18 +1484,17 @@ OvercomeNausea:
         IPrint("You're too confused to make a non-standard attack.");
         return ABORT;
     } else if (HasStati(NEGATED))
-        if ((r = HandleNegate(e)) != NOTHING)
+        if ((r = HandleNegate(e)) != NOTHING) {
             return r;
-        else if (e.EVictim && HasStati(CHARMED,-1,e.EVictim)) {
+        } else if (e.EVictim && HasStati(CHARMED,-1,e.EVictim)) {
             IPrint("You have no desire to hurt your dear friend!");
             return ABORT;
         } else if (ts.hasTargetOfType(OrderDoNotAttack)) {
             return ABORT; 
-        } else if (!m) // you can't attack if you're nowhere
+        } else if (!m) { // you can't attack if you're nowhere
             return ABORT;
         /* ww: are stuck in no-attack webbing or somesuch? */
-        else if (x!=-1 && 
-            TTER(m->TerrainAt(x,y))->Event(e,m->TerrainAt(x,y)) == ABORT)
+        } else if (x != -1 && TTER(m->TerrainAt(x,y))->Event(e,m->TerrainAt(x,y)) == ABORT)
             return ABORT; 
 
     if (e.EVictim && e.EVictim->isCreature())
@@ -1895,6 +1894,7 @@ SkipSoundAttack:
                 IPrint("You have no active method of attack in this form.");
                 return ABORT;
             }
+            // TODO: What if the monster type has a ranged method of attack?
             e.EItem   = NULL;
             e.vHit    = (int8)Attr[A_HIT_BRAWL];
             e.vDef    = (int8)e.EVictim->getDef();
@@ -1904,6 +1904,12 @@ SkipSoundAttack:
             e.vThreat = 17;
             e.vCrit   = 2;
         } else {
+            int8 attackMode = AttackMode();
+            if (attackMode == S_ARCHERY || attackMode == S_THROWN) {
+                IPrint("You cannot make precision strokes with a ranged weapon.");
+                return ABORT;
+            }
+
             e.EItem    = EInSlot(SL_WEAPON);
             e.Dmg      = e.EActor->DmgVal(S_MELEE, e.EVictim->GetAttr(A_SIZ) > SZ_MEDIUM);
             e.vHit     = (int8)Attr[A_HIT_MELEE]; 
@@ -2402,7 +2408,8 @@ SkipRepeat:;
         etc. in the path to the monster and back. For now, we just 
         ignore these aspects. */
         switch (AttackMode()) {
-        case S_MELEE: case S_DUAL:
+        case S_MELEE:
+        case S_DUAL:
             return ReThrow(EV_WATTACK,e);
         case S_BRAWL:
             return ReThrow(EV_NATTACK,e);
@@ -3788,8 +3795,7 @@ EvReturn Creature::PreStrike(EventInfo &e) /* this == EActor */
           e.AType == A_THRU || e.AType == A_LUNG ||
           e.AType == A_CALL || e.AType == A_PUNC ||
           e.AType == A_HURL || e.AType == A_KICK)
-        if (e.EItem == NULL || (e.EItem->Size(e.EActor) <= 
-                                    SZ_MEDIUM))
+        if (e.EItem == NULL || (e.EItem->Size(e.EActor) <= SZ_MEDIUM))
           if (e.EActor->Mod(A_STR) < e.EActor->Mod(A_DEX))
           {
             e.subStr = true;
@@ -5685,8 +5691,7 @@ EvReturn Creature::Damage(EventInfo &e)
               if ((e.EActor != e.EVictim) && !(e.isTrap || e.isActOfGod))
                 e.EActor->AlignedAct(AL_EVIL,2,"acid damage");
 
-          if ((EDType == AD_COLD && e.EVictim->isMType(MA_FIRE)) ||
-              (EDType == AD_FIRE && e.EVictim->isMType(MA_COLD))) {
+          if ((EDType == AD_COLD && e.EVictim->isMType(MA_FIRE)) || (EDType == AD_FIRE && e.EVictim->isMType(MA_COLD))) {
             e.strDmg += Format(" %+d vulnerability", e.vDmg / 2);
             e.vDmg = (e.vDmg * 3) / 2;
             }
@@ -5697,9 +5702,8 @@ EvReturn Creature::Damage(EventInfo &e)
            * even a +5 bow with +5 arrows wouldn't hurt something with
            * +1 weapon immunity ... */
           /* ww: finally, Monks with Ki Strike count as +X weapons */
-          if (is_wepdmg(EDType) && e.EActor && (e.AType == A_SWNG ||
-               e.AType == A_FIRE || e.AType == A_HURL || e.AType == A_GREA
-               || e.AType == A_LUNG || e.AType == A_CALL ||
+          if (is_wepdmg(EDType) && e.EActor &&
+              (e.AType == A_SWNG || e.AType == A_FIRE || e.AType == A_HURL || e.AType == A_GREA || e.AType == A_LUNG || e.AType == A_CALL ||
                e.AType == A_PREC)) {
             int16 wil = e.EVictim->AbilityLevel(CA_WEAPON_IMMUNITY);
             if (wil > 0 && !e.EActor->HasStati(IGNORES_WEAPON_IMMUNITY)) {
@@ -7704,29 +7708,23 @@ int16 Creature::WeaponSaveDC(Item *wp, int16 at)
     return DC;
   }
 
-int8 Creature::AttackMode()
-	{
-    /* If you have a touch spell active, and you can
-       possibly have a free hand, that's assumed to be
-       your prefered method of attack. */
-		if (HasStati(TOUCH_ATTACK))
-      if (!(EInSlot(SL_WEAPON) && EInSlot(SL_READY)) ||
-             (EInSlot(SL_WEAPON) == EInSlot(SL_READY)))
-        return S_BRAWL;
+int8 Creature::AttackMode() {
+    /* If you have a touch spell active, and you can possibly have a free hand, that's assumed to be your prefered method of attack. */
+    if (HasStati(TOUCH_ATTACK))
+        if (!(EInSlot(SL_WEAPON) && EInSlot(SL_READY)) || (EInSlot(SL_WEAPON) == EInSlot(SL_READY)))
+            return S_BRAWL;
     /* Later, Optimize to avoid unnecessary InSlot calls */
-    if (EInSlot(SL_WEAPON)==NULL)
-			return S_BRAWL;
+    if (EInSlot(SL_WEAPON) == NULL)
+        return S_BRAWL;
     if (EInSlot(SL_WEAPON)->isType(T_BOW))
-      return S_ARCHERY;
-    if (EInSlot(SL_WEAPON)->isType(T_MISSILE) ||
-        EInSlot(SL_WEAPON)->thrownOnly())
-      return S_THROWN;
+        return S_ARCHERY;
+    if (EInSlot(SL_WEAPON)->isType(T_MISSILE) || EInSlot(SL_WEAPON)->thrownOnly())
+        return S_THROWN;
     if (EInSlot(SL_READY) && EInSlot(SL_READY)->isType(T_WEAPON))
-      if ((EInSlot(SL_READY) != EInSlot(SL_WEAPON)) || 
-        TITEM(InSlot(SL_WEAPON)->iID)->HasFlag(WT_DOUBLE))
-        return S_DUAL;
-		return S_MELEE;
-	}
+        if ((EInSlot(SL_READY) != EInSlot(SL_WEAPON)) || TITEM(InSlot(SL_WEAPON)->iID)->HasFlag(WT_DOUBLE))
+            return S_DUAL;
+    return S_MELEE;
+}
 
 Dice& Creature::DmgVal(int16 type, bool is_large)
 {
