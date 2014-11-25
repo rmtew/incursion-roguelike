@@ -43,7 +43,7 @@ Windows build instructions
 
   1. Download and install Visual Studio Express 2010, if necessary.
   2. Extract 'flex.exe' directly into the project directory.
-  3. Place [libtcod source files](https://bitbucket.org/jice/libtcod/src) within the "_dependencies\libtcod" sub-directory.
+  3. Place [these libtcod source files and directories](https://bitbucket.org/jice/libtcod/src) into the "_dependencies\libtcod" sub-directory.  Note they are from the default branch, not the 1.5.x branch.
   4. Extract '_dependencies-20141125.7z' over the "_dependencies" sub-directory.  If extracted correctly, it should ask for permission to override files and directories.
   4. Build libtcod to obtain the libtcod.dll, libtcod.lib and SDL2.dll files.  Read the section below for help.
   4. Build Incursion.
