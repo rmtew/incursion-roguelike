@@ -37,17 +37,23 @@ Windows build instructions
 
   * libtcod.dll: [libtcod@bitbucket](https://bitbucket.org/jice/libtcod).
   * flex.exe: [winflexbison@sourceforge](http://sourceforge.net/projects/winflexbison/) 0.7 MB (extract and rename it).
+  * _dependencies-20141125.7z: Available from the bitbucket project downloads page.
 
 *Compilation instructions:*
 
   1. Download and install Visual Studio Express 2010, if necessary.
   2. Extract 'flex.exe' directly into the project directory.
-  3. Place libtcod source code under "_dependencies\libtcod" sub-directory.
-  4. Build libtcod to obtain the libtcod.dll, libtcod.lib and SDL2.dll files.
+  3. Place [libtcod source files](https://bitbucket.org/jice/libtcod/src) within the "_dependencies\libtcod" sub-directory.
+  4. Extract '_dependencies-20141125.7z' over the "_dependencies" sub-directory.  If extracted correctly, it should ask for permission to override files and directories.
+  4. Build libtcod to obtain the libtcod.dll, libtcod.lib and SDL2.dll files.  Read the section below for help.
   4. Build Incursion.
   4. Place "libtcod.dll" directly into the project directory.
   4. Place "SDL2.dll" directly into the project directory.
 
-*Building modules:*
+*Building libtcod:*
+
+The '_dependencies-20141125.7z' file contains a few minor source modifications, and the solution and project files required to build libtcod with Visual Studio 2010.  To build it, you simply build the solution.  However, this may not be necessary.  The built lib and dll files are also bundled in the '_dependencies-20141125.7z' file.  With them also extracted in place, it may be possible to build Incursion without needing to build libtcod at all.
+
+*Building Incursion modules:*
 
 Note that the module is built by running the Incursion executable, and selecting the compile option from the main menu.  However, this option is only present in debug builds of Incursion.
