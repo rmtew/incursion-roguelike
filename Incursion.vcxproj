@@ -75,10 +75,10 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>exception_handler.lib;crash_generation_client.lib;common.lib;libtcod.lib;sdl2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libtcod.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>.\Release/Incursion.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>_dependencies\libtcod\makefiles\Release;_dependencies\google-breakpad\src\client\windows\Release\lib;_dependencies\sdl2\VisualC\SDL\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>_dependencies\libtcod\makefiles\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>.\Release/Incursion.pdb</ProgramDatabaseFile>
@@ -127,7 +127,7 @@
       <AdditionalDependencies>libtcod.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>.\Debug/Incursion.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>_dependencies\libtcod\makefiles\Debug;_dependencies\sdl2\VisualC\SDL\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>_dependencies\libtcod\makefiles\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>.\Debug/Incursion.pdb</ProgramDatabaseFile>
