@@ -46,7 +46,7 @@ Windows build instructions
   1. Place `flex.exe` directly into the project directory.
   1. Extract `_dependencies-20141125.7z` over the `_dependencies` sub-directory.  Check that you extracted it at the right level.
   1. Place `libtcod.dll` directly into the project directory (look in `_dependencies\libtcod\makefiles\Release`, it comes from `_dependencies-20141125.7z`).
-  1. Place `SDL2.dll` directly into the project directory (look in '_dependencies\libtcod', it comes from the libtcod source).
+  1. Place `SDL2.dll` directly into the project directory (look in `_dependencies\libtcod`, it comes from the libtcod source).
   1. Open `Incursion.sln` and do a debug build of Incursion.
   1. Run the debug build.
   1. Select the 'Compile Resources' main menu option.  Once completed, this will have created the `mod\Incursion.Mod` file.
