@@ -91,8 +91,8 @@
 #undef MIN
 #undef MAX
 
-#define SDL_MAIN_HANDLED
-#include "SDL.h"
+//#define SDL_MAIN_HANDLED
+//#include "SDL.h"
 
 #define FORE(g) ((g & 0x0F00) / 256)
 #define BACK(g) ((g & 0xF000) / (256*16))
@@ -104,11 +104,18 @@
 #define CURSOR_BLINK_MS 300
 #define INPUT_IDLE_MS 50
 
+/*
+
+Add to release libs: exception_handler.lib;crash_generation_client.lib;common.lib
+Add to release paths: _dependencies\google-breakpad\src\client\windows\Release\lib
+Add to release includes: _dependencies\google-breakpad\src
+
 #ifndef DEBUG
 #ifdef USE_CRASHPAD
 using google_breakpad::ExceptionHandler;
 #endif
 #endif
+*/
 
 
 TCOD_color_t RGBValues[MAX_COLORS] = {
@@ -982,7 +989,7 @@ int16 libtcodTerm::GetCharCmd(KeyCmdMode mode) {
     ticks_last = TCOD_sys_elapsed_milli();
 
     for(;;) {
-		Uint32 ticks0 = TCOD_sys_elapsed_milli(), ticks1;
+		uint32 ticks0 = TCOD_sys_elapsed_milli(), ticks1;
         TCOD_key_t tcodKey;
         TCOD_event_t tcodEvent = TCOD_sys_check_for_event(TCOD_EVENT_KEY_PRESS, &tcodKey, NULL);
 
