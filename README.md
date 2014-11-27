@@ -36,10 +36,12 @@ Windows build instructions
 *Dependencies:*
 
   * `libtcod.dll`: [libtcod@bitbucket](https://bitbucket.org/jice/libtcod/src) (note this is the default branch, not 1.5.x).
-  * `flex.exe`: [winflexbison@sourceforge](http://sourceforge.net/projects/winflexbison/) 0.7 MB (extract and rename 'win_flex.exe' to 'flex.exe').
+  * `flex.exe`: [winflexbison@sourceforge](http://sourceforge.net/projects/winflexbison/) 0.7 MB (extract and rename `win_flex.exe` to `flex.exe`).
   * `_dependencies-20141125.7z`: Available from the bitbucket [project downloads page](https://bitbucket.org/rmtew/incursion-roguelike/downloads).
 
 *Compilation instructions:*
+
+These instructions are intended to allow you to get Incursion to the point where you can debug it within Visual Studio.
 
   1. Download and install Visual Studio Express 2010, if necessary.
   1. Enter the Incursion project directory.
@@ -48,11 +50,13 @@ Windows build instructions
   1. Place `libtcod.dll` directly into the project directory (look in `_dependencies\libtcod\makefiles\Release`, it comes from `_dependencies-20141125.7z`).
   1. Place `SDL2.dll` directly into the project directory (look in `_dependencies\libtcod`, it comes from the libtcod source).
   1. Open `Incursion.sln` and do a debug build of Incursion.
-  1. Run the debug build.
+  1. Debug Incursion within Visual Studio.
   1. Select the 'Compile Resources' main menu option.  Once completed, this will have created the `mod\Incursion.Mod` file.
 
-At this point, you are ready to do some development, or just play the latest version of the source code.  Congratulations!
-  
+At this point, you are ready to do some development, or just play the latest version of the source code (within Visual Studio).  Congratulations!
+ 
+If you wish to play what you have built outside of Visual Studio, run the `make-release.bat` script and the correct directory structure will be created.
+ 
 *Building libtcod:*
 
 It is not necessary to build libtcod.  The include files from the libtcod source code, and the static libraries built from it, are included within the provided `_dependencies-20141125.7z` archive.
