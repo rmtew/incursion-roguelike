@@ -2177,7 +2177,7 @@ void TextTerm::DisplayCharSheet()
     Clear();
     Color(EMERALD);
     Write(0,WinSizeY()-3,"[P]restige Classes [PGUP/PGDN] Scroll [W]rite Dump [ESC] Return to Game");
-    Write(0,WinSizeY()-2,"[G]ain Levels [L]earn Spells [S]kill Manager [M]ulticlass [C]onditions [Q]uests");
+    Write(0,WinSizeY()-2,Format("[G]ain Levels %sarn Spells [S]kill Manager [M]ulticlass [C]onditions [Q]uests", theGame->Opt(OPT_ROGUELIKE) ? "L[E]" : "[L]e"));
     Write(0,WinSizeY()-1,"[K]nown Items [F]eat Descriptions [J]ournal [R]ecall Monster [D] Alignment");
     SizeWin(WIN_CSHEET,0,0,WinSizeX(),WinSizeY() - 4);
     SetWin(WIN_CSHEET);

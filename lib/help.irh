@@ -3638,7 +3638,7 @@ Text "help::magic"
 
      <11>LEARNING SPELLS {LE}\n
      ===============<3>\n
-     __You can learn spells by typing 'L' on the character
+     __You can learn spells by typing 'L' or 'E' on the character
      sheet screen. This brings up a menu with all the possible spells you could
      learn at the moment; for clerics and druids, this is every unlearned spell
      of a level for which you currently have a free spell slot. For wizards, however,
