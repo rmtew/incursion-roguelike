@@ -1,5 +1,12 @@
 @echo off
 
+REM TODO: The libtcod and SDL2 pdbs from the relevant _dependency locations should be used if they are present.
+REM       - If they are not present, then complain loudly.
+REM       - The correct release and debug versions should be copied.
+REM       - Also generate the _dependencies-YYYYMMDD.7z file.
+
+SET TLD=INCURSION-RELEASES
+
 PUSHD .
 
 FOR %%I IN (Release\Incursion.exe Debug\Incursion.exe mod\Incursion.mod) DO (
@@ -9,20 +16,21 @@ FOR %%I IN (Release\Incursion.exe Debug\Incursion.exe mod\Incursion.mod) DO (
 	)
 )
 
-@ECHO Making 'INCURSION-RELEASES' directories.
-IF EXIST INCURSION-RELEASES (
-	RD /s /q INCURSION-RELEASES
+@ECHO Making '%TLD%' directories.
+IF EXIST %TLD% (
+	RD /s /q %TLD%
     if ERRORLEVEL 1 (
-        @echo Cannot remove INCURSION-RELEASES, it is locked
+        @echo Cannot remove %TLD%, it is locked
         exit /b 1
 	)
 )
-MD INCURSION-RELEASES
+MD %TLD%
 if ERRORLEVEL 1 (
-	@echo Cannot create INCURSION-RELEASES directory
+	@echo Cannot create %TLD% directory
 	exit /b 1
 )
-CD INCURSION-RELEASES
+
+CD %TLD%
 
 @ECHO Making required directories and copying shared files.
 FOR %%I IN (Incursion-VVV\ Incursion-VVV-release-with-pdbs\ Incursion-VVV-debug-with-pdbs\) DO (
