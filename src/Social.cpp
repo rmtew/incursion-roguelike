@@ -2049,13 +2049,15 @@ void Creature::LoseMoneyTo(int32 amt, Creature *cr) {
     then gold, etc. */
     for(i=0; i!=nCoins; i++) {
         it = Money[i];
-        if (needed - VALUE(it) >= 0) {
+        int32 vTotal = VALUE(it);
+        int32 vOne = VONE(it);
+        if (needed >= vTotal) { /* The stack of coins will partially or fully cover it. */
             Stacks[nStacks++] = it;
-            needed -= VALUE(it);
-        } else if (VONE(it) - needed > 0)
+            needed -= vTotal;
+        } else if (vOne > needed) /* Not even one coin will cover it, move on. */
             continue;
-        else {
-            n = needed / VONE(it);
+        else { /* Not all the stack of coins will cover it, but some will, so use them. */
+            n = needed / vOne;
             it2 = it->TakeOne();
             it2->SetQuantity(n);
             it->SetQuantity(it->GetQuantity() - (n-1));
