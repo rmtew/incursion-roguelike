@@ -424,10 +424,12 @@ bool Magic::isTarget(EventInfo &_e, Thing *t) {
       if ((e.isSpell || (e.isItem && e.EItem->isType(T_SCROLL))) && e.EMagic == NULL)
           Error("Crash imminent, id=%l, effect='%s', num=%d, actor='%s'", e.EActor->myHandle, NAME(e.eID), e.efNum, e.EActor->Name());
 
-      if (e.isItem && e.EItem->isItem() && e.EItem->isBlessed())
-          e.isBlessed = true;
-      if (e.isItem && e.EItem->isItem() && e.EItem->isCursed())
-          e.isCursed = true;
+      if (e.isItem && e.EItem->isItem()) {
+          if (e.EItem->isBlessed())
+              e.isBlessed = true;
+          if (e.EItem->isCursed())
+              e.isCursed = true;
+      }
 
       if (e.isTrap || e.isItem)
           sp_flags = 0;
@@ -451,11 +453,9 @@ bool Magic::isTarget(EventInfo &_e, Thing *t) {
               e.saveDC += 4;
           if (te->HasFlag(EF_HARDSAVE8))
               e.saveDC += 8;
-      } else if ((e.AType == A_BREA || e.AType == A_SPIT ||
-          e.DType == AD_SPE1 || e.DType == AD_SPE2) &&
-          e.EActor->HasAttk(e.AType)) {
+      } else if ((e.AType == A_BREA || e.AType == A_SPIT || e.DType == AD_SPE1 || e.DType == AD_SPE2) && e.EActor->HasAttk(e.AType))
           e.saveDC = (int8)e.EActor->GetPower(e.EActor->GetAttk(e.AType)->u.a.DC);
-      } else if (e.isTrap || !e.EActor)
+      else if (e.isTrap || !e.EActor)
           e.saveDC = 10 + te->Level;
       else if (TEFF(e.eID)->HasFlag(EF_SPECABIL))
           e.saveDC = 10 + e.EActor->ChallengeRating() + e.EActor->Mod(A_CHA);
@@ -523,6 +523,7 @@ bool Magic::isTarget(EventInfo &_e, Thing *t) {
           e.vDuration = -1;
       else
           e.vDuration = 10 + e.vCasterLev*2;
+
       if ((e.MM & MM_ANCHOR) && e.vDuration > 1)
           e.vDuration *= 2;
       if ((te->Purpose & EP_BUFF) && e.vDuration > 1 && 
@@ -534,8 +535,7 @@ bool Magic::isTarget(EventInfo &_e, Thing *t) {
           e.vDuration *= 2;
 
       if (e.MM & MM_TRANSMUTE) {
-          char ch;
-          ch = e.Transmute;
+          char ch = e.Transmute;
           switch (ch) {
           case 'f': e.DType = AD_FIRE; break;
           case 'c': e.DType = AD_COLD; break;
@@ -592,8 +592,6 @@ bool Magic::isTarget(EventInfo &_e, Thing *t) {
           if (e.MM & MM_EMPOWER)
               e.vDmg = (e.vDmg*150)/100;
       }
-
-
   }
 
   EvReturn Magic::MagicEvent(EventInfo &e) {
@@ -629,6 +627,7 @@ bool Magic::isTarget(EventInfo &_e, Thing *t) {
 Nothing:
           if (e.isWield || e.isRemove || e.isEnter || e.isLeave)
               return DONE;
+
           switch(random(4)) {
           case 0:e.EActor->IPrint("Nothing happens.");break;
           case 1:e.EActor->IPrint("There's no effect.");break;
@@ -640,8 +639,7 @@ Nothing:
 
       if (e.MM & MM_TRANSMUTE)
           do {
-              e.Transmute = e.EActor->ChoicePrompt("Fire, Cold, Acid, Lightning, Poison or Sonic damage?",
-                  "fcalps", "fcalps"[random(6)]);
+              e.Transmute = e.EActor->ChoicePrompt("Fire, Cold, Acid, Lightning, Poison or Sonic damage?", "fcalps", "fcalps"[random(6)]);
           } while (e.Transmute == -1);
 
       {
@@ -670,6 +668,7 @@ Nothing:
                   goto Nothing;
               if (te->HasFlag(EF_7PERDAY) && e.EItem->GetCharges() >= 7)
                   goto Nothing;
+
               e.EItem->SetCharges(e.EItem->GetCharges()+1);
           }
 
@@ -679,6 +678,7 @@ Nothing:
                   "Nothing happens.", e.eID);
               return ABORT;
           }
+
           MapIterate(e.EMap,t,i)
               if (t->isCreature() && e.EActor->DistFrom(t) <= 30)
                   if (t->HasStati(SINGING) && !e.EMap->FieldAt(e.EActor->x,e.EActor->y,FI_SILENCE))
@@ -720,12 +720,13 @@ Nothing:
           e.Dmg = e.EMagic->pval.LevelAdjust(e.vCasterLev,((e.EItem && e.EItem->isItem())) ? e.EItem->GetPlus() : 0);
 
           if (e.isSpell || (e.isItem && e.EItem->isType(T_SCROLL))) { 
-              if (e.EMagic->eval == EA_BLAST || e.EMagic->eval == EA_DRAIN)
+              if (e.EMagic->eval == EA_BLAST || e.EMagic->eval == EA_DRAIN) {
                   if (e.EMagic->xval <= 16) /* i.e., hit point damage */
                       e.Dmg.Bonus += e.EActor->SpellDmgBonus(e.eID); 
-              if (e.EMagic->eval == EA_INFLICT)
+              } else if (e.EMagic->eval == EA_INFLICT) {
                   if (IsAdjustStati(e.EMagic->xval) && e.EMagic->yval == A_ARM)
                       e.Dmg.Bonus += e.EActor->SpellDmgBonus(e.eID); 
+              }
           }
 
           // ww: this looks very suspicious to me: you can't tell the
@@ -742,9 +743,7 @@ Nothing:
           case ABORT:   return ABORT;
           }
 
-          if (e.EMagic->eval == EA_HEALING &&
-              e.EMagic->xval & HEAL_HP &&
-              e.EMagic->aval == AR_NONE) {
+          if (e.EMagic->eval == EA_HEALING && e.EMagic->xval & HEAL_HP && e.EMagic->aval == AR_NONE) {
               Creature *cr, *cr2, *ot; bool isPhoenix; int16 i;
               isPhoenix = false;
               /* Optimization -- only PCs sing! */
