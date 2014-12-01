@@ -4847,15 +4847,17 @@ AfterEffects:
   if (e.AType == A_TUCH && e.EActor->HasStati(TOUCH_ATTACK)
                         && !e.EVictim->isDead())
   {
+      int8 ii;
     e.eID = e.EActor->GetStatiEID(TOUCH_ATTACK);
-    for(int8 ii=0;;ii++) {
-      ASSERT(TEFF(e.eID)->Vals(ii))
+    for(ii=0;;ii++) {
+        ASSERT(TEFF(e.eID)->Vals(ii))
         if (TEFF(e.eID)->Vals(ii)->aval == AR_TOUCH)
           break;
     }
-    e.efNum = (int8)i;
+    e.efNum = ii;
     e.isSpell = true; 
     ReThrow(EV_MAGIC_STRIKE,e);
+
     /* If this touch spell allows multiple uses, reduce the
        number remaining by one; otherwise, get rid of the 
        TOUCH_ATTACK Stati completely. */
