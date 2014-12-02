@@ -7816,428 +7816,398 @@ Dice& Creature::DmgVal(int16 type, bool is_large)
   return d;
   }
 
-EvReturn Creature::AttackMsg(EventInfo &e)
-{
-  const char *loc,*verb_s,*verb_p,*result; 
-  String prelude, s1, s2, s3, chargeStr; int16 saveSil;
-  bool note_death; 
-  const char * cMult[] = { "x0", "x1", "x2", "x3", "x4", "x5", "x6", "x7" },
-             * rMult[] = { "x0", "x1", "x1.5", "x2", "x2.5", "x3", "x3.5", "x4" };
-      
-  s1 = "";
-  s2 = "";
-  chargeStr = "";
+EvReturn Creature::AttackMsg(EventInfo &e) {
+    const char *loc, *verb_s, *verb_p, *result; 
+    String prelude, s1, s2, s3, chargeStr;
+    int16 saveSil;
+    bool note_death; 
+    const char *cMult[] = { "x0", "x1", "x2", "x3", "x4", "x5", "x6", "x7" }, *rMult[] = { "x0", "x1", "x1.5", "x2", "x2.5", "x3", "x3.5", "x4" };
+
+    s1 = "";
+    s2 = "";
+    chargeStr = "";
 
     /* Watch out for Traps in EItem! */ 
     if (e.EItem && !e.EItem->isItem())
-      e.EItem = NULL;
+        e.EItem = NULL;
 
+    {
+        Player *p; int16 dis; Dir d;
+        p = theGame->GetPlayer(0);
+        if (!(p->Perceives(e.EActor) || p->Perceives(e.EVictim)) && p->m == m && p->x > 0) {
+            static TextVal DirNames[] = {
+                { NORTH, "north" },
+                { SOUTH, "south" },
+                { EAST, "east" },
+                { WEST, "west" },
+                { NORTHEAST, "north-east" },
+                { NORTHWEST, "north-west" },
+                { SOUTHEAST, "south-east" },
+                { SOUTHWEST, "south-west" },
+                { 0, NULL }
+            };    
 
-  {
-    Player *p; int16 dis; Dir d;
-    p = theGame->GetPlayer(0);
-    if (!(p->Perceives(e.EActor) || p->Perceives(e.EVictim)) &&
-          p->m == m && p->x > 0)
-      {
-        static TextVal DirNames[] = {
-              { NORTH, "north" },
-              { SOUTH, "south" },
-              { EAST, "east" },
-              { WEST, "west" },
-              { NORTHEAST, "north-east" },
-              { NORTHWEST, "north-west" },
-              { SOUTHEAST, "south-east" },
-              { SOUTHWEST, "south-west" },
-              { 0, NULL } };    
-        d = p->DirTo(e.EActor);
-        if ((dis = p->DistFrom(e.EActor)) < 10 + p->SkillLevel(SK_LISTEN))
-        if (!p->HasStati(HEARD_IT,d)) {
-          if (p->SkillCheck(SK_LISTEN,10))
-            p->IPrint("You hear the sounds of conflict to the <Str>.",
-                (const char*) Lower(LookupOnly(DirNames,d)));
-          p->GainTempStati(HEARD_IT,NULL,SS_MISC,4,d);
-          }
-      }
-  }
+            d = p->DirTo(e.EActor);
+            if ((dis = p->DistFrom(e.EActor)) < 10 + p->SkillLevel(SK_LISTEN))
+                if (!p->HasStati(HEARD_IT,d)) {
+                    if (p->SkillCheck(SK_LISTEN,10))
+                        p->IPrint("You hear the sounds of conflict to the <Str>.",
+                        (const char*) Lower(LookupOnly(DirNames,d)));
+                    p->GainTempStati(HEARD_IT,NULL,SS_MISC,4,d);
+                }
+        }
+    }
 
-  /* Kludge to avoid giveaway messages for invisible/ethereal creatures
-      in the path of missile weapons. */
-  if (e.EActor && e.EVictim)
-    if (!e.EActor->isBeside(e.EVictim) || 
-          e.AType == A_FIRE || e.AType == A_HURL)
-      if (!e.EVictim->isPlayer())
-        if (!e.EActor->Perceives(e.EVictim))
-          if (e.EVictim->onPlane() != e.EActor->onPlane())
-            {
-              if (e.EActor && e.EActor->m)
-                e.EActor->m->EmptyQueue(QUEUE_DAMAGE_MSG);
-              return DONE;
+    /* Kludge to avoid giveaway messages for invisible/ethereal creatures
+    in the path of missile weapons. */
+    if (e.EActor && e.EVictim)
+        if (!e.EActor->isBeside(e.EVictim) || e.AType == A_FIRE || e.AType == A_HURL)
+            if (!e.EVictim->isPlayer())
+                if (!e.EActor->Perceives(e.EVictim))
+                    if (e.EVictim->onPlane() != e.EActor->onPlane())
+                    {
+                        if (e.EActor && e.EActor->m)
+                            e.EActor->m->EmptyQueue(QUEUE_DAMAGE_MSG);
+                        return DONE;
+                    }
+
+    saveSil = Silence;
+    Silence = false;
+
+    if (e.strDmg == NULL)
+        e.strDmg = "";
+
+    Term *TActor = NULL;
+    Term *TVictim = NULL;
+
+    if (e.EActor) 
+        TActor = e.EActor->ShowCombatNumbers();
+    else
+        Fatal("no Actor in AttackMsg?");
+
+    if (e.EVictim) 
+        TVictim = e.EVictim->ShowCombatNumbers();
+
+    if (TActor || TVictim) {
+        s3 = Format("%c%s ",-GREY, (const char *)Capitalize(e.EActor->Name(NA_POSS),true));
+        if (TActor) { 
+            TActor->SetWin(WIN_NUMBERS3);
+            TActor->Clear();
+        }
+
+        if (TVictim) {
+            TVictim->SetWin(WIN_NUMBERS4);
+            TVictim->Clear();
+        }
+
+        if ((e.AType == A_BULL || e.AType == A_DISA || e.AType == A_TRIP || e.AType == A_GRAB || e.AType == A_THRO || e.AType == A_ESCA) && e.isHit) {
+            String s0; 
+
+            /* XPrint Needed here for colour extension below */
+            switch (e.AType) {
+            case A_BULL: s0 = XPrint("<13>Bull Rush:<7> "); break;
+            case A_THRO: s0 = XPrint("<14>Grapple:<7> "); break;
+            case A_GRAB: s0 = XPrint("<14>Grapple:<7> "); break;
+            case A_ESCA: s0 = XPrint("<14>Grapple:<7> "); break;
+            case A_DISA: s0 = XPrint("<10>Disarm:<7> "); break;
+            case A_TRIP: s0 = XPrint("<10>Trip:<7> "); break;
+            }        
+
+            s1 = Format("%s = %d vs. %s = %d %c[%s]%c",
+                (const char*)e.strOpp1, e.vOpp1, (const char*)e.strOpp2, e.vOpp2, -(e.Resist ? RED : EMERALD), e.Resist ? "failure" : "success", -GREY);
+
+            if (TActor) {
+                if (e.EActor->isPlayer())  {
+                    TActor->Write(0,0,XPrint(s0.TrueLeft(64) + s1));
+                    if (theGame->Opt(OPT_STORE_ROLLS))
+                        TActor->AddMessage(s0 + s1);
+                } else {
+                    s3.SetAt(0, s0[0]);
+                    TActor->Write(0,0,XPrint((s3 + s0).TrueLeft(64) + s1));
+                    if (theGame->Opt(OPT_STORE_ROLLS))
+                        TActor->AddMessage(s3+s0+s1);
+                } 
+            } 
+            if (TVictim) {
+                s3.SetAt(0, s0[0]);
+                TVictim->Write(0,0,XPrint((s3 + s0).TrueLeft(64) + s1));
+                if (theGame->Opt(OPT_STORE_ROLLS))
+                    TVictim->AddMessage(s3 + s0+s1);
             }
-
-  saveSil = Silence;
-  Silence = false;
-  
-  
-  
-  if (e.strDmg == NULL)
-    e.strDmg = "";
-
-  Term * TActor = NULL;
-  if (e.EActor) 
-    TActor = e.EActor->ShowCombatNumbers();
-  else
-    Fatal("no Actor in AttackMsg?");
-  Term * TVictim = NULL;
-  if (e.EVictim) 
-    TVictim = e.EVictim->ShowCombatNumbers();
-
-  if (TActor || TVictim) {
-    s3 = Format("%c%s ",-GREY, 
-        (const char *)Capitalize(e.EActor->Name(NA_POSS),true));
-    if (TActor) { 
-      TActor->SetWin(WIN_NUMBERS3);
-      TActor->Clear();
-    }
-    if (TVictim) {
-      TVictim->SetWin(WIN_NUMBERS4);
-      TVictim->Clear();
-    }
-
-    if ((e.AType == A_BULL || e.AType == A_DISA || e.AType == A_TRIP || 
-          e.AType == A_GRAB || e.AType == A_THRO || e.AType == A_ESCA) &&
-        e.isHit) {
-
-      String s0; 
-
-      switch (e.AType) {
-        /* XPrint Needed here for colour extension below */
-        case A_BULL: s0 = XPrint("<13>Bull Rush:<7> "); break;
-        case A_THRO: s0 = XPrint("<14>Grapple:<7> "); break;
-        case A_GRAB: s0 = XPrint("<14>Grapple:<7> "); break;
-        case A_ESCA: s0 = XPrint("<14>Grapple:<7> "); break;
-        case A_DISA: s0 = XPrint("<10>Disarm:<7> "); break;
-        case A_TRIP: s0 = XPrint("<10>Trip:<7> "); break;
-      }        
-
-      s1 = Format("%s = %d vs. %s = %d %c[%s]%c",
-          (const char*)e.strOpp1, e.vOpp1, (const char*)e.strOpp2, e.vOpp2,
-          -(e.Resist ? RED : EMERALD), e.Resist ? "failure" : "success", -GREY);
-      if (TActor) {
-        if (e.EActor->isPlayer())  {
-          TActor->Write(0,0,XPrint(s0.TrueLeft(64) + s1));
-          if (theGame->Opt(OPT_STORE_ROLLS))
-            TActor->AddMessage(s0 + s1);
         } else {
-          s3.SetAt(0, s0[0]);
-          TActor->Write(0,0,XPrint((s3 + s0).TrueLeft(64) + s1));
-          if (theGame->Opt(OPT_STORE_ROLLS))
-            TActor->AddMessage(s3+s0+s1);
-        } 
-      } 
-      if (TVictim) {
-        s3.SetAt(0, s0[0]);
-        TVictim->Write(0,0,XPrint((s3 + s0).TrueLeft(64) + s1));
-        if (theGame->Opt(OPT_STORE_ROLLS))
-          TVictim->AddMessage(s3 + s0+s1);
-      }
-    } else {
+            if (e.strDef.GetLength() > 3)
+                e.strDef += Format(" = %d",e.vDef);
 
-      if (e.strDef.GetLength() > 3)
-        e.strDef += Format(" = %d",e.vDef);
-      s1 = Format("%c%s:%c 1d20 (%d) %s = %d vs. ",
-          -14,e.AType == A_SPEL ? NAME(e.eID) : "Attack", -7,e.vRoll, 
-          (const char*)e.strHit, e.vHit + e.vRoll);
-      if (e.vRideCheck > e.vDef)
-        s1 += Format("Ride %d [",e.vRideCheck);
-      else
-        s1 += Format("Def %s [",(const char*)e.strDef); 
+            s1 = Format("%c%s:%c 1d20 (%d) %s = %d vs. ",
+                -14,e.AType == A_SPEL ? NAME(e.eID) : "Attack", -7,e.vRoll, (const char*)e.strHit, e.vHit + e.vRoll);
+            if (e.vRideCheck > e.vDef)
+                s1 += Format("Ride %d [", e.vRideCheck);
+            else
+                s1 += Format("Def %s [", (const char*)e.strDef); 
 
-      s1 += e.isCrit ? "crit" : e.vRoll >= e.vThreat ? "threat" :
-        e.isHit ? "hit" : "miss";
-      s1 += "]";
-      if (e.AType == A_SPEL)
-        goto SkipPrintingDamageButStillPrintHitRoll;
-      if (e.AType == A_TUCH && !e.EActor->HasAttk(A_TUCH))
+            s1 += e.isCrit ? "crit" : (e.vRoll >= e.vThreat ? "threat" : (e.isHit ? "hit" : "miss"));
+            s1 += "]";
+            if (e.AType == A_SPEL)
+                goto SkipPrintingDamageButStillPrintHitRoll;
+            if (e.AType == A_TUCH && !e.EActor->HasAttk(A_TUCH))
+                if (GetStatiMag(CHARGING)) {
+                    int32 mult = 1 + ((HasFeat(FT_SPIRITED_CHARGE) && HasStati(MOUNTED)) || (HasFeat(FT_FLYING_KICK) && e.AType == A_KICK));
+                    if (e.EItem && e.EItem->HasIFlag(WT_CHARGE)) mult++;
+                    if (mult > 1) 
+                        chargeStr += Format("x%d ",mult);
+                } 
+            {
+                Creature * rider = (Creature *)GetStatiObj(MOUNT);
+                if (rider && rider->GetStatiMag(CHARGING)) {
+                    int32 mult = 1; 
+                    if (e.EItem && e.EItem->HasIFlag(WT_CHARGE))
+                        mult++;
+                    if (mult > 1)
+                        chargeStr += Format("x%d ",mult);
+                } 
+            }
+            if (e.vicCharging) {
+                if (e.isAoO && e.isMoveAoO && e.vicCharging) { 
+                    int32 mult = 1; 
+                    if ((e.EItem != NULL) && e.EItem->HasIFlag(WT_CHARGE))
+                        mult++;
+                    if (mult > 1) 
+                        chargeStr += Format("x%d ",mult); 
+                } 
+            } 
 
-      if (GetStatiMag(CHARGING)) {
-        int32 mult = 1 + ( (HasFeat(FT_SPIRITED_CHARGE) && HasStati(MOUNTED)) ||
-                           (HasFeat(FT_FLYING_KICK) && e.AType == A_KICK) );
-        if (e.EItem && e.EItem->HasIFlag(WT_CHARGE)) mult++;
-        if (mult > 1) 
-          chargeStr += Format("x%d ",mult);
-      } 
-      {
-        Creature * rider = (Creature *)GetStatiObj(MOUNT);
-        if (rider && rider->GetStatiMag(CHARGING)) {
-          int32 mult = 1; 
-          if (e.EItem && e.EItem->HasIFlag(WT_CHARGE)) mult++;
-          if (mult > 1) 
-            chargeStr += Format("x%d ",mult);
-        } 
-      }
-      if (e.vicCharging) {
-        if (e.isAoO && e.isMoveAoO && e.vicCharging) { 
-          int32 mult = 1; 
-          if ((e.EItem != NULL) && e.EItem->HasIFlag(WT_CHARGE)) mult++;
-          if (mult > 1) 
-            chargeStr += Format("x%d ",mult); 
-        } 
-      } 
-
-      if (e.isCrit && e.strDmg.GetLength())
-        s2 = Format("%cDamage:%c %s + (%s) %s %s= %d",-13,-7, (const
-              char*)e.Dmg.Str(),
-              (const char*)Trim(e.strDmg),
-            e.EVictim->HasFeat(FT_ROLL_WITH_IT) ? rMult[e.vCrit] : cMult[e.vCrit], 
-            (const char*)chargeStr, (int)e.vDmg);
-      else if (e.isHit) {
-        s2 = Format("%cDamage:%c %s%s %s= %d",-13,-7,
-            (const char*)e.Dmg.Str(),(const char*)e.strDmg, 
-            (const char*)chargeStr, (int)e.vDmg);
-      } if (e.isBypass) {
-        if (e.vPen)
-          s2 += Format(" bypassed Cov %d (%d other %s, %d%% Pen) = %d",
-              e.EVictim->Attr[A_COV], 
-              e.vArm, is_wepdmg(e.DType) ? "Arm" : "Res",
-              e.vPen, e.aDmg);
-        else
-          s2 += Format(" bypassed Cov %d = %d",e.EVictim->Attr[A_COV],
-              e.aDmg);
-      }
-      else if (e.isHit && e.vArm) {
-        s2 += Format(" vs. %s %d",is_wepdmg(e.DType) ? 
-            "Arm" : "Res", e.vArm);
-        if (e.vPen)
-          s2 += Format(" (%d%% Pen)",e.vPen);
-        s2 += Format(" = %d",e.aDmg);
-      }
-      if (e.strXDmg.GetLength())
-        s2 += Format("%s = %d",(const char*)e.strXDmg,e.aDmg+e.xDmg);
-      if (!is_wepdmg(e.DType))
-        s2 += Format(" %s",Lookup(DTypeNames,e.DType));
+            if (e.isCrit && e.strDmg.GetLength())
+                s2 = Format("%cDamage:%c %s + (%s) %s %s= %d",-13,-7,
+                    (const char*)e.Dmg.Str(), (const char*)Trim(e.strDmg), e.EVictim->HasFeat(FT_ROLL_WITH_IT) ? rMult[e.vCrit] : cMult[e.vCrit],
+                    (const char*)chargeStr, (int)e.vDmg);
+            else if (e.isHit) {
+                s2 = Format("%cDamage:%c %s%s %s= %d",-13,-7,
+                    (const char*)e.Dmg.Str(),(const char*)e.strDmg, (const char*)chargeStr, (int)e.vDmg);
+            }
+            if (e.isBypass) {
+                if (e.vPen)
+                    s2 += Format(" bypassed Cov %d (%d other %s, %d%% Pen) = %d",
+                        e.EVictim->Attr[A_COV], e.vArm, is_wepdmg(e.DType) ? "Arm" : "Res", e.vPen, e.aDmg);
+                else
+                    s2 += Format(" bypassed Cov %d = %d",e.EVictim->Attr[A_COV], e.aDmg);
+            } else if (e.isHit && e.vArm) {
+                s2 += Format(" vs. %s %d",is_wepdmg(e.DType) ? 
+                    "Arm" : "Res", e.vArm);
+                if (e.vPen)
+                    s2 += Format(" (%d%% Pen)",e.vPen);
+                s2 += Format(" = %d",e.aDmg);
+            }
+            if (e.strXDmg.GetLength())
+                s2 += Format("%s = %d",(const char*)e.strXDmg,e.aDmg+e.xDmg);
+            if (!is_wepdmg(e.DType))
+                s2 += Format(" %s",Lookup(DTypeNames,e.DType));
 
 SkipPrintingDamageButStillPrintHitRoll:
-      if (e.AType == A_GAZE ||
-          e.AType == A_PROX ||
-          e.AType == A_CPRX ||
-          e.AType == A_ROAR ||
-          e.AType == A_DEQU ||
-          e.AType == A_AURA ||
-          e.EActor->HasStati(ENGULFED) ||
-          is_postgrab_attk(e.AType))
-        s1 = ""; 
+            if (e.AType == A_GAZE || e.AType == A_PROX || e.AType == A_CPRX || e.AType == A_ROAR || e.AType == A_DEQU || e.AType == A_AURA ||
+                e.EActor->HasStati(ENGULFED) || is_postgrab_attk(e.AType))
+                s1 = ""; 
 
-      if (TActor) {
-        if (e.EActor->isPlayer()) { 
-          if (s1.GetLength()) {
-            TActor->Write(0,0,XPrint(s1.TrueLeft(64) + "\n" + s2));
-            if (theGame->Opt(OPT_STORE_ROLLS))
-              TActor->AddMessage(s1);
-          } else {
-            TActor->Write(0,0,XPrint(s2));
-          } 
-          if (theGame->Opt(OPT_STORE_ROLLS))
-            TActor->AddMessage(s2);
-        } else {
-          s3.SetAt(0,s1[0]);
-          if (s1.GetLength()) { 
-            TActor->Write(0,0,XPrint((s3 + s1).TrueLeft(64)));
-            if (theGame->Opt(OPT_STORE_ROLLS))
-              TActor->AddMessage(s3 + s1);
-          }
-          if (s2.GetLength()) {
-            s3.SetAt(0, s2[0]);
-            TActor->Write(0,1,XPrint(s3 + s2));
-            if (theGame->Opt(OPT_STORE_ROLLS))
-              TActor->AddMessage(s3 + s2);
-          }
-        } 
-      } if (TVictim) { 
-        s3.SetAt(0,s1[0]);
-        if (s1.GetLength()) { 
-          TVictim->Write(0,0,XPrint((s3 + s1).TrueLeft(64)));
-          if (theGame->Opt(OPT_STORE_ROLLS))
-            TVictim->AddMessage(s3 + s1);
-        }
-        if (s2.GetLength()) {
-          s3.SetAt(0,s2[0]);
-          TVictim->Write(0,1,XPrint(s3 + s2));
-          if (theGame->Opt(OPT_STORE_ROLLS))
-            TVictim->AddMessage(s3 + s2); 
-        }
-      }
-    }
-  } else {
-    // unless a player can see the actor or the victim, there's
-    // no reason to do anything else here ...
-    // a recent (Sun Nov  2 16:28:02 PST 2003) profile run suggests
-    // that this is the fourth-most time consuming function in Incursion
-    if (e.EMap)
-      for(int16 i=0;i!=MAX_PLAYERS;i++)
-        if (Player *p = oPlayer(e.EMap->pl[i]))
-          if (p != e.EActor && p != e.EVictim)
-            if ((e.EActor && p->XPerceives(e.EActor)) && 
-                (!e.EVictim || p->XPerceives(e.EVictim)))
-              goto SkipDamage;
-    return DONE;
-  } 
-SkipDamage:
-  if (e.AType == A_SPEL)
-    {
-      if (e.strBlastDmg.GetLength() > 0)
-        {
-          if (TActor)
-            {
-              TActor->SetWin(WIN_NUMBERS3);
-              TActor->Write(0,1,e.strBlastDmg);
-              if (theGame->Opt(OPT_STORE_ROLLS))
-                TActor->AddMessage(e.strBlastDmg);
+            if (TActor) {
+                if (e.EActor->isPlayer()) { 
+                    if (s1.GetLength()) {
+                        TActor->Write(0,0, XPrint(s1.TrueLeft(64) + "\n" + s2));
+                        if (theGame->Opt(OPT_STORE_ROLLS))
+                            TActor->AddMessage(s1);
+                    } else {
+                        TActor->Write(0,0, XPrint(s2));
+                    } 
+                    if (theGame->Opt(OPT_STORE_ROLLS))
+                        TActor->AddMessage(s2);
+                } else {
+                    s3.SetAt(0,s1[0]);
+                    if (s1.GetLength()) { 
+                        TActor->Write(0,0, XPrint((s3 + s1).TrueLeft(64)));
+                        if (theGame->Opt(OPT_STORE_ROLLS))
+                            TActor->AddMessage(s3 + s1);
+                    }
+                    if (s2.GetLength()) {
+                        s3.SetAt(0, s2[0]);
+                        TActor->Write(0,1, XPrint(s3 + s2));
+                        if (theGame->Opt(OPT_STORE_ROLLS))
+                            TActor->AddMessage(s3 + s2);
+                    }
+                } 
+            } if (TVictim) { 
+                s3.SetAt(0,s1[0]);
+                if (s1.GetLength()) { 
+                    TVictim->Write(0,0, XPrint((s3 + s1).TrueLeft(64)));
+                    if (theGame->Opt(OPT_STORE_ROLLS))
+                        TVictim->AddMessage(s3 + s1);
+                }
+                if (s2.GetLength()) {
+                    s3.SetAt(0,s2[0]);
+                    TVictim->Write(0,1, XPrint(s3 + s2));
+                    if (theGame->Opt(OPT_STORE_ROLLS))
+                        TVictim->AddMessage(s3 + s2); 
+                }
             }
-          if (TVictim)
-            {
-              TVictim->SetWin(WIN_NUMBERS4);
-              TVictim->Write(0,1,e.strBlastDmg);
-              if (theGame->Opt(OPT_STORE_ROLLS))
-                TVictim->AddMessage(e.strBlastDmg);
+        }
+    } else {
+        // unless a player can see the actor or the victim, there's no reason to do anything else here ...
+        // a recent (Sun Nov  2 16:28:02 PST 2003) profile run suggests that this is the fourth-most time consuming function in Incursion
+        if (e.EMap)
+            for(int16 i=0;i!=MAX_PLAYERS;i++)
+                if (Player *p = oPlayer(e.EMap->pl[i]))
+                    if (p != e.EActor && p != e.EVictim)
+                        if ((e.EActor && p->XPerceives(e.EActor)) && (!e.EVictim || p->XPerceives(e.EVictim)))
+                            goto SkipDamage;
+        return DONE;
+    } 
+
+SkipDamage:
+    if (e.AType == A_SPEL) {
+        if (e.strBlastDmg.GetLength() > 0) {
+            if (TActor) {
+                TActor->SetWin(WIN_NUMBERS3);
+                TActor->Write(0,1,e.strBlastDmg);
+                if (theGame->Opt(OPT_STORE_ROLLS))
+                    TActor->AddMessage(e.strBlastDmg);
+            }
+            if (TVictim) {
+                TVictim->SetWin(WIN_NUMBERS4);
+                TVictim->Write(0,1,e.strBlastDmg);
+                if (theGame->Opt(OPT_STORE_ROLLS))
+                    TVictim->AddMessage(e.strBlastDmg);
             }              
         }
-      return DONE;
+        return DONE;
     }
 
-  if (e.Terse)
-    goto SkipMainMessage;
+    if (e.Terse)
+        goto SkipMainMessage;
 
-  loc = "";
-  verb_s=
-    verb_p=Lookup(AttkVerbs2,e.AType);
-  result = e.Died ? "kill" : (e.isCrit ? (random(2) ? "blast" : "brutaliz") :
-      (e.isHit ? "hitt" : "miss"));
+    loc = "";
+    verb_s = verb_p = Lookup(AttkVerbs2,e.AType);
+    result = e.Died ? "kill" : (e.isCrit ? (random(2) ? "blast" : "brutaliz") : (e.isHit ? "hitt" : "miss"));
 
-  if (e.isAoO)
-    prelude = "Seeing an opportunity, ";
-  else if (e.isCleave)
-    prelude = "Cleaving through, ";
-  else if (e.isSurprise) {
-    /* Kludge, but it works (for single player). */
-    if (e.EVictim->isPlayer())
-      prelude = "Catching you unaware, ";
-    else
-      prelude = XPrint("Catching <him:Obj> unaware, ",e.EVictim);
-  }
-  else if (e.isGreatBlow) {
-    switch(random(4)) {
-      case 0: prelude = "Giving a mighty battle-howl, ";
-      case 1: prelude = "Drawing back to land a terrible blow, ";
-      case 2: prelude = "Preparing to smite your enemy, ";
-      case 3: prelude = "With great and terrible force, ";
-      }
-    }
-  else if (e.isPrecision) {
-    prelude = "With considered precision, ";
-    }
-  else if (e.isFlatFoot) {
-    /* Kludge, but it works (for single player). */
-    if (e.EVictim->isPlayer())
-      prelude = "Catching you flat-footed, ";
-    else
-      prelude = XPrint("Catching <him:Obj> flat-footed, ",e.EVictim);
-  }
-  else if (e.isBypass) {
-    /* Kludge, but it works (for single player). */
-    if (e.EVictim->isPlayer())
-      prelude = "Bypassing your armour, ";
-    else
-      prelude = XPrint("Bypassing <his:Obj> armour, ",e.EVictim);
-  }
-  else if (e.isOffhand) {
-    if (e.EActor->isPlayer())
-      prelude = "With your off hand, ";
-    else
-      prelude = XPrint("With <his:Obj> off hand, ",e.EActor);
-  }
-  else
-    prelude = "";
+    if (e.isAoO)
+        prelude = "Seeing an opportunity, ";
+    else if (e.isCleave)
+        prelude = "Cleaving through, ";
+    else if (e.isSurprise) {
+        /* Kludge, but it works (for single player). */
+        if (e.EVictim->isPlayer())
+            prelude = "Catching you unaware, ";
+        else
+            prelude = XPrint("Catching <him:Obj> unaware, ",e.EVictim);
+    } else if (e.isGreatBlow) {
+        switch(random(4)) {
+        case 0: prelude = "Giving a mighty battle-howl, ";
+        case 1: prelude = "Drawing back to land a terrible blow, ";
+        case 2: prelude = "Preparing to smite your enemy, ";
+        case 3: prelude = "With great and terrible force, ";
+        }
+    } else if (e.isPrecision) {
+        prelude = "With considered precision, ";
+    } else if (e.isFlatFoot) {
+        /* Kludge, but it works (for single player). */
+        if (e.EVictim->isPlayer())
+            prelude = "Catching you flat-footed, ";
+        else
+            prelude = XPrint("Catching <him:Obj> flat-footed, ",e.EVictim);
+    } else if (e.isBypass) {
+        /* Kludge, but it works (for single player). */
+        if (e.EVictim->isPlayer())
+            prelude = "Bypassing your armour, ";
+        else
+            prelude = XPrint("Bypassing <his:Obj> armour, ",e.EVictim);
+    } else if (e.isOffhand) {
+        if (e.EActor->isPlayer())
+            prelude = "With your off hand, ";
+        else
+            prelude = XPrint("With <his:Obj> off hand, ",e.EActor);
+    } else
+        prelude = "";
 
-  switch(e.AType)
-  {
+    switch(e.AType) {
     case A_BREA:
     case A_BRE2:
     case A_SPIT:
-      TPrint(e,"<Str4>you <Str1> <Str3>.",
-          "<Str4>a <EActor> <Str2> <Str3>.",
-          "<Str4>a <EActor> <Str2> <Str3>.",
-          Lookup(AttkVerbs1,e.AType), Lookup(AttkVerbs2,e.AType), 
-          Lookup(BreathTypes,e.DType), (const char*)prelude);
-      break;
+        TPrint(e,
+            "<Str4>you <Str1> <Str3>.",
+            "<Str4>a <EActor> <Str2> <Str3>.",
+            "<Str4>a <EActor> <Str2> <Str3>.",
+            Lookup(AttkVerbs1,e.AType), Lookup(AttkVerbs2,e.AType), 
+            Lookup(BreathTypes,e.DType), (const char*)prelude);
+        break;
     case A_ROAR:
-      String *verb;
-      /* Player-Ally Monsters cause trouble with A_ROAR, c.f. chasme */
-      if (e.EActor->getLeader())
-        if (e.EActor->getLeader()->isPlayer())
-          return ABORT;
-      if ((verb = TMON(e.EActor->tmID)->GetMessages(MSG_ROARVERB)) && verb[0].GetLength())
-        {
-          TPrint(e,"<Str3>you <Str1>.",
-              "<Str3>the <EActor> <Str2>.",
-              "<Str3>the <EActor> <Str2>.",
-              (const char*)(verb[0]), (const char*)(verb[1]), 
-              (const char*)prelude);
-          break;
+        String *verb;
+        /* Player-Ally Monsters cause trouble with A_ROAR, c.f. chasme */
+        if (e.EActor->getLeader())
+            if (e.EActor->getLeader()->isPlayer())
+                return ABORT;
+
+        if ((verb = TMON(e.EActor->tmID)->GetMessages(MSG_ROARVERB)) && verb[0].GetLength()) {
+            TPrint(e,
+                "<Str3>you <Str1>.",
+                "<Str3>the <EActor> <Str2>.",
+                "<Str3>the <EActor> <Str2>.",
+                (const char*)(verb[0]), (const char*)(verb[1]), 
+                (const char*)prelude);
+            break;
         }
-      if ((verb = TMON(e.EActor->mID)->GetMessages(MSG_ROARVERB)) && verb[0].GetLength())
-        {
-          TPrint(e,"<Str3>you <Str1>.",
-              "<Str3>the <EActor> <Str2>.",
-              "<Str3>the <EActor> <Str2>.",
-              (const char*)(verb[0]), (const char*)(verb[1]), 
-              (const char*)prelude);
-          break;
+        if ((verb = TMON(e.EActor->mID)->GetMessages(MSG_ROARVERB)) && verb[0].GetLength()) {
+            TPrint(e,
+                "<Str3>you <Str1>.",
+                "<Str3>the <EActor> <Str2>.",
+                "<Str3>the <EActor> <Str2>.",
+                (const char*)(verb[0]), (const char*)(verb[1]), 
+                (const char*)prelude);
+            break;
         }
-      // fall through          
+        // fall through          
     case A_EXPL:
-      TPrint(e,"<Str3>you <Str1>.",
-          "<Str3>the <EActor> <Str2>.",
-          "<Str3>the <EActor> <Str2>.",
-          Lookup(AttkVerbs1,e.AType), Lookup(AttkVerbs2,e.AType), (const char*)prelude);
-      break;
+        TPrint(e,
+            "<Str3>you <Str1>.",
+            "<Str3>the <EActor> <Str2>.",
+            "<Str3>the <EActor> <Str2>.",
+            Lookup(AttkVerbs1,e.AType), Lookup(AttkVerbs2,e.AType), (const char*)prelude);
+        break;
     case A_PROB:
-      if (e.isHit) {
-        TPrint(e,"<Str1>your probiscis pierces the <EVictim>.",
-            "<Str1>the <EActor>'s probiscis pierces you.",
-            "<Str1>the <EActor>'s probiscis pierces a <EVictim>.",
-            (const char*)prelude);
-        note_death = true;
-      }
-      else
-        TPrint(e,"<Str1>your probiscis misses the <EVictim>.",
+        if (e.isHit) {
+            TPrint(e,
+                "<Str1>your probiscis pierces the <EVictim>.",
+                "<Str1>the <EActor>'s probiscis pierces you.",
+                "<Str1>the <EActor>'s probiscis pierces a <EVictim>.",
+                (const char*)prelude);
+            note_death = true;
+        }
+        else
+            TPrint(e,
+            "<Str1>your probiscis misses the <EVictim>.",
             "<Str1>the <EActor>'s probiscis misses you.",
             "<Str1>the <EActor>'s probiscis misses a <EVictim>.",
             (const char*)prelude);
-      break;
+        break;
     case A_FIRE:
-      TPrint(e,"<Str4>you <Str1> an <EItem2> at an <EVictim>, <Str3>ing <him:EVictim><Str5>.",
-          "<Str4>a <EActor> <Str2> an <EItem2> at you, <Str3>ing you<Str5>.", 
-          "<Str4>a <EActor> <Str2> an <EItem2> at <EVictim>, <Str3>ing <him:EVictim><Str5>.",
-          Lookup(AttkVerbs1,e.AType), Lookup(AttkVerbs2,e.AType),
-          result, (const char*)prelude,
-          e.isWildMiss ? " wildly" : "");
-      break;
+        TPrint(e,
+            "<Str4>you <Str1> an <EItem2> at an <EVictim>, <Str3>ing <him:EVictim><Str5>.",
+            "<Str4>a <EActor> <Str2> an <EItem2> at you, <Str3>ing you<Str5>.", 
+            "<Str4>a <EActor> <Str2> an <EItem2> at <EVictim>, <Str3>ing <him:EVictim><Str5>.",
+            Lookup(AttkVerbs1,e.AType), Lookup(AttkVerbs2,e.AType),
+            result, (const char*)prelude,
+            e.isWildMiss ? " wildly" : "");
+        break;
     case A_ESCA:
-      if (e.Resist)
-        TPrint(e,"You try to break the <EVictim>'s hold on you, but cannot.",
+        if (e.Resist)
+            TPrint(e,"You try to break the <EVictim>'s hold on you, but cannot.",
             "The <EActor> tries to break your hold on <him:EActor>, but cannot.",
             "The <EActor> tries to break the <EVictim>'s hold on <him:EActor>, but cannot.");
-      else
-        TPrint(e,"You tear free of the <EVictim>'s grip!",
+        else
+            TPrint(e,"You tear free of the <EVictim>'s grip!",
             "The <EActor> tears free of your grip!",
             "The <EActor> tears free of the <EVictim>'s grip.");
-      break;                                    
+        break;                                    
     case A_SUCK:
-      TPrint(e,"You suck the <EVictim>'s blood.",
-          "The <EActor> sucks your blood.",
-          "The <EActor> sucks a <EVictim>'s blood.");
-      break;
-
+        TPrint(e,"You suck the <EVictim>'s blood.",
+            "The <EActor> sucks your blood.",
+            "The <EActor> sucks a <EVictim>'s blood.");
+        break;
     case A_SPOR:
     case A_OOZE:
     case A_BITE:
@@ -8248,15 +8218,15 @@ SkipDamage:
     case A_SLAM:
     case A_IMPA:
     case A_GAZE:
-      if (e.Died && e.isHit)
-        TPrint(e,"<Str1>you <Str2> an <EVictim>, killing <him:EVictim>.",
+        if (e.Died && e.isHit)
+            TPrint(e,"<Str1>you <Str2> an <EVictim>, killing <him:EVictim>.",
             "<Str1>a <EActor> <Str3> you.",
             "<Str1>a <EActor> <Str3> an <EVictim>, killing <him:EVictim>.",
             (const char*)prelude,
             Lookup(AttkVerbs1,e.AType),
             Lookup(e.isHit ? AttkVerbs2 : AttkVerbs1,e.AType));
-      else
-        TPrint(e,"<Str8>you<Str1> <Str6> an <EVictim><Str3><Str5>.",
+        else
+            TPrint(e,"<Str8>you<Str1> <Str6> an <EVictim><Str3><Str5>.",
             "<Str8>a <EActor><Str2> <Str7> you<Str4><Str5>.",
             "<Str8>a <EActor><Str2> <Str7> an <EVictim><Str4><Str5>.",
             e.isHit ? "" : " try to",
@@ -8267,66 +8237,66 @@ SkipDamage:
             Lookup(AttkVerbs1,e.AType),
             Lookup(e.isHit ? AttkVerbs2 : AttkVerbs1,e.AType),
             (const char*)prelude);
-      break;
+        break;
     case A_TENT:
-      TPrint(e,"<Str8>you<Str1> <Str6> an <EVictim> with your tentacles<Str3><Str5>.",
-          "<Str8>a <EActor><Str2> <Str7> you with <his:EActor> tentacles<Str4><Str5>.",
-          "<Str8>a <EActor><Str2> <Str7> an <EVictim> with <his:EActor> tentacles<Str4><Str5>.",
-          e.isHit ? "" : " try to",
-          e.isHit ? "" : " tries to",
-          e.isHit ? "" : ", but miss",
-          e.isHit ? "" : ", but misses",
-          e.isWildMiss ? " wildly" : "",
-          "snare",
-          e.isHit ? "snares" : "snare",
-          (const char*)prelude);
-      break;
+        TPrint(e,"<Str8>you<Str1> <Str6> an <EVictim> with your tentacles<Str3><Str5>.",
+            "<Str8>a <EActor><Str2> <Str7> you with <his:EActor> tentacles<Str4><Str5>.",
+            "<Str8>a <EActor><Str2> <Str7> an <EVictim> with <his:EActor> tentacles<Str4><Str5>.",
+            e.isHit ? "" : " try to",
+            e.isHit ? "" : " tries to",
+            e.isHit ? "" : ", but miss",
+            e.isHit ? "" : ", but misses",
+            e.isWildMiss ? " wildly" : "",
+            "snare",
+            e.isHit ? "snares" : "snare",
+            (const char*)prelude);
+        break;
     case A_SUND:
-      TPrint(e,"<Str8>you<Str1> <Str6> the <EVictim>'s <EItem2><Str3><Str5>.",
-          "<Str8>a <EActor><Str2> <Str7> your <EItem2><Str4><Str5>.",
-          "<Str8>a <EActor><Str2> <Str7> an <EVictim>'s <EItem2><Str4><Str5>.",
-          e.isHit ? "" : " try to",
-          e.isHit ? "" : " tries to",
-          e.isHit ? "" : ", but miss",
-          e.isHit ? "" : ", but misses",
-          e.isWildMiss ? " wildly" : "",
-          "strike",
-          e.isHit ? "strikes" : "strike",
-          (const char*)prelude);
-      break;
+        TPrint(e,"<Str8>you<Str1> <Str6> the <EVictim>'s <EItem2><Str3><Str5>.",
+            "<Str8>a <EActor><Str2> <Str7> your <EItem2><Str4><Str5>.",
+            "<Str8>a <EActor><Str2> <Str7> an <EVictim>'s <EItem2><Str4><Str5>.",
+            e.isHit ? "" : " try to",
+            e.isHit ? "" : " tries to",
+            e.isHit ? "" : ", but miss",
+            e.isHit ? "" : ", but misses",
+            e.isWildMiss ? " wildly" : "",
+            "strike",
+            e.isHit ? "strikes" : "strike",
+            (const char*)prelude);
+        break;
     case A_DEQU: 
     case A_AURA:
     case A_ALSO:
     case A_PROX:
     case A_CPRX:
-      switch(e.DType) {
+        switch(e.DType) {
         case AD_FIRE:
-          VPrint(e,"Fire sears you!","Fire sears the <EVictim>!"); 
-          break;
+            VPrint(e,"Fire sears you!","Fire sears the <EVictim>!"); 
+            break;
         case AD_COLD:
-          VPrint(e,"Frost chills you!","Frost chills the <EVictim>!"); 
-          break;
+            VPrint(e,"Frost chills you!","Frost chills the <EVictim>!"); 
+            break;
         case AD_HOLY:
-          if (e.aDmg)
-            VPrint(e,"Holy purity sears you!","Holy purity sears the <EVictim>!"); 
-          break;
+            if (e.aDmg)
+                VPrint(e,"Holy purity sears you!","Holy purity sears the <EVictim>!"); 
+            break;
         case AD_ACID:
-          VPrint(e,"Acid splashes you!","Acid splashes the <EVictim>!"); 
-          break;
+            VPrint(e,"Acid splashes you!","Acid splashes the <EVictim>!"); 
+            break;
         case AD_ELEC:
-          VPrint(e,"Lightning zaps you!","Lightning zaps the <EVictim>!"); 
-          break;
+            VPrint(e,"Lightning zaps you!","Lightning zaps the <EVictim>!"); 
+            break;
         case AD_EVIL:
-          if (e.aDmg)
-            VPrint(e,"Dark power burns you!","Dark power burns the <EVictim>!"); 
+            if (e.aDmg)
+                VPrint(e,"Dark power burns you!","Dark power burns the <EVictim>!"); 
         case AD_SONI: 
-          if (e.aDmg)
-            VPrint(e,"Sonic vibrations strike you!","Sonic vibrations strike the <EVictim>!"); 
-          break;
-          /* Other auras, such as AD_SOAK and AD_DREX, have special messages
-             printed in the damage section. */
-      }
-      break;
+            if (e.aDmg)
+                VPrint(e,"Sonic vibrations strike you!","Sonic vibrations strike the <EVictim>!"); 
+            break;
+            /* Other auras, such as AD_SOAK and AD_DREX, have special messages
+            printed in the damage section. */
+        }
+        break;
     case A_WRAP:
     case A_CRUS:
     case A_REND:
@@ -8335,68 +8305,70 @@ SkipDamage:
     case A_TRIP:
     case A_DISA:
     case A_THRO:          
-      TPrint(e,"<Str7>you<Str1> <Str5> an <EVictim><Str3>.",
-          "<Str7>a <EActor><Str2> <Str6> you<Str4>.",
-          "<Str7>a <EActor><Str2> <Str6> an <EVictim><Str4>.",
-          (e.isHit && !e.Resist) ? "" : " try to",
-          (e.isHit && !e.Resist) ? "" : " tries to",
-          (e.isHit && !e.Resist) ? "" : ", but fail",
-          (e.isHit && !e.Resist) ? "" : ", but fails",
-          Lookup(AttkVerbs1,e.AType),
-          Lookup((e.isHit && !e.Resist) ? AttkVerbs2 : AttkVerbs1,e.AType),
-          (const char*)prelude);
-      break;
+        TPrint(e,"<Str7>you<Str1> <Str5> an <EVictim><Str3>.",
+            "<Str7>a <EActor><Str2> <Str6> you<Str4>.",
+            "<Str7>a <EActor><Str2> <Str6> an <EVictim><Str4>.",
+            (e.isHit && !e.Resist) ? "" : " try to",
+            (e.isHit && !e.Resist) ? "" : " tries to",
+            (e.isHit && !e.Resist) ? "" : ", but fail",
+            (e.isHit && !e.Resist) ? "" : ", but fails",
+            Lookup(AttkVerbs1,e.AType),
+            Lookup((e.isHit && !e.Resist) ? AttkVerbs2 : AttkVerbs1,e.AType),
+            (const char*)prelude);
+        break;
     case A_HURL:
-      TPrint(e,"<Str2>you throw <str3>, <Str1>ing the <EVictim>.",
-          "<Str2>a <EActor> throws <str3>, <Str1>ing you.",
-          "<Str2>a <EActor> throws <str3>, <Str1>ing a <EVictim>.",
-          result, (const char*)prelude,
-          (const char*)e.EItem2->Name(NA_A));
-      break;
+        TPrint(e,"<Str2>you throw <str3>, <Str1>ing the <EVictim>.",
+            "<Str2>a <EActor> throws <str3>, <Str1>ing you.",
+            "<Str2>a <EActor> throws <str3>, <Str1>ing a <EVictim>.",
+            result, (const char*)prelude,
+            (const char*)e.EItem2->Name(NA_A));
+        break;
     case A_SWNG:
     case A_THRU:
-      if (e.EVictim->HasMFlag(M_HUMANOID)) {
-        loc = !random(3) ? "high" : !random(2) ? "center" : "low";
-        TPrint(e,"<Str5>you <Str1> <Str4>, <Str3>ing the <EVictim><Str6>.",
-            "<Str5>a <EActor> <Str2> <Str4>, <Str3>ing you<Str6>.",
-            "<Str5>a <EActor> <Str2> <Str4>, <Str3>ing a <EVictim><Str6>.",
-            Lookup(AttkVerbs1,e.AType), Lookup(AttkVerbs2,e.AType), 
-            result, loc, (const char*)prelude, e.isWildMiss ? " wildly" : "");
-        break;
-      }    
-      /* NO BREAK HERE */
+        if (e.EVictim->HasMFlag(M_HUMANOID)) {
+            loc = !random(3) ? "high" : !random(2) ? "center" : "low";
+            TPrint(e,"<Str5>you <Str1> <Str4>, <Str3>ing the <EVictim><Str6>.",
+                "<Str5>a <EActor> <Str2> <Str4>, <Str3>ing you<Str6>.",
+                "<Str5>a <EActor> <Str2> <Str4>, <Str3>ing a <EVictim><Str6>.",
+                Lookup(AttkVerbs1,e.AType), Lookup(AttkVerbs2,e.AType), 
+                result, loc, (const char*)prelude, e.isWildMiss ? " wildly" : "");
+            break;
+        }    
+        /* NO BREAK HERE */
     default:
-      TPrint(e,"<Str4>you <Str1>, <Str3>ing the <EVictim>.",
-          "<Str4>a <EActor> <Str2>, <Str3>ing you.",
-          "<Str4>a <EActor> <Str2>, <Str3>ing a <EVictim>.",
-          Lookup(AttkVerbs1,e.AType), Lookup(AttkVerbs2,e.AType), 
-          result, (const char*)prelude);
-      break;
-  }
+        TPrint(e,"<Str4>you <Str1>, <Str3>ing the <EVictim>.",
+            "<Str4>a <EActor> <Str2>, <Str3>ing you.",
+            "<Str4>a <EActor> <Str2>, <Str3>ing a <EVictim>.",
+            Lookup(AttkVerbs1,e.AType), Lookup(AttkVerbs2,e.AType), 
+            result, (const char*)prelude);
+        break;
+    }
 
 SkipMainMessage:
+    e.EMap->PrintQueue(QUEUE_DAMAGE_MSG);
 
-  e.EMap->PrintQueue(QUEUE_DAMAGE_MSG);
-  if (e.EVictim && !e.Terse && !e.Absorb && !e.eID) {
-    if (e.isWImmune)
-      DPrint(e,"Your weapon fails to penetrate.",
-          "The <EActor>'s weapon fails to penetrate.");
-    if (e.actIllusion && !e.EActor->isShade() && !e.EActor->isRealTo(e.EVictim)) {
-      VPrint(e,"You ignore the illusion's attack.",
-               "The <EVictim> ignores the attack completely.");
-      e.EActor->DisbeliefCheck();
-      }
-    else if (e.Immune && e.EVictim->isCreature())
-      VPrint(e,"You are unaffected.","The <EVictim> seems unaffected.");
-    else if (e.Resist && e.DType != AD_DISA && e.DType != AD_TRIP &&
-        e.AType != A_ESCA)
-      VPrint(e,"You resist the effects.","The <EVictim> resists the effects.");
-  }
+    if (e.EVictim && !e.Terse && !e.Absorb && !e.eID) {
+        if (e.isWImmune)
+            DPrint(e,
+                "Your weapon fails to penetrate.",
+                "The <EActor>'s weapon fails to penetrate.");
+        if (e.actIllusion && !e.EActor->isShade() && !e.EActor->isRealTo(e.EVictim)) {
+            VPrint(e,
+                "You ignore the illusion's attack.",
+                "The <EVictim> ignores the attack completely.");
+            e.EActor->DisbeliefCheck();
+        } else if (e.Immune && e.EVictim->isCreature())
+            VPrint(e,
+                "You are unaffected.",
+                "The <EVictim> seems unaffected.");
+        else if (e.Resist && e.DType != AD_DISA && e.DType != AD_TRIP && e.AType != A_ESCA)
+            VPrint(e,
+                "You resist the effects.",
+                "The <EVictim> resists the effects.");
+    }
 
-
-
-  Silence = saveSil;
-  return DONE;
+    Silence = saveSil;
+    return DONE;
 }
 
 
