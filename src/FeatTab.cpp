@@ -842,7 +842,7 @@ struct FeatInfoStruct FeatInfo[] = {
     "A controlled spell that has a random effect (<9>polymorph self<7>, <9>monster "
     "summoning<7>, etc.) offers the caster a limited array of choices rather than " 
     "being completely random." },
-  { FT_CONSECRATE_SPELL, FF_META|FF_WIZARD, "Consecreate Spell",
+  { FT_CONSECRATE_SPELL, FF_META|FF_WIZARD, "Consecrate Spell",
     "A consecrated spell inflicts half holy damage and half damage "
       "of whatever type it normally does, making it useful against evil "
       "creatures who resist elemental damage types." ,
