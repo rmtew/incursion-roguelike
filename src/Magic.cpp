@@ -847,348 +847,316 @@ NextSegment:
       if (!e.isSomething && !(r == DONE) && !FieldDone)
           goto Nothing;
       return r;
-  }
+}
 
-EvReturn Magic::MagicStrike(EventInfo &e)
-  {
-    EvReturn r; bool nonPartialSave = false;
-    TEffect *te = TEFF(e.eID); uint32 save_fl;
-    int8 first_efNum = e.efNum; Creature *c;
+EvReturn Magic::MagicStrike(EventInfo &e) {
+    int8 first_efNum = e.efNum;
+    uint32 save_fl;
+    bool nonPartialSave = false;
+    Creature *c;
+    EvReturn r;
     Item *it;
+    TEffect *te = TEFF(e.eID);
 
-    
-    if (te->HasFlag(EF_ATTACK) && e.AType != A_SPEL)
-      {
+    if (te->HasFlag(EF_ATTACK) && e.AType != A_SPEL) {
         e.AType   = A_SPEL;
         /* This is a kludge to represent the fact that we can't get
-           Base Attack Bonus easily -- it should be the character's
-           BAB that's applied here. */
+        Base Attack Bonus easily -- it should be the character's
+        BAB that's applied here. */
         e.vHit    = (int8)e.EActor->GetBAB(S_ARCHERY);
         e.vDef    = (int8)e.EVictim->GetAttr(A_DEF);
         e.vThreat = 20;
         return ReThrow(EV_STRIKE,e);
-      }
+    }
 
-   e.Resist = false;
-   e.Immune = false;
-   /* Kludge to prevent multiple EV_MAGIC_HIT messages 
-      for one target; see Resource::Event. */
-   e.MHMessageDone = false;
-   e.BlastMessageDone = false;
+    e.Resist = false;
+    e.Immune = false;
+    /* Kludge to prevent multiple EV_MAGIC_HIT messages for one target; see Resource::Event. */
+    e.MHMessageDone = false;
+    e.BlastMessageDone = false;
 
-    /* At this point we need to have one concrete target that we
-       are effecting, even if it's the caster. Thus, ensure that
-       we have a valid EVictim. */
+    /* At this point we need to have one concrete target that we are effecting, even if it's the caster. Thus, ensure that we have a valid EVictim. */
     if (!e.ETarget)
-      e.ETarget = e.EActor;
+        e.ETarget = e.EActor;
 
     if (e.eID && TEFF(e.eID)->HasFlag(EF_GAZE)) {
-      if (e.EVictim->HasStati(GAZE_REFLECTION,GR_IMMUNE))
-        e.Immune = true;
-      else if (e.EVictim->HasStati(GAZE_REFLECTION,GR_REFLECT))
-        {
-          e.EActor->IDPrint("Your gaze is reflected back at you!",
-            "The <Obj>'s gaze is reflected back at <him:Obj>!", e.EActor);
-          e.EVictim = e.EActor;
+        if (e.EVictim->HasStati(GAZE_REFLECTION,GR_IMMUNE))
+            e.Immune = true;
+        else if (e.EVictim->HasStati(GAZE_REFLECTION,GR_REFLECT)) {
+            e.EActor->IDPrint("Your gaze is reflected back at you!",
+                "The <Obj>'s gaze is reflected back at <him:Obj>!", e.EActor);
+            e.EVictim = e.EActor;
         }
-      }
+    }
 
-    if (e.ETarget->isCreature() && !TEFF(e.eID)->HasSource(AI_PSIONIC) &&
-                                   !TEFF(e.eID)->HasFlag(EF_MUNDANE))
-        if ((e.EActor->isHostileTo(e.EVictim) ||
-            e.EVictim->isHostileTo(e.EActor)) &&
-            e.EVictim->GetAttr(A_MR) > 0) { 
-          int roll = random(100) + 1; 
-          int actor_side = 
-            (roll + e.EActor->ChallengeRating() * 2) +
-            (e.EActor->HasFeat(FT_SPELL_PENETRATION) ? 20 : 0);
-          bool bypass_mr = 
-            actor_side >
-            (e.EVictim->GetAttr(A_MR) + e.EVictim->ChallengeRating() * 2);
+    if (e.ETarget->isCreature() && !TEFF(e.eID)->HasSource(AI_PSIONIC) && !TEFF(e.eID)->HasFlag(EF_MUNDANE))
+        if ((e.EActor->isHostileTo(e.EVictim) || e.EVictim->isHostileTo(e.EActor)) && e.EVictim->GetAttr(A_MR) > 0) { 
+            int roll = random(100) + 1; 
+            int actor_side = (roll + e.EActor->ChallengeRating() * 2) + (e.EActor->HasFeat(FT_SPELL_PENETRATION) ? 20 : 0);
+            bool bypass_mr = actor_side > (e.EVictim->GetAttr(A_MR) + e.EVictim->ChallengeRating() * 2);
 
-          Term * TActor = e.EActor->ShowCombatNumbers();
-          Term * TVictim = e.EVictim->ShowCombatNumbers();
+            Term * TActor = e.EActor->ShowCombatNumbers();
+            Term * TVictim = e.EVictim->ShowCombatNumbers();
 
-          if (TActor || TVictim) { 
-            String smr;
-            smr = XPrint((const char *)Format("<10>Magic Res:<7> 1d100 (%d) %+d%s = %d vs %d %+d = %d [%s]",
-                roll, 
-                e.EActor->ChallengeRating() * 2,
-                (e.EActor->HasFeat(FT_SPELL_PENETRATION) ?  " +20 feat" : ""),
-                actor_side, 
-                e.EVictim->GetAttr(A_MR),
-                e.EVictim->ChallengeRating() * 2,
-                e.EVictim->GetAttr(A_MR) + e.EVictim->ChallengeRating() * 2,
-                bypass_mr ? "bypassed" : "resisted"));
-            if (TActor) {
-              TActor->SetWin(WIN_NUMBERS3);
-              TActor->Clear();
-              TActor->Write(smr);
-              if (theGame->Opt(OPT_STORE_ROLLS))
-                TActor->AddMessage(smr);
-              } 
-            if (TVictim) {
-              TVictim->SetWin(WIN_NUMBERS3);
-              TVictim->Clear();
-              TVictim->Write(smr);
-              if (theGame->Opt(OPT_STORE_ROLLS))
-                TVictim->AddMessage(smr);
-            } 
-          }
+            if (TActor || TVictim) { 
+                String smr;
+                smr = XPrint((const char *)Format("<10>Magic Res:<7> 1d100 (%d) %+d%s = %d vs %d %+d = %d [%s]",
+                    roll, 
+                    e.EActor->ChallengeRating() * 2,
+                    (e.EActor->HasFeat(FT_SPELL_PENETRATION) ?  " +20 feat" : ""),
+                    actor_side, 
+                    e.EVictim->GetAttr(A_MR),
+                    e.EVictim->ChallengeRating() * 2,
+                    e.EVictim->GetAttr(A_MR) + e.EVictim->ChallengeRating() * 2,
+                    bypass_mr ? "bypassed" : "resisted"));
+                if (TActor) {
+                    TActor->SetWin(WIN_NUMBERS3);
+                    TActor->Clear();
+                    TActor->Write(smr);
+                    if (theGame->Opt(OPT_STORE_ROLLS))
+                        TActor->AddMessage(smr);
+                } 
+                if (TVictim) {
+                    TVictim->SetWin(WIN_NUMBERS3);
+                    TVictim->Clear();
+                    TVictim->Write(smr);
+                    if (theGame->Opt(OPT_STORE_ROLLS))
+                        TVictim->AddMessage(smr);
+                } 
+            }
 
-          if (!bypass_mr)  
-          e.MagicRes = true;
-
+            if (!bypass_mr)  
+                e.MagicRes = true;
         } 
 
-      if (e.effIllusion)
-        {
-          uint16 saveFlags, ocast; 
-          Creature *Illusionist;
-          
-          if (e.EActor->m)
+    if (e.effIllusion) {
+        uint16 saveFlags, ocast; 
+        Creature *Illusionist;
+
+        if (e.EActor->m)
             e.EActor->m->SetQueue(QUEUE_DISBELIEF_MSG);
-          
-          if (!e.ETarget->isCreature())
-            { e.effDisbelieved = true; goto Disbelieved; }
-          if (e.EVictim->HasStati(TRUE_SIGHT))
-            { e.effDisbelieved = true; goto Disbelieved; }
-          if (e.EVictim->HasMFlag(M_MINDLESS))
-            { e.effDisbelieved = true; goto Disbelieved; }
-          
-          if (!(e.illFlags & IL_IMPROVED))
+
+        if (!e.ETarget->isCreature())
+        { e.effDisbelieved = true; goto Disbelieved; }
+        if (e.EVictim->HasStati(TRUE_SIGHT))
+        { e.effDisbelieved = true; goto Disbelieved; }
+        if (e.EVictim->HasMFlag(M_MINDLESS))
+        { e.effDisbelieved = true; goto Disbelieved; }
+
+        if (!(e.illFlags & IL_IMPROVED))
             if (e.EVictim->HasAbility(CA_SHARP_SENSES) ||
-                  e.EVictim->HasAbility(CA_TREMORSENSE)  ||
-                  e.EVictim->HasAbility(CA_BLINDSIGHT) ||
-                  e.EVictim->HasAbility(CA_SCENT) )
-              { e.effDisbelieved = true; goto Disbelieved; }
-          if (!e.EActor->isRealTo(e.EVictim))
+                e.EVictim->HasAbility(CA_TREMORSENSE)  ||
+                e.EVictim->HasAbility(CA_BLINDSIGHT) ||
+                e.EVictim->HasAbility(CA_SCENT) )
             { e.effDisbelieved = true; goto Disbelieved; }
-              
-          saveFlags = SA_ILLUS | SA_MAGIC;
-          if (TEFF(e.ill_eID)->HasSource(AI_WIZARDRY) ||
-              TEFF(e.ill_eID)->HasSource(AI_SORCERY) ||
-              TEFF(e.ill_eID)->HasSource(AI_THEURGY) ||
-              TEFF(e.ill_eID)->HasSource(AI_BARDIC) ||
-              TEFF(e.ill_eID)->HasSource(AI_WITCHCRAFT) )
+        if (!e.EActor->isRealTo(e.EVictim))
+        { e.effDisbelieved = true; goto Disbelieved; }
+
+        saveFlags = SA_ILLUS | SA_MAGIC;
+        if (TEFF(e.ill_eID)->HasSource(AI_WIZARDRY) ||
+            TEFF(e.ill_eID)->HasSource(AI_SORCERY) ||
+            TEFF(e.ill_eID)->HasSource(AI_THEURGY) ||
+            TEFF(e.ill_eID)->HasSource(AI_BARDIC) ||
+            TEFF(e.ill_eID)->HasSource(AI_WITCHCRAFT) )
             saveFlags |= SA_SPELLS;
-          if (TEFF(e.ill_eID)->HasFlag(EF_EVIL))
+        if (TEFF(e.ill_eID)->HasFlag(EF_EVIL))
             saveFlags |= SA_EVIL;
-          if (TEFF(e.ill_eID)->Schools & SC_NEC)
+        if (TEFF(e.ill_eID)->Schools & SC_NEC)
             saveFlags |= SA_NECRO;
-          
-          Illusionist = e.EActor;
-          while (Illusionist && Illusionist->HasStati(ILLUSION))
+
+        Illusionist = e.EActor;
+        while (Illusionist && Illusionist->HasStati(ILLUSION))
             Illusionist = (Creature*) Illusionist->GetStatiObj(ILLUSION);
-          if (Illusionist->isPlayer() && !(e.illFlags & IL_SHADE))
+        if (Illusionist->isPlayer() && !(e.illFlags & IL_SHADE))
             ocast = -theGame->Opt(OPT_OVERCAST)*2;
-          else
+        else
             ocast = 0; 
-                        
-          if (e.EVictim->SavingThrow(WILL,10 + (Illusionist ? Illusionist->
-                SkillLevel(SK_ILLUSION) / 2 : 10) + ocast + (e.isArcaneTrickery ? 8 : 0)
-                + (e.EActor->HasStati(SCHOOL_FOCUS,SC_ILL) ? 2 : 0), saveFlags))
-            {
-              e.EActor->IPrint("The <Obj> disbelieves!", e.EVictim);
-              e.effDisbelieved = true;
-              goto DisbeliefMessageDone;
-            }
-          
-          Disbelieved:
-          if (e.effDisbelieved && e.EVictim->isCreature())
-            e.EActor->IPrint("The <Obj> sees through your illusion automatically.", e.EVictim);
-          else if (e.effDisbelieved)
-            APrint(e,"The <Obj> is unaffected.", e.EVictim);
-          DisbeliefMessageDone:
-          if (e.EActor->m)
-            e.EActor->m->UnsetQueue(QUEUE_DISBELIEF_MSG);
-          
-          
-        }            
 
-      bool doResistDeath;
-      doResistDeath = false;
-      if (TEFF(e.eID)->HasFlag(EF_DEATH))
-        if (e.EVictim && e.EVictim->isCreature())
-          if (e.EVictim->HasFeat(FT_RESIST_DEATH))
-            {
-              int16 count;
-              count = e.EVictim->GetStatiMag(TRIED,FT_RESIST_DEATH);
-              if (count < e.EVictim->Mod(A_CON)*2)
-                {
-                  e.EVictim->IncStatiMag(TRIED,SS_MISC,FT_RESIST_DEATH,NULL,1);
-                  doResistDeath = true;
-                  TPrint(e,"The <EVictim> shrugs off your death magic with sheer toughness!",
-                    "You shrug off the <EActor>'s death magic with sheer toughness! (<Num> left).", 
-                           NULL, max(0,e.EVictim->Mod(A_CON)*2 - (count+1)));
-                }
-            }
-        
-    do {
-      /* Set EMagic to the current effect component */
-      e.EMagic = te->Vals(e.efNum);
-
-      if (e.isActivation != te->HasFlag(EF_ACTIVATE+min(e.efNum,4)))
-        goto SkipSegment;
-
-      e.Immune = e.MagicRes || doResistDeath || !isTarget(e,e.ETarget);
-
-            
-
-      /* Changed to accomidate Magic C vs. E */
-      if (e.Immune)
-        goto SkipSegment;
- 
-      CalcEffect(e);
-
-      /* Handle DType & Transmute Spell */
-      if (e.EMagic->eval == EA_BLAST) {
-        if (!(e.MM & MM_TRANSMUTE) || !is_elemental_dmg(e.EMagic->xval))
-          e.DType = e.EMagic->xval;
+        if (e.EVictim->SavingThrow(WILL,10 + (Illusionist ? Illusionist->SkillLevel(SK_ILLUSION) / 2 : 10)
+            + ocast + (e.isArcaneTrickery ? 8 : 0) + (e.EActor->HasStati(SCHOOL_FOCUS,SC_ILL) ? 2 : 0), saveFlags))
+        {
+            e.EActor->IPrint("The <Obj> disbelieves!", e.EVictim);
+            e.effDisbelieved = true;
+            goto DisbeliefMessageDone;
         }
 
-      /* We make a new saving throw for a given effect component if and
-         only if A) it's the first component in this strike, or B) if it
-         has a different sval from the component immediately before it. */      
-      if (e.EMagic->aval != AR_POISON && e.EMagic->aval != AR_DISEASE)
-        if (!e.Resist && ((!te->HasFlag(EF_PARTIAL)) || e.EMagic->eval != EA_BLAST))
-          if (e.ETarget->isCreature() && e.EActor != e.EVictim)
-            if ((e.efNum == first_efNum) || (te->Vals(e.efNum-1)->sval != 
-                                               e.EMagic->sval)) 
-              {
-                save_fl = SA_MAGIC | SA_SPELLS;
-                if (te->HasFlag(EF_DEATH))
-                  save_fl |= SA_DEATH;
-                if (e.EMagic->eval == EA_INFLICT && e.EMagic->xval == PARALYSIS)
-                  save_fl |= SA_PARA;
-                if (te->HasFlag(EF_EVIL) || e.EActor->isMType(MA_EVIL))
-                  save_fl |= SA_EVIL;
-                if (te->Schools & SC_NEC)
-                  save_fl |= SA_NECRO;
-                if (te->Schools & SC_ENC)
-                  save_fl |= SA_ENCH;
-                if (te->Schools & SC_ILL)
-                  save_fl |= SA_ILLUS;
-                if (e.EMagic->eval == EA_INFLICT && e.EMagic->xval == CONFUSED)
-                  save_fl |= SA_CONF;
-                if (e.EMagic->eval == EA_INFLICT && e.EMagic->xval == CHARMED &&
-                       e.EMagic->yval == CH_DOMINATE)
-                  save_fl |= SA_COMP;
-                if (e.EMagic->eval == EA_INFLICT && e.EMagic->xval == STONING)
-                  save_fl |= SA_PETRI;
-                if (e.EMagic->eval == EA_INFLICT && e.EMagic->xval == AFRAID)
-                  save_fl |= SA_FEAR;
-                if (TEFF(e.eID)->HasFlag(EF_FEAR))
-                  save_fl |= SA_FEAR;
+Disbelieved:
+        if (e.effDisbelieved && e.EVictim->isCreature())
+            e.EActor->IPrint("The <Obj> sees through your illusion automatically.", e.EVictim);
+        else if (e.effDisbelieved)
+            APrint(e,"The <Obj> is unaffected.", e.EVictim);
+DisbeliefMessageDone:
+        if (e.EActor->m)
+            e.EActor->m->UnsetQueue(QUEUE_DISBELIEF_MSG);
+    }            
 
-                e.Resist = false;
-                if (e.EMagic->sval != NOSAVE && e.EMagic->sval < 10 &&
-                    !(e.EVictim->HasStati(ANIMAL_COMPANION,TA_LEADER,e.EActor)))
-                  if (e.EVictim->SavingThrow(e.EMagic->sval, e.saveDC, save_fl))
-                    {
-                      e.Resist = true;
-                      nonPartialSave = true;
+    bool doResistDeath;
+    doResistDeath = false;
+    if (TEFF(e.eID)->HasFlag(EF_DEATH))
+        if (e.EVictim && e.EVictim->isCreature())
+            if (e.EVictim->HasFeat(FT_RESIST_DEATH)) {
+                int16 count;
+                count = e.EVictim->GetStatiMag(TRIED,FT_RESIST_DEATH);
+                if (count < e.EVictim->Mod(A_CON)*2) {
+                    e.EVictim->IncStatiMag(TRIED,SS_MISC,FT_RESIST_DEATH,NULL,1);
+                    doResistDeath = true;
+                    TPrint(e,"The <EVictim> shrugs off your death magic with sheer toughness!",
+                        "You shrug off the <EActor>'s death magic with sheer toughness! (<Num> left).", 
+                        NULL, max(0,e.EVictim->Mod(A_CON)*2 - (count+1)));
+                }
+            }
+
+    do {
+        /* Set EMagic to the current effect component */
+        e.EMagic = te->Vals(e.efNum);
+
+        if (e.isActivation != te->HasFlag(EF_ACTIVATE+min(e.efNum,4)))
+            goto SkipSegment;
+
+        e.Immune = e.MagicRes || doResistDeath || !isTarget(e,e.ETarget);
+
+        /* Changed to accomidate Magic C vs. E */
+        if (e.Immune)
+            goto SkipSegment;
+
+        CalcEffect(e);
+
+        /* Handle DType & Transmute Spell */
+        if (e.EMagic->eval == EA_BLAST)
+            if (!(e.MM & MM_TRANSMUTE) || !is_elemental_dmg(e.EMagic->xval))
+                e.DType = e.EMagic->xval;
+
+        /* We make a new saving throw for a given effect component if and
+        only if A) it's the first component in this strike, or B) if it
+        has a different sval from the component immediately before it. */      
+        if (e.EMagic->aval != AR_POISON && e.EMagic->aval != AR_DISEASE)
+            if (!e.Resist && ((!te->HasFlag(EF_PARTIAL)) || e.EMagic->eval != EA_BLAST))
+                if (e.ETarget->isCreature() && e.EActor != e.EVictim)
+                    if ((e.efNum == first_efNum) || (te->Vals(e.efNum-1)->sval != e.EMagic->sval)) {
+                        save_fl = SA_MAGIC | SA_SPELLS;
+                        if (te->HasFlag(EF_DEATH))
+                            save_fl |= SA_DEATH;
+                        if (e.EMagic->eval == EA_INFLICT && e.EMagic->xval == PARALYSIS)
+                            save_fl |= SA_PARA;
+                        if (te->HasFlag(EF_EVIL) || e.EActor->isMType(MA_EVIL))
+                            save_fl |= SA_EVIL;
+                        if (te->Schools & SC_NEC)
+                            save_fl |= SA_NECRO;
+                        if (te->Schools & SC_ENC)
+                            save_fl |= SA_ENCH;
+                        if (te->Schools & SC_ILL)
+                            save_fl |= SA_ILLUS;
+                        if (e.EMagic->eval == EA_INFLICT && e.EMagic->xval == CONFUSED)
+                            save_fl |= SA_CONF;
+                        if (e.EMagic->eval == EA_INFLICT && e.EMagic->xval == CHARMED &&
+                            e.EMagic->yval == CH_DOMINATE)
+                            save_fl |= SA_COMP;
+                        if (e.EMagic->eval == EA_INFLICT && e.EMagic->xval == STONING)
+                            save_fl |= SA_PETRI;
+                        if (e.EMagic->eval == EA_INFLICT && e.EMagic->xval == AFRAID)
+                            save_fl |= SA_FEAR;
+                        if (TEFF(e.eID)->HasFlag(EF_FEAR))
+                            save_fl |= SA_FEAR;
+
+                        e.Resist = false;
+                        if (e.EMagic->sval != NOSAVE && e.EMagic->sval < 10 && !(e.EVictim->HasStati(ANIMAL_COMPANION,TA_LEADER,e.EActor)))
+                            if (e.EVictim->SavingThrow(e.EMagic->sval, e.saveDC, save_fl)) {
+                                e.Resist = true;
+                                nonPartialSave = true;
+                            }
                     }
-              }
 
-
-        
         /* If we haven't resisted the effect, or we did resist but still
-           need to apply half damage, throw the effect. */
+        need to apply half damage, throw the effect. */
         if (!e.Immune)
-          if ((!e.Resist) || (te->HasFlag(EF_PARTIAL) && 
-          // ww: previously breath weapons never did any damage -- they
-          // have no EMagic field
-              (!e.EMagic || e.EMagic->eval == EA_BLAST)))
+            if ((!e.Resist) || (te->HasFlag(EF_PARTIAL) && 
+                // ww: previously breath weapons never did any damage -- they
+                // have no EMagic field
+                (!e.EMagic || e.EMagic->eval == EA_BLAST)))
             {
-              r = ReThrow(EV_MAGIC_HIT,e);
-              if (r == ABORT) 
-                return ABORT;
-              if (!e.Immune)
-                e.notFullyImmune = true;
+                r = ReThrow(EV_MAGIC_HIT,e);
+                if (r == ABORT) 
+                    return ABORT;
+                if (!e.Immune)
+                    e.notFullyImmune = true;
             }   
 
-        
-        SkipSegment:
+SkipSegment:
         /* If there's another effect component right after this one, and
-           it has the same aval as this one, perform it as well immediately. */
+        it has the same aval as this one, perform it as well immediately. */
         if (te->Vals(e.efNum+1) && (te->Vals(e.efNum+1)->aval == e.EMagic->aval))
-          e.efNum++;
+            e.efNum++;
         else
-          break;
-          
-      }
-    while (1);
+            break;
+    } while (1);
 
     /* If the target was immune, skip over all the segments that have the same
-       area as this one. */
+    area as this one. */
     while(te->Vals(e.efNum+1) && te->Vals(e.efNum+1)->aval == te->Vals(e.efNum)->aval)
-      e.efNum++;
+        e.efNum++;
 
     /* We do not print the "unaffected" message when:
-       1. The target is not immune. (duh)
-       2. The target was affected by a different segment.
-       3. The target is not a creature, and the spell has an area.
-       4. The target is a creature, and the spell affects items only.
-       5. The target is the caster, and the spell has an area.
-       6. The spell is going to affect the target's equipment.
+    1. The target is not immune. (duh)
+    2. The target was affected by a different segment.
+    3. The target is not a creature, and the spell has an area.
+    4. The target is a creature, and the spell affects items only.
+    5. The target is the caster, and the spell has an area.
+    6. The spell is going to affect the target's equipment.
     */
-    
+
     if (e.EActor->m)
-      e.EActor->m->PrintQueue(QUEUE_DISBELIEF_MSG);
-    
+        e.EActor->m->PrintQueue(QUEUE_DISBELIEF_MSG);
+
     if (e.Immune && !e.notFullyImmune)
-      if (e.EVictim->isCreature() || te->Vals(e.efNum)->aval == 0)
-        if (e.EVictim != e.EActor || te->Vals(e.efNum)->aval == 0)
-          if (e.EVictim->isItem() || !TEFF(e.eID)->HasFlag(EF_ITEMS_ONLY))
-            if (!(te->Vals(e.efNum)->qval & Q_EQU))
-              {
-                VPrint(e,"You are unaffected.", 
-                  "The <EVictim> is unaffected.");
-                goto SkipResistMsg;
-              }
+        if (e.EVictim->isCreature() || te->Vals(e.efNum)->aval == 0)
+            if (e.EVictim != e.EActor || te->Vals(e.efNum)->aval == 0)
+                if (e.EVictim->isItem() || !TEFF(e.eID)->HasFlag(EF_ITEMS_ONLY))
+                    if (!(te->Vals(e.efNum)->qval & Q_EQU)) {
+                        VPrint(e,"You are unaffected.", 
+                            "The <EVictim> is unaffected.");
+                        goto SkipResistMsg;
+                    }
+
     if (nonPartialSave)
-      if (!(e.EVictim->Flags & F_DELETE))
-        {
-          TPrint(e,"The <EVictim> resists your magic.",
-            "You resist the <EActor>'s magic.",NULL);
+        if (!(e.EVictim->Flags & F_DELETE)) {
+            TPrint(e,"The <EVictim> resists your magic.",
+                "You resist the <EActor>'s magic.",NULL);
         }
-    SkipResistMsg:
+SkipResistMsg:
 
     if (TEFF(e.eID)->ef.qval & Q_EQU)
-        if (e.EVictim->isCreature()){
-          // ww: as with EV_DAMAGE/AD_RUST, if you are polymorphed this won't
-          // hurt merged equipment
-          for (it = e.EVictim->FirstInv(); it; it = e.EVictim->NextInv()) {
-            if (it->GetParent() == e.EVictim) /* Exposed Equipment Only */
-              {
-                bool goodSlot = false;
-                for (int s =0; s<SL_LAST; s++)
-                  if (e.EVictim->InSlot(s) == it)
-                    goodSlot = true;
-                if (goodSlot) { 
-                  EventInfo eCopy = e; 
-                  eCopy.ETarget = it;
-                  int res = ReThrow(EV_DAMAGE,eCopy);
+        if (e.EVictim->isCreature()) {
+            // ww: as with EV_DAMAGE/AD_RUST, if you are polymorphed this won't
+            // hurt merged equipment
+            for (it = e.EVictim->FirstInv(); it; it = e.EVictim->NextInv()) {
+                if (it->GetParent() == e.EVictim) /* Exposed Equipment Only */ {
+                    bool goodSlot = false;
+                    for (int s =0; s<SL_LAST; s++)
+                        if (e.EVictim->InSlot(s) == it)
+                            goodSlot = true;
+                    if (goodSlot) { 
+                        EventInfo eCopy = e; 
+                        eCopy.ETarget = it;
+                        int res = ReThrow(EV_DAMAGE,eCopy);
+                    }
                 }
-              }
-          }
-      }
-    if (e.EMagic->aval == AR_BALL || TEFF(e.eID)->HasFlag(EF_HIT_MOUNT))
-      if (e.EVictim->HasStati(MOUNTED))
-        {
-          c = e.EVictim;
-          e.ETarget = c->GetStatiObj(MOUNTED);
-          ReThrow(EV_MAGIC_STRIKE,e);
-          e.EVictim = c;
+            }
         }
-    if (e.EMap && e.AType != A_TUCH)
-      e.EMap->PrintQueue(QUEUE_DAMAGE_MSG);    
-    return DONE;
-  }
 
-EvReturn Magic::MagicHit(EventInfo &e)
-  {
+    if (e.EMagic->aval == AR_BALL || TEFF(e.eID)->HasFlag(EF_HIT_MOUNT))
+        if (e.EVictim->HasStati(MOUNTED)) {
+            c = e.EVictim;
+            e.ETarget = c->GetStatiObj(MOUNTED);
+            ReThrow(EV_MAGIC_STRIKE,e);
+            e.EVictim = c;
+        }
+
+    if (e.EMap && e.AType != A_TUCH)
+        e.EMap->PrintQueue(QUEUE_DAMAGE_MSG);    
+    return DONE;
+}
+
+EvReturn Magic::MagicHit(EventInfo &e) {
     EvReturn r;       
 
     if (!e.EMagic)

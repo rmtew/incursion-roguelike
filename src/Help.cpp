@@ -2648,10 +2648,8 @@ String & Monster::Describe(Player *p)
       }
 
     for (i=0;i<NUM_TMON_STATI;i++)
-      if (tm->Stati[i].Nature == ADJUST_NAT &&
-          tm->Stati[i].Val == A_MR)
-          str += Format("It has %+d~ magic resistance. ",
-              tm->Stati[i].Val);
+      if (tm->Stati[i].Nature == ADJUST_NAT && tm->Stati[i].Val == A_MR)
+          str += Format("It has %+d~ magic resistance. ", tm->Stati[i].Val);
 
     lc = 0; 
     for (i=0;i<NUM_TMON_STATI;i++) {
@@ -3082,10 +3080,9 @@ String & Monster::Describe(Player *p)
             }
 
     for (i=0;i<NUM_TMON_STATI;i++)
-      if (tt->Stati[i].Nature == ADJUST_NAT &&
-          tt->Stati[i].Val == A_MR)
-          str += Format("It gains %+d~ magic resistance. ",
-              tt->Stati[i].Mag);
+      if (tt->Stati[i].Nature == ADJUST_NAT && tt->Stati[i].Val == A_MR)
+          str += Format("It gains %+d~ magic resistance. ", tt->Stati[i].Mag);
+
     lc = 0;
     for (i=0;i<NUM_TMON_STATI;i++)
       if (tt->Stati[i].Nature == SKILL_BONUS) {

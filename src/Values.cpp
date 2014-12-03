@@ -1296,17 +1296,18 @@ Restart:
                 continue;
             }
 
-            for (j = 0;j != BONUS_LAST; j++)
-                if (!(percent_attr(i) && bonus_is_mult(i,j)))
-                    Attr[i] += AttrAdj[i][j];
-
-            if (percent_attr(i))
+            if (percent_attr(i)) {
                 for (j=0; j != BONUS_LAST; j++)
                     if (bonus_is_mult(i, j)) {
                         Attr[i] = ((((Attr[i] * 5 + 100) * (AttrAdj[i][j] * 5 + 100)) / 100) - 100) / 5;
                         if (i == A_MOV && AttrAdj[i][j] <= -20 && !isPlayer())
                             isHalted = true;
                     }
+            } else {
+                for (j = 0;j != BONUS_LAST; j++)
+                    if (bonus_is_mult(i,j))
+                        Attr[i] += AttrAdj[i][j];
+            }
 
             Attr[A_CDEF] = Attr[A_DEF] -
                 (max(0,AttrAdj[A_DEF][BONUS_WEAPON]) + max(0,AttrAdj[A_DEF][BONUS_INSIGHT]) + max(0,AttrAdj[A_DEF][BONUS_DODGE]) + (HasFeat(FT_COMBAT_CASTING) ? 2 : 4));
