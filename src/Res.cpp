@@ -429,90 +429,89 @@ rID Game::GetItemID(int16 Purpose, int8 minlev, int8 maxlev, int8 IType)
     return Candidates[random(n)];
   }
 
-rID Game::GetMonID(int16 Purpose, int8 minlev, int8 maxlev,
-    int8 Depth, int32 MType)
-  {
-    int16 i,q,n,j,k, rarity; bool isListing;
-    /*while (((30 - Luck*3) > (random(100)+1)) && real_lev <= Level+3)
-      real_lev++;*/
+rID Game::GetMonID(int16 Purpose, int8 minlev, int8 maxlev, int8 Depth, int32 MType) {
+    int16 i,q,n,j,k, rarity;
+    bool isListing;
+
     isListing = false;
     if (Purpose >= PUR_LISTING) {
-      Purpose -= PUR_LISTING;
-      isListing = true;
-      }
-    Retry:
+        Purpose -= PUR_LISTING;
+        isListing = true;
+    }
+
+Retry:
     n = 0; 
     for (q=0;q!=1;q++) /* Only one Module at the moment */
-      for(i=0;i!=Modules[q]->szMon;i++)
-        {
-          rID mID = Modules[q]->MonsterID(i);
-          if (MType > 0 && MType < 100000  &&
+        for(i=0;i!=Modules[q]->szMon;i++) {
+            rID mID = Modules[q]->MonsterID(i);
+            if (MType > 0 && MType < 100000  &&
                 !Modules[q]->QMon[i].isMType(mID,MType))
-            continue;
-          /* Kludge for AcquisitionPrompt */
-          if (MType >= 100000 && ((Modules[q]->QMon[i].Image & 0xFF) != (MType-100000)))
-            continue;
-          if (Modules[q]->QMon[i].HasFlag(M_AQUATIC))
-            if (MType != MA_AQUATIC && Purpose != PUR_ANYMON)
-              continue;
-          if (Modules[q]->QMon[i].HasFlag(M_NOGEN) && Purpose != PUR_ANYMON)
-            continue;
-          if (Modules[q]->QMon[i].HasFlag(M_NOPOLY) && Purpose == PUR_POLY)
-            continue;
-          if (Modules[q]->QMon[i].HasFlag(M_UNIQUE) && (Purpose != PUR_DUNGEON)
-                                                    && (Purpose != PUR_ANYMON))
-            continue;
-          if (Modules[q]->QMon[i].CR > maxlev)
-            continue;
-          if (Modules[q]->QMon[i].CR < minlev)
-            continue;
-          if (Modules[q]->QMon[i].Depth > Depth)
-            continue;
-          if (Modules[q]->QMon[i].HasFlag(M_PLAYER) ||
-              Modules[q]->QMon[i].HasFlag(M_UNKNOWN))
-            continue;
-          if (!isListing) {
-            if (Modules[q]->QMon[i].HasFlag(M_VERY_RARE))
-              rarity = random(7) ? 0 : 1;
-            else if (Modules[q]->QMon[i].HasFlag(M_RARE))
-              rarity = random(3) ? 0 : 1;
-            else if (Modules[q]->QMon[i].HasFlag(M_UNCOMMON))
-              rarity = 3;
-            else if (Modules[q]->QMon[i].HasFlag(M_COMMON))
-              rarity = 7;
-            else
-              rarity = 1;
-            }
-          else
-            rarity = 1;
-          for (k=0;k!=rarity;k++) 
-            Candidates[n++] = Modules[q]->MonsterID(i);
+                continue;
+            /* Kludge for AcquisitionPrompt */
+            if (MType >= 100000 && ((Modules[q]->QMon[i].Image & 0xFF) != (MType-100000)))
+                continue;
+            if (Modules[q]->QMon[i].HasFlag(M_AQUATIC))
+                if (MType != MA_AQUATIC && Purpose != PUR_ANYMON)
+                    continue;
+            if (Modules[q]->QMon[i].HasFlag(M_NOGEN) && Purpose != PUR_ANYMON)
+                continue;
+            if (Modules[q]->QMon[i].HasFlag(M_NOPOLY) && Purpose == PUR_POLY)
+                continue;
+            if (Modules[q]->QMon[i].HasFlag(M_UNIQUE) && (Purpose != PUR_DUNGEON) && (Purpose != PUR_ANYMON))
+                continue;
+            if (Modules[q]->QMon[i].CR > maxlev)
+                continue;
+            if (Modules[q]->QMon[i].CR < minlev)
+                continue;
+            if (Modules[q]->QMon[i].Depth > Depth)
+                continue;
+            if (Modules[q]->QMon[i].HasFlag(M_PLAYER) || Modules[q]->QMon[i].HasFlag(M_UNKNOWN))
+                continue;
+
+            if (!isListing) {
+                if (Modules[q]->QMon[i].HasFlag(M_VERY_RARE))
+                    rarity = random(7) ? 0 : 1;
+                else if (Modules[q]->QMon[i].HasFlag(M_RARE))
+                    rarity = random(3) ? 0 : 1;
+                else if (Modules[q]->QMon[i].HasFlag(M_UNCOMMON))
+                    rarity = 3;
+                else if (Modules[q]->QMon[i].HasFlag(M_COMMON))
+                    rarity = 7;
+                else
+                    rarity = 1;
+            } else
+                rarity = 1;
+
+            for (k=0; k!=rarity; k++) 
+                Candidates[n++] = Modules[q]->MonsterID(i);
         }
+
     Candidates[n] = 0;
-    if (!n && !isListing)
-      { isListing = true;
-        goto Retry; }
+    if (!n && !isListing) {
+        isListing = true;
+        goto Retry;
+    }
     if (!n)
-      return 0;
+        return 0;
     j = random(n);
 
     /* For people, it's good to return low CR monsters to a high
-       CR request -- we want cave orcs generated at DLev 15 because
-       the become veteran cave orc master paladins. For beasts,
-       though, the generation of a grid bug at DLevel 15 should
-       be very rare compared to the generation of a purple worm,
-       as a majority of heavily templated grid bugs ends up looking
-       very strange. */
+    CR request -- we want cave orcs generated at DLev 15 because
+    the become veteran cave orc master paladins. For beasts,
+    though, the generation of a grid bug at DLevel 15 should
+    be very rare compared to the generation of a purple worm,
+    as a majority of heavily templated grid bugs ends up looking
+    very strange. */
     if (TMON(Candidates[j])->isMType(Candidates[j],MA_PERSON))
-      return Candidates[j];
+        return Candidates[j];
     for (i=0;i!=4;i++) {
-      k = random(n);
-      if (TMON(Candidates[k])->CR > TMON(Candidates[j])->CR)
-        j = k;
-      }
-      
+        k = random(n);
+        if (TMON(Candidates[k])->CR > TMON(Candidates[j])->CR)
+            j = k;
+    }
+
     return Candidates[j];
-  }
+}
 
 rID Game::GetTempID(uint16 Types, rID mID, int8 maxCR)
   {
