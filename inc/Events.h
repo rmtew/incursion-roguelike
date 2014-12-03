@@ -138,7 +138,7 @@ struct EventInfo {
        these assumptions hold up... for now. It's important
        that this be noted, though, in case any of this ever
        changes. */
-    EventInfo& operator=(EventInfo &e) { /* Memory image copy for the int/bool/ptr members */
+    void UserDefinedCopy(EventInfo &e) {
         memcpy(this,&e,sizeof(EventInfo));
         /* Blank out the Strings using memset, as they contain
         pointers to string buffers that properly belong to
@@ -171,7 +171,15 @@ struct EventInfo {
         enDump     = e.enDump;
         Text       = e.Text;
         // ww: what about nPrefix, etc.? 
-        return e;
+    }
+    EventInfo() {
+    }
+    EventInfo(EventInfo &e) {
+        UserDefinedCopy(e);
+    }
+    EventInfo& operator=(EventInfo &e) { /* Memory image copy for the int/bool/ptr members */
+        UserDefinedCopy(e);
+        return *this;
     }
     void inline Clear() {
         GraveText = NULL; strDmg  = NULL;
