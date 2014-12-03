@@ -2579,7 +2579,8 @@ rID TextTerm::MonsterPrompt(const char * prompt)
 Thing* TextTerm::AcquisitionPrompt(int8 Reason, int8 minlev, int8 maxlev, int8 MType)
   {                            
     int16 BlankGlyphs[4];
-    int16 cp,ocp,n,i,j,k; const int16 *Glyphs, *GOffset; 
+    int16 cp,ocp,n,i,j; const int16 *Glyphs, *GOffset;
+    int32 k;
     rID xID; Item *it; Monster *mn; String str;
     
     PrePrompt();

@@ -441,11 +441,10 @@ rID Game::GetMonID(int16 Purpose, int8 minlev, int8 maxlev, int8 Depth, int32 MT
 
 Retry:
     n = 0; 
-    for (q=0;q!=1;q++) /* Only one Module at the moment */
-        for(i=0;i!=Modules[q]->szMon;i++) {
+    for (q=0; q!=1; q++) /* Only one Module at the moment */
+        for(i=0; i!=Modules[q]->szMon; i++) {
             rID mID = Modules[q]->MonsterID(i);
-            if (MType > 0 && MType < 100000  &&
-                !Modules[q]->QMon[i].isMType(mID,MType))
+            if (MType > 0 && MType < 100000  && !Modules[q]->QMon[i].isMType(mID,MType))
                 continue;
             /* Kludge for AcquisitionPrompt */
             if (MType >= 100000 && ((Modules[q]->QMon[i].Image & 0xFF) != (MType-100000)))
