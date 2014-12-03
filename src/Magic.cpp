@@ -889,45 +889,51 @@ EvReturn Magic::MagicStrike(EventInfo &e) {
         }
     }
 
-    if (e.ETarget->isCreature() && !TEFF(e.eID)->HasSource(AI_PSIONIC) && !TEFF(e.eID)->HasFlag(EF_MUNDANE))
-        if ((e.EActor->isHostileTo(e.EVictim) || e.EVictim->isHostileTo(e.EActor)) && e.EVictim->GetAttr(A_MR) > 0) { 
-            int roll = random(100) + 1; 
-            int actor_side = (roll + e.EActor->ChallengeRating() * 2) + (e.EActor->HasFeat(FT_SPELL_PENETRATION) ? 20 : 0);
-            bool bypass_mr = actor_side > (e.EVictim->GetAttr(A_MR) + e.EVictim->ChallengeRating() * 2);
+    if (e.ETarget->isCreature() && !TEFF(e.eID)->HasSource(AI_PSIONIC) && !TEFF(e.eID)->HasFlag(EF_MUNDANE)) {
+        if (e.EActor->isHostileTo(e.EVictim) || e.EVictim->isHostileTo(e.EActor)) {
+            int16 victim_mr = e.EVictim->GetAttr(A_MR);
+            if (victim_mr > 0) { 
+                int victim_mr_final = e.EActor->HasFeat(FT_AMPLIFY_SPELL) ? (victim_mr * 75) / 100 : victim_mr;
+                int roll = random(100) + 1; 
+                int actor_side = (roll + e.EActor->ChallengeRating() * 2) + (e.EActor->HasFeat(FT_SPELL_PENETRATION) ? 20 : 0);
+                bool bypass_mr = actor_side > (victim_mr_final + e.EVictim->ChallengeRating() * 2);
 
-            Term * TActor = e.EActor->ShowCombatNumbers();
-            Term * TVictim = e.EVictim->ShowCombatNumbers();
+                Term * TActor = e.EActor->ShowCombatNumbers();
+                Term * TVictim = e.EVictim->ShowCombatNumbers();
 
-            if (TActor || TVictim) { 
-                String smr;
-                smr = XPrint((const char *)Format("<10>Magic Res:<7> 1d100 (%d) %+d%s = %d vs %d %+d = %d [%s]",
-                    roll, 
-                    e.EActor->ChallengeRating() * 2,
-                    (e.EActor->HasFeat(FT_SPELL_PENETRATION) ?  " +20 feat" : ""),
-                    actor_side, 
-                    e.EVictim->GetAttr(A_MR),
-                    e.EVictim->ChallengeRating() * 2,
-                    e.EVictim->GetAttr(A_MR) + e.EVictim->ChallengeRating() * 2,
-                    bypass_mr ? "bypassed" : "resisted"));
-                if (TActor) {
-                    TActor->SetWin(WIN_NUMBERS3);
-                    TActor->Clear();
-                    TActor->Write(smr);
-                    if (theGame->Opt(OPT_STORE_ROLLS))
-                        TActor->AddMessage(smr);
-                } 
-                if (TVictim) {
-                    TVictim->SetWin(WIN_NUMBERS3);
-                    TVictim->Clear();
-                    TVictim->Write(smr);
-                    if (theGame->Opt(OPT_STORE_ROLLS))
-                        TVictim->AddMessage(smr);
-                } 
-            }
+                if (TActor || TVictim) { 
+                    String smr;
+                    smr = XPrint((const char *)Format("<10>Magic Res:<7> 1d100 (%d) %+d%s = %d vs %d %+d%s = %d [%s]",
+                        roll, 
+                        e.EActor->ChallengeRating() * 2,
+                        (e.EActor->HasFeat(FT_SPELL_PENETRATION) ?  " +20 feat" : ""),
+                        actor_side, 
+                        victim_mr,
+                        e.EVictim->ChallengeRating() * 2,
+                        e.EActor->HasFeat(FT_AMPLIFY_SPELL) ? "-25% feat" : "",
+                        victim_mr_final + e.EVictim->ChallengeRating() * 2,
+                        bypass_mr ? "bypassed" : "resisted"));
+                    if (TActor) {
+                        TActor->SetWin(WIN_NUMBERS3);
+                        TActor->Clear();
+                        TActor->Write(smr);
+                        if (theGame->Opt(OPT_STORE_ROLLS))
+                            TActor->AddMessage(smr);
+                    } 
+                    if (TVictim) {
+                        TVictim->SetWin(WIN_NUMBERS3);
+                        TVictim->Clear();
+                        TVictim->Write(smr);
+                        if (theGame->Opt(OPT_STORE_ROLLS))
+                            TVictim->AddMessage(smr);
+                    } 
+                }
 
-            if (!bypass_mr)  
-                e.MagicRes = true;
+                if (!bypass_mr)  
+                    e.MagicRes = true;
+            }       
         } 
+    }
 
     if (e.effIllusion) {
         uint16 saveFlags, ocast; 

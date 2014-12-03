@@ -830,7 +830,7 @@ struct FeatInfoStruct FeatInfo[] = {
  *                               METAMAGIC FEATS                              *
 \******************************************************************************/
 
-  { FT_AMPLIFY_SPELL, FF_UNIMP|FF_META|FF_WIZARD, "Amplify Spell",
+  { FT_AMPLIFY_SPELL, FF_META|FF_WIZARD, "Amplify Spell",
     "An amplified spell reduces a target creature's magic resistance by 25%." },
   { FT_AUGMENT_SUMMONING, FF_META|FF_WIZARD, "Augment Summoning",
     "Your summoned creatures are more powerful than most, gaining a +4 magic bonus "
