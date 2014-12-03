@@ -184,7 +184,7 @@ Wizard Spell "Mage Armour" : EA_INFLICT
       manifesting through luck and coincidence (with no physical form)
       to protect her from harm. This effect is represented in game
       terms by granting the caster [4 + Luck modifier] levels armour in 
-      each armour catagory, or [6 + Luck modifier] if the caster is an
+      each armour category, or [6 + Luck modifier] if the caster is an
       Abjurer. Mage Armour is not compatible with real armour, and counts
       as medium armour for the purpose of abilities like defensive roll
       and Zen Defense.";
@@ -1612,7 +1612,7 @@ Wizard Spell "Enlarge" : EA_INFLICT
   { SC_THA; IS_A_BUFF(COST_1X); Level: 1; qval: Q_TAR; sval: FORT;
     xval: ADJUST; yval: A_SIZ; pval: 1;
     Desc: "Causes a target creature to become larger, increasing their
-      size catagory by one level.";
+      size category by one level.";
     On Event EV_MAGIC_HIT {
       if (EVictim->GetAttr(A_SIZ) == SZ_COLLOSAL)
         {
@@ -1650,7 +1650,7 @@ Wizard Spell "Reduce" : EA_INFLICT
     Purpose: EP_CURSE; xval: ADJUST; yval: A_SIZ; pval: -1;
     Flags: EF_SHOWNAME;
     Desc: "Causes a target creature to become smaller, lowering their
-      size catagory by one level.";
+      size category by one level.";
     On Event EV_MAGIC_HIT {
       if (EVictim->GetAttr(A_SIZ) == SZ_MINISCULE)
         {

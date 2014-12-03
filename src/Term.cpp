@@ -2843,7 +2843,7 @@ Thing* TextTerm::AcquisitionPrompt(int8 Reason, int8 minlev, int8 maxlev, int8 M
       }
     while(1);
     DragonAgeCat:
-    /* Assumption: all age catagories are in Module 0. */
+    /* Assumption: all age categories are in Module 0. */
     for(i=0;i!=theGame->Modules[0]->szTem;i++)
       if (theGame->Modules[0]->QTem[i].TType & TM_AGECAT)
         if (theGame->Modules[0]->QTem[i].CR.Adjust(mn->ChallengeRating()) <= maxlev)

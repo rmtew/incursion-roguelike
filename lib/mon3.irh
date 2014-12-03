@@ -650,7 +650,7 @@ Effect "Reduce;ray" : EA_INFLICT
   { SC_THA; Base: 85; Cost: 3; Level: 1; qval: Q_TAR; sval: FORT;
     Purpose: EP_ATTACK; xval: ADJUST; yval: A_SIZ; pval: -1;
     Desc: "Causes a target creature to become smaller, lowering their
-      size catagory by one level."; aval: AR_BEAM; cval: EMERALD;
+      size category by one level."; aval: AR_BEAM; cval: EMERALD;
     Flags: EF_SPECABIL;
     On Event EV_MAGIC_HIT {
       if (EVictim->GetAttr(A_SIZ) == SZ_MINISCULE)

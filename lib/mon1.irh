@@ -29,7 +29,7 @@
    MA_ANIMAL     
        An animal is a real-world creature that is neither intelligent nor
      effectively mindless. Fungi, insects, plants and dinosaurs are
-     specifically excluded from this catagory; birds, reptiles, fish
+     specifically excluded from this category; birds, reptiles, fish
      and such are included.
    MA_ELEMENTAL
        An elemental is the spirit of an element that manifests as an animated
@@ -153,11 +153,11 @@
  ********************************************************************************/
 
 /*   The large-scale plan for the balance of dragons in Incursion is that
-   all dragon types are of equal CR at a given age catagory, unlike in SRD
+   all dragon types are of equal CR at a given age category, unlike in SRD
    where dragon CRs vary based on dragon type intensely. However, every
    dragon has different aptitudes, strengths and weaknesses. Consider each
-   dragon type to have 25 "points" to rate 8 "catagories" from 1 to 5: the
-   catagories being Melee, Magic, Breath, Endurance, Speed, Intellect, Fear
+   dragon type to have 25 "points" to rate 8 "categories" from 1 to 5: the
+   categories being Melee, Magic, Breath, Endurance, Speed, Intellect, Fear
    and Flight.
              Element     Mel  Mag  Bre  End  Spd  Int  Fea  Fli  Special
    White     Water        3    1    3    5    4    1    2    4   Regen +2
@@ -267,7 +267,7 @@ Effect "Luck Bonus" : EA_GENERIC
   {
     Flags: EF_SPECABIL; Cost: 50;
     Desc: "A gold dragon has the ability to enchant a gem to create
-      a luckstone with a magical bonus equal to half it's age catagory.
+      a luckstone with a magical bonus equal to half it's age category.
       Sometimes, in exchange for rare gems or other valuable services,
       a dragon will bestow such a boon on adventurers.";
   }

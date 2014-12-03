@@ -826,7 +826,7 @@ TextVal MTypePlurals[] = {
   { 0, NULL } };
 
 /* This list should include things that a ranger could *sensibly* hate or
-   specialize in killing -- catagories like "quadrupeds" or 
+   specialize in killing -- categories like "quadrupeds" or 
    "creatures with blood" make no sense. */
 int16 FavEnemies[] = { 
 

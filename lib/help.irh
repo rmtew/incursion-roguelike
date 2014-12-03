@@ -1052,9 +1052,9 @@ Text "help::interface"
      also with the [SHIFT] + [DIR] ranged attack shortcut -- this always uses
      your default ammo, rather then having you choose a projectile from a
      menu like the 'f' command.\n
-     __To select a weapon as your default weapon in one of these four catagories,
+     __To select a weapon as your default weapon in one of these four categories,
      first move the inventory cursor over to the slot that currently holds the
-     weapon in question, then type a capital letter representing the catagory
+     weapon in question, then type a capital letter representing the category
      in question: 'M' to set the chosen weapon as your default melee weapon,
      'R' for the default ranged weapon, 'O' for the offhand weapon, and 'A'
      for the default ammunition or thrown weapon.\n

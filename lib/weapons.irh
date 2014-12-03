@@ -139,7 +139,7 @@ Item "great lance" : T_WEAPON
  * against DC 10 + (1/2 BAB) + Spec. Failure wastes (10 - Dex mod) phases
  * of the enemy's time, and he doesn't move, and if you have the right
  * feat, you get an AoO. Smaller enemies get a bonus to this roll, those
- * one catagory larger get a penalty, and those two or more catagories
+ * one category larger get a penalty, and those two or more categories
  * larger are unaffected.
  */ 
 

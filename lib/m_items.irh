@@ -1180,7 +1180,7 @@ AI_POTION Effect "Dimunition" : EA_GENERIC
       return RedirectEff(e,$"reduce");
       };
     Desc: "When drunk, this potion causes you to shrink, lowering
-      your size by one size catagory.";
+      your size by one size category.";
   }
 
 AI_POTION Effect "Growth" : EA_GENERIC
@@ -1189,7 +1189,7 @@ AI_POTION Effect "Growth" : EA_GENERIC
       return RedirectEff(e,$"enlarge");
       };
     Desc: "When drunk, this potion causes you to grow, increasing
-      your size by one size catagory.";
+      your size by one size category.";
   }
 
 #if 0
@@ -2954,7 +2954,7 @@ AI_WAND Effect "Wonder" : EA_GENERIC
               case 2:
                 /* You are paralyzed for 1d6+1 turns */
               case 3:
-                /* You shrink 3 catagories */
+                /* You shrink 3 categories */
               case 4:
                 /* Enemy Turns Invisible */
               case 5:
@@ -7236,7 +7236,7 @@ Enervation
    -- Different food items decay at different rates, with some
       (smoked meat) lasting nearly forever and others (pile of
       frest fruit) decaying very quickly. Thus, there's a divison
-      of three catagories in regard to food -- nutrition, weight
+      of three categories in regard to food -- nutrition, weight
       and shelf life.
    -- Downsides for sustenance and regeneration -- perhaps
       sustenance makes you slower (always full) and a little
@@ -7413,7 +7413,7 @@ and EA_GRANT                                                       \
       colour of the robes directly opposes the wearer's alignment,  \
       they catch fire and burn, becoming cursed in the process.\n  \
       __For a suitable wearer, however, they grant a 50~ magic     \
-      resistance, bestow an armour rating of 5 in all catagories,   \
+      resistance, bestow an armour rating of 5 in all categories,   \
       grant a +3 magic bonus to saving throws and allow the wearer \
       to use the feat Spell Penetration."; }                       \                                  
   
@@ -7690,7 +7690,7 @@ AI_GIRDLE Effect "Uncanny Growth" : EA_GRANT
     Purpose: EP_BUFF;
     Flags: EF_NEEDS_PLUS | EF_AUTOID; SC_THA; Level: PLUS_4PER1; 
     Desc: "Causes a you to become larger, increasing your
-      size catagory by one level per plus.";
+      size category by one level per plus.";
   }
 
 AI_AMULET Effect "Incredible Shrinking" : EA_GRANT
@@ -7698,7 +7698,7 @@ AI_AMULET Effect "Incredible Shrinking" : EA_GRANT
     xval: ADJUST; yval: A_SIZ; pval: -1;
     Flags: EF_AUTOID | EF_CURSED; SC_THA; Level: 0; 
     Desc: "Causes a you to become smaller, decreasing your
-      size catagory by one.";
+      size category by one.";
   }
 
 AI_AMULET Effect "Boldness" : EA_GRANT

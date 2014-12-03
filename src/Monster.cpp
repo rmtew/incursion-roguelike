@@ -972,7 +972,7 @@ SkipShifting:
      * to it in the various Acts/Pri/ATar arrays. We now want to choose one *
      * by scanning through the array, and choosing as random option from    *
      * those with the highest priority (or, for an erratic monster, the two *
-     * highest priority catagories.                                         *
+     * highest priority categories.                                         *
      ************************************************************************/
     j = 0;
     for (i=0;i<nAct;i++) 

@@ -2691,7 +2691,7 @@ void Creature::ProvokeAoO(Creature *c, bool from_move)
 
   /* Later, this should only work in areas where the creature
      has room to fly around -- vast chambers one or more size
-     catagories larger than the creature, and outdoors. */
+     categories larger than the creature, and outdoors. */
   bool needFlight = HasFeat(FT_FLYBY_ATTACK) && isAerial();
 
   if (c) { 

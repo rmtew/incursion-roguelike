@@ -1462,7 +1462,7 @@ Restart:
         m->Update(x,y);
 
     /* Here, we cause the player to drop weapons when they change
-    size catagories as a result of things like Divine Power or
+    size categories as a result of things like Divine Power or
     Enlarge wearing off. */
     if ((!m) || (oldSize == Attr[A_SIZ])) {
         theGame->inCalcVal--;
