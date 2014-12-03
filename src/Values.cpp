@@ -44,91 +44,82 @@
 
 #include "Incursion.h"
 
-
 #define A  (*((int16*)a))
 #define B  (*((int16*)b))
-int compare_int16(const void *a, const void *b)
-  { return B>A ? -1 : (A>B ? 1 : 0); }
+int compare_int16(const void *a, const void *b) { return B>A ? -1 : (A>B ? 1 : 0); }
 
 int16 concentTotal;
 
-void Creature::StackBonus(int8 btype, int8 attr,int16 bonus)
-  { 
+void Creature::StackBonus(int8 btype, int8 attr,int16 bonus) { 
     if (attr == A_MAG && bonus < 0 && concentUsed < concentTotal)
-      if (btype != BONUS_TACTIC && btype != BONUS_ARMOUR && btype != BONUS_SHIELD)
-        {
-          if (concentUsed + (-bonus) <= concentTotal)
-            {
-              concentUsed += (-bonus);
-              return;
+        if (btype != BONUS_TACTIC && btype != BONUS_ARMOUR && btype != BONUS_SHIELD) {
+            if (concentUsed + (-bonus) <= concentTotal) {
+                concentUsed += (-bonus);
+                return;
             }
-          else
-            {
-              bonus += (concentTotal - concentUsed);
-              concentUsed = (int8)concentTotal;
-            }
-        }
-  
-    switch (attr) 
-      {
-        case A_HIT:                               
-          AttrAdj[A_HIT_BRAWL][btype]   += bonus;          
-          AttrAdj[A_HIT_MELEE][btype]   += bonus;          
-          AttrAdj[A_HIT_OFFHAND][btype] += bonus;          
-          AttrAdj[A_HIT_ARCHERY][btype] += bonus;          
-          AttrAdj[A_HIT_THROWN][btype]  += bonus;  
-         break;
-        case A_DMG:          
-          AttrAdj[A_DMG_BRAWL][btype]   += bonus;          
-          AttrAdj[A_DMG_MELEE][btype]   += bonus;          
-          AttrAdj[A_DMG_OFFHAND][btype] += bonus;          
-          AttrAdj[A_DMG_ARCHERY][btype] += bonus;          
-          AttrAdj[A_DMG_THROWN][btype]  += bonus;          
-         break;
-        case A_SPD:
-          AttrAdj[A_SPD_BRAWL][btype]   += bonus;          
-          AttrAdj[A_SPD_MELEE][btype]   += bonus;          
-          AttrAdj[A_SPD_OFFHAND][btype] += bonus;          
-          AttrAdj[A_SPD_ARCHERY][btype] += bonus;          
-          AttrAdj[A_SPD_THROWN][btype]  += bonus;          
-         break;
-        case A_AID:
-          AttrAdj[A_HIT_BRAWL][btype]   += bonus;          
-          AttrAdj[A_HIT_MELEE][btype]   += bonus;          
-          AttrAdj[A_HIT_OFFHAND][btype] += bonus;          
-          AttrAdj[A_HIT_ARCHERY][btype] += bonus;          
-          AttrAdj[A_HIT_THROWN][btype]  += bonus;          
-                                                     
-          AttrAdj[A_DEF][btype] += bonus;                  
-          AttrAdj[A_SAV_FORT][btype] += bonus;             
-          AttrAdj[A_SAV_REF ][btype] += bonus;             
-          AttrAdj[A_SAV_WILL][btype] += bonus;             
-          AttrAdj[A_ARC][btype] += bonus;                  
-          AttrAdj[A_DIV][btype] += bonus;                  
-          AttrAdj[A_SOR][btype] += bonus;
-          AttrAdj[A_PRI][btype] += bonus;
-          AttrAdj[A_BAR][btype] += bonus;
-         break;
-        case A_SAV:
-          AttrAdj[A_SAV_FORT][btype] += bonus;             
-          AttrAdj[A_SAV_REF][btype]  += bonus;             
-          AttrAdj[A_SAV_WILL][btype] += bonus;    
-         break;         
-        case A_MAG:
-          AttrAdj[A_ARC][btype] += bonus;                  
-          AttrAdj[A_DIV][btype] += bonus;
-          AttrAdj[A_SOR][btype] += bonus;
-          AttrAdj[A_PRI][btype] += bonus;
-          AttrAdj[A_BAR][btype] += bonus;
-         break;                 
-        default:
-          ASSERT(attr <= ATTR_LAST)
-          AttrAdj[attr][btype] += bonus; 
-      }
-  }                  
 
-void Creature::AddBonus(int8 btype,int8 attr,int16 bonus) 
-  {
+            bonus += (concentTotal - concentUsed);
+            concentUsed = (int8)concentTotal;
+        }
+
+    switch (attr) {
+    case A_HIT:                               
+        AttrAdj[A_HIT_BRAWL][btype] += bonus;
+        AttrAdj[A_HIT_MELEE][btype] += bonus;
+        AttrAdj[A_HIT_OFFHAND][btype] += bonus;
+        AttrAdj[A_HIT_ARCHERY][btype] += bonus;
+        AttrAdj[A_HIT_THROWN][btype] += bonus;
+        break;
+    case A_DMG:          
+        AttrAdj[A_DMG_BRAWL][btype] += bonus;          
+        AttrAdj[A_DMG_MELEE][btype] += bonus;          
+        AttrAdj[A_DMG_OFFHAND][btype] += bonus;          
+        AttrAdj[A_DMG_ARCHERY][btype] += bonus;          
+        AttrAdj[A_DMG_THROWN][btype] += bonus;          
+        break;
+    case A_SPD:
+        AttrAdj[A_SPD_BRAWL][btype] += bonus;          
+        AttrAdj[A_SPD_MELEE][btype] += bonus;          
+        AttrAdj[A_SPD_OFFHAND][btype] += bonus;          
+        AttrAdj[A_SPD_ARCHERY][btype] += bonus;          
+        AttrAdj[A_SPD_THROWN][btype] += bonus;          
+        break;
+    case A_AID:
+        AttrAdj[A_HIT_BRAWL][btype] += bonus;          
+        AttrAdj[A_HIT_MELEE][btype] += bonus;          
+        AttrAdj[A_HIT_OFFHAND][btype] += bonus;          
+        AttrAdj[A_HIT_ARCHERY][btype] += bonus;          
+        AttrAdj[A_HIT_THROWN][btype] += bonus;          
+
+        AttrAdj[A_DEF][btype] += bonus;                  
+        AttrAdj[A_SAV_FORT][btype] += bonus;             
+        AttrAdj[A_SAV_REF ][btype] += bonus;             
+        AttrAdj[A_SAV_WILL][btype] += bonus;             
+        AttrAdj[A_ARC][btype] += bonus;                  
+        AttrAdj[A_DIV][btype] += bonus;                  
+        AttrAdj[A_SOR][btype] += bonus;
+        AttrAdj[A_PRI][btype] += bonus;
+        AttrAdj[A_BAR][btype] += bonus;
+        break;
+    case A_SAV:
+        AttrAdj[A_SAV_FORT][btype] += bonus;             
+        AttrAdj[A_SAV_REF][btype] += bonus;             
+        AttrAdj[A_SAV_WILL][btype] += bonus;    
+        break;         
+    case A_MAG:
+        AttrAdj[A_ARC][btype] += bonus;                  
+        AttrAdj[A_DIV][btype] += bonus;
+        AttrAdj[A_SOR][btype] += bonus;
+        AttrAdj[A_PRI][btype] += bonus;
+        AttrAdj[A_BAR][btype] += bonus;
+        break;                 
+    default:
+        ASSERT(attr <= ATTR_LAST)
+        AttrAdj[attr][btype] += bonus; 
+    }
+}
+
+void Creature::AddBonus(int8 btype,int8 attr,int16 bonus) {
     // ww: it seems like this would work, but in fact it doesn't. 
     // Imagine that you have 
     //   Spell1 = +3 STR, -3 DEX
@@ -154,101 +145,63 @@ void Creature::AddBonus(int8 btype,int8 attr,int16 bonus)
     //
     // FIXME. 
 
-    
-
-    if ((bonus < 0) || btype == BONUS_DODGE || btype == BONUS_CIRC)  
-      {
+    if ((bonus < 0) || btype == BONUS_DODGE || btype == BONUS_CIRC) {
         StackBonus(btype, attr, bonus);
         return;
-      }
-    else switch (attr)
-      {
-        case A_HIT:
-          AttrAdj[A_HIT_BRAWL][btype] =                    
-            WESMAX(AttrAdj[A_HIT_BRAWL][btype], bonus);       
-          AttrAdj[A_HIT_MELEE][btype] =                    
-            WESMAX(AttrAdj[A_HIT_MELEE][btype], bonus);       
-          AttrAdj[A_HIT_OFFHAND][btype] =                  
-            WESMAX(AttrAdj[A_HIT_OFFHAND][btype], bonus);     
-          AttrAdj[A_HIT_ARCHERY][btype] =                  
-            WESMAX(AttrAdj[A_HIT_ARCHERY][btype], bonus);    
-          AttrAdj[A_HIT_THROWN][btype] =                   
-            WESMAX(AttrAdj[A_HIT_THROWN][btype], bonus); 
-         break;        
-        case A_DMG:
-          AttrAdj[A_DMG_BRAWL][btype] =                    
-            WESMAX(AttrAdj[A_DMG_BRAWL][btype], bonus);       
-          AttrAdj[A_DMG_MELEE][btype] =                    
-            WESMAX(AttrAdj[A_DMG_MELEE][btype], bonus);       
-          AttrAdj[A_DMG_OFFHAND][btype] =                  
-            WESMAX(AttrAdj[A_DMG_OFFHAND][btype], bonus);     
-          AttrAdj[A_DMG_ARCHERY][btype] =                  
-            WESMAX(AttrAdj[A_DMG_ARCHERY][btype], bonus);     
-          AttrAdj[A_DMG_THROWN][btype] =                   
-            WESMAX(AttrAdj[A_DMG_THROWN][btype], bonus);      
-         break;
-        case A_SPD:
-          AttrAdj[A_SPD_BRAWL][btype] =                    
-            WESMAX(AttrAdj[A_SPD_BRAWL][btype], bonus);       
-          AttrAdj[A_SPD_MELEE][btype] =                    
-            WESMAX(AttrAdj[A_SPD_MELEE][btype], bonus);       
-          AttrAdj[A_SPD_OFFHAND][btype] =                  
-            WESMAX(AttrAdj[A_SPD_OFFHAND][btype], bonus);     
-          AttrAdj[A_SPD_ARCHERY][btype] =                  
-            WESMAX(AttrAdj[A_SPD_ARCHERY][btype], bonus);     
-          AttrAdj[A_SPD_THROWN][btype] =                   
-            WESMAX(AttrAdj[A_SPD_THROWN][btype], bonus);      
-         break;
-        case A_AID:
-          AttrAdj[A_HIT_BRAWL][btype] =                    
-            WESMAX(AttrAdj[A_HIT_BRAWL][btype], bonus);       
-          AttrAdj[A_HIT_MELEE][btype] =                    
-            WESMAX(AttrAdj[A_HIT_MELEE][btype], bonus);       
-          AttrAdj[A_HIT_OFFHAND][btype] =                  
-            WESMAX(AttrAdj[A_HIT_OFFHAND][btype], bonus);     
-          AttrAdj[A_HIT_ARCHERY][btype] =                  
-            WESMAX(AttrAdj[A_HIT_ARCHERY][btype], bonus);     
-          AttrAdj[A_HIT_THROWN][btype] =                   
-            WESMAX(AttrAdj[A_HIT_THROWN][btype], bonus);      
+    }
 
-          AttrAdj[A_DEF][btype] =                          
-            WESMAX(AttrAdj[A_DEF][btype], bonus);             
-          AttrAdj[A_SAV_FORT][btype] =                     
-            WESMAX(AttrAdj[A_SAV_FORT][btype], bonus);        
-          AttrAdj[A_SAV_REF][btype] =                      
-            WESMAX(AttrAdj[A_SAV_REF][btype], bonus);         
-          AttrAdj[A_SAV_WILL][btype] =                     
-            WESMAX(AttrAdj[A_SAV_WILL][btype], bonus);        
-          AttrAdj[A_ARC][btype] =                          
-            WESMAX(AttrAdj[A_ARC][btype], bonus);             
-          AttrAdj[A_DIV][btype] =                          
-            WESMAX(AttrAdj[A_DIV][btype], bonus);             
-         break;
-        case A_SAV:
-          AttrAdj[A_SAV_FORT][btype] =                     
-            WESMAX(AttrAdj[A_SAV_FORT][btype], bonus);        
-          AttrAdj[A_SAV_REF][btype] =                                  
-            WESMAX(AttrAdj[A_SAV_REF][btype], bonus);         
-          AttrAdj[A_SAV_WILL][btype] =                     
-            WESMAX(AttrAdj[A_SAV_WILL][btype], bonus);        
-         break;
-        case A_MAG:
-          AttrAdj[A_ARC][btype] =                          
-            WESMAX(AttrAdj[A_ARC][btype], bonus);             
-          AttrAdj[A_DIV][btype] =                          
-            WESMAX(AttrAdj[A_DIV][btype], bonus);             
-          AttrAdj[A_PRI][btype] =                          
-            WESMAX(AttrAdj[A_PRI][btype], bonus);             
-          AttrAdj[A_SOR][btype] =                          
-            WESMAX(AttrAdj[A_SOR][btype], bonus);             
-          AttrAdj[A_BAR][btype] =                          
-            WESMAX(AttrAdj[A_BAR][btype], bonus);             
-         break;
-        default:
-          AttrAdj[attr][btype] =                           
-            WESMAX(AttrAdj[attr][btype], bonus); 
-      }
-  }
+    switch (attr) {
+    case A_HIT:
+        AttrAdj[A_HIT_BRAWL][btype] = WESMAX(AttrAdj[A_HIT_BRAWL][btype], bonus);       
+        AttrAdj[A_HIT_MELEE][btype] = WESMAX(AttrAdj[A_HIT_MELEE][btype], bonus);       
+        AttrAdj[A_HIT_OFFHAND][btype] = WESMAX(AttrAdj[A_HIT_OFFHAND][btype], bonus);     
+        AttrAdj[A_HIT_ARCHERY][btype] = WESMAX(AttrAdj[A_HIT_ARCHERY][btype], bonus);    
+        AttrAdj[A_HIT_THROWN][btype] = WESMAX(AttrAdj[A_HIT_THROWN][btype], bonus); 
+        break;        
+    case A_DMG:
+        AttrAdj[A_DMG_BRAWL][btype] = WESMAX(AttrAdj[A_DMG_BRAWL][btype], bonus);       
+        AttrAdj[A_DMG_MELEE][btype] = WESMAX(AttrAdj[A_DMG_MELEE][btype], bonus);       
+        AttrAdj[A_DMG_OFFHAND][btype] = WESMAX(AttrAdj[A_DMG_OFFHAND][btype], bonus);     
+        AttrAdj[A_DMG_ARCHERY][btype] = WESMAX(AttrAdj[A_DMG_ARCHERY][btype], bonus);     
+        AttrAdj[A_DMG_THROWN][btype] = WESMAX(AttrAdj[A_DMG_THROWN][btype], bonus);      
+        break;
+    case A_SPD:
+        AttrAdj[A_SPD_BRAWL][btype] = WESMAX(AttrAdj[A_SPD_BRAWL][btype], bonus);       
+        AttrAdj[A_SPD_MELEE][btype] = WESMAX(AttrAdj[A_SPD_MELEE][btype], bonus);       
+        AttrAdj[A_SPD_OFFHAND][btype] = WESMAX(AttrAdj[A_SPD_OFFHAND][btype], bonus);     
+        AttrAdj[A_SPD_ARCHERY][btype] = WESMAX(AttrAdj[A_SPD_ARCHERY][btype], bonus);     
+        AttrAdj[A_SPD_THROWN][btype] = WESMAX(AttrAdj[A_SPD_THROWN][btype], bonus);      
+        break;
+    case A_AID:
+        AttrAdj[A_HIT_BRAWL][btype] = WESMAX(AttrAdj[A_HIT_BRAWL][btype], bonus);       
+        AttrAdj[A_HIT_MELEE][btype] = WESMAX(AttrAdj[A_HIT_MELEE][btype], bonus);       
+        AttrAdj[A_HIT_OFFHAND][btype] = WESMAX(AttrAdj[A_HIT_OFFHAND][btype], bonus);     
+        AttrAdj[A_HIT_ARCHERY][btype] = WESMAX(AttrAdj[A_HIT_ARCHERY][btype], bonus);     
+        AttrAdj[A_HIT_THROWN][btype] = WESMAX(AttrAdj[A_HIT_THROWN][btype], bonus);      
+
+        AttrAdj[A_DEF][btype] = WESMAX(AttrAdj[A_DEF][btype], bonus);             
+        AttrAdj[A_SAV_FORT][btype] = WESMAX(AttrAdj[A_SAV_FORT][btype], bonus);        
+        AttrAdj[A_SAV_REF][btype] = WESMAX(AttrAdj[A_SAV_REF][btype], bonus);         
+        AttrAdj[A_SAV_WILL][btype] = WESMAX(AttrAdj[A_SAV_WILL][btype], bonus);        
+        AttrAdj[A_ARC][btype] = WESMAX(AttrAdj[A_ARC][btype], bonus);             
+        AttrAdj[A_DIV][btype] = WESMAX(AttrAdj[A_DIV][btype], bonus);             
+        break;
+    case A_SAV:
+        AttrAdj[A_SAV_FORT][btype] = WESMAX(AttrAdj[A_SAV_FORT][btype], bonus);        
+        AttrAdj[A_SAV_REF][btype] = WESMAX(AttrAdj[A_SAV_REF][btype], bonus);         
+        AttrAdj[A_SAV_WILL][btype] = WESMAX(AttrAdj[A_SAV_WILL][btype], bonus);        
+        break;
+    case A_MAG:
+        AttrAdj[A_ARC][btype] = WESMAX(AttrAdj[A_ARC][btype], bonus);             
+        AttrAdj[A_DIV][btype] = WESMAX(AttrAdj[A_DIV][btype], bonus);             
+        AttrAdj[A_PRI][btype] = WESMAX(AttrAdj[A_PRI][btype], bonus);             
+        AttrAdj[A_SOR][btype] = WESMAX(AttrAdj[A_SOR][btype], bonus);             
+        AttrAdj[A_BAR][btype] = WESMAX(AttrAdj[A_BAR][btype], bonus);             
+        break;
+    default:
+        AttrAdj[attr][btype] = WESMAX(AttrAdj[attr][btype], bonus); 
+    }
+}
 
 /*
 at:
@@ -258,525 +211,519 @@ tm:
     if (tm.VType == MVAL_SET) {                                                         \
         AttrAdj[at][BONUS_BASE] = (int8)tm.Value;                                       \
         AttrAdj[at][BONUS_TEMP] = 0;                                                    \
-     } else if (tm.VType == MVAL_PERCENT && percent_attr(at))                           \
+    } else if (tm.VType == MVAL_PERCENT && percent_attr(at))                            \
         AttrAdj[at][BONUS_TEMP] = (int8)(((((AttrAdj[at][BONUS_TEMP]*5+100L)*           \
                                   ((long)tm.Adjust(100))) / 100L) - 100) / 5);          \
-   else                                                                                 \
-     AttrAdj[at][BONUS_TEMP] = tm.Adjust(AttrAdj[at][BONUS_BASE]                         \
+     else                                                                               \
+         AttrAdj[at][BONUS_TEMP] = tm.Adjust(AttrAdj[at][BONUS_BASE]                    \
        + AttrAdj[at][BONUS_TEMP]) - (AttrAdj[at][BONUS_BASE] /*+ AttrAdj[at][BONUS_TEMP]*/);  
 
 #define NAT_ARMOUR_TEMPLATE_MOD(at,tm)                                                  \
    if (tm.VType == MVAL_SET) {                                                          \
-     AttrAdj[at][BONUS_BASE] = tm.Value;                                                \
-     AttrAdj[at][BONUS_TEMP] = 0;                                                       \
-     }                                                                                  \
-   else                                                                                 \
-     AttrAdj[at][BONUS_TEMP] = tm.Adjust(TMON(mID)->Arm                                 \
+       AttrAdj[at][BONUS_BASE] = tm.Value;                                              \
+       AttrAdj[at][BONUS_TEMP] = 0;                                                     \
+   } else                                                                               \
+       AttrAdj[at][BONUS_TEMP] = tm.Adjust(TMON(mID)->Arm                               \
        + AttrAdj[at][BONUS_TEMP]) - (TMON(mID)->Arm /*+ AttrAdj[at][BONUS_TEMP]*/);  
                                                                                        
 
 int8 MonGoodSaves(int8 MType);
 
 int8 Creature::AttrAdj[ATTR_LAST][BONUS_LAST]; 
-Item *Creature::missileWep, *Creature::thrownWep,
-     *Creature::offhandWep, *Creature::meleeWep;
+Item *Creature::missileWep, *Creature::thrownWep, *Creature::offhandWep, *Creature::meleeWep;
 
-void Creature::CalcValues(bool KnownOnly, Item *thrown)
-{
+void Creature::CalcValues(bool KnownOnly, Item *thrown) {
 #define XMod(a) (KnownOnly ? KMod(a) : Mod(a))
 #define XMod2(a) (KnownOnly ? KMod2(a) : Mod2(a))
-  int16 j, tsav, oFP, oHP, oldSize; Item *it;
-  int8 i;
-  bool isHalted = false; static int16 MRVals[BONUS_LAST], MRC;
-  int restart_count = 0; 
-  oldSize = Attr[A_SIZ];
-  oHP  = cHP;
-  cFP -= Attr[A_FAT];
-  cHP -= Attr[A_THP];
-  
-  /* HACKFIX -- no recursive calcval looping */
-  if (theGame->inCalcVal)
-    return;
-  
-  theGame->inCalcVal++;
-  
+    int8 i;
+    int16 j, tsav, oFP, oHP, oldSize;
+    int32 restart_count = 0; 
+    static int16 MRVals[BONUS_LAST], MRC;
+    bool isHalted = false;
+    Item *it;
+
+    oldSize = Attr[A_SIZ];
+    oHP  = cHP;
+    cFP -= Attr[A_FAT];
+    cHP -= Attr[A_THP];
+
+    /* HACKFIX -- no recursive calcval looping */
+    if (theGame->inCalcVal)
+        return;
+    theGame->inCalcVal++;
+
 Restart:
-  memset(AttrAdj,0,sizeof(int8) * BONUS_LAST * ATTR_LAST);
+    memset(AttrAdj, 0, sizeof(int8) * BONUS_LAST * ATTR_LAST);
 
-  bool grappling = false; 
+    bool grappling = false; 
 
-  oFP = Attr[A_FAT];
+    oFP = Attr[A_FAT];
 
-  concentUsed = 0;
-  concentTotal = ConcentBuffer();
+    concentUsed = 0;
+    concentTotal = ConcentBuffer();
 
-  ASSERT(isCharacter() || !KnownOnly);
-  ASSERT(TMON(mID));
-  /* Figure out our weapons. For monsters, we only need to
-     account for the weapons immediately in their hands. For
-     the player, setting all the static weapon variables is
-     important so that, for example, a player still sees his
-     character's archery stats on the character sheet when he
-     has his bow slung over his shoulder. */
+    ASSERT(isCharacter() || !KnownOnly);
+    ASSERT(TMON(mID));
+    /* Figure out our weapons. For monsters, we only need to
+    account for the weapons immediately in their hands. For
+    the player, setting all the static weapon variables is
+    important so that, for example, a player still sees his
+    character's archery stats on the character sheet when he
+    has his bow slung over his shoulder. */
 
-  
-  meleeWep   = EInSlot(SL_WEAPON);
-  offhandWep = EInSlot(SL_READY);
-  missileWep = EInSlot(SL_ARCHERY);
-  thrownWep  = thrown;
-  if (meleeWep && meleeWep->isType(T_BOW)) {
-    missileWep = meleeWep;
-    meleeWep = offhandWep = NULL;
-    if (it = EInSlot(SL_LSHOULDER))
-      if (it->isType(T_WEAPON) && !it->isType(T_BOW)
-            && !it->thrownOnly())
-        meleeWep = it;
+
+    meleeWep   = EInSlot(SL_WEAPON);
+    offhandWep = EInSlot(SL_READY);
+    missileWep = EInSlot(SL_ARCHERY);
+    thrownWep  = thrown;
+    if (meleeWep && meleeWep->isType(T_BOW)) {
+        missileWep = meleeWep;
+        meleeWep = offhandWep = NULL;
+        if (it = EInSlot(SL_LSHOULDER))
+            if (it->isType(T_WEAPON) && !it->isType(T_BOW) && !it->thrownOnly())
+                meleeWep = it;
     }
-  if (meleeWep && meleeWep->thrownOnly()) {
-    thrownWep = meleeWep;
-    meleeWep = offhandWep = NULL;
+    if (meleeWep && meleeWep->thrownOnly()) {
+        thrownWep = meleeWep;
+        meleeWep = offhandWep = NULL;
+        if (it = EInSlot(SL_LSHOULDER))
+            if (it->isType(T_WEAPON) && !it->isType(T_BOW) && !it->thrownOnly())
+                meleeWep = it;
+    } else if (meleeWep && meleeWep->HasIFlag(IT_THROWABLE) && !thrownWep)
+        thrownWep = meleeWep;
+
+    if (!offhandWep || !offhandWep->isType(T_WEAPON) || ((offhandWep==meleeWep) && !TITEM(meleeWep->iID)->HasFlag(WT_DOUBLE)))
+        offhandWep = NULL;
+
+#if 0
+    /* This is a nice concept, but currently horribly buggy
+    -- the player gets parry bonus from quarterstaff in
+    the shoulder slot, etc. */
+
+    if (!meleeWep)
+        meleeWep = getPrimaryMelee();
+    if (!missileWep && getPrimaryRanged())
+        if (getPrimaryRanged()->isType(T_BOW))
+            missileWep = getPrimaryRanged();
+    if (!thrownWep && getPrimaryRanged())
+        if (getPrimaryRanged()->HasIFlag(IT_THROWABLE))
+            thrownWep = getPrimaryRanged();
+
     if (it = EInSlot(SL_LSHOULDER))
-      if (it->isType(T_WEAPON) && !it->isType(T_BOW)
-            && !it->thrownOnly())
-        meleeWep = it;
-    }
-  else if (meleeWep && meleeWep->HasIFlag(IT_THROWABLE) && !thrownWep)
-    thrownWep = meleeWep;    
-  
-  if (!offhandWep || !offhandWep->isType(T_WEAPON) ||
-      ((offhandWep==meleeWep) && !TITEM(meleeWep->iID)->HasFlag(WT_DOUBLE)))
-    offhandWep = NULL;
-  
-  #if 0
-  /* This is a nice concept, but currently horribly buggy
-     -- the player gets parry bonus from quarterstaff in
-     the shoulder slot, etc. */
-  
-  if (!meleeWep)
-    meleeWep = getPrimaryMelee();
-  if (!missileWep && getPrimaryRanged())
-    if (getPrimaryRanged()->isType(T_BOW))
-      missileWep = getPrimaryRanged();
-  if (!thrownWep && getPrimaryRanged())
-    if (getPrimaryRanged()->HasIFlag(IT_THROWABLE))
-      thrownWep = getPrimaryRanged();
+        if (!missileWep && it->isType(T_BOW))
+            missileWep = it;
+#endif
 
-  if (it = EInSlot(SL_LSHOULDER))
-    if (!missileWep && it->isType(T_BOW))
-      missileWep = it;
-  #endif
+    if (isCharacter()) {
+        for(i=0; i!=7; i++) 
+            AddBonus(BONUS_BASE, i, thisc->BAttr[i]);
 
-  if (isCharacter()) {
-    for(i=0;i!=7;i++) 
-      AddBonus(BONUS_BASE,i,thisc->BAttr[i]);
-
-    if (HasStati(POLYMORPH)) {
-      TMonster * tm = TMON(mID); 
-      // ww: polymorphing into an ooze (or whatever, something stupid)
-      // doesn't cause you to become stupid -- otherwise mages and druids
-      // would never think to stop their polymorph spells. You're
-      // changing the body: the physical attributes change. An orc
-      // polymorphed into a mind flayer doesn't suddenly become smart. 
-      // Here's quote from the SRD: "The subject gains the Strength,
-      // Dexterity, and Constitution scores of the new form but retains
-      // its own Intelligence, Wisdom, and Charisma scores."
-      for(i=A_STR;i<=A_CON;i++) 
-        if (tm->Attr[i]) {
-          AddBonus(BONUS_NATURAL,i,(tm->Attr[i]-10));
+        if (HasStati(POLYMORPH)) {
+            TMonster * tm = TMON(mID);
+            // ww: polymorphing into an ooze (or whatever, something stupid)
+            // doesn't cause you to become stupid -- otherwise mages and druids
+            // would never think to stop their polymorph spells. You're
+            // changing the body: the physical attributes change. An orc
+            // polymorphed into a mind flayer doesn't suddenly become smart. 
+            // Here's quote from the SRD: "The subject gains the Strength,
+            // Dexterity, and Constitution scores of the new form but retains
+            // its own Intelligence, Wisdom, and Charisma scores."
+            for(i=A_STR;i<=A_CON;i++) 
+                if (tm->Attr[i]) {
+                    AddBonus(BONUS_NATURAL,i,(tm->Attr[i]-10));
+                } else {
+                    AttrAdj[i][BONUS_BASE] = 0; 
+                    AttrAdj[i][BONUS_TEMP] = 0; 
+                } 
+                for(i=A_INT;i<=A_LUC;i++)
+                    AddBonus(BONUS_NATURAL,i,TRACE(thisc->RaceID)->AttrAdj[i]);
+                // ww: these were forgotten somewhere
+                for(i=0;i<5;i++)  {
+                    AddBonus(BONUS_NATURAL,A_SPD_ARCHERY+i,tm->Spd);
+                    AddBonus(BONUS_NATURAL,A_HIT_ARCHERY+i,tm->Hit);
+                }
         } else {
-          AttrAdj[i][BONUS_BASE] = 0; 
-          AttrAdj[i][BONUS_TEMP] = 0; 
-        } 
-      for(i=A_INT;i<=A_LUC;i++)
-        AddBonus(BONUS_NATURAL,i,TRACE(thisc->RaceID)->AttrAdj[i]);
-      // ww: these were forgotten somewhere
-      for(i=0;i<5;i++)  {
-        AddBonus(BONUS_NATURAL,A_SPD_ARCHERY+i,tm->Spd);
-        AddBonus(BONUS_NATURAL,A_HIT_ARCHERY+i,tm->Hit);
-      }
-    }
-    else {
-      if (thisc->RaceID) {
-        TRace * tr = TRACE(thisc->RaceID);
-        for(i=0;i!=7;i++)
-          if (tr->AttrAdj[i] == -99) {
-            AttrAdj[i][BONUS_BASE] = 0; 
-            AttrAdj[i][BONUS_TEMP] = 0; 
-          } else { 
-            AddBonus(BONUS_NATURAL,i,tr->AttrAdj[i]);
-          } 
-      }
-    }
-
-    for(i=0;i!=3 && thisc->ClassID[i];i++) {
-      StackBonus(BONUS_BASE+i,A_HIT_ARCHERY, 
-          (TCLASS(thisc->ClassID[i])->AttkVal[S_ARCHERY] * thisc->Level[i])/100);
-      StackBonus(BONUS_BASE+i,A_HIT_BRAWL, 
-          (TCLASS(thisc->ClassID[i])->AttkVal[S_BRAWL] * thisc->Level[i])/100);
-      StackBonus(BONUS_BASE+i,A_HIT_MELEE, 
-          (TCLASS(thisc->ClassID[i])->AttkVal[S_MELEE] * thisc->Level[i])/100);
-      StackBonus(BONUS_BASE+i,A_HIT_THROWN, 
-          (TCLASS(thisc->ClassID[i])->AttkVal[S_THROWN] * thisc->Level[i])/100);
-      StackBonus(BONUS_BASE+i,A_HIT_OFFHAND, 
-          (TCLASS(thisc->ClassID[i])->AttkVal[S_MELEE] * thisc->Level[i])/100);
-
-      StackBonus(BONUS_BASE+i,A_SPD_ARCHERY,
-          max(0,AttrAdj[A_HIT_ARCHERY][BONUS_BASE+i] - (thisc->Level[i]/2)));
-      StackBonus(BONUS_BASE+i,A_SPD_BRAWL,
-          max(0,AttrAdj[A_HIT_ARCHERY][BONUS_BASE+i] - (thisc->Level[i]/2)));
-      StackBonus(BONUS_BASE+i,A_SPD_MELEE,
-          max(0,AttrAdj[A_HIT_ARCHERY][BONUS_BASE+i] - (thisc->Level[i]/2)));
-      StackBonus(BONUS_BASE+i,A_SPD_THROWN,
-          max(0,AttrAdj[A_HIT_ARCHERY][BONUS_BASE+i] - (thisc->Level[i]/2)));
-      StackBonus(BONUS_BASE+i,A_SPD_OFFHAND,
-          max(0,AttrAdj[A_HIT_ARCHERY][BONUS_BASE+i] - (thisc->Level[i]/2)));
-
-      StackBonus(BONUS_BASE+i,A_SAV_FORT, TCLASS(thisc->ClassID[i])->HasFlag(CF_GOOD_FORT) ?
-          GoodSave[thisc->Level[i]] : PoorSave[thisc->Level[i]]);
-      StackBonus(BONUS_BASE+i,A_SAV_REF, TCLASS(thisc->ClassID[i])->HasFlag(CF_GOOD_REF) ?
-          GoodSave[thisc->Level[i]] : PoorSave[thisc->Level[i]]);
-      StackBonus(BONUS_BASE+i,A_SAV_WILL, TCLASS(thisc->ClassID[i])->HasFlag(CF_GOOD_WILL) ?
-          GoodSave[thisc->Level[i]] : PoorSave[thisc->Level[i]]);
-
-      StackBonus(BONUS_BASE+i,A_DEF, thisc->Level[i] / TCLASS(thisc->ClassID[i])->DefMod);
-
-      }
-    int16 BAB;
-    for(i=0;i!=5;i++) {
-      BAB = AttrAdj[A_HIT_ARCHERY+i][BONUS_BASE] +
-            AttrAdj[A_HIT_ARCHERY+i][BONUS_CLASS2] +
-            AttrAdj[A_HIT_ARCHERY+i][BONUS_CLASS3];
-      if (GetBAB(i) > BAB) {
-        AttrAdj[A_HIT_ARCHERY+i][BONUS_STUDY] = GetBAB(i) - BAB;
-        AttrAdj[A_HIT_ARCHERY+i][BONUS_STUDY] = GetBAB(i) - BAB;
+            if (thisc->RaceID) {
+                TRace * tr = TRACE(thisc->RaceID);
+                for(i=0;i!=7;i++)
+                    if (tr->AttrAdj[i] == -99) {
+                        AttrAdj[i][BONUS_BASE] = 0; 
+                        AttrAdj[i][BONUS_TEMP] = 0; 
+                    } else { 
+                        AddBonus(BONUS_NATURAL, i, tr->AttrAdj[i]);
+                    } 
+            }
         }
-      }
 
-  }
-  else {
-    /* When monsters use a *natural* shapechanging ability (a dragon's human
-       form, a lycanthrope, etc.), they use their natural attributes or those
-       of the assumed form, whichever is better. Magical polymorph spells
-       always give the attributes of the new form, OTOH. */
-    if (GetStatiEID(POLYMORPH)) { 
-      for(i=0;i!=7;i++) 
-        AddBonus(BONUS_BASE,i,TMON(mID)->Attr[i]);
+        for(i=0;i!=3 && thisc->ClassID[i];i++) {
+            StackBonus(BONUS_BASE+i,A_HIT_ARCHERY, 
+                (TCLASS(thisc->ClassID[i])->AttkVal[S_ARCHERY] * thisc->Level[i])/100);
+            StackBonus(BONUS_BASE+i,A_HIT_BRAWL, 
+                (TCLASS(thisc->ClassID[i])->AttkVal[S_BRAWL] * thisc->Level[i])/100);
+            StackBonus(BONUS_BASE+i,A_HIT_MELEE, 
+                (TCLASS(thisc->ClassID[i])->AttkVal[S_MELEE] * thisc->Level[i])/100);
+            StackBonus(BONUS_BASE+i,A_HIT_THROWN, 
+                (TCLASS(thisc->ClassID[i])->AttkVal[S_THROWN] * thisc->Level[i])/100);
+            StackBonus(BONUS_BASE+i,A_HIT_OFFHAND, 
+                (TCLASS(thisc->ClassID[i])->AttkVal[S_MELEE] * thisc->Level[i])/100);
+
+            StackBonus(BONUS_BASE+i,A_SPD_ARCHERY,
+                max(0,AttrAdj[A_HIT_ARCHERY][BONUS_BASE+i] - (thisc->Level[i]/2)));
+            StackBonus(BONUS_BASE+i,A_SPD_BRAWL,
+                max(0,AttrAdj[A_HIT_ARCHERY][BONUS_BASE+i] - (thisc->Level[i]/2)));
+            StackBonus(BONUS_BASE+i,A_SPD_MELEE,
+                max(0,AttrAdj[A_HIT_ARCHERY][BONUS_BASE+i] - (thisc->Level[i]/2)));
+            StackBonus(BONUS_BASE+i,A_SPD_THROWN,
+                max(0,AttrAdj[A_HIT_ARCHERY][BONUS_BASE+i] - (thisc->Level[i]/2)));
+            StackBonus(BONUS_BASE+i,A_SPD_OFFHAND,
+                max(0,AttrAdj[A_HIT_ARCHERY][BONUS_BASE+i] - (thisc->Level[i]/2)));
+
+            StackBonus(BONUS_BASE+i,A_SAV_FORT, TCLASS(thisc->ClassID[i])->HasFlag(CF_GOOD_FORT) ?
+                GoodSave[thisc->Level[i]] : PoorSave[thisc->Level[i]]);
+            StackBonus(BONUS_BASE+i,A_SAV_REF, TCLASS(thisc->ClassID[i])->HasFlag(CF_GOOD_REF) ?
+                GoodSave[thisc->Level[i]] : PoorSave[thisc->Level[i]]);
+            StackBonus(BONUS_BASE+i,A_SAV_WILL, TCLASS(thisc->ClassID[i])->HasFlag(CF_GOOD_WILL) ?
+                GoodSave[thisc->Level[i]] : PoorSave[thisc->Level[i]]);
+
+            StackBonus(BONUS_BASE+i,A_DEF, thisc->Level[i] / TCLASS(thisc->ClassID[i])->DefMod);
+
+        }
+        int16 BAB;
+        for(i=0;i!=5;i++) {
+            BAB = AttrAdj[A_HIT_ARCHERY+i][BONUS_BASE] +
+                AttrAdj[A_HIT_ARCHERY+i][BONUS_CLASS2] +
+                AttrAdj[A_HIT_ARCHERY+i][BONUS_CLASS3];
+            if (GetBAB(i) > BAB) {
+                AttrAdj[A_HIT_ARCHERY+i][BONUS_STUDY] = GetBAB(i) - BAB;
+                AttrAdj[A_HIT_ARCHERY+i][BONUS_STUDY] = GetBAB(i) - BAB;
+            }
+        }
+
     }
     else {
-      for(i=0;i!=7;i++) 
-        AddBonus(BONUS_BASE,i,max(TMON(tmID)->Attr[i],TMON(mID)->Attr[i]));
+        /* When monsters use a *natural* shapechanging ability (a dragon's human
+        form, a lycanthrope, etc.), they use their natural attributes or those
+        of the assumed form, whichever is better. Magical polymorph spells
+        always give the attributes of the new form, OTOH. */
+        if (GetStatiEID(POLYMORPH)) { 
+            for(i=0;i!=7;i++) 
+                AddBonus(BONUS_BASE,i,TMON(mID)->Attr[i]);
+        }
+        else {
+            for(i=0;i!=7;i++) 
+                AddBonus(BONUS_BASE,i,max(TMON(tmID)->Attr[i],TMON(mID)->Attr[i]));
+        }
+
+        AddBonus(BONUS_BASE,A_HIT,TMON(mID)->Hit);
+
+        StackBonus(BONUS_NATURAL,A_SPD,TMON(mID)->Spd);      
+        /* Account for template here... */
+        tsav = MonGoodSaves((int8)TMON(mID)->MType[0]) |
+            MonGoodSaves((int8)TMON(mID)->MType[1]) |
+            MonGoodSaves((int8)TMON(mID)->MType[2]);
+
+        if (tsav & XBIT(FORT))
+            AddBonus(BONUS_BASE,A_SAV_FORT, GoodSave[max(ChallengeRating(),0)]);
+        else 
+            AddBonus(BONUS_BASE,A_SAV_FORT, PoorSave[max(ChallengeRating(),0)]);
+
+        if (tsav & XBIT(REF))
+            AddBonus(BONUS_BASE,A_SAV_REF, GoodSave[max(ChallengeRating(),0)]);
+        else 
+            AddBonus(BONUS_BASE,A_SAV_REF, PoorSave[max(ChallengeRating(),0)]);
+
+        if (tsav & XBIT(WILL))
+            AddBonus(BONUS_BASE,A_SAV_WILL, GoodSave[max(ChallengeRating(),0)]);
+        else 
+            AddBonus(BONUS_BASE,A_SAV_WILL, PoorSave[max(ChallengeRating(),0)]);
+
+        // mMana = TMON(mID)->Mana;
     }
 
-    AddBonus(BONUS_BASE,A_HIT,TMON(mID)->Hit);
+    StackBonus(BONUS_NATURAL,A_DEF,TMON(mID)->Def);
+    StackBonus(BONUS_BASE,A_SIZ,TMON(mID)->Size);
+    StackBonus(BONUS_BASE,A_MOV,TMON(mID)->Mov);
+    StackBonus(BONUS_NATURAL,A_ARM,TMON(mID)->Arm);
+    if (HasFeat(FT_IRON_SKIN)) { 
+        StackBonus(BONUS_NATURAL,A_ARM,5); 
+    } 
 
-    StackBonus(BONUS_NATURAL,A_SPD,TMON(mID)->Spd);      
-    /* Account for template here... */
-    tsav = MonGoodSaves((int8)TMON(mID)->MType[0]) |
-      MonGoodSaves((int8)TMON(mID)->MType[1]) |
-      MonGoodSaves((int8)TMON(mID)->MType[2]);
+    AddBonus(BONUS_NATURAL,A_FAT,4);
+    if (isCharacter()) {
+        for (i=0;i<3;i++) 
+            if (thisc->Level[i] > 0) {
+                TClass *tc = TCLASS(thisc->ClassID[i]);
+                if (!tc) continue; 
+                int amt = thisc->Level[i] * tc->HitDie / 12; 
+                { AddBonus(BONUS_BASE+i,A_FAT,amt); }
+            } 
+    } else {
+        int amt = max( ChallengeRating(), 0) / 2; 
+        AddBonus(BONUS_BASE,A_FAT,amt); 
+    } 
 
-    if (tsav & XBIT(FORT))
-      AddBonus(BONUS_BASE,A_SAV_FORT, GoodSave[max(ChallengeRating(),0)]);
-    else 
-      AddBonus(BONUS_BASE,A_SAV_FORT, PoorSave[max(ChallengeRating(),0)]);
+    for(i=0;i!=5;i++) {
+        switch(i) {
+        case S_ARCHERY: it = missileWep; break;
+        case S_BRAWL:   it = NULL;
+        case S_MELEE:   it = meleeWep; break;
+        case S_DUAL:    it = offhandWep; break;
+        case S_THROWN:  it = thrownWep; break;
+        }
+        // ww: it is entirely possible to have Weapon Focus - Tentacle
+        // and want to get a A_HIT_BRAWL bonus, even though there is no item
+        switch(WepSkill(it)) {
+        case WS_NOT_PROF:
+            if (i != S_BRAWL) { 
+                AddBonus(BONUS_SKILL,A_HIT_ARCHERY+i,-4);
+                AddBonus(BONUS_SKILL,A_SPD_ARCHERY+i,-10);
+            } 
+            break;
+        case WS_PROFICIENT:
+            /* the default, no mods */
+            break;
+        case WS_FOCUSED:
+            AddBonus(BONUS_SKILL,A_HIT_ARCHERY+i,+1);
+            break;
+        case WS_SPECIALIST:
+            AddBonus(BONUS_SKILL,A_HIT_ARCHERY+i,+1);
+            AddBonus(BONUS_SKILL,A_SPD_ARCHERY+i,+2);
+            AddBonus(BONUS_SKILL,A_DMG_ARCHERY+i,+2);
+            break;
+        case WS_MASTERY:
+            AddBonus(BONUS_SKILL,A_HIT_ARCHERY+i,+2);
+            AddBonus(BONUS_SKILL,A_DMG_ARCHERY+i,+2);
+            AddBonus(BONUS_SKILL,A_SPD_ARCHERY+i,+4);
+            if (EInSlot(SL_WEAPON) == it && (it == offhandWep || it == meleeWep))
+            { StackBonus(BONUS_SKILL,A_DEF,+2); }
+            /* Also, the weapon does the next highest die
+            of damage. This is figured in Creature::WAttack()
+            Missile weapons benefit from increased range.
+            */
+            break;
+        case WS_HIGH_MASTERY:
+            AddBonus(BONUS_SKILL,A_HIT_ARCHERY+i,+2);
+            AddBonus(BONUS_SKILL,A_DMG_ARCHERY+i,+3);
+            AddBonus(BONUS_SKILL,A_SPD_ARCHERY+i,+6);
+            if (EInSlot(SL_WEAPON) == it && (it == offhandWep || it == meleeWep))
+            { StackBonus(BONUS_SKILL,A_DEF,+3); }
+            // +6 Spd, +3 Dmg, +2 Hit, +3 Def, +1 Crit Mult, Negate Fumbles 
+            break; 
+        case WS_GRAND_MASTERY:
+            AddBonus(BONUS_SKILL,A_HIT_ARCHERY+i,+3);
+            AddBonus(BONUS_SKILL,A_DMG_ARCHERY+i,+4);
+            AddBonus(BONUS_SKILL,A_SPD_ARCHERY+i,+10);
+            if (EInSlot(SL_WEAPON) == it && (it == offhandWep || it == meleeWep))
+            { StackBonus(BONUS_SKILL,A_DEF,+4); }
+            //  +10 Spd, +4 Dmf, +3 Hit, +4 Def, +1 CM, 
+            // ww: todo! Chance of death blow/bisection
+            break; 
+        }
+        if (!it)
+            continue;
+        AddBonus(BONUS_WEAPON, A_HIT_ARCHERY+i, TITEM(it->iID)->u.w.Acc +
+            it->HasQuality(IQ_MITHRIL) - it->HasQuality(IQ_ORCISH));
+        AddBonus(BONUS_WEAPON, A_SPD_ARCHERY+i, TITEM(it->iID)->u.w.Spd +
+            it->HasQuality(IQ_ELVEN)*2);
+        if (it->HasQuality(IQ_ORCISH) || it->HasQuality(IQ_ADAMANT))
+            AddBonus(BONUS_WEAPON, A_DMG_ARCHERY+i, 1); 
 
-    if (tsav & XBIT(REF))
-      AddBonus(BONUS_BASE,A_SAV_REF, GoodSave[max(ChallengeRating(),0)]);
-    else 
-      AddBonus(BONUS_BASE,A_SAV_REF, PoorSave[max(ChallengeRating(),0)]);
+        if (!KnownOnly || it->isKnown(KN_PLUS)) {
+            AddBonus(BONUS_ENHANCE,A_HIT_ARCHERY+i, it->GetPlus() + 
+                (it->HasQuality(WQ_ACCURACY) ? 4 : 0));
+            AddBonus(BONUS_ENHANCE,A_SPD_ARCHERY+i, it->GetPlus());
+            AddBonus(BONUS_ENHANCE,A_DMG_ARCHERY+i, it->GetPlus());
+        }
+        if (it == offhandWep || it == meleeWep)
+            if (it->isMetallic())
+            { StackBonus(BONUS_ARMOUR, A_PRI, -16); }
 
-    if (tsav & XBIT(WILL))
-      AddBonus(BONUS_BASE,A_SAV_WILL, GoodSave[max(ChallengeRating(),0)]);
-    else 
-      AddBonus(BONUS_BASE,A_SAV_WILL, PoorSave[max(ChallengeRating(),0)]);
-
-    // mMana = TMON(mID)->Mana;
-  }
-
-  StackBonus(BONUS_NATURAL,A_DEF,TMON(mID)->Def);
-  StackBonus(BONUS_BASE,A_SIZ,TMON(mID)->Size);
-  StackBonus(BONUS_BASE,A_MOV,TMON(mID)->Mov);
-  StackBonus(BONUS_NATURAL,A_ARM,TMON(mID)->Arm);
-  if (HasFeat(FT_IRON_SKIN)) { 
-    StackBonus(BONUS_NATURAL,A_ARM,5); 
-  } 
- 
-  AddBonus(BONUS_NATURAL,A_FAT,4);
-  if (isCharacter()) {
-    for (i=0;i<3;i++) 
-      if (thisc->Level[i] > 0) {
-        TClass *tc = TCLASS(thisc->ClassID[i]);
-        if (!tc) continue; 
-        int amt = thisc->Level[i] * tc->HitDie / 12; 
-        { AddBonus(BONUS_BASE+i,A_FAT,amt); }
-      } 
-  } else {
-    int amt = max( ChallengeRating(), 0) / 2; 
-    AddBonus(BONUS_BASE,A_FAT,amt); 
-  } 
-
-  for(i=0;i!=5;i++) {
-    switch(i) {
-      case S_ARCHERY: it = missileWep; break;
-      case S_BRAWL:   it = NULL;
-      case S_MELEE:   it = meleeWep; break;
-      case S_DUAL:    it = offhandWep; break;
-      case S_THROWN:  it = thrownWep; break;
-      }
-    // ww: it is entirely possible to have Weapon Focus - Tentacle
-    // and want to get a A_HIT_BRAWL bonus, even though there is no item
-    switch(WepSkill(it)) {
-      case WS_NOT_PROF:
-        if (i != S_BRAWL) { 
-          AddBonus(BONUS_SKILL,A_HIT_ARCHERY+i,-4);
-          AddBonus(BONUS_SKILL,A_SPD_ARCHERY+i,-10);
-        } 
-        break;
-      case WS_PROFICIENT:
-        /* the default, no mods */
-        break;
-      case WS_FOCUSED:
-        AddBonus(BONUS_SKILL,A_HIT_ARCHERY+i,+1);
-        break;
-      case WS_SPECIALIST:
-        AddBonus(BONUS_SKILL,A_HIT_ARCHERY+i,+1);
-        AddBonus(BONUS_SKILL,A_SPD_ARCHERY+i,+2);
-        AddBonus(BONUS_SKILL,A_DMG_ARCHERY+i,+2);
-        break;
-      case WS_MASTERY:
-        AddBonus(BONUS_SKILL,A_HIT_ARCHERY+i,+2);
-        AddBonus(BONUS_SKILL,A_DMG_ARCHERY+i,+2);
-        AddBonus(BONUS_SKILL,A_SPD_ARCHERY+i,+4);
-        if (EInSlot(SL_WEAPON) == it && (it == offhandWep || it == meleeWep))
-        { StackBonus(BONUS_SKILL,A_DEF,+2); }
-        /* Also, the weapon does the next highest die
-           of damage. This is figured in Creature::WAttack()
-           Missile weapons benefit from increased range.
-         */
-        break;
-      case WS_HIGH_MASTERY:
-        AddBonus(BONUS_SKILL,A_HIT_ARCHERY+i,+2);
-        AddBonus(BONUS_SKILL,A_DMG_ARCHERY+i,+3);
-        AddBonus(BONUS_SKILL,A_SPD_ARCHERY+i,+6);
-        if (EInSlot(SL_WEAPON) == it && (it == offhandWep || it == meleeWep))
-        { StackBonus(BONUS_SKILL,A_DEF,+3); }
-        // +6 Spd, +3 Dmg, +2 Hit, +3 Def, +1 Crit Mult, Negate Fumbles 
-        break; 
-      case WS_GRAND_MASTERY:
-        AddBonus(BONUS_SKILL,A_HIT_ARCHERY+i,+3);
-        AddBonus(BONUS_SKILL,A_DMG_ARCHERY+i,+4);
-        AddBonus(BONUS_SKILL,A_SPD_ARCHERY+i,+10);
-        if (EInSlot(SL_WEAPON) == it && (it == offhandWep || it == meleeWep))
-        { StackBonus(BONUS_SKILL,A_DEF,+4); }
-        //  +10 Spd, +4 Dmf, +3 Hit, +4 Def, +1 CM, 
-        // ww: todo! Chance of death blow/bisection
-        break; 
-    }
-    if (!it)
-      continue;
-    AddBonus(BONUS_WEAPON, A_HIT_ARCHERY+i, TITEM(it->iID)->u.w.Acc +
-        it->HasQuality(IQ_MITHRIL) - it->HasQuality(IQ_ORCISH));
-    AddBonus(BONUS_WEAPON, A_SPD_ARCHERY+i, TITEM(it->iID)->u.w.Spd +
-        it->HasQuality(IQ_ELVEN)*2);
-    if (it->HasQuality(IQ_ORCISH) || it->HasQuality(IQ_ADAMANT))
-      AddBonus(BONUS_WEAPON, A_DMG_ARCHERY+i, 1); 
-        
-    if (!KnownOnly || it->isKnown(KN_PLUS)) {
-      AddBonus(BONUS_ENHANCE,A_HIT_ARCHERY+i, it->GetPlus() + 
-          (it->HasQuality(WQ_ACCURACY) ? 4 : 0));
-      AddBonus(BONUS_ENHANCE,A_SPD_ARCHERY+i, it->GetPlus());
-      AddBonus(BONUS_ENHANCE,A_DMG_ARCHERY+i, it->GetPlus());
-      }
-    if (it == offhandWep || it == meleeWep)
-      if (it->isMetallic())
-        { StackBonus(BONUS_ARMOUR, A_PRI, -16); }
-        
-    if (it->HasQuality(WQ_HOLY) && isMType(MA_EVIL))
-      { AddBonus(BONUS_NEGLEV,A_HIT_ARCHERY+i,-2);
-        AddBonus(BONUS_NEGLEV,A_DMG_ARCHERY+i,-2);
-        AddBonus(BONUS_NEGLEV,A_SPD_ARCHERY+i,-4); }
-    if (it->HasQuality(WQ_UNHOLY) && isMType(MA_GOOD))
-      { AddBonus(BONUS_NEGLEV,A_HIT_ARCHERY+i,-2);  
-        AddBonus(BONUS_NEGLEV,A_DMG_ARCHERY+i,-2);
-        AddBonus(BONUS_NEGLEV,A_SPD_ARCHERY+i,-4); }
-    if (it->HasQuality(WQ_CHAOTIC) && isMType(MA_LAWFUL))
-      { AddBonus(BONUS_NEGLEV,A_HIT_ARCHERY+i,-2); 
-        AddBonus(BONUS_NEGLEV,A_DMG_ARCHERY+i,-2);
-        AddBonus(BONUS_NEGLEV,A_SPD_ARCHERY+i,-4); }
-    if (it->HasQuality(WQ_LAWFUL) && isMType(MA_CHAOTIC))
-      { AddBonus(BONUS_NEGLEV,A_HIT_ARCHERY+i,-2);   
-        AddBonus(BONUS_NEGLEV,A_DMG_ARCHERY+i,-2);
-        AddBonus(BONUS_NEGLEV,A_SPD_ARCHERY+i,-4); }
-    if (it->HasQuality(WQ_BALANCE) && 
-          (isMType(MA_LAWFUL) || isMType(MA_CHAOTIC)) &&
-          (isMType(MA_GOOD) || isMType(MA_EVIL)))
-      { AddBonus(BONUS_NEGLEV,A_HIT_ARCHERY+i,-2);   
-        AddBonus(BONUS_NEGLEV,A_DMG_ARCHERY+i,-2);
-        AddBonus(BONUS_NEGLEV,A_SPD_ARCHERY+i,-4); } 
+            if (it->HasQuality(WQ_HOLY) && isMType(MA_EVIL))
+            { AddBonus(BONUS_NEGLEV,A_HIT_ARCHERY+i,-2);
+            AddBonus(BONUS_NEGLEV,A_DMG_ARCHERY+i,-2);
+            AddBonus(BONUS_NEGLEV,A_SPD_ARCHERY+i,-4); }
+            if (it->HasQuality(WQ_UNHOLY) && isMType(MA_GOOD))
+            { AddBonus(BONUS_NEGLEV,A_HIT_ARCHERY+i,-2);  
+            AddBonus(BONUS_NEGLEV,A_DMG_ARCHERY+i,-2);
+            AddBonus(BONUS_NEGLEV,A_SPD_ARCHERY+i,-4); }
+            if (it->HasQuality(WQ_CHAOTIC) && isMType(MA_LAWFUL))
+            { AddBonus(BONUS_NEGLEV,A_HIT_ARCHERY+i,-2); 
+            AddBonus(BONUS_NEGLEV,A_DMG_ARCHERY+i,-2);
+            AddBonus(BONUS_NEGLEV,A_SPD_ARCHERY+i,-4); }
+            if (it->HasQuality(WQ_LAWFUL) && isMType(MA_CHAOTIC))
+            { AddBonus(BONUS_NEGLEV,A_HIT_ARCHERY+i,-2);   
+            AddBonus(BONUS_NEGLEV,A_DMG_ARCHERY+i,-2);
+            AddBonus(BONUS_NEGLEV,A_SPD_ARCHERY+i,-4); }
+            if (it->HasQuality(WQ_BALANCE) && 
+                (isMType(MA_LAWFUL) || isMType(MA_CHAOTIC)) &&
+                (isMType(MA_GOOD) || isMType(MA_EVIL)))
+            { AddBonus(BONUS_NEGLEV,A_HIT_ARCHERY+i,-2);   
+            AddBonus(BONUS_NEGLEV,A_DMG_ARCHERY+i,-2);
+            AddBonus(BONUS_NEGLEV,A_SPD_ARCHERY+i,-4); } 
     }
 
-  if (meleeWep && meleeWep->HasQuality(WQ_SPEED))
-  { StackBonus(BONUS_ENHANCE,A_SPD_MELEE,offhandWep ? 5 : 10); }
-  if (offhandWep && offhandWep->HasQuality(WQ_SPEED))
-  { StackBonus(BONUS_ENHANCE,A_SPD_MELEE,5); }
-  if (missileWep && missileWep->HasQuality(WQ_SPEED))
-  { StackBonus(BONUS_ENHANCE,A_SPD_ARCHERY,10); }
+    if (meleeWep && meleeWep->HasQuality(WQ_SPEED))
+    { StackBonus(BONUS_ENHANCE,A_SPD_MELEE,offhandWep ? 5 : 10); }
+    if (offhandWep && offhandWep->HasQuality(WQ_SPEED))
+    { StackBonus(BONUS_ENHANCE,A_SPD_MELEE,5); }
+    if (missileWep && missileWep->HasQuality(WQ_SPEED))
+    { StackBonus(BONUS_ENHANCE,A_SPD_ARCHERY,10); }
 
-  StateFlags &= ~(MS_HAS_REACH | MS_REACH_ONLY);
-  if (InSlot(SL_WEAPON) && InSlot(SL_WEAPON)->HasIFlag(WT_REACH)) {
-    StateFlags |= MS_HAS_REACH;
-    if (!InSlot(SL_WEAPON)->HasIFlag(WT_STRIKE_NEAR))
-      StateFlags |= MS_REACH_ONLY;
-  } else if (InherentCreatureReach())
-    StateFlags |= MS_HAS_REACH;
+    StateFlags &= ~(MS_HAS_REACH | MS_REACH_ONLY);
+    if (InSlot(SL_WEAPON) && InSlot(SL_WEAPON)->HasIFlag(WT_REACH)) {
+        StateFlags |= MS_HAS_REACH;
+        if (!InSlot(SL_WEAPON)->HasIFlag(WT_STRIKE_NEAR))
+            StateFlags |= MS_REACH_ONLY;
+    } else if (InherentCreatureReach())
+        StateFlags |= MS_HAS_REACH;
 
 #define KNOWN \
     if (KnownOnly && S->h && oThing(S->h)->isItem() && \
-        !oItem(S->h)->isKnown(KN_PLUS)) continue
+    !oItem(S->h)->isKnown(KN_PLUS)) continue
 
-  if (HasStati(PRONE)) {
+    if (HasStati(PRONE)) {
         AddBonus(BONUS_STATUS,A_HIT,-4);
         AddBonus(BONUS_STATUS,A_DEF,-4);
-      }
-  if (HasStati(CONFUSED)) {
+    }
+    if (HasStati(CONFUSED)) {
         AddBonus(BONUS_STATUS,A_INT,-4);
         AddBonus(BONUS_STATUS,A_WIS,-4);
         AddBonus(BONUS_STATUS,A_MAG,-15);
     }
-  grappling = (HasStati(GRABBED) ||
-      HasStati(GRAPPLED) ||
-      HasStati(GRAPPLING) ||
-      HasStati(STUCK));
-  if (HasStati(STUNNED) || HasStati(NAUSEA)) { 
-    AddBonus(BONUS_STATUS,A_DEX,-6);
-    AddBonus(BONUS_STATUS,A_SPD,-10);
-    AddBonus(BONUS_STATUS,A_MAG,-10);
+    grappling = (HasStati(GRABBED) ||
+        HasStati(GRAPPLED) ||
+        HasStati(GRAPPLING) ||
+        HasStati(STUCK));
+    if (HasStati(STUNNED) || HasStati(NAUSEA)) { 
+        AddBonus(BONUS_STATUS,A_DEX,-6);
+        AddBonus(BONUS_STATUS,A_SPD,-10);
+        AddBonus(BONUS_STATUS,A_MAG,-10);
     }
-  if (HasStati(DISTRACTED))
-    AddBonus(BONUS_CIRC,A_MAG,HighStatiMag(DISTRACTED));
-  switch (HungerState())
+    if (HasStati(DISTRACTED))
+        AddBonus(BONUS_CIRC,A_MAG,HighStatiMag(DISTRACTED));
+    switch (HungerState())
     {
-      case BLOATED:
+    case BLOATED:
         AddBonus(BONUS_HUNGER, A_SPD,-2);
-       break;
-      case HUNGRY:
+        break;
+    case HUNGRY:
         AddBonus(BONUS_HUNGER, A_FAT, -1);
         AddBonus(BONUS_HUNGER, A_STR, -1);
         AddBonus(BONUS_HUNGER, A_CON, -1);
-      case STARVING:
+    case STARVING:
         AddBonus(BONUS_HUNGER, A_MAG,-3);
         AddBonus(BONUS_HUNGER, A_FAT, -2);
         AddBonus(BONUS_HUNGER, A_STR, -2);
         AddBonus(BONUS_HUNGER, A_CON, -2);
-       break;
-      case WEAK:
-      case FAINTING:
+        break;
+    case WEAK:
+    case FAINTING:
         AddBonus(BONUS_HUNGER, A_MAG,-6);
         AddBonus(BONUS_HUNGER, A_FAT, -2);
         AddBonus(BONUS_HUNGER, A_STR, -4);
         AddBonus(BONUS_HUNGER, A_CON, -4);
-       break;
+        break;
     }
-  
-  
-  if (HasStati(SINGING)) {
+
+
+    if (HasStati(SINGING)) {
         AddBonus(BONUS_STATUS,A_HIT,-2);
-  }
-  StatiIterNature(this,ADJUST)
-    KNOWN;
+    }
+    StatiIterNature(this,ADJUST)
+        KNOWN;
     AddBonus(BONUS_ENHANCE,S->Val,S->Mag);
-  StatiIterEnd(this)
-  StatiIterNature(this,ADJUST_SAC)
-    KNOWN;
+    StatiIterEnd(this)
+        StatiIterNature(this,ADJUST_SAC)
+        KNOWN;
     AddBonus(BONUS_SACRED,S->Val,S->Mag);
-  StatiIterEnd(this)
-  StatiIterNature(this,ADJUST_INS)
-    KNOWN;
+    StatiIterEnd(this)
+        StatiIterNature(this,ADJUST_INS)
+        KNOWN;
     AddBonus(BONUS_INSIGHT,S->Val,S->Mag);
-  StatiIterEnd(this)
-  StatiIterNature(this,ADJUST_COMP)
-    KNOWN;
+    StatiIterEnd(this)
+        StatiIterNature(this,ADJUST_COMP)
+        KNOWN;
     AddBonus(BONUS_COMP,S->Val,S->Mag);
-  StatiIterEnd(this)
-  StatiIterNature(this,ADJUST_ART)
-    KNOWN;
+    StatiIterEnd(this)
+        StatiIterNature(this,ADJUST_ART)
+        KNOWN;
     AddBonus(BONUS_ARTI,S->Val,S->Mag);
-  StatiIterEnd(this)
-  StatiIterNature(this,ADJUST_DEFL)
-    KNOWN;
+    StatiIterEnd(this)
+        StatiIterNature(this,ADJUST_DEFL)
+        KNOWN;
     AddBonus(BONUS_DEFLECT,S->Val,S->Mag);
-  StatiIterEnd(this)
-  StatiIterNature(this,ADJUST_DMG)
-    KNOWN;
+    StatiIterEnd(this)
+        StatiIterNature(this,ADJUST_DMG)
+        KNOWN;
     if (S->Val == A_AID) 
-      { StackBonus(BONUS_NEGLEV,S->Val,S->Mag); }
+    { StackBonus(BONUS_NEGLEV,S->Val,S->Mag); }
     else 
-      { StackBonus(BONUS_DAMAGE,S->Val,S->Mag); }
-  StatiIterEnd(this)
-  StatiIterNature(this,ADJUST_INH)
-    KNOWN;
+    { StackBonus(BONUS_DAMAGE,S->Val,S->Mag); }
+    StatiIterEnd(this)
+        StatiIterNature(this,ADJUST_INH)
+        KNOWN;
     StackBonus(BONUS_INHERANT,S->Val,S->Mag);
-  StatiIterEnd(this)
-  StatiIterNature(this,ADJUST_MOR)
-    KNOWN;
+    StatiIterEnd(this)
+        StatiIterNature(this,ADJUST_MOR)
+        KNOWN;
     AddBonus(BONUS_MORALE,S->Val,S->Mag);
-  StatiIterEnd(this)
-  StatiIterNature(this,ADJUST_ARM)
-    KNOWN;
+    StatiIterEnd(this)
+        StatiIterNature(this,ADJUST_ARM)
+        KNOWN;
     AddBonus(BONUS_ARMOUR,S->Val,S->Mag);
-  StatiIterEnd(this)
-  StatiIterNature(this,ADJUST_DODG)
-    KNOWN;
+    StatiIterEnd(this)
+        StatiIterNature(this,ADJUST_DODG)
+        KNOWN;
     StackBonus(BONUS_DODGE,S->Val,S->Mag);
-  StatiIterEnd(this)
-  StatiIterNature(this,ADJUST_CIRC)
-    KNOWN;
+    StatiIterEnd(this)
+        StatiIterNature(this,ADJUST_CIRC)
+        KNOWN;
     StackBonus(BONUS_CIRC,S->Val,S->Mag);
-  StatiIterEnd(this)
-  StatiIterNature(this,ADJUST_NAT)
-    KNOWN;
+    StatiIterEnd(this)
+        StatiIterNature(this,ADJUST_NAT)
+        KNOWN;
     AddBonus(BONUS_NATURAL,S->Val,S->Mag);
-  StatiIterEnd(this)
-  StatiIterNature(this,ADJUST_LUCK)
-    KNOWN;
+    StatiIterEnd(this)
+        StatiIterNature(this,ADJUST_LUCK)
+        KNOWN;
     AddBonus(BONUS_LUCK,S->Val,S->Mag);
-  StatiIterEnd(this)
-  StatiIterNature(this,ADJUST_RES)
-    KNOWN;
+    StatiIterEnd(this)
+        StatiIterNature(this,ADJUST_RES)
+        KNOWN;
     AddBonus(BONUS_RESIST,S->Val,S->Mag);
-  StatiIterEnd(this)
-  StatiIterNature(this,ADJUST_PAIN)
-    KNOWN;
+    StatiIterEnd(this)
+        StatiIterNature(this,ADJUST_PAIN)
+        KNOWN;
     AddBonus(BONUS_PAIN,S->Val,S->Mag);
-  StatiIterEnd(this)
-  StatiIterNature(this,ADJUST_SIZE)
-    KNOWN;
+    StatiIterEnd(this)
+        StatiIterNature(this,ADJUST_SIZE)
+        KNOWN;
     AddBonus(BONUS_SIZE,S->Val,S->Mag);
-  StatiIterEnd(this)
-  
-  {
-    int16 n;
-    // Concentration cancels pain
-    if (HasSkill(SK_CONCENT) && ((n = (SkillLevel(SK_CONCENT)-8)/2) > 0) )
-      for (i=0;i!=ATTR_LAST;i++)
-        if (AttrAdj[i][BONUS_PAIN] < 0)
-          AttrAdj[i][BONUS_PAIN] = min(0,
-            AttrAdj[i][BONUS_PAIN] + n);
-  }
-      
-  if (HasStati(MANIFEST)) {
+    StatiIterEnd(this)
+
+    {
+        int16 n;
+        // Concentration cancels pain
+        if (HasSkill(SK_CONCENT) && ((n = (SkillLevel(SK_CONCENT)-8)/2) > 0) )
+            for (i=0;i!=ATTR_LAST;i++)
+                if (AttrAdj[i][BONUS_PAIN] < 0)
+                    AttrAdj[i][BONUS_PAIN] = min(0,
+                    AttrAdj[i][BONUS_PAIN] + n);
+    }
+
+    if (HasStati(MANIFEST)) {
         AddBonus(BONUS_ENHANCE,A_CHA,4);
-  }
-  if (HasStati(SPRINTING)) { 
+    }
+    if (HasStati(SPRINTING)) { 
         // ww: in the SRD, Charging increases your movement rate by 100%
         // and costs no fatigue ... I've never used sprinting in the
         // game, so let's make it a bit cooler! We'll also assume that
         // it stacks with Charging. 
-        
+
         AddBonus(BONUS_TACTIC,A_MOV,20);
         AddBonus(BONUS_TACTIC,A_DEF,-2);
-  }
-  if (HasStati(CHARGING)) {
+    }
+    if (HasStati(CHARGING)) {
         // ww: SRD: Charging is x2 movement, -2 AC
         // fjm: In SRD, charging also prevents you from getting
         // full-attack and does all kinds of other stuff. Charging
@@ -785,414 +732,405 @@ Restart:
         // sprinting is for!
         AddBonus(BONUS_TACTIC,A_MOV,10);
         AddBonus(BONUS_TACTIC,A_DEF,-2);
-  }
-  if (HasStati(DEFENSIVE)) {
+    }
+    if (HasStati(DEFENSIVE)) {
         AddBonus(BONUS_TACTIC,A_DEF,+4);
         AddBonus(BONUS_TACTIC,A_MAG,-4);
         AddBonus(BONUS_TACTIC,A_MOV,-5);
         AddBonus(BONUS_TACTIC,A_HIT,-4);
         AddBonus(BONUS_TACTIC,A_DMG,-2);
-  }
-  if (HasStati(HIDING)) { 
+    }
+    if (HasStati(HIDING)) { 
         if (!HasFeat(FT_SNEAKY))
-          AddBonus(BONUS_HIDE,A_MOV,-10);
-  }
-  StatiIterNature(this,RAGING)
+            AddBonus(BONUS_HIDE,A_MOV,-10);
+    }
+    StatiIterNature(this,RAGING)
         if (isSmallRace())
-          { AddBonus(BONUS_RAGE, A_STR, S->Val/2);
-            AddBonus(BONUS_RAGE, A_DEX, S->Val/2); }        
+        { AddBonus(BONUS_RAGE, A_STR, S->Val/2);
+        AddBonus(BONUS_RAGE, A_DEX, S->Val/2); }        
         else
-          { AddBonus(BONUS_RAGE, A_STR, S->Val); }
-        
+        { AddBonus(BONUS_RAGE, A_STR, S->Val); }
+
         AddBonus(BONUS_RAGE, A_CON, S->Val);
         AddBonus(BONUS_RAGE, A_SPD, S->Val);
         AddBonus(BONUS_RAGE, A_SAV_WILL, S->Val/2);
-  StatiIterEnd(this)
-  StatiIterNature(this,DWARVEN_FOCUS)
-        if (!S->h)
-          break;
+    StatiIterEnd(this)
+    StatiIterNature(this,DWARVEN_FOCUS)
+            if (!S->h)
+                break;
         AddBonus(BONUS_MORALE, A_SAV_WILL, +4);
         AddBonus(BONUS_MORALE, A_FAT, 3);
-  StatiIterEnd(this)
-  StatiIterNature(this,TEMPLATE)
-        TTemplate *tt; tt = TTEM(S->eID);
+    StatiIterEnd(this)
+    StatiIterNature(this,TEMPLATE)
+            TTemplate *tt; tt = TTEM(S->eID);
         for (j=0;j!=6;j++)
-          APPLY_TEMPLATE_MODIFIER(j,tt->Attr[j])
-        APPLY_TEMPLATE_MODIFIER(A_HIT_ARCHERY,tt->Hit)
-        APPLY_TEMPLATE_MODIFIER(A_HIT_BRAWL,tt->Hit)
-        APPLY_TEMPLATE_MODIFIER(A_HIT_MELEE,tt->Hit)
-        APPLY_TEMPLATE_MODIFIER(A_HIT_OFFHAND,tt->Hit)
-        APPLY_TEMPLATE_MODIFIER(A_HIT_THROWN,tt->Hit)
-        APPLY_TEMPLATE_MODIFIER(A_DEF,tt->Def)
-        APPLY_TEMPLATE_MODIFIER(A_MOV,tt->Mov)
-        APPLY_TEMPLATE_MODIFIER(A_SPD_ARCHERY,tt->Spd)
-        APPLY_TEMPLATE_MODIFIER(A_SPD_BRAWL,tt->Spd)
-        APPLY_TEMPLATE_MODIFIER(A_SPD_MELEE,tt->Spd)
-        APPLY_TEMPLATE_MODIFIER(A_SPD_OFFHAND,tt->Spd)
-        APPLY_TEMPLATE_MODIFIER(A_SPD_THROWN,tt->Spd)
-        APPLY_TEMPLATE_MODIFIER(A_SIZ,tt->Size)
-        NAT_ARMOUR_TEMPLATE_MOD(A_ARM,tt->Arm)
-        StackBonus(BONUS_TEMP,A_DMG_BRAWL,tt->DmgMod);
-  StatiIterEnd(this)
-  if (HasStati(TUMBLING)) {
+            APPLY_TEMPLATE_MODIFIER(j,tt->Attr[j])
+            APPLY_TEMPLATE_MODIFIER(A_HIT_ARCHERY,tt->Hit)
+            APPLY_TEMPLATE_MODIFIER(A_HIT_BRAWL,tt->Hit)
+            APPLY_TEMPLATE_MODIFIER(A_HIT_MELEE,tt->Hit)
+            APPLY_TEMPLATE_MODIFIER(A_HIT_OFFHAND,tt->Hit)
+            APPLY_TEMPLATE_MODIFIER(A_HIT_THROWN,tt->Hit)
+            APPLY_TEMPLATE_MODIFIER(A_DEF,tt->Def)
+            APPLY_TEMPLATE_MODIFIER(A_MOV,tt->Mov)
+            APPLY_TEMPLATE_MODIFIER(A_SPD_ARCHERY,tt->Spd)
+            APPLY_TEMPLATE_MODIFIER(A_SPD_BRAWL,tt->Spd)
+            APPLY_TEMPLATE_MODIFIER(A_SPD_MELEE,tt->Spd)
+            APPLY_TEMPLATE_MODIFIER(A_SPD_OFFHAND,tt->Spd)
+            APPLY_TEMPLATE_MODIFIER(A_SPD_THROWN,tt->Spd)
+            APPLY_TEMPLATE_MODIFIER(A_SIZ,tt->Size)
+            NAT_ARMOUR_TEMPLATE_MOD(A_ARM,tt->Arm)
+            StackBonus(BONUS_TEMP,A_DMG_BRAWL,tt->DmgMod);
+    StatiIterEnd(this)
+
+    if (HasStati(TUMBLING)) {
         AddBonus(BONUS_STATUS,A_MOV,(SkillLevel(SK_TUMBLE)+1)/2);
         AddBonus(BONUS_STATUS,A_DEF,(SkillLevel(SK_TUMBLE)+1)/2);
         AddBonus(BONUS_STATUS,A_SPD,-5);
         AddBonus(BONUS_STATUS,A_MAG,-5);
-  }
-  if (HasSkill(SK_TUMBLE) && SkillLevel(SK_TUMBLE) > 5)
-    AddBonus(BONUS_COMP,A_SAV_REF,(SkillLevel(SK_TUMBLE)-3)/3);
-  if (HasStati(ELEVATED)) {
-    AddBonus(BONUS_ELEV,A_DEF,SkillLevel(SK_CLIMB)/6+2);
-    AddBonus(BONUS_ELEV,A_HIT,SkillLevel(SK_CLIMB)/6+2);
-    if (GetStatiVal(ELEVATED) == ELEV_CEILING)
-      AddBonus(BONUS_ELEV,A_MOV, -14 + max(0,SkillLevel(SK_CLIMB)-20));
-    else if (HasFeat(FT_BRACHIATION))
-      ;
-    else
-      AddBonus(BONUS_ELEV,A_MOV, -10);
-      
-  } 
-  if (HasStati(MOUNTED)) {
-    AddBonus(BONUS_ELEV,A_DEF,SkillLevel(SK_RIDE)/6+2);
-    AddBonus(BONUS_ELEV,A_HIT_MELEE,SkillLevel(SK_RIDE)/5+1);
-    AddBonus(BONUS_ELEV,A_DMG_MELEE,SkillLevel(SK_RIDE)/5);
-  }
+    }
+    if (HasSkill(SK_TUMBLE) && SkillLevel(SK_TUMBLE) > 5)
+        AddBonus(BONUS_COMP,A_SAV_REF,(SkillLevel(SK_TUMBLE)-3)/3);
+    if (HasStati(ELEVATED)) {
+        AddBonus(BONUS_ELEV,A_DEF,SkillLevel(SK_CLIMB)/6+2);
+        AddBonus(BONUS_ELEV,A_HIT,SkillLevel(SK_CLIMB)/6+2);
+        if (GetStatiVal(ELEVATED) == ELEV_CEILING)
+            AddBonus(BONUS_ELEV,A_MOV, -14 + max(0,SkillLevel(SK_CLIMB)-20));
+        else if (HasFeat(FT_BRACHIATION))
+            ;
+        else
+            AddBonus(BONUS_ELEV,A_MOV, -10);
 
-  static int armourSlots[] = {
-    SL_ARMOUR, SL_READY, SL_WEAPON, 0
-  } ;
-  for (j=0; armourSlots[j]; j++) {
-    i = armourSlots[j];
-    if ((it = EInSlot(i)) && it->activeSlot(i)) {
-      /* count a two-handed shield only once! */
-      if (i == SL_WEAPON) 
-        if (EInSlot(SL_READY) == EInSlot(SL_WEAPON))
-          continue;
-
-      /* don't count a suit of armour held in a hand */
-      if (!it->activeSlot(i))
-        continue; 
-
-      if (it->isType(T_SHIELD)) {
-        int penalty = ((Armour *)it)->PenaltyVal(this,true) ;
-
-        if (!grappling) { 
-          StackBonus(BONUS_SHIELD, A_COV,it->CovVal(this,KnownOnly));
-          AddBonus(BONUS_SHIELD,A_DEF,it->DefVal(this,KnownOnly));
-          // ww: to make shields more attractive, magical shields also
-          // absorb damage (based largely on their Plus 
-          AddBonus(BONUS_SHIELD,A_ARM, it->ArmVal(0,KnownOnly)); 
-        } 
-        StackBonus(BONUS_SHIELD,A_ARC,penalty * 2);
-        if (it->isMetallic())
-          { StackBonus(BONUS_ARMOUR, A_PRI, -16); }
-        
-        // ww: not bonus skill because if you're wearing armour *and* a
-        // shield, the penalties stack! 
-        if (WepSkill(it) == WS_NOT_PROF) {
-          StackBonus(BONUS_SHIELD,A_SPD,penalty);
-          StackBonus(BONUS_SHIELD,A_HIT,penalty);
-          StackBonus(BONUS_SHIELD,A_SAV_REF,penalty);
-        }
-
-        AddBonus(BONUS_SHIELD, A_MOV, (penalty / 2));
-
-      } else if (it->isType(T_ARMOUR)) {
-        int penalty = ((Armour *)it)->PenaltyVal(this,true) ;
-
-        StackBonus(BONUS_ARMOUR, A_COV, it->CovVal(this,KnownOnly));
-        StackBonus(BONUS_ARMOUR, A_ARC, penalty * 2);
-        if (it->isMetallic())
-          { StackBonus(BONUS_ARMOUR, A_PRI, -16); }
-        if (!it->isGroup(WG_LARMOUR))
-          { StackBonus(BONUS_ARMOUR, A_BAR, penalty * 2); }
-
-        if (WepSkill(it) == WS_NOT_PROF) {
-          StackBonus(BONUS_ARMOUR,A_SPD,penalty);
-          StackBonus(BONUS_ARMOUR,A_HIT,penalty);
-          StackBonus(BONUS_ARMOUR,A_SAV_REF,penalty);
-        }
-        AddBonus(BONUS_ARMOUR, A_MOV, penalty);
-      } 
     } 
-  } 
-  
-  
+    if (HasStati(MOUNTED)) {
+        AddBonus(BONUS_ELEV,A_DEF,SkillLevel(SK_RIDE)/6+2);
+        AddBonus(BONUS_ELEV,A_HIT_MELEE,SkillLevel(SK_RIDE)/5+1);
+        AddBonus(BONUS_ELEV,A_DMG_MELEE,SkillLevel(SK_RIDE)/5);
+    }
 
- 
+    static int armourSlots[] = {
+        SL_ARMOUR, SL_READY, SL_WEAPON, 0
+    } ;
+    for (j=0; armourSlots[j]; j++) {
+        i = armourSlots[j];
+        if ((it = EInSlot(i)) && it->activeSlot(i)) {
+            /* count a two-handed shield only once! */
+            if (i == SL_WEAPON) 
+                if (EInSlot(SL_READY) == EInSlot(SL_WEAPON))
+                    continue;
 
-  if (onPlane() != PHASE_MATERIAL) {
-    // SRD: An incorporeal creature has no natural armour bonus but has a
-    // deflection bonus equal to its Charisma bonus (always at least +1,
-    // even if the creature's Charisma score does not normally provide a
-    // bonus).
-    StackBonus(BONUS_CIRC,A_DEF, max(1,Mod2(A_CHA)));
-  } 
+            /* don't count a suit of armour held in a hand */
+            if (!it->activeSlot(i))
+                continue; 
 
-  switch (Encumbrance()) {
+            if (it->isType(T_SHIELD)) {
+                int penalty = ((Armour *)it)->PenaltyVal(this,true) ;
+
+                if (!grappling) { 
+                    StackBonus(BONUS_SHIELD, A_COV,it->CovVal(this,KnownOnly));
+                    AddBonus(BONUS_SHIELD,A_DEF,it->DefVal(this,KnownOnly));
+                    // ww: to make shields more attractive, magical shields also
+                    // absorb damage (based largely on their Plus 
+                    AddBonus(BONUS_SHIELD,A_ARM, it->ArmVal(0,KnownOnly)); 
+                } 
+                StackBonus(BONUS_SHIELD,A_ARC,penalty * 2);
+                if (it->isMetallic())
+                { StackBonus(BONUS_ARMOUR, A_PRI, -16); }
+
+                // ww: not bonus skill because if you're wearing armour *and* a
+                // shield, the penalties stack! 
+                if (WepSkill(it) == WS_NOT_PROF) {
+                    StackBonus(BONUS_SHIELD,A_SPD,penalty);
+                    StackBonus(BONUS_SHIELD,A_HIT,penalty);
+                    StackBonus(BONUS_SHIELD,A_SAV_REF,penalty);
+                }
+
+                AddBonus(BONUS_SHIELD, A_MOV, (penalty / 2));
+
+            } else if (it->isType(T_ARMOUR)) {
+                int penalty = ((Armour *)it)->PenaltyVal(this,true) ;
+
+                StackBonus(BONUS_ARMOUR, A_COV, it->CovVal(this,KnownOnly));
+                StackBonus(BONUS_ARMOUR, A_ARC, penalty * 2);
+                if (it->isMetallic())
+                { StackBonus(BONUS_ARMOUR, A_PRI, -16); }
+                if (!it->isGroup(WG_LARMOUR))
+                { StackBonus(BONUS_ARMOUR, A_BAR, penalty * 2); }
+
+                if (WepSkill(it) == WS_NOT_PROF) {
+                    StackBonus(BONUS_ARMOUR,A_SPD,penalty);
+                    StackBonus(BONUS_ARMOUR,A_HIT,penalty);
+                    StackBonus(BONUS_ARMOUR,A_SAV_REF,penalty);
+                }
+                AddBonus(BONUS_ARMOUR, A_MOV, penalty);
+            } 
+        } 
+    } 
+
+    if (onPlane() != PHASE_MATERIAL) {
+        // SRD: An incorporeal creature has no natural armour bonus but has a
+        // deflection bonus equal to its Charisma bonus (always at least +1,
+        // even if the creature's Charisma score does not normally provide a
+        // bonus).
+        StackBonus(BONUS_CIRC,A_DEF, max(1,Mod2(A_CHA)));
+    } 
+
+    switch (Encumbrance()) {
     case EN_NONE:
-      break;
+        break;
     case EN_LIGHT:
-      if (HasFeat(FT_LOADBEARER)) 
+        if (HasFeat(FT_LOADBEARER)) 
+            break;
+        AddBonus(BONUS_ENCUM,A_MOV,-2);
         break;
-      AddBonus(BONUS_ENCUM,A_MOV,-2);
-      break;
     case EN_MODERATE:
-      if (HasFeat(FT_LOADBEARER)) 
+        if (HasFeat(FT_LOADBEARER)) 
+            break;
+        AddBonus(BONUS_ENCUM,A_DEF,-1);
+        AddBonus(BONUS_ENCUM,A_MOV,-4);
+        AddBonus(BONUS_ENCUM,A_FAT,-1);
         break;
-      AddBonus(BONUS_ENCUM,A_DEF,-1);
-      AddBonus(BONUS_ENCUM,A_MOV,-4);
-      AddBonus(BONUS_ENCUM,A_FAT,-1);
-      break;
     case EN_HEAVY:
-      AddBonus(BONUS_ENCUM,A_DEF,-2 / (1 + HasFeat(FT_LOADBEARER)));
-      AddBonus(BONUS_ENCUM,A_MOV,-6 / (1 + HasFeat(FT_LOADBEARER)));
-      AddBonus(BONUS_ENCUM,A_SAV_REF,-2 / (1 + HasFeat(FT_LOADBEARER)));
-      AddBonus(BONUS_ENCUM,A_SPD,-2 / (1 + HasFeat(FT_LOADBEARER)));
-      AddBonus(BONUS_ENCUM,A_FAT,-2 / (1 + HasFeat(FT_LOADBEARER)));
-      break;
+        AddBonus(BONUS_ENCUM,A_DEF,-2 / (1 + HasFeat(FT_LOADBEARER)));
+        AddBonus(BONUS_ENCUM,A_MOV,-6 / (1 + HasFeat(FT_LOADBEARER)));
+        AddBonus(BONUS_ENCUM,A_SAV_REF,-2 / (1 + HasFeat(FT_LOADBEARER)));
+        AddBonus(BONUS_ENCUM,A_SPD,-2 / (1 + HasFeat(FT_LOADBEARER)));
+        AddBonus(BONUS_ENCUM,A_FAT,-2 / (1 + HasFeat(FT_LOADBEARER)));
+        break;
     case EN_EXTREME:
-      AddBonus(BONUS_ENCUM,A_DEF,-4 / (1 + HasFeat(FT_LOADBEARER)));
-      AddBonus(BONUS_ENCUM,A_MOV,-10 / (1 + HasFeat(FT_LOADBEARER)));
-      AddBonus(BONUS_ENCUM,A_SAV_REF,-4 / (1 + HasFeat(FT_LOADBEARER)));
-      AddBonus(BONUS_ENCUM,A_SPD,-5 / (1 + HasFeat(FT_LOADBEARER)));
-      AddBonus(BONUS_ENCUM,A_FAT,-3 / (1 + HasFeat(FT_LOADBEARER)));
-      break;
-  }
-
-  for(i=0;i!=7;i++)
-    if (HasFeat(FT_IMPROVED_STRENGTH + i))
-    { AddBonus(BONUS_FEAT,i,1); }
-  if (HasFeat(FT_ATHLETIC))
-  { AddBonus(BONUS_COMP,A_SAV_FORT,1); }
-  if (HasFeat(FT_CLEAR_MINDED))
-  { AddBonus(BONUS_COMP,A_SAV_WILL,1); }
-  
-
-  if (HasFeat(FT_LIGHTNING_REFLEXES))
-  { AddBonus(BONUS_FEAT,A_SAV_REF,3); }
-  if (HasFeat(FT_GREAT_FORTITUDE))
-  { AddBonus(BONUS_FEAT,A_SAV_FORT,3); }
-  if (HasFeat(FT_IRON_WILL))
-  { AddBonus(BONUS_FEAT,A_SAV_WILL,3); }
-
-  if (HasFeat(FT_RUN) )
-  { AddBonus(BONUS_FEAT,A_MOV,4); }
-
-  /*
-  if (HasFeat(FT_FAST_STRIDE) &&
-      (Encumbrance() <= EN_MODERATE) &&
-      ((ArmourType() == 0) || !(ArmourType() & WG_HARMOUR)))
-  { AddBonus(BONUS_ENHANCE,A_MOV,10); }
-  */
-  
-  {
-    int16 feat_fp;
-    feat_fp = 0;
-    if (HasFeat(FT_ENDURANCE))
-      feat_fp += 5;
-    if (HasFeat(FT_WOODSMAN))
-      feat_fp += 2;
-    AddBonus(BONUS_FEAT,A_FAT,feat_fp);
-  }
-  if (HasFeat(FT_TALENTED))
-  { AddBonus(BONUS_FEAT,A_MAG,+1); }
-
-  if (HasFeat(FT_ZEN_ARCHERY))
-  { AddBonus(BONUS_INSIGHT,A_HIT_ARCHERY,Mod(A_WIS)); }
-  
-  if (HasFeat(FT_ZEN_DEFENSE))
-    { 
-      uint32 at = getArmourType(true);
-      if (!at)
-        AddBonus(BONUS_INSIGHT,A_DEF,Mod(A_WIS)); 
-      else if (!(at & (WG_MARMOUR|WG_HARMOUR)))
-        AddBonus(BONUS_INSIGHT,A_DEF,(Mod(A_WIS)+1)/2); 
+        AddBonus(BONUS_ENCUM,A_DEF,-4 / (1 + HasFeat(FT_LOADBEARER)));
+        AddBonus(BONUS_ENCUM,A_MOV,-10 / (1 + HasFeat(FT_LOADBEARER)));
+        AddBonus(BONUS_ENCUM,A_SAV_REF,-4 / (1 + HasFeat(FT_LOADBEARER)));
+        AddBonus(BONUS_ENCUM,A_SPD,-5 / (1 + HasFeat(FT_LOADBEARER)));
+        AddBonus(BONUS_ENCUM,A_FAT,-3 / (1 + HasFeat(FT_LOADBEARER)));
+        break;
     }
 
-  if (HasSkill(SK_ATHLETICS))
-    { AddBonus(BONUS_SKILL,A_MOV,max(0,SkillLevel(SK_ATHLETICS)/2)); 
-      AddBonus(BONUS_SKILL,A_FAT,max(0,SkillLevel(SK_ATHLETICS)/3)); }
+    for(i=0;i!=7;i++)
+        if (HasFeat(FT_IMPROVED_STRENGTH + i))
+        { AddBonus(BONUS_FEAT,i,1); }
 
-  if (isMType(MA_UNDEAD) || isMType(MA_CONSTRUCT) ||
-      isMType(MA_PLANT)) {
-    cFP = 0; 
-    if (isCharacter())
-      SetStatiDur(HUNGER,-1,NULL,CONTENT*2);
-  } 
-
-  if ((cFP >= -oFP) || AttrAdj[A_STR][BONUS_RAGE])
-    ;
-  else if (cFP >= -(oFP*2)) /* Fatigued */
-  {
-    AddBonus(BONUS_FATIGUE,A_STR,-2);
-    AddBonus(BONUS_FATIGUE,A_DEX,-2);
-    AddBonus(BONUS_FATIGUE,A_CHA,-2);
-    AddBonus(BONUS_FATIGUE,A_MOV,-2);
-    AddBonus(BONUS_FATIGUE,A_SPD,-2);
-
-  }
-  else
-  {
-    AddBonus(BONUS_FATIGUE,A_STR,-6);
-    AddBonus(BONUS_FATIGUE,A_DEX,-6);
-    AddBonus(BONUS_FATIGUE,A_CHA,-6);
-    AddBonus(BONUS_FATIGUE,A_MOV,-5);
-    AddBonus(BONUS_FATIGUE,A_SPD,-5);
-  }
+    if (HasFeat(FT_ATHLETIC))
+    { AddBonus(BONUS_COMP,A_SAV_FORT,1); }
+    if (HasFeat(FT_CLEAR_MINDED))
+    { AddBonus(BONUS_COMP,A_SAV_WILL,1); }
 
 
+    if (HasFeat(FT_LIGHTNING_REFLEXES))
+    { AddBonus(BONUS_FEAT,A_SAV_REF,3); }
+    if (HasFeat(FT_GREAT_FORTITUDE))
+    { AddBonus(BONUS_FEAT,A_SAV_FORT,3); }
+    if (HasFeat(FT_IRON_WILL))
+    { AddBonus(BONUS_FEAT,A_SAV_WILL,3); }
 
-  /* Precalculate the true attributes (Str, Con, Wis, etc.) early, so that
-   * we can calculate other things that depend on them properly. */
-  if (isCharacter() && KnownOnly)
-    for(i=0;i!=7;i++) {
-      thisc->KAttr[i] = 0;
-      if (AttrAdj[i][BONUS_BASE] == 0)
-        ;
-      else for (j=0;j!=BONUS_LAST;j++)
-        thisc->KAttr[i] += AttrAdj[i][j];
-      if (Attr[i] <= 0) Attr[i] = 0;
-    }
-  else
-    for(i=0;i!=7;i++) {
-      Attr[i] = 0;
-      if (AttrAdj[i][BONUS_BASE] == 0)
-        ;
-      else for (j=0;j!=BONUS_LAST;j++)
-        Attr[i] += AttrAdj[i][j];
-      if (Attr[i] <= 0) Attr[i] = 0;
-    }
-  if (Attr[A_FAT] <= 0)
-    Attr[A_FAT] = 1;
+    if (HasFeat(FT_RUN) )
+    { AddBonus(BONUS_FEAT,A_MOV,4); }
 
-  if (HasFeat(FT_ONE_BODY_ONE_SOUL) || (Attr[A_CON] == 0)) {
-    int16 one_mod = max(XMod(A_CON),XMod(A_WIS));
-    int16 best = max(IAttr(A_CON),IAttr(A_WIS));
-    AddBonus(BONUS_ATTR,A_SAV_FORT, one_mod);
-    AddBonus(BONUS_ATTR,A_SAV_WILL, one_mod);
-    AddBonus(BONUS_ATTR,A_FAT,(best-11)/2); 
-  } else { 
-    AddBonus(BONUS_ATTR,A_SAV_FORT, XMod(A_CON));
-    AddBonus(BONUS_ATTR,A_SAV_WILL, XMod(A_WIS));
-    AddBonus(BONUS_ATTR,A_FAT,(IAttr(A_CON)-11)/2); 
-  } 
-  AddBonus(BONUS_ATTR,A_SAV_REF , XMod(A_DEX));
+    /*
+    if (HasFeat(FT_FAST_STRIDE) &&
+    (Encumbrance() <= EN_MODERATE) &&
+    ((ArmourType() == 0) || !(ArmourType() & WG_HARMOUR)))
+    { AddBonus(BONUS_ENHANCE,A_MOV,10); }
+    */
 
-  AddBonus(BONUS_ATTR,A_HIT_ARCHERY, XMod(A_DEX));
-  AddBonus(BONUS_ATTR,A_HIT_THROWN,  XMod(A_DEX));
-  
-  if (HasFeat(FT_WEAPON_FINESSE))
-    { AddBonus(BONUS_ATTR,A_HIT_BRAWL,max(XMod(A_STR),XMod(A_DEX))); }
-  else
-    { AddBonus(BONUS_ATTR,A_HIT_BRAWL,XMod(A_STR)); }
-  if (HasFeat(FT_WEAPON_FINESSE) && meleeWep && meleeWep->canFinesse()) 
-    { AddBonus(BONUS_ATTR,A_HIT_MELEE,max(XMod(A_STR),XMod(A_DEX))); } 
-  else
-    { AddBonus(BONUS_ATTR,A_HIT_MELEE,XMod(A_STR)); }
-  if (HasFeat(FT_WEAPON_FINESSE) && offhandWep && offhandWep->canFinesse()) 
-    { AddBonus(BONUS_ATTR,A_HIT_OFFHAND,max(XMod(A_STR),XMod(A_DEX))); }
-  else
-    { AddBonus(BONUS_ATTR,A_HIT_OFFHAND,XMod(A_STR)); }
-  
-  if (HasFeat(FT_WEAPON_FINESSE))
-    AddBonus(BONUS_ATTR,A_DMG_BRAWL,max(0,XMod(A_STR)));
-  else
-    AddBonus(BONUS_ATTR,A_DMG_BRAWL,XMod(A_STR));
-  
-
-  StackBonus(BONUS_SIZE,A_DEF,SZ_MEDIUM - Attr[A_SIZ]);
-  StackBonus(BONUS_SIZE,A_HIT,SZ_MEDIUM - Attr[A_SIZ]);
-
-  /* Wielding a weapon two-handed gives you 1.5 times Strength bonus */
-  if (meleeWep && !meleeWep->useStrength())
-    ;
-  else if (meleeWep && (EInSlot(SL_WEAPON) == EInSlot(SL_READY)) && !meleeWep->HasIFlag(WT_DOUBLE))      
-  { AddBonus(BONUS_ATTR,A_DMG_MELEE,max(0,((XMod(A_STR)*3)+1)/2)); }
-  else if (XMod(A_STR) >= 0 || !HasFeat(FT_WEAPON_FINESSE) ||
-            (meleeWep && !meleeWep->canFinesse()))
-  { AddBonus(BONUS_ATTR,A_DMG_MELEE,XMod(A_STR)); }
-
-  /* Figure out WT_NO_STRENGTH at attack time */
-  AddBonus(BONUS_ATTR,A_DMG_THROWN,max(0,XMod(A_STR)));
-  if (missileWep && missileWep->useStrength())
-  { AddBonus(BONUS_ATTR,A_DMG_ARCHERY,XMod(A_STR)); }
-  /* The offhand weapon gets only 0.5 times Strength bonus */
-  if (offhandWep && !offhandWep->useStrength())
-    ;
-  else if (XMod(A_STR) <= 0)
-  { if (offhandWep && offhandWep->useStrength())
-    AddBonus(BONUS_ATTR,A_DMG_OFFHAND,XMod(A_STR)); }
-  else
-  { 
-    if (offhandWep && offhandWep == meleeWep && 
-        HasFeat(FT_POWER_DOUBLE_WEAPON)) {
-      AddBonus(BONUS_ATTR,A_DMG_OFFHAND,(XMod(A_STR))); 
-    } else 
-      if (offhandWep && offhandWep->useStrength()) {
-        AddBonus(BONUS_ATTR,A_DMG_OFFHAND,(XMod(A_STR)+1)/2); 
-      }
-  }
-
-  if (HasFeat(FT_MONKEY_GRIP))
-    if (EInSlot(SL_WEAPON) != EInSlot(SL_READY))
     {
-      if ((it = EInSlot(SL_WEAPON)) && it->isType(T_WEAPON))
-        if (it->Size(this) > Attr[A_SIZ])
-        { AddBonus(BONUS_CIRC,A_HIT_MELEE,-2); }
-      if ((it = EInSlot(SL_READY)) && it->isType(T_WEAPON))
-        if (it->Size(this) > Attr[A_SIZ])
-        { AddBonus(BONUS_CIRC,A_HIT_OFFHAND,-2); }
+        int16 feat_fp;
+        feat_fp = 0;
+        if (HasFeat(FT_ENDURANCE))
+            feat_fp += 5;
+        if (HasFeat(FT_WOODSMAN))
+            feat_fp += 2;
+        AddBonus(BONUS_FEAT,A_FAT,feat_fp);
+    }
+    if (HasFeat(FT_TALENTED))
+    { AddBonus(BONUS_FEAT,A_MAG,+1); }
+
+    if (HasFeat(FT_ZEN_ARCHERY))
+    { AddBonus(BONUS_INSIGHT,A_HIT_ARCHERY,Mod(A_WIS)); }
+
+    if (HasFeat(FT_ZEN_DEFENSE))
+    { 
+        uint32 at = getArmourType(true);
+        if (!at)
+            AddBonus(BONUS_INSIGHT,A_DEF,Mod(A_WIS)); 
+        else if (!(at & (WG_MARMOUR|WG_HARMOUR)))
+            AddBonus(BONUS_INSIGHT,A_DEF,(Mod(A_WIS)+1)/2); 
     }
 
-  if (HasFeat(FT_LIGHTNING_FISTS)) //  && !HasStati(POLYMORPH))
-  { AddBonus(BONUS_FEAT,A_SPD_BRAWL,max(0,XMod(A_DEX))); }
-  if (HasFeat(FT_FISTS_OF_IRON)) 
-  { AddBonus(BONUS_FEAT,A_DMG_BRAWL,1); } 
+    if (HasSkill(SK_ATHLETICS))
+    { AddBonus(BONUS_SKILL,A_MOV,max(0,SkillLevel(SK_ATHLETICS)/2)); 
+    AddBonus(BONUS_SKILL,A_FAT,max(0,SkillLevel(SK_ATHLETICS)/3)); }
 
-  if (HasFeat(FT_RAPID_SHOT))
-  { AddBonus(BONUS_FEAT,A_SPD_ARCHERY,+5); }
+    if (isMType(MA_UNDEAD) || isMType(MA_CONSTRUCT) || isMType(MA_PLANT)) {
+        cFP = 0; 
+        if (isCharacter())
+            SetStatiDur(HUNGER,-1,NULL,CONTENT*2);
+    } 
+
+    if ((cFP >= -oFP) || AttrAdj[A_STR][BONUS_RAGE])
+        ;
+    else if (cFP >= -(oFP*2)) /* Fatigued */ {
+        AddBonus(BONUS_FATIGUE,A_STR,-2);
+        AddBonus(BONUS_FATIGUE,A_DEX,-2);
+        AddBonus(BONUS_FATIGUE,A_CHA,-2);
+        AddBonus(BONUS_FATIGUE,A_MOV,-2);
+        AddBonus(BONUS_FATIGUE,A_SPD,-2);
+    } else {
+        AddBonus(BONUS_FATIGUE,A_STR,-6);
+        AddBonus(BONUS_FATIGUE,A_DEX,-6);
+        AddBonus(BONUS_FATIGUE,A_CHA,-6);
+        AddBonus(BONUS_FATIGUE,A_MOV,-5);
+        AddBonus(BONUS_FATIGUE,A_SPD,-5);
+    }
+
+    /* Precalculate the true attributes (Str, Con, Wis, etc.) early, so that
+    * we can calculate other things that depend on them properly. */
+    if (isCharacter() && KnownOnly)
+        for(i=0;i!=7;i++) {
+            thisc->KAttr[i] = 0;
+            if (AttrAdj[i][BONUS_BASE] == 0)
+                ;
+            else for (j=0;j!=BONUS_LAST;j++)
+                thisc->KAttr[i] += AttrAdj[i][j];
+            if (Attr[i] <= 0) Attr[i] = 0;
+        }
+    else
+        for(i=0;i!=7;i++) {
+            Attr[i] = 0;
+            if (AttrAdj[i][BONUS_BASE] == 0)
+                ;
+            else for (j=0;j!=BONUS_LAST;j++)
+                Attr[i] += AttrAdj[i][j];
+            if (Attr[i] <= 0) Attr[i] = 0;
+        }
+    if (Attr[A_FAT] <= 0)
+        Attr[A_FAT] = 1;
+
+    if (HasFeat(FT_ONE_BODY_ONE_SOUL) || (Attr[A_CON] == 0)) {
+        int16 one_mod = max(XMod(A_CON),XMod(A_WIS));
+        int16 best = max(IAttr(A_CON),IAttr(A_WIS));
+        AddBonus(BONUS_ATTR,A_SAV_FORT, one_mod);
+        AddBonus(BONUS_ATTR,A_SAV_WILL, one_mod);
+        AddBonus(BONUS_ATTR,A_FAT,(best-11)/2); 
+    } else { 
+        AddBonus(BONUS_ATTR,A_SAV_FORT, XMod(A_CON));
+        AddBonus(BONUS_ATTR,A_SAV_WILL, XMod(A_WIS));
+        AddBonus(BONUS_ATTR,A_FAT,(IAttr(A_CON)-11)/2); 
+    } 
+    AddBonus(BONUS_ATTR,A_SAV_REF , XMod(A_DEX));
+
+    AddBonus(BONUS_ATTR,A_HIT_ARCHERY, XMod(A_DEX));
+    AddBonus(BONUS_ATTR,A_HIT_THROWN,  XMod(A_DEX));
+
+    if (HasFeat(FT_WEAPON_FINESSE))
+    { AddBonus(BONUS_ATTR,A_HIT_BRAWL,max(XMod(A_STR),XMod(A_DEX))); }
+    else
+    { AddBonus(BONUS_ATTR,A_HIT_BRAWL,XMod(A_STR)); }
+    if (HasFeat(FT_WEAPON_FINESSE) && meleeWep && meleeWep->canFinesse()) 
+    { AddBonus(BONUS_ATTR,A_HIT_MELEE,max(XMod(A_STR),XMod(A_DEX))); } 
+    else
+    { AddBonus(BONUS_ATTR,A_HIT_MELEE,XMod(A_STR)); }
+    if (HasFeat(FT_WEAPON_FINESSE) && offhandWep && offhandWep->canFinesse()) 
+    { AddBonus(BONUS_ATTR,A_HIT_OFFHAND,max(XMod(A_STR),XMod(A_DEX))); }
+    else
+    { AddBonus(BONUS_ATTR,A_HIT_OFFHAND,XMod(A_STR)); }
+
+    if (HasFeat(FT_WEAPON_FINESSE))
+        AddBonus(BONUS_ATTR,A_DMG_BRAWL,max(0,XMod(A_STR)));
+    else
+        AddBonus(BONUS_ATTR,A_DMG_BRAWL,XMod(A_STR));
+
+
+    StackBonus(BONUS_SIZE,A_DEF,SZ_MEDIUM - Attr[A_SIZ]);
+    StackBonus(BONUS_SIZE,A_HIT,SZ_MEDIUM - Attr[A_SIZ]);
+
+    /* Wielding a weapon two-handed gives you 1.5 times Strength bonus */
+    if (meleeWep && !meleeWep->useStrength())
+        ;
+    else if (meleeWep && (EInSlot(SL_WEAPON) == EInSlot(SL_READY)) && !meleeWep->HasIFlag(WT_DOUBLE))      
+    { AddBonus(BONUS_ATTR,A_DMG_MELEE,max(0,((XMod(A_STR)*3)+1)/2)); }
+    else if (XMod(A_STR) >= 0 || !HasFeat(FT_WEAPON_FINESSE) ||
+        (meleeWep && !meleeWep->canFinesse()))
+    { AddBonus(BONUS_ATTR,A_DMG_MELEE,XMod(A_STR)); }
+
+    /* Figure out WT_NO_STRENGTH at attack time */
+    AddBonus(BONUS_ATTR,A_DMG_THROWN,max(0,XMod(A_STR)));
+    if (missileWep && missileWep->useStrength())
+    { AddBonus(BONUS_ATTR,A_DMG_ARCHERY,XMod(A_STR)); }
+    /* The offhand weapon gets only 0.5 times Strength bonus */
+    if (offhandWep && !offhandWep->useStrength())
+        ;
+    else if (XMod(A_STR) <= 0)
+    { if (offhandWep && offhandWep->useStrength())
+    AddBonus(BONUS_ATTR,A_DMG_OFFHAND,XMod(A_STR)); }
+    else
+    { 
+        if (offhandWep && offhandWep == meleeWep && 
+            HasFeat(FT_POWER_DOUBLE_WEAPON)) {
+                AddBonus(BONUS_ATTR,A_DMG_OFFHAND,(XMod(A_STR))); 
+        } else 
+            if (offhandWep && offhandWep->useStrength()) {
+                AddBonus(BONUS_ATTR,A_DMG_OFFHAND,(XMod(A_STR)+1)/2); 
+            }
+    }
+
+    if (HasFeat(FT_MONKEY_GRIP))
+        if (EInSlot(SL_WEAPON) != EInSlot(SL_READY))
+        {
+            if ((it = EInSlot(SL_WEAPON)) && it->isType(T_WEAPON))
+                if (it->Size(this) > Attr[A_SIZ])
+                { AddBonus(BONUS_CIRC,A_HIT_MELEE,-2); }
+                if ((it = EInSlot(SL_READY)) && it->isType(T_WEAPON))
+                    if (it->Size(this) > Attr[A_SIZ])
+                    { AddBonus(BONUS_CIRC,A_HIT_OFFHAND,-2); }
+        }
+
+    if (HasFeat(FT_LIGHTNING_FISTS)) //  && !HasStati(POLYMORPH))
+    { AddBonus(BONUS_FEAT,A_SPD_BRAWL,max(0,XMod(A_DEX))); }
+    if (HasFeat(FT_FISTS_OF_IRON)) 
+    { AddBonus(BONUS_FEAT,A_DMG_BRAWL,1); } 
+
+    if (HasFeat(FT_RAPID_SHOT))
+    { AddBonus(BONUS_FEAT,A_SPD_ARCHERY,+5); }
 
     if (HasFeat(FT_ELEGANT_DEFENSE))
     { AddBonus(BONUS_ATTR,A_DEF,XMod(A_DEX)*2); }
     else
     { AddBonus(BONUS_ATTR,A_DEF,XMod(A_DEX)); }
 
-  // ww: "no dodge while grappling" is handled in fight.cpp
-  if (HasFeat(FT_DODGE)) {
-    // ww: +2/+1 is too weak compared to the phenominal power of armour
-    // in this game! 
-    if (!(getArmourType(true) & WG_MARMOUR) &&
-        (Encumbrance() <= EN_LIGHT))
-    { AddBonus(BONUS_DODGE,A_DEF,+3); }
-    else 
-    { AddBonus(BONUS_DODGE,A_DEF,+1); }
-  }
+    // ww: "no dodge while grappling" is handled in fight.cpp
+    if (HasFeat(FT_DODGE)) {
+        // ww: +2/+1 is too weak compared to the phenominal power of armour
+        // in this game! 
+        if (!(getArmourType(true) & WG_MARMOUR) &&
+            (Encumbrance() <= EN_LIGHT))
+        { AddBonus(BONUS_DODGE,A_DEF,+3); }
+        else 
+        { AddBonus(BONUS_DODGE,A_DEF,+1); }
+    }
 
     if (HasFeat(FT_EXPERTISE)) {
-      int16 a, b = 0;
-      // ww: a +10 sword should be better at parrying than a +0 sword
-      if (meleeWep) 
-        a = meleeWep->ParryVal(this); 
-      else {
-        /* ww: incredible parry values from enchanted weapons give
-         * monks a severe disadvantage! In martial arts flicks you're
-         * always seeing monks turn aside knife blows and whatnot barehanded.
-         */
-        a = AbilityLevel(CA_UNARMED_STRIKE) * 2; 
-      } 
-      if (offhandWep) 
-        b = offhandWep->ParryVal(this); 
-      else if (meleeWep && TITEM(meleeWep->iID)->HasFlag(WT_DOUBLE)) 
-        b = a; 
-      else if (!EInSlot(SL_READY))
-        b = AbilityLevel(CA_UNARMED_STRIKE) * 2; 
-      // ww: this logic was reversed! ouch!
-      if (!HasFeat(FT_DEFENSIVE_SYNERGY))
-      { AddBonus(BONUS_WEAPON,A_DEF,max(a,b)); }
-      else
-      { AddBonus(BONUS_WEAPON,A_DEF,max(a,b) + min(a,b)/2); }
+        int16 a, b = 0;
+        // ww: a +10 sword should be better at parrying than a +0 sword
+        if (meleeWep) 
+            a = meleeWep->ParryVal(this); 
+        else {
+            /* ww: incredible parry values from enchanted weapons give
+            * monks a severe disadvantage! In martial arts flicks you're
+            * always seeing monks turn aside knife blows and whatnot barehanded.
+            */
+            a = AbilityLevel(CA_UNARMED_STRIKE) * 2; 
+        } 
+        if (offhandWep) 
+            b = offhandWep->ParryVal(this); 
+        else if (meleeWep && TITEM(meleeWep->iID)->HasFlag(WT_DOUBLE)) 
+            b = a; 
+        else if (!EInSlot(SL_READY))
+            b = AbilityLevel(CA_UNARMED_STRIKE) * 2; 
+        // ww: this logic was reversed! ouch!
+        if (!HasFeat(FT_DEFENSIVE_SYNERGY))
+        { AddBonus(BONUS_WEAPON,A_DEF,max(a,b)); }
+        else
+        { AddBonus(BONUS_WEAPON,A_DEF,max(a,b) + min(a,b)/2); }
     } 
 
     if (meleeWep && meleeWep->HasQuality(WQ_DEFENDING))
@@ -1200,448 +1138,441 @@ Restart:
     if (offhandWep && offhandWep->HasQuality(WQ_DEFENDING))
     { StackBonus(BONUS_WEAPON,A_DEF,offhandWep->GetPlus()); }
 
-  // ww: monk Flurry of Blows ability: make an extra attack each round
-  // but at -2 penalty ... -1 at 5th level, -0 at ninth, but only with
-  // unarmed strikes or martial weapons. To balance things, this only
-  // works if you are wearing nothing in the armour slot. 
-  if (HasAbility(CA_FLURRY_OF_BLOWS) && HasStati(FLURRYING) &&
-      (!isCharacter() || !thisc->EInSlot(SL_ARMOUR)) 
-      && !HasStati(POLYMORPH)) {
-    int penalty = -3 + AbilityLevel(CA_FLURRY_OF_BLOWS);
+    // ww: monk Flurry of Blows ability: make an extra attack each round
+    // but at -2 penalty ... -1 at 5th level, -0 at ninth, but only with
+    // unarmed strikes or martial weapons. To balance things, this only
+    // works if you are wearing nothing in the armour slot. 
+    if (HasAbility(CA_FLURRY_OF_BLOWS) && HasStati(FLURRYING) &&
+        (!isCharacter() || !thisc->EInSlot(SL_ARMOUR)) 
+        && !HasStati(POLYMORPH)) {
+            int penalty = -3 + AbilityLevel(CA_FLURRY_OF_BLOWS);
 
-    { AddBonus(BONUS_CLASS,A_SPD_BRAWL,+20); 
-      AddBonus(BONUS_CLASS,A_HIT_BRAWL,penalty); }
+            { AddBonus(BONUS_CLASS,A_SPD_BRAWL,+20); 
+            AddBonus(BONUS_CLASS,A_HIT_BRAWL,penalty); }
 
-      if (EInSlot(SL_WEAPON) && 
-          (TITEM(EInSlot(SL_WEAPON)->iID)->Group & WG_MARTIAL) ||
-          HasFeat(FT_NON_STANDARD_FLURRY))
-      { AddBonus(BONUS_CLASS,A_SPD_MELEE,+20); 
-        AddBonus(BONUS_CLASS,A_HIT_MELEE,penalty); } 
+            if (EInSlot(SL_WEAPON) && 
+                (TITEM(EInSlot(SL_WEAPON)->iID)->Group & WG_MARTIAL) ||
+                HasFeat(FT_NON_STANDARD_FLURRY))
+            { AddBonus(BONUS_CLASS,A_SPD_MELEE,+20); 
+            AddBonus(BONUS_CLASS,A_HIT_MELEE,penalty); } 
 
-        if (EInSlot(SL_READY) && 
-            (TITEM(EInSlot(SL_READY)->iID)->Group & WG_MARTIAL) ||
-            HasFeat(FT_NON_STANDARD_FLURRY))
-        { AddBonus(BONUS_CLASS,A_SPD_OFFHAND,+20); 
-          AddBonus(BONUS_CLASS,A_HIT_OFFHAND,penalty); } 
+            if (EInSlot(SL_READY) && 
+                (TITEM(EInSlot(SL_READY)->iID)->Group & WG_MARTIAL) ||
+                HasFeat(FT_NON_STANDARD_FLURRY))
+            { AddBonus(BONUS_CLASS,A_SPD_OFFHAND,+20); 
+            AddBonus(BONUS_CLASS,A_HIT_OFFHAND,penalty); } 
     }
 
-  if (HasAbility(CA_DIVINE_GRACE) && XMod(A_CHA) > 0)
-    { AddBonus(BONUS_GRACE, A_SAV, XMod(A_CHA)); }
-    
-  if (isMType(MA_CHAOTIC) && isCharacter())
-    { AddBonus(BONUS_MORALE, A_SAV_WILL, max(0,(thisc->alignLC - 35) / 5)); }
-  else if (isMType(MA_CHAOTIC))
-    { AddBonus(BONUS_MORALE, A_SAV_WILL, HasMFlag(M_IALIGN) ? 6 : 3); }
-  
-  if (HasStati(CHANNELING)) {
-    if (HasFeat(FT_DIVINE_MIGHT) && XMod2(A_CHA) > 0) { 
-      AddBonus(BONUS_SACRED, A_DMG_BRAWL, XMod2(A_CHA)); 
-      AddBonus(BONUS_SACRED, A_DMG_MELEE, XMod2(A_CHA)); 
-      AddBonus(BONUS_SACRED, A_DMG_OFFHAND, XMod2(A_CHA)); 
-      }
-    if (HasFeat(FT_DIVINE_VIGOR) && XMod2(A_CHA) > 0) {
-      AddBonus(BONUS_SACRED, A_CON, 2);
-      AddBonus(BONUS_SACRED, A_MOV, XMod2(A_CHA)); 
-      }
+    if (HasAbility(CA_DIVINE_GRACE) && XMod(A_CHA) > 0) {
+        AddBonus(BONUS_GRACE, A_SAV, XMod(A_CHA));
+    }
+
+    if (isMType(MA_CHAOTIC) && isCharacter()) {
+        AddBonus(BONUS_MORALE, A_SAV_WILL, max(0,(thisc->alignLC - 35) / 5));
+    } else if (isMType(MA_CHAOTIC)) {
+        AddBonus(BONUS_MORALE, A_SAV_WILL, HasMFlag(M_IALIGN) ? 6 : 3);
+    }
+
+    if (HasStati(CHANNELING)) {
+        if (HasFeat(FT_DIVINE_MIGHT) && XMod2(A_CHA) > 0) { 
+            AddBonus(BONUS_SACRED, A_DMG_BRAWL, XMod2(A_CHA)); 
+            AddBonus(BONUS_SACRED, A_DMG_MELEE, XMod2(A_CHA)); 
+            AddBonus(BONUS_SACRED, A_DMG_OFFHAND, XMod2(A_CHA)); 
+        }
+
+        if (HasFeat(FT_DIVINE_VIGOR) && XMod2(A_CHA) > 0) {
+            AddBonus(BONUS_SACRED, A_CON, 2);
+            AddBonus(BONUS_SACRED, A_MOV, XMod2(A_CHA)); 
+        }
     } 
 
-  if (HasAbility(CA_UNEARTHLY_LUCK) && XMod(A_LUC) > 0)
-  { AddBonus(BONUS_LUCK,A_SAV,XMod(A_LUC)); }
-  if (HasAbility(CA_INCREASED_MOVE))
-  { AddBonus(BONUS_CLASS,A_MOV,AbilityLevel(CA_INCREASED_MOVE)); } 
-  if (offhandWep && meleeWep) {
-    if (!HasFeat(FT_AMBIDEXTERITY) && 
-        !(offhandWep == meleeWep && HasFeat(FT_DOUBLE_WEAPON_FIGHTING))){
-      StackBonus(BONUS_DUAL,A_HIT_OFFHAND,-2);
-      StackBonus(BONUS_DUAL,A_SPD_OFFHAND,-2);
-    }
-    if (!HasFeat(FT_TWO_WEAPON_STYLE) &&
-        !(offhandWep == meleeWep && HasFeat(FT_DOUBLE_WEAPON_FIGHTING))) {
-      StackBonus(BONUS_DUAL,A_HIT_MELEE  ,-2);
-      StackBonus(BONUS_DUAL,A_HIT_OFFHAND,-2);
-    }
-    if (!HasFeat(FT_TWIN_WEAPON_STYLE) && 
-        offhandWep->Size(this) >= meleeWep->Size(this)) { 
-      StackBonus(BONUS_DUAL,A_HIT_MELEE,  -2);
-      StackBonus(BONUS_DUAL,A_HIT_OFFHAND,-2);
-    }
-    if (HasFeat(FT_TWO_WEAPON_TEMPEST)) {
-      StackBonus(BONUS_DUAL,A_SPD, +10);
-      StackBonus(BONUS_DUAL,A_SPD_OFFHAND, +10);
-    }
-    /*
-       The real d20 system gives a -2 penalty to all TWF,
-       regardless of how many feats one invests. However, it
-       is also commonly agreed that d20 TWF sucks at lower
-       levels (and just in general), so we don't use this
-       penalty and leave it commented out.
+    if (HasAbility(CA_UNEARTHLY_LUCK) && XMod(A_LUC) > 0)
+        AddBonus(BONUS_LUCK, A_SAV, XMod(A_LUC));
 
-       StackBonus(BONUS_DUAL, A_HIT_MELEE, -2);
-       StackBonus(BONUS_DUAL, A_HIT_OFFHAND, -2);
-     */
-    /*
-       Obsolete due to ParryMod and Expertise?
-       if (HasFeat(FT_DEFENSIVE_SYNERGY) && (offhandWep != meleeWep)) 
-       { AddBonus(BONUS_WEAPON, A_DEF, TITEM(offhandWep->iID)->Def +
-       TITEM(meleeWep->iID)->Def) }
-       else
-       {AddBonus(BONUS_WEAPON, A_DEF, max(TITEM(offhandWep->iID)->Def,
-       TITEM(meleeWep->iID)->Def)); }
-     */
-  }
-  /*else if (meleeWep)
+    if (HasAbility(CA_INCREASED_MOVE))
+        AddBonus(BONUS_CLASS, A_MOV, AbilityLevel(CA_INCREASED_MOVE));
+
+    if (offhandWep && meleeWep) {
+        if (!HasFeat(FT_AMBIDEXTERITY) && !(offhandWep == meleeWep && HasFeat(FT_DOUBLE_WEAPON_FIGHTING))){
+            StackBonus(BONUS_DUAL,A_HIT_OFFHAND,-2);
+            StackBonus(BONUS_DUAL,A_SPD_OFFHAND,-2);
+        }
+        if (!HasFeat(FT_TWO_WEAPON_STYLE) && !(offhandWep == meleeWep && HasFeat(FT_DOUBLE_WEAPON_FIGHTING))) {
+            StackBonus(BONUS_DUAL,A_HIT_MELEE  ,-2);
+            StackBonus(BONUS_DUAL,A_HIT_OFFHAND,-2);
+        }
+        if (!HasFeat(FT_TWIN_WEAPON_STYLE) && offhandWep->Size(this) >= meleeWep->Size(this)) { 
+            StackBonus(BONUS_DUAL,A_HIT_MELEE,  -2);
+            StackBonus(BONUS_DUAL,A_HIT_OFFHAND,-2);
+        }
+        if (HasFeat(FT_TWO_WEAPON_TEMPEST)) {
+            StackBonus(BONUS_DUAL,A_SPD, +10);
+            StackBonus(BONUS_DUAL,A_SPD_OFFHAND, +10);
+        }
+        /*
+        The real d20 system gives a -2 penalty to all TWF,
+        regardless of how many feats one invests. However, it
+        is also commonly agreed that d20 TWF sucks at lower
+        levels (and just in general), so we don't use this
+        penalty and leave it commented out.
+
+        StackBonus(BONUS_DUAL, A_HIT_MELEE, -2);
+        StackBonus(BONUS_DUAL, A_HIT_OFFHAND, -2);
+        */
+        /*
+        Obsolete due to ParryMod and Expertise?
+        if (HasFeat(FT_DEFENSIVE_SYNERGY) && (offhandWep != meleeWep)) 
+        { AddBonus(BONUS_WEAPON, A_DEF, TITEM(offhandWep->iID)->Def +
+        TITEM(meleeWep->iID)->Def) }
+        else
+        {AddBonus(BONUS_WEAPON, A_DEF, max(TITEM(offhandWep->iID)->Def,
+        TITEM(meleeWep->iID)->Def)); }
+        */
+    }
+    /*else if (meleeWep)
     { AddBonus(BONUS_WEAPON, A_DEF, TITEM(meleeWep->iID)->Def); } */
 
-  if (HasStati(MOUNTED)) {
-    // ww: your base walking speed is your mount's speed, not 
-    // yours! that's the main point of riding ...
-    for (i=0;i<BONUS_LAST;i++) {
-      if (i != BONUS_CIRC) AttrAdj[A_MOV][i] = 0; 
-    }
-    Creature *mount = (Creature*)GetStatiObj(MOUNTED);
-    AddBonus(BONUS_BASE,A_MOV,mount->Attr[A_MOV]);
-    AddBonus(BONUS_SKILL,A_MOV,(SkillLevel(SK_RIDE)/2));
-    if (HasAbility(CA_RAPID_RIDING)) { 
-      AddBonus(BONUS_CLASS,A_MOV,AbilityLevel(CA_RAPID_RIDING)); 
+    if (HasStati(MOUNTED)) {
+        // ww: your base walking speed is your mount's speed, not 
+        // yours! that's the main point of riding ...
+        for (i = 0;i < BONUS_LAST; i++)
+            if (i != BONUS_CIRC)
+                AttrAdj[A_MOV][i] = 0; 
+
+        Creature *mount = (Creature*)GetStatiObj(MOUNTED);
+        AddBonus(BONUS_BASE,A_MOV,mount->Attr[A_MOV]);
+        AddBonus(BONUS_SKILL,A_MOV,(SkillLevel(SK_RIDE)/2));
+        if (HasAbility(CA_RAPID_RIDING)) { 
+            AddBonus(BONUS_CLASS,A_MOV,AbilityLevel(CA_RAPID_RIDING)); 
+        } 
     } 
-  } 
-  
-  /* Animal Companions receive a bonus to Movement Rate when
-     not being ridden, so they can keep up. */
-  if (HasStati(ANIMAL_COMPANION) && !HasStati(MOUNT))
-    AddBonus(BONUS_CLASS,A_MOV,15);
 
-  if (HasStati(POLYMORPH))
-    for (i=A_STR;i<=A_CON;i++)
-      {
-        AttrAdj[i][BONUS_ENHANCE] = 
-          min(0,AttrAdj[i][BONUS_ENHANCE]);
-        AttrAdj[i][BONUS_FEAT] = 
-          min(0,AttrAdj[i][BONUS_FEAT]);
-        AttrAdj[i][BONUS_INHERANT] = 
-          min(0,AttrAdj[i][BONUS_INHERANT]);
-      }
-  
-  if (HasFeat(FT_LION_HEART))
-    {
-      for (i=0;i!=ATTR_LAST;i++)
-        if (AttrAdj[i][BONUS_MORALE] < 0)
-          AttrAdj[i][BONUS_MORALE] /= 2;
+    /* Animal Companions receive a bonus to Movement Rate when
+    not being ridden, so they can keep up. */
+    if (HasStati(ANIMAL_COMPANION) && !HasStati(MOUNT))
+        AddBonus(BONUS_CLASS,A_MOV,15);
+
+    if (HasStati(POLYMORPH))
+        for (i=A_STR; i<=A_CON; i++) {
+            AttrAdj[i][BONUS_ENHANCE] = min(0,AttrAdj[i][BONUS_ENHANCE]);
+            AttrAdj[i][BONUS_FEAT] = min(0,AttrAdj[i][BONUS_FEAT]);
+            AttrAdj[i][BONUS_INHERANT] = min(0,AttrAdj[i][BONUS_INHERANT]);
+        }
+
+    if (HasFeat(FT_LION_HEART)) {
+        for (i = 0;i != ATTR_LAST; i++)
+            if (AttrAdj[i][BONUS_MORALE] < 0)
+                AttrAdj[i][BONUS_MORALE] /= 2;
     }
-      
-  if (isCharacter() && KnownOnly) 
-    for(i=0;i!=ATTR_LAST;i++) {
-      thisc->KAttr[i] = 0;
 
-      /* WW: this is too confusing for now 
-         FJM: It's needed for balance. Two sources
-           of 50% MR -- say, a drow with a Mantle
-           of MR -- shouldn't grant 100% MR in a
-           game where spellcasters are intended to
-           be supremely dangerous. I'll add a more
-           clear bonus breakdown to the CharSheet
-           for MR soon. */
-         if (i == A_MR) {
-           MRC = 0;
-           for(j=0;j!=BONUS_LAST;j++)
-             if (AttrAdj[i][j])
-               MRVals[MRC++] = AttrAdj[i][j];
-           if (!MRC)
-             continue;
-           qsort(MRVals,MRC,sizeof(int16),compare_int16);
-           for(j=0;j!=MRC;j++)
-             thisc->KAttr[A_MR] += ((100-thisc->KAttr[A_MR])*MRVals[j])/100;
-           continue;
-         }
-       
+    if (isCharacter() && KnownOnly) 
+        for(i = 0;i != ATTR_LAST; i++) {
+            thisc->KAttr[i] = 0;
 
-      for (j=0;j!=BONUS_LAST;j++)
-        if (!(percent_attr(i) && bonus_is_mult(i,j)))
-          thisc->KAttr[i] += AttrAdj[i][j];
-
-      if (percent_attr(i))
-        for (j=0;j!=BONUS_LAST;j++)
-          if (bonus_is_mult(i,j)) {
-            thisc->KAttr[i] = ((((thisc->KAttr[i]*5 + 100) *
-                    (max(-16,AttrAdj[i][j])*5 + 100) ) / 100)-100)/5;          
-            
-            if (i == A_MOV && AttrAdj[i][j] <= -20 && !isPlayer())
-              isHalted = true;
+            /* WW: this is too confusing for now 
+            FJM: It's needed for balance. Two sources
+            of 50% MR -- say, a drow with a Mantle
+            of MR -- shouldn't grant 100% MR in a
+            game where spellcasters are intended to
+            be supremely dangerous. I'll add a more
+            clear bonus breakdown to the CharSheet
+            for MR soon. */
+            if (i == A_MR) {
+                MRC = 0;
+                for(j=0;j!=BONUS_LAST;j++)
+                    if (AttrAdj[i][j])
+                        MRVals[MRC++] = AttrAdj[i][j];
+                if (!MRC)
+                    continue;
+                qsort(MRVals,MRC,sizeof(int16),compare_int16);
+                for(j=0;j!=MRC;j++)
+                    thisc->KAttr[A_MR] += ((100-thisc->KAttr[A_MR])*MRVals[j])/100;
+                continue;
             }
-      
-      thisc->KAttr[A_CDEF] = thisc->KAttr[A_DEF] - 
-         (max(0,AttrAdj[A_DEF][BONUS_WEAPON]) +
-          max(0,AttrAdj[A_DEF][BONUS_INSIGHT]) +
-          max(0,AttrAdj[A_DEF][BONUS_DODGE]) + 
-          (HasFeat(FT_COMBAT_CASTING) ? 2 : 4));
-    } 
-  else
-    for(i=0;i!=ATTR_LAST;i++) {
-      Attr[i] = 0;
 
-      if (i == A_MR) {
-        MRC = 0;
-        for(j=0;j!=BONUS_LAST;j++)
-          if (AttrAdj[i][j])
-            MRVals[MRC++] = AttrAdj[i][j];
-         if (!MRC)
-           continue;
-         qsort(MRVals,MRC,sizeof(int16),compare_int16);
-         for(j=0;j!=MRC;j++)
-           Attr[A_MR] += ((100-Attr[A_MR])*MRVals[j])/100;
-         continue;
-         }
-       
-      for (j=0;j!=BONUS_LAST;j++)
-        if (!(percent_attr(i) && bonus_is_mult(i,j)))
-          Attr[i] += AttrAdj[i][j];
+            for (j=0;j!=BONUS_LAST;j++)
+                if (!(percent_attr(i) && bonus_is_mult(i,j)))
+                    thisc->KAttr[i] += AttrAdj[i][j];
 
-      if (percent_attr(i))
-        for (j=0;j!=BONUS_LAST;j++)
-          if (bonus_is_mult(i,j)) {
-            Attr[i] = ((((Attr[i]*5 + 100) * 
-                    (AttrAdj[i][j]*5 + 100)) / 100)-100)/5;
-            if (i == A_MOV && AttrAdj[i][j] <= -20 && !isPlayer())
-              isHalted = true;
-          }
-      Attr[A_CDEF] = Attr[A_DEF] - (max(0,AttrAdj[A_DEF][BONUS_WEAPON]) +
-                                    max(0,AttrAdj[A_DEF][BONUS_INSIGHT]) +
-                                    max(0,AttrAdj[A_DEF][BONUS_DODGE])  + 
-                                    (HasFeat(FT_COMBAT_CASTING) ? 2 : 4));
+            if (percent_attr(i))
+                for (j=0;j!=BONUS_LAST;j++)
+                    if (bonus_is_mult(i,j)) {
+                        thisc->KAttr[i] = ((((thisc->KAttr[i]*5 + 100) *
+                            (max(-16,AttrAdj[i][j])*5 + 100) ) / 100)-100)/5;          
 
-    }
+                        if (i == A_MOV && AttrAdj[i][j] <= -20 && !isPlayer())
+                            isHalted = true;
+                    }
 
-  if (theGame->InPlay() && !KnownOnly) {
-    /* Having one's attribute score reduced to 0 by poison, disease or
-       the special attacks of an undead is lethal. Having an attribute
-       score of 0 naturally (golems have Int 0, undead have Con 0, etc.),
-       or having an attribute reduced to 0 by fatigue modifiers, attribute
-       magic penalties (ray of enfeeblement/bestow curse) or such is not.
-       This explains the logic here. */
-    for(i=0;i!=6;i++) {
-      if (AttrAdj[i][BONUS_BASE] && (AttrAdj[i][BONUS_BASE] +
-            AttrAdj[i][BONUS_TEMP] > 0))
-        if (Attr[i] <= 0)
-          if (AttrAdj[i][BONUS_BASE] + AttrAdj[i][BONUS_TEMP] + AttrAdj[i][BONUS_FEAT] +
-              AttrAdj[i][BONUS_DAMAGE] <= 0)            
-            AttrDeath |= XBIT(i);
-    }
-
-  }
-
-  if (isCharacter() && KnownOnly) 
-  {
-    for(i=0;i!=7;i++) 
-      if (AttrAdj[i][BONUS_BASE] && (AttrAdj[i][BONUS_BASE] +
-            AttrAdj[i][BONUS_TEMP] > 0)) {
-        if (thisp->KAttr[i] <= 0 && !(AttrDeath & XBIT(i)))
-          thisp->KAttr[i] = 1;
-      }
-      else
-        thisp->KAttr[i] = 0;
-
-    if (thisp->KAttr[A_FAT] <= 0)
-      thisp->KAttr[A_FAT] = 1;
-
-    if (!isHalted)
-      thisp->KAttr[A_MOV]       = max(min(-15,TMON(mID)->Mov),thisp->KAttr[A_MOV]);
+                    thisc->KAttr[A_CDEF] = thisc->KAttr[A_DEF] - 
+                        (max(0,AttrAdj[A_DEF][BONUS_WEAPON]) +
+                        max(0,AttrAdj[A_DEF][BONUS_INSIGHT]) +
+                        max(0,AttrAdj[A_DEF][BONUS_DODGE]) + 
+                        (HasFeat(FT_COMBAT_CASTING) ? 2 : 4));
+        } 
     else
-      thisp->KAttr[A_MOV]       = -20;
-    thisp->KAttr[A_SPD_MELEE]   = max(-15,thisp->KAttr[A_SPD_MELEE]);
-    thisp->KAttr[A_SPD_BRAWL]   = max(-15,thisp->KAttr[A_SPD_BRAWL]);
-    thisp->KAttr[A_SPD_ARCHERY] = max(-15,thisp->KAttr[A_SPD_ARCHERY]);
-    thisp->KAttr[A_SPD_THROWN]  = max(-15,thisp->KAttr[A_SPD_THROWN]);
-    thisp->KAttr[A_SPD_OFFHAND] = max(-15,thisp->KAttr[A_SPD_OFFHAND]);
+        for(i=0; i!=ATTR_LAST; i++) {
+            Attr[i] = 0;
 
-  } 
-  else
-  {
-    /* If you do not naturally have an attribute of 0, and are not about
-       to die as a result of having that attribute at 0, set it to a minimum
-       of one. Also, do not let modifiers raise a natural 0 to a higher
-       value -- you can't make a clay golem sapient by playing a Headband
-       of Intellect on its forehead. */
-    for(i=0;i!=7;i++) 
-      if (AttrAdj[i][BONUS_BASE] && (AttrAdj[i][BONUS_BASE] +
-            AttrAdj[i][BONUS_TEMP] > 0)) {
-        if (Attr[i] <= 0 && !(AttrDeath & XBIT(i)))
-          Attr[i] = 1;
-      }
-      else
-        Attr[i] = 0;
+            if (i == A_MR) {
+                MRC = 0;
+                for(j=0;j!=BONUS_LAST;j++)
+                    if (AttrAdj[i][j])
+                        MRVals[MRC++] = AttrAdj[i][j];
+                if (!MRC)
+                    continue;
 
-    if (Attr[A_FAT] <= 0)
-      Attr[A_FAT] = 1;
+                qsort(MRVals,MRC,sizeof(int16),compare_int16);
+                for(j=0; j!=MRC; j++)
+                    Attr[A_MR] += ((100 - Attr[A_MR]) * MRVals[j]) / 100;
+                continue;
+            }
 
-    if (!isHalted)
-      thisp->Attr[A_MOV]       = max(min(-15,TMON(mID)->Mov),thisp->Attr[A_MOV]);
-    else
-      thisp->Attr[A_MOV]       = -20;
-    thisp->Attr[A_SPD_MELEE]   = max(-15,thisp->Attr[A_SPD_MELEE]);
-    thisp->Attr[A_SPD_BRAWL]   = max(-15,thisp->Attr[A_SPD_BRAWL]);
-    thisp->Attr[A_SPD_ARCHERY] = max(-15,thisp->Attr[A_SPD_ARCHERY]);
-    thisp->Attr[A_SPD_THROWN]  = max(-15,thisp->Attr[A_SPD_THROWN]);
-    thisp->Attr[A_SPD_OFFHAND] = max(-15,thisp->Attr[A_SPD_OFFHAND]);
+            for (j=0;j!=BONUS_LAST;j++)
+                if (!(percent_attr(i) && bonus_is_mult(i,j)))
+                    Attr[i] += AttrAdj[i][j];
 
-    Creature *lead;
-    if ((lead = getLeader()) && !isHalted)
-      if (lead != this && lead->GetAttr(A_MOV) > GetAttr(A_MOV))
-        if (lead->HasFeat(FT_COORDINATED_TACTICS))
-          Attr[A_MOV] = lead->GetAttr(A_MOV);
+            if (percent_attr(i))
+                for (j=0; j != BONUS_LAST; j++)
+                    if (bonus_is_mult(i, j)) {
+                        Attr[i] = ((((Attr[i] * 5 + 100) * (AttrAdj[i][j] * 5 + 100)) / 100) - 100) / 5;
+                        if (i == A_MOV && AttrAdj[i][j] <= -20 && !isPlayer())
+                            isHalted = true;
+                    }
+                    Attr[A_CDEF] = Attr[A_DEF] - (max(0,AttrAdj[A_DEF][BONUS_WEAPON]) +
+                        max(0,AttrAdj[A_DEF][BONUS_INSIGHT]) +
+                        max(0,AttrAdj[A_DEF][BONUS_DODGE])  + 
+                        (HasFeat(FT_COMBAT_CASTING) ? 2 : 4));
 
-    SightRange   = max(12,15+Mod(A_WIS)*3) + AbilityLevel(CA_SHARP_SENSES)*2;
-    LightRange   = EInSlot(SL_LIGHT) ? EInSlot(SL_LIGHT)->GetLightRange() : 0;
-    if (InSlot(SL_WEAPON) && InSlot(SL_WEAPON)->HasQuality(WQ_GLOWING))
-      LightRange = max(LightRange,InSlot(SL_WEAPON)->GetPlus()*3);
-    if (InSlot(SL_READY) && InSlot(SL_READY)->HasQuality(WQ_GLOWING))
-      LightRange = max(LightRange,InSlot(SL_READY)->GetPlus()*3);
-    ShadowRange  = LightRange*2;
-    ScentRange   = AbilityLevel(CA_SCENT) + 
-      (HasFeat(FT_WILD_SHAPE_SCENT) ? 3 : 0);
-    if (LightRange) LightRange   += AbilityLevel(CA_LOWLIGHT);
-    InfraRange   = (uint8)AbilityLevel(CA_INFRAVISION);
-    if (isBlind()) {
-      SightRange = ShadowRange = InfraRange = 0;  
-    }
-    if (HasFeat(FT_ACUTE_SENSES)) {
-      SightRange  = (SightRange * 3) / 2;
-      ShadowRange = (ShadowRange * 3) / 2;
-      InfraRange  = (InfraRange * 3) / 2;
-      ScentRange  = (ScentRange * 3) / 2; 
-    } 
-    TelepRange   = (uint8)AbilityLevel(CA_TELEPATHY);
-    TremorRange  = (uint8)AbilityLevel(CA_TREMORSENSE);
-    BlindRange   = AbilityLevel(CA_BLINDSIGHT) + HasFeat(FT_BLINDSIGHT);
-    if (BlindRange) {
-      if ( m && m->InBounds(x,y) && m->FieldAt(x,y,FI_SILENCE))
-        BlindRange = 0; 
-      if (InSlot(SL_HELM) && EInSlot(SL_HELM)->isMetallic())
-        BlindRange /= 2;
-      if (InSlot(SL_WEAPON)) {
-        int pen = InSlot(SL_WEAPON)->Size(this) - SZ_TINY;
-        if (pen > 0) {
-          if (BlindRange < pen) BlindRange = 0;
-          else BlindRange -= pen; 
         }
-      }
-      if (InSlot(SL_READY) && InSlot(SL_READY) != InSlot(SL_WEAPON)) {
-        int pen = InSlot(SL_READY)->Size(this) - SZ_TINY;
-        if (pen > 0) {
-          if (BlindRange < pen) BlindRange = 0;
-          else BlindRange -= pen; 
+
+    if (theGame->InPlay() && !KnownOnly) {
+        /* Having one's attribute score reduced to 0 by poison, disease or
+        the special attacks of an undead is lethal. Having an attribute
+        score of 0 naturally (golems have Int 0, undead have Con 0, etc.),
+        or having an attribute reduced to 0 by fatigue modifiers, attribute
+        magic penalties (ray of enfeeblement/bestow curse) or such is not.
+        This explains the logic here. */
+        for(i=0;i!=6;i++) {
+            if (AttrAdj[i][BONUS_BASE] && (AttrAdj[i][BONUS_BASE] +
+                AttrAdj[i][BONUS_TEMP] > 0))
+                if (Attr[i] <= 0)
+                    if (AttrAdj[i][BONUS_BASE] + AttrAdj[i][BONUS_TEMP] + AttrAdj[i][BONUS_FEAT] +
+                        AttrAdj[i][BONUS_DAMAGE] <= 0)            
+                        AttrDeath |= XBIT(i);
         }
-      }
-      BlindRange = max(1,BlindRange);
+
     }
-    NatureSight  = HasAbility(CA_NATURE_SENSE);
-    PercepRange  = (uint8)HighStatiMag(PERCEPTION);
-    /* We're assuming for now that animals don't need light to see, so
-       that they can exist in the dungeon as effective companions to
-       druids and rangers. */
-    if (!isPlayer() && InfraRange + LightRange + TelepRange + TremorRange + BlindRange + ScentRange == 0)
-      InfraRange = max(6,InfraRange);
-  }
 
-  if (Attr[A_FAT] != oFP) {
-    if (restart_count++ < 10) 
-      goto Restart;
-    // ww: you lose! 
-    Attr[A_FAT] = min(Attr[A_FAT],oFP);
-    // ww: fixme, this is hideous! 
-  }
+    if (isCharacter() && KnownOnly) {
+        for(i=0;i!=7;i++) 
+            if (AttrAdj[i][BONUS_BASE] && (AttrAdj[i][BONUS_BASE] +
+                AttrAdj[i][BONUS_TEMP] > 0)) {
+                    if (thisp->KAttr[i] <= 0 && !(AttrDeath & XBIT(i)))
+                        thisp->KAttr[i] = 1;
+            } else
+                thisp->KAttr[i] = 0;
 
-  cFP += Attr[A_FAT];
-  cHP += Attr[A_THP];
-  /* Gaining temporary maximum hit points increases your current
-     hit points, but losing them only decreases current hit points
-     enough to put them equal to or lower then the new maximum
-     hit points. */       
-  if (oHP > cHP)
-    cHP = min (mHP+Attr[A_THP], oHP);
+        if (thisp->KAttr[A_FAT] <= 0)
+            thisp->KAttr[A_FAT] = 1;
 
-  SetImage();
-  if (m && x != -1)
-    m->Update(x,y);
+        if (!isHalted)
+            thisp->KAttr[A_MOV]       = max(min(-15,TMON(mID)->Mov),thisp->KAttr[A_MOV]);
+        else
+            thisp->KAttr[A_MOV]       = -20;
+        thisp->KAttr[A_SPD_MELEE]   = max(-15,thisp->KAttr[A_SPD_MELEE]);
+        thisp->KAttr[A_SPD_BRAWL]   = max(-15,thisp->KAttr[A_SPD_BRAWL]);
+        thisp->KAttr[A_SPD_ARCHERY] = max(-15,thisp->KAttr[A_SPD_ARCHERY]);
+        thisp->KAttr[A_SPD_THROWN]  = max(-15,thisp->KAttr[A_SPD_THROWN]);
+        thisp->KAttr[A_SPD_OFFHAND] = max(-15,thisp->KAttr[A_SPD_OFFHAND]);
 
-  /* Here, we cause the player to drop weapons when they change
-     size catagories as a result of things like Divine Power or
-     Enlarge wearing off. */
-  if ((!m) || (oldSize == Attr[A_SIZ]))
+    } else {
+        /* If you do not naturally have an attribute of 0, and are not about
+        to die as a result of having that attribute at 0, set it to a minimum
+        of one. Also, do not let modifiers raise a natural 0 to a higher
+        value -- you can't make a clay golem sapient by playing a Headband
+        of Intellect on its forehead. */
+        for(i=0;i!=7;i++) 
+            if (AttrAdj[i][BONUS_BASE] && (AttrAdj[i][BONUS_BASE] +
+                AttrAdj[i][BONUS_TEMP] > 0)) {
+                    if (Attr[i] <= 0 && !(AttrDeath & XBIT(i)))
+                        Attr[i] = 1;
+            }
+            else
+                Attr[i] = 0;
+
+        if (Attr[A_FAT] <= 0)
+            Attr[A_FAT] = 1;
+
+        if (!isHalted)
+            thisp->Attr[A_MOV]       = max(min(-15,TMON(mID)->Mov),thisp->Attr[A_MOV]);
+        else
+            thisp->Attr[A_MOV]       = -20;
+        thisp->Attr[A_SPD_MELEE]   = max(-15,thisp->Attr[A_SPD_MELEE]);
+        thisp->Attr[A_SPD_BRAWL]   = max(-15,thisp->Attr[A_SPD_BRAWL]);
+        thisp->Attr[A_SPD_ARCHERY] = max(-15,thisp->Attr[A_SPD_ARCHERY]);
+        thisp->Attr[A_SPD_THROWN]  = max(-15,thisp->Attr[A_SPD_THROWN]);
+        thisp->Attr[A_SPD_OFFHAND] = max(-15,thisp->Attr[A_SPD_OFFHAND]);
+
+        Creature *lead;
+        if ((lead = getLeader()) && !isHalted)
+            if (lead != this && lead->GetAttr(A_MOV) > GetAttr(A_MOV))
+                if (lead->HasFeat(FT_COORDINATED_TACTICS))
+                    Attr[A_MOV] = lead->GetAttr(A_MOV);
+
+        SightRange   = max(12,15+Mod(A_WIS)*3) + AbilityLevel(CA_SHARP_SENSES)*2;
+        LightRange   = EInSlot(SL_LIGHT) ? EInSlot(SL_LIGHT)->GetLightRange() : 0;
+        if (InSlot(SL_WEAPON) && InSlot(SL_WEAPON)->HasQuality(WQ_GLOWING))
+            LightRange = max(LightRange,InSlot(SL_WEAPON)->GetPlus()*3);
+        if (InSlot(SL_READY) && InSlot(SL_READY)->HasQuality(WQ_GLOWING))
+            LightRange = max(LightRange,InSlot(SL_READY)->GetPlus()*3);
+        ShadowRange  = LightRange*2;
+        ScentRange   = AbilityLevel(CA_SCENT) + 
+            (HasFeat(FT_WILD_SHAPE_SCENT) ? 3 : 0);
+        if (LightRange) LightRange   += AbilityLevel(CA_LOWLIGHT);
+        InfraRange   = (uint8)AbilityLevel(CA_INFRAVISION);
+        if (isBlind()) {
+            SightRange = ShadowRange = InfraRange = 0;  
+        }
+        if (HasFeat(FT_ACUTE_SENSES)) {
+            SightRange  = (SightRange * 3) / 2;
+            ShadowRange = (ShadowRange * 3) / 2;
+            InfraRange  = (InfraRange * 3) / 2;
+            ScentRange  = (ScentRange * 3) / 2; 
+        } 
+        TelepRange   = (uint8)AbilityLevel(CA_TELEPATHY);
+        TremorRange  = (uint8)AbilityLevel(CA_TREMORSENSE);
+        BlindRange   = AbilityLevel(CA_BLINDSIGHT) + HasFeat(FT_BLINDSIGHT);
+        if (BlindRange) {
+            if ( m && m->InBounds(x,y) && m->FieldAt(x,y,FI_SILENCE))
+                BlindRange = 0; 
+            if (InSlot(SL_HELM) && EInSlot(SL_HELM)->isMetallic())
+                BlindRange /= 2;
+            if (InSlot(SL_WEAPON)) {
+                int pen = InSlot(SL_WEAPON)->Size(this) - SZ_TINY;
+                if (pen > 0) {
+                    if (BlindRange < pen) BlindRange = 0;
+                    else BlindRange -= pen; 
+                }
+            }
+            if (InSlot(SL_READY) && InSlot(SL_READY) != InSlot(SL_WEAPON)) {
+                int pen = InSlot(SL_READY)->Size(this) - SZ_TINY;
+                if (pen > 0) {
+                    if (BlindRange < pen) BlindRange = 0;
+                    else BlindRange -= pen; 
+                }
+            }
+            BlindRange = max(1,BlindRange);
+        }
+        NatureSight  = HasAbility(CA_NATURE_SENSE);
+        PercepRange  = (uint8)HighStatiMag(PERCEPTION);
+        /* We're assuming for now that animals don't need light to see, so
+        that they can exist in the dungeon as effective companions to
+        druids and rangers. */
+        if (!isPlayer() && InfraRange + LightRange + TelepRange + TremorRange + BlindRange + ScentRange == 0)
+            InfraRange = max(6,InfraRange);
+    }
+
+    if (Attr[A_FAT] != oFP) {
+        if (restart_count++ < 10) 
+            goto Restart;
+        // ww: you lose! 
+        Attr[A_FAT] = min(Attr[A_FAT],oFP);
+        // ww: fixme, this is hideous! 
+    }
+
+    cFP += Attr[A_FAT];
+    cHP += Attr[A_THP];
+    /* Gaining temporary maximum hit points increases your current
+    hit points, but losing them only decreases current hit points
+    enough to put them equal to or lower then the new maximum
+    hit points. */       
+    if (oHP > cHP)
+        cHP = min (mHP+Attr[A_THP], oHP);
+
+    SetImage();
+    if (m && x != -1)
+        m->Update(x,y);
+
+    /* Here, we cause the player to drop weapons when they change
+    size catagories as a result of things like Divine Power or
+    Enlarge wearing off. */
+    if ((!m) || (oldSize == Attr[A_SIZ]))
     { theGame->inCalcVal--; return; }
 
-  if (HasStati(DISGUISED)) {
-    IPrint("Your change in size ruins your disguise!");
-    RemoveStati(DISGUISED);
+    if (HasStati(DISGUISED)) {
+        IPrint("Your change in size ruins your disguise!");
+        RemoveStati(DISGUISED);
     }
 
-  Creature *mount, *rider;
-  if (HasStati(MOUNT))
+    Creature *mount, *rider;
+    if (HasStati(MOUNT))
     {
-      mount = this;
-      rider = (Creature*) GetStatiObj(MOUNT);
-      goto MountChecks;
+        mount = this;
+        rider = (Creature*) GetStatiObj(MOUNT);
+        goto MountChecks;
     }
-  if (HasStati(MOUNTED))
+    if (HasStati(MOUNTED))
     {
-      mount = (Creature*) GetStatiObj(MOUNTED);
-      rider = this;
-      
-      MountChecks:
-      if (mount->GetAttr(A_SIZ) <= rider->GetAttr(A_SIZ) &&
-               (mount->GetAttr(A_SIZ) != SZ_SMALL ||
-                mount->GetAttr(A_SIZ) != SZ_SMALL))
-        ThrowVal(EV_DISMOUNT,DSM_THROWN,rider,mount);
-      else if (mount->GetAttr(A_SIZ) > rider->GetAttr(A_SIZ)+1 &&
-               mount->isMType(MA_ANIMAL))
-        ThrowVal(EV_DISMOUNT,DSM_THROWN,rider,mount);
-    }
-      
+        mount = (Creature*) GetStatiObj(MOUNTED);
+        rider = this;
 
-  if (theGame->InPlay()) { 
-    static Item *w1, *w2;
-    w1 = InSlot(SL_WEAPON);
-    w2 = InSlot(SL_READY);
-    if (w1 && w1 == w2) {
-      if (w1->Size(this) > Attr[A_SIZ]+1 && !w1->isCursed()) {
-        IDPrint("You drop your <Obj1>!",
-            "The <Obj2> drops <his:Obj1> <Obj1>.",w1,this);
-        Throw(EV_LOSEITEM,this,NULL,w1);
-        Throw(EV_DROP,this,NULL,w1);
-      }
+MountChecks:
+        if (mount->GetAttr(A_SIZ) <= rider->GetAttr(A_SIZ) &&
+            (mount->GetAttr(A_SIZ) != SZ_SMALL ||
+            mount->GetAttr(A_SIZ) != SZ_SMALL))
+            ThrowVal(EV_DISMOUNT,DSM_THROWN,rider,mount);
+        else if (mount->GetAttr(A_SIZ) > rider->GetAttr(A_SIZ)+1 &&
+            mount->isMType(MA_ANIMAL))
+            ThrowVal(EV_DISMOUNT,DSM_THROWN,rider,mount);
     }
-    else
-    {
-      if (w1 && w1->Size(this) > Attr[A_SIZ] && !w1->isCursed()) {
-        IDPrint("You drop your <Obj1>!",
-            "The <Obj2> drops <his:Obj1> <Obj1>.",w1,this);
-        Throw(EV_LOSEITEM,this,NULL,w1);
-        Throw(EV_DROP,this,NULL,w1);
-      }
-      if (w2 && w2->Size(this) > Attr[A_SIZ] && !w2->isCursed()) {
-        IDPrint("You drop your <Obj1>!",
-            "The <Obj2> drops <his:Obj1> <Obj1>.",w2,this);
-        Throw(EV_LOSEITEM,this,NULL,w2);
-        Throw(EV_DROP,this,NULL,w2);
-      }
-    }
-  }
 
 
-  if (FaceRadius[Attr[A_SIZ]] && !FaceRadius[oldSize]) {
-    m->NewField(FI_SIZE|FI_MOBILE,x,y,FaceRadius[Attr[A_SIZ]],
-        GLYPH_BULK | (Image & 0x0F00),-1,0,this);
-    PlaceNear(x,y);
-  }
-  else for (i=0;m->Fields[i];i++)
-    if (m->Fields[i]->Creator == myHandle)
-      if (m->Fields[i]->FType & FI_SIZE) {
-        if (FaceRadius[Attr[A_SIZ]])
-          m->Fields[i]->rad = FaceRadius[Attr[A_SIZ]];
+    if (theGame->InPlay()) { 
+        static Item *w1, *w2;
+        w1 = InSlot(SL_WEAPON);
+        w2 = InSlot(SL_READY);
+        if (w1 && w1 == w2) {
+            if (w1->Size(this) > Attr[A_SIZ]+1 && !w1->isCursed()) {
+                IDPrint("You drop your <Obj1>!",
+                    "The <Obj2> drops <his:Obj1> <Obj1>.",w1,this);
+                Throw(EV_LOSEITEM,this,NULL,w1);
+                Throw(EV_DROP,this,NULL,w1);
+            }
+        }
         else
-        { m->RemoveField(m->Fields[i]); i--; }
-      }
-  theGame->inCalcVal--;
+        {
+            if (w1 && w1->Size(this) > Attr[A_SIZ] && !w1->isCursed()) {
+                IDPrint("You drop your <Obj1>!",
+                    "The <Obj2> drops <his:Obj1> <Obj1>.",w1,this);
+                Throw(EV_LOSEITEM,this,NULL,w1);
+                Throw(EV_DROP,this,NULL,w1);
+            }
+            if (w2 && w2->Size(this) > Attr[A_SIZ] && !w2->isCursed()) {
+                IDPrint("You drop your <Obj1>!",
+                    "The <Obj2> drops <his:Obj1> <Obj1>.",w2,this);
+                Throw(EV_LOSEITEM,this,NULL,w2);
+                Throw(EV_DROP,this,NULL,w2);
+            }
+        }
+    }
 
+
+    if (FaceRadius[Attr[A_SIZ]] && !FaceRadius[oldSize]) {
+        m->NewField(FI_SIZE|FI_MOBILE,x,y,FaceRadius[Attr[A_SIZ]], GLYPH_BULK | (Image & 0x0F00),-1,0,this);
+        PlaceNear(x,y);
+    } else
+        for (i=0;m->Fields[i];i++)
+            if (m->Fields[i]->Creator == myHandle)
+                if (m->Fields[i]->FType & FI_SIZE) {
+                    if (FaceRadius[Attr[A_SIZ]])
+                        m->Fields[i]->rad = FaceRadius[Attr[A_SIZ]];
+                    else {
+                        m->RemoveField(m->Fields[i]);
+                        i--;
+                    }
+                }
+    theGame->inCalcVal--;
 }
 
 bool Creature::InherentCreatureReach() {
@@ -1980,7 +1911,7 @@ int16 Creature::ResistLevel(int16 DType, bool bypass_armour)
       total += Resists[i] / 3;
 
     return total;
-  }
+}
 
 int8 MonHDType(int8 MType)
   {

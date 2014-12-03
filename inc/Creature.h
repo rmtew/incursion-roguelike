@@ -383,9 +383,10 @@ class Creature: public Thing, public Magic
       virtual int8 SkillKitMod(int16 sk);
       virtual int16 ISkillLevel(int16 n);
       virtual int16 SkillLevel(int16 n);
-      virtual int16 ConcentBuffer()
-                      { int16 cc = SkillLevel(SK_CONCENT);
-                        return max(cc-5,0); }
+      virtual int16 ConcentBuffer() {
+          int16 cc = SkillLevel(SK_CONCENT);
+          return max(cc-5,0);
+      }
       virtual int8 WepSkill(rID wep, bool ignore_str=false);
       int8 WepSkill(Item * it) ;
       bool SavingThrow(int16 type, int16 DC, uint32 Subtype=0,
