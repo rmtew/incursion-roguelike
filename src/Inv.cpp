@@ -270,26 +270,21 @@ Item* Monster::GetInv(bool first)
       Error("Glitch in Monster::GetInv!");
 
     return it2;
-  }
-
-        
-      
+}
 
 /*****************************************************************************\
  *                            CHARACTER INVENTORY                            *
 \*****************************************************************************/
 
-
-Item* Character::InSlot(int8 sl, bool eff)
-  {
+Item* Character::InSlot(int8 sl, bool eff) {
     if (eff && HasStati(ALT_ITEM,sl)) {
-      ASSERT (GetStatiObj(ALT_ITEM,sl)->isItem());
-      return (Item*) (GetStatiObj(ALT_ITEM,sl));
-      }
+        ASSERT (GetStatiObj(ALT_ITEM,sl)->isItem());
+        return (Item*) (GetStatiObj(ALT_ITEM,sl));
+    }
     if (sl != SL_LIGHT && sl != SL_INAIR && !TMON(mID)->HasSlot(sl))
-      return NULL;
+        return NULL;
     return sl > SL_LAST ? NULL : oItem(Inv[sl]);
-  }
+}
 
 EvReturn Character::Wield(EventInfo &e) {
     int8 paramslot = (int8)e.EParam;
@@ -315,11 +310,9 @@ EvReturn Character::Wield(EventInfo &e) {
         }
 
     Item *other;
-    if ((paramslot == SL_WEAPON && (other = InSlot(SL_READY))) ||
-        (paramslot == SL_READY && (other = InSlot(SL_WEAPON))))
+    if ((paramslot == SL_WEAPON && (other = InSlot(SL_READY))) || (paramslot == SL_READY && (other = InSlot(SL_WEAPON))))
         if (e.EItem->HasIFlag(WT_REACH) != other->HasIFlag(WT_REACH))
-            if (e.EItem->isType(T_WEAPON) && other->isType(T_WEAPON))
-            {
+            if (e.EItem->isType(T_WEAPON) && other->isType(T_WEAPON)) {
                 IPrint("You cannot wield a reach weapon along with a non-reach weapon.");
                 return ABORT;
             }
@@ -333,9 +326,8 @@ EvReturn Character::Wield(EventInfo &e) {
         return ABORT;
     }
 
-
     if (m && theGame->InPlay() && x != -1) { 
-        if((isMType(MA_DEMON) || isMType(MA_LYCANTHROPE) || isMType(MA_DEVIL) || isMType(MA_UNDEAD))) {
+        if ((isMType(MA_DEMON) || isMType(MA_LYCANTHROPE) || isMType(MA_DEVIL) || isMType(MA_UNDEAD))) {
             if (e.EItem->Material() == MAT_SILVER) {
                 IPrint("You are too fiendish to use silver items."); 
                 return ABORT; 
@@ -345,7 +337,8 @@ EvReturn Character::Wield(EventInfo &e) {
                 return ABORT; 
             } 
         }
-        if(onPlane() != PHASE_MATERIAL) {
+
+        if (onPlane() != PHASE_MATERIAL) {
             if (!e.EItem->isGhostTouch()) {
                 IPrint("You are incorporeal and cannot use material items."); 
                 return ABORT; 
@@ -361,20 +354,16 @@ EvReturn Character::Wield(EventInfo &e) {
                 IPrint("The <Obj> is too large for you to wield effectively.",e.EItem);
                 return ABORT;
             }
+
             if ((TITEM(e.EItem->iID)->HasFlag(WT_EXOTIC_1H) && !HasEffStati(WEP_SKILL,e.EItem->iID)) ||
-                (e.EItem->Size(this) + 
-                TITEM(e.EItem->iID)->HasFlag(WT_TWO_HANDED) 
-                > (Attr[A_SIZ]+
-                (e.EItem->isType(T_SHIELD) ? 0 : HasFeat(FT_MONKEY_GRIP))))) {
-               if (Inv[SL_WEAPON] || Inv[SL_READY]) {
-                   IPrint("You grip the <Obj> experimentally, and find you would "
-                       " need both hands free to wield it well.",e.EItem);
-                   return ABORT;
-               }
-               Inv[SL_WEAPON] = e.EItem->myHandle;
-               Inv[SL_READY]  = e.EItem->myHandle;
-            } else if (!Inv[SL_WEAPON] && !Inv[SL_READY] && theGame->InPlay() && e.EItem->isType(T_WEAPON) &&
-                (isExchange || yn(XPrint("Wield the <Obj> two-handed?",e.EItem)))) {
+                (e.EItem->Size(this) + TITEM(e.EItem->iID)->HasFlag(WT_TWO_HANDED) > (Attr[A_SIZ] + (e.EItem->isType(T_SHIELD) ? 0 : HasFeat(FT_MONKEY_GRIP))))) {
+                if (Inv[SL_WEAPON] || Inv[SL_READY]) {
+                    IPrint("You grip the <Obj> experimentally, and find you would need both hands free to wield it well.", e.EItem);
+                    return ABORT;
+                }
+                Inv[SL_WEAPON] = e.EItem->myHandle;
+                Inv[SL_READY]  = e.EItem->myHandle;
+            } else if (!Inv[SL_WEAPON] && !Inv[SL_READY] && theGame->InPlay() && e.EItem->isType(T_WEAPON) && (isExchange || yn(XPrint("Wield the <Obj> two-handed?",e.EItem)))) {
                 Inv[SL_WEAPON] = e.EItem->myHandle;
                 Inv[SL_READY]  = e.EItem->myHandle;
             }
@@ -382,6 +371,7 @@ EvReturn Character::Wield(EventInfo &e) {
 
     Inv[paramslot] = e.EItem->myHandle;
     e.EItem->SetOwner(e.EActor->myHandle);
+
     if (e.EItem->activeSlot(paramslot))
         e.EItem->IFlags |= IF_WORN;
     if (theGame->InPlay()) {
@@ -394,7 +384,7 @@ EvReturn Character::Wield(EventInfo &e) {
         (e.EItem->HasQuality(WQ_CHAOTIC) && isMType(MA_LAWFUL)) ||
         (e.EItem->HasQuality(WQ_LAWFUL) && isMType(MA_CHAOTIC)) ||
         (e.EItem->HasQuality(WQ_BALANCE) && !isMType(MA_NEUTRAL))) {
-        IPrint("Wielding the <Obj> makes you feel uneasy.",e.EItem);
+            IPrint("Wielding the <Obj> makes you feel uneasy.",e.EItem);
     }
 
     if (HasFeat(FT_SOULBLADE) && e.EItem->activeSlot(paramslot))
@@ -418,7 +408,7 @@ EvReturn Character::Wield(EventInfo &e) {
     return DONE;
 }
 
-  EvReturn Character::TakeOff(EventInfo &e) {
+EvReturn Character::TakeOff(EventInfo &e) {
       int16 i;
       for (i=0;i!=SL_LAST;i++)
           if (Inv[i] == e.EItem->myHandle)
