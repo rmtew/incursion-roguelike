@@ -1261,6 +1261,10 @@ Restart:
                 continue;
             }
 
+            for (j = 0;j != BONUS_LAST; j++)
+                if (!(percent_attr(i) && bonus_is_mult(i,j)))
+                    thisc->KAttr[i] += AttrAdj[i][j];
+
             if (percent_attr(i)) {
                 for (j=0;j!=BONUS_LAST;j++)
                     if (bonus_is_mult(i,j)) {
@@ -1269,10 +1273,6 @@ Restart:
                         if (i == A_MOV && AttrAdj[i][j] <= -20 && !isPlayer())
                             isHalted = true;
                     }
-            } else {
-                for (j = 0;j != BONUS_LAST; j++)
-                    if (!bonus_is_mult(i,j))
-                        thisc->KAttr[i] += AttrAdj[i][j];
             }
 
             thisc->KAttr[A_CDEF] = thisc->KAttr[A_DEF] - 
@@ -1296,6 +1296,10 @@ Restart:
                 continue;
             }
 
+            for (j = 0;j != BONUS_LAST; j++)
+                if (!(percent_attr(i) && bonus_is_mult(i,j)))
+                    Attr[i] += AttrAdj[i][j];
+
             if (percent_attr(i)) {
                 for (j=0; j != BONUS_LAST; j++)
                     if (bonus_is_mult(i, j)) {
@@ -1303,10 +1307,6 @@ Restart:
                         if (i == A_MOV && AttrAdj[i][j] <= -20 && !isPlayer())
                             isHalted = true;
                     }
-            } else {
-                for (j = 0;j != BONUS_LAST; j++)
-                    if (!bonus_is_mult(i,j))
-                        Attr[i] += AttrAdj[i][j];
             }
 
             Attr[A_CDEF] = Attr[A_DEF] -
