@@ -542,7 +542,7 @@ DoneDeletion:
     return 0;
 }
 
-#pragma warning(disable:4291)
+#pragma warning(disable:4291) // no matching operator delete found; memory will not be freed if initialization throws an exception
 
 int16 Registry::LoadGroup(Term &t, hObj hGroup, bool use_lz) {
     fileHeader fh;

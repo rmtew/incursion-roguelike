@@ -55,8 +55,6 @@
 
 */
 
-
-
 #include "Incursion.h"
 #define GLYPHS_SHOWN 25
 
@@ -65,8 +63,7 @@
 *                                Main Display                                *
 \*****************************************************************************/
 
-void TextTerm::ShowStatus()
-	{
+void TextTerm::ShowStatus() {
     int16 i,j, mColor, statiLen;
 		String LStatLine, MStatLine, SStatLine, Loc, *sp, add;
     
@@ -315,10 +312,9 @@ void TextTerm::ShowStatus()
         PutChar(i,1,'*');
         }
       }
-  }
+}
 
-void TextTerm::ShowTraits()
-  {
+void TextTerm::ShowTraits() {
     int i;
     String FName, s, form, attks, dstr;
 
@@ -622,10 +618,9 @@ void TextTerm::ShowTraits()
       ShowViewList();
       }
     SetWin(WIN_SCREEN);
-	}
+}
 
-void TextTerm::ShowTime()
-  {
+void TextTerm::ShowTime() {
     uint8 hour, min, sec, day;
     const char *Months[] = { "Suntide", "Harvest", "Leafdry", "Softwind",
                              "Thincold", "Deepcold", "Midwint", "Arvester", 
@@ -652,10 +647,9 @@ void TextTerm::ShowTime()
         Write(0,TimeLine,Format("%d\n",turn));
         break; 
     }
-  }
+}
 
-void TextTerm::ShowDamage(const char*str, Item *w, int8 Mode)
-  {
+void TextTerm::ShowDamage(const char*str, Item *w, int8 Mode) {
     bool SuperSneak = false;
     Write(Format("%s:%s\n", (const char*)str, (const char*)(p->DmgVal(Mode,false)).Str()));
     if ((p->HasStati(HIDING) || p->HasStati(INVIS) || p->HasStati(INVIS_TO)) 
@@ -691,27 +685,22 @@ void TextTerm::ShowDamage(const char*str, Item *w, int8 Mode)
       if (w->KnownQuality(WQ_CHAOTIC))
         Write("    +2d6 vs. L\n"); 
       }
-  }
-
-
+}
 
 /*****************************************************************************\
 *                                  TEXTTERM                                  *
 *                              Rendering the Map                             *
 \*****************************************************************************/
 
-inline int16 Priority(int16 t)
-	{
-		if(t == T_MONSTER || t == T_NPC || t == T_PLAYER)
-			return 3;
-		if(t >= T_FIRSTITEM && t <= T_LASTITEM)
-			return 2;
-		return 1;
-	}
+inline int16 Priority(int16 t) {
+    if (t == T_MONSTER || t == T_NPC || t == T_PLAYER)
+        return 3;
+    if (t >= T_FIRSTITEM && t <= T_LASTITEM)
+        return 2;
+    return 1;
+}
 
-
-void Map::Update(int16 x,int16 y)
-{
+void Map::Update(int16 x,int16 y) {
   int16 i; uint8 items, creatures; bool hi = false;
   int16 Pri; Thing *t, *bt = NULL;
   uint16 Vis, CVis; Player *p = oPlayer(pl[0]);
@@ -883,8 +872,7 @@ DoOverlay:
         T1->PutGlyph(x,y,ov.GlyphImage[i] | (mg & 0xF000));
 }
 
-void TextTerm::ShowMap()
-{
+void TextTerm::ShowMap() {
   int16 x,y;
   Glyph g;
   if (Mode != MO_PLAY || !p->m) 
@@ -958,8 +946,7 @@ void TextTerm::ShowMap()
     m->ov.ShowGlyphs();
 }
 
-void TextTerm::AdjustMap(int16 vx, int16 vy,bool newmap)
-	{
+void TextTerm::AdjustMap(int16 vx, int16 vy,bool newmap) {
 		int16 rx,ry;   //Position of player (Screen Coord. System)
 		int16 ox,oy;
     int16 lx,ly;   // How close player must be to edge to cause scrolling
@@ -1032,10 +1019,9 @@ void TextTerm::AdjustMap(int16 vx, int16 vy,bool newmap)
 		
     if(ox!=XOff || oy!=YOff || p->UpdateMap)
 			ShowMap();
-	}
+}
 
-void TextTerm::ShowThings()
-	{
+void TextTerm::ShowThings() {
 		int16 i,fx,fy, Per; Thing *t;
     Rect ViewRange(max(XOff-15,0),max(YOff-15,0),
       min(XOff+MSizeX()+15,m->SizeX()),min(YOff+MSizeY()+15,m->SizeY()));
@@ -1137,7 +1123,7 @@ void TextTerm::ShowThings()
           }
         }
       }
-	}
+}
 
 int8 ColorShadingPriority[] = {
   10, 1, 10, 10, 10, 10, 3, 2, 10, 10, 10, 10, 10, 10, 5, 4 };
@@ -1160,8 +1146,7 @@ static int8 BrightenOnce[] = {
 /* YELLOW  becomes */     YELLOW,
 /* WHITE   becomes */     BROWN, }; 
 
-Glyph TextTerm::FloorShading(int16 x, int16 y, Glyph g)
-  {
+Glyph TextTerm::FloorShading(int16 x, int16 y, Glyph g) {
     int8 c;
     int32 b; 
 
@@ -1211,10 +1196,9 @@ Glyph TextTerm::FloorShading(int16 x, int16 y, Glyph g)
     else
       return g;
       */
-  }
+}
 
-void TextTerm::PutGlyph(int16 x, int16 y,Glyph g) 
-  {
+void TextTerm::PutGlyph(int16 x, int16 y,Glyph g) {
     if(x<XOff || y<YOff || !m)
       return;
     if (x>XOff+Windows[WIN_MAP].Right || 
@@ -1230,19 +1214,17 @@ void TextTerm::PutGlyph(int16 x, int16 y,Glyph g)
     APutChar(x-XOff + Windows[WIN_MAP].Left,
              y-YOff + Windows[WIN_MAP].Top,g);
     updated = false;
-  }
+}
 
-Glyph TextTerm::GetGlyph(int16 x, int16 y)
-  {
+Glyph TextTerm::GetGlyph(int16 x, int16 y) {
     if(x<XOff || y<YOff)
       return 0;
 	  if(x>XOff+Windows[WIN_MAP].Right || y>YOff+Windows[WIN_MAP].Bottom-Windows[WIN_MAP].Top)
       return 0;
     return AGetChar(x-XOff+Windows[WIN_MAP].Left,y-YOff + Windows[WIN_MAP].Top);
-  }
+}
 
-void TextTerm::ShowMapOverview()
-{
+void TextTerm::ShowMapOverview() {
   int16 sx, sy, x, y, mx, my, x1, x2, y1, y2, vx, vy, tx, ty;
   bool open, seen, onmap; int16 ch, mag, magn;
   Glyph force;
@@ -1503,8 +1485,7 @@ BadChar:
 
     SetWin(WIN_BIGMAP);
     SetMode(MO_SPLASH);
-  }
-  while (1);
+  } while (1);
 }
 
 /*****************************************************************************\
@@ -1512,8 +1493,7 @@ BadChar:
 *                              View List  Code                                *
 \*****************************************************************************/
 
-static int16 ViewListPriorityMod(Thing *t)
-  {
+static int16 ViewListPriorityMod(Thing *t) {
     if (t->isItem()) {
       if (t->isType(T_WEAPON) || t->isType(T_ARMOUR))
         {
@@ -1538,10 +1518,9 @@ static int16 ViewListPriorityMod(Thing *t)
       }
     else
       return 0;
-  }
+}
 
-static int WViewListSortA(const void *a, const void *b)
-{
+static int WViewListSortA(const void *a, const void *b) {
   WViewListElt *aa = (WViewListElt *)a,
                *bb = (WViewListElt *)b;
  
@@ -1555,18 +1534,14 @@ static int WViewListSortA(const void *a, const void *b)
          (bb->dist + ViewListPriorityMod(bb->t)); 
 }
 
-static int WViewListSortB(const void *a, const void *b)
-{
+static int WViewListSortB(const void *a, const void *b) {
   WViewListElt *aa = (WViewListElt *)a,
                *bb = (WViewListElt *)b;
 
     return aa->dist - bb->dist; 
 }
 
-
-
-void TextTerm::ShowViewList()
-  {
+void TextTerm::ShowViewList() {
     int8 ResistsShown[] = {
       AD_FIRE, AD_COLD, AD_SONI, 
       AD_ACID, AD_ELEC, AD_TOXI, AD_NECR, AD_PSYC, AD_MAGC,
@@ -1705,17 +1680,14 @@ void TextTerm::ShowViewList()
             Write("  None Set.\n");
          break;
       }
+}
 
-  }
-
-void TextTerm::ResetWViewList()
-{
+void TextTerm::ResetWViewList() {
   WViewListCount=0;
   return;
 }
 
-void TextTerm::WViewThing(Thing *t, int32 dist, bool assertSeen)
-{
+void TextTerm::WViewThing(Thing *t, int32 dist, bool assertSeen) {
   int itemCount = 0;
   int chestCount = 0;
   Glyph chestGlyph = 0; 
@@ -1822,13 +1794,12 @@ look_at_next:
 *                               Effect Prompt                                *
 \*****************************************************************************/
 
-inline String & DescribeResource(rID xID)
-  {
+inline String & DescribeResource(rID xID) {
     if (RES(xID)->Desc)
       return *tmpstr(DESC(xID));
     else
       return *tmpstr(XPrint("You see nothing exceptional about the <Res>.",xID));
-  }
+}
 
 bool TextTerm::EffectPrompt(EventInfo &e,uint16 fl,bool is_look, const char* PromptText) {
     int16 i, j, ch, t, dist, best, bestd, typ, mod, tx, ty, range;
@@ -2370,16 +2341,12 @@ TargetChosen:
     return false; 
 }
 
-
-
-Thing* TextTerm::ChooseTarget(const char* Prompt, int16 rType)
-  {
+Thing* TextTerm::ChooseTarget(const char* Prompt, int16 rType) {
     EventInfo e; e.Clear();
     return EffectPrompt(e,Q_TAR|Q_CRE,false,Prompt) ? e.ETarget : NULL;
-  }
+}
 
-Thing * TextTerm::ExamineSquare(int x, int y)
-{
+Thing * TextTerm::ExamineSquare(int x, int y) {
   Thing * retvals[1024]; 
 
   int c = 0, i; 
@@ -2460,9 +2427,7 @@ Thing * TextTerm::ExamineSquare(int x, int y)
 *                               Other Prompts                                *
 \*****************************************************************************/
 
-char TextTerm::ChoicePrompt(const char*msg,const char*choices,int8 col1, int8 col2, bool
-                             preprompt)
-  {
+char TextTerm::ChoicePrompt(const char*msg,const char*choices,int8 col1, int8 col2, bool preprompt) {
     String str; int16 ch; 
     if (Mode == MO_RECREATE)
       {
@@ -2527,13 +2492,11 @@ int32 TextTerm::MonsterTypePrompt(const char * prompt, int minCount, int maxCoun
           count_in_this_ma),i,desc);
     }
   } 
-  return LMenu(MENU_ESC|MENU_SORTED|MENU_2COLS|MENU_DESC,prompt,
-      WIN_SCREEN);
-} 
+  return LMenu(MENU_ESC|MENU_SORTED|MENU_2COLS|MENU_DESC,prompt,WIN_SCREEN);
+}
 
 
-rID TextTerm::MonsterOfTypePrompt(int32 type, const char * prompt) 
-{
+rID TextTerm::MonsterOfTypePrompt(int32 type, const char * prompt) {
   int count = 0; 
   rID mID = 0; 
   for (int modIdx = 0; modIdx < 1; modIdx++) {
@@ -2563,9 +2526,7 @@ rID TextTerm::MonsterOfTypePrompt(int32 type, const char * prompt)
   else return mID; 
 } 
 
-
-rID TextTerm::MonsterPrompt(const char * prompt)
-{
+rID TextTerm::MonsterPrompt(const char * prompt) {
   int matype;
   rID res;
   res = 0;
@@ -2576,8 +2537,8 @@ rID TextTerm::MonsterPrompt(const char * prompt)
   } while (res <= 0); 
   return res; 
 } 
-Thing* TextTerm::AcquisitionPrompt(int8 Reason, int8 minlev, int8 maxlev, int8 MType)
-  {                            
+
+Thing* TextTerm::AcquisitionPrompt(int8 Reason, int8 minlev, int8 maxlev, int8 MType) {                            
     int16 BlankGlyphs[4];
     int16 cp,ocp,n,i,j; const int16 *Glyphs, *GOffset;
     int32 k;
@@ -2851,10 +2812,9 @@ Thing* TextTerm::AcquisitionPrompt(int8 Reason, int8 minlev, int8 maxlev, int8 M
     xID = LMenu(MENU_BORDER,"Choose an age category:",WIN_MENUBOX);
     mn->AddTemplate(xID);
     return mn;
-  } 
+} 
 
-String & TextTerm::StringPrompt(int8 col, const char*msg)
-  {
+String & TextTerm::StringPrompt(int8 col, const char*msg) {
     SetWin(WIN_INPUT);
     Clear(); PrePrompt(); Color(col);
     Write(msg); Color(7);
@@ -2862,10 +2822,9 @@ String & TextTerm::StringPrompt(int8 col, const char*msg)
     SetWin(WIN_INPUT);
     Clear();
     return *tmpstr(Input);
-  }
+}
 
-const char* TextTerm::ReadLine(int16 x,int16 y,int16 first_ch)
-	{
+const char* TextTerm::ReadLine(int16 x,int16 y,int16 first_ch) {
     int16 loc, ch;
     SetWin(WIN_SCREEN);
     Write(x,y,"                                                                        ");
@@ -2898,13 +2857,10 @@ const char* TextTerm::ReadLine(int16 x,int16 y,int16 first_ch)
         PutChar((x+loc)-1,y,Input[loc-1]);
       PutChar(x+loc,y,' ');
       GotoXY(x+loc,y);
-    }
-  while(1);
-  }
+    } while(1);
+}
 
-
-rID TextTerm::ChooseResource(const char*prompt, int16 RType, rID eID)
-  {
+rID TextTerm::ChooseResource(const char*prompt, int16 RType, rID eID) {
     rID xID; int16 i,m; EventInfo e;
 
     LOptionClear();
@@ -2937,11 +2893,9 @@ rID TextTerm::ChooseResource(const char*prompt, int16 RType, rID eID)
     
     return xID; 
     
-  }
+}
 
-
-bool TextTerm::yn(const char*msg)
-	{
+bool TextTerm::yn(const char*msg) {
   	int16 ch='a';
     if (Mode == MO_RECREATE)
       {
@@ -2974,7 +2928,7 @@ bool TextTerm::yn(const char*msg)
     
 		
 		return ch=='y' ? true : false;
-	}
+}
 
 /*****************************************************************************\
 *                                  TEXTTERM                                  *
@@ -3025,8 +2979,7 @@ const char* IntroScreen[] = {
  "                                                                               ", 
  NULL };
 
-void TextTerm::Title()
-  {
+void TextTerm::Title() {
     int16 i, ox, oy;
     
     ox = (sizeX - 80) / 2;
@@ -3038,12 +2991,9 @@ void TextTerm::Title()
     SizeWin(WIN_CUSTOM,WinLeft(),min(i+2,WinBottom()-8),WinRight(),WinBottom());
     SetWin(WIN_CUSTOM);
     Clear();
-  }
+}
 
-
-
-void TextTerm::DisplayLegend()
-  {
+void TextTerm::DisplayLegend() {
     String gl;
     int8 x1,x2,y1,y2;
     Save();
@@ -3062,10 +3012,9 @@ void TextTerm::DisplayLegend()
     PrePrompt();
     GetCharRaw();
     Restore();
-  }
+}
 
-void TextTerm::DisplayKnownItems()
-  {
+void TextTerm::DisplayKnownItems() {
     String list; rID eID, endID; 
     EffMem *em; int16 i, q;
     Item *it;
@@ -3173,16 +3122,15 @@ void TextTerm::DisplayKnownItems()
           Restore();
           return;
         }
-      }
-    while(1);
-  }    
+    } while(1);
+}    
 
 /*****************************************************************************\
 *                                  TEXTTERM                                  *
 *                              Compressed Files                              *
 \*****************************************************************************/
 
-#define CFILE_DELTA (1024*1024)
+#define CFILE_DELTA (1024 * 1024)
 
 #define bytes ((char*)data)
 
@@ -3190,109 +3138,86 @@ void TextTerm::DisplayKnownItems()
 #include "lz.h"
 
 
-CFile::CFile(Term *_t)
-  {
+CFile::CFile(Term *_t) {
     t = _t;
     pos = 0;
     size = 0;
     alloc = CFILE_DELTA;
     data = malloc(alloc);
-  }
+}
   
-CFile::~CFile()
-  {
+CFile::~CFile() {
     if (data)
-      free(data);
-  }
+        free(data);
+}
 
-void CFile::FWrite(const void *vp,size_t sz)
-  {
-    if (pos + (int32)sz > alloc)
-      {
-      
-        alloc = (((pos+sz-1)/CFILE_DELTA)+1) * CFILE_DELTA;
-        data = realloc(data,alloc);
-      }
-    memcpy(&bytes[pos], vp, sz);
-    size = max(size,pos+(int32)sz);
-    pos += sz;
-  }
+void CFile::FWrite(const void *vp, size_t write_size) {
+    if (pos + (int32)write_size > alloc) {
+        alloc = (((pos + write_size - 1) / CFILE_DELTA) + 1) * CFILE_DELTA;
+        data = realloc(data, alloc);
+    }
+    memcpy(&bytes[pos], vp, write_size);
+    size = max(size, pos + (int32)write_size);
+    pos += write_size;
+}
   
-void CFile::FRead(void *vp,size_t sz)
-  {
-    memset(vp,0,sz);
-    memcpy(vp,&bytes[pos],min((int32)sz,size - pos));
-    pos = min(size,pos+(int32)sz);
-  }
+void CFile::FRead(void *vp, size_t read_size) {
+    memset(vp, 0, read_size);
+    memcpy(vp, &bytes[pos], min((int32)read_size, size - pos));
+    pos = min(size, pos + (int32)read_size);
+}
 
-void CFile::Seek(int32 val, int8 typ)
-  {
-    switch (typ)
-      {
-        case SEEK_SET: pos = val; break;
-        case SEEK_CUR: pos += val; break;
-        case SEEK_END: pos = size - val; break;
-      }
-    if (pos > alloc)
-      {
+void CFile::Seek(int32 val, int8 seek_type) {
+    switch (seek_type) {
+    case SEEK_SET: pos = val; break;
+    case SEEK_CUR: pos += val; break;
+    case SEEK_END: pos = size - val; break;
+    }
+    if (pos > alloc) {
+        alloc = (((pos - 1) / CFILE_DELTA) + 1) * CFILE_DELTA;
+        realloc(data, alloc);
+    }
+    size = max(pos, size);
+}
       
-        alloc = (((pos-1)/CFILE_DELTA)+1) * CFILE_DELTA;
-        realloc(data,alloc);
-      }
-    size = max(pos,size);
-  }
-      
-int32 CFile::CommitCompressed(int32 offset, bool use_lz)
-  {
-    void *comped, *temp; int32 csize;
-    
-    comped = malloc(size + (size/20) + 1L);
-    ASSERT(comped);
+int32 CFile::CommitCompressed(int32 offset, bool use_lz) {
+    void *compressed_data;
+    int32 compressed_size;
+
+    compressed_data = malloc(size + (size / 20) + 1L);
+    ASSERT(compressed_data);
     if (use_lz) {
-      temp = malloc(sizeof(int)*(size+65536));
-      csize = LZ_CompressFast((unsigned char*)data,
-                   (unsigned char*)comped,
-                   size,
-                   (unsigned int*)temp);
-      free(temp);
-      }
-    else {
-      csize = RLE_Compress((unsigned char*)data,
-                           (unsigned char*)comped,
-                           size);
-      }
-    
-    
-    t->FWrite(comped,csize);
-    free(comped);
-    return csize;
-  }
+        void *temp = malloc(sizeof(int) * (size + 65536));
+        compressed_size = LZ_CompressFast((unsigned char*)data, (unsigned char*)compressed_data, size, (unsigned int*)temp);
+        free(temp);
+    } else
+        compressed_size = RLE_Compress((unsigned char*)data, (unsigned char*)compressed_data, size);
 
-void CFile::LoadCompressed(int32 offset, int32 csz, int32 sz, bool use_lz) {
-    void *comped; 
-    
+    t->FWrite(compressed_data, compressed_size);
+    free(compressed_data);
+    return compressed_size;
+}
+
+void CFile::LoadCompressed(int32 offset, int32 compressed_size, int32 uncompressed_size, bool use_lz) {
+    void *compressed_data; 
+
     t->Seek(offset,SEEK_SET);
-    comped = malloc(csz);
-    t->FRead(comped,csz);
-    
-    alloc = (((sz-1)/CFILE_DELTA)+1) * CFILE_DELTA;
+    compressed_data = malloc(compressed_size);
+    t->FRead(compressed_data, compressed_size);
+
+    alloc = (((uncompressed_size - 1) / CFILE_DELTA) + 1) * CFILE_DELTA;
     if (data)
-      data = realloc(data,alloc);
+        data = realloc(data, alloc);
     else
-      data = malloc(alloc);
-    memset(data,0,alloc);
-      
-    if (use_lz) {
-      LZ_Uncompress((unsigned char*)comped,
-                    (unsigned char*)data,
-                    csz);
-      }
-    else {
-      RLE_Uncompress((unsigned char*)comped,
-                     (unsigned char*)data,
-                     csz);
-      }
-    free(comped);
-    size = sz;
+        data = malloc(alloc);
+    memset(data, 0, alloc);
+
+    if (use_lz)
+        LZ_Uncompress((unsigned char*)compressed_data, (unsigned char*)data, compressed_size);
+    else
+        RLE_Uncompress((unsigned char*)compressed_data, (unsigned char*)data, compressed_size);
+
+    free(compressed_data);
+    size = uncompressed_size;
     pos = 0;
-  }
+}
