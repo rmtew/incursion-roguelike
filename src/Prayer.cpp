@@ -833,151 +833,139 @@ void Creature::PlaceSomewhereSafe()
       i += 20;
       }
     while(isThreatened(false));
-  }
+}
 
-
-EvReturn Character::GiveAid(EventInfo &e)
-  {
+EvReturn Character::GiveAid(EventInfo &e) {
     int16 n, gained; 
     int8 i;
-    Item *it; rID spBooks[128], bkID;
+    Item *it;
+    rID spBooks[128], bkID;
     rID gID;
+
     gID = theGame->GodID(e.godNum);
     setGodFlags(gID,GS_INVOLVED);
 
     if (e.EParam != AID_IDENTIFY)
         GodMessage(gID,(int16)(MSG_AID + e.EParam));
-    switch (e.EParam) {
-        case AID_HEAL:
-          cHP = mHP + GetAttr(A_THP);
-         break;
-        case AID_PURIFY:
-          RemoveStati(POISONED);
-          RemoveStati(DISEASED);
-          RemoveStati(STONING);
-          RemoveStati(PARALYSIS);
-         break;
-        case AID_CURE:
-          RemoveStati(BLIND);
-          RemoveStati(WOUNDED);
-         break;
-        case AID_SMITE:
-          Error("AID_SMITE without custom override!");
-         break;
-        case AID_UNCURSE:
-          for (i=0;i!=SL_LAST;i++)
-            if ((it = InSlot(i)) && it->isCursed())
-              {
-                if (it->eID && TEFF(it->eID)->HasFlag(EF_CURSED))
-                  {
-                    DPrint(e, "Your <Obj> crumbles to ash!",
-                              "The <EActor>'s <Obj> crumbles to ash!");
-                    it->Remove(true);
-                  }
-                else
-                  {
-                    DPrint(e, "Your <Obj> glows with a soft blue light.",
-                              "The <EActor>'s <Obj> glows with a soft blue light.");
-                    it->IFlags &= ~(IF_CURSED);
-                  }
-              }
-          RemoveStatiSource(SS_CURS);
-         break;
-        case AID_TELEPORT:
 
-         break;
-        case AID_FEED:
-          if (HasStati(HUNGER))
+    switch (e.EParam) {
+    case AID_HEAL:
+        cHP = mHP + GetAttr(A_THP);
+        break;
+    case AID_PURIFY:
+        RemoveStati(POISONED);
+        RemoveStati(DISEASED);
+        RemoveStati(STONING);
+        RemoveStati(PARALYSIS);
+        break;
+    case AID_CURE:
+        RemoveStati(BLIND);
+        RemoveStati(WOUNDED);
+        break;
+    case AID_SMITE:
+        Error("AID_SMITE without custom override!");
+        break;
+    case AID_UNCURSE:
+        for (i=0;i!=SL_LAST;i++)
+            if ((it = InSlot(i)) && it->isCursed()) {
+                if (it->eID && TEFF(it->eID)->HasFlag(EF_CURSED)) {
+                    DPrint(e, "Your <Obj> crumbles to ash!",
+                        "The <EActor>'s <Obj> crumbles to ash!");
+                    it->Remove(true);
+                } else {
+                    DPrint(e, "Your <Obj> glows with a soft blue light.",
+                        "The <EActor>'s <Obj> glows with a soft blue light.");
+                    it->IFlags &= ~(IF_CURSED);
+                }
+            }
+        RemoveStatiSource(SS_CURS);
+        break;
+    case AID_TELEPORT:
+
+        break;
+    case AID_FEED:
+        if (HasStati(HUNGER))
             SetStatiDur(HUNGER,-1,NULL,(SATIATED+BLOATED)/2);
-         break;
-        case AID_REFRESH:
-          cFP = GetAttr(A_FAT);
-         break;
-        case AID_RESTORE:
-          RemoveStati(ADJUST_DMG);
-          RestoreXP(600000);
-         break;
-        case AID_MANA:
-          uMana = 0;
-         break;
-        case AID_CLARITY:
-          IPrint("Divine clarity restores focus to your thoughts!");
-          RemoveStati(STUNNED);
-          RemoveStati(CONFUSED);
-          RemoveStati(CHARMED);
-          RemoveStati(PARALYSIS);
-          {
+        break;
+    case AID_REFRESH:
+        cFP = GetAttr(A_FAT);
+        break;
+    case AID_RESTORE:
+        RemoveStati(ADJUST_DMG);
+        RestoreXP(600000);
+        break;
+    case AID_MANA:
+        uMana = 0;
+        break;
+    case AID_CLARITY:
+        IPrint("Divine clarity restores focus to your thoughts!");
+        RemoveStati(STUNNED);
+        RemoveStati(CONFUSED);
+        RemoveStati(CHARMED);
+        RemoveStati(PARALYSIS);
+        {
             Creature *cr; int16 i;
             MapIterate(m,cr,i)
-              if (cr->isCreature())
-                if (cr->onPlane() == PHASE_ETHEREAL ||
-                    cr->HasStati(INVIS))
-                  if (m->LineOfFire(x,y,cr->x,cr->y,cr) &&
-                       cr->isHostileTo(this))
-                    {
-                      IPrint("You vision expands to encompass the invisible!");
-                      GainTempStati(SEE_INVIS,NULL,60,SS_MISC,0,0,
-                        FIND("See Invisibility"));
-                      break;
-                    }
-          }
-         break;
-
-        case AID_BERSERK:
-          IPrint("<Res>'s spirit comes over you, and you fly into a berzerk rage!",gID);
-          GainTempStati(RAGING,NULL,100,SS_MISC,8,20);
-         break;
-        case AID_NEWBOOK:
-          /* Make Array of all spellbooks */
-          for (i=0,n=0;i!=theGame->Modules[0]->szItm;i++)
-            {
-              bkID = theGame->Modules[0]->ItemID(i);
-              if (TITEM(bkID)->Type != T_BOOK)
+                if (cr->isCreature())
+                    if (cr->onPlane() == PHASE_ETHEREAL || cr->HasStati(INVIS))
+                        if (m->LineOfFire(x,y,cr->x,cr->y,cr) && cr->isHostileTo(this)) {
+                            IPrint("You vision expands to encompass the invisible!");
+                            GainTempStati(SEE_INVIS, NULL, 60, SS_MISC, 0, 0, FIND("See Invisibility"));
+                            break;
+                        }
+        }
+        break;
+    case AID_BERSERK:
+        IPrint("<Res>'s spirit comes over you, and you fly into a berzerk rage!",gID);
+        GainTempStati(RAGING,NULL,100,SS_MISC,8,20);
+        break;
+    case AID_NEWBOOK:
+        /* Make Array of all spellbooks */
+        for (i=0,n=0;i!=theGame->Modules[0]->szItm;i++) {
+            bkID = theGame->Modules[0]->ItemID(i);
+            if (TITEM(bkID)->Type != T_BOOK)
                 continue;
-              spBooks[n++] = bkID;
-            }
-          spBooks[n] = 0;
-          gained = 0;      
-          for (i=0;i!=theGame->LastSpell();i++)
-            if ((Spells[i] & SP_KNOWN) && (Spells[i] & SP_ARCANE))
-              {
+            spBooks[n++] = bkID;
+        }
+        spBooks[n] = 0;
+
+        gained = 0;      
+        for (i=0;i!=theGame->LastSpell();i++)
+            if ((Spells[i] & SP_KNOWN) && (Spells[i] & SP_ARCANE)) {
                 for (it = FirstInv(); it ;it=NextInv())
-                  if (it->HasSpell(i))
-                    goto NextSpell;
-                
-                it = Item::Create(spBooks[0]);
-                for(n=0;spBooks[n];n++)
-                  {
-                    it->iID = spBooks[n];
                     if (it->HasSpell(i))
-                      {
+                        goto NextSpell;
+
+                it = Item::Create(spBooks[0]);
+                for(n=0;spBooks[n];n++) {
+                    it->iID = spBooks[n];
+                    if (it->HasSpell(i)) {
                         IPrint("<Res> replaces your <Obj>!", gID, it);
                         GainItem(it,true);
                         if (it->Owner() != this)
-                          goto Done;
+                            goto Done;
                         gained++;
-                      }
-                  }
-                NextSpell:;
+                    }
+                }
+NextSpell:;
                 if (gained >= 5)
-                  break;
-              }
-          Done:
-         break;
-        case AID_IDENTIFY:
-          SetSilence();
-          for (it=FirstInv();it;it=NextInv())
+                    break;
+            }
+Done:
+        break;
+    case AID_IDENTIFY:
+        SetSilence();
+        for (it=FirstInv();it;it=NextInv())
             if (it->isType((int16)e.EParam2))
-              it->MakeKnown(KN_MAGIC|KN_NATURE|KN_PLUS|KN_CURSE|KN_IDENTIFIED);
-          UnsetSilence();
-         break;
-      }
-            
+                it->MakeKnown(KN_MAGIC|KN_NATURE|KN_PLUS|KN_CURSE|KN_IDENTIFIED);
+        UnsetSilence();
+        break;
+    }
+
     return DONE;
-  }  
-  
-void Character::GrantSymbol(rID gID)
-  {
+}  
+
+void Character::GrantSymbol(rID gID) {
     rID iID, eID; Item *it;
     iID = FIND("holy symbol");
     eID = TGOD(gID)->GetConst(HOLY_SYMBOL);
