@@ -772,744 +772,696 @@ int8 Creature::SkillKitMod(int16 sk)
     return best + sec + rope_mod;
   }
 
-bool Creature::HasSkillKit(int16 sk)
-  {
+bool Creature::HasSkillKit(int16 sk) {
     Item *it;
-    
-    /* These frequently rolled skills have no skill kit
-       that modifies them, so let's avoid gratuitous
-       inventory scanning. */
-    if (sk == SK_MOVE_SIL || sk == SK_HIDE || sk == SK_SPELLCRAFT ||
-        sk == SK_SPOT || sk == SK_LISTEN || sk == SK_INTIMIDATE)
-      return 0;
-    
-    if (HasStati(INNATE_KIT,sk))
-      return true;
-    
-    for (it=FirstInv();it;it=NextInv())
-      if (TEFF(it->iID)->ListHasItem(SKILL_KIT_FOR,sk))
-        return true;
-    return false;
-  }
 
-void Character::UseSkill(uint8 sk)
-  {
+    /* These frequently rolled skills have no skill kit
+    that modifies them, so let's avoid gratuitous
+    inventory scanning. */
+    if (sk == SK_MOVE_SIL || sk == SK_HIDE || sk == SK_SPELLCRAFT || sk == SK_SPOT || sk == SK_LISTEN || sk == SK_INTIMIDATE)
+        return 0;
+
+    if (HasStati(INNATE_KIT,sk))
+        return true;
+
+    for (it=FirstInv();it;it=NextInv())
+        if (TEFF(it->iID)->ListHasItem(SKILL_KIT_FOR,sk))
+            return true;
+    return false;
+}
+
+void Character::UseSkill(uint8 sk) {
     EventInfo e; Trap *tr; int16 i, PartyID; Thing *t; String s;
     int8 Check = (int8)Dice::Roll(1,20,(int8)SkillLevel(sk)), DC;
     /* Skill Check: 7 + 1d20 (15) = 22 vs. DC 25 (failure) */
-    int16 NeedKitFor[] = { SK_HEAL, SK_DISGUISE, SK_ALCHEMY,
-                           SK_MINING, SK_CRAFT, SK_LOCKPICKING, 0 };
-    
-    for (i=0;NeedKitFor[i];i++)
-      if (NeedKitFor[i] == sk)
-        if (!HasSkillKit(sk))
-          {
-            IPrint("You need a skill kit to use that skill.");
+    int16 NeedKitFor[] = { SK_HEAL, SK_DISGUISE, SK_ALCHEMY, SK_MINING, SK_CRAFT, SK_LOCKPICKING, 0 };
+
+    for (i=0; NeedKitFor[i]; i++)
+        if (NeedKitFor[i] == sk)
+            if (!HasSkillKit(sk)) {
+                IPrint("You need a skill kit to use that skill.");
+                return;
+            }
+
+    switch(sk) {
+    case SK_BALANCE:
+        if (!isPlayer())
             return;
-          }
-        
-    switch(sk)
-      {
-        case SK_BALANCE:
-          if (!isPlayer())
-            return;
-          e.Clear();
-          e.EActor = this;
-          e.eID = FIND("create tightrope bridge");
-          thisp->MyTerm->EffectPrompt(e,Q_LOC,false, 
-            "Create Tightrope Bridge");
-          ReThrow(EV_EFFECT,e);
-         return;
-        // ww: let's implement Julian's active listen
-        case SK_LISTEN: 
-          {
-            Creature *posse[500], *in_sight = NULL;
-            int16 Nearest[50], j, spec, ll;
-            int8 DirToGroup[50]; 
-            Creature* Heard[50], *cr;
-            TextVal Sounds[] = {
-              { MA_SPIDER, NULL },
-              { MA_RODENT, "the skittering of tiny claws" },
-              { MA_BAT, "the fluttering of tiny wings" },
-              { MA_CAT, "the growling of a feline" },
-              { MA_DOG, "the howling of a canid" },
-              { MA_BURROW, "the sound of burrowing" },
-              { MA_HOMINID, "the hooting calls of primates" },
-              { MA_VERMIN, "clicking and chittering" },
-              { MA_QUADRUPED, "the clacking of hooves on stone" },
-              { MA_WRAITH, "a horrific moaning" },
-              { MA_ZOMBIE, "a slow shambling" },
-              { MA_SKELETON, "the clacking of bones" },
-              { MA_HUMAN, "traces of hushed conversation" },
-              { MA_ELF, "the lilting tones of the elvish language" },
-              { MA_KOBOLD, "high-pitched laughter" },
-              { MA_DWARF, "sonorous, dwarven chanting" },
-              { MA_TROLL, "the vicious snarling of trolls" },
-              { MA_GOBLINOID, "the guttural tones of a goblinoid tongue" },
-              { MA_DEVIL, "diabolical chanting" },
-              { MA_DEMON, "loathsome demonic snarling" },
-              { MA_OOZE, "faint slurping sounds" },
-              { MA_ABERRATION, "something slithering" },
-              { MA_PLANT, "the rustling of vines" },
-              { MA_CELESTIAL, "faint, glorious music" },
-              { MA_CONSTRUCT, "heavy grinding noises" },
-              { MA_BEAST, "monsterous growling" },
-              { MA_YUAN_TI, "sibilant voices" },
-              { MA_NAGA, "sibilant voices" },
-              { MA_SNAKE, "hissing" },
-              { MA_DRAGON, "a loud, slow heartbeat" },
-              { MA_GIANT, "very heavy footfalls" },
-              { MA_VORTEX, "a howling like that of a cyclone" },
-              { MA_FAERIE, "high-pitched laughter" },
-              { MA_FIRE+(MA_ELEMENTAL*256), "the crackling of a bonfire" },
-              { MA_AIR+(MA_ELEMENTAL*256), "the rustling of wind" },
-              { MA_EARTH+(MA_ELEMENTAL*256), "the grinding of stone against stone" },
-              { MA_WATER+(MA_ELEMENTAL*256), "water sloshing around" },
-              { MA_HUMANOID, "indistinct footsteps" },
-              { MA_AQUATIC, "water flowing" },
-              { MA_AVIAN, "the fluttering of wings" },
-              { 0, NULL } };
-            TextVal Distance[] = {
-              { 40, "exceedingly faintly" },
-              { 30, "extremely far away" },
-              { 25, "very far away" },
-              { 20, "quite far away" },
-              { 15, "at a distance" },
-              { 12, "at a moderate distance" },
-              { 8, "close by" },
-              { 5, "very close by" },
-              { 0, "extremely close by" },
-              { 0, NULL } };
-            TextVal Direct[] = {
-              { NORTH, "north" },
-              { SOUTH, "south" },
-              { EAST, "east" },
-              { WEST, "west" },
-              { NORTHEAST, "north-east" },
-              { NORTHWEST, "north-west" },
-              { SOUTHEAST, "south-east" },
-              { SOUTHWEST, "south-west" },
-              { 0, NULL } };
-            spec = 0;
-            int16 pc = 0, Chance; 
-            memset(Nearest,0,sizeof(int16)*50);
-            memset(Heard,0,sizeof(Creature*)*50);
-            memset(DirToGroup,0,sizeof(int8)*50);
-            bool groups[114] = { 0, };
-            RestEncounterChance(3, PartyID, in_sight, Chance);
-            pc = 0;
-            ll = 0;
-            
-            if (isThreatened())
-              {
-                IPrint("You can't listen in combat.");
-                break;
-              }
-              
-            Timeout += 40;
-            
-            MapIterate(m,cr,i)
-              if (cr->isCreature() && pc < 498)
+
+        e.Clear();
+        e.EActor = this;
+        e.eID = FIND("create tightrope bridge");
+        thisp->MyTerm->EffectPrompt(e,Q_LOC, false, "Create Tightrope Bridge");
+        ReThrow(EV_EFFECT,e);
+        return;
+    case SK_LISTEN: { // ww: let's implement Julian's active listen
+        Creature *posse[500], *in_sight = NULL;
+        int16 Nearest[50], j, spec, ll;
+        int8 DirToGroup[50]; 
+        Creature* Heard[50], *cr;
+        TextVal Sounds[] = {
+            { MA_SPIDER, NULL },
+            { MA_RODENT, "the skittering of tiny claws" },
+            { MA_BAT, "the fluttering of tiny wings" },
+            { MA_CAT, "the growling of a feline" },
+            { MA_DOG, "the howling of a canid" },
+            { MA_BURROW, "the sound of burrowing" },
+            { MA_HOMINID, "the hooting calls of primates" },
+            { MA_VERMIN, "clicking and chittering" },
+            { MA_QUADRUPED, "the clacking of hooves on stone" },
+            { MA_WRAITH, "a horrific moaning" },
+            { MA_ZOMBIE, "a slow shambling" },
+            { MA_SKELETON, "the clacking of bones" },
+            { MA_HUMAN, "traces of hushed conversation" },
+            { MA_ELF, "the lilting tones of the elvish language" },
+            { MA_KOBOLD, "high-pitched laughter" },
+            { MA_DWARF, "sonorous, dwarven chanting" },
+            { MA_TROLL, "the vicious snarling of trolls" },
+            { MA_GOBLINOID, "the guttural tones of a goblinoid tongue" },
+            { MA_DEVIL, "diabolical chanting" },
+            { MA_DEMON, "loathsome demonic snarling" },
+            { MA_OOZE, "faint slurping sounds" },
+            { MA_ABERRATION, "something slithering" },
+            { MA_PLANT, "the rustling of vines" },
+            { MA_CELESTIAL, "faint, glorious music" },
+            { MA_CONSTRUCT, "heavy grinding noises" },
+            { MA_BEAST, "monsterous growling" },
+            { MA_YUAN_TI, "sibilant voices" },
+            { MA_NAGA, "sibilant voices" },
+            { MA_SNAKE, "hissing" },
+            { MA_DRAGON, "a loud, slow heartbeat" },
+            { MA_GIANT, "very heavy footfalls" },
+            { MA_VORTEX, "a howling like that of a cyclone" },
+            { MA_FAERIE, "high-pitched laughter" },
+            { MA_FIRE+(MA_ELEMENTAL*256), "the crackling of a bonfire" },
+            { MA_AIR+(MA_ELEMENTAL*256), "the rustling of wind" },
+            { MA_EARTH+(MA_ELEMENTAL*256), "the grinding of stone against stone" },
+            { MA_WATER+(MA_ELEMENTAL*256), "water sloshing around" },
+            { MA_HUMANOID, "indistinct footsteps" },
+            { MA_AQUATIC, "water flowing" },
+            { MA_AVIAN, "the fluttering of wings" },
+            { 0, NULL } };
+        TextVal Distance[] = {
+            { 40, "exceedingly faintly" },
+            { 30, "extremely far away" },
+            { 25, "very far away" },
+            { 20, "quite far away" },
+            { 15, "at a distance" },
+            { 12, "at a moderate distance" },
+            { 8, "close by" },
+            { 5, "very close by" },
+            { 0, "extremely close by" },
+            { 0, NULL } };
+        TextVal Direct[] = {
+            { NORTH, "north" },
+            { SOUTH, "south" },
+            { EAST, "east" },
+            { WEST, "west" },
+            { NORTHEAST, "north-east" },
+            { NORTHWEST, "north-west" },
+            { SOUTHEAST, "south-east" },
+            { SOUTHWEST, "south-west" },
+            { 0, NULL } };
+
+        spec = 0;
+        int16 pc = 0, Chance; 
+        memset(Nearest,0,sizeof(int16)*50);
+        memset(Heard,0,sizeof(Creature*)*50);
+        memset(DirToGroup,0,sizeof(int8)*50);
+        bool groups[114] = { 0, };
+        RestEncounterChance(3, PartyID, in_sight, Chance);
+        pc = 0;
+        ll = 0;
+
+        if (isThreatened()) {
+            IPrint("You can't listen in combat.");
+            break;
+        }
+
+        Timeout += 40;
+
+        MapIterate(m,cr,i)
+            if (cr->isCreature() && pc < 498)
                 posse[pc++] = cr;
-            for (i=0;i<pc;i++) {
-              /* For clarity, exclude what you see clearly */
-              if (Perceives(posse[i]) & ~PER_SHADOW)
+
+        for (i=0;i<pc;i++) {
+            /* For clarity, exclude what you see clearly */
+            if (Perceives(posse[i]) & ~PER_SHADOW)
                 continue;
-              /* First, do you hear it? */
-              int16 DC = posse[i]->SkillLevel(SK_MOVE_SIL) +
-                dist(x,y,posse[i]->x,posse[i]->y);
-                
-              /* Too easy to scum this now...
-               * SkillCheck(SK_LISTEN,DC,false,0);
-               */
-              
-              int16 sc = SkillLevel(SK_LISTEN)*2 - DC;
-              if (sc > 15) { // you hear it perfectly! 
+
+            /* First, do you hear it? */
+            int16 DC = posse[i]->SkillLevel(SK_MOVE_SIL) + dist(x,y,posse[i]->x,posse[i]->y);
+
+            /* Too easy to scum this now...
+            * SkillCheck(SK_LISTEN,DC,false,0);
+            */
+
+            int16 sc = SkillLevel(SK_LISTEN)*2 - DC;
+            if (sc > 15) { // you hear it perfectly! 
                 for (j=0;Heard[j];j++)
-                  if (Heard[j]->mID == posse[i]->mID)
-                    if (Heard[j]->GetStatiEID(TEMPLATE) ==
-                        posse[i]->GetStatiEID(TEMPLATE))
-                      goto SkipDuplicate;
+                    if (Heard[j]->mID == posse[i]->mID)
+                        if (Heard[j]->GetStatiEID(TEMPLATE) == posse[i]->GetStatiEID(TEMPLATE))
+                            goto SkipDuplicate;
+
                 Heard[spec++] = posse[i];
-                SkipDuplicate:;
-                } 
-              else if (sc > 0) { // hear general traits
+SkipDuplicate:;
+            } else if (sc > 0) { // hear general traits
                 for (j=0;Sounds[j].Val;j++)
-                  if (posse[i]->isMType(Sounds[j].Val))
-                    {
-                      if (!Sounds[j].Text)
-                        break;
-                      if (sc > 5 && (!Nearest[j] || Nearest[j] >
-                           dist(x,y,posse[i]->x,posse[i]->y)))
-                        DirToGroup[j] = DirTo(
-                          posse[i]->x,posse[i]->y) + 10;
-                      if (Nearest[j])
-                        Nearest[j] = min(Nearest[j],
-                          dist(x,y,posse[i]->x,posse[i]->y));
-                      else
-                        Nearest[j] = 
-                          dist(x,y,posse[i]->x,posse[i]->y);
-                      
-                        
+                    if (posse[i]->isMType(Sounds[j].Val)) {
+                        if (!Sounds[j].Text)
+                            break;
+                        if (sc > 5 && (!Nearest[j] || Nearest[j] >
+                            dist(x,y,posse[i]->x,posse[i]->y)))
+                            DirToGroup[j] = DirTo(
+                            posse[i]->x,posse[i]->y) + 10;
+                        if (Nearest[j])
+                            Nearest[j] = min(Nearest[j],
+                            dist(x,y,posse[i]->x,posse[i]->y));
+                        else
+                            Nearest[j] = 
+                            dist(x,y,posse[i]->x,posse[i]->y);
                     }
+            }  
+        }
 
-                }  
-            } 
-            s = "You hear"; 
-            bool first = true; 
-            for (i=0;Heard[i];i++)
-              {
-                Creature *m; 
-                if (!first) {
-                  s += ",";
-                  ll = (int16)s.GetLength();
-                  }
-                s += " ";
-                
-                m = new Monster(Heard[i]->tmID);
-                StatiIterNature(m,TEMPLATE)
-                  if (S->Mag && TTEM(S->eID)->TType & 
-                        (TM_UNDEAD|TM_AGECAT|TM_PLANAR))
-                    {
-                      m->AddTemplate(S->eID);
-                      m->IdentifyTemp(S->eID);
-                    }
-                StatiIterEnd(m)
-                s += m->Name(NA_A);
-                m->Remove(true);
-                
-                s += " ";
-                for (j=0;Distance[j].Val > dist(
-                     x,y,Heard[i]->x,Heard[i]->y);j++)
-                  ;
-                s += Distance[j].Text;
-                s += " to the ";
-                s += Lookup(Direct,DirTo(
-                      Heard[i]->x,Heard[i]->y));
-                first = false;
-              }
-            for (i=0;Sounds[i].Val;i++)
-              {
-                if (!Nearest[i])
-                  continue;
-                if (!Sounds[i].Text)
-                  continue;
-                if (!first) {
-                  s += ",";
-                  ll = (int16)s.GetLength();
+        s = "You hear"; 
+        bool first = true; 
+        for (i=0; Heard[i]; i++) {
+            Creature *m; 
+            if (!first) {
+                s += ",";
+                ll = (int16)s.GetLength();
+            }
+            s += " ";
+
+            m = new Monster(Heard[i]->tmID);
+
+            StatiIterNature(m,TEMPLATE)
+                if (S->Mag && TTEM(S->eID)->TType & (TM_UNDEAD|TM_AGECAT|TM_PLANAR)) {
+                    m->AddTemplate(S->eID);
+                    m->IdentifyTemp(S->eID);
                 }
-                s += " ";
-                s += Sounds[i].Text;
-                s += " ";
-                for (j=0;Distance[j].Val > Nearest[i];j++)
-                  ;
-                s += Distance[j].Text;
-                if (DirToGroup[j]) {
-                  s += " to the ";
-                  s += Lookup(Direct,DirToGroup[j]-10);
-                  }
-                first = false;
-              }
-            
-            if (first) 
-              s += " nothing"; 
-            
-            if (ll)
-              s = s.Left(ll - 1) + SC(" and") + s.Right(s.GetLength() - ll);
-            s += "."; 
-            IPrint(s); 
-            if (HasStati(TRIED,SK_LISTEN))
-              goto FailedRestListen;
-            if (SkillCheck(SK_LISTEN,15,true,0)) {
-              if (Chance <= 0)
-                IPrint("You think it is safe to rest.");
-              else if (Chance < 100) 
-                IPrint("If you rest, there may be an encounter.");
-              else 
-                IPrint("It is not safe to rest."); 
-              }
-            else {
-              GainTempStati(TRIED,NULL,-1,SS_MISC,SK_LISTEN,3);
-              FailedRestListen:
-              IPrint("You can't tell whether it's safe to rest.");
-              } 
-          } 
-          break; 
+            StatiIterEnd(m)
 
-        case SK_HIDE: 
-          ThrowVal(EV_HIDE,HI_SHADOWS,this);
-         return;
-        case SK_KNOW_MAGIC:
-          Throw(EV_RESEARCH,this);
-         return;
-        case SK_TUMBLE:
-          if (!LoseFatigue(1,true))
+            s += m->Name(NA_A);
+            m->Remove(true);
+
+            s += " ";
+            for (j=0; Distance[j].Val > dist(x,y,Heard[i]->x,Heard[i]->y); j++)
+                ;
+            s += Distance[j].Text;
+            s += " to the ";
+            s += Lookup(Direct,DirTo(Heard[i]->x,Heard[i]->y));
+            first = false;
+        }
+
+        for (i=0;Sounds[i].Val;i++) {
+            if (!Nearest[i])
+                continue;
+            if (!Sounds[i].Text)
+                continue;
+            if (!first) {
+                s += ",";
+                ll = (int16)s.GetLength();
+            }
+            s += " ";
+            s += Sounds[i].Text;
+            s += " ";
+            for (j=0;Distance[j].Val > Nearest[i];j++)
+                ;
+            s += Distance[j].Text;
+            if (DirToGroup[j]) {
+                s += " to the ";
+                s += Lookup(Direct,DirToGroup[j]-10);
+            }
+            first = false;
+        }
+
+        if (first) 
+            s += " nothing"; 
+
+        if (ll)
+            s = s.Left(ll - 1) + SC(" and") + s.Right(s.GetLength() - ll);
+        s += "."; 
+        IPrint(s); 
+        if (HasStati(TRIED,SK_LISTEN))
+            goto FailedRestListen;
+
+        if (SkillCheck(SK_LISTEN,15,true,0)) {
+            if (Chance <= 0)
+                IPrint("You think it is safe to rest.");
+            else if (Chance < 100) 
+                IPrint("If you rest, there may be an encounter.");
+            else 
+                IPrint("It is not safe to rest."); 
+        } else {
+            GainTempStati(TRIED,NULL,-1,SS_MISC,SK_LISTEN,3);
+FailedRestListen:
+            IPrint("You can't tell whether it's safe to rest.");
+        } 
+        break; 
+    } 
+    case SK_HIDE: 
+        ThrowVal(EV_HIDE,HI_SHADOWS,this);
+        return;
+    case SK_KNOW_MAGIC:
+        Throw(EV_RESEARCH,this);
+        return;
+    case SK_TUMBLE:
+        if (!LoseFatigue(1,true))
             break;
-          Exercise(A_DEX,random(4)+1,EDEX_TUMBLE,20);
-          GainTempStati(TUMBLING,NULL,Dice::Roll(1,4)+SkillLevel(SK_TUMBLE),SS_MISC);
-          IDPrint("You begin a series of intricate leaps and tumbles.",
-                  "The <Obj> jumps and weaves with a dancing gait.",this);
-         break;
-        case SK_JUMP:
-          e.Clear();
-          e.EActor = this;
-          if (!thisp->MyTerm->EffectPrompt(e,Q_LOC))
+
+        Exercise(A_DEX,random(4)+1,EDEX_TUMBLE,20);
+        GainTempStati(TUMBLING,NULL,Dice::Roll(1,4)+SkillLevel(SK_TUMBLE),SS_MISC);
+        IDPrint("You begin a series of intricate leaps and tumbles.",
+            "The <Obj> jumps and weaves with a dancing gait.",this);
+        break;
+    case SK_JUMP:
+        e.Clear();
+        e.EActor = this;
+        if (!thisp->MyTerm->EffectPrompt(e,Q_LOC))
             break;
-          ReThrow(EV_JUMP,e);
-         break;
-        case SK_HANDLE_DEV:
-          Timeout += 50;
-          
-          MapIterate(m,t,i)
+        ReThrow(EV_JUMP,e);
+        break;
+    case SK_HANDLE_DEV:
+        Timeout += 50;
+
+        MapIterate(m,t,i)
             if (t->isType(T_TRAP) && (tr = (Trap*)t))
-              if (isBeside(tr) && Perceives(tr))
-                if (DisarmTrap(tr,true)) 
-                  return; 
-          if (HasStati(TELEKINETIC))
-            {
-              e.Clear();
-              e.vRange = (int8)GetStatiMag(TELEKINETIC);
-              if (thisp->MyTerm->EffectPrompt(e,Q_TAR,false,"Disarm a trap:"))
+                if (isBeside(tr) && Perceives(tr))
+                    if (DisarmTrap(tr,true)) 
+                        return; 
+
+        if (HasStati(TELEKINETIC)) {
+            e.Clear();
+            e.vRange = (int8)GetStatiMag(TELEKINETIC);
+            if (thisp->MyTerm->EffectPrompt(e,Q_TAR,false,"Disarm a trap:"))
                 if (e.ETarget->isType(T_TRAP))
-                  if (DisarmTrap(tr,true))
-                    return;
-              return;
-              
-            }
-          
-          IPrint("You see nothing suitable to use that skill on.");
-          return;
-        case SK_ANIMAL_EMP:
-          e.Clear();
-          e.EActor = this;
-          e.EMap = e.EActor->m;
-          Check = (int8)Dice::Roll(1,20);
-          if (isPlayer()) {
+                    if (DisarmTrap(tr,true))
+                        return;
+            return;
+        }
+
+        IPrint("You see nothing suitable to use that skill on.");
+        return;
+    case SK_ANIMAL_EMP:
+        e.Clear();
+        e.EActor = this;
+        e.EMap = e.EActor->m;
+        Check = (int8)Dice::Roll(1,20);
+        if (isPlayer()) {
             if (!thisp->MyTerm->EffectPrompt(e,Q_TAR|Q_CRE))
-              return /*ABORT*/;
-            }
-          else
+                return /*ABORT*/;
+        } else
             return /*ABORT*/;
 
-          e.EParam = SkillLevel(SK_ANIMAL_EMP);
-          StatiIterNature(this,SPECIES_AFFINITY)
-              if (e.EVictim->isMType(S->Val))
-                { e.EParam = max(e.EParam,S->Mag);
-                  StatiIterBreakout(this,goto ValidTarget) }
-          StatiIterEnd(this)
-          
-          if (e.EVictim->isMType(MA_ANIMAL) && SkillLevel(SK_ANIMAL_EMP))
+        e.EParam = SkillLevel(SK_ANIMAL_EMP);
+        StatiIterNature(this,SPECIES_AFFINITY)
+            if (e.EVictim->isMType(S->Val))
+            { e.EParam = max(e.EParam,S->Mag);
+        StatiIterBreakout(this,goto ValidTarget) }
+        StatiIterEnd(this)
+
+            if (e.EVictim->isMType(MA_ANIMAL) && SkillLevel(SK_ANIMAL_EMP))
+                goto ValidTarget;
+        if (e.EVictim->isMType(MA_BEAST) && HasFeat(FT_BEASTIAL_EMPATHY) && SkillRanks[SK_ANIMAL_EMP])
             goto ValidTarget;
-          if (e.EVictim->isMType(MA_BEAST) && HasFeat(FT_BEASTIAL_EMPATHY) && SkillRanks[SK_ANIMAL_EMP])
+        if ((e.EVictim->isMType(MA_PLANT) || e.EVictim->isMType(MA_FUNGI)) &&
+            HasFeat(FT_PLANT_EMPATHY) && SkillRanks[SK_ANIMAL_EMP])
             goto ValidTarget;
-          if ((e.EVictim->isMType(MA_PLANT) || e.EVictim->isMType(MA_FUNGI)) &&
-                    HasFeat(FT_PLANT_EMPATHY) && SkillRanks[SK_ANIMAL_EMP])
-            goto ValidTarget;
-          IPrint("You have no primal link to that sort of creature.");
-          return /*ABORT*/;
-          ValidTarget:
-          e.EActor->Timeout += 50;
-          if (e.EVictim->HasStati(ANIMAL_EMP_TRIED,-1,this))
-            {
-              IPrint("You already tried your animal empathy on that creature.");
-              return /*ABORT*/;
+        IPrint("You have no primal link to that sort of creature.");
+        return /*ABORT*/;
+ValidTarget:
+        e.EActor->Timeout += 50;
+        if (e.EVictim->HasStati(ANIMAL_EMP_TRIED,-1,this)) {
+            IPrint("You already tried your animal empathy on that creature.");
+            return /*ABORT*/;
+        }
+        if (e.EVictim->isCharacter() || /* e.EVictim->isMType(MA_SAPIENT) ||  */ !e.EVictim->isMType(MA_LIVING)) {
+            IPrint("Strangely, you can't get a read on that creature.");
+            return /*DONE*/;
+        }
+Retry:
+        switch (ChoicePrompt("Pacify it, Cow it, Soothe it or Befriend it?","pcsb?",'p',YELLOW,BROWN)) {
+        case -1:
+            return;
+        case 'p':
+            if (!e.EVictim->isHostileTo(e.EActor)) {
+                IPrint("But it isn't hostile.");
+                return /*DONE*/;
             }
-          if (e.EVictim->isCharacter() || /* e.EVictim->isMType(MA_SAPIENT) ||  */
-                                              !e.EVictim->isMType(MA_LIVING))
-            {
-              IPrint("Strangely, you can't get a read on that creature.");
-              return /*DONE*/;
+            e.EVictim->RemoveStati(SLEEPING,-1,SLEEP_NATURAL);
+            TPrint(e,"You look deep into the <EVictim>'s eyes.", NULL,
+                "The <EActor> looks deep into the <EVictim>'s eyes.");
+            if ((DC = e.EVictim->ChallengeRating() + 15) > e.EParam+Check) {
+                TPrint(e,"The <EVictim> snarls and breaks free of your gaze.", NULL,
+                    "The <EVictim> snarls and breaks free of the <EActor>'s gaze.");
+                e.ETarget->GainTempStati(ANIMAL_EMP_TRIED,this,500,SS_MISC,0,0,0);
+            } else {
+                e.EVictim->StateFlags |= MS_PEACEFUL;
+                e.EVictim->ts.Pacify(e.EVictim,this);
+                VPrint(e,NULL,"The <EVictim> settles back and seems much calmer now.");
             }
-          Retry:
-          switch (ChoicePrompt("Pacify it, Cow it, Soothe it or Befriend it?","pcsb?",'p',YELLOW,BROWN))
-            {
-              case -1:
-                return;
-              case 'p':
-                if (!e.EVictim->isHostileTo(e.EActor))
-                  {
-                    IPrint("But it isn't hostile.");
-                    return /*DONE*/;
-                  }
-                e.EVictim->RemoveStati(SLEEPING,-1,SLEEP_NATURAL);
-                TPrint(e,"You look deep into the <EVictim>'s eyes.", NULL,
-                         "The <EActor> looks deep into the <EVictim>'s eyes.");
-                if ((DC = e.EVictim->ChallengeRating() + 15) > e.EParam+Check) {
-                  TPrint(e,"The <EVictim> snarls and breaks free of your gaze.", NULL,
-                         "The <EVictim> snarls and breaks free of the <EActor>'s gaze.");
-                  e.ETarget->GainTempStati(ANIMAL_EMP_TRIED,this,500,SS_MISC,0,0,0);
-                  }
-                else {
-                  e.EVictim->StateFlags |= MS_PEACEFUL;
-                  e.EVictim->ts.Pacify(e.EVictim,this);
-                  VPrint(e,NULL,"The <EVictim> settles back and seems much calmer now.");
-                  }
-               break;   
-              case 'b':
-                if (e.EVictim->isHostileTo(e.EActor))
-                  {
-                    IPrint("You can't befriend a hostile creature.");
-                    return /*DONE*/;
-                  }
-                if (!e.EVictim->isBeside(e.EActor))
-                  {
-                    IPrint("You need to get closer to do that.");
-                    return /*ABORT*/;
-                  }
-                e.EVictim->RemoveStati(SLEEPING,-1,SLEEP_NATURAL);
-                VPrint(e,"You reach out to gently touch the <EVictim>.", NULL,
-                         "The <EActor> reaches out to gently touch the <EVictim>.");
-                if ((DC = e.EVictim->ChallengeRating()*2 + 15) > e.EParam+Check) {
-                  VPrint(e, NULL, "The <EVictim> backs away awkwardly.");
-                  e.ETarget->GainTempStati(ANIMAL_EMP_TRIED,this,-2,SS_MISC,0,0,0);
-                  }
-                else {
-                  if (isPlayer())
-                    {
-                      if (!e.EVictim->isMonster())
+            break;   
+        case 'b':
+            if (e.EVictim->isHostileTo(e.EActor)) {
+                IPrint("You can't befriend a hostile creature.");
+                return /*DONE*/;
+            }
+            if (!e.EVictim->isBeside(e.EActor)) {
+                IPrint("You need to get closer to do that.");
+                return /*ABORT*/;
+            }
+            e.EVictim->RemoveStati(SLEEPING,-1,SLEEP_NATURAL);
+            VPrint(e,"You reach out to gently touch the <EVictim>.", NULL,
+                "The <EActor> reaches out to gently touch the <EVictim>.");
+            if ((DC = e.EVictim->ChallengeRating()*2 + 15) > e.EParam+Check) {
+                VPrint(e, NULL, "The <EVictim> backs away awkwardly.");
+                e.ETarget->GainTempStati(ANIMAL_EMP_TRIED,this,-2,SS_MISC,0,0,0);
+            } else {
+                if (isPlayer()) {
+                    if (!e.EVictim->isMonster())
                         return;
-                      if (!((Monster*)e.EVictim)->MakeCompanion(thisp,PHD_ANIMAL))
+                    if (!((Monster*)e.EVictim)->MakeCompanion(thisp,PHD_ANIMAL))
                         break;
-                    }
-                  else
+                } else
                     e.EVictim->PartyID = e.EActor->PartyID;
-                  TPrint(e,"The <EVictim> moves up to you and nuzzles your hand. "
-                           "<He:EVictim> seems friendly now.",NULL,
-                           "The <EVictim> moves up to you and nuzzles the <EActor>'s hand.");
-                  }
-               break;   
-              case 'c':
-                if (!e.EVictim->isHostileTo(e.EActor))
-                  {
-                    IPrint("That creature isn't hostile.");
-                    return /*DONE*/;
-                  }
-                e.EVictim->RemoveStati(SLEEPING,-1,SLEEP_NATURAL);
-                TPrint(e,"You stare down the <EVictim>.", NULL,
-                         "The <EActor> stares down the <EVictim>.");
-                if ((DC = e.EVictim->ChallengeRating() + 10) > e.EParam+Check) {
-                  TPrint(e,"The <EVictim> snarls and breaks free of your gaze.", NULL,
-                         "The <EVictim> snarls and breaks free of the <EActor>'s gaze.");
-                  e.ETarget->GainTempStati(ANIMAL_EMP_TRIED,this,500,SS_MISC,0,0,0);
-                  }
-                else {
-                  e.EVictim->GainTempStati(AFRAID,NULL,(int8)(5+e.EParam*2),SS_MISC,FEAR_PANIC);
-                  VPrint(e,NULL,"The <EVictim> turns to flee.");
-                  }
-               break;   
-              case 's':
-                if (!e.EVictim->HasStati(AFRAID))
-                  {
-                    IPrint("That creature isn't panicked.");
-                    return /*DONE*/;
-                  }
-                e.EVictim->RemoveStati(SLEEPING,-1,SLEEP_NATURAL);
-                TPrint(e,"You whisper softly to the <EVictim>.", NULL,
-                         "The <EActor> whispers softly to the <EVictim>.");
-                if ((DC = e.EVictim->ChallengeRating() + 10) > e.EParam+Check) {
-                  TPrint(e,"You fail to calm down the <EVictim>.", NULL,
-                         "The <EActor> fails to calm down the <EVictim>.");
-                  e.ETarget->GainTempStati(ANIMAL_EMP_TRIED,this,500,SS_MISC,0,0,0);
-                  }
-                else {
-                  e.EVictim->RemoveStati(AFRAID);
-                  VPrint(e,NULL,"The <EVictim> seems steadier now.");
-                  }
-               break;
-              case '?':
-                if (isPlayer())
-                  thisp->MyTerm->HelpTopic("help::skills","AN");
-                goto Retry;
-              default: 
-                return;
+                TPrint(e,"The <EVictim> moves up to you and nuzzles your hand. "
+                    "<He:EVictim> seems friendly now.",NULL,
+                    "The <EVictim> moves up to you and nuzzles the <EActor>'s hand.");
             }
-          if (isPlayer()) {
+            break;   
+        case 'c':
+            if (!e.EVictim->isHostileTo(e.EActor)) {
+                IPrint("That creature isn't hostile.");
+                return /*DONE*/;
+            }
+            e.EVictim->RemoveStati(SLEEPING,-1,SLEEP_NATURAL);
+            TPrint(e,"You stare down the <EVictim>.", NULL,
+                "The <EActor> stares down the <EVictim>.");
+            if ((DC = e.EVictim->ChallengeRating() + 10) > e.EParam+Check) {
+                TPrint(e,"The <EVictim> snarls and breaks free of your gaze.", NULL,
+                    "The <EVictim> snarls and breaks free of the <EActor>'s gaze.");
+                e.ETarget->GainTempStati(ANIMAL_EMP_TRIED,this,500,SS_MISC,0,0,0);
+            } else {
+                e.EVictim->GainTempStati(AFRAID,NULL,(int8)(5+e.EParam*2),SS_MISC,FEAR_PANIC);
+                VPrint(e,NULL,"The <EVictim> turns to flee.");
+            }
+            break;   
+        case 's':
+            if (!e.EVictim->HasStati(AFRAID)) {
+                IPrint("That creature isn't panicked.");
+                return /*DONE*/;
+            }
+            e.EVictim->RemoveStati(SLEEPING,-1,SLEEP_NATURAL);
+            TPrint(e,"You whisper softly to the <EVictim>.", NULL,
+                "The <EActor> whispers softly to the <EVictim>.");
+            if ((DC = e.EVictim->ChallengeRating() + 10) > e.EParam+Check) {
+                TPrint(e,"You fail to calm down the <EVictim>.", NULL,
+                    "The <EActor> fails to calm down the <EVictim>.");
+                e.ETarget->GainTempStati(ANIMAL_EMP_TRIED,this,500,SS_MISC,0,0,0);
+            } else {
+                e.EVictim->RemoveStati(AFRAID);
+                VPrint(e,NULL,"The <EVictim> seems steadier now.");
+            }
+            break;
+        case '?':
+            if (isPlayer())
+                thisp->MyTerm->HelpTopic("help::skills","AN");
+            goto Retry;
+        default: 
+            return;
+        }
+
+        if (isPlayer()) {
             thisp->MyTerm->SetWin(WIN_NUMBERS);
             thisp->MyTerm->Clear();
             thisp->MyTerm->Write(Format("%c%s Check:%c 1d20 (%d) %c %d = %d vs DC %d [%s]",
-              -13,SkillInfo[SK_ANIMAL_EMP].name, -7,Check,e.EParam >= 0 ? '+' : '-',
-              e.EParam, e.EParam+Check, DC, e.EParam+Check >= DC ? "success" : "failure"));
-            if (thisp->Opt(OPT_STORE_ROLLS))
-              thisp->MyTerm->AddMessage(Format("%c%s Check:%c 1d20 (%d) %c %d = %d vs DC %d [%s]",
                 -13,SkillInfo[SK_ANIMAL_EMP].name, -7,Check,e.EParam >= 0 ? '+' : '-',
                 e.EParam, e.EParam+Check, DC, e.EParam+Check >= DC ? "success" : "failure"));
-            }
-          return /*DONE*/;   
-        case SK_CRAFT:
-          CraftItem(SK_CRAFT + SKILL_VAL);
-         break;
-        case SK_DISGUISE:
-          Throw(EV_DISGUISE,this);
-         break;
-        case SK_PICK_POCKET:
-          {
-            EventInfo xe;
-            xe.Clear();
-            xe.EActor = this;
-            if (!thisp->MyTerm->EffectPrompt(xe,Q_NEAR|Q_TAR|Q_CRE,false,"Pick Pocket -- "))
-              break;
-            ReThrow(EV_PICK_POCKET, xe);
-          }
-         break;
-        case SK_MINING:
-          if (thisp->DigMode) {
+            if (thisp->Opt(OPT_STORE_ROLLS))
+                thisp->MyTerm->AddMessage(Format("%c%s Check:%c 1d20 (%d) %c %d = %d vs DC %d [%s]",
+                -13,SkillInfo[SK_ANIMAL_EMP].name, -7,Check,e.EParam >= 0 ? '+' : '-',
+                e.EParam, e.EParam+Check, DC, e.EParam+Check >= DC ? "success" : "failure"));
+        }
+        return /*DONE*/;   
+    case SK_CRAFT:
+        CraftItem(SK_CRAFT + SKILL_VAL);
+        break;
+    case SK_DISGUISE:
+        Throw(EV_DISGUISE,this);
+        break;
+    case SK_PICK_POCKET: {
+        EventInfo xe;
+        xe.Clear();
+        xe.EActor = this;
+        if (!thisp->MyTerm->EffectPrompt(xe,Q_NEAR|Q_TAR|Q_CRE,false,"Pick Pocket -- "))
+            break;
+        ReThrow(EV_PICK_POCKET, xe);
+                            }
+                            break;
+    case SK_MINING:
+        if (thisp->DigMode) {
             thisp->DigMode = false;
             thisp->MyTerm->ShowTraits();
             break;
-          }
-          if (!EInSlot(SL_WEAPON) || !EInSlot(SL_WEAPON)->HasIFlag(WT_DIGGER))
-          {
+        }
+        if (!EInSlot(SL_WEAPON) || !EInSlot(SL_WEAPON)->HasIFlag(WT_DIGGER)) {
             IPrint("You need to wield a digging implement first.");
             return;
-          }
-          thisp->DigMode = true;
-          RemoveStati(CHARGING);
-          thisp->MyTerm->ShowTraits();
-          break;
-        case SK_ALCHEMY:
-          CraftItem(SK_ALCHEMY + SKILL_VAL); 
-         break;  
-        case SK_HEAL:
-        {
-          int16 healDC, i, choice, amt;
-          TEffect *te; const char *ab;
-          bool found = false, failed = false;
-          
-          if (!HasSkillKit(SK_HEAL))
-            { IPrint("You need a healing kit for that."); }
-          if (isThreatened())
-            { IPrint("You can't use Healing in combat."); } 
-          
-          
-          
-          if (HasStati(BLEEDING)) 
-            if (!HasStati(HEAL_TIMEOUT,AD_BLEE))
-              { thisp->MyTerm->LOption("Treat Bleeding",AD_BLEE); 
-                found = true; }
-          if (!(HasStati(HEAL_TIMEOUT,AD_DAST) ||
-                HasStati(HEAL_TIMEOUT,AD_DADX) ||
-                HasStati(HEAL_TIMEOUT,AD_DACO) ||
-                HasStati(HEAL_TIMEOUT,AD_DAIN) ||
-                HasStati(HEAL_TIMEOUT,AD_DAWI) ||
-                HasStati(HEAL_TIMEOUT,AD_DACH) ||
-                HasStati(HEAL_TIMEOUT,AD_DALU) ) )
-            {
-              if (HasStati(POISONED))
-                if (!HasStati(HEAL_TIMEOUT,AD_POIS))
-                  { thisp->MyTerm->LOption("Treat Poison",AD_POIS);
-                    found = true; }
-              if (HasStati(DISEASED))
-                if (!HasStati(HEAL_TIMEOUT,AD_DISE))
-                  { thisp->MyTerm->LOption("Treat Disease",AD_DISE);  
-                    found = true; }
-            }
-          if (HasStati(BLINDNESS))
-            if (!HasStati(HEAL_TIMEOUT,AD_BLND))
-              { thisp->MyTerm->LOption("Treat Blindness",AD_BLND);  
-                found = true; }
-          
-          const char* AbilityName[] = { "Strength", "Dexterity",
-            "Constitution", "Intelligence", "Wisdom", "Charisma", "Luck" };
-          /* Get the player to make a tactical decision -- treat either
-             the poison or disease, or the ability damage that results
-             from said poison or disease, not both, each day. */
-          if (!(HasStati(HEAL_TIMEOUT,AD_POIS) ||
-                HasStati(HEAL_TIMEOUT,AD_DISE) ))
-            for (i=0;i<=A_LUC;i++)
-              if (HasStati(ADJUST_DMG,i))
-                if (!HasStati(HEAL_TIMEOUT,AD_DAST+i))
-                  { thisp->MyTerm->LOption(Format(
-                      "Treat %s Damage",AbilityName[i]),AD_DAST+i);
-                    found = true; }                  
-          
-          if (HasStati(STONING))
-            if (!HasStati(HEAL_TIMEOUT, AD_STON)) {
-                thisp->MyTerm->LOption("Forestall Petrification",AD_STON);  
+        }
+        thisp->DigMode = true;
+        RemoveStati(CHARGING);
+        thisp->MyTerm->ShowTraits();
+        break;
+    case SK_ALCHEMY:
+        CraftItem(SK_ALCHEMY + SKILL_VAL); 
+        break;  
+    case SK_HEAL: {
+        int16 healDC, i, choice, amt;
+        TEffect *te; const char *ab;
+        bool found = false, failed = false;
+
+        if (!HasSkillKit(SK_HEAL))
+            IPrint("You need a healing kit for that.");
+        if (isThreatened())
+            IPrint("You can't use Healing in combat.");
+
+        if (HasStati(BLEEDING)) 
+            if (!HasStati(HEAL_TIMEOUT,AD_BLEE)) {
+                thisp->MyTerm->LOption("Treat Bleeding",AD_BLEE); 
                 found = true;
             }
-          
-          if (!found) {
-              IPrint("You have no untreated ailments at present.");
-              return;
-          }
-          
-          choice = (int16)thisp->MyTerm->LMenu(MENU_ESC|MENU_BORDER,"What do you want to do?", WIN_MENUBOX);
-          if (choice == -1)
+            if (!(HasStati(HEAL_TIMEOUT,AD_DAST) || HasStati(HEAL_TIMEOUT,AD_DADX) || HasStati(HEAL_TIMEOUT,AD_DACO) || HasStati(HEAL_TIMEOUT,AD_DAIN) ||
+                HasStati(HEAL_TIMEOUT,AD_DAWI) || HasStati(HEAL_TIMEOUT,AD_DACH) || HasStati(HEAL_TIMEOUT,AD_DALU))) {
+                    if (HasStati(POISONED))
+                        if (!HasStati(HEAL_TIMEOUT,AD_POIS)) {
+                            thisp->MyTerm->LOption("Treat Poison",AD_POIS);
+                            found = true;
+                        }
+                        if (HasStati(DISEASED))
+                            if (!HasStati(HEAL_TIMEOUT,AD_DISE)) {
+                                thisp->MyTerm->LOption("Treat Disease",AD_DISE);  
+                                found = true;
+                            }
+            }
+            if (HasStati(BLINDNESS))
+                if (!HasStati(HEAL_TIMEOUT,AD_BLND)) {
+                    thisp->MyTerm->LOption("Treat Blindness",AD_BLND);  
+                    found = true;
+                }
+
+                const char* AbilityName[] = { "Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma", "Luck" };
+                /* Get the player to make a tactical decision -- treat either
+                the poison or disease, or the ability damage that results
+                from said poison or disease, not both, each day. */
+                if (!(HasStati(HEAL_TIMEOUT,AD_POIS) || HasStati(HEAL_TIMEOUT,AD_DISE) ))
+                    for (i=0;i<=A_LUC;i++)
+                        if (HasStati(ADJUST_DMG,i))
+                            if (!HasStati(HEAL_TIMEOUT,AD_DAST+i)) {
+                                thisp->MyTerm->LOption(Format("Treat %s Damage",AbilityName[i]),AD_DAST+i);
+                                found = true;
+                            }                  
+
+                            if (HasStati(STONING))
+                                if (!HasStati(HEAL_TIMEOUT, AD_STON)) {
+                                    thisp->MyTerm->LOption("Forestall Petrification",AD_STON);  
+                                    found = true;
+                                }
+
+                                if (!found) {
+                                    IPrint("You have no untreated ailments at present.");
+                                    return;
+                                }
+
+                                choice = (int16)thisp->MyTerm->LMenu(MENU_ESC|MENU_BORDER,"What do you want to do?", WIN_MENUBOX);
+                                if (choice == -1)
+                                    return;
+
+                                int16 spent;
+                                if (isPlayer())
+                                    if (thisp->SpendHours(1,1,spent,true) != DONE)
+                                        return;
+
+                                switch(choice) {
+                                case AD_BLEE:
+                                    healDC = 10 + SumStatiMag(BLEEDING)*3 +
+                                        GetStatiEID(BLEEDING) ? 5 : 0;
+                                    if (SkillCheck(SK_HEAL,healDC,true)) {
+                                        RemoveStati(BLEEDING);
+                                        IPrint("You stop the bleeding.");
+                                    } else {
+                                        failed = true;
+                                        IPrint("You fail to staunch the flow of blood.");
+                                    }
+                                    break;
+                                case AD_BLND:
+                                    if (GetStatiDur(BLINDNESS) == -1) /* Permanent */
+                                        healDC = 30;
+                                    else if (GetStatiDur(BLINDNESS) < -1) /* Days */
+                                        healDC = 25;
+                                    else
+                                        healDC = min(10 + GetStatiDur(BLINDNESS)/3,20);
+                                    if (SkillCheck(SK_HEAL,healDC,true)) {
+                                        RemoveStati(BLINDNESS);
+                                        IPrint("You manage to restore your sight.");
+                                    } else { 
+                                        failed = true;
+                                        IPrint("You are unable to treat the blindness effectively.");
+                                    }
+                                    break;
+                                case AD_POIS:
+                                case AD_DISE:
+                                    StatiIterNature(this, ((choice == AD_POIS) ? POISONED : DISEASED))
+                                        te = TEFF(S->eID);
+                                    healDC = te->Vals(0)->sval;
+                                    if (!SkillCheck(SK_HEAL,healDC,true)) { failed = true;
+                                    IPrint("You fail to treat the <Res>.",S->eID); }
+                                    else if (LastSkillCheckResult > (healDC - 5) + (te->Vals(0)->lval - S->Mag)*5) { IPrint("You purge the <Res>.",S->eID); 
+                                    StatiIter_RemoveCurrent(this); }
+                                    else { IPrint("You lessen the effect of the <Res>.",S->eID);
+                                    failed = true; S->Mag += 1 + 
+                                        ((LastSkillCheckResult - healDC)/5);
+                                    }
+                                    StatiIterEnd(this)
+                                        break; 
+                                case AD_DAST: case AD_DADX: case AD_DACO:
+                                case AD_DAIN: case AD_DAWI: case AD_DACH:
+                                case AD_DALU:
+                                    ab = AbilityName[choice - AD_DAST];
+                                    healDC = 10 - GetStatiMag(ADJUST_DMG,A_STR + (choice - AD_DAST))*2;
+                                    if (!SkillCheck(SK_HEAL,healDC,true))
+                                    { IPrint("You fail to treat the <str> damage.",ab);
+                                    failed = true; break; }
+                                    amt = 1 + (LastSkillCheckResult - healDC)/5;
+                                    StatiIterNature(this,ADJUST_DMG)
+                                        if (S->Val != (A_STR + choice - AD_DAST))
+                                            continue;
+                                    if (amt >= (-S->Mag)) { 
+                                        amt -= (-S->Mag); 
+                                        StatiIter_RemoveCurrent(this);
+                                    } else {
+                                        S->Mag -= (-amt);
+                                        amt = 0;
+                                    }
+                                    StatiIterEnd(this)
+                                        IPrint("You <str>treat the <str> damage.",
+                                        HasStati(ADJUST_DMG,(A_STR + choice - AD_DAST)) ?
+                                        "" : "fully ", ab);
+                                    failed = HasStati(ADJUST_DMG,(A_STR + choice - AD_DAST));
+                                    break;
+                                case AD_STON:
+                                    healDC = 20;
+                                    if (SkillCheck(SK_HEAL,healDC,true)) {
+                                        IPrint("You forestall your coming petrification.");
+                                        StatiIterNature(this,STONING)
+                                            S->Duration += SkillLevel(SK_HEAL)*20; 
+                                        StatiIterEnd(this)
+                                    } else {
+                                        IPrint("You fail to slow the petrification effect.");
+                                        failed = true;
+                                    }
+                                    break;
+                                } 
+                                if (failed)
+                                    GainTempStati(HEAL_TIMEOUT,NULL,-2,SS_MISC,choice);
+                                break; 
+                    }
+    case SK_POISON_USE: {
+        char ch; Item *it; rID vialID; bool found;
+        hObj hPoison, hWeapon;
+        vialID = FIND("small glass vial");
+        ch = ChoicePrompt("Create or apply poison?", "ca");
+        if (ch == -1)
             return;
-          
-          int16 spent;
-          if (isPlayer())
-            if (thisp->SpendHours(1,1,spent,true) != DONE)
-              return;
-          
-          switch(choice)
-            {
-              case AD_BLEE:
-                healDC = 10 + SumStatiMag(BLEEDING)*3 +
-                           GetStatiEID(BLEEDING) ? 5 : 0;
-                if (SkillCheck(SK_HEAL,healDC,true))
-                  { RemoveStati(BLEEDING);
-                    IPrint("You stop the bleeding."); }
-                else {
-                  failed = true;
-                  IPrint("You fail to staunch the flow of blood.");
-                  }
-               break;
-              case AD_BLND:
-                if (GetStatiDur(BLINDNESS) == -1) /* Permanent */
-                  healDC = 30;
-                else if (GetStatiDur(BLINDNESS) < -1) /* Days */
-                  healDC = 25;
-                else
-                  healDC = min(10 + GetStatiDur(BLINDNESS)/3,20);
-                if (SkillCheck(SK_HEAL,healDC,true))
-                  { RemoveStati(BLINDNESS);
-                    IPrint("You manage to restore your sight."); }
-                else { 
-                  failed = true;
-                  IPrint("You are unable to treat the blindness effectively.");
-                  }
-               break;
-              case AD_POIS:
-              case AD_DISE:
-                StatiIterNature(this, ((choice == AD_POIS) ? 
-                                    POISONED : DISEASED))
-                    te = TEFF(S->eID);
-                    healDC = te->Vals(0)->sval;
-                    if (!SkillCheck(SK_HEAL,healDC,true))
-                      { failed = true;
-                        IPrint("You fail to treat the <Res>.",S->eID); }
-                    else if (LastSkillCheckResult > (healDC - 5) + 
-                                      (te->Vals(0)->lval - S->Mag)*5)
-                      { IPrint("You purge the <Res>.",S->eID); 
-                        StatiIter_RemoveCurrent(this); }
-                    else
-                      { IPrint("You lessen the effect of the <Res>.",S->eID);
-                        failed = true; S->Mag += 1 + 
-                          ((LastSkillCheckResult - healDC)/5); }
-                StatiIterEnd(this)
-               break; 
-              case AD_DAST: case AD_DADX: case AD_DACO:
-              case AD_DAIN: case AD_DAWI: case AD_DACH:
-              case AD_DALU:
-                ab = AbilityName[choice - AD_DAST];
-                healDC = 10 - GetStatiMag(ADJUST_DMG,A_STR + (choice - AD_DAST))*2;
-                if (!SkillCheck(SK_HEAL,healDC,true))
-                  { IPrint("You fail to treat the <str> damage.",ab);
-                    failed = true; break; }
-                amt = 1 + (LastSkillCheckResult - healDC)/5;
-                StatiIterNature(this,ADJUST_DMG)
-                  if (S->Val != (A_STR + choice - AD_DAST))
-                    continue;
-                  if (amt >= (-S->Mag))
-                    { 
-                      amt -= (-S->Mag); 
-                      StatiIter_RemoveCurrent(this);
-                    }
-                  else
-                    {
-                      S->Mag -= (-amt);
-                      amt = 0;
-                    }
-                StatiIterEnd(this)
-                IPrint("You <str>treat the <str> damage.",
-                  HasStati(ADJUST_DMG,(A_STR + choice - AD_DAST)) ?
-                  "" : "fully ", ab);
-                failed = HasStati(ADJUST_DMG,(A_STR + choice - AD_DAST));
-               break;
-              case AD_STON:
-                healDC = 20;
-                if (SkillCheck(SK_HEAL,healDC,true))
-                  { IPrint("You forestall your coming petrification.");
-                    StatiIterNature(this,STONING)
-                      S->Duration += SkillLevel(SK_HEAL)*20; 
-                    StatiIterEnd(this)
-                  }
-                else
-                  { IPrint("You fail to slow the petrification effect.");
-                    failed = true; }
-               break;
-            } 
-          if (failed)
-            GainTempStati(HEAL_TIMEOUT,NULL,-2,SS_MISC,choice);
-         break; 
-        }
-        case SK_POISON_USE:
-          {
-            char ch; Item *it; rID vialID; bool found;
-            hObj hPoison, hWeapon;
-            vialID = FIND("small glass vial");
-            ch = ChoicePrompt("Create or apply poison?", "ca");
-            if (ch == -1)
-              return;
-            if (ch == 'a')
-              {
-                found = false;
-                for (it=FirstInv();it;it=NextInv())
-                  if (it->HasStati(POISONED) && it->iID == vialID)
-                    { found = true;
-                      thisp->MyTerm->LOption(it->Name(NA_LONG),it->myHandle); }
-                if (!found)
-                  { IPrint("You have no poisons to apply.");
-                    return; }
+        if (ch == 'a') {
+            found = false;
+            for (it=FirstInv();it;it=NextInv())
+                if (it->HasStati(POISONED) && it->iID == vialID) {
+                    found = true;
+                    thisp->MyTerm->LOption(it->Name(NA_LONG),it->myHandle);
+                }
+                if (!found) {
+                    IPrint("You have no poisons to apply.");
+                    return;
+                }
                 hPoison = thisp->MyTerm->LMenu(MENU_BORDER|MENU_ESC,"Choose a Poison:");
                 if (hPoison == -1)
-                  return;
+                    return;
                 found = false;
                 for (it=FirstInv();it;it=NextInv())
-                  if (it->isType(T_WEAPON) || it->isType(T_MISSILE))
-                    { found = true;
-                      thisp->MyTerm->LOption(it->Name(0),it->myHandle); }
-                if (!found)
-                  { IPrint("You have weapons to poison.");
-                    return; }
-                hWeapon = thisp->MyTerm->LMenu(MENU_BORDER|MENU_ESC,"Choose a Weapon:");
-                if (hWeapon == -1)
-                  return;
-                Throw(EV_APPLY,this,oItem(hWeapon),oItem(hPoison));
-                return;
-              }
-            else
-              {
-                if (!HasSkill(SK_ALCHEMY) || SkillLevel(SK_POISON_USE) < 12)
-                  {
-                    IPrint("To brew poisons, you must have both Alchemy and "
-                      "Poison Use as class skills, and a Poison Use rating of 12+.");
+                    if (it->isType(T_WEAPON) || it->isType(T_MISSILE)) {
+                        found = true;
+                        thisp->MyTerm->LOption(it->Name(0),it->myHandle);
+                    }
+                    if (!found) {
+                        IPrint("You have weapons to poison.");
+                        return;
+                    }
+                    hWeapon = thisp->MyTerm->LMenu(MENU_BORDER|MENU_ESC,"Choose a Weapon:");
+                    if (hWeapon == -1)
+                        return;
+                    Throw(EV_APPLY,this,oItem(hWeapon),oItem(hPoison));
                     return;
-                  }
-                if (!HasSkillKit(SK_ALCHEMY))
-                  {
-                    IPrint("You need an alchemy set to make poison.");
-                    return;
-                  }
-                CraftItem(SK_POISON_USE + SKILL_VAL);
+        } else {
+            if (!HasSkill(SK_ALCHEMY) || SkillLevel(SK_POISON_USE) < 12) {
+                IPrint("To brew poisons, you must have both Alchemy and "
+                    "Poison Use as class skills, and a Poison Use rating of 12+.");
                 return;
-              }
-                
-          }
-        default:
-          IPrint("That skill isn't implemented yet.");
-      }
-  }
+            }
+            if (!HasSkillKit(SK_ALCHEMY)) {
+                IPrint("You need an alchemy set to make poison.");
+                return;
+            }
+            CraftItem(SK_POISON_USE + SKILL_VAL);
+            return;
+        }
 
-Creature * Creature::MostSkilledAlly(int16 sk)
-  {
+                        }
+    default:
+        IPrint("That skill isn't implemented yet.");
+    }
+}
+
+Creature * Creature::MostSkilledAlly(int16 sk) {
     Creature *cr, *best; 
     int16 blev, i;
     if (!m)
-      return this;
+        return this;
+
     blev = SkillLevel(sk);
     best = this;
-    MapIterate(m,cr,i)
-      if (cr->isCreature() && cr != this)
-        if (DistFrom(cr) < 6 && cr->HasSkill(sk))
-          if (cr->isFriendlyTo(this))
-            if (Perceives(this) &&
-                 m->LineOfFire(x,y,cr->x,cr->y,cr))
-              if (cr->SkillLevel(sk) > blev)
-                { best = cr; blev = cr->SkillLevel(sk); }
+    MapIterate(m, cr, i)
+        if (cr->isCreature() && cr != this)
+            if (DistFrom(cr) < 6 && cr->HasSkill(sk))
+                if (cr->isFriendlyTo(this))
+                    if (Perceives(this) && m->LineOfFire(x,y,cr->x,cr->y,cr))
+                        if (cr->SkillLevel(sk) > blev) {
+                            best = cr;
+                            blev = cr->SkillLevel(sk);
+                        }
     return best;
-  }  
+}  
 
 /* fjm: I had this a bool, and saved the skill check result in LastSkillCheckResult.
    You (Wes) changed it to give the difference of check and DC, and then I didn't

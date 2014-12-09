@@ -651,7 +651,7 @@ Restart:
         KNOWN;
         StackBonus(BONUS_INHERANT,S->Val,S->Mag);
     StatiIterEnd(this)
-     StatiIterNature(this,ADJUST_MOR)
+    StatiIterNature(this,ADJUST_MOR)
         KNOWN;
         AddBonus(BONUS_MORALE,S->Val,S->Mag);
     StatiIterEnd(this)
