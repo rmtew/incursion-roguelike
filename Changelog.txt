@@ -12,6 +12,7 @@ Incursion (open source) 0.6.9Y15: 2014-??-??
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/191/: When people use the roguelike keyset, this overrides all the keys that comprise the roguelike keyset to do arrow key movements.  Unfortunately this means that any menu that expects these keys gets the movement character instead.  Including in this case, the learn spell option in the character sheet.  Now if roguelike keyset is in use, 'E' is advertised as the key instead of 'L'.  Reported by Thyme Oregano@Bitbucket.
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/192/: Compilation warning fixes broke money transfers, resulting in bugged amounts being transferred due to signed/unsigned variable interaction.  Reported by Felius@Bay12, with handy save file.
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/193/: Compilation warning fixes broke casted touch attacks, resulting in crashes.  Reported by Felius@Bay12, with handy save file.
+* https://bitbucket.org/rmtew/incursion-roguelike/issue/194/: Compilation warning fixes broke praying for aid.  Reported by Felius@Bay12, with handy save file.
 
 Incursion (open source) 0.6.9Y14: 2014-11-15
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/129/: Journal entries are now listed in order of most recent to oldest.  Level stats are put first, instead of last.  This is to put the most relevant information in the most accessible place.  Reported by golgepapaz, with patch.

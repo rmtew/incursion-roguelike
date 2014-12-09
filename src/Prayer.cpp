@@ -837,7 +837,6 @@ void Creature::PlaceSomewhereSafe()
 
 EvReturn Character::GiveAid(EventInfo &e) {
     int16 n, gained; 
-    int8 i;
     Item *it;
     rID spBooks[128], bkID;
     rID gID;
@@ -866,7 +865,7 @@ EvReturn Character::GiveAid(EventInfo &e) {
         Error("AID_SMITE without custom override!");
         break;
     case AID_UNCURSE:
-        for (i=0;i!=SL_LAST;i++)
+        for (int8 i = 0; i != SL_LAST; i++)
             if ((it = InSlot(i)) && it->isCursed()) {
                 if (it->eID && TEFF(it->eID)->HasFlag(EF_CURSED)) {
                     DPrint(e, "Your <Obj> crumbles to ash!",
@@ -904,7 +903,9 @@ EvReturn Character::GiveAid(EventInfo &e) {
         RemoveStati(CHARMED);
         RemoveStati(PARALYSIS);
         {
-            Creature *cr; int16 i;
+            Creature *cr;
+            int16 i;
+
             MapIterate(m,cr,i)
                 if (cr->isCreature())
                     if (cr->onPlane() == PHASE_ETHEREAL || cr->HasStati(INVIS))
@@ -921,7 +922,8 @@ EvReturn Character::GiveAid(EventInfo &e) {
         break;
     case AID_NEWBOOK:
         /* Make Array of all spellbooks */
-        for (i=0,n=0;i!=theGame->Modules[0]->szItm;i++) {
+        n = 0;
+        for (int16 i = 0; i != theGame->Modules[0]->szItm; i++) {
             bkID = theGame->Modules[0]->ItemID(i);
             if (TITEM(bkID)->Type != T_BOOK)
                 continue;
@@ -930,7 +932,7 @@ EvReturn Character::GiveAid(EventInfo &e) {
         spBooks[n] = 0;
 
         gained = 0;      
-        for (i=0;i!=theGame->LastSpell();i++)
+        for (uint16 i = 0; i != theGame->LastSpell(); i++)
             if ((Spells[i] & SP_KNOWN) && (Spells[i] & SP_ARCANE)) {
                 for (it = FirstInv(); it ;it=NextInv())
                     if (it->HasSpell(i))
