@@ -2983,7 +2983,7 @@ EvReturn Creature::Counterspell(EventInfo &e, Counterspeller *csp) {
         case 1:  // always counterspell
             goto DoCounterspell;
         case 2:  // ask player
-            if (csp[i].cr->yn(XPrint("Best opt. is <9><Res><5> (mana <Num>). Timeout <Num>. Counter?", csID, mCost, Timeout)))
+            if (csp[i].cr->yn(XPrint("Best opt. is <9><Res><5> (mana <Num>). Timeout <Num>. Counter?", csID, mCost, csp[i].cr->Timeout)))
                 goto DoCounterspell;
             else
                 goto DoNotCounter;
@@ -3020,7 +3020,7 @@ Counterspelled:
         "The <EActor> counters your spell with <9><Res><7>.",
         "The <EActor> mutters a quick counterspell!", csID);
 
-    csp[i].cr->Timeout += min(3, (isDispel ? 20 : 15) - csp[i].cr->SkillLevel(SK_SPELLCRAFT));
+    csp[i].cr->Timeout += max(3, (isDispel ? 20 : 15) - csp[i].cr->SkillLevel(SK_SPELLCRAFT));
     LoseMana(mCost);
 
     if (csp[i].cr->HasFeat(FT_REFLECTIVE_COUNTERSPELL))
