@@ -51,24 +51,21 @@ void HelpWeaponTable(String &helpText);
 
 String & BoxIt(String & Header,int16 col, int16 col2);
 
-const char* Something(int16 Flags)
-  {
+const char* Something(int16 Flags) {
+    /* This makes no sense.  If something you Perceive, but do not XPerceive does something and the message is
+       "The <obj>..." then you get "It..." and it makes little sense.
     if (Flags & NA_THE) {
-      if (Flags & NA_POSS)
-        return Flags & NA_CAPS ? "Its" : "its";
-      return Flags & NA_CAPS ? "It" : "it";
-      }
     if (Flags & NA_POSS)
-      return Flags & NA_CAPS ?             
-        "Its" : "its";
-    return Flags & NA_CAPS ?             
-      "Something" : "something";
-  }
+    return Flags & NA_CAPS ? "Its" : "its";
+    return Flags & NA_CAPS ? "It" : "it";
+    }
+    */
+    if (Flags & NA_POSS)
+        return Flags & NA_CAPS ? "Its" : "its";
+    return Flags & NA_CAPS ? "Something" : "something";
+}
 
-
-
-const char* __XPrint(Player *POV, const char *msg,va_list args)
-  {
+const char* __XPrint(Player *POV, const char *msg,va_list args) {
     char Tag1[24], Tag2[24]; char *Out; 
     const char *cc, *ts; char *p, *tag; 
     int32 n = 0, i,j; EventInfo *oev;
