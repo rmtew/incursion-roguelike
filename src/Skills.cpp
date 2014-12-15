@@ -4351,65 +4351,57 @@ void Creature::FocusCheck(Creature *killer)
       }
 }
 
-EvReturn Creature::Turn(EventInfo &e)
-  {
+EvReturn Creature::Turn(EventInfo &e) {
     bool printed, found; 
-    int16 mag, i; String s, t;
+    int16 mag, i;
+    String s, t;
+    int okSlots[] = { SL_READY, SL_WEAPON, SL_AMULET, SL_ARMOUR, 0};
+    Item *it;
 
     found = false;
 
-    int okSlots[] = { SL_READY, SL_WEAPON, SL_AMULET, SL_ARMOUR, 0};
-    Item *it;
-    for (i=0;okSlots[i];i++) {
-      if ((it=InSlot(okSlots[i])) && it->eID && 
-          !strncmp(NAME(it->eID),NAME(thisc->GodID),
-            strlen(NAME(thisc->GodID))))
-        goto HasComponent;
-      if ((it=InSlot(okSlots[i])) && (it->isType(T_ARMOUR) ||
-            it->isType(T_SHIELD)) && it->HasQuality(AQ_GRAVEN))
-        goto HasComponent;
-      } 
+    for (i=0; okSlots[i]; i++) {
+        if ((it = InSlot(okSlots[i])) && it->eID && !strncmp(NAME(it->eID),NAME(thisc->GodID), strlen(NAME(thisc->GodID))))
+            goto HasComponent;
+        if ((it=InSlot(okSlots[i])) && (it->isType(T_ARMOUR) || it->isType(T_SHIELD)) && it->HasQuality(AQ_GRAVEN))
+            goto HasComponent;
+    } 
     DPrint(e,"You need an appropriate Holy Symbol to affect <Str>.",
-              "The <EActor> lacks a Holy Symbol and fails to affect <Str>.",
-              (const char*)Pluralize(Lookup(MTypeNames,e.EParam)).Lower());
+        "The <EActor> lacks a Holy Symbol and fails to affect <Str>.",
+        (const char*)Pluralize(Lookup(MTypeNames,e.EParam)).Lower());
     return ABORT; 
-    
-    HasComponent:
 
+HasComponent:
     if (isCharacter()) {
-      if (!thisp->GodID) {
-        IPrint("You must have a god to channel holy power.");
-        return ABORT;
+        if (!thisp->GodID) {
+            IPrint("You must have a god to channel holy power.");
+            return ABORT;
         }
-      if (!thisp->isWorthyOf(thisp->GodID,false)) {
-        IPrint("You must have <Res>'s favour to channel <Str> holy power.",
-                 thisp->GodID, GodPronoun(thisp->GodID, true));
-        return ABORT;
+
+        if (!thisp->isWorthyOf(thisp->GodID,false)) {
+            IPrint("You must have <Res>'s favour to channel <Str> holy power.",
+                thisp->GodID, GodPronoun(thisp->GodID, true));
+            return ABORT;
         }
-      }
+    }
 
-
-    
     if (e.AType == CA_TURNING || e.AType == CA_GREATER_TURNING)
-      if (e.EActor->HasFeat(FT_DIVINE_ARMOUR) || e.EActor->HasFeat(FT_DIVINE_CLEANSING) ||
-          e.EActor->HasFeat(FT_DIVINE_MIGHT) || e.EActor->HasFeat(FT_DIVINE_RESISTANCE) ||
-          e.EActor->HasFeat(FT_DIVINE_VENGEANCE) || e.EActor->HasFeat(FT_DIVINE_VIGOR) ||
-          e.EActor->HasFeat(FT_DIVINE_AEGIS))
-        e.EActor->GainTempStati(CHANNELING,NULL,e.EActor->GetAttr(A_CHA)*2,SS_MISC);
-    
+        if (e.EActor->HasFeat(FT_DIVINE_ARMOUR) || e.EActor->HasFeat(FT_DIVINE_CLEANSING) || e.EActor->HasFeat(FT_DIVINE_MIGHT) || e.EActor->HasFeat(FT_DIVINE_RESISTANCE) ||
+            e.EActor->HasFeat(FT_DIVINE_VENGEANCE) || e.EActor->HasFeat(FT_DIVINE_VIGOR) || e.EActor->HasFeat(FT_DIVINE_AEGIS))
+            e.EActor->GainTempStati(CHANNELING,NULL,e.EActor->GetAttr(A_CHA)*2,SS_MISC);
 
     s = Format("%cTurn Check:%c %d",-13,-7,e.vDmg);
 
     if (e.EActor->HasFeat(FT_IMPROVED_TURNING)) {
-      e.vDmg += 4; 
-      s += " +4 feat";
+        e.vDmg += 4; 
+        s += " +4 feat";
     }
 
     // SRD: A cleric with 5 or more ranks in Knowledge (religion) gets a +2
     // bonus on turning checks ...
     if (e.EActor->SkillLevel(SK_KNOW_THEO) > 5) {
-      e.vDmg += 2; 
-      s += " +2 theo";
+        e.vDmg += 2; 
+        s += " +2 theo";
     }
 
     e.vDmg += Mod(A_CHA);
@@ -4418,32 +4410,34 @@ EvReturn Creature::Turn(EventInfo &e)
     int max_dist = 10 + e.vDmg;
     bool hitNeutral;
     hitNeutral = false;
+
     for (int dx = -max_dist; dx <= max_dist; dx++) 
-      for (int dy = -max_dist; dy <= max_dist; dy++) {
-        int xx = x + dx;
-        int yy = y + dy; 
-        if (!m->InBounds(xx,yy) || dist(x,y,xx,yy) > max_dist)
-          continue; 
-        for (Thing * it = m->FirstAt(xx,yy) ; it ; it = m->NextAt(xx,yy)) {
-          if (!it->isCreature() || it == this) continue; 
-          Creature * c = (Creature *)it; 
-          bool valid = c->isMType(e.EParam);
-          int i = 0; 
-          StatiIterNature(this,ALSO_TURN_MA_TYPE)
-              if (c->isMType(S->Val) && e.AType != CA_GREATER_TURNING) 
-                valid = true; 
-          StatiIterEnd(this)
-          if (valid && !c->isHostileTo(e.EActor) && (e.EActor->isMType(MA_GOOD) ||
-                (e.EActor->isCharacter() && (e.EPActor->desiredAlign & AL_GOOD))))
-            hitNeutral = true;
-          }
+        for (int dy = -max_dist; dy <= max_dist; dy++) {
+            int xx = x + dx;
+            int yy = y + dy; 
+            if (!m->InBounds(xx,yy) || dist(x,y,xx,yy) > max_dist)
+                continue; 
+
+            for (Thing *it = m->FirstAt(xx,yy); it; it = m->NextAt(xx,yy)) {
+                if (!it->isCreature() || it == this)
+                    continue;
+
+                Creature * c = (Creature *)it; 
+                bool valid = c->isMType(e.EParam);
+                int i = 0; 
+                StatiIterNature(this,ALSO_TURN_MA_TYPE)
+                    if (c->isMType(S->Val) && e.AType != CA_GREATER_TURNING) 
+                        valid = true; 
+                StatiIterEnd(this)
+
+                if (valid && !c->isHostileTo(e.EActor) && (e.EActor->isMType(MA_GOOD) || (e.EActor->isCharacter() && (e.EPActor->desiredAlign & AL_GOOD))))
+                    hitNeutral = true;
+            }
         }
-        
+
     if (hitNeutral)
-      if (!yn("You feel uncertain about this. Continue?"))
-        return ABORT;
-
-
+        if (!yn("You feel uncertain about this. Continue?"))
+            return ABORT;
 
     // WW: from the SRD: "A cleric may attempt to turn undead a number of
     // times per day equal to 3 + his Charisma modifier" -- this fatigue
@@ -4453,152 +4447,151 @@ EvReturn Creature::Turn(EventInfo &e)
     // Let's experiment Turning coming out of Mana -- a level 2 cleric
     // turning undead pays as per a level 2 spell ...
     /* FJM: Turning is intended to be somewhat different, and a lot more
-       powerful, in Incursion. In SRD, you can't even affect moderately
-       powerful undead; it's for getting rid of popcorn. Anyway, it was
-       not all that, so I amped up the ratio a bit and lowered the fatigue
-       cost. Let me know if this is now a good/worthwhile ability. */
-    if (!LoseFatigue(e.AType == CA_GREATER_TURNING ? 4 : 2,true))
-      return ABORT;
-      
+    powerful, in Incursion. In SRD, you can't even affect moderately
+    powerful undead; it's for getting rid of popcorn. Anyway, it was
+    not all that, so I amped up the ratio a bit and lowered the fatigue
+    cost. Let me know if this is now a good/worthwhile ability. */
+    if (!LoseFatigue(e.AType == CA_GREATER_TURNING ? 4 : 2, true))
+        return ABORT;
+
     Timeout += 30;
 
     if (e.AType == CA_COMMAND)
-      DPrint(e,"You exercise divine authority over <Str>.",
-               "The <EActor> compels the <Str> to obey <him:EActor>.",
-               (const char*)Pluralize(Lookup(MTypeNames,e.EParam)).Lower());
+        DPrint(e,"You exercise divine authority over <Str>.",
+        "The <EActor> compels the <Str> to obey <him:EActor>.",
+        (const char*)Pluralize(Lookup(MTypeNames,e.EParam)).Lower());
     else
-      DPrint(e,"You channel the sacred energies of <Str>.",
-               "The <EActor> waves <his:EActor> holy symbol and prays.",
-               (isPlayer() && thisp->GodID) ? NAME(thisp->GodID) : "the gods");
+        DPrint(e,"You channel the sacred energies of <Str>.",
+        "The <EActor> waves <his:EActor> holy symbol and prays.",
+        (isPlayer() && thisp->GodID) ? NAME(thisp->GodID) : "the gods");
 
     for (int dx = -max_dist; dx <= max_dist; dx++) 
-      for (int dy = -max_dist; dy <= max_dist; dy++) {
-        int xx = x + dx;
-        int yy = y + dy; 
-        if (!m->InBounds(xx,yy) || dist(x,y,xx,yy) > max_dist)
-          continue; 
-        for (Thing * it = m->FirstAt(xx,yy) ; it ; it = m->NextAt(xx,yy)) {
-          if (!it->isCreature() || it == this) continue; 
-          Creature * c = (Creature *)it; 
-          bool valid = c->isMType(e.EParam);
-          int i = 0; 
-          StatiIterNature(this,ALSO_TURN_MA_TYPE)
-              if (c->isMType(S->Val) && e.AType != CA_GREATER_TURNING) 
-                valid = true; 
-          StatiIterEnd(this)
-          if (valid && c != this && !c->isLedBy(this)) {
-              found = true;
-              printed = false;
-              e.EVictim = c;
-              int roll = Dice::Roll(1,20);
-              int resist = (max(e.EVictim->ChallengeRating()+
-                         e.EVictim->AbilityLevel(CA_TURN_RESISTANCE),1));
+        for (int dy = -max_dist; dy <= max_dist; dy++) {
+            int xx = x + dx;
+            int yy = y + dy; 
+            if (!m->InBounds(xx,yy) || dist(x,y,xx,yy) > max_dist)
+                continue; 
 
-              mag = ((e.vDmg+roll) * 750) / (resist * 100);
+            for (Thing * it = m->FirstAt(xx,yy) ; it ; it = m->NextAt(xx,yy)) {
+                if (!it->isCreature() || it == this)
+                    continue; 
 
-              t = Format("%s +1d20 (%d) = %d vs %s (%d).",
-                  (const char*)s,
-                  roll,e.vDmg + roll,
-                  (const char*)c->Name(0),
-                  resist /*(resist * 3) / 2)*/);
-              t = XPrint(t);
-              if (e.EActor->isPlayer())
-                {
-                  e.EPActor->MyTerm->SetWin(WIN_NUMBERS3);
-                  e.EPActor->MyTerm->Clear();
-                  e.EPActor->MyTerm->Write(t);
-                  if (e.EPActor->Opt(OPT_STORE_ROLLS))
-                    e.EPActor->MyTerm->AddMessage(t);
-                }
+                Creature * c = (Creature *)it; 
+                bool valid = c->isMType(e.EParam);
+                int i = 0; 
+                StatiIterNature(this,ALSO_TURN_MA_TYPE)
+                    if (c->isMType(S->Val) && e.AType != CA_GREATER_TURNING) 
+                        valid = true; 
+                StatiIterEnd(this)
 
-              if (mag > 5) {
-                Exercise(A_WIS,random(mag/5)+1,EWIS_TURNING,50);
-                Exercise(A_CHA,random(mag/5)+1,ECHA_TURNING,50);
-                }
-                
-              if (e.AType == CA_COMMAND) {
-                if (c->HasStati(CHARMED,-1,this))
-                  continue;
-                
-                if (mag > 40) { /* Four times CR */
-                  TPrint(e,"The <EVictim> yields to your will.",
-                           "You fall under the <EActor>'s thrall.",
-                           "The <EVictim> bows down to the <EActor>.");
-                  e.EVictim->GainPermStati(CHARMED,e.EActor,SS_MISC,CH_COMMAND,0,0);
-                  }
-                else if (mag > 10) {
-                  if (mag > 20) {
-                    TPrint(e,"The <EVictim> is paralyzed with awe.",
-                             "The <EActor>'s authority pins you in place.",
-                             "The <EVictim> is paralyzed with awe.");
-                    printed = true;
-                    e.EVictim->GainTempStati(PARALYSIS,NULL,Dice::Roll(1,4),SS_MISC);
+                if (valid && c != this && !c->isLedBy(this)) {
+                    found = true;
+                    printed = false;
+                    e.EVictim = c;
+                    int roll = Dice::Roll(1,20);
+                    int resist = (max(e.EVictim->ChallengeRating() + e.EVictim->AbilityLevel(CA_TURN_RESISTANCE),1));
+
+                    mag = ((e.vDmg+roll) * 750) / (resist * 100);
+
+                    t = Format("%s +1d20 (%d) = %d vs %s (%d).",
+                        (const char*)s,
+                        roll,e.vDmg + roll,
+                        (const char*)c->Name(0),
+                        resist /*(resist * 3) / 2)*/);
+                    t = XPrint(t);
+                    if (e.EActor->isPlayer()) {
+                        e.EPActor->MyTerm->SetWin(WIN_NUMBERS3);
+                        e.EPActor->MyTerm->Clear();
+                        e.EPActor->MyTerm->Write(t);
+                        if (e.EPActor->Opt(OPT_STORE_ROLLS))
+                            e.EPActor->MyTerm->AddMessage(t);
                     }
-                  else if (!printed)
-                    TPrint(e,"The <EVictim> is justly rebuked.",
-                             "The <EActor>'s authority terrifies you.",
-                             "The <EVictim> is terrified of the <EActor>.");
-                  e.EVictim->GainTempStati(AFRAID,NULL,Dice::Roll(1,4),SS_MISC,
-                                             FEAR_PANIC);
-                  }
-                continue;
-                }
 
-              if (mag > 60 || (e.AType == CA_GREATER_TURNING && mag > 10)) { /* Six Times CR */
-                TPrint(e,"An <EVictim> is blasted out of existence!",
-                         "An <EActor>'s holy power tears you apart!",
-                         "An <EVictim> is blasted out of existence!");
-                printed = true; 
-                ThrowDmg(EV_DEATH, 0, 0, "holy power", e.EActor, e.ETarget);
-                continue;
+                    if (mag > 5) {
+                        Exercise(A_WIS,random(mag/5)+1,EWIS_TURNING,50);
+                        Exercise(A_CHA,random(mag/5)+1,ECHA_TURNING,50);
+                    }
+
+                    if (e.AType == CA_COMMAND) {
+                        if (c->HasStati(CHARMED,-1,this))
+                            continue;
+
+                        if (mag > 40) { /* Four times CR */
+                            TPrint(e,"The <EVictim> yields to your will.",
+                                "You fall under the <EActor>'s thrall.",
+                                "The <EVictim> bows down to the <EActor>.");
+                            e.EVictim->GainPermStati(CHARMED, e.EActor, SS_MISC, CH_COMMAND, 0, 0);
+                        } else if (mag > 10) {
+                            if (mag > 20) {
+                                TPrint(e,"The <EVictim> is paralyzed with awe.",
+                                    "The <EActor>'s authority pins you in place.",
+                                    "The <EVictim> is paralyzed with awe.");
+                                printed = true;
+                                e.EVictim->GainTempStati(PARALYSIS, NULL, Dice::Roll(1,4), SS_MISC);
+                            } else if (!printed)
+                                TPrint(e,"The <EVictim> is justly rebuked.",
+                                "The <EActor>'s authority terrifies you.",
+                                "The <EVictim> is terrified of the <EActor>.");
+                            e.EVictim->GainTempStati(AFRAID, NULL, Dice::Roll(1,4), SS_MISC, FEAR_PANIC);
+                        }
+                        continue;
+                    }
+
+                    if (mag > 60 || (e.AType == CA_GREATER_TURNING && mag > 10)) { /* Six Times CR */
+                        TPrint(e,"An <EVictim> is blasted out of existence!",
+                            "An <EActor>'s holy power tears you apart!",
+                            "An <EVictim> is blasted out of existence!");
+                        printed = true; 
+                        ThrowDmg(EV_DEATH, 0, 0, "holy power", e.EActor, e.ETarget);
+                        continue;
+                    }
+                    if (mag > 30) { /* Three times CR */
+                        if (!printed)
+                            TPrint(e,"An <EVictim> is blasted by holy energy!",
+                            "An <EActor>'s holy power blasts you!",
+                            "An <EVictim> is blasted by holy energy!");
+                        int dmg = Dice::Roll(e.vDmg + roll,4);
+                        ThrowDmg(EV_DAMAGE, AD_HOLY, dmg, "being turned", e.EActor,e.EVictim);
+                        printed = true;
+                    }
+                    if (mag > 20) { /* Twice CR */
+                        if (!printed)
+                            TPrint(e,"An <EVictim> is overcome with revulsion!",
+                            "An <EActor>'s holy power overpowers you with revulsion!",
+                            "An <EVictim> is overcome with revulsion!");
+                        e.EVictim->GainTempStati(STUNNED, NULL, (e.vDmg+roll)*1+5,SS_MISC,0,0,0);
+                        printed = true;
+                    }
+                    if (mag > 10) { /* Equal CR */
+                        if (!printed)
+                            TPrint(e,"An <EVictim> becomes terrified!",
+                            "An <EActor>'s holy power terrifies you!",
+                            "An <EVictim> becomes terrified!");
+                        e.EVictim->GainTempStati(AFRAID, NULL, (e.vDmg+roll)*3+10,SS_MISC,FEAR_PANIC,0,0);
+                        printed = true;
+                    }
+                    if (mag > 5) { /* 1/2 CR */
+                        if (!printed)
+                            TPrint(e,"An <EVictim> is badly shaken.",
+                            "An <EActor>'s holy power shakes your morale.",
+                            "An <EVictim> is badly shaken.");
+                        e.EVictim->GainTempStati(ADJUST_MOR, NULL, (e.vDmg+roll)*6+20,SS_MISC,A_AID,-2,0);
+                        printed = true;
+                    }
+                    if (!printed)
+                        TPrint(e,"An <EVictim> stands firm in the face of an <EActor>'s holy power.",
+                        "You resist an <EActor>'s holy power.",
+                        "An <EVictim> stands firm in the face of an <EActor>'s holy power.");
                 }
-              if (mag > 30) { /* Three times CR */
-                if (!printed)
-                TPrint(e,"An <EVictim> is blasted by holy energy!",
-                         "An <EActor>'s holy power blasts you!",
-                         "An <EVictim> is blasted by holy energy!");
-                int dmg = Dice::Roll(e.vDmg + roll,4);
-                ThrowDmg(EV_DAMAGE, AD_HOLY, dmg, "being turned", e.EActor,e.EVictim);
-                printed = true;
-                }
-              if (mag > 20) { /* Twice CR */
-                if (!printed)
-                TPrint(e,"An <EVictim> is overcome with revulsion!",
-                         "An <EActor>'s holy power overpowers you with revulsion!",
-                         "An <EVictim> is overcome with revulsion!");
-                e.EVictim->GainTempStati(STUNNED, NULL, (e.vDmg+roll)*1+5,SS_MISC,0,0,0);
-                printed = true;
-                }
-              if (mag > 10) { /* Equal CR */
-                if (!printed)
-                TPrint(e,"An <EVictim> becomes terrified!",
-                         "An <EActor>'s holy power terrifies you!",
-                         "An <EVictim> becomes terrified!");
-                e.EVictim->GainTempStati(AFRAID, NULL, (e.vDmg+roll)*3+10,SS_MISC,FEAR_PANIC,0,0);
-                printed = true;
-                }
-              if (mag > 5) { /* 1/2 CR */
-                if (!printed)
-                TPrint(e,"An <EVictim> is badly shaken.",
-                         "An <EActor>'s holy power shakes your morale.",
-                         "An <EVictim> is badly shaken.");
-                e.EVictim->GainTempStati(ADJUST_MOR, NULL, (e.vDmg+roll)*6+20,SS_MISC,A_AID,-2,0);
-                printed = true;
-                }
-              if (!printed)
-                TPrint(e,"An <EVictim> stands firm in the face of an <EActor>'s holy power.",
-                         "You resist an <EActor>'s holy power.",
-                         "An <EVictim> stands firm in the face of an <EActor>'s holy power.");
             }
         }
-      }
-    if (!found)
-      IPrint("Nothing happens.");
-    return DONE;
-  }
 
-EvReturn Creature::Phase(EventInfo &e)
-  {               
+    if (!found)
+        IPrint("Nothing happens.");
+    return DONE;
+}
+
+EvReturn Creature::Phase(EventInfo &e) {               
     const char * Planes[8] = { "material plane", "astral plane", 
       "ethereal plane", "plane of shadow", "negative energy plane",
       "positive energy plane", "???", "???" };       

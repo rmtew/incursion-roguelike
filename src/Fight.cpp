@@ -137,69 +137,56 @@ bool isLegalPersonTo(Creature *Actor, Creature *Victim)
                        Victim->isMType(MA_CELESTIAL)) &&
                       Victim->isMType(MA_NLIVING);
     return isLegalPerson;
-  }
+}
 
 /* Determines both breach of chivalry and attacking fleeing foe */
 int16 getChivalryBreach(EventInfo &e) {
     int16 i, breach;
-    bool givenTerms, isLegalPerson,
-         vicFleeing, vicUnready;
-    
+    bool givenTerms, isLegalPerson, vicFleeing, vicUnready;
+
     breach = 0;
-    
+
     if (!e.EVictim)
-      return breach;
+        return breach;
     if (!e.EVictim->isCreature())
-      return breach;
-    
-    vicFleeing = e.EVictim->HasStati(AFRAID) &&
-                 e.EVictim->GetStatiVal(AFRAID) != FEAR_SKIRMISH;
-    for (i=0;i!=EventSP;i++)
-      if (EventStack[i].vicNotFleeing &&
-          EventStack[i].EVictim == e.EVictim)
-        vicFleeing = false;
-        
-    vicUnready = e.EVictim->HasStati(PRONE) ||
-                 e.EVictim->HasStati(BLIND) ||
-                 e.EVictim->HasStati(PARALYSIS) ||
-                 e.EVictim->HasStati(STUCK);
-    for (i=0;i!=EventSP;i++)
-      if (EventStack[i].vicReady &&
-          EventStack[i].EVictim == e.EVictim)
-        vicUnready = false;
-    
+        return breach;
+
+    vicFleeing = e.EVictim->HasStati(AFRAID) && e.EVictim->GetStatiVal(AFRAID) != FEAR_SKIRMISH;
+    for (i = 0; i != EventSP; i++)
+        if (EventStack[i].vicNotFleeing && EventStack[i].EVictim == e.EVictim)
+            vicFleeing = false;
+
+    vicUnready = e.EVictim->HasStati(PRONE) || e.EVictim->HasStati(BLIND) || e.EVictim->HasStati(PARALYSIS) || e.EVictim->HasStati(STUCK);
+    for (i = 0;i != EventSP; i++)
+        if (EventStack[i].vicReady && EventStack[i].EVictim == e.EVictim)
+            vicUnready = false;
+
     /* Inherently evil creatures are not subject to law or good. */
     if (e.EVictim->isMType(MA_EVIL) && e.EVictim->HasMFlag(M_IALIGN))
-      return breach;
-      
+        return breach;
+
     isLegalPerson = isLegalPersonTo(e.EActor,e.EVictim);
     givenTerms = e.EVictim && 
-                 (e.EVictim->HasStati(TRIED, SK_DIPLOMACY+EV_TERMS*100,e.EActor) ||
-                 e.EVictim->HasStati(TRIED, SK_INTIMIDATE+EV_COW*100,e.EActor));
-    
-      
-    if (vicFleeing && !givenTerms && 
-            e.EVictim->isMType(MA_SAPIENT)) {
-      breach |= AL_NONGOOD;
-      if (isLegalPerson)
-        breach |= AL_NONLAWFUL;
-      }
-         
-    /* Only paladins, heavy armour wearers, mounted fighters and followers
-       of Erich are subject to the code of chivalry... */
-    if (e.EActor->HasAbility(CA_LAY_ON_HANDS) || e.EActor->HasStati(MOUNTED) ||
-        !stricmp(NAME(e.EActor->getGod()),"Erich") || (e.EActor->InSlot(SL_ARMOUR)
-        && e.EActor->InSlot(SL_ARMOUR)->isGroup(WG_HARMOUR)))
-      {
-        if (vicUnready)
-          if (isLegalPerson && !e.EVictim->HasStati(HIT_WHILE_UNREADY,-1,e.EActor))
+        (e.EVictim->HasStati(TRIED, SK_DIPLOMACY+EV_TERMS*100,e.EActor) || e.EVictim->HasStati(TRIED, SK_INTIMIDATE+EV_COW*100,e.EActor));
+
+    if (vicFleeing && !givenTerms && e.EVictim->isMType(MA_SAPIENT)) {
+        breach |= AL_NONGOOD;
+        if (isLegalPerson)
             breach |= AL_NONLAWFUL;
-      }    
+    }
+
+    /* Only paladins, heavy armour wearers, mounted fighters and followers of Erich are subject to the code of chivalry... */
+    if (e.EActor->HasAbility(CA_LAY_ON_HANDS) || e.EActor->HasStati(MOUNTED) ||
+        !stricmp(NAME(e.EActor->getGod()),"Erich") || (e.EActor->InSlot(SL_ARMOUR) && e.EActor->InSlot(SL_ARMOUR)->isGroup(WG_HARMOUR))) {
+        if (vicUnready)
+            if (isLegalPerson && !e.EVictim->HasStati(HIT_WHILE_UNREADY, -1, e.EActor))
+                breach |= AL_NONLAWFUL;
+    }
+
     return breach;
-  }
+}
   
-bool attackSanity(EventInfo &e)
-  {
+bool attackSanity(EventInfo &e) {
     bool doAlignWarning; 
     int16 breach;
     Creature *l;
@@ -5376,1422 +5363,1415 @@ EvReturn Creature::Miss(EventInfo &e)
   	        }
 
 		return DONE;
-	} 
-EvReturn Creature::Damage(EventInfo &e)
-	{
+}
+
+EvReturn Creature::Damage(EventInfo &e) {
     int8 subtype = 0, lv, at, Percent; 
-    uint8 Col; int16 n; int16 EDType;
-    EvReturn r; rID xID; String why;
-    Item *it = NULL; int16 c; bool coll;
+    uint8 Col;
+    int16 n, c, EDType;
+    EvReturn r;
+    rID xID;
+    String why;
+    Item *it = NULL;
+    bool coll;
 
     if (e.EVictim->isDead())
-      return ABORT;
+        return ABORT;
 
     /* Watch out for Traps in EItem! */ 
     if (e.EItem && !e.EItem->isItem())
-      e.EItem = NULL;
+        e.EItem = NULL;
 
     if (e.EActor == e.EVictim)
-      goto IgnoreMorality;
-    if (e.EVictim->HasStati(TRANSFORMED))
-      goto IgnoreMorality;
-    if (e.isActOfGod)
-      goto IgnoreMorality;
-    if (e.EActor->isMonster())
-      if (e.EVictim->isPlayer())
         goto IgnoreMorality;
-        
+    if (e.EVictim->HasStati(TRANSFORMED))
+        goto IgnoreMorality;
+    if (e.isActOfGod)
+        goto IgnoreMorality;
+    if (e.EActor->isMonster())
+        if (e.EVictim->isPlayer())
+            goto IgnoreMorality;
+
     if (e.AType == A_GAZE && !e.wasFriendly)
-      goto IgnoreMorality;
-        
-    if (e.wasFriendly)
-      {
+        goto IgnoreMorality;
+
+    if (e.wasFriendly) {
         int16 mag;
         if (e.DType == AD_NECR && e.EVictim->isMType(MA_UNDEAD))
-          goto IgnoreMorality;
-        if (e.EVictim->ResistLevel(e.DType) == -1)
-          goto IgnoreMorality;
-        if (!e.EVictim->isMType(MA_SAPIENT))
-          if (!(isMType(MA_ANIMAL) && e.EActor->LevelAs(FIND("Druid"))))
             goto IgnoreMorality;
+        if (e.EVictim->ResistLevel(e.DType) == -1)
+            goto IgnoreMorality;
+        if (!e.EVictim->isMType(MA_SAPIENT))
+            if (!(isMType(MA_ANIMAL) && e.EActor->LevelAs(FIND("Druid"))))
+                goto IgnoreMorality;
 
         mag = e.EVictim->isDead() ? 3 : 1;
         if (e.EVictim->ChallengeRating()+4 < e.EActor->ChallengeRating())
-          mag++;
+            mag++;
         if (e.EVictim->isMType(MA_GOOD))
-          mag++;
+            mag++;
         if (e.isSurprise)
-          mag++;
-        if (e.DType == AD_SLASH ||
-            e.DType == AD_PIERCE ||
-            e.DType == AD_BLUNT)
-          mag++;
+            mag++;
+        if (e.DType == AD_SLASH || e.DType == AD_PIERCE || e.DType == AD_BLUNT)
+            mag++;
         if (e.EActor->Perceives(e.EVictim))
-          mag++;
-          
-        /* Allowance for clipping people with area spells for
-           tactical reasons. */
+            mag++;
+
+        /* Allowance for clipping people with area spells for tactical reasons. */
         coll = false;
-        if (e.EMagic && (e.EMagic->aval == AR_BALL ||
-            e.EMagic->aval == AR_BEAM || e.EMagic->aval == AR_BREATH ||
-            e.EMagic->aval == AR_GLOBE || e.EMagic->aval == AR_CHAIN))
-          { mag = max(1,mag/2); coll = true; }
-          
+        if (e.EMagic && (e.EMagic->aval == AR_BALL || e.EMagic->aval == AR_BEAM || e.EMagic->aval == AR_BREATH || e.EMagic->aval == AR_GLOBE || e.EMagic->aval == AR_CHAIN)) {
+            mag = max(1, mag/2);
+            coll = true;
+        }
+
         e.EActor->AlignedAct(AL_NONGOOD|AL_EVIL,mag,
-           coll ? "collateral damage" : "unprovoked attack",
-           e.EVictim);
+            coll ? "collateral damage" : "unprovoked attack",
+            e.EVictim);
         if (isLegalPersonTo(e.EActor,e.EVictim))
-          e.EActor->AlignedAct(AL_NONLAWFUL,mag,
+            e.EActor->AlignedAct(AL_NONLAWFUL,mag,
             "unlawful attack");
-      }
+    }
 
-    if ((e.EItem && e.EItem->HasStati(POISONED)) ||
-        (e.EItem2 && e.EItem2->HasStati(POISONED)) ||
-        e.DType == AD_POIS)
-      if (!e.EActor->isMType(MA_DROW))
-        e.EActor->AlignedAct(AL_NONLAWFUL,2,"using poison");
-      
+    if ((e.EItem && e.EItem->HasStati(POISONED)) || (e.EItem2 && e.EItem2->HasStati(POISONED)) || e.DType == AD_POIS)
+        if (!e.EActor->isMType(MA_DROW))
+            e.EActor->AlignedAct(AL_NONLAWFUL,2,"using poison");
+
     if (int16 breach = getChivalryBreach(e))
-      e.EActor->AlignedAct(breach, 1,
-        (breach == (AL_NONLAWFUL|AL_NONGOOD)) ? "unchivalrous, merciless attack" :
-        ((breach == AL_NONLAWFUL) ? "unchivalrous attack" : "merciless attack"),
-        e.EVictim);
-    
-    if (e.EVictim->HasStati(TRIED,SK_DIPLOMACY+EV_SURRENDER*100,e.EActor))
-      {
-        e.EActor->AlignedAct(AL_NONLAWFUL,5,
-          "attacking surrendered creatures",e.EVictim);
-        if (!e.EVictim->isMType(MA_EVIL))
-          e.EActor->AlignedAct(AL_NONGOOD,2,
-            "attacking surrendered creatures",e.EVictim);
-      }
-      
-    IgnoreMorality:;
+        e.EActor->AlignedAct(breach, 1,
+            (breach == (AL_NONLAWFUL|AL_NONGOOD)) ? "unchivalrous, merciless attack" :
+            ((breach == AL_NONLAWFUL) ? "unchivalrous attack" : "merciless attack"),
+            e.EVictim);
 
-      
+    if (e.EVictim->HasStati(TRIED,SK_DIPLOMACY+EV_SURRENDER*100,e.EActor)) {
+        e.EActor->AlignedAct(AL_NONLAWFUL, 5, "attacking surrendered creatures", e.EVictim);
+        if (!e.EVictim->isMType(MA_EVIL))
+            e.EActor->AlignedAct(AL_NONGOOD, 2, "attacking surrendered creatures", e.EVictim);
+    }
+
+IgnoreMorality:;
+
     if (e.EActor && e.EActor->HasStati(NEGATED))
-      { r = e.EActor->HandleNegate(e);
-        if (r != NOTHING) return r; }
+    { r = e.EActor->HandleNegate(e);
+    if (r != NOTHING) return r; }
 
     {
-      Item *ar = e.EVictim->InSlot(SL_ARMOUR);
-      if (e.AType > 0 && e.AType <= A_LAST_STANDARD && ar)
-        if (e.DType == AD_DREX || e.DType == AD_BLND ||
-            e.DType == AD_STUN || e.DType == AD_SLOW ||
-            e.DType == AD_CONF || e.DType == AD_DISE ||
-            e.DType == AD_STON || e.DType == AD_PLYS ||
-            e.DType == AD_WERE || e.DType == AD_PLYS ||
-            (e.DType >= AD_DAST && e.DType <= AD_DALU) ||
-            (e.DType >= AD_DRST && e.DType <= AD_DRLU) ||
-            e.DType == AD_BLEE) 
-          if (e.AType != A_TUCH || (ar && ar->HasQuality(AQ_SACRED)))
-            if (e.vHit < e.vDef + (e.EVictim->GetAttr(A_COV)-4))
-              {
-                VPrint(e, "Your armour blocks the <str>!",
-                          "The <EVictim>'s armour blocks the <str>!",
-                          (const char*)Lower(Lookup(DTypeNames,e.DType)));
-                return DONE;
-              } 
+        Item *ar = e.EVictim->InSlot(SL_ARMOUR);
+        if (e.AType > 0 && e.AType <= A_LAST_STANDARD && ar)
+            if (e.DType == AD_DREX || e.DType == AD_BLND ||
+                e.DType == AD_STUN || e.DType == AD_SLOW ||
+                e.DType == AD_CONF || e.DType == AD_DISE ||
+                e.DType == AD_STON || e.DType == AD_PLYS ||
+                e.DType == AD_WERE || e.DType == AD_PLYS ||
+                (e.DType >= AD_DAST && e.DType <= AD_DALU) ||
+                (e.DType >= AD_DRST && e.DType <= AD_DRLU) ||
+                e.DType == AD_BLEE) 
+                if (e.AType != A_TUCH || (ar && ar->HasQuality(AQ_SACRED)))
+                    if (e.vHit < e.vDef + (e.EVictim->GetAttr(A_COV)-4))
+                    {
+                        VPrint(e, "Your armour blocks the <str>!",
+                            "The <EVictim>'s armour blocks the <str>!",
+                            (const char*)Lower(Lookup(DTypeNames,e.DType)));
+                        return DONE;
+                    } 
     }
-    
+
     if (e.EVictim->HasAbility(CA_TOUGH_AS_HELL))
-      if (e.DType <= AD_LAST_PHYSICAL)
-        if (e.EVictim->Mod(A_CON) > 0)
-          {
-            int16 mod, percent;
-            Armour *ar = (Armour*) e.EVictim->InSlot(SL_ARMOUR);
-            mod = max(0,e.EVictim->Mod(A_CON));
-            percent = (e.EVictim->AbilityLevel(CA_TOUGH_AS_HELL) * 100) /
-                        (max(1,e.EVictim->ChallengeRating()) + ((!ar) ? 0 :
-                        ar->isGroup(WG_HARMOUR) ? 9 :
-                        (ar->isGroup(WG_MARMOUR) ? 6 : 3)));
-            mod = (mod * percent) / 100;
-            if (mod > 0)
-              {
-                e.strDmg += Format(" %+d TaH", -mod);
-                e.bDmg   -= mod;
-                e.vDmg   = max(1, e.vDmg - mod);
-              }
-          }
-          
-    if (e.vDmg > e.EVictim->cHP / 3)
-      if (e.AType && (e.EActor != e.EVictim))
-        if (e.DType == AD_SLASH || e.DType == AD_BLUNT)
-          if (e.EVictim->HasFeat(FT_REED_IN_THE_WIND))
-            if (!(e.EVictim->getArmourType(false) & (WG_MARMOUR|WG_HARMOUR)))
-              if (!e.EVictim->HasStati(PRONE) &&
-                  e.EVictim->HasMFlag(M_HUMANOID))
-                if (e.EVictim->isMonster() || e.EVictim->yn(Format(
-                  "Use Reed in the Wind (vs. %d damage)?", e.vDmg)))
-                  {
-                    e.vDmg /= 3;
-                    e.EVictim->GainPermStati(PRONE,NULL,SS_MISC,0,0,0,0);
-                    VPrint(e, "You fall with the blow, lessening the force.",
-                      "The <EVictim> falls with the blow, lessening the force.");
-                  }
-                
-    if (e.DType <= AD_LAST_PHYSICAL && e.isCrit)
-      if (e.EVictim->isCharacter())
-        e.EPVictim->GodDeflect(e);
-
-    if (e.actIllusion)
-      {
-        if (!e.EActor->isRealTo(e.EVictim))
-          {
-            e.Immune = true;
-            e.EActor->DisbeliefCheck();
-            return DONE;
-          }
-        /* For now... */
-        if (e.DType > AD_LAST_PHYSICAL)
-          return DONE;
-      }
-    if (e.effIllusion)
-      if (e.DType > AD_LAST_PHYSICAL)
-        return DONE;
-    /* When you trade blows with a non-Improved illusion, you
-       automatically get a chance to disbelieve it every hit
-       that lands, due to the absence of kinetics, smell, etc. */
-    if (e.vicIllusion && e.EActor)
-      if (!(e.EVictim->getIllusionFlags() & IL_IMPROVED))
-        e.EVictim->DisbeliefCheck(e.EActor);
-    
-    e.EVictim->FFCount = 0;
-    if (e.EVictim->isPlayer())
-      e.EPVictim->statiChanged = true;
-    if (e.EActor) {
-      e.EActor->FFCount = 0;
-      if (e.EActor->isPlayer())
-        e.EPActor->statiChanged = true;
-      }
-    // ww: this was AType, which was a mistake, I believe -- "flame
-    // hobgoblins" would take full damage (+1, actually, from the -1 armour) 
-    // from fire bolts, etc. 
-    if (e.EVictim->ResistLevel(e.DType) == -1)
-      {
-        e.Immune = true;
-        if (!e.Terse) {
-          /* Illusions are immune to these things, not resistant (see
-             ResistLevel), but the clever illusionist will make the
-             failure look like a resistance, not an immmunity, to avoid
-             giving away the creature's nature. */
-          if (e.EVictim->isIllusion())
-            if (e.DType == AD_MIND || e.DType == AD_PLYS ||
-                e.DType == AD_STON || e.DType == AD_STUN ||
-                e.DType == AD_CONF || e.DType == AD_VAMP ||
-                e.DType == AD_HOLY || e.DType == AD_EVIL ||
-                e.DType == AD_LAWF || e.DType == AD_CHAO ||
-                e.DType == AD_POIS || e.DType == AD_DISE ||
-                e.DType == AD_SLEE || e.DType == AD_FEAR)
-              if (e.EVictim->isRealTo(theGame->GetPlayer(0)))
-                { VPrint(e,NULL,"The <EVictim> resists.");
-                  goto DoneResistMsg; }
-          VPrint(e,"You are unaffected.","The <EVictim> is unaffected.");
-          DoneResistMsg:
-          ;
-          }
-        e.Terse = true;
-        return DONE;
-      }
-
-    e.vicIncor = (e.EVictim->HasStati(PHASED)
-                       || e.EVictim->HasMFlag(M_INCOR));
-    e.actIncor = (e.EActor && (e.EActor->HasStati(PHASED)
-                       || e.EActor->HasMFlag(M_INCOR)));
-
-    if (e.vicIncor && !e.actIncor && !e.isGhostTouch) {
-      // SRD: Even when hit by spells or magic weapons, it has a 50% chance
-      // to ignore any damage from a corporeal source (except for positive
-      // energy, negative energy, force effects such as magic missile, or
-      // attacks made with ghost touch weapons). 
-      if (e.DType == AD_HOLY || e.DType == AD_NECR || e.DType == AD_VAMP ||
-          e.DType == AD_MAGC || e.DType == AD_PSYC || e.DType == AD_SUNL)
-        ;
-      else if (random(100) < 50) {
-          e.Immune = true;
-          if (!e.Terse)
-            VPrint(e,"You, being incorporeal, are unaffected.",
-                     "The incorporeal <EVictim> is unaffected.");
-          e.Terse = true;
-          return DONE;
-        } 
-    } 
-    
-
-    if (HasStati(ACTING)) {
-      why = 
-        (e.EActor && e.EActor != this) ? 
-          Format("%s: %s",(const char*)
-                 Lower(Lookup(DTypeNames,e.DType)),
-                 (const char*)e.EActor->Name(NA_A))
-        : Lower(Lookup(DTypeNames,e.DType));
-      HaltAction(why,false); 
-    }
-
-    EDType = e.DType;
-
-    /* Implement Pick Pockets vs. A_STEA/A_SGLD */
-    switch(e.DType)
-    	{
-        case AD_NECR:
-          if (e.EVictim->isMType(MA_UNDEAD)) {
-            // SRD: necro damage (like inflict spells) heals undead ...
-            n = e.vDmg; 
-            if (e.EVictim->mHP+e.EVictim->Attr[A_THP] > e.EVictim->cHP) {
-              if (e.EVictim->mHP+e.EVictim->Attr[A_THP] > e.EVictim->cHP + n) 
-                e.EVictim->cHP += n;
-              else
-                e.EVictim->cHP = e.EVictim->mHP+e.EVictim->Attr[A_THP];
-              DPrint(e,
-                  "Necromatic magic heals the undead <EVictim>'s wounds <Str>!",
-                  "Necromatic magic heals your wounds <Str>!", 
-                  e.EVictim->cHP == (e.EVictim->mHP+e.EVictim->Attr[A_THP]) ? " fully" : "");
-              }
-            e.Immune = true;
-            return DONE; 
-          } 
-        case AD_SUNL:
-          if (e.DType == AD_SUNL) {
-            if (e.EVictim->isMType(MA_PLANT)) {
-              n = e.vDmg; 
-              if (e.EVictim->mHP+e.EVictim->Attr[A_THP] > e.EVictim->cHP) {
-                if (e.EVictim->mHP+e.EVictim->Attr[A_THP] > e.EVictim->cHP + n) 
-                  e.EVictim->cHP += n;
-                else
-                  e.EVictim->cHP = e.EVictim->mHP+e.EVictim->Attr[A_THP];
-                DPrint(e,
-                    "Sunlight heals the <EVictim>'s wounds <Str>!",
-                    "Sunlight heals your wounds <Str>!", 
-                    e.EVictim->cHP == (e.EVictim->mHP+e.EVictim->Attr[A_THP]) ? " fully" : "");
-              }
-              e.Immune = true;
-              return DONE; 
-              } 
-            if (e.EVictim->isMType(MA_WRAITH)) {
-              e.strDmg += SC(" x2 light");
-              e.vDmg *= 2; 
-              }
-            EDType = AD_FIRE;
-          }
-        
-        case AD_NORM:
-        case AD_FIRE:
-        case AD_COLD:
-        case AD_ACID:
-        case AD_ELEC:
-        case AD_TOXI:
-        case AD_PSYC:
-        case AD_MAGC:
-        case AD_SONI:
-        case AD_SLASH:
-        case AD_PIERCE:
-        case AD_BLUNT:
-
-          if (EDType == AD_ACID)
-            if (e.EVictim->isMType(MA_LIVING) || !(e.EVictim->isMType(MA_PLANT)
-                 || e.EVictim->isMType(MA_VORTEX) || e.EVictim->isMType(MA_ELEMENTAL)))
-              if ((e.EActor != e.EVictim) && !(e.isTrap || e.isActOfGod))
-                e.EActor->AlignedAct(AL_EVIL,2,"acid damage");
-
-          if ((EDType == AD_COLD && e.EVictim->isMType(MA_FIRE)) || (EDType == AD_FIRE && e.EVictim->isMType(MA_COLD))) {
-            e.strDmg += Format(" %+d vulnerability", e.vDmg / 2);
-            e.vDmg = (e.vDmg * 3) / 2;
+        if (e.DType <= AD_LAST_PHYSICAL)
+            if (e.EVictim->Mod(A_CON) > 0)
+            {
+                int16 mod, percent;
+                Armour *ar = (Armour*) e.EVictim->InSlot(SL_ARMOUR);
+                mod = max(0,e.EVictim->Mod(A_CON));
+                percent = (e.EVictim->AbilityLevel(CA_TOUGH_AS_HELL) * 100) /
+                    (max(1,e.EVictim->ChallengeRating()) + ((!ar) ? 0 :
+                    ar->isGroup(WG_HARMOUR) ? 9 :
+                    (ar->isGroup(WG_MARMOUR) ? 6 : 3)));
+                mod = (mod * percent) / 100;
+                if (mod > 0)
+                {
+                    e.strDmg += Format(" %+d TaH", -mod);
+                    e.bDmg   -= mod;
+                    e.vDmg   = max(1, e.vDmg - mod);
+                }
             }
 
-          /* Straight Damage Types */
+            if (e.vDmg > e.EVictim->cHP / 3)
+                if (e.AType && (e.EActor != e.EVictim))
+                    if (e.DType == AD_SLASH || e.DType == AD_BLUNT)
+                        if (e.EVictim->HasFeat(FT_REED_IN_THE_WIND))
+                            if (!(e.EVictim->getArmourType(false) & (WG_MARMOUR|WG_HARMOUR)))
+                                if (!e.EVictim->HasStati(PRONE) &&
+                                    e.EVictim->HasMFlag(M_HUMANOID))
+                                    if (e.EVictim->isMonster() || e.EVictim->yn(Format(
+                                        "Use Reed in the Wind (vs. %d damage)?", e.vDmg)))
+                                    {
+                                        e.vDmg /= 3;
+                                        e.EVictim->GainPermStati(PRONE,NULL,SS_MISC,0,0,0,0);
+                                        VPrint(e, "You fall with the blow, lessening the force.",
+                                            "The <EVictim> falls with the blow, lessening the force.");
+                                    }
 
-          /* ww: previously this checked isType(T_WEAPON), which meant that
-           * even a +5 bow with +5 arrows wouldn't hurt something with
-           * +1 weapon immunity ... */
-          /* ww: finally, Monks with Ki Strike count as +X weapons */
-          if (is_wepdmg(EDType) && e.EActor &&
-              (e.AType == A_SWNG || e.AType == A_FIRE || e.AType == A_HURL || e.AType == A_GREA || e.AType == A_LUNG || e.AType == A_CALL ||
-               e.AType == A_PREC)) {
-            int16 wil = e.EVictim->AbilityLevel(CA_WEAPON_IMMUNITY);
-            if (wil > 0 && !e.EActor->HasStati(IGNORES_WEAPON_IMMUNITY)) {
-              if (e.EItem && e.EItem->GetPlus() >= wil)
-                goto NotWImmune; 
-              else if (e.EItem2 && e.EItem2->GetPlus() >= wil)
-                goto NotWImmune; 
-              /*else if (!e.EItem && !e.EItem2 &&
-                  e.EActor->AbilityLevel(CA_KI_STRIKE) >= wil)
-                goto NotWImmune;*/ 
-              else if ((e.EVictim->isMType(MA_DEVIL) || 
-                  e.EVictim->isMType(MA_UNDEAD) ||
-                  e.EVictim->isMType(MA_LYCANTHROPE) ||
-                  e.EVictim->isMType(MA_DEMON)) &&
-                  ((e.EItem && (e.EItem->isBlessed() ||
-                                e.EItem->Material() == MAT_SILVER)) ||
-                  (e.EItem2&& (e.EItem2->isBlessed() ||
-                               e.EItem2->Material() == MAT_SILVER)) ))
-                goto NotWImmune; 
-              e.isWImmune = true;
-              return DONE;
-            } 
-          } 
-          NotWImmune:
+                                    if (e.DType <= AD_LAST_PHYSICAL && e.isCrit)
+                                        if (e.EVictim->isCharacter())
+                                            e.EPVictim->GodDeflect(e);
 
-          if (is_wepdmg(EDType) && e.vRoll && e.EVictim->Attr[A_COV]) {
-            /* On a critical hit, we use the critical roll, rather than the
-               attack roll, to determine if armour is bypassed. This can 
-               (very rarely) lead to the illogical situation where a lower
-               threat range is better, because you would rather bypass the
-               tough armour on a roll of a 19 rather than "just" score a
-               critical hit. This is sufficiently rare as to not be a serious
-               issue.
-                 The reason crits don't automatically bypass armour is that
-               this pushes them too far into the range of being stupid player
-               instakills -- they can end up doing x4 or x5 damage on average
-               to a heavily armoured player.
-            */
-            if (e.vHit + (e.isCrit ? e.vtRoll : e.vRoll) + e.vPenetrateBonus >= 
-                   e.vDef + e.EVictim->Attr[A_COV])
-              e.isBypass = true;
-            if (e.EItem && e.EItem->isItem() && e.EItem->HasQuality(WQ_ENERGY))
-              e.isBypass = true;
-            if (e.AType != A_SUND && e.EItem2 && e.EItem2->isItem() && e.EItem2->HasQuality(WQ_ENERGY))
-              e.isBypass = true;
+                                    if (e.actIllusion)
+                                    {
+                                        if (!e.EActor->isRealTo(e.EVictim))
+                                        {
+                                            e.Immune = true;
+                                            e.EActor->DisbeliefCheck();
+                                            return DONE;
+                                        }
+                                        /* For now... */
+                                        if (e.DType > AD_LAST_PHYSICAL)
+                                            return DONE;
+                                    }
+                                    if (e.effIllusion)
+                                        if (e.DType > AD_LAST_PHYSICAL)
+                                            return DONE;
+                                    /* When you trade blows with a non-Improved illusion, you
+                                    automatically get a chance to disbelieve it every hit
+                                    that lands, due to the absence of kinetics, smell, etc. */
+                                    if (e.vicIllusion && e.EActor)
+                                        if (!(e.EVictim->getIllusionFlags() & IL_IMPROVED))
+                                            e.EVictim->DisbeliefCheck(e.EActor);
 
-            }
+                                    e.EVictim->FFCount = 0;
+                                    if (e.EVictim->isPlayer())
+                                        e.EPVictim->statiChanged = true;
+                                    if (e.EActor) {
+                                        e.EActor->FFCount = 0;
+                                        if (e.EActor->isPlayer())
+                                            e.EPActor->statiChanged = true;
+                                    }
+                                    // ww: this was AType, which was a mistake, I believe -- "flame
+                                    // hobgoblins" would take full damage (+1, actually, from the -1 armour) 
+                                    // from fire bolts, etc. 
+                                    if (e.EVictim->ResistLevel(e.DType) == -1)
+                                    {
+                                        e.Immune = true;
+                                        if (!e.Terse) {
+                                            /* Illusions are immune to these things, not resistant (see
+                                            ResistLevel), but the clever illusionist will make the
+                                            failure look like a resistance, not an immmunity, to avoid
+                                            giving away the creature's nature. */
+                                            if (e.EVictim->isIllusion())
+                                                if (e.DType == AD_MIND || e.DType == AD_PLYS ||
+                                                    e.DType == AD_STON || e.DType == AD_STUN ||
+                                                    e.DType == AD_CONF || e.DType == AD_VAMP ||
+                                                    e.DType == AD_HOLY || e.DType == AD_EVIL ||
+                                                    e.DType == AD_LAWF || e.DType == AD_CHAO ||
+                                                    e.DType == AD_POIS || e.DType == AD_DISE ||
+                                                    e.DType == AD_SLEE || e.DType == AD_FEAR)
+                                                    if (e.EVictim->isRealTo(theGame->GetPlayer(0)))
+                                                    { VPrint(e,NULL,"The <EVictim> resists.");
+                                            goto DoneResistMsg; }
+                                            VPrint(e,"You are unaffected.","The <EVictim> is unaffected.");
+DoneResistMsg:
+                                            ;
+                                        }
+                                        e.Terse = true;
+                                        return DONE;
+                                    }
 
-          e.vArm = (int8)e.EVictim->ResistLevel(EDType,e.isBypass);
+                                    e.vicIncor = (e.EVictim->HasStati(PHASED)
+                                        || e.EVictim->HasMFlag(M_INCOR));
+                                    e.actIncor = (e.EActor && (e.EActor->HasStati(PHASED)
+                                        || e.EActor->HasMFlag(M_INCOR)));
 
-          /* ww: replaced for now by the weimer alternate penetration system 
-          if (is_wepdmg(e.DType)) {
-            if (e.EActor->Mod2(A_STR) > 0)
-              e.vPen = min(e.EActor->Mod2(A_STR),e.vArm/2);
-            else
-              e.vPen = 0;
-            if (e.EItem && e.EItem->isItem() && e.EItem->HasIFlag(WT_PENETRATING))
-              e.vPen += 2;
-            else if (e.AType != A_SUND && e.EItem2 && e.EItem2->isItem() && e.EItem2->HasIFlag(WT_PENETRATING))
-              e.vPen += 2;
-            }
-            */
+                                    if (e.vicIncor && !e.actIncor && !e.isGhostTouch) {
+                                        // SRD: Even when hit by spells or magic weapons, it has a 50% chance
+                                        // to ignore any damage from a corporeal source (except for positive
+                                        // energy, negative energy, force effects such as magic missile, or
+                                        // attacks made with ghost touch weapons). 
+                                        if (e.DType == AD_HOLY || e.DType == AD_NECR || e.DType == AD_VAMP ||
+                                            e.DType == AD_MAGC || e.DType == AD_PSYC || e.DType == AD_SUNL)
+                                            ;
+                                        else if (random(100) < 50) {
+                                            e.Immune = true;
+                                            if (!e.Terse)
+                                                VPrint(e,"You, being incorporeal, are unaffected.",
+                                                "The incorporeal <EVictim> is unaffected.");
+                                            e.Terse = true;
+                                            return DONE;
+                                        } 
+                                    } 
 
-          if (e.vDmg < 5)
-            Col = 0;
-          else if (e.vDmg < 10)
-            Col = 1;
-          else if (e.vDmg < 100)
-            Col = (e.vDmg / 10) + 1;
-          else if (e.vDmg < 200)
-            Col = ((e.vDmg - 100)/20) + 11;
-          else
-            Col = 15;
 
-          if (e.vArm > 0) {
-            // ww: I'm having serious consistency problems with the way
-            // this plays out. Imagine that you (critically) hit something
-            // for 180 points of damage (this is not unreasonable, just
-            // kinda rare -- high STR, magical great maul, critical hit
-            // x4). I just did it now, so it's possible. Anyway, that's
-            // enough force to kill about 30 normal humans (say, 5 hp
-            // each). And yet, something with armour 8 (plate mail, say)
-            // can completely resist this blow ArmourTable[8][15] = 24%
-            // of the time. One fourth of the time your plate armour reduces
-            // to nothing enough force to kill 30 men? I think not. Note
-            // that the plate mail's chance of reducing a hit for 1 point
-            // of damage to 0 here is ArmourTable[8][0] = 43% ... one
-            // conclusion here is that the ArmourTable[i] does not drop off
-            // fast enough. However, ArmourTable is big and I don't want to
-            // change that. What I will do here is say that you can only
-            // completely absorb an attack with mag <= your armour rating x
-            // 2. 
-            // fjm: I upped the minAmount a bit, from vArm to 10 + vArm*2,
-            // so that armour can absorb small and medium blows instead of
-            // just small blows. I think that's still in the realm of
-            // believability.
-            Percent = AbsorbTable[min(e.vArm,16)][Col];
-            int minAmount = 10 + e.vArm*2;
-            if ((e.EItem && e.EItem->isItem() && 
-                e.EItem->HasIFlag(WT_PENETRATING)) ||
-                (e.EItem2 && e.EItem2->isItem() && 
-                e.EItem2->HasIFlag(WT_PENETRATING))) {
-              Percent /= 2;
-              minAmount /= 2; 
-            }
-            /* Later, this should be altered to make /actual/ armour
-               count more for absorbing blows then magic bonuses, and
-               barbarian natural armour should not absorb blows at all. */
-            if (Dice::Roll(1,100) <= Percent && e.vDmg <= minAmount) { 
+                                    if (HasStati(ACTING)) {
+                                        why = 
+                                            (e.EActor && e.EActor != this) ? 
+                                            Format("%s: %s",(const char*)
+                                            Lower(Lookup(DTypeNames,e.DType)),
+                                            (const char*)e.EActor->Name(NA_A))
+                                            : Lower(Lookup(DTypeNames,e.DType));
+                                        HaltAction(why,false); 
+                                    }
+
+                                    EDType = e.DType;
+
+                                    /* Implement Pick Pockets vs. A_STEA/A_SGLD */
+                                    switch(e.DType)
+                                    {
+                                    case AD_NECR:
+                                        if (e.EVictim->isMType(MA_UNDEAD)) {
+                                            // SRD: necro damage (like inflict spells) heals undead ...
+                                            n = e.vDmg; 
+                                            if (e.EVictim->mHP+e.EVictim->Attr[A_THP] > e.EVictim->cHP) {
+                                                if (e.EVictim->mHP+e.EVictim->Attr[A_THP] > e.EVictim->cHP + n) 
+                                                    e.EVictim->cHP += n;
+                                                else
+                                                    e.EVictim->cHP = e.EVictim->mHP+e.EVictim->Attr[A_THP];
+                                                DPrint(e,
+                                                    "Necromatic magic heals the undead <EVictim>'s wounds <Str>!",
+                                                    "Necromatic magic heals your wounds <Str>!", 
+                                                    e.EVictim->cHP == (e.EVictim->mHP+e.EVictim->Attr[A_THP]) ? " fully" : "");
+                                            }
+                                            e.Immune = true;
+                                            return DONE; 
+                                        } 
+                                    case AD_SUNL:
+                                        if (e.DType == AD_SUNL) {
+                                            if (e.EVictim->isMType(MA_PLANT)) {
+                                                n = e.vDmg; 
+                                                if (e.EVictim->mHP+e.EVictim->Attr[A_THP] > e.EVictim->cHP) {
+                                                    if (e.EVictim->mHP+e.EVictim->Attr[A_THP] > e.EVictim->cHP + n) 
+                                                        e.EVictim->cHP += n;
+                                                    else
+                                                        e.EVictim->cHP = e.EVictim->mHP+e.EVictim->Attr[A_THP];
+                                                    DPrint(e,
+                                                        "Sunlight heals the <EVictim>'s wounds <Str>!",
+                                                        "Sunlight heals your wounds <Str>!", 
+                                                        e.EVictim->cHP == (e.EVictim->mHP+e.EVictim->Attr[A_THP]) ? " fully" : "");
+                                                }
+                                                e.Immune = true;
+                                                return DONE; 
+                                            } 
+                                            if (e.EVictim->isMType(MA_WRAITH)) {
+                                                e.strDmg += SC(" x2 light");
+                                                e.vDmg *= 2; 
+                                            }
+                                            EDType = AD_FIRE;
+                                        }
+
+                                    case AD_NORM:
+                                    case AD_FIRE:
+                                    case AD_COLD:
+                                    case AD_ACID:
+                                    case AD_ELEC:
+                                    case AD_TOXI:
+                                    case AD_PSYC:
+                                    case AD_MAGC:
+                                    case AD_SONI:
+                                    case AD_SLASH:
+                                    case AD_PIERCE:
+                                    case AD_BLUNT:
+
+                                        if (EDType == AD_ACID)
+                                            if (e.EVictim->isMType(MA_LIVING) || !(e.EVictim->isMType(MA_PLANT)
+                                                || e.EVictim->isMType(MA_VORTEX) || e.EVictim->isMType(MA_ELEMENTAL)))
+                                                if ((e.EActor != e.EVictim) && !(e.isTrap || e.isActOfGod))
+                                                    e.EActor->AlignedAct(AL_EVIL,2,"acid damage");
+
+                                        if ((EDType == AD_COLD && e.EVictim->isMType(MA_FIRE)) || (EDType == AD_FIRE && e.EVictim->isMType(MA_COLD))) {
+                                            e.strDmg += Format(" %+d vulnerability", e.vDmg / 2);
+                                            e.vDmg = (e.vDmg * 3) / 2;
+                                        }
+
+                                        /* Straight Damage Types */
+
+                                        /* ww: previously this checked isType(T_WEAPON), which meant that
+                                        * even a +5 bow with +5 arrows wouldn't hurt something with
+                                        * +1 weapon immunity ... */
+                                        /* ww: finally, Monks with Ki Strike count as +X weapons */
+                                        if (is_wepdmg(EDType) && e.EActor &&
+                                            (e.AType == A_SWNG || e.AType == A_FIRE || e.AType == A_HURL || e.AType == A_GREA || e.AType == A_LUNG || e.AType == A_CALL ||
+                                            e.AType == A_PREC)) {
+                                                int16 wil = e.EVictim->AbilityLevel(CA_WEAPON_IMMUNITY);
+                                                if (wil > 0 && !e.EActor->HasStati(IGNORES_WEAPON_IMMUNITY)) {
+                                                    if (e.EItem && e.EItem->GetPlus() >= wil)
+                                                        goto NotWImmune; 
+                                                    else if (e.EItem2 && e.EItem2->GetPlus() >= wil)
+                                                        goto NotWImmune; 
+                                                    /*else if (!e.EItem && !e.EItem2 &&
+                                                    e.EActor->AbilityLevel(CA_KI_STRIKE) >= wil)
+                                                    goto NotWImmune;*/ 
+                                                    else if ((e.EVictim->isMType(MA_DEVIL) || 
+                                                        e.EVictim->isMType(MA_UNDEAD) ||
+                                                        e.EVictim->isMType(MA_LYCANTHROPE) ||
+                                                        e.EVictim->isMType(MA_DEMON)) &&
+                                                        ((e.EItem && (e.EItem->isBlessed() ||
+                                                        e.EItem->Material() == MAT_SILVER)) ||
+                                                        (e.EItem2&& (e.EItem2->isBlessed() ||
+                                                        e.EItem2->Material() == MAT_SILVER)) ))
+                                                        goto NotWImmune; 
+                                                    e.isWImmune = true;
+                                                    return DONE;
+                                                } 
+                                        } 
+NotWImmune:
+
+                                        if (is_wepdmg(EDType) && e.vRoll && e.EVictim->Attr[A_COV]) {
+                                            /* On a critical hit, we use the critical roll, rather than the
+                                            attack roll, to determine if armour is bypassed. This can 
+                                            (very rarely) lead to the illogical situation where a lower
+                                            threat range is better, because you would rather bypass the
+                                            tough armour on a roll of a 19 rather than "just" score a
+                                            critical hit. This is sufficiently rare as to not be a serious
+                                            issue.
+                                            The reason crits don't automatically bypass armour is that
+                                            this pushes them too far into the range of being stupid player
+                                            instakills -- they can end up doing x4 or x5 damage on average
+                                            to a heavily armoured player.
+                                            */
+                                            if (e.vHit + (e.isCrit ? e.vtRoll : e.vRoll) + e.vPenetrateBonus >= 
+                                                e.vDef + e.EVictim->Attr[A_COV])
+                                                e.isBypass = true;
+                                            if (e.EItem && e.EItem->isItem() && e.EItem->HasQuality(WQ_ENERGY))
+                                                e.isBypass = true;
+                                            if (e.AType != A_SUND && e.EItem2 && e.EItem2->isItem() && e.EItem2->HasQuality(WQ_ENERGY))
+                                                e.isBypass = true;
+
+                                        }
+
+                                        e.vArm = (int8)e.EVictim->ResistLevel(EDType,e.isBypass);
+
+                                        /* ww: replaced for now by the weimer alternate penetration system 
+                                        if (is_wepdmg(e.DType)) {
+                                        if (e.EActor->Mod2(A_STR) > 0)
+                                        e.vPen = min(e.EActor->Mod2(A_STR),e.vArm/2);
+                                        else
+                                        e.vPen = 0;
+                                        if (e.EItem && e.EItem->isItem() && e.EItem->HasIFlag(WT_PENETRATING))
+                                        e.vPen += 2;
+                                        else if (e.AType != A_SUND && e.EItem2 && e.EItem2->isItem() && e.EItem2->HasIFlag(WT_PENETRATING))
+                                        e.vPen += 2;
+                                        }
+                                        */
+
+                                        if (e.vDmg < 5)
+                                            Col = 0;
+                                        else if (e.vDmg < 10)
+                                            Col = 1;
+                                        else if (e.vDmg < 100)
+                                            Col = (e.vDmg / 10) + 1;
+                                        else if (e.vDmg < 200)
+                                            Col = ((e.vDmg - 100)/20) + 11;
+                                        else
+                                            Col = 15;
+
+                                        if (e.vArm > 0) {
+                                            // ww: I'm having serious consistency problems with the way
+                                            // this plays out. Imagine that you (critically) hit something
+                                            // for 180 points of damage (this is not unreasonable, just
+                                            // kinda rare -- high STR, magical great maul, critical hit
+                                            // x4). I just did it now, so it's possible. Anyway, that's
+                                            // enough force to kill about 30 normal humans (say, 5 hp
+                                            // each). And yet, something with armour 8 (plate mail, say)
+                                            // can completely resist this blow ArmourTable[8][15] = 24%
+                                            // of the time. One fourth of the time your plate armour reduces
+                                            // to nothing enough force to kill 30 men? I think not. Note
+                                            // that the plate mail's chance of reducing a hit for 1 point
+                                            // of damage to 0 here is ArmourTable[8][0] = 43% ... one
+                                            // conclusion here is that the ArmourTable[i] does not drop off
+                                            // fast enough. However, ArmourTable is big and I don't want to
+                                            // change that. What I will do here is say that you can only
+                                            // completely absorb an attack with mag <= your armour rating x
+                                            // 2. 
+                                            // fjm: I upped the minAmount a bit, from vArm to 10 + vArm*2,
+                                            // so that armour can absorb small and medium blows instead of
+                                            // just small blows. I think that's still in the realm of
+                                            // believability.
+                                            Percent = AbsorbTable[min(e.vArm,16)][Col];
+                                            int minAmount = 10 + e.vArm*2;
+                                            if ((e.EItem && e.EItem->isItem() && 
+                                                e.EItem->HasIFlag(WT_PENETRATING)) ||
+                                                (e.EItem2 && e.EItem2->isItem() && 
+                                                e.EItem2->HasIFlag(WT_PENETRATING))) {
+                                                    Percent /= 2;
+                                                    minAmount /= 2; 
+                                            }
+                                            /* Later, this should be altered to make /actual/ armour
+                                            count more for absorbing blows then magic bonuses, and
+                                            barbarian natural armour should not absorb blows at all. */
+                                            if (Dice::Roll(1,100) <= Percent && e.vDmg <= minAmount) { 
 Absorbed:
-              e.Absorb = true;
-              e.vPen = 0; // 100% absorbed
-              e.aDmg = 0; 
-              if (!is_wepdmg(EDType))
-                e.Resist = true;
-              if (!e.Terse) {
-                if ((EDType == AD_SLASH || e.DType == AD_PIERCE
-                      || EDType == AD_BLUNT) && e.EVictim->EInSlot(SL_ARMOUR))
-                  VPrint(e,"Your <Str>armour absorbs the attack!",
-                      "The <EVictim>'s <Str>armour absorbs the attack!",
-                      e.isBypass ? "natural " : "");
-                else VPrint(e,"You resist completely!",
-                    "The <EVictim> resists completely!");
-              }
-              return DONE;
-            }
+                                                e.Absorb = true;
+                                                e.vPen = 0; // 100% absorbed
+                                                e.aDmg = 0; 
+                                                if (!is_wepdmg(EDType))
+                                                    e.Resist = true;
+                                                if (!e.Terse) {
+                                                    if ((EDType == AD_SLASH || e.DType == AD_PIERCE
+                                                        || EDType == AD_BLUNT) && e.EVictim->EInSlot(SL_ARMOUR))
+                                                        VPrint(e,"Your <Str>armour absorbs the attack!",
+                                                        "The <EVictim>'s <Str>armour absorbs the attack!",
+                                                        e.isBypass ? "natural " : "");
+                                                    else VPrint(e,"You resist completely!",
+                                                        "The <EVictim> resists completely!");
+                                                }
+                                                return DONE;
+                                            }
 
-            Percent = ArmourTable[min(e.vArm,32)][Col];
-            if (e.EItem && e.EItem->isItem() && 
-                e.EItem->HasIFlag(WT_PENETRATING))
-              Percent /= 2;
-            else if (e.EItem2 && e.EItem2->isItem() && 
-                e.EItem2->HasIFlag(WT_PENETRATING))
-              Percent /= 2;
-            e.vPen = 100 - Percent;
+                                            Percent = ArmourTable[min(e.vArm,32)][Col];
+                                            if (e.EItem && e.EItem->isItem() && 
+                                                e.EItem->HasIFlag(WT_PENETRATING))
+                                                Percent /= 2;
+                                            else if (e.EItem2 && e.EItem2->isItem() && 
+                                                e.EItem2->HasIFlag(WT_PENETRATING))
+                                                Percent /= 2;
+                                            e.vPen = 100 - Percent;
 
-            e.aDmg = ((int32)e.vDmg * ((int32)(e.vPen))) / 100L;
-            if (!e.aDmg)
-              goto Absorbed;
-            if (!is_wepdmg(EDType))
-              e.Resist = true;
-            } 
-          else 
-            e.aDmg = e.vDmg;
-          
-          
-          if (is_wepdmg(EDType))
-            if (e.vDef > e.vHit + 14)
-              if (e.EVictim->HasAbility(CA_DEFENSIVE_ROLL))
-                {
-                  uint32 at = getArmourType(false);
-                  
-                  if (at & WG_HARMOUR)
-                    goto CantRoll;
-                  
-                  e.vDefRoll = 5;
-                  
-                  if (at & WG_MARMOUR)
-                    ;
-                  else if (at)
-                    e.vDefRoll -= 1;
-                  else
-                    e.vDefRoll -= 2;
-                  
-                  if (e.EVictim->isSmallRace() && 
-                        e.EVictim->GetAttr(A_SIZ) == SZ_SMALL)
-                    if (e.EActor->GetAttr(A_SIZ) >= SZ_MEDIUM)
-                      e.vDefRoll -= 1;
-                      
-                  if (e.vDef > e.vHit + 19)
-                    e.vDefRoll -= 1;
-                  
-                  e.vDefRoll = max(1,e.vDefRoll);
-                  
-                  e.aDmg = max(1, (e.aDmg*e.vDefRoll)/6);
-                  e.isDefRoll = true;
-                  e.strXDmg = Format(" x (%d/6)",e.vDefRoll) + e.strXDmg;
-                  /* People that benefit from Defensive Roll are going
-                     to see this message A LOT, hence it being so short
-                     -- avoids message spam. */
-                  e.EVictim->IDPrint("You roll!", "The <Obj> rolls with the hit!", e.EActor);
-                  e.EVictim->Exercise(A_DEX,1,EDEX_EVASION,45);
-                }
-          CantRoll:
+                                            e.aDmg = ((int32)e.vDmg * ((int32)(e.vPen))) / 100L;
+                                            if (!e.aDmg)
+                                                goto Absorbed;
+                                            if (!is_wepdmg(EDType))
+                                                e.Resist = true;
+                                        } 
+                                        else 
+                                            e.aDmg = e.vDmg;
 
-          if (((!e.actIllusion) || e.EActor->isShade()) &&
-              ((!e.effIllusion) || e.illFlags & IL_SHADE))
-            {
-              int16 per, rDmg, iDmg;
-              if (e.EActor->isShade())
-                {
-                  per = e.EActor->getShadePercent();
-                  rDmg = (e.aDmg * per) / 100;
-                  iDmg = e.aDmg - rDmg;
-                }
-              else if (e.illFlags & IL_SHADE)
-                {
-                  per = 0 + ((e.illFlags & IL_SHADE10) ? 10 : 0)
-                          + ((e.illFlags & IL_SHADE20) ? 20 : 0)
-                          + ((e.illFlags & IL_SHADE40) ? 40 : 0);
-                  rDmg = (e.aDmg * per) / 100;
-                  iDmg = e.aDmg - rDmg;
-                }                   
-              else
-                { rDmg = e.aDmg; iDmg = 0; }
-            
-              
-              if(rDmg >= e.EVictim->cHP)
-                {
-                  if (e.EVictim->HasFeat(FT_IGNORE_WOUND))
-                    if (!e.EVictim->HasStati(TRIED,FT_IGNORE_WOUND))
-                      {
-                        e.EVictim->IPrint("<3>You endure a nearly-mortal stroke!<7>");
-                        e.EActor->IPrint("You were sure that blow should have felled "
-                          "the <Obj>, but no.", e.EVictim);
-                        e.EVictim->GainTempStati(TRIED,NULL,-2,SS_MISC,FT_IGNORE_WOUND);
-                        goto WoundIgnored;
-                      }
-                           
-                  if (e.EVictim->cHP + e.EVictim->SumStatiMag(ILLUS_DMG) > rDmg)
-                    ReThrow(EV_PDAMAGE, e);
-                  else { 
-                    e.EVictim->cHP = 0;
-                    ReThrow(EV_DEATH, e);
-                    return DONE;
-                    }
-                }
-              e.EVictim->cHP -= e.aDmg;
-              if (iDmg && !e.EVictim->HasStati(SLEEPING,SLEEP_PSYCH) && 
-                    e.EActor->isRealTo(e.EVictim))
-                {
-                  e.aDmg = iDmg;
-                  ReThrow(EV_PDAMAGE, e);
-                  e.aDmg = rDmg;
-                } 
-            }
-          else
-            ReThrow(EV_PDAMAGE,e);
-            
-          if (e.vicIllusion && !e.actIllusion)
-            if (e.EVictim->isShade() && (e.EActor == e.EVictim || 
-                  !e.EActor || !e.EVictim->isRealTo(e.EActor)))
-              if ((e.EVictim->mHP - e.EVictim->cHP) * 100 / 
-                     e.EVictim->mHP > e.EVictim->getShadePercent())
-                {
-                  e.EVictim->cHP = 0;
-                  ReThrow(EV_DEATH, e);
-                  return DONE;
-                } 
-            
-          WoundIgnored:
-          
-          if (HasAbility(CA_RETRIBUTIVE_STRIKE) && e.EActor && e.EActor != this)
-            {
-              if (HasStati(WOUNDED_BY,0,e.EActor)) {
-                SetStatiMag(WOUNDED_BY,0,e.EActor,
-                  GetStatiMag(WOUNDED_BY,0,e.EActor) + e.aDmg );
-                SetStatiDur(WOUNDED_BY,0,e.EActor,
-                  max(GetStatiDur(WOUNDED_BY,0,e.EActor) + e.aDmg*2, e.aDmg*2+10) );
-                }
-              else
-                GainTempStati(WOUNDED_BY,e.EActor,e.aDmg*2+10,SS_MISC,0,e.aDmg,0,0);
-            }
 
-          if (isPlayer() && ((cHP+e.aDmg)*3 >= mHP+Attr[A_THP]))
-            if (cHP*3 <= mHP+Attr[A_THP]) {
-              IPrint("<12>You are gravely wounded!<7>");
-              Player * pl = (Player *)this; 
-              if (e.EActor) 
-                pl->AddJournalEntry(Format("You are <12>gravely wounded by %s<7>!", (const char*)e.EActor->Name(NA_A)));
-              else
-                pl->AddJournalEntry(Format("You are <12>gravely wounded<7>!"));
-              if (!(e.isTrap || e.isActOfGod))
-                e.EVictim->GainPermStati(CRIT_WOUNDED_BY,e.EActor,SS_MISC);
-            } 
+                                        if (is_wepdmg(EDType))
+                                            if (e.vDef > e.vHit + 14)
+                                                if (e.EVictim->HasAbility(CA_DEFENSIVE_ROLL))
+                                                {
+                                                    uint32 at = getArmourType(false);
 
-          if (HasStati(PARALYSIS))
-            RemoveStati(PARALYSIS,-1,PARA_HYPNOTIZED);
-            
-          if (HasStati(ELEVATED) && !isDead())
-            {
-              int16 ClimbDC;
-              ClimbDC = GetStatiVal(ELEVATED) == ELEV_TREE ? 10 : 20;
-              ClimbDC += (e.vDmg * 40) / (mHP+GetAttr(A_THP));
-              if (!SkillCheck(SK_CLIMB,ClimbDC,false))
-                ClimbFall();           
-            }       
-          
-          if ((e.DType == AD_SLASH || e.DType == AD_PIERCE ||
-              e.DType == AD_BLUNT) && HasStati(LEVITATION) && !isDead())
-            ThrowDmg(EV_DAMAGE,AD_KNOC,e.vDmg / max(1,mHP/20),
-              "aerial damage knockback", e.EActor, e.EVictim, e.EItem, e.EItem2);
-             
-              
-          return DONE;
-        case AD_VAMP:
-          if (!e.EActor)
-            {
-              e.DType = AD_NORM;
-              return ReThrow(EV_DAMAGE,e);
-            }
-          n = cHP;
-          e.DType = AD_NECR;
-          r = ReThrow(EV_DAMAGE,e);
-          e.DType = AD_VAMP;
-          if (r != DONE)
-            return r;
-          if (cHP < n)
-            if (e.EActor->mHP+e.EActor->Attr[A_THP] > e.EActor->cHP) {
-              if (e.EActor->mHP+e.EActor->Attr[A_THP] > e.EActor->cHP + (n-cHP)) 
-                e.EActor->cHP += (int16)n-cHP;
-              else
-                e.EActor->cHP = e.EActor->mHP+e.EActor->Attr[A_THP];
-              DPrint(e,"Your wounds heal<Str>!", "The <EActor>'s wounds heal<Str>!",
-                e.EActor->cHP == (e.EActor->mHP+e.EActor->Attr[A_THP]) ? " fully" : "");
-              }
-         return DONE;
-        case AD_ENGL:
-        case AD_SWAL:
-          if (!e.EActor)
-            return ABORT;
-          if (e.DType == AD_SWAL)
-            if (!(e.EActor->GetAttr(A_SIZ) > e.EVictim->GetAttr(A_SIZ)))
-              return DONE;
-          if (!(e.EActor->GetAttr(A_SIZ) >= e.EVictim->GetAttr(A_SIZ)))
-              return DONE;
-          if (e.EVictim->HasStati(ENGULFER))
-            return ABORT;
-          if (e.EVictim->HasStati(ENGULFED))
-            return ABORT;
-          if (e.EActor->HasStati(ENGULFER))
-            return ABORT;
-          if (e.EActor->HasStati(ENGULFED))
-            return ABORT;
-          if (e.EVictim->HasStati(MOUNT))
-            return ABORT;  
-          if (e.saveDC <= 0 || 
-              !e.EVictim->SavingThrow(REF,e.saveDC)) 
-            {
-              e.EVictim->DoEngulf(e.EActor);
-              if (e.DType == AD_ENGL)
-                TPrint(e,"You engulf the <EVictim>!",
-                         "You are engulfed by the <EVictim>!",
-                         "The <EVictim> is engulfed by the <EActor>!");
-              else
-                TPrint(e,"You swallow the <EVictim> whole!",
-                         "You get swallowed whole!",
-                         "The <EVictim> gets swallowed whole!");
-            }
-          else
-            { e.Resist = true; } 
-         return DONE; 
-        case AD_GRAB:
-          if (!e.EActor)
-            return ABORT;
-          if (e.EActor && e.EVictim->HasStati(GRABBED,-1,e.EActor))
-            return ABORT;
-          if (e.EActor && e.EVictim->HasStati(GRAPPLED,-1,e.EActor))
-            return ABORT;
-          if (e.saveDC <= 0 || 
-              !e.EVictim->SavingThrow(REF,e.saveDC,SA_GRAB)) {
-            e.EVictim->GainPermStati(GRABBED,   e.EActor,  SS_ATTK);
-            e.EActor ->GainPermStati(GRAPPLING, e.EVictim, SS_ATTK);
-            e.vicHeld = true;
-            }
-          else
-            { e.Resist = true;  } 
-         break;
-        case AD_STON:
-          if (e.EVictim->HasStati(STONING) || !e.EVictim->isMType(MA_LIVING)
-              || e.EVictim->ResistLevel(AD_STON) == -1)
-            { e.Immune = true; break; }
-          if (!e.EVictim->SavingThrow(REF,e.saveDC,SA_PETRI)) 
-            {
-              e.EVictim->StatiMessage(STONING,0,false);
-              e.EVictim->GainTempStati(STONING, e.EActor,  SS_ATTK, 20);
-            }
-          else
-            e.Resist = true;
-         break;
-        case AD_FEAR:
-          if (e.EVictim->HasStati(AFRAID))
-            return ABORT;          
-          if (e.AType == A_PROX)
-            e.saveDC += (int8)TMON(e.EVictim->tmID)->GetConst(DRAGON_FEAR_DC);
-          if (!e.EVictim->SavingThrow(WILL,e.saveDC,SA_FEAR)) {
-            if (!e.Terse)
-              VPrint(e,"You are terrified!", "The <EVictim> seems terrified!"); 
-            e.EVictim->GainTempStati(AFRAID,e.EActor,SS_ATTK,(int8)e.vDmg,FEAR_MAGIC);
-            }
-          else
-            e.Resist = true;
-         break;
-        case AD_BLND:
-          if (e.EVictim->isBlind()) {
-            e.Immune = true;
-            VPrint(e,"Being already blind, you are unaffected.",
-                "Being already blind, the <EVictim> is unaffected.");
-            } 
-          else if (!e.EVictim->SavingThrow(FORT,e.saveDC)) {
-            if (!e.Terse)
-              VPrint(e,"You are blinded!", "The <EVictim> is blinded!"); 
-            e.EVictim->GainTempStati(BLIND,e.EActor,e.vDmg, SS_ATTK);
-            }
-          else
-            e.Resist = true;
-         break;
-        case AD_PLYS:
-          if (e.EVictim->HasStati(PARALYSIS,PARA_HELD))
-            return ABORT; 
-          if (e.EVictim->UseLimitedFA())
-            return DONE;         
-          if (!e.EVictim->SavingThrow(FORT,e.saveDC,SA_PARA)) {
-            if (!e.Terse)
-              e.EVictim->StatiMessage(PARALYSIS,0,false);
-            e.EVictim->GainTempStati(PARALYSIS,e.EActor,e.vDmg,SS_ATTK,PARA_HELD);
-            }
-          else
-            e.Resist = true;
-         break;
-        case AD_STUK:
-          if (e.EVictim->HasStati(STUCK))
-            return ABORT; 
-          else if (e.EVictim->HasMFlag(M_AMORPH)) {
-            e.Immune = true;
-            break;
-          } 
-          if (!e.EVictim->SavingThrow(REF,e.saveDC,SA_GRAB)) {
-            if (!e.Terse)
-              e.EVictim->StatiMessage(STUCK,0,false);
-            
-            e.EVictim->GainTempStati(STUCK,e.EActor,e.vDmg,SS_ATTK,(int16)e.EParam);
-          } else e.Resist = true;
-         break;
-        case AD_SLOW:
-          if (!e.EVictim->SavingThrow(FORT,e.saveDC,SA_PARA)) {
-            /* Kludge, but necessary */
-            xID = FIND("slow");
-            ASSERT(xID);
-            ThrowEff(EV_MAGIC_STRIKE,xID,e.EActor ? e.EActor : e.EVictim,e.EVictim);
-            }
-          else
-            e.Resist = true;
-         break;
-        case AD_DRMA:
-          if (!e.EVictim->SavingThrow(WILL,e.saveDC,SA_ENCH)) {
-            if (!e.Terse)
-              TPrint(e,"You leech away the <EVictim>'s magical energy!",
-                       "Your magical energy is leeched away!", NULL); 
-            LoseMana(e.vDmg,true);
-            }
-          else
-            e.Resist = true;
-         break;
-        case AD_CONF:
-          if (e.EVictim->HasStati(CONFUSED))
-            return ABORT;          
-          if (!e.EVictim->SavingThrow(WILL,e.saveDC,SA_ENCH|SA_CONF)) {
-            if (!e.Terse)
-              VPrint(e,"Your suddenly feel disoriented!", 
-                       "The <EVictim> staggers..."); 
-            e.EVictim->GainTempStati(CONFUSED,NULL,e.vDmg,SS_ATTK);
-            }
-          else
-            e.Resist = true;
-         break;
-        case AD_NAUS:
-          if (e.EVictim->HasStati(NAUSEA))
-            return ABORT;          
-          if (!e.EVictim->SavingThrow(WILL,e.saveDC,0)) {
-            if (!e.Terse)
-              VPrint(e,"Your suddenly feel nauseated!", 
-                       "The <EVictim> retches..."); 
-            e.EVictim->GainTempStati(NAUSEA,NULL,e.vDmg,SS_ATTK);
-            }
-          else
-            e.Resist = true;
-         break;
-        case AD_EVIL:
-          if (e.EVictim->isMType(MA_EVIL))
-            break;
-          else if (!e.EVictim->isMType(MA_GOOD))
-            e.vDmg /= 2;
-          e.DType = AD_NORM;
-          if (!e.Terse)
-            VPrint(e,"Malevolent energies burn at your spirit!",
-                     "Malevolent energies burn at the <EVictim>!");
-          ReThrow(EV_DAMAGE,e);
-         break; 
-        case AD_CHAO:
-          if (e.EVictim->isMType(MA_CHAOTIC))
-            break;
-          else if (!e.EVictim->isMType(MA_LAWFUL))
-            e.vDmg /= 2;
-          e.DType = AD_NORM;
-          if (!e.Terse)
-            VPrint(e,"Primordial chaos lashes at you!", 
-                     "Primordial chaos lashes at the <EVictim>!");
-          ReThrow(EV_DAMAGE,e);
-         break;           
-        case AD_LAWF:
-          if (e.EVictim->isMType(MA_LAWFUL))
-            break;
-          else if (!e.EVictim->isMType(MA_CHAOTIC))
-            e.vDmg /= 2;
-          e.DType = AD_NORM;
-          if (!e.Terse)
-            VPrint(e,"Order's fury binds you!", 
-                     "Order's fury binds the <EVictim>.");
-          ReThrow(EV_DAMAGE,e);
-         break;           
-        case AD_HOLY:
-          if (e.EVictim->isMType(MA_GOOD) &&
-              !e.EVictim->isMType(MA_UNDEAD))
-            break;
-          else if (!e.EVictim->isMType(MA_EVIL))
-            e.vDmg /= 2;
-          e.DType = AD_NORM;
-          if (!e.Terse)
-            VPrint(e,"Holy power smites you!",
-                     "Holy power smites the <EVictim>!");
-          ReThrow(EV_DAMAGE,e);
-         break;                   
-        case AD_DRST:
-        case AD_DRDX:
-        case AD_DRCO:
-        case AD_DRIN:
-        case AD_DRWI:
-        case AD_DRCH:
-        case AD_DRLU:
-        case AD_DAST:
-        case AD_DADX:
-        case AD_DACO:
-        case AD_DAIN:
-        case AD_DAWI:
-        case AD_DACH:
-        case AD_DALU:
-          /* We don't necessarily know what kind of effect is *causing* the
-             stat drain, so we have to make some guesses based on the nature
-             of the attacker: an inherently evil creature that drains stats
-             is presumed to use inherently evil means to do so; an undead is
-             assumed to drain based on negative energy, and a non-undead that
-             bites is assumed to be using poison. */
-          subtype = 0;
-          at = e.DType >= AD_DAST ? (e.DType-AD_DAST) : (e.DType-AD_DRST);
-          if (at >= A_STR && at <= A_CON && e.EVictim->isMType(MA_UNDEAD)) {
-            /* SRD: &#151;Not subject to critical hits, nonlethal damage,
-             * ability drain, or energy drain. Immune to damage to its
-             * physical ability scores (Strength, Dexterity, and
-             * Constitution), as well as to fatigue and exhaustion
-             * effects.<br> */
-            e.Immune = true; break;
-          } 
-          if (e.EActor && e.EActor->isMType(MA_EVIL))
-            subtype |= SA_EVIL;
-          if (e.EActor && e.EActor->isMType(MA_UNDEAD)) {
-            subtype |= SA_NECRO;
-            if (e.EVictim->ResistLevel(AD_NECR) == -1)
-              { e.Immune = true; break; }
-            }
-          if (e.AType == A_BITE && e.EActor && !e.EActor->isMType(MA_UNDEAD))
-            subtype |= SA_POISON;
-          e.vDmg =  max(1,e.Dmg.Roll());
-          e.vDmg -= AbilityLevel(CA_STRONG_SOUL);
+                                                    if (at & WG_HARMOUR)
+                                                        goto CantRoll;
 
-          if (e.vDmg <= 0) {
-            VPrint(e,"The strength of your spirit turns aside the effects.",NULL);
-            e.vDmg = 0;
-            return DONE;
-            }
+                                                    e.vDefRoll = 5;
 
-          if (e.EVictim->SavingThrow(FORT,e.saveDC,subtype)) 
-            {
-              e.vDmg = max(1,e.vDmg/2);
-              e.Resist = true;
-            }
-          
-          if (e.EVictim->HasStati(SUSTAIN,at))
-            e.vDmg = max(0,e.vDmg - e.EVictim->SumStatiMag(SUSTAIN,at));
-          if (!e.vDmg || Attr[at] <= 0) {
-            e.Immune = true;
-            break;
-            }
-          if ((Attr[at] - e.vDmg <= 0) /* && (at == A_STR || at == A_CON)*/)
-            {
-              if (e.EMagic) {
-                if (e.EActor == e.EVictim || !e.EActor)
-                  e.GraveText = NAME(e.eID);
-                else
-                  e.GraveText = XPrint("An <Obj>'s <Res>",e.EActor,e.eID);
-                }
-              else if (e.AType == A_TUCH && e.EActor)
-                e.GraveText = XPrint("A <Obj>'s Touch",e.EActor);
-              else if (e.EActor && e.AType == A_BITE || e.AType == A_SUCK)
-                e.GraveText = XPrint("A <Obj>'s Bite",e.EActor);
-              else if (e.EActor)
-                e.GraveText = e.EActor->Name(NA_A|NA_CAPS);
-              else 
-                e.GraveText = "attribute drain";
-              ReThrow(EV_DEATH,e);
-              return DONE;
-            }
-          if (e.DType >= AD_DAST) /* permadrain */
-            e.EVictim->GainPermStati(ADJUST_DMG,NULL,SS_ATTK,e.DType-AD_DAST,-e.vDmg);
-          else                    /* recoverable drain; currently identical */
-            e.EVictim->GainPermStati(ADJUST_DMG,NULL,SS_ATTK,e.DType-AD_DRST,-e.vDmg);
-          switch (at)
-            {
-              case A_STR: e.EVictim->IPrint("<4>You feel weaker.<7>"); break;
-              case A_DEX: e.EVictim->IPrint("<4>You feel numb.<7>"); break;
-              case A_CON: e.EVictim->IPrint("<4>You feel unhealthy.<7>"); break;
-              case A_INT: e.EVictim->IPrint("<4>Your head throbs.<7>"); break;
-              case A_WIS: e.EVictim->IPrint("<4>You feel dizzy.<7>"); break;
-              case A_CHA: e.EVictim->IPrint("<4>You feel craven.<7>"); break;
-              case A_LUC: e.EVictim->IPrint("<4>You feel unlucky.<7>"); break;
-            }
-         break;
-        case AD_DREX:
-          if (e.EVictim->HasStati(SUSTAIN,A_AID)) {
-            lv = (int8)e.EVictim->SumStatiMag(SUSTAIN,A_AID);
-            if (lv*3 >= e.vDmg) {
-              e.Immune = true;
-              break;
-              }
-            else
-              e.vDmg -= lv*3;
-            }
-          if (e.EVictim->ResistLevel(AD_NECR) == -1)
-            { e.Immune = true; break; }
-          if (e.EVictim->SavingThrow(WILL,e.saveDC,SA_NECRO))
-            {
-              e.vDmg /= 2;
-              e.Resist = true;
-            }
-          if (!e.Terse)
-            VPrint(e,"You feel a chill in your very soul!",
-              "The <EVictim> looks deathly pale!");
-          if (e.EVictim->isCharacter())
-            ((Character*)e.EVictim)->DrainXP(e.vDmg * 50);
-          else {
-            if (e.EVictim->HasStati(ADJUST_DMG,A_AID))
-              e.EVictim->GetStati(ADJUST_DMG,A_AID)->Mag -= 
-                  e.vDmg / max(1,e.EVictim->ChallengeRating() * 5);
-            else
-              // ww: the signs were reversed here, so one hit from a
-              // spectre actually gave another creature a +1 neglev bonus
-              // ... :-) 
-              e.EVictim->GainPermStati(ADJUST_DMG,NULL,SS_ATTK,A_AID,
-                -(max(1,e.vDmg / max(1,e.EVictim->ChallengeRating() * 5))));
-            lv = max(1,e.EVictim->ChallengeRating());
-            lv += e.EVictim->SumStatiMag(ADJUST_DMG,A_AID);
-            if (lv <= 0)
-              ReThrow(EV_DEATH,e);
-            }
-         break; 
-        case AD_DISE:
-          ASSERT(e.EActor);
-          if (e.EVictim->ResistLevel(AD_DISE) == -1)
-            {
-              e.Immune = true;
-              return DONE;
-            }
-          n = 0;
-          for(xID = TMON(e.EActor->mID)->FirstRes(AN_DISEASE);xID;
-                xID = TMON(e.EActor->mID)->NextRes(AN_DISEASE))
-            Candidates[n++] = xID;
-          StatiIterNature(e.EActor,TEMPLATE)
-            for(xID = TMON(S->eID)->FirstRes(AN_DISEASE);xID;
-                  xID = TMON(S->eID)->NextRes(AN_DISEASE))
-              Candidates[n++] = xID;
-          StatiIterEnd(e.EActor)
-          if (!n)
-            {
-              if (e.eID && TEFF(e.eID)->ef.aval == AR_DISEASE)
-                  xID = e.eID;
-                else
-                  return DONE; 
-              Error(XPrint("Creature <Res> has an AD_DISE attack, but no diseases!",e.EActor->mID));
-              return DONE;
-            }
-          xID = Candidates[random((int16)n)];
-          if (e.EVictim->HasEffStati(DISEASED,xID))
-            break;
-          if (!e.EVictim->SavingThrow(FORT,e.saveDC)) {
-            e.Event = EV_INFECT;
-            switch (TEFF(xID)->Event(e,xID)) {
-              case ABORT:
-                return ABORT;
-              case DONE:
-                return DONE;
-              }
-            if (!e.Terse)
-              VPrint(e,"You feel unclean.", "The <EVictim> squirms!"); 
-            e.EVictim->GainPermStati(DISEASED,NULL,SS_ATTK, 0, 0, xID);
-            }
-          else
-            e.Resist = true;
-         break;
-        case AD_POIS:
-          ASSERT(e.EActor);
-          if (e.EVictim->ResistLevel(AD_TOXI) == -1)
-            {
-              e.Immune = true;
-              return DONE;
-            }
-          n = 0;
-          for(xID = TMON(e.EActor->mID)->FirstRes(AN_POISON);xID;
-                xID = TMON(e.EActor->mID)->NextRes(AN_POISON))
-            Candidates[n++] = xID;
-          StatiIterNature(e.EActor,TEMPLATE)
-            for(xID = TMON(S->eID)->FirstRes(AN_POISON);xID;
-                  xID = TMON(S->eID)->NextRes(AN_POISON))
-              Candidates[n++] = xID;
-          StatiIterEnd(e.EActor)
-          if (!n)
-            {
-              if (e.eID && TEFF(e.eID)->ef.aval == AR_POISON)
-                  xID = e.eID;
-                else
-                  return DONE; 
-              /*
-              Error(XPrint("Creature <Res> has an AD_POIS attack for <Res>, but no poisons!",e.EActor->mID, e.EVictim->mID));
-              */
-            } else
-                xID = Candidates[random((int16)n)];
-          if (e.EVictim->HasEffStati(POISONED,xID))
-            break;
-          if (e.saveDC == 0)
-            e.saveDC = TEFF(xID)->ef.sval;
-          if (!e.EVictim->SavingThrow(FORT,e.saveDC)) {
-            e.Event = EV_POISON;
-            switch (TEFF(xID)->Event(e,xID)) {
-              case ABORT:
-                return ABORT;
-              case DONE:
-                return DONE;
-              }
-            if (!e.Terse)
-              VPrint(e,"You've been poisoned!", "The <EVictim> staggers!"); 
-            e.EVictim->GainPermStati(POISONED,NULL,SS_ATTK, 0, 0, xID);
-            }
-          else
-            e.Resist = true;
-         break;
-        case AD_TRIP:
-         {
-           if (e.EVictim->HasStati(PRONE) || 
-               e.EVictim->HasMFlag(M_AMORPH) ||
-               (e.vicIncor && !e.actIncor && !e.isGhostTouch) ||
-               e.EVictim->HasMFlag(M_NOLIMBS)) {
-             e.Immune = true; 
-             break;
-             }
-           if (e.EActor && e.EVictim && e.EActor != e.EVictim &&
-               !e.eID && !e.EActor->HasFeat(FT_MASTER_TRIP) &&
-               (e.AType == A_TRIP)) 
-             e.EActor->ProvokeAoO(e.EActor);              
-           if (e.EActor->isDead())
-             return ABORT;
-           if (e.saveDC == -1)
-             goto SkipTripSave;
-           int16 DC; DC = e.saveDC;
-           if (DC == 0) DC = e.vDmg;
-           // ww: subtract the secondary dex mod so that you only get the
-           // ranks and bonuses -- your DEX mod will count again on the
-           // reflex save
-           if (e.EVictim->HasSkill(SK_BALANCE))
-             DC -= (e.EVictim->SkillLevel(SK_BALANCE) - e.EVictim->Mod2(A_DEX)) / 2;
-           if (DC < 1 || e.EVictim->SavingThrow(REF,DC,SA_KNOCKDOWN)) { 
-             e.Resist = true; 
-             break; 
-           }
-           SkipTripSave:
-           if (e.EActor) {
-             e.EActor->Reveal(false);
-             e.EActor->MakeNoise(6);
-             }
-           if (!e.Terse)
-             e.EVictim->StatiMessage(PRONE,0,false);
-           e.EVictim->GainPermStati(PRONE,NULL,SS_ATTK);
-           /* VPrint(e,"You are knocked prone!",
-                         "The <EVictim> is knocked prone!"); */       
-           break;
-         }
-        case AD_DISA:
-          Item *wp; int16 tx,ty;
-          if (!(wp = e.EVictim->EInSlot(SL_WEAPON)))
-            break;
-          if (e.EVictim->SavingThrow(REF,e.saveDC))
-            { e.Resist = true; break; }
-          do {
-            tx = (e.EVictim->x - 1) + random(3);
-            ty = (e.EVictim->y - 1) + random(3);
-            }
-          while(e.EVictim->m->SolidAt(tx,ty)&& 
-                  (tx != e.EVictim->x || ty != e.EVictim->y));
-          Throw(EV_LOSEITEM,e.EVictim,NULL,wp);
-          wp->Remove(false); /* Paranoia */
-          wp->PlaceAt(e.EVictim->m,tx,ty);
-         break;
-        case AD_KNOC:
-          int32 i, curr;
-          curr = e.EVictim->x+e.EVictim->y*256;
-          e.EDir = e.EActor ? e.EActor->DirTo(e.EVictim) : random(8);
-          if (e.eID || !e.EVictim->SavingThrow(FORT,e.saveDC,SA_KNOCKDOWN)) {
-            for(i=0;i!=e.vDmg;i++)
-              if (ThrowDir(EV_PUSH,(Dir)e.EDir,e.EVictim,e.EActor) == ABORT)
-                {
-                  /* Later, Inflict Impact Damage? */
-                  break;
-                }
-            if (curr != e.EVictim->x+e.EVictim->y*256 && !e.Terse)
-              e.EVictim->IDPrint("You are knocked back!",
-                                 "The <Obj> is forced backward!",e.EVictim);
-            }
-         break;
-        case AD_SHAT:
-          if (e.DType == AD_SHAT && e.EVictim->isMType(MA_CONSTRUCT)) {
-            VPrint(e,"Your construct body shatters!",
-                "The <EVictim>'s construct body shatters !");
-            e.DType = AD_NORM;
-            ThrowDmg(EV_DAMAGE,e.DType,e.vDmg,"shattering",e.EActor,e.EVictim);
-            if (e.EVictim->isDead())
-              return DONE; 
-          } 
-          e.DType = AD_BLUNT; 
-        case AD_DCAY:
-          if (e.DType == AD_DCAY && e.EVictim->isMType(MA_PLANT)) {
-            VPrint(e,"You wither and decay!",
-                "The <EVictim> withers and decays!");
-            e.DType = AD_NORM;
-            ThrowDmg(EV_DAMAGE,e.DType,e.vDmg,"decay",e.EActor,e.EVictim);
-            if (e.EVictim->isDead())
-              return DONE; 
-            e.DType = AD_DCAY;
-          } 
-          // fall through!
-        case AD_RUST:
-          /* 1/4 chance of damaging: weapon, shield, armour, random 
-           * unexposed item */
-        { 
-          // ww: bugfix: if you are a wild-shaped druid and your equipment
-          // has merged with your body, it won't rust! 
-          if ((it = e.EVictim->EInSlot(SL_WEAPON)) && it->Hardness(e.DType) != -1 && !random(4))
-            (void)0;
-          if ((it = e.EVictim->EInSlot(SL_READY)) && it->Hardness(e.DType) != -1 && !random(3)) {
-            (void)0;
-          } else if ((it = e.EVictim->EInSlot(SL_ARMOUR)) && it->Hardness(e.DType) != -1 && !random(2)) {
-            (void)0;
-          } else {
-            TMonster * tm = TMON(e.EVictim->mID);
-            for(c=0,it=e.EVictim->FirstInv();it;it=e.EVictim->NextInv())
-              if (it->Hardness(e.DType) != -1 && it->GetParent() == e.EVictim){
-                bool inGoodSlot = false;
-                for (int s=0; s<SL_LAST; s++)
-                  if (it == e.EVictim->EInSlot(s) && tm->HasSlot(s))
-                    inGoodSlot = true;
-                if (inGoodSlot) 
-                  Candidates[c++] = it->myHandle;
-              }
-            if (c)
-              it = oItem(Candidates[random(c)]);
-            }
-          if (it)
-            ThrowDmg(EV_DAMAGE,e.DType,e.vDmg,NULL,e.EActor,it);
-          else
-            e.Immune = true;
-         break;
-        }
-        case AD_SOAK:
-          e.EVictim->IDPrint("You get soaked!","The <Obj> gets soaked!",e.EVictim);
-          for(c=0,it=e.EVictim->FirstInv();it;it=e.EVictim->NextInv()) {
-            bool inside = (it->GetParent() != e.EVictim);
-            int dmg = e.vDmg;
-            if (inside && it->GetParent()->isItem()) {
-              int hard = ((Item *)(it->GetParent()))->Hardness(AD_SOAK);
-              if (hard == -1) dmg /= 2;
-              else dmg -= hard; 
-              if (dmg <= 0) {
-                continue;
-              }
-            } 
-            if (it->Hardness(AD_SOAK) != -1) {
-              /* e.EVictim->IPrint(Format("Soaking %s for %d.", (const char*)(it->Name()),dmg)); */
-              ThrowDmg(EV_DAMAGE,e.DType,dmg,NULL,e.EActor,it);
-            } else if (it->Type == T_LIGHT && it->Material() != MAT_FORCE) {
-              /* average water elemental soak = 3d4, average torch
-               * age = 3000, getting soaked once should destroy your
-               * torch */
-              it->Age -= (int16)((dmg * 400) / it->Quantity); 
-              if (it->Age <= 1) {
-                IDPrint("Your <Obj2> is soaked and destroyed!",
-                    "The <Obj1>'s <Obj2> is soaked destroyed!",this,it);
-                it->Remove(true);
-                if (e.EVictim->isPlayer())
-                  ((Player *)e.EVictim)->UpdateMap = true;
-              }
-            } 
-          }
-          if (e.EVictim->isMType(MA_ELEMENTAL) && e.EVictim->isMType(MA_FIRE))
-            ThrowDmg(EV_DAMAGE,AD_NORM,e.vDmg*2,"getting soaked",e.EActor,e.EVictim);
-         break;
-        case AD_STEA:
-          ASSERT(e.EActor);
-          if (e.EVictim->SavingThrow(REF,e.saveDC,SA_THEFT)) 
-            { e.Resist = true; break; }
-          for(c=0,it=e.EVictim->FirstInv();it;it=e.EVictim->NextInv())
-            if (it != EInSlot(SL_PACK) && it != EInSlot(SL_ARMOUR) && it != EInSlot(SL_WEAPON) &&
-                  it->GetParent() == e.EVictim && it != EInSlot(SL_BRACERS) && it !=
-                  EInSlot(SL_BOOTS)) 
-              Candidates[c++] = it->myHandle;
-          if (c) {
-            it = oItem(Candidates[random(c)]);
-            if (it->Quantity > (uint32)e.vDmg) {
-                it->Quantity = it->Quantity - e.vDmg + 1;
-                it = it->TakeOne();
-                it->Quantity = e.vDmg;
-              }
-            it->Remove(false);
-            e.EActor->IPrint("You stole an <Obj>!",it);
-            e.EVictim->IPrint("Your <Obj1> <Str2> stolen!",it,
-              it->Quantity > 1 ? "were" : "was");
-            e.EActor->GainItem(it,false);
-            e.EActor->StateFlags &= ~MS_INVEN_GOOD;
-            if (e.EActor->isMonster() && e.EActor->HasMFlag(M_SKIRMISH))
-              if (!HasStati(AFRAID) && !random(2))
-                e.EActor->GainTempStati(AFRAID,NULL,10+random(10),SS_MONI,
-                                          FEAR_SKIRMISH);
-            }
-         break;
-        case AD_STUN:
-          if (e.EVictim->HasStati(STUNNED))
-            return ABORT;          
-          if (!e.EVictim->SavingThrow(FORT,e.saveDC,SA_PARA)) {
-            if (!e.Terse)
-              VPrint(e,"You are stunned!", "The <EVictim> is stunned!"); 
-            e.EVictim->GainTempStati(STUNNED,0,SS_ATTK,(int8)e.vDmg);
-            }
-          else
-            e.Resist = true;
-         break;
-        case AD_CHOK:
-          {
-           if (!e.EVictim->isMType(MA_BREATHER)) {
-             e.Immune = true; 
-             break;
-           } 
-          if (e.EVictim->isMType(MA_AIR))
-            e.vDmg *= 2;
-          e.DType = AD_NORM;
-          if (!e.Terse)
-            VPrint(e,"You choke and cannot breathe!",
-                "The <EVictim> chokes and cannot breathe!");
-          ReThrow(EV_DAMAGE,e);
-          break; 
-          } 
-        /*case AD_SGLD:
-          if (e.EVictim->SavingThrow(REF,e.saveDC,SA_THEFT)) {
-          for(c=0,it=e.EVictim->FirstInv();it;it=e.EVictim->NextInv())
-            if (it->isType(T_COIN)) 
-              Candidates[c++] = it->myHandle;
-          if (c) {
-            it = oItem(Candidates[random(c)]);
-            if (it->Quantity > e.vDmg)
-              {
-                it->Quantity = it->Quantity - e.vDmg + 1;
-                it = it->TakeOne();
-                it->Quantity = e.vDmg;
-              }
-            it->Remove(false);
-            e.EActor->IPrint("You stole an <Obj>!",it);
-            e.EVictim->IPrint("A <Obj> was stolen!",it);
-            e.EActor->GainItem(it,false);
-            e.EActor->StateFlags &= ~MS_INVEN_GOOD;
-            }
-         break;*/
-        case AD_SPE1:
-        case AD_SPE2:
-          Error("Undefined special attack damage type AD_SPE%d for monster %s vs. monster %s!",
-                  (e.DType - AD_SPE1) + 1, (const char*) e.EActor->Name(0), 
-                                           (const char*) e.EVictim->Name(0));
-          return DONE;
-        case AD_BLEE:
-          if (!e.EVictim->isMType(MA_HAS_BLOOD))
-            return ABORT;          
-          if (!e.Terse)
-            VPrint(e,"You start bleeding!", "The <EVictim> starts bleeding!");
-          // ww: "Mag" is how much bleeding damage is done each turn:
-          // here we've made it "2"
-          e.EVictim->GainTempStati(BLEEDING,NULL,e.vDmg,SS_ATTK,1,2);
-          break; 
+                                                    if (at & WG_MARMOUR)
+                                                        ;
+                                                    else if (at)
+                                                        e.vDefRoll -= 1;
+                                                    else
+                                                        e.vDefRoll -= 2;
 
-        case AD_SLEE: 
-          if (e.vDmg == 0) { 
-            e.vDmg = Dice::Roll(3,4);
-          }
-          /*
-          VPrint(e,"You are hit by sleep damage!",
-              (const char*)Format("The <EVictim> is hit by %d sleep damage!",e.vDmg));
-              */
-          e.EVictim->GainTempStati(ASLEEP,NULL,e.vDmg,SS_ENCH,SLEEP_MAGIC);
-          break; 
-        case AD_FALL:
-          if (HasAbility(CA_SLOW_FALL))
-            {
-              if (e.vDmg < AbilityLevel(CA_SLOW_FALL)*5)
-                {
-                  IPrint("You control your fall.");
-                  e.Immune = true;
-                  return DONE;
-                }
-              else
-                {
-                  IPrint("You partially control your fall.");
-                  e.vDmg -= AbilityLevel(CA_SLOW_FALL)*5;
-                  e.Resist = true;
-                }
-            }
-          if (HasSkill(SK_TUMBLE) && SkillCheck(SK_TUMBLE,20,false))
-            {
-              IPrint("You land gracefully, lessening the impact.");
-              e.vDmg /= 2;
-            }
-          else {
-            SetSilence();
-            if (!e.EVictim->HasStati(PRONE))
-              e.EVictim->GainPermStati(PRONE,NULL,SS_MISC);
-            UnsetSilence();
-            MakeNoise(10+e.vDmg*2);
-            Creature *cr;
-            for (cr=m->FCreatureAt(x,y);cr;cr=m->NCreatureAt(x,y))
-              if (cr != this)
-                {
-                  cr->GainPermStati(PRONE,NULL,SS_MISC);
-                  ThrowDmg(EV_DAMAGE,AD_NORM,e.vDmg,XPrint("having a <Obj> fall on <him:Obj2>",
-                    this, cr), this, cr);
-                  String s;
-                  s = XPrint(", killing <him:Obj>",cr);
-                  VPrint(e, "You land on an <Obj><str>! Crunch!", 
-                    "The <EVictim> lands on a <Obj><str>! Crunch!", cr, cr->isDead() ?
-                    (const char *) s : "");
-                  // soft landing :-)
-                  e.vDmg /= 2;
-                  // only land on one creature.
-                  goto SkipSplat;
-                } 
-            if (e.vDmg >= 13)
-              IPrint("Splat.");
-            SkipSplat:;
-            }
-                
-          if (HasStati(MOUNTED))
-            {
-              Creature *mount = (Creature*) GetStatiObj(MOUNTED);
-              ThrowDmg(EV_DAMAGE,AD_FALL,e.vDmg, XPrint(
-                "falling into a <Res>",m->TerrainAt(x,y)),mount,mount);
-              if (!mount->isDead())
-                ThrowVal(EV_DISMOUNT,DSM_FALL,this);
-            }            
-          e.DType = AD_NORM;
-          if (!(e.Immune || e.Resist))
-            GainTempStati(STUNNED,NULL,Dice::Roll(1,4,2),SS_MISC);
-          return ReThrow(EV_DAMAGE,e);
-        case AD_DISN:
-          xID = FIND("disintegrate");
-          ASSERT(xID);
-          ThrowEff(EV_EFFECT,xID,e.EActor ? e.EActor : e.EVictim,e.EVictim);
-         break;
-        case AD_LEGS:
-        case AD_STCK:
-        case AD_SGLD:
-        case AD_TLPT:
-        case AD_CURS:
-        case AD_WRAP:
-        case AD_WERE:
-        case AD_SUBD:
-        default:
-        	Error("Undefined attack damage-effect [%s] to [%s] from [%s]'s [%s]!",Lookup(DTypeNames,e.DType),
-                    (const char*)e.EVictim->Name(),
-                    (const char*)e.EActor->Name(),
-                    NAME(e.eID));
-          return ABORT;
-      }
-    return DONE;
+                                                    if (e.EVictim->isSmallRace() && 
+                                                        e.EVictim->GetAttr(A_SIZ) == SZ_SMALL)
+                                                        if (e.EActor->GetAttr(A_SIZ) >= SZ_MEDIUM)
+                                                            e.vDefRoll -= 1;
 
-	}
+                                                    if (e.vDef > e.vHit + 19)
+                                                        e.vDefRoll -= 1;
+
+                                                    e.vDefRoll = max(1,e.vDefRoll);
+
+                                                    e.aDmg = max(1, (e.aDmg*e.vDefRoll)/6);
+                                                    e.isDefRoll = true;
+                                                    e.strXDmg = Format(" x (%d/6)",e.vDefRoll) + e.strXDmg;
+                                                    /* People that benefit from Defensive Roll are going
+                                                    to see this message A LOT, hence it being so short
+                                                    -- avoids message spam. */
+                                                    e.EVictim->IDPrint("You roll!", "The <Obj> rolls with the hit!", e.EActor);
+                                                    e.EVictim->Exercise(A_DEX,1,EDEX_EVASION,45);
+                                                }
+CantRoll:
+
+                                                if (((!e.actIllusion) || e.EActor->isShade()) &&
+                                                    ((!e.effIllusion) || e.illFlags & IL_SHADE))
+                                                {
+                                                    int16 per, rDmg, iDmg;
+                                                    if (e.EActor->isShade())
+                                                    {
+                                                        per = e.EActor->getShadePercent();
+                                                        rDmg = (e.aDmg * per) / 100;
+                                                        iDmg = e.aDmg - rDmg;
+                                                    }
+                                                    else if (e.illFlags & IL_SHADE)
+                                                    {
+                                                        per = 0 + ((e.illFlags & IL_SHADE10) ? 10 : 0)
+                                                            + ((e.illFlags & IL_SHADE20) ? 20 : 0)
+                                                            + ((e.illFlags & IL_SHADE40) ? 40 : 0);
+                                                        rDmg = (e.aDmg * per) / 100;
+                                                        iDmg = e.aDmg - rDmg;
+                                                    }                   
+                                                    else
+                                                    { rDmg = e.aDmg; iDmg = 0; }
+
+
+                                                    if(rDmg >= e.EVictim->cHP)
+                                                    {
+                                                        if (e.EVictim->HasFeat(FT_IGNORE_WOUND))
+                                                            if (!e.EVictim->HasStati(TRIED,FT_IGNORE_WOUND))
+                                                            {
+                                                                e.EVictim->IPrint("<3>You endure a nearly-mortal stroke!<7>");
+                                                                e.EActor->IPrint("You were sure that blow should have felled "
+                                                                    "the <Obj>, but no.", e.EVictim);
+                                                                e.EVictim->GainTempStati(TRIED,NULL,-2,SS_MISC,FT_IGNORE_WOUND);
+                                                                goto WoundIgnored;
+                                                            }
+
+                                                            if (e.EVictim->cHP + e.EVictim->SumStatiMag(ILLUS_DMG) > rDmg)
+                                                                ReThrow(EV_PDAMAGE, e);
+                                                            else { 
+                                                                e.EVictim->cHP = 0;
+                                                                ReThrow(EV_DEATH, e);
+                                                                return DONE;
+                                                            }
+                                                    }
+                                                    e.EVictim->cHP -= e.aDmg;
+                                                    if (iDmg && !e.EVictim->HasStati(SLEEPING,SLEEP_PSYCH) && 
+                                                        e.EActor->isRealTo(e.EVictim))
+                                                    {
+                                                        e.aDmg = iDmg;
+                                                        ReThrow(EV_PDAMAGE, e);
+                                                        e.aDmg = rDmg;
+                                                    } 
+                                                }
+                                                else
+                                                    ReThrow(EV_PDAMAGE,e);
+
+                                                if (e.vicIllusion && !e.actIllusion)
+                                                    if (e.EVictim->isShade() && (e.EActor == e.EVictim || 
+                                                        !e.EActor || !e.EVictim->isRealTo(e.EActor)))
+                                                        if ((e.EVictim->mHP - e.EVictim->cHP) * 100 / 
+                                                            e.EVictim->mHP > e.EVictim->getShadePercent())
+                                                        {
+                                                            e.EVictim->cHP = 0;
+                                                            ReThrow(EV_DEATH, e);
+                                                            return DONE;
+                                                        } 
+
+WoundIgnored:
+
+                                                        if (HasAbility(CA_RETRIBUTIVE_STRIKE) && e.EActor && e.EActor != this)
+                                                        {
+                                                            if (HasStati(WOUNDED_BY,0,e.EActor)) {
+                                                                SetStatiMag(WOUNDED_BY,0,e.EActor,
+                                                                    GetStatiMag(WOUNDED_BY,0,e.EActor) + e.aDmg );
+                                                                SetStatiDur(WOUNDED_BY,0,e.EActor,
+                                                                    max(GetStatiDur(WOUNDED_BY,0,e.EActor) + e.aDmg*2, e.aDmg*2+10) );
+                                                            }
+                                                            else
+                                                                GainTempStati(WOUNDED_BY,e.EActor,e.aDmg*2+10,SS_MISC,0,e.aDmg,0,0);
+                                                        }
+
+                                                        if (isPlayer() && ((cHP+e.aDmg)*3 >= mHP+Attr[A_THP]))
+                                                            if (cHP*3 <= mHP+Attr[A_THP]) {
+                                                                IPrint("<12>You are gravely wounded!<7>");
+                                                                Player * pl = (Player *)this; 
+                                                                if (e.EActor) 
+                                                                    pl->AddJournalEntry(Format("You are <12>gravely wounded by %s<7>!", (const char*)e.EActor->Name(NA_A)));
+                                                                else
+                                                                    pl->AddJournalEntry(Format("You are <12>gravely wounded<7>!"));
+                                                                if (!(e.isTrap || e.isActOfGod))
+                                                                    e.EVictim->GainPermStati(CRIT_WOUNDED_BY,e.EActor,SS_MISC);
+                                                            } 
+
+                                                            if (HasStati(PARALYSIS))
+                                                                RemoveStati(PARALYSIS,-1,PARA_HYPNOTIZED);
+
+                                                            if (HasStati(ELEVATED) && !isDead())
+                                                            {
+                                                                int16 ClimbDC;
+                                                                ClimbDC = GetStatiVal(ELEVATED) == ELEV_TREE ? 10 : 20;
+                                                                ClimbDC += (e.vDmg * 40) / (mHP+GetAttr(A_THP));
+                                                                if (!SkillCheck(SK_CLIMB,ClimbDC,false))
+                                                                    ClimbFall();           
+                                                            }       
+
+                                                            if ((e.DType == AD_SLASH || e.DType == AD_PIERCE ||
+                                                                e.DType == AD_BLUNT) && HasStati(LEVITATION) && !isDead())
+                                                                ThrowDmg(EV_DAMAGE,AD_KNOC,e.vDmg / max(1,mHP/20),
+                                                                "aerial damage knockback", e.EActor, e.EVictim, e.EItem, e.EItem2);
+
+
+                                                            return DONE;
+                                    case AD_VAMP:
+                                        if (!e.EActor)
+                                        {
+                                            e.DType = AD_NORM;
+                                            return ReThrow(EV_DAMAGE,e);
+                                        }
+                                        n = cHP;
+                                        e.DType = AD_NECR;
+                                        r = ReThrow(EV_DAMAGE,e);
+                                        e.DType = AD_VAMP;
+                                        if (r != DONE)
+                                            return r;
+                                        if (cHP < n)
+                                            if (e.EActor->mHP+e.EActor->Attr[A_THP] > e.EActor->cHP) {
+                                                if (e.EActor->mHP+e.EActor->Attr[A_THP] > e.EActor->cHP + (n-cHP)) 
+                                                    e.EActor->cHP += (int16)n-cHP;
+                                                else
+                                                    e.EActor->cHP = e.EActor->mHP+e.EActor->Attr[A_THP];
+                                                DPrint(e,"Your wounds heal<Str>!", "The <EActor>'s wounds heal<Str>!",
+                                                    e.EActor->cHP == (e.EActor->mHP+e.EActor->Attr[A_THP]) ? " fully" : "");
+                                            }
+                                            return DONE;
+                                    case AD_ENGL:
+                                    case AD_SWAL:
+                                        if (!e.EActor)
+                                            return ABORT;
+                                        if (e.DType == AD_SWAL)
+                                            if (!(e.EActor->GetAttr(A_SIZ) > e.EVictim->GetAttr(A_SIZ)))
+                                                return DONE;
+                                        if (!(e.EActor->GetAttr(A_SIZ) >= e.EVictim->GetAttr(A_SIZ)))
+                                            return DONE;
+                                        if (e.EVictim->HasStati(ENGULFER))
+                                            return ABORT;
+                                        if (e.EVictim->HasStati(ENGULFED))
+                                            return ABORT;
+                                        if (e.EActor->HasStati(ENGULFER))
+                                            return ABORT;
+                                        if (e.EActor->HasStati(ENGULFED))
+                                            return ABORT;
+                                        if (e.EVictim->HasStati(MOUNT))
+                                            return ABORT;  
+                                        if (e.saveDC <= 0 || 
+                                            !e.EVictim->SavingThrow(REF,e.saveDC)) 
+                                        {
+                                            e.EVictim->DoEngulf(e.EActor);
+                                            if (e.DType == AD_ENGL)
+                                                TPrint(e,"You engulf the <EVictim>!",
+                                                "You are engulfed by the <EVictim>!",
+                                                "The <EVictim> is engulfed by the <EActor>!");
+                                            else
+                                                TPrint(e,"You swallow the <EVictim> whole!",
+                                                "You get swallowed whole!",
+                                                "The <EVictim> gets swallowed whole!");
+                                        }
+                                        else
+                                        { e.Resist = true; } 
+                                        return DONE; 
+                                    case AD_GRAB:
+                                        if (!e.EActor)
+                                            return ABORT;
+                                        if (e.EActor && e.EVictim->HasStati(GRABBED,-1,e.EActor))
+                                            return ABORT;
+                                        if (e.EActor && e.EVictim->HasStati(GRAPPLED,-1,e.EActor))
+                                            return ABORT;
+                                        if (e.saveDC <= 0 || 
+                                            !e.EVictim->SavingThrow(REF,e.saveDC,SA_GRAB)) {
+                                                e.EVictim->GainPermStati(GRABBED,   e.EActor,  SS_ATTK);
+                                                e.EActor ->GainPermStati(GRAPPLING, e.EVictim, SS_ATTK);
+                                                e.vicHeld = true;
+                                        }
+                                        else
+                                        { e.Resist = true;  } 
+                                        break;
+                                    case AD_STON:
+                                        if (e.EVictim->HasStati(STONING) || !e.EVictim->isMType(MA_LIVING)
+                                            || e.EVictim->ResistLevel(AD_STON) == -1)
+                                        { e.Immune = true; break; }
+                                        if (!e.EVictim->SavingThrow(REF,e.saveDC,SA_PETRI)) 
+                                        {
+                                            e.EVictim->StatiMessage(STONING,0,false);
+                                            e.EVictim->GainTempStati(STONING, e.EActor,  SS_ATTK, 20);
+                                        }
+                                        else
+                                            e.Resist = true;
+                                        break;
+                                    case AD_FEAR:
+                                        if (e.EVictim->HasStati(AFRAID))
+                                            return ABORT;          
+                                        if (e.AType == A_PROX)
+                                            e.saveDC += (int8)TMON(e.EVictim->tmID)->GetConst(DRAGON_FEAR_DC);
+                                        if (!e.EVictim->SavingThrow(WILL,e.saveDC,SA_FEAR)) {
+                                            if (!e.Terse)
+                                                VPrint(e,"You are terrified!", "The <EVictim> seems terrified!"); 
+                                            e.EVictim->GainTempStati(AFRAID,e.EActor,SS_ATTK,(int8)e.vDmg,FEAR_MAGIC);
+                                        }
+                                        else
+                                            e.Resist = true;
+                                        break;
+                                    case AD_BLND:
+                                        if (e.EVictim->isBlind()) {
+                                            e.Immune = true;
+                                            VPrint(e,"Being already blind, you are unaffected.",
+                                                "Being already blind, the <EVictim> is unaffected.");
+                                        } 
+                                        else if (!e.EVictim->SavingThrow(FORT,e.saveDC)) {
+                                            if (!e.Terse)
+                                                VPrint(e,"You are blinded!", "The <EVictim> is blinded!"); 
+                                            e.EVictim->GainTempStati(BLIND,e.EActor,e.vDmg, SS_ATTK);
+                                        }
+                                        else
+                                            e.Resist = true;
+                                        break;
+                                    case AD_PLYS:
+                                        if (e.EVictim->HasStati(PARALYSIS,PARA_HELD))
+                                            return ABORT; 
+                                        if (e.EVictim->UseLimitedFA())
+                                            return DONE;         
+                                        if (!e.EVictim->SavingThrow(FORT,e.saveDC,SA_PARA)) {
+                                            if (!e.Terse)
+                                                e.EVictim->StatiMessage(PARALYSIS,0,false);
+                                            e.EVictim->GainTempStati(PARALYSIS,e.EActor,e.vDmg,SS_ATTK,PARA_HELD);
+                                        }
+                                        else
+                                            e.Resist = true;
+                                        break;
+                                    case AD_STUK:
+                                        if (e.EVictim->HasStati(STUCK))
+                                            return ABORT; 
+                                        else if (e.EVictim->HasMFlag(M_AMORPH)) {
+                                            e.Immune = true;
+                                            break;
+                                        } 
+                                        if (!e.EVictim->SavingThrow(REF,e.saveDC,SA_GRAB)) {
+                                            if (!e.Terse)
+                                                e.EVictim->StatiMessage(STUCK,0,false);
+
+                                            e.EVictim->GainTempStati(STUCK,e.EActor,e.vDmg,SS_ATTK,(int16)e.EParam);
+                                        } else e.Resist = true;
+                                        break;
+                                    case AD_SLOW:
+                                        if (!e.EVictim->SavingThrow(FORT,e.saveDC,SA_PARA)) {
+                                            /* Kludge, but necessary */
+                                            xID = FIND("slow");
+                                            ASSERT(xID);
+                                            ThrowEff(EV_MAGIC_STRIKE,xID,e.EActor ? e.EActor : e.EVictim,e.EVictim);
+                                        }
+                                        else
+                                            e.Resist = true;
+                                        break;
+                                    case AD_DRMA:
+                                        if (!e.EVictim->SavingThrow(WILL,e.saveDC,SA_ENCH)) {
+                                            if (!e.Terse)
+                                                TPrint(e,"You leech away the <EVictim>'s magical energy!",
+                                                "Your magical energy is leeched away!", NULL); 
+                                            LoseMana(e.vDmg,true);
+                                        }
+                                        else
+                                            e.Resist = true;
+                                        break;
+                                    case AD_CONF:
+                                        if (e.EVictim->HasStati(CONFUSED))
+                                            return ABORT;          
+                                        if (!e.EVictim->SavingThrow(WILL,e.saveDC,SA_ENCH|SA_CONF)) {
+                                            if (!e.Terse)
+                                                VPrint(e,"Your suddenly feel disoriented!", 
+                                                "The <EVictim> staggers..."); 
+                                            e.EVictim->GainTempStati(CONFUSED,NULL,e.vDmg,SS_ATTK);
+                                        }
+                                        else
+                                            e.Resist = true;
+                                        break;
+                                    case AD_NAUS:
+                                        if (e.EVictim->HasStati(NAUSEA))
+                                            return ABORT;          
+                                        if (!e.EVictim->SavingThrow(WILL,e.saveDC,0)) {
+                                            if (!e.Terse)
+                                                VPrint(e,"Your suddenly feel nauseated!", 
+                                                "The <EVictim> retches..."); 
+                                            e.EVictim->GainTempStati(NAUSEA,NULL,e.vDmg,SS_ATTK);
+                                        }
+                                        else
+                                            e.Resist = true;
+                                        break;
+                                    case AD_EVIL:
+                                        if (e.EVictim->isMType(MA_EVIL))
+                                            break;
+                                        else if (!e.EVictim->isMType(MA_GOOD))
+                                            e.vDmg /= 2;
+                                        e.DType = AD_NORM;
+                                        if (!e.Terse)
+                                            VPrint(e,"Malevolent energies burn at your spirit!",
+                                            "Malevolent energies burn at the <EVictim>!");
+                                        ReThrow(EV_DAMAGE,e);
+                                        break; 
+                                    case AD_CHAO:
+                                        if (e.EVictim->isMType(MA_CHAOTIC))
+                                            break;
+                                        else if (!e.EVictim->isMType(MA_LAWFUL))
+                                            e.vDmg /= 2;
+                                        e.DType = AD_NORM;
+                                        if (!e.Terse)
+                                            VPrint(e,"Primordial chaos lashes at you!", 
+                                            "Primordial chaos lashes at the <EVictim>!");
+                                        ReThrow(EV_DAMAGE,e);
+                                        break;           
+                                    case AD_LAWF:
+                                        if (e.EVictim->isMType(MA_LAWFUL))
+                                            break;
+                                        else if (!e.EVictim->isMType(MA_CHAOTIC))
+                                            e.vDmg /= 2;
+                                        e.DType = AD_NORM;
+                                        if (!e.Terse)
+                                            VPrint(e,"Order's fury binds you!", 
+                                            "Order's fury binds the <EVictim>.");
+                                        ReThrow(EV_DAMAGE,e);
+                                        break;           
+                                    case AD_HOLY:
+                                        if (e.EVictim->isMType(MA_GOOD) &&
+                                            !e.EVictim->isMType(MA_UNDEAD))
+                                            break;
+                                        else if (!e.EVictim->isMType(MA_EVIL))
+                                            e.vDmg /= 2;
+                                        e.DType = AD_NORM;
+                                        if (!e.Terse)
+                                            VPrint(e,"Holy power smites you!",
+                                            "Holy power smites the <EVictim>!");
+                                        ReThrow(EV_DAMAGE,e);
+                                        break;                   
+                                    case AD_DRST:
+                                    case AD_DRDX:
+                                    case AD_DRCO:
+                                    case AD_DRIN:
+                                    case AD_DRWI:
+                                    case AD_DRCH:
+                                    case AD_DRLU:
+                                    case AD_DAST:
+                                    case AD_DADX:
+                                    case AD_DACO:
+                                    case AD_DAIN:
+                                    case AD_DAWI:
+                                    case AD_DACH:
+                                    case AD_DALU:
+                                        /* We don't necessarily know what kind of effect is *causing* the
+                                        stat drain, so we have to make some guesses based on the nature
+                                        of the attacker: an inherently evil creature that drains stats
+                                        is presumed to use inherently evil means to do so; an undead is
+                                        assumed to drain based on negative energy, and a non-undead that
+                                        bites is assumed to be using poison. */
+                                        subtype = 0;
+                                        at = e.DType >= AD_DAST ? (e.DType-AD_DAST) : (e.DType-AD_DRST);
+                                        if (at >= A_STR && at <= A_CON && e.EVictim->isMType(MA_UNDEAD)) {
+                                            /* SRD: &#151;Not subject to critical hits, nonlethal damage,
+                                            * ability drain, or energy drain. Immune to damage to its
+                                            * physical ability scores (Strength, Dexterity, and
+                                            * Constitution), as well as to fatigue and exhaustion
+                                            * effects.<br> */
+                                            e.Immune = true; break;
+                                        } 
+                                        if (e.EActor && e.EActor->isMType(MA_EVIL))
+                                            subtype |= SA_EVIL;
+                                        if (e.EActor && e.EActor->isMType(MA_UNDEAD)) {
+                                            subtype |= SA_NECRO;
+                                            if (e.EVictim->ResistLevel(AD_NECR) == -1)
+                                            { e.Immune = true; break; }
+                                        }
+                                        if (e.AType == A_BITE && e.EActor && !e.EActor->isMType(MA_UNDEAD))
+                                            subtype |= SA_POISON;
+                                        e.vDmg =  max(1,e.Dmg.Roll());
+                                        e.vDmg -= AbilityLevel(CA_STRONG_SOUL);
+
+                                        if (e.vDmg <= 0) {
+                                            VPrint(e,"The strength of your spirit turns aside the effects.",NULL);
+                                            e.vDmg = 0;
+                                            return DONE;
+                                        }
+
+                                        if (e.EVictim->SavingThrow(FORT,e.saveDC,subtype)) 
+                                        {
+                                            e.vDmg = max(1,e.vDmg/2);
+                                            e.Resist = true;
+                                        }
+
+                                        if (e.EVictim->HasStati(SUSTAIN,at))
+                                            e.vDmg = max(0,e.vDmg - e.EVictim->SumStatiMag(SUSTAIN,at));
+                                        if (!e.vDmg || Attr[at] <= 0) {
+                                            e.Immune = true;
+                                            break;
+                                        }
+                                        if ((Attr[at] - e.vDmg <= 0) /* && (at == A_STR || at == A_CON)*/)
+                                        {
+                                            if (e.EMagic) {
+                                                if (e.EActor == e.EVictim || !e.EActor)
+                                                    e.GraveText = NAME(e.eID);
+                                                else
+                                                    e.GraveText = XPrint("An <Obj>'s <Res>",e.EActor,e.eID);
+                                            }
+                                            else if (e.AType == A_TUCH && e.EActor)
+                                                e.GraveText = XPrint("A <Obj>'s Touch",e.EActor);
+                                            else if (e.EActor && e.AType == A_BITE || e.AType == A_SUCK)
+                                                e.GraveText = XPrint("A <Obj>'s Bite",e.EActor);
+                                            else if (e.EActor)
+                                                e.GraveText = e.EActor->Name(NA_A|NA_CAPS);
+                                            else 
+                                                e.GraveText = "attribute drain";
+                                            ReThrow(EV_DEATH,e);
+                                            return DONE;
+                                        }
+                                        if (e.DType >= AD_DAST) /* permadrain */
+                                            e.EVictim->GainPermStati(ADJUST_DMG,NULL,SS_ATTK,e.DType-AD_DAST,-e.vDmg);
+                                        else                    /* recoverable drain; currently identical */
+                                            e.EVictim->GainPermStati(ADJUST_DMG,NULL,SS_ATTK,e.DType-AD_DRST,-e.vDmg);
+                                        switch (at)
+                                        {
+                                        case A_STR: e.EVictim->IPrint("<4>You feel weaker.<7>"); break;
+                                        case A_DEX: e.EVictim->IPrint("<4>You feel numb.<7>"); break;
+                                        case A_CON: e.EVictim->IPrint("<4>You feel unhealthy.<7>"); break;
+                                        case A_INT: e.EVictim->IPrint("<4>Your head throbs.<7>"); break;
+                                        case A_WIS: e.EVictim->IPrint("<4>You feel dizzy.<7>"); break;
+                                        case A_CHA: e.EVictim->IPrint("<4>You feel craven.<7>"); break;
+                                        case A_LUC: e.EVictim->IPrint("<4>You feel unlucky.<7>"); break;
+                                        }
+                                        break;
+                                    case AD_DREX:
+                                        if (e.EVictim->HasStati(SUSTAIN,A_AID)) {
+                                            lv = (int8)e.EVictim->SumStatiMag(SUSTAIN,A_AID);
+                                            if (lv*3 >= e.vDmg) {
+                                                e.Immune = true;
+                                                break;
+                                            }
+                                            else
+                                                e.vDmg -= lv*3;
+                                        }
+                                        if (e.EVictim->ResistLevel(AD_NECR) == -1)
+                                        { e.Immune = true; break; }
+                                        if (e.EVictim->SavingThrow(WILL,e.saveDC,SA_NECRO))
+                                        {
+                                            e.vDmg /= 2;
+                                            e.Resist = true;
+                                        }
+                                        if (!e.Terse)
+                                            VPrint(e,"You feel a chill in your very soul!",
+                                            "The <EVictim> looks deathly pale!");
+                                        if (e.EVictim->isCharacter())
+                                            ((Character*)e.EVictim)->DrainXP(e.vDmg * 50);
+                                        else {
+                                            if (e.EVictim->HasStati(ADJUST_DMG,A_AID))
+                                                e.EVictim->GetStati(ADJUST_DMG,A_AID)->Mag -= 
+                                                e.vDmg / max(1,e.EVictim->ChallengeRating() * 5);
+                                            else
+                                                // ww: the signs were reversed here, so one hit from a
+                                                // spectre actually gave another creature a +1 neglev bonus
+                                                // ... :-) 
+                                                e.EVictim->GainPermStati(ADJUST_DMG,NULL,SS_ATTK,A_AID,
+                                                -(max(1,e.vDmg / max(1,e.EVictim->ChallengeRating() * 5))));
+                                            lv = max(1,e.EVictim->ChallengeRating());
+                                            lv += e.EVictim->SumStatiMag(ADJUST_DMG,A_AID);
+                                            if (lv <= 0)
+                                                ReThrow(EV_DEATH,e);
+                                        }
+                                        break; 
+                                    case AD_DISE:
+                                        ASSERT(e.EActor);
+                                        if (e.EVictim->ResistLevel(AD_DISE) == -1)
+                                        {
+                                            e.Immune = true;
+                                            return DONE;
+                                        }
+                                        n = 0;
+                                        for(xID = TMON(e.EActor->mID)->FirstRes(AN_DISEASE);xID;
+                                            xID = TMON(e.EActor->mID)->NextRes(AN_DISEASE))
+                                            Candidates[n++] = xID;
+                                        StatiIterNature(e.EActor,TEMPLATE)
+                                            for(xID = TMON(S->eID)->FirstRes(AN_DISEASE);xID;
+                                                xID = TMON(S->eID)->NextRes(AN_DISEASE))
+                                                Candidates[n++] = xID;
+                                        StatiIterEnd(e.EActor)
+                                            if (!n)
+                                            {
+                                                if (e.eID && TEFF(e.eID)->ef.aval == AR_DISEASE)
+                                                    xID = e.eID;
+                                                else
+                                                    return DONE; 
+                                                Error(XPrint("Creature <Res> has an AD_DISE attack, but no diseases!",e.EActor->mID));
+                                                return DONE;
+                                            }
+                                            xID = Candidates[random((int16)n)];
+                                            if (e.EVictim->HasEffStati(DISEASED,xID))
+                                                break;
+                                            if (!e.EVictim->SavingThrow(FORT,e.saveDC)) {
+                                                e.Event = EV_INFECT;
+                                                switch (TEFF(xID)->Event(e,xID)) {
+                                                case ABORT:
+                                                    return ABORT;
+                                                case DONE:
+                                                    return DONE;
+                                                }
+                                                if (!e.Terse)
+                                                    VPrint(e,"You feel unclean.", "The <EVictim> squirms!"); 
+                                                e.EVictim->GainPermStati(DISEASED,NULL,SS_ATTK, 0, 0, xID);
+                                            }
+                                            else
+                                                e.Resist = true;
+                                            break;
+                                    case AD_POIS:
+                                        ASSERT(e.EActor);
+                                        if (e.EVictim->ResistLevel(AD_TOXI) == -1)
+                                        {
+                                            e.Immune = true;
+                                            return DONE;
+                                        }
+                                        n = 0;
+                                        for(xID = TMON(e.EActor->mID)->FirstRes(AN_POISON);xID;
+                                            xID = TMON(e.EActor->mID)->NextRes(AN_POISON))
+                                            Candidates[n++] = xID;
+                                        StatiIterNature(e.EActor,TEMPLATE)
+                                            for(xID = TMON(S->eID)->FirstRes(AN_POISON);xID;
+                                                xID = TMON(S->eID)->NextRes(AN_POISON))
+                                                Candidates[n++] = xID;
+                                        StatiIterEnd(e.EActor)
+                                            if (!n)
+                                            {
+                                                if (e.eID && TEFF(e.eID)->ef.aval == AR_POISON)
+                                                    xID = e.eID;
+                                                else
+                                                    return DONE; 
+                                                /*
+                                                Error(XPrint("Creature <Res> has an AD_POIS attack for <Res>, but no poisons!",e.EActor->mID, e.EVictim->mID));
+                                                */
+                                            } else
+                                                xID = Candidates[random((int16)n)];
+                                            if (e.EVictim->HasEffStati(POISONED,xID))
+                                                break;
+                                            if (e.saveDC == 0)
+                                                e.saveDC = TEFF(xID)->ef.sval;
+                                            if (!e.EVictim->SavingThrow(FORT,e.saveDC)) {
+                                                e.Event = EV_POISON;
+                                                switch (TEFF(xID)->Event(e,xID)) {
+                                                case ABORT:
+                                                    return ABORT;
+                                                case DONE:
+                                                    return DONE;
+                                                }
+                                                if (!e.Terse)
+                                                    VPrint(e,"You've been poisoned!", "The <EVictim> staggers!"); 
+                                                e.EVictim->GainPermStati(POISONED,NULL,SS_ATTK, 0, 0, xID);
+                                            }
+                                            else
+                                                e.Resist = true;
+                                            break;
+                                    case AD_TRIP:
+                                        {
+                                            if (e.EVictim->HasStati(PRONE) || 
+                                                e.EVictim->HasMFlag(M_AMORPH) ||
+                                                (e.vicIncor && !e.actIncor && !e.isGhostTouch) ||
+                                                e.EVictim->HasMFlag(M_NOLIMBS)) {
+                                                    e.Immune = true; 
+                                                    break;
+                                            }
+                                            if (e.EActor && e.EVictim && e.EActor != e.EVictim &&
+                                                !e.eID && !e.EActor->HasFeat(FT_MASTER_TRIP) &&
+                                                (e.AType == A_TRIP)) 
+                                                e.EActor->ProvokeAoO(e.EActor);              
+                                            if (e.EActor->isDead())
+                                                return ABORT;
+                                            if (e.saveDC == -1)
+                                                goto SkipTripSave;
+                                            int16 DC; DC = e.saveDC;
+                                            if (DC == 0) DC = e.vDmg;
+                                            // ww: subtract the secondary dex mod so that you only get the
+                                            // ranks and bonuses -- your DEX mod will count again on the
+                                            // reflex save
+                                            if (e.EVictim->HasSkill(SK_BALANCE))
+                                                DC -= (e.EVictim->SkillLevel(SK_BALANCE) - e.EVictim->Mod2(A_DEX)) / 2;
+                                            if (DC < 1 || e.EVictim->SavingThrow(REF,DC,SA_KNOCKDOWN)) { 
+                                                e.Resist = true; 
+                                                break; 
+                                            }
+SkipTripSave:
+                                            if (e.EActor) {
+                                                e.EActor->Reveal(false);
+                                                e.EActor->MakeNoise(6);
+                                            }
+                                            if (!e.Terse)
+                                                e.EVictim->StatiMessage(PRONE,0,false);
+                                            e.EVictim->GainPermStati(PRONE,NULL,SS_ATTK);
+                                            /* VPrint(e,"You are knocked prone!",
+                                            "The <EVictim> is knocked prone!"); */       
+                                            break;
+                                        }
+                                    case AD_DISA:
+                                        Item *wp; int16 tx,ty;
+                                        if (!(wp = e.EVictim->EInSlot(SL_WEAPON)))
+                                            break;
+                                        if (e.EVictim->SavingThrow(REF,e.saveDC))
+                                        { e.Resist = true; break; }
+                                        do {
+                                            tx = (e.EVictim->x - 1) + random(3);
+                                            ty = (e.EVictim->y - 1) + random(3);
+                                        }
+                                        while(e.EVictim->m->SolidAt(tx,ty)&& 
+                                            (tx != e.EVictim->x || ty != e.EVictim->y));
+                                        Throw(EV_LOSEITEM,e.EVictim,NULL,wp);
+                                        wp->Remove(false); /* Paranoia */
+                                        wp->PlaceAt(e.EVictim->m,tx,ty);
+                                        break;
+                                    case AD_KNOC:
+                                        int32 i, curr;
+                                        curr = e.EVictim->x+e.EVictim->y*256;
+                                        e.EDir = e.EActor ? e.EActor->DirTo(e.EVictim) : random(8);
+                                        if (e.eID || !e.EVictim->SavingThrow(FORT,e.saveDC,SA_KNOCKDOWN)) {
+                                            for(i=0;i!=e.vDmg;i++)
+                                                if (ThrowDir(EV_PUSH,(Dir)e.EDir,e.EVictim,e.EActor) == ABORT)
+                                                {
+                                                    /* Later, Inflict Impact Damage? */
+                                                    break;
+                                                }
+                                                if (curr != e.EVictim->x+e.EVictim->y*256 && !e.Terse)
+                                                    e.EVictim->IDPrint("You are knocked back!",
+                                                    "The <Obj> is forced backward!",e.EVictim);
+                                        }
+                                        break;
+                                    case AD_SHAT:
+                                        if (e.DType == AD_SHAT && e.EVictim->isMType(MA_CONSTRUCT)) {
+                                            VPrint(e,"Your construct body shatters!",
+                                                "The <EVictim>'s construct body shatters !");
+                                            e.DType = AD_NORM;
+                                            ThrowDmg(EV_DAMAGE,e.DType,e.vDmg,"shattering",e.EActor,e.EVictim);
+                                            if (e.EVictim->isDead())
+                                                return DONE; 
+                                        } 
+                                        e.DType = AD_BLUNT; 
+                                    case AD_DCAY:
+                                        if (e.DType == AD_DCAY && e.EVictim->isMType(MA_PLANT)) {
+                                            VPrint(e,"You wither and decay!",
+                                                "The <EVictim> withers and decays!");
+                                            e.DType = AD_NORM;
+                                            ThrowDmg(EV_DAMAGE,e.DType,e.vDmg,"decay",e.EActor,e.EVictim);
+                                            if (e.EVictim->isDead())
+                                                return DONE; 
+                                            e.DType = AD_DCAY;
+                                        } 
+                                        // fall through!
+                                    case AD_RUST:
+                                        /* 1/4 chance of damaging: weapon, shield, armour, random 
+                                        * unexposed item */
+                                        { 
+                                            // ww: bugfix: if you are a wild-shaped druid and your equipment
+                                            // has merged with your body, it won't rust! 
+                                            if ((it = e.EVictim->EInSlot(SL_WEAPON)) && it->Hardness(e.DType) != -1 && !random(4))
+                                                (void)0;
+                                            if ((it = e.EVictim->EInSlot(SL_READY)) && it->Hardness(e.DType) != -1 && !random(3)) {
+                                                (void)0;
+                                            } else if ((it = e.EVictim->EInSlot(SL_ARMOUR)) && it->Hardness(e.DType) != -1 && !random(2)) {
+                                                (void)0;
+                                            } else {
+                                                TMonster * tm = TMON(e.EVictim->mID);
+                                                for(c=0,it=e.EVictim->FirstInv();it;it=e.EVictim->NextInv())
+                                                    if (it->Hardness(e.DType) != -1 && it->GetParent() == e.EVictim){
+                                                        bool inGoodSlot = false;
+                                                        for (int s=0; s<SL_LAST; s++)
+                                                            if (it == e.EVictim->EInSlot(s) && tm->HasSlot(s))
+                                                                inGoodSlot = true;
+                                                        if (inGoodSlot) 
+                                                            Candidates[c++] = it->myHandle;
+                                                    }
+                                                    if (c)
+                                                        it = oItem(Candidates[random(c)]);
+                                            }
+                                            if (it)
+                                                ThrowDmg(EV_DAMAGE,e.DType,e.vDmg,NULL,e.EActor,it);
+                                            else
+                                                e.Immune = true;
+                                            break;
+                                        }
+                                    case AD_SOAK:
+                                        e.EVictim->IDPrint("You get soaked!","The <Obj> gets soaked!",e.EVictim);
+                                        for(c=0,it=e.EVictim->FirstInv();it;it=e.EVictim->NextInv()) {
+                                            bool inside = (it->GetParent() != e.EVictim);
+                                            int dmg = e.vDmg;
+                                            if (inside && it->GetParent()->isItem()) {
+                                                int hard = ((Item *)(it->GetParent()))->Hardness(AD_SOAK);
+                                                if (hard == -1) dmg /= 2;
+                                                else dmg -= hard; 
+                                                if (dmg <= 0) {
+                                                    continue;
+                                                }
+                                            } 
+                                            if (it->Hardness(AD_SOAK) != -1) {
+                                                /* e.EVictim->IPrint(Format("Soaking %s for %d.", (const char*)(it->Name()),dmg)); */
+                                                ThrowDmg(EV_DAMAGE,e.DType,dmg,NULL,e.EActor,it);
+                                            } else if (it->Type == T_LIGHT && it->Material() != MAT_FORCE) {
+                                                /* average water elemental soak = 3d4, average torch
+                                                * age = 3000, getting soaked once should destroy your
+                                                * torch */
+                                                it->Age -= (int16)((dmg * 400) / it->Quantity); 
+                                                if (it->Age <= 1) {
+                                                    IDPrint("Your <Obj2> is soaked and destroyed!",
+                                                        "The <Obj1>'s <Obj2> is soaked destroyed!",this,it);
+                                                    it->Remove(true);
+                                                    if (e.EVictim->isPlayer())
+                                                        ((Player *)e.EVictim)->UpdateMap = true;
+                                                }
+                                            } 
+                                        }
+                                        if (e.EVictim->isMType(MA_ELEMENTAL) && e.EVictim->isMType(MA_FIRE))
+                                            ThrowDmg(EV_DAMAGE,AD_NORM,e.vDmg*2,"getting soaked",e.EActor,e.EVictim);
+                                        break;
+                                    case AD_STEA:
+                                        ASSERT(e.EActor);
+                                        if (e.EVictim->SavingThrow(REF,e.saveDC,SA_THEFT)) 
+                                        { e.Resist = true; break; }
+                                        for(c=0,it=e.EVictim->FirstInv();it;it=e.EVictim->NextInv())
+                                            if (it != EInSlot(SL_PACK) && it != EInSlot(SL_ARMOUR) && it != EInSlot(SL_WEAPON) &&
+                                                it->GetParent() == e.EVictim && it != EInSlot(SL_BRACERS) && it !=
+                                                EInSlot(SL_BOOTS)) 
+                                                Candidates[c++] = it->myHandle;
+                                        if (c) {
+                                            it = oItem(Candidates[random(c)]);
+                                            if (it->Quantity > (uint32)e.vDmg) {
+                                                it->Quantity = it->Quantity - e.vDmg + 1;
+                                                it = it->TakeOne();
+                                                it->Quantity = e.vDmg;
+                                            }
+                                            it->Remove(false);
+                                            e.EActor->IPrint("You stole an <Obj>!",it);
+                                            e.EVictim->IPrint("Your <Obj1> <Str2> stolen!",it,
+                                                it->Quantity > 1 ? "were" : "was");
+                                            e.EActor->GainItem(it,false);
+                                            e.EActor->StateFlags &= ~MS_INVEN_GOOD;
+                                            if (e.EActor->isMonster() && e.EActor->HasMFlag(M_SKIRMISH))
+                                                if (!HasStati(AFRAID) && !random(2))
+                                                    e.EActor->GainTempStati(AFRAID,NULL,10+random(10),SS_MONI,
+                                                    FEAR_SKIRMISH);
+                                        }
+                                        break;
+                                    case AD_STUN:
+                                        if (e.EVictim->HasStati(STUNNED))
+                                            return ABORT;          
+                                        if (!e.EVictim->SavingThrow(FORT,e.saveDC,SA_PARA)) {
+                                            if (!e.Terse)
+                                                VPrint(e,"You are stunned!", "The <EVictim> is stunned!"); 
+                                            e.EVictim->GainTempStati(STUNNED,0,SS_ATTK,(int8)e.vDmg);
+                                        }
+                                        else
+                                            e.Resist = true;
+                                        break;
+                                    case AD_CHOK:
+                                        {
+                                            if (!e.EVictim->isMType(MA_BREATHER)) {
+                                                e.Immune = true; 
+                                                break;
+                                            } 
+                                            if (e.EVictim->isMType(MA_AIR))
+                                                e.vDmg *= 2;
+                                            e.DType = AD_NORM;
+                                            if (!e.Terse)
+                                                VPrint(e,"You choke and cannot breathe!",
+                                                "The <EVictim> chokes and cannot breathe!");
+                                            ReThrow(EV_DAMAGE,e);
+                                            break; 
+                                        } 
+                                        /*case AD_SGLD:
+                                        if (e.EVictim->SavingThrow(REF,e.saveDC,SA_THEFT)) {
+                                        for(c=0,it=e.EVictim->FirstInv();it;it=e.EVictim->NextInv())
+                                        if (it->isType(T_COIN)) 
+                                        Candidates[c++] = it->myHandle;
+                                        if (c) {
+                                        it = oItem(Candidates[random(c)]);
+                                        if (it->Quantity > e.vDmg)
+                                        {
+                                        it->Quantity = it->Quantity - e.vDmg + 1;
+                                        it = it->TakeOne();
+                                        it->Quantity = e.vDmg;
+                                        }
+                                        it->Remove(false);
+                                        e.EActor->IPrint("You stole an <Obj>!",it);
+                                        e.EVictim->IPrint("A <Obj> was stolen!",it);
+                                        e.EActor->GainItem(it,false);
+                                        e.EActor->StateFlags &= ~MS_INVEN_GOOD;
+                                        }
+                                        break;*/
+                                    case AD_SPE1:
+                                    case AD_SPE2:
+                                        Error("Undefined special attack damage type AD_SPE%d for monster %s vs. monster %s!",
+                                            (e.DType - AD_SPE1) + 1, (const char*) e.EActor->Name(0), 
+                                            (const char*) e.EVictim->Name(0));
+                                        return DONE;
+                                    case AD_BLEE:
+                                        if (!e.EVictim->isMType(MA_HAS_BLOOD))
+                                            return ABORT;          
+                                        if (!e.Terse)
+                                            VPrint(e,"You start bleeding!", "The <EVictim> starts bleeding!");
+                                        // ww: "Mag" is how much bleeding damage is done each turn:
+                                        // here we've made it "2"
+                                        e.EVictim->GainTempStati(BLEEDING,NULL,e.vDmg,SS_ATTK,1,2);
+                                        break; 
+
+                                    case AD_SLEE: 
+                                        if (e.vDmg == 0) { 
+                                            e.vDmg = Dice::Roll(3,4);
+                                        }
+                                        /*
+                                        VPrint(e,"You are hit by sleep damage!",
+                                        (const char*)Format("The <EVictim> is hit by %d sleep damage!",e.vDmg));
+                                        */
+                                        e.EVictim->GainTempStati(ASLEEP,NULL,e.vDmg,SS_ENCH,SLEEP_MAGIC);
+                                        break; 
+                                    case AD_FALL:
+                                        if (HasAbility(CA_SLOW_FALL))
+                                        {
+                                            if (e.vDmg < AbilityLevel(CA_SLOW_FALL)*5)
+                                            {
+                                                IPrint("You control your fall.");
+                                                e.Immune = true;
+                                                return DONE;
+                                            }
+                                            else
+                                            {
+                                                IPrint("You partially control your fall.");
+                                                e.vDmg -= AbilityLevel(CA_SLOW_FALL)*5;
+                                                e.Resist = true;
+                                            }
+                                        }
+                                        if (HasSkill(SK_TUMBLE) && SkillCheck(SK_TUMBLE,20,false))
+                                        {
+                                            IPrint("You land gracefully, lessening the impact.");
+                                            e.vDmg /= 2;
+                                        }
+                                        else {
+                                            SetSilence();
+                                            if (!e.EVictim->HasStati(PRONE))
+                                                e.EVictim->GainPermStati(PRONE,NULL,SS_MISC);
+                                            UnsetSilence();
+                                            MakeNoise(10+e.vDmg*2);
+                                            Creature *cr;
+                                            for (cr=m->FCreatureAt(x,y);cr;cr=m->NCreatureAt(x,y))
+                                                if (cr != this)
+                                                {
+                                                    cr->GainPermStati(PRONE,NULL,SS_MISC);
+                                                    ThrowDmg(EV_DAMAGE,AD_NORM,e.vDmg,XPrint("having a <Obj> fall on <him:Obj2>",
+                                                        this, cr), this, cr);
+                                                    String s;
+                                                    s = XPrint(", killing <him:Obj>",cr);
+                                                    VPrint(e, "You land on an <Obj><str>! Crunch!", 
+                                                        "The <EVictim> lands on a <Obj><str>! Crunch!", cr, cr->isDead() ?
+                                                        (const char *) s : "");
+                                                    // soft landing :-)
+                                                    e.vDmg /= 2;
+                                                    // only land on one creature.
+                                                    goto SkipSplat;
+                                                } 
+                                                if (e.vDmg >= 13)
+                                                    IPrint("Splat.");
+SkipSplat:;
+                                        }
+
+                                        if (HasStati(MOUNTED))
+                                        {
+                                            Creature *mount = (Creature*) GetStatiObj(MOUNTED);
+                                            ThrowDmg(EV_DAMAGE,AD_FALL,e.vDmg, XPrint(
+                                                "falling into a <Res>",m->TerrainAt(x,y)),mount,mount);
+                                            if (!mount->isDead())
+                                                ThrowVal(EV_DISMOUNT,DSM_FALL,this);
+                                        }            
+                                        e.DType = AD_NORM;
+                                        if (!(e.Immune || e.Resist))
+                                            GainTempStati(STUNNED,NULL,Dice::Roll(1,4,2),SS_MISC);
+                                        return ReThrow(EV_DAMAGE,e);
+                                    case AD_DISN:
+                                        xID = FIND("disintegrate");
+                                        ASSERT(xID);
+                                        ThrowEff(EV_EFFECT,xID,e.EActor ? e.EActor : e.EVictim,e.EVictim);
+                                        break;
+                                    case AD_LEGS:
+                                    case AD_STCK:
+                                    case AD_SGLD:
+                                    case AD_TLPT:
+                                    case AD_CURS:
+                                    case AD_WRAP:
+                                    case AD_WERE:
+                                    case AD_SUBD:
+                                    default:
+                                        Error("Undefined attack damage-effect [%s] to [%s] from [%s]'s [%s]!",Lookup(DTypeNames,e.DType),
+                                            (const char*)e.EVictim->Name(),
+                                            (const char*)e.EActor->Name(),
+                                            NAME(e.eID));
+                                        return ABORT;
+                                    }
+                                    return DONE;
+}
 
 EvReturn Creature::PDamage(EventInfo &e)
   {
