@@ -2985,24 +2985,23 @@ ChooseExotic:
     }
 }
 
-void Player::GainAbility(int16 ab,uint32 pa, rID sourceID,int16 statiSource)
-{
-    int16 st; const char* MTypePrompt;
+void Player::GainAbility(int16 ab, uint32 pa, rID sourceID, int16 statiSource) {
+    int16 st;
+    const char* MTypePrompt;
     /* New spell levels -- the caster level at which a player
     receives access to a new level of spells. */
-    static int16 NSL[] = { 0, 1, 0, 2, 0, 3, 0, 4, 0, 5, 0,
-        0, 6, 0, 7, 0, 8, 0, 9, 0, 0 };
+    static int16 NSL[] = { 0, 1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 0, 6, 0, 7, 0, 8, 0, 9, 0, 0 };
     String desc, category;
-
     int16 i,j;
 
     if (ab != CA_SMITE)
         pa = max(pa,1);
 
-    switch (ab)
-    {
+    switch (ab) {
     case CA_AURA_OF_VALOUR:
-        Map *om; int16 ox,oy;
+        Map *om;
+        int16 ox,oy;
+
         Abilities[ab] += (uint8)pa;
         /* Refresh the field */
         om = m; ox = x; oy = y;
@@ -3011,7 +3010,7 @@ void Player::GainAbility(int16 ab,uint32 pa, rID sourceID,int16 statiSource)
         break;
     case CA_SPELLCASTING:
         Abilities[ab] += (uint8)pa;
-        for(i=0;i!=9;i++) {
+        for(i=0; i!=9; i++) {
             if (SpellTable[Abilities[ab]][i] > SpellSlots[i])
                 SpellSlots[i]++;
         }
@@ -3026,17 +3025,16 @@ void Player::GainAbility(int16 ab,uint32 pa, rID sourceID,int16 statiSource)
         ASSERT(GodID)
         StatiIterNature(this,HAS_DOMAIN)
             TDomain *td = TDOM(S->eID);
-        if (td->Spells[NSL[Abilities[ab]]-1])
-            Spells[theGame->SpellNum(td->Spells[NSL[Abilities[ab]]-1])] 
-        |= SP_DOMAIN | SP_DIVINE | SP_KNOWN;
+            if (td->Spells[NSL[Abilities[ab]]-1])
+                Spells[theGame->SpellNum(td->Spells[NSL[Abilities[ab]]-1])] |= SP_DOMAIN | SP_DIVINE | SP_KNOWN;
         StatiIterEnd(this)
-            /* Gain the Perks */
-            if (RES(sourceID)->Type == T_TDOMAIN)
-                Error("Some idiot put CA_DOMAINS as a domain special ability!");
+        /* Gain the Perks */
+        if (RES(sourceID)->Type == T_TDOMAIN)
+            Error("Some idiot put CA_DOMAINS as a domain special ability!");
         StatiIterNature(this,HAS_DOMAIN)
             AddAbilities(S->eID,Abilities[CA_DOMAINS]);
         StatiIterEnd(this)
-            break;
+        break;
     case CA_INNATE_SPELL:
         Abilities[ab] = 1;
         i = theGame->SpellNum(pa);
@@ -3049,34 +3047,34 @@ void Player::GainAbility(int16 ab,uint32 pa, rID sourceID,int16 statiSource)
         break; 
     case CA_TATTOOS:
         {
-            bool found; int16 i, j; rID tatID;
-            for (i=0;i!=theGame->LastSpell();i++)
-            {
+            bool found;
+            int16 i, j;
+            rID tatID;
+
+            for (i = 0;i != theGame->LastSpell(); i++) {
                 tatID = theGame->SpellID(i);
                 if (!TEFF(tatID)->HasSource(AI_TATTOO))
                     continue;
                 if (TEFF(tatID)->PEvent(EV_PREREQ,this,tatID) == ABORT)
                     continue;
-                for (j=0;j!=10;j++)
+                for (j = 0; j != 10; j++)
                     if (Tattoos[j] == tatID)
                         goto SkipThisOne;
                 found = true;
                 MyTerm->LOption(NAME(tatID),tatID, TEFF(tatID)->Describe(this));
 SkipThisOne:;
             }
-            if (!found)
-            {
-                IPrint("Unfortunately, there are no remaining tattoos that "
-                    "you are eligable to take, so you do not gain a new tattoo "
-                    "this level.");
+            if (!found) {
+                IPrint("Unfortunately, there are no remaining tattoos that you are eligable to take, so you do not gain a new tattoo this level.");
                 break;
             }
-            tatID = MyTerm->LMenu(MENU_2COLS|MENU_SORTED|MENU_BORDER|MENU_DESC,
-                "Choose a new Mystic Tattoo:");
+            tatID = MyTerm->LMenu(MENU_2COLS|MENU_SORTED|MENU_BORDER|MENU_DESC, "Choose a new Mystic Tattoo:");
             ASSERT(tatID);
-            for (j=0;j!=10;j++)
-                if (!Tattoos[j])
-                { Tattoos[j] = tatID; break; }
+            for (j =0 ; j != 10; j++)
+                if (!Tattoos[j]) {
+                    Tattoos[j] = tatID;
+                    break;
+                }
         }
         break;      
     case CA_FAV_ENEMY:
@@ -3107,113 +3105,106 @@ SkipThisOne:;
 DoCAStati:
         Abilities[ab] = 1;
         StatiIterNature(this,st)
-            if ((S->Source == statiSource) && (!(pa & 0x0000FFFF) || 
-                (S->Val == (pa & 0x0000FFFF)) ||
-                (S->CLev == (pa - MA_CHOICE1 + 1)))) {
-                    if (pa & 0xFFFF0000)
-                        S->Mag += (pa >> 16);
-                    else
-                        S->Mag++;
-                    StatiIterBreakout(this,return)
-            }
-            StatiIterEnd(this)
-                if (pa >= MA_CHOICE1 && pa <= MA_CHOICE5)
-                {
-                    // ww: let's restructure this a bit, because RangerEnemies
-                    // falls out of sync with what's really there ...
-                    for (i=0; FavEnemies[i]; i++) {
-
-                        /*if (i == MA_MISC_OUTSIDER || 
-                        i == MA_NATIVE ||
-                        i == MA_OUTSIDER ||
-                        i == MA_HUMANOID ||
-                        i == MA_NLIVING ||
-                        i == MA_ANIMAL ||
-                        i == MA_EARTH_ELEM ||
-                        i == MA_AIR_ELEM ||
-                        i == MA_FIRE_ELEM ||
-                        i == MA_WATER_ELEM ||
-                        i == MA_JELLY || // ww: covered by ooze = pudding + jelly
-                        i == MA_ELEMENTAL ||
-                        // i == MA_ADVENTURER ||
-                        (i >= MA_FORCE_D12 && i <=  MA_FORCE_D4))
-                        continue;      */
-                        desc = "";
-                        category = "";
-                        int count_in_this_ma = 0; 
-
-                        desc += -EMERALD;
-                        for (j=1;j!=12;j++)
-                        {
-                            if (j != 1)
-                                desc += "/";
-                            desc += Format("%+d",CalcFEBonus(FavEnemies[i],j));
-                        }
-                        desc += "\n";
-                        desc += -GREY;
-
-
-                        for (int modIdx = 0; modIdx < 1; modIdx++) {
-                            Module *mod = theGame->Modules[modIdx];
-                            for (int idx = 0; idx < mod->szMon; idx++) { 
-                                rID _mID = mod->MonsterID(idx);
-                                if (!(mod->QMon[idx].isMType(_mID,FavEnemies[i])))
-                                    continue;
-                                if (mod->QMon[idx].HasFlag(M_NOGEN))
-                                    continue;
-
-                                int8 color = - (mod->QMon[idx].Image >> 8);
-                                if (color == 0) color = -SHADOW;
-                                desc += Format("%c%s (%c%c%c CR %d). ",-7,
-                                    (const char*)Capitalize(NAME(_mID)),
-                                    color,
-                                    (mod->QMon[idx].Image & 0xff),
-                                    -7,
-                                    mod->QMon[idx].CR);
-                                count_in_this_ma++;
-                            }
-                        } 
-                        if (count_in_this_ma) {
-                            const char *Rarities[] = { "",
-                                "Common", "Uncommon", "Rare", "Very Rare", "Obscure" };
-                            for (j=0;MonGroupRarities[j];j+=2) 
-                                if (MonGroupRarities[j] == FavEnemies[i]) {
-                                    category = Format("%s [%s]", (const char*)
-                                        Pluralize(Lookup(MTypeNames,FavEnemies[i])),
-                                        Rarities[MonGroupRarities[j+1]]);
-                                    goto Found;
-                                }
-                                Error("Favoured Enemy MA_TYPE not found in MonGroupRarities!");
-                                continue;
-Found: 
-                                MyTerm->LOption(category,FavEnemies[i],desc);
-                        }
-                    } 
-                    j = (int16)MyTerm->LMenu(MENU_SORTED|MENU_2COLS|MENU_DESC|MENU_BORDER,MTypePrompt);
-#if 0
-                    do { 
-                        j = MyTerm->MonsterTypePrompt(MTypePrompt,10,50);
-                    } 
-                    while (j <= 0);
-#endif
-                }
+            if ((S->Source == statiSource) && (!(pa & 0x0000FFFF) || (S->Val == (pa & 0x0000FFFF)) || (S->CLev == (pa - MA_CHOICE1 + 1)))) {
+                if (pa & 0xFFFF0000)
+                    S->Mag += (pa >> 16);
                 else
-                    j = (int16)pa;                                                      
-            /* was sourceID */
-            /* ww: this looks a little wrong to me ... 
-            * The source isn't kept correctly, yada yada. 
-            GainPermStati(st,NULL,statiSource,j,
-            (pa & 0xFFFF0000) ? (pa >> 16) : 1,0);
-            */
-            if (pa >= MA_CHOICE1 && pa <= MA_CHOICE5)
-                GainPermStati(st,NULL,(int8)statiSource,j,
-                (pa & 0xFFFF0000) ? (pa >> 16) : 1,sourceID,
-                (int8)(pa - MA_CHOICE1 + 1));
-            else
-                GainPermStati(st,NULL,(int8)statiSource,j,
-                (pa & 0xFFFF0000) ? (pa >> 16) : 1,sourceID,0);
-            // GetStati(st,j)->Duration = (pa & 0xFFFF);
-            break;
+                    S->Mag++;
+                StatiIterBreakout(this,return)
+            }
+        StatiIterEnd(this)
+
+        if (pa >= MA_CHOICE1 && pa <= MA_CHOICE5) {
+            // ww: let's restructure this a bit, because RangerEnemies
+            // falls out of sync with what's really there ...
+            for (i=0; FavEnemies[i]; i++) {
+                /*if (i == MA_MISC_OUTSIDER || 
+                i == MA_NATIVE ||
+                i == MA_OUTSIDER ||
+                i == MA_HUMANOID ||
+                i == MA_NLIVING ||
+                i == MA_ANIMAL ||
+                i == MA_EARTH_ELEM ||
+                i == MA_AIR_ELEM ||
+                i == MA_FIRE_ELEM ||
+                i == MA_WATER_ELEM ||
+                i == MA_JELLY || // ww: covered by ooze = pudding + jelly
+                i == MA_ELEMENTAL ||
+                // i == MA_ADVENTURER ||
+                (i >= MA_FORCE_D12 && i <=  MA_FORCE_D4))
+                continue;      */
+                desc = "";
+                category = "";
+                int count_in_this_ma = 0; 
+
+                desc += -EMERALD;
+                for (j=1;j!=12;j++) {
+                    if (j != 1)
+                        desc += "/";
+                    desc += Format("%+d",CalcFEBonus(FavEnemies[i],j));
+                }
+                desc += "\n";
+                desc += -GREY;
+
+                for (int modIdx = 0; modIdx < 1; modIdx++) {
+                    Module *mod = theGame->Modules[modIdx];
+                    for (int idx = 0; idx < mod->szMon; idx++) { 
+                        rID _mID = mod->MonsterID(idx);
+                        if (!(mod->QMon[idx].isMType(_mID,FavEnemies[i])))
+                            continue;
+                        if (mod->QMon[idx].HasFlag(M_NOGEN))
+                            continue;
+
+                        int8 color = - (mod->QMon[idx].Image >> 8);
+                        if (color == 0) color = -SHADOW;
+                        desc += Format("%c%s (%c%c%c CR %d). ",-7,
+                            (const char*)Capitalize(NAME(_mID)),
+                            color,
+                            (mod->QMon[idx].Image & 0xff),
+                            -7,
+                            mod->QMon[idx].CR);
+                        count_in_this_ma++;
+                    }
+                } 
+                if (count_in_this_ma) {
+                    const char *Rarities[] = { "", "Common", "Uncommon", "Rare", "Very Rare", "Obscure" };
+                    for (j=0;MonGroupRarities[j];j+=2) 
+                        if (MonGroupRarities[j] == FavEnemies[i]) {
+                            category = Format("%s [%s]", (const char*)
+                                Pluralize(Lookup(MTypeNames,FavEnemies[i])),
+                                Rarities[MonGroupRarities[j+1]]);
+                            goto Found;
+                        }
+                    Error("Favoured Enemy MA_TYPE not found in MonGroupRarities!");
+                    continue;
+Found: 
+                    MyTerm->LOption(category,FavEnemies[i],desc);
+                }
+            } 
+            j = (int16)MyTerm->LMenu(MENU_SORTED|MENU_2COLS|MENU_DESC|MENU_BORDER,MTypePrompt);
+#if 0
+            do { 
+                j = MyTerm->MonsterTypePrompt(MTypePrompt,10,50);
+            } 
+            while (j <= 0);
+#endif
+        } else
+            j = (int16)pa;                                                      
+        /* was sourceID */
+        /* ww: this looks a little wrong to me ... 
+        * The source isn't kept correctly, yada yada. 
+        GainPermStati(st,NULL,statiSource,j,
+        (pa & 0xFFFF0000) ? (pa >> 16) : 1,0);
+        */
+        if (pa >= MA_CHOICE1 && pa <= MA_CHOICE5)
+            GainPermStati(st,NULL,(int8)statiSource,j,
+            (pa & 0xFFFF0000) ? (pa >> 16) : 1,sourceID,
+            (int8)(pa - MA_CHOICE1 + 1));
+        else
+            GainPermStati(st,NULL,(int8)statiSource,j,
+            (pa & 0xFFFF0000) ? (pa >> 16) : 1,sourceID,0);
+        // GetStati(st,j)->Duration = (pa & 0xFFFF);
+        break;
     case CA_SPECIALIST:
         if (!Abilities[ab]) {
             for(i=0;i!=9;i++) {
@@ -3234,17 +3225,15 @@ Found:
         break;    
     case CA_UNCANNY_DODGE:
         Abilities[ab] += (uint8)pa;
-        if (Abilities[ab] >= 6 && (Abilities[ab] % 3 == 0))
-        {
+        if (Abilities[ab] >= 6 && (Abilities[ab] % 3 == 0)) {
             StatiIterNature(this,SAVE_BONUS)
                 if (S->Val == SN_TRAPS)
-                    if (S->Source == SS_CLAS)
-                    {
+                    if (S->Source == SS_CLAS) {
                         S->Mag++;
                         StatiIterBreakout(this,goto DoneTrapBonus)         
                     }
-                    StatiIterEnd(this)
-                        GainPermStati(SAVE_BONUS,NULL,(int8)statiSource,SN_TRAPS,1);
+            StatiIterEnd(this)
+            GainPermStati(SAVE_BONUS,NULL,(int8)statiSource,SN_TRAPS,1);
 DoneTrapBonus:;
         }
         break;
@@ -3261,8 +3250,7 @@ DoneTrapBonus:;
     }
 }
 
-void Character::UpdateTattoos()
-{
+void Character::UpdateTattoos() {
     int16 i, ocHP; EventInfo e;
 
     if (!Tattoos[0])
