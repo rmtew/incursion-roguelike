@@ -1759,27 +1759,24 @@ void Player::ChooseDomains()
     }
 }
 
-
-void Character::AddAbilities(rID resID,int16 Lev)
-{
+void Character::AddAbilities(rID resID,int16 Lev) {
     Annotation *a; int16 i, ss;
     Resource *r = RES(resID);
-    /* No FAnnot / NAnnot here, because it can be called recursively
-    when processing Domains. */
-    for(a=r->Annot(r->AnHead);a;a=r->Annot(a->Next)) {
+    /* No FAnnot / NAnnot here, because it can be called recursively when processing Domains. */
+    for (a = r->Annot(r->AnHead); a; a = r->Annot(a->Next)) {
         if (a->AnType == AN_ABILITY)
-            for(i=0;i!=4;i++)
+            for (i = 0; i != 4; i++)
                 if (a->u.ab[i].AbType) {
                     if (a->u.ab[i].Lev2 == 0) {
                         if (a->u.ab[i].Lev1 != Lev)
                             continue;
-                    }
-                    else {
+                    } else {
                         if (a->u.ab[i].Lev1 > Lev)
                             continue;
                         if ((Lev-a->u.ab[i].Lev1) % a->u.ab[i].Lev2)
                             continue;
                     }
+
                     if (r->Type == T_TDOMAIN)
                         ss = SS_DOMA; 
                     else if (r->Type == T_TRACE)
@@ -1788,8 +1785,8 @@ void Character::AddAbilities(rID resID,int16 Lev)
                         ss = SS_BLES;
                     else
                         ss = SS_CLAS; 
-                    switch (a->u.ab[i].AbType)
-                    {
+
+                    switch (a->u.ab[i].AbType) {
                     case AB_ABILITY:
                         GainAbility(a->u.ab[i].Ability,a->u.ab[i].Param,resID,ss);
                         break;
@@ -1799,26 +1796,25 @@ void Character::AddAbilities(rID resID,int16 Lev)
                     case AB_STATI:
                         StatiIterNature(this,a->u.ab[i].Ability)
                             if (S->Val == (a->u.ab[i].Param & 0xFFFF))
-                                if (S->Source == ss && (a->u.ab[i].Ability !=
-                                    SPELL_ACCESS || S->eID == resID)) 
-                                {
+                                if (S->Source == ss && (a->u.ab[i].Ability != SPELL_ACCESS || S->eID == resID)) {
                                     if (!(a->u.ab[i].Param & 0xFFFF0000))
                                         S->Mag++;
                                     else
                                         S->Mag += a->u.ab[i].Param >> 16;
                                     StatiIterBreakout(this,goto DoneStati)         
                                 }
-                                StatiIterEnd(this)
-                                    GainPermStati(
-                                    (int16)a->u.ab[i].Ability, /* n */
-                                    NULL, /* Thing */
-                                    (int8)ss, /* Cause */
-                                    a->u.ab[i].Param & 0xFFFF, /* Val */
-                                    a->u.ab[i].Param & 0xFFFF0000 ? 
-                                    a->u.ab[i].Param >> 16 : 0, /* Mag */
-                                    resID /* eID */);
-DoneStati:;
-                                break;
+                        StatiIterEnd(this)
+
+                        GainPermStati(
+                            (int16)a->u.ab[i].Ability, /* n */
+                            NULL, /* Thing */
+                            (int8)ss, /* Cause */
+                            a->u.ab[i].Param & 0xFFFF, /* Val */
+                            a->u.ab[i].Param & 0xFFFF0000 ? 
+                            a->u.ab[i].Param >> 16 : 0, /* Mag */
+                            resID /* eID */);
+    DoneStati:;
+                        break;
                     default:
                         Fatal("Wierd AbType in Character::AddAbilities!");
                         break;
