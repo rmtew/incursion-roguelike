@@ -1388,45 +1388,53 @@ Retry:
                                 break; 
                     }
     case SK_POISON_USE: {
-        char ch; Item *it; rID vialID; bool found;
+        char ch;
+        Item *it;
+        rID vialID;
+        bool found;
         hObj hPoison, hWeapon;
+
         vialID = FIND("small glass vial");
         ch = ChoicePrompt("Create or apply poison?", "ca");
         if (ch == -1)
             return;
+
         if (ch == 'a') {
             found = false;
-            for (it=FirstInv();it;it=NextInv())
+            for (it = FirstInv(); it; it = NextInv())
                 if (it->HasStati(POISONED) && it->iID == vialID) {
                     found = true;
-                    thisp->MyTerm->LOption(it->Name(NA_LONG),it->myHandle);
+                    thisp->MyTerm->LOption(it->Name(NA_LONG), it->myHandle);
                 }
-                if (!found) {
-                    IPrint("You have no poisons to apply.");
-                    return;
+            if (!found) {
+                IPrint("You have no poisons to apply.");
+                return;
+            }
+
+            hPoison = thisp->MyTerm->LMenu(MENU_BORDER|MENU_ESC,"Choose a Poison:");
+            if (hPoison == -1)
+                return;
+
+            found = false;
+            for (it = FirstInv(); it; it = NextInv())
+                if (it->isType(T_WEAPON) || it->isType(T_MISSILE)) {
+                    found = true;
+                    thisp->MyTerm->LOption(it->Name(0),it->myHandle);
                 }
-                hPoison = thisp->MyTerm->LMenu(MENU_BORDER|MENU_ESC,"Choose a Poison:");
-                if (hPoison == -1)
-                    return;
-                found = false;
-                for (it=FirstInv();it;it=NextInv())
-                    if (it->isType(T_WEAPON) || it->isType(T_MISSILE)) {
-                        found = true;
-                        thisp->MyTerm->LOption(it->Name(0),it->myHandle);
-                    }
-                    if (!found) {
-                        IPrint("You have weapons to poison.");
-                        return;
-                    }
-                    hWeapon = thisp->MyTerm->LMenu(MENU_BORDER|MENU_ESC,"Choose a Weapon:");
-                    if (hWeapon == -1)
-                        return;
-                    Throw(EV_APPLY,this,oItem(hWeapon),oItem(hPoison));
-                    return;
+            if (!found) {
+                IPrint("You have weapons to poison.");
+                return;
+            }
+
+            hWeapon = thisp->MyTerm->LMenu(MENU_BORDER|MENU_ESC,"Choose a Weapon:");
+            if (hWeapon == -1)
+                return;
+
+            Throw(EV_APPLY, this, oItem(hWeapon), oItem(hPoison));
+            return;
         } else {
             if (!HasSkill(SK_ALCHEMY) || SkillLevel(SK_POISON_USE) < 12) {
-                IPrint("To brew poisons, you must have both Alchemy and "
-                    "Poison Use as class skills, and a Poison Use rating of 12+.");
+                IPrint("To brew poisons, you must have both Alchemy and Poison Use as class skills, and a Poison Use rating of 12+.");
                 return;
             }
             if (!HasSkillKit(SK_ALCHEMY)) {
