@@ -3548,6 +3548,7 @@ TextVal ClassAbilities[] = {
   { CA_TRICK_MAGIC, "Trick Magic" },
   { CA_TATTOOS, "Tattoos" },
   { CA_ACROBATIC_FIGHTING, "Acrobatic Fighting" },
+  { CA_MASTER_ARTISAN, "Master Artisan" },
   { CA_HIDE_IN_PLAIN_SIGHT, "Hide in Plain Sight" },
   { 0, NULL } };
 
