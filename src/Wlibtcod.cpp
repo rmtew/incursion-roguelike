@@ -196,6 +196,7 @@ class libtcodTerm: public TextTerm
       virtual void Clear();
       virtual void Color(int16 _attr);
       virtual void StopWatch(int16 milli);
+      virtual uint32 GetElapsedMilli();
       
       /* Input Functions */
       virtual int16 GetCharRaw();
@@ -569,15 +570,17 @@ void libtcodTerm::Color(int16 _attr) {
     attr = _attr;
 }
 
-void libtcodTerm::StopWatch(int16 milli)
-  {    
+void libtcodTerm::StopWatch(int16 milli) {    
     switch (p ? p->Opt(OPT_ANIMATION) : 0) {
-      case 0: TCOD_sys_sleep_milli(milli); return;
-      case 1: TCOD_sys_sleep_milli((milli+3)/4); return; 
-      case 2: return;
+    case 0: TCOD_sys_sleep_milli(milli); return;
+    case 1: TCOD_sys_sleep_milli((milli+3)/4); return; 
+    case 2: return;
     }
-  }
+}
 
+uint32 libtcodTerm::GetElapsedMilli() {
+    return TCOD_sys_elapsed_milli();
+}
 
 /*****************************************************************************\
 *                                 libtcodTerm                                   *

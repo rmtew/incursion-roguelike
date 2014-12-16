@@ -472,6 +472,7 @@ public:
     virtual void Clear()=0;
     virtual void Color(int16 _attr)=0;
     virtual void StopWatch(int16 milli)=0;
+    virtual uint32 GetElapsedMilli()=0;
 
     /* Input Functions (platform-specific) */
     virtual int16 GetCharRaw()=0;

@@ -18,6 +18,7 @@ Incursion (open source) 0.6.9Y15: 2014-??-??
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/199/: The poison doses requires to coat each 10 missiles, required 1 dose for the first 20 and an additional dose for each additional 10. This is bad math. It should be 1 dose per 10. Reported by Felius@Bay12.
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/200/: Undefined 141 appeared in character abilities listing, this is because Master Artisan lacked an entry in the naming table.
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/201/: The code which considers paralysis of a target as valid for coup de gras checked skills on the actor, rather than the victim.  Reported by Felius@Bay12, with handy save file.
+* https://bitbucket.org/rmtew/incursion-roguelike/issue/202/: The attribute rolling animation took a strangely long time.  The animation display update, and display delay were the same, but just seemed more effective (and slower) under libtcod.  This is fixed by only updating the animation for the first 0.5 seconds of the roll, as it's all a super fast graphical affectation anyway.
 
 Incursion (open source) 0.6.9Y14: 2014-11-15
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/129/: Journal entries are now listed in order of most recent to oldest.  Level stats are put first, instead of last.  This is to put the most relevant information in the most accessible place.  Reported by golgepapaz, with patch.

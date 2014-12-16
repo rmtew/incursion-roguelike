@@ -907,18 +907,16 @@ void Player::DisableReincarnation()
 
 }
 
-int16 AttrDice(int16 dice)
-{
+int16 AttrDice(int16 dice) {
     static int16 roll[12], best[3], i;
-    for(i=0;i!=dice;i++)
-        roll[i] = random(6)+1;
+    for(i = 0; i != dice; i++)
+        roll[i] = random(6) + 1;
 
     best[0] = 0;
     best[1] = 1;
     best[2] = 2;
 
-    for (i=0;i!=dice;i++)
-    {
+    for (i=0;i!=dice;i++) {
         if (roll[i] > roll[best[0]] && i != best[1] && i != best[2])
             best[0] = i;
         if (roll[i] > roll[best[1]] && i != best[0] && i != best[2])
@@ -927,17 +925,12 @@ int16 AttrDice(int16 dice)
             best[2] = i;
     }
 
-    return roll[best[0]] +
-        roll[best[1]] +
-        roll[best[2]] ;
+    return roll[best[0]] + roll[best[1]] + roll[best[2]];
 }
-
 
 static char * DesiredPerk = NULL;
 
-
-static void NamePerk(Perk& p, String& str)
-{
+static void NamePerk(Perk& p, String& str) {
     String s2; Item *it;
     switch (p.type) {
     case PERK_ITEM: 
@@ -1340,23 +1333,19 @@ static void GrantPerks(PerkSet& p, Player *target)
     return; 
 } 
 
-void Player::RollAttributes()
-{
-    int16 nPerks; bool do_redraw;
-    int16 ch, wanted; bool perk_warn = 0;
-    int8 BestStats[7][5],i,j,k,l,c,tot,Points, PCost;
-    int8 PointCosts[] = { 0, 0, 0, -5, -4, -3, -2, -1, 0, 1,
-        2, 3, 4, 5, 6, 8, 10, 13, 16 
-    };
+void Player::RollAttributes() {
+    int16 nPerks, ch, wanted;
+    bool do_redraw = false, perk_warn = 0;
+    int8 BestStats[7][5], i, j, k, l, c, tot, Points, PCost;
+    int8 PointCosts[] = { 0, 0, 0, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 8, 10, 13, 16 };
     PerkSet PerkSets[5];
-    do_redraw = false;
 
-    if (MyTerm->GetMode() == MO_RECREATE)
-    {
-        for (i=0;i!=7;i++)
+    if (MyTerm->GetMode() == MO_RECREATE) {
+        for (i = 0; i != 7; i++)
             BAttr[i] = RInf.Attr[i];
         return;
     }
+
     MyTerm->SetMode(MO_ROLLING);
 
     if (RaceID) {
@@ -1365,20 +1354,20 @@ void Player::RollAttributes()
             nPerks = 3;
         if (TRACE(RaceID)->BaseRace)
             nPerks = 1;
-    }
-    else 
+    } else 
         nPerks = 3;
 
-    memset(PerkSets,0,sizeof(PerkSets));
+    memset(PerkSets, 0, sizeof(PerkSets));
     int linesPerSet = 3 + nPerks;
     statMethod = Opt(OPT_STATS);
 
 Redraw:;
     MyTerm->SetWin(WIN_CREATION);
     MyTerm->Clear();
+
+    uint32 milli0[5];
 Reroll:;
-    switch(statMethod) 
-    {
+    switch(statMethod) {
     case 0: linesPerSet = 3; /* 4d6 in order */
     case 1: /* 4d6 + Perks */
 
@@ -1396,35 +1385,43 @@ MethodI:
         for (i=0,j=0;i!=5;i++) {
             if (do_redraw)
                 goto JustDrawIt;
+
+            milli0[i] = MyTerm->GetElapsedMilli();
 RerollThisOne: 
             MyTerm->Color(BLUE+i);
             MyTerm->Write(10,3+linesPerSet*i,"STR DEX CON INT WIS CHA LUC");
             MyTerm->Write(2,4+i*linesPerSet,Format("[%c]",'a'+i));
-            switch (Opt(OPT_POWER_STATS)) {
-    case 0: wanted = 75; break;
-    case 1: wanted = 100; break;
-    case 2: wanted = 115; break;
-    case 3: wanted = 125; break;
-            }
-            do 
-            {
-                for(k=0;k!=7;k++)
-                    Attr[k] = BAttr[k] = AttrDice(4);
-                MyTerm->Write(10,4+linesPerSet*i,
-                    Format("%2d  %2d  %2d  %2d  %2d  %2d  %2d  ", BAttr[A_STR],
-                    BAttr[A_DEX], BAttr[A_CON], BAttr[A_INT], 
-                    BAttr[A_WIS], BAttr[A_CHA], BAttr[A_LUC]));
-                if (j%5 == 0) /* ww: this wasn't working before */
-                    MyTerm->Update();
-                tot = BAttr[A_STR] + BAttr[A_DEX] + BAttr[A_CON] + BAttr[A_INT] +
-                    BAttr[A_WIS] + BAttr[A_CHA] + BAttr[A_LUC];
-                MyTerm->Update();
-                if (Opt(OPT_ANIMATION) != 2)
-                    MyTerm->StopWatch(3);
 
-                j++;
+            switch (Opt(OPT_POWER_STATS)) {
+            case 0: wanted = 75; break;
+            case 1: wanted = 100; break;
+            case 2: wanted = 115; break;
+            case 3: wanted = 125; break;
             }
-            while (tot < 95 || tot > 100 || j < 100);
+
+            do {
+                for (k = 0; k != 7; k++)
+                    Attr[k] = BAttr[k] = AttrDice(4);
+
+                if (MyTerm->GetElapsedMilli() - milli0[i] < 500)
+                    if (Opt(OPT_ANIMATION) != 2) {
+                        MyTerm->Write(10,4+linesPerSet*i,
+                            Format("%2d  %2d  %2d  %2d  %2d  %2d  %2d  ", BAttr[A_STR],
+                            BAttr[A_DEX], BAttr[A_CON], BAttr[A_INT], 
+                            BAttr[A_WIS], BAttr[A_CHA], BAttr[A_LUC]));
+                        MyTerm->Update();
+                        MyTerm->StopWatch(3);
+                    }
+
+                tot = BAttr[A_STR] + BAttr[A_DEX] + BAttr[A_CON] + BAttr[A_INT] + BAttr[A_WIS] + BAttr[A_CHA] + BAttr[A_LUC];
+                j++;
+            } while (tot < 95 || tot > 100 || j < 100);
+
+            MyTerm->Write(10,4+linesPerSet*i,
+                Format("%2d  %2d  %2d  %2d  %2d  %2d  %2d  ", BAttr[A_STR],
+                BAttr[A_DEX], BAttr[A_CON], BAttr[A_INT], 
+                BAttr[A_WIS], BAttr[A_CHA], BAttr[A_LUC]));
+            MyTerm->Update();
 
             for (j=0;j!=7;j++) {
                 BestStats[j][i] = (int8)BAttr[j];
@@ -1466,45 +1463,40 @@ JustDrawIt:
                         { PERK_FEAT,     25 },
                         { PERK_ITEM,     30 },
                         { PERK_IMMUNE,   5  },
-                        { 0,             0  } };
+                        { 0,             0  }
+                    };
 
+                    for(tot=0,l=0;PerkWeights[l][0];l++)
+                        tot += PerkWeights[l][1];
 
-                        for(tot=0,l=0;PerkWeights[l][0];l++)
-                            tot += PerkWeights[l][1];
+                    r = random(tot);
+                    for(l=0;PerkWeights[l][0];l++) {
+                        tot -= PerkWeights[l][1];
+                        if (r >= tot)
+                            break;
+                    }
+                    type = (PerkType) PerkWeights[l][0];
 
-                        r = random(tot);
+                    if (!do_redraw)
+                        CreatePerk(PerkSets[I(i,5)],j,type,this);
 
-                        for(l=0;PerkWeights[l][0];l++)
-                        {
-                            tot -= PerkWeights[l][1];
-                            if (r >= tot)
-                                break;
-                        }
-                        type = (PerkType) PerkWeights[l][0];
-
-                        if (!do_redraw)
-                            CreatePerk(PerkSets[I(i,5)],j,type,this);
-
-                        String desc;
-
-
-
-                        NamePerk(PerkSets[I(i,5)].elt[I(j,3)],desc);
-                        /*
-                        if (j == 0 && DesiredPerk) {
+                    String desc;
+                    NamePerk(PerkSets[I(i,5)].elt[I(j,3)],desc);
+                    /*
+                    if (j == 0 && DesiredPerk) {
                         if (strstr((const char*)desc,DesiredPerk) == 0) {
-                        j--; 
-                        continue;
+                            j--; 
+                            continue;
                         } 
-                        } 
-                        */
-                        OK = true; 
+                    } 
+                    */
+                    OK = true; 
 
-                        MyTerm->Write(10,(5+j)+linesPerSet*i,
-                            "                                                                    ");
-                        MyTerm->Write(10,(5+j)+linesPerSet*i,desc);
+                    MyTerm->Write(10, (5+j)+linesPerSet*i, "                                                                    ");
+                    MyTerm->Write(10, (5+j)+linesPerSet*i, desc);
                 } 
-                if (!OK) goto RerollThisOne;
+                if (!OK)
+                    goto RerollThisOne;
             }
 
             MyTerm->Color(AZURE+i);
@@ -1530,9 +1522,8 @@ Reprompt:
 
         do_redraw = false;
         do
-        ch = tolower(MyTerm->GetCharRaw());
-        while (ch != KY_REDRAW && (ch < 'a' || ch > 'e') && ch != '?' && 
-            ch != 'p' && ((ch != 'x' && ch != 'w') || !Opt(OPT_REROLL)));
+            ch = tolower(MyTerm->GetCharRaw());
+        while (ch != KY_REDRAW && (ch < 'a' || ch > 'e') && ch != '?' && ch != 'p' && ((ch != 'x' && ch != 'w') || !Opt(OPT_REROLL)));
         PurgeStrings();
         MyTerm->CursorOff();
         if (ch == KY_REDRAW)
