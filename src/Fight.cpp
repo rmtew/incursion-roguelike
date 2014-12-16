@@ -2208,7 +2208,7 @@ SkipRepeat:;
             }
         }  
         if (e.EVictim->HasStati(SLEEPING) || 
-            (e.EVictim->HasStati(PARALYSIS,PARA_HELD) && !(max(SkillLevel(SK_CONCENT),SkillLevel(SK_ESCAPE_ART)) >= 15)) ||
+            (e.EVictim->HasStati(PARALYSIS,PARA_HELD) && !(max(e.EVictim->SkillLevel(SK_CONCENT),e.EVictim->SkillLevel(SK_ESCAPE_ART)) >= 15)) ||
             (e.EVictim->HasStati(STUCK) && e.EVictim->HasStati(PRONE) && e.EActor->SkillLevel(SK_FIND_WEAKNESS) >= 20))
             ; // OK, victim cannot defend
         else {

@@ -17,6 +17,7 @@ Incursion (open source) 0.6.9Y15: 2014-??-??
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/196/: When someone successfully counterspells, they get the act factored into when their next action happens, as a delay. The problem was that counterspell has benefits over and above the advertised ones, where the delay is reduced as the skill level of counterspell increases. This then goes negative at a certain level, and puts the player out of commission with a permanent timeout.  Reported by Felius@Bay12, with handy save file.
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/199/: The poison doses requires to coat each 10 missiles, required 1 dose for the first 20 and an additional dose for each additional 10. This is bad math. It should be 1 dose per 10. Reported by Felius@Bay12.
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/200/: Undefined 141 appeared in character abilities listing, this is because Master Artisan lacked an entry in the naming table.
+* https://bitbucket.org/rmtew/incursion-roguelike/issue/201/: The code which considers paralysis of a target as valid for coup de gras checked skills on the actor, rather than the victim.  Reported by Felius@Bay12, with handy save file.
 
 Incursion (open source) 0.6.9Y14: 2014-11-15
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/129/: Journal entries are now listed in order of most recent to oldest.  Level stats are put first, instead of last.  This is to put the most relevant information in the most accessible place.  Reported by golgepapaz, with patch.
