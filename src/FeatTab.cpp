@@ -477,26 +477,19 @@ struct FeatInfoStruct FeatInfo[] = {
 \******************************************************************************/
 
   { FT_IMPROVED_STRENGTH, 0, "Improved Strength", 
-    "Your might is truly legendary -- you receive a +1 feat bonus "
-                  "to your Strength score." },
+    "Your might is truly legendary -- you receive a +1 feat bonus to your Strength score." },
   { FT_IMPROVED_DEXTERITY, 0, "Improved Dexterity", 
-    "Your agility is peerless; you receive a +1 feat bonus to your "
-                  "Dexterity score." },
+    "Your agility is peerless; you receive a +1 feat bonus to your Dexterity score." },
   { FT_IMPROVED_CONSTITUTION, 0, "Improved Constitution", 
-    "You are a peak physical specimen of your race, and you "
-                  "receive a +1 feat bonus to your Constitution score." },
+    "You are a peak physical specimen of your race, and you receive a +1 feat bonus to your Constitution score." },
   { FT_IMPROVED_INTELLIGENCE, 0, "Improved Intelligence", 
-    "Your intellect is unparalleled, giving you a +1 feat bonus "
-                  "to your Intelligence score." },
+    "Your intellect is unparalleled, giving you a +1 feat bonus to your Intelligence score." },
   { FT_IMPROVED_WISDOM, 0, "Improved Wisdom", 
-    "Your instincts have saved your life more times than you can "
-                  "count. Gain a +1 feat bonus to Wisdom." },
+    "Your instincts have saved your life more times than you can count. Gain a +1 feat bonus to Wisdom." },
   { FT_IMPROVED_CHARISMA, 0, "Improved Charisma", 
-    "You have a magnetic personality, and benefit from a +1 feat "
-                  "bonus to your Charisma." },
+    "You have a magnetic personality, and benefit from a +1 feat bonus to your Charisma." },
   { FT_IMPROVED_LUCK, 0, "Improved Luck", 
-    "Fortune simply smiles on you, as represented by your +1 feat "
-                  "bonus to Luck." },
+    "Fortune simply smiles on you, as represented by your +1 feat bonus to Luck." },
 
 /******************************************************************************\
  *                             CLASS FEATURE BOOSTERS                         *
@@ -661,14 +654,11 @@ struct FeatInfoStruct FeatInfo[] = {
 
 
   { FT_LIGHTNING_REFLEXES, 0, "Lightning Reflexes", 
-    "You have unearthly reflexes, and thus receive a +3 feat "
-                  "bonus to all Reflex saving throws." },
+    "You have unearthly reflexes, and thus receive a +3 feat bonus to all Reflex saving throws." },
   { FT_GREAT_FORTITUDE, 0, "Great Fortitude", 
-    "You're tougher than nails, and thus receive a +3 feat bonus "
-                  "to all Fortitude saving throws." },
+    "You're tougher than nails, and thus receive a +3 feat bonus to all Fortitude saving throws." },
   { FT_IRON_WILL, 0, "Iron Will",
-    "You have a resolute psyche, and thus gain a +3 feat bonus to all "
-      "Will saving throws." },
+    "You have a resolute psyche, and thus gain a +3 feat bonus to all Will saving throws." },
 
   { FT_ONE_BODY_ONE_SOUL, 0, "One Body, One Soul", 
     "You have tapped into the innermost depths of your being, where the mental and "
@@ -704,17 +694,14 @@ struct FeatInfoStruct FeatInfo[] = {
 \******************************************************************************/
 
   { FT_AP_LIGHT,  0, "Armour Proficiency: Light", 
-    "You are able to wear Light armour without it severely impeding "
-      "your ability to function.",
+    "You are able to wear Light armour without it severely impeding your ability to function.",
     {{{FP_NOT_PROF, WG_LARMOUR, 0}}} },
   { FT_AP_MEDIUM,  0, "Armour Proficiency: Medium",
-    "You are able to wear Medium armour without it severely impeding "
-      "your ability to function." ,
+    "You are able to wear Medium armour without it severely impeding your ability to function." ,
     {{{FP_PROF,WG_LARMOUR, 0,
        FP_NOT_PROF, WG_MARMOUR, 0}}} },
   { FT_AP_HEAVY,  0, "Armour Proficiency: Heavy",
-    "You are able to wear Heavy armour without it severely impeding "
-      "your ability to function." ,
+    "You are able to wear Heavy armour without it severely impeding your ability to function." ,
     {{{FP_PROF,WG_MARMOUR, 0,
        FP_NOT_PROF,WG_HARMOUR, 0}}} },
   { FT_ARMOUR_OPTIMIZATION, FF_WARRIOR, "Armour Optimization",
