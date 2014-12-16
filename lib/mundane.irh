@@ -1001,104 +1001,90 @@ Item "electrum piece" : T_COIN
     Flags: IT_BGROUP;
   }
 
-Item "small glass vial" : T_TOOL
-  {
+Item "small glass vial" : T_TOOL {
     Image: grey GLYPH_POTION; 
-    Level: 1; Mat: MAT_GLASS; Weight: 1; hp: 1;
+    Level: 1;
+	Mat: MAT_GLASS;
+	Weight: 1;
+	hp: 1;
+
     On Event EV_GENITEM {
-      rID xID;
-      xID = theGame->GetEffectID(PUR_POISON,0,e.vLevel);
-      ETarget->GainPermStati(POISONED,NULL,SS_MISC,0,1d4+1,xID);
-      return DONE;
-      }, 
-    EV_APPLY {
-      rID pID;
-      int16 m, q; 
-      if (!GetHandle(EItem))
-        return NOTHING;
-      if (EItem->iID != $"small glass vial")
-        return NOTHING;
-      if (!GetHandle(ETarget))
-        return NOTHING;
-      if (!ETarget->isType(T_WEAPON) && 
-          !ETarget->isType(T_MISSILE)) {
-        EActor->IPrint("You can only poison weapons and ammunition.");
-        return NOTHING;
-      } 
-      if (!EItem->GetStatiMag(POISONED))
-        {
-          EActor->IPrint("That vial is empty.");
-          return ABORT;
+		rID xID;
+		xID = theGame->GetEffectID(PUR_POISON,0,e.vLevel);
+		ETarget->GainPermStati(POISONED,NULL,SS_MISC,0,1d4+1,xID);
+		return DONE;
+    }, EV_APPLY {
+        rID pID;
+        int16 m, q; 
+
+        if (!GetHandle(EItem))
+            return NOTHING;
+        if (EItem->iID != $"small glass vial")
+            return NOTHING;
+        if (!GetHandle(ETarget))
+            return NOTHING;
+        if (!ETarget->isType(T_WEAPON) && !ETarget->isType(T_MISSILE)) {
+            EActor->IPrint("You can only poison weapons and ammunition.");
+            return NOTHING;
         }
-      if (!(ETarget->HasIFlag(WT_SLASHING) ||
-              ETarget->HasIFlag(WT_PIERCING) ||
-              ETarget->isType(T_MISSILE)) )
-        {
-          EActor->IPrint("Poison can only be applied to slashing
-            or piercing weapons.");
-          return ABORT;
+        if (!EItem->GetStatiMag(POISONED)) {
+            EActor->IPrint("That vial is empty.");
+            return ABORT;
+        }
+        if (!(ETarget->HasIFlag(WT_SLASHING) || ETarget->HasIFlag(WT_PIERCING) || ETarget->isType(T_MISSILE))) {
+            EActor->IPrint("Poison can only be applied to slashing or piercing weapons.");
+            return ABORT;
         }            
       
-      pID = EItem->GetStatiEID(POISONED);
+        pID = EItem->GetStatiEID(POISONED);
       
-      if (ETarget->GetQuantity() > 1)
-        {
-          if (ETarget->isType(T_MISSILE))
-            q = max(1,ETarget->GetQuantity()/10);
-          else
-            q = ETarget->GetQuantity();
-          if (q > EItem->GetStatiMag(POISONED))
-            {
-              EActor->IPrint("You don't have enough doses 
-                to poison all those items.");
-              return ABORT;
-            }
-        }
-      else
-        q = 1;
-      
-      if (EItem->GetStatiMag(POISONED) <= q)
-        EItem->RemoveStati(POISONED);
-      else
-        EItem->SetStatiMag(POISONED,-1,NULL,
-          EItem->GetStatiMag(POISONED) - q );
-      EActor->Timeout += 50;
+        if (ETarget->GetQuantity() > 1) {
+            if (ETarget->isType(T_MISSILE))
+                q = (ETarget->GetQuantity() + 9)/10;
+            else
+                q = ETarget->GetQuantity();
 
-      if (!EActor->SkillCheck(SK_POISON_USE,10,true))
-        {
-          if (!(EActor->HasSkill(SK_POISON_USE) || (1d3==1)))
-            {
-              EActor->IPrint("You poison yourself!");
-              if (EActor->ResistLevel(AD_POIS) != -1)
-                EActor->IPrint("Fortunately, it has no effect.");
-              else
-                EActor->GainPermStati(POISONED,NULL,SS_MISC,0,0,pID);
+            if (q > EItem->GetStatiMag(POISONED)) {
+                EActor->IPrint("You don't have enough doses to poison all those items.");
+                return ABORT;
             }
-          else
-            EActor->IPrint("You fail to correctly apply the poison, 
-              wasting <hText>.", q > 1 ? "the doses" : "a dose");
-          return DONE;
+        } else
+            q = 1;
+      
+        if (EItem->GetStatiMag(POISONED) <= q)
+            EItem->RemoveStati(POISONED);
+        else
+            EItem->SetStatiMag(POISONED,-1,NULL, EItem->GetStatiMag(POISONED) - q );
+        EActor->Timeout += 50;
+
+        if (!EActor->SkillCheck(SK_POISON_USE,10,true)) {
+            if (!(EActor->HasSkill(SK_POISON_USE) || (1d3 == 1))) {
+                EActor->IPrint("You poison yourself!");
+
+                if (EActor->ResistLevel(AD_POIS) != -1)
+                    EActor->IPrint("Fortunately, it has no effect.");
+                else
+                    EActor->GainPermStati(POISONED,NULL,SS_MISC,0,0,pID);
+            } else
+                EActor->IPrint("You fail to correctly apply the poison, wasting <hText>.", q > 1 ? "the doses" : "a dose");
+            return DONE;
         }
 
-      DPrint(e,"You apply the <Res> to your <ETarget>.",
+        DPrint(e,"You apply the <Res> to your <ETarget>.",
                "The <EActor> coats <his:EActor> <ETarget> with poison.",
                pID);
 
-      /* ww: combine doses with previously-applied poison of the same
-       * type ... */
-      if (ETarget->HasEffStati(POISONED,pID)) {
-        m = ETarget->GetEffStatiMag(POISONED,pID);
-        ETarget->SetEffStatiMag(POISONED,pID,
-          m + (LastSkillCheckResult()-7)/3); 
+        /* ww: combine doses with previously-applied poison of the same
+         * type ... */
+        if (ETarget->HasEffStati(POISONED,pID)) {
+            m = ETarget->GetEffStatiMag(POISONED,pID);
+		    ETarget->SetEffStatiMag(POISONED,pID,m + (LastSkillCheckResult()-7)/3); 
+        } else { 
+            ETarget->RemoveStati(POISONED);
+            ETarget->GainPermStati(POISONED,NULL,SS_MISC,0,(LastSkillCheckResult()-7)/3,pID);  
         } 
-      else { 
-        ETarget->RemoveStati(POISONED);
-        ETarget->GainPermStati(POISONED,NULL,SS_MISC,0,
-          (LastSkillCheckResult()-7)/3,pID);  
-        } 
-      return DONE;
-      },
-    EV_GETNAME {
+        return DONE;
+    }, EV_GETNAME {
       hObj p;
       p = theGame->GetPlayer(0);
       /* paranoia */
