@@ -3,7 +3,7 @@ Incursion
 
 Incursion is a roguelike developed by Julian Mensch.  He has kindly released the source he has for some of the later versions.  This file is intended for people viewing the project repository where the source code can be obtained.
 
-At this time building is only supported on Windows, using Visual Studio 2010.  You should be able to substitute other versions of Visual Studio, or write a makefile if you plan to compile on another platform.
+At this time building is only supported on Windows, using Visual Studio 2013.  You should be able to substitute other versions of Visual Studio, or write a makefile if you plan to compile on another platform.
 
 Recent Changes
 --------------
@@ -30,8 +30,7 @@ Windows build instructions
 
 *Recommended compiler:*
 
-  * Visual Studio Express 2010: [web-based installer](http://www.visualstudio.com/en-us/downloads#d-2010-express).
-  * Visual Studio Express 2010: [VS2010Express1.iso](http://download.microsoft.com/download/1/E/5/1E5F1C0A-0D5B-426A-A603-1798B951DDAE/VS2010Express1.iso) 694MB.
+  * Visual Studio Express 2013: [web-based installer](http://www.visualstudio.com/en-us/downloads/download-visual-studio-vs#d-community).
 
 *Dependencies:*
 
@@ -43,7 +42,7 @@ Windows build instructions
 
 These instructions are intended to allow you to get Incursion to the point where you can debug it within Visual Studio.
 
-  1. Download and install Visual Studio Express 2010, if necessary.
+  1. Download and install Visual Studio 2013 Community Edition, if necessary.
   1. Enter the Incursion project directory.
   1. Place `flex.exe` directly into the project directory.
   1. Extract `_dependencies-20141125.7z` over the `_dependencies` sub-directory.  Check that you extracted it at the right level.
