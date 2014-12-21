@@ -7,8 +7,7 @@
 # Windows build & dependencies
 Debug
 Release
-modaccent
-modaccent*
+modaccent*.*
 _dependencies
 _dependencies/libtcod
 _dependencies/sdl2
