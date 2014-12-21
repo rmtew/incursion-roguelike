@@ -2356,7 +2356,7 @@ Option OptionList[] = {
       "window when playing in windowed mode. If the window is too large to "
       "fit on screen, the system will try consecutively smaller sizes until "
       "it finds one which fits." },
-  { OPT_WIND_FONT, "Windowed-Mode Font Size", "8x8/12x16/16x12/16x16", 3, 0, 0,
+  { OPT_WIND_FONT, "Windowed-Mode Font Size", "8x8/12x16/16x12/16x16", 3, 1, 0,
       "__This option determines what font size Incursion will use "
       "when playing the game in windowed mode. If the selected font "
       "size does not allow the display of at least 50 rows and 80 columns, "
