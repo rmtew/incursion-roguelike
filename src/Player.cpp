@@ -193,7 +193,7 @@ void Player::ChooseAction() {
             ;
         else {
             MyTerm->Box(WIN_SCREEN,BOX_MUST_PRESS_ENTER,RED,GREY,
-                "You are empty-handed!\n\nPress [ENTER] to continue.");
+                "You are empty-handed!\n\nThis message can be disabled in the options.\nPress [ENTER] to continue.");
         } 
     } 
 
