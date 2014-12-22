@@ -1,4 +1,4 @@
-Incursion (open source) 0.6.9Y15: 2014-??-??
+Incursion (open source) 0.6.9Y15: 2014-12-23 (Festivus release)
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/4: Implemented 'amplify spell' metamagic feat.  This reduces the target's magic resistance by 25%.
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/46/: Character sheet recall monster option allows a user to read a card detailing the selected monster type.  However, certain monster categories were not displaying correctly because the value was bumped 100000 as an indicator and the value's variable was an int16.  Reported by Stone_Dog@Bitbucket. 
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/44/: Added note to empty handed warning about ability to switch warning off in the options.
