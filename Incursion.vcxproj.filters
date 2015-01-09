@@ -157,9 +157,6 @@
     <ClCompile Include="SRC\VMachine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Wlibtcod.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\cpp1.c">
       <Filter>Preprocessor</Filter>
     </ClCompile>
