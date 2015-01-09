@@ -446,7 +446,6 @@ void libtcodTerm::Update() {
 }
   
 void libtcodTerm::Redraw() {
-    /* TCOD_console_clear(bCurrent);*/
     Update();
 }
 

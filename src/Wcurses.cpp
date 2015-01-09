@@ -142,7 +142,7 @@ int RGBValues[MAX_COLORS] = {
   COLOR_WHITE,  // WHITE
   };
 
-int16 RGBValues[MAX_COLORS][3] = {
+int32 RGBValues[MAX_COLORS][3] = {
 	{ 0, 0, 0 },  // BLACK
 	{ 0, 0, 192 },  // BLUE
 	{ 0, 128, 0 },  // GREEN
@@ -162,7 +162,7 @@ int16 RGBValues[MAX_COLORS][3] = {
 };
 
 
-int16 RGBSofter[MAX_COLORS][3] = {
+int32 RGBSofter[MAX_COLORS][3] = {
 	{ 0, 0, 0 }, // BLACK
 	{ 64, 64, 187 }, // BLUE
 	{ 0, 128, 0 }, // GREEN
@@ -192,6 +192,8 @@ class cursesTerm: public TextTerm
 	  WINDOW *bWindow;
 	  WINDOW *bScreen, *bSave, *bScroll, *bCurrent;
       int16 Colors[MAX_COLORS][3];
+	  int16 colour_pair_index;
+	  int16 colour_pairs[256][2];
       int16 resX, resY, fontX, fontY, ocx, ocy;
       uint32 ticks_blink_last;
       int oldResX, oldResY;
@@ -200,12 +202,11 @@ class cursesTerm: public TextTerm
       String CurrentDirectory;
       String CurrentFileName; 
       FILE *fp;
-      TCOD_list_t alf;
-      int32 *alf_it;
 	  // Windows specific part of API, if make cross-platform, add Loonix version or whatever..
 #ifdef WIN32
 	  LARGE_INTEGER time_freq, time_0;
 #endif
+
   public:
 	  cursesTerm() {
 #ifdef WIN32
@@ -213,6 +214,11 @@ class cursesTerm: public TextTerm
 		  QueryPerformanceCounter(&time_0);
 #endif
 	  }
+
+	  // Mao a curses "color pair" index to a fg and bg colour index.
+	  void colour_index_to_pair(int16 index, int16 *fg, int16 *bg);
+	  // Map a fg and bg colour index to a curses "color pair" index.
+	  int16 colour_pair_to_index(int16 fg, int16 bg);
 
       /* Low-Level Read/Write */
       virtual void Update();
@@ -459,6 +465,33 @@ int readkey(int wait) {
 	return getch();
 }
 
+void cursesTerm::colour_index_to_pair(int16 index, int16 *fg, int16 *bg) {
+	*bg = colour_pairs[index][0];
+	*fg = colour_pairs[index][1];
+}
+
+int16 cursesTerm::colour_pair_to_index(int16 fg, int16 bg) {
+	int16 index;
+	// Find out if we have already allocated the colour pair.  If so return it's index.
+	for (index = 0; index < colour_pair_index; index++)
+		if (colour_pairs[index][0] == bg && colour_pairs[index][1] == fg)
+			return index;
+
+	// Oops, we're out of allocatible pairs.
+	if (colour_pair_index >= 256) {
+		index = 0;
+	} else {
+		// Otherwise, add the pair in, and return the new index.
+		index = colour_pair_index;
+		colour_pairs[index][0] = bg;
+		colour_pairs[index][1] = fg;
+		colour_pair_index += 1;
+	}
+	return index;
+}
+
+
+
   
 /*****************************************************************************\
 *                                 cursesTerm                                   *
@@ -471,43 +504,46 @@ void cursesTerm::SetDebugText(const char *text) {
 
 void cursesTerm::Update() {
     static int update_count = 0;
+	char buffer[256];
 
+	wrefresh(bScreen);
+	overwrite(bScreen, stdscr);
 	overwrite(bScreen, bCurrent);
-#ifdef ZZZ
     if (debugText.GetLength()) {
         update_count++;
-        TCOD_console_print(NULL,0,0,"%d: %s",update_count,(const char *)debugText);
+		sprintf(buffer, "%d: %s", update_count, (const char *)debugText);
+		mvaddstr(0, 0, buffer);
         debugText = "";
     }
-#endif
-	wrefresh(bScreen);
+	refresh();
 
     updated = true;
 }
   
 void cursesTerm::Redraw() {
-    /* TCOD_console_clear(bCurrent);*/
     Update();
 }
 
 void cursesTerm::CursorOn() {
     showCursor = true;
-    //ticks_blink_last = TCOD_sys_elapsed_milli();
+    ticks_blink_last = GetElapsedMilli();
     ocx = ocy = 0;
 }
 
 void cursesTerm::CursorOff() {
-    showCursor = false;
-    cursorPulse = false;
- //   TCOD_console_blit(bCurrent,ocx,ocy,1,1,NULL,ocx,ocy,1.0f,1.0f);
-    ocx = ocy = 0;
+	chtype c = mvwinch(bCurrent, ocy, ocx);
+	mvwaddch(stdscr, ocy, ocx, c);
+
+	showCursor = false;
+	cursorPulse = false;
+	ocx = ocy = 0;
 }
   
 void cursesTerm::BlinkCursor() {
-#ifdef ZZZ
     // Sometimes the windows may leave the cursor off the RHS.
     if (cx >= sizeX)
         return;
+
     cursorPulse = !cursorPulse;
     if (cursorPulse) {
         int16 c = attr & 0x000F;
@@ -517,11 +553,12 @@ void cursesTerm::BlinkCursor() {
           c += 8;
         TCOD_console_put_char_ex(NULL,cx,cy,'X',Colors[c], Colors[c]);
         ocy = cy; ocx = cx;
-    } else
-        TCOD_console_blit(bScreen,ocx,ocy,1,1,NULL,ocx,ocy,1.0f,1.0f);
+	} else {
+		chtype c = mvwinch(bScreen, ocy, ocx);
+		mvwaddch(stdscr, ocy, ocx, c);
+	}
     /* Won't get an update necessarily otherwise */
-    TCOD_console_flush();
-#endif
+	refresh();
 }
   
 void cursesTerm::Save() { 
@@ -535,95 +572,72 @@ void cursesTerm::Restore() {
 }
 
 void cursesTerm::PutChar(Glyph g) {
-#ifdef TODOTODO
-    if (g >> 8) {
-        TCOD_console_put_char(bScreen,cx,cy,CHAR(g),TCOD_BKGND_SET);
-    } else {
-        uint32 ga = attr*256;
-        TCOD_console_put_char_ex(bScreen,cx,cy,CHAR(g),Colors[FORE(ga)], Colors[BACK(ga)]);
-    }
-#else
-	mvaddch(cx, cy, CHAR(g));
-#endif
+	chtype c = CHAR(g);
+	if (g >> 8) {
+		// Use default colours.
+	} else {
+		uint32 ga = attr * 256;
+		int16 fg = FORE(ga), bg = BACK(ga);
+		int16 colour_index = colour_pair_to_index(fg, bg);
+		c |= COLOR_PAIR(colour_index);
+	}
+	mvwaddch(bScreen, cy, cx, c);
 
     cx++;
     updated = false;
 }
 
-void cursesTerm::APutChar(int16 x, int16 y, Glyph g) 
-  {
+void cursesTerm::APutChar(int16 x, int16 y, Glyph g) {
     int c = CHAR(g);
     uint32 ga;
-    if (g >> 8) {
+    if (g >> 8)
         ga = ATTR(g)*256;
-    } else {
+    else
         ga = attr*256;
-    }
-#ifdef TODOTODO
-    TCOD_console_put_char_ex(bScreen,x,y,c,Colors[FORE(ga)], Colors[BACK(ga)]);
-#else
-	mvaddch(x, y, c);
-#endif
-    updated = false;
-  }
+	int16 fg = FORE(ga), bg = BACK(ga);
+	int16 colour_index = colour_pair_to_index(fg, bg);
+	c |= COLOR_PAIR(colour_index);
+	mvwaddch(bScreen, y, x, c);
 
-void cursesTerm::PutChar(int16 x, int16 y, Glyph g) 
-  {
+	updated = false;
+}
+
+void cursesTerm::PutChar(int16 x, int16 y, Glyph g) {
     x += activeWin->Left;
     y += activeWin->Top;
     APutChar(x,y,g);
-  }
+}
 
 Glyph cursesTerm::AGetChar(int16 x, int16 y) {
 	int32 fi = -1, bi = -1;
-#ifdef TODOTODO
-    Glyph g = TCOD_console_get_char(bScreen,x,y);
-	int16 i;
-	TCOD_color_t fgcolor, bgcolor;
-	fgcolor = TCOD_console_get_char_foreground(bScreen, x, y);
-	for (i = 0; i<MAX_COLORS; i++)
-		if (Colors[i].r == fgcolor.r && Colors[i].g == fgcolor.g && Colors[i].b == fgcolor.b) {
-			fi = i;
-			break;
-		}
-	bgcolor = TCOD_console_get_char_background(bScreen, x, y);
-	for (i = 0; i<MAX_COLORS; i++)
-		if (Colors[i].r == bgcolor.r && Colors[i].g == bgcolor.g && Colors[i].b == bgcolor.b) {
-			bi = i;
-			break;
-		}
+	int16 fg, bg;
+	chtype c = mvwinch(bScreen, y, x);
+	Glyph g = c & A_CHARTEXT;
+	pair_content(COLOR_PAIR(c), &fg, &bg);
+	bi = bg;
+	fi = fg;
 	if (bi != -1)
 		g |= bi * 256 * 16;
 	if (fi != -1)
 		g |= fi * 256;
-#else
-	int16 fg, bg;
-	chtype c = mvinch(y, x);
-	// Start with the char.
-	g = c & A_CHARTEXT;
-	pair_content(COLOR_PAIR(c), &fg, &bg);
-#endif
     return g;
 }
 
-void cursesTerm::GotoXY(int16 x, int16 y) 
-  {
+void cursesTerm::GotoXY(int16 x, int16 y) {
     cx = x + activeWin->Left;
     cy = y + activeWin->Top;
-    //if (!Cursor.bVisible)
-    //  return;
-    //crd.X = cx; crd.Y = cy;
-    //SetConsoleCursorPosition(hStdOut, crd); 
-  }
+}
 
 void cursesTerm::Clear() {
 	int i, clear_w, clear_h;
+	// Colour should be curses "color pair" 0, the default.
+	chtype clear_ch = ' ';
 
 	clear_w = (activeWin->Right + 1) - activeWin->Left;
 	clear_h = (activeWin->Bottom + 1) - activeWin->Top;
 	for (i = 0; i < clear_h; i++) {
 		move(activeWin->Top + i, activeWin->Left);
-		vline(' ', clear_w);
+		vline(clear_ch, clear_w);
 	}
 	
     cWrap = 0; cx = cy = 0;
@@ -760,19 +774,19 @@ RetryFont:
 		else
 			memcpy(&Colors, &RGBValues, sizeof(Colors[0][0]) * MAX_COLORS * 3);
 
-		for (i = 0; i < MAX_COLORS; i++)
-			init_color(i, Colors[i][0], Colors[i][1], Colors[i][2]);
+		for (i = 0; i < MAX_COLORS; i++) {
+			// The curses RGB range is 0-1000, whereas our local range is 0-255.
+			init_color(i, (Colors[i][0] * 1000) / 256, (Colors[i][1] * 1000) / 256, (Colors[i][2] * 1000) / 256);
+		}
+
+		colour_pair_index = 0;
+		colour_pairs[colour_pair_index][0] = 0;
+		colour_pairs[colour_pair_index++][1] = 15;
 	}
 
 	bScreen = newwin(sizeY, sizeX, 0, 0);
-    //TCOD_console_set_default_background(bScreen, TCOD_black);
-    //TCOD_console_set_default_foreground(bScreen, TCOD_white);
 	bCurrent = newwin(sizeY, sizeX, 0, 0);
-    //TCOD_console_set_default_background(bCurrent, TCOD_black);
-    //TCOD_console_set_default_foreground(bCurrent, TCOD_white);
 	bSave = newwin(sizeY, sizeX, 0, 0);
-    //TCOD_console_set_default_background(bSave, TCOD_black);
-    //TCOD_console_set_default_foreground(bSave, TCOD_white);
 
     if (bScroll == NULL) {
 		bScroll = newwin(MAX_SCROLL_LINES, SCROLL_WIDTH, 0, 0);
@@ -810,7 +824,6 @@ void cursesTerm::Initialize() {
     MsgHistory[0] = 0;
     Mode = MO_SPLASH;
     isWindowed = true;
-    alf = NULL;
 
 	bWindow = initscr();
 	start_color();
@@ -951,11 +964,12 @@ int16 cursesTerm::GetCharCmd(KeyCmdMode mode) {
     Update();
     activeWin = wn;
     cx = ox; cy = oy;
-    //ticks_last = TCOD_sys_elapsed_milli();
+    ticks_last = GetElapsedMilli();
 
     for(;;) {
-		//uint32 ticks0 = TCOD_sys_elapsed_milli(), ticks1;
+		uint32 ticks0 = GetElapsedMilli(), ticks1;
         int key = readkey(0);
+		unsigned long key_modifiers = PDC_get_key_modifiers();
 
         if (Mode == MO_PLAY && p->UpdateMap)
             RefreshMap();
@@ -966,28 +980,11 @@ int16 cursesTerm::GetCharCmd(KeyCmdMode mode) {
                 ShowStatus();
             }
           
-        //ticks1 = TCOD_sys_elapsed_milli();
-        //if (showCursor && ticks1 > ticks_blink_last + CURSOR_BLINK_MS) {
-        //    BlinkCursor();
-        //    ticks_blink_last = ticks1;
-       // }
-
-#ifdef AAA
-        if (TCOD_console_is_window_closed()) {
-            int16 ox, oy;
-
-CtrlBreak:
-            ox = cx; oy = cy;
-            if (!theGame || !theGame->InPlay()) {
-                ShutDown();
-                exit(0);
-            }
-            if (GetMode() == MO_PLAY && mode == KY_CMD_NORMAL_MODE) {
-                theGame->SetQuitFlag();
-                return KY_CMD_QUICK_QUIT;
-            }
+        ticks1 = GetElapsedMilli();
+        if (showCursor && ticks1 > ticks_blink_last + CURSOR_BLINK_MS) {
+            BlinkCursor();
+            ticks_blink_last = ticks1;
         }
-#endif
 
         if (key == ERR) {
             uint32 ticks_next = ticks1 + INPUT_IDLE_MS;
@@ -1016,96 +1013,87 @@ CtrlBreak:
         
         ticks_blink_last = GetElapsedMilli();
 
-        if (tcodKey.vk == TCODK_TEXT) {
-            ch = tcodKey.text[0];
-        } else {
-            ch = tcodKey.c;
+        ControlKeys = 0;
+		if (key_modifiers & PDC_KEY_MODIFIER_CONTROL)
+            ControlKeys |= CONTROL;
+		if (key_modifiers & PDC_KEY_MODIFIER_SHIFT)
+            ControlKeys |= SHIFT;
+		if (key_modifiers & PDC_KEY_MODIFIER_ALT)
+            ControlKeys |= ALT; 
 
-            ControlKeys = 0;
-            if (tcodKey.lctrl || tcodKey.rctrl)
-                ControlKeys |= CONTROL;
-            if (tcodKey.shift)
-                ControlKeys |= SHIFT;
-            if (tcodKey.lalt || tcodKey.ralt)
-                ControlKeys |= ALT; 
+        if (key == 10)
+            if (ControlKeys & ALT) {
+                isWindowed = !isWindowed;
+                Reset();
+                Update();
+                return KY_REDRAW;
+            }
 
-            if (tcodKey.vk == TCODK_ENTER)
-                if (ControlKeys & ALT) {
-                    isWindowed = !isWindowed;
-                    Reset();
-                    Update();
-                    return KY_REDRAW;
-                }
-
-			//if ((ch == 'c' || key == KEY_BREAK) && (ControlKeys & CONTROL))
-            //    goto CtrlBreak;
+		//if ((ch == 'c' || key == KEY_BREAK) && (ControlKeys & CONTROL))
+        //    goto CtrlBreak;
 
 #ifdef HACK_KEY_DEBUGGING
-            {
-                static bool debug_keys = false;
-                if ((ch == 'd') && (ControlKeys & CONTROL)) {
-                    debug_keys = !debug_keys;
-                    if (debug_keys)
-                        T1->SetDebugText("Key debugging started.");
+        {
+            static bool debug_keys = false;
+            if ((ch == 'd') && (ControlKeys & CONTROL)) {
+                debug_keys = !debug_keys;
+                if (debug_keys)
+                    T1->SetDebugText("Key debugging started.");
+                else
+                    T1->SetDebugText("Key debugging stopped.");
+            } else if (debug_keys) {
+                char formatted[256];
+                if (tcodKey.vk != TCODK_CONTROL) {
+                    int result = sprintf(formatted, "Key code: %d, Char-number: %d Char-letter: '%c' CtrlKeys: %x", tcodKey.vk, tcodKey.c, tcodKey.c, ControlKeys);
+                    if (result != -1)
+                        T1->SetDebugText(formatted);
                     else
-                        T1->SetDebugText("Key debugging stopped.");
-                } else if (debug_keys) {
-                    char formatted[256];
-                    if (tcodKey.vk != TCODK_CONTROL) {
-                        int result = sprintf(formatted, "Key code: %d, Char-number: %d Char-letter: '%c' CtrlKeys: %x", tcodKey.vk, tcodKey.c, tcodKey.c, ControlKeys);
-                        if (result != -1)
-                            T1->SetDebugText(formatted);
-                        else
-                            T1->SetDebugText("Failed to format key debugging info.");
-                    }
+                        T1->SetDebugText("Failed to format key debugging info.");
                 }
             }
+        }
 #endif
 
-            switch (tcodKey.vk) {
-            case TCODK_ENTER:      ch = KY_ENTER;     break; 
-            case TCODK_KPENTER:    ch = KY_ENTER;     break; 
-            case TCODK_ESCAPE:     ch = KY_ESC;       break;
-            case TCODK_BACKSPACE:  ch = KY_BACKSPACE; break;
-            case TCODK_TAB:        ch = KY_TAB;       break;
-            case TCODK_RIGHT:      ch = KY_RIGHT;     break;
-            case TCODK_UP:         ch = KY_UP;        break;
-            case TCODK_LEFT:       ch = KY_LEFT;      break;
-            case TCODK_DOWN:       ch = KY_DOWN;      break;
-            case TCODK_PAGEUP:     ch = KY_PGUP;      break;
-            case TCODK_PAGEDOWN:   ch = KY_PGDN;      break;
-            case TCODK_HOME:       ch = KY_HOME;      break;
-            case TCODK_END:        ch = KY_END;       break;
+        switch (key) {
+        case 0x0A:             ch = KY_ENTER;     break; 
+		case PADENTER:	       ch = KY_ENTER;     break;
+        case 0x1B:             ch = KY_ESC;       break;
+        case 0x08:             ch = KY_BACKSPACE; break;
+        case 0x09:             ch = KY_TAB;       break;
+		case KEY_RIGHT:        ch = KY_RIGHT;     break;
+		case KEY_UP:           ch = KY_UP;        break;
+		case KEY_LEFT:         ch = KY_LEFT;      break;
+		case KEY_DOWN:         ch = KY_DOWN;      break;
+		case KEY_NPAGE:        ch = KY_PGUP;      break;
+		case KEY_PPAGE:        ch = KY_PGDN;      break;
+		case KEY_HOME:         ch = KY_HOME;      break;
+		case KEY_END:          ch = KY_END;       break;
 
-			/* Users with numpads should turn numlock off. */
-            case TCODK_KP7:        ch = KY_HOME;      break;
-            case TCODK_KP8:        ch = KY_UP;        break;
-            case TCODK_KP9:        ch = KY_PGUP;      break;
-            case TCODK_KP4:        ch = KY_LEFT;      break;
-            case TCODK_KP6:        ch = KY_RIGHT;     break;
-            case TCODK_KP1:        ch = KY_END;       break;
-            case TCODK_KP2:        ch = KY_DOWN;      break;
-            case TCODK_KP3:        ch = KY_PGDN;      break;
-            case TCODK_KPDEC:      ch = KY_PERIOD;    break;
+		/* Users with numpads should turn numlock off. */
+        case KEY_A1:           ch = KY_HOME;      break;
+		case KEY_A2:           ch = KY_UP;        break;
+		case KEY_A3:           ch = KY_PGUP;      break;
+		case KEY_B1:           ch = KY_LEFT;      break;
+		case KEY_B3:           ch = KY_RIGHT;     break;
+		case KEY_C1:           ch = KY_END;       break;
+		case KEY_C2:           ch = KY_DOWN;      break;
+		case KEY_C3:           ch = KY_PGDN;      break;
+		case PADSTOP:          ch = KY_PERIOD;    break;
 
-            case KEY_F(1):         ch = KY_CMD_MACRO1; break;
-			case KEY_F(2):         ch = KY_CMD_MACRO2; break;
-			case KEY_F(3):         ch = KY_CMD_MACRO3; break;
-			case KEY_F(4):         ch = KY_CMD_MACRO4; break;
-			case KEY_F(5):         ch = KY_CMD_MACRO5; break;
-			case KEY_F(6):         ch = KY_CMD_MACRO6; break;
-			case KEY_F(7):         ch = KY_CMD_MACRO7; break;
-			case KEY_F(8):         ch = KY_CMD_MACRO8; break;
-			case KEY_F(9):         ch = KY_CMD_MACRO9; break;
-			case KEY_F(10):         ch = KY_CMD_MACRO10; break;
-			case KEY_F(11):         ch = KY_CMD_MACRO11; break;
-			case KEY_F(12):         ch = KY_CMD_MACRO12; break;
-            case TCODK_CHAR:
-                if (ControlKeys & (CONTROL|ALT))
-                    break;
-            default:
-                continue;
-            }
+        case KEY_F(1):         ch = KY_CMD_MACRO1; break;
+		case KEY_F(2):         ch = KY_CMD_MACRO2; break;
+		case KEY_F(3):         ch = KY_CMD_MACRO3; break;
+		case KEY_F(4):         ch = KY_CMD_MACRO4; break;
+		case KEY_F(5):         ch = KY_CMD_MACRO5; break;
+		case KEY_F(6):         ch = KY_CMD_MACRO6; break;
+		case KEY_F(7):         ch = KY_CMD_MACRO7; break;
+		case KEY_F(8):         ch = KY_CMD_MACRO8; break;
+		case KEY_F(9):         ch = KY_CMD_MACRO9; break;
+		case KEY_F(10):        ch = KY_CMD_MACRO10; break;
+		case KEY_F(11):        ch = KY_CMD_MACRO11; break;
+		case KEY_F(12):        ch = KY_CMD_MACRO12; break;
+        default:
+            continue;
         }
 
         if (mode == KY_CMD_RAW)
