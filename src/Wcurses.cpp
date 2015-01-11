@@ -488,6 +488,8 @@ int16 cursesTerm::colour_pair_to_index(int16 fg, int16 bg) {
 		colour_pairs[index][0] = bg;
 		colour_pairs[index][1] = fg;
 		colour_pair_index += 1;
+
+		init_pair(index, fg, bg);
 	}
 	return index;
 }
@@ -576,14 +578,14 @@ void cursesTerm::Restore() {
 
 void cursesTerm::PutChar(Glyph g) {
 	chtype c = CHAR(g);
-	if (g >> 8) {
-		// Use default colours.
-	} else {
-		uint32 ga = attr * 256;
-		int16 fg = FORE(ga), bg = BACK(ga);
-		int16 colour_index = colour_pair_to_index(fg, bg);
-		c |= COLOR_PAIR(colour_index);
-	}
+	uint32 ga;
+	// No glyph attr means use the default colours.
+	if (g >> 8)
+		ga = ATTR(g);
+	else
+		ga = attr * 256;
+	int16 colour_index = colour_pair_to_index(FORE(ga), BACK(ga));
+	c |= COLOR_PAIR(colour_index);
 	mvwaddch(bScreen, cy, cx, c);
 
     cx++;
@@ -597,8 +599,7 @@ void cursesTerm::APutChar(int16 x, int16 y, Glyph g) {
         ga = ATTR(g)*256;
     else
         ga = attr*256;
-	int16 fg = FORE(ga), bg = BACK(ga);
-	int16 colour_index = colour_pair_to_index(fg, bg);
+	int16 colour_index = colour_pair_to_index(FORE(ga), BACK(ga));
 	c |= COLOR_PAIR(colour_index);
 	mvwaddch(bScreen, y, x, c);
 
@@ -771,6 +772,14 @@ RetryFont:
 
     InitWindows();
 
+	bScreen = newwin(sizeY, sizeX, 0, 0);
+	bCurrent = newwin(sizeY, sizeX, 0, 0);
+	bSave = newwin(sizeY, sizeX, 0, 0);
+
+	if (bScroll == NULL) {
+		bScroll = newwin(MAX_SCROLL_LINES, SCROLL_WIDTH, 0, 0);
+	}
+
 	if (can_change_color()) { // CURSES API
 		if (theGame->Opt(OPT_SOFT_PALETTE))
 			memcpy(&Colors, &RGBSofter, sizeof(Colors[0][0]) * MAX_COLORS * 3);
@@ -782,18 +791,10 @@ RetryFont:
 			init_color(i, (Colors[i][0] * 1000) / 256, (Colors[i][1] * 1000) / 256, (Colors[i][2] * 1000) / 256);
 		}
 
-		colour_pair_index = 0;
-		colour_pairs[colour_pair_index][0] = 0;
-		colour_pairs[colour_pair_index++][1] = 15;
+		//WINDOW *windows[] = { bScreen, bScroll, bCurrent, bSave };
+		//for (int32 j = 0; j < 4; j++)
+//			wattron(windows[j], COLOR_PAIR(index));
 	}
-
-	bScreen = newwin(sizeY, sizeX, 0, 0);
-	bCurrent = newwin(sizeY, sizeX, 0, 0);
-	bSave = newwin(sizeY, sizeX, 0, 0);
-
-    if (bScroll == NULL) {
-		bScroll = newwin(MAX_SCROLL_LINES, SCROLL_WIDTH, 0, 0);
-    }
 
     if (Mode == MO_PLAY) { 
         ShowStatus();
@@ -835,6 +836,9 @@ void cursesTerm::Initialize() {
 	keypad(bWindow, TRUE);
 	bScreen = bCurrent = bSave = bScroll = NULL;
 
+	colour_pair_index = 0;
+	colour_pair_to_index(15, 0);
+
 	Reset();
     
     InitWindows();   
@@ -864,11 +868,8 @@ void cursesTerm::Title() {
 \*****************************************************************************/
 
 void  cursesTerm::SPutChar(int16 x, int16 y, Glyph g) {
-#ifdef TODOTODO
-    TCOD_console_put_char_ex(bScroll,x,y,CHAR(g),Colors[FORE(g)], Colors[BACK(g)]);
-#else
-	mvaddch(y, x, CHAR(g));
-#endif
+	int16 index = colour_pair_to_index(FORE(g), BACK(g));
+	mvwaddch(bScroll, y, x, COLOR_PAIR(index) | CHAR(g));
 }
 
 Glyph cursesTerm::SGetChar(int16 x, int16 y) {
@@ -876,11 +877,10 @@ Glyph cursesTerm::SGetChar(int16 x, int16 y) {
 }
 
 void cursesTerm::SPutColor(int16 x, int16 y, int16 col) {
-#ifdef TODOTODO
-    uint32 ga = col*256;
-    uint8 c = TCOD_console_get_char(bScroll,x,y);
-    TCOD_console_put_char_ex(bScroll,x,y,c,Colors[FORE(ga)],Colors[BACK(ga)]);
-#endif
+	uint32 ga = col * 256;
+	chtype c = mvwinch(bScroll, y, x);
+	c = COLOR_PAIR(colour_pair_to_index(FORE(ga), BACK(ga))) | (c & A_CHARTEXT);
+	mvwaddch(bScroll, y, x, c);
 }
 
 int16 cursesTerm::SGetColor(int16 x, int16 y) {
@@ -903,8 +903,11 @@ void cursesTerm::SClear() {
 	werase(bScroll);
 }
 
-void  cursesTerm::BlitScrollLine(int16 wn, int32 buffline, int32 winline) {
-	copywin(bScroll, bScreen, buffline, 0, winline + Windows[wn].Top, Windows[wn].Left, winline + Windows[wn].Top, Windows[wn].Left + min(SCROLL_WIDTH, WinSizeX()), FALSE);
+void cursesTerm::BlitScrollLine(int16 wn, int32 buffline, int32 winline) {
+	copywin(bScroll, bScreen,
+		buffline, 0,
+		winline + Windows[wn].Top, Windows[wn].Left,
+		winline + Windows[wn].Top, Windows[wn].Left + min(SCROLL_WIDTH, WinSizeX()), FALSE);
 }
 
 /*****************************************************************************\
