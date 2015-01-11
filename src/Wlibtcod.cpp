@@ -354,13 +354,10 @@ void GetIncursionDirectory(int argc, char *argv[], char *out) {
     if (IncursionDirectory.GetLength() > 0) {
         /* Kludge to cope with directory structure for
            multiple builds on my machine */
-        IncursionDirectory = IncursionDirectory.Replace("DebugAllegro\\","");     
-        IncursionDirectory = IncursionDirectory.Replace("ReleaseAllegro\\","");
-        IncursionDirectory = IncursionDirectory.Replace("Debug\\","");
-        IncursionDirectory = IncursionDirectory.Replace("Release\\","");
-        IncursionDirectory = IncursionDirectory.Replace("debug/src/","");
-        IncursionDirectory = IncursionDirectory.Replace("release/src/","");
-    }
+		const char *findstr = strstr(IncursionDirectory, "\\build\\");
+		if (findstr != NULL)
+			IncursionDirectory = IncursionDirectory.Left(findstr - IncursionDirectory.GetData());
+	}
     strncpy(out,(const char *)IncursionDirectory,IncursionDirectory.GetLength());
     out[IncursionDirectory.GetLength()] = '\0';
 }
