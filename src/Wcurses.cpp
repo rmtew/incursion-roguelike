@@ -70,6 +70,9 @@
 #include <time.h>
 #include <malloc.h>
 #include <Windows.h>
+#undef ERROR
+#undef EV_BREAK
+#undef MOUSE_MOVED
 
 #ifndef DEBUG
 #ifdef USE_CRASHPAD
@@ -123,7 +126,7 @@ using google_breakpad::ExceptionHandler;
 /*
 xterm has 256 colours, why do we only have 8 at most? huh pdcurses?
 */
-int RGBValues[MAX_COLORS] = {
+int RGBValuesX[MAX_COLORS] = {
   COLOR_BLACK,  // BLACK
   COLOR_BLUE,  // BLUE
   COLOR_GREEN,  // GREEN
@@ -204,6 +207,8 @@ class cursesTerm: public TextTerm
       FILE *fp;
 	  // Windows specific part of API, if make cross-platform, add Loonix version or whatever..
 #ifdef WIN32
+	  HANDLE findhandle = NULL;
+	  WIN32_FIND_DATA finddata;
 	  LARGE_INTEGER time_freq, time_0;
 #endif
 
@@ -396,12 +401,9 @@ void GetIncursionDirectory(int argc, char *argv[], char *out) {
     if (IncursionDirectory.GetLength() > 0) {
         /* Kludge to cope with directory structure for
            multiple builds on my machine */
-        IncursionDirectory = IncursionDirectory.Replace("DebugAllegro\\","");     
-        IncursionDirectory = IncursionDirectory.Replace("ReleaseAllegro\\","");
-        IncursionDirectory = IncursionDirectory.Replace("Debug\\","");
-        IncursionDirectory = IncursionDirectory.Replace("Release\\","");
-        IncursionDirectory = IncursionDirectory.Replace("debug/src/","");
-        IncursionDirectory = IncursionDirectory.Replace("release/src/","");
+		const char *findstr = strstr(IncursionDirectory, "\\build\\");
+		if (findstr != NULL)
+			IncursionDirectory = IncursionDirectory.Left(findstr - IncursionDirectory.GetData());
     }
     strncpy(out,(const char *)IncursionDirectory,IncursionDirectory.GetLength());
     out[IncursionDirectory.GetLength()] = '\0';
@@ -551,7 +553,8 @@ void cursesTerm::BlinkCursor() {
           c = 7;
         else if (c < 8)
           c += 8;
-        TCOD_console_put_char_ex(NULL,cx,cy,'X',Colors[c], Colors[c]);
+		//TODOTODO:
+        //TCOD_console_put_char_ex(NULL,cx,cy,'X',Colors[c], Colors[c]);
         ocy = cy; ocx = cx;
 	} else {
 		chtype c = mvwinch(bScreen, ocy, ocx);
@@ -613,7 +616,7 @@ Glyph cursesTerm::AGetChar(int16 x, int16 y) {
 	int16 fg, bg;
 	chtype c = mvwinch(bScreen, y, x);
 	Glyph g = c & A_CHARTEXT;
-	pair_content(COLOR_PAIR(c), &fg, &bg);
+	pair_content(PAIR_NUMBER(c), &fg, &bg);
 	bi = bg;
 	fi = fg;
 	if (bi != -1)
@@ -636,8 +639,8 @@ void cursesTerm::Clear() {
 	clear_w = (activeWin->Right + 1) - activeWin->Left;
 	clear_h = (activeWin->Bottom + 1) - activeWin->Top;
 	for (i = 0; i < clear_h; i++) {
-		move(activeWin->Top + i, activeWin->Left);
-		vline(clear_ch, clear_w);
+		wmove(bScreen, activeWin->Top + i, activeWin->Left);
+		whline(bScreen, clear_ch, clear_w);
 	}
 	
     cWrap = 0; cx = cy = 0;
@@ -665,7 +668,7 @@ uint32 cursesTerm::GetElapsedMilli() {
 	time_result.QuadPart = time_now.QuadPart - time_0.QuadPart;
 	time_result.QuadPart *= 1000; // Milliseconds are 1/1000 of a second.
 	time_result.QuadPart /= time_freq.QuadPart;
-	return time_result.QuadPart;
+	return (uint32)time_result.QuadPart;
 #endif
 }
 
@@ -852,6 +855,7 @@ void cursesTerm::SetIncursionDirectory(const char *s) {
 /* Draw the intro screen header and display the start of game libtcod-specific
  * stuff in the footer area below it. */
 void cursesTerm::Title() {
+	TextTerm::Title();
 }
 
 /*****************************************************************************\
@@ -1093,7 +1097,10 @@ int16 cursesTerm::GetCharCmd(KeyCmdMode mode) {
 		case KEY_F(11):        ch = KY_CMD_MACRO11; break;
 		case KEY_F(12):        ch = KY_CMD_MACRO12; break;
         default:
-            continue;
+			// All special key codes are transformed into incursion codes above.  Ignore rest.
+			if (key >= KEY_MIN) 
+				continue;
+			ch = key;
         }
 
         if (mode == KY_CMD_RAW)
@@ -1145,134 +1152,149 @@ void cursesTerm::PrePrompt() {
 \*****************************************************************************/
 
 bool cursesTerm::Exists(const char *fn) {
-    return (TCOD_sys_file_exists(fn) != 0);
+#ifdef WIN32
+	DWORD ret = GetFileAttributesA(fn);
+	return (ret != INVALID_FILE_ATTRIBUTES && !(ret & FILE_ATTRIBUTE_DIRECTORY));
+#endif
 }
 
-void cursesTerm::Delete(const char *fn)
-  {
-    if (!TCOD_sys_delete_file(fn))
+void cursesTerm::Delete(const char *fn) {
+#ifdef WIN32
+	if (!DeleteFileA(fn))
         Error("Can't delete file \"%s\".",fn);
-  }
+#endif
+}
 
-void cursesTerm::OpenRead(const char*fn)
-  {
-    fp = fopen(fn,"rb");
-    if (!fp)
-      throw ENOFILE;
-    CurrentFileName = fn;
-  }
+void cursesTerm::OpenRead(const char*fn) {
+	fp = fopen(fn, "rb");
+	if (!fp)
+		throw ENOFILE;
+	CurrentFileName = fn;
+}
 
-void cursesTerm::OpenWrite(const char*fn)
-  {
-    fp = fopen(fn,"wb+");
-    if (!fp)
-      throw ENODIR;
-    CurrentFileName = fn;
-  }
+void cursesTerm::OpenWrite(const char*fn) {
+	fp = fopen(fn, "wb+");
+	if (!fp)
+		throw ENODIR;
+	CurrentFileName = fn;
+}
 
-void cursesTerm::OpenUpdate(const char*fn)
-  {
-    fp = fopen(fn,"rb+");
-    if (!fp)
-      fp = fopen(fn,"wb+");
-    if (!fp)
-      throw ENODIR;
-    CurrentFileName = fn;
-  }
+void cursesTerm::OpenUpdate(const char*fn) {
+	fp = fopen(fn, "rb+");
+	if (!fp)
+		fp = fopen(fn, "wb+");
+	if (!fp)
+		throw ENODIR;
+	CurrentFileName = fn;
+}
 
-void cursesTerm::Close()
-  {
-    if (fp) {
-      fclose(fp);
-      fp = NULL;
-      }
-  }
+void cursesTerm::Close() {
+	if (fp) {
+		fclose(fp);
+		fp = NULL;
+	}
+}
   
-void cursesTerm::FRead(void *vp,size_t sz)
-  {
-    if (fread(vp,1,sz,fp)!=sz)
-      throw EREADERR;
-  }
+void cursesTerm::FRead(void *vp, size_t sz) {
+	if (fread(vp, 1, sz, fp) != sz)
+		throw EREADERR;
+}
 
-void cursesTerm::FWrite(const void *vp,size_t sz)
-  {
-    if (!fp)
-      return;
-    if (fwrite(vp,1,sz,fp)!=sz)
-      throw EWRIERR;
-  }
+void cursesTerm::FWrite(const void *vp, size_t sz) {
+	if (!fp)
+		return;
+	if (fwrite(vp, 1, sz, fp) != sz)
+		throw EWRIERR;
+}
 
-int32 cursesTerm::Tell()
-  { return ftell(fp); }  
+int32 cursesTerm::Tell() {
+	return ftell(fp);
+}  
 
-void cursesTerm::Seek(int32 pos,int8 rel)
-  { if(fseek(fp,pos,rel))
-      throw ECORRUPT; }
+void cursesTerm::Seek(int32 pos,int8 rel) {
+	if(fseek(fp,pos,rel))
+		throw ECORRUPT;
+}
 
-void cursesTerm::Cut(int32 amt)
-  {
-    /* Fix this later! */
-    int32 start, end;
-    void *block;
-    start = ftell(fp);
-    fseek(fp,0,SEEK_END);
-    end = ftell(fp);
-    fseek(fp,start+amt,SEEK_SET);
-    block = malloc(end - (start+amt));
-    fread(block,end - (start+amt),1,fp);
-    fseek(fp,start,SEEK_SET);
-    fwrite(block,end - (start+amt),1,fp);
-  }
+void cursesTerm::Cut(int32 amt) {
+	/* Fix this later! */
+	int32 start, end;
+	void *block;
+	start = ftell(fp);
+	fseek(fp, 0, SEEK_END);
+	end = ftell(fp);
+	fseek(fp, start + amt, SEEK_SET);
+	block = malloc(end - (start + amt));
+	fread(block, end - (start + amt), 1, fp);
+	fseek(fp, start, SEEK_SET);
+	fwrite(block, end - (start + amt), 1, fp);
+}
 
-char * cursesTerm::MenuListFiles(const char * filespec, uint16 flags, const char * title) {
-    char * file;
-    TCOD_list_t l = TCOD_sys_get_directory_content(CurrentDirectory, filespec);
-    for (int *iterator = (int *)TCOD_list_begin(l); iterator != (int *)TCOD_list_end(l); iterator++) {
-        const char *fileName = (const char *)(*iterator);
-        char *str = strdup(fileName);
-        /* TODO: Check if 'str' can leak */
-        LOption(str,(int32)str);
-    }
-    TCOD_list_clear_and_delete(l);
-    file = (char*)LMenu(flags,title);
-    if (file == (char*)(-1))
-      return NULL;
-    return file;
+char *cursesTerm::MenuListFiles(const char * filespec, uint16 flags, const char * title) {
+#ifdef WIN32
+	WIN32_FIND_DATA data;
+	char *file;
+	HANDLE filehandle;
+	String pathdir = CurrentDirectory + "\\" + filespec;
+
+	filehandle = FindFirstFileA(pathdir, &data);
+	if (filehandle != INVALID_HANDLE_VALUE) {
+		do {
+			LOption(data.cFileName, (int32)data.cFileName);
+		} while (FindNextFileA(filehandle, &data));
+
+		FindClose(filehandle);
+	} else {
+		Error("Problem listing files for user perusal.");
+		return "";
+	}
+
+	// Invoke user selection from the compiled list.
+	file = (char*)LMenu(flags, title);
+	if (file == (char*)(-1))
+		return NULL;
+	return file;
+#endif
 }
 
 bool cursesTerm::FirstFile(char * filespec) {
-    alf_it = NULL;
-    if (alf != NULL && TCOD_list_is_empty(alf))
-        TCOD_list_clear_and_delete(alf);
-    alf = TCOD_sys_get_directory_content(CurrentDirectory, filespec);
-    if (TCOD_list_size(alf) == 0)
-        return false;
-    alf_it = (int32 *)TCOD_list_begin(alf);
-    try {
-        OpenRead((const char *)*alf_it);
-    } catch (int) {
-        fp = NULL;
-        return false;
-    }
-    ASSERT(fp);
-    return true;
+#ifdef WIN32
+	String pathdir = CurrentDirectory + "\\" + filespec;
+
+	if (findhandle != NULL)
+		FindClose(findhandle);
+
+	findhandle = FindFirstFile(pathdir, &finddata);
+	if (findhandle == INVALID_HANDLE_VALUE)
+		return false;
+
+	try {
+		OpenRead(finddata.cFileName);
+	} catch (int) {
+		fp = NULL;
+		return false;
+	}
+	ASSERT(fp);
+	return true;
+#endif
 }
 
 bool cursesTerm::NextFile() {
+#ifdef WIN32
 Retry:
-    alf_it += 1;
-    if (alf_it == (int32 *)TCOD_list_end(alf)) {
-        TCOD_list_clear_and_delete(alf);
-        return false;
-    }
+	if (!FindNextFileA(findhandle, &finddata)) {
+		FindClose(findhandle);
+		return false;
+	} 
     try {
-        OpenRead((const char *)*alf_it);
+        OpenRead(finddata.cFileName);
     } catch (int) {
         fp = NULL;
         goto Retry;
     }
     ASSERT(fp);
     return true;
+#endif
 }
 
 #endif
