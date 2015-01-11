@@ -193,7 +193,8 @@ class cursesTerm: public TextTerm
     private:
       bool isWindowed, showCursor, cursorPulse;
 	  WINDOW *bWindow;
-	  WINDOW *bScreen, *bSave, *bScroll, *bCurrent;
+	  WINDOW *bScreen, *bSave, *bCurrent;
+	  chtype *fakeScrollWindow;
       int16 Colors[MAX_COLORS][3];
 	  int16 colour_pair_index;
 	  int16 colour_pairs[256][2];
@@ -612,11 +613,12 @@ void cursesTerm::PutChar(int16 x, int16 y, Glyph g) {
     APutChar(x,y,g);
 }
 
-Glyph cursesTerm::AGetChar(int16 x, int16 y) {
+Glyph chtype_to_glyph(chtype c) {
 	int32 fi = -1, bi = -1;
 	int16 fg, bg;
-	chtype c = mvwinch(bScreen, y, x);
 	Glyph g = c & A_CHARTEXT;
+	if (g == 0)
+		g = ' ';
 	pair_content(PAIR_NUMBER(c), &fg, &bg);
 	bi = bg;
 	fi = fg;
@@ -624,7 +626,11 @@ Glyph cursesTerm::AGetChar(int16 x, int16 y) {
 		g |= bi * 256 * 16;
 	if (fi != -1)
 		g |= fi * 256;
-    return g;
+	return g;
+}
+
+Glyph cursesTerm::AGetChar(int16 x, int16 y) {
+	return chtype_to_glyph(mvwinch(bScreen, y, x));
 }
 
 void cursesTerm::GotoXY(int16 x, int16 y) {
@@ -776,8 +782,9 @@ RetryFont:
 	bCurrent = newwin(sizeY, sizeX, 0, 0);
 	bSave = newwin(sizeY, sizeX, 0, 0);
 
-	if (bScroll == NULL) {
-		bScroll = newwin(MAX_SCROLL_LINES, SCROLL_WIDTH, 0, 0);
+	if (fakeScrollWindow == NULL) {
+		fakeScrollWindow = (chtype *)malloc(MAX_SCROLL_LINES * SCROLL_WIDTH * sizeof(chtype));
+		SClear();
 	}
 
 	if (can_change_color()) { // CURSES API
@@ -834,7 +841,8 @@ void cursesTerm::Initialize() {
 	raw();
 	noecho();
 	keypad(bWindow, TRUE);
-	bScreen = bCurrent = bSave = bScroll = NULL;
+	bScreen = bCurrent = bSave = NULL;
+	fakeScrollWindow = NULL;
 
 	colour_pair_index = 0;
 	colour_pair_to_index(15, 0);
@@ -868,25 +876,24 @@ void cursesTerm::Title() {
 \*****************************************************************************/
 
 void  cursesTerm::SPutChar(int16 x, int16 y, Glyph g) {
-	int16 index = colour_pair_to_index(FORE(g), BACK(g));
-	mvwaddch(bScroll, y, x, COLOR_PAIR(index) | CHAR(g));
+	chtype c = COLOR_PAIR(colour_pair_to_index(FORE(g), BACK(g))) | CHAR(g);
+	fakeScrollWindow[(y * SCROLL_WIDTH) + x] = c;
 }
 
 Glyph cursesTerm::SGetChar(int16 x, int16 y) {
-	return mvwinch(bScroll, y, x) & A_CHARTEXT;
+	return fakeScrollWindow[(y * SCROLL_WIDTH) + x] & A_CHARTEXT;
 }
 
 void cursesTerm::SPutColor(int16 x, int16 y, int16 col) {
 	uint32 ga = col * 256;
-	chtype c = mvwinch(bScroll, y, x);
-	c = COLOR_PAIR(colour_pair_to_index(FORE(ga), BACK(ga))) | (c & A_CHARTEXT);
-	mvwaddch(bScroll, y, x, c);
+	chtype c = fakeScrollWindow[(y * SCROLL_WIDTH) + x];
+	fakeScrollWindow[(y * SCROLL_WIDTH) + x] = COLOR_PAIR(colour_pair_to_index(FORE(ga), BACK(ga))) | (c & A_CHARTEXT);
 }
 
 int16 cursesTerm::SGetColor(int16 x, int16 y) {
     int16 i = 0;
 	int32 fi = -1, bi = -1;
-	chtype c = mvwinch(bScroll, y, x);
+	chtype c = fakeScrollWindow[(y * SCROLL_WIDTH) + x];
 	int16 pn = PAIR_NUMBER(c);
 	int16 fg, bg;
 	pair_content(pn, &fg, &bg);
@@ -900,14 +907,19 @@ int16 cursesTerm::SGetColor(int16 x, int16 y) {
 }
 
 void cursesTerm::SClear() {
-	werase(bScroll);
+	//memset(fakeScrollWindow)
+	for (int32 i = 0; i < MAX_SCROLL_LINES * SCROLL_WIDTH; i++)
+		fakeScrollWindow[i] = ' ';
 }
 
 void cursesTerm::BlitScrollLine(int16 wn, int32 buffline, int32 winline) {
-	copywin(bScroll, bScreen,
-		buffline, 0,
-		winline + Windows[wn].Top, Windows[wn].Left,
-		winline + Windows[wn].Top, Windows[wn].Left + min(SCROLL_WIDTH, WinSizeX()), FALSE);
+	size_t copy_width = min(SCROLL_WIDTH, WinSizeX());
+	int32 src_yindex = buffline * SCROLL_WIDTH;
+
+	for (size_t i = 0; i < copy_width; i++) {
+		Glyph g = chtype_to_glyph(fakeScrollWindow[src_yindex + i]);
+		APutChar(Windows[wn].Left + i, Windows[wn].Top + (int16)winline, g);
+	}
 }
 
 /*****************************************************************************\
@@ -915,11 +927,13 @@ void cursesTerm::BlitScrollLine(int16 wn, int32 buffline, int32 winline) {
 *                              Input Functions                                *
 \*****************************************************************************/
 
-int16 cursesTerm::GetCharRaw()
-  { return GetCharCmd(KY_CMD_RAW); }
+int16 cursesTerm::GetCharRaw() {
+	return GetCharCmd(KY_CMD_RAW);
+}
 
-int16 cursesTerm::GetCharCmd()
-  { return GetCharCmd(KY_CMD_NORMAL_MODE); }
+int16 cursesTerm::GetCharCmd() {
+	return GetCharCmd(KY_CMD_NORMAL_MODE);
+}
 
 int16 cursesTerm::GetCharCmd(KeyCmdMode mode) {
     KeySetItem * keyset = theGame->Opt(OPT_ROGUELIKE) ? RoguelikeKeySet : StandardKeySet;
