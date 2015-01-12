@@ -551,13 +551,13 @@ void cursesTerm::BlinkCursor() {
 
     cursorPulse = !cursorPulse;
     if (cursorPulse) {
-        int16 c = attr & 0x000F;
-        if (c == 8) 
-          c = 7;
-        else if (c < 8)
-          c += 8;
-		//TODOTODO:
-        //TCOD_console_put_char_ex(NULL,cx,cy,'X',Colors[c], Colors[c]);
+        int16 colour_index = attr & 0x000F;
+		if (colour_index == 8)
+			colour_index = 7;
+		else if (colour_index < 8)
+			colour_index += 8;
+		chtype c = 'X' | COLOR_PAIR(colour_pair_to_index(colour_index, colour_index));
+		mvwaddch(stdscr, cy, cx, c);
         ocy = cy; ocx = cx;
 	} else {
 		chtype c = mvwinch(bScreen, ocy, ocx);
@@ -578,28 +578,29 @@ void cursesTerm::Restore() {
 }
 
 void cursesTerm::PutChar(Glyph g) {
-	chtype c = CHAR(g);
-	uint32 ga;
-	// No glyph attr means use the default colours.
-	if (g >> 8)
-		ga = ATTR(g);
-	else
-		ga = attr * 256;
-	int16 colour_index = colour_pair_to_index(FORE(ga), BACK(ga));
-	c |= COLOR_PAIR(colour_index);
-	mvwaddch(bScreen, cy, cx, c);
+	APutChar(cx++, cy, g);
+}
 
-    cx++;
-    updated = false;
+chtype glyphchar_to_chtype(Glyph g) {
+	int c = CHAR(g);
+	switch (c) {
+	case GLYPH_ARROW_UP:
+		return ACS_UARROW | A_ALTCHARSET;
+	case GLYPH_ARROW_DOWN:
+		return ACS_DARROW | A_ALTCHARSET;
+	default:
+		return c;
+	}
 }
 
 void cursesTerm::APutChar(int16 x, int16 y, Glyph g) {
-    int c = CHAR(g);
     uint32 ga;
-    if (g >> 8)
-        ga = ATTR(g)*256;
+	chtype c = glyphchar_to_chtype(g);
+	// No glyph attr means use the default colours.
+	if (g >> 8)
+        ga = ATTR(g) * 256;
     else
-        ga = attr*256;
+        ga = attr * 256;
 	int16 colour_index = colour_pair_to_index(FORE(ga), BACK(ga));
 	c |= COLOR_PAIR(colour_index);
 	mvwaddch(bScreen, y, x, c);
@@ -876,7 +877,8 @@ void cursesTerm::Title() {
 \*****************************************************************************/
 
 void  cursesTerm::SPutChar(int16 x, int16 y, Glyph g) {
-	chtype c = COLOR_PAIR(colour_pair_to_index(FORE(g), BACK(g))) | CHAR(g);
+	chtype c = glyphchar_to_chtype(g);
+	c |= COLOR_PAIR(colour_pair_to_index(FORE(g), BACK(g)));
 	fakeScrollWindow[(y * SCROLL_WIDTH) + x] = c;
 }
 
@@ -1085,8 +1087,8 @@ int16 cursesTerm::GetCharCmd(KeyCmdMode mode) {
 		case KEY_UP:           ch = KY_UP;        break;
 		case KEY_LEFT:         ch = KY_LEFT;      break;
 		case KEY_DOWN:         ch = KY_DOWN;      break;
-		case KEY_NPAGE:        ch = KY_PGUP;      break;
-		case KEY_PPAGE:        ch = KY_PGDN;      break;
+		case KEY_PPAGE:        ch = KY_PGUP;      break;
+		case KEY_NPAGE:        ch = KY_PGDN;      break;
 		case KEY_HOME:         ch = KY_HOME;      break;
 		case KEY_END:          ch = KY_END;       break;
 
