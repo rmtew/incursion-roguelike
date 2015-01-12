@@ -372,234 +372,213 @@ void TextTerm::ShowMessages()
           return;
         }
     } while(1);
-  }
+}
 
-void TextTerm::DrawBorder(int16 wn, int16 border)
-  {
-    int16 i;
-    SetWin(WIN_SCREEN); Color(border);
-    for(i=Windows[wn].Left;i!=Windows[wn].Right+1;i++)
-      {
-        PutChar(i,Windows[wn].Top-1,205);
-        PutChar(i,Windows[wn].Bottom+1,205);
-      }
-    for(i=Windows[wn].Top;i!=Windows[wn].Bottom+1;i++)
-      {
-        PutChar(Windows[wn].Left-1,i,186);
-        PutChar(Windows[wn].Right+1,i,186);
-      }
-    PutChar(Windows[wn].Left-1,Windows[wn].Top-1,219);
-    PutChar(Windows[wn].Right+1,Windows[wn].Top-1,219);
-    PutChar(Windows[wn].Left-1,Windows[wn].Bottom+1,219);
-    PutChar(Windows[wn].Right+1,Windows[wn].Bottom+1,219);
-  }
+void TextTerm::DrawBorder(int16 wn, int16 border) {
+	int16 i;
+	SetWin(WIN_SCREEN); Color(border);
+	for (i = Windows[wn].Left; i != Windows[wn].Right + 1; i++) {
+		PutChar(i, Windows[wn].Top - 1, 205);
+		PutChar(i, Windows[wn].Bottom + 1, 205);
+	}
+	for (i = Windows[wn].Top; i != Windows[wn].Bottom + 1; i++) {
+		PutChar(Windows[wn].Left - 1, i, 186);
+		PutChar(Windows[wn].Right + 1, i, 186);
+	}
+	PutChar(Windows[wn].Left - 1, Windows[wn].Top - 1, 219);
+	PutChar(Windows[wn].Right + 1, Windows[wn].Top - 1, 219);
+	PutChar(Windows[wn].Left - 1, Windows[wn].Bottom + 1, 219);
+	PutChar(Windows[wn].Right + 1, Windows[wn].Bottom + 1, 219);
+}
 
-void TextTerm::Box(int16 win, int16 flags, int16 cbor, int16 ctxt, const char*text)
-  {
-    int16 LineLength, BoxLength, Avail, Lines, SpaceAt, y, c, i, real_c, in;
-    char *ch; int8 saveMode; bool done;
-    ASSERT(strlen(text) < sizeof(lbuff) - 20)
-    SetWin(win);
-    strcpy(lbuff,text);
-    strcat(lbuff,"\n");
-    ch = lbuff; LineLength = BoxLength = Lines = SpaceAt = 0;
-    if (flags & BOX_WIDEBOX)
-      Avail = max((activeWin->Right-activeWin->Left)-10,20);
-    else
-      Avail = max(min((activeWin->Right-activeWin->Left)-10,50),20);
-    while (*ch)
-      {
-        if (*ch >= 0)
-          LineLength++;
-        if (*ch == '\n')
-          {
-            Lines++;
-            if (LineLength > BoxLength)
-              BoxLength = LineLength;
-            LineLength = 0;
-            SpaceAt = 0;
-          }
-        if (LineLength >= Avail)
-          {
-            for (i=0;ch - i > lbuff && i < Avail/3;i++)
-              if (*(ch - i) == ' ')
-                {
-                  ch = ch - i;
-                  ASSERT(*ch == ' ');
-                  *ch = '\n';
-                  for (int16 j=0;j!=i;j++)
-                    if (ch[j+1] > 0)
-                      LineLength--;
-                  goto FoundSpace;
-                }
-            String temp;
-            temp = ch;
-            *ch = '\n';
-            for (i=0;temp[i];i++)
-              ch[i + 1] = temp[i];
-            ch[i+1] = 0;
-            goto FoundSpace;
-          }
-        ch++;
-        FoundSpace:;
-      }
-    Lines++;
+void TextTerm::Box(int16 win, int16 flags, int16 cbor, int16 ctxt, const char*text) {
+	int16 LineLength, BoxLength, Avail, Lines, SpaceAt, y, c, i, real_c, in;
+	char *ch; int8 saveMode; bool done;
+	ASSERT(strlen(text) < sizeof(lbuff) - 20)
+		SetWin(win);
+	strcpy(lbuff, text);
+	strcat(lbuff, "\n");
+	ch = lbuff; LineLength = BoxLength = Lines = SpaceAt = 0;
+	if (flags & BOX_WIDEBOX)
+		Avail = max((activeWin->Right - activeWin->Left) - 10, 20);
+	else
+		Avail = max(min((activeWin->Right - activeWin->Left) - 10, 50), 20);
+	while (*ch) {
+		if (*ch >= 0)
+			LineLength++;
+		if (*ch == '\n') {
+			Lines++;
+			if (LineLength > BoxLength)
+				BoxLength = LineLength;
+			LineLength = 0;
+			SpaceAt = 0;
+		}
+		if (LineLength >= Avail) {
+			for (i = 0; ch - i > lbuff && i < Avail / 3; i++)
+				if (*(ch - i) == ' ') {
+					ch = ch - i;
+					ASSERT(*ch == ' ');
+					*ch = '\n';
+					for (int16 j = 0; j != i; j++)
+						if (ch[j + 1] > 0)
+							LineLength--;
+					goto FoundSpace;
+				}
+			String temp;
+			temp = ch;
+			*ch = '\n';
+			for (i = 0; temp[i]; i++)
+				ch[i + 1] = temp[i];
+			ch[i + 1] = 0;
+			goto FoundSpace;
+		}
+		ch++;
+FoundSpace:;
+	}
+	Lines++;
 
-    if (!(flags & BOX_NOSAVE))
-      Save();
+	if (!(flags & BOX_NOSAVE))
+		Save();
 
-    SetWin(WIN_SCREEN);
-    SizeWin(WIN_CUSTOM,BoxLength-1,min(40,Lines-2));
+	SetWin(WIN_SCREEN);
+	SizeWin(WIN_CUSTOM, BoxLength - 1, min(40, Lines - 2));
 
-    DrawBorder(WIN_CUSTOM,cbor);
-    ClearScroll(true);
-    Color(ctxt);
+	DrawBorder(WIN_CUSTOM, cbor);
+	ClearScroll(true);
+	Color(ctxt);
 
-    ch = lbuff; c=1; real_c=1; buff2[0] = ' '; y = -1;
+	ch = lbuff; c = 1; real_c = 1; buff2[0] = ' '; y = -1;
 
-    while(*ch)
-      {
-        if (*ch == '\n')
-          {
-            y++;
-            while(real_c<BoxLength)
-              {
-                buff2[c++] = ' ';
-                real_c++;
-              }
-            buff2[c++] = 0;
-            SWrite(0,y,buff2);
-            c = 1; real_c = 1;
-          }
-        else
-          {
-            buff2[c++] = *ch;
-            if (*ch > 0)
-              real_c++;
-          }
-        ch++;
-      }
-    UpdateScrollArea(0,WIN_CUSTOM);
-    saveMode = (int8)Mode;
-    Mode = MO_SPLASH;
-    done = false; in = 0;
-    if (!(flags & BOX_NOPAUSE))
-      do {
-        int16 oldMode;
-        oldMode = GetMode();
-        SetMode(MO_DIALOG);
-        in = GetCharCmd(KY_CMD_ARROW_MODE);
-        SetMode(oldMode);
-        switch(in) {
-          case KY_CMD_NORTH: 
-          case KY_CMD_NORTHWEST:
-          case KY_CMD_NORTHEAST:
-            ScrollUp(); break;
-            //UpdateScrollArea(offset- WinSizeY() - 6, WIN_CUSTOM); break;
+	while (*ch) {
+		if (*ch == '\n') {
+			y++;
+			while (real_c < BoxLength) {
+				buff2[c++] = ' ';
+				real_c++;
+			}
+			buff2[c++] = 0;
+			SWrite(0, y, buff2);
+			c = 1; real_c = 1;
+		} else {
+			buff2[c++] = *ch;
+			if (*ch > 0)
+				real_c++;
+		}
+		ch++;
+	}
+	UpdateScrollArea(0, WIN_CUSTOM);
+	saveMode = (int8)Mode;
+	Mode = MO_SPLASH;
+	done = false; in = 0;
+	if (!(flags & BOX_NOPAUSE))
+		do {
+			int16 oldMode;
+			oldMode = GetMode();
+			SetMode(MO_DIALOG);
+			in = GetCharCmd(KY_CMD_ARROW_MODE);
+			SetMode(oldMode);
+			switch (in) {
+			case KY_CMD_NORTH:
+			case KY_CMD_NORTHWEST:
+			case KY_CMD_NORTHEAST:
+				ScrollUp(); break;
+				//UpdateScrollArea(offset- WinSizeY() - 6, WIN_CUSTOM); break;
 
-          case KY_CMD_SOUTH: 
-          case KY_CMD_SOUTHWEST:
-          case KY_CMD_SOUTHEAST:
-            ScrollDown(); break;
-            //UpdateScrollArea(offset + (WinSizeY() - 6), WIN_CUSTOM); break;
+			case KY_CMD_SOUTH:
+			case KY_CMD_SOUTHWEST:
+			case KY_CMD_SOUTHEAST:
+				ScrollDown(); break;
+				//UpdateScrollArea(offset + (WinSizeY() - 6), WIN_CUSTOM); break;
 
-          case KY_CMD_EAST:
-          case KY_CMD_WEST:
-            break;
+			case KY_CMD_EAST:
+			case KY_CMD_WEST:
+				break;
 
-          case KY_CMD_ENTER:
-          case KY_ENTER: done = true; break; 
+			case KY_CMD_ENTER:
+			case KY_ENTER: done = true; break;
 
-          default:
-            if (!(flags & BOX_MUST_PRESS_ENTER))
-              done = true;
-            break;
-          }
-        }
-      while (!done);
+			default:
+				if (!(flags & BOX_MUST_PRESS_ENTER))
+					done = true;
+				break;
+			}
+		} while (!done);
 
-    if (flags & BOX_SAVECHAR)
-      QueuedChar = (uint8)in;
-    Mode = saveMode;
-    if (!(flags & BOX_NOSAVE))
-      Restore();
-  }
+	if (flags & BOX_SAVECHAR)
+		QueuedChar = (uint8)in;
+	Mode = saveMode;
+	if (!(flags & BOX_NOSAVE))
+		Restore();
+}
 
+int16 TextTerm::WrapWrite(int16 x, int16 y, const char* _s, int16 x2, int16 maxlines) {
+	String l, v, s; s = _s;
+	int pos, lines;
+	/* Trim Trailing Returns */
+	while (s.GetLength() && s[s.GetLength() - 1] == '\n')
+		s = s.Left(s.GetLength() - 1);
+	GotoXY(x, y); lines = 0; cWrap = 0;
+	while (1) {
+		int space_left_on_this_line = (x2 ? x2 : WinSizeX()) - max(x, cWrap);
+		int trueLength = s.GetTrueLength();
+		if (space_left_on_this_line > trueLength) {
+			if (trueLength > 0) { lines++; }
+			Write(s);
+			GotoXY(max(x, cWrap), y + lines);
+			return lines;
+		}
+		pos = (s.TrueLeft(space_left_on_this_line)).GetLength() - 1;
 
-
-  int16 TextTerm::WrapWrite(int16 x,int16 y,const char* _s, int16 x2, int16 maxlines) {
-      String l, v, s; s = _s;
-      int pos, lines;
-      /* Trim Trailing Returns */
-      while (s.GetLength() && s[s.GetLength()-1] == '\n')
-          s = s.Left(s.GetLength()-1);
-      GotoXY(x,y); lines = 0; cWrap = 0;
-      while(1) {
-          int space_left_on_this_line = (x2 ? x2 : WinSizeX()) - max(x,cWrap);
-          int trueLength = s.GetTrueLength(); 
-          if (space_left_on_this_line > trueLength) {
-              if (trueLength > 0) { lines++; } 
-              Write(s);
-              GotoXY(max(x,cWrap),y+lines);
-              return lines;
-          }
-          pos = (s.TrueLeft(space_left_on_this_line)).GetLength()-1;
-
-          int good_breakpoint = pos;
-          while (good_breakpoint && 
-              s[good_breakpoint] != ' ' &&
-              s[good_breakpoint] != '\n')
-              good_breakpoint --;
-          if (!good_breakpoint) {
-              // just write out what we have 
-              l = s.TrueLeft(pos);
-          } else {
-              l = s.Left(good_breakpoint);
-          } 
-          if (l.strchr('\n')) { 
-              pos = l.strchr('\n'); 
-              l = s.Left(pos); 
-          }
-          s = s.Right((s.GetLength() - l.GetLength()));
-          lines++; Write(l); GotoXY(max(x,cWrap),y+lines);
-          if ((y + lines) >= WinSizeY() || lines >= maxlines)
-              return lines;
-          while (s.GetLength() && s[0] == ' ')
-              s = s.Right(s.GetLength()-1);
-      }  
-  }
+		int good_breakpoint = pos;
+		while (good_breakpoint && s[good_breakpoint] != ' ' && s[good_breakpoint] != '\n')
+			good_breakpoint--;
+		if (!good_breakpoint) {
+			// just write out what we have 
+			l = s.TrueLeft(pos);
+		} else {
+			l = s.Left(good_breakpoint);
+		}
+		if (l.strchr('\n')) {
+			pos = l.strchr('\n');
+			l = s.Left(pos);
+		}
+		s = s.Right((s.GetLength() - l.GetLength()));
+		lines++; Write(l); GotoXY(max(x, cWrap), y + lines);
+		if ((y + lines) >= WinSizeY() || lines >= maxlines)
+			return lines;
+		while (s.GetLength() && s[0] == ' ')
+			s = s.Right(s.GetLength() - 1);
+	}
+}
 
 /*****************************************************************************\
 *                                 TextTerm                                   *
 *                              Scrolling Text                                 *
 \*****************************************************************************/
 
-void TextTerm::UpdateScrollArea(int16 _offset, int16 wn)
-  {
-    int16 y;
-    SetWin(wn);
-    Clear();
-    offset = _offset == -2 ? offset : _offset;
-    if (offset > ScrollLines - WinSizeY())
-      offset = max(0,ScrollLines - WinSizeY());
-    if (offset < 0)
-      offset = 0;
-    for(y=0;y!=WinSizeY();y++) {
-      if (y+offset > ScrollLines)
-        break;
-      BlitScrollLine(wn,y+offset,y);
-      }
-    if (offset)
-      PutChar(WinSizeX()-1,0,GLYPH_ARROW_UP + (EMERALD*256));
-    if (offset < ScrollLines - WinSizeY())
-      PutChar(WinSizeX()-1,WinSizeY()-1,GLYPH_ARROW_DOWN + (EMERALD*256));
+void TextTerm::UpdateScrollArea(int16 _offset, int16 wn) {
+	int16 y;
+	SetWin(wn);
+	Clear();
+	offset = _offset == -2 ? offset : _offset;
+	if (offset > ScrollLines - WinSizeY())
+		offset = max(0, ScrollLines - WinSizeY());
+	if (offset < 0)
+		offset = 0;
+	for (y = 0; y != WinSizeY(); y++) {
+		if (y + offset > ScrollLines)
+			break;
+		BlitScrollLine(wn, y + offset, y);
+	}
+	if (offset)
+		PutChar(WinSizeX() - 1, 0, GLYPH_ARROW_UP + (EMERALD * 256));
+	if (offset < ScrollLines - WinSizeY())
+		PutChar(WinSizeX() - 1, WinSizeY() - 1, GLYPH_ARROW_DOWN + (EMERALD * 256));
 
-    updated = false;  
-  }
+	updated = false;
+}
 
-
-void TextTerm::HyperTab(int16 wn)
-  {
+void TextTerm::HyperTab(int16 wn) {
     int16 CurrLine, i, ln, sx, sy;
     bool isLink;
     /* Assumptions:
