@@ -489,19 +489,10 @@ void libtcodTerm::Restore() {
 }
 
 void libtcodTerm::PutChar(Glyph g) {
-    if (g >> 8) {
-        TCOD_console_put_char(bScreen,cx,cy,CHAR(g),TCOD_BKGND_SET);
-    } else {
-        uint32 ga = attr*256;
-        TCOD_console_put_char_ex(bScreen,cx,cy,CHAR(g),Colors[FORE(ga)], Colors[BACK(ga)]);
-    }
-
-    cx++;
-    updated = false;
+	APutChar(cx++, cy, g);
 }
 
-void libtcodTerm::APutChar(int16 x, int16 y, Glyph g) 
-  {
+void libtcodTerm::APutChar(int16 x, int16 y, Glyph g) {
     int c = CHAR(g);
     uint32 ga;
     if (g >> 8) {
@@ -511,14 +502,13 @@ void libtcodTerm::APutChar(int16 x, int16 y, Glyph g)
     }
     TCOD_console_put_char_ex(bScreen,x,y,c,Colors[FORE(ga)], Colors[BACK(ga)]);
     updated = false;
-  }
+}
 
-void libtcodTerm::PutChar(int16 x, int16 y, Glyph g) 
-  {
+void libtcodTerm::PutChar(int16 x, int16 y, Glyph g) {
     x += activeWin->Left;
     y += activeWin->Top;
     APutChar(x,y,g);
-  }
+}
 
 Glyph libtcodTerm::AGetChar(int16 x, int16 y) {
     Glyph g = TCOD_console_get_char(bScreen,x,y);
