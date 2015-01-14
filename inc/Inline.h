@@ -211,7 +211,7 @@ inline int32 LookupStr(TextVal *list, const char*str)
 
 inline Glyph AdjustGlyphDir(Glyph G, Dir d)
   {
-    Glyph g = G & 0x00FF;
+    Glyph g = GLYPH_ID_VALUE(G);
     switch (g)
       {
         case GLYPH_ARROW_UP:
@@ -219,13 +219,13 @@ inline Glyph AdjustGlyphDir(Glyph G, Dir d)
         case GLYPH_ARROW_LEFT:
         case GLYPH_ARROW_RIGHT:
           switch(d) {
-            case NORTH: return GLYPH_ARROW_UP | (G & 0xFF00);
-            case SOUTH: return GLYPH_ARROW_DOWN | (G & 0xFF00);
-            case EAST:  return GLYPH_ARROW_RIGHT | (G & 0xFF00);
-            case WEST:  return GLYPH_ARROW_LEFT | (G & 0xFF00);
-            case NORTHEAST: case SOUTHWEST: return '/' | (G & 0xFF00);
-            case NORTHWEST: case SOUTHEAST: return '\\' | (G & 0xFF00);
-            default:                        return '*' | (G & 0xFF00);
+            case NORTH: return GLYPH_ARROW_UP | (G & GLYPH_ATTR_MASK);
+			case SOUTH: return GLYPH_ARROW_DOWN | (G & GLYPH_ATTR_MASK);
+			case EAST:  return GLYPH_ARROW_RIGHT | (G & GLYPH_ATTR_MASK);
+			case WEST:  return GLYPH_ARROW_LEFT | (G & GLYPH_ATTR_MASK);
+			case NORTHEAST: case SOUTHWEST: return '/' | (G & GLYPH_ATTR_MASK);
+			case NORTHWEST: case SOUTHEAST: return '\\' | (G & GLYPH_ATTR_MASK);
+			default:                        return '*' | (G & GLYPH_ATTR_MASK);
             }
          break;
         default:
@@ -415,7 +415,7 @@ inline bool Map::FieldAt(int16 x,int16 y, uint32 FType)
 
 inline Glyph Map::FieldGlyph(int16 x,int16 y, Glyph og) 
   {
-    int16 i; Glyph g; uint32 best = 0;
+    int16 i; Glyph g, g_id, og_id; uint32 best = 0;
     if (!At(x,y).Visibility & VI_VISIBLE)
       return og;
 
@@ -435,7 +435,7 @@ inline Glyph Map::FieldGlyph(int16 x,int16 y, Glyph og)
               perID  = PTerrainAt(x,y,seer);
               g = TTER(illID)->Image;
               if (illID != perID)
-                g = (g & 0xF0FF) | (11 * 0xFF);
+                g = (g & (GLYPH_BACK_MASK | GLYPH_ID_MASK)) | GLYPH_FORE(11);
             }
           else
             g = Fields[i]->Image; 
@@ -449,29 +449,32 @@ inline Glyph Map::FieldGlyph(int16 x,int16 y, Glyph og)
     /* Size Glyphs should not be displayed over solid stone, since
        stone/size overlaps are supposed to represent large creatures
        squeezing into smaller spaces. */
-    if ((g & 0xFF) == GLYPH_BULK)
+	g_id = GLYPH_ID_VALUE(g);
+	og_id = GLYPH_ID_VALUE(og);
+
+    if (g_id == GLYPH_BULK)
       if (SolidAt(x,y))
         return og;
 
-    if ((og & 0xFF) != GLYPH_FLOOR && 
-        (og & 0xFF) != GLYPH_FLOOR2 &&
-        (((g & 0xFF) != GLYPH_BULK) || 
+    if (og_id != GLYPH_FLOOR && 
+        og_id != GLYPH_FLOOR2 &&
+        ((g_id != GLYPH_BULK) || 
          (At(x,y).Contents && oThing(At(x,y).Contents)->isCreature()))) {
       return og;
-      //return (og & 0x00FF) | (g & 0xFF00); 
+      //return og_id | (g & GLYPH_ATTR_MASK); 
     }
 
-    if ((g & 0x00FF) == GLYPH_FLOOR2)
-      if (((og & 0x00FF) != GLYPH_FLOOR) && ((og & 0x00FF) != GLYPH_FLOOR2))
+    if (g_id == GLYPH_FLOOR2)
+      if ((og_id != GLYPH_FLOOR) && (og_id != GLYPH_FLOOR2))
         return og;
-    if ((g & 0xF0FF) == 0) {
+	if ((g & (GLYPH_BACK_MASK | GLYPH_ID_MASK)) == 0) {
       /* No Glyph Proper */
-      if ((og & 0x00FF) != GLYPH_FLOOR)
+      if (og_id != GLYPH_FLOOR)
         return og;
-      return (g & 0x0F00) | (At(x,y).Glyph & 0xF0FF);
+	  return (g & GLYPH_FORE_MASK) | (At(x, y).Glyph & (GLYPH_BACK_MASK | GLYPH_ID_MASK));
       }
     else
-      return (g & 0x0FFF) | (At(x,y).Glyph & 0xF000);
+		return (g & (GLYPH_FORE_MASK | GLYPH_ID_MASK)) | (At(x, y).Glyph & GLYPH_BACK_MASK);
 
   }
 

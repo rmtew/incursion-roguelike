@@ -306,14 +306,14 @@ ProcessSpells:
     do {
         Clear(); Color(EMERALD);
         for(i=0;i!=WinSizeX();i++) {
-            PutChar(i,0,205);
-            PutChar(i,WinSizeY()-1,205);
+			PutChar(i, 0, GLYPH_STORE_HWALL);
+			PutChar(i, WinSizeY() - 1, GLYPH_STORE_HWALL);
         }
         Color(YELLOW);
-        PutChar(0,0,219);
-        PutChar(0,WinSizeY()-1,219);
-        PutChar(WinSizeX()-1,0,219);
-        PutChar(WinSizeX()-1,WinSizeY()-1,219);
+		PutChar(0, 0, GLYPH_SOLID);
+		PutChar(0, WinSizeY() - 1, GLYPH_SOLID);
+		PutChar(WinSizeX() - 1, 0, GLYPH_SOLID);
+		PutChar(WinSizeX() - 1, WinSizeY() - 1, GLYPH_SOLID);
         Write(WinLeft() + (WinSizeX() / 2) -
             (strlen(WinTitle)/2),0,WinTitle);
 
@@ -324,8 +324,8 @@ ProcessSpells:
             // Write(2,i,Text[i + offset - 2]);
             Write(2,i,(const char*)spell_line[i + offset - 2]);
         Color(EMERALD);
-        PutChar(0,(curr-offset)+2,16);
-        PutChar(79,(curr-offset)+2,17);
+		PutChar(0, (curr - offset) + 2, GLYPH_POINTER_RIGHT);
+		PutChar(79, (curr - offset) + 2, GLYPH_POINTER_LEFT);
         Color(BLUE);
 
         ClearScroll();
@@ -346,8 +346,10 @@ ProcessSpells:
         Color(AZURE);
         if(FeatList)
             Write(0,WinSizeY()-3,FeatList);
-        Write(0,WinSizeY()-2,Format("[%c%c] Select Spell [ENTER] Cast %c[0-9] Set Spellkey%c [?] Help",
-            GLYPH_ARROW_UP,GLYPH_ARROW_DOWN,-8,-9)); 
+        Write(0,WinSizeY()-2,Format("[%c%c%c%c%c%c] Select Spell [ENTER] Cast %c[0-9] Set Spellkey%c [?] Help",
+			LITERAL_CHAR, LITERAL_CHAR1(GLYPH_ARROW_UP), LITERAL_CHAR2(GLYPH_ARROW_UP),
+			LITERAL_CHAR, LITERAL_CHAR1(GLYPH_ARROW_DOWN), LITERAL_CHAR2(GLYPH_ARROW_DOWN),
+			-SHADOW,-AZURE)); 
 GetKey:
         ClearKeyBuff();
         switch(sp = GetCharRaw()) {
@@ -1617,19 +1619,19 @@ void TextTerm::SkillManager(bool initial)
     Color(SKYBLUE);
     for(i=x1;i<=x2;i++)
       {
-        PutChar(i,y1-1,205);
-        PutChar(i,y2+1,205);
+		  PutChar(i, y1 - 1, GLYPH_STORE_HWALL);
+		PutChar(i, y2 + 1, GLYPH_STORE_HWALL);
       }
     for(i=y1;i<=y2;i++)
       {
-        PutChar(x1-1,i,186);
-        PutChar(x2+1,i,186);
+		  PutChar(x1 - 1, i, GLYPH_STORE_VWALL);
+		PutChar(x2 + 1, i, GLYPH_STORE_VWALL);
       }
     Color(CYAN);
-    PutChar(x1-1,y1-1,219);
-    PutChar(x1-1,y2+1,219);
-    PutChar(x2+1,y1-1,219);
-    PutChar(x2+1,y2+1,219);
+	PutChar(x1 - 1, y1 - 1, GLYPH_SOLID);
+	PutChar(x1 - 1, y2 + 1, GLYPH_SOLID);
+	PutChar(x2 + 1, y1 - 1, GLYPH_SOLID);
+	PutChar(x2 + 1, y2 + 1, GLYPH_SOLID);
 
     Color(AZURE);
     title = " -- Skill Manager -- ";
@@ -1713,8 +1715,11 @@ void TextTerm::SkillManager(bool initial)
             j++;
           }
       Color(GREEN);
-      Write(0,WinSizeY()-1,Format("[%c%c] Select Skill [%c%c] Allocate Ranks [ESC] Abort [ENTER] Done",
-        GLYPH_ARROW_UP, GLYPH_ARROW_DOWN, GLYPH_ARROW_LEFT, GLYPH_ARROW_RIGHT));
+	  Write(0, WinSizeY() - 1, Format("[%c%c%c%c%c%c] Select Skill [%c%c%c%c%c%c] Allocate Ranks [ESC] Abort [ENTER] Done",
+		  LITERAL_CHAR, LITERAL_CHAR1(GLYPH_ARROW_UP), LITERAL_CHAR2(GLYPH_ARROW_UP),
+		  LITERAL_CHAR, LITERAL_CHAR1(GLYPH_ARROW_DOWN), LITERAL_CHAR2(GLYPH_ARROW_DOWN),
+		  LITERAL_CHAR, LITERAL_CHAR1(GLYPH_ARROW_LEFT), LITERAL_CHAR2(GLYPH_ARROW_LEFT),
+		  LITERAL_CHAR, LITERAL_CHAR1(GLYPH_ARROW_RIGHT), LITERAL_CHAR2(GLYPH_ARROW_RIGHT)));
       Write(0,WinSizeY()-2,Format("[?] Skill Manager Help / Skill Descriptions [TAB] Change Class"));
       
       SizeWin(WIN_MENUDESC,x1+2,y1+sl+SKILLS_SHOWN+1,x2-2,y2-3);
@@ -1827,9 +1832,12 @@ void TextTerm::SkillManager(bool initial)
               goto Recount;
             if (ch == 'n') {
               Color(GREEN);
-              Write(0,WinSizeY()-1,Format("[%c%c] Select Skill [%c%c] Allocate Ranks [ESC] Abort [ENTER] Done",
-                GLYPH_ARROW_UP, GLYPH_ARROW_DOWN, GLYPH_ARROW_LEFT, GLYPH_ARROW_RIGHT));
-              break;
+              Write(0,WinSizeY()-1,Format("[%c%c%c%c%c%c] Select Skill [%c%c%c%c%c%c] Allocate Ranks [ESC] Abort [ENTER] Done",
+				  LITERAL_CHAR, LITERAL_CHAR1(GLYPH_ARROW_UP), LITERAL_CHAR2(GLYPH_ARROW_UP),
+				  LITERAL_CHAR, LITERAL_CHAR1(GLYPH_ARROW_DOWN), LITERAL_CHAR2(GLYPH_ARROW_DOWN),
+				  LITERAL_CHAR, LITERAL_CHAR1(GLYPH_ARROW_LEFT), LITERAL_CHAR2(GLYPH_ARROW_LEFT),
+				  LITERAL_CHAR, LITERAL_CHAR1(GLYPH_ARROW_RIGHT), LITERAL_CHAR2(GLYPH_ARROW_RIGHT)));
+			  break;
               }
             for(i=0;i!=SK_LAST;i++)
               p->SkillRanks[i] += Alloc[i][0] + 
@@ -1997,9 +2005,11 @@ void TextTerm::OptionManager(int16 start_cat)
         SetWin(WIN_OPTIONS);
 
         Color(EMERALD);
-        Write(0,WinSizeY()-1,Format("[%c%c] Select [SPACE] Change Option [%c%c TAB] Change Group",
-          GLYPH_ARROW_UP, GLYPH_ARROW_DOWN, GLYPH_ARROW_LEFT, GLYPH_ARROW_RIGHT
-            ));
+        Write(0,WinSizeY()-1,Format("[%c%c%c%c%c%c] Select [SPACE] Change Option [%c%c%c%c%c%c TAB] Change Group",
+			LITERAL_CHAR, LITERAL_CHAR1(GLYPH_ARROW_UP), LITERAL_CHAR2(GLYPH_ARROW_UP),
+			LITERAL_CHAR, LITERAL_CHAR1(GLYPH_ARROW_DOWN), LITERAL_CHAR2(GLYPH_ARROW_DOWN),
+			LITERAL_CHAR, LITERAL_CHAR1(GLYPH_ARROW_LEFT), LITERAL_CHAR2(GLYPH_ARROW_LEFT),
+			LITERAL_CHAR, LITERAL_CHAR1(GLYPH_ARROW_RIGHT), LITERAL_CHAR2(GLYPH_ARROW_RIGHT)));
         Write(0,WinSizeY()-2,"[R] Reset All Options [PGUP/PGDN] Scroll Option Descriptions");    
         BadChar:
         SetWin(WIN_OPTIONS);

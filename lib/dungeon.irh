@@ -573,17 +573,17 @@ Terrain "Building Wall"
     Flags: TF_SOLID, TF_OPAQUE, TF_WALL; }
 
 Terrain "Adamant Wall"
-  { Image: shadow 219; Mat:MAT_ADAMANT; 
+  { Image: shadow GLYPH_SOLID; Mat:MAT_ADAMANT; 
     Flags: TF_SOLID, TF_OPAQUE, TF_WALL; }
 
 Terrain "bookshelf"
-  { Image: brown 219; Mat: MAT_WOOD;
+  { Image: brown GLYPH_SOLID; Mat: MAT_WOOD;
     Flags: TF_SOLID, TF_OPAQUE, TF_WALL; }
 
 
 
 Terrain "Steel Fence"
-  { Image: cyan 240; Mat:MAT_IRON; 
+  { Image: cyan GLYPH_PORTAL; Mat:MAT_IRON; 
     Flags: TF_SOLID, TF_WALL; }
 
 
@@ -805,7 +805,7 @@ and EA_TERRAFORM
  ************************************************************************/
 
 Feature "Pillar" : T_FEATURE
-  { Image: grey GLYPH_PILLAR; Mat:MAT_GRANITE; 
+  { Image: grey GLYPH_PILLAR1; Mat:MAT_GRANITE; 
     Flags: F_SOLID, F_OPAQUE; HP: 40; 
   }
   
@@ -815,10 +815,10 @@ Feature "altar" : T_FEATURE
   }
 
 Feature "pews" : T_FEATURE
-  { Image: brown 219; Mat: MAT_WOOD; HP: 10; }
+  { Image: brown GLYPH_SOLID; Mat: MAT_WOOD; HP: 10; }
 
 Feature "rock column" : T_FEATURE
-  { Image: brown GLYPH_PILLAR; Mat:MAT_MINERAL; 
+  { Image: brown GLYPH_PILLAR1; Mat:MAT_MINERAL; 
     HP: 10; 
     Flags: F_SOLID, F_OPAQUE; 
     Desc: "Stalactites and stalagmites are naturally occurring rock
@@ -1450,7 +1450,7 @@ Terrain "bed of spikes"
   }
 
 Terrain "Summoning Circle"
-  { Image: bright purple 233; Mat:MAT_GRANITE; 
+  { Image: bright purple GLYPH_SUMMONING_CIRCLE; Mat:MAT_GRANITE; 
     Flags: TF_SHOWNAME | TF_SPECIAL; 
     On Event EV_INITIALIZE {
       hObj h,w;
@@ -4163,7 +4163,7 @@ Region "The Goblin Encampment" : RF_ROOM
      Tiles:
        /* keep the rabble out */
        '=': $"steel fence",
-       'o': $"floor" with $"pillar" as red 15,
+       'o': $"floor" with $"pillar" as red GLYPH_PILLAR2,
 
        /* follow the yellow-brick road ... */
        ',': $"floor" as purple GLYPH_FLOOR2,
@@ -4174,9 +4174,9 @@ Region "The Goblin Encampment" : RF_ROOM
             $"statue" of $"Murgash, the Goblin King",    
 
        /* goblin family barracks: a life of squalor */
-       '*': $"building wall" as brown 219,
-       '-': $"building wall" as brown 205,
-       '|': $"building wall" as brown 186,
+       '*': $"building wall" as brown GLYPH_SOLID,
+       '-': $"building wall" as brown GLYPH_STORE_HWALL,
+       '|': $"building wall" as brown GLYPH_STORE_VWALL,
        'F': $"floor" with $"forge",
        'b': $"bloodstain",      /* charnel house, grocery strore */
        'm': $"bloodstain" with $"strip of cured meat",
@@ -4824,7 +4824,7 @@ Terrain "Testing Terrain"
 
 #if 0
 Terrain "Summoning Circle"
-  { Image: bright green 233; Mat:MAT_GRANITE; 
+  { Image: bright green GLYPH_SUMMONING_CIRCLE; Mat:MAT_GRANITE; 
     Flags: TF_SHOWNAME | TF_SPECIAL; 
     On Event EV_INITIALIZE {
       rID fID;
@@ -4840,7 +4840,7 @@ Terrain "Summoning Circle"
                 colour = RED; mtype = (MA_EVIL+MA_OUTSIDER*256); break;
       } 
       EMap->NewField(FI_BLOCKER,e.EXVal,e.EYVal,r,
-          colour*256+GLYPH_FLOOR2,-1,fID,NULL);
+          GLYPH_VALUE(GLYPH_FLOOR2, colour),-1,fID,NULL);
       x = -3 + (random(2) * 6);
       y = -3 + (random(3) * 6); 
       if (EMap->InBounds(e.EXVal+x,e.EYVal+y))

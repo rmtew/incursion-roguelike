@@ -3077,7 +3077,7 @@ Monster "torch archon" : MA_CELESTIAL
     On Event EV_INITIALIZE {
       if (!EActor->HasStati(SUMMONED))
         EMap->NewField(FI_LIGHT|FI_MODIFIER|FI_MOBILE|FI_BLOCKER,EActor->x,EActor->y,2,
-          WHITE*256+GLYPH_FLOOR2,-1,$"magic circle vs. evil",EActor);
+          GLYPH_VALUE(GLYPH_FLOOR2, WHITE),-1,$"magic circle vs. evil",EActor);
       },
     MSG_SPECABIL 
       "It projects a continual <1>Magic Circle vs. Evil<7> effect. ";
@@ -3146,7 +3146,7 @@ Monster "shining torch archon" : MA_CELESTIAL
     On Event EV_INITIALIZE {
       if (!EActor->HasStati(SUMMONED))
         EMap->NewField(FI_LIGHT|FI_MODIFIER|FI_MOBILE|FI_BLOCKER,EActor->x,EActor->y,3, 
-          WHITE*256+GLYPH_FLOOR2,-1,$"magic circle vs. evil",EActor);
+          GLYPH_VALUE(GLYPH_FLOOR2, WHITE),-1,$"magic circle vs. evil",EActor);
       },
     MSG_SPECABIL 
       "It projects a continual <1>Magic Circle vs. Evil<7> effect. ";
@@ -3208,7 +3208,7 @@ Monster "lantern archon" : MA_CELESTIAL
     On Event EV_INITIALIZE {
       if (!EActor->HasStati(SUMMONED))
         EMap->NewField(FI_LIGHT|FI_MODIFIER|FI_MOBILE|FI_BLOCKER,
-          EActor->x,EActor->y,4, WHITE*256+GLYPH_FLOOR2,-1,$"magic circle vs. evil",EActor);
+          EActor->x,EActor->y,4, GLYPH_VALUE(GLYPH_FLOOR2, WHITE),-1,$"magic circle vs. evil",EActor);
       },
     MSG_SPECABIL 
       "It projects a continual <1>Magic Circle vs. Evil<7> effect. ";
@@ -3250,7 +3250,7 @@ Monster "hound archon" : MA_CELESTIAL, MA_DOG, MA_HUMANOID
     On Event EV_INITIALIZE {
       if (!EActor->HasStati(SUMMONED))
         EMap->NewField(FI_MODIFIER|FI_MOBILE|FI_BLOCKER,EActor->x,EActor->y,2,
-          WHITE*256+GLYPH_FLOOR2,-1,$"magic circle vs. evil",EActor);
+          GLYPH_VALUE(GLYPH_FLOOR2, WHITE),-1,$"magic circle vs. evil",EActor);
       },
     MSG_SPECABIL 
       "It projects a continual <1>Magic Circle vs. Evil<7> effect. ";

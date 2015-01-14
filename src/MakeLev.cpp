@@ -151,20 +151,20 @@ void Map::calcLight(Rect &r)
                    moment. It will need to be rewritten in a
                    more device-independant way if Incursion
                    ever comes to support graphical tiles. */
-                if (((At(x,y).Glyph & 0x00FF) == GLYPH_FLOOR) && At(x,y).Shade) {
+                if ((GLYPH_ID_VALUE(At(x,y).Glyph) == GLYPH_FLOOR) && At(x,y).Shade) {
                   switch (l) {
                     case 3:
-                      At(x,y).Glyph = GLYPH_FLOOR + (YELLOW*256);
+                      At(x,y).Glyph = GLYPH_VALUE(GLYPH_FLOOR, YELLOW);
                       At(x,y).Bright = true;
                      break;
                     case 2:
-                      if ((At(x,y).Glyph & 0x0F00) != (YELLOW*256))
-                        At(x,y).Glyph = GLYPH_FLOOR + (BROWN*256);
+                      if (GLYPH_FORE_VALUE(At(x,y).Glyph) != YELLOW)
+						  At(x, y).Glyph = GLYPH_VALUE(GLYPH_FLOOR, BROWN);
                      break;
                     }
                   }
-                else if ((At(x,y).Glyph & 0x00FF) == GLYPH_FLOOR && l == 3)
-                  At(x,y).Glyph |= 0x0800;
+                else if (GLYPH_ID_VALUE(At(x,y).Glyph) == GLYPH_FLOOR && l == 3)
+                  At(x,y).Glyph |= GLYPH_FORE(BRIGHT_MASK);
 
                 }
 
@@ -1087,15 +1087,15 @@ void Map::WriteMap(Rect &r,rID regID)
       if (t = MapLetterArray[ch]) {
         WriteAt(r,r.x1 + x,r.y1 + y,t->tID,regID,PRIO_VAULT);
 
-        if (t->Image & 0xFF00) {
-          At(r.x1 + x,r.y1 + y).Glyph &= 0x00FF;
+        if (t->Image & GLYPH_ATTR_MASK) {
+          At(r.x1 + x,r.y1 + y).Glyph &= GLYPH_ID_MASK;
           At(r.x1 + x,r.y1 + y).Glyph |= t->Image;
         }
-        if (t->Image & 0x00FF) {
-          At(r.x1 + x,r.y1 + y).Glyph &= 0xFF00;
+        if (t->Image & GLYPH_ID_MASK) {
+          At(r.x1 + x,r.y1 + y).Glyph &= GLYPH_ATTR_MASK;
           At(r.x1 + x,r.y1 + y).Glyph |= t->Image;
         }
-        if ((t->Image & 0xFF00) != 0x0700)
+        if ((t->Image & GLYPH_COLOUR_MASK) != GLYPH_FORE(7))
           At(r.x1 + x,r.y1 + y).Shade = false;
         if (t->fl & TILE_ITEM || (!(t->fl & TILE_MONSTER) && 
               RES(t->xID) && RES(t->xID)->Type == T_TITEM))
@@ -1338,7 +1338,7 @@ void Map::WriteMap(Rect &r,rID regID)
         if (TerrainAt(r.x1+x,r.y1+y) == WallID &&
             (At(r.x1+x,r.y1+y).Priority == PRIO_ROOM_WALL ||
              At(r.x1+x,r.y1+y).Priority == PRIO_VAULT)) {
-          At(r.x1+x,r.y1+y).Glyph = (At(r.x1+x,r.y1+y).Glyph & 0x00FF) | (ColorList[random((int16)c)] << 8);
+          At(r.x1+x,r.y1+y).Glyph = GLYPH_VALUE(At(r.x1+x,r.y1+y).Glyph & GLYPH_ID_MASK, ColorList[random((int16)c)]);
           At(r.x1+x,r.y1+y).Shade = false;
         }
       }
@@ -1968,17 +1968,6 @@ NewLocation:
         free(best);
     }
 
-    /*
-    for(x=1;x<sizeX-1;x++)
-    for(y=1;y<sizeY-1;y++)
-    if (At(x,y).Connected == false)
-    if (!At(x,y).Solid)
-    {
-    At(x,y).Shade = 0;
-    At(x,y).Glyph |= 0xB000;
-    }
-    */
-
     for(x=1;x<sizeX-1;x++)
         for(y=1;y<sizeY-1;y++)
             At(x,y).Connected = false;
@@ -2171,7 +2160,7 @@ StartAgain:
                 TREG(RegionAt(t->x,t->y))->Floor ? TREG(RegionAt(t->x,t->y))->Floor : FIND("floor"),
                 RegionAt(t->x,t->y),PRIO_FEATURE_FLOOR);
             ((Door*)t)->SetImage();
-        } else if (((t->Image & 0xFF) == '<') && Depth <= 5) {
+		} else if ((GLYPH_ID_VALUE(t->Image) == GLYPH_USTAIRS) && Depth <= 5) {
             /* Remove all secret doors near the up stairs,
             to prevent the player from being 'boxed in'
             and starving on a new level. */
@@ -2314,7 +2303,7 @@ StartAgain:
         do {
             x = 1 + random(sizeX-1);
             y = 1 + random(sizeY-1);
-            if ((TTER(TerrainAt(x,y))->Image & 0xFF) != GLYPH_ROCK)
+            if ((TTER(TerrainAt(x,y))->Image & GLYPH_ID_MASK) != GLYPH_ROCK)
                 goto TryAgain;
             for (j=0;j!=8;j++)
                 if (InBounds(x+DirX[j],y+DirY[j]) && !SolidAt(x+DirX[j],y+DirY[j]))
@@ -2357,9 +2346,9 @@ TryAgain:;
                 }
                 if (isChasm) {
                     At(x,y).isSkylight = true;
-                    if ((At(x,y).Glyph & 0xFF) == GLYPH_FLOOR) {
-                        At(x,y).Glyph &= 0xF0FF;
-                        At(x,y).Glyph |= CYAN * 256;
+                    if (GLYPH_ID_VALUE(At(x,y).Glyph) == GLYPH_FLOOR) {
+                        At(x,y).Glyph &= (GLYPH_BACK_MASK | GLYPH_ID_MASK);
+                        At(x,y).Glyph |= GLYPH_FORE(CYAN);
                         At(x,y).Shade = false;
                     }
                 }
@@ -2945,8 +2934,7 @@ DoBasicRoom:
         for(x=cPanel.x1;x<=cPanel.x2;x++)
             for(y=cPanel.y1;y<=cPanel.y2;y++)
                 if (TerrainAt(x,y) == FloorID) {
-                    At(x,y).Glyph = (At(x,y).Glyph & 0x00FF) |
-                        (ColorList[random(c)] << 8);
+                    At(x,y).Glyph = GLYPH_VALUE(GLYPH_ID_VALUE(At(x,y).Glyph), ColorList[random(c)]);
                     At(x,y).Shade = true;
                 }
     }
@@ -2957,8 +2945,7 @@ DoBasicRoom:
         for(x=cPanel.x1;x<=cPanel.x2;x++)
             for(y=cPanel.y1;y<=cPanel.y2;y++)
                 if (TerrainAt(x,y) == WallID) {
-                    At(x,y).Glyph = (At(x,y).Glyph & 0x00FF) |
-                        (ColorList[random(c)] << 8);
+					At(x, y).Glyph = GLYPH_VALUE(GLYPH_ID_VALUE(At(x, y).Glyph), ColorList[random(c)]);
                     At(x,y).Shade = false;
                 }
     }
@@ -3766,11 +3753,11 @@ WriteCorridor:
        colours, for purposes of debugging the dungeon design
        algorithm. */
     if (TFlags & TT_CONNECT) {
-      At(x,y).Glyph = GLYPH_FLOOR2 | PINK*256;
+		At(x,y).Glyph = GLYPH_VALUE(GLYPH_FLOOR2, PINK);
       At(x,y).Shade = false;
     }
     else {
-      At(x,y).Glyph = GLYPH_FLOOR2 | WHITE*256;
+		At(x,y).Glyph = GLYPH_VALUE(GLYPH_FLOOR2, WHITE);
       At(x,y).Shade = false;
     }
 #endif
@@ -3841,7 +3828,7 @@ DoCall:
         goto DoReturn;
 
     At(x,y).Connected = true;
-    //At(x,y).Glyph = GLYPH_FLOOR2 + PINK*256;
+	//At(x, y).Glyph = GLYPH_VALUE(GLYPH_FLOOR2, PINK);
     FloodArray[fCount*2]   = (uint8)x;
     FloodArray[fCount*2+1] = (uint8)y;
     fCount++;
@@ -3907,9 +3894,11 @@ DoCall:
         goto DoReturn;
 
     At(x,y).Connected = true;
-    /*At(x,y).Glyph &= 0x00FF;
-    At(x,y).Glyph |= EMERALD*256; 
-    At(x,y).Shade = 0;           */
+#if 0
+    At(x,y).Glyph &= GLYPH_ID_MASK;
+    At(x,y).Glyph |= GLYPH_FORE(EMERALD); 
+    At(x,y).Shade = 0;
+#endif
 
 
     FloodArray[fCount*2]   = (uint8)x;

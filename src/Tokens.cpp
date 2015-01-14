@@ -2599,9 +2599,12 @@ void CatLiteral(const char*str)
                           LBuff[lpos++] = ' '; break;
                 case '\\': LBuff[lpos++] = '\\'; break;
                 case '\"': LBuff[lpos++] = '\"'; break;
+				// To understand LITERAL_CHAR mangling, search for it elsewhere.
                 case '<': LBuff[lpos++] = LITERAL_CHAR;
+                          LBuff[lpos++] = (char)0xFF;
                           LBuff[lpos++] = '<'; break;
                 case '>': LBuff[lpos++] = LITERAL_CHAR;
+                          LBuff[lpos++] = (char)0xFF;
                           LBuff[lpos++] = '>'; break;
                 case 0: break;
                 default:

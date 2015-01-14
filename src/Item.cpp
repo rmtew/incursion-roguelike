@@ -608,14 +608,14 @@ void Item::MakeMagical(rID _eID, int16 spe)
       if (isType(T_POTION)) {
         if (em->PFlavorID)
           if (TFLA(em->PFlavorID)->Color != -1)
-            Image = (Image & 0xF0FF) | 
-              TFLA(em->PFlavorID)->Color << 8;
+            Image = (Image & ~GLYPH_FORE_MASK) | 
+              GLYPH_FORE(TFLA(em->PFlavorID)->Color);
         }
       else {
         if (em->PFlavorID)
           if (TFLA(em->PFlavorID)->Color != -1)
-            Image = (Image & 0xF0FF) | 
-              TFLA(em->PFlavorID)->Color << 8;
+			  Image = (Image & ~GLYPH_FORE_MASK) |
+              GLYPH_FORE(TFLA(em->PFlavorID)->Color);
         }
       }
 
@@ -1568,7 +1568,7 @@ Corpse::Corpse(Creature *c, int16 _Type)
 	: Food(FIND("corpse"),_Type)
   {
     int t = 0;
-    Image &= 0x00FF;
+    Image &= GLYPH_ID_MASK;
     if (c) {
       mID=c->tmID;
       StatiIterNature(c,TEMPLATE)
@@ -1581,34 +1581,22 @@ Corpse::Corpse(Creature *c, int16 _Type)
 
 
       Named = c->Named;
-      Image |= (c->Image & 0x0F00);
+      Image |= (c->Image & GLYPH_FORE_MASK);
     } else {
       mID = FIND("human");
-      Image |= TMON(mID)->Image & 0x0F00;
+	  Image |= TMON(mID)->Image & GLYPH_FORE_MASK;
     } 
     TurnCreated = theGame->Turn;
     LastDiseaseDCCheck = -1; 
     Type=T_CORPSE;
   }
 
-/*
-Corpse::Corpse(rID iID, int16 _Type)
-  : Food(iID,_Type)
-  {
-    mID = FIND("human");
-    if (Type == T_CORPSE) {
-      Image &= 0x00FF;
-  		Image |= (TMON(mID)->Image & 0xFF00);
-      }
-  }
-  */
-
 void Corpse::SetImage()
   {
     Image = TITEM(iID)->Image;
     if (Type == T_CORPSE) {
-      Image &= 0x00FF;
-  		Image |= (TMON(mID)->Image & 0xFF00);
+      Image &= GLYPH_ID_MASK;
+  		Image |= (TMON(mID)->Image & GLYPH_ATTR_MASK);
       }
   }
 

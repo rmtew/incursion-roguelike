@@ -63,7 +63,7 @@ EvReturn Magic::Vision(EventInfo &e)
       e.EPActor->CalcVision(); 
       t->ShowMap();
       t->ShowViewList();
-      t->PutGlyph(ViewpointX,ViewpointY,GLYPH_VIEWPOINT | SKYBLUE<<8);
+      t->PutGlyph(ViewpointX,ViewpointY,GLYPH_VALUE(GLYPH_VIEWPOINT, SKYBLUE));
       ovx = (uint8)ViewpointX;
       ovy = (uint8)ViewpointY;                           
       ch = (uint8)t->GetCharCmd(KY_CMD_ARROW_MODE);
@@ -1541,8 +1541,8 @@ EvReturn Magic::Terraform(EventInfo &e)
        break;
       case TERRA_FLOOR:
         if (!m->SolidAt(x,y) && 
-            (((m->At(x,y).Glyph & 0x00FF) == GLYPH_FLOOR) || 
-             ((m->At(x,y).Glyph & 0x00FF) == GLYPH_FLOOR2)))
+            (GLYPH_ID_VALUE(m->At(x,y).Glyph) == GLYPH_FLOOR || 
+			GLYPH_ID_VALUE(m->At(x, y).Glyph) == GLYPH_FLOOR2))
           break;
         return ABORT;
       case TERRA_OPEN:

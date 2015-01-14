@@ -5822,7 +5822,7 @@ AI_HORN Effect "Goodness" : EA_INFLICT
     xval: AFRAID; Flags: EF_ACTIVATE, EF_LIM_MTYPE, EF_AUTOID, EF_SOUND;
     Level: 3; On Event EV_EFFECT {
       EMap->NewField(FI_BLOCKER|FI_MODIFIER,EActor->x,EActor->y,
-        2,GLYPH_FLOOR2+WHITE*256,10,$"Magic Circle vs. Evil",EActor);
+        2,GLYPH_VALUE(GLYPH_FLOOR2, WHITE),10,$"Magic Circle vs. Evil",EActor);
       };
 		Desc: "When blown (activated), this horn creates a protective field
 		  against evil creatures and influences (similar to Magic Circle

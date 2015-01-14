@@ -75,7 +75,7 @@ void Creature::SetImage()
     Image = TMON(mID)->Image;
 
     if (isPlayer() && !HasStati(POLYMORPH))
-      Image = GLYPH_PLAYER | (Image & 0xFF00);
+      Image = GLYPH_PLAYER | (Image & GLYPH_COLOUR_MASK);
 
     if (HasStati(DISGUISED))
       Image = TMON(((Monster*)GetStatiObj(DISGUISED))->mID)->Image;
@@ -91,10 +91,10 @@ void Creature::SetImage()
     StatiIterNature(this,TEMPLATE)
         if (S->Mag) {
           TTemplate *tt = TTEM(S->eID);
-          if (tt->NewImage & 0x00FF)
-            Image = (Image & 0xFF00) | (tt->NewImage & 0x00FF);
-          if (tt->NewImage & 0xFF00)
-            Image = (Image & 0x00FF) | (tt->NewImage & 0xFF00);
+          if (tt->NewImage & GLYPH_ID_MASK)
+            Image = (Image & GLYPH_ATTR_MASK) | (tt->NewImage & GLYPH_ID_MASK);
+          if (tt->NewImage & GLYPH_ATTR_MASK)
+            Image = (Image & GLYPH_ID_MASK) | (tt->NewImage & GLYPH_ATTR_MASK);
           }
     StatiIterEnd(this)
 
@@ -102,43 +102,43 @@ void Creature::SetImage()
 
     if (isPlayer())
       if (thisp->Opt(OPT_PLAYER_COL) != 16)
-        Image = (Image & 0xF0FF) | thisp->Opt(OPT_PLAYER_COL)*256;
+        Image = (Image & (GLYPH_BACK_MASK | GLYPH_ID_MASK)) | GLYPH_FORE(thisp->Opt(OPT_PLAYER_COL));
 
     if (pl && pl->Opt(OPT_HIGH_FRIEND) && pl != this) 
       if (!isHostileTo(pl))
-        Image |= (ts.getLeader() == pl) ?  0xB000 : 0x3000;
+        Image |= (ts.getLeader() == pl) ?  GLYPH_BACK(SKYBLUE) : GLYPH_BACK(CYAN);
       
       
     if (HasStati(INVIS)) {
       /* This would obviously need to be rewritten for multiplayer */
       if (pl == this)
-        Image = (Image & 0xF0FF) | 0x0100;
+        Image = (Image & (GLYPH_BACK_MASK | GLYPH_ID_MASK)) | GLYPH_FORE(BLUE);
       else {
         Flags |= F_INVIS;
         if (pl && pl->Opt(OPT_HIGH_INVIS))
-          if (!(Image & 0xF000))
-            Image |= 0x1000;
+          if (!(Image & GLYPH_BACK_MASK))
+            Image |= GLYPH_BACK(BLUE);
         }
       }
     
     if (HasStati(HIDING)) {
       if (pl == this)
-        Image = (Image & 0x0FFF) | 0x1000;
+		  Image = (Image & (GLYPH_FORE_MASK | GLYPH_ID_MASK)) | GLYPH_BACK(BLUE);
       else {
         Flags |= F_INVIS;
         if (pl && pl->Opt(OPT_HIGH_HIDE))
-          if (!(Image & 0xF000))
-            Image |= 0x1000;
+          if (!(Image & GLYPH_BACK_MASK))
+			  Image |= GLYPH_BACK(BLUE);
         }
       }
     if (pl && pl->Opt(OPT_HIGH_SLEEP) && pl != this) {
       if (HasStati(SLEEPING) || HasStati(PARALYSIS,PARA_HELD))
-        if (!(Image & 0xF000))
-          Image |= 0x2000;
+		  if (!(Image & GLYPH_BACK_MASK))
+			Image |= GLYPH_BACK(GREEN);
     }
 
     if (pl && pl->Opt(OPT_HIGH_MALADY) && pl != this)
-      if (!(Image & 0xF000)) {
+      if (!(Image & GLYPH_BACK_MASK)) {
         bool stuck = false;
         bool prone = false; 
         int badStati[] = { BLIND, STUNNED, CONFUSED, PARALYSIS,
@@ -147,11 +147,11 @@ void Creature::SetImage()
           if (HasStati(badStati[i])) {
             stuck |= (badStati[i] == STUCK);
             prone |= (badStati[i] == PRONE);
-            Image |= 0x6000;
+			Image |= GLYPH_BACK(BROWN);
           }
         } 
         if (stuck && prone)
-          Image = (Image & 0x0FFF) | 0xe000;
+			Image = (Image & (GLYPH_FORE_MASK | GLYPH_ID_MASK)) | GLYPH_BACK(YELLOW);
       }
 
     if (pl && (onPlane() != pl->onPlane())) {
@@ -160,34 +160,34 @@ void Creature::SetImage()
         switch (onPlane())
           {
             case PHASE_ETHEREAL:
-              Image = (Image & 0xF0FF) + (BROWN * 256);
+				Image = (Image & (GLYPH_BACK_MASK | GLYPH_ID_MASK)) + GLYPH_FORE(BROWN);
             break;
             case PHASE_ASTRAL:
-              Image = (Image & 0xF0FF) + (AZURE * 256);
+				Image = (Image & (GLYPH_BACK_MASK | GLYPH_ID_MASK)) + GLYPH_FORE(AZURE);
             break;
             case PHASE_NEGATIVE:
-              Image = (Image & 0xF0FF) + (BLUE * 256);
+				Image = (Image & (GLYPH_BACK_MASK | GLYPH_ID_MASK)) + GLYPH_FORE(BLUE);
             break;
             case PHASE_MATERIAL:
-              Image = (Image & 0xF0FF) + (WHITE * 256);
+				Image = (Image & (GLYPH_BACK_MASK | GLYPH_ID_MASK)) + GLYPH_FORE(WHITE);
             break;
             case PHASE_SHADOW:
-              Image = (Image & 0xF0FF) + (SHADOW * 256);
+				Image = (Image & (GLYPH_BACK_MASK | GLYPH_ID_MASK)) + GLYPH_FORE(SHADOW);
             break;
           }
       if (pl->Opt(OPT_HIGH_INVIS) && onPlane() == PHASE_ETHEREAL)
-        if (!(Image & 0xF000))
-          Image |= 0x1000;
+		  if (!(Image & GLYPH_BACK_MASK))
+			Image |= GLYPH_BACK(BLUE);
       }
 
 
     #if 0
     /* Handled in Map::Update() */
-    if ((Image & 0x0F00)*16 == (Image & 0xF000)) {
-      if (Image & 0xF000)
-        Image &= 0xF0FF;
+    if (GLYPH_FORE_VALUE(Image) == GLYPH_BACK_VALUE(Image)) {
+      if (Image & GLYPH_BACK_MASK)
+		  Image &= (GLYPH_BACK_MASK | GLYPH_ID_MASK);
       else
-        Image |= 0x0800;
+        Image |= GLYPH_FORE(BRIGHT_MASK);
       }
     #endif
 

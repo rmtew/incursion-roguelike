@@ -340,12 +340,13 @@ AI_POTION Effect "Testing Resource Members" : EA_GENERIC
         $"troll"->isMType(MA_EVIL),
         $"troll"->isMType(MA_HUMANOID) );
 
+		/* BUG: Printing glyphs in this way will not work for curses, as wide characters are involved. */
       EActor->IPrint("Human Glyph: <Num>, Pillar Glyph: <num>, 
                         Door Glyph: <Num>, Potion Glyph: <num>.",
-        $"human"->Image & 0x00FF,
-        $"pillar"->Image & 0x00FF,
-        $"large oak door"->Image & 0x00FF,
-        $"potion"->Image & 0x00FF);
+        GLYPH_ID_VALUE($"human"->Image),
+        GLYPH_ID_VALUE($"pillar"->Image),
+        GLYPH_ID_VALUE($"large oak door"->Image),
+        GLYPH_ID_VALUE($"potion"->Image));
 
       return DONE;
       };

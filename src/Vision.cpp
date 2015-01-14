@@ -363,8 +363,8 @@ void Map::VisionThing(int16 pn, Creature *c, bool do_clear)
         ) 
        )
       if (At(t->x,t->y).Memory != 0)
-        At(t->x,t->y).Memory = (At(t->x,t->y).Memory & 0xF000) | 
-                               (t->Image & 0x0FFF);
+        At(t->x,t->y).Memory = (At(t->x,t->y).Memory & GLYPH_BACK_MASK) | 
+		(t->Image & ~GLYPH_BACK_MASK);
   } 
 }
 

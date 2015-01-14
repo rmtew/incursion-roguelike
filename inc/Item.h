@@ -50,11 +50,14 @@ class Item: public Thing, public Magic
       virtual bool isPlural() { return Quantity != 1 ||
                                   (iID && TITEM(iID)->HasFlag(IT_PLURAL)); }
       virtual String & Describe(Player *p);
-      virtual String & DescribeWithTitle(Player *p)
-      { return Format("%c%s%c ('%c%c%c%c')\n%s",-2,
-          (const char*)Name(NA_SINGLE|NA_XCAPS|NA_THE|NA_LONG|NA_MECH|NA_MONO|NA_NO_TERSE), 
-          -7, -((Image & 0x0F00) >> 8), LITERAL_CHAR,(Image & 0x00FF),-7,
-          (const char *)Describe(p)); } 
+	  virtual String & DescribeWithTitle(Player *p) {
+		  uint32 gid = GLYPH_ID_VALUE(Image);
+		  // To understand LITERAL_CHAR mangling, search for it elsewhere.
+		  return Format("%c%s%c ('%c%c%c%c%c')\n%s",
+			  -GREEN, (const char*)Name(NA_SINGLE | NA_XCAPS | NA_THE | NA_LONG | NA_MECH | NA_MONO | NA_NO_TERSE), -GREY,
+			  -(char)GLYPH_FORE_VALUE(Image), LITERAL_CHAR, LITERAL_CHAR1(gid), LITERAL_CHAR2(gid), -GREY,
+			  (const char *)Describe(p));
+	  }
       Creature* Owner() 
         { // ww: maybe this is fixed once and for all now ...
           if ((!Parent) || (!theRegistry->Exists(Parent)) || (!oThing(Parent))) 

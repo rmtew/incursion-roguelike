@@ -1884,7 +1884,7 @@ void Character::UseAbility(uint8 ab,int16 pa) {
                     if ((dist(cx,cy,x,y) <= i) && m->InBounds(cx,cy))
                     {
                         g = T1->GetGlyph(cx,cy);
-                        g = (g & 0x00FF) | AZURE<<8;
+                        g = (g & GLYPH_ID_MASK) | GLYPH_FORE(AZURE);
                         T1->PutGlyph(cx,cy,g);
                     }
                     T1->Update();
@@ -2795,7 +2795,7 @@ EvReturn Creature::Search(EventInfo &e)
         if ((dist(x,y,dx,dy) <= 5) && m->InBounds(dx,dy))
           {
             g = T1->GetGlyph(dx,dy);
-            g = (g & 0x00FF) | (PINK << 8);
+            g = (g & GLYPH_ID_MASK) | GLYPH_FORE(PINK);
             T1->PutGlyph(dx,dy,g);
           }
     T1->Update();

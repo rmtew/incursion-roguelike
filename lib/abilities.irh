@@ -14,7 +14,7 @@ Effect "Circle Kick" : EA_BLAST
           {                                                           \
             ETerm->PutGlyph(EActor->x + vx,                           \
                             EActor->y + vy,                           \
-                            GLYPH_BULK | (EActor->Image & 0x0F00));   \
+                            GLYPH_VALUE(GLYPH_BULK, (EActor->Image & GLYPH_FORE_MASK)));   \
             h = EMap->FCreatureAt(EActor->x + vx,EActor->y + vy);     \
           }                                                       
       h1 = NULL; h2 = NULL; h3 = NULL;

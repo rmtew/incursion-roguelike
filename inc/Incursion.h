@@ -30,9 +30,6 @@
 #include <time.h>
 #include <limits.h>
 
-
-
-
 #ifdef DEBUG_MEMORY_CORRUPTION
 
 void * _malloc(size_t sz);

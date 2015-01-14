@@ -842,7 +842,7 @@ Class "Blackguard"
     On Event EV_ADVANCE {
       if (EActor->LevelAs($"blackguard") == 4)
         EMap->NewField(FI_MODIFIER|FI_MOBILE,EActor->x,EActor->y,2,
-          GREEN*256+GLYPH_FLOOR2,-1,$"aura of despair",EActor);        
+          GLYPH_VALUE(GLYPH_FLOOR2, GREEN),-1,$"aura of despair",EActor);        
       return NOTHING;
       };
     Flags: CF_PRESTIGE, CF_FAVOURED, CF_GOOD_FORT;

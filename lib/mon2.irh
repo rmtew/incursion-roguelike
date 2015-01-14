@@ -2945,8 +2945,8 @@ Monster "rainbow sprite" : MA_FAERIE, MA_SYLVAN, MA_COUTSIDER
           case 5: c = SKYBLUE; break;
           case 6: c = EMERALD; break;
         }
-      if ((EActor->Image & 0x00FF) == 'f')
-        EActor->Image = 'f' + c*256;
+      if ((EActor->Image & GLYPH_ID_MASK) == 'f')
+        EActor->Image = GLYPH_VALUE('f', c);
       return NOTHING;
       };
     Desc: "Rainbow sprites are tiny, mischevious fae that delight
@@ -5441,7 +5441,7 @@ Template "blackguard;template" : TM_CLASS for MA_SAPIENT
       },
     EV_INIT_FIELDS {
       EMap->NewField(FI_MODIFIER|FI_MOBILE,EActor->x,EActor->y,2,
-        GREEN*256+GLYPH_FLOOR2,-1,$"aura of despair",EActor);
+        GLYPH_VALUE(GLYPH_FLOOR2, GREEN),-1,$"aura of despair",EActor);
       };
     Desc: "Once a paladin, the blackguard has renounced his higher
       calling and consciously embraced the ways of evil and blight.

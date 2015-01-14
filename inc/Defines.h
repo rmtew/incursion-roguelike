@@ -1,3 +1,6 @@
+#ifndef INCURSION_DEFINES_H
+#define INCURSION_DEFINES_H
+
 /* DEFINES.H -- Copyright (c) 1999-2003 Julian Mensch
      This file contains definitions of all the constants,
    bitflags, data types and macros used in Incursion. It 
@@ -25,16 +28,16 @@
 #ifndef ICOMP
 #define __MINMAX_DEFINED
 
-typedef signed char         int8;
-typedef signed short        int16;
-typedef unsigned char      uint8;
-typedef unsigned short     uint16;
+typedef signed char       int8;
+typedef signed short      int16;
+typedef unsigned char     uint8;
+typedef unsigned short    uint16;
 typedef unsigned long     uint32;
-typedef signed long        int32;
+typedef signed long       int32;
 typedef unsigned long     rID;
 typedef signed char       Dir;
 typedef void*             Param;
-typedef unsigned short    Glyph;
+typedef uint32            Glyph;
 typedef int8              EvReturn;
 
 typedef signed long       hText;
@@ -4088,141 +4091,17 @@ typedef signed long       hObj;
 
 #define OPT_LAST                900
 
-#define GLYPH_PERSON    6
-#define GLYPH_BULK      197
-#define GLYPH_WATER     247
-#define GLYPH_FOG       '~'
-#define GLYPH_ICE       254
-#define GLYPH_WEB       '#'
-#define GLYPH_LAVA      247
-#define GLYPH_BLAST     15
-#define GLYPH_WALL      177
-#define GLYPH_ROCK      176
-#define GLYPH_SOLID     219
-#define GLYPH_PILLAR    9
-#define GLYPH_VIEWPOINT 9
-#define GLYPH_GRAVE     239
-#define GLYPH_SHELF     216
-                       
-#define GLYPH_RING      235
-#define GLYPH_POTION    173
-#define GLYPH_SCROLL    168
-#define GLYPH_AMULET    11
-#define GLYPH_WEAPON    251
-#define GLYPH_ROD       '|'
-#define GLYPH_STAFF     '/'
-#define GLYPH_WAND      '-'
-#define GLYPH_FOOD      '%'
-#define GLYPH_CORPSE    '%'
-#define GLYPH_BOOK      254
-#define GLYPH_TORCH     '}'
-#define GLYPH_LARMOUR    228
-#define GLYPH_MARMOUR    228
-#define GLYPH_HARMOUR    228
-#define GLYPH_SHIELD    ']'
-#define GLYPH_GAUNTLETS 229
-#define GLYPH_HELMET    155
-#define GLYPH_HEADBAND  155
-#define GLYPH_BOOTS     224
-#define GLYPH_BRACERS   224
-#define GLYPH_GIRDLE    226
-#define GLYPH_CLOTHES   20
-#define GLYPH_CONTAIN   127
-#define GLYPH_CROWN     '^'
-#define GLYPH_DUST      240
-#define GLYPH_DECK      240
-#define GLYPH_RING      235
-#define GLYPH_AMULET    11
-#define GLYPH_FIGURE    156
-#define GLYPH_HORN      '&'
-#define GLYPH_EYES      236
-#define GLYPH_HERB      '\"'
-#define GLYPH_MUSH      227
-#define GLYPH_GEM       4
-#define GLYPH_COIN      '$'
-#define GLYPH_TOOL      234
-#define GLYPH_SWORD     '('
-#define GLYPH_BOW       ')'
-#define GLYPH_JUNK      '&'
-#define GLYPH_CHEST     127
-/*#define GLYPH_TRAP      23 or 146 */
-#define GLYPH_CLOAK      6
-#define GLYPH_STATUE     5
-#define GLYPH_PILE      '*'
-#define GLYPH_MULTI     146
-#define GLYPH_ALTAR     '8'
-#define GLYPH_FOUNTAIN  244
-#define GLYPH_THRONE    190
-#define GLYPH_SYMBOL    237
+/* ??? */
 
-#define GLYPH_HEDGE     34
-#define GLYPH_RUBBLE    ':'
-#define GLYPH_BRIDGE    '='
-#define GLYPH_FLOOR     250
-#define GLYPH_FLOOR2    249
-#define GLYPH_VDOOR     179
-#define GLYPH_HDOOR     196
-#define GLYPH_ODOOR     43
-#define GLYPH_BDOOR     241
-#define GLYPH_PIT       '0'
-#define GLYPH_PORTAL    240
+#define LITERAL_CHAR -20
+#define WRAP_BREAK   -21
+//#define BACK_COLOUR  -22
+#define WRAP_INDENT  -23
 
-#define GLYPH_STORE         21
-#define GLYPH_GUILD         20
-#define GLYPH_STORE_VWALL  186
-#define GLYPH_STORE_HWALL  205
-#define GLYPH_STORE_CORNER 219
+#define LITERAL_CHAR1(value) ~(value >> 8)
+#define LITERAL_CHAR2(value) (value & 0xFF)
 
-#define GLYPH_USTAIRS   '<'
-#define GLYPH_DSTAIRS   '>'
-#define GLYPH_TREE      157
-#define GLYPH_CHECK     251
-#define GLYPH_FURNATURE 254
-#define GLYPH_UNKNOWN   63
-#define GLYPH_TRASH     '&'
-#define GLYPH_BONES     '&'
-#define GLYPH_CHECKMARK 251
-
-#define GLYPH_TRAP      232
-#define GLYPH_DISARMED  246
-
-#define GLYPH_ARROW      24
-#define GLYPH_ARROW_UP   24
-#define GLYPH_ARROW_DOWN 25
-#define GLYPH_ARROW_RIGHT 26
-#define GLYPH_ARROW_LEFT  27
-
-#define GLYPH_GUARD      140
-#define GLYPH_TOWNIE     139
-#define GLYPH_TOWNSCUM   141
-#define GLYPH_TOWN_NPC   'i'
-#define GLYPH_LDEMON     151
-#define GLYPH_GDEMON     154
-#define GLYPH_LDEVIL     148
-#define GLYPH_GDEVIL     153
-#define GLYPH_FIEND      152
-
-#define GLYPH_PLAYER      '@'
-#define GLYPH_HUMAN       1
-#define GLYPH_ELF         132
-#define GLYPH_DWARF       131
-#define GLYPH_GNOME       133
-#define GLYPH_HOBBIT      133
-
-#define PRIO_EMPTY               1
-#define PRIO_CORRIDOR_WALL      10
-#define PRIO_ROOM_WALL          20
-#define PRIO_ROOM_WALL_TORCH    30
-#define PRIO_ROOM_WALL_MODIFIER 40
-#define PRIO_PILLARS            50
-#define PRIO_ROCK_STREAMER      60
-#define PRIO_DEPOSIT            65
-#define PRIO_ROOM_FLOOR         70
-#define PRIO_ROOM_FURNITURE     80
-#define PRIO_RIVER_STREAMER     90
-#define PRIO_VAULT              100
-#define PRIO_FEATURE_FLOOR      110
-#define PRIO_MAX                120
+/* Colours known by the game engine. */
 
 #define BLACK   0
 #define BLUE    1
@@ -4241,15 +4120,202 @@ typedef signed long       hObj;
 #define YELLOW  14
 #define WHITE   15
 
-#define LITERAL_CHAR -20
-#define WRAP_BREAK   -21
-#define BACK_COLOUR  -22
-#define WRAP_INDENT  -23
+// 1 << 4 == 16, should be covered below by *_BITS defines.
+#define MAX_COLOURS 16
 
+#define COLOUR_BITS				4
+#define COLOUR_MASK				((1 << COLOUR_BITS) - 1)
+#define BRIGHT_MASK				(1 << (COLOUR_BITS - 1))
+#define DARK_MASK				(~BRIGHT_MASK & COLOUR_MASK)
+#define BACK_COLOUR(v)			(v << COLOUR_BITS)
 
-#define DARK_MASK(a) (a & ~0x08)
-#define BRIGHT_MASK(a) (a | 0x08)
-#define ATTR_MASK(a,b) (a + b*256)
+/* Glyph management macros: 
+
+   NOTE: If in the future the ATTR is extended to include more than the colour, then all masking should be checked.
+*/
+
+#define GLYPH_ID_BITS			12
+#define GLYPH_FORE_BITS			COLOUR_BITS
+#define GLYPH_BACK_BITS			COLOUR_BITS
+#define GLYPH_ATTR_BITS			(GLYPH_BACK_BITS + GLYPH_FORE_BITS)
+
+#define GLYPH_ID(value)         (value)
+#define GLYPH_ID_MASK			((1 << GLYPH_ID_BITS) - 1)
+#define GLYPH_ID_VALUE(glyph)   (glyph & GLYPH_ID_MASK)
+
+#define GLYPH_ATTR_SHIFT        (GLYPH_ID_BITS)
+#define GLYPH_ATTR(value)       (value << GLYPH_ATTR_SHIFT)
+#define GLYPH_ATTR_MASK         (((1 << GLYPH_ATTR_BITS) - 1) << GLYPH_ATTR_SHIFT)
+#define GLYPH_ATTR_VALUE(glyph) ((glyph & GLYPH_ATTR_MASK) >> GLYPH_ATTR_SHIFT)
+
+#define GLYPH_FORE_SHIFT        (GLYPH_ATTR_SHIFT)
+#define GLYPH_FORE(value)       (value << GLYPH_FORE_SHIFT)
+#define GLYPH_FORE_MASK         (((1 << GLYPH_FORE_BITS) - 1) << GLYPH_FORE_SHIFT)
+#define GLYPH_FORE_VALUE(glyph) ((glyph & GLYPH_FORE_MASK) >> GLYPH_FORE_SHIFT)
+
+#define GLYPH_BACK_SHIFT        (GLYPH_ATTR_SHIFT + GLYPH_FORE_BITS)
+#define GLYPH_BACK(value)       (value << GLYPH_BACK_SHIFT)
+#define GLYPH_BACK_MASK         (((1 << GLYPH_BACK_BITS) - 1) << GLYPH_BACK_SHIFT)
+#define GLYPH_BACK_VALUE(glyph) ((glyph & GLYPH_BACK_MASK) >> GLYPH_BACK_SHIFT)
+
+#define GLYPH_COLOUR(value)     (value << GLYPH_FORE_SHIFT)
+#define GLYPH_COLOUR_MASK		(GLYPH_FORE_MASK + GLYPH_BACK_MASK)
+#define GLYPH_COLOUR_VALUE(g)   ((g & GLYPH_COLOUR_MASK) >> GLYPH_FORE_SHIFT)
+
+#define GLYPH_VALUE(id, attr)   (GLYPH_ID(id) | GLYPH_ATTR(attr))
+
+/* Glyph values. */
+
+#define GLYPH_FIRST     256
+
+#define GLYPH_PERSON    256
+#define GLYPH_BULK      257
+#define GLYPH_WATER     258
+#define GLYPH_FOG       259
+#define GLYPH_ICE       260
+#define GLYPH_WEB       261
+#define GLYPH_LAVA      262
+#define GLYPH_BLAST     263
+#define GLYPH_WALL      264
+#define GLYPH_ROCK      265
+#define GLYPH_SOLID     266
+#define GLYPH_PILLAR1   267
+#define GLYPH_VIEWPOINT 268
+#define GLYPH_GRAVE     269
+#define GLYPH_SHELF     270
+#define GLYPH_PILLAR2   271
+
+#define GLYPH_POTION    272
+#define GLYPH_SCROLL    273
+//#define GLYPH_AMULET    274
+#define GLYPH_WEAPON    275
+#define GLYPH_ROD       276
+#define GLYPH_STAFF     277
+#define GLYPH_WAND      278
+#define GLYPH_FOOD      279
+#define GLYPH_CORPSE    280
+#define GLYPH_BOOK      281
+#define GLYPH_TORCH     282
+#define GLYPH_LARMOUR   283
+#define GLYPH_MARMOUR   284
+#define GLYPH_HARMOUR   285
+#define GLYPH_SHIELD    286
+#define GLYPH_GAUNTLETS 287
+#define GLYPH_HELMET    288
+#define GLYPH_HEADBAND  289
+#define GLYPH_BOOTS     290
+#define GLYPH_BRACERS   291
+#define GLYPH_GIRDLE    292
+#define GLYPH_CLOTHES   293
+#define GLYPH_CONTAIN   294
+#define GLYPH_CROWN     295
+#define GLYPH_DUST      296
+#define GLYPH_DECK      297
+#define GLYPH_RING      298
+#define GLYPH_AMULET    299
+#define GLYPH_FIGURE    300
+#define GLYPH_HORN      301
+#define GLYPH_EYES      302
+#define GLYPH_HERB      303
+#define GLYPH_MUSH      304
+#define GLYPH_GEM       305
+#define GLYPH_COIN      306
+#define GLYPH_TOOL      307
+#define GLYPH_SWORD     308
+#define GLYPH_BOW       309
+#define GLYPH_JUNK      310
+#define GLYPH_CHEST     311
+
+#define GLYPH_CLOAK     312
+#define GLYPH_STATUE    313
+#define GLYPH_PILE      314
+#define GLYPH_MULTI     315
+#define GLYPH_ALTAR     316
+#define GLYPH_FOUNTAIN  317
+#define GLYPH_THRONE    318
+#define GLYPH_SYMBOL    319
+
+#define GLYPH_HEDGE     320
+#define GLYPH_RUBBLE    321
+#define GLYPH_BRIDGE    322
+#define GLYPH_FLOOR     323
+#define GLYPH_FLOOR2    324
+#define GLYPH_VDOOR     325
+#define GLYPH_HDOOR     326
+#define GLYPH_ODOOR     327
+#define GLYPH_BDOOR     328
+#define GLYPH_PIT       329
+#define GLYPH_PORTAL    330
+
+#define GLYPH_STORE         331
+#define GLYPH_GUILD         332
+// This needs to be diversified into different kinds of wall glyphs, at moment shared between non-store versions.
+#define GLYPH_STORE_VWALL   333
+#define GLYPH_STORE_HWALL   334
+#define GLYPH_STORE_CORNER  335
+
+#define GLYPH_USTAIRS   336
+#define GLYPH_DSTAIRS   337
+#define GLYPH_TREE      338
+#define GLYPH_CHECK     339
+#define GLYPH_FURNATURE 340
+#define GLYPH_UNKNOWN   341
+#define GLYPH_TRASH     342
+#define GLYPH_BONES     343
+#define GLYPH_CHECKMARK 344
+
+#define GLYPH_TRAP      345
+#define GLYPH_DISARMED  346
+
+#define GLYPH_ARROW       347
+#define GLYPH_ARROW_UP    348
+#define GLYPH_ARROW_DOWN  349
+#define GLYPH_ARROW_RIGHT 350
+#define GLYPH_ARROW_LEFT  351
+
+#define GLYPH_GUARD      352
+#define GLYPH_TOWNIE     353
+#define GLYPH_TOWNSCUM   354
+#define GLYPH_TOWN_NPC   355
+#define GLYPH_LDEMON     356
+#define GLYPH_GDEMON     357
+#define GLYPH_LDEVIL     358
+#define GLYPH_GDEVIL     359
+#define GLYPH_FIEND      360
+
+#define GLYPH_PLAYER     361
+#define GLYPH_HUMAN      362
+#define GLYPH_ELF        363
+#define GLYPH_DWARF      364
+#define GLYPH_GNOME      365
+#define GLYPH_HOBBIT     366
+
+#define GLYPH_VLINE      367
+#define GLYPH_HLINE      368
+#define GLYPH_DIVIDE     369
+#define GLYPH_APPROXIMATELY 370
+#define GLYPH_BLACK_SQUARE 371
+
+#define GLYPH_SUMMONING_CIRCLE    372
+#define GLYPH_POINTER_LEFT        373
+#define GLYPH_POINTER_RIGHT       374
+
+#define GLYPH_LAST       374
+
+#define PRIO_EMPTY               1
+#define PRIO_CORRIDOR_WALL      10
+#define PRIO_ROOM_WALL          20
+#define PRIO_ROOM_WALL_TORCH    30
+#define PRIO_ROOM_WALL_MODIFIER 40
+#define PRIO_PILLARS            50
+#define PRIO_ROCK_STREAMER      60
+#define PRIO_DEPOSIT            65
+#define PRIO_ROOM_FLOOR         70
+#define PRIO_ROOM_FURNITURE     80
+#define PRIO_RIVER_STREAMER     90
+#define PRIO_VAULT              100
+#define PRIO_FEATURE_FLOOR      110
+#define PRIO_MAX                120
 
 
 #define MAX_DUNGEONS       32
@@ -4633,4 +4699,4 @@ struct EffectValues;
 struct ItemGen;
 #endif
 
-
+#endif // INCURSION_DEFINES_H

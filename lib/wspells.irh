@@ -1054,7 +1054,7 @@ Wizard / Scroll Spell "Force Bolt" : EA_BLAST
           {                                                           \
             ETerm->PutGlyph(EActor->x + vx,                           \
                             EActor->y + vy,                           \
-                            197 + (PINK*256));                        \
+                            GLYPH_VALUE(GLYPH_BULK, PINK));           \
             h = EMap->FCreatureAt(EActor->x + vx,EActor->y + vy);      \
           }                                                       
       h1 = NULL; h2 = NULL; h3 = NULL;
@@ -3226,7 +3226,7 @@ Wizard / Scroll Spell "Ghoul Touch" : EA_INFLICT
     On Event POST(EV_MAGIC_HIT) {
       if (!e.Resist) {
         EMap->NewField(FI_MODIFIER,EVictim->x,EVictim->y,2,
-          GREEN*256,e.vDuration,$"ghast stench",EActor);
+          GLYPH_COLOUR(GREEN),e.vDuration,$"ghast stench",EActor);
         VPrint(e,NULL,"A terrible stench rises from the <EVictim>'s body!");
         }
       return NOTHING;
@@ -5448,7 +5448,7 @@ Region "Extradimensional Space;rope trick" : RF_ROOM
 
 Feature "dangling rope" : T_PORTAL
   {
-    Image: bright green '<';
+    Image: bright green GLYPH_USTAIRS;
     Mat:MAT_CLOTH;
     xval:POR_DUN_ENTRY;
     Target: $"Extradimensional Space;rope trick";
@@ -5456,7 +5456,7 @@ Feature "dangling rope" : T_PORTAL
 
 Feature "portal;rope trick" : T_PORTAL
   {
-    Image: bright green '>';
+    Image: bright green GLYPH_DSTAIRS;
     Mat:MAT_EMPTYNESS;
     xval:POR_RETURN;
     Target: $"dangling rope";
@@ -6662,8 +6662,8 @@ Wizard Spell "Hallucinatory Terrain" : EA_GENERIC
     EV_ITERRAIN {
       char ch; rID tID;
       tID = EMap->TerrainAt(e.EXVal, e.EYVal);
-      if ((tID->Image & 0xFF) == GLYPH_FLOOR ||
-          (tID->Image & 0xFF) == GLYPH_FLOOR2)
+      if ((tID->Image & GLYPH_ID_MASK) == GLYPH_ID(GLYPH_FLOOR) ||
+          (tID->Image & GLYPH_ID_MASK) == GLYPH_ID(GLYPH_FLOOR2))
         {
           ch = EActor->GetEffStatiVal(EFF_FLAG1,$"Hallucinatory Terrain");
           switch (ch)

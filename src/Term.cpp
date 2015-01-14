@@ -76,7 +76,7 @@ void TextTerm::ShowStatus() {
     Clear();
     SetWin(WIN_SCREEN);
 		for(i=0;i<=WinBottom();i++)
-      PutChar(WinRight()-15,i,179);
+      PutChar(WinRight()-15,i,GLYPH_VLINE);
     SetWin(WIN_STATUS);
 		Color(7);
     if (!theGame->InPlay())
@@ -280,10 +280,10 @@ void TextTerm::ShowStatus() {
 
     if (theGame->InPlay()) {
       if (p->ktMana() > p->kcMana()*3)
-        j = RED*16;
+        j = BACK_COLOUR(RED);
       else
-        j = 0;
-      Color(WHITE|j);
+        j = BACK_COLOUR(BLACK);
+      Color(WHITE | j);
       PutChar(sizeX-15,0,'[');
       PutChar(sizeX-1,0,']');
       for(i=sizeX-14;i!=sizeX-1;i++) {
@@ -298,17 +298,17 @@ void TextTerm::ShowStatus() {
         }
       
       if ((p->mHP+p->Attr[A_THP]) > p->cHP*3)
-        j = RED*16 + BRIGHT_MASK(0);
+        j = BACK_COLOUR(RED) | BRIGHT_MASK;
       else
-        j = 0;
-      Color(WHITE|j);
+        j = BACK_COLOUR(BLACK);
+      Color(WHITE | j);
       PutChar(sizeX-15,1,'[');
       PutChar(sizeX-1,1,']');
       for(i=sizeX-14;i!=sizeX-1;i++) {
         if ((((p->mHP+p->Attr[A_THP])-p->cHP)*(14)/(p->mHP+p->Attr[A_THP])) > i-(sizeX-14))
-          Color(RED|j);
+          Color(RED | j);
         else
-          Color(GREY|j);
+          Color(GREY | j);
         PutChar(i,1,'*');
         }
       }
@@ -338,10 +338,10 @@ void TextTerm::ShowTraits() {
           FName = FName.Left(FName.strchr(' '));
       FName = FName.Left(WinSizeX()-1);
 	    TimeLine = 4;
-	    if ((p->Image & 0x0F00)/256 == 15)
+	    if (GLYPH_FORE_VALUE(p->Image)== WHITE)
 	      Write(Format("%c%s%c\n",-AZURE,(const char*)FName,-7));
 	    else
-	      Write(Format("%c%s%c\n",-((p->Image & 0x0F00)/256),(const char*)FName,-7));
+	      Write(Format("%c%s%c\n",-(int32)GLYPH_FORE_VALUE(p->Image),(const char*)FName,-7));
       if (p->RaceID) {
         if (strlen(NAME(p->RaceID)) >= (size_t)(WinSizeX() - 7))
           Write(Format("%s %s\n",p->StateFlags & MS_FEMALE ? "F" : "M",NAME(p->RaceID)));
@@ -457,7 +457,7 @@ void TextTerm::ShowTraits() {
         else if (p->cFP >= -p->Attr[A_FAT]) 
           { Color(RED); Write("Fatigued\n"); }
         else
-          { Color(RED | WHITE << 4); Write("Exhausted\n"); }
+          { Color(RED | BACK_COLOUR(WHITE)); Write("Exhausted\n"); }
         Color(GREY);
         Write("\n");
         
@@ -715,8 +715,8 @@ void Map::Update(int16 x,int16 y) {
   
   if (isEngulfed)
     {
-      uint16 col = p->GetStatiObj(ENGULFED)->Image & 0x0F00,
-             ex  = p->GetStatiObj(ENGULFED)->x,
+		uint32 col = p->GetStatiObj(ENGULFED)->Image & GLYPH_FORE_MASK;
+      uint16 ex  = p->GetStatiObj(ENGULFED)->x,
              ey  = p->GetStatiObj(ENGULFED)->y;
       /*
       if (x == ex && (y == ey+1 || y == ey-1))
@@ -792,21 +792,21 @@ void Map::Update(int16 x,int16 y) {
       Vis = CVis;
       if (t->Flags & F_HILIGHT)
       { 
-        if ((g & 0x0F00) == 0x0A00)
-          g = (g & 0x00FF);
-        hg = (g |= 0xA000); 
+        if (GLYPH_FORE_VALUE(g) == EMERALD)
+          g = (g & GLYPH_ID_MASK);
+        hg = (g |= GLYPH_BACK(EMERALD)); 
         hi = true;
       }
       #if 0
-      else if (!(g & 0xF000)) {
+      else if (!(g & GLYPH_BACK_MASK)) {
         /* If the glyph foreground has the same colour as the map
            background, change the glyph's foreground colour. Then,
            apply the background colour. */
       #endif
       else {
-        if ((mg & 0xF000) == (g & 0x0F00) << 4)
-          g = g & 0x00FF;
-        g |= (mg & 0xF000);
+		  if (GLYPH_FORE_VALUE(mg) == GLYPH_BACK_VALUE(g))
+          g = g & GLYPH_ID_MASK;
+        g |= (mg & GLYPH_BACK_MASK);
       }
     }
 #ifdef OLD_TRACKING
@@ -822,20 +822,20 @@ void Map::Update(int16 x,int16 y) {
         /*if (dist(oPlayer(pl[i])->x,oPlayer(pl[i])->y,t->x,t->y) 
           > oPlayer(pl[i])->GetStati(TRACKING,-1,t)->Mag)
           break;*/
-        g = (t->Image & 0x0FFF) | 0xE000;
+        g = (t->Image & (GLYPH_FORE_MASK | GLYPH_ID_MASK)) | GLYPH_BACK(YELLOW);
         goto DoDraw;
       }
 #endif
   }
 
   if (Vis == PER_SHADOW) {
-    g = (g & 0xF000) | GLYPH_UNKNOWN | (SHADOW*256);
+    g = (g & GLYPH_BACK_MASK) | GLYPH_VALUE(GLYPH_UNKNOWN, SHADOW);
   }
 
   /* If the background and foreground are the same colour,
      change the foreground so that the glyph is visible. */
-  if ((g & 0xF000) == ((g & 0x0F00) << 4))
-    g = (g & 0x0F00) ? (g & 0xF0FF) : (g | 0x0800);
+  if (GLYPH_BACK(g) == GLYPH_FORE(g))
+	  g = (g & GLYPH_FORE_MASK) ? (g & ~GLYPH_FORE_MASK) : (g | GLYPH_FORE(BRIGHT_MASK));
 
   
   if(!((At(x,y).Visibility & VI_VISIBLE) || Vis) &&
@@ -852,16 +852,16 @@ void Map::Update(int16 x,int16 y) {
 
 DoDraw:
   if (creatures > 1 && Pri == 3)
-    T1->PutGlyph(x,y,GLYPH_MULTI | (15 << 8) | (mg & 0xF000) );
+    T1->PutGlyph(x,y,GLYPH_VALUE(GLYPH_MULTI, WHITE) | (mg & GLYPH_BACK_MASK) );
   else if (items > 1 && Pri < 3) {
     Container * c = FChestAt(x,y); 
     if (c) {
-      if (g & 0xF000)
-        T1->PutGlyph(x,y,(g & 0xF000) | (c->Image & 0x0FFF));
+		if (g & GLYPH_BACK_MASK)
+			T1->PutGlyph(x, y, (g & GLYPH_BACK_MASK) | (c->Image & ~GLYPH_BACK_MASK));
     else
         T1->PutGlyph(x,y,c->Image);
     } else
-      T1->PutGlyph(x,y,GLYPH_PILE | (7 << 8) | (mg & 0xF000) );
+		T1->PutGlyph(x, y, GLYPH_VALUE(GLYPH_PILE, GREY) | (mg & GLYPH_BACK_MASK));
   } else
     T1->PutGlyph(x,y,g);
 
@@ -869,7 +869,7 @@ DoOverlay:
   if(ov.Active && !isEngulfed)
     for(i=0;i!=ov.GlyphCount;i++)
       if(ov.GlyphX[i]==x && ov.GlyphY[i]==y)
-        T1->PutGlyph(x,y,ov.GlyphImage[i] | (mg & 0xF000));
+        T1->PutGlyph(x,y,ov.GlyphImage[i] | (mg & GLYPH_BACK_MASK));
 }
 
 void TextTerm::ShowMap() {
@@ -882,7 +882,7 @@ void TextTerm::ShowMap() {
     {
       Creature *en = (Creature*) p->GetStatiObj(ENGULFED);
       ASSERT(en && en->isCreature());
-      Glyph col = en->Image & 0xFF00;
+      Glyph col = en->Image & GLYPH_COLOUR_MASK;
       SetWin(WIN_MAP);
       Clear();
     
@@ -926,7 +926,7 @@ void TextTerm::ShowMap() {
         }
       LocationInfo & mAt = m->At(x+XOff,y+YOff); 
       if(mAt.Visibility & VI_EXTERIOR) /*later, >> player*4 */
-        PutGlyph(x+XOff, y+YOff, GLYPH_WALL + GREY * 256);
+        PutGlyph(x+XOff, y+YOff, GLYPH_VALUE(GLYPH_WALL, GREY));
       else if(mAt.Visibility & VI_VISIBLE) { /*later, >> player*4 */
         PutGlyph(x+XOff, y+YOff, gr[(y+YOff)*msx + (x+XOff)].Glyph);
         WViewThing(m->FirstAt(x+XOff,y+YOff) , 
@@ -1107,15 +1107,15 @@ void TextTerm::ShowThings() {
           else 
 #endif
           if (t->Flags & F_HILIGHT) 
-            PutGlyph(fx,fy,((Per == PER_SHADOW) ? ('?' + 256*7) : 
-                            (t->Image & 0x0FFF)) | 0xA000);
+            PutGlyph(fx,fy,((Per == PER_SHADOW) ? GLYPH_VALUE('?', GREY) : 
+                            (t->Image & ~GLYPH_BACK_MASK)) | GLYPH_BACK(EMERALD));
           else if((m->At(t->x,t->y).Visibility & VI_VISIBLE) == false) /*later, >> player*4 */
           {
             if (t->isShadowShape())
-              PutGlyph(fx,fy,GLYPH_UNKNOWN | 0x4800);
+              PutGlyph(fx,fy,GLYPH_VALUE(GLYPH_UNKNOWN, BACK_COLOUR(RED) | SHADOW));
           }
           else
-            PutGlyph(fx,fy,(t->Image & 0x0FFF) | 0x4000);
+			  PutGlyph(fx, fy, (t->Image & ~GLYPH_BACK_MASK) | GLYPH_BACK(RED));
           if (OffscreenC < 64) {
             OffscreenX[OffscreenC] = (uint8)fx;
             OffscreenY[OffscreenC] = (uint8)fy;
@@ -1147,8 +1147,7 @@ static int8 BrightenOnce[] = {
 /* WHITE   becomes */     BROWN, }; 
 
 Glyph TextTerm::FloorShading(int16 x, int16 y, Glyph g) {
-    int8 c;
-    int32 b; 
+    int32 c;
 
     if (m->At(x,y).Dark)
       if (!m->SolidAt(x,y))
@@ -1162,37 +1161,36 @@ Glyph TextTerm::FloorShading(int16 x, int16 y, Glyph g) {
     if (!(m->At(x,y).Visibility & VI_VISIBLE) || Dist > p->SightRange) {
       if (m->At(x,y).Shade)
         return 
-          ((m->At(x,y).Memory & 0xF000) == 0x1000 ? 
-            (m->At(x,y).Memory & 0xF0FF) + (BLACK << 8) : 
-            (m->At(x,y).Memory & 0xF0FF) + (BLUE << 8) );
+          ((m->At(x,y).Memory & GLYPH_BACK_MASK) == GLYPH_BACK(BLUE) ? 
+		  (m->At(x, y).Memory & ~GLYPH_FORE_MASK) | GLYPH_FORE(BLACK) :
+		  (m->At(x, y).Memory & ~GLYPH_FORE_MASK) | GLYPH_FORE(BLUE));
       else
-        return (m->At(x,y).Memory & 0x0F00) == 0x0700 ? 
-          (m->At(x,y).Memory & 0xF0FF + (SHADOW << 8)) : 
-          (m->At(x,y).Memory & 0xF7FF);     
+        return (m->At(x,y).Memory & GLYPH_FORE_MASK) == GLYPH_FORE(GREY) ? 
+		((m->At(x, y).Memory & ~GLYPH_FORE_MASK) | GLYPH_FORE(SHADOW)) :
+          (m->At(x,y).Memory & (GLYPH_BACK_MASK | GLYPH_FORE(DARK_MASK) | GLYPH_ID_MASK));     
       }
     if (!m->At(x,y).Shade)
       return g;
 
-    c = (g & 0x0F00) / 256; 
-    b = (g & 0xF000); 
+    c = GLYPH_FORE_VALUE(g); 
     // if (abs(p->x - x) <= 1 && abs(p->y - y) <= 1 && p->LightRange >= 3) 
     if (Dist <= 1 && p->LightRange >= 3)
       c = BrightenOnce[BrightenOnce[c]];
     // else if (abs(p->x - x) <= p->LightRange/2 && abs(p->y - y) <= p->LightRange/2)
     else if (Dist <= p->LightRange / 2)
       c = BrightenOnce[c];
-    return (Glyph)(((g & 0x00FF) + (c * 256)) | b);
+	return (Glyph)((g & GLYPH_ID_MASK) | GLYPH_FORE(c) | (g & GLYPH_BACK_MASK));
 
     /*
     if (abs(p->x - x) <= 1 && abs(p->y - y) <= 1 && p->LightRange >= 3)
-      c = 14;
+      c = YELLOW;
     else if (abs(p->x - x) <= p->LightRange/2 && abs(p->y - y) <= p->LightRange/2)
-      c = 6;
+      c = BROWN;
     else
-      c = 7;
+      c = GREY;
 
-    if (ColorShadingPriority[c] > ColorShadingPriority[(g & 0x0F00)/256])
-      return (g & 0x00FF) + (c * 256);
+    if (ColorShadingPriority[c] > ColorShadingPriority[GLYPH_FORE_VALUE(g)])
+      return (g & GLYPH_ID_MASK) | GLYPH_FORE(c);
     else
       return g;
       */
@@ -1207,7 +1205,7 @@ void TextTerm::PutGlyph(int16 x, int16 y,Glyph g) {
     if (m->At(x,y).Shade)
       g = FloorShading(x,y,g);
 
-    if (m->At(x,y).hasField && ((g & 0xF000) != 0xF000)) {
+    if (m->At(x,y).hasField && ((g & GLYPH_BACK_MASK) != GLYPH_BACK(WHITE))) {
       g = m->FieldGlyph(x,y,g);
     }
     
@@ -1310,11 +1308,11 @@ void TextTerm::ShowMapOverview() {
         if (p->x >= mx && p->y >= my && p->x < mx+mag && p->y < my+mag)
           PutChar(sx,sy,p->Image);
         else if (vx >= mx && vy >= my && vx < mx+mag && vy < my+mag)
-          PutChar(sx,sy,'*' | YELLOW*256);
+			PutChar(sx, sy, GLYPH_VALUE('*', YELLOW));
         else if (force)
           PutChar(sx,sy,force);
         else
-          PutChar(sx,sy,' '+GREY*256);
+			PutChar(sx, sy, GLYPH_VALUE(' ', GREY));
       }
 
     GotoXY(0,WinSizeY()-1);
@@ -1512,7 +1510,7 @@ static int16 ViewListPriorityMod(Thing *t) {
     else if (t->isFeature())
       {
         if ((t->isType(T_DOOR)) ||
-            ((t->Image & 0xFF) == GLYPH_STATUE))
+            (GLYPH_ID_VALUE(t->Image) == GLYPH_STATUE))
           return 20;
         return 7;
       }
@@ -1566,7 +1564,7 @@ void TextTerm::ShowViewList() {
             Write("Things in View:");
             if (p->HasStati(ENGULFED)) {
               Color(RED);
-              PutChar(0,1,p->GetStatiObj(ENGULFED)->Image & 0x0FFF);
+              PutChar(0,1,p->GetStatiObj(ENGULFED)->Image & ~GLYPH_BACK_MASK);
               WrapWrite(2,1,p->GetStatiObj(ENGULFED)->Name(NA_MONO),16,
                     linesWeCanUse - 2);
               break;
@@ -1591,7 +1589,7 @@ void TextTerm::ShowViewList() {
               if (WViewList[i].t->x == -1)
                 continue;
               PutChar(m->MultiAt( WViewList[i].t->x, WViewList[i].t->y ) ?
-                (GLYPH_MULTI | WHITE*256) : WViewList[i].glyph);
+                GLYPH_VALUE(GLYPH_MULTI, WHITE) : WViewList[i].glyph);
               Color(WViewList[i].color);
               int code = WViewList[i].color == GREY ? 0 : NA_MONO;
               int linesUsed = 
@@ -1716,14 +1714,17 @@ look_again:
   
   if (t == p ) 
     goto look_at_next; 
-  if (t->isFeature())
-    if ((t->Image & 0xFF) == GLYPH_TREE ||
-        (t->Image & 0xFF) == GLYPH_BULK ||
-        (t->Image & 0xFF) == GLYPH_PILLAR ||
-        (t->Image & 0xFF) == GLYPH_HEDGE ||
-        (t->Image & 0xFF) == GLYPH_FLOOR2 ||
-        (t->Image & 0xFF) == GLYPH_FLOOR)
-      goto look_at_next;
+  if (t->isFeature()) {
+	  uint16 tg = GLYPH_ID_VALUE(t->Image);
+	  if (tg == GLYPH_TREE ||
+		  tg == GLYPH_BULK ||
+		  tg == GLYPH_PILLAR1 ||
+		  tg == GLYPH_PILLAR2 ||
+		  tg == GLYPH_HEDGE ||
+		  tg == GLYPH_FLOOR2 ||
+		  tg == GLYPH_FLOOR)
+		  goto look_at_next;
+  }
   
   if (t->isMonster()) {
     p->JournalNoteMonster((Monster *)t);
@@ -1775,7 +1776,7 @@ look_again:
       if (chestCount > 0)
         g = chestGlyph;
       else
-        g = GREY * 256 + '*';
+		  g = GLYPH_VALUE('*', GREY);
     } else g = t->Image;
     WViewList[big_idx].color = color; 
     WViewList[big_idx].glyph = g  ;
@@ -1947,10 +1948,10 @@ SelectItem:
             else if (m->InBounds(tx,ty))
                 cr = m->FirstAt(tx,ty);
             m->Update(tx,ty);
-            PutGlyph(tx,ty, (GetGlyph(tx,ty) & 0xFF) | 0xF000);
+            PutGlyph(tx,ty, (GetGlyph(tx,ty) & GLYPH_ID_MASK) | GLYPH_BACK(WHITE));
         } else if (mod == Q_TAR) {
             m->Update(cr->x,cr->y);
-            PutGlyph(cr->x,cr->y, (GetGlyph(cr->x,cr->y) & 0xFF) | 0xF000);
+			PutGlyph(cr->x, cr->y, (GetGlyph(cr->x, cr->y) & GLYPH_ID_MASK) | GLYPH_BACK(WHITE));
         }
 
         SetWin(WIN_MESSAGE);
@@ -2259,8 +2260,8 @@ TargetChosen:
                     if (XOff < th->x && YOff < th->y)
                         if (XOff+Windows[WIN_MAP].Right >= th->x && YOff+(Windows[WIN_MAP].Bottom-Windows[WIN_MAP].Top) >= th->y)
                             if ((p->Perceives(th) || (m->At(th->x,th->y).Visibility & VI_DEFINED)))
-                                if ((th->Image & 0x00FF) != GLYPH_TREE &&
-                                    (th->Image & 0x00FF) != GLYPH_FLOOR2 &&
+                                if (GLYPH_ID_VALUE(th->Image) != GLYPH_TREE &&
+                                    GLYPH_ID_VALUE(th->Image) != GLYPH_FLOOR2 &&
                                     (::dist(p->x,p->y,th->x,th->y) <= range ||
                                     /* Kludge for reach weapons */
                                     (range == 2 && abs(p->x-th->x) <= 2 && abs(p->y-th->y) <= 2))) {
@@ -2474,13 +2475,12 @@ int32 TextTerm::MonsterTypePrompt(const char * prompt, int minCount, int maxCoun
         if (mod->QMon[idx].HasFlag(M_NOGEN))
           continue;
 
-        int8 color = - (mod->QMon[idx].Image >> 8);
+		uint32 gid = GLYPH_ID_VALUE(mod->QMon[idx].Image);
+        int32 color = -(int32)GLYPH_COLOUR_VALUE(mod->QMon[idx].Image);
         if (color == 0) color = -SHADOW;
-        desc += Format("%c%s (%c%c%c CR %d). ",-7,
-            (const char*)Capitalize(Upto(NAME(mID),";"),true),
-            color,
-            (mod->QMon[idx].Image & 0xff),
-            -7,
+        desc += Format("%c%s (%c%c%c%c%c CR %d). ",
+			-GREY, (const char*)Capitalize(Upto(NAME(mID),";"),true),
+			color, LITERAL_CHAR, LITERAL_CHAR1(gid), LITERAL_CHAR2(gid), -GREY,
             mod->QMon[idx].CR);
         count_in_this_ma++;
       }
@@ -3005,12 +3005,12 @@ void TextTerm::DisplayLegend() {
     SizeWin(WIN_MENUBOX,x1,y1,x2,y2);
     DrawBorder(WIN_MENUBOX,PINK);
     SetWin(WIN_MENUBOX);
-    Color(GREY); Clear();
-    gl = XPrint(GlyphLegend1);
-    gl += XPrint(GlyphLegend2);
+	Color(GREY); Clear();
+	gl = PPrint(p, GlyphLegend1);
+    gl += PPrint(p, GlyphLegend2);
     Write(0,0,gl);
-    PrePrompt();
-    GetCharRaw();
+	PrePrompt();
+	GetCharRaw();
     Restore();
 }
 

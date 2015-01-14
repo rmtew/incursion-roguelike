@@ -1554,7 +1554,7 @@ void Monster::Initialize(bool in_play)
     if (Attr[A_SIZ] >= SZ_HUGE) {
       if (m) { 
         m->NewField(FI_SIZE|FI_MOBILE,x,y,FaceRadius[Attr[A_SIZ]],
-            GLYPH_BULK | (Image & 0x0F00),-1,0,this);
+            GLYPH_VALUE(GLYPH_BULK, WHITE),-1,0,this);
         PlaceNear(x,y);
         }
       }

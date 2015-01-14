@@ -1321,7 +1321,7 @@ EvReturn Magic::AGlobe(EventInfo &e)
           if ((dist(cx,cy,x,y) < e.vRadius) && m->InBounds(x,y))
             {
               g = T1->GetGlyph(x,y);
-              g = (g & 0x00FF) | (e.EMagic->cval << 8);
+              g = (g & GLYPH_ID_MASK) | GLYPH_FORE(e.EMagic->cval);
               T1->PutGlyph(x,y,g);
             }
       T1->Update();
@@ -1384,14 +1384,14 @@ EvReturn Magic::ABarrier(EventInfo &e)
       }
 
     if (e.EMagic->eval == EA_TERRAFORM) {
-      if ((TTER(e.EMagic->rval)->Image & 0x00FF) == 179)
+      if (GLYPH_ID_VALUE(TTER(e.EMagic->rval)->Image) == GLYPH_VDOOR)
         if (e.EDir == NORTH || e.EDir == SOUTH)
           TTER(e.EMagic->rval)->Image = 
-            (TTER(e.EMagic->rval)->Image & 0xFF00) | 196;
-      if ((TTER(e.EMagic->rval)->Image & 0x00FF) == 186)
+            (TTER(e.EMagic->rval)->Image & GLYPH_ATTR_MASK) | GLYPH_HDOOR;
+      if (GLYPH_ID_VALUE(TTER(e.EMagic->rval)->Image) == GLYPH_STORE_VWALL)
         if (e.EDir == NORTH || e.EDir == SOUTH)
           TTER(e.EMagic->rval)->Image = 
-            (TTER(e.EMagic->rval)->Image & 0xFF00) | 205;
+            (TTER(e.EMagic->rval)->Image & GLYPH_ATTR_MASK) | GLYPH_STORE_HWALL;
       }
 
     x1 = x2 = e.EActor->x + DirX[e.EDir];
@@ -1495,13 +1495,13 @@ EvReturn Magic::AField(EventInfo &e)
     if (TEFF(e.eID)->HasFlag(EF_GLYPH_INSECTS))
       g = '`';
     else if (TEFF(e.eID)->HasFlag(EF_GLYPH_FOG))
-      g = '~';
+      g = GLYPH_FOG;
     else if (TEFF(e.eID)->HasFlag(EF_GLYPH_FLOOR))
       g = GLYPH_FLOOR;
     else
       g = GLYPH_FLOOR2;
 
-    g |= e.EMagic->cval * 256;
+    g |= GLYPH_FORE(e.EMagic->cval);
 
     tx = e.EXVal ? e.EXVal : e.ETarget ? e.ETarget->x : e.EActor->x;
     ty = e.EYVal ? e.EYVal : e.ETarget ? e.ETarget->y : e.EActor->y;
@@ -1623,7 +1623,7 @@ EvReturn Magic::ABallBeamBolt(EventInfo &e)
     }
 
   // glyph (colour set below) 
-  int16 g = 15 ;
+  int16 g = GLYPH_BLAST;
 
   // where do we start? 
   int16 sx, sy, cx, cy; 
@@ -1778,12 +1778,12 @@ EvReturn Magic::ABallBeamBolt(EventInfo &e)
 
 
     if (vis) {
-      int16 colour; 
+      uint16 colour; 
       if (isBeam) 
-        colour = (BlastColourSets[(Color * 4)+random(4)] << 8);
+        colour = BlastColourSets[(Color * 4)+random(4)];
       else 
-        colour = (BlastColourSets[Color * 4] << 8);
-      o.AddGlyph(cx/2,cy/2, g | colour);
+        colour = BlastColourSets[Color * 4];
+      o.AddGlyph(cx/2,cy/2, g | GLYPH_FORE(colour));
       o.ShowGlyphs();
       PossiblyPause(T1,cx/2,cy/2,35);
       if (!isBeam) {
@@ -1984,7 +1984,7 @@ EvReturn Magic::ABallBeamBolt(EventInfo &e)
                 ListY[szList] = OListY[i] + DirY[j];                                    
                 if (vis)                                                         
                   o.AddGlyph(ListX[szList],ListY[szList],                        
-                    15 | (BlastColourSets[Color*4+1+random(3)] << 8));            
+				  GLYPH_VALUE(GLYPH_BLAST, BlastColourSets[Color * 4 + 1 + random(3)]));
                 szList++; GlyphCount++;                                          
                 if (szList > 58)                                                 
                   goto Breakout;                                                 

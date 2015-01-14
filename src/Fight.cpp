@@ -709,13 +709,13 @@ EvReturn Creature::RAttack(EventInfo &e)
    * trajectory code. */ 
 
   // where do we start? 
-  int16 sx, sy, cx, cy, lx, ly; 
-  lx=sx=cx=e.EActor->x*2;
-  ly=sy=cy=e.EActor->y*2;
+  int16 sx, sy, cx, cy, lx, ly;
+  lx = sx = cx = e.EActor->x * 2;
+  ly = sy = cy = e.EActor->y * 2;
 
   // glyph (colour set below) 
-  int16 g = 15 ;
-  int16 Color = TITEM(e.EItem2->iID)->Image >> 8; 
+  Glyph g = GLYPH_ID(WHITE);
+  Glyph gcolour = TITEM(e.EItem2->iID)->Image & GLYPH_COLOUR_MASK;
 
   int8 dirX = 0, dirY = 0;
   // if we're not a direction, keep track of slopes
@@ -795,7 +795,7 @@ EvReturn Creature::RAttack(EventInfo &e)
 
     // draw something on this square? 
     if (m.At(cx/2,cy/2).Visibility & VI_DEFINED) {
-      o.AddGlyph(cx/2,cy/2, g | Color*256);
+      o.AddGlyph(cx/2,cy/2, g | gcolour);
       o.ShowGlyphs();
       PossiblyPause(T1,cx/2,cy/2,30);
       o.DeActivate();

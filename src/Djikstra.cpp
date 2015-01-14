@@ -156,9 +156,9 @@ bool Map::ShortestPath(uint8 sx, uint8 sy, uint8 tx, uint8 ty,
           if (Dist[x][y] != 30000)
             {
               At(x,y).Glyph =
-                GLYPH_FLOOR2 | (EMERALD*256);
+                GLYPH_VALUE(GLYPH_FLOOR2, EMERALD);
               At(x,y).Memory =
-                GLYPH_FLOOR2 | (EMERALD*256);
+				  GLYPH_VALUE(GLYPH_FLOOR2, EMERALD);
               At(x,y).Shade = false;
             }              
       #endif
@@ -190,9 +190,9 @@ bool Map::ShortestPath(uint8 sx, uint8 sy, uint8 tx, uint8 ty,
     #ifdef DEBUG_DJIKSTRA
     for (i=0;i==0 || ThePath[i];i++) {
       At(ThePath[i]%256,ThePath[i]/256).Glyph =
-        GLYPH_FLOOR2 | (MAGENTA*256);
+		  GLYPH_VALUE(GLYPH_FLOOR2, MAGENTA);
       At(ThePath[i]%256,ThePath[i]/256).Memory =
-        GLYPH_FLOOR2 | (MAGENTA*256);
+		  GLYPH_VALUE(GLYPH_FLOOR2, MAGENTA);
       At(ThePath[i]%256,ThePath[i]/256).Shade = false;
       }
     #endif

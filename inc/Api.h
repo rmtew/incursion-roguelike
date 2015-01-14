@@ -18,7 +18,7 @@
 #define EvReturn   int32
 #define uint32     int32
 #define Dir        int8
-#define GlyphType  uint16
+#define GlyphType  uint32
 #define NULL_ID    ((rID)0)
 #define NULL_RECT  ((Rect)0)
 #define NULL_OBJ   ((hObj)0)
@@ -627,7 +627,7 @@ system void    T_TERM::PutGlyph(int16 x,int16 y, GlyphType g);
 system int32   T_TERM::GetGlyph(int16 x,int16 y);
 system void    T_TERM::GotoXY(int16 x, int16 y);
 system void    T_TERM::Clear();
-system void    T_TERM::SetColor(int16 col);
+system void    T_TERM::SetColor(uint16 col);
 system void    T_TERM::Write(string msg);
 system void    T_TERM::WriteXY(int16 x,int16 y, string msg);
 system void    T_TERM::CursorOn();

@@ -447,7 +447,7 @@ Retry:
             if (MType > 0 && MType < 100000  && !Modules[q]->QMon[i].isMType(mID,MType))
                 continue;
             /* Kludge for AcquisitionPrompt */
-            if (MType >= 100000 && ((Modules[q]->QMon[i].Image & 0xFF) != (MType-100000)))
+            if (MType >= 100000 && (GLYPH_ID_VALUE(Modules[q]->QMon[i].Image) != (MType-100000)))
                 continue;
             if (Modules[q]->QMon[i].HasFlag(M_AQUATIC))
                 if (MType != MA_AQUATIC && Purpose != PUR_ANYMON)

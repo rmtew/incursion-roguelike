@@ -2591,7 +2591,7 @@ EvReturn Map::enBuildMon(EventInfo &e)
       else if (mn->isMType(MA_AQUATIC)) {
         if (!TTER(TerrainAt(OpenX[j], OpenY[j]))->HasFlag(TF_WATER))
           { 
-            //if (GlyphAt(OpenX[j],OpenY[j]) & 0xFF == GLYPH_WATER)
+            //if (GLYPH_ID_VALUE(GlyphAt(OpenX[j],OpenY[j])) == GLYPH_WATER)
             //  __asm int 3; 
             Tries++; 
             goto Retry; 

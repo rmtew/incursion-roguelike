@@ -421,7 +421,7 @@ class TItem: public Resource
       void SetFlag(uint16 fl)   { Flags[fl/8] |=  (1 << (fl % 8)); }
       void UnsetFlag(uint16 fl) { Flags[fl/8] &= ~(1 << (fl % 8)); }
       bool inline HasFlag(uint16 fl)   { return (Flags[fl/8] & (1 << (fl % 8))) != 0; }
-			int16 Image;
+			uint32 Image; // Glyph
 			int16 IType;
 			int8  Level, Depth;
 			int8  Material;

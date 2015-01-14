@@ -19,7 +19,7 @@
      void libtcodTerm::PutChar(int16 x, int16 y, Glyph g) 
      void libtcodTerm::GotoXY(int16 x, int16 y) 
      void libtcodTerm::Clear() 
-     void libtcodTerm::Color(int16 _attr) 
+     void libtcodTerm::Color(uint16 _attr) 
      void libtcodTerm::StopWatch(int16 milli)  
    Input Functions
      int16 libtcodTerm::GetCharRaw()
@@ -33,8 +33,8 @@
    Scroll Buffer
       void  libtcodTerm::SPutChar(int16 x, int16 y,Glyph g);
       //int16 libtcodTerm::SGetGlyph(int16 x, int16 y);
-      void  libtcodTerm::SPutColor(int16 x, int16 y, int16 col);
-      int16 libtcodTerm::SGetColor(int16 x, int16 y);
+      void  libtcodTerm::SPutColor(int16 x, int16 y, uint16 col);
+      uint16 libtcodTerm::SGetColor(int16 x, int16 y);
       void  libtcodTerm::ClearScroll(bool full=false);
       void  libtcodTerm::BlitScrollLine(int16 wn, int32 buffline, int32 winline);
    File I/O
@@ -91,15 +91,6 @@
 #undef MIN
 #undef MAX
 
-//#define SDL_MAIN_HANDLED
-//#include "SDL.h"
-
-#define FORE(g) ((g & 0x0F00) / 256)
-#define BACK(g) ((g & 0xF000) / (256*16))
-#define ATTR(g) ((g & 0xFF00) / 256)
-#define CHAR(g) ((g & 0x00FF))
-
-#define MAX_COLORS 16
 
 #define CURSOR_BLINK_MS 300
 #define INPUT_IDLE_MS 50
@@ -118,7 +109,7 @@ using google_breakpad::ExceptionHandler;
 */
 
 
-TCOD_color_t RGBValues[MAX_COLORS] = {
+TCOD_color_t RGBValues[MAX_COLOURS] = {
   {   0,   0,   0 },  // BLACK
   {   0,   0, 192 },  // BLUE
   {   0, 128,   0 },  // GREEN
@@ -138,7 +129,7 @@ TCOD_color_t RGBValues[MAX_COLORS] = {
   };
 
 
-TCOD_color_t RGBSofter[MAX_COLORS] = {
+TCOD_color_t RGBSofter[MAX_COLOURS] = {
   { 0, 0, 0 }, // BLACK
   { 64, 64, 187 }, // BLUE
   { 0, 128, 0 }, // GREEN
@@ -166,7 +157,7 @@ class libtcodTerm: public TextTerm
     private:
       bool isWindowed, showCursor, cursorPulse;
       TCOD_console_t bScreen, bSave, bScroll, bCurrent;
-      TCOD_color_t Colors[MAX_COLORS];
+      TCOD_color_t Colors[MAX_COLOURS];
       int16 resX, resY, fontX, fontY, ocx, ocy;
       uint32 ticks_blink_last;
       int oldResX, oldResY;
@@ -194,10 +185,11 @@ class libtcodTerm: public TextTerm
       virtual Glyph AGetChar(int16 x, int16 y);
       virtual void GotoXY(int16 x, int16 y);
       virtual void Clear();
-      virtual void Color(int16 _attr);
+      virtual void Color(uint16 _attr);
       virtual void StopWatch(int16 milli);
       virtual uint32 GetElapsedMilli();
-      
+	  virtual int32 ConvertChar(Glyph g, char **out); 
+
       /* Input Functions */
       virtual int16 GetCharRaw();
       virtual int16 GetCharCmd();
@@ -217,8 +209,8 @@ class libtcodTerm: public TextTerm
       /* Scroll Buffer */
       virtual void SPutChar(int16 x, int16 y, Glyph g);
       virtual uint16 SGetChar(int16 x, int16 y);
-      virtual void SPutColor(int16 x, int16 y, int16 col);
-      virtual int16 SGetColor(int16 x, int16 y);
+      virtual void SPutColor(int16 x, int16 y, uint16 col);
+      virtual uint16 SGetColor(int16 x, int16 y);
       virtual void SClear();
       virtual void  BlitScrollLine(int16 wn, int32 buffline, int32 winline);
       
@@ -393,17 +385,7 @@ int main(int argc, char *argv[]) {
     T1->ShutDown();
     delete theGame;
     return 0;
-    /*
-    T1->Initialize();
-    T1->SetWin(WIN_SCREEN);
-    T1->Clear();
-    int16 i;
-    for (i=0;i!=256;i++)
-      T1->PutChar(i%16,i/16,i + WHITE*256);
-    T1->GetCharRaw();
-    T1->GetCharRaw();
-    */
-  }
+}
 
 TCOD_key_t readkey(int wait) {
     TCOD_key_t key;
@@ -416,6 +398,171 @@ TCOD_key_t readkey(int wait) {
             return nokey;
     }
     return key;
+}
+
+int glyphchar_to_char(Glyph g) {
+	static int lookup_table[GLYPH_LAST + 2];
+	int c = GLYPH_ID_VALUE(g);
+	int lookup_value;
+	if (lookup_table[GLYPH_LAST + 1] == NULL) {
+		/*
+   00          01          02          03          04          05          06          07          08          09          0A          0B          0C          0D          0E          0F
+00 ?           WhiteFace   BlackFace   Heart       Diamond     Club        Spade       ?           ?           WhiteCircle ?           Male        Female      EighthNote  BEighthNote WhiteSun
+10 LPtr        RPtr        UDArrow     2Exclamat.. Pilcrow     SectionSign DoubleLow   DArrowBase  UArrow      DArrow      RArrow      LArrow      ?           LRArrow     UPtr        DPtr
+20 ...
+30 ...
+40 ...
+50 ...
+60 ...
+70                                                                                                                                                                                     House
+   00          01          02          03          04          05          06          07          08          09          0A          0B          0C          0D          0E          0F
+80
+90
+A0                                                                                                 Inverted?   Not         ReverseNot  1/2         1/4         Inverted!   <<          >>
+B0 LightShade  MediumShade DarkShade   BoxV1       BoxV1L1     BoxV1L2     BoxV2L1     BoxD2L1     BoxD1L2     BoxV2L2     BoxV2       BoxD2L2     BoxU2L2     BoxU2L1     BoxU1L2     BoxD1L1
+C0 BoxU1R1     BoxU1H      BoxD1H      BoxV1R1     BoxH1       BoxH1V1     BoxV1R2     BoxV2R1     BoxU2R2     BoxD2R2     BoxH2U2     BoxH2D2     BoxV2R2     BoxH2       BoxV2H2     BoxH2U1
+D0 BoxH2U1     BoxH2D1     BoxH1D2     BoxU2R1     BoxU1R2     BoxD1R2     BoxD2R1     BoxV2H1     BoxV1H2     BoxUL       BoxDR       FullBlock   LowerBlock  LeftBlock   RightBlock  TopBlock
+E0 Alpha       Beta        Gamma       Pi          SigmaL      SigmaS      MuS         GammaS      ShoL        ThetaL      OmegaL      DeltaS      Infinity    OStroke     Summation   Product
+F0 IdenticalTo PlusMinus   GreaterThE  LessThanE   IntegralTp  IntegralBtm DivisionSgn AlmostEqual Degree      BlackSquare MiddleDot   SquareRoot  SuperScrptn SuperScrpt2 BlackSquare ...
+   00          01          02          03          04          05          06          07          08          09          0A          0B          0C          0D          0E          0F
+		*/
+
+		// NULL entries just use the raw glyph character value for now.
+		lookup_table[GLYPH_VLINE] = 179; // Box drawings light vertical.
+		lookup_table[GLYPH_HLINE] = 196; // Box drawings light horizontal.
+		lookup_table[GLYPH_DIVIDE] = 246;
+		lookup_table[GLYPH_APPROXIMATELY] = 247; // Almost equal to.
+		lookup_table[GLYPH_BLACK_SQUARE] = 254;
+		lookup_table[GLYPH_CHECK] = 251;
+
+		lookup_table[GLYPH_PERSON] = 6;
+		lookup_table[GLYPH_BULK] = 197; // Box drawings vertical and horizonal
+		lookup_table[GLYPH_WATER] = lookup_table[GLYPH_APPROXIMATELY];
+		lookup_table[GLYPH_FOG] = '~';
+		lookup_table[GLYPH_ICE] = lookup_table[GLYPH_BLACK_SQUARE];
+		lookup_table[GLYPH_WEB] = '#';
+		lookup_table[GLYPH_LAVA] = lookup_table[GLYPH_APPROXIMATELY];
+		lookup_table[GLYPH_BLAST] = 15; // White sun
+		lookup_table[GLYPH_WALL] = 177; // Medium shade
+		lookup_table[GLYPH_ROCK] = 176; // Light shade
+		lookup_table[GLYPH_SOLID] = 219; // Full block
+		lookup_table[GLYPH_PILLAR1] = 9; // White circle
+		lookup_table[GLYPH_PILLAR2] = 15; // White sun with rays.
+		lookup_table[GLYPH_VIEWPOINT] = 9; // White circle.
+		lookup_table[GLYPH_GRAVE] = 239; // Product symbol.
+		lookup_table[GLYPH_SHELF] = 216; // Box drawings vertical single and horizontal double.
+
+		lookup_table[GLYPH_POTION] = 173;
+		lookup_table[GLYPH_SCROLL] = 168; // Inverted question mark.
+		lookup_table[GLYPH_WEAPON] = lookup_table[GLYPH_CHECK];
+		lookup_table[GLYPH_ROD] = '|';
+		lookup_table[GLYPH_STAFF] = '/';
+		lookup_table[GLYPH_WAND] = '-';
+		lookup_table[GLYPH_FOOD] = '%';
+		lookup_table[GLYPH_CORPSE] = '%';
+		lookup_table[GLYPH_BOOK] = lookup_table[GLYPH_BLACK_SQUARE];
+		lookup_table[GLYPH_TORCH] = '}';
+		lookup_table[GLYPH_LARMOUR] = 228; // Greek capital letter sigma.
+		lookup_table[GLYPH_MARMOUR] = 228; // Greek capital letter sigma.
+		lookup_table[GLYPH_HARMOUR] = 228; // Greek capital letter sigma.
+		lookup_table[GLYPH_SHIELD] = ']';
+		lookup_table[GLYPH_GAUNTLETS] = 229; // Greek small letter sigma.
+		lookup_table[GLYPH_HELMET] = 155; // Cent sign.
+		lookup_table[GLYPH_HEADBAND] = 155; // Cent sign.
+		lookup_table[GLYPH_BOOTS] = 224; // Greek small letter alpha.
+		lookup_table[GLYPH_BRACERS] = 224; // Greek small letter alpha.
+		lookup_table[GLYPH_GIRDLE] = 226; // Greek capital letter gamma.
+		lookup_table[GLYPH_CLOTHES] = 20; // Pilcrow.
+		lookup_table[GLYPH_CONTAIN] = 127; // House.
+		lookup_table[GLYPH_CROWN] = '^';
+		lookup_table[GLYPH_DUST] = 240; // Identical to.
+		lookup_table[GLYPH_DECK] = 240; // Identical to.
+		lookup_table[GLYPH_RING] = 235; // Greek small letter delta.
+		lookup_table[GLYPH_AMULET] = 11; // Male sign.
+		lookup_table[GLYPH_FIGURE] = 156; // Pound sign.
+		lookup_table[GLYPH_HORN] = '&';
+		lookup_table[GLYPH_EYES] = 236; // Infinity.
+		lookup_table[GLYPH_HERB] = '"';
+		lookup_table[GLYPH_MUSH] = 227; // Greek small letter pi.
+		lookup_table[GLYPH_GEM] = 4; // Diamond.
+		lookup_table[GLYPH_COIN] = '$';
+		lookup_table[GLYPH_TOOL] = 234; // Greek capital letter omega.
+		lookup_table[GLYPH_SWORD] = '(';
+		lookup_table[GLYPH_BOW] = ')';
+		lookup_table[GLYPH_JUNK] = '&';
+		lookup_table[GLYPH_CHEST] = 127; // House.
+		lookup_table[GLYPH_CLOAK] = 6; // Hearts suit symbol.
+		lookup_table[GLYPH_STATUE] = 5; // Spades suit symbol.
+		lookup_table[GLYPH_PILE] = '*';
+		lookup_table[GLYPH_MULTI] = 146; // Latin capital letter Ae.
+		lookup_table[GLYPH_ALTAR] = '8';
+		lookup_table[GLYPH_FOUNTAIN] = 244; // Integral top.
+		lookup_table[GLYPH_THRONE] = 190; // Box drawings up single and left double.
+		lookup_table[GLYPH_SYMBOL] = 237; // Capital O with stroke.
+
+		lookup_table[GLYPH_HEDGE] = '"';
+		lookup_table[GLYPH_RUBBLE] = ':';
+		lookup_table[GLYPH_BRIDGE] = '=';
+		lookup_table[GLYPH_FLOOR] = 250; // Middle dot.
+		lookup_table[GLYPH_FLOOR2] = 249; // Black small square.
+		lookup_table[GLYPH_VDOOR] = lookup_table[GLYPH_VLINE];
+		lookup_table[GLYPH_HDOOR] = lookup_table[GLYPH_HLINE];
+		lookup_table[GLYPH_ODOOR] = '+';
+		lookup_table[GLYPH_BDOOR] = 241; // Plus-minus.
+		lookup_table[GLYPH_PIT] = '0';
+		lookup_table[GLYPH_PORTAL] = 240; // Identical to.
+		lookup_table[GLYPH_SUMMONING_CIRCLE] = 233; // Greek capital letter theta.
+
+		lookup_table[GLYPH_STORE] = 21; // Section sign.
+		lookup_table[GLYPH_GUILD] = 20; // Pilcrow.
+		lookup_table[GLYPH_STORE_VWALL] = 186; // Box drawings double vertical.
+		lookup_table[GLYPH_STORE_HWALL] = 205; // Box drawings double horizontal.
+		lookup_table[GLYPH_STORE_CORNER] = 219; // Full block.
+
+		lookup_table[GLYPH_USTAIRS] = '<';
+		lookup_table[GLYPH_DSTAIRS] = '>';
+		lookup_table[GLYPH_TREE] = 157; // Yen sign.
+		lookup_table[GLYPH_FURNATURE] = lookup_table[GLYPH_BLACK_SQUARE];
+		lookup_table[GLYPH_UNKNOWN] = '?';
+		lookup_table[GLYPH_TRASH] = '&';
+		lookup_table[GLYPH_BONES] = '&';
+		lookup_table[GLYPH_CHECKMARK] = lookup_table[GLYPH_CHECK];
+
+		lookup_table[GLYPH_TRAP] = 232; // Greek capital letter sho.
+		lookup_table[GLYPH_DISARMED] = lookup_table[GLYPH_DIVIDE];
+
+		lookup_table[GLYPH_ARROW] = 24; // Upwards arrow.
+		lookup_table[GLYPH_ARROW_UP] = 24; // Black up pointing arrow.
+		lookup_table[GLYPH_ARROW_DOWN] = 25; // Black down pointing arrow.
+		lookup_table[GLYPH_ARROW_RIGHT] = 26; // Black right pointing arrow.
+		lookup_table[GLYPH_ARROW_LEFT] = 27; // Black left pointing arrow.
+
+		lookup_table[GLYPH_POINTER_LEFT] = 17; // Black left pointing pointer.
+		lookup_table[GLYPH_POINTER_RIGHT] = 16; // Black right pointing pointer.
+
+		lookup_table[GLYPH_GUARD] = 140; // latin small letter I with circumflex.
+		lookup_table[GLYPH_TOWNIE] = 139; // Latin small letter I with diaeresis.
+		lookup_table[GLYPH_TOWNSCUM] = 141; // Latin small letter I with grave.
+		lookup_table[GLYPH_TOWN_NPC] = 'i';
+		lookup_table[GLYPH_LDEMON] = 151; // // Latin small letter U with grave.
+		lookup_table[GLYPH_GDEMON] = 154; // Latin small letter U with diaeresis.
+		lookup_table[GLYPH_LDEVIL] = 148; // Latin small letter O with diaeresis.
+		lookup_table[GLYPH_GDEVIL] = 153; // Latin capital letter O with diaeresis.
+		lookup_table[GLYPH_FIEND] = 152; // Latin small letter y with diaeresis.
+
+		lookup_table[GLYPH_PLAYER] = '@';
+		lookup_table[GLYPH_HUMAN] = 1; // White smiling face.
+		lookup_table[GLYPH_ELF] = 132; // CUSTOM face graphic.
+		lookup_table[GLYPH_DWARF] = 131; // CUSTOM face graphic.
+		lookup_table[GLYPH_GNOME] = 133; // CUSTOM small face graphic.
+		lookup_table[GLYPH_HOBBIT] = 133; // CUSTOM small face graphic.
+
+		lookup_table[GLYPH_LAST + 1] = 1;
+	}
+	lookup_value = lookup_table[c];
+	if (lookup_value == NULL)
+		return c;
+	return lookup_value;
 }
 
   
@@ -465,9 +612,9 @@ void libtcodTerm::BlinkCursor() {
         return;
     cursorPulse = !cursorPulse;
     if (cursorPulse) {
-        int16 c = attr & 0x000F;
-        if (c == 8) 
-          c = 7;
+        uint16 c = attr & COLOUR_MASK;
+        if (c == SHADOW) 
+          c = GREY;
         else if (c < 8)
           c += 8;
         TCOD_console_put_char_ex(NULL,cx,cy,'X',Colors[c], Colors[c]);
@@ -493,15 +640,20 @@ void libtcodTerm::PutChar(Glyph g) {
 }
 
 void libtcodTerm::APutChar(int16 x, int16 y, Glyph g) {
-    int c = CHAR(g);
-    uint32 ga;
-    if (g >> 8) {
-        ga = ATTR(g)*256;
-    } else {
-        ga = attr*256;
-    }
-    TCOD_console_put_char_ex(bScreen,x,y,c,Colors[FORE(ga)], Colors[BACK(ga)]);
-    updated = false;
+	int c = glyphchar_to_char(g);
+	uint16 fg_idx = GLYPH_FORE_VALUE(g);
+	uint16 bg_idx = GLYPH_BACK_VALUE(g);
+
+	if (fg_idx == 0 && bg_idx == 0) {
+		fg_idx = attr & COLOUR_MASK;
+		bg_idx = (attr >> COLOUR_BITS) & COLOUR_MASK;
+	}
+	if (c >= 255)
+		Error("Bad character code encountered");
+	else
+	    TCOD_console_put_char_ex(bScreen, x, y, c, Colors[fg_idx], Colors[bg_idx]);
+
+	updated = false;
 }
 
 void libtcodTerm::PutChar(int16 x, int16 y, Glyph g) {
@@ -511,27 +663,27 @@ void libtcodTerm::PutChar(int16 x, int16 y, Glyph g) {
 }
 
 Glyph libtcodTerm::AGetChar(int16 x, int16 y) {
-    Glyph g = TCOD_console_get_char(bScreen,x,y);
-    int16 i;
-    TCOD_color_t fgcolor, bgcolor;
-    int32 fi = -1, bi = -1;
-    fgcolor = TCOD_console_get_char_foreground(bScreen,x,y);
-    for (i=0;i<MAX_COLORS;i++)
-        if (Colors[i].r == fgcolor.r && Colors[i].g == fgcolor.g && Colors[i].b == fgcolor.b) {
-            fi = i;
-            break;
-        }
-    bgcolor = TCOD_console_get_char_background(bScreen,x,y);
-    for (i=0;i<MAX_COLORS;i++)
-        if (Colors[i].r == bgcolor.r && Colors[i].g == bgcolor.g && Colors[i].b == bgcolor.b) {
-            bi = i;
-            break;
-        }
-    if (bi != -1)
-        g |= bi * 256 * 16;
-    if (fi != -1)
-        g |= fi * 256;
-    return g;
+	int16 i;
+	// TODO: This will be the screen character.  In an ideal world, it would be translated back
+	//       to the GLYPH_ID value.
+	Glyph g = TCOD_console_get_char(bScreen, x, y);
+	TCOD_color_t fgcolor, bgcolor;
+
+	fgcolor = TCOD_console_get_char_foreground(bScreen, x, y);
+	for (i = 0; i < MAX_COLOURS; i++)
+		if (Colors[i].r == fgcolor.r && Colors[i].g == fgcolor.g && Colors[i].b == fgcolor.b) {
+			g |= GLYPH_FORE(i);
+			break;
+		}
+
+	bgcolor = TCOD_console_get_char_background(bScreen, x, y);
+	for (i = 0; i < MAX_COLOURS; i++)
+		if (Colors[i].r == bgcolor.r && Colors[i].g == bgcolor.g && Colors[i].b == bgcolor.b) {
+			g |= GLYPH_BACK(i);
+			break;
+		}
+
+	return g;
 }
 
 void libtcodTerm::GotoXY(int16 x, int16 y) 
@@ -552,7 +704,7 @@ void libtcodTerm::Clear() {
     updated = false;
 }
 
-void libtcodTerm::Color(int16 _attr) {
+void libtcodTerm::Color(uint16 _attr) {
     attr = _attr;
 }
 
@@ -566,6 +718,10 @@ void libtcodTerm::StopWatch(int16 milli) {
 
 uint32 libtcodTerm::GetElapsedMilli() {
     return TCOD_sys_elapsed_milli();
+}
+
+int32 libtcodTerm::ConvertChar(Glyph g, char **out) {
+	return 0;
 }
 
 /*****************************************************************************\
@@ -708,10 +864,10 @@ RetryFont:
     InitWindows();
 
     if (theGame->Opt(OPT_SOFT_PALETTE))
-        for (i=0;i!=MAX_COLORS;i++)
+        for (i=0;i!=MAX_COLOURS;i++)
             Colors[i] = RGBSofter[i];
     else
-        for (i=0;i!=MAX_COLORS;i++)
+        for (i=0;i!=MAX_COLOURS;i++)
             Colors[i] = RGBValues[i];
 
     bScreen = TCOD_console_new(sizeX, sizeY);
@@ -865,42 +1021,40 @@ void libtcodTerm::Title() {
 \*****************************************************************************/
 
 void  libtcodTerm::SPutChar(int16 x, int16 y, Glyph g) {
-    TCOD_console_put_char_ex(bScroll,x,y,CHAR(g),Colors[FORE(g)], Colors[BACK(g)]);
+	int c = glyphchar_to_char(g);
+	TCOD_console_put_char_ex(bScroll, x, y, c, Colors[GLYPH_FORE_VALUE(g)], Colors[GLYPH_BACK_VALUE(g)]);
 }
 
-Glyph libtcodTerm::SGetChar(int16 x, int16 y) {
-    return TCOD_console_get_char(bScroll,x,y);
+uint16 libtcodTerm::SGetChar(int16 x, int16 y) {
+	return TCOD_console_get_char(bScroll, x, y);
 }
 
-void libtcodTerm::SPutColor(int16 x, int16 y, int16 col) {
-    uint32 ga = col*256;
+void libtcodTerm::SPutColor(int16 x, int16 y, uint16 col) {
+    uint32 ga = GLYPH_ATTR(col);
     uint8 c = TCOD_console_get_char(bScroll,x,y);
-    TCOD_console_put_char_ex(bScroll,x,y,c,Colors[FORE(ga)],Colors[BACK(ga)]);
+	TCOD_console_put_char_ex(bScroll, x, y, c, Colors[GLYPH_FORE_VALUE(ga)], Colors[GLYPH_BACK_VALUE(ga)]);
 }
 
-int16 libtcodTerm::SGetColor(int16 x, int16 y) {
-    int16 i;
-    TCOD_color_t fgcolor, bgcolor;
-    int32 fi = -1, bi = -1;
-    fgcolor = TCOD_console_get_char_foreground(bScroll,x,y);
-    for (i=0;i<MAX_COLORS;i++)
-        if (Colors[i].r == fgcolor.r && Colors[i].g == fgcolor.g && Colors[i].b == fgcolor.b) {
-            fi = i;
+uint16 libtcodTerm::SGetColor(int16 x, int16 y) {
+    uint32 i, colour = 0;
+    TCOD_color_t fgcolour, bgcolour;
+	uint8 c = TCOD_console_get_char(bScroll, x, y);
+
+    fgcolour = TCOD_console_get_char_foreground(bScroll,x,y);
+    for (i=0;i<MAX_COLOURS;i++)
+		if (Colors[i].r == fgcolour.r && Colors[i].g == fgcolour.g && Colors[i].b == fgcolour.b) {
+			colour |= GLYPH_FORE(i);
             break;
         }
-    bgcolor = TCOD_console_get_char_background(bScroll,x,y);
-    for (i=0;i<MAX_COLORS;i++)
-        if (Colors[i].r == bgcolor.r && Colors[i].g == bgcolor.g && Colors[i].b == bgcolor.b) {
-            bi = i;
-            break;
+
+    bgcolour = TCOD_console_get_char_background(bScroll,x,y);
+    for (i=0;i<MAX_COLOURS;i++)
+		if (Colors[i].r == bgcolour.r && Colors[i].g == bgcolour.g && Colors[i].b == bgcolour.b) {
+			colour |= GLYPH_BACK(i);
+			break;
         }
-    i = 0;
-    if (bi != -1)
-        i |= bi << 4;
-    if (fi != -1)
-        i |= fi;
-    return i;
-    /* return ATTR(bScroll[y*SCROLL_WIDTH+x]);*/
+
+    return (uint16)GLYPH_COLOUR_VALUE(colour);
 }
 
 void libtcodTerm::SClear() {
@@ -908,9 +1062,6 @@ void libtcodTerm::SClear() {
 }
 
 void  libtcodTerm::BlitScrollLine(int16 wn, int32 buffline, int32 winline) {
-    /*memcpy(&(bScreen[(winline+Windows[wn].Top)*sizeX + Windows[wn].Left]),
-           &(bScroll[buffline*SCROLL_WIDTH]), 
-           sizeof(Glyph) * min(SCROLL_WIDTH,WinSizeX()));*/
     TCOD_console_blit(bScroll,0,buffline,min(SCROLL_WIDTH,WinSizeX()),1,bScreen,Windows[wn].Left,winline+Windows[wn].Top,1.0f,1.0f);
 }
 

@@ -210,7 +210,7 @@ void Thing::PlaceAt(Map*_m,int16 _x,int16 _y, bool share_square)
           if (m->Fields[i]->Creator == myHandle)
             if (m->Fields[i]->eID == vID)
               goto ValourExists;
-        m->NewField(FI_MOBILE|FI_MODIFIER,x,y,3,(15*256) | GLYPH_FLOOR2,-1,vID,thisc);
+        m->NewField(FI_MOBILE|FI_MODIFIER,x,y,3,GLYPH_VALUE(GLYPH_FLOOR2, WHITE),-1,vID,thisc);
         ValourExists:;
         }
       if (m == NULL)

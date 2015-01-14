@@ -164,19 +164,23 @@ void TextTerm::Write(const char*str)
             continue;
           }
         if (*ch == '~')
-          APutChar(cx,cy,'%' + attr*256);
+          APutChar(cx,cy,GLYPH_VALUE('%', attr));
         else if (*ch == '_' && (activeWin != &Windows[WIN_DEBUG]))
-          APutChar(cx,cy,' ' + attr*256);
-        else if (*ch == LITERAL_CHAR) {
-          ch++;
-          APutChar(cx,cy,*ch + attr*256);
-          }
-        else if (*ch == WRAP_BREAK) 
+			APutChar(cx, cy, GLYPH_VALUE(' ' ,attr));
+		else if (*ch == LITERAL_CHAR) {
+			// To understand LITERAL_CHAR mangling, search for it elsewhere.
+			uint32 gid;
+			ch++;
+			gid = ~(*ch) << 8;
+			ch++;
+			gid |= *ch;
+			APutChar(cx, cy, GLYPH_VALUE(gid, attr));
+		} else if (*ch == WRAP_BREAK) 
           cWrap = cx+1;
         else if (*ch == WRAP_INDENT) 
           cWrap = cx+3;
         else {
-          APutChar(cx,cy,*ch + attr*256);
+			APutChar(cx, cy, GLYPH_VALUE(*ch, attr));
           }
         cx++; ch++;
       }
@@ -378,17 +382,17 @@ void TextTerm::DrawBorder(int16 wn, int16 border) {
 	int16 i;
 	SetWin(WIN_SCREEN); Color(border);
 	for (i = Windows[wn].Left; i != Windows[wn].Right + 1; i++) {
-		PutChar(i, Windows[wn].Top - 1, 205);
-		PutChar(i, Windows[wn].Bottom + 1, 205);
+		PutChar(i, Windows[wn].Top - 1, GLYPH_STORE_HWALL);
+		PutChar(i, Windows[wn].Bottom + 1, GLYPH_STORE_HWALL);
 	}
 	for (i = Windows[wn].Top; i != Windows[wn].Bottom + 1; i++) {
-		PutChar(Windows[wn].Left - 1, i, 186);
-		PutChar(Windows[wn].Right + 1, i, 186);
+		PutChar(Windows[wn].Left - 1, i, GLYPH_STORE_VWALL);
+		PutChar(Windows[wn].Right + 1, i, GLYPH_STORE_VWALL);
 	}
-	PutChar(Windows[wn].Left - 1, Windows[wn].Top - 1, 219);
-	PutChar(Windows[wn].Right + 1, Windows[wn].Top - 1, 219);
-	PutChar(Windows[wn].Left - 1, Windows[wn].Bottom + 1, 219);
-	PutChar(Windows[wn].Right + 1, Windows[wn].Bottom + 1, 219);
+	PutChar(Windows[wn].Left - 1, Windows[wn].Top - 1, GLYPH_SOLID);
+	PutChar(Windows[wn].Right + 1, Windows[wn].Top - 1, GLYPH_SOLID);
+	PutChar(Windows[wn].Left - 1, Windows[wn].Bottom + 1, GLYPH_SOLID);
+	PutChar(Windows[wn].Right + 1, Windows[wn].Bottom + 1, GLYPH_SOLID);
 }
 
 void TextTerm::Box(int16 win, int16 flags, int16 cbor, int16 ctxt, const char*text) {
@@ -571,9 +575,9 @@ void TextTerm::UpdateScrollArea(int16 _offset, int16 wn) {
 		BlitScrollLine(wn, y + offset, y);
 	}
 	if (offset)
-		PutChar(WinSizeX() - 1, 0, GLYPH_ARROW_UP + (EMERALD * 256));
+		PutChar(WinSizeX() - 1, 0, GLYPH_VALUE(GLYPH_ARROW_UP, EMERALD));
 	if (offset < ScrollLines - WinSizeY())
-		PutChar(WinSizeX() - 1, WinSizeY() - 1, GLYPH_ARROW_DOWN + (EMERALD * 256));
+		PutChar(WinSizeX() - 1, WinSizeY() - 1, GLYPH_VALUE(GLYPH_ARROW_DOWN, EMERALD));
 
 	updated = false;
 }
@@ -584,8 +588,8 @@ void TextTerm::HyperTab(int16 wn) {
     /* Assumptions:
        * There is only one hyper-link per line.
        * Each hyperlink fits on a single line.
-       * No text in the scrolling win has attr 0+15*16.
-       * All links are attr 15+0*16
+       * No text in the scrolling win has attr BLACK + BACK_COLOUR(WHITE).
+       * All links are attr WHITE + BACK_COLOUR(BLACK)
        * All links are bracketed with '>' and '<'
        * The character '<' does not occur naturally in the
            same line as a hyperlink.
@@ -607,8 +611,9 @@ void TextTerm::HyperTab(int16 wn) {
     /* De-highlight the old link */
     if (SelectedLink != -1) {
         for(i=0;i<sx;i++) {
-            SGetChar(i, HL[SelectedLink].LineNo);
-            if (SGetColor(i,HL[SelectedLink].LineNo) == WHITE*16)
+            //SGetChar(i, HL[SelectedLink].LineNo);
+			// Invert the colour.
+            if (SGetColor(i,HL[SelectedLink].LineNo) == (BLACK | BACK_COLOUR(WHITE)))
                 SPutColor(i,HL[SelectedLink].LineNo, WHITE);
         }
     }
@@ -655,7 +660,7 @@ void TextTerm::HyperTab(int16 wn) {
         if (SGetChar(i, HL[ln].LineNo) == '<')
           isLink = true;
         if (isLink)
-          SPutColor(i, HL[ln].LineNo,WHITE*16);
+          SPutColor(i, HL[ln].LineNo, BLACK | BACK_COLOUR(WHITE));
         if (SGetChar(i, HL[ln].LineNo) == '>')
           isLink = false;
       }
@@ -720,7 +725,7 @@ void TextTerm::SWrite(const char *text, int16 wn)
             HL[LinkCount].LineNo = scy;
             HL[LinkCount].Column = scx;
             HL[LinkCount].Text[0] = 0;
-            SPutChar(scx,scy,'<' + attr*256);
+			SPutChar(scx, scy, GLYPH_VALUE('<',attr));
             scx++;
             ASSERT(isalnum(*(ch+1)));
             if (*(ch+1) && *(ch+2) && *(ch+3) && *(ch+4))
@@ -757,7 +762,7 @@ void TextTerm::SWrite(const char *text, int16 wn)
           }
         if (*ch == '}' && isLink)
           {
-            SPutChar(scx,scy,'>' + attr*256);
+			  SPutChar(scx, scy, GLYPH_VALUE('>', attr ));
             scx++;
             Color((int16)oColor);
             isLink = false;
@@ -772,21 +777,26 @@ void TextTerm::SWrite(const char *text, int16 wn)
             continue;
           }
         if (*ch == '~') {
-          SPutChar(scx,scy,'%' + attr*256);
+			SPutChar(scx, scy, GLYPH_VALUE('%', attr));
           }
         else if (*ch == '_' && (activeWin != &Windows[WIN_DEBUG])) {
-          SPutChar(scx,scy,' ' + attr*256);
+			SPutChar(scx, scy, GLYPH_VALUE(' ', attr ));
           }
         else if (*ch == LITERAL_CHAR) {
-          ch++;
-          SPutChar(scx,scy,*ch + attr*256);
-          }
+			// To understand LITERAL_CHAR mangling, search for it elsewhere.
+			uint32 gid;
+			ch++;
+			gid = ~(*ch) << 8;
+			ch++;
+			gid |= *ch;
+			SPutChar(scx, scy, GLYPH_VALUE(gid, attr));
+		}
         else if (*ch == WRAP_BREAK) 
           cWrap = scx+1;
         else if (*ch == WRAP_INDENT) 
           cWrap = scx+3;
         else {
-          SPutChar(scx,scy,*ch + attr*256);
+			SPutChar(scx, scy, GLYPH_VALUE(*ch, attr));
           }
         scx++; ch++;
       }

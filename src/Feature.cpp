@@ -313,9 +313,9 @@ bool Portal::EnterDir(Dir d)
         case POR_UP_STAIR:      return d == UP;
         case POR_DOWN_STAIR:    return d == DOWN;
         default:                
-          if ((Image & 0xFF) == '>')
+          if ((Image & GLYPH_ID_MASK) == GLYPH_ID(GLYPH_DSTAIRS))
             return d == DOWN;
-          if ((Image & 0xFF) == '<')
+		  if ((Image & GLYPH_ID_MASK) == GLYPH_ID(GLYPH_USTAIRS))
             return d == UP;
           return d == CENTER;
       }
@@ -368,10 +368,10 @@ void Door::SetImage()
       return;
 
     Image = TFEAT(fID)->Image; 
-      Image &= 0xFF00;
+      Image &= GLYPH_ATTR_MASK;
 
     if (HasStati(WIZLOCK)) 
-      Image |= (RED << 12);
+      Image |= GLYPH_BACK(RED);
      
 
     if (DoorFlags & DF_OPEN)
@@ -422,9 +422,9 @@ void Door::SetImage()
         if (DoorFlags & DF_BROKEN)
           Image += GLYPH_BDOOR;				
         else if(DoorFlags & DF_VERTICAL)
-					Image += ((DoorFlags & DF_OPEN) ? '+' : 179);
+					Image += ((DoorFlags & DF_OPEN) ? '+' : GLYPH_VLINE);
 				else
-					Image += ((DoorFlags & DF_OPEN) ? '+' : 196);
+					Image += ((DoorFlags & DF_OPEN) ? '+' : GLYPH_HLINE);
 
 			}
 
@@ -726,9 +726,9 @@ Immune:
 void Trap::SetImage()
   {
     if (TrapFlags & TS_DISARMED)
-      Image = GLYPH_DISARMED | (TEFF(tID)->ef.cval * 256);
+      Image = GLYPH_VALUE(GLYPH_DISARMED, TEFF(tID)->ef.cval);
     else
-      Image = GLYPH_TRAP | (TEFF(tID)->ef.cval * 256);
+      Image = GLYPH_VALUE(GLYPH_TRAP, TEFF(tID)->ef.cval);
     if (TrapFlags & TS_FOUND)
 			Flags &= ~F_INVIS;
     else
@@ -1079,8 +1079,8 @@ void Feature::StatiOn(Status s)
     if (s.Nature == MY_GOD && (Flags & F_ALTAR))
       if (col = (int16)TGOD(s.eID)->GetConst(ALTAR_COLOUR))
       {
-        Image &= 0xFF;
-        Image |= col * 256;
+        Image &= GLYPH_ID_MASK;
+        Image |= GLYPH_FORE(col);
         if (m)
           m->Update(x,y);
       }

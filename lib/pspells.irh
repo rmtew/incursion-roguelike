@@ -795,8 +795,8 @@ Druid Spell "Sandblast" : EA_BLAST
           {                                                           \
             ETerm->PutGlyph(EActor->x + vx,                           \
                             EActor->y + vy,                           \
-                            197 + (BROWN*256));                       \
-            h = EMap->FCreatureAt(EActor->x + vx,EActor->y + vy);      \
+                            GLYPH_VALUE(GLYPH_BULK, BROWN));          \
+            h = EMap->FCreatureAt(EActor->x + vx,EActor->y + vy);     \
           }                                                       
       h1 = NULL; h2 = NULL; h3 = NULL;
       if (DirX(e.EDir) && DirY(e.EDir)) {
@@ -2316,7 +2316,7 @@ Wizard / Druid  Spell "Flaming Sphere" : EA_SUMMON
  * Animal Summoning 2. Let's beef it up a bit. Now it has CR 3 -- slightly
  * stronger than AS2 in some cases, but predictable. */
 Monster "flaming sphere;monster" : MA_CONSTRUCT
-  { Image: red GLYPH_PILLAR; Size: SZ_MEDIUM; Mana: 0;
+  { Image: red GLYPH_PILLAR1; Size: SZ_MEDIUM; Mana: 0;
     CR: OPT_CR(3,3); HD: 3; Def: 8; Hit: +4; Mov: 150%; Spd: 150%;
     Str 12, Dex 14, Con 0, Int 0, Wis 10, Cha 0;
     Attk: A_RUBS for 2d6 AD_FIRE and 0d0 AD_TRIP (DC 18),

@@ -1521,7 +1521,7 @@ MountChecks:
     }
 
     if (FaceRadius[Attr[A_SIZ]] && !FaceRadius[oldSize]) {
-        m->NewField(FI_SIZE|FI_MOBILE,x,y,FaceRadius[Attr[A_SIZ]], GLYPH_BULK | (Image & 0x0F00),-1,0,this);
+        m->NewField(FI_SIZE|FI_MOBILE,x,y,FaceRadius[Attr[A_SIZ]], GLYPH_VALUE(GLYPH_BULK, WHITE),-1,0,this);
         PlaceNear(x,y);
     } else {
         for (i=0;m->Fields[i];i++)

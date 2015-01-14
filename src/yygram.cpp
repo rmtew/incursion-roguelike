@@ -860,13 +860,13 @@ int glyph_entry (uint16 *img)
       default: ;
       }
 #line 333 "lang/grammar.acc"
- *img = 15 << 8; 
+ *img = GLYPH_FORE(WHITE); 
 # line 865 "src/yygram.cpp"
       switch (yyselect()) {
       case 508: {
          color(&col);
 #line 334 "lang/grammar.acc"
- *img = (uint16)(col << 8); 
+ *img = (uint16)GLYPH_FORE(col); 
 # line 871 "src/yygram.cpp"
          } break;
       default: ;
@@ -893,7 +893,7 @@ int glyph_entry (uint16 *img)
          get_lexval();
          color(&back);
 #line 338 "lang/grammar.acc"
- *img |= back << 12; 
+ *img |= GLYPH_BACK(back); 
 # line 898 "src/yygram.cpp"
          } break;
       default: ;
@@ -912,13 +912,13 @@ int glyph_desc (uint16 *img)
    switch(yyselect()) {
    case 58: {
 #line 342 "lang/grammar.acc"
- *img = 15 << 8; 
+ *img = GLYPH_FORE(WHITE); 
 # line 917 "src/yygram.cpp"
       switch (yyselect()) {
       case 512: {
          color(&col);
 #line 343 "lang/grammar.acc"
- *img = (uint16)(col << 8); 
+ *img = (uint16)GLYPH_FORE(col); 
 # line 923 "src/yygram.cpp"
          } break;
       default: ;
@@ -945,7 +945,7 @@ int glyph_desc (uint16 *img)
          get_lexval();
          color(&back);
 #line 346 "lang/grammar.acc"
- *img |= back << 12; 
+ *img |= GLYPH_BACK(back); 
 # line 950 "src/yygram.cpp"
          } break;
       default: ;

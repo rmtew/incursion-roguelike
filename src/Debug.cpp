@@ -373,6 +373,7 @@ void Player::WizardOptions() {
     MyTerm->LOption("Become Divine Champion", 34);
     MyTerm->LOption("Generate 50 XP Ticks", 35);
     MyTerm->LOption("Change terrain type", 36);
+	MyTerm->LOption("View glyphs", 37);
 
     switch(MyTerm->LMenu(MENU_ESC|MENU_BORDER|MENU_2COLS,"Wizard Mode Options:",WIN_MENUBOX)) {
     case -1:
@@ -925,6 +926,64 @@ Restart:
         xID = MyTerm->ChooseResource("Which terrain type?",T_TTERRAIN,NULL);
         if (xID != -1)
             m->WriteTerra(e.EXVal,e.EYVal,xID);
+		break;
+	case 37:
+		{
+			String gl;
+			int8 x1, x2, y1, y2;
+			MyTerm->Save();
+			MyTerm->SetWin(WIN_SCREEN);
+			x1 = x2 = MyTerm->WinSizeX() / 2;
+			y1 = y2 = MyTerm->WinSizeY() / 2;
+			x1 -= 34; x2 += 34;
+			y1 -= 16; y2 += 17;
+			MyTerm->SizeWin(WIN_MENUBOX, x1, y1, x2, y2);
+			MyTerm->DrawBorder(WIN_MENUBOX, PINK);
+			MyTerm->SetWin(WIN_MENUBOX);
+			MyTerm->Color(GREY); MyTerm->Clear();
+
+			String s = "", line;
+			int8 page_columns = x2-x1-4;
+			int8 page_rows = y2-y1;
+			uint8 row_length = 0;
+			uint8 row_count = 0;
+
+			for (uint16 gid = GLYPH_FIRST; gid <= GLYPH_LAST; gid++) {
+				const char *glyph_label = LookupOnly(GLYPH_CONSTNAMES, gid);
+				if (glyph_label == NULL)
+					continue;
+
+				// Use less screen space in columns, but skipping the "GLYPH_" constant name prefix.
+				s += XPrint(Format("%12s <char:%d> ", glyph_label + 6, gid));
+				row_length += 16;
+				// 12+1+1+1 = 15 hmm so should it be 15 or 16?
+				if (row_length + 16 > page_columns) {
+					s += "\n";
+					row_count += 1;
+					row_length = 0;
+				}
+
+				if ((row_count < page_rows) && (gid != GLYPH_LAST))
+					continue;
+
+				MyTerm->Write(0, 0, s);
+				MyTerm->PrePrompt();
+				MyTerm->GetCharRaw();
+				MyTerm->Clear();
+
+				s = "";
+				row_length = 0;
+				row_count = 0;
+			}
+
+			if (s.GetLength() > 0) {
+				MyTerm->Write(0, 0, s);
+				MyTerm->PrePrompt();
+				MyTerm->GetCharRaw();
+			}
+			MyTerm->Restore();
+		}
+		break;
     }
     MyTerm->RefreshMap();
 }
@@ -1617,14 +1676,15 @@ void Resource::Dump()
     T1->SWrite(Format("  Resource: \"%s\"\n",theGame->Modules[ModNum]->GetText(Name)));
   }
 
-void TTemplate::Dump()
-  {
+void TTemplate::Dump() {
+	uint32 gid = GLYPH_ID_VALUE(NewImage);
     uint16 i;
+
     Resource::Dump();
     T1->SWrite("  NewImage ");
-    T1->Color((NewImage & 0x0F00) >> 8);
-    T1->SWrite(Format("%c",NewImage & 0x00FF));
-    T1->Color(7);
+    T1->Color(GLYPH_FORE_VALUE(NewImage));
+	T1->SWrite(Format("%c%c%c", LITERAL_CHAR, LITERAL_CHAR1(gid), LITERAL_CHAR2(gid)));
+    T1->Color(GREY);
     T1->SWrite("\n  NewAttk: (constant names only vaguely correct)");
     for(i=0;i<16;i++) {
       TAttack * a = &NewAttk[i]; 
@@ -1679,11 +1739,12 @@ void Annotation::Dump()
 void TMonster::Dump()
   {
     uint16 i;
+	uint32 gid = GLYPH_ID_VALUE(Image);
     Resource::Dump();
     T1->SWrite("  Image '");
-    T1->Color((Image & 0x0F00) >> 8);
-    T1->SWrite(Format("%c",Image & 0x00FF));
-    T1->Color(7);
+    T1->Color(GLYPH_FORE_VALUE(Image));
+	T1->SWrite(Format("%c%c%c", LITERAL_CHAR, LITERAL_CHAR1(gid), LITERAL_CHAR2(gid)));
+    T1->Color(GREY);
     T1->SWrite(Format("' Challenge Rating: %d MType %s", CR, Lookup(MA_CONSTNAMES,MType[0])));
     if (MType[1])
       T1->SWrite(Format(" / %s",Lookup(MA_CONSTNAMES,MType[1])));

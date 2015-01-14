@@ -19,7 +19,7 @@
      void cursesTerm::PutChar(int16 x, int16 y, Glyph g) W
      void cursesTerm::GotoXY(int16 x, int16 y) 
      void cursesTerm::Clear() 
-     void cursesTerm::Color(int16 _attr) 
+     void cursesTerm::Color(uint16 _attr) 
      void cursesTerm::StopWatch(int16 milli)  
    Input Functions
      int16 cursesTerm::GetCharRaw()
@@ -33,8 +33,8 @@
    Scroll Buffer
       void  cursesTerm::SPutChar(int16 x, int16 y,Glyph g);
       //int16 cursesTerm::SGetGlyph(int16 x, int16 y);
-      void  cursesTerm::SPutColor(int16 x, int16 y, int16 col);
-      int16 cursesTerm::SGetColor(int16 x, int16 y);
+      void  cursesTerm::SPutColor(int16 x, int16 y, uint16 col);
+      uint16 cursesTerm::SGetColor(int16 x, int16 y);
       void  cursesTerm::ClearScroll(bool full=false);
       void  cursesTerm::BlitScrollLine(int16 wn, int32 buffline, int32 winline);
    File I/O
@@ -90,6 +90,7 @@
 #undef MIN
 #undef MAX
 
+#define PDC_WIDE
 #include "curses.h"
 //#define TCOD_NOBASETYPES
 //#include "libtcod.h"
@@ -100,12 +101,6 @@
 //#define SDL_MAIN_HANDLED
 //#include "SDL.h"
 
-#define FORE(g) ((g & 0x0F00) / 256)
-#define BACK(g) ((g & 0xF000) / (256*16))
-#define ATTR(g) ((g & 0xFF00) / 256)
-#define CHAR(g) ((g & 0x00FF))
-
-#define MAX_COLORS 16
 
 #define CURSOR_BLINK_MS 300
 #define INPUT_IDLE_MS 50
@@ -126,7 +121,7 @@ using google_breakpad::ExceptionHandler;
 /*
 xterm has 256 colours, why do we only have 8 at most? huh pdcurses?
 */
-int RGBValuesX[MAX_COLORS] = {
+int RGBValuesX[MAX_COLOURS] = {
   COLOR_BLACK,  // BLACK
   COLOR_BLUE,  // BLUE
   COLOR_GREEN,  // GREEN
@@ -145,7 +140,7 @@ int RGBValuesX[MAX_COLORS] = {
   COLOR_WHITE,  // WHITE
   };
 
-int32 RGBValues[MAX_COLORS][3] = {
+int32 RGBValues[MAX_COLOURS][3] = {
 	{ 0, 0, 0 },  // BLACK
 	{ 0, 0, 192 },  // BLUE
 	{ 0, 128, 0 },  // GREEN
@@ -165,7 +160,7 @@ int32 RGBValues[MAX_COLORS][3] = {
 };
 
 
-int32 RGBSofter[MAX_COLORS][3] = {
+int32 RGBSofter[MAX_COLOURS][3] = {
 	{ 0, 0, 0 }, // BLACK
 	{ 64, 64, 187 }, // BLUE
 	{ 0, 128, 0 }, // GREEN
@@ -195,7 +190,7 @@ class cursesTerm: public TextTerm
 	  WINDOW *bWindow;
 	  WINDOW *bScreen, *bSave, *bCurrent;
 	  chtype *fakeScrollWindow;
-      int16 Colors[MAX_COLORS][3];
+      int16 Colors[MAX_COLOURS][3];
 	  int16 colour_pair_index;
 	  int16 colour_pairs[256][2];
       int16 resX, resY, fontX, fontY, ocx, ocy;
@@ -242,10 +237,11 @@ class cursesTerm: public TextTerm
       virtual Glyph AGetChar(int16 x, int16 y);
       virtual void GotoXY(int16 x, int16 y);
       virtual void Clear();
-      virtual void Color(int16 _attr);
+      virtual void Color(uint16 _attr);
       virtual void StopWatch(int16 milli);
       virtual uint32 GetElapsedMilli();
-      
+	  virtual int32 ConvertChar(Glyph g, char **out);
+
       /* Input Functions */
       virtual int16 GetCharRaw();
       virtual int16 GetCharCmd();
@@ -265,8 +261,8 @@ class cursesTerm: public TextTerm
       /* Scroll Buffer */
       virtual void SPutChar(int16 x, int16 y, Glyph g);
       virtual uint16 SGetChar(int16 x, int16 y);
-      virtual void SPutColor(int16 x, int16 y, int16 col);
-      virtual int16 SGetColor(int16 x, int16 y);
+      virtual void SPutColor(int16 x, int16 y, uint16 col);
+      virtual uint16 SGetColor(int16 x, int16 y);
       virtual void SClear();
       virtual void  BlitScrollLine(int16 wn, int32 buffline, int32 winline);
       
@@ -427,7 +423,8 @@ int main(int argc, char *argv[]) {
                            ExceptionHandler::HANDLER_ALL);
 #endif
 #endif
-    theGame = new Game();
+
+	theGame = new Game();
     {
         AT1 = new cursesTerm;
 		AT1->SetIncursionDirectory(executablePath);
@@ -437,20 +434,21 @@ int main(int argc, char *argv[]) {
         T1->Initialize();
         //T1->Title();
     }
-    theGame->StartMenu();
+#if 0
+	// If this is reenabled, it needs to page, and to do up to GLYPH_MAX
+	T1->SetWin(WIN_SCREEN);
+	T1->Clear();
+	int16 i;
+	for (i = 0; i != 256; i++)
+		T1->PutChar(i % 16, i / 16, GLYPH_VALUE(i, WHITE));
+
+	T1->GetCharRaw();
+	T1->GetCharRaw();
+#endif
+	theGame->StartMenu();
     T1->ShutDown();
     delete theGame;
     return 0;
-    /*
-    T1->Initialize();
-    T1->SetWin(WIN_SCREEN);
-    T1->Clear();
-    int16 i;
-    for (i=0;i!=256;i++)
-      T1->PutChar(i%16,i/16,i + WHITE*256);
-    T1->GetCharRaw();
-    T1->GetCharRaw();
-    */
   }
 
 int readkey(int wait) {
@@ -495,8 +493,153 @@ int16 cursesTerm::colour_pair_to_index(int16 fg, int16 bg) {
 	return index;
 }
 
+chtype glyphchar_to_chtype(Glyph g) {
+	static chtype lookup_table[GLYPH_LAST + 2];
+	int c = GLYPH_ID_VALUE(g);
+	chtype lookup_value;
+	if (lookup_table[GLYPH_LAST + 1] == NULL) {
+		// WARNING: This is currently a huge mess.
+		// WARNING: GLYPH constants are the code, so different constants may have the same value, and override each other.
+		// TODO: Rewrite all the main and libtcod code to use GLYPH_ constants instead of character values.
+		// NOTE: Actual characters need to be displayed verbatim, so should separate verbatim range from named range.
+		// NULL entries just use the raw glyph character value for now.
 
+		lookup_table[GLYPH_VLINE] = 0x2502; // Box drawings light vertical.
+		lookup_table[GLYPH_HLINE] = 0x2500; // Box drawings light horizontal.
+		lookup_table[GLYPH_DIVIDE] = 0x00F7; // Division symbol.
+		lookup_table[GLYPH_APPROXIMATELY] = 0x2248; // Almost equal to.
+		lookup_table[GLYPH_BLACK_SQUARE] = 0x25AA; // Small centered black square.
+		lookup_table[GLYPH_CHECK] = 0x221A; // Checkmark
 
+		lookup_table[GLYPH_PERSON] = 0x2665;
+		lookup_table[GLYPH_BULK] = 0x253C; // Box drawings vertical and horizonal
+		lookup_table[GLYPH_WATER] = lookup_table[GLYPH_APPROXIMATELY];
+		lookup_table[GLYPH_FOG] = '~';
+		lookup_table[GLYPH_ICE] = lookup_table[GLYPH_BLACK_SQUARE];
+		lookup_table[GLYPH_WEB] = '#';
+		lookup_table[GLYPH_LAVA] = lookup_table[GLYPH_APPROXIMATELY];
+		lookup_table[GLYPH_BLAST] = 0x263C; // White sun with rays.
+		lookup_table[GLYPH_WALL] = 0x2592; // Medium shade
+		lookup_table[GLYPH_ROCK] = 0x2591; // Light shade
+		lookup_table[GLYPH_SOLID] = 0x2588; // Full block
+		lookup_table[GLYPH_PILLAR1] = 0x25CB; // White circle.
+		lookup_table[GLYPH_PILLAR2] = lookup_table[GLYPH_BLAST]; // White sun with rays.
+		lookup_table[GLYPH_VIEWPOINT] = 0x25CB; // White circle.
+		lookup_table[GLYPH_GRAVE] = 0x220F; // Product symbol.
+		lookup_table[GLYPH_SHELF] = 0x256A; // Box drawings vertical single and horizontal double.
+
+		lookup_table[GLYPH_POTION] = 0x00A1; // Inverted exclamation mark.
+		lookup_table[GLYPH_SCROLL] = 0x00BF; // Inverted question mark.
+		lookup_table[GLYPH_WEAPON] = lookup_table[GLYPH_CHECK];
+		lookup_table[GLYPH_ROD] = '|';
+		lookup_table[GLYPH_STAFF] = '/';
+		lookup_table[GLYPH_WAND] = '-';
+		lookup_table[GLYPH_FOOD] = '%';
+		lookup_table[GLYPH_CORPSE] = '%';
+		lookup_table[GLYPH_BOOK] = lookup_table[GLYPH_BLACK_SQUARE];
+		lookup_table[GLYPH_TORCH] = '}';
+		lookup_table[GLYPH_LARMOUR] = 0x03A3; // Greek capital letter sigma.
+		lookup_table[GLYPH_MARMOUR] = 0x03A3; // Greek capital letter sigma.
+		lookup_table[GLYPH_HARMOUR] = 0x03A3; // Greek capital letter sigma.
+		lookup_table[GLYPH_SHIELD] = ']';
+		lookup_table[GLYPH_GAUNTLETS] = 0x03C3; // Greek small letter sigma.
+		lookup_table[GLYPH_HELMET] = 0x00A2; // Cent sign.
+		lookup_table[GLYPH_HEADBAND] = 0x00A2; // Cent sign.
+		lookup_table[GLYPH_BOOTS] = 0x03B1; // Greek small letter alpha.
+		lookup_table[GLYPH_BRACERS] = 0x03B1; // Greek small letter alpha.
+		lookup_table[GLYPH_GIRDLE] = 0x0393; // Greek capital letter gamma.
+		lookup_table[GLYPH_CLOTHES] = 0x00B6; // Pilcrow.
+		lookup_table[GLYPH_CONTAIN] = 0x2302; // House.
+		lookup_table[GLYPH_CROWN] = '^';
+		lookup_table[GLYPH_DUST] = 0x2261; // Identical to.
+		lookup_table[GLYPH_DECK] = 0x2261; // Identical to.
+		lookup_table[GLYPH_RING] = 0x03B4; // Greek small letter delta.
+		lookup_table[GLYPH_AMULET] = 0x2642; // Male sign.
+		lookup_table[GLYPH_FIGURE] = 0x00A3; // Pound sign.
+		lookup_table[GLYPH_HORN] = '&';
+		lookup_table[GLYPH_EYES] = 0x221E; // Infinity.
+		lookup_table[GLYPH_HERB] = '"';
+		lookup_table[GLYPH_MUSH] = 0x03C0; // Greek small letter pi.
+		lookup_table[GLYPH_GEM] = 0x2666; // Diamond.
+		lookup_table[GLYPH_COIN] = '$';
+		lookup_table[GLYPH_TOOL] = 0x03A9; // Greek capital letter omega.
+		lookup_table[GLYPH_SWORD] = '(';
+		lookup_table[GLYPH_BOW] = ')';
+		lookup_table[GLYPH_JUNK] = '&';
+		lookup_table[GLYPH_CHEST] = 0x2302; // House.
+		lookup_table[GLYPH_CLOAK] = 0x2665; // Hearts suit symbol.
+		lookup_table[GLYPH_STATUE] = 0x2660; // Spades suit symbol.
+		lookup_table[GLYPH_PILE] = '*';
+		lookup_table[GLYPH_MULTI] = 0x00C6; // Latin capital letter Ae.
+		lookup_table[GLYPH_ALTAR] = '8';
+		lookup_table[GLYPH_FOUNTAIN] = 0x2320; // Integral top.
+		lookup_table[GLYPH_THRONE] = 0x255B; // Box drawings up single and left double.
+		lookup_table[GLYPH_SYMBOL] = 0x00D8; // Capital O with stroke
+
+		lookup_table[GLYPH_HEDGE] = '"';
+		lookup_table[GLYPH_RUBBLE] = ':';
+		lookup_table[GLYPH_BRIDGE] = '=';
+		lookup_table[GLYPH_FLOOR] = 0x00B7; // Middle dot.
+		lookup_table[GLYPH_FLOOR2] = 0x25AA; // Black small square
+		lookup_table[GLYPH_VDOOR] = lookup_table[GLYPH_VLINE];
+		lookup_table[GLYPH_HDOOR] = lookup_table[GLYPH_HLINE];
+		lookup_table[GLYPH_ODOOR] = '+';
+		lookup_table[GLYPH_BDOOR] = 0x00B1; // Plus-minus sign.
+		lookup_table[GLYPH_PIT] = '0';
+		lookup_table[GLYPH_PORTAL] = 0x2261; // Identical to.
+		lookup_table[GLYPH_SUMMONING_CIRCLE] = 0x03F4; // Greek capital letter theta.
+
+		lookup_table[GLYPH_STORE] = 0x00A7; // Section sign.
+		lookup_table[GLYPH_GUILD] = 0x00B6; // Pilcrow.
+		lookup_table[GLYPH_STORE_VWALL] = 0x2551; // Box drawings double vertical.
+		lookup_table[GLYPH_STORE_HWALL] = 0x2550; // Box drawings double horizontal.
+		lookup_table[GLYPH_STORE_CORNER] = 0x2558; // Full block.
+
+		lookup_table[GLYPH_USTAIRS] = '<';
+		lookup_table[GLYPH_DSTAIRS] = '>';
+		lookup_table[GLYPH_TREE] = 0x00A5; // Yen sign.
+		lookup_table[GLYPH_FURNATURE] = lookup_table[GLYPH_BLACK_SQUARE];
+		lookup_table[GLYPH_UNKNOWN] = '?';
+		lookup_table[GLYPH_TRASH] = '&';
+		lookup_table[GLYPH_BONES] = '&';
+		lookup_table[GLYPH_CHECKMARK] = lookup_table[GLYPH_CHECK];
+
+		lookup_table[GLYPH_TRAP] = 0x03F7; // Greek capital letter sho.
+		lookup_table[GLYPH_DISARMED] = lookup_table[GLYPH_DIVIDE];
+
+		lookup_table[GLYPH_ARROW] = 0x2191; // Upwards arrow.
+		lookup_table[GLYPH_ARROW_UP] = 0x2191; // Upwards arrow. // 0x25B2; // Black up pointing arrow.
+		lookup_table[GLYPH_ARROW_DOWN] = 0x2193; // Downwards arrow. // 0x25BC; // Black down pointing arrow.
+		lookup_table[GLYPH_ARROW_RIGHT] = 0x2192; // Rightwards arrow. // 0x25BA; // Black right pointing arrow.
+		lookup_table[GLYPH_ARROW_LEFT] = 0x2190; // Leftwards arrow. 0x25C4; // Black left pointing arrow.
+
+		lookup_table[GLYPH_POINTER_LEFT] = 0x25C4; // Black left pointing pointer.
+		lookup_table[GLYPH_POINTER_RIGHT] = 0x25BA; // Black right pointing pointer.
+
+		lookup_table[GLYPH_GUARD] = 0x00EE; // Latin small letter I with circumflex.
+		lookup_table[GLYPH_TOWNIE] = 0x00EF; // Latin small letter I with diaeresis.
+		lookup_table[GLYPH_TOWNSCUM] = 0x00EC; // Latin small letter I with grave.
+		lookup_table[GLYPH_TOWN_NPC] = 'i';
+		lookup_table[GLYPH_LDEMON] = 0x00F9; // Latin small letter U with grave.
+		lookup_table[GLYPH_GDEMON] = 0x00FC; // Latin small letter U with diaeresis.
+		lookup_table[GLYPH_LDEVIL] = 0x00F6; // Latin small letter O with diaeresis.
+		lookup_table[GLYPH_GDEVIL] = 0x00D6; // Latin capital letter O with diaeresis.
+		lookup_table[GLYPH_FIEND] = 0x00FF; // Latin small letter y with diaeresis.
+
+		lookup_table[GLYPH_PLAYER] = '@';
+		lookup_table[GLYPH_HUMAN] = 0x263A; // White smiling face.
+		lookup_table[GLYPH_ELF] = 0x263B; // Black smiling face.
+		lookup_table[GLYPH_DWARF] = 0x0110; // Latin capital letter D with stroke.
+		lookup_table[GLYPH_GNOME] = 0x00F0; // Latin small letter Eth.
+		lookup_table[GLYPH_HOBBIT] = 0x00F0; // Latin small letter Eth.
+
+		lookup_table[GLYPH_LAST + 1] = 1;
+	}
+	lookup_value = lookup_table[c];
+	if (lookup_value == NULL)
+		return c;
+	return lookup_value;
+}
   
 /*****************************************************************************\
 *                                 cursesTerm                                   *
@@ -536,8 +679,14 @@ void cursesTerm::CursorOn() {
 }
 
 void cursesTerm::CursorOff() {
+#ifdef PDC_WIDE
+	chtype c;
+	mvwin_wch(bCurrent, ocy, ocx, &c);
+	mvwadd_wch(stdscr, ocy, ocx, &c);
+#else
 	chtype c = mvwinch(bCurrent, ocy, ocx);
 	mvwaddch(stdscr, ocy, ocx, c);
+#endif
 
 	showCursor = false;
 	cursorPulse = false;
@@ -557,11 +706,21 @@ void cursesTerm::BlinkCursor() {
 		else if (colour_index < 8)
 			colour_index += 8;
 		chtype c = 'X' | COLOR_PAIR(colour_pair_to_index(colour_index, colour_index));
+#ifdef PDC_WIDE
+		mvwadd_wch(stdscr, cy, cx, &c);
+#else
 		mvwaddch(stdscr, cy, cx, c);
+#endif
         ocy = cy; ocx = cx;
 	} else {
+#ifdef PDC_WIDE
+		chtype c;
+		mvwin_wch(bScreen, ocy, ocx, &c);
+		mvwadd_wch(stdscr, ocy, ocx, &c);
+#else
 		chtype c = mvwinch(bScreen, ocy, ocx);
 		mvwaddch(stdscr, ocy, ocx, c);
+#endif
 	}
     /* Won't get an update necessarily otherwise */
 	refresh();
@@ -581,29 +740,22 @@ void cursesTerm::PutChar(Glyph g) {
 	APutChar(cx++, cy, g);
 }
 
-chtype glyphchar_to_chtype(Glyph g) {
-	int c = CHAR(g);
-	switch (c) {
-	case GLYPH_ARROW_UP:
-		return ACS_UARROW | A_ALTCHARSET;
-	case GLYPH_ARROW_DOWN:
-		return ACS_DARROW | A_ALTCHARSET;
-	default:
-		return c;
-	}
-}
-
 void cursesTerm::APutChar(int16 x, int16 y, Glyph g) {
-    uint32 ga;
 	chtype c = glyphchar_to_chtype(g);
-	// No glyph attr means use the default colours.
-	if (g >> 8)
-        ga = ATTR(g) * 256;
-    else
-        ga = attr * 256;
-	int16 colour_index = colour_pair_to_index(FORE(ga), BACK(ga));
-	c |= COLOR_PAIR(colour_index);
+	uint16 fg_idx = GLYPH_FORE_VALUE(g);
+	uint16 bg_idx = GLYPH_BACK_VALUE(g);
+
+	if (fg_idx == 0 && bg_idx == 0) {
+		fg_idx = attr & COLOUR_MASK;
+		bg_idx = (attr >> COLOUR_BITS) & COLOUR_MASK;
+	}
+
+	c |= COLOR_PAIR(colour_pair_to_index(fg_idx, bg_idx));
+#ifdef PDC_WIDE
+	mvwadd_wch(bScreen, y, x, &c);
+#else
 	mvwaddch(bScreen, y, x, c);
+#endif
 
 	updated = false;
 }
@@ -615,23 +767,24 @@ void cursesTerm::PutChar(int16 x, int16 y, Glyph g) {
 }
 
 Glyph chtype_to_glyph(chtype c) {
-	int32 fi = -1, bi = -1;
 	int16 fg, bg;
 	Glyph g = c & A_CHARTEXT;
 	if (g == 0)
 		g = ' ';
 	pair_content(PAIR_NUMBER(c), &fg, &bg);
-	bi = bg;
-	fi = fg;
-	if (bi != -1)
-		g |= bi * 256 * 16;
-	if (fi != -1)
-		g |= fi * 256;
+	g |= GLYPH_BACK(bg);
+	g |= GLYPH_FORE(fg);
 	return g;
 }
 
 Glyph cursesTerm::AGetChar(int16 x, int16 y) {
-	return chtype_to_glyph(mvwinch(bScreen, y, x));
+	chtype c;
+#ifdef PDC_WIDE
+	mvwin_wch(bScreen, y, x, &c);
+#else
+	c = mvwinch(bScreen, y, x);
+#endif
+	return chtype_to_glyph(c);
 }
 
 void cursesTerm::GotoXY(int16 x, int16 y) {
@@ -657,7 +810,7 @@ void cursesTerm::Clear() {
     updated = false;
 }
 
-void cursesTerm::Color(int16 _attr) {
+void cursesTerm::Color(uint16 _attr) {
     attr = _attr;
 }
 
@@ -679,6 +832,11 @@ uint32 cursesTerm::GetElapsedMilli() {
 	return (uint32)time_result.QuadPart;
 #endif
 }
+
+int32 cursesTerm::ConvertChar(Glyph g, char **out) {
+	return 0;
+}
+
 
 /*****************************************************************************\
 *                                 cursesTerm                                   *
@@ -790,11 +948,11 @@ RetryFont:
 
 	if (can_change_color()) { // CURSES API
 		if (theGame->Opt(OPT_SOFT_PALETTE))
-			memcpy(&Colors, &RGBSofter, sizeof(Colors[0][0]) * MAX_COLORS * 3);
+			memcpy(&Colors, &RGBSofter, sizeof(Colors[0][0]) * MAX_COLOURS * 3);
 		else
-			memcpy(&Colors, &RGBValues, sizeof(Colors[0][0]) * MAX_COLORS * 3);
+			memcpy(&Colors, &RGBValues, sizeof(Colors[0][0]) * MAX_COLOURS * 3);
 
-		for (i = 0; i < MAX_COLORS; i++) {
+		for (i = 0; i < MAX_COLOURS; i++) {
 			// The curses RGB range is 0-1000, whereas our local range is 0-255.
 			init_color(i, (Colors[i][0] * 1000) / 256, (Colors[i][1] * 1000) / 256, (Colors[i][2] * 1000) / 256);
 		}
@@ -878,38 +1036,30 @@ void cursesTerm::Title() {
 
 void  cursesTerm::SPutChar(int16 x, int16 y, Glyph g) {
 	chtype c = glyphchar_to_chtype(g);
-	c |= COLOR_PAIR(colour_pair_to_index(FORE(g), BACK(g)));
+	c |= COLOR_PAIR(colour_pair_to_index(GLYPH_FORE_VALUE(g), GLYPH_BACK_VALUE(g)));
 	fakeScrollWindow[(y * SCROLL_WIDTH) + x] = c;
 }
 
-Glyph cursesTerm::SGetChar(int16 x, int16 y) {
+uint16 cursesTerm::SGetChar(int16 x, int16 y) {
 	return fakeScrollWindow[(y * SCROLL_WIDTH) + x] & A_CHARTEXT;
 }
 
-void cursesTerm::SPutColor(int16 x, int16 y, int16 col) {
-	uint32 ga = col * 256;
+void cursesTerm::SPutColor(int16 x, int16 y, uint16 col) {
+	uint32 ga = GLYPH_FORE(col);
 	chtype c = fakeScrollWindow[(y * SCROLL_WIDTH) + x];
-	fakeScrollWindow[(y * SCROLL_WIDTH) + x] = COLOR_PAIR(colour_pair_to_index(FORE(ga), BACK(ga))) | (c & A_CHARTEXT);
+	fakeScrollWindow[(y * SCROLL_WIDTH) + x] = COLOR_PAIR(colour_pair_to_index(GLYPH_FORE_VALUE(ga), GLYPH_BACK_VALUE(ga))) | (c & A_CHARTEXT);
 }
 
-int16 cursesTerm::SGetColor(int16 x, int16 y) {
-    int16 i = 0;
-	int32 fi = -1, bi = -1;
-	chtype c = fakeScrollWindow[(y * SCROLL_WIDTH) + x];
-	int16 pn = PAIR_NUMBER(c);
-	int16 fg, bg;
-	pair_content(pn, &fg, &bg);
-	fi = fg;
-	bi = bg;
-	if (bi != -1)
-		i |= bi << 4;
-	if (fi != -1)
-		i |= fi;
-	return i;
+uint16 cursesTerm::SGetColor(int16 x, int16 y) {
+	int16 fg_idx, bg_idx;
+	int16 pn = PAIR_NUMBER(fakeScrollWindow[(y * SCROLL_WIDTH) + x]);
+	pair_content(pn, &fg_idx, &bg_idx);
+	return BACK_COLOUR(bg_idx) | fg_idx;
 }
 
 void cursesTerm::SClear() {
-	//memset(fakeScrollWindow)
+	// TODO: memset only sets repeated bytes.  If we set the memory to 0, and 0 is interpreted as ' ' glyph character.
+	// it might be faster to do it that way, should it become necessary.  But we can't set to repeated ' ' as that's corrupt.
 	for (int32 i = 0; i < MAX_SCROLL_LINES * SCROLL_WIDTH; i++)
 		fakeScrollWindow[i] = ' ';
 }

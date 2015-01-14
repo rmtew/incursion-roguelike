@@ -1483,7 +1483,7 @@ EvReturn Player::GodRaise(EventInfo &e)
     /* Move back to DLev 1 */
     MoveDepth(1,true);
     for (Thing *t=m->FirstThing();t;t=m->NextThing())
-      if ((t->Image & 0xFF) == GLYPH_USTAIRS)
+      if (GLYPH_ID_VALUE(t->Image) == GLYPH_USTAIRS)
         PlaceAt(m,t->x,t->y);
     SetSilence();
     e.EParam = AID_TELEPORT;

@@ -1562,10 +1562,10 @@ static void DescribeKeys(String &s)
                   switch (ks[j].raw_key) 
                     {
                       case KY_TAB:    Keys[n] += "Tab"; break; 
-                      case KY_UP:     Keys[n] += Format("%c",GLYPH_ARROW_UP); break; 
-                      case KY_DOWN:   Keys[n] += Format("%c",GLYPH_ARROW_DOWN); break; 
-                      case KY_LEFT:   Keys[n] += Format("%c",GLYPH_ARROW_LEFT); break; 
-                      case KY_RIGHT:  Keys[n] += Format("%c",GLYPH_ARROW_RIGHT); break; 
+					  case KY_UP:     Keys[n] += Format("%c%c%c", LITERAL_CHAR, LITERAL_CHAR1(GLYPH_ARROW_UP), LITERAL_CHAR2(GLYPH_ARROW_UP)); break;
+					  case KY_DOWN:   Keys[n] += Format("%c%c%c", LITERAL_CHAR, LITERAL_CHAR1(GLYPH_ARROW_DOWN), LITERAL_CHAR2(GLYPH_ARROW_DOWN)); break;
+					  case KY_LEFT:   Keys[n] += Format("%c%c%c", LITERAL_CHAR, LITERAL_CHAR1(GLYPH_ARROW_LEFT), LITERAL_CHAR2(GLYPH_ARROW_LEFT)); break;
+					  case KY_RIGHT:  Keys[n] += Format("%c%c%c", LITERAL_CHAR, LITERAL_CHAR1(GLYPH_ARROW_RIGHT), LITERAL_CHAR2(GLYPH_ARROW_RIGHT)); break;
                       case KY_PGUP:   Keys[n] += "PgUp";break; 
                       case KY_PGDN:   Keys[n] += "PgDn";break; 
                       case KY_HOME:   Keys[n] += "Home";break; 
@@ -2205,10 +2205,10 @@ String & Monster::Describe(Player *p)
     CR = tm->CR;
     if (isMType(MA_DRAGON))
       CR += 9;
-
-    str = XPrint(Format("<5>The <Str><Str><7> ('<%d>%c<7>')\n__",
-            tm->Image >> 8, tm->Image & 0x00FF),isMType(MA_DRAGON) ?
-            "(Adult) " : "",NAME(xID));
+	uint32 gid = GLYPH_ID_VALUE(tm->Image);
+    str = XPrint(Format("<5>The <Str><Str><7> ('<%d>%c%c%c<7>')\n__",
+            GLYPH_COLOUR_VALUE(tm->Image), LITERAL_CHAR, LITERAL_CHAR1(gid), LITERAL_CHAR2(gid),isMType(MA_DRAGON) ?
+            "(Adult) " : "",NAME(xID)));
     for(i=1;i!=str.GetLength();i++)
       if (isalpha(max(1,str[i])) && str[i-1] == ' ')
         str.SetAt(i,toupper(str[i]));

@@ -1022,7 +1022,7 @@ Monster "brilliant ur-dragon" : MA_DRAGON, MA_VERMIN
     On Event MSG_BLASTNAME "cone of brilliant sunlight";
     On Event EV_INITIALIZE {
       EMap->NewField(FI_LIGHT|FI_MOBILE,EActor->x,EActor->y,3,
-        YELLOW*256+GLYPH_FLOOR2,-1,NULL_ID,EActor);
+        GLYPH_VALUE(GLYPH_FLOOR2, YELLOW),-1,NULL_ID,EActor);
     }; 
     On Event
     MSG_SPECABIL
@@ -1704,7 +1704,7 @@ Monster "lammasu" : MA_QUADRUPED, MA_MYTHIC
            M_MOUNTABLE, M_FLYER, M_LAWFUL, M_GOOD, M_IALIGN;    
     On Event EV_INITIALIZE {
       EMap->NewField(FI_MODIFIER|FI_MOBILE|FI_BLOCKER,EActor->x,EActor->y,2,
-        WHITE*256+GLYPH_FLOOR2,-1,$"magic circle vs. evil",EActor);
+        GLYPH_VALUE(GLYPH_FLOOR2, WHITE),-1,$"magic circle vs. evil",EActor);
       return NOTHING;
       },
     MSG_SPECABIL 
@@ -1808,7 +1808,7 @@ Monster "unicorn" : MA_MYTHIC, MA_QUADRUPED, MA_SYLVAN
       },
     EV_INITIALIZE {
       EMap->NewField(FI_MODIFIER|FI_MOBILE|FI_BLOCKER,EActor->x,EActor->y,2,
-        WHITE*256+GLYPH_FLOOR2,-1,$"magic circle vs. evil",EActor);
+        GLYPH_VALUE(GLYPH_FLOOR2, WHITE),-1,$"magic circle vs. evil",EActor);
       },
     MSG_SPECABIL 
       "It projects a continual <1>Magic Circle vs. Evil<7> effect. ";
@@ -2992,7 +2992,7 @@ Monster "thunderbeast" : MA_BEAST, MA_QUADRUPED
            M_HOSTILE;
     On Event EV_INITIALIZE {
       EMap->NewField(FI_MODIFIER|FI_MOBILE|FI_FOG,EActor->x,EActor->y,6,
-        BLUE*256+'~',-1,$"thunderbeast fumes",EActor);
+        GLYPH_VALUE(GLYPH_FOG, BLUE),-1,$"thunderbeast fumes",EActor);
       return NOTHING;
       },
     POST(EV_HIT) {
@@ -4805,8 +4805,8 @@ Monster "senmurv" : MA_DOG, MA_BEAST, MA_AVIAN
           case 5: c = SKYBLUE; break;
           case 6: c = EMERALD; break;
         }
-      if ((EActor->Image & 0x00FF) == 'f')
-        EActor->Image = 'f' + c*256;
+      if ((EActor->Image & GLYPH_ID_MASK) == 'f')
+        EActor->Image = GLYPH_VALUE('f', c);
       return NOTHING;
       };
   }

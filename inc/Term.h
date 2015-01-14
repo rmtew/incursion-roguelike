@@ -238,8 +238,8 @@ typedef struct LMenuOption {
 typedef struct WViewListElt {
   Thing *t;
   int32 dist;
-  int16 color;
-  int16 glyph; 
+  uint16 color;
+  uint32 glyph; 
 } WViewListElt; 
 
 extern KeySetItem StandardKeySet[]; 
@@ -470,9 +470,10 @@ public:
     virtual Glyph AGetChar(int16 x, int16 y)=0;
     virtual void GotoXY(int16 x, int16 y)=0;
     virtual void Clear()=0;
-    virtual void Color(int16 _attr)=0;
+    virtual void Color(uint16 _attr)=0;
     virtual void StopWatch(int16 milli)=0;
     virtual uint32 GetElapsedMilli()=0;
+	virtual int32 ConvertChar(Glyph g, char **out) = 0;
 
     /* Input Functions (platform-specific) */
     virtual int16 GetCharRaw()=0;
@@ -496,7 +497,7 @@ public:
     /* Scroll Buffer (platform-specific) */
     virtual void SPutChar(int16 x, int16 y, Glyph g)=0;
     virtual uint16 SGetChar(int16 x, int16 y)=0;
-    virtual int16 SGetColor(int16 x, int16 y)=0;
+    virtual uint16 SGetColor(int16 x, int16 y)=0;
     virtual void  BlitScrollLine(int16 wn, int32 buffline, int32 winline)=0;
 
     /* System-Independant File I/O (platform-specific) */
@@ -526,7 +527,7 @@ public:
     int16 ActionsSinceLastAutoSave; 
 };
 
-// TODO: Work out what purpose this was supposed to serve.
+// TODO: Work out what purpose NO_TEXTTERM was supposed to serve.
 #ifndef NO_TEXTTERM
 
 struct TextWin {
@@ -721,7 +722,7 @@ public:
     virtual Glyph AGetChar(int16 x, int16 y)=0;
     virtual void GotoXY(int16 x, int16 y)=0;
     virtual void Clear()=0;
-    virtual void Color(int16 _attr)=0;
+    virtual void Color(uint16 _attr)=0;
     virtual void StopWatch(int16 milli)=0;
 
     /* Input Functions (platform-specific) */
@@ -744,10 +745,10 @@ public:
 
     /* Scroll Buffer (platform-specific) */
     virtual void SPutChar(int16 x, int16 y, Glyph g)=0;
-    virtual void SPutColor(int16 x, int16 y, int16 col)=0;
+    virtual void SPutColor(int16 x, int16 y, uint16 col)=0;
     virtual void SClear()=0;
     virtual uint16 SGetChar(int16 x, int16 y)=0;
-    virtual int16 SGetColor(int16 x, int16 y)=0;
+    virtual uint16 SGetColor(int16 x, int16 y)=0;
     virtual void  BlitScrollLine(int16 wn, int32 buffline, int32 winline)=0;
 
     /* System-Independant File I/O (platform-specific) */

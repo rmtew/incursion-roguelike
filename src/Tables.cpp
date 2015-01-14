@@ -1945,10 +1945,10 @@ TextVal AQualityDescs[] = {
 LocationInfo *Tiles;
 
 LocationInfo __Tiles__[] = {
-  /* Wall */    { 177 | (7  * 256), 0, 1,1,1,1,0,0,  0,0,0,0,0,0,0 },
-  /* Floor */   { 250 | (14 * 256), 0, 0,1,0,0,0,1,  0,0,0,0,0,0,0 },
-  /* Rock */    { 176 | (6  * 256), 0, 1,1,1,1,0,0,  0,0,0,0,0,0,0 },
-  /* Border */  { 219 | (2  * 256), 0, 1,1,1,1,0,0,  0,0,0,0,0,0,0 }
+  /* Wall */    { GLYPH_VALUE(GLYPH_WALL, GREY),	0, 1,1,1,1,0,0,  0,0,0,0,0,0,0 },
+  /* Floor */	{ GLYPH_VALUE(GLYPH_FLOOR, YELLOW),	0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0 },
+  /* Rock */	{ GLYPH_VALUE(GLYPH_ROCK, BROWN),	0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+  /* Border */	{ GLYPH_VALUE(GLYPH_SOLID, GREEN),	0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
   };
 
 const char* TileNames[] = {

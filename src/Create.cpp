@@ -2763,13 +2763,12 @@ ChosenStudy:
                             if (mod->QMon[idx].HasFlag(M_NOGEN))
                                 continue;
 
-                            int8 color = - (mod->QMon[idx].Image >> 8);
-                            if (color == 0) color = -SHADOW;
-                            desc += Format("%c%s (%c%c%c, CR %d, HD %d). ",-7,
-                                (const char*)(RES(idx)->GetName(0).Capitalize()),
-                                color,
-                                (mod->QMon[idx].Image & 0xff),
-                                -7,
+							uint32 gid = GLYPH_ID_VALUE(mod->QMon[idx].Image);
+                            int32 color = -(int32)GLYPH_COLOUR_VALUE(mod->QMon[idx].Image);
+                            if (color == BLACK) color = -SHADOW;
+                            desc += Format("%c%s (%c%c%c%c%c, CR %d, HD %d). ",
+								-GREY, (const char*)(RES(idx)->GetName(0).Capitalize()),
+								color, LITERAL_CHAR, LITERAL_CHAR1(gid), LITERAL_CHAR2(gid), -GREY,
                                 mod->QMon[idx].CR,
                                 mod->QMon[idx].HitDice);
                         }
@@ -3142,13 +3141,12 @@ DoCAStati:
                         if (mod->QMon[idx].HasFlag(M_NOGEN))
                             continue;
 
-                        int8 color = - (mod->QMon[idx].Image >> 8);
-                        if (color == 0) color = -SHADOW;
-                        desc += Format("%c%s (%c%c%c CR %d). ",-7,
-                            (const char*)Capitalize(NAME(_mID)),
-                            color,
-                            (mod->QMon[idx].Image & 0xff),
-                            -7,
+						uint32 gid = GLYPH_ID_VALUE(mod->QMon[idx].Image);
+                        int32 color = -(int32)GLYPH_COLOUR_VALUE(mod->QMon[idx].Image);
+                        if (color == BLACK) color = -SHADOW;
+                        desc += Format("%c%s (%c%c%c%c%c CR %d). ",
+							-GREY, (const char*)Capitalize(NAME(_mID)),
+							color, LITERAL_CHAR, LITERAL_CHAR1(gid), LITERAL_CHAR2(gid) , - GREY,
                             mod->QMon[idx].CR);
                         count_in_this_ma++;
                     }

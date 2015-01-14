@@ -71,7 +71,8 @@ String & DescribeSkill(int16 sk);
 
 const char* __XPrint(Player *POV, const char *msg,va_list args);
 const char* XPrint(const char*msg,...);
-void APrint(EventInfo &e, const char *msg1,...);
+const char* PPrint(Player *POV, const char*msg, ...);
+void APrint(EventInfo &e, const char *msg1, ...);
 void DPrint(EventInfo &e, const char *msg1,const char *msg2,...);
 void VPrint(EventInfo &e, const char *msg1,const char *msg2,...);
 void TPrint(EventInfo &e,const char *msg1,const char *msg2,

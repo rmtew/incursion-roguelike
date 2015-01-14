@@ -337,7 +337,7 @@ EvReturn Creature::Walk(EventInfo &e) {
             Timeout += 6;
             IPrint("You bump against something.");
             if (!m->At(tx,ty).Memory)
-                m->At(tx,ty).Memory = GLYPH_ROCK | (SHADOW*256);
+                m->At(tx,ty).Memory = GLYPH_VALUE(GLYPH_ROCK, SHADOW);
             thisp->UpdateMap = true;
         } 
         return ABORT;
@@ -1173,7 +1173,7 @@ RepeatPrompt:
         to have too many TTER calls. */
         for (mx=x-range;mx<=x+range;mx++)
             for (my=y-range;my<=y+range;my++)
-                if (m->InBounds(mx, my) && (m->At(mx,my).Glyph & 0xFF) == GLYPH_ROCK)
+                if (m->InBounds(mx, my) && GLYPH_ID_VALUE(m->At(mx,my).Glyph) == GLYPH_ROCK)
                     if (m->TerrainAt(mx,my) != rockID)
                         if (TTER(m->TerrainAt(mx,my))->HasFlag(TF_DEPOSIT)) {
                             if (m->At(mx,my).Memory == 0)

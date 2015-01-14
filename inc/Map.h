@@ -23,8 +23,8 @@ extern int8 MapMakerMode;
 
 struct LocationInfo
   {
-    unsigned int Glyph       :16;
-	  unsigned int Region      :8;
+    uint32 Glyph;
+	unsigned int Region      :8;
     unsigned int Terrain     :8;
     unsigned int Opaque      :1;   // Opaque (from map)
     unsigned int Obscure     :1;   // foggy
@@ -347,12 +347,12 @@ class Map: public Object
     void MakeDoor(uint8 x,uint8 y, rID fID);
     void MakeSecretDoor(uint8 x,uint8 y, rID fID);
     void SetGlyphAt(int16 x, int16 y, Glyph g)
-      { if (g & 0x00FF) 
-          At(x,y).Glyph &= 0xFF00;
-        if (g & 0xF000)  
-          At(x,y).Glyph &= 0x0FFF;
-        if (g & 0x0F00)  
-          At(x,y).Glyph &= 0xF0FF;
+      { if (GLYPH_ID_VALUE(g)) 
+          At(x,y).Glyph &= GLYPH_ATTR_MASK;
+        if (g & GLYPH_BACK_MASK)  
+			At(x, y).Glyph &= (GLYPH_FORE_MASK | GLYPH_ID_MASK);
+        if (g & GLYPH_FORE_MASK)  
+			At(x, y).Glyph &= (GLYPH_BACK_MASK | GLYPH_ID_MASK);
         At(x,y).Glyph |= g; }
 
     bool FindOpenAreas(Rect r, rID regID=0, int16 Flags=0);

@@ -99,7 +99,7 @@ const char* __XPrint(Player *POV, const char *msg,va_list args) {
     while(*cc) {
       if (p >= Out+(xprint_lev < 3 ? 129000 : 4000))
         break;
-      if (*cc == '<' && (cc == msg || (*(cc-1) != LITERAL_CHAR))) {
+      if (*cc == '<' && (cc == msg || cc == (msg+1) || (*(cc-2) != LITERAL_CHAR))) {
         tag = Tag1; ts = cc; cc++; Tag2[0] = 0;
 Repeat:
         i = 0;
@@ -158,7 +158,11 @@ Repeat:
               i = LookupStr(GLYPH_CONSTNAMES,Tag2);
             if (!i)
               Error("Cannot identify XXX field in <char:XXX> in formatted string!");
-            strcpy(p,Format("%c%c",LITERAL_CHAR,i));
+
+			// We need to encode the potentially larger than 8 bit glyph code, in the string.  It is currently 12 bits, and
+			// will never grow larger.  So it's safe to encode it in two bytes.  The first byte may be 0x00, and should never be
+			// 0xFF, so we invert it to prevent it signalling an end of string.
+			strcpy(p, Format("%c%c%c", LITERAL_CHAR, LITERAL_CHAR1(i), LITERAL_CHAR2(i)));
             p = Out + strlen(Out);
             continue;
           }
@@ -504,6 +508,16 @@ Repeat:
   }
 
 
+const char* PPrint(Player *p, const char* msg, ...)
+{
+	va_list ap;
+	va_start(ap, msg);
+	const char*str;
+	ev = NULL;
+	str = __XPrint(p, msg, ap);
+	va_end(ap);
+	return str;
+}
 
 
 const char* XPrint(const char* msg,...)

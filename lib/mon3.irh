@@ -3693,7 +3693,7 @@ Monster "ghast" : MA_REVENANT
     Flags: M_HUMANOID, M_UNDEAD, M_EVIL, M_CHAOTIC, M_IALIGN, M_CLOSEID;
     On Event EV_INITIALIZE {
       EMap->NewField(FI_MODIFIER|FI_MOBILE,EActor->x,EActor->y,2,
-        GREEN*256+GLYPH_FLOOR2,-1,$"ghast stench",EActor);
+        GLYPH_VALUE(GLYPH_FLOOR2, GREEN),-1,$"ghast stench",EActor);
       },
     EV_RATETARG {
       if (ETarget->isType(T_CORPSE))
@@ -4241,7 +4241,7 @@ Monster "mummy" : MA_REVENANT
            M_NO_BLOOD, M_PSYCHO;
     On Event EV_INIT_FIELDS {
       EMap->NewField(FI_MODIFIER|FI_MOBILE,EActor->x,EActor->y,2,
-        GREEN*256+GLYPH_FLOOR2,-1,$"aura of despair",EActor);
+        GLYPH_VALUE(GLYPH_FLOOR2, GREEN),-1,$"aura of despair",EActor);
       },
     EVICTIM(EV_DAMAGE) {
       if (e.DType == AD_FIRE)
@@ -4296,7 +4296,7 @@ Monster "mummy lord" : MA_REVENANT
            M_NO_BLOOD, M_PSYCHO;
     On Event EV_INIT_FIELDS {
       EMap->NewField(FI_MODIFIER|FI_MOBILE,EActor->x,EActor->y,2,
-        GREEN*256+GLYPH_FLOOR2,-1,$"aura of despair",EActor);
+        GLYPH_VALUE(GLYPH_FLOOR2, GREEN),-1,$"aura of despair",EActor);
       },
     EVICTIM(EV_DAMAGE) {
       if (e.DType == AD_FIRE)

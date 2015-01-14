@@ -330,20 +330,20 @@ gear_desc:
   ;
 
 glyph_entry<uint16 img>:
-  (IMAGE|GLYPH) (':')?               { *img = 15 << 8; }
-    (color<col>                      { *img = (uint16)(col << 8); }
+  (IMAGE|GLYPH) (':')?               { *img = GLYPH_FORE(WHITE); }
+    (color<col>                      { *img = (uint16)GLYPH_FORE(col); }
     )? (CHAR_CONST<n>                { *img |= n; }
     | NUMBER<n>                      { *img |= n; }
     ) 
-    (ON color<back>                  { *img |= back << 12; }
+    (ON color<back>                  { *img |= GLYPH_BACK(back); }
     )? ';'
   ;
 
-glyph_desc<uint16 img>:              { *img = 15 << 8; }
-  ( color<col>                       { *img = (uint16)(col << 8); } )?
+glyph_desc<uint16 img>:              { *img = GLYPH_FORE(WHITE); }
+  ( color<col>                       { *img = (uint16)GLYPH_FORE(col); } )?
   (CHAR_CONST<n>                     { *img |= n; }
     | NUMBER<n>                      { *img |= n; } )
-  (ON color<back>                    { *img |= back << 12; } )?
+  (ON color<back>                    { *img |= GLYPH_BACK(back); } )?
   ;
 
 event_desc: 
