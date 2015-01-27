@@ -36,7 +36,7 @@ Windows build instructions
 
   * `libtcod.dll`: [libtcod@bitbucket](https://bitbucket.org/jice/libtcod/src) (note this is the default branch, not 1.5.x).
   * `flex.exe`: [winflexbison@sourceforge](http://sourceforge.net/projects/winflexbison/) 0.7 MB (extract and rename `win_flex.exe` to `flex.exe`).
-  * `_dependencies-20141125.7z`: Available from the bitbucket [project downloads page](https://bitbucket.org/rmtew/incursion-roguelike/downloads).
+  * `build_dependencies-20150127.7z`: Available from the bitbucket [project downloads page](https://bitbucket.org/rmtew/incursion-roguelike/downloads).
 
 *Compilation instructions:*
 
@@ -46,8 +46,8 @@ These instructions are intended to allow you to get Incursion to the point where
   1. Enter the Incursion project directory.
   1. Place `flex.exe` directly into the project directory.
   1. Extract `_dependencies-20141125.7z` over the `_dependencies` sub-directory.  Check that you extracted it at the right level.
-  1. Place `libtcod.dll` directly into the project directory (look in `_dependencies\libtcod\makefiles\Release`, it comes from `_dependencies-20141125.7z`).
-  1. Place `SDL2.dll` directly into the project directory (look in `_dependencies\libtcod`, it comes from the libtcod source).
+  1. Place `libtcod.dll` directly into the project directory (look in `_dependencies\libtcod\makefiles\Release`, it comes from `build_dependencies-20150127.7z`).
+  1. Place `SDL2.dll` directly into the project directory (look in `_dependencies\sdl2\VisualC\SDL\Release`, it comes from `build_dependencies-20150127.7z`).
   1. Open `Incursion.sln` and do a debug build of Incursion.
   1. Debug Incursion within Visual Studio.
   1. Select the 'Compile Resources' main menu option.  Once completed, this will have created the `mod\Incursion.Mod` file.
