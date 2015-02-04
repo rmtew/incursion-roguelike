@@ -44,6 +44,12 @@ These instructions are intended to allow you to get Incursion to the point where
 
   1. Download and install Visual Studio 2013 Community Edition, if necessary.
   1. Enter the Incursion project directory.
+  1. Ensure that you have the EditorConfig extension installed.
+    1. Run Visual Studio.
+    1. Select the menu option: Tools -> Extensions and Updates.
+    1. Select the Online entry from the left-hand side list.
+    1. Search for and install EditorConfig.
+    1. Exit Visual Studio.
   1. Place `flex.exe` directly into the project directory.
   1. Extract `_dependencies-20141125.7z` over the `_dependencies` sub-directory.  Check that you extracted it at the right level.
   1. Place `libtcod.dll` directly into the project directory (look in `_dependencies\libtcod\makefiles\Release`, it comes from `build_dependencies-20150127.7z`).
