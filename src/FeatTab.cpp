@@ -679,9 +679,12 @@ struct FeatInfoStruct FeatInfo[] = {
      },
 
 
-  { FT_PAIN_TOLERANCE, FF_UNIMP, "Pain Tolerance",
+  { FT_PAIN_TOLERANCE, FF_WARRIOR, "Pain Tolerance",
     "You are naturally resistant to pain, and the modifiers that it "
-      "causes you are all halved." },
+      "causes you are all halved.",
+	  {{{ FP_ATTR, A_CON, 13 }}}
+  },
+
   { FT_STUBBORN_MIND, FF_UNIMP, "Stubborn Mind", 
     "You fight like a wild bull against mental coercion. The duration "
       "of all mental effects against you is halved." },
