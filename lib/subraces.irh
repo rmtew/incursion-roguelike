@@ -1,10 +1,9 @@
-#if 0
 
 /***********************************************************************
  *                              DEEP GNOMES
  ***********************************************************************/
 
-Monster "gnome, deep;temp" : MA_ADVENTURER
+Monster "Deep Gnome;temp" : MA_ADVENTURER
 {                        
     Image: pink GLYPH_PLAYER; Size: SZ_SMALL; Mana: 10;
     CR: 0; HD: 1; Hit: +0; Def: 14; Mov: 75%; Speed: 100%;
@@ -19,10 +18,10 @@ Monster "gnome, deep;temp" : MA_ADVENTURER
     Stati[NONDETECTION,
         (PER_DETECT|PER_SCENT|PER_TREMOR|PER_TELE|PER_BLIND)];
     Flags: M_CARNI, M_HERBI, M_HUMANOID, M_NOGEN, M_NOPOLY;
-    Desc: "Gnome, Deep Player Race"; 
+    Desc: "Deep Gnome Player Race"; 
 }
 
-Race "Gnome, Deep;race" : $"gnome;race"
+Race "Deep Gnome;race" : $"gnome;race"
   {
     Str -2, Dex +2, Con 0, Int 0, Wis +2, Cha -4, Luc 0;
     Monster: $"gnome, deep;temp"; Favoured: $"priest", $"rogue";
@@ -138,7 +137,7 @@ Race "Gnome, Deep;race" : $"gnome;race"
  ***********************************************************************/
 
 
-Monster "Dwarf, Gray;temp" : MA_DWARF, MA_ADVENTURER
+Monster "Grey Dwarf;temp" : MA_DWARF, MA_ADVENTURER
 	{                        
         Image: red GLYPH_PLAYER; Size: SZ_MEDIUM; Mana: 10;
         CR: 0; HD: 1; Hit: +0; Def: 10; Mov: 75%; Speed: 100%;
@@ -156,16 +155,16 @@ Monster "Dwarf, Gray;temp" : MA_DWARF, MA_ADVENTURER
         Flags: M_CARNI, M_HERBI, M_HUMANOID, M_NOGEN, M_NOPOLY;
         Feats: FT_TOUGHNESS, FT_LOADBEARER, FT_ARMOUR_OPTIMIZATION; 
         Immune: DF_POIS, DF_PLYS;
-        Desc: "Dwarf, Gray Player Race"; 
+        Desc: "Grey Dwarf Player Race"; 
       Stati[SAVE_BONUS,SN_MAGIC,+2];
       Stati[SAVE_BONUS,SN_TRAPS,+2];
 	}
 
 
-Race "Dwarf, Gray;race" : $"dwarf;race"
+Race "Grey Dwarf;race" : $"dwarf;race"
   {
     Str 0, Dex +2, Con +2, Int -2, Wis -2, Cha -4, Luc 0;
-    Monster: $"dwarf, gray;temp"; Favoured: $"warrior", $"rogue";
+    Monster: $"dwarf, grey;temp"; Favoured: $"warrior", $"rogue";
     Skills: SK_MINING, SK_CRAFT, SK_MOVE_SIL;
     Grants:
       Ability[CA_INNATE_SPELL,$"enlarge"] at 1st,
@@ -184,47 +183,47 @@ Race "Dwarf, Gray;race" : $"dwarf;race"
     };
     Desc: "<15>Str:<1>-- <15>Dex:<1>+2 <15>Con:<1>+2 <15>Int:<1>-2 <15>Wis:<1>-2 <15>Cha:<1>-4 <15>Luc:<1>--
       \n<15>Favoured Classes:<2> Warrior, Rogue 
-      \n<12>Experimental:<2> Gray Dwarves are not a Core Incursion race.
+      \n<12>Experimental:<2> Grey Dwarves are not a Core Incursion race.
       \n
-      \n__Gray dwarves are a degenerate and evil dwarven subrace, with a very
+      \n__Grey dwarves are a degenerate and evil dwarven subrace, with a very
       limited intelligence and no concept of honour or nobility. They tend to
-      dwell deep in the Underdark and possess potent innate magics. Gray dwarves
+      dwell deep in the Underdark and possess potent innate magics. Grey dwarves
       are psychologically weak and craven, and it is said that they compose
       the portion of the dwarven race that did not have the strength of
       spirit to resist diabolical corruption in the primevil birth of the
       dwarven race. 
-      \n__Gray dwarves are a dwarven subrace, and share all Dwarven traits,
+      \n__Grey dwarves are a dwarven subrace, and share all Dwarven traits,
       except as noted below.\n 
-      \n<10>GRAY DWARF RACIAL SKILLS<2>\n
-      __In addition to Craft and Mining, Gray Dwarves treat Move
+      \n<10>GREY DWARF RACIAL SKILLS<2>\n
+      __In addition to Craft and Mining, Grey Dwarves treat Move
       Silently as a racial skill. 
       \n\n
-      <10>GRAY DWARF RACIAL TRAITS<2>\n
-      __*_<7>Dwarven Focus<2> -- Gray Dwarves lack the strength of will
+      <10>GREY DWARF RACIAL TRAITS<2>\n
+      __*_<7>Dwarven Focus<2> -- Grey Dwarves lack the strength of will
       normally associated with dwarves, and as a result do not possess this
       ability.\n
-      __*_<7>Infravision<2> -- Gray Dwarves have infravision to 120 feet
-      (12 squares). In addition, Gray Dwarves gain a +1 racial bonus to
+      __*_<7>Infravision<2> -- Grey Dwarves have infravision to 120 feet
+      (12 squares). In addition, Grey Dwarves gain a +1 racial bonus to
       Listen and Spot checks and a +4 racial bonus to Move Silently checks.
       \n
-      __*_<7>Orc Slayer<2> -- Gray Dwarves have quite a bit to worry about
+      __*_<7>Orc Slayer<2> -- Grey Dwarves have quite a bit to worry about
       in the Underdark, and have not developed a culture of hatred and war
-      with Orcs. Gray Dwarves have no racial enemies. \n
-      __*_<7>Racial Weapons<2> -- Gray Dwarves treat the battleaxe and
+      with Orcs. Grey Dwarves have no racial enemies. \n
+      __*_<7>Racial Weapons<2> -- Grey Dwarves treat the battleaxe and
       warhammer as Simple weapons, and gain proficiency with the (normally
       exotic) dwarven waraxe and pickaxe if they are proficient with
       the Axes group.\n
-      __*_<7>Underdark Toughness<2> -- Gray Dwarves have adapted to the
+      __*_<7>Underdark Toughness<2> -- Grey Dwarves have adapted to the
       stunning horrors of the Underdark and the venom-using Drow and
       Kobolds. They are immune to paralysis (but not entangling) and
       poison. The recover fatigue just as normal dwarves do.\n
-      __*_<7>Magical Nature<2> -- Gray Dwarves can use <9>enlarge<2> and
+      __*_<7>Magical Nature<2> -- Grey Dwarves can use <9>enlarge<2> and
       <9>invisibility<2> as innate spell-like abilities.
-      \n__*_<7>Starting Equipment<2> -- Gray Dwarves start with a medium
+      \n__*_<7>Starting Equipment<2> -- Grey Dwarves start with a medium
       backpack, food rations, some poison, a battleaxe, warhammer and
       pickaxe. All initial armour and weapons are assumed to be
       dwarven-forged (hard, heavy and protective). All metal items are assumed
-      to be forged from adamant (very hard and protective). Gray Dwarf
+      to be forged from adamant (very hard and protective). Grey Dwarf
       starting armour and shields are the strongest in the game.\n";
     MALE_NAMES: "Barendd/Brottor/Eberk/Einkil/Oskar/Rurik/Taklinn/Traubon/
       Ulfgar/Veit/Balderk/Dankil/Gorunn/Holderhek/Loderr/Lutgehr/Ungart";
@@ -247,7 +246,7 @@ Race "Dwarf, Gray;race" : $"dwarf;race"
  ***********************************************************************/
 
 
-Monster "elf, gray;temp" : MA_ELF, MA_ADVENTURER
+Monster "Grey Elf;temp" : MA_ELF, MA_ADVENTURER
 	{                        
 		Image: bright cyan GLYPH_PLAYER; Size: SZ_MEDIUM; Mana: 10;
     CR: 0; HD: 1; Hit: +0; Def: 10; Mov: 100%; Speed: 100%;
@@ -259,32 +258,32 @@ Monster "elf, gray;temp" : MA_ELF, MA_ADVENTURER
 
     Flags: M_CARNI, M_HERBI, M_HUMANOID, M_NOGEN, M_NOPOLY;
     Immune: DF_SLEE; 
-    Desc: "Elf, Gray Player Race"; 
+    Desc: "Grey Elf Player Race"; 
       Stati[SAVE_BONUS,SN_DEATH,+2];
       Stati[SAVE_BONUS,SN_ENCH,+2];
       Stati[RESIST,AD_FIRE,2];
       Stati[RESIST,AD_COLD,2];
 	}
-Race "Elf, Gray;race" : $"elf;race"
+Race "Grey Elf;race" : $"elf;race"
   {
     Str -3, Dex +3, Con -3, Int +3, Wis +4, Cha +2, Luc 0;
-    Monster: $"elf, gray;temp"; Favoured: $"priest", $"mage";
+    Monster: $"elf, grey;temp"; Favoured: $"priest", $"mage";
     Desc: "<15>Str:<1>-3 <15>Dex:<1>+3 <15>Con:<1>-3 <15>Int:<1>+3 <15>Wis:<1>+4 <15>Cha:<1>+2 <15>Luc:<1>--
       \n<15>Favoured Classes:<2> Mage, Priest
-      \n<12>Experimental:<2> Gray Elves are not a Core Incursion race.
+      \n<12>Experimental:<2> Grey Elves are not a Core Incursion race.
       \n\n
-      __Gray elves are reclusive and frail, physically weak but possessed of
+      __Grey elves are reclusive and frail, physically weak but possessed of
       incredible mystical and intellectual potency. Not a true ethnicity,
       they are instead a metamorphosed form of normal elves, having survived
       for over a millenia and attained true immortality through spiritual
-      kinship to the realm of Faerie. Gray elves are terribly wise creatures,
+      kinship to the realm of Faerie. Grey elves are terribly wise creatures,
       but also filled with grief, for their race's bondage to Maeve strikes
       them more deeply then any other elves.\n
-      __Gray Elves are an Elven subrace, and share all Elven traits,
+      __Grey Elves are an Elven subrace, and share all Elven traits,
       except as noted below.\n 
       \n 
-      <10>GRAY ELVEN RACIAL SKILLS<2>\n
-      __The Gray Elf racial skill list represents the true depth of 
+      <10>GREY ELVEN RACIAL SKILLS<2>\n
+      __The Grey Elf racial skill list represents the true depth of 
       their knowledge and the unending centuries they have had to
       acquire such skills. Their racial skillset includes
       Animal Empathy, Concentration, Decipher Script, Intuition,
@@ -294,77 +293,77 @@ Race "Elf, Gray;race" : $"elf;race"
       teaches them how to apply the vast storehouse of facts they hold
       in their minds. 
       \n\n
-      <10>GRAY ELVEN RACIAL TRAITS<2>\n
-      __*_<7>Racial Attributes<2> -- Gray Elves are weaker and frailer
+      <10>GREY ELVEN RACIAL TRAITS<2>\n
+      __*_<7>Racial Attributes<2> -- Grey Elves are weaker and frailer
       than their cousins. In fact, they are weaker than all other
       human-sized inhabitants of Therya. However, their wisdom and 
       erudition are unparalleled. Grey elves also have an awesome presence
       and force of personality, much of it coming from their connection to
       the realm of Faerie.\n
-      __*_<7>Atrophy<2> -- The physical bodies of Gray Elves are in
+      __*_<7>Atrophy<2> -- The physical bodies of Grey Elves are in
       a somewhat active decline even as their mental prowess reaches
       new heights. The more time they spend contemplating the Faerie realm
       the less they are actually of this world ... until their bodies are
-      but frail husks. Gray Elves lose a point of Constitution at every
+      but frail husks. Grey Elves lose a point of Constitution at every
       even level and a point of Strength at every odd level (starting at
       3rd). Starting at 10th level they lose a point of each with every
       advancement. This loss is an inherent penalty and can only be
       addressed directly by magical tomes or other truly supernatural
       powers.\n
       __*_<7>Magical Nature<2> -- Representing the pinnacle of magical
-      power in an already eldritch race, Gray Elves start with an extra 10
+      power in an already eldritch race, Grey Elves start with an extra 10
       mana points and gain three points for every level they achieve above
       1st. \n
-      __*_<7>Racial Weapons<2> -- Gray elves are familiar with the use
+      __*_<7>Racial Weapons<2> -- Grey elves are familiar with the use
       of the short bow and thinblade in the same
       sense that most humans are familiar with breathing. Scores of
       decades of an immortal life spent in the pursuit and study 
       have given them the benefits of Weapon Mastery in these weapons ...
-      even if gray elves would not normally be called warriors. Gray Elves
+      even if grey elves would not normally be called warriors. Grey Elves
       are also merely passingly proficient with all other non-exotic
-      weapons. By the time they are moved to begin adventuring, most gray
+      weapons. By the time they are moved to begin adventuring, most grey
       elves have given up the use of the sword and bow for more magical
-      pursuits, however. In fact, the neglience with which most gray elves
+      pursuits, however. In fact, the neglience with which most grey elves
       treat their marital knowledge often makes them appear arrogant even
-      to other elves. Most gray elves view their martial knowledge through
+      to other elves. Most grey elves view their martial knowledge through
       the bitter lense of irony: their razor-sharp minds and reflexes
       remember the steps, the twists and the turns ... but their frail
       bodies mean they are easily defeated by younger, unskilled
       oppponents. If the sword and bow are nothing compared to the wand and
       spellbook and if they will not save one from Maeve's clutches, what
       is the point?\n
-      __*_<7>Immortality<2> -- Gray elves are immortal in the sense that
+      __*_<7>Immortality<2> -- Grey elves are immortal in the sense that
       they will never be directly conquered by time. Mara and Xel will
-      come with scythe and sickle to cut the cord of life for a gray elf
+      come with scythe and sickle to cut the cord of life for a grey elf
       only in cases of extreme bodily trauma. From a human perspective, all
-      gray elves are impossibly old and have had centuries to study. 
-      As a result, gray elves begin with three feats
+      grey elves are impossibly old and have had centuries to study. 
+      As a result, grey elves begin with three feats
       representing choice pieces of learning remembered from their earlier
       training.\n
       __*_<7>Manifestation<2> -- Compared to their more mundane
-      cousins, Gray Elves constantly manifest a fraction of their race's
+      cousins, Grey Elves constantly manifest a fraction of their race's
       magical essence. They gain an enhancement bonus of +4 to their
       Charisma, a +2 awe bonus to Defense versus foes that are neither
       blind nor mindless. In addition, they can always strike and be struck
       by incorporeal creatures. Their radiant grandeur prevents them from
       hiding in the shadows, however.\n
-      __*_<7>Magic Resistance<2> -- Gray Elves have an innate ability 
-      to shrug off the magic of others. Like the drow, gray elves do
+      __*_<7>Magic Resistance<2> -- Grey Elves have an innate ability 
+      to shrug off the magic of others. Like the drow, grey elves do
       not resist magic so much as simple negate adverse effects. Unlike the
       drow, however, this defense has more to do with willpower and
       personal experience and less to do with flat, inborn powers. 
       They have a low 25~ natural magic resistance associated with their
-      gray elven physiology and gain a +5~
+      grey elven physiology and gain a +5~
       inherent bonus for every character level gained.\n
       __*_<7>Inner Grief<2> -- Even more maudlin than normal elves,
-      gray elves feel the touch of Maeve in their daily lives and racial
-      destiny. Her aegis seems inescapable, and gray elves, with their
+      grey elves feel the touch of Maeve in their daily lives and racial
+      destiny. Her aegis seems inescapable, and grey elves, with their
       seemingly endless time for personal reflection, invariably come to
       the conclusion that this is not necessarily such a good thing. Still,
       they are drawn to her by the magic of their very beings. This
       inner turmoil results in a -1 Morale penalty to saving throws and
       attack rolls. This penalty increases by -1 at every third level. \n
-      __*_<7>Starting Equipment<2> -- Gray Elves start with a medium
+      __*_<7>Starting Equipment<2> -- Grey Elves start with a medium
       backpack, elven waybread, a bow, a thinblade, and
       torches. They also start with antitoxins because they are notoriously
       vulnerable to poisons. Starting weapons and armour are assumed to be
@@ -439,7 +438,25 @@ Race "Elf, Gray;race" : $"elf;race"
  *                              WOOD ELVES
  ***********************************************************************/
 
-Race "Elf, Wood;race" : $"elf;race"
+ Monster "Wood Elf;temp" : MA_ELF, MA_ADVENTURER
+	{                        
+		Image: bright cyan GLYPH_PLAYER; Size: SZ_MEDIUM; Mana: 10;
+    CR: 0; HD: 1; Hit: +0; Def: 10; Mov: 100%; Speed: 100%;
+    Attk:A_PUNC for 1d2 AD_BLUNT;
+
+	ABILITY(CA_LOWLIGHT,2);
+	ABILITY(CA_SHARP_SENSES,1);
+	MAGIC_RES(25);
+
+    Flags: M_CARNI, M_HERBI, M_HUMANOID, M_NOGEN, M_NOPOLY;
+    Immune: DF_SLEE; 
+    Desc: "Wood Elf Player Race"; 
+      Stati[SAVE_BONUS,SN_DEATH,+2];
+      Stati[SAVE_BONUS,SN_ENCH,+2];
+      Stati[RESIST,AD_FIRE,2];
+      Stati[RESIST,AD_COLD,2];
+	}
+Race "Wood Elf;race" : $"elf;race"
   {
     Str +1, Dex +2, Con +1, Int 0, Wis 0, Cha +1, Luc -1;
     Monster: $"elf;temp"; Favoured: $"barbarian", $"ranger", $"druid";
@@ -518,7 +535,7 @@ Race "Elf, Wood;race" : $"elf;race"
  *                            DROW (FEMALE)
  ***********************************************************************/
 
-Race "Drow (female);race" : $"drow;race"
+Race "Female Drow;race" : $"drow;race"
   {
     Str +1, Dex +2, Con 0, Int 0, Wis 0, Cha +1, Luc -2;
     Monster: $"drow;temp"; Favoured: $"rogue", $"priest";
@@ -565,7 +582,7 @@ Race "Drow (female);race" : $"drow;race"
  ***********************************************************************/
 
 
-Monster "halfling, stoutheart;temp" : MA_HALFLING, MA_ADVENTURER
+Monster "Stoutheart Halfling;temp" : MA_HALFLING, MA_ADVENTURER
 	{                        
   Image: yellow GLYPH_PLAYER; Size: SZ_SMALL; Mana: 10;
   CR: 0; HD: 1; Hit: +0; Def: 10; Mov: 75%; Speed: 100%;
@@ -576,10 +593,10 @@ Monster "halfling, stoutheart;temp" : MA_HALFLING, MA_ADVENTURER
 
   Flags: M_CARNI, M_HERBI, M_HUMANOID, M_NOGEN, M_NOPOLY;
   Feats: FT_SLIPAWAY;
-  Desc: "Halfling, Stoutheart Player Race"; 
+  Desc: "Stoutheart Halfling Player Race"; 
   }
   
-Race "Halfling, Stoutheart;race" : $"halfling;race"
+Race "Stoutheart Halfling;race" : $"halfling;race"
   {
     Str -2, Dex +2, Con 0, Int 0, Wis +2, Cha +2, Luc +2;
     Monster: $"halfling, stoutheart;temp"; 
@@ -666,7 +683,7 @@ Monster "Dragonkin;temp" : MA_REPTILE, MA_HUMANOID, MA_ADVENTURER
     Stati[NEUTRAL_TO,MA_DRAGON];
   }
 
-Race "Lizardfolk, Dragonkin;race" : $"lizardfolk;race"
+Race "Dragonkin;race" : $"lizardfolk;race"
   {
     Str +2, Dex +2, Con +2, Int -1, Wis 0, Cha -2, Luc -4;
     Monster: $"Dragonkin;temp"; Favoured Class: $"barbarian", $"warrior";
@@ -763,7 +780,7 @@ Race "Lizardfolk, Dragonkin;race" : $"lizardfolk;race"
  ***********************************************************************/
 
 
-Monster "Orc, Black;temp" : MA_ORC, MA_ADVENTURER
+Monster "Black Orc;temp" : MA_ORC, MA_ADVENTURER
   {
     Image: brown GLYPH_PLAYER; Size: SZ_MEDIUM; Mana: 5;
     CR: 0; HD: 1; Hit: 0; Def: 10; Hit: 1; Mov: 100%; Spd: 100%;
@@ -775,9 +792,9 @@ Monster "Orc, Black;temp" : MA_ORC, MA_ADVENTURER
 	ABILITY(CA_SCENT,3);
 
     Flags: M_CARNI, M_HUMANOID, M_LIGHT_AVERSE, M_NOGEN, M_NOPOLY;
-    Desc: "Orc, Black Player Race"; 
+    Desc: "Black Orc Player Race"; 
   }
-Race "Orc, Black;race" : $"orc;race"
+Race "Black Orc;race" : $"orc;race"
   {
     Str 0, Dex 0, Con 0, Int 0, Wis +3, Cha -1, Luc 0; 
     Monster: $"orc, black;temp"; Favoured Class: $"mage", $"priest";
@@ -855,4 +872,3 @@ Race "Orc, Black;race" : $"orc;race"
       $"dagger";
   }
 
-#endif
