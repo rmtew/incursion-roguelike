@@ -18,6 +18,7 @@ flex*.exe
 *.vcxproj.user
 *.suo
 *.sdf
+Incursion.opensdf
 
 # Incursion specific temporary files.
 lib/dispatch.h
@@ -34,3 +35,5 @@ save/_testcases
 
 # Local nonsense.
 _external
+INCURSION-RELEASES
+modaccent/build
