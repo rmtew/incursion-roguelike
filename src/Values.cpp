@@ -689,18 +689,17 @@ Restart:
     StatiIterEnd(this)
 
     {
-		int16 n = 0;
-        // Concentration cancels pain
-		// as does Pain Tolerance
-		if (HasSkill(SK_CONCENT)) {
-			n = max(((SkillLevel(SK_CONCENT) - 8) / 2), 0);
-		}
-		if (n > 0 || this->HasFeat(FT_PAIN_TOLERANCE))
+		int16 n_add = 0, n_div = 1;
+        // Concentration cancels pain as does Pain Tolerance
+		if (HasSkill(SK_CONCENT))
+			n_add = max(((SkillLevel(SK_CONCENT) - 8) / 2), 0);
+        if (this->HasFeat(FT_PAIN_TOLERANCE))
+            n_div = 2;
+		if (n_add > 0 || n_div != 1)
 			for (i = 0; i != ATTR_LAST; i++)
 				if (AttrAdj[i][BONUS_PAIN] < 0) {
-					AttrAdj[i][BONUS_PAIN] = min(0, AttrAdj[i][BONUS_PAIN] + n);
-					if (this->HasFeat(FT_PAIN_TOLERANCE))
-						AttrAdj[i][BONUS_PAIN] = AttrAdj[i][BONUS_PAIN] / 2;
+					AttrAdj[i][BONUS_PAIN] = min(0, AttrAdj[i][BONUS_PAIN] + n_add);
+					AttrAdj[i][BONUS_PAIN] = AttrAdj[i][BONUS_PAIN] / n_div;
 				}
     }
 
