@@ -968,7 +968,7 @@ inline void FixupBackrefs(Status *S, Thing *tReferee) {
                         S->Nature,
                         (const char *)tReferrer->Name(0));
 #else
-                ;
+                (void)0;
 #endif
         }
 }
