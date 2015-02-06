@@ -1026,7 +1026,32 @@ void cursesTerm::SetIncursionDirectory(const char *s) {
 /* Draw the intro screen header and display the start of game libtcod-specific
  * stuff in the footer area below it. */
 void cursesTerm::Title() {
-	TextTerm::Title();
+    static bool first_time = false;
+    char *s;
+
+    TextTerm::Title();
+    if (first_time == false) {
+        int16 body_y = WinSizeY() / 4 - 1;
+        first_time = true;
+
+        // At this point the selected window should be the footer area, which
+        // TextTerm::Title() defined for it (and it should be cleared).
+        s = "%c%c%c%c EXPERIMENTAL %c%c%c%c";
+        Write((WinSizeX() - 16) / 2, body_y + 1, Format(s, -GREEN, LITERAL_CHAR, LITERAL_CHAR1(GLYPH_SOLID), LITERAL_CHAR2(GLYPH_SOLID), LITERAL_CHAR, LITERAL_CHAR1(GLYPH_SOLID), LITERAL_CHAR2(GLYPH_SOLID), -GREY));
+        s = "Be aware there are bugs in the support for character display.";
+        Write((WinSizeX() - strlen(s)) / 2, body_y + 2, s);
+        s = "%c%c%c%c EXPERIMENTAL %c%c%c%c";
+        Write((WinSizeX() - 16) / 2, body_y + 3, Format(s, -GREEN, LITERAL_CHAR, LITERAL_CHAR1(GLYPH_SOLID), LITERAL_CHAR2(GLYPH_SOLID), LITERAL_CHAR, LITERAL_CHAR1(GLYPH_SOLID), LITERAL_CHAR2(GLYPH_SOLID), -GREY));
+
+        s = "Press a key to skip this page";
+        Write((WinSizeX() - strlen(s)) / 2, body_y + 5, s);
+
+        Update();
+        readkey(1);
+
+        // Clear the footer area.
+        Clear();
+    }
 }
 
 /*****************************************************************************\
@@ -1401,7 +1426,7 @@ void cursesTerm::Cut(int32 amt) {
 
 char *cursesTerm::MenuListFiles(const char * filespec, uint16 flags, const char * title) {
 #ifdef WIN32
-	WIN32_FIND_DATA data;
+	WIN32_FIND_DATAA data;
 	char *file;
 	HANDLE filehandle;
 	String pathdir = CurrentDirectory + "\\" + filespec;
@@ -1410,7 +1435,7 @@ char *cursesTerm::MenuListFiles(const char * filespec, uint16 flags, const char 
 	if (filehandle != INVALID_HANDLE_VALUE) {
 		do {
 			LOption(data.cFileName, (int32)data.cFileName);
-		} while (FindNextFileA(filehandle, &data));
+        } while (FindNextFileA(filehandle, &data));
 
 		FindClose(filehandle);
 	} else {
@@ -1428,12 +1453,13 @@ char *cursesTerm::MenuListFiles(const char * filespec, uint16 flags, const char 
 
 bool cursesTerm::FirstFile(char * filespec) {
 #ifdef WIN32
-	String pathdir = CurrentDirectory + "\\" + filespec;
+    WIN32_FIND_DATAA finddata;
+    String pathdir = CurrentDirectory + "\\" + filespec;
 
 	if (findhandle != NULL)
 		FindClose(findhandle);
 
-	findhandle = FindFirstFile(pathdir, &finddata);
+	findhandle = FindFirstFileA(pathdir, &finddata);
 	if (findhandle == INVALID_HANDLE_VALUE)
 		return false;
 
@@ -1450,6 +1476,7 @@ bool cursesTerm::FirstFile(char * filespec) {
 
 bool cursesTerm::NextFile() {
 #ifdef WIN32
+    WIN32_FIND_DATAA finddata;
 Retry:
 	if (!FindNextFileA(findhandle, &finddata)) {
 		FindClose(findhandle);
