@@ -9,11 +9,18 @@ SET TLD=INCURSION-RELEASES
 
 PUSHD .
 
-FOR %%I IN (Release\Incursion.exe Debug\Incursion.exe mod\Incursion.mod) DO (
-	IF NOT EXIST %%I (
-		@ECHO Please build '%%I' and try again.
-		EXIT /b 1
-	)
+FOR %%I IN (exe_libtcod exe_curses) DO (
+    FOR %%J IN (Release Debug) DO (
+        IF NOT EXIST build\%%I\%%J (
+            @ECHO The [%%I] project needs to be built in [%%J] configuration.    
+            EXIT /b 1
+        )
+    )
+)
+
+IF NOT EXIST mod\Incursion.Mod (
+    @ECHO [Incursion.Mod] needs to be built.  See the readme file.
+    EXIT /b 1
 )
 
 @ECHO Making '%TLD%' directories.
@@ -47,8 +54,17 @@ FOR %%I IN (Incursion-VVV\ Incursion-VVV-release-with-pdbs\ Incursion-VVV-debug-
 )
 
 @ECHO Copying executables.
-COPY ..\Release\Incursion.exe Incursion-VVV\ >NUL
-FOR %%I IN (..\Release\Incursion.exe ..\Release\Incursion.pdb) DO COPY %%I Incursion-VVV-release-with-pdbs\ >NUL
-FOR %%I IN (..\Debug\Incursion.exe ..\Debug\Incursion.pdb) DO COPY %%I Incursion-VVV-debug-with-pdbs\ >NUL
+COPY ..\build\exe_libtcod\Release\Incursion.exe Incursion-VVV\ >NUL
+COPY ..\build\exe_curses\Release\IncursionCurses.exe Incursion-VVV\ >NUL
+
+COPY ..\build\exe_libtcod\Release\Incursion.exe Incursion-VVV-release-with-pdbs\ >NUL
+COPY ..\build\exe_libtcod\Release\Incursion.pdb Incursion-VVV-release-with-pdbs\ >NUL
+COPY ..\build\exe_curses\Release\IncursionCurses.exe Incursion-VVV-release-with-pdbs\ >NUL
+COPY ..\build\exe_curses\Release\IncursionCurses.pdb Incursion-VVV-release-with-pdbs\ >NUL
+
+COPY ..\build\exe_libtcod\Debug\Incursion.exe Incursion-VVV-debug-with-pdbs\ >NUL
+COPY ..\build\exe_libtcod\Debug\Incursion.pdb Incursion-VVV-debug-with-pdbs\ >NUL
+COPY ..\build\exe_curses\Debug\IncursionCurses.exe Incursion-VVV-debug-with-pdbs\ >NUL
+COPY ..\build\exe_curses\Debug\IncursionCurses.pdb Incursion-VVV-debug-with-pdbs\ >NUL
 
 POPD
