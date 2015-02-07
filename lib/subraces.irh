@@ -3,7 +3,7 @@
  *                              DEEP GNOMES
  ***********************************************************************/
 
-Monster "Deep Gnome;temp" : MA_ADVENTURER
+Monster "Deep Gnome;temp" : MA_GNOME, MA_ADVENTURER
 {                        
     Image: pink GLYPH_PLAYER; Size: SZ_SMALL; Mana: 10;
     CR: 0; HD: 1; Hit: +0; Def: 14; Mov: 75%; Speed: 100%;
@@ -24,7 +24,7 @@ Monster "Deep Gnome;temp" : MA_ADVENTURER
 Race "Deep Gnome;race" : $"gnome;race"
   {
     Str -2, Dex +2, Con 0, Int 0, Wis +2, Cha -4, Luc 0;
-    Monster: $"gnome, deep;temp"; Favoured: $"priest", $"rogue";
+    Monster: $"Deep Gnome;temp"; Favoured: $"priest", $"rogue";
     Skills: 
       SK_CRAFT, SK_HANDLE_DEV, SK_MINING,
       SK_LISTEN, SK_HIDE;
@@ -164,7 +164,7 @@ Monster "Grey Dwarf;temp" : MA_DWARF, MA_ADVENTURER
 Race "Grey Dwarf;race" : $"dwarf;race"
   {
     Str 0, Dex +2, Con +2, Int -2, Wis -2, Cha -4, Luc 0;
-    Monster: $"dwarf, grey;temp"; Favoured: $"warrior", $"rogue";
+    Monster: $"Grey Dwarf;temp"; Favoured: $"warrior", $"rogue";
     Skills: SK_MINING, SK_CRAFT, SK_MOVE_SIL;
     Grants:
       Ability[CA_INNATE_SPELL,$"enlarge"] at 1st,
@@ -267,7 +267,7 @@ Monster "Grey Elf;temp" : MA_ELF, MA_ADVENTURER
 Race "Grey Elf;race" : $"elf;race"
   {
     Str -3, Dex +3, Con -3, Int +3, Wis +4, Cha +2, Luc 0;
-    Monster: $"elf, grey;temp"; Favoured: $"priest", $"mage";
+    Monster: $"Grey Elf;temp"; Favoured: $"priest", $"mage";
     Desc: "<15>Str:<1>-3 <15>Dex:<1>+3 <15>Con:<1>-3 <15>Int:<1>+3 <15>Wis:<1>+4 <15>Cha:<1>+2 <15>Luc:<1>--
       \n<15>Favoured Classes:<2> Mage, Priest
       \n<12>Experimental:<2> Grey Elves are not a Core Incursion race.
@@ -459,7 +459,7 @@ Race "Grey Elf;race" : $"elf;race"
 Race "Wood Elf;race" : $"elf;race"
   {
     Str +1, Dex +2, Con +1, Int 0, Wis 0, Cha +1, Luc -1;
-    Monster: $"elf;temp"; Favoured: $"barbarian", $"ranger", $"druid";
+    Monster: $"Wood Elf;temp"; Favoured: $"barbarian", $"ranger", $"druid";
     Desc: "<15>Str:<1>+1 <15>Dex:<1>+2 <15>Con:<1>+1 <15>Int:<1>-- <15>Wis:<1>-- <15>Cha:<1>+1 <15>Luc:<1>-1
       \n<15>Favoured Classes:<2> Barbarian, Ranger, Druid
       \n<12>Experimental:<2> Wood Elves are not a Core Incursion race.
@@ -599,7 +599,7 @@ Monster "Stoutheart Halfling;temp" : MA_HALFLING, MA_ADVENTURER
 Race "Stoutheart Halfling;race" : $"halfling;race"
   {
     Str -2, Dex +2, Con 0, Int 0, Wis +2, Cha +2, Luc +2;
-    Monster: $"halfling, stoutheart;temp"; 
+    Monster: $"Stoutheart Halfling;temp"; 
     Favoured Class: $"paladin", $"priest";
     Skills: 
       SK_KNOW_THEO, SK_APPRAISE, SK_RIDE, SK_INTUITION, SK_HIDE, SK_DIPLOMACY;
@@ -797,7 +797,7 @@ Monster "Black Orc;temp" : MA_ORC, MA_ADVENTURER
 Race "Black Orc;race" : $"orc;race"
   {
     Str 0, Dex 0, Con 0, Int 0, Wis +3, Cha -1, Luc 0; 
-    Monster: $"orc, black;temp"; Favoured Class: $"mage", $"priest";
+    Monster: $"Black Orc;temp"; Favoured Class: $"mage", $"priest";
     Skills: SK_SPELLCRAFT, SK_KNOW_THEO, SK_CONCENTRATION;
     Grants:
       Stati[NEUTRAL_TO,MA_UNDEAD] at 1st level,
