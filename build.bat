@@ -6,8 +6,7 @@ REM TODO: Executing this script with no arguments should do some evaluation and 
 REM TODO: potential argument <upto> - If present with a stage name, will do all stages leading up to that stage name.
 REM TODO: potential argument <bootstrap|bs> - Fetch project source code if not already present with this script.
 REM TODO: potential argument <fetch-dependencies|fd> - Fetch dependencies if not already done.
-REM TODO: potential argument <sync-dependencies|sd> - Extract and generally prepare fetched dependencies if not already done.
-REM TODO: potential argument <build-dependencies|bd> - Build the prepared dependencies if fetched and extracted.
+REM TODO: potential argument <prepare-dependencies|pd> - Extract and generally prepare fetched dependencies if not already done.
 REM TODO: potential argument <all|a> - Attempt to build this project's source code.
 REM TODO: potential argument <run|r> - Attempt to run this projects's source code.
 
@@ -16,6 +15,8 @@ REM       then when that something else exits, the BAT script will still have th
 REM       same variables it already had - as it gets them at startup and by direct
 REM       execution.
 
+REM These variables are used to index the LINKS array entries.
+REM
 REM               0    1     2      3          4          5
 REM HTTP link:   HTTP <url> <NAME> <FILENAME>
 REM VCS link:    VCS  <hg>  <NAME> <REVISION> <CLONEURL> <ZIPDLURL>
@@ -47,31 +48,76 @@ set LINKS[2]=vcs hg libtcod 7a8b072365b5 C:\RMT\VCS\HG\libraries\libtcod https:/
 REM Process the user data, calling event functions when applicable.
 goto internal_function_main
 
-REM --- FUNCTION: user_function_zip_extracted --------------------------------
-:user_function_zip_extracted
+REM --- FUNCTION: user_function_prepare_dependency --------------------------------
+:user_function_prepare_dependency
 REM variable: %V_LINK_PARTS% - The link data.
-REM variable: %DEPENDENCY_PATH% - The absolute directory the archive is located in, and will be extracted within.
-REM variable: %V_DIRNAME% - The relative directory name the archive contains as it's sole top level entry.
+REM variable: %DEPENDENCY_PATH% - The absolute path of the dependencies directory.
+REM variable: %V_DIRNAME% - The relative directory name the dependency can be found in.
 REM variable: %V_SKIPPED% - 'yes' or 'no', depending on whether the archive was already extracted.
+set V_LABEL_RETURN_ifpd=!V_LABEL_RETURN!
+
 cd !DEPENDENCY_PATH!
 
-if "!V_LINK_PARTS[%HTTP_FILENAME%]!" EQU "win_flex_bison-latest.zip" (
-    if "%V_SKIPPED%" equ "no" (
-        if exist "%BUILD_PATH%flex.exe" del %BUILD_PATH%flex.exe        
+if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
+    if "!V_LINK_PARTS[%HTTP_FILENAME%]!" EQU "win_flex_bison-latest.zip" (
+        REM Extract the pre-built executable and put in the right location.
+        if "%V_SKIPPED%" equ "no" (
+            if exist "%BUILD_PATH%flex.exe" del %BUILD_PATH%flex.exe        
+        )
+        if not exist "%BUILD_PATH%flex.exe" (
+            cd !V_DIRNAME!
+            copy win_flex.exe %BUILD_PATH%flex.exe
+        )
+    ) else (
+        echo ERROR.. !V_LINK_PARTS[%HTTP_FILENAME%]! not handled by user who wrote the build amendments.
     )
-    if not exist "%BUILD_PATH%flex.exe" (
+) else if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "vcs" (
+    set L_VCS_NAME=!V_LINK_PARTS[%VCS_NAME%]!
+    if "!L_VCS_NAME!" EQU "SDL2" (
         cd !V_DIRNAME!
-        copy win_flex.exe %BUILD_PATH%flex.exe
 
-        goto return_from_user_function_zip_extracted
+        if not exist !DEPENDENCY_PATH!\SDL2_d.dll (
+            echo Building: [SDL2/Debug]
+
+            msbuild /nologo VisualC\SDL_VS2013.sln /p:Configuration=Debug /p:Platform=Win32 /t:SDL2,SDL2main
+            copy VisualC\SDL\Win32\Debug\SDL2.dll !DEPENDENCY_PATH!\SDL2_d.dll
+            copy VisualC\SDL\Win32\Debug\SDL2.lib !DEPENDENCY_PATH!\SDL2_d.lib
+            copy VisualC\SDL\Win32\Debug\SDL2.pdb !DEPENDENCY_PATH!\SDL2_d.pdb
+        ) else (
+            echo Building: [SDL2/Debug] .. SKIPPED
+        )
+
+        if not exist !DEPENDENCY_PATH!\SDL2.dll (
+            echo Building: [SDL2/Release]
+
+            msbuild /nologo VisualC\SDL_VS2013.sln /p:Configuration=Release /p:Platform=Win32 /t:SDL2,SDL2main
+            copy VisualC\SDL\Win32\Release\SDL2.dll !DEPENDENCY_PATH!\SDL2.dll
+            copy VisualC\SDL\Win32\Release\SDL2.lib !DEPENDENCY_PATH!\SDL2.lib
+            copy VisualC\SDL\Win32\Release\SDL2.pdb !DEPENDENCY_PATH!\SDL2.pdb
+        ) else (
+            echo Building: [SDL2/Release] .. SKIPPED
+        )
+    ) else if "!L_VCS_NAME!" EQU "libtcod" (
+        cd !V_DIRNAME!
+
+REM  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\RMT\VCS\GIT\Roguelike\incursion-roguelike\_dependencies\libtcod\makefiles\\..\src\png" /I"C:\RMT\VCS\GIT\Roguelike\incursion-roguelike\_dependencies\libtcod\makefiles\\..\src\zlib" /I"C:\RMT\VCS\GIT\Roguelike\incursion-roguelike\_dependencies\libtcod\makefiles\\..\include" /I"$SolutionDir)\..\..\..\sdl2\include" /ZI /nologo /W3 /WX- /Od /Oy- /D TCOD_SDL2 /D NO_OPENGL /D LIBTCOD_EXPORTS /D _WINDLL /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TC /analyze- /errorReport:queue ..\src\bresenham_c.c ..\src\bsp_c.c ..\src\color_c.c ..\src\console_c.c ..\src\fov_c.c ..\src\fov_circular_raycasting.c ..\src\fov_diamond_raycasting.c ..\src\fov_permissive2.c ..\src\fov_recursive_shadowcasting.c ..\src\fov_restrictive.c ..\src\heightmap_c.c ..\src\image_c.c ..\src\lex_c.c ..\src\list_c.c ..\src\mersenne_c.c ..\src\namegen_c.c ..\src\noise_c.c ..\src\parser_c.c ..\src\path_c.c ..\src\sys_c.c ..\src\sys_opengl_c.c ..\src\sys_sdl2_c.c ..\src\sys_sdl_c.c ..\src\sys_sdl_img_bmp.c ..\src\sys_sdl_img_png.c ..\src\tree_c.c ..\src\txtfield_c.c ..\src\zip_c.c
+
+REM   C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:QUEUE /OUT:"C:\RMT\VCS\GIT\Roguelike\incursion-roguelike\_dependencies\libtcod\makefiles\Debug\libtcod.dll" /NOLOGO /LIBPATH:"C:\RMT\VCS\GIT\Roguelike\incursion-roguelike\_dependencies\libtcod\makefiles\Debug\\" /LIBPATH:"C:\RMT\VCS\GIT\Roguelike\incursion-roguelike\_dependencies\libtcod\makefiles\..\..\sdl2\VisualC\SDL\Debug" libz.lib png.lib sdl2.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /NODEFAULTLIB:libcmtd /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\RMT\VCS\GIT\Roguelike\incursion-roguelike\_dependencies\libtcod\makefiles\Debug\libtcod.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\RMT\VCS\GIT\Roguelike\incursion-roguelike\_dependencies\libtcod\makefiles\Debug\libtcod.lib" /MACHINE:X86 /SAFESEH /DLL Debug\bresenham_c.obj
+
+REM  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TC /analyze- /errorReport:queue ..\src\zlib\adler32.c ..\src\zlib\compress.c ..\src\zlib\crc32.c ..\src\zlib\deflate.c ..\src\zlib\gzclose.c ..\src\zlib\gzlib.c ..\src\zlib\gzread.c ..\src\zlib\gzwrite.c ..\src\zlib\infback.c ..\src\zlib\inffast.c ..\src\zlib\inflate.c ..\src\zlib\inftrees.c ..\src\zlib\trees.c ..\src\zlib\uncompr.c ..\src\zlib\zutil.c
+
+REM  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TC /analyze- /errorReport:queue ..\src\png\lodepng.c
+REM   C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"C:\RMT\VCS\GIT\Roguelike\incursion-roguelike\_dependencies\libtcod\makefiles\Debug\png.lib" /NOLOGO Debug\lodepng.obj
+   
+        REM msbuild /nologo VisualC\SDL_VS2013.sln /p:Configuration=Debug /p:Platform=Win32 /t:SDL2,SDL2main
+        echo Build libtcod and copy the right shit into place.
+    ) else (
+        echo ERROR.. !V_LINK_PARTS[%HTTP_FILENAME%]! not handled by user who wrote the build amendments.
     )
-) else (
-    echo ERROR.. !V_LINK_PARTS[%HTTP_FILENAME%]! not handled by user who wrote the build amendments.
-
-    goto return_from_user_function_zip_extracted
 )
 
-goto return_from_user_function_zip_extracted
+:exit_from_internal_function_prepare_dependency
+goto !V_LABEL_RETURN_ifpd!
 
 REM User function: user_function_teardown
 REM Description: Called as a final step before the script exits.
@@ -181,7 +227,7 @@ if "!V_LINK_PARTS[0]!" EQU "http" (
     set fn=Archive-Extract
     set fnp0=%DEPENDENCY_PATH%\!V_LINK_PARTS[3]!
     set fnp1=%DEPENDENCY_PATH%
-    REM Environment variables for function 'user_function_zip_extracted'.
+    REM Environment variables for function 'user_function_prepare_dependency'.
     set V_DIRNAME=
     set V_SKIPPED=no
 
@@ -203,14 +249,17 @@ if "!V_LINK_PARTS[0]!" EQU "http" (
     )
     REM Do we process the output as it arrives, or at the end?
     REM echo Decompressed?: [!V_LINK_PARTS[3]!]
-
-    goto user_function_zip_extracted
-:return_from_user_function_zip_extracted
-    cd %DEPENDENCY_PATH%
+) else if "!V_LINK_PARTS[0]!" EQU "vcs" (
+    set V_DIRNAME=!V_LINK_PARTS[%VCS_NAME%]!
+    REM Stop errors from nothing being here.
 )
+set V_LABEL_RETURN=return_to_internal_function_prepare_dependency
+goto user_function_prepare_dependency
+:return_to_internal_function_prepare_dependency
+cd %DEPENDENCY_PATH%
 
-:exit_from_internal_function_prepare_dependencies
-goto !V_LABEL_RETURN_ifpds!
+:exit_from_internal_function_prepare_dependency
+goto !V_LABEL_RETURN_iffd!
 
 REM --- FUNCTION: internal_function_fetch_dependencies --------------------------
 
