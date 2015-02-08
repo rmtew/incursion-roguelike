@@ -1,0 +1,7 @@
+2014-11-09:
+	https://bitbucket.org/rmtew/incursion-roguelike/issue/144/
+		The 'x' cancel menu cannot find the springblade bracers to deactivate them, after they have been activated.
+		Stati are put in place by the EV_BIRTH event in the script.
+			EActor->GainPermStati(EFF_FLAG1,nhBlade1,SS_MISC, type, 0, $"Springblade Bracers");
+			EActor->GainPermStati(EFF_FLAG2,nhBlade2,SS_MISC, type, 0, $"Springblade Bracers");
+		However, they are not found when cancel looks for stati.
