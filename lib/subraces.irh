@@ -414,6 +414,18 @@ Race "Grey Elf;race" : $"elf;race"
         WG_STAVES | WG_IMPACT | WG_THROWN | WG_POLEARMS | WG_SPEARS |
         WG_LANCES | WG_DAGGERS | WG_MARTIAL | WG_FLEXIBLE | WG_FLAILS |
         WG_LIGHT | WG_LARMOUR | WG_MARMOUR | WG_HARMOUR); 
+		
+	EActor->setGodFlags($"Maeve",GS_INVOLVED);
+      if (EActor->GodID == NULL_ID)
+        EActor->GodID = $"Maeve";
+      else if (EActor->GodID != $"Maeve") {
+        SetSilence();
+        EActor->Transgress($"Maeve",10,false,"turning away from Maeve");
+        EActor->setGodFlags($"Maeve",GS_KNOWN_ANGER);
+        UnsetSilence();
+        }
+      return NOTHING;
+		
       };
     MALE_NAMES: "Aramil/Aust/Enialis/Heian/Ivellios/Laucian/
       Quarion/Sethwin/Selasia/Faridhir/Semirathis/Agorna/Disead/
@@ -512,7 +524,21 @@ Race "Wood Elf;race" : $"elf;race"
           EItem->AddQuality(IQ_ELVEN);
         if (EItem->QualityOK(IQ_DARKWOOD))
           EItem->AddQuality(IQ_DARKWOOD);
-      };
+      },
+	  
+	  EV_BIRTH {
+      EActor->setGodFlags($"Maeve",GS_INVOLVED);
+      if (EActor->GodID == NULL_ID)
+        EActor->GodID = $"Maeve";
+      else if (EActor->GodID != $"Maeve") {
+        SetSilence();
+        EActor->Transgress($"Maeve",10,false,"turning away from Maeve");
+        EActor->setGodFlags($"Maeve",GS_KNOWN_ANGER);
+        UnsetSilence();
+        }
+      return NOTHING;
+      }; 
+	  
     MALE_NAMES: "Aramil/Aust/Enialis/Heian/Ivellios/Laucian/
       Quarion/Sethwin/Selasia/Faridhir/Semirathis/Agorna/Disead/
       Cassius/Lachin/Tesserath/Amakiir/Holimion/Meliamne/Nailo/
