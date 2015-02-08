@@ -206,7 +206,7 @@ if "!V_LINK_PARTS[0]!" EQU "http" (
 
     goto user_function_zip_extracted
 :return_from_user_function_zip_extracted
-    cd !DEPENDENCY_PATH!
+    cd %DEPENDENCY_PATH%
 )
 
 :exit_from_internal_function_prepare_dependencies
@@ -255,6 +255,7 @@ REM output argument: V_LINK_PARTS   - The array of elements that make up the giv
 set V_LABEL_RETURN_iffd=!V_LABEL_RETURN!
 
 :loop_internal_function_fetch_dependency
+cd %DEPENDENCY_PATH%
 
 if "!V_LINK_PARTS[0]!" EQU "vcs" (
     if "!V_LINK_PARTS[1]!" EQU "hg" (
