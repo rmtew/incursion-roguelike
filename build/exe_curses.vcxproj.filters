@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Wcurses.cpp">
+    <ClCompile Include="..\src\Wcurses.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

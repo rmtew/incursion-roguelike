@@ -31,415 +31,310 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="SRC\Annot.cpp">
+    <ClCompile Include="..\src\Annot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SRC\art.cpp">
+    <ClCompile Include="..\src\art.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SRC\BASE.CPP">
+    <ClCompile Include="..\src\BASE.CPP">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SRC\CREATE.CPP">
+    <ClCompile Include="..\src\CREATE.CPP">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SRC\CREATURE.CPP">
+    <ClCompile Include="..\src\CREATURE.CPP">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SRC\DEBUG.CPP">
+    <ClCompile Include="..\src\DEBUG.CPP">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SRC\DISPLAY.CPP">
+    <ClCompile Include="..\src\DISPLAY.CPP">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SRC\Djikstra.cpp">
+    <ClCompile Include="..\src\Djikstra.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SRC\Effects.cpp">
+    <ClCompile Include="..\src\Effects.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Encounter.cpp">
+    <ClCompile Include="..\src\Encounter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SRC\EVENT.CPP">
+    <ClCompile Include="..\src\EVENT.CPP">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SRC\feattab.cpp">
+    <ClCompile Include="..\src\feattab.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SRC\feature.cpp">
+    <ClCompile Include="..\src\feature.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SRC\FIGHT.CPP">
+    <ClCompile Include="..\src\FIGHT.CPP">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SRC\help.cpp">
+    <ClCompile Include="..\src\help.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SRC\INV.CPP">
+    <ClCompile Include="..\src\INV.CPP">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SRC\ITEM.CPP">
+    <ClCompile Include="..\src\ITEM.CPP">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\lz.c">
+    <ClCompile Include="..\src\lz.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SRC\MAGIC.CPP">
+    <ClCompile Include="..\src\MAGIC.CPP">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SRC\MAIN.CPP">
+    <ClCompile Include="..\src\MAIN.CPP">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SRC\MAKELEV.CPP">
+    <ClCompile Include="..\src\MAKELEV.CPP">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Managers.cpp">
+    <ClCompile Include="..\src\Managers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SRC\MESSAGE.CPP">
+    <ClCompile Include="..\src\MESSAGE.CPP">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SRC\MONSTER.CPP">
+    <ClCompile Include="..\src\MONSTER.CPP">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SRC\MOVE.CPP">
+    <ClCompile Include="..\src\MOVE.CPP">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SRC\PLAYER.CPP">
+    <ClCompile Include="..\src\PLAYER.CPP">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Prayer.cpp">
+    <ClCompile Include="..\src\Prayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SRC\RComp.cpp">
+    <ClCompile Include="..\src\RComp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SRC\Registry.cpp">
+    <ClCompile Include="..\src\Registry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SRC\RES.CPP">
+    <ClCompile Include="..\src\RES.CPP">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\rle.c">
+    <ClCompile Include="..\src\rle.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Sheet.cpp">
+    <ClCompile Include="..\src\Sheet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SRC\SKILLS.CPP">
+    <ClCompile Include="..\src\SKILLS.CPP">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Social.cpp">
+    <ClCompile Include="..\src\Social.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SRC\Status.cpp">
+    <ClCompile Include="..\src\Status.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SRC\TABLES.CPP">
+    <ClCompile Include="..\src\TABLES.CPP">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SRC\target.cpp">
+    <ClCompile Include="..\src\target.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SRC\TERM.CPP">
+    <ClCompile Include="..\src\TERM.CPP">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Src\TextTerm.cpp">
+    <ClCompile Include="..\src\TextTerm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SRC\Values.cpp">
+    <ClCompile Include="..\src\Values.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SRC\VISION.CPP">
+    <ClCompile Include="..\src\VISION.CPP">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SRC\VMachine.cpp">
+    <ClCompile Include="..\src\VMachine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\cpp1.c">
+    <ClCompile Include="..\src\cpp1.c">
       <Filter>Preprocessor</Filter>
     </ClCompile>
-    <ClCompile Include="src\cpp2.c">
+    <ClCompile Include="..\src\cpp2.c">
       <Filter>Preprocessor</Filter>
     </ClCompile>
-    <ClCompile Include="src\cpp3.c">
+    <ClCompile Include="..\src\cpp3.c">
       <Filter>Preprocessor</Filter>
     </ClCompile>
-    <ClCompile Include="src\cpp4.c">
+    <ClCompile Include="..\src\cpp4.c">
       <Filter>Preprocessor</Filter>
     </ClCompile>
-    <ClCompile Include="src\cpp5.c">
+    <ClCompile Include="..\src\cpp5.c">
       <Filter>Preprocessor</Filter>
     </ClCompile>
-    <ClCompile Include="src\cpp6.c">
+    <ClCompile Include="..\src\cpp6.c">
       <Filter>Preprocessor</Filter>
     </ClCompile>
-    <ClCompile Include="SRC\tokens.cpp">
+    <ClCompile Include="..\src\tokens.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="SRC\yygram.cpp">
+    <ClCompile Include="..\src\yygram.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="INC\api.h">
+    <ClInclude Include="..\inc\api.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="INC\BASE.H">
+    <ClInclude Include="..\inc\BASE.H">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\ConstNam.h">
+    <ClInclude Include="..\inc\ConstNam.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="INC\CREATURE.H">
+    <ClInclude Include="..\inc\CREATURE.H">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="INC\DEFINES.H">
+    <ClInclude Include="..\inc\DEFINES.H">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="INC\EVENTS.H">
+    <ClInclude Include="..\inc\EVENTS.H">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="INC\FEATURE.H">
+    <ClInclude Include="..\inc\FEATURE.H">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="INC\Globals.h">
+    <ClInclude Include="..\inc\Globals.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="INC\incursion.h">
+    <ClInclude Include="..\inc\incursion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="INC\Inline.h">
+    <ClInclude Include="..\inc\Inline.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="INC\ITEM.H">
+    <ClInclude Include="..\inc\ITEM.H">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\lz.h">
+    <ClInclude Include="..\inc\lz.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="INC\MAGIC.H">
+    <ClInclude Include="..\inc\MAGIC.H">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="INC\map.h">
+    <ClInclude Include="..\inc\map.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="INC\rcomp.h">
+    <ClInclude Include="..\inc\rcomp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="INC\RES.H">
+    <ClInclude Include="..\inc\RES.H">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\rle.h">
+    <ClInclude Include="..\inc\rle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Inc\target.h">
+    <ClInclude Include="..\inc\target.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="INC\TERM.H">
+    <ClInclude Include="..\inc\TERM.H">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LIB\dispatch.h">
+    <ClInclude Include="..\lib\dispatch.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ChangeLog.txt">
+    <None Include="..\ChangeLog.txt">
       <Filter>Notes</Filter>
     </None>
-    <None Include="EncStats.txt">
-      <Filter>Notes</Filter>
-    </None>
-    <None Include="NOTES\FEATS.TXT">
-      <Filter>Notes</Filter>
-    </None>
-    <None Include="NOTES\help.txt">
-      <Filter>Notes</Filter>
-    </None>
-    <None Include="makedist.bat">
-      <Filter>Notes</Filter>
-    </None>
-    <None Include="NOTES\Manual.txt">
-      <Filter>Notes</Filter>
-    </None>
-    <None Include="Notes\Notes -- CharGen.txt">
-      <Filter>Notes</Filter>
-    </None>
-    <None Include="Notes\Notes -- Dungeon.txt">
-      <Filter>Notes</Filter>
-    </None>
-    <None Include="Notes\Notes -- Encounters.txt">
-      <Filter>Notes</Filter>
-    </None>
-    <None Include="Notes\notes -- Exercise.txt">
-      <Filter>Notes</Filter>
-    </None>
-    <None Include="Notes\Notes -- Feats.txt">
-      <Filter>Notes</Filter>
-    </None>
-    <None Include="Notes\Notes -- IncursionScript.txt">
-      <Filter>Notes</Filter>
-    </None>
-    <None Include="Notes\Notes -- Items.txt">
-      <Filter>Notes</Filter>
-    </None>
-    <None Include="Notes\Notes -- Mon AI.txt">
-      <Filter>Notes</Filter>
-    </None>
-    <None Include="Notes\Notes -- Monsters.txt">
-      <Filter>Notes</Filter>
-    </None>
-    <None Include="Notes\Notes -- Newest.txt">
-      <Filter>Notes</Filter>
-    </None>
-    <None Include="Notes\Notes -- Prayer &amp; Gods.txt">
-      <Filter>Notes</Filter>
-    </None>
-    <None Include="Notes\Notes -- Psi.txt">
-      <Filter>Notes</Filter>
-    </None>
-    <None Include="Notes\Notes -- Quests.txt">
-      <Filter>Notes</Filter>
-    </None>
-    <None Include="Notes\Notes -- Revision.txt">
-      <Filter>Notes</Filter>
-    </None>
-    <None Include="Notes\Notes -- Rods.txt">
-      <Filter>Notes</Filter>
-    </None>
-    <None Include="Notes\Notes -- Skills.txt">
-      <Filter>Notes</Filter>
-    </None>
-    <None Include="Notes\Notes -- Spells.txt">
-      <Filter>Notes</Filter>
-    </None>
-    <None Include="Notes\Notes -- Subclasses.txt">
-      <Filter>Notes</Filter>
-    </None>
-    <None Include="Notes\Notes -- TownGen.txt">
-      <Filter>Notes</Filter>
-    </None>
-    <None Include="Notes\Notes -- Tweaks.txt">
-      <Filter>Notes</Filter>
-    </None>
-    <None Include="Notes\Notes -- Weapons.txt">
-      <Filter>Notes</Filter>
-    </None>
-    <None Include="Notes\Notes -- Wilderness.txt">
-      <Filter>Notes</Filter>
-    </None>
-    <None Include="LIB\outline.txt">
-      <Filter>Notes</Filter>
-    </None>
-    <None Include="NOTES\rescomp.txt">
-      <Filter>Notes</Filter>
-    </None>
-    <None Include="NOTES\Source.Txt">
-      <Filter>Notes</Filter>
-    </None>
-    <None Include="Spells.txt">
-      <Filter>Notes</Filter>
-    </None>
-    <None Include="NOTES\stats.txt">
-      <Filter>Notes</Filter>
-    </None>
-    <None Include="NOTES\timing.txt">
-      <Filter>Notes</Filter>
-    </None>
-    <None Include="TODO.txt">
-      <Filter>Notes</Filter>
-    </None>
-    <None Include="wes-notes">
-      <Filter>Notes</Filter>
-    </None>
-    <None Include="LIB\program.i">
+    <None Include="..\lib\program.i">
       <Filter>Generated Files</Filter>
     </None>
-    <None Include="Lib\abilities.irh">
+    <None Include="..\lib\abilities.irh">
       <Filter>World Files</Filter>
     </None>
-    <None Include="Lib\Alchemy.Irh">
+    <None Include="..\lib\alchemy.Irh">
       <Filter>World Files</Filter>
     </None>
-    <None Include="Lib\classes.irh">
+    <None Include="..\lib\classes.irh">
       <Filter>World Files</Filter>
     </None>
-    <None Include="LIB\defines.irh">
+    <None Include="..\lib\defines.irh">
       <Filter>World Files</Filter>
     </None>
-    <None Include="LIB\domains.irh">
+    <None Include="..\lib\domains.irh">
       <Filter>World Files</Filter>
     </None>
-    <None Include="LIB\dungeon.irh">
+    <None Include="..\lib\dungeon.irh">
       <Filter>World Files</Filter>
     </None>
-    <None Include="Lib\enclist.irh">
+    <None Include="..\lib\enclist.irh">
       <Filter>World Files</Filter>
     </None>
-    <None Include="LIB\Flavors.Irh">
+    <None Include="..\lib\flavors.Irh">
       <Filter>World Files</Filter>
     </None>
-    <None Include="LIB\help.irh">
+    <None Include="..\lib\help.irh">
       <Filter>World Files</Filter>
     </None>
-    <None Include="LIB\m_items.irh">
+    <None Include="..\lib\m_items.irh">
       <Filter>World Files</Filter>
     </None>
-    <None Include="LIB\MAIN.IRC">
+    <None Include="..\lib\main.irc">
       <Filter>World Files</Filter>
     </None>
-    <None Include="LIB\mon1.irh">
+    <None Include="..\lib\mon1.irh">
       <Filter>World Files</Filter>
     </None>
-    <None Include="LIB\Mon2.Irh">
+    <None Include="..\lib\mon2.Irh">
       <Filter>World Files</Filter>
     </None>
-    <None Include="LIB\mon3.irh">
+    <None Include="..\lib\mon3.irh">
       <Filter>World Files</Filter>
     </None>
-    <None Include="LIB\mon4.irh">
+    <None Include="..\lib\mon4.irh">
       <Filter>World Files</Filter>
     </None>
-    <None Include="Lib\mundane.irh">
+    <None Include="..\lib\mundane.irh">
       <Filter>World Files</Filter>
     </None>
-    <None Include="Lib\prestige.irh">
+    <None Include="..\lib\prestige.irh">
       <Filter>World Files</Filter>
     </None>
-    <None Include="LIB\pspells.irh">
+    <None Include="..\lib\pspells.irh">
       <Filter>World Files</Filter>
     </None>
-    <None Include="Lib\races.irh">
+    <None Include="..\lib\races.irh">
       <Filter>World Files</Filter>
     </None>
-    <None Include="LIB\religion.irh">
+    <None Include="..\lib\religion.irh">
       <Filter>World Files</Filter>
     </None>
-    <None Include="Lib\sk_descs.irh">
+    <None Include="..\lib\sk_descs.irh">
       <Filter>World Files</Filter>
     </None>
-    <None Include="LIB\sp_books.irh">
+    <None Include="..\lib\sp_books.irh">
       <Filter>World Files</Filter>
     </None>
-    <None Include="Lib\subraces.irh">
+    <None Include="..\lib\subraces.irh">
       <Filter>World Files</Filter>
     </None>
-    <None Include="LIB\threats.irh">
+    <None Include="..\lib\threats.irh">
       <Filter>World Files</Filter>
     </None>
-    <None Include="LIB\Weapons.irh">
+    <None Include="..\lib\weapons.irh">
       <Filter>World Files</Filter>
     </None>
-    <None Include="LIB\wspells.irh">
+    <None Include="..\lib\wspells.irh">
       <Filter>World Files</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="lang\grammar.acc">
+    <CustomBuild Include="..\lang\grammar.acc">
       <Filter>Language Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="lang\tokens.lex">
+    <CustomBuild Include="..\lang\tokens.lex">
       <Filter>Language Files</Filter>
     </CustomBuild>
   </ItemGroup>

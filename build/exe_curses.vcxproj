@@ -62,7 +62,7 @@
       <Optimization>Disabled</Optimization>
       <PrecompiledHeaderOutputFile>$(IntDir)$(SolutionName)C.pch</PrecompiledHeaderOutputFile>
       <ProgramDataBaseFileName>$(IntDir)$(TargetName)C.pdb</ProgramDataBaseFileName>
-      <AdditionalIncludeDirectories>_dependencies\pdcurs34;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>dependencies\pdcurs34;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <TargetMachine>MachineX86</TargetMachine>
@@ -72,7 +72,7 @@
       <AdditionalDependencies>pdcurses.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
-      <AdditionalLibraryDirectories>_dependencies\pdcurs34\win32</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>dependencies\pdcurs34\win32</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -83,7 +83,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <PrecompiledHeaderOutputFile>$(IntDir)$(SolutionName)C.pch</PrecompiledHeaderOutputFile>
       <ProgramDataBaseFileName>$(IntDir)$(TargetName)C.pdb</ProgramDataBaseFileName>
-      <AdditionalIncludeDirectories>_dependencies\pdcurs34;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>dependencies\pdcurs34;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <TargetMachine>MachineX86</TargetMachine>
@@ -95,7 +95,7 @@
       <AdditionalDependencies>pdcurses.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
-      <AdditionalLibraryDirectories>_dependencies\pdcurs34\win32</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>dependencies\pdcurs34\win32</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -109,7 +109,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Wcurses.cpp" />
+    <ClCompile Include="..\src\Wcurses.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

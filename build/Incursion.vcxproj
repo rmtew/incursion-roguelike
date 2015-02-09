@@ -65,7 +65,7 @@
     <ClCompile>
       <Optimization>Full</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_UNICODE;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -116,7 +116,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_UNICODE;_DEBUG;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -155,7 +155,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="SRC\Annot.cpp">
+    <ClCompile Include="..\src\Annot.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -163,7 +163,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="SRC\art.cpp">
+    <ClCompile Include="..\src\art.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -171,7 +171,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="SRC\BASE.CPP">
+    <ClCompile Include="..\src\BASE.CPP">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -179,7 +179,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="SRC\CREATE.CPP">
+    <ClCompile Include="..\src\CREATE.CPP">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -187,7 +187,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="SRC\CREATURE.CPP">
+    <ClCompile Include="..\src\CREATURE.CPP">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -195,7 +195,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="SRC\DEBUG.CPP">
+    <ClCompile Include="..\src\DEBUG.CPP">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -203,7 +203,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="SRC\DISPLAY.CPP">
+    <ClCompile Include="..\src\DISPLAY.CPP">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -211,7 +211,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="SRC\Djikstra.cpp">
+    <ClCompile Include="..\src\Djikstra.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -219,7 +219,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="SRC\Effects.cpp">
+    <ClCompile Include="..\src\Effects.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -227,8 +227,8 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="Src\Encounter.cpp" />
-    <ClCompile Include="SRC\EVENT.CPP">
+    <ClCompile Include="..\src\Encounter.cpp" />
+    <ClCompile Include="..\src\EVENT.CPP">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -236,7 +236,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="SRC\feattab.cpp">
+    <ClCompile Include="..\src\feattab.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -244,7 +244,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="SRC\feature.cpp">
+    <ClCompile Include="..\src\feature.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -252,7 +252,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="SRC\FIGHT.CPP">
+    <ClCompile Include="..\src\FIGHT.CPP">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -260,7 +260,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="SRC\help.cpp">
+    <ClCompile Include="..\src\help.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -268,7 +268,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="SRC\INV.CPP">
+    <ClCompile Include="..\src\INV.CPP">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -276,7 +276,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="SRC\ITEM.CPP">
+    <ClCompile Include="..\src\ITEM.CPP">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -284,8 +284,8 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="src\lz.c" />
-    <ClCompile Include="SRC\MAGIC.CPP">
+    <ClCompile Include="..\src\lz.c" />
+    <ClCompile Include="..\src\MAGIC.CPP">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -293,7 +293,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="SRC\MAIN.CPP">
+    <ClCompile Include="..\src\MAIN.CPP">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -301,7 +301,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="SRC\MAKELEV.CPP">
+    <ClCompile Include="..\src\MAKELEV.CPP">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -309,8 +309,8 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="Src\Managers.cpp" />
-    <ClCompile Include="SRC\MESSAGE.CPP">
+    <ClCompile Include="..\src\Managers.cpp" />
+    <ClCompile Include="..\src\MESSAGE.CPP">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -318,7 +318,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="SRC\MONSTER.CPP">
+    <ClCompile Include="..\src\MONSTER.CPP">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -326,7 +326,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="SRC\MOVE.CPP">
+    <ClCompile Include="..\src\MOVE.CPP">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -334,7 +334,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="SRC\PLAYER.CPP">
+    <ClCompile Include="..\src\PLAYER.CPP">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -342,8 +342,8 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="Src\Prayer.cpp" />
-    <ClCompile Include="SRC\RComp.cpp">
+    <ClCompile Include="..\src\Prayer.cpp" />
+    <ClCompile Include="..\src\RComp.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -351,7 +351,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="SRC\Registry.cpp">
+    <ClCompile Include="..\src\Registry.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -359,7 +359,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="SRC\RES.CPP">
+    <ClCompile Include="..\src\RES.CPP">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -367,9 +367,9 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="src\rle.c" />
-    <ClCompile Include="Src\Sheet.cpp" />
-    <ClCompile Include="SRC\SKILLS.CPP">
+    <ClCompile Include="..\src\rle.c" />
+    <ClCompile Include="..\src\Sheet.cpp" />
+    <ClCompile Include="..\src\SKILLS.CPP">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -377,8 +377,8 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="Src\Social.cpp" />
-    <ClCompile Include="SRC\Status.cpp">
+    <ClCompile Include="..\src\Social.cpp" />
+    <ClCompile Include="..\src\Status.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -386,7 +386,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="SRC\TABLES.CPP">
+    <ClCompile Include="..\src\TABLES.CPP">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -394,7 +394,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="SRC\target.cpp">
+    <ClCompile Include="..\src\target.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -402,7 +402,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="SRC\TERM.CPP">
+    <ClCompile Include="..\src\TERM.CPP">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -410,8 +410,8 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="Src\TextTerm.cpp" />
-    <ClCompile Include="SRC\Values.cpp">
+    <ClCompile Include="..\src\TextTerm.cpp" />
+    <ClCompile Include="..\src\Values.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -419,7 +419,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="SRC\VISION.CPP">
+    <ClCompile Include="..\src\VISION.CPP">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -427,7 +427,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="SRC\VMachine.cpp">
+    <ClCompile Include="..\src\VMachine.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -435,13 +435,13 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="src\cpp1.c" />
-    <ClCompile Include="src\cpp2.c" />
-    <ClCompile Include="src\cpp3.c" />
-    <ClCompile Include="src\cpp4.c" />
-    <ClCompile Include="src\cpp5.c" />
-    <ClCompile Include="src\cpp6.c" />
-    <ClCompile Include="SRC\tokens.cpp">
+    <ClCompile Include="..\src\cpp1.c" />
+    <ClCompile Include="..\src\cpp2.c" />
+    <ClCompile Include="..\src\cpp3.c" />
+    <ClCompile Include="..\src\cpp4.c" />
+    <ClCompile Include="..\src\cpp5.c" />
+    <ClCompile Include="..\src\cpp6.c" />
+    <ClCompile Include="..\src\tokens.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -449,7 +449,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">MaxSpeed</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <ClCompile Include="SRC\yygram.cpp">
+    <ClCompile Include="..\src\yygram.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">EnableFastChecks</BasicRuntimeChecks>
@@ -459,113 +459,74 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="INC\api.h">
+    <ClInclude Include="..\inc\api.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="INC\BASE.H" />
-    <ClInclude Include="inc\ConstNam.h" />
-    <ClInclude Include="INC\CREATURE.H" />
-    <ClInclude Include="INC\DEFINES.H" />
-    <ClInclude Include="INC\EVENTS.H" />
-    <ClInclude Include="INC\FEATURE.H" />
-    <ClInclude Include="INC\Globals.h" />
-    <ClInclude Include="INC\incursion.h" />
-    <ClInclude Include="INC\Inline.h" />
-    <ClInclude Include="INC\ITEM.H" />
-    <ClInclude Include="inc\lz.h" />
-    <ClInclude Include="INC\MAGIC.H" />
-    <ClInclude Include="INC\map.h" />
-    <ClInclude Include="INC\rcomp.h" />
-    <ClInclude Include="INC\RES.H" />
-    <ClInclude Include="inc\rle.h" />
-    <ClInclude Include="Inc\target.h" />
-    <ClInclude Include="INC\TERM.H" />
-    <ClInclude Include="LIB\dispatch.h" />
+    <ClInclude Include="..\inc\BASE.H" />
+    <ClInclude Include="..\inc\ConstNam.h" />
+    <ClInclude Include="..\inc\CREATURE.H" />
+    <ClInclude Include="..\inc\DEFINES.H" />
+    <ClInclude Include="..\inc\EVENTS.H" />
+    <ClInclude Include="..\inc\FEATURE.H" />
+    <ClInclude Include="..\inc\Globals.h" />
+    <ClInclude Include="..\inc\incursion.h" />
+    <ClInclude Include="..\inc\Inline.h" />
+    <ClInclude Include="..\inc\ITEM.H" />
+    <ClInclude Include="..\inc\lz.h" />
+    <ClInclude Include="..\inc\MAGIC.H" />
+    <ClInclude Include="..\inc\map.h" />
+    <ClInclude Include="..\inc\rcomp.h" />
+    <ClInclude Include="..\inc\RES.H" />
+    <ClInclude Include="..\inc\rle.h" />
+    <ClInclude Include="..\inc\target.h" />
+    <ClInclude Include="..\inc\TERM.H" />
+    <ClInclude Include="..\lib\dispatch.h" />
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="lang\grammar.acc">
+    <CustomBuild Include="..\lang\grammar.acc">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">cd $(ProjectDir)
-modaccent_d %(Identity) src inc
-rem move /Y yygram.cpp $(ProjectDir)\src\
-rem move /Y yygram.h $(ProjectDir)\inc\
+modaccent_d %(Identity) ..\src ..\inc
 </Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">src\yygram.cpp;inc\yygram.h;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\src\yygram.cpp;..\inc\yygram.h;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">cd $(ProjectDir)
-modaccent %(Identity) src inc
-rem move /Y yygram.cpp $(ProjectDir)\src\
-rem move /Y yygram.h $(ProjectDir)\inc\
+modaccent %(Identity) ..\src ..\inc
 </Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">src\yygram.cpp;src\yygram.h;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\src\yygram.cpp;..\src\yygram.h;%(Outputs)</Outputs>
     </CustomBuild>
-    <CustomBuild Include="lang\tokens.lex">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">FLEX --wincompat -B -i -o.\SRC\tokens.cpp .\lang\Tokens.Lex</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\SRC\tokens.cpp;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">FLEX --wincompat -B -i -o.\SRC\tokens.cpp .\lang\Tokens.Lex</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\SRC\tokens.cpp;%(Outputs)</Outputs>
+    <CustomBuild Include="..\lang\tokens.lex">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">FLEX --wincompat -B -i -o..\src\tokens.cpp ..\lang\Tokens.Lex</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\src\tokens.cpp;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">FLEX --wincompat -B -i -o..\src\tokens.cpp ..\lang\Tokens.Lex</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\src\tokens.cpp;%(Outputs)</Outputs>
     </CustomBuild>
-    <None Include="ChangeLog.txt" />
-    <None Include="EncStats.txt" />
-    <None Include="NOTES\FEATS.TXT" />
-    <None Include="NOTES\help.txt" />
-    <None Include="makedist.bat" />
-    <None Include="NOTES\Manual.txt" />
-    <None Include="Notes\Notes -- CharGen.txt" />
-    <None Include="Notes\Notes -- Dungeon.txt" />
-    <None Include="Notes\Notes -- Encounters.txt" />
-    <None Include="Notes\notes -- Exercise.txt" />
-    <None Include="Notes\Notes -- Feats.txt" />
-    <None Include="Notes\Notes -- IncursionScript.txt" />
-    <None Include="Notes\Notes -- Items.txt" />
-    <None Include="Notes\Notes -- Mon AI.txt" />
-    <None Include="Notes\Notes -- Monsters.txt" />
-    <None Include="Notes\Notes -- Newest.txt" />
-    <None Include="Notes\Notes -- Prayer &amp; Gods.txt" />
-    <None Include="Notes\Notes -- Psi.txt" />
-    <None Include="Notes\Notes -- Quests.txt" />
-    <None Include="Notes\Notes -- Revision.txt" />
-    <None Include="Notes\Notes -- Rods.txt" />
-    <None Include="Notes\Notes -- Skills.txt" />
-    <None Include="Notes\Notes -- Spells.txt" />
-    <None Include="Notes\Notes -- Subclasses.txt" />
-    <None Include="Notes\Notes -- TownGen.txt" />
-    <None Include="Notes\Notes -- Tweaks.txt" />
-    <None Include="Notes\Notes -- Weapons.txt" />
-    <None Include="Notes\Notes -- Wilderness.txt" />
-    <None Include="LIB\outline.txt" />
-    <None Include="NOTES\rescomp.txt" />
-    <None Include="NOTES\Source.Txt" />
-    <None Include="Spells.txt" />
-    <None Include="NOTES\stats.txt" />
-    <None Include="NOTES\timing.txt" />
-    <None Include="TODO.txt" />
-    <None Include="wes-notes" />
-    <None Include="LIB\program.i" />
-    <None Include="Lib\abilities.irh" />
-    <None Include="Lib\Alchemy.Irh" />
-    <None Include="Lib\classes.irh" />
-    <None Include="LIB\defines.irh" />
-    <None Include="LIB\domains.irh" />
-    <None Include="LIB\dungeon.irh" />
-    <None Include="Lib\enclist.irh" />
-    <None Include="LIB\Flavors.Irh" />
-    <None Include="LIB\help.irh" />
-    <None Include="LIB\m_items.irh" />
-    <None Include="LIB\MAIN.IRC" />
-    <None Include="LIB\mon1.irh" />
-    <None Include="LIB\Mon2.Irh" />
-    <None Include="LIB\mon3.irh" />
-    <None Include="LIB\mon4.irh" />
-    <None Include="Lib\mundane.irh" />
-    <None Include="Lib\prestige.irh" />
-    <None Include="LIB\pspells.irh" />
-    <None Include="Lib\races.irh" />
-    <None Include="LIB\religion.irh" />
-    <None Include="Lib\sk_descs.irh" />
-    <None Include="LIB\sp_books.irh" />
-    <None Include="Lib\subraces.irh" />
-    <None Include="LIB\threats.irh" />
-    <None Include="LIB\Weapons.irh" />
-    <None Include="LIB\wspells.irh" />
+    <None Include="..\ChangeLog.txt" />
+    <None Include="..\lib\program.i" />
+    <None Include="..\lib\abilities.irh" />
+    <None Include="..\lib\alchemy.Irh" />
+    <None Include="..\lib\classes.irh" />
+    <None Include="..\lib\defines.irh" />
+    <None Include="..\lib\domains.irh" />
+    <None Include="..\lib\dungeon.irh" />
+    <None Include="..\lib\enclist.irh" />
+    <None Include="..\lib\flavors.Irh" />
+    <None Include="..\lib\help.irh" />
+    <None Include="..\lib\m_items.irh" />
+    <None Include="..\lib\main.irc" />
+    <None Include="..\lib\mon1.irh" />
+    <None Include="..\lib\mon2.Irh" />
+    <None Include="..\lib\mon3.irh" />
+    <None Include="..\lib\mon4.irh" />
+    <None Include="..\lib\mundane.irh" />
+    <None Include="..\lib\prestige.irh" />
+    <None Include="..\lib\pspells.irh" />
+    <None Include="..\lib\races.irh" />
+    <None Include="..\lib\religion.irh" />
+    <None Include="..\lib\sk_descs.irh" />
+    <None Include="..\lib\sp_books.irh" />
+    <None Include="..\lib\subraces.irh" />
+    <None Include="..\lib\threats.irh" />
+    <None Include="..\lib\weapons.irh" />
+    <None Include="..\lib\wspells.irh" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
