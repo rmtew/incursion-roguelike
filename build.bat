@@ -2,10 +2,19 @@
 @echo off
 setlocal EnableDelayedExpansion
 
-REM TODO: The version control archived zip.  How well does it work?  Should I even bother to support it?
-REM TODO:       What if someone installs hg after downloading and using the snapshot?
-REM TODO: Incorporate make-release.bat -> build\release\...
-REM TODO: Add arguments to this script, to allow skipping the pre-steps.
+REM TODO: INCURSION USER
+REM TODO: - Collect the include files and put them in dependencies\include\...
+REM TODO: FETCH
+REM TODO: - The top level prepared dependencies should be bundled for release, as a quick cheat pack.
+REM TODO: -- If installed, then 
+REM TODO: PREPARE
+REM TODO: - The version control archived zip.  How well does it work?  Should I even bother to support it?
+REM TODO: -- What if someone installs hg after downloading and using the snapshot?
+REM TODO: GENERAL
+REM TODO: - Incorporate make-release.bat -> build\release\...
+REM TODO: - Add arguments to this script, to allow skipping the pre-steps.
+REM TODO: - Try and remove the extra directories top level that are only there to make Incursion run.
+REM TODO: -- Debugging Incursion should create a build\run\...
 
 REM Divert to the internal setup code, it will return to the user setup.
 goto internal_function_setup
@@ -13,17 +22,29 @@ goto internal_function_setup
 REM --- FUNCTION: user_function_setup ----------------------------------------
 :user_function_setup
 
-REM __ URL entries are expanded to [http <url> ... some other shit
+REM This function is provided for the user to define what resources this script should
+REM fetch and help prepare.  How they are actually prepared, the user specifies by
+REM adding support below in 'user_function_prepare_dependency'.
+REM
+REM __ LINKS entries are either URLs to ZIP archives, or a collection of version control (vcs) information.
+REM      LINKS[n]=<url to zip>
+REM      LINKS[n]=vcs <vcs-system> <name> <revision-id> <repo-path> <snapshot-url>
+REM        <revision-id>: This can be a URL, or it can be a filesystem path to an existing local clone.
+
 set LINKS[0]=http://jaist.dl.sf.net/pub/sourceforge/w/wi/winflexbison/win_flex_bison-latest.zip
-REM set LINKS[1]=vcs hg SDL2 704a0bfecf75 http://hg.libsdl.org/SDL http://hg.libsdl.org/SDL/archive/
 set LINKS[1]=vcs hg SDL2 704a0bfecf75 C:\RMT\VCS\HG\libraries\SDL http://hg.libsdl.org/SDL/archive/
-REM set LINKS[2]=vcs hg libtcod 7a8b072365b5 https://bitbucket.org/jice/libtcod https://bitbucket.org/jice/libtcod/get/
 set LINKS[2]=vcs hg libtcod 7a8b072365b5 C:\RMT\VCS\HG\libraries\libtcod https://bitbucket.org/jice/libtcod/get/
 set LINKS[3]=http://jaist.dl.sf.net/pub/sourceforge/p/pd/pdcurses/pdcurses/3.4/pdcurs34.zip
 
-REM __ HASHES entries are the MD5 checksum for the download in the matching LINKS position
-set HASHES[0]=BB-C5-10-F0-91-34-2F-CF-5B-A7-A2-BC-A3-97-FD-A1
-set HASHES[3]=D6-3A-85-FD-5D-E9-60-11-71-02-87-4C-AB-5A-EB-90
+REM set LINKS[1]=vcs hg SDL2 704a0bfecf75 http://hg.libsdl.org/SDL http://hg.libsdl.org/SDL/archive/
+REM set LINKS[2]=vcs hg libtcod 7a8b072365b5 https://bitbucket.org/jice/libtcod https://bitbucket.org/jice/libtcod/get/
+
+REM __ MD5CHECKSUMS entries are the MD5 checksum for the download in the matching LINKS position
+REM      To get the checksum for a newly added download to add to an entry here, simply run the script and when
+REM      the download is processed, the calculated checksum will be printed and noted as unchecked.
+
+set MD5CHECKSUMS[0]=BB-C5-10-F0-91-34-2F-CF-5B-A7-A2-BC-A3-97-FD-A1
+set MD5CHECKSUMS[3]=D6-3A-85-FD-5D-E9-60-11-71-02-87-4C-AB-5A-EB-90
 
 REM Process the user data, calling event functions when applicable.
 goto internal_function_main
@@ -377,75 +398,93 @@ if "!V_LINK_PARTS[0]!" EQU "vcs" (
     )
 )
 
-if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
-    if not exist "!V_LINK_PARTS[%HTTP_NAME%]!" (
-        echo Downloading: [!V_LINK_PARTS[%HTTP_NAME%]!] 
-        powershell -c "Start-BitsTransfer -source !V_LINK_PARTS[%HTTP_URL%]!"
-        
-        if not exist !V_LINK_PARTS[%HTTP_FILENAME%]! (
-            echo Failed to download !V_LINK_PARTS[%HTTP_FILENAME%]!
-            goto internal_function_exit
-        )
+REM Skip logic to keep script flat, as not possible to have label inside if statement block.
+if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" NEQ "http" goto exit_from_internal_function_fetch_dependency
 
-        REM Environment variables for powershell script.
-        set fn=MD5-Checksum
-        set fnp0=!V_LINK_PARTS[%HTTP_FILENAME%]!
-        set fnp1=discard
+set /A L_ATTEMPTS=0
+:internal_function_fetch_dependency_retry
 
-        REM Iterate over the lines of output.
-        for /F "usebackq tokens=*" %%i in (`more "%BUILD_PATH%%BUILD_SCRIPT_FILENAME%" ^| powershell -c -`) do (
-            set L_LINE=%%i
-            if "!L_LINE:~0,4!" EQU "MSG:" (
-                if "!HASHES[%V_IDX_FD%]!" EQU "!L_LINE:~5!" (
-                    echo .. MD5 checksum passed
-                    echo .. MD5 checksum unknown, calculated as: !L_LINE:~5!
-                ) else if "!HASHES[%V_IDX_FD%]!" EQU "" (
-                    echo .. MD5 checksum unknown, calculated as: !L_LINE:~5!
-                ) else (
-                    echo .. MD5 checksum FAILED
-                    echo .. Expected value:    !HASHES[%V_IDX_FD%]!
-                    echo .. Encountered value: !L_LINE:~5!
-                    goto internal_function_exit
-                )
-            ) else (
-                echo Unexpected result: !L_LINE!
-            )
-        )
-    ) else (
-        echo Downloading: [!V_LINK_PARTS[%HTTP_NAME%]!] .. skipped
-        REM Environment variables for powershell script.
-        set fn=MD5-Checksum
-        set fnp0=!V_LINK_PARTS[%HTTP_FILENAME%]!
-        set fnp1=discard
+if not exist "!V_LINK_PARTS[%HTTP_NAME%]!" (
+    echo Downloading: [!V_LINK_PARTS[%HTTP_NAME%]!] 
+    echo powershell -c "Start-BitsTransfer -source !V_LINK_PARTS[%HTTP_URL%]!"
+    
+    if not exist !V_LINK_PARTS[%HTTP_FILENAME%]! (
+        echo Failed to download !V_LINK_PARTS[%HTTP_FILENAME%]!
+        goto internal_function_exit
+    )
+) else (
+    echo Downloading: [!V_LINK_PARTS[%HTTP_NAME%]!] .. skipped
+)
+set /A L_ATTEMPTS=!L_ATTEMPTS!+1
 
-        REM Iterate over the lines of output.
-        for /F "usebackq tokens=*" %%i in (`more "%BUILD_PATH%%BUILD_SCRIPT_FILENAME%" ^| powershell -c -`) do (
-            set L_LINE=%%i
-            if "!L_LINE:~0,4!" EQU "MSG:" (
-                if "!HASHES[%V_IDX_FD%]!" EQU "!L_LINE:~5!" (
-                    echo .. MD5 checksum [!L_LINE:~5!] correct
-                ) else if "!HASHES[%V_IDX_FD%]!" EQU "" (
-                    echo .. MD5 checksum [!L_LINE:~5!] unknown
-                ) else (
-                    echo .. MD5 checksum [!L_LINE:~5!] incorrect
-                    echo .. Expected: !HASHES[%V_IDX_FD%]!
-                    goto internal_function_exit
-                )
-            ) else (
-                echo Unexpected result: !L_LINE!
-            )
+set V_LABEL_RETURN=return_to_internal_function_fetch_dependency1
+goto internal_function_checksum
+:return_to_internal_function_fetch_dependency1
+
+if "!V_PASSED!" EQU "yes" (
+    echo .. MD5 checksum [!V_CHECKSUM!] correct
+) else if "!V_PASSED!" EQU "no" (
+    echo .. MD5 checksum [!V_CHECKSUM!] incorrect
+    echo .. Expected: [!MD5CHECKSUMS[%V_IDX_FD%]!]
+
+    if !L_ATTEMPTS! EQU 1 (
+        set /p L_RESULT="Attempt to re-download the file [Y/n]?"
+        if /I "!L_RESULT!" NEQ "n" (
+            echo del !V_LINK_PARTS[%HTTP_FILENAME%]!
+            goto internal_function_fetch_dependency_retry
         )
     )
+    
+    echo ERROR: Failed to obtain valid copy of [!V_LINK_PARTS[%HTTP_FILENAME%]!]
+    goto internal_function_exit
+) else (
+    echo .. MD5 checksum [!V_CHECKSUM!] unknown
 )
 
 :exit_from_internal_function_fetch_dependency
 goto !V_LABEL_RETURN_iffd!
 
+REM --- FUNCTION: internal_function_checksum ---------------------------------
+
+:internal_function_checksum
+REM input argument:  V_LINK_PARTS   - The array of elements relating to the link in question.
+REM input argument:  V_LABEL_RETURN - The name of the label to return to when finished.
+REM output argument: V_CHECKSUM     - The calculated checksum for the given file.
+REM output argument: V_PASSED       - If there is one to match, "yes" for correct and "no" for incorrect.
+REM                                   If there is not one to match, "".
+set V_LABEL_RETURN_ifc=!V_LABEL_RETURN!
+
+set fn=MD5-Checksum
+set fnp0=!V_LINK_PARTS[%HTTP_FILENAME%]!
+set fnp1=discard
+
+set V_PASSED=
+
+REM Iterate over the lines of output.
+for /F "usebackq tokens=*" %%i in (`more "%BUILD_PATH%%BUILD_SCRIPT_FILENAME%" ^| powershell -c -`) do (
+    set L_LINE=%%i
+    if "!L_LINE:~0,4!" EQU "MSG:" (
+        set V_CHECKSUM=!L_LINE:~5!
+        set L_CHECKSUM=!MD5CHECKSUMS[%V_IDX_FD%]!
+        if "!L_CHECKSUM!" NEQ "" (
+            if "!L_CHECKSUM!" EQU "!V_CHECKSUM!" (
+                set V_PASSED=yes
+            ) else (
+                set V_PASSED=no
+            )
+        )
+    ) else (
+        echo Unexpected result in checksum function: !L_LINE!
+        goto internal_function_exit
+    )
+)
+
+:exit_from_internal_function_checksum
+goto !V_LABEL_RETURN_ifc!
+
 REM --- FUNCTION: internal_function_verify_link ------------------------------
 
 :internal_function_verify_link
-REM is this function re-entrant? No.
-REM
 REM input argument:  V_LINK         - The link text to verify.
 REM input argument:  V_LABEL_RETURN - The name of the label to return to when finished.
 REM output argument: V_LINK_PARTS   - The array of elements that make up the given link text.
@@ -468,7 +507,6 @@ echo Invalid link: %V_LINK%
 goto internal_function_exit
 
 :internal_function_verify_link__valid
-
 goto !V_LABEL_RETURN_ifvl!
 
 REM --- FUNCTION: internal_function_split_link -------------------------------
