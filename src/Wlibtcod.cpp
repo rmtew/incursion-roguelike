@@ -982,6 +982,7 @@ void libtcodTerm::Title() {
 
     // Draw the intro screen header.
     TextTerm::Title();
+/*
     if (first_time == false) {
         int16 body_y = WinSizeY()/4-1;
         first_time = true;
@@ -1013,6 +1014,7 @@ void libtcodTerm::Title() {
         // Clear the footer area.
         Clear();
     }
+    */
 }
 
 /*****************************************************************************\

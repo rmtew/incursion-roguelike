@@ -1,37 +1,11 @@
 <# : 
 @echo off
 setlocal EnableDelayedExpansion
- 
-REM TODO: Executing this script with no arguments should do some evaluation and display a status and short help information.
-REM TODO: potential argument <upto> - If present with a stage name, will do all stages leading up to that stage name.
-REM TODO: potential argument <bootstrap|bs> - Fetch project source code if not already present with this script.
-REM TODO: potential argument <fetch-dependencies|fd> - Fetch dependencies if not already done.
-REM TODO: potential argument <prepare-dependencies|pd> - Extract and generally prepare fetched dependencies if not already done.
-REM TODO: potential argument <all|a> - Attempt to build this project's source code.
-REM TODO: potential argument <run|r> - Attempt to run this projects's source code.
 
-REM Note: If a BAT script calls something else, which modifies environment variables
-REM       then when that something else exits, the BAT script will still have the
-REM       same variables it already had - as it gets them at startup and by direct
-REM       execution.
-
-REM These variables are used to index the LINKS array entries.
-REM
-REM               0    1     2      3          4          5
-REM HTTP link:   HTTP <url> <NAME> <FILENAME>
-REM VCS link:    VCS  <hg>  <NAME> <REVISION> <CLONEURL> <ZIPDLURL>
-REM ............ Attempt 1: Identify presence of hg.exe or git.exe, and clone or pull <CLONEURL> <REVISION>
-REM ............ Attempt 2: Download <ZIPDLURL><REVISION>.zip as a normal link.
-
-set LINK_CLASSIFIER=0
-set HTTP_URL=1
-set HTTP_NAME=2
-set HTTP_FILENAME=3
-set VCS_SYSTEM=1
-set VCS_NAME=2
-set VCS_REVISION=3
-set VCS_CLONEURL=4
-set VCS_ZIPDLURL=5
+REM TODO: The version control archived zip.  How well does it work?  Should I even bother to support it?
+REM TODO:       What if someone installs hg after downloading and using the snapshot?
+REM TODO: Incorporate make-release.bat -> build\release\...
+REM TODO: Add arguments to this script, to allow skipping the pre-steps.
 
 REM Divert to the internal setup code, it will return to the user setup.
 goto internal_function_setup
@@ -39,11 +13,17 @@ goto internal_function_setup
 REM --- FUNCTION: user_function_setup ----------------------------------------
 :user_function_setup
 
+REM __ URL entries are expanded to [http <url> ... some other shit
 set LINKS[0]=http://jaist.dl.sf.net/pub/sourceforge/w/wi/winflexbison/win_flex_bison-latest.zip
 REM set LINKS[1]=vcs hg SDL2 704a0bfecf75 http://hg.libsdl.org/SDL http://hg.libsdl.org/SDL/archive/
 set LINKS[1]=vcs hg SDL2 704a0bfecf75 C:\RMT\VCS\HG\libraries\SDL http://hg.libsdl.org/SDL/archive/
 REM set LINKS[2]=vcs hg libtcod 7a8b072365b5 https://bitbucket.org/jice/libtcod https://bitbucket.org/jice/libtcod/get/
 set LINKS[2]=vcs hg libtcod 7a8b072365b5 C:\RMT\VCS\HG\libraries\libtcod https://bitbucket.org/jice/libtcod/get/
+set LINKS[3]=http://jaist.dl.sf.net/pub/sourceforge/p/pd/pdcurses/pdcurses/3.4/pdcurs34.zip
+
+REM __ HASHES entries are the MD5 checksum for the download in the matching LINKS position
+set HASHES[0]=BB-C5-10-F0-91-34-2F-CF-5B-A7-A2-BC-A3-97-FD-A1
+set HASHES[3]=D6-3A-85-FD-5D-E9-60-11-71-02-87-4C-AB-5A-EB-90
 
 REM Process the user data, calling event functions when applicable.
 goto internal_function_main
@@ -62,18 +42,42 @@ if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
     if "!V_LINK_PARTS[%HTTP_FILENAME%]!" EQU "win_flex_bison-latest.zip" (
         REM Extract the pre-built executable and put in the right location.
         if "%V_SKIPPED%" equ "no" (
-            if exist "%BUILD_PATH%flex.exe" del %BUILD_PATH%flex.exe        
+            if exist flex.exe del flex.exe        
         )
-        if not exist "%BUILD_PATH%flex.exe" (
-            cd !V_DIRNAME!
-            copy win_flex.exe %BUILD_PATH%flex.exe
+        if not exist flex.exe (
+            copy !V_DIRNAME!\win_flex.exe .\flex.exe
         )
+    ) else if "!V_LINK_PARTS[%HTTP_FILENAME%]!" EQU "pdcurs34.zip" (
+        cd !V_DIRNAME!\win32\
+        
+        if not exist !DEPENDENCY_PATH!\pdcurses_d.lib (
+            echo Building: [pdcurses/Debug]
+            nmake -f vcwin32.mak clean
+            nmake -f vcwin32.mak DEBUG=1 WIDE=1 DLLOPT=/MTd pdcurses.lib
+            copy pdcurses.lib !DEPENDENCY_PATH!\pdcurses_d.lib
+        ) else (
+            echo Building: [pdcurses/Debug] .. skipped
+        )
+
+        if not exist !DEPENDENCY_PATH!\pdcurses.lib (
+            echo Building: [pdcurses/Release]
+            nmake -f vcwin32.mak clean
+            nmake -f vcwin32.mak WIDE=1 DLLOPT=/MT pdcurses.lib
+            copy pdcurses.lib !DEPENDENCY_PATH!\pdcurses.lib
+        ) else (
+            echo Building: [pdcurses/Release] .. skipped
+        )
+
+        cd !DEPENDENCY_PATH!
     ) else (
         echo ERROR.. !V_LINK_PARTS[%HTTP_FILENAME%]! not handled by user who wrote the build amendments.
     )
 ) else if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "vcs" (
     set L_VCS_NAME=!V_LINK_PARTS[%VCS_NAME%]!
     if "!L_VCS_NAME!" EQU "SDL2" (
+        REM Used by the libtcod build process.
+        set SDL2PATH=!DEPENDENCY_PATH!\!V_DIRNAME!
+
         cd !V_DIRNAME!
 
         if not exist !DEPENDENCY_PATH!\SDL2_d.dll (
@@ -84,7 +88,7 @@ if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
             copy VisualC\SDL\Win32\Debug\SDL2.lib !DEPENDENCY_PATH!\SDL2_d.lib
             copy VisualC\SDL\Win32\Debug\SDL2.pdb !DEPENDENCY_PATH!\SDL2_d.pdb
         ) else (
-            echo Building: [SDL2/Debug] .. SKIPPED
+            echo Building: [SDL2/Debug] .. skipped
         )
 
         if not exist !DEPENDENCY_PATH!\SDL2.dll (
@@ -95,22 +99,34 @@ if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
             copy VisualC\SDL\Win32\Release\SDL2.lib !DEPENDENCY_PATH!\SDL2.lib
             copy VisualC\SDL\Win32\Release\SDL2.pdb !DEPENDENCY_PATH!\SDL2.pdb
         ) else (
-            echo Building: [SDL2/Release] .. SKIPPED
+            echo Building: [SDL2/Release] .. skipped
         )
     ) else if "!L_VCS_NAME!" EQU "libtcod" (
-        cd !V_DIRNAME!
+        set BASEPATH=!DEPENDENCY_PATH!\!V_DIRNAME!
+        set BASEOBJPATH=!DEPENDENCY_PATH!\!V_DIRNAME!\build
+        if not exist !BASEOBJPATH! mkdir !BASEOBJPATH!
 
-REM  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\RMT\VCS\GIT\Roguelike\incursion-roguelike\_dependencies\libtcod\makefiles\\..\src\png" /I"C:\RMT\VCS\GIT\Roguelike\incursion-roguelike\_dependencies\libtcod\makefiles\\..\src\zlib" /I"C:\RMT\VCS\GIT\Roguelike\incursion-roguelike\_dependencies\libtcod\makefiles\\..\include" /I"$SolutionDir)\..\..\..\sdl2\include" /ZI /nologo /W3 /WX- /Od /Oy- /D TCOD_SDL2 /D NO_OPENGL /D LIBTCOD_EXPORTS /D _WINDLL /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TC /analyze- /errorReport:queue ..\src\bresenham_c.c ..\src\bsp_c.c ..\src\color_c.c ..\src\console_c.c ..\src\fov_c.c ..\src\fov_circular_raycasting.c ..\src\fov_diamond_raycasting.c ..\src\fov_permissive2.c ..\src\fov_recursive_shadowcasting.c ..\src\fov_restrictive.c ..\src\heightmap_c.c ..\src\image_c.c ..\src\lex_c.c ..\src\list_c.c ..\src\mersenne_c.c ..\src\namegen_c.c ..\src\noise_c.c ..\src\parser_c.c ..\src\path_c.c ..\src\sys_c.c ..\src\sys_opengl_c.c ..\src\sys_sdl2_c.c ..\src\sys_sdl_c.c ..\src\sys_sdl_img_bmp.c ..\src\sys_sdl_img_png.c ..\src\tree_c.c ..\src\txtfield_c.c ..\src\zip_c.c
+        if not exist !DEPENDENCY_PATH!\libtcod_d.dll (
+            echo Building: [libtcod/Debug]
+            set CONFIG=Debug
+            nmake /nologo -f ..\makefile-libtcod
+            copy !BASEOBJPATH!\!CONFIG!\libtcod.lib libtcod_d.lib
+            copy !BASEOBJPATH!\!CONFIG!\libtcod.dll libtcod_d.dll
+            copy !BASEOBJPATH!\!CONFIG!\libtcod.pdb libtcod_d.pdb
+        ) else (
+            echo Building: [libtcod/Debug] .. skipped
+        )
 
-REM   C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:QUEUE /OUT:"C:\RMT\VCS\GIT\Roguelike\incursion-roguelike\_dependencies\libtcod\makefiles\Debug\libtcod.dll" /NOLOGO /LIBPATH:"C:\RMT\VCS\GIT\Roguelike\incursion-roguelike\_dependencies\libtcod\makefiles\Debug\\" /LIBPATH:"C:\RMT\VCS\GIT\Roguelike\incursion-roguelike\_dependencies\libtcod\makefiles\..\..\sdl2\VisualC\SDL\Debug" libz.lib png.lib sdl2.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /NODEFAULTLIB:libcmtd /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\RMT\VCS\GIT\Roguelike\incursion-roguelike\_dependencies\libtcod\makefiles\Debug\libtcod.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\RMT\VCS\GIT\Roguelike\incursion-roguelike\_dependencies\libtcod\makefiles\Debug\libtcod.lib" /MACHINE:X86 /SAFESEH /DLL Debug\bresenham_c.obj
-
-REM  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TC /analyze- /errorReport:queue ..\src\zlib\adler32.c ..\src\zlib\compress.c ..\src\zlib\crc32.c ..\src\zlib\deflate.c ..\src\zlib\gzclose.c ..\src\zlib\gzlib.c ..\src\zlib\gzread.c ..\src\zlib\gzwrite.c ..\src\zlib\infback.c ..\src\zlib\inffast.c ..\src\zlib\inflate.c ..\src\zlib\inftrees.c ..\src\zlib\trees.c ..\src\zlib\uncompr.c ..\src\zlib\zutil.c
-
-REM  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TC /analyze- /errorReport:queue ..\src\png\lodepng.c
-REM   C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"C:\RMT\VCS\GIT\Roguelike\incursion-roguelike\_dependencies\libtcod\makefiles\Debug\png.lib" /NOLOGO Debug\lodepng.obj
-   
-        REM msbuild /nologo VisualC\SDL_VS2013.sln /p:Configuration=Debug /p:Platform=Win32 /t:SDL2,SDL2main
-        echo Build libtcod and copy the right shit into place.
+        if not exist !DEPENDENCY_PATH!\libtcod.dll (
+            echo Building: [libtcod/Release]
+            set CONFIG=Release
+            nmake /nologo -f ..\makefile-libtcod
+            copy !BASEOBJPATH!\!CONFIG!\libtcod.lib libtcod.lib
+            copy !BASEOBJPATH!\!CONFIG!\libtcod.dll libtcod.dll
+            copy !BASEOBJPATH!\!CONFIG!\libtcod.pdb libtcod.pdb
+        ) else (
+            echo Building: [libtcod/Release] .. skipped
+        )
     ) else (
         echo ERROR.. !V_LINK_PARTS[%HTTP_FILENAME%]! not handled by user who wrote the build amendments.
     )
@@ -125,7 +141,7 @@ REM Description: Called as a final step before the script exits.
 
 
 
-goto return_from_user_function_teardown
+goto internal_function_exit
 
 REM --- Script defined values ------------------------------------------------
 
@@ -146,7 +162,7 @@ if "%VisualStudioVersion%" NEQ "12.0" (
 
 set BUILD_PATH=%~dp0
 set BUILD_SCRIPT_FILENAME=%~nx0
-set DEPENDENCY_DIRNAME=dependencies
+set DEPENDENCY_DIRNAME=build\dependencies
 set DEPENDENCY_PATH=%BUILD_PATH%%DEPENDENCY_DIRNAME%
 
 REM Allow the user to specify the path to their 'hg' executable.  It may have to be accessed via absolute path.
@@ -156,6 +172,24 @@ if not defined HG_EXE (
 
 if not exist "%DEPENDENCY_PATH%" mkdir %DEPENDENCY_PATH%
 cd %DEPENDENCY_PATH%
+
+REM These variables are used to index the LINKS array entries.
+REM
+REM               0    1     2      3          4          5
+REM HTTP link:   HTTP <url> <NAME> <FILENAME>
+REM VCS link:    VCS  <hg>  <NAME> <REVISION> <CLONEURL> <ZIPDLURL>
+REM ............ Attempt 1: Identify presence of hg.exe or git.exe, and clone or pull <CLONEURL> <REVISION>
+REM ............ Attempt 2: Download <ZIPDLURL><REVISION>.zip as a normal link.
+
+set LINK_CLASSIFIER=0
+set HTTP_URL=1
+set HTTP_NAME=2
+set HTTP_FILENAME=3
+set VCS_SYSTEM=1
+set VCS_NAME=2
+set VCS_REVISION=3
+set VCS_CLONEURL=4
+set VCS_ZIPDLURL=5
 
 goto user_function_setup 
 
@@ -238,7 +272,7 @@ if "!V_LINK_PARTS[0]!" EQU "http" (
             set V_DIRNAME=!L_LINE:~13!
         ) else if "!L_LINE:~0,4!" EQU "MSG:" (
             if "!L_LINE:~5!" EQU "EXTRACTED" (
-                echo Decompressing: [!V_LINK_PARTS[3]!] .. SKIPPED
+                echo Decompressing: [!V_LINK_PARTS[3]!] .. skipped
                 set V_SKIPPED=yes
             ) else if "!L_LINE:~5!" EQU "EXTRACTING" (
                 echo Decompressing: [!V_LINK_PARTS[3]!]
@@ -272,9 +306,9 @@ REM input argument:  V_LABEL_RETURN - The name of the label to return to when fi
 REM XXX output argument: V_LINK_PARTS   - The array of elements that make up the given link text.
 set V_LABEL_RETURN_ifdls=!V_LABEL_RETURN!
 
-set /A IDX_FD=0
+set /A V_IDX_FD=0
 :loop_internal_function_fetch_dependencies
-set V_LINK=!LINKS[%IDX_FD%]!
+set V_LINK=!LINKS[%V_IDX_FD%]!
 if "!V_LINK!" EQU "" goto exit_from_internal_function_fetch_dependencies
 
 REM function call: V_LINK_PARTS = split_link(V_LINK)
@@ -287,7 +321,7 @@ set V_LABEL_RETURN=return_to_internal_function_fetch_dependencies2
 goto internal_function_fetch_dependency
 :return_to_internal_function_fetch_dependencies2
 
-set /A IDX_FD=!IDX_FD!+1
+set /A V_IDX_FD=!V_IDX_FD!+1
 goto loop_internal_function_fetch_dependencies
 
 :exit_from_internal_function_fetch_dependencies
@@ -299,6 +333,7 @@ REM --- FUNCTION: internal_function_fetch_dependency ---------------------------
 REM is this function re-entrant? No.
 REM
 REM input argument:  V_LINK_PARTS   - The processed link parts to make use of.
+REM input argument:  V_IDX_FD       - The index into the links array of the current dependency.
 REM input argument:  V_LABEL_RETURN - The name of the label to return to when finished.
 REM output argument: V_LINK_PARTS   - The array of elements that make up the given link text.
 set V_LABEL_RETURN_iffd=!V_LABEL_RETURN!
@@ -330,7 +365,6 @@ if "!V_LINK_PARTS[0]!" EQU "vcs" (
             goto exit_from_internal_function_fetch_dependency
         ) else (
             REM Fall back to ZIP archive downloading.
-            REM TODO: What if someone installs hg after downloading and using the snapshot?
             REM = name
             set V_LINK_PARTS[2]=!V_LINK_PARTS[2]! r!V_LINK_PARTS[3]! !V_LINK_PARTS[1]! snapshot
             rem = classifier
@@ -343,12 +377,64 @@ if "!V_LINK_PARTS[0]!" EQU "vcs" (
     )
 )
 
-if "!V_LINK_PARTS[0]!" EQU "http" (
-    if not exist "!V_LINK_PARTS[2]!" (
-        echo Downloading: [!V_LINK_PARTS[2]!] 
-        echo powershell -c "Start-BitsTransfer -source !V_LINK_PARTS[1]!"
+if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
+    if not exist "!V_LINK_PARTS[%HTTP_NAME%]!" (
+        echo Downloading: [!V_LINK_PARTS[%HTTP_NAME%]!] 
+        powershell -c "Start-BitsTransfer -source !V_LINK_PARTS[%HTTP_URL%]!"
+        
+        if not exist !V_LINK_PARTS[%HTTP_FILENAME%]! (
+            echo Failed to download !V_LINK_PARTS[%HTTP_FILENAME%]!
+            goto internal_function_exit
+        )
+
+        REM Environment variables for powershell script.
+        set fn=MD5-Checksum
+        set fnp0=!V_LINK_PARTS[%HTTP_FILENAME%]!
+        set fnp1=discard
+
+        REM Iterate over the lines of output.
+        for /F "usebackq tokens=*" %%i in (`more "%BUILD_PATH%%BUILD_SCRIPT_FILENAME%" ^| powershell -c -`) do (
+            set L_LINE=%%i
+            if "!L_LINE:~0,4!" EQU "MSG:" (
+                if "!HASHES[%V_IDX_FD%]!" EQU "!L_LINE:~5!" (
+                    echo .. MD5 checksum passed
+                    echo .. MD5 checksum unknown, calculated as: !L_LINE:~5!
+                ) else if "!HASHES[%V_IDX_FD%]!" EQU "" (
+                    echo .. MD5 checksum unknown, calculated as: !L_LINE:~5!
+                ) else (
+                    echo .. MD5 checksum FAILED
+                    echo .. Expected value:    !HASHES[%V_IDX_FD%]!
+                    echo .. Encountered value: !L_LINE:~5!
+                    goto internal_function_exit
+                )
+            ) else (
+                echo Unexpected result: !L_LINE!
+            )
+        )
     ) else (
-        echo Downloading: [!V_LINK_PARTS[2]!] .. SKIPPED
+        echo Downloading: [!V_LINK_PARTS[%HTTP_NAME%]!] .. skipped
+        REM Environment variables for powershell script.
+        set fn=MD5-Checksum
+        set fnp0=!V_LINK_PARTS[%HTTP_FILENAME%]!
+        set fnp1=discard
+
+        REM Iterate over the lines of output.
+        for /F "usebackq tokens=*" %%i in (`more "%BUILD_PATH%%BUILD_SCRIPT_FILENAME%" ^| powershell -c -`) do (
+            set L_LINE=%%i
+            if "!L_LINE:~0,4!" EQU "MSG:" (
+                if "!HASHES[%V_IDX_FD%]!" EQU "!L_LINE:~5!" (
+                    echo .. MD5 checksum [!L_LINE:~5!] correct
+                ) else if "!HASHES[%V_IDX_FD%]!" EQU "" (
+                    echo .. MD5 checksum [!L_LINE:~5!] unknown
+                ) else (
+                    echo .. MD5 checksum [!L_LINE:~5!] incorrect
+                    echo .. Expected: !HASHES[%V_IDX_FD%]!
+                    goto internal_function_exit
+                )
+            ) else (
+                echo Unexpected result: !L_LINE!
+            )
+        )
     )
 )
 
@@ -379,7 +465,7 @@ if %V_LINK_PARTS[0]% EQU "http" (
 
 REM emergency exit with error message.
 echo Invalid link: %V_LINK%
-goto return_from_user_function_teardown
+goto internal_function_exit
 
 :internal_function_verify_link__valid
 
@@ -460,7 +546,7 @@ REM --- Everything is done, exit back to the user ----------------------------
 REM Now that processing is done, allow the user to do some steps before exiting.
 goto user_function_teardown
 
-:return_from_user_function_teardown
+:internal_function_exit
 REM Leave the user in the directory they were in to begin with.
 cd %BUILD_PATH%
 
@@ -469,11 +555,12 @@ REM exit /b:  Exit the script, but do not close any DOS window it was run from w
 endlocal & exit /b
 #>
 
-function MD5-Checksum([string]$path) {
-    // $fullPath = Resolve-Path $path;
+function MD5-Checksum([string]$path, [string]$discard) {
+    # $fullPath = Resolve-Path $path;
     $md5 = new-object -TypeName System.Security.Cryptography.MD5CryptoServiceProvider;
-    $file = [System.IO.File]::Open($fullPath,[System.IO.Filemode]::Open, [System.IO.FileAccess]::Read);
-    [System.BitConverter]::ToString($md5.ComputeHash($file));
+    $file = [System.IO.File]::Open($path, [System.IO.Filemode]::Open, [System.IO.FileAccess]::Read);
+    $hash = [System.BitConverter]::ToString($md5.ComputeHash($file))
+    Write-Host "MSG: $hash";
     $file.Dispose();
     return 0;
 }

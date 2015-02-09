@@ -44,7 +44,6 @@ PNGSRCPATH=$(SRCPATH)\png
 TCODSRCPATH=$(SRCPATH)
 
 DLLPATH=$(OBJPATH)\$(BASENAME).dll
-STATICLIBPATH=$(OBJPATH)\$(BASENAME)-static.lib
 
 ZLIBOBJS=\
 	$(OBJPATH)\adler32.obj $(OBJPATH)\crc32.obj $(OBJPATH)\deflate.obj $(OBJPATH)\infback.obj \
@@ -78,13 +77,10 @@ TCODOBJS= \
 
 OBJS= $(ZLIBOBJS) $(PNGOBJS) $(TCODOBJS)
 
-all: $(STATICLIBPATH) $(DLLPATH)
+all: $(DLLPATH)
 
 $(DLLPATH): $(OBJS)
 	link.exe /nologo /out:"$*.dll" /pdb:"$*.pdb" $(LDFLAGS) $**
-
-$(STATICLIBPATH): $(OBJS)
-	lib.exe /nologo /out:"$*.lib" /subsystem:console,5.01 $**
 
 clean:
 	if exist $(BASEOBJPATH)\Debug rmdir /s /q $(BASEOBJPATH)\Debug
