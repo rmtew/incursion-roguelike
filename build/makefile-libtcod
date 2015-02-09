@@ -1,0 +1,91 @@
+# This nmake makefile for libtcod is copyright 2015 by Richard Tew.
+# It is in the public domain and can be freely adapted.
+
+# OPTIONAL ENVIRONMENT VARIABLES
+#     BASEPATH: This should be the path to the libtcod directory.
+#     BASEOBJPATH: This should be the path to where the output files will be placed.
+#         e.g. $(BASEOBJPATH)\Release\libtcod.dll
+
+!ifndef SDL2PATH
+!error Please set SDL2PATH to the absolute path of the SDL2 directory.
+!endif
+
+!ifndef CONFIG
+!error Please set CONFIG to either Debug or Release.
+!endif
+
+CFLAGS= /nologo /c $(cflags) $(cdebug) $(cvars) /W3 /WX- /Oy- /EHsc /GS /Gd /TC /analyze- /wd4996
+LDFLAGS= /nologo /manifest /manifest:embed /debug /machine:X86 /dll /safeseh $(ldflags) /libpath:"$(SDL2PATH)\VisualC\SDL\Win32\$(CONFIG)" sdl2.lib user32.lib
+
+!if "$(CONFIG)"=="Debug"
+CFLAGS= $(CFLAGS) /Od /MTd /RTC1 /Z7
+!else if "$(CONFIG)"=="Release"
+CFLAGS= $(CFLAGS) /O2 /Oi /MT /Zo
+LDFLAGS=$(LDFLAGS) /opt:ref
+!endif
+
+BASENAME=libtcod
+TCODCFLAGS=/DTCOD_SDL2 /DLIBTCOD_EXPORTS /DNO_OPENGL -I"$(BASEPATH)\include" -I"$(ZLIBSRCPATH)" /I"$(SDL2PATH)\include"
+LDLIBS= $(ldlibs)
+RM= del
+
+!IFNDEF BASEPATH
+BASEPATH=..
+!ENDIF
+!IFNDEF BASEOBJPATH
+BASEOBJPATH=$(MAKEDIR)
+!ENDIF
+
+SRCPATH=$(BASEPATH)\src
+OBJPATH=$(BASEOBJPATH)\$(CONFIG)
+
+ZLIBSRCPATH=$(SRCPATH)\zlib
+PNGSRCPATH=$(SRCPATH)\png
+TCODSRCPATH=$(SRCPATH)
+
+DLLPATH=$(OBJPATH)\$(BASENAME).dll
+STATICLIBPATH=$(OBJPATH)\$(BASENAME)-static.lib
+
+ZLIBOBJS=\
+	$(OBJPATH)\adler32.obj $(OBJPATH)\crc32.obj $(OBJPATH)\deflate.obj $(OBJPATH)\infback.obj \
+	$(OBJPATH)\inffast.obj $(OBJPATH)\inflate.obj $(OBJPATH)\inftrees.obj $(OBJPATH)\trees.obj \
+	$(OBJPATH)\zutil.obj $(OBJPATH)\compress.obj $(OBJPATH)\uncompr.obj $(OBJPATH)\gzclose.obj \
+	$(OBJPATH)\gzlib.obj $(OBJPATH)\gzread.obj $(OBJPATH)\gzwrite.obj
+
+PNGOBJS=$(OBJPATH)\lodepng.obj
+
+TCODOBJS= \
+	$(OBJPATH)\bresenham_c.obj $(OBJPATH)\bsp_c.obj $(OBJPATH)\color_c.obj $(OBJPATH)\console_c.obj \
+	$(OBJPATH)\fov_c.obj $(OBJPATH)\fov_circular_raycasting.obj $(OBJPATH)\fov_diamond_raycasting.obj \
+	$(OBJPATH)\fov_recursive_shadowcasting.obj $(OBJPATH)\fov_permissive2.obj $(OBJPATH)\fov_restrictive.obj \
+	$(OBJPATH)\heightmap_c.obj $(OBJPATH)\image_c.obj $(OBJPATH)\lex_c.obj $(OBJPATH)\list_c.obj \
+	$(OBJPATH)\mersenne_c.obj $(OBJPATH)\noise_c.obj $(OBJPATH)\parser_c.obj $(OBJPATH)\path_c.obj \
+	$(OBJPATH)\sys_c.obj $(OBJPATH)\sys_sdl_c.obj $(OBJPATH)\sys_sdl2_c.obj $(OBJPATH)\sys_sdl_img_bmp.obj \
+	$(OBJPATH)\sys_sdl_img_png.obj $(OBJPATH)\tree_c.obj $(OBJPATH)\txtfield_c.obj $(OBJPATH)\wrappers.obj \
+	$(OBJPATH)\zip_c.obj $(OBJPATH)\namegen_c.obj
+	
+{$(ZLIBSRCPATH)}.c{$(OBJPATH)}.obj::
+	if not exist $(OBJPATH) mkdir $(OBJPATH)
+	$(CC) $(CFLAGS) /Fo"$(OBJPATH)\\" $<
+
+{$(PNGSRCPATH)}.c{$(OBJPATH)}.obj::
+	if not exist $(OBJPATH) mkdir $(OBJPATH)
+	$(CC) $(CFLAGS) /Fo"$(OBJPATH)\\" $<
+
+{$(TCODSRCPATH)}.c{$(OBJPATH)}.obj::
+	if not exist $(OBJPATH) mkdir $(OBJPATH)
+	$(CC) $(TCODCFLAGS) $(CFLAGS) /Fo"$(OBJPATH)\\" $<
+
+OBJS= $(ZLIBOBJS) $(PNGOBJS) $(TCODOBJS)
+
+all: $(STATICLIBPATH) $(DLLPATH)
+
+$(DLLPATH): $(OBJS)
+	link.exe /nologo /out:"$*.dll" /pdb:"$*.pdb" $(LDFLAGS) $**
+
+$(STATICLIBPATH): $(OBJS)
+	lib.exe /nologo /out:"$*.lib" /subsystem:console,5.01 $**
+
+clean:
+	if exist $(BASEOBJPATH)\Debug rmdir /s /q $(BASEOBJPATH)\Debug
+	if exist $(BASEOBJPATH)\Release rmdir /s /q $(BASEOBJPATH)\Release
