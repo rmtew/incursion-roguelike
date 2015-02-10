@@ -68,6 +68,10 @@
 #include <ctype.h> 
 #include <time.h>
 #include <malloc.h>
+#include <Windows.h>
+#undef ERROR
+#undef EV_BREAK
+#undef MOUSE_MOVED
 
 #ifndef DEBUG
 #ifdef USE_CRASHPAD
@@ -217,14 +221,34 @@ class libtcodTerm: public TextTerm
       /* System-Independant File I/O */
       virtual const char* SaveSubDir()    { return "save"; } 
       virtual const char* ModuleSubDir()  { return "mod"; } 
-      virtual const char* LibrarySubDir() { return "lib"; } 
+      virtual const char* LibraryPath() {
+          char *envLibPath;
+          static char s[MAX_PATH_LENGTH] = "";
+          if (strlen(s) == 0) {
+              envLibPath = getenv("INCURSIONLIBPATH");
+              if (envLibPath != NULL) {
+                  if (strcat(s, envLibPath)) {
+                      if (s[strlen(s) - 1] == '\\')
+                          s[strlen(s) - 1] = '\0';
+                  }
+              } else {
+                  strcat(s, IncursionDirectory);
+                  strcat(s, "lib");
+              }
+          }
+          return s;
+      } 
       virtual const char* LogSubDir()     { return "logs"; } 
       virtual const char* ManualSubDir()  { return "man"; } 
       virtual const char* OptionsSubDir() { return "."; } 
-      virtual void ChangeDirectory(const char * c) { 
-          CurrentDirectory = (const char*)IncursionDirectory;
-          if (CurrentDirectory != c)
-              CurrentDirectory += c;
+      virtual void ChangeDirectory(const char * c, bool set) { 
+          if (set)
+              CurrentDirectory = c;
+          else {
+              CurrentDirectory = (const char*)IncursionDirectory;
+              if (CurrentDirectory != c)
+                  CurrentDirectory += c;
+          }
           if (chdir(CurrentDirectory))
               Fatal("Unable to locate directory '%s'.", (const char*)CurrentDirectory);
       }
@@ -328,35 +352,29 @@ ExceptionHandler* crashdumpHandler;
 *                              main() Function                               *
 \*****************************************************************************/
 
-void GetIncursionDirectory(int argc, char *argv[], char *out) {
-    String IncursionDirectory;
-    if (argc >= 1) {
-        const char *str = strrchr(argv[0], '\\');
-        if (str == NULL) {
-            IncursionDirectory = "";
-        } else {
-            int16 n = str - argv[0] + 1; /* Copy the separator too. */
-            char *tstr = (char*)alloca(n+1);
-            tstr[n] = '\0';
-            IncursionDirectory = strncpy(tstr,argv[0],n);
-        }
-    } else
-        IncursionDirectory = "";
-
-    if (IncursionDirectory.GetLength() > 0) {
-        /* Kludge to cope with directory structure for
-           multiple builds on my machine */
-		const char *findstr = strstr(IncursionDirectory, "\\build\\");
-		if (findstr != NULL)
-			IncursionDirectory = IncursionDirectory.Left(findstr - IncursionDirectory.GetData());
-	}
-    strncpy(out,(const char *)IncursionDirectory,IncursionDirectory.GetLength());
-    out[IncursionDirectory.GetLength()] = '\0';
-}
-
 int main(int argc, char *argv[]) {
-    char executablePath[512];
-    GetIncursionDirectory(argc, argv, executablePath);
+    /* This path code is currently present in libtcod and curses code. */
+    char executablePath[MAX_PATH_LENGTH] = "";
+
+    /* If run normally, check to see from which directory, and if there is one, use it. */
+    if (!IsDebuggerPresent() && argc >= 1) {
+        /* argv[0] is the filename and maybe the path before it, if the path is there grab it. */
+        const char *str = strrchr(argv[0], '\\');
+        if (str != NULL) {
+            int16 n = str - argv[0]; /* Copy the separator too. */
+            if (!strncpy(executablePath, argv[0], n))
+                Error("Failed to locate Incursion directory for '%s'", argv[0]);
+            executablePath[n] = '\0';
+        }
+    }
+
+    /* If run under the debugger, or from within the current directory, or if
+       something went wrong above, get and use the current directory path. */
+    if (strlen(executablePath) == 0) {
+        if (!_getcwd(executablePath, MAX_PATH_LENGTH))
+            Error("Failed to locate Incursion directory under debugger (error 23)");
+    }
+
     /* Google Breakpad is only compiled into Release builds, which get distributed.
      * Debug builds get the option to break out into the debugger, which makes it
      * superfluous in that case. */
@@ -794,7 +812,8 @@ void Error(const char*fmt,...) {
 
 void libtcodTerm::Reset() {
     int16 optRes, optFont, i;
-    char fontName[256] = "";
+    char *envFontPath;
+    char fontName[MAX_PATH_LENGTH] = "";
     bool scaled_res, scaled_font;
     int res_w, res_h;
 
@@ -856,8 +875,23 @@ RetryFont:
    
     if (sizeX < 80 || sizeY < 48)
         { optFont = 0; scaled_font = true; goto RetryFont; }
-    
- 	sprintf(fontName, "fonts/%dx%d.png", fontX, fontY);
+
+    /* The VS debugger finds it handy to run things where they get generated in sub-directories. */
+    i = 0;
+    envFontPath = getenv("INCURSIONFONTPATH");
+    if (envFontPath != NULL) {
+        if (strcat(fontName, envFontPath)) {
+            if (fontName[strlen(fontName) - 1] != '\\')
+                strcat(fontName, "\\");
+        }
+    }
+    if (strlen(fontName) == 0) {
+        strcat(fontName, IncursionDirectory);
+        strcat(fontName, "fonts\\");
+    }
+    i = strlen(fontName);
+
+    sprintf(fontName + i, "%dx%d.png", fontX, fontY);
 	TCOD_console_set_custom_font(fontName, TCOD_FONT_LAYOUT_ASCII_INROW, 16, 16);
 	TCOD_console_init_root(sizeX, sizeY, "Incursion: Halls of the Goblin King", !isWindowed, TCOD_RENDERER_SDL);
 
@@ -967,7 +1001,21 @@ void libtcodTerm::ShutDown() {
 }
 
 void libtcodTerm::SetIncursionDirectory(const char *s) {
+    char tmp[MAX_PATH_LENGTH] = "";
     IncursionDirectory = (const char *)s;
+    IncursionDirectory += "\\";
+
+    strcpy(tmp, s);
+    strcat(tmp, "\\mod");
+    _mkdir(tmp);
+
+    strcpy(tmp, s);
+    strcat(tmp, "\\logs");
+    _mkdir(tmp);
+
+    strcpy(tmp, s);
+    strcat(tmp, "\\save");
+    _mkdir(tmp);
 }
 
 /* Draw the intro screen header and display the start of game libtcod-specific
@@ -975,8 +1023,9 @@ void libtcodTerm::SetIncursionDirectory(const char *s) {
 void libtcodTerm::Title() {
     uint8 done_rendering = 0;
     TCOD_key_t key = { TCODK_NONE, 0 };
+    /*
     int credits_x, credits_y;
-    TCOD_color_t colour_fg, colour_bg;
+    TCOD_color_t colour_fg, colour_bg;*/
     static bool first_time = false;
     char *next_page = "Press a key to skip this page";
 

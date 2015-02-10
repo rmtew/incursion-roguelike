@@ -62,7 +62,7 @@
       <Optimization>Disabled</Optimization>
       <PrecompiledHeaderOutputFile>$(IntDir)$(SolutionName)C.pch</PrecompiledHeaderOutputFile>
       <ProgramDataBaseFileName>$(IntDir)$(TargetName)C.pdb</ProgramDataBaseFileName>
-      <AdditionalIncludeDirectories>dependencies\pdcurs34;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>dependencies\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <TargetMachine>MachineX86</TargetMachine>
@@ -74,6 +74,9 @@
       </IgnoreSpecificDefaultLibraries>
       <AdditionalLibraryDirectories>dependencies</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>if not exist $(SolutionDir)run mkdir $(SolutionDir)run</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -83,7 +86,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <PrecompiledHeaderOutputFile>$(IntDir)$(SolutionName)C.pch</PrecompiledHeaderOutputFile>
       <ProgramDataBaseFileName>$(IntDir)$(TargetName)C.pdb</ProgramDataBaseFileName>
-      <AdditionalIncludeDirectories>dependencies\pdcurs34;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>dependencies\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <TargetMachine>MachineX86</TargetMachine>
@@ -97,6 +100,9 @@
       </IgnoreSpecificDefaultLibraries>
       <AdditionalLibraryDirectories>dependencies</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>if not exist $(SolutionDir)run mkdir $(SolutionDir)run</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ProjectReference Include="Incursion.vcxproj">

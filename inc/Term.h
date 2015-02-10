@@ -503,11 +503,11 @@ public:
     /* System-Independant File I/O (platform-specific) */
     virtual const char* SaveSubDir()=0;
     virtual const char* ModuleSubDir()=0; 
-    virtual const char* LibrarySubDir()=0; 
+    virtual const char* LibraryPath()=0; 
     virtual const char* LogSubDir()=0; 
     virtual const char* ManualSubDir()=0; 
     virtual const char* OptionsSubDir()=0;
-    virtual void ChangeDirectory(const char * c)=0;
+    virtual void ChangeDirectory(const char * c, bool set=false)=0;
     virtual bool Exists(const char* fn)=0;
     virtual void Delete(const char* fn)=0;
     virtual void OpenRead(const char* fn)=0;
@@ -754,11 +754,11 @@ public:
     /* System-Independant File I/O (platform-specific) */
     virtual const char* SaveSubDir()=0;
     virtual const char* ModuleSubDir()=0; 
-    virtual const char* LibrarySubDir()=0; 
+    virtual const char* LibraryPath()=0; 
     virtual const char* LogSubDir()=0; 
     virtual const char* ManualSubDir()=0; 
     virtual const char* OptionsSubDir()=0;
-    virtual void ChangeDirectory(const char * c)=0;
+    virtual void ChangeDirectory(const char * c, bool set=false)=0;
     virtual bool Exists(const char* fn)=0;
     virtual void Delete(const char* fn)=0;
     virtual void OpenRead(const char* fn)=0;

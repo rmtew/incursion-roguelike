@@ -287,7 +287,7 @@ bool Game::ResourceCompiler() {
 
     char * file_to_open = NULL;
 
-    T1->ChangeDirectory(T1->LibrarySubDir());
+    T1->ChangeDirectory(T1->LibraryPath(), true);
 
     do {
         yyin = NULL;
@@ -750,7 +750,7 @@ void GenerateDispatch() {
 #else
         "%s/dispatch.h"
 #endif  
-        ,(const char*)T1->LibrarySubDir()),"wt");
+        ,(const char*)T1->LibraryPath()),"wt");
     if (!fp)
         Error("Can't open LIBDIR\\dispatch.h");
     fprintf(fp,

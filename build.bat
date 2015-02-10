@@ -3,7 +3,10 @@
 setlocal EnableDelayedExpansion
 
 REM TODO: INCURSION USER
-REM TODO: - Collect the include files and put them in dependencies\include\...
+REM TODO: - Alter the game code to use environment variables to get override paths for:
+REM TODO: -- Lib directory
+REM TODO: -- Font directory
+REM TODO: - Do not copy the above directories as a post-build step.
 REM TODO: FETCH
 REM TODO: - The top level prepared dependencies should be bundled for release, as a quick cheat pack.
 REM TODO: -- If installed, then 
@@ -46,6 +49,11 @@ REM      the download is processed, the calculated checksum will be printed and 
 set MD5CHECKSUMS[0]=BB-C5-10-F0-91-34-2F-CF-5B-A7-A2-BC-A3-97-FD-A1
 set MD5CHECKSUMS[3]=D6-3A-85-FD-5D-E9-60-11-71-02-87-4C-AB-5A-EB-90
 
+set UV_INCLUDE_PATH=!DEPENDENCY_PATH!\include
+
+set UV_INCLUDE_COMMANDS[0]=
+set /A UV_INCLUDE_COMMAND_COUNT=0
+
 REM Process the user data, calling event functions when applicable.
 goto internal_function_main
 
@@ -55,7 +63,7 @@ REM variable: %V_LINK_PARTS% - The link data.
 REM variable: %DEPENDENCY_PATH% - The absolute path of the dependencies directory.
 REM variable: %V_DIRNAME% - The relative directory name the dependency can be found in.
 REM variable: %V_SKIPPED% - 'yes' or 'no', depending on whether the archive was already extracted.
-set V_LABEL_RETURN_ifpd=!V_LABEL_RETURN!
+set V_LABEL_RETURN_ufpd=!V_LABEL_RETURN!
 
 cd !DEPENDENCY_PATH!
 
@@ -89,14 +97,18 @@ if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
             echo Building: [pdcurses/Release] .. skipped
         )
 
+        set UV_INCLUDE_COMMANDS[%UV_INCLUDE_COMMAND_COUNT%]=!V_DIRNAME!\*.h
+        set /A UV_INCLUDE_COMMAND_COUNT=%UV_INCLUDE_COMMAND_COUNT%+1
+
         cd !DEPENDENCY_PATH!
     ) else (
         echo ERROR.. !V_LINK_PARTS[%HTTP_FILENAME%]! not handled by user who wrote the build amendments.
+        goto internal_function_exit
     )
 ) else if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "vcs" (
     set L_VCS_NAME=!V_LINK_PARTS[%VCS_NAME%]!
     if "!L_VCS_NAME!" EQU "SDL2" (
-        REM Used by the libtcod build process.
+        REM This variable is required by the libtcod makefile.
         set SDL2PATH=!DEPENDENCY_PATH!\!V_DIRNAME!
 
         cd !V_DIRNAME!
@@ -122,6 +134,9 @@ if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
         ) else (
             echo Building: [SDL2/Release] .. skipped
         )
+
+        set UV_INCLUDE_COMMANDS[%UV_INCLUDE_COMMAND_COUNT%]=!V_DIRNAME!\include\*.h
+        set /A UV_INCLUDE_COMMAND_COUNT=%UV_INCLUDE_COMMAND_COUNT%+1
     ) else if "!L_VCS_NAME!" EQU "libtcod" (
         set BASEPATH=!DEPENDENCY_PATH!\!V_DIRNAME!
         set BASEOBJPATH=!DEPENDENCY_PATH!\!V_DIRNAME!\build
@@ -148,24 +163,46 @@ if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
         ) else (
             echo Building: [libtcod/Release] .. skipped
         )
+
+        set UV_INCLUDE_COMMANDS[%UV_INCLUDE_COMMAND_COUNT%]=!V_DIRNAME!\include\*.h
+        set /A UV_INCLUDE_COMMAND_COUNT=%UV_INCLUDE_COMMAND_COUNT%+1
     ) else (
         echo ERROR.. !V_LINK_PARTS[%HTTP_FILENAME%]! not handled by user who wrote the build amendments.
+        goto internal_function_exit
     )
 )
 
-:exit_from_internal_function_prepare_dependency
-goto !V_LABEL_RETURN_ifpd!
+goto !V_LABEL_RETURN_ufpd!
 
-REM User function: user_function_teardown
-REM Description: Called as a final step before the script exits.
+REM --- FUNCTION: user_function_prepare_dependencies --------------------------------
+:user_function_prepare_dependencies
+REM description: This is called as a final step after all dependencies have been prepared.
+REM variable: %DEPENDENCY_PATH% - The absolute path of the dependencies directory.
+set V_LABEL_RETURN_ufpds=!V_LABEL_RETURN!
+
+if exist !UV_INCLUDE_PATH! goto exit_from_user_function_prepare_dependencies
+
+set /A L_COUNT=0
+:loop_user_function_prepare_dependencies
+
+if %L_COUNT% LSS %UV_INCLUDE_COMMAND_COUNT% (
+    echo Copying includes: !UV_INCLUDE_COMMANDS[%L_COUNT%]!
+    xcopy /Q /Y !DEPENDENCY_PATH!\!UV_INCLUDE_COMMANDS[%L_COUNT%]! %UV_INCLUDE_PATH%\
+
+    set /A L_COUNT=%L_COUNT%+1
+    goto loop_user_function_prepare_dependencies
+)
+
+:exit_from_user_function_prepare_dependencies
+goto !V_LABEL_RETURN_ufpds!
+
+REM --- FUNCTION: user_function_teardown -------------------------------------
 :user_function_teardown
-
-
+REM description: This is called just before a non-error exit.
 
 goto internal_function_exit
 
-REM --- Script defined values ------------------------------------------------
-
+REM --- FUNCTION: internal_function_setup ------------------------------------
 :internal_function_setup
 
 REM Ensure that we have a properly set up developer console with access to things like msbuild and devenv.
@@ -216,8 +253,6 @@ goto user_function_setup
 
 REM --- FUNCTION: internal_function_main -------------------------------------
 :internal_function_main
-REM is this function re-entrant? No.
-REM
 REM input argument:  V_LINKS   - The user defined links.
 
 REM fetch-dependencies
@@ -235,8 +270,6 @@ goto internal_function_teardown
 REM --- FUNCTION: internal_function_prepare_dependencies ---------------------
 
 :internal_function_prepare_dependencies
-REM is this function re-entrant? No.
-REM
 REM expectation: 
 REM Process the user defined links.
 set V_LABEL_RETURN_ifpds=!V_LABEL_RETURN!
@@ -244,7 +277,7 @@ set V_LABEL_RETURN_ifpds=!V_LABEL_RETURN!
 set /A IDX_PDS=0
 :loop_internal_function_prepare_dependencies
 set V_LINK=!LINKS[%IDX_PDS%]!
-if "!V_LINK!" EQU "" goto exit_from_internal_function_prepare_dependencies
+if "!V_LINK!" EQU "" goto loop_internal_function_prepare_dependencies_break
 
 REM function call: V_LINK_PARTS = split_link(V_LINK)
 set V_LABEL_RETURN=return_to_internal_function_prepare_dependencies1
@@ -259,13 +292,15 @@ goto internal_function_prepare_dependency
 set /A IDX_PDS=!IDX_PDS!+1
 goto loop_internal_function_prepare_dependencies
 
+:loop_internal_function_prepare_dependencies_break
+set V_LABEL_RETURN=exit_from_internal_function_prepare_dependencies
+goto user_function_prepare_dependencies
+
 :exit_from_internal_function_prepare_dependencies
 goto !V_LABEL_RETURN_ifpds!
 
 REM --- FUNCTION: internal_function_prepare_dependency -----------------------
 :internal_function_prepare_dependency
-REM is this function re-entrant? No.
-REM
 REM input argument:  V_LINK_PARTS   - The processed link parts to make use of.
 REM input argument:  V_LABEL_RETURN - The name of the label to return to when finished.
 REM output argument: V_LINK_PARTS   - The array of elements that make up the given link text.
@@ -317,14 +352,9 @@ cd %DEPENDENCY_PATH%
 goto !V_LABEL_RETURN_iffd!
 
 REM --- FUNCTION: internal_function_fetch_dependencies --------------------------
-
 :internal_function_fetch_dependencies
-REM is this function re-entrant? No.
-REM
 REM input argument:  V_LINKS        - The processed link parts to make use of.
-REM XXXX input argument:  V_LINK_PARTS   - The array of elements that make up the given link text.
 REM input argument:  V_LABEL_RETURN - The name of the label to return to when finished.
-REM XXX output argument: V_LINK_PARTS   - The array of elements that make up the given link text.
 set V_LABEL_RETURN_ifdls=!V_LABEL_RETURN!
 
 set /A V_IDX_FD=0
@@ -349,10 +379,7 @@ goto loop_internal_function_fetch_dependencies
 goto !V_LABEL_RETURN_ifdls!
 
 REM --- FUNCTION: internal_function_fetch_dependency ---------------------------
-
 :internal_function_fetch_dependency
-REM is this function re-entrant? No.
-REM
 REM input argument:  V_LINK_PARTS   - The processed link parts to make use of.
 REM input argument:  V_IDX_FD       - The index into the links array of the current dependency.
 REM input argument:  V_LABEL_RETURN - The name of the label to return to when finished.
@@ -510,10 +537,7 @@ goto internal_function_exit
 goto !V_LABEL_RETURN_ifvl!
 
 REM --- FUNCTION: internal_function_split_link -------------------------------
-
 :internal_function_split_link
-REM is this function re-entrant? No.
-REM
 REM input argument:  V_LINK         - The link text to verify.
 REM input argument:  V_LABEL_RETURN - The name of the label to return to when finished.
 REM output argument: V_LINK_PARTS   - The array of elements that make up the given link text.
@@ -549,10 +573,7 @@ set V_LINK_PARTS[3]=!V_RESULT!
 goto !V_LABEL_RETURN_ifsl!
 
 REM --- FUNCTION: internal_function_split_link -------------------------------
-
 :internal_function_get_urlfilename
-REM is this function re-entrant? No.
-REM
 REM input argument:  V_LINK         - The link text to verify.
 REM input argument:  V_LABEL_RETURN - The name of the label to return to when finished.
 REM output argument: V_RESULT       - The base filename the URL exposes for download.
