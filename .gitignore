@@ -5,15 +5,9 @@
 *.obj
 
 # Windows build & dependencies
-Debug
-Release
-_dependencies
-_dependencies/libtcod
-_dependencies/sdl2
-_dependencies/google-breakpad
-SDL2*
-libtcod*
-flex*.exe
+build/dependencies
+build/run
+build/Win32
 *.vcxproj.user
 *.suo
 *.sdf
@@ -22,17 +16,6 @@ Incursion.opensdf
 # Incursion specific temporary files.
 lib/dispatch.h
 lib/program.i
-logs/*.txt
-logs/*.html
-mod/Incursion.Mod
-save/*.sav
-save/*.backup
-save/*.zip
-save/*.7z
-save/_testcases
-*.dat
 
 # Local nonsense.
 _external
-INCURSION-RELEASES
-modaccent/build
