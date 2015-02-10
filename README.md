@@ -34,47 +34,49 @@ Windows build instructions
 
 *Dependencies:*
 
-  * `libtcod.dll`: [libtcod@bitbucket](https://bitbucket.org/jice/libtcod/src) (note this is the default branch, not 1.5.x).
-  * `flex.exe`: [winflexbison@sourceforge](http://sourceforge.net/projects/winflexbison/) 0.7 MB (extract and rename `win_flex.exe` to `flex.exe`).
-  * `build_dependencies-20150127.7z`: Available from the bitbucket [project downloads page](https://bitbucket.org/rmtew/incursion-roguelike/downloads).
+The simple option is to download the following dependencies archive.  It contains all the pre-built files required to get Incursion to build.  It just needs to be downloaded, extracted in the right location within the source code, and the compilation instructions below detail this further.
+
+  * `build_dependencies-20150210.7z`: Available from the bitbucket [project downloads page](https://bitbucket.org/rmtew/incursion-roguelike/downloads).
+
+The advanced option, which someone who knows about debugging and stepping into linked library code would be interested in, is to use the `build.bat` batch script which is located with the source code.
+
+A simple downloadable archive of pre-built dependencies is mentioned, and also an advanced script that will download them and compile them for you.  If you choose to ignore both of these and go your own way, it is going to be difficult for you to compile them yourself, unless you know what you are doing, and you are willing to do it without any help from me.  In you wish to do this to yourself, and by yourself without any help from me, you will need the following so that you can do it without any help from me.
+
+  * `libtcod`: [libtcod@bitbucket](https://bitbucket.org/jice/libtcod/) (note this is the default branch, not 1.5.x).
+  * `SDL2`: [SDL2@libsdl.org](https://www.libsdl.org/hg.php) (can be optional).
+  * `flex.exe`: [winflexbison@sourceforge](http://sourceforge.net/projects/winflexbison/) 660 KB (extract and rename `win_flex.exe` to `flex.exe`).
+  * `pdcurses`: [pdcurses@sourceforge](http://pdcurses.sourceforge.net) 384 KB
 
 *Compilation instructions:*
 
 These instructions are intended to allow you to get Incursion to the point where you can debug it within Visual Studio.
 
   1. Download and install Visual Studio 2013 Community Edition, if necessary.
-  1. Enter the Incursion project directory.
-  1. Ensure that you have the EditorConfig extension installed.
-    1. Run Visual Studio.
+  1. Download and extract the Incursion source code.
+  1. Enter the `build` subdirectory within the source code.
+  1. Ensure that you have the EditorConfig extension installed by doing the following:
+    1. Run Visual Studio, perhaps by opening `Incursion.sln`.
     1. Select the menu option: Tools -> Extensions and Updates.
     1. Select the Online entry from the left-hand side list.
     1. Search for and install EditorConfig.
     1. Exit Visual Studio.
-  1. Place `flex.exe` directly into the project directory.
-  1. Extract `_dependencies-20141125.7z` over the `_dependencies` sub-directory.  Check that you extracted it at the right level.
-  1. Place `libtcod.dll` directly into the project directory (look in `_dependencies\libtcod\makefiles\Release`, it comes from `build_dependencies-20150127.7z`).
-  1. Place `SDL2.dll` directly into the project directory (look in `_dependencies\sdl2\VisualC\SDL\Release`, it comes from `build_dependencies-20150127.7z`).
+  1. Decide if you are going to do take the simple or advanced approach to obtaining the dependencies.
+    1. The simple approach.
+      1. Ensure you have downloaded the build dependencies archive mentioned above, from the bitbucket [project downloads page](https://bitbucket.org/rmtew/incursion-roguelike/downloads).
+      1. Open the archive and look inside it.  There is only one entry there, a directory named `dependencies`, and within that there is a selection of files and directories inside it like `include`, `libtcod.dll` and so forth.
+      1. Enter the `build` subdirectory within the source code.
+      1. Extract the contents of the archive here.
+      1. You should now be able to locate the `build\dependencies\include` directory.  You should now be able to locate `build\dependencies\libtcod.lib`.  If this is not the case, then you did not extract the contents of the archive into the `build` subdirectory.  Try again.
+      1. The simple approach is complete!
+    1. The advanced approach.
+      1. Open a DOS console window, and ensure you are in the top-level directory of the Incursion source code.
+      1. Type `build.bat -d` and hit enter.
+      1. Lots of text will scroll past and eventually you will have compiled source code, or this script will error and you will have to ask for help.	
   1. Open `Incursion.sln` and do a debug build of Incursion.
   1. Debug Incursion within Visual Studio.
   1. Select the 'Compile Resources' main menu option.  Once completed, this will have created the `mod\Incursion.Mod` file.
 
 At this point, you are ready to do some development, or just play the latest version of the source code (within Visual Studio).  Congratulations!
- 
-If you wish to play what you have built outside of Visual Studio, run the `make-release.bat` script and the correct directory structure will be created.
- 
-*Building libtcod:*
-
-It is not necessary to build libtcod.  The include files from the libtcod source code, and the static libraries built from it, are included within the provided `_dependencies-20141125.7z` archive.
-
-But if you do wish to build it, be aware that libtcod does not provide a Visual Studio solution and projects.  These are created by me, and are included within the provided `_dependencies-20141125.7z` archive, within the `_dependencies\libtcod\makefiles` directory.  Also note that there are minor changes to the libtcod source code, to make it better work with Incursion.  These are included in the archive, and will extract over the libtcod source code into the right places.
-
-The recommended approach to getting a libtcod compilation environment is:
-
-  1. Enter the Incursion project directory.
-  1. Place the [libtcod source files](https://bitbucket.org/jice/libtcod/src) into the `_dependencies/libtcod` sub-directory.  Ensure you get [this commit](https://bitbucket.org/jice/libtcod/commits/30646e7bc99ececb155dece7bf9821899bf0eab2).  It matches the minor changes to the libtcod source code mentioned above.
-  1. Extract `_dependencies-20141125.7z` over the `_dependencies` sub-directory.  Check that you extracted it at the right level.  This will overwrite some parts of the libtcod source code.
-
-This should be incorporated into the compilation instructions above, so that the last step here falls in the same place as in the compilation instructions.
 
 *Building Incursion modules:*
 

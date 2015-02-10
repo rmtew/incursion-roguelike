@@ -9,6 +9,7 @@ REM TODO: -- If installed, then
 REM TODO: PREPARE
 REM TODO: - The version control archived zip.  How well does it work?  Should I even bother to support it?
 REM TODO: -- What if someone installs hg after downloading and using the snapshot?
+REM TODO: -- 
 REM TODO: GENERAL
 REM TODO: - Incorporate make-release.bat -> build\release\...
 REM TODO: - Add arguments to this script, to allow skipping the pre-steps.
@@ -291,9 +292,9 @@ if "%1" EQU "" (
     echo     -mr, make-release          construct release directory for packaging
     echo     -pr, package-release       compress and archive release directory
     echo.
-    echo     -d, dependencies           fetch and prepare dependencies
-    echo     -p, project                build this project
-    echo     -r, release                construct, compress and archive release
+    echo     -d, dependencies           fetch and prepare the dependencies
+    echo     -p, project                build this project using the dependencies
+    echo     -r, release                construct/compress/archive built project
 
     goto internal_function_teardown
 )
@@ -359,10 +360,8 @@ if "!V_COMMAND[package-release]!" EQU "yes"  echo Unsupported
 goto internal_function_teardown
 
 REM --- FUNCTION: internal_function_prepare_dependencies ---------------------
-
 :internal_function_prepare_dependencies
-REM expectation: 
-REM Process the user defined links.
+REM input argument:  V_LINKS   - The user defined links.
 set V_LABEL_RETURN_ifpds=!V_LABEL_RETURN!
 
 set /A IDX_PDS=0
@@ -403,10 +402,10 @@ REM VCS link:    VCS  <hg>  <NAME> <REVISION> <CLONEURL> <ZIPDLURL>
 REM ............ Attempt 1: Identify presence of hg.exe or git.exe, and clone or pull <CLONEURL> <REVISION>
 REM ............ Attempt 2: Download <ZIPDLURL><REVISION>.zip as a normal link.
 
-if "!V_LINK_PARTS[0]!" EQU "http" (
+if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
     REM Environment variables for powershell script.
     set fn=Archive-Extract
-    set fnp0=%DEPENDENCY_PATH%\!V_LINK_PARTS[3]!
+    set fnp0=%DEPENDENCY_PATH%\!V_LINK_PARTS[%HTTP_FILENAME%]!
     set fnp1=%DEPENDENCY_PATH%
     REM Environment variables for function 'user_function_prepare_dependency'.
     set V_DIRNAME=
@@ -419,18 +418,18 @@ if "!V_LINK_PARTS[0]!" EQU "http" (
             set V_DIRNAME=!L_LINE:~13!
         ) else if "!L_LINE:~0,4!" EQU "MSG:" (
             if "!L_LINE:~5!" EQU "EXTRACTED" (
-                echo Decompressing: [!V_LINK_PARTS[3]!] .. skipped
+                echo Decompressing: [!V_LINK_PARTS[%HTTP_FILENAME%]!] .. skipped
                 set V_SKIPPED=yes
             ) else if "!L_LINE:~5!" EQU "EXTRACTING" (
-                echo Decompressing: [!V_LINK_PARTS[3]!]
+                echo Decompressing: [!V_LINK_PARTS[%HTTP_FILENAME%]!]
             )
         ) else (
             echo Unexpected result: !L_LINE!
         )
     )
     REM Do we process the output as it arrives, or at the end?
-    REM echo Decompressed?: [!V_LINK_PARTS[3]!]
-) else if "!V_LINK_PARTS[0]!" EQU "vcs" (
+    REM echo Decompressed?: [!V_LINK_PARTS[%HTTP_FILENAME%]!]
+) else if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "vcs" (
     set V_DIRNAME=!V_LINK_PARTS[%VCS_NAME%]!
     REM Stop errors from nothing being here.
 )
@@ -480,38 +479,57 @@ set V_LABEL_RETURN_iffd=!V_LABEL_RETURN!
 :loop_internal_function_fetch_dependency
 cd %DEPENDENCY_PATH%
 
-if "!V_LINK_PARTS[0]!" EQU "vcs" (
-    if "!V_LINK_PARTS[1]!" EQU "hg" (
+if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "vcs" (
+    if "!V_LINK_PARTS[%VCS_SYSTEM%]!" EQU "hg" (
+        REM Compute whether to use Mercurial or not.
         if defined HG_EXE (
+            set L_USE_HG=yes
+            REM Presence of directory, but lack of '.hg' sub-directory, indicates zip archive source.
+            if exist "!V_LINK_PARTS[%VCS_NAME%]!" (
+                if not exist "!V_LINK_PARTS[%VCS_NAME%]!\.hg" (
+                    echo WARNING: While Mercurial is now installed, existing [!V_LINK_PARTS[%VCS_NAME%]!] directory does not use it.
+                    set L_USE_HG=no
+                )
+            )
+        ) else (
+            set L_USE_HG=no
+        )
+        if "!L_USE_HG!" EQU "yes" (
             REM Has the repository already been cloned?  If so, reuse it.
-            echo Fetching: [!V_LINK_PARTS[2]!] mercurial repository.
-            if not exist "!V_LINK_PARTS[2]!" (
+            echo Fetching: [!V_LINK_PARTS[%VCS_NAME%]!] Mercurial repository.
+            if not exist "!V_LINK_PARTS[%VCS_NAME%]!" (
                 REM Does not exist, fetch it.
-                for /F "usebackq tokens=*" %%i in (`hg clone "!V_LINK_PARTS[4]!" !V_LINK_PARTS[2]!`) do (
+                for /F "usebackq tokens=*" %%i in (`hg clone "!V_LINK_PARTS[%VCS_CLONEURL%]!" !V_LINK_PARTS[%VCS_NAME%]!`) do (
                     echo .. %HG_EXE%: %%i
-                )                
-                cd !V_LINK_PARTS[2]!
+                )
+                REM The subsequent Mercurial update needs to be within the repository directory.
+                cd !V_LINK_PARTS[%VCS_NAME%]!
             ) else (
-                cd !V_LINK_PARTS[2]!
+                REM The Mercurial pull and subsequent update needs to be within the repository directory.
+                cd !V_LINK_PARTS[%VCS_NAME%]!
                 for /F "usebackq tokens=*" %%i in (`hg pull`) do (
                     echo .. %HG_EXE%: %%i
                 )
             )
-            echo Updating: [!V_LINK_PARTS[2]!] mercurial repository to revision [!V_LINK_PARTS[3]!].
-            for /F "usebackq tokens=*" %%i in (`hg update -r "!V_LINK_PARTS[3]!" -C`) do (
+            echo Updating: [!V_LINK_PARTS[%VCS_NAME%]!] mercurial repository to revision [!V_LINK_PARTS[%VCS_REVISION%]!].
+            for /F "usebackq tokens=*" %%i in (`hg update -r "!V_LINK_PARTS[%VCS_REVISION%]!" -C`) do (
                 echo .. %HG_EXE%: %%i
             )
             goto exit_from_internal_function_fetch_dependency
         ) else (
-            REM Fall back to ZIP archive downloading.
-            REM = name
-            set V_LINK_PARTS[2]=!V_LINK_PARTS[2]! r!V_LINK_PARTS[3]! !V_LINK_PARTS[1]! snapshot
-            rem = classifier
-            set V_LINK_PARTS[0]=http
-            REM = filename
-            set V_LINK_PARTS[3]=!V_LINK_PARTS[3]!.zip
-            REM = url
-            set V_LINK_PARTS[1]=!V_LINK_PARTS[5]!!V_LINK_PARTS[3]!
+            if exist "!V_LINK_PARTS[%VCS_NAME%]!" (
+                if exist "!V_LINK_PARTS[%VCS_NAME%]!\.hg" (
+                    echo WARNING: No Mercurial client installed yet [!V_LINK_PARTS[%VCS_NAME%]!] was originally created using one.
+                    echo WARNING: Therefore [!V_LINK_PARTS[%VCS_NAME%]!] cannot be updated.
+                    goto exit_from_internal_function_fetch_dependency
+                )
+            )
+            REM Fall back to ZIP archive downloading.  Ordering of these assignments is important as some overwrite others.
+            echo WARNING: This is untested code.  If it does not work, report it.
+            set V_LINK_PARTS[%HTTP_NAME%]=!V_LINK_PARTS[%VCS_NAME%]!
+            set V_LINK_PARTS[%LINK_CLASSIFIER%]=http
+            set V_LINK_PARTS[%HTTP_FILENAME%]=!V_LINK_PARTS[%VCS_REVISION%]!.zip
+            set V_LINK_PARTS[%HTTP_URL%]=!V_LINK_PARTS[%VCS_ZIPDLURL%]!!V_LINK_PARTS[%HTTP_FILENAME%]!
         )
     )
 )
@@ -524,7 +542,7 @@ set /A L_ATTEMPTS=0
 
 if not exist "!V_LINK_PARTS[%HTTP_NAME%]!" (
     echo Downloading: [!V_LINK_PARTS[%HTTP_NAME%]!] 
-    echo powershell -c "Start-BitsTransfer -source !V_LINK_PARTS[%HTTP_URL%]!"
+    powershell -c "Start-BitsTransfer -source !V_LINK_PARTS[%HTTP_URL%]!"
     
     if not exist !V_LINK_PARTS[%HTTP_FILENAME%]! (
         echo Failed to download !V_LINK_PARTS[%HTTP_FILENAME%]!
@@ -613,11 +631,11 @@ set V_LABEL_RETURN=return_to_internal_function_verify_link
 goto internal_function_split_link
 :return_to_internal_function_verify_link
 
-if %V_LINK_PARTS[0]% EQU "http" (
-    if /I %V_LINK_PARTS[1]:~0,4% NEQ "http" goto internal_function_verify_link__valid
-    if /I %V_LINK_PARTS[1]:~-4,4% NEQ ".zip" goto internal_function_verify_link__valid
-) else if %V_LINK_PARTS[0]% EQU "vcs" (
-    if %V_LINK_PARTS[1]% EQU "hg" goto internal_function_verify_link__valid
+if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
+    if /I "!V_LINK_PARTS[%HTTP_URL%]:~0,4!" NEQ "http" goto internal_function_verify_link__valid
+    if /I "!V_LINK_PARTS[%HTTP_URL%]:~-4,4!" NEQ ".zip" goto internal_function_verify_link__valid
+) else if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "vcs" (
+    if "!V_LINK_PARTS[%VCS_SYSTEM%]!" EQU "hg" goto internal_function_verify_link__valid
 )
 
 REM emergency exit with error message.
@@ -634,33 +652,32 @@ REM input argument:  V_LABEL_RETURN - The name of the label to return to when fi
 REM output argument: V_LINK_PARTS   - The array of elements that make up the given link text.
 set V_LABEL_RETURN_ifsl=!V_LABEL_RETURN!
 
-set V_LINK_PARTS[0]=
+set V_LINK_PARTS[%LINK_CLASSIFIER%]=
 for /F "tokens=1,2,3,4,5,6" %%A in ("!V_LINK!") do (
-    set V_LINK_PARTS[0]=%%A
-    set V_LINK_PARTS[1]=%%B
-    set V_LINK_PARTS[2]=%%C
-    set V_LINK_PARTS[3]=%%D
-    set V_LINK_PARTS[4]=%%E
-    set V_LINK_PARTS[5]=%%F
-)
+    set L_FIRST=%%A
+    if /I "!L_FIRST:~0,7!" EQU "http://" (
+        set V_LINK_PARTS[%LINK_CLASSIFIER%]=http
+        set V_LINK_PARTS[%HTTP_URL%]=!V_LINK_PARTS[%%A]!
 
-if /I "!V_LINK_PARTS[0]:~0,7!" EQU "http://" (
-    set V_LINK_PARTS[1]=!V_LINK_PARTS[0]!
-    set V_LINK_PARTS[0]=http
-
-    REM function call: V_LINK_PARTS[2] = get_urlfilename(V_LINK)
-    set V_LABEL_RETURN=return_to_internal_function_split_link
-    goto internal_function_get_urlfilename
-
-) else (
-    goto internal_function_split_link__loop_exit
+        REM .. V_LINK_PARTS[%HTTP_NAME%], V_LINK_PARTS[%HTTP_FILENAME%] = get_urlfilename(V_LINK)
+        set V_LABEL_RETURN=return_to_internal_function_split_link
+        goto internal_function_get_urlfilename
+    ) else (
+        set V_LINK_PARTS[%LINK_CLASSIFIER%]=%%A
+        set V_LINK_PARTS[%VCS_SYSTEM%]=%%B
+        set V_LINK_PARTS[%VCS_NAME%]=%%C
+        set V_LINK_PARTS[%VCS_REVISION%]=%%D
+        set V_LINK_PARTS[%VCS_CLONEURL%]=%%E
+        set V_LINK_PARTS[%VCS_ZIPDLURL%]=%%F
+        goto exit_from_internal_function_split_link
+    )
 )
 
 :return_to_internal_function_split_link
-set V_LINK_PARTS[2]=!V_RESULT!
-set V_LINK_PARTS[3]=!V_RESULT!
+set V_LINK_PARTS[%HTTP_NAME%]=!V_RESULT!
+set V_LINK_PARTS[%HTTP_FILENAME%]=!V_RESULT!
 
-:internal_function_split_link__loop_exit
+:exit_from_internal_function_split_link
 goto !V_LABEL_RETURN_ifsl!
 
 REM --- FUNCTION: internal_function_split_link -------------------------------
