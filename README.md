@@ -60,18 +60,17 @@ These instructions are intended to allow you to get Incursion to the point where
     1. Select the Online entry from the left-hand side list.
     1. Search for and install EditorConfig.
     1. Exit Visual Studio.
-  1. Decide if you are going to do take the simple or advanced approach to obtaining the dependencies.
-    1. The simple approach.
-      1. Ensure you have downloaded the build dependencies archive mentioned above, from the bitbucket [project downloads page](https://bitbucket.org/rmtew/incursion-roguelike/downloads).
-      1. Open the archive and look inside it.  There is only one entry there, a directory named `dependencies`, and within that there is a selection of files and directories inside it like `include`, `libtcod.dll` and so forth.
-      1. Enter the `build` subdirectory within the source code.
-      1. Extract the contents of the archive here.
-      1. You should now be able to locate the `build\dependencies\include` directory.  You should now be able to locate `build\dependencies\libtcod.lib`.  If this is not the case, then you did not extract the contents of the archive into the `build` subdirectory.  Try again.
-      1. The simple approach is complete!
-    1. The advanced approach.
-      1. Open a DOS console window, and ensure you are in the top-level directory of the Incursion source code.
-      1. Type `build.bat -d` and hit enter.
-      1. Lots of text will scroll past and eventually you will have compiled source code, or this script will error and you will have to ask for help.	
+  1. If you are going to do take the simple approach to obtaining the dependencies:
+    1. Ensure you have downloaded the build dependencies archive mentioned above, from the bitbucket [project downloads page](https://bitbucket.org/rmtew/incursion-roguelike/downloads).
+    1. Open the archive and look inside it.  There is only one entry there, a directory named `dependencies`, and within that there is a selection of files and directories inside it like `include`, `libtcod.dll` and so forth.
+    1. Enter the `build` subdirectory within the source code.
+    1. Extract the contents of the archive here.
+    1. You should now be able to locate the `build\dependencies\include` directory.  You should now be able to locate `build\dependencies\libtcod.lib`.  If this is not the case, then you did not extract the contents of the archive into the `build` subdirectory.  Try again.
+  1. Otherwise if you are going to do take the advanced approach to obtaining the dependencies:
+    1. Open a DOS console window, and ensure you are in the top-level directory of the Incursion source code.
+    1. Type `build.bat -d` and hit enter.
+    1. Lots of text will scroll past and eventually you will have compiled source code, or this script will error and you will have to ask for help.
+  1. If you have reached here, you have obtained the dependencies.
   1. Open `Incursion.sln` and do a debug build of Incursion.
   1. Debug Incursion within Visual Studio.
   1. Select the 'Compile Resources' main menu option.  Once completed, this will have created the `mod\Incursion.Mod` file.
