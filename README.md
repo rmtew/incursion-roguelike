@@ -71,12 +71,10 @@ These instructions are intended to allow you to get Incursion to the point where
     1. Type `build.bat -d` and hit enter.
     1. Lots of text will scroll past and eventually you will have compiled source code, or this script will error and you will have to ask for help.
   1. If you have reached here, you have obtained the dependencies.
-  1. Open `Incursion.sln` and do a debug build of Incursion.
-  1. Debug Incursion within Visual Studio.
-  1. Select the 'Compile Resources' main menu option.  Once completed, this will have created the `mod\Incursion.Mod` file.
+  1. Open `Incursion.sln`.
+  1. Ensure the `Debug` configuration is selected.
+  1. Look at the Solution Explorer window.  You will see four entries: `exe_curses`, `exe_libtcod`, `lib_incursion` and `modaccent`.  One will be darker than the others.  This is the one which runs when you start debugging.  If the darker entry is not `exe_libtcod`, then right click on `exe_libtcod` and choose the `Set as Startup Project` option to make it darker.
+  1. Start debugging Incursion.  The game window will open.
+  1. In the Incursion main menu, select the 'Compile Resources' option.  Until this is done and the module is generated, few other options will work.  Once the module is generated, this will have created a `build\run\mod\Incursion.Mod` file.
 
-At this point, you are ready to do some development, or just play the latest version of the source code (within Visual Studio).  Congratulations!
-
-*Building Incursion modules:*
-
-Note that the module is built by running the Incursion executable, and selecting the compile option from the main menu.  However, this option is only present in debug builds of Incursion.
+At this point, you are ready to do some development, or just play the latest version of the source code within Visual Studio.  Congratulations!  But note that all the files which `Incursion.exe` requires to run are scattered in a variety of directories, and you cannot just copy it somewhere and expect it to work.  At some point `build.bat -r` will take care of that.  For now, you can read `build\make-release.bat` and try and work it out for yourself.  Or open an Incursion release and look at what files are needed where.
