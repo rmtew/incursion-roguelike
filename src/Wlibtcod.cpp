@@ -231,13 +231,14 @@ class libtcodTerm: public TextTerm
                       if (s[strlen(s) - 1] == '\\')
                           s[strlen(s) - 1] = '\0';
                   }
-              } else {
+              }
+              if (strlen(s) == 0) {
                   strcat(s, IncursionDirectory);
                   strcat(s, "lib");
               }
           }
           return s;
-      } 
+      }
       virtual const char* LogSubDir()     { return "logs"; } 
       virtual const char* ManualSubDir()  { return "man"; } 
       virtual const char* OptionsSubDir() { return "."; } 

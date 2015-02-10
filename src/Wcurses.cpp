@@ -279,7 +279,8 @@ class cursesTerm: public TextTerm
                       if (s[strlen(s) - 1] == '\\')
                           s[strlen(s) - 1] = '\0';
                   }
-              } else {
+              }
+              if (strlen(s) == 0) {
                   strcat(s, IncursionDirectory);
                   strcat(s, "lib");
               }
