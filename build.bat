@@ -3,10 +3,6 @@
 setlocal EnableDelayedExpansion
 
 REM TODO: INCURSION USER
-REM TODO: - Alter the game code to use environment variables to get override paths for:
-REM TODO: -- Lib directory
-REM TODO: -- Font directory
-REM TODO: - Do not copy the above directories as a post-build step.
 REM TODO: FETCH
 REM TODO: - The top level prepared dependencies should be bundled for release, as a quick cheat pack.
 REM TODO: -- If installed, then 
@@ -16,8 +12,6 @@ REM TODO: -- What if someone installs hg after downloading and using the snapsho
 REM TODO: GENERAL
 REM TODO: - Incorporate make-release.bat -> build\release\...
 REM TODO: - Add arguments to this script, to allow skipping the pre-steps.
-REM TODO: - Try and remove the extra directories top level that are only there to make Incursion run.
-REM TODO: -- Debugging Incursion should create a build\run\...
 
 REM Divert to the internal setup code, it will return to the user setup.
 goto internal_function_setup
@@ -66,6 +60,9 @@ REM variable: %V_SKIPPED% - 'yes' or 'no', depending on whether the archive was 
 set V_LABEL_RETURN_ufpd=!V_LABEL_RETURN!
 
 cd !DEPENDENCY_PATH!
+
+set /A L_SDL2_ATTEMPTS=0
+:user_function_prepare_dependency_retry
 
 if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
     if "!V_LINK_PARTS[%HTTP_FILENAME%]!" EQU "win_flex_bison-latest.zip" (
@@ -116,10 +113,36 @@ if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
         if not exist !DEPENDENCY_PATH!\SDL2_d.dll (
             echo Building: [SDL2/Debug]
 
-            msbuild /nologo VisualC\SDL_VS2013.sln /p:Configuration=Debug /p:Platform=Win32 /t:SDL2,SDL2main
-            copy VisualC\SDL\Win32\Debug\SDL2.dll !DEPENDENCY_PATH!\SDL2_d.dll
-            copy VisualC\SDL\Win32\Debug\SDL2.lib !DEPENDENCY_PATH!\SDL2_d.lib
-            copy VisualC\SDL\Win32\Debug\SDL2.pdb !DEPENDENCY_PATH!\SDL2_d.pdb
+            REM SDL2 in theory requires the DirectX SDK to be installed, but in practice it's absence
+            REM can be worked around by putting a dummy include file in place, and then only XAudio2
+            REM support is lost.
+            set L_ERROR_MSG=
+            for /F "usebackq tokens=*" %%i in (`msbuild /nologo VisualC\SDL_VS2013.sln /p:Configuration^=Debug /p:Platform^=Win32 /t:SDL2^,SDL2main`) do (
+                set L_LINE=%%i
+                if "!L_LINE:fatal error=!" NEQ "!L_LINE!" set L_ERROR_MSG=%%i
+            )
+            set /A L_SDL2_ATTEMPTS=!L_SDL2_ATTEMPTS!+1
+
+            if exist VisualC\SDL\Win32\Debug\SDL2.dll (
+                copy VisualC\SDL\Win32\Debug\SDL2.dll !DEPENDENCY_PATH!\SDL2_d.dll
+                copy VisualC\SDL\Win32\Debug\SDL2.lib !DEPENDENCY_PATH!\SDL2_d.lib
+                copy VisualC\SDL\Win32\Debug\SDL2.pdb !DEPENDENCY_PATH!\SDL2_d.pdb
+            ) else (
+                REM Only try and recover from the DirectX problem, and if that don't work, give up.
+                if "!L_ERROR_MSG!" NEQ "" (
+                    if !L_SDL2_ATTEMPTS! EQU 1 (
+                        if "!L_ERROR_MSG:dxsdkver=!" NEQ "!L_ERROR_MSG!" (
+                            echo WARNING: Trying to make up for lack of installed DirectX SDK.
+                            type nul > include\dxsdkver.h
+                            cd !DEPENDENCY_PATH!
+                            goto user_function_prepare_dependency_retry
+                        )
+                    )
+                )
+            
+                echo ERROR.. SDL2.dll did not successfully build for some reason.
+                goto internal_function_exit
+            )
         ) else (
             echo Building: [SDL2/Debug] .. skipped
         )
@@ -128,9 +151,14 @@ if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
             echo Building: [SDL2/Release]
 
             msbuild /nologo VisualC\SDL_VS2013.sln /p:Configuration=Release /p:Platform=Win32 /t:SDL2,SDL2main
-            copy VisualC\SDL\Win32\Release\SDL2.dll !DEPENDENCY_PATH!\SDL2.dll
-            copy VisualC\SDL\Win32\Release\SDL2.lib !DEPENDENCY_PATH!\SDL2.lib
-            copy VisualC\SDL\Win32\Release\SDL2.pdb !DEPENDENCY_PATH!\SDL2.pdb
+            if exist VisualC\SDL\Win32\Debug\SDL2.dll (
+                copy VisualC\SDL\Win32\Release\SDL2.dll !DEPENDENCY_PATH!\SDL2.dll
+                copy VisualC\SDL\Win32\Release\SDL2.lib !DEPENDENCY_PATH!\SDL2.lib
+                copy VisualC\SDL\Win32\Release\SDL2.pdb !DEPENDENCY_PATH!\SDL2.pdb
+            ) else (
+                echo ERROR.. SDL2.dll did not successfully build for some reason.
+                goto internal_function_exit
+            )
         ) else (
             echo Building: [SDL2/Release] .. skipped
         )
@@ -255,15 +283,78 @@ REM --- FUNCTION: internal_function_main -------------------------------------
 :internal_function_main
 REM input argument:  V_LINKS   - The user defined links.
 
-REM fetch-dependencies
-set V_LABEL_RETURN=return_to_internal_function_main_FD
-goto internal_function_fetch_dependencies
+if "%1" EQU "" (
+    echo Usage: !BUILD_SCRIPT_FILENAME! [OPTION]
+    echo.
+    echo     -fd, fetch-dependencies    download if necessary
+    echo     -pd, prepare-dependencies  extract and/or build, ready for project build
+    echo     -mr, make-release          construct release directory for packaging
+    echo     -pr, package-release       compress and archive release directory
+    echo.
+    echo     -d, dependencies           fetch and prepare dependencies
+    echo     -p, project                build this project
+    echo     -r, release                construct, compress and archive release
+
+    goto internal_function_teardown
+)
+
+set V_COMMANDS[fetch-dependencies]=fetch-dependencies
+set V_COMMANDS[prepare-dependencies]=prepare-dependencies
+set V_COMMANDS[make-release]=make-release
+set V_COMMANDS[package-release]=package-release
+set V_COMMANDS[dependencies]=dependencies
+set V_COMMANDS[project]=project
+set V_COMMANDS[release]=release
+set V_COMMANDS[-fd]=fetch-dependencies
+set V_COMMANDS[-pd]=prepare-dependencies
+set V_COMMANDS[-mr]=make-release
+set V_COMMANDS[-pr]=package-release
+set V_COMMANDS[-d]=dependencies
+set V_COMMANDS[-p]=project
+set V_COMMANDS[-r]=release
+
+:parse_args
+if "%~1" EQU "" goto parse_args_end
+set L_COMMAND=!V_COMMANDS[%~1]!
+if "!L_COMMAND!" EQU "" (
+    echo !BUILD_SCRIPT_FILENAME!: command %1 unrecognised.
+    echo.
+    echo Type '!BUILD_SCRIPT_FILENAME!' to see valid options.
+    goto internal_function_teardown
+)
+set V_COMMAND[!L_COMMAND!]=yes
+shift
+goto parse_args
+
+:parse_args_end
+
+REM Ensure sub-steps are selected for the more general commands.
+if "!V_COMMAND[dependencies]!" EQU "yes" (
+    set V_COMMAND[fetch-dependencies]=yes
+    set V_COMMAND[prepare-dependencies]=yes
+)
+
+if "!V_COMMAND[release]!" EQU "yes" (
+    set V_COMMAND[make-release]=yes
+    set V_COMMAND[package-release]=yes
+)
+
+REM Do the selected general commands.
+if "!V_COMMAND[fetch-dependencies]!" EQU "yes" (
+    set V_LABEL_RETURN=return_to_internal_function_main_FD
+    goto internal_function_fetch_dependencies
+)
 :return_to_internal_function_main_FD
 
-REM prepare-dependencies
-set V_LABEL_RETURN=return_to_internal_function_main_PD
-goto internal_function_prepare_dependencies
+if "!V_COMMAND[prepare-dependencies]!" EQU "yes" (
+    set V_LABEL_RETURN=return_to_internal_function_main_PD
+    goto internal_function_prepare_dependencies
+)
 :return_to_internal_function_main_PD
+
+REM These are not implemented yet.
+if "!V_COMMAND[make-release]!" EQU "yes"  echo Unsupported
+if "!V_COMMAND[package-release]!" EQU "yes"  echo Unsupported
 
 goto internal_function_teardown
 
