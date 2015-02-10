@@ -1,4 +1,4 @@
-#line 1 "lang/grammar.acc"
+#line 1 "../lang/grammar.acc"
 
 /* GRAMMAR.ACC -- Copyright (c) 1999-2003 Julian Mensch
 
@@ -148,7 +148,7 @@ extern "C" int yywrap() {
 
 
 
-# line 152 "src/yygram.cpp"
+# line 152 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
 #include "yygram.h"
 
 int YYSTART ()
@@ -166,9 +166,9 @@ int file ()
 {
    switch(yyselect()) {
    case 1: {
-#line 193 "lang/grammar.acc"
+#line 193 "../lang/grammar.acc"
  currMap = 0; MemFuncID = 0; MemVarID = 0; 
-# line 172 "src/yygram.cpp"
+# line 172 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 480: {
@@ -196,26 +196,26 @@ int resource ()
       get_lexval();
       name = yylval;
       get_lexval();
-#line 197 "lang/grammar.acc"
+#line 197 "../lang/grammar.acc"
  theModule->Name = name; 
-# line 202 "src/yygram.cpp"
+# line 202 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 3: {
       get_lexval();
       cexpr3(&n);
       get_lexval();
-#line 198 "lang/grammar.acc"
+#line 198 "../lang/grammar.acc"
  theModule->Slot = (int16)n; 
-# line 210 "src/yygram.cpp"
+# line 210 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 4: {
       get_lexval();
       get_lexval();
       fname = yylval;
       get_lexval();
-#line 199 "lang/grammar.acc"
+#line 199 "../lang/grammar.acc"
  theModule->FName = fname; 
-# line 219 "src/yygram.cpp"
+# line 219 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 5: {
       monster_def();
@@ -295,9 +295,9 @@ int resource ()
       default: printf("???\n"); exit(1);
       }
       cexpr(&n);
-#line 223 "lang/grammar.acc"
+#line 223 "../lang/grammar.acc"
  CompilerFlags |= n; 
-# line 301 "src/yygram.cpp"
+# line 301 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 29: {
       get_lexval();
@@ -320,9 +320,9 @@ int resource ()
       default: ;
       }
       get_lexval();
-#line 225 "lang/grammar.acc"
+#line 225 "../lang/grammar.acc"
  theRes = theTxt; theTxt->Name = nam; theTxt->Desc = text; theTxt++; 
-# line 326 "src/yygram.cpp"
+# line 326 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -337,7 +337,7 @@ int res_ref (rID *res)
       get_lexval();
       get_lexval();
       lit = yylval;
-#line 229 "lang/grammar.acc"
+#line 229 "../lang/grammar.acc"
  PurgeStrings();
                          *res = FIND(theModule->GetText(lit)); 
                          if (!*res) {
@@ -347,14 +347,14 @@ int res_ref (rID *res)
                            *res = FIND("unimplemented");
                            }
                         
-# line 351 "src/yygram.cpp"
+# line 351 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 31: {
       get_lexval();
       cexpr3(&n);
-#line 238 "lang/grammar.acc"
+#line 238 "../lang/grammar.acc"
  *res = n; 
-# line 358 "src/yygram.cpp"
+# line 358 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -370,23 +370,23 @@ int cexpr (YYSTYPE *val)
       cexpr(&x);
       get_lexval();
       cexpr2(&y);
-#line 242 "lang/grammar.acc"
+#line 242 "../lang/grammar.acc"
  *val = x+y; 
-# line 376 "src/yygram.cpp"
+# line 376 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 33: {
       cexpr(&x);
       get_lexval();
       cexpr2(&y);
-#line 243 "lang/grammar.acc"
+#line 243 "../lang/grammar.acc"
  *val = x-y; 
-# line 384 "src/yygram.cpp"
+# line 384 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 34: {
       cexpr2(&val2);
-#line 244 "lang/grammar.acc"
+#line 244 "../lang/grammar.acc"
  *val = val2; 
-# line 390 "src/yygram.cpp"
+# line 390 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -402,47 +402,47 @@ int cexpr2 (YYSTYPE *val)
       cexpr2(&x);
       get_lexval();
       cexpr3(&y);
-#line 248 "lang/grammar.acc"
+#line 248 "../lang/grammar.acc"
  *val = x * y; 
-# line 408 "src/yygram.cpp"
+# line 408 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 36: {
       cexpr2(&x);
       get_lexval();
       cexpr3(&y);
-#line 249 "lang/grammar.acc"
+#line 249 "../lang/grammar.acc"
  *val = x / y; 
-# line 416 "src/yygram.cpp"
+# line 416 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 37: {
       cexpr2(&x);
       get_lexval();
       cexpr3(&y);
-#line 250 "lang/grammar.acc"
+#line 250 "../lang/grammar.acc"
  *val = x % y; 
-# line 424 "src/yygram.cpp"
+# line 424 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 38: {
       cexpr2(&x);
       get_lexval();
       cexpr3(&y);
-#line 251 "lang/grammar.acc"
+#line 251 "../lang/grammar.acc"
  *val = x | y; 
-# line 432 "src/yygram.cpp"
+# line 432 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 39: {
       cexpr2(&x);
       get_lexval();
       cexpr3(&y);
-#line 252 "lang/grammar.acc"
+#line 252 "../lang/grammar.acc"
  *val = x & y; 
-# line 440 "src/yygram.cpp"
+# line 440 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 40: {
       cexpr3(&val2);
-#line 254 "lang/grammar.acc"
+#line 254 "../lang/grammar.acc"
  *val = val2; 
-# line 446 "src/yygram.cpp"
+# line 446 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -457,22 +457,22 @@ int cexpr3 (YYSTYPE *val)
    case 41: {
       get_lexval();
       cexpr4(&val2);
-#line 258 "lang/grammar.acc"
+#line 258 "../lang/grammar.acc"
  *val = val2; 
-# line 463 "src/yygram.cpp"
+# line 463 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 42: {
       get_lexval();
       cexpr4(&n);
-#line 259 "lang/grammar.acc"
+#line 259 "../lang/grammar.acc"
  *val = -n; 
-# line 470 "src/yygram.cpp"
+# line 470 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 43: {
       cexpr4(&val3);
-#line 260 "lang/grammar.acc"
+#line 260 "../lang/grammar.acc"
  *val = val3; 
-# line 476 "src/yygram.cpp"
+# line 476 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -488,35 +488,35 @@ int cexpr4 (YYSTYPE *val)
       get_lexval();
       cexpr(&val2);
       get_lexval();
-#line 264 "lang/grammar.acc"
+#line 264 "../lang/grammar.acc"
  * val = val2; 
-# line 494 "src/yygram.cpp"
+# line 494 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 45: {
       get_lexval();
       val3 = yylval;
-#line 265 "lang/grammar.acc"
+#line 265 "../lang/grammar.acc"
  *val = val3; 
-# line 501 "src/yygram.cpp"
+# line 501 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 46: {
       get_lexval();
-#line 266 "lang/grammar.acc"
+#line 266 "../lang/grammar.acc"
  *val = 1; 
-# line 507 "src/yygram.cpp"
+# line 507 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 47: {
       get_lexval();
-#line 267 "lang/grammar.acc"
+#line 267 "../lang/grammar.acc"
  *val = 0; 
-# line 513 "src/yygram.cpp"
+# line 513 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 48: {
       get_lexval();
       val4 = yylval;
-#line 268 "lang/grammar.acc"
+#line 268 "../lang/grammar.acc"
  * val = val4; 
-# line 520 "src/yygram.cpp"
+# line 520 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -535,9 +535,9 @@ int dice_val (Dice *d)
       cexpr4(&sid);
       get_lexval();
       cexpr4(&bon);
-#line 273 "lang/grammar.acc"
+#line 273 "../lang/grammar.acc"
  d->Number = (int8)num; d->Sides = (int8)sid; d->Bonus = (int8)bon; 
-# line 541 "src/yygram.cpp"
+# line 541 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 50: {
       cexpr4(&num);
@@ -546,23 +546,23 @@ int dice_val (Dice *d)
       get_lexval();
       get_lexval();
       cexpr4(&bon);
-#line 275 "lang/grammar.acc"
+#line 275 "../lang/grammar.acc"
  d->Number = (int8)num; d->Sides = (int8)sid; d->Bonus = (int8)-bon; 
-# line 552 "src/yygram.cpp"
+# line 552 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 51: {
       cexpr4(&num);
       get_lexval();
       cexpr4(&sid);
-#line 277 "lang/grammar.acc"
+#line 277 "../lang/grammar.acc"
  d->Number = (int8)num; d->Sides = (int8)sid; d->Bonus = 0; 
-# line 560 "src/yygram.cpp"
+# line 560 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 52: {
       cexpr3(&x);
-#line 279 "lang/grammar.acc"
+#line 279 "../lang/grammar.acc"
  d->Number = 0; d->Sides = 0; d->Bonus = (int8)x; 
-# line 566 "src/yygram.cpp"
+# line 566 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -580,17 +580,17 @@ int dice_only (Dice *d)
       cexpr4(&sid);
       get_lexval();
       cexpr4(&bon);
-#line 284 "lang/grammar.acc"
+#line 284 "../lang/grammar.acc"
  d->Number = (int8)num; d->Sides = (int8)sid; d->Bonus = (int8)bon; 
-# line 586 "src/yygram.cpp"
+# line 586 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 54: {
       cexpr4(&num);
       get_lexval();
       cexpr4(&sid);
-#line 286 "lang/grammar.acc"
+#line 286 "../lang/grammar.acc"
  d->Number = (int8)num; d->Sides = (int8)sid; d->Bonus = 0; 
-# line 594 "src/yygram.cpp"
+# line 594 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -609,7 +609,7 @@ int gear_entry (int16 *chance, Dice *amt, rID *iID, rID *eID, uint16 *spec, uint
    YYSTYPE y;
    switch(yyselect()) {
    case 55: {
-#line 291 "lang/grammar.acc"
+#line 291 "../lang/grammar.acc"
 
     int16 q; q=0;
     *chance = 0;
@@ -618,16 +618,16 @@ int gear_entry (int16 *chance, Dice *amt, rID *iID, rID *eID, uint16 *spec, uint
     *cond = 0;
     *iID = *eID = 0;
     amt->Set(1,1,0); 
-# line 622 "src/yygram.cpp"
+# line 622 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       switch (yyselect()) {
       case 484: {
          get_lexval();
          get_lexval();
          sep_expr(&hc);
          get_lexval();
-#line 299 "lang/grammar.acc"
+#line 299 "../lang/grammar.acc"
  *cond = hc; 
-# line 631 "src/yygram.cpp"
+# line 631 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       default: ;
       }
@@ -636,49 +636,49 @@ int gear_entry (int16 *chance, Dice *amt, rID *iID, rID *eID, uint16 *spec, uint
          get_lexval();
          n = yylval;
          get_lexval();
-#line 300 "lang/grammar.acc"
+#line 300 "../lang/grammar.acc"
  *chance = (int16)n; 
-# line 642 "src/yygram.cpp"
+# line 642 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       default: ;
       }
       switch (yyselect()) {
       case 486: {
          dice_only(&dv);
-#line 301 "lang/grammar.acc"
+#line 301 "../lang/grammar.acc"
  *amt = yyDice(dv); 
-# line 651 "src/yygram.cpp"
+# line 651 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       default: ;
       }
       switch (yyselect()) {
       case 487: {
          get_lexval();
-#line 302 "lang/grammar.acc"
+#line 302 "../lang/grammar.acc"
  *fl |= GF_CURSED; 
-# line 660 "src/yygram.cpp"
+# line 660 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       case 488: {
          get_lexval();
-#line 303 "lang/grammar.acc"
+#line 303 "../lang/grammar.acc"
  *fl |= GF_BLESSED; 
-# line 666 "src/yygram.cpp"
+# line 666 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       default: ;
       }
       switch (yyselect()) {
       case 489: {
          res_ref(&rr);
-#line 304 "lang/grammar.acc"
+#line 304 "../lang/grammar.acc"
  *iID = rr; 
-# line 675 "src/yygram.cpp"
+# line 675 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       case 490: {
          get_lexval();
          cexpr3(&n);
-#line 305 "lang/grammar.acc"
+#line 305 "../lang/grammar.acc"
  *iID = n; *fl |= GF_RANDOM_ITEM; 
-# line 682 "src/yygram.cpp"
+# line 682 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       default: printf("???\n"); exit(1);
       }
@@ -687,17 +687,17 @@ int gear_entry (int16 *chance, Dice *amt, rID *iID, rID *eID, uint16 *spec, uint
          get_lexval();
          get_lexval();
          n = yylval;
-#line 306 "lang/grammar.acc"
+#line 306 "../lang/grammar.acc"
  *spec = (uint16)n; 
-# line 693 "src/yygram.cpp"
+# line 693 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       case 492: {
          get_lexval();
          get_lexval();
          n = yylval;
-#line 306 "lang/grammar.acc"
+#line 306 "../lang/grammar.acc"
  *spec = (uint16)-n; 
-# line 701 "src/yygram.cpp"
+# line 701 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       default: ;
       }
@@ -716,12 +716,12 @@ int gear_entry (int16 *chance, Dice *amt, rID *iID, rID *eID, uint16 *spec, uint
                      } break;
                   default: ;
                   }
-#line 307 "lang/grammar.acc"
+#line 307 "../lang/grammar.acc"
  if (q >= 4)
                                    yyerror("Max 4 qualities in gear lists!");
                                 else
                                   ((uint8*)qual)[q++] = (uint8)wq;
-# line 725 "src/yygram.cpp"
+# line 725 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                   } break;
                default: goto yy3;
                }
@@ -732,9 +732,9 @@ int gear_entry (int16 *chance, Dice *amt, rID *iID, rID *eID, uint16 *spec, uint
          case 496: {
             get_lexval();
             res_ref(&rr);
-#line 311 "lang/grammar.acc"
+#line 311 "../lang/grammar.acc"
  *eID = rr; 
-# line 738 "src/yygram.cpp"
+# line 738 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          case 497: {
             get_lexval();
@@ -742,24 +742,24 @@ int gear_entry (int16 *chance, Dice *amt, rID *iID, rID *eID, uint16 *spec, uint
             cexpr3(&a);
             get_lexval();
             cexpr3(&b);
-#line 313 "lang/grammar.acc"
+#line 313 "../lang/grammar.acc"
  *eID = a + b*256; *fl |= GF_RANDOM_EFFECT; 
-# line 748 "src/yygram.cpp"
+# line 748 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          case 498: {
             get_lexval();
             get_lexval();
             cexpr3(&b);
-#line 315 "lang/grammar.acc"
+#line 315 "../lang/grammar.acc"
  *eID = b*256; *fl |= GF_RANDOM_EFFECT; 
-# line 756 "src/yygram.cpp"
+# line 756 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          case 499: {
             get_lexval();
             get_lexval();
-#line 317 "lang/grammar.acc"
+#line 317 "../lang/grammar.acc"
  *eID = 0; *fl |= GF_RANDOM_EFFECT; 
-# line 763 "src/yygram.cpp"
+# line 763 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          case 500: {
             get_lexval();
@@ -790,9 +790,9 @@ int gear_desc ()
    hCode cond;
    switch(yyselect()) {
    case 56: {
-#line 323 "lang/grammar.acc"
+#line 323 "../lang/grammar.acc"
  int16 is_else = 0; 
-# line 796 "src/yygram.cpp"
+# line 796 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       get_lexval();
       switch (yyselect()) {
       case 501: {
@@ -804,21 +804,21 @@ int gear_desc ()
          switch (yyselect()) {
          case 504: {
             gear_entry(&chance, &amt, &iID, &eID, &spec, &qual, &fl, &cond);
-#line 326 "lang/grammar.acc"
+#line 326 "../lang/grammar.acc"
  theRes->AddEquip((uint8)chance,amt,iID,eID,(int8)spec,(uint8*)(&qual),(uint8)(fl | is_else),cond); 
-# line 810 "src/yygram.cpp"
+# line 810 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 502: {
                get_lexval();
-#line 327 "lang/grammar.acc"
+#line 327 "../lang/grammar.acc"
  is_else = 0; 
-# line 816 "src/yygram.cpp"
+# line 816 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                } break;
             case 503: {
                get_lexval();
-#line 327 "lang/grammar.acc"
+#line 327 "../lang/grammar.acc"
  is_else = GF_ELSE; 
-# line 822 "src/yygram.cpp"
+# line 822 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                } break;
             default: printf("???\n"); exit(1);
             }
@@ -828,9 +828,9 @@ int gear_desc ()
       }
       yy4: ;
       gear_entry(&chance, &amt, &iID, &eID, &spec, &qual, &fl, &cond);
-#line 329 "lang/grammar.acc"
+#line 329 "../lang/grammar.acc"
  theRes->AddEquip((uint8)chance,amt,iID,eID,(int8)spec,(uint8*)(&qual),(uint8)(fl | is_else),cond); 
-# line 834 "src/yygram.cpp"
+# line 834 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       get_lexval();
       } break;
    }
@@ -859,15 +859,15 @@ int glyph_entry (uint16 *img)
          } break;
       default: ;
       }
-#line 333 "lang/grammar.acc"
+#line 333 "../lang/grammar.acc"
  *img = GLYPH_FORE(WHITE); 
-# line 865 "src/yygram.cpp"
+# line 865 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       switch (yyselect()) {
       case 508: {
          color(&col);
-#line 334 "lang/grammar.acc"
+#line 334 "../lang/grammar.acc"
  *img = (uint16)GLYPH_FORE(col); 
-# line 871 "src/yygram.cpp"
+# line 871 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       default: ;
       }
@@ -875,16 +875,16 @@ int glyph_entry (uint16 *img)
       case 509: {
          get_lexval();
          n = yylval;
-#line 335 "lang/grammar.acc"
+#line 335 "../lang/grammar.acc"
  *img |= n; 
-# line 881 "src/yygram.cpp"
+# line 881 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       case 510: {
          get_lexval();
          n = yylval;
-#line 336 "lang/grammar.acc"
+#line 336 "../lang/grammar.acc"
  *img |= n; 
-# line 888 "src/yygram.cpp"
+# line 888 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       default: printf("???\n"); exit(1);
       }
@@ -892,9 +892,9 @@ int glyph_entry (uint16 *img)
       case 511: {
          get_lexval();
          color(&back);
-#line 338 "lang/grammar.acc"
+#line 338 "../lang/grammar.acc"
  *img |= GLYPH_BACK(back); 
-# line 898 "src/yygram.cpp"
+# line 898 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       default: ;
       }
@@ -911,15 +911,15 @@ int glyph_desc (uint16 *img)
    YYSTYPE back;
    switch(yyselect()) {
    case 58: {
-#line 342 "lang/grammar.acc"
+#line 342 "../lang/grammar.acc"
  *img = GLYPH_FORE(WHITE); 
-# line 917 "src/yygram.cpp"
+# line 917 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       switch (yyselect()) {
       case 512: {
          color(&col);
-#line 343 "lang/grammar.acc"
+#line 343 "../lang/grammar.acc"
  *img = (uint16)GLYPH_FORE(col); 
-# line 923 "src/yygram.cpp"
+# line 923 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       default: ;
       }
@@ -927,16 +927,16 @@ int glyph_desc (uint16 *img)
       case 513: {
          get_lexval();
          n = yylval;
-#line 344 "lang/grammar.acc"
+#line 344 "../lang/grammar.acc"
  *img |= n; 
-# line 933 "src/yygram.cpp"
+# line 933 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       case 514: {
          get_lexval();
          n = yylval;
-#line 345 "lang/grammar.acc"
+#line 345 "../lang/grammar.acc"
  *img |= n; 
-# line 940 "src/yygram.cpp"
+# line 940 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       default: printf("???\n"); exit(1);
       }
@@ -944,9 +944,9 @@ int glyph_desc (uint16 *img)
       case 515: {
          get_lexval();
          color(&back);
-#line 346 "lang/grammar.acc"
+#line 346 "../lang/grammar.acc"
  *img |= GLYPH_BACK(back); 
-# line 950 "src/yygram.cpp"
+# line 950 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       default: ;
       }
@@ -985,21 +985,21 @@ int event_entry ()
    VBlock vc;
    switch(yyselect()) {
    case 60: {
-#line 354 "lang/grammar.acc"
+#line 354 "../lang/grammar.acc"
  int16 EvList[32]; int16 i, cEvent = 0; 
-# line 991 "src/yygram.cpp"
+# line 991 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       cexpr(&n);
-#line 355 "lang/grammar.acc"
+#line 355 "../lang/grammar.acc"
  EvList[cEvent++] = (int16)n; theEvent = n; 
-# line 995 "src/yygram.cpp"
+# line 995 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 517: {
             get_lexval();
             cexpr(&n);
-#line 356 "lang/grammar.acc"
+#line 356 "../lang/grammar.acc"
  EvList[cEvent++] = (int16)n; 
-# line 1003 "src/yygram.cpp"
+# line 1003 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          default: goto yy6;
          }
@@ -1009,20 +1009,20 @@ int event_entry ()
       case 519: {
          get_lexval();
          lv = yylval;
-#line 357 "lang/grammar.acc"
+#line 357 "../lang/grammar.acc"
  for(i=0;i!=cEvent;i++)
                               theRes->AddEvent(-EvList[i],lv); 
-# line 1016 "src/yygram.cpp"
+# line 1016 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          while (1) {
             switch (yyselect()) {
             case 518: {
                get_lexval();
                get_lexval();
                lv = yylval;
-#line 359 "lang/grammar.acc"
+#line 359 "../lang/grammar.acc"
  for(i=0;i!=cEvent;i++)
                               theRes->AddEvent(-EvList[i],lv); 
-# line 1026 "src/yygram.cpp"
+# line 1026 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                } break;
             default: goto yy7;
             }
@@ -1031,13 +1031,13 @@ int event_entry ()
          } break;
       case 520: {
          routine(&vc);
-#line 364 "lang/grammar.acc"
+#line 364 "../lang/grammar.acc"
  hCode hc = theCodeSeg.Add(&vc);
                             theCodeSeg.Generate(HALT);
                             for(i=0;i!=cEvent;i++)
                               theRes->AddEvent(EvList[i],hc);
                             theEvent = 0; 
-# line 1041 "src/yygram.cpp"
+# line 1041 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       default: printf("???\n"); exit(1);
       }
@@ -1051,17 +1051,17 @@ int sep_expr (hCode *hc)
    PExp ex;
    switch(yyselect()) {
    case 61: {
-#line 373 "lang/grammar.acc"
+#line 373 "../lang/grammar.acc"
  theEvent = EV_CONDITION; 
-# line 1057 "src/yygram.cpp"
+# line 1057 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       expr(&ex);
-#line 375 "lang/grammar.acc"
+#line 375 "../lang/grammar.acc"
  *hc = theCodeSeg.Add(ex.Code);
       theCodeSeg.Generate(RET,ex.Storage,ex.Value); 
-# line 1062 "src/yygram.cpp"
-#line 377 "lang/grammar.acc"
+# line 1062 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
+#line 377 "../lang/grammar.acc"
  theEvent = 0; 
-# line 1065 "src/yygram.cpp"
+# line 1065 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -1072,17 +1072,17 @@ int sep_stat (hCode *hc)
    VBlock st;
    switch(yyselect()) {
    case 62: {
-#line 381 "lang/grammar.acc"
+#line 381 "../lang/grammar.acc"
  theEvent = EV_CONDITION; 
-# line 1078 "src/yygram.cpp"
+# line 1078 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       statement(&st);
-#line 383 "lang/grammar.acc"
+#line 383 "../lang/grammar.acc"
  *hc = theCodeSeg.Add(&st);
       theCodeSeg.Generate(RET,0,0); 
-# line 1083 "src/yygram.cpp"
-#line 385 "lang/grammar.acc"
+# line 1083 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
+#line 385 "../lang/grammar.acc"
  theEvent = 0; 
-# line 1086 "src/yygram.cpp"
+# line 1086 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -1093,9 +1093,9 @@ int mval (MVal *mv)
    YYSTYPE n;
    switch(yyselect()) {
    case 63: {
-#line 389 "lang/grammar.acc"
+#line 389 "../lang/grammar.acc"
  mv->BType = mv->Bound = 0; 
-# line 1099 "src/yygram.cpp"
+# line 1099 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       switch (yyselect()) {
       case 522: {
          switch (yyselect()) {
@@ -1105,30 +1105,30 @@ int mval (MVal *mv)
          default: ;
          }
          cexpr4(&n);
-#line 390 "lang/grammar.acc"
+#line 390 "../lang/grammar.acc"
  mv->Value = n;  mv->VType = MVAL_ADD; 
-# line 1111 "src/yygram.cpp"
+# line 1111 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       case 523: {
          get_lexval();
          cexpr4(&n);
-#line 391 "lang/grammar.acc"
+#line 391 "../lang/grammar.acc"
  mv->Value = -n; mv->VType = MVAL_ADD; 
-# line 1118 "src/yygram.cpp"
+# line 1118 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       case 524: {
          get_lexval();
          cexpr4(&n);
-#line 392 "lang/grammar.acc"
+#line 392 "../lang/grammar.acc"
  mv->Value = n;  mv->VType = MVAL_SET; 
-# line 1125 "src/yygram.cpp"
+# line 1125 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       case 525: {
          cexpr3(&n);
          get_lexval();
-#line 393 "lang/grammar.acc"
+#line 393 "../lang/grammar.acc"
  mv->Value = n;  mv->VType = MVAL_PERCENT; 
-# line 1132 "src/yygram.cpp"
+# line 1132 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       default: printf("???\n"); exit(1);
       }
@@ -1139,23 +1139,23 @@ int mval (MVal *mv)
          case 526: {
             get_lexval();
             cexpr4(&n);
-#line 395 "lang/grammar.acc"
+#line 395 "../lang/grammar.acc"
  mv->Bound = n;  mv->BType = MBOUND_MIN; 
-# line 1145 "src/yygram.cpp"
+# line 1145 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          case 527: {
             get_lexval();
             cexpr4(&n);
-#line 396 "lang/grammar.acc"
+#line 396 "../lang/grammar.acc"
  mv->Bound = n;  mv->BType = MBOUND_MAX; 
-# line 1152 "src/yygram.cpp"
+# line 1152 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          case 528: {
             get_lexval();
             cexpr4(&n);
-#line 397 "lang/grammar.acc"
+#line 397 "../lang/grammar.acc"
  mv->Bound = n;  mv->BType = MBOUND_NEAR; 
-# line 1159 "src/yygram.cpp"
+# line 1159 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          default: printf("???\n"); exit(1);
          }
@@ -1177,36 +1177,36 @@ int monster_def ()
    switch(yyselect()) {
    case 64: {
       get_lexval();
-#line 402 "lang/grammar.acc"
+#line 402 "../lang/grammar.acc"
  theMon->Attr[0] = theMon->Attr[1] =
                        theMon->Attr[2] = theMon->Attr[3] =
                          theMon->Attr[4] = theMon->Attr[5] =
                          0; CurrAttk = 0; CurrFeat = 0; theRes = theMon; 
-# line 1186 "src/yygram.cpp"
+# line 1186 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       get_lexval();
       name = yylval;
-#line 406 "lang/grammar.acc"
+#line 406 "../lang/grammar.acc"
  theMon->Name = name; 
-# line 1191 "src/yygram.cpp"
+# line 1191 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       get_lexval();
       cexpr3(&n);
-#line 407 "lang/grammar.acc"
+#line 407 "../lang/grammar.acc"
  theMon->MType[0] = n; 
-# line 1196 "src/yygram.cpp"
+# line 1196 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       switch (yyselect()) {
       case 531: {
          get_lexval();
          cexpr3(&n2);
-#line 408 "lang/grammar.acc"
+#line 408 "../lang/grammar.acc"
  theMon->MType[1] = n2; 
-# line 1203 "src/yygram.cpp"
+# line 1203 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          switch (yyselect()) {
          case 530: {
             get_lexval();
             cexpr3(&n3);
-#line 409 "lang/grammar.acc"
+#line 409 "../lang/grammar.acc"
  theMon->MType[2] = n3; 
-# line 1210 "src/yygram.cpp"
+# line 1210 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          default: ;
          }
@@ -1224,9 +1224,9 @@ int monster_def ()
       }
       yy8: ;
       get_lexval();
-#line 411 "lang/grammar.acc"
+#line 411 "../lang/grammar.acc"
  theMon++; 
-# line 1230 "src/yygram.cpp"
+# line 1230 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -1258,9 +1258,9 @@ int mon_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 414 "lang/grammar.acc"
+#line 414 "../lang/grammar.acc"
  theMon->Desc = lv; 
-# line 1264 "src/yygram.cpp"
+# line 1264 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 66: {
       get_lexval();
@@ -1272,9 +1272,9 @@ int mon_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 415 "lang/grammar.acc"
+#line 415 "../lang/grammar.acc"
  theMon->Depth = (int8)n; 
-# line 1278 "src/yygram.cpp"
+# line 1278 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 67: {
       switch (yyselect()) {
@@ -1294,9 +1294,9 @@ int mon_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 416 "lang/grammar.acc"
+#line 416 "../lang/grammar.acc"
  theMon->CR = (int8)n; 
-# line 1300 "src/yygram.cpp"
+# line 1300 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 68: {
       switch (yyselect()) {
@@ -1318,11 +1318,11 @@ int mon_entry ()
       get_lexval();
       cexpr3(&n1);
       get_lexval();
-#line 418 "lang/grammar.acc"
+#line 418 "../lang/grammar.acc"
  if (n2 != 1 || n1 > 8 || n1 < 2)
                                         yyerror("Fractional CR error!");
                                       theMon->CR = (int8)((-n1) + 2); 
-# line 1326 "src/yygram.cpp"
+# line 1326 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 69: {
       get_lexval();
@@ -1333,17 +1333,17 @@ int mon_entry ()
       default: ;
       }
       cexpr(&n);
-#line 421 "lang/grammar.acc"
+#line 421 "../lang/grammar.acc"
  theMon->Terrains |= n; 
-# line 1339 "src/yygram.cpp"
+# line 1339 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 542: {
             get_lexval();
             cexpr(&n);
-#line 422 "lang/grammar.acc"
+#line 422 "../lang/grammar.acc"
  theMon->Terrains |= n; 
-# line 1347 "src/yygram.cpp"
+# line 1347 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          default: goto yy9;
          }
@@ -1361,9 +1361,9 @@ int mon_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 423 "lang/grammar.acc"
+#line 423 "../lang/grammar.acc"
  theMon->HitDice = (int16)n; 
-# line 1367 "src/yygram.cpp"
+# line 1367 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 71: {
       get_lexval();
@@ -1375,10 +1375,10 @@ int mon_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 424 "lang/grammar.acc"
+#line 424 "../lang/grammar.acc"
  theMon->HitDice = (int16)n; 
                                        theMon->SetFlag(M_FIXED_HP); 
-# line 1382 "src/yygram.cpp"
+# line 1382 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 72: {
       switch (yyselect()) {
@@ -1396,15 +1396,15 @@ int mon_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 426 "lang/grammar.acc"
+#line 426 "../lang/grammar.acc"
  theMon->Hit = (int8)n; 
-# line 1402 "src/yygram.cpp"
+# line 1402 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 73: {
       glyph_entry(&img);
-#line 427 "lang/grammar.acc"
+#line 427 "../lang/grammar.acc"
  theMon->Image = img; 
-# line 1408 "src/yygram.cpp"
+# line 1408 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 74: {
       get_lexval();
@@ -1412,9 +1412,9 @@ int mon_entry ()
       cexpr3(&st);
       get_lexval();
       get_lexval();
-#line 429 "lang/grammar.acc"
+#line 429 "../lang/grammar.acc"
  if (!theMon->GainStati((uint8)st)) yyerror("too many Stati in monster"); 
-# line 1418 "src/yygram.cpp"
+# line 1418 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 75: {
       get_lexval();
@@ -1424,9 +1424,9 @@ int mon_entry ()
       cexpr3(&stV);
       get_lexval();
       get_lexval();
-#line 431 "lang/grammar.acc"
+#line 431 "../lang/grammar.acc"
  if (!theMon->GainStati((uint8)st,(int16)stV)) yyerror("too many Stati in monster"); 
-# line 1430 "src/yygram.cpp"
+# line 1430 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 76: {
       get_lexval();
@@ -1438,10 +1438,10 @@ int mon_entry ()
       cexpr3(&stM);
       get_lexval();
       get_lexval();
-#line 433 "lang/grammar.acc"
+#line 433 "../lang/grammar.acc"
  if (!theMon->GainStati((uint8)st,(int16)stV,(int16)stM)) 
         yyerror("too many Stati in monster"); 
-# line 1445 "src/yygram.cpp"
+# line 1445 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 77: {
       get_lexval();
@@ -1455,10 +1455,10 @@ int mon_entry ()
       res_ref(&rr);
       get_lexval();
       get_lexval();
-#line 436 "lang/grammar.acc"
+#line 436 "../lang/grammar.acc"
  if (!theMon->GainStati((uint8)st,(int16)stV,(int16)stM,rr)) 
         yyerror("too many Stati in monster"); 
-# line 1462 "src/yygram.cpp"
+# line 1462 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 78: {
       get_lexval();
@@ -1472,9 +1472,9 @@ int mon_entry ()
          switch (yyselect()) {
          case 549: {
             cexpr3(&res);
-#line 439 "lang/grammar.acc"
+#line 439 "../lang/grammar.acc"
  theMon->Res |= res; 
-# line 1478 "src/yygram.cpp"
+# line 1478 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 548: {
                get_lexval();
@@ -1500,9 +1500,9 @@ int mon_entry ()
          switch (yyselect()) {
          case 552: {
             cexpr3(&imm);
-#line 440 "lang/grammar.acc"
+#line 440 "../lang/grammar.acc"
  theMon->Imm |= imm; 
-# line 1506 "src/yygram.cpp"
+# line 1506 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 551: {
                get_lexval();
@@ -1542,24 +1542,24 @@ int mon_entry ()
       get_lexval();
       l = yylval;
       get_lexval();
-#line 442 "lang/grammar.acc"
+#line 442 "../lang/grammar.acc"
  for(TMonster*m=firstMon;m!=theMon;m++)
                                          if(stricmp(theModule->GetText(l),theModule->GetText(m->Name))==0)
                                            { memcpy(theMon,m,sizeof(TMonster));
                                              goto DoneCopy; }
                                        Fatal("Monster '%s' not found!",theModule->GetText(l));
                                        DoneCopy:; 
-# line 1553 "src/yygram.cpp"
+# line 1553 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 82: {
       get_lexval();
       cexpr3(&n);
       get_lexval();
-#line 448 "lang/grammar.acc"
+#line 448 "../lang/grammar.acc"
  if (n > (theMon - firstMon) || n < 0)
                                          Fatal("Bad number in Monster:as!");
                                        memcpy(theMon,&(firstMon[n]),sizeof(TMonster)); 
-# line 1563 "src/yygram.cpp"
+# line 1563 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 83: {
       get_lexval();
@@ -1571,9 +1571,9 @@ int mon_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 451 "lang/grammar.acc"
+#line 451 "../lang/grammar.acc"
  theMon->Def = (int8)n; 
-# line 1577 "src/yygram.cpp"
+# line 1577 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 84: {
       get_lexval();
@@ -1585,9 +1585,9 @@ int mon_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 452 "lang/grammar.acc"
+#line 452 "../lang/grammar.acc"
  theMon->Arm = (int8)n; 
-# line 1591 "src/yygram.cpp"
+# line 1591 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 85: {
       get_lexval();
@@ -1599,9 +1599,9 @@ int mon_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 453 "lang/grammar.acc"
+#line 453 "../lang/grammar.acc"
  theMon->Mana = (int16)n; 
-# line 1605 "src/yygram.cpp"
+# line 1605 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 86: {
       get_lexval();
@@ -1616,12 +1616,12 @@ int mon_entry ()
          case 559: {
             cexpr3(&n);
             get_lexval();
-#line 454 "lang/grammar.acc"
+#line 454 "../lang/grammar.acc"
  theMon->Feats[CurrFeat++] = (uint16)n; 
     if (CurrFeat > 16) Fatal("Too many feats for '%s' (max 16)",
                                 theModule->QTextSeg + theMon->Name);
     
-# line 1625 "src/yygram.cpp"
+# line 1625 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          default: goto yy13;
          }
@@ -1629,12 +1629,12 @@ int mon_entry ()
       yy13: ;
       cexpr3(&n);
       get_lexval();
-#line 458 "lang/grammar.acc"
+#line 458 "../lang/grammar.acc"
  theMon->Feats[CurrFeat++] = (uint16)n; 
     if (CurrFeat > 16) Fatal("Too many feats for '%s' (max 16)",
                                 theModule->QTextSeg + theMon->Name);
     
-# line 1638 "src/yygram.cpp"
+# line 1638 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 87: {
       get_lexval();
@@ -1679,9 +1679,9 @@ int mon_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 464 "lang/grammar.acc"
+#line 464 "../lang/grammar.acc"
  theMon->Size = (int8)n; 
-# line 1685 "src/yygram.cpp"
+# line 1685 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 90: {
       get_lexval();
@@ -1699,9 +1699,9 @@ int mon_entry ()
       default: ;
       }
       get_lexval();
-#line 465 "lang/grammar.acc"
+#line 465 "../lang/grammar.acc"
  theMon->Spd = (int8)((n-100)/5); 
-# line 1705 "src/yygram.cpp"
+# line 1705 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 91: {
       get_lexval();
@@ -1719,9 +1719,9 @@ int mon_entry ()
       default: ;
       }
       get_lexval();
-#line 466 "lang/grammar.acc"
+#line 466 "../lang/grammar.acc"
  theMon->Mov = (int8)((n-100)/5); 
-# line 1725 "src/yygram.cpp"
+# line 1725 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 92: {
       get_lexval();
@@ -1735,10 +1735,10 @@ int mon_entry ()
          switch (yyselect()) {
          case 570: {
             res_ref(&rr);
-#line 467 "lang/grammar.acc"
+#line 467 "../lang/grammar.acc"
  theMon->SetFlag(M_INNATE);
                                        theMon->AddResID(AN_INNATE, rr); 
-# line 1742 "src/yygram.cpp"
+# line 1742 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 569: {
                get_lexval();
@@ -1764,9 +1764,9 @@ int mon_entry ()
          switch (yyselect()) {
          case 573: {
             res_ref(&rr);
-#line 470 "lang/grammar.acc"
+#line 470 "../lang/grammar.acc"
  theMon->AddResID(AN_DISEASE, rr); 
-# line 1770 "src/yygram.cpp"
+# line 1770 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 572: {
                get_lexval();
@@ -1792,9 +1792,9 @@ int mon_entry ()
          switch (yyselect()) {
          case 576: {
             res_ref(&rr);
-#line 472 "lang/grammar.acc"
+#line 472 "../lang/grammar.acc"
  theMon->AddResID(AN_POISON, rr); 
-# line 1798 "src/yygram.cpp"
+# line 1798 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 575: {
                get_lexval();
@@ -1831,33 +1831,33 @@ int color (YYSTYPE *col)
    case 99: {
       get_lexval();
       n = yylval;
-#line 481 "lang/grammar.acc"
+#line 481 "../lang/grammar.acc"
  *col = n; 
-# line 1837 "src/yygram.cpp"
+# line 1837 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 100: {
       get_lexval();
       get_lexval();
       n = yylval;
-#line 482 "lang/grammar.acc"
+#line 482 "../lang/grammar.acc"
  *col = n | 8; 
-# line 1845 "src/yygram.cpp"
+# line 1845 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 101: {
       get_lexval();
       get_lexval();
       n = yylval;
-#line 483 "lang/grammar.acc"
+#line 483 "../lang/grammar.acc"
  *col = n | 8; 
-# line 1853 "src/yygram.cpp"
+# line 1853 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 102: {
       get_lexval();
       get_lexval();
       n = yylval;
-#line 484 "lang/grammar.acc"
+#line 484 "../lang/grammar.acc"
  *col = n & ~8; 
-# line 1861 "src/yygram.cpp"
+# line 1861 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -1876,34 +1876,34 @@ int attack_entry ()
    YYSTYPE dt;
    switch(yyselect()) {
    case 103: {
-#line 488 "lang/grammar.acc"
+#line 488 "../lang/grammar.acc"
  uint8 dt = AD_NORM; dam.Set(0,0,0);
                                  theMon->Attk[CurrAttk].u.a.Dmg.Set(0,0,0); 
-# line 1883 "src/yygram.cpp"
+# line 1883 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       cexpr3(&at);
       get_lexval();
       switch (yyselect()) {
       case 577: {
          dice_only(&dam);
-#line 491 "lang/grammar.acc"
+#line 491 "../lang/grammar.acc"
  theMon->Attk[CurrAttk].u.a.Dmg = yyDice(dam); 
-# line 1891 "src/yygram.cpp"
+# line 1891 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       case 578: {
          cexpr4(&chance);
          get_lexval();
-#line 492 "lang/grammar.acc"
+#line 492 "../lang/grammar.acc"
  theMon->Attk[CurrAttk].u.a.Dmg.Bonus = (int8)chance; 
-# line 1898 "src/yygram.cpp"
+# line 1898 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       default: ;
       }
       switch (yyselect()) {
       case 579: {
          cexpr4(&n);
-#line 493 "lang/grammar.acc"
+#line 493 "../lang/grammar.acc"
  dt = (uint8)n; 
-# line 1907 "src/yygram.cpp"
+# line 1907 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       default: ;
       }
@@ -1929,14 +1929,14 @@ int attack_entry ()
          default: printf("???\n"); exit(1);
          }
          cexpr3(&dc);
-#line 496 "lang/grammar.acc"
+#line 496 "../lang/grammar.acc"
  theMon->Attk[CurrAttk].u.a.DC = (int8)dc; 
-# line 1935 "src/yygram.cpp"
+# line 1935 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          get_lexval();
          } break;
       default: ;
       }
-#line 497 "lang/grammar.acc"
+#line 497 "../lang/grammar.acc"
  theMon->Attk[CurrAttk].AType = (int8)at;
                                  theMon->Attk[CurrAttk].DType = dt;
                                  /*
@@ -1952,29 +1952,29 @@ int attack_entry ()
                                  if (CurrAttk >= 32)
                                    yyerror("> 32 attacks on a single monster!");
                                
-# line 1956 "src/yygram.cpp"
+# line 1956 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 592: {
             get_lexval();
-#line 508 "lang/grammar.acc"
+#line 508 "../lang/grammar.acc"
  dt = AD_NORM; dam2.Set(0,0,0); theMon->Attk[CurrAttk].u.a.Dmg.Set(0,0,0); 
-# line 1963 "src/yygram.cpp"
+# line 1963 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 585: {
                dice_only(&dam2);
-#line 509 "lang/grammar.acc"
+#line 509 "../lang/grammar.acc"
  theMon->Attk[CurrAttk].u.a.Dmg = yyDice(dam2); 
-# line 1969 "src/yygram.cpp"
+# line 1969 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                } break;
             default: ;
             }
             switch (yyselect()) {
             case 586: {
                cexpr3(&n2);
-#line 510 "lang/grammar.acc"
+#line 510 "../lang/grammar.acc"
  dt = (uint8)n2; 
-# line 1978 "src/yygram.cpp"
+# line 1978 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                } break;
             default: ;
             }
@@ -2000,21 +2000,21 @@ int attack_entry ()
                default: printf("???\n"); exit(1);
                }
                cexpr3(&dc);
-#line 512 "lang/grammar.acc"
+#line 512 "../lang/grammar.acc"
  theMon->Attk[CurrAttk].u.a.DC = (int8)dc; 
-# line 2006 "src/yygram.cpp"
+# line 2006 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                get_lexval();
                } break;
             default: ;
             }
-#line 513 "lang/grammar.acc"
+#line 513 "../lang/grammar.acc"
  theMon->Attk[CurrAttk].AType = A_ALSO;
                                  theMon->Attk[CurrAttk].DType = dt;
                                  CurrAttk++;
                                  if (CurrAttk >= 12)
                                    Fatal("> 12 attacks on a single monster!");
                                
-# line 2018 "src/yygram.cpp"
+# line 2018 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          default: goto yy19;
          }
@@ -2025,26 +2025,26 @@ int attack_entry ()
       cexpr3(&at);
       get_lexval();
       res_ref(&rr);
-#line 520 "lang/grammar.acc"
+#line 520 "../lang/grammar.acc"
  theMon->Attk[CurrAttk].AType = (int8)at;
                                   theMon->Attk[CurrAttk].u.xID = rr; 
-# line 2032 "src/yygram.cpp"
+# line 2032 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       switch (yyselect()) {
       case 593: {
          cexpr3(&dt);
-#line 522 "lang/grammar.acc"
+#line 522 "../lang/grammar.acc"
  theMon->Attk[CurrAttk].DType = (int8)dt; 
-# line 2038 "src/yygram.cpp"
+# line 2038 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       default: ;
       }
-#line 523 "lang/grammar.acc"
+#line 523 "../lang/grammar.acc"
 
                                  CurrAttk++;
                                  if (CurrAttk >= 32)
                                    yyerror("> 32 attacks on a single monster!");
                                
-# line 2048 "src/yygram.cpp"
+# line 2048 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -2062,9 +2062,9 @@ int mflag_entry ()
          } break;
       default: ;
       }
-#line 531 "lang/grammar.acc"
+#line 531 "../lang/grammar.acc"
  theMon->SetFlag((uint16)mf); 
-# line 2068 "src/yygram.cpp"
+# line 2068 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 106: {
       get_lexval();
@@ -2075,9 +2075,9 @@ int mflag_entry ()
          } break;
       default: ;
       }
-#line 532 "lang/grammar.acc"
+#line 532 "../lang/grammar.acc"
  theMon->UnsetFlag((uint16)mf); 
-# line 2081 "src/yygram.cpp"
+# line 2081 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -2098,9 +2098,9 @@ int attrib_entry ()
       default: ;
       }
       cexpr3(&v);
-#line 536 "lang/grammar.acc"
+#line 536 "../lang/grammar.acc"
  theMon->Attr[at] = (int8)v; 
-# line 2104 "src/yygram.cpp"
+# line 2104 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -2113,22 +2113,22 @@ int item_def ()
    switch(yyselect()) {
    case 108: {
       get_lexval();
-#line 540 "lang/grammar.acc"
+#line 540 "../lang/grammar.acc"
  theRes = theItem; 
                                theItem->u.w.Crit = 2; 
                                theItem->u.w.Threat = 1; 
                                theItem->hp = 15; 
-# line 2122 "src/yygram.cpp"
+# line 2122 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       get_lexval();
       name = yylval;
-#line 544 "lang/grammar.acc"
+#line 544 "../lang/grammar.acc"
  theItem->Name = name; 
-# line 2127 "src/yygram.cpp"
+# line 2127 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       get_lexval();
       cexpr3(&n);
-#line 545 "lang/grammar.acc"
+#line 545 "../lang/grammar.acc"
  theItem->IType = (int16)n; 
-# line 2132 "src/yygram.cpp"
+# line 2132 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -2140,9 +2140,9 @@ int item_def ()
       }
       yy20: ;
       get_lexval();
-#line 546 "lang/grammar.acc"
+#line 546 "../lang/grammar.acc"
  theItem++; 
-# line 2146 "src/yygram.cpp"
+# line 2146 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -2169,9 +2169,9 @@ int item_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 550 "lang/grammar.acc"
+#line 550 "../lang/grammar.acc"
  theItem->Desc = lv; 
-# line 2175 "src/yygram.cpp"
+# line 2175 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 110: {
       get_lexval();
@@ -2183,15 +2183,15 @@ int item_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 551 "lang/grammar.acc"
+#line 551 "../lang/grammar.acc"
  theItem->Level = (int8)n; 
-# line 2189 "src/yygram.cpp"
+# line 2189 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 111: {
       glyph_entry(&img);
-#line 552 "lang/grammar.acc"
+#line 552 "../lang/grammar.acc"
  theItem->Image = img; 
-# line 2195 "src/yygram.cpp"
+# line 2195 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 112: {
       get_lexval();
@@ -2203,9 +2203,9 @@ int item_entry ()
       }
       dice_val(&dv);
       get_lexval();
-#line 553 "lang/grammar.acc"
+#line 553 "../lang/grammar.acc"
  theItem->u.w.SDmg = yyDice(dv); 
-# line 2209 "src/yygram.cpp"
+# line 2209 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 113: {
       get_lexval();
@@ -2217,9 +2217,9 @@ int item_entry ()
       }
       dice_val(&dv);
       get_lexval();
-#line 554 "lang/grammar.acc"
+#line 554 "../lang/grammar.acc"
  theItem->u.w.LDmg = yyDice(dv); 
-# line 2223 "src/yygram.cpp"
+# line 2223 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 114: {
       get_lexval();
@@ -2231,9 +2231,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 555 "lang/grammar.acc"
+#line 555 "../lang/grammar.acc"
  theItem->u.w.Crit = (int8)n; 
-# line 2237 "src/yygram.cpp"
+# line 2237 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 115: {
       get_lexval();
@@ -2245,9 +2245,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 556 "lang/grammar.acc"
+#line 556 "../lang/grammar.acc"
  theItem->u.w.Threat = (int8)n; 
-# line 2251 "src/yygram.cpp"
+# line 2251 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 116: {
       get_lexval();
@@ -2259,9 +2259,9 @@ int item_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 557 "lang/grammar.acc"
+#line 557 "../lang/grammar.acc"
  theItem->u.w.Acc = (int8)n; 
-# line 2265 "src/yygram.cpp"
+# line 2265 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 117: {
       get_lexval();
@@ -2273,9 +2273,9 @@ int item_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 558 "lang/grammar.acc"
+#line 558 "../lang/grammar.acc"
  theItem->u.w.Spd = (int8)n; 
-# line 2279 "src/yygram.cpp"
+# line 2279 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 118: {
       get_lexval();
@@ -2288,9 +2288,9 @@ int item_entry ()
       cexpr4(&n);
       get_lexval();
       get_lexval();
-#line 559 "lang/grammar.acc"
+#line 559 "../lang/grammar.acc"
  theItem->u.w.Spd = (int8)(n > 0 ? ((n-100)/5) : n/5); 
-# line 2294 "src/yygram.cpp"
+# line 2294 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 119: {
       get_lexval();
@@ -2304,9 +2304,9 @@ int item_entry ()
       cexpr4(&n);
       get_lexval();
       get_lexval();
-#line 560 "lang/grammar.acc"
+#line 560 "../lang/grammar.acc"
  theItem->u.w.Spd = (int8)(n/5); 
-# line 2310 "src/yygram.cpp"
+# line 2310 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 120: {
       get_lexval();
@@ -2318,9 +2318,9 @@ int item_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 561 "lang/grammar.acc"
+#line 561 "../lang/grammar.acc"
  theItem->u.w.ParryMod = (int8)n; 
-# line 2324 "src/yygram.cpp"
+# line 2324 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 121: {
       get_lexval();
@@ -2332,9 +2332,9 @@ int item_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 562 "lang/grammar.acc"
+#line 562 "../lang/grammar.acc"
  theItem->u.w.RangeInc = (int8)n; 
-# line 2338 "src/yygram.cpp"
+# line 2338 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 122: {
       get_lexval();
@@ -2346,9 +2346,9 @@ int item_entry ()
       }
       cexpr3(&m);
       get_lexval();
-#line 563 "lang/grammar.acc"
+#line 563 "../lang/grammar.acc"
  theItem->Material = (int8)m; 
-# line 2352 "src/yygram.cpp"
+# line 2352 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 123: {
       get_lexval();
@@ -2359,13 +2359,13 @@ int item_entry ()
       default: ;
       }
       cexpr3(&n);
-#line 564 "lang/grammar.acc"
+#line 564 "../lang/grammar.acc"
  theItem->Cost = n * 100; 
-# line 2365 "src/yygram.cpp"
+# line 2365 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       switch (yyselect()) {
       case 612: {
          cexpr3(&unit);
-#line 565 "lang/grammar.acc"
+#line 565 "../lang/grammar.acc"
  switch (unit)
                                          { case PLATINUM: theItem->Cost *= 5; break;
                                            case GOLD:     break;
@@ -2375,7 +2375,7 @@ int item_entry ()
                                            
                                          }
                                      
-# line 2379 "src/yygram.cpp"
+# line 2379 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       default: ;
       }
@@ -2391,7 +2391,7 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 575 "lang/grammar.acc"
+#line 575 "../lang/grammar.acc"
  theItem->Weight = (int16)n; 
     /* ww: according to the SRD, one inch (thickness) of iron has 30
 
@@ -2402,7 +2402,7 @@ int item_entry ()
      * points. */
                                theItem->hp = (uint16)((n * 30) / 80); 
                                if (theItem->hp < 1) theItem->hp = 1; 
-# line 2406 "src/yygram.cpp"
+# line 2406 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 125: {
       get_lexval();
@@ -2414,9 +2414,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 582 "lang/grammar.acc"
+#line 582 "../lang/grammar.acc"
  theItem->Size = (int8)n; 
-# line 2420 "src/yygram.cpp"
+# line 2420 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 126: {
       get_lexval();
@@ -2428,9 +2428,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 583 "lang/grammar.acc"
+#line 583 "../lang/grammar.acc"
  theItem->Nutrition = (int8)n; 
-# line 2434 "src/yygram.cpp"
+# line 2434 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 127: {
       get_lexval();
@@ -2442,9 +2442,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 584 "lang/grammar.acc"
+#line 584 "../lang/grammar.acc"
  theItem->u.a.Def = (int8)n; 
-# line 2448 "src/yygram.cpp"
+# line 2448 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 128: {
       get_lexval();
@@ -2456,9 +2456,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 585 "lang/grammar.acc"
+#line 585 "../lang/grammar.acc"
  theItem->u.a.Cov = (int8)n; 
-# line 2462 "src/yygram.cpp"
+# line 2462 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 129: {
       get_lexval();
@@ -2470,9 +2470,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 586 "lang/grammar.acc"
+#line 586 "../lang/grammar.acc"
  theItem->u.a.Penalty = (int8)n; 
-# line 2476 "src/yygram.cpp"
+# line 2476 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 130: {
       get_lexval();
@@ -2503,9 +2503,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 588 "lang/grammar.acc"
+#line 588 "../lang/grammar.acc"
  theItem->hp = (uint16)n; 
-# line 2509 "src/yygram.cpp"
+# line 2509 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 132: {
       get_lexval();
@@ -2519,9 +2519,9 @@ int item_entry ()
          switch (yyselect()) {
          case 624: {
             res_ref(&rr);
-#line 589 "lang/grammar.acc"
+#line 589 "../lang/grammar.acc"
  theItem->AddResID(AN_SPELLS, rr); 
-# line 2525 "src/yygram.cpp"
+# line 2525 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 623: {
                get_lexval();
@@ -2547,9 +2547,9 @@ int item_entry ()
          switch (yyselect()) {
          case 627: {
             res_ref(&rr);
-#line 591 "lang/grammar.acc"
+#line 591 "../lang/grammar.acc"
  theItem->AddResID(AN_FIRES, rr); 
-# line 2553 "src/yygram.cpp"
+# line 2553 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 626: {
                get_lexval();
@@ -2603,9 +2603,9 @@ int item_entry ()
                } break;
             default: ;
             }
-#line 594 "lang/grammar.acc"
+#line 594 "../lang/grammar.acc"
  theItem->Group |= n; 
-# line 2609 "src/yygram.cpp"
+# line 2609 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          default: goto yy25;
          }
@@ -2623,9 +2623,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 595 "lang/grammar.acc"
+#line 595 "../lang/grammar.acc"
  theItem->u.c.Capacity = (int8)n; 
-# line 2629 "src/yygram.cpp"
+# line 2629 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 137: {
       get_lexval();
@@ -2637,9 +2637,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 596 "lang/grammar.acc"
+#line 596 "../lang/grammar.acc"
  theItem->u.c.WeightLim = (int16)n; 
-# line 2643 "src/yygram.cpp"
+# line 2643 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 138: {
       get_lexval();
@@ -2651,9 +2651,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 597 "lang/grammar.acc"
+#line 597 "../lang/grammar.acc"
  theItem->u.c.WeightMod = (int8)n; 
-# line 2657 "src/yygram.cpp"
+# line 2657 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 139: {
       get_lexval();
@@ -2665,9 +2665,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 598 "lang/grammar.acc"
+#line 598 "../lang/grammar.acc"
  theItem->u.c.MaxSize = (int8)n; 
-# line 2671 "src/yygram.cpp"
+# line 2671 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 140: {
       get_lexval();
@@ -2679,9 +2679,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 599 "lang/grammar.acc"
+#line 599 "../lang/grammar.acc"
  theItem->u.c.Timeout = (int8)n; 
-# line 2685 "src/yygram.cpp"
+# line 2685 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 141: {
       get_lexval();
@@ -2693,9 +2693,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 600 "lang/grammar.acc"
+#line 600 "../lang/grammar.acc"
  theItem->u.c.CType = (int8)n; 
-# line 2699 "src/yygram.cpp"
+# line 2699 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 142: {
       get_lexval();
@@ -2708,9 +2708,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 601 "lang/grammar.acc"
+#line 601 "../lang/grammar.acc"
  theItem->u.l.LightRange = (int8)n; 
-# line 2714 "src/yygram.cpp"
+# line 2714 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 143: {
       get_lexval();
@@ -2722,9 +2722,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 602 "lang/grammar.acc"
+#line 602 "../lang/grammar.acc"
  theItem->u.l.Lifespan = (int16)n; 
-# line 2728 "src/yygram.cpp"
+# line 2728 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 144: {
       get_lexval();
@@ -2736,9 +2736,9 @@ int item_entry ()
       }
       res_ref(&rr);
       get_lexval();
-#line 603 "lang/grammar.acc"
+#line 603 "../lang/grammar.acc"
  theItem->u.l.Fuel = rr; 
-# line 2742 "src/yygram.cpp"
+# line 2742 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 145: {
       dconst_entry();
@@ -2766,12 +2766,12 @@ int arm_entry ()
          } break;
       default: ;
       }
-#line 610 "lang/grammar.acc"
+#line 610 "../lang/grammar.acc"
  if (theItem->u.a.Arm[0] == 0) theItem->u.a.Arm[0] = (int8)n;
                             if (theItem->u.a.Arm[1] == 0) theItem->u.a.Arm[1] = (int8)n;
                             if (theItem->u.a.Arm[2] == 0) theItem->u.a.Arm[2] = (int8)n;
                          
-# line 2775 "src/yygram.cpp"
+# line 2775 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 149: {
       get_lexval();
@@ -2783,9 +2783,9 @@ int arm_entry ()
          } break;
       default: ;
       }
-#line 614 "lang/grammar.acc"
+#line 614 "../lang/grammar.acc"
  theItem->u.a.Arm[wt] = (int8)n; 
-# line 2789 "src/yygram.cpp"
+# line 2789 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -2803,9 +2803,9 @@ int iflag_entry ()
          } break;
       default: ;
       }
-#line 618 "lang/grammar.acc"
+#line 618 "../lang/grammar.acc"
  theItem->SetFlag((uint16)itf); 
-# line 2809 "src/yygram.cpp"
+# line 2809 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 151: {
       get_lexval();
@@ -2816,9 +2816,9 @@ int iflag_entry ()
          } break;
       default: ;
       }
-#line 619 "lang/grammar.acc"
+#line 619 "../lang/grammar.acc"
  theItem->UnsetFlag((uint16)itf); 
-# line 2822 "src/yygram.cpp"
+# line 2822 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -2833,14 +2833,14 @@ int feature_def ()
       get_lexval();
       get_lexval();
       name = yylval;
-#line 625 "lang/grammar.acc"
+#line 625 "../lang/grammar.acc"
  theRes = theFeat; theFeat->Name = name; theRes = theFeat; 
-# line 2839 "src/yygram.cpp"
+# line 2839 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       get_lexval();
       cexpr3(&n);
-#line 626 "lang/grammar.acc"
+#line 626 "../lang/grammar.acc"
  theFeat->FType = (uint8)n; 
-# line 2844 "src/yygram.cpp"
+# line 2844 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -2852,9 +2852,9 @@ int feature_def ()
       }
       yy26: ;
       get_lexval();
-#line 627 "lang/grammar.acc"
+#line 627 "../lang/grammar.acc"
  theFeat++; 
-# line 2858 "src/yygram.cpp"
+# line 2858 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -2881,9 +2881,9 @@ int feat_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 631 "lang/grammar.acc"
+#line 631 "../lang/grammar.acc"
  theFeat->Desc = lv; 
-# line 2887 "src/yygram.cpp"
+# line 2887 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 154: {
       get_lexval();
@@ -2895,15 +2895,15 @@ int feat_entry ()
       }
       cexpr3(&m);
       get_lexval();
-#line 632 "lang/grammar.acc"
+#line 632 "../lang/grammar.acc"
  theFeat->Material = (int8)m; 
-# line 2901 "src/yygram.cpp"
+# line 2901 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 155: {
       glyph_entry(&img);
-#line 633 "lang/grammar.acc"
+#line 633 "../lang/grammar.acc"
  theFeat->Image = img; 
-# line 2907 "src/yygram.cpp"
+# line 2907 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 156: {
       get_lexval();
@@ -2916,9 +2916,9 @@ int feat_entry ()
       cexpr3(&mov);
       get_lexval();
       get_lexval();
-#line 634 "lang/grammar.acc"
+#line 634 "../lang/grammar.acc"
  theFeat->MoveMod = (int8)((mov-100)/5); 
-# line 2922 "src/yygram.cpp"
+# line 2922 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 157: {
       get_lexval();
@@ -2930,9 +2930,9 @@ int feat_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 635 "lang/grammar.acc"
+#line 635 "../lang/grammar.acc"
  theFeat->hp = (uint16)n; 
-# line 2936 "src/yygram.cpp"
+# line 2936 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 158: {
       get_lexval();
@@ -2955,9 +2955,9 @@ int feat_entry ()
                } break;
             default: ;
             }
-#line 636 "lang/grammar.acc"
+#line 636 "../lang/grammar.acc"
  theFeat->Flags |= n; 
-# line 2961 "src/yygram.cpp"
+# line 2961 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          default: goto yy27;
          }
@@ -2983,9 +2983,9 @@ int feat_entry ()
       }
       res_ref(&rr);
       get_lexval();
-#line 637 "lang/grammar.acc"
+#line 637 "../lang/grammar.acc"
  theFeat->xID = rr; 
-# line 2989 "src/yygram.cpp"
+# line 2989 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 160: {
       get_lexval();
@@ -2997,9 +2997,9 @@ int feat_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 638 "lang/grammar.acc"
+#line 638 "../lang/grammar.acc"
  theFeat->xval = (int16)n; 
-# line 3003 "src/yygram.cpp"
+# line 3003 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 161: {
       get_lexval();
@@ -3011,9 +3011,9 @@ int feat_entry ()
       }
       dice_val(&d);
       get_lexval();
-#line 639 "lang/grammar.acc"
+#line 639 "../lang/grammar.acc"
  theFeat->Factor = d; 
-# line 3017 "src/yygram.cpp"
+# line 3017 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 162: {
       event_desc();
@@ -3034,14 +3034,14 @@ int effect_def ()
    YYSTYPE name;
    switch(yyselect()) {
    case 165: {
-#line 645 "lang/grammar.acc"
+#line 645 "../lang/grammar.acc"
  theRes = theEff; theEff->ef.sval = NOSAVE; 
-# line 3040 "src/yygram.cpp"
+# line 3040 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 662: {
             cexpr3(&n);
-#line 646 "lang/grammar.acc"
+#line 646 "../lang/grammar.acc"
  if (theEff->Sources[2])
                                         theEff->Sources[3] = (int8)n;
                                       else if (theEff->Sources[1])
@@ -3050,7 +3050,7 @@ int effect_def ()
                                         theEff->Sources[1] = (int8)n; 
                                       else
                                         theEff->Sources[0] = (int8)n; 
-# line 3054 "src/yygram.cpp"
+# line 3054 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 661: {
                get_lexval();
@@ -3071,29 +3071,29 @@ int effect_def ()
          } break;
       case 665: {
          get_lexval();
-#line 656 "lang/grammar.acc"
+#line 656 "../lang/grammar.acc"
  theEff->ef.aval = AR_POISON; 
-# line 3077 "src/yygram.cpp"
+# line 3077 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       case 666: {
          get_lexval();
-#line 657 "lang/grammar.acc"
+#line 657 "../lang/grammar.acc"
  theEff->ef.aval = AR_DISEASE; 
-# line 3083 "src/yygram.cpp"
+# line 3083 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       default: printf("???\n"); exit(1);
       }
       get_lexval();
       name = yylval;
-#line 658 "lang/grammar.acc"
+#line 658 "../lang/grammar.acc"
  theEff->Name = name; 
-# line 3091 "src/yygram.cpp"
+# line 3091 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       get_lexval();
       cexpr3(&n);
-#line 659 "lang/grammar.acc"
+#line 659 "../lang/grammar.acc"
  theValsIdx = 0; 
                                       theEff->ef.eval = (int8)n; 
-# line 3097 "src/yygram.cpp"
+# line 3097 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -3110,7 +3110,7 @@ int effect_def ()
          case 669: {
             get_lexval();
             cexpr3(&n);
-#line 662 "lang/grammar.acc"
+#line 662 "../lang/grammar.acc"
   Annotation *a; EffectValues tmp; int32 t;
                                ESTABLISH_VALS
 							                 memcpy(&tmp,theVals,sizeof(EffectValues));
@@ -3131,7 +3131,7 @@ int effect_def ()
                                memcpy(&(a->u.ef),&tmp,sizeof(EffectValues));
                                a->u.ef.eval = (int8)n;
                              
-# line 3135 "src/yygram.cpp"
+# line 3135 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             get_lexval();
             while (1) {
                switch (yyselect()) {
@@ -3148,9 +3148,9 @@ int effect_def ()
          }
       }
       yy30: ;
-#line 684 "lang/grammar.acc"
+#line 684 "../lang/grammar.acc"
  theEff++; 
-# line 3154 "src/yygram.cpp"
+# line 3154 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -3177,16 +3177,16 @@ int eff_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 688 "lang/grammar.acc"
+#line 688 "../lang/grammar.acc"
  theEff->Desc = lv; 
-# line 3183 "src/yygram.cpp"
+# line 3183 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 167: {
       cexpr(&sc);
       get_lexval();
-#line 689 "lang/grammar.acc"
+#line 689 "../lang/grammar.acc"
  theEff->Schools |= sc; 
-# line 3190 "src/yygram.cpp"
+# line 3190 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 168: {
       get_lexval();
@@ -3198,9 +3198,9 @@ int eff_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 690 "lang/grammar.acc"
+#line 690 "../lang/grammar.acc"
  theEff->Level = (int8)n; 
-# line 3204 "src/yygram.cpp"
+# line 3204 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 169: {
       get_lexval();
@@ -3212,9 +3212,9 @@ int eff_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 691 "lang/grammar.acc"
+#line 691 "../lang/grammar.acc"
  theEff->ManaCost = (uint8)n; 
-# line 3218 "src/yygram.cpp"
+# line 3218 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 170: {
       get_lexval();
@@ -3238,9 +3238,9 @@ int eff_entry ()
       default: ;
       }
       get_lexval();
-#line 692 "lang/grammar.acc"
+#line 692 "../lang/grammar.acc"
  theEff->BaseChance = (uint8)n; 
-# line 3244 "src/yygram.cpp"
+# line 3244 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 171: {
       get_lexval();
@@ -3251,17 +3251,17 @@ int eff_entry ()
       default: ;
       }
       cexpr(&n);
-#line 693 "lang/grammar.acc"
+#line 693 "../lang/grammar.acc"
  theEff->Purpose = n; 
-# line 3257 "src/yygram.cpp"
+# line 3257 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       switch (yyselect()) {
       case 677: {
          get_lexval();
          cexpr(&n2);
          get_lexval();
-#line 694 "lang/grammar.acc"
+#line 694 "../lang/grammar.acc"
  theEff->Purpose |= n2<<16; 
-# line 3265 "src/yygram.cpp"
+# line 3265 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       default: ;
       }
@@ -3279,16 +3279,16 @@ int eff_entry ()
       switch (yyselect()) {
       case 679: {
          get_lexval();
-#line 695 "lang/grammar.acc"
+#line 695 "../lang/grammar.acc"
  theEff->SetFlag(EF_PARTIAL); 
-# line 3285 "src/yygram.cpp"
+# line 3285 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       default: ;
       }
       get_lexval();
-#line 696 "lang/grammar.acc"
+#line 696 "../lang/grammar.acc"
  ESTABLISH_VALS; theVals->sval = (int8)sv; 
-# line 3292 "src/yygram.cpp"
+# line 3292 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 173: {
       get_lexval();
@@ -3300,9 +3300,9 @@ int eff_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 697 "lang/grammar.acc"
+#line 697 "../lang/grammar.acc"
  ESTABLISH_VALS; theVals->qval = (int8)n; 
-# line 3306 "src/yygram.cpp"
+# line 3306 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 174: {
       get_lexval();
@@ -3314,9 +3314,9 @@ int eff_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 698 "lang/grammar.acc"
+#line 698 "../lang/grammar.acc"
  ESTABLISH_VALS; theVals->xval = (uint8)n; 
-# line 3320 "src/yygram.cpp"
+# line 3320 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 175: {
       get_lexval();
@@ -3328,9 +3328,9 @@ int eff_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 699 "lang/grammar.acc"
+#line 699 "../lang/grammar.acc"
  ESTABLISH_VALS; theVals->yval = (int16)n; 
-# line 3334 "src/yygram.cpp"
+# line 3334 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 176: {
       get_lexval();
@@ -3342,9 +3342,9 @@ int eff_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 700 "lang/grammar.acc"
+#line 700 "../lang/grammar.acc"
  ESTABLISH_VALS; theVals->dval = (int8)n; 
-# line 3348 "src/yygram.cpp"
+# line 3348 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 177: {
       get_lexval();
@@ -3356,9 +3356,9 @@ int eff_entry ()
       }
       dice_val(&d);
       get_lexval();
-#line 701 "lang/grammar.acc"
+#line 701 "../lang/grammar.acc"
  ESTABLISH_VALS; theVals->pval = d; 
-# line 3362 "src/yygram.cpp"
+# line 3362 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 178: {
       get_lexval();
@@ -3370,9 +3370,9 @@ int eff_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 702 "lang/grammar.acc"
+#line 702 "../lang/grammar.acc"
  ESTABLISH_VALS; theVals->aval = (int8)n; 
-# line 3376 "src/yygram.cpp"
+# line 3376 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 179: {
       get_lexval();
@@ -3384,9 +3384,9 @@ int eff_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 703 "lang/grammar.acc"
+#line 703 "../lang/grammar.acc"
  ESTABLISH_VALS; theVals->lval = (int8)n; 
-# line 3390 "src/yygram.cpp"
+# line 3390 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 180: {
       get_lexval();
@@ -3398,9 +3398,9 @@ int eff_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 704 "lang/grammar.acc"
+#line 704 "../lang/grammar.acc"
  ESTABLISH_VALS; theVals->tval = (int8)n; 
-# line 3404 "src/yygram.cpp"
+# line 3404 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 181: {
       get_lexval();
@@ -3412,9 +3412,9 @@ int eff_entry ()
       }
       res_ref(&rr);
       get_lexval();
-#line 705 "lang/grammar.acc"
+#line 705 "../lang/grammar.acc"
  ESTABLISH_VALS; theVals->rval = rr; 
-# line 3418 "src/yygram.cpp"
+# line 3418 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 182: {
       get_lexval();
@@ -3426,9 +3426,9 @@ int eff_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 706 "lang/grammar.acc"
+#line 706 "../lang/grammar.acc"
  ESTABLISH_VALS; theVals->rval = n; 
-# line 3432 "src/yygram.cpp"
+# line 3432 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 183: {
       get_lexval();
@@ -3440,9 +3440,9 @@ int eff_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 707 "lang/grammar.acc"
+#line 707 "../lang/grammar.acc"
  ESTABLISH_VALS; theVals->cval = (int8)n; 
-# line 3446 "src/yygram.cpp"
+# line 3446 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 184: {
       get_lexval();
@@ -3455,9 +3455,9 @@ int eff_entry ()
       get_lexval();
       n = yylval;
       get_lexval();
-#line 708 "lang/grammar.acc"
+#line 708 "../lang/grammar.acc"
  ESTABLISH_VALS; theVals->cval = (int8)n; 
-# line 3461 "src/yygram.cpp"
+# line 3461 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 185: {
       get_lexval();
@@ -3471,9 +3471,9 @@ int eff_entry ()
          switch (yyselect()) {
          case 695: {
             cexpr3(&n);
-#line 709 "lang/grammar.acc"
+#line 709 "../lang/grammar.acc"
  theEff->SetFlag((uint16)n); 
-# line 3477 "src/yygram.cpp"
+# line 3477 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 693: {
                get_lexval();
@@ -3508,16 +3508,16 @@ int numlist (YYSTYPE *val)
    YYSTYPE n;
    switch(yyselect()) {
    case 189: {
-#line 716 "lang/grammar.acc"
+#line 716 "../lang/grammar.acc"
  *val = 0; 
-# line 3514 "src/yygram.cpp"
+# line 3514 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 698: {
             cexpr3(&n);
-#line 717 "lang/grammar.acc"
+#line 717 "../lang/grammar.acc"
  *val |= n; 
-# line 3521 "src/yygram.cpp"
+# line 3521 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 696: {
                get_lexval();
@@ -3556,20 +3556,20 @@ int race_def ()
       get_lexval();
       get_lexval();
       name = yylval;
-#line 726 "lang/grammar.acc"
+#line 726 "../lang/grammar.acc"
  theRes = theRace; theRace->Name = name;
                                     theRace->BaseRace = 0; 
-# line 3563 "src/yygram.cpp"
+# line 3563 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       switch (yyselect()) {
       case 699: {
          get_lexval();
          res_ref(&base);
-#line 728 "lang/grammar.acc"
+#line 728 "../lang/grammar.acc"
  TRace tr; 
                                     theRace->BaseRace = base;                                        
                                     if (TRACE(base) > theRace)
                                       Fatal("Subrace definition before def of base race!"); 
-# line 3573 "src/yygram.cpp"
+# line 3573 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       default: ;
       }
@@ -3584,9 +3584,9 @@ int race_def ()
       }
       yy34: ;
       get_lexval();
-#line 733 "lang/grammar.acc"
+#line 733 "../lang/grammar.acc"
  theRace++; 
-# line 3590 "src/yygram.cpp"
+# line 3590 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -3619,9 +3619,9 @@ int race_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 737 "lang/grammar.acc"
+#line 737 "../lang/grammar.acc"
  theRace->Desc = lv; 
-# line 3625 "src/yygram.cpp"
+# line 3625 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 193: {
       while (1) {
@@ -3636,9 +3636,9 @@ int race_entry ()
             default: ;
             }
             cexpr(&v);
-#line 738 "lang/grammar.acc"
+#line 738 "../lang/grammar.acc"
  theRace->AttrAdj[at] = (int8)v; 
-# line 3642 "src/yygram.cpp"
+# line 3642 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 703: {
                get_lexval();
@@ -3670,9 +3670,9 @@ int race_entry ()
                } break;
             default: ;
             }
-#line 741 "lang/grammar.acc"
+#line 741 "../lang/grammar.acc"
  theRace->AddAbility((int8)AbT,(int16)Abil,p,(int8)l1,(int8)l2); 
-# line 3676 "src/yygram.cpp"
+# line 3676 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          default: goto yy36;
          }
@@ -3690,9 +3690,9 @@ int race_entry ()
       }
       res_ref(&rr);
       get_lexval();
-#line 742 "lang/grammar.acc"
+#line 742 "../lang/grammar.acc"
  theRace->mID = rr; 
-# line 3696 "src/yygram.cpp"
+# line 3696 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 196: {
       get_lexval();
@@ -3712,10 +3712,10 @@ int race_entry ()
       get_lexval();
       res_ref(&rr2);
       get_lexval();
-#line 744 "lang/grammar.acc"
+#line 744 "../lang/grammar.acc"
  theRace->FavouredClass[0] = rr;
                                   theRace->FavouredClass[1] = rr2; 
-# line 3719 "src/yygram.cpp"
+# line 3719 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 197: {
       get_lexval();
@@ -3737,11 +3737,11 @@ int race_entry ()
       get_lexval();
       res_ref(&rr3);
       get_lexval();
-#line 747 "lang/grammar.acc"
+#line 747 "../lang/grammar.acc"
  theRace->FavouredClass[0] = rr;
                                   theRace->FavouredClass[1] = rr2; 
                                   theRace->FavouredClass[2] = rr3; 
-# line 3745 "src/yygram.cpp"
+# line 3745 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 198: {
       get_lexval();
@@ -3751,16 +3751,16 @@ int race_entry ()
          } break;
       default: ;
       }
-#line 750 "lang/grammar.acc"
+#line 750 "../lang/grammar.acc"
 int8 skn = 0;
-# line 3757 "src/yygram.cpp"
+# line 3757 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 715: {
             cexpr3(&sk);
-#line 751 "lang/grammar.acc"
+#line 751 "../lang/grammar.acc"
  theRace->Skills[skn++] = (int8)sk; 
-# line 3764 "src/yygram.cpp"
+# line 3764 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 714: {
                get_lexval();
@@ -3785,14 +3785,14 @@ int8 skn = 0;
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 752 "lang/grammar.acc"
+#line 752 "../lang/grammar.acc"
  switch(n) {
                                          case MALE_NAMES  : theRace-> MNames = lv; break;
                                          case FEMALE_NAMES: theRace-> FNames = lv; break;
                                          case FAMILY_NAMES: theRace-> SNames = lv; break;
                                          default: yyerror("Illegal name const in race!");
                                          } 
-# line 3796 "src/yygram.cpp"
+# line 3796 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 200: {
       get_lexval();
@@ -3815,9 +3815,9 @@ int8 skn = 0;
                } break;
             default: ;
             }
-#line 758 "lang/grammar.acc"
+#line 758 "../lang/grammar.acc"
  theRace->SetFlag((uint16)n); 
-# line 3821 "src/yygram.cpp"
+# line 3821 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          default: goto yy38;
          }
@@ -3849,9 +3849,9 @@ int class_def ()
       get_lexval();
       get_lexval();
       name = yylval;
-#line 766 "lang/grammar.acc"
+#line 766 "../lang/grammar.acc"
  theRes = theClass; theClass->Name = name; 
-# line 3855 "src/yygram.cpp"
+# line 3855 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -3863,9 +3863,9 @@ int class_def ()
       }
       yy39: ;
       get_lexval();
-#line 767 "lang/grammar.acc"
+#line 767 "../lang/grammar.acc"
  theClass++; 
-# line 3869 "src/yygram.cpp"
+# line 3869 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -3898,9 +3898,9 @@ int class_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 771 "lang/grammar.acc"
+#line 771 "../lang/grammar.acc"
  theClass->Desc = lv; 
-# line 3904 "src/yygram.cpp"
+# line 3904 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 207: {
       get_lexval();
@@ -3918,9 +3918,9 @@ int class_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 772 "lang/grammar.acc"
+#line 772 "../lang/grammar.acc"
  theClass->HitDie = (uint8)n; 
-# line 3924 "src/yygram.cpp"
+# line 3924 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 208: {
       get_lexval();
@@ -3938,9 +3938,9 @@ int class_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 773 "lang/grammar.acc"
+#line 773 "../lang/grammar.acc"
  theClass->ManaDie = (uint8)n; 
-# line 3944 "src/yygram.cpp"
+# line 3944 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 209: {
       get_lexval();
@@ -3954,10 +3954,10 @@ int class_entry ()
       get_lexval();
       cexpr3(&n);
       get_lexval();
-#line 774 "lang/grammar.acc"
+#line 774 "../lang/grammar.acc"
  theClass->DefMod = (uint8)n;
                                              if (x != 1) yyerror("class defense mod must by 1 per N."); 
-# line 3961 "src/yygram.cpp"
+# line 3961 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 210: {
       get_lexval();
@@ -3972,9 +3972,9 @@ int class_entry ()
          case 730: {
             cexpr3(&typ);
             cexpr3(&l);
-#line 777 "lang/grammar.acc"
+#line 777 "../lang/grammar.acc"
  theClass->AttkVal[typ] = (uint8)l; 
-# line 3978 "src/yygram.cpp"
+# line 3978 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 729: {
                get_lexval();
@@ -4001,9 +4001,9 @@ int class_entry ()
          case 733: {
             cexpr3(&typ);
             cexpr3(&l);
-#line 779 "lang/grammar.acc"
+#line 779 "../lang/grammar.acc"
  theClass->Saves[typ] = (uint8)l; 
-# line 4007 "src/yygram.cpp"
+# line 4007 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 732: {
                get_lexval();
@@ -4035,9 +4035,9 @@ int class_entry ()
                } break;
             default: ;
             }
-#line 781 "lang/grammar.acc"
+#line 781 "../lang/grammar.acc"
  theClass->AddAbility((int8)AbT,(int16)Abil,p,(int8)l1,(int8)l2); 
-# line 4041 "src/yygram.cpp"
+# line 4041 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          default: goto yy42;
          }
@@ -4060,9 +4060,9 @@ int class_entry ()
          } break;
       default: printf("???\n"); exit(1);
       }
-#line 782 "lang/grammar.acc"
+#line 782 "../lang/grammar.acc"
  theClass->SkillPoints = (uint8)sp; int8 skn = 0; 
-# line 4066 "src/yygram.cpp"
+# line 4066 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       switch (yyselect()) {
       case 739: {
          get_lexval();
@@ -4073,9 +4073,9 @@ int class_entry ()
          switch (yyselect()) {
          case 741: {
             cexpr3(&sk);
-#line 783 "lang/grammar.acc"
+#line 783 "../lang/grammar.acc"
  theClass->Skills[skn++] = (uint8)sk; 
-# line 4079 "src/yygram.cpp"
+# line 4079 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 740: {
                get_lexval();
@@ -4101,9 +4101,9 @@ int class_entry ()
          switch (yyselect()) {
          case 744: {
             cexpr3(&pr);
-#line 785 "lang/grammar.acc"
+#line 785 "../lang/grammar.acc"
  theClass->Proficiencies |= pr; 
-# line 4107 "src/yygram.cpp"
+# line 4107 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 743: {
                get_lexval();
@@ -4138,9 +4138,9 @@ int class_entry ()
                } break;
             default: ;
             }
-#line 786 "lang/grammar.acc"
+#line 786 "../lang/grammar.acc"
  theClass->SetFlag((uint16)n); 
-# line 4144 "src/yygram.cpp"
+# line 4144 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          default: goto yy45;
          }
@@ -4174,73 +4174,73 @@ int special_ability (YYSTYPE *AbT, YYSTYPE *Abil, YYSTYPE *p, YYSTYPE *l1, YYSTY
    YYSTYPE ft;
    switch(yyselect()) {
    case 220: {
-#line 794 "lang/grammar.acc"
+#line 794 "../lang/grammar.acc"
  *p = 0; 
-# line 4180 "src/yygram.cpp"
+# line 4180 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       get_lexval();
       get_lexval();
       cexpr3(&ca);
       switch (yyselect()) {
       case 749: {
          abil_param(&xp);
-#line 794 "lang/grammar.acc"
+#line 794 "../lang/grammar.acc"
  *p = xp; 
-# line 4189 "src/yygram.cpp"
+# line 4189 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       default: ;
       }
       get_lexval();
       get_lexval();
       abil_level(&xl1, &xl2);
-#line 795 "lang/grammar.acc"
+#line 795 "../lang/grammar.acc"
  *AbT = AB_ABILITY; *Abil = ca; *l1 =xl1; *l2 = xl2; 
-# line 4198 "src/yygram.cpp"
+# line 4198 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 221: {
-#line 796 "lang/grammar.acc"
+#line 796 "../lang/grammar.acc"
  *p = 0; 
-# line 4203 "src/yygram.cpp"
+# line 4203 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       get_lexval();
       get_lexval();
       cexpr3(&st);
       switch (yyselect()) {
       case 750: {
          abil_param(&xp);
-#line 796 "lang/grammar.acc"
+#line 796 "../lang/grammar.acc"
  *p = xp; 
-# line 4212 "src/yygram.cpp"
+# line 4212 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       default: ;
       }
       get_lexval();
       get_lexval();
       abil_level(&xl1, &xl2);
-#line 797 "lang/grammar.acc"
+#line 797 "../lang/grammar.acc"
  *AbT = AB_STATI;   *Abil = st; *l1 = xl1; *l2 = xl2; 
-# line 4221 "src/yygram.cpp"
+# line 4221 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 222: {
-#line 798 "lang/grammar.acc"
+#line 798 "../lang/grammar.acc"
  *p = 0; 
-# line 4226 "src/yygram.cpp"
+# line 4226 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       get_lexval();
       get_lexval();
       cexpr3(&ft);
       switch (yyselect()) {
       case 751: {
          abil_param(&xp);
-#line 798 "lang/grammar.acc"
+#line 798 "../lang/grammar.acc"
  *p = xp; 
-# line 4235 "src/yygram.cpp"
+# line 4235 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       default: ;
       }
       get_lexval();
       get_lexval();
       abil_level(&xl1, &xl2);
-#line 799 "lang/grammar.acc"
+#line 799 "../lang/grammar.acc"
  *AbT = AB_FEAT;    *Abil = ft; *l1 = xl1; *l2 = xl2; 
-# line 4244 "src/yygram.cpp"
+# line 4244 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -4255,25 +4255,25 @@ int abil_param (YYSTYPE *p)
    case 223: {
       get_lexval();
       cexpr3(&pa);
-#line 803 "lang/grammar.acc"
+#line 803 "../lang/grammar.acc"
  *p = pa; 
-# line 4261 "src/yygram.cpp"
+# line 4261 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 224: {
       get_lexval();
       res_ref(&rr);
-#line 804 "lang/grammar.acc"
+#line 804 "../lang/grammar.acc"
  *p = rr; 
-# line 4268 "src/yygram.cpp"
+# line 4268 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 225: {
       get_lexval();
       cexpr3(&pa);
       get_lexval();
       cexpr3(&pa2);
-#line 805 "lang/grammar.acc"
+#line 805 "../lang/grammar.acc"
  *p = pa | (pa2 << 16); 
-# line 4277 "src/yygram.cpp"
+# line 4277 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -4292,24 +4292,24 @@ int abil_level (YYSTYPE *l1, YYSTYPE *l2)
          } break;
       default: ;
       }
-#line 810 "lang/grammar.acc"
+#line 810 "../lang/grammar.acc"
  *l1 = xl1; *l2 = 0; 
-# line 4298 "src/yygram.cpp"
+# line 4298 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 227: {
       get_lexval();
       cexpr3(&xl2);
       get_lexval();
-#line 812 "lang/grammar.acc"
+#line 812 "../lang/grammar.acc"
  *l1 = 1;  *l2 = xl2; 
-# line 4306 "src/yygram.cpp"
+# line 4306 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 228: {
       get_lexval();
       get_lexval();
-#line 814 "lang/grammar.acc"
+#line 814 "../lang/grammar.acc"
  *l1 = 1;  *l2 = 1; 
-# line 4313 "src/yygram.cpp"
+# line 4313 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 229: {
       get_lexval();
@@ -4323,9 +4323,9 @@ int abil_level (YYSTYPE *l1, YYSTYPE *l2)
          } break;
       default: ;
       }
-#line 816 "lang/grammar.acc"
+#line 816 "../lang/grammar.acc"
  *l1 = xl1; *l2 = 1; 
-# line 4329 "src/yygram.cpp"
+# line 4329 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 230: {
       get_lexval();
@@ -4340,9 +4340,9 @@ int abil_level (YYSTYPE *l1, YYSTYPE *l2)
          } break;
       default: ;
       }
-#line 818 "lang/grammar.acc"
+#line 818 "../lang/grammar.acc"
  *l1 = xl1; *l2 = xl2; 
-# line 4346 "src/yygram.cpp"
+# line 4346 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -4356,9 +4356,9 @@ int dungeon_def ()
       get_lexval();
       get_lexval();
       name = yylval;
-#line 822 "lang/grammar.acc"
+#line 822 "../lang/grammar.acc"
  theRes = theDgn; theDgn->Name = name; 
-# line 4362 "src/yygram.cpp"
+# line 4362 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -4370,9 +4370,9 @@ int dungeon_def ()
       }
       yy46: ;
       get_lexval();
-#line 823 "lang/grammar.acc"
+#line 823 "../lang/grammar.acc"
  theDgn++; 
-# line 4376 "src/yygram.cpp"
+# line 4376 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -4393,9 +4393,9 @@ int dun_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 827 "lang/grammar.acc"
+#line 827 "../lang/grammar.acc"
  theDgn->Desc = lv; 
-# line 4399 "src/yygram.cpp"
+# line 4399 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 233: {
       dconst_entry();
@@ -4433,9 +4433,9 @@ int dconst_entry ()
             get_lexval();
             cexpr3(&con);
             cexpr3(&val);
-#line 835 "lang/grammar.acc"
+#line 835 "../lang/grammar.acc"
  theRes->AddConstant((int8)con,val); 
-# line 4439 "src/yygram.cpp"
+# line 4439 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 758: {
                get_lexval();
@@ -4447,9 +4447,9 @@ int dconst_entry ()
             get_lexval();
             cexpr3(&con);
             res_ref(&rr);
-#line 836 "lang/grammar.acc"
+#line 836 "../lang/grammar.acc"
  theRes->AddConstant((int8)con,rr); 
-# line 4453 "src/yygram.cpp"
+# line 4453 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 760: {
                get_lexval();
@@ -4476,9 +4476,9 @@ int dconst_entry ()
          case 766: {
             get_lexval();
             cexpr4(&lis);
-#line 839 "lang/grammar.acc"
+#line 839 "../lang/grammar.acc"
  TempListLoc = 0; 
-# line 4482 "src/yygram.cpp"
+# line 4482 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             while (1) {
                switch (yyselect()) {
                case 763: {
@@ -4497,13 +4497,13 @@ int dconst_entry ()
                } break;
             default: printf("???\n"); exit(1);
             }
-#line 840 "lang/grammar.acc"
+#line 840 "../lang/grammar.acc"
  TempList[TempListLoc++] = 0;
         TempList[TempListLoc++] = 0;
         TempList[TempListLoc++] = 0;
         ASSERT(TempListLoc < 1023);
         theRes->AddList((int8)lis,TempList); 
-# line 4507 "src/yygram.cpp"
+# line 4507 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          default: goto yy48;
          }
@@ -4521,17 +4521,17 @@ int dconst_entry ()
       while (1) {
          switch (yyselect()) {
          case 773: {
-#line 847 "lang/grammar.acc"
+#line 847 "../lang/grammar.acc"
  int16 Chance = 100; 
-# line 4527 "src/yygram.cpp"
+# line 4527 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             get_lexval();
             switch (yyselect()) {
             case 768: {
                cexpr4(&n);
                get_lexval();
-#line 847 "lang/grammar.acc"
+#line 847 "../lang/grammar.acc"
  Chance = (int16)n; 
-# line 4535 "src/yygram.cpp"
+# line 4535 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                } break;
             default: ;
             }
@@ -4541,27 +4541,27 @@ int dconst_entry ()
                get_lexval();
                get_lexval();
                cexpr3(&n);
-#line 848 "lang/grammar.acc"
+#line 848 "../lang/grammar.acc"
  theRes->AddSpecial(rr,Chance,(int16)n); 
-# line 4547 "src/yygram.cpp"
+# line 4547 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                } break;
             case 770: {
                res_ref(&rr);
                get_lexval();
                cexpr3(&n);
                get_lexval();
-#line 849 "lang/grammar.acc"
+#line 849 "../lang/grammar.acc"
  theRes->AddSpecial(rr,Chance,(int16)n); 
-# line 4556 "src/yygram.cpp"
+# line 4556 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                } break;
             case 771: {
                res_ref(&rr);
                get_lexval();
                get_lexval();
                dice_only(&dv);
-#line 850 "lang/grammar.acc"
+#line 850 "../lang/grammar.acc"
  theRes->AddSpecial(rr,Chance,yyDice(dv)); 
-# line 4565 "src/yygram.cpp"
+# line 4565 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                } break;
             default: printf("???\n"); exit(1);
             }
@@ -4590,22 +4590,22 @@ int list_entry ()
    switch(yyselect()) {
    case 239: {
       res_ref(&rr);
-#line 855 "lang/grammar.acc"
+#line 855 "../lang/grammar.acc"
  TempList[TempListLoc++] = rr; ASSERT(TempListLoc < 1023); 
-# line 4596 "src/yygram.cpp"
+# line 4596 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 240: {
       cexpr4(&n);
-#line 856 "lang/grammar.acc"
+#line 856 "../lang/grammar.acc"
  TempList[TempListLoc++] = n;  ASSERT(TempListLoc < 1023); 
-# line 4602 "src/yygram.cpp"
+# line 4602 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 241: {
       get_lexval();
       text = yylval;
-#line 857 "lang/grammar.acc"
+#line 857 "../lang/grammar.acc"
  TempList[TempListLoc++] = text; ASSERT(TempListLoc < 1023); 
-# line 4609 "src/yygram.cpp"
+# line 4609 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -4619,9 +4619,9 @@ int artifact_def ()
       get_lexval();
       get_lexval();
       name = yylval;
-#line 861 "lang/grammar.acc"
+#line 861 "../lang/grammar.acc"
  theRes = theArti; theArti->Name = name; 
-# line 4625 "src/yygram.cpp"
+# line 4625 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -4633,9 +4633,9 @@ int artifact_def ()
       }
       yy51: ;
       get_lexval();
-#line 862 "lang/grammar.acc"
+#line 862 "../lang/grammar.acc"
  theArti++; 
-# line 4639 "src/yygram.cpp"
+# line 4639 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -4661,9 +4661,9 @@ int arti_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 866 "lang/grammar.acc"
+#line 866 "../lang/grammar.acc"
  theRes = theArti; theArti->Desc = lv; 
-# line 4667 "src/yygram.cpp"
+# line 4667 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 244: {
       get_lexval();
@@ -4675,9 +4675,9 @@ int arti_entry ()
       }
       res_ref(&rr);
       get_lexval();
-#line 867 "lang/grammar.acc"
+#line 867 "../lang/grammar.acc"
  theArti->iID = rr; 
-# line 4681 "src/yygram.cpp"
+# line 4681 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 245: {
       while (1) {
@@ -4692,9 +4692,9 @@ int arti_entry ()
             default: ;
             }
             cexpr3(&v);
-#line 868 "lang/grammar.acc"
+#line 868 "../lang/grammar.acc"
  theArti->AttrAdjLow[at] = (int8)v; 
-# line 4698 "src/yygram.cpp"
+# line 4698 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 778: {
                get_lexval();
@@ -4720,9 +4720,9 @@ int arti_entry ()
          switch (yyselect()) {
          case 782: {
             cexpr3(&res);
-#line 869 "lang/grammar.acc"
+#line 869 "../lang/grammar.acc"
  theArti->Resists |= res; 
-# line 4726 "src/yygram.cpp"
+# line 4726 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 781: {
                get_lexval();
@@ -4749,9 +4749,9 @@ int arti_entry ()
          case 785: {
             get_lexval();
             at = yylval;
-#line 870 "lang/grammar.acc"
+#line 870 "../lang/grammar.acc"
  theArti->Sustains |= 1 << (at-1); 
-# line 4755 "src/yygram.cpp"
+# line 4755 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 784: {
                get_lexval();
@@ -4777,9 +4777,9 @@ int arti_entry ()
          switch (yyselect()) {
          case 788: {
             cexpr3(&qu);
-#line 871 "lang/grammar.acc"
+#line 871 "../lang/grammar.acc"
  theArti->Qualities |= qu; 
-# line 4783 "src/yygram.cpp"
+# line 4783 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 787: {
                get_lexval();
@@ -4795,9 +4795,9 @@ int arti_entry ()
       } break;
    case 249: {
       get_lexval();
-#line 873 "lang/grammar.acc"
+#line 873 "../lang/grammar.acc"
  ArtPowerType = AN_ART_EQUIP; 
-# line 4801 "src/yygram.cpp"
+# line 4801 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -4818,9 +4818,9 @@ int arti_entry ()
       } break;
    case 250: {
       get_lexval();
-#line 874 "lang/grammar.acc"
+#line 874 "../lang/grammar.acc"
  ArtPowerType = AN_ART_WIELD; 
-# line 4824 "src/yygram.cpp"
+# line 4824 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -4841,9 +4841,9 @@ int arti_entry ()
       } break;
    case 251: {
       get_lexval();
-#line 875 "lang/grammar.acc"
+#line 875 "../lang/grammar.acc"
  ArtPowerType = AN_ART_HIT;   
-# line 4847 "src/yygram.cpp"
+# line 4847 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -4864,9 +4864,9 @@ int arti_entry ()
       } break;
    case 252: {
       get_lexval();
-#line 876 "lang/grammar.acc"
+#line 876 "../lang/grammar.acc"
  ArtPowerType = AN_ART_INVOKE;
-# line 4870 "src/yygram.cpp"
+# line 4870 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -4911,18 +4911,18 @@ int art_power ()
       get_lexval();
       cexpr3(&p);
       get_lexval();
-#line 883 "lang/grammar.acc"
+#line 883 "../lang/grammar.acc"
  theArti->AddPower((int8)ArtPowerType,AB_STATI,st,(int16)p,NULL); 
-# line 4917 "src/yygram.cpp"
+# line 4917 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 256: {
       get_lexval();
       get_lexval();
       cexpr3(&st);
       get_lexval();
-#line 885 "lang/grammar.acc"
+#line 885 "../lang/grammar.acc"
  theArti->AddPower((int8)ArtPowerType,AB_STATI,st,0,NULL); 
-# line 4926 "src/yygram.cpp"
+# line 4926 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 257: {
       res_ref(&rr);
@@ -4933,18 +4933,18 @@ int art_power ()
          } break;
       default: ;
       }
-#line 887 "lang/grammar.acc"
+#line 887 "../lang/grammar.acc"
  theArti->AddPower((int8)ArtPowerType,AB_EFFECT,rr,0,NULL); 
-# line 4939 "src/yygram.cpp"
+# line 4939 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 258: {
       res_ref(&rr);
       get_lexval();
       dice_val(&dv);
       get_lexval();
-#line 889 "lang/grammar.acc"
+#line 889 "../lang/grammar.acc"
  theArti->AddPower((int8)ArtPowerType,AB_EFFECT,rr,0,&yyDice(dv)); 
-# line 4948 "src/yygram.cpp"
+# line 4948 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 259: {
       res_ref(&rr);
@@ -4959,10 +4959,10 @@ int art_power ()
       default: printf("???\n"); exit(1);
       }
       get_lexval();
-#line 891 "lang/grammar.acc"
+#line 891 "../lang/grammar.acc"
  Dice d; d.Set(0,(int8)n,1);
         theArti->AddPower((int8)ArtPowerType,AB_EFFECT,rr,0,&d); 
-# line 4966 "src/yygram.cpp"
+# line 4966 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 260: {
       res_ref(&rr);
@@ -4977,24 +4977,24 @@ int art_power ()
       default: printf("???\n"); exit(1);
       }
       get_lexval();
-#line 894 "lang/grammar.acc"
+#line 894 "../lang/grammar.acc"
  Dice d; d.Set(0,(int8)n,7);
         theArti->AddPower((int8)ArtPowerType,AB_EFFECT,rr,0,&d); 
-# line 4984 "src/yygram.cpp"
+# line 4984 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 261: {
       get_lexval();
       res_ref(&rr);
-#line 897 "lang/grammar.acc"
+#line 897 "../lang/grammar.acc"
  theArti->AddPower((int8)ArtPowerType,AB_INNATE,rr,0,NULL); 
-# line 4991 "src/yygram.cpp"
+# line 4991 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 262: {
       get_lexval();
       cexpr3(&ft);
-#line 899 "lang/grammar.acc"
+#line 899 "../lang/grammar.acc"
  theArti->AddPower((int8)ArtPowerType,AB_FEAT,ft,0,NULL); 
-# line 4998 "src/yygram.cpp"
+# line 4998 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -5011,9 +5011,9 @@ int domain_def ()
       name = yylval;
       get_lexval();
       cexpr3(&type);
-#line 903 "lang/grammar.acc"
+#line 903 "../lang/grammar.acc"
  theRes = theDom; theDom->Name = name; theDom->DType = (int8)type; 
-# line 5017 "src/yygram.cpp"
+# line 5017 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -5025,9 +5025,9 @@ int domain_def ()
       }
       yy60: ;
       get_lexval();
-#line 905 "lang/grammar.acc"
+#line 905 "../lang/grammar.acc"
  theDom++; 
-# line 5031 "src/yygram.cpp"
+# line 5031 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -5044,9 +5044,9 @@ int domain_entry ()
    YYSTYPE lv;
    switch(yyselect()) {
    case 264: {
-#line 909 "lang/grammar.acc"
+#line 909 "../lang/grammar.acc"
  int8 sp = 0; 
-# line 5050 "src/yygram.cpp"
+# line 5050 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       get_lexval();
       switch (yyselect()) {
       case 803: {
@@ -5058,9 +5058,9 @@ int domain_entry ()
          switch (yyselect()) {
          case 805: {
             res_ref(&rr);
-#line 910 "lang/grammar.acc"
+#line 910 "../lang/grammar.acc"
  theDom->Spells[min(sp,8)] = rr; sp++; 
-# line 5064 "src/yygram.cpp"
+# line 5064 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 804: {
                get_lexval();
@@ -5073,11 +5073,11 @@ int domain_entry ()
       }
       yy61: ;
       get_lexval();
-#line 911 "lang/grammar.acc"
+#line 911 "../lang/grammar.acc"
  if (sp > 9) 
       { yyerror(Format("Error: Domain %s has %d spells; must have at most nine.",
         theModule->QTextSeg + theDom->Name,sp)); } 
-# line 5081 "src/yygram.cpp"
+# line 5081 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 265: {
       get_lexval();
@@ -5097,9 +5097,9 @@ int domain_entry ()
                } break;
             default: ;
             }
-#line 915 "lang/grammar.acc"
+#line 915 "../lang/grammar.acc"
  theDom->AddAbility((int8)AbT,(int16)Abil,p,(int8)l1,(int8)l2); 
-# line 5103 "src/yygram.cpp"
+# line 5103 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          default: goto yy62;
          }
@@ -5118,9 +5118,9 @@ int domain_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 916 "lang/grammar.acc"
+#line 916 "../lang/grammar.acc"
  theDom->Desc = lv; 
-# line 5124 "src/yygram.cpp"
+# line 5124 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 267: {
       event_desc();
@@ -5143,9 +5143,9 @@ int god_def ()
       get_lexval();
       get_lexval();
       name = yylval;
-#line 922 "lang/grammar.acc"
+#line 922 "../lang/grammar.acc"
  theRes = theGod; theGod->Name = name; 
-# line 5149 "src/yygram.cpp"
+# line 5149 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -5157,9 +5157,9 @@ int god_def ()
       }
       yy63: ;
       get_lexval();
-#line 924 "lang/grammar.acc"
+#line 924 "../lang/grammar.acc"
  theGod++; 
-# line 5163 "src/yygram.cpp"
+# line 5163 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -5177,9 +5177,9 @@ int god_entry ()
    YYSTYPE l2;
    switch(yyselect()) {
    case 271: {
-#line 928 "lang/grammar.acc"
+#line 928 "../lang/grammar.acc"
  int8 dm = 0; 
-# line 5183 "src/yygram.cpp"
+# line 5183 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       get_lexval();
       switch (yyselect()) {
       case 811: {
@@ -5191,9 +5191,9 @@ int god_entry ()
          switch (yyselect()) {
          case 813: {
             res_ref(&rr);
-#line 929 "lang/grammar.acc"
+#line 929 "../lang/grammar.acc"
  theGod->Domains[min(dm,5)] = rr; dm++; 
-# line 5197 "src/yygram.cpp"
+# line 5197 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 812: {
                get_lexval();
@@ -5206,11 +5206,11 @@ int god_entry ()
       }
       yy64: ;
       get_lexval();
-#line 930 "lang/grammar.acc"
+#line 930 "../lang/grammar.acc"
  if (dm < 3 || dm > 6) 
       { yyerror(Format("Error: God %s has %d domains; must have between 3 and 6.",
         theModule->QTextSeg + theGod->Name,dm)); } 
-# line 5214 "src/yygram.cpp"
+# line 5214 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 272: {
       get_lexval();
@@ -5237,9 +5237,9 @@ int god_entry ()
                } break;
             default: ;
             }
-#line 934 "lang/grammar.acc"
+#line 934 "../lang/grammar.acc"
  theGod->SetFlag((uint16)n); 
-# line 5243 "src/yygram.cpp"
+# line 5243 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          default: goto yy65;
          }
@@ -5258,9 +5258,9 @@ int god_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 935 "lang/grammar.acc"
+#line 935 "../lang/grammar.acc"
  theGod->Desc = lv; 
-# line 5264 "src/yygram.cpp"
+# line 5264 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 275: {
       get_lexval();
@@ -5280,9 +5280,9 @@ int god_entry ()
                } break;
             default: ;
             }
-#line 937 "lang/grammar.acc"
+#line 937 "../lang/grammar.acc"
  theGod->AddAbility((int8)AbT,(int16)Abil,p,(int8)l1,(int8)l2); 
-# line 5286 "src/yygram.cpp"
+# line 5286 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          default: goto yy66;
          }
@@ -5311,10 +5311,10 @@ int terrain_def ()
       get_lexval();
       get_lexval();
       name = yylval;
-#line 943 "lang/grammar.acc"
+#line 943 "../lang/grammar.acc"
  theRes = theTer; 
                                       theTer->Name = name; 
-# line 5318 "src/yygram.cpp"
+# line 5318 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -5326,9 +5326,9 @@ int terrain_def ()
       }
       yy67: ;
       get_lexval();
-#line 946 "lang/grammar.acc"
+#line 946 "../lang/grammar.acc"
  theTer++; 
-# line 5332 "src/yygram.cpp"
+# line 5332 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -5354,15 +5354,15 @@ int terrain_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 950 "lang/grammar.acc"
+#line 950 "../lang/grammar.acc"
  theTer->Desc = lv; 
-# line 5360 "src/yygram.cpp"
+# line 5360 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 281: {
       glyph_entry(&img);
-#line 951 "lang/grammar.acc"
+#line 951 "../lang/grammar.acc"
  theTer->Image = img; 
-# line 5366 "src/yygram.cpp"
+# line 5366 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 282: {
       get_lexval();
@@ -5375,9 +5375,9 @@ int terrain_entry ()
       cexpr3(&mov);
       get_lexval();
       get_lexval();
-#line 952 "lang/grammar.acc"
+#line 952 "../lang/grammar.acc"
  theTer->MoveMod = (int8)((mov-100)/5); 
-# line 5381 "src/yygram.cpp"
+# line 5381 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 283: {
       get_lexval();
@@ -5389,9 +5389,9 @@ int terrain_entry ()
       }
       cexpr3(&pen);
       get_lexval();
-#line 953 "lang/grammar.acc"
+#line 953 "../lang/grammar.acc"
  theTer->Penalty = (int8)pen; 
-# line 5395 "src/yygram.cpp"
+# line 5395 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 284: {
       get_lexval();
@@ -5403,9 +5403,9 @@ int terrain_entry ()
       }
       cexpr3(&mat);
       get_lexval();
-#line 954 "lang/grammar.acc"
+#line 954 "../lang/grammar.acc"
  theTer->Material = (int8)mat; 
-# line 5409 "src/yygram.cpp"
+# line 5409 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 285: {
       get_lexval();
@@ -5428,9 +5428,9 @@ int terrain_entry ()
                } break;
             default: ;
             }
-#line 955 "lang/grammar.acc"
+#line 955 "../lang/grammar.acc"
  theTer->SetFlag((uint16)n); 
-# line 5434 "src/yygram.cpp"
+# line 5434 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          default: goto yy68;
          }
@@ -5462,10 +5462,10 @@ int region_def ()
       name = yylval;
       get_lexval();
       cexpr3(&regflag);
-#line 962 "lang/grammar.acc"
+#line 962 "../lang/grammar.acc"
  theRes = theReg; theReg->Name = name; theReg->SetFlag((uint16)regflag); 
     theReg->Size = SZ_COLLOSAL; 
-# line 5469 "src/yygram.cpp"
+# line 5469 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -5477,9 +5477,9 @@ int region_def ()
       }
       yy69: ;
       get_lexval();
-#line 965 "lang/grammar.acc"
+#line 965 "../lang/grammar.acc"
  theReg++; 
-# line 5483 "src/yygram.cpp"
+# line 5483 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -5508,9 +5508,9 @@ int region_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 969 "lang/grammar.acc"
+#line 969 "../lang/grammar.acc"
  theReg->Desc = lv; 
-# line 5514 "src/yygram.cpp"
+# line 5514 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 291: {
       get_lexval();
@@ -5522,9 +5522,9 @@ int region_entry ()
       }
       res_ref(&rr);
       get_lexval();
-#line 970 "lang/grammar.acc"
+#line 970 "../lang/grammar.acc"
  theReg->Walls = rr; 
-# line 5528 "src/yygram.cpp"
+# line 5528 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 292: {
       get_lexval();
@@ -5536,9 +5536,9 @@ int region_entry ()
       }
       res_ref(&rr);
       get_lexval();
-#line 971 "lang/grammar.acc"
+#line 971 "../lang/grammar.acc"
  theReg->Floor = rr; 
-# line 5542 "src/yygram.cpp"
+# line 5542 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 293: {
       get_lexval();
@@ -5550,9 +5550,9 @@ int region_entry ()
       }
       res_ref(&rr);
       get_lexval();
-#line 972 "lang/grammar.acc"
+#line 972 "../lang/grammar.acc"
  theReg->Door = rr; 
-# line 5556 "src/yygram.cpp"
+# line 5556 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 294: {
       get_lexval();
@@ -5564,9 +5564,9 @@ int region_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 973 "lang/grammar.acc"
+#line 973 "../lang/grammar.acc"
  theReg->Depth = (int8)n; 
-# line 5570 "src/yygram.cpp"
+# line 5570 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 295: {
       get_lexval();
@@ -5578,9 +5578,9 @@ int region_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 974 "lang/grammar.acc"
+#line 974 "../lang/grammar.acc"
  theReg->Size = (int8)n; 
-# line 5584 "src/yygram.cpp"
+# line 5584 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 296: {
       get_lexval();
@@ -5594,9 +5594,9 @@ int region_entry ()
          switch (yyselect()) {
          case 841: {
             cexpr3(&n);
-#line 975 "lang/grammar.acc"
+#line 975 "../lang/grammar.acc"
  theReg->RoomTypes |= BIT(n); 
-# line 5600 "src/yygram.cpp"
+# line 5600 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 839: {
                get_lexval();
@@ -5634,9 +5634,9 @@ int region_entry ()
                } break;
             default: ;
             }
-#line 977 "lang/grammar.acc"
+#line 977 "../lang/grammar.acc"
  theReg->SetFlag((uint16)n); 
-# line 5640 "src/yygram.cpp"
+# line 5640 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          default: goto yy71;
          }
@@ -5650,11 +5650,11 @@ int region_entry ()
       get_lexval();
       mg = yylval;
       get_lexval();
-#line 978 "lang/grammar.acc"
+#line 978 "../lang/grammar.acc"
  theReg->sx   = yyMapSize[currMap] % 256; 
                                     theReg->sy   = yyMapSize[currMap++] / 256;
                                     theReg->Grid = mg; 
-# line 5658 "src/yygram.cpp"
+# line 5658 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 299: {
       get_lexval();
@@ -5662,35 +5662,35 @@ int region_entry ()
       while (1) {
          switch (yyselect()) {
          case 858: {
-#line 981 "lang/grammar.acc"
+#line 981 "../lang/grammar.acc"
  rID tID, xID, xID2; Glyph Img; uint8 fl; 
                                     tID = xID = xID2 = 0; Img = 0; fl = 0; 
-# line 5669 "src/yygram.cpp"
+# line 5669 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             get_lexval();
             ch = yylval;
             get_lexval();
             res_ref(&rr);
-#line 983 "lang/grammar.acc"
+#line 983 "../lang/grammar.acc"
  tID = rr; 
-# line 5676 "src/yygram.cpp"
+# line 5676 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             while (1) {
                switch (yyselect()) {
                case 846: {
                   get_lexval();
                   cexpr(&n);
                   get_lexval();
-#line 984 "lang/grammar.acc"
+#line 984 "../lang/grammar.acc"
  fl |= n; 
-# line 5685 "src/yygram.cpp"
+# line 5685 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                   } break;
                case 855: {
                   get_lexval();
                   switch (yyselect()) {
                   case 847: {
                      res_ref(&rr);
-#line 985 "lang/grammar.acc"
+#line 985 "../lang/grammar.acc"
  xID = rr; 
-# line 5694 "src/yygram.cpp"
+# line 5694 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                      } break;
                   case 849: {
                      get_lexval();
@@ -5698,15 +5698,15 @@ int region_entry ()
                      switch (yyselect()) {
                      case 848: {
                         cexpr(&v);
-#line 986 "lang/grammar.acc"
+#line 986 "../lang/grammar.acc"
  xID = v; 
-# line 5704 "src/yygram.cpp"
+# line 5704 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                         } break;
                      default: ;
                      }
-#line 987 "lang/grammar.acc"
+#line 987 "../lang/grammar.acc"
  fl |= TILE_RANDOM | TILE_ITEM; 
-# line 5710 "src/yygram.cpp"
+# line 5710 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                      } break;
                   case 851: {
                      get_lexval();
@@ -5714,15 +5714,15 @@ int region_entry ()
                      switch (yyselect()) {
                      case 850: {
                         cexpr(&v);
-#line 988 "lang/grammar.acc"
+#line 988 "../lang/grammar.acc"
  xID = v; 
-# line 5720 "src/yygram.cpp"
+# line 5720 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                         } break;
                      default: ;
                      }
-#line 989 "lang/grammar.acc"
+#line 989 "../lang/grammar.acc"
  fl |= TILE_RANDOM | TILE_MONSTER; 
-# line 5726 "src/yygram.cpp"
+# line 5726 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                      } break;
                   default: printf("???\n"); exit(1);
                   }
@@ -5730,9 +5730,9 @@ int region_entry ()
                   case 852: {
                      get_lexval();
                      res_ref(&rr2);
-#line 990 "lang/grammar.acc"
+#line 990 "../lang/grammar.acc"
  xID2 = rr2; 
-# line 5736 "src/yygram.cpp"
+# line 5736 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                      } break;
                   case 853: {
                      get_lexval();
@@ -5740,16 +5740,16 @@ int region_entry ()
                      cexpr(&v);
                      get_lexval();
                      cexpr(&v2);
-#line 992 "lang/grammar.acc"
+#line 992 "../lang/grammar.acc"
  fl |= TILE_RANDOM_EFF; xID2 = v+v2*256; 
-# line 5746 "src/yygram.cpp"
+# line 5746 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                      } break;
                   case 854: {
                      get_lexval();
                      cexpr(&v);
-#line 993 "lang/grammar.acc"
+#line 993 "../lang/grammar.acc"
  xID2 = v; 
-# line 5753 "src/yygram.cpp"
+# line 5753 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                      } break;
                   default: ;
                   }
@@ -5757,17 +5757,17 @@ int region_entry ()
                case 856: {
                   get_lexval();
                   glyph_desc(&g);
-#line 994 "lang/grammar.acc"
+#line 994 "../lang/grammar.acc"
  Img = g; 
-# line 5763 "src/yygram.cpp"
+# line 5763 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                   } break;
                default: goto yy73;
                }
             }
             yy73: ;
-#line 995 "lang/grammar.acc"
+#line 995 "../lang/grammar.acc"
  theReg->AddTile((char)ch,Img,fl,tID,xID,xID2); 
-# line 5771 "src/yygram.cpp"
+# line 5771 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 857: {
                get_lexval();
@@ -5830,21 +5830,21 @@ int template_def ()
       get_lexval();
       get_lexval();
       name = yylval;
-#line 1005 "lang/grammar.acc"
+#line 1005 "../lang/grammar.acc"
  theRes = theTemp; theTemp->Name = name; CurrFeat = 0; CurrAttk = 0; 
-# line 5836 "src/yygram.cpp"
+# line 5836 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       get_lexval();
       cexpr3(&ty);
-#line 1006 "lang/grammar.acc"
+#line 1006 "../lang/grammar.acc"
  theTemp->TType = (uint16)ty; 
-# line 5841 "src/yygram.cpp"
+# line 5841 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       switch (yyselect()) {
       case 861: {
          get_lexval();
          cexpr3(&mt);
-#line 1007 "lang/grammar.acc"
+#line 1007 "../lang/grammar.acc"
  theTemp->ForMType = mt; 
-# line 5848 "src/yygram.cpp"
+# line 5848 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       default: ;
       }
@@ -5859,9 +5859,9 @@ int template_def ()
       }
       yy76: ;
       get_lexval();
-#line 1009 "lang/grammar.acc"
+#line 1009 "../lang/grammar.acc"
  theTemp++; 
-# line 5865 "src/yygram.cpp"
+# line 5865 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -5893,9 +5893,9 @@ int template_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 1013 "lang/grammar.acc"
+#line 1013 "../lang/grammar.acc"
  theTemp->Desc = lv; 
-# line 5899 "src/yygram.cpp"
+# line 5899 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 307: {
       get_lexval();
@@ -5907,9 +5907,9 @@ int template_entry ()
       }
       cexpr3(&mt);
       get_lexval();
-#line 1014 "lang/grammar.acc"
+#line 1014 "../lang/grammar.acc"
  theTemp->ForMType = mt; 
-# line 5913 "src/yygram.cpp"
+# line 5913 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 308: {
       get_lexval();
@@ -5921,15 +5921,15 @@ int template_entry ()
       }
       cexpr3(&mt);
       get_lexval();
-#line 1015 "lang/grammar.acc"
+#line 1015 "../lang/grammar.acc"
  theTemp->AddMType = mt; 
-# line 5927 "src/yygram.cpp"
+# line 5927 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 309: {
       glyph_entry(&img);
-#line 1016 "lang/grammar.acc"
+#line 1016 "../lang/grammar.acc"
  theTemp->NewImage = img; 
-# line 5933 "src/yygram.cpp"
+# line 5933 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 310: {
       switch (yyselect()) {
@@ -5949,9 +5949,9 @@ int template_entry ()
       }
       mval(&mv);
       get_lexval();
-#line 1017 "lang/grammar.acc"
+#line 1017 "../lang/grammar.acc"
  theTemp->CR = mv; 
-# line 5955 "src/yygram.cpp"
+# line 5955 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 311: {
       get_lexval();
@@ -5963,9 +5963,9 @@ int template_entry ()
       }
       mval(&mv);
       get_lexval();
-#line 1018 "lang/grammar.acc"
+#line 1018 "../lang/grammar.acc"
  theTemp->HitDice = mv; 
-# line 5969 "src/yygram.cpp"
+# line 5969 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 312: {
       get_lexval();
@@ -5977,9 +5977,9 @@ int template_entry ()
       }
       mval(&mv);
       get_lexval();
-#line 1019 "lang/grammar.acc"
+#line 1019 "../lang/grammar.acc"
  theTemp->Hit = mv; 
-# line 5983 "src/yygram.cpp"
+# line 5983 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 313: {
       get_lexval();
@@ -5991,9 +5991,9 @@ int template_entry ()
       }
       mval(&mv);
       get_lexval();
-#line 1020 "lang/grammar.acc"
+#line 1020 "../lang/grammar.acc"
  theTemp->Def = mv; 
-# line 5997 "src/yygram.cpp"
+# line 5997 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 314: {
       get_lexval();
@@ -6005,9 +6005,9 @@ int template_entry ()
       }
       mval(&mv);
       get_lexval();
-#line 1021 "lang/grammar.acc"
+#line 1021 "../lang/grammar.acc"
  theTemp->Arm = mv; 
-# line 6011 "src/yygram.cpp"
+# line 6011 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 315: {
       get_lexval();
@@ -6019,9 +6019,9 @@ int template_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 1022 "lang/grammar.acc"
+#line 1022 "../lang/grammar.acc"
  theTemp->DmgMod = (int8)n; 
-# line 6025 "src/yygram.cpp"
+# line 6025 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 316: {
       get_lexval();
@@ -6033,9 +6033,9 @@ int template_entry ()
       }
       mval(&mv);
       get_lexval();
-#line 1023 "lang/grammar.acc"
+#line 1023 "../lang/grammar.acc"
  theTemp->Power = mv; 
-# line 6039 "src/yygram.cpp"
+# line 6039 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 317: {
       get_lexval();
@@ -6048,9 +6048,9 @@ int template_entry ()
       }
       mval(&mv);
       get_lexval();
-#line 1024 "lang/grammar.acc"
+#line 1024 "../lang/grammar.acc"
  theTemp->CasterLev = mv; 
-# line 6054 "src/yygram.cpp"
+# line 6054 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 318: {
       get_lexval();
@@ -6062,9 +6062,9 @@ int template_entry ()
       }
       mval(&mv);
       get_lexval();
-#line 1025 "lang/grammar.acc"
+#line 1025 "../lang/grammar.acc"
  theTemp->Size = mv; 
-# line 6068 "src/yygram.cpp"
+# line 6068 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 319: {
       get_lexval();
@@ -6076,9 +6076,9 @@ int template_entry ()
       }
       mval(&mv);
       get_lexval();
-#line 1026 "lang/grammar.acc"
+#line 1026 "../lang/grammar.acc"
  theTemp->Spd = mv; 
-# line 6082 "src/yygram.cpp"
+# line 6082 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 320: {
       get_lexval();
@@ -6090,9 +6090,9 @@ int template_entry ()
       }
       mval(&mv);
       get_lexval();
-#line 1027 "lang/grammar.acc"
+#line 1027 "../lang/grammar.acc"
  theTemp->Mov = mv; 
-# line 6096 "src/yygram.cpp"
+# line 6096 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 321: {
       get_lexval();
@@ -6113,9 +6113,9 @@ int template_entry ()
          } break;
       default: printf("???\n"); exit(1);
       }
-#line 1028 "lang/grammar.acc"
+#line 1028 "../lang/grammar.acc"
  theTemp->Attr[at] = mv; 
-# line 6119 "src/yygram.cpp"
+# line 6119 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 322: {
       get_lexval();
@@ -6144,9 +6144,9 @@ int template_entry ()
       cexpr3(&st);
       get_lexval();
       get_lexval();
-#line 1032 "lang/grammar.acc"
+#line 1032 "../lang/grammar.acc"
  if (!theTemp->GainStati((uint8)st)) yyerror("too many Stati in template"); 
-# line 6150 "src/yygram.cpp"
+# line 6150 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 324: {
       get_lexval();
@@ -6156,9 +6156,9 @@ int template_entry ()
       cexpr3(&stV);
       get_lexval();
       get_lexval();
-#line 1034 "lang/grammar.acc"
+#line 1034 "../lang/grammar.acc"
  if (!theTemp->GainStati((uint8)st,(int16)stV)) yyerror("too many Stati in template"); 
-# line 6162 "src/yygram.cpp"
+# line 6162 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 325: {
       get_lexval();
@@ -6170,10 +6170,10 @@ int template_entry ()
       cexpr3(&stM);
       get_lexval();
       get_lexval();
-#line 1036 "lang/grammar.acc"
+#line 1036 "../lang/grammar.acc"
  if (!theTemp->GainStati((uint8)st,(int16)stV,(int16)stM)) 
         yyerror("too many Stati in template"); 
-# line 6177 "src/yygram.cpp"
+# line 6177 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 326: {
       get_lexval();
@@ -6187,10 +6187,10 @@ int template_entry ()
       res_ref(&rr);
       get_lexval();
       get_lexval();
-#line 1039 "lang/grammar.acc"
+#line 1039 "../lang/grammar.acc"
  if (!theTemp->GainStati((uint8)st,(int16)stV,(int16)stM,rr)) 
         yyerror("too many Stati in template"); 
-# line 6194 "src/yygram.cpp"
+# line 6194 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 327: {
       get_lexval();
@@ -6206,9 +6206,9 @@ int template_entry ()
             switch (yyselect()) {
             case 885: {
                cexpr3(&res);
-#line 1042 "lang/grammar.acc"
+#line 1042 "../lang/grammar.acc"
  theTemp->AddRes |= res; 
-# line 6212 "src/yygram.cpp"
+# line 6212 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                } break;
             case 888: {
                switch (yyselect()) {
@@ -6221,9 +6221,9 @@ int template_entry ()
                default: printf("???\n"); exit(1);
                }
                cexpr3(&res);
-#line 1043 "lang/grammar.acc"
+#line 1043 "../lang/grammar.acc"
  theTemp->SubRes |= res; 
-# line 6227 "src/yygram.cpp"
+# line 6227 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                } break;
             default: printf("???\n"); exit(1);
             }
@@ -6254,9 +6254,9 @@ int template_entry ()
             switch (yyselect()) {
             case 892: {
                cexpr3(&res);
-#line 1045 "lang/grammar.acc"
+#line 1045 "../lang/grammar.acc"
  theTemp->AddImm |= res; 
-# line 6260 "src/yygram.cpp"
+# line 6260 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                } break;
             case 895: {
                switch (yyselect()) {
@@ -6269,9 +6269,9 @@ int template_entry ()
                default: printf("???\n"); exit(1);
                }
                cexpr3(&res);
-#line 1046 "lang/grammar.acc"
+#line 1046 "../lang/grammar.acc"
  theTemp->SubImm |= res; 
-# line 6275 "src/yygram.cpp"
+# line 6275 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                } break;
             default: printf("???\n"); exit(1);
             }
@@ -6301,9 +6301,9 @@ int template_entry ()
          case 899: {
             cexpr3(&n);
             get_lexval();
-#line 1048 "lang/grammar.acc"
+#line 1048 "../lang/grammar.acc"
  theTemp->NewFeats[CurrFeat++] = (uint16)n; 
-# line 6307 "src/yygram.cpp"
+# line 6307 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          default: goto yy80;
          }
@@ -6311,9 +6311,9 @@ int template_entry ()
       yy80: ;
       cexpr3(&n);
       get_lexval();
-#line 1049 "lang/grammar.acc"
+#line 1049 "../lang/grammar.acc"
  theTemp->NewFeats[CurrFeat++] = (uint16)n; 
-# line 6317 "src/yygram.cpp"
+# line 6317 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 330: {
       get_lexval();
@@ -6327,10 +6327,10 @@ int template_entry ()
          switch (yyselect()) {
          case 902: {
             res_ref(&rr);
-#line 1050 "lang/grammar.acc"
+#line 1050 "../lang/grammar.acc"
  theTemp->AddsFlag(M_INNATE);
                                        theTemp->AddResID(AN_INNATE, rr); 
-# line 6334 "src/yygram.cpp"
+# line 6334 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 901: {
                get_lexval();
@@ -6356,9 +6356,9 @@ int template_entry ()
          switch (yyselect()) {
          case 905: {
             res_ref(&rr);
-#line 1053 "lang/grammar.acc"
+#line 1053 "../lang/grammar.acc"
  theTemp->AddResID(AN_DISEASE, rr); 
-# line 6362 "src/yygram.cpp"
+# line 6362 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 904: {
                get_lexval();
@@ -6384,9 +6384,9 @@ int template_entry ()
          switch (yyselect()) {
          case 908: {
             res_ref(&rr);
-#line 1055 "lang/grammar.acc"
+#line 1055 "../lang/grammar.acc"
  theTemp->AddResID(AN_POISON, rr); 
-# line 6390 "src/yygram.cpp"
+# line 6390 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 907: {
                get_lexval();
@@ -6414,13 +6414,13 @@ int template_entry ()
             switch (yyselect()) {
             case 910: {
                cexpr3(&fl);
-#line 1058 "lang/grammar.acc"
+#line 1058 "../lang/grammar.acc"
  if (fl < 0) 
                                          theTemp->Flags[(-fl)/8] |= 1 << ((-fl)%8);
                                        else
                                          theTemp->AddFlags[fl/8] |= 1 << (fl % 8); 
                                      
-# line 6424 "src/yygram.cpp"
+# line 6424 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                } break;
             case 913: {
                switch (yyselect()) {
@@ -6433,9 +6433,9 @@ int template_entry ()
                default: printf("???\n"); exit(1);
                }
                cexpr3(&fl);
-#line 1063 "lang/grammar.acc"
+#line 1063 "../lang/grammar.acc"
  theTemp->SubFlags[fl/8] |= 1 << (fl % 8); 
-# line 6439 "src/yygram.cpp"
+# line 6439 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                } break;
             default: printf("???\n"); exit(1);
             }
@@ -6483,34 +6483,34 @@ int temp_attack_entry ()
    YYSTYPE dt;
    switch(yyselect()) {
    case 338: {
-#line 1071 "lang/grammar.acc"
+#line 1071 "../lang/grammar.acc"
  uint8 dt = AD_NORM; dam.Set(0,0,0);
                                  theTemp->NewAttk[CurrAttk].u.a.Dmg.Set(0,0,0);
-# line 6490 "src/yygram.cpp"
+# line 6490 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       cexpr3(&at);
       get_lexval();
       switch (yyselect()) {
       case 917: {
          dice_only(&dam);
-#line 1074 "lang/grammar.acc"
+#line 1074 "../lang/grammar.acc"
  theTemp->NewAttk[CurrAttk].u.a.Dmg = yyDice(dam); 
-# line 6498 "src/yygram.cpp"
+# line 6498 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       case 918: {
          cexpr3(&chance);
          get_lexval();
-#line 1075 "lang/grammar.acc"
+#line 1075 "../lang/grammar.acc"
  theTemp->NewAttk[CurrAttk].u.a.Dmg.Bonus = (int8)chance; 
-# line 6505 "src/yygram.cpp"
+# line 6505 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       default: ;
       }
       switch (yyselect()) {
       case 919: {
          cexpr3(&n);
-#line 1076 "lang/grammar.acc"
+#line 1076 "../lang/grammar.acc"
  dt = (uint8)n; 
-# line 6514 "src/yygram.cpp"
+# line 6514 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       default: ;
       }
@@ -6536,14 +6536,14 @@ int temp_attack_entry ()
          default: printf("???\n"); exit(1);
          }
          cexpr3(&dc);
-#line 1079 "lang/grammar.acc"
+#line 1079 "../lang/grammar.acc"
  theTemp->NewAttk[CurrAttk].u.a.DC = (int8)dc; 
-# line 6542 "src/yygram.cpp"
+# line 6542 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          get_lexval();
          } break;
       default: ;
       }
-#line 1080 "lang/grammar.acc"
+#line 1080 "../lang/grammar.acc"
  theTemp->NewAttk[CurrAttk].AType = (int8)at;
                                  theTemp->NewAttk[CurrAttk].DType = dt;
                                  /*
@@ -6559,29 +6559,29 @@ int temp_attack_entry ()
                                  if (CurrAttk >= 16)
                                    yyerror("> 16 attacks on a single template!");
                                
-# line 6563 "src/yygram.cpp"
+# line 6563 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 932: {
             get_lexval();
-#line 1091 "lang/grammar.acc"
+#line 1091 "../lang/grammar.acc"
  dt = AD_NORM; theTemp->NewAttk[CurrAttk].u.a.Dmg.Set(0,0,0); dam2.Set(0,0,0); 
-# line 6570 "src/yygram.cpp"
+# line 6570 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 925: {
                dice_only(&dam2);
-#line 1092 "lang/grammar.acc"
+#line 1092 "../lang/grammar.acc"
  theTemp->NewAttk[CurrAttk].u.a.Dmg = yyDice(dam2); 
-# line 6576 "src/yygram.cpp"
+# line 6576 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                } break;
             default: ;
             }
             switch (yyselect()) {
             case 926: {
                cexpr3(&n2);
-#line 1093 "lang/grammar.acc"
+#line 1093 "../lang/grammar.acc"
  dt = (uint8)n2; 
-# line 6585 "src/yygram.cpp"
+# line 6585 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                } break;
             default: ;
             }
@@ -6607,14 +6607,14 @@ int temp_attack_entry ()
                default: printf("???\n"); exit(1);
                }
                cexpr3(&dc);
-#line 1095 "lang/grammar.acc"
+#line 1095 "../lang/grammar.acc"
  theTemp->NewAttk[CurrAttk].u.a.DC = (int8)dc; 
-# line 6613 "src/yygram.cpp"
+# line 6613 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                get_lexval();
                } break;
             default: ;
             }
-#line 1096 "lang/grammar.acc"
+#line 1096 "../lang/grammar.acc"
  theTemp->NewAttk[CurrAttk].AType = A_ALSO;
                                  theTemp->NewAttk[CurrAttk].DType = dt;
                                  theTemp->NewAttk[CurrAttk].u.a.Dmg = yyDice(dam2);
@@ -6622,7 +6622,7 @@ int temp_attack_entry ()
                                  if (CurrAttk >= 16)
                                    Fatal("> 16 attacks on a single monster!");
                                
-# line 6626 "src/yygram.cpp"
+# line 6626 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          default: goto yy85;
          }
@@ -6633,16 +6633,16 @@ int temp_attack_entry ()
       cexpr3(&at);
       get_lexval();
       res_ref(&rr);
-#line 1104 "lang/grammar.acc"
+#line 1104 "../lang/grammar.acc"
  theTemp->NewAttk[CurrAttk].AType = (int8)at;
                                   theTemp->NewAttk[CurrAttk].u.xID = rr; 
-# line 6640 "src/yygram.cpp"
+# line 6640 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       switch (yyselect()) {
       case 933: {
          cexpr3(&dt);
-#line 1106 "lang/grammar.acc"
+#line 1106 "../lang/grammar.acc"
  theTemp->NewAttk[CurrAttk].DType = (int8)dt; 
-# line 6646 "src/yygram.cpp"
+# line 6646 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       default: ;
       }
@@ -6672,14 +6672,14 @@ int flavor_def ()
       name = yylval;
       get_lexval();
       cexpr3(&it);
-#line 1113 "lang/grammar.acc"
+#line 1113 "../lang/grammar.acc"
  theRes = theFlavor; 
                                          theFlavor->Name = name;
                                          theFlavor->IType = (int8)it;
                                          theFlavor->Material = -1;
                                          theFlavor->Color = -1;
                                          theFlavor->Weight = 20; 
-# line 6683 "src/yygram.cpp"
+# line 6683 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -6691,9 +6691,9 @@ int flavor_def ()
       }
       yy86: ;
       get_lexval();
-#line 1119 "lang/grammar.acc"
+#line 1119 "../lang/grammar.acc"
  theFlavor++; 
-# line 6697 "src/yygram.cpp"
+# line 6697 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -6716,9 +6716,9 @@ int flavor_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 1123 "lang/grammar.acc"
+#line 1123 "../lang/grammar.acc"
  theFlavor->Desc     = lv; 
-# line 6722 "src/yygram.cpp"
+# line 6722 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 343: {
       get_lexval();
@@ -6730,9 +6730,9 @@ int flavor_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 1124 "lang/grammar.acc"
+#line 1124 "../lang/grammar.acc"
  theFlavor->Material = (int8)n; 
-# line 6736 "src/yygram.cpp"
+# line 6736 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 344: {
       get_lexval();
@@ -6744,9 +6744,9 @@ int flavor_entry ()
       }
       color(&col);
       get_lexval();
-#line 1125 "lang/grammar.acc"
+#line 1125 "../lang/grammar.acc"
  theFlavor->Color    = (int8)col; 
-# line 6750 "src/yygram.cpp"
+# line 6750 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 345: {
       get_lexval();
@@ -6759,9 +6759,9 @@ int flavor_entry ()
       cexpr3(&n);
       get_lexval();
       get_lexval();
-#line 1126 "lang/grammar.acc"
+#line 1126 "../lang/grammar.acc"
  theFlavor->Weight   = (int8)(n/5); 
-# line 6765 "src/yygram.cpp"
+# line 6765 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -6774,22 +6774,22 @@ int encounter_def ()
    switch(yyselect()) {
    case 346: {
       get_lexval();
-#line 1131 "lang/grammar.acc"
+#line 1131 "../lang/grammar.acc"
  theRes = theEnc; 
                      theEnc->Weight = 10; 
-# line 6781 "src/yygram.cpp"
+# line 6781 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       get_lexval();
       name = yylval;
-#line 1133 "lang/grammar.acc"
+#line 1133 "../lang/grammar.acc"
  theEnc->Name = name; 
-# line 6786 "src/yygram.cpp"
+# line 6786 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       switch (yyselect()) {
       case 939: {
          get_lexval();
          cexpr3(&n);
-#line 1134 "lang/grammar.acc"
+#line 1134 "../lang/grammar.acc"
  theEnc->Terrain |= n; 
-# line 6793 "src/yygram.cpp"
+# line 6793 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       default: ;
       }
@@ -6804,9 +6804,9 @@ int encounter_def ()
       }
       yy87: ;
       get_lexval();
-#line 1137 "lang/grammar.acc"
+#line 1137 "../lang/grammar.acc"
  theEnc++; 
-# line 6810 "src/yygram.cpp"
+# line 6810 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -6822,36 +6822,36 @@ int encounter_entry ()
       get_lexval();
       cexpr(&n);
       get_lexval();
-#line 1140 "lang/grammar.acc"
+#line 1140 "../lang/grammar.acc"
  theEnc->Terrain |= n; 
-# line 6828 "src/yygram.cpp"
+# line 6828 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 348: {
       get_lexval();
       get_lexval();
       cexpr3(&n);
       get_lexval();
-#line 1141 "lang/grammar.acc"
+#line 1141 "../lang/grammar.acc"
  theEnc->Depth = (int16)n; 
-# line 6837 "src/yygram.cpp"
+# line 6837 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 349: {
       get_lexval();
       get_lexval();
       cexpr3(&n);
       get_lexval();
-#line 1142 "lang/grammar.acc"
+#line 1142 "../lang/grammar.acc"
  theEnc->Weight = (int16)n; 
-# line 6846 "src/yygram.cpp"
+# line 6846 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 350: {
       get_lexval();
       get_lexval();
       cexpr3(&n);
       get_lexval();
-#line 1143 "lang/grammar.acc"
+#line 1143 "../lang/grammar.acc"
  theEnc->minCR = theEnc->maxCR = (int16)n; 
-# line 6855 "src/yygram.cpp"
+# line 6855 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 351: {
       get_lexval();
@@ -6859,9 +6859,9 @@ int encounter_entry ()
       cexpr3(&n);
       get_lexval();
       get_lexval();
-#line 1144 "lang/grammar.acc"
+#line 1144 "../lang/grammar.acc"
  theEnc->minCR = (int16)n; theEnc->maxCR = 36; 
-# line 6865 "src/yygram.cpp"
+# line 6865 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 352: {
       get_lexval();
@@ -6878,25 +6878,25 @@ int encounter_entry ()
       }
       cexpr3(&n2);
       get_lexval();
-#line 1146 "lang/grammar.acc"
+#line 1146 "../lang/grammar.acc"
  theEnc->minCR = (int16)n; theEnc->maxCR = (int16)n2; 
-# line 6884 "src/yygram.cpp"
+# line 6884 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 353: {
       get_lexval();
       get_lexval();
       cexpr3(&n);
       get_lexval();
-#line 1147 "lang/grammar.acc"
+#line 1147 "../lang/grammar.acc"
  theEnc->Align = (int16)n; 
-# line 6893 "src/yygram.cpp"
+# line 6893 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 354: {
       get_lexval();
       get_lexval();
-#line 1148 "lang/grammar.acc"
+#line 1148 "../lang/grammar.acc"
  currPart = 0; 
-# line 6900 "src/yygram.cpp"
+# line 6900 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 943: {
@@ -6920,9 +6920,9 @@ int encounter_entry ()
          switch (yyselect()) {
          case 947: {
             cexpr3(&n);
-#line 1151 "lang/grammar.acc"
+#line 1151 "../lang/grammar.acc"
  theEnc->SetFlag((uint16)n); 
-# line 6926 "src/yygram.cpp"
+# line 6926 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 945: {
                get_lexval();
@@ -6964,38 +6964,38 @@ int encounter_part ()
    rID rr;
    switch(yyselect()) {
    case 360: {
-#line 1160 "lang/grammar.acc"
+#line 1160 "../lang/grammar.acc"
  ASSERT(currPart < MAX_PARTS); 
-# line 6970 "src/yygram.cpp"
+# line 6970 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       switch (yyselect()) {
       case 948: {
          get_lexval();
          } break;
       case 949: {
          get_lexval();
-#line 1162 "lang/grammar.acc"
+#line 1162 "../lang/grammar.acc"
  theEnc->Parts[currPart].Flags |= EP_ELSE; 
-# line 6979 "src/yygram.cpp"
+# line 6979 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       case 950: {
          get_lexval();
-#line 1163 "lang/grammar.acc"
+#line 1163 "../lang/grammar.acc"
  theEnc->Parts[currPart].Flags |= EP_OR; 
-# line 6985 "src/yygram.cpp"
+# line 6985 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       default: printf("???\n"); exit(1);
       }
-#line 1165 "lang/grammar.acc"
+#line 1165 "../lang/grammar.acc"
  theEnc->Parts[currPart].Weight = 10; 
-# line 6991 "src/yygram.cpp"
+# line 6991 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 951: {
             cexpr4(&n);
             get_lexval();
-#line 1167 "lang/grammar.acc"
+#line 1167 "../lang/grammar.acc"
  theEnc->Parts[currPart].Chance = (uint8)n; 
-# line 6999 "src/yygram.cpp"
+# line 6999 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          case 952: {
             get_lexval();
@@ -7003,25 +7003,25 @@ int encounter_part ()
             cexpr4(&n);
             get_lexval();
             get_lexval();
-#line 1168 "lang/grammar.acc"
+#line 1168 "../lang/grammar.acc"
  theEnc->Parts[currPart].minCR = (uint8)n; 
-# line 7009 "src/yygram.cpp"
+# line 7009 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          case 953: {
             get_lexval();
             cexpr4(&n);
             get_lexval();
-#line 1169 "lang/grammar.acc"
+#line 1169 "../lang/grammar.acc"
  theEnc->Parts[currPart].Weight = (uint8)n; 
-# line 7017 "src/yygram.cpp"
+# line 7017 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          case 954: {
             get_lexval();
             sep_expr(&hc);
             get_lexval();
-#line 1170 "lang/grammar.acc"
+#line 1170 "../lang/grammar.acc"
  theEnc->Parts[currPart].Condition = hc; 
-# line 7025 "src/yygram.cpp"
+# line 7025 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          case 957: {
             cexpr4(&n);
@@ -7035,34 +7035,34 @@ int encounter_part ()
             default: printf("???\n"); exit(1);
             }
             cexpr4(&n2);
-#line 1171 "lang/grammar.acc"
+#line 1171 "../lang/grammar.acc"
  theEnc->Parts[currPart].Amt.Number = (int8)n;
                                       theEnc->Parts[currPart].Amt.Bonus  = (int8)n2;
                                       theEnc->Parts[currPart].Amt.Sides  = 0; 
-# line 7043 "src/yygram.cpp"
+# line 7043 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          case 958: {
             cexpr4(&n);
-#line 1174 "lang/grammar.acc"
+#line 1174 "../lang/grammar.acc"
  theEnc->Parts[currPart].Amt.Number = (int8)n;
                                       theEnc->Parts[currPart].Amt.Bonus  = (int8)n;
                                       theEnc->Parts[currPart].Amt.Sides  = 0; 
-# line 7051 "src/yygram.cpp"
+# line 7051 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          case 959: {
             cexpr4(&n);
             get_lexval();
-#line 1177 "lang/grammar.acc"
+#line 1177 "../lang/grammar.acc"
  theEnc->Parts[currPart].Amt.Number = (int8)n;
                                       theEnc->Parts[currPart].Amt.Bonus  = (int8)(n+50);
                                       theEnc->Parts[currPart].Amt.Sides  = 0; 
-# line 7060 "src/yygram.cpp"
+# line 7060 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          case 960: {
             dice_only(&d);
-#line 1180 "lang/grammar.acc"
+#line 1180 "../lang/grammar.acc"
  theEnc->Parts[currPart].Amt        = d; 
-# line 7066 "src/yygram.cpp"
+# line 7066 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          default: goto yy90;
          }
@@ -7072,46 +7072,46 @@ int encounter_part ()
       switch (yyselect()) {
       case 961: {
          res_ref(&rr);
-#line 1186 "lang/grammar.acc"
+#line 1186 "../lang/grammar.acc"
  theEnc->Parts[currPart].xID = rr; 
-# line 7078 "src/yygram.cpp"
+# line 7078 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       case 962: {
          cexpr3(&n);
-#line 1187 "lang/grammar.acc"
+#line 1187 "../lang/grammar.acc"
  theEnc->Parts[currPart].xID = n; 
-# line 7084 "src/yygram.cpp"
+# line 7084 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       case 963: {
          get_lexval();
          cexpr3(&n);
-#line 1188 "lang/grammar.acc"
+#line 1188 "../lang/grammar.acc"
  theEnc->Parts[currPart].xID = n;
                                       theEnc->Parts[currPart].Flags |= EP_ANYMON; 
-# line 7092 "src/yygram.cpp"
+# line 7092 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       default: printf("???\n"); exit(1);
       }
       switch (yyselect()) {
       case 964: {
          res_ref(&rr);
-#line 1192 "lang/grammar.acc"
+#line 1192 "../lang/grammar.acc"
  theEnc->Parts[currPart].xID2 = rr; 
-# line 7101 "src/yygram.cpp"
+# line 7101 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       case 965: {
          cexpr3(&n);
-#line 1193 "lang/grammar.acc"
+#line 1193 "../lang/grammar.acc"
  theEnc->Parts[currPart].xID2 = n; 
-# line 7107 "src/yygram.cpp"
+# line 7107 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       case 966: {
          get_lexval();
          cexpr3(&n);
-#line 1194 "lang/grammar.acc"
+#line 1194 "../lang/grammar.acc"
  theEnc->Parts[currPart].xID = n;
                                       theEnc->Parts[currPart].Flags |= EP_ANYTEMP; 
-# line 7115 "src/yygram.cpp"
+# line 7115 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       default: ;
       }
@@ -7119,9 +7119,9 @@ int encounter_part ()
       case 970: {
          get_lexval();
          cexpr3(&n);
-#line 1198 "lang/grammar.acc"
+#line 1198 "../lang/grammar.acc"
  theEnc->Parts[currPart].Flags |= n; 
-# line 7125 "src/yygram.cpp"
+# line 7125 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          while (1) {
             switch (yyselect()) {
             case 969: {
@@ -7135,9 +7135,9 @@ int encounter_part ()
                default: printf("???\n"); exit(1);
                }
                cexpr3(&n);
-#line 1199 "lang/grammar.acc"
+#line 1199 "../lang/grammar.acc"
  theEnc->Parts[currPart].Flags |= n; 
-# line 7141 "src/yygram.cpp"
+# line 7141 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                } break;
             default: goto yy91;
             }
@@ -7147,9 +7147,9 @@ int encounter_part ()
          } break;
       default: ;
       }
-#line 1202 "lang/grammar.acc"
+#line 1202 "../lang/grammar.acc"
  currPart++; 
-# line 7153 "src/yygram.cpp"
+# line 7153 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -7166,11 +7166,11 @@ int behaviour_def ()
       name = yylval;
       get_lexval();
       cexpr3(&c);
-#line 1206 "lang/grammar.acc"
+#line 1206 "../lang/grammar.acc"
  theRes = theBev; 
                                            theBev->Name = name;
                                            theBev->Conditions = c; 
-# line 7174 "src/yygram.cpp"
+# line 7174 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -7182,9 +7182,9 @@ int behaviour_def ()
       }
       yy92: ;
       get_lexval();
-#line 1209 "lang/grammar.acc"
+#line 1209 "../lang/grammar.acc"
  theBev++; 
-# line 7188 "src/yygram.cpp"
+# line 7188 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -7205,9 +7205,9 @@ int behaviour_entry ()
       }
       res_ref(&rr);
       get_lexval();
-#line 1213 "lang/grammar.acc"
+#line 1213 "../lang/grammar.acc"
  theBev->spID = rr; 
-# line 7211 "src/yygram.cpp"
+# line 7211 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 363: {
       get_lexval();
@@ -7230,9 +7230,9 @@ int behaviour_entry ()
                } break;
             default: ;
             }
-#line 1214 "lang/grammar.acc"
+#line 1214 "../lang/grammar.acc"
  theBev->SetFlag((uint16)n); 
-# line 7236 "src/yygram.cpp"
+# line 7236 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          default: goto yy93;
          }
@@ -7264,79 +7264,79 @@ int text_def ()
       get_lexval();
       get_lexval();
       name = yylval;
-#line 1221 "lang/grammar.acc"
+#line 1221 "../lang/grammar.acc"
  theRes = theText;
                          theText->Name = name;
                          cText = 0; 
-# line 7272 "src/yygram.cpp"
+# line 7272 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 977: {
             get_lexval();
             text = yylval;
-#line 1224 "lang/grammar.acc"
+#line 1224 "../lang/grammar.acc"
  TempList[cText++] = text; 
-# line 7280 "src/yygram.cpp"
+# line 7280 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          case 978: {
             res_ref(&rr);
-#line 1225 "lang/grammar.acc"
+#line 1225 "../lang/grammar.acc"
  TempList[cText++] = rr; 
-# line 7286 "src/yygram.cpp"
+# line 7286 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          case 979: {
             get_lexval();
-#line 1226 "lang/grammar.acc"
+#line 1226 "../lang/grammar.acc"
  TempList[cText++] = TC_LPAREN; 
-# line 7292 "src/yygram.cpp"
+# line 7292 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          case 980: {
             get_lexval();
-#line 1227 "lang/grammar.acc"
+#line 1227 "../lang/grammar.acc"
  TempList[cText++] = TC_RPAREN; 
-# line 7298 "src/yygram.cpp"
+# line 7298 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          case 981: {
             get_lexval();
-#line 1228 "lang/grammar.acc"
+#line 1228 "../lang/grammar.acc"
  TempList[cText++] = TC_CHOICE; 
-# line 7304 "src/yygram.cpp"
+# line 7304 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          case 982: {
             get_lexval();
-#line 1229 "lang/grammar.acc"
+#line 1229 "../lang/grammar.acc"
  TempList[cText++] = TC_TERM; 
-# line 7310 "src/yygram.cpp"
+# line 7310 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          case 983: {
             get_lexval();
             sep_expr(&hc);
             get_lexval();
             get_lexval();
-#line 1231 "lang/grammar.acc"
+#line 1231 "../lang/grammar.acc"
  TempList[cText++] = TC_CASE;
                       TempList[cText++] = hc; 
-# line 7320 "src/yygram.cpp"
+# line 7320 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          case 984: {
             get_lexval();
             sep_stat(&hc);
             get_lexval();
-#line 1234 "lang/grammar.acc"
+#line 1234 "../lang/grammar.acc"
  TempList[cText++] = TC_ACTION;
                       TempList[cText++] = hc; 
-# line 7329 "src/yygram.cpp"
+# line 7329 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          default: goto yy94;
          }
       }
       yy94: ;
       get_lexval();
-#line 1236 "lang/grammar.acc"
+#line 1236 "../lang/grammar.acc"
  TempList[cText] = 0;
              theText->AddList(TEXT_LIST,TempList);
              theText++; 
-# line 7340 "src/yygram.cpp"
+# line 7340 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -7357,75 +7357,75 @@ int type_name (YYSTYPE *ty)
    switch(yyselect()) {
    case 369: {
       get_lexval();
-#line 1244 "lang/grammar.acc"
+#line 1244 "../lang/grammar.acc"
  *ty = DT_VOID; 
-# line 7363 "src/yygram.cpp"
+# line 7363 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 370: {
       get_lexval();
-#line 1245 "lang/grammar.acc"
+#line 1245 "../lang/grammar.acc"
  *ty = DT_BOOL; 
-# line 7369 "src/yygram.cpp"
+# line 7369 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 371: {
       get_lexval();
-#line 1246 "lang/grammar.acc"
+#line 1246 "../lang/grammar.acc"
  *ty = DT_UINT8; 
-# line 7375 "src/yygram.cpp"
+# line 7375 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 372: {
       get_lexval();
-#line 1247 "lang/grammar.acc"
+#line 1247 "../lang/grammar.acc"
  *ty = DT_UINT16; 
-# line 7381 "src/yygram.cpp"
+# line 7381 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 373: {
       get_lexval();
-#line 1248 "lang/grammar.acc"
+#line 1248 "../lang/grammar.acc"
  *ty = DT_INT8; 
-# line 7387 "src/yygram.cpp"
+# line 7387 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 374: {
       get_lexval();
-#line 1249 "lang/grammar.acc"
+#line 1249 "../lang/grammar.acc"
  *ty = DT_INT16; 
-# line 7393 "src/yygram.cpp"
+# line 7393 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 375: {
       get_lexval();
-#line 1250 "lang/grammar.acc"
+#line 1250 "../lang/grammar.acc"
  *ty = DT_INT32; 
-# line 7399 "src/yygram.cpp"
+# line 7399 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 376: {
       get_lexval();
-#line 1251 "lang/grammar.acc"
+#line 1251 "../lang/grammar.acc"
  *ty = DT_HOBJ; 
-# line 7405 "src/yygram.cpp"
+# line 7405 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 377: {
       get_lexval();
-#line 1252 "lang/grammar.acc"
+#line 1252 "../lang/grammar.acc"
  *ty = DT_HTEXT; 
-# line 7411 "src/yygram.cpp"
+# line 7411 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 378: {
       get_lexval();
-#line 1253 "lang/grammar.acc"
+#line 1253 "../lang/grammar.acc"
  *ty = DT_RID; 
-# line 7417 "src/yygram.cpp"
+# line 7417 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 379: {
       get_lexval();
-#line 1254 "lang/grammar.acc"
+#line 1254 "../lang/grammar.acc"
  *ty = DT_STRING; 
-# line 7423 "src/yygram.cpp"
+# line 7423 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 380: {
       get_lexval();
-#line 1255 "lang/grammar.acc"
+#line 1255 "../lang/grammar.acc"
  *ty = DT_RECT; 
-# line 7429 "src/yygram.cpp"
+# line 7429 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -7444,9 +7444,9 @@ int s_prototype ()
    YYSTYPE ot_n;
    switch(yyselect()) {
    case 381: {
-#line 1259 "lang/grammar.acc"
+#line 1259 "../lang/grammar.acc"
  BSysFunc *b; 
-# line 7450 "src/yygram.cpp"
+# line 7450 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       get_lexval();
       type_name(&ty);
       cexpr3(&ot);
@@ -7454,7 +7454,7 @@ int s_prototype ()
       get_lexval();
       fn = yylval;
       get_lexval();
-#line 1261 "lang/grammar.acc"
+#line 1261 "../lang/grammar.acc"
  if (is_res(ot)) {
         if (theSymTab.GetBinding(fn,0,0,RES_FUNC))
           if (GETBIND_RESFUNC(fn)->RType == ot)
@@ -7472,7 +7472,7 @@ int s_prototype ()
         theSymTab.Bind(fn,b); 
       }
     
-# line 7476 "src/yygram.cpp"
+# line 7476 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       switch (yyselect()) {
       case 992: {
          type_name(&ty_1);
@@ -7480,15 +7480,15 @@ int s_prototype ()
          case 985: {
             get_lexval();
             cexpr3(&ot_1);
-#line 1277 "lang/grammar.acc"
+#line 1277 "../lang/grammar.acc"
  b->ParamOType[0] = (int8)ot_1; 
-# line 7486 "src/yygram.cpp"
+# line 7486 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          default: ;
          }
-#line 1278 "lang/grammar.acc"
+#line 1278 "../lang/grammar.acc"
  b->ParamType[0] = (int8)ty_1; b->ParamCount++; 
-# line 7492 "src/yygram.cpp"
+# line 7492 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          switch (yyselect()) {
          case 986: {
             get_lexval();
@@ -7500,9 +7500,9 @@ int s_prototype ()
          case 987: {
             get_lexval();
             cexpr(&def);
-#line 1279 "lang/grammar.acc"
+#line 1279 "../lang/grammar.acc"
  b->Default[0] = (int8)def; b->HasDefault |= BIT(2); 
-# line 7506 "src/yygram.cpp"
+# line 7506 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          default: ;
          }
@@ -7515,15 +7515,15 @@ int s_prototype ()
                case 988: {
                   get_lexval();
                   cexpr3(&ot_n);
-#line 1281 "lang/grammar.acc"
+#line 1281 "../lang/grammar.acc"
  b->ParamOType[b->ParamCount] = (int8)ot_n; 
-# line 7521 "src/yygram.cpp"
+# line 7521 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                   } break;
                default: ;
                }
-#line 1282 "lang/grammar.acc"
+#line 1282 "../lang/grammar.acc"
  b->ParamType[b->ParamCount] = (int8)ty_n; b->ParamCount++; 
-# line 7527 "src/yygram.cpp"
+# line 7527 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                switch (yyselect()) {
                case 989: {
                   get_lexval();
@@ -7535,9 +7535,9 @@ int s_prototype ()
                case 990: {
                   get_lexval();
                   cexpr(&def);
-#line 1283 "lang/grammar.acc"
+#line 1283 "../lang/grammar.acc"
  b->Default[b->ParamCount] = (int8)def; b->HasDefault |= BIT(1+b->ParamCount); 
-# line 7541 "src/yygram.cpp"
+# line 7541 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                   } break;
                default: ;
                }
@@ -7553,9 +7553,9 @@ int s_prototype ()
       case 993: {
          get_lexval();
          get_lexval();
-#line 1285 "lang/grammar.acc"
+#line 1285 "../lang/grammar.acc"
  b->isVarParam = true; 
-# line 7559 "src/yygram.cpp"
+# line 7559 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       default: ;
       }
@@ -7578,22 +7578,22 @@ int sg_prototype ()
    YYSTYPE ot_n;
    switch(yyselect()) {
    case 382: {
-#line 1288 "lang/grammar.acc"
+#line 1288 "../lang/grammar.acc"
  BSysFunc *b; 
-# line 7584 "src/yygram.cpp"
+# line 7584 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       get_lexval();
       type_name(&ty);
       get_lexval();
       fn = yylval;
       get_lexval();
-#line 1290 "lang/grammar.acc"
+#line 1290 "../lang/grammar.acc"
  if (theSymTab.GetBinding(fn,0,0,SYS_FUNC))
         yyerror(Format("System global function '%s' declared twice!",theSymTab[fn]));
       else if (theSymTab.GetBinding(fn,0,1,ANY))
         yyerror(Format("Identifier conflict: '%s'.", theSymTab[fn]));
       b = new BSysFunc((int16)MemFuncID++,(int8)ty);
       theSymTab.Bind(fn,b); 
-# line 7597 "src/yygram.cpp"
+# line 7597 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       switch (yyselect()) {
       case 1001: {
          type_name(&ty_1);
@@ -7601,15 +7601,15 @@ int sg_prototype ()
          case 994: {
             get_lexval();
             cexpr3(&ot_1);
-#line 1296 "lang/grammar.acc"
+#line 1296 "../lang/grammar.acc"
  b->ParamOType[0] = (int8)ot_1; 
-# line 7607 "src/yygram.cpp"
+# line 7607 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          default: ;
          }
-#line 1297 "lang/grammar.acc"
+#line 1297 "../lang/grammar.acc"
  b->ParamType[0] = (int8)ty_1; b->ParamCount++; 
-# line 7613 "src/yygram.cpp"
+# line 7613 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          switch (yyselect()) {
          case 995: {
             get_lexval();
@@ -7621,9 +7621,9 @@ int sg_prototype ()
          case 996: {
             get_lexval();
             cexpr(&def);
-#line 1298 "lang/grammar.acc"
+#line 1298 "../lang/grammar.acc"
  b->Default[0] = (int8)def; b->HasDefault |= BIT(2); 
-# line 7627 "src/yygram.cpp"
+# line 7627 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          default: ;
          }
@@ -7636,15 +7636,15 @@ int sg_prototype ()
                case 997: {
                   get_lexval();
                   cexpr3(&ot_n);
-#line 1300 "lang/grammar.acc"
+#line 1300 "../lang/grammar.acc"
  b->ParamOType[b->ParamCount] = (int8)ot_n; 
-# line 7642 "src/yygram.cpp"
+# line 7642 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                   } break;
                default: ;
                }
-#line 1301 "lang/grammar.acc"
+#line 1301 "../lang/grammar.acc"
  b->ParamType[b->ParamCount] = (int8)ty_n; b->ParamCount++; 
-# line 7648 "src/yygram.cpp"
+# line 7648 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                switch (yyselect()) {
                case 998: {
                   get_lexval();
@@ -7656,9 +7656,9 @@ int sg_prototype ()
                case 999: {
                   get_lexval();
                   cexpr(&def);
-#line 1302 "lang/grammar.acc"
+#line 1302 "../lang/grammar.acc"
  b->Default[b->ParamCount] = (int8)def; b->HasDefault |= BIT(1+b->ParamCount); 
-# line 7662 "src/yygram.cpp"
+# line 7662 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                   } break;
                default: ;
                }
@@ -7674,9 +7674,9 @@ int sg_prototype ()
       case 1002: {
          get_lexval();
          get_lexval();
-#line 1304 "lang/grammar.acc"
+#line 1304 "../lang/grammar.acc"
  b->isVarParam = true; 
-# line 7680 "src/yygram.cpp"
+# line 7680 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       default: ;
       }
@@ -7694,9 +7694,9 @@ int s_declaration ()
    YYSTYPE vn;
    switch(yyselect()) {
    case 383: {
-#line 1307 "lang/grammar.acc"
+#line 1307 "../lang/grammar.acc"
  BMemVar *b; BResMem *b2; 
-# line 7700 "src/yygram.cpp"
+# line 7700 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       get_lexval();
       type_name(&ty);
       cexpr3(&ot);
@@ -7704,7 +7704,7 @@ int s_declaration ()
       get_lexval();
       vn = yylval;
       get_lexval();
-#line 1309 "lang/grammar.acc"
+#line 1309 "../lang/grammar.acc"
  
       if (is_res(ot)) {
         if (theSymTab.GetBinding(vn,0,RES_MEM))
@@ -7734,7 +7734,7 @@ int s_declaration ()
         theSymTab.Bind(vn,b); 
         }
     
-# line 7738 "src/yygram.cpp"
+# line 7738 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -7747,9 +7747,9 @@ int s_object_decl ()
    YYSTYPE oid;
    switch(yyselect()) {
    case 384: {
-#line 1340 "lang/grammar.acc"
+#line 1340 "../lang/grammar.acc"
  BSysObj *b; 
-# line 7753 "src/yygram.cpp"
+# line 7753 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       get_lexval();
       cexpr3(&ot);
       get_lexval();
@@ -7757,7 +7757,7 @@ int s_object_decl ()
       get_lexval();
       cexpr3(&oid);
       get_lexval();
-#line 1342 "lang/grammar.acc"
+#line 1342 "../lang/grammar.acc"
  if (theSymTab.GetBinding(oname,0,0,SYS_OBJ))
         yyerror(Format("System object '%s' declared twice!",theSymTab[oname]));
       else if (theSymTab.GetBinding(oname,0,1,ANY))
@@ -7769,7 +7769,7 @@ int s_object_decl ()
       b->Event = 0;
       b->type  = SYS_OBJ;
       theSymTab.Bind(oname,b); 
-# line 7773 "src/yygram.cpp"
+# line 7773 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -7781,13 +7781,13 @@ int g_declaration ()
    YYSTYPE vn;
    switch(yyselect()) {
    case 385: {
-#line 1356 "lang/grammar.acc"
+#line 1356 "../lang/grammar.acc"
  BGlobalVar *b; 
-# line 7787 "src/yygram.cpp"
+# line 7787 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       type_name(&ty);
       get_lexval();
       vn = yylval;
-#line 1358 "lang/grammar.acc"
+#line 1358 "../lang/grammar.acc"
  if (ty == DT_STRING)
         Error("Global variables of type String cannot be created!");
       if (theSymTab.GetBinding(vn,0,0,GLOB_VAR))
@@ -7802,14 +7802,14 @@ int g_declaration ()
       
       b->type    = GLOB_VAR;
       theSymTab.Bind(vn,b); 
-# line 7806 "src/yygram.cpp"
+# line 7806 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 1003: {
             get_lexval();
             get_lexval();
             vn = yylval;
-#line 1373 "lang/grammar.acc"
+#line 1373 "../lang/grammar.acc"
  if (theSymTab.GetBinding(vn,0,0,GLOB_VAR))
         Error("Global variable '%s' declared twice!",theSymTab[vn]);
       else if (theSymTab.GetBinding(vn,0,1,ANY))
@@ -7821,7 +7821,7 @@ int g_declaration ()
       b->Event   = 0;
       b->type    = GLOB_VAR;
       theSymTab.Bind(vn,b); 
-# line 7825 "src/yygram.cpp"
+# line 7825 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          default: goto yy97;
          }
@@ -7839,13 +7839,13 @@ int l_declaration (VBlock *code)
    YYSTYPE vn;
    switch(yyselect()) {
    case 386: {
-#line 1386 "lang/grammar.acc"
+#line 1386 "../lang/grammar.acc"
  BLocalVar *b; int16 i; String scope_id; 
-# line 7845 "src/yygram.cpp"
+# line 7845 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       type_name(&ty);
       get_lexval();
       vn = yylval;
-#line 1388 "lang/grammar.acc"
+#line 1388 "../lang/grammar.acc"
  b = new BLocalVar();
       b->xID   = FIND(theModule->GetText(theRes->Name));
       ASSERT(theEvent);
@@ -7862,14 +7862,14 @@ int l_declaration (VBlock *code)
         code->Generate(ESTR,RT_CONSTANT,-i);
         }
       theSymTab.Bind(vn,b); 
-# line 7866 "src/yygram.cpp"
+# line 7866 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 1004: {
             get_lexval();
             get_lexval();
             vn = yylval;
-#line 1405 "lang/grammar.acc"
+#line 1405 "../lang/grammar.acc"
  b = new BLocalVar();
       b->xID   = FIND(theModule->GetText(theRes->Name));
       ASSERT(theEvent);
@@ -7886,7 +7886,7 @@ int l_declaration (VBlock *code)
         code->Generate(ESTR,RT_CONSTANT,-i);
         }
       theSymTab.Bind(vn,b); 
-# line 7890 "src/yygram.cpp"
+# line 7890 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          default: goto yy98;
          }
@@ -7904,13 +7904,13 @@ int r_declaration ()
    YYSTYPE vn;
    switch(yyselect()) {
    case 387: {
-#line 1423 "lang/grammar.acc"
+#line 1423 "../lang/grammar.acc"
  BResVar *b; String scope_id; 
-# line 7910 "src/yygram.cpp"
+# line 7910 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       type_name(&ty);
       get_lexval();
       vn = yylval;
-#line 1425 "lang/grammar.acc"
+#line 1425 "../lang/grammar.acc"
  if (ty == DT_STRING)
         yyerror("Resource variables of type String cannot be allocated.");
       b = new BResVar();
@@ -7922,14 +7922,14 @@ int r_declaration ()
       b->Address = HeapHead++;
       b->type    = RES_VAR;
       theSymTab.Bind(vn,b); 
-# line 7926 "src/yygram.cpp"
+# line 7926 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 1005: {
             get_lexval();
             get_lexval();
             vn = yylval;
-#line 1437 "lang/grammar.acc"
+#line 1437 "../lang/grammar.acc"
  b = new BResVar();
       b->xID   = FIND(theModule->GetText(theRes->Name));
       b->Event = 0;
@@ -7939,7 +7939,7 @@ int r_declaration ()
       b->Address = HeapHead++;
       b->type    = RES_VAR;
       theSymTab.Bind(vn,b); 
-# line 7943 "src/yygram.cpp"
+# line 7943 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          default: goto yy99;
          }
@@ -7967,7 +7967,7 @@ int statement (VBlock *st)
    case 388: {
       expr(&ex);
       get_lexval();
-#line 1451 "lang/grammar.acc"
+#line 1451 "../lang/grammar.acc"
 
       st->Add(ex.Code);
       if (ex.Storage == RT_REGISTER) {
@@ -7978,7 +7978,7 @@ int statement (VBlock *st)
         if (ex.Value < -1)
           FreeString((int16)-ex.Value);
     
-# line 7982 "src/yygram.cpp"
+# line 7982 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 389: {
       get_lexval();
@@ -7988,7 +7988,7 @@ int statement (VBlock *st)
       statement(&st1);
       get_lexval();
       statement(&st2);
-#line 1462 "lang/grammar.acc"
+#line 1462 "../lang/grammar.acc"
 
       st->Add(ex.Code);
       /* Here, we compute the address to include the size
@@ -8005,7 +8005,7 @@ int statement (VBlock *st)
       st->Generate(JUMP, RT_CONSTANT, st2.GetSize()+1);
       st->Add(&st2);
     
-# line 8009 "src/yygram.cpp"
+# line 8009 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 390: {
       get_lexval();
@@ -8013,7 +8013,7 @@ int statement (VBlock *st)
       expr(&ex);
       get_lexval();
       statement(&st1);
-#line 1477 "lang/grammar.acc"
+#line 1477 "../lang/grammar.acc"
 
       st->Add(ex.Code);
       st->Generate(JFAL, ex.Storage, ex.Value, 
@@ -8022,7 +8022,7 @@ int statement (VBlock *st)
         FreeRegister((int16)ex.Value);
       st->Add(&st1);
     
-# line 8026 "src/yygram.cpp"
+# line 8026 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 391: {
       get_lexval();
@@ -8034,7 +8034,7 @@ int statement (VBlock *st)
       expr(&ex3);
       get_lexval();
       statement(&st1);
-#line 1487 "lang/grammar.acc"
+#line 1487 "../lang/grammar.acc"
 
       int16 jumpback;
       ex1.Code->TrimGratuitousMOV();
@@ -8062,7 +8062,7 @@ int statement (VBlock *st)
         FreeRegister((int16)ex3.Value);
       st->Generate(JUMP,RT_CONSTANT,jumpback - st->GetSize());
     
-# line 8066 "src/yygram.cpp"
+# line 8066 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 392: {
       get_lexval();
@@ -8070,7 +8070,7 @@ int statement (VBlock *st)
       expr(&ex);
       get_lexval();
       get_lexval();
-#line 1513 "lang/grammar.acc"
+#line 1513 "../lang/grammar.acc"
 
         int16 CaseAddr[256], DefaultAddr;
         int32 CaseVal[256];
@@ -8080,7 +8080,7 @@ int statement (VBlock *st)
         DefaultAddr = 0;
         CaseAddr[0] = 0; 
       
-# line 8084 "src/yygram.cpp"
+# line 8084 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 1009: {
@@ -8091,32 +8091,32 @@ int statement (VBlock *st)
                } break;
             case 1007: {
                res_ref(&rr);
-#line 1522 "lang/grammar.acc"
+#line 1522 "../lang/grammar.acc"
  val = rr; 
-# line 8097 "src/yygram.cpp"
+# line 8097 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                } break;
             default: printf("???\n"); exit(1);
             }
             get_lexval();
-#line 1523 "lang/grammar.acc"
+#line 1523 "../lang/grammar.acc"
  CaseCode[CaseCount] = new VBlock; 
-# line 8104 "src/yygram.cpp"
+# line 8104 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             while (1) {
                switch (yyselect()) {
                case 1008: {
-#line 1524 "lang/grammar.acc"
+#line 1524 "../lang/grammar.acc"
  st_n.Clear(); 
-# line 8110 "src/yygram.cpp"
+# line 8110 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                   statement(&st_n);
-#line 1524 "lang/grammar.acc"
+#line 1524 "../lang/grammar.acc"
  CaseCode[CaseCount]->Add(&st_n);  
-# line 8114 "src/yygram.cpp"
+# line 8114 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                   } break;
                default: goto yy101;
                }
             }
             yy101: ;
-#line 1525 "lang/grammar.acc"
+#line 1525 "../lang/grammar.acc"
 
         /* We know where *this* case ends, which is synonimous with where
 
@@ -8125,7 +8125,7 @@ int statement (VBlock *st)
         CaseVal[CaseCount] = val;
         CaseCount++;  
       
-# line 8129 "src/yygram.cpp"
+# line 8129 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          default: goto yy100;
          }
@@ -8135,35 +8135,35 @@ int statement (VBlock *st)
       case 1011: {
          get_lexval();
          get_lexval();
-#line 1533 "lang/grammar.acc"
+#line 1533 "../lang/grammar.acc"
  DefaultCode = new VBlock; 
-# line 8141 "src/yygram.cpp"
+# line 8141 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          while (1) {
             switch (yyselect()) {
             case 1010: {
-#line 1534 "lang/grammar.acc"
+#line 1534 "../lang/grammar.acc"
  st_n.Clear(); 
-# line 8147 "src/yygram.cpp"
+# line 8147 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                statement(&st_n);
-#line 1534 "lang/grammar.acc"
+#line 1534 "../lang/grammar.acc"
  DefaultCode->Add(&st_n);  
-# line 8151 "src/yygram.cpp"
+# line 8151 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                } break;
             default: goto yy102;
             }
          }
          yy102: ;
-#line 1535 "lang/grammar.acc"
+#line 1535 "../lang/grammar.acc"
  
         DefaultAddr = CaseAddr[CaseCount]; 
         CaseAddr[CaseCount] = DefaultAddr + (int16)DefaultCode->GetSize(); 
       
-# line 8162 "src/yygram.cpp"
+# line 8162 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          } break;
       default: ;
       }
       get_lexval();
-#line 1542 "lang/grammar.acc"
+#line 1542 "../lang/grammar.acc"
 
         /* Now we code the *entire* switch statement! */
         
@@ -8204,25 +8204,25 @@ int statement (VBlock *st)
         st->Generate(FBRK);
         
       
-# line 8208 "src/yygram.cpp"
+# line 8208 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 393: {
       get_lexval();
       get_lexval();
-#line 1583 "lang/grammar.acc"
+#line 1583 "../lang/grammar.acc"
 
         st->Generate(JBRK);
       
-# line 8217 "src/yygram.cpp"
+# line 8217 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 394: {
       get_lexval();
       get_lexval();
-#line 1587 "lang/grammar.acc"
+#line 1587 "../lang/grammar.acc"
 
         st->Generate(CONT);
       
-# line 8226 "src/yygram.cpp"
+# line 8226 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 395: {
       get_lexval();
@@ -8232,7 +8232,7 @@ int statement (VBlock *st)
       expr(&ex);
       get_lexval();
       get_lexval();
-#line 1591 "lang/grammar.acc"
+#line 1591 "../lang/grammar.acc"
 
         st->Add(&st1);
         st->Add(ex.Code);
@@ -8241,7 +8241,7 @@ int statement (VBlock *st)
         if (ex.Storage == RT_REGISTER)
           FreeRegister((int16)ex.Value);
       
-# line 8245 "src/yygram.cpp"
+# line 8245 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 396: {
       get_lexval();
@@ -8249,7 +8249,7 @@ int statement (VBlock *st)
       expr(&ex);
       get_lexval();
       statement(&st1);
-#line 1600 "lang/grammar.acc"
+#line 1600 "../lang/grammar.acc"
 
         st->Add(ex.Code);
         st->Generate(JFAL,ex.Storage,ex.Value,
@@ -8260,21 +8260,21 @@ int statement (VBlock *st)
         if (ex.Storage == RT_REGISTER)
           FreeRegister((int16)ex.Value);
       
-# line 8264 "src/yygram.cpp"
+# line 8264 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 397: {
       block(&bl);
-#line 1611 "lang/grammar.acc"
+#line 1611 "../lang/grammar.acc"
  
         st->Add(&bl); 
       
-# line 8272 "src/yygram.cpp"
+# line 8272 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 398: {
       get_lexval();
       expr(&ex);
       get_lexval();
-#line 1615 "lang/grammar.acc"
+#line 1615 "../lang/grammar.acc"
 
         st->Add(ex.Code);
         if (StackHead) {
@@ -8287,18 +8287,18 @@ int statement (VBlock *st)
         if (ex.Storage == RT_REGISTER)
           FreeRegister((int16)ex.Value);
       
-# line 8291 "src/yygram.cpp"
+# line 8291 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 399: {
       get_lexval();
       get_lexval();
-#line 1628 "lang/grammar.acc"
+#line 1628 "../lang/grammar.acc"
 
         if (StackHead)
           st->Generate(DEC,RT_REGISTER,63,RT_CONSTANT,StackHead);
         st->Generate(RET);
       
-# line 8302 "src/yygram.cpp"
+# line 8302 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -8313,13 +8313,13 @@ int block (VBlock *bl)
       while (1) {
          switch (yyselect()) {
          case 1012: {
-#line 1636 "lang/grammar.acc"
+#line 1636 "../lang/grammar.acc"
  st.Clear(); 
-# line 8319 "src/yygram.cpp"
+# line 8319 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             statement(&st);
-#line 1636 "lang/grammar.acc"
+#line 1636 "../lang/grammar.acc"
  bl->Add(&st); 
-# line 8323 "src/yygram.cpp"
+# line 8323 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          default: goto yy103;
          }
@@ -8337,20 +8337,20 @@ int routine (VBlock *bl)
    VBlock st;
    switch(yyselect()) {
    case 401: {
-#line 1640 "lang/grammar.acc"
+#line 1640 "../lang/grammar.acc"
  VBlock decl_code; StackHead = 0; ClearStrings(); 
-# line 8343 "src/yygram.cpp"
+# line 8343 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
          case 1013: {
-#line 1641 "lang/grammar.acc"
+#line 1641 "../lang/grammar.acc"
  code.Clear(); 
-# line 8350 "src/yygram.cpp"
+# line 8350 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             l_declaration(&code);
-#line 1641 "lang/grammar.acc"
+#line 1641 "../lang/grammar.acc"
  decl_code.Add(&code); 
-# line 8354 "src/yygram.cpp"
+# line 8354 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          case 1014: {
             get_lexval();
@@ -8360,28 +8360,28 @@ int routine (VBlock *bl)
          }
       }
       yy104: ;
-#line 1643 "lang/grammar.acc"
+#line 1643 "../lang/grammar.acc"
  if (StackHead)
           bl->Generate(INC,RT_REGISTER,63,RT_CONSTANT,StackHead);
         bl->Add(&decl_code); 
-# line 8368 "src/yygram.cpp"
+# line 8368 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 1015: {
-#line 1646 "lang/grammar.acc"
+#line 1646 "../lang/grammar.acc"
  st.Clear(); 
-# line 8374 "src/yygram.cpp"
+# line 8374 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             statement(&st);
-#line 1646 "lang/grammar.acc"
+#line 1646 "../lang/grammar.acc"
  bl->Add(&st); 
-# line 8378 "src/yygram.cpp"
+# line 8378 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
             } break;
          default: goto yy105;
          }
       }
       yy105: ;
       get_lexval();
-#line 1647 "lang/grammar.acc"
+#line 1647 "../lang/grammar.acc"
  if (StackHead)
           bl->Generate(DEC,RT_REGISTER,63,RT_CONSTANT,StackHead); 
       
@@ -8398,7 +8398,7 @@ int routine (VBlock *bl)
         for (i=0;i!=64;i++)
           FreeRegister(i);
       
-# line 8402 "src/yygram.cpp"
+# line 8402 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -8421,61 +8421,61 @@ int fund_expr (PExp *ex)
    case 402: {
       get_lexval();
       n = yylval;
-#line 1683 "lang/grammar.acc"
+#line 1683 "../lang/grammar.acc"
  ex->Type = DT_INT32; ex->Storage = RT_CONSTANT; ex->Value = n; ex->Code = NULL; 
-# line 8427 "src/yygram.cpp"
+# line 8427 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 403: {
       get_lexval();
       n = yylval;
-#line 1685 "lang/grammar.acc"
+#line 1685 "../lang/grammar.acc"
  ex->Type = DT_INT32; ex->Storage = RT_CONSTANT; ex->Value = n; ex->Code = NULL; 
-# line 8434 "src/yygram.cpp"
+# line 8434 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 404: {
       get_lexval();
       lv = yylval;
-#line 1687 "lang/grammar.acc"
+#line 1687 "../lang/grammar.acc"
  ex->Type = DT_HTEXT; ex->Storage = RT_CONSTANT; ex->Value = lv; ex->Code = NULL; 
-# line 8441 "src/yygram.cpp"
+# line 8441 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 405: {
       get_lexval();
-#line 1689 "lang/grammar.acc"
+#line 1689 "../lang/grammar.acc"
  ex->Type = DT_BOOL; ex->Storage = RT_CONSTANT; ex->Value = 1; ex->Code = NULL; 
-# line 8447 "src/yygram.cpp"
+# line 8447 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 406: {
       get_lexval();
-#line 1691 "lang/grammar.acc"
+#line 1691 "../lang/grammar.acc"
  ex->Type = DT_BOOL; ex->Storage = RT_CONSTANT; ex->Value = 0; ex->Code = NULL; 
-# line 8453 "src/yygram.cpp"
+# line 8453 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 407: {
       get_lexval();
-#line 1693 "lang/grammar.acc"
+#line 1693 "../lang/grammar.acc"
  ex->Type = DT_UNKNOWN; ex->Storage = RT_CONSTANT; ex->Value = 0; ex->Code = NULL; 
-# line 8459 "src/yygram.cpp"
+# line 8459 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 408: {
       res_ref(&rr);
-#line 1695 "lang/grammar.acc"
+#line 1695 "../lang/grammar.acc"
  ex->Type = DT_RID;   ex->Storage = RT_CONSTANT; ex->Value = rr; ex->Code = NULL; 
-# line 8465 "src/yygram.cpp"
+# line 8465 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 409: {
       get_lexval();
       expr(&ex2);
       get_lexval();
-#line 1697 "lang/grammar.acc"
+#line 1697 "../lang/grammar.acc"
  ex->Code = ex2.Code; 
       ex->Type = ex2.Type; ex->Storage = ex2.Storage; ex->Value = ex2.Value; 
-# line 8474 "src/yygram.cpp"
+# line 8474 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 410: {
       get_lexval();
       id = yylval;
-#line 1700 "lang/grammar.acc"
+#line 1700 "../lang/grammar.acc"
  BGlobalVar *b; BLocalVar *b2; BSysObj *b3; BResVar *b4; rID resID;
       resID = FIND(theModule->GetText(theRes->Name));
       ASSERT(resID);
@@ -8516,7 +8516,7 @@ int fund_expr (PExp *ex)
 
         }
     
-# line 8520 "src/yygram.cpp"
+# line 8520 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 411: {
       fund_expr(&obj);
@@ -8531,7 +8531,7 @@ int fund_expr (PExp *ex)
       }
       get_lexval();
       id = yylval;
-#line 1741 "lang/grammar.acc"
+#line 1741 "../lang/grammar.acc"
 
       BMemVar *b;
 	  BResMem *b2;
@@ -8588,7 +8588,7 @@ int fund_expr (PExp *ex)
           }
         }
     
-# line 8592 "src/yygram.cpp"
+# line 8592 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 412: {
       fund_expr(&obj);
@@ -8603,7 +8603,7 @@ int fund_expr (PExp *ex)
       }
       get_lexval();
       fn = yylval;
-#line 1798 "lang/grammar.acc"
+#line 1798 "../lang/grammar.acc"
  BSysFunc *b;
         if (obj.Type == DT_RID) {
           if (!(b = GETBIND_RESFUNC(fn)))
@@ -8630,11 +8630,11 @@ int fund_expr (PExp *ex)
               obj.Value = j;
             }          
       
-# line 8634 "src/yygram.cpp"
+# line 8634 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       get_lexval();
       param_list(b, fn, &bl, &narg);
       get_lexval();
-#line 1825 "lang/grammar.acc"
+#line 1825 "../lang/grammar.acc"
 
         if (obj.Code)
           ex->Code->Add(obj.Code);
@@ -8663,23 +8663,23 @@ int fund_expr (PExp *ex)
           ex->Code->Generate(MOV,RT_REGISTER,ex->Value,RT_REGISTER,0);
           }
       
-# line 8667 "src/yygram.cpp"
+# line 8667 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 413: {
       get_lexval();
       fn = yylval;
-#line 1853 "lang/grammar.acc"
+#line 1853 "../lang/grammar.acc"
  BSysFunc *b;
         if (!(b = GETBIND_SYSFUNC(fn)))
           yyerror(Format("Expected: global function name before '(' (%s).",
             theSymTab[fn]));
         ex->Code = new VBlock;
       
-# line 8679 "src/yygram.cpp"
+# line 8679 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       get_lexval();
       param_list(b, fn, &bl, &narg);
       get_lexval();
-#line 1860 "lang/grammar.acc"
+#line 1860 "../lang/grammar.acc"
 
         ex->Code->Add(&bl);
         /* Call the Function */
@@ -8698,21 +8698,21 @@ int fund_expr (PExp *ex)
           ex->Code->Generate(MOV,RT_REGISTER,ex->Value,RT_REGISTER,0);
           }
       
-# line 8702 "src/yygram.cpp"
+# line 8702 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 414: {
       fund_expr(&rect);
       get_lexval();
       get_lexval();
       id = yylval;
-#line 1879 "lang/grammar.acc"
+#line 1879 "../lang/grammar.acc"
 
       if (rect.Type != DT_RECT)
         yyerror("Type mismatch: '@' operator used on non-Rect target.");
       *ex = CodeRectMember(&rect,(int16)id);
       
     
-# line 8716 "src/yygram.cpp"
+# line 8716 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -8727,7 +8727,7 @@ int lvalue (LExp *lv)
    case 415: {
       get_lexval();
       id = yylval;
-#line 1889 "lang/grammar.acc"
+#line 1889 "../lang/grammar.acc"
  BGlobalVar *b; BLocalVar *b2; BResVar *b3; rID resID;
       resID = FIND(theModule->GetText(theRes->Name));
       ASSERT(resID);
@@ -8772,20 +8772,20 @@ int lvalue (LExp *lv)
 
         }
     
-# line 8776 "src/yygram.cpp"
+# line 8776 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 416: {
       lvalue(&rect);
       get_lexval();
       get_lexval();
       id = yylval;
-#line 1934 "lang/grammar.acc"
+#line 1934 "../lang/grammar.acc"
 
       if (rect.Type != DT_RECT)
         yyerror("Type mismatch: '@' operator used on non-Rect target.");
       *lv = CodeRectLVal(&rect,(int16)id);
     
-# line 8789 "src/yygram.cpp"
+# line 8789 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 417: {
       fund_expr(&obj);
@@ -8800,7 +8800,7 @@ int lvalue (LExp *lv)
       }
       get_lexval();
       id = yylval;
-#line 1940 "lang/grammar.acc"
+#line 1940 "../lang/grammar.acc"
 
       int8 i;
 	  BMemVar *b;
@@ -8839,7 +8839,7 @@ int lvalue (LExp *lv)
           RT_CONSTANT, b->varid);
         }
     
-# line 8843 "src/yygram.cpp"
+# line 8843 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -8854,16 +8854,16 @@ int expr10 (PExp *ex)
    case 418: {
       lvalue(&lv);
       get_lexval();
-#line 1983 "lang/grammar.acc"
+#line 1983 "../lang/grammar.acc"
  *ex = CodeAssignment('i',lv,NULL); 
-# line 8860 "src/yygram.cpp"
+# line 8860 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 419: {
       lvalue(&lv);
       get_lexval();
-#line 1985 "lang/grammar.acc"
+#line 1985 "../lang/grammar.acc"
  *ex = CodeAssignment('d',lv,NULL); 
-# line 8867 "src/yygram.cpp"
+# line 8867 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 420: {
       get_lexval();
@@ -8872,9 +8872,9 @@ int expr10 (PExp *ex)
       get_lexval();
       expr150(&ex2);
       get_lexval();
-#line 1987 "lang/grammar.acc"
+#line 1987 "../lang/grammar.acc"
  *ex = CodeOperator('m',ex1,ex2); 
-# line 8878 "src/yygram.cpp"
+# line 8878 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 421: {
       get_lexval();
@@ -8883,15 +8883,15 @@ int expr10 (PExp *ex)
       get_lexval();
       expr150(&ex2);
       get_lexval();
-#line 1989 "lang/grammar.acc"
+#line 1989 "../lang/grammar.acc"
  *ex = CodeOperator('M',ex1,ex2); 
-# line 8889 "src/yygram.cpp"
+# line 8889 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 422: {
       fund_expr(&ex1);
-#line 1991 "lang/grammar.acc"
+#line 1991 "../lang/grammar.acc"
  *ex = ex1; 
-# line 8895 "src/yygram.cpp"
+# line 8895 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -8905,58 +8905,58 @@ int expr20 (PExp *ex)
    case 423: {
       get_lexval();
       lvalue(&lv);
-#line 1996 "lang/grammar.acc"
+#line 1996 "../lang/grammar.acc"
  *ex = CodeAssignment('I',lv,NULL); 
-# line 8911 "src/yygram.cpp"
+# line 8911 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 424: {
       get_lexval();
       lvalue(&lv);
-#line 1998 "lang/grammar.acc"
+#line 1998 "../lang/grammar.acc"
  *ex = CodeAssignment('D',lv,NULL); 
-# line 8918 "src/yygram.cpp"
+# line 8918 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 425: {
       get_lexval();
       expr20(&ex1);
-#line 2000 "lang/grammar.acc"
+#line 2000 "../lang/grammar.acc"
  *ex = ex1; 
-# line 8925 "src/yygram.cpp"
+# line 8925 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 426: {
       get_lexval();
       expr20(&ex1);
-#line 2002 "lang/grammar.acc"
+#line 2002 "../lang/grammar.acc"
  *ex = CodeOperator('-',ex1,ex1); 
-# line 8932 "src/yygram.cpp"
+# line 8932 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 427: {
       get_lexval();
       expr20(&ex1);
-#line 2004 "lang/grammar.acc"
+#line 2004 "../lang/grammar.acc"
  *ex = CodeOperator('!',ex1,ex1); 
-# line 8939 "src/yygram.cpp"
+# line 8939 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 428: {
       get_lexval();
       expr20(&ex1);
-#line 2006 "lang/grammar.acc"
+#line 2006 "../lang/grammar.acc"
  *ex = CodeOperator('~',ex1,ex1); 
-# line 8946 "src/yygram.cpp"
+# line 8946 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 429: {
       get_lexval();
       expr20(&ex1);
       get_lexval();
-#line 2008 "lang/grammar.acc"
+#line 2008 "../lang/grammar.acc"
  *ex = CodeOperator(':',ex1,ex1); 
-# line 8954 "src/yygram.cpp"
+# line 8954 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 430: {
       expr10(&ex1);
-#line 2010 "lang/grammar.acc"
+#line 2010 "../lang/grammar.acc"
  *ex = ex1; 
-# line 8960 "src/yygram.cpp"
+# line 8960 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -8971,15 +8971,15 @@ int expr30 (PExp *ex)
       expr20(&ex1);
       get_lexval();
       expr20(&ex2);
-#line 2015 "lang/grammar.acc"
+#line 2015 "../lang/grammar.acc"
  *ex = CodeOperator('d',ex1,ex2); 
-# line 8977 "src/yygram.cpp"
+# line 8977 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 432: {
       expr20(&ex1);
-#line 2017 "lang/grammar.acc"
+#line 2017 "../lang/grammar.acc"
  *ex = ex1; 
-# line 8983 "src/yygram.cpp"
+# line 8983 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -8995,15 +8995,15 @@ int expr40 (PExp *ex)
       type_name(&tn);
       get_lexval();
       expr40(&ex1);
-#line 2022 "lang/grammar.acc"
+#line 2022 "../lang/grammar.acc"
  *ex = ex1; ex->Type = (int8)tn; 
-# line 9001 "src/yygram.cpp"
+# line 9001 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 434: {
       expr30(&ex1);
-#line 2024 "lang/grammar.acc"
+#line 2024 "../lang/grammar.acc"
  *ex = ex1; 
-# line 9007 "src/yygram.cpp"
+# line 9007 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -9018,31 +9018,31 @@ int expr50 (PExp *ex)
       expr50(&ex1);
       get_lexval();
       expr40(&ex2);
-#line 2030 "lang/grammar.acc"
+#line 2030 "../lang/grammar.acc"
  *ex = CodeOperator('*',ex1,ex2); 
-# line 9024 "src/yygram.cpp"
+# line 9024 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 436: {
       expr50(&ex1);
       get_lexval();
       expr40(&ex2);
-#line 2032 "lang/grammar.acc"
+#line 2032 "../lang/grammar.acc"
  *ex = CodeOperator('/',ex1,ex2); 
-# line 9032 "src/yygram.cpp"
+# line 9032 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 437: {
       expr50(&ex1);
       get_lexval();
       expr40(&ex2);
-#line 2034 "lang/grammar.acc"
+#line 2034 "../lang/grammar.acc"
  *ex = CodeOperator('%',ex1,ex2); 
-# line 9040 "src/yygram.cpp"
+# line 9040 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 438: {
       expr40(&ex1);
-#line 2036 "lang/grammar.acc"
+#line 2036 "../lang/grammar.acc"
  *ex = ex1; 
-# line 9046 "src/yygram.cpp"
+# line 9046 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -9057,23 +9057,23 @@ int expr60 (PExp *ex)
       expr60(&ex1);
       get_lexval();
       expr50(&ex2);
-#line 2041 "lang/grammar.acc"
+#line 2041 "../lang/grammar.acc"
  *ex = CodeOperator('+',ex1,ex2); 
-# line 9063 "src/yygram.cpp"
+# line 9063 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 440: {
       expr60(&ex1);
       get_lexval();
       expr50(&ex2);
-#line 2043 "lang/grammar.acc"
+#line 2043 "../lang/grammar.acc"
  *ex = CodeOperator('-',ex1,ex2); 
-# line 9071 "src/yygram.cpp"
+# line 9071 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 441: {
       expr50(&ex1);
-#line 2045 "lang/grammar.acc"
+#line 2045 "../lang/grammar.acc"
  *ex = ex1; 
-# line 9077 "src/yygram.cpp"
+# line 9077 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -9088,23 +9088,23 @@ int expr70 (PExp *ex)
       expr70(&ex1);
       get_lexval();
       expr60(&ex2);
-#line 2050 "lang/grammar.acc"
+#line 2050 "../lang/grammar.acc"
  *ex = CodeOperator(LSHIFT_OP,ex1,ex2); 
-# line 9094 "src/yygram.cpp"
+# line 9094 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 443: {
       expr70(&ex1);
       get_lexval();
       expr60(&ex2);
-#line 2052 "lang/grammar.acc"
+#line 2052 "../lang/grammar.acc"
  *ex = CodeOperator(RSHIFT_OP,ex1,ex2); 
-# line 9102 "src/yygram.cpp"
+# line 9102 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 444: {
       expr60(&ex1);
-#line 2054 "lang/grammar.acc"
+#line 2054 "../lang/grammar.acc"
  *ex = ex1; 
-# line 9108 "src/yygram.cpp"
+# line 9108 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -9119,55 +9119,55 @@ int expr80 (PExp *ex)
       expr80(&ex1);
       get_lexval();
       expr70(&ex2);
-#line 2063 "lang/grammar.acc"
+#line 2063 "../lang/grammar.acc"
  *ex = CodeOperator('<',ex1,ex2); 
-# line 9125 "src/yygram.cpp"
+# line 9125 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 446: {
       expr80(&ex1);
       get_lexval();
       expr70(&ex2);
-#line 2065 "lang/grammar.acc"
+#line 2065 "../lang/grammar.acc"
  *ex = CodeOperator('>',ex1,ex2); 
-# line 9133 "src/yygram.cpp"
+# line 9133 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 447: {
       expr80(&ex1);
       get_lexval();
       expr70(&ex2);
-#line 2067 "lang/grammar.acc"
+#line 2067 "../lang/grammar.acc"
  *ex = CodeOperator(GE_OP,ex1,ex2); 
-# line 9141 "src/yygram.cpp"
+# line 9141 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 448: {
       expr80(&ex1);
       get_lexval();
       expr70(&ex2);
-#line 2069 "lang/grammar.acc"
+#line 2069 "../lang/grammar.acc"
  *ex = CodeOperator(LE_OP,ex1,ex2); 
-# line 9149 "src/yygram.cpp"
+# line 9149 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 449: {
       expr80(&ex1);
       get_lexval();
       expr70(&ex2);
-#line 2071 "lang/grammar.acc"
+#line 2071 "../lang/grammar.acc"
  *ex = CodeOperator(EQ_OP,ex1,ex2); 
-# line 9157 "src/yygram.cpp"
+# line 9157 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 450: {
       expr80(&ex1);
       get_lexval();
       expr70(&ex2);
-#line 2073 "lang/grammar.acc"
+#line 2073 "../lang/grammar.acc"
  *ex = CodeOperator(NE_OP,ex1,ex2); 
-# line 9165 "src/yygram.cpp"
+# line 9165 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 451: {
       expr70(&ex1);
-#line 2075 "lang/grammar.acc"
+#line 2075 "../lang/grammar.acc"
  *ex = ex1; 
-# line 9171 "src/yygram.cpp"
+# line 9171 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -9182,15 +9182,15 @@ int expr90 (PExp *ex)
       expr90(&ex1);
       get_lexval();
       expr80(&ex2);
-#line 2080 "lang/grammar.acc"
+#line 2080 "../lang/grammar.acc"
  *ex = CodeOperator('&',ex1,ex2); 
-# line 9188 "src/yygram.cpp"
+# line 9188 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 453: {
       expr80(&ex1);
-#line 2082 "lang/grammar.acc"
+#line 2082 "../lang/grammar.acc"
  *ex = ex1; 
-# line 9194 "src/yygram.cpp"
+# line 9194 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -9205,15 +9205,15 @@ int expr100 (PExp *ex)
       expr100(&ex1);
       get_lexval();
       expr90(&ex2);
-#line 2087 "lang/grammar.acc"
+#line 2087 "../lang/grammar.acc"
  *ex = CodeOperator('^',ex1,ex2); 
-# line 9211 "src/yygram.cpp"
+# line 9211 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 455: {
       expr90(&ex1);
-#line 2089 "lang/grammar.acc"
+#line 2089 "../lang/grammar.acc"
  *ex = ex1; 
-# line 9217 "src/yygram.cpp"
+# line 9217 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -9228,15 +9228,15 @@ int expr110 (PExp *ex)
       expr110(&ex1);
       get_lexval();
       expr100(&ex2);
-#line 2094 "lang/grammar.acc"
+#line 2094 "../lang/grammar.acc"
  *ex = CodeOperator('|',ex1,ex2); 
-# line 9234 "src/yygram.cpp"
+# line 9234 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 457: {
       expr100(&ex1);
-#line 2096 "lang/grammar.acc"
+#line 2096 "../lang/grammar.acc"
  *ex = ex1; 
-# line 9240 "src/yygram.cpp"
+# line 9240 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -9251,15 +9251,15 @@ int expr120 (PExp *ex)
       expr120(&ex1);
       get_lexval();
       expr110(&ex2);
-#line 2101 "lang/grammar.acc"
+#line 2101 "../lang/grammar.acc"
  *ex = CodeOperator(AND_OP,ex1,ex2); 
-# line 9257 "src/yygram.cpp"
+# line 9257 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 459: {
       expr110(&ex1);
-#line 2103 "lang/grammar.acc"
+#line 2103 "../lang/grammar.acc"
  *ex = ex1; 
-# line 9263 "src/yygram.cpp"
+# line 9263 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -9274,15 +9274,15 @@ int expr130 (PExp *ex)
       expr130(&ex1);
       get_lexval();
       expr120(&ex2);
-#line 2108 "lang/grammar.acc"
+#line 2108 "../lang/grammar.acc"
  *ex = CodeOperator(OR_OP,ex1,ex2); 
-# line 9280 "src/yygram.cpp"
+# line 9280 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 461: {
       expr120(&ex1);
-#line 2110 "lang/grammar.acc"
+#line 2110 "../lang/grammar.acc"
  *ex = ex1; 
-# line 9286 "src/yygram.cpp"
+# line 9286 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -9300,7 +9300,7 @@ int expr140 (PExp *ex)
       expr(&ex2);
       get_lexval();
       expr140(&ex3);
-#line 2115 "lang/grammar.acc"
+#line 2115 "../lang/grammar.acc"
 
       VBlock bl;
       if (!AllowedCast(ex1.Type,DT_BOOL))
@@ -9350,13 +9350,13 @@ int expr140 (PExp *ex)
       if (ex3.Storage == RT_REGISTER)
         FreeRegister((int16)ex3.Value);
     
-# line 9354 "src/yygram.cpp"
+# line 9354 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 463: {
       expr130(&ex1);
-#line 2165 "lang/grammar.acc"
+#line 2165 "../lang/grammar.acc"
  *ex = ex1; 
-# line 9360 "src/yygram.cpp"
+# line 9360 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -9372,95 +9372,95 @@ int expr150 (PExp *ex)
       lvalue(&lv);
       get_lexval();
       expr140(&ex2);
-#line 2173 "lang/grammar.acc"
+#line 2173 "../lang/grammar.acc"
  *ex = CodeAssignment('=',lv,&ex2); 
-# line 9378 "src/yygram.cpp"
+# line 9378 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 465: {
       lvalue(&lv);
       get_lexval();
       expr140(&ex2);
-#line 2175 "lang/grammar.acc"
+#line 2175 "../lang/grammar.acc"
  *ex = CodeAssignment(ASSIGN_ADD,lv,&ex2); 
-# line 9386 "src/yygram.cpp"
+# line 9386 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 466: {
       lvalue(&lv);
       get_lexval();
       expr140(&ex2);
-#line 2177 "lang/grammar.acc"
+#line 2177 "../lang/grammar.acc"
  *ex = CodeAssignment(ASSIGN_SUB,lv,&ex2); 
-# line 9394 "src/yygram.cpp"
+# line 9394 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 467: {
       lvalue(&lv);
       get_lexval();
       expr140(&ex2);
-#line 2179 "lang/grammar.acc"
+#line 2179 "../lang/grammar.acc"
  *ex = CodeAssignment(ASSIGN_MULT,lv,&ex2); 
-# line 9402 "src/yygram.cpp"
+# line 9402 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 468: {
       lvalue(&lv);
       get_lexval();
       expr140(&ex2);
-#line 2181 "lang/grammar.acc"
+#line 2181 "../lang/grammar.acc"
  *ex = CodeAssignment(ASSIGN_DIV,lv,&ex2); 
-# line 9410 "src/yygram.cpp"
+# line 9410 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 469: {
       lvalue(&lv);
       get_lexval();
       expr140(&ex2);
-#line 2183 "lang/grammar.acc"
+#line 2183 "../lang/grammar.acc"
  *ex = CodeAssignment(ASSIGN_MOD,lv,&ex2); 
-# line 9418 "src/yygram.cpp"
+# line 9418 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 470: {
       lvalue(&lv);
       get_lexval();
       expr140(&ex2);
-#line 2185 "lang/grammar.acc"
+#line 2185 "../lang/grammar.acc"
  *ex = CodeAssignment(ASSIGN_AND,lv,&ex2); 
-# line 9426 "src/yygram.cpp"
+# line 9426 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 471: {
       lvalue(&lv);
       get_lexval();
       expr140(&ex2);
-#line 2187 "lang/grammar.acc"
+#line 2187 "../lang/grammar.acc"
  *ex = CodeAssignment(ASSIGN_OR,lv,&ex2); 
-# line 9434 "src/yygram.cpp"
+# line 9434 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 472: {
       lvalue(&lv);
       get_lexval();
       expr140(&ex2);
-#line 2189 "lang/grammar.acc"
+#line 2189 "../lang/grammar.acc"
  *ex = CodeAssignment(ASSIGN_LSHIFT,lv,&ex2); 
-# line 9442 "src/yygram.cpp"
+# line 9442 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 473: {
       lvalue(&lv);
       get_lexval();
       expr140(&ex2);
-#line 2191 "lang/grammar.acc"
+#line 2191 "../lang/grammar.acc"
  *ex = CodeAssignment(ASSIGN_RSHIFT,lv,&ex2); 
-# line 9450 "src/yygram.cpp"
+# line 9450 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 474: {
       lvalue(&lv);
       get_lexval();
       expr140(&ex2);
-#line 2193 "lang/grammar.acc"
+#line 2193 "../lang/grammar.acc"
  *ex = CodeAssignment(ASSIGN_NEG,lv,&ex2); 
-# line 9458 "src/yygram.cpp"
+# line 9458 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 475: {
       expr140(&ex1);
-#line 2195 "lang/grammar.acc"
+#line 2195 "../lang/grammar.acc"
  *ex = ex1; 
-# line 9464 "src/yygram.cpp"
+# line 9464 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -9475,7 +9475,7 @@ int expr (PExp *ex)
       expr(&ex1);
       get_lexval();
       expr150(&ex2);
-#line 2200 "lang/grammar.acc"
+#line 2200 "../lang/grammar.acc"
 
       ex->Code = ex1.Code;
       if (!ex->Code)
@@ -9488,13 +9488,13 @@ int expr (PExp *ex)
       ex->Value   = ex1.Value;
       ex->Type    = ex1.Type;
     
-# line 9492 "src/yygram.cpp"
+# line 9492 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    case 477: {
       expr150(&ex1);
-#line 2213 "lang/grammar.acc"
+#line 2213 "../lang/grammar.acc"
  *ex = ex1; 
-# line 9498 "src/yygram.cpp"
+# line 9498 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -9505,14 +9505,14 @@ int param_list (pBSysFunc b, YYSTYPE fn, VBlock *bl, int *narg)
    PExp p;
    switch(yyselect()) {
    case 478: {
-#line 2221 "lang/grammar.acc"
+#line 2221 "../lang/grammar.acc"
  *narg = 0; int16 i,j; bl->Clear();
     int16 PStorage[10]; int32 PValue[10]; 
-# line 9512 "src/yygram.cpp"
+# line 9512 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       switch (yyselect()) {
       case 1023: {
          expr150(&p);
-#line 2224 "lang/grammar.acc"
+#line 2224 "../lang/grammar.acc"
 
       if (!b)
         ;
@@ -9539,13 +9539,13 @@ int param_list (pBSysFunc b, YYSTYPE fn, VBlock *bl, int *narg)
         (*narg)++;
         }
     
-# line 9543 "src/yygram.cpp"
+# line 9543 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
          while (1) {
             switch (yyselect()) {
             case 1022: {
                get_lexval();
                expr150(&p);
-#line 2251 "lang/grammar.acc"
+#line 2251 "../lang/grammar.acc"
 
       if (!b)
         ;
@@ -9580,7 +9580,7 @@ int param_list (pBSysFunc b, YYSTYPE fn, VBlock *bl, int *narg)
         (*narg)++;
         }
     
-# line 9584 "src/yygram.cpp"
+# line 9584 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
                } break;
             default: goto yy106;
             }
@@ -9589,7 +9589,7 @@ int param_list (pBSysFunc b, YYSTYPE fn, VBlock *bl, int *narg)
          } break;
       default: ;
       }
-#line 2286 "lang/grammar.acc"
+#line 2286 "../lang/grammar.acc"
 
       if ((*narg) <= b->ParamCount)
         for(i=b->ParamCount;i!=(*narg);i--) {
@@ -9609,7 +9609,7 @@ int param_list (pBSysFunc b, YYSTYPE fn, VBlock *bl, int *narg)
       *narg = max(*narg,b->ParamCount);
       Done:;
       
-# line 9613 "src/yygram.cpp"
+# line 9613 "C:/RMT/VCS/GIT/Roguelike/incursion-roguelike/build//../src/yygram.cpp"
       } break;
    }
 return 0;
