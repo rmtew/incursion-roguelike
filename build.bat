@@ -30,12 +30,12 @@ REM      LINKS[n]=vcs <vcs-system> <name> <revision-id> <repo-path> <snapshot-ur
 REM        <revision-id>: This can be a URL, or it can be a filesystem path to an existing local clone.
 
 set LINKS[0]=http://jaist.dl.sf.net/pub/sourceforge/w/wi/winflexbison/win_flex_bison-latest.zip
-set LINKS[1]=vcs hg SDL2 704a0bfecf75 C:\RMT\VCS\HG\libraries\SDL http://hg.libsdl.org/SDL/archive/
-set LINKS[2]=vcs hg libtcod 7a8b072365b5 C:\RMT\VCS\HG\libraries\libtcod https://bitbucket.org/jice/libtcod/get/
+REM set LINKS[1]=vcs hg SDL2 704a0bfecf75 C:\RMT\VCS\HG\libraries\SDL http://hg.libsdl.org/SDL/archive/
+set LINKS[1]=vcs hg SDL2 704a0bfecf75 http://hg.libsdl.org/SDL http://hg.libsdl.org/SDL/archive/
+REM set LINKS[2]=vcs hg libtcod 7a8b072365b5 C:\RMT\VCS\HG\libraries\libtcod https://bitbucket.org/jice/libtcod/get/
+set LINKS[2]=vcs hg libtcod 7a8b072365b5 https://bitbucket.org/jice/libtcod https://bitbucket.org/jice/libtcod/get/
 set LINKS[3]=http://jaist.dl.sf.net/pub/sourceforge/p/pd/pdcurses/pdcurses/3.4/pdcurs34.zip
 
-REM set LINKS[1]=vcs hg SDL2 704a0bfecf75 http://hg.libsdl.org/SDL http://hg.libsdl.org/SDL/archive/
-REM set LINKS[2]=vcs hg libtcod 7a8b072365b5 https://bitbucket.org/jice/libtcod https://bitbucket.org/jice/libtcod/get/
 
 REM __ MD5CHECKSUMS entries are the MD5 checksum for the download in the matching LINKS position
 REM      To get the checksum for a newly added download to add to an entry here, simply run the script and when
@@ -48,6 +48,12 @@ set UV_INCLUDE_PATH=!DEPENDENCY_PATH!\include
 
 set UV_INCLUDE_COMMANDS[0]=
 set /A UV_INCLUDE_COMMAND_COUNT=0
+
+set UV_PACKAGES_DIRNAME=packages
+set UV_PACKAGES_PATH=!BUILD_PATH!\packages
+
+REM Set to yes to get the buggy curses executables packaged as well.
+set UV_PACKAGE_CURSES=no
 
 REM Process the user data, calling event functions when applicable.
 goto internal_function_main
@@ -203,7 +209,7 @@ if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
 
 goto !V_LABEL_RETURN_ufpd!
 
-REM --- FUNCTION: user_function_prepare_dependencies --------------------------------
+REM --- FUNCTION: user_function_prepare_dependencies -------------------------
 :user_function_prepare_dependencies
 REM description: This is called as a final step after all dependencies have been prepared.
 REM variable: %DEPENDENCY_PATH% - The absolute path of the dependencies directory.
@@ -224,6 +230,131 @@ if %L_COUNT% LSS %UV_INCLUDE_COMMAND_COUNT% (
 
 :exit_from_user_function_prepare_dependencies
 goto !V_LABEL_RETURN_ufpds!
+
+REM --- FUNCTION: user_function_make_release ---------------------------------
+:user_function_make_release
+set V_LABEL_RETURN_ufmr=!V_LABEL_RETURN!
+
+if "!UV_VERSION!" EQU "" (
+    set /p UV_VERSION="Enter a version like 0.6.9Y15: "
+    if "!UV_VERSION!" EQU "" (
+        echo Invalid version
+    )
+)
+
+cd "!BUILD_PATH!"
+
+if not exist "run\mod\Incursion.mod" (
+    echo "ERROR: Making a release requires you to build 'Incursion.mod'"
+)
+
+if exist "!UV_PACKAGES_DIRNAME!" rmdir /S /Q "!UV_PACKAGES_DIRNAME!"
+mkdir "!UV_PACKAGES_DIRNAME!"
+
+REM The naming is important and is dynamically used to determine which files to copy.
+for %%A in (release-with-pdbs debug-with-pdbs release) do (
+    set L_ARCHIVENAME=Incursion-!UV_VERSION!
+    set L_NAME=%%A
+    set L_PDBS=!L_NAME:~-4,4!
+    if "!L_NAME:~0,1!" EQU "r" (
+        set L_CONFIG=Release
+        if "!L_PDBS!" EQU "pdbs" set L_ARCHIVENAME=!L_ARCHIVENAME!-release-with-pdbs
+    ) else (
+        set L_CONFIG=Debug
+        if "!L_PDBS!" EQU "pdbs" set L_ARCHIVENAME=!L_ARCHIVENAME!-debug-with-pdbs
+    )
+    set L_NAME=!L_ARCHIVENAME!
+
+    mkdir "!UV_PACKAGES_DIRNAME!\!L_NAME!"
+    mkdir "!UV_PACKAGES_DIRNAME!\!L_NAME!\logs"
+    mkdir "!UV_PACKAGES_DIRNAME!\!L_NAME!\save"
+
+    xcopy /I /E "run\mod" "!UV_PACKAGES_DIRNAME!\!L_NAME!\mod\"
+    xcopy /I /E "!BUILD_SCRIPT_PATH!\fonts" "!UV_PACKAGES_DIRNAME!\!L_NAME!\fonts\"
+
+    copy "!BUILD_SCRIPT_PATH!\LICENSE" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
+    copy "!BUILD_SCRIPT_PATH!\Incursion.txt" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
+    copy "!BUILD_SCRIPT_PATH!\Changelog.txt" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
+    copy "!BUILD_SCRIPT_PATH!\README.md" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
+    
+    copy "!DEPENDENCY_PATH!\libtcod\build\!L_CONFIG!\libtcod.dll" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
+    if "!L_PDBS!" EQU "pdbs" copy "!DEPENDENCY_PATH!\libtcod\build\!L_CONFIG!\libtcod.pdb" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
+
+    copy "!DEPENDENCY_PATH!\SDL2\VisualC\SDL\Win32\!L_CONFIG!\SDL2.dll" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
+    if "!L_PDBS!" EQU "pdbs" copy "!DEPENDENCY_PATH!\SDL2\VisualC\SDL\Win32\!L_CONFIG!\SDL2.pdb" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
+    
+    if "!UV_PACKAGE_CURSES!" EQU "yes" (
+        copy "Win32\!L_CONFIG!\exe_curses\Incursion.exe" "!UV_PACKAGES_DIRNAME!\!L_NAME!\IncursionCurses.exe"
+        if "!L_PDBS!" EQU "pdbs" copy "Win32\!L_CONFIG!\exe_curses\Incursion.pdb" "!UV_PACKAGES_DIRNAME!\!L_NAME!\IncursionCurses.pdb"
+    )
+
+    copy "Win32\!L_CONFIG!\exe_libtcod\Incursion.exe" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
+    if "!L_PDBS!" EQU "pdbs" copy "Win32\!L_CONFIG!\exe_libtcod\Incursion.pdb" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
+)
+
+
+
+:exit_from_user_function_make_release
+goto !V_LABEL_RETURN_ufmr!
+
+REM --- FUNCTION: user_function_package_release ------------------------------
+:user_function_package_release
+set V_LABEL_RETURN_ufpr=!V_LABEL_RETURN!
+
+if "!UV_VERSION!" EQU "" (
+    set /p UV_VERSION="Enter a version like 0.6.9Y15: "
+    if "!UV_VERSION!" EQU "" (
+        echo Invalid version
+    )
+)
+
+cd "!BUILD_PATH!"
+
+REM Verify that the directories exist.
+set /A L_FLAG=0
+for %%A in (release-with-pdbs debug-with-pdbs release) do (
+    set L_ARCHIVENAME=Incursion-!UV_VERSION!
+    set L_NAME=%%A
+    set L_PDBS=!L_NAME:~-4,4!
+    if "!L_PDBS!" EQU "pdbs" (
+        if "!L_NAME:~0,1!" EQU "r" (
+            set L_ARCHIVENAME=!L_ARCHIVENAME!-release-with-pdbs
+        ) else (
+            set L_ARCHIVENAME=!L_ARCHIVENAME!-debug-with-pdbs
+        )
+    )
+
+    if not exist "!UV_PACKAGES_PATH!\!L_ARCHIVENAME!" (
+        echo ERROR: Release directory '!L_ARCHIVENAME!' does not exist.
+        set /A L_FLAG=1
+    )
+)
+if !L_FLAG! EQU 1 (
+    echo Aborting packaging process.
+    goto internal_function_teardown
+)
+
+REM Archive
+cd "!UV_PACKAGES_PATH!"
+for %%A in (release-with-pdbs debug-with-pdbs release) do (
+    set L_ARCHIVENAME=Incursion-!UV_VERSION!
+    set L_NAME=%%A
+    set L_PDBS=!L_NAME:~-4,4!
+    if "!L_PDBS!" EQU "pdbs" (
+        if "!L_NAME:~0,1!" EQU "r" (
+            set L_ARCHIVENAME=!L_ARCHIVENAME!-release-with-pdbs
+        ) else (
+            set L_ARCHIVENAME=!L_ARCHIVENAME!-debug-with-pdbs
+        )
+    )
+
+    !7Z_EXE! a -r -t7z -mx9 !L_ARCHIVENAME!.7z !L_ARCHIVENAME!
+)
+
+cd "!BUILD_PATH!"
+
+:exit_from_user_function_package_release
+goto !V_LABEL_RETURN_ufpr!
 
 REM --- FUNCTION: user_function_teardown -------------------------------------
 :user_function_teardown
@@ -247,14 +378,27 @@ if "%VisualStudioVersion%" NEQ "12.0" (
     pause & exit /b
 )
 
-set BUILD_PATH=%~dp0
+REM The top-level directory.
+set BUILD_SCRIPT_PATH=%~dp0
 set BUILD_SCRIPT_FILENAME=%~nx0
-set DEPENDENCY_DIRNAME=build\dependencies
-set DEPENDENCY_PATH=%BUILD_PATH%%DEPENDENCY_DIRNAME%
+REM The build sub-directory.
+set BUILD_DIRNAME=build
+set BUILD_PATH=%BUILD_SCRIPT_PATH%%BUILD_DIRNAME%
+REM The dependencies sub-directory.
+set DEPENDENCY_DIRNAME=%BUILD_DIRNAME%\dependencies
+set DEPENDENCY_PATH=%BUILD_SCRIPT_PATH%%DEPENDENCY_DIRNAME%
 
-REM Allow the user to specify the path to their 'hg' executable.  It may have to be accessed via absolute path.
+REM Allow the user to specify the path to their Mercurial 'hg' executable.  It may have to be accessed via absolute path.
 if not defined HG_EXE (
     hg.exe >nul 2>&1 && (set HG_EXE=hg.exe) || (set HG_EXE=)
+)
+
+REM Allow the user to specify the path to their 7zip '7z' executable.  It may have to be accessed via absolute path.
+if not defined 7Z_EXE (
+    7z.exe >nul 2>&1 && (set 7Z_EXE=7z.exe) || (set 7Z_EXE=)
+    if "!7Z_EXE!" EQU "" (
+        if exist "c:\Program Files\7-Zip\7z.exe" set 7Z_EXE="c:\Program Files\7-Zip\7z.exe"
+    )
 )
 
 if not exist "%DEPENDENCY_PATH%" mkdir %DEPENDENCY_PATH%
@@ -295,6 +439,13 @@ if "%1" EQU "" (
     echo     -d, dependencies           fetch and prepare the dependencies
     echo     -p, project                build this project using the dependencies
     echo     -r, release                construct/compress/archive built project
+    echo.
+    if not defined HG_EXE (
+    echo WARNING: 'hg.exe' cannot be located.  Mercurial may not be installed.
+    echo   This script can operate without it, but that mode is less supported.
+    echo   If Mercurial is not in PATH, you can set HG_EXE to full filename of 'hg.exe'
+    echo.
+    )
 
     goto internal_function_teardown
 )
@@ -353,11 +504,52 @@ if "!V_COMMAND[prepare-dependencies]!" EQU "yes" (
 )
 :return_to_internal_function_main_PD
 
-REM These are not implemented yet.
-if "!V_COMMAND[make-release]!" EQU "yes"  echo Unsupported
-if "!V_COMMAND[package-release]!" EQU "yes"  echo Unsupported
+if "!V_COMMAND[make-release]!" EQU "yes" (
+    REM TODO TODO
+    set V_LABEL_RETURN=return_to_internal_function_main_MR
+    goto internal_function_make_release
+)
+:return_to_internal_function_main_MR
+
+if "!V_COMMAND[package-release]!" EQU "yes" (
+    REM TODO TODO
+    set V_LABEL_RETURN=return_to_internal_function_main_PR
+    goto internal_function_package_release
+)
+:return_to_internal_function_main_PR
 
 goto internal_function_teardown
+
+REM --- FUNCTION: internal_function_make_release -----------------------------
+:internal_function_make_release
+set V_LABEL_RETURN_ifmr=!V_LABEL_RETURN!
+
+REM TODO: Complete this functionality.
+REM .... 
+
+cd %DEPENDENCY_PATH%
+set V_LABEL_RETURN=return_to_internal_function_make_release
+goto user_function_make_release
+:return_to_internal_function_make_release
+
+:exit_from_internal_function_make_release
+goto !V_LABEL_RETURN_ifmr!
+
+REM --- FUNCTION: internal_function_package_release --------------------------
+:internal_function_package_release
+set V_LABEL_RETURN_ifpr=!V_LABEL_RETURN!
+
+if "!7Z_EXE!" EQU "" (
+    echo ERROR: Packaging a release requires 7zip to be installed.
+    goto internal_function_teardown
+)
+
+set V_LABEL_RETURN=return_to_internal_function_package_release
+goto user_function_package_release
+:return_to_internal_function_package_release
+
+:exit_from_internal_function_package_release
+goto !V_LABEL_RETURN_ifpr!
 
 REM --- FUNCTION: internal_function_prepare_dependencies ---------------------
 :internal_function_prepare_dependencies
@@ -412,7 +604,7 @@ if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
     set V_SKIPPED=no
 
     REM Iterate over the lines of output.
-    for /F "usebackq tokens=*" %%i in (`more "%BUILD_PATH%%BUILD_SCRIPT_FILENAME%" ^| powershell -c -`) do (
+    for /F "usebackq tokens=*" %%i in (`more "%BUILD_SCRIPT_PATH%%BUILD_SCRIPT_FILENAME%" ^| powershell -c -`) do (
         set L_LINE=%%i
         if "!L_LINE:~0,12!" EQU "EXTRACTPATH:" (
             set V_DIRNAME=!L_LINE:~13!
@@ -566,7 +758,7 @@ if "!V_PASSED!" EQU "yes" (
     if !L_ATTEMPTS! EQU 1 (
         set /p L_RESULT="Attempt to re-download the file [Y/n]?"
         if /I "!L_RESULT!" NEQ "n" (
-            echo del !V_LINK_PARTS[%HTTP_FILENAME%]!
+            del !V_LINK_PARTS[%HTTP_FILENAME%]!
             goto internal_function_fetch_dependency_retry
         )
     )
@@ -597,7 +789,7 @@ set fnp1=discard
 set V_PASSED=
 
 REM Iterate over the lines of output.
-for /F "usebackq tokens=*" %%i in (`more "%BUILD_PATH%%BUILD_SCRIPT_FILENAME%" ^| powershell -c -`) do (
+for /F "usebackq tokens=*" %%i in (`more "%BUILD_SCRIPT_PATH%%BUILD_SCRIPT_FILENAME%" ^| powershell -c -`) do (
     set L_LINE=%%i
     if "!L_LINE:~0,4!" EQU "MSG:" (
         set V_CHECKSUM=!L_LINE:~5!
@@ -715,7 +907,7 @@ goto user_function_teardown
 
 :internal_function_exit
 REM Leave the user in the directory they were in to begin with.
-cd %BUILD_PATH%
+cd %BUILD_SCRIPT_PATH%
 
 REM endlocal: Ensure environment variables are left the same as when the script started.
 REM exit /b:  Exit the script, but do not close any DOS window it was run from within.
