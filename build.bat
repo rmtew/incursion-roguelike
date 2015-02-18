@@ -5,14 +5,11 @@ setlocal EnableDelayedExpansion
 REM TODO: INCURSION USER
 REM TODO: FETCH
 REM TODO: - The top level prepared dependencies should be bundled for release, as a quick cheat pack.
-REM TODO: -- If installed, then 
+REM TODO: -- Add to make-release/package-release steps.
+REM TODO: -- Also support downloading and using them with a command-line argument if bitbucket allows.
 REM TODO: PREPARE
 REM TODO: - The version control archived zip.  How well does it work?  Should I even bother to support it?
 REM TODO: -- What if someone installs hg after downloading and using the snapshot?
-REM TODO: -- 
-REM TODO: GENERAL
-REM TODO: - Incorporate make-release.bat -> build\release\...
-REM TODO: - Add arguments to this script, to allow skipping the pre-steps.
 
 REM Divert to the internal setup code, it will return to the user setup.
 goto internal_function_setup

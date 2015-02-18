@@ -55,6 +55,7 @@ These instructions are intended to allow you to get Incursion to the point where
   1. Download and extract the Incursion source code.
   1. Enter the `build` subdirectory within the source code.
   1. Ensure that you have the EditorConfig extension installed by doing the following:
+    1. It is important you do this if you plan to contribute back changes to me, as it ensures the files are have correct indentation.
     1. Run Visual Studio, perhaps by opening `Incursion.sln`.
     1. Select the menu option: Tools -> Extensions and Updates.
     1. Select the Online entry from the left-hand side list.
@@ -77,4 +78,6 @@ These instructions are intended to allow you to get Incursion to the point where
   1. Start debugging Incursion.  The game window will open.
   1. In the Incursion main menu, select the 'Compile Resources' option.  Until this is done and the module is generated, few other options will work.  Once the module is generated, this will have created a `build\run\mod\Incursion.Mod` file.
 
-At this point, you are ready to do some development, or just play the latest version of the source code within Visual Studio.  Congratulations!  But note that all the files which `Incursion.exe` requires to run are scattered in a variety of directories, and you cannot just copy it somewhere and expect it to work.  At some point `build.bat -r` will take care of that.  For now, you can read `build\make-release.bat` and try and work it out for yourself.  Or open an Incursion release and look at what files are needed where.
+At this point, you are ready to do some development, or just play the latest version of the source code by debugging it within Visual Studio.  Congratulations!
+
+Note that all the files which `Incursion.exe` requires to run are scattered in a variety of directories, and you cannot just copy the executable somewhere and expect it to work.  If you wish to collect the correct set of files, then run `build.bat -r`.  It should create various distribution packages and archives under `build\packages`.  You will be asked for a version number to be used for the directory and archive naming, but you could enter any text as it is not processed otherwise.
