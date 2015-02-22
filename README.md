@@ -1,9 +1,18 @@
 Incursion
 =========
 
+**Incursion's game downloads are currently in accidental violation of the GPL license.**
+
 Incursion is a roguelike developed by Julian Mensch.  He has kindly released the source he has for some of the later versions.  This file is intended for people viewing the project repository where the source code can be obtained.
 
 At this time building is only supported on Windows, using Visual Studio 2013.  You should be able to substitute other versions of Visual Studio, or write a makefile if you plan to compile on another platform.
+
+GPL Violation
+-------------
+
+The violation is incidental and will be fixed as soon as time to do so becomes available.  The problem is that GPLv2 licensed code is linked in, even though it is not used.  The upgrade to more recent versions of Visual Studio has resulted in failure to remove dead code.  All source code used to produce the binaries, is within this GIT repository.
+
+The source code in question is the GPLv2 licensed Accent compiler compiler.  This is used in debug builds, which are not distributed, to compile game scripts into a game module.  In release builds, the compiler should remove it.  Why it is not removing it, is currently a mystery.
 
 Recent Changes
 --------------
