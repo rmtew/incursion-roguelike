@@ -15,10 +15,6 @@
 #define SIGNATURE_TWO 0xF1F2F3F4
 #define VERSION_STRING "0.6.9Y15"
 
-#ifdef DEBUG
-#define ENABLE_MODDING 1
-#endif
-
 #define SAVE_SUFFIX ".sav"
 #define BACKUP_SUFFIX ".backup"
 #define SAVE_BACKUP_SUFFIX SAVE_SUFFIX BACKUP_SUFFIX

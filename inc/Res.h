@@ -923,7 +923,9 @@ class Module : public Object
                  szCodeSeg;  
       OArray<Annotation,ANNOT_INITIAL_SIZE,20> Annotations;
       OArray<DebugInfo,1000,1000> Symbols;
+#ifdef ENABLE_MODDING
       void AddDebugInfo(int32 ID, Binding *b);
+#endif
       int16     szMon, szItm, szFea, szEff, szArt, szQue,
         szDgn, szRou, szNPC, szCla, szRac, szDom, szGod, 
         szReg, szTer, szTxt, szVar, szTem, szFla, szBev,
@@ -1181,7 +1183,9 @@ class Game : public Object
       String BuildText(EventInfo &e, rID tID);
       String RecursiveParse(EventInfo &e, rID tID, int32 *t, int16 len);
 
+#ifdef ENABLE_MODDING
       bool ResourceCompiler();
+#endif
       void CountResources();
 };
 

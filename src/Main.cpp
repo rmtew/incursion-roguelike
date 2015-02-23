@@ -2200,10 +2200,12 @@ Redraw:
             T1->HelpTopic(NULL);
             Cleanup();
             break;
+#ifdef ENABLE_MODDING
         case 3: //compile resources
             theGame->ResourceCompiler();
             Cleanup();
             break;
+#endif
         case 4:
             T1->SetWin(WIN_SCREEN);
             T1->Clear();

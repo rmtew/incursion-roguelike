@@ -1,3 +1,10 @@
+#ifdef DEBUG
+/*
+  This file is GPLv2, it cannot be compiled into any distributed binaries,
+  otherwise it will be a GPL violation.  Ideally we'll become more free
+  by removing this restrictively licensed code in future.  It's holding us
+  back.
+*/
 /*
  *   art.c
  *
@@ -1568,5 +1575,4 @@ free(sub);
 }
 
 /*================================================================ THE END ===*/
-
-
+#endif

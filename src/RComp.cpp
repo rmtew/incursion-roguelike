@@ -1,3 +1,4 @@
+#ifdef DEBUG
 /* RCOMP.CPP -- Copyright (c) 1999-2003 Julian Mensch
      Contains all the support and wrapper functions for the
    IncursionScript resource compiler; the bulk of the actual
@@ -17,10 +18,9 @@
 */
 
 #include "Incursion.h"
-
-
 #include <setjmp.h>
 #include "yygram.h"
+
 
 TMonster * theMon, * firstMon;
 TItem * theItem, * firstItem;
@@ -77,199 +77,8 @@ String Unresolved;
 bool RegsInUse[64];
 int8 StringsInUse[64]; 
 
-int compare_int32 (const void * a, const void * b)
-{
-  return ( *(int32*)b - *(int32*)a );
-}
-
-String & Game::CompileStatistics()
-  {
-    TextVal ST[] = {
-      { SC_ABJ,      "Abjuration...." },
-      { SC_ARC,      "Arcana........" },
-      { SC_DIV,      "Divination...." },
-      { SC_ENC,      "Enchantment..." },
-      { SC_EVO,      "Evocation....." },
-      { SC_ILL,      "Illusion......" },
-      { SC_THA,      "Thaumaturgy..." },
-      { SC_NEC,      "Necromancy...." },
-      { SC_WEA,      "Weavecraft...." },
-      { -AI_DRUIDIC, "Druidic......." },
-      { -AI_THEURGY, "Theurgy......." },
-      { 0, NULL } };
-    String s, s2; rID eID;
-    uint16 i, j;
-    int32 monCount, temCount, trapCount,
-             poiCount, disCount, domCount, 
-             enchCount, divCount, druCount,
-             terCount, regCount, spCount,
-             itemCount, magCount, encCount;
-    
-    s = Format("\n%cModule Statistics:%c\n",-14,-7);
-    
-    monCount = Modules[0]->szMon;
-    temCount = Modules[0]->szTem;
-    domCount = Modules[0]->szDom;
-    terCount = Modules[0]->szTer;
-    regCount = Modules[0]->szReg;
-    itemCount = Modules[0]->szItm;
-    encCount = Modules[0]->szEnc;
-    
-    trapCount = poiCount = disCount =
-      enchCount = divCount = druCount =
-      spCount = magCount = 0;
-    
-    for (i=0;i!=LastSpell();i++)
-      {
-        eID = SpellID(i);
-        if (TEFF(eID)->Vals(0)->aval == AR_POISON)
-          poiCount++;
-        if (TEFF(eID)->Vals(0)->aval == AR_DISEASE)
-          disCount++;
-        if (TEFF(eID)->HasSource(AI_TRAP))
-          trapCount++;
-        if (TEFF(eID)->HasSource(AI_WIZARDRY))
-          magCount++;
-        if (TEFF(eID)->HasSource(AI_THEURGY))
-          divCount++;
-        if (TEFF(eID)->HasSource(AI_DRUIDIC))
-          druCount++;
-        if (TEFF(eID)->Sources[0] && !TEFF(eID)->BaseChance)
-          enchCount++;
-        if (TEFF(eID)->BaseChance)
-          spCount++;
-      }
-    
-    s +=        "-----TOTAL RESOURCES-----\n";
-    s += Format("Monsters..............%d\n",monCount);
-    s += Format("Material Items........%d\n",itemCount);
-    s += Format("Magical Items.........%d\n",enchCount);
-    s += Format("Templates.............%d\n",temCount);
-    s += Format("Poisons...............%d\n",poiCount);
-    s += Format("Diseases..............%d\n",disCount);
-    s += Format("Trap Types............%d\n",trapCount);
-    s += Format("Domains...............%d\n",domCount);
-    s +=        "-------------------------\n";
-    s += Format("Terrain Types.........%d\n",terCount);
-    s += Format("Region Types..........%d\n",regCount);
-    s +=        "-------------------------\n";  
-    s += Format("Arcane Spells.........%d\n",magCount);
-    s += Format("Divine Spells.........%d\n",divCount);
-    s += Format("Druid Spells..........%d\n",druCount);
-    //s += Format("Domain Spells.........%d\n",spCount - (magCount+divCount+druCount));
-    s += Format("Total Spells..........%d\n\n",spCount);
-    s +=        "-------------------------\n";  
-    s += Format("HasStati(x,-1) calls..%d\n",ccHasNatStati);
-    s += Format("HasStati(x,y) calls...%d\n",ccHasValStati);
-    s += Format("HasEffStati calls.....%d\n",ccHasEffStati);
-    s += Format("HasStati==true calls..%d\n",ccHasStatiTrue);
-    s += Format("HasStati==false calls.%d\n",ccHasStatiFalse);
-    s += Format("Perceive's HS calls...%d\n",ccHSPerceive);
-    s += Format("CalcVal's HS calls....%d\n",ccHSCalcVal);
-    s +=        "-------------------------\n";  
-    
-    int32 * sorted = new int32[256];
-    memcpy(sorted,ccStatiNat,256*sizeof(int32));
-    qsort(sorted,256,sizeof(int32),compare_int32);
-    for(i=0;i!=256;i++)
-      if (ccStatiNat[i] >= sorted[32])
-        {
-          s2 = Lookup(STATI_CONSTNAMES,i);
-          while (s2.GetLength() < 22)
-            s2 += ".";
-          s2 += Format("%d\n",ccStatiNat[i]);
-          s += s2;
-        }
-    delete[] sorted;
-    
-    if (!GetPlayer(0))
-      goto DoneStats;
-    
-    Map *m;
-    Creature *cr; Item *it; Container *cn; Thing *t;
-    int16 mCount, iCount, cCount, tCount, fCount,
-         dCount, sCount, niCount;
-    m = GetPlayer(0)->m;
-    
-    mCount = iCount = cCount =
-      tCount = fCount = dCount = 
-      sCount = niCount = 0;
-    
-    fCount = (int16)m->Fields.Total();
-    for (t=m->FirstThing();t;t=m->NextThing())
-      {
-        if (t->isCreature())
-          {
-            cr = (Creature*)t;
-            mCount++;
-            for(it=cr->FirstInv();it;it=cr->NextInv())
-              niCount++;
-          }
-        if (t->isItem())
-          {
-            iCount++;
-            if (t->isType(T_CONTAIN))
-              {
-                cn = (Container*)t;
-                cCount++;
-                for(it = oItem(cn->Contents);it;it = oItem(it->Next))
-                  niCount++;
-              }
-          }
-        if (t->isType(T_DOOR))
-          dCount++;
-        if (t->isType(T_PORTAL))
-          sCount++;
-      }
-    
-    
-    s +=        "-----THE CURRENT MAP-----\n";  
-    s += Format("Creatures.............%d\n",mCount);
-    s += Format("Items on Floor........%d\n",iCount);
-    s += Format("Nested Item Count.....%d\n",niCount);
-    s += Format("Total Items...........%d\n",iCount + niCount);
-    s += Format("Chests................%d\n",cCount);
-    s += Format("Fields................%d\n",fCount);
-    s += Format("Doors.................%d\n",dCount);
-    s += Format("Stairs/Portals........%d\n",sCount);
-    s +=        "-----SPELLS BY LEVEL-----\n";  
-    
-
-    int16 Levels[30];
-    for (i=0;ST[i].Val;i++)
-      {
-        memset(Levels,0,sizeof(Levels));
-        for(j=0;j!=theGame->LastSpell();j++)
-          {
-            TEffect *te = TEFF(theGame->SpellID(j));
-            if (ST[i].Val < 0 ? te->HasSource((int8)(-ST[i].Val)) :
-                 (te->HasSource(AI_WIZARDRY) && 
-                   (te->Schools & ST[i].Val)))
-              Levels[te->Level]++;
-          }
-        if (ST[i].Val == SC_ABJ)
-          { Levels[1] += -7 + 2;
-            Levels[2] += -4 + 2;
-            Levels[3] += -3 + 3;
-            Levels[4] += -4 + 2;
-            Levels[5] +=      2;
-            Levels[6] +=      2; }
-        if (ST[i].Val == SC_ENC)
-          { Levels[2]++; }
-            
-        s += Format("%s%2d/%2d/%2d/%2d/%2d/%2d = %d\n",
-               ST[i].Text,Levels[1], Levels[2], Levels[3],
-                          Levels[4], Levels[5], Levels[6],
-                          Levels[1] + Levels[2] + Levels[3] +
-                          Levels[4] + Levels[5] + Levels[6]);
-      }
-    
-    DoneStats:
-    return *tmpstr(s);
-} 
 
 bool Game::ResourceCompiler() {
-#if ENABLE_MODDING
     String fn;
     time_t theTime;
 
@@ -455,7 +264,6 @@ PreprocError:
     T1->Clear();
     T1->SetWin(WIN_SCREEN); 
     T1->Clear();
-#endif
     return (!Errors); 
 }
 
@@ -473,7 +281,6 @@ PreprocError:
  *  in until the first pass is finished.
  */
 void Game::CountResources() {
-#if ENABLE_MODDING
     int16 brack = 0, i;
     NArray<hText,30,30> MonNames, ItemNames,
       FeatNames, EffNames, ArtNames, QuestNames,
@@ -675,7 +482,6 @@ void Game::CountResources() {
 
     firstTile = new LocationInfo[127];
     currMap = 0;
-#endif
 }
 
 const char* AllocTextSeg()
@@ -1620,6 +1426,7 @@ LExp& CodeRectLVal(LExp *rect,int16 id)
     
     return lv;
   }
+
 int16 AllocRegister()
   {
     int16 i;
@@ -1665,5 +1472,4 @@ void ClearStrings()
   {
     memset(StringsInUse,0,64);
   }
-
-
+#endif
