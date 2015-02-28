@@ -106,6 +106,7 @@
     </PostBuildEvent>
     <Lib>
       <OutputFile>$(OutDir)$(SolutionName)$(TargetExt)</OutputFile>
+      <LinkTimeCodeGeneration>true</LinkTimeCodeGeneration>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
