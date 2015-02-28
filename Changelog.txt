@@ -1,6 +1,8 @@
-Incursion (open source) 0.6.9Y15: 2015-02-??
+Incursion (open source) 0.6.9Y16: 2015-02-28
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/1/: Implemented 'pain tolerance' feat.  Pull request submitted by thehouseoflai@Bitbucket.
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/205/: Enabled sub-races support.  This was disabled but has now been reenabled, is untested and generally unsupported.   Pull request submitted by Thydron@Bitbucket.
+* https://bitbucket.org/rmtew/incursion-roguelike/issue/206/: GPLv2 violation within unused code compiled into the distribution binaries reported by johnny0@Bitbucket.
+* https://bitbucket.org/rmtew/incursion-roguelike/issue/207/: Incursion domain name transfers.  Outstanding donations in the paypal account ($28.52US) have been used to fund transfer of the 'incursion-roguelike.org/.net/.com' domains from the original Incursion author, Julian.  This will prevent people finding the old stale domains which refer to old releases, and experiencing a more broken Incursion.  And will provide a better entrypoint than the bitbucket project page.  In the long term, the .net and .com domains may be discarded.
 
 Incursion (open source) 0.6.9Y15: 2014-12-23 (Festivus release)
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/4: Implemented 'amplify spell' metamagic feat.  This reduces the target's magic resistance by 25%.
