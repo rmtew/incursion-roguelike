@@ -246,7 +246,7 @@ if not exist "run\mod\Incursion.mod" (
 )
 
 if exist "!UV_PACKAGES_DIRNAME!" rmdir /S /Q "!UV_PACKAGES_DIRNAME!"
-mkdir "!UV_PACKAGES_DIRNAME!"
+if not exist "!UV_PACKAGES_DIRNAME!" mkdir "!UV_PACKAGES_DIRNAME!"
 
 REM The naming is important and is dynamically used to determine which files to copy.
 for %%A in (release-with-pdbs debug-with-pdbs release) do (
