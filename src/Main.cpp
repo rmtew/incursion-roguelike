@@ -2089,7 +2089,7 @@ Redraw:
         T1->LOption("Restore a Saved Game",1);
         T1->LOption("Reincarnate a Character",9);
         T1->LOption("Recover a Crashed Game",8);
-#if ENABLE_MODDING
+#if DEBUG
         T1->LOption("Compile Resources",3);
 #endif
         T1->LOption("Change System Options",4);
@@ -2200,7 +2200,7 @@ Redraw:
             T1->HelpTopic(NULL);
             Cleanup();
             break;
-#ifdef ENABLE_MODDING
+#ifdef DEBUG
         case 3: //compile resources
             theGame->ResourceCompiler();
             Cleanup();

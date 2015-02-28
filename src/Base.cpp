@@ -1178,7 +1178,7 @@ Binding* SymbolTable::GetBinding(int32 id, rID xID, int16 Ev, btype bt)
   }
 
 
-#ifdef ENABLE_MODDING
+#ifdef DEBUG
 void SymbolTable::Bind(int32 id, Binding *b)
   {
     Binding *b2; SymbolNode *n; b->next = NULL;

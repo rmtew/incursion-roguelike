@@ -1490,133 +1490,137 @@ void HelpCustom(String &helpText, Player *p)
     
   }  
 
-int SortKeys(const void *A, const void *B)
-  {
-    TextVal *a = (TextVal*)A,
-            *b = (TextVal*)B;
+int SortKeys(const void *A, const void *B) {
+    TextVal *a = (TextVal*)A, *b = (TextVal*)B;
     return a->Val > b->Val;
-  }
+}
 
-static void DescribeKeys(String &s)
-  {
-    int16 i,j,n; TextVal KStr[256]; String Keys[256];
+int realstringlen(String s) {
+    const char *cs = s;
+    int len = 0, i = 0;
+    while (i < s.GetLength()) {
+        if (cs[i] == LITERAL_CHAR) {
+            i += 3;
+            len += 3-1;
+            continue;
+        }
+        i += 1;
+    }
+    return len;
+}
+
+static void DescribeKeys(String &s) {
+    int16 i, j, n;
+    TextVal KStr[256];
+    String Keys[256];
     extern TextVal KeyCmdDescs[];
-    KeySetItem * ks = theGame->Opt(OPT_ROGUELIKE)  
-            ?  RoguelikeKeySet : StandardKeySet;
-
-    s = Format("            %c-- %cIncursion Key Bindings%c --\n",-7,-12,-7); 
-
+    KeySetItem * ks = theGame->Opt(OPT_ROGUELIKE) ? RoguelikeKeySet : StandardKeySet;
     int time_for_ret = 0;
 
+    s = Format("            %c-- %cIncursion Key Bindings%c --\n", -7, -12, -7);
     n = 0;
-    
-    memset(KStr,0,sizeof(TextVal)*256);
-  
-    for (i=KY_HEADER_DIR; i< KY_CMD_LAST; i++) 
-      {
-        if (i == KY_HEADER_DIR)
-          { Keys[n] = Format("     %cDirection Keys%c     ",-PINK,-GREY);
+
+    memset(KStr, 0, sizeof(TextVal) * 256);
+
+    for (i = KY_HEADER_DIR; i < KY_CMD_LAST; i++) {
+        if (i == KY_HEADER_DIR) {
+            Keys[n] = Format("     %cDirection Keys%c     ", -PINK, -GREY);
             KStr[n].Text = Keys[n];
             KStr[n].Val = i;
             n++;
-            continue; }
-        else if (i == KY_HEADER_PROMPT)
-          { Keys[n] = Format("  %cSelection Prompt Keys%c ",-PINK,-GREY);
+            continue;
+        } else if (i == KY_HEADER_PROMPT) {
+            Keys[n] = Format("  %cSelection Prompt Keys%c ", -PINK, -GREY);
             KStr[n].Text = Keys[n];
             KStr[n].Val = i;
             n++;
-            continue; }
-        if (i == KY_HEADER_GAME)
-          { Keys[n] = Format("   %cGameplay Mode Keys%c   ",-PINK,-GREY);
+            continue;
+        }
+
+        if (i == KY_HEADER_GAME) {
+            Keys[n] = Format("   %cGameplay Mode Keys%c   ", -PINK, -GREY);
             KStr[n].Text = Keys[n];
             KStr[n].Val = i;
             n++;
-            continue; }
-         
-        for (j=0; ks[j].cmd != KY_CMD_LAST ; j++) 
-          {
-            if (ks[j].cmd == i) 
-              {
-                 
+            continue;
+        }
+
+        for (j = 0; ks[j].cmd != KY_CMD_LAST; j++) {
+            if (ks[j].cmd == i) {
                 Keys[n] = "";
-                
-                if (ks[j].raw_key_flags == -1)
-                  { 
+
+                if (ks[j].raw_key_flags == -1) {
                     if (ks[j].raw_key >= 200)
-                      goto PrintSpecialKey;
-                    Keys[n] += (char)ks[j].raw_key; 
-                    goto DoneKey; 
-                  }
+                        goto PrintSpecialKey;
+                    Keys[n] += (char)ks[j].raw_key;
+                    goto DoneKey;
+                }
                 if (ks[j].raw_key_flags & KY_FLAG_CONTROL)
-                  Keys[n] += "C-";
+                    Keys[n] += "C-";
                 if (ks[j].raw_key_flags & KY_FLAG_ALT)
-                  Keys[n] += "A-";
+                    Keys[n] += "A-";
                 if (isalpha(ks[j].raw_key)) {
-                  if (ks[j].raw_key_flags & KY_FLAG_SHIFT)
-                    Keys[n] += Format("%c",toupper(ks[j].raw_key));
-                  else 
-                    Keys[n] += Format("%c",tolower(ks[j].raw_key));
-                  } 
-                else {
-                  PrintSpecialKey:
-                  switch (ks[j].raw_key) 
-                    {
-                      case KY_TAB:    Keys[n] += "Tab"; break; 
-					  case KY_UP:     Keys[n] += Format("%c%c%c", LITERAL_CHAR, LITERAL_CHAR1(GLYPH_ARROW_UP), LITERAL_CHAR2(GLYPH_ARROW_UP)); break;
-					  case KY_DOWN:   Keys[n] += Format("%c%c%c", LITERAL_CHAR, LITERAL_CHAR1(GLYPH_ARROW_DOWN), LITERAL_CHAR2(GLYPH_ARROW_DOWN)); break;
-					  case KY_LEFT:   Keys[n] += Format("%c%c%c", LITERAL_CHAR, LITERAL_CHAR1(GLYPH_ARROW_LEFT), LITERAL_CHAR2(GLYPH_ARROW_LEFT)); break;
-					  case KY_RIGHT:  Keys[n] += Format("%c%c%c", LITERAL_CHAR, LITERAL_CHAR1(GLYPH_ARROW_RIGHT), LITERAL_CHAR2(GLYPH_ARROW_RIGHT)); break;
-                      case KY_PGUP:   Keys[n] += "PgUp";break; 
-                      case KY_PGDN:   Keys[n] += "PgDn";break; 
-                      case KY_HOME:   Keys[n] += "Home";break; 
-                      case KY_END:    Keys[n] += "End";break; 
-                      case KY_ESC:    Keys[n] += "Esc";break; 
-                      case KY_HELP:   Keys[n] += (ks[j].raw_key_flags & KY_FLAG_SHIFT) ? "?" : "/"; break; 
-                      case KY_ENTER:  Keys[n] += "Enter";break; 
-                      case KY_COMMA:  Keys[n] += (ks[j].raw_key_flags & KY_FLAG_SHIFT) ? "<" : ","; break; 
-                      case KY_PERIOD: Keys[n] += (ks[j].raw_key_flags & KY_FLAG_SHIFT) ? ">" : "."; break; 
-                      case KY_ONE:    Keys[n] += "1"; break; 
-                      case KY_EIGHT:  Keys[n] += "8"; break; 
-                      case KY_MINUS:  Keys[n] += "-"; break; 
-                      case KY_EQUALS: Keys[n] += "="; break; 
-                      default: 
+                    if (ks[j].raw_key_flags & KY_FLAG_SHIFT)
+                        Keys[n] += Format("%c", toupper(ks[j].raw_key));
+                    else
+                        Keys[n] += Format("%c", tolower(ks[j].raw_key));
+                } else {
+PrintSpecialKey:
+                    switch (ks[j].raw_key) {
+                    case KY_TAB:    Keys[n] += "Tab"; break;
+                    case KY_UP:     Keys[n] += Format("%c%c%c", LITERAL_CHAR, LITERAL_CHAR1(GLYPH_ARROW_UP), LITERAL_CHAR2(GLYPH_ARROW_UP)); break;
+                    case KY_DOWN:   Keys[n] += Format("%c%c%c", LITERAL_CHAR, LITERAL_CHAR1(GLYPH_ARROW_DOWN), LITERAL_CHAR2(GLYPH_ARROW_DOWN)); break;
+                    case KY_LEFT:   Keys[n] += Format("%c%c%c", LITERAL_CHAR, LITERAL_CHAR1(GLYPH_ARROW_LEFT), LITERAL_CHAR2(GLYPH_ARROW_LEFT)); break;
+                    case KY_RIGHT:  Keys[n] += Format("%c%c%c", LITERAL_CHAR, LITERAL_CHAR1(GLYPH_ARROW_RIGHT), LITERAL_CHAR2(GLYPH_ARROW_RIGHT)); break;
+                    case KY_PGUP:   Keys[n] += "PgUp"; break;
+                    case KY_PGDN:   Keys[n] += "PgDn"; break;
+                    case KY_HOME:   Keys[n] += "Home"; break;
+                    case KY_END:    Keys[n] += "End"; break;
+                    case KY_ESC:    Keys[n] += "Esc"; break;
+                    case KY_HELP:   Keys[n] += (ks[j].raw_key_flags & KY_FLAG_SHIFT) ? "?" : "/"; break;
+                    case KY_ENTER:  Keys[n] += "Enter"; break;
+                    case KY_COMMA:  Keys[n] += (ks[j].raw_key_flags & KY_FLAG_SHIFT) ? "<" : ","; break;
+                    case KY_PERIOD: Keys[n] += (ks[j].raw_key_flags & KY_FLAG_SHIFT) ? ">" : "."; break;
+                    case KY_ONE:    Keys[n] += "1"; break;
+                    case KY_EIGHT:  Keys[n] += "8"; break;
+                    case KY_MINUS:  Keys[n] += "-"; break;
+                    case KY_EQUALS: Keys[n] += "="; break;
+                    default:
                         if (ks[j].raw_key >= KY_F1 && ks[j].raw_key <= KY_F12)
-                          Keys[n] += Format("F%d",1 + ks[j].raw_key - KY_F1);
+                            Keys[n] += Format("F%d", 1 + ks[j].raw_key - KY_F1);
                         else
-                          Keys[n] += Format("(%d)",ks[j].raw_key); break; 
-                    } 
-                  }
-                DoneKey:;
-              }  
-          }  
-      if (Keys[n].GetTrueLength() == 0)
-        continue; 
-      const char * desc = LookupOnly(KeyCmdDescs,i);
-      if (!desc)
-        continue;
-      Keys[n] = Format("%c%s%c%*s%c",-7,desc, -14, 
-                  24 - strlen(desc), (const char *)Keys[n], -7);
-      KStr[n].Val = i;
-      KStr[n].Text = Keys[n];
-      n++;
-    } 
-    
-  qsort(KStr,n,sizeof(TextVal),&SortKeys);
-  
-  for (i=0;i!=(n+1)/2;i++)
-    {
-      s += KStr[i].Text;
-      s += " | ";
-      s += KStr[i + n/2].Text;
-      s += "\n";
+                            Keys[n] += Format("(%d)", ks[j].raw_key); break;
+                    }
+                }
+DoneKey:;
+            }
+        }
+
+        if (Keys[n].GetTrueLength() == 0)
+            continue;
+        const char * desc = LookupOnly(KeyCmdDescs, i);
+        if (!desc)
+            continue;
+        int padcnt = realstringlen(Keys[n]);
+        Keys[n] = Format("%c%s%c%*s%c", -7, desc, -14, 24 + padcnt - strlen(desc), (const char *)Keys[n], -7);
+        KStr[n].Val = i;
+        KStr[n].Text = Keys[n];
+        n++;
     }
-   
-  return; 
-} 
 
+    qsort(KStr, n, sizeof(TextVal), &SortKeys);
 
-void TextTerm::GetHelp(String & helpText, const char *topic)
-  {
+    for (i = 0; i != (n + 1) / 2; i++) {
+        s += KStr[i].Text;
+        s += " | ";
+        s += KStr[i + n / 2].Text;
+        s += "\n";
+    }
+
+    return;
+}
+
+void TextTerm::GetHelp(String & helpText, const char *topic) {
     Player *p; rID tID;
     p = theGame->GetPlayer(0);
     helpText.Empty();
@@ -1686,12 +1690,9 @@ void TextTerm::GetHelp(String & helpText, const char *topic)
         }
       helpText = XPrint(DESC(tID));
       }
-  }  
-  
+}  
 
-
-void TextTerm::HelpTopic(const char*topic, const char*link)
-  {
+void TextTerm::HelpTopic(const char*topic, const char*link) {
     rID xID = 0; char ln[3], xln[2];
     int32 ch; char TopicName[52];
 

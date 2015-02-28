@@ -2884,10 +2884,10 @@ const char* GlyphLegend2 = "\
    <char:GLYPH_LDEMON>  lesser demon     <char:GLYPH_LDEVIL>  lesser devil        <char:GLYPH_DISARMED>  trap, disarmed \n\
    <char:GLYPH_GDEMON>  greater demon    <char:GLYPH_GDEVIL>  greater devil       <char:GLYPH_FOG>  fog             \n\
    <char:GLYPH_HELMET>  helmet/headband  `  swarm of insects    <char:GLYPH_JUNK>  junk / garbage\n\
-   <char:GLYPH_CLOAK>  cloak    <char:GLYPH_BRACERS>  bracers    <char:GLYPH_RING>  ring     <char:GLYPH_LARMOUR>  armour     x  xxx\n\
-   <char:GLYPH_GEM>  gemstone <char:GLYPH_GAUNTLETS>  gauntlets  <char:GLYPH_AMULET>  amulet   <char:GLYPH_SHIELD>  shield    x  xxx\n\
-   <char:GLYPH_TOOL>  tool     <char:GLYPH_MUSH>  mushroom   <char:GLYPH_FIGURE>  figurine <char:GLYPH_GIRDLE>  girdle    x  xxx\n\
-   <char:GLYPH_BOOK>  book     <char:GLYPH_POTION>  potion     <char:GLYPH_SCROLL>  scroll   <char:GLYPH_CLOTHES>  clothing  x  xxx";
+   <char:GLYPH_CLOAK>  cloak    <char:GLYPH_BRACERS>  bracers    <char:GLYPH_RING>  ring     <char:GLYPH_LARMOUR>  armour\n\
+   <char:GLYPH_GEM>  gemstone <char:GLYPH_GAUNTLETS>  gauntlets  <char:GLYPH_AMULET>  amulet   <char:GLYPH_SHIELD>  shield\n\
+   <char:GLYPH_TOOL>  tool     <char:GLYPH_MUSH>  mushroom   <char:GLYPH_FIGURE>  figurine <char:GLYPH_GIRDLE>  girdle\n\
+   <char:GLYPH_BOOK>  book     <char:GLYPH_POTION>  potion     <char:GLYPH_SCROLL>  scroll   <char:GLYPH_CLOTHES>  clothing";
      
 ItemGen DungeonItems[] = {
 /* Prob, Type,      Source,    NvGood, MinL,CMul,Prototype,   Flavored */
@@ -4905,7 +4905,7 @@ TextVal KeyCmdDescs[] = {
   {       KY_CMD_LOOK_EAST       ,"Look East" },
   {       KY_CMD_LOOK_WEST       ,"Look West" },
   {       KY_CMD_LOOK_NORTHEAST  ,"Look North-East" },
-  {       KY_CMD_LOOK_NORTHWEST  ,"Look Nort-West" },
+  {       KY_CMD_LOOK_NORTHWEST  ,"Look North-West" },
   {       KY_CMD_LOOK_SOUTHEAST  ,"Look South-East" },
   {       KY_CMD_LOOK_SOUTHWEST  ,"Look South-West" },
 
