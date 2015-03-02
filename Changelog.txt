@@ -1,3 +1,7 @@
+Incursion (open source) 0.6.9Y17: 2015-03-??
+* https://bitbucket.org/rmtew/incursion-roguelike/issue/213/: GIT on Windows will not recognise file names that are not in exactly the right casing that they were added to it as.  Visual Studio will rename files it encounters on disk, that do not have the same casing as it has for them, to have it's casing.  Eventually a programmer will tab complete a file name and do a git command on it, and the command will fail silently as the file name casing is no longer correct for git.  git can suck it.  But for now, this corrects the VS2013 file name casing.
+* https://bitbucket.org/rmtew/incursion-roguelike/issue/214/: Add the Open Gaming License to the LICENSE file.  Note that it was and always has been included already within the game executable.
+
 Incursion (open source) 0.6.9Y16: 2015-03-01
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/1/: Implemented 'pain tolerance' feat.  Pull request submitted by thehouseoflai@Bitbucket.
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/205/: Enabled sub-races support.  This was disabled but has now been reenabled, is untested and generally unsupported.   Pull request submitted by Thydron@Bitbucket.
