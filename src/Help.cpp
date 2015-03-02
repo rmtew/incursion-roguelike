@@ -1495,24 +1495,22 @@ int SortKeys(const void *A, const void *B) {
     return a->Val > b->Val;
 }
 
-int realstringlen(String s) {
-    const char *cs = s;
-    int len = 0, i = 0;
-    while (i < s.GetLength()) {
+size_t countskipchars(const char *cs) {
+    size_t len = 0, i = 0;
+    while (i < strlen(cs)) {
         if (cs[i] == LITERAL_CHAR) {
             i += 3;
             len += 3-1;
-            continue;
-        }
-        i += 1;
+        }  else
+            i += 1;
     }
     return len;
 }
 
 static void DescribeKeys(String &s) {
     int16 i, j, n;
-    TextVal KStr[256];
-    String Keys[256];
+    TextVal KStr[KY_CMD_LAST];
+    String Keys[KY_CMD_LAST];
     extern TextVal KeyCmdDescs[];
     KeySetItem * ks = theGame->Opt(OPT_ROGUELIKE) ? RoguelikeKeySet : StandardKeySet;
     int time_for_ret = 0;
@@ -1520,7 +1518,7 @@ static void DescribeKeys(String &s) {
     s = Format("            %c-- %cIncursion Key Bindings%c --\n", -7, -12, -7);
     n = 0;
 
-    memset(KStr, 0, sizeof(TextVal) * 256);
+    memset(KStr, 0, sizeof(TextVal) * KY_CMD_LAST);
 
     for (i = KY_HEADER_DIR; i < KY_CMD_LAST; i++) {
         if (i == KY_HEADER_DIR) {
@@ -1601,10 +1599,9 @@ DoneKey:;
         const char * desc = LookupOnly(KeyCmdDescs, i);
         if (!desc)
             continue;
-        int padcnt = realstringlen(Keys[n]);
-        Keys[n] = Format("%c%s%c%*s%c", -7, desc, -14, 24 + padcnt - strlen(desc), (const char *)Keys[n], -7);
+        int padcnt = countskipchars(Keys[n]);
+        KStr[n].Text = Format("%c%s%c%*s%c", -7, desc, -14, 24 + padcnt - strlen(desc), (const char *)Keys[n], -7);
         KStr[n].Val = i;
-        KStr[n].Text = Keys[n];
         n++;
     }
 
