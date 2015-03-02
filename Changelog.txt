@@ -1,6 +1,8 @@
-Incursion (open source) 0.6.9Y17: 2015-03-??
+Incursion (open source) 0.6.9Y17: 2015-03-03
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/213/: GIT on Windows will not recognise file names that are not in exactly the right casing that they were added to it as.  Visual Studio will rename files it encounters on disk, that do not have the same casing as it has for them, to have it's casing.  Eventually a programmer will tab complete a file name and do a git command on it, and the command will fail silently as the file name casing is no longer correct for git.  git can suck it.  But for now, this corrects the VS2013 file name casing.
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/214/: Add the Open Gaming License to the LICENSE file.  Note that it was and always has been included already within the game executable.
+* https://bitbucket.org/rmtew/incursion-roguelike/issue/215/: Reintroduction of Google Breakpad.  This will write minidumps out to the game directory if the game crashes, as before.  However, it's been removed from the place it caused crashes in the last time.  It has also been updated to the latest version which will hopefully address reports of empty minidumps for #216.
+* https://bitbucket.org/rmtew/incursion-roguelike/issue/216/: The last release seems to have included a whole raft of changes that were forgotten about, related to Curses support.  One final pre-release change introduced graphical corruption if you were lucky, instability if not.  Reported by Robsoie@Bay12.
 
 Incursion (open source) 0.6.9Y16: 2015-03-01
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/1/: Implemented 'pain tolerance' feat.  Pull request submitted by thehouseoflai@Bitbucket.

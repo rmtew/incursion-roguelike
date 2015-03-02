@@ -34,6 +34,8 @@ Windows build instructions
 
 *Dependencies:*
 
+NOTE: The following has not been updated for the re-enabled Google Breakpad support.  Undefine USE_BREAKPAD if compiling, and you should be able to work around it in the simplest possible way.
+
 The simple option is to download the following dependencies archive.  It contains all the pre-built files required to get Incursion to build.  It just needs to be downloaded, extracted in the right location within the source code, and the compilation instructions below detail this further.
 
   * `build_dependencies-20150210.7z`: Available from the bitbucket [project downloads page](https://bitbucket.org/rmtew/incursion-roguelike/downloads).
