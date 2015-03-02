@@ -31,132 +31,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\Annot.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\art.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\BASE.CPP">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\CREATE.CPP">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\CREATURE.CPP">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\DEBUG.CPP">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\DISPLAY.CPP">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Djikstra.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Effects.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Encounter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\EVENT.CPP">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\feattab.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\feature.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\FIGHT.CPP">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\help.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\INV.CPP">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\ITEM.CPP">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\lz.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\MAGIC.CPP">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\MAIN.CPP">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\MAKELEV.CPP">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Managers.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\MESSAGE.CPP">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\MONSTER.CPP">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\MOVE.CPP">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\PLAYER.CPP">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Prayer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\RComp.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Registry.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\RES.CPP">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\rle.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Sheet.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\SKILLS.CPP">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Social.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Status.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\TABLES.CPP">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\target.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\TERM.CPP">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\TextTerm.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Values.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\VISION.CPP">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\VMachine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\cpp1.c">
       <Filter>Preprocessor</Filter>
     </ClCompile>
@@ -181,73 +55,211 @@
     <ClCompile Include="..\src\yygram.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Encounter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Event.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\FeatTab.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Feature.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Fight.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Help.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Inv.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Item.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\lz.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Magic.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\MakeLev.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Managers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Message.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Monster.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Move.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OverGen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Overland.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Prayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Quest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\RComp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Registry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Res.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\rle.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Sheet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Skills.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Social.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Status.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Tables.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Target.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Term.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TextTerm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Values.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Vision.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\VMachine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Annot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Art.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Base.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CalcVal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Create.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Creature.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Debug.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Display.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Djikstra.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Effects.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\inc\api.h">
+    <ClInclude Include="..\lib\dispatch.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Term.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\inc\BASE.H">
+    <ClInclude Include="..\inc\Api.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\ArmourTab.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\Base.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\inc\ConstNam.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\inc\CREATURE.H">
+    <ClInclude Include="..\inc\Creature.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\inc\DEFINES.H">
+    <ClInclude Include="..\inc\Defines.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\inc\EVENTS.H">
+    <ClInclude Include="..\inc\Events.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\inc\FEATURE.H">
+    <ClInclude Include="..\inc\Feature.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\inc\Globals.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\inc\incursion.h">
+    <ClInclude Include="..\inc\Incursion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\inc\Inline.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\inc\ITEM.H">
+    <ClInclude Include="..\inc\Item.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\inc\lz.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\inc\MAGIC.H">
+    <ClInclude Include="..\inc\Magic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\inc\map.h">
+    <ClInclude Include="..\inc\Map.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\inc\rcomp.h">
+    <ClInclude Include="..\inc\RComp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\inc\RES.H">
+    <ClInclude Include="..\inc\Res.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\inc\rle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\inc\target.h">
+    <ClInclude Include="..\inc\Target.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\TERM.H">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\lib\dispatch.h">
-      <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\ChangeLog.txt">
-      <Filter>Notes</Filter>
-    </None>
     <None Include="..\lib\program.i">
       <Filter>Generated Files</Filter>
     </None>
@@ -329,6 +341,12 @@
     <None Include="..\lib\wspells.irh">
       <Filter>World Files</Filter>
     </None>
+    <None Include="..\LICENSE">
+      <Filter>Notes</Filter>
+    </None>
+    <None Include="..\README.md">
+      <Filter>Notes</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\lang\grammar.acc">
@@ -337,5 +355,13 @@
     <CustomBuild Include="..\lang\tokens.lex">
       <Filter>Language Files</Filter>
     </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\Changelog.txt">
+      <Filter>Notes</Filter>
+    </Text>
+    <Text Include="..\Incursion.txt">
+      <Filter>Notes</Filter>
+    </Text>
   </ItemGroup>
 </Project>
