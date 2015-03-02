@@ -27,12 +27,14 @@ REM      LINKS[n]=vcs <vcs-system> <name> <revision-id> <repo-path> <snapshot-ur
 REM        <revision-id>: This can be a URL, or it can be a filesystem path to an existing local clone.
 
 set LINKS[0]=http://jaist.dl.sf.net/pub/sourceforge/w/wi/winflexbison/win_flex_bison-latest.zip
-REM set LINKS[1]=vcs hg SDL2 704a0bfecf75 C:\RMT\VCS\HG\libraries\SDL http://hg.libsdl.org/SDL/archive/
-set LINKS[1]=vcs hg SDL2 704a0bfecf75 http://hg.libsdl.org/SDL http://hg.libsdl.org/SDL/archive/
-REM set LINKS[2]=vcs hg libtcod 7a8b072365b5 C:\RMT\VCS\HG\libraries\libtcod https://bitbucket.org/jice/libtcod/get/
-set LINKS[2]=vcs hg libtcod 7a8b072365b5 https://bitbucket.org/jice/libtcod https://bitbucket.org/jice/libtcod/get/
+REM TODO: Comment out local git repositories and replace with remote ones before committing.
+set LINKS[1]=vcs hg SDL2 704a0bfecf75 C:\RMT\VCS\HG\libraries\SDL http://hg.libsdl.org/SDL/archive/
+REM set LINKS[1]=vcs hg SDL2 704a0bfecf75 http://hg.libsdl.org/SDL http://hg.libsdl.org/SDL/archive/
+set LINKS[2]=vcs hg libtcod 7a8b072365b5 C:\RMT\VCS\HG\libraries\libtcod https://bitbucket.org/jice/libtcod/get/
+REM set LINKS[2]=vcs hg libtcod 7a8b072365b5 https://bitbucket.org/jice/libtcod https://bitbucket.org/jice/libtcod/get/
 set LINKS[3]=http://jaist.dl.sf.net/pub/sourceforge/p/pd/pdcurses/pdcurses/3.4/pdcurs34.zip
-
+set LINKS[4]=vcs git gyp dd831fd C:\RMT\VCS\GIT\Tools\gyp ???
+set LINKS[5]=vcs git google-breakpad 0a0ad99 C:\RMT\VCS\GIT\Libraries\google-breakpad ???
 
 REM __ MD5CHECKSUMS entries are the MD5 checksum for the download in the matching LINKS position
 REM      To get the checksum for a newly added download to add to an entry here, simply run the script and when
@@ -51,6 +53,12 @@ set UV_PACKAGES_PATH=!BUILD_PATH!\packages
 
 REM Set to yes to get the buggy curses executables packaged as well.
 set UV_PACKAGE_CURSES=no
+
+REM Allow the user to specify the path to their Git 'git' executable.  It may have to be accessed via absolute path.
+if not defined PYTHON_EXE (
+    set "PATH=C:\Python27;%PATH%"
+    python.exe --help >nul 2>&1 && (set PYTHON_EXE=python.exe) || (set PYTHON_EXE=)
+)
 
 REM Process the user data, calling event functions when applicable.
 goto internal_function_main
@@ -198,8 +206,20 @@ if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
 
         set UV_INCLUDE_COMMANDS[%UV_INCLUDE_COMMAND_COUNT%]=!V_DIRNAME!\include\*.h
         set /A UV_INCLUDE_COMMAND_COUNT=%UV_INCLUDE_COMMAND_COUNT%+1
+    ) else if "!L_VCS_NAME!" EQU "gyp" (
+        echo Building: [gyp] .. skipped
+    ) else if "!L_VCS_NAME!" EQU "google-breakpad" (
+        set GYP_MSVS_VERSION=2013
+        cd !DEPENDENCY_PATH!\google-breakpad
+        CALL !DEPENDENCY_PATH!\gyp\gyp.bat --no-circular-check client\windows\breakpad_client.gyp --depth .
+        REM I think gyp is dropping a turd, but we can step around the chunks.
+        msbuild /nologo client\Windows\common.vcxproj /p:Configuration=Release /p:Platform=Win32
+        msbuild /nologo client\Windows\breakpad_client.sln /p:Configuration=Release /p:Platform=Win32 /t:build_all
+        copy client\Windows\Release\lib\exception_handler.lib !DEPENDENCY_PATH!\
+        copy client\Windows\Release\lib\crash_generation_client.lib !DEPENDENCY_PATH!\
+        copy client\Windows\Release\lib\common.lib !DEPENDENCY_PATH!\
     ) else (
-        echo ERROR.. !V_LINK_PARTS[%HTTP_FILENAME%]! not handled by user who wrote the build amendments.
+        echo ERROR.. !V_LINK_PARTS[%VCS_NAME%]! not handled by user who wrote the build amendments.
         goto internal_function_exit
     )
 )
@@ -390,6 +410,12 @@ if not defined HG_EXE (
     hg.exe >nul 2>&1 && (set HG_EXE=hg.exe) || (set HG_EXE=)
 )
 
+REM Allow the user to specify the path to their Git 'git' executable.  It may have to be accessed via absolute path.
+if not defined GIT_EXE (
+    REM This doesn't work directly, like hg.exe, so need where.
+    where git.exe >nul 2>&1 && (set GIT_EXE=git.exe) || (set GIT_EXE=)
+)
+
 REM Allow the user to specify the path to their 7zip '7z' executable.  It may have to be accessed via absolute path.
 if not defined 7Z_EXE (
     7z.exe >nul 2>&1 && (set 7Z_EXE=7z.exe) || (set 7Z_EXE=)
@@ -441,6 +467,12 @@ if "%1" EQU "" (
     echo WARNING: 'hg.exe' cannot be located.  Mercurial may not be installed.
     echo   This script can operate without it, but that mode is less supported.
     echo   If Mercurial is not in PATH, you can set HG_EXE to full filename of 'hg.exe'
+    echo.
+    )
+    if not defined GIT_EXE (
+    echo WARNING: 'git.exe' cannot be located.  Git may not be installed.
+    echo   This script can operate without it, but that mode is less supported.
+    echo   If Git is not in PATH, you can set GIT_EXE to full filename of 'git.exe'
     echo.
     )
 
@@ -669,46 +701,63 @@ set V_LABEL_RETURN_iffd=!V_LABEL_RETURN!
 cd %DEPENDENCY_PATH%
 
 if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "vcs" (
+    set L_VCS_DESC=
     if "!V_LINK_PARTS[%VCS_SYSTEM%]!" EQU "hg" (
-        REM Compute whether to use Mercurial or not.
-        if defined HG_EXE (
-            set L_USE_HG=yes
-            REM Presence of directory, but lack of '.hg' sub-directory, indicates zip archive source.
+        set L_VCS_DESC=Mercurial
+        set L_VCS_TEST_NAME=.hg
+        set L_VCS_EXE=!HG_EXE!
+        set L_VCS_CMD_CLONE=!HG_EXE! clone "!V_LINK_PARTS[%VCS_CLONEURL%]!" !V_LINK_PARTS[%VCS_NAME%]!
+        set L_VCS_CMD_PULL=!HG_EXE! pull
+        set L_VCS_CMD_UPDATE=!HG_EXE! update -r "!V_LINK_PARTS[%VCS_REVISION%]!" -C
+    ) else if "!V_LINK_PARTS[%VCS_SYSTEM%]!" EQU "git" (
+        set L_VCS_DESC=Git
+        set L_VCS_TEST_NAME=.git
+        set L_VCS_EXE=!GIT_EXE!
+        set L_VCS_CMD_CLONE=!GIT_EXE! clone "!V_LINK_PARTS[%VCS_CLONEURL%]!" !V_LINK_PARTS[%VCS_NAME%]! --no-checkout -b master
+        set L_VCS_CMD_PULL=!GIT_EXE! pull origin master
+        set L_VCS_CMD_UPDATE=!GIT_EXE! checkout !V_LINK_PARTS[%VCS_REVISION%]! -q
+    )
+
+    if "!L_VCS_DESC!" NEQ "" (
+        REM Compute whether to use the VCS system or not.
+        if "!L_VCS_EXE!" NEQ "" (
+            set L_USE_VCS=yes
+            REM Presence of directory, but lack of tested sub-directory, indicates zip archive source.
             if exist "!V_LINK_PARTS[%VCS_NAME%]!" (
-                if not exist "!V_LINK_PARTS[%VCS_NAME%]!\.hg" (
-                    echo WARNING: While Mercurial is now installed, existing [!V_LINK_PARTS[%VCS_NAME%]!] directory does not use it.
-                    set L_USE_HG=no
+                if not exist "!V_LINK_PARTS[%VCS_NAME%]!\!L_VCS_TEST_NAME!" (
+                    echo WARNING: While !L_VCS_DESC! is now installed, existing [!V_LINK_PARTS[%VCS_NAME%]!] directory does not use it.
+                    set L_USE_VCS=no
                 )
             )
         ) else (
-            set L_USE_HG=no
+            set L_USE_VCS=no
         )
-        if "!L_USE_HG!" EQU "yes" (
+        if "!L_USE_VCS!" EQU "yes" (
             REM Has the repository already been cloned?  If so, reuse it.
-            echo Fetching: [!V_LINK_PARTS[%VCS_NAME%]!] Mercurial repository.
+            echo Fetching: [!V_LINK_PARTS[%VCS_NAME%]!] !L_VCS_DESC! repository.
             if not exist "!V_LINK_PARTS[%VCS_NAME%]!" (
                 REM Does not exist, fetch it.
-                for /F "usebackq tokens=*" %%i in (`hg clone "!V_LINK_PARTS[%VCS_CLONEURL%]!" !V_LINK_PARTS[%VCS_NAME%]!`) do (
-                    echo .. %HG_EXE%: %%i
+                for /F "usebackq tokens=*" %%i in (`!L_VCS_CMD_CLONE!`) do (
+                    echo .. %L_VCS_EXE%: %%i
                 )
-                REM The subsequent Mercurial update needs to be within the repository directory.
+                REM The subsequent VCS update needs to be within the repository directory.
                 cd !V_LINK_PARTS[%VCS_NAME%]!
             ) else (
-                REM The Mercurial pull and subsequent update needs to be within the repository directory.
+                REM The VCS pull and subsequent update needs to be within the repository directory.
                 cd !V_LINK_PARTS[%VCS_NAME%]!
-                for /F "usebackq tokens=*" %%i in (`hg pull`) do (
-                    echo .. %HG_EXE%: %%i
+                for /F "usebackq tokens=*" %%i in (`!L_VCS_CMD_PULL!`) do (
+                    echo .. %L_VCS_EXE%: %%i
                 )
             )
-            echo Updating: [!V_LINK_PARTS[%VCS_NAME%]!] mercurial repository to revision [!V_LINK_PARTS[%VCS_REVISION%]!].
-            for /F "usebackq tokens=*" %%i in (`hg update -r "!V_LINK_PARTS[%VCS_REVISION%]!" -C`) do (
-                echo .. %HG_EXE%: %%i
+            echo Updating: [!V_LINK_PARTS[%VCS_NAME%]!] !L_VCS_DESC! repository to revision [!V_LINK_PARTS[%VCS_REVISION%]!].
+            for /F "usebackq tokens=*" %%i in (`!L_VCS_CMD_UPDATE!`) do (
+                echo .. %L_VCS_EXE%: %%i
             )
             goto exit_from_internal_function_fetch_dependency
         ) else (
             if exist "!V_LINK_PARTS[%VCS_NAME%]!" (
-                if exist "!V_LINK_PARTS[%VCS_NAME%]!\.hg" (
-                    echo WARNING: No Mercurial client installed yet [!V_LINK_PARTS[%VCS_NAME%]!] was originally created using one.
+                if exist "!V_LINK_PARTS[%VCS_NAME%]!\!L_VCS_TEST_NAME!" (
+                    echo WARNING: No !L_VCS_DESC! client installed yet [!V_LINK_PARTS[%VCS_NAME%]!] was originally created using one.
                     echo WARNING: Therefore [!V_LINK_PARTS[%VCS_NAME%]!] cannot be updated.
                     goto exit_from_internal_function_fetch_dependency
                 )

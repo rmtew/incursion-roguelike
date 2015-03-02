@@ -75,7 +75,11 @@
 
 #ifndef DEBUG
 #ifdef USE_CRASHPAD
-/* Google Breakpad. */
+/* Google Breakpad.
+    1. Set Release configuration preprocessor to have USE_CRASHPAD defined.
+    2. Add to release libs: exception_handler.lib;crash_generation_client.lib;common.lib.
+    3. Add "$(SolutionDir)..\_dependencies\google-breakpad\src\client\windows\Release\lib" to the lib path.
+    4. Add "$(SolutionDir)..\_dependencies\google-breakpad\src" to the include path.  */
 #include "client/windows/handler/exception_handler.h"
 #undef ERROR
 #undef MIN
@@ -99,18 +103,11 @@
 #define CURSOR_BLINK_MS 300
 #define INPUT_IDLE_MS 50
 
-/*
-
-Add to release libs: exception_handler.lib;crash_generation_client.lib;common.lib
-Add to release paths: _dependencies\google-breakpad\src\client\windows\Release\lib
-Add to release includes: _dependencies\google-breakpad\src
-
 #ifndef DEBUG
 #ifdef USE_CRASHPAD
 using google_breakpad::ExceptionHandler;
 #endif
 #endif
-*/
 
 
 TCOD_color_t RGBValues[MAX_COLOURS] = {
@@ -578,10 +575,15 @@ F0 IdenticalTo PlusMinus   GreaterThE  LessThanE   IntegralTp  IntegralBtm Divis
 
 		lookup_table[GLYPH_LAST + 1] = 1;
 	}
-	lookup_value = lookup_table[c];
-	if (lookup_value == NULL)
-		return c;
-	return lookup_value;
+    if (c <= GLYPH_LAST) {
+        lookup_value = lookup_table[c];
+        if (lookup_value == NULL)
+            return c;
+        return lookup_value;
+    } else {
+        Error("Encountered invalid glyph (glyph: %d, id: %d)", g, c);
+        return '?';
+    }
 }
 
   
@@ -779,10 +781,13 @@ void Error(const char*fmt,...) {
 #ifdef DEBUG
 	sprintf(__buff2, "Error: %s\n[B]reak, [E]xit or [C]ontinue?",__buffer);
 #else
+    /* TODO: This should be enabled optionally in the menus, as it causes problems for some people apparently.
+        See Issue #215
 #ifdef USE_CRASHPAD
 	crashdumpHandler->WriteMinidump();
-	sprintf(__buff2, "Error: %s\n[E]xit or [C]ontinue?",__buffer);
 #endif
+*/
+    sprintf(__buff2, "Error: %s\n[E]xit or [C]ontinue?", __buffer);
 #endif
 	((libtcodTerm*)T1)->Save();
 	((libtcodTerm*)T1)->Box(WIN_SCREEN,BOX_NOPAUSE|BOX_NOSAVE,RED,PINK,__buff2);

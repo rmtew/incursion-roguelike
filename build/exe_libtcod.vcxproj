@@ -88,16 +88,16 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>dependencies\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>dependencies\include;$(SolutionDir)..\_dependencies\google-breakpad\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderOutputFile>$(IntDir)$(SolutionName).pch</PrecompiledHeaderOutputFile>
       <ProgramDataBaseFileName>$(IntDir)$(SolutionName).pdb</ProgramDataBaseFileName>
-      <PreprocessorDefinitions>_UNICODE;LIBTCOD_TERM;TCOD_SDL2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_UNICODE;LIBTCOD_TERM;TCOD_SDL2;USE_CRASHPAD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <AdditionalLibraryDirectories>dependencies;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libtcod.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libtcod.lib;exception_handler.lib;common.lib;crash_generation_client.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <CustomBuildStep>
