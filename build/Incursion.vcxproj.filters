@@ -347,6 +347,9 @@
     <None Include="..\README.md">
       <Filter>Notes</Filter>
     </None>
+    <None Include="..\lib\module-example.irc">
+      <Filter>World Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\lang\grammar.acc">

@@ -32,8 +32,6 @@
     #define platf_getcwd getcwd
 #endif
 
-int test;
-
 Map* TheMainMap;
 extern bool QuestMode;
 Tile *MapLetterArray[127];
@@ -68,106 +66,88 @@ Game::Game() : Object(T_GAME) {
 
 extern hObj excessItems[30];
 
-void Game::NewGame(rID mID, bool reincarnate)
-  {
-		int16 x,y,i; 
+void Game::NewGame(rID mID, bool reincarnate) {
+    int16 x, y, i;
     Map *mp; Player *pp;
     rID dID;
-    char ch = 0;
 
     T1->SetWin(WIN_SCREEN);
     T1->Clear();
     T1->SetMode(MO_CREATE);
 
-    memset(DungeonLevels,0,sizeof(hObj*)*MAX_DUNGEONS);
-    memset(DungeonID,0,sizeof(rID)*MAX_DUNGEONS);
-    memset(DungeonSize,0,sizeof(int16)*MAX_DUNGEONS);
-    
-    for(i=0;i!=MAX_MODULES;i++)
-      if (Modules[i])
-        {
-          MDataSegSize[i] = Modules[i]->szDataSeg + 
-            ( Modules[i]->szMon * sizeof(MonMem) +
-              Modules[i]->szItm * sizeof(ItemMem) +
-              Modules[i]->szEff * sizeof(EffMem) +
-              Modules[i]->szReg * sizeof(RegMem) )
-            * NumPlayers();
-          MDataSeg[i] = (char*)malloc(Modules[i]->szDataSeg + 
-            ( Modules[i]->szMon * sizeof(MonMem) +
-              Modules[i]->szItm * sizeof(ItemMem) +
-              Modules[i]->szEff * sizeof(EffMem) +
-              Modules[i]->szReg * sizeof(RegMem) )
-            * NumPlayers());
-          memset(MDataSeg[i],0,Modules[i]->szDataSeg + 
-            ( Modules[i]->szMon * sizeof(MonMem) +
-              Modules[i]->szItm * sizeof(ItemMem) +
-              Modules[i]->szEff * sizeof(EffMem) +
-              Modules[i]->szReg * sizeof(RegMem) )
-            * NumPlayers());
-        } 
+    memset(DungeonLevels, 0, sizeof(hObj*) * MAX_DUNGEONS);
+    memset(DungeonID, 0, sizeof(rID) * MAX_DUNGEONS);
+    memset(DungeonSize, 0, sizeof(int16) * MAX_DUNGEONS);
 
-    Turn= 198000L;
+    for (i = 0; i != MAX_MODULES; i++)
+        if (Modules[i]) {
+            MDataSegSize[i] = Modules[i]->szDataSeg + 
+                (Modules[i]->szMon * sizeof(MonMem) +
+                Modules[i]->szItm * sizeof(ItemMem) +
+                Modules[i]->szEff * sizeof(EffMem) +
+                Modules[i]->szReg * sizeof(RegMem)) * NumPlayers();
+            MDataSeg[i] = (char*)malloc(MDataSegSize[i]);
+            memset(MDataSeg[i], 0, MDataSegSize[i]);
+        }
 
-    pp   = new Player(T1);
+    Turn = 198000L;
+
+    pp = new Player(T1);
     p[0] = pp->myHandle;
     pp->LoadOptions(true);
 
     SetFlavors();
     if (reincarnate) {
-      if (!pp->Reincarnate())
-        return;
-      }
-    else
-      pp->Create(false);
+        if (!pp->Reincarnate())
+            return;
+    } else
+        pp->Create(false);
 
     if (mID) {
-      mp = new Map;
-      mp->Load(mID);                  
-      x = 7;
-      y = 7;
-      m[0] = mp->myHandle;
-      (new Portal(FIND("ancient passage")))->
-        PlaceAt(oMap(m[0]),20,20);
-      mp->RegisterPlayer(p[0]);
-    }
-    else {
-      dID = FIND("The Goblin Caves");
-      // dID = FIND("Monster Evaluation Arena");
-      if (!dID)
-        Error("Can't load the default dungeon!");
-      mp   = GetDungeonMap(dID,1,pp);
-      m[0] = mp->myHandle; 
-      oMap(m[0])->RegisterPlayer(p[0]);
-      x=y=0;
-      if (mp->EnterX)
-      { x = mp->EnterX; y = mp->EnterY; }
-      else while(oMap(m[0])->At(x,y).Solid || TTER(mp->TerrainAt(x,y))->HasFlag(TF_WATER) ||
-          TTER(mp->TerrainAt(x,y))->HasFlag(TF_FALL) || TTER(mp->TerrainAt(x,y))->HasFlag(TF_WARN) ||
-          TREG(mp->RegionAt(x,y))->HasFlag(RF_VAULT))
-      {
-        x=random(mp->SizeX());
-        y=random(mp->SizeY());
-      }
+        mp = new Map;
+        mp->Load(mID);
+        x = 7;
+        y = 7;
+        m[0] = mp->myHandle;
+        (new Portal(FIND("ancient passage")))->
+            PlaceAt(oMap(m[0]), 20, 20);
+        mp->RegisterPlayer(p[0]);
+    } else {
+        dID = FIND("The Goblin Caves");
+        // dID = FIND("Monster Evaluation Arena");
+        if (!dID)
+            Error("Can't load the default dungeon!");
+        mp = GetDungeonMap(dID, 1, pp);
+        m[0] = mp->myHandle;
+        oMap(m[0])->RegisterPlayer(p[0]);
 
+        x = y = 0;
+        if (mp->EnterX) {
+            x = mp->EnterX;
+            y = mp->EnterY;
+        } else
+            while (oMap(m[0])->At(x, y).Solid || TTER(mp->TerrainAt(x, y))->HasFlag(TF_WATER) ||
+                TTER(mp->TerrainAt(x, y))->HasFlag(TF_FALL) || TTER(mp->TerrainAt(x, y))->HasFlag(TF_WARN) ||
+                TREG(mp->RegionAt(x, y))->HasFlag(RF_VAULT)) {
+                x = random(mp->SizeX());
+                y = random(mp->SizeY());
+            }
     }
-    pp->PlaceAt(oMap(m[0]),x,y);
+    pp->PlaceAt(oMap(m[0]), x, y);
     pp->CalcValues();
 
     pp->InitCompanions();
- 
+
     if (pp->getGod())
-      pp->GodMessage(pp->getGod(),MSG_SALUTATION);
-    
+        pp->GodMessage(pp->getGod(), MSG_SALUTATION);
+
     pp->NoteArrival();
-    
-    for (i=0;i!=30;i++)
-      if (excessItems[i])
-        {
-          oItem(excessItems[i])->PlaceAt(pp->m,pp->x,pp->y);
-          excessItems[i] = 0;
+
+    for (i = 0; i != 30; i++)
+        if (excessItems[i]) {
+            oItem(excessItems[i])->PlaceAt(pp->m, pp->x, pp->y);
+            excessItems[i] = 0;
         }
-    
-		test=3;
 }
 
 void Game::Play() {

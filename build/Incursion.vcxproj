@@ -284,6 +284,7 @@ $(SolutionDir)$(Platform)\Release\modaccent\modaccent.exe %(Identity) $(Solution
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\src\tokens.cpp;%(Outputs)</Outputs>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </CustomBuild>
+    <None Include="..\lib\module-example.irc" />
     <None Include="..\lib\program.i" />
     <None Include="..\lib\abilities.irh" />
     <None Include="..\lib\alchemy.Irh" />

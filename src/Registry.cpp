@@ -706,10 +706,9 @@ foundGroup:
     delete cf;
     
     return 0;
-  }
+}
 
-
-  bool Game::SaveGame(Player &p) {
+bool Game::SaveGame(Player &p) {
       fileHeader fh; int32 i;
       String fn, base, desc;
 
@@ -812,246 +811,243 @@ failed:
 
       }
       return true;
-  }
+}
 
+bool Game::LoadGame(bool backup) {
+    int32 i;
+    String Filenames[128], Filedescs[128], fn;
+    fileHeader fh; bool found;
+    int patternsize = backup ? strlen(SAVE_BACKUP_PATTERN) : strlen(SAVE_PATTERN);
+    char *pattern = (char *)alloca(patternsize + 1);
+    strncpy(pattern, backup ? SAVE_BACKUP_PATTERN : SAVE_PATTERN, patternsize);
+    pattern[patternsize] = '\0';
 
-  bool Game::LoadGame(bool backup) {
-      int32 i;
-      String Filenames[128], Filedescs[128], fn; 
-      fileHeader fh; bool found;
-      int patternsize = backup ? strlen(SAVE_BACKUP_PATTERN) : strlen(SAVE_PATTERN);
-      char *pattern = (char *)alloca(patternsize+1);
-      strncpy(pattern, backup ? SAVE_BACKUP_PATTERN : SAVE_PATTERN, patternsize);
-      pattern[patternsize] = '\0';
+    T1->ChangeDirectory(T1->SaveSubDir());
 
-      T1->ChangeDirectory(T1->SaveSubDir());
-
-#ifndef WIN32
-      system("mv *.Sav *.sav");
-      system("mv *.SAV *.sav");
-#endif
-
-      try {
-          if (!T1->FirstFile(pattern)) {
+    try {
+        if (!T1->FirstFile(pattern)) {
 NoSaved:
-              T1->LOptionClear();
-              T1->Box(Format("There are currently no %s available to load.",
-                  backup ? "backup files" : "saved games"));
-              return false;
-          }
-          T1->SetWin(WIN_SCREEN);
-          T1->Clear(); T1->GotoXY(0,0);
-          i = 0;
-          found = false;
-          do {
-              T1->FRead(&fh,sizeof(fh));
-              T1->Close();
-              if (stricmp(VERSION_STRING,fh.Version))
-                  continue; 
-              Filenames[i] = T1->GetFileName();
-              Filedescs[i] = fh.Name;
-              if (backup)
-              {
-                  struct stat statbuf;
-                  stat(Filenames[i],&statbuf) ;
-                  Filedescs[i] += Format(" (BACKUP at %s)", ctime(&statbuf.st_ctime));
-              }
-              T1->LOption(Filedescs[i],i);
-              found = true;
+            T1->LOptionClear();
+            T1->Box(Format("There are currently no %s available to load.",
+                backup ? "backup files" : "saved games"));
+            return false;
+        }
 
-              i++;
-          } while(T1->NextFile() && i < 128);
-          if (!found)
-              goto NoSaved;
-          T1->Clear();
-          if (!i)
-              goto NoSaved;
-          i = T1->LMenu(MENU_SORTED|MENU_ESC,"Choose a character:\n\n",WIN_SCREEN);
-          if (i < 0) {
-              T1->ChangeDirectory(T1->IncursionDirectory);
-              return false;
-          }
-          fn = Filenames[i];
-          T1->Clear(); T1->GotoXY(0,0);
-          T1->Color(15); T1->Write("Loading... ");
-          T1->OpenRead(fn);
-          /* The central Game object gets overwritten. */
-          MainRegistry.RemoveObject(theGame);
-          MainRegistry.LoadGroup(*T1,0,false);
-          T1->Close();
-          SaveFile = fn;
-          T1->ChangeDirectory(T1->IncursionDirectory);
-      }
-      catch (int error_number) {
-          Error("Error reading saved game (%s).",
-              Lookup(FileErrors,error_number));
-          T1->ChangeDirectory(T1->IncursionDirectory);
-          return false;
-      }
+        T1->SetWin(WIN_SCREEN);
+        T1->Clear(); T1->GotoXY(0, 0);
+        i = 0;
+        found = false;
+        do {
+            T1->FRead(&fh, sizeof(fh));
+            T1->Close();
+            if (stricmp(VERSION_STRING, fh.Version))
+                continue;
 
-      /* LoadGroup should have overwritten theGame with the
-      restored version from disk; thus, p[0] points to the
-      player and m[0] points to the current map. The dungeon
-      is described by the arrays in theGame as well. Rather
-      than crash horribly, however, let us just confirm this. */
+            Filenames[i] = T1->GetFileName();
+            Filedescs[i] = fh.Name;
+            if (backup) {
+                struct stat statbuf;
+                stat(Filenames[i], &statbuf);
+                Filedescs[i] += Format(" (BACKUP at %s)", ctime(&statbuf.st_ctime));
+            }
+            T1->LOption(Filedescs[i], i);
+            found = true;
 
-      if (!p[0] || !m[0])
-      {
-          Error("Null map/player after saved game loaded!");
-          return false;
-      }
-      /* Here, we look what resource files this saved game depends
-      on, and restore them each in order. */
-      theRegistry = &ResourceRegistry;
-      memset(Modules,0,sizeof(Module*)*MAX_MODULES);
-      for(i=0;ModFiles[i];i++)
-      {
-          try {
-              char * filespec = ModFiles[i]->FName;
-              T1->ChangeDirectory(T1->ModuleSubDir());
-              //T1->Scour(ModFiles[i]->FName,true);
-              T1->OpenRead(filespec);
-              ResourceRegistry.LoadGroup(*T1,ModFiles[i]->hMod,true);
-              T1->Close();
-              if (!oThing(ModFiles[i]->hMod))
-                  throw EHANDLE;
-              Modules[ModFiles[i]->Slot] = oModule(ModFiles[i]->hMod);
-              T1->ChangeDirectory(T1->IncursionDirectory);
-          }
-          catch (int error_number) {
-              Error("Error loading module '%s' (%s).",
-                  ModFiles[i]->FName,
-                  Lookup(FileErrors,error_number));
-              T1->ChangeDirectory(T1->IncursionDirectory);
-          }
-      }
-      theRegistry = &MainRegistry;
-      memset(oPlayer(p[0])->MessageQueue,0,sizeof(String)*8);
-      InitGodArrays();
-      oPlayer(p[0])->MyTerm = T1;
-      T1->SetPlayer(oPlayer(p[0]));
-      T1->SetMap(oMap(m[0]));
-      T1->SetMode(MO_PLAY); 
-      oPlayer(p[0])->CalcValues();
-      oPlayer(p[0])->CalcVision();
-      T1->AdjustMap(oPlayer(p[0])->x,oPlayer(p[0])->y,true);    
-      T1->ShowStatus();
-      T1->ShowTraits();
-      oPlayer(p[0])->LoadOptions(false);
-      oPlayer(p[0])->ResetLevelStats(); 
-      oPlayer(p[0])->TouchGallery(true);
-      oPlayer(p[0])->IPrint("Welcome back to Incursion, <Str>!",
-          (const char*)oPlayer(p[0])->Name(0));
-      if (oPlayer(p[0])->GodID)
-          oPlayer(p[0])->GodMessage(oPlayer(p[0])->GodID,MSG_SALUTATION);
-      doQuit = false;
-      return true;
+            i++;
+        } while (T1->NextFile() && i < 128);
 
-  }
+        if (!found)
+            goto NoSaved;
 
-void Game::SaveModule(int16 mn)
-  {
-    fileHeader fh; 
-    if (!Modules[mn])
-      {
-        Error("Attempt to save nonexistant module!");
+        T1->Clear();
+        if (!i)
+            goto NoSaved;
+
+        i = T1->LMenu(MENU_SORTED | MENU_ESC, "Choose a character:\n\n", WIN_SCREEN);
+        if (i < 0) {
+            T1->ChangeDirectory(T1->IncursionDirectory);
+            return false;
+        }
+
+        fn = Filenames[i];
+        T1->Clear();
+        T1->GotoXY(0, 0);
+        T1->Color(WHITE);
+        T1->Write("Loading... ");
+
+        T1->OpenRead(fn);
+        /* The central Game object gets overwritten. */
+        MainRegistry.RemoveObject(theGame);
+        MainRegistry.LoadGroup(*T1, 0, false);
+        T1->Close();
+        SaveFile = fn;
+        T1->ChangeDirectory(T1->IncursionDirectory);
+    } catch (int error_number) {
+        Error("Error reading saved game (%s).", Lookup(FileErrors, error_number));
+        T1->ChangeDirectory(T1->IncursionDirectory);
+        return false;
+    }
+
+    /* LoadGroup should have overwritten theGame with the
+    restored version from disk; thus, p[0] points to the
+    player and m[0] points to the current map. The dungeon
+    is described by the arrays in theGame as well. Rather
+    than crash horribly, however, let us just confirm this. */
+
+    if (!p[0] || !m[0]) {
+        Error("Null map/player after saved game loaded!");
+        return false;
+    }
+    /* Here, we look what resource files this saved game depends
+    on, and restore them each in order. */
+    theRegistry = &ResourceRegistry;
+    memset(Modules, 0, sizeof(Module*)*MAX_MODULES);
+    for (i = 0; ModFiles[i]; i++) {
+        try {
+            char * filespec = ModFiles[i]->FName;
+            T1->ChangeDirectory(T1->ModuleSubDir());
+            //T1->Scour(ModFiles[i]->FName,true);
+            T1->OpenRead(filespec);
+            ResourceRegistry.LoadGroup(*T1, ModFiles[i]->hMod, true);
+            T1->Close();
+            if (!oThing(ModFiles[i]->hMod))
+                throw EHANDLE;
+
+            Modules[ModFiles[i]->Slot] = oModule(ModFiles[i]->hMod);
+            T1->ChangeDirectory(T1->IncursionDirectory);
+        } catch (int error_number) {
+            Error("Error loading module '%s' (%s).", ModFiles[i]->FName, Lookup(FileErrors, error_number));
+            T1->ChangeDirectory(T1->IncursionDirectory);
+        }
+    }
+
+    theRegistry = &MainRegistry;
+    memset(oPlayer(p[0])->MessageQueue, 0, sizeof(String) * 8);
+    InitGodArrays();
+
+    oPlayer(p[0])->MyTerm = T1;
+    T1->SetPlayer(oPlayer(p[0]));
+    T1->SetMap(oMap(m[0]));
+    T1->SetMode(MO_PLAY);
+    oPlayer(p[0])->CalcValues();
+    oPlayer(p[0])->CalcVision();
+    T1->AdjustMap(oPlayer(p[0])->x, oPlayer(p[0])->y, true);
+    T1->ShowStatus();
+    T1->ShowTraits();
+    oPlayer(p[0])->LoadOptions(false);
+    oPlayer(p[0])->ResetLevelStats();
+    oPlayer(p[0])->TouchGallery(true);
+    oPlayer(p[0])->IPrint("Welcome back to Incursion, <Str>!", (const char*)oPlayer(p[0])->Name(0));
+    if (oPlayer(p[0])->GodID)
+        oPlayer(p[0])->GodMessage(oPlayer(p[0])->GodID, MSG_SALUTATION);
+    doQuit = false;
+
+    return true;
+}
+
+void Game::SaveModule(int16 mn) {
+    fileHeader fh;
+    if (!Modules[mn]) {
+        Error("Attempt to save non-existent module!");
         return;
-      }
-    if (!Modules[mn]->FName)
-      {
+    }
+    if (!Modules[mn]->FName) {
         Error("Module has no filename!");
         return;
-      }
+    }
 
-    try {  
-      const char * filespec = Modules[mn]->GetText(Modules[mn]->FName);
-      T1->ChangeDirectory(T1->ModuleSubDir());
-      T1->OpenWrite(filespec);
-      memset(&fh,0,sizeof(fh));
-      strcpy(fh.Version,VERSION_STRING);
-      fh.Sig = SIGNATURE;
-      fh.numGroups = 1;
-      strncpy(fh.Name,Modules[mn]->GetText(Modules[mn]->Name),71);
-      T1->FWrite(&fh,sizeof(fh));
-      theRegistry = &ResourceRegistry;
-      theRegistry->SaveGroup(*T1,Modules[mn]->myHandle,true,true);
-      theRegistry = &MainRegistry;
-      T1->Close();
-      T1->ChangeDirectory(T1->IncursionDirectory);
-      }
-    catch (int error_number) {
-      Error("Error writing MOD file (%s).",
-        Lookup(FileErrors,error_number));
-      T1->ChangeDirectory(T1->IncursionDirectory);
-      return;
-
-      }    
+    try {
+        const char * filespec = Modules[mn]->GetText(Modules[mn]->FName);
+        T1->ChangeDirectory(T1->ModuleSubDir());
+        T1->OpenWrite(filespec);
+        memset(&fh, 0, sizeof(fh));
+        strcpy(fh.Version, VERSION_STRING);
+        fh.Sig = SIGNATURE;
+        fh.numGroups = 1;
+        strncpy(fh.Name, Modules[mn]->GetText(Modules[mn]->Name), 71);
+        T1->FWrite(&fh, sizeof(fh));
+        theRegistry = &ResourceRegistry;
+        theRegistry->SaveGroup(*T1, Modules[mn]->myHandle, true, true);
+        theRegistry = &MainRegistry;
+        T1->Close();
+        T1->ChangeDirectory(T1->IncursionDirectory);
+    } catch (int error_number) {
+        Error("Error writing module (%s).", Lookup(FileErrors, error_number));
+        T1->ChangeDirectory(T1->IncursionDirectory);
+        return;
+    }
 
     return;
-  }
+}
 
 bool Game::LoadModules() {
     String fn;
     ModuleRecord mr;
-    uint8 sl, i;
-    /* Later, this function will scan all the relevant directories for
-    module files and add them to the new game. For now it just loads
-    the one file, Incursion.Mod. */
+    ModuleRecord mrBacklog[MAX_MODULES];
+    uint8 sl, i, backlogCount = 0, moduleCount = 0;
 
     Cleanup();
 
     T1->ChangeDirectory(T1->ModuleSubDir());
 
-#ifndef WIN32
-    system("mv *.Mod *.mod");
-    system("mv *.MOD *.mod");
-#endif
-
     theRegistry = &ResourceRegistry;
     try {
         if (!T1->FirstFile("*.Mod")) {
-            Fatal(Format("%s\nCan't find any game data modules!",(const char*)T1->ModuleSubDir()));
+            Fatal(Format("%s\nCan't find any game data modules!", (const char*)T1->ModuleSubDir()));
         }
 
         do {
-            strcpy(mr.FName,T1->GetFileName());
-            ResourceRegistry.LoadGroup(*T1,0,true);
+            strcpy(mr.FName, T1->GetFileName());
+            ResourceRegistry.LoadGroup(*T1, 0, true);
             T1->Close();
             mr.hMod = ResourceRegistry.GetModuleHandle();
             if (!oModule(mr.hMod))
                 throw EHANDLE;
 
+            if ((backlogCount + moduleCount) == MAX_MODULES) {
+                Error("Only %d modules can be loaded at once!", MAX_MODULES);
+                delete oModule(mr.hMod);
+                break;
+            }
+
             if (oModule(mr.hMod)->Slot == -1) {
-                for(i=0; i<MAX_MODULES; i++)
-                    if (!Modules[i])
-                        break;
-                if (i == MAX_MODULES) { 
-                    Error("Only 192 free-slot modules can be loaded at once!");
-                    delete oModule(mr.hMod);
-                    continue;
-                }
-                sl = i;
+                mrBacklog[backlogCount++] = mr;
             } else {
                 sl = (uint8)oModule(mr.hMod)->Slot;
                 if (Modules[sl]) {
                     Error("Two fixed-slot modules (%s and %s) conflict over slot %d!",
                         oModule(mr.hMod)->GetText(oModule(mr.hMod)->Name),
-                        Modules[sl]->GetText(Modules[sl]->Name),sl);
-                    delete oModule(mr.hMod); 
+                        Modules[sl]->GetText(Modules[sl]->Name), sl);
+                    delete oModule(mr.hMod);
                     continue;
                 }
-            }
 
+                Modules[sl] = oModule(mr.hMod);
+                mr.Slot = sl;
+                ModFiles.Add(mr);
+
+                moduleCount++;
+            }
+        } while (T1->NextFile());
+
+        // Fill in the empty module slots with the backlog of floating slot modules.
+        sl = 0;
+        for (i = 0; i < backlogCount; i++) {
+            while (Modules[sl])
+                sl++;
+            ASSERT(sl < MAX_MODULES);
+            mr = mrBacklog[i];
             Modules[sl] = oModule(mr.hMod);
             mr.Slot = sl;
             ModFiles.Add(mr);
-        } while (T1->NextFile());
+        }
     } catch (int error_number) {
-        Error("Error loading module '%s' (%s).", mr.FName, Lookup(FileErrors,error_number));
+        Error("Error loading module '%s' (%s).", mr.FName, Lookup(FileErrors, error_number));
         theRegistry = &MainRegistry;
         T1->ChangeDirectory(T1->IncursionDirectory);
         return false;
     }
+
     theRegistry = &MainRegistry;
     T1->ChangeDirectory(T1->IncursionDirectory);
     InitGodArrays();

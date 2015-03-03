@@ -1,39 +1,55 @@
-# Creating a Module
+# User defined modules
 
-## In-game Usage
+TODO: RComp.cpp: Game::ResourceCompiler()
+    if (FIND("mage") && FIND("shocker lizard") && !Errors) {
 
-Modules are loaded when the player chooses to create a new character, or
-reincarnate an existing character from the main menu.  As well as in a
-variety of other random places.
+## Which modules are loaded
 
-## The .irc File
+There are a number of ways to start playing from the main menu, and they
+depend on modules in different ways.
+
+If the player chooses to create a new character or to reincarnate an existing
+character, any modules located on disk are loaded.
+
+If the player chooses to load a saved game, the set of modules which were on
+disk at the time the game's character was created, or reincarnated, are
+expected to be present and will be the ones loaded.  If any are not present
+the user will be shown an error dialog.
+
+## Creating a Module
 
 A module is defined using a file with the suffix `.irc`.  At this time only
 the top level of the `mod` subdirectory is searched for these files.
 
-### Module
+### Keyword: Module
+
+Required: If not provided, compilation of the given module will fail.
 
 This is a required definition.  It specifies the module name, as presented to
-the player.  If not provided, compilation of the given module will fail.
+the player.
 
     Module "<module name>";
+	e.g. Module "Bong Bong's Magical Tower"
 
-### File
+### Keyword: File
+
+Required: If not provided, compilation of the given module will fail.
 
 This is a required definition.  It specifies the module file name, and it
 specifies the file name which the compiled module will be written out as.
-If not provided, compilation of the given module will fail.
 
-    File "";
+    File "<file name>";
+	e.g. File "BongBongsMagicalTower.Mod";
 
-### Slot
+### Keyword: Slot
 
-This is an optional definition.  If not provided, the value defaults to
-putting the module in whatever slot module loading order leaves it in.
+Optional: If not provided, the module will automatically be placed in the
+first unoccupied slot.
 
 	Slot <number>;
+	e.g. Slot 4;
 
-The slot number a given module appears in depends mainly on module loading
+The slot a given module appears in depends mainly on module loading
 order.  It is possible for a module to explicitly specify a slot number
 by defining a `Slot` entry, but module loading will error if this causes
 a conflict, discarding the second of the two to be encountered.
