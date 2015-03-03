@@ -2204,9 +2204,9 @@ String & Monster::Describe(Player *p)
     if (isMType(MA_DRAGON))
       CR += 9;
 	uint32 gid = GLYPH_ID_VALUE(tm->Image);
-    str = XPrint(Format("<5>The <Str><Str><7> ('<%d>%c%c%c<7>')\n__",
-            GLYPH_COLOUR_VALUE(tm->Image), LITERAL_CHAR, LITERAL_CHAR1(gid), LITERAL_CHAR2(gid),isMType(MA_DRAGON) ?
-            "(Adult) " : "",NAME(xID)));
+    str = XPrint(
+        Format("<5>The <Str><Str><7> ('<%d>%c%c%c<7>')\n__", GLYPH_COLOUR_VALUE(tm->Image), LITERAL_CHAR, LITERAL_CHAR1(gid), LITERAL_CHAR2(gid)),
+        isMType(MA_DRAGON) ? "(Adult) " : "", NAME(xID));
     for(i=1;i!=str.GetLength();i++)
       if (isalpha(max(1,str[i])) && str[i-1] == ' ')
         str.SetAt(i,toupper(str[i]));
