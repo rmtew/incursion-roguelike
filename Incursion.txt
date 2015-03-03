@@ -1,5 +1,5 @@
-Incursion 0.6.9Y17
-------------------
+Incursion
+---------
 
  1. Introduction.
  2. Support the development.
