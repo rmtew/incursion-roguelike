@@ -74,12 +74,10 @@
 #undef MOUSE_MOVED
 
 #ifndef DEBUG
-#ifdef USE_CRASHPAD
-/* Google Breakpad.
-    1. Set Release configuration preprocessor to have USE_CRASHPAD defined.
-    2. Add to release libs: exception_handler.lib;crash_generation_client.lib;common.lib.
-    3. Add "$(SolutionDir)..\_dependencies\google-breakpad\src\client\windows\Release\lib" to the lib path.
-    4. Add "$(SolutionDir)..\_dependencies\google-breakpad\src" to the include path.  */
+#ifdef USE_BREAKPAD
+#pragma comment(lib, "common")
+#pragma comment(lib, "exception_handler")
+#pragma comment(lib, "crash_generation_client")
 #include "client/windows/handler/exception_handler.h"
 #undef ERROR
 #undef MIN
@@ -104,7 +102,7 @@
 #define INPUT_IDLE_MS 50
 
 #ifndef DEBUG
-#ifdef USE_CRASHPAD
+#ifdef USE_BREAKPAD
 using google_breakpad::ExceptionHandler;
 #endif
 #endif
@@ -340,7 +338,7 @@ static int16 kbPolish[][3] = {
 Term *T1;
 libtcodTerm *AT1;
 #ifndef DEBUG
-#ifdef USE_CRASHPAD
+#ifdef USE_BREAKPAD
 ExceptionHandler* crashdumpHandler;
 #endif
 #endif
@@ -377,7 +375,7 @@ int main(int argc, char *argv[]) {
      * Debug builds get the option to break out into the debugger, which makes it
      * superfluous in that case. */
 #ifndef DEBUG
-#ifdef USE_CRASHPAD
+#ifdef USE_BREAKPAD
     std::wstring wsExecutablePath(strlen(executablePath), 0);
     mbstowcs(&wsExecutablePath[0],executablePath,strlen(executablePath));
     crashdumpHandler = new ExceptionHandler(wsExecutablePath,
@@ -783,7 +781,7 @@ void Error(const char*fmt,...) {
 #else
     /* TODO: This should be enabled optionally in the menus, as it causes problems for some people apparently.
         See Issue #215
-#ifdef USE_CRASHPAD
+#ifdef USE_BREAKPAD
 	crashdumpHandler->WriteMinidump();
 #endif
 */

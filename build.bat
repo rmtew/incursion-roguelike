@@ -10,6 +10,18 @@ REM TODO: -- Also support downloading and using them with a command-line argumen
 REM TODO: PREPARE
 REM TODO: - The version control archived zip.  How well does it work?  Should I even bother to support it?
 REM TODO: -- What if someone installs hg after downloading and using the snapshot?
+REM TODO: - Detect the Incursion version number, and use it automatically.
+REM TODO: -- Check the mod file for the version number to ensure it has been generated.
+REM TODO: -- Until the mod can be generated on command line, add it as an option to debug executables.
+REM TODO: RELEASE
+REM TODO: - Need to automate the creation of the dependencies archive as part of this process.
+REM TODO: -- build_dependencies-yyyymmdd.7z
+REM TODO: --- _dependencies
+REM TODO: ---- build\dependencies\include\
+REM TODO: ---- build\dependencies\*.lib
+REM TODO: ---- build\dependencies\*.exe
+REM TODO: ---- build\dependencies\*.pdb
+REM TODO: ---- build\dependencies\*.dll
 
 REM Divert to the internal setup code, it will return to the user setup.
 goto internal_function_setup
@@ -27,14 +39,17 @@ REM      LINKS[n]=vcs <vcs-system> <name> <revision-id> <repo-path> <snapshot-ur
 REM        <revision-id>: This can be a URL, or it can be a filesystem path to an existing local clone.
 
 set LINKS[0]=http://jaist.dl.sf.net/pub/sourceforge/w/wi/winflexbison/win_flex_bison-latest.zip
-REM TODO: Comment out local git repositories and replace with remote ones before committing.
-set LINKS[1]=vcs hg SDL2 704a0bfecf75 C:\RMT\VCS\HG\libraries\SDL http://hg.libsdl.org/SDL/archive/
-REM set LINKS[1]=vcs hg SDL2 704a0bfecf75 http://hg.libsdl.org/SDL http://hg.libsdl.org/SDL/archive/
-set LINKS[2]=vcs hg libtcod 7a8b072365b5 C:\RMT\VCS\HG\libraries\libtcod https://bitbucket.org/jice/libtcod/get/
-REM set LINKS[2]=vcs hg libtcod 7a8b072365b5 https://bitbucket.org/jice/libtcod https://bitbucket.org/jice/libtcod/get/
+set LINKS[1]=vcs hg SDL2 704a0bfecf75 http://hg.libsdl.org/SDL http://hg.libsdl.org/SDL/archive/REV.zip
+set LINKS[2]=vcs hg libtcod 7a8b072365b5 https://bitbucket.org/jice/libtcod https://bitbucket.org/jice/libtcod/get/REV.zip
 set LINKS[3]=http://jaist.dl.sf.net/pub/sourceforge/p/pd/pdcurses/pdcurses/3.4/pdcurs34.zip
-set LINKS[4]=vcs git gyp dd831fd C:\RMT\VCS\GIT\Tools\gyp ???
-set LINKS[5]=vcs git google-breakpad 0a0ad99 C:\RMT\VCS\GIT\Libraries\google-breakpad ???
+set LINKS[4]=vcs git gyp dd831fd https://chromium.googlesource.com/external/gyp https://chromium.googlesource.com/external/gyp/REV.tar.gz
+set LINKS[5]=vcs git google-breakpad 0a0ad99 https://chromium.googlesource.com/external/google-breakpad/src/ https://chromium.googlesource.com/external/google-breakpad/src/REV.tar.gz
+
+REM TODO: Comment out local git repositories and replace with remote ones before committing.
+REM set LINKS[1]=vcs hg SDL2 704a0bfecf75 C:\RMT\VCS\HG\libraries\SDL http://hg.libsdl.org/SDL/archive/
+REM set LINKS[2]=vcs hg libtcod 7a8b072365b5 C:\RMT\VCS\HG\libraries\libtcod https://bitbucket.org/jice/libtcod/get/
+REM set LINKS[4]=vcs git gyp dd831fd C:\RMT\VCS\GIT\Tools\gyp ???
+REM set LINKS[5]=vcs git google-breakpad 0a0ad99 C:\RMT\VCS\GIT\Libraries\google-breakpad ???
 
 REM __ MD5CHECKSUMS entries are the MD5 checksum for the download in the matching LINKS position
 REM      To get the checksum for a newly added download to add to an entry here, simply run the script and when
@@ -207,23 +222,88 @@ if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
         set UV_INCLUDE_COMMANDS[%UV_INCLUDE_COMMAND_COUNT%]=!V_DIRNAME!\include\*.h
         set /A UV_INCLUDE_COMMAND_COUNT=%UV_INCLUDE_COMMAND_COUNT%+1
     ) else if "!L_VCS_NAME!" EQU "gyp" (
+        REM gyp is built using Python, so no building is required.
         echo Building: [gyp] .. skipped
     ) else if "!L_VCS_NAME!" EQU "google-breakpad" (
-        set GYP_MSVS_VERSION=2013
+        set L_LIBS=exception_handler.lib crash_generation_client.lib common.lib
+        set L_LIBRELPATH=client\Windows\Release\lib
+        set L_FAILED=no
+        REM gyp is a bit flakey, and requires at least at this time, we be at the right directory level and provide a depth.
         cd !DEPENDENCY_PATH!\google-breakpad
-        CALL !DEPENDENCY_PATH!\gyp\gyp.bat --no-circular-check client\windows\breakpad_client.gyp --depth .
-        REM I think gyp is dropping a turd, but we can step around the chunks.
-        msbuild /nologo client\Windows\common.vcxproj /p:Configuration=Release /p:Platform=Win32
-        msbuild /nologo client\Windows\breakpad_client.sln /p:Configuration=Release /p:Platform=Win32 /t:build_all
-        copy client\Windows\Release\lib\exception_handler.lib !DEPENDENCY_PATH!\
-        copy client\Windows\Release\lib\crash_generation_client.lib !DEPENDENCY_PATH!\
-        copy client\Windows\Release\lib\common.lib !DEPENDENCY_PATH!\
+        for %%A in (!L_LIBS!) do (
+            if not exist !L_LIBRELPATH!\%%A (
+                set L_FAILED=yes
+            )
+        )
+        
+        if "!L_FAILED!" EQU "yes" (
+            REM Use gyp to produce VS2013 solution and project files.
+            set GYP_MSVS_VERSION=2013
+            CALL !DEPENDENCY_PATH!\gyp\gyp.bat --no-circular-check client\windows\breakpad_client.gyp --depth .
+
+            REM TODO: The current revision breaks on missing files, and produces partial results, but enough.  Build them piecemeal.
+            msbuild /nologo client\Windows\common.vcxproj /p:Configuration=Release /p:Platform=Win32
+            msbuild /nologo client\Windows\breakpad_client.sln /p:Configuration=Release /p:Platform=Win32 /t:build_all
+
+            REM Verify that the required static libraries were produced as a result.
+            set L_FAILED=no
+            for %%A in (!L_LIBS!) do (
+                if not exist !L_LIBRELPATH!\%%A (
+                    echo ERROR.. google-breakpad compilation failed to produce '%%A'
+                    set L_FAILED=yes
+                )
+            )
+            REM If one or more libraries were not produced, the user will have been told about each, so now exit.
+            if "!L_FAILED!" EQU "yes" (
+                echo ERROR.. Giving up as these libraries are required for google-breakpad to work.
+                goto internal_function_exit
+            )
+
+            REM Copy all the required static libraries.
+            for %%A in (!L_LIBS!) do (
+                copy !L_LIBRELPATH!\%%A !DEPENDENCY_PATH!\
+            )
+
+            echo SUCCESS.. Enough of google-breakpad was compiled to produce the required static libraries.
+            REM goto cannot be done within a nested scope, so need to embed it below.
+            goto user_function_prepare_dependency_breakpad_includes
+        ) else (
+            echo Building: [google-breakpad] .. skipped
+        )
     ) else (
         echo ERROR.. !V_LINK_PARTS[%VCS_NAME%]! not handled by user who wrote the build amendments.
         goto internal_function_exit
     )
 )
 
+goto exit_from_user_function_prepare_dependency
+:user_function_prepare_dependency_breakpad_includes
+
+cd "!DEPENDENCY_PATH!\google-breakpad"
+set L_PATHS[0]=client\windows
+set L_PATHS[1]=common
+set L_PATHS[2]=google_breakpad
+set /A L_PATH_COUNT=3
+set /A L_IDX=0
+
+:user_function_make_release_loop1
+set L_DIR_PATH=!L_PATHS[%L_IDX%]!
+for /F "delims=" %%W in ('dir /B "!L_DIR_PATH!\*.h" 2^>^&1') do (
+    if "%%W" NEQ "File Not Found" (
+        xcopy /Y /Q >nul "!L_DIR_PATH!\%%W" "!DEPENDENCY_PATH!\include\!L_DIR_PATH!\"
+    )
+)    
+for /F %%V in ('dir /A:D /B "!L_DIR_PATH!"') do (
+    if "%%V" NEQ "Release" (
+        set L_SUBDIR_PATH=!L_DIR_PATH!\%%V
+        set L_PATHS[!L_PATH_COUNT!]=!L_SUBDIR_PATH!
+        set /A L_PATH_COUNT=!L_PATH_COUNT!+1
+    )
+)
+set /A L_IDX=!L_IDX!+1
+if !L_IDX! LSS !L_PATH_COUNT! goto user_function_make_release_loop1
+
+:exit_from_user_function_prepare_dependency
 goto !V_LABEL_RETURN_ufpd!
 
 REM --- FUNCTION: user_function_prepare_dependencies -------------------------
@@ -272,6 +352,7 @@ REM The naming is important and is dynamically used to determine which files to 
 for %%A in (release-with-pdbs debug-with-pdbs release) do (
     set L_ARCHIVENAME=Incursion-!UV_VERSION!
     set L_NAME=%%A
+    echo Making '%%A' package directory
     set L_PDBS=!L_NAME:~-4,4!
     if "!L_NAME:~0,1!" EQU "r" (
         set L_CONFIG=Release
@@ -286,30 +367,39 @@ for %%A in (release-with-pdbs debug-with-pdbs release) do (
     mkdir "!UV_PACKAGES_DIRNAME!\!L_NAME!\logs"
     mkdir "!UV_PACKAGES_DIRNAME!\!L_NAME!\save"
 
-    xcopy /I /E "run\mod" "!UV_PACKAGES_DIRNAME!\!L_NAME!\mod\"
-    xcopy /I /E "!BUILD_SCRIPT_PATH!\fonts" "!UV_PACKAGES_DIRNAME!\!L_NAME!\fonts\"
+    xcopy /I /E >nul "run\mod" "!UV_PACKAGES_DIRNAME!\!L_NAME!\mod\"
+    xcopy /I /E >nul "!BUILD_SCRIPT_PATH!\fonts" "!UV_PACKAGES_DIRNAME!\!L_NAME!\fonts\"
 
-    copy "!BUILD_SCRIPT_PATH!\LICENSE" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
-    copy "!BUILD_SCRIPT_PATH!\Incursion.txt" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
-    copy "!BUILD_SCRIPT_PATH!\Changelog.txt" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
-    copy "!BUILD_SCRIPT_PATH!\README.md" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
+    copy >nul "!BUILD_SCRIPT_PATH!\LICENSE" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
+    copy >nul "!BUILD_SCRIPT_PATH!\Incursion.txt" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
+    copy >nul "!BUILD_SCRIPT_PATH!\Changelog.txt" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
+    copy >nul "!BUILD_SCRIPT_PATH!\README.md" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
     
-    copy "!DEPENDENCY_PATH!\libtcod\build\!L_CONFIG!\libtcod.dll" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
-    if "!L_PDBS!" EQU "pdbs" copy "!DEPENDENCY_PATH!\libtcod\build\!L_CONFIG!\libtcod.pdb" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
+    copy >nul "!DEPENDENCY_PATH!\libtcod\build\!L_CONFIG!\libtcod.dll" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
+    if "!L_PDBS!" EQU "pdbs" copy >nul "!DEPENDENCY_PATH!\libtcod\build\!L_CONFIG!\libtcod.pdb" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
 
-    copy "!DEPENDENCY_PATH!\SDL2\VisualC\SDL\Win32\!L_CONFIG!\SDL2.dll" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
-    if "!L_PDBS!" EQU "pdbs" copy "!DEPENDENCY_PATH!\SDL2\VisualC\SDL\Win32\!L_CONFIG!\SDL2.pdb" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
+    copy >nul "!DEPENDENCY_PATH!\SDL2\VisualC\SDL\Win32\!L_CONFIG!\SDL2.dll" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
+    if "!L_PDBS!" EQU "pdbs" copy >nul "!DEPENDENCY_PATH!\SDL2\VisualC\SDL\Win32\!L_CONFIG!\SDL2.pdb" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
     
     if "!UV_PACKAGE_CURSES!" EQU "yes" (
-        copy "Win32\!L_CONFIG!\exe_curses\Incursion.exe" "!UV_PACKAGES_DIRNAME!\!L_NAME!\IncursionCurses.exe"
-        if "!L_PDBS!" EQU "pdbs" copy "Win32\!L_CONFIG!\exe_curses\Incursion.pdb" "!UV_PACKAGES_DIRNAME!\!L_NAME!\IncursionCurses.pdb"
+        copy >nul "Win32\!L_CONFIG!\exe_curses\Incursion.exe" "!UV_PACKAGES_DIRNAME!\!L_NAME!\IncursionCurses.exe"
+        if "!L_PDBS!" EQU "pdbs" copy >nul "Win32\!L_CONFIG!\exe_curses\Incursion.pdb" "!UV_PACKAGES_DIRNAME!\!L_NAME!\IncursionCurses.pdb"
     )
 
-    copy "Win32\!L_CONFIG!\exe_libtcod\Incursion.exe" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
-    if "!L_PDBS!" EQU "pdbs" copy "Win32\!L_CONFIG!\exe_libtcod\Incursion.pdb" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
+    copy >nul "Win32\!L_CONFIG!\exe_libtcod\Incursion.exe" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
+    if "!L_PDBS!" EQU "pdbs" copy >nul "Win32\!L_CONFIG!\exe_libtcod\Incursion.pdb" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
 )
 
-
+REM Collect the dependencies
+echo Making 'dependencies' package directory
+set "L_DEPENDENCIES_PATH=!UV_PACKAGES_DIRNAME!\dependencies"
+mkdir "!L_DEPENDENCIES_PATH!"
+xcopy /I /E  >nul "!DEPENDENCY_PATH!\include" "!L_DEPENDENCIES_PATH!\include\"
+copy >nul "!BUILD_SCRIPT_PATH!\LICENSE" "!L_DEPENDENCIES_PATH!\"
+copy >nul "!DEPENDENCY_PATH!\*.lib" "!L_DEPENDENCIES_PATH!\"
+copy >nul "!DEPENDENCY_PATH!\*.pdb" "!L_DEPENDENCIES_PATH!\"
+copy >nul "!DEPENDENCY_PATH!\*.dll" "!L_DEPENDENCIES_PATH!\"
+copy >nul "!DEPENDENCY_PATH!\*.exe" "!L_DEPENDENCIES_PATH!\"
 
 :exit_from_user_function_make_release
 goto !V_LABEL_RETURN_ufmr!
@@ -367,6 +457,10 @@ for %%A in (release-with-pdbs debug-with-pdbs release) do (
 
     !7Z_EXE! a -r -t7z -mx9 !L_ARCHIVENAME!.7z !L_ARCHIVENAME!
 )
+
+REM Archive the dependencies collection.
+for /f "tokens=2-4 delims=/ " %%a in ('date /t') do (set L_DATE=%%c%%a%%b)
+!7Z_EXE! a -r -t7z -mx9 build_dependencies-!L_DATE!-only-needed-for-development.7z dependencies\*
 
 cd "!BUILD_PATH!"
 
@@ -552,9 +646,6 @@ goto internal_function_teardown
 REM --- FUNCTION: internal_function_make_release -----------------------------
 :internal_function_make_release
 set V_LABEL_RETURN_ifmr=!V_LABEL_RETURN!
-
-REM TODO: Complete this functionality.
-REM .... 
 
 cd %DEPENDENCY_PATH%
 set V_LABEL_RETURN=return_to_internal_function_make_release
@@ -766,8 +857,12 @@ if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "vcs" (
             echo WARNING: This is untested code.  If it does not work, report it.
             set V_LINK_PARTS[%HTTP_NAME%]=!V_LINK_PARTS[%VCS_NAME%]!
             set V_LINK_PARTS[%LINK_CLASSIFIER%]=http
-            set V_LINK_PARTS[%HTTP_FILENAME%]=!V_LINK_PARTS[%VCS_REVISION%]!.zip
-            set V_LINK_PARTS[%HTTP_URL%]=!V_LINK_PARTS[%VCS_ZIPDLURL%]!!V_LINK_PARTS[%HTTP_FILENAME%]!
+            echo Download of VCS repo snapshots not fully implemented, giving up.
+            goto internal_function_exit
+            REM TODO: Set this to !V_LINK_PARTS[%VCS_ZIPDLURL%]! with 'REV' replaced with !V_LINK_PARTS[%VCS_REVISION%]!
+            set V_LINK_PARTS[%HTTP_URL%]=!V_LINK_PARTS[%VCS_ZIPDLURL%]!
+            REM TODO: Set this to the extracted file name from the HTTP_URL we just constructed.
+            set V_LINK_PARTS[%HTTP_FILENAME%]=
         )
     )
 )

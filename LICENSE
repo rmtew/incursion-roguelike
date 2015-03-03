@@ -1,12 +1,12 @@
 There are 6 sets of licenses that apply to the files that come as part of either
 the Incursion source code, or a binary distribution made from it.
 
- 1. Additional Incursion license (from v0.6.9Y onward)
+ 1. Additional Incursion license (applies to changes after v0.6.9Y)
  2. Base Incursion license statement
  3. Open Gaming License
- 4. libtcod license
- 5. SDL2 licence
- 6. Google Breakpad licenses
+ 4. libtcod license (only applies if in use)
+ 5. SDL2 licence (only applies if in use)
+ 6. Google Breakpad licenses (only applies if in use)
  
 -- LICENSE 1: Additional Incursion license (from v0.6.9Y onward)
 
