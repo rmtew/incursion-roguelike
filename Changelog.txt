@@ -1,3 +1,6 @@
+Incursion (open source) 0.6.9Y18: 2015-03-??
+* https://bitbucket.org/rmtew/incursion-roguelike/issue/215/: Finished Google Breakpad reintegration. Build script now packages libs and includes for Breakpad in the generated dependencies archive. Build script now packages the licenses in the generated dependencies archive. Build script now actually generates a dependencies archive. Rename USE_CRASHPAD to USE_BREAKPAD. Make static library names pragmas for Breakpad to allow easy disabling.
+
 Incursion (open source) 0.6.9Y17: 2015-03-03
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/213/: GIT on Windows will not recognise file names that are not in exactly the right casing that they were added to it as.  Visual Studio will rename files it encounters on disk, that do not have the same casing as it has for them, to have it's casing.  Eventually a programmer will tab complete a file name and do a git command on it, and the command will fail silently as the file name casing is no longer correct for git.  git can suck it.  But for now, this corrects the VS2013 file name casing.
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/214/: Add the Open Gaming License to the LICENSE file.  Note that it was and always has been included already within the game executable.
