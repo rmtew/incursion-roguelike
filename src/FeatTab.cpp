@@ -852,7 +852,7 @@ struct FeatInfoStruct FeatInfo[] = {
     {{{FP_FEAT,FT_BIND_SPELL}}}},
   { FT_EMPOWER_SPELL, FF_META|FF_WIZARD, "Empower Spell",
     "An empowered spell inflicts 50% extra damage, or otherwise has its "
-      "megnitude increased by 50%." },
+      "magnitude increased by 50%." },
   { FT_ENLARGE_SPELL, FF_META|FF_WIZARD, "Enlarge Spell",
     "An enlarged spell has its area of effect significantly increased." },
   { FT_EXTEND_SPELL, FF_META|FF_WIZARD, "Extend Spell",
