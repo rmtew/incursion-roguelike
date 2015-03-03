@@ -75,7 +75,7 @@
 #undef MOUSE_MOVED
 
 #ifndef DEBUG
-#ifdef USE_CRASHPAD
+#ifdef USE_BREAKPAD
 /* Google Breakpad. */
 #include "client/windows/handler/exception_handler.h"
 #undef ERROR
@@ -112,7 +112,7 @@ Add to release paths: _dependencies\google-breakpad\src\client\windows\Release\l
 Add to release includes: _dependencies\google-breakpad\src
 
 #ifndef DEBUG
-#ifdef USE_CRASHPAD
+#ifdef USE_BREAKPAD
 using google_breakpad::ExceptionHandler;
 #endif
 #endif
@@ -391,7 +391,7 @@ static int16 kbPolish[][3] = {
 Term *T1;
 cursesTerm *AT1;
 #ifndef DEBUG
-#ifdef USE_CRASHPAD
+#ifdef USE_BREAKPAD
 ExceptionHandler* crashdumpHandler;
 #endif
 #endif
@@ -428,7 +428,7 @@ int main(int argc, char *argv[]) {
      * Debug builds get the option to break out into the debugger, which makes it
      * superfluous in that case. */
 #ifndef DEBUG
-#ifdef USE_CRASHPAD
+#ifdef USE_BREAKPAD
     std::wstring wsExecutablePath(strlen(executablePath), 0);
     mbstowcs(&wsExecutablePath[0],executablePath,strlen(executablePath));
     crashdumpHandler = new ExceptionHandler(wsExecutablePath,
@@ -889,7 +889,7 @@ void Error(const char*fmt,...) {
 #ifdef DEBUG
 	sprintf(__buff2, "Error: %s\n[B]reak, [E]xit or [C]ontinue?",__buffer);
 #else
-#ifdef USE_CRASHPAD
+#ifdef USE_BREAKPAD
 	crashdumpHandler->WriteMinidump();
 	sprintf(__buff2, "Error: %s\n[E]xit or [C]ontinue?",__buffer);
 #endif
