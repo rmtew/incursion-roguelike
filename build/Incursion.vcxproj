@@ -267,13 +267,11 @@
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="..\lang\grammar.acc">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">cd $(ProjectDir)
-$(SolutionDir)$(Platform)\Debug\modaccent\modaccent_d.exe %(Identity) $(SolutionDir)\..\src $(SolutionDir)\..\inc
-</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">cd "$(ProjectDir)"
+"$(SolutionDir)$(Platform)\Debug\modaccent\modaccent_d.exe" %(Identity) "$(SolutionDir)\..\src" "$(SolutionDir)\..\inc"</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\src\yygram.cpp;..\inc\yygram.h;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">cd $(ProjectDir)
-$(SolutionDir)$(Platform)\Release\modaccent\modaccent.exe %(Identity) $(SolutionDir)\..\src $(SolutionDir)\..\inc
-</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">cd "$(ProjectDir)"
+"$(SolutionDir)$(Platform)\Release\modaccent\modaccent.exe" %(Identity) "$(SolutionDir)\..\src" "$(SolutionDir)\..\inc"</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\src\yygram.cpp;..\src\yygram.h;%(Outputs)</Outputs>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </CustomBuild>

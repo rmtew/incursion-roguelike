@@ -75,7 +75,7 @@
       <AdditionalLibraryDirectories>dependencies</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>if not exist $(SolutionDir)run mkdir $(SolutionDir)run</Command>
+      <Command>if not exist "$(SolutionDir)run" mkdir "$(SolutionDir)run"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -101,7 +101,7 @@
       <AdditionalLibraryDirectories>dependencies</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>if not exist $(SolutionDir)run mkdir $(SolutionDir)run</Command>
+      <Command>if not exist "$(SolutionDir)run" mkdir "$(SolutionDir)run"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
