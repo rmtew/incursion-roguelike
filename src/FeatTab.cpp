@@ -267,7 +267,7 @@ struct FeatInfoStruct FeatInfo[] = {
     {{{FP_ABILITY, CA_FLIGHT, +1 }}}},
   { FT_MULTIATTACK,  0, "Multiattack",
     "When making your second and further attacks in your natural attack "
-      "sequence, you suffer only a -2 penalty, rather then a -5.",
+      "sequence, you suffer only a -2 penalty, rather than a -5.",
     {{{FP_ATTACK, A_CLAW, 0}}}},
   { FT_POUNCE,       FF_MONSTER, "Pounce",
     "When you attack a flat-footed enemy, you may make all of the attacks "
@@ -547,7 +547,7 @@ struct FeatInfoStruct FeatInfo[] = {
   { FT_IMPROVED_MOUNT, 0, "Improved Mount", 
     "You have a knack for bonding with sacred mounts that are exceptional "
       "for your degree of skill. Your paladin level is treated as if it were "
-      "two higher then it actually is when determining what kind of creatures "
+      "two higher than it actually is when determining what kind of creatures "
       "you can summon as a bonded mount.",
     {{{ FP_ABILITY, CA_SACRED_MOUNT,5}}}},
 
@@ -1585,7 +1585,7 @@ struct FeatInfoStruct FeatInfo[] = {
       "rendered prone.",
     {{{FP_FEAT,FT_MOUNTED_COMBAT}}}},
   { FT_RIDE_BY_ATTACK, FF_WARRIOR, "Ride-By Attack",
-    "You are able to attack while charging and mounted more proficiently then most. "
+    "You are able to attack while charging and mounted more proficiently than most. "
     "This conveys three benefits:\n__First, you keep "
     "charging if you strike and kill an opponent, potentially allowing you to continue "
     "in a straight line and attack more enemies behind the first one with the full "

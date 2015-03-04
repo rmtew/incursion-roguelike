@@ -704,7 +704,7 @@ uint16 Creature::Perceives(Thing *t, bool assertLOS)
   }          
 
   /* For now, we are treating "infravision" as darkvision rather
-     then heat-sight. This may change later, depending on human/
+     than heat-sight. This may change later, depending on human/
      demihuman balance and power levels. */
   if (Dist <= InfraRange &&
       (assertLOS || 

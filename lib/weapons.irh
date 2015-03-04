@@ -771,7 +771,7 @@ Item "shotput" : T_WEAPON
     SDmg: 1d10; LDmg: 1d8; Acc: 0; Crit: x3; Threat: 2; Spd: 70%;
     Flags: WT_BLUNT, WT_KNOCKDOWN, WT_STUNNING, WT_STR1, WT_STR2,
            IT_GROUP;
-    Desc: "Nothing more then a steel globe the size of a cantelope,
+    Desc: "Nothing more than a steel globe the size of a cantelope,
       the shotput is nonetheless a terrifying weapon; in the
       hands of a proficient user, a solid throw can crush flesh and
       bone alike into a fine paste -- its weight puts a terrible
@@ -937,7 +937,7 @@ Item "short bow" : T_BOW {
     Fires: $"sheaf arrow", $"flight arrow";
     Size: SZ_MEDIUM;
     Flags: WT_TWO_HANDED, WT_NO_STRENGTH, WT_NO_MELEE, WT_PIERCING;
-    Desc: "The short bow is lighter and slightly faster then the long bow,
+    Desc: "The short bow is lighter and slightly faster than the long bow,
       but not nearly as powerful. However, its primary advantage is that
       it is maneuverable enough to use effectively while mounted. It is
       thus also known as the cavalry bow or horseman's bow.";
@@ -1013,7 +1013,7 @@ Item "hand crossbow dart" : T_MISSILE {
     Mat: MAT_IRON; Size: SZ_TINY; Weight: 0; Cost: 1 SILVER;
     SDmg: 0d0; LDmg: 0d0; Acc: 0; Range: 0;
     Flags: IT_BGROUP, WT_RACIAL, WT_PIERCING, IT_NOGEN;
-    Desc: "This bolt is thin, sharp and not longer then three inches. It is often coated with some type of poison.";
+    Desc: "This bolt is thin, sharp and not longer than three inches. It is often coated with some type of poison.";
 }
 
 Item "crossbow bolt" : T_MISSILE {

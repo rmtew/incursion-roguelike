@@ -3553,7 +3553,7 @@ int16 Character::MaxRanks(int16 sk)
 
     int16 mr,i,lv;
     /* The intent behind this is that the max ranks grow
-    more slowly then the number of skills, allowing
+    more slowly than the number of skills, allowing
     the player to broaden out as he increases in level,
     maxing out more skills as he advances while still
     having enough points to keep his original skills
@@ -4087,7 +4087,7 @@ LearnableSpell* Character::CalcSpellAccess()
     /* This is more than we'll ever need -- it assumes a player
     could have access to every spell in the game as arcane,
     divine, primal AND sorcerous -- but paranoid is better
-    then obscure memory corruption errors. */
+    than obscure memory corruption errors. */
     ls = (LearnableSpell*) malloc(sizeof(LearnableSpell) * (MAX_SPELLS+1)*4);
 
 /*
@@ -4132,7 +4132,7 @@ typ: uint8
                 entire list at that point. */
                 for (i=0;SpellList[i] || SpellList[i+1] || SpellList[i+2];i++)
                 {
-                    /* Less then 256 is a spell level rather then a 
+                    /* Less than 256 is a spell level rather than a 
                     spell entry. S->Mag stores the maximum level
                     of spell access. */
                     if (SpellList[i] == 0)

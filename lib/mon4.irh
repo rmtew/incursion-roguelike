@@ -625,7 +625,7 @@ Monster "vrock" : MA_DEMON, MA_BIRD
       rains down from above, flaying all creatures in the area
       for 20d6 damage as the vulture-demons' blasphemous prayers
       are answered. A Reflex save for half damage is allowed,
-      but lif more then three vrocks participate in the
+      but if more than three vrocks participate in the
       dance, the save DC increases by +4 for every participant
       after the first three.";
     
@@ -1245,7 +1245,7 @@ Monster "nupperibo" : MA_DEVIL
     Desc: "Slightly more willful damned souls become nupperibos
       instead of lemures. Obese and amorphious, much like the
       lemures, nupperibo possess a greater degree of physical
-      power then the lemures -- though they are still mindless --
+      power than the lemures -- though they are still mindless --
       and are sometimes used as hard labourers or press gangs in
       the hells. Their bodies are sticky to the touch, and they
       are eager to devour and absorb any other beings in order
@@ -2240,7 +2240,7 @@ Monster word  " fire elemental" : MA_ELEMENTAL                                  
       "of fire, dwelling on the elemental plane of fire but occasionally summoned by "\
       "wizards and creatures of magic to the prime plane. Fire elementals "           \
       "are fierce, wild, destructive, capricious and passionate, loving nothing more "\
-      "then to watch things burn. A "  word  " fire elemental is about the size "     \
+      "than to watch things burn. A "  word  " fire elemental is about the size "     \
       "of a "  desc  ".";                                                             \
     On Event EVICTIM(EV_DAMAGE) {                                                     \
       if (e.DType == AD_SOAK) {                                                       \
@@ -2423,7 +2423,7 @@ Monster "fire mephit" : MA_OUTSIDER, MA_FIRE, MA_IMPKIN
       of the inner and outer planes. Possessed of a distinctly
       spiteful sense of humour, they enjoy tormenting humans and
       the few other creatures they see that are (on average)
-      weaker then them.\n
+      weaker than them.\n
       __Fire mephits look like red-skinned, puckish devils, and
       have a malicious sense of humour to suit.";
   }
@@ -2450,7 +2450,7 @@ Monster "ice mephit" : MA_OUTSIDER, MA_COLD, MA_IMPKIN
       of the inner and outer planes. Possessed of a distinctly
       spiteful sense of humour, they enjoy tormenting humans and
       the few other creatures they see that are (on average)
-      weaker then them.\n
+      weaker than them.\n
       __Ice mephits are blue-skinned, with sharp features and
       regal manners. Aloof and distant, they remember petty
       vendettas for centuries.";
@@ -2509,7 +2509,7 @@ Monster "dust mephit" : MA_OUTSIDER, MA_IMPKIN
       of the inner and outer planes. Possessed of a distinctly
       spiteful sense of humour, they enjoy tormenting humans and
       the few other creatures they see that are (on average)
-      weaker then them.\n
+      weaker than them.\n
       __Wizened, gaunt and wrinkly grey skinned humanoids, dust 
       mephits speak slowly and take a morbid, nihilistic attitude 
       to life.";
@@ -2566,7 +2566,7 @@ Monster "earth mephit" : MA_OUTSIDER, MA_IMPKIN
       of the inner and outer planes. Possessed of a distinctly
       spiteful sense of humour, they enjoy tormenting humans and
       the few other creatures they see that are (on average)
-      weaker then them.\n
+      weaker than them.\n
       __Stocky and broad-shouldered, earth mephits have a stubborn
       and petty cast to their personalities.";
     On Event MSG_BLASTNAME "spray of tiny stones";
@@ -2594,7 +2594,7 @@ Monster "salt mephit" : MA_OUTSIDER, MA_IMPKIN
       of the inner and outer planes. Possessed of a distinctly
       spiteful sense of humour, they enjoy tormenting humans and
       the few other creatures they see that are (on average)
-      weaker then them.\n
+      weaker than them.\n
       __Salt mephits appear as albino humanoids with bleary eyes
       and a bored and apathetic demeanour.";
     On Event MSG_BLASTNAME "spray of salt crystals";
@@ -2636,7 +2636,7 @@ Monster "air mephit" : MA_OUTSIDER, MA_IMPKIN
       of the inner and outer planes. Possessed of a distinctly
       spiteful sense of humour, they enjoy tormenting humans and
       the few other creatures they see that are (on average)
-      weaker then them.\n
+      weaker than them.\n
       __Air mephits are thin, graceful creatures resembling a
       cross between a pixie and an imp. Their hyperactive
       mindset irritates all who must spend time with them.";
@@ -2664,7 +2664,7 @@ Monster "fog mephit" : MA_OUTSIDER, MA_IMPKIN
       of the inner and outer planes. Possessed of a distinctly
       spiteful sense of humour, they enjoy tormenting humans and
       the few other creatures they see that are (on average)
-      weaker then them.\n
+      weaker than them.\n
       __Fog mephits are plump and ponderous, slow to act and
       easily distracted by anything getting in their way.";
     On Event MSG_BLASTNAME "cone of scalding steam";  
@@ -3437,7 +3437,7 @@ Monster "vaporighu" : MA_OUTSIDER, MA_HOMINID
       __Vaporighu are technically sapient creatures, but seem to prefer
       living a life of crude  beastiality and forsaking any kind of
       intelligent or civilized conduct. They are solitary and have little
-      or no society, living to prey on those weaker then them and enjoy
+      or no society, living to prey on those weaker than them and enjoy
       the sadistic pleasures of the Lower Planes.";
   }
   

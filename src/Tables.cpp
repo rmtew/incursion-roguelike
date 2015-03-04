@@ -1,6 +1,6 @@
 /* TABLES.CPP -- Copyright (c) 1999-2003 Julian Mensch
      Contains all of the static data used by Incursion that is
-   hard-coded into the game rather then being user-definable
+   hard-coded into the game rather than being user-definable
    in modules. There are no functions or active code in this
    file.
 */
@@ -2308,7 +2308,7 @@ Option OptionList[] = {
       "infravision, detection, ESP) will be given." },
   { OPT_CONTEXT_HELP, "Context-Based Help", "NO/YES", 1, 1, 0,
       "__When this option is active, the help menus only show descriptions "
-      "for the race and class(es) that you are currently playing, rather then "
+      "for the race and class(es) that you are currently playing, rather than "
       "every race and class in the game." },
   { OPT_HELP_MODE, "Help Format", "BOOK/MENU", 1, 0, 0,
       "__Determines the format that the online help will be shown in. In BOOK "
@@ -2454,7 +2454,7 @@ Option OptionList[] = {
       "also make offhand Shield Bashes when wielding a shield in your off hand." },
   { OPT_AUTO_COUP, "Automatic Coup de Grace", "NO/YES", 1, 1, 0,
       "__When this option is active and you run into a helpless hostile creature, "
-      "you will automatically perform a Coup de Grace rather then a normal attack. "
+      "you will automatically perform a Coup de Grace rather than a normal attack. "
       "Note that this will provoke attacks of opportunity from any other creatures "
       "threatening you." },
   { OPT_RIPOSTE_MODE, "Riposte Mode", "NO/YES/ASK", 2, 1, 0,
@@ -2568,7 +2568,7 @@ Option OptionList[] = {
   { OPT_STOP_INTER, "Stop Running at Intersections", "NO/YES", 1, 1, 0,
       "__When this option is active, a character will stop running as soon "
       "as they reach an intersection in a corridor -- a place where they "
-      "could viably go more then one direction, not counting backtracking. "
+      "could viably go more than one direction, not counting backtracking. "
       "This option has no effect in rooms." },
   { OPT_STOP_REGION, "Stop Running at Region Barrier", "NO/YES", 1, 0, 0,
       "__When this option is active, characters will stop running immediately "

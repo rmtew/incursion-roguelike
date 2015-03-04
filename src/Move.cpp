@@ -743,7 +743,7 @@ SkipConfirms:
                             an overloaded GetBAB(S_MELEE) function that will calc
                             the correct BAB for both monsters and characters. It
                             is also quite intentional that it's easier to close
-                            with natural reach creatures then polearm-wielders --
+                            with natural reach creatures than polearm-wielders --
                             the monster with reach can keep attacking you once
                             you've closed; the polearm wielder has to either
                             disengage or drop his weapon. */

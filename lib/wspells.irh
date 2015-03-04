@@ -573,7 +573,7 @@ Wizard Spell "Erase" : EA_GENERIC
 Wizard / Scroll Spell "Feather Fall" : EA_INFLICT
   { SC_ARC; Base: SP_TRIVIAL; IS_A_BUFF(COST_1); Level: 1; 
     xval: TRAP_EVENT; yval: EVICTIM(PRE(EV_DAMAGE));
-    Desc: "__While this spell is active, you float gentley downward rather then
+    Desc: "__While this spell is active, you float gentley downward rather than
       plummeting, suffering no damage for falls and not becoming prone as a result
       of them, though you can still be tripped.";
     On Event META(EVICTIM(PRE(EV_DAMAGE))) {
@@ -2240,7 +2240,7 @@ Wizard / Druid / Scroll Spell "Pyrotechnics" : EA_GENERIC
       fog, and breathing creatures in the area must make a Fortitude
       save each turn or begin choking.\n
       __<9>Fireworks:<1> The fire explodes into a brilliant display
-      of fireworks. Everyone within 40 feet of it (other then the
+      of fireworks. Everyone within 40 feet of it (other than the
       caster and his allies, who are assumed to be prepared) must
       make a Fortitude save or be blinded for 1d4+1 rounds. Further,
       creatures with an aversion to light (such as orcs and wraiths)
@@ -2970,7 +2970,7 @@ Wizard / Scroll Spell "Hypnotic Pattern" : EA_INFLICT
       };
     Desc: "Causes creatures in a 20-foot globe to become entranced with
       a display of weaving lines and images, standing rapt and motionless,
-      provided that their Intelligence is lower then 14, their CR is lower
+      provided that their Intelligence is lower than 14, their CR is lower
       than half your caster level (rounded up) and they are able to see
       the pattern normally. Attacking an entranced creature ends the trance.";
     On Event MSG_CAST
@@ -3920,7 +3920,7 @@ Wizard / Scroll Spell "Minor Globe of Invulnerability" : EA_INFLICT
       };
     Desc: "Creates a zone 30 feet (3 squares) in radius that moves with the
       caster in which spells of 3rd level or lower cannot be cast
-      by anyone other then the globe's creator.";
+      by anyone other than the globe's creator.";
   }
           
 /* --ARCANA 3-- */
@@ -5487,7 +5487,7 @@ Wizard Spell "Conjure Vortex" : EA_SUMMON
     Flags: EF_DLONG, EF_XSUMMON; 
     Desc: "Casting this spell opens a conduit to the turbulent para-elemental
       or quasi-elemental planes, calling forth a vortex with a Challenge Rating
-      of up to five. The creature lasts longer then one summoned with Monster
+      of up to five. The creature lasts longer than one summoned with Monster
       Summoning III, and is typically more powerful, but opening the conduit is
       draining for the caster, costing her two Fatigue points. The caster also
       needs to succeed on a Knowledge (Planes) check against DC 10 to open the
@@ -5655,7 +5655,7 @@ Wizard Spell "Fire Trap" : EA_INFLICT
   { SC_ABJ; Base 70; Cost 30; Level: 4; pval: (LEVEL_1PER1)d6;
     Purpose: EP_PLAYER_ONLY;
     Desc: "Enchants a single chest for 1 day per three levels, such that
-      any creature other then the caster attempting to remove an item
+      any creature other than the caster attempting to remove an item
       from it is struck by a burst of flame inflicting 1d6 points of fire
       damage per caster level."; }
 #endif
@@ -6977,7 +6977,7 @@ Wizard / Scroll Spell "Evard's Black Tentacles" : EA_GENERIC
       Fortunately, no tentacles will grow in the squares directly
       surronding the caster.\n
       __If the spell is cast is a very constricted area such as a
-      corridor, less then the normal number of tentacles may appear.";
+      corridor, less than the normal number of tentacles may appear.";
   }
   
 Monster "black tentacle" : MA_ABERRATION
@@ -7388,7 +7388,7 @@ Wizard Spell "Mooncloak" : EA_INFLICT
     Desc: "Casting this spell evokes a shimmering silver
       luminescence around the mage's body not unlike that
       produced by <9>faerie fire<1>, but the Mooncloak
-      has a much greater effect then that. The dweomer
+      has a much greater effect than that. The dweomer
       abjures several kinds of protection against the next
       applicable attack she suffers -- a Cold Resistance of
       7, a +5 bonus on saving throws versus paralyzation
@@ -7968,7 +7968,7 @@ Wizard Spell "Nightmare;spell" : EA_BLAST
       1d6 points of psychic damage per odd caster level.\n
       __(Remember that spells have verbal components, and casting near
       sleeping creatures will awaken them before they can be affected -- 
-      but Nightmare has a greater range then the 120 feet away from which
+      but Nightmare has a greater range than the 120 feet away from which
       spellcasting can be heard.)";
     aval: AR_GLOBE; cval: AZURE; Flags: EF_DISTANT;
     On Event EV_CALC_EFFECT {
@@ -8015,7 +8015,7 @@ Wizard Spell "Dream" : EA_INFLICT
       for the remainder of the day in which it was cast.\n
       __(Remember that spells have verbal components, and casting near
       sleeping creatures will awaken them before they can be affected -- 
-      but Dream has a greater range then the 120 feet away from which
+      but Dream has a greater range than the 120 feet away from which
       spellcasting can be heard.)";
     aval: AR_GLOBE; cval: AZURE; sval: WILL + 10; 
     Flags: EF_DISTANT, EF_PERMANANT, EF_NOTBAD;
@@ -9144,7 +9144,7 @@ Wizard / Scroll Spell "Monster Summoning VI" : EA_SUMMON
 Repulsion
   When you cast this spell, you evoke a stationary field centered
 on you inside which creatures whose Challenge Rating is equal to
-or lower then your own cannot move toward the center.
+or lower than your own cannot move toward the center.
 
 Spell Turning
   This spell evokes a metaphysical reflective effect around you,

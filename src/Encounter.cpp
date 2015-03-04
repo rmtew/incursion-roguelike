@@ -129,7 +129,7 @@
    * Fix EP_ELSE known issues for multi-else
    * Iterate 3-5 times, save results and choose best if
        finished encounter XCR exceeds specified XCR by
-       more then ALLOWED_DEVIANCE
+       more than ALLOWED_DEVIANCE
    * When choosing mID, figure out the CR adjust of the
        required/specified templates, and take it into
        account in the maximum mID CR allowed.
