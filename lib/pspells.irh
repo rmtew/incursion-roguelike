@@ -1691,7 +1691,7 @@ Priest / Sorcerer Spell "Calm Emotions" : EA_INFLICT
     xval: CHARMED; yval: CH_CALMED; sval: WILL; Purpose: EP_PLAYER_ONLY;
     Desc: "Causes hostile, intelligent creatures within a 40 foot
       radius globe who are not evil, have not been given a strong
-      reason to attack you and are of lower CR then you to become
+      reason to attack you and are of lower CR than you to become
       friendly.";
     On Event EV_ISTARGET {
 	  if (!EVictim->isHostileTo(EActor))
@@ -3891,7 +3891,7 @@ and EA_HEALING
   
 /* You'd think this should be Druid, huh? It's for clerics
    because it duplicates a classic Judeo-Christian miracle,
-   which is more priest imagery then druidic. */
+   which is more priest imagery than druidic. */
 Priest Spell "Part Water" : EA_TERRAFORM
   { SC_ARC|SC_WATER; Base: SP_HARD; Cost: 14; Level: 4; 
     qval: Q_DIR|Q_LOC; aval: AR_BEAM; cval: WHITE; lval: 6;
@@ -3956,7 +3956,7 @@ and EA_BLAST
 /* This is a little bit different from the PHB version. It's permanent
    so you don't have to recast it every morning, selecting spells from
    a HUGE list. You get CL/2 instead of CL/4 because total immunity is
-   a lot more important in a roguelike then in tabletop, and there's a
+   a lot more important in a roguelike than in tabletop, and there's a
    lot of different spells in Incursion, and monster casters are quite
    unpredictable. */
 Priest / Scroll Spell "Spell Immunity" : EA_GENERIC

@@ -786,7 +786,7 @@ CastSpell:
                 " provokes an attack of oppurtonity from the target.");
             MyTerm->LOption("Called Shot",A_CALL,XPrint("You aim an attack at a specific"
                 " part of an opponent's body, hoping to inflict a debilitating injury"
-                " rather then just going for the kill. <13>Not implemented yet.<2>"));
+                " rather than just going for the kill. <13>Not implemented yet.<2>"));
 #if 1
             MyTerm->LOption("Charge",A_CHAR,
                 "__You run (or ride) in a straight line, gaining a +2 bonus to hit and "
@@ -856,7 +856,7 @@ CastSpell:
                 " (or, at your option, any unattended object) and attempt to damage or"
                 " destroy it. This provokes an attack of opportunity from the person"
                 " using the weapon. Weapons with a magical plus can not be destroyed" 
-                " by any weapon with a lower magical plus then their own.");
+                " by any weapon with a lower magical plus than their own.");
             MyTerm->LOption("Throw",A_THRO,"You throw an enemy you are grappling"
                 " with already one or more squares away from you. You must succeed"
                 " in a grapple check against them, and this action ends the grapple."

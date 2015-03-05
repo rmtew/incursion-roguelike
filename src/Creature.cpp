@@ -321,7 +321,7 @@ void Map::MakeNoiseXY(int16 x, int16 y, int16 radius)
       
       /* Nested FCreatureAt loop issue -- fix later */
       for (cr=FCreatureAt(xx,yy);cr;cr=NULL /* NCreatureAt(xx,yy) */) {
-        /* Should this be more then just SLEEP_NATURAL? A Sleep
+        /* Should this be more than just SLEEP_NATURAL? A Sleep
            spell should be disrupted by noise, perhaps? */
         cr->Awaken(SLEEP_NATURAL);
         /* Reveal location to monsters */
@@ -529,7 +529,7 @@ bool Creature::isFlanking(Creature *c)
     /* Characters with Uncanny Dodge at 4 or higher (Barbarians at
        level 5+, Rogues at 6+) cannot be flanked by anyone that
        does not have Uncanny Dodge at four or more ranks higher
-       then their own score. */
+       than their own score. */
        
     if (m != c->m)
       return false;
@@ -1220,7 +1220,7 @@ bool Player::RunTo(int16 tx, int16 ty)
 
 /* Notes of Poison and Disease:
      Poison and disease each have iterative effects over time in Incursion,
-   rather then just the normal "one minute later" check. Essentially, a
+   rather than just the normal "one minute later" check. Essentially, a
    poison or disease is an effect, like a spell, that repeats every N turns
    if a fortitude save is failed. The Effect has the same values as a normal
    effect, with the following exceptions:
@@ -2778,7 +2778,7 @@ bool Creature::HasAbility(int16 n, bool inh) {
   }
 
 /* Skills are stored in the same array as feats, and the number
-   index for the first feat is one higher then for the last skill.
+   index for the first feat is one higher than for the last skill.
    This simplifies things immensely, and lets monsters be either
    feat-heavy or skill-heavy without needing to allocate seperate
    space for each. */
@@ -3125,7 +3125,7 @@ EvReturn Creature::TryToDestroyThing(Thing *f)
        them the optimal solution to locked doors as well.
        Visually, shooting arrows into a door makes NO sense
        in terms of getting it open, and hacking it with a
-       sword still seems less effective then the classical
+       sword still seems less effective than the classical
        bodycheck maneuver, in terms of applying force to a
        wall-like barrier. 
        Finally, this leads to some wierd situations like

@@ -386,7 +386,7 @@ Item "disguise kit" : T_TOOL
       variety of dyes, makeup, contact lenses, prosthetics, 
       mirrors and straps. It also contains a wide variety of
       clothing bearing a minor magical enchantment that allows
-      it to occupy far less space then it normally would.\n
+      it to occupy far less space than it normally would.\n
       __You cannot use the Disguise skill without a disguise
       kit, unless you have magical aid (such as the <9>hat of
       disguise<7> or a <9>change self<1> spell).";

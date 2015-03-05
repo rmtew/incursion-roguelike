@@ -40,7 +40,7 @@ Monster "cave orc" : MA_ORC, MA_ADVENTURER
     infravision, a racial aptitude for climbing and the ability to scale
     even sheer surfaces easily, along with an understanding of swarm
     tactics and an aptitude for underground survival, but they are even
-    more craven then the majority of the orcish race, and more
+    more craven than the majority of the orcish race, and more
     intellectually stunted."; 
     On Event EV_INITIALIZE {
       hObj h;
@@ -147,7 +147,7 @@ Monster "drow" : MA_DROW, MA_ADVENTURER
       $"hand crossbow",
       4d3 $"hand crossbow dart",
       50% $"rapier" else $"short sword";
-    Desc: "No race, save perhaps the kobolds, is more widely despised then
+    Desc: "No race, save perhaps the kobolds, is more widely despised than
       the drow. Treacherous, deceitful, chaotic, power-hungry and supremely
       skillful, the drow are an offshoot of elves who sought freedom from
       Maeve through pacts with tanari and other profane powers.";
@@ -380,7 +380,7 @@ Monster "stoutheart halfling" : MA_HALFLING, MA_ADVENTURER
     Desc: "Stoutheart halflings are the strongest-willed of their race, with a
       great devotion to the ideals of family and community. They despise
       corruption in all of its forms, and become adventurers more frequently
-      then other halflings in the interest of rooting out and resolving
+      than other halflings in the interest of rooting out and resolving
       something that has shaken their sensibilities. They are famed for
       their resourcefulness and clever planning."; 
     On Event EV_INITIALIZE {
@@ -628,7 +628,7 @@ Monster "blue goblin" : MA_GOBLIN, MA_ADVENTURER
         EActor->IdentifyMon();
       return NOTHING;
       };
-    Desc: "Sometimes, a goblin is simply born different then the vast
+    Desc: "Sometimes, a goblin is simply born different than the vast
       majority of his kin. Often delivered on the night of a full moon,
       during an intense lightning storm or in an area with overwhelming
       psychic residue, a blue goblin possesses a physical mutation not
@@ -3083,7 +3083,7 @@ Item "tiny arrow" : T_MISSILE
     Mat: MAT_WOOD; Size: SZ_TINY; Weight: 1; Cost: 5 COPPER;
     SDmg: 0d0+1; LDmg: 0d0+1; Acc: -1; Range: -2;
     Flags: IT_BGROUP, IT_NOGEN;
-    Desc: "These arrows are barely longer then your middle finger, but
+    Desc: "These arrows are barely longer than your middle finger, but
       they're no toy -- the tip is as razor-sharp as any full-sized
       arrow.";
   }
@@ -3368,7 +3368,7 @@ Template "half-fey" : TM_DESCENT for MA_HUMANOID
     great and terrible champions of light. Subtle in their weavings, they
     seek out sources of hidden darkness to oppose with their great store
     of occult knowledge. Many guardian nagas watch over ancient evils far
-    more powerful then they, ensuring that they remain concealed from the
+    more powerful than they, ensuring that they remain concealed from the
     prying eyes or interlopers.
     
       While most nagas are concerned with discovering secrets, dark nagas
@@ -3462,7 +3462,7 @@ Monster "guardian naga" : MA_NAGA, MA_SNAKE
     great and terrible champions of light. Subtle in their weavings, they
     seek out sources of hidden darkness to oppose with their great store
     of occult knowledge. Many guardian nagas watch over ancient evils far
-    more powerful then they, ensuring that they remain concealed from the
+    more powerful than they, ensuring that they remain concealed from the
     prying eyes or interlopers.";
     Poison: $"guardian naga venom";
     ABILITY(CA_SPELLCASTING, 9);
@@ -4051,7 +4051,7 @@ Monster "wererat" : MA_LYCANTHROPE, MA_RODENT
       lycanthropes. They are able to take three forms: that of a human,
       a rat and their natural form, a monsterous hybrid of the two.
       Wererats are viscious creatures, enjoying stalking those weaker
-      then them and destroying anything that others find beautiful.";
+      than them and destroying anything that others find beautiful.";
     Lists:
       * GROUP_FOLLOWER $"giant rat" $"plague rat";
   }

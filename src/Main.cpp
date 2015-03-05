@@ -180,7 +180,7 @@ Ressurected:
     srand((unsigned long)tm);
 
     do {
-        /* If the player changed maps, we follow him around rather then
+        /* If the player changed maps, we follow him around rather than
         * continuing to run through turns for a map that has only monsters
         * on it. We can cache the old map to disk at this point, if needed.
         * The map the player is going to visit should already have been

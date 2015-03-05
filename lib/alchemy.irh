@@ -48,7 +48,7 @@
    
    ALL dungeon-found alchemy items are made with an
      Alchemy skill of +10; thus, raising it higher
-     then that is very desirable.
+     than that is very desirable.
      
    Alchemy CANNOT be used untrained!
    
@@ -1483,7 +1483,7 @@ AI_MACRO Effect "AutoLoot" : EA_GENERIC
    culmulative penalty to the power check for every time they overcame
    that specific mode. (The game takes this into account when choosing
    the best defense mode for you.) So there's a really obvious benefit
-   to having a lot of different modes rather then just "the best ones".
+   to having a lot of different modes rather than just "the best ones".
    
    Psionic Visuals:
      I want psionic combat to be very cool and flavourful in Incursion.
@@ -2484,7 +2484,7 @@ AI_TATTOO Effect "Scorpion" : EA_GRANT
   {
     Desc: "The scorpion tattoo grants a mystic the power of striking
       retributively - once a foe has injured him in combat recently for 
-      more then 10~ of his total hit points, he gains a +1 bonus to all 
+      more than 10~ of his total hit points, he gains a +1 bonus to all 
       melee attack rolls against that foe, and twice that to damage,
       for every 10~ of the mystic's hit points inflicted, to a maximum
       of the tattoo mystic's class level (i.e., max +5/+10 at 5th level). 

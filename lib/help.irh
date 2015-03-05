@@ -76,12 +76,12 @@ Text "help::intro"
      a plague upon the land. Even should you succeed, you must escape with
      your life and return to the surface world. Do these things and you will
      receive the fame and glory of a hero of legend, but beware! Rumours claim
-     Murgash is dealing with things far fouler then just goblinoids in the
+     Murgash is dealing with things far fouler than just goblinoids in the
      shadowed caverns deep beneath the stone...\n\n
 
      <14>NOTES ON GAMEPLAY\n
      =================<6>\n
-     __Incursion plays significantly differently then existing roguelikes,
+     __Incursion plays significantly differently than existing roguelikes,
      and it's recommended that players have some experience with at least
      one other roguelike game before trying Incursion. Beyond this, some
      basic recommendations include playing a physically tough character to
@@ -228,7 +228,7 @@ Text "help::intro"
 	    bring up a registry error dialog box, but sometimes badly enough to crash
 	    completely. Fortunately, Incursion does not delete save files until it is
 	    ready to overwrite them, so if Incursion does crash (at some place other
-	    then in the save game routines), you can recover your game from the last
+	    than in the save game routines), you can recover your game from the last
 	    place you saved. What this means is that it is also in your benefit to 
 	    save your game frequently, so that you don't lose a great deal when the
 	    game does crash. Incursion provides an AutoSave option for this purpose.\n\n
@@ -401,7 +401,7 @@ Text "help::chargen"
      unique advantages and disadvantages in gameplay. A character's race
      alters four types of traits:\n
      __<13>Attribute Modifiers:<5> Each race has a set of modifiers to
-     their attribute scores. For example, dwarves are more hardy then
+     their attribute scores. For example, dwarves are more hardy than
      humans, orcs stronger and elves more charismatic. These modifiers
      stack with all other bonus types, and are permanent and always in
      effect.\n
@@ -542,7 +542,7 @@ Text "help::chargen"
      is a factor in the successful use of magical devices, and many
      non-physical skills are based on Intelligence. Obviously, a character
      with a high intelligence is very flexible, having more skills and
-     spells to choose from then otherwise possible.\n
+     spells to choose from than otherwise possible.\n
      <13>Primary:<5>___Skill Points, Spell Failure\n 
      <13>Secondary:<5> Everything Else\n\n
 
@@ -901,7 +901,7 @@ Text "help::interface"
      <13>THE SELECTION PROMPT {SP}\n
      ====================<5>\n
       __The selection prompt comes up whenever you cast a spell or use a
-	  special ability that can affect something other then yourself, or
+	  special ability that can affect something other than yourself, or
 	  whenever you use the Look ('l') command. It allows you to aim your
 	  effects at other targets on the map, or simply to examine what is
 	  around you. The selection prompt is usually accompanied by a white
@@ -1002,7 +1002,7 @@ Text "help::interface"
      magical qualities it has.\n
      __<13>Containers:<5> If you have a container in one of your inventory
      slots, its contents will appear listed directly below the contents of
-     the slots. If this list is longer then the available screen space, you
+     the slots. If this list is longer than the available screen space, you
      can scroll it up and down by using the [PGUP] and [PGDN] keys. To take
      an item out of the container, type the item's number directly as it
      appears on the screen, counting the '0' in front of the first nine
@@ -1010,22 +1010,22 @@ Text "help::interface"
      an item into a container, put it in your 'in the air' slot and type
      's'. It will be transferred to the container listed below, if that is
      possible.\n
-     __If you have more then one container in your inventory slots, you
+     __If you have more than one container in your inventory slots, you
      can flip between them by pressing [TAB]. This switches the listing
      to the next container available to you sequentially. If you opened
      the inventory screen by electing to loot a chest, that chest will be
      one of the containers you can flip to, even though it isn't truly in
      your inventory.\n
      __Containers have different properties. It takes more time to remove
-     an item from some containers then it does from others. Specialized
+     an item from some containers than it does from others. Specialized
      containers (like the ivory scroll case) generally offer much faster
-     access to items then the backpack, which can store anything but takes
+     access to items than the backpack, which can store anything but takes
      more time to sort through.\n
      __<13>Wielding Weapons:<5> You can wield any weapon on your own size
      category or less in one hand, unless that weapon is of a type that
      specifically requires two hands regardless of size, like a long bow.
      If you use both hands, you can wield a weapon of one size category
-     larger then you are.\n
+     larger than you are.\n
      __<13>Locked Slots:<5> When your character has changed shape (as from
      a <9>polymorph self<5> spell or the druid's Wild Shape ability) you
      may not have access to some of your inventory slots; an eagle has no
@@ -1050,7 +1050,7 @@ Text "help::interface"
      defaults are used to determine the outcome of the Swap Weapons command,
      which allows you to toggle between ranged and melee combat easily, and
      also with the [SHIFT] + [DIR] ranged attack shortcut -- this always uses
-     your default ammo, rather then having you choose a projectile from a
+     your default ammo, rather than having you choose a projectile from a
      menu like the 'f' command.\n
      __To select a weapon as your default weapon in one of these four categories,
      first move the inventory cursor over to the slot that currently holds the
@@ -1143,7 +1143,7 @@ Text "help::commands"
      will eventually allow the player to access lesser-used specific 
      functions like dissecting corpses, mixing potions or performing 
      combat maneuvers. Incursion thus has a small number of very flexible
-     commands, rather then a large number of extremely specific ones.
+     commands, rather than a large number of extremely specific ones.
      This was a specific design choice, intended to make the keystrokes
      easier to learn and the game simpler to play.\n
      __The command set of Incursion is as follows:\n\n  
@@ -1152,7 +1152,7 @@ Text "help::commands"
      \n__Presents you with a menu listing all of the magic items you
      possess that can be activated, provided they are in a state that
      allows activation (i.e., not out of charges, wielded if necessary,
-     etc.) All items that must be actively used (rather then conveying
+     etc.) All items that must be actively used (rather than conveying
      a passive benefit) and are not potions, scrolls, staves or wands
      are utilized by this command.\n
      __Note that you can read an unknown scroll, drink an unknown potion
@@ -1172,7 +1172,7 @@ Text "help::commands"
 
      <15>Display Character Sheet ('<13>d<15>')<6> {D}
      \n__Takes you to the character sheet screen, where you can examine
-     your character's traits in more detail then the main game screen
+     your character's traits in more detail than the main game screen
      lists. The character sheet gives breakdowns of your statistics,
      showing the different types of modifiers which stack to form each
      value, as well as listing all your feats and special abilities.
@@ -1252,7 +1252,7 @@ Text "help::commands"
 
      <15>Open/Close Something ('<13>o<15>')<6> {O}
      \n__This command is used to open or close a door that is within one square of
-     you. If there is more then one door nearby, the command will prompt you to
+     you. If there is more than one door nearby, the command will prompt you to
      choose a direction. It can also be used to open a chest in the square that
      you are currently in, taking items out of it (or putting new ones in) using
      the Inventory Manager.\n\n
@@ -1275,7 +1275,7 @@ Text "help::commands"
 
      <15>Search the Area ('<13>s<15>')<6> {S}
      \n__This command causes your character to search the area for traps
-     and secret doors. This works differently in Incursion then it does
+     and secret doors. This works differently in Incursion than it does
      in most other Roguelike games. You only get one chance to find a
      given trap or secret door, and if you fail you must rest before you
      can try again.\n\n 
@@ -1297,7 +1297,7 @@ Text "help::commands"
      ancillary powers your character might have, such as a divine gift
      or the special ability of a monster you have polymorphed into. If
      an ability requires an active choice to use on the player's part and
-     is inherent to the character rather then coming from an item, it
+     is inherent to the character rather than coming from an item, it
      will be listen here.\n\n
 
      <15>View Recent Messages ('<13>v<15>')<6> {V}
@@ -1371,7 +1371,7 @@ Text "help::commands"
      your default ranged weapon and your default melee weapon (along with
      your default offhand weapon or shield, if any). You can set your
      default weapons using the Inventory Manager.
-     \n__Note that using the swap weapons command has a lower timecost then
+     \n__Note that using the swap weapons command has a lower timecost than
      performing these actions manually using the Inventory Manager. If you
      have the feat Quick Draw, it takes you 10 segments to swap weapons;
      otherwise, it takes 30 segments.\n\n
@@ -1494,7 +1494,7 @@ Text "help::adventuring"
         that may be nearby.\n
         __There is a certain amount of monsters that is considered to be a given
         dungeon level's monster equilibrium. When it is reached, no new monsters
-        will be generated. This number is always higher then the number of monsters
+        will be generated. This number is always higher than the number of monsters
         a level starts with, and higher the deeper into the dungeon you go. This
         makes it more dangerous to rest frequently deeper into the dungeon, as 
         the player can end up swamped in monsters.\n
@@ -1503,7 +1503,7 @@ Text "help::adventuring"
         which can be Bad.\n\n 
         
         <9>Encounters<1>\n
-        __Encounters are much more dangerous then normal fights
+        __Encounters are much more dangerous than normal fights
         for several reasons. The encounter normally starts off with multiple monsters
         in melee range with the player, and the player only just waking up. Thus,
         the monsters have time to attack before the player does. Deeper into the
@@ -2303,7 +2303,7 @@ Text "help::adventuring"
          as lawful good characters must.\n
          __Inherently evil creatures -- fiends, energy-draining undead and so
          forth -- are recognized as inherently destructive to all societies, and
-         no society (other then devils) awards such beings protection under
+         no society (other than devils) awards such beings protection under
          law.\n\n
          
          <9>CHAOS<1>\n
@@ -2360,7 +2360,7 @@ Text "help::adventuring"
          bonus to the save DC of spells cast at evil creatures.\n
          __Lawful characters follow a strict code of conduct
          imposed by society, and in so doing develop a greater
-         degree of self-discipline and focus then other
+         degree of self-discipline and focus than other
          characters, allowing them to devote their will more
          fully to improving themselves -- they receive a small
          bonus to experience gained upon reaching character 
@@ -2943,7 +2943,7 @@ Text "help::combat"
       base attack bonus in the relevant category (archery, brawl, melee
       or throwing), any modifiers due to weapon, magic, feats, ability
       scores or circumstances, and the result of a single twenty-sided 
-      dice. If this value is equal to or higher then the opponent's Defense
+      dice. If this value is equal to or higher than the opponent's Defense
       Class, the attack is a hit. If it is lower, the attack is a miss.\n
       __<11>Timing:<3> A single attack at 100% speed takes 30 segments to
       complete. This value is modified by the percentile speed exactly
@@ -2956,12 +2956,12 @@ Text "help::combat"
       __Actions occur on a timeline scheme. If you perform an action
       that takes six segments, your next action will occur six segments further
       down on the timeline. One consequence of this is that if you have a
-      faster speed then another character, they will never be able to
-      attack you more then once in combat without you having an action
+      faster speed than another character, they will never be able to
+      attack you more than once in combat without you having an action
       in the interim.\n
       __<11>Natural Attacks:<3> Monstrous creatures have natural attacks --
       claw rakes, fanged bites, tentacles that lash and ensnare, and so
-      forth. Often, they will have more then one form of attack. Creatures
+      forth. Often, they will have more than one form of attack. Creatures
       can make all of their natural attacks in a single sequence at the
       same time -- for example, many creatures have a bite/claw/claw pattern.
       The first attack is at no penalty, but all the latter attacks suffer a
@@ -2994,7 +2994,7 @@ Text "help::combat"
       notify you of a miss that is due to a percentile miss chance by telling
       you that you missed 'wildly'.
       \n__There are some magical effects that also grant a percentile miss chance,
-      such as the <9>blink<3> spell or a Cloak of Displacement. If more then one
+      such as the <9>blink<3> spell or a Cloak of Displacement. If more than one
       miss chance applies, each is rolled separately.\n
 
 
@@ -3038,7 +3038,7 @@ Text "help::combat"
       containers has a timecost in segments that varies with the
       container. Special purpose containers, such as the ivory
       scroll case that mages begin play with, are often much
-      faster in this regard then the leather backpack.\n
+      faster in this regard than the leather backpack.\n
 
       \n<11>
       \nEXPLORING AND FIGHTING {EF}\n
@@ -3083,7 +3083,7 @@ Text "help::combat"
       \n<11>
       \nARMOUR AND RESISTANCES {AR}\n
       =====================<3>\n
-      __In Incursion, armour reduces damage rather then just adding a set value
+      __In Incursion, armour reduces damage rather than just adding a set value
       to defense that must be beaten on the attack roll. Every type of armour
       has three ratings -- resistance to slashing, piercing and blunt damage.
       Similarly, all weapons inflict one of these types of damage, determining
@@ -3100,7 +3100,7 @@ Text "help::combat"
       as armour ratings, but instead of applying against slashing, piercing or
       blunt damage, resistances lower damage from the elemental types: fire,
       cold, acid, lightning, toxic damage or sonic damage. Resistances are 
-      typically a little higher then armour values, simply because elemental
+      typically a little higher than armour values, simply because elemental
       damage is usually doled out in larger amounts at once, coming from sources
       such as a wizard's spell or a dragon's breath weapon, and thus needs a
       higher value to protect against it effectively.\n
@@ -3134,7 +3134,7 @@ Text "help::combat"
       points of armour rating against the relevant type of damage, that character has
       an effective armour of 3 after Penetration is factored in.\n
       __Certain weapons are able to penetrate armour (natural or otherwise) more
-      effectively then most. These weapons grant a +2 bonus to Penetration, and this
+      effectively than most. These weapons grant a +2 bonus to Penetration, and this
       bonus is applied after the half-only cap is applied, meaning that such a weapon
       can negate more than half of an enemy's armour rating.\n\n
       
@@ -3311,7 +3311,7 @@ Text "help::combat"
       -- it is hard to fight a sword-wielder with a dagger! This does not apply if the
       attacker uses a martial arts weapon, or the defender is surprised, caught flat-
       footed or unable to perceive the attacker.
-      __Note that Incursion is slightly nicer about attacks of opportunity then its
+      __Note that Incursion is slightly nicer about attacks of opportunity than its
       parent system: using magic items generally does not provoke an attack of
       opportunity, nor does moving around within another creature's threatened area,
       so long as you aren't leaving it.\n
@@ -3339,9 +3339,9 @@ Text "help::combat"
       \n<11>
       \nREACH {RE}\n
       =====<3>\n
-      __Some weapons are longer then others. Reach weapons are long enough to allow
+      __Some weapons are longer than others. Reach weapons are long enough to allow
       characters to attack opponents who are one square distant from them, rather
-      then those that are right beside them. Usually, this means that the wielder
+      than those that are right beside them. Usually, this means that the wielder
       of a reach weapon can only attack creatures at this range -- once they have
       slipped closer, his current weapon is useless and he must first wield something
       else or move back if he wishes to make an attack. Some rare weapons, such as
@@ -3412,7 +3412,7 @@ Text "help::combat"
       every difference in size category between you and your opponent. A bull rush 
       normally provokes an attack of opportunity from the target.\n
       __<11>Called Shot:<3> You aim an attack at a specific part of an opponent's body, 
-      hoping to inflict a debilitating injury rather then just going for the kill. 
+      hoping to inflict a debilitating injury rather than just going for the kill. 
       <13>Not implemented yet.<2>\n
       __<11>Charge:<3> You run in a straight line, accumulating plusses to hit and 
       damage due to momentum as you move. See below for more information.\n 
@@ -3455,7 +3455,7 @@ Text "help::combat"
       __<11>Sunder Weapon:<3> You strike an opponent's weapon (or, at your option, any 
       unattended object) and attempt to damage or destroy it. This provokes an attack 
       of opportunity from the person using the weapon. Weapons with a magical plus can
-      not be destroyed by any weapon with a lower magical plus then their own.\n
+      not be destroyed by any weapon with a lower magical plus than their own.\n
       __<11>Throw:<3> You throw an enemy you are grappling with already one or more 
       squares away from you. You must succeed in a grapple check against them, and this 
       action ends the grapple. You inflict your normal unarmed damage value in subdual 
@@ -3479,7 +3479,7 @@ Text "help::combat"
       faster weapon. However, you also suffer penalties to the attack rolls with each 
       hand, starting at -4 / -6. These penalties are reduced, however,
       by taking the Two-Weapon Style and Ambidexterity feats, and if the weapon in your
-      offhand is one or more size categories smaller then the weapon in your primary
+      offhand is one or more size categories smaller than the weapon in your primary
       hand.\n
 
       \n<11>
@@ -3891,7 +3891,7 @@ Text "help::magic"
     and Enchantment difficult to manage, but are very comfortable with
     the powerful and direct spells of Abjuration and Thaumaturgy.\n
     __<11>Specialist Ability:<3> Evokers channel raw magical energies
-    through their bodies far more frequently then other mages, relying
+    through their bodies far more frequently than other mages, relying
     on draining metamagic feats like Empower, Quicken and Maximize. To
     support this penchant, their maximum total Fatigue Points increases
     by one every even mage level.\n\n
@@ -4529,7 +4529,7 @@ Text "help::feats"
       ========================\n<5>
       __The agile fighter may be a swashbuckler, a martial artist or
       a street-bred scrapper, but nobody is faster or, more importantly,
-      harder to hit, then he is. Most agile fighters don't wear heavy
+      harder to hit, than he is. Most agile fighters don't wear heavy
       armour, to avoid mitigating the benefit their Dexterity grants to
       defense.<7>\n\n
       
@@ -4736,7 +4736,7 @@ Text "help::skills"
   { "<14>CHARACTERS AND SKILLS\n
      =====================<6>\n
      -- {MM:mainmenu} Return to the Main Help Menu\n
-     __Skills work slightly differently in Incursion then they do in its
+     __Skills work slightly differently in Incursion than they do in its
      parent system. Characters can gain access to different skills in
      three ways: by having one or more levels in a class which has a given
      skill as a class skill, by selecting a race that has the skill as a
@@ -4757,7 +4757,7 @@ Text "help::skills"
      a class, they receive an alottment of skill points that may be distributed
      among the skills of that class, or any class-independant skills the
      character has from race or feats. The base number of available skill
-     points gained per level in a class in then adjusted by the character's
+     points gained per level in a class is then adjusted by the character's
      Intelligence modifier; if the character gains 8 or more skill points
      per class level, the Intelligence modifier is doubled (if positive).
      A point invested in a skill becomes a rank in

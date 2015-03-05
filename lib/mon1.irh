@@ -879,7 +879,7 @@ Monster "blue dragon" : MA_DRAGON
       chromatics known for ever making selfless sacrifices, and there is no
       confirmable instance of one of these dragons ever breaking their
       sworn word. Blue dragons interact with non-draconic races much more
-      freely then other dragon types, and also seem to take much better to
+      freely than other dragon types, and also seem to take much better to
       leadership -- indeed, some have observed that a blue seems the most
       comfortable when it has someone else giving it orders. As such, they
       often end up serving as generals in a warlord's army, a blackguard's
@@ -1610,7 +1610,7 @@ Monster "dragon turtle" : MA_MYTHIC, MA_REPTILIAN
     On Event MSG_BLASTNAME "cloud of scalding vapor";
     Desc: "One of the most feared beasts that mariners encounter,
       the dragon turtle is famous for capsizing ships. As its name
-      implies, it resembles a great, prehistoric turtle, more then
+      implies, it resembles a great, prehistoric turtle, more than
       40 feet in length, with draconic features added. It possesses
       terrible strength, legendary fortitude and an irascible
       temperment.";
@@ -2074,7 +2074,7 @@ Monster "aurumvorax" : MA_BEAST
     Feats: FT_RAKE, FT_MULTIATTACK, FT_MOBILITY, FT_IRON_WILL, 
            SK_LISTEN, SK_SPOT, SK_WILD_LORE, FT_NATURAL_GRAB;
     Desc: "This legendary beast looks vaguely similar to a wild
-      cougar, but it has six legs and is no larger then an average
+      cougar, but it has six legs and is no larger than an average
       rottwieler. Yet it is one of the most hunted creatures on the
       face of Theyra, for it has a pelt of solid gold. The aurumvorax,
       or golden gorger, build burrows in the ground to live out the
@@ -2221,7 +2221,7 @@ Monster "cateoblepas" : MA_BEAST, MA_QUADRUPED
       brontosaurus. Its legs are stumpy, like those of a hippopotamus,
       and its eyes are bloodshot. Its tail has a bony globe at the end
       like the head of a mace that it uses to strike enemies with. The
-      cateoblepas' head is heavier then its neck can support well, and
+      cateoblepas' head is heavier than its neck can support well, and
       thus its posture is poor, with its head near the ground. This
       slumped appearance is likely the source of the legends of the
       creature as a harbringer of despair.";
@@ -2881,7 +2881,7 @@ Monster "rust monster" : MA_BEAST, MA_ABERRATION
       eating metals, and tend to have a playful, non-aggressive manner
       toward other living things. Druids often use rust monsters as
       companions and weapons, given their distaste for most metal
-      weapons. A rust monster is only slightly larger then a great
+      weapons. A rust monster is only slightly larger than a great
       Bernard.";
   }
 
@@ -4050,7 +4050,7 @@ Monster "wild boar" : MA_ANIMAL, MA_QUADRUPED
     restricting their forward vision. The boar has varying ear shapes,
     ranging from small and erect to low-flapping.";
     On Event EV_GETNAME {
-      /* "dire boar" rather then "dire wild boar". */
+      /* "dire boar" rather than "dire wild boar". */
       if (EActor->HasEffStati(TEMPLATE,$"dire"))
         e.nBase = "boar";
       return NOTHING;
@@ -5049,7 +5049,7 @@ Monster "mastiff" : MA_DOG, MA_ANIMAL
          M_GROUP;
   Desc: "This vicious hunting dog may once have been the companion
           of a ranger or druid, but now it seems to have gone feral and
-          recognizes no master other then its own hunger and survival
+          recognizes no master other than its own hunger and survival
           instinct.";
   }
 

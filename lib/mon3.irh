@@ -1105,7 +1105,7 @@ Template "pseudonatural" : TM_PLANAR for MA_NLIVING
     /* To add later:
        change A_GAZE to A_VISA (just different messages,
          but it should be looking at their form, rather
-         then meeting their gaze, that does the harm).
+         than meeting their gaze, that does the harm).
        add GATE ability for more pseudonaturals
        trap EV_SOCIAL so that only Kysul-followers can
        communicate with them. Maybe make them neutral to
@@ -3207,7 +3207,7 @@ Monster "giant blue beetle" : MA_VERMIN
       if it feeds well, and the fiery jet it projects can kill nearly
       anything that would prey on it in its native habitat. Despite
       this, the beetle is a scavenger, not a predator, and fights more
-      often out of defense then hunger.";
+      often out of defense than hunger.";
 	}
 
 Monster "giant crustacean" : MA_VERMIN
@@ -3357,7 +3357,7 @@ Monster "white worm mass" : MA_WORM, MA_VERMIN
           EVictim->Multiply(1,false);
       };
     Desc: "A mass of thin white earthworms twisted by thaumaturgy
-      to reproduce literally quicker then the eye can see, these
+      to reproduce literally quicker than the eye can see, these
       horrors can quickly become a plague if fought improperly.";
   }
 
@@ -4287,7 +4287,7 @@ Monster "mummy lord" : MA_REVENANT
       __The most powerful mummies are known as mummy lords, and augment
       their potent innate abilities with a powerful understanding of
       clerical magic and a far greater degree of intelligence and
-      reason then the majority of their kind.";
+      reason than the majority of their kind.";
     Immune: UNDEAD_IMMUNITIES; 
     Feats: SK_HIDE, SK_LISTEN, SK_MOVE_SIL, SK_SPOT, SK_KNOW_THEO,
            FT_TOUGHNESS, FT_POWER_ATTACK, FT_KNOCK_PRONE,

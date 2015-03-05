@@ -1481,7 +1481,7 @@ EvReturn Creature::Surrender(EventInfo &e)
       return DONE;
     
     /* If you're surrendering, then obviously you're going to
-       be weaker then them; that shouldn't penalize the roll.
+       be weaker than them; that shouldn't penalize the roll.
        But if by some chance you're /stronger/ and decide to
        surrender, the NPCs will happily take the opportunity
        not to have to fight you... */

@@ -1499,7 +1499,7 @@ OvercomeNausea:
             return ABORT;
         /* This is a kludgy way to handle breath weapons, writing
         the effects into a dummy resource in memory -- but it
-        is far, far better then the old way! */        
+        is far, far better than the old way! */        
         //ASSERT(e.ETarget);
         if (e.AType == A_BREA || e.AType == A_BRE2) 
             e.eID = FIND("Breath Weapon");
@@ -3441,7 +3441,7 @@ EvReturn Creature::PreStrike(EventInfo &e) /* this == EActor */
                 e.bDmg   -= (cha - bon); }
           }
 
-    /* This needs to be here rather then in CalcValues because we
+    /* This needs to be here rather than in CalcValues because we
        don't wield a thrown weapon before throwing it, ergo we
        can't do this kind of precalculation. */
     if (e.AType == A_HURL && !((Weapon *)e.EItem2)->useStrength())
@@ -3775,7 +3775,7 @@ EvReturn Creature::PreStrike(EventInfo &e) /* this == EActor */
     /* fjm: This is an important balance tweak for Rogues and
        other stealth-based fighters who are often Small. Dex
        can replace Str when modifying damage if A) the weapon
-       is smaller then the target, B) Dex > Str, C) it is a
+       is smaller than the target, B) Dex > Str, C) it is a
        surprise attack against a flat-footed foe. */
     if (e.isSurprise && e.isFlatFoot)
       if (e.AType == A_SWNG || e.AType == A_FIRE ||
@@ -5793,7 +5793,7 @@ NotWImmune:
                                                     minAmount /= 2; 
                                             }
                                             /* Later, this should be altered to make /actual/ armour
-                                            count more for absorbing blows then magic bonuses, and
+                                            count more for absorbing blows than magic bonuses, and
                                             barbarian natural armour should not absorb blows at all. */
                                             if (Dice::Roll(1,100) <= Percent && e.vDmg <= minAmount) { 
 Absorbed:
