@@ -4,6 +4,6 @@
 root = true
 
 # 4 space indentation
-[*.{c,h,cpp}]
+[*.{c,h,cpp,irh,irc}]
 indent_style = space
 indent_size = 4
