@@ -155,7 +155,7 @@ Domain "Death" : 0
     Desc: "__<15>Granted Power:<7> You are supernaturally resistant to negative energy,
       and have inherent necromantic damage resistance equal to half your level as a
       priest. You may also perform a <9>Death Touch<7> as an innate spell-like
-      ability, killing any creature with fewer hit points then your roll of
+      ability, killing any creature with fewer hit points than your roll of
       (caster level)d8. Each touch costs you one fatigue point, and the ability
       can be shut off with the cancel command ('x').";
     Grants:
@@ -193,7 +193,7 @@ Effect "Death Touch" : EA_GENERIC
       return DONE;
       };
     Desc: "You may perform a <9>Death Touch<7> as an innate spell-like
-      ability, killing any creature with fewer hit points then your roll of
+      ability, killing any creature with fewer hit points than your roll of
       (caster level)d8. Each touch costs you one fatigue point, and the ability
       can be shut off with the cancel command ('x').";
   } 
@@ -632,7 +632,7 @@ Domain "Passion" : 0
 Domain "Planning" : 0
   {
     Desc: "__<15>Granted Power:<7> You are able to prepare buff spells more
-      effectively then most spellcasters -- every even priest level 
+      effectively than most spellcasters -- every even priest level 
       reduces the mana cost of buffs by 5%, to a maximum of 25% reduction at
       10th level. You also receive the Extend Spell feat for free at 1st
       level.";
@@ -700,7 +700,7 @@ Domain "Retribution" : 0
     Desc: "__<15>Granted Power:<7> No enemy can hide from you for long -- you gain
       Search and Find Weakness as bonus priest class skills. Additionally,
       you have the power of Retributive Strikes - once a foe has injured you
-      in combat recently for more then 10~ of your total hit points, you gain 
+      in combat recently for more than 10~ of your total hit points, you gain 
       a +1 bonus to all melee attack rolls against that foe, and twice that to
       damage. This bonus increases to +2 for 20~ at 4th level, +3 for 30~ at 
       7th, +4 for 40~ at 10th and so forth.";

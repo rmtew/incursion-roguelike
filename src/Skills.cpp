@@ -3079,7 +3079,7 @@ void Creature::Devour(Corpse * c)
    decidedly inferior to the dwarves and bards abilities, or at least not
    directly intersect it, B) not favour the spellcasters so immensely, C)
    be less predictable and require more effort (components, quests, etc.)
-   and creativity then the SRD version, which just drives the player into
+   and creativity than the SRD version, which just drives the player into
    scumming for gold and XP. 
    
    Addenda: It would be nice to do some kind of Fletchery feat that lets
@@ -5471,7 +5471,7 @@ bool Creature::okBondedMount(int16 lev, rID mID, rID tID)
       }
 
     /* Bonded mounts by default allow a wider range of creatures (i.e.,
-         mythic beasts, dragons, celestial animals, etc.) then do animal
+         mythic beasts, dragons, celestial animals, etc.) than do animal
          companions; furthermore, they can be ridden, which is a tactical
          advantage. To preserve druid and ranger uniqueness, we thus make
          them somewhat less powerful. */

@@ -785,7 +785,7 @@ SkipShifting:
 
     /* This is the logic behind whether a monster will use its
        gate ability or not: it will only do so when facing another
-       monster 3 CRs higher then itself, or when facing a player
+       monster 3 CRs higher than itself, or when facing a player
        character (which, given the magic item christmas tree glow
        effect, it's safe to assume smart monsters like demons and
        celestials recognize). Monsters can only attempt to gate
@@ -2700,7 +2700,7 @@ EvReturn Monster::Event(EventInfo &e) {
           if (denySpell(this,e.eID))
               return ABORT;
           /* This code protects against extraneous spell use by monsters.
-          It's simpler to put it here rather then in ChooseAction's
+          It's simpler to put it here rather than in ChooseAction's
           already convoluted casting sequence. For example, it prevents
           an illithid from mind-blasting a target that's already stunned,
           or a novice mage from casting Bull's Strength twice in a row.

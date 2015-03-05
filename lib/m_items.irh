@@ -1753,7 +1753,7 @@ AI_EYES Effect "Precision;eyes" : EA_GRANT
 
 /* NOTE: All wands are not created equal! The level I've assigned
  *   them is based on the level it would be balanced for a PC to
- *   wield them at, rather then their effective power compared to
+ *   wield them at, rather than their effective power compared to
  *   each other. A level 3 wand is not as powerful as a level 6
  *   wand, but one level 3 wand might be as useful as four other
  *   level 3 wands put together, and thus a much "better" item.
@@ -3408,7 +3408,7 @@ AI_STAFF Effect "Wind and Water" : EA_GRANT
       hermit, giving advice and magical tokens freely to those
       he finds worthy. Nowadays, sadly, they are more likely 
       to show up in the hands of mage guilds or black markets
-      then in any pseudohistorical water spirit's hands. Still,
+      than in any pseudohistorical water spirit's hands. Still,
       many mages and priests view these items quite reverantly,
       and pay all due respects to their legendary creator,
       wherever he might be.\n
@@ -3528,7 +3528,7 @@ AI_STAFF Effect "the Abyss" : EA_GRANT
       power over demons -- but the exact opposite. Demons, 
       after all, understand the ways of men all too well.\n
       __A staff of the Abyss is an inert stick in the hands of
-      any good character, or any character with less then five
+      any good character, or any character with less than five
       levels as an arcane or divine spellcaster -- druids lack
       the abstract ethos to grasp the staff's function. In the
       hands of a non-good caster, however, it grants access to
@@ -4054,7 +4054,7 @@ AI_GAUNTLETS Effect "Lightning;gauntlets" : EA_GRANT
 AI_GAUNTLETS Effect "Legerdemain" : EA_GRANT
   { SC_THA; xval: EXTRA_FEAT; yval: FT_FASTER_THAN_THE_EYE; Level: 2; 
     Desc: "This magical item grants its wearer the benefits of the Faster
-    Then The Eye feat, allowing for rapid item shuffling and looting. In 
+    Than The Eye feat, allowing for rapid item shuffling and looting. In 
     addition, it allows its wearer to detect all chests within 300 feet 
     (30 squares)."; } 
   and EA_GRANT { xval: DETECTING_TYPE; yval: T_CHEST; pval: 30; } 
@@ -6524,7 +6524,7 @@ AI_WEAPON Effect "Sword of the Planes" : EA_GENERIC
       <11>+1 adamant brilliant energy long sword of binding<7> with 
       bane properties against outsiders and elementals. However, 
       its enhancement bonus can increase circumstantially if the 
-      user is on a plane other then the Prime Material, or if 
+      user is on a plane other than the Prime Material, or if 
       fighting an outsider.\n
       __On an elemental plane, or when fighting elementalkin,
       the sword has a +2 bonus. Against denizens of the ethereal
@@ -6902,7 +6902,7 @@ and EA_GRANT
 AI_WEAPON Effect "Oathbow" : EA_GRANT
   { Level: 5; xval: EXTRA_ABILITY; yval: CA_DWARVEN_FOCUS;
     Flags: EF_NAMEONLY;
-    Desc: "For more then six hundred years now, the drow have
+    Desc: "For more than six hundred years now, the drow have
       sent raiding parties to the surface, moving in perfect
       stealth at night, to silently slaughter the children of
       the surface elves. They seldom stay long enough for true

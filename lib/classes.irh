@@ -117,7 +117,7 @@ Class "Barbarian"
       traps -- her instincts tell her exactly when to dodge or pull back.\n
       __Levels of this ability from the barbarian and rogue classes stack.\n
       __*_<7>Spellbreaker<2> -- Barbarians receive experience points for
-      the destruction of magical items other then weapons or armour. When
+      the destruction of magical items other than weapons or armour. When
       they destroy such an item, they receive experience equal to that
       gained from killing a creature with a CR two below the item's level.
       Multiclass barbarians receive a fraction of the experience proporational
@@ -372,7 +372,7 @@ Class "Bard"
       roll of the character's bard levels versus the item's own level. Bards have a similar
       chance to identify monsters completely upon first inflicting damage upon a given
       monster.\n
-      __*_<7>Storycraft<2> -- Artifacts are more then magical items; they are
+      __*_<7>Storycraft<2> -- Artifacts are more than magical items; they are
       legends. Quite literally, an artifact gains its
       enchantment not from a mage's workings, but from
       the shifting of the tapestry of fate and the
@@ -389,7 +389,7 @@ Class "Bard"
       character the ability to increase the magical
       plus of any single magical item by one. This can
       only be done if doing so would not increase the
-      item's Item Level to a greater total then the
+      item's Item Level to a greater total than the
       bard's [Bard Level + Charisma modifier]. The
       increase is permanent and irreversable, and is
       not refunded if the item is destroyed.\n
@@ -986,7 +986,7 @@ Class "Mage"
            case 1: // arc             
              /* I know these aren't Arcana spells. Arcana has entirely
                 utility spells at 1st, except Chromatic Orb, which is
-                more an Illusionist signature then an Arcanist. Give the
+                more an Illusionist signature than an Arcanist. Give the
                 player the fundamentals and let him choose from there;
                 arcanists are suposed to be diverse. */ 
              EActor->GainSpell($"magic missile",SP_KNOWN|SP_ARCANE);
@@ -2364,7 +2364,7 @@ Class "Rogue"
       __<10>Exposure:<2> If an enemy is unable to focus her defenses as a
       result of being stunned, paralyzed, charging, off-balance after
       performing a Great Blow or is currently engaging in grappling combat
-      with someone other then the rogue, then the rogue can gain her sneak
+      with someone other than the rogue, then the rogue can gain her sneak
       attack damage on all attacks against that creature.\n
       __Sneak attacks require freedom of movement, and a rogue cannot 
       perform them while she is grappled or ensnared.\n
@@ -2760,7 +2760,7 @@ Class "Warrior"
       circles. Even in this more civilized age, most kings and barons are
       members of this class, ruling in equal measure from political
       canniness and force of arms. The peasantry respects a lord who is
-      willing to take up arms to defend them rather then letting others
+      willing to take up arms to defend them rather than letting others
       die in his name, and even among the most cosmopolitan of noble
       families, warcraft is still a respected art.\n
       
@@ -2804,7 +2804,7 @@ Class "Warrior"
       advantage of these blind spots, utilizing their smaller size to strike at
       vital regions their opponents usually aren't as skilled at defending. From
       an anatomical standpoint, after all, humans are much better set up to block
-      blows from their height or from above then they are to deflect strikes
+      blows from their height or from above than they are to deflect strikes
       coming in low.\n
       __In game terms, Small warriors gain increased threat ranges in melee
       combat against anything larger than them. Their threat range increases by

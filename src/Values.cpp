@@ -1459,7 +1459,7 @@ Restart:
     cHP += Attr[A_THP];
     /* Gaining temporary maximum hit points increases your current
     hit points, but losing them only decreases current hit points
-    enough to put them equal to or lower then the new maximum
+    enough to put them equal to or lower than the new maximum
     hit points. */       
     if (oHP > cHP)
         cHP = min (mHP+Attr[A_THP], oHP);
@@ -1697,7 +1697,7 @@ void Character::CalcValues(bool KnownOnly, Item *thrown)
   // bonus spell right away and you'll have 4 total by the time you go up
   // two levels. 
   // fjm: Slight tweak here -- it's very possible to get more bonus spells
-  //      at a level then you will ever get of regular spell. Change this
+  //      at a level than you will ever get of regular spell. Change this
   //      to bonus slots == max(normal slots, number of levels you've
   //      advanced since first getting access to that specific slot.
   
@@ -2111,7 +2111,7 @@ bool Creature::isMType(int32 mt)
      isMType() function when determining the suitability of templates
      and various other things. As such, it is important that this
      function not look at any member variables of Creature other
-     then mID, TEMPLATE Stati, Attr[A_INT] and Attr[A_SIZ] without
+     than mID, TEMPLATE Stati, Attr[A_INT] and Attr[A_SIZ] without
      making sure that MonGroup::isMType is modified accordingly. */
 
   if (!mt)

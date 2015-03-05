@@ -1379,7 +1379,7 @@ Text "help::mining"
       Mining skill rating in squares; this range is extended by 3 squares for
       characters with the Stonework Sense ability. These deposits appear on
       screen as rock glyphs, usually isolated islands in the middle of solid
-      stone, that are coloured differently then the normal rock that composes
+      stone, that are coloured differently than the normal rock that composes
       the dungeon -- bright white for diamonds, silver or mithril, yellow for
       gold, various bright colours for gemstones, dark grey for adamant, etc.\n
       __Characters that do not have the Mining skill cannot perceive deposits,
