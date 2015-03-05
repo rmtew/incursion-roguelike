@@ -1,3 +1,6 @@
+Incursion (open source) 0.6.9Y19: 2015-03-??
+* https://bitbucket.org/rmtew/incursion-roguelike/issue/222/: Spelling and grammar fixes.  Pull request from Carl Minden.
+
 Incursion (open source) 0.6.9Y18: 2015-03-04
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/215/: Finished Google Breakpad reintegration. Build script now packages libs and includes for Breakpad in the generated dependencies archive. Build script now packages the licenses in the generated dependencies archive. Build script now actually generates a dependencies archive. Rename USE_CRASHPAD to USE_BREAKPAD. Make static library names pragmas for Breakpad to allow easy disabling.
 * https://bitbucket.org/rmtew/incursion-roguelike/issue/219/: Fix a crash where the game exited, when the player tried to use the animal companion ability.  This was introduced by a typo when the recent refactoring was done to allow other interfaces like Curses.  Reported by Karagy@bitbucket.
