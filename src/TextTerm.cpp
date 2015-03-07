@@ -997,10 +997,10 @@ Restart:
             if ((int16)strlen(title) > WinSizeX()-3 || strchr(title,'\n')) {
                 if (fl & MENU_SWRAPWRITE) {
                     ClearScroll(); 
-                    DY += SWrapWrite(3,1,(fl & MENU_RAW) ? (const char*) title : XPrint(title),WinSizeX()-2,MWin);
+                    DY += SWrapWrite(3, 1, (fl & MENU_RAW) ? (const char*)title : XPrint(title), WinSizeX() - 2, MWin);
                     UpdateScrollArea(0,MWin); 
                 } else if (MWin == WIN_CREATION) {
-                    DY += WrapWrite(3,1,(fl & MENU_RAW) ? (const char*) title : XPrint(title),WinSizeX()-2);
+                    DY += WrapWrite(3, 1, (fl & MENU_RAW) ? (const char*)title : XPrint(title), WinSizeX() - 2);
                 } else
                     DY += WrapWrite(0,0,(fl & MENU_RAW) ? (const char*) title : XPrint(title));
             } else {
@@ -1025,9 +1025,9 @@ Restart:
             vStart = c; 
 
         SetWin(MWin);
-        for(i=vStart;i!=min(OptionCount,vStart+vRows*Cols);i++) {
-            GotoXY(((i-vStart)/vRows)*szCol,((i-vStart)%vRows)+DY);
-            let[0] = MenuLetters[min(53,i)];
+        for (i = vStart; i != min(OptionCount, vStart + vRows*Cols); i++) {
+            GotoXY(((i - vStart) / vRows)*szCol, ((i - vStart) % vRows) + DY);
+            let[0] = MenuLetters[min(53, i)];
             let[1] = 0;
             if (fl & MENU_QKEY)
                 for (qk=0;qk!=MAX_QKEYS;qk++)
@@ -1052,10 +1052,7 @@ Restart:
                 Color(GREY);
             } else {
                 Color(GREY);
-                Write(Format("  [%s] %.*s",let,
-                    szCol - 5, 
-                    (const char*) Option[i].Text
-                    )); 
+                Write(Format("  [%s] %.*s", let, szCol - 5, (const char*)Option[i].Text));
             }
         }
         if (fl & MENU_DESC) {
