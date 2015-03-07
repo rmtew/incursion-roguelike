@@ -1369,6 +1369,7 @@ void Map::MakeDoor(uint8 x,uint8 y,rID fID)
     if (!fID)
       fID = FIND("oak door");
       
+    // TODO(design-decision-difficulty): doors above a certain level forced to be woord.
     /* Force all doors on dlev 1-3 to be wood -- some character
        types can't get through the other kinds of doors in the
        early game! */
@@ -2379,6 +2380,7 @@ TryAgain:;
             At(x,y).Priority = 0;
 
     /* HACKFIX */
+    // TODO(design-decision-difficulty): Remove all monsters above the level's challenge rating.
     int16 capCR = Depth + (theGame->Opt(OPT_OOD_MONSTERS) ? 3 : 1);
     rID campID = FIND("The Goblin Encampment");
 RestartVerifyMon:
@@ -2396,7 +2398,7 @@ RestartVerifyMon:
                 }
     }
 
-    /* Kludge to make sure that no fortress enemies are neutral */
+    // TODO(design-decision-difficulty): Kludge to make sure that no fortress enemies are neutral.
     if (Depth == 10) {
         Creature *cr; int32 i;
         MapIterate(this,cr,i)
@@ -3048,7 +3050,7 @@ void Map::PopulateChest(Container *ch) {
       delete it;
   }
   
-  /* KLUDGE: 1 in 3 chests have 1d6 scrolls of identify */
+  // TODO(design-decision-content): 1 in 3 chests have 1d6 scrolls of identify.
   if (!random(2))
     {
       it = Item::Create(FIND("scroll"));
@@ -4011,11 +4013,3 @@ rID Map::StickyAt(int16 x, int16 y)
   } 
   return false; 
 }
-
-
-
-
-
-
-
-

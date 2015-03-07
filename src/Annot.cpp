@@ -719,10 +719,11 @@ void Resource::GrantGear(Creature *c, rID xID, bool doRanged)
             if (random_depth_effect) {
                 int max_lev = a->u.eq.eID / 256; 
                 int min_lev = a->u.eq.eID % 256; 
+                // TODO(design-decision-difficulty): Scale item difficulty in proportion to depth.
                 if (theGame->GetPlayer(0) &&
                     theGame->GetPlayer(0)->m) 
                   max_lev = theGame->GetPlayer(0)->m->Depth;
-                int the_lev = min_lev + random((max_lev+1) - min_lev);
+                int the_lev = min_lev + random((max_lev + 1) - min_lev);
                 int luck = c->GetAttr(A_LUC);
                 if (!luck) luck = 10; 
                 // ww: if you play a super-lucky character, you will find
