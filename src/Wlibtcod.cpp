@@ -1398,81 +1398,75 @@ bool libtcodTerm::Exists(const char *fn) {
     return (TCOD_sys_file_exists(fn) != 0);
 }
 
-void libtcodTerm::Delete(const char *fn)
-  {
+void libtcodTerm::Delete(const char *fn) {
     if (!TCOD_sys_delete_file(fn))
-        Error("Can't delete file \"%s\".",fn);
-  }
+        Error("Can't delete file \"%s\".", fn);
+}
 
-void libtcodTerm::OpenRead(const char*fn)
-  {
-    fp = fopen(fn,"rb");
+void libtcodTerm::OpenRead(const char*fn) {
+    fp = fopen(fn, "rb");
     if (!fp)
-      throw ENOFILE;
+        throw ENOFILE;
     CurrentFileName = fn;
-  }
+}
 
-void libtcodTerm::OpenWrite(const char*fn)
-  {
-    fp = fopen(fn,"wb+");
+void libtcodTerm::OpenWrite(const char*fn) {
+    fp = fopen(fn, "wb+");
     if (!fp)
-      throw ENODIR;
+        throw ENODIR;
     CurrentFileName = fn;
-  }
+}
 
-void libtcodTerm::OpenUpdate(const char*fn)
-  {
-    fp = fopen(fn,"rb+");
+void libtcodTerm::OpenUpdate(const char*fn) {
+    fp = fopen(fn, "rb+");
     if (!fp)
-      fp = fopen(fn,"wb+");
+        fp = fopen(fn, "wb+");
     if (!fp)
-      throw ENODIR;
+        throw ENODIR;
     CurrentFileName = fn;
-  }
+}
 
-void libtcodTerm::Close()
-  {
+void libtcodTerm::Close() {
     if (fp) {
-      fclose(fp);
-      fp = NULL;
-      }
-  }
+        fclose(fp);
+        fp = NULL;
+    }
+}
   
-void libtcodTerm::FRead(void *vp,size_t sz)
-  {
-    if (fread(vp,1,sz,fp)!=sz)
-      throw EREADERR;
-  }
+void libtcodTerm::FRead(void *vp, size_t sz) {
+    if (fread(vp, 1, sz, fp) != sz)
+        throw EREADERR;
+}
 
-void libtcodTerm::FWrite(const void *vp,size_t sz)
-  {
+void libtcodTerm::FWrite(const void *vp, size_t sz) {
     if (!fp)
-      return;
-    if (fwrite(vp,1,sz,fp)!=sz)
-      throw EWRIERR;
-  }
+        return;
+    if (fwrite(vp, 1, sz, fp) != sz)
+        throw EWRIERR;
+}
 
-int32 libtcodTerm::Tell()
-  { return ftell(fp); }  
+int32 libtcodTerm::Tell() {
+    return ftell(fp);
+}
 
-void libtcodTerm::Seek(int32 pos,int8 rel)
-  { if(fseek(fp,pos,rel))
-      throw ECORRUPT; }
+void libtcodTerm::Seek(int32 pos, int8 rel) {
+    if (fseek(fp, pos, rel))
+        throw ECORRUPT;
+}
 
-void libtcodTerm::Cut(int32 amt)
-  {
+void libtcodTerm::Cut(int32 amt) {
     /* Fix this later! */
     int32 start, end;
     void *block;
     start = ftell(fp);
-    fseek(fp,0,SEEK_END);
+    fseek(fp, 0, SEEK_END);
     end = ftell(fp);
-    fseek(fp,start+amt,SEEK_SET);
-    block = malloc(end - (start+amt));
-    fread(block,end - (start+amt),1,fp);
-    fseek(fp,start,SEEK_SET);
-    fwrite(block,end - (start+amt),1,fp);
-  }
+    fseek(fp, start + amt, SEEK_SET);
+    block = malloc(end - (start + amt));
+    fread(block, end - (start + amt), 1, fp);
+    fseek(fp, start, SEEK_SET);
+    fwrite(block, end - (start + amt), 1, fp);
+}
 
 char * libtcodTerm::MenuListFiles(const char * filespec, uint16 flags, const char * title) {
     char * file;
@@ -1481,12 +1475,12 @@ char * libtcodTerm::MenuListFiles(const char * filespec, uint16 flags, const cha
         const char *fileName = (const char *)(*iterator);
         char *str = strdup(fileName);
         /* TODO: Check if 'str' can leak */
-        LOption(str,(int32)str);
+        LOption(str, (int32)str);
     }
     TCOD_list_clear_and_delete(l);
-    file = (char*)LMenu(flags,title);
+    file = (char*)LMenu(flags, title);
     if (file == (char*)(-1))
-      return NULL;
+        return NULL;
     return file;
 }
 
