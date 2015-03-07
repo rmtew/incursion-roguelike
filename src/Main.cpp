@@ -1863,7 +1863,7 @@ void Game::GenerateRarityTable()
     Silence = 1 ; 
 
     T1->Write("Generating dungeon ...\n");
-    T1->Update(); 
+    T1->Update();
       
     dID = FIND("The Goblin Caves");
     if (!dID)
