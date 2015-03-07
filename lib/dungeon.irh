@@ -36,9 +36,9 @@ Dungeon "The Goblin Caves"
       * $"armoury"            at level 7,
       * $"place of sanctuary" at level 9,
       * $"the Goblin Encampment" at level 10;
-  	Desc: "These are the Goblin Caves, the subterrainian passages in 
-        eastern Mohandi where many kings and warlords believe the goblinoid
-        peoples are preparing for a massive attack upon the surface world
+  	Desc: "These are the Goblin Caves, the subterranean passages in 
+        eastern Mohandi where many kings and warlords believe the goblins
+        are preparing for a massive attack upon the surface world
         of Therya. Many believe them to have once been an ancient dwarven
         or drow citadel, long since abandoned."; 
   }
