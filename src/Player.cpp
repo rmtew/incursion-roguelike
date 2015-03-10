@@ -2830,7 +2830,9 @@ void Character::Exercise(int16 at, int16 amt, int16 col, int16 cap) {
         return;
 
     switch (at) {
-    case A_STR: case A_DEX: case A_CON:
+    case A_STR:
+    case A_DEX:
+    case A_CON:
         needed = 100 - max(0, SkillLevel(SK_ATHLETICS));
         break;
     case A_WIS:

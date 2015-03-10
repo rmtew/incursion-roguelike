@@ -205,9 +205,11 @@ class Creature: public Thing, public Magic
         { return max(0,tMana() - hMana); }
       void GainStatiFromBody(rID _mID);
       void GainStatiFromTemplate(rID _tID, bool turn_on);
+      /* Use of an attribute can lead to gains. */
       virtual void Exercise(int16 at, int16 amt, int16 col, int16 cap) { }
-      virtual void Abuse(int16 at, int16 amt)
-                     { Exercise(at,-amt,0,0); }
+      virtual void Abuse(int16 at, int16 amt) {
+          Exercise(at, -amt, 0, 0);
+      }
       virtual void RecalcStaffSpells() { }
       virtual int16 LevelAs(rID clID) { return 0; }
       virtual int16 GetStaffFatigueCost(rID xID);
@@ -218,28 +220,29 @@ class Creature: public Thing, public Magic
       virtual void AddJournalEntry(const char* s) { }
       virtual String & Describe(Player *p);
       virtual void Dump();
-		  virtual String & Name(int16 Flags=0);
-      int16 GetAttr(int8 at)             { return Attr[at]; }
-      virtual int16 IAttr(int8 at)       { return at > A_CON ? TMON(tmID)->Attr[at] : 
-                                                               TMON(tmID)->Attr[at] ; 
-                                                               }
-      virtual int16 KnownAttr(int8 at)   { return Attr[at]; }
-      virtual int16 getDef() 
-        { if (StateFlags & MS_STILL_CAST) {
-            CalcValues();
-            return Attr[A_CDEF] + max(0,AttrAdj[A_DEF][BONUS_WEAPON]);
-            }
-          return (StateFlags & MS_CASTING) ? 
-            Attr[A_CDEF] : Attr[A_DEF]; } 
+      virtual String & Name(int16 Flags = 0);
+      int16 GetAttr(int8 at) { return Attr[at]; }
+      virtual int16 IAttr(int8 at) {
+          return at > A_CON ? TMON(tmID)->Attr[at] : TMON(tmID)->Attr[at];
+      }
+      virtual int16 KnownAttr(int8 at) { return Attr[at]; }
+      virtual int16 getDef() {
+          if (StateFlags & MS_STILL_CAST) {
+              CalcValues();
+              return Attr[A_CDEF] + max(0, AttrAdj[A_DEF][BONUS_WEAPON]);
+          }
+          return (StateFlags & MS_CASTING) ? Attr[A_CDEF] : Attr[A_DEF];
+      }
       bool isBoosted(int8 at);
       bool isDrained(int8 at);
-      bool isBlind() { return HasMFlag(M_BLIND) || HasStati(BLIND); } 
+      bool isBlind() {
+          return HasMFlag(M_BLIND) || HasStati(BLIND);
+      } 
 
       /* yields a number like 130% or 90% */
       int32 MoveAttr(int from_x, int from_y);
 
-      int32 MoveTimeout(int from_x, int from_y)
-      {
+      int32 MoveTimeout(int from_x, int from_y) {
         int32 Mov = MoveAttr(from_x,from_y);
         int32 normal_timeout = max(1,1000 / max(Mov,1));
         return normal_timeout;
