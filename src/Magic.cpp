@@ -3751,10 +3751,10 @@ EvReturn Item::ZapWand(EventInfo &e)
       String skillStr;
       if (rollC)
         skillStr = Format("%cUse Magic Check:%c 1d20 (%d [%d/%d/%d]) %+d ",
-          -13,-7,roll,rollA,rollB,rollC,Rating - SpecBonus);
+        -MAGENTA, -GREY, roll, rollA, rollB, rollC, Rating - SpecBonus);
       else
         skillStr = Format("%cUse Magic Check:%c 1d20 (%d [%d/%d]) %+d ",
-          -13,-7,roll,rollA,rollB,Rating - SpecBonus);      
+        -MAGENTA, -GREY, roll, rollA, rollB, Rating - SpecBonus);
       if (SpecBonus)
         skillStr += Format("%+d (spec) ",SpecBonus);
       skillStr += Format("= %d vs DC %d %c[%s]%c.",
@@ -3762,7 +3762,7 @@ EvReturn Item::ZapWand(EventInfo &e)
         Rating+roll >= 10+(Lev/2) ? -EMERALD: -RED,
         Rating+roll >= 20+Lev   ? "*success*" :
         Rating+roll >= 10+(Lev/2) ? "success" : "failure",
-        -7);
+        -GREY);
       e.EPActor->MyTerm->Write(skillStr);
       if (e.EPActor->Opt(OPT_STORE_ROLLS))
         e.EPActor->MyTerm->AddMessage(skillStr);

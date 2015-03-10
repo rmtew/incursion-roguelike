@@ -74,11 +74,8 @@ template<class S,int32 Initial,int32 Delta>
   };
 
 
-#define MapIterate(m,t,i)                  \
-     for(i=0,t = (Creature*)oThing(m -> Things[0]); m && m->Things[ i ];           \
-        i++, (t = m ? (Creature*)oThing(m-> Things[ i ]) : NULL))
-
-
+#define MapIterate(m,t,i) \
+    for (i = 0, t = (Creature*)oThing(m->Things[0]); m && m->Things[i]; i++, (t = m ? (Creature*)oThing(m->Things[i]) : NULL))
 
 void* x_realloc(void *block, size_t unit, size_t sz, size_t osz);
 

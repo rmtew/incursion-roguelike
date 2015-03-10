@@ -1343,7 +1343,7 @@ EvReturn Item::Damage(EventInfo &e) {
 
         if ((e.EActor && e.EActor->isPlayer()) || (owner && owner->isPlayer())) {
             s = Format("%c%s:%c %s%s %s",-13,(const char*)(Name(0).Capitalize()),
-                -7,
+                -GREY,
                 (e.Dmg.Number == 0 && e.Dmg.Sides == 0 && e.Dmg.Bonus == 0) ?
                 "Residual" : (const char*)e.Dmg.Str(),
                 e.strDmg ? (const char*)e.strDmg : "",

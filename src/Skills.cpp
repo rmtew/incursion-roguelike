@@ -77,7 +77,7 @@ String & DescribeSkill(int16 sk)
   else if (SkillInfo[sk].armour_penalty) 
     res += Format(" %c[armour penalty]",-RED);
   
-  res += Format("\n%c__Possessed By:%c Some Humans",-13,-7);
+  res += Format("\n%c__Possessed By:%c Some Humans", -MAGENTA, -GREY);
   for (int mIdx=0;theGame->Modules[mIdx];mIdx++) {
     Module * m = theGame->Modules[mIdx];
     for (i=0; i<m->szRac; i++) {
@@ -1197,11 +1197,11 @@ Retry:
             thisp->MyTerm->SetWin(WIN_NUMBERS);
             thisp->MyTerm->Clear();
             thisp->MyTerm->Write(Format("%c%s Check:%c 1d20 (%d) %c %d = %d vs DC %d [%s]",
-                -13,SkillInfo[SK_ANIMAL_EMP].name, -7,Check,e.EParam >= 0 ? '+' : '-',
+                -MAGENTA, SkillInfo[SK_ANIMAL_EMP].name, -GREY, Check, e.EParam >= 0 ? '+' : '-',
                 e.EParam, e.EParam+Check, DC, e.EParam+Check >= DC ? "success" : "failure"));
             if (thisp->Opt(OPT_STORE_ROLLS))
                 thisp->MyTerm->AddMessage(Format("%c%s Check:%c 1d20 (%d) %c %d = %d vs DC %d [%s]",
-                -13,SkillInfo[SK_ANIMAL_EMP].name, -7,Check,e.EParam >= 0 ? '+' : '-',
+                -MAGENTA, SkillInfo[SK_ANIMAL_EMP].name, -GREY, Check, e.EParam >= 0 ? '+' : '-',
                 e.EParam, e.EParam+Check, DC, e.EParam+Check >= DC ? "success" : "failure"));
         }
         return /*DONE*/;   
@@ -1585,15 +1585,15 @@ bool Creature::SkillCheck(int16 sk, int16 DC, bool show, int16 mod1,
         
       sStr = Format((DC == 0) ? "%c%s Check%s%s%s:%c 1d20 (%d%s) %+d%s%s = %d."
         : "%c%s Check%s%s%s:%c 1d20 (%d%s) %+d%s%s = %d vs DC %d %c[%s]%c.",
-        -13,SkillInfo[sk].name, 
+        -MAGENTA,SkillInfo[sk].name, 
         msa == this ? "" : " [",
         msa == this ? "" : (const char*) Lower(msa->Name(0)),
         msa == this ? "" : "]",
-        -7,roll, (const char*) sRolls,
+        -GREY, roll, (const char*)sRolls,
         sr,(const char*) modStr,
         armPen ? (const char*)Format(" %+d armour",armPen) : "",
         sr+roll+mod1+mod2+armPen,DC,succ ? -EMERALD : -PINK,
-        succ ? "success" : "failure", -7);
+        succ ? "success" : "failure", -GREY);
       thisp->MyTerm->Write(0,0,sStr);
       if (thisp->Opt(OPT_STORE_ROLLS))
         thisp->MyTerm->AddMessage(sStr);
@@ -4398,7 +4398,7 @@ HasComponent:
             e.EActor->HasFeat(FT_DIVINE_VENGEANCE) || e.EActor->HasFeat(FT_DIVINE_VIGOR) || e.EActor->HasFeat(FT_DIVINE_AEGIS))
             e.EActor->GainTempStati(CHANNELING,NULL,e.EActor->GetAttr(A_CHA)*2,SS_MISC);
 
-    s = Format("%cTurn Check:%c %d",-13,-7,e.vDmg);
+    s = Format("%cTurn Check:%c %d", -MAGENTA, -GREY, e.vDmg);
 
     if (e.EActor->HasFeat(FT_IMPROVED_TURNING)) {
         e.vDmg += 4; 
@@ -5053,22 +5053,21 @@ void Player::WildShape()
       if (okWildShape(lev,mID,0)) {
         Monster *mon = new Monster(mID);
         mon->CalcValues(); 
-        s = Format("%c%s",-14,NAME(mID));
+        s = Format("%c%s",-YELLOW,NAME(mID));
         MyTerm->LOption(s,mID,mon->Describe(this),
             999 - mod->QMon[idx].HitDice);
         delete mon; 
       } else if (okWildShape(lev+20,mID,0)) {
         Monster *mon = new Monster(mID);
         mon->CalcValues(); 
-        s = Format("%c%s",-8,NAME(mID));
+        s = Format("%c%s",-SHADOW,NAME(mID));
         MyTerm->LOption(s,-idx,mon->Describe(this),1000 +
           mod->QMon[idx].HitDice);
         delete mon; 
         }
     }
   }
-  mID = MyTerm->LMenu(MENU_ESC|MENU_DESC|MENU_3COLS|MENU_SORTED,
-      "Wild Shape Into What Type of Creature?", WIN_MAP,0);
+  mID = MyTerm->LMenu(MENU_ESC|MENU_DESC|MENU_3COLS|MENU_SORTED, "Wild Shape Into What Type of Creature?", WIN_MAP,0);
   if ((long)mID <= 0 || mID == (rID)-1) return;
 
   if (!LoseFatigue(1,true))

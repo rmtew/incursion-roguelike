@@ -904,25 +904,25 @@ void TextTerm::CreateCharSheet(CharSheet &cs)
     if (j != p->Mod2((int8)p->SkillAttr(i)) &&
         (SkillInfo[i].imp || 1)) {
         int color; 
-        if (j > 25) color = 15;
-        else if (j > 20) color = 14; 
-        else if (j > 15) color = 12; 
-        else if (j > 12) color = 4; 
-        else if (j > 9) color = 6; 
-        else if (j > 6) color = 5; 
-        else if (j > 3) color = 9; 
-        else if (j > 1) color = 1; 
-        else color = 8; 
+        if (j > 25) color = WHITE;
+        else if (j > 20) color = YELLOW; 
+        else if (j > 15) color = PINK; 
+        else if (j > 12) color = RED; 
+        else if (j > 9) color = BROWN; 
+        else if (j > 6) color = PURPLE; 
+        else if (j > 3) color = AZURE; 
+        else if (j > 1) color = BLUE; 
+        else color = SHADOW; 
 
         skname = SkillInfo[i].name;
         skname.Replace("Knowledge","Know");
 
         cs.sSkills += Format("  %c%-16s %c%+d%s %c(%c%d%c ranks",
             -color, (const char*) skname,
-            -15, j, abs(j) > 9 ? "" : " ", -6,
+            -WHITE, j, abs(j) > 9 ? "" : " ", -BROWN,
             p->SkillRanks[i] ? (p->SkillRanks[i] == 
-              p->MaxRanks(i) ? -15 : -14) : -6,
-             p->SkillRanks[i], -6);
+              p->MaxRanks(i) ? -WHITE : -YELLOW) : -BROWN,
+             p->SkillRanks[i], -BROWN);
 
         if (p->Mod2((int8)p->SkillAttr(i)))
           cs.sSkills += Format(", %+d %s",
@@ -1343,8 +1343,7 @@ void TextTerm::CreateCharDump(String &str)
 
   if (m->InBounds(p->x,p->y)) {
     is += Format("\n%cOn The Ground:%c\n",-WHITE,-GREY);
-    for (Thing *t = oThing(m->At(p->x,p->y).Contents) ; t ; 
-                t = oThing(t->Next)) 
+    for (Thing *t = oThing(m->At(p->x,p->y).Contents) ; t; t = oThing(t->Next)) 
       if (t->isItem()) 
         ListInventory(is,(Item *)t,2,true);
   }
@@ -1355,8 +1354,8 @@ void TextTerm::CreateCharDump(String &str)
     if ((j = p->SpellRating(theGame->SpellID(ii),0,true)) != -1) {
       int mana = (TEFF(theGame->SpellID(ii))->ManaCost);
       ss += Format("  %c%-30s%c %2d  %3d~ %4d %s\n",
-                      (p->Spells[ii] & SP_DOMAIN) ? -5 : -1,
-                      NAME(theGame->SpellID(ii)), -7,
+                      (p->Spells[ii] & SP_DOMAIN) ? -PURPLE : -BLUE,
+                      NAME(theGame->SpellID(ii)), -GREY,
                       TEFF(theGame->SpellID(ii))->Level, 
                       j, mana, 
                       (const char*)

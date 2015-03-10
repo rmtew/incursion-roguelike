@@ -1274,16 +1274,14 @@ EvReturn Character::ConvertAltar(EventInfo &e)
     
     bonus = FavourLev[theGame->GodNum(GodID)];
     bonus += Mod(A_WIS);
-    nums = Format("%cAltar Conversion:%c 1d20 (%d) %+d favour %+d Wis ",
-                   -14, -7, roll, FavourLev[theGame->GodNum(GodID)], Mod(A_WIS));
+    nums = Format("%cAltar Conversion:%c 1d20 (%d) %+d favour %+d Wis ", -YELLOW, -GREY, roll, FavourLev[theGame->GodNum(GodID)], Mod(A_WIS));
     isCeded = false;               
     if (rel == 0 && !TGOD(altarID)->HasFlag(GF_JEALOUS)) {
-      IPrint("Based on <str> respect for <Res>, <Res> cedes the "
-             "altar to you.", GodPronoun(altarID,true), GodID, altarID);
+      IPrint("Based on <str> respect for <Res>, <Res> cedes the altar to you.", GodPronoun(altarID,true), GodID, altarID);
       bonus += 4;
       nums += "+4 ceded ";
       isCeded = true;
-      }
+    }
       
     nums += Format("= %d vs. DC 15 %c[%s]%c", bonus+roll, 
       bonus + roll >= 15 ? -EMERALD : -RED,

@@ -110,7 +110,7 @@ void TextTerm::ShowStatus() {
                 Capitalize(p->GetStatiObj(ENGULFED)->Name(0),true));
       
       if (Loc.GetLength() > WinRight()-4)
-        Loc = Loc.Left(WinRight()-8) + Format("...%c%s",-7,
+        Loc = Loc.Left(WinRight()-8) + Format("...%c%s",-GREY,
                    p->HasStati(ENGULFED) ? "" : ")");
       Write(0,0,Loc);
 
@@ -162,16 +162,14 @@ void TextTerm::ShowStatus() {
       LStatLine += XPrint(Lookup(StatiLineStats,S->Nature));
       MStatLine += XPrint(Lookup(StatiLineStats,S->Nature));
       if (S->Nature == CHARGING && S->Mag) {
-                    int32 bonus = p->ChargeBonus(); 
-                    LStatLine += Format("%c%+d%c ", -12,bonus,-7);
-                    MStatLine += Format("%c%+d%c ", -12,bonus,-7);
-                  }
+        int32 bonus = p->ChargeBonus(); 
+        LStatLine += Format("%c%+d%c ", -PINK, bonus, -GREY);
+        MStatLine += Format("%c%+d%c ", -PINK, bonus, -GREY);
+    }
       if (S->Nature == FLAWLESS_DODGE)
         {
-          LStatLine += Format("%c(%d left)%c ",-10,
-            p->AbilityLevel(CA_FLAWLESS_DODGE) + p->Mod(A_DEX) - S->Mag);
-          MStatLine += Format("%c(%d)%c ",-10,
-            p->AbilityLevel(CA_FLAWLESS_DODGE) + p->Mod(A_DEX) - S->Mag);
+          LStatLine += Format("%c(%d left)%c ",-EMERALD, p->AbilityLevel(CA_FLAWLESS_DODGE) + p->Mod(A_DEX) - S->Mag, -GREY);
+          MStatLine += Format("%c(%d)%c ", -EMERALD, p->AbilityLevel(CA_FLAWLESS_DODGE) + p->Mod(A_DEX) - S->Mag, -GREY);
         }  
       if (LookupOnly(StatiLineShorts,S->Nature)) {
         SStatLine += XPrint(Lookup(StatiLineShorts,S->Nature));
@@ -339,9 +337,9 @@ void TextTerm::ShowTraits() {
       FName = FName.Left(WinSizeX()-1);
 	    TimeLine = 4;
 	    if (GLYPH_FORE_VALUE(p->Image)== WHITE)
-	      Write(Format("%c%s%c\n",-AZURE,(const char*)FName,-7));
+	      Write(Format("%c%s%c\n",-AZURE,(const char*)FName,-GREY));
 	    else
-	      Write(Format("%c%s%c\n",-(int32)GLYPH_FORE_VALUE(p->Image),(const char*)FName,-7));
+            Write(Format("%c%s%c\n", -(int32)GLYPH_FORE_VALUE(p->Image), (const char*)FName, -GREY));
       if (p->RaceID) {
         if (strlen(NAME(p->RaceID)) >= (size_t)(WinSizeX() - 7))
           Write(Format("%s %s\n",p->StateFlags & MS_FEMALE ? "F" : "M",NAME(p->RaceID)));
@@ -495,11 +493,11 @@ void TextTerm::ShowTraits() {
           }
           s;
           if (a == b) 
-            s = (Format(" %c--%d--%c",-7,a,-7));
+              s = (Format(" %c--%d--%c", -GREY, a, -GREY));
           else if (a * 2 > b)
-            s = (Format(" %c%d/%d%c",-YELLOW,a,b,-7));
+              s = (Format(" %c%d/%d%c", -YELLOW, a, b, -GREY));
           else 
-            s = (Format(" %c%d/%d%c",-RED,a,b,-7));
+              s = (Format(" %c%d/%d%c", -RED, a, b, -GREY));
           Write(s);
           if (s.GetTrueLength() <= 7)
             Write("\n");
@@ -527,10 +525,10 @@ void TextTerm::ShowTraits() {
       ShowDamage("Dmg",p->InSlot(SL_WEAPON),S_MELEE);
       ShowDamage("Off",p->InSlot(SL_READY),S_DUAL);
       Write(Format("Spd:%c%d~%c / %c%d~%c\r",  
-        (p->WepSkill(p->InSlot(SL_WEAPON)) == WS_NOT_PROF) ? -4 : -7,
-        100 + p->KAttr[A_SPD_MELEE]*5, -7,
-        (p->WepSkill(p->InSlot(SL_READY)) == WS_NOT_PROF) ? -4 : -7,
-        100 + p->KAttr[A_SPD_OFFHAND]*5, -7));
+          (p->WepSkill(p->InSlot(SL_WEAPON)) == WS_NOT_PROF) ? -RED : -GREY,
+        100 + p->KAttr[A_SPD_MELEE] * 5, -GREY,
+        (p->WepSkill(p->InSlot(SL_READY)) == WS_NOT_PROF) ? -RED : -GREY,
+        100 + p->KAttr[A_SPD_OFFHAND] * 5, -GREY));
     } else if (i == S_BRAWL) {
       int count = 0; bool multi = false;
       TAttack buf[1024];
@@ -590,8 +588,8 @@ void TextTerm::ShowTraits() {
       Write(Format("Hit:%d\r",p->KAttr[A_HIT_ARCHERY+i]));
       ShowDamage("Dmg",p->InSlot(SL_WEAPON),i);
       Write(Format("Spd:%c%d~%c\n", (p->InSlot(SL_WEAPON) && 
-        p->WepSkill(p->InSlot(SL_WEAPON)) == WS_NOT_PROF) ? -4 : -7,
-        100 + p->KAttr[A_SPD_ARCHERY+i]*5, -7));
+          p->WepSkill(p->InSlot(SL_WEAPON)) == WS_NOT_PROF) ? -RED : -GREY,
+          100 + p->KAttr[A_SPD_ARCHERY + i] * 5, -GREY));
       }
     if (p->Opt(OPT_SIDEBAR) && p->Encumbrance() <= EN_LIGHT)
       ;  // do nothing, don't display this
@@ -605,12 +603,12 @@ void TextTerm::ShowTraits() {
       Write(Format("Def:%d\r",p->KAttr[A_DEF]));
     
     Write(Format("Arm:%c%2d Slash\r    %2d Pierce\r    %2d Blunt%c\r", (p->InSlot(SL_ARMOUR) 
-            && p->WepSkill(p->InSlot(SL_ARMOUR)) == WS_NOT_PROF) ? -4 : -7,
-          p->ResistLevel(AD_SLASH),p->ResistLevel(AD_PIERCE),p->ResistLevel(AD_BLUNT),-7));
+        && p->WepSkill(p->InSlot(SL_ARMOUR)) == WS_NOT_PROF) ? -RED : -GREY,
+        p->ResistLevel(AD_SLASH), p->ResistLevel(AD_PIERCE), p->ResistLevel(AD_BLUNT), -GREY));
     if (theGame->InPlay() && p->m) {
       int32 attr = p->MoveAttr(p->x,p->y);
       Write(Format("Mov:%c%d%c~\r",
-        p->HasStati(SPRINTING) ? -10 : -7,attr,-7));
+          p->HasStati(SPRINTING) ? -EMERALD : -GREY, attr, -GREY));
     } else Write(Format("Mov:%d~\r",p->KAttr[A_MOV]*5+100));
 
     if (theGame->InPlay() && Mode == MO_PLAY) {
@@ -1827,14 +1825,14 @@ Reprompt:
         return true;
 
     if (is_look)
-        Prompt = Format("%cLooking [rfmoxltn%s*?]:%c ",-9,Arrows,-7);
+        Prompt = Format("%cLooking [rfmoxltn%s*?]:%c ", -AZURE, Arrows, -GREY);
     else {
         if (typ == Q_TAR) {
 //SelectTarget:
-            Prompt = Format("%cChoose your target",-9,Arrows,-7);
+            Prompt = Format("%cChoose your target", -AZURE, Arrows, -GREY);
             Prompt += Format(": [%s%s%s%s%s%s%s]%c ", Arrows, "*", (fl & Q_DIR) ? "d" : "", 
                 fl & Q_LOC ? "l" : "", fl & Q_TAR ? "tn" : "", fl & Q_INV ? "i" : "",
-                fl & Q_ALL ? "a" : "", -7);
+                fl & Q_ALL ? "a" : "", -GREY);
             mod = Q_TAR; cr = p;
         } else if (typ == Q_INV) {
             Thing **things = NULL;
@@ -1866,10 +1864,10 @@ SelectItem:
             return e.ETarget ? true : false;
         } else if (typ == Q_LOC) {
 //SelectLocation:
-            Prompt = Format("%cChoose a location",-9);
+            Prompt = Format("%cChoose a location",-AZURE);
             Prompt += Format(": [%s%s%s%s%s%s%s]%c ", Arrows, "*", (fl & Q_DIR) ? "d" : "", 
                 fl & Q_LOC ? "l" : "", fl & Q_TAR ? "tn" : "", fl & Q_INV ? "i" : "",
-                fl & Q_ALL ? "a" : "", -7);
+                fl & Q_ALL ? "a" : "", -GREY);
 
             e.isLoc = true;
             mod = Q_LOC; 
@@ -1909,7 +1907,7 @@ SelectItem:
             }
             Prompt += Format(": [%s%s%s%s%s%s%s]%c ", Arrows, "*", (fl & Q_DIR) ? "d" : "", 
                 fl & Q_LOC ? "l" : "", fl & Q_TAR ? "tn" : "", fl & Q_INV ? "i" : "",
-                fl & Q_ALL ? "a" : "", -7);
+                fl & Q_ALL ? "a" : "", -GREY);
         }
     }
     if (PromptText) 
@@ -2908,9 +2906,9 @@ bool TextTerm::yn(const char*msg) {
     /*
     fjm: Changed so that the cursor appears in the right place.
     SetWin(WIN_MESSAGE); Clear();
-    WrapWrite(0,0,Format("%c%s [%cyn%c] ",-5,msg,-13,-5)); */
+    WrapWrite(0,0,Format("%c%s [%cyn%c] ",-PURPLE,msg,-MAGENTA,-PURPLE)); */
     SetWin(WIN_INPUT); GotoXY(0,0); Clear();
-    Write(Format("%c%s [%cyn%c] ",-5,msg,-13,-5));    
+    Write(Format("%c%s [%cyn%c] ", -PURPLE, msg, -MAGENTA, -PURPLE));
     CursorOn();
     while (ch!='y' && ch!='n' && ch != KY_REDRAW)
       ch=tolower(GetCharRaw());

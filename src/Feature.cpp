@@ -110,13 +110,13 @@ EvReturn Feature::Event(EventInfo &e) {
       if (e.EActor->isPlayer())
         {
           if (e.Dmg.Number == 0 && e.Dmg.Sides == 0 && e.Dmg.Bonus == 0) {
-            s = Format("%c%s:%c %d %s",-13,(const char*)(Name(0).Capitalize()),
-                -7,
+            s = Format("%c%s:%c %d %s",-MAGENTA,(const char*)(Name(0).Capitalize()),
+                -GREY,
                 e.vDmg,
                 Lookup(DTypeNames,e.DType));
           } else { 
-            s = Format("%c%s:%c %s%s %s",-13,(const char*)(Name(0).Capitalize()),
-                -7,
+              s = Format("%c%s:%c %s%s %s", -MAGENTA, (const char*)(Name(0).Capitalize()),
+                -GREY,
                 (const char*)e.Dmg.Str(),
                 e.strDmg ? (const char*)e.strDmg : "",
                 Lookup(DTypeNames,e.DType));
@@ -617,13 +617,13 @@ Immune:
 
         if (e.EActor->isPlayer()) {
             if (e.Dmg.Number == 0 && e.Dmg.Sides == 0 && e.Dmg.Bonus == 0) {
-                s = Format("%c%s:%c %d %s",-13,(const char*)(Name(0).Capitalize()),
-                    -7,
+                s = Format("%c%s:%c %d %s", -MAGENTA, (const char*)(Name(0).Capitalize()),
+                    -GREY,
                     e.vDmg,
                     Lookup(DTypeNames,e.DType));
             } else { 
-                s = Format("%c%s:%c %s%s %s",-13,(const char*)(Name(0).Capitalize()),
-                    -7,
+                s = Format("%c%s:%c %s%s %s", -MAGENTA, (const char*)(Name(0).Capitalize()),
+                    -GREY,
                     (const char*)e.Dmg.Str(),
                     e.strDmg ? (const char*)e.strDmg : "",
                     Lookup(DTypeNames,e.DType));

@@ -2234,13 +2234,12 @@ EvReturn Player::Rest(EventInfo &e) {
 }
 
 void Map::DaysPassed() {
-    int16 i, c, j, k, x, y, x2, y2, n, pc, MonCount, Tries, MonEquil, numRegen;
+    int16 i, c, j, k, x, y, x2, y2, n, pc, MonCount, Tries, MonEquil;
     Thing *t;
     Item *it;
     Player *p[MAX_PLAYERS];
     Creature *cr;
-    static Thing *list[2048];
-    /* This function updates the map when the player rests, adding new monsters and such. */
+    Thing *list[2048];
     int8 DepthCR = (int8)(TDUN(dID)->GetConst(INITIAL_CR)) + (Depth * (int8)(TDUN(dID)->GetConst(DUN_SPEED))) / 100 - 1;
 
     if (Day == theGame->Day)
@@ -2266,6 +2265,7 @@ Restart1:
                 StatiIterBreakout(t, goto Restart1);
             } else if (S->Duration < -2)
                 S->Duration++;
+
             if (t->isDead())
                 StatiIterBreakout(t, goto Done1);
         StatiIterEnd(t)
@@ -2280,6 +2280,7 @@ Restart2:
                         StatiIterBreakout(it, goto Restart2);
                     } else if (S->Duration < -2)
                         S->Duration++;
+
                     if (t->isDead())
                         StatiIterBreakout(it, goto Done2)
                 StatiIterEnd(it)
@@ -2292,10 +2293,12 @@ Done2:;
 
         if (t->isType(T_DOOR))
             ((Door*)t)->DoorFlags &= ~DF_SEARCHED;
+
         if (t->isMonster())
             if (!((Monster*)t)->HasMFlag(M_BREEDER))
                 if (((Monster*)t)->ChallengeRating() + 4 >= Depth)
                     MonCount++;
+
         if (t->isPlayer())
             p[pc++] = (Player*)t;
     }
@@ -2324,10 +2327,7 @@ RestartTerra:
         goto SkipMonUpdate;
 
     if (dID) {
-        MonEquil = (int16)TDUN(dID)->GetConst(MONSTER_EQUILIBRIUM_BASE) +
-            Depth * (int16)TDUN(dID)->GetConst(MONSTER_EQUILIBRIUM_INC);
-
-        numRegen = max(3, DepthCR);
+        MonEquil = (int16)TDUN(dID)->GetConst(MONSTER_EQUILIBRIUM_BASE) + Depth * (int16)TDUN(dID)->GetConst(MONSTER_EQUILIBRIUM_INC);
 
         for (i = Day * 6; i != theGame->Day * 6; i++)
             if (MonEquil > MonCount) {
@@ -2402,6 +2402,7 @@ RestartTerra:
                                 continue;
                             break;
                         } while (1);
+
                         if (cr = GetEncounterCreature(j)) {
                             cr->PlaceAt(this, x2, y2);
                             cr->Initialize();
@@ -2425,6 +2426,7 @@ RestartTerra:
                     }
                 }
             }
+
         j = 2 + random(4);
         for (i = 0; j != 5; j++) {
             Tries = 0;
@@ -2514,13 +2516,13 @@ const char* Player::GetMonstersEncountered() {
     mons = Format("  Total: %d\n", JournalInfo.numMonSeen);
     for (int i = 1; i < MA_LAST_REAL; i++)
         if (JournalInfo.numMonOfType[i] > 0 && LookupOnly(MTypeNames, i))
-            mons += Format("  %4d %s\n", JournalInfo.numMonOfType[i],
-            (const char*)Pluralize(Lookup(MTypeNames, i), 0));
+            mons += Format("  %4d %s\n", JournalInfo.numMonOfType[i], (const char*)Pluralize(Lookup(MTypeNames, i), 0));
     return mons;
 }
 
 void Player::JournalNoteItem(Item *i) {
-    if (!i) return;
+    if (!i)
+        return;
     if (!i->isKnown(KN_MAGIC | KN_PLUS))
         return;
     if (m && m->inDaysPassed)
@@ -2558,14 +2560,11 @@ found_it:;
     }
     if (m->isHostileTo(this) || this->isHostileTo(m))
         /* ww: Dwarven Auto-Focus */
-        if (Opt(OPT_DWARVEN_AUTOFOCUS) &&
-            ((Creature *)m)->ChallengeRating() >= ChallengeRating() &&
-            HasAbility(CA_DWARVEN_FOCUS) &&
-            !GetStati(DWARVEN_FOCUS, -1, 0)) {
+        if (Opt(OPT_DWARVEN_AUTOFOCUS) && ((Creature *)m)->ChallengeRating() >= ChallengeRating() &&
+            HasAbility(CA_DWARVEN_FOCUS) && !GetStati(DWARVEN_FOCUS, -1, 0)) {
             GainPermStati(DWARVEN_FOCUS, m, SS_RACE, 0, 0, 0);
             m->Flags |= F_HILIGHT;
-            msg = Format("You swear a vow to slay %c%s%c.",
-                -RED, (const char*)m->Name(NA_THE), -GREY);
+            msg = Format("You swear a vow to slay %c%s%c.", -RED, (const char*)m->Name(NA_THE), -GREY);
             MyTerm->Message(msg);
             MyTerm->Box(msg);
         }

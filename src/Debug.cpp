@@ -357,7 +357,7 @@ String & Game::CompileStatistics() {
         terCount, regCount, spCount,
         itemCount, magCount, encCount;
 
-    s = Format("\n%cModule Statistics:%c\n", -14, -7);
+    s = Format("\n%cModule Statistics:%c\n", -YELLOW, -GREY);
 
     monCount = Modules[0]->szMon;
     temCount = Modules[0]->szTem;
@@ -1259,7 +1259,7 @@ void Player::ListChestContents()
       IPrint("No chests on level.");
     else {
       str += Format("%cTotal Chest Gold:%c %d (baseline %d)", 
-        -14, -7, gp, WealthByLevel[m->Depth]);
+          -YELLOW, -GREY, gp, WealthByLevel[m->Depth]);
       MyTerm->Box(WIN_SCREEN,BOX_WIDEBOX,YELLOW,GREY,str);  
       }
   
@@ -1415,12 +1415,12 @@ void Creature::Dump()
 
     Thing::Dump(); 
     T1->SWrite(Format("%cHP:%c%d/%d%s %cMana:%c%d/%d %cFP:%c%d/%d %cSubdual:%c%d %cPartyID:%c%d %cCR:%c%d\n",
-      -14, -7, cHP, mHP, Attr[A_THP] ? (const char*)Format("%+d",Attr[A_THP]) : "",
-      -14 ,-7, cMana(), tMana(), 
-      -14 ,-7, cFP, Attr[A_FAT], 
-      -14, -7, Subdual, -14, -7, PartyID,
-      -14, -7, ChallengeRating()));
-    T1->SWrite(Format("%cStateFlags:%c",-14,-7));
+        -YELLOW, -GREY, cHP, mHP, Attr[A_THP] ? (const char*)Format("%+d", Attr[A_THP]) : "",
+      -YELLOW, -GREY, cMana(), tMana(),
+      -YELLOW, -GREY, cFP, Attr[A_FAT],
+      -YELLOW, -GREY, Subdual, -YELLOW, -GREY, PartyID,
+      -YELLOW, -GREY, ChallengeRating()));
+    T1->SWrite(Format("%cStateFlags:%c",-YELLOW,-GREY));
     for(i=0;i!=16;i++)
       if (StateFlags & XBIT(i))
         T1->SWrite(Format("  %s",Lookup(MS_CONSTNAMES,XBIT(i))));
@@ -1428,7 +1428,7 @@ void Creature::Dump()
       T1->SWrite(" None.");
     T1->SWrite("\n");
 
-    T1->SWrite(Format("%cM_Flags:%c",-14,-7));
+    T1->SWrite(Format("%cM_Flags:%c", -YELLOW, -GREY));
     for(i=0;i!=M_LAST;i++)
       if (HasMFlag(i))
         T1->SWrite(Format("  %s",Lookup(M_CONSTNAMES,(i))));
@@ -1487,8 +1487,8 @@ void Creature::Dump()
       l1 = ResistLevel(ResistsShown[i],false);
       l2 = ResistLevel(ResistsShown[i],true);
       if (l1 != 0 || l2 != 0)
-        T1->SWrite(Format("  %c%s%c %d (bypass = %d)\n", -14, 
-              (const char*)Lookup(DTypeNames,ResistsShown[i]),-7,l1,l2));
+        T1->SWrite(Format("  %c%s%c %d (bypass = %d)\n", -YELLOW, 
+              (const char*)Lookup(DTypeNames,ResistsShown[i]),-GREY,l1,l2));
     } 
 
     T1->Color(AZURE); 
@@ -1599,9 +1599,8 @@ void Creature::Dump()
         }
     T1->SWrite("\n");
     ts_dump = ts.Dump();
-    T1->SWrite(Format("\n%c---------- Target System:%c\n%s",-13,-7,
-          (const char*)XPrint(ts_dump)));
-    T1->SWrite(Format("\n%c---------- Hostility:%c\n",-13,-7));
+    T1->SWrite(Format("\n%c---------- Target System:%c\n%s", -MAGENTA, -GREY, (const char*)XPrint(ts_dump)));
+    T1->SWrite(Format("\n%c---------- Hostility:%c\n", -MAGENTA, -GREY));
     Thing *t;
     if (m != 0 && x != -1)  {
     MapIterate(m,t,i) {
@@ -1615,16 +1614,16 @@ void Creature::Dump()
     } 
     }
 
-    T1->SWrite(Format("\n%c---------- tmID:%c %s (%d)\n",-13,-7,NAME(tmID),tmID));
+    T1->SWrite(Format("\n%c---------- tmID:%c %s (%d)\n", -MAGENTA, -GREY, NAME(tmID), tmID));
     TMON(tmID)->Dump();
     if (tmID != mID)
       {
-        T1->SWrite(Format("\n%c---------- mID:%c %s (%d) \n",-13,-7,NAME(mID),mID));
+          T1->SWrite(Format("\n%c---------- mID:%c %s (%d) \n", -MAGENTA, -GREY, NAME(mID), mID));
         TMON(mID)->Dump();
       }
     StatiIterNature(this,TEMPLATE)
           TTemplate * tt = TTEM(S->eID);
-          T1->SWrite(Format("\n%c---------- Template:%c %s (%d)\n",-13,-7,NAME(S->eID),S->eID));
+    T1->SWrite(Format("\n%c---------- Template:%c %s (%d)\n", -MAGENTA, -GREY, NAME(S->eID), S->eID));
           tt->Dump(); 
     StatiIterEnd(this)
 
@@ -1712,24 +1711,22 @@ void Player::Dump()
                                             
   }
 
-void Monster::Dump()
-  {
+void Monster::Dump() {
     const char* DirNames[] = { "NORTH", "SOUTH", "EAST", "WEST", "NORTHEAST",
                                "NORTHWEST", "SOUTHEAST", "SOUTHWEST", "CENTER",
                                "UP", "DOWN" };
     Creature::Dump();
-    T1->SWrite(Format("%cLastMoveDir:%c %s\n%cBuffCount:%c %d\n %cFoilCount:%c %d\n"
-                      -11,-7,DirNames[LastMoveDir],-11,-7,BuffCount,-11,-7,FoilCount));
+    T1->SWrite(Format("%cLastMoveDir:%c %s\n%cBuffCount:%c %d\n %cFoilCount:%c %d\n",
+        -SKYBLUE, -GREY, DirNames[LastMoveDir], -SKYBLUE, -GREY, BuffCount, -SKYBLUE, -GREY, FoilCount));
+}
 
-  }
-
-void Item::Dump()
-  {
+void Item::Dump() {
     int16 i; String ss;
     Thing::Dump();
     T1->SWrite(Format("%cHP:%c %d/%d %cPlus:%c %+d %cCharges:%c %d %cFlavor:%c %d %cQuantity:%c %d\n",
-      -14, -7, cHP,TITEM(iID) ? MaxHP() : -1, -14, -7, Plus, -14 ,-7, Charges, -14, -7, Flavor, -14, -7, Quantity));
-    T1->SWrite(Format("%cIFlags:%c ",-14,-7));
+        -YELLOW, -GREY, cHP, TITEM(iID) ? MaxHP() : -BLUE, -YELLOW, -GREY, Plus, -YELLOW, -GREY, Charges,
+        -YELLOW, -GREY, Flavor, -YELLOW, -GREY, Quantity));
+    T1->SWrite(Format("%cIFlags:%c ", -YELLOW, -GREY));
     for(i=0;i!=8;i++)
       if (IFlags & XBIT(i))
         T1->SWrite(Format(" %s",Lookup(IF_CONSTNAMES,XBIT(i))));
@@ -1801,35 +1798,28 @@ void Item::Dump()
         T1->SWrite(XPrint(ss));
     StatiIterEnd(this)
 
-    T1->SWrite(Format("\n%c---------- iID:%c %s (%d)\n",-13,-7,RES(iID) ? NAME(iID) : "?",iID));
+        T1->SWrite(Format("\n%c---------- iID:%c %s (%d)\n", -MAGENTA, -GREY, RES(iID) ? NAME(iID) : "?", iID));
     if (TITEM(iID))
             TITEM(iID)->Dump();
-    if (eID && RES(eID))
-      {
-        T1->SWrite(Format("\n%c---------- eID:%c %s (%d) \n",-13,-7,NAME(eID),eID));
+    if (eID && RES(eID)) {
+          T1->SWrite(Format("\n%c---------- eID:%c %s (%d) \n", -MAGENTA, -GREY, NAME(eID), eID));
         TEFF(eID)->Dump();
-      }
+    }
 
     T1->SWrite("\n----------\n");
+}
 
-  }
-
-void Food::Dump()
-  {
+void Food::Dump() {
     Item::Dump();
-    T1->SWrite(Format("\n%cEaten:%c%d %cAge:%c%d\n",
-      -14, -7, Eaten, -14 ,-7, Age));
-  }
+    T1->SWrite(Format("\n%cEaten:%c%d %cAge:%c%d\n", -YELLOW, -GREY, Eaten, -YELLOW, -GREY, Age));
+}
 
-void Corpse::Dump()
-  {
+void Corpse::Dump() {
     Food::Dump();
-    T1->SWrite(Format("\n%cMonster:%c%d (%s)\n",
-      -14, -7, mID, NAME(mID)));
-  }
+    T1->SWrite(Format("\n%cMonster:%c%d (%s)\n", -YELLOW, -GREY, mID, NAME(mID)));
+}
 
-void Container::Dump()
-  {
+void Container::Dump() {
     hObj h;
     Item::Dump();
     T1->Color(AZURE);
@@ -1846,29 +1836,26 @@ void Container::Dump()
       }
   }
 
-void Weapon::Dump()
-  {
+void Weapon::Dump() {
     int16 i;
     Item::Dump();
-    T1->SWrite(Format("%cQualities:%c ",-14,-7));
+    T1->SWrite(Format("%cQualities:%c ",-YELLOW,-GREY));
     for(i=0;i!=8;i++)
       if (Qualities[i])
         T1->SWrite(Format(" %s",Lookup(WQ_CONSTNAMES,Qualities[i])));
     if (!Qualities[0])
       T1->SWrite(" None.");
     T1->SWrite("\n");
-  }
+}
 
-void Map::Dump()
-  {
+void Map::Dump() {
     Object::Dump();
-  }
+}
 
-void Resource::Dump()
-  {
+void Resource::Dump() {
     //Object::Dump();
     T1->SWrite(Format("  Resource: \"%s\"\n",theGame->Modules[ModNum]->GetText(Name)));
-  }
+}
 
 void TTemplate::Dump() {
 	uint32 gid = GLYPH_ID_VALUE(NewImage);
@@ -1904,10 +1891,9 @@ void TTemplate::Dump() {
         a->Dump(); 
     }
     T1->SWrite("\n");
-  }
+}
 
-void Annotation::Dump()
-{
+void Annotation::Dump() {
   T1->SWrite(Format("\n  Annot: %s",Lookup(AnnotationNames,AnType)));
   switch (AnType) {
     case AN_SPELLS: 

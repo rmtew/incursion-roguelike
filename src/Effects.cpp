@@ -272,7 +272,7 @@ SkipSave:
       Term * TVictim = e.EVictim->ShowCombatNumbers(); 
       if (TActor || TVictim) { 
       msg = Format("%cDamage:%c %s%s%s%s%s = %d %s",
-          -13,-7,e.Resist ? "(" : "", (const char*)e.Dmg.Str(), e.eID && 
+          -MAGENTA, -GREY, e.Resist ? "(" : "", (const char*)e.Dmg.Str(), e.eID &&
           (e.MM & MM_EMPOWER) ? " + 50%" : "",
           e.Resist || e.isPartiallyEvaded ? ") / 2" : "", 
           (const char*)(e.strDmg ? e.strDmg : ""),
@@ -288,7 +288,7 @@ SkipSave:
         if (TActor && e.EActor != e.EVictim) { 
           TActor->SetWin(WIN_NUMBERS3);
           TActor->Clear();
-          msg = Format("%c%s %s",-13,
+          msg = Format("%c%s %s", -MAGENTA,
               (const char *)Capitalize(e.EVictim->Name(NA_POSS)),(const char*)msg);
           TActor->Write(msg); 
           TActor->AddMessage(msg);

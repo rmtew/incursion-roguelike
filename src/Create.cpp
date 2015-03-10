@@ -767,8 +767,8 @@ bool Player::Reincarnate()
         if (ri[i].Disabled)
             continue;
         found = true;
-        desc = Format("%c%s -- %s %s%c\n",-14,ri[i].Name,
-            NAME(ri[i].RaceID), NAME(ri[i].ClassID), -7);
+        desc = Format("%c%s -- %s %s%c\n",-YELLOW,ri[i].Name,
+            NAME(ri[i].RaceID), NAME(ri[i].ClassID), -GREY);
         if (ri[i].Active)
             desc += "[ In Play ]\n";
         else {
@@ -779,7 +779,7 @@ bool Player::Reincarnate()
             desc += Format("%s %c%d%c%s ",
             AttrTitle[j],
             ri[i].Attr[j] >= 16 ? -EMERALD : -GREY,
-            ri[i].Attr[j],-7,
+            ri[i].Attr[j],-GREY,
             j == 6 ? ".\n" : ",");
         for (j=0;j!=3;j++)
             if (ri[i].Perks.elt[j].type != PERK_NONE)

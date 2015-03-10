@@ -159,18 +159,18 @@ ProcessSpells:
                     // Write(0,1,"  Key Spell                  Mana Time Succ CLev Save DC Power & Feats");
                     String myline;
                     String save_string;
-                    int KY_color = Key ? -14 : -7; 
-                    int name_color = ((p->Spells[i] & SP_DOMAIN) ? -5 : -7);
+                    int KY_color = Key ? -YELLOW : -GREY; 
+                    int name_color = ((p->Spells[i] & SP_DOMAIN) ? -PURPLE : -GREY);
                     int time_cost = 3000 / max(25,100+10*(1 + e.EActor->Mod(A_INT) -
                         TEFF(e.eID)->Level));
 
 
                     if (p->Spells[i] & SP_INNATE) {
-                        name_color = -6; 
+                        name_color = -BROWN; 
                         time_cost = 20; 
                     } 
                     if (p->Spells[i] & SP_STAFF) {
-                        name_color = (p->Spells[i] & (~SP_STAFF)) ? -10 : -2;
+                        name_color = (p->Spells[i] & (~SP_STAFF)) ? -EMERALD : -GREEN;
                     }
 
                     for (z=0;p->AutoBuffs[z] && z!=63;z++)
@@ -231,40 +231,26 @@ ProcessSpells:
                     the_name = the_name.Left(22); 
                     if (TEFF(e.eID)->HasFlag(EF_VARMANA))
                         myline = Format("[%c%c%c] %c%-22s%c    %cV%c %c%4d%c %c%3d~%c %c%4d%c %c%.7s%c %s",
-                        KY_color, Key ? Key : (ch <= 'z' ? ch : ' '), -7,
-
-                        name_color, (const char*)the_name, -7,
-
-                        -AZURE, -7,
-
-                        time_color, time_cost, -7, 
-
-                        succ_color, j, -7,
-
-                        clev_color, e.vCasterLev, -7,
-
-                        save_color, (const char*)save_string, -7,
-
-                        (const char*)(TEFF(theGame->SpellID(i))->Power(0,p,theGame->SpellID(i)))
-                        );
+                            KY_color, Key ? Key : (ch <= 'z' ? ch : ' '), -GREY,
+                            name_color, (const char*)the_name, -GREY,
+                            -AZURE, -GREY,
+                            time_color, time_cost, -GREY,
+                            succ_color, j, -GREY,
+                            clev_color, e.vCasterLev, -GREY,
+                            save_color, (const char*)save_string, -GREY,
+                            (const char*)(TEFF(theGame->SpellID(i))->Power(0,p,theGame->SpellID(i)))
+                            );
                     else
                         myline = Format("[%c%c%c] %c%-22s%c %c%4d%c %c%4d%c %c%3d~%c %c%4d%c %c%.7s%c %s",
-                        KY_color, Key ? Key : (ch <= 'z' ? ch : ' '), -7,
-
-                        name_color, (const char*)the_name, -7,
-
-                        mana_color, mana, -7,
-
-                        time_color, time_cost, -7, 
-
-                        succ_color, j, -7,
-
-                        clev_color, e.vCasterLev, -7,
-
-                        save_color, (const char*)save_string, -7,
-
-                        (const char*)(TEFF(theGame->SpellID(i))->Power(0,p,theGame->SpellID(i)))
-                        );
+                            KY_color, Key ? Key : (ch <= 'z' ? ch : ' '), -GREY,
+                            name_color, (const char*)the_name, -GREY,
+                            mana_color, mana, -GREY,
+                            time_color, time_cost, -GREY,
+                            succ_color, j, -GREY,
+                            clev_color, e.vCasterLev, -GREY,
+                            save_color, (const char*)save_string, -GREY,
+                            (const char*)(TEFF(theGame->SpellID(i))->Power(0,p,theGame->SpellID(i)))
+                            );
                     myline += Format("%c",-EMERALD);
                     if (p->HasMM(MM_ANCHOR,i)) myline +=  " An";/* Amplify Spell */
                     if (p->HasMM(MM_AMPLIFY,i)) myline +=  " Am";/* Amplify Spell */
@@ -336,7 +322,7 @@ ProcessSpells:
                 int32 p;
                 for (p=0;desc[p];p++)
                     if (desc[p] <= -1 && desc[p] >= -8)
-                        desc.SetAt(p,-7);
+                        desc.SetAt(p,-GREY);
             }
             SWrapWrite(0,0,desc,WinSizeX()-2);
         }
@@ -519,8 +505,8 @@ void TextTerm::InvShowSlots(bool changed)
           }
         
         if (i)
-          str = Format("%c)%c%s%c :%s",SlotLetters[i-1],TMON(p->mID)->HasSlot(i) ? -7 : -1,
-            SlotNames[i],-7,(const char*)str);
+          str = Format("%c)%c%s%c :%s",SlotLetters[i-1],TMON(p->mID)->HasSlot(i) ? -GREY : -BLUE,
+            SlotNames[i],-GREY,(const char*)str);
         else
           str = SC("'In the Air':") + str;
 
@@ -528,10 +514,9 @@ void TextTerm::InvShowSlots(bool changed)
 
 
         if (str.GetLength()+2 > WinSizeX()-wgt.GetLength())
-          str = str.Left((WinSizeX()-5)-wgt.GetLength()) + 
-                  Format("...%c",-7);
+          str = str.Left((WinSizeX()-5)-wgt.GetLength()) +  Format("...%c",-GREY);
 
-				Write(2,0+i,str);
+		Write(2,0+i,str);
         if (wgt)
           Write(WinSizeX()-(int16)wgt.GetLength(),0+i,wgt);
         PurgeStrings();
@@ -596,7 +581,7 @@ void TextTerm::InvShowSlots(bool changed)
             k = Contents[j]->Weight(psych_might);
             wgt = Format("%d.%ds", k / 10, k % 10);
             if (str.GetLength() > WinSizeX() - wgt.GetLength())
-              str = str.Left((WinSizeX()-3)-wgt.GetLength()) + Format("...%c",-7);
+              str = str.Left((WinSizeX()-3)-wgt.GetLength()) + Format("...%c",-GREY);
             SWrite(0,y,str);          
             SWrite(WinSizeX()-(int16)wgt.GetLength(),y,wgt);
             yContents[j] = y;
@@ -1241,7 +1226,7 @@ void TextTerm::BarterManager(Creature *Seller)
           {
             Color(GREY);
             SWrite(Format("%s%d) %c%s%c", i >= 10 ? "" : "0", i, (i == curr) ? -YELLOW : -GREY,
-              (const char*)WareNames[i], -7));
+              (const char*)WareNames[i], -GREY));
             SGotoXY(width-10,i);
             Color(GREY);
             SWrite(Format("%d gp",oItem(Wares[i])->getShopCost(p,Seller) /
@@ -1253,8 +1238,8 @@ void TextTerm::BarterManager(Creature *Seller)
             if (Seller && Seller->getLeader() == p)
               cost = 0;
             SWrite(Format("%s%d) Service Spell: %c%s%c", i >= 10 ? "" : "0", i,
-              (i == curr) ? -YELLOW : (TEFF(Wares[i])->ManaCost > Seller->cMana() ? -8 : -9), 
-              NAME(Wares[i]), -7));
+              (i == curr) ? -YELLOW : (TEFF(Wares[i])->ManaCost > Seller->cMana() ? -SHADOW : -AZURE), 
+              NAME(Wares[i]), -GREY));
             SGotoXY(width-10,i);
             SWrite(Format("%d gp",cost));
           }
@@ -1734,7 +1719,7 @@ void TextTerm::SkillManager(bool initial)
             SetWin(WIN_MENUDESC);
             ClearScroll();
             desc = Upper(Format("%c%s%c ",
-              -12,SkillInfo[Show[offset+ln]].name,-7));
+                -PINK, SkillInfo[Show[offset + ln]].name, -GREY));
             desc += XPrint(DescribeSkill(Show[offset+ln]));
             SWrapWrite(0,0,desc,WinSizeX()-2,WIN_MENUDESC);
             UpdateScrollArea(0,WIN_MENUDESC);

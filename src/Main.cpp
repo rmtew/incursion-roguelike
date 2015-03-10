@@ -2035,8 +2035,7 @@ void Game::ListItemsByLevel()
       
       qsort(list,c,sizeof(String),StringCompare);
       
-      full += Format("%c%s:%c\n", -SKYBLUE,
-        Lookup(AI_CONSTNAMES,IType[t]), -7);
+      full += Format("%c%s:%c\n", -SKYBLUE, Lookup(AI_CONSTNAMES, IType[t]), -GREY);
       
       for (i=0;i!=c;i++)
         full += list[i];

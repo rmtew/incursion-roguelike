@@ -7919,7 +7919,7 @@ EvReturn Creature::AttackMsg(EventInfo &e) {
                 e.strDef += Format(" = %d",e.vDef);
 
             s1 = Format("%c%s:%c 1d20 (%d) %s = %d vs. ",
-                -14,e.AType == A_SPEL ? NAME(e.eID) : "Attack", -7,e.vRoll, (const char*)e.strHit, e.vHit + e.vRoll);
+                -YELLOW, e.AType == A_SPEL ? NAME(e.eID) : "Attack", -GREY, e.vRoll, (const char*)e.strHit, e.vHit + e.vRoll);
             if (e.vRideCheck > e.vDef)
                 s1 += Format("Ride %d [", e.vRideCheck);
             else
@@ -7957,11 +7957,11 @@ EvReturn Creature::AttackMsg(EventInfo &e) {
             } 
 
             if (e.isCrit && e.strDmg.GetLength())
-                s2 = Format("%cDamage:%c %s + (%s) %s %s= %d",-13,-7,
+                s2 = Format("%cDamage:%c %s + (%s) %s %s= %d", -MAGENTA, -GREY,
                     (const char*)e.Dmg.Str(), (const char*)Trim(e.strDmg), e.EVictim->HasFeat(FT_ROLL_WITH_IT) ? rMult[e.vCrit] : cMult[e.vCrit],
                     (const char*)chargeStr, (int)e.vDmg);
             else if (e.isHit) {
-                s2 = Format("%cDamage:%c %s%s %s= %d",-13,-7,
+                s2 = Format("%cDamage:%c %s%s %s= %d", -MAGENTA, -GREY,
                     (const char*)e.Dmg.Str(),(const char*)e.strDmg, (const char*)chargeStr, (int)e.vDmg);
             }
             if (e.isBypass) {

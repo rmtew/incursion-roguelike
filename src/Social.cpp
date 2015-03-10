@@ -1144,23 +1144,20 @@ EvReturn Creature::Request(EventInfo &e) {
     if (!doSocialSanity(EV_REQUEST,e.EVictim))
       return ABORT;    
     
-    if (e.EVictim->HasStati(TRIED,EV_REQUEST*100,e.EActor))
-      {
+    if (e.EVictim->HasStati(TRIED,EV_REQUEST*100,e.EActor)) {
         e.EActor->IPrint("You already failed to persuade the <Obj1> "
-          "(or a member of <his:Obj1> group); you can't try again until the "
-          "next day.", e.EVictim);
+          "(or a member of <his:Obj1> group); you can't try again until the next day.", e.EVictim);
         return ABORT;
-      }
+    }
     
     sk = SK_DIPLOMACY;
     if (SkillLevel(SK_INTIMIDATE) > SkillLevel(SK_DIPLOMACY)) {
       if (yn(Format("Intimidate %c%+d%c, Diplomacy %c%+d%c. Use Intimidate?",
-           -13, SkillLevel(SK_INTIMIDATE), -5, -13, SkillLevel(SK_DIPLOMACY), -5),true))
+          -MAGENTA, SkillLevel(SK_INTIMIDATE), -PURPLE, -MAGENTA, SkillLevel(SK_DIPLOMACY), -PURPLE), true))
         sk = SK_INTIMIDATE;
-      }
-    else if (SkillLevel(SK_BLUFF) > SkillLevel(SK_DIPLOMACY))
+    } else if (SkillLevel(SK_BLUFF) > SkillLevel(SK_DIPLOMACY))
       if (yn(Format("Bluff %c%+d%c, Diplomacy %c%+d%c. Use Bluff?",
-           -13, SkillLevel(SK_BLUFF), -5, -13, SkillLevel(SK_DIPLOMACY), -5),true))
+          -MAGENTA, SkillLevel(SK_BLUFF), -PURPLE, -MAGENTA, SkillLevel(SK_DIPLOMACY), -PURPLE), true))
         sk = SK_BLUFF;  
         
     if (sk == SK_INTIMIDATE && !e.EVictim->isMType(MA_EVIL))

@@ -467,6 +467,7 @@ class Map: public Object
     bool Filled(int16 x,int16 y);
     void Load(rID mID);
     void RegisterPlayer(hObj h);
+    /* This function updates the map when the player rests, adding new monsters and such. */
     void DaysPassed();
     void ResetImages();
     

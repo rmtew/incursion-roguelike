@@ -232,11 +232,11 @@ void HelpSpellIndex(String &helpText)
           {
             if (i)
               helpText += "\n";
-            helpText += BoxIt(Groups[i].Text,11,7);
+            helpText += BoxIt(Groups[i].Text,SKYBLUE,GREY);
             continue;
           }
         
-        helpText += Format("\n%c%s\n",-14,Groups[i].Text);
+        helpText += Format("\n%c%s\n",-YELLOW,Groups[i].Text);
         for (j=0;j!=strlen(Groups[i].Text);j++)
           helpText += '=';
         helpText += '\n';
@@ -258,7 +258,7 @@ void HelpSpellIndex(String &helpText)
             bool found = false;
             if (j == 0 || TEFF(Spells[j])->Level != 
                           TEFF(Spells[j-1])->Level)
-              helpText += Format("%c%c%c_", -14, '0' + TEFF(Spells[j])->Level, -7);
+                          helpText += Format("%c%c%c_", -YELLOW, '0' + TEFF(Spells[j])->Level, -GREY);
             else
               helpText += "__";
             
@@ -403,7 +403,7 @@ void HelpOtherSpells(String & helpText)
     p = new Player(NULL,T_PLAYER);
     UnimpID = FIND("Unimplemented");
     
-    s = BoxIt("OTHER CLASSES' SPELLS",11,3);
+    s = BoxIt("OTHER CLASSES' SPELLS",SKYBLUE,CYAN);
     s += XPrint("<7>-- {MM:mainmenu} Return to the Main Menu\n");
 
     lcID = 0;
@@ -466,9 +466,9 @@ void HelpOtherSpells(String & helpText)
           
           if (!lcID || stricmp(Left(NAME(lcID),2),Left(NAME(clID),2)))
             s += BoxIt(Format("%s SPELLS {%s}",(const char*)Upper(NAME(clID)),
-                  (const char*)Upper(Left(NAME(clID),2))),11,3);
+                  (const char*)Upper(Left(NAME(clID),2))),SKYBLUE,CYAN);
           else
-            s += BoxIt(Format("%s SPELLS",(const char*)Upper(NAME(clID))),11,3);
+            s += BoxIt(Format("%s SPELLS",(const char*)Upper(NAME(clID))),SKYBLUE,CYAN);
           
           lcID = clID;
           
@@ -478,8 +478,7 @@ void HelpOtherSpells(String & helpText)
             {
             
               if (lv != ls[j].Level)
-                s += Format("\n%c= LEVEL %s %s SPELLS =%c\n\n", -11, Levs[ls[j].Level],
-                       (const char*)Upper(NAME(clID)),-3);
+                s += Format("\n%c= LEVEL %s %s SPELLS =%c\n\n", -SKYBLUE, Levs[ls[j].Level], (const char*)Upper(NAME(clID)),-CYAN);
               lv = ls[j].Level;
               if (ls[j].spID == UnimpID)
                 continue;
@@ -498,7 +497,7 @@ void HelpPowers(String & helpText)
     int16 i, n, c; rID tID; TEffect *Effs[256];
     String s;
         
-    s = BoxIt("MISCELLANEOUS REFERENCE",11,3);
+    s = BoxIt("MISCELLANEOUS REFERENCE",SKYBLUE,CYAN);
     s += XPrint("<7>-- {AL:alchemy} Alchemical Items\n");
     s += XPrint("<7>-- {PS:psionics} Psionic Wild Talents\n");
     s += XPrint("<7>-- {PO:poisons} Poisons\n");
@@ -587,7 +586,7 @@ bool HelpDomains(String & helpText)
       
       Contents += "\n-- {MM:mainmenu} Return to Main Help Menu\n\n";
 
-      helpText = Contents + BoxIt("DOMAIN ALLOCATIONS",11,3);
+      helpText = Contents + BoxIt("DOMAIN ALLOCATIONS",SKYBLUE,CYAN);
       
       helpText += "\n<15>God_______Domain List<1>\n";
       RetribID = FIND("Retribution");
@@ -624,7 +623,7 @@ bool HelpDomains(String & helpText)
       
       helpText += "\n";
 
-      helpText += BoxIt("DOMAIN DESCRIPTIONS",11,3);
+      helpText += BoxIt("DOMAIN DESCRIPTIONS",SKYBLUE,CYAN);
 
       c2.Empty(); count = 0;
       for (mIdx=0;theGame->Modules[mIdx];mIdx++) {
@@ -669,7 +668,7 @@ bool HelpDomains(String & helpText)
           c2 = c;
         }
       helpText += "\n";
-      helpText += BoxIt("UNIQUE DOMAIN SPELLS",11,3);
+      helpText += BoxIt("UNIQUE DOMAIN SPELLS",SKYBLUE,CYAN);
       
       UnimpID = FIND("Unimplemented"); cds = 0;
       for (mIdx=0;theGame->Modules[mIdx];mIdx++) {
@@ -1343,13 +1342,12 @@ void HelpWeaponTable(String &helpText)
 void HelpCustom(String &helpText, Player *p)
   {
     int16 i;
-    if (!p)
-      {
-        helpText = BoxIt("No Character Currently Generated",13,7);
+    if (!p) {
+        helpText = BoxIt("No Character Currently Generated",SKYBLUE,CYAN);
         return;
-      }
+    }
                                                                                                  
-    helpText = BoxIt("My Race {R}",14,7);
+    helpText = BoxIt("My Race {R}",YELLOW,GREY);
     helpText += -EMERALD;
     helpText += Upper(NAME(p->RaceID));
     helpText += -7;
@@ -1357,25 +1355,25 @@ void HelpCustom(String &helpText, Player *p)
     helpText += XPrint(DESC(p->RaceID));
     helpText += "\n\n";
 
-    helpText += BoxIt(p->ClassID[1] ? "My Classes {C}" : "My Class {C}",14,7);
+    helpText += BoxIt(p->ClassID[1] ? "My Classes {C}" : "My Class {C}",YELLOW,GREY);
     for (i=0;i!=3 && p->ClassID[i];i++)
       {
         helpText += -EMERALD;
         helpText += Upper(NAME(p->ClassID[i]));
-        helpText += -7;
+        helpText += -GREY;
         helpText += "\n";
         helpText += XPrint(DESC(p->ClassID[i]));
         helpText += "\n\n";
       }
 
     // My Alignment {A}
-    helpText += BoxIt("My Alignment {A}",14,7);
+    helpText += BoxIt("My Alignment {A}",YELLOW,GREY);
     for(i=0;i!=9;i++)
       if (AlignmentInfo[i].align == p->GetStatiVal(ALIGNMENT))
         {
           helpText += -EMERALD;
           helpText += Upper(AlignmentInfo[i].name);
-          helpText += -7;
+          helpText += -GREY;
           helpText += "\n__";
           helpText += XPrint(AlignmentInfo[i].desc);
           helpText += "\n\n";
@@ -1384,10 +1382,10 @@ void HelpCustom(String &helpText, Player *p)
     // My God {G}
     if (p->GodID)
       {
-        helpText += BoxIt("My God {G}",14,7);
+        helpText += BoxIt("My God {G}",YELLOW,GREY);
         helpText += -EMERALD;
         helpText += Upper(NAME(p->GodID));
-        helpText += -7;
+        helpText += -GREY;
         helpText += "\n";
         helpText += XPrint(DESC(p->GodID));
         helpText += "\n\n";
@@ -1396,7 +1394,7 @@ void HelpCustom(String &helpText, Player *p)
     // My Domains {D}
     if (p->HasAbility(CA_DOMAINS))
       {
-        helpText += BoxIt("My Domains {D}",14,7);
+        helpText += BoxIt("My Domains {D}",YELLOW,GREY);
         helpText += -EMERALD;
         StatiIter(p)
           if (S->Nature == HAS_DOMAIN)
@@ -1408,7 +1406,7 @@ void HelpCustom(String &helpText, Player *p)
       }
 
 
-    helpText += BoxIt("My Feats {F}",14,7);
+    helpText += BoxIt("My Feats {F}",YELLOW,GREY);
     for (i=FT_FIRST;i!=FT_LAST;i++)
       {
         if (!p->HasFeat(i))
@@ -1417,7 +1415,7 @@ void HelpCustom(String &helpText, Player *p)
         helpText += "\n";
       }
 
-    helpText += BoxIt("My Skills {K}",14,7);
+    helpText += BoxIt("My Skills {K}",YELLOW,GREY);
     for (i=0;i!=SK_LAST;i++)
       {
         if (!p->GetSkillRanks(i))
@@ -1438,7 +1436,7 @@ void HelpCustom(String &helpText, Player *p)
                                   "Four", "Five", "Six", "Seven",
                                   "Eight", "Nine" };
         LearnableSpell *ls;
-        helpText += BoxIt("My Spell Access {S}",14,7);
+        helpText += BoxIt("My Spell Access {S}",YELLOW,GREY);
         ls = p->CalcSpellAccess();
         found = false;
         for (l=1;l<=9;l++)
@@ -1465,7 +1463,7 @@ void HelpCustom(String &helpText, Player *p)
           helpText = helpText.Left(helpText.GetLength() - 2);
         helpText += found ? ".\n\n" : XPrint("<1>None.\n\n");
         
-        helpText += BoxIt("My Spells {P}", 14, 7);
+        helpText += BoxIt("My Spells {P}", YELLOW, GREY);
         rID spList[512]; int16 n;
         for(i=0,n=0;i!=theGame->LastSpell();i++)
           if (p->getSpellFlags(theGame->SpellID(i)) & 
@@ -1515,7 +1513,7 @@ static void DescribeKeys(String &s) {
     KeySetItem * ks = theGame->Opt(OPT_ROGUELIKE) ? RoguelikeKeySet : StandardKeySet;
     int time_for_ret = 0;
 
-    s = Format("            %c-- %cIncursion Key Bindings%c --\n", -7, -12, -7);
+    s = Format("            %c-- %cIncursion Key Bindings%c --\n", -GREY, -PINK, -GREY);
     n = 0;
 
     memset(KStr, 0, sizeof(TextVal) * KY_CMD_LAST);
@@ -1600,7 +1598,7 @@ DoneKey:;
         if (!desc)
             continue;
         int padcnt = countskipchars(Keys[n]);
-        KStr[n].Text = Format("%c%s%c%*s%c", -7, desc, -14, 24 + padcnt - strlen(desc), (const char *)Keys[n], -7);
+        KStr[n].Text = Format("%c%s%c%*s%c", -GREY, desc, -YELLOW, 24 + padcnt - strlen(desc), (const char *)Keys[n], -GREY);
         KStr[n].Val = i;
         n++;
     }
@@ -1681,8 +1679,8 @@ void TextTerm::GetHelp(String & helpText, const char *topic) {
       tID = FIND(topic);
       if (!tID || !RES(tID)->Desc) {
         Box(Format("The help topic %c%s%c cannot be found among any of the "
-              "currently loaded resources. Please contact Julian Mensch "
-              "at jmensch@shaw.ca if this is unexpected.",-14,topic,-7));
+              "currently loaded resources. Please contact Richard Tew "
+              "at richard.m.tew@gmail.com if this is unexpected.",-YELLOW,topic,-GREY));
         isHelp = false; return;
         }
       helpText = XPrint(DESC(tID));
@@ -1690,25 +1688,24 @@ void TextTerm::GetHelp(String & helpText, const char *topic) {
 }  
 
 void TextTerm::HelpTopic(const char*topic, const char*link) {
-    rID xID = 0; char ln[3], xln[2];
-    int32 ch; char TopicName[52];
-
-    String helpText, s; 
-    
+    rID xID = 0;
+    char ln[3], xln[2];
+    int32 ch;
+    char TopicName[52];
+    String helpText, s;     
     int16 oldMode;
+
     oldMode = GetMode();
     SetMode(MO_HELP);
-    
 
-    NewTopic:
-
+NewTopic:
     isHTML = false;
     isHelp = true;
 
     if (topic == NULL) { 
       DescribeKeys(helpText);
       helpText += Format("\n%c---------------------------------------------------"
-                         "\n                    %cFurther Help%c\n",-15,-12,-7);
+                         "\n                    %cFurther Help%c\n",-WHITE,-PINK,-GREY);
       LOption("Help Contents",0);
       LOption("My Character_________",1);
       //LOption("Command Descriptions",2);
@@ -1810,8 +1807,8 @@ void TextTerm::HelpTopic(const char*topic, const char*link) {
       {
         int32 p;
         for (p=0;helpText[p];p++)
-          if (helpText[p] <= -1 && helpText[p] >= -8)
-            helpText.SetAt(p,-7);
+          if (helpText[p] <= -BLUE && helpText[p] >= -SHADOW)
+            helpText.SetAt(p,-GREY);
       }
     SetWin(WIN_SCREEN);
     Save();
@@ -2318,7 +2315,7 @@ String & Monster::Describe(Player *p)
     str += ". ";
         
     if (CR <= 0) {
-      str += -11;
+      str += -SKYBLUE;
       switch (CR) {
         case 0: str += "Two"; break;
         case -1: str += "Three"; break;
@@ -2328,27 +2325,24 @@ String & Monster::Describe(Player *p)
         case -5: str += "Seven"; break;
         case -6: str += "Eight"; break;
         }
-      str += -7;
+      str += -GREY;
       str += " of them together are similar in power to a 1st level character. ";
       }        
     else
       str += Format("It is similar in power to a %c%d%s%c level character. ",
-        -11, CR, NumPrefix(CR), -7);
+        -SKYBLUE, CR, NumPrefix(CR), -GREY);
 
     if (mm->Kills >= 3) {
       if (tm->HasFlag(M_FIXED_HP))
-        str += Format("It has %c%d%c hit points",-15,tm->HitDice,-7);
+        str += Format("It has %c%d%c hit points",-WHITE,tm->HitDice,-GREY);
       else {
         int attr = A_CON;
         if (tm->Attr[A_CON] == 0) attr = A_WIS; 
 
         if ((tm->Attr[attr]-10)/2 == 0 || tm->Attr[attr] == 0)
-          str += Format("It has %c%dd%d%c hit points",-14,tm->HitDice,
-              BestHDType(),-7);
+          str += Format("It has %c%dd%d%c hit points",-YELLOW,tm->HitDice, BestHDType(),-GREY);
         else
-          str += Format("It has %c%dd%d%+d%c hit points",-14,tm->HitDice,
-              BestHDType(),
-            tm->HitDice*((tm->Attr[attr]-10)/2),-7);
+          str += Format("It has %c%dd%d%+d%c hit points",-YELLOW,tm->HitDice, BestHDType(), tm->HitDice*((tm->Attr[attr]-10)/2),-GREY);
         
         if (tm->Size != SZ_MEDIUM && !tm->HasFlag(M_NO_SIZE_HP)) {
           str += ", with a ";
@@ -2379,10 +2373,10 @@ String & Monster::Describe(Player *p)
           }
         }
       str += Format(", a base attack bonus of %c%+d%c, and a defense class of %c%d%c. ",
-        -14,tm->Hit,-7,-14, tm->Def,-7);
+          -YELLOW, tm->Hit, -GREY, -YELLOW, tm->Def, -GREY);
       
       if (tm->Arm)
-        str += Format("It has a natural armour rating of %c%d%c. ", -14, tm->Arm, -7);
+          str += Format("It has a natural armour rating of %c%d%c. ", -YELLOW, tm->Arm, -GREY);
 
       }
 
@@ -2391,10 +2385,10 @@ String & Monster::Describe(Player *p)
     /* Movement and Speed */
     if (tm->Mov == -20)
       str += Format("It is stationary, and attacks at %c%d~%c speed with natural attacks. ",
-                     -14,tm->Spd*5+100,-7);
+                     -YELLOW,tm->Spd*5+100,-GREY);
     else
       str += Format("It moves at %c%d~%c of normal human speed, and attacks at "
-                    "%c%d~%c speed with natural attacks. ",-14,tm->Mov*5+100,-7,-14,tm->Spd*5+100,-7);
+                    "%c%d~%c speed with natural attacks. ",-YELLOW,tm->Mov*5+100,-GREY,-YELLOW,tm->Spd*5+100,-GREY);
 
     /* Saving Throws */
     sv = MonGoodSaves((int8)tm->MType[0]);
@@ -2465,7 +2459,7 @@ String & Monster::Describe(Player *p)
           str += "unearthly";
         else
           str += "godlike";
-        str += Format("%c",-11);
+        str += Format("%c",-SKYBLUE);
         switch (i) {
           case A_STR: str += " strength";  break;
           case A_DEX: str += " dexterity"; break;
@@ -2477,7 +2471,7 @@ String & Monster::Describe(Player *p)
 
         if (mm->Kills - (20+i*2) >= 0 && tm->Attr[i] != 0)
           str += Format(" (%d)",tm->Attr[i]);
-        str += Format("%c",-7);
+        str += Format("%c",-GREY);
 
         if ((i == 1 && mm->Kills < 15) || i == 4)
           str += " and ";
@@ -2855,7 +2849,7 @@ String & Monster::Describe(Player *p)
         if (p && p->Perceives(oThing(h)))
           {
             if (oItem(h)->IFlags & IF_WORN)
-              List[lc] = Format("%c%s (equipped)%c",-11,(const char*)oThing(h)->Name(NA_A),-7);
+              List[lc] = Format("%c%s (equipped)%c",-SKYBLUE,(const char*)oThing(h)->Name(NA_A),-GREY);
             else 
               List[lc] = oThing(h)->Name(NA_A);
             lc++;
@@ -3558,7 +3552,7 @@ String & Item::Describe(Player *p)
       continue;
     Desc += Format("__%c%s:%c Due to an outside enchantment, this item counts as a %c%+d%c magical item.\n",
         -PINK, NAME(S->eID), -GREY,
-        -14,
+        -YELLOW,
         S->Mag,
         -GREY);
   StatiIterEnd(this)
@@ -3653,11 +3647,11 @@ String & QItem::Describe(Player *p)
       continue;
 
     if (LookupOnly(GenericPreQualNames,Qualities[i]))
-      tmp = Format("__%c%s:%c ",-14,Lookup(GenericPreQualNames,Qualities[i]),-7);
+        tmp = Format("__%c%s:%c ", -YELLOW, Lookup(GenericPreQualNames, Qualities[i]), -GREY);
     else if (LookupOnly(isArmour ? APreQualNames : PreQualNames,Qualities[i]))
-      tmp = Format("__%c%s:%c ",-14,Lookup(isArmour ? APreQualNames : PreQualNames,Qualities[i]),-7);
+        tmp = Format("__%c%s:%c ", -YELLOW, Lookup(isArmour ? APreQualNames : PreQualNames, Qualities[i]), -GREY);
     else
-      tmp = Format("__%c%s:%c ",-14,Lookup(isArmour ? APostQualNames : PostQualNames,Qualities[i]),-7);
+        tmp = Format("__%c%s:%c ", -YELLOW, Lookup(isArmour ? APostQualNames : PostQualNames, Qualities[i]), -GREY);
     tmp.SetAt(3,toupper(tmp[3]));
     if (LookupOnly(GenericQualityDescs,Qualities[i]))
       Desc += tmp + Lookup(GenericQualityDescs,Qualities[i]); 
@@ -3669,11 +3663,11 @@ String & QItem::Describe(Player *p)
   StatiIterNature(this,EXTRA_QUALITY)
     {
       if (LookupOnly(GenericPreQualNames,S->Val))
-        tmp = Format("__%c%s:%c ",-14,Lookup(GenericPreQualNames,S->Val),-7);
+          tmp = Format("__%c%s:%c ", -YELLOW, Lookup(GenericPreQualNames, S->Val), -GREY);
       else if (LookupOnly(isArmour ? APreQualNames : PreQualNames,S->Val))
-        tmp = Format("__%c%s:%c ",-14,Lookup(isArmour ? APreQualNames : PreQualNames,S->Val),-7);
+          tmp = Format("__%c%s:%c ", -YELLOW, Lookup(isArmour ? APreQualNames : PreQualNames, S->Val), -GREY);
       else
-        tmp = Format("__%c%s:%c ",-14,Lookup(isArmour ? APostQualNames : PostQualNames,S->Val),-7);
+          tmp = Format("__%c%s:%c ", -YELLOW, Lookup(isArmour ? APostQualNames : PostQualNames, S->Val), -GREY);
       tmp.SetAt(3,toupper(tmp[3]));
       if (LookupOnly(GenericQualityDescs,Qualities[S->Val]))
         Desc += tmp + Lookup(GenericQualityDescs,S->Val); 
@@ -4055,36 +4049,32 @@ String & Weapon::Describe(Player *p)
 
     Desc += SC("\n") + QItem::Describe(p);
     
-    if (p)
-      {
+    if (p) {
         if (myHandle == p->defMelee)
-          Desc += Format("__%cThis is your default melee weapon.%c\n", -15, -7);
+            Desc += Format("__%cThis is your default melee weapon.%c\n", -WHITE, -GREY);
         if (myHandle == p->defOffhand)
-          Desc += Format("__%cThis is your default offhand weapon.%c\n", -15, -7);
+            Desc += Format("__%cThis is your default offhand weapon.%c\n", -WHITE, -GREY);
         if (myHandle == p->defRanged)
-          Desc += Format("__%cThis is your default ranged weapon.%c\n", -15, -7);
+            Desc += Format("__%cThis is your default ranged weapon.%c\n", -WHITE, -GREY);
         if (myHandle == p->defAmmo)
-          Desc += Format("__%cThis is your default projectile.%c\n", -15, -7);
+            Desc += Format("__%cThis is your default projectile.%c\n", -WHITE, -GREY);
       }    
 
   return *tmpstr(XPrint(Desc));
-  }
+}
 
-String & Character::Describe(Player *p)
-  {
+String & Character::Describe(Player *p) {
     return *tmpstr("You see yourself.");
-  }
+}
 
-String & Map::Describe(Player* p)
-  {
+String & Map::Describe(Player* p) {
     if (DESC(dID))
       return *tmpstr(DESC(dID));
     else
       return *tmpstr("Dark, cramped and fetid."); 
-  }
+}
 
-String & Feature::Describe(Player *p)
-{
+String & Feature::Describe(Player *p) {
   TFeature *tf = TFEAT(fID); 
   String Desc;
   Desc = "";
@@ -4117,8 +4107,7 @@ String & Feature::Describe(Player *p)
   return *tmpstr(Desc);
 }
 
-String & Door::Describe(Player *p)
-{
+String & Door::Describe(Player *p) {
   TFeature *tf = TFEAT(fID); 
   String Desc;
 
@@ -4185,7 +4174,7 @@ String & TEffect::Describe(Player *p) {
         for (i=0; SchoolNames[i].Val; i++) 
             if ((Schools & SchoolNames[i].Val) == SchoolNames[i].Val) {
                 if (SchoolNames[i].Val > SC_NAT)
-                    descs += Format(" %c[%s]",-7, (const char*)Upto(SchoolNames[i].Text," "));
+                    descs += Format(" %c[%s]",-GREY, (const char*)Upto(SchoolNames[i].Text," "));
                 else            
                     s += Format("%s<4>%s<7>",dual ? "/" : "", SchoolNames[i].Text);
                 dual = true;
@@ -4259,7 +4248,7 @@ String & TEffect::Describe(Player *p) {
     s += "\n";
     if (levs.GetLength()) {
         levs = levs.Right(levs.GetLength() - 2);
-        s += Format("%cLevel: %s\n",-7, (const char*)levs);
+        s += Format("%cLevel: %s\n",-GREY, (const char*)levs);
     }
 
 

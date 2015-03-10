@@ -1148,11 +1148,11 @@ String & Item::Name(int16 Flags)
   {
     if (isBlessed()) {
       char const * str = terse_blessed ? "b " : "blessed " ;
-      xe.nCursed += !(Flags & NA_MONO) ? Format("%c%s%c",-11,str,-7) : s;
+      xe.nCursed += !(Flags & NA_MONO) ? Format("%c%s%c",-SKYBLUE,str,-GREY) : s;
     }
     else if (isCursed()) {
       char const * str = terse_blessed ? "c " : "cursed " ;
-      xe.nCursed += !(Flags & NA_MONO) ? Format("%c%s%c",-4,str,-7) : s;
+      xe.nCursed += !(Flags & NA_MONO) ? Format("%c%s%c",-RED,str,-GREY) : s;
     } 
     else {
       if (!terse_blessed)
@@ -1160,13 +1160,13 @@ String & Item::Name(int16 Flags)
   }
   } else {
     if (terse_blessed)
-      xe.nCursed += !(Flags & NA_MONO) ? Format("%c?%c ",-15,-7) : "? ";
+      xe.nCursed += !(Flags & NA_MONO) ? Format("%c?%c ",-WHITE,-GREY) : "? ";
   } 
 
   /*
   if (isGhostTouch()) {
       char const * str = terse_blessed ? "g " : "ghost touch " ;
-      xe.nCursed += !(Flags & NA_MONO) ? Format("%c%s%c",-3,str,-7) : str;
+      xe.nCursed += !(Flags & NA_MONO) ? Format("%c%s%c",-CYAN,str,-GREY) : str;
   } 
   */
 
@@ -1292,8 +1292,7 @@ String & Item::Name(int16 Flags)
        (TEFF(eID) && TEFF(eID)->HasFlag(EF_NEEDS_PLUS)))*/)
   {
     if (HasStati(BOOST_PLUS) && !(Flags & NA_MONO))
-      xe.nPlus += Format(" %c%+d%c",-14, (Known & KN_PLUS || Flags & NA_IDENT) ? 
-          GetPlus() : HighStatiMag(BOOST_PLUS), -7);
+      xe.nPlus += Format(" %c%+d%c",-YELLOW, (Known & KN_PLUS || Flags & NA_IDENT) ? GetPlus() : HighStatiMag(BOOST_PLUS), -GREY);
     else
       xe.nPlus += Format(" %+d",GetPlus());
   }
@@ -1337,7 +1336,7 @@ String & Item::Name(int16 Flags)
 
     if (Flags & NA_INSC || Flags & NA_LONG) 
       if (Inscrip.GetLength())
-        xe.nInscrip += Format(" %c{%s%c}", -7, (const char*)Inscrip, -7);
+          xe.nInscrip += Format(" %c{%s%c}", -GREY, (const char*)Inscrip, -GREY);
     
     /* Allow resources to override */
     
@@ -1464,25 +1463,23 @@ String & Item::Name(int16 Flags)
       if (s[i-1] == ' ')
         s.SetAt(i,toupper(s[i]));
         
-  if ((Flags & NA_MECH) && !(Flags & NA_MONO))
-    {
+  if ((Flags & NA_MECH) && !(Flags & NA_MONO)) {
       Player *p;
       p = theGame->GetPlayer(0);
       if (p->defMelee == myHandle)
-        s = Format("%c%s%c", -SKYBLUE, (const char*) Decolorize(s), -7);
+          s = Format("%c%s%c", -SKYBLUE, (const char*)Decolorize(s), -GREY);
       if (p->defOffhand == myHandle)
-        s = Format("%c%s%c", -AZURE, (const char*) Decolorize(s), -7);
+          s = Format("%c%s%c", -AZURE, (const char*)Decolorize(s), -GREY);
       if (p->defRanged == myHandle)
-        s = Format("%c%s%c", -PINK, (const char*) Decolorize(s), -7);
+          s = Format("%c%s%c", -PINK, (const char*)Decolorize(s), -GREY);
       if (p->defAmmo == myHandle)
-        s = Format("%c%s%c", -MAGENTA, (const char*) Decolorize(s), -7);
+          s = Format("%c%s%c", -MAGENTA, (const char*)Decolorize(s), -GREY);
     }
 
   return *tmpstr(s);
 }
 
-String & Feature::Name(int16 Flags)
-	{
+String & Feature::Name(int16 Flags) {
     String s;
   if (Named.GetLength() && !(Flags & NA_LONG))
       return Named;

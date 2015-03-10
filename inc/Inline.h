@@ -347,7 +347,7 @@ inline bool Creature::SavingThrow(int16 type, int16 DC, uint32 Subtype)
     String bStr ; 
     if (show) { 
       bStr = Format("%c%s Save:%c 1d20 (%d)",
-          -13,save_name[type],-7,roll);
+          -MAGENTA,save_name[type],-GREY,roll);
       if (Bonus)
         bStr += Format(" %+d base",Bonus);
     }
@@ -378,7 +378,7 @@ inline bool Creature::SavingThrow(int16 type, int16 DC, uint32 Subtype)
           Bonus + roll, DC, 
           (Bonus + roll >= DC) ? -EMERALD: -PINK,
           (Bonus + roll >= DC) ? "success" : "failure",
-          -7);
+          -GREY);
       Term * term;
       if (isPlayer()) 
         term = thisp->MyTerm;
