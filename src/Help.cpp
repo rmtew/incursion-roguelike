@@ -4376,8 +4376,7 @@ String & DescribeFeat(int16 ft) {
             for (j=0; FeatInfo[j].feat; j++) {
                 for (d=0; d<FP_MAX_DISJUNCTS; d++) {
                     for (c=0; c<FP_MAX_CONJUNCTS; c++) {
-                        if (FeatInfo[j].pre.Or[d].And[c].elt == FP_FEAT &&
-                            FeatInfo[j].pre.Or[d].And[c].arg == ft) {
+                        if (FeatInfo[j].pre.Or[d].And[c].elt == FP_FEAT && FeatInfo[j].pre.Or[d].And[c].arg == ft) {
                             if (allow_count)
                                 a += ", ";
                             allow_count++; 

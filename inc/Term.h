@@ -349,9 +349,12 @@ public:
     virtual void Write(const char*str)=0;
     virtual void Write(int16 x, int16 y, const char*str)=0;
     virtual void CWrite(const char*)=0;
+    /* Write a message to the player's message window. */
     virtual void Message(const char*)=0;
+    /* Log a message which has been written to the player's message window. */
     virtual void AddMessage(const char *)=0; 
     virtual void ShowMessages()=0;      
+
     virtual void DrawBorder(int16 wn, int16 col=YELLOW)=0;
     virtual void Box(const char*text)=0;
     virtual void Box(int16 w, const char*text)=0;
@@ -371,14 +374,13 @@ public:
     virtual void ClearScroll(bool full=false)=0;
 
     /* Formatted Menus (TextTerm.cpp) */
-    virtual int32 LMenu(uint16 fl, const char*title,int8 MWin=WIN_MENUBOX,
-        const char*help=NULL, int8 pos = 0)=0;
-    virtual bool  LMultiSelect(uint16 fl, const char*title,int8 MWin=WIN_MENUBOX,
-        const char*help=NULL, int8 pos = 0)=0;
-    void SetQKeyType(QuickKey *qk, int16 typ) { QKeyType = typ;
-    QuickKeys = qk; }
-    virtual void LOption(const char*text,int32 val,const char*desc=NULL,
-        int32 sortkey=0)=0;
+    virtual int32 LMenu(uint16 fl, const char*title,int8 MWin=WIN_MENUBOX, const char*help=NULL, int8 pos = 0)=0;
+    virtual bool  LMultiSelect(uint16 fl, const char*title,int8 MWin=WIN_MENUBOX, const char*help=NULL, int8 pos = 0)=0;
+    void SetQKeyType(QuickKey *qk, int16 typ) {
+        QKeyType = typ;
+        QuickKeys = qk;
+    }
+    virtual void LOption(const char*text,int32 val,const char*desc=NULL, int32 sortkey=0)=0;
     virtual void LOptionClear()=0;
     virtual void HelpTopic(const char*topic, const char*link=NULL)=0;
     virtual int32 FirstSelected()=0;
@@ -418,8 +420,7 @@ public:
 
     /* Other Prompts (Term.Cpp) */
     virtual bool yn(const char*msg)=0;
-    virtual char ChoicePrompt(const char*msg,const char*choices,int8 col1=BROWN, 
-        int8 col2=YELLOW,bool preprompt=true)=0;
+    virtual char ChoicePrompt(const char*msg,const char*choices,int8 col1=BROWN,  int8 col2=YELLOW,bool preprompt=true)=0;
     virtual Thing* AcquisitionPrompt(int8 Reason, int8 minlev, int8 maxlev, int8 MType=0)=0;
     virtual rID  ChooseResource(const char*prompt, int16 RType, rID eID)=0;
     virtual int32 MonsterTypePrompt(const char * prompt, int minCount = 1, int maxCount = 99999)=0;

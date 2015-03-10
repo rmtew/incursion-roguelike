@@ -1335,7 +1335,7 @@ void Creature::TerrainEffects()
           RemoveStati(CHARGING);      
           if (isPlayer()) {
             thisp->MyTerm->SetWin(WIN_INPUT);
-            thisp->MyTerm->Color(15);
+            thisp->MyTerm->Color(WHITE);
             thisp->MyTerm->CursorOn();
             thisp->MyTerm->Write(0,0,"Press [ENTER] to continue... ");
             thisp->MyTerm->CursorOn();

@@ -1028,7 +1028,9 @@ class Player: public Character
       virtual void AutoPickupFloor(); 
       void ChooseGod(bool required = true); 
 
-      virtual void IPrint(const char*,...);
+      /* Display a formatted message in the player's message window. */
+      virtual void IPrint(const char*, ...);
+      /* [Varargs] Display a formatted message in the player's message window. */
       virtual void __IPrint(const char*, va_list ap);
       virtual void IDPrint(const char*,const char*,...);
       EvReturn Death(EventInfo &e);

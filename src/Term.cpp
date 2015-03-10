@@ -78,7 +78,7 @@ void TextTerm::ShowStatus() {
 		for(i=0;i<=WinBottom();i++)
       PutChar(WinRight()-15,i,GLYPH_VLINE);
     SetWin(WIN_STATUS);
-		Color(7);
+		Color(GREY);
     if (!theGame->InPlay())
       Write(0,0,Format("Character Generation: %s",p->Named.GetLength()==0 ? "unnamed" :
                                             (const char*)p->Named));
@@ -324,7 +324,7 @@ void TextTerm::ShowTraits() {
 
     SetWin(WIN_TRAITS);
     Clear();
-    Color(7);
+    Color(GREY);
     GotoXY(0,0);
 
     TimeLine = 2;
@@ -405,9 +405,9 @@ void TextTerm::ShowTraits() {
             case PECKISH:   Write("Peckish\n"); break;
             case HUNGRY:    Color(BROWN); Write("Hungry\n"); break;
             case STARVING:  Color(PINK); Write("Starving\n"); break;
-            case WEAK:      Color(RED | WHITE << 4); Write("Weak\n"); break;
-            case FAINTING:  Color(RED | WHITE << 4); Write("Fainting\n"); break;
-            case STARVED:  Color(RED | WHITE << 4); Write("Starved!\n"); break;
+            case WEAK:      Color(RED | BACK_COLOUR(WHITE)); Write("Weak\n"); break;
+            case FAINTING:  Color(RED | BACK_COLOUR(WHITE)); Write("Fainting\n"); break;
+            case STARVED:  Color(RED | BACK_COLOUR(WHITE)); Write("Starved!\n"); break;
           }
         Color(GREY);
 
@@ -504,7 +504,7 @@ void TextTerm::ShowTraits() {
         } else Write("\n"); 
       }
     }
-    Color(7);
+    Color(GREY);
 
     if (p->BAttr[A_STR] == -1)
       { SetWin(WIN_SCREEN); return; }
@@ -2019,9 +2019,9 @@ SelectItem:
         }
 CantSee:
         SetWin(WIN_INPUT);
-        Clear(); Color(12);
+        Clear(); Color(PINK);
         Write(0,0,Prompt);
-        Color(7);
+        Color(GREY);
 
         if (mod == Q_LOC && ((m->At(tx,ty).Visibility & VI_DEFINED) ||
             TTER(m->PTerrainAt(tx,ty,p))->HasFlag(TF_DEPOSIT)))
@@ -2536,42 +2536,41 @@ rID TextTerm::MonsterPrompt(const char * prompt) {
   return res; 
 } 
 
-Thing* TextTerm::AcquisitionPrompt(int8 Reason, int8 minlev, int8 maxlev, int8 MType) {                            
+Thing* TextTerm::AcquisitionPrompt(int8 Reason, int8 minlev, int8 maxlev, int8 MType) {
     int16 BlankGlyphs[4];
-    int16 cp,ocp,n,i,j; const int16 *Glyphs, *GOffset;
+    int16 cp, ocp, n, i, j; const int16 *Glyphs, *GOffset;
     int32 k;
     rID xID; Item *it; Monster *mn; String str;
-    
-    PrePrompt();
-    
-    Redraw:
-    
-    SetWin(WIN_INPUT);
-    Glyphs = (Reason >= ACQ_MONSTER) ?  ( MType == MA_ANIMAL ? 
-      WildShapeGlyphs : MonsterGlyphs ) : (Reason == ACQ_MAJOR ||
-      Reason == ACQ_MINOR || Reason == ACQ_CRAFT) ? CreationGlyphs : ItemGlyphs;
-    GOffset = Glyphs;
-    cp = 0; ocp = -1;
 
-    if (Glyphs == ItemGlyphs && MType > 0)
-      {
-        for (i=0;ItemGlyphs[i];i += 2)
-          if (ItemGlyphs[i+1] == -MType)
-            {
-              BlankGlyphs[0] = ItemGlyphs[i];
-              BlankGlyphs[1] = ItemGlyphs[i+1];
-              BlankGlyphs[2] = 0;
-              BlankGlyphs[3] = 0;
-              Glyphs = BlankGlyphs;
-              GOffset = BlankGlyphs;
-              break;
+    PrePrompt();
+
+Redraw:
+    SetWin(WIN_INPUT);
+    Glyphs = (Reason >= ACQ_MONSTER) ?
+        (MType == MA_ANIMAL ? WildShapeGlyphs : MonsterGlyphs) : (Reason == ACQ_MAJOR || Reason == ACQ_MINOR || Reason == ACQ_CRAFT) ? CreationGlyphs : ItemGlyphs;
+    GOffset = Glyphs;
+    cp = 0;
+    ocp = -1;
+
+    if (Glyphs == ItemGlyphs && MType > 0) {
+        for (i = 0; ItemGlyphs[i]; i += 2)
+            if (ItemGlyphs[i + 1] == -MType) {
+                BlankGlyphs[0] = ItemGlyphs[i];
+                BlankGlyphs[1] = ItemGlyphs[i + 1];
+                BlankGlyphs[2] = 0;
+                BlankGlyphs[3] = 0;
+                Glyphs = BlankGlyphs;
+                GOffset = BlankGlyphs;
+                break;
             }
-      }
+    }
 
     do {
-      Clear(); Color(10);
-      switch(Reason) {
-        case ACQ_ANY_ITEM: 
+        Clear();
+        Color(EMERALD);
+
+        switch (Reason) {
+        case ACQ_ANY_ITEM:
         case ACQ_ACQUIRE: Write("Acquisition -- ["); break;
         case ACQ_IDENT_ALL: Write("Identify -- ["); break;
         case ACQ_MINOR: Write("Minor Creation -- ["); break;
@@ -2579,244 +2578,256 @@ Thing* TextTerm::AcquisitionPrompt(int8 Reason, int8 minlev, int8 maxlev, int8 M
         case ACQ_ANYMON:
         case ACQ_SUMMON: Write("Summon -- ["); break;
         case ACQ_POLYMORPH: Write("Polymorph -- ["); break;
-        case ACQ_GENOCIDE: Write("Genocide -- ["); break;   
-        case ACQ_RECALL: Write("Recall -- ["); break; 
-        case ACQ_CRAFT:   Write("Craft Item -- ["); break;  
+        case ACQ_GENOCIDE: Write("Genocide -- ["); break;
+        case ACQ_RECALL: Write("Recall -- ["); break;
+        case ACQ_CRAFT:   Write("Craft Item -- ["); break;
         case ACQ_KNOWN:   Write("Create Item -- ["); break;
         }
-      for(i=0;GOffset[i*2] && i < GLYPHS_SHOWN;i++) {
-        Color(cp - ((GOffset - Glyphs)/2) == i ? 15 : 2);
-        PutChar(GOffset[i*2]);
+        for (i = 0; GOffset[i * 2] && i < GLYPHS_SHOWN; i++) {
+            Color(cp - ((GOffset - Glyphs) / 2) == i ? WHITE : GREEN);
+            PutChar(GOffset[i * 2]);
         }
-      Color(10); Write("]: "); Color(7);
-      if (Reason >= ACQ_MONSTER) {
-        if (LookupOnly(MTypeNames,Glyphs[cp*2+1]))
-          Write(Pluralize(Lookup(MTypeNames,Glyphs[cp*2+1])));
-        }
-      else if (Glyphs[cp*2+1] < 0)
-        { Write(Lookup(SourceNames,-Glyphs[cp*2+1]));  }
-      else
-        { Write(Lookup(ITypeNames,Glyphs[cp*2+1]));  }
+        Color(EMERALD);
+        Write("]: ");
+        Color(GREY);
 
-      if (cp != ocp) {
-        n = 0; xID = 0; ocp = cp;
-        memset(Candidates,0,sizeof(rID)*2047);
-        if (strchr("ahxBCKORX",Glyphs[cp*2]) || Glyphs[cp*2] == GLYPH_LDEMON ||
-             Glyphs[cp*2] == GLYPH_LDEVIL || Glyphs[cp*2] == GLYPH_GDEMON ||
-             Glyphs[cp*2] == GLYPH_GDEVIL)
-          k = Glyphs[cp*2] + 100000;
-        else
-          k = Glyphs[cp*2+1];
-        
-        if (Glyphs[cp*2+1] > 0) {
-        
-          switch(Reason) {
-            case ACQ_ANY_ITEM: 
-              if ((k & 0xFF) == T_TRAP)
-                { 
-                  xID = FIND("trap");          
-                  theGame->GetEffectID(PUR_ACQUIRE + PUR_LISTING,minlev,maxlev,AI_TRAP);
+        if (Reason >= ACQ_MONSTER) {
+            if (LookupOnly(MTypeNames, Glyphs[cp * 2 + 1]))
+                Write(Pluralize(Lookup(MTypeNames, Glyphs[cp * 2 + 1])));
+        } else if (Glyphs[cp * 2 + 1] < 0)
+        {
+            Write(Lookup(SourceNames, -Glyphs[cp * 2 + 1]));
+        } else
+        {
+            Write(Lookup(ITypeNames, Glyphs[cp * 2 + 1]));
+        }
+
+        if (cp != ocp) {
+            n = 0; xID = 0; ocp = cp;
+            memset(Candidates, 0, sizeof(rID) * 2047);
+            if (strchr("ahxBCKORX", Glyphs[cp * 2]) || Glyphs[cp * 2] == GLYPH_LDEMON ||
+                Glyphs[cp * 2] == GLYPH_LDEVIL || Glyphs[cp * 2] == GLYPH_GDEMON ||
+                Glyphs[cp * 2] == GLYPH_GDEVIL)
+                k = Glyphs[cp * 2] + 100000;
+            else
+                k = Glyphs[cp * 2 + 1];
+
+            if (Glyphs[cp * 2 + 1] > 0) {
+
+                switch (Reason) {
+                case ACQ_ANY_ITEM:
+                    if ((k & 0xFF) == T_TRAP)
+                    {
+                        xID = FIND("trap");
+                        theGame->GetEffectID(PUR_ACQUIRE + PUR_LISTING, minlev, maxlev, AI_TRAP);
+                    } else
+                        theGame->GetItemID(-1, minlev, maxlev, k & 0xFF);
+                    break;
+                case ACQ_ACQUIRE:
+                    theGame->GetItemID(PUR_ACQUIRE + PUR_LISTING, minlev, maxlev, k & 0xFF); break;
+                case ACQ_MINOR:
+                    theGame->GetItemID(PUR_MINOR + PUR_LISTING, minlev, maxlev, k & 0xFF); break;
+                case ACQ_MAJOR:
+                    theGame->GetItemID(PUR_MAJOR + PUR_LISTING, minlev, maxlev, k & 0xFF); break;
+                case ACQ_CRAFT:
+                    theGame->GetItemID(PUR_CRAFT + PUR_LISTING, minlev, maxlev, k & 0xFF); break;
+                case ACQ_IDENT_ALL:
+                    Candidates[0] = 0; break;
+                case ACQ_RECALL:
+                case ACQ_ANYMON:
+                    theGame->GetMonID(PUR_ANYMON + PUR_LISTING, minlev, maxlev, maxlev, k);
+                    break;
+                case ACQ_SUMMON:
+                    theGame->GetMonID(PUR_SUMMON + PUR_LISTING, minlev, maxlev, maxlev, k); break;
+                case ACQ_POLYMORPH:
+                    theGame->GetMonID(PUR_POLY + PUR_LISTING, minlev, maxlev, maxlev, k); break;
+                case ACQ_GENOCIDE:
+                    theGame->GetMonID(PUR_SUMMON + PUR_LISTING, minlev, maxlev, maxlev, k); break;
                 }
-              else
-                theGame->GetItemID(-1,minlev,maxlev,k & 0xFF); 
-             break;
-            case ACQ_ACQUIRE: 
-              theGame->GetItemID(PUR_ACQUIRE + PUR_LISTING,minlev,maxlev,k & 0xFF); break;
-            case ACQ_MINOR: 
-              theGame->GetItemID(PUR_MINOR + PUR_LISTING,minlev,maxlev,k & 0xFF); break;
-            case ACQ_MAJOR: 
-              theGame->GetItemID(PUR_MAJOR + PUR_LISTING,minlev,maxlev,k & 0xFF); break;
-            case ACQ_CRAFT: 
-              theGame->GetItemID(PUR_CRAFT + PUR_LISTING,minlev,maxlev,k & 0xFF); break;
-            case ACQ_IDENT_ALL: 
-              Candidates[0] = 0; break;
-            case ACQ_RECALL:
-            case ACQ_ANYMON:
-              theGame->GetMonID(PUR_ANYMON + PUR_LISTING,minlev,maxlev,maxlev,k); 
-             break;
-            case ACQ_SUMMON: 
-              theGame->GetMonID(PUR_SUMMON + PUR_LISTING,minlev,maxlev,maxlev,k); break;
-            case ACQ_POLYMORPH: 
-              theGame->GetMonID(PUR_POLY + PUR_LISTING,minlev,maxlev,maxlev,k); break;
-            case ACQ_GENOCIDE:  
-              theGame->GetMonID(PUR_SUMMON + PUR_LISTING,minlev,maxlev,maxlev,k); break;
-            }
-          if (Candidates[0] && MType && RES(Candidates[0])->Type == T_TMONSTER)
-            for (i=0;Candidates[i];i++)
-              if (!TMON(Candidates[i])->isMType(Candidates[i],MType))
+                if (Candidates[0] && MType && RES(Candidates[0])->Type == T_TMONSTER)
+                    for (i = 0; Candidates[i]; i++)
+                        if (!TMON(Candidates[i])->isMType(Candidates[i], MType))
+                        {
+                            memmove(Candidates + i, Candidates + i + 1, 2047 - i);
+                            i--;
+                        }
+            } else
+            {
+
+
+                for (i = 0; DungeonItems[i].Type; i++)
+                    if (Glyphs[cp * 2 + 1] == -DungeonItems[i].Source) {
+                        if (DungeonItems[i].Prototype)
+                        {
+                            xID = FIND(DungeonItems[i].Prototype); goto FoundProto;
+                        }
+                        if (DungeonItems[i].Source == AI_WEAPON)
+                        {
+                            xID = FIND("short sword"); goto FoundProto;
+                        }
+                        if (DungeonItems[i].Source == AI_ARMOUR)
+                        {
+                            xID = FIND("chainmail"); goto FoundProto;
+                        }
+                        if (DungeonItems[i].Source == AI_SHIELD)
+                        {
+                            xID = FIND("kite shield"); goto FoundProto;
+                        }
+                    }
+                xID = 0;
+
+            FoundProto:
+                switch (Reason)
                 {
-                  memmove(Candidates+i,Candidates+i+1,2047-i);
-                  i--;
+                case ACQ_CRAFT:
+                    theGame->GetEffectID(PUR_MUNDANE, minlev, maxlev, -Glyphs[cp * 2 + 1]);
+                    break;
+                case ACQ_KNOWN:
+                    theGame->GetEffectID(PUR_KNOWN, minlev, maxlev, -Glyphs[cp * 2 + 1]);
+                    break;
+                case ACQ_MAJOR:
+                    theGame->GetEffectID(PUR_MAJOR, minlev, maxlev, -Glyphs[cp * 2 + 1]);
+                    break;
+                case ACQ_MINOR:
+                    theGame->GetEffectID(PUR_MINOR, minlev, maxlev, -Glyphs[cp * 2 + 1]);
+                    break;
+                default:
+                    theGame->GetEffectID(PUR_ACQUIRE, minlev, maxlev, -Glyphs[cp * 2 + 1]);
+                    break;
                 }
-          }
-        else 
-          {
-            
+                if (!Candidates[0] && !Glyphs[2])
+                {
+                    SetWin(WIN_INPUT);
+                    Clear();
+                    Message("You don't know any suitable formulas.");
+                    return NULL;
+                }
 
-          for (i=0;DungeonItems[i].Type;i++)
-            if (Glyphs[cp*2+1] == -DungeonItems[i].Source) {
-              if (DungeonItems[i].Prototype)
-                { xID = FIND(DungeonItems[i].Prototype); goto FoundProto; }
-              if (DungeonItems[i].Source == AI_WEAPON)
-                { xID = FIND("short sword"); goto FoundProto; }
-              if (DungeonItems[i].Source == AI_ARMOUR)
-                { xID = FIND("chainmail"); goto FoundProto; }
-              if (DungeonItems[i].Source == AI_SHIELD)
-                { xID = FIND("kite shield"); goto FoundProto; }
-              }
-          xID = 0;
 
-          FoundProto:
-          switch(Reason)
-            {
-              case ACQ_CRAFT: 
-                theGame->GetEffectID(PUR_MUNDANE,minlev,maxlev,-Glyphs[cp*2+1]);
-               break;
-              case ACQ_KNOWN: 
-                theGame->GetEffectID(PUR_KNOWN,minlev,maxlev,-Glyphs[cp*2+1]);
-               break;
-              case ACQ_MAJOR: 
-                theGame->GetEffectID(PUR_MAJOR,minlev,maxlev,-Glyphs[cp*2+1]);
-               break;
-              case ACQ_MINOR: 
-                theGame->GetEffectID(PUR_MINOR,minlev,maxlev,-Glyphs[cp*2+1]);
-               break;
-              default:
-                theGame->GetEffectID(PUR_ACQUIRE,minlev,maxlev,-Glyphs[cp*2+1]);
-               break;
             }
-          if (!Candidates[0] && !Glyphs[2])
-            {
-              SetWin(WIN_INPUT);
-              Clear();
-              Message("You don't know any suitable formulas.");
-              return NULL;
-            }  
-                
-               
-          }
         }
-      SetWin(WIN_MESSAGE); Clear(); GotoXY(0,0);
-      j = WinSizeY()/2;
-      for(i=0;i!=WinSizeY();i++)
+        SetWin(WIN_MESSAGE); Clear(); GotoXY(0, 0);
+        j = WinSizeY() / 2;
+        for (i = 0; i != WinSizeY(); i++)
         {
-          Color(i == j ? AZURE : BLUE);
-          if (n - j + i < 0)
-            continue;
-          if (!Candidates[n-j+i])
-            continue;
-            
-          if (xID)
-            str = ItemNameFromEffect(Candidates[n-j+i]);
-          else
-            str = NAME(Candidates[n-j+i]);
-          /*
-          if (xID && Candidates[n-j+i] && TEFF(Candidates[n-j+i])->HasFlag(EF_NAMEONLY)) 
-            str = Format("%s",NAME(Candidates[n-j+i]));
-          else if (TEFF(Candidates[n-j+i])->GetConst(BASE_ITEM))
-            str = Format("%s of %s",NAME(TEFF(Candidates[n-j+i])->GetConst(BASE_ITEM)),NAME(Candidates[n-j+i]));
-          else if (xID && Candidates[n-j+i]) 
-            str = Format("%s of %s",NAME(xID),NAME(Candidates[n-j+i]));
-          else 
-            str = Format("%s",NAME(Candidates[n-j+i]));*/
-          str.SetAt(0,toupper(str[0]));
-          Write(0,i,str);
-        }
-      SetWin(WIN_INPUT);
+            Color(i == j ? AZURE : BLUE);
+            if (n - j + i < 0)
+                continue;
+            if (!Candidates[n - j + i])
+                continue;
 
-      PurgeStrings();  
-      switch(GetCharCmd(KY_CMD_ARROW_MODE))
+            if (xID)
+                str = ItemNameFromEffect(Candidates[n - j + i]);
+            else
+                str = NAME(Candidates[n - j + i]);
+            /*
+            if (xID && Candidates[n-j+i] && TEFF(Candidates[n-j+i])->HasFlag(EF_NAMEONLY))
+            str = Format("%s",NAME(Candidates[n-j+i]));
+            else if (TEFF(Candidates[n-j+i])->GetConst(BASE_ITEM))
+            str = Format("%s of %s",NAME(TEFF(Candidates[n-j+i])->GetConst(BASE_ITEM)),NAME(Candidates[n-j+i]));
+            else if (xID && Candidates[n-j+i])
+            str = Format("%s of %s",NAME(xID),NAME(Candidates[n-j+i]));
+            else
+            str = Format("%s",NAME(Candidates[n-j+i]));*/
+            str.SetAt(0, toupper(str[0]));
+            Write(0, i, str);
+        }
+        SetWin(WIN_INPUT);
+
+        PurgeStrings();
+        switch (GetCharCmd(KY_CMD_ARROW_MODE))
         {
-          case KY_REDRAW:
+        case KY_REDRAW:
             goto Redraw;
-          case KY_CMD_WEST:
+        case KY_CMD_WEST:
             if (cp)
-              cp--;
-            if (cp*2 + Glyphs < GOffset)
-              GOffset = Glyphs + cp*2;
-           break;
-          case KY_CMD_EAST:
-            if (Glyphs[cp*2+2])
-              cp++;
-            if (cp - ((GOffset - Glyphs)/2) > GLYPHS_SHOWN-1)
-              GOffset = (Glyphs + cp*2 + 2) - GLYPHS_SHOWN*2;
-           break;
-          case KY_CMD_NORTH:
+                cp--;
+            if (cp * 2 + Glyphs < GOffset)
+                GOffset = Glyphs + cp * 2;
+            break;
+        case KY_CMD_EAST:
+            if (Glyphs[cp * 2 + 2])
+                cp++;
+            if (cp - ((GOffset - Glyphs) / 2) > GLYPHS_SHOWN - 1)
+                GOffset = (Glyphs + cp * 2 + 2) - GLYPHS_SHOWN * 2;
+            break;
+        case KY_CMD_NORTH:
             if (n)
-              n--;
-           break;
-          case KY_CMD_SOUTH:
-            if (Candidates[n+1])
-              n++;
-           break;
-          case KY_ENTER: 
-          case KY_CMD_ENTER: 
+                n--;
+            break;
+        case KY_CMD_SOUTH:
+            if (Candidates[n + 1])
+                n++;
+            break;
+        case KY_ENTER:
+        case KY_CMD_ENTER:
             if (!Candidates[n])
-              break;
+                break;
             SetWin(WIN_MESSAGE); Clear();
             SetWin(WIN_INPUT); Clear();
             if (Reason >= ACQ_MONSTER) {
-              mn = new Monster(Candidates[n]);
-              if (mn->isMType(MA_DRAGON))
-                goto DragonAgeCat;
-              return mn; 
-              }
+                mn = new Monster(Candidates[n]);
+                if (mn->isMType(MA_DRAGON))
+                    goto DragonAgeCat;
+                return mn;
+            }
             if (xID) {
-              if (xID == FIND("trap")) {
-                it = (Item*) new Trap(xID,Candidates[n]);
-                return it;
+                if (xID == FIND("trap")) {
+                    it = (Item*) new Trap(xID, Candidates[n]);
+                    return it;
+                } else {
+                    it = Item::Create(xID);
+                    /*
+                    if (TEFF(Candidates[n])->HasFlag(EF_NEEDS_PLUS))
+                    it->MakeMagical(Candidates[n],1+random(5));
+                    else
+                    it->MakeMagical(Candidates[n],1+random(5));
+                    */
+                    if (TEFF(Candidates[n])->ef.aval == AR_POISON) {
+                        it->GainPermStati(POISONED, NULL, SS_MISC, 0, 10, Candidates[n]);
+                        it->eID = 0;
+                    } else if (TEFF(Candidates[n])->HasFlag(EF_NEEDS_PLUS))
+                        it->MakeMagical(Candidates[n], MaxItemPlus(maxlev, Candidates[n]));
+                    else
+                        it->MakeMagical(Candidates[n], 0);
+                    it->Initialize();
                 }
-              else {
-                it = Item::Create(xID);
-                /*
-                if (TEFF(Candidates[n])->HasFlag(EF_NEEDS_PLUS))
-                  it->MakeMagical(Candidates[n],1+random(5));
-                else
-                  it->MakeMagical(Candidates[n],1+random(5));
-                  */
-                if (TEFF(Candidates[n])->ef.aval == AR_POISON) {
-                  it->GainPermStati(POISONED,NULL,SS_MISC,0,10,Candidates[n]);
-                  it->eID = 0;
-                  }
-                else if (TEFF(Candidates[n])->HasFlag(EF_NEEDS_PLUS))
-                  it->MakeMagical(Candidates[n],MaxItemPlus(maxlev,Candidates[n]));
-                else
-                  it->MakeMagical(Candidates[n],0);
-                it->Initialize();                
-                }
-              }
-            else
-              it = Item::Create(Candidates[n]);
+            } else
+                it = Item::Create(Candidates[n]);
             it->SetKnown(0xFF);
             if (it->HasIFlag(IT_BGROUP))
-              it->SetQuantity(100);
+                it->SetQuantity(100);
             else if (it->HasIFlag(IT_GROUP) || it->HasIFlag(IT_ROPE))
-              it->SetQuantity(12);          
+                it->SetQuantity(12);
             return it;
-          default: 
+        default:
             SetWin(WIN_INPUT); Clear();
             SetWin(WIN_MESSAGE); Clear();
             Clear();
             return NULL;
         }
-      }
-    while(1);
-    DragonAgeCat:
+    } while (1);
+
+DragonAgeCat:
     /* Assumption: all age categories are in Module 0. */
-    for(i=0;i!=theGame->Modules[0]->szTem;i++)
-      if (theGame->Modules[0]->QTem[i].TType & TM_AGECAT)
-        if (theGame->Modules[0]->QTem[i].CR.Adjust(mn->ChallengeRating()) <= maxlev)
-          LOption(NAME(theGame->Modules[0]->TemplateID(i)),theGame->Modules[0]->TemplateID(i));
-    xID = LMenu(MENU_BORDER,"Choose an age category:",WIN_MENUBOX);
+    for (i = 0; i != theGame->Modules[0]->szTem; i++)
+        if (theGame->Modules[0]->QTem[i].TType & TM_AGECAT)
+            if (theGame->Modules[0]->QTem[i].CR.Adjust(mn->ChallengeRating()) <= maxlev)
+                LOption(NAME(theGame->Modules[0]->TemplateID(i)), theGame->Modules[0]->TemplateID(i));
+
+    xID = LMenu(MENU_BORDER, "Choose an age category:", WIN_MENUBOX);
     mn->AddTemplate(xID);
     return mn;
-} 
+}
 
 String & TextTerm::StringPrompt(int8 col, const char*msg) {
     SetWin(WIN_INPUT);
-    Clear(); PrePrompt(); Color(col);
-    Write(msg); Color(7);
-    ReadLine(cx+1,cy,0); 
+    Clear();
+    PrePrompt();
+    Color(col);
+    Write(msg);
+    Color(GREY);
+    ReadLine(cx + 1, cy, 0);
     SetWin(WIN_INPUT);
     Clear();
     return *tmpstr(Input);

@@ -2047,51 +2047,41 @@ String & EventName(int16 Ev)
     return *tmpstr(pre + str + post);
   }
 
-void Game::DumpCode()
-  {
+void Game::DumpCode() {
     Annotation *a;
     String res, msg; rID xID; int16 i, ev;
-    // weimer: the old version of this absolutely did not work for me
-    // (never displayed anything) ... which is weird, because I'm sure you
-    // must have used it a million times ...
-    // fjm: I hope this works for both of us now; it's been updated.
+
     T1->SetWin(WIN_INPUT);
-    T1->Color(14);
-    T1->Clear(); 
+    T1->Color(YELLOW);
+    T1->Clear();
 
     do {
-      xID = 0;
-      T1->Clear();
-      T1->Write("Resource Name: ");
-      T1->ReadLine();
-      res = T1->GetTypedString();
-      xID = FIND(res);
-      }
-    while (!xID);
+        xID = 0;
+        T1->Clear();
+        T1->Write("Resource Name: ");
+        T1->ReadLine();
+        res = T1->GetTypedString();
+        xID = FIND(res);
+    } while (!xID);
 
-    for(a=RES(xID)->FAnnot();a;a=RES(xID)->NAnnot())  
-      if (a->AnType == AN_EVENT) {
-        for (i=0;i!=5;i++)
-          if (a->u.ev[i].Event != 0) {
-            ev = a->u.ev[i].Event; 
-            T1->LOption(EventName(ev),ev);
-          } 
-      } 
+    for (a = RES(xID)->FAnnot(); a; a = RES(xID)->NAnnot())
+        if (a->AnType == AN_EVENT) {
+            for (i = 0; i != 5; i++)
+                if (a->u.ev[i].Event != 0) {
+                    ev = a->u.ev[i].Event;
+                    T1->LOption(EventName(ev), ev);
+                }
+        }
 
-    ev = (int16)T1->LMenu(MENU_ESC|MENU_2COLS|MENU_BORDER,"Choose an event:",WIN_MENUBOX);
+    ev = (int16)T1->LMenu(MENU_ESC | MENU_2COLS | MENU_BORDER, "Choose an event:", WIN_MENUBOX);
+    if (ev == -1) return;
 
-    if (ev == -1) return; 
-
-    ASSERT(RES(xID)->EventMask & BIT((ev%16)+1));
+    ASSERT(RES(xID)->EventMask & BIT((ev % 16) + 1));
 
     T1->TraceWindow(xID, ev, &theGame->VM, 0, false);
-
-  }
-    
+}
   
-String & VMachine::LookupParam(uint16 Type,int32 Value, rID xID, 
-							   int16 Ev, int16 op, int16 pn)
-  {
+String & VMachine::LookupParam(uint16 Type,int32 Value, rID xID, int16 Ev, int16 op, int16 pn) {
     int32 i, best, pri;
     OArray<DebugInfo,1000,1000> &sym = 
               theGame->Modules[0]->Symbols;
@@ -2172,10 +2162,10 @@ void TextTerm::TraceWindow(rID xID, int16 Event, VMachine *VM, hCode CP, bool ru
     T1->SetWin(WIN_DEBUG);
     sy = T1->WinSizeY();
     T1->Clear(); 
-    T1->Color(9); 
+    T1->Color(AZURE); 
     T1->Write(0,0,(const char*)Format("$\"%s\": %s\n\n",
       NAME(xID), (const char*)EventName(Event)));
-    T1->Color(7);
+    T1->Color(GREY);
     T1->Color(PINK);
     T1->Write(0,sy-2,"[F2] Toggle Breakpoint [F5] Run [F10] Step Into [F11] Step Over");
     T1->Write(0,sy-1,"[PGUP/PGDN] Scroll Code [F6] Execute to Cursor [F7] Abort Script");
@@ -2209,9 +2199,9 @@ void TextTerm::TraceWindow(rID xID, int16 Event, VMachine *VM, hCode CP, bool ru
           }
         else
           {
-            T1->Color(7);
+            T1->Color(GREY);
             T1->Write(0,4,"No code to display.");
-            T1->Color(15);
+            T1->Color(WHITE);
             T1->Write(0,10,"\nPress any key to continue...");
             T1->GetCharRaw();
             return;
@@ -2360,9 +2350,9 @@ void TextTerm::TraceWindow(rID xID, int16 Event, VMachine *VM, hCode CP, bool ru
           break;
       }
       
-    T1->Color(11);
+    T1->Color(SKYBLUE);
     T1->Write(48,2,"Registers:");
-    T1->Color(3);
+    T1->Color(CYAN);
     for (y=3;y!=20;y++)
       {
         T1->Write(48,y,Format("R%2d = %3d",
@@ -2373,9 +2363,9 @@ void TextTerm::TraceWindow(rID xID, int16 Event, VMachine *VM, hCode CP, bool ru
     if (cLocals)
       {
         int32 Val;
-        T1->Color(13);
+        T1->Color(MAGENTA);
         T1->Write(0,(sy-(3+watch_size)),"Local Variables:");
-        T1->Color(5);
+        T1->Color(PURPLE);
         for (i=0;i!=cLocals;i++)
           {
             y = (sy-(2+watch_size)) + i;

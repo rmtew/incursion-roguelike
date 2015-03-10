@@ -3919,14 +3919,13 @@ int16 Creature::SkillAttr(int16 sk) {
 }
 
 
-void Character::TrainAs(rID cID)
-{
+void Character::TrainAs(rID cID) {
     char ch;
     if (Level[2] && Level[1]) {
         IPrint("Sadly, you can possess at most three classes.");
         return;
     }
-    if (!ClassID[1]) 
+    if (!ClassID[1])
         ClassID[1] = cID;
     else if (!ClassID[2])
         ClassID[2] = cID;
@@ -3934,18 +3933,16 @@ void Character::TrainAs(rID cID)
         if (Type != T_PLAYER)
             return;
         if (Level[2]) {
-            if (!yn(Format("Do you wish to replace your training as a %s? ",NAME(ClassID[1]))))
+            if (!yn(Format("Do you wish to replace your training as a %s? ", NAME(ClassID[1]))))
                 return;
             ClassID[1] = cID;
             return;
-        }
-        else if (Level[1]) {
-            if (!yn(Format("Do you wish to replace your training as a %s? ",NAME(ClassID[2]))))
+        } else if (Level[1]) {
+            if (!yn(Format("Do you wish to replace your training as a %s? ", NAME(ClassID[2]))))
                 return;
             ClassID[2] = cID;
             return;
-        }
-        else {
+        } else {
             ch = thisp->MyTerm->ChoicePrompt(Format(
                 "Replace your training as a %s [1], a %s [2] or [n]either? ",
                 NAME(ClassID[1]), NAME(ClassID[2])), "12n");
@@ -3958,8 +3955,7 @@ void Character::TrainAs(rID cID)
     }
 }
 
-int8 Creature::rateMeleeWeapon()
-{
+int8 Creature::rateMeleeWeapon() {
     int8 rating = 0; Item *it;
     for (it=FirstInv();it;it=NextInv())
         if (it->isType(T_WEAPON) && !it->isType(T_BOW)

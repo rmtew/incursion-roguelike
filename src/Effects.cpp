@@ -1049,8 +1049,7 @@ void Creature::Shapeshift(rID _mID, bool merge, Item* PolySource)
 }
 
 /* HACKFIX */
-EvReturn Magic::Dispel(EventInfo &e)
-  {
+EvReturn Magic::Dispel(EventInfo &e) {
     static rID Resisted[512], Dispelled[512];
     hObj   oResisted[512], oDispelled[512]; 
     int16 eCasterLev, rc, dc, j, bon; 
@@ -1060,10 +1059,8 @@ EvReturn Magic::Dispel(EventInfo &e)
     bon = e.EActor->AbilityLevel(CA_PURGE_MAGIC);
 
     if (e.EMagic->xval & DIS_BANISH)
-      if (e.EVictim->HasStati(SUMMONED))
-        {
-          if (e.vDmg + bon >= 11+e.EVictim->GetStatiMag(SUMMONED))
-            {
+      if (e.EVictim->HasStati(SUMMONED)) {
+          if (e.vDmg + bon >= 11+e.EVictim->GetStatiMag(SUMMONED)) {
               VPrint(e,NULL,"The <EVictim> winks out of existence.");
               // ww: it's really annoying when your summoned celestial elf
               // picks up Stormbringer and then disappears with it
@@ -1078,8 +1075,7 @@ EvReturn Magic::Dispel(EventInfo &e)
     if (e.EMagic->xval & DIS_DISPEL) {
       StatiIter(e.EVictim)
           it = NULL;
-          if (!(S->Source == SS_ENCH || S->Source == SS_ITEM ||
-                S->Source == SS_ONCE || S->Source == SS_ATTK))
+          if (!(S->Source == SS_ENCH || S->Source == SS_ITEM || S->Source == SS_ONCE || S->Source == SS_ATTK))
             continue;
 
           if (!S->eID)
@@ -1087,23 +1083,19 @@ EvReturn Magic::Dispel(EventInfo &e)
           if (TEFF(S->eID)->Type != T_TEFFECT)
             continue;
 
-          if (TEFF(S->eID)->ef.aval == AR_POISON ||
-              TEFF(S->eID)->ef.aval == AR_DISEASE)
+          if (TEFF(S->eID)->ef.aval == AR_POISON || TEFF(S->eID)->ef.aval == AR_DISEASE)
             continue;
             
           if (TEFF(S->eID)->HasFlag(EF_MUNDANE))
             continue;
 
           for (j=0;j!=dc;j++)
-            if (Dispelled[j] == S->eID &&
-                oDispelled[j] == S->h)
-              {
+            if (Dispelled[j] == S->eID && oDispelled[j] == S->h) {
                 StatiIter_DispelCurrent(e.EVictim);
                 continue;
               }
           for(j=0;j!=rc;j++)
-            if (Resisted[j] == S->eID &&
-                oResisted[j] == S->h)
+            if (Resisted[j] == S->eID && oResisted[j] == S->h)
               goto NextStati;
           
           eCasterLev = S->CLev;
@@ -1116,8 +1108,7 @@ EvReturn Magic::Dispel(EventInfo &e)
           if (!eCasterLev)
             eCasterLev = e.EVictim->ChallengeRating();
           
-          if (eCasterLev+11 > e.vDmg+bon)
-            {
+          if (eCasterLev+11 > e.vDmg+bon) {
               e.Resist = true;
               oResisted[rc] = S->h;
               Resisted[rc++] = S->eID;
@@ -1132,7 +1123,6 @@ EvReturn Magic::Dispel(EventInfo &e)
           if (dc > 512)
             StatiIterBreakout(e.EVictim,return DONE)
               
-
           if (it) {
             it->GainTempStati(DISPELLED,NULL,e.vDuration,SS_MISC,0,0,e.eID);
             if (!it->isKnown(KN_MAGIC))
@@ -1142,33 +1132,26 @@ EvReturn Magic::Dispel(EventInfo &e)
           Something = true;
           if (!it)
             e.EVictim->IPrint("Your <5><Res><7> spell is dispelled.",S->eID);
-          if (it || e.EActor->SkillCheck(SK_SPELLCRAFT,15+TEFF(S->eID)->Level))
-            {
+          if (it || e.EActor->SkillCheck(SK_SPELLCRAFT,15+TEFF(S->eID)->Level)) {
               if (it)
                 TPrint(e,e.EActor == e.EVictim ? NULL :
                   "The <EVictim>'s <Obj> is surrounded with a dull grey aura.",
                   "Your <Obj> is surrounded with a dull grey aura.",
                   "The <EVictim>'s <Obj> is surrounded with a dull grey aura.",it);
               else if (e.EActor != e.EVictim)
-                e.EActor->IPrint("The <Obj>'s <5><Res><7> spell is dispelled.",
-                                   e.EVictim,S->eID);
+                e.EActor->IPrint("The <Obj>'s <5><Res><7> spell is dispelled.", e.EVictim,S->eID);
               msg = true;
             }
 
-
-
-          SkipMessage:
-
+SkipMessage:
           StatiIter_DispelCurrent(e.EVictim);
 
-          NextStati:
-            ;
+NextStati:;
       StatiIterEnd(e.EVictim)
     }
     e.EMap->UnsetQueue(QUEUE_DISPEL_MSG);
 
     if (e.EVictim->isPlayer() || (e.EItem && e.EItem->isItem()) && e.EItem->isKnown(KN_MAGIC)) {
-
       if (e.Resist)
         TPrint(e,e.EActor == e.EVictim ? NULL :
                  "The <EVictim> <Str1>resists the dispelling.",
@@ -1186,10 +1169,9 @@ EvReturn Magic::Dispel(EventInfo &e)
       }
                       
     return DONE;
-  }
+}
 
-EvReturn Magic::Reveal(EventInfo &e)
-  {
+EvReturn Magic::Reveal(EventInfo &e) {
     Corpse* theCorpse; uint8 tlev; int16 i,d; String Text;
     Thing *o; int8 high; int16 gauge; bool DoneBenefit;
     Map *m = e.EActor->m; Thing *t; 
@@ -1201,15 +1183,13 @@ EvReturn Magic::Reveal(EventInfo &e)
           if (t->y == e.EActor->y)
             if (t->Type == T_CORPSE)
               { theCorpse = (Corpse*)t; goto FoundCorpse; }
-      e.EActor->IPrint("The spell fails -- you need to be standing over a "
-        "fresh corpse for it to function properly.");
+      e.EActor->IPrint("The spell fails -- you need to be standing over a fresh corpse for it to function properly.");
       return DONE;
-      FoundCorpse:
+
+FoundCorpse:
       //tlev = (EffectLevel() + TMON(theCorpse->mID)->Level + 1) / 2;
-      DPrint(e,NULL, "The <EActor> cuts open the <Obj> and reads auguries "
-        "from its entrails.");
-      Text += SC("You cut open the ") + theCorpse->Name() + 
-        SC("and read auguries from its entrails.  ");
+      DPrint(e,NULL, "The <EActor> cuts open the <Obj> and reads auguries from its entrails.");
+      Text += SC("You cut open the ") + theCorpse->Name() + SC("and read auguries from its entrails.  ");
       }
 
     if (e.EItem && e.EItem->isItem())

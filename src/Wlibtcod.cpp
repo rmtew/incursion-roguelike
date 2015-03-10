@@ -632,14 +632,14 @@ void libtcodTerm::BlinkCursor() {
     cursorPulse = !cursorPulse;
     if (cursorPulse) {
         uint16 c = attr & COLOUR_MASK;
-        if (c == SHADOW) 
-          c = GREY;
-        else if (c < 8)
-          c += 8;
-        TCOD_console_put_char_ex(NULL,cx,cy,'X',Colors[c], Colors[c]);
+        if (c == SHADOW)
+            c = GREY;
+        else if (c < SHADOW)
+            c += SHADOW;
+        TCOD_console_put_char_ex(NULL, cx, cy, 'X', Colors[c], Colors[c]);
         ocy = cy; ocx = cx;
     } else
-        TCOD_console_blit(bScreen,ocx,ocy,1,1,NULL,ocx,ocy,1.0f,1.0f);
+        TCOD_console_blit(bScreen, ocx, ocy, 1, 1, NULL, ocx, ocy, 1.0f, 1.0f);
     /* Won't get an update necessarily otherwise */
     TCOD_console_flush();
 }
@@ -996,7 +996,7 @@ void libtcodTerm::Initialize() {
     InitWindows();   
 
     SetWin(WIN_SCREEN);
-    Color(14);
+    Color(YELLOW);
 }
 
 void libtcodTerm::ShutDown() {

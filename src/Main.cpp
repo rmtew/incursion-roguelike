@@ -1883,7 +1883,7 @@ void Game::GenerateRarityTable()
                   num[FavEnemies[k]]++;
             }
         T1->SetWin(WIN_SCREEN);
-        T1->Color(15);
+        T1->Color(WHITE);
       }
 
     for (i=0,j=0;FavEnemies[i];i++)

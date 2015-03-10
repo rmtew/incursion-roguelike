@@ -1019,14 +1019,14 @@ void cursesTerm::Initialize() {
 	fakeScrollWindow = NULL;
 
 	colour_pair_index = 0;
-	colour_pair_to_index(15, 0);
+	colour_pair_to_index(WHITE, BLACK);
 
 	Reset();
     
     InitWindows();   
 
     SetWin(WIN_SCREEN);
-    Color(14);
+    Color(YELLOW);
 }
 
 void cursesTerm::ShutDown() {

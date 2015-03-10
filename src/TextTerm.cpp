@@ -202,142 +202,131 @@ void TextTerm::CWrite(const char* text)
       }
   }
 
-void TextTerm::Message(const char* _Msg)
-	{
-		String Seg; String Msg; 
-		int16 oldWin = (activeWin - &Windows[0]);
-    int16 space, len; 
-    int16 ch; bool isFull;
-    bool autoMore =  p ? p->Opt(OPT_AUTOMORE) != 0 : false;
+void TextTerm::Message(const char* _Msg) {
+    String Seg, Msg;
+    int16 oldWin = (activeWin - &Windows[0]);
+    int16 space, len;
+    int16 ch;
+    bool isFull;
+    bool autoMore = p ? p->Opt(OPT_AUTOMORE) != 0 : false;
+
     Msg = _Msg;
     if (!Msg.GetTrueLength())
-      return;
+        return;
     AddMessage(Msg);
 
-    if (Mode != MO_PLAY && Mode != MO_INV)
-      {
-        Box(WIN_SCREEN,0,PURPLE,GREY,Msg);
+    if (Mode != MO_PLAY && Mode != MO_INV) {
+        Box(WIN_SCREEN, 0, PURPLE, GREY, Msg);
         SetWin(oldWin);
         return;
-      }
+    }
 
-		if (Msg.GetTrueLength()+4 > (Windows[WIN_MESSAGE].Right-Windows[WIN_MESSAGE].Left)*2)
-      { Box(WIN_SCREEN,0,PINK,GREY,Msg); 
+    if (Msg.GetTrueLength() + 4 > (Windows[WIN_MESSAGE].Right - Windows[WIN_MESSAGE].Left) * 2) {
+        Box(WIN_SCREEN, 0, PINK, GREY, Msg);
         SetWin(oldWin);
-        return; }
+        return;
+    }
     SetWin(WIN_MESSAGE);
-    
-    if (ClearMsgOK)
-      {
+
+    if (ClearMsgOK) {
         ClearMsgOK = false;
         linenum = linepos = 0;
         Clear();
-      }
+    }
 
     Color(GREY);
     ASSERT(WinSizeX() >= 25)
-    ASSERT(WinSizeY() >= 2)
+        ASSERT(WinSizeY() >= 2)
 
-    NextSeg:
+NextSeg:
+    space = WinSizeX() - (linepos + 1);
 
-    space = WinSizeX() - (linepos+1);
-    
     /* Leave room for -- more -- on the last line. */
     if (linenum == WinSizeY() - 1 && !autoMore)
-      space -= 12; 
+        space -= 12;
     if (space < 5) {
-      if (linenum == WinSizeY() - 1)
-        goto DoMore;
-      linenum++;
-      linepos = 0;
-      goto NextSeg;
-      }
+        if (linenum == WinSizeY() - 1)
+            goto DoMore;
+        linenum++;
+        linepos = 0;
+        goto NextSeg;
+    }
 
     /* Find a good place to break off the segment */
-    len = max(space,(int16)Msg.TrueLeft(space).GetLength());
-    for (; len != max(0,space-15); len--) 
-      if (len > Msg.GetLength() || Msg[len] == ' ' || Msg[len] == '\n')
-        break;
+    len = max(space, (int16)Msg.TrueLeft(space).GetLength());
+    for (; len != max(0, space - 15); len--)
+        if (len > Msg.GetLength() || Msg[len] == ' ' || Msg[len] == '\n')
+            break;
     /* No good place, so we have to break a word. */
     if (len == 0)
-      len = space;
+        len = space;
 
-    if (len > Msg.GetLength())
-      { 
-        isFull = true; 
-        Seg = Msg; 
+    if (len > Msg.GetLength()) {
+        isFull = true;
+        Seg = Msg;
         Msg.Empty();
-      }
-    else
-      {
+    } else {
         isFull = false;
         Seg = Msg.Left(len);
         Msg = Msg.Right(Msg.GetLength() - len);
         Seg = Seg.Trim();
         Msg = Msg.Trim();
-      }
+    }
 
-    GotoXY(linepos,linenum);
+    GotoXY(linepos, linenum);
     Write(Seg);
 
-    if (isFull)
-      {
+    if (isFull) {
         linepos += (int8)Seg.GetTrueLength() + 1;
         return;
-      }
-    else
-      {
-        if (linenum < WinSizeY() - 1)
-          { linenum++; 
-            linepos = 0; 
-            goto NextSeg; }
+    } else {
+        if (linenum < WinSizeY() - 1) {
+            linenum++;
+            linepos = 0;
+            goto NextSeg;
+        }
 
-        DoMore:
-
-        if (!autoMore) { 
-          int32 old_attr;
-          GotoXY(WinSizeX()-11,WinSizeY()-1);
-          old_attr = attr;
-          Color(PINK);
-          Write("-- more --");
-          do 
-            ch = GetCharCmd();
-          while (ch >= KY_CMD_NORTH &&
-                 ch <= KY_CMD_SOUTHWEST);   
-          Color((int16)old_attr);   
-        } 
+DoMore:
+        if (!autoMore) {
+            int32 old_attr;
+            GotoXY(WinSizeX() - 11, WinSizeY() - 1);
+            old_attr = attr;
+            Color(PINK);
+            Write("-- more --");
+            do
+                ch = GetCharCmd();
+            while (ch >= KY_CMD_NORTH && ch <= KY_CMD_SOUTHWEST);
+            Color((int16)old_attr);
+        }
         ClearMsgOK = false;
         Clear();
         linenum = linepos = 0;
         goto NextSeg;
-      }
+    }
     SetWin(oldWin);
-	}
+}
 
-void TextTerm::AddMessage(const char* msg)
-  {
+void TextTerm::AddMessage(const char* msg) {
     int16 i;
     if ((strlen(MsgHistory) + strlen(msg)) > 10230) {
-      i = strlen(msg)+3;
-      while(MsgHistory[i] && (MsgHistory[i] != '.'))
-        i++;
-      if (!MsgHistory[i])
-        {
-          strcpy(MsgHistory,msg);
-          strcat(MsgHistory," ");
-          return;
+        i = strlen(msg) + 3;
+        while (MsgHistory[i] && (MsgHistory[i] != '.'))
+            i++;
+        if (!MsgHistory[i]) {
+            strcpy(MsgHistory, msg);
+            strcat(MsgHistory, " ");
+            return;
         }
-      i += 2;
-      memmove(MsgHistory,&(MsgHistory[i]),10239-i);
-      MsgHistory[10239-i] = 0;
-      }
-    strcat(MsgHistory,msg);
-    strcat(MsgHistory,"\n"); /* ww: now that we're scrolling, keeping line
-                              * breaks is important */
-   }
 
-void TextTerm::ShowMessages()
-  {
+        i += 2;
+        memmove(MsgHistory, &(MsgHistory[i]), 10239 - i);
+        MsgHistory[10239 - i] = 0;
+    }
+    strcat(MsgHistory, msg);
+    strcat(MsgHistory, "\n"); /* ww: now that we're scrolling, keeping line breaks is important */
+}
+
+void TextTerm::ShowMessages() {
     int16 oldMode;
     oldMode = GetMode();
     SetMode(MO_DIALOG);
@@ -993,7 +982,7 @@ Restart:
         PurgeStrings();
         DY = (MWin == WIN_MENUBOX) ? 1 : 2;
         if (title) {
-            Color(15);
+            Color(WHITE);
             if ((int16)strlen(title) > WinSizeX()-3 || strchr(title,'\n')) {
                 if (fl & MENU_SWRAPWRITE) {
                     ClearScroll(); 
@@ -1057,7 +1046,7 @@ Restart:
         }
         if (fl & MENU_DESC) {
             ClearScroll();
-            Color(1);
+            Color(BLUE);
             SWrapWrite(3,0,XPrint(Option[c].Desc),WinSizeX()-2,WIN_MENUDESC);
             UpdateScrollArea(0,WIN_MENUDESC);
             SetWin(MWin);
@@ -1303,7 +1292,7 @@ Restart:
         PurgeStrings();
         DY = (MWin == WIN_MENUBOX) ? 1 : 2;
         if (title) {
-            Color(15);
+            Color(WHITE);
             if ((int16)strlen(title) > WinSizeX()-3 || strchr(title,'\n')) {
                 if (fl & MENU_SWRAPWRITE) {
                     ClearScroll(); 
@@ -1350,10 +1339,9 @@ Restart:
                 (AGetChar(j,((i-vStart)%vRows)+DY+activeWin->Top) & 0x0FFF) | 
                 ((c == i) ? 0x1000 : 0x0000));
         }
-        if (fl & MENU_DESC)
-        {
+        if (fl & MENU_DESC) {
             ClearScroll();
-            Color(1);
+            Color(BLUE);
             SWrapWrite(3,0,XPrint(Option[c].Desc),WinSizeX()-2,WIN_MENUDESC);
             UpdateScrollArea(0,WIN_MENUDESC);
             SetWin(MWin);
@@ -1370,8 +1358,8 @@ InvalidChar:
                 ch = GetCharCmd(KY_CMD_ARROW_MODE);
             SetMode(oldMode);
         }
-        switch(ch)
-        {
+
+        switch(ch) {
         case KY_CMD_NORTHEAST:
         case KY_CMD_NORTHWEST:
             if (fl & MENU_DESC) { 

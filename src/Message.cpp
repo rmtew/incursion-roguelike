@@ -65,544 +65,589 @@ const char* Something(int16 Flags) {
     return Flags & NA_CAPS ? "Something" : "something";
 }
 
-const char* __XPrint(Player *POV, const char *msg,va_list args) {
-    char Tag1[24], Tag2[24]; char *Out; 
-    const char *cc, *ts; char *p, *tag; 
-    int32 n = 0, i,j; EventInfo *oev;
-    String str, l; Thing* Subject;
-
-    union {
-      int32 i;
-      const char *s;
-      Thing *o;
-      }
-    Params[10];
-
+const char* __XPrint(Player *POV, const char *msg, va_list args) {
+    char Tag1[24], Tag2[24];
+    const char *cc, *ts;
+    char *p, *tag, *Out;
+    int32 n = 0, i, j;
+    EventInfo *oev;
+    String str, l;
+    Thing* Subject;
     uint16 Flags;
 
-    switch(++xprint_lev)
-      {
-        case 1: Out = XPrintBuff1; break;
-        case 2: Out = XPrintBuff2; break;
-        case 3: Out = XPrintBuff3; break;
-        case 4: Out = XPrintBuff4; break;
-        case 5: Out = XPrintBuff5; break;
-        default: 
-          Error("XPrint recursion is too deep!");
-          --xprint_lev;
-          return "(XPrint Error)";
-      }
+    union {
+        int32 i;
+        const char *s;
+        Thing *o;
+    }
+    Params[10];
 
+
+    switch (++xprint_lev) {
+    case 1:
+        Out = XPrintBuff1;
+        break;
+    case 2:
+        Out = XPrintBuff2;
+        break;
+    case 3:
+        Out = XPrintBuff3;
+        break;
+    case 4:
+        Out = XPrintBuff4;
+        break;
+    case 5:
+        Out = XPrintBuff5;
+        break;
+    default:
+        Error("XPrint recursion is too deep!");
+        --xprint_lev;
+        return "(XPrint Error)";
+    }
 
     cc = msg;
     p = Out;
-    while(*cc) {
-      if (p >= Out+(xprint_lev < 3 ? 129000 : 4000))
-        break;
-      if (*cc == '<' && (cc == msg || cc == (msg+1) || (*(cc-2) != LITERAL_CHAR))) {
-        tag = Tag1; ts = cc; cc++; Tag2[0] = 0;
+    while (*cc) {
+        if (p >= Out + (xprint_lev < 3 ? 129000 : 4000))
+            break;
+
+        if (*cc == '<' && (cc == msg || cc == (msg + 1) || (*(cc - 2) != LITERAL_CHAR))) {
+            tag = Tag1;
+            ts = cc;
+            cc++;
+            Tag2[0] = 0;
 Repeat:
-        i = 0;
-        while(*cc && *cc != ':' && *cc != '>' && i!=23)
-          { *tag++ = tolower(*cc++); i++; }
-        if (i == 23)
-          Fatal("Formatted string with bad tag!");
-        *tag = 0;
-        if (!*cc)
-          Fatal("Null terminator inside tag!");
-        if (*cc == ':')
-          { tag = Tag2; cc++; goto Repeat; }
-        cc++;
-        
-        if (isdigit(Tag1[0]))
-          { *p++ = -atoi(Tag1); continue; }
-        if (Tag1[0] == 's' && Tag1[1] == 't' && Tag1[2] == 'r')
-          {
-            if (!Tag1[3])
-              i = n + 1;
-            else
-              i = atoi(&(Tag1[3]));
-            while (i > n) {
-              n++;
-              Params[n].s = va_arg(args,const  char*);
-              }
-            if (Params[i].s == NULL)
-              strcpy(p,"[null string]");
-            else
-              strcpy(p,Params[i].s);
-            p = Out + strlen(Out);
-            continue;
-          }
-        if (Tag1[0] == 'n' && Tag1[1] == 'u' && Tag1[2] == 'm')
-          {
-            if (!Tag1[3])
-              i = n + 1;
-            else
-              i = atoi(&(Tag1[3]));
-            while (i > n) {
-              n++;
-              Params[n].i = va_arg(args,int);
-              }
-            strcpy(p,Format("%d",Params[i].i));
-            p = Out + strlen(Out);
-            continue;
-          }
-        if (Tag1[0] == 'c' && Tag1[1] == 'h' && Tag1[2] == 'a' && Tag1[3] == 'r')
-          {
-            if (!Tag2[0]) {
-              Error("<char:XXX> field in string without XXX.");
-              continue;
-              }
-            i = atoi(Tag2);
-            if (!i)
-              i = LookupStr(GLYPH_CONSTNAMES,Tag2);
-            if (!i)
-              Error("Cannot identify XXX field in <char:XXX> in formatted string!");
+            i = 0;
+            while (*cc && *cc != ':' && *cc != '>' && i != 23) {
+                *tag++ = tolower(*cc++);
+                i++;
+            }
+            if (i == 23)
+                Fatal("Formatted string with bad tag!");
+            *tag = 0;
+            if (!*cc)
+                Fatal("Null terminator inside tag!");
 
-			// We need to encode the potentially larger than 8 bit glyph code, in the string.  It is currently 12 bits, and
-			// will never grow larger.  So it's safe to encode it in two bytes.  The first byte may be 0x00, and should never be
-			// 0xFF, so we invert it to prevent it signalling an end of string.
-			strcpy(p, Format("%c%c%c", LITERAL_CHAR, LITERAL_CHAR1(i), LITERAL_CHAR2(i)));
-            p = Out + strlen(Out);
-            continue;
-          }
-        if (Tag1[0] == 'h' && Tag1[1] == 't')
-          {                                  
-            for(j=0;isalpha(Tag1[j]);j++)
-              ;
-            if (!Tag1[j])
-              i = n + 1;
-            else
-              i = atoi(&(Tag1[j]));
-            while (i > n) {
-              n++;
-              Params[n].i = va_arg(args,hText);
-              }
-            if (Params[n].i < 0)
-              strcpy(p,theGame->VM.getStringSafe(Params[n].i));
-            else
-              strcpy(p,theGame->Modules[theGame->VM.mn]->GetText(Params[i].i));
-            p = Out + strlen(Out);
-            continue;
-          }
-        if (Tag1[0] == 'r' && ( (Tag1[1] == 'i' && Tag1[2] == 'd') ||
-                                (Tag1[1] == 'e' && Tag1[2] == 's') )  )
-          {
-            if (!Tag1[3])
-              i = n + 1;
-            else
-              i = atoi(&(Tag1[3]));
-            while (i > n) {
-              n++;
-              Params[n].i = va_arg(args,rID);
-              }
-            strcpy(p,NAME(Params[i].i));
-            p = Out + strlen(Out);
-            continue;
-          }
-        else if (str.Left(4) == "hstr")
-          {
-            if (!str[4])
-              i = n + 1;
-            else
-              i = atoi(str.Right(str.GetLength()-4));
-            while (i > n) {
-              n++;
-              Params[n].i = va_arg(args,hObj);
-              }
-            /* strcpy(p,theGame->VM.GetString(Params[i].i)); */
-            p = Out + strlen(Out);
-            continue;
-          }
-        else if (!stricmp(Tag1,"list tattoos"))
-          {
-            int16 n, c; rID tID; TEffect *Tats[64];
-            l.Empty();
-            c = 0;
-            for (n=0;n!=theGame->LastSpell();n++)
-              { 
-                tID = theGame->SpellID(n);
-                if (!TEFF(tID)->HasSource(AI_TATTOO))
-                  continue;
-                Tats[c++] = TEFF(tID);
-              }
-            Tats[c] = NULL;
-            qsort(Tats,c,sizeof(Tats[0]),HelpEffectSort);
-            for (n=0;n!=c;n++)
-              { l += Tats[n]->Describe(POV); 
-                l += "\n\n"; }
-            strcpy(p,XPrint(l));
-            p = Out + strlen(Out);
-            continue;
-          }
-        else if (!stricmp(Tag1,"list macros"))
-          {
-            int16 n, c; String l; rID mID, Macs[64];
-            l.Empty();
-            c = 0;
-            for (n=0;n!=theGame->LastSpell();n++)
-              { 
-                mID = theGame->SpellID(n);
-                if (!TEFF(mID)->HasSource(AI_MACRO))
-                  continue;
-                Macs[c++] = mID;
-              }
-            Macs[c] = 0;
-            qsort(Macs,c,sizeof(Macs[0]),HelpResourceSort);
-            for (n=0;n!=c;n++)
-              { l += Format("<13>%s<5>\n__%s\n\n",
-                        (const char*) Upper(NAME(Macs[n])),
-                        (const char*) DESC(Macs[n])); }
-            strcpy(p,XPrint(l));
-            p = Out + strlen(Out);
-            continue;
-          }
-        else if (!stricmp(Tag1,"list options"))
-          {
-            TextVal CatDescs[] = {
-              { OPC_CHARGEN, "<15>CHARACTER GENERATION OPTIONS<5>\n"
-                 "__Character generation options determine how an Incursion character "
-                 "is generated, covering the rolling of Attributes and certain defaults "
-                 "such as gender. Character generation options are specific to a certain "
-                 "character and cannot be changed in gameplay -- they must be set before "
-                 "the character is created and are thereafter fixed. As such, this "
-                 "category also includes some switches that affect gameplay after "
-                 "character creation, but should not be changed once the game has been "
-                 "begun.\n\n" },
-              { OPC_INPUT, "<15>INPUT OPTIONS<5>\n"
-                 "__Input options allow a player to customize the manner in which they "
-                 "issue commands to Incursion, including an alternate keyset as well as "
-                 "various automatic functions and user-interface preferences.\n\n" },
-              { OPC_LIMITS, "<15>LIMITS AND WARNINGS<5>\n"
-                 "__The Limits and Warnings options specify when and how the player will be "
-                 "warned about certain dangerous conditions, and also define exactly when "
-                 "the player will stop an extended run-action.\n\n" },
-              { OPC_DISPLAY, "<15>OUTPUT OPTIONS<5>\n"
-                 "__The Output options describe how the game map is rendered on the screen, "
-                 "how glyphs representing creatures will be coloured to convey information "
-                 "to the player, which dice rolls will be displayed where and how status "
-                 "information and messages will be shown onscreen.\n\n" }, 
-              { OPC_TACTICAL, "<15>TACTICS AND COMBAT OPTIONS<5>\n"
-                 "__The Tactics and Combat options serve to automate certain choices "
-                 "made automatically by Incursion of behalf of your character with "
-                 "regards to the game's combat rules, such as how you prefer to make "
-                 "attacks of opportunity or use counterspells. Tactics and Combat "
-                 "options are saved with a specific character and set to system defaults "
-                 "when a new character is created, because the way these options are "
-                 "set usually depends on how the player chose to build her character.\n\n" },
-               { OPC_WIZARD, "<15>WIZARD MODE OPTIONS<5>\n"
-                 "__The Wizard Mode options allow a player using the game in Wizard "
-                 "Mode to cheat, removing threats or altering the normal nature of "
-                 "Incursion's gameplay. Wizard Mode can be used to test and debug "
-                 "the game, to learn about its exact rules, to play an easier game "
-                 "than normal or to experiment with unusual situations.\n\n" },
-               { 0, NULL } };
-            int16 i, j; String opts;
-            opts = "";
-            for (i=0;CatDescs[i].Val;i++)
-              {                  
-                opts += CatDescs[i].Text;
-                for (j=0;OptionList[j].Val;j++)
-                  if (OptionList[j].Val >= CatDescs[i].Val)
-                    if (OptionList[j].Val <= CatDescs[i].Val + 99)
-                      {
-                        opts += "<13>";
-                        opts += Capitalize(OptionList[j].Name,true);
-                        opts += "\n<5>";
-                        opts += Decolorize(XPrint(OptionList[j].Desc));
-                        opts += "\n\n";
-                      }
-                strcpy(p,XPrint(opts));
+            if (*cc == ':') {
+                tag = Tag2;
+                cc++;
+                goto Repeat;
+            }
+            cc++;
+
+            if (isdigit(Tag1[0])) {
+                *p++ = -atoi(Tag1);
+                continue;
+            }
+
+            if (Tag1[0] == 's' && Tag1[1] == 't' && Tag1[2] == 'r') {
+                if (!Tag1[3])
+                    i = n + 1;
+                else
+                    i = atoi(&(Tag1[3]));
+
+                while (i > n) {
+                    n++;
+                    Params[n].s = va_arg(args, const  char*);
+                }
+
+                if (Params[i].s == NULL)
+                    strcpy(p, "[null string]");
+                else
+                    strcpy(p, Params[i].s);
+
                 p = Out + strlen(Out);
+                continue;
+            }
+
+            if (Tag1[0] == 'n' && Tag1[1] == 'u' && Tag1[2] == 'm') {
+                if (!Tag1[3])
+                    i = n + 1;
+                else
+                    i = atoi(&(Tag1[3]));
+
+                while (i > n) {
+                    n++;
+                    Params[n].i = va_arg(args, int);
+                }
+
+                strcpy(p, Format("%d", Params[i].i));
+                p = Out + strlen(Out);
+                continue;
+            }
+
+            if (Tag1[0] == 'c' && Tag1[1] == 'h' && Tag1[2] == 'a' && Tag1[3] == 'r') {
+                if (!Tag2[0]) {
+                    Error("<char:XXX> field in string without XXX.");
+                    continue;
+                }
+
+                i = atoi(Tag2);
+                if (!i)
+                    i = LookupStr(GLYPH_CONSTNAMES, Tag2);
+                if (!i)
+                    Error("Cannot identify XXX field in <char:XXX> in formatted string!");
+
+                // We need to encode the potentially larger than 8 bit glyph code, in the string.  It is currently 12 bits, and
+                // will never grow larger.  So it's safe to encode it in two bytes.  The first byte may be 0x00, and should never be
+                // 0xFF, so we invert it to prevent it signalling an end of string.
+                strcpy(p, Format("%c%c%c", LITERAL_CHAR, LITERAL_CHAR1(i), LITERAL_CHAR2(i)));
+                p = Out + strlen(Out);
+                continue;
+            }
+
+            if (Tag1[0] == 'h' && Tag1[1] == 't') {
+                for (j = 0; isalpha(Tag1[j]); j++)
+                    ;
+
+                if (!Tag1[j])
+                    i = n + 1;
+                else
+                    i = atoi(&(Tag1[j]));
+
+                while (i > n) {
+                    n++;
+                    Params[n].i = va_arg(args, hText);
+                }
+
+                if (Params[n].i < 0)
+                    strcpy(p, theGame->VM.getStringSafe(Params[n].i));
+                else
+                    strcpy(p, theGame->Modules[theGame->VM.mn]->GetText(Params[i].i));
+
+                p = Out + strlen(Out);
+                continue;
+            }
+
+            if (Tag1[0] == 'r' && ((Tag1[1] == 'i' && Tag1[2] == 'd') || (Tag1[1] == 'e' && Tag1[2] == 's'))) {
+                if (!Tag1[3])
+                    i = n + 1;
+                else
+                    i = atoi(&(Tag1[3]));
+
+                while (i > n) {
+                    n++;
+                    Params[n].i = va_arg(args, rID);
+                }
+
+                strcpy(p, NAME(Params[i].i));
+                p = Out + strlen(Out);
+                continue;
+            } else if (str.Left(4) == "hstr") {
+                if (!str[4])
+                    i = n + 1;
+                else
+                    i = atoi(str.Right(str.GetLength() - 4));
+
+                while (i > n) {
+                    n++;
+                    Params[n].i = va_arg(args, hObj);
+                }
+
+                /* strcpy(p,theGame->VM.GetString(Params[i].i)); */
+                p = Out + strlen(Out);
+                continue;
+            } else if (!stricmp(Tag1, "list tattoos")) {
+                int16 n, c;
+                rID tID;
+                TEffect *Tats[64];
+
+                l.Empty();
+                c = 0;
+                for (n = 0; n != theGame->LastSpell(); n++) {
+                    tID = theGame->SpellID(n);
+                    if (!TEFF(tID)->HasSource(AI_TATTOO))
+                        continue;
+                    Tats[c++] = TEFF(tID);
+                }
+
+                Tats[c] = NULL;
+                qsort(Tats, c, sizeof(Tats[0]), HelpEffectSort);
+                for (n = 0; n != c; n++) {
+                    l += Tats[n]->Describe(POV);
+                    l += "\n\n";
+                }
+
+                strcpy(p, XPrint(l));
+                p = Out + strlen(Out);
+                continue;
+            } else if (!stricmp(Tag1, "list macros")) {
+                int16 n, c;
+                String l;
+                rID mID, Macs[64];
+
+                l.Empty();
+                c = 0;
+                for (n = 0; n != theGame->LastSpell(); n++) {
+                    mID = theGame->SpellID(n);
+                    if (!TEFF(mID)->HasSource(AI_MACRO))
+                        continue;
+                    Macs[c++] = mID;
+                }
+
+                Macs[c] = 0;
+                qsort(Macs, c, sizeof(Macs[0]), HelpResourceSort);
+                for (n = 0; n != c; n++) {
+                    l += Format("<13>%s<5>\n__%s\n\n",
+                        (const char*)Upper(NAME(Macs[n])),
+                        (const char*)DESC(Macs[n]));
+                }
+
+                strcpy(p, XPrint(l));
+                p = Out + strlen(Out);
+                continue;
+            } else if (!stricmp(Tag1, "list options")) {
+                TextVal CatDescs[] = {
+                    { OPC_CHARGEN, "<15>CHARACTER GENERATION OPTIONS<5>\n"
+                    "__Character generation options determine how an Incursion character "
+                    "is generated, covering the rolling of Attributes and certain defaults "
+                    "such as gender. Character generation options are specific to a certain "
+                    "character and cannot be changed in gameplay -- they must be set before "
+                    "the character is created and are thereafter fixed. As such, this "
+                    "category also includes some switches that affect gameplay after "
+                    "character creation, but should not be changed once the game has been "
+                    "begun.\n\n" },
+                    { OPC_INPUT, "<15>INPUT OPTIONS<5>\n"
+                    "__Input options allow a player to customize the manner in which they "
+                    "issue commands to Incursion, including an alternate keyset as well as "
+                    "various automatic functions and user-interface preferences.\n\n" },
+                    { OPC_LIMITS, "<15>LIMITS AND WARNINGS<5>\n"
+                    "__The Limits and Warnings options specify when and how the player will be "
+                    "warned about certain dangerous conditions, and also define exactly when "
+                    "the player will stop an extended run-action.\n\n" },
+                    { OPC_DISPLAY, "<15>OUTPUT OPTIONS<5>\n"
+                    "__The Output options describe how the game map is rendered on the screen, "
+                    "how glyphs representing creatures will be coloured to convey information "
+                    "to the player, which dice rolls will be displayed where and how status "
+                    "information and messages will be shown onscreen.\n\n" },
+                    { OPC_TACTICAL, "<15>TACTICS AND COMBAT OPTIONS<5>\n"
+                    "__The Tactics and Combat options serve to automate certain choices "
+                    "made automatically by Incursion of behalf of your character with "
+                    "regards to the game's combat rules, such as how you prefer to make "
+                    "attacks of opportunity or use counterspells. Tactics and Combat "
+                    "options are saved with a specific character and set to system defaults "
+                    "when a new character is created, because the way these options are "
+                    "set usually depends on how the player chose to build her character.\n\n" },
+                    { OPC_WIZARD, "<15>WIZARD MODE OPTIONS<5>\n"
+                    "__The Wizard Mode options allow a player using the game in Wizard "
+                    "Mode to cheat, removing threats or altering the normal nature of "
+                    "Incursion's gameplay. Wizard Mode can be used to test and debug "
+                    "the game, to learn about its exact rules, to play an easier game "
+                    "than normal or to experiment with unusual situations.\n\n" },
+                    { 0, NULL } };
+
+                int16 i, j;
+                String opts;
+
                 opts = "";
-              }
+                for (i = 0; CatDescs[i].Val; i++) {
+                    opts += CatDescs[i].Text;
 
-            continue;
-          }          
-        else if (!stricmp(Tag1,"weapon table"))
-          {
-            String l;
-            l = "";
-            HelpWeaponTable(l);
-            strcpy(p,l);
+                    for (j = 0; OptionList[j].Val; j++)
+                        if (OptionList[j].Val >= CatDescs[i].Val)
+                            if (OptionList[j].Val <= CatDescs[i].Val + 99) {
+                                opts += "<13>";
+                                opts += Capitalize(OptionList[j].Name, true);
+                                opts += "\n<5>";
+                                opts += Decolorize(XPrint(OptionList[j].Desc));
+                                opts += "\n\n";
+                            }
+
+                    strcpy(p, XPrint(opts));
+                    p = Out + strlen(Out);
+                    opts = "";
+                }
+
+                continue;
+            } else if (!stricmp(Tag1, "weapon table")) {
+                String l;
+
+                l = "";
+                HelpWeaponTable(l);
+                strcpy(p, l);
+                p = Out + strlen(Out);
+                continue;
+            }
+
+            Flags = 0;
+            oev = ev;
+            if (cc[0] && cc[1] && cc[0] == '\'' && cc[1] == 's') {
+                cc += 2;
+                Flags |= NA_POSS;
+            } else if (cc[0] && cc[0] == '\'') {
+                cc++;
+                Flags |= NA_POSS;
+            }
+
+            if (ts - msg >= 2)
+                if (ts[-1] == ' ' && ts[-2] == '.')
+                    Flags |= NA_CAPS;
+            if (ts - msg <= 0)
+                Flags |= NA_CAPS;
+
+            if (ts - msg == 2)
+                if (ts[-2] == 'a' && ts[-1] == ' ') {
+                    Flags |= NA_A + NA_CAPS;
+                    p -= 2;
+                    goto PutName;
+                }
+            if (ts - msg == 2)
+                if (ts[-2] == 'A' && ts[-1] == ' ') {
+                    Flags |= NA_A + NA_CAPS;
+                    p -= 2;
+                    goto PutName;
+                }
+            if (ts - msg == 3)
+                if (ts[-3] == 'a' && ts[-2] == 'n' && ts[-1] == ' ') {
+                    Flags |= NA_A;
+                    p -= 3;
+                    goto PutName;
+                }
+            if (ts - msg == 3)
+                if (ts[-3] == 'A' && ts[-2] == 'n' && ts[-1] == ' ') {
+                    Flags |= NA_A + NA_CAPS;
+                    p -= 3;
+                    goto PutName;
+                }
+            if (ts - msg >= 3)
+                if ((ts[-3] == ' ' || ts[-3] == '>') && ts[-2] == 'a' && ts[-1] == ' ') {
+                    Flags |= NA_A;
+                    p -= 2;
+                    goto PutName;
+                }
+            if (ts - msg >= 3)
+                if ((ts[-3] == ' ' || ts[-3] == '>') && ts[-2] == 'A' && ts[-1] == ' ') {
+                    Flags |= NA_A + NA_CAPS;
+                    p -= 2;
+                    goto PutName;
+                }
+            if (ts - msg == 4)
+                if (ts[-4] == 't' && ts[-3] == 'h' && ts[-2] == 'e' && ts[-1] == ' ') {
+                    Flags |= NA_THE + NA_CAPS;
+                    p -= 4;
+                    goto PutName;
+                }
+            if (ts - msg == 4)
+                if (ts[-4] == 'T' && ts[-3] == 'h' && ts[-2] == 'e' && ts[-1] == ' ') {
+                    Flags |= NA_THE + NA_CAPS;
+                    p -= 4;
+                    goto PutName;
+                }
+            if (ts - msg >= 4)
+                if ((ts[-4] == ' ' || ts[-4] == '>') && ts[-3] == 'A' && ts[-3] == 'n' && ts[-1] == ' ') {
+                    Flags |= NA_A + NA_CAPS;
+                    p -= 3;
+                    goto PutName;
+                }
+            if (ts - msg >= 4)
+                if ((ts[-4] == ' ' || ts[-4] == '>') && ts[-3] == 'a' && ts[-2] == 'n' && ts[-1] == ' ') {
+                    Flags |= NA_A;
+                    p -= 3;
+                    goto PutName;
+                }
+            if (ts - msg >= 5)
+                if ((ts[-5] == ' ' || ts[-5] == '>') && ts[-4] == 't' && ts[-3] == 'h' && ts[-2] == 'e' && ts[-1] == ' ') {
+                    Flags |= NA_THE;
+                    p -= 4;
+                    goto PutName;
+                }
+            if (ts - msg >= 5)
+                if ((ts[-5] == ' ' || ts[-5] == '>') && ts[-4] == 'T' && ts[-3] == 'h' && ts[-2] == 'e' && ts[-1] == ' ') {
+                    Flags |= NA_THE;
+                    p -= 4;
+                    goto PutName;
+                }
+
+PutName:
+            str = Tag2[0] ? Tag2 : Tag1;
+            if (str.Left(2) == "ea")
+                Subject = ev ? ev->EActor : theGame->GetPlayer(0);
+            else if ((str.Left(2) == "ev") || (str.Left(2) == "et"))
+                Subject = ev ? ev->ETarget : theGame->GetPlayer(0);
+            else if (str == "eitem2" || str == "ei2")
+                Subject = ev ? ev->EItem2 : (Item*)theGame->GetPlayer(0);
+            else if (str.Left(2) == "ei")
+                Subject = ev ? ev->EItem : (Item*)theGame->GetPlayer(0);
+            else if (str.Left(3) == "obj" || str.Left(3) == "mon" || str.Left(3) == "itm") {
+                if (!str[3])
+                    i = n + 1;
+                else
+                    i = atoi(str.Right(str.GetLength() - 3));
+
+                while (i > n) {
+                    n++;
+                    Params[n].o = va_arg(args, Thing*);
+                }
+                Subject = Params[i].o;
+            } else if (str.Left(4) == "hobj" || str.Left(4) == "hmon" || str.Left(4) == "hitm") {
+                if (!str[4])
+                    i = n + 1;
+                else
+                    i = atoi(str.Right(str.GetLength() - 4));
+                while (i > n) {
+                    n++;
+                    Params[n].o = oThing(va_arg(args, hObj));
+                }
+                Subject = Params[i].o;
+            } else {
+                Error("Syntax error in __XPrint!");
+                xprint_lev--;
+                return msg;
+            }
+
+            str = Tag1;
+            if (((int)(Subject)) < 0x000FFFFF) {
+                Error("Probable parameter mismatch in __XPrint; msg = \"%s\","
+                    " POV=%d, Subject=%d", msg, (long)POV, (long)Subject);
+                Error("Probable parameter mismatch in __XPrint; msg = \"%s\","
+                    " POV=%s, Subject=%s", msg, (const char*)POV->Name(0), (const char*)Subject->Name(0));
+                return msg;
+            }
+
+            if (!Subject) {
+                strcpy(p, "[null]");
+                Error("Null string in __XPrint; msg = \"%s\"", msg);
+            } else if (!Tag2[0]) {
+                if (POV && !POV->XPerceives(Subject))
+                    strcpy(p, Something(Flags));
+                else
+                    strcpy(p, Subject->Name(Flags));
+            } else if (str == "her") {
+                Error("\"<her>\" is ambiguous in a message; use him/his!");
+                xprint_lev--;
+                return msg;
+            } else if (str == "his") {
+                if (POV && !POV->XPerceives(Subject))
+                    strcpy(p, Flags & NA_CAPS ? "Its" : "its");
+                else
+                    strcpy(p, Flags & NA_CAPS ? Subject->His() : Subject->his());
+            } else if (str == "him") {
+                if (POV && !POV->XPerceives(Subject))
+                    strcpy(p, Flags & NA_CAPS ? "It" : "it");
+                else
+                    strcpy(p, Flags & NA_CAPS ? Subject->Him() : Subject->him());
+            } else if (str == "he" || str == "she") {
+                if (POV && !POV->XPerceives(Subject))
+                    strcpy(p, Flags & NA_CAPS ? "It" : "it");
+                else
+                    strcpy(p, Flags & NA_CAPS ? Subject->He() : Subject->he());
+            } else if (str == "s") {
+                if (POV && !POV->XPerceives(Subject))
+                    continue;
+                else if (!Subject->isPlural())
+                    strcpy(p, "s");
+                /* HACKFIX */
+                else
+                    strcpy(p, "");
+            } else if (str == "god") {
+                if (!Subject->isCreature())
+                    Error("__XPrint: <God> applied to non-Creature Object!");
+                else if (Subject->isCharacter())
+                    strcpy(p, NAME(((Creature*)Subject)->getGod()));
+                else if (((Creature*)Subject)->isMType(MA_GOOD))
+                    strcpy(p, random(2) ? "Essiah" : "Xavias");
+                else if (((Creature*)Subject)->isMType(MA_EVIL))
+                    strcpy(p, random(2) ? "Xel" : "Zurvash");
+                else
+                    strcpy(p, random(2) ? "Immotian" : "Ekliazeh");
+
+            }
+            ev = oev;
             p = Out + strlen(Out);
-            continue;
-          }
-          
-          
-        Flags = 0; oev = ev;
-        if (cc[0] && cc[1] && cc[0] == '\'' && cc[1] == 's')
-          { cc += 2; Flags |= NA_POSS; }
-        else if (cc[0] && cc[0] == '\'')
-          { cc++; Flags |= NA_POSS; }
-          
-        if (ts - msg >= 2) 
-          if (ts[-1] == ' ' && ts[-2] == '.')
-            Flags |= NA_CAPS;
-        if (ts - msg <= 0)
-          Flags |= NA_CAPS;
-          
-        if (ts - msg == 2)
-          if (ts[-2] == 'a' && ts[-1] == ' ')
-            { Flags |= NA_A + NA_CAPS; p -= 2; goto PutName; }
-        if (ts - msg >= 3)
-          if((ts[-3] == ' ' || ts[-3] == '>') && ts[-2] == 'a' && ts[-1] == ' ')
-            { Flags |= NA_A; p -= 2; goto PutName; }
-        if (ts - msg == 3)
-          if (ts[-3] == 'a' && ts[-2] == 'n' && ts[-1] == ' ')
-            { Flags |= NA_A; p -= 3; goto PutName; }
-        if (ts - msg >= 4)
-          if((ts[-4] == ' ' || ts[-4] == '>') && ts[-3] == 'a' && ts[-2] == 'n' && ts[-1] == ' ')
-            { Flags |= NA_A; p -= 3; goto PutName; }
-
-        if (ts - msg == 2)
-          if (ts[-2] == 'A' && ts[-1] == ' ')
-            { Flags |= NA_A + NA_CAPS; p -= 2; goto PutName; }
-        if (ts - msg >= 3)
-          if((ts[-3] == ' ' || ts[-3] == '>') && ts[-2] == 'A' && ts[-1] == ' ')
-            { Flags |= NA_A + NA_CAPS; p -= 2; goto PutName; }
-        if (ts - msg == 3)
-          if (ts[-3] == 'A' && ts[-2] == 'n' && ts[-1] == ' ')
-            { Flags |= NA_A + NA_CAPS; p -= 3; goto PutName; }
-        if (ts - msg >= 4)
-          if((ts[-4] == ' ' || ts[-4] == '>') && ts[-3] == 'A' && ts[-3] == 'n' && ts[-1] == ' ')
-            { Flags |= NA_A + NA_CAPS; p -= 3; goto PutName; }
-
-        if (ts - msg == 4)
-          if (ts[-4] == 't' && ts[-3] == 'h' && ts[-2] == 'e' && ts[-1] == ' ')
-            { Flags |= NA_THE + NA_CAPS; p -= 4; goto PutName; }
-        if (ts - msg >= 5)
-          if ((ts[-5] == ' ' || ts[-5] == '>') && ts[-4] == 't' && ts[-3] == 'h' && ts[-2] == 'e' && ts[-1] == ' ')
-            { Flags |= NA_THE; p -= 4; goto PutName; }
-        if (ts - msg == 4)
-          if (ts[-4] == 'T' && ts[-3] == 'h' && ts[-2] == 'e' && ts[-1] == ' ')
-            { Flags |= NA_THE + NA_CAPS; p -= 4; goto PutName; }
-        if (ts - msg >= 5)
-          if ((ts[-5] == ' ' || ts[-5] == '>') && ts[-4] == 'T' && ts[-3] == 'h' && ts[-2] == 'e' && ts[-1] == ' ')
-            { Flags |= NA_THE; p -= 4; goto PutName; }
-
-        PutName:
-        str = Tag2[0] ? Tag2 : Tag1;
-        if (str.Left(2) == "ea")
-          Subject = ev ? ev->EActor : theGame->GetPlayer(0);
-        else if ((str.Left(2) == "ev") || (str.Left(2) == "et"))
-          Subject = ev ? ev->ETarget : theGame->GetPlayer(0);
-        else if (str == "eitem2" || str == "ei2")
-          Subject = ev ? ev->EItem2  : (Item*)theGame->GetPlayer(0);
-        else if (str.Left(2) == "ei")
-          Subject = ev ? ev->EItem  : (Item*)theGame->GetPlayer(0);
-        else if (str.Left(3) == "obj" || str.Left(3) == "mon" 
-                                         || str.Left(3) == "itm")
-          {
-            if (!str[3])
-              i = n + 1;
-            else
-              i = atoi(str.Right(str.GetLength()-3));
-            while (i > n) {
-              n++;
-              Params[n].o = va_arg(args,Thing*);
-              }
-            Subject = Params[i].o;
-          }
-        else if (str.Left(4) == "hobj" || str.Left(4) == "hmon" 
-                                         || str.Left(4) == "hitm")
-          {
-            if (!str[4])
-              i = n + 1;
-            else
-              i = atoi(str.Right(str.GetLength()-4));
-            while (i > n) {
-              n++;
-              Params[n].o = oThing(va_arg(args,hObj));
-              }
-            Subject = Params[i].o;
-          }
-        else
-          {
-            Error("Syntax error in __XPrint!");
-            xprint_lev--;
-            return msg;
-          } 
-
-        str = Tag1;
-        if (((int)(Subject)) < 0x000FFFFF) {
-          Error("Probable parameter mismatch in __XPrint; msg = \"%s\","
-                   " POV=%d, Subject=%d",msg, (long)POV, (long)Subject);
-          Error("Probable parameter mismatch in __XPrint; msg = \"%s\","
-                   " POV=%s, Subject=%s",msg, 
-                   (const char*)POV->Name(0), 
-                   (const char*)Subject->Name(0));
-          return msg;
-          }
-        if (!Subject) {
-          strcpy(p,"[null]");
-          Error("Null string in __XPrint; msg = \"%s\"",msg);
-          }
-        else if (!Tag2[0]) {
-          if (POV && !POV->XPerceives(Subject))
-            strcpy(p,Something(Flags));
-          else
-            strcpy(p,Subject->Name(Flags));
-
-          }
-        else if (str == "her")
-          {
-            Error("\"<her>\" is ambiguous in a message; use him/his!");
-            xprint_lev--;
-            return msg;
-          }
-        else if (str == "his")
-          {
-            if (POV && !POV->XPerceives(Subject))
-              strcpy(p,Flags & NA_CAPS ? "Its" : "its");
-            else
-              strcpy(p,Flags & NA_CAPS ? Subject->His() : Subject->his());
-          }
-        else if (str == "him")
-          {
-            if (POV && !POV->XPerceives(Subject))
-              strcpy(p,Flags & NA_CAPS ? "It" : "it");
-            else
-              strcpy(p,Flags & NA_CAPS ? Subject->Him() : Subject->him());
-          }
-        else if (str == "he" || str == "she")
-          {
-            if (POV && !POV->XPerceives(Subject))
-              strcpy(p,Flags & NA_CAPS ? "It" : "it");
-            else
-              strcpy(p,Flags & NA_CAPS ? Subject->He() : Subject->he());
-          }
-        else if (str == "s")
-          {
-            if (POV && !POV->XPerceives(Subject))
-              continue;
-            else if (!Subject->isPlural())
-              strcpy(p,"s");
-            /* HACKFIX */
-            else
-              strcpy(p,"");
-          }
-        else if (str == "god")  
-          {
-            if (!Subject->isCreature())
-              Error("__XPrint: <God> applied to non-Creature Object!");
-            else if (Subject->isCharacter())
-              strcpy(p,NAME(((Creature*)Subject)->getGod()));
-            else if (((Creature*)Subject)->isMType(MA_GOOD))
-              strcpy(p,random(2) ? "Essiah" : "Xavias");
-            else if (((Creature*)Subject)->isMType(MA_EVIL))
-              strcpy(p,random(2) ? "Xel" : "Zurvash");
-            else 
-              strcpy(p,random(2) ? "Immotian" : "Ekliazeh");
-            
-          } 
-        ev = oev;           
-        p = Out + strlen(Out); 
-      }
-    else
-      *p++ = *cc++;
+        } else
+            *p++ = *cc++;
     }
-  *p = 0;
-  xprint_lev--;
-  return Out;
-  }
 
-
-const char* PPrint(Player *p, const char* msg, ...)
-{
-	va_list ap;
-	va_start(ap, msg);
-	const char*str;
-	ev = NULL;
-	str = __XPrint(p, msg, ap);
-	va_end(ap);
-	return str;
+    *p = 0;
+    xprint_lev--;
+    return Out;
 }
 
-
-const char* XPrint(const char* msg,...)
-  {
-		va_list ap;
-		va_start(ap, msg);
+const char* PPrint(Player *p, const char* msg, ...) {
+    va_list ap;
+    va_start(ap, msg);
     const char*str;
     ev = NULL;
-    str = __XPrint(NULL,msg,ap);
-		va_end(ap);
+    str = __XPrint(p, msg, ap);
+    va_end(ap);
     return str;
-  }
+}
 
+const char* XPrint(const char* msg, ...) {
+    va_list ap;
+    va_start(ap, msg);
+    const char*str;
+    ev = NULL;
+    str = __XPrint(NULL, msg, ap);
+    va_end(ap);
+    return str;
+}
 
-void DPrint(EventInfo &e, const char* msg1, const char* msg2,...)
-  {
-		va_list ap; Player *p;
-		va_start(ap, msg2);
+void DPrint(EventInfo &e, const char* msg1, const char* msg2, ...) {
+    va_list ap;
+    Player *p;
+    va_start(ap, msg2);
     ev = &e;
     if (!e.EMap)
-      return;
+        return;
     if (msg1)
-      e.EActor->__IPrint(msg1,ap);
-    
+        e.EActor->__IPrint(msg1, ap);
+
     if (msg2 && e.EMap)
-      for(int16 i=0;i!=MAX_PLAYERS;i++)
-        if (p = oPlayer(e.EMap->pl[i]))
-          if (p != e.EActor)
-            if (p->XPerceives(e.EActor))
-              p->__IPrint(msg2,ap);
+        for (int16 i = 0; i != MAX_PLAYERS; i++)
+            if (p = oPlayer(e.EMap->pl[i]))
+                if (p != e.EActor)
+                    if (p->XPerceives(e.EActor))
+                        p->__IPrint(msg2, ap);
 
-		va_end(ap);
-  }
+    va_end(ap);
+}
 
-void APrint(EventInfo &e, const char* msg,...)
-  {
-		va_list ap; Player *p;
-		va_start(ap, msg);
+void APrint(EventInfo &e, const char* msg, ...) {
+    va_list ap; Player *p;
+    va_start(ap, msg);
     ev = &e;
     if (e.EMap)
-      for(int16 i=0;i!=MAX_PLAYERS;i++)
-        if (p = oPlayer(e.EMap->pl[i]))
-          if ((e.EActor && p->XPerceives(e.EActor)) || 
-               (e.EItem && p->XPerceives(e.EItem)) ||
-               (e.EVictim && p->XPerceives(e.EVictim)))              
-            p->__IPrint(msg,ap);
+        for (int16 i = 0; i != MAX_PLAYERS; i++)
+            if (p = oPlayer(e.EMap->pl[i]))
+                if ((e.EActor && p->XPerceives(e.EActor)) || (e.EItem && p->XPerceives(e.EItem)) || (e.EVictim && p->XPerceives(e.EVictim)))
+                    p->__IPrint(msg, ap);
 
-		va_end(ap);
-  }
+    va_end(ap);
+}
 
-
-void VPrint(EventInfo &e, const char* msg1, const char* msg2,...)
-  {
-		va_list ap; Player *p;
-		va_start(ap, msg2);
+void VPrint(EventInfo &e, const char* msg1, const char* msg2, ...) {
+    va_list ap; Player *p;
+    va_start(ap, msg2);
     ev = &e;
 
     if (msg1 && e.EVictim && e.EVictim->m)
-      e.EVictim->__IPrint(msg1,ap);
-    
-    if (msg2 && e.EMap)
-      for(int16 i=0;i!=MAX_PLAYERS;i++)
-        if (p = oPlayer(e.EMap->pl[i]))
-          if (p != e.EVictim && e.EVictim)
-            if (p->XPerceives(e.EVictim))
-              p->__IPrint(msg2,ap);
-		va_end(ap);
-  }
+        e.EVictim->__IPrint(msg1, ap);
 
-void Hear(EventInfo &e, int16 range, const char* msg,...)
-  {
-		va_list ap; Player *p;
-		va_start(ap, msg);
+    if (msg2 && e.EMap)
+        for (int16 i = 0; i != MAX_PLAYERS; i++)
+            if (p = oPlayer(e.EMap->pl[i]))
+                if (p != e.EVictim && e.EVictim)
+                    if (p->XPerceives(e.EVictim))
+                        p->__IPrint(msg2, ap);
+    va_end(ap);
+}
+
+void Hear(EventInfo &e, int16 range, const char* msg, ...) {
+    va_list ap; Player *p;
+    va_start(ap, msg);
     ev = &e;
 
     if (msg && e.EMap)
-      for(int16 i=0;i!=MAX_PLAYERS;i++)
-        if (p = oPlayer(e.EMap->pl[i]))
-          if (dist(e.EActor->x,e.EActor->y,p->x,p->y) <= range)
-            if (p!=e.EActor && !p->XPerceives(e.EActor))
-              if (!p->HasMFlag(M_DEAF))
-                p->__IPrint(msg,ap);
+        for (int16 i = 0; i != MAX_PLAYERS; i++)
+            if (p = oPlayer(e.EMap->pl[i]))
+                if (dist(e.EActor->x, e.EActor->y, p->x, p->y) <= range)
+                    if (p != e.EActor && !p->XPerceives(e.EActor))
+                        if (!p->HasMFlag(M_DEAF))
+                            p->__IPrint(msg, ap);
 
-		va_end(ap);
-  }
+    va_end(ap);
+}
 
 void TPrint(EventInfo &e, const char* msg1, const char* msg2, const char* msg3, ...) {
     va_list ap; Player *p;
@@ -610,155 +655,141 @@ void TPrint(EventInfo &e, const char* msg1, const char* msg2, const char* msg3, 
     ev = &e;
 
     if (msg1 && e.EActor && e.EActor != e.EVictim)
-        e.EActor->__IPrint(msg1,ap);
+        e.EActor->__IPrint(msg1, ap);
     if (msg2 && e.EVictim)
-        e.EVictim->__IPrint(msg2,ap);
+        e.EVictim->__IPrint(msg2, ap);
 
     if (msg3 && e.EMap)
-        for(int16 i=0;i!=MAX_PLAYERS;i++)
+        for (int16 i = 0; i != MAX_PLAYERS; i++)
             if (p = oPlayer(e.EMap->pl[i]))
                 if (p != e.EActor && p != e.EVictim)
-                    if ((e.EActor && p->XPerceives(e.EActor)) &&  (!e.EVictim || p->XPerceives(e.EVictim)))
-                        p->__IPrint(msg3,ap);
+                    if ((e.EActor && p->XPerceives(e.EActor)) && (!e.EVictim || p->XPerceives(e.EVictim)))
+                        p->__IPrint(msg3, ap);
 
     va_end(ap);
 }
 
-void Map::SetQueue(int16 Queue)
-  { 
-    QueueSP++; 
+void Map::SetQueue(int16 Queue) {
+    QueueSP++;
     if (QueueSP > (sizeof(QueueStack) / sizeof(QueueStack[0])))
-      Error("Queue Stack Overflow!");
-    QueueStack[QueueSP] = (int8)Queue; 
-  }   
+        Error("Queue Stack Overflow!");
+    QueueStack[QueueSP] = (int8)Queue;
+}
          
-void Map::UnsetQueue(int16 Queue) 
-  { 
+void Map::UnsetQueue(int16 Queue) {
     if (QueueStack[QueueSP] != Queue)
-      Error("Print Queue Stack corruption!");
+        Error("Print Queue Stack corruption!");
     else
-      QueueSP--; 
-  }
+        QueueSP--;
+}
 
-void Map::PrintQueue(int16 Queue)
-  { 
-    for(int16 i=0;Things[i];i++)
-      if (oThing(Things[i])->Type == T_PLAYER)
-        oPlayer(Things[i])->DumpQueue(Queue); 
-  } 
+void Map::PrintQueue(int16 Queue) {
+    for (int16 i = 0; Things[i]; i++)
+        if (oThing(Things[i])->Type == T_PLAYER)
+            oPlayer(Things[i])->DumpQueue(Queue);
+}
 
-void Map::EmptyQueue(int16 Queue)
-  {
-    for(int16 i=0;Things[i];i++)
-      if (oThing(Things[i])->Type == T_PLAYER)
-        oPlayer(Things[i])->EmptyQueue(Queue); 
-  }
+void Map::EmptyQueue(int16 Queue) {
+    for (int16 i = 0; Things[i]; i++)
+        if (oThing(Things[i])->Type == T_PLAYER)
+            oPlayer(Things[i])->EmptyQueue(Queue);
+}
 
-void Player::DumpQueue(int16 Queue)
-  {
+void Player::DumpQueue(int16 Queue) {
     if (Queue == m->QueueNum())
-      return;
+        return;
+
     if (MessageQueue[Queue]) {
-      MyTerm->Message(MessageQueue[Queue]);
-      MessageQueue[Queue].Empty();
-      }
-  }
+        MyTerm->Message(MessageQueue[Queue]);
+        MessageQueue[Queue].Empty();
+    }
+}
 
-void Player::EmptyQueue(int16 Queue)
-  {
-    if (MessageQueue[Queue]) 
-      MessageQueue[Queue].Empty();      
-  }
+void Player::EmptyQueue(int16 Queue) {
+    if (MessageQueue[Queue])
+        MessageQueue[Queue].Empty();
+}
 
-
-void Player::__IPrint(const char*msg,va_list ap)
-	{
+void Player::__IPrint(const char*msg, va_list ap) {
     const char* fm;
     if (Silence)
-      return;
+        return;
+
     if (msg) {
-      fm = __XPrint(this,msg,ap);
-      ((char*)fm)[0] = toupper(fm[0]);
-      if (m && m->QueueNum()) {
-        MessageQueue[m->QueueNum()] += fm;
-        MessageQueue[m->QueueNum()] += " ";
-        }
-      else
-        MyTerm->Message(fm);
-      }
-  }
+        fm = __XPrint(this, msg, ap);
+        ((char*)fm)[0] = toupper(fm[0]);
+        if (m && m->QueueNum()) {
+            MessageQueue[m->QueueNum()] += fm;
+            MessageQueue[m->QueueNum()] += " ";
+        } else
+            MyTerm->Message(fm);
+    }
+}
 
-void Player::IPrint(const char*msg,...)
-	{
-		va_list ap;
-		va_start(ap, msg);
-    __IPrint(msg,ap);
-		va_end(ap);
-  }
+void Player::IPrint(const char*msg, ...) {
+    va_list ap;
+    va_start(ap, msg);
+    __IPrint(msg, ap);
+    va_end(ap);
+}
 
-void Creature::IPrint(const char*msg,...)
-{
-  /*
-  va_list ap;
-  Creature * c = ts.getLeader();
-  if (c) { 
+void Creature::IPrint(const char*msg, ...) {
+    /*
+    va_list ap;
+    Creature * c = ts.getLeader();
+    if (c) {
     va_start(ap, msg);
     c->__IPrint(msg,ap);
     va_end(ap);
-  }
-  */
+    }
+    */
 }
 
 /* weimer: debugging 
-void Thing::IPrint(const char*msg,...)
-{
+void Thing::IPrint(const char*msg,...) {
 		va_list ap;
 		va_start(ap, msg);
-                theGame->GetPlayer(0)->__IPrint(msg,ap);
+        theGame->GetPlayer(0)->__IPrint(msg,ap);
 		va_end(ap);
 }
 */
 
 
-void Player::IDPrint(const char*msg1,const char*msg2,...)
-	{
-		va_list ap; Player *p;
-		va_start(ap, msg2);
+void Player::IDPrint(const char*msg1, const char*msg2, ...) {
+    va_list ap; Player *p;
+    va_start(ap, msg2);
     if (msg1)
-      __IPrint(msg1,ap);
+        __IPrint(msg1, ap);
     if (msg2 && m)
-      for(int16 i=0;i!=MAX_PLAYERS;i++)
-        if (p = oPlayer(m->pl[i]))
-          if (p != this)
-            if (p->XPerceives(this))
-              p->__IPrint(msg2,ap);
+        for (int16 i = 0; i != MAX_PLAYERS; i++)
+            if (p = oPlayer(m->pl[i]))
+                if (p != this)
+                    if (p->XPerceives(this))
+                        p->__IPrint(msg2, ap);
 
-		va_end(ap);
-  }
+    va_end(ap);
+}
 
-void Thing::IDPrint(const char*msg1,const char*msg2,...)
-	{
-		va_list ap; Player *p;
-		va_start(ap, msg2);
+void Thing::IDPrint(const char*msg1, const char*msg2, ...) {
+    va_list ap; Player *p;
+    va_start(ap, msg2);
 
     if (msg2 && m)
-      for(int16 i=0;i!=MAX_PLAYERS;i++)
-        if (p = oPlayer(m->pl[i]))
-          if (p->XPerceives(this))
-            p->__IPrint(msg2,ap);
-    if (isItem() && !m && ((Item*)this)->Owner())
-      {
+        for (int16 i = 0; i != MAX_PLAYERS; i++)
+            if (p = oPlayer(m->pl[i]))
+                if (p->XPerceives(this))
+                    p->__IPrint(msg2, ap);
+    if (isItem() && !m && ((Item*)this)->Owner()) {
         Map *_m = ((Item*)this)->Owner()->m;
         if (_m)
-          for(int16 i=0;i!=MAX_PLAYERS;i++)
-            if (p = oPlayer(_m->pl[i]))
-              if (p->XPerceives(this))
-                p->__IPrint(msg2,ap);
-      }
+            for (int16 i = 0; i != MAX_PLAYERS; i++)
+                if (p = oPlayer(_m->pl[i]))
+                    if (p->XPerceives(this))
+                        p->__IPrint(msg2, ap);
+    }
 
-
-		va_end(ap);            
-  }
+    va_end(ap);
+}
 
 void SinglePrintXY(EventInfo &e,const char *msg,...)
   {

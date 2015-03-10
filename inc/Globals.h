@@ -72,13 +72,17 @@ String & DescribeSkill(int16 sk);
 const char* __XPrint(Player *POV, const char *msg,va_list args);
 const char* XPrint(const char*msg,...);
 const char* PPrint(Player *POV, const char*msg, ...);
+/* Display a message to all players who xperceive the event. */
 void APrint(EventInfo &e, const char *msg1, ...);
+/* Display one message to the acting player, and another to any players who xperceive the actor. */
 void DPrint(EventInfo &e, const char *msg1,const char *msg2,...);
-void VPrint(EventInfo &e, const char *msg1,const char *msg2,...);
-void TPrint(EventInfo &e,const char *msg1,const char *msg2,
-               const char *msg3,...);
+/* Display one message to the victim player, and another to any players who xperceive the victim. */
+void VPrint(EventInfo &e, const char *msg1, const char *msg2, ...);
+/* Display one message to the acting player, another to the victim, and yet another to any players who xperceive the actor/victim. */
+void TPrint(EventInfo &e, const char *msg1, const char *msg2, const char *msg3,...);
 void BDPrint(EventInfo &e, const char *msg1,...);
 void BTPrint(EventInfo &e,const char *msg1,const char *msg2,...);
+/* Display a message to all players (other than the actor) within the given range, who are able to hear. */
 void Hear(EventInfo &e, int16 range, const char *msg1,...);
 void SinglePrintXY(EventInfo &e, const char*msg,...);
 
