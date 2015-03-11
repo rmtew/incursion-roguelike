@@ -738,8 +738,7 @@ Class "Druid"
       * SPELL_LIST
           ALL_SPELLS_FROM_SOURCE(AI_DRUIDIC),
       * ALLOWED_GODS
-          $"Essiah" $"Hesani" $"Kysul" $"Mara" $"Maeve" 
-          $"Sabine" $"Xel" $"Zurvash";
+          $"Essiah" $"Hesani" $"Kysul" $"Mara" $"Maeve" $"Sabine" $"Xel" $"Zurvash";
   }
 
 
@@ -1480,8 +1479,7 @@ Class "Monk"
       };
     Lists:
       * ALLOWED_GODS
-          $"Aiswin" $"Essiah" $"Hesani" $"Immotian" $"Mara"
-          $"The Multitude" $"Xavias";
+          $"Aiswin" $"Essiah" $"Hesani" $"Immotian" $"Mara" $"The Multitude" $"Xavias";
   }
 
 
