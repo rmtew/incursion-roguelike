@@ -668,9 +668,14 @@ class Thing: public Object
       virtual String & Name(int16 Flags=0) { return *tmpstr("<Thing>"); }
       virtual void SetImage() { }
       virtual void Initialize(bool in_play = false) { }
+
+      /* [Varargs] Display a formatted message in the player's message window. */
       virtual void __IPrint(const char*, va_list ap) {}
-      virtual void IPrint(const char*,...) {}
-      virtual void IDPrint(const char*,const char*,...);
+      /* Display a formatted message in the player's message window. */
+      virtual void IPrint(const char*, ...) {}
+      /* Display one message to the given player, and another to any players who xperceive the given player. */
+      virtual void IDPrint(const char*, const char*, ...);
+
       virtual const char* His() { return "Its"; }
       virtual const char* his() { return "its"; }
       virtual const char* Him() { return "It"; }

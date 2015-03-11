@@ -2110,8 +2110,7 @@ void Creature::ThiefXP(rID regID)
                 }
             }
             if (t->isMonster() && !t->isDead())
-                if (t->HasEffStati(HOME_REGION,regID))
-                {
+                if (t->HasEffStati(HOME_REGION,regID)) {
                     mn = (Monster*)t;
                     if (!t->HasStati(XP_GAINED))
                         foundMon = true;
@@ -2123,10 +2122,8 @@ void Creature::ThiefXP(rID regID)
                 }
     }  
 
-    if (foundTreasure && foundMon)
-    { 
-        IDPrint("You slip out like a thief in the night!",
-            "The <Obj> slips out like a thief in the night!",this);
+    if (foundTreasure && foundMon) {
+        IDPrint("You slip out like a thief in the night!", "The <Obj> slips out like a thief in the night!",this);
         percent = (AbilityLevel(CA_THIEF_IN_THE_NIGHT) * 
             100) / max(1,ChallengeRating());
         for (i=0;i!=mc;i++)
@@ -2134,64 +2131,68 @@ void Creature::ThiefXP(rID regID)
     }
 }
 
-void Player::ChooseGod(bool required)
-{
-    int i = 0, q; rID GodList[50], xID;
-    bool pally = false; String desc;
+#define CG_LIMIT 50
 
-    i = 0;
-    if (!TCLASS(ClassID[0])->GetList(ALLOWED_GODS,GodList,49)) {
-        for (q=0;q!=MAX_MODULES;q++)
-            if (theGame->Modules[q]) {
-                rID xID = xID=theGame->Modules[q]->GodID(0);
-                rID endID = xID + theGame->Modules[q]->szGod;
-                for(;xID!=endID;xID++)
-                    GodList[i++] = xID;        
-            }
-            GodList[i] = 0;
-    }
-
+void Player::ChooseGod(bool required) {
+    int i = 0, q;
+    rID GodList[CG_LIMIT], xID;
+    bool pally = false;
+    String desc;
     bool worthy;
 
-    for (i=0;GodList[i];i++)
-    {
+    i = 0;
+    /* First look to the class for a restricted list of allowed gods, and if
+       that doesn't exist, find and create a list of all gods in any module. */
+    if (!TCLASS(ClassID[0])->GetList(ALLOWED_GODS, GodList, CG_LIMIT - 1)) {
+        for (q = 0; q != MAX_MODULES && i < CG_LIMIT - 1; q++)
+            if (theGame->Modules[q]) {
+                rID xID = xID = theGame->Modules[q]->GodID(0);
+                rID endID = xID + theGame->Modules[q]->szGod;
+                for (; xID != endID; xID++) {
+                    GodList[i++] = xID;
+                    if (i == CG_LIMIT - 1)
+                        break;
+                }
+            }
+        GodList[i] = 0;
+    }
+
+    for (i = 0; GodList[i]; i++) {
         xID = GodList[i];
 
         SetSilence();
-        worthy = isWorthyOf(xID,true);
+        worthy = isWorthyOf(xID, true);
         UnsetSilence();
         if (!worthy)
             continue;
-//skip_align_checks: 
+
         Candidates[i] = xID;
         desc = DESC(xID);
-        for (int d=0;d<6;d++) {
+        for (int d = 0; d < 6; d++) {
             if (TGOD(xID)->Domains[d])
-                desc += Format("\n\n%s",(const char*)
+                desc += Format("\n\n%s", (const char*)
                 TDOM(TGOD(xID)->Domains[d])->Describe());
-        } 
-        MyTerm->LOption(NAME(xID),i,desc);
-
+        }
+        MyTerm->LOption(NAME(xID), i, desc);
     }
 
     if (!i)
         Fatal("No suitable God to choose from among the loaded resources!");
 
     int flags = MENU_3COLS | MENU_DESC;
-
-    if (!required) flags |= MENU_ESC; 
-    i = MyTerm->LMenu(flags, "<15>Choose a God:", 
+    if (!required)
+        flags |= MENU_ESC;
+    i = MyTerm->LMenu(flags, "<15>Choose a God:",
         thisp->MyTerm->GetMode() == MO_CREATE ? WIN_CREATION :
         WIN_SCREEN, "help::domains");
 
     if (i >= 0)
         GodID = Candidates[i];
 
-    setGodFlags(GodID,GS_INVOLVED);
-} 
+    setGodFlags(GodID, GS_INVOLVED);
+}
 
-int16 TotalClassLevels(rID clID)
-{
+int16 TotalClassLevels(rID clID) {
     int16 tl;
     tl = (int16)TCLASS(clID)->GetConst(TOTAL_CLASS_LEVELS);
     if (tl)
@@ -2199,17 +2200,14 @@ int16 TotalClassLevels(rID clID)
     return TCLASS(clID)->HasFlag(CF_PRESTIGE) ? 10 : 20;
 }
 
-void Player::AdvanceLevel()
-{
+void Player::AdvanceLevel() {
     int16 c,i, j; TClass *tc;
-    if (TotalLevel() >= MAX_CHAR_LEVEL)
-    {
-        IPrint(Format("The maximum character level in this "
-            "version of Incursion is %d.",MAX_CHAR_LEVEL));
+    if (TotalLevel() >= MAX_CHAR_LEVEL) {
+        IPrint(Format("The maximum character level in this version of Incursion is %d.",MAX_CHAR_LEVEL));
         return;
     }
-    if (ClassID[1] && Level[0])
-    {
+
+    if (ClassID[1] && Level[0]) {
         MyTerm->LOption(NAME(ClassID[0]),0);
         MyTerm->LOption(NAME(ClassID[1]),1);
         if(ClassID[2])
@@ -2219,31 +2217,25 @@ void Player::AdvanceLevel()
             "Which class do you wish to advance in?",WIN_MENUBOX,"help::chargen,C");
         if (c == -1)
             return; 
-    }
-    else
+    } else
         c = 0;
 
     tc = TCLASS(ClassID[c]);
 
-    if (TotalLevel() > 1)
-    {
-
-        if (LevelAs(ClassID[c]) >= TotalClassLevels(ClassID[c]))
-        {
+    if (TotalLevel() > 1) {
+        if (LevelAs(ClassID[c]) >= TotalClassLevels(ClassID[c])) {
             IPrint("The <res> class only has <Num> levels. You must choose a "
                 "different class to continue to advance.", ClassID[c],
                 TotalClassLevels(ClassID[c]));
             return;
         }
 
-        if (tc->HasFlag(CF_PALADIN) && isFallenPaladin)
-        {
+        if (tc->HasFlag(CF_PALADIN) && isFallenPaladin) {
             IPrint("You have fallen. You may advance no farther as a paladin.");
             return;
         }
 
-        if (tc->HasFlag(CF_RELIGIOUS) && !GodID)
-        {
+        if (tc->HasFlag(CF_RELIGIOUS) && !GodID) {
             IPrint("You must have a suitable god to advance in that class.");
             return;
         }
@@ -2269,20 +2261,17 @@ void Player::AdvanceLevel()
         if (tc->HasFlag(CF_NONGOOD) && (align & AL_GOOD)) 
             bad_align = true;
 
-        if (bad_align)
-        {
+        if (bad_align) {
             IPrint("You do not meet the alignment requirements of that class.");
             return;
         }
 
-        rID GodList[50];
-        if (tc->GetList(ALLOWED_GODS,GodList,49) && GodID)
-        {
+        rID GodList[CG_LIMIT];
+        if (tc->GetList(ALLOWED_GODS, GodList, CG_LIMIT-1) && GodID) {
             for (int n=0;GodList[n];n++)
                 if (GodList[n] == GodID)
                     goto GodIsOkay;
-            IPrint("You cannot advance as a <Res> because <Res> is not a <Res> god.",
-                ClassID[c], GodID, ClassID[c]);
+            IPrint("You cannot advance as a <Res> because <Res> is not a <Res> god.", ClassID[c], GodID, ClassID[c]);
             return;
 GodIsOkay:;
         }
@@ -2295,9 +2284,7 @@ GodIsOkay:;
     if (Opt(OPT_ATTR_ON_LEVEL) && 
         ((TotalLevel() % 4 == 0) && (TotalLevel() >= 4))) {
             int16 MaxBonus, CurrBonus, foundOne = 0;
-            static const char*AttrNames[] =
-            { "Strength", "Dexterity", "Constitution", "Intelligence", 
-            "Wisdom", "Charisma", "Luck" };
+            static const char*AttrNames[] = { "Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma", "Luck" };
             MaxBonus = 5 + AbilityLevel(CA_INHERANT_POTENTIAL);
             for (i=A_STR; i<= A_LUC; i++) {
                 CurrBonus = SumStatiMag(ADJUST_INH,i);
@@ -2312,6 +2299,7 @@ GodIsOkay:;
                 CalcValues(); 
             }
     }
+
     {
         EventInfo xe;
         xe.Clear();
@@ -2323,7 +2311,7 @@ GodIsOkay:;
 
         if (GodID)
             RES(GodID)->Event(xe,ClassID[c]);
-        // ww: domains can catch this event too ...
+
         StatiIterNature(this,HAS_DOMAIN)
             RES(S->eID)->Event(xe,ClassID[c]);
         StatiIterEnd(this)
@@ -2334,7 +2322,6 @@ GodIsOkay:;
     AddAbilities(ClassID[c],Level[c]);
     AddAbilities(RaceID,TotalLevel());
     CalcValues(); // For Attribute-based feat prereqs
-
 
 #if 0
     // ww: give feats for following favoured classes, rather than an xp
@@ -2356,7 +2343,6 @@ GodIsOkay:;
     }
 #endif 
 
-
     {
         EventInfo xe;
         xe.Clear();
@@ -2368,7 +2354,7 @@ GodIsOkay:;
 
         if (GodID)
             RES(GodID)->Event(xe,ClassID[c]);
-        // ww: domains can catch this event too ...
+
         StatiIterNature(this,HAS_DOMAIN)
             RES(S->eID)->Event(xe,ClassID[c]);
         StatiIterEnd(this)
@@ -2425,6 +2411,7 @@ GodIsOkay:;
             FavPenalty[theGame->GodNum(GodIDList[i])] = max(0,FavPenalty[theGame->GodNum(GodIDList[i])] - j);
 
     CalcValues();
+
     {
         EventInfo xe;
         xe.Clear();
@@ -2436,7 +2423,7 @@ GodIsOkay:;
 
         if (GodID)
             RES(GodID)->Event(xe,ClassID[c]);
-        // ww: domains can catch this event too ...
+
         StatiIterNature(this,HAS_DOMAIN)
             RES(S->eID)->Event(xe,ClassID[c]);
         StatiIterEnd(this)
@@ -2449,18 +2436,16 @@ GodIsOkay:;
 
     if (isPlayer())
         thisp->statiChanged = true;
-
 }
 
-void Character::PaladinFall()
-{
+// TODO(unreliable-code): Verify that the loss of abilities in a Paladin-fall is correct.
+void Character::PaladinFall() {
     int16 lev;
     lev = LevelAs(FIND("Paladin"));
-    IPrint("<1>You experience a wrenching, soul-destroying sense of loss: "
-        "you are no longer a paladin.<7>");
-    AddJournalEntry("You experience a wrenching, soul-destroying sense of loss: "
-        "you are no longer a paladin.");
+    IPrint("<1>You experience a wrenching, soul-destroying sense of loss: you are no longer a paladin.<7>");
+    AddJournalEntry("You experience a wrenching, soul-destroying sense of loss: you are no longer a paladin.");
     isFallenPaladin = true;
+
     Abilities[CA_SACRED_MOUNT] = 0;
     Abilities[CA_DIVINE_GRACE] = 0;
     Abilities[CA_LAY_ON_HANDS] = 0;
@@ -2475,22 +2460,21 @@ void Character::PaladinFall()
     if (lev >= 3)
         Abilities[CA_TURNING] -= (lev-2);
     RemoveEffStati(FIND("Paladin"));
+
     if (isPlayer())
         thisp->statiChanged = true;
 
 }
 
-void Character::PaladinAtone()
-{
-
-
+// TODO(unimplemented): Paladin atonement.
+void Character::PaladinAtone() {
 }
 
-inline bool CheckWeapon(Player *p, rID wID)
-{
+inline bool CheckWeapon(Player *p, rID wID) {
     if (p->GetAttr(A_SIZ) + 1 < TITEM(wID)->Size)
         if (!p->yn("That weapon is too large for you normally. Continue?"))
             return false;
+
     {
         int16 mstr = 5;
         if (TITEM(wID)->HasFlag(WT_STR1))
@@ -2507,8 +2491,7 @@ inline bool CheckWeapon(Player *p, rID wID)
     return true;
 }
 
-void Player::GainFeat(int16 feat, int32 param)
-{
+void Player::GainFeat(int16 feat, int32 param) {
     int16 *list; const char*title; String desc;
     int16 i,lv,q,j; int8 Win; int16 ofeat = feat;
     bool OneFeat, Found; rID wID, endID;
@@ -2521,11 +2504,10 @@ Restart:
     //Win = WIN_SCREEN; 
     OneFeat = false;
 
-    if (feat >= FT_FIRST) {
+    if (feat >= FT_FIRST)
         goto SelectedFeat;
-    }
-    switch(ofeat)
-    {
+
+    switch(ofeat) {
     case FT_WIZARD_LIST: 
         title = "Choose a bonus metamagic Feat:";
         break;
@@ -2547,7 +2529,8 @@ Restart:
         title = "Choose any feat without another feat as prerequisite:"; 
         break;
     case FT_FULL_LIST:
-    default: list = NULL;
+    default:
+        list = NULL;
         title = "Choose a feat; the following are available:";
         break;
     }
@@ -2557,6 +2540,7 @@ pick_again:
         extern bool FeatUnimplemented(int16 ft);
         extern const char * FeatName(int16 ft);
         extern String & DescribeFeat(int16 ft); 
+
         for(i=FT_FIRST;i!=FT_LAST;i++) 
             if (/*!FeatUnimplemented(i)*/1) {
                 for (j=0;FeatInfo[j].feat;j++)
@@ -2567,8 +2551,7 @@ FoundFeat:
                 /* is it on our list, if any? */
                 bool onList;
                 onList = false;
-                switch (ofeat)
-                {
+                switch (ofeat) {
                 case FT_WIZARD_LIST:
                     if (FeatInfo[j].flags & (FF_META|FF_WIZARD))
                         onList = true;
@@ -2607,7 +2590,6 @@ FoundFeat:
         return;
 
     feat = (int16)MyTerm->LMenu(MENU_SORTED|MENU_3COLS|MENU_DESC|(Win == WIN_MENUBOX ? MENU_BORDER : 0),title,Win,"help::feats");
-
     if (feat == -1) {
         showAll = !showAll;
         goto pick_again;
@@ -2615,22 +2597,18 @@ FoundFeat:
 
     if (!FeatPrereq(feat)) {
         if (FeatUnimplemented(feat))
-            MyTerm->Box("That feat isn't implemented (or isn't working correctly) in this "
-            "version of Incursion. Please select another.");
+            MyTerm->Box("That feat isn't implemented (or isn't working correctly) in this version of Incursion. Please select another.");
         else
             MyTerm->Box("You do not have the prerequisites for that feat. Please select another.");
         goto pick_again; 
     } 
 
 SelectedFeat:
-
     if (feat != FT_WEAPON_PROFICIENCY || OneFeat)
         Feats[feat/8] |= 1 << (feat%8);
 
 //ChooseParam:
-
-    switch(feat)
-    {
+    switch(feat) {
     case FT_LION_HEART:
         GainPermStati(SAVE_BONUS,NULL,SS_MISC,SN_FEAR,+2);
         break;
@@ -2640,8 +2618,7 @@ SelectedFeat:
         else {
             Found = false;
             for(i=1;i!=SK_LAST;i++)
-                if (SkillInfo[i].imp)
-                {
+                if (SkillInfo[i].imp) {
                     bool taken; taken = false;
                     StatiIterNature(this, SKILL_BONUS)
                         if (S->Val == i && S->Source == SS_PERM)
@@ -2655,8 +2632,7 @@ SelectedFeat:
                         DescribeSkill(SkillInfo[i].sk));
                     Found = true; 
                 }
-                if (!Found)
-                {
+                if (!Found) {
                     if (ofeat != feat)
                         feat = ofeat; 
                     else
@@ -2676,11 +2652,11 @@ SelectedFeat:
             for(i=0;i!=SK_LAST;i++)
                 if (!HasSkill(i))                
                     if (SkillInfo[i].name && SkillInfo[i].imp)
-                        if (!HasStati(EXTRA_SKILL,i))
-                        { MyTerm->LOption(SkillInfo[i].name,i,DescribeSkill(SkillInfo[i].sk));
-            Found = true; }
-            if (!Found)
-            {
+                        if (!HasStati(EXTRA_SKILL,i)) {
+                            MyTerm->LOption(SkillInfo[i].name,i,DescribeSkill(SkillInfo[i].sk));
+                            Found = true;
+                        }
+            if (!Found) {
                 if (ofeat != feat)
                     feat = ofeat; 
                 else
@@ -2695,14 +2671,17 @@ SelectedFeat:
         uint16 eli, choice;
         eli = getEligableStudies();
         for (i=0;Studies[i][0];i++)
-            if (eli == XBIT(Studies[i][0]))
-            { choice = Studies[i][0]; goto ChosenStudy; }
-            if (eli == XBIT(STUDY_BAB))
-            { choice = STUDY_BAB; goto ChosenStudy; }
+            if (eli == XBIT(Studies[i][0])) {
+                choice = Studies[i][0];
+                goto ChosenStudy;
+            }
+            if (eli == XBIT(STUDY_BAB)) {
+                choice = STUDY_BAB;
+                goto ChosenStudy;
+            }
             for (i=0;StudyNames[i].Val;i++)
                 if (eli & XBIT(StudyNames[i].Val))
-                    MyTerm->LOption(StudyNames[i].Text, 
-                    StudyNames[i].Val);
+                    MyTerm->LOption(StudyNames[i].Text, StudyNames[i].Val);
             choice = (uint16)MyTerm->LMenu(MENU_SORTED|MENU_BORDER,"Choose an area to improve:",WIN_MENUBOX);
 ChosenStudy:
             IntStudy[choice]++;
@@ -2798,8 +2777,7 @@ ImpCritChoice:
                     endID = wID + theGame->Modules[q]->szItm;
                     for(;wID!=endID;wID++)
                         if (TITEM(wID)->IType == T_WEAPON || TITEM(wID)->IType == T_BOW)
-                            if (WepSkill(wID,true) >= WS_PROFICIENT)
-                            { 
+                            if (WepSkill(wID,true) >= WS_PROFICIENT) { 
                                 Item * i = Item::Create(wID); 
                                 Weapon * w = (Weapon *)i; 
                                 if (TITEM(wID)->HasFlag(IT_NOGEN))
@@ -2812,8 +2790,7 @@ ImpCritChoice:
                                 Found = true; 
                             }
                 }
-                if (!Found)
-                {
+                if (!Found) {
                     if (ofeat != feat)
                         feat = ofeat; 
                     else
@@ -2864,8 +2841,7 @@ ChooseWeapon:
                     for(;wID!=endID;wID++)
                         if (TITEM(wID)->IType == T_WEAPON || TITEM(wID)->IType == T_BOW)
                             if (WepSkill(wID,true) == lv-1)
-                                if (lv != WS_PROFICIENT || !(TITEM(wID)->Group & WG_EXOTIC))
-                                { 
+                                if (lv != WS_PROFICIENT || !(TITEM(wID)->Group & WG_EXOTIC)) { 
                                     Item * i = Item::Create(wID); 
                                     Weapon * w = (Weapon *)i; 
                                     /* ww: for the purposes of this list, pretend that
@@ -2882,8 +2858,7 @@ ChooseWeapon:
                                     Found = true; 
                                 }
                 }
-                if (!Found)
-                {
+                if (!Found) {
                     if (ofeat != feat)
                         feat = ofeat; 
                     else

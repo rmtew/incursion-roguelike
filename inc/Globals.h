@@ -84,6 +84,7 @@ void BDPrint(EventInfo &e, const char *msg1,...);
 void BTPrint(EventInfo &e,const char *msg1,const char *msg2,...);
 /* Display a message to all players (other than the actor) within the given range, who are able to hear. */
 void Hear(EventInfo &e, int16 range, const char *msg1,...);
+/* Display a message to all players for whom the source location or actor is visible or perceived respectively. */
 void SinglePrintXY(EventInfo &e, const char*msg,...);
 
 int8 MonHDType(int8 MType);

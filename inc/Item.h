@@ -254,28 +254,28 @@ class QItem: public Item
     END_ARCHIVE	
   };
 
-class Food: public QItem
-	{
+class Food : public QItem {
     friend String & Item::Name(int16 Flags);
-		protected:
-			//  Counter in Thing represents age, higher is newer,
-			// when it reaches 0, destroy object.
-			int16 Eaten;
-		public:
-      virtual void Dump();
-			Food(rID iID,int16 _Type = T_FOOD) :
-        QItem(iID,_Type) { Eaten = Age = 0; }
-      String & Describe(Player *p);
-      Food(Item*i) : QItem(i) 
-        { Eaten = ((Food*)i)->Eaten;
-          Age   = ((Food*)i)->Age; }
-      virtual int32 Weight(bool psych_might = false);
+protected:
+    //  Counter in Thing represents age, higher is newer, when it reaches 0, destroy object.
+    int16 Eaten;
+public:
+    virtual void Dump();
+    Food(rID iID, int16 _Type = T_FOOD) : QItem(iID, _Type) {
+        Eaten = Age = 0;
+    }
+    String & Describe(Player *p);
+    Food(Item*i) : QItem(i) {
+        Eaten = ((Food*)i)->Eaten;
+        Age = ((Food*)i)->Age;
+    }
+    virtual int32 Weight(bool psych_might = false);
+    EvReturn Event(EventInfo &e);
+    EvReturn Eat(EventInfo &e);
 
-			EvReturn Event(EventInfo &e);
-			EvReturn Eat(EventInfo &e);
-      ARCHIVE_CLASS(Food,QItem,r)
-      END_ARCHIVE
-  };
+    ARCHIVE_CLASS(Food, QItem, r)
+    END_ARCHIVE
+};
 
 class Corpse: public Food
 	{

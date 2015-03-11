@@ -1032,7 +1032,8 @@ class Player: public Character
       virtual void IPrint(const char*, ...);
       /* [Varargs] Display a formatted message in the player's message window. */
       virtual void __IPrint(const char*, va_list ap);
-      virtual void IDPrint(const char*,const char*,...);
+      /* Display one message to the given player, and another to any players who xperceive the given player. */
+      virtual void IDPrint(const char*, const char*, ...);
       EvReturn Death(EventInfo &e);
       void Gravestone();
 	 	  EvReturn Event(EventInfo &e);

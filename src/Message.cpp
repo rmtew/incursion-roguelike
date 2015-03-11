@@ -82,7 +82,6 @@ const char* __XPrint(Player *POV, const char *msg, va_list args) {
     }
     Params[10];
 
-
     switch (++xprint_lev) {
     case 1:
         Out = XPrintBuff1;
@@ -779,6 +778,7 @@ void Thing::IDPrint(const char*msg1, const char*msg2, ...) {
             if (p = oPlayer(m->pl[i]))
                 if (p->XPerceives(this))
                     p->__IPrint(msg2, ap);
+
     if (isItem() && !m && ((Item*)this)->Owner()) {
         Map *_m = ((Item*)this)->Owner()->m;
         if (_m)
@@ -791,144 +791,139 @@ void Thing::IDPrint(const char*msg1, const char*msg2, ...) {
     va_end(ap);
 }
 
-void SinglePrintXY(EventInfo &e,const char *msg,...)
-  {
+void SinglePrintXY(EventInfo &e, const char *msg, ...) {
     static String Recent[12];
-		va_list ap; Player *p; int16 i;
-		va_start(ap, msg);
+    va_list ap;
+    Player *p;
+    int16 i;
+    va_start(ap, msg);
 
-    if (!msg)
-      {
-        for(i=0;i!=12;i++)
-          Recent[i].Empty();
+    if (!msg) {
+        for (i = 0; i != 12; i++)
+            Recent[i].Empty();
         return;
-      }
-    
-    for(i=0;Recent[i].GetLength() && i!=12;i++)
-       if (!stricmp(msg,Recent[i]))
-        return;
+    }
+
+    for (i = 0; Recent[i].GetLength() && i != 12; i++)
+        if (!stricmp(msg, Recent[i]))
+            return;
     if (i != 12)
-      Recent[i] = msg;
+        Recent[i] = msg;
 
     if (msg && e.EMap)
-      for(i=0;i!=MAX_PLAYERS;i++)
-        if (p = oPlayer(e.EMap->pl[i])) 
-          if ((e.isLoc && e.EMap->At(e.EXVal,e.EYVal).Visibility & VI_VISIBLE << i*4) ||
-              (!e.isLoc && e.EActor && p->Perceives(e.EActor)) )
-            p->__IPrint(msg,ap);
-  }
-
+        for (i = 0; i != MAX_PLAYERS; i++)
+            if (p = oPlayer(e.EMap->pl[i]))
+                if ((e.isLoc && e.EMap->At(e.EXVal, e.EYVal).Visibility & VI_VISIBLE << i * 4) || (!e.isLoc && e.EActor && p->Perceives(e.EActor)))
+                    p->__IPrint(msg, ap);
+}
 
 char DiceStr[10];
-const char* Dice::Str()
-	{
-	  if (Sides <= 0)
-	    return Format("%d",(int16)Bonus);
+
+const char* Dice::Str() {
+    if (Sides <= 0)
+        return Format("%d", (int16)Bonus);
     else if (Sides == 1) /* 7d1+2 == 9 */
-      return Format("%d",(int16)(Number + Bonus));
-		if(Bonus)
-			return Format("%dd%d%+d",(int16)Number,(int16)Sides,(int16)Bonus);
-		else
-			return Format("%dd%d",(int16)Number,(int16)Sides);
-	}
-
-String & Map::Name(int16 Flags)
-  {
-    if (dID)
-      return *tmpstr(NAME(dID));
+        return Format("%d", (int16)(Number + Bonus));
+    if (Bonus)
+        return Format("%dd%d%+d", (int16)Number, (int16)Sides, (int16)Bonus);
     else
-      return *tmpstr("[Map]");
-  }
+        return Format("%dd%d", (int16)Number, (int16)Sides);
+}
 
-String & GetFirstName(const char* _Fullname)
-  {
+String & Map::Name(int16 Flags) {
+    if (dID)
+        return *tmpstr(NAME(dID));
+    else
+        return *tmpstr("[Map]");
+}
+
+String & GetFirstName(const char* _Fullname) {
     /* Things players might put in front of a name that
        should be ruled out as potentially being a true
        first name. Many aren't medieval, but may apply
        to joke names or such. */
-    String NameSegs[3], Fullname; int16 i,c;
+    String NameSegs[3], Fullname;
+    int16 i, c;
     const char * Prefixes[] = {
-      "Mr.", "Mr", "Ms.", "Ms", "Miss", "Mister",
-      "Dr.", "Dr", "Doctor", "Sir", "Lady", "Baron",
-      "Count", "Duke", "King", "Viscount", "Baroness",
-      "Countess", "Duchess", "Queen", "Emperor",
-      "Ambassidor", "Chairman", "Chairwoman", "Chairperson",
-      "Chair", "Empress", "Father", "Mother", "Brother",
-      "Sister", "Saint", "St.", "St", "Bishop", "Cardinal",
-      "Pope", "Guru", "Imam", "Director", "Captain", "Sergeant",
-      "Admiral", "Commodore", "Lieutenant", "Ensign", "Abbot",
-      "Madam", "Madame", "Commander", "Lord", "Magister",
-      "Magistrate", "Guildmaster", "Guildsman", "Apprentice",
-      "Journeyman", "Private", "Secretary", "Secretary-General",
-      "Chamberlain", "Provincial", "Rector", "Overseer",
-      "Custodian", "Operative", "Agent", "Seneschal", "Prince",
-      "Princess", "Baronet", "Czar", "Tzar", "Tsar", "Voivode",
-      NULL };
-    
+        "Mr.", "Mr", "Ms.", "Ms", "Miss", "Mister",
+        "Dr.", "Dr", "Doctor", "Sir", "Lady", "Baron",
+        "Count", "Duke", "King", "Viscount", "Baroness",
+        "Countess", "Duchess", "Queen", "Emperor",
+        "Ambassidor", "Chairman", "Chairwoman", "Chairperson",
+        "Chair", "Empress", "Father", "Mother", "Brother",
+        "Sister", "Saint", "St.", "St", "Bishop", "Cardinal",
+        "Pope", "Guru", "Imam", "Director", "Captain", "Sergeant",
+        "Admiral", "Commodore", "Lieutenant", "Ensign", "Abbot",
+        "Madam", "Madame", "Commander", "Lord", "Magister",
+        "Magistrate", "Guildmaster", "Guildsman", "Apprentice",
+        "Journeyman", "Private", "Secretary", "Secretary-General",
+        "Chamberlain", "Provincial", "Rector", "Overseer",
+        "Custodian", "Operative", "Agent", "Seneschal", "Prince",
+        "Princess", "Baronet", "Czar", "Tzar", "Tsar", "Voivode",
+        NULL };
+
     const char * MonkNames[] = {
-      "Scarlet", "Ebon", "Righteous", "Jade", "Iron", "Excelent",
-      "Graceful", "Unfolding", "Revealed", "Ivory", "Harmonious",
-      "Furious", "Transcendant", "Resplendant", "River", "Flawless",
-      "Immaculate", "August", "Fivefold", "Eightfold", NULL };  
-    
+        "Scarlet", "Ebon", "Righteous", "Jade", "Iron", "Excelent",
+        "Graceful", "Unfolding", "Revealed", "Ivory", "Harmonious",
+        "Furious", "Transcendant", "Resplendant", "River", "Flawless",
+        "Immaculate", "August", "Fivefold", "Eightfold", NULL };
+
     Fullname = Trim(_Fullname);
 
-    c=0;
-    for (i=0;Fullname[i];i++)
-      {
+    c = 0;
+    for (i = 0; Fullname[i]; i++) {
         if (!isspace(Fullname[i]))
-          NameSegs[c] += Fullname[i];
+            NameSegs[c] += Fullname[i];
         else {
-          if (NameSegs[c].GetLength())
-            if (i && !isspace(Fullname[i-1]))
-              c++;
-          }
+            if (NameSegs[c].GetLength())
+                if (i && !isspace(Fullname[i - 1]))
+                    c++;
+        }
         if (c == 3)
-          break;
-      }
+            break;
+    }
 
     /* Trailing Spaces (paranoia) */
     if (NameSegs[c].GetLength())
-      c++;
+        c++;
 
     if (!c)
-      return *tmpstr("Nameless");
+        return *tmpstr("Nameless");
 
     /* A one-word name; use the whole thing as the first
        name, even if it's a prefix (a player names their
        dog "King", for example */
     if (c == 1)
-      return *tmpstr(NameSegs[0]);
+        return *tmpstr(NameSegs[0]);
 
-    for(i=0;Prefixes[i];i++)
-      if (!stricmp(Prefixes[i],NameSegs[0]))
-        {
-          /* "Mister Elliot" -> Elliot */
-          return *tmpstr(NameSegs[1]);
+    for (i = 0; Prefixes[i]; i++)
+        if (!stricmp(Prefixes[i], NameSegs[0])) {
+            /* "Mister Elliot" -> Elliot */
+            return *tmpstr(NameSegs[1]);
         }
-        
-    for(i=0;MonkNames[i];i++)
-      if (!stricmp(MonkNames[i],NameSegs[0]))
-        {
-          /* "Flawless Tiger" -> Flawless Tiger */
-          return *tmpstr(Fullname);
+
+    for (i = 0; MonkNames[i]; i++)
+        if (!stricmp(MonkNames[i], NameSegs[0])) {
+            /* "Flawless Tiger" -> Flawless Tiger */
+            return *tmpstr(Fullname);
         }
-        
+
 
     return *tmpstr(NameSegs[0]);
 
-  }
+}
 
+String & Creature::Name(int16 Flags) {
+    String s;
 
-String & Creature::Name(int16 Flags)
-	{
-		String s;
-    
-    if (!(Flags & NA_LONG) && Named.GetLength() && (StateFlags & MS_KNOWN))
-      { s = GetFirstName(Named); goto Done; }
+    if (!(Flags & NA_LONG) && Named.GetLength() && (StateFlags & MS_KNOWN)) {
+        s = GetFirstName(Named);
+        goto Done;
+    }
+
     if (Flags & NA_SHADOW) {
-      s = "unclearly seen ";
-      switch(TMON(mID)->Size) {
+        s = "unclearly seen ";
+        switch (TMON(mID)->Size) {
         case SZ_MINISCULE: s += "miniscule "; break;
         case SZ_TINY:      s += "tiny "; break;
         case SZ_SMALL:     s += "small "; break;
@@ -939,743 +934,725 @@ String & Creature::Name(int16 Flags)
         case SZ_COLLOSAL:  s += "collosal "; break;
         }
 
-      if (TMON(mID)->HasFlag(M_INCOR))
-        s += "spectral ";
-      else if (TMON(mID)->HasFlag(M_HUMANOID))
-        s += "humanoid ";
-      else if (TMON(mID)->HasFlag(M_AMORPH))
-        s += "amorphious ";
-      else if (isMType(MA_REPTILIAN))
-        s += "reptillian ";
-      else
-        s += "monsterous ";
-      s += "form";
-      goto Done;
-      }
-    else {
-      s = NAME(mID);
-      if (StateFlags & MS_POLY_KNOWN)
-        s = NAME(tmID);
-      if (!(StateFlags & MS_KNOWN)) {
-        TAttack *ta = TMON(mID)->GetAttk(A_SEEM);
-        if (ta)
-          s = NAME(ta->u.xID);
-        }
-      if (s.strchr(';'))
-        s = s.Upto(";");
-      if (!HasStati(POLYMORPH)) {
-        StatiIterNature(this,TEMPLATE)
-            if (S->Mag) { 
-            if (TTEM(S->eID)->HasFlag(TMF_POSTSCRIPT))
-              s += SC(" ") + NAME(S->eID);
-            else
-              s = SC(NAME(S->eID)) + SC(" ") + s;
-            } 
-        StatiIterEnd(this)
-        /* Kludge:
-             graveborn ancient goblin -> ancient graveborn goblin */
-        const char* utn[] = {
-          "ancient ", "elder ", "spellstitched ", "spiked ", NULL };
-        for (int16 n=0;utn[n];n++)
-          if (strstr(s,utn[n]))
-            {
-              s = s.Replace(utn[n], "");
-              s = SC(utn[n]) + s;
-            }
-        } 
-      }
-    if (Flags & NA_STATI) {
-      if (HasMFlag(M_NEUTER))
-        ;
-      else if (StateFlags & MS_FEMALE)
-        s = SC("female ") + s;
-      else
-        s = SC("male ") + s;
-      switch((cHP*10) / max(1,(mHP+Attr[A_THP])))
-        {
-          case 10: s = SC("uninjured ") + s; break;
-          case 9:
-          case 8:  s = SC("mildly injured ") + s; break;
-          case 7:  
-          case 6:  s = SC("moderately hurt ") + s; break;
-          case 5:  
-          case 4:  s = SC("severely hurt ") + s; break;
-          case 3:  
-          case 2:  s = SC("badly wounded ") + s; break;
-          case 1:  s = SC("critically wounded ") + s; break;
-          case 0:  s = SC("almost dead ") + s; break;
-        }
-      if (HasStati(AFRAID))
-        s = SC("frightened ") + s;
-      if (HasStati(PARALYSIS))
-        s = SC("paralyzed ") + s;
-      if (HasStati(CONFUSED))
-        s = SC("confused ") + s;
-      if (HasStati(ELEVATED))
-        s = SC("climbing ") + s;
-      if (HasStati(STUNNED))
-        s = SC("stunned ") + s;
-      if (HasStati(HIDING))
-        s = SC("hiding ") + s;
-      if (HasStati(PRONE))
-        s = SC("prone ") + s;
-      if (HasStati(CHARGING))
-        s = SC("charging ") + s;
-      if (HasStati(SLEEPING))
-        s = SC("sleeping ") + s;
-      if (HasStati(BLIND))
-        s = SC("blinded ") + s;
-      if (HasStati(STUCK))
-        s = SC("stuck ") + s;
-      if (HasStati(PHASED))
-        s = SC("phased ") + s;
-      if (HasStati(SUMMONED))
-        s = SC("summoned ") + s;
-      if (StateFlags & MS_PEACEFUL) {
-        if (isHostileTo(theGame->GetPlayer(0)))
-          s = SC("formerly peaceful ") + s;
+        if (TMON(mID)->HasFlag(M_INCOR))
+            s += "spectral ";
+        else if (TMON(mID)->HasFlag(M_HUMANOID))
+            s += "humanoid ";
+        else if (TMON(mID)->HasFlag(M_AMORPH))
+            s += "amorphious ";
+        else if (isMType(MA_REPTILIAN))
+            s += "reptillian ";
         else
-          s = SC("peaceful ") + s;
-        } 
-      {
-      Player *p = theGame->GetPlayer(0); 
-      if (p->HasStati(HIDING))
-        if (p->SkillLevel(SK_APPRAISE) - 4 >= SkillLevel(SK_BLUFF))
-          s = SC((Perceives(p) ? "aware " : "unaware ")) + s;
-      }
-      if (isFriendlyTo(theGame->GetPlayer(0)) && !isPlayer())
-        s = SC("allied ") + s;
-      else if (!isHostileTo(theGame->GetPlayer(0)) && !isPlayer())
-        s = SC("neutral ") + s;
-      else if (!isPlayer())
-        s = SC("hostile ") + s;
-      
-        
-      }
+            s += "monsterous ";
+        s += "form";
+        goto Done;
+    } else {
+        s = NAME(mID);
+        if (StateFlags & MS_POLY_KNOWN)
+            s = NAME(tmID);
+        if (!(StateFlags & MS_KNOWN)) {
+            TAttack *ta = TMON(mID)->GetAttk(A_SEEM);
+            if (ta)
+                s = NAME(ta->u.xID);
+        }
+        if (s.strchr(';'))
+            s = s.Upto(";");
+        if (!HasStati(POLYMORPH)) {
+            StatiIterNature(this, TEMPLATE)
+                if (S->Mag) {
+                    if (TTEM(S->eID)->HasFlag(TMF_POSTSCRIPT))
+                        s += SC(" ") + NAME(S->eID);
+                    else
+                        s = SC(NAME(S->eID)) + SC(" ") + s;
+                }
+            StatiIterEnd(this)
+            /* Kludge: graveborn ancient goblin -> ancient graveborn goblin */
+            const char* utn[] = { "ancient ", "elder ", "spellstitched ", "spiked ", NULL };
+            for (int16 n = 0; utn[n]; n++)
+                if (strstr(s, utn[n]))
+                {
+                    s = s.Replace(utn[n], "");
+                    s = SC(utn[n]) + s;
+                }
+        }
+    }
+    if (Flags & NA_STATI) {
+        if (HasMFlag(M_NEUTER))
+            ;
+        else if (StateFlags & MS_FEMALE)
+            s = SC("female ") + s;
+        else
+            s = SC("male ") + s;
+
+        switch ((cHP * 10) / max(1, (mHP + Attr[A_THP]))) {
+        case 10: s = SC("uninjured ") + s; break;
+        case 9:
+        case 8:  s = SC("mildly injured ") + s; break;
+        case 7:
+        case 6:  s = SC("moderately hurt ") + s; break;
+        case 5:
+        case 4:  s = SC("severely hurt ") + s; break;
+        case 3:
+        case 2:  s = SC("badly wounded ") + s; break;
+        case 1:  s = SC("critically wounded ") + s; break;
+        case 0:  s = SC("almost dead ") + s; break;
+        }
+        if (HasStati(AFRAID))
+            s = SC("frightened ") + s;
+        if (HasStati(PARALYSIS))
+            s = SC("paralyzed ") + s;
+        if (HasStati(CONFUSED))
+            s = SC("confused ") + s;
+        if (HasStati(ELEVATED))
+            s = SC("climbing ") + s;
+        if (HasStati(STUNNED))
+            s = SC("stunned ") + s;
+        if (HasStati(HIDING))
+            s = SC("hiding ") + s;
+        if (HasStati(PRONE))
+            s = SC("prone ") + s;
+        if (HasStati(CHARGING))
+            s = SC("charging ") + s;
+        if (HasStati(SLEEPING))
+            s = SC("sleeping ") + s;
+        if (HasStati(BLIND))
+            s = SC("blinded ") + s;
+        if (HasStati(STUCK))
+            s = SC("stuck ") + s;
+        if (HasStati(PHASED))
+            s = SC("phased ") + s;
+        if (HasStati(SUMMONED))
+            s = SC("summoned ") + s;
+        if (StateFlags & MS_PEACEFUL) {
+            if (isHostileTo(theGame->GetPlayer(0)))
+                s = SC("formerly peaceful ") + s;
+            else
+                s = SC("peaceful ") + s;
+        }
+        {
+            Player *p = theGame->GetPlayer(0);
+            if (p->HasStati(HIDING))
+                if (p->SkillLevel(SK_APPRAISE) - 4 >= SkillLevel(SK_BLUFF))
+                    s = SC((Perceives(p) ? "aware " : "unaware ")) + s;
+        }
+        if (isFriendlyTo(theGame->GetPlayer(0)) && !isPlayer())
+            s = SC("allied ") + s;
+        else if (!isHostileTo(theGame->GetPlayer(0)) && !isPlayer())
+            s = SC("neutral ") + s;
+        else if (!isPlayer())
+            s = SC("hostile ") + s;
+    }
+
     if (isIllusion() && !isRealTo(theGame->GetPlayer(0)))
-      s = SC("illusory ") + s;
-
-
-
+        s = SC("illusory ") + s;
 
     if (!HasMFlag(M_PROPER)) {
-      if (Flags & NA_A) {
-        Player * POV = theGame->GetPlayer(0);
-        if ( POV == GetStatiObj(ILLUSION) || 
-             POV == GetStatiObj(SUMMONED) )
-          s = SC("your ") + s;
-        else if ((s[0] == 'a') || (s[0] == 'e') || (s[0] == 'i') || (s[0] == 'o') 
-            || (s[0] == 'u'))
-          s = SC("an ") + s;
-        else
-          s = SC("a ") + s;
-        }
-      else if (Flags & NA_THE)
-        s = SC("the ") + s;
-      }
-    
+        if (Flags & NA_A) {
+            Player * POV = theGame->GetPlayer(0);
+            if (POV == GetStatiObj(ILLUSION) || POV == GetStatiObj(SUMMONED))
+                s = SC("your ") + s;
+            else if ((s[0] == 'a') || (s[0] == 'e') || (s[0] == 'i') || (s[0] == 'o') || (s[0] == 'u'))
+                s = SC("an ") + s;
+            else
+                s = SC("a ") + s;
+        } else if (Flags & NA_THE)
+            s = SC("the ") + s;
+    }
+
     if (Named.GetLength() && !(Flags & NA_SHADOW) && (StateFlags & MS_KNOWN))
-      s += SC(" named ") + Named;
-      
-    if ((mID != tmID) && (StateFlags & MS_POLY_KNOWN) && (Flags & NA_LONG))
-      {
-        bool isForm; TAttack Attk[64]; 
-        int16 i, n; String form;
+        s += SC(" named ") + Named;
+
+    if ((mID != tmID) && (StateFlags & MS_POLY_KNOWN) && (Flags & NA_LONG)) {
+        bool isForm;
+        TAttack Attk[64];
+        int16 i, n;
+        String form;
         isForm = false;
-        n = ListAttacks(Attk,64);
-        for (i=0;i!=n;i++)
-          if (Attk[i].AType == A_FORM)
-            if (Attk[i].u.xID == mID)
-              isForm = true;
+
+        n = ListAttacks(Attk, 64);
+        for (i = 0; i != n; i++)
+            if (Attk[i].AType == A_FORM)
+                if (Attk[i].u.xID == mID)
+                    isForm = true;
+
         form = NAME(mID);
         if (isForm)
-          s += XPrint(" (in <Res> form)", mID);
+            s += XPrint(" (in <Res> form)", mID);
         else
-          s += XPrint(" (polymorphed into <Str> <Res>)",
-            strchr("aeiou",form[0]) ? "an" : "a", mID);
-      } 
-      
-    Done:
-    if (Flags & NA_CAPS)
-      s = s.Capitalize();
-    if (Flags & NA_POSS)
-      {
-        if (s[s.GetLength()-1] == 's')
-          s += "'";
-        else
-          s += "'s";
-      }
-		return *tmpstr(s);
-	}
+            s += XPrint(" (polymorphed into <Str> <Res>)", strchr("aeiou", form[0]) ? "an" : "a", mID);
+    }
 
-String & Trap::Name(int16 Flags)
-  {
+Done:
+    if (Flags & NA_CAPS)
+        s = s.Capitalize();
+
+    if (Flags & NA_POSS) {
+        if (s[s.GetLength() - 1] == 's')
+            s += "'";
+        else
+            s += "'s";
+    }
+    return *tmpstr(s);
+}
+
+String & Trap::Name(int16 Flags) {
     String s;
     if (Flags & NA_THE)
-      s = "the ";
-    else if (Flags & NA_A) 
-		  s = "a ";
+        s = "the ";
+    else if (Flags & NA_A)
+        s = "a ";
     else
-      s = "";
+        s = "";
 
     s += NAME(tID);
-
     return *tmpstr(s);
+}
 
-  }
+String & Item::Name(int16 Flags) {
+    uint8 i, ofCount;
+    EffMem *em;
+    String s, d, flav, pre, post, ofWords[8];
+    EventInfo xe;
+    bool NamedOnly;
 
+    xe.Clear();
+    xe.Event = EV_GETNAME;
 
+    if (isType(T_WEAPON) || isType(T_MISSILE) || isType(T_BOW))
+        if (HasQuality(WQ_SLAYING) || HasQuality(WQ_BANE))
+            if (GetBane() == 0)
+                RandomBane();
+    if ((Known & KN_MAGIC) && (Known & KN_CURSE))
+        Inscrip.Empty();
 
-
-
-String & Item::Name(int16 Flags)
-{
-  uint8 i, ofCount; EffMem *em;
-  String s, d, flav, pre, post, ofWords[8];
-  EventInfo xe; bool NamedOnly;
-  xe.Clear();
-  xe.Event = EV_GETNAME;
-  
-  if (isType(T_WEAPON) || isType(T_MISSILE) || isType(T_BOW)) 
-    if (HasQuality(WQ_SLAYING) || HasQuality(WQ_BANE))
-      if (GetBane() == 0)
-        RandomBane();
-  if ((Known & KN_MAGIC) && (Known & KN_CURSE))
-    Inscrip.Empty();
-  
-  if (eID) {
-    if ((em = EFFMEM(eID,theGame->GetPlayer(0)))->FlavorID && !isType(T_POTION)) {
-      /* This REALLY doesn't belong here, but there is no better
-         place to put it that insures it gets called every single
-         time it should. */
-      if (em->Tried && Inscrip.GetLength() == 0)
-        Inscrip = "tried";
-      if (em->Known)
-      { Known |= KN_MAGIC;
-        if (Inscrip == "tried")
-          Inscrip.Empty(); }
-        flav = Trim(NAME(em->FlavorID));
+    if (eID) {
+        if ((em = EFFMEM(eID, theGame->GetPlayer(0)))->FlavorID && !isType(T_POTION)) {
+            /* This REALLY doesn't belong here, but there is no better
+               place to put it that insures it gets called every single
+               time it should. */
+            if (em->Tried && Inscrip.GetLength() == 0)
+                Inscrip = "tried";
+            if (em->Known) {
+                Known |= KN_MAGIC;
+                if (Inscrip == "tried")
+                    Inscrip.Empty();
+            }
+            flav = Trim(NAME(em->FlavorID));
+        }
+        if ((em = EFFMEM(eID, theGame->GetPlayer(0)))->PFlavorID && isType(T_POTION)) {
+            /* This REALLY doesn't belong here, but there is no better
+               place to put it that insures it gets called every single
+               time it should. */
+            if (em->PTried && Inscrip.GetLength() == 0)
+                Inscrip = "tried";
+            if (em->PKnown) {
+                Known |= KN_MAGIC;
+                if (Inscrip == "tried")
+                    Inscrip.Empty();
+            }
+            flav = NAME(em->PFlavorID);
+        }
     }
-    if ((em = EFFMEM(eID,theGame->GetPlayer(0)))->PFlavorID && isType(T_POTION)) {
-      /* This REALLY doesn't belong here, but there is no better
-         place to put it that insures it gets called every single
-         time it should. */
-      if (em->PTried && Inscrip.GetLength() == 0)
-        Inscrip = "tried";
-      if (em->PKnown)
-      { Known |= KN_MAGIC;
-        if (Inscrip == "tried")
-          Inscrip.Empty(); }
-        flav = NAME(em->PFlavorID);
+
+    bool terse_blessed = theGame->Opt(OPT_TERSE_BLESSED) ? true : false;
+    if (Flags & NA_NO_TERSE)
+        terse_blessed = false;
+
+    if ((Known & KN_CURSE || Flags & NA_IDENT)) {
+        if (isBlessed()) {
+            char const * str = terse_blessed ? "b " : "blessed ";
+            xe.nCursed += !(Flags & NA_MONO) ? Format("%c%s%c", -SKYBLUE, str, -GREY) : s;
+        } else if (isCursed()) {
+            char const * str = terse_blessed ? "c " : "cursed ";
+            xe.nCursed += !(Flags & NA_MONO) ? Format("%c%s%c", -RED, str, -GREY) : s;
+        } else {
+            if (!terse_blessed)
+                xe.nCursed += "uncursed ";
+        }
+    } else {
+        if (terse_blessed)
+            xe.nCursed += !(Flags & NA_MONO) ? Format("%c?%c ", -WHITE, -GREY) : "? ";
     }
-  }
 
-  bool terse_blessed = theGame->Opt(OPT_TERSE_BLESSED) ? true : false;
-  if (Flags & NA_NO_TERSE)
-    terse_blessed = false; 
-
-
-  if((Known & KN_CURSE || Flags & NA_IDENT))
-  {
-    if (isBlessed()) {
-      char const * str = terse_blessed ? "b " : "blessed " ;
-      xe.nCursed += !(Flags & NA_MONO) ? Format("%c%s%c",-SKYBLUE,str,-GREY) : s;
+    /*
+    if (isGhostTouch()) {
+    char const * str = terse_blessed ? "g " : "ghost touch " ;
+    xe.nCursed += !(Flags & NA_MONO) ? Format("%c%s%c",-CYAN,str,-GREY) : str;
     }
-    else if (isCursed()) {
-      char const * str = terse_blessed ? "c " : "cursed " ;
-      xe.nCursed += !(Flags & NA_MONO) ? Format("%c%s%c",-RED,str,-GREY) : s;
-    } 
-    else {
-      if (!terse_blessed)
-      xe.nCursed += "uncursed ";
-  }
-  } else {
-    if (terse_blessed)
-      xe.nCursed += !(Flags & NA_MONO) ? Format("%c?%c ",-WHITE,-GREY) : "? ";
-  } 
+    */
 
-  /*
-  if (isGhostTouch()) {
-      char const * str = terse_blessed ? "g " : "ghost touch " ;
-      xe.nCursed += !(Flags & NA_MONO) ? Format("%c%s%c",-CYAN,str,-GREY) : str;
-  } 
-  */
+    TextVal PhaseDesc[] = {
+        { PHASE_MATERIAL, "material " },
+        { PHASE_ETHEREAL, "ethereal " },
+        { PHASE_ASTRAL, "astral " },
+        { PHASE_SHADOW, "umbral " },
+        { PHASE_NEGATIVE, "negative-material " },
+        { 0, NULL } };
 
-  TextVal PhaseDesc[] = {
-    { PHASE_MATERIAL, "material " },
-    { PHASE_ETHEREAL, "ethereal " },
-    { PHASE_ASTRAL,   "astral " },
-    { PHASE_SHADOW,   "umbral " },
-    { PHASE_NEGATIVE, "negative-material " },
-    { 0, NULL } };
-    
-  if (HasStati(PHASED))
-    xe.nAdjective += Lookup(PhaseDesc,GetStatiVal(PHASED));
-    
-  if (Flags & NA_LONG) {
-    if (HasStati(COCKED))
-      xe.nAdjective += "cocked ";
-    else if (needsToBeCocked())
-      xe.nAdjective += "uncocked ";
-  }
+    if (HasStati(PHASED))
+        xe.nAdjective += Lookup(PhaseDesc, GetStatiVal(PHASED));
 
-  if ((Flags & NA_LONG) && HasStati(POISONED))
-    if (isType(T_WEAPON) || isType(T_MISSILE))  
-      xe.nAdjective += "poisoned ";
+    if (Flags & NA_LONG) {
+        if (HasStati(COCKED))
+            xe.nAdjective += "cocked ";
+        else if (needsToBeCocked())
+            xe.nAdjective += "uncocked ";
+    }
 
-  if ((Flags & NA_LONG) && isType(T_FOOD) || isType(T_CORPSE))
-    if (((Food*)this)->Eaten && (Flags & NA_LONG))
-      xe.nAdjective += "partly eaten ";
+    if ((Flags & NA_LONG) && HasStati(POISONED))
+        if (isType(T_WEAPON) || isType(T_MISSILE))
+            xe.nAdjective += "poisoned ";
 
-  if ((Flags & NA_LONG) && (cHP != MaxHP() && (Flags & NA_LONG))) {
-    if (cHP*3 < MaxHP())
-      xe.nAdjective += "badly ";
-    else if ((TITEM(iID)->hp - cHP)*3 < MaxHP())
-      xe.nAdjective += "mildly ";
+    if ((Flags & NA_LONG) && isType(T_FOOD) || isType(T_CORPSE))
+        if (((Food*)this)->Eaten && (Flags & NA_LONG))
+            xe.nAdjective += "partly eaten ";
+
+    if ((Flags & NA_LONG) && (cHP != MaxHP() && (Flags & NA_LONG))) {
+        if (cHP * 3 < MaxHP())
+            xe.nAdjective += "badly ";
+        else if ((TITEM(iID)->hp - cHP) * 3 < MaxHP())
+            xe.nAdjective += "mildly ";
+        else
+            xe.nAdjective += "partly ";
+        switch (DmgType) {
+        case AD_FIRE: xe.nAdjective += isMetallic() ? "melted " : "burnt "; break;
+        case AD_ACID: xe.nAdjective += "melted "; break;
+        case AD_SONI: xe.nAdjective += "cracked "; break;
+        case AD_NECR: xe.nAdjective += "withered "; break;
+        case AD_RUST: xe.nAdjective += "rusted "; break;
+        default:      xe.nAdjective += "damaged "; break;
+        }
+    }
+
+
+    if (IFlags & IF_BROKEN)
+        xe.nAdjective += "broken ";
+
+    if (HasStati(MASTERWORK))
+        xe.nAdjective += "masterwork ";
+
+    ofCount = 0;
+    for (i = 0; i < 8; i++)
+        ofWords[i].Empty();
+
+    if (!(eID && TEFF(eID)->HasFlag(EF_HIDEQUAL)))
+        for (i = 1; i < max(WQ_TRUELAST, AQ_TRUELAST); i++)
+            if (KnownQuality(i) || (HasQuality(i) && Flags & NA_IDENT)) {
+                if (LookupOnly(GenericPreQualNames, i)) {
+                    xe.nPrequal += Lookup(GenericPreQualNames, i); xe.nPrequal += " ";
+                } else if (Type == T_ARMOUR || Type == T_SHIELD) {
+                    if (LookupOnly(APostQualNames, i))
+                        ofWords[ofCount++] = Lookup(APostQualNames, i);
+                    else {
+                        xe.nPrequal += Lookup(APreQualNames, i); xe.nPrequal += " ";
+                    }
+                } else { // not Armour
+                    if (LookupOnly(PostQualNames, i)) {
+                        if (i == WQ_SLAYING && GetBane() != -2)
+                            ofWords[ofCount++] = SC(Lookup(MTypeNames, GetBane()))
+                            + " Slaying";
+                        else
+                            ofWords[ofCount++] = Lookup(PostQualNames, i);
+                    } else {
+                        if (i == WQ_BANE && GetBane() != -2)
+                            xe.nPrequal += Lookup(MTypeNames, GetBane());
+                        xe.nPrequal += Lookup(PreQualNames, i);
+                        xe.nPrequal += " ";
+                    }
+                }
+            }
+
+    if (IFlags & IF_RUNIC)
+        flav = "rune-covered";
+
+    if (flav.GetLength())
+        xe.nFlavour += flav + SC(" ");
+
+
+
+    if ((Known & KN_MAGIC || Flags & NA_IDENT) && eID)
+        if (TEFF(eID)->HasFlag(EF_NAMEFIRST))
+            xe.nPrequal += SC(NAME(eID)) + SC(" ");
+
+    if ((Known & KN_MAGIC || Flags & NA_IDENT) && eID &&
+        TEFF(eID)->HasFlag(EF_NAMEONLY))
+        xe.nBase += NAME(eID);
     else
-      xe.nAdjective += "partly ";
-    switch (DmgType) {
-      case AD_FIRE: xe.nAdjective += isMetallic() ? "melted " : "burnt "; break; 
-      case AD_ACID: xe.nAdjective += "melted "; break;
-      case AD_SONI: xe.nAdjective += "cracked "; break;
-      case AD_NECR: xe.nAdjective += "withered "; break;
-      case AD_RUST: xe.nAdjective += "rusted "; break;
-      default:      xe.nAdjective += "damaged "; break;
-    }
-  }
+        xe.nBase += NAME(iID);
 
-
-  if (IFlags & IF_BROKEN)
-    xe.nAdjective += "broken ";
-
-  if (HasStati(MASTERWORK))
-    xe.nAdjective += "masterwork ";
-
-  ofCount = 0;
-  for (i=0;i<8;i++)
-    ofWords[i].Empty(); 
-
-  if (!(eID && TEFF(eID)->HasFlag(EF_HIDEQUAL)))
-    for (i=1;i<max(WQ_TRUELAST,AQ_TRUELAST);i++) 
-      if (KnownQuality(i) || (HasQuality(i) && Flags & NA_IDENT)) {
-        if (LookupOnly(GenericPreQualNames,i)) {
-          xe.nPrequal += Lookup(GenericPreQualNames,i); xe.nPrequal += " "; 
-        } else if (Type == T_ARMOUR || Type == T_SHIELD) {
-          if (LookupOnly(APostQualNames,i)) 
-            ofWords[ofCount++] = Lookup(APostQualNames,i);
-          else { 
-            xe.nPrequal += Lookup(APreQualNames,i); xe.nPrequal += " "; 
-          }
-        } else { // not Armour
-          if (LookupOnly(PostQualNames,i)) {
-            if (i == WQ_SLAYING && GetBane() != -2)
-              ofWords[ofCount++] = SC(Lookup(MTypeNames,GetBane())) 
-                + " Slaying";
-            else
-              ofWords[ofCount++] = Lookup(PostQualNames,i);
-          } else { 
-            if (i == WQ_BANE && GetBane() != -2)
-              xe.nPrequal += Lookup(MTypeNames,GetBane());
-            xe.nPrequal += Lookup(PreQualNames,i); 
-            xe.nPrequal += " "; 
-          }
-        } 
-      } 
-
-  if (IFlags & IF_RUNIC)
-    flav = "rune-covered";
-
-  if (flav.GetLength())
-    xe.nFlavour += flav + SC(" ");
-
-
-
-  if ((Known & KN_MAGIC || Flags & NA_IDENT) && eID)
-    if (TEFF(eID)->HasFlag(EF_NAMEFIRST))
-      xe.nPrequal += SC(NAME(eID)) + SC(" ");
-
-  if ((Known & KN_MAGIC || Flags & NA_IDENT) && eID &&
-      TEFF(eID)->HasFlag(EF_NAMEONLY)) 
-    xe.nBase += NAME(eID);
-  else
-    xe.nBase += NAME(iID);
-    
-  if ((Known & KN_MAGIC || Flags & NA_IDENT) && eID)
+    if ((Known & KN_MAGIC || Flags & NA_IDENT) && eID)
     {
-      if (TEFF(eID)->HasFlag(EF_POSTFIX))
+        if (TEFF(eID)->HasFlag(EF_POSTFIX))
         {
-          xe.nBase += ", ";
-          xe.nBase += NAME(eID);
-          xe.nBase = Capitalize(xe.nBase, true);
-        }
-      else if (TEFF(eID)->HasFlag(EF_PROPER))
+            xe.nBase += ", ";
+            xe.nBase += NAME(eID);
+            xe.nBase = Capitalize(xe.nBase, true);
+        } else if (TEFF(eID)->HasFlag(EF_PROPER))
         {
-          xe.nBase += " '";
-          xe.nBase += NAME(eID);
-          xe.nBase += "'";
+            xe.nBase += " '";
+            xe.nBase += NAME(eID);
+            xe.nBase += "'";
         }
-    } 
-  
-
-  if (((Known & KN_PLUS || Flags & NA_IDENT) || HasStati(BOOST_PLUS)) && GetPlus() /*&&
-      (Type == T_WEAPON || Type == T_ARMOUR || Type == T_TOME || 
-       Type == T_SHIELD || Type == T_BOW || Type == T_MISSILE ||
-       (TEFF(eID) && TEFF(eID)->HasFlag(EF_NEEDS_PLUS)))*/)
-  {
-    if (HasStati(BOOST_PLUS) && !(Flags & NA_MONO))
-      xe.nPlus += Format(" %c%+d%c",-YELLOW, (Known & KN_PLUS || Flags & NA_IDENT) ? GetPlus() : HighStatiMag(BOOST_PLUS), -GREY);
-    else
-      xe.nPlus += Format(" %+d",GetPlus());
-  }
-
-  if(Known & KN_MAGIC || Flags & NA_IDENT) {
-    if(eID && !TEFF(eID)->HasFlag(EF_NAMEONLY) && !TEFF(eID)->HasFlag(EF_NAMEFIRST)
-           && !TEFF(eID)->HasFlag(EF_POSTFIX) && !TEFF(eID)->HasFlag(EF_PROPER)) {
-      /* Capitalize properly: blue potion, blue Potion of Healing.
-         "Potion of Healing" is considered a proper name, I guess. */
-      xe.nBase.SetAt(0,toupper(xe.nBase[0]));
-      ofWords[ofCount++] = NAME(eID);        
     }
-  }
 
 
-  if (Flags & NA_LONG) {
-    if ((isKnown(KN_PLUS|KN_PLUS2) || Flags & NA_IDENT) && eID && 
-         (d = TEFF(eID)->Power(GetPlus(),Owner(),eID,this)).GetLength())
-      xe.nMech += SC(" [") + d + SC("]");
+    if (((Known & KN_PLUS || Flags & NA_IDENT) || HasStati(BOOST_PLUS)) && GetPlus() /*&&
+        (Type == T_WEAPON || Type == T_ARMOUR || Type == T_TOME ||
+        Type == T_SHIELD || Type == T_BOW || Type == T_MISSILE ||
+        (TEFF(eID) && TEFF(eID)->HasFlag(EF_NEEDS_PLUS)))*/)
+    {
+        if (HasStati(BOOST_PLUS) && !(Flags & NA_MONO))
+            xe.nPlus += Format(" %c%+d%c", -YELLOW, (Known & KN_PLUS || Flags & NA_IDENT) ? GetPlus() : HighStatiMag(BOOST_PLUS), -GREY);
+        else
+            xe.nPlus += Format(" %+d", GetPlus());
+    }
 
-    if (Type == T_WAND || Type == T_STAFF || Type == T_ROD)
-      if (isKnown(KN_PLUS2) || Flags & NA_IDENT)
-        xe.nAppend += Format(" (%02d charge%s)", Charges,
-            Charges == 1 ? "" : "s");
+    if (Known & KN_MAGIC || Flags & NA_IDENT) {
+        if (eID && !TEFF(eID)->HasFlag(EF_NAMEONLY) && !TEFF(eID)->HasFlag(EF_NAMEFIRST)
+            && !TEFF(eID)->HasFlag(EF_POSTFIX) && !TEFF(eID)->HasFlag(EF_PROPER)) {
+            /* Capitalize properly: blue potion, blue Potion of Healing.
+               "Potion of Healing" is considered a proper name, I guess. */
+            xe.nBase.SetAt(0, toupper(xe.nBase[0]));
+            ofWords[ofCount++] = NAME(eID);
+        }
+    }
 
-    if (eID && TEFF(eID)->HasFlag(EF_3PERDAY))
-      if ((isKnown(KN_MAGIC) && isKnown(KN_PLUS2)) || Flags & NA_IDENT)
-        xe.nAppend += Format(" (%d use%s left)", 3-Charges,
-            (3-Charges) == 1 ? "" : "s");
-    if (eID && TEFF(eID)->HasFlag(EF_7PERDAY))
-      if ((isKnown(KN_MAGIC) && isKnown(KN_PLUS2)) || Flags & NA_IDENT)
-        xe.nAppend += Format(" (%d use%s left)", 7-Charges,
-            (7-Charges) == 1 ? "" : "s");
 
-    if (Type == T_LIGHT)
-      xe.nAppend += Format(" (with %d turns of light left)",Age);
+    if (Flags & NA_LONG) {
+        if ((isKnown(KN_PLUS | KN_PLUS2) || Flags & NA_IDENT) && eID &&
+            (d = TEFF(eID)->Power(GetPlus(), Owner(), eID, this)).GetLength())
+            xe.nMech += SC(" [") + d + SC("]");
 
-    if ((isKnown(KN_MAGIC) || Flags & NA_IDENT) && HasStati(DISPELLED))
-      xe.nAppend += " (dispelled)";
-  }
+        if (Type == T_WAND || Type == T_STAFF || Type == T_ROD)
+            if (isKnown(KN_PLUS2) || Flags & NA_IDENT)
+                xe.nAppend += Format(" (%02d charge%s)", Charges,
+                Charges == 1 ? "" : "s");
 
-    if (Flags & NA_INSC || Flags & NA_LONG) 
-      if (Inscrip.GetLength())
-          xe.nInscrip += Format(" %c{%s%c}", -GREY, (const char*)Inscrip, -GREY);
-    
+        if (eID && TEFF(eID)->HasFlag(EF_3PERDAY))
+            if ((isKnown(KN_MAGIC) && isKnown(KN_PLUS2)) || Flags & NA_IDENT)
+                xe.nAppend += Format(" (%d use%s left)", 3 - Charges,
+                (3 - Charges) == 1 ? "" : "s");
+        if (eID && TEFF(eID)->HasFlag(EF_7PERDAY))
+            if ((isKnown(KN_MAGIC) && isKnown(KN_PLUS2)) || Flags & NA_IDENT)
+                xe.nAppend += Format(" (%d use%s left)", 7 - Charges,
+                (7 - Charges) == 1 ? "" : "s");
+
+        if (Type == T_LIGHT)
+            xe.nAppend += Format(" (with %d turns of light left)", Age);
+
+        if ((isKnown(KN_MAGIC) || Flags & NA_IDENT) && HasStati(DISPELLED))
+            xe.nAppend += " (dispelled)";
+    }
+
+    if (Flags & NA_INSC || Flags & NA_LONG)
+        if (Inscrip.GetLength())
+            xe.nInscrip += Format(" %c{%s%c}", -GREY, (const char*)Inscrip, -GREY);
+
     /* Allow resources to override */
-    
+
     xe.EParam = Flags;
     xe.EItem = this;
     xe.EActor = (Creature*)this;
     xe.EVictim = (Creature*)this;
 
     xe.nOf.Empty();
-    TITEM(iID)->Event(xe,iID);
+    TITEM(iID)->Event(xe, iID);
     if (xe.nOf.GetLength())
-      ofWords[ofCount++] = xe.nOf;
+        ofWords[ofCount++] = xe.nOf;
     xe.nOf.Empty();
     if (eID)
-      TEFF(eID)->Event(xe,eID);
+        TEFF(eID)->Event(xe, eID);
     if (xe.nOf.GetLength())
-      ofWords[ofCount++] = xe.nOf;
+        ofWords[ofCount++] = xe.nOf;
     xe.nOf.Empty();
-    
+
     xe.Event = META(EV_GETNAME);
     StatiIter(this)
         if (S->eID) {
-        TEFF(S->eID)->Event(xe,S->eID);
-        if (xe.nOf.GetLength())
-          ofWords[ofCount++] = xe.nOf;
-      }
+            TEFF(S->eID)->Event(xe, S->eID);
+            if (xe.nOf.GetLength())
+                ofWords[ofCount++] = xe.nOf;
+        }
     StatiIterEnd(this)
-    xe.Event = EV_GETNAME;
+        xe.Event = EV_GETNAME;
 
     /* Assemble the of-Words */
     xe.nOf.Empty();
     if (ofCount) {
-      xe.nOf += " of ";
-      for(i=0;i!=ofCount;i++) {
-        if (!i)
-          ;
-        else if (i == ofCount-1)
-          xe.nOf += " and ";
-        else
-          xe.nOf += ", ";
-        xe.nOf += ofWords[i];
+        xe.nOf += " of ";
+        for (i = 0; i != ofCount; i++) {
+            if (!i)
+                ;
+            else if (i == ofCount - 1)
+                xe.nOf += " and ";
+            else
+                xe.nOf += ", ";
+            xe.nOf += ofWords[i];
         }
-      }
+    }
 
-  /* Now, assemble the name */
-  if (xe.nNamed.GetLength() && !(Flags & NA_LONG))
-    NamedOnly = true;
-  else
-    NamedOnly = false;
-
-
-  if (Flags & NA_THE)
-    if (!xe.isProper)
-      xe.nArticle = "the ";
-      
-  if ((Quantity == 1 || Flags & NA_SINGLE || HasIFlag(IT_ROPE)) && (Flags & NA_A)) {
-    String t;
-    t = xe.nAdjective + xe.nCursed + xe.nPrequal;
-    if ((xe.EParam & NA_FLAVOR) || !(isKnown(KN_MAGIC) || (xe.EParam & NA_IDENT)))
-      t += xe.nFlavour;
-    t += xe.nBase;
-    if (strchr("aeiou",tolower(Trim(t)[0])) &&
-         (!TITEM(iID)->HasFlag(IT_PLURAL)))
-      xe.nArticle += "an ";
+    /* Now, assemble the name */
+    if (xe.nNamed.GetLength() && !(Flags & NA_LONG))
+        NamedOnly = true;
     else
-      xe.nArticle += "a ";
-    if (TITEM(iID)->HasFlag(IT_PLURAL) &&
-         (!eID || !TEFF(eID)->HasFlag(EF_NAMEONLY)
-           || strstr(NAME(eID),"Gloves")))
-      switch (TITEM(iID)->IType) {
-        case T_ARMOUR:
-          xe.nArticle += "suit of ";
-          break;  
-        case T_BRACERS: 
-        case T_GAUNTLETS: 
-        case T_BOOTS:
-          xe.nArticle += "pair of "; 
-          break;
-        default:
-          xe.nArticle += "set of ";  
-          break;
-      }
-  }
-  else if (Quantity > 1 && !(Flags & NA_SINGLE) && !HasIFlag(IT_ROPE))
-    xe.nArticle += Format("%d ",Quantity);
+        NamedOnly = false;
+
+
+    if (Flags & NA_THE)
+        if (!xe.isProper)
+            xe.nArticle = "the ";
+
+    if ((Quantity == 1 || Flags & NA_SINGLE || HasIFlag(IT_ROPE)) && (Flags & NA_A)) {
+        String t;
+        t = xe.nAdjective + xe.nCursed + xe.nPrequal;
+        if ((xe.EParam & NA_FLAVOR) || !(isKnown(KN_MAGIC) || (xe.EParam & NA_IDENT)))
+            t += xe.nFlavour;
+        t += xe.nBase;
+        if (strchr("aeiou", tolower(Trim(t)[0])) &&
+            (!TITEM(iID)->HasFlag(IT_PLURAL)))
+            xe.nArticle += "an ";
+        else
+            xe.nArticle += "a ";
+        if (TITEM(iID)->HasFlag(IT_PLURAL) &&
+            (!eID || !TEFF(eID)->HasFlag(EF_NAMEONLY)
+            || strstr(NAME(eID), "Gloves")))
+            switch (TITEM(iID)->IType) {
+            case T_ARMOUR:
+                xe.nArticle += "suit of ";
+                break;
+            case T_BRACERS:
+            case T_GAUNTLETS:
+            case T_BOOTS:
+                xe.nArticle += "pair of ";
+                break;
+            default:
+                xe.nArticle += "set of ";
+                break;
+        }
+    } else if (Quantity > 1 && !(Flags & NA_SINGLE) && !HasIFlag(IT_ROPE))
+        xe.nArticle += Format("%d ", Quantity);
 
 
     s.Empty();
     if (NamedOnly && Quantity > 1) /* Strange case, but possible (2 Stormbringers) */
-      { s += Format("%d ",Quantity); 
-        s += Pluralize(xe.nNamed); }
-    else if (NamedOnly)
-      s += xe.nNamed;
+    {
+        s += Format("%d ", Quantity);
+        s += Pluralize(xe.nNamed);
+    } else if (NamedOnly)
+        s += xe.nNamed;
     else {
-      s += xe.nArticle;
-      s += xe.nAdjective;
-      s += xe.nCursed; 
-      s += xe.nPrequal;
-      if ((xe.EParam & NA_FLAVOR) || !(isKnown(KN_MAGIC) || (xe.EParam & NA_IDENT)))
-        s += xe.nFlavour;
-      if (Quantity > 1 && !(xe.EParam & NA_SINGLE) && !HasIFlag(IT_ROPE))
-        s += Pluralize(xe.nBase,iID);
-      else
-        s += xe.nBase;
-      s += xe.nPlus;
-      s += xe.nOf;
-      s += xe.nPostqual;
-      if (xe.nNamed.GetLength() && (xe.EParam & NA_LONG))
-        { s += " named "; s += xe.nNamed; }
-      }
-
-  if (xe.EParam & NA_LONG)
-    s += xe.nInscrip;
-  if (xe.EParam & NA_MECH)
-    s += xe.nMech;
-  if (xe.EParam & NA_LONG)
-    s += xe.nAppend; 
-
-  /* Handle Capitalization */
-  if (Flags & NA_CAPS || Flags & NA_XCAPS)
-    s.SetAt(0, toupper(s[0]));
-  if (Flags & NA_XCAPS)
-    for(i=1;s[i];i++)
-      if (s[i-1] == ' ')
-        s.SetAt(i,toupper(s[i]));
-        
-  if ((Flags & NA_MECH) && !(Flags & NA_MONO)) {
-      Player *p;
-      p = theGame->GetPlayer(0);
-      if (p->defMelee == myHandle)
-          s = Format("%c%s%c", -SKYBLUE, (const char*)Decolorize(s), -GREY);
-      if (p->defOffhand == myHandle)
-          s = Format("%c%s%c", -AZURE, (const char*)Decolorize(s), -GREY);
-      if (p->defRanged == myHandle)
-          s = Format("%c%s%c", -PINK, (const char*)Decolorize(s), -GREY);
-      if (p->defAmmo == myHandle)
-          s = Format("%c%s%c", -MAGENTA, (const char*)Decolorize(s), -GREY);
+        s += xe.nArticle;
+        s += xe.nAdjective;
+        s += xe.nCursed;
+        s += xe.nPrequal;
+        if ((xe.EParam & NA_FLAVOR) || !(isKnown(KN_MAGIC) || (xe.EParam & NA_IDENT)))
+            s += xe.nFlavour;
+        if (Quantity > 1 && !(xe.EParam & NA_SINGLE) && !HasIFlag(IT_ROPE))
+            s += Pluralize(xe.nBase, iID);
+        else
+            s += xe.nBase;
+        s += xe.nPlus;
+        s += xe.nOf;
+        s += xe.nPostqual;
+        if (xe.nNamed.GetLength() && (xe.EParam & NA_LONG))
+        {
+            s += " named "; s += xe.nNamed;
+        }
     }
 
-  return *tmpstr(s);
+    if (xe.EParam & NA_LONG)
+        s += xe.nInscrip;
+    if (xe.EParam & NA_MECH)
+        s += xe.nMech;
+    if (xe.EParam & NA_LONG)
+        s += xe.nAppend;
+
+    /* Handle Capitalization */
+    if (Flags & NA_CAPS || Flags & NA_XCAPS)
+        s.SetAt(0, toupper(s[0]));
+    if (Flags & NA_XCAPS)
+        for (i = 1; s[i]; i++)
+            if (s[i - 1] == ' ')
+                s.SetAt(i, toupper(s[i]));
+
+    if ((Flags & NA_MECH) && !(Flags & NA_MONO)) {
+        Player *p;
+        p = theGame->GetPlayer(0);
+        if (p->defMelee == myHandle)
+            s = Format("%c%s%c", -SKYBLUE, (const char*)Decolorize(s), -GREY);
+        if (p->defOffhand == myHandle)
+            s = Format("%c%s%c", -AZURE, (const char*)Decolorize(s), -GREY);
+        if (p->defRanged == myHandle)
+            s = Format("%c%s%c", -PINK, (const char*)Decolorize(s), -GREY);
+        if (p->defAmmo == myHandle)
+            s = Format("%c%s%c", -MAGENTA, (const char*)Decolorize(s), -GREY);
+    }
+
+    return *tmpstr(s);
 }
 
 String & Feature::Name(int16 Flags) {
     String s;
-  if (Named.GetLength() && !(Flags & NA_LONG))
-      return Named;
-    
+    if (Named.GetLength() && !(Flags & NA_LONG))
+        return Named;
+
     s = NAME(fID);
-		
-  if (cHP > 0 && (Flags & NA_LONG))
-      switch((cHP*10) / max(1,mHP))
-        {
-          case 10: break; 
-          case 9:
-          case 8:  s = SC("mildly damaged ") + s; break;
-          case 7:  
-          case 6:  s = SC("moderately damaged ") + s; break;
-          case 5:  
-          case 4:  s = SC("severely damaged ") + s; break;
-          case 3:  
-          case 2:  s = SC("badly damaged ") + s; break;
-          case 1:  s = SC("critically damaged ") + s; break;
-          case 0:  s = SC("almost destroyed ") + s; break;
-        }
+
+    if (cHP > 0 && (Flags & NA_LONG))
+        switch ((cHP * 10) / max(1, mHP))
+    {
+        case 10: break;
+        case 9:
+        case 8:  s = SC("mildly damaged ") + s; break;
+        case 7:
+        case 6:  s = SC("moderately damaged ") + s; break;
+        case 5:
+        case 4:  s = SC("severely damaged ") + s; break;
+        case 3:
+        case 2:  s = SC("badly damaged ") + s; break;
+        case 1:  s = SC("critically damaged ") + s; break;
+        case 0:  s = SC("almost destroyed ") + s; break;
+    }
 
     if (Flags & NA_A) {
-      if ((s[0] == 'a') || (s[0] == 'e') || (s[0] == 'i') || (s[0] == 'o') 
-          || (s[0] == 'u'))
-      s = SC("an ") + s;
-    else
-      s = SC("a ") + s;
-  }
-  else if (Flags & NA_THE)
-    s = SC("the ") + s;
+        if ((s[0] == 'a') || (s[0] == 'e') || (s[0] == 'i') || (s[0] == 'o')
+            || (s[0] == 'u'))
+            s = SC("an ") + s;
+        else
+            s = SC("a ") + s;
+    } else if (Flags & NA_THE)
+        s = SC("the ") + s;
 
-  if (Named.GetLength())
-    s += SC(" named ") + Named;
+    if (Named.GetLength())
+        s += SC(" named ") + Named;
 
-  if (HasStati(WIZLOCK) && (Flags & NA_LONG)) {
-    s += Format(" (wizard-locked by %s)",(const char*) GetStatiObj(WIZLOCK)->Name(0));
-  } 
+    if (HasStati(WIZLOCK) && (Flags & NA_LONG)) {
+        s += Format(" (wizard-locked by %s)", (const char*)GetStatiObj(WIZLOCK)->Name(0));
+    }
 
     if (HasStati(MY_GOD))
-      s += Format(" to %s", NAME(GetStatiEID(MY_GOD)));
+        s += Format(" to %s", NAME(GetStatiEID(MY_GOD)));
 
     return *tmpstr(s);
-	}
+}
 
-String & Corpse::Name(int16 Flags)
-{
-  String s, s2; int16 i;
+String & Corpse::Name(int16 Flags) {
+    String s, s2; int16 i;
 
-  s = ""; 
+    s = "";
 
 
-  if (isType(T_FIGURE) || isType(T_STATUE)) {
-    if (Quantity > 1 && !(Flags & NA_SINGLE))
-      s += Format("%d ",Quantity);
+    if (isType(T_FIGURE) || isType(T_STATUE)) {
+        if (Quantity > 1 && !(Flags & NA_SINGLE))
+            s += Format("%d ", Quantity);
 
-    s += NAME(iID);
-    s += " of ";
-    if (Named)
-      s += Named;
-    else if (!mID)
-      ;
-    else if (TMON(mID)->HasFlag(M_PROPER))
-      s += NAME(mID);
-    else {
-      s2 = NAME(mID);
-      if ((s2[0] == 'a') || (s2[0] == 'e') || (s2[0] == 'i') || (s2[0] == 'o') 
-          || (s2[0] == 'u'))
-        s += SC("an ") + s2;
-      else
-        s += SC("a ") + s2;
+        s += NAME(iID);
+        s += " of ";
+        if (Named)
+            s += Named;
+        else if (!mID)
+            ;
+        else if (TMON(mID)->HasFlag(M_PROPER))
+            s += NAME(mID);
+        else {
+            s2 = NAME(mID);
+            if ((s2[0] == 'a') || (s2[0] == 'e') || (s2[0] == 'i') || (s2[0] == 'o')
+                || (s2[0] == 'u'))
+                s += SC("an ") + s2;
+            else
+                s += SC("a ") + s2;
+        }
+
+        if (Flags & NA_THE)
+            s = SC("the ") + s;
+        else if (Flags & NA_A) {
+            if ((s[0] == 'a') || (s[0] == 'e') || (s[0] == 'i') || (s[0] == 'o')
+                || (s[0] == 'u'))
+                s = SC("an ") + s;
+            else
+                s = SC("a ") + s;
+        }
+
+        goto Done;
     }
 
-    if (Flags & NA_THE)
-      s = SC("the ") + s;
-    else if (Flags & NA_A) {
-      if ((s[0] == 'a') || (s[0] == 'e') || (s[0] == 'i') || (s[0] == 'o') 
-          || (s[0] == 'u'))
-        s = SC("an ") + s;
-      else
-        s = SC("a ") + s;
+    if (Named.GetLength())
+    {
+        s += Format("%s's %scorpse", (const char*)Named,
+            Eaten ? "partly eaten " : "");
+        return *tmpstr(s);
     }
+    if (Eaten && (Flags & NA_LONG))
+        s += "partly eaten ";
+    s += NAME(mID);
 
-    goto Done;
-  }  
+    StatiIterNature(this, TEMPLATE)
+        if (S->Mag) {
+            if (TTEM(S->eID)->HasFlag(TMF_POSTSCRIPT))
+                s += SC(" ") + NAME(S->eID);
+            else
+                s = SC(NAME(S->eID)) + SC(" ") + s;
+        }
+    StatiIterEnd(this)
 
+    if (!TMON(mID)->HasFlag(M_PROPER)) {
+        s += " corpse";
 
-  if (Named.GetLength())
-  {
-    s += Format("%s's %scorpse",(const char*)Named,
-        Eaten ? "partly eaten " : "");
-    return *tmpstr(s);
-  }
-  if (Eaten && (Flags & NA_LONG))
-    s += "partly eaten ";
-  s += NAME(mID);
+        if (Quantity > 1 && !(Flags & NA_SINGLE))
+            s = Format("%d %ss", Quantity, (const char*)s);
 
-  StatiIterNature(this,TEMPLATE)
-      if (S->Mag) { 
-        if (TTEM(S->eID)->HasFlag(TMF_POSTSCRIPT))
-          s += SC(" ") + NAME(S->eID);
+        if (Flags & NA_A) {
+            if ((s[0] == 'a') || (s[0] == 'e') || (s[0] == 'i') || (s[0] == 'o')
+                || (s[0] == 'u'))
+                s = SC("an ") + s;
+            else
+                s = SC("a ") + s;
+        }
+
+        else if (Flags & NA_THE)
+            s = SC("the ") + s;
+    } else
+        s += SC("'s corpse");
+
+    {
+        if (isFresh())
+            s += Format(" %c(%cfresh", -GREY, -GREEN);
         else
-          s = SC(NAME(S->eID)) + SC(" ") + s;
-      } 
-  StatiIterEnd(this)
+            s += Format(" %c(%cstale", -GREY, -RED, -GREY);
 
-  if (!TMON(mID)->HasFlag(M_PROPER)) {
-    s += " corpse";
-
-    if (Quantity > 1 && !(Flags & NA_SINGLE))
-      s = Format("%d %ss", Quantity, (const char*)s);
-
-    if (Flags & NA_A) {
-      if ((s[0] == 'a') || (s[0] == 'e') || (s[0] == 'i') || (s[0] == 'o') 
-          || (s[0] == 'u'))
-        s = SC("an ") + s;
-      else
-        s = SC("a ") + s;
+        int16 dc = noDiseaseDC();
+        if (dc <= 30)
+            s += Format(", DC %d", dc);
+        s += Format("%c)", -GREY);
     }
-
-    else if (Flags & NA_THE)
-      s = SC("the ") + s;
-  }
-  else
-    s += SC("'s corpse");
-
-  {
-  if (isFresh())
-    s += Format(" %c(%cfresh",-GREY,-GREEN);
-  else 
-    s += Format(" %c(%cstale",-GREY,-RED,-GREY);
-  int16 dc = noDiseaseDC();
-  if (dc <= 30)
-    s += Format(", DC %d",dc);
-  s += Format("%c)",-GREY);
-  }
 
 Done:
-  if (Flags & NA_CAPS || Flags & NA_XCAPS)
-    s.SetAt(0,toupper(s[0]));
-  if (Flags & NA_XCAPS)
-    for(i=1;s[i];i++)
-      if (s[i-1] == ' ')
-        s.SetAt(i,toupper(s[i]));
-  return *tmpstr(s);
+    if (Flags & NA_CAPS || Flags & NA_XCAPS)
+        s.SetAt(0, toupper(s[0]));
+    if (Flags & NA_XCAPS)
+        for (i = 1; s[i]; i++)
+            if (s[i - 1] == ' ')
+                s.SetAt(i, toupper(s[i]));
+    return *tmpstr(s);
 }
 
 /********************************************************************
                         Text Resource Support
  ********************************************************************/
 
-
 String Game::BuildText(EventInfo &e, rID tID) {
     int16 ln = 0;
     int32 tBuff[2048];
     TText *tt = TTEX(tID);
-    tt->GetList(TEXT_LIST,(rID*)tBuff,2048);
+    tt->GetList(TEXT_LIST, (rID*)tBuff, 2048);
     while (tBuff[ln++])
         ;
-    return *tmpstr(RecursiveParse(e,tID,tBuff,ln));
-} 
+    return *tmpstr(RecursiveParse(e, tID, tBuff, ln));
+}
     
 String Game::RecursiveParse(EventInfo &e, rID tID, int32 *tBuff, int16 len) {
-    String Text; hCode hc; 
-    int16 i, n, c,orPos[30],nest,start;
+    String Text; hCode hc;
+    int16 i, n, c, orPos[30], nest, start;
 
     if (len <= 0)
         return *tmpstr("");
@@ -1688,9 +1665,9 @@ String Game::RecursiveParse(EventInfo &e, rID tID, int32 *tBuff, int16 len) {
     while (tBuff[i] && i < len) {
         switch (tBuff[i]) {
         case TC_RPAREN:
-            Error("Mismatched parenthesis in dynamic text <Res>.",tID);
+            Error("Mismatched parenthesis in dynamic text <Res>.", tID);
             return *tmpstr("Error building text.");
-        case TC_LPAREN:                             
+        case TC_LPAREN:
             nest = 1;
             while (nest && tBuff[i]) {
                 i++;
@@ -1700,7 +1677,7 @@ String Game::RecursiveParse(EventInfo &e, rID tID, int32 *tBuff, int16 len) {
                     nest--;
             }
             if (nest) {
-                Error("Closing parenthesis missing in dynamic text <Res>.",tID);
+                Error("Closing parenthesis missing in dynamic text <Res>.", tID);
                 return *tmpstr("Error building text.");
             }
             break;
@@ -1712,8 +1689,8 @@ String Game::RecursiveParse(EventInfo &e, rID tID, int32 *tBuff, int16 len) {
     orPos[c] = 0;
     if (c > 1) {
         int16 choice = random(c);
-        Text = RecursiveParse(e,tID,&tBuff[orPos[choice]+1],
-            (orPos[choice+1] ? orPos[choice+1] : len) - orPos[choice]);
+        Text = RecursiveParse(e, tID, &tBuff[orPos[choice] + 1],
+            (orPos[choice + 1] ? orPos[choice + 1] : len) - orPos[choice]);
         return *tmpstr(Text);
     }
 
@@ -1721,9 +1698,9 @@ String Game::RecursiveParse(EventInfo &e, rID tID, int32 *tBuff, int16 len) {
     while (tBuff[i] && i < len) {
         switch (tBuff[i]) {
         case TC_RPAREN:
-            Error("Mismatched parenthesis in dynamic text <Res>.",tID);
+            Error("Mismatched parenthesis in dynamic text <Res>.", tID);
             return *tmpstr("Error building text.");
-        case TC_LPAREN:                             
+        case TC_LPAREN:
             nest++;
             start = i;
             while (nest && tBuff[i]) {
@@ -1734,20 +1711,20 @@ String Game::RecursiveParse(EventInfo &e, rID tID, int32 *tBuff, int16 len) {
                     nest--;
             }
             if (nest) {
-                Error("Closing parenthesis missing in dynamic text <Res>.",tID);
+                Error("Closing parenthesis missing in dynamic text <Res>.", tID);
                 return *tmpstr("Error building text.");
             }
-            if (i == start+1)
+            if (i == start + 1)
                 ;
             else
-                Text += RecursiveParse(e,tID,&tBuff[start+1],i-(start+1));
+                Text += RecursiveParse(e, tID, &tBuff[start + 1], i - (start + 1));
             break;
         case TC_CHOICE:
             orPos[c++] = i;
             break;
         case TC_CASE:
-            hc = tBuff[i+1];
-            n = i+2;
+            hc = tBuff[i + 1];
+            n = i + 2;
             nest = 0;
             while (tBuff[n]) {
                 if (tBuff[n] == TC_LPAREN)
@@ -1763,7 +1740,7 @@ String Game::RecursiveParse(EventInfo &e, rID tID, int32 *tBuff, int16 len) {
                 return *tmpstr("Error building text.");
             }
             if (theGame->VM.Execute(&e, tID, hc))
-                Text += RecursiveParse(e,tID,&tBuff[i+2],n-(i+2));
+                Text += RecursiveParse(e, tID, &tBuff[i + 2], n - (i + 2));
             i = n;
             break;
         case TC_ACTION:
@@ -1773,8 +1750,8 @@ String Game::RecursiveParse(EventInfo &e, rID tID, int32 *tBuff, int16 len) {
             Text += e.Text;
             break;
         case TC_WCHOICE:
-            c = (int16)(tBuff[i+1]);
-            n = i+2; nest = 0;
+            c = (int16)(tBuff[i + 1]);
+            n = i + 2; nest = 0;
             while (tBuff[n]) {
                 if (tBuff[n] == TC_LPAREN)
                     nest++;
@@ -1789,16 +1766,16 @@ String Game::RecursiveParse(EventInfo &e, rID tID, int32 *tBuff, int16 len) {
                 return *tmpstr("Error building text.");
             }
             if (random(100) <= c)
-                Text += RecursiveParse(e,tID,&tBuff[i+2],n-(i+2));
+                Text += RecursiveParse(e, tID, &tBuff[i + 2], n - (i + 2));
             i = n;
             break;
         default:
             if (tBuff[i] >= 0x01000000)
-                Text += BuildText(e,(rID)(tBuff[i]));
+                Text += BuildText(e, (rID)(tBuff[i]));
             else
-                Text += (GetText(tID,tBuff[i]));
+                Text += (GetText(tID, tBuff[i]));
             break;
         }
     }
     return *tmpstr(Text);
-}    
+}
