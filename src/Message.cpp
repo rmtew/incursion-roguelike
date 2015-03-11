@@ -477,16 +477,19 @@ PutName:
                     n++;
                     Params[n].o = va_arg(args, Thing*);
                 }
+
                 Subject = Params[i].o;
             } else if (str.Left(4) == "hobj" || str.Left(4) == "hmon" || str.Left(4) == "hitm") {
                 if (!str[4])
                     i = n + 1;
                 else
                     i = atoi(str.Right(str.GetLength() - 4));
+
                 while (i > n) {
                     n++;
                     Params[n].o = oThing(va_arg(args, hObj));
                 }
+
                 Subject = Params[i].o;
             } else {
                 Error("Syntax error in __XPrint!");
@@ -539,6 +542,7 @@ PutName:
                 else
                     strcpy(p, "");
             } else if (str == "god") {
+                // TODO(hardcoded-content): God names should be picked from module data.
                 if (!Subject->isCreature())
                     Error("__XPrint: <God> applied to non-Creature Object!");
                 else if (Subject->isCharacter())
@@ -549,7 +553,6 @@ PutName:
                     strcpy(p, random(2) ? "Xel" : "Zurvash");
                 else
                     strcpy(p, random(2) ? "Immotian" : "Ekliazeh");
-
             }
             ev = oev;
             p = Out + strlen(Out);
