@@ -518,6 +518,7 @@ chtype glyphchar_to_chtype(Glyph g) {
 		// TODO: Rewrite all the main and libtcod code to use GLYPH_ constants instead of character values.
 		// NOTE: Actual characters need to be displayed verbatim, so should separate verbatim range from named range.
 		// NULL entries just use the raw glyph character value for now.
+        lookup_table[GLYPH_UNSEEN] = ' ';
 
 		lookup_table[GLYPH_VLINE] = 0x2502; // Box drawings light vertical.
 		lookup_table[GLYPH_HLINE] = 0x2500; // Box drawings light horizontal.

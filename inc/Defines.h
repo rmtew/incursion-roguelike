@@ -4296,7 +4296,9 @@ typedef signed long       hObj;
 #define GLYPH_POINTER_LEFT        373
 #define GLYPH_POINTER_RIGHT       374
 
-#define GLYPH_LAST       374
+#define GLYPH_UNSEEN     375
+
+#define GLYPH_LAST       375
 
 #define PRIO_EMPTY               1
 #define PRIO_CORRIDOR_WALL      10

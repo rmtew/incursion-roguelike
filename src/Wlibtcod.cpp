@@ -440,6 +440,7 @@ E0 Alpha       Beta        Gamma       Pi          SigmaL      SigmaS      MuS  
 F0 IdenticalTo PlusMinus   GreaterThE  LessThanE   IntegralTp  IntegralBtm DivisionSgn AlmostEqual Degree      BlackSquare MiddleDot   SquareRoot  SuperScrptn SuperScrpt2 BlackSquare ...
    00          01          02          03          04          05          06          07          08          09          0A          0B          0C          0D          0E          0F
 		*/
+        lookup_table[GLYPH_UNSEEN] = ' ';
 
 		// NULL entries just use the raw glyph character value for now.
 		lookup_table[GLYPH_VLINE] = 179; // Box drawings light vertical.
