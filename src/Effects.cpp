@@ -2174,7 +2174,7 @@ EvReturn Magic::Travel(EventInfo &e)
             e.ETarget = t;
             goto TravelTarg;
           }
-        #if OLD_TRACKING
+#ifdef OLD_TRACKING
         if (e.EActor == e.EVictim)
           for(i=0;e.EActor->Stati[i];i++)
             if (e.EActor->Stati[i]->Nature == TRACKING)
@@ -2187,7 +2187,7 @@ EvReturn Magic::Travel(EventInfo &e)
                         e.isDir = e.isLoc = false;
                         goto TravelTarg;
                       }
-        #endif
+#endif
 
         for(i=0;i!=50;i++)
           {
