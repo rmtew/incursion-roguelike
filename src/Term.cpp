@@ -834,40 +834,37 @@ void Map::Update(int16 x,int16 y) {
      change the foreground so that the glyph is visible. */
   if (GLYPH_BACK(g) == GLYPH_FORE(g))
 	  g = (g & GLYPH_FORE_MASK) ? (g & ~GLYPH_FORE_MASK) : (g | GLYPH_FORE(BRIGHT_MASK));
-
   
-  if(!((At(x,y).Visibility & VI_VISIBLE) || Vis) &&
-        T1->getMap() == this) /*later, >> player*4 */
-  {
-    g = hi ? hg : (isEngulfed ? 0 : (Glyph)At(x,y).Memory);
-    if (g)
-      T1->PutGlyph(x,y,g);
-    else
-      T1->PutGlyph(x,y,' ');
-    mg = 0;
-    goto DoOverlay;
+  if (!((At(x, y).Visibility & VI_VISIBLE) || Vis) && T1->getMap() == this)  { /*later, >> player*4 */
+      g = hi ? hg : (isEngulfed ? 0 : (Glyph)At(x, y).Memory);
+      if (g)
+          T1->PutGlyph(x, y, g);
+      else
+          T1->PutGlyph(x, y, GLYPH_UNSEEN);
+      mg = 0;
+      goto DoOverlay;
   }
 
 DoDraw:
   if (creatures > 1 && Pri == 3)
-    T1->PutGlyph(x,y,GLYPH_VALUE(GLYPH_MULTI, WHITE) | (mg & GLYPH_BACK_MASK) );
+      T1->PutGlyph(x, y, GLYPH_VALUE(GLYPH_MULTI, WHITE) | (mg & GLYPH_BACK_MASK));
   else if (items > 1 && Pri < 3) {
-    Container * c = FChestAt(x,y); 
-    if (c) {
-		if (g & GLYPH_BACK_MASK)
-			T1->PutGlyph(x, y, (g & GLYPH_BACK_MASK) | (c->Image & ~GLYPH_BACK_MASK));
-    else
-        T1->PutGlyph(x,y,c->Image);
-    } else
-		T1->PutGlyph(x, y, GLYPH_VALUE(GLYPH_PILE, GREY) | (mg & GLYPH_BACK_MASK));
+      Container * c = FChestAt(x, y);
+      if (c) {
+          if (g & GLYPH_BACK_MASK)
+              T1->PutGlyph(x, y, (g & GLYPH_BACK_MASK) | (c->Image & ~GLYPH_BACK_MASK));
+          else
+              T1->PutGlyph(x, y, c->Image);
+      } else
+          T1->PutGlyph(x, y, GLYPH_VALUE(GLYPH_PILE, GREY) | (mg & GLYPH_BACK_MASK));
   } else
-    T1->PutGlyph(x,y,g);
+      T1->PutGlyph(x, y, g);
 
 DoOverlay:
-  if(ov.Active && !isEngulfed)
-    for(i=0;i!=ov.GlyphCount;i++)
-      if(ov.GlyphX[i]==x && ov.GlyphY[i]==y)
-        T1->PutGlyph(x,y,ov.GlyphImage[i] | (mg & GLYPH_BACK_MASK));
+  if (ov.Active && !isEngulfed)
+      for (i = 0; i != ov.GlyphCount; i++)
+          if (ov.GlyphX[i] == x && ov.GlyphY[i] == y)
+              T1->PutGlyph(x, y, ov.GlyphImage[i] | (mg & GLYPH_BACK_MASK));
 }
 
 void TextTerm::ShowMap() {
@@ -936,7 +933,7 @@ void TextTerm::ShowMap() {
           WViewThing(m->FirstAt(x+XOff,y+YOff), 
                 dist(x+XOff,y+YOff,p->x,p->y), false);
         } else
-          PutGlyph(x+XOff,y+YOff,' ');
+          PutGlyph(x+XOff,y+YOff,GLYPH_UNSEEN);
       }
     }
   ShowThings();
@@ -1020,111 +1017,90 @@ void TextTerm::AdjustMap(int16 vx, int16 vy,bool newmap) {
 }
 
 void TextTerm::ShowThings() {
-		int16 i,fx,fy, Per; Thing *t;
-    Rect ViewRange(max(XOff-15,0),max(YOff-15,0),
-      min(XOff+MSizeX()+15,m->SizeX()),min(YOff+MSizeY()+15,m->SizeY()));
-    Rect ScreenRect((uint8)XOff,(uint8)YOff,(uint8)(XOff+MSizeX()),(uint8)(YOff+MSizeY()));
-     
+    int16 i, fx, fy, Per; Thing *t;
+    Rect ViewRange(max(XOff - 15, 0), max(YOff - 15, 0), min(XOff + MSizeX() + 15, m->SizeX()), min(YOff + MSizeY() + 15, m->SizeY()));
+    Rect ScreenRect((uint8)XOff, (uint8)YOff, (uint8)(XOff + MSizeX()), (uint8)(YOff + MSizeY()));
+
     /* TODO: Allow Selection of Offscreen Glyphs with EffectPrompt:
          The Term object will contain an array of 64 OffscreenGlyph
-       objects, defined as follows:
+         objects, defined as follows:
 
-       struct OffscreenGlyph {
-         uint8 rx, ry; // Real Location 
+         struct OffscreenGlyph {
+         uint8 rx, ry; // Real Location
          uint8 sx, sy; // Screen Location
          Thing *t;     // Object Pointer
          };
-       
+
          Every call to ShowThings() will zero this array with memset,
-       then fill it with the relevant info as the glyphs are drawn.
-       Then, EffectPrompt can use this info to allow the player to
-       look at offscreen objects. */
+         then fill it with the relevant info as the glyphs are drawn.
+         Then, EffectPrompt can use this info to allow the player to
+         look at offscreen objects. */
 
     /* Remove old offscreen monsters */
-    for(i=0;i!=OffscreenC;i++)
-      m->Update(OffscreenX[i],OffscreenY[i]);
+    for (i = 0; i != OffscreenC; i++)
+        m->Update(OffscreenX[i], OffscreenY[i]);
     OffscreenC = 0;
 
-    int16 sx = min(MSizeX(),m->SizeX() - XOff);
-    int16 sy = min(MSizeY(),m->SizeY() - YOff);
-    for(int16 y=0;y<sy;y++)
-      for(int16 x=0;x<sx;x++) {
-        if (!m->InBounds(x+XOff,y+YOff))
-          continue;
-        t = m->FirstAt(x+XOff,y+YOff);
-        if (!t) continue; 
-        /*
-         * WW: this is it! my great contribution to Incursion speed: the
-         * incredible bottleneck from beyond the grave ...
-         *
-         * (drumroll ...)
-         *
-         * A call to MapIterate inside ShowThings!
-         *
-         * In particular, this meant that if there were 10 items on a
-         * single square (loot from a dead monster, say) we would be inside
-         * this loop once for each item and then (horror!) we would call
-         * m->Update() on that square 10 times!
-         *
-           MapIterate(m,t,i) 
-           if(ViewRange.Within(t->x, t->y) || (t->Flags & F_HILIGHT))
-           if (ScreenRect.Within(t->x, t->y))
-           m->Update(t->x, t->y);
-           else 
-         */
-        fx = x+XOff;
-        fy = y+YOff;
-        if(ViewRange.Within((uint8)t->x, (uint8)t->y) || (t->Flags & F_HILIGHT)) {
-          m->Update(fx,fy);
-        } else if ((t->isCreature() || (t->Flags & F_HILIGHT)) && 
-            (Per = p->Perceives(t)))
-        {
-          ASSERT(0);
-          /* A preemptive fix to Angband's "off-screen breathers"
-           * glitch: if a monster is within the player's LOS and
-           * range of vision, but is not in the screen area, show
-           * it, highlighted red, on the farthest edge of the 
-           * screen in the direction which it is found.
-           */
-          /*
-          fx = t->x;
-          fy = t->y;
-          if (fx < XOff)
-            fx = XOff;
-          if (fx > XOff+MSizeX()-1)
-            fx = XOff+MSizeX()-1;
-          if (fy < YOff)
-            fy = YOff;
-          if (fy > YOff+MSizeY()-1)
-            fy = YOff+MSizeY()-1;
-            */
+    int16 sx = min(MSizeX(), m->SizeX() - XOff);
+    int16 sy = min(MSizeY(), m->SizeY() - YOff);
+    for (int16 y = 0; y < sy; y++)
+        for (int16 x = 0; x < sx; x++) {
+            if (!m->InBounds(x + XOff, y + YOff))
+                continue;
+
+            t = m->FirstAt(x + XOff, y + YOff);
+            if (!t)
+                continue;
+
+            fx = x + XOff;
+            fy = y + YOff;
+            if (ViewRange.Within((uint8)t->x, (uint8)t->y) || (t->Flags & F_HILIGHT)) {
+                m->Update(fx, fy);
+            } else if ((t->isCreature() || (t->Flags & F_HILIGHT)) && (Per = p->Perceives(t))) {
+                ASSERT(0);
+                /* A preemptive fix to Angband's "off-screen breathers"
+                 * glitch: if a monster is within the player's LOS and
+                 * range of vision, but is not in the screen area, show
+                 * it, highlighted red, on the farthest edge of the
+                 * screen in the direction which it is found.
+                 */
+                /*
+                fx = t->x;
+                fy = t->y;
+                if (fx < XOff)
+                fx = XOff;
+                if (fx > XOff+MSizeX()-1)
+                fx = XOff+MSizeX()-1;
+                if (fy < YOff)
+                fy = YOff;
+                if (fy > YOff+MSizeY()-1)
+                fy = YOff+MSizeY()-1;
+                */
 
 #ifdef OLD_TRACKING
-          if (p->HasStati(TRACKING,-1,t))
-            ;
-          else 
+                if (p->HasStati(TRACKING,-1,t))
+                    ;
+                else 
 #endif
-          if (t->Flags & F_HILIGHT) 
-            PutGlyph(fx,fy,((Per == PER_SHADOW) ? GLYPH_VALUE('?', GREY) : 
-                            (t->Image & ~GLYPH_BACK_MASK)) | GLYPH_BACK(EMERALD));
-          else if((m->At(t->x,t->y).Visibility & VI_VISIBLE) == false) /*later, >> player*4 */
-          {
-            if (t->isShadowShape())
-              PutGlyph(fx,fy,GLYPH_VALUE(GLYPH_UNKNOWN, BACK_COLOUR(RED) | SHADOW));
-          }
-          else
-			  PutGlyph(fx, fy, (t->Image & ~GLYPH_BACK_MASK) | GLYPH_BACK(RED));
-          if (OffscreenC < 64) {
-            OffscreenX[OffscreenC] = (uint8)fx;
-            OffscreenY[OffscreenC] = (uint8)fy;
-            OffscreenC++;
-          }
+                    if (t->Flags & F_HILIGHT)
+                        PutGlyph(fx, fy, ((Per == PER_SHADOW) ? GLYPH_VALUE(GLYPH_UNKNOWN, GREY) : (t->Image & ~GLYPH_BACK_MASK)) | GLYPH_BACK(EMERALD));
+                    else if ((m->At(t->x, t->y).Visibility & VI_VISIBLE) == false) { /*later, >> player*4 */
+                        if (t->isShadowShape())
+                            PutGlyph(fx, fy, GLYPH_VALUE(GLYPH_UNKNOWN, BACK_COLOUR(RED) | SHADOW));
+                    } else
+                        PutGlyph(fx, fy, (t->Image & ~GLYPH_BACK_MASK) | GLYPH_BACK(RED));
+
+                    if (OffscreenC < 64) {
+                        OffscreenX[OffscreenC] = (uint8)fx;
+                        OffscreenY[OffscreenC] = (uint8)fy;
+                        OffscreenC++;
+                    }
+            }
         }
-      }
 }
 
-int8 ColorShadingPriority[] = {
-  10, 1, 10, 10, 10, 10, 3, 2, 10, 10, 10, 10, 10, 10, 5, 4 };
+/* int8 ColorShadingPriority[] = {
+    10, 1, 10, 10, 10, 10, 3, 2, 10, 10, 10, 10, 10, 10, 5, 4 }; */
 
 static int8 BrightenOnce[] = {
 /* BLACK   becomes */     SHADOW,
@@ -1213,275 +1189,278 @@ void TextTerm::PutGlyph(int16 x, int16 y,Glyph g) {
 }
 
 Glyph TextTerm::GetGlyph(int16 x, int16 y) {
-    if(x<XOff || y<YOff)
-      return 0;
-	  if(x>XOff+Windows[WIN_MAP].Right || y>YOff+Windows[WIN_MAP].Bottom-Windows[WIN_MAP].Top)
-      return 0;
-    return AGetChar(x-XOff+Windows[WIN_MAP].Left,y-YOff + Windows[WIN_MAP].Top);
+    if (x < XOff || y<YOff)
+        return 0;
+    if (x > XOff + Windows[WIN_MAP].Right || y > YOff + Windows[WIN_MAP].Bottom - Windows[WIN_MAP].Top)
+        return 0;
+    return AGetChar(x - XOff + Windows[WIN_MAP].Left, y - YOff + Windows[WIN_MAP].Top);
 }
 
 void TextTerm::ShowMapOverview() {
-  int16 sx, sy, x, y, mx, my, x1, x2, y1, y2, vx, vy, tx, ty;
-  bool open, seen, onmap; int16 ch, mag, magn;
-  Glyph force;
-  int force_priority;
+    int16 sx, sy, x, y, mx, my, x1, x2, y1, y2, vx, vy, tx, ty;
+    bool open, seen, onmap; int16 ch, mag, magn;
+    Glyph force;
+    int force_priority;
 
-  bool wizsight = p && p->Opt(OPT_WIZ_SIGHT); 
+    bool wizsight = p && p->Opt(OPT_WIZ_SIGHT);
 
-  // ww: allow the player to cycle through things on the overview map
-  // rapidly -- this is a nice convenience feature because usually when
-  // you're done exploring a level you want to run to the down stair case
-  // ... unfortunately, you still have to hunt for it! 
-  enum {
-    SEARCH_NONE,
-    SEARCH_UP,
-    SEARCH_DOWN,
-    SEARCH_UNEXPLORED,
-  } searching = SEARCH_NONE; 
-
-  SetWin(WIN_BIGMAP);
-  SetMode(MO_SPLASH);
-
-  vx = p->x;
-  vy = p->y;
-  mag = 1;
-  x1 = x2 = p->x;
-  y1 = y2 = p->y;
-  do {
-    if (vx < x1) vx = x1; else if (vx > x2) vx = x2;
-    if (vy < y1) vy = y1; else if (vy > y2) vy = y2; 
-
-    Clear();
-    x1 = x2 = p->x;
-    y1 = y2 = p->y;
-    for (sx=0;sx!=WinSizeX();sx++)
-      for (sy=0;sy!=WinSizeY()-1;sy++)
-      {
-        open = false;
-        seen = false;
-        onmap = false;
-        force = 0;
-        force_priority = T_LAST;
-        /* ww: we prefer features in their #define'd order ... which
-         * happens to work because stairs (portals) are early */
-        mx = vx - (WinSizeX()/2)*mag + sx*mag;
-        my = vy - (WinSizeY()/2)*mag + sy*mag;
-
-        for(x = mx; x!=mx+mag;x++)
-          for (y = my; y!=my+mag;y++)
-          {
-            if (!m->InBounds(x,y))
-              continue;
-
-            if (m->At(x,y).Memory || wizsight)
-              seen = true;
-
-            onmap = true;
-
-            /* ww: show stairs (portals) over doors, etc. */
-            if (m->At(x,y).Memory && m->KnownFeatureAt(x,y)) {
-              force_priority = m->KnownFeatureAt(x,y)->Type ;
-              force = (Glyph)m->At(x,y).Memory ;
-            } else if (wizsight && m->KnownFeatureAt(x,y)) {
-              force_priority = m->KnownFeatureAt(x,y)->Type ;
-              force = m->KnownFeatureAt(x,y)->Image;
-            } 
-
-            /* if all else fails, show walls and floors */
-            if (force_priority == T_LAST && !force && wizsight)
-              force = (Glyph)m->At(x,y).Glyph;
-
-            if (force_priority == T_LAST && !force)
-                force = (Glyph)m->At(x,y).Memory;
-          }
-
-        if ((onmap && seen) || force)
-        {
-          x1 = min(x1,mx);
-          x2 = max(x2,mx);
-          y1 = min(y1,my);
-          y2 = max(y2,my);
-        }
-
-        if (p->x >= mx && p->y >= my && p->x < mx+mag && p->y < my+mag)
-          PutChar(sx,sy,p->Image);
-        else if (vx >= mx && vy >= my && vx < mx+mag && vy < my+mag)
-			PutChar(sx, sy, GLYPH_VALUE('*', YELLOW));
-        else if (force)
-          PutChar(sx,sy,force);
-        else
-			PutChar(sx, sy, GLYPH_VALUE(' ', GREY));
-      }
-
-    GotoXY(0,WinSizeY()-1);
-    Color(YELLOW);                                                                  
-    Write(Format("[%s] Move Viewpoint [R] Run to Point [+] Zoom In [-] Zoom Out [ESC] Exit",Arrows));
-
-BadChar:
-    ch = GetCharCmd(KY_CMD_ARROW_MODE);
-
-    magn = (ControlKeys & SHIFT) ? mag * 5 : mag; 
-
-    switch(ch)
-    {
-      // ww: find Stairs going up ...
-      case KY_CMD_UP:          
-      case KY_COMMA: 
-        searching = SEARCH_UP; break; 
-      case KY_CMD_DOWN:        
-      case KY_PERIOD: 
-        searching = SEARCH_DOWN; break; 
-
-      case KY_TAB: 
-        searching = SEARCH_UNEXPLORED; break; 
-
-      case '-': case '_': /* ww: + and - were flipped */
-        if (mag < 5)
-          mag++;
-        else
-          goto BadChar;
-        break;
-      case '+': case '=':
-        if (mag > 1) /* ww: we should be able to zoom all the way in:
-                      * it's currently the only way to scroll the
-                      * viewport with detail */
-          mag--;
-        else
-          goto BadChar;
-        break;
-      case 'R': case 'r':
-        /* All kinds of checks... */
-        tx = ty = -1;
-        seen = open = false;
-        for (x=vx;x!=vx+mag;x++)
-          for (y=vy;y!=vy+mag;y++)
-          {
-            if (!m->InBounds(x,y))
-              continue;
-            if (!m->At(x,y).Memory)
-              continue;
-            seen = true;
-            if (m->SolidAt(x,y))
-              continue;
-            open = true;
-            if (tx != -1)
-              if (m->KnownFeatureAt(tx,ty))
-                if (m->KnownFeatureAt(tx,ty)->isType(T_PORTAL))
-                  continue;
-            tx = x;
-            ty = y;
-          }
-        if (!seen)
-        { Message("You can't run to an unexplored area."); break; }
-        if (!open)
-        { Message("You can't run to an area filled with stone."); break; }
-        if (tx == -1)
-          break;
-        if (!p->RunTo(tx,ty))                                                          
-          { Message("There's no clear, safe and explored route to that area."); break; }
-
-      default: 
-        SetWin(WIN_BIGMAP);
-        Clear();
-        SetWin(WIN_MAP);
-        Clear();
-        SetMode(MO_PLAY);
-        ShowMap();
-        ShowStatus();
-        ShowTraits();
-        linenum = linepos = 0;
-        return; 
-
-      case KY_CMD_NORTH:       vy -= magn; break; 
-      case KY_CMD_NORTHEAST:   vy -= magn; vx += magn; break; 
-      case KY_CMD_EAST:        vx += magn; break; 
-      case KY_CMD_SOUTHEAST:   vy += magn; vx += magn; break; 
-      case KY_CMD_SOUTH:       vy += magn; break; 
-      case KY_CMD_SOUTHWEST:   vx -= magn; vy += magn; break; 
-      case KY_CMD_WEST:        vx -= magn; break; 
-      case KY_CMD_NORTHWEST:   vy -= magn; vx -= magn; break; 
-
-    }
-
-    if (searching != SEARCH_NONE) {
-      int wx,wy,iter;
-      int good_x = -1, good_y = -1; 
-      // go through the map twice, first looking for things *after* this
-      // point, then looking for things *before* this point -- this
-      // allows the player to cycle through all things matching this
-      // description by pressing the key over and over 
-      int current_index = vy * m->SizeX() + vx; 
-      for (iter=0; iter<2 && good_x == -1; iter++) 
-        for (wy=0; wy<m->SizeY() && good_x == -1; wy++) 
-          for (wx=0; wx<m->SizeX() && good_x == -1; wx++) {
-
-            if (!m->At(wx,wy).Memory) continue; // don't know this place
-
-            int w_index = wy * m->SizeX() + wx; 
-
-            if      (iter == 0 && w_index <= current_index) continue; 
-            else if (iter == 1 && w_index >= current_index) continue; 
-
-            Feature * f = m->KnownFeatureAt(wx,wy);
-
-            if (searching == SEARCH_UP) 
-              if (!f || f->Type != T_PORTAL || 
-                  TFEAT(f->fID)->xval != POR_UP_STAIR) continue; 
-
-            if (searching == SEARCH_DOWN) 
-              if (!f || f->Type != T_PORTAL || 
-                  TFEAT(f->fID)->xval != POR_DOWN_STAIR) continue; 
-
-            if (searching == SEARCH_UNEXPLORED) {
-              // find a place we do know that 
-              // (1) is not solid
-              // (2) touches a place we don't know ...
-              // (3) ... or touches a door that touches a place we don't know
-              //        (4) massive convenience hack: (2) is not solid
-                
-              if (m->SolidAt(wx,wy)) continue; // couldn't walk here
-              Door * d = m->FDoorAt(wx,wy);
-              if (d && d->DoorFlags & DF_SECRET) continue; 
-              // now check neighbours
-              bool foundUnexplored = false; 
-              for (int i=0;i<8;i++) {
-                if (! m->At(wx + DirX[i], wy + DirY[i]).Memory &&
-                    ! m->SolidAt(wx + DirX[i], wy + DirY[i]))
-                  foundUnexplored = true;
-                // *OR* (important special case) this is a door and we
-                // don't know what is on the other side! 
-                d = m->FDoorAt(wx + DirX[i], wy + DirY[i]);
-                if (d && !(d->DoorFlags & DF_SECRET))
-                  for (int j=0; j<8; j++) 
-                    if (! m->At(wx + DirX[i] + DirX[j], 
-                                wy + DirY[i] + DirY[j]).Memory)
-                      foundUnexplored = true;
-              }
-
-              if (!foundUnexplored) continue; 
-            } 
-
-            good_x = wx;
-            good_y = wy; 
-          } 
-      if (good_x == -1) {
-        switch (searching) {
-          case SEARCH_NONE: Message("Not found!"); break;  // !? 
-          case SEARCH_UP: Message("No ascending stairs found!"); break; 
-          case SEARCH_DOWN: Message("No descending stairs found!"); break; 
-          case SEARCH_UNEXPLORED: 
-                            Message("No explored areas found!"); break; 
-        }
-      } else {
-        x1 = x2 = vx = good_x;
-        y1 = y2 = vy = good_y; 
-      } 
-    } 
-    searching = SEARCH_NONE; 
+    // ww: allow the player to cycle through things on the overview map
+    // rapidly -- this is a nice convenience feature because usually when
+    // you're done exploring a level you want to run to the down stair case
+    // ... unfortunately, you still have to hunt for it! 
+    enum {
+        SEARCH_NONE,
+        SEARCH_UP,
+        SEARCH_DOWN,
+        SEARCH_UNEXPLORED,
+    } searching = SEARCH_NONE;
 
     SetWin(WIN_BIGMAP);
     SetMode(MO_SPLASH);
-  } while (1);
+
+    vx = p->x;
+    vy = p->y;
+    mag = 1;
+    x1 = x2 = p->x;
+    y1 = y2 = p->y;
+    do {
+        if (vx < x1) vx = x1; else if (vx > x2) vx = x2;
+        if (vy < y1) vy = y1; else if (vy > y2) vy = y2;
+
+        Clear();
+        x1 = x2 = p->x;
+        y1 = y2 = p->y;
+        for (sx = 0; sx != WinSizeX(); sx++)
+            for (sy = 0; sy != WinSizeY() - 1; sy++) {
+                open = false;
+                seen = false;
+                onmap = false;
+                force = 0;
+                force_priority = T_LAST;
+                /* ww: we prefer features in their #define'd order ... which
+                 * happens to work because stairs (portals) are early */
+                mx = vx - (WinSizeX() / 2)*mag + sx*mag;
+                my = vy - (WinSizeY() / 2)*mag + sy*mag;
+
+                for (x = mx; x != mx + mag; x++)
+                    for (y = my; y != my + mag; y++) {
+                        if (!m->InBounds(x, y))
+                            continue;
+
+                        if (m->At(x, y).Memory || wizsight)
+                            seen = true;
+
+                        onmap = true;
+
+                        /* ww: show stairs (portals) over doors, etc. */
+                        if (m->At(x, y).Memory && m->KnownFeatureAt(x, y)) {
+                            force_priority = m->KnownFeatureAt(x, y)->Type;
+                            force = (Glyph)m->At(x, y).Memory;
+                        } else if (wizsight && m->KnownFeatureAt(x, y)) {
+                            force_priority = m->KnownFeatureAt(x, y)->Type;
+                            force = m->KnownFeatureAt(x, y)->Image;
+                        }
+
+                        /* if all else fails, show walls and floors */
+                        if (force_priority == T_LAST && !force && wizsight)
+                            force = (Glyph)m->At(x, y).Glyph;
+
+                        if (force_priority == T_LAST && !force)
+                            force = (Glyph)m->At(x, y).Memory;
+                    }
+
+                if ((onmap && seen) || force) {
+                    x1 = min(x1, mx);
+                    x2 = max(x2, mx);
+                    y1 = min(y1, my);
+                    y2 = max(y2, my);
+                }
+
+                if (p->x >= mx && p->y >= my && p->x < mx + mag && p->y < my + mag)
+                    PutChar(sx, sy, p->Image);
+                else if (vx >= mx && vy >= my && vx < mx + mag && vy < my + mag)
+                    PutChar(sx, sy, GLYPH_VALUE('*', YELLOW));
+                else if (force)
+                    PutChar(sx, sy, force);
+                else
+                    PutChar(sx, sy, GLYPH_VALUE(GLYPH_UNSEEN, GREY));
+            }
+
+        GotoXY(0, WinSizeY() - 1);
+        Color(YELLOW);
+        Write(Format("[%s] Move Viewpoint [R] Run to Point [+] Zoom In [-] Zoom Out [ESC] Exit", Arrows));
+
+    BadChar:
+        ch = GetCharCmd(KY_CMD_ARROW_MODE);
+
+        magn = (ControlKeys & SHIFT) ? mag * 5 : mag;
+
+        switch (ch)
+        {
+            // ww: find Stairs going up ...
+        case KY_CMD_UP:
+        case KY_COMMA:
+            searching = SEARCH_UP; break;
+        case KY_CMD_DOWN:
+        case KY_PERIOD:
+            searching = SEARCH_DOWN; break;
+
+        case KY_TAB:
+            searching = SEARCH_UNEXPLORED; break;
+
+        case '-': case '_': /* ww: + and - were flipped */
+            if (mag < 5)
+                mag++;
+            else
+                goto BadChar;
+            break;
+        case '+': case '=':
+            if (mag > 1) /* ww: we should be able to zoom all the way in:
+                          * it's currently the only way to scroll the
+                          * viewport with detail */
+                          mag--;
+            else
+                goto BadChar;
+            break;
+        case 'R': case 'r':
+            /* All kinds of checks... */
+            tx = ty = -1;
+            seen = open = false;
+            for (x = vx; x != vx + mag; x++)
+                for (y = vy; y != vy + mag; y++)
+                {
+                    if (!m->InBounds(x, y))
+                        continue;
+                    if (!m->At(x, y).Memory)
+                        continue;
+                    seen = true;
+                    if (m->SolidAt(x, y))
+                        continue;
+                    open = true;
+                    if (tx != -1)
+                        if (m->KnownFeatureAt(tx, ty))
+                            if (m->KnownFeatureAt(tx, ty)->isType(T_PORTAL))
+                                continue;
+                    tx = x;
+                    ty = y;
+                }
+            if (!seen)
+            {
+                Message("You can't run to an unexplored area."); break;
+            }
+            if (!open)
+            {
+                Message("You can't run to an area filled with stone."); break;
+            }
+            if (tx == -1)
+                break;
+            if (!p->RunTo(tx, ty))
+            {
+                Message("There's no clear, safe and explored route to that area."); break;
+            }
+
+        default:
+            SetWin(WIN_BIGMAP);
+            Clear();
+            SetWin(WIN_MAP);
+            Clear();
+            SetMode(MO_PLAY);
+            ShowMap();
+            ShowStatus();
+            ShowTraits();
+            linenum = linepos = 0;
+            return;
+
+        case KY_CMD_NORTH:       vy -= magn; break;
+        case KY_CMD_NORTHEAST:   vy -= magn; vx += magn; break;
+        case KY_CMD_EAST:        vx += magn; break;
+        case KY_CMD_SOUTHEAST:   vy += magn; vx += magn; break;
+        case KY_CMD_SOUTH:       vy += magn; break;
+        case KY_CMD_SOUTHWEST:   vx -= magn; vy += magn; break;
+        case KY_CMD_WEST:        vx -= magn; break;
+        case KY_CMD_NORTHWEST:   vy -= magn; vx -= magn; break;
+
+        }
+
+        if (searching != SEARCH_NONE) {
+            int wx, wy, iter;
+            int good_x = -1, good_y = -1;
+            // go through the map twice, first looking for things *after* this
+            // point, then looking for things *before* this point -- this
+            // allows the player to cycle through all things matching this
+            // description by pressing the key over and over 
+            int current_index = vy * m->SizeX() + vx;
+            for (iter = 0; iter < 2 && good_x == -1; iter++)
+                for (wy = 0; wy < m->SizeY() && good_x == -1; wy++)
+                    for (wx = 0; wx < m->SizeX() && good_x == -1; wx++) {
+
+                        if (!m->At(wx, wy).Memory) continue; // don't know this place
+
+                        int w_index = wy * m->SizeX() + wx;
+
+                        if (iter == 0 && w_index <= current_index) continue;
+                        else if (iter == 1 && w_index >= current_index) continue;
+
+                        Feature * f = m->KnownFeatureAt(wx, wy);
+
+                        if (searching == SEARCH_UP)
+                            if (!f || f->Type != T_PORTAL ||
+                                TFEAT(f->fID)->xval != POR_UP_STAIR) continue;
+
+                        if (searching == SEARCH_DOWN)
+                            if (!f || f->Type != T_PORTAL ||
+                                TFEAT(f->fID)->xval != POR_DOWN_STAIR) continue;
+
+                        if (searching == SEARCH_UNEXPLORED) {
+                            // find a place we do know that 
+                            // (1) is not solid
+                            // (2) touches a place we don't know ...
+                            // (3) ... or touches a door that touches a place we don't know
+                            //        (4) massive convenience hack: (2) is not solid
+
+                            if (m->SolidAt(wx, wy)) continue; // couldn't walk here
+                            Door * d = m->FDoorAt(wx, wy);
+                            if (d && d->DoorFlags & DF_SECRET) continue;
+                            // now check neighbours
+                            bool foundUnexplored = false;
+                            for (int i = 0; i < 8; i++) {
+                                if (!m->At(wx + DirX[i], wy + DirY[i]).Memory &&
+                                    !m->SolidAt(wx + DirX[i], wy + DirY[i]))
+                                    foundUnexplored = true;
+                                // *OR* (important special case) this is a door and we
+                                // don't know what is on the other side! 
+                                d = m->FDoorAt(wx + DirX[i], wy + DirY[i]);
+                                if (d && !(d->DoorFlags & DF_SECRET))
+                                    for (int j = 0; j < 8; j++)
+                                        if (!m->At(wx + DirX[i] + DirX[j],
+                                            wy + DirY[i] + DirY[j]).Memory)
+                                            foundUnexplored = true;
+                            }
+
+                            if (!foundUnexplored) continue;
+                        }
+
+                        good_x = wx;
+                        good_y = wy;
+                    }
+            if (good_x == -1) {
+                switch (searching) {
+                case SEARCH_NONE: Message("Not found!"); break;  // !? 
+                case SEARCH_UP: Message("No ascending stairs found!"); break;
+                case SEARCH_DOWN: Message("No descending stairs found!"); break;
+                case SEARCH_UNEXPLORED:
+                    Message("No explored areas found!"); break;
+                }
+            } else {
+                x1 = x2 = vx = good_x;
+                y1 = y2 = vy = good_y;
+            }
+        }
+        searching = SEARCH_NONE;
+
+        SetWin(WIN_BIGMAP);
+        SetMode(MO_SPLASH);
+    } while (1);
 }
 
 /*****************************************************************************\
