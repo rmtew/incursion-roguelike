@@ -141,10 +141,8 @@ void Map::calcLight(Rect &r) {
                         if (l = isTorched(x, y, t)) {
                             At(x, y).Lit = true;
 
-                            /* This is way too terminal-dependant at the
-                               moment. It will need to be rewritten in a
-                               more device-independant way if Incursion
-                               ever comes to support graphical tiles. */
+                            /* This is way too terminal-dependant at the moment. It will need to be rewritten in a
+                               more device-independant way if Incursion ever comes to support graphical tiles. */
                             if ((GLYPH_ID_VALUE(At(x, y).Glyph) == GLYPH_FLOOR) && At(x, y).Shade) {
                                 switch (l) {
                                 case 3:

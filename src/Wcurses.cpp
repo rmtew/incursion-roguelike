@@ -179,6 +179,8 @@ int32 RGBSofter[MAX_COLOURS][3] = {
 	{ 230, 230, 230 }, // WHITE
 };
 
+char __buffer[1600];
+char __buff2[80];
 
 class cursesTerm: public TextTerm
   {

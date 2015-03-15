@@ -138,7 +138,7 @@ extern const char *KeyBindings,
                   *SlotNames[],
                   *NumberNames[],
                   *RomanNumerals[],
-                  *TileNames[],
+                  // *TileNames[],
                   *EncumbranceNames[];
 
 extern TextVal DTypeNames[],
@@ -251,8 +251,7 @@ extern int16 RogueFeats[],
 extern int16 QualityMods[][2],
              AQualityMods[][2];
 
-extern int8 PythDist[],
-            FaceRadius[];
+extern int8 FaceRadius[];
 extern int8 NeededSwings[];
 
 extern int8 SpecialistTable[9][9];
@@ -278,6 +277,4 @@ extern int16 nGods;
 
 extern Term *T1;
 
-extern char __buffer[1600];
-extern char __buff2[80];
 extern "C" int yyerror(const char*);

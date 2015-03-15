@@ -109,7 +109,7 @@ extern Resource *theRes;
 
 extern char preprocFilename[];
 
-extern LocationInfo __Tiles__[];
+//extern LocationInfo __Tiles__[];
 
 extern LocationInfo *firstTile, *theTile;
 

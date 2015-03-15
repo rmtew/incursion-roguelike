@@ -147,6 +147,8 @@ TCOD_color_t RGBSofter[MAX_COLOURS] = {
   { 230, 230, 230 }, // WHITE
   };
 
+char __buffer[1600];
+char __buff2[80];
 
 class libtcodTerm: public TextTerm
   {
