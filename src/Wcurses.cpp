@@ -74,15 +74,15 @@
 #undef EV_BREAK
 #undef MOUSE_MOVED
 
-#ifndef DEBUG
 #ifdef USE_BREAKPAD
-/* Google Breakpad. */
+#pragma comment(lib, "common")
+#pragma comment(lib, "exception_handler")
+#pragma comment(lib, "crash_generation_client")
 #include "client/windows/handler/exception_handler.h"
 #undef ERROR
 #undef MIN
 #undef MAX
 #undef EV_BREAK
-#endif
 #endif
 
 #include "Incursion.h"
@@ -105,18 +105,9 @@
 #define CURSOR_BLINK_MS 300
 #define INPUT_IDLE_MS 50
 
-/*
-
-Add to release libs: exception_handler.lib;crash_generation_client.lib;common.lib
-Add to release paths: _dependencies\google-breakpad\src\client\windows\Release\lib
-Add to release includes: _dependencies\google-breakpad\src
-
-#ifndef DEBUG
 #ifdef USE_BREAKPAD
 using google_breakpad::ExceptionHandler;
 #endif
-#endif
-*/
 
 /*
 xterm has 256 colours, why do we only have 8 at most? huh pdcurses?
@@ -392,10 +383,9 @@ static int16 kbPolish[][3] = {
 
 Term *T1;
 cursesTerm *AT1;
-#ifndef DEBUG
+
 #ifdef USE_BREAKPAD
 ExceptionHandler* crashdumpHandler;
-#endif
 #endif
 
 /*****************************************************************************\
@@ -885,41 +875,67 @@ void Error(const char*fmt,...) {
 	va_list argptr;
 	va_start(argptr, fmt); 
 	char ch;
-	vsprintf(__buffer, fmt, argptr);
-	if (!T1)
-		{ printf(__buffer); exit(1); }
+#ifdef USE_BREAKPAD
+    int attempts = 0;
+#endif
+
+    vsprintf(__buffer, fmt, argptr);
+	if (!T1) {
+        printf(__buffer);
+        exit(1);
+    }
+
+#ifdef USE_BREAKPAD
+retry:
+    attempts += 1;
+#endif
 
 #ifdef DEBUG
 	sprintf(__buff2, "Error: %s\n[B]reak, [E]xit or [C]ontinue?",__buffer);
 #else
 #ifdef USE_BREAKPAD
-	crashdumpHandler->WriteMinidump();
-	sprintf(__buff2, "Error: %s\n[E]xit or [C]ontinue?",__buffer);
+    if (attempts > 1)
+        sprintf(__buff2, "Error: %s\n[E]xit or [C]ontinue?", __buffer);
+    else
+        sprintf(__buff2, "Error: %s\n[M]inidump, [E]xit or [C]ontinue?", __buffer);
+#else
+    sprintf(__buff2, "Error: %s\n[E]xit or [C]ontinue?", __buffer);
 #endif
 #endif
-	((cursesTerm*)T1)->Save();
-	((cursesTerm*)T1)->Box(WIN_SCREEN,BOX_NOPAUSE|BOX_NOSAVE,RED,PINK,__buff2);
+    ((cursesTerm*)T1)->Save();
+    ((cursesTerm*)T1)->Box(WIN_SCREEN, BOX_NOPAUSE | BOX_NOSAVE, RED, PINK, __buff2);
 	T1->Update();
 
-	do 
-	ch = toupper(readkey(1));
-	while (ch != 'C' && ch != 'E' && ch != 'S'    
+    do {
+        ch = toupper(readkey(1));
+    } while (ch != 'C' && ch != 'E'
 #ifdef DEBUG
 		&& ch != 'B'
+#else
+#ifdef USE_BREAKPAD
+        && ch != 'M'
+#endif
 #endif
 		);
-	if (ch == 'E')
-		{ T1->ShutDown(); exit(1); }
-	if (ch == 'C')
+#ifdef USE_BREAKPAD
+    if (ch == 'M') {
+        /* This causes problems for some people apparently.  See Issue #215. */
+        crashdumpHandler->WriteMinidump();
+        ((cursesTerm*)T1)->Restore();
+
+        goto retry;
+    }
+#endif
+    if (ch == 'E') {
+        T1->ShutDown();
+        exit(1);
+    } else if (ch == 'C')
 		return;
+
 #ifdef DEBUG
 	BREAKOUT;
 #endif
 
-	/*
-	else if (ch == 'S')
-	theGame->PanicSave();
-	*/
 	((cursesTerm*)T1)->Restore();
 	va_end(argptr);
 }

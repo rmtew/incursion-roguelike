@@ -73,7 +73,6 @@
 #undef EV_BREAK
 #undef MOUSE_MOVED
 
-#ifndef DEBUG
 #ifdef USE_BREAKPAD
 #pragma comment(lib, "common")
 #pragma comment(lib, "exception_handler")
@@ -83,7 +82,6 @@
 #undef MIN
 #undef MAX
 #undef EV_BREAK
-#endif
 #endif
 
 #include "Incursion.h"
@@ -101,10 +99,8 @@
 #define CURSOR_BLINK_MS 300
 #define INPUT_IDLE_MS 50
 
-#ifndef DEBUG
 #ifdef USE_BREAKPAD
 using google_breakpad::ExceptionHandler;
-#endif
 #endif
 
 
@@ -339,10 +335,9 @@ static int16 kbPolish[][3] = {
 
 Term *T1;
 libtcodTerm *AT1;
-#ifndef DEBUG
+
 #ifdef USE_BREAKPAD
 ExceptionHandler* crashdumpHandler;
-#endif
 #endif
 
 /*****************************************************************************\
@@ -788,44 +783,65 @@ void Error(const char*fmt,...) {
 	va_list argptr;
 	va_start(argptr, fmt); 
 	char ch;
-	vsprintf(__buffer, fmt, argptr);
-	if (!T1)
-		{ printf(__buffer); exit(1); }
+    int attempts = 0;
+
+    vsprintf(__buffer, fmt, argptr);
+	if (!T1) {
+        printf(__buffer);
+        exit(1);
+    }
+
+#ifdef USE_BREAKPAD
+retry:
+#endif
+    attempts += 1;
 
 #ifdef DEBUG
 	sprintf(__buff2, "Error: %s\n[B]reak, [E]xit or [C]ontinue?",__buffer);
 #else
-    /* TODO: This should be enabled optionally in the menus, as it causes problems for some people apparently.
-        See Issue #215
 #ifdef USE_BREAKPAD
-	crashdumpHandler->WriteMinidump();
-#endif
-*/
+    if (attempts > 1)
+        sprintf(__buff2, "Error: %s\n[E]xit or [C]ontinue?", __buffer);
+    else
+        sprintf(__buff2, "Error: %s\n[M]inidump, [E]xit or [C]ontinue?", __buffer);
+#else
     sprintf(__buff2, "Error: %s\n[E]xit or [C]ontinue?", __buffer);
+#endif
 #endif
 	((libtcodTerm*)T1)->Save();
 	((libtcodTerm*)T1)->Box(WIN_SCREEN,BOX_NOPAUSE|BOX_NOSAVE,RED,PINK,__buff2);
 	T1->Update();
 
-	do 
-	ch = toupper(readkey(1).c & 0xFF);
-	while (ch != 'C' && ch != 'E' && ch != 'S'    
+    do {
+        ch = toupper(readkey(1).c & 0xFF);
+    } while (ch != 'C' && ch != 'E'
 #ifdef DEBUG
 		&& ch != 'B'
+#else
+#ifdef USE_BREAKPAD
+        && ch != 'M'
+#endif
 #endif
 		);
-	if (ch == 'E')
-		{ T1->ShutDown(); exit(1); }
-	if (ch == 'C')
+#ifdef USE_BREAKPAD
+    if (ch == 'M') {
+        /* This causes problems for some people apparently.  See Issue #215. */
+        crashdumpHandler->WriteMinidump();
+        ((libtcodTerm*)T1)->Restore();
+
+        goto retry;
+    }
+#endif
+    if (ch == 'E') {
+        T1->ShutDown();
+        exit(1);
+    } else if (ch == 'C')
 		return;
+
 #ifdef DEBUG
 	BREAKOUT;
 #endif
 
-	/*
-	else if (ch == 'S')
-	theGame->PanicSave();
-	*/
 	((libtcodTerm*)T1)->Restore();
 	va_end(argptr);
 }
