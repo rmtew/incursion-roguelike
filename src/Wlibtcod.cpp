@@ -716,15 +716,14 @@ Glyph libtcodTerm::AGetChar(int16 x, int16 y) {
 	return g;
 }
 
-void libtcodTerm::GotoXY(int16 x, int16 y) 
-  {
+void libtcodTerm::GotoXY(int16 x, int16 y)  {
     cx = x + activeWin->Left;
     cy = y + activeWin->Top;
     //if (!Cursor.bVisible)
     //  return;
     //crd.X = cx; crd.Y = cy;
     //SetConsoleCursorPosition(hStdOut, crd); 
-  }
+}
 
 void libtcodTerm::Clear() {
     TCOD_console_rect(bScreen,activeWin->Left,activeWin->Top,(activeWin->Right+1)-activeWin->Left,(activeWin->Bottom+1)-activeWin->Top,1,TCOD_BKGND_SET);
@@ -1157,11 +1156,13 @@ void  libtcodTerm::BlitScrollLine(int16 wn, int32 buffline, int32 winline) {
 *                              Input Functions                                *
 \*****************************************************************************/
 
-int16 libtcodTerm::GetCharRaw()
-  { return GetCharCmd(KY_CMD_RAW); }
+int16 libtcodTerm::GetCharRaw() {
+    return GetCharCmd(KY_CMD_RAW);
+}
 
-int16 libtcodTerm::GetCharCmd()
-  { return GetCharCmd(KY_CMD_NORMAL_MODE); }
+int16 libtcodTerm::GetCharCmd() {
+    return GetCharCmd(KY_CMD_NORMAL_MODE);
+}
 
 int16 libtcodTerm::GetCharCmd(KeyCmdMode mode) {
     KeySetItem * keyset = theGame->Opt(OPT_ROGUELIKE) ? RoguelikeKeySet : StandardKeySet;
@@ -1501,20 +1502,27 @@ void libtcodTerm::Cut(int32 amt) {
 }
 
 char * libtcodTerm::MenuListFiles(const char * filespec, uint16 flags, const char * title) {
-    char * file;
+    static char persistent_retval[MAX_PATH];
     TCOD_list_t l = TCOD_sys_get_directory_content(CurrentDirectory, filespec);
+    char *file_names[MAX_MENU_OPTIONS];
+    int option_count = -1;
+
     for (int *iterator = (int *)TCOD_list_begin(l); iterator != (int *)TCOD_list_end(l); iterator++) {
         const char *fileName = (const char *)(*iterator);
-        char *str = strdup(fileName);
-        /* TODO: Check if 'str' can leak */
-        LOption(str, (int32)str);
+
+        option_count++;
+        file_names[option_count] = (char *)alloca(strlen(fileName) + 1);
+        memcpy(file_names[option_count], fileName, strlen(fileName) + 1);
+        LOption(file_names[option_count], option_count);
     }
     TCOD_list_clear_and_delete(l);
 
-    file = (char*)LMenu(flags, title);
-    if (file == (char*)(-1))
-        file = NULL;
-    return file;
+    option_count = (int)LMenu(flags, title);
+    if (option_count == -1)
+        return NULL;
+    persistent_retval[0] = '\0';
+    memcpy(persistent_retval, file_names[option_count], strlen(file_names[option_count]) + 1);
+    return persistent_retval;
 }
 
 bool libtcodTerm::FirstFile(char * filespec) {

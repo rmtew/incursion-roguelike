@@ -1476,7 +1476,7 @@ void cursesTerm::Cut(int32 amt) {
 
 char *cursesTerm::MenuListFiles(const char * filespec, uint16 flags, const char * title) {
 #ifdef WIN32
-    static char pesky_retval[MAX_PATH_LENGTH];
+    static char persistent_retval[MAX_PATH_LENGTH];
     char *file_names[MAX_MENU_OPTIONS];
     int option_count = -1;
 	WIN32_FIND_DATAA data;
@@ -1502,9 +1502,9 @@ char *cursesTerm::MenuListFiles(const char * filespec, uint16 flags, const char 
     option_count = (int)LMenu(flags, title);
 	if (option_count == -1)
 		return NULL;
-    pesky_retval[0] = '\0';
-    memcpy(pesky_retval, file_names[option_count], strlen(file_names[option_count]) + 1);
-	return pesky_retval;
+    persistent_retval[0] = '\0';
+    memcpy(persistent_retval, file_names[option_count], strlen(file_names[option_count]) + 1);
+    return persistent_retval;
 #endif
 }
 
