@@ -276,7 +276,7 @@ class cursesTerm: public TextTerm
           static char s[MAX_PATH_LENGTH] = "";
           if (strlen(s) == 0) {
               envLibPath = getenv("INCURSIONLIBPATH");
-              if (envLibPath != NULL) {
+              if (envLibPath != NULL && strlen(envLibPath)) {
                   if (strcat(s, envLibPath)) {
                       if (s[strlen(s) - 1] == '\\')
                           s[strlen(s) - 1] = '\0';
@@ -289,7 +289,7 @@ class cursesTerm: public TextTerm
           }
           return s;
       }
-      virtual const char* LogSubDir()     { return "logs"; } 
+      virtual const char* LogSubDir()     { return "logs"; }
       virtual const char* ManualSubDir()  { return "man"; } 
       virtual const char* OptionsSubDir() { return "."; } 
       virtual void ChangeDirectory(const char * c, bool set) { 
@@ -406,16 +406,26 @@ ExceptionHandler* crashdumpHandler;
 int main(int argc, char *argv[]) {
     /* This path code is currently present in libtcod and curses code. */
     char executablePath[MAX_PATH_LENGTH] = "";
+    char *envPath = getenv("INCURSIONPATH");
 
-    /* If run normally, check to see from which directory, and if there is one, use it. */
-    if (!IsDebuggerPresent() && argc >= 1) {
-        /* argv[0] is the filename and maybe the path before it, if the path is there grab it. */
-        const char *str = strrchr(argv[0], '\\');
-        if (str != NULL) {
-            int16 n = str - argv[0]; /* Copy the separator too. */
-            if (!strncpy(executablePath, argv[0], n))
-                Error("Failed to locate Incursion directory for '%s'", argv[0]);
-            executablePath[n] = '\0';
+    if (envPath != NULL) {
+        if (strlen(envPath) > 0 && strcat(executablePath, envPath)) {
+            if (executablePath[strlen(executablePath) - 1] != '\\')
+                strncat(executablePath, "\\", 1);
+        }
+    }
+
+    if (strlen(executablePath) == 0) {
+        /* If run normally, check to see from which directory, and if there is one, use it. */
+        if (!IsDebuggerPresent() && argc >= 1) {
+            /* argv[0] is the filename and maybe the path before it, if the path is there grab it. */
+            const char *str = strrchr(argv[0], '\\');
+            if (str != NULL) {
+                int16 n = str - argv[0]; /* Copy the separator too. */
+                if (!strncpy(executablePath, argv[0], n))
+                    Error("Failed to locate Incursion directory for '%s'", argv[0]);
+                executablePath[n] = '\0';
+            }
         }
     }
 
@@ -442,31 +452,21 @@ int main(int argc, char *argv[]) {
 #endif
 
 	theGame = new Game();
-    {
-        AT1 = new cursesTerm;
-		AT1->SetIncursionDirectory(executablePath);
-        T1 = AT1;
-        // ww: otherwise we segfault checking options
-        T1->SetPlayer(NULL);
-        T1->Initialize();
-        //T1->Title();
-    }
-#if 0
-	// If this is reenabled, it needs to page, and to do up to GLYPH_MAX
-	T1->SetWin(WIN_SCREEN);
-	T1->Clear();
-	int16 i;
-	for (i = 0; i != 256; i++)
-		T1->PutChar(i % 16, i / 16, GLYPH_VALUE(i, WHITE));
+    AT1 = new cursesTerm;
+	AT1->SetIncursionDirectory(executablePath);
+    T1 = AT1;
+    int retval = 0;
 
-	T1->GetCharRaw();
-	T1->GetCharRaw();
-#endif
-	theGame->StartMenu();
-    T1->ShutDown();
+    // Anything that runs at this point should not use the display, but rather standard C functions.
+    if (!AT1->RunOnCommandLine(argc, argv, &retval)) {
+        T1->Initialize();
+        theGame->StartMenu();
+        T1->ShutDown();
+    }
+
     delete theGame;
-    return 0;
-  }
+    return retval;
+}
 
 int readkey(int wait) {
 	if (wait) {
@@ -996,7 +996,9 @@ RetryFont:
 
 
 void cursesTerm::Initialize() {
-    p = NULL; m = NULL; isHelp = false;
+    p = NULL;
+    m = NULL;
+    isHelp = false;
     ActionsSinceLastAutoSave = 0;
     cx = cy = 0;
     showCursor = false;
@@ -1458,15 +1460,20 @@ void cursesTerm::Cut(int32 amt) {
 
 char *cursesTerm::MenuListFiles(const char * filespec, uint16 flags, const char * title) {
 #ifdef WIN32
+    static char pesky_retval[MAX_PATH_LENGTH];
+    char *file_names[MAX_MENU_OPTIONS];
+    int option_count = -1;
 	WIN32_FIND_DATAA data;
-	char *file;
 	HANDLE filehandle;
 	String pathdir = CurrentDirectory + "\\" + filespec;
 
 	filehandle = FindFirstFileA(pathdir, &data);
 	if (filehandle != INVALID_HANDLE_VALUE) {
 		do {
-			LOption(data.cFileName, (int32)data.cFileName);
+            option_count++;
+            file_names[option_count] = (char *)alloca(strlen(data.cFileName) + 1);
+            memcpy(file_names[option_count], data.cFileName, strlen(data.cFileName) + 1);
+            LOption(file_names[option_count], option_count);
         } while (FindNextFileA(filehandle, &data));
 
 		FindClose(filehandle);
@@ -1476,10 +1483,12 @@ char *cursesTerm::MenuListFiles(const char * filespec, uint16 flags, const char 
 	}
 
 	// Invoke user selection from the compiled list.
-	file = (char*)LMenu(flags, title);
-	if (file == (char*)(-1))
+    option_count = (int)LMenu(flags, title);
+	if (option_count == -1)
 		return NULL;
-	return file;
+    pesky_retval[0] = '\0';
+    memcpy(pesky_retval, file_names[option_count], strlen(file_names[option_count]) + 1);
+	return pesky_retval;
 #endif
 }
 

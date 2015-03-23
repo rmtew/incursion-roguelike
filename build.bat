@@ -10,18 +10,7 @@ REM TODO: -- Also support downloading and using them with a command-line argumen
 REM TODO: PREPARE
 REM TODO: - The version control archived zip.  How well does it work?  Should I even bother to support it?
 REM TODO: -- What if someone installs hg after downloading and using the snapshot?
-REM TODO: - Detect the Incursion version number, and use it automatically.
-REM TODO: -- Check the mod file for the version number to ensure it has been generated.
-REM TODO: -- Until the mod can be generated on command line, add it as an option to debug executables.
 REM TODO: RELEASE
-REM TODO: - Need to automate the creation of the dependencies archive as part of this process.
-REM TODO: -- build_dependencies-yyyymmdd.7z
-REM TODO: --- _dependencies
-REM TODO: ---- build\dependencies\include\
-REM TODO: ---- build\dependencies\*.lib
-REM TODO: ---- build\dependencies\*.exe
-REM TODO: ---- build\dependencies\*.pdb
-REM TODO: ---- build\dependencies\*.dll
 
 REM Divert to the internal setup code, it will return to the user setup.
 goto internal_function_setup
@@ -67,7 +56,7 @@ set UV_PACKAGES_DIRNAME=packages
 set UV_PACKAGES_PATH=!BUILD_PATH!\packages
 
 REM Set to yes to get the buggy curses executables packaged as well.
-set UV_PACKAGE_CURSES=no
+set UV_PACKAGE_CURSES=yes
 
 REM Allow the user to specify the path to their Git 'git' executable.  It may have to be accessed via absolute path.
 if not defined PYTHON_EXE (
@@ -328,21 +317,57 @@ if %L_COUNT% LSS %UV_INCLUDE_COMMAND_COUNT% (
 :exit_from_user_function_prepare_dependencies
 goto !V_LABEL_RETURN_ufpds!
 
+REM --- FUNCTION: user_function_detect_incursion_version ---------------------
+:user_function_detect_incursion_version
+set V_LABEL_RETURN_ufdiv=!V_LABEL_RETURN!
+
+if "!UV_VERSION!" EQU "" (
+    REM Set up the environment so that we can run Incursion piecemeal.
+    REM TODO(rmtew): Do this locally, so it doesn't pollute the environment.
+    set "PATH=%PATH%;!BUILD_PATH!\dependencies"
+    cd "!BUILD_PATH!\run"
+
+    for /F "usebackq tokens=*" %%M in (`..\Win32\Debug\exe_libtcod\Incursion.exe -version`) do (
+        set UV_VERSION=%%M
+    )
+
+    if "!UV_VERSION!" EQU "" (
+        echo ERROR: unable to auto-detect the version of Incursion.
+        goto internal_function_teardown
+    )
+)
+
+:exit_from_user_function_detect_incursion_version
+goto !V_LABEL_RETURN_ufdiv!
+
 REM --- FUNCTION: user_function_make_release ---------------------------------
 :user_function_make_release
 set V_LABEL_RETURN_ufmr=!V_LABEL_RETURN!
 
-if "!UV_VERSION!" EQU "" (
-    set /p UV_VERSION="Enter a version like 0.6.9Y15: "
-    if "!UV_VERSION!" EQU "" (
-        echo Invalid version
-    )
+set V_LABEL_RETURN=return_to_user_function_make_release1
+goto user_function_detect_incursion_version
+:return_to_user_function_make_release1
+
+echo Compiling 'Incursion.Mod' ...
+
+cd "!BUILD_PATH!\run"
+REM TODO(rmtew): This should be locally defined, and thrown away after the second line.
+set INCURSIONPATH=!BUILD_PATH!\..\
+set INCURSIONLIBPATH=
+for /F "usebackq tokens=*" %%M in (`..\Win32\Debug\exe_libtcod\Incursion.exe -compile`) do (
+    set L_LINE=%%M
+    REM if "!L_LINE:~0,12!" EQU "EXTRACTPATH:" (
+)
+
+if !ERRORLEVEL! NEQ 0 (
+    echo ERROR: 'Incursion.exe -compile' exited with error level !ERRORLEVEL!
+    goto internal_function_teardown
 )
 
 cd "!BUILD_PATH!"
-
 if not exist "run\mod\Incursion.mod" (
-    echo "ERROR: Making a release requires you to build 'Incursion.mod'"
+    echo "ERROR: Failed building 'Incursion.mod'"
+    goto internal_function_teardown
 )
 
 if exist "!UV_PACKAGES_DIRNAME!" rmdir /S /Q "!UV_PACKAGES_DIRNAME!"
@@ -408,12 +433,9 @@ REM --- FUNCTION: user_function_package_release ------------------------------
 :user_function_package_release
 set V_LABEL_RETURN_ufpr=!V_LABEL_RETURN!
 
-if "!UV_VERSION!" EQU "" (
-    set /p UV_VERSION="Enter a version like 0.6.9Y15: "
-    if "!UV_VERSION!" EQU "" (
-        echo Invalid version
-    )
-)
+set V_LABEL_RETURN=return_to_user_function_package_release1
+goto user_function_detect_incursion_version
+:return_to_user_function_package_release1
 
 cd "!BUILD_PATH!"
 

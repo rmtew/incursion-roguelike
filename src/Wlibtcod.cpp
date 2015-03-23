@@ -223,7 +223,7 @@ class libtcodTerm: public TextTerm
           static char s[MAX_PATH_LENGTH] = "";
           if (strlen(s) == 0) {
               envLibPath = getenv("INCURSIONLIBPATH");
-              if (envLibPath != NULL) {
+              if (envLibPath != NULL && strlen(envLibPath)) {
                   if (strcat(s, envLibPath)) {
                       if (s[strlen(s) - 1] == '\\')
                           s[strlen(s) - 1] = '\0';
@@ -353,16 +353,26 @@ ExceptionHandler* crashdumpHandler;
 int main(int argc, char *argv[]) {
     /* This path code is currently present in libtcod and curses code. */
     char executablePath[MAX_PATH_LENGTH] = "";
+    char *envPath = getenv("INCURSIONPATH");
 
-    /* If run normally, check to see from which directory, and if there is one, use it. */
-    if (!IsDebuggerPresent() && argc >= 1) {
-        /* argv[0] is the filename and maybe the path before it, if the path is there grab it. */
-        const char *str = strrchr(argv[0], '\\');
-        if (str != NULL) {
-            int16 n = str - argv[0]; /* Copy the separator too. */
-            if (!strncpy(executablePath, argv[0], n))
-                Error("Failed to locate Incursion directory for '%s'", argv[0]);
-            executablePath[n] = '\0';
+    if (envPath != NULL) {
+        if (strlen(envPath) > 0 && strcat(executablePath, envPath)) {
+            if (executablePath[strlen(executablePath) - 1] != '\\')
+                strncat(executablePath, "\\", 1);
+        }
+    }
+
+    if (strlen(executablePath) == 0) {
+        /* If run normally, check to see from which directory, and if there is one, use it. */
+        if (!IsDebuggerPresent() && argc >= 1) {
+            /* argv[0] is the filename and maybe the path before it, if the path is there grab it. */
+            const char *str = strrchr(argv[0], '\\');
+            if (str != NULL) {
+                int16 n = str - argv[0]; /* Copy the separator too. */
+                if (!strncpy(executablePath, argv[0], n))
+                    Error("Failed to locate Incursion directory for '%s'", argv[0]);
+                executablePath[n] = '\0';
+            }
         }
     }
 
@@ -376,6 +386,7 @@ int main(int argc, char *argv[]) {
     /* Google Breakpad is only compiled into Release builds, which get distributed.
      * Debug builds get the option to break out into the debugger, which makes it
      * superfluous in that case. */
+
 #ifndef DEBUG
 #ifdef USE_BREAKPAD
     std::wstring wsExecutablePath(strlen(executablePath), 0);
@@ -387,20 +398,22 @@ int main(int argc, char *argv[]) {
                            ExceptionHandler::HANDLER_ALL);
 #endif
 #endif
+
     theGame = new Game();
-    {
-        AT1 = new libtcodTerm;
-        AT1->SetIncursionDirectory(executablePath);
-        T1 = AT1;
-        // ww: otherwise we segfault checking options
-        T1->SetPlayer(NULL);
+    AT1 = new libtcodTerm;
+    AT1->SetIncursionDirectory(executablePath);
+    T1 = AT1;
+    int retval = 0;
+
+    // Anything that runs at this point should not use the display, but rather standard C functions.
+    if (!AT1->RunOnCommandLine(argc, argv, &retval)) {
         T1->Initialize();
-        //T1->Title();
+        theGame->StartMenu();
+        T1->ShutDown();
     }
-    theGame->StartMenu();
-    T1->ShutDown();
+
     delete theGame;
-    return 0;
+    return retval;
 }
 
 TCOD_key_t readkey(int wait) {
@@ -1481,9 +1494,10 @@ char * libtcodTerm::MenuListFiles(const char * filespec, uint16 flags, const cha
         LOption(str, (int32)str);
     }
     TCOD_list_clear_and_delete(l);
+
     file = (char*)LMenu(flags, title);
     if (file == (char*)(-1))
-        return NULL;
+        file = NULL;
     return file;
 }
 
@@ -1498,7 +1512,6 @@ bool libtcodTerm::FirstFile(char * filespec) {
     try {
         OpenRead((const char *)*alf_it);
     } catch (int) {
-        fp = NULL;
         return false;
     }
     ASSERT(fp);
@@ -1515,7 +1528,6 @@ Retry:
     try {
         OpenRead((const char *)*alf_it);
     } catch (int) {
-        fp = NULL;
         goto Retry;
     }
     ASSERT(fp);

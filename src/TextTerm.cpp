@@ -1,7 +1,9 @@
 /* TEXTTERM.CPP -- Copyright (c) 1999-2003 Julian Mensch
      Lower-level functions for interacting with a character-based
    terminal.
-   
+
+   Functions better put in Term?
+     bool  TextTerm::RunOnCommandLine(int argc, char *argv[], int *retval);
    Window Handling
      void  TextTerm::InitWindows();
      void  TextTerm::SetWin(int16 w)
@@ -32,6 +34,44 @@
 */
 
 #include "Incursion.h"
+
+bool TextTerm::RunOnCommandLine(int argc, char *argv[], int *retval) {
+    char option_names[10][15];
+    char option_values[10][50];
+    size_t option_count = 0;
+
+    // Arguments are noted to be -NAME VALUE, but -NAME1 -NAME2 may mean NAME1 is valid if no VALUE1 is expected.
+    for (int i = 1; i < argc && option_count < 10; i++) {
+        // If it starts with '-' it is the beginning of a named option.
+        if (argv[i][0] == '-') {
+            option_count++;
+            option_names[option_count - 1][0] = '\0';
+            option_values[option_count - 1][0] = '\0';
+            strncat(option_names[option_count - 1], &argv[i][1], 14);
+        } else if (option_count && option_values[option_count - 1][0] == '\0') {
+            strncat(option_values[option_count - 1], argv[i], 49);
+        }
+    }
+
+    for (size_t j = 0; j < option_count; j++) {
+        if (stricmp(option_names[j], "compile") == 0) {
+#ifdef DEBUG
+            if (option_values[j][0] == '\0')
+                strncat(option_values[j], "main.irc", 8);
+            if (!theGame->ResourceCompiler(option_values[j]))
+                *retval = 20; // Error compiling specified module.  At this point, it should be preceded by explanatory text.
+#else
+            printf("Error: -compile only works in debug builds, and is not compiled into release builds due to GPL licensing constraints.");
+            *retval = 19; // -compile argument given for release build.
+#endif
+            return true;
+        } else if (stricmp(option_names[j], "version") == 0) {
+            printf("%s\n", VERSION_STRING);
+            return true;
+        }
+    }
+    return false;
+}
 
 /*****************************************************************************\
 *                                 TEXTTERM                                    *
@@ -843,7 +883,7 @@ int16 TextTerm::SWrapWrite(int16 x, int16 y, const char* _s, int16 x2, int16 wn)
 void TextTerm::LOption(const char*text,int32 val,const char*desc,
                         int32 sortkey)
   {
-    if (OptionCount >= 510)
+      if (OptionCount >= MAX_MENU_OPTIONS)
       return;
     for (int i=0; i<OptionCount; i++)
       if (Option[i].Val == val)

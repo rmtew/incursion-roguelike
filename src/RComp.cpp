@@ -4,7 +4,7 @@
    IncursionScript resource compiler; the bulk of the actual
    compiler is built into the ACCENT parser file Grammar.Acc.
 
-     bool Game::ResourceCompiler()
+     bool Game::ResourceCompiler(char *moduleFileName)
      void Game::CountResources()
      const char* AllocTextSeg()
      void GenerateDispatch()
@@ -78,7 +78,7 @@ bool RegsInUse[64];
 int8 StringsInUse[64]; 
 
 
-bool Game::ResourceCompiler() {
+bool Game::ResourceCompiler(char *moduleFileName) {
     String fn;
     time_t theTime;
 
@@ -91,65 +91,44 @@ bool Game::ResourceCompiler() {
         * Without the test, this would result in wierd memory
         * bugs due to the kludgy way yyDice is defined.
         */
-        Fatal("Strange compiler-level struct alignment error!");
+        printf("Fatal error: strange compiler-level struct alignment error!\n");
+        return false;
     }
-
-    char * file_to_open = NULL;
 
     T1->ChangeDirectory(T1->LibraryPath(), true);
 
-    do {
-        yyin = NULL;
-        Unresolved.Empty();
-        T1->SetWin(WIN_SCREEN); T1->Color(EMERALD); T1->Clear();
-        T1->Write(0,0,"Incursion Resource Compiler\n");
-        T1->GotoXY(0,2); T1->Color(WHITE);
-        T1->Write("Module Resource Files:\n"); T1->Color(GREY);
-        file_to_open = T1->MenuListFiles("*.irc",MENU_ESC,"Compile Which Module?");
-        T1->SetWin(WIN_SCREEN);
-        if (!file_to_open) {
-            T1->ChangeDirectory(T1->IncursionDirectory);
-            return false; 
-        }
-        yyin = fopen(file_to_open, "rt");
-        T1->GotoXY(0,6); 
-    } while (!yyin);
+    yyin = fopen(moduleFileName, "rt");
+    if (!yyin) {
+        T1->ChangeDirectory(T1->IncursionDirectory);
+        return false;
+    }
     fclose(yyin);
+
     if (setjmp(jb)) {
-        T1->Color(GREY);
-        T1->Write("\n\nPress any key to continue...");
-        T1->GetCharRaw(); T1->Clear();
+        //T1->Write("\n\nPress any key to continue...");
+        //T1->GetCharRaw();
         T1->ChangeDirectory(T1->IncursionDirectory);
         return false;
     }
 
     time(&theTime);
-    T1->Write(Format("%s: Preprocessing ...\n", ctime(&theTime)));
-    T1->Update();
-#ifdef WIN32
-    if (!Preprocess(file_to_open,"program.i")) {
-#else
-    if (0) {
-#endif
+    printf(Format("%s: Preprocessing ...\n", ctime(&theTime)));
+
+    if (!Preprocess(moduleFileName,"program.i")) {
 PreprocError:
-        T1->Color(RED);
-        T1->Write("[Unknown Preprocessor Error.]\n");
-        T1->GetCharRaw();
+        printf("[Unknown Preprocessor Error.]\n");
         T1->ChangeDirectory(T1->IncursionDirectory);
         return false;
     }
+
     time(&theTime);
-    T1->Write(Format("%s: Reading preprocessed file ...\n", ctime(&theTime)));
-    T1->Update();
+    printf(Format("%s: Reading preprocessed file ...\n", ctime(&theTime)));
+
     yyin = fopen("program.i","rt");
     if (!yyin)
         goto PreprocError;
 
-    //ProcessFile:
     if (setjmp(jb)) {
-        T1->Color(GREY);
-        T1->Write("\n\nPress any key to continue...");
-        T1->GetCharRaw(); T1->Clear();
         T1->ChangeDirectory(T1->IncursionDirectory);
         return false;
     }
@@ -163,8 +142,8 @@ PreprocError:
     theModule->Slot = -1;
 
     time(&theTime);
-    T1->Write(Format("%s: Counting and naming resources ...\n", ctime(&theTime)));
-    T1->Update();
+    printf("%s: Counting and naming resources ...\n", ctime(&theTime));
+
     CountResources();
     theMon = firstMon = theModule->QMon;
     theItem = firstItem = theModule->QItm;
@@ -196,23 +175,20 @@ PreprocError:
         fseek(yyin,0,SEEK_SET);
         yyrestart(yyin);
 
-        T1->Color(GREY);
         theSymTab.Empty();
         time(&theTime);
-        T1->Write(Format("%s: Parsing resources ...\n", ctime(&theTime)));
-        T1->Update();
+        printf("%s: Parsing resources ...\n", ctime(&theTime));
         brace_level = 0;
         decl_state = false;
         yyparse();
         time(&theTime);
-        T1->Write((const char*)Format("%s: Parsed [%s] into [%s] ...\n",ctime(&theTime),file_to_open,theModule->GetText(theModule->Name)));
+        printf("%s: Parsed [%s] into [%s] ...\n",ctime(&theTime),moduleFileName,theModule->GetText(theModule->Name));
         if (!theModule->Name)
             yyerror("Module has no name.");
         if (!theModule->FName)
             yyerror("Module has no filename.");
     } else {
-        T1->Color(RED);
-        T1->Write("[Compilation Aborted.]\n");
+        printf("[Compilation Aborted.]\n");
     }
 
     theCodeSeg.Generate(HALT);
@@ -223,16 +199,12 @@ PreprocError:
     theCodeSeg.Clear();
 
     if (Unresolved.GetLength()) {
-        T1->Color(CYAN);
-        T1->Write("Warning -- Unresolved References:\n__");
-        T1->Color(GREY);
-        T1->Write(Unresolved);
-        T1->Write("\n\n");
+        printf("Warning -- Unresolved References:\n");
+        printf("%s\n\n", (const char*)Unresolved);
     } 
 
     time(&theTime);
-    T1->Write(Format("%s: Caching TMonster MTypes ...\n", ctime(&theTime)));
-    T1->Update();
+    printf("%s: Caching TMonster MTypes ...\n", ctime(&theTime));
     for (int i=0; i<theModule->szMon; i++) {
         rID mID = theModule->MonsterID(i); 
         theModule->QMon[i].InitializeMTypeCache(mID); 
@@ -241,29 +213,21 @@ PreprocError:
     /* Don't save when we're only test-compiling one file for syntax */
     if (FIND("mage") && FIND("shocker lizard") && !Errors) {
         time(&theTime);
-        T1->Write(Format("%s: Generating dispatch tables ...\n", ctime(&theTime)));
-        T1->Update();
+        printf("%s: Generating dispatch tables ...\n", ctime(&theTime));
         T1->ChangeDirectory(T1->IncursionDirectory);
         GenerateDispatch();
         theSymTab.Empty();
         time(&theTime);
-        T1->Write(Format("%s: Saving module ...\n", ctime(&theTime)));
-        T1->Update();
+        printf("%s: Saving module ...\n", ctime(&theTime));
         theGame->SaveModule(0);
     } else {
         time(&theTime);
-        T1->Write(Format("%s: Forgoing save.\n", ctime(&theTime)));
-        T1->Update();
+        printf("%s: Forgoing save.\n", ctime(&theTime));
     }
 
-    T1->Color(EMERALD);
     time(&theTime);
-    T1->Write(Format("\n%s: Press any key to continue...", ctime(&theTime)));
-    T1->GetCharRaw();
+    printf("\n%s: Done\n", ctime(&theTime));
     Cleanup();
-    T1->Clear();
-    T1->SetWin(WIN_SCREEN); 
-    T1->Clear();
     return (!Errors); 
 }
 

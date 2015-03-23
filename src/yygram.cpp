@@ -15,8 +15,6 @@
 #include "Incursion.h"
 #include <setjmp.h>
 
-#define printf T1->Write
-
 #define GETBIND_MEMFUNC(id)         ((BMemFunc*)(theSymTab.GetBinding(id,0,0,MEM_FUNC)))
 #define GETBIND_SYSFUNC(id)         ((BSysFunc*)(theSymTab.GetBinding(id,0,0,SYS_FUNC)))
 #define GETBIND_MEMVAR(id)          ((BMemVar*)(theSymTab.GetBinding(id,0,1,MEM_VAR)))
@@ -131,14 +129,12 @@ EffectValues ValArray[32];
 
 int yyerror(const char*msg) {
    Errors++;
-   T1->Color(RED);
-   T1->CWrite(Format("\"%s\" (%d): %s\n", preprocFilename, yypos, msg));
+   printf("\"%s\" (%d): %s\n", preprocFilename, yypos, msg);
    longjmp(jb,1);
 }
 
 void yywarning(const char*msg) {
-   T1->Color(GREY);
-   T1->CWrite(Format("\"%s\" (%d): %s\n", preprocFilename,  yypos, msg));
+   printf("\"%s\" (%d): %s\n", preprocFilename,  yypos, msg);
 }
 
 
@@ -148,7 +144,7 @@ extern "C" int yywrap() {
 
 
 
-# line 152 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 148 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
 #include "yygram.h"
 
 int YYSTART ()
@@ -166,9 +162,9 @@ int file ()
 {
    switch(yyselect()) {
    case 1: {
-#line 193 "../lang/grammar.acc"
+#line 189 "../lang/grammar.acc"
  currMap = 0; MemFuncID = 0; MemVarID = 0; 
-# line 172 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 168 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 480: {
@@ -196,26 +192,26 @@ int resource ()
       get_lexval();
       name = yylval;
       get_lexval();
-#line 197 "../lang/grammar.acc"
+#line 193 "../lang/grammar.acc"
  theModule->Name = name; 
-# line 202 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 198 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 3: {
       get_lexval();
       cexpr3(&n);
       get_lexval();
-#line 198 "../lang/grammar.acc"
+#line 194 "../lang/grammar.acc"
  theModule->Slot = (int16)n; 
-# line 210 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 206 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 4: {
       get_lexval();
       get_lexval();
       fname = yylval;
       get_lexval();
-#line 199 "../lang/grammar.acc"
+#line 195 "../lang/grammar.acc"
  theModule->FName = fname; 
-# line 219 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 215 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 5: {
       monster_def();
@@ -295,9 +291,9 @@ int resource ()
       default: printf("???\n"); exit(1);
       }
       cexpr(&n);
-#line 223 "../lang/grammar.acc"
+#line 219 "../lang/grammar.acc"
  CompilerFlags |= n; 
-# line 301 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 297 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 29: {
       get_lexval();
@@ -320,9 +316,9 @@ int resource ()
       default: ;
       }
       get_lexval();
-#line 225 "../lang/grammar.acc"
+#line 221 "../lang/grammar.acc"
  theRes = theTxt; theTxt->Name = nam; theTxt->Desc = text; theTxt++; 
-# line 326 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 322 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -337,7 +333,7 @@ int res_ref (rID *res)
       get_lexval();
       get_lexval();
       lit = yylval;
-#line 229 "../lang/grammar.acc"
+#line 225 "../lang/grammar.acc"
  PurgeStrings();
                          *res = FIND(theModule->GetText(lit)); 
                          if (!*res) {
@@ -347,14 +343,14 @@ int res_ref (rID *res)
                            *res = FIND("unimplemented");
                            }
                         
-# line 351 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 347 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 31: {
       get_lexval();
       cexpr3(&n);
-#line 238 "../lang/grammar.acc"
+#line 234 "../lang/grammar.acc"
  *res = n; 
-# line 358 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 354 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -370,23 +366,23 @@ int cexpr (YYSTYPE *val)
       cexpr(&x);
       get_lexval();
       cexpr2(&y);
-#line 242 "../lang/grammar.acc"
+#line 238 "../lang/grammar.acc"
  *val = x+y; 
-# line 376 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 372 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 33: {
       cexpr(&x);
       get_lexval();
       cexpr2(&y);
-#line 243 "../lang/grammar.acc"
+#line 239 "../lang/grammar.acc"
  *val = x-y; 
-# line 384 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 380 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 34: {
       cexpr2(&val2);
-#line 244 "../lang/grammar.acc"
+#line 240 "../lang/grammar.acc"
  *val = val2; 
-# line 390 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 386 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -402,47 +398,47 @@ int cexpr2 (YYSTYPE *val)
       cexpr2(&x);
       get_lexval();
       cexpr3(&y);
-#line 248 "../lang/grammar.acc"
+#line 244 "../lang/grammar.acc"
  *val = x * y; 
-# line 408 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 404 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 36: {
       cexpr2(&x);
       get_lexval();
       cexpr3(&y);
-#line 249 "../lang/grammar.acc"
+#line 245 "../lang/grammar.acc"
  *val = x / y; 
-# line 416 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 412 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 37: {
       cexpr2(&x);
       get_lexval();
       cexpr3(&y);
-#line 250 "../lang/grammar.acc"
+#line 246 "../lang/grammar.acc"
  *val = x % y; 
-# line 424 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 420 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 38: {
       cexpr2(&x);
       get_lexval();
       cexpr3(&y);
-#line 251 "../lang/grammar.acc"
+#line 247 "../lang/grammar.acc"
  *val = x | y; 
-# line 432 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 428 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 39: {
       cexpr2(&x);
       get_lexval();
       cexpr3(&y);
-#line 252 "../lang/grammar.acc"
+#line 248 "../lang/grammar.acc"
  *val = x & y; 
-# line 440 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 436 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 40: {
       cexpr3(&val2);
-#line 254 "../lang/grammar.acc"
+#line 250 "../lang/grammar.acc"
  *val = val2; 
-# line 446 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 442 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -457,22 +453,22 @@ int cexpr3 (YYSTYPE *val)
    case 41: {
       get_lexval();
       cexpr4(&val2);
-#line 258 "../lang/grammar.acc"
+#line 254 "../lang/grammar.acc"
  *val = val2; 
-# line 463 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 459 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 42: {
       get_lexval();
       cexpr4(&n);
-#line 259 "../lang/grammar.acc"
+#line 255 "../lang/grammar.acc"
  *val = -n; 
-# line 470 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 466 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 43: {
       cexpr4(&val3);
-#line 260 "../lang/grammar.acc"
+#line 256 "../lang/grammar.acc"
  *val = val3; 
-# line 476 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 472 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -488,35 +484,35 @@ int cexpr4 (YYSTYPE *val)
       get_lexval();
       cexpr(&val2);
       get_lexval();
-#line 264 "../lang/grammar.acc"
+#line 260 "../lang/grammar.acc"
  * val = val2; 
-# line 494 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 490 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 45: {
       get_lexval();
       val3 = yylval;
-#line 265 "../lang/grammar.acc"
+#line 261 "../lang/grammar.acc"
  *val = val3; 
-# line 501 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 497 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 46: {
       get_lexval();
-#line 266 "../lang/grammar.acc"
+#line 262 "../lang/grammar.acc"
  *val = 1; 
-# line 507 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 503 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 47: {
       get_lexval();
-#line 267 "../lang/grammar.acc"
+#line 263 "../lang/grammar.acc"
  *val = 0; 
-# line 513 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 509 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 48: {
       get_lexval();
       val4 = yylval;
-#line 268 "../lang/grammar.acc"
+#line 264 "../lang/grammar.acc"
  * val = val4; 
-# line 520 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 516 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -535,9 +531,9 @@ int dice_val (Dice *d)
       cexpr4(&sid);
       get_lexval();
       cexpr4(&bon);
-#line 273 "../lang/grammar.acc"
+#line 269 "../lang/grammar.acc"
  d->Number = (int8)num; d->Sides = (int8)sid; d->Bonus = (int8)bon; 
-# line 541 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 537 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 50: {
       cexpr4(&num);
@@ -546,23 +542,23 @@ int dice_val (Dice *d)
       get_lexval();
       get_lexval();
       cexpr4(&bon);
-#line 275 "../lang/grammar.acc"
+#line 271 "../lang/grammar.acc"
  d->Number = (int8)num; d->Sides = (int8)sid; d->Bonus = (int8)-bon; 
-# line 552 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 548 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 51: {
       cexpr4(&num);
       get_lexval();
       cexpr4(&sid);
-#line 277 "../lang/grammar.acc"
+#line 273 "../lang/grammar.acc"
  d->Number = (int8)num; d->Sides = (int8)sid; d->Bonus = 0; 
-# line 560 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 556 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 52: {
       cexpr3(&x);
-#line 279 "../lang/grammar.acc"
+#line 275 "../lang/grammar.acc"
  d->Number = 0; d->Sides = 0; d->Bonus = (int8)x; 
-# line 566 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 562 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -580,17 +576,17 @@ int dice_only (Dice *d)
       cexpr4(&sid);
       get_lexval();
       cexpr4(&bon);
-#line 284 "../lang/grammar.acc"
+#line 280 "../lang/grammar.acc"
  d->Number = (int8)num; d->Sides = (int8)sid; d->Bonus = (int8)bon; 
-# line 586 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 582 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 54: {
       cexpr4(&num);
       get_lexval();
       cexpr4(&sid);
-#line 286 "../lang/grammar.acc"
+#line 282 "../lang/grammar.acc"
  d->Number = (int8)num; d->Sides = (int8)sid; d->Bonus = 0; 
-# line 594 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 590 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -609,7 +605,7 @@ int gear_entry (int16 *chance, Dice *amt, rID *iID, rID *eID, uint16 *spec, uint
    YYSTYPE y;
    switch(yyselect()) {
    case 55: {
-#line 291 "../lang/grammar.acc"
+#line 287 "../lang/grammar.acc"
 
     int16 q; q=0;
     *chance = 0;
@@ -618,16 +614,16 @@ int gear_entry (int16 *chance, Dice *amt, rID *iID, rID *eID, uint16 *spec, uint
     *cond = 0;
     *iID = *eID = 0;
     amt->Set(1,1,0); 
-# line 622 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 618 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       switch (yyselect()) {
       case 484: {
          get_lexval();
          get_lexval();
          sep_expr(&hc);
          get_lexval();
-#line 299 "../lang/grammar.acc"
+#line 295 "../lang/grammar.acc"
  *cond = hc; 
-# line 631 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 627 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       default: ;
       }
@@ -636,49 +632,49 @@ int gear_entry (int16 *chance, Dice *amt, rID *iID, rID *eID, uint16 *spec, uint
          get_lexval();
          n = yylval;
          get_lexval();
-#line 300 "../lang/grammar.acc"
+#line 296 "../lang/grammar.acc"
  *chance = (int16)n; 
-# line 642 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 638 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       default: ;
       }
       switch (yyselect()) {
       case 486: {
          dice_only(&dv);
-#line 301 "../lang/grammar.acc"
+#line 297 "../lang/grammar.acc"
  *amt = yyDice(dv); 
-# line 651 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 647 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       default: ;
       }
       switch (yyselect()) {
       case 487: {
          get_lexval();
-#line 302 "../lang/grammar.acc"
+#line 298 "../lang/grammar.acc"
  *fl |= GF_CURSED; 
-# line 660 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 656 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       case 488: {
          get_lexval();
-#line 303 "../lang/grammar.acc"
+#line 299 "../lang/grammar.acc"
  *fl |= GF_BLESSED; 
-# line 666 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 662 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       default: ;
       }
       switch (yyselect()) {
       case 489: {
          res_ref(&rr);
-#line 304 "../lang/grammar.acc"
+#line 300 "../lang/grammar.acc"
  *iID = rr; 
-# line 675 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 671 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       case 490: {
          get_lexval();
          cexpr3(&n);
-#line 305 "../lang/grammar.acc"
+#line 301 "../lang/grammar.acc"
  *iID = n; *fl |= GF_RANDOM_ITEM; 
-# line 682 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 678 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       default: printf("???\n"); exit(1);
       }
@@ -687,17 +683,17 @@ int gear_entry (int16 *chance, Dice *amt, rID *iID, rID *eID, uint16 *spec, uint
          get_lexval();
          get_lexval();
          n = yylval;
-#line 306 "../lang/grammar.acc"
+#line 302 "../lang/grammar.acc"
  *spec = (uint16)n; 
-# line 693 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 689 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       case 492: {
          get_lexval();
          get_lexval();
          n = yylval;
-#line 306 "../lang/grammar.acc"
+#line 302 "../lang/grammar.acc"
  *spec = (uint16)-n; 
-# line 701 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 697 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       default: ;
       }
@@ -716,12 +712,12 @@ int gear_entry (int16 *chance, Dice *amt, rID *iID, rID *eID, uint16 *spec, uint
                      } break;
                   default: ;
                   }
-#line 307 "../lang/grammar.acc"
+#line 303 "../lang/grammar.acc"
  if (q >= 4)
                                    yyerror("Max 4 qualities in gear lists!");
                                 else
                                   ((uint8*)qual)[q++] = (uint8)wq;
-# line 725 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 721 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                   } break;
                default: goto yy3;
                }
@@ -732,9 +728,9 @@ int gear_entry (int16 *chance, Dice *amt, rID *iID, rID *eID, uint16 *spec, uint
          case 496: {
             get_lexval();
             res_ref(&rr);
-#line 311 "../lang/grammar.acc"
+#line 307 "../lang/grammar.acc"
  *eID = rr; 
-# line 738 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 734 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          case 497: {
             get_lexval();
@@ -742,24 +738,24 @@ int gear_entry (int16 *chance, Dice *amt, rID *iID, rID *eID, uint16 *spec, uint
             cexpr3(&a);
             get_lexval();
             cexpr3(&b);
-#line 313 "../lang/grammar.acc"
+#line 309 "../lang/grammar.acc"
  *eID = a + b*256; *fl |= GF_RANDOM_EFFECT; 
-# line 748 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 744 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          case 498: {
             get_lexval();
             get_lexval();
             cexpr3(&b);
-#line 315 "../lang/grammar.acc"
+#line 311 "../lang/grammar.acc"
  *eID = b*256; *fl |= GF_RANDOM_EFFECT; 
-# line 756 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 752 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          case 499: {
             get_lexval();
             get_lexval();
-#line 317 "../lang/grammar.acc"
+#line 313 "../lang/grammar.acc"
  *eID = 0; *fl |= GF_RANDOM_EFFECT; 
-# line 763 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 759 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          case 500: {
             get_lexval();
@@ -790,9 +786,9 @@ int gear_desc ()
    hCode cond;
    switch(yyselect()) {
    case 56: {
-#line 323 "../lang/grammar.acc"
+#line 319 "../lang/grammar.acc"
  int16 is_else = 0; 
-# line 796 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 792 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       get_lexval();
       switch (yyselect()) {
       case 501: {
@@ -804,21 +800,21 @@ int gear_desc ()
          switch (yyselect()) {
          case 504: {
             gear_entry(&chance, &amt, &iID, &eID, &spec, &qual, &fl, &cond);
-#line 326 "../lang/grammar.acc"
+#line 322 "../lang/grammar.acc"
  theRes->AddEquip((uint8)chance,amt,iID,eID,(int8)spec,(uint8*)(&qual),(uint8)(fl | is_else),cond); 
-# line 810 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 806 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 502: {
                get_lexval();
-#line 327 "../lang/grammar.acc"
+#line 323 "../lang/grammar.acc"
  is_else = 0; 
-# line 816 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 812 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                } break;
             case 503: {
                get_lexval();
-#line 327 "../lang/grammar.acc"
+#line 323 "../lang/grammar.acc"
  is_else = GF_ELSE; 
-# line 822 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 818 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                } break;
             default: printf("???\n"); exit(1);
             }
@@ -828,9 +824,9 @@ int gear_desc ()
       }
       yy4: ;
       gear_entry(&chance, &amt, &iID, &eID, &spec, &qual, &fl, &cond);
-#line 329 "../lang/grammar.acc"
+#line 325 "../lang/grammar.acc"
  theRes->AddEquip((uint8)chance,amt,iID,eID,(int8)spec,(uint8*)(&qual),(uint8)(fl | is_else),cond); 
-# line 834 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 830 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       get_lexval();
       } break;
    }
@@ -859,15 +855,15 @@ int glyph_entry (uint16 *img)
          } break;
       default: ;
       }
-#line 333 "../lang/grammar.acc"
+#line 329 "../lang/grammar.acc"
  *img = GLYPH_FORE(WHITE); 
-# line 865 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 861 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       switch (yyselect()) {
       case 508: {
          color(&col);
-#line 334 "../lang/grammar.acc"
+#line 330 "../lang/grammar.acc"
  *img = (uint16)GLYPH_FORE(col); 
-# line 871 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 867 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       default: ;
       }
@@ -875,16 +871,16 @@ int glyph_entry (uint16 *img)
       case 509: {
          get_lexval();
          n = yylval;
-#line 335 "../lang/grammar.acc"
+#line 331 "../lang/grammar.acc"
  *img |= n; 
-# line 881 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 877 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       case 510: {
          get_lexval();
          n = yylval;
-#line 336 "../lang/grammar.acc"
+#line 332 "../lang/grammar.acc"
  *img |= n; 
-# line 888 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 884 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       default: printf("???\n"); exit(1);
       }
@@ -892,9 +888,9 @@ int glyph_entry (uint16 *img)
       case 511: {
          get_lexval();
          color(&back);
-#line 338 "../lang/grammar.acc"
+#line 334 "../lang/grammar.acc"
  *img |= GLYPH_BACK(back); 
-# line 898 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 894 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       default: ;
       }
@@ -911,15 +907,15 @@ int glyph_desc (uint16 *img)
    YYSTYPE back;
    switch(yyselect()) {
    case 58: {
-#line 342 "../lang/grammar.acc"
+#line 338 "../lang/grammar.acc"
  *img = GLYPH_FORE(WHITE); 
-# line 917 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 913 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       switch (yyselect()) {
       case 512: {
          color(&col);
-#line 343 "../lang/grammar.acc"
+#line 339 "../lang/grammar.acc"
  *img = (uint16)GLYPH_FORE(col); 
-# line 923 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 919 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       default: ;
       }
@@ -927,16 +923,16 @@ int glyph_desc (uint16 *img)
       case 513: {
          get_lexval();
          n = yylval;
-#line 344 "../lang/grammar.acc"
+#line 340 "../lang/grammar.acc"
  *img |= n; 
-# line 933 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 929 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       case 514: {
          get_lexval();
          n = yylval;
-#line 345 "../lang/grammar.acc"
+#line 341 "../lang/grammar.acc"
  *img |= n; 
-# line 940 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 936 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       default: printf("???\n"); exit(1);
       }
@@ -944,9 +940,9 @@ int glyph_desc (uint16 *img)
       case 515: {
          get_lexval();
          color(&back);
-#line 346 "../lang/grammar.acc"
+#line 342 "../lang/grammar.acc"
  *img |= GLYPH_BACK(back); 
-# line 950 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 946 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       default: ;
       }
@@ -985,21 +981,21 @@ int event_entry ()
    VBlock vc;
    switch(yyselect()) {
    case 60: {
-#line 354 "../lang/grammar.acc"
+#line 350 "../lang/grammar.acc"
  int16 EvList[32]; int16 i, cEvent = 0; 
-# line 991 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 987 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       cexpr(&n);
-#line 355 "../lang/grammar.acc"
+#line 351 "../lang/grammar.acc"
  EvList[cEvent++] = (int16)n; theEvent = n; 
-# line 995 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 991 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 517: {
             get_lexval();
             cexpr(&n);
-#line 356 "../lang/grammar.acc"
+#line 352 "../lang/grammar.acc"
  EvList[cEvent++] = (int16)n; 
-# line 1003 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 999 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          default: goto yy6;
          }
@@ -1009,20 +1005,20 @@ int event_entry ()
       case 519: {
          get_lexval();
          lv = yylval;
-#line 357 "../lang/grammar.acc"
+#line 353 "../lang/grammar.acc"
  for(i=0;i!=cEvent;i++)
                               theRes->AddEvent(-EvList[i],lv); 
-# line 1016 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1012 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          while (1) {
             switch (yyselect()) {
             case 518: {
                get_lexval();
                get_lexval();
                lv = yylval;
-#line 359 "../lang/grammar.acc"
+#line 355 "../lang/grammar.acc"
  for(i=0;i!=cEvent;i++)
                               theRes->AddEvent(-EvList[i],lv); 
-# line 1026 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1022 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                } break;
             default: goto yy7;
             }
@@ -1031,13 +1027,13 @@ int event_entry ()
          } break;
       case 520: {
          routine(&vc);
-#line 364 "../lang/grammar.acc"
+#line 360 "../lang/grammar.acc"
  hCode hc = theCodeSeg.Add(&vc);
                             theCodeSeg.Generate(HALT);
                             for(i=0;i!=cEvent;i++)
                               theRes->AddEvent(EvList[i],hc);
                             theEvent = 0; 
-# line 1041 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1037 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       default: printf("???\n"); exit(1);
       }
@@ -1051,17 +1047,17 @@ int sep_expr (hCode *hc)
    PExp ex;
    switch(yyselect()) {
    case 61: {
-#line 373 "../lang/grammar.acc"
+#line 369 "../lang/grammar.acc"
  theEvent = EV_CONDITION; 
-# line 1057 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1053 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       expr(&ex);
-#line 375 "../lang/grammar.acc"
+#line 371 "../lang/grammar.acc"
  *hc = theCodeSeg.Add(ex.Code);
       theCodeSeg.Generate(RET,ex.Storage,ex.Value); 
-# line 1062 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
-#line 377 "../lang/grammar.acc"
+# line 1058 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+#line 373 "../lang/grammar.acc"
  theEvent = 0; 
-# line 1065 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1061 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -1072,17 +1068,17 @@ int sep_stat (hCode *hc)
    VBlock st;
    switch(yyselect()) {
    case 62: {
-#line 381 "../lang/grammar.acc"
+#line 377 "../lang/grammar.acc"
  theEvent = EV_CONDITION; 
-# line 1078 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1074 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       statement(&st);
-#line 383 "../lang/grammar.acc"
+#line 379 "../lang/grammar.acc"
  *hc = theCodeSeg.Add(&st);
       theCodeSeg.Generate(RET,0,0); 
-# line 1083 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
-#line 385 "../lang/grammar.acc"
+# line 1079 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+#line 381 "../lang/grammar.acc"
  theEvent = 0; 
-# line 1086 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1082 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -1093,9 +1089,9 @@ int mval (MVal *mv)
    YYSTYPE n;
    switch(yyselect()) {
    case 63: {
-#line 389 "../lang/grammar.acc"
+#line 385 "../lang/grammar.acc"
  mv->BType = mv->Bound = 0; 
-# line 1099 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1095 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       switch (yyselect()) {
       case 522: {
          switch (yyselect()) {
@@ -1105,30 +1101,30 @@ int mval (MVal *mv)
          default: ;
          }
          cexpr4(&n);
-#line 390 "../lang/grammar.acc"
+#line 386 "../lang/grammar.acc"
  mv->Value = n;  mv->VType = MVAL_ADD; 
-# line 1111 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1107 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       case 523: {
          get_lexval();
          cexpr4(&n);
-#line 391 "../lang/grammar.acc"
+#line 387 "../lang/grammar.acc"
  mv->Value = -n; mv->VType = MVAL_ADD; 
-# line 1118 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1114 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       case 524: {
          get_lexval();
          cexpr4(&n);
-#line 392 "../lang/grammar.acc"
+#line 388 "../lang/grammar.acc"
  mv->Value = n;  mv->VType = MVAL_SET; 
-# line 1125 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1121 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       case 525: {
          cexpr3(&n);
          get_lexval();
-#line 393 "../lang/grammar.acc"
+#line 389 "../lang/grammar.acc"
  mv->Value = n;  mv->VType = MVAL_PERCENT; 
-# line 1132 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1128 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       default: printf("???\n"); exit(1);
       }
@@ -1139,23 +1135,23 @@ int mval (MVal *mv)
          case 526: {
             get_lexval();
             cexpr4(&n);
-#line 395 "../lang/grammar.acc"
+#line 391 "../lang/grammar.acc"
  mv->Bound = n;  mv->BType = MBOUND_MIN; 
-# line 1145 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1141 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          case 527: {
             get_lexval();
             cexpr4(&n);
-#line 396 "../lang/grammar.acc"
+#line 392 "../lang/grammar.acc"
  mv->Bound = n;  mv->BType = MBOUND_MAX; 
-# line 1152 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1148 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          case 528: {
             get_lexval();
             cexpr4(&n);
-#line 397 "../lang/grammar.acc"
+#line 393 "../lang/grammar.acc"
  mv->Bound = n;  mv->BType = MBOUND_NEAR; 
-# line 1159 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1155 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          default: printf("???\n"); exit(1);
          }
@@ -1177,36 +1173,36 @@ int monster_def ()
    switch(yyselect()) {
    case 64: {
       get_lexval();
-#line 402 "../lang/grammar.acc"
+#line 398 "../lang/grammar.acc"
  theMon->Attr[0] = theMon->Attr[1] =
                        theMon->Attr[2] = theMon->Attr[3] =
                          theMon->Attr[4] = theMon->Attr[5] =
                          0; CurrAttk = 0; CurrFeat = 0; theRes = theMon; 
-# line 1186 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1182 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       get_lexval();
       name = yylval;
-#line 406 "../lang/grammar.acc"
+#line 402 "../lang/grammar.acc"
  theMon->Name = name; 
-# line 1191 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1187 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       get_lexval();
       cexpr3(&n);
-#line 407 "../lang/grammar.acc"
+#line 403 "../lang/grammar.acc"
  theMon->MType[0] = n; 
-# line 1196 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1192 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       switch (yyselect()) {
       case 531: {
          get_lexval();
          cexpr3(&n2);
-#line 408 "../lang/grammar.acc"
+#line 404 "../lang/grammar.acc"
  theMon->MType[1] = n2; 
-# line 1203 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1199 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          switch (yyselect()) {
          case 530: {
             get_lexval();
             cexpr3(&n3);
-#line 409 "../lang/grammar.acc"
+#line 405 "../lang/grammar.acc"
  theMon->MType[2] = n3; 
-# line 1210 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1206 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          default: ;
          }
@@ -1224,9 +1220,9 @@ int monster_def ()
       }
       yy8: ;
       get_lexval();
-#line 411 "../lang/grammar.acc"
+#line 407 "../lang/grammar.acc"
  theMon++; 
-# line 1230 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1226 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -1258,9 +1254,9 @@ int mon_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 414 "../lang/grammar.acc"
+#line 410 "../lang/grammar.acc"
  theMon->Desc = lv; 
-# line 1264 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1260 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 66: {
       get_lexval();
@@ -1272,9 +1268,9 @@ int mon_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 415 "../lang/grammar.acc"
+#line 411 "../lang/grammar.acc"
  theMon->Depth = (int8)n; 
-# line 1278 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1274 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 67: {
       switch (yyselect()) {
@@ -1294,9 +1290,9 @@ int mon_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 416 "../lang/grammar.acc"
+#line 412 "../lang/grammar.acc"
  theMon->CR = (int8)n; 
-# line 1300 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1296 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 68: {
       switch (yyselect()) {
@@ -1318,11 +1314,11 @@ int mon_entry ()
       get_lexval();
       cexpr3(&n1);
       get_lexval();
-#line 418 "../lang/grammar.acc"
+#line 414 "../lang/grammar.acc"
  if (n2 != 1 || n1 > 8 || n1 < 2)
                                         yyerror("Fractional CR error!");
                                       theMon->CR = (int8)((-n1) + 2); 
-# line 1326 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1322 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 69: {
       get_lexval();
@@ -1333,17 +1329,17 @@ int mon_entry ()
       default: ;
       }
       cexpr(&n);
-#line 421 "../lang/grammar.acc"
+#line 417 "../lang/grammar.acc"
  theMon->Terrains |= n; 
-# line 1339 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1335 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 542: {
             get_lexval();
             cexpr(&n);
-#line 422 "../lang/grammar.acc"
+#line 418 "../lang/grammar.acc"
  theMon->Terrains |= n; 
-# line 1347 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1343 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          default: goto yy9;
          }
@@ -1361,9 +1357,9 @@ int mon_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 423 "../lang/grammar.acc"
+#line 419 "../lang/grammar.acc"
  theMon->HitDice = (int16)n; 
-# line 1367 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1363 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 71: {
       get_lexval();
@@ -1375,10 +1371,10 @@ int mon_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 424 "../lang/grammar.acc"
+#line 420 "../lang/grammar.acc"
  theMon->HitDice = (int16)n; 
                                        theMon->SetFlag(M_FIXED_HP); 
-# line 1382 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1378 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 72: {
       switch (yyselect()) {
@@ -1396,15 +1392,15 @@ int mon_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 426 "../lang/grammar.acc"
+#line 422 "../lang/grammar.acc"
  theMon->Hit = (int8)n; 
-# line 1402 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1398 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 73: {
       glyph_entry(&img);
-#line 427 "../lang/grammar.acc"
+#line 423 "../lang/grammar.acc"
  theMon->Image = img; 
-# line 1408 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1404 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 74: {
       get_lexval();
@@ -1412,9 +1408,9 @@ int mon_entry ()
       cexpr3(&st);
       get_lexval();
       get_lexval();
-#line 429 "../lang/grammar.acc"
+#line 425 "../lang/grammar.acc"
  if (!theMon->GainStati((uint8)st)) yyerror("too many Stati in monster"); 
-# line 1418 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1414 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 75: {
       get_lexval();
@@ -1424,9 +1420,9 @@ int mon_entry ()
       cexpr3(&stV);
       get_lexval();
       get_lexval();
-#line 431 "../lang/grammar.acc"
+#line 427 "../lang/grammar.acc"
  if (!theMon->GainStati((uint8)st,(int16)stV)) yyerror("too many Stati in monster"); 
-# line 1430 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1426 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 76: {
       get_lexval();
@@ -1438,10 +1434,10 @@ int mon_entry ()
       cexpr3(&stM);
       get_lexval();
       get_lexval();
-#line 433 "../lang/grammar.acc"
+#line 429 "../lang/grammar.acc"
  if (!theMon->GainStati((uint8)st,(int16)stV,(int16)stM)) 
         yyerror("too many Stati in monster"); 
-# line 1445 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1441 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 77: {
       get_lexval();
@@ -1455,10 +1451,10 @@ int mon_entry ()
       res_ref(&rr);
       get_lexval();
       get_lexval();
-#line 436 "../lang/grammar.acc"
+#line 432 "../lang/grammar.acc"
  if (!theMon->GainStati((uint8)st,(int16)stV,(int16)stM,rr)) 
         yyerror("too many Stati in monster"); 
-# line 1462 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1458 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 78: {
       get_lexval();
@@ -1472,9 +1468,9 @@ int mon_entry ()
          switch (yyselect()) {
          case 549: {
             cexpr3(&res);
-#line 439 "../lang/grammar.acc"
+#line 435 "../lang/grammar.acc"
  theMon->Res |= res; 
-# line 1478 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1474 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 548: {
                get_lexval();
@@ -1500,9 +1496,9 @@ int mon_entry ()
          switch (yyselect()) {
          case 552: {
             cexpr3(&imm);
-#line 440 "../lang/grammar.acc"
+#line 436 "../lang/grammar.acc"
  theMon->Imm |= imm; 
-# line 1506 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1502 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 551: {
                get_lexval();
@@ -1542,24 +1538,24 @@ int mon_entry ()
       get_lexval();
       l = yylval;
       get_lexval();
-#line 442 "../lang/grammar.acc"
+#line 438 "../lang/grammar.acc"
  for(TMonster*m=firstMon;m!=theMon;m++)
                                          if(stricmp(theModule->GetText(l),theModule->GetText(m->Name))==0)
                                            { memcpy(theMon,m,sizeof(TMonster));
                                              goto DoneCopy; }
                                        Fatal("Monster '%s' not found!",theModule->GetText(l));
                                        DoneCopy:; 
-# line 1553 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1549 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 82: {
       get_lexval();
       cexpr3(&n);
       get_lexval();
-#line 448 "../lang/grammar.acc"
+#line 444 "../lang/grammar.acc"
  if (n > (theMon - firstMon) || n < 0)
                                          Fatal("Bad number in Monster:as!");
                                        memcpy(theMon,&(firstMon[n]),sizeof(TMonster)); 
-# line 1563 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1559 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 83: {
       get_lexval();
@@ -1571,9 +1567,9 @@ int mon_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 451 "../lang/grammar.acc"
+#line 447 "../lang/grammar.acc"
  theMon->Def = (int8)n; 
-# line 1577 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1573 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 84: {
       get_lexval();
@@ -1585,9 +1581,9 @@ int mon_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 452 "../lang/grammar.acc"
+#line 448 "../lang/grammar.acc"
  theMon->Arm = (int8)n; 
-# line 1591 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1587 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 85: {
       get_lexval();
@@ -1599,9 +1595,9 @@ int mon_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 453 "../lang/grammar.acc"
+#line 449 "../lang/grammar.acc"
  theMon->Mana = (int16)n; 
-# line 1605 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1601 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 86: {
       get_lexval();
@@ -1616,12 +1612,12 @@ int mon_entry ()
          case 559: {
             cexpr3(&n);
             get_lexval();
-#line 454 "../lang/grammar.acc"
+#line 450 "../lang/grammar.acc"
  theMon->Feats[CurrFeat++] = (uint16)n; 
     if (CurrFeat > 16) Fatal("Too many feats for '%s' (max 16)",
                                 theModule->QTextSeg + theMon->Name);
     
-# line 1625 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1621 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          default: goto yy13;
          }
@@ -1629,12 +1625,12 @@ int mon_entry ()
       yy13: ;
       cexpr3(&n);
       get_lexval();
-#line 458 "../lang/grammar.acc"
+#line 454 "../lang/grammar.acc"
  theMon->Feats[CurrFeat++] = (uint16)n; 
     if (CurrFeat > 16) Fatal("Too many feats for '%s' (max 16)",
                                 theModule->QTextSeg + theMon->Name);
     
-# line 1638 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1634 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 87: {
       get_lexval();
@@ -1679,9 +1675,9 @@ int mon_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 464 "../lang/grammar.acc"
+#line 460 "../lang/grammar.acc"
  theMon->Size = (int8)n; 
-# line 1685 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1681 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 90: {
       get_lexval();
@@ -1699,9 +1695,9 @@ int mon_entry ()
       default: ;
       }
       get_lexval();
-#line 465 "../lang/grammar.acc"
+#line 461 "../lang/grammar.acc"
  theMon->Spd = (int8)((n-100)/5); 
-# line 1705 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1701 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 91: {
       get_lexval();
@@ -1719,9 +1715,9 @@ int mon_entry ()
       default: ;
       }
       get_lexval();
-#line 466 "../lang/grammar.acc"
+#line 462 "../lang/grammar.acc"
  theMon->Mov = (int8)((n-100)/5); 
-# line 1725 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1721 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 92: {
       get_lexval();
@@ -1735,10 +1731,10 @@ int mon_entry ()
          switch (yyselect()) {
          case 570: {
             res_ref(&rr);
-#line 467 "../lang/grammar.acc"
+#line 463 "../lang/grammar.acc"
  theMon->SetFlag(M_INNATE);
                                        theMon->AddResID(AN_INNATE, rr); 
-# line 1742 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1738 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 569: {
                get_lexval();
@@ -1764,9 +1760,9 @@ int mon_entry ()
          switch (yyselect()) {
          case 573: {
             res_ref(&rr);
-#line 470 "../lang/grammar.acc"
+#line 466 "../lang/grammar.acc"
  theMon->AddResID(AN_DISEASE, rr); 
-# line 1770 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1766 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 572: {
                get_lexval();
@@ -1792,9 +1788,9 @@ int mon_entry ()
          switch (yyselect()) {
          case 576: {
             res_ref(&rr);
-#line 472 "../lang/grammar.acc"
+#line 468 "../lang/grammar.acc"
  theMon->AddResID(AN_POISON, rr); 
-# line 1798 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1794 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 575: {
                get_lexval();
@@ -1831,33 +1827,33 @@ int color (YYSTYPE *col)
    case 99: {
       get_lexval();
       n = yylval;
-#line 481 "../lang/grammar.acc"
+#line 477 "../lang/grammar.acc"
  *col = n; 
-# line 1837 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1833 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 100: {
       get_lexval();
       get_lexval();
       n = yylval;
-#line 482 "../lang/grammar.acc"
+#line 478 "../lang/grammar.acc"
  *col = n | 8; 
-# line 1845 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1841 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 101: {
       get_lexval();
       get_lexval();
       n = yylval;
-#line 483 "../lang/grammar.acc"
+#line 479 "../lang/grammar.acc"
  *col = n | 8; 
-# line 1853 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1849 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 102: {
       get_lexval();
       get_lexval();
       n = yylval;
-#line 484 "../lang/grammar.acc"
+#line 480 "../lang/grammar.acc"
  *col = n & ~8; 
-# line 1861 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1857 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -1876,34 +1872,34 @@ int attack_entry ()
    YYSTYPE dt;
    switch(yyselect()) {
    case 103: {
-#line 488 "../lang/grammar.acc"
+#line 484 "../lang/grammar.acc"
  uint8 dt = AD_NORM; dam.Set(0,0,0);
                                  theMon->Attk[CurrAttk].u.a.Dmg.Set(0,0,0); 
-# line 1883 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1879 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       cexpr3(&at);
       get_lexval();
       switch (yyselect()) {
       case 577: {
          dice_only(&dam);
-#line 491 "../lang/grammar.acc"
+#line 487 "../lang/grammar.acc"
  theMon->Attk[CurrAttk].u.a.Dmg = yyDice(dam); 
-# line 1891 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1887 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       case 578: {
          cexpr4(&chance);
          get_lexval();
-#line 492 "../lang/grammar.acc"
+#line 488 "../lang/grammar.acc"
  theMon->Attk[CurrAttk].u.a.Dmg.Bonus = (int8)chance; 
-# line 1898 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1894 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       default: ;
       }
       switch (yyselect()) {
       case 579: {
          cexpr4(&n);
-#line 493 "../lang/grammar.acc"
+#line 489 "../lang/grammar.acc"
  dt = (uint8)n; 
-# line 1907 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1903 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       default: ;
       }
@@ -1929,14 +1925,14 @@ int attack_entry ()
          default: printf("???\n"); exit(1);
          }
          cexpr3(&dc);
-#line 496 "../lang/grammar.acc"
+#line 492 "../lang/grammar.acc"
  theMon->Attk[CurrAttk].u.a.DC = (int8)dc; 
-# line 1935 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1931 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          get_lexval();
          } break;
       default: ;
       }
-#line 497 "../lang/grammar.acc"
+#line 493 "../lang/grammar.acc"
  theMon->Attk[CurrAttk].AType = (int8)at;
                                  theMon->Attk[CurrAttk].DType = dt;
                                  /*
@@ -1952,29 +1948,29 @@ int attack_entry ()
                                  if (CurrAttk >= 32)
                                    yyerror("> 32 attacks on a single monster!");
                                
-# line 1956 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1952 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 592: {
             get_lexval();
-#line 508 "../lang/grammar.acc"
+#line 504 "../lang/grammar.acc"
  dt = AD_NORM; dam2.Set(0,0,0); theMon->Attk[CurrAttk].u.a.Dmg.Set(0,0,0); 
-# line 1963 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1959 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 585: {
                dice_only(&dam2);
-#line 509 "../lang/grammar.acc"
+#line 505 "../lang/grammar.acc"
  theMon->Attk[CurrAttk].u.a.Dmg = yyDice(dam2); 
-# line 1969 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1965 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                } break;
             default: ;
             }
             switch (yyselect()) {
             case 586: {
                cexpr3(&n2);
-#line 510 "../lang/grammar.acc"
+#line 506 "../lang/grammar.acc"
  dt = (uint8)n2; 
-# line 1978 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 1974 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                } break;
             default: ;
             }
@@ -2000,21 +1996,21 @@ int attack_entry ()
                default: printf("???\n"); exit(1);
                }
                cexpr3(&dc);
-#line 512 "../lang/grammar.acc"
+#line 508 "../lang/grammar.acc"
  theMon->Attk[CurrAttk].u.a.DC = (int8)dc; 
-# line 2006 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2002 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                get_lexval();
                } break;
             default: ;
             }
-#line 513 "../lang/grammar.acc"
+#line 509 "../lang/grammar.acc"
  theMon->Attk[CurrAttk].AType = A_ALSO;
                                  theMon->Attk[CurrAttk].DType = dt;
                                  CurrAttk++;
                                  if (CurrAttk >= 12)
                                    Fatal("> 12 attacks on a single monster!");
                                
-# line 2018 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2014 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          default: goto yy19;
          }
@@ -2025,26 +2021,26 @@ int attack_entry ()
       cexpr3(&at);
       get_lexval();
       res_ref(&rr);
-#line 520 "../lang/grammar.acc"
+#line 516 "../lang/grammar.acc"
  theMon->Attk[CurrAttk].AType = (int8)at;
                                   theMon->Attk[CurrAttk].u.xID = rr; 
-# line 2032 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2028 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       switch (yyselect()) {
       case 593: {
          cexpr3(&dt);
-#line 522 "../lang/grammar.acc"
+#line 518 "../lang/grammar.acc"
  theMon->Attk[CurrAttk].DType = (int8)dt; 
-# line 2038 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2034 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       default: ;
       }
-#line 523 "../lang/grammar.acc"
+#line 519 "../lang/grammar.acc"
 
                                  CurrAttk++;
                                  if (CurrAttk >= 32)
                                    yyerror("> 32 attacks on a single monster!");
                                
-# line 2048 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2044 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -2062,9 +2058,9 @@ int mflag_entry ()
          } break;
       default: ;
       }
-#line 531 "../lang/grammar.acc"
+#line 527 "../lang/grammar.acc"
  theMon->SetFlag((uint16)mf); 
-# line 2068 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2064 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 106: {
       get_lexval();
@@ -2075,9 +2071,9 @@ int mflag_entry ()
          } break;
       default: ;
       }
-#line 532 "../lang/grammar.acc"
+#line 528 "../lang/grammar.acc"
  theMon->UnsetFlag((uint16)mf); 
-# line 2081 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2077 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -2098,9 +2094,9 @@ int attrib_entry ()
       default: ;
       }
       cexpr3(&v);
-#line 536 "../lang/grammar.acc"
+#line 532 "../lang/grammar.acc"
  theMon->Attr[at] = (int8)v; 
-# line 2104 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2100 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -2113,22 +2109,22 @@ int item_def ()
    switch(yyselect()) {
    case 108: {
       get_lexval();
-#line 540 "../lang/grammar.acc"
+#line 536 "../lang/grammar.acc"
  theRes = theItem; 
                                theItem->u.w.Crit = 2; 
                                theItem->u.w.Threat = 1; 
                                theItem->hp = 15; 
-# line 2122 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2118 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       get_lexval();
       name = yylval;
-#line 544 "../lang/grammar.acc"
+#line 540 "../lang/grammar.acc"
  theItem->Name = name; 
-# line 2127 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2123 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       get_lexval();
       cexpr3(&n);
-#line 545 "../lang/grammar.acc"
+#line 541 "../lang/grammar.acc"
  theItem->IType = (int16)n; 
-# line 2132 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2128 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -2140,9 +2136,9 @@ int item_def ()
       }
       yy20: ;
       get_lexval();
-#line 546 "../lang/grammar.acc"
+#line 542 "../lang/grammar.acc"
  theItem++; 
-# line 2146 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2142 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -2169,9 +2165,9 @@ int item_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 550 "../lang/grammar.acc"
+#line 546 "../lang/grammar.acc"
  theItem->Desc = lv; 
-# line 2175 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2171 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 110: {
       get_lexval();
@@ -2183,15 +2179,15 @@ int item_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 551 "../lang/grammar.acc"
+#line 547 "../lang/grammar.acc"
  theItem->Level = (int8)n; 
-# line 2189 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2185 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 111: {
       glyph_entry(&img);
-#line 552 "../lang/grammar.acc"
+#line 548 "../lang/grammar.acc"
  theItem->Image = img; 
-# line 2195 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2191 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 112: {
       get_lexval();
@@ -2203,9 +2199,9 @@ int item_entry ()
       }
       dice_val(&dv);
       get_lexval();
-#line 553 "../lang/grammar.acc"
+#line 549 "../lang/grammar.acc"
  theItem->u.w.SDmg = yyDice(dv); 
-# line 2209 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2205 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 113: {
       get_lexval();
@@ -2217,9 +2213,9 @@ int item_entry ()
       }
       dice_val(&dv);
       get_lexval();
-#line 554 "../lang/grammar.acc"
+#line 550 "../lang/grammar.acc"
  theItem->u.w.LDmg = yyDice(dv); 
-# line 2223 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2219 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 114: {
       get_lexval();
@@ -2231,9 +2227,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 555 "../lang/grammar.acc"
+#line 551 "../lang/grammar.acc"
  theItem->u.w.Crit = (int8)n; 
-# line 2237 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2233 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 115: {
       get_lexval();
@@ -2245,9 +2241,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 556 "../lang/grammar.acc"
+#line 552 "../lang/grammar.acc"
  theItem->u.w.Threat = (int8)n; 
-# line 2251 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2247 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 116: {
       get_lexval();
@@ -2259,9 +2255,9 @@ int item_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 557 "../lang/grammar.acc"
+#line 553 "../lang/grammar.acc"
  theItem->u.w.Acc = (int8)n; 
-# line 2265 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2261 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 117: {
       get_lexval();
@@ -2273,9 +2269,9 @@ int item_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 558 "../lang/grammar.acc"
+#line 554 "../lang/grammar.acc"
  theItem->u.w.Spd = (int8)n; 
-# line 2279 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2275 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 118: {
       get_lexval();
@@ -2288,9 +2284,9 @@ int item_entry ()
       cexpr4(&n);
       get_lexval();
       get_lexval();
-#line 559 "../lang/grammar.acc"
+#line 555 "../lang/grammar.acc"
  theItem->u.w.Spd = (int8)(n > 0 ? ((n-100)/5) : n/5); 
-# line 2294 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2290 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 119: {
       get_lexval();
@@ -2304,9 +2300,9 @@ int item_entry ()
       cexpr4(&n);
       get_lexval();
       get_lexval();
-#line 560 "../lang/grammar.acc"
+#line 556 "../lang/grammar.acc"
  theItem->u.w.Spd = (int8)(n/5); 
-# line 2310 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2306 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 120: {
       get_lexval();
@@ -2318,9 +2314,9 @@ int item_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 561 "../lang/grammar.acc"
+#line 557 "../lang/grammar.acc"
  theItem->u.w.ParryMod = (int8)n; 
-# line 2324 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2320 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 121: {
       get_lexval();
@@ -2332,9 +2328,9 @@ int item_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 562 "../lang/grammar.acc"
+#line 558 "../lang/grammar.acc"
  theItem->u.w.RangeInc = (int8)n; 
-# line 2338 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2334 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 122: {
       get_lexval();
@@ -2346,9 +2342,9 @@ int item_entry ()
       }
       cexpr3(&m);
       get_lexval();
-#line 563 "../lang/grammar.acc"
+#line 559 "../lang/grammar.acc"
  theItem->Material = (int8)m; 
-# line 2352 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2348 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 123: {
       get_lexval();
@@ -2359,13 +2355,13 @@ int item_entry ()
       default: ;
       }
       cexpr3(&n);
-#line 564 "../lang/grammar.acc"
+#line 560 "../lang/grammar.acc"
  theItem->Cost = n * 100; 
-# line 2365 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2361 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       switch (yyselect()) {
       case 612: {
          cexpr3(&unit);
-#line 565 "../lang/grammar.acc"
+#line 561 "../lang/grammar.acc"
  switch (unit)
                                          { case PLATINUM: theItem->Cost *= 5; break;
                                            case GOLD:     break;
@@ -2375,7 +2371,7 @@ int item_entry ()
                                            
                                          }
                                      
-# line 2379 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2375 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       default: ;
       }
@@ -2391,7 +2387,7 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 575 "../lang/grammar.acc"
+#line 571 "../lang/grammar.acc"
  theItem->Weight = (int16)n; 
     /* ww: according to the SRD, one inch (thickness) of iron has 30
 
@@ -2402,7 +2398,7 @@ int item_entry ()
      * points. */
                                theItem->hp = (uint16)((n * 30) / 80); 
                                if (theItem->hp < 1) theItem->hp = 1; 
-# line 2406 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2402 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 125: {
       get_lexval();
@@ -2414,9 +2410,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 582 "../lang/grammar.acc"
+#line 578 "../lang/grammar.acc"
  theItem->Size = (int8)n; 
-# line 2420 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2416 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 126: {
       get_lexval();
@@ -2428,9 +2424,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 583 "../lang/grammar.acc"
+#line 579 "../lang/grammar.acc"
  theItem->Nutrition = (int8)n; 
-# line 2434 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2430 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 127: {
       get_lexval();
@@ -2442,9 +2438,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 584 "../lang/grammar.acc"
+#line 580 "../lang/grammar.acc"
  theItem->u.a.Def = (int8)n; 
-# line 2448 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2444 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 128: {
       get_lexval();
@@ -2456,9 +2452,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 585 "../lang/grammar.acc"
+#line 581 "../lang/grammar.acc"
  theItem->u.a.Cov = (int8)n; 
-# line 2462 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2458 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 129: {
       get_lexval();
@@ -2470,9 +2466,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 586 "../lang/grammar.acc"
+#line 582 "../lang/grammar.acc"
  theItem->u.a.Penalty = (int8)n; 
-# line 2476 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2472 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 130: {
       get_lexval();
@@ -2503,9 +2499,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 588 "../lang/grammar.acc"
+#line 584 "../lang/grammar.acc"
  theItem->hp = (uint16)n; 
-# line 2509 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2505 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 132: {
       get_lexval();
@@ -2519,9 +2515,9 @@ int item_entry ()
          switch (yyselect()) {
          case 624: {
             res_ref(&rr);
-#line 589 "../lang/grammar.acc"
+#line 585 "../lang/grammar.acc"
  theItem->AddResID(AN_SPELLS, rr); 
-# line 2525 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2521 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 623: {
                get_lexval();
@@ -2547,9 +2543,9 @@ int item_entry ()
          switch (yyselect()) {
          case 627: {
             res_ref(&rr);
-#line 591 "../lang/grammar.acc"
+#line 587 "../lang/grammar.acc"
  theItem->AddResID(AN_FIRES, rr); 
-# line 2553 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2549 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 626: {
                get_lexval();
@@ -2603,9 +2599,9 @@ int item_entry ()
                } break;
             default: ;
             }
-#line 594 "../lang/grammar.acc"
+#line 590 "../lang/grammar.acc"
  theItem->Group |= n; 
-# line 2609 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2605 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          default: goto yy25;
          }
@@ -2623,9 +2619,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 595 "../lang/grammar.acc"
+#line 591 "../lang/grammar.acc"
  theItem->u.c.Capacity = (int8)n; 
-# line 2629 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2625 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 137: {
       get_lexval();
@@ -2637,9 +2633,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 596 "../lang/grammar.acc"
+#line 592 "../lang/grammar.acc"
  theItem->u.c.WeightLim = (int16)n; 
-# line 2643 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2639 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 138: {
       get_lexval();
@@ -2651,9 +2647,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 597 "../lang/grammar.acc"
+#line 593 "../lang/grammar.acc"
  theItem->u.c.WeightMod = (int8)n; 
-# line 2657 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2653 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 139: {
       get_lexval();
@@ -2665,9 +2661,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 598 "../lang/grammar.acc"
+#line 594 "../lang/grammar.acc"
  theItem->u.c.MaxSize = (int8)n; 
-# line 2671 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2667 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 140: {
       get_lexval();
@@ -2679,9 +2675,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 599 "../lang/grammar.acc"
+#line 595 "../lang/grammar.acc"
  theItem->u.c.Timeout = (int8)n; 
-# line 2685 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2681 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 141: {
       get_lexval();
@@ -2693,9 +2689,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 600 "../lang/grammar.acc"
+#line 596 "../lang/grammar.acc"
  theItem->u.c.CType = (int8)n; 
-# line 2699 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2695 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 142: {
       get_lexval();
@@ -2708,9 +2704,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 601 "../lang/grammar.acc"
+#line 597 "../lang/grammar.acc"
  theItem->u.l.LightRange = (int8)n; 
-# line 2714 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2710 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 143: {
       get_lexval();
@@ -2722,9 +2718,9 @@ int item_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 602 "../lang/grammar.acc"
+#line 598 "../lang/grammar.acc"
  theItem->u.l.Lifespan = (int16)n; 
-# line 2728 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2724 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 144: {
       get_lexval();
@@ -2736,9 +2732,9 @@ int item_entry ()
       }
       res_ref(&rr);
       get_lexval();
-#line 603 "../lang/grammar.acc"
+#line 599 "../lang/grammar.acc"
  theItem->u.l.Fuel = rr; 
-# line 2742 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2738 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 145: {
       dconst_entry();
@@ -2766,12 +2762,12 @@ int arm_entry ()
          } break;
       default: ;
       }
-#line 610 "../lang/grammar.acc"
+#line 606 "../lang/grammar.acc"
  if (theItem->u.a.Arm[0] == 0) theItem->u.a.Arm[0] = (int8)n;
                             if (theItem->u.a.Arm[1] == 0) theItem->u.a.Arm[1] = (int8)n;
                             if (theItem->u.a.Arm[2] == 0) theItem->u.a.Arm[2] = (int8)n;
                          
-# line 2775 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2771 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 149: {
       get_lexval();
@@ -2783,9 +2779,9 @@ int arm_entry ()
          } break;
       default: ;
       }
-#line 614 "../lang/grammar.acc"
+#line 610 "../lang/grammar.acc"
  theItem->u.a.Arm[wt] = (int8)n; 
-# line 2789 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2785 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -2803,9 +2799,9 @@ int iflag_entry ()
          } break;
       default: ;
       }
-#line 618 "../lang/grammar.acc"
+#line 614 "../lang/grammar.acc"
  theItem->SetFlag((uint16)itf); 
-# line 2809 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2805 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 151: {
       get_lexval();
@@ -2816,9 +2812,9 @@ int iflag_entry ()
          } break;
       default: ;
       }
-#line 619 "../lang/grammar.acc"
+#line 615 "../lang/grammar.acc"
  theItem->UnsetFlag((uint16)itf); 
-# line 2822 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2818 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -2833,14 +2829,14 @@ int feature_def ()
       get_lexval();
       get_lexval();
       name = yylval;
-#line 625 "../lang/grammar.acc"
+#line 621 "../lang/grammar.acc"
  theRes = theFeat; theFeat->Name = name; theRes = theFeat; 
-# line 2839 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2835 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       get_lexval();
       cexpr3(&n);
-#line 626 "../lang/grammar.acc"
+#line 622 "../lang/grammar.acc"
  theFeat->FType = (uint8)n; 
-# line 2844 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2840 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -2852,9 +2848,9 @@ int feature_def ()
       }
       yy26: ;
       get_lexval();
-#line 627 "../lang/grammar.acc"
+#line 623 "../lang/grammar.acc"
  theFeat++; 
-# line 2858 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2854 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -2881,9 +2877,9 @@ int feat_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 631 "../lang/grammar.acc"
+#line 627 "../lang/grammar.acc"
  theFeat->Desc = lv; 
-# line 2887 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2883 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 154: {
       get_lexval();
@@ -2895,15 +2891,15 @@ int feat_entry ()
       }
       cexpr3(&m);
       get_lexval();
-#line 632 "../lang/grammar.acc"
+#line 628 "../lang/grammar.acc"
  theFeat->Material = (int8)m; 
-# line 2901 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2897 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 155: {
       glyph_entry(&img);
-#line 633 "../lang/grammar.acc"
+#line 629 "../lang/grammar.acc"
  theFeat->Image = img; 
-# line 2907 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2903 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 156: {
       get_lexval();
@@ -2916,9 +2912,9 @@ int feat_entry ()
       cexpr3(&mov);
       get_lexval();
       get_lexval();
-#line 634 "../lang/grammar.acc"
+#line 630 "../lang/grammar.acc"
  theFeat->MoveMod = (int8)((mov-100)/5); 
-# line 2922 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2918 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 157: {
       get_lexval();
@@ -2930,9 +2926,9 @@ int feat_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 635 "../lang/grammar.acc"
+#line 631 "../lang/grammar.acc"
  theFeat->hp = (uint16)n; 
-# line 2936 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2932 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 158: {
       get_lexval();
@@ -2955,9 +2951,9 @@ int feat_entry ()
                } break;
             default: ;
             }
-#line 636 "../lang/grammar.acc"
+#line 632 "../lang/grammar.acc"
  theFeat->Flags |= n; 
-# line 2961 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2957 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          default: goto yy27;
          }
@@ -2983,9 +2979,9 @@ int feat_entry ()
       }
       res_ref(&rr);
       get_lexval();
-#line 637 "../lang/grammar.acc"
+#line 633 "../lang/grammar.acc"
  theFeat->xID = rr; 
-# line 2989 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2985 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 160: {
       get_lexval();
@@ -2997,9 +2993,9 @@ int feat_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 638 "../lang/grammar.acc"
+#line 634 "../lang/grammar.acc"
  theFeat->xval = (int16)n; 
-# line 3003 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 2999 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 161: {
       get_lexval();
@@ -3011,9 +3007,9 @@ int feat_entry ()
       }
       dice_val(&d);
       get_lexval();
-#line 639 "../lang/grammar.acc"
+#line 635 "../lang/grammar.acc"
  theFeat->Factor = d; 
-# line 3017 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3013 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 162: {
       event_desc();
@@ -3034,14 +3030,14 @@ int effect_def ()
    YYSTYPE name;
    switch(yyselect()) {
    case 165: {
-#line 645 "../lang/grammar.acc"
+#line 641 "../lang/grammar.acc"
  theRes = theEff; theEff->ef.sval = NOSAVE; 
-# line 3040 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3036 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 662: {
             cexpr3(&n);
-#line 646 "../lang/grammar.acc"
+#line 642 "../lang/grammar.acc"
  if (theEff->Sources[2])
                                         theEff->Sources[3] = (int8)n;
                                       else if (theEff->Sources[1])
@@ -3050,7 +3046,7 @@ int effect_def ()
                                         theEff->Sources[1] = (int8)n; 
                                       else
                                         theEff->Sources[0] = (int8)n; 
-# line 3054 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3050 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 661: {
                get_lexval();
@@ -3071,29 +3067,29 @@ int effect_def ()
          } break;
       case 665: {
          get_lexval();
-#line 656 "../lang/grammar.acc"
+#line 652 "../lang/grammar.acc"
  theEff->ef.aval = AR_POISON; 
-# line 3077 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3073 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       case 666: {
          get_lexval();
-#line 657 "../lang/grammar.acc"
+#line 653 "../lang/grammar.acc"
  theEff->ef.aval = AR_DISEASE; 
-# line 3083 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3079 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       default: printf("???\n"); exit(1);
       }
       get_lexval();
       name = yylval;
-#line 658 "../lang/grammar.acc"
+#line 654 "../lang/grammar.acc"
  theEff->Name = name; 
-# line 3091 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3087 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       get_lexval();
       cexpr3(&n);
-#line 659 "../lang/grammar.acc"
+#line 655 "../lang/grammar.acc"
  theValsIdx = 0; 
                                       theEff->ef.eval = (int8)n; 
-# line 3097 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3093 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -3110,7 +3106,7 @@ int effect_def ()
          case 669: {
             get_lexval();
             cexpr3(&n);
-#line 662 "../lang/grammar.acc"
+#line 658 "../lang/grammar.acc"
   Annotation *a; EffectValues tmp; int32 t;
                                ESTABLISH_VALS
 							                 memcpy(&tmp,theVals,sizeof(EffectValues));
@@ -3131,7 +3127,7 @@ int effect_def ()
                                memcpy(&(a->u.ef),&tmp,sizeof(EffectValues));
                                a->u.ef.eval = (int8)n;
                              
-# line 3135 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3131 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             get_lexval();
             while (1) {
                switch (yyselect()) {
@@ -3148,9 +3144,9 @@ int effect_def ()
          }
       }
       yy30: ;
-#line 684 "../lang/grammar.acc"
+#line 680 "../lang/grammar.acc"
  theEff++; 
-# line 3154 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3150 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -3177,16 +3173,16 @@ int eff_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 688 "../lang/grammar.acc"
+#line 684 "../lang/grammar.acc"
  theEff->Desc = lv; 
-# line 3183 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3179 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 167: {
       cexpr(&sc);
       get_lexval();
-#line 689 "../lang/grammar.acc"
+#line 685 "../lang/grammar.acc"
  theEff->Schools |= sc; 
-# line 3190 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3186 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 168: {
       get_lexval();
@@ -3198,9 +3194,9 @@ int eff_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 690 "../lang/grammar.acc"
+#line 686 "../lang/grammar.acc"
  theEff->Level = (int8)n; 
-# line 3204 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3200 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 169: {
       get_lexval();
@@ -3212,9 +3208,9 @@ int eff_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 691 "../lang/grammar.acc"
+#line 687 "../lang/grammar.acc"
  theEff->ManaCost = (uint8)n; 
-# line 3218 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3214 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 170: {
       get_lexval();
@@ -3238,9 +3234,9 @@ int eff_entry ()
       default: ;
       }
       get_lexval();
-#line 692 "../lang/grammar.acc"
+#line 688 "../lang/grammar.acc"
  theEff->BaseChance = (uint8)n; 
-# line 3244 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3240 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 171: {
       get_lexval();
@@ -3251,17 +3247,17 @@ int eff_entry ()
       default: ;
       }
       cexpr(&n);
-#line 693 "../lang/grammar.acc"
+#line 689 "../lang/grammar.acc"
  theEff->Purpose = n; 
-# line 3257 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3253 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       switch (yyselect()) {
       case 677: {
          get_lexval();
          cexpr(&n2);
          get_lexval();
-#line 694 "../lang/grammar.acc"
+#line 690 "../lang/grammar.acc"
  theEff->Purpose |= n2<<16; 
-# line 3265 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3261 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       default: ;
       }
@@ -3279,16 +3275,16 @@ int eff_entry ()
       switch (yyselect()) {
       case 679: {
          get_lexval();
-#line 695 "../lang/grammar.acc"
+#line 691 "../lang/grammar.acc"
  theEff->SetFlag(EF_PARTIAL); 
-# line 3285 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3281 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       default: ;
       }
       get_lexval();
-#line 696 "../lang/grammar.acc"
+#line 692 "../lang/grammar.acc"
  ESTABLISH_VALS; theVals->sval = (int8)sv; 
-# line 3292 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3288 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 173: {
       get_lexval();
@@ -3300,9 +3296,9 @@ int eff_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 697 "../lang/grammar.acc"
+#line 693 "../lang/grammar.acc"
  ESTABLISH_VALS; theVals->qval = (int8)n; 
-# line 3306 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3302 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 174: {
       get_lexval();
@@ -3314,9 +3310,9 @@ int eff_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 698 "../lang/grammar.acc"
+#line 694 "../lang/grammar.acc"
  ESTABLISH_VALS; theVals->xval = (uint8)n; 
-# line 3320 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3316 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 175: {
       get_lexval();
@@ -3328,9 +3324,9 @@ int eff_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 699 "../lang/grammar.acc"
+#line 695 "../lang/grammar.acc"
  ESTABLISH_VALS; theVals->yval = (int16)n; 
-# line 3334 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3330 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 176: {
       get_lexval();
@@ -3342,9 +3338,9 @@ int eff_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 700 "../lang/grammar.acc"
+#line 696 "../lang/grammar.acc"
  ESTABLISH_VALS; theVals->dval = (int8)n; 
-# line 3348 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3344 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 177: {
       get_lexval();
@@ -3356,9 +3352,9 @@ int eff_entry ()
       }
       dice_val(&d);
       get_lexval();
-#line 701 "../lang/grammar.acc"
+#line 697 "../lang/grammar.acc"
  ESTABLISH_VALS; theVals->pval = d; 
-# line 3362 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3358 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 178: {
       get_lexval();
@@ -3370,9 +3366,9 @@ int eff_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 702 "../lang/grammar.acc"
+#line 698 "../lang/grammar.acc"
  ESTABLISH_VALS; theVals->aval = (int8)n; 
-# line 3376 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3372 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 179: {
       get_lexval();
@@ -3384,9 +3380,9 @@ int eff_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 703 "../lang/grammar.acc"
+#line 699 "../lang/grammar.acc"
  ESTABLISH_VALS; theVals->lval = (int8)n; 
-# line 3390 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3386 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 180: {
       get_lexval();
@@ -3398,9 +3394,9 @@ int eff_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 704 "../lang/grammar.acc"
+#line 700 "../lang/grammar.acc"
  ESTABLISH_VALS; theVals->tval = (int8)n; 
-# line 3404 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3400 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 181: {
       get_lexval();
@@ -3412,9 +3408,9 @@ int eff_entry ()
       }
       res_ref(&rr);
       get_lexval();
-#line 705 "../lang/grammar.acc"
+#line 701 "../lang/grammar.acc"
  ESTABLISH_VALS; theVals->rval = rr; 
-# line 3418 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3414 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 182: {
       get_lexval();
@@ -3426,9 +3422,9 @@ int eff_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 706 "../lang/grammar.acc"
+#line 702 "../lang/grammar.acc"
  ESTABLISH_VALS; theVals->rval = n; 
-# line 3432 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3428 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 183: {
       get_lexval();
@@ -3440,9 +3436,9 @@ int eff_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 707 "../lang/grammar.acc"
+#line 703 "../lang/grammar.acc"
  ESTABLISH_VALS; theVals->cval = (int8)n; 
-# line 3446 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3442 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 184: {
       get_lexval();
@@ -3455,9 +3451,9 @@ int eff_entry ()
       get_lexval();
       n = yylval;
       get_lexval();
-#line 708 "../lang/grammar.acc"
+#line 704 "../lang/grammar.acc"
  ESTABLISH_VALS; theVals->cval = (int8)n; 
-# line 3461 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3457 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 185: {
       get_lexval();
@@ -3471,9 +3467,9 @@ int eff_entry ()
          switch (yyselect()) {
          case 695: {
             cexpr3(&n);
-#line 709 "../lang/grammar.acc"
+#line 705 "../lang/grammar.acc"
  theEff->SetFlag((uint16)n); 
-# line 3477 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3473 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 693: {
                get_lexval();
@@ -3508,16 +3504,16 @@ int numlist (YYSTYPE *val)
    YYSTYPE n;
    switch(yyselect()) {
    case 189: {
-#line 716 "../lang/grammar.acc"
+#line 712 "../lang/grammar.acc"
  *val = 0; 
-# line 3514 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3510 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 698: {
             cexpr3(&n);
-#line 717 "../lang/grammar.acc"
+#line 713 "../lang/grammar.acc"
  *val |= n; 
-# line 3521 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3517 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 696: {
                get_lexval();
@@ -3556,20 +3552,20 @@ int race_def ()
       get_lexval();
       get_lexval();
       name = yylval;
-#line 726 "../lang/grammar.acc"
+#line 722 "../lang/grammar.acc"
  theRes = theRace; theRace->Name = name;
                                     theRace->BaseRace = 0; 
-# line 3563 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3559 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       switch (yyselect()) {
       case 699: {
          get_lexval();
          res_ref(&base);
-#line 728 "../lang/grammar.acc"
+#line 724 "../lang/grammar.acc"
  TRace tr; 
                                     theRace->BaseRace = base;                                        
                                     if (TRACE(base) > theRace)
                                       Fatal("Subrace definition before def of base race!"); 
-# line 3573 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3569 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       default: ;
       }
@@ -3584,9 +3580,9 @@ int race_def ()
       }
       yy34: ;
       get_lexval();
-#line 733 "../lang/grammar.acc"
+#line 729 "../lang/grammar.acc"
  theRace++; 
-# line 3590 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3586 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -3619,9 +3615,9 @@ int race_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 737 "../lang/grammar.acc"
+#line 733 "../lang/grammar.acc"
  theRace->Desc = lv; 
-# line 3625 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3621 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 193: {
       while (1) {
@@ -3636,9 +3632,9 @@ int race_entry ()
             default: ;
             }
             cexpr(&v);
-#line 738 "../lang/grammar.acc"
+#line 734 "../lang/grammar.acc"
  theRace->AttrAdj[at] = (int8)v; 
-# line 3642 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3638 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 703: {
                get_lexval();
@@ -3670,9 +3666,9 @@ int race_entry ()
                } break;
             default: ;
             }
-#line 741 "../lang/grammar.acc"
+#line 737 "../lang/grammar.acc"
  theRace->AddAbility((int8)AbT,(int16)Abil,p,(int8)l1,(int8)l2); 
-# line 3676 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3672 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          default: goto yy36;
          }
@@ -3690,9 +3686,9 @@ int race_entry ()
       }
       res_ref(&rr);
       get_lexval();
-#line 742 "../lang/grammar.acc"
+#line 738 "../lang/grammar.acc"
  theRace->mID = rr; 
-# line 3696 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3692 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 196: {
       get_lexval();
@@ -3712,10 +3708,10 @@ int race_entry ()
       get_lexval();
       res_ref(&rr2);
       get_lexval();
-#line 744 "../lang/grammar.acc"
+#line 740 "../lang/grammar.acc"
  theRace->FavouredClass[0] = rr;
                                   theRace->FavouredClass[1] = rr2; 
-# line 3719 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3715 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 197: {
       get_lexval();
@@ -3737,11 +3733,11 @@ int race_entry ()
       get_lexval();
       res_ref(&rr3);
       get_lexval();
-#line 747 "../lang/grammar.acc"
+#line 743 "../lang/grammar.acc"
  theRace->FavouredClass[0] = rr;
                                   theRace->FavouredClass[1] = rr2; 
                                   theRace->FavouredClass[2] = rr3; 
-# line 3745 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3741 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 198: {
       get_lexval();
@@ -3751,16 +3747,16 @@ int race_entry ()
          } break;
       default: ;
       }
-#line 750 "../lang/grammar.acc"
+#line 746 "../lang/grammar.acc"
 int8 skn = 0;
-# line 3757 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3753 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 715: {
             cexpr3(&sk);
-#line 751 "../lang/grammar.acc"
+#line 747 "../lang/grammar.acc"
  theRace->Skills[skn++] = (int8)sk; 
-# line 3764 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3760 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 714: {
                get_lexval();
@@ -3785,14 +3781,14 @@ int8 skn = 0;
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 752 "../lang/grammar.acc"
+#line 748 "../lang/grammar.acc"
  switch(n) {
                                          case MALE_NAMES  : theRace-> MNames = lv; break;
                                          case FEMALE_NAMES: theRace-> FNames = lv; break;
                                          case FAMILY_NAMES: theRace-> SNames = lv; break;
                                          default: yyerror("Illegal name const in race!");
                                          } 
-# line 3796 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3792 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 200: {
       get_lexval();
@@ -3815,9 +3811,9 @@ int8 skn = 0;
                } break;
             default: ;
             }
-#line 758 "../lang/grammar.acc"
+#line 754 "../lang/grammar.acc"
  theRace->SetFlag((uint16)n); 
-# line 3821 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3817 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          default: goto yy38;
          }
@@ -3849,9 +3845,9 @@ int class_def ()
       get_lexval();
       get_lexval();
       name = yylval;
-#line 766 "../lang/grammar.acc"
+#line 762 "../lang/grammar.acc"
  theRes = theClass; theClass->Name = name; 
-# line 3855 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3851 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -3863,9 +3859,9 @@ int class_def ()
       }
       yy39: ;
       get_lexval();
-#line 767 "../lang/grammar.acc"
+#line 763 "../lang/grammar.acc"
  theClass++; 
-# line 3869 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3865 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -3898,9 +3894,9 @@ int class_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 771 "../lang/grammar.acc"
+#line 767 "../lang/grammar.acc"
  theClass->Desc = lv; 
-# line 3904 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3900 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 207: {
       get_lexval();
@@ -3918,9 +3914,9 @@ int class_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 772 "../lang/grammar.acc"
+#line 768 "../lang/grammar.acc"
  theClass->HitDie = (uint8)n; 
-# line 3924 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3920 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 208: {
       get_lexval();
@@ -3938,9 +3934,9 @@ int class_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 773 "../lang/grammar.acc"
+#line 769 "../lang/grammar.acc"
  theClass->ManaDie = (uint8)n; 
-# line 3944 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3940 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 209: {
       get_lexval();
@@ -3954,10 +3950,10 @@ int class_entry ()
       get_lexval();
       cexpr3(&n);
       get_lexval();
-#line 774 "../lang/grammar.acc"
+#line 770 "../lang/grammar.acc"
  theClass->DefMod = (uint8)n;
                                              if (x != 1) yyerror("class defense mod must by 1 per N."); 
-# line 3961 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3957 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 210: {
       get_lexval();
@@ -3972,9 +3968,9 @@ int class_entry ()
          case 730: {
             cexpr3(&typ);
             cexpr3(&l);
-#line 777 "../lang/grammar.acc"
+#line 773 "../lang/grammar.acc"
  theClass->AttkVal[typ] = (uint8)l; 
-# line 3978 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 3974 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 729: {
                get_lexval();
@@ -4001,9 +3997,9 @@ int class_entry ()
          case 733: {
             cexpr3(&typ);
             cexpr3(&l);
-#line 779 "../lang/grammar.acc"
+#line 775 "../lang/grammar.acc"
  theClass->Saves[typ] = (uint8)l; 
-# line 4007 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4003 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 732: {
                get_lexval();
@@ -4035,9 +4031,9 @@ int class_entry ()
                } break;
             default: ;
             }
-#line 781 "../lang/grammar.acc"
+#line 777 "../lang/grammar.acc"
  theClass->AddAbility((int8)AbT,(int16)Abil,p,(int8)l1,(int8)l2); 
-# line 4041 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4037 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          default: goto yy42;
          }
@@ -4060,9 +4056,9 @@ int class_entry ()
          } break;
       default: printf("???\n"); exit(1);
       }
-#line 782 "../lang/grammar.acc"
+#line 778 "../lang/grammar.acc"
  theClass->SkillPoints = (uint8)sp; int8 skn = 0; 
-# line 4066 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4062 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       switch (yyselect()) {
       case 739: {
          get_lexval();
@@ -4073,9 +4069,9 @@ int class_entry ()
          switch (yyselect()) {
          case 741: {
             cexpr3(&sk);
-#line 783 "../lang/grammar.acc"
+#line 779 "../lang/grammar.acc"
  theClass->Skills[skn++] = (uint8)sk; 
-# line 4079 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4075 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 740: {
                get_lexval();
@@ -4101,9 +4097,9 @@ int class_entry ()
          switch (yyselect()) {
          case 744: {
             cexpr3(&pr);
-#line 785 "../lang/grammar.acc"
+#line 781 "../lang/grammar.acc"
  theClass->Proficiencies |= pr; 
-# line 4107 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4103 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 743: {
                get_lexval();
@@ -4138,9 +4134,9 @@ int class_entry ()
                } break;
             default: ;
             }
-#line 786 "../lang/grammar.acc"
+#line 782 "../lang/grammar.acc"
  theClass->SetFlag((uint16)n); 
-# line 4144 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4140 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          default: goto yy45;
          }
@@ -4174,18 +4170,64 @@ int special_ability (YYSTYPE *AbT, YYSTYPE *Abil, YYSTYPE *p, YYSTYPE *l1, YYSTY
    YYSTYPE ft;
    switch(yyselect()) {
    case 220: {
-#line 794 "../lang/grammar.acc"
+#line 790 "../lang/grammar.acc"
  *p = 0; 
-# line 4180 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4176 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       get_lexval();
       get_lexval();
       cexpr3(&ca);
       switch (yyselect()) {
       case 749: {
          abil_param(&xp);
+#line 790 "../lang/grammar.acc"
+ *p = xp; 
+# line 4185 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+         } break;
+      default: ;
+      }
+      get_lexval();
+      get_lexval();
+      abil_level(&xl1, &xl2);
+#line 791 "../lang/grammar.acc"
+ *AbT = AB_ABILITY; *Abil = ca; *l1 =xl1; *l2 = xl2; 
+# line 4194 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+      } break;
+   case 221: {
+#line 792 "../lang/grammar.acc"
+ *p = 0; 
+# line 4199 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+      get_lexval();
+      get_lexval();
+      cexpr3(&st);
+      switch (yyselect()) {
+      case 750: {
+         abil_param(&xp);
+#line 792 "../lang/grammar.acc"
+ *p = xp; 
+# line 4208 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+         } break;
+      default: ;
+      }
+      get_lexval();
+      get_lexval();
+      abil_level(&xl1, &xl2);
+#line 793 "../lang/grammar.acc"
+ *AbT = AB_STATI;   *Abil = st; *l1 = xl1; *l2 = xl2; 
+# line 4217 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+      } break;
+   case 222: {
+#line 794 "../lang/grammar.acc"
+ *p = 0; 
+# line 4222 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+      get_lexval();
+      get_lexval();
+      cexpr3(&ft);
+      switch (yyselect()) {
+      case 751: {
+         abil_param(&xp);
 #line 794 "../lang/grammar.acc"
  *p = xp; 
-# line 4189 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4231 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       default: ;
       }
@@ -4193,54 +4235,8 @@ int special_ability (YYSTYPE *AbT, YYSTYPE *Abil, YYSTYPE *p, YYSTYPE *l1, YYSTY
       get_lexval();
       abil_level(&xl1, &xl2);
 #line 795 "../lang/grammar.acc"
- *AbT = AB_ABILITY; *Abil = ca; *l1 =xl1; *l2 = xl2; 
-# line 4198 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
-      } break;
-   case 221: {
-#line 796 "../lang/grammar.acc"
- *p = 0; 
-# line 4203 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
-      get_lexval();
-      get_lexval();
-      cexpr3(&st);
-      switch (yyselect()) {
-      case 750: {
-         abil_param(&xp);
-#line 796 "../lang/grammar.acc"
- *p = xp; 
-# line 4212 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
-         } break;
-      default: ;
-      }
-      get_lexval();
-      get_lexval();
-      abil_level(&xl1, &xl2);
-#line 797 "../lang/grammar.acc"
- *AbT = AB_STATI;   *Abil = st; *l1 = xl1; *l2 = xl2; 
-# line 4221 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
-      } break;
-   case 222: {
-#line 798 "../lang/grammar.acc"
- *p = 0; 
-# line 4226 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
-      get_lexval();
-      get_lexval();
-      cexpr3(&ft);
-      switch (yyselect()) {
-      case 751: {
-         abil_param(&xp);
-#line 798 "../lang/grammar.acc"
- *p = xp; 
-# line 4235 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
-         } break;
-      default: ;
-      }
-      get_lexval();
-      get_lexval();
-      abil_level(&xl1, &xl2);
-#line 799 "../lang/grammar.acc"
  *AbT = AB_FEAT;    *Abil = ft; *l1 = xl1; *l2 = xl2; 
-# line 4244 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4240 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -4255,25 +4251,25 @@ int abil_param (YYSTYPE *p)
    case 223: {
       get_lexval();
       cexpr3(&pa);
-#line 803 "../lang/grammar.acc"
+#line 799 "../lang/grammar.acc"
  *p = pa; 
-# line 4261 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4257 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 224: {
       get_lexval();
       res_ref(&rr);
-#line 804 "../lang/grammar.acc"
+#line 800 "../lang/grammar.acc"
  *p = rr; 
-# line 4268 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4264 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 225: {
       get_lexval();
       cexpr3(&pa);
       get_lexval();
       cexpr3(&pa2);
-#line 805 "../lang/grammar.acc"
+#line 801 "../lang/grammar.acc"
  *p = pa | (pa2 << 16); 
-# line 4277 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4273 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -4292,24 +4288,24 @@ int abil_level (YYSTYPE *l1, YYSTYPE *l2)
          } break;
       default: ;
       }
-#line 810 "../lang/grammar.acc"
+#line 806 "../lang/grammar.acc"
  *l1 = xl1; *l2 = 0; 
-# line 4298 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4294 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 227: {
       get_lexval();
       cexpr3(&xl2);
       get_lexval();
-#line 812 "../lang/grammar.acc"
+#line 808 "../lang/grammar.acc"
  *l1 = 1;  *l2 = xl2; 
-# line 4306 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4302 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 228: {
       get_lexval();
       get_lexval();
-#line 814 "../lang/grammar.acc"
+#line 810 "../lang/grammar.acc"
  *l1 = 1;  *l2 = 1; 
-# line 4313 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4309 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 229: {
       get_lexval();
@@ -4323,9 +4319,9 @@ int abil_level (YYSTYPE *l1, YYSTYPE *l2)
          } break;
       default: ;
       }
-#line 816 "../lang/grammar.acc"
+#line 812 "../lang/grammar.acc"
  *l1 = xl1; *l2 = 1; 
-# line 4329 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4325 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 230: {
       get_lexval();
@@ -4340,9 +4336,9 @@ int abil_level (YYSTYPE *l1, YYSTYPE *l2)
          } break;
       default: ;
       }
-#line 818 "../lang/grammar.acc"
+#line 814 "../lang/grammar.acc"
  *l1 = xl1; *l2 = xl2; 
-# line 4346 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4342 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -4356,9 +4352,9 @@ int dungeon_def ()
       get_lexval();
       get_lexval();
       name = yylval;
-#line 822 "../lang/grammar.acc"
+#line 818 "../lang/grammar.acc"
  theRes = theDgn; theDgn->Name = name; 
-# line 4362 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4358 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -4370,9 +4366,9 @@ int dungeon_def ()
       }
       yy46: ;
       get_lexval();
-#line 823 "../lang/grammar.acc"
+#line 819 "../lang/grammar.acc"
  theDgn++; 
-# line 4376 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4372 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -4393,9 +4389,9 @@ int dun_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 827 "../lang/grammar.acc"
+#line 823 "../lang/grammar.acc"
  theDgn->Desc = lv; 
-# line 4399 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4395 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 233: {
       dconst_entry();
@@ -4433,9 +4429,9 @@ int dconst_entry ()
             get_lexval();
             cexpr3(&con);
             cexpr3(&val);
-#line 835 "../lang/grammar.acc"
+#line 831 "../lang/grammar.acc"
  theRes->AddConstant((int8)con,val); 
-# line 4439 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4435 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 758: {
                get_lexval();
@@ -4447,9 +4443,9 @@ int dconst_entry ()
             get_lexval();
             cexpr3(&con);
             res_ref(&rr);
-#line 836 "../lang/grammar.acc"
+#line 832 "../lang/grammar.acc"
  theRes->AddConstant((int8)con,rr); 
-# line 4453 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4449 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 760: {
                get_lexval();
@@ -4476,9 +4472,9 @@ int dconst_entry ()
          case 766: {
             get_lexval();
             cexpr4(&lis);
-#line 839 "../lang/grammar.acc"
+#line 835 "../lang/grammar.acc"
  TempListLoc = 0; 
-# line 4482 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4478 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             while (1) {
                switch (yyselect()) {
                case 763: {
@@ -4497,13 +4493,13 @@ int dconst_entry ()
                } break;
             default: printf("???\n"); exit(1);
             }
-#line 840 "../lang/grammar.acc"
+#line 836 "../lang/grammar.acc"
  TempList[TempListLoc++] = 0;
         TempList[TempListLoc++] = 0;
         TempList[TempListLoc++] = 0;
         ASSERT(TempListLoc < 1023);
         theRes->AddList((int8)lis,TempList); 
-# line 4507 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4503 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          default: goto yy48;
          }
@@ -4521,17 +4517,17 @@ int dconst_entry ()
       while (1) {
          switch (yyselect()) {
          case 773: {
-#line 847 "../lang/grammar.acc"
+#line 843 "../lang/grammar.acc"
  int16 Chance = 100; 
-# line 4527 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4523 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             get_lexval();
             switch (yyselect()) {
             case 768: {
                cexpr4(&n);
                get_lexval();
-#line 847 "../lang/grammar.acc"
+#line 843 "../lang/grammar.acc"
  Chance = (int16)n; 
-# line 4535 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4531 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                } break;
             default: ;
             }
@@ -4541,27 +4537,27 @@ int dconst_entry ()
                get_lexval();
                get_lexval();
                cexpr3(&n);
-#line 848 "../lang/grammar.acc"
+#line 844 "../lang/grammar.acc"
  theRes->AddSpecial(rr,Chance,(int16)n); 
-# line 4547 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4543 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                } break;
             case 770: {
                res_ref(&rr);
                get_lexval();
                cexpr3(&n);
                get_lexval();
-#line 849 "../lang/grammar.acc"
+#line 845 "../lang/grammar.acc"
  theRes->AddSpecial(rr,Chance,(int16)n); 
-# line 4556 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4552 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                } break;
             case 771: {
                res_ref(&rr);
                get_lexval();
                get_lexval();
                dice_only(&dv);
-#line 850 "../lang/grammar.acc"
+#line 846 "../lang/grammar.acc"
  theRes->AddSpecial(rr,Chance,yyDice(dv)); 
-# line 4565 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4561 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                } break;
             default: printf("???\n"); exit(1);
             }
@@ -4590,22 +4586,22 @@ int list_entry ()
    switch(yyselect()) {
    case 239: {
       res_ref(&rr);
-#line 855 "../lang/grammar.acc"
+#line 851 "../lang/grammar.acc"
  TempList[TempListLoc++] = rr; ASSERT(TempListLoc < 1023); 
-# line 4596 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4592 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 240: {
       cexpr4(&n);
-#line 856 "../lang/grammar.acc"
+#line 852 "../lang/grammar.acc"
  TempList[TempListLoc++] = n;  ASSERT(TempListLoc < 1023); 
-# line 4602 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4598 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 241: {
       get_lexval();
       text = yylval;
-#line 857 "../lang/grammar.acc"
+#line 853 "../lang/grammar.acc"
  TempList[TempListLoc++] = text; ASSERT(TempListLoc < 1023); 
-# line 4609 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4605 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -4619,9 +4615,9 @@ int artifact_def ()
       get_lexval();
       get_lexval();
       name = yylval;
-#line 861 "../lang/grammar.acc"
+#line 857 "../lang/grammar.acc"
  theRes = theArti; theArti->Name = name; 
-# line 4625 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4621 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -4633,9 +4629,9 @@ int artifact_def ()
       }
       yy51: ;
       get_lexval();
-#line 862 "../lang/grammar.acc"
+#line 858 "../lang/grammar.acc"
  theArti++; 
-# line 4639 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4635 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -4661,9 +4657,9 @@ int arti_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 866 "../lang/grammar.acc"
+#line 862 "../lang/grammar.acc"
  theRes = theArti; theArti->Desc = lv; 
-# line 4667 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4663 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 244: {
       get_lexval();
@@ -4675,9 +4671,9 @@ int arti_entry ()
       }
       res_ref(&rr);
       get_lexval();
-#line 867 "../lang/grammar.acc"
+#line 863 "../lang/grammar.acc"
  theArti->iID = rr; 
-# line 4681 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4677 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 245: {
       while (1) {
@@ -4692,9 +4688,9 @@ int arti_entry ()
             default: ;
             }
             cexpr3(&v);
-#line 868 "../lang/grammar.acc"
+#line 864 "../lang/grammar.acc"
  theArti->AttrAdjLow[at] = (int8)v; 
-# line 4698 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4694 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 778: {
                get_lexval();
@@ -4720,9 +4716,9 @@ int arti_entry ()
          switch (yyselect()) {
          case 782: {
             cexpr3(&res);
-#line 869 "../lang/grammar.acc"
+#line 865 "../lang/grammar.acc"
  theArti->Resists |= res; 
-# line 4726 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4722 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 781: {
                get_lexval();
@@ -4749,9 +4745,9 @@ int arti_entry ()
          case 785: {
             get_lexval();
             at = yylval;
-#line 870 "../lang/grammar.acc"
+#line 866 "../lang/grammar.acc"
  theArti->Sustains |= 1 << (at-1); 
-# line 4755 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4751 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 784: {
                get_lexval();
@@ -4777,9 +4773,9 @@ int arti_entry ()
          switch (yyselect()) {
          case 788: {
             cexpr3(&qu);
-#line 871 "../lang/grammar.acc"
+#line 867 "../lang/grammar.acc"
  theArti->Qualities |= qu; 
-# line 4783 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4779 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 787: {
                get_lexval();
@@ -4795,9 +4791,9 @@ int arti_entry ()
       } break;
    case 249: {
       get_lexval();
-#line 873 "../lang/grammar.acc"
+#line 869 "../lang/grammar.acc"
  ArtPowerType = AN_ART_EQUIP; 
-# line 4801 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4797 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -4818,9 +4814,9 @@ int arti_entry ()
       } break;
    case 250: {
       get_lexval();
-#line 874 "../lang/grammar.acc"
+#line 870 "../lang/grammar.acc"
  ArtPowerType = AN_ART_WIELD; 
-# line 4824 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4820 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -4841,9 +4837,9 @@ int arti_entry ()
       } break;
    case 251: {
       get_lexval();
-#line 875 "../lang/grammar.acc"
+#line 871 "../lang/grammar.acc"
  ArtPowerType = AN_ART_HIT;   
-# line 4847 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4843 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -4864,9 +4860,9 @@ int arti_entry ()
       } break;
    case 252: {
       get_lexval();
-#line 876 "../lang/grammar.acc"
+#line 872 "../lang/grammar.acc"
  ArtPowerType = AN_ART_INVOKE;
-# line 4870 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4866 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -4911,18 +4907,18 @@ int art_power ()
       get_lexval();
       cexpr3(&p);
       get_lexval();
-#line 883 "../lang/grammar.acc"
+#line 879 "../lang/grammar.acc"
  theArti->AddPower((int8)ArtPowerType,AB_STATI,st,(int16)p,NULL); 
-# line 4917 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4913 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 256: {
       get_lexval();
       get_lexval();
       cexpr3(&st);
       get_lexval();
-#line 885 "../lang/grammar.acc"
+#line 881 "../lang/grammar.acc"
  theArti->AddPower((int8)ArtPowerType,AB_STATI,st,0,NULL); 
-# line 4926 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4922 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 257: {
       res_ref(&rr);
@@ -4933,18 +4929,18 @@ int art_power ()
          } break;
       default: ;
       }
-#line 887 "../lang/grammar.acc"
+#line 883 "../lang/grammar.acc"
  theArti->AddPower((int8)ArtPowerType,AB_EFFECT,rr,0,NULL); 
-# line 4939 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4935 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 258: {
       res_ref(&rr);
       get_lexval();
       dice_val(&dv);
       get_lexval();
-#line 889 "../lang/grammar.acc"
+#line 885 "../lang/grammar.acc"
  theArti->AddPower((int8)ArtPowerType,AB_EFFECT,rr,0,&yyDice(dv)); 
-# line 4948 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4944 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 259: {
       res_ref(&rr);
@@ -4959,10 +4955,10 @@ int art_power ()
       default: printf("???\n"); exit(1);
       }
       get_lexval();
-#line 891 "../lang/grammar.acc"
+#line 887 "../lang/grammar.acc"
  Dice d; d.Set(0,(int8)n,1);
         theArti->AddPower((int8)ArtPowerType,AB_EFFECT,rr,0,&d); 
-# line 4966 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4962 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 260: {
       res_ref(&rr);
@@ -4977,24 +4973,24 @@ int art_power ()
       default: printf("???\n"); exit(1);
       }
       get_lexval();
-#line 894 "../lang/grammar.acc"
+#line 890 "../lang/grammar.acc"
  Dice d; d.Set(0,(int8)n,7);
         theArti->AddPower((int8)ArtPowerType,AB_EFFECT,rr,0,&d); 
-# line 4984 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4980 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 261: {
       get_lexval();
       res_ref(&rr);
-#line 897 "../lang/grammar.acc"
+#line 893 "../lang/grammar.acc"
  theArti->AddPower((int8)ArtPowerType,AB_INNATE,rr,0,NULL); 
-# line 4991 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4987 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 262: {
       get_lexval();
       cexpr3(&ft);
-#line 899 "../lang/grammar.acc"
+#line 895 "../lang/grammar.acc"
  theArti->AddPower((int8)ArtPowerType,AB_FEAT,ft,0,NULL); 
-# line 4998 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 4994 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -5011,9 +5007,9 @@ int domain_def ()
       name = yylval;
       get_lexval();
       cexpr3(&type);
-#line 903 "../lang/grammar.acc"
+#line 899 "../lang/grammar.acc"
  theRes = theDom; theDom->Name = name; theDom->DType = (int8)type; 
-# line 5017 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5013 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -5025,9 +5021,9 @@ int domain_def ()
       }
       yy60: ;
       get_lexval();
-#line 905 "../lang/grammar.acc"
+#line 901 "../lang/grammar.acc"
  theDom++; 
-# line 5031 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5027 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -5044,9 +5040,9 @@ int domain_entry ()
    YYSTYPE lv;
    switch(yyselect()) {
    case 264: {
-#line 909 "../lang/grammar.acc"
+#line 905 "../lang/grammar.acc"
  int8 sp = 0; 
-# line 5050 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5046 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       get_lexval();
       switch (yyselect()) {
       case 803: {
@@ -5058,9 +5054,9 @@ int domain_entry ()
          switch (yyselect()) {
          case 805: {
             res_ref(&rr);
-#line 910 "../lang/grammar.acc"
+#line 906 "../lang/grammar.acc"
  theDom->Spells[min(sp,8)] = rr; sp++; 
-# line 5064 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5060 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 804: {
                get_lexval();
@@ -5073,11 +5069,11 @@ int domain_entry ()
       }
       yy61: ;
       get_lexval();
-#line 911 "../lang/grammar.acc"
+#line 907 "../lang/grammar.acc"
  if (sp > 9) 
       { yyerror(Format("Error: Domain %s has %d spells; must have at most nine.",
         theModule->QTextSeg + theDom->Name,sp)); } 
-# line 5081 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5077 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 265: {
       get_lexval();
@@ -5097,9 +5093,9 @@ int domain_entry ()
                } break;
             default: ;
             }
-#line 915 "../lang/grammar.acc"
+#line 911 "../lang/grammar.acc"
  theDom->AddAbility((int8)AbT,(int16)Abil,p,(int8)l1,(int8)l2); 
-# line 5103 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5099 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          default: goto yy62;
          }
@@ -5118,9 +5114,9 @@ int domain_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 916 "../lang/grammar.acc"
+#line 912 "../lang/grammar.acc"
  theDom->Desc = lv; 
-# line 5124 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5120 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 267: {
       event_desc();
@@ -5143,9 +5139,9 @@ int god_def ()
       get_lexval();
       get_lexval();
       name = yylval;
-#line 922 "../lang/grammar.acc"
+#line 918 "../lang/grammar.acc"
  theRes = theGod; theGod->Name = name; 
-# line 5149 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5145 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -5157,9 +5153,9 @@ int god_def ()
       }
       yy63: ;
       get_lexval();
-#line 924 "../lang/grammar.acc"
+#line 920 "../lang/grammar.acc"
  theGod++; 
-# line 5163 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5159 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -5177,9 +5173,9 @@ int god_entry ()
    YYSTYPE l2;
    switch(yyselect()) {
    case 271: {
-#line 928 "../lang/grammar.acc"
+#line 924 "../lang/grammar.acc"
  int8 dm = 0; 
-# line 5183 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5179 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       get_lexval();
       switch (yyselect()) {
       case 811: {
@@ -5191,9 +5187,9 @@ int god_entry ()
          switch (yyselect()) {
          case 813: {
             res_ref(&rr);
-#line 929 "../lang/grammar.acc"
+#line 925 "../lang/grammar.acc"
  theGod->Domains[min(dm,5)] = rr; dm++; 
-# line 5197 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5193 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 812: {
                get_lexval();
@@ -5206,11 +5202,11 @@ int god_entry ()
       }
       yy64: ;
       get_lexval();
-#line 930 "../lang/grammar.acc"
+#line 926 "../lang/grammar.acc"
  if (dm < 3 || dm > 6) 
       { yyerror(Format("Error: God %s has %d domains; must have between 3 and 6.",
         theModule->QTextSeg + theGod->Name,dm)); } 
-# line 5214 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5210 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 272: {
       get_lexval();
@@ -5237,9 +5233,9 @@ int god_entry ()
                } break;
             default: ;
             }
-#line 934 "../lang/grammar.acc"
+#line 930 "../lang/grammar.acc"
  theGod->SetFlag((uint16)n); 
-# line 5243 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5239 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          default: goto yy65;
          }
@@ -5258,9 +5254,9 @@ int god_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 935 "../lang/grammar.acc"
+#line 931 "../lang/grammar.acc"
  theGod->Desc = lv; 
-# line 5264 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5260 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 275: {
       get_lexval();
@@ -5280,9 +5276,9 @@ int god_entry ()
                } break;
             default: ;
             }
-#line 937 "../lang/grammar.acc"
+#line 933 "../lang/grammar.acc"
  theGod->AddAbility((int8)AbT,(int16)Abil,p,(int8)l1,(int8)l2); 
-# line 5286 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5282 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          default: goto yy66;
          }
@@ -5311,10 +5307,10 @@ int terrain_def ()
       get_lexval();
       get_lexval();
       name = yylval;
-#line 943 "../lang/grammar.acc"
+#line 939 "../lang/grammar.acc"
  theRes = theTer; 
                                       theTer->Name = name; 
-# line 5318 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5314 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -5326,9 +5322,9 @@ int terrain_def ()
       }
       yy67: ;
       get_lexval();
-#line 946 "../lang/grammar.acc"
+#line 942 "../lang/grammar.acc"
  theTer++; 
-# line 5332 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5328 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -5354,15 +5350,15 @@ int terrain_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 950 "../lang/grammar.acc"
+#line 946 "../lang/grammar.acc"
  theTer->Desc = lv; 
-# line 5360 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5356 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 281: {
       glyph_entry(&img);
-#line 951 "../lang/grammar.acc"
+#line 947 "../lang/grammar.acc"
  theTer->Image = img; 
-# line 5366 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5362 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 282: {
       get_lexval();
@@ -5375,9 +5371,9 @@ int terrain_entry ()
       cexpr3(&mov);
       get_lexval();
       get_lexval();
-#line 952 "../lang/grammar.acc"
+#line 948 "../lang/grammar.acc"
  theTer->MoveMod = (int8)((mov-100)/5); 
-# line 5381 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5377 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 283: {
       get_lexval();
@@ -5389,9 +5385,9 @@ int terrain_entry ()
       }
       cexpr3(&pen);
       get_lexval();
-#line 953 "../lang/grammar.acc"
+#line 949 "../lang/grammar.acc"
  theTer->Penalty = (int8)pen; 
-# line 5395 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5391 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 284: {
       get_lexval();
@@ -5403,9 +5399,9 @@ int terrain_entry ()
       }
       cexpr3(&mat);
       get_lexval();
-#line 954 "../lang/grammar.acc"
+#line 950 "../lang/grammar.acc"
  theTer->Material = (int8)mat; 
-# line 5409 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5405 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 285: {
       get_lexval();
@@ -5428,9 +5424,9 @@ int terrain_entry ()
                } break;
             default: ;
             }
-#line 955 "../lang/grammar.acc"
+#line 951 "../lang/grammar.acc"
  theTer->SetFlag((uint16)n); 
-# line 5434 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5430 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          default: goto yy68;
          }
@@ -5462,10 +5458,10 @@ int region_def ()
       name = yylval;
       get_lexval();
       cexpr3(&regflag);
-#line 962 "../lang/grammar.acc"
+#line 958 "../lang/grammar.acc"
  theRes = theReg; theReg->Name = name; theReg->SetFlag((uint16)regflag); 
     theReg->Size = SZ_COLLOSAL; 
-# line 5469 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5465 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -5477,9 +5473,9 @@ int region_def ()
       }
       yy69: ;
       get_lexval();
-#line 965 "../lang/grammar.acc"
+#line 961 "../lang/grammar.acc"
  theReg++; 
-# line 5483 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5479 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -5508,9 +5504,9 @@ int region_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 969 "../lang/grammar.acc"
+#line 965 "../lang/grammar.acc"
  theReg->Desc = lv; 
-# line 5514 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5510 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 291: {
       get_lexval();
@@ -5522,9 +5518,9 @@ int region_entry ()
       }
       res_ref(&rr);
       get_lexval();
-#line 970 "../lang/grammar.acc"
+#line 966 "../lang/grammar.acc"
  theReg->Walls = rr; 
-# line 5528 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5524 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 292: {
       get_lexval();
@@ -5536,9 +5532,9 @@ int region_entry ()
       }
       res_ref(&rr);
       get_lexval();
-#line 971 "../lang/grammar.acc"
+#line 967 "../lang/grammar.acc"
  theReg->Floor = rr; 
-# line 5542 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5538 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 293: {
       get_lexval();
@@ -5550,9 +5546,9 @@ int region_entry ()
       }
       res_ref(&rr);
       get_lexval();
-#line 972 "../lang/grammar.acc"
+#line 968 "../lang/grammar.acc"
  theReg->Door = rr; 
-# line 5556 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5552 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 294: {
       get_lexval();
@@ -5564,9 +5560,9 @@ int region_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 973 "../lang/grammar.acc"
+#line 969 "../lang/grammar.acc"
  theReg->Depth = (int8)n; 
-# line 5570 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5566 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 295: {
       get_lexval();
@@ -5578,9 +5574,9 @@ int region_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 974 "../lang/grammar.acc"
+#line 970 "../lang/grammar.acc"
  theReg->Size = (int8)n; 
-# line 5584 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5580 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 296: {
       get_lexval();
@@ -5594,9 +5590,9 @@ int region_entry ()
          switch (yyselect()) {
          case 841: {
             cexpr3(&n);
-#line 975 "../lang/grammar.acc"
+#line 971 "../lang/grammar.acc"
  theReg->RoomTypes |= BIT(n); 
-# line 5600 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5596 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 839: {
                get_lexval();
@@ -5634,9 +5630,9 @@ int region_entry ()
                } break;
             default: ;
             }
-#line 977 "../lang/grammar.acc"
+#line 973 "../lang/grammar.acc"
  theReg->SetFlag((uint16)n); 
-# line 5640 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5636 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          default: goto yy71;
          }
@@ -5650,11 +5646,11 @@ int region_entry ()
       get_lexval();
       mg = yylval;
       get_lexval();
-#line 978 "../lang/grammar.acc"
+#line 974 "../lang/grammar.acc"
  theReg->sx   = yyMapSize[currMap] % 256; 
                                     theReg->sy   = yyMapSize[currMap++] / 256;
                                     theReg->Grid = mg; 
-# line 5658 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5654 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 299: {
       get_lexval();
@@ -5662,35 +5658,35 @@ int region_entry ()
       while (1) {
          switch (yyselect()) {
          case 858: {
-#line 981 "../lang/grammar.acc"
+#line 977 "../lang/grammar.acc"
  rID tID, xID, xID2; Glyph Img; uint8 fl; 
                                     tID = xID = xID2 = 0; Img = 0; fl = 0; 
-# line 5669 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5665 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             get_lexval();
             ch = yylval;
             get_lexval();
             res_ref(&rr);
-#line 983 "../lang/grammar.acc"
+#line 979 "../lang/grammar.acc"
  tID = rr; 
-# line 5676 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5672 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             while (1) {
                switch (yyselect()) {
                case 846: {
                   get_lexval();
                   cexpr(&n);
                   get_lexval();
-#line 984 "../lang/grammar.acc"
+#line 980 "../lang/grammar.acc"
  fl |= n; 
-# line 5685 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5681 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                   } break;
                case 855: {
                   get_lexval();
                   switch (yyselect()) {
                   case 847: {
                      res_ref(&rr);
-#line 985 "../lang/grammar.acc"
+#line 981 "../lang/grammar.acc"
  xID = rr; 
-# line 5694 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5690 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                      } break;
                   case 849: {
                      get_lexval();
@@ -5698,15 +5694,15 @@ int region_entry ()
                      switch (yyselect()) {
                      case 848: {
                         cexpr(&v);
-#line 986 "../lang/grammar.acc"
+#line 982 "../lang/grammar.acc"
  xID = v; 
-# line 5704 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5700 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                         } break;
                      default: ;
                      }
-#line 987 "../lang/grammar.acc"
+#line 983 "../lang/grammar.acc"
  fl |= TILE_RANDOM | TILE_ITEM; 
-# line 5710 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5706 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                      } break;
                   case 851: {
                      get_lexval();
@@ -5714,15 +5710,15 @@ int region_entry ()
                      switch (yyselect()) {
                      case 850: {
                         cexpr(&v);
-#line 988 "../lang/grammar.acc"
+#line 984 "../lang/grammar.acc"
  xID = v; 
-# line 5720 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5716 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                         } break;
                      default: ;
                      }
-#line 989 "../lang/grammar.acc"
+#line 985 "../lang/grammar.acc"
  fl |= TILE_RANDOM | TILE_MONSTER; 
-# line 5726 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5722 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                      } break;
                   default: printf("???\n"); exit(1);
                   }
@@ -5730,9 +5726,9 @@ int region_entry ()
                   case 852: {
                      get_lexval();
                      res_ref(&rr2);
-#line 990 "../lang/grammar.acc"
+#line 986 "../lang/grammar.acc"
  xID2 = rr2; 
-# line 5736 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5732 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                      } break;
                   case 853: {
                      get_lexval();
@@ -5740,16 +5736,16 @@ int region_entry ()
                      cexpr(&v);
                      get_lexval();
                      cexpr(&v2);
-#line 992 "../lang/grammar.acc"
+#line 988 "../lang/grammar.acc"
  fl |= TILE_RANDOM_EFF; xID2 = v+v2*256; 
-# line 5746 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5742 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                      } break;
                   case 854: {
                      get_lexval();
                      cexpr(&v);
-#line 993 "../lang/grammar.acc"
+#line 989 "../lang/grammar.acc"
  xID2 = v; 
-# line 5753 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5749 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                      } break;
                   default: ;
                   }
@@ -5757,17 +5753,17 @@ int region_entry ()
                case 856: {
                   get_lexval();
                   glyph_desc(&g);
-#line 994 "../lang/grammar.acc"
+#line 990 "../lang/grammar.acc"
  Img = g; 
-# line 5763 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5759 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                   } break;
                default: goto yy73;
                }
             }
             yy73: ;
-#line 995 "../lang/grammar.acc"
+#line 991 "../lang/grammar.acc"
  theReg->AddTile((char)ch,Img,fl,tID,xID,xID2); 
-# line 5771 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5767 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 857: {
                get_lexval();
@@ -5830,21 +5826,21 @@ int template_def ()
       get_lexval();
       get_lexval();
       name = yylval;
-#line 1005 "../lang/grammar.acc"
+#line 1001 "../lang/grammar.acc"
  theRes = theTemp; theTemp->Name = name; CurrFeat = 0; CurrAttk = 0; 
-# line 5836 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5832 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       get_lexval();
       cexpr3(&ty);
-#line 1006 "../lang/grammar.acc"
+#line 1002 "../lang/grammar.acc"
  theTemp->TType = (uint16)ty; 
-# line 5841 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5837 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       switch (yyselect()) {
       case 861: {
          get_lexval();
          cexpr3(&mt);
-#line 1007 "../lang/grammar.acc"
+#line 1003 "../lang/grammar.acc"
  theTemp->ForMType = mt; 
-# line 5848 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5844 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       default: ;
       }
@@ -5859,9 +5855,9 @@ int template_def ()
       }
       yy76: ;
       get_lexval();
-#line 1009 "../lang/grammar.acc"
+#line 1005 "../lang/grammar.acc"
  theTemp++; 
-# line 5865 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5861 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -5893,9 +5889,9 @@ int template_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 1013 "../lang/grammar.acc"
+#line 1009 "../lang/grammar.acc"
  theTemp->Desc = lv; 
-# line 5899 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5895 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 307: {
       get_lexval();
@@ -5907,9 +5903,9 @@ int template_entry ()
       }
       cexpr3(&mt);
       get_lexval();
-#line 1014 "../lang/grammar.acc"
+#line 1010 "../lang/grammar.acc"
  theTemp->ForMType = mt; 
-# line 5913 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5909 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 308: {
       get_lexval();
@@ -5921,15 +5917,15 @@ int template_entry ()
       }
       cexpr3(&mt);
       get_lexval();
-#line 1015 "../lang/grammar.acc"
+#line 1011 "../lang/grammar.acc"
  theTemp->AddMType = mt; 
-# line 5927 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5923 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 309: {
       glyph_entry(&img);
-#line 1016 "../lang/grammar.acc"
+#line 1012 "../lang/grammar.acc"
  theTemp->NewImage = img; 
-# line 5933 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5929 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 310: {
       switch (yyselect()) {
@@ -5949,9 +5945,9 @@ int template_entry ()
       }
       mval(&mv);
       get_lexval();
-#line 1017 "../lang/grammar.acc"
+#line 1013 "../lang/grammar.acc"
  theTemp->CR = mv; 
-# line 5955 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5951 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 311: {
       get_lexval();
@@ -5963,9 +5959,9 @@ int template_entry ()
       }
       mval(&mv);
       get_lexval();
-#line 1018 "../lang/grammar.acc"
+#line 1014 "../lang/grammar.acc"
  theTemp->HitDice = mv; 
-# line 5969 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5965 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 312: {
       get_lexval();
@@ -5977,9 +5973,9 @@ int template_entry ()
       }
       mval(&mv);
       get_lexval();
-#line 1019 "../lang/grammar.acc"
+#line 1015 "../lang/grammar.acc"
  theTemp->Hit = mv; 
-# line 5983 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5979 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 313: {
       get_lexval();
@@ -5991,9 +5987,9 @@ int template_entry ()
       }
       mval(&mv);
       get_lexval();
-#line 1020 "../lang/grammar.acc"
+#line 1016 "../lang/grammar.acc"
  theTemp->Def = mv; 
-# line 5997 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 5993 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 314: {
       get_lexval();
@@ -6005,9 +6001,9 @@ int template_entry ()
       }
       mval(&mv);
       get_lexval();
-#line 1021 "../lang/grammar.acc"
+#line 1017 "../lang/grammar.acc"
  theTemp->Arm = mv; 
-# line 6011 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6007 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 315: {
       get_lexval();
@@ -6019,9 +6015,9 @@ int template_entry ()
       }
       cexpr(&n);
       get_lexval();
-#line 1022 "../lang/grammar.acc"
+#line 1018 "../lang/grammar.acc"
  theTemp->DmgMod = (int8)n; 
-# line 6025 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6021 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 316: {
       get_lexval();
@@ -6033,9 +6029,9 @@ int template_entry ()
       }
       mval(&mv);
       get_lexval();
-#line 1023 "../lang/grammar.acc"
+#line 1019 "../lang/grammar.acc"
  theTemp->Power = mv; 
-# line 6039 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6035 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 317: {
       get_lexval();
@@ -6048,9 +6044,9 @@ int template_entry ()
       }
       mval(&mv);
       get_lexval();
-#line 1024 "../lang/grammar.acc"
+#line 1020 "../lang/grammar.acc"
  theTemp->CasterLev = mv; 
-# line 6054 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6050 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 318: {
       get_lexval();
@@ -6062,9 +6058,9 @@ int template_entry ()
       }
       mval(&mv);
       get_lexval();
-#line 1025 "../lang/grammar.acc"
+#line 1021 "../lang/grammar.acc"
  theTemp->Size = mv; 
-# line 6068 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6064 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 319: {
       get_lexval();
@@ -6076,9 +6072,9 @@ int template_entry ()
       }
       mval(&mv);
       get_lexval();
-#line 1026 "../lang/grammar.acc"
+#line 1022 "../lang/grammar.acc"
  theTemp->Spd = mv; 
-# line 6082 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6078 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 320: {
       get_lexval();
@@ -6090,9 +6086,9 @@ int template_entry ()
       }
       mval(&mv);
       get_lexval();
-#line 1027 "../lang/grammar.acc"
+#line 1023 "../lang/grammar.acc"
  theTemp->Mov = mv; 
-# line 6096 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6092 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 321: {
       get_lexval();
@@ -6113,9 +6109,9 @@ int template_entry ()
          } break;
       default: printf("???\n"); exit(1);
       }
-#line 1028 "../lang/grammar.acc"
+#line 1024 "../lang/grammar.acc"
  theTemp->Attr[at] = mv; 
-# line 6119 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6115 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 322: {
       get_lexval();
@@ -6144,9 +6140,9 @@ int template_entry ()
       cexpr3(&st);
       get_lexval();
       get_lexval();
-#line 1032 "../lang/grammar.acc"
+#line 1028 "../lang/grammar.acc"
  if (!theTemp->GainStati((uint8)st)) yyerror("too many Stati in template"); 
-# line 6150 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6146 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 324: {
       get_lexval();
@@ -6156,9 +6152,9 @@ int template_entry ()
       cexpr3(&stV);
       get_lexval();
       get_lexval();
-#line 1034 "../lang/grammar.acc"
+#line 1030 "../lang/grammar.acc"
  if (!theTemp->GainStati((uint8)st,(int16)stV)) yyerror("too many Stati in template"); 
-# line 6162 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6158 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 325: {
       get_lexval();
@@ -6170,10 +6166,10 @@ int template_entry ()
       cexpr3(&stM);
       get_lexval();
       get_lexval();
-#line 1036 "../lang/grammar.acc"
+#line 1032 "../lang/grammar.acc"
  if (!theTemp->GainStati((uint8)st,(int16)stV,(int16)stM)) 
         yyerror("too many Stati in template"); 
-# line 6177 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6173 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 326: {
       get_lexval();
@@ -6187,10 +6183,10 @@ int template_entry ()
       res_ref(&rr);
       get_lexval();
       get_lexval();
-#line 1039 "../lang/grammar.acc"
+#line 1035 "../lang/grammar.acc"
  if (!theTemp->GainStati((uint8)st,(int16)stV,(int16)stM,rr)) 
         yyerror("too many Stati in template"); 
-# line 6194 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6190 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 327: {
       get_lexval();
@@ -6206,9 +6202,9 @@ int template_entry ()
             switch (yyselect()) {
             case 885: {
                cexpr3(&res);
-#line 1042 "../lang/grammar.acc"
+#line 1038 "../lang/grammar.acc"
  theTemp->AddRes |= res; 
-# line 6212 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6208 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                } break;
             case 888: {
                switch (yyselect()) {
@@ -6221,9 +6217,9 @@ int template_entry ()
                default: printf("???\n"); exit(1);
                }
                cexpr3(&res);
-#line 1043 "../lang/grammar.acc"
+#line 1039 "../lang/grammar.acc"
  theTemp->SubRes |= res; 
-# line 6227 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6223 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                } break;
             default: printf("???\n"); exit(1);
             }
@@ -6254,9 +6250,9 @@ int template_entry ()
             switch (yyselect()) {
             case 892: {
                cexpr3(&res);
-#line 1045 "../lang/grammar.acc"
+#line 1041 "../lang/grammar.acc"
  theTemp->AddImm |= res; 
-# line 6260 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6256 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                } break;
             case 895: {
                switch (yyselect()) {
@@ -6269,9 +6265,9 @@ int template_entry ()
                default: printf("???\n"); exit(1);
                }
                cexpr3(&res);
-#line 1046 "../lang/grammar.acc"
+#line 1042 "../lang/grammar.acc"
  theTemp->SubImm |= res; 
-# line 6275 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6271 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                } break;
             default: printf("???\n"); exit(1);
             }
@@ -6301,9 +6297,9 @@ int template_entry ()
          case 899: {
             cexpr3(&n);
             get_lexval();
-#line 1048 "../lang/grammar.acc"
+#line 1044 "../lang/grammar.acc"
  theTemp->NewFeats[CurrFeat++] = (uint16)n; 
-# line 6307 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6303 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          default: goto yy80;
          }
@@ -6311,9 +6307,9 @@ int template_entry ()
       yy80: ;
       cexpr3(&n);
       get_lexval();
-#line 1049 "../lang/grammar.acc"
+#line 1045 "../lang/grammar.acc"
  theTemp->NewFeats[CurrFeat++] = (uint16)n; 
-# line 6317 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6313 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 330: {
       get_lexval();
@@ -6327,10 +6323,10 @@ int template_entry ()
          switch (yyselect()) {
          case 902: {
             res_ref(&rr);
-#line 1050 "../lang/grammar.acc"
+#line 1046 "../lang/grammar.acc"
  theTemp->AddsFlag(M_INNATE);
                                        theTemp->AddResID(AN_INNATE, rr); 
-# line 6334 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6330 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 901: {
                get_lexval();
@@ -6356,9 +6352,9 @@ int template_entry ()
          switch (yyselect()) {
          case 905: {
             res_ref(&rr);
-#line 1053 "../lang/grammar.acc"
+#line 1049 "../lang/grammar.acc"
  theTemp->AddResID(AN_DISEASE, rr); 
-# line 6362 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6358 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 904: {
                get_lexval();
@@ -6384,9 +6380,9 @@ int template_entry ()
          switch (yyselect()) {
          case 908: {
             res_ref(&rr);
-#line 1055 "../lang/grammar.acc"
+#line 1051 "../lang/grammar.acc"
  theTemp->AddResID(AN_POISON, rr); 
-# line 6390 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6386 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 907: {
                get_lexval();
@@ -6414,13 +6410,13 @@ int template_entry ()
             switch (yyselect()) {
             case 910: {
                cexpr3(&fl);
-#line 1058 "../lang/grammar.acc"
+#line 1054 "../lang/grammar.acc"
  if (fl < 0) 
                                          theTemp->Flags[(-fl)/8] |= 1 << ((-fl)%8);
                                        else
                                          theTemp->AddFlags[fl/8] |= 1 << (fl % 8); 
                                      
-# line 6424 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6420 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                } break;
             case 913: {
                switch (yyselect()) {
@@ -6433,9 +6429,9 @@ int template_entry ()
                default: printf("???\n"); exit(1);
                }
                cexpr3(&fl);
-#line 1063 "../lang/grammar.acc"
+#line 1059 "../lang/grammar.acc"
  theTemp->SubFlags[fl/8] |= 1 << (fl % 8); 
-# line 6439 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6435 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                } break;
             default: printf("???\n"); exit(1);
             }
@@ -6483,34 +6479,34 @@ int temp_attack_entry ()
    YYSTYPE dt;
    switch(yyselect()) {
    case 338: {
-#line 1071 "../lang/grammar.acc"
+#line 1067 "../lang/grammar.acc"
  uint8 dt = AD_NORM; dam.Set(0,0,0);
                                  theTemp->NewAttk[CurrAttk].u.a.Dmg.Set(0,0,0);
-# line 6490 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6486 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       cexpr3(&at);
       get_lexval();
       switch (yyselect()) {
       case 917: {
          dice_only(&dam);
-#line 1074 "../lang/grammar.acc"
+#line 1070 "../lang/grammar.acc"
  theTemp->NewAttk[CurrAttk].u.a.Dmg = yyDice(dam); 
-# line 6498 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6494 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       case 918: {
          cexpr3(&chance);
          get_lexval();
-#line 1075 "../lang/grammar.acc"
+#line 1071 "../lang/grammar.acc"
  theTemp->NewAttk[CurrAttk].u.a.Dmg.Bonus = (int8)chance; 
-# line 6505 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6501 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       default: ;
       }
       switch (yyselect()) {
       case 919: {
          cexpr3(&n);
-#line 1076 "../lang/grammar.acc"
+#line 1072 "../lang/grammar.acc"
  dt = (uint8)n; 
-# line 6514 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6510 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       default: ;
       }
@@ -6536,14 +6532,14 @@ int temp_attack_entry ()
          default: printf("???\n"); exit(1);
          }
          cexpr3(&dc);
-#line 1079 "../lang/grammar.acc"
+#line 1075 "../lang/grammar.acc"
  theTemp->NewAttk[CurrAttk].u.a.DC = (int8)dc; 
-# line 6542 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6538 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          get_lexval();
          } break;
       default: ;
       }
-#line 1080 "../lang/grammar.acc"
+#line 1076 "../lang/grammar.acc"
  theTemp->NewAttk[CurrAttk].AType = (int8)at;
                                  theTemp->NewAttk[CurrAttk].DType = dt;
                                  /*
@@ -6559,29 +6555,29 @@ int temp_attack_entry ()
                                  if (CurrAttk >= 16)
                                    yyerror("> 16 attacks on a single template!");
                                
-# line 6563 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6559 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 932: {
             get_lexval();
-#line 1091 "../lang/grammar.acc"
+#line 1087 "../lang/grammar.acc"
  dt = AD_NORM; theTemp->NewAttk[CurrAttk].u.a.Dmg.Set(0,0,0); dam2.Set(0,0,0); 
-# line 6570 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6566 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 925: {
                dice_only(&dam2);
-#line 1092 "../lang/grammar.acc"
+#line 1088 "../lang/grammar.acc"
  theTemp->NewAttk[CurrAttk].u.a.Dmg = yyDice(dam2); 
-# line 6576 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6572 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                } break;
             default: ;
             }
             switch (yyselect()) {
             case 926: {
                cexpr3(&n2);
-#line 1093 "../lang/grammar.acc"
+#line 1089 "../lang/grammar.acc"
  dt = (uint8)n2; 
-# line 6585 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6581 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                } break;
             default: ;
             }
@@ -6607,14 +6603,14 @@ int temp_attack_entry ()
                default: printf("???\n"); exit(1);
                }
                cexpr3(&dc);
-#line 1095 "../lang/grammar.acc"
+#line 1091 "../lang/grammar.acc"
  theTemp->NewAttk[CurrAttk].u.a.DC = (int8)dc; 
-# line 6613 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6609 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                get_lexval();
                } break;
             default: ;
             }
-#line 1096 "../lang/grammar.acc"
+#line 1092 "../lang/grammar.acc"
  theTemp->NewAttk[CurrAttk].AType = A_ALSO;
                                  theTemp->NewAttk[CurrAttk].DType = dt;
                                  theTemp->NewAttk[CurrAttk].u.a.Dmg = yyDice(dam2);
@@ -6622,7 +6618,7 @@ int temp_attack_entry ()
                                  if (CurrAttk >= 16)
                                    Fatal("> 16 attacks on a single monster!");
                                
-# line 6626 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6622 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          default: goto yy85;
          }
@@ -6633,16 +6629,16 @@ int temp_attack_entry ()
       cexpr3(&at);
       get_lexval();
       res_ref(&rr);
-#line 1104 "../lang/grammar.acc"
+#line 1100 "../lang/grammar.acc"
  theTemp->NewAttk[CurrAttk].AType = (int8)at;
                                   theTemp->NewAttk[CurrAttk].u.xID = rr; 
-# line 6640 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6636 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       switch (yyselect()) {
       case 933: {
          cexpr3(&dt);
-#line 1106 "../lang/grammar.acc"
+#line 1102 "../lang/grammar.acc"
  theTemp->NewAttk[CurrAttk].DType = (int8)dt; 
-# line 6646 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6642 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       default: ;
       }
@@ -6672,14 +6668,14 @@ int flavor_def ()
       name = yylval;
       get_lexval();
       cexpr3(&it);
-#line 1113 "../lang/grammar.acc"
+#line 1109 "../lang/grammar.acc"
  theRes = theFlavor; 
                                          theFlavor->Name = name;
                                          theFlavor->IType = (int8)it;
                                          theFlavor->Material = -1;
                                          theFlavor->Color = -1;
                                          theFlavor->Weight = 20; 
-# line 6683 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6679 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -6691,9 +6687,9 @@ int flavor_def ()
       }
       yy86: ;
       get_lexval();
-#line 1119 "../lang/grammar.acc"
+#line 1115 "../lang/grammar.acc"
  theFlavor++; 
-# line 6697 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6693 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -6716,9 +6712,9 @@ int flavor_entry ()
       get_lexval();
       lv = yylval;
       get_lexval();
-#line 1123 "../lang/grammar.acc"
+#line 1119 "../lang/grammar.acc"
  theFlavor->Desc     = lv; 
-# line 6722 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6718 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 343: {
       get_lexval();
@@ -6730,9 +6726,9 @@ int flavor_entry ()
       }
       cexpr3(&n);
       get_lexval();
-#line 1124 "../lang/grammar.acc"
+#line 1120 "../lang/grammar.acc"
  theFlavor->Material = (int8)n; 
-# line 6736 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6732 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 344: {
       get_lexval();
@@ -6744,9 +6740,9 @@ int flavor_entry ()
       }
       color(&col);
       get_lexval();
-#line 1125 "../lang/grammar.acc"
+#line 1121 "../lang/grammar.acc"
  theFlavor->Color    = (int8)col; 
-# line 6750 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6746 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 345: {
       get_lexval();
@@ -6759,9 +6755,9 @@ int flavor_entry ()
       cexpr3(&n);
       get_lexval();
       get_lexval();
-#line 1126 "../lang/grammar.acc"
+#line 1122 "../lang/grammar.acc"
  theFlavor->Weight   = (int8)(n/5); 
-# line 6765 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6761 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -6774,22 +6770,22 @@ int encounter_def ()
    switch(yyselect()) {
    case 346: {
       get_lexval();
-#line 1131 "../lang/grammar.acc"
+#line 1127 "../lang/grammar.acc"
  theRes = theEnc; 
                      theEnc->Weight = 10; 
-# line 6781 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6777 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       get_lexval();
       name = yylval;
-#line 1133 "../lang/grammar.acc"
+#line 1129 "../lang/grammar.acc"
  theEnc->Name = name; 
-# line 6786 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6782 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       switch (yyselect()) {
       case 939: {
          get_lexval();
          cexpr3(&n);
-#line 1134 "../lang/grammar.acc"
+#line 1130 "../lang/grammar.acc"
  theEnc->Terrain |= n; 
-# line 6793 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6789 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       default: ;
       }
@@ -6804,9 +6800,9 @@ int encounter_def ()
       }
       yy87: ;
       get_lexval();
-#line 1137 "../lang/grammar.acc"
+#line 1133 "../lang/grammar.acc"
  theEnc++; 
-# line 6810 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6806 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -6822,36 +6818,36 @@ int encounter_entry ()
       get_lexval();
       cexpr(&n);
       get_lexval();
-#line 1140 "../lang/grammar.acc"
+#line 1136 "../lang/grammar.acc"
  theEnc->Terrain |= n; 
-# line 6828 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6824 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 348: {
       get_lexval();
       get_lexval();
       cexpr3(&n);
       get_lexval();
-#line 1141 "../lang/grammar.acc"
+#line 1137 "../lang/grammar.acc"
  theEnc->Depth = (int16)n; 
-# line 6837 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6833 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 349: {
       get_lexval();
       get_lexval();
       cexpr3(&n);
       get_lexval();
-#line 1142 "../lang/grammar.acc"
+#line 1138 "../lang/grammar.acc"
  theEnc->Weight = (int16)n; 
-# line 6846 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6842 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 350: {
       get_lexval();
       get_lexval();
       cexpr3(&n);
       get_lexval();
-#line 1143 "../lang/grammar.acc"
+#line 1139 "../lang/grammar.acc"
  theEnc->minCR = theEnc->maxCR = (int16)n; 
-# line 6855 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6851 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 351: {
       get_lexval();
@@ -6859,9 +6855,9 @@ int encounter_entry ()
       cexpr3(&n);
       get_lexval();
       get_lexval();
-#line 1144 "../lang/grammar.acc"
+#line 1140 "../lang/grammar.acc"
  theEnc->minCR = (int16)n; theEnc->maxCR = 36; 
-# line 6865 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6861 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 352: {
       get_lexval();
@@ -6878,25 +6874,25 @@ int encounter_entry ()
       }
       cexpr3(&n2);
       get_lexval();
-#line 1146 "../lang/grammar.acc"
+#line 1142 "../lang/grammar.acc"
  theEnc->minCR = (int16)n; theEnc->maxCR = (int16)n2; 
-# line 6884 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6880 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 353: {
       get_lexval();
       get_lexval();
       cexpr3(&n);
       get_lexval();
-#line 1147 "../lang/grammar.acc"
+#line 1143 "../lang/grammar.acc"
  theEnc->Align = (int16)n; 
-# line 6893 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6889 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 354: {
       get_lexval();
       get_lexval();
-#line 1148 "../lang/grammar.acc"
+#line 1144 "../lang/grammar.acc"
  currPart = 0; 
-# line 6900 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6896 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 943: {
@@ -6920,9 +6916,9 @@ int encounter_entry ()
          switch (yyselect()) {
          case 947: {
             cexpr3(&n);
-#line 1151 "../lang/grammar.acc"
+#line 1147 "../lang/grammar.acc"
  theEnc->SetFlag((uint16)n); 
-# line 6926 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6922 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             switch (yyselect()) {
             case 945: {
                get_lexval();
@@ -6964,38 +6960,38 @@ int encounter_part ()
    rID rr;
    switch(yyselect()) {
    case 360: {
-#line 1160 "../lang/grammar.acc"
+#line 1156 "../lang/grammar.acc"
  ASSERT(currPart < MAX_PARTS); 
-# line 6970 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6966 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       switch (yyselect()) {
       case 948: {
          get_lexval();
          } break;
       case 949: {
          get_lexval();
-#line 1162 "../lang/grammar.acc"
+#line 1158 "../lang/grammar.acc"
  theEnc->Parts[currPart].Flags |= EP_ELSE; 
-# line 6979 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6975 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       case 950: {
          get_lexval();
-#line 1163 "../lang/grammar.acc"
+#line 1159 "../lang/grammar.acc"
  theEnc->Parts[currPart].Flags |= EP_OR; 
-# line 6985 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6981 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       default: printf("???\n"); exit(1);
       }
-#line 1165 "../lang/grammar.acc"
+#line 1161 "../lang/grammar.acc"
  theEnc->Parts[currPart].Weight = 10; 
-# line 6991 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6987 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 951: {
             cexpr4(&n);
             get_lexval();
-#line 1167 "../lang/grammar.acc"
+#line 1163 "../lang/grammar.acc"
  theEnc->Parts[currPart].Chance = (uint8)n; 
-# line 6999 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 6995 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          case 952: {
             get_lexval();
@@ -7003,25 +6999,25 @@ int encounter_part ()
             cexpr4(&n);
             get_lexval();
             get_lexval();
-#line 1168 "../lang/grammar.acc"
+#line 1164 "../lang/grammar.acc"
  theEnc->Parts[currPart].minCR = (uint8)n; 
-# line 7009 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7005 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          case 953: {
             get_lexval();
             cexpr4(&n);
             get_lexval();
-#line 1169 "../lang/grammar.acc"
+#line 1165 "../lang/grammar.acc"
  theEnc->Parts[currPart].Weight = (uint8)n; 
-# line 7017 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7013 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          case 954: {
             get_lexval();
             sep_expr(&hc);
             get_lexval();
-#line 1170 "../lang/grammar.acc"
+#line 1166 "../lang/grammar.acc"
  theEnc->Parts[currPart].Condition = hc; 
-# line 7025 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7021 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          case 957: {
             cexpr4(&n);
@@ -7035,34 +7031,34 @@ int encounter_part ()
             default: printf("???\n"); exit(1);
             }
             cexpr4(&n2);
-#line 1171 "../lang/grammar.acc"
+#line 1167 "../lang/grammar.acc"
  theEnc->Parts[currPart].Amt.Number = (int8)n;
                                       theEnc->Parts[currPart].Amt.Bonus  = (int8)n2;
                                       theEnc->Parts[currPart].Amt.Sides  = 0; 
-# line 7043 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7039 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          case 958: {
             cexpr4(&n);
-#line 1174 "../lang/grammar.acc"
+#line 1170 "../lang/grammar.acc"
  theEnc->Parts[currPart].Amt.Number = (int8)n;
                                       theEnc->Parts[currPart].Amt.Bonus  = (int8)n;
                                       theEnc->Parts[currPart].Amt.Sides  = 0; 
-# line 7051 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7047 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          case 959: {
             cexpr4(&n);
             get_lexval();
-#line 1177 "../lang/grammar.acc"
+#line 1173 "../lang/grammar.acc"
  theEnc->Parts[currPart].Amt.Number = (int8)n;
                                       theEnc->Parts[currPart].Amt.Bonus  = (int8)(n+50);
                                       theEnc->Parts[currPart].Amt.Sides  = 0; 
-# line 7060 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7056 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          case 960: {
             dice_only(&d);
-#line 1180 "../lang/grammar.acc"
+#line 1176 "../lang/grammar.acc"
  theEnc->Parts[currPart].Amt        = d; 
-# line 7066 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7062 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          default: goto yy90;
          }
@@ -7072,46 +7068,46 @@ int encounter_part ()
       switch (yyselect()) {
       case 961: {
          res_ref(&rr);
-#line 1186 "../lang/grammar.acc"
+#line 1182 "../lang/grammar.acc"
  theEnc->Parts[currPart].xID = rr; 
-# line 7078 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7074 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       case 962: {
          cexpr3(&n);
-#line 1187 "../lang/grammar.acc"
+#line 1183 "../lang/grammar.acc"
  theEnc->Parts[currPart].xID = n; 
-# line 7084 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7080 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       case 963: {
          get_lexval();
          cexpr3(&n);
-#line 1188 "../lang/grammar.acc"
+#line 1184 "../lang/grammar.acc"
  theEnc->Parts[currPart].xID = n;
                                       theEnc->Parts[currPart].Flags |= EP_ANYMON; 
-# line 7092 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7088 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       default: printf("???\n"); exit(1);
       }
       switch (yyselect()) {
       case 964: {
          res_ref(&rr);
-#line 1192 "../lang/grammar.acc"
+#line 1188 "../lang/grammar.acc"
  theEnc->Parts[currPart].xID2 = rr; 
-# line 7101 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7097 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       case 965: {
          cexpr3(&n);
-#line 1193 "../lang/grammar.acc"
+#line 1189 "../lang/grammar.acc"
  theEnc->Parts[currPart].xID2 = n; 
-# line 7107 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7103 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       case 966: {
          get_lexval();
          cexpr3(&n);
-#line 1194 "../lang/grammar.acc"
+#line 1190 "../lang/grammar.acc"
  theEnc->Parts[currPart].xID = n;
                                       theEnc->Parts[currPart].Flags |= EP_ANYTEMP; 
-# line 7115 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7111 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       default: ;
       }
@@ -7119,9 +7115,9 @@ int encounter_part ()
       case 970: {
          get_lexval();
          cexpr3(&n);
-#line 1198 "../lang/grammar.acc"
+#line 1194 "../lang/grammar.acc"
  theEnc->Parts[currPart].Flags |= n; 
-# line 7125 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7121 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          while (1) {
             switch (yyselect()) {
             case 969: {
@@ -7135,9 +7131,9 @@ int encounter_part ()
                default: printf("???\n"); exit(1);
                }
                cexpr3(&n);
-#line 1199 "../lang/grammar.acc"
+#line 1195 "../lang/grammar.acc"
  theEnc->Parts[currPart].Flags |= n; 
-# line 7141 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7137 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                } break;
             default: goto yy91;
             }
@@ -7147,9 +7143,9 @@ int encounter_part ()
          } break;
       default: ;
       }
-#line 1202 "../lang/grammar.acc"
+#line 1198 "../lang/grammar.acc"
  currPart++; 
-# line 7153 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7149 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -7166,11 +7162,11 @@ int behaviour_def ()
       name = yylval;
       get_lexval();
       cexpr3(&c);
-#line 1206 "../lang/grammar.acc"
+#line 1202 "../lang/grammar.acc"
  theRes = theBev; 
                                            theBev->Name = name;
                                            theBev->Conditions = c; 
-# line 7174 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7170 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
@@ -7182,9 +7178,9 @@ int behaviour_def ()
       }
       yy92: ;
       get_lexval();
-#line 1209 "../lang/grammar.acc"
+#line 1205 "../lang/grammar.acc"
  theBev++; 
-# line 7188 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7184 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -7205,9 +7201,9 @@ int behaviour_entry ()
       }
       res_ref(&rr);
       get_lexval();
-#line 1213 "../lang/grammar.acc"
+#line 1209 "../lang/grammar.acc"
  theBev->spID = rr; 
-# line 7211 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7207 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 363: {
       get_lexval();
@@ -7230,9 +7226,9 @@ int behaviour_entry ()
                } break;
             default: ;
             }
-#line 1214 "../lang/grammar.acc"
+#line 1210 "../lang/grammar.acc"
  theBev->SetFlag((uint16)n); 
-# line 7236 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7232 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          default: goto yy93;
          }
@@ -7264,79 +7260,79 @@ int text_def ()
       get_lexval();
       get_lexval();
       name = yylval;
-#line 1221 "../lang/grammar.acc"
+#line 1217 "../lang/grammar.acc"
  theRes = theText;
                          theText->Name = name;
                          cText = 0; 
-# line 7272 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7268 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 977: {
             get_lexval();
             text = yylval;
-#line 1224 "../lang/grammar.acc"
+#line 1220 "../lang/grammar.acc"
  TempList[cText++] = text; 
-# line 7280 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7276 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          case 978: {
             res_ref(&rr);
-#line 1225 "../lang/grammar.acc"
+#line 1221 "../lang/grammar.acc"
  TempList[cText++] = rr; 
-# line 7286 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7282 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          case 979: {
             get_lexval();
-#line 1226 "../lang/grammar.acc"
+#line 1222 "../lang/grammar.acc"
  TempList[cText++] = TC_LPAREN; 
-# line 7292 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7288 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          case 980: {
             get_lexval();
-#line 1227 "../lang/grammar.acc"
+#line 1223 "../lang/grammar.acc"
  TempList[cText++] = TC_RPAREN; 
-# line 7298 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7294 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          case 981: {
             get_lexval();
-#line 1228 "../lang/grammar.acc"
+#line 1224 "../lang/grammar.acc"
  TempList[cText++] = TC_CHOICE; 
-# line 7304 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7300 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          case 982: {
             get_lexval();
-#line 1229 "../lang/grammar.acc"
+#line 1225 "../lang/grammar.acc"
  TempList[cText++] = TC_TERM; 
-# line 7310 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7306 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          case 983: {
             get_lexval();
             sep_expr(&hc);
             get_lexval();
             get_lexval();
-#line 1231 "../lang/grammar.acc"
+#line 1227 "../lang/grammar.acc"
  TempList[cText++] = TC_CASE;
                       TempList[cText++] = hc; 
-# line 7320 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7316 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          case 984: {
             get_lexval();
             sep_stat(&hc);
             get_lexval();
-#line 1234 "../lang/grammar.acc"
+#line 1230 "../lang/grammar.acc"
  TempList[cText++] = TC_ACTION;
                       TempList[cText++] = hc; 
-# line 7329 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7325 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          default: goto yy94;
          }
       }
       yy94: ;
       get_lexval();
-#line 1236 "../lang/grammar.acc"
+#line 1232 "../lang/grammar.acc"
  TempList[cText] = 0;
              theText->AddList(TEXT_LIST,TempList);
              theText++; 
-# line 7340 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7336 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -7357,75 +7353,75 @@ int type_name (YYSTYPE *ty)
    switch(yyselect()) {
    case 369: {
       get_lexval();
-#line 1244 "../lang/grammar.acc"
+#line 1240 "../lang/grammar.acc"
  *ty = DT_VOID; 
-# line 7363 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7359 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 370: {
       get_lexval();
-#line 1245 "../lang/grammar.acc"
+#line 1241 "../lang/grammar.acc"
  *ty = DT_BOOL; 
-# line 7369 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7365 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 371: {
       get_lexval();
-#line 1246 "../lang/grammar.acc"
+#line 1242 "../lang/grammar.acc"
  *ty = DT_UINT8; 
-# line 7375 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7371 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 372: {
       get_lexval();
-#line 1247 "../lang/grammar.acc"
+#line 1243 "../lang/grammar.acc"
  *ty = DT_UINT16; 
-# line 7381 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7377 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 373: {
       get_lexval();
-#line 1248 "../lang/grammar.acc"
+#line 1244 "../lang/grammar.acc"
  *ty = DT_INT8; 
-# line 7387 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7383 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 374: {
       get_lexval();
-#line 1249 "../lang/grammar.acc"
+#line 1245 "../lang/grammar.acc"
  *ty = DT_INT16; 
-# line 7393 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7389 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 375: {
       get_lexval();
-#line 1250 "../lang/grammar.acc"
+#line 1246 "../lang/grammar.acc"
  *ty = DT_INT32; 
-# line 7399 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7395 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 376: {
       get_lexval();
-#line 1251 "../lang/grammar.acc"
+#line 1247 "../lang/grammar.acc"
  *ty = DT_HOBJ; 
-# line 7405 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7401 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 377: {
       get_lexval();
-#line 1252 "../lang/grammar.acc"
+#line 1248 "../lang/grammar.acc"
  *ty = DT_HTEXT; 
-# line 7411 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7407 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 378: {
       get_lexval();
-#line 1253 "../lang/grammar.acc"
+#line 1249 "../lang/grammar.acc"
  *ty = DT_RID; 
-# line 7417 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7413 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 379: {
       get_lexval();
-#line 1254 "../lang/grammar.acc"
+#line 1250 "../lang/grammar.acc"
  *ty = DT_STRING; 
-# line 7423 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7419 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 380: {
       get_lexval();
-#line 1255 "../lang/grammar.acc"
+#line 1251 "../lang/grammar.acc"
  *ty = DT_RECT; 
-# line 7429 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7425 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -7444,9 +7440,9 @@ int s_prototype ()
    YYSTYPE ot_n;
    switch(yyselect()) {
    case 381: {
-#line 1259 "../lang/grammar.acc"
+#line 1255 "../lang/grammar.acc"
  BSysFunc *b; 
-# line 7450 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7446 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       get_lexval();
       type_name(&ty);
       cexpr3(&ot);
@@ -7454,7 +7450,7 @@ int s_prototype ()
       get_lexval();
       fn = yylval;
       get_lexval();
-#line 1261 "../lang/grammar.acc"
+#line 1257 "../lang/grammar.acc"
  if (is_res(ot)) {
         if (theSymTab.GetBinding(fn,0,0,RES_FUNC))
           if (GETBIND_RESFUNC(fn)->RType == ot)
@@ -7472,7 +7468,7 @@ int s_prototype ()
         theSymTab.Bind(fn,b); 
       }
     
-# line 7476 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7472 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       switch (yyselect()) {
       case 992: {
          type_name(&ty_1);
@@ -7480,15 +7476,15 @@ int s_prototype ()
          case 985: {
             get_lexval();
             cexpr3(&ot_1);
-#line 1277 "../lang/grammar.acc"
+#line 1273 "../lang/grammar.acc"
  b->ParamOType[0] = (int8)ot_1; 
-# line 7486 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7482 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          default: ;
          }
-#line 1278 "../lang/grammar.acc"
+#line 1274 "../lang/grammar.acc"
  b->ParamType[0] = (int8)ty_1; b->ParamCount++; 
-# line 7492 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7488 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          switch (yyselect()) {
          case 986: {
             get_lexval();
@@ -7500,9 +7496,9 @@ int s_prototype ()
          case 987: {
             get_lexval();
             cexpr(&def);
-#line 1279 "../lang/grammar.acc"
+#line 1275 "../lang/grammar.acc"
  b->Default[0] = (int8)def; b->HasDefault |= BIT(2); 
-# line 7506 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7502 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          default: ;
          }
@@ -7515,15 +7511,15 @@ int s_prototype ()
                case 988: {
                   get_lexval();
                   cexpr3(&ot_n);
-#line 1281 "../lang/grammar.acc"
+#line 1277 "../lang/grammar.acc"
  b->ParamOType[b->ParamCount] = (int8)ot_n; 
-# line 7521 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7517 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                   } break;
                default: ;
                }
-#line 1282 "../lang/grammar.acc"
+#line 1278 "../lang/grammar.acc"
  b->ParamType[b->ParamCount] = (int8)ty_n; b->ParamCount++; 
-# line 7527 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7523 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                switch (yyselect()) {
                case 989: {
                   get_lexval();
@@ -7535,9 +7531,9 @@ int s_prototype ()
                case 990: {
                   get_lexval();
                   cexpr(&def);
-#line 1283 "../lang/grammar.acc"
+#line 1279 "../lang/grammar.acc"
  b->Default[b->ParamCount] = (int8)def; b->HasDefault |= BIT(1+b->ParamCount); 
-# line 7541 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7537 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                   } break;
                default: ;
                }
@@ -7553,9 +7549,9 @@ int s_prototype ()
       case 993: {
          get_lexval();
          get_lexval();
-#line 1285 "../lang/grammar.acc"
+#line 1281 "../lang/grammar.acc"
  b->isVarParam = true; 
-# line 7559 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7555 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       default: ;
       }
@@ -7578,22 +7574,22 @@ int sg_prototype ()
    YYSTYPE ot_n;
    switch(yyselect()) {
    case 382: {
-#line 1288 "../lang/grammar.acc"
+#line 1284 "../lang/grammar.acc"
  BSysFunc *b; 
-# line 7584 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7580 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       get_lexval();
       type_name(&ty);
       get_lexval();
       fn = yylval;
       get_lexval();
-#line 1290 "../lang/grammar.acc"
+#line 1286 "../lang/grammar.acc"
  if (theSymTab.GetBinding(fn,0,0,SYS_FUNC))
         yyerror(Format("System global function '%s' declared twice!",theSymTab[fn]));
       else if (theSymTab.GetBinding(fn,0,1,ANY))
         yyerror(Format("Identifier conflict: '%s'.", theSymTab[fn]));
       b = new BSysFunc((int16)MemFuncID++,(int8)ty);
       theSymTab.Bind(fn,b); 
-# line 7597 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7593 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       switch (yyselect()) {
       case 1001: {
          type_name(&ty_1);
@@ -7601,15 +7597,15 @@ int sg_prototype ()
          case 994: {
             get_lexval();
             cexpr3(&ot_1);
-#line 1296 "../lang/grammar.acc"
+#line 1292 "../lang/grammar.acc"
  b->ParamOType[0] = (int8)ot_1; 
-# line 7607 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7603 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          default: ;
          }
-#line 1297 "../lang/grammar.acc"
+#line 1293 "../lang/grammar.acc"
  b->ParamType[0] = (int8)ty_1; b->ParamCount++; 
-# line 7613 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7609 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          switch (yyselect()) {
          case 995: {
             get_lexval();
@@ -7621,9 +7617,9 @@ int sg_prototype ()
          case 996: {
             get_lexval();
             cexpr(&def);
-#line 1298 "../lang/grammar.acc"
+#line 1294 "../lang/grammar.acc"
  b->Default[0] = (int8)def; b->HasDefault |= BIT(2); 
-# line 7627 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7623 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          default: ;
          }
@@ -7636,15 +7632,15 @@ int sg_prototype ()
                case 997: {
                   get_lexval();
                   cexpr3(&ot_n);
-#line 1300 "../lang/grammar.acc"
+#line 1296 "../lang/grammar.acc"
  b->ParamOType[b->ParamCount] = (int8)ot_n; 
-# line 7642 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7638 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                   } break;
                default: ;
                }
-#line 1301 "../lang/grammar.acc"
+#line 1297 "../lang/grammar.acc"
  b->ParamType[b->ParamCount] = (int8)ty_n; b->ParamCount++; 
-# line 7648 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7644 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                switch (yyselect()) {
                case 998: {
                   get_lexval();
@@ -7656,9 +7652,9 @@ int sg_prototype ()
                case 999: {
                   get_lexval();
                   cexpr(&def);
-#line 1302 "../lang/grammar.acc"
+#line 1298 "../lang/grammar.acc"
  b->Default[b->ParamCount] = (int8)def; b->HasDefault |= BIT(1+b->ParamCount); 
-# line 7662 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7658 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                   } break;
                default: ;
                }
@@ -7674,9 +7670,9 @@ int sg_prototype ()
       case 1002: {
          get_lexval();
          get_lexval();
-#line 1304 "../lang/grammar.acc"
+#line 1300 "../lang/grammar.acc"
  b->isVarParam = true; 
-# line 7680 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7676 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       default: ;
       }
@@ -7694,9 +7690,9 @@ int s_declaration ()
    YYSTYPE vn;
    switch(yyselect()) {
    case 383: {
-#line 1307 "../lang/grammar.acc"
+#line 1303 "../lang/grammar.acc"
  BMemVar *b; BResMem *b2; 
-# line 7700 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7696 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       get_lexval();
       type_name(&ty);
       cexpr3(&ot);
@@ -7704,7 +7700,7 @@ int s_declaration ()
       get_lexval();
       vn = yylval;
       get_lexval();
-#line 1309 "../lang/grammar.acc"
+#line 1305 "../lang/grammar.acc"
  
       if (is_res(ot)) {
         if (theSymTab.GetBinding(vn,0,RES_MEM))
@@ -7734,7 +7730,7 @@ int s_declaration ()
         theSymTab.Bind(vn,b); 
         }
     
-# line 7738 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7734 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -7747,9 +7743,9 @@ int s_object_decl ()
    YYSTYPE oid;
    switch(yyselect()) {
    case 384: {
-#line 1340 "../lang/grammar.acc"
+#line 1336 "../lang/grammar.acc"
  BSysObj *b; 
-# line 7753 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7749 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       get_lexval();
       cexpr3(&ot);
       get_lexval();
@@ -7757,7 +7753,7 @@ int s_object_decl ()
       get_lexval();
       cexpr3(&oid);
       get_lexval();
-#line 1342 "../lang/grammar.acc"
+#line 1338 "../lang/grammar.acc"
  if (theSymTab.GetBinding(oname,0,0,SYS_OBJ))
         yyerror(Format("System object '%s' declared twice!",theSymTab[oname]));
       else if (theSymTab.GetBinding(oname,0,1,ANY))
@@ -7769,7 +7765,7 @@ int s_object_decl ()
       b->Event = 0;
       b->type  = SYS_OBJ;
       theSymTab.Bind(oname,b); 
-# line 7773 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7769 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -7781,13 +7777,13 @@ int g_declaration ()
    YYSTYPE vn;
    switch(yyselect()) {
    case 385: {
-#line 1356 "../lang/grammar.acc"
+#line 1352 "../lang/grammar.acc"
  BGlobalVar *b; 
-# line 7787 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7783 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       type_name(&ty);
       get_lexval();
       vn = yylval;
-#line 1358 "../lang/grammar.acc"
+#line 1354 "../lang/grammar.acc"
  if (ty == DT_STRING)
         Error("Global variables of type String cannot be created!");
       if (theSymTab.GetBinding(vn,0,0,GLOB_VAR))
@@ -7802,14 +7798,14 @@ int g_declaration ()
       
       b->type    = GLOB_VAR;
       theSymTab.Bind(vn,b); 
-# line 7806 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7802 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 1003: {
             get_lexval();
             get_lexval();
             vn = yylval;
-#line 1373 "../lang/grammar.acc"
+#line 1369 "../lang/grammar.acc"
  if (theSymTab.GetBinding(vn,0,0,GLOB_VAR))
         Error("Global variable '%s' declared twice!",theSymTab[vn]);
       else if (theSymTab.GetBinding(vn,0,1,ANY))
@@ -7821,7 +7817,7 @@ int g_declaration ()
       b->Event   = 0;
       b->type    = GLOB_VAR;
       theSymTab.Bind(vn,b); 
-# line 7825 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7821 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          default: goto yy97;
          }
@@ -7839,13 +7835,13 @@ int l_declaration (VBlock *code)
    YYSTYPE vn;
    switch(yyselect()) {
    case 386: {
-#line 1386 "../lang/grammar.acc"
+#line 1382 "../lang/grammar.acc"
  BLocalVar *b; int16 i; String scope_id; 
-# line 7845 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7841 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       type_name(&ty);
       get_lexval();
       vn = yylval;
-#line 1388 "../lang/grammar.acc"
+#line 1384 "../lang/grammar.acc"
  b = new BLocalVar();
       b->xID   = FIND(theModule->GetText(theRes->Name));
       ASSERT(theEvent);
@@ -7862,14 +7858,14 @@ int l_declaration (VBlock *code)
         code->Generate(ESTR,RT_CONSTANT,-i);
         }
       theSymTab.Bind(vn,b); 
-# line 7866 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7862 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 1004: {
             get_lexval();
             get_lexval();
             vn = yylval;
-#line 1405 "../lang/grammar.acc"
+#line 1401 "../lang/grammar.acc"
  b = new BLocalVar();
       b->xID   = FIND(theModule->GetText(theRes->Name));
       ASSERT(theEvent);
@@ -7886,7 +7882,7 @@ int l_declaration (VBlock *code)
         code->Generate(ESTR,RT_CONSTANT,-i);
         }
       theSymTab.Bind(vn,b); 
-# line 7890 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7886 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          default: goto yy98;
          }
@@ -7904,13 +7900,13 @@ int r_declaration ()
    YYSTYPE vn;
    switch(yyselect()) {
    case 387: {
-#line 1423 "../lang/grammar.acc"
+#line 1419 "../lang/grammar.acc"
  BResVar *b; String scope_id; 
-# line 7910 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7906 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       type_name(&ty);
       get_lexval();
       vn = yylval;
-#line 1425 "../lang/grammar.acc"
+#line 1421 "../lang/grammar.acc"
  if (ty == DT_STRING)
         yyerror("Resource variables of type String cannot be allocated.");
       b = new BResVar();
@@ -7922,14 +7918,14 @@ int r_declaration ()
       b->Address = HeapHead++;
       b->type    = RES_VAR;
       theSymTab.Bind(vn,b); 
-# line 7926 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7922 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 1005: {
             get_lexval();
             get_lexval();
             vn = yylval;
-#line 1437 "../lang/grammar.acc"
+#line 1433 "../lang/grammar.acc"
  b = new BResVar();
       b->xID   = FIND(theModule->GetText(theRes->Name));
       b->Event = 0;
@@ -7939,7 +7935,7 @@ int r_declaration ()
       b->Address = HeapHead++;
       b->type    = RES_VAR;
       theSymTab.Bind(vn,b); 
-# line 7943 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7939 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          default: goto yy99;
          }
@@ -7967,7 +7963,7 @@ int statement (VBlock *st)
    case 388: {
       expr(&ex);
       get_lexval();
-#line 1451 "../lang/grammar.acc"
+#line 1447 "../lang/grammar.acc"
 
       st->Add(ex.Code);
       if (ex.Storage == RT_REGISTER) {
@@ -7978,7 +7974,7 @@ int statement (VBlock *st)
         if (ex.Value < -1)
           FreeString((int16)-ex.Value);
     
-# line 7982 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 7978 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 389: {
       get_lexval();
@@ -7988,7 +7984,7 @@ int statement (VBlock *st)
       statement(&st1);
       get_lexval();
       statement(&st2);
-#line 1462 "../lang/grammar.acc"
+#line 1458 "../lang/grammar.acc"
 
       st->Add(ex.Code);
       /* Here, we compute the address to include the size
@@ -8005,7 +8001,7 @@ int statement (VBlock *st)
       st->Generate(JUMP, RT_CONSTANT, st2.GetSize()+1);
       st->Add(&st2);
     
-# line 8009 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8005 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 390: {
       get_lexval();
@@ -8013,7 +8009,7 @@ int statement (VBlock *st)
       expr(&ex);
       get_lexval();
       statement(&st1);
-#line 1477 "../lang/grammar.acc"
+#line 1473 "../lang/grammar.acc"
 
       st->Add(ex.Code);
       st->Generate(JFAL, ex.Storage, ex.Value, 
@@ -8022,7 +8018,7 @@ int statement (VBlock *st)
         FreeRegister((int16)ex.Value);
       st->Add(&st1);
     
-# line 8026 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8022 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 391: {
       get_lexval();
@@ -8034,7 +8030,7 @@ int statement (VBlock *st)
       expr(&ex3);
       get_lexval();
       statement(&st1);
-#line 1487 "../lang/grammar.acc"
+#line 1483 "../lang/grammar.acc"
 
       int16 jumpback;
       ex1.Code->TrimGratuitousMOV();
@@ -8062,7 +8058,7 @@ int statement (VBlock *st)
         FreeRegister((int16)ex3.Value);
       st->Generate(JUMP,RT_CONSTANT,jumpback - st->GetSize());
     
-# line 8066 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8062 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 392: {
       get_lexval();
@@ -8070,7 +8066,7 @@ int statement (VBlock *st)
       expr(&ex);
       get_lexval();
       get_lexval();
-#line 1513 "../lang/grammar.acc"
+#line 1509 "../lang/grammar.acc"
 
         int16 CaseAddr[256], DefaultAddr;
         int32 CaseVal[256];
@@ -8080,7 +8076,7 @@ int statement (VBlock *st)
         DefaultAddr = 0;
         CaseAddr[0] = 0; 
       
-# line 8084 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8080 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 1009: {
@@ -8091,32 +8087,32 @@ int statement (VBlock *st)
                } break;
             case 1007: {
                res_ref(&rr);
-#line 1522 "../lang/grammar.acc"
+#line 1518 "../lang/grammar.acc"
  val = rr; 
-# line 8097 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8093 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                } break;
             default: printf("???\n"); exit(1);
             }
             get_lexval();
-#line 1523 "../lang/grammar.acc"
+#line 1519 "../lang/grammar.acc"
  CaseCode[CaseCount] = new VBlock; 
-# line 8104 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8100 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             while (1) {
                switch (yyselect()) {
                case 1008: {
-#line 1524 "../lang/grammar.acc"
+#line 1520 "../lang/grammar.acc"
  st_n.Clear(); 
-# line 8110 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8106 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                   statement(&st_n);
-#line 1524 "../lang/grammar.acc"
+#line 1520 "../lang/grammar.acc"
  CaseCode[CaseCount]->Add(&st_n);  
-# line 8114 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8110 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                   } break;
                default: goto yy101;
                }
             }
             yy101: ;
-#line 1525 "../lang/grammar.acc"
+#line 1521 "../lang/grammar.acc"
 
         /* We know where *this* case ends, which is synonimous with where
 
@@ -8125,7 +8121,7 @@ int statement (VBlock *st)
         CaseVal[CaseCount] = val;
         CaseCount++;  
       
-# line 8129 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8125 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          default: goto yy100;
          }
@@ -8135,35 +8131,35 @@ int statement (VBlock *st)
       case 1011: {
          get_lexval();
          get_lexval();
-#line 1533 "../lang/grammar.acc"
+#line 1529 "../lang/grammar.acc"
  DefaultCode = new VBlock; 
-# line 8141 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8137 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          while (1) {
             switch (yyselect()) {
             case 1010: {
-#line 1534 "../lang/grammar.acc"
+#line 1530 "../lang/grammar.acc"
  st_n.Clear(); 
-# line 8147 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8143 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                statement(&st_n);
-#line 1534 "../lang/grammar.acc"
+#line 1530 "../lang/grammar.acc"
  DefaultCode->Add(&st_n);  
-# line 8151 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8147 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                } break;
             default: goto yy102;
             }
          }
          yy102: ;
-#line 1535 "../lang/grammar.acc"
+#line 1531 "../lang/grammar.acc"
  
         DefaultAddr = CaseAddr[CaseCount]; 
         CaseAddr[CaseCount] = DefaultAddr + (int16)DefaultCode->GetSize(); 
       
-# line 8162 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8158 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          } break;
       default: ;
       }
       get_lexval();
-#line 1542 "../lang/grammar.acc"
+#line 1538 "../lang/grammar.acc"
 
         /* Now we code the *entire* switch statement! */
         
@@ -8204,25 +8200,25 @@ int statement (VBlock *st)
         st->Generate(FBRK);
         
       
-# line 8208 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8204 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 393: {
       get_lexval();
       get_lexval();
-#line 1583 "../lang/grammar.acc"
+#line 1579 "../lang/grammar.acc"
 
         st->Generate(JBRK);
       
-# line 8217 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8213 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 394: {
       get_lexval();
       get_lexval();
-#line 1587 "../lang/grammar.acc"
+#line 1583 "../lang/grammar.acc"
 
         st->Generate(CONT);
       
-# line 8226 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8222 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 395: {
       get_lexval();
@@ -8232,7 +8228,7 @@ int statement (VBlock *st)
       expr(&ex);
       get_lexval();
       get_lexval();
-#line 1591 "../lang/grammar.acc"
+#line 1587 "../lang/grammar.acc"
 
         st->Add(&st1);
         st->Add(ex.Code);
@@ -8241,7 +8237,7 @@ int statement (VBlock *st)
         if (ex.Storage == RT_REGISTER)
           FreeRegister((int16)ex.Value);
       
-# line 8245 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8241 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 396: {
       get_lexval();
@@ -8249,7 +8245,7 @@ int statement (VBlock *st)
       expr(&ex);
       get_lexval();
       statement(&st1);
-#line 1600 "../lang/grammar.acc"
+#line 1596 "../lang/grammar.acc"
 
         st->Add(ex.Code);
         st->Generate(JFAL,ex.Storage,ex.Value,
@@ -8260,21 +8256,21 @@ int statement (VBlock *st)
         if (ex.Storage == RT_REGISTER)
           FreeRegister((int16)ex.Value);
       
-# line 8264 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8260 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 397: {
       block(&bl);
-#line 1611 "../lang/grammar.acc"
+#line 1607 "../lang/grammar.acc"
  
         st->Add(&bl); 
       
-# line 8272 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8268 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 398: {
       get_lexval();
       expr(&ex);
       get_lexval();
-#line 1615 "../lang/grammar.acc"
+#line 1611 "../lang/grammar.acc"
 
         st->Add(ex.Code);
         if (StackHead) {
@@ -8287,18 +8283,18 @@ int statement (VBlock *st)
         if (ex.Storage == RT_REGISTER)
           FreeRegister((int16)ex.Value);
       
-# line 8291 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8287 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 399: {
       get_lexval();
       get_lexval();
-#line 1628 "../lang/grammar.acc"
+#line 1624 "../lang/grammar.acc"
 
         if (StackHead)
           st->Generate(DEC,RT_REGISTER,63,RT_CONSTANT,StackHead);
         st->Generate(RET);
       
-# line 8302 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8298 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -8313,13 +8309,13 @@ int block (VBlock *bl)
       while (1) {
          switch (yyselect()) {
          case 1012: {
-#line 1636 "../lang/grammar.acc"
+#line 1632 "../lang/grammar.acc"
  st.Clear(); 
-# line 8319 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8315 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             statement(&st);
-#line 1636 "../lang/grammar.acc"
+#line 1632 "../lang/grammar.acc"
  bl->Add(&st); 
-# line 8323 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8319 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          default: goto yy103;
          }
@@ -8337,20 +8333,20 @@ int routine (VBlock *bl)
    VBlock st;
    switch(yyselect()) {
    case 401: {
-#line 1640 "../lang/grammar.acc"
+#line 1636 "../lang/grammar.acc"
  VBlock decl_code; StackHead = 0; ClearStrings(); 
-# line 8343 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8339 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       get_lexval();
       while (1) {
          switch (yyselect()) {
          case 1013: {
-#line 1641 "../lang/grammar.acc"
+#line 1637 "../lang/grammar.acc"
  code.Clear(); 
-# line 8350 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8346 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             l_declaration(&code);
-#line 1641 "../lang/grammar.acc"
+#line 1637 "../lang/grammar.acc"
  decl_code.Add(&code); 
-# line 8354 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8350 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          case 1014: {
             get_lexval();
@@ -8360,28 +8356,28 @@ int routine (VBlock *bl)
          }
       }
       yy104: ;
-#line 1643 "../lang/grammar.acc"
+#line 1639 "../lang/grammar.acc"
  if (StackHead)
           bl->Generate(INC,RT_REGISTER,63,RT_CONSTANT,StackHead);
         bl->Add(&decl_code); 
-# line 8368 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8364 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       while (1) {
          switch (yyselect()) {
          case 1015: {
-#line 1646 "../lang/grammar.acc"
+#line 1642 "../lang/grammar.acc"
  st.Clear(); 
-# line 8374 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8370 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             statement(&st);
-#line 1646 "../lang/grammar.acc"
+#line 1642 "../lang/grammar.acc"
  bl->Add(&st); 
-# line 8378 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8374 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
             } break;
          default: goto yy105;
          }
       }
       yy105: ;
       get_lexval();
-#line 1647 "../lang/grammar.acc"
+#line 1643 "../lang/grammar.acc"
  if (StackHead)
           bl->Generate(DEC,RT_REGISTER,63,RT_CONSTANT,StackHead); 
       
@@ -8398,7 +8394,7 @@ int routine (VBlock *bl)
         for (i=0;i!=64;i++)
           FreeRegister(i);
       
-# line 8402 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8398 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -8421,61 +8417,61 @@ int fund_expr (PExp *ex)
    case 402: {
       get_lexval();
       n = yylval;
-#line 1683 "../lang/grammar.acc"
+#line 1679 "../lang/grammar.acc"
  ex->Type = DT_INT32; ex->Storage = RT_CONSTANT; ex->Value = n; ex->Code = NULL; 
-# line 8427 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8423 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 403: {
       get_lexval();
       n = yylval;
-#line 1685 "../lang/grammar.acc"
+#line 1681 "../lang/grammar.acc"
  ex->Type = DT_INT32; ex->Storage = RT_CONSTANT; ex->Value = n; ex->Code = NULL; 
-# line 8434 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8430 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 404: {
       get_lexval();
       lv = yylval;
-#line 1687 "../lang/grammar.acc"
+#line 1683 "../lang/grammar.acc"
  ex->Type = DT_HTEXT; ex->Storage = RT_CONSTANT; ex->Value = lv; ex->Code = NULL; 
-# line 8441 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8437 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 405: {
       get_lexval();
-#line 1689 "../lang/grammar.acc"
+#line 1685 "../lang/grammar.acc"
  ex->Type = DT_BOOL; ex->Storage = RT_CONSTANT; ex->Value = 1; ex->Code = NULL; 
-# line 8447 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8443 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 406: {
       get_lexval();
-#line 1691 "../lang/grammar.acc"
+#line 1687 "../lang/grammar.acc"
  ex->Type = DT_BOOL; ex->Storage = RT_CONSTANT; ex->Value = 0; ex->Code = NULL; 
-# line 8453 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8449 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 407: {
       get_lexval();
-#line 1693 "../lang/grammar.acc"
+#line 1689 "../lang/grammar.acc"
  ex->Type = DT_UNKNOWN; ex->Storage = RT_CONSTANT; ex->Value = 0; ex->Code = NULL; 
-# line 8459 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8455 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 408: {
       res_ref(&rr);
-#line 1695 "../lang/grammar.acc"
+#line 1691 "../lang/grammar.acc"
  ex->Type = DT_RID;   ex->Storage = RT_CONSTANT; ex->Value = rr; ex->Code = NULL; 
-# line 8465 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8461 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 409: {
       get_lexval();
       expr(&ex2);
       get_lexval();
-#line 1697 "../lang/grammar.acc"
+#line 1693 "../lang/grammar.acc"
  ex->Code = ex2.Code; 
       ex->Type = ex2.Type; ex->Storage = ex2.Storage; ex->Value = ex2.Value; 
-# line 8474 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8470 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 410: {
       get_lexval();
       id = yylval;
-#line 1700 "../lang/grammar.acc"
+#line 1696 "../lang/grammar.acc"
  BGlobalVar *b; BLocalVar *b2; BSysObj *b3; BResVar *b4; rID resID;
       resID = FIND(theModule->GetText(theRes->Name));
       ASSERT(resID);
@@ -8516,7 +8512,7 @@ int fund_expr (PExp *ex)
 
         }
     
-# line 8520 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8516 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 411: {
       fund_expr(&obj);
@@ -8531,7 +8527,7 @@ int fund_expr (PExp *ex)
       }
       get_lexval();
       id = yylval;
-#line 1741 "../lang/grammar.acc"
+#line 1737 "../lang/grammar.acc"
 
       BMemVar *b;
 	  BResMem *b2;
@@ -8588,7 +8584,7 @@ int fund_expr (PExp *ex)
           }
         }
     
-# line 8592 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8588 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 412: {
       fund_expr(&obj);
@@ -8603,7 +8599,7 @@ int fund_expr (PExp *ex)
       }
       get_lexval();
       fn = yylval;
-#line 1798 "../lang/grammar.acc"
+#line 1794 "../lang/grammar.acc"
  BSysFunc *b;
         if (obj.Type == DT_RID) {
           if (!(b = GETBIND_RESFUNC(fn)))
@@ -8630,11 +8626,11 @@ int fund_expr (PExp *ex)
               obj.Value = j;
             }          
       
-# line 8634 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8630 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       get_lexval();
       param_list(b, fn, &bl, &narg);
       get_lexval();
-#line 1825 "../lang/grammar.acc"
+#line 1821 "../lang/grammar.acc"
 
         if (obj.Code)
           ex->Code->Add(obj.Code);
@@ -8663,23 +8659,23 @@ int fund_expr (PExp *ex)
           ex->Code->Generate(MOV,RT_REGISTER,ex->Value,RT_REGISTER,0);
           }
       
-# line 8667 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8663 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 413: {
       get_lexval();
       fn = yylval;
-#line 1853 "../lang/grammar.acc"
+#line 1849 "../lang/grammar.acc"
  BSysFunc *b;
         if (!(b = GETBIND_SYSFUNC(fn)))
           yyerror(Format("Expected: global function name before '(' (%s).",
             theSymTab[fn]));
         ex->Code = new VBlock;
       
-# line 8679 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8675 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       get_lexval();
       param_list(b, fn, &bl, &narg);
       get_lexval();
-#line 1860 "../lang/grammar.acc"
+#line 1856 "../lang/grammar.acc"
 
         ex->Code->Add(&bl);
         /* Call the Function */
@@ -8698,21 +8694,21 @@ int fund_expr (PExp *ex)
           ex->Code->Generate(MOV,RT_REGISTER,ex->Value,RT_REGISTER,0);
           }
       
-# line 8702 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8698 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 414: {
       fund_expr(&rect);
       get_lexval();
       get_lexval();
       id = yylval;
-#line 1879 "../lang/grammar.acc"
+#line 1875 "../lang/grammar.acc"
 
       if (rect.Type != DT_RECT)
         yyerror("Type mismatch: '@' operator used on non-Rect target.");
       *ex = CodeRectMember(&rect,(int16)id);
       
     
-# line 8716 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8712 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -8727,7 +8723,7 @@ int lvalue (LExp *lv)
    case 415: {
       get_lexval();
       id = yylval;
-#line 1889 "../lang/grammar.acc"
+#line 1885 "../lang/grammar.acc"
  BGlobalVar *b; BLocalVar *b2; BResVar *b3; rID resID;
       resID = FIND(theModule->GetText(theRes->Name));
       ASSERT(resID);
@@ -8772,20 +8768,20 @@ int lvalue (LExp *lv)
 
         }
     
-# line 8776 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8772 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 416: {
       lvalue(&rect);
       get_lexval();
       get_lexval();
       id = yylval;
-#line 1934 "../lang/grammar.acc"
+#line 1930 "../lang/grammar.acc"
 
       if (rect.Type != DT_RECT)
         yyerror("Type mismatch: '@' operator used on non-Rect target.");
       *lv = CodeRectLVal(&rect,(int16)id);
     
-# line 8789 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8785 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 417: {
       fund_expr(&obj);
@@ -8800,7 +8796,7 @@ int lvalue (LExp *lv)
       }
       get_lexval();
       id = yylval;
-#line 1940 "../lang/grammar.acc"
+#line 1936 "../lang/grammar.acc"
 
       int8 i;
 	  BMemVar *b;
@@ -8839,7 +8835,7 @@ int lvalue (LExp *lv)
           RT_CONSTANT, b->varid);
         }
     
-# line 8843 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8839 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -8854,16 +8850,16 @@ int expr10 (PExp *ex)
    case 418: {
       lvalue(&lv);
       get_lexval();
-#line 1983 "../lang/grammar.acc"
+#line 1979 "../lang/grammar.acc"
  *ex = CodeAssignment('i',lv,NULL); 
-# line 8860 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8856 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 419: {
       lvalue(&lv);
       get_lexval();
-#line 1985 "../lang/grammar.acc"
+#line 1981 "../lang/grammar.acc"
  *ex = CodeAssignment('d',lv,NULL); 
-# line 8867 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8863 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 420: {
       get_lexval();
@@ -8872,9 +8868,9 @@ int expr10 (PExp *ex)
       get_lexval();
       expr150(&ex2);
       get_lexval();
-#line 1987 "../lang/grammar.acc"
+#line 1983 "../lang/grammar.acc"
  *ex = CodeOperator('m',ex1,ex2); 
-# line 8878 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8874 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 421: {
       get_lexval();
@@ -8883,15 +8879,15 @@ int expr10 (PExp *ex)
       get_lexval();
       expr150(&ex2);
       get_lexval();
-#line 1989 "../lang/grammar.acc"
+#line 1985 "../lang/grammar.acc"
  *ex = CodeOperator('M',ex1,ex2); 
-# line 8889 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8885 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 422: {
       fund_expr(&ex1);
-#line 1991 "../lang/grammar.acc"
+#line 1987 "../lang/grammar.acc"
  *ex = ex1; 
-# line 8895 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8891 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -8905,58 +8901,58 @@ int expr20 (PExp *ex)
    case 423: {
       get_lexval();
       lvalue(&lv);
-#line 1996 "../lang/grammar.acc"
+#line 1992 "../lang/grammar.acc"
  *ex = CodeAssignment('I',lv,NULL); 
-# line 8911 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8907 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 424: {
       get_lexval();
       lvalue(&lv);
-#line 1998 "../lang/grammar.acc"
+#line 1994 "../lang/grammar.acc"
  *ex = CodeAssignment('D',lv,NULL); 
-# line 8918 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8914 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 425: {
       get_lexval();
       expr20(&ex1);
-#line 2000 "../lang/grammar.acc"
+#line 1996 "../lang/grammar.acc"
  *ex = ex1; 
-# line 8925 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8921 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 426: {
       get_lexval();
       expr20(&ex1);
-#line 2002 "../lang/grammar.acc"
+#line 1998 "../lang/grammar.acc"
  *ex = CodeOperator('-',ex1,ex1); 
-# line 8932 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8928 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 427: {
       get_lexval();
       expr20(&ex1);
-#line 2004 "../lang/grammar.acc"
+#line 2000 "../lang/grammar.acc"
  *ex = CodeOperator('!',ex1,ex1); 
-# line 8939 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8935 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 428: {
       get_lexval();
       expr20(&ex1);
-#line 2006 "../lang/grammar.acc"
+#line 2002 "../lang/grammar.acc"
  *ex = CodeOperator('~',ex1,ex1); 
-# line 8946 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8942 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 429: {
       get_lexval();
       expr20(&ex1);
       get_lexval();
-#line 2008 "../lang/grammar.acc"
+#line 2004 "../lang/grammar.acc"
  *ex = CodeOperator(':',ex1,ex1); 
-# line 8954 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8950 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 430: {
       expr10(&ex1);
-#line 2010 "../lang/grammar.acc"
+#line 2006 "../lang/grammar.acc"
  *ex = ex1; 
-# line 8960 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8956 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -8971,15 +8967,15 @@ int expr30 (PExp *ex)
       expr20(&ex1);
       get_lexval();
       expr20(&ex2);
-#line 2015 "../lang/grammar.acc"
+#line 2011 "../lang/grammar.acc"
  *ex = CodeOperator('d',ex1,ex2); 
-# line 8977 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8973 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 432: {
       expr20(&ex1);
-#line 2017 "../lang/grammar.acc"
+#line 2013 "../lang/grammar.acc"
  *ex = ex1; 
-# line 8983 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8979 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -8995,15 +8991,15 @@ int expr40 (PExp *ex)
       type_name(&tn);
       get_lexval();
       expr40(&ex1);
-#line 2022 "../lang/grammar.acc"
+#line 2018 "../lang/grammar.acc"
  *ex = ex1; ex->Type = (int8)tn; 
-# line 9001 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 8997 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 434: {
       expr30(&ex1);
-#line 2024 "../lang/grammar.acc"
+#line 2020 "../lang/grammar.acc"
  *ex = ex1; 
-# line 9007 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9003 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -9018,31 +9014,31 @@ int expr50 (PExp *ex)
       expr50(&ex1);
       get_lexval();
       expr40(&ex2);
-#line 2030 "../lang/grammar.acc"
+#line 2026 "../lang/grammar.acc"
  *ex = CodeOperator('*',ex1,ex2); 
-# line 9024 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9020 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 436: {
       expr50(&ex1);
       get_lexval();
       expr40(&ex2);
-#line 2032 "../lang/grammar.acc"
+#line 2028 "../lang/grammar.acc"
  *ex = CodeOperator('/',ex1,ex2); 
-# line 9032 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9028 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 437: {
       expr50(&ex1);
       get_lexval();
       expr40(&ex2);
-#line 2034 "../lang/grammar.acc"
+#line 2030 "../lang/grammar.acc"
  *ex = CodeOperator('%',ex1,ex2); 
-# line 9040 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9036 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 438: {
       expr40(&ex1);
-#line 2036 "../lang/grammar.acc"
+#line 2032 "../lang/grammar.acc"
  *ex = ex1; 
-# line 9046 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9042 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -9057,23 +9053,23 @@ int expr60 (PExp *ex)
       expr60(&ex1);
       get_lexval();
       expr50(&ex2);
-#line 2041 "../lang/grammar.acc"
+#line 2037 "../lang/grammar.acc"
  *ex = CodeOperator('+',ex1,ex2); 
-# line 9063 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9059 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 440: {
       expr60(&ex1);
       get_lexval();
       expr50(&ex2);
-#line 2043 "../lang/grammar.acc"
+#line 2039 "../lang/grammar.acc"
  *ex = CodeOperator('-',ex1,ex2); 
-# line 9071 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9067 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 441: {
       expr50(&ex1);
-#line 2045 "../lang/grammar.acc"
+#line 2041 "../lang/grammar.acc"
  *ex = ex1; 
-# line 9077 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9073 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -9088,23 +9084,23 @@ int expr70 (PExp *ex)
       expr70(&ex1);
       get_lexval();
       expr60(&ex2);
-#line 2050 "../lang/grammar.acc"
+#line 2046 "../lang/grammar.acc"
  *ex = CodeOperator(LSHIFT_OP,ex1,ex2); 
-# line 9094 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9090 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 443: {
       expr70(&ex1);
       get_lexval();
       expr60(&ex2);
-#line 2052 "../lang/grammar.acc"
+#line 2048 "../lang/grammar.acc"
  *ex = CodeOperator(RSHIFT_OP,ex1,ex2); 
-# line 9102 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9098 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 444: {
       expr60(&ex1);
-#line 2054 "../lang/grammar.acc"
+#line 2050 "../lang/grammar.acc"
  *ex = ex1; 
-# line 9108 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9104 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -9119,55 +9115,55 @@ int expr80 (PExp *ex)
       expr80(&ex1);
       get_lexval();
       expr70(&ex2);
-#line 2063 "../lang/grammar.acc"
+#line 2059 "../lang/grammar.acc"
  *ex = CodeOperator('<',ex1,ex2); 
-# line 9125 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9121 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 446: {
       expr80(&ex1);
       get_lexval();
       expr70(&ex2);
-#line 2065 "../lang/grammar.acc"
+#line 2061 "../lang/grammar.acc"
  *ex = CodeOperator('>',ex1,ex2); 
-# line 9133 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9129 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 447: {
       expr80(&ex1);
       get_lexval();
       expr70(&ex2);
-#line 2067 "../lang/grammar.acc"
+#line 2063 "../lang/grammar.acc"
  *ex = CodeOperator(GE_OP,ex1,ex2); 
-# line 9141 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9137 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 448: {
       expr80(&ex1);
       get_lexval();
       expr70(&ex2);
-#line 2069 "../lang/grammar.acc"
+#line 2065 "../lang/grammar.acc"
  *ex = CodeOperator(LE_OP,ex1,ex2); 
-# line 9149 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9145 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 449: {
       expr80(&ex1);
       get_lexval();
       expr70(&ex2);
-#line 2071 "../lang/grammar.acc"
+#line 2067 "../lang/grammar.acc"
  *ex = CodeOperator(EQ_OP,ex1,ex2); 
-# line 9157 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9153 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 450: {
       expr80(&ex1);
       get_lexval();
       expr70(&ex2);
-#line 2073 "../lang/grammar.acc"
+#line 2069 "../lang/grammar.acc"
  *ex = CodeOperator(NE_OP,ex1,ex2); 
-# line 9165 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9161 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 451: {
       expr70(&ex1);
-#line 2075 "../lang/grammar.acc"
+#line 2071 "../lang/grammar.acc"
  *ex = ex1; 
-# line 9171 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9167 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -9182,15 +9178,15 @@ int expr90 (PExp *ex)
       expr90(&ex1);
       get_lexval();
       expr80(&ex2);
-#line 2080 "../lang/grammar.acc"
+#line 2076 "../lang/grammar.acc"
  *ex = CodeOperator('&',ex1,ex2); 
-# line 9188 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9184 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 453: {
       expr80(&ex1);
-#line 2082 "../lang/grammar.acc"
+#line 2078 "../lang/grammar.acc"
  *ex = ex1; 
-# line 9194 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9190 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -9205,15 +9201,15 @@ int expr100 (PExp *ex)
       expr100(&ex1);
       get_lexval();
       expr90(&ex2);
-#line 2087 "../lang/grammar.acc"
+#line 2083 "../lang/grammar.acc"
  *ex = CodeOperator('^',ex1,ex2); 
-# line 9211 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9207 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 455: {
       expr90(&ex1);
-#line 2089 "../lang/grammar.acc"
+#line 2085 "../lang/grammar.acc"
  *ex = ex1; 
-# line 9217 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9213 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -9228,15 +9224,15 @@ int expr110 (PExp *ex)
       expr110(&ex1);
       get_lexval();
       expr100(&ex2);
-#line 2094 "../lang/grammar.acc"
+#line 2090 "../lang/grammar.acc"
  *ex = CodeOperator('|',ex1,ex2); 
-# line 9234 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9230 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 457: {
       expr100(&ex1);
-#line 2096 "../lang/grammar.acc"
+#line 2092 "../lang/grammar.acc"
  *ex = ex1; 
-# line 9240 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9236 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -9251,15 +9247,15 @@ int expr120 (PExp *ex)
       expr120(&ex1);
       get_lexval();
       expr110(&ex2);
-#line 2101 "../lang/grammar.acc"
+#line 2097 "../lang/grammar.acc"
  *ex = CodeOperator(AND_OP,ex1,ex2); 
-# line 9257 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9253 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 459: {
       expr110(&ex1);
-#line 2103 "../lang/grammar.acc"
+#line 2099 "../lang/grammar.acc"
  *ex = ex1; 
-# line 9263 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9259 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -9274,15 +9270,15 @@ int expr130 (PExp *ex)
       expr130(&ex1);
       get_lexval();
       expr120(&ex2);
-#line 2108 "../lang/grammar.acc"
+#line 2104 "../lang/grammar.acc"
  *ex = CodeOperator(OR_OP,ex1,ex2); 
-# line 9280 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9276 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 461: {
       expr120(&ex1);
-#line 2110 "../lang/grammar.acc"
+#line 2106 "../lang/grammar.acc"
  *ex = ex1; 
-# line 9286 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9282 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -9300,7 +9296,7 @@ int expr140 (PExp *ex)
       expr(&ex2);
       get_lexval();
       expr140(&ex3);
-#line 2115 "../lang/grammar.acc"
+#line 2111 "../lang/grammar.acc"
 
       VBlock bl;
       if (!AllowedCast(ex1.Type,DT_BOOL))
@@ -9350,13 +9346,13 @@ int expr140 (PExp *ex)
       if (ex3.Storage == RT_REGISTER)
         FreeRegister((int16)ex3.Value);
     
-# line 9354 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9350 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 463: {
       expr130(&ex1);
-#line 2165 "../lang/grammar.acc"
+#line 2161 "../lang/grammar.acc"
  *ex = ex1; 
-# line 9360 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9356 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -9372,95 +9368,95 @@ int expr150 (PExp *ex)
       lvalue(&lv);
       get_lexval();
       expr140(&ex2);
-#line 2173 "../lang/grammar.acc"
+#line 2169 "../lang/grammar.acc"
  *ex = CodeAssignment('=',lv,&ex2); 
-# line 9378 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9374 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 465: {
       lvalue(&lv);
       get_lexval();
       expr140(&ex2);
-#line 2175 "../lang/grammar.acc"
+#line 2171 "../lang/grammar.acc"
  *ex = CodeAssignment(ASSIGN_ADD,lv,&ex2); 
-# line 9386 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9382 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 466: {
       lvalue(&lv);
       get_lexval();
       expr140(&ex2);
-#line 2177 "../lang/grammar.acc"
+#line 2173 "../lang/grammar.acc"
  *ex = CodeAssignment(ASSIGN_SUB,lv,&ex2); 
-# line 9394 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9390 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 467: {
       lvalue(&lv);
       get_lexval();
       expr140(&ex2);
-#line 2179 "../lang/grammar.acc"
+#line 2175 "../lang/grammar.acc"
  *ex = CodeAssignment(ASSIGN_MULT,lv,&ex2); 
-# line 9402 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9398 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 468: {
       lvalue(&lv);
       get_lexval();
       expr140(&ex2);
-#line 2181 "../lang/grammar.acc"
+#line 2177 "../lang/grammar.acc"
  *ex = CodeAssignment(ASSIGN_DIV,lv,&ex2); 
-# line 9410 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9406 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 469: {
       lvalue(&lv);
       get_lexval();
       expr140(&ex2);
-#line 2183 "../lang/grammar.acc"
+#line 2179 "../lang/grammar.acc"
  *ex = CodeAssignment(ASSIGN_MOD,lv,&ex2); 
-# line 9418 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9414 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 470: {
       lvalue(&lv);
       get_lexval();
       expr140(&ex2);
-#line 2185 "../lang/grammar.acc"
+#line 2181 "../lang/grammar.acc"
  *ex = CodeAssignment(ASSIGN_AND,lv,&ex2); 
-# line 9426 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9422 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 471: {
       lvalue(&lv);
       get_lexval();
       expr140(&ex2);
-#line 2187 "../lang/grammar.acc"
+#line 2183 "../lang/grammar.acc"
  *ex = CodeAssignment(ASSIGN_OR,lv,&ex2); 
-# line 9434 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9430 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 472: {
       lvalue(&lv);
       get_lexval();
       expr140(&ex2);
-#line 2189 "../lang/grammar.acc"
+#line 2185 "../lang/grammar.acc"
  *ex = CodeAssignment(ASSIGN_LSHIFT,lv,&ex2); 
-# line 9442 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9438 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 473: {
       lvalue(&lv);
       get_lexval();
       expr140(&ex2);
-#line 2191 "../lang/grammar.acc"
+#line 2187 "../lang/grammar.acc"
  *ex = CodeAssignment(ASSIGN_RSHIFT,lv,&ex2); 
-# line 9450 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9446 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 474: {
       lvalue(&lv);
       get_lexval();
       expr140(&ex2);
-#line 2193 "../lang/grammar.acc"
+#line 2189 "../lang/grammar.acc"
  *ex = CodeAssignment(ASSIGN_NEG,lv,&ex2); 
-# line 9458 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9454 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 475: {
       expr140(&ex1);
-#line 2195 "../lang/grammar.acc"
+#line 2191 "../lang/grammar.acc"
  *ex = ex1; 
-# line 9464 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9460 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -9475,7 +9471,7 @@ int expr (PExp *ex)
       expr(&ex1);
       get_lexval();
       expr150(&ex2);
-#line 2200 "../lang/grammar.acc"
+#line 2196 "../lang/grammar.acc"
 
       ex->Code = ex1.Code;
       if (!ex->Code)
@@ -9488,13 +9484,13 @@ int expr (PExp *ex)
       ex->Value   = ex1.Value;
       ex->Type    = ex1.Type;
     
-# line 9492 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9488 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    case 477: {
       expr150(&ex1);
-#line 2213 "../lang/grammar.acc"
+#line 2209 "../lang/grammar.acc"
  *ex = ex1; 
-# line 9498 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9494 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -9505,14 +9501,14 @@ int param_list (pBSysFunc b, YYSTYPE fn, VBlock *bl, int *narg)
    PExp p;
    switch(yyselect()) {
    case 478: {
-#line 2221 "../lang/grammar.acc"
+#line 2217 "../lang/grammar.acc"
  *narg = 0; int16 i,j; bl->Clear();
     int16 PStorage[10]; int32 PValue[10]; 
-# line 9512 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9508 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       switch (yyselect()) {
       case 1023: {
          expr150(&p);
-#line 2224 "../lang/grammar.acc"
+#line 2220 "../lang/grammar.acc"
 
       if (!b)
         ;
@@ -9539,13 +9535,13 @@ int param_list (pBSysFunc b, YYSTYPE fn, VBlock *bl, int *narg)
         (*narg)++;
         }
     
-# line 9543 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9539 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
          while (1) {
             switch (yyselect()) {
             case 1022: {
                get_lexval();
                expr150(&p);
-#line 2251 "../lang/grammar.acc"
+#line 2247 "../lang/grammar.acc"
 
       if (!b)
         ;
@@ -9580,7 +9576,7 @@ int param_list (pBSysFunc b, YYSTYPE fn, VBlock *bl, int *narg)
         (*narg)++;
         }
     
-# line 9584 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9580 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
                } break;
             default: goto yy106;
             }
@@ -9589,7 +9585,7 @@ int param_list (pBSysFunc b, YYSTYPE fn, VBlock *bl, int *narg)
          } break;
       default: ;
       }
-#line 2286 "../lang/grammar.acc"
+#line 2282 "../lang/grammar.acc"
 
       if ((*narg) <= b->ParamCount)
         for(i=b->ParamCount;i!=(*narg);i--) {
@@ -9609,7 +9605,7 @@ int param_list (pBSysFunc b, YYSTYPE fn, VBlock *bl, int *narg)
       *narg = max(*narg,b->ParamCount);
       Done:;
       
-# line 9613 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
+# line 9609 "C:/RMT/VCS/GIT/Games/roguelike - incursion/repo/build//../src/yygram.cpp"
       } break;
    }
 return 0;
@@ -23180,6754 +23176,6754 @@ extern int yycoordinate[];
 int yycoordinate[] = {
 0,
 /* 1 */ 9999,
-/* 2 */ 192005,
+/* 2 */ 188005,
 /* 3 */ 9999,
 /* 4 */ 9999,
-/* 5 */ 192005,
+/* 5 */ 188005,
 /* 6 */ 9999,
-/* 7 */ 194003,
+/* 7 */ 190003,
 /* 8 */ 9999,
-/* 9 */ 193003,
+/* 9 */ 189003,
 /* 10 */ 9999,
-/* 11 */ 194004,
-/* 12 */ 194011,
+/* 11 */ 190004,
+/* 12 */ 190011,
 /* 13 */ 9999,
-/* 14 */ 194011,
+/* 14 */ 190011,
 /* 15 */ 9999,
 /* 16 */ 9999,
-/* 17 */ 194011,
+/* 17 */ 190011,
 /* 18 */ 9999,
 /* 19 */ 9999,
 /* 20 */ 9999,
 /* 21 */ 9999,
 /* 22 */ 9999,
-/* 23 */ 197010,
+/* 23 */ 193010,
 /* 24 */ 9999,
 /* 25 */ 9999,
-/* 26 */ 198010,
+/* 26 */ 194010,
 /* 27 */ 9999,
 /* 28 */ 9999,
-/* 29 */ 198008,
+/* 29 */ 194008,
 /* 30 */ 9999,
 /* 31 */ 9999,
 /* 32 */ 9999,
 /* 33 */ 9999,
 /* 34 */ 9999,
-/* 35 */ 199013,
+/* 35 */ 195013,
 /* 36 */ 9999,
-/* 37 */ 200005,
+/* 37 */ 196005,
 /* 38 */ 9999,
-/* 39 */ 200015,
+/* 39 */ 196015,
 /* 40 */ 9999,
-/* 41 */ 201005,
+/* 41 */ 197005,
 /* 42 */ 9999,
-/* 43 */ 201012,
+/* 43 */ 197012,
 /* 44 */ 9999,
-/* 45 */ 202005,
+/* 45 */ 198005,
 /* 46 */ 9999,
-/* 47 */ 202015,
+/* 47 */ 198015,
 /* 48 */ 9999,
-/* 49 */ 203005,
+/* 49 */ 199005,
 /* 50 */ 9999,
-/* 51 */ 203016,
+/* 51 */ 199016,
 /* 52 */ 9999,
-/* 53 */ 204005,
+/* 53 */ 200005,
 /* 54 */ 9999,
-/* 55 */ 204015,
+/* 55 */ 200015,
 /* 56 */ 9999,
-/* 57 */ 205005,
+/* 57 */ 201005,
 /* 58 */ 9999,
-/* 59 */ 205013,
+/* 59 */ 201013,
 /* 60 */ 9999,
-/* 61 */ 206005,
+/* 61 */ 202005,
 /* 62 */ 9999,
-/* 63 */ 206014,
+/* 63 */ 202014,
 /* 64 */ 9999,
-/* 65 */ 207005,
+/* 65 */ 203005,
 /* 66 */ 9999,
-/* 67 */ 207012,
+/* 67 */ 203012,
 /* 68 */ 9999,
-/* 69 */ 208005,
+/* 69 */ 204005,
 /* 70 */ 9999,
-/* 71 */ 208013,
+/* 71 */ 204013,
 /* 72 */ 9999,
-/* 73 */ 209005,
+/* 73 */ 205005,
 /* 74 */ 9999,
-/* 75 */ 209011,
+/* 75 */ 205011,
 /* 76 */ 9999,
-/* 77 */ 210005,
+/* 77 */ 206005,
 /* 78 */ 9999,
-/* 79 */ 210014,
+/* 79 */ 206014,
 /* 80 */ 9999,
-/* 81 */ 211005,
+/* 81 */ 207005,
 /* 82 */ 9999,
-/* 83 */ 211014,
+/* 83 */ 207014,
 /* 84 */ 9999,
-/* 85 */ 212005,
+/* 85 */ 208005,
 /* 86 */ 9999,
-/* 87 */ 212015,
+/* 87 */ 208015,
 /* 88 */ 9999,
-/* 89 */ 213005,
+/* 89 */ 209005,
 /* 90 */ 9999,
-/* 91 */ 213016,
+/* 91 */ 209016,
 /* 92 */ 9999,
-/* 93 */ 214005,
+/* 93 */ 210005,
 /* 94 */ 9999,
-/* 95 */ 214014,
+/* 95 */ 210014,
 /* 96 */ 9999,
-/* 97 */ 215005,
+/* 97 */ 211005,
 /* 98 */ 9999,
-/* 99 */ 215017,
+/* 99 */ 211017,
 /* 100 */ 9999,
-/* 101 */ 216005,
+/* 101 */ 212005,
 /* 102 */ 9999,
-/* 103 */ 216017,
+/* 103 */ 212017,
 /* 104 */ 9999,
-/* 105 */ 217005,
+/* 105 */ 213005,
 /* 106 */ 9999,
-/* 107 */ 217013,
+/* 107 */ 213013,
 /* 108 */ 9999,
-/* 109 */ 218005,
+/* 109 */ 214005,
 /* 110 */ 9999,
-/* 111 */ 218015,
+/* 111 */ 214015,
 /* 112 */ 9999,
-/* 113 */ 219005,
+/* 113 */ 215005,
 /* 114 */ 9999,
-/* 115 */ 219016,
+/* 115 */ 215016,
 /* 116 */ 9999,
-/* 117 */ 220005,
+/* 117 */ 216005,
 /* 118 */ 9999,
-/* 119 */ 220017,
+/* 119 */ 216017,
 /* 120 */ 9999,
-/* 121 */ 221005,
+/* 121 */ 217005,
 /* 122 */ 9999,
-/* 123 */ 221017,
+/* 123 */ 217017,
 /* 124 */ 9999,
-/* 125 */ 222005,
+/* 125 */ 218005,
 /* 126 */ 9999,
-/* 127 */ 222017,
+/* 127 */ 218017,
 /* 128 */ 9999,
 /* 129 */ 9999,
-/* 130 */ 223011,
-/* 131 */ 223017,
+/* 130 */ 219011,
+/* 131 */ 219017,
 /* 132 */ 9999,
-/* 133 */ 223009,
+/* 133 */ 219009,
 /* 134 */ 9999,
 /* 135 */ 9999,
 /* 136 */ 9999,
 /* 137 */ 9999,
-/* 138 */ 224027,
+/* 138 */ 220027,
 /* 139 */ 9999,
-/* 140 */ 224058,
+/* 140 */ 220058,
 /* 141 */ 9999,
 /* 142 */ 9999,
-/* 143 */ 224008,
+/* 143 */ 220008,
 /* 144 */ 9999,
 /* 145 */ 9999,
 /* 146 */ 9999,
-/* 147 */ 223012,
+/* 147 */ 219012,
 /* 148 */ 9999,
 /* 149 */ 9999,
 /* 150 */ 9999,
 /* 151 */ 9999,
-/* 152 */ 224036,
+/* 152 */ 220036,
 /* 153 */ 9999,
 /* 154 */ 9999,
-/* 155 */ 224036,
+/* 155 */ 220036,
 /* 156 */ 9999,
 /* 157 */ 9999,
 /* 158 */ 9999,
-/* 159 */ 224059,
+/* 159 */ 220059,
 /* 160 */ 9999,
 /* 161 */ 9999,
-/* 162 */ 224059,
+/* 162 */ 220059,
 /* 163 */ 9999,
 /* 164 */ 9999,
 /* 165 */ 9999,
 /* 166 */ 9999,
-/* 167 */ 229005,
+/* 167 */ 225005,
 /* 168 */ 9999,
 /* 169 */ 9999,
-/* 170 */ 238009,
+/* 170 */ 234009,
 /* 171 */ 9999,
-/* 172 */ 238005,
+/* 172 */ 234005,
 /* 173 */ 9999,
-/* 174 */ 242005,
+/* 174 */ 238005,
 /* 175 */ 9999,
-/* 176 */ 242018,
+/* 176 */ 238018,
 /* 177 */ 9999,
-/* 178 */ 242009,
+/* 178 */ 238009,
 /* 179 */ 9999,
-/* 180 */ 243005,
+/* 180 */ 239005,
 /* 181 */ 9999,
-/* 182 */ 243018,
+/* 182 */ 239018,
 /* 183 */ 9999,
-/* 184 */ 243009,
+/* 184 */ 239009,
 /* 185 */ 9999,
-/* 186 */ 244005,
+/* 186 */ 240005,
 /* 187 */ 9999,
-/* 188 */ 244010,
+/* 188 */ 240010,
 /* 189 */ 9999,
-/* 190 */ 248005,
+/* 190 */ 244005,
 /* 191 */ 9999,
-/* 192 */ 248019,
+/* 192 */ 244019,
 /* 193 */ 9999,
-/* 194 */ 248010,
+/* 194 */ 244010,
 /* 195 */ 9999,
-/* 196 */ 249005,
+/* 196 */ 245005,
 /* 197 */ 9999,
-/* 198 */ 249019,
+/* 198 */ 245019,
 /* 199 */ 9999,
-/* 200 */ 249010,
+/* 200 */ 245010,
 /* 201 */ 9999,
-/* 202 */ 250005,
+/* 202 */ 246005,
 /* 203 */ 9999,
-/* 204 */ 250019,
+/* 204 */ 246019,
 /* 205 */ 9999,
-/* 206 */ 250010,
+/* 206 */ 246010,
 /* 207 */ 9999,
-/* 208 */ 251005,
+/* 208 */ 247005,
 /* 209 */ 9999,
-/* 210 */ 251019,
+/* 210 */ 247019,
 /* 211 */ 9999,
-/* 212 */ 251010,
+/* 212 */ 247010,
 /* 213 */ 9999,
-/* 214 */ 252005,
+/* 214 */ 248005,
 /* 215 */ 9999,
-/* 216 */ 252019,
+/* 216 */ 248019,
 /* 217 */ 9999,
-/* 218 */ 252010,
+/* 218 */ 248010,
 /* 219 */ 9999,
-/* 220 */ 254005,
+/* 220 */ 250005,
 /* 221 */ 9999,
-/* 222 */ 254010,
+/* 222 */ 250010,
 /* 223 */ 9999,
 /* 224 */ 9999,
-/* 225 */ 258009,
+/* 225 */ 254009,
 /* 226 */ 9999,
-/* 227 */ 258005,
+/* 227 */ 254005,
 /* 228 */ 9999,
 /* 229 */ 9999,
-/* 230 */ 259009,
+/* 230 */ 255009,
 /* 231 */ 9999,
-/* 232 */ 259005,
+/* 232 */ 255005,
 /* 233 */ 9999,
-/* 234 */ 260005,
+/* 234 */ 256005,
 /* 235 */ 9999,
-/* 236 */ 260010,
+/* 236 */ 256010,
 /* 237 */ 9999,
 /* 238 */ 9999,
-/* 239 */ 264009,
+/* 239 */ 260009,
 /* 240 */ 9999,
 /* 241 */ 9999,
-/* 242 */ 264005,
+/* 242 */ 260005,
 /* 243 */ 9999,
 /* 244 */ 9999,
 /* 245 */ 9999,
-/* 246 */ 265010,
+/* 246 */ 261010,
 /* 247 */ 9999,
 /* 248 */ 9999,
 /* 249 */ 9999,
-/* 250 */ 266013,
+/* 250 */ 262013,
 /* 251 */ 9999,
 /* 252 */ 9999,
 /* 253 */ 9999,
-/* 254 */ 267014,
+/* 254 */ 263014,
 /* 255 */ 9999,
 /* 256 */ 9999,
 /* 257 */ 9999,
-/* 258 */ 268014,
+/* 258 */ 264014,
 /* 259 */ 9999,
-/* 260 */ 272005,
+/* 260 */ 268005,
 /* 261 */ 9999,
-/* 262 */ 272021,
+/* 262 */ 268021,
 /* 263 */ 9999,
-/* 264 */ 272037,
+/* 264 */ 268037,
 /* 265 */ 9999,
-/* 266 */ 272010,
+/* 266 */ 268010,
 /* 267 */ 9999,
-/* 268 */ 274005,
+/* 268 */ 270005,
 /* 269 */ 9999,
-/* 270 */ 274021,
+/* 270 */ 270021,
 /* 271 */ 9999,
 /* 272 */ 9999,
-/* 273 */ 274041,
+/* 273 */ 270041,
 /* 274 */ 9999,
-/* 275 */ 274010,
+/* 275 */ 270010,
 /* 276 */ 9999,
-/* 277 */ 276005,
+/* 277 */ 272005,
 /* 278 */ 9999,
-/* 279 */ 276021,
+/* 279 */ 272021,
 /* 280 */ 9999,
-/* 281 */ 276010,
+/* 281 */ 272010,
 /* 282 */ 9999,
-/* 283 */ 278005,
+/* 283 */ 274005,
 /* 284 */ 9999,
-/* 285 */ 278010,
+/* 285 */ 274010,
 /* 286 */ 9999,
-/* 287 */ 283005,
+/* 287 */ 279005,
 /* 288 */ 9999,
-/* 289 */ 283021,
+/* 289 */ 279021,
 /* 290 */ 9999,
-/* 291 */ 283037,
+/* 291 */ 279037,
 /* 292 */ 9999,
-/* 293 */ 283010,
+/* 293 */ 279010,
 /* 294 */ 9999,
-/* 295 */ 285005,
+/* 295 */ 281005,
 /* 296 */ 9999,
-/* 297 */ 285021,
+/* 297 */ 281021,
 /* 298 */ 9999,
-/* 299 */ 285010,
+/* 299 */ 281010,
 /* 300 */ 9999,
-/* 301 */ 299003,
-/* 302 */ 300003,
-/* 303 */ 301003,
-/* 304 */ 302003,
-/* 305 */ 304003,
-/* 306 */ 306003,
-/* 307 */ 307003,
+/* 301 */ 295003,
+/* 302 */ 296003,
+/* 303 */ 297003,
+/* 304 */ 298003,
+/* 305 */ 300003,
+/* 306 */ 302003,
+/* 307 */ 303003,
 /* 308 */ 9999,
-/* 309 */ 291003,
+/* 309 */ 287003,
 /* 310 */ 9999,
 /* 311 */ 9999,
 /* 312 */ 9999,
-/* 313 */ 299011,
+/* 313 */ 295011,
 /* 314 */ 9999,
 /* 315 */ 9999,
-/* 316 */ 299005,
+/* 316 */ 295005,
 /* 317 */ 9999,
 /* 318 */ 9999,
-/* 319 */ 299005,
+/* 319 */ 295005,
 /* 320 */ 9999,
 /* 321 */ 9999,
 /* 322 */ 9999,
 /* 323 */ 9999,
-/* 324 */ 300009,
+/* 324 */ 296009,
 /* 325 */ 9999,
 /* 326 */ 9999,
-/* 327 */ 300009,
+/* 327 */ 296009,
 /* 328 */ 9999,
-/* 329 */ 301004,
+/* 329 */ 297004,
 /* 330 */ 9999,
-/* 331 */ 301012,
+/* 331 */ 297012,
 /* 332 */ 9999,
 /* 333 */ 9999,
-/* 334 */ 301012,
+/* 334 */ 297012,
 /* 335 */ 9999,
 /* 336 */ 9999,
 /* 337 */ 9999,
-/* 338 */ 302009,
+/* 338 */ 298009,
 /* 339 */ 9999,
 /* 340 */ 9999,
 /* 341 */ 9999,
-/* 342 */ 303012,
+/* 342 */ 299012,
 /* 343 */ 9999,
 /* 344 */ 9999,
-/* 345 */ 303012,
+/* 345 */ 299012,
 /* 346 */ 9999,
-/* 347 */ 304004,
+/* 347 */ 300004,
 /* 348 */ 9999,
-/* 349 */ 304010,
+/* 349 */ 300010,
 /* 350 */ 9999,
 /* 351 */ 9999,
-/* 352 */ 305013,
+/* 352 */ 301013,
 /* 353 */ 9999,
-/* 354 */ 305011,
+/* 354 */ 301011,
 /* 355 */ 9999,
 /* 356 */ 9999,
 /* 357 */ 9999,
 /* 358 */ 9999,
-/* 359 */ 306005,
+/* 359 */ 302005,
 /* 360 */ 9999,
 /* 361 */ 9999,
 /* 362 */ 9999,
 /* 363 */ 9999,
-/* 364 */ 306044,
+/* 364 */ 302044,
 /* 365 */ 9999,
 /* 366 */ 9999,
-/* 367 */ 306044,
+/* 367 */ 302044,
 /* 368 */ 9999,
 /* 369 */ 9999,
 /* 370 */ 9999,
-/* 371 */ 307013,
+/* 371 */ 303013,
 /* 372 */ 9999,
-/* 373 */ 307007,
+/* 373 */ 303007,
 /* 374 */ 9999,
-/* 375 */ 307007,
+/* 375 */ 303007,
 /* 376 */ 9999,
 /* 377 */ 9999,
-/* 378 */ 311009,
-/* 379 */ 311007,
+/* 378 */ 307009,
+/* 379 */ 307007,
 /* 380 */ 9999,
-/* 381 */ 311007,
+/* 381 */ 307007,
 /* 382 */ 9999,
 /* 383 */ 9999,
 /* 384 */ 9999,
-/* 385 */ 312016,
+/* 385 */ 308016,
 /* 386 */ 9999,
-/* 387 */ 312029,
-/* 388 */ 312007,
+/* 387 */ 308029,
+/* 388 */ 308007,
 /* 389 */ 9999,
-/* 390 */ 312007,
+/* 390 */ 308007,
 /* 391 */ 9999,
 /* 392 */ 9999,
 /* 393 */ 9999,
-/* 394 */ 314016,
-/* 395 */ 314007,
+/* 394 */ 310016,
+/* 395 */ 310007,
 /* 396 */ 9999,
-/* 397 */ 314007,
+/* 397 */ 310007,
 /* 398 */ 9999,
 /* 399 */ 9999,
 /* 400 */ 9999,
-/* 401 */ 316007,
+/* 401 */ 312007,
 /* 402 */ 9999,
-/* 403 */ 316007,
+/* 403 */ 312007,
 /* 404 */ 9999,
 /* 405 */ 9999,
 /* 406 */ 9999,
-/* 407 */ 318013,
+/* 407 */ 314013,
 /* 408 */ 9999,
-/* 409 */ 318027,
+/* 409 */ 314027,
 /* 410 */ 9999,
-/* 411 */ 318007,
+/* 411 */ 314007,
 /* 412 */ 9999,
-/* 413 */ 318007,
+/* 413 */ 314007,
 /* 414 */ 9999,
 /* 415 */ 9999,
-/* 416 */ 318007,
+/* 416 */ 314007,
 /* 417 */ 9999,
-/* 418 */ 307014,
-/* 419 */ 307024,
-/* 420 */ 307018,
+/* 418 */ 303014,
+/* 419 */ 303024,
+/* 420 */ 303018,
 /* 421 */ 9999,
-/* 422 */ 307018,
+/* 422 */ 303018,
 /* 423 */ 9999,
 /* 424 */ 9999,
-/* 425 */ 307018,
+/* 425 */ 303018,
 /* 426 */ 9999,
 /* 427 */ 9999,
 /* 428 */ 9999,
-/* 429 */ 307025,
+/* 429 */ 303025,
 /* 430 */ 9999,
 /* 431 */ 9999,
-/* 432 */ 307025,
+/* 432 */ 303025,
 /* 433 */ 9999,
 /* 434 */ 9999,
-/* 435 */ 324008,
-/* 436 */ 325005,
-/* 437 */ 328006,
+/* 435 */ 320008,
+/* 436 */ 321005,
+/* 437 */ 324006,
 /* 438 */ 9999,
 /* 439 */ 9999,
-/* 440 */ 323004,
+/* 440 */ 319004,
 /* 441 */ 9999,
 /* 442 */ 9999,
 /* 443 */ 9999,
-/* 444 */ 324009,
+/* 444 */ 320009,
 /* 445 */ 9999,
-/* 446 */ 325007,
-/* 447 */ 327007,
-/* 448 */ 325016,
+/* 446 */ 321007,
+/* 447 */ 323007,
+/* 448 */ 321016,
 /* 449 */ 9999,
-/* 450 */ 325016,
+/* 450 */ 321016,
 /* 451 */ 9999,
 /* 452 */ 9999,
-/* 453 */ 325016,
+/* 453 */ 321016,
 /* 454 */ 9999,
 /* 455 */ 9999,
 /* 456 */ 9999,
-/* 457 */ 327008,
+/* 457 */ 323008,
 /* 458 */ 9999,
 /* 459 */ 9999,
 /* 460 */ 9999,
-/* 461 */ 327034,
+/* 461 */ 323034,
 /* 462 */ 9999,
-/* 463 */ 333003,
-/* 464 */ 333017,
-/* 465 */ 334005,
-/* 466 */ 335008,
-/* 467 */ 338005,
+/* 463 */ 329003,
+/* 464 */ 329017,
+/* 465 */ 330005,
+/* 466 */ 331008,
+/* 467 */ 334005,
 /* 468 */ 9999,
 /* 469 */ 9999,
-/* 470 */ 333003,
+/* 470 */ 329003,
 /* 471 */ 9999,
 /* 472 */ 9999,
 /* 473 */ 9999,
-/* 474 */ 333008,
+/* 474 */ 329008,
 /* 475 */ 9999,
 /* 476 */ 9999,
 /* 477 */ 9999,
-/* 478 */ 333014,
+/* 478 */ 329014,
 /* 479 */ 9999,
 /* 480 */ 9999,
 /* 481 */ 9999,
-/* 482 */ 333018,
+/* 482 */ 329018,
 /* 483 */ 9999,
 /* 484 */ 9999,
-/* 485 */ 333018,
+/* 485 */ 329018,
 /* 486 */ 9999,
-/* 487 */ 334006,
+/* 487 */ 330006,
 /* 488 */ 9999,
-/* 489 */ 334010,
+/* 489 */ 330010,
 /* 490 */ 9999,
 /* 491 */ 9999,
-/* 492 */ 334010,
+/* 492 */ 330010,
 /* 493 */ 9999,
 /* 494 */ 9999,
 /* 495 */ 9999,
-/* 496 */ 335018,
+/* 496 */ 331018,
 /* 497 */ 9999,
 /* 498 */ 9999,
 /* 499 */ 9999,
-/* 500 */ 336012,
+/* 500 */ 332012,
 /* 501 */ 9999,
 /* 502 */ 9999,
-/* 503 */ 338009,
+/* 503 */ 334009,
 /* 504 */ 9999,
-/* 505 */ 338007,
+/* 505 */ 334007,
 /* 506 */ 9999,
 /* 507 */ 9999,
-/* 508 */ 338007,
+/* 508 */ 334007,
 /* 509 */ 9999,
-/* 510 */ 343003,
-/* 511 */ 344003,
-/* 512 */ 346003,
+/* 510 */ 339003,
+/* 511 */ 340003,
+/* 512 */ 342003,
 /* 513 */ 9999,
-/* 514 */ 342038,
+/* 514 */ 338038,
 /* 515 */ 9999,
-/* 516 */ 343005,
+/* 516 */ 339005,
 /* 517 */ 9999,
-/* 518 */ 343009,
+/* 518 */ 339009,
 /* 519 */ 9999,
 /* 520 */ 9999,
-/* 521 */ 343009,
+/* 521 */ 339009,
 /* 522 */ 9999,
 /* 523 */ 9999,
 /* 524 */ 9999,
-/* 525 */ 344013,
+/* 525 */ 340013,
 /* 526 */ 9999,
 /* 527 */ 9999,
 /* 528 */ 9999,
-/* 529 */ 345012,
+/* 529 */ 341012,
 /* 530 */ 9999,
 /* 531 */ 9999,
-/* 532 */ 346007,
+/* 532 */ 342007,
 /* 533 */ 9999,
-/* 534 */ 346005,
+/* 534 */ 342005,
 /* 535 */ 9999,
 /* 536 */ 9999,
-/* 537 */ 346005,
+/* 537 */ 342005,
 /* 538 */ 9999,
 /* 539 */ 9999,
 /* 540 */ 9999,
-/* 541 */ 350012,
-/* 542 */ 350024,
+/* 541 */ 346012,
+/* 542 */ 346024,
 /* 543 */ 9999,
 /* 544 */ 9999,
-/* 545 */ 350004,
+/* 545 */ 346004,
 /* 546 */ 9999,
 /* 547 */ 9999,
-/* 548 */ 350029,
-/* 549 */ 350025,
+/* 548 */ 346029,
+/* 549 */ 346025,
 /* 550 */ 9999,
-/* 551 */ 350025,
+/* 551 */ 346025,
 /* 552 */ 9999,
 /* 553 */ 9999,
-/* 554 */ 350025,
+/* 554 */ 346025,
 /* 555 */ 9999,
-/* 556 */ 355003,
-/* 557 */ 356003,
-/* 558 */ 357003,
+/* 556 */ 351003,
+/* 557 */ 352003,
+/* 558 */ 353003,
 /* 559 */ 9999,
-/* 560 */ 354027,
+/* 560 */ 350027,
 /* 561 */ 9999,
 /* 562 */ 9999,
-/* 563 */ 356008,
-/* 564 */ 356004,
+/* 563 */ 352008,
+/* 564 */ 352004,
 /* 565 */ 9999,
-/* 566 */ 356004,
+/* 566 */ 352004,
 /* 567 */ 9999,
 /* 568 */ 9999,
-/* 569 */ 356004,
+/* 569 */ 352004,
 /* 570 */ 9999,
 /* 571 */ 9999,
-/* 572 */ 359005,
+/* 572 */ 355005,
 /* 573 */ 9999,
-/* 574 */ 357011,
+/* 574 */ 353011,
 /* 575 */ 9999,
-/* 576 */ 364007,
+/* 576 */ 360007,
 /* 577 */ 9999,
-/* 578 */ 364013,
+/* 578 */ 360013,
 /* 579 */ 9999,
 /* 580 */ 9999,
 /* 581 */ 9999,
-/* 582 */ 359007,
+/* 582 */ 355007,
 /* 583 */ 9999,
-/* 584 */ 359007,
+/* 584 */ 355007,
 /* 585 */ 9999,
 /* 586 */ 9999,
-/* 587 */ 359007,
+/* 587 */ 355007,
 /* 588 */ 9999,
-/* 589 */ 374003,
+/* 589 */ 370003,
 /* 590 */ 9999,
-/* 591 */ 373003,
+/* 591 */ 369003,
 /* 592 */ 9999,
-/* 593 */ 382003,
+/* 593 */ 378003,
 /* 594 */ 9999,
-/* 595 */ 381003,
+/* 595 */ 377003,
 /* 596 */ 9999,
-/* 597 */ 390003,
-/* 598 */ 394003,
+/* 597 */ 386003,
+/* 598 */ 390003,
 /* 599 */ 9999,
-/* 600 */ 389003,
+/* 600 */ 385003,
 /* 601 */ 9999,
-/* 602 */ 390007,
-/* 603 */ 390014,
+/* 602 */ 386007,
+/* 603 */ 386014,
 /* 604 */ 9999,
-/* 605 */ 390007,
+/* 605 */ 386007,
 /* 606 */ 9999,
 /* 607 */ 9999,
-/* 608 */ 391011,
+/* 608 */ 387011,
 /* 609 */ 9999,
-/* 610 */ 391007,
+/* 610 */ 387007,
 /* 611 */ 9999,
 /* 612 */ 9999,
-/* 613 */ 392011,
+/* 613 */ 388011,
 /* 614 */ 9999,
-/* 615 */ 392007,
+/* 615 */ 388007,
 /* 616 */ 9999,
-/* 617 */ 393007,
+/* 617 */ 389007,
 /* 618 */ 9999,
 /* 619 */ 9999,
-/* 620 */ 393012,
+/* 620 */ 389012,
 /* 621 */ 9999,
 /* 622 */ 9999,
 /* 623 */ 9999,
-/* 624 */ 390008,
+/* 624 */ 386008,
 /* 625 */ 9999,
 /* 626 */ 9999,
-/* 627 */ 390008,
+/* 627 */ 386008,
 /* 628 */ 9999,
 /* 629 */ 9999,
-/* 630 */ 394009,
+/* 630 */ 390009,
 /* 631 */ 9999,
 /* 632 */ 9999,
-/* 633 */ 394005,
+/* 633 */ 390005,
 /* 634 */ 9999,
 /* 635 */ 9999,
-/* 636 */ 394005,
+/* 636 */ 390005,
 /* 637 */ 9999,
 /* 638 */ 9999,
-/* 639 */ 395016,
+/* 639 */ 391016,
 /* 640 */ 9999,
-/* 641 */ 395014,
+/* 641 */ 391014,
 /* 642 */ 9999,
 /* 643 */ 9999,
-/* 644 */ 396016,
+/* 644 */ 392016,
 /* 645 */ 9999,
-/* 646 */ 396014,
+/* 646 */ 392014,
 /* 647 */ 9999,
 /* 648 */ 9999,
-/* 649 */ 397012,
+/* 649 */ 393012,
 /* 650 */ 9999,
-/* 651 */ 397010,
+/* 651 */ 393010,
 /* 652 */ 9999,
 /* 653 */ 9999,
 /* 654 */ 9999,
 /* 655 */ 9999,
-/* 656 */ 407009,
-/* 657 */ 408005,
+/* 656 */ 403009,
+/* 657 */ 404005,
 /* 658 */ 9999,
-/* 659 */ 410009,
+/* 659 */ 406009,
 /* 660 */ 9999,
 /* 661 */ 9999,
-/* 662 */ 402009,
+/* 662 */ 398009,
 /* 663 */ 9999,
 /* 664 */ 9999,
-/* 665 */ 408011,
-/* 666 */ 409005,
+/* 665 */ 404011,
+/* 666 */ 405005,
 /* 667 */ 9999,
-/* 668 */ 408007,
+/* 668 */ 404007,
 /* 669 */ 9999,
 /* 670 */ 9999,
-/* 671 */ 408007,
+/* 671 */ 404007,
 /* 672 */ 9999,
 /* 673 */ 9999,
-/* 674 */ 409011,
+/* 674 */ 405011,
 /* 675 */ 9999,
-/* 676 */ 409007,
+/* 676 */ 405007,
 /* 677 */ 9999,
 /* 678 */ 9999,
-/* 679 */ 409007,
+/* 679 */ 405007,
 /* 680 */ 9999,
-/* 681 */ 410010,
-/* 682 */ 410018,
+/* 681 */ 406010,
+/* 682 */ 406018,
 /* 683 */ 9999,
-/* 684 */ 410018,
+/* 684 */ 406018,
 /* 685 */ 9999,
 /* 686 */ 9999,
-/* 687 */ 410018,
+/* 687 */ 406018,
 /* 688 */ 9999,
 /* 689 */ 9999,
-/* 690 */ 414015,
+/* 690 */ 410015,
 /* 691 */ 9999,
 /* 692 */ 9999,
 /* 693 */ 9999,
-/* 694 */ 414013,
+/* 694 */ 410013,
 /* 695 */ 9999,
 /* 696 */ 9999,
-/* 697 */ 415011,
-/* 698 */ 415018,
+/* 697 */ 411011,
+/* 698 */ 411018,
 /* 699 */ 9999,
 /* 700 */ 9999,
-/* 701 */ 415009,
+/* 701 */ 411009,
 /* 702 */ 9999,
-/* 703 */ 416005,
-/* 704 */ 416028,
-/* 705 */ 416035,
+/* 703 */ 412005,
+/* 704 */ 412028,
+/* 705 */ 412035,
 /* 706 */ 9999,
 /* 707 */ 9999,
-/* 708 */ 416005,
+/* 708 */ 412005,
 /* 709 */ 9999,
-/* 710 */ 417005,
-/* 711 */ 417028,
-/* 712 */ 417035,
+/* 710 */ 413005,
+/* 711 */ 413028,
+/* 712 */ 413035,
 /* 713 */ 9999,
-/* 714 */ 417050,
+/* 714 */ 413050,
 /* 715 */ 9999,
 /* 716 */ 9999,
-/* 717 */ 417005,
+/* 717 */ 413005,
 /* 718 */ 9999,
 /* 719 */ 9999,
-/* 720 */ 421013,
-/* 721 */ 421020,
-/* 722 */ 422018,
+/* 720 */ 417013,
+/* 721 */ 417020,
+/* 722 */ 418018,
 /* 723 */ 9999,
 /* 724 */ 9999,
-/* 725 */ 421011,
+/* 725 */ 417011,
 /* 726 */ 9999,
 /* 727 */ 9999,
-/* 728 */ 423013,
-/* 729 */ 423020,
+/* 728 */ 419013,
+/* 729 */ 419020,
 /* 730 */ 9999,
 /* 731 */ 9999,
-/* 732 */ 423011,
+/* 732 */ 419011,
 /* 733 */ 9999,
 /* 734 */ 9999,
-/* 735 */ 424015,
-/* 736 */ 424022,
+/* 735 */ 420015,
+/* 736 */ 420022,
 /* 737 */ 9999,
 /* 738 */ 9999,
-/* 739 */ 424013,
+/* 739 */ 420013,
 /* 740 */ 9999,
-/* 741 */ 426005,
+/* 741 */ 422005,
 /* 742 */ 9999,
-/* 743 */ 426016,
-/* 744 */ 426023,
+/* 743 */ 422016,
+/* 744 */ 422023,
 /* 745 */ 9999,
 /* 746 */ 9999,
-/* 747 */ 426005,
+/* 747 */ 422005,
 /* 748 */ 9999,
-/* 749 */ 427005,
+/* 749 */ 423005,
 /* 750 */ 9999,
-/* 751 */ 427015,
+/* 751 */ 423015,
 /* 752 */ 9999,
 /* 753 */ 9999,
 /* 754 */ 9999,
-/* 755 */ 428015,
+/* 755 */ 424015,
 /* 756 */ 9999,
 /* 757 */ 9999,
 /* 758 */ 9999,
-/* 759 */ 428009,
+/* 759 */ 424009,
 /* 760 */ 9999,
 /* 761 */ 9999,
 /* 762 */ 9999,
-/* 763 */ 430015,
+/* 763 */ 426015,
 /* 764 */ 9999,
-/* 765 */ 430030,
+/* 765 */ 426030,
 /* 766 */ 9999,
 /* 767 */ 9999,
 /* 768 */ 9999,
-/* 769 */ 430009,
+/* 769 */ 426009,
 /* 770 */ 9999,
 /* 771 */ 9999,
 /* 772 */ 9999,
-/* 773 */ 432015,
+/* 773 */ 428015,
 /* 774 */ 9999,
-/* 775 */ 432030,
+/* 775 */ 428030,
 /* 776 */ 9999,
-/* 777 */ 432046,
+/* 777 */ 428046,
 /* 778 */ 9999,
 /* 779 */ 9999,
 /* 780 */ 9999,
-/* 781 */ 432009,
+/* 781 */ 428009,
 /* 782 */ 9999,
 /* 783 */ 9999,
 /* 784 */ 9999,
-/* 785 */ 435015,
+/* 785 */ 431015,
 /* 786 */ 9999,
-/* 787 */ 435030,
+/* 787 */ 431030,
 /* 788 */ 9999,
-/* 789 */ 435046,
+/* 789 */ 431046,
 /* 790 */ 9999,
-/* 791 */ 435062,
+/* 791 */ 431062,
 /* 792 */ 9999,
 /* 793 */ 9999,
 /* 794 */ 9999,
-/* 795 */ 435009,
+/* 795 */ 431009,
 /* 796 */ 9999,
 /* 797 */ 9999,
-/* 798 */ 439013,
-/* 799 */ 439020,
+/* 798 */ 435013,
+/* 799 */ 435020,
 /* 800 */ 9999,
 /* 801 */ 9999,
-/* 802 */ 439011,
+/* 802 */ 435011,
 /* 803 */ 9999,
 /* 804 */ 9999,
-/* 805 */ 440012,
-/* 806 */ 440019,
+/* 805 */ 436012,
+/* 806 */ 436019,
 /* 807 */ 9999,
 /* 808 */ 9999,
-/* 809 */ 440010,
+/* 809 */ 436010,
 /* 810 */ 9999,
 /* 811 */ 9999,
-/* 812 */ 441012,
-/* 813 */ 441019,
-/* 814 */ 441032,
+/* 812 */ 437012,
+/* 813 */ 437019,
+/* 814 */ 437032,
 /* 815 */ 9999,
 /* 816 */ 9999,
-/* 817 */ 441010,
+/* 817 */ 437010,
 /* 818 */ 9999,
 /* 819 */ 9999,
 /* 820 */ 9999,
 /* 821 */ 9999,
 /* 822 */ 9999,
-/* 823 */ 442006,
+/* 823 */ 438006,
 /* 824 */ 9999,
 /* 825 */ 9999,
-/* 826 */ 448008,
+/* 826 */ 444008,
 /* 827 */ 9999,
 /* 828 */ 9999,
-/* 829 */ 448006,
+/* 829 */ 444006,
 /* 830 */ 9999,
 /* 831 */ 9999,
-/* 832 */ 451009,
-/* 833 */ 451016,
+/* 832 */ 447009,
+/* 833 */ 447016,
 /* 834 */ 9999,
 /* 835 */ 9999,
-/* 836 */ 451007,
+/* 836 */ 447007,
 /* 837 */ 9999,
 /* 838 */ 9999,
-/* 839 */ 452009,
-/* 840 */ 452016,
+/* 839 */ 448009,
+/* 840 */ 448016,
 /* 841 */ 9999,
 /* 842 */ 9999,
-/* 843 */ 452007,
+/* 843 */ 448007,
 /* 844 */ 9999,
 /* 845 */ 9999,
-/* 846 */ 453010,
-/* 847 */ 453017,
+/* 846 */ 449010,
+/* 847 */ 449017,
 /* 848 */ 9999,
 /* 849 */ 9999,
-/* 850 */ 453008,
+/* 850 */ 449008,
 /* 851 */ 9999,
 /* 852 */ 9999,
-/* 853 */ 454011,
-/* 854 */ 454018,
-/* 855 */ 458019,
+/* 853 */ 450011,
+/* 854 */ 450018,
+/* 855 */ 454019,
 /* 856 */ 9999,
 /* 857 */ 9999,
-/* 858 */ 454009,
+/* 858 */ 450009,
 /* 859 */ 9999,
 /* 860 */ 9999,
-/* 861 */ 462011,
-/* 862 */ 462018,
+/* 861 */ 458011,
+/* 862 */ 458018,
 /* 863 */ 9999,
 /* 864 */ 9999,
-/* 865 */ 462009,
+/* 865 */ 458009,
 /* 866 */ 9999,
-/* 867 */ 463005,
-/* 868 */ 463018,
+/* 867 */ 459005,
+/* 868 */ 459018,
 /* 869 */ 9999,
 /* 870 */ 9999,
-/* 871 */ 463016,
+/* 871 */ 459016,
 /* 872 */ 9999,
 /* 873 */ 9999,
-/* 874 */ 464010,
-/* 875 */ 464017,
+/* 874 */ 460010,
+/* 875 */ 460017,
 /* 876 */ 9999,
 /* 877 */ 9999,
-/* 878 */ 464008,
+/* 878 */ 460008,
 /* 879 */ 9999,
 /* 880 */ 9999,
-/* 881 */ 465011,
-/* 882 */ 465018,
-/* 883 */ 465028,
+/* 881 */ 461011,
+/* 882 */ 461018,
+/* 883 */ 461028,
 /* 884 */ 9999,
 /* 885 */ 9999,
-/* 886 */ 465009,
+/* 886 */ 461009,
 /* 887 */ 9999,
 /* 888 */ 9999,
-/* 889 */ 466010,
-/* 890 */ 466017,
-/* 891 */ 466027,
+/* 889 */ 462010,
+/* 890 */ 462017,
+/* 891 */ 462027,
 /* 892 */ 9999,
 /* 893 */ 9999,
-/* 894 */ 466008,
+/* 894 */ 462008,
 /* 895 */ 9999,
 /* 896 */ 9999,
-/* 897 */ 467012,
-/* 898 */ 467019,
+/* 897 */ 463012,
+/* 898 */ 463019,
 /* 899 */ 9999,
 /* 900 */ 9999,
-/* 901 */ 467010,
+/* 901 */ 463010,
 /* 902 */ 9999,
 /* 903 */ 9999,
-/* 904 */ 470013,
-/* 905 */ 470020,
+/* 904 */ 466013,
+/* 905 */ 466020,
 /* 906 */ 9999,
 /* 907 */ 9999,
-/* 908 */ 470011,
+/* 908 */ 466011,
 /* 909 */ 9999,
 /* 910 */ 9999,
-/* 911 */ 472012,
-/* 912 */ 472019,
+/* 911 */ 468012,
+/* 912 */ 468019,
 /* 913 */ 9999,
 /* 914 */ 9999,
-/* 915 */ 472010,
+/* 915 */ 468010,
 /* 916 */ 9999,
-/* 917 */ 474005,
+/* 917 */ 470005,
 /* 918 */ 9999,
-/* 919 */ 474013,
+/* 919 */ 470013,
 /* 920 */ 9999,
-/* 921 */ 475005,
+/* 921 */ 471005,
 /* 922 */ 9999,
-/* 923 */ 475014,
+/* 923 */ 471014,
 /* 924 */ 9999,
-/* 925 */ 476005,
+/* 925 */ 472005,
 /* 926 */ 9999,
-/* 927 */ 476016,
+/* 927 */ 472016,
 /* 928 */ 9999,
-/* 929 */ 477005,
+/* 929 */ 473005,
 /* 930 */ 9999,
-/* 931 */ 477017,
+/* 931 */ 473017,
 /* 932 */ 9999,
 /* 933 */ 9999,
 /* 934 */ 9999,
-/* 935 */ 414016,
+/* 935 */ 410016,
 /* 936 */ 9999,
 /* 937 */ 9999,
-/* 938 */ 414016,
+/* 938 */ 410016,
 /* 939 */ 9999,
 /* 940 */ 9999,
 /* 941 */ 9999,
-/* 942 */ 415012,
+/* 942 */ 411012,
 /* 943 */ 9999,
 /* 944 */ 9999,
-/* 945 */ 415012,
+/* 945 */ 411012,
 /* 946 */ 9999,
 /* 947 */ 9999,
 /* 948 */ 9999,
-/* 949 */ 416015,
+/* 949 */ 412015,
 /* 950 */ 9999,
 /* 951 */ 9999,
 /* 952 */ 9999,
-/* 953 */ 416025,
+/* 953 */ 412025,
 /* 954 */ 9999,
 /* 955 */ 9999,
 /* 956 */ 9999,
-/* 957 */ 416029,
+/* 957 */ 412029,
 /* 958 */ 9999,
 /* 959 */ 9999,
-/* 960 */ 416029,
+/* 960 */ 412029,
 /* 961 */ 9999,
 /* 962 */ 9999,
 /* 963 */ 9999,
-/* 964 */ 417015,
+/* 964 */ 413015,
 /* 965 */ 9999,
 /* 966 */ 9999,
 /* 967 */ 9999,
-/* 968 */ 417025,
+/* 968 */ 413025,
 /* 969 */ 9999,
 /* 970 */ 9999,
 /* 971 */ 9999,
-/* 972 */ 417029,
+/* 972 */ 413029,
 /* 973 */ 9999,
 /* 974 */ 9999,
-/* 975 */ 417029,
+/* 975 */ 413029,
 /* 976 */ 9999,
 /* 977 */ 9999,
 /* 978 */ 9999,
-/* 979 */ 421014,
+/* 979 */ 417014,
 /* 980 */ 9999,
 /* 981 */ 9999,
-/* 982 */ 421014,
+/* 982 */ 417014,
 /* 983 */ 9999,
 /* 984 */ 9999,
-/* 985 */ 422024,
-/* 986 */ 422020,
+/* 985 */ 418024,
+/* 986 */ 418020,
 /* 987 */ 9999,
-/* 988 */ 422020,
+/* 988 */ 418020,
 /* 989 */ 9999,
 /* 990 */ 9999,
-/* 991 */ 422020,
+/* 991 */ 418020,
 /* 992 */ 9999,
 /* 993 */ 9999,
 /* 994 */ 9999,
-/* 995 */ 423014,
+/* 995 */ 419014,
 /* 996 */ 9999,
 /* 997 */ 9999,
-/* 998 */ 423014,
+/* 998 */ 419014,
 /* 999 */ 9999,
 /* 1000 */ 9999,
 /* 1001 */ 9999,
-/* 1002 */ 424016,
+/* 1002 */ 420016,
 /* 1003 */ 9999,
 /* 1004 */ 9999,
-/* 1005 */ 424016,
+/* 1005 */ 420016,
 /* 1006 */ 9999,
 /* 1007 */ 9999,
 /* 1008 */ 9999,
-/* 1009 */ 426006,
+/* 1009 */ 422006,
 /* 1010 */ 9999,
 /* 1011 */ 9999,
-/* 1012 */ 426006,
+/* 1012 */ 422006,
 /* 1013 */ 9999,
 /* 1014 */ 9999,
 /* 1015 */ 9999,
-/* 1016 */ 426017,
+/* 1016 */ 422017,
 /* 1017 */ 9999,
 /* 1018 */ 9999,
-/* 1019 */ 426017,
+/* 1019 */ 422017,
 /* 1020 */ 9999,
 /* 1021 */ 9999,
 /* 1022 */ 9999,
-/* 1023 */ 439014,
+/* 1023 */ 435014,
 /* 1024 */ 9999,
 /* 1025 */ 9999,
-/* 1026 */ 439014,
+/* 1026 */ 435014,
 /* 1027 */ 9999,
-/* 1028 */ 439021,
-/* 1029 */ 439057,
-/* 1030 */ 439026,
+/* 1028 */ 435021,
+/* 1029 */ 435057,
+/* 1030 */ 435026,
 /* 1031 */ 9999,
-/* 1032 */ 439026,
+/* 1032 */ 435026,
 /* 1033 */ 9999,
 /* 1034 */ 9999,
-/* 1035 */ 439026,
+/* 1035 */ 435026,
 /* 1036 */ 9999,
 /* 1037 */ 9999,
 /* 1038 */ 9999,
-/* 1039 */ 439058,
+/* 1039 */ 435058,
 /* 1040 */ 9999,
 /* 1041 */ 9999,
-/* 1042 */ 439058,
+/* 1042 */ 435058,
 /* 1043 */ 9999,
 /* 1044 */ 9999,
 /* 1045 */ 9999,
-/* 1046 */ 440013,
+/* 1046 */ 436013,
 /* 1047 */ 9999,
 /* 1048 */ 9999,
-/* 1049 */ 440013,
+/* 1049 */ 436013,
 /* 1050 */ 9999,
-/* 1051 */ 440020,
-/* 1052 */ 440056,
-/* 1053 */ 440025,
+/* 1051 */ 436020,
+/* 1052 */ 436056,
+/* 1053 */ 436025,
 /* 1054 */ 9999,
-/* 1055 */ 440025,
+/* 1055 */ 436025,
 /* 1056 */ 9999,
 /* 1057 */ 9999,
-/* 1058 */ 440025,
+/* 1058 */ 436025,
 /* 1059 */ 9999,
 /* 1060 */ 9999,
 /* 1061 */ 9999,
-/* 1062 */ 440057,
+/* 1062 */ 436057,
 /* 1063 */ 9999,
 /* 1064 */ 9999,
-/* 1065 */ 440057,
+/* 1065 */ 436057,
 /* 1066 */ 9999,
 /* 1067 */ 9999,
 /* 1068 */ 9999,
-/* 1069 */ 441013,
+/* 1069 */ 437013,
 /* 1070 */ 9999,
 /* 1071 */ 9999,
-/* 1072 */ 441013,
+/* 1072 */ 437013,
 /* 1073 */ 9999,
 /* 1074 */ 9999,
-/* 1075 */ 441037,
-/* 1076 */ 441033,
+/* 1075 */ 437037,
+/* 1076 */ 437033,
 /* 1077 */ 9999,
-/* 1078 */ 441033,
+/* 1078 */ 437033,
 /* 1079 */ 9999,
 /* 1080 */ 9999,
-/* 1081 */ 441033,
+/* 1081 */ 437033,
 /* 1082 */ 9999,
 /* 1083 */ 9999,
 /* 1084 */ 9999,
-/* 1085 */ 451010,
+/* 1085 */ 447010,
 /* 1086 */ 9999,
 /* 1087 */ 9999,
-/* 1088 */ 451010,
+/* 1088 */ 447010,
 /* 1089 */ 9999,
 /* 1090 */ 9999,
 /* 1091 */ 9999,
-/* 1092 */ 452010,
+/* 1092 */ 448010,
 /* 1093 */ 9999,
 /* 1094 */ 9999,
-/* 1095 */ 452010,
+/* 1095 */ 448010,
 /* 1096 */ 9999,
 /* 1097 */ 9999,
 /* 1098 */ 9999,
-/* 1099 */ 453011,
+/* 1099 */ 449011,
 /* 1100 */ 9999,
 /* 1101 */ 9999,
-/* 1102 */ 453011,
+/* 1102 */ 449011,
 /* 1103 */ 9999,
 /* 1104 */ 9999,
 /* 1105 */ 9999,
-/* 1106 */ 454012,
+/* 1106 */ 450012,
 /* 1107 */ 9999,
 /* 1108 */ 9999,
-/* 1109 */ 454012,
+/* 1109 */ 450012,
 /* 1110 */ 9999,
-/* 1111 */ 454019,
+/* 1111 */ 450019,
 /* 1112 */ 9999,
-/* 1113 */ 454024,
+/* 1113 */ 450024,
 /* 1114 */ 9999,
-/* 1115 */ 454024,
+/* 1115 */ 450024,
 /* 1116 */ 9999,
 /* 1117 */ 9999,
-/* 1118 */ 454024,
+/* 1118 */ 450024,
 /* 1119 */ 9999,
 /* 1120 */ 9999,
 /* 1121 */ 9999,
-/* 1122 */ 462012,
+/* 1122 */ 458012,
 /* 1123 */ 9999,
 /* 1124 */ 9999,
-/* 1125 */ 462012,
+/* 1125 */ 458012,
 /* 1126 */ 9999,
-/* 1127 */ 462019,
-/* 1128 */ 462029,
+/* 1127 */ 458019,
+/* 1128 */ 458029,
 /* 1129 */ 9999,
-/* 1130 */ 462029,
+/* 1130 */ 458029,
 /* 1131 */ 9999,
 /* 1132 */ 9999,
-/* 1133 */ 462029,
+/* 1133 */ 458029,
 /* 1134 */ 9999,
 /* 1135 */ 9999,
-/* 1136 */ 463023,
-/* 1137 */ 463019,
+/* 1136 */ 459023,
+/* 1137 */ 459019,
 /* 1138 */ 9999,
-/* 1139 */ 463019,
+/* 1139 */ 459019,
 /* 1140 */ 9999,
 /* 1141 */ 9999,
-/* 1142 */ 463019,
+/* 1142 */ 459019,
 /* 1143 */ 9999,
 /* 1144 */ 9999,
 /* 1145 */ 9999,
-/* 1146 */ 464011,
+/* 1146 */ 460011,
 /* 1147 */ 9999,
 /* 1148 */ 9999,
-/* 1149 */ 464011,
+/* 1149 */ 460011,
 /* 1150 */ 9999,
 /* 1151 */ 9999,
 /* 1152 */ 9999,
-/* 1153 */ 465012,
+/* 1153 */ 461012,
 /* 1154 */ 9999,
 /* 1155 */ 9999,
-/* 1156 */ 465012,
+/* 1156 */ 461012,
 /* 1157 */ 9999,
 /* 1158 */ 9999,
 /* 1159 */ 9999,
-/* 1160 */ 465029,
+/* 1160 */ 461029,
 /* 1161 */ 9999,
 /* 1162 */ 9999,
-/* 1163 */ 465029,
+/* 1163 */ 461029,
 /* 1164 */ 9999,
 /* 1165 */ 9999,
 /* 1166 */ 9999,
-/* 1167 */ 466011,
+/* 1167 */ 462011,
 /* 1168 */ 9999,
 /* 1169 */ 9999,
-/* 1170 */ 466011,
+/* 1170 */ 462011,
 /* 1171 */ 9999,
 /* 1172 */ 9999,
 /* 1173 */ 9999,
-/* 1174 */ 466028,
+/* 1174 */ 462028,
 /* 1175 */ 9999,
 /* 1176 */ 9999,
-/* 1177 */ 466028,
+/* 1177 */ 462028,
 /* 1178 */ 9999,
 /* 1179 */ 9999,
 /* 1180 */ 9999,
-/* 1181 */ 467013,
+/* 1181 */ 463013,
 /* 1182 */ 9999,
 /* 1183 */ 9999,
-/* 1184 */ 467013,
+/* 1184 */ 463013,
 /* 1185 */ 9999,
-/* 1186 */ 467021,
-/* 1187 */ 469006,
-/* 1188 */ 467027,
+/* 1186 */ 463021,
+/* 1187 */ 465006,
+/* 1188 */ 463027,
 /* 1189 */ 9999,
-/* 1190 */ 467027,
+/* 1190 */ 463027,
 /* 1191 */ 9999,
 /* 1192 */ 9999,
-/* 1193 */ 467027,
+/* 1193 */ 463027,
 /* 1194 */ 9999,
 /* 1195 */ 9999,
 /* 1196 */ 9999,
-/* 1197 */ 469007,
+/* 1197 */ 465007,
 /* 1198 */ 9999,
 /* 1199 */ 9999,
-/* 1200 */ 469007,
+/* 1200 */ 465007,
 /* 1201 */ 9999,
 /* 1202 */ 9999,
 /* 1203 */ 9999,
-/* 1204 */ 470014,
+/* 1204 */ 466014,
 /* 1205 */ 9999,
 /* 1206 */ 9999,
-/* 1207 */ 470014,
+/* 1207 */ 466014,
 /* 1208 */ 9999,
-/* 1209 */ 470022,
-/* 1210 */ 471006,
-/* 1211 */ 470028,
+/* 1209 */ 466022,
+/* 1210 */ 467006,
+/* 1211 */ 466028,
 /* 1212 */ 9999,
-/* 1213 */ 470028,
+/* 1213 */ 466028,
 /* 1214 */ 9999,
 /* 1215 */ 9999,
-/* 1216 */ 470028,
+/* 1216 */ 466028,
 /* 1217 */ 9999,
 /* 1218 */ 9999,
 /* 1219 */ 9999,
-/* 1220 */ 471007,
+/* 1220 */ 467007,
 /* 1221 */ 9999,
 /* 1222 */ 9999,
-/* 1223 */ 471007,
+/* 1223 */ 467007,
 /* 1224 */ 9999,
 /* 1225 */ 9999,
 /* 1226 */ 9999,
-/* 1227 */ 472013,
+/* 1227 */ 468013,
 /* 1228 */ 9999,
 /* 1229 */ 9999,
-/* 1230 */ 472013,
+/* 1230 */ 468013,
 /* 1231 */ 9999,
-/* 1232 */ 472021,
-/* 1233 */ 473006,
-/* 1234 */ 472027,
+/* 1232 */ 468021,
+/* 1233 */ 469006,
+/* 1234 */ 468027,
 /* 1235 */ 9999,
-/* 1236 */ 472027,
+/* 1236 */ 468027,
 /* 1237 */ 9999,
 /* 1238 */ 9999,
-/* 1239 */ 472027,
+/* 1239 */ 468027,
 /* 1240 */ 9999,
 /* 1241 */ 9999,
 /* 1242 */ 9999,
-/* 1243 */ 473007,
+/* 1243 */ 469007,
 /* 1244 */ 9999,
 /* 1245 */ 9999,
-/* 1246 */ 473007,
+/* 1246 */ 469007,
 /* 1247 */ 9999,
 /* 1248 */ 9999,
 /* 1249 */ 9999,
-/* 1250 */ 481007,
+/* 1250 */ 477007,
 /* 1251 */ 9999,
 /* 1252 */ 9999,
 /* 1253 */ 9999,
 /* 1254 */ 9999,
-/* 1255 */ 482010,
+/* 1255 */ 478010,
 /* 1256 */ 9999,
 /* 1257 */ 9999,
 /* 1258 */ 9999,
 /* 1259 */ 9999,
-/* 1260 */ 483009,
+/* 1260 */ 479009,
 /* 1261 */ 9999,
 /* 1262 */ 9999,
 /* 1263 */ 9999,
 /* 1264 */ 9999,
-/* 1265 */ 484008,
+/* 1265 */ 480008,
 /* 1266 */ 9999,
-/* 1267 */ 490003,
+/* 1267 */ 486003,
 /* 1268 */ 9999,
-/* 1269 */ 491005,
-/* 1270 */ 493003,
-/* 1271 */ 495003,
-/* 1272 */ 496005,
-/* 1273 */ 508003,
+/* 1269 */ 487005,
+/* 1270 */ 489003,
+/* 1271 */ 491003,
+/* 1272 */ 492005,
+/* 1273 */ 504003,
 /* 1274 */ 9999,
-/* 1275 */ 488032,
+/* 1275 */ 484032,
 /* 1276 */ 9999,
-/* 1277 */ 520005,
+/* 1277 */ 516005,
 /* 1278 */ 9999,
-/* 1279 */ 520020,
-/* 1280 */ 522019,
+/* 1279 */ 516020,
+/* 1280 */ 518019,
 /* 1281 */ 9999,
-/* 1282 */ 520010,
+/* 1282 */ 516010,
 /* 1283 */ 9999,
-/* 1284 */ 491007,
+/* 1284 */ 487007,
 /* 1285 */ 9999,
-/* 1286 */ 491015,
+/* 1286 */ 487015,
 /* 1287 */ 9999,
-/* 1288 */ 492009,
+/* 1288 */ 488009,
 /* 1289 */ 9999,
 /* 1290 */ 9999,
-/* 1291 */ 492014,
+/* 1291 */ 488014,
 /* 1292 */ 9999,
 /* 1293 */ 9999,
-/* 1294 */ 492014,
+/* 1294 */ 488014,
 /* 1295 */ 9999,
-/* 1296 */ 493004,
+/* 1296 */ 489004,
 /* 1297 */ 9999,
-/* 1298 */ 493009,
+/* 1298 */ 489009,
 /* 1299 */ 9999,
 /* 1300 */ 9999,
-/* 1301 */ 493009,
+/* 1301 */ 489009,
 /* 1302 */ 9999,
 /* 1303 */ 9999,
 /* 1304 */ 9999,
-/* 1305 */ 495006,
+/* 1305 */ 491006,
 /* 1306 */ 9999,
 /* 1307 */ 9999,
-/* 1308 */ 495006,
+/* 1308 */ 491006,
 /* 1309 */ 9999,
 /* 1310 */ 9999,
-/* 1311 */ 496011,
-/* 1312 */ 496040,
+/* 1311 */ 492011,
+/* 1312 */ 492040,
 /* 1313 */ 9999,
 /* 1314 */ 9999,
-/* 1315 */ 496007,
+/* 1315 */ 492007,
 /* 1316 */ 9999,
 /* 1317 */ 9999,
-/* 1318 */ 496007,
+/* 1318 */ 492007,
 /* 1319 */ 9999,
 /* 1320 */ 9999,
 /* 1321 */ 9999,
-/* 1322 */ 496018,
+/* 1322 */ 492018,
 /* 1323 */ 9999,
 /* 1324 */ 9999,
 /* 1325 */ 9999,
-/* 1326 */ 496026,
+/* 1326 */ 492026,
 /* 1327 */ 9999,
 /* 1328 */ 9999,
 /* 1329 */ 9999,
-/* 1330 */ 496037,
+/* 1330 */ 492037,
 /* 1331 */ 9999,
 /* 1332 */ 9999,
-/* 1333 */ 509005,
-/* 1334 */ 510005,
-/* 1335 */ 511005,
-/* 1336 */ 512005,
-/* 1337 */ 508006,
+/* 1333 */ 505005,
+/* 1334 */ 506005,
+/* 1335 */ 507005,
+/* 1336 */ 508005,
+/* 1337 */ 504006,
 /* 1338 */ 9999,
-/* 1339 */ 508006,
+/* 1339 */ 504006,
 /* 1340 */ 9999,
 /* 1341 */ 9999,
-/* 1342 */ 508006,
+/* 1342 */ 504006,
 /* 1343 */ 9999,
-/* 1344 */ 509007,
+/* 1344 */ 505007,
 /* 1345 */ 9999,
-/* 1346 */ 509015,
+/* 1346 */ 505015,
 /* 1347 */ 9999,
 /* 1348 */ 9999,
-/* 1349 */ 509015,
+/* 1349 */ 505015,
 /* 1350 */ 9999,
-/* 1351 */ 510006,
+/* 1351 */ 506006,
 /* 1352 */ 9999,
-/* 1353 */ 510011,
+/* 1353 */ 506011,
 /* 1354 */ 9999,
 /* 1355 */ 9999,
-/* 1356 */ 510011,
+/* 1356 */ 506011,
 /* 1357 */ 9999,
 /* 1358 */ 9999,
 /* 1359 */ 9999,
-/* 1360 */ 511008,
+/* 1360 */ 507008,
 /* 1361 */ 9999,
 /* 1362 */ 9999,
-/* 1363 */ 511008,
+/* 1363 */ 507008,
 /* 1364 */ 9999,
 /* 1365 */ 9999,
-/* 1366 */ 512011,
-/* 1367 */ 512040,
+/* 1366 */ 508011,
+/* 1367 */ 508040,
 /* 1368 */ 9999,
 /* 1369 */ 9999,
-/* 1370 */ 512007,
+/* 1370 */ 508007,
 /* 1371 */ 9999,
 /* 1372 */ 9999,
-/* 1373 */ 512007,
+/* 1373 */ 508007,
 /* 1374 */ 9999,
 /* 1375 */ 9999,
 /* 1376 */ 9999,
-/* 1377 */ 512018,
+/* 1377 */ 508018,
 /* 1378 */ 9999,
 /* 1379 */ 9999,
 /* 1380 */ 9999,
-/* 1381 */ 512026,
+/* 1381 */ 508026,
 /* 1382 */ 9999,
 /* 1383 */ 9999,
 /* 1384 */ 9999,
-/* 1385 */ 512037,
+/* 1385 */ 508037,
 /* 1386 */ 9999,
-/* 1387 */ 522021,
+/* 1387 */ 518021,
 /* 1388 */ 9999,
-/* 1389 */ 522026,
+/* 1389 */ 518026,
 /* 1390 */ 9999,
 /* 1391 */ 9999,
-/* 1392 */ 522026,
+/* 1392 */ 518026,
 /* 1393 */ 9999,
-/* 1394 */ 531003,
-/* 1395 */ 531015,
+/* 1394 */ 527003,
+/* 1395 */ 527015,
 /* 1396 */ 9999,
-/* 1397 */ 531008,
+/* 1397 */ 527008,
 /* 1398 */ 9999,
 /* 1399 */ 9999,
-/* 1400 */ 532009,
-/* 1401 */ 532020,
+/* 1400 */ 528009,
+/* 1401 */ 528020,
 /* 1402 */ 9999,
-/* 1403 */ 532005,
+/* 1403 */ 528005,
 /* 1404 */ 9999,
 /* 1405 */ 9999,
 /* 1406 */ 9999,
-/* 1407 */ 531016,
+/* 1407 */ 527016,
 /* 1408 */ 9999,
 /* 1409 */ 9999,
-/* 1410 */ 531016,
+/* 1410 */ 527016,
 /* 1411 */ 9999,
 /* 1412 */ 9999,
 /* 1413 */ 9999,
-/* 1414 */ 532021,
+/* 1414 */ 528021,
 /* 1415 */ 9999,
 /* 1416 */ 9999,
-/* 1417 */ 532021,
+/* 1417 */ 528021,
 /* 1418 */ 9999,
 /* 1419 */ 9999,
-/* 1420 */ 536017,
-/* 1421 */ 536024,
+/* 1420 */ 532017,
+/* 1421 */ 532024,
 /* 1422 */ 9999,
-/* 1423 */ 536011,
+/* 1423 */ 532011,
 /* 1424 */ 9999,
 /* 1425 */ 9999,
 /* 1426 */ 9999,
-/* 1427 */ 536018,
+/* 1427 */ 532018,
 /* 1428 */ 9999,
 /* 1429 */ 9999,
-/* 1430 */ 536018,
+/* 1430 */ 532018,
 /* 1431 */ 9999,
 /* 1432 */ 9999,
 /* 1433 */ 9999,
 /* 1434 */ 9999,
-/* 1435 */ 545009,
+/* 1435 */ 541009,
 /* 1436 */ 9999,
-/* 1437 */ 546009,
+/* 1437 */ 542009,
 /* 1438 */ 9999,
 /* 1439 */ 9999,
-/* 1440 */ 540006,
+/* 1440 */ 536006,
 /* 1441 */ 9999,
-/* 1442 */ 546010,
-/* 1443 */ 546019,
+/* 1442 */ 542010,
+/* 1443 */ 542019,
 /* 1444 */ 9999,
-/* 1445 */ 546019,
+/* 1445 */ 542019,
 /* 1446 */ 9999,
 /* 1447 */ 9999,
-/* 1448 */ 546019,
+/* 1448 */ 542019,
 /* 1449 */ 9999,
 /* 1450 */ 9999,
-/* 1451 */ 550015,
+/* 1451 */ 546015,
 /* 1452 */ 9999,
 /* 1453 */ 9999,
 /* 1454 */ 9999,
-/* 1455 */ 550013,
+/* 1455 */ 546013,
 /* 1456 */ 9999,
 /* 1457 */ 9999,
-/* 1458 */ 551017,
-/* 1459 */ 551024,
+/* 1458 */ 547017,
+/* 1459 */ 547024,
 /* 1460 */ 9999,
 /* 1461 */ 9999,
-/* 1462 */ 551015,
+/* 1462 */ 547015,
 /* 1463 */ 9999,
-/* 1464 */ 552005,
+/* 1464 */ 548005,
 /* 1465 */ 9999,
-/* 1466 */ 552015,
+/* 1466 */ 548015,
 /* 1467 */ 9999,
 /* 1468 */ 9999,
-/* 1469 */ 553010,
-/* 1470 */ 553017,
+/* 1469 */ 549010,
+/* 1470 */ 549017,
 /* 1471 */ 9999,
 /* 1472 */ 9999,
-/* 1473 */ 553008,
+/* 1473 */ 549008,
 /* 1474 */ 9999,
 /* 1475 */ 9999,
-/* 1476 */ 554010,
-/* 1477 */ 554017,
+/* 1476 */ 550010,
+/* 1477 */ 550017,
 /* 1478 */ 9999,
 /* 1479 */ 9999,
-/* 1480 */ 554008,
+/* 1480 */ 550008,
 /* 1481 */ 9999,
 /* 1482 */ 9999,
-/* 1483 */ 555010,
-/* 1484 */ 555017,
+/* 1483 */ 551010,
+/* 1484 */ 551017,
 /* 1485 */ 9999,
 /* 1486 */ 9999,
-/* 1487 */ 555008,
+/* 1487 */ 551008,
 /* 1488 */ 9999,
 /* 1489 */ 9999,
-/* 1490 */ 556012,
-/* 1491 */ 556019,
+/* 1490 */ 552012,
+/* 1491 */ 552019,
 /* 1492 */ 9999,
 /* 1493 */ 9999,
-/* 1494 */ 556010,
+/* 1494 */ 552010,
 /* 1495 */ 9999,
 /* 1496 */ 9999,
-/* 1497 */ 557009,
-/* 1498 */ 557016,
+/* 1497 */ 553009,
+/* 1498 */ 553016,
 /* 1499 */ 9999,
 /* 1500 */ 9999,
-/* 1501 */ 557007,
+/* 1501 */ 553007,
 /* 1502 */ 9999,
 /* 1503 */ 9999,
-/* 1504 */ 558011,
-/* 1505 */ 558018,
+/* 1504 */ 554011,
+/* 1505 */ 554018,
 /* 1506 */ 9999,
 /* 1507 */ 9999,
-/* 1508 */ 558009,
+/* 1508 */ 554009,
 /* 1509 */ 9999,
 /* 1510 */ 9999,
-/* 1511 */ 559011,
-/* 1512 */ 559018,
+/* 1511 */ 555011,
+/* 1512 */ 555018,
 /* 1513 */ 9999,
 /* 1514 */ 9999,
 /* 1515 */ 9999,
-/* 1516 */ 559009,
+/* 1516 */ 555009,
 /* 1517 */ 9999,
 /* 1518 */ 9999,
-/* 1519 */ 560011,
+/* 1519 */ 556011,
 /* 1520 */ 9999,
-/* 1521 */ 560022,
+/* 1521 */ 556022,
 /* 1522 */ 9999,
 /* 1523 */ 9999,
 /* 1524 */ 9999,
-/* 1525 */ 560009,
+/* 1525 */ 556009,
 /* 1526 */ 9999,
 /* 1527 */ 9999,
-/* 1528 */ 561011,
-/* 1529 */ 561018,
+/* 1528 */ 557011,
+/* 1529 */ 557018,
 /* 1530 */ 9999,
 /* 1531 */ 9999,
-/* 1532 */ 561009,
+/* 1532 */ 557009,
 /* 1533 */ 9999,
 /* 1534 */ 9999,
-/* 1535 */ 562011,
-/* 1536 */ 562018,
+/* 1535 */ 558011,
+/* 1536 */ 558018,
 /* 1537 */ 9999,
 /* 1538 */ 9999,
-/* 1539 */ 562009,
+/* 1539 */ 558009,
 /* 1540 */ 9999,
 /* 1541 */ 9999,
-/* 1542 */ 563014,
-/* 1543 */ 563021,
+/* 1542 */ 559014,
+/* 1543 */ 559021,
 /* 1544 */ 9999,
 /* 1545 */ 9999,
-/* 1546 */ 563012,
+/* 1546 */ 559012,
 /* 1547 */ 9999,
 /* 1548 */ 9999,
-/* 1549 */ 564010,
-/* 1550 */ 564017,
-/* 1551 */ 565005,
+/* 1549 */ 560010,
+/* 1550 */ 560017,
+/* 1551 */ 561005,
 /* 1552 */ 9999,
 /* 1553 */ 9999,
-/* 1554 */ 564008,
+/* 1554 */ 560008,
 /* 1555 */ 9999,
 /* 1556 */ 9999,
-/* 1557 */ 575012,
-/* 1558 */ 575019,
+/* 1557 */ 571012,
+/* 1558 */ 571019,
 /* 1559 */ 9999,
 /* 1560 */ 9999,
-/* 1561 */ 575010,
+/* 1561 */ 571010,
 /* 1562 */ 9999,
 /* 1563 */ 9999,
-/* 1564 */ 582010,
-/* 1565 */ 582017,
+/* 1564 */ 578010,
+/* 1565 */ 578017,
 /* 1566 */ 9999,
 /* 1567 */ 9999,
-/* 1568 */ 582008,
+/* 1568 */ 578008,
 /* 1569 */ 9999,
 /* 1570 */ 9999,
-/* 1571 */ 583015,
-/* 1572 */ 583022,
+/* 1571 */ 579015,
+/* 1572 */ 579022,
 /* 1573 */ 9999,
 /* 1574 */ 9999,
-/* 1575 */ 583013,
+/* 1575 */ 579013,
 /* 1576 */ 9999,
 /* 1577 */ 9999,
-/* 1578 */ 584009,
-/* 1579 */ 584016,
+/* 1578 */ 580009,
+/* 1579 */ 580016,
 /* 1580 */ 9999,
 /* 1581 */ 9999,
-/* 1582 */ 584007,
+/* 1582 */ 580007,
 /* 1583 */ 9999,
 /* 1584 */ 9999,
-/* 1585 */ 585014,
-/* 1586 */ 585021,
+/* 1585 */ 581014,
+/* 1586 */ 581021,
 /* 1587 */ 9999,
 /* 1588 */ 9999,
-/* 1589 */ 585012,
+/* 1589 */ 581012,
 /* 1590 */ 9999,
 /* 1591 */ 9999,
-/* 1592 */ 586013,
-/* 1593 */ 586020,
+/* 1592 */ 582013,
+/* 1593 */ 582020,
 /* 1594 */ 9999,
 /* 1595 */ 9999,
-/* 1596 */ 586011,
+/* 1596 */ 582011,
 /* 1597 */ 9999,
 /* 1598 */ 9999,
-/* 1599 */ 587009,
-/* 1600 */ 587016,
+/* 1599 */ 583009,
+/* 1600 */ 583016,
 /* 1601 */ 9999,
 /* 1602 */ 9999,
-/* 1603 */ 587007,
+/* 1603 */ 583007,
 /* 1604 */ 9999,
 /* 1605 */ 9999,
-/* 1606 */ 588015,
-/* 1607 */ 588022,
+/* 1606 */ 584015,
+/* 1607 */ 584022,
 /* 1608 */ 9999,
 /* 1609 */ 9999,
-/* 1610 */ 588013,
+/* 1610 */ 584013,
 /* 1611 */ 9999,
 /* 1612 */ 9999,
-/* 1613 */ 589012,
-/* 1614 */ 589019,
+/* 1613 */ 585012,
+/* 1614 */ 585019,
 /* 1615 */ 9999,
 /* 1616 */ 9999,
-/* 1617 */ 589010,
+/* 1617 */ 585010,
 /* 1618 */ 9999,
 /* 1619 */ 9999,
-/* 1620 */ 591011,
-/* 1621 */ 591018,
+/* 1620 */ 587011,
+/* 1621 */ 587018,
 /* 1622 */ 9999,
 /* 1623 */ 9999,
-/* 1624 */ 591009,
+/* 1624 */ 587009,
 /* 1625 */ 9999,
 /* 1626 */ 9999,
-/* 1627 */ 593011,
-/* 1628 */ 593018,
+/* 1627 */ 589011,
+/* 1628 */ 589018,
 /* 1629 */ 9999,
 /* 1630 */ 9999,
-/* 1631 */ 593009,
+/* 1631 */ 589009,
 /* 1632 */ 9999,
 /* 1633 */ 9999,
-/* 1634 */ 594011,
-/* 1635 */ 594018,
+/* 1634 */ 590011,
+/* 1635 */ 590018,
 /* 1636 */ 9999,
 /* 1637 */ 9999,
-/* 1638 */ 594009,
+/* 1638 */ 590009,
 /* 1639 */ 9999,
 /* 1640 */ 9999,
-/* 1641 */ 595014,
-/* 1642 */ 595021,
+/* 1641 */ 591014,
+/* 1642 */ 591021,
 /* 1643 */ 9999,
 /* 1644 */ 9999,
-/* 1645 */ 595012,
+/* 1645 */ 591012,
 /* 1646 */ 9999,
 /* 1647 */ 9999,
-/* 1648 */ 596016,
-/* 1649 */ 596023,
+/* 1648 */ 592016,
+/* 1649 */ 592023,
 /* 1650 */ 9999,
 /* 1651 */ 9999,
-/* 1652 */ 596014,
+/* 1652 */ 592014,
 /* 1653 */ 9999,
 /* 1654 */ 9999,
-/* 1655 */ 597016,
-/* 1656 */ 597023,
+/* 1655 */ 593016,
+/* 1656 */ 593023,
 /* 1657 */ 9999,
 /* 1658 */ 9999,
-/* 1659 */ 597014,
+/* 1659 */ 593014,
 /* 1660 */ 9999,
 /* 1661 */ 9999,
-/* 1662 */ 598014,
-/* 1663 */ 598021,
+/* 1662 */ 594014,
+/* 1663 */ 594021,
 /* 1664 */ 9999,
 /* 1665 */ 9999,
-/* 1666 */ 598012,
+/* 1666 */ 594012,
 /* 1667 */ 9999,
 /* 1668 */ 9999,
-/* 1669 */ 599013,
-/* 1670 */ 599020,
+/* 1669 */ 595013,
+/* 1670 */ 595020,
 /* 1671 */ 9999,
 /* 1672 */ 9999,
-/* 1673 */ 599011,
+/* 1673 */ 595011,
 /* 1674 */ 9999,
 /* 1675 */ 9999,
-/* 1676 */ 600011,
-/* 1677 */ 600018,
+/* 1676 */ 596011,
+/* 1677 */ 596018,
 /* 1678 */ 9999,
 /* 1679 */ 9999,
-/* 1680 */ 600009,
+/* 1680 */ 596009,
 /* 1681 */ 9999,
 /* 1682 */ 9999,
 /* 1683 */ 9999,
-/* 1684 */ 601017,
-/* 1685 */ 601024,
+/* 1684 */ 597017,
+/* 1685 */ 597024,
 /* 1686 */ 9999,
 /* 1687 */ 9999,
-/* 1688 */ 601009,
+/* 1688 */ 597009,
 /* 1689 */ 9999,
 /* 1690 */ 9999,
-/* 1691 */ 602014,
-/* 1692 */ 602021,
+/* 1691 */ 598014,
+/* 1692 */ 598021,
 /* 1693 */ 9999,
 /* 1694 */ 9999,
-/* 1695 */ 602012,
+/* 1695 */ 598012,
 /* 1696 */ 9999,
 /* 1697 */ 9999,
-/* 1698 */ 603010,
-/* 1699 */ 603017,
+/* 1698 */ 599010,
+/* 1699 */ 599017,
 /* 1700 */ 9999,
 /* 1701 */ 9999,
-/* 1702 */ 603008,
+/* 1702 */ 599008,
 /* 1703 */ 9999,
-/* 1704 */ 604005,
+/* 1704 */ 600005,
 /* 1705 */ 9999,
-/* 1706 */ 604016,
+/* 1706 */ 600016,
 /* 1707 */ 9999,
-/* 1708 */ 605005,
+/* 1708 */ 601005,
 /* 1709 */ 9999,
-/* 1710 */ 605014,
+/* 1710 */ 601014,
 /* 1711 */ 9999,
-/* 1712 */ 606005,
+/* 1712 */ 602005,
 /* 1713 */ 9999,
-/* 1714 */ 606017,
+/* 1714 */ 602017,
 /* 1715 */ 9999,
 /* 1716 */ 9999,
 /* 1717 */ 9999,
-/* 1718 */ 550016,
+/* 1718 */ 546016,
 /* 1719 */ 9999,
 /* 1720 */ 9999,
-/* 1721 */ 550016,
+/* 1721 */ 546016,
 /* 1722 */ 9999,
 /* 1723 */ 9999,
 /* 1724 */ 9999,
-/* 1725 */ 551018,
+/* 1725 */ 547018,
 /* 1726 */ 9999,
 /* 1727 */ 9999,
-/* 1728 */ 551018,
+/* 1728 */ 547018,
 /* 1729 */ 9999,
 /* 1730 */ 9999,
 /* 1731 */ 9999,
-/* 1732 */ 553011,
+/* 1732 */ 549011,
 /* 1733 */ 9999,
 /* 1734 */ 9999,
-/* 1735 */ 553011,
+/* 1735 */ 549011,
 /* 1736 */ 9999,
 /* 1737 */ 9999,
 /* 1738 */ 9999,
-/* 1739 */ 554011,
+/* 1739 */ 550011,
 /* 1740 */ 9999,
 /* 1741 */ 9999,
-/* 1742 */ 554011,
+/* 1742 */ 550011,
 /* 1743 */ 9999,
 /* 1744 */ 9999,
 /* 1745 */ 9999,
-/* 1746 */ 555011,
+/* 1746 */ 551011,
 /* 1747 */ 9999,
 /* 1748 */ 9999,
-/* 1749 */ 555011,
+/* 1749 */ 551011,
 /* 1750 */ 9999,
 /* 1751 */ 9999,
 /* 1752 */ 9999,
-/* 1753 */ 556013,
+/* 1753 */ 552013,
 /* 1754 */ 9999,
 /* 1755 */ 9999,
-/* 1756 */ 556013,
+/* 1756 */ 552013,
 /* 1757 */ 9999,
 /* 1758 */ 9999,
 /* 1759 */ 9999,
-/* 1760 */ 557010,
+/* 1760 */ 553010,
 /* 1761 */ 9999,
 /* 1762 */ 9999,
-/* 1763 */ 557010,
+/* 1763 */ 553010,
 /* 1764 */ 9999,
 /* 1765 */ 9999,
 /* 1766 */ 9999,
-/* 1767 */ 558012,
+/* 1767 */ 554012,
 /* 1768 */ 9999,
 /* 1769 */ 9999,
-/* 1770 */ 558012,
+/* 1770 */ 554012,
 /* 1771 */ 9999,
 /* 1772 */ 9999,
 /* 1773 */ 9999,
-/* 1774 */ 559012,
+/* 1774 */ 555012,
 /* 1775 */ 9999,
 /* 1776 */ 9999,
-/* 1777 */ 559012,
+/* 1777 */ 555012,
 /* 1778 */ 9999,
 /* 1779 */ 9999,
 /* 1780 */ 9999,
-/* 1781 */ 560012,
+/* 1781 */ 556012,
 /* 1782 */ 9999,
 /* 1783 */ 9999,
-/* 1784 */ 560012,
+/* 1784 */ 556012,
 /* 1785 */ 9999,
 /* 1786 */ 9999,
 /* 1787 */ 9999,
-/* 1788 */ 561012,
+/* 1788 */ 557012,
 /* 1789 */ 9999,
 /* 1790 */ 9999,
-/* 1791 */ 561012,
+/* 1791 */ 557012,
 /* 1792 */ 9999,
 /* 1793 */ 9999,
 /* 1794 */ 9999,
-/* 1795 */ 562012,
+/* 1795 */ 558012,
 /* 1796 */ 9999,
 /* 1797 */ 9999,
-/* 1798 */ 562012,
+/* 1798 */ 558012,
 /* 1799 */ 9999,
 /* 1800 */ 9999,
 /* 1801 */ 9999,
-/* 1802 */ 563015,
+/* 1802 */ 559015,
 /* 1803 */ 9999,
 /* 1804 */ 9999,
-/* 1805 */ 563015,
+/* 1805 */ 559015,
 /* 1806 */ 9999,
 /* 1807 */ 9999,
 /* 1808 */ 9999,
-/* 1809 */ 564011,
+/* 1809 */ 560011,
 /* 1810 */ 9999,
 /* 1811 */ 9999,
-/* 1812 */ 564011,
+/* 1812 */ 560011,
 /* 1813 */ 9999,
-/* 1814 */ 565007,
+/* 1814 */ 561007,
 /* 1815 */ 9999,
-/* 1816 */ 565012,
+/* 1816 */ 561012,
 /* 1817 */ 9999,
 /* 1818 */ 9999,
-/* 1819 */ 565012,
+/* 1819 */ 561012,
 /* 1820 */ 9999,
 /* 1821 */ 9999,
 /* 1822 */ 9999,
-/* 1823 */ 575013,
+/* 1823 */ 571013,
 /* 1824 */ 9999,
 /* 1825 */ 9999,
-/* 1826 */ 575013,
+/* 1826 */ 571013,
 /* 1827 */ 9999,
 /* 1828 */ 9999,
 /* 1829 */ 9999,
-/* 1830 */ 582011,
+/* 1830 */ 578011,
 /* 1831 */ 9999,
 /* 1832 */ 9999,
-/* 1833 */ 582011,
+/* 1833 */ 578011,
 /* 1834 */ 9999,
 /* 1835 */ 9999,
 /* 1836 */ 9999,
-/* 1837 */ 583016,
+/* 1837 */ 579016,
 /* 1838 */ 9999,
 /* 1839 */ 9999,
-/* 1840 */ 583016,
+/* 1840 */ 579016,
 /* 1841 */ 9999,
 /* 1842 */ 9999,
 /* 1843 */ 9999,
-/* 1844 */ 584010,
+/* 1844 */ 580010,
 /* 1845 */ 9999,
 /* 1846 */ 9999,
-/* 1847 */ 584010,
+/* 1847 */ 580010,
 /* 1848 */ 9999,
 /* 1849 */ 9999,
 /* 1850 */ 9999,
-/* 1851 */ 585015,
+/* 1851 */ 581015,
 /* 1852 */ 9999,
 /* 1853 */ 9999,
-/* 1854 */ 585015,
+/* 1854 */ 581015,
 /* 1855 */ 9999,
 /* 1856 */ 9999,
 /* 1857 */ 9999,
-/* 1858 */ 586014,
+/* 1858 */ 582014,
 /* 1859 */ 9999,
 /* 1860 */ 9999,
-/* 1861 */ 586014,
+/* 1861 */ 582014,
 /* 1862 */ 9999,
 /* 1863 */ 9999,
 /* 1864 */ 9999,
-/* 1865 */ 587010,
+/* 1865 */ 583010,
 /* 1866 */ 9999,
 /* 1867 */ 9999,
-/* 1868 */ 587010,
+/* 1868 */ 583010,
 /* 1869 */ 9999,
-/* 1870 */ 587017,
-/* 1871 */ 587025,
+/* 1870 */ 583017,
+/* 1871 */ 583025,
 /* 1872 */ 9999,
-/* 1873 */ 587025,
+/* 1873 */ 583025,
 /* 1874 */ 9999,
 /* 1875 */ 9999,
-/* 1876 */ 587025,
+/* 1876 */ 583025,
 /* 1877 */ 9999,
 /* 1878 */ 9999,
 /* 1879 */ 9999,
-/* 1880 */ 588016,
+/* 1880 */ 584016,
 /* 1881 */ 9999,
 /* 1882 */ 9999,
-/* 1883 */ 588016,
+/* 1883 */ 584016,
 /* 1884 */ 9999,
 /* 1885 */ 9999,
 /* 1886 */ 9999,
-/* 1887 */ 589013,
+/* 1887 */ 585013,
 /* 1888 */ 9999,
 /* 1889 */ 9999,
-/* 1890 */ 589013,
+/* 1890 */ 585013,
 /* 1891 */ 9999,
-/* 1892 */ 589021,
-/* 1893 */ 590006,
-/* 1894 */ 589027,
+/* 1892 */ 585021,
+/* 1893 */ 586006,
+/* 1894 */ 585027,
 /* 1895 */ 9999,
-/* 1896 */ 589027,
+/* 1896 */ 585027,
 /* 1897 */ 9999,
 /* 1898 */ 9999,
-/* 1899 */ 589027,
+/* 1899 */ 585027,
 /* 1900 */ 9999,
 /* 1901 */ 9999,
 /* 1902 */ 9999,
-/* 1903 */ 590007,
+/* 1903 */ 586007,
 /* 1904 */ 9999,
 /* 1905 */ 9999,
-/* 1906 */ 590007,
+/* 1906 */ 586007,
 /* 1907 */ 9999,
 /* 1908 */ 9999,
 /* 1909 */ 9999,
-/* 1910 */ 591012,
+/* 1910 */ 587012,
 /* 1911 */ 9999,
 /* 1912 */ 9999,
-/* 1913 */ 591012,
+/* 1913 */ 587012,
 /* 1914 */ 9999,
-/* 1915 */ 591020,
-/* 1916 */ 592006,
-/* 1917 */ 591026,
+/* 1915 */ 587020,
+/* 1916 */ 588006,
+/* 1917 */ 587026,
 /* 1918 */ 9999,
-/* 1919 */ 591026,
+/* 1919 */ 587026,
 /* 1920 */ 9999,
 /* 1921 */ 9999,
-/* 1922 */ 591026,
+/* 1922 */ 587026,
 /* 1923 */ 9999,
 /* 1924 */ 9999,
 /* 1925 */ 9999,
-/* 1926 */ 592007,
+/* 1926 */ 588007,
 /* 1927 */ 9999,
 /* 1928 */ 9999,
-/* 1929 */ 592007,
+/* 1929 */ 588007,
 /* 1930 */ 9999,
 /* 1931 */ 9999,
 /* 1932 */ 9999,
-/* 1933 */ 593012,
+/* 1933 */ 589012,
 /* 1934 */ 9999,
 /* 1935 */ 9999,
-/* 1936 */ 593012,
+/* 1936 */ 589012,
 /* 1937 */ 9999,
-/* 1938 */ 593019,
-/* 1939 */ 593029,
+/* 1938 */ 589019,
+/* 1939 */ 589029,
 /* 1940 */ 9999,
-/* 1941 */ 593029,
+/* 1941 */ 589029,
 /* 1942 */ 9999,
 /* 1943 */ 9999,
-/* 1944 */ 593029,
+/* 1944 */ 589029,
 /* 1945 */ 9999,
 /* 1946 */ 9999,
 /* 1947 */ 9999,
-/* 1948 */ 594012,
+/* 1948 */ 590012,
 /* 1949 */ 9999,
 /* 1950 */ 9999,
-/* 1951 */ 594012,
+/* 1951 */ 590012,
 /* 1952 */ 9999,
-/* 1953 */ 594020,
-/* 1954 */ 594030,
-/* 1955 */ 594025,
+/* 1953 */ 590020,
+/* 1954 */ 590030,
+/* 1955 */ 590025,
 /* 1956 */ 9999,
-/* 1957 */ 594025,
+/* 1957 */ 590025,
 /* 1958 */ 9999,
 /* 1959 */ 9999,
-/* 1960 */ 594025,
+/* 1960 */ 590025,
 /* 1961 */ 9999,
 /* 1962 */ 9999,
 /* 1963 */ 9999,
-/* 1964 */ 594031,
+/* 1964 */ 590031,
 /* 1965 */ 9999,
 /* 1966 */ 9999,
 /* 1967 */ 9999,
-/* 1968 */ 594035,
+/* 1968 */ 590035,
 /* 1969 */ 9999,
 /* 1970 */ 9999,
-/* 1971 */ 594035,
+/* 1971 */ 590035,
 /* 1972 */ 9999,
 /* 1973 */ 9999,
 /* 1974 */ 9999,
-/* 1975 */ 595015,
+/* 1975 */ 591015,
 /* 1976 */ 9999,
 /* 1977 */ 9999,
-/* 1978 */ 595015,
+/* 1978 */ 591015,
 /* 1979 */ 9999,
 /* 1980 */ 9999,
 /* 1981 */ 9999,
-/* 1982 */ 596017,
+/* 1982 */ 592017,
 /* 1983 */ 9999,
 /* 1984 */ 9999,
-/* 1985 */ 596017,
+/* 1985 */ 592017,
 /* 1986 */ 9999,
 /* 1987 */ 9999,
 /* 1988 */ 9999,
-/* 1989 */ 597017,
+/* 1989 */ 593017,
 /* 1990 */ 9999,
 /* 1991 */ 9999,
-/* 1992 */ 597017,
+/* 1992 */ 593017,
 /* 1993 */ 9999,
 /* 1994 */ 9999,
 /* 1995 */ 9999,
-/* 1996 */ 598015,
+/* 1996 */ 594015,
 /* 1997 */ 9999,
 /* 1998 */ 9999,
-/* 1999 */ 598015,
+/* 1999 */ 594015,
 /* 2000 */ 9999,
 /* 2001 */ 9999,
 /* 2002 */ 9999,
-/* 2003 */ 599014,
+/* 2003 */ 595014,
 /* 2004 */ 9999,
 /* 2005 */ 9999,
-/* 2006 */ 599014,
+/* 2006 */ 595014,
 /* 2007 */ 9999,
 /* 2008 */ 9999,
 /* 2009 */ 9999,
-/* 2010 */ 600012,
+/* 2010 */ 596012,
 /* 2011 */ 9999,
 /* 2012 */ 9999,
-/* 2013 */ 600012,
+/* 2013 */ 596012,
 /* 2014 */ 9999,
 /* 2015 */ 9999,
 /* 2016 */ 9999,
-/* 2017 */ 601018,
+/* 2017 */ 597018,
 /* 2018 */ 9999,
 /* 2019 */ 9999,
-/* 2020 */ 601018,
+/* 2020 */ 597018,
 /* 2021 */ 9999,
 /* 2022 */ 9999,
 /* 2023 */ 9999,
-/* 2024 */ 602015,
+/* 2024 */ 598015,
 /* 2025 */ 9999,
 /* 2026 */ 9999,
-/* 2027 */ 602015,
+/* 2027 */ 598015,
 /* 2028 */ 9999,
 /* 2029 */ 9999,
 /* 2030 */ 9999,
-/* 2031 */ 603011,
+/* 2031 */ 599011,
 /* 2032 */ 9999,
 /* 2033 */ 9999,
-/* 2034 */ 603011,
+/* 2034 */ 599011,
 /* 2035 */ 9999,
-/* 2036 */ 610003,
-/* 2037 */ 610014,
+/* 2036 */ 606003,
+/* 2037 */ 606014,
 /* 2038 */ 9999,
-/* 2039 */ 610008,
+/* 2039 */ 606008,
 /* 2040 */ 9999,
 /* 2041 */ 9999,
-/* 2042 */ 614018,
-/* 2043 */ 614028,
+/* 2042 */ 610018,
+/* 2043 */ 610028,
 /* 2044 */ 9999,
-/* 2045 */ 614012,
+/* 2045 */ 610012,
 /* 2046 */ 9999,
 /* 2047 */ 9999,
 /* 2048 */ 9999,
-/* 2049 */ 610015,
+/* 2049 */ 606015,
 /* 2050 */ 9999,
 /* 2051 */ 9999,
-/* 2052 */ 610015,
+/* 2052 */ 606015,
 /* 2053 */ 9999,
 /* 2054 */ 9999,
 /* 2055 */ 9999,
-/* 2056 */ 614029,
+/* 2056 */ 610029,
 /* 2057 */ 9999,
 /* 2058 */ 9999,
-/* 2059 */ 614029,
+/* 2059 */ 610029,
 /* 2060 */ 9999,
-/* 2061 */ 618005,
-/* 2062 */ 618018,
+/* 2061 */ 614005,
+/* 2062 */ 614018,
 /* 2063 */ 9999,
-/* 2064 */ 618010,
+/* 2064 */ 614010,
 /* 2065 */ 9999,
 /* 2066 */ 9999,
-/* 2067 */ 619009,
-/* 2068 */ 619021,
+/* 2067 */ 615009,
+/* 2068 */ 615021,
 /* 2069 */ 9999,
-/* 2070 */ 619005,
+/* 2070 */ 615005,
 /* 2071 */ 9999,
 /* 2072 */ 9999,
 /* 2073 */ 9999,
-/* 2074 */ 618019,
+/* 2074 */ 614019,
 /* 2075 */ 9999,
 /* 2076 */ 9999,
-/* 2077 */ 618019,
+/* 2077 */ 614019,
 /* 2078 */ 9999,
 /* 2079 */ 9999,
 /* 2080 */ 9999,
-/* 2081 */ 619022,
+/* 2081 */ 615022,
 /* 2082 */ 9999,
 /* 2083 */ 9999,
-/* 2084 */ 619022,
+/* 2084 */ 615022,
 /* 2085 */ 9999,
 /* 2086 */ 9999,
 /* 2087 */ 9999,
 /* 2088 */ 9999,
-/* 2089 */ 626007,
+/* 2089 */ 622007,
 /* 2090 */ 9999,
-/* 2091 */ 627007,
+/* 2091 */ 623007,
 /* 2092 */ 9999,
 /* 2093 */ 9999,
-/* 2094 */ 624009,
+/* 2094 */ 620009,
 /* 2095 */ 9999,
-/* 2096 */ 627008,
-/* 2097 */ 627017,
+/* 2096 */ 623008,
+/* 2097 */ 623017,
 /* 2098 */ 9999,
-/* 2099 */ 627017,
+/* 2099 */ 623017,
 /* 2100 */ 9999,
 /* 2101 */ 9999,
-/* 2102 */ 627017,
+/* 2102 */ 623017,
 /* 2103 */ 9999,
 /* 2104 */ 9999,
-/* 2105 */ 631016,
+/* 2105 */ 627016,
 /* 2106 */ 9999,
 /* 2107 */ 9999,
 /* 2108 */ 9999,
-/* 2109 */ 631014,
+/* 2109 */ 627014,
 /* 2110 */ 9999,
 /* 2111 */ 9999,
-/* 2112 */ 632015,
-/* 2113 */ 632022,
+/* 2112 */ 628015,
+/* 2113 */ 628022,
 /* 2114 */ 9999,
 /* 2115 */ 9999,
-/* 2116 */ 632013,
+/* 2116 */ 628013,
 /* 2117 */ 9999,
-/* 2118 */ 633005,
+/* 2118 */ 629005,
 /* 2119 */ 9999,
-/* 2120 */ 633015,
+/* 2120 */ 629015,
 /* 2121 */ 9999,
 /* 2122 */ 9999,
-/* 2123 */ 634010,
-/* 2124 */ 634017,
+/* 2123 */ 630010,
+/* 2124 */ 630017,
 /* 2125 */ 9999,
 /* 2126 */ 9999,
 /* 2127 */ 9999,
-/* 2128 */ 634008,
+/* 2128 */ 630008,
 /* 2129 */ 9999,
 /* 2130 */ 9999,
-/* 2131 */ 635015,
-/* 2132 */ 635022,
+/* 2131 */ 631015,
+/* 2132 */ 631022,
 /* 2133 */ 9999,
 /* 2134 */ 9999,
-/* 2135 */ 635013,
+/* 2135 */ 631013,
 /* 2136 */ 9999,
 /* 2137 */ 9999,
-/* 2138 */ 636011,
-/* 2139 */ 636019,
+/* 2138 */ 632011,
+/* 2139 */ 632019,
 /* 2140 */ 9999,
 /* 2141 */ 9999,
-/* 2142 */ 636009,
+/* 2142 */ 632009,
 /* 2143 */ 9999,
-/* 2144 */ 637005,
-/* 2145 */ 637028,
-/* 2146 */ 637035,
+/* 2144 */ 633005,
+/* 2145 */ 633028,
+/* 2146 */ 633035,
 /* 2147 */ 9999,
 /* 2148 */ 9999,
-/* 2149 */ 637005,
+/* 2149 */ 633005,
 /* 2150 */ 9999,
 /* 2151 */ 9999,
-/* 2152 */ 638010,
-/* 2153 */ 638017,
+/* 2152 */ 634010,
+/* 2153 */ 634017,
 /* 2154 */ 9999,
 /* 2155 */ 9999,
-/* 2156 */ 638008,
+/* 2156 */ 634008,
 /* 2157 */ 9999,
 /* 2158 */ 9999,
-/* 2159 */ 639012,
-/* 2160 */ 639019,
+/* 2159 */ 635012,
+/* 2160 */ 635019,
 /* 2161 */ 9999,
 /* 2162 */ 9999,
-/* 2163 */ 639010,
+/* 2163 */ 635010,
 /* 2164 */ 9999,
-/* 2165 */ 640005,
+/* 2165 */ 636005,
 /* 2166 */ 9999,
-/* 2167 */ 640014,
+/* 2167 */ 636014,
 /* 2168 */ 9999,
-/* 2169 */ 641005,
+/* 2169 */ 637005,
 /* 2170 */ 9999,
-/* 2171 */ 641016,
+/* 2171 */ 637016,
 /* 2172 */ 9999,
-/* 2173 */ 642005,
+/* 2173 */ 638005,
 /* 2174 */ 9999,
-/* 2175 */ 642017,
+/* 2175 */ 638017,
 /* 2176 */ 9999,
 /* 2177 */ 9999,
 /* 2178 */ 9999,
-/* 2179 */ 631017,
+/* 2179 */ 627017,
 /* 2180 */ 9999,
 /* 2181 */ 9999,
-/* 2182 */ 631017,
+/* 2182 */ 627017,
 /* 2183 */ 9999,
 /* 2184 */ 9999,
 /* 2185 */ 9999,
-/* 2186 */ 632016,
+/* 2186 */ 628016,
 /* 2187 */ 9999,
 /* 2188 */ 9999,
-/* 2189 */ 632016,
+/* 2189 */ 628016,
 /* 2190 */ 9999,
 /* 2191 */ 9999,
 /* 2192 */ 9999,
-/* 2193 */ 634011,
+/* 2193 */ 630011,
 /* 2194 */ 9999,
 /* 2195 */ 9999,
-/* 2196 */ 634011,
+/* 2196 */ 630011,
 /* 2197 */ 9999,
 /* 2198 */ 9999,
 /* 2199 */ 9999,
-/* 2200 */ 635016,
+/* 2200 */ 631016,
 /* 2201 */ 9999,
 /* 2202 */ 9999,
-/* 2203 */ 635016,
+/* 2203 */ 631016,
 /* 2204 */ 9999,
 /* 2205 */ 9999,
 /* 2206 */ 9999,
-/* 2207 */ 636012,
+/* 2207 */ 632012,
 /* 2208 */ 9999,
 /* 2209 */ 9999,
-/* 2210 */ 636012,
+/* 2210 */ 632012,
 /* 2211 */ 9999,
-/* 2212 */ 636020,
-/* 2213 */ 636030,
-/* 2214 */ 636025,
+/* 2212 */ 632020,
+/* 2213 */ 632030,
+/* 2214 */ 632025,
 /* 2215 */ 9999,
-/* 2216 */ 636025,
+/* 2216 */ 632025,
 /* 2217 */ 9999,
 /* 2218 */ 9999,
-/* 2219 */ 636025,
+/* 2219 */ 632025,
 /* 2220 */ 9999,
 /* 2221 */ 9999,
 /* 2222 */ 9999,
-/* 2223 */ 636031,
+/* 2223 */ 632031,
 /* 2224 */ 9999,
 /* 2225 */ 9999,
 /* 2226 */ 9999,
-/* 2227 */ 636037,
+/* 2227 */ 632037,
 /* 2228 */ 9999,
 /* 2229 */ 9999,
-/* 2230 */ 636037,
+/* 2230 */ 632037,
 /* 2231 */ 9999,
 /* 2232 */ 9999,
 /* 2233 */ 9999,
-/* 2234 */ 637016,
+/* 2234 */ 633016,
 /* 2235 */ 9999,
 /* 2236 */ 9999,
 /* 2237 */ 9999,
-/* 2238 */ 637025,
+/* 2238 */ 633025,
 /* 2239 */ 9999,
 /* 2240 */ 9999,
 /* 2241 */ 9999,
-/* 2242 */ 637029,
+/* 2242 */ 633029,
 /* 2243 */ 9999,
 /* 2244 */ 9999,
-/* 2245 */ 637029,
+/* 2245 */ 633029,
 /* 2246 */ 9999,
 /* 2247 */ 9999,
 /* 2248 */ 9999,
-/* 2249 */ 638011,
+/* 2249 */ 634011,
 /* 2250 */ 9999,
 /* 2251 */ 9999,
-/* 2252 */ 638011,
+/* 2252 */ 634011,
 /* 2253 */ 9999,
 /* 2254 */ 9999,
 /* 2255 */ 9999,
-/* 2256 */ 639013,
+/* 2256 */ 635013,
 /* 2257 */ 9999,
 /* 2258 */ 9999,
-/* 2259 */ 639013,
+/* 2259 */ 635013,
 /* 2260 */ 9999,
-/* 2261 */ 646003,
-/* 2262 */ 655003,
+/* 2261 */ 642003,
+/* 2262 */ 651003,
 /* 2263 */ 9999,
 /* 2264 */ 9999,
-/* 2265 */ 659007,
+/* 2265 */ 655007,
 /* 2266 */ 9999,
-/* 2267 */ 661007,
+/* 2267 */ 657007,
 /* 2268 */ 9999,
-/* 2269 */ 662003,
+/* 2269 */ 658003,
 /* 2270 */ 9999,
-/* 2271 */ 645037,
+/* 2271 */ 641037,
 /* 2272 */ 9999,
-/* 2273 */ 646005,
-/* 2274 */ 654005,
-/* 2275 */ 646010,
+/* 2273 */ 642005,
+/* 2274 */ 650005,
+/* 2275 */ 642010,
 /* 2276 */ 9999,
-/* 2277 */ 646010,
+/* 2277 */ 642010,
 /* 2278 */ 9999,
 /* 2279 */ 9999,
-/* 2280 */ 646010,
+/* 2280 */ 642010,
 /* 2281 */ 9999,
 /* 2282 */ 9999,
 /* 2283 */ 9999,
-/* 2284 */ 654006,
+/* 2284 */ 650006,
 /* 2285 */ 9999,
 /* 2286 */ 9999,
-/* 2287 */ 654006,
+/* 2287 */ 650006,
 /* 2288 */ 9999,
 /* 2289 */ 9999,
 /* 2290 */ 9999,
-/* 2291 */ 655008,
+/* 2291 */ 651008,
 /* 2292 */ 9999,
 /* 2293 */ 9999,
 /* 2294 */ 9999,
-/* 2295 */ 655017,
+/* 2295 */ 651017,
 /* 2296 */ 9999,
 /* 2297 */ 9999,
 /* 2298 */ 9999,
-/* 2299 */ 656012,
+/* 2299 */ 652012,
 /* 2300 */ 9999,
 /* 2301 */ 9999,
 /* 2302 */ 9999,
-/* 2303 */ 657013,
+/* 2303 */ 653013,
 /* 2304 */ 9999,
-/* 2305 */ 661008,
-/* 2306 */ 661016,
+/* 2305 */ 657008,
+/* 2306 */ 657016,
 /* 2307 */ 9999,
-/* 2308 */ 661016,
+/* 2308 */ 657016,
 /* 2309 */ 9999,
 /* 2310 */ 9999,
-/* 2311 */ 661016,
+/* 2311 */ 657016,
 /* 2312 */ 9999,
 /* 2313 */ 9999,
-/* 2314 */ 662009,
+/* 2314 */ 658009,
 /* 2315 */ 9999,
-/* 2316 */ 683008,
+/* 2316 */ 679008,
 /* 2317 */ 9999,
-/* 2318 */ 662007,
+/* 2318 */ 658007,
 /* 2319 */ 9999,
-/* 2320 */ 662007,
+/* 2320 */ 658007,
 /* 2321 */ 9999,
 /* 2322 */ 9999,
-/* 2323 */ 662007,
+/* 2323 */ 658007,
 /* 2324 */ 9999,
-/* 2325 */ 683009,
-/* 2326 */ 683017,
+/* 2325 */ 679009,
+/* 2326 */ 679017,
 /* 2327 */ 9999,
-/* 2328 */ 683017,
+/* 2328 */ 679017,
 /* 2329 */ 9999,
 /* 2330 */ 9999,
-/* 2331 */ 683017,
+/* 2331 */ 679017,
 /* 2332 */ 9999,
 /* 2333 */ 9999,
-/* 2334 */ 688015,
+/* 2334 */ 684015,
 /* 2335 */ 9999,
 /* 2336 */ 9999,
 /* 2337 */ 9999,
-/* 2338 */ 688013,
+/* 2338 */ 684013,
 /* 2339 */ 9999,
-/* 2340 */ 689005,
+/* 2340 */ 685005,
 /* 2341 */ 9999,
 /* 2342 */ 9999,
-/* 2343 */ 689009,
+/* 2343 */ 685009,
 /* 2344 */ 9999,
 /* 2345 */ 9999,
-/* 2346 */ 690016,
-/* 2347 */ 690023,
+/* 2346 */ 686016,
+/* 2347 */ 686023,
 /* 2348 */ 9999,
 /* 2349 */ 9999,
-/* 2350 */ 690014,
+/* 2350 */ 686014,
 /* 2351 */ 9999,
 /* 2352 */ 9999,
-/* 2353 */ 691010,
-/* 2354 */ 691017,
+/* 2353 */ 687010,
+/* 2354 */ 687017,
 /* 2355 */ 9999,
 /* 2356 */ 9999,
-/* 2357 */ 691008,
+/* 2357 */ 687008,
 /* 2358 */ 9999,
 /* 2359 */ 9999,
-/* 2360 */ 692010,
-/* 2361 */ 692020,
-/* 2362 */ 692027,
-/* 2363 */ 692037,
+/* 2360 */ 688010,
+/* 2361 */ 688020,
+/* 2362 */ 688027,
+/* 2363 */ 688037,
 /* 2364 */ 9999,
 /* 2365 */ 9999,
-/* 2366 */ 692008,
+/* 2366 */ 688008,
 /* 2367 */ 9999,
 /* 2368 */ 9999,
-/* 2369 */ 693013,
-/* 2370 */ 693020,
-/* 2371 */ 694007,
+/* 2369 */ 689013,
+/* 2370 */ 689020,
+/* 2371 */ 690007,
 /* 2372 */ 9999,
 /* 2373 */ 9999,
-/* 2374 */ 693011,
+/* 2374 */ 689011,
 /* 2375 */ 9999,
 /* 2376 */ 9999,
-/* 2377 */ 695010,
-/* 2378 */ 695017,
-/* 2379 */ 695027,
+/* 2377 */ 691010,
+/* 2378 */ 691017,
+/* 2379 */ 691027,
 /* 2380 */ 9999,
 /* 2381 */ 9999,
-/* 2382 */ 695008,
+/* 2382 */ 691008,
 /* 2383 */ 9999,
 /* 2384 */ 9999,
-/* 2385 */ 697010,
-/* 2386 */ 697017,
+/* 2385 */ 693010,
+/* 2386 */ 693017,
 /* 2387 */ 9999,
 /* 2388 */ 9999,
-/* 2389 */ 697008,
+/* 2389 */ 693008,
 /* 2390 */ 9999,
 /* 2391 */ 9999,
-/* 2392 */ 698010,
-/* 2393 */ 698017,
+/* 2392 */ 694010,
+/* 2393 */ 694017,
 /* 2394 */ 9999,
 /* 2395 */ 9999,
-/* 2396 */ 698008,
+/* 2396 */ 694008,
 /* 2397 */ 9999,
 /* 2398 */ 9999,
-/* 2399 */ 699010,
-/* 2400 */ 699017,
+/* 2399 */ 695010,
+/* 2400 */ 695017,
 /* 2401 */ 9999,
 /* 2402 */ 9999,
-/* 2403 */ 699008,
+/* 2403 */ 695008,
 /* 2404 */ 9999,
 /* 2405 */ 9999,
-/* 2406 */ 700010,
-/* 2407 */ 700017,
+/* 2406 */ 696010,
+/* 2407 */ 696017,
 /* 2408 */ 9999,
 /* 2409 */ 9999,
-/* 2410 */ 700008,
+/* 2410 */ 696008,
 /* 2411 */ 9999,
 /* 2412 */ 9999,
-/* 2413 */ 701010,
-/* 2414 */ 701017,
+/* 2413 */ 697010,
+/* 2414 */ 697017,
 /* 2415 */ 9999,
 /* 2416 */ 9999,
-/* 2417 */ 701008,
+/* 2417 */ 697008,
 /* 2418 */ 9999,
 /* 2419 */ 9999,
-/* 2420 */ 702010,
-/* 2421 */ 702017,
+/* 2420 */ 698010,
+/* 2421 */ 698017,
 /* 2422 */ 9999,
 /* 2423 */ 9999,
-/* 2424 */ 702008,
+/* 2424 */ 698008,
 /* 2425 */ 9999,
 /* 2426 */ 9999,
-/* 2427 */ 703010,
-/* 2428 */ 703017,
+/* 2427 */ 699010,
+/* 2428 */ 699017,
 /* 2429 */ 9999,
 /* 2430 */ 9999,
-/* 2431 */ 703008,
+/* 2431 */ 699008,
 /* 2432 */ 9999,
 /* 2433 */ 9999,
-/* 2434 */ 704010,
-/* 2435 */ 704017,
+/* 2434 */ 700010,
+/* 2435 */ 700017,
 /* 2436 */ 9999,
 /* 2437 */ 9999,
-/* 2438 */ 704008,
+/* 2438 */ 700008,
 /* 2439 */ 9999,
 /* 2440 */ 9999,
-/* 2441 */ 705010,
-/* 2442 */ 705017,
+/* 2441 */ 701010,
+/* 2442 */ 701017,
 /* 2443 */ 9999,
 /* 2444 */ 9999,
-/* 2445 */ 705008,
+/* 2445 */ 701008,
 /* 2446 */ 9999,
 /* 2447 */ 9999,
-/* 2448 */ 706010,
-/* 2449 */ 706017,
+/* 2448 */ 702010,
+/* 2449 */ 702017,
 /* 2450 */ 9999,
 /* 2451 */ 9999,
-/* 2452 */ 706008,
+/* 2452 */ 702008,
 /* 2453 */ 9999,
 /* 2454 */ 9999,
-/* 2455 */ 707010,
-/* 2456 */ 707017,
+/* 2455 */ 703010,
+/* 2456 */ 703017,
 /* 2457 */ 9999,
 /* 2458 */ 9999,
-/* 2459 */ 707008,
+/* 2459 */ 703008,
 /* 2460 */ 9999,
 /* 2461 */ 9999,
-/* 2462 */ 708010,
+/* 2462 */ 704010,
 /* 2463 */ 9999,
 /* 2464 */ 9999,
 /* 2465 */ 9999,
-/* 2466 */ 708008,
+/* 2466 */ 704008,
 /* 2467 */ 9999,
 /* 2468 */ 9999,
-/* 2469 */ 709011,
-/* 2470 */ 709018,
+/* 2469 */ 705011,
+/* 2470 */ 705018,
 /* 2471 */ 9999,
 /* 2472 */ 9999,
-/* 2473 */ 709009,
+/* 2473 */ 705009,
 /* 2474 */ 9999,
-/* 2475 */ 711005,
+/* 2475 */ 707005,
 /* 2476 */ 9999,
-/* 2477 */ 711014,
+/* 2477 */ 707014,
 /* 2478 */ 9999,
-/* 2479 */ 712005,
+/* 2479 */ 708005,
 /* 2480 */ 9999,
-/* 2481 */ 712017,
+/* 2481 */ 708017,
 /* 2482 */ 9999,
-/* 2483 */ 713005,
+/* 2483 */ 709005,
 /* 2484 */ 9999,
-/* 2485 */ 713016,
+/* 2485 */ 709016,
 /* 2486 */ 9999,
 /* 2487 */ 9999,
 /* 2488 */ 9999,
-/* 2489 */ 688016,
+/* 2489 */ 684016,
 /* 2490 */ 9999,
 /* 2491 */ 9999,
-/* 2492 */ 688016,
+/* 2492 */ 684016,
 /* 2493 */ 9999,
 /* 2494 */ 9999,
 /* 2495 */ 9999,
-/* 2496 */ 690017,
+/* 2496 */ 686017,
 /* 2497 */ 9999,
 /* 2498 */ 9999,
-/* 2499 */ 690017,
+/* 2499 */ 686017,
 /* 2500 */ 9999,
 /* 2501 */ 9999,
 /* 2502 */ 9999,
-/* 2503 */ 691011,
+/* 2503 */ 687011,
 /* 2504 */ 9999,
 /* 2505 */ 9999,
-/* 2506 */ 691011,
+/* 2506 */ 687011,
 /* 2507 */ 9999,
 /* 2508 */ 9999,
 /* 2509 */ 9999,
-/* 2510 */ 692016,
+/* 2510 */ 688016,
 /* 2511 */ 9999,
 /* 2512 */ 9999,
-/* 2513 */ 692016,
+/* 2513 */ 688016,
 /* 2514 */ 9999,
 /* 2515 */ 9999,
 /* 2516 */ 9999,
-/* 2517 */ 692021,
+/* 2517 */ 688021,
 /* 2518 */ 9999,
 /* 2519 */ 9999,
-/* 2520 */ 692021,
+/* 2520 */ 688021,
 /* 2521 */ 9999,
 /* 2522 */ 9999,
 /* 2523 */ 9999,
-/* 2524 */ 692038,
+/* 2524 */ 688038,
 /* 2525 */ 9999,
 /* 2526 */ 9999,
-/* 2527 */ 692038,
+/* 2527 */ 688038,
 /* 2528 */ 9999,
 /* 2529 */ 9999,
 /* 2530 */ 9999,
-/* 2531 */ 693014,
+/* 2531 */ 689014,
 /* 2532 */ 9999,
 /* 2533 */ 9999,
-/* 2534 */ 693014,
+/* 2534 */ 689014,
 /* 2535 */ 9999,
 /* 2536 */ 9999,
-/* 2537 */ 694013,
+/* 2537 */ 690013,
 /* 2538 */ 9999,
 /* 2539 */ 9999,
-/* 2540 */ 694009,
+/* 2540 */ 690009,
 /* 2541 */ 9999,
 /* 2542 */ 9999,
-/* 2543 */ 694009,
+/* 2543 */ 690009,
 /* 2544 */ 9999,
 /* 2545 */ 9999,
 /* 2546 */ 9999,
-/* 2547 */ 695011,
+/* 2547 */ 691011,
 /* 2548 */ 9999,
 /* 2549 */ 9999,
-/* 2550 */ 695011,
+/* 2550 */ 691011,
 /* 2551 */ 9999,
 /* 2552 */ 9999,
 /* 2553 */ 9999,
-/* 2554 */ 695035,
+/* 2554 */ 691035,
 /* 2555 */ 9999,
 /* 2556 */ 9999,
-/* 2557 */ 695035,
+/* 2557 */ 691035,
 /* 2558 */ 9999,
 /* 2559 */ 9999,
 /* 2560 */ 9999,
-/* 2561 */ 697011,
+/* 2561 */ 693011,
 /* 2562 */ 9999,
 /* 2563 */ 9999,
-/* 2564 */ 697011,
+/* 2564 */ 693011,
 /* 2565 */ 9999,
 /* 2566 */ 9999,
 /* 2567 */ 9999,
-/* 2568 */ 698011,
+/* 2568 */ 694011,
 /* 2569 */ 9999,
 /* 2570 */ 9999,
-/* 2571 */ 698011,
+/* 2571 */ 694011,
 /* 2572 */ 9999,
 /* 2573 */ 9999,
 /* 2574 */ 9999,
-/* 2575 */ 699011,
+/* 2575 */ 695011,
 /* 2576 */ 9999,
 /* 2577 */ 9999,
-/* 2578 */ 699011,
+/* 2578 */ 695011,
 /* 2579 */ 9999,
 /* 2580 */ 9999,
 /* 2581 */ 9999,
-/* 2582 */ 700011,
+/* 2582 */ 696011,
 /* 2583 */ 9999,
 /* 2584 */ 9999,
-/* 2585 */ 700011,
+/* 2585 */ 696011,
 /* 2586 */ 9999,
 /* 2587 */ 9999,
 /* 2588 */ 9999,
-/* 2589 */ 701011,
+/* 2589 */ 697011,
 /* 2590 */ 9999,
 /* 2591 */ 9999,
-/* 2592 */ 701011,
+/* 2592 */ 697011,
 /* 2593 */ 9999,
 /* 2594 */ 9999,
 /* 2595 */ 9999,
-/* 2596 */ 702011,
+/* 2596 */ 698011,
 /* 2597 */ 9999,
 /* 2598 */ 9999,
-/* 2599 */ 702011,
+/* 2599 */ 698011,
 /* 2600 */ 9999,
 /* 2601 */ 9999,
 /* 2602 */ 9999,
-/* 2603 */ 703011,
+/* 2603 */ 699011,
 /* 2604 */ 9999,
 /* 2605 */ 9999,
-/* 2606 */ 703011,
+/* 2606 */ 699011,
 /* 2607 */ 9999,
 /* 2608 */ 9999,
 /* 2609 */ 9999,
-/* 2610 */ 704011,
+/* 2610 */ 700011,
 /* 2611 */ 9999,
 /* 2612 */ 9999,
-/* 2613 */ 704011,
+/* 2613 */ 700011,
 /* 2614 */ 9999,
 /* 2615 */ 9999,
 /* 2616 */ 9999,
-/* 2617 */ 705011,
+/* 2617 */ 701011,
 /* 2618 */ 9999,
 /* 2619 */ 9999,
-/* 2620 */ 705011,
+/* 2620 */ 701011,
 /* 2621 */ 9999,
 /* 2622 */ 9999,
 /* 2623 */ 9999,
-/* 2624 */ 706011,
+/* 2624 */ 702011,
 /* 2625 */ 9999,
 /* 2626 */ 9999,
-/* 2627 */ 706011,
+/* 2627 */ 702011,
 /* 2628 */ 9999,
 /* 2629 */ 9999,
 /* 2630 */ 9999,
-/* 2631 */ 707011,
+/* 2631 */ 703011,
 /* 2632 */ 9999,
 /* 2633 */ 9999,
-/* 2634 */ 707011,
+/* 2634 */ 703011,
 /* 2635 */ 9999,
 /* 2636 */ 9999,
 /* 2637 */ 9999,
-/* 2638 */ 708011,
+/* 2638 */ 704011,
 /* 2639 */ 9999,
 /* 2640 */ 9999,
-/* 2641 */ 708011,
+/* 2641 */ 704011,
 /* 2642 */ 9999,
 /* 2643 */ 9999,
 /* 2644 */ 9999,
-/* 2645 */ 709012,
+/* 2645 */ 705012,
 /* 2646 */ 9999,
 /* 2647 */ 9999,
-/* 2648 */ 709012,
+/* 2648 */ 705012,
 /* 2649 */ 9999,
-/* 2650 */ 709019,
-/* 2651 */ 710005,
-/* 2652 */ 709024,
+/* 2650 */ 705019,
+/* 2651 */ 706005,
+/* 2652 */ 705024,
 /* 2653 */ 9999,
-/* 2654 */ 709024,
+/* 2654 */ 705024,
 /* 2655 */ 9999,
 /* 2656 */ 9999,
-/* 2657 */ 709024,
+/* 2657 */ 705024,
 /* 2658 */ 9999,
 /* 2659 */ 9999,
 /* 2660 */ 9999,
-/* 2661 */ 710006,
+/* 2661 */ 706006,
 /* 2662 */ 9999,
 /* 2663 */ 9999,
 /* 2664 */ 9999,
-/* 2665 */ 710012,
+/* 2665 */ 706012,
 /* 2666 */ 9999,
 /* 2667 */ 9999,
-/* 2668 */ 710012,
+/* 2668 */ 706012,
 /* 2669 */ 9999,
-/* 2670 */ 717003,
+/* 2670 */ 713003,
 /* 2671 */ 9999,
-/* 2672 */ 716015,
+/* 2672 */ 712015,
 /* 2673 */ 9999,
-/* 2674 */ 717004,
-/* 2675 */ 717029,
-/* 2676 */ 717009,
+/* 2674 */ 713004,
+/* 2675 */ 713029,
+/* 2676 */ 713009,
 /* 2677 */ 9999,
-/* 2678 */ 717009,
+/* 2678 */ 713009,
 /* 2679 */ 9999,
 /* 2680 */ 9999,
-/* 2681 */ 717009,
+/* 2681 */ 713009,
 /* 2682 */ 9999,
 /* 2683 */ 9999,
 /* 2684 */ 9999,
-/* 2685 */ 717030,
+/* 2685 */ 713030,
 /* 2686 */ 9999,
 /* 2687 */ 9999,
 /* 2688 */ 9999,
-/* 2689 */ 717036,
+/* 2689 */ 713036,
 /* 2690 */ 9999,
 /* 2691 */ 9999,
-/* 2692 */ 717036,
+/* 2692 */ 713036,
 /* 2693 */ 9999,
 /* 2694 */ 9999,
 /* 2695 */ 9999,
-/* 2696 */ 723009,
+/* 2696 */ 719009,
 /* 2697 */ 9999,
 /* 2698 */ 9999,
 /* 2699 */ 9999,
-/* 2700 */ 728005,
+/* 2700 */ 724005,
 /* 2701 */ 9999,
-/* 2702 */ 733007,
+/* 2702 */ 729007,
 /* 2703 */ 9999,
 /* 2704 */ 9999,
-/* 2705 */ 726006,
+/* 2705 */ 722006,
 /* 2706 */ 9999,
 /* 2707 */ 9999,
-/* 2708 */ 728011,
+/* 2708 */ 724011,
 /* 2709 */ 9999,
-/* 2710 */ 728007,
+/* 2710 */ 724007,
 /* 2711 */ 9999,
 /* 2712 */ 9999,
-/* 2713 */ 728007,
+/* 2713 */ 724007,
 /* 2714 */ 9999,
-/* 2715 */ 733008,
-/* 2716 */ 733017,
+/* 2715 */ 729008,
+/* 2716 */ 729017,
 /* 2717 */ 9999,
-/* 2718 */ 733017,
+/* 2718 */ 729017,
 /* 2719 */ 9999,
 /* 2720 */ 9999,
-/* 2721 */ 733017,
+/* 2721 */ 729017,
 /* 2722 */ 9999,
 /* 2723 */ 9999,
-/* 2724 */ 737014,
+/* 2724 */ 733014,
 /* 2725 */ 9999,
 /* 2726 */ 9999,
 /* 2727 */ 9999,
-/* 2728 */ 737012,
+/* 2728 */ 733012,
 /* 2729 */ 9999,
-/* 2730 */ 738004,
+/* 2730 */ 734004,
 /* 2731 */ 9999,
 /* 2732 */ 9999,
-/* 2733 */ 738004,
+/* 2733 */ 734004,
 /* 2734 */ 9999,
 /* 2735 */ 9999,
-/* 2736 */ 740012,
-/* 2737 */ 740019,
+/* 2736 */ 736012,
+/* 2737 */ 736019,
 /* 2738 */ 9999,
 /* 2739 */ 9999,
-/* 2740 */ 740010,
+/* 2740 */ 736010,
 /* 2741 */ 9999,
 /* 2742 */ 9999,
-/* 2743 */ 742013,
-/* 2744 */ 742020,
+/* 2743 */ 738013,
+/* 2744 */ 738020,
 /* 2745 */ 9999,
 /* 2746 */ 9999,
-/* 2747 */ 742011,
+/* 2747 */ 738011,
 /* 2748 */ 9999,
 /* 2749 */ 9999,
-/* 2750 */ 743013,
-/* 2751 */ 743022,
-/* 2752 */ 743029,
+/* 2750 */ 739013,
+/* 2751 */ 739022,
+/* 2752 */ 739029,
 /* 2753 */ 9999,
-/* 2754 */ 743045,
+/* 2754 */ 739045,
 /* 2755 */ 9999,
 /* 2756 */ 9999,
-/* 2757 */ 743011,
+/* 2757 */ 739011,
 /* 2758 */ 9999,
 /* 2759 */ 9999,
-/* 2760 */ 746013,
-/* 2761 */ 746022,
-/* 2762 */ 746029,
+/* 2760 */ 742013,
+/* 2761 */ 742022,
+/* 2762 */ 742029,
 /* 2763 */ 9999,
-/* 2764 */ 746045,
+/* 2764 */ 742045,
 /* 2765 */ 9999,
-/* 2766 */ 746062,
+/* 2766 */ 742062,
 /* 2767 */ 9999,
 /* 2768 */ 9999,
-/* 2769 */ 746011,
+/* 2769 */ 742011,
 /* 2770 */ 9999,
 /* 2771 */ 9999,
-/* 2772 */ 750012,
-/* 2773 */ 751007,
+/* 2772 */ 746012,
+/* 2773 */ 747007,
 /* 2774 */ 9999,
 /* 2775 */ 9999,
-/* 2776 */ 750010,
+/* 2776 */ 746010,
 /* 2777 */ 9999,
-/* 2778 */ 752005,
-/* 2779 */ 752015,
+/* 2778 */ 748005,
+/* 2779 */ 748015,
 /* 2780 */ 9999,
 /* 2781 */ 9999,
 /* 2782 */ 9999,
-/* 2783 */ 752010,
+/* 2783 */ 748010,
 /* 2784 */ 9999,
 /* 2785 */ 9999,
-/* 2786 */ 758011,
-/* 2787 */ 758019,
+/* 2786 */ 754011,
+/* 2787 */ 754019,
 /* 2788 */ 9999,
 /* 2789 */ 9999,
-/* 2790 */ 758009,
+/* 2790 */ 754009,
 /* 2791 */ 9999,
-/* 2792 */ 759005,
+/* 2792 */ 755005,
 /* 2793 */ 9999,
-/* 2794 */ 759013,
+/* 2794 */ 755013,
 /* 2795 */ 9999,
-/* 2796 */ 760005,
+/* 2796 */ 756005,
 /* 2797 */ 9999,
-/* 2798 */ 760016,
+/* 2798 */ 756016,
 /* 2799 */ 9999,
-/* 2800 */ 761005,
+/* 2800 */ 757005,
 /* 2801 */ 9999,
-/* 2802 */ 761014,
+/* 2802 */ 757014,
 /* 2803 */ 9999,
-/* 2804 */ 762005,
+/* 2804 */ 758005,
 /* 2805 */ 9999,
-/* 2806 */ 762017,
+/* 2806 */ 758017,
 /* 2807 */ 9999,
 /* 2808 */ 9999,
 /* 2809 */ 9999,
-/* 2810 */ 737015,
+/* 2810 */ 733015,
 /* 2811 */ 9999,
 /* 2812 */ 9999,
-/* 2813 */ 737015,
+/* 2813 */ 733015,
 /* 2814 */ 9999,
 /* 2815 */ 9999,
-/* 2816 */ 738019,
-/* 2817 */ 738026,
-/* 2818 */ 739003,
-/* 2819 */ 738013,
+/* 2816 */ 734019,
+/* 2817 */ 734026,
+/* 2818 */ 735003,
+/* 2819 */ 734013,
 /* 2820 */ 9999,
-/* 2821 */ 738013,
+/* 2821 */ 734013,
 /* 2822 */ 9999,
 /* 2823 */ 9999,
-/* 2824 */ 738013,
+/* 2824 */ 734013,
 /* 2825 */ 9999,
 /* 2826 */ 9999,
 /* 2827 */ 9999,
-/* 2828 */ 738020,
+/* 2828 */ 734020,
 /* 2829 */ 9999,
 /* 2830 */ 9999,
-/* 2831 */ 738020,
+/* 2831 */ 734020,
 /* 2832 */ 9999,
 /* 2833 */ 9999,
 /* 2834 */ 9999,
-/* 2835 */ 739004,
+/* 2835 */ 735004,
 /* 2836 */ 9999,
 /* 2837 */ 9999,
-/* 2838 */ 739004,
+/* 2838 */ 735004,
 /* 2839 */ 9999,
 /* 2840 */ 9999,
 /* 2841 */ 9999,
-/* 2842 */ 740013,
+/* 2842 */ 736013,
 /* 2843 */ 9999,
 /* 2844 */ 9999,
-/* 2845 */ 740013,
+/* 2845 */ 736013,
 /* 2846 */ 9999,
-/* 2847 */ 740020,
-/* 2848 */ 740054,
-/* 2849 */ 740034,
+/* 2847 */ 736020,
+/* 2848 */ 736054,
+/* 2849 */ 736034,
 /* 2850 */ 9999,
-/* 2851 */ 740034,
+/* 2851 */ 736034,
 /* 2852 */ 9999,
 /* 2853 */ 9999,
-/* 2854 */ 740034,
+/* 2854 */ 736034,
 /* 2855 */ 9999,
 /* 2856 */ 9999,
 /* 2857 */ 9999,
-/* 2858 */ 740055,
+/* 2858 */ 736055,
 /* 2859 */ 9999,
 /* 2860 */ 9999,
-/* 2861 */ 740055,
+/* 2861 */ 736055,
 /* 2862 */ 9999,
 /* 2863 */ 9999,
 /* 2864 */ 9999,
-/* 2865 */ 742014,
+/* 2865 */ 738014,
 /* 2866 */ 9999,
 /* 2867 */ 9999,
-/* 2868 */ 742014,
+/* 2868 */ 738014,
 /* 2869 */ 9999,
 /* 2870 */ 9999,
 /* 2871 */ 9999,
-/* 2872 */ 743018,
+/* 2872 */ 739018,
 /* 2873 */ 9999,
 /* 2874 */ 9999,
-/* 2875 */ 743018,
+/* 2875 */ 739018,
 /* 2876 */ 9999,
 /* 2877 */ 9999,
 /* 2878 */ 9999,
-/* 2879 */ 743023,
+/* 2879 */ 739023,
 /* 2880 */ 9999,
 /* 2881 */ 9999,
-/* 2882 */ 743023,
+/* 2882 */ 739023,
 /* 2883 */ 9999,
 /* 2884 */ 9999,
 /* 2885 */ 9999,
-/* 2886 */ 746018,
+/* 2886 */ 742018,
 /* 2887 */ 9999,
 /* 2888 */ 9999,
-/* 2889 */ 746018,
+/* 2889 */ 742018,
 /* 2890 */ 9999,
 /* 2891 */ 9999,
 /* 2892 */ 9999,
-/* 2893 */ 746023,
+/* 2893 */ 742023,
 /* 2894 */ 9999,
 /* 2895 */ 9999,
-/* 2896 */ 746023,
+/* 2896 */ 742023,
 /* 2897 */ 9999,
 /* 2898 */ 9999,
 /* 2899 */ 9999,
-/* 2900 */ 750013,
+/* 2900 */ 746013,
 /* 2901 */ 9999,
 /* 2902 */ 9999,
-/* 2903 */ 750013,
+/* 2903 */ 746013,
 /* 2904 */ 9999,
-/* 2905 */ 751009,
-/* 2906 */ 751059,
-/* 2907 */ 751014,
+/* 2905 */ 747009,
+/* 2906 */ 747059,
+/* 2907 */ 747014,
 /* 2908 */ 9999,
-/* 2909 */ 751014,
+/* 2909 */ 747014,
 /* 2910 */ 9999,
 /* 2911 */ 9999,
-/* 2912 */ 751014,
+/* 2912 */ 747014,
 /* 2913 */ 9999,
 /* 2914 */ 9999,
 /* 2915 */ 9999,
-/* 2916 */ 751060,
+/* 2916 */ 747060,
 /* 2917 */ 9999,
 /* 2918 */ 9999,
-/* 2919 */ 751060,
+/* 2919 */ 747060,
 /* 2920 */ 9999,
 /* 2921 */ 9999,
 /* 2922 */ 9999,
-/* 2923 */ 752016,
+/* 2923 */ 748016,
 /* 2924 */ 9999,
 /* 2925 */ 9999,
-/* 2926 */ 752016,
+/* 2926 */ 748016,
 /* 2927 */ 9999,
 /* 2928 */ 9999,
 /* 2929 */ 9999,
-/* 2930 */ 758012,
+/* 2930 */ 754012,
 /* 2931 */ 9999,
 /* 2932 */ 9999,
-/* 2933 */ 758012,
+/* 2933 */ 754012,
 /* 2934 */ 9999,
-/* 2935 */ 758020,
-/* 2936 */ 758030,
-/* 2937 */ 758025,
+/* 2935 */ 754020,
+/* 2936 */ 754030,
+/* 2937 */ 754025,
 /* 2938 */ 9999,
-/* 2939 */ 758025,
+/* 2939 */ 754025,
 /* 2940 */ 9999,
 /* 2941 */ 9999,
-/* 2942 */ 758025,
+/* 2942 */ 754025,
 /* 2943 */ 9999,
 /* 2944 */ 9999,
 /* 2945 */ 9999,
-/* 2946 */ 758031,
+/* 2946 */ 754031,
 /* 2947 */ 9999,
 /* 2948 */ 9999,
 /* 2949 */ 9999,
-/* 2950 */ 758037,
+/* 2950 */ 754037,
 /* 2951 */ 9999,
 /* 2952 */ 9999,
-/* 2953 */ 758037,
+/* 2953 */ 754037,
 /* 2954 */ 9999,
 /* 2955 */ 9999,
 /* 2956 */ 9999,
 /* 2957 */ 9999,
-/* 2958 */ 767007,
+/* 2958 */ 763007,
 /* 2959 */ 9999,
 /* 2960 */ 9999,
-/* 2961 */ 766007,
+/* 2961 */ 762007,
 /* 2962 */ 9999,
-/* 2963 */ 767008,
-/* 2964 */ 767018,
+/* 2963 */ 763008,
+/* 2964 */ 763018,
 /* 2965 */ 9999,
-/* 2966 */ 767018,
+/* 2966 */ 763018,
 /* 2967 */ 9999,
 /* 2968 */ 9999,
-/* 2969 */ 767018,
+/* 2969 */ 763018,
 /* 2970 */ 9999,
 /* 2971 */ 9999,
-/* 2972 */ 771015,
+/* 2972 */ 767015,
 /* 2973 */ 9999,
 /* 2974 */ 9999,
 /* 2975 */ 9999,
-/* 2976 */ 771013,
+/* 2976 */ 767013,
 /* 2977 */ 9999,
 /* 2978 */ 9999,
-/* 2979 */ 772013,
-/* 2980 */ 772020,
-/* 2981 */ 772027,
+/* 2979 */ 768013,
+/* 2980 */ 768020,
+/* 2981 */ 768027,
 /* 2982 */ 9999,
 /* 2983 */ 9999,
-/* 2984 */ 772011,
+/* 2984 */ 768011,
 /* 2985 */ 9999,
 /* 2986 */ 9999,
-/* 2987 */ 773010,
-/* 2988 */ 773017,
-/* 2989 */ 773024,
+/* 2987 */ 769010,
+/* 2988 */ 769017,
+/* 2989 */ 769024,
 /* 2990 */ 9999,
 /* 2991 */ 9999,
-/* 2992 */ 773008,
+/* 2992 */ 769008,
 /* 2993 */ 9999,
 /* 2994 */ 9999,
-/* 2995 */ 774009,
-/* 2996 */ 774016,
+/* 2995 */ 770009,
+/* 2996 */ 770016,
 /* 2997 */ 9999,
-/* 2998 */ 774030,
+/* 2998 */ 770030,
 /* 2999 */ 9999,
 /* 3000 */ 9999,
-/* 3001 */ 774007,
+/* 3001 */ 770007,
 /* 3002 */ 9999,
 /* 3003 */ 9999,
-/* 3004 */ 776012,
-/* 3005 */ 777007,
+/* 3004 */ 772012,
+/* 3005 */ 773007,
 /* 3006 */ 9999,
 /* 3007 */ 9999,
-/* 3008 */ 776010,
+/* 3008 */ 772010,
 /* 3009 */ 9999,
 /* 3010 */ 9999,
-/* 3011 */ 778011,
-/* 3012 */ 779007,
+/* 3011 */ 774011,
+/* 3012 */ 775007,
 /* 3013 */ 9999,
 /* 3014 */ 9999,
-/* 3015 */ 778009,
+/* 3015 */ 774009,
 /* 3016 */ 9999,
 /* 3017 */ 9999,
-/* 3018 */ 780012,
-/* 3019 */ 780019,
+/* 3018 */ 776012,
+/* 3019 */ 776019,
 /* 3020 */ 9999,
 /* 3021 */ 9999,
-/* 3022 */ 780010,
+/* 3022 */ 776010,
 /* 3023 */ 9999,
 /* 3024 */ 9999,
-/* 3025 */ 782012,
-/* 3026 */ 782018,
-/* 3027 */ 782029,
-/* 3028 */ 783007,
-/* 3029 */ 783014,
+/* 3025 */ 778012,
+/* 3026 */ 778018,
+/* 3027 */ 778029,
+/* 3028 */ 779007,
+/* 3029 */ 779014,
 /* 3030 */ 9999,
 /* 3031 */ 9999,
-/* 3032 */ 782010,
+/* 3032 */ 778010,
 /* 3033 */ 9999,
 /* 3034 */ 9999,
-/* 3035 */ 784019,
-/* 3036 */ 785007,
+/* 3035 */ 780019,
+/* 3036 */ 781007,
 /* 3037 */ 9999,
 /* 3038 */ 9999,
-/* 3039 */ 784017,
+/* 3039 */ 780017,
 /* 3040 */ 9999,
 /* 3041 */ 9999,
-/* 3042 */ 786011,
-/* 3043 */ 786019,
+/* 3042 */ 782011,
+/* 3043 */ 782019,
 /* 3044 */ 9999,
 /* 3045 */ 9999,
-/* 3046 */ 786009,
+/* 3046 */ 782009,
 /* 3047 */ 9999,
-/* 3048 */ 787005,
+/* 3048 */ 783005,
 /* 3049 */ 9999,
-/* 3050 */ 787013,
+/* 3050 */ 783013,
 /* 3051 */ 9999,
-/* 3052 */ 788005,
+/* 3052 */ 784005,
 /* 3053 */ 9999,
-/* 3054 */ 788014,
+/* 3054 */ 784014,
 /* 3055 */ 9999,
-/* 3056 */ 789005,
+/* 3056 */ 785005,
 /* 3057 */ 9999,
-/* 3058 */ 789016,
+/* 3058 */ 785016,
 /* 3059 */ 9999,
-/* 3060 */ 790005,
+/* 3060 */ 786005,
 /* 3061 */ 9999,
-/* 3062 */ 790017,
+/* 3062 */ 786017,
 /* 3063 */ 9999,
 /* 3064 */ 9999,
 /* 3065 */ 9999,
-/* 3066 */ 771016,
+/* 3066 */ 767016,
 /* 3067 */ 9999,
 /* 3068 */ 9999,
-/* 3069 */ 771016,
+/* 3069 */ 767016,
 /* 3070 */ 9999,
 /* 3071 */ 9999,
 /* 3072 */ 9999,
-/* 3073 */ 772014,
+/* 3073 */ 768014,
 /* 3074 */ 9999,
 /* 3075 */ 9999,
-/* 3076 */ 772014,
+/* 3076 */ 768014,
 /* 3077 */ 9999,
 /* 3078 */ 9999,
 /* 3079 */ 9999,
-/* 3080 */ 772021,
+/* 3080 */ 768021,
 /* 3081 */ 9999,
 /* 3082 */ 9999,
-/* 3083 */ 772021,
+/* 3083 */ 768021,
 /* 3084 */ 9999,
 /* 3085 */ 9999,
 /* 3086 */ 9999,
-/* 3087 */ 773011,
+/* 3087 */ 769011,
 /* 3088 */ 9999,
 /* 3089 */ 9999,
-/* 3090 */ 773011,
+/* 3090 */ 769011,
 /* 3091 */ 9999,
 /* 3092 */ 9999,
 /* 3093 */ 9999,
-/* 3094 */ 773018,
+/* 3094 */ 769018,
 /* 3095 */ 9999,
 /* 3096 */ 9999,
-/* 3097 */ 773018,
+/* 3097 */ 769018,
 /* 3098 */ 9999,
 /* 3099 */ 9999,
 /* 3100 */ 9999,
-/* 3101 */ 774010,
+/* 3101 */ 770010,
 /* 3102 */ 9999,
 /* 3103 */ 9999,
-/* 3104 */ 774010,
+/* 3104 */ 770010,
 /* 3105 */ 9999,
 /* 3106 */ 9999,
 /* 3107 */ 9999,
-/* 3108 */ 776013,
+/* 3108 */ 772013,
 /* 3109 */ 9999,
 /* 3110 */ 9999,
-/* 3111 */ 776013,
+/* 3111 */ 772013,
 /* 3112 */ 9999,
-/* 3113 */ 777008,
-/* 3114 */ 777020,
-/* 3115 */ 777069,
-/* 3116 */ 777013,
+/* 3113 */ 773008,
+/* 3114 */ 773020,
+/* 3115 */ 773069,
+/* 3116 */ 773013,
 /* 3117 */ 9999,
-/* 3118 */ 777013,
+/* 3118 */ 773013,
 /* 3119 */ 9999,
 /* 3120 */ 9999,
-/* 3121 */ 777013,
+/* 3121 */ 773013,
 /* 3122 */ 9999,
 /* 3123 */ 9999,
 /* 3124 */ 9999,
-/* 3125 */ 777070,
+/* 3125 */ 773070,
 /* 3126 */ 9999,
 /* 3127 */ 9999,
-/* 3128 */ 777070,
+/* 3128 */ 773070,
 /* 3129 */ 9999,
 /* 3130 */ 9999,
 /* 3131 */ 9999,
-/* 3132 */ 778012,
+/* 3132 */ 774012,
 /* 3133 */ 9999,
 /* 3134 */ 9999,
-/* 3135 */ 778012,
+/* 3135 */ 774012,
 /* 3136 */ 9999,
-/* 3137 */ 779008,
-/* 3138 */ 779020,
-/* 3139 */ 779067,
-/* 3140 */ 779013,
+/* 3137 */ 775008,
+/* 3138 */ 775020,
+/* 3139 */ 775067,
+/* 3140 */ 775013,
 /* 3141 */ 9999,
-/* 3142 */ 779013,
+/* 3142 */ 775013,
 /* 3143 */ 9999,
 /* 3144 */ 9999,
-/* 3145 */ 779013,
+/* 3145 */ 775013,
 /* 3146 */ 9999,
 /* 3147 */ 9999,
 /* 3148 */ 9999,
-/* 3149 */ 779068,
+/* 3149 */ 775068,
 /* 3150 */ 9999,
 /* 3151 */ 9999,
-/* 3152 */ 779068,
+/* 3152 */ 775068,
 /* 3153 */ 9999,
 /* 3154 */ 9999,
 /* 3155 */ 9999,
-/* 3156 */ 780013,
+/* 3156 */ 776013,
 /* 3157 */ 9999,
 /* 3158 */ 9999,
-/* 3159 */ 780013,
+/* 3159 */ 776013,
 /* 3160 */ 9999,
-/* 3161 */ 780020,
-/* 3162 */ 780054,
-/* 3163 */ 780034,
+/* 3161 */ 776020,
+/* 3162 */ 776054,
+/* 3163 */ 776034,
 /* 3164 */ 9999,
-/* 3165 */ 780034,
+/* 3165 */ 776034,
 /* 3166 */ 9999,
 /* 3167 */ 9999,
-/* 3168 */ 780034,
+/* 3168 */ 776034,
 /* 3169 */ 9999,
 /* 3170 */ 9999,
 /* 3171 */ 9999,
-/* 3172 */ 780055,
+/* 3172 */ 776055,
 /* 3173 */ 9999,
 /* 3174 */ 9999,
-/* 3175 */ 780055,
+/* 3175 */ 776055,
 /* 3176 */ 9999,
 /* 3177 */ 9999,
 /* 3178 */ 9999,
-/* 3179 */ 782013,
+/* 3179 */ 778013,
 /* 3180 */ 9999,
 /* 3181 */ 9999,
 /* 3182 */ 9999,
-/* 3183 */ 782030,
+/* 3183 */ 778030,
 /* 3184 */ 9999,
 /* 3185 */ 9999,
 /* 3186 */ 9999,
-/* 3187 */ 783008,
+/* 3187 */ 779008,
 /* 3188 */ 9999,
 /* 3189 */ 9999,
-/* 3190 */ 783008,
+/* 3190 */ 779008,
 /* 3191 */ 9999,
-/* 3192 */ 783016,
-/* 3193 */ 783068,
-/* 3194 */ 783021,
+/* 3192 */ 779016,
+/* 3193 */ 779068,
+/* 3194 */ 779021,
 /* 3195 */ 9999,
-/* 3196 */ 783021,
+/* 3196 */ 779021,
 /* 3197 */ 9999,
 /* 3198 */ 9999,
-/* 3199 */ 783021,
+/* 3199 */ 779021,
 /* 3200 */ 9999,
 /* 3201 */ 9999,
 /* 3202 */ 9999,
-/* 3203 */ 783069,
+/* 3203 */ 779069,
 /* 3204 */ 9999,
 /* 3205 */ 9999,
-/* 3206 */ 783069,
+/* 3206 */ 779069,
 /* 3207 */ 9999,
 /* 3208 */ 9999,
 /* 3209 */ 9999,
-/* 3210 */ 784020,
+/* 3210 */ 780020,
 /* 3211 */ 9999,
 /* 3212 */ 9999,
-/* 3213 */ 784020,
+/* 3213 */ 780020,
 /* 3214 */ 9999,
-/* 3215 */ 785008,
-/* 3216 */ 785054,
-/* 3217 */ 785013,
+/* 3215 */ 781008,
+/* 3216 */ 781054,
+/* 3217 */ 781013,
 /* 3218 */ 9999,
-/* 3219 */ 785013,
+/* 3219 */ 781013,
 /* 3220 */ 9999,
 /* 3221 */ 9999,
-/* 3222 */ 785013,
+/* 3222 */ 781013,
 /* 3223 */ 9999,
 /* 3224 */ 9999,
 /* 3225 */ 9999,
-/* 3226 */ 785055,
+/* 3226 */ 781055,
 /* 3227 */ 9999,
 /* 3228 */ 9999,
-/* 3229 */ 785055,
+/* 3229 */ 781055,
 /* 3230 */ 9999,
 /* 3231 */ 9999,
 /* 3232 */ 9999,
-/* 3233 */ 786012,
+/* 3233 */ 782012,
 /* 3234 */ 9999,
 /* 3235 */ 9999,
-/* 3236 */ 786012,
+/* 3236 */ 782012,
 /* 3237 */ 9999,
-/* 3238 */ 786020,
-/* 3239 */ 786030,
-/* 3240 */ 786025,
+/* 3238 */ 782020,
+/* 3239 */ 782030,
+/* 3240 */ 782025,
 /* 3241 */ 9999,
-/* 3242 */ 786025,
+/* 3242 */ 782025,
 /* 3243 */ 9999,
 /* 3244 */ 9999,
-/* 3245 */ 786025,
+/* 3245 */ 782025,
 /* 3246 */ 9999,
 /* 3247 */ 9999,
 /* 3248 */ 9999,
-/* 3249 */ 786031,
+/* 3249 */ 782031,
 /* 3250 */ 9999,
 /* 3251 */ 9999,
 /* 3252 */ 9999,
-/* 3253 */ 786037,
+/* 3253 */ 782037,
 /* 3254 */ 9999,
 /* 3255 */ 9999,
-/* 3256 */ 786037,
+/* 3256 */ 782037,
 /* 3257 */ 9999,
 /* 3258 */ 9999,
 /* 3259 */ 9999,
-/* 3260 */ 794027,
-/* 3261 */ 794038,
+/* 3260 */ 790027,
+/* 3261 */ 790038,
 /* 3262 */ 9999,
 /* 3263 */ 9999,
-/* 3264 */ 794076,
+/* 3264 */ 790076,
 /* 3265 */ 9999,
-/* 3266 */ 794003,
+/* 3266 */ 790003,
 /* 3267 */ 9999,
 /* 3268 */ 9999,
 /* 3269 */ 9999,
-/* 3270 */ 796029,
-/* 3271 */ 796040,
+/* 3270 */ 792029,
+/* 3271 */ 792040,
 /* 3272 */ 9999,
 /* 3273 */ 9999,
-/* 3274 */ 796078,
+/* 3274 */ 792078,
 /* 3275 */ 9999,
-/* 3276 */ 796005,
+/* 3276 */ 792005,
 /* 3277 */ 9999,
 /* 3278 */ 9999,
 /* 3279 */ 9999,
-/* 3280 */ 798029,
-/* 3281 */ 798040,
+/* 3280 */ 794029,
+/* 3281 */ 794040,
 /* 3282 */ 9999,
 /* 3283 */ 9999,
-/* 3284 */ 798078,
+/* 3284 */ 794078,
 /* 3285 */ 9999,
-/* 3286 */ 798005,
+/* 3286 */ 794005,
 /* 3287 */ 9999,
-/* 3288 */ 794039,
+/* 3288 */ 790039,
 /* 3289 */ 9999,
-/* 3290 */ 794048,
+/* 3290 */ 790048,
 /* 3291 */ 9999,
 /* 3292 */ 9999,
-/* 3293 */ 794048,
+/* 3293 */ 790048,
 /* 3294 */ 9999,
-/* 3295 */ 796041,
+/* 3295 */ 792041,
 /* 3296 */ 9999,
-/* 3297 */ 796050,
+/* 3297 */ 792050,
 /* 3298 */ 9999,
 /* 3299 */ 9999,
-/* 3300 */ 796050,
+/* 3300 */ 792050,
 /* 3301 */ 9999,
-/* 3302 */ 798041,
+/* 3302 */ 794041,
 /* 3303 */ 9999,
-/* 3304 */ 798050,
+/* 3304 */ 794050,
 /* 3305 */ 9999,
 /* 3306 */ 9999,
-/* 3307 */ 798050,
+/* 3307 */ 794050,
 /* 3308 */ 9999,
 /* 3309 */ 9999,
-/* 3310 */ 803007,
+/* 3310 */ 799007,
 /* 3311 */ 9999,
-/* 3312 */ 803003,
+/* 3312 */ 799003,
 /* 3313 */ 9999,
 /* 3314 */ 9999,
-/* 3315 */ 804009,
+/* 3315 */ 800009,
 /* 3316 */ 9999,
-/* 3317 */ 804005,
+/* 3317 */ 800005,
 /* 3318 */ 9999,
 /* 3319 */ 9999,
-/* 3320 */ 805009,
+/* 3320 */ 801009,
 /* 3321 */ 9999,
-/* 3322 */ 805024,
+/* 3322 */ 801024,
 /* 3323 */ 9999,
-/* 3324 */ 805005,
+/* 3324 */ 801005,
 /* 3325 */ 9999,
-/* 3326 */ 809003,
-/* 3327 */ 809015,
+/* 3326 */ 805003,
+/* 3327 */ 805015,
 /* 3328 */ 9999,
-/* 3329 */ 809008,
+/* 3329 */ 805008,
 /* 3330 */ 9999,
 /* 3331 */ 9999,
-/* 3332 */ 811011,
+/* 3332 */ 807011,
 /* 3333 */ 9999,
 /* 3334 */ 9999,
-/* 3335 */ 811009,
+/* 3335 */ 807009,
 /* 3336 */ 9999,
 /* 3337 */ 9999,
 /* 3338 */ 9999,
 /* 3339 */ 9999,
-/* 3340 */ 813009,
+/* 3340 */ 809009,
 /* 3341 */ 9999,
 /* 3342 */ 9999,
 /* 3343 */ 9999,
 /* 3344 */ 9999,
 /* 3345 */ 9999,
-/* 3346 */ 815034,
-/* 3347 */ 815046,
+/* 3346 */ 811034,
+/* 3347 */ 811046,
 /* 3348 */ 9999,
-/* 3349 */ 815009,
+/* 3349 */ 811009,
 /* 3350 */ 9999,
 /* 3351 */ 9999,
-/* 3352 */ 817011,
+/* 3352 */ 813011,
 /* 3353 */ 9999,
 /* 3354 */ 9999,
 /* 3355 */ 9999,
-/* 3356 */ 817046,
-/* 3357 */ 817058,
+/* 3356 */ 813046,
+/* 3357 */ 813058,
 /* 3358 */ 9999,
-/* 3359 */ 817009,
+/* 3359 */ 813009,
 /* 3360 */ 9999,
 /* 3361 */ 9999,
 /* 3362 */ 9999,
-/* 3363 */ 809025,
+/* 3363 */ 805025,
 /* 3364 */ 9999,
 /* 3365 */ 9999,
-/* 3366 */ 809025,
+/* 3366 */ 805025,
 /* 3367 */ 9999,
 /* 3368 */ 9999,
 /* 3369 */ 9999,
-/* 3370 */ 815056,
+/* 3370 */ 811056,
 /* 3371 */ 9999,
 /* 3372 */ 9999,
-/* 3373 */ 815056,
+/* 3373 */ 811056,
 /* 3374 */ 9999,
 /* 3375 */ 9999,
 /* 3376 */ 9999,
-/* 3377 */ 817068,
+/* 3377 */ 813068,
 /* 3378 */ 9999,
 /* 3379 */ 9999,
-/* 3380 */ 817068,
+/* 3380 */ 813068,
 /* 3381 */ 9999,
 /* 3382 */ 9999,
 /* 3383 */ 9999,
 /* 3384 */ 9999,
-/* 3385 */ 823007,
+/* 3385 */ 819007,
 /* 3386 */ 9999,
 /* 3387 */ 9999,
-/* 3388 */ 822009,
+/* 3388 */ 818009,
 /* 3389 */ 9999,
-/* 3390 */ 823008,
-/* 3391 */ 823016,
+/* 3390 */ 819008,
+/* 3391 */ 819016,
 /* 3392 */ 9999,
-/* 3393 */ 823016,
+/* 3393 */ 819016,
 /* 3394 */ 9999,
 /* 3395 */ 9999,
-/* 3396 */ 823016,
+/* 3396 */ 819016,
 /* 3397 */ 9999,
 /* 3398 */ 9999,
-/* 3399 */ 827015,
+/* 3399 */ 823015,
 /* 3400 */ 9999,
 /* 3401 */ 9999,
 /* 3402 */ 9999,
-/* 3403 */ 827013,
+/* 3403 */ 823013,
 /* 3404 */ 9999,
-/* 3405 */ 828005,
+/* 3405 */ 824005,
 /* 3406 */ 9999,
-/* 3407 */ 828016,
+/* 3407 */ 824016,
 /* 3408 */ 9999,
-/* 3409 */ 829005,
+/* 3409 */ 825005,
 /* 3410 */ 9999,
-/* 3411 */ 829014,
+/* 3411 */ 825014,
 /* 3412 */ 9999,
-/* 3413 */ 830005,
+/* 3413 */ 826005,
 /* 3414 */ 9999,
-/* 3415 */ 830017,
+/* 3415 */ 826017,
 /* 3416 */ 9999,
 /* 3417 */ 9999,
 /* 3418 */ 9999,
-/* 3419 */ 827016,
+/* 3419 */ 823016,
 /* 3420 */ 9999,
 /* 3421 */ 9999,
-/* 3422 */ 827016,
+/* 3422 */ 823016,
 /* 3423 */ 9999,
 /* 3424 */ 9999,
-/* 3425 */ 834013,
-/* 3426 */ 835005,
+/* 3425 */ 830013,
+/* 3426 */ 831005,
 /* 3427 */ 9999,
 /* 3428 */ 9999,
-/* 3429 */ 834011,
+/* 3429 */ 830011,
 /* 3430 */ 9999,
 /* 3431 */ 9999,
-/* 3432 */ 838011,
-/* 3433 */ 839005,
+/* 3432 */ 834011,
+/* 3433 */ 835005,
 /* 3434 */ 9999,
-/* 3435 */ 838009,
+/* 3435 */ 834009,
 /* 3436 */ 9999,
 /* 3437 */ 9999,
-/* 3438 */ 846014,
-/* 3439 */ 847005,
+/* 3438 */ 842014,
+/* 3439 */ 843005,
 /* 3440 */ 9999,
 /* 3441 */ 9999,
-/* 3442 */ 846012,
+/* 3442 */ 842012,
 /* 3443 */ 9999,
 /* 3444 */ 9999,
 /* 3445 */ 9999,
-/* 3446 */ 834014,
+/* 3446 */ 830014,
 /* 3447 */ 9999,
 /* 3448 */ 9999,
-/* 3449 */ 834014,
+/* 3449 */ 830014,
 /* 3450 */ 9999,
 /* 3451 */ 9999,
-/* 3452 */ 835011,
-/* 3453 */ 835023,
-/* 3454 */ 835077,
-/* 3455 */ 835007,
+/* 3452 */ 831011,
+/* 3453 */ 831023,
+/* 3454 */ 831077,
+/* 3455 */ 831007,
 /* 3456 */ 9999,
-/* 3457 */ 835007,
+/* 3457 */ 831007,
 /* 3458 */ 9999,
 /* 3459 */ 9999,
-/* 3460 */ 836011,
-/* 3461 */ 836023,
-/* 3462 */ 836076,
-/* 3463 */ 836007,
+/* 3460 */ 832011,
+/* 3461 */ 832023,
+/* 3462 */ 832076,
+/* 3463 */ 832007,
 /* 3464 */ 9999,
-/* 3465 */ 836007,
+/* 3465 */ 832007,
 /* 3466 */ 9999,
 /* 3467 */ 9999,
-/* 3468 */ 836007,
+/* 3468 */ 832007,
 /* 3469 */ 9999,
 /* 3470 */ 9999,
 /* 3471 */ 9999,
-/* 3472 */ 835078,
+/* 3472 */ 831078,
 /* 3473 */ 9999,
 /* 3474 */ 9999,
-/* 3475 */ 835078,
+/* 3475 */ 831078,
 /* 3476 */ 9999,
 /* 3477 */ 9999,
 /* 3478 */ 9999,
-/* 3479 */ 836077,
+/* 3479 */ 832077,
 /* 3480 */ 9999,
 /* 3481 */ 9999,
-/* 3482 */ 836077,
+/* 3482 */ 832077,
 /* 3483 */ 9999,
 /* 3484 */ 9999,
 /* 3485 */ 9999,
-/* 3486 */ 838012,
+/* 3486 */ 834012,
 /* 3487 */ 9999,
 /* 3488 */ 9999,
-/* 3489 */ 838012,
+/* 3489 */ 834012,
 /* 3490 */ 9999,
 /* 3491 */ 9999,
-/* 3492 */ 839011,
-/* 3493 */ 839044,
-/* 3494 */ 839058,
-/* 3495 */ 839007,
+/* 3492 */ 835011,
+/* 3493 */ 835044,
+/* 3494 */ 835058,
+/* 3495 */ 835007,
 /* 3496 */ 9999,
-/* 3497 */ 839007,
+/* 3497 */ 835007,
 /* 3498 */ 9999,
 /* 3499 */ 9999,
-/* 3500 */ 839007,
+/* 3500 */ 835007,
 /* 3501 */ 9999,
-/* 3502 */ 839045,
-/* 3503 */ 839054,
+/* 3502 */ 835045,
+/* 3503 */ 835054,
 /* 3504 */ 9999,
-/* 3505 */ 839054,
+/* 3505 */ 835054,
 /* 3506 */ 9999,
 /* 3507 */ 9999,
-/* 3508 */ 839054,
+/* 3508 */ 835054,
 /* 3509 */ 9999,
 /* 3510 */ 9999,
 /* 3511 */ 9999,
-/* 3512 */ 839059,
+/* 3512 */ 835059,
 /* 3513 */ 9999,
 /* 3514 */ 9999,
 /* 3515 */ 9999,
-/* 3516 */ 839063,
+/* 3516 */ 835063,
 /* 3517 */ 9999,
 /* 3518 */ 9999,
 /* 3519 */ 9999,
-/* 3520 */ 846015,
+/* 3520 */ 842015,
 /* 3521 */ 9999,
 /* 3522 */ 9999,
-/* 3523 */ 846015,
+/* 3523 */ 842015,
 /* 3524 */ 9999,
 /* 3525 */ 9999,
-/* 3526 */ 847035,
-/* 3527 */ 848007,
-/* 3528 */ 851011,
-/* 3529 */ 847007,
+/* 3526 */ 843035,
+/* 3527 */ 844007,
+/* 3528 */ 847011,
+/* 3529 */ 843007,
 /* 3530 */ 9999,
-/* 3531 */ 847007,
+/* 3531 */ 843007,
 /* 3532 */ 9999,
 /* 3533 */ 9999,
-/* 3534 */ 847007,
+/* 3534 */ 843007,
 /* 3535 */ 9999,
-/* 3536 */ 847037,
+/* 3536 */ 843037,
 /* 3537 */ 9999,
 /* 3538 */ 9999,
-/* 3539 */ 847042,
+/* 3539 */ 843042,
 /* 3540 */ 9999,
 /* 3541 */ 9999,
-/* 3542 */ 847042,
+/* 3542 */ 843042,
 /* 3543 */ 9999,
-/* 3544 */ 848011,
+/* 3544 */ 844011,
 /* 3545 */ 9999,
 /* 3546 */ 9999,
-/* 3547 */ 848037,
+/* 3547 */ 844037,
 /* 3548 */ 9999,
-/* 3549 */ 848017,
+/* 3549 */ 844017,
 /* 3550 */ 9999,
-/* 3551 */ 849011,
+/* 3551 */ 845011,
 /* 3552 */ 9999,
-/* 3553 */ 849026,
+/* 3553 */ 845026,
 /* 3554 */ 9999,
 /* 3555 */ 9999,
-/* 3556 */ 849017,
+/* 3556 */ 845017,
 /* 3557 */ 9999,
-/* 3558 */ 850011,
+/* 3558 */ 846011,
 /* 3559 */ 9999,
 /* 3560 */ 9999,
-/* 3561 */ 850037,
+/* 3561 */ 846037,
 /* 3562 */ 9999,
-/* 3563 */ 850017,
+/* 3563 */ 846017,
 /* 3564 */ 9999,
 /* 3565 */ 9999,
 /* 3566 */ 9999,
-/* 3567 */ 851012,
+/* 3567 */ 847012,
 /* 3568 */ 9999,
 /* 3569 */ 9999,
-/* 3570 */ 851012,
+/* 3570 */ 847012,
 /* 3571 */ 9999,
-/* 3572 */ 855005,
+/* 3572 */ 851005,
 /* 3573 */ 9999,
-/* 3574 */ 855011,
+/* 3574 */ 851011,
 /* 3575 */ 9999,
-/* 3576 */ 856005,
+/* 3576 */ 852005,
 /* 3577 */ 9999,
-/* 3578 */ 856010,
+/* 3578 */ 852010,
 /* 3579 */ 9999,
 /* 3580 */ 9999,
 /* 3581 */ 9999,
-/* 3582 */ 857011,
+/* 3582 */ 853011,
 /* 3583 */ 9999,
 /* 3584 */ 9999,
 /* 3585 */ 9999,
 /* 3586 */ 9999,
-/* 3587 */ 862007,
+/* 3587 */ 858007,
 /* 3588 */ 9999,
 /* 3589 */ 9999,
-/* 3590 */ 861010,
+/* 3590 */ 857010,
 /* 3591 */ 9999,
-/* 3592 */ 862008,
-/* 3593 */ 862017,
+/* 3592 */ 858008,
+/* 3593 */ 858017,
 /* 3594 */ 9999,
-/* 3595 */ 862017,
+/* 3595 */ 858017,
 /* 3596 */ 9999,
 /* 3597 */ 9999,
-/* 3598 */ 862017,
+/* 3598 */ 858017,
 /* 3599 */ 9999,
 /* 3600 */ 9999,
-/* 3601 */ 866015,
+/* 3601 */ 862015,
 /* 3602 */ 9999,
 /* 3603 */ 9999,
 /* 3604 */ 9999,
-/* 3605 */ 866013,
+/* 3605 */ 862013,
 /* 3606 */ 9999,
 /* 3607 */ 9999,
-/* 3608 */ 867010,
-/* 3609 */ 867017,
+/* 3608 */ 863010,
+/* 3609 */ 863017,
 /* 3610 */ 9999,
 /* 3611 */ 9999,
-/* 3612 */ 867008,
+/* 3612 */ 863008,
 /* 3613 */ 9999,
-/* 3614 */ 868005,
+/* 3614 */ 864005,
 /* 3615 */ 9999,
 /* 3616 */ 9999,
-/* 3617 */ 868005,
+/* 3617 */ 864005,
 /* 3618 */ 9999,
 /* 3619 */ 9999,
-/* 3620 */ 869013,
-/* 3621 */ 869020,
+/* 3620 */ 865013,
+/* 3621 */ 865020,
 /* 3622 */ 9999,
 /* 3623 */ 9999,
-/* 3624 */ 869011,
+/* 3624 */ 865011,
 /* 3625 */ 9999,
 /* 3626 */ 9999,
-/* 3627 */ 870014,
-/* 3628 */ 870021,
+/* 3627 */ 866014,
+/* 3628 */ 866021,
 /* 3629 */ 9999,
 /* 3630 */ 9999,
-/* 3631 */ 870012,
+/* 3631 */ 866012,
 /* 3632 */ 9999,
 /* 3633 */ 9999,
-/* 3634 */ 871015,
-/* 3635 */ 871022,
+/* 3634 */ 867015,
+/* 3635 */ 867022,
 /* 3636 */ 9999,
 /* 3637 */ 9999,
-/* 3638 */ 871013,
+/* 3638 */ 867013,
 /* 3639 */ 9999,
 /* 3640 */ 9999,
 /* 3641 */ 9999,
-/* 3642 */ 873049,
+/* 3642 */ 869049,
 /* 3643 */ 9999,
 /* 3644 */ 9999,
-/* 3645 */ 873009,
+/* 3645 */ 869009,
 /* 3646 */ 9999,
 /* 3647 */ 9999,
 /* 3648 */ 9999,
-/* 3649 */ 874049,
+/* 3649 */ 870049,
 /* 3650 */ 9999,
 /* 3651 */ 9999,
-/* 3652 */ 874009,
+/* 3652 */ 870009,
 /* 3653 */ 9999,
 /* 3654 */ 9999,
 /* 3655 */ 9999,
-/* 3656 */ 875049,
+/* 3656 */ 871049,
 /* 3657 */ 9999,
 /* 3658 */ 9999,
-/* 3659 */ 875007,
+/* 3659 */ 871007,
 /* 3660 */ 9999,
 /* 3661 */ 9999,
 /* 3662 */ 9999,
-/* 3663 */ 876049,
+/* 3663 */ 872049,
 /* 3664 */ 9999,
 /* 3665 */ 9999,
-/* 3666 */ 876010,
+/* 3666 */ 872010,
 /* 3667 */ 9999,
-/* 3668 */ 877005,
+/* 3668 */ 873005,
 /* 3669 */ 9999,
-/* 3670 */ 877014,
+/* 3670 */ 873014,
 /* 3671 */ 9999,
-/* 3672 */ 878005,
+/* 3672 */ 874005,
 /* 3673 */ 9999,
-/* 3674 */ 878017,
+/* 3674 */ 874017,
 /* 3675 */ 9999,
 /* 3676 */ 9999,
 /* 3677 */ 9999,
-/* 3678 */ 866016,
+/* 3678 */ 862016,
 /* 3679 */ 9999,
 /* 3680 */ 9999,
-/* 3681 */ 866016,
+/* 3681 */ 862016,
 /* 3682 */ 9999,
 /* 3683 */ 9999,
 /* 3684 */ 9999,
-/* 3685 */ 867011,
+/* 3685 */ 863011,
 /* 3686 */ 9999,
 /* 3687 */ 9999,
-/* 3688 */ 867011,
+/* 3688 */ 863011,
 /* 3689 */ 9999,
 /* 3690 */ 9999,
-/* 3691 */ 868020,
-/* 3692 */ 868027,
-/* 3693 */ 868076,
-/* 3694 */ 868014,
+/* 3691 */ 864020,
+/* 3692 */ 864027,
+/* 3693 */ 864076,
+/* 3694 */ 864014,
 /* 3695 */ 9999,
-/* 3696 */ 868014,
+/* 3696 */ 864014,
 /* 3697 */ 9999,
 /* 3698 */ 9999,
-/* 3699 */ 868014,
+/* 3699 */ 864014,
 /* 3700 */ 9999,
 /* 3701 */ 9999,
 /* 3702 */ 9999,
-/* 3703 */ 868021,
+/* 3703 */ 864021,
 /* 3704 */ 9999,
 /* 3705 */ 9999,
-/* 3706 */ 868021,
+/* 3706 */ 864021,
 /* 3707 */ 9999,
 /* 3708 */ 9999,
 /* 3709 */ 9999,
-/* 3710 */ 868077,
+/* 3710 */ 864077,
 /* 3711 */ 9999,
 /* 3712 */ 9999,
-/* 3713 */ 868077,
+/* 3713 */ 864077,
 /* 3714 */ 9999,
 /* 3715 */ 9999,
 /* 3716 */ 9999,
-/* 3717 */ 869014,
+/* 3717 */ 865014,
 /* 3718 */ 9999,
 /* 3719 */ 9999,
-/* 3720 */ 869014,
+/* 3720 */ 865014,
 /* 3721 */ 9999,
-/* 3722 */ 869021,
-/* 3723 */ 869062,
-/* 3724 */ 869026,
+/* 3722 */ 865021,
+/* 3723 */ 865062,
+/* 3724 */ 865026,
 /* 3725 */ 9999,
-/* 3726 */ 869026,
+/* 3726 */ 865026,
 /* 3727 */ 9999,
 /* 3728 */ 9999,
-/* 3729 */ 869026,
+/* 3729 */ 865026,
 /* 3730 */ 9999,
 /* 3731 */ 9999,
 /* 3732 */ 9999,
-/* 3733 */ 869063,
+/* 3733 */ 865063,
 /* 3734 */ 9999,
 /* 3735 */ 9999,
-/* 3736 */ 869063,
+/* 3736 */ 865063,
 /* 3737 */ 9999,
 /* 3738 */ 9999,
 /* 3739 */ 9999,
-/* 3740 */ 870015,
+/* 3740 */ 866015,
 /* 3741 */ 9999,
 /* 3742 */ 9999,
-/* 3743 */ 870015,
+/* 3743 */ 866015,
 /* 3744 */ 9999,
 /* 3745 */ 9999,
-/* 3746 */ 870074,
-/* 3747 */ 870030,
+/* 3746 */ 866074,
+/* 3747 */ 866030,
 /* 3748 */ 9999,
-/* 3749 */ 870030,
+/* 3749 */ 866030,
 /* 3750 */ 9999,
 /* 3751 */ 9999,
-/* 3752 */ 870030,
+/* 3752 */ 866030,
 /* 3753 */ 9999,
 /* 3754 */ 9999,
 /* 3755 */ 9999,
-/* 3756 */ 870075,
+/* 3756 */ 866075,
 /* 3757 */ 9999,
 /* 3758 */ 9999,
-/* 3759 */ 870075,
+/* 3759 */ 866075,
 /* 3760 */ 9999,
 /* 3761 */ 9999,
 /* 3762 */ 9999,
-/* 3763 */ 871016,
+/* 3763 */ 867016,
 /* 3764 */ 9999,
 /* 3765 */ 9999,
-/* 3766 */ 871016,
+/* 3766 */ 867016,
 /* 3767 */ 9999,
-/* 3768 */ 871023,
-/* 3769 */ 871064,
-/* 3770 */ 871028,
+/* 3768 */ 867023,
+/* 3769 */ 867064,
+/* 3770 */ 867028,
 /* 3771 */ 9999,
-/* 3772 */ 871028,
+/* 3772 */ 867028,
 /* 3773 */ 9999,
 /* 3774 */ 9999,
-/* 3775 */ 871028,
+/* 3775 */ 867028,
 /* 3776 */ 9999,
 /* 3777 */ 9999,
 /* 3778 */ 9999,
-/* 3779 */ 871065,
+/* 3779 */ 867065,
 /* 3780 */ 9999,
 /* 3781 */ 9999,
-/* 3782 */ 871065,
+/* 3782 */ 867065,
 /* 3783 */ 9999,
-/* 3784 */ 873050,
-/* 3785 */ 873060,
-/* 3786 */ 873058,
+/* 3784 */ 869050,
+/* 3785 */ 869060,
+/* 3786 */ 869058,
 /* 3787 */ 9999,
-/* 3788 */ 873058,
+/* 3788 */ 869058,
 /* 3789 */ 9999,
 /* 3790 */ 9999,
-/* 3791 */ 873058,
+/* 3791 */ 869058,
 /* 3792 */ 9999,
 /* 3793 */ 9999,
 /* 3794 */ 9999,
-/* 3795 */ 873061,
+/* 3795 */ 869061,
 /* 3796 */ 9999,
-/* 3797 */ 874050,
-/* 3798 */ 874060,
-/* 3799 */ 874058,
+/* 3797 */ 870050,
+/* 3798 */ 870060,
+/* 3799 */ 870058,
 /* 3800 */ 9999,
-/* 3801 */ 874058,
+/* 3801 */ 870058,
 /* 3802 */ 9999,
 /* 3803 */ 9999,
-/* 3804 */ 874058,
+/* 3804 */ 870058,
 /* 3805 */ 9999,
 /* 3806 */ 9999,
 /* 3807 */ 9999,
-/* 3808 */ 874061,
+/* 3808 */ 870061,
 /* 3809 */ 9999,
-/* 3810 */ 875050,
-/* 3811 */ 875060,
-/* 3812 */ 875058,
+/* 3810 */ 871050,
+/* 3811 */ 871060,
+/* 3812 */ 871058,
 /* 3813 */ 9999,
-/* 3814 */ 875058,
+/* 3814 */ 871058,
 /* 3815 */ 9999,
 /* 3816 */ 9999,
-/* 3817 */ 875058,
+/* 3817 */ 871058,
 /* 3818 */ 9999,
 /* 3819 */ 9999,
 /* 3820 */ 9999,
-/* 3821 */ 875061,
+/* 3821 */ 871061,
 /* 3822 */ 9999,
-/* 3823 */ 876050,
-/* 3824 */ 876060,
-/* 3825 */ 876058,
+/* 3823 */ 872050,
+/* 3824 */ 872060,
+/* 3825 */ 872058,
 /* 3826 */ 9999,
-/* 3827 */ 876058,
+/* 3827 */ 872058,
 /* 3828 */ 9999,
 /* 3829 */ 9999,
-/* 3830 */ 876058,
+/* 3830 */ 872058,
 /* 3831 */ 9999,
 /* 3832 */ 9999,
 /* 3833 */ 9999,
-/* 3834 */ 876061,
+/* 3834 */ 872061,
 /* 3835 */ 9999,
 /* 3836 */ 9999,
 /* 3837 */ 9999,
-/* 3838 */ 882015,
+/* 3838 */ 878015,
 /* 3839 */ 9999,
-/* 3840 */ 882030,
+/* 3840 */ 878030,
 /* 3841 */ 9999,
 /* 3842 */ 9999,
-/* 3843 */ 882009,
+/* 3843 */ 878009,
 /* 3844 */ 9999,
 /* 3845 */ 9999,
 /* 3846 */ 9999,
-/* 3847 */ 884015,
+/* 3847 */ 880015,
 /* 3848 */ 9999,
 /* 3849 */ 9999,
-/* 3850 */ 884009,
+/* 3850 */ 880009,
 /* 3851 */ 9999,
-/* 3852 */ 886005,
-/* 3853 */ 886017,
+/* 3852 */ 882005,
+/* 3853 */ 882017,
 /* 3854 */ 9999,
-/* 3855 */ 886011,
+/* 3855 */ 882011,
 /* 3856 */ 9999,
-/* 3857 */ 888005,
+/* 3857 */ 884005,
 /* 3858 */ 9999,
-/* 3859 */ 888023,
+/* 3859 */ 884023,
 /* 3860 */ 9999,
 /* 3861 */ 9999,
-/* 3862 */ 888011,
+/* 3862 */ 884011,
 /* 3863 */ 9999,
-/* 3864 */ 890005,
-/* 3865 */ 890017,
-/* 3866 */ 890027,
+/* 3864 */ 886005,
+/* 3865 */ 886017,
+/* 3866 */ 886027,
 /* 3867 */ 9999,
 /* 3868 */ 9999,
-/* 3869 */ 890011,
+/* 3869 */ 886011,
 /* 3870 */ 9999,
-/* 3871 */ 893005,
-/* 3872 */ 893017,
-/* 3873 */ 893027,
+/* 3871 */ 889005,
+/* 3872 */ 889017,
+/* 3873 */ 889027,
 /* 3874 */ 9999,
 /* 3875 */ 9999,
-/* 3876 */ 893011,
+/* 3876 */ 889011,
 /* 3877 */ 9999,
 /* 3878 */ 9999,
-/* 3879 */ 896012,
+/* 3879 */ 892012,
 /* 3880 */ 9999,
-/* 3881 */ 896010,
+/* 3881 */ 892010,
 /* 3882 */ 9999,
 /* 3883 */ 9999,
-/* 3884 */ 898010,
+/* 3884 */ 894010,
 /* 3885 */ 9999,
-/* 3886 */ 898008,
+/* 3886 */ 894008,
 /* 3887 */ 9999,
 /* 3888 */ 9999,
 /* 3889 */ 9999,
 /* 3890 */ 9999,
-/* 3891 */ 886019,
+/* 3891 */ 882019,
 /* 3892 */ 9999,
 /* 3893 */ 9999,
-/* 3894 */ 886019,
+/* 3894 */ 882019,
 /* 3895 */ 9999,
 /* 3896 */ 9999,
 /* 3897 */ 9999,
-/* 3898 */ 890028,
+/* 3898 */ 886028,
 /* 3899 */ 9999,
 /* 3900 */ 9999,
 /* 3901 */ 9999,
-/* 3902 */ 890034,
+/* 3902 */ 886034,
 /* 3903 */ 9999,
 /* 3904 */ 9999,
 /* 3905 */ 9999,
-/* 3906 */ 893028,
+/* 3906 */ 889028,
 /* 3907 */ 9999,
 /* 3908 */ 9999,
 /* 3909 */ 9999,
-/* 3910 */ 893034,
+/* 3910 */ 889034,
 /* 3911 */ 9999,
 /* 3912 */ 9999,
 /* 3913 */ 9999,
 /* 3914 */ 9999,
-/* 3915 */ 902038,
+/* 3915 */ 898038,
 /* 3916 */ 9999,
-/* 3917 */ 904007,
+/* 3917 */ 900007,
 /* 3918 */ 9999,
 /* 3919 */ 9999,
-/* 3920 */ 902018,
+/* 3920 */ 898018,
 /* 3921 */ 9999,
-/* 3922 */ 904008,
-/* 3923 */ 904019,
+/* 3922 */ 900008,
+/* 3923 */ 900019,
 /* 3924 */ 9999,
-/* 3925 */ 904019,
+/* 3925 */ 900019,
 /* 3926 */ 9999,
 /* 3927 */ 9999,
-/* 3928 */ 904019,
+/* 3928 */ 900019,
 /* 3929 */ 9999,
 /* 3930 */ 9999,
-/* 3931 */ 910010,
-/* 3932 */ 910017,
+/* 3931 */ 906010,
+/* 3932 */ 906017,
 /* 3933 */ 9999,
 /* 3934 */ 9999,
-/* 3935 */ 909003,
+/* 3935 */ 905003,
 /* 3936 */ 9999,
 /* 3937 */ 9999,
-/* 3938 */ 914012,
-/* 3939 */ 914019,
+/* 3938 */ 910012,
+/* 3939 */ 910019,
 /* 3940 */ 9999,
 /* 3941 */ 9999,
-/* 3942 */ 914010,
+/* 3942 */ 910010,
 /* 3943 */ 9999,
 /* 3944 */ 9999,
-/* 3945 */ 916015,
+/* 3945 */ 912015,
 /* 3946 */ 9999,
 /* 3947 */ 9999,
 /* 3948 */ 9999,
-/* 3949 */ 916013,
+/* 3949 */ 912013,
 /* 3950 */ 9999,
-/* 3951 */ 917005,
+/* 3951 */ 913005,
 /* 3952 */ 9999,
-/* 3953 */ 917014,
+/* 3953 */ 913014,
 /* 3954 */ 9999,
-/* 3955 */ 918005,
+/* 3955 */ 914005,
 /* 3956 */ 9999,
-/* 3957 */ 918016,
+/* 3957 */ 914016,
 /* 3958 */ 9999,
-/* 3959 */ 919005,
+/* 3959 */ 915005,
 /* 3960 */ 9999,
-/* 3961 */ 919017,
+/* 3961 */ 915017,
 /* 3962 */ 9999,
 /* 3963 */ 9999,
 /* 3964 */ 9999,
-/* 3965 */ 910011,
+/* 3965 */ 906011,
 /* 3966 */ 9999,
 /* 3967 */ 9999,
-/* 3968 */ 910011,
+/* 3968 */ 906011,
 /* 3969 */ 9999,
-/* 3970 */ 910018,
-/* 3971 */ 910072,
-/* 3972 */ 910024,
+/* 3970 */ 906018,
+/* 3971 */ 906072,
+/* 3972 */ 906024,
 /* 3973 */ 9999,
-/* 3974 */ 910024,
+/* 3974 */ 906024,
 /* 3975 */ 9999,
 /* 3976 */ 9999,
-/* 3977 */ 910024,
+/* 3977 */ 906024,
 /* 3978 */ 9999,
 /* 3979 */ 9999,
 /* 3980 */ 9999,
-/* 3981 */ 910073,
+/* 3981 */ 906073,
 /* 3982 */ 9999,
 /* 3983 */ 9999,
-/* 3984 */ 910073,
+/* 3984 */ 906073,
 /* 3985 */ 9999,
 /* 3986 */ 9999,
 /* 3987 */ 9999,
-/* 3988 */ 914013,
+/* 3988 */ 910013,
 /* 3989 */ 9999,
 /* 3990 */ 9999,
-/* 3991 */ 914013,
+/* 3991 */ 910013,
 /* 3992 */ 9999,
-/* 3993 */ 914020,
-/* 3994 */ 914054,
-/* 3995 */ 914034,
+/* 3993 */ 910020,
+/* 3994 */ 910054,
+/* 3995 */ 910034,
 /* 3996 */ 9999,
-/* 3997 */ 914034,
+/* 3997 */ 910034,
 /* 3998 */ 9999,
 /* 3999 */ 9999,
-/* 4000 */ 914034,
+/* 4000 */ 910034,
 /* 4001 */ 9999,
 /* 4002 */ 9999,
 /* 4003 */ 9999,
-/* 4004 */ 914055,
+/* 4004 */ 910055,
 /* 4005 */ 9999,
 /* 4006 */ 9999,
-/* 4007 */ 914055,
+/* 4007 */ 910055,
 /* 4008 */ 9999,
 /* 4009 */ 9999,
 /* 4010 */ 9999,
-/* 4011 */ 916016,
+/* 4011 */ 912016,
 /* 4012 */ 9999,
 /* 4013 */ 9999,
-/* 4014 */ 916016,
+/* 4014 */ 912016,
 /* 4015 */ 9999,
 /* 4016 */ 9999,
 /* 4017 */ 9999,
 /* 4018 */ 9999,
-/* 4019 */ 923007,
+/* 4019 */ 919007,
 /* 4020 */ 9999,
 /* 4021 */ 9999,
-/* 4022 */ 922012,
+/* 4022 */ 918012,
 /* 4023 */ 9999,
-/* 4024 */ 923008,
-/* 4025 */ 923016,
+/* 4024 */ 919008,
+/* 4025 */ 919016,
 /* 4026 */ 9999,
-/* 4027 */ 923016,
+/* 4027 */ 919016,
 /* 4028 */ 9999,
 /* 4029 */ 9999,
-/* 4030 */ 923016,
+/* 4030 */ 919016,
 /* 4031 */ 9999,
 /* 4032 */ 9999,
-/* 4033 */ 929011,
-/* 4034 */ 929018,
+/* 4033 */ 925011,
+/* 4034 */ 925018,
 /* 4035 */ 9999,
 /* 4036 */ 9999,
-/* 4037 */ 928003,
+/* 4037 */ 924003,
 /* 4038 */ 9999,
 /* 4039 */ 9999,
 /* 4040 */ 9999,
 /* 4041 */ 9999,
-/* 4042 */ 933013,
+/* 4042 */ 929013,
 /* 4043 */ 9999,
 /* 4044 */ 9999,
-/* 4045 */ 934011,
-/* 4046 */ 934018,
+/* 4045 */ 930011,
+/* 4046 */ 930018,
 /* 4047 */ 9999,
 /* 4048 */ 9999,
-/* 4049 */ 934009,
+/* 4049 */ 930009,
 /* 4050 */ 9999,
 /* 4051 */ 9999,
-/* 4052 */ 935015,
+/* 4052 */ 931015,
 /* 4053 */ 9999,
 /* 4054 */ 9999,
 /* 4055 */ 9999,
-/* 4056 */ 935013,
+/* 4056 */ 931013,
 /* 4057 */ 9999,
 /* 4058 */ 9999,
-/* 4059 */ 936012,
-/* 4060 */ 936019,
+/* 4059 */ 932012,
+/* 4060 */ 932019,
 /* 4061 */ 9999,
 /* 4062 */ 9999,
-/* 4063 */ 936010,
+/* 4063 */ 932010,
 /* 4064 */ 9999,
-/* 4065 */ 938005,
+/* 4065 */ 934005,
 /* 4066 */ 9999,
-/* 4067 */ 938014,
+/* 4067 */ 934014,
 /* 4068 */ 9999,
-/* 4069 */ 939005,
+/* 4069 */ 935005,
 /* 4070 */ 9999,
-/* 4071 */ 939016,
+/* 4071 */ 935016,
 /* 4072 */ 9999,
-/* 4073 */ 940005,
+/* 4073 */ 936005,
 /* 4074 */ 9999,
-/* 4075 */ 940017,
+/* 4075 */ 936017,
 /* 4076 */ 9999,
 /* 4077 */ 9999,
 /* 4078 */ 9999,
-/* 4079 */ 929012,
+/* 4079 */ 925012,
 /* 4080 */ 9999,
 /* 4081 */ 9999,
-/* 4082 */ 929012,
+/* 4082 */ 925012,
 /* 4083 */ 9999,
-/* 4084 */ 929019,
-/* 4085 */ 929074,
-/* 4086 */ 929025,
+/* 4084 */ 925019,
+/* 4085 */ 925074,
+/* 4086 */ 925025,
 /* 4087 */ 9999,
-/* 4088 */ 929025,
+/* 4088 */ 925025,
 /* 4089 */ 9999,
 /* 4090 */ 9999,
-/* 4091 */ 929025,
+/* 4091 */ 925025,
 /* 4092 */ 9999,
 /* 4093 */ 9999,
 /* 4094 */ 9999,
-/* 4095 */ 929075,
+/* 4095 */ 925075,
 /* 4096 */ 9999,
 /* 4097 */ 9999,
-/* 4098 */ 929075,
+/* 4098 */ 925075,
 /* 4099 */ 9999,
 /* 4100 */ 9999,
 /* 4101 */ 9999,
-/* 4102 */ 934012,
+/* 4102 */ 930012,
 /* 4103 */ 9999,
 /* 4104 */ 9999,
-/* 4105 */ 934012,
+/* 4105 */ 930012,
 /* 4106 */ 9999,
-/* 4107 */ 934019,
-/* 4108 */ 934029,
-/* 4109 */ 934024,
+/* 4107 */ 930019,
+/* 4108 */ 930029,
+/* 4109 */ 930024,
 /* 4110 */ 9999,
-/* 4111 */ 934024,
+/* 4111 */ 930024,
 /* 4112 */ 9999,
 /* 4113 */ 9999,
-/* 4114 */ 934024,
+/* 4114 */ 930024,
 /* 4115 */ 9999,
 /* 4116 */ 9999,
 /* 4117 */ 9999,
-/* 4118 */ 934030,
+/* 4118 */ 930030,
 /* 4119 */ 9999,
 /* 4120 */ 9999,
 /* 4121 */ 9999,
-/* 4122 */ 934036,
+/* 4122 */ 930036,
 /* 4123 */ 9999,
 /* 4124 */ 9999,
-/* 4125 */ 934036,
+/* 4125 */ 930036,
 /* 4126 */ 9999,
 /* 4127 */ 9999,
 /* 4128 */ 9999,
-/* 4129 */ 935016,
+/* 4129 */ 931016,
 /* 4130 */ 9999,
 /* 4131 */ 9999,
-/* 4132 */ 935016,
+/* 4132 */ 931016,
 /* 4133 */ 9999,
 /* 4134 */ 9999,
 /* 4135 */ 9999,
-/* 4136 */ 936013,
+/* 4136 */ 932013,
 /* 4137 */ 9999,
 /* 4138 */ 9999,
-/* 4139 */ 936013,
+/* 4139 */ 932013,
 /* 4140 */ 9999,
-/* 4141 */ 936020,
-/* 4142 */ 936054,
-/* 4143 */ 936034,
+/* 4141 */ 932020,
+/* 4142 */ 932054,
+/* 4143 */ 932034,
 /* 4144 */ 9999,
-/* 4145 */ 936034,
+/* 4145 */ 932034,
 /* 4146 */ 9999,
 /* 4147 */ 9999,
-/* 4148 */ 936034,
+/* 4148 */ 932034,
 /* 4149 */ 9999,
 /* 4150 */ 9999,
 /* 4151 */ 9999,
-/* 4152 */ 936055,
+/* 4152 */ 932055,
 /* 4153 */ 9999,
 /* 4154 */ 9999,
-/* 4155 */ 936055,
+/* 4155 */ 932055,
 /* 4156 */ 9999,
 /* 4157 */ 9999,
 /* 4158 */ 9999,
 /* 4159 */ 9999,
-/* 4160 */ 945007,
+/* 4160 */ 941007,
 /* 4161 */ 9999,
 /* 4162 */ 9999,
-/* 4163 */ 943020,
+/* 4163 */ 939020,
 /* 4164 */ 9999,
-/* 4165 */ 945008,
-/* 4166 */ 945020,
+/* 4165 */ 941008,
+/* 4166 */ 941020,
 /* 4167 */ 9999,
-/* 4168 */ 945020,
+/* 4168 */ 941020,
 /* 4169 */ 9999,
 /* 4170 */ 9999,
-/* 4171 */ 945020,
+/* 4171 */ 941020,
 /* 4172 */ 9999,
 /* 4173 */ 9999,
-/* 4174 */ 950015,
+/* 4174 */ 946015,
 /* 4175 */ 9999,
 /* 4176 */ 9999,
 /* 4177 */ 9999,
-/* 4178 */ 950013,
+/* 4178 */ 946013,
 /* 4179 */ 9999,
-/* 4180 */ 951005,
+/* 4180 */ 947005,
 /* 4181 */ 9999,
-/* 4182 */ 951015,
+/* 4182 */ 947015,
 /* 4183 */ 9999,
 /* 4184 */ 9999,
-/* 4185 */ 952010,
-/* 4186 */ 952017,
+/* 4185 */ 948010,
+/* 4186 */ 948017,
 /* 4187 */ 9999,
 /* 4188 */ 9999,
 /* 4189 */ 9999,
-/* 4190 */ 952008,
+/* 4190 */ 948008,
 /* 4191 */ 9999,
 /* 4192 */ 9999,
-/* 4193 */ 953013,
-/* 4194 */ 953020,
+/* 4193 */ 949013,
+/* 4194 */ 949020,
 /* 4195 */ 9999,
 /* 4196 */ 9999,
-/* 4197 */ 953011,
+/* 4197 */ 949011,
 /* 4198 */ 9999,
 /* 4199 */ 9999,
-/* 4200 */ 954014,
-/* 4201 */ 954021,
+/* 4200 */ 950014,
+/* 4201 */ 950021,
 /* 4202 */ 9999,
 /* 4203 */ 9999,
-/* 4204 */ 954012,
+/* 4204 */ 950012,
 /* 4205 */ 9999,
 /* 4206 */ 9999,
-/* 4207 */ 955011,
-/* 4208 */ 955019,
+/* 4207 */ 951011,
+/* 4208 */ 951019,
 /* 4209 */ 9999,
 /* 4210 */ 9999,
-/* 4211 */ 955009,
+/* 4211 */ 951009,
 /* 4212 */ 9999,
-/* 4213 */ 956005,
+/* 4213 */ 952005,
 /* 4214 */ 9999,
-/* 4215 */ 956016,
+/* 4215 */ 952016,
 /* 4216 */ 9999,
-/* 4217 */ 957005,
+/* 4217 */ 953005,
 /* 4218 */ 9999,
-/* 4219 */ 957014,
+/* 4219 */ 953014,
 /* 4220 */ 9999,
-/* 4221 */ 958005,
+/* 4221 */ 954005,
 /* 4222 */ 9999,
-/* 4223 */ 958017,
+/* 4223 */ 954017,
 /* 4224 */ 9999,
 /* 4225 */ 9999,
 /* 4226 */ 9999,
-/* 4227 */ 950016,
+/* 4227 */ 946016,
 /* 4228 */ 9999,
 /* 4229 */ 9999,
-/* 4230 */ 950016,
+/* 4230 */ 946016,
 /* 4231 */ 9999,
 /* 4232 */ 9999,
 /* 4233 */ 9999,
-/* 4234 */ 952011,
+/* 4234 */ 948011,
 /* 4235 */ 9999,
 /* 4236 */ 9999,
-/* 4237 */ 952011,
+/* 4237 */ 948011,
 /* 4238 */ 9999,
 /* 4239 */ 9999,
 /* 4240 */ 9999,
-/* 4241 */ 953014,
+/* 4241 */ 949014,
 /* 4242 */ 9999,
 /* 4243 */ 9999,
-/* 4244 */ 953014,
+/* 4244 */ 949014,
 /* 4245 */ 9999,
 /* 4246 */ 9999,
 /* 4247 */ 9999,
-/* 4248 */ 954015,
+/* 4248 */ 950015,
 /* 4249 */ 9999,
 /* 4250 */ 9999,
-/* 4251 */ 954015,
+/* 4251 */ 950015,
 /* 4252 */ 9999,
 /* 4253 */ 9999,
 /* 4254 */ 9999,
-/* 4255 */ 955012,
+/* 4255 */ 951012,
 /* 4256 */ 9999,
 /* 4257 */ 9999,
-/* 4258 */ 955012,
+/* 4258 */ 951012,
 /* 4259 */ 9999,
-/* 4260 */ 955020,
-/* 4261 */ 955030,
-/* 4262 */ 955025,
+/* 4260 */ 951020,
+/* 4261 */ 951030,
+/* 4262 */ 951025,
 /* 4263 */ 9999,
-/* 4264 */ 955025,
+/* 4264 */ 951025,
 /* 4265 */ 9999,
 /* 4266 */ 9999,
-/* 4267 */ 955025,
+/* 4267 */ 951025,
 /* 4268 */ 9999,
 /* 4269 */ 9999,
 /* 4270 */ 9999,
-/* 4271 */ 955031,
+/* 4271 */ 951031,
 /* 4272 */ 9999,
 /* 4273 */ 9999,
 /* 4274 */ 9999,
-/* 4275 */ 955037,
+/* 4275 */ 951037,
 /* 4276 */ 9999,
 /* 4277 */ 9999,
-/* 4278 */ 955037,
+/* 4278 */ 951037,
 /* 4279 */ 9999,
 /* 4280 */ 9999,
 /* 4281 */ 9999,
 /* 4282 */ 9999,
-/* 4283 */ 961038,
+/* 4283 */ 957038,
 /* 4284 */ 9999,
-/* 4285 */ 964007,
+/* 4285 */ 960007,
 /* 4286 */ 9999,
 /* 4287 */ 9999,
-/* 4288 */ 961018,
+/* 4288 */ 957018,
 /* 4289 */ 9999,
-/* 4290 */ 964008,
-/* 4291 */ 964019,
+/* 4290 */ 960008,
+/* 4291 */ 960019,
 /* 4292 */ 9999,
-/* 4293 */ 964019,
+/* 4293 */ 960019,
 /* 4294 */ 9999,
 /* 4295 */ 9999,
-/* 4296 */ 964019,
+/* 4296 */ 960019,
 /* 4297 */ 9999,
 /* 4298 */ 9999,
-/* 4299 */ 969015,
+/* 4299 */ 965015,
 /* 4300 */ 9999,
 /* 4301 */ 9999,
 /* 4302 */ 9999,
-/* 4303 */ 969013,
+/* 4303 */ 965013,
 /* 4304 */ 9999,
 /* 4305 */ 9999,
-/* 4306 */ 970011,
-/* 4307 */ 970018,
+/* 4306 */ 966011,
+/* 4307 */ 966018,
 /* 4308 */ 9999,
 /* 4309 */ 9999,
-/* 4310 */ 970009,
+/* 4310 */ 966009,
 /* 4311 */ 9999,
 /* 4312 */ 9999,
-/* 4313 */ 971011,
-/* 4314 */ 971018,
+/* 4313 */ 967011,
+/* 4314 */ 967018,
 /* 4315 */ 9999,
 /* 4316 */ 9999,
-/* 4317 */ 971009,
+/* 4317 */ 967009,
 /* 4318 */ 9999,
 /* 4319 */ 9999,
-/* 4320 */ 972011,
-/* 4321 */ 972018,
+/* 4320 */ 968011,
+/* 4321 */ 968018,
 /* 4322 */ 9999,
 /* 4323 */ 9999,
-/* 4324 */ 972008,
+/* 4324 */ 968008,
 /* 4325 */ 9999,
 /* 4326 */ 9999,
-/* 4327 */ 973011,
-/* 4328 */ 973018,
+/* 4327 */ 969011,
+/* 4328 */ 969018,
 /* 4329 */ 9999,
 /* 4330 */ 9999,
-/* 4331 */ 973009,
+/* 4331 */ 969009,
 /* 4332 */ 9999,
 /* 4333 */ 9999,
-/* 4334 */ 974011,
-/* 4335 */ 974018,
+/* 4334 */ 970011,
+/* 4335 */ 970018,
 /* 4336 */ 9999,
 /* 4337 */ 9999,
-/* 4338 */ 974008,
+/* 4338 */ 970008,
 /* 4339 */ 9999,
 /* 4340 */ 9999,
-/* 4341 */ 975015,
-/* 4342 */ 975022,
+/* 4341 */ 971015,
+/* 4342 */ 971022,
 /* 4343 */ 9999,
 /* 4344 */ 9999,
-/* 4345 */ 975013,
+/* 4345 */ 971013,
 /* 4346 */ 9999,
 /* 4347 */ 9999,
-/* 4348 */ 977011,
-/* 4349 */ 977019,
+/* 4348 */ 973011,
+/* 4349 */ 973019,
 /* 4350 */ 9999,
 /* 4351 */ 9999,
-/* 4352 */ 977009,
+/* 4352 */ 973009,
 /* 4353 */ 9999,
 /* 4354 */ 9999,
 /* 4355 */ 9999,
 /* 4356 */ 9999,
 /* 4357 */ 9999,
 /* 4358 */ 9999,
-/* 4359 */ 978008,
+/* 4359 */ 974008,
 /* 4360 */ 9999,
 /* 4361 */ 9999,
 /* 4362 */ 9999,
-/* 4363 */ 981015,
+/* 4363 */ 977015,
 /* 4364 */ 9999,
 /* 4365 */ 9999,
-/* 4366 */ 981009,
+/* 4366 */ 977009,
 /* 4367 */ 9999,
 /* 4368 */ 9999,
 /* 4369 */ 9999,
-/* 4370 */ 997017,
+/* 4370 */ 993017,
 /* 4371 */ 9999,
-/* 4372 */ 997011,
+/* 4372 */ 993011,
 /* 4373 */ 9999,
 /* 4374 */ 9999,
 /* 4375 */ 9999,
-/* 4376 */ 998017,
+/* 4376 */ 994017,
 /* 4377 */ 9999,
-/* 4378 */ 998011,
+/* 4378 */ 994011,
 /* 4379 */ 9999,
-/* 4380 */ 999005,
+/* 4380 */ 995005,
 /* 4381 */ 9999,
-/* 4382 */ 999016,
+/* 4382 */ 995016,
 /* 4383 */ 9999,
-/* 4384 */ 1000005,
+/* 4384 */ 996005,
 /* 4385 */ 9999,
-/* 4386 */ 1000014,
+/* 4386 */ 996014,
 /* 4387 */ 9999,
-/* 4388 */ 1001005,
+/* 4388 */ 997005,
 /* 4389 */ 9999,
-/* 4390 */ 1001017,
+/* 4390 */ 997017,
 /* 4391 */ 9999,
 /* 4392 */ 9999,
 /* 4393 */ 9999,
-/* 4394 */ 969016,
+/* 4394 */ 965016,
 /* 4395 */ 9999,
 /* 4396 */ 9999,
-/* 4397 */ 969016,
+/* 4397 */ 965016,
 /* 4398 */ 9999,
 /* 4399 */ 9999,
 /* 4400 */ 9999,
-/* 4401 */ 970012,
+/* 4401 */ 966012,
 /* 4402 */ 9999,
 /* 4403 */ 9999,
-/* 4404 */ 970012,
+/* 4404 */ 966012,
 /* 4405 */ 9999,
 /* 4406 */ 9999,
 /* 4407 */ 9999,
-/* 4408 */ 971012,
+/* 4408 */ 967012,
 /* 4409 */ 9999,
 /* 4410 */ 9999,
-/* 4411 */ 971012,
+/* 4411 */ 967012,
 /* 4412 */ 9999,
 /* 4413 */ 9999,
 /* 4414 */ 9999,
-/* 4415 */ 972012,
+/* 4415 */ 968012,
 /* 4416 */ 9999,
 /* 4417 */ 9999,
-/* 4418 */ 972012,
+/* 4418 */ 968012,
 /* 4419 */ 9999,
 /* 4420 */ 9999,
 /* 4421 */ 9999,
-/* 4422 */ 973012,
+/* 4422 */ 969012,
 /* 4423 */ 9999,
 /* 4424 */ 9999,
-/* 4425 */ 973012,
+/* 4425 */ 969012,
 /* 4426 */ 9999,
 /* 4427 */ 9999,
 /* 4428 */ 9999,
-/* 4429 */ 974012,
+/* 4429 */ 970012,
 /* 4430 */ 9999,
 /* 4431 */ 9999,
-/* 4432 */ 974012,
+/* 4432 */ 970012,
 /* 4433 */ 9999,
 /* 4434 */ 9999,
 /* 4435 */ 9999,
-/* 4436 */ 975016,
+/* 4436 */ 971016,
 /* 4437 */ 9999,
 /* 4438 */ 9999,
-/* 4439 */ 975016,
+/* 4439 */ 971016,
 /* 4440 */ 9999,
-/* 4441 */ 975023,
-/* 4442 */ 976006,
-/* 4443 */ 975028,
+/* 4441 */ 971023,
+/* 4442 */ 972006,
+/* 4443 */ 971028,
 /* 4444 */ 9999,
-/* 4445 */ 975028,
+/* 4445 */ 971028,
 /* 4446 */ 9999,
 /* 4447 */ 9999,
-/* 4448 */ 975028,
+/* 4448 */ 971028,
 /* 4449 */ 9999,
 /* 4450 */ 9999,
 /* 4451 */ 9999,
-/* 4452 */ 976007,
+/* 4452 */ 972007,
 /* 4453 */ 9999,
 /* 4454 */ 9999,
 /* 4455 */ 9999,
-/* 4456 */ 976013,
+/* 4456 */ 972013,
 /* 4457 */ 9999,
 /* 4458 */ 9999,
-/* 4459 */ 976013,
+/* 4459 */ 972013,
 /* 4460 */ 9999,
 /* 4461 */ 9999,
 /* 4462 */ 9999,
-/* 4463 */ 977012,
+/* 4463 */ 973012,
 /* 4464 */ 9999,
 /* 4465 */ 9999,
-/* 4466 */ 977012,
+/* 4466 */ 973012,
 /* 4467 */ 9999,
-/* 4468 */ 977020,
-/* 4469 */ 977030,
-/* 4470 */ 977025,
+/* 4468 */ 973020,
+/* 4469 */ 973030,
+/* 4470 */ 973025,
 /* 4471 */ 9999,
-/* 4472 */ 977025,
+/* 4472 */ 973025,
 /* 4473 */ 9999,
 /* 4474 */ 9999,
-/* 4475 */ 977025,
+/* 4475 */ 973025,
 /* 4476 */ 9999,
 /* 4477 */ 9999,
 /* 4478 */ 9999,
-/* 4479 */ 977031,
+/* 4479 */ 973031,
 /* 4480 */ 9999,
 /* 4481 */ 9999,
 /* 4482 */ 9999,
-/* 4483 */ 977037,
+/* 4483 */ 973037,
 /* 4484 */ 9999,
 /* 4485 */ 9999,
-/* 4486 */ 977037,
+/* 4486 */ 973037,
 /* 4487 */ 9999,
 /* 4488 */ 9999,
 /* 4489 */ 9999,
-/* 4490 */ 983025,
-/* 4491 */ 984006,
-/* 4492 */ 996003,
-/* 4493 */ 981035,
+/* 4490 */ 979025,
+/* 4491 */ 980006,
+/* 4492 */ 992003,
+/* 4493 */ 977035,
 /* 4494 */ 9999,
-/* 4495 */ 981035,
+/* 4495 */ 977035,
 /* 4496 */ 9999,
 /* 4497 */ 9999,
-/* 4498 */ 981035,
+/* 4498 */ 977035,
 /* 4499 */ 9999,
 /* 4500 */ 9999,
-/* 4501 */ 984014,
+/* 4501 */ 980014,
 /* 4502 */ 9999,
-/* 4503 */ 984010,
+/* 4503 */ 980010,
 /* 4504 */ 9999,
-/* 4505 */ 984010,
+/* 4505 */ 980010,
 /* 4506 */ 9999,
 /* 4507 */ 9999,
-/* 4508 */ 985015,
-/* 4509 */ 990010,
-/* 4510 */ 985013,
+/* 4508 */ 981015,
+/* 4509 */ 986010,
+/* 4510 */ 981013,
 /* 4511 */ 9999,
-/* 4512 */ 985013,
+/* 4512 */ 981013,
 /* 4513 */ 9999,
 /* 4514 */ 9999,
-/* 4515 */ 994013,
-/* 4516 */ 994011,
+/* 4515 */ 990013,
+/* 4516 */ 990011,
 /* 4517 */ 9999,
-/* 4518 */ 994011,
+/* 4518 */ 990011,
 /* 4519 */ 9999,
 /* 4520 */ 9999,
-/* 4521 */ 994011,
+/* 4521 */ 990011,
 /* 4522 */ 9999,
-/* 4523 */ 985017,
+/* 4523 */ 981017,
 /* 4524 */ 9999,
-/* 4525 */ 985023,
+/* 4525 */ 981023,
 /* 4526 */ 9999,
 /* 4527 */ 9999,
 /* 4528 */ 9999,
-/* 4529 */ 986031,
+/* 4529 */ 982031,
 /* 4530 */ 9999,
-/* 4531 */ 986024,
+/* 4531 */ 982024,
 /* 4532 */ 9999,
 /* 4533 */ 9999,
 /* 4534 */ 9999,
-/* 4535 */ 988034,
+/* 4535 */ 984034,
 /* 4536 */ 9999,
-/* 4537 */ 988024,
+/* 4537 */ 984024,
 /* 4538 */ 9999,
-/* 4539 */ 986032,
+/* 4539 */ 982032,
 /* 4540 */ 9999,
-/* 4541 */ 986036,
+/* 4541 */ 982036,
 /* 4542 */ 9999,
 /* 4543 */ 9999,
-/* 4544 */ 986036,
+/* 4544 */ 982036,
 /* 4545 */ 9999,
-/* 4546 */ 988035,
+/* 4546 */ 984035,
 /* 4547 */ 9999,
-/* 4548 */ 988039,
+/* 4548 */ 984039,
 /* 4549 */ 9999,
 /* 4550 */ 9999,
-/* 4551 */ 988039,
+/* 4551 */ 984039,
 /* 4552 */ 9999,
 /* 4553 */ 9999,
-/* 4554 */ 990014,
+/* 4554 */ 986014,
 /* 4555 */ 9999,
-/* 4556 */ 990012,
+/* 4556 */ 986012,
 /* 4557 */ 9999,
 /* 4558 */ 9999,
 /* 4559 */ 9999,
-/* 4560 */ 991023,
+/* 4560 */ 987023,
 /* 4561 */ 9999,
-/* 4562 */ 991035,
+/* 4562 */ 987035,
 /* 4563 */ 9999,
-/* 4564 */ 991014,
+/* 4564 */ 987014,
 /* 4565 */ 9999,
 /* 4566 */ 9999,
-/* 4567 */ 993016,
+/* 4567 */ 989016,
 /* 4568 */ 9999,
-/* 4569 */ 993014,
+/* 4569 */ 989014,
 /* 4570 */ 9999,
 /* 4571 */ 9999,
-/* 4572 */ 993014,
+/* 4572 */ 989014,
 /* 4573 */ 9999,
 /* 4574 */ 9999,
 /* 4575 */ 9999,
-/* 4576 */ 996004,
+/* 4576 */ 992004,
 /* 4577 */ 9999,
 /* 4578 */ 9999,
-/* 4579 */ 996004,
+/* 4579 */ 992004,
 /* 4580 */ 9999,
-/* 4581 */ 997018,
-/* 4582 */ 997029,
+/* 4581 */ 993018,
+/* 4582 */ 993029,
 /* 4583 */ 9999,
-/* 4584 */ 997029,
+/* 4584 */ 993029,
 /* 4585 */ 9999,
 /* 4586 */ 9999,
-/* 4587 */ 997029,
+/* 4587 */ 993029,
 /* 4588 */ 9999,
-/* 4589 */ 998018,
-/* 4590 */ 998029,
+/* 4589 */ 994018,
+/* 4590 */ 994029,
 /* 4591 */ 9999,
-/* 4592 */ 998029,
+/* 4592 */ 994029,
 /* 4593 */ 9999,
 /* 4594 */ 9999,
-/* 4595 */ 998029,
+/* 4595 */ 994029,
 /* 4596 */ 9999,
 /* 4597 */ 9999,
 /* 4598 */ 9999,
 /* 4599 */ 9999,
-/* 4600 */ 1006009,
-/* 4601 */ 1007005,
+/* 4600 */ 1002009,
+/* 4601 */ 1003005,
 /* 4602 */ 9999,
-/* 4603 */ 1008007,
+/* 4603 */ 1004007,
 /* 4604 */ 9999,
 /* 4605 */ 9999,
-/* 4606 */ 1004027,
+/* 4606 */ 1000027,
 /* 4607 */ 9999,
 /* 4608 */ 9999,
-/* 4609 */ 1007010,
+/* 4609 */ 1003010,
 /* 4610 */ 9999,
-/* 4611 */ 1007008,
+/* 4611 */ 1003008,
 /* 4612 */ 9999,
 /* 4613 */ 9999,
-/* 4614 */ 1007008,
+/* 4614 */ 1003008,
 /* 4615 */ 9999,
-/* 4616 */ 1008008,
-/* 4617 */ 1008021,
+/* 4616 */ 1004008,
+/* 4617 */ 1004021,
 /* 4618 */ 9999,
-/* 4619 */ 1008021,
+/* 4619 */ 1004021,
 /* 4620 */ 9999,
 /* 4621 */ 9999,
-/* 4622 */ 1008021,
+/* 4622 */ 1004021,
 /* 4623 */ 9999,
 /* 4624 */ 9999,
-/* 4625 */ 1013015,
+/* 4625 */ 1009015,
 /* 4626 */ 9999,
 /* 4627 */ 9999,
 /* 4628 */ 9999,
-/* 4629 */ 1013013,
+/* 4629 */ 1009013,
 /* 4630 */ 9999,
 /* 4631 */ 9999,
-/* 4632 */ 1014009,
-/* 4633 */ 1014016,
+/* 4632 */ 1010009,
+/* 4633 */ 1010016,
 /* 4634 */ 9999,
 /* 4635 */ 9999,
-/* 4636 */ 1014007,
+/* 4636 */ 1010007,
 /* 4637 */ 9999,
 /* 4638 */ 9999,
-/* 4639 */ 1015011,
-/* 4640 */ 1015018,
+/* 4639 */ 1011011,
+/* 4640 */ 1011018,
 /* 4641 */ 9999,
 /* 4642 */ 9999,
-/* 4643 */ 1015009,
+/* 4643 */ 1011009,
 /* 4644 */ 9999,
-/* 4645 */ 1016005,
+/* 4645 */ 1012005,
 /* 4646 */ 9999,
-/* 4647 */ 1016015,
+/* 4647 */ 1012015,
 /* 4648 */ 9999,
-/* 4649 */ 1017005,
-/* 4650 */ 1017028,
-/* 4651 */ 1017035,
+/* 4649 */ 1013005,
+/* 4650 */ 1013028,
+/* 4651 */ 1013035,
 /* 4652 */ 9999,
 /* 4653 */ 9999,
-/* 4654 */ 1017005,
+/* 4654 */ 1013005,
 /* 4655 */ 9999,
 /* 4656 */ 9999,
-/* 4657 */ 1018013,
-/* 4658 */ 1018020,
+/* 4657 */ 1014013,
+/* 4658 */ 1014020,
 /* 4659 */ 9999,
 /* 4660 */ 9999,
-/* 4661 */ 1018011,
+/* 4661 */ 1014011,
 /* 4662 */ 9999,
 /* 4663 */ 9999,
-/* 4664 */ 1019013,
-/* 4665 */ 1019020,
+/* 4664 */ 1015013,
+/* 4665 */ 1015020,
 /* 4666 */ 9999,
 /* 4667 */ 9999,
-/* 4668 */ 1019007,
+/* 4668 */ 1015007,
 /* 4669 */ 9999,
 /* 4670 */ 9999,
-/* 4671 */ 1020013,
-/* 4672 */ 1020020,
+/* 4671 */ 1016013,
+/* 4672 */ 1016020,
 /* 4673 */ 9999,
 /* 4674 */ 9999,
-/* 4675 */ 1020007,
+/* 4675 */ 1016007,
 /* 4676 */ 9999,
 /* 4677 */ 9999,
-/* 4678 */ 1021013,
-/* 4679 */ 1021020,
+/* 4678 */ 1017013,
+/* 4679 */ 1017020,
 /* 4680 */ 9999,
 /* 4681 */ 9999,
-/* 4682 */ 1021007,
+/* 4682 */ 1017007,
 /* 4683 */ 9999,
 /* 4684 */ 9999,
-/* 4685 */ 1022013,
-/* 4686 */ 1022020,
+/* 4685 */ 1018013,
+/* 4686 */ 1018020,
 /* 4687 */ 9999,
 /* 4688 */ 9999,
-/* 4689 */ 1022007,
+/* 4689 */ 1018007,
 /* 4690 */ 9999,
 /* 4691 */ 9999,
-/* 4692 */ 1023013,
-/* 4693 */ 1023020,
+/* 4692 */ 1019013,
+/* 4693 */ 1019020,
 /* 4694 */ 9999,
 /* 4695 */ 9999,
-/* 4696 */ 1023009,
+/* 4696 */ 1019009,
 /* 4697 */ 9999,
 /* 4698 */ 9999,
 /* 4699 */ 9999,
-/* 4700 */ 1024024,
-/* 4701 */ 1024031,
+/* 4700 */ 1020024,
+/* 4701 */ 1020031,
 /* 4702 */ 9999,
 /* 4703 */ 9999,
-/* 4704 */ 1024010,
+/* 4704 */ 1020010,
 /* 4705 */ 9999,
 /* 4706 */ 9999,
-/* 4707 */ 1025013,
-/* 4708 */ 1025020,
+/* 4707 */ 1021013,
+/* 4708 */ 1021020,
 /* 4709 */ 9999,
 /* 4710 */ 9999,
-/* 4711 */ 1025008,
+/* 4711 */ 1021008,
 /* 4712 */ 9999,
 /* 4713 */ 9999,
-/* 4714 */ 1026013,
-/* 4715 */ 1026020,
+/* 4714 */ 1022013,
+/* 4715 */ 1022020,
 /* 4716 */ 9999,
 /* 4717 */ 9999,
-/* 4718 */ 1026009,
+/* 4718 */ 1022009,
 /* 4719 */ 9999,
 /* 4720 */ 9999,
-/* 4721 */ 1027013,
-/* 4722 */ 1027020,
+/* 4721 */ 1023013,
+/* 4722 */ 1023020,
 /* 4723 */ 9999,
 /* 4724 */ 9999,
-/* 4725 */ 1027008,
+/* 4725 */ 1023008,
 /* 4726 */ 9999,
 /* 4727 */ 9999,
-/* 4728 */ 1028019,
-/* 4729 */ 1028026,
-/* 4730 */ 1028035,
+/* 4728 */ 1024019,
+/* 4729 */ 1024026,
+/* 4730 */ 1024035,
 /* 4731 */ 9999,
-/* 4732 */ 1028013,
+/* 4732 */ 1024013,
 /* 4733 */ 9999,
 /* 4734 */ 9999,
-/* 4735 */ 1029012,
-/* 4736 */ 1029019,
-/* 4737 */ 1029037,
+/* 4735 */ 1025012,
+/* 4736 */ 1025019,
+/* 4737 */ 1025037,
 /* 4738 */ 9999,
 /* 4739 */ 9999,
-/* 4740 */ 1029010,
+/* 4740 */ 1025010,
 /* 4741 */ 9999,
 /* 4742 */ 9999,
 /* 4743 */ 9999,
-/* 4744 */ 1031015,
+/* 4744 */ 1027015,
 /* 4745 */ 9999,
 /* 4746 */ 9999,
 /* 4747 */ 9999,
-/* 4748 */ 1031009,
+/* 4748 */ 1027009,
 /* 4749 */ 9999,
 /* 4750 */ 9999,
 /* 4751 */ 9999,
-/* 4752 */ 1033015,
+/* 4752 */ 1029015,
 /* 4753 */ 9999,
-/* 4754 */ 1033030,
+/* 4754 */ 1029030,
 /* 4755 */ 9999,
 /* 4756 */ 9999,
 /* 4757 */ 9999,
-/* 4758 */ 1033009,
+/* 4758 */ 1029009,
 /* 4759 */ 9999,
 /* 4760 */ 9999,
 /* 4761 */ 9999,
-/* 4762 */ 1035015,
+/* 4762 */ 1031015,
 /* 4763 */ 9999,
-/* 4764 */ 1035030,
+/* 4764 */ 1031030,
 /* 4765 */ 9999,
-/* 4766 */ 1035046,
+/* 4766 */ 1031046,
 /* 4767 */ 9999,
 /* 4768 */ 9999,
 /* 4769 */ 9999,
-/* 4770 */ 1035009,
+/* 4770 */ 1031009,
 /* 4771 */ 9999,
 /* 4772 */ 9999,
 /* 4773 */ 9999,
-/* 4774 */ 1038015,
+/* 4774 */ 1034015,
 /* 4775 */ 9999,
-/* 4776 */ 1038030,
+/* 4776 */ 1034030,
 /* 4777 */ 9999,
-/* 4778 */ 1038046,
+/* 4778 */ 1034046,
 /* 4779 */ 9999,
-/* 4780 */ 1038062,
+/* 4780 */ 1034062,
 /* 4781 */ 9999,
 /* 4782 */ 9999,
 /* 4783 */ 9999,
-/* 4784 */ 1038009,
+/* 4784 */ 1034009,
 /* 4785 */ 9999,
 /* 4786 */ 9999,
-/* 4787 */ 1042013,
-/* 4788 */ 1042020,
+/* 4787 */ 1038013,
+/* 4788 */ 1038020,
 /* 4789 */ 9999,
 /* 4790 */ 9999,
-/* 4791 */ 1042011,
+/* 4791 */ 1038011,
 /* 4792 */ 9999,
 /* 4793 */ 9999,
-/* 4794 */ 1045013,
-/* 4795 */ 1045020,
+/* 4794 */ 1041013,
+/* 4795 */ 1041020,
 /* 4796 */ 9999,
 /* 4797 */ 9999,
-/* 4798 */ 1045010,
+/* 4798 */ 1041010,
 /* 4799 */ 9999,
 /* 4800 */ 9999,
-/* 4801 */ 1048011,
-/* 4802 */ 1048018,
-/* 4803 */ 1049019,
+/* 4801 */ 1044011,
+/* 4802 */ 1044018,
+/* 4803 */ 1045019,
 /* 4804 */ 9999,
 /* 4805 */ 9999,
-/* 4806 */ 1048009,
+/* 4806 */ 1044009,
 /* 4807 */ 9999,
 /* 4808 */ 9999,
-/* 4809 */ 1050012,
-/* 4810 */ 1050019,
+/* 4809 */ 1046012,
+/* 4810 */ 1046019,
 /* 4811 */ 9999,
 /* 4812 */ 9999,
-/* 4813 */ 1050010,
+/* 4813 */ 1046010,
 /* 4814 */ 9999,
 /* 4815 */ 9999,
-/* 4816 */ 1053013,
-/* 4817 */ 1053020,
+/* 4816 */ 1049013,
+/* 4817 */ 1049020,
 /* 4818 */ 9999,
 /* 4819 */ 9999,
-/* 4820 */ 1053011,
+/* 4820 */ 1049011,
 /* 4821 */ 9999,
 /* 4822 */ 9999,
-/* 4823 */ 1055012,
-/* 4824 */ 1055019,
+/* 4823 */ 1051012,
+/* 4824 */ 1051019,
 /* 4825 */ 9999,
 /* 4826 */ 9999,
-/* 4827 */ 1055010,
+/* 4827 */ 1051010,
 /* 4828 */ 9999,
 /* 4829 */ 9999,
-/* 4830 */ 1057011,
-/* 4831 */ 1057018,
+/* 4830 */ 1053011,
+/* 4831 */ 1053018,
 /* 4832 */ 9999,
-/* 4833 */ 1057009,
+/* 4833 */ 1053009,
 /* 4834 */ 9999,
-/* 4835 */ 1065005,
+/* 4835 */ 1061005,
 /* 4836 */ 9999,
-/* 4837 */ 1065013,
+/* 4837 */ 1061013,
 /* 4838 */ 9999,
-/* 4839 */ 1066005,
+/* 4839 */ 1062005,
 /* 4840 */ 9999,
-/* 4841 */ 1066014,
+/* 4841 */ 1062014,
 /* 4842 */ 9999,
-/* 4843 */ 1067005,
+/* 4843 */ 1063005,
 /* 4844 */ 9999,
-/* 4845 */ 1067016,
+/* 4845 */ 1063016,
 /* 4846 */ 9999,
-/* 4847 */ 1068005,
+/* 4847 */ 1064005,
 /* 4848 */ 9999,
-/* 4849 */ 1068017,
+/* 4849 */ 1064017,
 /* 4850 */ 9999,
 /* 4851 */ 9999,
 /* 4852 */ 9999,
-/* 4853 */ 1013016,
+/* 4853 */ 1009016,
 /* 4854 */ 9999,
 /* 4855 */ 9999,
-/* 4856 */ 1013016,
+/* 4856 */ 1009016,
 /* 4857 */ 9999,
 /* 4858 */ 9999,
 /* 4859 */ 9999,
-/* 4860 */ 1014010,
+/* 4860 */ 1010010,
 /* 4861 */ 9999,
 /* 4862 */ 9999,
-/* 4863 */ 1014010,
+/* 4863 */ 1010010,
 /* 4864 */ 9999,
 /* 4865 */ 9999,
 /* 4866 */ 9999,
-/* 4867 */ 1015012,
+/* 4867 */ 1011012,
 /* 4868 */ 9999,
 /* 4869 */ 9999,
-/* 4870 */ 1015012,
+/* 4870 */ 1011012,
 /* 4871 */ 9999,
 /* 4872 */ 9999,
 /* 4873 */ 9999,
-/* 4874 */ 1017015,
+/* 4874 */ 1013015,
 /* 4875 */ 9999,
 /* 4876 */ 9999,
 /* 4877 */ 9999,
-/* 4878 */ 1017025,
+/* 4878 */ 1013025,
 /* 4879 */ 9999,
 /* 4880 */ 9999,
 /* 4881 */ 9999,
-/* 4882 */ 1017029,
+/* 4882 */ 1013029,
 /* 4883 */ 9999,
 /* 4884 */ 9999,
-/* 4885 */ 1017029,
+/* 4885 */ 1013029,
 /* 4886 */ 9999,
 /* 4887 */ 9999,
 /* 4888 */ 9999,
-/* 4889 */ 1018014,
+/* 4889 */ 1014014,
 /* 4890 */ 9999,
 /* 4891 */ 9999,
-/* 4892 */ 1018014,
+/* 4892 */ 1014014,
 /* 4893 */ 9999,
 /* 4894 */ 9999,
 /* 4895 */ 9999,
-/* 4896 */ 1019014,
+/* 4896 */ 1015014,
 /* 4897 */ 9999,
 /* 4898 */ 9999,
-/* 4899 */ 1019014,
+/* 4899 */ 1015014,
 /* 4900 */ 9999,
 /* 4901 */ 9999,
 /* 4902 */ 9999,
-/* 4903 */ 1020014,
+/* 4903 */ 1016014,
 /* 4904 */ 9999,
 /* 4905 */ 9999,
-/* 4906 */ 1020014,
+/* 4906 */ 1016014,
 /* 4907 */ 9999,
 /* 4908 */ 9999,
 /* 4909 */ 9999,
-/* 4910 */ 1021014,
+/* 4910 */ 1017014,
 /* 4911 */ 9999,
 /* 4912 */ 9999,
-/* 4913 */ 1021014,
+/* 4913 */ 1017014,
 /* 4914 */ 9999,
 /* 4915 */ 9999,
 /* 4916 */ 9999,
-/* 4917 */ 1022014,
+/* 4917 */ 1018014,
 /* 4918 */ 9999,
 /* 4919 */ 9999,
-/* 4920 */ 1022014,
+/* 4920 */ 1018014,
 /* 4921 */ 9999,
 /* 4922 */ 9999,
 /* 4923 */ 9999,
-/* 4924 */ 1023014,
+/* 4924 */ 1019014,
 /* 4925 */ 9999,
 /* 4926 */ 9999,
-/* 4927 */ 1023014,
+/* 4927 */ 1019014,
 /* 4928 */ 9999,
 /* 4929 */ 9999,
 /* 4930 */ 9999,
-/* 4931 */ 1024025,
+/* 4931 */ 1020025,
 /* 4932 */ 9999,
 /* 4933 */ 9999,
-/* 4934 */ 1024025,
+/* 4934 */ 1020025,
 /* 4935 */ 9999,
 /* 4936 */ 9999,
 /* 4937 */ 9999,
-/* 4938 */ 1025014,
+/* 4938 */ 1021014,
 /* 4939 */ 9999,
 /* 4940 */ 9999,
-/* 4941 */ 1025014,
+/* 4941 */ 1021014,
 /* 4942 */ 9999,
 /* 4943 */ 9999,
 /* 4944 */ 9999,
-/* 4945 */ 1026014,
+/* 4945 */ 1022014,
 /* 4946 */ 9999,
 /* 4947 */ 9999,
-/* 4948 */ 1026014,
+/* 4948 */ 1022014,
 /* 4949 */ 9999,
 /* 4950 */ 9999,
 /* 4951 */ 9999,
-/* 4952 */ 1027014,
+/* 4952 */ 1023014,
 /* 4953 */ 9999,
 /* 4954 */ 9999,
-/* 4955 */ 1027014,
+/* 4955 */ 1023014,
 /* 4956 */ 9999,
 /* 4957 */ 9999,
 /* 4958 */ 9999,
-/* 4959 */ 1028020,
+/* 4959 */ 1024020,
 /* 4960 */ 9999,
 /* 4961 */ 9999,
-/* 4962 */ 1028020,
+/* 4962 */ 1024020,
 /* 4963 */ 9999,
 /* 4964 */ 9999,
 /* 4965 */ 9999,
-/* 4966 */ 1028036,
+/* 4966 */ 1024036,
 /* 4967 */ 9999,
 /* 4968 */ 9999,
 /* 4969 */ 9999,
-/* 4970 */ 1028040,
+/* 4970 */ 1024040,
 /* 4971 */ 9999,
 /* 4972 */ 9999,
 /* 4973 */ 9999,
-/* 4974 */ 1029013,
+/* 4974 */ 1025013,
 /* 4975 */ 9999,
 /* 4976 */ 9999,
-/* 4977 */ 1029013,
+/* 4977 */ 1025013,
 /* 4978 */ 9999,
 /* 4979 */ 9999,
-/* 4980 */ 1029042,
-/* 4981 */ 1029038,
+/* 4980 */ 1025042,
+/* 4981 */ 1025038,
 /* 4982 */ 9999,
-/* 4983 */ 1029038,
+/* 4983 */ 1025038,
 /* 4984 */ 9999,
 /* 4985 */ 9999,
-/* 4986 */ 1029038,
+/* 4986 */ 1025038,
 /* 4987 */ 9999,
 /* 4988 */ 9999,
 /* 4989 */ 9999,
-/* 4990 */ 1042014,
+/* 4990 */ 1038014,
 /* 4991 */ 9999,
 /* 4992 */ 9999,
-/* 4993 */ 1042014,
+/* 4993 */ 1038014,
 /* 4994 */ 9999,
-/* 4995 */ 1042021,
-/* 4996 */ 1044007,
-/* 4997 */ 1042021,
+/* 4995 */ 1038021,
+/* 4996 */ 1040007,
+/* 4997 */ 1038021,
 /* 4998 */ 9999,
-/* 4999 */ 1042021,
+/* 4999 */ 1038021,
 /* 5000 */ 9999,
 /* 5001 */ 9999,
-/* 5002 */ 1042021,
+/* 5002 */ 1038021,
 /* 5003 */ 9999,
-/* 5004 */ 1042023,
+/* 5004 */ 1038023,
 /* 5005 */ 9999,
-/* 5006 */ 1042028,
+/* 5006 */ 1038028,
 /* 5007 */ 9999,
-/* 5008 */ 1043015,
-/* 5009 */ 1043025,
+/* 5008 */ 1039015,
+/* 5009 */ 1039025,
 /* 5010 */ 9999,
-/* 5011 */ 1043015,
+/* 5011 */ 1039015,
 /* 5012 */ 9999,
 /* 5013 */ 9999,
 /* 5014 */ 9999,
-/* 5015 */ 1043016,
+/* 5015 */ 1039016,
 /* 5016 */ 9999,
 /* 5017 */ 9999,
 /* 5018 */ 9999,
-/* 5019 */ 1043020,
+/* 5019 */ 1039020,
 /* 5020 */ 9999,
 /* 5021 */ 9999,
 /* 5022 */ 9999,
-/* 5023 */ 1044008,
+/* 5023 */ 1040008,
 /* 5024 */ 9999,
 /* 5025 */ 9999,
-/* 5026 */ 1044008,
+/* 5026 */ 1040008,
 /* 5027 */ 9999,
 /* 5028 */ 9999,
 /* 5029 */ 9999,
-/* 5030 */ 1045014,
+/* 5030 */ 1041014,
 /* 5031 */ 9999,
 /* 5032 */ 9999,
-/* 5033 */ 1045014,
+/* 5033 */ 1041014,
 /* 5034 */ 9999,
-/* 5035 */ 1045021,
-/* 5036 */ 1047007,
-/* 5037 */ 1045021,
+/* 5035 */ 1041021,
+/* 5036 */ 1043007,
+/* 5037 */ 1041021,
 /* 5038 */ 9999,
-/* 5039 */ 1045021,
+/* 5039 */ 1041021,
 /* 5040 */ 9999,
 /* 5041 */ 9999,
-/* 5042 */ 1045021,
+/* 5042 */ 1041021,
 /* 5043 */ 9999,
-/* 5044 */ 1045023,
+/* 5044 */ 1041023,
 /* 5045 */ 9999,
-/* 5046 */ 1045028,
+/* 5046 */ 1041028,
 /* 5047 */ 9999,
-/* 5048 */ 1046015,
-/* 5049 */ 1046025,
+/* 5048 */ 1042015,
+/* 5049 */ 1042025,
 /* 5050 */ 9999,
-/* 5051 */ 1046015,
+/* 5051 */ 1042015,
 /* 5052 */ 9999,
 /* 5053 */ 9999,
 /* 5054 */ 9999,
-/* 5055 */ 1046016,
+/* 5055 */ 1042016,
 /* 5056 */ 9999,
 /* 5057 */ 9999,
 /* 5058 */ 9999,
-/* 5059 */ 1046020,
+/* 5059 */ 1042020,
 /* 5060 */ 9999,
 /* 5061 */ 9999,
 /* 5062 */ 9999,
-/* 5063 */ 1047008,
+/* 5063 */ 1043008,
 /* 5064 */ 9999,
 /* 5065 */ 9999,
-/* 5066 */ 1047008,
+/* 5066 */ 1043008,
 /* 5067 */ 9999,
 /* 5068 */ 9999,
 /* 5069 */ 9999,
-/* 5070 */ 1048012,
+/* 5070 */ 1044012,
 /* 5071 */ 9999,
 /* 5072 */ 9999,
-/* 5073 */ 1048012,
+/* 5073 */ 1044012,
 /* 5074 */ 9999,
-/* 5075 */ 1048019,
+/* 5075 */ 1044019,
 /* 5076 */ 9999,
-/* 5077 */ 1048024,
+/* 5077 */ 1044024,
 /* 5078 */ 9999,
-/* 5079 */ 1048024,
+/* 5079 */ 1044024,
 /* 5080 */ 9999,
 /* 5081 */ 9999,
-/* 5082 */ 1048024,
+/* 5082 */ 1044024,
 /* 5083 */ 9999,
 /* 5084 */ 9999,
 /* 5085 */ 9999,
-/* 5086 */ 1050013,
+/* 5086 */ 1046013,
 /* 5087 */ 9999,
 /* 5088 */ 9999,
-/* 5089 */ 1050013,
+/* 5089 */ 1046013,
 /* 5090 */ 9999,
-/* 5091 */ 1050021,
-/* 5092 */ 1052006,
-/* 5093 */ 1050027,
+/* 5091 */ 1046021,
+/* 5092 */ 1048006,
+/* 5093 */ 1046027,
 /* 5094 */ 9999,
-/* 5095 */ 1050027,
+/* 5095 */ 1046027,
 /* 5096 */ 9999,
 /* 5097 */ 9999,
-/* 5098 */ 1050027,
+/* 5098 */ 1046027,
 /* 5099 */ 9999,
 /* 5100 */ 9999,
 /* 5101 */ 9999,
-/* 5102 */ 1052007,
+/* 5102 */ 1048007,
 /* 5103 */ 9999,
 /* 5104 */ 9999,
-/* 5105 */ 1052007,
+/* 5105 */ 1048007,
 /* 5106 */ 9999,
 /* 5107 */ 9999,
 /* 5108 */ 9999,
-/* 5109 */ 1053014,
+/* 5109 */ 1049014,
 /* 5110 */ 9999,
 /* 5111 */ 9999,
-/* 5112 */ 1053014,
+/* 5112 */ 1049014,
 /* 5113 */ 9999,
-/* 5114 */ 1053022,
-/* 5115 */ 1054006,
-/* 5116 */ 1053028,
+/* 5114 */ 1049022,
+/* 5115 */ 1050006,
+/* 5116 */ 1049028,
 /* 5117 */ 9999,
-/* 5118 */ 1053028,
+/* 5118 */ 1049028,
 /* 5119 */ 9999,
 /* 5120 */ 9999,
-/* 5121 */ 1053028,
+/* 5121 */ 1049028,
 /* 5122 */ 9999,
 /* 5123 */ 9999,
 /* 5124 */ 9999,
-/* 5125 */ 1054007,
+/* 5125 */ 1050007,
 /* 5126 */ 9999,
 /* 5127 */ 9999,
-/* 5128 */ 1054007,
+/* 5128 */ 1050007,
 /* 5129 */ 9999,
 /* 5130 */ 9999,
 /* 5131 */ 9999,
-/* 5132 */ 1055013,
+/* 5132 */ 1051013,
 /* 5133 */ 9999,
 /* 5134 */ 9999,
-/* 5135 */ 1055013,
+/* 5135 */ 1051013,
 /* 5136 */ 9999,
-/* 5137 */ 1055021,
-/* 5138 */ 1056006,
-/* 5139 */ 1055027,
+/* 5137 */ 1051021,
+/* 5138 */ 1052006,
+/* 5139 */ 1051027,
 /* 5140 */ 9999,
-/* 5141 */ 1055027,
+/* 5141 */ 1051027,
 /* 5142 */ 9999,
 /* 5143 */ 9999,
-/* 5144 */ 1055027,
+/* 5144 */ 1051027,
 /* 5145 */ 9999,
 /* 5146 */ 9999,
 /* 5147 */ 9999,
-/* 5148 */ 1056007,
+/* 5148 */ 1052007,
 /* 5149 */ 9999,
 /* 5150 */ 9999,
-/* 5151 */ 1056007,
+/* 5151 */ 1052007,
 /* 5152 */ 9999,
 /* 5153 */ 9999,
 /* 5154 */ 9999,
-/* 5155 */ 1057012,
+/* 5155 */ 1053012,
 /* 5156 */ 9999,
 /* 5157 */ 9999,
-/* 5158 */ 1057012,
+/* 5158 */ 1053012,
 /* 5159 */ 9999,
-/* 5160 */ 1057020,
-/* 5161 */ 1064006,
-/* 5162 */ 1057020,
+/* 5160 */ 1053020,
+/* 5161 */ 1060006,
+/* 5162 */ 1053020,
 /* 5163 */ 9999,
-/* 5164 */ 1057020,
+/* 5164 */ 1053020,
 /* 5165 */ 9999,
 /* 5166 */ 9999,
-/* 5167 */ 1057020,
+/* 5167 */ 1053020,
 /* 5168 */ 9999,
-/* 5169 */ 1058006,
+/* 5169 */ 1054006,
 /* 5170 */ 9999,
-/* 5171 */ 1058011,
+/* 5171 */ 1054011,
 /* 5172 */ 9999,
-/* 5173 */ 1063008,
-/* 5174 */ 1063018,
+/* 5173 */ 1059008,
+/* 5174 */ 1059018,
 /* 5175 */ 9999,
-/* 5176 */ 1063008,
+/* 5176 */ 1059008,
 /* 5177 */ 9999,
 /* 5178 */ 9999,
 /* 5179 */ 9999,
-/* 5180 */ 1063009,
+/* 5180 */ 1059009,
 /* 5181 */ 9999,
 /* 5182 */ 9999,
 /* 5183 */ 9999,
-/* 5184 */ 1063013,
+/* 5184 */ 1059013,
 /* 5185 */ 9999,
 /* 5186 */ 9999,
 /* 5187 */ 9999,
-/* 5188 */ 1064007,
+/* 5188 */ 1060007,
 /* 5189 */ 9999,
 /* 5190 */ 9999,
 /* 5191 */ 9999,
-/* 5192 */ 1064011,
+/* 5192 */ 1060011,
 /* 5193 */ 9999,
-/* 5194 */ 1073003,
+/* 5194 */ 1069003,
 /* 5195 */ 9999,
-/* 5196 */ 1074005,
-/* 5197 */ 1076003,
-/* 5198 */ 1078003,
-/* 5199 */ 1079005,
-/* 5200 */ 1091003,
+/* 5196 */ 1070005,
+/* 5197 */ 1072003,
+/* 5198 */ 1074003,
+/* 5199 */ 1075005,
+/* 5200 */ 1087003,
 /* 5201 */ 9999,
-/* 5202 */ 1071032,
+/* 5202 */ 1067032,
 /* 5203 */ 9999,
-/* 5204 */ 1104005,
+/* 5204 */ 1100005,
 /* 5205 */ 9999,
-/* 5206 */ 1104020,
-/* 5207 */ 1106019,
+/* 5206 */ 1100020,
+/* 5207 */ 1102019,
 /* 5208 */ 9999,
-/* 5209 */ 1104010,
+/* 5209 */ 1100010,
 /* 5210 */ 9999,
-/* 5211 */ 1074007,
+/* 5211 */ 1070007,
 /* 5212 */ 9999,
-/* 5213 */ 1074015,
+/* 5213 */ 1070015,
 /* 5214 */ 9999,
-/* 5215 */ 1075009,
+/* 5215 */ 1071009,
 /* 5216 */ 9999,
 /* 5217 */ 9999,
-/* 5218 */ 1075014,
+/* 5218 */ 1071014,
 /* 5219 */ 9999,
 /* 5220 */ 9999,
-/* 5221 */ 1075014,
+/* 5221 */ 1071014,
 /* 5222 */ 9999,
-/* 5223 */ 1076004,
+/* 5223 */ 1072004,
 /* 5224 */ 9999,
-/* 5225 */ 1076009,
+/* 5225 */ 1072009,
 /* 5226 */ 9999,
 /* 5227 */ 9999,
-/* 5228 */ 1076009,
+/* 5228 */ 1072009,
 /* 5229 */ 9999,
 /* 5230 */ 9999,
 /* 5231 */ 9999,
-/* 5232 */ 1078006,
+/* 5232 */ 1074006,
 /* 5233 */ 9999,
 /* 5234 */ 9999,
-/* 5235 */ 1078006,
+/* 5235 */ 1074006,
 /* 5236 */ 9999,
 /* 5237 */ 9999,
-/* 5238 */ 1079011,
-/* 5239 */ 1079040,
+/* 5238 */ 1075011,
+/* 5239 */ 1075040,
 /* 5240 */ 9999,
 /* 5241 */ 9999,
-/* 5242 */ 1079007,
+/* 5242 */ 1075007,
 /* 5243 */ 9999,
 /* 5244 */ 9999,
-/* 5245 */ 1079007,
+/* 5245 */ 1075007,
 /* 5246 */ 9999,
 /* 5247 */ 9999,
 /* 5248 */ 9999,
-/* 5249 */ 1079018,
+/* 5249 */ 1075018,
 /* 5250 */ 9999,
 /* 5251 */ 9999,
 /* 5252 */ 9999,
-/* 5253 */ 1079026,
+/* 5253 */ 1075026,
 /* 5254 */ 9999,
 /* 5255 */ 9999,
 /* 5256 */ 9999,
-/* 5257 */ 1079037,
+/* 5257 */ 1075037,
 /* 5258 */ 9999,
 /* 5259 */ 9999,
-/* 5260 */ 1092005,
-/* 5261 */ 1093005,
-/* 5262 */ 1094005,
-/* 5263 */ 1095005,
-/* 5264 */ 1091006,
+/* 5260 */ 1088005,
+/* 5261 */ 1089005,
+/* 5262 */ 1090005,
+/* 5263 */ 1091005,
+/* 5264 */ 1087006,
 /* 5265 */ 9999,
-/* 5266 */ 1091006,
+/* 5266 */ 1087006,
 /* 5267 */ 9999,
 /* 5268 */ 9999,
-/* 5269 */ 1091006,
+/* 5269 */ 1087006,
 /* 5270 */ 9999,
-/* 5271 */ 1092007,
+/* 5271 */ 1088007,
 /* 5272 */ 9999,
-/* 5273 */ 1092015,
+/* 5273 */ 1088015,
 /* 5274 */ 9999,
 /* 5275 */ 9999,
-/* 5276 */ 1092015,
+/* 5276 */ 1088015,
 /* 5277 */ 9999,
-/* 5278 */ 1093006,
+/* 5278 */ 1089006,
 /* 5279 */ 9999,
-/* 5280 */ 1093011,
+/* 5280 */ 1089011,
 /* 5281 */ 9999,
 /* 5282 */ 9999,
-/* 5283 */ 1093011,
+/* 5283 */ 1089011,
 /* 5284 */ 9999,
 /* 5285 */ 9999,
 /* 5286 */ 9999,
-/* 5287 */ 1094008,
+/* 5287 */ 1090008,
 /* 5288 */ 9999,
 /* 5289 */ 9999,
-/* 5290 */ 1094008,
+/* 5290 */ 1090008,
 /* 5291 */ 9999,
 /* 5292 */ 9999,
-/* 5293 */ 1095011,
-/* 5294 */ 1095040,
+/* 5293 */ 1091011,
+/* 5294 */ 1091040,
 /* 5295 */ 9999,
 /* 5296 */ 9999,
-/* 5297 */ 1095007,
+/* 5297 */ 1091007,
 /* 5298 */ 9999,
 /* 5299 */ 9999,
-/* 5300 */ 1095007,
+/* 5300 */ 1091007,
 /* 5301 */ 9999,
 /* 5302 */ 9999,
 /* 5303 */ 9999,
-/* 5304 */ 1095018,
+/* 5304 */ 1091018,
 /* 5305 */ 9999,
 /* 5306 */ 9999,
 /* 5307 */ 9999,
-/* 5308 */ 1095026,
+/* 5308 */ 1091026,
 /* 5309 */ 9999,
 /* 5310 */ 9999,
 /* 5311 */ 9999,
-/* 5312 */ 1095037,
+/* 5312 */ 1091037,
 /* 5313 */ 9999,
-/* 5314 */ 1106021,
+/* 5314 */ 1102021,
 /* 5315 */ 9999,
-/* 5316 */ 1106026,
+/* 5316 */ 1102026,
 /* 5317 */ 9999,
 /* 5318 */ 9999,
-/* 5319 */ 1106026,
+/* 5319 */ 1102026,
 /* 5320 */ 9999,
 /* 5321 */ 9999,
 /* 5322 */ 9999,
-/* 5323 */ 1110018,
+/* 5323 */ 1106018,
 /* 5324 */ 9999,
 /* 5325 */ 9999,
 /* 5326 */ 9999,
 /* 5327 */ 9999,
-/* 5328 */ 1113028,
+/* 5328 */ 1109028,
 /* 5329 */ 9999,
-/* 5330 */ 1119007,
+/* 5330 */ 1115007,
 /* 5331 */ 9999,
 /* 5332 */ 9999,
-/* 5333 */ 1113008,
+/* 5333 */ 1109008,
 /* 5334 */ 9999,
-/* 5335 */ 1119008,
-/* 5336 */ 1119019,
+/* 5335 */ 1115008,
+/* 5336 */ 1115019,
 /* 5337 */ 9999,
-/* 5338 */ 1119019,
+/* 5338 */ 1115019,
 /* 5339 */ 9999,
 /* 5340 */ 9999,
-/* 5341 */ 1119019,
+/* 5341 */ 1115019,
 /* 5342 */ 9999,
 /* 5343 */ 9999,
-/* 5344 */ 1123016,
+/* 5344 */ 1119016,
 /* 5345 */ 9999,
 /* 5346 */ 9999,
 /* 5347 */ 9999,
-/* 5348 */ 1123013,
+/* 5348 */ 1119013,
 /* 5349 */ 9999,
 /* 5350 */ 9999,
-/* 5351 */ 1124016,
-/* 5352 */ 1124023,
+/* 5351 */ 1120016,
+/* 5352 */ 1120023,
 /* 5353 */ 9999,
 /* 5354 */ 9999,
-/* 5355 */ 1124012,
+/* 5355 */ 1120012,
 /* 5356 */ 9999,
 /* 5357 */ 9999,
-/* 5358 */ 1125016,
-/* 5359 */ 1125023,
+/* 5358 */ 1121016,
+/* 5359 */ 1121023,
 /* 5360 */ 9999,
 /* 5361 */ 9999,
-/* 5362 */ 1125014,
+/* 5362 */ 1121014,
 /* 5363 */ 9999,
 /* 5364 */ 9999,
-/* 5365 */ 1126016,
-/* 5366 */ 1126023,
+/* 5365 */ 1122016,
+/* 5366 */ 1122023,
 /* 5367 */ 9999,
 /* 5368 */ 9999,
 /* 5369 */ 9999,
-/* 5370 */ 1126010,
+/* 5370 */ 1122010,
 /* 5371 */ 9999,
 /* 5372 */ 9999,
 /* 5373 */ 9999,
-/* 5374 */ 1123017,
+/* 5374 */ 1119017,
 /* 5375 */ 9999,
 /* 5376 */ 9999,
-/* 5377 */ 1123017,
+/* 5377 */ 1119017,
 /* 5378 */ 9999,
 /* 5379 */ 9999,
 /* 5380 */ 9999,
-/* 5381 */ 1124017,
+/* 5381 */ 1120017,
 /* 5382 */ 9999,
 /* 5383 */ 9999,
-/* 5384 */ 1124017,
+/* 5384 */ 1120017,
 /* 5385 */ 9999,
 /* 5386 */ 9999,
 /* 5387 */ 9999,
-/* 5388 */ 1125017,
+/* 5388 */ 1121017,
 /* 5389 */ 9999,
 /* 5390 */ 9999,
-/* 5391 */ 1125017,
+/* 5391 */ 1121017,
 /* 5392 */ 9999,
 /* 5393 */ 9999,
 /* 5394 */ 9999,
-/* 5395 */ 1126017,
+/* 5395 */ 1122017,
 /* 5396 */ 9999,
 /* 5397 */ 9999,
-/* 5398 */ 1126017,
+/* 5398 */ 1122017,
 /* 5399 */ 9999,
 /* 5400 */ 9999,
 /* 5401 */ 9999,
-/* 5402 */ 1134005,
+/* 5402 */ 1130005,
 /* 5403 */ 9999,
-/* 5404 */ 1136009,
+/* 5404 */ 1132009,
 /* 5405 */ 9999,
 /* 5406 */ 9999,
-/* 5407 */ 1131016,
+/* 5407 */ 1127016,
 /* 5408 */ 9999,
 /* 5409 */ 9999,
-/* 5410 */ 1134011,
+/* 5410 */ 1130011,
 /* 5411 */ 9999,
-/* 5412 */ 1134007,
+/* 5412 */ 1130007,
 /* 5413 */ 9999,
 /* 5414 */ 9999,
-/* 5415 */ 1134007,
+/* 5415 */ 1130007,
 /* 5416 */ 9999,
-/* 5417 */ 1136010,
-/* 5418 */ 1136024,
+/* 5417 */ 1132010,
+/* 5418 */ 1132024,
 /* 5419 */ 9999,
-/* 5420 */ 1136024,
+/* 5420 */ 1132024,
 /* 5421 */ 9999,
 /* 5422 */ 9999,
-/* 5423 */ 1136024,
+/* 5423 */ 1132024,
 /* 5424 */ 9999,
 /* 5425 */ 9999,
 /* 5426 */ 9999,
-/* 5427 */ 1140017,
+/* 5427 */ 1136017,
 /* 5428 */ 9999,
 /* 5429 */ 9999,
-/* 5430 */ 1140011,
+/* 5430 */ 1136011,
 /* 5431 */ 9999,
 /* 5432 */ 9999,
 /* 5433 */ 9999,
-/* 5434 */ 1141015,
+/* 5434 */ 1137015,
 /* 5435 */ 9999,
 /* 5436 */ 9999,
-/* 5437 */ 1141009,
+/* 5437 */ 1137009,
 /* 5438 */ 9999,
 /* 5439 */ 9999,
 /* 5440 */ 9999,
-/* 5441 */ 1142016,
+/* 5441 */ 1138016,
 /* 5442 */ 9999,
 /* 5443 */ 9999,
-/* 5444 */ 1142010,
+/* 5444 */ 1138010,
 /* 5445 */ 9999,
 /* 5446 */ 9999,
 /* 5447 */ 9999,
-/* 5448 */ 1143017,
+/* 5448 */ 1139017,
 /* 5449 */ 9999,
 /* 5450 */ 9999,
-/* 5451 */ 1143011,
+/* 5451 */ 1139011,
 /* 5452 */ 9999,
 /* 5453 */ 9999,
 /* 5454 */ 9999,
-/* 5455 */ 1144017,
+/* 5455 */ 1140017,
 /* 5456 */ 9999,
 /* 5457 */ 9999,
 /* 5458 */ 9999,
-/* 5459 */ 1144011,
+/* 5459 */ 1140011,
 /* 5460 */ 9999,
 /* 5461 */ 9999,
 /* 5462 */ 9999,
-/* 5463 */ 1145017,
-/* 5464 */ 1145027,
-/* 5465 */ 1146030,
+/* 5463 */ 1141017,
+/* 5464 */ 1141027,
+/* 5465 */ 1142030,
 /* 5466 */ 9999,
 /* 5467 */ 9999,
-/* 5468 */ 1145011,
+/* 5468 */ 1141011,
 /* 5469 */ 9999,
 /* 5470 */ 9999,
 /* 5471 */ 9999,
-/* 5472 */ 1147015,
+/* 5472 */ 1143015,
 /* 5473 */ 9999,
 /* 5474 */ 9999,
-/* 5475 */ 1147009,
+/* 5475 */ 1143009,
 /* 5476 */ 9999,
 /* 5477 */ 9999,
 /* 5478 */ 9999,
-/* 5479 */ 1149006,
+/* 5479 */ 1145006,
 /* 5480 */ 9999,
 /* 5481 */ 9999,
-/* 5482 */ 1148009,
+/* 5482 */ 1144009,
 /* 5483 */ 9999,
 /* 5484 */ 9999,
-/* 5485 */ 1151011,
-/* 5486 */ 1151018,
+/* 5485 */ 1147011,
+/* 5486 */ 1147018,
 /* 5487 */ 9999,
 /* 5488 */ 9999,
-/* 5489 */ 1151009,
+/* 5489 */ 1147009,
 /* 5490 */ 9999,
-/* 5491 */ 1153005,
+/* 5491 */ 1149005,
 /* 5492 */ 9999,
-/* 5493 */ 1153013,
+/* 5493 */ 1149013,
 /* 5494 */ 9999,
-/* 5495 */ 1154005,
+/* 5495 */ 1150005,
 /* 5496 */ 9999,
-/* 5497 */ 1154014,
+/* 5497 */ 1150014,
 /* 5498 */ 9999,
-/* 5499 */ 1155005,
+/* 5499 */ 1151005,
 /* 5500 */ 9999,
-/* 5501 */ 1155016,
+/* 5501 */ 1151016,
 /* 5502 */ 9999,
-/* 5503 */ 1156005,
+/* 5503 */ 1152005,
 /* 5504 */ 9999,
-/* 5505 */ 1156017,
+/* 5505 */ 1152017,
 /* 5506 */ 9999,
 /* 5507 */ 9999,
 /* 5508 */ 9999,
-/* 5509 */ 1145029,
+/* 5509 */ 1141029,
 /* 5510 */ 9999,
 /* 5511 */ 9999,
 /* 5512 */ 9999,
-/* 5513 */ 1145031,
+/* 5513 */ 1141031,
 /* 5514 */ 9999,
-/* 5515 */ 1149007,
-/* 5516 */ 1149020,
+/* 5515 */ 1145007,
+/* 5516 */ 1145020,
 /* 5517 */ 9999,
-/* 5518 */ 1149020,
+/* 5518 */ 1145020,
 /* 5519 */ 9999,
 /* 5520 */ 9999,
-/* 5521 */ 1149020,
+/* 5521 */ 1145020,
 /* 5522 */ 9999,
 /* 5523 */ 9999,
 /* 5524 */ 9999,
-/* 5525 */ 1151012,
+/* 5525 */ 1147012,
 /* 5526 */ 9999,
 /* 5527 */ 9999,
-/* 5528 */ 1151012,
+/* 5528 */ 1147012,
 /* 5529 */ 9999,
-/* 5530 */ 1151019,
-/* 5531 */ 1152005,
-/* 5532 */ 1151024,
+/* 5530 */ 1147019,
+/* 5531 */ 1148005,
+/* 5532 */ 1147024,
 /* 5533 */ 9999,
-/* 5534 */ 1151024,
+/* 5534 */ 1147024,
 /* 5535 */ 9999,
 /* 5536 */ 9999,
-/* 5537 */ 1151024,
+/* 5537 */ 1147024,
 /* 5538 */ 9999,
 /* 5539 */ 9999,
 /* 5540 */ 9999,
-/* 5541 */ 1152006,
+/* 5541 */ 1148006,
 /* 5542 */ 9999,
 /* 5543 */ 9999,
 /* 5544 */ 9999,
-/* 5545 */ 1152012,
+/* 5545 */ 1148012,
 /* 5546 */ 9999,
 /* 5547 */ 9999,
-/* 5548 */ 1152012,
+/* 5548 */ 1148012,
 /* 5549 */ 9999,
-/* 5550 */ 1161003,
-/* 5551 */ 1166003,
+/* 5550 */ 1157003,
+/* 5551 */ 1162003,
 /* 5552 */ 9999,
-/* 5553 */ 1186003,
-/* 5554 */ 1192003,
-/* 5555 */ 1198003,
+/* 5553 */ 1182003,
+/* 5554 */ 1188003,
+/* 5555 */ 1194003,
 /* 5556 */ 9999,
-/* 5557 */ 1160003,
+/* 5557 */ 1156003,
 /* 5558 */ 9999,
 /* 5559 */ 9999,
 /* 5560 */ 9999,
-/* 5561 */ 1161007,
+/* 5561 */ 1157007,
 /* 5562 */ 9999,
 /* 5563 */ 9999,
 /* 5564 */ 9999,
-/* 5565 */ 1162010,
+/* 5565 */ 1158010,
 /* 5566 */ 9999,
 /* 5567 */ 9999,
 /* 5568 */ 9999,
-/* 5569 */ 1163007,
+/* 5569 */ 1159007,
 /* 5570 */ 9999,
-/* 5571 */ 1167007,
+/* 5571 */ 1163007,
 /* 5572 */ 9999,
-/* 5573 */ 1167012,
+/* 5573 */ 1163012,
 /* 5574 */ 9999,
-/* 5575 */ 1167012,
+/* 5575 */ 1163012,
 /* 5576 */ 9999,
 /* 5577 */ 9999,
 /* 5578 */ 9999,
-/* 5579 */ 1168019,
+/* 5579 */ 1164019,
 /* 5580 */ 9999,
 /* 5581 */ 9999,
-/* 5582 */ 1168007,
+/* 5582 */ 1164007,
 /* 5583 */ 9999,
-/* 5584 */ 1168007,
+/* 5584 */ 1164007,
 /* 5585 */ 9999,
 /* 5586 */ 9999,
-/* 5587 */ 1169011,
+/* 5587 */ 1165011,
 /* 5588 */ 9999,
-/* 5589 */ 1169007,
+/* 5589 */ 1165007,
 /* 5590 */ 9999,
-/* 5591 */ 1169007,
+/* 5591 */ 1165007,
 /* 5592 */ 9999,
 /* 5593 */ 9999,
-/* 5594 */ 1170011,
+/* 5594 */ 1166011,
 /* 5595 */ 9999,
-/* 5596 */ 1170007,
+/* 5596 */ 1166007,
 /* 5597 */ 9999,
-/* 5598 */ 1170007,
+/* 5598 */ 1166007,
 /* 5599 */ 9999,
-/* 5600 */ 1171007,
-/* 5601 */ 1171017,
-/* 5602 */ 1171026,
-/* 5603 */ 1171012,
+/* 5600 */ 1167007,
+/* 5601 */ 1167017,
+/* 5602 */ 1167026,
+/* 5603 */ 1167012,
 /* 5604 */ 9999,
-/* 5605 */ 1171012,
+/* 5605 */ 1167012,
 /* 5606 */ 9999,
-/* 5607 */ 1174007,
-/* 5608 */ 1174012,
+/* 5607 */ 1170007,
+/* 5608 */ 1170012,
 /* 5609 */ 9999,
-/* 5610 */ 1174012,
+/* 5610 */ 1170012,
 /* 5611 */ 9999,
-/* 5612 */ 1177007,
+/* 5612 */ 1173007,
 /* 5613 */ 9999,
-/* 5614 */ 1177012,
+/* 5614 */ 1173012,
 /* 5615 */ 9999,
-/* 5616 */ 1177012,
+/* 5616 */ 1173012,
 /* 5617 */ 9999,
-/* 5618 */ 1180007,
-/* 5619 */ 1180015,
+/* 5618 */ 1176007,
+/* 5619 */ 1176015,
 /* 5620 */ 9999,
-/* 5621 */ 1180015,
+/* 5621 */ 1176015,
 /* 5622 */ 9999,
 /* 5623 */ 9999,
-/* 5624 */ 1180015,
+/* 5624 */ 1176015,
 /* 5625 */ 9999,
 /* 5626 */ 9999,
 /* 5627 */ 9999,
-/* 5628 */ 1171018,
+/* 5628 */ 1167018,
 /* 5629 */ 9999,
 /* 5630 */ 9999,
 /* 5631 */ 9999,
-/* 5632 */ 1171023,
+/* 5632 */ 1167023,
 /* 5633 */ 9999,
-/* 5634 */ 1186007,
+/* 5634 */ 1182007,
 /* 5635 */ 9999,
-/* 5636 */ 1186013,
+/* 5636 */ 1182013,
 /* 5637 */ 9999,
-/* 5638 */ 1187007,
+/* 5638 */ 1183007,
 /* 5639 */ 9999,
-/* 5640 */ 1187012,
+/* 5640 */ 1183012,
 /* 5641 */ 9999,
 /* 5642 */ 9999,
-/* 5643 */ 1188016,
+/* 5643 */ 1184016,
 /* 5644 */ 9999,
-/* 5645 */ 1188014,
+/* 5645 */ 1184014,
 /* 5646 */ 9999,
-/* 5647 */ 1192007,
+/* 5647 */ 1188007,
 /* 5648 */ 9999,
-/* 5649 */ 1192013,
+/* 5649 */ 1188013,
 /* 5650 */ 9999,
-/* 5651 */ 1193007,
+/* 5651 */ 1189007,
 /* 5652 */ 9999,
-/* 5653 */ 1193012,
+/* 5653 */ 1189012,
 /* 5654 */ 9999,
 /* 5655 */ 9999,
-/* 5656 */ 1194016,
+/* 5656 */ 1190016,
 /* 5657 */ 9999,
-/* 5658 */ 1194014,
+/* 5658 */ 1190014,
 /* 5659 */ 9999,
 /* 5660 */ 9999,
-/* 5661 */ 1194014,
+/* 5661 */ 1190014,
 /* 5662 */ 9999,
 /* 5663 */ 9999,
-/* 5664 */ 1198009,
-/* 5665 */ 1199006,
+/* 5664 */ 1194009,
+/* 5665 */ 1195006,
 /* 5666 */ 9999,
 /* 5667 */ 9999,
-/* 5668 */ 1198005,
+/* 5668 */ 1194005,
 /* 5669 */ 9999,
 /* 5670 */ 9999,
-/* 5671 */ 1198005,
+/* 5671 */ 1194005,
 /* 5672 */ 9999,
-/* 5673 */ 1199008,
-/* 5674 */ 1199018,
-/* 5675 */ 1199008,
+/* 5673 */ 1195008,
+/* 5674 */ 1195018,
+/* 5675 */ 1195008,
 /* 5676 */ 9999,
-/* 5677 */ 1199008,
+/* 5677 */ 1195008,
 /* 5678 */ 9999,
 /* 5679 */ 9999,
-/* 5680 */ 1199008,
+/* 5680 */ 1195008,
 /* 5681 */ 9999,
 /* 5682 */ 9999,
 /* 5683 */ 9999,
-/* 5684 */ 1199009,
+/* 5684 */ 1195009,
 /* 5685 */ 9999,
 /* 5686 */ 9999,
 /* 5687 */ 9999,
-/* 5688 */ 1199013,
+/* 5688 */ 1195013,
 /* 5689 */ 9999,
 /* 5690 */ 9999,
 /* 5691 */ 9999,
 /* 5692 */ 9999,
-/* 5693 */ 1206031,
+/* 5693 */ 1202031,
 /* 5694 */ 9999,
-/* 5695 */ 1209007,
+/* 5695 */ 1205007,
 /* 5696 */ 9999,
 /* 5697 */ 9999,
-/* 5698 */ 1206011,
+/* 5698 */ 1202011,
 /* 5699 */ 9999,
-/* 5700 */ 1209008,
-/* 5701 */ 1209022,
+/* 5700 */ 1205008,
+/* 5701 */ 1205022,
 /* 5702 */ 9999,
-/* 5703 */ 1209022,
+/* 5703 */ 1205022,
 /* 5704 */ 9999,
 /* 5705 */ 9999,
-/* 5706 */ 1209022,
+/* 5706 */ 1205022,
 /* 5707 */ 9999,
 /* 5708 */ 9999,
-/* 5709 */ 1213012,
-/* 5710 */ 1213019,
+/* 5709 */ 1209012,
+/* 5710 */ 1209019,
 /* 5711 */ 9999,
 /* 5712 */ 9999,
-/* 5713 */ 1213009,
+/* 5713 */ 1209009,
 /* 5714 */ 9999,
 /* 5715 */ 9999,
-/* 5716 */ 1214011,
-/* 5717 */ 1214019,
+/* 5716 */ 1210011,
+/* 5717 */ 1210019,
 /* 5718 */ 9999,
 /* 5719 */ 9999,
-/* 5720 */ 1214009,
+/* 5720 */ 1210009,
 /* 5721 */ 9999,
-/* 5722 */ 1215005,
+/* 5722 */ 1211005,
 /* 5723 */ 9999,
-/* 5724 */ 1215014,
+/* 5724 */ 1211014,
 /* 5725 */ 9999,
-/* 5726 */ 1216005,
+/* 5726 */ 1212005,
 /* 5727 */ 9999,
-/* 5728 */ 1216016,
+/* 5728 */ 1212016,
 /* 5729 */ 9999,
-/* 5730 */ 1217005,
+/* 5730 */ 1213005,
 /* 5731 */ 9999,
-/* 5732 */ 1217017,
+/* 5732 */ 1213017,
 /* 5733 */ 9999,
 /* 5734 */ 9999,
 /* 5735 */ 9999,
-/* 5736 */ 1213013,
+/* 5736 */ 1209013,
 /* 5737 */ 9999,
 /* 5738 */ 9999,
-/* 5739 */ 1213013,
+/* 5739 */ 1209013,
 /* 5740 */ 9999,
 /* 5741 */ 9999,
 /* 5742 */ 9999,
-/* 5743 */ 1214012,
+/* 5743 */ 1210012,
 /* 5744 */ 9999,
 /* 5745 */ 9999,
-/* 5746 */ 1214012,
+/* 5746 */ 1210012,
 /* 5747 */ 9999,
-/* 5748 */ 1214020,
-/* 5749 */ 1214030,
-/* 5750 */ 1214025,
+/* 5748 */ 1210020,
+/* 5749 */ 1210030,
+/* 5750 */ 1210025,
 /* 5751 */ 9999,
-/* 5752 */ 1214025,
+/* 5752 */ 1210025,
 /* 5753 */ 9999,
 /* 5754 */ 9999,
-/* 5755 */ 1214025,
+/* 5755 */ 1210025,
 /* 5756 */ 9999,
 /* 5757 */ 9999,
 /* 5758 */ 9999,
-/* 5759 */ 1214031,
+/* 5759 */ 1210031,
 /* 5760 */ 9999,
 /* 5761 */ 9999,
 /* 5762 */ 9999,
-/* 5763 */ 1214037,
+/* 5763 */ 1210037,
 /* 5764 */ 9999,
 /* 5765 */ 9999,
-/* 5766 */ 1214037,
+/* 5766 */ 1210037,
 /* 5767 */ 9999,
 /* 5768 */ 9999,
 /* 5769 */ 9999,
-/* 5770 */ 1224004,
+/* 5770 */ 1220004,
 /* 5771 */ 9999,
 /* 5772 */ 9999,
-/* 5773 */ 1221008,
+/* 5773 */ 1217008,
 /* 5774 */ 9999,
 /* 5775 */ 9999,
-/* 5776 */ 1224013,
+/* 5776 */ 1220013,
 /* 5777 */ 9999,
-/* 5778 */ 1224013,
+/* 5778 */ 1220013,
 /* 5779 */ 9999,
-/* 5780 */ 1225007,
-/* 5781 */ 1225013,
+/* 5780 */ 1221007,
+/* 5781 */ 1221013,
 /* 5782 */ 9999,
-/* 5783 */ 1225013,
+/* 5783 */ 1221013,
 /* 5784 */ 9999,
 /* 5785 */ 9999,
-/* 5786 */ 1226007,
+/* 5786 */ 1222007,
 /* 5787 */ 9999,
-/* 5788 */ 1226007,
+/* 5788 */ 1222007,
 /* 5789 */ 9999,
 /* 5790 */ 9999,
-/* 5791 */ 1227007,
+/* 5791 */ 1223007,
 /* 5792 */ 9999,
-/* 5793 */ 1227007,
+/* 5793 */ 1223007,
 /* 5794 */ 9999,
 /* 5795 */ 9999,
-/* 5796 */ 1228007,
+/* 5796 */ 1224007,
 /* 5797 */ 9999,
-/* 5798 */ 1228007,
+/* 5798 */ 1224007,
 /* 5799 */ 9999,
 /* 5800 */ 9999,
-/* 5801 */ 1229007,
+/* 5801 */ 1225007,
 /* 5802 */ 9999,
-/* 5803 */ 1229007,
+/* 5803 */ 1225007,
 /* 5804 */ 9999,
 /* 5805 */ 9999,
-/* 5806 */ 1230011,
+/* 5806 */ 1226011,
 /* 5807 */ 9999,
 /* 5808 */ 9999,
-/* 5809 */ 1230007,
+/* 5809 */ 1226007,
 /* 5810 */ 9999,
-/* 5811 */ 1230007,
+/* 5811 */ 1226007,
 /* 5812 */ 9999,
 /* 5813 */ 9999,
-/* 5814 */ 1233011,
+/* 5814 */ 1229011,
 /* 5815 */ 9999,
-/* 5816 */ 1233007,
+/* 5816 */ 1229007,
 /* 5817 */ 9999,
-/* 5818 */ 1233007,
+/* 5818 */ 1229007,
 /* 5819 */ 9999,
 /* 5820 */ 9999,
-/* 5821 */ 1233007,
+/* 5821 */ 1229007,
 /* 5822 */ 9999,
 /* 5823 */ 9999,
 /* 5824 */ 9999,
-/* 5825 */ 1241018,
+/* 5825 */ 1237018,
 /* 5826 */ 9999,
 /* 5827 */ 9999,
 /* 5828 */ 9999,
-/* 5829 */ 1244008,
+/* 5829 */ 1240008,
 /* 5830 */ 9999,
 /* 5831 */ 9999,
 /* 5832 */ 9999,
-/* 5833 */ 1245008,
+/* 5833 */ 1241008,
 /* 5834 */ 9999,
 /* 5835 */ 9999,
 /* 5836 */ 9999,
-/* 5837 */ 1246009,
+/* 5837 */ 1242009,
 /* 5838 */ 9999,
 /* 5839 */ 9999,
 /* 5840 */ 9999,
-/* 5841 */ 1247010,
+/* 5841 */ 1243010,
 /* 5842 */ 9999,
 /* 5843 */ 9999,
 /* 5844 */ 9999,
-/* 5845 */ 1248008,
+/* 5845 */ 1244008,
 /* 5846 */ 9999,
 /* 5847 */ 9999,
 /* 5848 */ 9999,
-/* 5849 */ 1249009,
+/* 5849 */ 1245009,
 /* 5850 */ 9999,
 /* 5851 */ 9999,
 /* 5852 */ 9999,
-/* 5853 */ 1250009,
+/* 5853 */ 1246009,
 /* 5854 */ 9999,
 /* 5855 */ 9999,
 /* 5856 */ 9999,
-/* 5857 */ 1251008,
+/* 5857 */ 1247008,
 /* 5858 */ 9999,
 /* 5859 */ 9999,
 /* 5860 */ 9999,
-/* 5861 */ 1252009,
+/* 5861 */ 1248009,
 /* 5862 */ 9999,
 /* 5863 */ 9999,
 /* 5864 */ 9999,
-/* 5865 */ 1253007,
+/* 5865 */ 1249007,
 /* 5866 */ 9999,
 /* 5867 */ 9999,
 /* 5868 */ 9999,
-/* 5869 */ 1254010,
+/* 5869 */ 1250010,
 /* 5870 */ 9999,
 /* 5871 */ 9999,
 /* 5872 */ 9999,
-/* 5873 */ 1255013,
+/* 5873 */ 1251013,
 /* 5874 */ 9999,
 /* 5875 */ 9999,
-/* 5876 */ 1260010,
-/* 5877 */ 1260024,
+/* 5876 */ 1256010,
+/* 5877 */ 1256024,
 /* 5878 */ 9999,
 /* 5879 */ 9999,
 /* 5880 */ 9999,
-/* 5881 */ 1277003,
-/* 5882 */ 1285004,
+/* 5881 */ 1273003,
+/* 5882 */ 1281004,
 /* 5883 */ 9999,
 /* 5884 */ 9999,
 /* 5885 */ 9999,
-/* 5886 */ 1259015,
+/* 5886 */ 1255015,
 /* 5887 */ 9999,
-/* 5888 */ 1277005,
-/* 5889 */ 1277021,
-/* 5890 */ 1279005,
-/* 5891 */ 1279025,
-/* 5892 */ 1281005,
+/* 5888 */ 1273005,
+/* 5889 */ 1273021,
+/* 5890 */ 1275005,
+/* 5891 */ 1275025,
+/* 5892 */ 1277005,
 /* 5893 */ 9999,
-/* 5894 */ 1277013,
+/* 5894 */ 1273013,
 /* 5895 */ 9999,
 /* 5896 */ 9999,
-/* 5897 */ 1277013,
+/* 5897 */ 1273013,
 /* 5898 */ 9999,
 /* 5899 */ 9999,
-/* 5900 */ 1277026,
+/* 5900 */ 1273026,
 /* 5901 */ 9999,
-/* 5902 */ 1277022,
+/* 5902 */ 1273022,
 /* 5903 */ 9999,
 /* 5904 */ 9999,
-/* 5905 */ 1277022,
+/* 5905 */ 1273022,
 /* 5906 */ 9999,
 /* 5907 */ 9999,
 /* 5908 */ 9999,
-/* 5909 */ 1279010,
+/* 5909 */ 1275010,
 /* 5910 */ 9999,
 /* 5911 */ 9999,
-/* 5912 */ 1279010,
+/* 5912 */ 1275010,
 /* 5913 */ 9999,
 /* 5914 */ 9999,
-/* 5915 */ 1279031,
+/* 5915 */ 1275031,
 /* 5916 */ 9999,
-/* 5917 */ 1279027,
+/* 5917 */ 1275027,
 /* 5918 */ 9999,
 /* 5919 */ 9999,
-/* 5920 */ 1279027,
+/* 5920 */ 1275027,
 /* 5921 */ 9999,
 /* 5922 */ 9999,
-/* 5923 */ 1281010,
-/* 5924 */ 1281026,
-/* 5925 */ 1283007,
-/* 5926 */ 1283027,
-/* 5927 */ 1281006,
+/* 5923 */ 1277010,
+/* 5924 */ 1277026,
+/* 5925 */ 1279007,
+/* 5926 */ 1279027,
+/* 5927 */ 1277006,
 /* 5928 */ 9999,
-/* 5929 */ 1281006,
+/* 5929 */ 1277006,
 /* 5930 */ 9999,
 /* 5931 */ 9999,
-/* 5932 */ 1281006,
+/* 5932 */ 1277006,
 /* 5933 */ 9999,
 /* 5934 */ 9999,
-/* 5935 */ 1281031,
+/* 5935 */ 1277031,
 /* 5936 */ 9999,
-/* 5937 */ 1281027,
+/* 5937 */ 1277027,
 /* 5938 */ 9999,
 /* 5939 */ 9999,
-/* 5940 */ 1281027,
+/* 5940 */ 1277027,
 /* 5941 */ 9999,
 /* 5942 */ 9999,
 /* 5943 */ 9999,
-/* 5944 */ 1283012,
+/* 5944 */ 1279012,
 /* 5945 */ 9999,
 /* 5946 */ 9999,
-/* 5947 */ 1283012,
+/* 5947 */ 1279012,
 /* 5948 */ 9999,
 /* 5949 */ 9999,
-/* 5950 */ 1283033,
+/* 5950 */ 1279033,
 /* 5951 */ 9999,
-/* 5952 */ 1283029,
+/* 5952 */ 1279029,
 /* 5953 */ 9999,
 /* 5954 */ 9999,
-/* 5955 */ 1283029,
+/* 5955 */ 1279029,
 /* 5956 */ 9999,
 /* 5957 */ 9999,
 /* 5958 */ 9999,
 /* 5959 */ 9999,
-/* 5960 */ 1285005,
+/* 5960 */ 1281005,
 /* 5961 */ 9999,
 /* 5962 */ 9999,
-/* 5963 */ 1285005,
+/* 5963 */ 1281005,
 /* 5964 */ 9999,
 /* 5965 */ 9999,
-/* 5966 */ 1289010,
+/* 5966 */ 1285010,
 /* 5967 */ 9999,
 /* 5968 */ 9999,
-/* 5969 */ 1296003,
-/* 5970 */ 1304004,
+/* 5969 */ 1292003,
+/* 5970 */ 1300004,
 /* 5971 */ 9999,
 /* 5972 */ 9999,
 /* 5973 */ 9999,
-/* 5974 */ 1288016,
+/* 5974 */ 1284016,
 /* 5975 */ 9999,
-/* 5976 */ 1296005,
-/* 5977 */ 1296021,
-/* 5978 */ 1298005,
-/* 5979 */ 1298025,
-/* 5980 */ 1300005,
+/* 5976 */ 1292005,
+/* 5977 */ 1292021,
+/* 5978 */ 1294005,
+/* 5979 */ 1294025,
+/* 5980 */ 1296005,
 /* 5981 */ 9999,
-/* 5982 */ 1296013,
+/* 5982 */ 1292013,
 /* 5983 */ 9999,
 /* 5984 */ 9999,
-/* 5985 */ 1296013,
+/* 5985 */ 1292013,
 /* 5986 */ 9999,
 /* 5987 */ 9999,
-/* 5988 */ 1296026,
+/* 5988 */ 1292026,
 /* 5989 */ 9999,
-/* 5990 */ 1296022,
+/* 5990 */ 1292022,
 /* 5991 */ 9999,
 /* 5992 */ 9999,
-/* 5993 */ 1296022,
+/* 5993 */ 1292022,
 /* 5994 */ 9999,
 /* 5995 */ 9999,
 /* 5996 */ 9999,
-/* 5997 */ 1298010,
+/* 5997 */ 1294010,
 /* 5998 */ 9999,
 /* 5999 */ 9999,
-/* 6000 */ 1298010,
+/* 6000 */ 1294010,
 /* 6001 */ 9999,
 /* 6002 */ 9999,
-/* 6003 */ 1298031,
+/* 6003 */ 1294031,
 /* 6004 */ 9999,
-/* 6005 */ 1298027,
+/* 6005 */ 1294027,
 /* 6006 */ 9999,
 /* 6007 */ 9999,
-/* 6008 */ 1298027,
+/* 6008 */ 1294027,
 /* 6009 */ 9999,
 /* 6010 */ 9999,
-/* 6011 */ 1300010,
-/* 6012 */ 1300026,
-/* 6013 */ 1302007,
-/* 6014 */ 1302027,
-/* 6015 */ 1300006,
+/* 6011 */ 1296010,
+/* 6012 */ 1296026,
+/* 6013 */ 1298007,
+/* 6014 */ 1298027,
+/* 6015 */ 1296006,
 /* 6016 */ 9999,
-/* 6017 */ 1300006,
+/* 6017 */ 1296006,
 /* 6018 */ 9999,
 /* 6019 */ 9999,
-/* 6020 */ 1300006,
+/* 6020 */ 1296006,
 /* 6021 */ 9999,
 /* 6022 */ 9999,
-/* 6023 */ 1300031,
+/* 6023 */ 1296031,
 /* 6024 */ 9999,
-/* 6025 */ 1300027,
+/* 6025 */ 1296027,
 /* 6026 */ 9999,
 /* 6027 */ 9999,
-/* 6028 */ 1300027,
+/* 6028 */ 1296027,
 /* 6029 */ 9999,
 /* 6030 */ 9999,
 /* 6031 */ 9999,
-/* 6032 */ 1302012,
+/* 6032 */ 1298012,
 /* 6033 */ 9999,
 /* 6034 */ 9999,
-/* 6035 */ 1302012,
+/* 6035 */ 1298012,
 /* 6036 */ 9999,
 /* 6037 */ 9999,
-/* 6038 */ 1302033,
+/* 6038 */ 1298033,
 /* 6039 */ 9999,
-/* 6040 */ 1302029,
+/* 6040 */ 1298029,
 /* 6041 */ 9999,
 /* 6042 */ 9999,
-/* 6043 */ 1302029,
+/* 6043 */ 1298029,
 /* 6044 */ 9999,
 /* 6045 */ 9999,
 /* 6046 */ 9999,
 /* 6047 */ 9999,
-/* 6048 */ 1304005,
+/* 6048 */ 1300005,
 /* 6049 */ 9999,
 /* 6050 */ 9999,
-/* 6051 */ 1304005,
+/* 6051 */ 1300005,
 /* 6052 */ 9999,
 /* 6053 */ 9999,
-/* 6054 */ 1308010,
-/* 6055 */ 1308024,
+/* 6054 */ 1304010,
+/* 6055 */ 1304024,
 /* 6056 */ 9999,
 /* 6057 */ 9999,
 /* 6058 */ 9999,
 /* 6059 */ 9999,
-/* 6060 */ 1307016,
+/* 6060 */ 1303016,
 /* 6061 */ 9999,
 /* 6062 */ 9999,
-/* 6063 */ 1341010,
+/* 6063 */ 1337010,
 /* 6064 */ 9999,
 /* 6065 */ 9999,
-/* 6066 */ 1341040,
+/* 6066 */ 1337040,
 /* 6067 */ 9999,
 /* 6068 */ 9999,
-/* 6069 */ 1340016,
+/* 6069 */ 1336016,
 /* 6070 */ 9999,
-/* 6071 */ 1357003,
+/* 6071 */ 1353003,
 /* 6072 */ 9999,
-/* 6073 */ 1372003,
+/* 6073 */ 1368003,
 /* 6074 */ 9999,
 /* 6075 */ 9999,
-/* 6076 */ 1356016,
+/* 6076 */ 1352016,
 /* 6077 */ 9999,
 /* 6078 */ 9999,
 /* 6079 */ 9999,
-/* 6080 */ 1372004,
+/* 6080 */ 1368004,
 /* 6081 */ 9999,
-/* 6082 */ 1372004,
+/* 6082 */ 1368004,
 /* 6083 */ 9999,
 /* 6084 */ 9999,
-/* 6085 */ 1372004,
+/* 6085 */ 1368004,
 /* 6086 */ 9999,
-/* 6087 */ 1387003,
+/* 6087 */ 1383003,
 /* 6088 */ 9999,
-/* 6089 */ 1404003,
+/* 6089 */ 1400003,
 /* 6090 */ 9999,
 /* 6091 */ 9999,
-/* 6092 */ 1386029,
+/* 6092 */ 1382029,
 /* 6093 */ 9999,
 /* 6094 */ 9999,
 /* 6095 */ 9999,
-/* 6096 */ 1404004,
+/* 6096 */ 1400004,
 /* 6097 */ 9999,
-/* 6098 */ 1404004,
+/* 6098 */ 1400004,
 /* 6099 */ 9999,
 /* 6100 */ 9999,
-/* 6101 */ 1404004,
+/* 6101 */ 1400004,
 /* 6102 */ 9999,
-/* 6103 */ 1424003,
+/* 6103 */ 1420003,
 /* 6104 */ 9999,
-/* 6105 */ 1436003,
+/* 6105 */ 1432003,
 /* 6106 */ 9999,
 /* 6107 */ 9999,
-/* 6108 */ 1423016,
+/* 6108 */ 1419016,
 /* 6109 */ 9999,
 /* 6110 */ 9999,
 /* 6111 */ 9999,
-/* 6112 */ 1436004,
+/* 6112 */ 1432004,
 /* 6113 */ 9999,
-/* 6114 */ 1436004,
+/* 6114 */ 1432004,
 /* 6115 */ 9999,
 /* 6116 */ 9999,
-/* 6117 */ 1436004,
+/* 6117 */ 1432004,
 /* 6118 */ 9999,
-/* 6119 */ 1450003,
+/* 6119 */ 1446003,
 /* 6120 */ 9999,
 /* 6121 */ 9999,
-/* 6122 */ 1450006,
+/* 6122 */ 1446006,
 /* 6123 */ 9999,
 /* 6124 */ 9999,
 /* 6125 */ 9999,
-/* 6126 */ 1461012,
+/* 6126 */ 1457012,
 /* 6127 */ 9999,
-/* 6128 */ 1461025,
+/* 6128 */ 1457025,
 /* 6129 */ 9999,
-/* 6130 */ 1461045,
+/* 6130 */ 1457045,
 /* 6131 */ 9999,
-/* 6132 */ 1461006,
+/* 6132 */ 1457006,
 /* 6133 */ 9999,
 /* 6134 */ 9999,
 /* 6135 */ 9999,
-/* 6136 */ 1476012,
+/* 6136 */ 1472012,
 /* 6137 */ 9999,
-/* 6138 */ 1476025,
+/* 6138 */ 1472025,
 /* 6139 */ 9999,
-/* 6140 */ 1476006,
+/* 6140 */ 1472006,
 /* 6141 */ 9999,
 /* 6142 */ 9999,
 /* 6143 */ 9999,
-/* 6144 */ 1485013,
+/* 6144 */ 1481013,
 /* 6145 */ 9999,
-/* 6146 */ 1485027,
+/* 6146 */ 1481027,
 /* 6147 */ 9999,
-/* 6148 */ 1485041,
+/* 6148 */ 1481041,
 /* 6149 */ 9999,
-/* 6150 */ 1486007,
+/* 6150 */ 1482007,
 /* 6151 */ 9999,
-/* 6152 */ 1485007,
+/* 6152 */ 1481007,
 /* 6153 */ 9999,
 /* 6154 */ 9999,
 /* 6155 */ 9999,
-/* 6156 */ 1512016,
+/* 6156 */ 1508016,
 /* 6157 */ 9999,
 /* 6158 */ 9999,
-/* 6159 */ 1522005,
-/* 6160 */ 1533005,
+/* 6159 */ 1518005,
+/* 6160 */ 1529005,
 /* 6161 */ 9999,
 /* 6162 */ 9999,
-/* 6163 */ 1512010,
+/* 6163 */ 1508010,
 /* 6164 */ 9999,
 /* 6165 */ 9999,
 /* 6166 */ 9999,
 /* 6167 */ 9999,
-/* 6168 */ 1582009,
+/* 6168 */ 1578009,
 /* 6169 */ 9999,
 /* 6170 */ 9999,
 /* 6171 */ 9999,
 /* 6172 */ 9999,
-/* 6173 */ 1586012,
+/* 6173 */ 1582012,
 /* 6174 */ 9999,
 /* 6175 */ 9999,
-/* 6176 */ 1590008,
+/* 6176 */ 1586008,
 /* 6177 */ 9999,
 /* 6178 */ 9999,
-/* 6179 */ 1590033,
+/* 6179 */ 1586033,
 /* 6180 */ 9999,
 /* 6181 */ 9999,
 /* 6182 */ 9999,
-/* 6183 */ 1590006,
+/* 6183 */ 1586006,
 /* 6184 */ 9999,
 /* 6185 */ 9999,
 /* 6186 */ 9999,
-/* 6187 */ 1599015,
+/* 6187 */ 1595015,
 /* 6188 */ 9999,
-/* 6189 */ 1599028,
+/* 6189 */ 1595028,
 /* 6190 */ 9999,
-/* 6191 */ 1599009,
+/* 6191 */ 1595009,
 /* 6192 */ 9999,
-/* 6193 */ 1610005,
+/* 6193 */ 1606005,
 /* 6194 */ 9999,
-/* 6195 */ 1610009,
+/* 6195 */ 1606009,
 /* 6196 */ 9999,
 /* 6197 */ 9999,
-/* 6198 */ 1614012,
+/* 6198 */ 1610012,
 /* 6199 */ 9999,
 /* 6200 */ 9999,
-/* 6201 */ 1614010,
+/* 6201 */ 1610010,
 /* 6202 */ 9999,
 /* 6203 */ 9999,
 /* 6204 */ 9999,
 /* 6205 */ 9999,
-/* 6206 */ 1627010,
+/* 6206 */ 1623010,
 /* 6207 */ 9999,
 /* 6208 */ 9999,
-/* 6209 */ 1522012,
+/* 6209 */ 1518012,
 /* 6210 */ 9999,
-/* 6211 */ 1524007,
-/* 6212 */ 1522010,
+/* 6211 */ 1520007,
+/* 6212 */ 1518010,
 /* 6213 */ 9999,
-/* 6214 */ 1522010,
+/* 6214 */ 1518010,
 /* 6215 */ 9999,
 /* 6216 */ 9999,
-/* 6217 */ 1522010,
+/* 6217 */ 1518010,
 /* 6218 */ 9999,
-/* 6219 */ 1522014,
+/* 6219 */ 1518014,
 /* 6220 */ 9999,
-/* 6221 */ 1522018,
+/* 6221 */ 1518018,
 /* 6222 */ 9999,
-/* 6223 */ 1522027,
+/* 6223 */ 1518027,
 /* 6224 */ 9999,
-/* 6225 */ 1522033,
+/* 6225 */ 1518033,
 /* 6226 */ 9999,
-/* 6227 */ 1524027,
-/* 6228 */ 1524009,
+/* 6227 */ 1520027,
+/* 6228 */ 1520009,
 /* 6229 */ 9999,
-/* 6230 */ 1524009,
+/* 6230 */ 1520009,
 /* 6231 */ 9999,
 /* 6232 */ 9999,
-/* 6233 */ 1524009,
+/* 6233 */ 1520009,
 /* 6234 */ 9999,
 /* 6235 */ 9999,
 /* 6236 */ 9999,
-/* 6237 */ 1534007,
+/* 6237 */ 1530007,
 /* 6238 */ 9999,
-/* 6239 */ 1533013,
+/* 6239 */ 1529013,
 /* 6240 */ 9999,
 /* 6241 */ 9999,
-/* 6242 */ 1533013,
+/* 6242 */ 1529013,
 /* 6243 */ 9999,
-/* 6244 */ 1534027,
-/* 6245 */ 1534009,
+/* 6244 */ 1530027,
+/* 6245 */ 1530009,
 /* 6246 */ 9999,
-/* 6247 */ 1534009,
+/* 6247 */ 1530009,
 /* 6248 */ 9999,
 /* 6249 */ 9999,
-/* 6250 */ 1534009,
+/* 6250 */ 1530009,
 /* 6251 */ 9999,
 /* 6252 */ 9999,
-/* 6253 */ 1636007,
+/* 6253 */ 1632007,
 /* 6254 */ 9999,
 /* 6255 */ 9999,
-/* 6256 */ 1636003,
+/* 6256 */ 1632003,
 /* 6257 */ 9999,
-/* 6258 */ 1636025,
-/* 6259 */ 1636009,
+/* 6258 */ 1632025,
+/* 6259 */ 1632009,
 /* 6260 */ 9999,
-/* 6261 */ 1636009,
+/* 6261 */ 1632009,
 /* 6262 */ 9999,
 /* 6263 */ 9999,
-/* 6264 */ 1636009,
+/* 6264 */ 1632009,
 /* 6265 */ 9999,
 /* 6266 */ 9999,
-/* 6267 */ 1641007,
-/* 6268 */ 1646007,
+/* 6267 */ 1637007,
+/* 6268 */ 1642007,
 /* 6269 */ 9999,
 /* 6270 */ 9999,
-/* 6271 */ 1640004,
+/* 6271 */ 1636004,
 /* 6272 */ 9999,
-/* 6273 */ 1641027,
-/* 6274 */ 1641009,
+/* 6273 */ 1637027,
+/* 6274 */ 1637009,
 /* 6275 */ 9999,
-/* 6276 */ 1641009,
+/* 6276 */ 1637009,
 /* 6277 */ 9999,
 /* 6278 */ 9999,
-/* 6279 */ 1642018,
-/* 6280 */ 1642016,
+/* 6279 */ 1638018,
+/* 6280 */ 1638016,
 /* 6281 */ 9999,
-/* 6282 */ 1642016,
+/* 6282 */ 1638016,
 /* 6283 */ 9999,
 /* 6284 */ 9999,
-/* 6285 */ 1642016,
+/* 6285 */ 1638016,
 /* 6286 */ 9999,
-/* 6287 */ 1646025,
-/* 6288 */ 1646009,
+/* 6287 */ 1642025,
+/* 6288 */ 1642009,
 /* 6289 */ 9999,
-/* 6290 */ 1646009,
+/* 6290 */ 1642009,
 /* 6291 */ 9999,
 /* 6292 */ 9999,
-/* 6293 */ 1646009,
+/* 6293 */ 1642009,
 /* 6294 */ 9999,
 /* 6295 */ 9999,
 /* 6296 */ 9999,
-/* 6297 */ 1682010,
+/* 6297 */ 1678010,
 /* 6298 */ 9999,
 /* 6299 */ 9999,
 /* 6300 */ 9999,
-/* 6301 */ 1684014,
+/* 6301 */ 1680014,
 /* 6302 */ 9999,
 /* 6303 */ 9999,
 /* 6304 */ 9999,
-/* 6305 */ 1686011,
+/* 6305 */ 1682011,
 /* 6306 */ 9999,
 /* 6307 */ 9999,
 /* 6308 */ 9999,
-/* 6309 */ 1688013,
+/* 6309 */ 1684013,
 /* 6310 */ 9999,
 /* 6311 */ 9999,
 /* 6312 */ 9999,
-/* 6313 */ 1690014,
+/* 6313 */ 1686014,
 /* 6314 */ 9999,
 /* 6315 */ 9999,
 /* 6316 */ 9999,
-/* 6317 */ 1692013,
+/* 6317 */ 1688013,
 /* 6318 */ 9999,
-/* 6319 */ 1694005,
+/* 6319 */ 1690005,
 /* 6320 */ 9999,
-/* 6321 */ 1694011,
+/* 6321 */ 1690011,
 /* 6322 */ 9999,
 /* 6323 */ 9999,
-/* 6324 */ 1696009,
+/* 6324 */ 1692009,
 /* 6325 */ 9999,
 /* 6326 */ 9999,
-/* 6327 */ 1696005,
+/* 6327 */ 1692005,
 /* 6328 */ 9999,
 /* 6329 */ 9999,
 /* 6330 */ 9999,
-/* 6331 */ 1699009,
+/* 6331 */ 1695009,
 /* 6332 */ 9999,
-/* 6333 */ 1740005,
-/* 6334 */ 1740020,
+/* 6333 */ 1736005,
+/* 6334 */ 1736020,
 /* 6335 */ 9999,
 /* 6336 */ 9999,
-/* 6337 */ 1740013,
+/* 6337 */ 1736013,
 /* 6338 */ 9999,
-/* 6339 */ 1797005,
-/* 6340 */ 1797020,
+/* 6339 */ 1793005,
+/* 6340 */ 1793020,
 /* 6341 */ 9999,
 /* 6342 */ 9999,
-/* 6343 */ 1824009,
+/* 6343 */ 1820009,
 /* 6344 */ 9999,
 /* 6345 */ 9999,
-/* 6346 */ 1797013,
+/* 6346 */ 1793013,
 /* 6347 */ 9999,
 /* 6348 */ 9999,
 /* 6349 */ 9999,
-/* 6350 */ 1859009,
+/* 6350 */ 1855009,
 /* 6351 */ 9999,
 /* 6352 */ 9999,
-/* 6353 */ 1852009,
+/* 6353 */ 1848009,
 /* 6354 */ 9999,
-/* 6355 */ 1878005,
+/* 6355 */ 1874005,
 /* 6356 */ 9999,
 /* 6357 */ 9999,
 /* 6358 */ 9999,
-/* 6359 */ 1878013,
+/* 6359 */ 1874013,
 /* 6360 */ 9999,
 /* 6361 */ 9999,
 /* 6362 */ 9999,
-/* 6363 */ 1740021,
+/* 6363 */ 1736021,
 /* 6364 */ 9999,
 /* 6365 */ 9999,
 /* 6366 */ 9999,
-/* 6367 */ 1740033,
+/* 6367 */ 1736033,
 /* 6368 */ 9999,
 /* 6369 */ 9999,
 /* 6370 */ 9999,
-/* 6371 */ 1797021,
+/* 6371 */ 1793021,
 /* 6372 */ 9999,
 /* 6373 */ 9999,
 /* 6374 */ 9999,
-/* 6375 */ 1797033,
+/* 6375 */ 1793033,
 /* 6376 */ 9999,
 /* 6377 */ 9999,
 /* 6378 */ 9999,
-/* 6379 */ 1888007,
+/* 6379 */ 1884007,
 /* 6380 */ 9999,
-/* 6381 */ 1933005,
+/* 6381 */ 1929005,
 /* 6382 */ 9999,
 /* 6383 */ 9999,
 /* 6384 */ 9999,
-/* 6385 */ 1933010,
+/* 6385 */ 1929010,
 /* 6386 */ 9999,
-/* 6387 */ 1939005,
-/* 6388 */ 1939020,
+/* 6387 */ 1935005,
+/* 6388 */ 1935020,
 /* 6389 */ 9999,
 /* 6390 */ 9999,
-/* 6391 */ 1939013,
+/* 6391 */ 1935013,
 /* 6392 */ 9999,
 /* 6393 */ 9999,
 /* 6394 */ 9999,
-/* 6395 */ 1939021,
+/* 6395 */ 1935021,
 /* 6396 */ 9999,
 /* 6397 */ 9999,
 /* 6398 */ 9999,
-/* 6399 */ 1939033,
+/* 6399 */ 1935033,
 /* 6400 */ 9999,
-/* 6401 */ 1982005,
+/* 6401 */ 1978005,
 /* 6402 */ 9999,
 /* 6403 */ 9999,
-/* 6404 */ 1982010,
+/* 6404 */ 1978010,
 /* 6405 */ 9999,
-/* 6406 */ 1984005,
+/* 6406 */ 1980005,
 /* 6407 */ 9999,
 /* 6408 */ 9999,
-/* 6409 */ 1984010,
+/* 6409 */ 1980010,
 /* 6410 */ 9999,
 /* 6411 */ 9999,
 /* 6412 */ 9999,
-/* 6413 */ 1986018,
+/* 6413 */ 1982018,
 /* 6414 */ 9999,
-/* 6415 */ 1986035,
+/* 6415 */ 1982035,
 /* 6416 */ 9999,
 /* 6417 */ 9999,
-/* 6418 */ 1986012,
+/* 6418 */ 1982012,
 /* 6419 */ 9999,
 /* 6420 */ 9999,
 /* 6421 */ 9999,
-/* 6422 */ 1988018,
+/* 6422 */ 1984018,
 /* 6423 */ 9999,
-/* 6424 */ 1988035,
+/* 6424 */ 1984035,
 /* 6425 */ 9999,
 /* 6426 */ 9999,
-/* 6427 */ 1988012,
+/* 6427 */ 1984012,
 /* 6428 */ 9999,
-/* 6429 */ 1990005,
+/* 6429 */ 1986005,
 /* 6430 */ 9999,
-/* 6431 */ 1990013,
+/* 6431 */ 1986013,
 /* 6432 */ 9999,
 /* 6433 */ 9999,
-/* 6434 */ 1995018,
+/* 6434 */ 1991018,
 /* 6435 */ 9999,
-/* 6436 */ 1995016,
+/* 6436 */ 1991016,
 /* 6437 */ 9999,
 /* 6438 */ 9999,
-/* 6439 */ 1997018,
+/* 6439 */ 1993018,
 /* 6440 */ 9999,
-/* 6441 */ 1997016,
+/* 6441 */ 1993016,
 /* 6442 */ 9999,
 /* 6443 */ 9999,
-/* 6444 */ 1999009,
+/* 6444 */ 1995009,
 /* 6445 */ 9999,
-/* 6446 */ 1999005,
+/* 6446 */ 1995005,
 /* 6447 */ 9999,
 /* 6448 */ 9999,
-/* 6449 */ 2001009,
+/* 6449 */ 1997009,
 /* 6450 */ 9999,
-/* 6451 */ 2001005,
+/* 6451 */ 1997005,
 /* 6452 */ 9999,
 /* 6453 */ 9999,
-/* 6454 */ 2003009,
+/* 6454 */ 1999009,
 /* 6455 */ 9999,
-/* 6456 */ 2003005,
+/* 6456 */ 1999005,
 /* 6457 */ 9999,
 /* 6458 */ 9999,
-/* 6459 */ 2005009,
+/* 6459 */ 2001009,
 /* 6460 */ 9999,
-/* 6461 */ 2005005,
+/* 6461 */ 2001005,
 /* 6462 */ 9999,
 /* 6463 */ 9999,
-/* 6464 */ 2007009,
+/* 6464 */ 2003009,
 /* 6465 */ 9999,
 /* 6466 */ 9999,
-/* 6467 */ 2007005,
+/* 6467 */ 2003005,
 /* 6468 */ 9999,
-/* 6469 */ 2009005,
+/* 6469 */ 2005005,
 /* 6470 */ 9999,
-/* 6471 */ 2009010,
+/* 6471 */ 2005010,
 /* 6472 */ 9999,
-/* 6473 */ 2014005,
+/* 6473 */ 2010005,
 /* 6474 */ 9999,
-/* 6475 */ 2014021,
+/* 6475 */ 2010021,
 /* 6476 */ 9999,
-/* 6477 */ 2014010,
+/* 6477 */ 2010010,
 /* 6478 */ 9999,
-/* 6479 */ 2016005,
+/* 6479 */ 2012005,
 /* 6480 */ 9999,
-/* 6481 */ 2016010,
+/* 6481 */ 2012010,
 /* 6482 */ 9999,
 /* 6483 */ 9999,
-/* 6484 */ 2021009,
+/* 6484 */ 2017009,
 /* 6485 */ 9999,
-/* 6486 */ 2021027,
+/* 6486 */ 2017027,
 /* 6487 */ 9999,
-/* 6488 */ 2021005,
+/* 6488 */ 2017005,
 /* 6489 */ 9999,
-/* 6490 */ 2023005,
+/* 6490 */ 2019005,
 /* 6491 */ 9999,
-/* 6492 */ 2023010,
+/* 6492 */ 2019010,
 /* 6493 */ 9999,
-/* 6494 */ 2029005,
+/* 6494 */ 2025005,
 /* 6495 */ 9999,
-/* 6496 */ 2029021,
+/* 6496 */ 2025021,
 /* 6497 */ 9999,
-/* 6498 */ 2029010,
+/* 6498 */ 2025010,
 /* 6499 */ 9999,
-/* 6500 */ 2031005,
+/* 6500 */ 2027005,
 /* 6501 */ 9999,
-/* 6502 */ 2031021,
+/* 6502 */ 2027021,
 /* 6503 */ 9999,
-/* 6504 */ 2031010,
+/* 6504 */ 2027010,
 /* 6505 */ 9999,
-/* 6506 */ 2033005,
+/* 6506 */ 2029005,
 /* 6507 */ 9999,
-/* 6508 */ 2033021,
+/* 6508 */ 2029021,
 /* 6509 */ 9999,
-/* 6510 */ 2033010,
+/* 6510 */ 2029010,
 /* 6511 */ 9999,
-/* 6512 */ 2035005,
+/* 6512 */ 2031005,
 /* 6513 */ 9999,
-/* 6514 */ 2035010,
+/* 6514 */ 2031010,
 /* 6515 */ 9999,
-/* 6516 */ 2040005,
+/* 6516 */ 2036005,
 /* 6517 */ 9999,
-/* 6518 */ 2040021,
+/* 6518 */ 2036021,
 /* 6519 */ 9999,
-/* 6520 */ 2040010,
+/* 6520 */ 2036010,
 /* 6521 */ 9999,
-/* 6522 */ 2042005,
+/* 6522 */ 2038005,
 /* 6523 */ 9999,
-/* 6524 */ 2042021,
+/* 6524 */ 2038021,
 /* 6525 */ 9999,
-/* 6526 */ 2042010,
+/* 6526 */ 2038010,
 /* 6527 */ 9999,
-/* 6528 */ 2044005,
+/* 6528 */ 2040005,
 /* 6529 */ 9999,
-/* 6530 */ 2044010,
+/* 6530 */ 2040010,
 /* 6531 */ 9999,
-/* 6532 */ 2049005,
+/* 6532 */ 2045005,
 /* 6533 */ 9999,
-/* 6534 */ 2049027,
+/* 6534 */ 2045027,
 /* 6535 */ 9999,
-/* 6536 */ 2049010,
+/* 6536 */ 2045010,
 /* 6537 */ 9999,
-/* 6538 */ 2051005,
+/* 6538 */ 2047005,
 /* 6539 */ 9999,
-/* 6540 */ 2051027,
+/* 6540 */ 2047027,
 /* 6541 */ 9999,
-/* 6542 */ 2051010,
+/* 6542 */ 2047010,
 /* 6543 */ 9999,
-/* 6544 */ 2053005,
+/* 6544 */ 2049005,
 /* 6545 */ 9999,
-/* 6546 */ 2053010,
+/* 6546 */ 2049010,
 /* 6547 */ 9999,
-/* 6548 */ 2062005,
+/* 6548 */ 2058005,
 /* 6549 */ 9999,
-/* 6550 */ 2062021,
+/* 6550 */ 2058021,
 /* 6551 */ 9999,
-/* 6552 */ 2062010,
+/* 6552 */ 2058010,
 /* 6553 */ 9999,
-/* 6554 */ 2064005,
+/* 6554 */ 2060005,
 /* 6555 */ 9999,
-/* 6556 */ 2064021,
+/* 6556 */ 2060021,
 /* 6557 */ 9999,
-/* 6558 */ 2064010,
+/* 6558 */ 2060010,
 /* 6559 */ 9999,
-/* 6560 */ 2066005,
+/* 6560 */ 2062005,
 /* 6561 */ 9999,
-/* 6562 */ 2066023,
+/* 6562 */ 2062023,
 /* 6563 */ 9999,
-/* 6564 */ 2066010,
+/* 6564 */ 2062010,
 /* 6565 */ 9999,
-/* 6566 */ 2068005,
+/* 6566 */ 2064005,
 /* 6567 */ 9999,
-/* 6568 */ 2068023,
+/* 6568 */ 2064023,
 /* 6569 */ 9999,
-/* 6570 */ 2068010,
+/* 6570 */ 2064010,
 /* 6571 */ 9999,
-/* 6572 */ 2070005,
+/* 6572 */ 2066005,
 /* 6573 */ 9999,
-/* 6574 */ 2070023,
+/* 6574 */ 2066023,
 /* 6575 */ 9999,
-/* 6576 */ 2070010,
+/* 6576 */ 2066010,
 /* 6577 */ 9999,
-/* 6578 */ 2072005,
+/* 6578 */ 2068005,
 /* 6579 */ 9999,
-/* 6580 */ 2072023,
+/* 6580 */ 2068023,
 /* 6581 */ 9999,
-/* 6582 */ 2072010,
+/* 6582 */ 2068010,
 /* 6583 */ 9999,
-/* 6584 */ 2074005,
+/* 6584 */ 2070005,
 /* 6585 */ 9999,
-/* 6586 */ 2074010,
+/* 6586 */ 2070010,
 /* 6587 */ 9999,
-/* 6588 */ 2079005,
+/* 6588 */ 2075005,
 /* 6589 */ 9999,
-/* 6590 */ 2079021,
+/* 6590 */ 2075021,
 /* 6591 */ 9999,
-/* 6592 */ 2079010,
+/* 6592 */ 2075010,
 /* 6593 */ 9999,
-/* 6594 */ 2081005,
+/* 6594 */ 2077005,
 /* 6595 */ 9999,
-/* 6596 */ 2081010,
+/* 6596 */ 2077010,
 /* 6597 */ 9999,
-/* 6598 */ 2086005,
+/* 6598 */ 2082005,
 /* 6599 */ 9999,
-/* 6600 */ 2086022,
+/* 6600 */ 2082022,
 /* 6601 */ 9999,
-/* 6602 */ 2086011,
+/* 6602 */ 2082011,
 /* 6603 */ 9999,
-/* 6604 */ 2088005,
+/* 6604 */ 2084005,
 /* 6605 */ 9999,
-/* 6606 */ 2088010,
+/* 6606 */ 2084010,
 /* 6607 */ 9999,
-/* 6608 */ 2093005,
+/* 6608 */ 2089005,
 /* 6609 */ 9999,
-/* 6610 */ 2093022,
+/* 6610 */ 2089022,
 /* 6611 */ 9999,
-/* 6612 */ 2093011,
+/* 6612 */ 2089011,
 /* 6613 */ 9999,
-/* 6614 */ 2095005,
+/* 6614 */ 2091005,
 /* 6615 */ 9999,
-/* 6616 */ 2095011,
+/* 6616 */ 2091011,
 /* 6617 */ 9999,
-/* 6618 */ 2100005,
+/* 6618 */ 2096005,
 /* 6619 */ 9999,
-/* 6620 */ 2100025,
+/* 6620 */ 2096025,
 /* 6621 */ 9999,
-/* 6622 */ 2100011,
+/* 6622 */ 2096011,
 /* 6623 */ 9999,
-/* 6624 */ 2102005,
+/* 6624 */ 2098005,
 /* 6625 */ 9999,
-/* 6626 */ 2102011,
+/* 6626 */ 2098011,
 /* 6627 */ 9999,
-/* 6628 */ 2107005,
+/* 6628 */ 2103005,
 /* 6629 */ 9999,
-/* 6630 */ 2107024,
+/* 6630 */ 2103024,
 /* 6631 */ 9999,
-/* 6632 */ 2107011,
+/* 6632 */ 2103011,
 /* 6633 */ 9999,
-/* 6634 */ 2109005,
+/* 6634 */ 2105005,
 /* 6635 */ 9999,
-/* 6636 */ 2109011,
+/* 6636 */ 2105011,
 /* 6637 */ 9999,
-/* 6638 */ 2114003,
+/* 6638 */ 2110003,
 /* 6639 */ 9999,
-/* 6640 */ 2114020,
+/* 6640 */ 2110020,
 /* 6641 */ 9999,
-/* 6642 */ 2114034,
+/* 6642 */ 2110034,
 /* 6643 */ 9999,
-/* 6644 */ 2114009,
+/* 6644 */ 2110009,
 /* 6645 */ 9999,
-/* 6646 */ 2164005,
+/* 6646 */ 2160005,
 /* 6647 */ 9999,
-/* 6648 */ 2164011,
+/* 6648 */ 2160011,
 /* 6649 */ 9999,
-/* 6650 */ 2172005,
+/* 6650 */ 2168005,
 /* 6651 */ 9999,
-/* 6652 */ 2172020,
+/* 6652 */ 2168020,
 /* 6653 */ 9999,
-/* 6654 */ 2172010,
+/* 6654 */ 2168010,
 /* 6655 */ 9999,
-/* 6656 */ 2174005,
+/* 6656 */ 2170005,
 /* 6657 */ 9999,
-/* 6658 */ 2174027,
+/* 6658 */ 2170027,
 /* 6659 */ 9999,
-/* 6660 */ 2174010,
+/* 6660 */ 2170010,
 /* 6661 */ 9999,
-/* 6662 */ 2176005,
+/* 6662 */ 2172005,
 /* 6663 */ 9999,
-/* 6664 */ 2176027,
+/* 6664 */ 2172027,
 /* 6665 */ 9999,
-/* 6666 */ 2176010,
+/* 6666 */ 2172010,
 /* 6667 */ 9999,
-/* 6668 */ 2178005,
+/* 6668 */ 2174005,
 /* 6669 */ 9999,
-/* 6670 */ 2178028,
+/* 6670 */ 2174028,
 /* 6671 */ 9999,
-/* 6672 */ 2178010,
+/* 6672 */ 2174010,
 /* 6673 */ 9999,
-/* 6674 */ 2180005,
+/* 6674 */ 2176005,
 /* 6675 */ 9999,
-/* 6676 */ 2180027,
+/* 6676 */ 2176027,
 /* 6677 */ 9999,
-/* 6678 */ 2180010,
+/* 6678 */ 2176010,
 /* 6679 */ 9999,
-/* 6680 */ 2182005,
+/* 6680 */ 2178005,
 /* 6681 */ 9999,
-/* 6682 */ 2182027,
+/* 6682 */ 2178027,
 /* 6683 */ 9999,
-/* 6684 */ 2182010,
+/* 6684 */ 2178010,
 /* 6685 */ 9999,
-/* 6686 */ 2184005,
+/* 6686 */ 2180005,
 /* 6687 */ 9999,
-/* 6688 */ 2184027,
+/* 6688 */ 2180027,
 /* 6689 */ 9999,
-/* 6690 */ 2184010,
+/* 6690 */ 2180010,
 /* 6691 */ 9999,
-/* 6692 */ 2186005,
+/* 6692 */ 2182005,
 /* 6693 */ 9999,
-/* 6694 */ 2186026,
+/* 6694 */ 2182026,
 /* 6695 */ 9999,
-/* 6696 */ 2186010,
+/* 6696 */ 2182010,
 /* 6697 */ 9999,
-/* 6698 */ 2188005,
+/* 6698 */ 2184005,
 /* 6699 */ 9999,
-/* 6700 */ 2188030,
+/* 6700 */ 2184030,
 /* 6701 */ 9999,
-/* 6702 */ 2188010,
+/* 6702 */ 2184010,
 /* 6703 */ 9999,
-/* 6704 */ 2190005,
+/* 6704 */ 2186005,
 /* 6705 */ 9999,
-/* 6706 */ 2190030,
+/* 6706 */ 2186030,
 /* 6707 */ 9999,
-/* 6708 */ 2190010,
+/* 6708 */ 2186010,
 /* 6709 */ 9999,
-/* 6710 */ 2192005,
+/* 6710 */ 2188005,
 /* 6711 */ 9999,
-/* 6712 */ 2192027,
+/* 6712 */ 2188027,
 /* 6713 */ 9999,
-/* 6714 */ 2192010,
+/* 6714 */ 2188010,
 /* 6715 */ 9999,
-/* 6716 */ 2194005,
+/* 6716 */ 2190005,
 /* 6717 */ 9999,
-/* 6718 */ 2194011,
+/* 6718 */ 2190011,
 /* 6719 */ 9999,
-/* 6720 */ 2199003,
+/* 6720 */ 2195003,
 /* 6721 */ 9999,
-/* 6722 */ 2199017,
+/* 6722 */ 2195017,
 /* 6723 */ 9999,
-/* 6724 */ 2199006,
+/* 6724 */ 2195006,
 /* 6725 */ 9999,
-/* 6726 */ 2212005,
+/* 6726 */ 2208005,
 /* 6727 */ 9999,
-/* 6728 */ 2212011,
+/* 6728 */ 2208011,
 /* 6729 */ 9999,
-/* 6730 */ 2223003,
+/* 6730 */ 2219003,
 /* 6731 */ 9999,
-/* 6732 */ 2221003,
+/* 6732 */ 2217003,
 /* 6733 */ 9999,
-/* 6734 */ 2223005,
-/* 6735 */ 2250003,
+/* 6734 */ 2219005,
+/* 6735 */ 2246003,
 /* 6736 */ 9999,
-/* 6737 */ 2223011,
+/* 6737 */ 2219011,
 /* 6738 */ 9999,
 /* 6739 */ 9999,
-/* 6740 */ 2223011,
+/* 6740 */ 2219011,
 /* 6741 */ 9999,
 /* 6742 */ 9999,
-/* 6743 */ 2250009,
-/* 6744 */ 2250005,
+/* 6743 */ 2246009,
+/* 6744 */ 2246005,
 /* 6745 */ 9999,
-/* 6746 */ 2250005,
+/* 6746 */ 2246005,
 /* 6747 */ 9999,
 /* 6748 */ 9999,
-/* 6749 */ 2250005,
+/* 6749 */ 2246005,
 0
 };
 /* only for BIGHASH (see art.c)

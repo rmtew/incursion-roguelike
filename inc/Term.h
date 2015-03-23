@@ -227,6 +227,8 @@ typedef struct HyperLink {
 
 extern KeySetItem StandardKeySet[], RoguelikeKeySet[];                                
 
+#define MAX_MENU_OPTIONS 510
+
 typedef struct LMenuOption {
   String Text;
   String Desc;
@@ -294,6 +296,7 @@ protected:
     int16 LinkCount;
     int16 SelectedLink;
     bool isHelp, updated;
+    bool initialised;
 
     /* The Debugger */
 #ifdef BYTECODE_TRACER
@@ -314,6 +317,7 @@ protected:
     QuickKey *QuickKeys;
 
     /* Menu Internals */
+    // TODO(rmtew): Why is this 1024?  The maximum is 510 (MAX_MENU_OPTIONS)
     LMenuOption Option[1024]; // ww: merge for easy sorting
     int16 OptionCount, cOption;
 
@@ -571,6 +575,8 @@ protected:
     int8 s1, s2, s3, s4;
 
 public:
+    virtual bool RunOnCommandLine(int argc, char *argv[], int *retval);
+
     /* Window Handling (TextTerm.cpp) */
     virtual void InitWindows();
     virtual void SetWin(int16 win);

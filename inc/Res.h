@@ -1184,7 +1184,7 @@ class Game : public Object
       String RecursiveParse(EventInfo &e, rID tID, int32 *t, int16 len);
 
 #ifdef DEBUG
-      bool ResourceCompiler();
+      bool ResourceCompiler(char *moduleFileName);
 #endif
       void CountResources();
 };

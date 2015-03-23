@@ -2068,9 +2068,6 @@ Redraw:
         T1->LOption("Restore a Saved Game",1);
         T1->LOption("Reincarnate a Character",9);
         T1->LOption("Recover a Crashed Game",8);
-#if DEBUG
-        T1->LOption("Compile Resources",3);
-#endif
         T1->LOption("Change System Options",4);
         /* T1->LOption("View the Scoreboard",5); */
         T1->LOption("Read the Introduction",6);
@@ -2179,12 +2176,6 @@ Redraw:
             T1->HelpTopic(NULL);
             Cleanup();
             break;
-#ifdef DEBUG
-        case 3: //compile resources
-            theGame->ResourceCompiler();
-            Cleanup();
-            break;
-#endif
         case 4:
             T1->SetWin(WIN_SCREEN);
             T1->Clear();

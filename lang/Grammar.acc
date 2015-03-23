@@ -9,8 +9,6 @@
 #include "Incursion.h"
 #include <setjmp.h>
 
-#define printf T1->Write
-
 #define GETBIND_MEMFUNC(id)         ((BMemFunc*)(theSymTab.GetBinding(id,0,0,MEM_FUNC)))
 #define GETBIND_SYSFUNC(id)         ((BSysFunc*)(theSymTab.GetBinding(id,0,0,SYS_FUNC)))
 #define GETBIND_MEMVAR(id)          ((BMemVar*)(theSymTab.GetBinding(id,0,1,MEM_VAR)))
@@ -125,14 +123,12 @@ EffectValues ValArray[32];
 
 int yyerror(const char*msg) {
    Errors++;
-   T1->Color(RED);
-   T1->CWrite(Format("\"%s\" (%d): %s\n", preprocFilename, yypos, msg));
+   printf("\"%s\" (%d): %s\n", preprocFilename, yypos, msg);
    longjmp(jb,1);
 }
 
 void yywarning(const char*msg) {
-   T1->Color(GREY);
-   T1->CWrite(Format("\"%s\" (%d): %s\n", preprocFilename,  yypos, msg));
+   printf("\"%s\" (%d): %s\n", preprocFilename,  yypos, msg);
 }
 
 
