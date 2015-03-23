@@ -1488,7 +1488,6 @@ void libtcodTerm::Seek(int32 pos, int8 rel) {
 }
 
 void libtcodTerm::Cut(int32 amt) {
-    /* Fix this later! */
     int32 start, end;
     void *block;
     start = ftell(fp);
@@ -1499,6 +1498,7 @@ void libtcodTerm::Cut(int32 amt) {
     fread(block, end - (start + amt), 1, fp);
     fseek(fp, start, SEEK_SET);
     fwrite(block, end - (start + amt), 1, fp);
+    free(block);
 }
 
 char * libtcodTerm::MenuListFiles(const char * filespec, uint16 flags, const char * title) {

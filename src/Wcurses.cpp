@@ -1461,17 +1461,18 @@ void cursesTerm::Seek(int32 pos,int8 rel) {
 }
 
 void cursesTerm::Cut(int32 amt) {
-	/* Fix this later! */
 	int32 start, end;
 	void *block;
 	start = ftell(fp);
 	fseek(fp, 0, SEEK_END);
 	end = ftell(fp);
 	fseek(fp, start + amt, SEEK_SET);
-	block = malloc(end - (start + amt));
+
+    block = malloc(end - (start + amt));
 	fread(block, end - (start + amt), 1, fp);
 	fseek(fp, start, SEEK_SET);
 	fwrite(block, end - (start + amt), 1, fp);
+    free(block);
 }
 
 char *cursesTerm::MenuListFiles(const char * filespec, uint16 flags, const char * title) {
