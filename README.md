@@ -85,7 +85,7 @@ These instructions are intended to allow you to get Incursion to the point where
   1. Ensure the `Debug` configuration is selected.
   1. Look at the Solution Explorer window.  You will see four entries: `exe_curses`, `exe_libtcod`, `lib_incursion` and `modaccent`.  One will be darker than the others.  This is the one which runs when you start debugging.  If the darker entry is not `exe_libtcod`, then right click on `exe_libtcod` and choose the `Set as Startup Project` option to make it darker.
   1. Build the solution.
-  1. You need to run 'Incursion.exe -compile' to compile the scripts.
+  1. You need to run 'Incursion.exe -compile' to compile the scripts.  It has to be the `Debug` build of the executable, for this to work.
 
 At this point, you are ready to do some development, or just play the latest version of the source code by debugging it within Visual Studio.  Congratulations!
 
