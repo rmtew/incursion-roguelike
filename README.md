@@ -57,35 +57,35 @@ These instructions are intended to allow you to get Incursion to the point where
   1. Download and extract the Incursion source code.
   1. Enter the `build` subdirectory within the Incursion source code.
   1. Ensure that you have the EditorConfig extension installed by doing the following:
-    1. It is important you do this if you plan to contribute back changes to me, as it ensures the files are have correct indentation.
-    1. Run Visual Studio, perhaps by opening `Incursion.sln`.
-    1. Select the menu option: Tools -> Extensions and Updates.
-    1. Select the Online entry from the left-hand side list.
-    1. Search for and install EditorConfig.
-    1. Exit Visual Studio.
+      1. It is important you do this if you plan to contribute back changes to me, as it ensures the files are have correct indentation.
+      1. Run Visual Studio, perhaps by opening `Incursion.sln`.
+      1. Select the menu option: Tools -> Extensions and Updates.
+      1. Select the Online entry from the left-hand side list.
+      1. Search for and install EditorConfig.
+      1. Exit Visual Studio.
   1. If you are going to take the simple approach to obtaining the dependencies:
-    1. Ensure you have downloaded the build dependencies archive mentioned above, from the bitbucket [project downloads page](https://bitbucket.org/rmtew/incursion-roguelike/downloads).
-    1. Open the archive and look inside it.  There is only one entry there, a directory named `dependencies`, and within that there is a selection of files and directories inside it like `include`, `libtcod.dll` and so forth.
-    1. Enter the `build` subdirectory within the source code.
-    1. Extract the contents of the archive here.
-    1. You should now be able to locate the `build\dependencies\include` directory.  You should now be able to locate `build\dependencies\libtcod.lib`.  If this is not the case, then you did not extract the contents of the archive into the `build` subdirectory.  Please try again.
+      1. Ensure you have downloaded the build dependencies archive mentioned above, from the bitbucket [project downloads page](https://bitbucket.org/rmtew/incursion-roguelike/downloads).
+      1. Open the archive and look inside it.  There is only one entry there, a directory named `dependencies`, and within that there is a selection of files and directories inside it like `include`, `libtcod.dll` and so forth.
+      1. Enter the `build` subdirectory within the source code.
+      1. Extract the contents of the archive here.
+      1. You should now be able to locate the `build\dependencies\include` directory.  You should now be able to locate `build\dependencies\libtcod.lib`.  If this is not the case, then you did not extract the contents of the archive into the `build` subdirectory.  Please try again.
   1. Otherwise if you are going to do take the advanced approach to obtaining the dependencies:
-    1. Download and install the mercurial command line tools.  This is used to obtain the SDL2 and libtcod source code.
-	1. If you want to build releases, then do the following:
-      1. Download and install [7zip](http://www.7-zip.org/).
-    1. If you want Google Breakpad support, then do the following:
-      1. Download and install the [Git command line tools](http://git-scm.com/).  This is only necessary if you do not have the git command already installed, and available in your PATH.
-      1. Download and install [Python 2.7](https://www.python.org/downloads/windows/).
-    1. Open a DOS console window, and ensure you are in the top-level directory of the Incursion source code.
-    1. Type `build.bat -d` and hit enter.
-    1. Lots of text will scroll past and eventually you will have compiled source code, or this script will error and you will have to ask for help.
-      1. Note that Google Breakpad will error, but will get far enough to produce the required libraries.
+      1. Download and install the mercurial command line tools.  This is used to obtain the SDL2 and libtcod source code.
+	  1. If you want to build releases, then do the following:
+        1. Download and install [7zip](http://www.7-zip.org/).
+      1. If you want Google Breakpad support, then do the following:
+        1. Download and install the [Git command line tools](http://git-scm.com/).  This is only necessary if you do not have the git command already installed, and available in your PATH.
+        1. Download and install [Python 2.7](https://www.python.org/downloads/windows/).
+      1. Open a DOS console window, and ensure you are in the top-level directory of the Incursion source code.
+      1. Type `build.bat -d` and hit enter.
+      1. Lots of text will scroll past and eventually you will have compiled source code, or this script will error and you will have to ask for help.
+        1. Note that Google Breakpad will error, but will get far enough to produce the required libraries.
   1. If you have reached here, you have obtained the dependencies.
   1. Open `Incursion.sln`.
   1. Ensure the `Debug` configuration is selected.
   1. Look at the Solution Explorer window.  You will see four entries: `exe_curses`, `exe_libtcod`, `lib_incursion` and `modaccent`.  One will be darker than the others.  This is the one which runs when you start debugging.  If the darker entry is not `exe_libtcod`, then right click on `exe_libtcod` and choose the `Set as Startup Project` option to make it darker.
-  1. Start debugging Incursion.  The game window will open.
-  1. In the Incursion main menu, select the 'Compile Resources' option.  Until this is done and the module is generated, few other options will work.  Once the module is generated, this will have created a `build\run\mod\Incursion.Mod` file.
+  1. Build the solution.
+  1. You need to run 'Incursion.exe -compile' to compile the scripts.
 
 At this point, you are ready to do some development, or just play the latest version of the source code by debugging it within Visual Studio.  Congratulations!
 
