@@ -1,10 +1,14 @@
-# This nmake makefile for libtcod is copyright 2015 by Richard Tew.
-# It is in the public domain and can be freely adapted.
+# libtcod nmake makefile, version 1
+# Copyright 2015 by Richard Tew.
+# It can be considered to be in the public domain and be freely adapted.
 
 # OPTIONAL ENVIRONMENT VARIABLES
 #     BASEPATH: This should be the path to the libtcod directory.
 #     BASEOBJPATH: This should be the path to where the output files will be placed.
 #         e.g. $(BASEOBJPATH)\Release\libtcod.dll
+#     BASENAME_SUFFIX: This should be something like _d or -debug, ensuring for
+#         example that libtcod-debug.lib causes libtcod-debug.dll to load and not
+#         libtcod.dll.
 
 !ifndef SDL2PATH
 !error Please set SDL2PATH to the absolute path of the SDL2 directory.
@@ -14,18 +18,19 @@
 !error Please set CONFIG to either Debug or Release.
 !endif
 
+BASENAME=libtcod
 CFLAGS= /nologo /c $(cflags) $(cdebug) $(cvars) /W3 /WX- /Oy- /EHsc /GS /Gd /TC /analyze- /wd4996
 LDFLAGS= /nologo /manifest /manifest:embed /debug /machine:X86 /dll /safeseh $(ldflags) /libpath:"$(SDL2PATH)\VisualC\SDL\Win32\$(CONFIG)" sdl2.lib user32.lib
 
 !if "$(CONFIG)"=="Debug"
+BASENAME=$(BASENAME)$(BASENAME_SUFFIX)
 CFLAGS= $(CFLAGS) /Od /MTd /RTC1 /Z7
 !else if "$(CONFIG)"=="Release"
 CFLAGS= $(CFLAGS) /O2 /Oi /MT /Zo
 LDFLAGS=$(LDFLAGS) /opt:ref
 !endif
 
-BASENAME=libtcod
-TCODCFLAGS=/DTCOD_SDL2 /DLIBTCOD_EXPORTS /DNO_OPENGL -I"$(BASEPATH)\include" -I"$(ZLIBSRCPATH)" /I"$(SDL2PATH)\include"
+TCODCFLAGS=/DTCOD_SDL2 /DLIBTCOD_EXPORTS /DNO_OPENGL /I"$(BASEPATH)\include" /I"$(ZLIBSRCPATH)" /I"$(SDL2PATH)\include"
 LDLIBS= $(ldlibs)
 RM= del
 
@@ -85,3 +90,17 @@ $(DLLPATH): $(OBJS)
 clean:
 	if exist $(BASEOBJPATH)\Debug rmdir /s /q $(BASEOBJPATH)\Debug
 	if exist $(BASEOBJPATH)\Release rmdir /s /q $(BASEOBJPATH)\Release
+
+# Samples relevant content.
+
+SAMPLESCFLAGS=/DTCOD_SDL2 /I"$(BASEPATH)\include" /I"$(SDL2PATH)\include" /link /libpath:"$(OBJPATH)" libtcod$(BASENAME_SUFFIX).lib
+
+SAMPLESPATH=$(BASEPATH)\samples
+SAMPLESOBJS=$(OBJPATH)\samples_c.obj
+
+{$(SAMPLESPATH)}.c{$(OBJPATH)}.obj::
+	if not exist $(OBJPATH) mkdir $(OBJPATH)
+	$(CC) /Fo"$(OBJPATH)\\" $< $(SAMPLESCFLAGS)
+
+samples_c$(BASENAME_SUFFIX).exe: $(SAMPLESOBJS)
+	$(CC) $(SAMPLESOBJS) /Fe"$(OBJPATH)\$@" $(SAMPLESCFLAGS)  
