@@ -1676,7 +1676,9 @@ void Character::CalcValues(bool KnownOnly, Item *thrown)
     
   mMana += AbilityLevel(CA_MAGICAL_NATURE);
 
-  if (isPlayer() && theGame->InPlay() && thisp->MyTerm)
+  /* It's possible for stati disabling to invoke this when the player is between
+     levels.  So now we check the coord is valid. */
+  if (isPlayer() && theGame->InPlay() && thisp->MyTerm && thisp->x != -1)
     thisp->ShowStats();
 
   // ww: calculate bonus spell slots ... this used to be in GainAbility,
