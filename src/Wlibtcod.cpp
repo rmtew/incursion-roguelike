@@ -1053,8 +1053,7 @@ void libtcodTerm::SetIncursionDirectory(const char *s) {
     _mkdir(tmp);
 }
 
-/* Draw the intro screen header and display the start of game libtcod-specific
- * stuff in the footer area below it. */
+/* Draw the intro screen header and display the start of game libtcod-specific stuff in the footer area below it. */
 void libtcodTerm::Title() {
     uint8 done_rendering = 0;
     TCOD_key_t key = { TCODK_NONE, 0 };
@@ -1399,12 +1398,6 @@ bool libtcodTerm::CheckEscape() {
 }
   
 void libtcodTerm::ClearKeyBuff() {
-      /*
-    int16 i;
-    for (i=0;i!=KEY_MAX;i++)
-      if (key[i])
-        return;
-        */
     TCOD_key_t key;
     while (1) {
         key = readkey(0);
