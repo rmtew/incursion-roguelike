@@ -1,0 +1,78 @@
+/* desktop CSS amendments */
+
+.main {
+  max-width: 748px; /* ipad (lowest common denominator) = 768px */
+  text-align: justify;
+}
+
+header .title a {
+  font-size: 4em;
+}
+
+footer {
+  max-width: 748px; /* ipad (lowest common denominator) = 768px */
+}
+
+.rcaptionblock {
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
+
+.mainheader {
+  text-align: left;
+}
+
+.aligned-example.text {
+  min-width: calc(98%/2);
+  max-width: calc(98%/2);
+}
+
+.aligned-example.text:nth-of-type(2n+1) {
+  padding-right: 1%;
+}
+
+.aligned-example.text:nth-of-type(2n) {
+  padding-left: 1%;
+}
+
+.aligned-example.highlight {
+  max-width: 48%;
+}
+
+footer .section a img.mini {
+  width: 16px;
+  height: 16px;
+}
+
+#menu-area {
+  top: 3em;
+  width: 5.25em;
+  height: 33px;
+  padding-left: 1.25em;
+  border-top-left-radius: 0.3em;
+  border-bottom-left-radius: 0.3em;
+}
+
+#menu-area .menu-text {
+  display: inline-block;
+  height: 100%;
+  line-height: 33px;
+  color: white;
+  text-transform: uppercase;
+  font-weight: 600;
+  visibility: visible;
+}
+
+#menu-area .menu-icon {
+  left: auto;
+  right: 10px;
+  -webkit-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -ms-transform: translateX(0);
+  -o-transform: translateX(0);
+  transform: translateX(0);
+}
+
+#lateral-nav {
+  top: 5em;
+}

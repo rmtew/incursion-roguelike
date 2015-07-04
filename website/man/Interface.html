@@ -1,0 +1,488 @@
+<html>  <head>    <title>Incursion: Halls of the Goblin King</title>    <link rel="Stylesheet" type="text/css" href="Incursion.css" />  </head>  <body>    <table width=100% height=100% cellspacing=0 cellpadding=0>      <tr>        <td style="background-image: url(waterleft.jpg);">          <img src="thinbar.gif">        </td>        <td BGCOLOR="#E2CAE0" text="black">          <SPAN STYLE="font-family: monospace"></b></b></b></b></b></b>&nbsp;&nbsp;Incursion uses a window and menu-based user interface for most functions, and it should be fairly intuitive to navigate it under most circumstances. This section explains some of the more intricate methods in which the user interacts with the game.<br>
+ </b></b></b></b>-- <A href="#SL">{SL}</A> Screen Layout<br>
+ -- <A href="#UH">{UH}</A> Using the Help System<br>
+ -- <A href="#MS">{MS}</A> Menus and Scrolling<br>
+ -- <A href="#QK">{QK}</A> Quick Keys<br>
+ -- <A href="#SP">{SP}</A> The Selection Prompt<br>
+ -- <A href="#IM">{IM}</A> The Inventory Manager<br>
+ -- <A href="#OP">{OP}</A> The Options Panel<br>
+ -- <A href="#MA">{MA}</A> Macros and AutoBuff<br>
+ -- <A href="#LS">{LS}</A> Loading and Saving<br>
+ -- <A href="Manual.html">{MM}</A> Return to the Main Help Menu<br>
+<br>
+ <b>SCREEN LAYOUT <A name="SL">{SL}</A><br>
+ ==============</b></b></b></b><br>
+ &nbsp;&nbsp;Incursion displays in the 80x50 terminal mode, and must have a display screen capable of supporting this; fortunately, all modern Windows systems do this. The display is a normal Windows terminal window, and the size of the font used can be changed by selecting the Properties command from the system menu, which can be brought up by pressing [Alt + SPACE]. Pressing [Alt + ENTER] toggles the display between fullscreen and windowed mode. Note that the game is designed to be played using Raster Fonts; selecting Lucida Console will cause characters to be displayed incorrectly in many cases, since TrueType fonts often do not represent all of the extended ASCII characters Incursion uses in the conventional way.<br>
+ &nbsp;&nbsp;In normal Incursion gameplay, the screen is divided into five distinct areas. The largest area is the map, which displays an overhead view of the area your character is exploring as represented by symbolic ASCII characters. This area is essentially self-explanatory. The other four areas are as follows:<br>
+ &nbsp;&nbsp;<b>Traits Window:</b></b></b></b> The rightmost strip of the screen is called the Traits Window, and is seperated from the map by a blue line. Here you see several different pieces of information about your character for quick reference: your name, race, classes and levels, experience total and attributes. The current time is also displayed here, as are several status conditions: your readyness (Exploring, Fighting or performing an extended action), hunger state, method of locomotion, health state and fatigue state. Attributes are shown in bright green if increased by magic, brown if decreased by a spell effect or fatigue penalty and red if damaged by an attribute-damage attack.<br>
+ &nbsp;&nbsp;Beneath your attributes are listed your combat values: combat mode, to-hit bonus, damage, attack speed, encumbrance level, defense class (and armor coverage, if applicable), armor ratings and movement rate. The meaning of all these terms is defined in depth in the combat chapter. Beneath the combat values is displayed a legend of all the creatures and objects currently within your line of sight, showing you exactly what each symbolic character on screen represents. If there are many things in your field of view, their names may be truncated to allow more to be shown.<br>
+ &nbsp;&nbsp;The final two lines of the Traits Window show two 'video game life meter' style gauges for your current mana and current hit points as proportional to their totals. When you cast spells that drain mana for as long as they remain active, that lost mana is shown as brown on the mana meter. When you cast spells costing mana that can be regenerated, that lost mana is shown in green. Injuries are always shown in the life meter in red.<br>
+ &nbsp;&nbsp;Several options allow you to customize what information is displayed in the Traits Window, suppressing common information that rarely changes or replacing the list of object in view with other kinds of quick referance data.<br>
+ &nbsp;&nbsp;<b>Status Window:</b></b></b></b> The two-line status window is shown at the bottom of the screen. The lowest line shows your current and total hit points, mana and fatigue points, as well as the total value in gold pieces of all the coins (of any type) you possess. After this, the line lists any spell effects currently affecting you or any other status conditions not shown in the Traits Window. If you have a number of protective spells is your AutoBuff list, they won't all be listed seperately here when active; instead, the status line will simply read BUFFED (to indicate all protective or augmentation spells have been cast), SEMIBUFF (to indicate some such spells are active but not others) and UNBUFFED (to indicate that none of your listed spells are active on you at this time.<br>
+ &nbsp;&nbsp;The line immediately above the lowest line shows your current location: the name of the area you inhabit, the current region in that area, the terrain and objects in the square your character is standing in and the depth you are at when in a dungeon.<br>
+ &nbsp;&nbsp;<b>Message/Prompt Windows:</b></b></b></b> The topmost three lines of the display are devoted to the message window. The game will display prose text here to tell you what is happening as the game progresses. The message window clears automatically every time a new message needs to be displayed and the user has given input since the last message was displayed. If enough messages are displayed that the message window becomes full, a <b>-- more --</b></b></b></b> prompt will be displayed, and the game will wait for the user to press [SPACE] before the remaining messages are displayed. This behaviour can be turned off using the Options Manager, causing new batches of messages to automatically overwrite old ones; this can be useful in the later game when combats involve many creatures and a great deal of text is shown for every turn. The 'v' command can be used to review recent messages if any are missed.<br>
+ &nbsp;&nbsp;Beneath the Message Window is the one-line prompt window, which is normally empty but is used to display various input prompts, such as the yes/no confirmation prompt or the spell targeting prompt.<br>
+ &nbsp;&nbsp;<b>Number Windows:</b></b></b></b> When the game makes a dice roll for you, the results of that roll are displayed in one of the game's number windows. These rolls include attack rolls (either your attacks against other creatures or their attacks against you), damage rolls, saving throws, skill checks and other, less common rolls such as magic resistance checks. There are two, two-line number windows; one for rolls your character makes and and for rolls made by other creatures as a result of your spells or attacks. Both of these windows can be turned off in the Options Manager; their screen-space is then used to display more of the map.<br>
+ &nbsp;&nbsp;Some rolls are not shown, either because they happen very frequently or because they would give away information the player should not have. In other cases, the numbers shown will not match the actual result of an action in game -- for example, if a player is wearing an unidentified magical item that grants her a +4 bonus to Strength (and thus a +2 bonus to melee attack rolls), a percieved attack roll result of 13 will hit a monster with a defense class of 15 -- the increased Strength will be taken into account by the game even though the character is unaware of it. This information might be useful to character seeking to determine the function of unknown magical items.<br>
+ &nbsp;&nbsp;When a roll needs to be displayed, the number window it should be displayed in will automatically be cleared, even if there is another roll there that the player has not yet had a chance to see. This is a fairly frequent occurance in Incursion; the overwritten rolls can be examined using the 'v' command. Additionally, sometimes all the modifiers for a roll cause its listing to be longer than the width of the numbers window it is displayed in; in this case its text will simply be truncated, but again the full roll can be viewed using the 'v' command.<br>
+<br>
+ <b>USING THE HELP SYSTEM <A name="UH">{UH}</A><br>
+ =====================</b></b></b></b><br>
+ &nbsp;&nbsp;The '?' command will display context-sensitive help at any time in Incursion; in normal gameplay it brings up a menu window listing all of the gameplay commands and the keystrokes bound to them, as well as allowing the user to choose one of several chapters of the manual to navigate to. The '/' command brings up a legend listing all the characters displayed on the Incursion map and what they represent in actual gameplay.<br>
+ &nbsp;&nbsp;Help is always displayed in a pop-up window in front of whatever else was on the screen when it was requested. It can be scrolled using the [PGUP] and [PGDN] keys; the [UP] and [DOWN] arrow keys scroll more rapidly. [ESC] dismisses the help window and returns to the game. Incursion help includes hyperlinks, but since Incursion does not use the mouse, a different means of navigating them is needed. A hyperlink is displayed as a two-character code enclosed in curly braces; note for example the 'UH' hyperlink displayed at the top of this section.<br>
+ &nbsp;&nbsp;A hyperlink can be selected in one of two ways. First, the [TAB] key can be used to jump among all the hyperlinks displayed in the current help window, and then [ENTER] can be pressed to jump to a currently selected hyperlink. More directly, you can simply type the two-character code associated with the hyperlink, automatically jumping to it even if it is not visible on the current help page.<br>
+ &nbsp;&nbsp;The hyperlinks can be used to quickly navigate long help pages. For example, the Wizard Spells chapter of the help has hyperlinks named according to school and spell level -- typing '3N' will automatically navigate to the third-level necromancy spells, and '2V' will send you to the 2nd-level evocation spells. Likewise, the feats are listed in alphabetical order, so typing the first two letters in any feat's name will scroll to the first feat with those two letters as the first letters in its name.<br>
+<br>
+ <b>MY CHARACTER</b></b></b></b><br>
+ The 'My Character' chapter of the manual is special in that it is customized to display only the help pertinent to the character you are currently playing. For example, if you are playing a chaotic neutral dwarven barbarian with the Power Attack feat, this chapter of the manual will contain the descriptions of dwarves, barbarians, the chaotic neutral alignment and the Power Attack feat. Multiclass spellcasters will find this chapter useful, because it lists all the spells they have access to in a neat, ordered list.<br>
+<br>
+ <b>MENUS AND SCROLLING <A name="MS">{MS}</A><br>
+ ===================</b></b></b></b><br>
+ &nbsp;&nbsp;Incursion displays a menu in a pop-up window whenever it needs the user to select something from a list of choices. These menus can be navigated using the cursor keys, and a choice made by pressing [ENTER]; alternatively, every option on a menu is assigned a letter of the alphabet in either upper or lower case; typing the letter in question will automatically select that item from the menu.<br>
+ &nbsp;&nbsp;Some menus can be dismissed by pressing [ESC], cancelling the command that brought them up; others require a selection and cannot be closed until one has been made. For some menus, every option has a description associated with it. In this case, only the currently selected item's description will be displayed, and it will be shown directly beneath the listing of choices.<br>
+ &nbsp;&nbsp;Frequently, Incursion displays a large amount of text in an area smaller than can contain that text, such as the help windows, the listing of the contents of a container in the inventory window or the descriptions of choices in a menu. This is indicated by the display of a green down-arrow in the area the text in displayed in. Whenever this green arrow appears, the text can be scrolled by pressing [PGDN] and [PGUP]. A green down arrow indicates that text can be scrolled further downward, while a green up arrow indicates that text can be scrolled further upwards.<br>
+<br>
+ <b>QUICK KEYS <A name="QK">{QK}</A><br>
+ ==============</b></b></b></b><br>
+ &nbsp;&nbsp;Quick Keys are a feature of Incursion that allows commonly used spells, verbs or combat options to be bound to a single keystroke. The number keys on the keyboard are considered Quick Keys in Incursion, and the user can bind them to commonly used commands, allowing those commands to be selected with a single keystroke. QuickKeys can be assigned to a spell in Spell Manager by moving the seelction arrows so that the desired spell is selected, then pressing the number key you wish to bind to that spell. Similarly, combat options or use-verbs (from the 'y' command) can be bound to a Quick Key by moving the menu cursor to that option and pressing the number key you wish to bind.<br>
+ &nbsp;&nbsp;Thereafter, the number key can be pressed at any time in normal gameplay to cast that spell, use that combat option or issue that verb in a single keystroke.<br>
+ &nbsp;&nbsp;Quick Keys are associated with a specific character; they are saved when the character is saved, but do not apply to any other character. This is because different characters will rely on different techniques -- a character who takes the Master Disarm feat will probably use the Disarm combat option a lot, whereas one who doesn't, won't.<br>
+<br>
+ <b>THE SELECTION PROMPT <A name="SP">{SP}</A><br>
+ ====================</b></b></b></b><br>
+ &nbsp;&nbsp;The selection prompt comes up whenever you cast a spell or use a special ability that can affect something other then yourself, or whenever you use the Look ('l') command. It allows you to aim your effects at other targets on the map, or simply to examine what is around you. The selection prompt is usually accompanied by a white block-cursor that highlights whatever is currently selected. The cursor keys are used to select a target as desired, while other keys can be used to examine your surrondings.<br>
+<br>
+ <b>SELECTION TYPES<br>
+ ===============</b></b></b></b><br>
+ &nbsp;&nbsp;Four different types of input can be given using the selection prompt. By pressing the associated keys, you can input a direction, location, target or inventory item. Not all of these types of input are accepted by every selection prompt, depending upon what spawned it. For example, the spell <b>bless</b></b></b></b> can be cast on either an inventory item or a location, but the spell <b>hideous laughter</b></b></b></b> can specifically be cast only on a living creature. You can press [ENTER] at any time to confirm the selection of a target, or [ESC] to cancel the selection prompt completely. The selection modes are as follows:<br>
+ &nbsp;&nbsp;<b>Select a Direction ('d'):</b></b></b></b> Wands, breath weapons, some tactical options and spells which produce a beam, bolt or ball can be fired in a specific cardinal direction. When selecting a direction, pressing an arrow key is considered to be making a choice, and the spell is fired in that direction. Some abilities (such as <b>magic missile</b></b></b></b>) can also be targeted at a specific creature, while others (such as a polymorphed character's breath weapon) can <b>only</b></b></b></b> be fired in a cardinal direction. You can press '*' to aim a bolt or beam at yourself.<br>
+ &nbsp;&nbsp;<b>Select a Location ('l'):</b></b></b></b> This selection mode allows you to select a given map square as a target for a spell or ability, irregardless of whether there is anything in it or not. This can be useful for spells like <b>dispel magic</b></b></b></b>, which have a circular area of effect that you are choosing the center point of. By carefully choosing the focus of such effects, you can hit a maximum number of desired targets while avoiding hitting targets you don't desire to affect.<br>
+ &nbsp;&nbsp;<b>Select a Target ('t'):</b></b></b></b> You can select a monster or unattended item as a target using this method. The arrow keys are used to jump to the nearest item in question in the direction chosen. If you can't manage to reach the target you want, you can also always use the 'l' location selection mode to select a target, even if	the game won't let you select an empty square in response to this specific prompt.<br>
+ &nbsp;&nbsp;<b>Select from Inventory ('i'):</b></b></b></b> Some spells can effect either external targets or items you are carrying. Pressing 'i' presents you with a menu list of items in your inventory that are applicable to this ability. You can cancel this list and return to selecting an external target by pressing [ESC].<br>
+<br>
+ <b>Looking</b></b></b></b><br>
+ &nbsp;&nbsp;The prompt for the Look ('l') command is simply the standard selection prompt, but the game ignores whatever you select. In other words, 'l' brings up the selection prompt just so that you can examine things around you. In addition, four other keystroke options are explicitly listed under the Look command prompt to allow you to examine things more carefully, but are available from any effect prompt as well.<br>
+ &nbsp;&nbsp;<b>Examine Target ('x'):</b></b></b></b> This option displays a window describing the target you have currently selected in greater detail, or a list of all the examinable things in the square. For monsters, this shows the monster memory entry in question; for weapons, it lists the weapon's combat statistics. Descriptions of things will be more fleshed out in later releases of Incursion.<br>
+ &nbsp;&nbsp;<b>Examine Region ('r'):</b></b></b></b> This option displays the descriptive text for the room, corridor or sub-area the cursor is currently positioned over.<br>
+ &nbsp;&nbsp;<b>Examine Terrain ('f'):</b></b></b></b> This option displays a more detailed description of the terrain type the cursor is positioned over, including things like rock types, webbing, piles of trash and so forth.<br>
+ &nbsp;&nbsp;<b>Map Overview ('o'):</b></b></b></b> This option displays the parts of the map that you have seen, zoomed out to allow you to view (most of) an entire dungeon level at the same time.<br>
+ &nbsp;&nbsp;<b>Examine Map ('m'):</b></b></b></b> This option redisplays the descriptive text you see when you enter a given map for the first time, such as the overall nature of a city or the origin of the dungeon you are currently in.<br>
+<br>
+ <b>Other Selection Keys</b></b></b></b><br>
+ &nbsp;&nbsp;<b>Next Target ('n'):</b></b></b></b> On a square that contains more than one object, the 'n' command can be used to cycle through them sequentially, for example to target a <b>magic missile</b></b></b></b> at a specific creature in a square with more than one creature in it.<br>
+ &nbsp;&nbsp;<b>Target Mount ('h'):</b></b></b></b> When the currently displayed target is mounted, this option can be used to target an effect at the creature's mount rather than directly at the creature.<br>
+ &nbsp;&nbsp;<b>All Allies ('a'):</b></b></b></b> This option allows the player to target all of her visible allies and summoned creatures, usually to give them orders as a collective group. It is only available when using the Talk ('t') command, and automatically defaults the command to giving orders.<br>
+ &nbsp;&nbsp;<b>Wizard View ('w'):</b></b></b></b> The wizard view command brings up a pop-up window listing all of the debug information for the currently selected object; it is obviously available only in Wizard Mode.<br>
+<br>
+ <b>THE INVENTORY MANAGER <A name="IM">{IM}</A><br>
+ =====================<br>
+ </b></b></b></b>&nbsp;&nbsp;Using the inventory manager is fairly straightforward and self-explanatory. You can move the <b>>></b></b></b></b> cursor by pressing the up or down arrow keys, or jump immediately to the slot you want to alter by typing the letter listed beside it. Pressing [SPACE] will swap the item currently in that slot with the item 'in the air'.<br>
+ &nbsp;&nbsp;You can type 'x' to examine the currently selected item, or 'd' to drop it on the ground where you are standing. Examining a weapon will describe its full combat statistics and the effects of any magical qualities it has.<br>
+ &nbsp;&nbsp;<b>Containers:</b></b></b></b> If you have a container in one of your inventory slots, its contents will appear listed directly below the contents of the slots. If this list is longer then the available screen space, you can scroll it up and down by using the [PGUP] and [PGDN] keys. To take an item out of the container, type the item's number directly as it appears on the screen, counting the '0' in front of the first nine items listed. This will place it in your 'in the air' slot. To place an item into a container, put it in your 'in the air' slot and type 's'. It will be transferred to the container listed below, if that is possible.<br>
+ &nbsp;&nbsp;If you have more then one container in your inventory slots, you can flip between them by pressing [TAB]. This switches the listing to the next container available to you sequentially. If you opened the inventory screen by electing to loot a chest, that chest will be one of the containers you can flip to, even though it isn't truly in your inventory.<br>
+ &nbsp;&nbsp;Containers have different properties. It takes more time to remove an item from some containers then it does from others. Specialized containers (like the ivory scroll case) generally offer much faster access to items then the backpack, which can store anything but takes more time to sort through.<br>
+ &nbsp;&nbsp;<b>Wielding Weapons:</b></b></b></b> You can wield any weapon on your own size category or less in one hand, unless that weapon is of a type that specifically requires two hands regardless of size, like a long bow. If you use both hands, you can wield a weapon of one size category larger then you are.<br>
+ &nbsp;&nbsp;<b>Locked Slots:</b></b></b></b> When your character has changed shape (as from a <b>polymorph self</b></b></b></b> spell or the druid's Wild Shape ability) you may not have access to some of your inventory slots; an eagle has no hands, for example. These slots appear in dark blue. If there is an item in the slot in question, it has merged into your body and, while you gain its benefits, you cannot manipulate it until you return to a form that gives you access to the slot in question.<br>
+ &nbsp;&nbsp;<b>Dividing Piles:</b></b></b></b> Multiple items can be grouped into a single entry, referred to as a pile or stack. You can perform a Drop, Stow or Swap inventory action on part of a pile, dividing it into two piles, by holding [ALT] while initiating the action. For example, if you have 50 gold pieces and want to drop 30, select the gold and press ALT-d and you will be prompted for a number to drop.<br>
+ &nbsp;&nbsp;If you try to put a stack of items into a slot that can only hold singular items, the stack will be automatically divided, with one being put into that slot and the remainder staying where they are.<br>
+<br>
+ <b>Default Weapons<br>
+ &nbsp;&nbsp;</b></b></b></b>Incursion allows you to choose four weapons as your default weapons: a melee weapon, an offhand weapon (or shield), a ranged weapon (bow, sling or crossbow) and a missile (arrow, bolt, rock, dagger, etc.) These defaults are used to determine the outcome of the Swap Weapons command, which allows you to toggle between ranged and melee combat easily, and also with the [SHIFT] + [DIR] ranged attack shortcut -- this always uses your default ammo, rather then having you choose a projectile from a menu like the 'f' command.<br>
+ &nbsp;&nbsp;To select a weapon as your default weapon in one of these four catagories, first move the inventory cursor over to the slot that currently holds the weapon in question, then type a capital letter representing the catagory in question: 'M' to set the chosen weapon as your default melee weapon, 'R' for the default ranged weapon, 'O' for the offhand weapon, and 'A' for the default ammunition or thrown weapon.<br>
+ &nbsp;&nbsp;If you type the appropriate letter over a weapon that is currently set as the default already, that will blank the default slot in question. This might be useful if you don't want the [SHIFT] + [DIR] command to work (to avoid dangerous typos) or if as a monk you want to set your default melee weapon to nothing, allowing you to use the Swap Weapons command to toggle between ranged and unarmed combat.<br>
+<br>
+ <b>THE OPTIONS PANEL <A name="OP">{OP}</A><br>
+ =================</b></b></b></b><br>
+ &nbsp;&nbsp;Incursion has a number of optimizations that can be customized to suit a specific player's tastes; these can all be manipulated from the Option Manager, brought up in gameplay with the '=' command. The player is also offered the choice of changing options at character creation, and they can be altered from the main menu on the splash screen.<br>
+ &nbsp;&nbsp;The Option Manager divides options into categories, which can be scrolled through using the [LEFT] and [RIGHT] arrow keys; individual options can be selected with [UP] and [DOWN] arrows. The space bar toggles a YES/NO option, or scrolls through the list of choices for an option with more possible values.<br>
+ &nbsp;&nbsp;The Option Manager also allows macros to be bound to the function keys in the Macro Binding page. Simply press the function key you want to bind a macro to, then select the macro you want to attach from the popup menu. <br>
+<br>
+ <b>CHARACTER GENERATION OPTIONS</b></b></b></b><br>
+&nbsp;&nbsp;Character generation options determine how an Incursion character is generated, covering the rolling of Attributes and certain defaults such as gender. Character generation options are specific to a certain character and cannot be changed in gameplay -- they must be set before the character is created and are thereafter fixed. As such, this category also includes some switches that affect gameplay after character creation, but should not be changed once the game has been begun.<br>
+<br>
+<b>Beginner's Kit<br>
+</b></b></b></b>&nbsp;&nbsp;This option allows you to begin play which some extra items designed to make the game easier for people still learning its intricacies. The kit includes Potions of Remove Curse, Cure Disease and Mana, and a Wand of Identify. Turning on this switch places the game in Explore Mode.<br>
+<br>
+<b>Initial Rolling Method<br>
+</b></b></b></b>&nbsp;&nbsp;This option determines which method is used initially to generate your starting attribute scores, out of the following choices:<br>
+&nbsp;&nbsp;Method 4d6: Five random stat sets are rolled in order, and you pick one that most suits you.<br>
+&nbsp;&nbsp;Method 4d6 + Perks: Five random stat sets are rolled in order.Each set comes with two feats and a magical item. You pick the lot that most suits you. (If the item is a weapon or a piece of armor, you still need the proper proficiency to use it without penalty.) You can abort to 4d6 if you want to reroll in a baseline game.<br>
+&nbsp;&nbsp;Method Point Buy: You purchase your scores using a point system to buy whatever level you want in each attribute. When using other methods, you can abort to Point Buy if your rolls do not suit your character concept.<br>
+<br>
+<br>
+<b>Allow Rerolling<br>
+</b></b></b></b>&nbsp;&nbsp;This option determines whether the game will allow you to reroll your attributes in order to get a better set when using methods involving randomness. The number of times you rerolled will be noted in your character dump.<br>
+<br>
+<b>Use The Subraces<br>
+</b></b></b></b>&nbsp;&nbsp;This option determines whether the player will be offered a choice of sub-races after he has chosen his primary race -- for example, black orcs and wood elves are subraces. This option is off initially so that new players will develop skill with the game first using standard races before trying to play the more exotic and confusing alternatives.<br>
+<br>
+<b>Disallow Wizard Mode<br>
+</b></b></b></b>&nbsp;&nbsp;Once a game has been started with this option active, wizard mode cannot be entered using that character. This enforces fair play for people who do not want the temptation of wizard mode available.<br>
+<br>
+<b>Maximum Hit Points<br>
+</b></b></b></b>&nbsp;&nbsp;This option gives your character the maximum hit points possible (or half the maximum possible) for his race, classes and level automatically. Turning on this switch places the game in Explore Mode.<br>
+<br>
+<b>Maximum Mana<br>
+</b></b></b></b>&nbsp;&nbsp;This option gives your character the maximum possible mana (or half the maximum possible) for his class, level and Wisdom score. Turning on this switch places the game in Explore Mode.<br>
+<br>
+<b>Default Character Gender<br>
+</b></b></b></b>&nbsp;&nbsp;This option determines what the gender of a newly created character will be, and whether the player will be asked for a gender at character generation.<br>
+<br>
+<b>Monsters Maximum Hit Points<br>
+</b></b></b></b>&nbsp;&nbsp;This option gives everyone except your character the maximum hit points possible (or half or double their maximum, as you decide, instead of rolling randomly).<br>
+<br>
+<b>Roll Attributes First<br>
+</b></b></b></b>&nbsp;&nbsp;This option allows you to roll attributes before choosing race and class. If you gain perks from your rolling method, three perks will be listed with each attribute set, but you will only get the first one or two listed if you choose a race that only gets one or two perks.<br>
+<br>
+<b>Gain Attributes With Levels<br>
+</b></b></b></b>&nbsp;&nbsp;If this option is set you gain a single-point inherant attribute bonus (your choice) at levels 4, 8, 12, etc.<br>
+<br>
+<b>Allow Rapid Intuition<br>
+</b></b></b></b>&nbsp;&nbsp;If this option is set, you recieve Intuition information about an item immediately after picking it up, whereas normally you must rest to recieve Intuition 'hunches' about magical items. The WEAPONS option -- the default -- allows rapid intuition only for weapons, armor, bows and missiles -- types of items non-spellcasting classes depend on that cannot easily be ID'd by flavor like potions. Setting this switch on YES places the game in Explore Mode.<br>
+<br>
+<b>Monsters Use Djikstra<br>
+</b></b></b></b>&nbsp;&nbsp;If this option is set, monsters will use the Djikstra pathfinding algorithm in their AI. It makes them smarter, prevents them from getting lost and lets allies follow the PC more effectively, but is currently prohibitively slow. If this option is set to PETS, only creatures following the player will use Djikstra.<br>
+<br>
+<b>Out-Of-Depth Monsters<br>
+</b></b></b></b>&nbsp;&nbsp;This option determines whether the game is allowed to generate Crawl-style out-of-depth monsters on dungeon level 2 and above; having it on makes the game significantly harder.<br>
+<br>
+<b>Transgression Hints<br>
+</b></b></b></b>&nbsp;&nbsp;This option prints a rationale behind the uneasy/guilty messages for alignment or religious conduct transgression when they are broken, and can be useful to players still coming to understand Incursion's alignment and religion system.<br>
+<br>
+<b>Difficulty Level<br>
+</b></b></b></b>&nbsp;&nbsp;The Difficulty Level switch skewers the generation of monsters and certain other factors in order to alter the overall difficulty of the game. EXPLORE allows players to experiment with different mechanical concepts without the game providing much of a serious challenge to the player. TRAINING reduces the difficulty more moderately, allowing new players to develop their skills. BASELINE is the default difficulty level which the game's balance is calibrated around; a victory in BASELINE mode means you can be considered to have 'beat the game'. CHALLENGE makes the game moderately more difficult by making the dungeon three levels deeper without increases the maximum character level, while NIGHTMARE works like CHALLENGE but also increases the difficulty of all monsters.<br>
+&nbsp;&nbsp;Setting Difficulty Level to EXPLORE or TRAINING will enable Explore Mode.<br>
+<br>
+<b>Power Stats<br>
+</b></b></b></b>&nbsp;&nbsp;This switch allows a character to begin with higher attribute sets. The switch affects both the rolling methods and Point Buy; in Point Buy mode, REDUCED gives you 30 points, BASELINE grants 42, HIGH 54 and EXTREME 75. Setting this switch to HIGH or EXTREME places the game in Explore Mode.<br>
+<br>
+<b>Elude Death<br>
+</b></b></b></b>&nbsp;&nbsp;The Elude Death option allows players to gain a number of free chances to return after dying, being transported to a safe locale and losing 15% of your total XP (minimum 750), but otherwise being unharmed. This can make the game substantially easier for new players, since death is common and sometimes arbitrary in the early game, before one develops a relationship with one's god. The switch can also be set to NO DEATH, in which case characters always return immediately from death with no experience penalty for doing so.<br>
+&nbsp;&nbsp;It is recommended that players who want to develop the skill needed to beat the game in baseline mode use one of the settings that penalizes death, to train themselves to avoid it at any cost. When you Elude Death for the first time, or when you start the game with this switch set to NO DEATH, the game is placed in Explore Mode.<br>
+<br>
+<b>Disable Complicity Transgressions<br>
+</b></b></b></b>This option causes the game to not count the actions of your allies against your own alignment. It is a short-term fix until the issue with allies and mounts attacking neutral creatures can be fixed.<br>
+<br>
+<b>INPUT OPTIONS</b></b></b></b><br>
+&nbsp;&nbsp;Input options allow a player to customize the manner in which they issue commands to Incursion, including an alternate keyset as well as various automatic functions and user-interface preferences.<br>
+<br>
+<b>Roguelike Keyset<br>
+</b></b></b></b>&nbsp;&nbsp;This option causes the traditional roguelike movement keys (hjklyubn) to move your character, with their normal functions being remapped elsewhere.<br>
+<br>
+<b>Shift Arrow Keys<br>
+</b></b></b></b>&nbsp;&nbsp;This option determines whether pressing Shift and an arrow key will activate a ranged attack shortcut or cause you to run in that direction.<br>
+<br>
+<b>Autopickup<br>
+</b></b></b></b>&nbsp;&nbsp;This option determines whether the player will automatically pick up any item she walks over that would stack with an item in her gear or in her pack.<br>
+<br>
+<b>Auto-Open Doors<br>
+</b></b></b></b>&nbsp;&nbsp;If this option is set to YES, the player will automatically attempt to open doors by walking into them; ASK prompts the player, whereas never means doors must be opened with the 'o' command.<br>
+<br>
+<b>Auto-Kick Doors<br>
+</b></b></b></b>&nbsp;&nbsp;If this option is active, trying to open a locked door will cause the player character to kick it if he hs already tried and failed to pick the lock.<br>
+<br>
+<b>Auto-Open Chests<br>
+</b></b></b></b>&nbsp;&nbsp;This option determines whether the player will automatically open any chest by walking over it.<br>
+<br>
+<b>Auto-Knock Locks<br>
+</b></b></b></b>&nbsp;&nbsp;If this option is active, a player character that knows an 'Unlock' spell (like 'Knock') will automatically cast it when a Lockpicking skill check fails.<br>
+<br>
+<b>Auto-Disarm Traps<br>
+</b></b></b></b>&nbsp;&nbsp;If this option is active, walking into a known trap will cause the player to attempt to disarm it, provided that the player has any skill ranks in Handle Devices.<br>
+<br>
+<b>Repeat Kicking Doors<br>
+</b></b></b></b>&nbsp;&nbsp;This switch causes the player to continue kicking a door until either it breaks open or he is interrupted when it is active.<br>
+<br>
+<b>Automatically Clear "-- More --"<br>
+</b></b></b></b>&nbsp;&nbsp;This option determines whether the game will automatically display all incoming messages without waiting for the player to press a key. (Messages can be reViewed later.)<br>
+<br>
+<b>Allow Selection Jumping<br>
+</b></b></b></b>This option determines how the selection prompt works when trying to select a specific creature or item. By default, pressing an arrow key will move the cursor to the next closest eligible item in that direction. However, if selection jumping is turned off, the arrow keys only move the selection cursor one square, just like when selecting a location. Some players may find this latter mode more intuitive.<br>
+<br>
+<b>Default To Direction Selection<br>
+</b></b></b></b>When you cast a spell or perform an action that allows a direction as input (such as many bolt spells), pressing any one of the arrow keys will finish the selection prompt, firing the spell in the selected direction. This allows the casting of offensive spells with a premium of keystrokes, but makes it easier to misfire spells with typos. When turned off, this option causes the selection prompt to default to target selection mode rather than direction selection mode.<br>
+<br>
+<b>Clear Messages Every Turn<br>
+</b></b></b></b>If this option is active, the message window at the top of the screen will be cleared before each action, so that they player can confirm that all the displayed messages (i.e., an AutoPickup message) resulted from the last command keystroke entered. Normally, the message window is only cleared when an action produces a message. <br>
+&nbsp;&nbsp;Note that regardless of this setting, the message window is never cleared when a key is held down to repeat an action.<br>
+<br>
+<b>Use Container Cursor<br>
+</b></b></b></b>This option activates an alternate inventory management mode when turned on, allows the inventory cursor to move down into the container area, to select items from the container manually. In this case, typing an item's number moves the cursor to that item rather than selecting it, and container items can be swapped with the In-Air slot by pressing [SPACE], or examined with [x].<br>
+<br>
+<b>Organize Containers<br>
+</b></b></b></b>When this option is active, the contents of containers are listed in the inventory screen sorted into groups by item type. This might be more intuitive for some players (especially NetHack veterans, since NetHack handles inventory like this), but takes up more screen space and thus requires more frequent scrolling of the container subwindow.<br>
+<br>
+<b>Context-Based Help<br>
+</b></b></b></b>&nbsp;&nbsp;When this option is active, the help menus only show descriptions for the race and class(es) that you are currently playing, rather then every race and class in the game.<br>
+<br>
+<b>Help Format<br>
+</b></b></b></b>&nbsp;&nbsp;Determines the format that the online help will be shown in. In BOOK mode, lists of feats, classes and such are shown in alphabetical order to allows browsing, whereas in MENU mode the user may scroll through menus to get the description of a given feat. The former is better for learning the game; the latter is better for quick reference.<br>
+<br>
+<b>Monochrome Help<br>
+</b></b></b></b>&nbsp;&nbsp;If this option is enabled, all of the main text of the online help will be displayed as plain grey text, rather than the more colorful default. This can be useful for people that have trouble reading the help due to low-contrast monitors or visual disabilities.<br>
+<br>
+<b>Learn Spell Menu Order<br>
+</b></b></b></b>&nbsp;&nbsp;Determines whether the spells in the 'learn a new spell' menu will be sorted by name or by level -- the former is better is you have spell levels memorized, but the latter might be clearer for new players.<br>
+<br>
+<b>Show All Possible Spells<br>
+</b></b></b></b>&nbsp;&nbsp;If this option is set, all arcane spells allowed to a character of your class and spell level will be shown on the Learn Spell menu, even if you don't have a spellbook with the spell in question in it. <br>
+<br>
+<b>Auto-Stand<br>
+</b></b></b></b>&nbsp;&nbsp;If this option is enabled and you try to move while prone you will automatically try to stand up first. This takes time and provokes an attack of opportunity.<br>
+<br>
+<b>Automatic Coup De Grace<br>
+</b></b></b></b>&nbsp;&nbsp;When this option is active and you run into a helpless hostile creature, you will automatically perform a Coup de Grace rather then a normal attack. Note that this will provoke attacks of opportunity from any other creatures threatening you.<br>
+<br>
+<b>Dwarven Auto-Focus<br>
+</b></b></b></b>&nbsp;&nbsp;When this option is active and you are playing a dwarf, the game will automatically choose appropriate targets for your Dwarven Focus.<br>
+<br>
+<b>Destroy Empty Chests<br>
+</b></b></b></b>&nbsp;&nbsp;This option (which should really be replaced by a general auto-squelch) will destroy (for free, taking zero time) any empty chest you are standing on.<br>
+<br>
+<b>LIMITS AND WARNINGS</b></b></b></b><br>
+&nbsp;&nbsp;The Limits and Warnings options specify when and how the player will be warned about certain dangerous conditions, and also define exactly when the player will stop an extended run-action.<br>
+<br>
+<b>Low Hit Point Warning<br>
+</b></b></b></b>&nbsp;&nbsp;This option determines what percentage of hit points the player must have lost in order to recieve a low hit point warning message.<br>
+<br>
+<b>Aggressive Low HP Warning<br>
+</b></b></b></b>&nbsp;&nbsp;When this option is active, the player must explicitly press [ENTER] to get rid of the low HP warning message.<br>
+<br>
+<b>Empty Hand Warning<br>
+</b></b></b></b>&nbsp;&nbsp;This option determines whether an aggressive warning is displayed when you are empty handed -- because you were disarmed by an opponent or forced to drop your weapon when reduced in size, for example. This sort of thing would be easy to notice in 'real life' but often gets lost in the noise in Roguelikes, causing you to waste precious time punching nearby monsters. The 'smart' setting disables the warning if you are polymorphed or have the Unarmed Strike ability.<br>
+<br>
+<b>Highlight Hiding Creatures<br>
+</b></b></b></b>&nbsp;&nbsp;When this option is active, monsters that are hiding in shadows but are still visible to you appear with a grey background.<br>
+<br>
+<b>Highlight Non-Hostile Creatures<br>
+</b></b></b></b>&nbsp;&nbsp;When this option is active, neutral creatures appear with a cyan background, and companions appear with a bright cyan background.<br>
+<br>
+<b>Highlight Sleeping Creatures<br>
+</b></b></b></b>&nbsp;&nbsp;When this option is active, sleeping monsters appear with a dark purple background highlight to signify their state.<br>
+<br>
+<b>Highlight Afflicted Creatures<br>
+</b></b></b></b>&nbsp;&nbsp;When this option is active, creatures that have been assgined an obviously apparent negative stati (i.e., Stunned, Confused, Paralyzed, Blind, Stuck, Prone, etc.) are drawn with a brown background highlight to make their condition obvious.<br>
+<br>
+<b>Highlight Invisible Creatures<br>
+</b></b></b></b>&nbsp;&nbsp;When this option is active, creatures that are invisible or phased into an adjacent plane of existance (i.e., a phase spider or wraithformed mage) are drawn with a blue background.<br>
+<br>
+<b>Confirm Attacking Equipment Destroyers<br>
+</b></b></b></b>&nbsp;&nbsp;If this option is enabled you will be asked to confirm before striking a creature that has a retributive equipment-destroying power (e.g., a rust monster or a grey ooze) if that power could possibly harm your weapon (or your bare hands!).<br>
+<br>
+<b>Confirm Drop Equipment<br>
+</b></b></b></b>&nbsp;&nbsp;If this option is active, you will be asked to confirm before dropping an item on the inventory screen.<br>
+<br>
+<b>Stop Running At Corners<br>
+</b></b></b></b>&nbsp;&nbsp;When this option is active, characters will stop running whenever a corridor they are in changes direction. With this active, a character will only ever run in the single direction he started running in.<br>
+<br>
+<b>Stop Running At Stairs<br>
+</b></b></b></b>&nbsp;&nbsp;When this option is active, a character stops running the instant a set of stairs are within her line of sight.<br>
+<br>
+<b>Stop Running At Intersections<br>
+</b></b></b></b>&nbsp;&nbsp;When this option is active, a character will stop running as soon as they reach an intersection in a corridor -- a place where they could viably go more then one direction, not counting backtracking. This option has no effect in rooms.<br>
+<br>
+<b>Stop Running At Region Barrier<br>
+</b></b></b></b>&nbsp;&nbsp;When this option is active, characters will stop running immediately before crossing the boundry to a new region -- for example, before walking into a room from a corridor.<br>
+<br>
+<b>Stop Running At Phase Changes<br>
+</b></b></b></b>&nbsp;&nbsp;When this option is active, characters will stop running immediately before crossing the boundry from a solid region to a non-solid region (or vice-versa). This option prevents incorporeal or earth-melding characters from accidentally running to the edge of the map.<br>
+<br>
+<b>OUTPUT OPTIONS</b></b></b></b><br>
+&nbsp;&nbsp;The Output options describe how the game map is rendered on the screen, how glyphs representing creatures will be colored to convey information to the player, which dice rolls will be displayed where and how status information and messages will be shown onscreen.<br>
+<br>
+<b>Sidebar<br>
+</b></b></b></b>&nbsp;&nbsp;This option can cause the sidebar (that area on the right-hand side of the screen that lists your weapons and armor and the things in view) to omit some information that basically never changes (e.g., your race and gender) in order to leave more room for other information (e.g., things in view).<br>
+<br>
+<b>Lower Screen Shows<br>
+</b></b></b></b>&nbsp;&nbsp;This option determines what is shown in the lower part of the status bar -- the viewlists, active resistance levels, party status, quick key assignments or spell key assignments.<br>
+<br>
+<b>List Piles In Viewlist<br>
+</b></b></b></b>&nbsp;&nbsp;When this option is set to No, piles of two or more object will not have their contents shown in the view list. If it is set at yes, they will be shown. If it is set at Near, only piles that are within one square of the player will have their contents listed in the view list window.<br>
+<br>
+<b>Message Window Lines<br>
+</b></b></b></b>&nbsp;&nbsp;This option determines how messages are displayed in the upper message window -- whether every sentence begins on a new line, or whether sentences form paragraphs without being separated by carriage returns. The 'lines' option is more readable to many, but results in you seeing the --more-- prompt more frequently.<br>
+<br>
+<b>Show Pile Contents<br>
+</b></b></b></b>&nbsp;&nbsp;This option determines whether the contents of a pile of objects on the ground will automatically be listed in a pop-up window whenever the player walks over it.<br>
+<br>
+<b>Sort Pile Contents<br>
+</b></b></b></b>&nbsp;&nbsp;This option determines the order in which items in piles are presented to you. In particular, when you Get an item from the ground, this sort order will be used.<br>
+<br>
+<b>Show Player Attacks<br>
+</b></b></b></b>&nbsp;&nbsp;This option determines whether the numeric aspect of the player's attacks will be listed in a window at the bottom of the screen.<br>
+<br>
+<b>Show Monster Attacks<br>
+</b></b></b></b>&nbsp;&nbsp;This option determines whether the numeric aspect of enemy attacks will be listed in a window at the bottom of the screen.<br>
+<br>
+<b>Show Saving Throws<br>
+</b></b></b></b>&nbsp;&nbsp;This option determines whether the results of the player's saving throws will be shown in a window at the bottom of the screen.<br>
+<br>
+<b>Show Skill Checks<br>
+</b></b></b></b>&nbsp;&nbsp;This option determines whether the results of the player's skill checks will be shown in a window at the bottom of the screen.<br>
+<br>
+<b>Show Room Descriptions<br>
+</b></b></b></b>&nbsp;&nbsp;This option determines whether the game will display a window showing the description of a room when you enter it -- NO (never), YES (always) or NEW (only if you've never been in a room of that type before.<br>
+<br>
+<b>Store Rolls In Log<br>
+</b></b></b></b>&nbsp;&nbsp;This option determines whether the results of dice rolls (attack rolls, damage rolls, saving throws and skill checks) will be stored in the message log -- the list of recent messages viewed with the 'v' command -- or not.<br>
+<br>
+<b>Player Glyph Color<br>
+</b></b></b></b>&nbsp;&nbsp;This option determines the color of the glyph used to represent the player's character. By default, this glyph's color is set by the character's race.<br>
+<br>
+<b>Center Map On Player<br>
+</b></b></b></b>&nbsp;&nbsp;When this option is active, the map scrolls every time the player moves in order to keep him in the center of the map window at all times.<br>
+<br>
+<b>Offscreen Creatures Shown<br>
+</b></b></b></b>&nbsp;&nbsp;When this option is active, creatures that are off the edge of the map by up to the listed range in squares but are still visible to the player's character are shown at the edge of the map with a red background.<br>
+<br>
+<b>Animation Behaviour<br>
+</b></b></b></b>&nbsp;&nbsp;Certain situations (a fireball spell, ranged attacks, etc.) have an animation effect associated with them. This option determines how that effect will be displayed:<br>
+&nbsp;&nbsp;Normal: All animations are displayed with their normal timing.<br>
+&nbsp;&nbsp;Fast: All animations are sped up to occur within 1/4 of their normal duration.<br>
+&nbsp;&nbsp;None: No animations are shown. This may make it difficult to tell the areas of effect of spells and where arrows landed, but it will make the game run faster in regions where many ranged attack or spells are being thrown at once.<br>
+&nbsp;&nbsp;Player: Only animations for the player's attacks and actions are shown. Monsters' missiles and spells are not animated.<br>
+<br>
+<b>Show Perception Modes<br>
+</b></b></b></b>&nbsp;&nbsp;When this option is active and a creature is examined with the 'l'ookcommand, a description of how the created is perceived (e.g., sight, infravision, detection, ESP) will be given.<br>
+<br>
+<b>Terse Blessed/Cursed Info<br>
+</b></b></b></b>&nbsp;&nbsp;When this option is active, common item qualifiers will be abbreviated to save space. Blessed ('b'), cursed ('c'), uncursed (' '), unknown ('?') and ghost touch ('g') are affected.<br>
+<br>
+<b>Precise Time<br>
+</b></b></b></b>&nbsp;&nbsp;This option determines how accurate the clock in the sidebar will be. The default option tracks hours and minutes. It is also possible to track seconds or 'internal game turns' (5 turns to a second).<br>
+<br>
+<b>Fullscreen Display Resolution<br>
+</b></b></b></b>&nbsp;&nbsp;This option determines what resolution Incursion will attempt to set the monitor to when playing the game in fullscreen mode. If the specified display mode cannot be set, the system will try consecutively smaller ones until one proves usable.<br>
+<br>
+<b>Fullscreen Font Size<br>
+</b></b></b></b>&nbsp;&nbsp;This option determines what font size Incursion will use when playing the game in fullscreen mode. If the selected font size does not allow the display of at least 50 rows and 80 columns, the 8x8 font will be used instead.<br>
+<br>
+<b>Windowed-Mode Window Size<br>
+</b></b></b></b>&nbsp;&nbsp;This option determines what size Incursion will make the application window when playing in windowed mode. If the window is too large to fit on screen, the system will try consecutively smaller sizes until it finds one which fits.<br>
+<br>
+<b>Windowed-Mode Font Size<br>
+</b></b></b></b>&nbsp;&nbsp;This option determines what font size Incursion will use when playing the game in windowed mode. If the selected font size does not allow the display of at least 50 rows and 80 columns, the 8x8 font will be used instead.<br>
+<br>
+<b>Softer Palette Colors<br>
+</b></b></b></b>&nbsp;&nbsp;This option uses a 'softer' set of RGB values for the colors in the game's palette. This might make text more readable, increase contrast and appeal aesthetically to some players, but is a less accurate simulation of traditional ASCII graphics.<br>
+<br>
+<b>TACTICS AND COMBAT OPTIONS</b></b></b></b><br>
+&nbsp;&nbsp;The Tactics and Combat options serve to automate certain choices made automatically by Incursion of behalf of your character with regards to the game's combat rules, such as how you prefer to make attacks of opportunity or use counterspells. Tactics and Combat options are saved with a specific character and set to system defaults when a new character is created, because the way these options are set usually depends on how the player chose to build her character.<br>
+<br>
+<b>Kick By Default<br>
+</b></b></b></b>&nbsp;&nbsp;When this option is active, the player will kick by default when making unarmed attacks. Kicking is slower, but it allows the player to add 1.5 times his normal Strength bonus to damage.<br>
+<br>
+<b>Two-Weapon Fighting<br>
+</b></b></b></b>&nbsp;&nbsp;This option determines when you will elect to make an attack with both weapons when wielding two weapons (or make an attack with both ends if wielding a double weapon) and when you will choose to only attack with your main weapon.<br>
+&nbsp;&nbsp;In Never mode, you will never attack with your offhand weapon. In Always mode, you will always make an offhand attack when you have something in your ready hands. In Smart mode, you will make an offhand attack only when wielding two actual weapons and when your character possesses the Two-Weapon Style feat. Bash mode is the same as Smart mode, but you will also make offhand Shield Bashes when wielding a shield in your off hand.<br>
+<br>
+<b>Riposte Mode<br>
+</b></b></b></b>&nbsp;&nbsp;If you have the Riposte feat and a creature fails to hit you with a swung weapon, you may make an immediate counterattack against them at half of the timecost in phases of a normal attack. This tactical option determines whether you will ignore the opportunity, make the counterattack or whether the game will ask you each individual time the situation arises.<br>
+<br>
+<b>Monk Preferred Attack Form<br>
+</b></b></b></b>&nbsp;&nbsp;This option determines how a character who has both a natural attack sequence and a monk's unarmed attack will behave when attacking unarmed. With MARTIAL, the character will use the monk unarmed strike table and gain all the normal benefits thereof, including stunning. With NATURAL, the character uses their natural attack sequence (usually claw/claw/bite) and gains a +1 skill bonus to speed and damage for every odd monk level. They do not gain any of the other normal benefits of a monk's unarmed strike, such as the stunning attack.<br>
+<br>
+<b>Overcast Illusions<br>
+</b></b></b></b>&nbsp;&nbsp;An illusionist can create a truly impressive destructive spectacle if she desires -- the magnitude of her illusions is a selection rather than a limitation -- but doing so makes such spells less believable. When creating illusionary forces, this option determines the amount by which the caster 'increases' her caster level -- creating more powerful spells that inflict greater psychosomatic damage, but also lowering the DC of the saving throw to disbelieve them by -2 per +1 'fake' caster level gained. This option has no effect on illusionary creatures, items or traps created by the caster.<br>
+<br>
+<b>Wait For Companions<br>
+</b></b></b></b>&nbsp;&nbsp;This option allows the player to move slower in order to allow his companions to keep up with him. When it is turned on, every single move the player makes has its Timecost increased by the specified number of segments, provided that the player can't currently percieve any hostile creatures, and there is at least one living (undead, whatever) ally of the player somewhere on the map. The player remains able to use her full movement any time hostile creatures are within her line of sight. This option is currently implemented in a processing-intensive manner and may cause a slight slowdown. In addition, when this option is active, all summoned creatures, companions, etc. enter play by default with the order to travel next to you. This can be changed by giving them the Retarget order.<br>
+<br>
+<b>Counterspell Tactics<br>
+</b></b></b></b>&nbsp;&nbsp;This option determines when a player character with the Spellcraft skill will attempt to perform counterspells, as described under that skill. The possibilities are as follows:<br>
+&nbsp;&nbsp;NEVER: The player character does not counterspell at all.<br>
+&nbsp;&nbsp;ALWAYS: The player character counterspells whenever the opportunity arises.<br>
+&nbsp;&nbsp;ASK: The player is prompted for yes/no whenever his character has an option to counterspell.<br>
+&nbsp;&nbsp;SMART: The player will counterspell whenever doing so would not put him under half his total, non-committed mana, and when he does not already have a timeout of 50 or greater.<br>
+<br>
+<b>Poisoned Missile Stacking<br>
+</b></b></b></b>&nbsp;&nbsp;When a creature strikes another creature with a poisoned weapon, the number of doses of poison on that weapon is reduced by one. Once the doses reach zero, the weapon is no longer poisoned. This option determines whether weapons with different number of doses of poison left will stack, forming a single pile of items.<br>
+&nbsp;&nbsp;NO: Poisoned missiles never stack. This produces behaviour that is always logically correct, but can be make large numbers of unmergable piles of arrows, which might be frusterating for rogue-archers to manage in gameplay.<br>
+&nbsp;&nbsp;YES: When relevant, an arrow with less doses of poison remaining will stack with a pile of arrows poisoned with the same poison. The new pile has a 1 in (number of arrows) chance of every arrow having the lower number of doses of poison left. For example, if a rogue-archer has 40 sheaf arrows poisoned with 5 doses of deathblade, and hits a aurumvorax with five of them, those five arrows will then have 4 doses of deathblade each. When the rogue-archer picks them up again, and they merge back into the big stack of 40 arrows, the whole stack will have a 5 in 40 chance of having 4 doses of deathblade and a 35 in 40 chance of having the same 5 doses of deathblade it started with.<br>
+<br>
+<b>Automatic Hide In Shadows<br>
+</b></b></b></b>&nbsp;&nbsp;When this option is turned on, a character with Hide in Shadows as a class skill will always attempt to hide when not already hidden, not standing in a brightly lit area and not observed by other hostile creatures.<br>
+<br>
+<b>Use Demoralize<br>
+</b></b></b></b>&nbsp;&nbsp;When this option is on, your character will demoralize foes whenever the opportunity arises, causing them to flee. If it is turned off, the character will conceal the effect of his Intimidate and not cause foes to flee when they otherwise wouldn't.<br>
+<br>
+<b>Use Wand Of Opening<br>
+</b></b></b></b>&nbsp;&nbsp;This option determines whether the AutoLoot macro will search through your inventory for known Wands of Opening to use to try and open chests. If it is set to ASK, the macro will confirm before every shot. If it is set to ON, the game will try to zap the wand until you are at 1/3rd of your total non-held mana. If it is set to OFF, wands will not be used to open chests.<br>
+<br>
+<b>Use Gaze Attack<br>
+</b></b></b></b>&nbsp;&nbsp;If you should gain a gaze attack from some source (such as the spell open the third eye), this switch allows you to turn it on and off. Gaze attacks consume 2 mana per creature potentially affected, and this mana does not regenerate, so use your gaze sparingly!<br>
+<br>
+<b>Use Dirty Fighting<br>
+</b></b></b></b>&nbsp;&nbsp;This option determines whether a character that has the Dirty Fighting feat (such as a kobold) will use it. When it is set to OFF, it will not be used; when set to ON, it will. When set to SMART, it will only be used if your desired alignment is not lawful.<br>
+<br>
+<b>WIZARD MODE OPTIONS</b></b></b></b><br>
+&nbsp;&nbsp;The Wizard Mode options allow a player using the game in Wizard Mode to cheat, removing threats or altering the normal nature of Incursion's gameplay. Wizard Mode can be used to test and debug the game, to learn about its exact rules, to play an easier game than normal or to experiment with unusual situations.<br>
+<br>
+<b>Cheat Death<br>
+</b></b></b></b>&nbsp;&nbsp;When this option is active, you will be offered a prompt to avoid dying when you would normally be killed. Choosing 'yes' allows you to return to life with full hit points and lethal attribute damage, diseases and poisons healed.<br>
+<br>
+<b>Auto-Identify Items<br>
+</b></b></b></b>&nbsp;&nbsp;When this option is active, you will automatically full-identify any item that you pick up.<br>
+<br>
+<b>Free Advancement<br>
+</b></b></b></b>&nbsp;&nbsp;When this option is active, you can advance levels without having the amount of experience needed to gain the level in question using the Gain Level option on the character screen.<br>
+<br>
+<b>Infinite Fatigue<br>
+</b></b></b></b>&nbsp;&nbsp;When this option is active, you will never lose fatigue points when you take actions or suffer effects that would normally cause them to be expended.<br>
+<br>
+<b>Always Rest Safely<br>
+</b></b></b></b>&nbsp;&nbsp;When this option is active, you will never suffer an encounter while resting, and no new monsters will be generated either.<br>
+<br>
+<b>Ignore Spell Failure<br>
+</b></b></b></b>&nbsp;&nbsp;When this option is active, the game will ignore the percentile spell success rate, considering any spell the player casts to be successful.<br>
+<br>
+<b>Know All Spells<br>
+</b></b></b></b>&nbsp;&nbsp;When this option is active, you are considered to know all of the spells a character of your class and level is eligible for. For example, a level 5 mage would know all arcane spells of spell levels one to three.<br>
+<br>
+<b>Infinite Mana<br>
+</b></b></b></b>&nbsp;&nbsp;When this option is active, you do not lose mana from casting spells or using magical items the way you normally would, and can cast spells successfully even if you do not have enough mana to do so normally.<br>
+<br>
+<b>Ghostwalking<br>
+</b></b></b></b>&nbsp;&nbsp;When this option is active, your character is able to walk through walls and doors as if they do not exist. You are not incorporeal or ethereal, however, and can engage corporeal creatures in combat normally.<br>
+<br>
+<b>Wizard Sight<br>
+</b></b></b></b>&nbsp;&nbsp;When this option is active, your character percieves as much of the map as can be displayed on the screen at any given time regardless of lighting or obstructions.<br>
+<br>
+<b>Freeze Monsters<br>
+</b></b></b></b>&nbsp;&nbsp;When this option is active, all monsters are denied their activity cycles and are frozen in place. They are still a part of the world and can be affected by spells, take attacks of opportunity and so forth.<br>
+<br>
+<b>Show All Combat Rolls<br>
+</b></b></b></b>&nbsp;&nbsp;When this option is active, all monster combat rolls (even those far off-screen) will be displayed to you. This information tends to be more confusing than useful, but it can help with debugging.<br>
+<br>
+ <br>
+ <b>MACROS AND AUTOBUFF <A name="MA">{MA}</A><br>
+ ===================</b></b></b></b><br>
+ &nbsp;&nbsp;Incursion has some built-in macros to automate repetitive tasks. These can be bound to function keys, as described above. Currently, only the following macros are implemented:<br>
+<br>
+ <b>AUTOBUFF</b></b></b></b><br>
+&nbsp;&nbsp;</b></b></b></b>Activating this macro causes you to cast all the spells in your autobuff list -- normally self-improvement spells (like <b>Bull's Strength</b></b></b></b>), protection spells (<b>stoneskin</b></b></b></b>) and detection spells (<b>detect monsters</b></b></b></b>). You can have up to 64 spells in your autobuff list, which is shown on the character sheet. Spells can be added or removed from this list using the Spell Manager, by pressing the key bound to this macro.<br>
+ &nbsp;&nbsp;If you already have some of the spells cast, you'll just cast the ones that are missing from the list -- thus, you can use this macro to fix things if you get hit with a <b>dispel magic</b></b></b></b> spell.<br>
+<br>
+<b>AUTODROP</b></b></b></b><br>
+&nbsp;&nbsp;</b></b></b></b>This macro allows you to select multiple items from your inventory, in any container you possess, and then drops them on the ground one by one, stopping if you are threatened or otherwise interrupted.<br>
+<br>
+<b>AUTOLOOT</b></b></b></b><br>
+&nbsp;&nbsp;This macro automates collecting items both from chests and from piles on the ground. First, it attempts to open any chests in the square you are standing in. It tries three methods to do this, first attempting to pick the lock on the chest, then potentially zapping any wand of opening in your inventory at the chest until either it opens, the wand is out of charges or you have insufficient mana, as moderated by the Tactical Option 'Use Wand of Opening'. If these methods fail, your character will strike the chest until it breaks. You will be asked for confirmation before trying to break open a chest.<br>
+ &nbsp;&nbsp;Once all chests are unlocked, the macro will display a list of all the items in your square, both those in chests and on the ground, and allow you to mark the ones you would like to pick up. Then it will pick the selected items up one by one, placing them in your pack if possible, otherwise bringing up the inventory screen to allow you to select where to put the item before moving on to the next one.<br>
+<br>
+<b>AUTOREST</b></b></b></b><br>
+&nbsp;&nbsp;</b></b></b></b>This macro repeats the 'rest' action for as many turns as it takes to recover full mana (if you are still recovering mana at all) and to get rid of any negative conditions such as stunned, confused, trap or spell effects that expire over a number of turns, etc. If you have regeneration, it waits until you are fully healed as well. The macro asks to stop resting if you are threatened by any hostile creatures.<br>
+ &nbsp;&nbsp;To prevent pathological situations of infinite resting, the macro stop resting after 1000 turns; it also stops if you are starving.<br>
+<br>
+ <b>LOADING AND SAVING <A name="LS">{LS}</A><br>
+ ==================</b></b></b></b><br>
+ &nbsp;&nbsp;Incursion allows you to save your game at any point, but by default when your character dies, the game is over. If you wish to play without this restriction, it is easy enough to circumvent -- either by backing up the save files, playing in Wizard Mode or using a batch file or third-party utility. That said, the game is designed to be played with the challenge of not dying at all.<br>
+ &nbsp;&nbsp;Pressing [ESC] during gameplay brings up the system menu, which gives you the option of saving and continuing to play, saving and quitting or ending the game.<br>
+<br>
+ <b>RECOVERING A GAME</b></b></b></b><br>
+ &nbsp;&nbsp;Incursion is still early in its development cycle and thus is not entirely stable -- it does crash on occasion. To help offset this, the game automatically saves every 20 turns; a crashed game can be recovered from this backup using the Recover a Crashed Game option on the intro screen. This option allows you to recover a game from the most recently-made backup in the event of a crash.<br>
+<br>
+ <b>REINCARNATING A CHARACTER</b></b></b></b><br>
+ &nbsp;&nbsp;The Incursion character creation process is both very complex and designed deliberately to ensure that it produces unusual and unique characters as a result of Perks. However, characters can die very quickly and sometimes arbitrarily in the early game. To allow players to truly experiment with any given character, and avoid the randomness of character creation becoming an annoyance, the game allows characters to be reincarnated when they die.<br>
+ &nbsp;&nbsp;When a character dies before reaching character level 5 and before having descended below the 5th level of the dungeon, that character is eligable for reincarnation. Selecting the Reincarnate a Character option from the main splash screen will restart the game with an exact copy of the selected character, including random perks, store contents, known alchemical formulas and random starting equipment. The character is first level and has no experience, however, and the dungeon itself will be different than it was in the prior game.<br>
+ &nbsp;&nbsp;A single character can be reincarnated at most ten times.          </span>        </td>        <td style="background-image: url(waterright.jpg);">          <img src="thinbar.gif">        </td>      </tr>    </table>  </body></html>
