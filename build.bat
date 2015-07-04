@@ -189,10 +189,11 @@ if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
         if not exist !DEPENDENCY_PATH!\libtcod_d.dll (
             echo Building: [libtcod/Debug]
             set CONFIG=Debug
+            set BASENAME_SUFFIX=_d
             nmake /nologo -f ..\makefile-libtcod
-            copy !BASEOBJPATH!\!CONFIG!\libtcod.lib libtcod_d.lib
-            copy !BASEOBJPATH!\!CONFIG!\libtcod.dll libtcod_d.dll
-            copy !BASEOBJPATH!\!CONFIG!\libtcod.pdb libtcod_d.pdb
+            copy !BASEOBJPATH!\!CONFIG!\libtcod_d.lib libtcod_d.lib
+            copy !BASEOBJPATH!\!CONFIG!\libtcod_d.dll libtcod_d.dll
+            copy !BASEOBJPATH!\!CONFIG!\libtcod_d.pdb libtcod_d.pdb
         ) else (
             echo Building: [libtcod/Debug] .. skipped
         )
