@@ -77,19 +77,22 @@ bool checkEndgameStuff(EventInfo &e) {
         return false;
 
     MapIterate(e.EMap, cr, i)
-        if (cr->isCreature())
-            if (cr->tmID == murgID)
-                if (cr->PartyID == e.EVictim->PartyID && e.EVictim->PartyID != e.EActor->PartyID) {
-                    if (e.Event == EV_SURRENDER) {
-                        if (!e.EMap->LineOfSight(e.EActor->x, e.EActor->y, cr->x, cr->y, cr))
-                            e.EActor->IPrint("The <Obj> binds you and brings you before the Goblin King.", e.EVictim);
-                        e.EVictim = cr;
-                        ReThrow(EV_SURRENDER, e);
-                        return true;
-                    }
-                    e.EActor->IPrint("The <Obj> says, <2>\"Speak only to the King!\"<7>.", e.EVictim);
+        if (cr->isCreature() && cr->tmID == murgID)
+            if (cr->PartyID == e.EVictim->PartyID &&
+                e.EVictim->PartyID != e.EActor->PartyID) {
+                if (e.Event == EV_SURRENDER) {
+                    if (!e.EMap->LineOfSight(e.EActor->x, e.EActor->y,
+                            cr->x, cr->y, cr))
+                        e.EActor->IPrint("The <Obj> binds you and brings you "
+                            "before the Goblin King.", e.EVictim);
+                    e.EVictim = cr;
+                    ReThrow(EV_SURRENDER, e);
                     return true;
                 }
+                e.EActor->IPrint("The <Obj> says, <2>\"Speak only to the "
+                    "King!\"<7>.", e.EVictim);
+                return true;
+            }
 
     return false;
 }

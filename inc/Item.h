@@ -133,8 +133,7 @@ class Item: public Thing, public Magic
       bool isBlessed() { return (IFlags & IF_BLESSED) != 0; }
       bool isCursed()  { return (IFlags & IF_CURSED) != 0;  }
       bool isMaster()  { return (IFlags & IF_MASTERWORK) != 0; }
-      bool isKnown(uint16 kn = KN_MAGIC)
-        { return (Known & kn) == kn; }
+      bool isKnown(uint16 kn = KN_MAGIC) { return (Known & kn) == kn; }
       int8 GetPlus()   { 
         if (IFlags & IF_CURSED)
           return HighStatiMag(BOOST_PLUS)-Plus;
@@ -144,15 +143,15 @@ class Item: public Thing, public Magic
           return 0;
           */
         else
-          return max(Plus,HighStatiMag(BOOST_PLUS)); }
-      int8 GetInherentPlus()
-        { return Plus; }
-      void SetInherentPlus(int8 i)
-        { int32 dmg;
+          return max(Plus,HighStatiMag(BOOST_PLUS));
+      }
+      int8 GetInherentPlus() { return Plus; }
+      void SetInherentPlus(int8 i) { int32 dmg;
           dmg = (cHP*1000) / MaxHP();
           Plus = i; 
           cHP =  (int16)((dmg * MaxHP())/1000);
-          ReApply(); }
+          ReApply();
+      }
       
       virtual int8 Material() {
         return TITEM(iID)->Material;

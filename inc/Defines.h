@@ -3566,88 +3566,90 @@ typedef signed long       hObj;
 #define UNIVERSAL_TEMPLATE    118
 #define WEIGHT_CURVE_BY_CR    119
 
-#define LEVEL_SIZEX           1
-#define LEVEL_SIZEY           2
-#define PANEL_SIZEX           3
-#define PANEL_SIZEY           4
-#define MAX_STREAMER_WIDTH    5
-#define MIN_STREAMERS         6
-#define MAX_STREAMERS         7
-#define TERRAIN_MAPEDGE       8
-#define TERRAIN_ROCK          9
-#define TERRAIN_TORCH         10
-#define BASE_REGION           11
-#define DIGGING_REGION        12
-#define TERRAFORM_REGION      13 /* Rock to Mud/Disint */
-#define REDUCE_CHASM_CHANCE   14
-#define MIN_STAIRS            15
-#define MAX_STAIRS            16
-#define ROOM_MINX             17
-#define ROOM_MAXX             18
-#define ROOM_MINY             19
-#define ROOM_MAXY             20
-#define TURN_CHANCE           21
-#define STUBBORN_CORRIDOR     22
-#define SEGMENT_MINLEN        23
-#define SEGMENT_MAXLEN        24
-#define STREAMER_CHANCE       25 
+/* Dungeon constant IDs. */
 
-#define MONSTER_COUNT         26
-#define MONSTER_FREQ          27
-#define REST_SAFETY           28
-#define DEAD_MAGIC            29
-#define WILD_MAGIC            30
-#define DESTROYED_LEV         34
-#define NATURAL_LEV           35
-#define VAULT_CHANCE          36
-#define GVAULT_CHANCE         37
-#define MAX_ARTIFACTS         38
-#define MIN_ARTIFACTS         39
-#define ARTI_LEVEL            40
-#define ARTI_CHANCE           41
-#define ARTI_LIST             42
-#define ARTI_REQUIRED         43
-#define DUN_DEPTH             44
-#define INITIAL_CR            45
-#define DUN_SPEED             46
-#define SUBMAP_CHANCE         47
-#define MAX_SUBMAPS           48
-#define CORRIDOR_REGION       49
-#define STAIRS_UP             50
-#define STAIRS_DOWN           51
-#define LIFE_PERCENT          52
-#define LIFE_ITERATIONS       53
-#define TERRAIN_PILLAR        54
-#define ABOVE_DUNGEON         55
-#define BELOW_DUNGEON         56
-#define FIRST_LEV_PORTAL      57
-#define LAST_LEV_PORTAL       58
-#define PATRON_DEITY          59
-#define MOOD_STRINGS          60
-#define BLOB_WITH             61
-#define MIN_CHASM_DEPTH       62
-#define MIN_RIVER_DEPTH       63
-#define TREASURE_CHANCE       64
-#define CHEST_CHANCE          65
-#define CHEST_MIN_ITEMS       66
-#define CHEST_MAX_ITEMS       67
-#define CURSED_CHANCE         68
-#define STAPLE_CHANCE         69
-#define STREAMER_MON_DENSITY  70
-#define MONSTER_EQUILIBRIUM_BASE 71
-#define MONSTER_EQUILIBRIUM_INC 72
-#define TRAP_CHANCE           73
-#define MIN_VAULT_DEPTH       74
-#define PSYCHIC_TRAUMA        75
-#define ROOM_LIT_CHANCE       76
-#define LIT_CHANCE_DEPTH_MOD  77
-#define TORCH_DENSITY         78
-#define BIG_CORRIDOR_REGION   79
+#define LEVEL_SIZEX           1 /* How many tiles wide on the x axis the generated map level is. */
+#define LEVEL_SIZEY           2 /* How many tiles wide on the y axis the generated map level is. */
+#define PANEL_SIZEX           3 /* Up to 32 equal divisions of the level x axis width. */
+#define PANEL_SIZEY           4 /* Up to 32 equal divisions of the level y axis width. */
+#define MAX_STREAMER_WIDTH    5 /* Maximum (non-river) streamer width on level generation. */
+#define MIN_STREAMERS         6 /* Minimum number of streamers per level. */
+#define MAX_STREAMERS         7 /* Maximum number of streamers per level. */
+#define TERRAIN_MAPEDGE       8 /* Reference to terrain to use as the impassable border along the map edges. */
+#define TERRAIN_ROCK          9 /* Reference to terrain to use as default level fill before generation. */
+#define TERRAIN_TORCH         10 /* Reference to terrain to use if lighting is to be placed. */
+#define BASE_REGION           11 /* Reference to region to use for default level fill and impassable map edge border. */
+#define DIGGING_REGION        12 /* Reference to region to use for tiles dug out by creatures. */
+#define TERRAFORM_REGION      13 /* Unused? (old comment: Rock to Mud/Disint) */
+#define REDUCE_CHASM_CHANCE   14 /* Percentage chance that the chasm being generated is narrowed. */
+#define MIN_STAIRS            15 /* The minimum number of stairs down to generate at each depth other than the last. */
+#define MAX_STAIRS            16 /* The maximum number of stairs down to generate at each depth other than the last. */
+#define ROOM_MINX             17 /* The minimum x axis width of a generated room. */
+#define ROOM_MAXX             18 /* The maximum x axis width of a generated room. */
+#define ROOM_MINY             19 /* The minimum y axis width of a generated room. */
+#define ROOM_MAXY             20 /* The maximum y axis width of a generated room. */
+#define TURN_CHANCE           21 /* Percentage chance of a turn in a corridor along a segment. */
+#define STUBBORN_CORRIDOR     22 /* Percentage chance that a corridor will be "stubborn". */
+#define SEGMENT_MINLEN        23 /* The minimum number of tiles in a corridor segment length. */
+#define SEGMENT_MAXLEN        24 /* The maximum number of tiles in a corridor segment length. */
+#define STREAMER_CHANCE       25 /* Percentage chance of each additional streamer to be generated over the minimum number per level. */
+
+#define MONSTER_COUNT         26 /* Unused? */
+#define MONSTER_FREQ          27 /* Unused? */
+#define REST_SAFETY           28 /* Unused? */
+#define DEAD_MAGIC            29 /* Unused? */
+#define WILD_MAGIC            30 /* Unused? */
+#define DESTROYED_LEV         34 /* Unused? */
+#define NATURAL_LEV           35 /* Unused? */
+#define VAULT_CHANCE          36 /* Unused? */
+#define GVAULT_CHANCE         37 /* Unused? */
+#define MAX_ARTIFACTS         38 /* Unused? */
+#define MIN_ARTIFACTS         39 /* Unused? */
+#define ARTI_LEVEL            40 /* Unused? */
+#define ARTI_CHANCE           41 /* Unused? */
+#define ARTI_LIST             42 /* Unused? */
+#define ARTI_REQUIRED         43 /* Unused? */
+#define DUN_DEPTH             44 /* How many levels of depth a dungeon has. */
+#define INITIAL_CR            45 /* The challenge rating of the dungeon at depth level 1. */
+#define DUN_SPEED             46 /* How much the challenge rating increases per dungeon level increase. */
+#define SUBMAP_CHANCE         47 /* Unused? */
+#define MAX_SUBMAPS           48 /* Unused? */
+#define CORRIDOR_REGION       49 /* Reference to region to use for tunnel generation. */
+#define STAIRS_UP             50 /* Reference to feature to use for stairs up. */
+#define STAIRS_DOWN           51 /* Reference to feature to use for stairs down. */
+#define LIFE_PERCENT          52 /* Used for 'game of life' cave generation. */
+#define LIFE_ITERATIONS       53 /* Unused? */
+#define TERRAIN_PILLAR        54 /* Reference to terrain to spawn as a pillar. */
+#define ABOVE_DUNGEON         55 /* Reference to dungeon to use at depth <= 0. */
+#define BELOW_DUNGEON         56 /* Reference to dungeon to use at depth > this dungeon's depth. */
+#define FIRST_LEV_PORTAL      57 /* Unused? */
+#define LAST_LEV_PORTAL       58 /* Unused? */
+#define PATRON_DEITY          59 /* Unused? */
+#define MOOD_STRINGS          60 /* Unused? */
+#define BLOB_WITH             61 /* What terrain to furnish a generated panel with. */
+#define MIN_CHASM_DEPTH       62 /* The minimum depth at which regions flagged as chasms can be spawned. */
+#define MIN_RIVER_DEPTH       63 /* The minimum depth at which regions flagged as rivers can be spawned. */
+#define TREASURE_CHANCE       64 /* Chance of furnishing treasure in an area. */ 
+#define CHEST_CHANCE          65 /* Chance of furnishing a chest in an area. */ 
+#define CHEST_MIN_ITEMS       66 /* Minimum number of items to spawn in a chest. */
+#define CHEST_MAX_ITEMS       67 /* Maximum number of items to spawn in a chest. */
+#define CURSED_CHANCE         68 /* Chance something will be cursed. */
+#define STAPLE_CHANCE         69 /* Chance of furnishing IG_STAPLE items in an area. */
+#define STREAMER_MON_DENSITY  70 /* 1/value chance of spawning from this streamer region's encounter list. */
+#define MONSTER_EQUILIBRIUM_BASE 71 /* The minimum limit on the number of monsters repopulated as days pass. */
+#define MONSTER_EQUILIBRIUM_INC 72 /* The per level of depth increment to base limit for monster repopulation as days pass. */
+#define TRAP_CHANCE           73 /* Trap placement chance range, compared to depth CR. */
+#define MIN_VAULT_DEPTH       74 /* Vaults are only randomly placed at this depth and beyond. */
+#define PSYCHIC_TRAUMA        75 /* Unused? */
+#define ROOM_LIT_CHANCE       76 /* Percentage chance a given room is lit. */
+#define LIT_CHANCE_DEPTH_MOD  77 /* Percentage chance a given room is not lit (subtracted from ROOM_LIT_CHANCE). */
+#define TORCH_DENSITY         78 /* Light approximately 1/this of the generated tiles. */
+#define BIG_CORRIDOR_REGION   79 /* Unused? */
 
 
 /* Constants for other resources */
 #define BASE_ITEM             101
-#define INITIAL_PLUS          102
+#define INITIAL_PLUS          102 /* Effect: Initial plus conveyed. */
 #define WIELD_AS              103
 #define APPEAR_AS             104
 #define SKILL_KIT_MOD         107

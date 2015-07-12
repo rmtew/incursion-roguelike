@@ -3010,14 +3010,13 @@ static void MakeMagicWeaponArmour(Item *it, int _plusLevel,
   return; 
 }
 
-Item* Item::GenItem(uint16 Flags, rID xID, int16 Depth, int8 Luck, ItemGen *Gen)
-  {
+Item* Item::GenItem(uint16 Flags, rID xID, int16 Depth, int8 Luck, ItemGen *Gen) {
     int16 i, minlev, maxlev, adjlev, restart_count, roll, IType = 0;
     uint32 mag; bool proto = false; String s;
     int16 magicLevel = 0;
     bool trulyCursed = false; /* generates EF_CURSED eID */
     bool isCursed = false; /* generates IF_CURSED item */
-    rID iID, eID; 
+    rID iID, eID;
     Item* theItem;
     int16 qv = 0;
 
@@ -3030,354 +3029,336 @@ Item* Item::GenItem(uint16 Flags, rID xID, int16 Depth, int8 Luck, ItemGen *Gen)
        maximum level of 80% of all items created by it's attribute
        modifier -- effectively, 80% of the treasure a character
        with Luck 3 finds on DL10 will be typical of DL6. The other
-       20% will be normal DL10 treasure. */   
+       20% will be normal DL10 treasure. */
     //maxlev = ((Depth + 1)* 2) / 3;
     maxlev = Depth;
-    
+
     /* New idea -- generate treasure for dlev 1-3 all as if they
        were dlev 3. My rationale for this is as follows:
        * Compared to, say, Angband or even NetHack, Incursion has
-         a VERY short timeframe for getting "needed" equipment.
-         The player can never scum for gear or hang out on a level
-         to get more treasure -- everything that will be generated
-         is genned when the level is. There needs to be more "chances"
-         to get certain staple equipment before the midgame.
+       a VERY short timeframe for getting "needed" equipment.
+       The player can never scum for gear or hang out on a level
+       to get more treasure -- everything that will be generated
+       is genned when the level is. There needs to be more "chances"
+       to get certain staple equipment before the midgame.
        * The character NEEDS equipment the most at the beginning,
-         and it doesn't come fast enough.
+       and it doesn't come fast enough.
        * I'm finding Wes' comments about there being "too much junk"
-         in Incursion very, very true -- a million +1 minor bonus
-         items are just irritating, while a few mixed in with better
-         stuff are quirky.
+       in Incursion very, very true -- a million +1 minor bonus
+       items are just irritating, while a few mixed in with better
+       stuff are quirky.
        * This should strongly curtail the "every helm on dlev 1 is a
-         helm of sound resistance" issue, because item level 3 has a
-         LOT more variety they ILev 1.
+       helm of sound resistance" issue, because item level 3 has a
+       LOT more variety they ILev 1.
        Wes, let me know if this is making characters way too powerful
        too early, or if it's even noticable, or what.
-    */
-    maxlev = max(3,Depth);
-    
-    if (random(5) && Luck <= 9)
-      { maxlev += (Luck-11)/2;
-        maxlev = max(min(1,Depth),maxlev); }
-        
+       */
+    maxlev = max(3, Depth);
+
+    if (random(5) && Luck <= 9) {
+        maxlev += (Luck - 11) / 2;
+        maxlev = max(min(1, Depth), maxlev);
+    }
+
     /* For high-luck characters, 20% of items are adjusted by luck
        -- their maxlev is increased by 1d[LuckMod]. When generating
-       specific weapons, this always happens. */    
-    adjlev = maxlev + (Luck <= 9 ? 0 : random((Luck-9)/2));
+       specific weapons, this always happens. */
+    adjlev = maxlev + (Luck <= 9 ? 0 : random((Luck - 9) / 2));
     if (!random(5))
-      maxlev = adjlev; 
-        
-    /* The old algorithm -- less dramatic luck effects.      
-      
+        maxlev = adjlev;
+
+    /* The old algorithm -- less dramatic luck effects.
+
       while (((Luck*3) > (random(100)+1)) && maxlev < Depth)
-        maxlev++;
-        
-    */
+      maxlev++;
+
+      */
 
     /* Later, the chance of generating an artifact will be based on the
        IG_GOOD and IG_GREAT flags as well, decreasing exponentially with
        the number of artifacts already generated. */
     if (Flags & IG_GREAT)
-      minlev = max(0,maxlev-2);
+        minlev = max(0, maxlev - 2);
     else if (Flags & IG_GOOD)
-      minlev = max(0,maxlev-4);
+        minlev = max(0, maxlev - 4);
     else {
-      if (xID && RES(xID)->Type == T_TDUNGEON)
-        if (random(100)+1 < (int16)TDUN(xID)->GetConst(CURSED_CHANCE)) {
-          isCursed = true;
-        } else if (random(100)+1 < (int16)TDUN(xID)->GetConst(CURSED_CHANCE)) {
-          isCursed = true;
-          trulyCursed = true; 
-        }
-      minlev = 0;
+        if (xID && RES(xID)->Type == T_TDUNGEON)
+            if (random(100) + 1 < (int16)TDUN(xID)->GetConst(CURSED_CHANCE)) {
+                isCursed = true;
+            } else if (random(100) + 1 < (int16)TDUN(xID)->GetConst(CURSED_CHANCE)) {
+                isCursed = true;
+                trulyCursed = true;
+            }
+        minlev = 0;
     }
-      
 
-    
     maxlev = max(maxlev, 1);
-    Depth  = max(Depth, 1);
-    minlev = max(maxlev - 4,0);
+    Depth = max(Depth, 1);
+    minlev = max(maxlev - 4, 0);
     restart_count = 0;
     /* To prevent the "1000 restarts" message, minlev MUST be
        zero, because most staple items are very low level! */
 
     if (Flags & IG_STAPLE)
-      minlev = 0;
+        minlev = 0;
 
-
-    if (xID && RES(xID)->Type == T_TITEM)
-      { iID = xID; mag = 0;
+    if (xID && RES(xID)->Type == T_TITEM) {
+        iID = xID;
+        mag = 0;
         IType = TITEM(iID)->IType;
-        for (i=0;DungeonItems[i].Prob;i++)
-          // ww: was 'type', but I'm pretty sure IType is what we want here
-          if (IType == DungeonItems[i].Type)
-            mag = DungeonItems[i].Source;
+        for (i = 0; DungeonItems[i].Prob; i++)
+            // ww: was 'type', but I'm pretty sure IType is what we want here
+            if (IType == DungeonItems[i].Type)
+                mag = DungeonItems[i].Source;
         goto Got_iID;
-      }
-    
-    Restart:
-    if (restart_count++ > 1000)
-      {
+    }
+
+Restart:
+    if (restart_count++ > 1000) {
         Error("1000 restarts on the Item Generator?!");
         theItem = Item::Create(FIND("food ration"));
         return theItem;
-      }
-    roll = 0;
+    }
 
-    for(i=0;Gen[i].Prob;i++)
-      roll += Gen[i].Prob;
+    roll = 0;
+    for (i = 0; Gen[i].Prob; i++)
+        roll += Gen[i].Prob;
 
     roll = random(roll);
-    
-    for(i=0;Gen[i].Prob;i++)
-      if (roll < Gen[i].Prob)
-        break;
-      else
-        roll -= Gen[i].Prob;
+    for (i = 0; Gen[i].Prob; i++)
+        if (roll < Gen[i].Prob)
+            break;
+        else
+            roll -= Gen[i].Prob;
 
     if (!Gen[i].Prob)
-      Fatal("Damaged item probability chart!");
+        Fatal("Damaged item probability chart!");
+
     IType = Gen[i].Type;
-    
-    RetryCoinType:
-    
-    if (Gen[i].Prototype)
-      { iID = FIND(Gen[i].Prototype); proto = true; }
-    else if (Flags & IG_STAPLE)
-      iID = theGame->GetItemID(PUR_STAPLE,0,(int8)maxlev,(int8)Gen[i].Type);
+
+RetryCoinType:
+    if (Gen[i].Prototype) {
+        iID = FIND(Gen[i].Prototype); proto = true;
+    } else if (Flags & IG_STAPLE)
+        iID = theGame->GetItemID(PUR_STAPLE, 0, (int8)maxlev, (int8)Gen[i].Type);
     else
-      iID = theGame->GetItemID(PUR_DUNGEON,0,(int8)maxlev,(int8)Gen[i].Type);
-    mag   = Gen[i].Source;
+        iID = theGame->GetItemID(PUR_DUNGEON, 0, (int8)maxlev, (int8)Gen[i].Type);
+    mag = Gen[i].Source;
 
     if (!iID)
-      goto Restart;
+        goto Restart;
 
     // no matter how lucky you are, you won't find a Depth 2 item at 10'
-    if (TITEM(iID)->Depth > Depth) 
-      goto Restart;
-    
-    qv++;
-    
-    Got_iID:
+    if (TITEM(iID)->Depth > Depth)
+        goto Restart;
 
+    qv++;
+
+Got_iID:
     theItem = Item::Create(iID);
-    if (theItem->isType(T_COIN))
-      {
+
+    if (theItem->isType(T_COIN)) {
         int32 val;
-        val = WealthByLevel[max(0,min(20,Depth))] / 4;
+        val = WealthByLevel[max(0, min(20, Depth))] / 4;
         val *= 50 + random(100); // 50% to 150%
         val /= TITEM(iID)->Cost;
         theItem->Quantity = val;
         /* Don't generate 1,000,000 cp on dlev 10! */
-        int32 maxCoins[] = {25000, 10000, 5000, 2500} ;
-        if (theItem->Quantity > (uint32)maxCoins[random(4)])
-          {
+        int32 maxCoins[] = { 25000, 10000, 5000, 2500 };
+        if (theItem->Quantity > (uint32)maxCoins[random(4)]) {
             delete theItem;
             goto RetryCoinType;
-          }
-      }
-    else if (TITEM(iID)->HasFlag(IT_BGROUP))
-      theItem->Quantity = 40 + random(41);
+        }
+    } else if (TITEM(iID)->HasFlag(IT_BGROUP))
+        theItem->Quantity = 40 + random(41);
     else if (TITEM(iID)->HasFlag(IT_GROUP))
-      theItem->Quantity = 1 + random(4);
-    else if ((Flags & IG_CHEST) && (TITEM(iID)->Type == T_POTION ||
-                TITEM(iID)->Type == T_SCROLL))
-      theItem->Quantity = 1 + random(4);
+        theItem->Quantity = 1 + random(4);
+    else if ((Flags & IG_CHEST) && (TITEM(iID)->Type == T_POTION || TITEM(iID)->Type == T_SCROLL))
+        theItem->Quantity = 1 + random(4);
 
-    eID = 0;  
+    eID = 0;
 
     if (!maxlev)
-      goto SkipMagic;
+        goto SkipMagic;
 
     {
-      EventInfo xe;
-      xe.Clear();
-      xe.ETarget = theItem;
-      xe.EItem   = theItem;
-      xe.vDepth  = Depth;
-      xe.vLevel  = maxlev;
-      xe.Event   = EV_GENITEM;
-      switch (TITEM(iID)->Event(xe,iID))
-        {
-          case DONE: goto DoneItem;
-          case ABORT: delete theItem; return NULL;
-          case ERROR: Error("EV_GENITEM returned ERROR!");
-          case NOTHING: break;
+        EventInfo xe;
+        xe.Clear();
+        xe.ETarget = theItem;
+        xe.EItem = theItem;
+        xe.vDepth = Depth;
+        xe.vLevel = maxlev;
+        xe.Event = EV_GENITEM;
+
+        switch (TITEM(iID)->Event(xe, iID)) {
+        case DONE:
+            goto DoneItem;
+        case ABORT:
+            delete theItem;
+            return NULL;
+        case ERROR:
+            Error("EV_GENITEM returned ERROR!");
+        case NOTHING:
+            break;
         }
     }
 
-    if ((IType == T_WEAPON || IType == T_BOW || IType == T_MISSILE || 
-         IType == T_ARMOUR || IType == T_SHIELD) && !(Flags & IG_STAPLE)) {
-      
-      /* Generate a fully mundane item? */
-      if (!random(maxlev+2))
-        goto SkipMagic;
-        
-      /* 5% of magic weapons/armour are specific weapons (i.e.,
-         Sunsword, Frost Brand) as opposed to randomly generated
-         weapons (+2 keen pickaxe, +1 ghost touch rapier) -- but
-         only at depth 6+! */ 
-      if (Depth > 5 && !random(8))
-        goto GrantEffect;
-        
-      NoSpecificWeaponFound:
-      int isArmour = IType == T_ARMOUR || IType == T_SHIELD;
-      int isShield = IType == T_SHIELD;
-      magicLevel = max(random(1 + maxlev - minlev) + minlev,
-                       random(1 + maxlev - minlev) + minlev);
-      //magicLevel += random(4) + random(4) - 3; // fake std dev ...
-      //magicLevel *= 100;
-      //magicLevel /= 150;
+    if ((IType == T_WEAPON || IType == T_BOW || IType == T_MISSILE || IType == T_ARMOUR || IType == T_SHIELD) && !(Flags & IG_STAPLE)) {
+        /* Generate a fully mundane item? */
+        if (!random(maxlev + 2))
+            goto SkipMagic;
 
-      if (magicLevel >= 0) { 
-        MakeMagicWeaponArmour(theItem, magicLevel,
-            isArmour ? AQualityMods : QualityMods,0);
-      } 
-    } 
-    else if (mag)
-      {
-        GrantEffect:
-        if (trulyCursed) 
-          eID = theGame->GetEffectID(PUR_CURSED,(int8)minlev,(int8)maxlev,(int8)mag);
+        /* 5% of magic weapons/armour are specific weapons (i.e.,
+           Sunsword, Frost Brand) as opposed to randomly generated
+           weapons (+2 keen pickaxe, +1 ghost touch rapier) -- but
+           only at depth 6+! */
+        if (Depth > 5 && !random(8))
+            goto GrantEffect;
+
+NoSpecificWeaponFound:
+        int isArmour = IType == T_ARMOUR || IType == T_SHIELD;
+        int isShield = IType == T_SHIELD;
+        magicLevel = max(random(1 + maxlev - minlev) + minlev, random(1 + maxlev - minlev) + minlev);
+        //magicLevel += random(4) + random(4) - 3; // fake std dev ...
+        //magicLevel *= 100;
+        //magicLevel /= 150;
+
+        if (magicLevel >= 0)
+            MakeMagicWeaponArmour(theItem, magicLevel, isArmour ? AQualityMods : QualityMods, 0);
+    } else if (mag) {
+GrantEffect:
+        if (trulyCursed)
+            eID = theGame->GetEffectID(PUR_CURSED, (int8)minlev, (int8)maxlev, (int8)mag);
         else if (Flags & IG_STAPLE)
-          eID = theGame->GetEffectID(PUR_STAPLE,(int8)minlev,(int8)maxlev,(int8)mag);
-        else if (mag == AI_WEAPON || mag == AI_ARMOUR) 
-          /* Specific Weapons ALWAYS have maxlev adjusted by luck. */
-          eID = theGame->GetEffectID(PUR_DUNGEON,(int8)minlev,(int8)adjlev,(int8)mag);
+            eID = theGame->GetEffectID(PUR_STAPLE, (int8)minlev, (int8)maxlev, (int8)mag);
+        else if (mag == AI_WEAPON || mag == AI_ARMOUR)
+            /* Specific Weapons ALWAYS have maxlev adjusted by luck. */
+            eID = theGame->GetEffectID(PUR_DUNGEON, (int8)minlev, (int8)adjlev, (int8)mag);
         else
-          eID = theGame->GetEffectID(PUR_DUNGEON,(int8)minlev,(int8)maxlev,(int8)mag);
-        
+            eID = theGame->GetEffectID(PUR_DUNGEON, (int8)minlev, (int8)maxlev, (int8)mag);
+
         if (mag == AI_ARMOUR)
-          if (eID && !TEFF(eID)->HasSource(AI_ARMOUR))
-            Error("Bad armour effect bug!");
-            
-        if (!eID)
-          {
-            if (mag == AI_WEAPON || mag == AI_ARMOUR ||
-                mag == AI_BOW || mag == AI_SHIELD)
-              {
+            if (eID && !TEFF(eID)->HasSource(AI_ARMOUR))
+                Error("Bad armour effect bug!");
+
+        if (!eID) {
+            if (mag == AI_WEAPON || mag == AI_ARMOUR || mag == AI_BOW || mag == AI_SHIELD) {
                 /*
                 if (theGame->GetPlayer(0)->WizardMode)
-                  theGame->GetPlayer(0)->IPrint(
-                    "No specific found (mag <str>, minlev <num>, maxlev <num>, adjlev <num>).",
-                    Lookup(AI_CONSTNAMES,mag),minlev,maxlev,adjlev);
+                theGame->GetPlayer(0)->IPrint(
+                "No specific found (mag <str>, minlev <num>, maxlev <num>, adjlev <num>).",
+                Lookup(AI_CONSTNAMES,mag),minlev,maxlev,adjlev);
                 */
                 goto NoSpecificWeaponFound;
-              }
-              
+            }
+
             delete theItem;
             if (xID && RES(xID)->Type == T_TITEM)
-              return NULL;
+                return NULL;
             goto Restart;
-          }
+        }
         if (eID && TEFF(eID)->HasFlag(EF_NEEDS_PLUS))
-          theItem->MakeMagical(eID,MaxItemPlus(Depth,eID));
-      }
+            theItem->MakeMagical(eID, MaxItemPlus(Depth, eID));
+    }
 
-    if (eID > 0)      
-      theItem->MakeMagical(eID,theItem->Plus);
-      
+    if (eID > 0)
+        theItem->MakeMagical(eID, theItem->Plus);
+
     if (theItem->eID || theItem->Plus)
-      if (random(theItem->eID ? 150 : 100) < (xID ? (int16)TDUN(xID)->GetConst(CURSED_CHANCE) : 25))
-        if (!(theItem->isType(T_POTION) || theItem->isType(T_SCROLL) || theItem->isType(T_WAND) ||
+        if (random(theItem->eID ? 150 : 100) < (xID ? (int16)TDUN(xID)->GetConst(CURSED_CHANCE) : 25))
+            if (!(theItem->isType(T_POTION) || theItem->isType(T_SCROLL) || theItem->isType(T_WAND) ||
                 theItem->isType(T_COIN) || theItem->isType(T_TOOL) || theItem->isType(T_TOME)))
-          theItem->IFlags |= IF_CURSED;
+                theItem->IFlags |= IF_CURSED;
 
-    if (isCursed) 
-      theItem->IFlags |= IF_CURSED;
+    if (isCursed)
+        theItem->IFlags |= IF_CURSED;
 
     if (theItem->Plus && theItem->eID == 0 && (theItem->isType(T_WEAPON) ||
-         theItem->isType(T_ARMOUR) || theItem->isType(T_SHIELD) ||
-         theItem->isType(T_BOW) || theItem->isType(T_MISSILE)))
-      if (!random(4))
-        theItem->IFlags |= IF_RUNIC;
+        theItem->isType(T_ARMOUR) || theItem->isType(T_SHIELD) ||
+        theItem->isType(T_BOW) || theItem->isType(T_MISSILE)))
+        if (!random(4))
+            theItem->IFlags |= IF_RUNIC;
 
-    SkipMagic:
+SkipMagic:
+    if (theItem->isType(T_BOOK) || theItem->isType(T_COIN) || theItem->isType(T_TOOL) || theItem->isType(T_FOOD))
+        theItem->IFlags &= ~(IF_CURSED | IF_BLESSED);
 
-    if (theItem->isType(T_BOOK) || theItem->isType(T_COIN) ||
-        theItem->isType(T_TOOL) || theItem->isType(T_FOOD))
-      theItem->IFlags &= ~(IF_CURSED|IF_BLESSED);
-      
-    if ((theItem->isType(T_POTION) || theItem->isType(T_WAND) ||
-           theItem->isType(T_SCROLL)) && !trulyCursed)
-      theItem->IFlags &= ~(IF_CURSED|IF_BLESSED);    
-      
-    if (!theItem->isMagic())  
-      theItem->IFlags &= ~(IF_CURSED|IF_BLESSED);    
+    if ((theItem->isType(T_POTION) || theItem->isType(T_WAND) || theItem->isType(T_SCROLL)) && !trulyCursed)
+        theItem->IFlags &= ~(IF_CURSED | IF_BLESSED);
+
+    if (!theItem->isMagic())
+        theItem->IFlags &= ~(IF_CURSED | IF_BLESSED);
 
     if (theItem)
-      if (!random(3)) {
-        switch(random(8)) {
-          case 0:
-            if (theItem->QualityOK(IQ_ELVEN))
-              theItem->AddQuality(IQ_ELVEN);
-           break;
-          case 1:
-            if (theItem->QualityOK(IQ_DWARVEN))
-              theItem->AddQuality(IQ_DWARVEN);
-           break;
-          case 2:
-          case 3:
-            if (theItem->QualityOK(IQ_ORCISH))
-              theItem->AddQuality(IQ_ORCISH);
-           break;
-          case 4:
-            if (theItem->QualityOK(IQ_ADAMANT))
-              theItem->AddQuality(IQ_ADAMANT);
-            else if (theItem->QualityOK(IQ_DARKWOOD))
-              theItem->AddQuality(IQ_DARKWOOD);
-           break;
-          case 5:
-            if (theItem->QualityOK(IQ_MITHRIL))
-              theItem->AddQuality(IQ_MITHRIL);
-            else if (theItem->QualityOK(IQ_DARKWOOD))
-              theItem->AddQuality(IQ_DARKWOOD);
-           break;
-          case 6:
-            if (theItem->QualityOK(IQ_IRONWOOD))
-              theItem->AddQuality(IQ_IRONWOOD);
-           break;
-          case 7:
-            if (theItem->QualityOK(IQ_SILVER))
-              theItem->AddQuality(IQ_SILVER);
-           break;
-          }
-        }  
+        if (!random(3)) {
+            switch (random(8)) {
+            case 0:
+                if (theItem->QualityOK(IQ_ELVEN))
+                    theItem->AddQuality(IQ_ELVEN);
+                break;
+            case 1:
+                if (theItem->QualityOK(IQ_DWARVEN))
+                    theItem->AddQuality(IQ_DWARVEN);
+                break;
+            case 2:
+            case 3:
+                if (theItem->QualityOK(IQ_ORCISH))
+                    theItem->AddQuality(IQ_ORCISH);
+                break;
+            case 4:
+                if (theItem->QualityOK(IQ_ADAMANT))
+                    theItem->AddQuality(IQ_ADAMANT);
+                else if (theItem->QualityOK(IQ_DARKWOOD))
+                    theItem->AddQuality(IQ_DARKWOOD);
+                break;
+            case 5:
+                if (theItem->QualityOK(IQ_MITHRIL))
+                    theItem->AddQuality(IQ_MITHRIL);
+                else if (theItem->QualityOK(IQ_DARKWOOD))
+                    theItem->AddQuality(IQ_DARKWOOD);
+                break;
+            case 6:
+                if (theItem->QualityOK(IQ_IRONWOOD))
+                    theItem->AddQuality(IQ_IRONWOOD);
+                break;
+            case 7:
+                if (theItem->QualityOK(IQ_SILVER))
+                    theItem->AddQuality(IQ_SILVER);
+                break;
+            }
+        }
 
     if (Flags & IG_KNOWN) {
-      theItem->Known = 0xff; 
-      if (theItem->isQItem())
-        ((QItem *)theItem)->KnownQualities = 0xff; 
+        theItem->Known = 0xff;
+        if (theItem->isQItem())
+            ((QItem *)theItem)->KnownQualities = 0xff;
     }
 
-    if (random(100) < max(maxlev,5) && !theItem->isType(T_TOOL) &&
-         !theItem->isType(T_COIN)) {
-      theItem->IFlags &= ~IF_CURSED;
-      theItem->IFlags |= IF_BLESSED;
+    if (random(100) < max(maxlev, 5) && !theItem->isType(T_TOOL) &&
+        !theItem->isType(T_COIN)) {
+        theItem->IFlags &= ~IF_CURSED;
+        theItem->IFlags |= IF_BLESSED;
     }
 
-    if (theItem->isType(T_POTION) || theItem->isType(T_SCROLL))
-      { s = theItem->Name(NA_IDENT);
-        ASSERT(!theItem->isQItem()); }
-    
-    DoneItem:
-    
-    theItem->GenStats = Format("[ minlev = %d, maxlev = %d, magicLevel = %d ]",
-      minlev, maxlev, magicLevel);
-    
+    if (theItem->isType(T_POTION) || theItem->isType(T_SCROLL)) {
+        s = theItem->Name(NA_IDENT);
+        ASSERT(!theItem->isQItem());
+    }
+
+DoneItem:
+    theItem->GenStats = Format("[ minlev = %d, maxlev = %d, magicLevel = %d ]", minlev, maxlev, magicLevel);
+
     theItem->Initialize();
 
     /*
     if (theItem->isType(T_WEAPON) ||
-        theItem->isType(T_ARMOUR) ||
-        theItem->isType(T_BOW) ||
-        theItem->isType(T_SHIELD))
-      if (theItem->eID && theGame->GetPlayer(0)->WizardMode)
-        theGame->GetPlayer(0)->IPrint("Generated <Res> (<num>/<num>).",
-          theItem->eID, minlev, adjlev);
+    theItem->isType(T_ARMOUR) ||
+    theItem->isType(T_BOW) ||
+    theItem->isType(T_SHIELD))
+    if (theItem->eID && theGame->GetPlayer(0)->WizardMode)
+    theGame->GetPlayer(0)->IPrint("Generated <Res> (<num>/<num>).",
+    theItem->eID, minlev, adjlev);
     */
-    
+
     return theItem;
-
-  }
-
+}

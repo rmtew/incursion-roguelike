@@ -1172,7 +1172,8 @@ class Game : public Object
       rID RandomResource(uint8 typ, int8 Level=-1, int8 Range=-1);
       rID GetItemID(int16 Purpose, int8 minlev, int8 maxlev, int8 IType=-1);
       rID GetMonID(int16 Purpose, int8 minlev, int8 maxlev, int8 Depth, int32 MType=-1);
-      rID GetEffectID(int16 Purpose, int8 minlev, int8 maxlev, int8 Source=0);
+      /* Select a random effect for a given purpose with the specified source. */
+      rID GetEffectID(int16 Purpose, int8 minlev, int8 maxlev, int8 Source = 0);
       rID GetEncounterID(int16 CR, uint32 Types, uint32 Terrain);
       rID GetMapID(int16 Purpose, uint8 depth, int8 MType=-1) { return 0; }
       rID GetTempID(uint16 Types, rID mID, int8 maxCR);

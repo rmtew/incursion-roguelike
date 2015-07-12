@@ -557,100 +557,99 @@ rID Game::GetTempID(uint16 Types, rID mID, int8 maxCR)
            Format("N = %d, i = %d = %s.",n,i,NAME(Candidates[i])));
            */
     return Candidates[i];
-  }
+}
 
-rID Game::GetEffectID(int16 Purpose, int8 minlev, int8 maxlev, int8 Source)
-  {
-    int16 i,q,n; Player *p;
+rID Game::GetEffectID(int16 Purpose, int8 minlev, int8 maxlev, int8 Source) {
+    int16 i, q, n;
+    Player *p;
     bool isListing = false;
+
     if (Purpose >= PUR_LISTING) {
-      Purpose -= PUR_LISTING;
-      isListing = true;
-      }
+        Purpose -= PUR_LISTING;
+        isListing = true;
+    }
     n = 0;
-    
+
     /* This is a horrible, but presently necessary kludge. We aren't
        likely to go multiplayer anytime soon, anyway. */
     if (Purpose == PUR_KNOWN)
-      p = theGame->GetPlayer(0);
-    
+        p = theGame->GetPlayer(0);
+
     if (Source == AI_WAND)
-      maxlev += 2;
-     
-    for (q=0;q!=1;q++) /* Only one Module at the moment */
-      for(i=0;i!=Modules[q]->szEff;i++)
-        {
-          if (Source == AI_POISON) {
-            if (Modules[q]->QEff[i].ef.aval != AR_POISON)
-              continue;
-            }
-          else if (!(Modules[q]->QEff[i].HasSource(Source)) && Source)
-            continue;
-          if (Purpose == PUR_DUNGEON)
-            if (Modules[q]->QEff[i].HasFlag(EF_NOGEN))
-              continue;
-          if (LevelAdjust(Modules[q]->QEff[i].Level,0,1) > maxlev)
-            continue;
-          if (LevelAdjust(Modules[q]->QEff[i].Level,0,5) < minlev)
-            continue;
-          if (Purpose == PUR_STAPLE)
-            if (!Modules[q]->QEff[i].HasFlag(EF_STAPLE))
-              continue;
-          if (Modules[q]->QEff[i].HasFlag(EF_CURSED)) {
-            if (Purpose != PUR_CURSED && Purpose != PUR_ACQUIRE)
-              continue; 
-          } else if (Purpose == PUR_CURSED) 
-              continue;   
-          if (Purpose == PUR_POISON)
-            if (Modules[q]->QEff[i].ef.aval != AR_POISON)
-              continue;
-          if (Purpose == PUR_DISEASE)
-            if (Modules[q]->QEff[i].ef.aval != AR_DISEASE)
-              continue;
-          if (Purpose == PUR_MUNDANE) {
-            if (!Modules[q]->QEff[i].HasFlag(EF_MUNDANE))
-              continue;
-            if (Modules[q]->QEff[i].HasSource(AI_ALCHEMY))
-              continue;
-            }
-          if (Purpose == PUR_KNOWN)
-            {
-              rID effID = Modules[q]->EffectID(i);
-              if (!p)
+        maxlev += 2;
+
+    /* TODO(rmtew): Requires change if truly supporting more than one module. */
+    for (q = 0; q != 1; q++) /* Only one Module at the moment */
+        for (i = 0; i != Modules[q]->szEff; i++) {
+            if (Source == AI_POISON) {
+                if (Modules[q]->QEff[i].ef.aval != AR_POISON)
+                    continue;
+            } else if (!(Modules[q]->QEff[i].HasSource(Source)) && Source)
                 continue;
-              if (TEFF(effID)->ef.aval == AR_POISON) {
-                if (p->HasSkill(SK_ALCHEMY) && p->HasSkill(SK_POISON_USE) &&
-                    (min(p->SkillLevel(SK_ALCHEMY),p->SkillLevel(
-                          SK_POISON_USE)) >= TEFF(effID)->ef.sval))
-                  ;
-                else
-                  continue;
-                }
-              else if (!(p->getSpellFlags(effID) & (SP_CREATE|SP_KNOWN)))
+
+            if (Purpose == PUR_DUNGEON)
+                if (Modules[q]->QEff[i].HasFlag(EF_NOGEN))
+                    continue;
+            if (LevelAdjust(Modules[q]->QEff[i].Level, 0, 1) > maxlev)
                 continue;
-            }      
-          if (Purpose == PUR_MINOR || Purpose == PUR_MAJOR)
-            {
-              if (!(Modules[q]->QEff[i].ef.aval == AR_POISON ||
+            if (LevelAdjust(Modules[q]->QEff[i].Level, 0, 5) < minlev)
+                continue;
+            if (Purpose == PUR_STAPLE)
+                if (!Modules[q]->QEff[i].HasFlag(EF_STAPLE))
+                    continue;
+            if (Modules[q]->QEff[i].HasFlag(EF_CURSED)) {
+                if (Purpose != PUR_CURSED && Purpose != PUR_ACQUIRE)
+                    continue;
+            } else if (Purpose == PUR_CURSED)
+                continue;
+            if (Purpose == PUR_POISON)
+                if (Modules[q]->QEff[i].ef.aval != AR_POISON)
+                    continue;
+            if (Purpose == PUR_DISEASE)
+                if (Modules[q]->QEff[i].ef.aval != AR_DISEASE)
+                    continue;
+            if (Purpose == PUR_MUNDANE) {
+                if (!Modules[q]->QEff[i].HasFlag(EF_MUNDANE))
+                    continue;
+                if (Modules[q]->QEff[i].HasSource(AI_ALCHEMY))
+                    continue;
+            }
+
+            if (Purpose == PUR_KNOWN) {
+                rID effID = Modules[q]->EffectID(i);
+                if (!p)
+                    continue;
+
+                if (TEFF(effID)->ef.aval == AR_POISON) {
+                    if (p->HasSkill(SK_ALCHEMY) && p->HasSkill(SK_POISON_USE) && (min(p->SkillLevel(SK_ALCHEMY), p->SkillLevel(SK_POISON_USE)) >= TEFF(effID)->ef.sval))
+                        ;
+                    else
+                        continue;
+                } else if (!(p->getSpellFlags(effID) & (SP_CREATE | SP_KNOWN)))
+                    continue;
+            }
+
+            if (Purpose == PUR_MINOR || Purpose == PUR_MAJOR) {
+                if (!(Modules[q]->QEff[i].ef.aval == AR_POISON ||
                     Modules[q]->QEff[i].HasSource(AI_TRAP)))
-                continue;
-              if (!Modules[q]->QEff[i].HasFlag(EF_MUNDANE))
-                continue;
+                    continue;
+                if (!Modules[q]->QEff[i].HasFlag(EF_MUNDANE))
+                    continue;
             }
-          Candidates[n++] = Modules[q]->EffectID(i);
+            Candidates[n++] = Modules[q]->EffectID(i);
         }
     Candidates[n] = 0;
     nCandidates = n;
     if (!n)
-      return 0;
+        return 0;
+
     return Candidates[random(n)];
-  }
+}
 
 
-rID Game::RandomResource(uint8 RType, int8 Level, int8 Range)
-  {
+rID Game::RandomResource(uint8 RType, int8 Level, int8 Range) {
     return Modules[0]->RandomResource(RType,Level,Range);
-  }
+}
 
 rID Module::RandomResource(uint8 RType, int8 Level, int8 Range)
   {

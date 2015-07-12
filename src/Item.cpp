@@ -135,43 +135,44 @@ void Item::ChangeIID(rID _iID, bool mult) {
         SetBane(b);
 }
   
-int16 Item::MaxHP()
- { return TITEM(iID)->hp + 
+int16 Item::MaxHP() {
+    return TITEM(iID)->hp + 
      GetInherentPlus()*10 + (
      (eID && !GetInherentPlus() &&
       Type != T_SCROLL && Type != T_POTION) ?
-       TEFF(eID)->Level*5 : 0); }
+       TEFF(eID)->Level*5 : 0);
+}
 
-void Item::Initialize(bool in_play)
-  {
+void Item::Initialize(bool in_play) {
     static rID QualList[33];
     int16 i;
     if (TITEM(iID)->HasFlag(IT_ROPE))
-      SetQuantity(random(2) ? 20 : 6);
-    if (eID)
-      {
-        if (TEFF(eID)->GetConst(BASE_ITEM))
-          ChangeIID(TEFF(eID)->GetConst(BASE_ITEM),true);
-        else if (TITEM(iID)->IType == T_WONDER)
-          Error("T_WONDER item %s has no BASE_ITEM.",NAME(eID));
-        if (TEFF(eID)->GetConst(INITIAL_PLUS))
-          Plus = (int8)TEFF(eID)->GetConst(INITIAL_PLUS);
-        if (TEFF(eID)->GetList(ITEM_QUALITIES,QualList,32))
-          {
-            for (i=0;i!=32 && QualList[i];i++)
-              AddQuality((int8)QualList[i]);
-          }
-        if (isWeapon() && TEFF(eID)->GetList(BANE_LIST,QualList,32))
-          SetBane(-2);
-      } 
-    TITEM(iID)->PEvent(EV_BIRTH,this,this,iID);
-    if (eID)
-      TEFF(eID)-> PEvent(EV_BIRTH,this,this,eID);
-    
-  }
+        SetQuantity(random(2) ? 20 : 6);
 
-void Item::ReApply()
-  {
+    if (eID) {
+        if (TEFF(eID)->GetConst(BASE_ITEM))
+            ChangeIID(TEFF(eID)->GetConst(BASE_ITEM), true);
+        else if (TITEM(iID)->IType == T_WONDER)
+            Error("T_WONDER item %s has no BASE_ITEM.", NAME(eID));
+
+        if (TEFF(eID)->GetConst(INITIAL_PLUS))
+            Plus = (int8)TEFF(eID)->GetConst(INITIAL_PLUS);
+
+        if (TEFF(eID)->GetList(ITEM_QUALITIES, QualList, 32)) {
+            for (i = 0; i != 32 && QualList[i]; i++)
+                AddQuality((int8)QualList[i]);
+        }
+
+        if (isWeapon() && TEFF(eID)->GetList(BANE_LIST, QualList, 32))
+            SetBane(-2);
+    }
+
+    TITEM(iID)->PEvent(EV_BIRTH, this, this, iID);
+    if (eID)
+        TEFF(eID)->PEvent(EV_BIRTH, this, this, eID);
+}
+
+void Item::ReApply() {
     Creature *cr;
     if (!(IFlags & IF_WORN))
       return;

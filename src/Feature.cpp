@@ -896,12 +896,11 @@ void Thing::MoveDepth(int16 NewDepth, bool safe)
     Remove(true);
   }
 
-void Player::MoveDepth(int16 NewDepth, bool safe)
-  {
+void Player::MoveDepth(int16 NewDepth, bool safe) {
     static Thing *GoWith[64]; Creature *c;
-    rID mID; Map *new_m = NULL; int16 nx,ny,i, gwc;
+    rID mID; Map *new_m = NULL; int16 nx, ny, i, gwc;
     StoreLevelStats((uint8)m->Depth);
-    { theGame->SaveGame(*this); }
+    theGame->SaveGame(*this);
 
     RemoveStati(SPRINTING);
     RemoveStati(ENGULFED);
@@ -909,104 +908,95 @@ void Player::MoveDepth(int16 NewDepth, bool safe)
     RemoveStati(GRAPPLING);
     RemoveStati(ELEVATED);
 
-    if (!RES(m->dID) || RES(m->dID)->Type != T_TDUNGEON)
-      {
+    if (!RES(m->dID) || RES(m->dID)->Type != T_TDUNGEON) {
         IPrint("Apparently, the fall was fatal.");
-        ThrowDmg(EV_DEATH,AD_BLUNT,0,"falling",this,this);
+        ThrowDmg(EV_DEATH, AD_BLUNT, 0, "falling", this, this);
         return;
-      }
-    if (NewDepth <= 0)
-      {
+    }
+
+    if (NewDepth <= 0) {
         mID = RES(m->dID)->GetConst(ABOVE_DUNGEON);
         if (!mID)
-          return;       
+            return;
+
         if (RES(mID)->Type == T_TDUNGEON) {
-          NewDepth += (int16)(RES(mID)->GetConst(DUN_DEPTH));
-          new_m = theGame->GetDungeonMap(mID,NewDepth,this);
-          }
-        else if (RES(mID)->Type == T_TREGION)
-          new_m = NULL; /* Map::LoadMap(mID); */
+            NewDepth += (int16)(RES(mID)->GetConst(DUN_DEPTH));
+            new_m = theGame->GetDungeonMap(mID, NewDepth, this);
+        } else if (RES(mID)->Type == T_TREGION)
+            new_m = NULL; /* Map::LoadMap(mID); */
         else
-          Error("Strange resource as ABOVE_DUNGEON in MoveDepth!");          
-      }
-    else if (RES(m->dID)->GetConst(DUN_DEPTH) &&
-      (int16)(RES(m->dID)->GetConst(DUN_DEPTH)) < NewDepth) {
+            Error("Strange resource as ABOVE_DUNGEON in MoveDepth!");
+    } else if (RES(m->dID)->GetConst(DUN_DEPTH) && (int16)(RES(m->dID)->GetConst(DUN_DEPTH)) < NewDepth) {
         NewDepth -= (int16)(RES(m->dID)->GetConst(DUN_DEPTH));
         mID = RES(m->dID)->GetConst(BELOW_DUNGEON);
         if (RES(mID)->Type == T_TDUNGEON)
-          new_m = theGame->GetDungeonMap(mID,NewDepth,this);
+            new_m = theGame->GetDungeonMap(mID, NewDepth, this);
         else if (RES(mID)->Type == T_TREGION)
-          new_m = NULL; /* Map::LoadMap(mID); */
+            new_m = NULL; /* Map::LoadMap(mID); */
         else
-          Error("Strange resource as BELOW_DUNGEON in MoveDepth!");          
-      }
-    else
-      new_m = theGame->GetDungeonMap(m->dID,NewDepth,this);
+            Error("Strange resource as BELOW_DUNGEON in MoveDepth!");
+    } else
+        new_m = theGame->GetDungeonMap(m->dID, NewDepth, this);
 
     if (new_m) {
-      /* Later, compensate for dimensions. */
-      nx = x;
-      ny = y;
-      /* Later, allow maps to choose their own entry points from
-         any other map, so that, for example, when entering $"Erisia"
-         from $"Mines of Moria", the player is always placed at the
-         feature $"ancient passage". */
-      
-      gwc = 0;
-      MapIterate(m,c,i)
-        if (c->isMonster()) 
-          if (c->ts.isLeader(this))
-            {
-              GoWith[gwc++] = c;
-              c->Remove(false);
-            }
-      
-      if (c = (Creature*) GetStatiObj(DWARVEN_FOCUS))
-        if (c->m == m)
-          {
-            LoseXP(TotalLevel()*200);
-            IPrint("You feel your heart grow leaden, as you realize "
-                   "true vengeance will forever elude you.");
-            SetStatiObj(DWARVEN_FOCUS,-1,NULL);            
-          }    
+        /* Later, compensate for dimensions. */
+        nx = x;
+        ny = y;
+        /* Later, allow maps to choose their own entry points from
+           any other map, so that, for example, when entering $"Erisia"
+           from $"Mines of Moria", the player is always placed at the
+           feature $"ancient passage". */
 
-      while ((!new_m->InBounds(nx,ny)) || 
-                new_m->SolidAt(nx,ny) || 
-                new_m->At(nx,ny).isVault) 
-        {
-          nx = 2 + random(new_m->SizeX()-4);
-          ny = 2 + random(new_m->SizeY()-4);
+        gwc = 0;
+        MapIterate(m, c, i)
+            if (c->isMonster())
+                if (c->ts.isLeader(this)) {
+                    GoWith[gwc++] = c;
+                    c->Remove(false);
+                }
+
+        if (c = (Creature*)GetStatiObj(DWARVEN_FOCUS))
+            if (c->m == m) {
+                LoseXP(TotalLevel() * 200);
+                IPrint("You feel your heart grow leaden, as you realize "
+                    "true vengeance will forever elude you.");
+                SetStatiObj(DWARVEN_FOCUS, -1, NULL);
+            }
+
+        while ((!new_m->InBounds(nx, ny)) || new_m->SolidAt(nx, ny) ||
+                new_m->At(nx, ny).isVault)  {
+            nx = 2 + random(new_m->SizeX() - 4);
+            ny = 2 + random(new_m->SizeY() - 4);
         }
 
-      if (safe && new_m->FallAt(nx,ny))
-        for(i=0;i!=8;i++)
-          if (!new_m->FallAt(nx+DirX[i],ny+DirY[i]))
-            { nx += DirX[i]; ny += DirY[i]; break; }
+        if (safe && new_m->FallAt(nx, ny))
+            for (i = 0; i != 8; i++)
+                if (!new_m->FallAt(nx + DirX[i], ny + DirY[i])) {
+                    nx += DirX[i];
+                    ny += DirY[i];
+                    break;
+                }
 
-      PlaceAt(new_m,nx,ny,true);
+        PlaceAt(new_m, nx, ny, true);
 
-      for(i=0;i!=gwc;i++)
-        GoWith[i]->PlaceAt(new_m,nx,ny);
-
-
-      }
+        for (i = 0; i != gwc; i++)
+            GoWith[i]->PlaceAt(new_m, nx, ny);
+    }
 
     MyTerm->RefreshMap();
 
     NoteArrival();
 
     if (safe) {
-      MapIterate(m,c,i)
-        if (c->isPlayer())
-          c->Timeout = 0;
-        else if (c->isCreature())
-          c->Timeout = max(c->Timeout,1);
-      }
-
-  }
+        MapIterate(m, c, i)
+            if (c->isPlayer())
+                c->Timeout = 0;
+            else if (c->isCreature())
+                c->Timeout = max(c->Timeout, 1);
+    }
+}
   
-void Player::NoteArrival()
-  {
+void Player::NoteArrival() {
     int16 dn, i;
     dn = -1;
     for (i=0;i!=MAX_DUNGEONS;i++)

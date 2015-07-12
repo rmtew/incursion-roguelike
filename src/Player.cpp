@@ -2294,6 +2294,7 @@ Done2:;
         if (t->isType(T_DOOR))
             ((Door*)t)->DoorFlags &= ~DF_SEARCHED;
 
+        /* TODO(rmtew): Why do we only count monsters of CR+4 >= Depth? */
         if (t->isMonster())
             if (!((Monster*)t)->HasMFlag(M_BREEDER))
                 if (((Monster*)t)->ChallengeRating() + 4 >= Depth)
@@ -2463,11 +2464,12 @@ SkipMonUpdate:
     Day = theGame->Day;
     inDaysPassed = false;
 
-    // TODO(design-decision-difficulty): Remove all monsters above the level's challenge rating.
-    int16 capCR = Depth + (theGame->Opt(OPT_OOD_MONSTERS) ? 3 : 1);
-    rID campID = FIND("The Goblin Encampment");
 RestartVerifyMon:
     if (theGame->Opt(OPT_DIFFICULTY) != DIFF_NIGHTMARE) {
+        // TODO(design-decision-difficulty): Remove all monsters above the level's challenge rating.
+        int16 capCR = Depth + (theGame->Opt(OPT_OOD_MONSTERS) ? 3 : 1);
+        rID campID = FIND("The Goblin Encampment");
+
         MapIterate(this, t, i)
             if (t->isType(T_MONSTER))
                 if (((Creature*)t)->ChallengeRating() > capCR) {

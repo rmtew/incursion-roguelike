@@ -1894,7 +1894,7 @@ SecondStreamerSame:
                 TTER(TerrainAt(x, y))->HasFlag(TF_FALL));
             st = new Portal(Con[STAIRS_DOWN]);
             ASSERT(st)
-                st->PlaceAt(this, x, y);
+            st->PlaceAt(this, x, y);
         }
     }
 
@@ -2445,21 +2445,19 @@ PresetRegion:
         RoomsTouched[py] |= (1 << px);
         return;
     case RM_NORMAL:
-    DoBasicRoom :
+DoBasicRoom:
         sx = (int16)(Con[ROOM_MINX] + random((int16)(Con[ROOM_MAXX] - Con[ROOM_MINX])));
-                sy = (int16)(Con[ROOM_MINY] + random((int16)(Con[ROOM_MAXY] - Con[ROOM_MINY])));
-                if (TREG(regID)->HasFlag(RF_ODD_WIDTH) && !(sx % 2))
-                {
-                    if (sx == Con[ROOM_MAXX]) sx--; else sx++;
-                }
-                if (TREG(regID)->HasFlag(RF_ODD_HEIGHT) && !(sy % 2))
-                {
-                    if (sx == Con[ROOM_MAXY]) sy--; else sy++;
-                }
-                r = cPanel.PlaceWithinSafely((uint8)sx, (uint8)sy);
-                WriteRoom(r, regID);
-                xe.cRoom = r;
-                break;
+        sy = (int16)(Con[ROOM_MINY] + random((int16)(Con[ROOM_MAXY] - Con[ROOM_MINY])));
+        if (TREG(regID)->HasFlag(RF_ODD_WIDTH) && !(sx % 2)) {
+            if (sx == Con[ROOM_MAXX]) sx--; else sx++;
+        }
+        if (TREG(regID)->HasFlag(RF_ODD_HEIGHT) && !(sy % 2)) {
+            if (sx == Con[ROOM_MAXY]) sy--; else sy++;
+        }
+        r = cPanel.PlaceWithinSafely((uint8)sx, (uint8)sy);
+        WriteRoom(r, regID);
+        xe.cRoom = r;
+        break;
     case RM_CIRCLE:
         sx = (int16)(Con[ROOM_MINX] + random((int16)(Con[ROOM_MAXX] - Con[ROOM_MINX])));
         sy = (int16)(Con[ROOM_MINY] + random((int16)(Con[ROOM_MAXY] - Con[ROOM_MINY])));

@@ -179,6 +179,9 @@ Ressurected:
     time(&tm);
     srand((unsigned long)tm);
 
+    /* NOTE(rmtew): This is the main game loop.  Once we're in here, we have to
+                    pretty much die or save and exit the game, to exit the
+                    loop.*/
     do {
         /* If the player changed maps, we follow him around rather than
         * continuing to run through turns for a map that has only monsters

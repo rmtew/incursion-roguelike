@@ -2573,30 +2573,27 @@ Redraw:
         if (Reason >= ACQ_MONSTER) {
             if (LookupOnly(MTypeNames, Glyphs[cp * 2 + 1]))
                 Write(Pluralize(Lookup(MTypeNames, Glyphs[cp * 2 + 1])));
-        } else if (Glyphs[cp * 2 + 1] < 0)
-        {
+        } else if (Glyphs[cp * 2 + 1] < 0) {
             Write(Lookup(SourceNames, -Glyphs[cp * 2 + 1]));
-        } else
-        {
+        } else {
             Write(Lookup(ITypeNames, Glyphs[cp * 2 + 1]));
         }
 
         if (cp != ocp) {
-            n = 0; xID = 0; ocp = cp;
+            ocp = cp;
+            n = 0;
+            xID = 0;
             memset(Candidates, 0, sizeof(rID) * 2047);
-            if (strchr("ahxBCKORX", Glyphs[cp * 2]) || Glyphs[cp * 2] == GLYPH_LDEMON ||
-                Glyphs[cp * 2] == GLYPH_LDEVIL || Glyphs[cp * 2] == GLYPH_GDEMON ||
-                Glyphs[cp * 2] == GLYPH_GDEVIL)
+            if (strchr("ahxBCKORX", Glyphs[cp * 2]) ||
+                    Glyphs[cp * 2] == GLYPH_LDEMON || Glyphs[cp * 2] == GLYPH_LDEVIL || Glyphs[cp * 2] == GLYPH_GDEMON || Glyphs[cp * 2] == GLYPH_GDEVIL)
                 k = Glyphs[cp * 2] + 100000;
             else
                 k = Glyphs[cp * 2 + 1];
 
             if (Glyphs[cp * 2 + 1] > 0) {
-
                 switch (Reason) {
                 case ACQ_ANY_ITEM:
-                    if ((k & 0xFF) == T_TRAP)
-                    {
+                    if ((k & 0xFF) == T_TRAP) {
                         xID = FIND("trap");
                         theGame->GetEffectID(PUR_ACQUIRE + PUR_LISTING, minlev, maxlev, AI_TRAP);
                     } else
@@ -2623,41 +2620,37 @@ Redraw:
                 case ACQ_GENOCIDE:
                     theGame->GetMonID(PUR_SUMMON + PUR_LISTING, minlev, maxlev, maxlev, k); break;
                 }
+
                 if (Candidates[0] && MType && RES(Candidates[0])->Type == T_TMONSTER)
                     for (i = 0; Candidates[i]; i++)
-                        if (!TMON(Candidates[i])->isMType(Candidates[i], MType))
-                        {
+                        if (!TMON(Candidates[i])->isMType(Candidates[i], MType)) {
                             memmove(Candidates + i, Candidates + i + 1, 2047 - i);
                             i--;
                         }
-            } else
-            {
-
-
+            } else {
                 for (i = 0; DungeonItems[i].Type; i++)
                     if (Glyphs[cp * 2 + 1] == -DungeonItems[i].Source) {
-                        if (DungeonItems[i].Prototype)
-                        {
-                            xID = FIND(DungeonItems[i].Prototype); goto FoundProto;
+                        if (DungeonItems[i].Prototype) {
+                            xID = FIND(DungeonItems[i].Prototype);
+                            goto FoundProto;
                         }
-                        if (DungeonItems[i].Source == AI_WEAPON)
-                        {
-                            xID = FIND("short sword"); goto FoundProto;
+                        if (DungeonItems[i].Source == AI_WEAPON) {
+                            xID = FIND("short sword");
+                            goto FoundProto;
                         }
-                        if (DungeonItems[i].Source == AI_ARMOUR)
-                        {
-                            xID = FIND("chainmail"); goto FoundProto;
+                        if (DungeonItems[i].Source == AI_ARMOUR) {
+                            xID = FIND("chainmail");
+                            goto FoundProto;
                         }
-                        if (DungeonItems[i].Source == AI_SHIELD)
-                        {
-                            xID = FIND("kite shield"); goto FoundProto;
+                        if (DungeonItems[i].Source == AI_SHIELD) {
+                            xID = FIND("kite shield");
+                            goto FoundProto;
                         }
                     }
-                xID = 0;
 
-            FoundProto:
-                switch (Reason)
-                {
+                xID = 0;
+FoundProto:
+                switch (Reason) {
                 case ACQ_CRAFT:
                     theGame->GetEffectID(PUR_MUNDANE, minlev, maxlev, -Glyphs[cp * 2 + 1]);
                     break;
@@ -2674,21 +2667,19 @@ Redraw:
                     theGame->GetEffectID(PUR_ACQUIRE, minlev, maxlev, -Glyphs[cp * 2 + 1]);
                     break;
                 }
-                if (!Candidates[0] && !Glyphs[2])
-                {
+
+                if (!Candidates[0] && !Glyphs[2]) {
                     SetWin(WIN_INPUT);
                     Clear();
                     Message("You don't know any suitable formulas.");
                     return NULL;
                 }
-
-
             }
         }
+
         SetWin(WIN_MESSAGE); Clear(); GotoXY(0, 0);
         j = WinSizeY() / 2;
-        for (i = 0; i != WinSizeY(); i++)
-        {
+        for (i = 0; i != WinSizeY(); i++) {
             Color(i == j ? AZURE : BLUE);
             if (n - j + i < 0)
                 continue;
@@ -2714,8 +2705,7 @@ Redraw:
         SetWin(WIN_INPUT);
 
         PurgeStrings();
-        switch (GetCharCmd(KY_CMD_ARROW_MODE))
-        {
+        switch (GetCharCmd(KY_CMD_ARROW_MODE)) {
         case KY_REDRAW:
             goto Redraw;
         case KY_CMD_WEST:
