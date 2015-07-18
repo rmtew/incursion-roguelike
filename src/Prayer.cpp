@@ -15,7 +15,7 @@ static TextVal AidTypes[] = {
   { AID_RESTORE,    "replenishing your spirit" },
   { AID_CURE,       "curing blindness or permanent wounds" },
   { AID_CLARITY,    "clearing your mind" },
-  { AID_RESSURECT,  "ressurecting you" },
+  { AID_RESURRECT,  "resurrecting you" },
   { AID_BERSERK,    "improving your fighting ability" },
   { AID_NEWBOOK,    "replacing lost spellbooks" },
   { AID_MANA,       "restoring spent mana" },
@@ -236,7 +236,7 @@ EvReturn Character::Insight(EventInfo &e)
              (e.eID == GodID ? 1 : (int32)TEFF(e.eID)->GetConst(LAY_MULTIPLIER)))
         {
 
-         if (aidChart[i] == AID_RESSURECT)
+         if (aidChart[i] == AID_RESURRECT)
            if (TotalLevel() < (int16)TEFF(GodID)->GetConst(MIN_RAISE_LEVEL) ||
                  e.eID != GodID)
              continue;
@@ -1413,13 +1413,13 @@ EvReturn Player::GodRaise(EventInfo &e)
     
     TGOD(e.eID)->GetList(AID_CHART,aidChart,64);
     for (i=0;aidChart[i];i+=3)
-      if (aidChart[i] == AID_RESSURECT)
+      if (aidChart[i] == AID_RESURRECT)
         if (calcFavour(e.eID) >= (int32)aidChart[i+2])
-          goto DoRessurect;
+          goto DoResurrect;
           
     return NOTHING;
     
-    DoRessurect:
+    DoResurrect:
     GodMessage(GodID,MSG_OFFER_RAISE);
     MyTerm->SetWin(WIN_MAP);
     MyTerm->Clear();
@@ -1473,7 +1473,7 @@ EvReturn Player::GodRaise(EventInfo &e)
     
     /* Do the actual raising */
     Flags &= ~(F_DELETE|F_INVIS);
-    AddJournalEntry(XPrint("<Res> ressurected you when you were killed by <Str>.",
+    AddJournalEntry(XPrint("<Res> resurrected you when you were killed by <Str>.",
                             e.eID, (const char*) GraveText));
     GraveText.Empty();
     
@@ -1498,8 +1498,8 @@ EvReturn Player::GodRaise(EventInfo &e)
       }
     
     /* Resurrection Message */
-    GodMessage(GodID,MSG_AID + AID_RESSURECT);
-    AddJournalEntry(XPrint("<14>You died, but <Res> ressurected you!<7>", GodID));    
+    GodMessage(GodID,MSG_AID + AID_RESURRECT);
+    AddJournalEntry(XPrint("<14>You died, but <Res> resurrected you!<7>", GodID));    
     return DONE;
   }
   
@@ -1783,7 +1783,7 @@ void Character::GodMessage(rID gID, int16 msgnum, ...)
       { MSG_AID + AID_BERSERK, "<Res>'s spirit comes over you, and you fly into a berzerk rage!" },
       { MSG_AID + AID_IDENTIFY, "<Res> reveals to you the nature of your equipment!" }, 
       { MSG_AID + AID_MANA, "Your magical energy is replenished!" },
-      { MSG_AID + AID_RESSURECT, "You awaken, shocked to find that you are alive again!" },
+      { MSG_AID + AID_RESURRECT, "You awaken, shocked to find that you are alive again!" },
       
       { MSG_OFFER_RAISE, "A voice speaks into the darkness: |I offer you a second "
                          "chance to find glory in my name!|" },

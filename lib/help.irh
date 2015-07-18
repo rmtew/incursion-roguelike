@@ -2695,9 +2695,9 @@ Text "help::adventuring"
          aid; it is received when a character dies rather than when she prays
          for aid. In addition to the normal minimum favour requirement, characters
          must be of a certain minimum character level (determined by their god)
-         to be important enough to be ressurected. Resurrection usually carries
+         to be important enough to be resurrected. Resurrection usually carries
          a stiffer percentile favour penalty than other forms of divine aid.\n
-         __A ressurected character loses a full character level and re-appears
+         __A resurrected character loses a full character level and re-appears
          on the first level of the dungeon with a limited supply of emergency
          equipment and a new, fully healed body. Their normal equipment remains 
          with their corpse at the location they died, unless the monsters they

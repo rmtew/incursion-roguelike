@@ -163,7 +163,7 @@ void Game::Play() {
     doLoad = true;
     doAutoSave = false;
 
-Ressurected:
+Resurrected:
     PlayMode = true;
     //T1->RecreateViewList();
 
@@ -409,7 +409,7 @@ restartDestroyCount:
                     res = ThrowEff(EV_GOD_RAISE,GodIDList[i],pp);
         }
         if (!(pp->Flags & F_DELETE))
-            goto Ressurected;
+            goto Resurrected;
 
         if (SaveFile.GetLength()) { 
             T1->ChangeDirectory(T1->SaveSubDir());

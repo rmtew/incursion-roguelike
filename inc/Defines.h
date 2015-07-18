@@ -3780,7 +3780,7 @@ typedef signed long       hObj;
 #define AID_IDENTIFY     10
 #define AID_CURE         11
 #define AID_CLARITY      12
-#define AID_RESSURECT    13
+#define AID_RESURRECT    13
 #define AID_BERSERK      14
 #define AID_NEWBOOK      15
 #define AID_MANA         16

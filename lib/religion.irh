@@ -68,13 +68,13 @@ God "Aiswin"
       aid in areas of bright (magically produced) sunlight.\n
       __<10>Blessings:<2> Aiswin is always willing to strike at the enemies
       of his followers, should they ask for his aid. He will also transport
-      worshippers to safety when called upon, heal or ressurect them or identify
+      worshippers to safety when called upon, heal or resurrect them or identify
       their items. For more devoted petitioners, he may purify the body, clear
       the mind or even remove fatigue. However, Aiswin cannot offer any aid to 
       followers when they are in areas of bright light. Aiswin does not take 
       converts lightly, however, and it takes a great deal of effort on a 
       petitioner's part to bring him to accept a new worshipper. He does not 
-      casually aid lay worshippers, but will ressurect even a comparatively
+      casually aid lay worshippers, but will resurrect even a comparatively
       unskilled loyalist.\n
       __His more permanent blessings include an affinity for hiding in shadows,
       magic to conjure darkness or command the shadows, a preternatural insight 
@@ -163,7 +163,7 @@ God "Aiswin"
           AID_SMITE     P_MODERATE   0  
           AID_TELEPORT  P_MODERATE   100         
           AID_HEAL      P_HIGH       500
-          AID_RESSURECT P_LOW        500
+          AID_RESURRECT P_LOW        500
           AID_IDENTIFY  T_ITEM       500
           AID_PURIFY    P_HIGH       1500
           AID_CLARITY   P_HIGH       1500
@@ -486,7 +486,7 @@ God "Asherath"
       their chosen calling increases.\n
       __<10>Blessings:<2> Asherath does not normally intercede on behalf of his followers:
       he expects them to succeed on their own skill, and thus usually does not
-      answer prayers for aid, nor will he ressurect the fallen. While he is easy for most
+      answer prayers for aid, nor will he resurrect the fallen. While he is easy for most
       competant adventurers to stay in favour with, he is much less willing
       to offer aid or intervention to his followers, given his distinctly
       Darwinist approach to life. However, for very
@@ -916,7 +916,7 @@ God "Ekliazeh"
           AID_IDENTIFY  T_WEAPON     2000
           AID_IDENTIFY  T_ARMOUR      2000
           AID_IDENTIFY  T_SHIELD     2000
-          AID_RESSURECT 0            3000;    
+          AID_RESURRECT 0            3000;    
     Constants:
       * VOICE_COLOUR BROWN,
       * ALTAR_COLOUR BROWN,
@@ -1233,7 +1233,7 @@ God "Erich"
           AID_UNCURSE     P_LOW        500
           AID_NEWBOOK     P_HIGH       500
           AID_MANA        P_MODERATE   1000
-          AID_RESSURECT   P_MODERATE   2000;    
+          AID_RESURRECT   P_MODERATE   2000;    
     Constants:
       * VOICE_COLOUR PURPLE,
       * ALTAR_COLOUR PURPLE,
@@ -1633,7 +1633,7 @@ God "Essiah"
           AID_RESTORE    P_LOW       100
           AID_CURE       P_LOW       100
           AID_DEFLECT    P_LOW       100
-          AID_RESSURECT  P_LOW       2500;    
+          AID_RESURRECT  P_LOW       2500;    
     Constants:
       * VOICE_COLOUR MAGENTA,
       * ALTAR_COLOUR AZURE,
@@ -1902,7 +1902,7 @@ God "Hesani"
       minor sacrifices in his name, he will also remove curses, restore
       spent fatigue and cure blindness or permanent wounds, and slightly
       later replace lost spellbooks as well. His veteran followers can
-      expect him to replenish the spirit and even ressurect them should
+      expect him to replenish the spirit and even resurrect them should
       they die. Hesani gives aid very casually in contrast with other
       gods; asking aid costs a petitioner comparatively very little favour.
       Being raised from the dead is far more costly, however, given the
@@ -2002,7 +2002,7 @@ God "Hesani"
           AID_RESTORE      P_LOW       1000
           AID_CURE         P_LOW       100         
           AID_CLARITY      P_LOW       0
-          AID_RESSURECT    P_LOW       1500
+          AID_RESURRECT    P_LOW       1500
           AID_NEWBOOK      P_MODERATE  250
           AID_MANA         P_LOW       0;    
     Constants:
@@ -2356,7 +2356,7 @@ God "Immotian"
           AID_REFRESH        P_MODERATE  500
           AID_RESTORE        P_MODERATE  500
           AID_UNCURSE        P_LOW       1000
-          AID_RESSURECT      P_LOW       1500
+          AID_RESURRECT      P_LOW       1500
           AID_DEFLECT        P_LOW       1500
           AID_SMITE          P_HIGH      2500;
     Constants:
@@ -2866,7 +2866,7 @@ God "Khasrach"
           AID_DEFLECT    P_LOW    250
           AID_RESTORE    P_HIGH   750
           AID_UNCURSE    P_LOW    1500
-          AID_RESSURECT  P_LOW    2500;    
+          AID_RESURRECT  P_LOW    2500;    
     Constants:
       * VOICE_COLOUR RED,
       * ALTAR_COLOUR RED,
@@ -3284,7 +3284,7 @@ God "Kysul"
           AID_CURE           P_MODERATE    100
           AID_CLARITY        P_MODERATE    0      
           AID_IDENTIFY       T_ITEM        2500
-          AID_RESSURECT      0             6000
+          AID_RESURRECT      0             6000
           AID_NEWBOOK        P_LOW         400      
           AID_MANA           P_MODERATE    250;    
     Constants:
@@ -3597,11 +3597,11 @@ God "Mara"
       responsible and ethical beings can be allowed to handle the
       powers of her domain!\n 
       __<10>Blessings:<2> Mara will heal any follower or transport
-      them to safety, and will ressurect, grant mental clarity to
+      them to safety, and will resurrect, grant mental clarity to
       or lift curses on the behalf of followers with even minimal
       favour. For more favoured followers, she will remove fatigue
       and restore the spirit, or even purify the body. Of all the
-      gods in Incursion, Mara is the freest in ressurecting her
+      gods in Incursion, Mara is the freest in resurrecting her
       followers (followed by Aiswin), as her entire ethos revolves
       around the opportunity to resolve issues left unresolved at
       one's time of death.\n
@@ -3704,7 +3704,7 @@ God "Mara"
       * AID_CHART
           AID_TELEPORT  P_LOW        0         
           AID_HEAL      P_LOW        0
-          AID_RESSURECT P_LOW        100
+          AID_RESURRECT P_LOW        100
           AID_CLARITY   P_LOW        100
           AID_UNCURSE   P_LOW        100
           AID_REFRESH   P_LOW        1000
@@ -4143,7 +4143,7 @@ God "Maeve"
           AID_IDENTIFY     T_AMULET   500
           AID_IDENTIFY     T_BOW      500
           AID_RESTORE      P_LOW      1000
-          AID_RESSURECT    P_MODERATE 1500;    
+          AID_RESURRECT    P_MODERATE 1500;    
     Constants:
       * VOICE_COLOUR COL_RAINBOW,
       * ALTAR_COLOUR EMERALD,
@@ -4575,7 +4575,7 @@ God "Sabine"
           AID_REFRESH      P_LOW    100     
           AID_RESTORE      P_LOW    100
           AID_CLARITY      P_LOW    100
-          AID_RESSURECT    P_LOW    100
+          AID_RESURRECT    P_LOW    100
           AID_UNCURSE      P_LOW    300 
           AID_MANA         P_LOW    500
           AID_PURIFY       P_LOW    750;    
@@ -4871,7 +4871,7 @@ God "Semirath"
       those who have followed him longer and done more in his name, he
       will cure blindness and permanent wounds, lift curses and grant
       incredible luck and grace in combat. He has also been known to
-      ressurect those that have served him more loyally still.\n
+      resurrect those that have served him more loyally still.\n
       __His permanent blessings include the ability to develop certain
       larcenous skills, inherent magic suited to trickery and pranks
       and augmented agility and intellect.";
@@ -4978,7 +4978,7 @@ God "Semirath"
           AID_DEFLECT   P_LOW       100       
           AID_REFRESH   P_LOW       100
           AID_CURE      P_MODERATE  1000   
-          AID_RESSURECT P_HIGH      2000   
+          AID_RESURRECT P_HIGH      2000   
           AID_NEWBOOK   P_LOW       100;    
     Constants:
       * VOICE_COLOUR MAGENTA,
@@ -5357,7 +5357,7 @@ God "Xavias"
           AID_UNCURSE      P_MODERATE   750      
           AID_TELEPORT     P_MODERATE   1000
           AID_MANA         P_MODERATE   1750
-          AID_RESSURECT    P_MODERATE   2000
+          AID_RESURRECT    P_MODERATE   2000
           AID_TELEPORT     P_LOW        3500
           AID_DEFLECT      P_LOW        3500,
       * FAVOURED_SKILLS
@@ -5665,7 +5665,7 @@ God "Xel"
           AID_TELEPORT    P_HIGH      1000 
           AID_REFRESH     P_LOW       1  
           AID_RESTORE     P_LOW       1
-          AID_RESSURECT   P_HIGH      4000   
+          AID_RESURRECT   P_HIGH      4000   
           AID_NEWBOOK     P_MODERATE  1000     
           AID_MANA        P_LOW       1;    
     Constants:
@@ -5915,7 +5915,7 @@ God "Zurvash"
           AID_RESTORE    P_HIGH    750  
           AID_UNCURSE    P_LOW     750
           AID_HEAL       P_LOW     2500    
-          AID_RESSURECT  P_LOW     6000;
+          AID_RESURRECT  P_LOW     6000;
           
     Constants:
       * VOICE_COLOUR RED,
@@ -6245,7 +6245,7 @@ God "The Multitude"
           AID_SMITE          P_MODERATE  0
           AID_DEFLECT        P_LOW       1500
           AID_IDENTIFY       T_ITEM      1500     
-          AID_RESSURECT      P_LOW       3500
+          AID_RESURRECT      P_LOW       3500
           AID_NEWBOOK        P_LOW       750      
           AID_MANA           P_LOW       125;    
     Constants:
