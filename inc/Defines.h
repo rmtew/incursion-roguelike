@@ -3520,7 +3520,7 @@ typedef signed long       hObj;
 #define ITEM_QUALITIES        12
 #define GRANTED_SPELLS        13 
 #define SPELLS_BY_CHARGE      14 /* i.e., staff of the magi */
-#define BASE_ITEMS            15 /* different possible base items */
+#define BASE_ITEMS            15 /* Unused? different possible base items */
 #define BANE_LIST             17
 #define STAFF_SPELL_LIST      18
 
@@ -3648,10 +3648,10 @@ typedef signed long       hObj;
 
 
 /* Constants for other resources */
-#define BASE_ITEM             101
+#define BASE_ITEM             101 /* Item: The base item for this item type (not sure what this means precisely). */
 #define INITIAL_PLUS          102 /* Effect: Initial plus conveyed. */
-#define WIELD_AS              103
-#define APPEAR_AS             104
+#define WIELD_AS              103 /* Item: Unused? TODO(unimplemented): ... */
+#define APPEAR_AS             104 /* Item: Unused? TODO(unimplemented): ... */
 #define SKILL_KIT_MOD         107 /* Item: The bonus this item gives to being used as either a primary or secondary skill kit. */
 #define SPAWN_TYPE            108 /* Unused? Monster: Defined on nabassu, no further detail. */
 #define SERVICE_SPELL_COST    109 /* Effect: The cost to the player when this spell is provided as a service to them. */
