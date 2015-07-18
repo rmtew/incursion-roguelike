@@ -719,58 +719,50 @@ bool Character::DisarmTrap(Trap *tr, bool active)
           return true;
       }
     return false;          
-  } 
+} 
 
-int8 Creature::SkillKitMod(int16 sk)
-  {
+int8 Creature::SkillKitMod(int16 sk) {
     Item *it; int16 mod, best, sec, i, cKit, rope_mod;
     rID kits[65];
-    
-    /* These frequently rolled skills have no skill kit
-       that modifies them, so let's avoid gratuitous
-       inventory scanning. */
-    if (sk == SK_MOVE_SIL || sk == SK_HIDE || sk == SK_SPELLCRAFT ||
-        sk == SK_SPOT || sk == SK_LISTEN || sk == SK_INTIMIDATE)
-      return 0;
-    
+
+    /* These frequently rolled skills have no skill kit that modifies them, so let's avoid gratuitous inventory scanning. */
+    if (sk == SK_MOVE_SIL || sk == SK_HIDE || sk == SK_SPELLCRAFT || sk == SK_SPOT || sk == SK_LISTEN || sk == SK_INTIMIDATE)
+        return 0;
+
     mod = best = sec = cKit = rope_mod = 0;
 
-    if (sk == SK_KNOW_THEO)
-      {
+    if (sk == SK_KNOW_THEO && getGod()) {
         int8 sl;
-        if (getGod())
-          for (sl=0;sl!=SL_LAST;sl++)
-            if (InSlot(sl) && InSlot(sl)->isType(T_SYMBOL))
-              if (InSlot(sl)->activeSlot(sl))
+        for (sl = 0; sl != SL_LAST; sl++)
+            if (InSlot(sl) && InSlot(sl)->isType(T_SYMBOL) && InSlot(sl)->activeSlot(sl))
                 if (InSlot(sl)->eID == TGOD(getGod())->GetConst(HOLY_SYMBOL))
-                  best = 4;
-      }
+                    best = 4;
+    }
 
-    for (it=FirstInv();it;it=NextInv()) {
-      if (TEFF(it->iID)->ListHasItem(SKILL_KIT_FOR,sk))
-        {
-          mod = (int16)TEFF(it->iID)->GetConst(SKILL_KIT_MOD) + it->GetPlus();
-          if (mod > best)
-            best = mod;
+    for (it = FirstInv(); it; it = NextInv()) {
+        if (TEFF(it->iID)->ListHasItem(SKILL_KIT_FOR, sk)) {
+            mod = (int16)TEFF(it->iID)->GetConst(SKILL_KIT_MOD) + it->GetPlus();
+            if (mod > best)
+                best = mod;
         }
-      if (TEFF(it->iID)->ListHasItem(SECONDARY_KIT_FOR,sk))
-        {
-          for (i=0;i!=cKit;i++)
-            if (kits[i] == it->iID)
-              continue;
-          sec += (int16)TEFF(it->iID)->GetConst(SKILL_KIT_MOD) + it->GetPlus();
-          kits[cKit++] = it->iID;
-        }
-      if (sk == SK_CLIMB && it->HasIFlag(IT_ROPE))
-        rope_mod = max(rope_mod,(int16)TITEM(it->iID)->
-          GetConst(SKILL_KIT_MOD));
-      }
 
-    if (HasStati(INNATE_KIT,sk))
-      best = max(best,GetStatiMag(INNATE_KIT,sk));
-      
+        if (TEFF(it->iID)->ListHasItem(SECONDARY_KIT_FOR, sk)) {
+            for (i = 0; i != cKit; i++)
+                if (kits[i] == it->iID)
+                    continue;
+            sec += (int16)TEFF(it->iID)->GetConst(SKILL_KIT_MOD) + it->GetPlus();
+            kits[cKit++] = it->iID;
+        }
+
+        if (sk == SK_CLIMB && it->HasIFlag(IT_ROPE))
+            rope_mod = max(rope_mod, (int16)TITEM(it->iID)->GetConst(SKILL_KIT_MOD));
+    }
+
+    if (HasStati(INNATE_KIT, sk))
+        best = max(best, GetStatiMag(INNATE_KIT, sk));
+
     return best + sec + rope_mod;
-  }
+}
 
 bool Creature::HasSkillKit(int16 sk) {
     Item *it;

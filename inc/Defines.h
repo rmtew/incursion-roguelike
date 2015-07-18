@@ -3652,13 +3652,13 @@ typedef signed long       hObj;
 #define INITIAL_PLUS          102 /* Effect: Initial plus conveyed. */
 #define WIELD_AS              103
 #define APPEAR_AS             104
-#define SKILL_KIT_MOD         107
-#define SPAWN_TYPE            108
-#define SERVICE_SPELL_COST    109
-#define DEPOSIT_DEPTH         110
-#define ROPE_MOD              111
-#define TOTAL_CLASS_LEVELS    112
-#define RES_SURVIVAL_CHANCE   113
+#define SKILL_KIT_MOD         107 /* Item: The bonus this item gives to being used as either a primary or secondary skill kit. */
+#define SPAWN_TYPE            108 /* Unused? Monster: Defined on nabassu, no further detail. */
+#define SERVICE_SPELL_COST    109 /* Effect: The cost to the player when this spell is provided as a service to them. */
+#define DEPOSIT_DEPTH         110 /* Terrain: The level at which or below a terrain type flagged with TF_DEPOSIT can be found. */
+#define ROPE_MOD              111 /* Unused? BUT it is defined on ropes.  TODO(rmtew): Either make it used, or relabel usage to SKILL_KIT_MOD IT_ROPE */
+#define TOTAL_CLASS_LEVELS    112 /* Class: Maximum level that can be advanced to in this class. */
+#define RES_SURVIVAL_CHANCE   113 /* Race: Initial resurrection survival chance, decreases every resurrection. */
 #define MIN_CRAFT_LEVEL       114 /* Item: Minimum skill level requires to craft this item type. */
 #define MIN_XCR_MULT          115 /* Encounter: Pre-minimum xCR multiplier for encounter. */
 #define MIN_XCR               116 /* Encounter: Fixed minimum bound for encounter xCR. */
