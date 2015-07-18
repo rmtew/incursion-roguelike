@@ -3656,7 +3656,7 @@ typedef signed long       hObj;
 #define SPAWN_TYPE            108 /* Unused? Monster: Defined on nabassu, no further detail. */
 #define SERVICE_SPELL_COST    109 /* Effect: The cost to the player when this spell is provided as a service to them. */
 #define DEPOSIT_DEPTH         110 /* Terrain: The level at which or below a terrain type flagged with TF_DEPOSIT can be found. */
-#define ROPE_MOD              111 /* Unused? BUT it is defined on ropes.  TODO(rmtew): Either make it used, or relabel usage to SKILL_KIT_MOD IT_ROPE */
+#define ROPE_MOD              111 /* Item: For items with IT_ROPE this is the additional bonus to climbing. */
 #define TOTAL_CLASS_LEVELS    112 /* Class: Maximum level that can be advanced to in this class. */
 #define RES_SURVIVAL_CHANCE   113 /* Race: Initial resurrection survival chance, decreases every resurrection. */
 #define MIN_CRAFT_LEVEL       114 /* Item: Minimum skill level requires to craft this item type. */

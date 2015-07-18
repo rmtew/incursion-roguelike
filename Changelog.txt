@@ -5,6 +5,7 @@ Incursion (open source) 0.6.9Y19: 2015-03-??
 * https://bitbucket.org/rmtew/incursion-roguelike/issues/222/: Spelling and grammar fixes.  Pull request from Carl Minden.
 * https://bitbucket.org/rmtew/incursion-roguelike/issues/236/: Moving between levels crashes when an illusion stops as days pass and then the UI is refreshed but the 'between levels' coordinates of -1, -1 choke everything that consumes them.  Reported by Esran Zarnath.
 * https://bitbucket.org/rmtew/incursion-roguelike/issues/239/: Secondary skill kit bonuses should be one per item type, not one per each of item type held by player.  This is not ideal as there may be multiple different visual item types for instance, but at least it no longer exploitable by holding 20 viewing lenses.
+* https://bitbucket.org/rmtew/incursion-roguelike/issues/240/: Your best type of rope in your inventory should add a given bonus to climbing attempts.  However, the wrong value is looked up and all ropes give +2 bonus (which is less than any rope bonus).
 * Spelling fix: ressurrection/ressurection -> resurrection.
 * Documented script constants, noting which were unused.  These are used for dungeon creation, defining how gods interact with players, and more.
 

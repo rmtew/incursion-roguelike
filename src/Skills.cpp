@@ -757,7 +757,7 @@ int8 Creature::SkillKitMod(int16 sk) {
         }
 
         if (sk == SK_CLIMB && it->HasIFlag(IT_ROPE))
-            rope_mod = max(rope_mod, (int16)TITEM(it->iID)->GetConst(SKILL_KIT_MOD));
+            rope_mod = max(rope_mod, (int16)TITEM(it->iID)->GetConst(ROPE_MOD));
 next_item:;
     }
 
