@@ -1201,19 +1201,17 @@ int16 getMaxCR(EventInfo &_e)
     ReThrow(EV_ENSELECT_TEMPS,e);
     e.EMap->enCalcCurrPartXCR(e);
     return XCRtoCR(e.epCurrXCR);
-  }
-
+}
   
-EvReturn Map::enGenPart(EventInfo &e)
-  {
+EvReturn Map::enGenPart(EventInfo &e) {
     /* -- If there's no XCR, generate exactly what's asked for
-          without regard to how much it "costs". 
+          without regard to how much it "costs".
        -- If we have XCR and a fixed amount, divide the XCR by
           the amount, and then generate N monsters as close to
           that XCR as possible.
        -- If we have fixed monster CR (set mID, no EP_SKILLED
           or EP_CLASSED, etc.) but unspecified or ranged Amt,
-          calculate individual monster XCR, divide by total XCR 
+          calculate individual monster XCR, divide by total XCR
           to find ideal Amt, then if needed raise Amt to minAmt
           or lower it to maxAmt.
        -- If we have variable monster CR and unspecified or
@@ -1221,136 +1219,123 @@ EvReturn Map::enGenPart(EventInfo &e)
           a) find minimum and maximum monster CR
           b) -- If EP_SKEW_FOR_AMT,
              -- If EP_SKEW_FOR_XCR,
-             
-       Also, check M_GROUP, M_SOLITARY, etc. if we chose an mID
-       and it doesn't override explicit settings in the encounter
-       
-       We might have NF_GENERIC single-Part encounters that can
-       respect GROUP_LEADER, GROUP_PET, GROUP_MOUNT, etc. lists
-       in the monster resource. We could also kludge this to allow
-       building encounters around a specific mID again.
-       (We could also scan through encounters to see which have a
-        match for a desired mID in any of their Parts, and then
-        force that mID, for use in, eg., generating an adlet tribe
-        in a cold room with "Goblinoid Warband" unmodified.) 
-       
-       
-       */
+
+          Also, check M_GROUP, M_SOLITARY, etc. if we chose an mID
+          and it doesn't override explicit settings in the encounter
+
+          We might have NF_GENERIC single-Part encounters that can
+          respect GROUP_LEADER, GROUP_PET, GROUP_MOUNT, etc. lists
+          in the monster resource. We could also kludge this to allow
+          building encounters around a specific mID again.
+          (We could also scan through encounters to see which have a
+          match for a desired mID in any of their Parts, and then
+          force that mID, for use in, eg., generating an adlet tribe
+          in a cold room with "Goblinoid Warband" unmodified.)
+          */
     int16 i, uBound, lBound;
     TEncounter *te = TENC(e.enID);
     EncPart *ep = &te->Parts[e.cPart];
-    
-    e.epClassRoll = random(100)+1;
-    
-    #define RNDAMT (e.epMinAmt + random((e.epMaxAmt+1) - e.epMinAmt))
+
+    e.epClassRoll = random(100) + 1;
+
+#define RNDAMT (e.epMinAmt + random((e.epMaxAmt+1) - e.epMinAmt))
     {
-      int16 A, B, C, D, E;
-      A = RNDAMT;
-      B = RNDAMT;
-      C = RNDAMT;
-      D = RNDAMT;
-      E = RNDAMT;
-      uBound = max(A,max(B,max(C,max(D,E))));
-      lBound = min(A,min(B,min(C,min(D,E))));
+        int16 A, B, C, D, E;
+        A = RNDAMT;
+        B = RNDAMT;
+        C = RNDAMT;
+        D = RNDAMT;
+        E = RNDAMT;
+        uBound = max(A, max(B, max(C, max(D, E))));
+        lBound = min(A, min(B, min(C, min(D, E))));
     }
-    if (ep->Flags & EP_NOXCR)
-      {
+
+    if (ep->Flags & EP_NOXCR) {
         if (e.epMinAmt)
-          e.epAmt = RNDAMT;
+            e.epAmt = RNDAMT;
         else
-          e.epAmt = 1;
-      }
-    else if (e.epMinAmt != 0 &&
-             e.epMinAmt == e.epMaxAmt)
-      {
-        e.eimXCR = min(XCR(e.enCR),e.epXCR / e.epMinAmt);
+            e.epAmt = 1;
+    } else if (e.epMinAmt != 0 && e.epMinAmt == e.epMaxAmt) {
+        e.eimXCR = min(XCR(e.enCR), e.epXCR / e.epMinAmt);
         e.epAmt = e.epMinAmt;
-      }
-    else 
-      {
+    } else {
         int16 minCR, maxCR;
         minCR = getMinCR(e);
         maxCR = getMaxCR(e);
-        maxCR = min(maxCR,e.enCR);
-        if (minCR == maxCR)
-          {
+        maxCR = min(maxCR, e.enCR);
+        if (minCR == maxCR) {
             e.eimXCR = XCR(minCR);
-            e.epAmt = (int16)max(1,e.epXCR / e.eimXCR);
+            e.epAmt = (int16)max(1, e.epXCR / e.eimXCR);
             if (e.epMaxAmt)
-              if (e.epAmt > e.epMaxAmt)
-                e.epAmt = e.epMaxAmt;
+                if (e.epAmt > e.epMaxAmt)
+                    e.epAmt = e.epMaxAmt;
             if (e.epMinAmt)
-              if (e.epAmt < e.epMinAmt)
-                e.epAmt = e.epMinAmt;
-          }
-        else
-          {
+                if (e.epAmt < e.epMinAmt)
+                    e.epAmt = e.epMinAmt;
+        } else {
             if (ep->Flags & EP_SKEW_FOR_AMT)
-              e.eimXCR = (XCR(minCR)*3+XCR(maxCR)*1)/4;
+                e.eimXCR = (XCR(minCR) * 3 + XCR(maxCR) * 1) / 4;
             else if (ep->Flags & EP_SKEW_FOR_XCR)
-              e.eimXCR = (XCR(minCR)*1+XCR(maxCR)*4)/4;
+                e.eimXCR = (XCR(minCR) * 1 + XCR(maxCR) * 4) / 4;
             else
-              e.eimXCR = (XCR(minCR)*2+XCR(maxCR)*2)/4;
-            e.eimXCR = min(XCR(e.enCR),e.eimXCR);
-            e.epAmt = (int16)max(1,e.epXCR / e.eimXCR);
-            
+                e.eimXCR = (XCR(minCR) * 2 + XCR(maxCR) * 2) / 4;
+            e.eimXCR = min(XCR(e.enCR), e.eimXCR);
+            e.epAmt = (int16)max(1, e.epXCR / e.eimXCR);
+
             if (e.epMaxAmt)
-              if (e.epAmt > e.epMaxAmt)
-                {
-                  /* Don't gen *exactly* the max, include some randomness
-                     by taking highest-of-four. */
-                  e.epAmt = uBound;
-                  e.eimXCR = e.epXCR / e.epAmt;
-                  if (e.eimXCR < XCR(minCR))
-                    e.eimXCR = XCR(minCR);
+                if (e.epAmt > e.epMaxAmt) {
+                    /* Don't gen *exactly* the max, include some randomness
+                       by taking highest-of-four. */
+                    e.epAmt = uBound;
+                    e.eimXCR = e.epXCR / e.epAmt;
+                    if (e.eimXCR < XCR(minCR))
+                        e.eimXCR = XCR(minCR);
                 }
             if (e.epMinAmt)
-              if (e.epAmt < e.epMinAmt)
-                {
-                  /* Don't gen *exactly* the min, include some randomness
-                     by taking lowest-of-four. */
-                  e.epAmt = lBound;
-                  e.eimXCR = e.epXCR / e.epAmt;
-                  if (e.eimXCR < XCR(minCR))
-                    e.eimXCR = XCR(minCR);
-                }    
-            e.eimXCR = min(XCR(e.enCR),e.eimXCR);
-          }
-      }
+                if (e.epAmt < e.epMinAmt) {
+                    /* Don't gen *exactly* the min, include some randomness
+                       by taking lowest-of-four. */
+                    e.epAmt = lBound;
+                    e.eimXCR = e.epXCR / e.epAmt;
+                    if (e.eimXCR < XCR(minCR))
+                        e.eimXCR = XCR(minCR);
+                }
+            e.eimXCR = min(XCR(e.enCR), e.eimXCR);
+        }
+    }
 
-
-    int32 totalXCR; 
+    int32 totalXCR;
     int16 old_cEncMem, old_cUniform;
     totalXCR = 0; e.epTries = 0;
     EvReturn r;
-    
-    for (i=0;i!=e.epAmt;i++)
-      {
+
+    for (i = 0; i != e.epAmt; i++) {
         old_cEncMem = cEncMem;
         old_cUniform = cUniform;
-        RetryPart:
+RetryPart:
         e.epFailed = false;
-        e.ep_mID = 
-          e.ep_tID =
-          e.ep_tID2 =
-          e.ep_tID3 = 
-          e.ep_hmID =
-          e.ep_htID =
-          e.ep_htID2 =
-          e.ep_iID =
-          e.ep_pID = 0;
+        e.ep_mID =
+            e.ep_tID =
+            e.ep_tID2 =
+            e.ep_tID3 =
+            e.ep_hmID =
+            e.ep_htID =
+            e.ep_htID2 =
+            e.ep_iID =
+            e.ep_pID = 0;
+
         if (te->HasFlag(NF_FREAKY) || ep->Flags & EP_FREAKY)
-          e.epFreaky = min(e.enFreaky, random(10)+1);
+            e.epFreaky = min(e.enFreaky, random(10) + 1);
         else
-          e.epFreaky = 0;
-          
-        RXTHROW(EV_ENCHOOSE_MID,e,r,);
+            e.epFreaky = 0;
+
+        RXTHROW(EV_ENCHOOSE_MID, e, r, );
         if (r == ABORT)
-          return ABORT;
+            return ABORT;
+
         e.ep_mID = e.chResult;
         ASSERT(e.ep_mID);
-        if (RES(e.ep_mID)->Type == T_TENCOUNTER)
-          {
+        if (RES(e.ep_mID)->Type == T_TENCOUNTER) {
             EventInfo ne;
             ne.Clear();
             ne = e;
@@ -1359,129 +1344,125 @@ EvReturn Map::enGenPart(EventInfo &e)
             ne.enID = e.ep_mID;
             ne.cPart = 0;
             ne.enFlags = (e.enFlags | EN_NESTED);
-            ReThrow(EV_ENGEN,ne);
-            
-            for (int j=old_cEncMem;j!=cEncMem;j++)
-              {
-                e.ep_mID   = EncMem[j].mID;
-                e.ep_tID   = EncMem[j].tID;
-                e.ep_tID2  = EncMem[j].tID2;
-                e.ep_tID3  = EncMem[j].tID3;
-                e.ep_hmID  = EncMem[j].hmID;
-                e.ep_htID  = EncMem[j].htID;
+            ReThrow(EV_ENGEN, ne);
+
+            for (int j = old_cEncMem; j != cEncMem; j++) {
+                e.ep_mID = EncMem[j].mID;
+                e.ep_tID = EncMem[j].tID;
+                e.ep_tID2 = EncMem[j].tID2;
+                e.ep_tID3 = EncMem[j].tID3;
+                e.ep_hmID = EncMem[j].hmID;
+                e.ep_htID = EncMem[j].htID;
                 e.ep_htID2 = EncMem[j].htID2;
-                e.ep_pID   = EncMem[j].pID;
-                e.ep_iID   = EncMem[j].iID;
+                e.ep_pID = EncMem[j].pID;
+                e.ep_iID = EncMem[j].iID;
                 enCalcCurrPartXCR(e);
                 totalXCR += e.epCurrXCR;
-              }
-            
+            }
+
             goto DoneNestedEnc;
-          }
-        
+        }
+
         e.ep_mID = e.chResult;
-        ReThrow(EV_ENSELECT_TEMPS,e);
+        ReThrow(EV_ENSELECT_TEMPS, e);
         if (e.epFailed && e.epTries++ < 20) {
-          cEncMem = old_cEncMem;
-          cUniform = old_cUniform;
-          goto RetryPart;
-          }
+            cEncMem = old_cEncMem;
+            cUniform = old_cUniform;
+            goto RetryPart;
+        }
+
         Player *p;
         if (e.epFailed && (p = theGame->GetPlayer(0))) {
-          String str;
-          str = XPrint("e.epFailed == true after 20 tries: Enc '<Res>', CR <Num>, Part <Num>,"
-            " eimXCR <Num>", e.enID, e.enCR, e.cPart, e.eimXCR);
-          if (e.eID)
-            str += XPrint(", eID '<Res>'", e.eID);
-          if (e.enRegID && RES(e.enRegID)->HasList(ENCOUNTER_LIST))
-            str += XPrint(", enRegID '<Res>'", e.enRegID);
-          if (e.enConstraint && e.enConstraint >= 0x01000000)
-            str += XPrint(", e.enConstraint '<Res>'", e.enConstraint);
-          else if (e.enConstraint)
-            str += XPrint(", e.enConstraint '<Str>'", Lookup(MTypeNames,e.enConstraint));
-          str += ".";
-          if (e.enFlags & EN_OODMON)
-            str += " [EN_OODMON]";
-          if (e.enFlags & EN_SINGLE)
-            str += " [EN_SINGLE]";
-          if (e.enFlags & EN_AQUATIC)
-            str += " [EN_AQUATIC]";
-          if (e.enFlags & EN_STREAMER)
-            str += " [EN_STREAMER]";
-          if (e.enFlags & EN_CREATOR)
-            str += " [EN_CREATOR]";
-          if (e.enFlags & EN_SUMMON)
-            str += " [EN_SUMMON]";
-          if (e.enFlags & EN_VAULT)
-            str += " [EN_VAULT]";
-          if (e.enFlags & EN_DUNREGEN)
-            str += " [EN_DUNREGEN]";          
-          p->AddJournalEntry(str);
-          }
+            String str;
+            str = XPrint("e.epFailed == true after 20 tries: Enc '<Res>', CR <Num>, Part <Num>,"
+                " eimXCR <Num>", e.enID, e.enCR, e.cPart, e.eimXCR);
+            if (e.eID)
+                str += XPrint(", eID '<Res>'", e.eID);
+            if (e.enRegID && RES(e.enRegID)->HasList(ENCOUNTER_LIST))
+                str += XPrint(", enRegID '<Res>'", e.enRegID);
+            if (e.enConstraint && e.enConstraint >= 0x01000000)
+                str += XPrint(", e.enConstraint '<Res>'", e.enConstraint);
+            else if (e.enConstraint)
+                str += XPrint(", e.enConstraint '<Str>'", Lookup(MTypeNames, e.enConstraint));
+            str += ".";
+
+            if (e.enFlags & EN_OODMON)
+                str += " [EN_OODMON]";
+            if (e.enFlags & EN_SINGLE)
+                str += " [EN_SINGLE]";
+            if (e.enFlags & EN_AQUATIC)
+                str += " [EN_AQUATIC]";
+            if (e.enFlags & EN_STREAMER)
+                str += " [EN_STREAMER]";
+            if (e.enFlags & EN_CREATOR)
+                str += " [EN_CREATOR]";
+            if (e.enFlags & EN_SUMMON)
+                str += " [EN_SUMMON]";
+            if (e.enFlags & EN_VAULT)
+                str += " [EN_VAULT]";
+            if (e.enFlags & EN_DUNREGEN)
+                str += " [EN_DUNREGEN]";
+            p->AddJournalEntry(str);
+        }
         e.epFailed = false;
-        
-        ASSERT(!e.ep_tID  || (RES(e.ep_tID )->Type == T_TTEMPLATE))
+
+        ASSERT(!e.ep_tID || (RES(e.ep_tID)->Type == T_TTEMPLATE))
         ASSERT(!e.ep_tID2 || (RES(e.ep_tID2)->Type == T_TTEMPLATE))
         ASSERT(!e.ep_tID3 || (RES(e.ep_tID3)->Type == T_TTEMPLATE))
 
         if (e.ep_hmID) {
-          bool riderIsUndead, mountIsUndead;
-          riderIsUndead = mountIsUndead = false;
-          if (TMON(e.ep_mID)->isMType(e.ep_mID, MA_UNDEAD))
-            riderIsUndead = true;
-          if (e.ep_tID && (TTEM(e.ep_tID)->TType & TM_UNDEAD))
-            riderIsUndead = true;
-          if (e.ep_tID2 && (TTEM(e.ep_tID2)->TType & TM_UNDEAD))
-            riderIsUndead = true;
-          if (e.ep_tID3 && (TTEM(e.ep_tID3)->TType & TM_UNDEAD))
-            riderIsUndead = true;
-            
-          if (TMON(e.ep_hmID)->isMType(e.ep_hmID, MA_UNDEAD))
-            mountIsUndead = true;
-          if (e.ep_htID && (TTEM(e.ep_htID)->TType & TM_UNDEAD))
-            mountIsUndead = true;
-          if (e.ep_htID2 && (TTEM(e.ep_htID2)->TType & TM_UNDEAD))
-            mountIsUndead = true;
-          
-          if (riderIsUndead && !mountIsUndead)
-            switch(random(3))
-              {
-                case 0:
-                  enAddMountTemp(e,FIND("graveborn;template"));
-                break;
-                case 1:
-                  enAddMountTemp(e,FIND("zombie"));
-                break;
-                case 2:
-                  enAddMountTemp(e,FIND("skeleton"));
-                break;      
-              }
-          }
+            bool riderIsUndead, mountIsUndead;
+            riderIsUndead = mountIsUndead = false;
+            if (TMON(e.ep_mID)->isMType(e.ep_mID, MA_UNDEAD))
+                riderIsUndead = true;
+            if (e.ep_tID && (TTEM(e.ep_tID)->TType & TM_UNDEAD))
+                riderIsUndead = true;
+            if (e.ep_tID2 && (TTEM(e.ep_tID2)->TType & TM_UNDEAD))
+                riderIsUndead = true;
+            if (e.ep_tID3 && (TTEM(e.ep_tID3)->TType & TM_UNDEAD))
+                riderIsUndead = true;
 
-        
+            if (TMON(e.ep_hmID)->isMType(e.ep_hmID, MA_UNDEAD))
+                mountIsUndead = true;
+            if (e.ep_htID && (TTEM(e.ep_htID)->TType & TM_UNDEAD))
+                mountIsUndead = true;
+            if (e.ep_htID2 && (TTEM(e.ep_htID2)->TType & TM_UNDEAD))
+                mountIsUndead = true;
+
+            if (riderIsUndead && !mountIsUndead)
+                switch (random(3)) {
+                case 0:
+                    enAddMountTemp(e, FIND("graveborn;template"));
+                    break;
+                case 1:
+                    enAddMountTemp(e, FIND("zombie"));
+                    break;
+                case 2:
+                    enAddMountTemp(e, FIND("skeleton"));
+                    break;
+            }
+        }
+
         enAddMon(e);
         UpdateAlignRestrict(e);
-        
+
         /* Adaptive Filling -- reappraise our judgement of how
            many monsters we need as we continue to build them! */
         enCalcCurrPartXCR(e);
         totalXCR += e.epCurrXCR;
-        
-        DoneNestedEnc:
-        
-        if (totalXCR >= e.epXCR && i >= (lBound-1))
-          break;
+
+DoneNestedEnc:
+        if (totalXCR >= e.epXCR && i >= (lBound - 1))
+            break;
         if (i == (e.epAmt - 1) && e.epAmt < uBound &&
-             (totalXCR+(totalXCR/(i+1))) <= e.epXCR)
-          e.epAmt++; 
-      }
-    
-    return DONE; 
-    
-  }
+            (totalXCR + (totalXCR / (i + 1))) <= e.epXCR)
+            e.epAmt++;
+    }
+
+    return DONE;
+}
   
-EvReturn Map::enChooseMID(EventInfo &e)
-  {
+EvReturn Map::enChooseMID(EventInfo &e) {
     TEncounter *te = TENC(e.enID);
     EncPart *ep = &te->Parts[e.cPart];  
     rID wmList[512], monList[512];

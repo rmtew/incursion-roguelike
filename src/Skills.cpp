@@ -3025,23 +3025,20 @@ ChangedMana:;
     } 
 } 
 
-void Creature::Devour(Corpse * c)
-  {
+void Creature::Devour(Corpse * c) {
     // ww: now that we're taking Templates into account for corpses, it's
     // easier just to make a fake monster
     Monster *m = new Monster(c->mID);
-    StatiIterNature(this,TEMPLATE)
-      m->AddTemplate(S->eID);
+    StatiIterNature(this, TEMPLATE)
+        m->AddTemplate(S->eID);
     StatiIterEnd(this)
     // ww: not necessary, plus things with fields get annoyed when they are
     // not on the map: TMON(m->tmID)->PEvent(EV_BIRTH,m,m->tmID);
     // m->Initialize(false);
     m->CalcValues();
-    
-    DevourMonster(m); 
-
-    delete m; 
-  }
+    DevourMonster(m);
+    delete m;
+}
 
 /* Just a note about this: I'm probably NOT going to implement magic
    item creation as it appears in the SRD, even though it wouldn't be
@@ -3093,300 +3090,284 @@ void Creature::Devour(Corpse * c)
 */
 EvReturn Character::CraftItem(int16 abil) {
     int8 i;
-    int16 new_lev, c, max_lev, qual, old_lev, 
-      repairDC, craftDC, itemType, itemSource, acqVal,
-      useSkill, minSkill, hours, quan; int32 gpCost, XPCost;
+    int16 new_lev, c, max_lev, qual, old_lev,
+        repairDC, craftDC, itemType, itemSource, acqVal,
+        useSkill, minSkill, hours, quan; int32 gpCost, XPCost;
     Feature *ft; hObj hItem; char ch; Item *it, *it2;
-    
+
     int16 XPCostTable[] = {
-      0, 80, 160, 320, 540, 720, 1280, 1670,
-      2000, 2880, 3920, 5120, 6480, 8165,
-      12050, 15400, 17200, 19400, 21300,
-      23750, 25000 };
-      
-      
+        0, 80, 160, 320, 540, 720, 1280, 1670,
+        2000, 2880, 3920, 5120, 6480, 8165,
+        12050, 15400, 17200, 19400, 21300,
+        23750, 25000 };
+
     bool improveOnly = false,
-         weaponsOnly = false,
-         foundForge  = false,
-         isBardic    = false,
-         addQuality  = false,
-         workSlowly  = false;
+        weaponsOnly = false,
+        foundForge = false,
+        isBardic = false,
+        addQuality = false,
+        workSlowly = false;
     /* For now, this is players-only. Later, players may be able to
        get friendly NPCs or party members to do these things, hence
        it being in Character. */
-    
-    for (ft=m->FFeatureAt(x,y);ft;ft=m->NFeatureAt(x,y))
-      if (ft->fID == FIND("forge"))
+
+    for (ft = m->FFeatureAt(x, y); ft; ft = m->NFeatureAt(x, y))
+        if (ft->fID == FIND("forge"))
+            foundForge = true;
+
+    if (HasStati(INNATE_KIT, SK_CRAFT))
         foundForge = true;
 
-    if (HasStati(INNATE_KIT,SK_CRAFT))
-      foundForge = true;
-
     if (!isPlayer())
-      return ABORT;
-      
-    switch (abil)
-      {       
-        case SK_ALCHEMY + SKILL_VAL:
-          itemType   = T_POTION;
-          itemSource = AI_ALCHEMY;
-          acqVal     = ACQ_KNOWN;
-          useSkill   = SK_ALCHEMY;
-          max_lev = SkillLevel(SK_ALCHEMY);
-          goto Create;
-        case SK_POISON_USE + SKILL_VAL:
-          itemType   = T_POTION;
-          itemSource = AI_POISON;
-          acqVal     = ACQ_KNOWN;
-          if (SkillLevel(SK_POISON_USE) <= SkillLevel(SK_ALCHEMY))
-            useSkill   = SK_POISON_USE;
-          else
-            useSkill   = SK_ALCHEMY;
-          max_lev = min(SkillLevel(SK_POISON_USE),SkillLevel(SK_ALCHEMY));
-          goto Create;
-        case FT_SCRIBE_SCROLL + FEAT_VAL:
-          itemType   = T_SCROLL;
-          itemSource = AI_SCROLL;
-          acqVal     = ACQ_KNOWN;
-          useSkill   = 0;
-          max_lev = SkillLevel(SK_KNOW_MAGIC);
-          goto Create;
-        case FT_BREW_POTION + FEAT_VAL:
-          itemType   = T_POTION;
-          itemSource = AI_POTION;
-          acqVal     = ACQ_KNOWN;
-          useSkill   = SK_ALCHEMY;
-          max_lev = SkillLevel(SK_ALCHEMY);
-          goto Create;        
-        case SK_CRAFT + SKILL_VAL:
-          if (SkillLevel(SK_CRAFT) >= 12)
+        return ABORT;
+
+    switch (abil) {
+    case SK_ALCHEMY + SKILL_VAL:
+        itemType = T_POTION;
+        itemSource = AI_ALCHEMY;
+        acqVal = ACQ_KNOWN;
+        useSkill = SK_ALCHEMY;
+        max_lev = SkillLevel(SK_ALCHEMY);
+        goto Create;
+    case SK_POISON_USE + SKILL_VAL:
+        itemType = T_POTION;
+        itemSource = AI_POISON;
+        acqVal = ACQ_KNOWN;
+        if (SkillLevel(SK_POISON_USE) <= SkillLevel(SK_ALCHEMY))
+            useSkill = SK_POISON_USE;
+        else
+            useSkill = SK_ALCHEMY;
+        max_lev = min(SkillLevel(SK_POISON_USE), SkillLevel(SK_ALCHEMY));
+        goto Create;
+    case FT_SCRIBE_SCROLL + FEAT_VAL:
+        itemType = T_SCROLL;
+        itemSource = AI_SCROLL;
+        acqVal = ACQ_KNOWN;
+        useSkill = 0;
+        max_lev = SkillLevel(SK_KNOW_MAGIC);
+        goto Create;
+    case FT_BREW_POTION + FEAT_VAL:
+        itemType = T_POTION;
+        itemSource = AI_POTION;
+        acqVal = ACQ_KNOWN;
+        useSkill = SK_ALCHEMY;
+        max_lev = SkillLevel(SK_ALCHEMY);
+        goto Create;
+    case SK_CRAFT + SKILL_VAL:
+        if (SkillLevel(SK_CRAFT) >= 12)
             ch = ChoicePrompt("Repair item, temper masterwork or create new item?", "rtc", 'r');
-          else
+        else
             ch = ChoicePrompt("Repair item or create new item?", "rc", 'r');
-          if (ch == -1)
+        if (ch == -1)
             return ABORT;
-          max_lev = SkillLevel(SK_CRAFT);
-          if (ch == 'r')
+
+        max_lev = SkillLevel(SK_CRAFT);
+        if (ch == 'r')
             goto Repair;
-          if (ch == 't')
+        if (ch == 't')
             goto Temper;
-          if (ch == 'c')
-            {
-              itemType   = -1;
-              itemSource = -1;
-              acqVal     = ACQ_CRAFT;
-              useSkill   = SK_CRAFT;
-            }
-          goto Create;
-        case CA_WEAPONCRAFT + ABIL_VAL:
-          if (!foundForge)
-            {
-              IPrint("You need to find a forge to create weapons or armour.");
-              return ABORT;
-            }
-          do
-            ch = ChoicePrompt("Add quality or improve plus?",
-                                       "qp",'p');
-          while (ch == -1);
-          addQuality = (ch == 'q');
-          improveOnly = false;
-          weaponsOnly = true;
-          max_lev     = SkillLevel(SK_CRAFT);
-          goto Augment;
-        case CA_STORYCRAFT + ABIL_VAL:     
-          if (aStoryPluses >= tStoryPluses)
-            {
-              IPrint("You cannot augment any more items until you advance "
-                     "farther as a bard.");
-              return ABORT;
-            }
-          improveOnly = true;
-          weaponsOnly = false;
-          isBardic    = true;
-          max_lev     = AbilityLevel(CA_STORYCRAFT) + Mod(A_CHA) + 1;
-          goto Augment;
-      }
-    
+
+        if (ch == 'c') {
+            itemType = -1;
+            itemSource = -1;
+            acqVal = ACQ_CRAFT;
+            useSkill = SK_CRAFT;
+        }
+        goto Create;
+    case CA_WEAPONCRAFT + ABIL_VAL:
+        if (!foundForge) {
+            IPrint("You need to find a forge to create weapons or armour.");
+            return ABORT;
+        }
+        do
+            ch = ChoicePrompt("Add quality or improve plus?", "qp", 'p');
+        while (ch == -1);
+        addQuality = (ch == 'q');
+        improveOnly = false;
+        weaponsOnly = true;
+        max_lev = SkillLevel(SK_CRAFT);
+        goto Augment;
+    case CA_STORYCRAFT + ABIL_VAL:
+        if (aStoryPluses >= tStoryPluses) {
+            IPrint("You cannot augment any more items until you advance "
+                "farther as a bard.");
+            return ABORT;
+        }
+        improveOnly = true;
+        weaponsOnly = false;
+        isBardic = true;
+        max_lev = AbilityLevel(CA_STORYCRAFT) + Mod(A_CHA) + 1;
+        goto Augment;
+    }
+
     Error("Unimplemented ability sent to CraftItem!");
     return ABORT;
-    
-    
-    Temper:
-    if (!foundForge)
-      {
+
+Temper:
+    if (!foundForge) {
         IPrint("You need to find a forge to temper blades.");
         return ABORT;
-      }
-    for (c=0,it=FirstInv();it;it=NextInv())
-      {
+    }
+    for (c = 0, it = FirstInv(); it; it = NextInv()) {
         if (!it->isType(T_WEAPON))
-          continue;
-        if (!it->isGroup(WG_LBLADES|WG_SBLADES|WG_DAGGERS))
-          continue;
+            continue;
+        if (!it->isGroup(WG_LBLADES | WG_SBLADES | WG_DAGGERS))
+            continue;
         if (!it->isMetallic())
-          continue;
+            continue;
         Candidates[c++] = it->myHandle;
-      }
-      
-    if (!c)
-      {
+    }
+
+    if (!c) {
         IPrint("You have no blades to temper.");
         return ABORT;
-      }
-    for(i=0;i!=c;i++) {
-      if (oItem(Candidates[i])->isKnown(KN_PLUS))
-        thisp->MyTerm->LOption(Format("%s (DC %d)",
-          (const char*) oThing(Candidates[i])->Name(NA_A|NA_MECH), 
-          15 + oItem(Candidates[i])->ItemLevel()),
-          Candidates[i] );
-      else
-        thisp->MyTerm->LOption(Format("%s",(const char*)
-          oThing(Candidates[i])->Name(NA_A|NA_MECH)),
-          Candidates[i] );
-      }
-    
-    hItem = thisp->MyTerm->LMenu(MENU_ESC|MENU_BORDER,
-      "Temper which item?", WIN_MENUBOX);
+    }
+    for (i = 0; i != c; i++) {
+        if (oItem(Candidates[i])->isKnown(KN_PLUS))
+            thisp->MyTerm->LOption(Format("%s (DC %d)",
+            (const char*)oThing(Candidates[i])->Name(NA_A | NA_MECH),
+            15 + oItem(Candidates[i])->ItemLevel()),
+            Candidates[i]);
+        else
+            thisp->MyTerm->LOption(Format("%s", (const char*)
+            oThing(Candidates[i])->Name(NA_A | NA_MECH)),
+            Candidates[i]);
+    }
+
+    hItem = thisp->MyTerm->LMenu(MENU_ESC | MENU_BORDER,
+        "Temper which item?", WIN_MENUBOX);
     if (hItem == -1)
-      return ABORT;
+        return ABORT;
     it = oItem(hItem);
 
     it->RemoveStati(MASTERWORK);
-        
-    if (thisp->SpendHours(6,6) != DONE)
-      return ABORT;
 
-    if (!SkillCheck(SK_CRAFT,15 + it->ItemLevel(),true))
-      {
-        IPrint("You fail to properly temper the <Obj>.",it);
-        if (LastSkillCheckResult < 10 + it->ItemLevel())
-          {
-            int16 dmg = Dice::Roll(1,8);
-            if (it->GetHP() <= dmg)
-              {
-                IPrint("Your failed tempering attempt destroys the <Obj>!",it);
+    if (thisp->SpendHours(6, 6) != DONE)
+        return ABORT;
+
+    if (!SkillCheck(SK_CRAFT, 15 + it->ItemLevel(), true)) {
+        IPrint("You fail to properly temper the <Obj>.", it);
+        if (LastSkillCheckResult < 10 + it->ItemLevel()) {
+            int16 dmg = Dice::Roll(1, 8);
+            if (it->GetHP() <= dmg) {
+                IPrint("Your failed tempering attempt destroys the <Obj>!", it);
                 it->Remove(true);
-              }
-            else
-              {
+            } else {
                 it->MendHP(-dmg);
-                IPrint("Your failed tempering attempt damages the <Obj>!",it);
-              }
-          }
+                IPrint("Your failed tempering attempt damages the <Obj>!", it);
+            }
+        }
         return DONE;
-      }
-      
-    Exercise(A_STR,Dice::Roll(1,12),ESTR_FORGE,30);
-    Exercise(A_INT,Dice::Roll(1,12),EINT_CREATION,40);
-    
-    it->GainPermStati(MASTERWORK,NULL,SS_MISC,(SkillLevel(SK_CRAFT)-7)/5,
-                                               LastSkillCheckResult*3);
+    }
+
+    Exercise(A_STR, Dice::Roll(1, 12), ESTR_FORGE, 30);
+    Exercise(A_INT, Dice::Roll(1, 12), EINT_CREATION, 40);
+
+    it->GainPermStati(MASTERWORK, NULL, SS_MISC, (SkillLevel(SK_CRAFT) - 7) / 5,
+        LastSkillCheckResult * 3);
     IPrint("You temper the <Obj> until it gleams razor-sharp!", it);
     return DONE;
-    
-    Augment:
-    for (c=0,it=FirstInv();it;it=NextInv())
-      {
+
+Augment:
+    for (c = 0, it = FirstInv(); it; it = NextInv()) {
         if (improveOnly && !it->GetInherentPlus())
-          continue;
-        if (!it->isKnown(KN_MAGIC|KN_PLUS|KN_BLESS))
-          continue;
+            continue;
+        if (!it->isKnown(KN_MAGIC | KN_PLUS | KN_BLESS))
+            continue;
         if (it->isCursed())
-          continue;
+            continue;
         if (it->isType(T_POTION) || it->isType(T_SCROLL))
-          continue;
+            continue;
         if (it->GetInherentPlus() >= 5)
-          continue;
-        if (weaponsOnly && !(it->isType(T_WEAPON) || 
-                             it->isType(T_ARMOUR) ||
-                             it->isType(T_SHIELD)))
-          continue;
-        
-          
+            continue;
+        if (weaponsOnly && !(it->isType(T_WEAPON) ||
+            it->isType(T_ARMOUR) ||
+            it->isType(T_SHIELD)))
+            continue;
+
+
         Candidates[c++] = it->myHandle;
-      }
-      
-    if (!c)
-      {
+    }
+
+    if (!c) {
         IPrint("You have no suitable items to augment.");
         return ABORT;
-      }
-    for(i=0;i!=c;i++)
-      thisp->MyTerm->LOption(oThing(Candidates[i])->
-        Name(NA_A|NA_MECH), Candidates[i] );
-    
-    hItem = thisp->MyTerm->LMenu(MENU_ESC|MENU_BORDER,
-      "Augment which item?", WIN_MENUBOX);
+    }
+    for (i = 0; i != c; i++)
+        thisp->MyTerm->LOption(oThing(Candidates[i])->
+        Name(NA_A | NA_MECH), Candidates[i]);
+
+    hItem = thisp->MyTerm->LMenu(MENU_ESC | MENU_BORDER,
+        "Augment which item?", WIN_MENUBOX);
     if (hItem == -1)
-      return ABORT;
+        return ABORT;
     it = oItem(hItem);
-    
-      
-    if (addQuality)
-      {
+
+    if (addQuality) {
         TextVal *desc, *pre, *post;
         bool isWeapon = false;
-        if (it->isType(T_SHIELD) || it->isType(T_ARMOUR))
-          { desc = AQualityDescs; pre = APreQualNames; post = APostQualNames; }
-        else if (it->isType(T_WEAPON))
-          { desc = QualityDescs; pre = PreQualNames; 
-            post = PostQualNames; isWeapon = true; }
-        else {
-          IPrint("That item cannot have qualities granted to it.");
-          return ABORT;
-          }
-          
-        for (i=0;i!=WQ_LAST;i++)
-          {
-            if (!LookupOnly(desc,i))
-              continue;
+        if (it->isType(T_SHIELD) || it->isType(T_ARMOUR)) {
+            desc = AQualityDescs;
+            pre = APreQualNames;
+            post = APostQualNames;
+        } else if (it->isType(T_WEAPON)) {
+            desc = QualityDescs;
+            pre = PreQualNames;
+            post = PostQualNames;
+            isWeapon = true;
+        } else {
+            IPrint("That item cannot have qualities granted to it.");
+            return ABORT;
+        }
+
+        for (i = 0; i != WQ_LAST; i++) {
+            if (!LookupOnly(desc, i))
+                continue;
             if (!it->QualityOK(i))
-              continue;
-            
-            if (isWeapon) 
-              {
+                continue;
+
+            if (isWeapon)  {
                 if (i == WQ_HOLY && !isMType(MA_GOOD))
-                  continue;
-                if (i == WQ_UNHOLY && !isMType(MA_EVIL))
-                  continue;
-                if (i == WQ_CHAOTIC && !isMType(MA_CHAOTIC))
-                  continue;
-                if (i == WQ_LAWFUL && !isMType(MA_LAWFUL))
-                  continue;
-                if (i == WQ_BALANCE)
-                  if (isMType(MA_LAWFUL) || isMType(MA_CHAOTIC) ||
-                      isMType(MA_GOOD) || isMType(MA_EVIL) )
                     continue;
-                    
+                if (i == WQ_UNHOLY && !isMType(MA_EVIL))
+                    continue;
+                if (i == WQ_CHAOTIC && !isMType(MA_CHAOTIC))
+                    continue;
+                if (i == WQ_LAWFUL && !isMType(MA_LAWFUL))
+                    continue;
+                if (i == WQ_BALANCE)
+                    if (isMType(MA_LAWFUL) || isMType(MA_CHAOTIC) ||
+                        isMType(MA_GOOD) || isMType(MA_EVIL))
+                        continue;
+
                 /* Let's not have low-level characters running around
                    with +1 vorpal long swords. */
                 if (i == WQ_VORPAL && TotalLevel() < 15)
-                  continue;
-              }
-            
-            thisp->MyTerm->LOption(LookupOnly(pre,i) ? Lookup(pre,i) :
-              (LookupOnly(post,i) ? Lookup(post,i) : "???"),i,
-              Lookup(desc,i));
-          }
-            
-        qual = (int16)thisp->MyTerm->LMenu(MENU_DESC|MENU_BORDER|MENU_ESC|MENU_3COLS,
-          "Pick a quality to imbue:", WIN_MENUBOX);
+                    continue;
+            }
+
+            thisp->MyTerm->LOption(LookupOnly(pre, i) ? Lookup(pre, i) :
+                (LookupOnly(post, i) ? Lookup(post, i) : "???"), i,
+                Lookup(desc, i));
+        }
+
+        qual = (int16)thisp->MyTerm->LMenu(MENU_DESC | MENU_BORDER | MENU_ESC | MENU_3COLS,
+            "Pick a quality to imbue:", WIN_MENUBOX);
         if (qual == -1)
-          return ABORT;
-      }    
-    else
-      qual = 0;
-            
-      
+            return ABORT;
+    } else
+        qual = 0;
+
+
     old_lev = it->ItemLevel();
-    
+
     it->Quantity++;
     it2 = it->TakeOne();
     if (addQuality)
         it2->AddQuality((int8)qual);
     else
         it2->SetInherentPlus(it->GetInherentPlus() + 1);
-    
+
     if (it2->ItemLevel() > 20) {
         IPrint("That enchantment is beyond the ability of mortal magics.");
         delete it2;
@@ -3396,369 +3377,341 @@ EvReturn Character::CraftItem(int16 abil) {
     new_lev = it2->ItemLevel();
     ASSERT(XPCost > 0);
     delete it2;
-    
-    if (new_lev > max_lev)
-      {
+
+    if (new_lev > max_lev) {
         IPrint(Format("That enchantment is beyond your current skill."
-          " (You can create items of up to level %d, and that would be "
-          "a level %d item.)",max_lev,new_lev));
+            " (You can create items of up to level %d, and that would be "
+            "a level %d item.)", max_lev, new_lev));
         return ABORT;
-      }
-      
+    }
+
     gpCost = XPCost * 25;
-    
-    if (isBardic)
-      {
+
+    if (isBardic) {
         aStoryPluses++;
-        IPrint("You have a sense of mythic grandeur about your <Obj>.",it);      
-      }
-    else
-      {
-        if ((uint32)XPCost > (XP - XP_Drained))
-          {
+        IPrint("You have a sense of mythic grandeur about your <Obj>.", it);
+    } else {
+        if ((uint32)XPCost > (XP - XP_Drained)) {
             IPrint(Format("You don't have enough available experience; "
-              "you have %d and need %d.",(XP - XP_Drained),XPCost));
+                "you have %d and need %d.", (XP - XP_Drained), XPCost));
             return ABORT;
-          }
-          
-        
+        }
+
+
         if (HasAbility(CA_MASTER_ARTISAN))
-          gpCost = (gpCost * max(4,20 - AbilityLevel(CA_MASTER_ARTISAN))) / 20;
-          
-        if (getTotalMoney()/100 < gpCost)
-          {
+            gpCost = (gpCost * max(4, 20 - AbilityLevel(CA_MASTER_ARTISAN))) / 20;
+
+        if (getTotalMoney() / 100 < gpCost) {
             IPrint(Format("That would cost %d gp in materials, but you only have %d gp.",
-              gpCost, getTotalMoney()/100));
+                gpCost, getTotalMoney() / 100));
             return ABORT;
-          }      
-          
-        hours = min(10,2 + (new_lev - old_lev)*2);
+        }
+
+        hours = min(10, 2 + (new_lev - old_lev) * 2);
         if (HasFeat(FT_ARTIFICER))
-          XPCost = (XPCost * 2) / 3;
+            XPCost = (XPCost * 2) / 3;
         if (!yn(Format("That will cost %d XP, %d gp and take %d hours. Proceed?",
-                  XPCost, gpCost, hours)))
-          return ABORT;
-        if (thisp->SpendHours(hours,hours) != DONE)
-          return ABORT;
-        LoseXP(XPCost);
-        LoseMoneyTo(gpCost,NULL);
-        thisp->MyTerm->ShowStatus();
-        IPrint("You forge magic into the <Obj>.",it);
-        Exercise(A_STR,Dice::Roll(1,12)+4,ESTR_FORGE,70);
-        Exercise(A_INT,Dice::Roll(1,12)+4,EINT_CREATION,70);
-        Exercise(A_WIS,Dice::Roll(1,12)+4,EWIS_CREATION,70);
-      }
-    
-    if (addQuality)
-      {
-        it->AddQuality((int8)qual);
-      }
-    else
-      {
-        it->SetInherentPlus(
-          it->GetInherentPlus() + 1);
-      }
-      
-    return DONE;
-    
-    Create:
-    
-    /*
-    if (itemType != -1) 
-      for (i=0,iID=0;DungeonItems[i].Type;i++)
-        if (DungeonItems[i].Type == itemType)
-          if (DungeonItems[i].Prototype)
-            {
-              iID = FIND(DungeonItems[i].Prototype);
-              if (!iID)
-                {
-                  Error("Item prototype from DungeonItems[] not found!");
-                  return ABORT;
-                }
-              break;
-            }
-    if (iID)
-      it = Item::Create(iID)
-    else*/
-    
-    it = (Item*) thisp->MyTerm->AcquisitionPrompt((int8)acqVal,0,(int8)max_lev,(int8)itemSource);
-    if (!it)
-      return ABORT;
-    
-    craftDC = 10;
-    
-    if (acqVal != ACQ_CRAFT)
-      if (it->eID && TEFF(it->eID)->HasFlag(EF_NEEDS_PLUS))
-        it->SetInherentPlus((int8)MaxItemPlus(max_lev,it->eID));
-    
-    if (acqVal == ACQ_CRAFT) {
-      minSkill = 0;
-      minSkill = max(minSkill,(int16)TITEM(it->iID)->GetConst(MIN_CRAFT_LEVEL));
-      if (it->eID)
-        minSkill = max(minSkill,(int16)TITEM(it->eID)->GetConst(MIN_CRAFT_LEVEL));   
-      if (it->isMetallic()) {
-        minSkill = max(minSkill, 10);
-        if (!foundForge)
-          {
-            delete it;
-            IPrint("You need a forge to create metallic items.");
+            XPCost, gpCost, hours)))
             return ABORT;
-          }
+        if (thisp->SpendHours(hours, hours) != DONE)
+            return ABORT;
+        LoseXP(XPCost);
+        LoseMoneyTo(gpCost, NULL);
+        thisp->MyTerm->ShowStatus();
+        IPrint("You forge magic into the <Obj>.", it);
+        Exercise(A_STR, Dice::Roll(1, 12) + 4, ESTR_FORGE, 70);
+        Exercise(A_INT, Dice::Roll(1, 12) + 4, EINT_CREATION, 70);
+        Exercise(A_WIS, Dice::Roll(1, 12) + 4, EWIS_CREATION, 70);
+    }
+
+    if (addQuality) {
+        it->AddQuality((int8)qual);
+    } else {
+        it->SetInherentPlus(
+            it->GetInherentPlus() + 1);
+    }
+
+    return DONE;
+
+Create:
+    /*
+    if (itemType != -1)
+    for (i=0,iID=0;DungeonItems[i].Type;i++)
+    if (DungeonItems[i].Type == itemType)
+    if (DungeonItems[i].Prototype)
+    {
+    iID = FIND(DungeonItems[i].Prototype);
+    if (!iID)
+    {
+    Error("Item prototype from DungeonItems[] not found!");
+    return ABORT;
+    }
+    break;
+    }
+    if (iID)
+    it = Item::Create(iID)
+    else*/
+
+    it = (Item*)thisp->MyTerm->AcquisitionPrompt((int8)acqVal, 0, (int8)max_lev, (int8)itemSource);
+    if (!it)
+        return ABORT;
+
+    craftDC = 10;
+
+    if (acqVal != ACQ_CRAFT)
+        if (it->eID && TEFF(it->eID)->HasFlag(EF_NEEDS_PLUS))
+            it->SetInherentPlus((int8)MaxItemPlus(max_lev, it->eID));
+
+    if (acqVal == ACQ_CRAFT) {
+        minSkill = 0;
+        minSkill = max(minSkill, (int16)TITEM(it->iID)->GetConst(MIN_CRAFT_LEVEL));
+        if (it->eID)
+            minSkill = max(minSkill, (int16)TITEM(it->eID)->GetConst(MIN_CRAFT_LEVEL));
+        if (it->isMetallic()) {
+            minSkill = max(minSkill, 10);
+            if (!foundForge) {
+                delete it;
+                IPrint("You need a forge to create metallic items.");
+                return ABORT;
+            }
         }
-      if (minSkill > SkillLevel(SK_CRAFT))
-        {
-          delete it;
-          IPrint(Format("You need Craft %+d to make that item, but have only Craft %+d.",
-                   minSkill, SkillLevel(SK_CRAFT)));
-          return ABORT;
+        if (minSkill > SkillLevel(SK_CRAFT)) {
+            delete it;
+            IPrint(Format("You need Craft %+d to make that item, but have only Craft %+d.",
+                minSkill, SkillLevel(SK_CRAFT)));
+            return ABORT;
         }
-      craftDC = max(craftDC, minSkill+7);
-      }
-    
+        craftDC = max(craftDC, minSkill + 7);
+    }
+
     quan = 1;
-    if (it->isType(T_POTION) || it->isType(T_SCROLL) || 
-          it->isType(T_MISSILE) || itemSource == AI_POISON ||
-          itemSource == AI_ALCHEMY)
-      {
-        
-        quan = atoi(thisp->MyTerm->StringPrompt(PINK,"Enter Quantity:"));
-        if (quan <= 0)
-          { it->Remove(true); return ABORT; }
+    if (it->isType(T_POTION) || it->isType(T_SCROLL) || it->isType(T_MISSILE) || itemSource == AI_POISON || itemSource == AI_ALCHEMY) {
+        quan = atoi(thisp->MyTerm->StringPrompt(PINK, "Enter Quantity:"));
+        if (quan <= 0) {
+            it->Remove(true);
+            return ABORT;
+        }
         if (it->HasStati(POISONED))
-          it->SetStatiMag(POISONED,-1,NULL,quan);
+            it->SetStatiMag(POISONED, -1, NULL, quan);
         else
-          it->Quantity = quan;
-      }
-    
-    
+            it->Quantity = quan;
+    }
+
+
     /* There should be a LOT more detail here later. We should
        base the DC off the gold cost, and we should require a
        skill kit and raw materials... etc. For now, let's just
        get it working. Also, provisions for making, say, 10
        potions of healing at the same time. */
-    
+
     if (itemSource == AI_SCROLL)
-      craftDC += (TEFF(it->eID)->Level-1)*2;
+        craftDC += (TEFF(it->eID)->Level - 1) * 2;
     else if (itemSource == AI_POISON)
-      craftDC += TEFF(it->GetStatiEID(POISONED))->Level;
+        craftDC += TEFF(it->GetStatiEID(POISONED))->Level;
     else
-      craftDC += it->ItemLevel();
-    
-    XPCost = XPCostTable[min(20,max(it->ItemLevel(),1))];
+        craftDC += it->ItemLevel();
+
+    XPCost = XPCostTable[min(20, max(it->ItemLevel(), 1))];
     rID icList[10];
-    if (it->eID && TEFF(it->eID)->GetList(ITEM_COST,icList,9))
-      XPCost = icList[max(0,it->GetInherentPlus()-1)] / 25;
-    
+    if (it->eID && TEFF(it->eID)->GetList(ITEM_COST, icList, 9))
+        XPCost = icList[max(0, it->GetInherentPlus() - 1)] / 25;
+
     if (itemType == T_MISSILE)
-      XPCost /= 20;
+        XPCost /= 20;
     if (itemType == T_SCROLL)
-      XPCost /= 10;
+        XPCost /= 10;
     if (itemSource == AI_POTION)
-      XPCost /= 5;
-      
+        XPCost /= 5;
+
     XPCost *= quan;
-    
+
     gpCost = XPCost * 8; /* Was 25 */
 
 
-    if (itemSource == AI_ALCHEMY ||
-        itemSource == AI_POISON ||
-        acqVal     == ACQ_CRAFT)
-      { XPCost = 0; gpCost /= 5; }
-    
+    if (itemSource == AI_ALCHEMY || itemSource == AI_POISON || acqVal == ACQ_CRAFT) {
+        XPCost = 0;
+        gpCost /= 5;
+    }
+
     if (acqVal == ACQ_CRAFT)
-      gpCost = it->getShopCost(NULL,NULL) * quan;
-    
+        gpCost = it->getShopCost(NULL, NULL) * quan;
+
     if (itemType == T_MISSILE)
-      hours = 2 + quan / 5;
+        hours = 2 + quan / 5;
     else
-      hours = 2 + quan;
-    
-    if (hours > 11 + Mod(A_CON))
-      {
-        IPrint("There isn't enough time in a full day to craft "
-          "that many items.");
-        { it->Remove(true); return ABORT; }
-      }
-    
+        hours = 2 + quan;
+
+    if (hours > 11 + Mod(A_CON)) {
+        IPrint("There isn't enough time in a full day to craft that many items."); {
+            it->Remove(true);
+            return ABORT;
+        }
+    }
+
     if (HasFeat(FT_ARTIFICER))
-      XPCost = (XPCost * 2) / 3;
-    
-    if ((uint32)XPCost > (XP - XP_Drained))
-      {
+        XPCost = (XPCost * 2) / 3;
+
+    if ((uint32)XPCost > (XP - XP_Drained)) {
         IPrint(Format("You don't have enough available experience; "
-          "you have %d and need %d.",(XP - XP_Drained),XPCost));
+            "you have %d and need %d.", (XP - XP_Drained), XPCost));
         return ABORT;
-      }
+    }
 
     if (HasAbility(CA_MASTER_ARTISAN))
-      gpCost = (gpCost * max(4,20 - AbilityLevel(CA_MASTER_ARTISAN))) / 20;
-      
-    if (getTotalMoney()/100 < gpCost)
-      {
+        gpCost = (gpCost * max(4, 20 - AbilityLevel(CA_MASTER_ARTISAN))) / 20;
+
+    if (getTotalMoney() / 100 < gpCost) {
         IPrint(Format("That would cost %d gp in materials, but you only have %d gp.",
-          gpCost, getTotalMoney()/100));
+            gpCost, getTotalMoney() / 100));
         return ABORT;
-      }      
-       
+    }
+
     if (useSkill > 0 && !XPCost) {
-      if (!yn(Format("That takes %d gp, %d hours and is DC %d. Proceed?",
-                        gpCost, hours, craftDC)))
-        { it->Remove(true); return ABORT; }   
-      }    
-    else if (useSkill > 0)
-      if (!yn(Format("That takes %d XP, %d gp, %d hours and is DC %d. Proceed?",
-                        XPCost, gpCost, hours, craftDC)))
-        { it->Remove(true); return ABORT; }
+        if (!yn(Format("That takes %d gp, %d hours and is DC %d. Proceed?",
+            gpCost, hours, craftDC))) {
+            it->Remove(true);
+            return ABORT;
+        }
+    } else if (useSkill > 0)
+        if (!yn(Format("That takes %d XP, %d gp, %d hours and is DC %d. Proceed?", XPCost, gpCost, hours, craftDC))) {
+            it->Remove(true);
+            return ABORT;
+        }
+
     if (useSkill <= 0)
-      if (!yn(Format("That takes %d XP, %d gp and %d hours. Proceed?",
-                        XPCost, gpCost, hours)))
-        { it->Remove(true); return ABORT; }
-    
-    if (thisp->SpendHours(hours,hours) != DONE)
-      { it->Remove(true); return ABORT; }
-    
+        if (!yn(Format("That takes %d XP, %d gp and %d hours. Proceed?", XPCost, gpCost, hours))) {
+            it->Remove(true);
+            return ABORT;
+        }
+
+    if (thisp->SpendHours(hours, hours) != DONE) {
+        it->Remove(true);
+        return ABORT;
+    }
+
     // lose half in either case
     LoseXP(XPCost / 2);
-    LoseMoneyTo(gpCost / 2,NULL);
-    
+    LoseMoneyTo(gpCost / 2, NULL);
+
     if (useSkill > 0)
-      if (!SkillCheck(useSkill,craftDC,true))
-        {
-          IPrint("You fail to craft the <Obj> properly.",it);
-          it->Remove(true); 
-          return ABORT;
+        if (!SkillCheck(useSkill, craftDC, true)) {
+            IPrint("You fail to craft the <Obj> properly.", it);
+            it->Remove(true);
+            return ABORT;
         }
-        
-    LoseXP((XPCost+1)/2);
-    LoseMoneyTo((gpCost+1)/2,NULL);
-        
+
+    LoseXP((XPCost + 1) / 2);
+    LoseMoneyTo((gpCost + 1) / 2, NULL);
+
     if (itemSource == AI_ALCHEMY && SkillLevel(SK_ALCHEMY) > 10)
-      it->GainPermStati(ALCHEMY_LEV,NULL,SS_MISC,0,SkillLevel(SK_ALCHEMY));
-        
+        it->GainPermStati(ALCHEMY_LEV, NULL, SS_MISC, 0, SkillLevel(SK_ALCHEMY));
+
     it->MakeKnown(0xFF);
-    GainItem(it,false);
-    
+    GainItem(it, false);
+
     if (it->isMetallic())
-      Exercise(A_STR,Dice::Roll(1,12)+4,ESTR_FORGE,70);
-    Exercise(A_INT,Dice::Roll(1,10)+2,EINT_CREATION,50);
-    
+        Exercise(A_STR, Dice::Roll(1, 12) + 4, ESTR_FORGE, 70);
+    Exercise(A_INT, Dice::Roll(1, 10) + 2, EINT_CREATION, 50);
+
     return DONE;
-    
-    Repair:
-    
-    for (c=0,it=FirstInv();it;it=NextInv())
-      if (it->GetHP() < it->MaxHP())
-        {
-          c++;
-          thisp->MyTerm->LOption(Format("%s (%d/%d)",
-                   (const char*)it->Name(NA_A|NA_MECH),
-                   it->GetHP(), it->MaxHP()),it->myHandle);
+
+Repair:
+    for (c = 0, it = FirstInv(); it; it = NextInv())
+        if (it->GetHP() < it->MaxHP()) {
+            c++;
+            thisp->MyTerm->LOption(Format("%s (%d/%d)",
+                (const char*)it->Name(NA_A | NA_MECH),
+                it->GetHP(), it->MaxHP()), it->myHandle);
         }
-    if (!c)
-      {
+    if (!c) {
         IPrint("You have no damaged items.");
         return ABORT;
-      }
-        
-    hItem = thisp->MyTerm->LMenu(MENU_ESC|MENU_BORDER,
-      "Repair which item?", WIN_MENUBOX); 
+    }
+
+    hItem = thisp->MyTerm->LMenu(MENU_ESC | MENU_BORDER, "Repair which item?", WIN_MENUBOX);
     if (hItem == -1)
-      return ABORT;
+        return ABORT;
+
     it = oItem(hItem);
-    
     if (it->isMetallic())
-      if (!foundForge)
-        {
-          IPrint("You need to find a forge to repair a metallic item.");
-          return ABORT;
+        if (!foundForge) {
+            IPrint("You need to find a forge to repair a metallic item.");
+            return ABORT;
         }
-    
+
     // base 10
     repairDC = 10;
-    
+
     // Plus the item level for magical items
     if (it->isMagic())
-      repairDC += it->ItemLevel();
-      
+        repairDC += it->ItemLevel();
+
     // +1 for every 10% of its HP the item is down
-    repairDC += 10 - ((it->GetHP()*10)/it->MaxHP());
-    
+    repairDC += 10 - ((it->GetHP() * 10) / it->MaxHP());
+
     // retry penalties -- +2 per failed check
-    repairDC += it->GetStatiMag(TRIED,SK_CRAFT);
-    
-    gpCost = it->getShopCost(NULL,NULL);
-    gpCost *= ((it->GetHP()*10)/it->MaxHP());
+    repairDC += it->GetStatiMag(TRIED, SK_CRAFT);
+
+    gpCost = it->getShopCost(NULL, NULL);
+    gpCost *= ((it->GetHP() * 10) / it->MaxHP());
     gpCost /= 30;
-    
+
     if (HasAbility(CA_MASTER_ARTISAN))
-      gpCost = (gpCost * max(4,20 - AbilityLevel(CA_MASTER_ARTISAN))) / 20;
-          
-    if (getTotalMoney()/100 < gpCost)
-      {
-        IPrint(Format("That would cost %d gp in materials, but you only have %d gp.",
-          gpCost, getTotalMoney()/100));
+        gpCost = (gpCost * max(4, 20 - AbilityLevel(CA_MASTER_ARTISAN))) / 20;
+
+    if (getTotalMoney() / 100 < gpCost) {
+        IPrint(Format("That would cost %d gp in materials, but you only have %d gp.", gpCost, getTotalMoney() / 100));
         return ABORT;
-      }      
-        
-    
+    }
+
     ch = thisp->MyTerm->ChoicePrompt(Format(
-      "Craft %+d, DC %d. Proceed, work slowly or cancel?",
-      SkillLevel(SK_CRAFT), repairDC),"psc",CYAN,SKYBLUE);
-    
+        "Craft %+d, DC %d. Proceed, work slowly or cancel?",
+        SkillLevel(SK_CRAFT), repairDC), "psc", CYAN, SKYBLUE);
+
     if (ch == 'c' || ch == -1)
-      return ABORT;
+        return ABORT;
     if (ch == 'p')
-      workSlowly = false;
+        workSlowly = false;
     if (ch == 's')
-      workSlowly = true;
-      
-    if (thisp->SpendHours(workSlowly ? 8 : 2, 
-                  workSlowly ? 8 : 2) != DONE)
-      return ABORT;
-      
+        workSlowly = true;
+
+    if (thisp->SpendHours(workSlowly ? 8 : 2, workSlowly ? 8 : 2) != DONE)
+        return ABORT;
+
     LoseMoneyTo(gpCost, NULL);
-      
-    if (SkillCheck(SK_CRAFT,repairDC,true, workSlowly ? 4 : 0,
-                     workSlowly ? "patience" : NULL))
-      {
-        it->MendHP(Dice::Roll(2,8,SkillLevel(SK_CRAFT)/3));
-        it->RemoveStati(TRIED,-1,SK_CRAFT);
+
+    if (SkillCheck(SK_CRAFT, repairDC, true, workSlowly ? 4 : 0, workSlowly ? "patience" : NULL)) {
+        it->MendHP(Dice::Roll(2, 8, SkillLevel(SK_CRAFT) / 3));
+        it->RemoveStati(TRIED, -1, SK_CRAFT);
         IPrint(Format("You %srepair your damaged %s. (%d/%d).",
-          it->GetHP() != it->MaxHP() ? "partially " : "",
-          (const char*) it->Name(0), it->GetHP(), it->MaxHP()));
+            it->GetHP() != it->MaxHP() ? "partially " : "",
+            (const char*)it->Name(0), it->GetHP(), it->MaxHP()));
         if (it->isMetallic())
-          Exercise(A_STR,Dice::Roll(1,12)+4,ESTR_FORGE,30);
-        Exercise(A_INT,Dice::Roll(1,6),EINT_CREATION,40);
+            Exercise(A_STR, Dice::Roll(1, 12) + 4, ESTR_FORGE, 30);
+        Exercise(A_INT, Dice::Roll(1, 6), EINT_CREATION, 40);
         return DONE;
-      }
-      
-    it->IncStatiMag(TRIED,SS_MISC,SK_CRAFT,NULL,+2);
-    
-    int16 dmg = random(8)+1;
-    
-    if (LastSkillCheckResult < (repairDC - 5))
-      {
-        if (it->GetHP() <= dmg)
-          {
-            IPrint("Your failed repair attempt destroys the <Obj>!",it);
+    }
+
+    it->IncStatiMag(TRIED, SS_MISC, SK_CRAFT, NULL, +2);
+
+    int16 dmg = random(8) + 1;
+
+    if (LastSkillCheckResult < (repairDC - 5)) {
+        if (it->GetHP() <= dmg) {
+            IPrint("Your failed repair attempt destroys the <Obj>!", it);
             it->Remove(true);
-          }
-        else
-          {
+        } else {
             it->MendHP(-dmg);
             IPrint("Your failed repair attempt aggravates the damage!");
-          }
+        }
         return DONE;
-      }
-      
+    }
+
     IPrint("You fail to repair the damage.");
     return DONE;
-        
-  }
+}
 
-void Character::RecalcCraftFormulas()
-  {
+void Character::RecalcCraftFormulas() {
     int16 CraftSkills[] = { SK_ALCHEMY,       AI_ALCHEMY, SK_ALCHEMY,    1,
                             FT_BREW_POTION,   AI_POTION,  SK_KNOW_MAGIC, 2,
                             FT_SCRIBE_SCROLL, AI_SCROLL,  SK_KNOW_MAGIC, 4,

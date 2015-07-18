@@ -3659,13 +3659,13 @@ typedef signed long       hObj;
 #define ROPE_MOD              111
 #define TOTAL_CLASS_LEVELS    112
 #define RES_SURVIVAL_CHANCE   113
-#define MIN_CRAFT_LEVEL       114
-#define MIN_XCR_MULT          115
-#define MIN_XCR               116
+#define MIN_CRAFT_LEVEL       114 /* Item: Minimum skill level requires to craft this item type. */
+#define MIN_XCR_MULT          115 /* Encounter: Pre-minimum xCR multiplier for encounter. */
+#define MIN_XCR               116 /* Encounter: Fixed minimum bound for encounter xCR. */
 
-#define VOICE_COLOUR          120
-#define ALTAR_COLOUR          121
-#define INTERVENTION_COST     122
+#define VOICE_COLOUR          120 /* God: The text colour of this god's messages. */
+#define ALTAR_COLOUR          121 /* God: The glyph colour of this god's altar. */
+#define INTERVENTION_COST     122 /* God: The favour penalty given to a player by this god when the god intervenes for them. */
 #define RESURRECTION_COST     123 /* God: The favour penalty given to a player by this god when the god raises/resurrects them. */
 #define PRAYER_TIMEOUT        124 /* God: How many xp gains a player has to make before he can gain a prayer benefit from this god again after the last attempt. */
 #define MIN_RAISE_LEVEL       125 /* God: The total level a player must be to get a god to raise/resurrect. */
