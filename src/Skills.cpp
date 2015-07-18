@@ -741,21 +741,24 @@ int8 Creature::SkillKitMod(int16 sk) {
 
     for (it = FirstInv(); it; it = NextInv()) {
         if (TEFF(it->iID)->ListHasItem(SKILL_KIT_FOR, sk)) {
+            /* The primary skill kit with the best bonus is used. */
             mod = (int16)TEFF(it->iID)->GetConst(SKILL_KIT_MOD) + it->GetPlus();
             if (mod > best)
                 best = mod;
         }
 
         if (TEFF(it->iID)->ListHasItem(SECONDARY_KIT_FOR, sk)) {
+            /* Each unique secondary kit type gives cumulative bonuses. */
             for (i = 0; i != cKit; i++)
                 if (kits[i] == it->iID)
-                    continue;
+                    goto next_item;
             sec += (int16)TEFF(it->iID)->GetConst(SKILL_KIT_MOD) + it->GetPlus();
             kits[cKit++] = it->iID;
         }
 
         if (sk == SK_CLIMB && it->HasIFlag(IT_ROPE))
             rope_mod = max(rope_mod, (int16)TITEM(it->iID)->GetConst(SKILL_KIT_MOD));
+next_item:;
     }
 
     if (HasStati(INNATE_KIT, sk))

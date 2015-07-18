@@ -1,9 +1,10 @@
 Incursion (open source) 0.6.9Y19: 2015-03-??
-* https://bitbucket.org/rmtew/incursion-roguelike/issue/207/: Incursion domain names finished transferring from Julian.
-* https://bitbucket.org/rmtew/incursion-roguelike/issue/209/: Make a standalone module compiler.  This is as done as it can be, and it is now possible to invoke the debug Incursion executable with the '-compile' argument to get it to build the default core module 'main.irc'.  '-compile <modulename.irc>' can be used instead to build other modules.
-* https://bitbucket.org/rmtew/incursion-roguelike/issue/217/: When Google Breakpad minidumping was first added, it was promptly removed when people started complaining that Error() would crash trying to do a minidump.  Now in release builds, which are the only ones with Breakpad support, the Error() function allows the user to choose to try and drop a minidump.
-* https://bitbucket.org/rmtew/incursion-roguelike/issue/222/: Spelling and grammar fixes.  Pull request from Carl Minden.
-* https://bitbucket.org/rmtew/incursion-roguelike/issue/236/: Moving between levels crashes when an illusion stops as days pass and then the UI is refreshed but the 'between levels' coordinates of -1, -1 choke everything that consumes them.  Reported by Esran Zarnath.
+* https://bitbucket.org/rmtew/incursion-roguelike/issues/207/: Incursion domain names finished transferring from Julian.
+* https://bitbucket.org/rmtew/incursion-roguelike/issues/209/: Make a standalone module compiler.  This is as done as it can be, and it is now possible to invoke the debug Incursion executable with the '-compile' argument to get it to build the default core module 'main.irc'.  '-compile <modulename.irc>' can be used instead to build other modules.
+* https://bitbucket.org/rmtew/incursion-roguelike/issues/217/: When Google Breakpad minidumping was first added, it was promptly removed when people started complaining that Error() would crash trying to do a minidump.  Now in release builds, which are the only ones with Breakpad support, the Error() function allows the user to choose to try and drop a minidump.
+* https://bitbucket.org/rmtew/incursion-roguelike/issues/222/: Spelling and grammar fixes.  Pull request from Carl Minden.
+* https://bitbucket.org/rmtew/incursion-roguelike/issues/236/: Moving between levels crashes when an illusion stops as days pass and then the UI is refreshed but the 'between levels' coordinates of -1, -1 choke everything that consumes them.  Reported by Esran Zarnath.
+* https://bitbucket.org/rmtew/incursion-roguelike/issues/239/: Secondary skill kit bonuses should be one per item type, not one per each of item type held by player.  This is not ideal as there may be multiple different visual item types for instance, but at least it no longer exploitable by holding 20 viewing lenses.
 * Spelling fix: ressurrection/ressurection -> resurrection.
 * Documented script constants, noting which were unused.  These are used for dungeon creation, defining how gods interact with players, and more.
 
