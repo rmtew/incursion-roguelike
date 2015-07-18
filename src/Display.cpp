@@ -1162,7 +1162,7 @@ FoundAndRemoved:
 
     /* Catch the case where a Creature is killed but we
     keep its Creature object to attach to the corpse
-    in case of ressurection, i.e., for players and
+    in case of resurrection, i.e., for players and
     player companions. */
     if (isDelete || (isCreature() && thisc->isDead()))
         CleanupRefedStati();

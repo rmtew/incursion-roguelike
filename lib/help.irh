@@ -2690,12 +2690,12 @@ Text "help::adventuring"
          (any amount of) experience -- and as a result it cannot be 'waited out'; 
          the player will have to continue adventuring to run out the prayer 
          timeout and again be eligable to receive divine aid.\n
-         __<9>Ressurection:<1> For an especially favoured servant, the gods will
+         __<9>Resurrection:<1> For an especially favoured servant, the gods will
          even raise the dead. This is essentially just a special case of divine
          aid; it is received when a character dies rather than when she prays
          for aid. In addition to the normal minimum favour requirement, characters
          must be of a certain minimum character level (determined by their god)
-         to be important enough to be ressurected. Ressurection usually carries
+         to be important enough to be ressurected. Resurrection usually carries
          a stiffer percentile favour penalty than other forms of divine aid.\n
          __A ressurected character loses a full character level and re-appears
          on the first level of the dungeon with a limited supply of emergency
@@ -2704,13 +2704,13 @@ Text "help::adventuring"
          were fighting pick it up and make use of it. A character can theoretically
          be raised in this manner any number of times, provided that doing so will 
          not put her favour penalty above 100~. However, there is a chance that a 
-         character will not survive repeated ressurections...\n\n
+         character will not survive repeated resurrections...\n\n
          
          <9>Blessing Items<1>\n
          __Characters with at least minimal favour with a god can also use an altar to 
          bless items. To do this, drop one or more items on the altar, pray and select 
          the blessing option. The items will glow with a silvery light, and become blessed.
-         This, like ressurection, is a specialized form of divine aid, and increases
+         This, like resurrection, is a specialized form of divine aid, and increases
          the character's percentile penalty to favour by one percent for each item
          so blessed. Blessing a stack of items accords a penalty of 1~ plus 1~ per
          five items in the stack.\n

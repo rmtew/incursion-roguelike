@@ -15,7 +15,7 @@ Monster "Beginner's Kit" : 0
     Flags: M_NOGEN, M_NOPOLY;
   }
   
-Monster "Ressurection Gear" : 0
+Monster "Resurrection Gear" : 0
   {
     Gear:
       1d4+1 $"potion" of $"healing",

@@ -1173,8 +1173,7 @@ EvReturn Character::Convert(EventInfo &e)
     if (!GodID)
       neededFavour /= 10;
     
-    if (calcFavour(e.eID) < neededFavour)
-      {
+    if (calcFavour(e.eID) < neededFavour) {
         if (getGodFlags(e.eID) & GS_FORSAKEN)
           GodMessage(e.eID,MSG_FORSAKEN);
         else
@@ -1397,7 +1396,7 @@ EvReturn Player::GodRaise(EventInfo &e)
     if (!(getGodFlags(e.eID) & GS_INVOLVED))
       return NOTHING;
     
-    if (FavPenalty[e.godNum] + TGOD(e.eID)->GetConst(RESSURECTION_COST) > 100)
+    if (FavPenalty[e.godNum] + TGOD(e.eID)->GetConst(RESURRECTION_COST) > 100)
       return NOTHING;
       
     if (Anger[e.godNum] > max(3,(int16)TGOD(e.eID)->GetConst(TOLERANCE_VAL)))
@@ -1430,7 +1429,7 @@ EvReturn Player::GodRaise(EventInfo &e)
     if (resChance < random(100))
       {
         IPrint("Your soul does not prove strong enough to withstand "
-               "the trauma of an attempted ressurection.");
+               "the trauma of an attempted resurrection.");
         MyTerm->SetWin(WIN_INPUT);
         MyTerm->Color(WHITE);
         MyTerm->Write("Press [ENTER] to continue... ");
@@ -1444,7 +1443,7 @@ EvReturn Player::GodRaise(EventInfo &e)
     resChance -= max(0,(10 - Mod(A_CON)));
     
     /* Intervention Penalty */
-    FavPenalty[e.godNum] += (int16)TGOD(GodID)->GetConst(RESSURECTION_COST);
+    FavPenalty[e.godNum] += (int16)TGOD(GodID)->GetConst(RESURRECTION_COST);
     
     /* You have enough XP for the level right below the one you are
        currently at -- simulate losing a level. */
@@ -1489,8 +1488,8 @@ EvReturn Player::GodRaise(EventInfo &e)
     UnsetSilence();
     
     /* Give essential equipment */
-    if (FIND("Ressurection Gear")) {
-      TMON(FIND("Ressurection Gear"))->GrantGear(this,FIND("Ressurection Gear"),1);
+    if (FIND("Resurrection Gear")) {
+      TMON(FIND("Resurrection Gear"))->GrantGear(this,FIND("Resurrection Gear"),1);
       for (it=FirstInv();it;it=NextInv()) {
         it->IFlags |= IF_BLESSED;
         if (it->iID == FIND("holy symbol"))
@@ -1498,7 +1497,7 @@ EvReturn Player::GodRaise(EventInfo &e)
         }
       }
     
-    /* Ressurection Message */
+    /* Resurrection Message */
     GodMessage(GodID,MSG_AID + AID_RESSURECT);
     AddJournalEntry(XPrint("<14>You died, but <Res> ressurected you!<7>", GodID));    
     return DONE;
@@ -1533,12 +1532,10 @@ EvReturn Character::IBlessing(EventInfo &e)
       goto SkipQuality;
       
     e.EItem->AddQuality(qual);
-    if (e.EItem->ItemLevel() > FavourLev[theGame->GodNum(e.eID)] + 
-                               Mod(A_WIS) + isChosen*4)
-      {
+    if (e.EItem->ItemLevel() > FavourLev[theGame->GodNum(e.eID)] +  Mod(A_WIS) + isChosen*4) {
         e.EItem->RemoveQuality(qual);
         goto SkipQuality;
-      }
+    }
     
     APrint(e,"The <Obj> glows with a deep silvery light!",e.EItem);
     e.isSomething = true;
@@ -1550,8 +1547,7 @@ EvReturn Character::IBlessing(EventInfo &e)
           (QualityMods[i][1] * 3) + (int16)(e.EItem->GetQuantity() / 5);
     return DONE;
 
-    SkipQuality:
-
+SkipQuality:
     if (e.EItem->IFlags & IF_BLESSED)
       return DONE;
         
@@ -1562,10 +1558,9 @@ EvReturn Character::IBlessing(EventInfo &e)
     FavPenalty[theGame->GodNum(e.eID)] += 1 + (int16)(e.EItem->GetQuantity() / 5);
           
     return DONE;
-  }    
+}    
   
-void Character::Transgress(rID gID, int16 mag, bool doWrath, const char *reason)
-  {
+void Character::Transgress(rID gID, int16 mag, bool doWrath, const char *reason) {
     EventInfo e;
     
     if (getGodFlags(gID) & (GS_FORSAKEN|GS_ANATHEMA))

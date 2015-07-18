@@ -176,7 +176,7 @@ God "Aiswin"
       * CHOSEN_WEAPON $"short sword",
       * CHOSEN_WEAPON_QUALITY WQ_BALANCE,
       * INTERVENTION_COST 4,
-      * RESSURECTION_COST 6,
+      * RESURRECTION_COST 6,
       * ALTAR_COST 5,
       * PRAYER_TIMEOUT 5,
       * MIN_RAISE_LEVEL 5,
@@ -924,7 +924,7 @@ God "Ekliazeh"
       * CHOSEN_WEAPON $"warhammer",
       * CHOSEN_WEAPON_QUALITY WQ_LAWFUL,
       * INTERVENTION_COST 12,
-      * RESSURECTION_COST 20,
+      * RESURRECTION_COST 20,
       * ALTAR_COST 4,
       * PRAYER_TIMEOUT 12,
       * MIN_RAISE_LEVEL 8,
@@ -1241,7 +1241,7 @@ God "Erich"
       * CHOSEN_WEAPON $"light lance",
       * CHOSEN_WEAPON_QUALITY IQ_ADAMANT,
       * INTERVENTION_COST 7,
-      * RESSURECTION_COST 15,
+      * RESURRECTION_COST 15,
       * ALTAR_COST 5,
       * PRAYER_TIMEOUT 12,
       * MIN_RAISE_LEVEL 8,
@@ -1641,7 +1641,7 @@ God "Essiah"
       * CHOSEN_WEAPON $"scourge",
       * CHOSEN_WEAPON_QUALITY WQ_WARNING,
       * INTERVENTION_COST 4,
-      * RESSURECTION_COST 15,
+      * RESURRECTION_COST 15,
       * ALTAR_COST 5,
       * PRAYER_TIMEOUT 4,
       * MIN_RAISE_LEVEL 8,
@@ -2010,7 +2010,7 @@ God "Hesani"
       * ALTAR_COLOUR SKYBLUE,
       * HOLY_SYMBOL $"Hesani;symbol",
       * INTERVENTION_COST 1,
-      * RESSURECTION_COST 10,
+      * RESURRECTION_COST 10,
       * ALTAR_COST 3,
       * PRAYER_TIMEOUT 4,
       * MIN_RAISE_LEVEL 5,
@@ -2366,7 +2366,7 @@ God "Immotian"
       * CHOSEN_WEAPON $"heavy mace",
       * CHOSEN_WEAPON_QUALITY WQ_FLAMING,
       * INTERVENTION_COST 9,
-      * RESSURECTION_COST 7,
+      * RESURRECTION_COST 7,
       * ALTAR_COST 3,
       * PRAYER_TIMEOUT 7,
       * MIN_RAISE_LEVEL 6,
@@ -2874,7 +2874,7 @@ God "Khasrach"
       * CHOSEN_WEAPON $"longspear"
       * CHOSEN_WEAPON_QUALITY WQ_WOUNDING,
       * INTERVENTION_COST 3,
-      * RESSURECTION_COST 20,
+      * RESURRECTION_COST 20,
       * ALTAR_COST 3,
       * PRAYER_TIMEOUT 8,
       * MIN_RAISE_LEVEL 7,
@@ -3294,7 +3294,7 @@ God "Kysul"
       * CHOSEN_WEAPON $"trident",
       * CHOSEN_WEAPON_QUALITY WQ_SLEEP,
       * INTERVENTION_COST 20,
-      * RESSURECTION_COST 30,
+      * RESURRECTION_COST 30,
       * ALTAR_COST 6,
       * PRAYER_TIMEOUT 12,
       * MIN_RAISE_LEVEL 8,
@@ -3717,7 +3717,7 @@ God "Mara"
       * CHOSEN_WEAPON $"scythe",
       * CHOSEN_WEAPON_QUALITY WQ_KEEN,
       * INTERVENTION_COST 5,
-      * RESSURECTION_COST 3,
+      * RESURRECTION_COST 3,
       * ALTAR_COST        5,
       * PRAYER_TIMEOUT    15,
       * MIN_RAISE_LEVEL   3,
@@ -4152,7 +4152,7 @@ God "Maeve"
       * CHOSEN_WEAPON_QUALITY WQ_CHAOTIC,
       * CHOSEN_ARMOUR_QUALITY  IQ_FEATHERLIGHT,
       * INTERVENTION_COST 2,
-      * RESSURECTION_COST 6,
+      * RESURRECTION_COST 6,
       * ALTAR_COST 5,
       * PRAYER_TIMEOUT 4,
       * MIN_RAISE_LEVEL 6,
@@ -4474,7 +4474,7 @@ God "Sabine"
 	expected to be independant and solitary.\n
 	__<10>Blessings:<2> For a follower who has gained a minimal degree of
 	favour, Sabine will strike at enemies with lightning, remove fatigue,
-	replenish the spirit, clear the mind and offer ressurection in case 
+	replenish the spirit, clear the mind and offer resurrection in case 
 	of death -- if the follower is sufficiently skilled, Sabine will
 	raise her with even minimal favour. For more favoured worshippers, 
 	Sabine will (in order of increasing favour) remove curses, refill mana
@@ -4586,7 +4586,7 @@ God "Sabine"
       * CHOSEN_WEAPON $"javelin",
       * CHOSEN_WEAPON_QUALITY WQ_SHOCKING,
       * INTERVENTION_COST 3,
-      * RESSURECTION_COST 14,
+      * RESURRECTION_COST 14,
       * ALTAR_COST 5,
       * PRAYER_TIMEOUT 7,
       * MIN_RAISE_LEVEL 7,
@@ -4987,7 +4987,7 @@ God "Semirath"
       * CHOSEN_WEAPON $"chakram",
       * CHOSEN_WEAPON_QUALITY WQ_DISTANCE, /* Later, Velocity? */
       * INTERVENTION_COST 3,
-      * RESSURECTION_COST 12,
+      * RESURRECTION_COST 12,
       * ALTAR_COST 5,
       * PRAYER_TIMEOUT 5,
       * MIN_RAISE_LEVEL 5,
@@ -5241,7 +5241,7 @@ God "Xavias"
       fatigue from anyone who petitions him. For a casual follower, he will
       identify magical items; for a moderately devoted disciple, he will
       purify the body; for a devoted student of his path he will uncurse
-      items, replenish mana or grant ressurection. He has been known to 
+      items, replenish mana or grant resurrection. He has been known to 
       offer instantaneous transport away from danger for his followers; the
       more loyal the follower, the less severe the danger must be to warrant
       his aid.\n
@@ -5371,7 +5371,7 @@ God "Xavias"
       * CHOSEN_WEAPON $"arbalest",
       * CHOSEN_WEAPON_QUALITY WQ_QUICK_LOADING,
       * INTERVENTION_COST 4,
-      * RESSURECTION_COST 10,
+      * RESURRECTION_COST 10,
       * ALTAR_COST 5,
       * PRAYER_TIMEOUT 5,
       * MIN_RAISE_LEVEL 6,
@@ -5673,7 +5673,7 @@ God "Xel"
       * ALTAR_COLOUR RED,
       * HOLY_SYMBOL $"Xel;symbol",
       * INTERVENTION_COST 7,
-      * RESSURECTION_COST 15,
+      * RESURRECTION_COST 15,
       * ALTAR_COST 0,
       * PRAYER_TIMEOUT  10,
       * MIN_RAISE_LEVEL 7,
@@ -5924,7 +5924,7 @@ God "Zurvash"
       * CHOSEN_WEAPON $"bolas",
       * CHOSEN_WEAPON_QUALITY WQ_VICIOUS,
       * INTERVENTION_COST 12,
-      * RESSURECTION_COST 20,
+      * RESURRECTION_COST 20,
       * ALTAR_COST 5,
       * PRAYER_TIMEOUT 10,
       * MIN_RAISE_LEVEL 8,
@@ -6150,7 +6150,7 @@ God "The Multitude"
       the body and smiting enemies. More loyal followers can also gain
       the following types of aid, in order of increasing favour: replenishment
       of mana, replacement of lost spellbooks, deflection of especially
-      lethal blows, identification of any items and even ressurection for
+      lethal blows, identification of any items and even resurrection for
       a truly favoured follower.\n
       __The demon ghosts are truly diverse beings, no two alike. As such,
       the more permanent blessings they grant to followers are very
@@ -6254,7 +6254,7 @@ God "The Multitude"
       * HOLY_SYMBOL $"The Multitude;symbol",
       * CHOSEN_WEAPON_QUALITY WQ_UNHOLY,
       * INTERVENTION_COST 3,
-      * RESSURECTION_COST 7,
+      * RESURRECTION_COST 7,
       * ALTAR_COST 2,
       * PRAYER_TIMEOUT 5,
       * MIN_RAISE_LEVEL 9,

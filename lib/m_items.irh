@@ -4760,7 +4760,7 @@ AI_RING Effect "Item Preservation" : EA_GRANT
       from their bodies.\n
       __Powerful NPC adventurers also sometimes wear these rings as
       deterrants against theft-by-murder, and to preserve their
-      items for their (hopeful) ressurection. However, they aren't as
+      items for their (hopeful) resurrection. However, they aren't as
       useful to player characters, who typically don't belong to 
       the powerful guilds that have the means to recover the items
       sequestered by the ring's magic.";

@@ -1476,11 +1476,10 @@ Creature * Creature::MostSkilledAlly(int16 sk) {
    realize this and called it as a pass/fail a bunch of times when implementing
    skills. For intuitiveness, I set it back to bool; you can get the old result
    easily by subtracting the DC you sent it from LastSkillCheckResult. */
-bool Creature::SkillCheck(int16 sk, int16 DC, bool show, int16 mod1, 
-                             const char* mod1Str, int16 mod2, const char* mod2Str)
-  {
+bool Creature::SkillCheck(int16 sk, int16 DC, bool show, int16 mod1, const char* mod1Str, int16 mod2, const char* mod2Str) {
     int16 roll, rollA, rollB, rollC, sr, armPen = 0; 
-    String sStr, sRolls; Creature *msa;
+    String sStr, sRolls;
+    Creature *msa;
     
     rollA = Dice::Roll(1,20);
     rollB = rollC = 0;

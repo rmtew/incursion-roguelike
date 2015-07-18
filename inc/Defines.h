@@ -3302,7 +3302,7 @@ typedef signed long       hObj;
   #define HEAL_HUNGER  0x40 /* by pval amount, no choking */
   #define HEAL_SATTR   0x80 /* Heal One Attribute */
   #define HEAL_ALL_MALADIES  0x100 /* like the priest spell 'Heal' */
-#define EA_RAISE    27 /* Raise Dead, Ressurection */
+#define EA_RAISE    27 /* Raise Dead, Resurrection */
 #define EA_MENU     28 /* Multi-Effect Staves & Artifacts */
 #define EA_CANCEL   29 /* Rod of Cancellation */
 #define EA_OVERRIDE   30 
@@ -3666,26 +3666,26 @@ typedef signed long       hObj;
 #define VOICE_COLOUR          120
 #define ALTAR_COLOUR          121
 #define INTERVENTION_COST     122
-#define RESSURECTION_COST     123
-#define PRAYER_TIMEOUT        124
-#define MIN_RAISE_LEVEL       125
-#define MIN_CONVERT_FAVOUR     126
-#define PRAYER_DC             127
-#define LEVEL_BLEEDOFF        128
-#define TOLERANCE_VAL         129
-#define HOLY_SYMBOL           130
-#define ALTAR_COST            131
-#define GODPULSE_INTERVAL     132
-#define GODANGER_INTERVAL     133
-#define LAY_MULTIPLIER        134
-#define CHOSEN_WEAPON         135
-#define CHOSEN_WEAPON_QUALITY 136
-#define CHOSEN_ARMOUR_QUALITY  137
-#define CHOSEN_SHIELD_QUALITY 138
-#define PERSONAL_ALIGN        139
-#define STICK_TYPE            140
-#define DRAGON_FEAR_DC        141
-#define UNIFORMITY_CHANCE     142
+#define RESURRECTION_COST     123 /* God: The favour penalty given to a player by this god when the god raises/resurrects them. */
+#define PRAYER_TIMEOUT        124 /* God: How many xp gains a player has to make before he can gain a prayer benefit from this god again after the last attempt. */
+#define MIN_RAISE_LEVEL       125 /* God: The total level a player must be to get a god to raise/resurrect. */
+#define MIN_CONVERT_FAVOUR    126 /* God: The amount of favour from this god required to convert to them (before standard factors are applied). */
+#define PRAYER_DC             127 /* God: DC for a prayer 'knowledge (theology)' skill check, when player prays to this god. */
+#define LEVEL_BLEEDOFF        128 /* God: How much a player's favour penalty from this god decreases everytime they advance a level. */
+#define TOLERANCE_VAL         129 /* God: Defines the point at which the god's tolerance is tested, before they truly become angry. */
+#define HOLY_SYMBOL           130 /* God: Reference to the item that serves as the holy symbol of this god. */
+#define ALTAR_COST            131 /* God: Defined on scripted god definitions, but not used anywhere. */
+#define GODPULSE_INTERVAL     132 /* God: Every how many xp ticks the non-angry god considers intervention. */
+#define GODANGER_INTERVAL     133 /* God: Every how many xp ticks the angry god considers intervention. */
+#define LAY_MULTIPLIER        134 /* God: Ratio of how much less chance there is of the god granting a non-follower any kind of aid. */
+#define CHOSEN_WEAPON         135 /* God: What weapon type they favour.  Used in different manners when applicable. */
+#define CHOSEN_WEAPON_QUALITY 136 /* God: Quality that may be bestowed by a God to their favoured weapon type if it is blessed by them. */
+#define CHOSEN_ARMOUR_QUALITY 137 /* God: Quality that may be bestowed by a God to their favoured armour type if it is blessed by them. */
+#define CHOSEN_SHIELD_QUALITY 138 /* God: Quality that may be bestowed by a God to their favoured shield type if it is blessed by them. */
+#define PERSONAL_ALIGN        139 /* God: The alignment of the god themselves. */
+#define STICK_TYPE            140 /* Terrain: The kind of sticky terrain that sticky terrain is. */
+#define DRAGON_FEAR_DC        141 /* Monster: +/- modifier to fear saves versus this creature. */
+#define UNIFORMITY_CHANCE     142 /* Unused? */
 #define LAST_DUNCONST         143
 
 
