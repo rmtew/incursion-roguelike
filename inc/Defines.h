@@ -3875,8 +3875,8 @@ typedef signed long       hObj;
 #define TILE_NO_PARTY         0x80
 
 /* feature tile flags */
-#define TILE_START            0x08
-#define TILE_HIDDEN           0x10
+#define TILE_START            0x08      /* Tile: Indicates that this tile is the one where the player enters the level. */
+#define TILE_HIDDEN           0x10      /* ... */
 #define TILE_LOCKED           0x20
 #define TILE_OPEN             0x40
 #define TILE_STUCK            0x80
@@ -3889,8 +3889,8 @@ typedef signed long       hObj;
 #define thisw ((Weapon*)this)
 #define thisa ((Armour*)this)
 
-#define INP_LINE 1
-#define INP_CHAR 2
+#define INP_LINE 1                      /* Unused? */
+#define INP_CHAR 2                      /* Unused? */
 
 #define WIN_SCREEN   0
 #define WIN_MAP      1
