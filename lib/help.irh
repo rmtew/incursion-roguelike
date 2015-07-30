@@ -36,7 +36,7 @@ Text "help::mainmenu"
        \n__*_{E1:strategy} Westley Weimer's Strategy Guide
        \n__*_{E2:example} Example of Play Tutorial
        \n__*_{E3:spoilers} Spoilers
-       \n__*_{LI:OGL}  The Open Gaming Liscence
+       \n__*_{LI:OGL}  The Open Gaming Licence
        \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n
        \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n
 
@@ -55,15 +55,15 @@ Text "help::intro"
      <14>THE GOAL OF THE GAME\n
      ====================<6>\n
      __The Forsaken -- primordial mage-lords who made pacts with things
-     beyond the rim of creation -- were sealed into a ceaseless, ageless
+     beyond the edge of creation -- were sealed into a ceaseless, ageless
      slumber eons ago during the sorcery wars. Now, their sleep grows
      restless and troubled, and the thirteen signs and omens the holy
-     texts claim will presage their awakening have begin to come to pass.
-     Trees grow crooked and bend, seven nations have fallen to the hand
-     of one, and a crimson fire rained from the sky for three days and
+     texts claim will presage their awakening have befallen:
+     trees grow warped and crooked, seven nations fall to the hand
+     of one, and a crimson fire rains from the sky for three days and
      three nights over the town of Akrenstone. The fourth sign is a great
      goblin horde boiling forth from the bowels of the Earth to overwhelm
-     a good king, and to preempt this many would-be adventurers are making
+     a good king. In efforts to preempt this overturn, many would-be adventurers are making
      the long and harsh journey to war-torn Mohandi, which holds the one
      known entrance to the labyrinthine underground citadel known as the
      Goblin Caves.\n 
@@ -72,7 +72,7 @@ Text "help::intro"
      and magical items to be able to delve down to the tenth and final level
      of the Goblin Caves, wherein can be found the fortress of Murgash, the
      Goblin King. Slay Murgash, and the hordes of goblinoids will disperse
-     on their own. Fail, and they will boil across the surface of Therya like
+     on their own. Fail, and they will spread across the surface of Therya like
      a plague upon the land. Even should you succeed, you must escape with
      your life and return to the surface world. Do these things and you will
      receive the fame and glory of a hero of legend, but beware! Rumours claim
@@ -81,7 +81,7 @@ Text "help::intro"
 
      <14>NOTES ON GAMEPLAY\n
      =================<6>\n
-     __Incursion plays significantly differently than existing roguelikes,
+     __Incursion plays differently than existing roguelikes,
      and it's recommended that players have some experience with at least
      one other roguelike game before trying Incursion. Beyond this, some
      basic recommendations include playing a physically tough character to
@@ -98,7 +98,7 @@ Text "help::intro"
           
      <7>Ten Points for Experienced Roguelike Players<6>\n
      __Players who have experience with other roguelike games would do well
-     to take the following points of divergance into account:\n
+     to take the following points of divergence into account:\n
      __<14>1. <6> Characters in Incursion do not heal simply by the passage
      of game turns -- instead, they must use the Rest command ('z') to rest
      and recover, which means finding a way to be safe from encounters while 
@@ -126,24 +126,24 @@ Text "help::intro"
       __<14>3. <6> Fountains are a valuable resource; use them wisely. A
       fountain can cure poison or disease and remove curses, as well as many
       other effects. Dipping magical items in a fountain can improve their
-      magical plus. However, fountains can have a wide variety of negative
+      magical properties. However, fountains can have a wide variety of negative
       effects as well. The behaviour of fountains is influenced by the Luck
       attribute; every +1 of your Luck bonus removes one possibe negative
       effect from fountain use, starting with the most severe. Characters
       with a Luck bonus of +2 or higher can use a fountain without risking
-      truly dire and irresistable consequences, though it can still provoke
-      several dangerous effects; characters with lower Luck risk effects that
-      can seriously mess up their game in the long term, especially in the
+      truly dire and irresistible consequences, though it can still provoke
+      several dangerous effects. Characters with lower Luck will risk effects that
+      can lead to ruination in the long term, especially in the
       late game.\n
       __<14>4. <6> Set up shortcuts. You can designate a default melee weapon, 
-      ranged weapon and ammo, and them switch between them with '-'. Once you
+      ranged weapon and ammo, and switch between them with '-'. Once you
       have done this, you can fire in a cardinal direction with SHIFT+Arrow. 
       This makes ranged combat much less tedious. Likewise, Incursion spellcasters
       typically operate with a wide variety of defensive spells active at any
       given time; use the AutoBuff feature to keep defensive spells constantly
       active. Likewise, assign Quick Keys to spells, Yuse verbs, Tactical Options 
       and other functions you repeat frequently. All these features are discussed
-      more throughly in the Interface section.\n
+      extensively in the Interface section.\n
       __<14>5. <6> Incursion opposes scumming by design. This isn't meant as any
       kind of contempt against people who enjoy patience gaming, but it's worth
       being aware of -- we had to cater to /some/ tastes over others, after all.
@@ -152,11 +152,11 @@ Text "help::intro"
       you clean out dungeon levels 1-3, and have sufficient experuience to move on,
       it's in your benefit to do so -- you aren't going to keep getting more items
       treading water.\n
-      __<14>6. <6> The early game in Incursion can be very difficult -- you will
+      __<14>6. <6> The early game stage of Incursion can be very difficult -- you will
       probably die frequently -- and character generation is quite detailed. The
       design intent behind the character generation system is that every character,
       even of the same race and class, will be different in some non-trivial way
-      from others. The counterpoint of this is that its very unfair to get a really
+      from others. The counterpoint of this is that it's very unfair to get a really
       nice character (or just a truly /unique/ one), and then die to random chance
       right away. Likewise, much can be learned from repetition under controlled
       circumstances.\n
@@ -166,11 +166,11 @@ Text "help::intro"
       random equipment you had at the beginning of the last game. A character
       can only be reincarnated if they died before reaching character level 5 and
       before descending to dungeon level 5.\n
-      __<14>7. <6> Armour and shields both work substantially differently than they
+      __<14>7. <6> Armour and shields both work differently than they
       do in any of Incursion's parent systems. Armour gives a character truly 
-      significant protection, but has significant costs associated with it as well.
-      Shields are /very/ strong, but also take up a character's active hand,
-      preventing two-weapon fighting or wielding a weapon two-handed for increased
+      significant protection, but has significant costs associated with it.
+      Shields are /very/ strong, but occupy a character's active hand, which
+      prevents two-weapon fighting or wielding a weapon two-handed for increased
       damage. When you create a Warrior, consider very carefully what /kind/ of
       warrior you want to create. Incursion automatically starts very Dexterity-
       dependant characters with light armour, and very Strength-dependant ones with
@@ -180,7 +180,7 @@ Text "help::intro"
       __<14>8. <6> Gods are useful. Very useful. Cultivating a relationship with
       one in the early game will strongly help you in the later game, both in
       terms of the permanent forms of blessings and bonuses you receive from your
-      diety, and in terms of being able to pray for divine aid if you ever find
+      deity, and in terms of being able to pray for divine aid if you ever find
       yourself in a truly difficult situation. Understand the religion system,
       and remember that in Incursion, a few quality sacrifices count a great deal,
       whereas quantity accomplishes nothing.\n
@@ -223,8 +223,8 @@ Text "help::intro"
 	    teaser for what's to come in the future. I encourage players to 
 	    experiment with the game, try out the features and get in touch with
 	    me to offer suggestions for any future versions.\n
-	    __<6>Incursion is still is very early alpha testing. It has several known
-	    game stability bugs that cause it to crash, hopefully elegantly enough to
+	    __<6>Incursion is still in very early alpha testing. It has several known
+	    game stability bugs that cause it to crash -- hopefully gracefully enough to
 	    bring up a registry error dialog box, but sometimes badly enough to crash
 	    completely. Fortunately, Incursion does not delete save files until it is
 	    ready to overwrite them, so if Incursion does crash (at some place other
@@ -236,7 +236,7 @@ Text "help::intro"
      \n\n
      <14>FREQUENTLY ASKED QUESTIONS {FQ}\n
      ==========================<6>\n
-     __<14>Is Incursion based on, y'now, that popular tabletop RPG?<6> Yes,
+     __<14>Is Incursion based on, y'know, that popular tabletop RPG?<6> Yes,
      it is, and we think that this is one of its stronger selling points.
      The only reason this isn't mentioned more clearly is that the actual
      names are all trademarks that we can't legally use per the rules of the
@@ -254,7 +254,7 @@ Text "help::intro"
      __<14>Why is Incursion so slow?<6> My development philosophy as a programmer
 	 is that algorithms are complex enough to confuse without optimization being
 	 in the picture in an early stage of development. Premature optimization makes
-	 an already difficult task harder. Thus, for the purposes of development there
+	 an already difficult task harder. Thus, for the purposes of development, there
 	 are several algorithms presently in use that are decidedly suboptimal,
 	 especially in the monster AI. Incursion also performs a lot of superfluous
 	 processing each turn that will (hopefully) be eliminated in future versions.
@@ -284,9 +284,9 @@ Text "help::intro"
      speak. My expectation is that the source will thus be released around
      2012, though of course dates cannot be exact.\n
      __<14>Where can I reach the author?<6> My name is Julian Mensch, and the
-     best way to get a hold of me is by e-mail at incursion@shaw.ca. If for
+     best way to contact me is by e-mail at incursion@shaw.ca. If for
      some reason that address isn't working, you can find my current e-mail
-     address by Googling for newer posts by on Usenet; I use my real name
+     address by Googling for newer posts on Usenet; I use my real name
      there.\n
      __<14>Where can I post messages about Incursion?<6> Strictly gameplay
      messages for any miscellaneous roguelike game are on-topic in the
@@ -297,7 +297,10 @@ Text "help::intro"
      the resource files (.IRC) contained in the \\lib directory after editing
      them. If you just want to play Incursion, you don't need to do anything
      with it. If you want to try editing the resource files, you can then
-     recompile MAIN.IRC and see what happens. Chances are that this won't be
+     recompile MAIN.IRC and see what happens.
+
+
+      Chances are that this won't be
      very fulfilling, however, as there's currently no documentation on how
      the IncursionScript language works, and I'm explicitly <7>not<6> providing
      technical help with scripting at this time.
@@ -307,7 +310,7 @@ Text "help::intro"
      =======<6>\n
      __All of the source code for Incursion, save what is noted below, is
      the work of Julian Mensch, and is fully copyright 1999-2006. However,
-     it terms of design and gameplay Incursion owes a great deal to the
+     it terms of design and gameplay, Incursion owes a great deal to the
      other roguelike games that have come before it. The primary inspiration
      was Omega, and I thus owe gratitude to both Laurence R. Brothers and
      Erik Max Francis, for creating the only roguelike that inspired me to
@@ -317,16 +320,16 @@ Text "help::intro"
      other major roguelikes (Angband, ToME, NetHack and ADOM) all influenced
      elements of Incursion as well.\n
      __The game system that Wizards of the Coast has released under the Open
-     Game License has been greatly beneficial as well, as it forms the basis
+     Game License has been beneficial as well, as it forms the basis
      for the rules system that Incursion uses. I'd thus like to thank Gary
      Gygax, Monte Cook, Skip Williams, Sean K Reynolds and all of the others
-     for producing one of the greatest hobbies in the world. Finally, a very
+     for producing one of the greatest hobbies in the world. Finally, a 
      few more specific attributions:\n
      __<14>*<6>_Westley Weimer used to extensively playtest Incursion for
      me, doing some coding, helping me balance the game and generally being
      exceedingly useful. Thanks, Westley!\n
      __<14>*<6>_Mac users owe a special debt of gratitude to Steven Hamilton,
-     my deticated Mac porter who puts up with me constantly sending him
+     my dedicated Mac porter who puts up with me constantly sending him
      archives with missing files. :)\n
      __<14>*<6>_Incursion now has many, many playtesters, all of whom I'm
      very thankful to. However, I've had a truly prodigious amount of feedback
