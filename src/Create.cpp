@@ -4202,34 +4202,30 @@ SkipThisAdd2:
         return ls;
 }
 
-void Player::LearnSpell(bool left)
-{
+void Player::LearnSpell(bool left) {
     bool areSpells, areBookSpells, noBook; 
-    int16 i,j,c; Item *it;
+    int16 i,j,c;
+    Item *it;
     LearnableSpell *ls = CalcSpellAccess();
     String menu_name, typ_str;
 
-
-    if (ls[0].spID == 0)
-    {
+    if (ls[0].spID == 0) {
         /* The more technically correct message would be, "You have
         no levels in classes that grant you a spell list.", but
         let's not confuse the new player. */
-        if (CasterLev())
-        {
+        if (CasterLev()) {
             IPrint("You have casting ability but no class spell "
                 "list. This is a bug or an oversight in class design.");
             return;
         }
+
         IPrint("You have no spellcasting ability.");
         return;
     }
 
     areSpells = false;
     areBookSpells = false;
-    for (i=0;ls[i].spID;i++)
-    {
-
+    for (i=0;ls[i].spID;i++) {
         /* Elves can't learn Necromancy spells. */
         if (isMType(MA_ELF) && (TEFF(ls[i].spID)->Schools & SC_NEC)
             && !(TEFF(ls[i].spID)->Schools & SC_ABJ))
@@ -4273,8 +4269,7 @@ void Player::LearnSpell(bool left)
 
         /* Clerics and other divine casters can't learn spells
         that conflict with their own alignment. */
-        if (ls[i].Type == SP_DIVINE)
-        {
+        if (ls[i].Type == SP_DIVINE) {
             TEffect *te = TEFF(ls[i].spID);
             if (te->HasFlag(EF_GOOD) && isMType(MA_EVIL))
                 continue;
@@ -4305,6 +4300,7 @@ HasComponent:
         if (!Opt(OPT_SHOW_ALL_SPELLS))
             if (noBook)
                 continue;
+
         areBookSpells = true;
 
         /* Disambiguate shared spells, so that mage/priests get both
@@ -4319,8 +4315,7 @@ HasComponent:
             menu_name += typ_str;
 
         if (noBook)
-            menu_name = Format("%c%s%c", -BLUE, 
-            (const char*)menu_name, -GREY);
+            menu_name = Format("%c%s%c", -BLUE, (const char*)menu_name, -GREY);
 
         MyTerm->LOption(menu_name,
             noBook ? (-(i+10)) : i,
@@ -4328,26 +4323,25 @@ HasComponent:
             Opt(OPT_SORT_SPELLS) ? ls[i].Level : 0);
     }
 
-    for (j=1;j!=10;j++)
-    {
+    for (j=1;j!=10;j++) {
         if (SpellSlots[j-1] + BonusSlots[j-1] > 
             SpellsLearned[j-1])
             goto OpenSlot;
     }
+
     IPrint("You have no unfilled spell slots.");
     MyTerm->LOptionClear();
     return;
-OpenSlot:                        
 
-    if (!areSpells)
-    {
+OpenSlot:                        
+    if (!areSpells) {
         IPrint("There are no remaining unlearned spells on your class "
             "spell list (or lists) that you have open slots for.");
         MyTerm->LOptionClear();
         return;
     }
-    if (!areBookSpells)
-    {
+
+    if (!areBookSpells) {
         IPrint("You have no spellbooks with unlearned spells for the "
             "spell slots you have open.");
         MyTerm->LOptionClear();
@@ -4357,16 +4351,15 @@ OpenSlot:
     String prompt;
     if (left)
         prompt = Format("Learn which spell (%d left)?", 
-        (int)(SpellSlots[0] + BonusSlots[0] - SpellsLearned[0]));
+            (int)(SpellSlots[0] + BonusSlots[0] - SpellsLearned[0]));
     else
         prompt = "Learn which spell?";
 
     i = (int16)MyTerm->LMenu(MENU_SORTED|MENU_3COLS|MENU_ESC|MENU_DESC|MENU_BORDER,prompt,WIN_MENUBOX,"help::magic,LE");    
-
     if (i == -1)
         return;
-    if (i < 0)
-    {
+
+    if (i < 0) {
         IPrint("You don't have a spellbook for that spell.");
         return;
     }
@@ -4377,10 +4370,7 @@ OpenSlot:
     if (!left)
         IPrint("Learned.");
 
-    /* If we learn a spell we previously knew how to scribe 
-    scrolls of, we get the slot back and learn a new scroll
-    spell. */
+    /* If we learn a spell we previously knew how to scribe scrolls of, we get
+       the slot back and learn a new scroll spell. */
     RecalcCraftFormulas();
-
 }
-
