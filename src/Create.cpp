@@ -4035,8 +4035,7 @@ Item* Creature::getPrimaryRanged()
         return best;
 }
 
-int CompareLSpells(const void *a, const void *b)
-{
+int CompareLSpells(const void *a, const void *b) {
     LearnableSpell *A, *B;
     A = (LearnableSpell*) a;
     B = (LearnableSpell*) b;
@@ -4049,84 +4048,79 @@ int CompareLSpells(const void *a, const void *b)
         return stricmp(NAME(A->spID),NAME(B->spID));
 }
 
-LearnableSpell* Character::CalcSpellAccess()
-{
-    int16 i, j, k, sp, lev, c; rID spID;
-    rID SpellList[MAX_SPELLS+1];
-    LearnableSpell *ls; bool skip, added;
+LearnableSpell* Character::CalcSpellAccess() {
+    int16 i, j, k, sp, lev, c;
+    rID spID;
+    rID SpellList[MAX_SPELLS + 1];
+    LearnableSpell *ls;
+    bool skip, added;
 
     /* This is more than we'll ever need -- it assumes a player
     could have access to every spell in the game as arcane,
     divine, primal AND sorcerous -- but paranoid is better
     than obscure memory corruption errors. */
-    ls = (LearnableSpell*) malloc(sizeof(LearnableSpell) * (MAX_SPELLS+1)*4);
+    ls = (LearnableSpell*)malloc(sizeof(LearnableSpell) * (MAX_SPELLS + 1) * 4);
 
-/*
-sp: rID
-lv: uint8
-typ: uint8
-*/
+    /*
+    sp: rID
+    lv: uint8
+    typ: uint8
+    */
 #define ADD_SPELL(sp,lv,typ)                    \
-    {                                             \
+        {                                             \
     Spells[theGame->SpellNum(sp)] |= typ;       \
     added = false;                              \
     for (k=0;k!=c;k++)                          \
     if (ls[k].spID == sp)                     \
     if (ls[k].Type == typ)                  \
-    {                                     \
+        {                                     \
     ls[k].Level = min(ls[k].Level,lv);  \
     added = true;                       \
-    }                                     \
+        }                                     \
     if (!added) {                               \
     ls[c].spID = sp;                          \
     ls[c].Level = lv;                         \
     ls[c].Type = typ;                         \
     c++;                                      \
-    }                                         \
+        }                                         \
     ASSERT(c < (MAX_SPELLS*4));                 \
-    }                                             
+        }                                             
 
-    for (i=0;i!=MAX_SPELLS;i++)
-        Spells[i] &= ~(SP_ARCANE|SP_DIVINE|SP_PRIMAL|SP_BARDIC);      
+    for (i = 0; i != MAX_SPELLS; i++)
+        Spells[i] &= ~(SP_ARCANE | SP_DIVINE | SP_PRIMAL | SP_BARDIC);
 
-    c = 0; lev = 1;
+    c = 0;
+    lev = 1;
+
     StatiIter(this)
-        if (S->Nature == SPELL_ACCESS)
-        {
-            if (RES(S->eID)->GetList(SPELL_LIST,SpellList,MAX_SPELLS+1))
-            {
+        if (S->Nature == SPELL_ACCESS) {
+            if (RES(S->eID)->GetList(SPELL_LIST, SpellList, MAX_SPELLS + 1)) {
                 skip = false;
                 /* 3 zeros serve as the null terminator. We can't use just
                 one, because if we have an illegal referance in a class
                 spell list (i.e., a spell not implemented yet, or a
                 misspelled spell name), we don't want to terminate the
                 entire list at that point. */
-                for (i=0;SpellList[i] || SpellList[i+1] || SpellList[i+2];i++)
-                {
-                    /* Less than 256 is a spell level rather than a 
+                for (i = 0; SpellList[i] || SpellList[i + 1] || SpellList[i + 2]; i++) {
+                    /* Less than 256 is a spell level rather than a
                     spell entry. S->Mag stores the maximum level
                     of spell access. */
                     if (SpellList[i] == 0)
                         ;
-                    else if (SpellList[i] < 50)
-                    {
+                    else if (SpellList[i] < 50) {
                         lev = (int16)SpellList[i];
                         if ((int)SpellList[i] > S->Mag)
                             skip = true;
                         else
                             skip = false;
                         continue;
-                    }
-                    else if (SpellList[i] > 1000 && SpellList[i] < 2000)
-                    {
+                    } else if (SpellList[i] > 1000 && SpellList[i] < 2000) {
                         int16 Source = (int16)SpellList[i] - 1000;
-                        for(sp=0;sp!=theGame->LastSpell();sp++)
-                        {
+                        for (sp = 0; sp != theGame->LastSpell(); sp++) {
                             spID = theGame->SpellID(sp);
                             if (TEFF(spID)->Level > S->Mag)
                                 continue;
-                            if (TEFF(spID)->HasSource((int8)Source))
-                            {
+                            if (TEFF(spID)->HasSource((int8)Source)) {
                                 /* If the spell is mentioned elsewhere on *this* list,
                                 we want to avoid adding it twice. The rationale for
                                 this is lists that alter levels and leave everything
@@ -4137,26 +4131,22 @@ typ: uint8
                                 2 $"call light"
                                 and have call light be level two, not be entered twice
                                 as both levels one and two. */
-                                for (j=0;SpellList[j];j++)
+                                for (j = 0; SpellList[j]; j++)
                                     if (SpellList[j] == spID)
                                         goto SkipThisAdd;
-                                ADD_SPELL(spID,TEFF(spID)->Level,S->Val);
-SkipThisAdd:
+                                ADD_SPELL(spID, TEFF(spID)->Level, S->Val);
+                            SkipThisAdd:
                                 ;
                             }
                         }
 
-                    }
-                    else if (SpellList[i] == 100)
-                    {
-                        for(sp=0;sp!=theGame->LastSpell();sp++)
-                        {
+                    } else if (SpellList[i] == 100) {
+                        for (sp = 0; sp != theGame->LastSpell(); sp++) {
                             spID = theGame->SpellID(sp);
                             if (TEFF(spID)->Level > S->Mag)
                                 continue;
-                            if (TEFF(spID)->HasSource((int8)SpellList[i+1]))
-                                if (TEFF(spID)->Schools & SpellList[i+2])
-                                {
+                            if (TEFF(spID)->HasSource((int8)SpellList[i + 1]))
+                                if (TEFF(spID)->Schools & SpellList[i + 2]) {
                                     /* If the spell is mentioned elsewhere on *this* list,
                                     we want to avoid adding it twice. The rationale for
                                     this is lists that alter levels and leave everything
@@ -4168,68 +4158,62 @@ SkipThisAdd:
                                     and have call light be level two, not be entered twice
                                     as both levels one and two, even thhough it's resource
                                     says level one. */
-                                    for (j=0;SpellList[j];j++)
+                                    for (j = 0; SpellList[j]; j++)
                                         if (SpellList[j] == spID)
                                             goto SkipThisAdd2;
-                                    ADD_SPELL(spID,TEFF(spID)->Level,S->Val);
-SkipThisAdd2:
+                                    ADD_SPELL(spID, TEFF(spID)->Level, S->Val);
+                                SkipThisAdd2:
                                     ;
                                 }
                         }
-                        i += 2;                      
-                    }
-                    else if (SpellList[i] && !skip)
-                    {
-                        ADD_SPELL(SpellList[i],(uint8)lev,(uint8)S->Val)
+                        i += 2;
+                    } else if (SpellList[i] && !skip) {
+                        ADD_SPELL(SpellList[i], (uint8)lev, (uint8)S->Val)
                     }
                 }
-            }          
+            }
         }
-        StatiIterEnd(this)
+    StatiIterEnd(this)
 
-            qsort(ls,c,sizeof(LearnableSpell),&CompareLSpells);
+    qsort(ls, c, sizeof(LearnableSpell), &CompareLSpells);
 
-        /* double-null terminator */
-        ls[c].spID  = 0;
-        ls[c].Level = 0;
-        ls[c].Type  = 0;
-        c++;
-        ls[c].spID  = 0;
-        ls[c].Level = 0;
-        ls[c].Type  = 0;
-        c++;
+    /* double-null terminator */
+    ls[c].spID = 0;
+    ls[c].Level = 0;
+    ls[c].Type = 0;
+    c++;
+    ls[c].spID = 0;
+    ls[c].Level = 0;
+    ls[c].Type = 0;
+    c++;
 
-        return ls;
+    return ls;
 }
 
-void Player::LearnSpell(bool left)
-{
+void Player::LearnSpell(bool left) {
     bool areSpells, areBookSpells, noBook; 
-    int16 i,j,c; Item *it;
+    int16 i,j,c;
+    Item *it;
     LearnableSpell *ls = CalcSpellAccess();
     String menu_name, typ_str;
 
-
-    if (ls[0].spID == 0)
-    {
-        /* The more technically correct message would be, "You have
-        no levels in classes that grant you a spell list.", but
-        let's not confuse the new player. */
-        if (CasterLev())
-        {
+    if (ls[0].spID == 0) {
+        /* The more technically correct message would be, "You have no levels
+           in classes that grant you a spell list.", but let's not confuse
+           the new player. */
+        if (CasterLev()) {
             IPrint("You have casting ability but no class spell "
                 "list. This is a bug or an oversight in class design.");
             return;
         }
+
         IPrint("You have no spellcasting ability.");
         return;
     }
 
     areSpells = false;
     areBookSpells = false;
-    for (i=0;ls[i].spID;i++)
-    {
-
+    for (i=0;ls[i].spID;i++) {
         /* Elves can't learn Necromancy spells. */
         if (isMType(MA_ELF) && (TEFF(ls[i].spID)->Schools & SC_NEC)
             && !(TEFF(ls[i].spID)->Schools & SC_ABJ))
@@ -4273,8 +4257,7 @@ void Player::LearnSpell(bool left)
 
         /* Clerics and other divine casters can't learn spells
         that conflict with their own alignment. */
-        if (ls[i].Type == SP_DIVINE)
-        {
+        if (ls[i].Type == SP_DIVINE) {
             TEffect *te = TEFF(ls[i].spID);
             if (te->HasFlag(EF_GOOD) && isMType(MA_EVIL))
                 continue;
@@ -4305,6 +4288,7 @@ HasComponent:
         if (!Opt(OPT_SHOW_ALL_SPELLS))
             if (noBook)
                 continue;
+
         areBookSpells = true;
 
         /* Disambiguate shared spells, so that mage/priests get both
@@ -4319,8 +4303,7 @@ HasComponent:
             menu_name += typ_str;
 
         if (noBook)
-            menu_name = Format("%c%s%c", -BLUE, 
-            (const char*)menu_name, -GREY);
+            menu_name = Format("%c%s%c", -BLUE, (const char*)menu_name, -GREY);
 
         MyTerm->LOption(menu_name,
             noBook ? (-(i+10)) : i,
@@ -4328,26 +4311,25 @@ HasComponent:
             Opt(OPT_SORT_SPELLS) ? ls[i].Level : 0);
     }
 
-    for (j=1;j!=10;j++)
-    {
+    for (j=1;j!=10;j++) {
         if (SpellSlots[j-1] + BonusSlots[j-1] > 
             SpellsLearned[j-1])
             goto OpenSlot;
     }
+
     IPrint("You have no unfilled spell slots.");
     MyTerm->LOptionClear();
     return;
-OpenSlot:                        
 
-    if (!areSpells)
-    {
+OpenSlot:                        
+    if (!areSpells) {
         IPrint("There are no remaining unlearned spells on your class "
             "spell list (or lists) that you have open slots for.");
         MyTerm->LOptionClear();
         return;
     }
-    if (!areBookSpells)
-    {
+
+    if (!areBookSpells) {
         IPrint("You have no spellbooks with unlearned spells for the "
             "spell slots you have open.");
         MyTerm->LOptionClear();
@@ -4357,16 +4339,15 @@ OpenSlot:
     String prompt;
     if (left)
         prompt = Format("Learn which spell (%d left)?", 
-        (int)(SpellSlots[0] + BonusSlots[0] - SpellsLearned[0]));
+            (int)(SpellSlots[0] + BonusSlots[0] - SpellsLearned[0]));
     else
         prompt = "Learn which spell?";
 
     i = (int16)MyTerm->LMenu(MENU_SORTED|MENU_3COLS|MENU_ESC|MENU_DESC|MENU_BORDER,prompt,WIN_MENUBOX,"help::magic,LE");    
-
     if (i == -1)
         return;
-    if (i < 0)
-    {
+
+    if (i < 0) {
         IPrint("You don't have a spellbook for that spell.");
         return;
     }
@@ -4377,10 +4358,7 @@ OpenSlot:
     if (!left)
         IPrint("Learned.");
 
-    /* If we learn a spell we previously knew how to scribe 
-    scrolls of, we get the slot back and learn a new scroll
-    spell. */
+    /* If we learn a spell we previously knew how to scribe scrolls of, we get
+       the slot back and learn a new scroll spell. */
     RecalcCraftFormulas();
-
 }
-

@@ -34,405 +34,370 @@
 
 EvReturn Feature::Event(EventInfo &e) {
     EvReturn res;
-    res = TFEAT(fID)->Event(e,fID);
+    res = TFEAT(fID)->Event(e, fID);
     if (res == DONE || res == ERROR)
-      return res;
+        return res;
     if (res == NOMSG)
-      e.Terse = true;
-    
-  switch (e.Event) {
-    case EV_TURN: 
-      UpdateStati();
-      return DONE; 
+        e.Terse = true;
 
+    switch (e.Event) {
+    case EV_TURN:
+        UpdateStati();
+        return DONE;
     case EV_PLACE:
-      x = e.EXVal;
-      y = e.EXVal;
-      break; 
-
+        x = e.EXVal;
+        y = e.EXVal;
+        break;
     case EV_STRIKE:
-      if (e.ETarget != this) return NOTHING; 
-      bool is_acting;
-      is_acting = e.EActor->HasStati(ACTING);
-      if (e.AType == A_KICK) {
-        DPrint(e,NULL,"The <EActor> kicks the <Obj>.",this);
-      }
-      else if (e.EItem)
-        DPrint(e,is_acting ? NULL : "You strike the <Obj> with your <EItem>.",
-            "The <EActor> strikes the <Obj> with his <EItem>.",this);
-      else
-        DPrint(e, is_acting ? NULL : "You <Str> the door.",
-            "The <EActor> <Str2> the door.", 
-            Lookup(AttkVerbs1,e.AType), 
-            Lookup(AttkVerbs2,e.AType));
+        if (e.ETarget != this)
+            return NOTHING;
 
-      e.vDmg = e.Dmg.Roll();
+        bool is_acting;
+        is_acting = e.EActor->HasStati(ACTING);
+        if (e.AType == A_KICK) {
+            DPrint(e, NULL, "The <EActor> kicks the <Obj>.", this);
+        } else if (e.EItem)
+            DPrint(e, is_acting ? NULL : "You strike the <Obj> with your <EItem>.", "The <EActor> strikes the <Obj> with his <EItem>.", this);
+        else
+            DPrint(e, is_acting ? NULL : "You <Str> the door.", "The <EActor> <Str2> the door.", Lookup(AttkVerbs1, e.AType), Lookup(AttkVerbs2, e.AType));
 
-      if (e.EActor->HasFeat(FT_SUNDER)) {
-        e.vDmg *= 2; 
-        e.strDmg += " (x2 Sunder)"; 
-      }
-      if (e.EItem && e.EItem->isWeapon() && 
-          ((Weapon *)e.EItem)->HasQuality(WQ_SUNDERING)) {
-        e.vDmg *= 2; 
-        e.strDmg += " (x2 Sundering)"; 
-      } 
+        e.vDmg = e.Dmg.Roll();
 
-      res = ReThrow(EV_DAMAGE,e);
-      if (e.EItem2 && e.EItem2->isWeapon()) {
-        ((Weapon *)e.EItem2)->DoQualityDmgSingle(e);
-      }
-      if (e.EItem && e.EItem->isWeapon()) {
-        ((Weapon *)e.EItem)->DoQualityDmgSingle(e);
-      }
-      e.EActor->MakeNoise(max(10 - (e.EActor->SkillLevel(SK_MOVE_SIL) / 2),1));
-      if (isDead())
-        e.Died = true; 
-      if (res != NOTHING) return res; 
-      return DONE;
-
-    case EV_DAMAGE:     
-      if (e.ETarget != this) return NOTHING; 
-      {
-        int16 hard;
-        String s;
-      if (mHP == 0 || cHP == 0)
-        return DONE; 
-        
-      hard = MaterialHardness(TFEAT(fID)->Material,e.DType);
-      if (hard <= -1) {
-//Immune:
-        e.EActor->IPrint("The <Obj> is immune to <Str>.",
-            this,Lookup(DTypeNames,e.DType));
-        return DONE; 
-      } 
-
-      if (e.EActor->isPlayer())
-        {
-          if (e.Dmg.Number == 0 && e.Dmg.Sides == 0 && e.Dmg.Bonus == 0) {
-            s = Format("%c%s:%c %d %s",-MAGENTA,(const char*)(Name(0).Capitalize()),
-                -GREY,
-                e.vDmg,
-                Lookup(DTypeNames,e.DType));
-          } else { 
-              s = Format("%c%s:%c %s%s %s", -MAGENTA, (const char*)(Name(0).Capitalize()),
-                -GREY,
-                (const char*)e.Dmg.Str(),
-                e.strDmg ? (const char*)e.strDmg : "",
-                Lookup(DTypeNames,e.DType));
-            s += Format(" = %d",e.vDmg);
-          }
-
-          s += Format(" vs. %d (%s)",hard,(const char*)Lookup(MaterialDescs,TFEAT(fID)->Material));
-
-          e.aDmg = e.vDmg - hard; 
-
-          s += Format(" <%d>[%s]<7>",
-              e.vDmg > hard ? EMERALD : PINK,
-              e.vDmg > hard ? (const char*)Format("%d damage",e.aDmg) : "unhurt");
-          
-      
-          if (e.EPActor->Opt(OPT_STORE_ROLLS))
-            e.EPActor->MyTerm->AddMessage(SC(XPrint(s)) + SC("\n"));
-          e.EPActor->MyTerm->SetWin(WIN_NUMBERS3);
-          e.EPActor->MyTerm->Clear();
-          e.EPActor->MyTerm->Write(0,0,XPrint(s));
+        if (e.EActor->HasFeat(FT_SUNDER)) {
+            e.vDmg *= 2;
+            e.strDmg += " (x2 Sunder)";
         }
-      
-      // ww: you can get stuck here if your STR is low kicking a door
-      // forever ... no way to interrupt actions
-      if (e.aDmg > 0)
-      { 
-        cHP -= e.aDmg;
+        if (e.EItem && e.EItem->isWeapon() &&
+            ((Weapon *)e.EItem)->HasQuality(WQ_SUNDERING)) {
+            e.vDmg *= 2;
+            e.strDmg += " (x2 Sundering)";
+        }
 
-        if (cHP <= 0) { 
-          cHP = 0; 
-
-          switch (e.DType) {
-            case AD_SONI: VPrint(e,NULL,"The <Obj> shatters!",this); break;
-            case AD_ACID: VPrint(e,NULL,"The <Obj> is eaten away!",this); break;
-            case AD_FIRE: VPrint(e,NULL,"The <Obj> burns down!",this); break;
-            default:      VPrint(e,NULL,"The <Obj> is destroyed!",this); break;
-          }
-          SetImage();
-          Hear(e,20,"You hear a loud *crack*.");
-          e.EActor->RemoveStati(ACTING); 
-          e.Died = true; 
-
-          if (e.EActor && e.EMap->FTrapAt(x,y) && e.EActor->isBeside(this)) {
-            e.EActor->IPrint("The <Obj> was trapped!",this);
-            e.EMap->FTrapAt(x,y)->TriggerTrap(e,false);
-          } 
-          Remove(true);
-          return NOTHING; 
-        } 
-      } 
-      VPrint(e,NULL,"The <Obj> holds!",this);
-      //Message spam...
-      //Hear(e,20,"You hear a muffled *thud*.");                         
-
-      if (e.EActor->isPlayer() && e.EPActor->Opt(OPT_REPEAT_KICK) && e.AType == A_KICK) {
-        if (!e.EActor->HasStati(ACTING,EV_SATTACK)) {
-          e.EActor->RemoveStati(ACTING);
-          e.EActor->GainPermStati(ACTING,this,SS_MISC,EV_SATTACK,20);
-        } else {
-          int16 mag = e.EActor->GetStatiMag(ACTING);
-          if (mag <= 0) {
-            e.EActor->HaltAction("not broken after 20 attacks", false); 
-            if (e.EActor->HasStati(ACTING)) {
-              e.EActor->RemoveStati(ACTING); 
-              e.EActor->GainPermStati(ACTING,this,SS_MISC,EV_SATTACK,20);
-            } else return ABORT; 
-          } else {
-            e.EActor->SetStatiMag(ACTING,-1,NULL,mag-1);
-          } 
-        } 
-      }
-      return DONE;
-      }
-  } 
-		return NOTHING;
-	}
-
-void Thing::BoostRetry(int16 sk, Creature *c)
-  {
-    if (HasStati(RETRY_BONUS,sk,c))
-      SetStatiMag(RETRY_BONUS,sk,c,
-        GetStatiMag(RETRY_BONUS,sk,c)+2);
-    else
-      GainPermStati(RETRY_BONUS,c,SS_MISC,sk,+4);
-  }
-
-
-Portal::Portal(rID _pID) 
-  : Feature(TFEAT(_pID)->Image,_pID,T_PORTAL)
-  { }
-
-EvReturn Portal::Event(EventInfo &e)
-  {
-    Creature *c; EvReturn res;
-    switch(e.Event)
-      {
-        case PRE(EV_ENTER):
-          res = TFEAT(fID)->Event(e,fID);
-          if (res == DONE || res == ERROR)
+        res = ReThrow(EV_DAMAGE, e);
+        if (e.EItem2 && e.EItem2->isWeapon()) {
+            ((Weapon *)e.EItem2)->DoQualityDmgSingle(e);
+        }
+        if (e.EItem && e.EItem->isWeapon()) {
+            ((Weapon *)e.EItem)->DoQualityDmgSingle(e);
+        }
+        e.EActor->MakeNoise(max(10 - (e.EActor->SkillLevel(SK_MOVE_SIL) / 2), 1));
+        if (isDead())
+            e.Died = true;
+        if (res != NOTHING)
             return res;
-          if (res == NOMSG)
-            e.Terse = true;
-          if (c = (Creature*) e.EActor->GetStatiObj(DWARVEN_FOCUS))
-            if (c->m == e.EActor->m)
-              {
-                e.EActor->IPrint("You will not flee while the <Obj> still lives!",c);
-                return ABORT;
-              }
-          return NOTHING;
-        case EV_ENTER:
-          return Enter(e);
-        default:
-          return NOTHING;
-      }
-  }
+        return DONE;
+    case EV_DAMAGE:
+        if (e.ETarget != this)
+            return NOTHING;
+        {
+            int16 hard;
+            String s;
+            if (mHP == 0 || cHP == 0)
+                return DONE;
 
-EvReturn Portal::Enter(EventInfo &e)
-  {
-    int8 DepthMod; Map * new_m; 
-    EvReturn res;
-    
-    res = TFEAT(fID)->Event(e,fID);
-    if (res == DONE || res == ERROR)
-      return res;
-    if (res == NOMSG)
-      e.Terse = true;
-
-    e.EActor->Timeout += 30;
-
-    switch(TFEAT(fID)->xval) {
-        case POR_DOWN_STAIR:
-        case POR_UP_STAIR:
-            DepthMod = TFEAT(fID)->xval == POR_DOWN_STAIR ? 1 : -1;
-            if (!m->dID) {
-                Error("Up/down stairs located outside dungeon!");
-                return ABORT;
+            hard = MaterialHardness(TFEAT(fID)->Material, e.DType);
+            if (hard <= -1) {
+//Immune:
+                e.EActor->IPrint("The <Obj> is immune to <Str>.",
+                    this, Lookup(DTypeNames, e.DType));
+                return DONE;
             }
-            if (e.EActor->isPlayer() && DepthMod == 1) {
-                new_m = theGame->GetDungeonMap(m->dID,m->Depth+DepthMod,e.EPActor,NULL);
-                if (new_m != NULL){
-                    int16 nx = e.EActor->x, ny = e.EActor->y;
-                    /* Out of bounds will result in random placement. Should be safe. HACK ALERT. */
-                    if (new_m->InBounds(nx, ny)) {
-                        //if ((TTER(new_m->PTerrainAt(nx,ny,e.EActor))->PEvent(EV_MON_CONSIDER,e.EActor,new_m->TerrainAt(nx,ny)) == ABORT))
-                            if (!e.EActor->yn(XPrint("The stair leads to <Res>. Confirm unsafe action?",new_m->TerrainAt(nx,ny)),true))
-                                return ABORT;
+
+            if (e.EActor->isPlayer()) {
+                if (e.Dmg.Number == 0 && e.Dmg.Sides == 0 && e.Dmg.Bonus == 0) {
+                    s = Format("%c%s:%c %d %s", -MAGENTA, (const char*)(Name(0).Capitalize()),
+                        -GREY,
+                        e.vDmg,
+                        Lookup(DTypeNames, e.DType));
+                } else {
+                    s = Format("%c%s:%c %s%s %s", -MAGENTA, (const char*)(Name(0).Capitalize()),
+                        -GREY,
+                        (const char*)e.Dmg.Str(),
+                        e.strDmg ? (const char*)e.strDmg : "",
+                        Lookup(DTypeNames, e.DType));
+                    s += Format(" = %d", e.vDmg);
+                }
+
+                s += Format(" vs. %d (%s)", hard, (const char*)Lookup(MaterialDescs, TFEAT(fID)->Material));
+
+                e.aDmg = e.vDmg - hard;
+
+                s += Format(" <%d>[%s]<7>",
+                    e.vDmg > hard ? EMERALD : PINK,
+                    e.vDmg > hard ? (const char*)Format("%d damage", e.aDmg) : "unhurt");
+
+
+                if (e.EPActor->Opt(OPT_STORE_ROLLS))
+                    e.EPActor->MyTerm->AddMessage(SC(XPrint(s)) + SC("\n"));
+                e.EPActor->MyTerm->SetWin(WIN_NUMBERS3);
+                e.EPActor->MyTerm->Clear();
+                e.EPActor->MyTerm->Write(0, 0, XPrint(s));
+            }
+
+            // ww: you can get stuck here if your STR is low kicking a door
+            // forever ... no way to interrupt actions
+            if (e.aDmg > 0) {
+                cHP -= e.aDmg;
+
+                if (cHP <= 0) {
+                    cHP = 0;
+
+                    switch (e.DType) {
+                    case AD_SONI: VPrint(e, NULL, "The <Obj> shatters!", this); break;
+                    case AD_ACID: VPrint(e, NULL, "The <Obj> is eaten away!", this); break;
+                    case AD_FIRE: VPrint(e, NULL, "The <Obj> burns down!", this); break;
+                    default:      VPrint(e, NULL, "The <Obj> is destroyed!", this); break;
+                    }
+                    SetImage();
+                    Hear(e, 20, "You hear a loud *crack*.");
+                    e.EActor->RemoveStati(ACTING);
+                    e.Died = true;
+
+                    if (e.EActor && e.EMap->FTrapAt(x, y) && e.EActor->isBeside(this)) {
+                        e.EActor->IPrint("The <Obj> was trapped!", this);
+                        e.EMap->FTrapAt(x, y)->TriggerTrap(e, false);
+                    }
+                    Remove(true);
+                    return NOTHING;
+                }
+            }
+            VPrint(e, NULL, "The <Obj> holds!", this);
+            //Message spam...
+            //Hear(e,20,"You hear a muffled *thud*.");                         
+
+            if (e.EActor->isPlayer() && e.EPActor->Opt(OPT_REPEAT_KICK) && e.AType == A_KICK) {
+                if (!e.EActor->HasStati(ACTING, EV_SATTACK)) {
+                    e.EActor->RemoveStati(ACTING);
+                    e.EActor->GainPermStati(ACTING, this, SS_MISC, EV_SATTACK, 20);
+                } else {
+                    int16 mag = e.EActor->GetStatiMag(ACTING);
+                    if (mag <= 0) {
+                        e.EActor->HaltAction("not broken after 20 attacks", false);
+                        if (e.EActor->HasStati(ACTING)) {
+                            e.EActor->RemoveStati(ACTING);
+                            e.EActor->GainPermStati(ACTING, this, SS_MISC, EV_SATTACK, 20);
+                        } else return ABORT;
+                    } else {
+                        e.EActor->SetStatiMag(ACTING, -1, NULL, mag - 1);
                     }
                 }
             }
-
-            e.EActor->MoveDepth(m->Depth + DepthMod,true);
             return DONE;
-        case POR_DUN_ENTRY:
-          if (!e.EActor->isPlayer())
+        }
+    }
+    return NOTHING;
+}
+
+void Thing::BoostRetry(int16 sk, Creature *c) {
+    if (HasStati(RETRY_BONUS, sk, c))
+        SetStatiMag(RETRY_BONUS, sk, c, GetStatiMag(RETRY_BONUS, sk, c) + 2);
+    else
+        GainPermStati(RETRY_BONUS, c, SS_MISC, sk, +4);
+}
+
+Portal::Portal(rID _pID) : Feature(TFEAT(_pID)->Image,_pID,T_PORTAL) { }
+
+EvReturn Portal::Event(EventInfo &e) {
+    Creature *c;
+    EvReturn res;
+
+    switch (e.Event) {
+    case PRE(EV_ENTER):
+        res = TFEAT(fID)->Event(e, fID);
+        if (res == DONE || res == ERROR)
+            return res;
+        if (res == NOMSG)
+            e.Terse = true;
+        if (c = (Creature*)e.EActor->GetStatiObj(DWARVEN_FOCUS))
+            if (c->m == e.EActor->m) {
+                e.EActor->IPrint("You will not flee while the <Obj> still lives!", c);
+                return ABORT;
+            }
+        return NOTHING;
+    case EV_ENTER:
+        return Enter(e);
+    default:
+        return NOTHING;
+    }
+}
+
+EvReturn Portal::Enter(EventInfo &e) {
+    int8 DepthMod;
+    Map * new_m;
+    EvReturn res;
+
+    res = TFEAT(fID)->Event(e, fID);
+    if (res == DONE || res == ERROR)
+        return res;
+    if (res == NOMSG)
+        e.Terse = true;
+
+    e.EActor->Timeout += 30;
+
+    switch (TFEAT(fID)->xval) {
+    case POR_DOWN_STAIR:
+    case POR_UP_STAIR:
+        DepthMod = TFEAT(fID)->xval == POR_DOWN_STAIR ? 1 : -1;
+        if (!m->dID) {
+            Error("Up/down stairs located outside dungeon!");
             return ABORT;
-          /* Changed TownLevel from m to NULL for Rope Trick; fix later */
-          new_m = theGame->GetDungeonMap(TFEAT(fID)->xID,1,(Player*)e.EActor,NULL);
-//          e.EActor->PlaceAt(new_m,e.EActor->GetX(),e.EActor->GetY());
-          e.EActor->RemoveEffStati(fID);
-          e.EActor->GainPermStati(ENTERED_AT,this,SS_MISC,0,0,fID);
-          e.EActor->PlaceAt(new_m,new_m->EnterX,new_m->EnterY);
-          return DONE;
-        case POR_RETURN:
-          Status *S;
-          S = e.EActor->GetEffStati(
-            ENTERED_AT,TFEAT(fID)->xID);
-          if (S) 
-            {
-              Thing * t = oThing(S->h);
-              ASSERT(t->m);
-              e.EActor->PlaceAt(t->m,t->x,t->y);
-              e.EActor->RemoveEffStati(((Feature*)t)->fID);
-              return DONE;
-            }
-          else
-            {
-              /* Later, scan the entire game and place the player at
-                 the first found Portal object that matches the Portal's
-                 target. */
-              Error("Returning to a portal you never entered!");
-              return ABORT;
-            }
-         break;
-        default:
-          Error("Strange Portal xval (%d).");
-          return DONE;
-      }
-  }
+        }
 
-bool Portal::EnterDir(Dir d)
-  {
-    switch (TFEAT(fID)->xval)
-      {
-        case POR_UP_STAIR:      return d == UP;
-        case POR_DOWN_STAIR:    return d == DOWN;
-        default:                
-          if ((Image & GLYPH_ID_MASK) == GLYPH_ID(GLYPH_DSTAIRS))
+        if (e.EActor->isPlayer() && DepthMod == 1) {
+            new_m = theGame->GetDungeonMap(m->dID, m->Depth + DepthMod, e.EPActor, NULL);
+            if (new_m != NULL){
+                int16 nx = e.EActor->x, ny = e.EActor->y;
+                /* Out of bounds will result in random placement. Should be safe. HACK ALERT. */
+                if (new_m->InBounds(nx, ny)) {
+                    //if ((TTER(new_m->PTerrainAt(nx,ny,e.EActor))->PEvent(EV_MON_CONSIDER,e.EActor,new_m->TerrainAt(nx,ny)) == ABORT))
+                    if (!e.EActor->yn(XPrint("The stair leads to <Res>. Confirm unsafe action?", new_m->TerrainAt(nx, ny)), true))
+                        return ABORT;
+                }
+            }
+        }
+
+        e.EActor->MoveDepth(m->Depth + DepthMod, true);
+        return DONE;
+    case POR_DUN_ENTRY:
+        if (!e.EActor->isPlayer())
+            return ABORT;
+        /* Changed TownLevel from m to NULL for Rope Trick; fix later */
+        new_m = theGame->GetDungeonMap(TFEAT(fID)->xID, 1, (Player*)e.EActor, NULL);
+        //          e.EActor->PlaceAt(new_m,e.EActor->GetX(),e.EActor->GetY());
+        e.EActor->RemoveEffStati(fID);
+        e.EActor->GainPermStati(ENTERED_AT, this, SS_MISC, 0, 0, fID);
+        e.EActor->PlaceAt(new_m, new_m->EnterX, new_m->EnterY);
+        return DONE;
+    case POR_RETURN:
+        Status *S;
+        S = e.EActor->GetEffStati(ENTERED_AT, TFEAT(fID)->xID);
+        if (S)  {
+            Thing * t = oThing(S->h);
+            ASSERT(t->m);
+            e.EActor->PlaceAt(t->m, t->x, t->y);
+            e.EActor->RemoveEffStati(((Feature*)t)->fID);
+            return DONE;
+        } else {
+            /* Later, scan the entire game and place the player at
+               the first found Portal object that matches the Portal's
+               target. */
+            Error("Returning to a portal you never entered!");
+            return ABORT;
+        }
+        break;
+    default:
+        Error("Strange Portal xval (%d).");
+        return DONE;
+    }
+}
+
+bool Portal::EnterDir(Dir d) {
+    switch (TFEAT(fID)->xval) {
+    case POR_UP_STAIR:
+        return d == UP;
+    case POR_DOWN_STAIR:
+        return d == DOWN;
+    default:
+        if ((Image & GLYPH_ID_MASK) == GLYPH_ID(GLYPH_DSTAIRS))
             return d == DOWN;
-		  if ((Image & GLYPH_ID_MASK) == GLYPH_ID(GLYPH_USTAIRS))
+        if ((Image & GLYPH_ID_MASK) == GLYPH_ID(GLYPH_USTAIRS))
             return d == UP;
-          return d == CENTER;
-      }
-  }
+        return d == CENTER;
+    }
+}
 
-
-
-Door::Door(rID fID):
-	Feature(TFEAT(fID)->Image, fID,T_DOOR)
-	{
-		#ifndef WEIMER
-		DoorFlags=0;
-		if (!random(10))
-			DoorFlags |= DF_OPEN;
-		else
-			{
-				Flags |= F_SOLID;
-				if (!random(2))
-					DoorFlags |= DF_LOCKED;
-			}
-		if(!random(7))
-			{
-				DoorFlags &= ~DF_OPEN;
-				DoorFlags |= DF_SECRET;
-				if (!random(2))
-					DoorFlags |= DF_LOCKED;
-			}
-		#else
+Door::Door(rID fID) : Feature(TFEAT(fID)->Image, fID, T_DOOR) {
+#ifndef WEIMER
+    DoorFlags = 0;
+    if (!random(10))
+        DoorFlags |= DF_OPEN;
+    else {
+        Flags |= F_SOLID;
+        if (!random(2))
+            DoorFlags |= DF_LOCKED;
+    }
+    if (!random(7)) {
+        DoorFlags &= ~DF_OPEN;
+        DoorFlags |= DF_SECRET;
+        if (!random(2))
+            DoorFlags |= DF_LOCKED;
+    }
+#else
     DoorFlags = DF_LOCKED;
-    Flags |= F_SOLID; 
+    Flags |= F_SOLID;
 
     // ww: all doors start out closed and locked
     // fjm: WHY?!
-    
+
     if(!random(7)) 
-      DoorFlags |= DF_SECRET;
-  
-    #endif
-  
-	}
+        DoorFlags |= DF_SECRET;
 
-Door::~Door()
-  {
-  }
+#endif
+}
 
+Door::~Door() {
+}
 
-void Door::SetImage()
-	{
-		if (!m || x == -1)
-      return;
+void Door::SetImage() {
+    if (!m || x == -1)
+        return;
 
-    Image = TFEAT(fID)->Image; 
-      Image &= GLYPH_ATTR_MASK;
+    Image = TFEAT(fID)->Image;
+    Image &= GLYPH_ATTR_MASK;
 
-    if (HasStati(WIZLOCK)) 
-      Image |= GLYPH_BACK(RED);
-     
+    if (HasStati(WIZLOCK))
+        Image |= GLYPH_BACK(RED);
 
     if (DoorFlags & DF_OPEN)
-      DoorFlags &= ~(DF_LOCKED|DF_SECRET);
+        DoorFlags &= ~(DF_LOCKED | DF_SECRET);
 
-    if (m->SolidAt(x,y-1) && m->SolidAt(x,y+1))
-			DoorFlags |= DF_VERTICAL;
-    else if (m->SolidAt(x-1,y) && m->SolidAt(x+1,y))
-      DoorFlags &= ~DF_VERTICAL;
+    if (m->SolidAt(x, y - 1) && m->SolidAt(x, y + 1))
+        DoorFlags |= DF_VERTICAL;
+    else if (m->SolidAt(x - 1, y) && m->SolidAt(x + 1, y))
+        DoorFlags &= ~DF_VERTICAL;
     else
-      DoorFlags |= DF_BROKEN;
+        DoorFlags |= DF_BROKEN;
 
-		if(DoorFlags & DF_SECRET)
-			{
+    if (DoorFlags & DF_SECRET) {
+        Flags |= F_INVIS;
 
-  			Flags |= F_INVIS;
-
-				if(DoorFlags & DF_VERTICAL) {
-          m->At(x,y).Glyph = m->At(x,y+1).Glyph;
-          m->At(x,y).Shade = m->At(x,y+1).Shade;
-          m->At(x,y).Solid = true;
-          m->At(x,y).Opaque = true;
-          }
-  		  else {
-          m->At(x,y).Glyph = m->At(x+1,y).Glyph;
-          m->At(x,y).Shade = m->At(x+1,y).Shade;
-          m->At(x,y).Solid = true;
-          m->At(x,y).Opaque = true;
-          }
-			}
-		else
-			{
+        if (DoorFlags & DF_VERTICAL) {
+            m->At(x, y).Glyph = m->At(x, y + 1).Glyph;
+            m->At(x, y).Shade = m->At(x, y + 1).Shade;
+            m->At(x, y).Solid = true;
+            m->At(x, y).Opaque = true;
+        } else {
+            m->At(x, y).Glyph = m->At(x + 1, y).Glyph;
+            m->At(x, y).Shade = m->At(x + 1, y).Shade;
+            m->At(x, y).Solid = true;
+            m->At(x, y).Opaque = true;
+        }
+    } else {
         Flags &= ~F_INVIS;
 
-        m->At(x,y).Glyph = TTER(m->TerrainAt(x,y))->Image;
-        m->At(x,y).Shade = TTER(m->TerrainAt(x,y))->HasFlag(TF_SHADE);
-        if (DoorFlags & (DF_OPEN|DF_BROKEN)) {
-          /* Used to refer to Terrain -- why not? */
-          m->At(x,y).Solid = false;
-          m->At(x,y).Opaque = false; 
-          Flags &= ~F_SOLID;
+        m->At(x, y).Glyph = TTER(m->TerrainAt(x, y))->Image;
+        m->At(x, y).Shade = TTER(m->TerrainAt(x, y))->HasFlag(TF_SHADE);
+        if (DoorFlags & (DF_OPEN | DF_BROKEN)) {
+            /* Used to refer to Terrain -- why not? */
+            m->At(x, y).Solid = false;
+            m->At(x, y).Opaque = false;
+            Flags &= ~F_SOLID;
+        } else {
+            m->At(x, y).Solid = true;
+            m->At(x, y).Opaque = true;
         }
-        else {
-          m->At(x,y).Solid = true;
-          m->At(x,y).Opaque = true;
-          }
 
         if (DoorFlags & DF_BROKEN)
-          Image += GLYPH_BDOOR;				
-        else if(DoorFlags & DF_VERTICAL)
-					Image += ((DoorFlags & DF_OPEN) ? '+' : GLYPH_VLINE);
-				else
-					Image += ((DoorFlags & DF_OPEN) ? '+' : GLYPH_HLINE);
-
-			}
+            Image += GLYPH_BDOOR;
+        else if (DoorFlags & DF_VERTICAL)
+            Image += ((DoorFlags & DF_OPEN) ? '+' : GLYPH_VLINE);
+        else
+            Image += ((DoorFlags & DF_OPEN) ? '+' : GLYPH_HLINE);
+    }
 
     if (theGame->InPlay())
-      m->VUpdate(x,y);
-
-	}
-
+        m->VUpdate(x, y);
+}
 
 EvReturn Door::Event(EventInfo &e) {
     EvReturn res;
@@ -723,36 +688,31 @@ Immune:
  *                              TRAPS                          *
 \***************************************************************/
 
-void Trap::SetImage()
-  {
+void Trap::SetImage() {
     if (TrapFlags & TS_DISARMED)
-      Image = GLYPH_VALUE(GLYPH_DISARMED, TEFF(tID)->ef.cval);
+        Image = GLYPH_VALUE(GLYPH_DISARMED, TEFF(tID)->ef.cval);
     else
-      Image = GLYPH_VALUE(GLYPH_TRAP, TEFF(tID)->ef.cval);
+        Image = GLYPH_VALUE(GLYPH_TRAP, TEFF(tID)->ef.cval);
+
     if (TrapFlags & TS_FOUND)
-			Flags &= ~F_INVIS;
+        Flags &= ~F_INVIS;
     else
-			Flags |= F_INVIS;
+        Flags |= F_INVIS;
+
     if (theGame->InPlay() && x != -1)
-      m->Update(x,y);
-  
-  }
+        m->Update(x, y);
+}
 
-
-
-Trap::~Trap()
-  {
+Trap::~Trap() {
     TrapFlags |= TS_FOUND;
     SetImage();
-  }
+}
 
-EvReturn Trap::Event(EventInfo &e)
-  {
+EvReturn Trap::Event(EventInfo &e) {
     return NOTHING;
-  }
+}
 
-EvReturn Trap::TriggerTrap(EventInfo &e, bool foundBefore)
-  {
+EvReturn Trap::TriggerTrap(EventInfo &e, bool foundBefore) {
     EvReturn r; Creature *cr;
     // ww: if the trap is not mundane, you get a saving throw vs. magic to
     // dodge it -- otherwise the polymorph trap always works on the drow
@@ -760,38 +720,39 @@ EvReturn Trap::TriggerTrap(EventInfo &e, bool foundBefore)
     TEffect *te = TEFF(tID);
 
     if (TrapFlags & TS_DISARMED)
-      return NOTHING;
+        return NOTHING;
 
-    if (!foundBefore) 
-      for (int i=0;i!=MAX_PLAYERS;i++)
-        if (theGame->GetPlayer(i))
-          if (theGame->GetPlayer(i)->Perceives(e.EActor))
-          {
-            TrapFlags |= TS_FOUND;
-            SetImage();
-          }
+    if (!foundBefore)
+        for (int i = 0; i != MAX_PLAYERS; i++)
+            if (theGame->GetPlayer(i))
+                if (theGame->GetPlayer(i)->Perceives(e.EActor)) {
+                    TrapFlags |= TS_FOUND;
+                    SetImage();
+                }
 
     uint32 saveType = SA_TRAPS;
-    if (!(te->HasFlag(EF_MUNDANE))) saveType |= SA_MAGIC;
+    if (!(te->HasFlag(EF_MUNDANE)))
+        saveType |= SA_MAGIC;
 
     int16 trapDC = 15 + te->Level;
-    if (!foundBefore) trapDC += 5; 
+    if (!foundBefore)
+        trapDC += 5;
 
     if ((foundBefore && e.EActor->HasFeat(FT_FEATHERFOOT)) ||
-        (te->ef.sval != NOSAVE && 
-         e.EActor->SavingThrow(te->ef.sval,trapDC,saveType))) {
+        (te->ef.sval != NOSAVE &&
+        e.EActor->SavingThrow(te->ef.sval, trapDC, saveType))) {
         e.EActor->IDPrint("You avoid the effects of a <Obj2>!",
-             "The <Obj> avoids the effects of a <Obj2>!",e.EActor,this);
+            "The <Obj> avoids the effects of a <Obj2>!", e.EActor, this);
         return DONE;
     }
     e.EActor->IDPrint("You fall victim to a <Obj2>!",
-             "The <Obj> falls victim to a <Obj2>!",e.EActor,this);
+        "The <Obj> falls victim to a <Obj2>!", e.EActor, this);
 
     /* Move this up here so that dispelling traps don't go into an
        infinite loop dispelling themselves! */
     TrapFlags |= TS_DISARMED;
     SetImage();
-    
+
 
     e.isTrap = true;
     e.vCasterLev = 12;
@@ -803,36 +764,33 @@ EvReturn Trap::TriggerTrap(EventInfo &e, bool foundBefore)
     e.EVictim->Reveal(false);
     e.EVictim->MakeNoise(30);
     if (e.EVictim->HasStati(ACTING))
-      e.EVictim->HaltAction("trap triggered");
-    r = ReThrow(EV_EFFECT,e);
+        e.EVictim->HaltAction("trap triggered");
+    r = ReThrow(EV_EFFECT, e);
     if (r != DONE)
-      return r;
-    
-    if (cr = (Creature*) GetStatiObj(RESET_BY))
-      if (e.EActor->isHostileTo(cr))
-        {
-          /* If your trap killed a hostile monster, get kill XP... */
-          if (e.EActor->isDead()) {
-            cr->KillXP(e.EActor);
-            cr->gainFavour(FIND("Semirath"),e.EActor->ChallengeRating()*50,false,true);
+        return r;
+
+    if (cr = (Creature*)GetStatiObj(RESET_BY))
+        if (e.EActor->isHostileTo(cr)) {
+            /* If your trap killed a hostile monster, get kill XP... */
+            if (e.EActor->isDead()) {
+                cr->KillXP(e.EActor);
+                cr->gainFavour(FIND("Semirath"), e.EActor->ChallengeRating() * 50, false, true);
             }
-          /* ...but most traps don't kill, they weaken, so give a
-             special trap award for using them -- but only give it
-             once per trap! */
-          if (!HasStati(XP_GAINED,-1,cr))
-            {
-              cr->GainXP(100 + 25*e.EActor->ChallengeRating());
-              cr->gainFavour(FIND("Semirath"),e.EActor->ChallengeRating()*50,false,true);
-              GainPermStati(XP_GAINED,cr,SS_MISC);
+            /* ...but most traps don't kill, they weaken, so give a
+               special trap award for using them -- but only give it
+               once per trap! */
+            if (!HasStati(XP_GAINED, -1, cr)) {
+                cr->GainXP(100 + 25 * e.EActor->ChallengeRating());
+                cr->gainFavour(FIND("Semirath"), e.EActor->ChallengeRating() * 50, false, true);
+                GainPermStati(XP_GAINED, cr, SS_MISC);
             }
         }
-    
-    if (m && x != -1)
-      m->Update(x,y);
-    return r;  
-    
-  }
 
+    if (m && x != -1)
+        m->Update(x, y);
+    return r;
+
+}
 
 /***************************************************************
  * Limbo:                                                      *
@@ -847,9 +805,7 @@ EvReturn Trap::TriggerTrap(EventInfo &e, bool foundBefore)
  * next level. And so forth.                                   *
  ***************************************************************/
 
-void Game::EnterLimbo(hObj h, uint8 x, uint8 y, rID mID, 
-            int8 Depth, int8 OldDepth, int32 Arrival, const char* Message)
-  {
+void Game::EnterLimbo(hObj h, uint8 x, uint8 y, rID mID, int8 Depth, int8 OldDepth, int32 Arrival, const char* Message) {
     LimboEntry *lr;
     lr = Limbo.NewItem();
     lr->h = h; lr->x = x; lr->y = y;
@@ -858,43 +814,41 @@ void Game::EnterLimbo(hObj h, uint8 x, uint8 y, rID mID,
     lr->Arrival = Arrival;
     lr->Message = Message;
     oThing(h)->Remove(false);
-  }
+}
 
 void Game::LimboCheck(Map *m) {
     int16 i;
     Player *p;
 
 Restart:
-    for(i=0;Limbo[i];i++)
-      if (Limbo[i]->Arrival >= Turn) {
-        if (Limbo[i]->Target)
-          if (oThing(Limbo[i]->Target)->isPlayer())
-            {
-              p = oPlayer(Limbo[i]->Target);
-              if (Limbo[i]->x > 0)
-                oThing(Limbo[i]->h)->PlaceAt(p->m, Limbo[i]->x,Limbo[i]->y);
-              else
-                /* PlaceAt calls PlaceNear automatically. */
-                oThing(Limbo[i]->h)->PlaceAt(p->m,p->x,p->y);
-              //oThing(Limbo[i]->h)->IDPrint(NULL,Limbo[i]->Message);
-              Limbo.Remove(i);
-              goto Restart;
-            }
-        if (/*m->mID == Limbo[i]->mID ||*/ m->dID == Limbo[i]->mID) 
-          if (m->Depth == Limbo[i]->Depth)
-            {
-              oThing(Limbo[i]->h)->PlaceAt(p->m, Limbo[i]->x,Limbo[i]->y);
-              //oThing(Limbo[i]->h)->IDPrint(NULL,Limbo[i]->Message);
-              Limbo.Remove(i);
-              goto Restart;
-            }
-        }
-  }
+    for (i = 0; Limbo[i]; i++)
+        if (Limbo[i]->Arrival >= Turn) {
+            if (Limbo[i]->Target)
+                if (oThing(Limbo[i]->Target)->isPlayer()) {
+                    p = oPlayer(Limbo[i]->Target);
+                    if (Limbo[i]->x > 0)
+                        oThing(Limbo[i]->h)->PlaceAt(p->m, Limbo[i]->x, Limbo[i]->y);
+                    else
+                        /* PlaceAt calls PlaceNear automatically. */
+                        oThing(Limbo[i]->h)->PlaceAt(p->m, p->x, p->y);
+                    //oThing(Limbo[i]->h)->IDPrint(NULL,Limbo[i]->Message);
+                    Limbo.Remove(i);
+                    goto Restart;
+                }
 
-void Thing::MoveDepth(int16 NewDepth, bool safe)
-  {
+            if (/*m->mID == Limbo[i]->mID ||*/ m->dID == Limbo[i]->mID)
+                if (m->Depth == Limbo[i]->Depth) {
+                    oThing(Limbo[i]->h)->PlaceAt(p->m, Limbo[i]->x, Limbo[i]->y);
+                    //oThing(Limbo[i]->h)->IDPrint(NULL,Limbo[i]->Message);
+                    Limbo.Remove(i);
+                    goto Restart;
+                }
+        }
+}
+
+void Thing::MoveDepth(int16 NewDepth, bool safe) {
     Remove(true);
-  }
+}
 
 void Player::MoveDepth(int16 NewDepth, bool safe) {
     static Thing *GoWith[64]; Creature *c;
@@ -998,102 +952,97 @@ void Player::MoveDepth(int16 NewDepth, bool safe) {
   
 void Player::NoteArrival() {
     int16 dn, i;
+
     dn = -1;
-    for (i=0;i!=MAX_DUNGEONS;i++)
-      if (m && m->dID && m->dID == theGame->DungeonID[i])
-        dn = i;
+    for (i = 0; i != MAX_DUNGEONS; i++)
+        if (m && m->dID && m->dID == theGame->DungeonID[i])
+            dn = i;
+
     if (dn != -1)
-      if (MaxDepths[dn] < m->Depth)
-        {
-          MaxDepths[dn] = m->Depth;
-          AddJournalEntry(XPrint("You arrive at <Num>' in the <Res>.",
-            m->Depth * 10, m->dID));
+        if (MaxDepths[dn] < m->Depth) {
+            MaxDepths[dn] = m->Depth;
+            AddJournalEntry(XPrint("You arrive at <Num>' in the <Res>.", m->Depth * 10, m->dID));
         }
-  }
+}
 
-Map* Game::GetDungeonMap(rID dID, int16 Depth, Player *pl, Map*TownLevel)
-  {
-    int16 i,n; Map *m; bool ip;
+Map* Game::GetDungeonMap(rID dID, int16 Depth, Player *pl, Map*TownLevel) {
+    int16 i, n;
+    Map *m;
+    bool ip;
 
-    ip = PlayMode; PlayMode = false;
+    ip = PlayMode;
+    PlayMode = false;
 
-    for(i=1;i!=MAX_DUNGEONS && DungeonID[i];i++)
-      if (DungeonID[i] == dID)
-        goto Found;
+    for (i = 1; i != MAX_DUNGEONS && DungeonID[i]; i++)
+        if (DungeonID[i] == dID)
+            goto Found;
 
     if (i == MAX_DUNGEONS)
-      Fatal("Too many dungeons; max specified by MAX_DUNGEONS is %d.",MAX_DUNGEONS);
+        Fatal("Too many dungeons; max specified by MAX_DUNGEONS is %d.", MAX_DUNGEONS);
     if (Depth > MAX_DUNGEON_LEVELS)
-      Fatal("Too deep in dungeon; MAX_DUNGEON_LEVELS is %d.",MAX_DUNGEON_LEVELS);
+        Fatal("Too deep in dungeon; MAX_DUNGEON_LEVELS is %d.", MAX_DUNGEON_LEVELS);
 
     DungeonID[i] = dID;
     DungeonSize[i] = min(MAX_DUNGEON_LEVELS, (int16)(RES(dID)->GetConst(DUN_DEPTH)));
-    DungeonLevels[i] = (hObj*)malloc(sizeof(hObj)*min(MAX_DUNGEON_LEVELS,
-                          RES(dID)->GetConst(DUN_DEPTH)+1));
-    memset(DungeonLevels[i],0,sizeof(hObj)*(RES(dID)->GetConst(DUN_DEPTH)+1));
-    Found:
+    DungeonLevels[i] = (hObj*)malloc(sizeof(hObj)*min(MAX_DUNGEON_LEVELS, RES(dID)->GetConst(DUN_DEPTH) + 1));
+    memset(DungeonLevels[i], 0, sizeof(hObj)*(RES(dID)->GetConst(DUN_DEPTH) + 1));
+Found:
     n = i;
 
     /* Set DungeonLevels[n][0] to whatever is directly, geographically
        above the first dungeon level. This will allow us to match up stair
        locations with the city (or whatever) above the dungeon. */
     if (TownLevel)
-      DungeonLevels[n][0] = TownLevel->myHandle;
+        DungeonLevels[n][0] = TownLevel->myHandle;
 
-    
+
     /* If we jump straight from dungeon level 4 to level 15, we have to
        generate (and then save) all the levels between, in order to match
        up stair locations, chasms, and other cross-level features. */
 
-    for(i=1;i<=Depth;i++)
-      if (!DungeonLevels[n][i])
-        {
-          m = new Map();
-          DungeonLevels[n][i] = m->myHandle;
-          m->Generate(dID,i,oMap(DungeonLevels[n][i-1]),(int8)pl->GetAttr(A_LUC));
+    for (i = 1; i <= Depth; i++)
+        if (!DungeonLevels[n][i]) {
+            m = new Map();
+            DungeonLevels[n][i] = m->myHandle;
+            m->Generate(dID, i, oMap(DungeonLevels[n][i - 1]), (int8)pl->GetAttr(A_LUC));
         }
 
     /*
     for(i=1;i!=Depth;i++)
-      theGame->Detach(DungeonLevels[n][i]);
+    theGame->Detach(DungeonLevels[n][i]);
     */
 
-    
     PlayMode = ip;
     return oMap(DungeonLevels[n][Depth]);
-  }
+}
 
-void Feature::StatiOn(Status s)
-  {
+void Feature::StatiOn(Status s) {
     int16 col;
     if (s.Nature == MY_GOD && (Flags & F_ALTAR))
-      if (col = (int16)TGOD(s.eID)->GetConst(ALTAR_COLOUR))
-      {
-        Image &= GLYPH_ID_MASK;
-        Image |= GLYPH_FORE(col);
-        if (m)
-          m->Update(x,y);
-      }
-  }
+        if (col = (int16)TGOD(s.eID)->GetConst(ALTAR_COLOUR)) {
+            Image &= GLYPH_ID_MASK;
+            Image |= GLYPH_FORE(col);
+            if (m)
+                m->Update(x, y);
+        }
+}
 
-void Feature::StatiOff(Status s)
-  {
+void Feature::StatiOff(Status s) {
     EventInfo xe;
-    switch (s.Nature)
-      {
-        case SUMMONED:
-          IDPrint(NULL,"The <Obj> winks out of existence.",this);
-          if (m && m->InBounds(x,y)) {
-            m->At(x,y).Glyph = TTER(m->TerrainAt(x,y))->Image;
-            m->At(x,y).Shade = TTER(m->TerrainAt(x,y))->HasFlag(TF_SHADE);
-            m->At(x,y).Solid = TTER(m->TerrainAt(x,y))->HasFlag(TF_SOLID);
-            m->At(x,y).Opaque = TTER(m->TerrainAt(x,y))->HasFlag(TF_OPAQUE);
-          }
-          Remove(true);
-         break;
+    switch (s.Nature) {
+    case SUMMONED:
+        IDPrint(NULL, "The <Obj> winks out of existence.", this);
+        if (m && m->InBounds(x, y)) {
+            m->At(x, y).Glyph = TTER(m->TerrainAt(x, y))->Image;
+            m->At(x, y).Shade = TTER(m->TerrainAt(x, y))->HasFlag(TF_SHADE);
+            m->At(x, y).Solid = TTER(m->TerrainAt(x, y))->HasFlag(TF_SOLID);
+            m->At(x, y).Opaque = TTER(m->TerrainAt(x, y))->HasFlag(TF_OPAQUE);
+        }
+        Remove(true);
+        break;
 
-      }
-    if (theGame->InPlay()) {
-      SetImage();
     }
-  }
+    if (theGame->InPlay()) {
+        SetImage();
+    }
+}

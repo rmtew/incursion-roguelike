@@ -98,7 +98,7 @@ Item::Item(Item *i)
     // ww: must also copy over Stati, otherwise when you TakeOne from a
     // pile of poisoned arrows you get a non-poisoned arrow
     i->__Stati.CopyTo(& this->__Stati);
-  }
+}
   
 void Item::ChangeIID(rID _iID, bool mult) {
     /* QItem / Item sanity */
