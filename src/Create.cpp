@@ -4210,9 +4210,9 @@ void Player::LearnSpell(bool left) {
     String menu_name, typ_str;
 
     if (ls[0].spID == 0) {
-        /* The more technically correct message would be, "You have
-        no levels in classes that grant you a spell list.", but
-        let's not confuse the new player. */
+        /* The more technically correct message would be, "You have no levels
+           in classes that grant you a spell list.", but let's not confuse
+           the new player. */
         if (CasterLev()) {
             IPrint("You have casting ability but no class spell "
                 "list. This is a bug or an oversight in class design.");
