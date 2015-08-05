@@ -248,62 +248,25 @@ Text "help::intro"
      influence can still be seen in the format of the game screen, the percentile
      speed system and in other areas. All of the sources listed on the title
      page were influences on Incursion in one way or another.\n
-     __<14>Why is Incursion so buggy?<6> Because it's still in early alpha testing.
-     This version was released to receive feedback, adjust game balance and
-     polish rough edges. It's not a fully stable game yet.\n
-     __<14>Why is Incursion so slow?<6> My development philosophy as a programmer
-	 is that algorithms are complex enough to confuse without optimization being
-	 in the picture in an early stage of development. Premature optimization makes
-	 an already difficult task harder. Thus, for the purposes of development, there
-	 are several algorithms presently in use that are decidedly suboptimal,
-	 especially in the monster AI. Incursion also performs a lot of superfluous
-	 processing each turn that will (hopefully) be eliminated in future versions.
-	 As as result, Incursion runs very, very slowly	at this stage in its development. 
-	 Now that the game engine is reasonably complete, greater effort will be placed 
-	 toward making it run faster.\n
-	 __There's nothing <14>inherently<6> slow about Incursion's structure, it's
-	 just that code was written with an eye to clarity over speed, and 'lazy
-	 algorithms' make the game nearly unplayable on slower computers. If your
-	 processor speed is below 400 MHz, chances are that the game will become
-	 unplayable in the deeper levels, where many, many objects are onscreen at
-	 the same time. Future versions should correct this, and be fully playable
-	 on lower-end computer systems. Regardless, please try out Incursion on your
-	 system and tell me how it runs. I'm interested in how severe the slowdowns
-	 are on lower-end systems.\n
-     __<14>Is Incursion open-source?<6> The source will be released along with 
-     the final, true version of the game. It won't be released until then so that
-     I can ensure exclusivity of development -- in other words, I've put a
-     tremendous amount of time and effort into writing a complex game engine,
-     and I don't want to fully open the source right away for fear of being
-     'scooped' on my own game and having someone else improve/finish it their
-     way before I have the chance to do so.\n
-     __This said, it WILL be open-source eventually. You can take this as a
-     gentleman's promise. I look forward to seeing what other people will
-     do with my work, and would be flattered if my game was popular enough to
-     inspire variants. I just want first crack at my own 'variant', so to
-     speak. My expectation is that the source will thus be released around
-     2012, though of course dates cannot be exact.\n
-     __<14>Where can I reach the author?<6> My name is Julian Mensch, and the
-     best way to contact me is by e-mail at incursion@shaw.ca. If for
-     some reason that address isn't working, you can find my current e-mail
-     address by Googling for newer posts on Usenet; I use my real name
-     there.\n
-     __<14>Where can I post messages about Incursion?<6> Strictly gameplay
-     messages for any miscellaneous roguelike game are on-topic in the
-     Usenet newsgroup rec.games.roguelike.misc. Questions relating to the
-     development (or bugs within) Incursion can be posted to the newsgroup
-     rec.games.roguelike.development.\n
-     __<14>What's the 'resource compiler' option for?<6> I use it to compile
+     __<14>Why is Incursion so buggy?<6> There's a lot of things
+     which are possible for players to try and do, and the cost of
+     doing business is that these interactions sometimes cause
+     unexpected problems.\n
+     __<14>Is Incursion open-source?<6> Yes, google the following words
+     "bitbucket incursion rmtew" and you will find the repository.\n
+     __<14>Where can I reach the author?<6> The current maintainer is
+     Richard Tew, and he can be reached at richard.m.tew@gmail.com.\n
+     __<14>Where can I post messages about Incursion?<6> Development related
+     posts can be made to reddit.com/r/roguelike-dev/ and gameplay related
+     posts can be made to reddit.com/r/roguelikes/.\n
+     __<14>What's the 'resource compiler' option for?<6> It is used to compile
      the resource files (.IRC) contained in the \\lib directory after editing
      them. If you just want to play Incursion, you don't need to do anything
      with it. If you want to try editing the resource files, you can then
-     recompile MAIN.IRC and see what happens.
-
-
-      Chances are that this won't be
+     recompile MAIN.IRC and see what happens. Chances are that this won't be
      very fulfilling, however, as there's currently no documentation on how
-     the IncursionScript language works, and I'm explicitly <7>not<6> providing
-     technical help with scripting at this time.
+     the IncursionScript language works, and <7>not<6> technical support is
+     provided for scripting at this time.
      
      \n\n
      <14>CREDITS\n
@@ -328,9 +291,6 @@ Text "help::intro"
      __<14>*<6>_Westley Weimer used to extensively playtest Incursion for
      me, doing some coding, helping me balance the game and generally being
      exceedingly useful. Thanks, Westley!\n
-     __<14>*<6>_Mac users owe a special debt of gratitude to Steven Hamilton,
-     my dedicated Mac porter who puts up with me constantly sending him
-     archives with missing files. :)\n
      __<14>*<6>_Incursion now has many, many playtesters, all of whom I'm
      very thankful to. However, I've had a truly prodigious amount of feedback
      from Terje S. Bo, Aaron Lambert, Adam Smith, Jussi Ylikahri, Frumple,
