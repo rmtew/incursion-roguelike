@@ -352,13 +352,15 @@ goto user_function_detect_incursion_version
 echo Compiling 'Incursion.Mod' ...
 
 cd "!BUILD_PATH!\run"
-REM TODO(rmtew): This should be locally defined, and thrown away after the second line.
-set INCURSIONPATH=!BUILD_PATH!\..\
-set INCURSIONLIBPATH=
+
+set INCURSIONPATH=!BUILD_PATH!\run\
+set INCURSIONLIBPATH=!BUILD_PATH!\..\lib
 for /F "usebackq tokens=*" %%M in (`..\Win32\Debug\exe_libtcod\Incursion.exe -compile`) do (
     set L_LINE=%%M
-    REM if "!L_LINE:~0,12!" EQU "EXTRACTPATH:" (
+	echo %%M
 )
+set INCURSIONPATH=
+set INCURSIONLIBPATH=
 
 if !ERRORLEVEL! NEQ 0 (
     echo ERROR: 'Incursion.exe -compile' exited with error level !ERRORLEVEL!
