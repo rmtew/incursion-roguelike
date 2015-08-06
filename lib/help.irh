@@ -33,9 +33,6 @@ Text "help::mainmenu"
        \n__*_{X:powers} Alchemy, Psionics and Poisons
 
        \n\n<15>__EXTRAS<5>
-       \n__*_{E1:strategy} Westley Weimer's Strategy Guide
-       \n__*_{E2:example} Example of Play Tutorial
-       \n__*_{E3:spoilers} Spoilers
        \n__*_{LI:OGL}  The Open Gaming Licence
        \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n
        \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n
@@ -253,7 +250,7 @@ Text "help::intro"
      doing business is that these interactions sometimes cause
      unexpected problems.\n
      __<14>Is Incursion open-source?<6> Yes, google the following words
-     "bitbucket incursion rmtew" and you will find the repository.\n
+     'bitbucket incursion rmtew' and you will find the repository.\n
      __<14>Where can I reach the author?<6> The current maintainer is
      Richard Tew, and he can be reached at richard.m.tew@gmail.com.\n
      __<14>Where can I post messages about Incursion?<6> Development related
