@@ -64,252 +64,253 @@
 \*****************************************************************************/
 
 void TextTerm::ShowStatus() {
-    int16 i,j, mColor, statiLen;
-		String LStatLine, MStatLine, SStatLine, Loc, *sp, add;
-    
-    if (Mode != MO_PLAY && Mode != MO_INV && Mode != MO_CREATE &&
-        Mode != MO_BARTER)
-      return;
-    
-    Color(AZURE); 
+    int16 i, j, mColor, statiLen;
+    String LStatLine, MStatLine, SStatLine, Loc, *sp, add;
+
+    if (Mode != MO_PLAY && Mode != MO_INV && Mode != MO_CREATE && Mode != MO_BARTER)
+        return;
+
+    Color(AZURE);
     SetWin(WIN_STATUS);
     Clear();
     SetWin(WIN_SCREEN);
-		for(i=0;i<=WinBottom();i++)
-      PutChar(WinRight()-15,i,GLYPH_VLINE);
+    for (i = 0; i <= WinBottom(); i++)
+        PutChar(WinRight() - 15, i, GLYPH_VLINE);
     SetWin(WIN_STATUS);
-		Color(GREY);
+    Color(GREY);
     if (!theGame->InPlay())
-      Write(0,0,Format("Character Generation: %s",p->Named.GetLength()==0 ? "unnamed" :
-                                            (const char*)p->Named));
+        Write(0, 0, Format("Character Generation: %s", p->Named.GetLength() == 0 ? "unnamed" :
+        (const char*)p->Named));
     else {
-      if (m->dID == m->RegionAt(p->x,p->y))
-        Loc = NAME(m->dID);
-      else
-		    Loc = Format("%s: %s",
-			    NAME(m->dID),
-          NAME(m->RegionAt(p->x,p->y)));
-      if (p->LightRange == 0 || p->isBlind())
-        ;
-      else if (TTER(m->PTerrainAt(p->x,p->y,p))->HasFlag(TF_SHOWNAME) && 
+        if (m->dID == m->RegionAt(p->x, p->y))
+            Loc = NAME(m->dID);
+        else
+            Loc = Format("%s: %s",
+            NAME(m->dID),
+            NAME(m->RegionAt(p->x, p->y)));
+        if (p->LightRange == 0 || p->isBlind())
+            ;
+        else if (TTER(m->PTerrainAt(p->x, p->y, p))->HasFlag(TF_SHOWNAME) &&
             (p->Next && p->Perceives(oThing(p->Next))))
-        Loc += Format(" (%s; %s)",NAME(m->PTerrainAt(p->x,p->y,p)), 
-          (const char*)oThing(p->Next)->Name(NA_INSC));
-      else if (TTER(m->PTerrainAt(p->x,p->y,p))->HasFlag(TF_SHOWNAME))
-       Loc += Format(" (%s)",NAME(m->PTerrainAt(p->x,p->y,p)));
-      else if (p->m->PileAt(p->x,p->y))
-        Loc += " (pile of objects)";
-      else if (p->Next && isValidHandle(p->Next))
-        Loc += Format(" (%s)",(const char*)oThing(p->Next)->Name(NA_INSC));
-      if (m->At(p->x,p->y).isSkylight && p->LightRange != 0 && p->isBlind())
-        Loc += " (open above)";
-      
-      if (p->HasStati(ENGULFED))
-        Loc = Format("%s: %s", p->GetStatiVal(ENGULFED) == EG_ENGULF ?
-                "Engulfed" : "Swallowed", (const char*) 
-                Capitalize(p->GetStatiObj(ENGULFED)->Name(0),true));
-      
-      if (Loc.GetLength() > WinRight()-4)
-        Loc = Loc.Left(WinRight()-8) + Format("...%c%s",-GREY,
-                   p->HasStati(ENGULFED) ? "" : ")");
-      Write(0,0,Loc);
+            Loc += Format(" (%s; %s)", NAME(m->PTerrainAt(p->x, p->y, p)),
+            (const char*)oThing(p->Next)->Name(NA_INSC));
+        else if (TTER(m->PTerrainAt(p->x, p->y, p))->HasFlag(TF_SHOWNAME))
+            Loc += Format(" (%s)", NAME(m->PTerrainAt(p->x, p->y, p)));
+        else if (p->m->PileAt(p->x, p->y))
+            Loc += " (pile of objects)";
+        else if (p->Next && isValidHandle(p->Next))
+            Loc += Format(" (%s)", (const char*)oThing(p->Next)->Name(NA_INSC));
+        if (m->At(p->x, p->y).isSkylight && p->LightRange != 0 && p->isBlind())
+            Loc += " (open above)";
 
-      if (p->m && p->m->Depth)
-		    Write(WinRight()-3,0,Format("%03dm",10 * p->m->Depth));
-      else
-        Write(WinRight()-4,0,"Study");
-      }
+        if (p->HasStati(ENGULFED))
+            Loc = Format("%s: %s", p->GetStatiVal(ENGULFED) == EG_ENGULF ?
+            "Engulfed" : "Swallowed", (const char*)
+            Capitalize(p->GetStatiObj(ENGULFED)->Name(0), true));
+
+        if (Loc.GetLength() > WinRight() - 4)
+            Loc = Loc.Left(WinRight() - 8) + Format("...%c%s", -GREY,
+            p->HasStati(ENGULFED) ? "" : ")");
+        Write(0, 0, Loc);
+
+        if (p->m && p->m->Depth)
+            Write(WinRight() - 3, 0, Format("%03dm", 10 * p->m->Depth));
+        else
+            Write(WinRight() - 4, 0, "Study");
+    }
     if (p->kcMana() + p->hMana >= p->ktMana())
-      mColor = EMERALD; /* Full Mana */
-    else if ((p->kcMana()+p->hMana)*2 >= p->ktMana())
-      mColor = YELLOW; /* Regenerating Mana */
+        mColor = EMERALD; /* Full Mana */
+    else if ((p->kcMana() + p->hMana) * 2 >= p->ktMana())
+        mColor = YELLOW; /* Regenerating Mana */
     else
-      mColor = RED; /* No Regen Till Rest */
-      
+        mColor = RED; /* No Regen Till Rest */
+
     statiLen = WinSizeX() - 3;
     if (!p->Opt(OPT_SIDEBAR)) {
-      String s;
-		  s = Format("HP:%d/%d Mana:%c%d%c/%d FP:%d/%d GP:%d",
-			  (int16)p->cHP+p->KAttr[A_THP]-p->Attr[A_THP],
-        (int16)p->mHP+p->Attr[A_THP],
-			  (int16)-mColor,
-        (int16)p->kcMana(),
-        (int16)-7,(int16)p->ktMana(),
-        p->cFP - (p->Attr[A_FAT] - p->KAttr[A_FAT]),
-        p->KAttr[A_FAT],
-        p->getTotalMoney()/100);
-      Write(0,1,s);
-      statiLen = WinRight() - (2 + s.TrueLength());
+        String s;
+        s = Format("HP:%d/%d Mana:%c%d%c/%d FP:%d/%d GP:%d",
+            (int16)p->cHP + p->KAttr[A_THP] - p->Attr[A_THP],
+            (int16)p->mHP + p->Attr[A_THP],
+            (int16)-mColor,
+            (int16)p->kcMana(),
+            (int16)-7, (int16)p->ktMana(),
+            p->cFP - (p->Attr[A_FAT] - p->KAttr[A_FAT]),
+            p->KAttr[A_FAT],
+            p->getTotalMoney() / 100);
+        Write(0, 1, s);
+        statiLen = WinRight() - (2 + s.TrueLength());
     }
 
     LStatLine.Empty();
     MStatLine.Empty();
     SStatLine.Empty();
 
-  rID shownIDs[1024];
-  int lastShown = 0; 
+    rID shownIDs[1024];
+    int lastShown = 0;
 
-  StatiIter(p)
-    if (S->eID && S->h == p->myHandle)
-      for (j=0;p->AutoBuffs[j];j++)
-        if (theGame->SpellID(p->AutoBuffs[j]) == S->eID)
-          goto SkipThisOne;
-        
-    if (LookupOnly(StatiLineStats,S->Nature)) {
-      if (S->Nature == FLAWLESS_DODGE)
-        if (!S->Val)
-          continue;
-      LStatLine += XPrint(Lookup(StatiLineStats,S->Nature));
-      MStatLine += XPrint(Lookup(StatiLineStats,S->Nature));
-      if (S->Nature == CHARGING && S->Mag) {
-        int32 bonus = p->ChargeBonus(); 
-        LStatLine += Format("%c%+d%c ", -PINK, bonus, -GREY);
-        MStatLine += Format("%c%+d%c ", -PINK, bonus, -GREY);
-    }
-      if (S->Nature == FLAWLESS_DODGE)
-        {
-          LStatLine += Format("%c(%d left)%c ",-EMERALD, p->AbilityLevel(CA_FLAWLESS_DODGE) + p->Mod(A_DEX) - S->Mag, -GREY);
-          MStatLine += Format("%c(%d)%c ", -EMERALD, p->AbilityLevel(CA_FLAWLESS_DODGE) + p->Mod(A_DEX) - S->Mag, -GREY);
-        }  
-      if (LookupOnly(StatiLineShorts,S->Nature)) {
-        SStatLine += XPrint(Lookup(StatiLineShorts,S->Nature));
-              }
-    } else if (S->eID && 
-        S->Nature != WEP_SKILL && S->Nature != TEMPLATE && 
-        S->Nature != SUSPEND_ATTK && 
-        (S->Duration > 0 || S->Duration < 0) && 
-        S->Source != SS_RACE &&
-        S->Source != SS_CLAS &&
-        S->Source != SS_TMPL &&
-        S->Source != SS_BODY &&
-        RES(S->eID)->Type == T_TEFFECT) {
-      TEffect * te = TEFF(S->eID); 
-      if (te->HasFlag(EF_SHOWNAME) || te->GetMessages(MSG_STATINAME)[0].GetLength()) {
-        bool found = false;
-        for (int j=0; !found && j<lastShown; j++)
-          if (S->eID == shownIDs[j])
-            found = true;
-        if (!found) { 
-          shownIDs[lastShown++] = S->eID; 
+    StatiIter(p)
+        if (S->eID && S->h == p->myHandle)
+            for (j = 0; p->AutoBuffs[j]; j++)
+                if (theGame->SpellID(p->AutoBuffs[j]) == S->eID)
+                    goto SkipThisOne;
 
-          bool isBad = !te->HasFlag(EF_NOTBAD);
+        if (LookupOnly(StatiLineStats, S->Nature)) {
+            if (S->Nature == FLAWLESS_DODGE)
+                if (!S->Val)
+                    continue;
 
-          String LS; 
-          String MS; 
-          String SS;
+            LStatLine += XPrint(Lookup(StatiLineStats, S->Nature));
+            MStatLine += XPrint(Lookup(StatiLineStats, S->Nature));
+            if (S->Nature == CHARGING && S->Mag) {
+                int32 bonus = p->ChargeBonus();
+                LStatLine += Format("%c%+d%c ", -PINK, bonus, -GREY);
+                MStatLine += Format("%c%+d%c ", -PINK, bonus, -GREY);
+            }
+            if (S->Nature == FLAWLESS_DODGE) {
+                LStatLine += Format("%c(%d left)%c ", -EMERALD, p->AbilityLevel(CA_FLAWLESS_DODGE) + p->Mod(A_DEX) - S->Mag, -GREY);
+                MStatLine += Format("%c(%d)%c ", -EMERALD, p->AbilityLevel(CA_FLAWLESS_DODGE) + p->Mod(A_DEX) - S->Mag, -GREY);
+            }
+            if (LookupOnly(StatiLineShorts, S->Nature)) {
+                SStatLine += XPrint(Lookup(StatiLineShorts, S->Nature));
+            }
+        } else if (S->eID &&
+            S->Nature != WEP_SKILL && S->Nature != TEMPLATE &&
+            S->Nature != SUSPEND_ATTK &&
+            (S->Duration > 0 || S->Duration < 0) &&
+            S->Source != SS_RACE &&
+            S->Source != SS_CLAS &&
+            S->Source != SS_TMPL &&
+            S->Source != SS_BODY &&
+            RES(S->eID)->Type == T_TEFFECT) {
+            TEffect * te = TEFF(S->eID);
+            if (te->HasFlag(EF_SHOWNAME) || te->GetMessages(MSG_STATINAME)[0].GetLength()) {
+                bool found = false;
+                for (int j = 0; !found && j < lastShown; j++)
+                    if (S->eID == shownIDs[j])
+                        found = true;
 
-          if (isBad) {
-            LS = MS = SS = XPrint(Format("<12>%s<7>",NAME(S->eID)));
-          } else {
-            sp = TEFF(S->eID)->GetMessages(MSG_STATINAME);
-            if (sp[0].GetLength()) {
-              LS = sp[0]; 
-              if (sp[1].GetLength()) {
-                MS = SS = sp[1];
-              } else {
-                MS = SS = sp[0];
-              } 
-            } else {
-              LS = MS = SS = NAME(S->eID); 
-            } 
-          } 
-          if (TEFF(S->eID)->HasFlag(EF_SHOWVAL)) {
-            add = Format(" (%d)",S->Val); 
-            LS += add;
-            MS += add;
-            SS += add; 
-          }
-          LStatLine += LS + " ";
-          MStatLine += MS + " ";
-          SStatLine += SS + " ";
+                if (!found) {
+                    shownIDs[lastShown++] = S->eID;
+
+                    bool isBad = !te->HasFlag(EF_NOTBAD);
+
+                    String LS;
+                    String MS;
+                    String SS;
+
+                    if (isBad) {
+                        LS = MS = SS = XPrint(Format("<12>%s<7>", NAME(S->eID)));
+                    } else {
+                        sp = TEFF(S->eID)->GetMessages(MSG_STATINAME);
+                        if (sp[0].GetLength()) {
+                            LS = sp[0];
+                            if (sp[1].GetLength()) {
+                                MS = SS = sp[1];
+                            } else {
+                                MS = SS = sp[0];
+                            }
+                        } else {
+                            LS = MS = SS = NAME(S->eID);
+                        }
+                    }
+                    if (TEFF(S->eID)->HasFlag(EF_SHOWVAL)) {
+                        add = Format(" (%d)", S->Val);
+                        LS += add;
+                        MS += add;
+                        SS += add;
+                    }
+                    LStatLine += LS + " ";
+                    MStatLine += MS + " ";
+                    SStatLine += SS + " ";
+                }
+            }
         }
-      } 
-    }
-    SkipThisOne:;
-  StatiIterEnd(p)
-  if (p->AutoBuffs[0])
-    {
-      bool all, some;
-      all = true; some = false;
-      for(j=0;p->AutoBuffs[j];j++) {
-        if (p->HasEffStati(-1,theGame->SpellID(p->AutoBuffs[j])) ||
-            p->HasEffField(theGame->SpellID(p->AutoBuffs[j])))
-          some = true;
-        else 
-          all = false;
+
+SkipThisOne:;
+    StatiIterEnd(p)
+
+    if (p->AutoBuffs[0]) {
+        bool all, some;
+        all = true; some = false;
+        for (j = 0; p->AutoBuffs[j]; j++) {
+            if (p->HasEffStati(-1, theGame->SpellID(p->AutoBuffs[j])) ||
+                p->HasEffField(theGame->SpellID(p->AutoBuffs[j])))
+                some = true;
+            else
+                all = false;
         }
-      if (all)
-        { LStatLine += XPrint("<10>Buffed<7> ");
-          MStatLine += XPrint("<10>Buffed<7> ");
-          SStatLine += XPrint("<10>Bufd<7> "); }
-      else if (some)
-        { LStatLine += XPrint("<14>Semibuffed<7> ");
-          MStatLine += XPrint("<14>Semibuffed<7> ");
-          SStatLine += XPrint("<14>Semi<7> "); }
-      else
-        { LStatLine += XPrint("<12>UNBUFFED<7> ");
-          MStatLine += XPrint("<12>UNBUFFED<7> ");
-          SStatLine += XPrint("<12>UNBUFF<7> "); }   
+        if (all) {
+            LStatLine += XPrint("<10>Buffed<7> ");
+            MStatLine += XPrint("<10>Buffed<7> ");
+            SStatLine += XPrint("<10>Bufd<7> ");
+        } else if (some) {
+            LStatLine += XPrint("<14>Semibuffed<7> ");
+            MStatLine += XPrint("<14>Semibuffed<7> ");
+            SStatLine += XPrint("<14>Semi<7> ");
+        } else {
+            LStatLine += XPrint("<12>UNBUFFED<7> ");
+            MStatLine += XPrint("<12>UNBUFFED<7> ");
+            SStatLine += XPrint("<12>UNBUFF<7> ");
+        }
     }
-  
+
     if (p->Flags & F_DELETE) {
-      LStatLine += XPrint("<4>Dead<7>");
-      MStatLine += XPrint("<4>Dead<7>");
-      }
+        LStatLine += XPrint("<4>Dead<7>");
+        MStatLine += XPrint("<4>Dead<7>");
+    }
     if (LStatLine.GetLength() == 0)
-      goto DoneStati;
-      
+        goto DoneStati;
+
     LStatLine = Trim(LStatLine);
     MStatLine = Trim(MStatLine);
     SStatLine = Trim(SStatLine);
-      
+
     {
-       
-      if (LStatLine.TrueLength() < statiLen)
-        Write(max(1,WinRight()-LStatLine.TrueLength()),1,LStatLine);
-      else if (MStatLine.TrueLength() < statiLen)
-        Write(max(1,WinRight()-MStatLine.TrueLength()),1,MStatLine);
-      else {
-        SStatLine = SStatLine.TrueLeft(statiLen);
-        Write(max(1,WinRight()-SStatLine.TrueLength()),1,SStatLine);
+        if (LStatLine.TrueLength() < statiLen)
+            Write(max(1, WinRight() - LStatLine.TrueLength()), 1, LStatLine);
+        else if (MStatLine.TrueLength() < statiLen)
+            Write(max(1, WinRight() - MStatLine.TrueLength()), 1, MStatLine);
+        else {
+            SStatLine = SStatLine.TrueLeft(statiLen);
+            Write(max(1, WinRight() - SStatLine.TrueLength()), 1, SStatLine);
         }
     }
-    DoneStati:
 
+DoneStati:
     if (theGame->InPlay()) {
-      if (p->ktMana() > p->kcMana()*3)
-        j = BACK_COLOUR(RED);
-      else
-        j = BACK_COLOUR(BLACK);
-      Color(WHITE | j);
-      PutChar(sizeX-15,0,'[');
-      PutChar(sizeX-1,0,']');
-      for(i=sizeX-14;i!=sizeX-1;i++) {
-        if (((p->hMana)*(14)/(p->ktMana())) > i-(sizeX-14))
-          Color(BROWN|j);        
-        else if (((p->ktMana()-p->cMana())*(13)/
-                       p->ktMana()) > i-(sizeX-14))
-          Color(EMERALD|j);
+        if (p->ktMana() > p->kcMana() * 3)
+            j = BACK_COLOUR(RED);
         else
-          Color(GREY|j);
-        PutChar(i,0,'*');
+            j = BACK_COLOUR(BLACK);
+        Color(WHITE | j);
+        PutChar(sizeX - 15, 0, '[');
+        PutChar(sizeX - 1, 0, ']');
+        for (i = sizeX - 14; i != sizeX - 1; i++) {
+            if (((p->hMana)*(14) / (p->ktMana())) > i - (sizeX - 14))
+                Color(BROWN | j);
+            else if (((p->ktMana() - p->cMana())*(13) /
+                p->ktMana()) > i - (sizeX - 14))
+                Color(EMERALD | j);
+            else
+                Color(GREY | j);
+            PutChar(i, 0, '*');
         }
-      
-      if ((p->mHP+p->Attr[A_THP]) > p->cHP*3)
-        j = BACK_COLOUR(RED) | BRIGHT_MASK;
-      else
-        j = BACK_COLOUR(BLACK);
-      Color(WHITE | j);
-      PutChar(sizeX-15,1,'[');
-      PutChar(sizeX-1,1,']');
-      for(i=sizeX-14;i!=sizeX-1;i++) {
-        if ((((p->mHP+p->Attr[A_THP])-p->cHP)*(14)/(p->mHP+p->Attr[A_THP])) > i-(sizeX-14))
-          Color(RED | j);
+
+        if ((p->mHP + p->Attr[A_THP]) > p->cHP * 3)
+            j = BACK_COLOUR(RED) | BRIGHT_MASK;
         else
-          Color(GREY | j);
-        PutChar(i,1,'*');
+            j = BACK_COLOUR(BLACK);
+        Color(WHITE | j);
+        PutChar(sizeX - 15, 1, '[');
+        PutChar(sizeX - 1, 1, ']');
+        for (i = sizeX - 14; i != sizeX - 1; i++) {
+            if ((((p->mHP + p->Attr[A_THP]) - p->cHP)*(14) / (p->mHP + p->Attr[A_THP])) > i - (sizeX - 14))
+                Color(RED | j);
+            else
+                Color(GREY | j);
+            PutChar(i, 1, '*');
         }
-      }
+    }
 }
 
 void TextTerm::ShowTraits() {
