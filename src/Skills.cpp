@@ -382,7 +382,11 @@ Later:
 
         for(j=0;m->Fields[j];j++)
             if (m->Fields[j]->Creator == myHandle) {
-                TEffect *eff = TEFF(m->Fields[j]->eID);
+                TEffect *eff;
+                // Some fields, like size-related ones, have no eID.
+                if (m->Fields[j]->eID == 0)
+                    continue;
+                eff = TEFF(m->Fields[j]->eID);
                 if (eff->HasFlag(EF_CANCEL)) {
                     bool found = false; 
                     for (i=0; i<num_spell; i++)
