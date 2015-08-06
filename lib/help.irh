@@ -125,7 +125,7 @@ Text "help::intro"
       other effects. Dipping magical items in a fountain can improve their
       magical properties. However, fountains can have a wide variety of negative
       effects as well. The behaviour of fountains is influenced by the Luck
-      attribute; every +1 of your Luck bonus removes one possibe negative
+      attribute; every +1 of your Luck bonus removes one possible negative
       effect from fountain use, starting with the most severe. Characters
       with a Luck bonus of +2 or higher can use a fountain without risking
       truly dire and irresistible consequences, though it can still provoke
@@ -146,7 +146,7 @@ Text "help::intro"
       being aware of -- we had to cater to /some/ tastes over others, after all.
       When you rest, more monsters are generated, but no new treasure is generated
       beyond occasional items given to monsters to make them more of a threat. If
-      you clean out dungeon levels 1-3, and have sufficient experuience to move on,
+      you clean out dungeon levels 1-3, and have sufficient experience to move on,
       it's in your benefit to do so -- you aren't going to keep getting more items
       treading water.\n
       __<14>6. <6> The early game stage of Incursion can be very difficult -- you will
@@ -157,7 +157,7 @@ Text "help::intro"
       nice character (or just a truly /unique/ one), and then die to random chance
       right away. Likewise, much can be learned from repetition under controlled
       circumstances.\n
-      __To accomodate this while preserving the intent for character uniqueness,
+      __To accommodate this while preserving the intent for character uniqueness,
       Incursion implements the ability to 'reincarnate' your character after you
       die, starting again at level 1 with exactly the same stats, perks and
       random equipment you had at the beginning of the last game. A character
@@ -170,7 +170,7 @@ Text "help::intro"
       prevents two-weapon fighting or wielding a weapon two-handed for increased
       damage. When you create a Warrior, consider very carefully what /kind/ of
       warrior you want to create. Incursion automatically starts very Dexterity-
-      dependant characters with light armour, and very Strength-dependant ones with
+      dependant characters with light armour, and very Strength-dependent ones with
       heavier armour.\n
       __Read the combat chapter in the manual carefully to understand all the
       implications of the armour system.\n
@@ -249,8 +249,13 @@ Text "help::intro"
      which are possible for players to try and do, and the cost of
      doing business is that these interactions sometimes cause
      unexpected problems.\n
+<<<<<<< HEAD
+     __<14>Is Incursion open-source?<6> Yes, google the following phrase
+     "bitbucket incursion rmtew" and you will find the repository.\n
+=======
      __<14>Is Incursion open-source?<6> Yes, google the following words
      'bitbucket incursion rmtew' and you will find the repository.\n
+>>>>>>> e4871e2c12d802e8adc0c7f545696e79ce3730bb
      __<14>Where can I reach the author?<6> The current maintainer is
      Richard Tew, and he can be reached at richard.m.tew@gmail.com.\n
      __<14>Where can I post messages about Incursion?<6> Development related
@@ -262,7 +267,7 @@ Text "help::intro"
      with it. If you want to try editing the resource files, you can then
      recompile MAIN.IRC and see what happens. Chances are that this won't be
      very fulfilling, however, as there's currently no documentation on how
-     the IncursionScript language works, and <7>not<6> technical support is
+     the IncursionScript language works, and <7>no<6> technical support is
      provided for scripting at this time.
      
      \n\n
@@ -371,7 +376,7 @@ Text "help::chargen"
      racial bonuses to certain skills.\n
      __<13>Favoured Classes:<5> Each race (except humans) have two classes
      as their favoured classes. If a multiclass character's highest class
-     (or one of his equally high classes) is not a racial favoured class, then
+     (or one of his equally high classes) is not a racially favoured class, then
      she receives a 20~ penalty to all experience points earned.\n
      __Humans treat all classes as favoured classes, and thus never receive
      an experience penalty for multiclassing.\n
@@ -380,7 +385,7 @@ Text "help::chargen"
      ability to meditate instead of sleeping, or an orc's ability to take
      an enemy's power by devouring his corpse. Some of these can be actively 
      used in the game by pressing 'u' and choosing the relevant ability
-     from the menu, while others are always active and simply alter the
+     from the menu, while others are always active, thus altering the
      way the game operates at different times.
      \n<7> See Also: <5> -- {RD:races} Race Descriptions
   
@@ -428,10 +433,8 @@ Text "help::chargen"
      the race you choose. Attributes can be raised in several different
      manners during the game -- every four character levels, you gain
      a +1 inherent bonus to increase a single attribute as you wish. Your god might
-     increase attributes related to his portfolio if you've been a loyal follower, and 
-     in the full-release version of Incursion, you
-     can train attributes in places in the city, such as the gymnasium
-     or library. Powerful magic-users can amplify their attributes with
+     increase attributes related to his portfolio if you've been a loyal follower. 
+	 Powerful magic-users can amplify their attributes with
      the <9>wish<5> spell, activities which train an attribute will
      increase it over time and many uncommon magical items and effects can amplify
      your character's attributes. However, all these methods are considered
@@ -439,11 +442,11 @@ Text "help::chargen"
      a maximum inherent bonus of +5. This makes the attributes you start
      the game with, along with your racial bonuses and the bonuses granted
      by attribute feats and divine blessings (none of which are inherent bonuses)
-     very important in the later stages of the game, when you will likely
+     important in the later stages of the game, when you will likely
      have maxed out your inherents.
      \n__There are seven attributes in total. Note that there are no real
      'prime requisites' in Incursion; while some attributes are of
-     truly crucial importance to a given character class, every attribute
+     crucial importance to a given character class, every attribute
      impacts every character in a significant way. Each attribute has two
      modifiers - the first increases by one for every even point in the
      attribute, the second by one for every odd point. Each modifier is
@@ -457,9 +460,8 @@ Text "help::chargen"
      weapons (other than firearms, of course). Strength also determines the
      amount by which armour reduces damage from your blows -- higher Strength
      means greater penetration and more damage. Strength also determines the
-     level of encumbrance you face from a given load, which can be very
-     important in play, as encumbrance gives a wide variety of penalties
-     and contributes to determining how quickly you get hungry. Finally,
+     level of encumbrance you face from a given load. Encumbrance causes a wide variety 
+	 of penalties and contributes to determining how quickly you get hungry. Finally,
      Strength impacts your chance of breaking down doors, your facility
      with mining and other feats of raw physical power.\n
      <13>Primary:<5>___Damage, Feats of Strength\n
@@ -482,25 +484,25 @@ Text "help::chargen"
      <7>Constitution<5> {CO}
      \n__Constitution rates your character's overall toughness, resilience,
      ability to withstand damage, health and susceptibility to diseases.
-     It figures in computing your character's hit points, and also modifies
+     It factors into your character's hit points, and also modifies
      your Fortitude saving throw, which is rolled against such
      attacks as breath weapons, petrification, polymorph and paralysis.
-     Constitution also helps in casting spells that carry a tremendous
-     strain on the body, or using the blood magic abilities of a witch
+     Constitution also helps in casting spells that tremendously
+     strain the body, or using the blood magic abilities of a witch
      or druid.\n
      <13>Primary:<5>___Hit Points\n 
      <13>Secondary:<5> Everything Else\n\n
 
      <7>Intelligence<5> {IN}
      \n__Intelligence governs a character's mental acuity, ability to learn,
-     academic prowess and general reasoning ability. It comes into play in
-     determining the number of skill points gained every level, and some
+     academic prowess and general reasoning ability. It influences
+	 the number of skill points gained every level, and some
      combat Feats have intelligence prerequisites -- the highest forms of
-     martial skill are as much mental as physical. Intelligence is also
-     very valuable to spellcasters, as bonus spells are granted based on
+     martial skill are as much mental as physical. Intelligence is
+     valuable to spellcasters, as bonus spells are granted based on
      it, and it influences spell failure rates as well. Finally, Intelligence
      is a factor in the successful use of magical devices, and many
-     non-physical skills are based on Intelligence. Obviously, a character
+     non-physical skills are based on Intelligence. A character
      with a high intelligence is very flexible, having more skills and
      spells to choose from than otherwise possible.\n
      <13>Primary:<5>___Skill Points, Spell Failure\n 
@@ -523,7 +525,7 @@ Text "help::chargen"
      <7>Charisma<5> {CH}
      \n__Charisma determines a character's social prowess, force of presence,
      leadership potential, comeliness and understanding of human relations.
-     It influences the prices shopkeepers offer her for goods and services,
+     It influences the prices shopkeepers offer her for goods and services
      and is used for calculating the save DC for mind-affecting spells and
      magic effects. More importantly, however, it is used in the calculation
      of the maximum amount of allies of any type a character may have --
@@ -555,9 +557,9 @@ Text "help::chargen"
      __By default, all characters receive two feats at first level, and one feat
      at every third character level (3rd, 6th, 9th, etc.) Certain races and
      classes also grant bonus feats at a given level, which are often chosen
-     for a more limited list thematically tied to the class in question.\n
-     __Feats play a very significant role in personalizing your character, and
-     in you overall tactics in the game. Buying certain feats opens the path to 
+     from a more limited list thematically tied to the class in question.\n
+     __Feats play a significant role in personalizing your character, and
+     in your overall tactics in the game. Buying certain feats opens the path to 
      buy others that have higher prerequisites. Remember that whenever you are 
      choosing a feat from the feat menu, you can press '?' to view the help 
      information on feat trees to help you choose intelligently.
@@ -567,10 +569,7 @@ Text "help::chargen"
      <13>PERSONALITY ARCHETYPE {P}\n
      =====================<5>\n
      __Finally, you are prompted to choose a personality archetype from a list
-     of 16 options. Currently, this is purely a colour choice; in future versions
-     of Incursion, it will impact which NPCs are willing to join your group,
-     which quests and guilds are available and how different plotlines conclude
-     for your character.
+     of 16 options. Currently, this is purely a choice of taste.
 
      \n\n
      <13>STARTING EQUIPMENT {E}\n
@@ -584,9 +583,7 @@ Text "help::chargen"
      weapon, that may subsume some of the abilities of her class-based initial
      weapons -- for example, a paladin starting with the Perk: +3 scimitar of
      accuracy will start with a +3 holy scimitar of accuracy rather than a
-     seperate additional holy sword. The game tends to be fairly intelligent
-     about assigning sensible starting equipment to new characters based on
-     character-design choices.\n\n
+     separate additional holy sword.\n\n
      
      <13>CALCULATED TRAITS {CT}\n
      =================<5>\n
@@ -600,7 +597,7 @@ Text "help::chargen"
      die, for example, while bards receive only 1d6. Options on the options panel allow
      a player to set maximum hit points, always average hit points or reroll if below
      average for hit points.\n
-     __<13>Mana Points:<5> Mana is determined in exactly the same manner as hit points,
+     __<13>Mana Points:<5> Mana is determined in the same way as hit points,
      but the base value is 10, not 20, and the mana die types for every class are
      different from the hit die types. All mana gained from the dice alone is then
      multiplied by a fixed multiplier based on total character level. These multipliers
@@ -614,32 +611,31 @@ Text "help::chargen"
      __<13>Encumbrance:<5> The amount of equipment and treasure a character can carry
      is determined by her Strength; the higher a character's strength, the lower her
      encumbrance level will be when carrying a certain mass of equipment.
-     There are four levels of encumbrance in
-     Incursion. Light encumbrance makes your movement rate 90~ of normal.
-     Moderate encumbrance makes your movement 80~ of normal, lowers your
-     maximum fatigue by one and gives you a -1 penalty to defense class.
+     There are four levels of encumbrance in Incursion. Light encumbrance makes your 
+	 movement rate 90~ of normal. Moderate encumbrance makes your movement 80~ of normal, 
+	 lowers your maximum fatigue by one and gives you a -1 penalty to defense class.
      Heavy encumbrance gives you 70~ normal movement, 90~ normal speed and a
      -2 encumbrance penalty to defense class, Reflex saves, and maximum
      fatigue points. Extreme encumbrance gives you 50~ movement, 75~ speed,
-     a -4 encumbrance penalty to defense class and Reflex saves and a -3
+     a -4 encumbrance penalty to defense class and reflex saves and a -3
      encumbrance penalty to maximum fatigue.
 
      \n\n
      <13>THE CHARACTER SHEET {CS}\n
      ===================<5>\n
      __You can bring up your character sheet at any time during play by pressing
-     'c'. This displays all of your characters' primary and figured characteristics,
-     as well as breaking the total numbers down to show you how they were calculated.
+     'c'. This displays all of your character's primary and figured characteristics
+     and breaks the total numbers down to show you how they were calculated.
      The character sheet screen also displays a list of commands on the bottom row,
      allowing you to level up ('<15>G<5>'), learn new spells ('<15>L<5>'), add a new
      class to your repertoire  ('<15>M<5>') or bring up the skill manager to advance
      your skills  ('<15>S<5>').
      __<13>Bonus Types:<5> All bonuses in Incursion have a type assigned to them,
-     even if that type is 'base' -- i.e., a class give you your base bonus to attack
+     even if that type is 'base' -- i.e., a class gives your base bonus to attack
      rolls, saving throws and so forth. For example, the clerical spell <9>bless<5>
      gives you a +1 sacred bonus to hit, a +2 sword gives you a +2 magic bonus to
      hit and damage, and a Cloak of Resistance +3 gives you a +3 resistance bonus to
-     all your saving throws. Bonuses of different types almost never stack, the only
+     all your saving throws. Bonuses of different types almost never stack with the only
      exception being bonuses of the types 'base', 'dodge' or 'circumstance'. Thus,
      for example, you can't cast bless four times in a row to get a +4 sacred bonus
      to hit, but the +1 dodge bonus from the Dodge feat stacks with a +4 dodge bonus
