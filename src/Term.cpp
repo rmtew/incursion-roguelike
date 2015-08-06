@@ -867,77 +867,79 @@ DoOverlay:
 }
 
 void TextTerm::ShowMap() {
-  int16 x,y;
-  Glyph g;
-  if (Mode != MO_PLAY || !p->m) 
-    return; 
-  
-  if (p->HasStati(ENGULFED))
-    {
-      Creature *en = (Creature*) p->GetStatiObj(ENGULFED);
-      ASSERT(en && en->isCreature());
-      Glyph col = en->Image & GLYPH_COLOUR_MASK;
-      SetWin(WIN_MAP);
-      Clear();
-    
-      /* Draw the player */
-      PutGlyph(p->x,p->y,p->Image);
-      
-      /* Draw the creature around the player */
-      PutChar(p->x  -XOff,p->y-1-YOff,'-' | col);
-      PutChar(p->x  -XOff,p->y+1-YOff,'-' | col);
-      PutChar(p->x-1-XOff,p->y  -YOff,'|' | col);
-      PutChar(p->x+1-XOff,p->y  -YOff,'|' | col);
-      PutChar(p->x+1-XOff,p->y+1-YOff,'/' | col);
-      PutChar(p->x+1-XOff,p->y-1-YOff,'\\' | col);
-      PutChar(p->x-1-XOff,p->y+1-YOff,'\\' | col);
-      PutChar(p->x-1-XOff,p->y-1-YOff,'/' | col);
-      
-      /* Later, draw other creature perceived by 
-         telepathy, etc -- but get this working
-         first! */
-      return;
+    int16 x, y;
+    Glyph g;
+
+    if (Mode != MO_PLAY || !p->m)
+        return;
+
+    if (p->HasStati(ENGULFED)) {
+        Creature *en = (Creature*)p->GetStatiObj(ENGULFED);
+        ASSERT(en && en->isCreature());
+        Glyph col = en->Image & GLYPH_COLOUR_MASK;
+        SetWin(WIN_MAP);
+        Clear();
+
+        /* Draw the player */
+        PutGlyph(p->x, p->y, p->Image);
+
+        /* Draw the creature around the player */
+        PutChar(p->x - XOff, p->y - 1 - YOff, '-' | col);
+        PutChar(p->x - XOff, p->y + 1 - YOff, '-' | col);
+        PutChar(p->x - 1 - XOff, p->y - YOff, '|' | col);
+        PutChar(p->x + 1 - XOff, p->y - YOff, '|' | col);
+        PutChar(p->x + 1 - XOff, p->y + 1 - YOff, '/' | col);
+        PutChar(p->x + 1 - XOff, p->y - 1 - YOff, '\\' | col);
+        PutChar(p->x - 1 - XOff, p->y + 1 - YOff, '\\' | col);
+        PutChar(p->x - 1 - XOff, p->y - 1 - YOff, '/' | col);
+
+        /* Later, draw other creature perceived by
+           telepathy, etc -- but get this working
+           first! */
+        return;
     }
-  Check(m,"Null Map in ShowMap?!");
-  Color(GREY);
-  if (p->UpdateMap)
-    p->CalcVision();
-  p->UpdateMap = 0;
-  SetWin(WIN_MAP);
-  //const int16 sx = min(MSizeX(),m->SizeX() - XOff);
-  //const int16 sy = min(MSizeY(),m->SizeY() - YOff);
-  const int16 sx = MSizeX();
-  const int16 sy = MSizeY();
-  const int16 msx= m->SizeX();
-  ResetWViewList(); 
-  for(y=0;y<sy;y++)
-    for(x=0;x<sx;x++)
-    {
-      if (!m->InBounds(x+XOff,y+YOff))
-        {
-          PutChar(x,y,' ');
-          continue;
+
+    Check(m, "Null Map in ShowMap?!");
+    Color(GREY);
+    if (p->UpdateMap)
+        p->CalcVision();
+    p->UpdateMap = 0;
+    SetWin(WIN_MAP);
+
+    const int16 sx = MSizeX();
+    const int16 sy = MSizeY();
+    const int16 msx = m->SizeX();
+
+    ResetWViewList();
+    for (y = 0; y < sy; y++)
+        for (x = 0; x < sx; x++) {
+            if (!m->InBounds(x + XOff, y + YOff)) {
+                PutChar(x, y, ' ');
+                continue;
+            }
+
+            LocationInfo & mAt = m->At(x + XOff, y + YOff);
+            if (mAt.Visibility & VI_EXTERIOR) /*later, >> player*4 */
+                PutGlyph(x + XOff, y + YOff, GLYPH_VALUE(GLYPH_WALL, GREY));
+            else if (mAt.Visibility & VI_VISIBLE) { /*later, >> player*4 */
+                PutGlyph(x + XOff, y + YOff, gr[(y + YOff)*msx + (x + XOff)].Glyph);
+                WViewThing(m->FirstAt(x + XOff, y + YOff),
+                    dist(x + XOff, y + YOff, p->x, p->y), true);
+            } else {
+                g = (Glyph)mAt.Memory;
+                if (g) {
+                    PutGlyph(x + XOff, y + YOff, g);
+                    WViewThing(m->FirstAt(x + XOff, y + YOff),
+                        dist(x + XOff, y + YOff, p->x, p->y), false);
+                } else
+                    PutGlyph(x + XOff, y + YOff, GLYPH_UNSEEN);
+            }
         }
-      LocationInfo & mAt = m->At(x+XOff,y+YOff); 
-      if(mAt.Visibility & VI_EXTERIOR) /*later, >> player*4 */
-        PutGlyph(x+XOff, y+YOff, GLYPH_VALUE(GLYPH_WALL, GREY));
-      else if(mAt.Visibility & VI_VISIBLE) { /*later, >> player*4 */
-        PutGlyph(x+XOff, y+YOff, gr[(y+YOff)*msx + (x+XOff)].Glyph);
-        WViewThing(m->FirstAt(x+XOff,y+YOff) , 
-            dist(x+XOff,y+YOff,p->x,p->y), true);
-      } else {
-        g = (Glyph)mAt.Memory;
-        if (g) {
-          PutGlyph(x+XOff,y+YOff,g);
-          WViewThing(m->FirstAt(x+XOff,y+YOff), 
-                dist(x+XOff,y+YOff,p->x,p->y), false);
-        } else
-          PutGlyph(x+XOff,y+YOff,GLYPH_UNSEEN);
-      }
-    }
-  ShowThings();
-  if(m->ov.Active)
-    m->ov.ShowGlyphs();
+
+    ShowThings();
+
+    if (m->ov.Active)
+        m->ov.ShowGlyphs();
 }
 
 void TextTerm::AdjustMap(int16 vx, int16 vy,bool newmap) {
@@ -1495,56 +1497,52 @@ static int16 ViewListPriorityMod(Thing *t) {
 }
 
 static int WViewListSortA(const void *a, const void *b) {
-  WViewListElt *aa = (WViewListElt *)a,
-               *bb = (WViewListElt *)b;
- 
-  /* Creatures first */
-  if (aa->t->isCreature() && !bb->t->isCreature())
-    return aa->dist - (bb->dist+10);
-  if (!aa->t->isCreature() && bb->t->isCreature())
-    return (aa->dist+10) - bb->dist; 
+    WViewListElt *aa = (WViewListElt *)a, *bb = (WViewListElt *)b;
 
-  return (aa->dist + ViewListPriorityMod(aa->t)) - 
-         (bb->dist + ViewListPriorityMod(bb->t)); 
+    /* Creatures first */
+    if (aa->t->isCreature() && !bb->t->isCreature())
+        return aa->dist - (bb->dist + 10);
+    if (!aa->t->isCreature() && bb->t->isCreature())
+        return (aa->dist + 10) - bb->dist;
+
+    return (aa->dist + ViewListPriorityMod(aa->t)) - (bb->dist + ViewListPriorityMod(bb->t));
 }
 
 static int WViewListSortB(const void *a, const void *b) {
-  WViewListElt *aa = (WViewListElt *)a,
-               *bb = (WViewListElt *)b;
-
-    return aa->dist - bb->dist; 
+    WViewListElt *aa = (WViewListElt *)a, *bb = (WViewListElt *)b;
+    return aa->dist - bb->dist;
 }
 
 void TextTerm::ShowViewList() {
     int8 ResistsShown[] = {
-      AD_FIRE, AD_COLD, AD_SONI, 
-      AD_ACID, AD_ELEC, AD_TOXI, AD_NECR, AD_PSYC, AD_MAGC,
-      AD_SLEE, AD_STUN, AD_PLYS, AD_STON, AD_POLY, AD_CHRM,
-      AD_DISN, AD_CRIT, AD_DISE, AD_FEAR, 0 
-      };
-    int16 y,i,j; 
-    String nm;  
+        AD_FIRE, AD_COLD, AD_SONI,
+        AD_ACID, AD_ELEC, AD_TOXI, AD_NECR, AD_PSYC, AD_MAGC,
+        AD_SLEE, AD_STUN, AD_PLYS, AD_STON, AD_POLY, AD_CHRM,
+        AD_DISN, AD_CRIT, AD_DISE, AD_FEAR, 0
+    };
+    int16 y, i, j;
+    String nm;
     Container *pack;
+
     /*if (GetMode() != MO_PLAY)
       return;
-    ListChanged = false;*/
+      ListChanged = false;*/
     ShowMap();
     SetWin(WIN_VIEWLIST);
     Clear();
     Color(YELLOW);
-    switch (p->Opt(OPT_LOWERSCREEN))
-      {
-        case 0: /* View List */
-          {
+    switch (p->Opt(OPT_LOWERSCREEN)) {
+    case 0: /* View List */
+        {
             int linesWeCanUse = activeWin->Bottom - activeWin->Top;
             Write("Things in View:");
             if (p->HasStati(ENGULFED)) {
-              Color(RED);
-              PutChar(0,1,p->GetStatiObj(ENGULFED)->Image & ~GLYPH_BACK_MASK);
-              WrapWrite(2,1,p->GetStatiObj(ENGULFED)->Name(NA_MONO),16,
+                Color(RED);
+                PutChar(0, 1, p->GetStatiObj(ENGULFED)->Image & ~GLYPH_BACK_MASK);
+                WrapWrite(2, 1, p->GetStatiObj(ENGULFED)->Name(NA_MONO), 16,
                     linesWeCanUse - 2);
-              break;
-              }            
+                break;
+            }
             /* 1st Priority: display all WViewListCount things in view,
              *               giving everything at least 1 line
              * 2nd Priority: if we have extra lines, give all of them
@@ -1553,216 +1551,228 @@ void TextTerm::ShowViewList() {
              */
             y = 1;
             //#ifdef WEIMER_LIST
-            qsort(WViewList,WViewListCount,sizeof(WViewList[0]),WViewListSortA);
+            qsort(WViewList, WViewListCount, sizeof(WViewList[0]), WViewListSortA);
             //#else
             //qsort(WViewList,WViewListCount,sizeof(WViewList[0]),WViewListSortB);
             //#endif
-            int spareLines = linesWeCanUse - WViewListCount; 
-            for (i=0;i<WViewListCount;i++) {
-              if (y > linesWeCanUse)
-                return;
-              GotoXY(0,y);
-              if (WViewList[i].t->x == -1)
-                continue;
-              PutChar(m->MultiAt( WViewList[i].t->x, WViewList[i].t->y ) ?
-                GLYPH_VALUE(GLYPH_MULTI, WHITE) : WViewList[i].glyph);
-              Color(WViewList[i].color);
-              int code = WViewList[i].color == GREY ? 0 : NA_MONO;
-              int linesUsed = 
-                WrapWrite(2,y,WViewList[i].t->Name(code),16,
+            int spareLines = linesWeCanUse - WViewListCount;
+            for (i = 0; i < WViewListCount; i++) {
+                if (y > linesWeCanUse)
+                    return;
+                GotoXY(0, y);
+                if (WViewList[i].t->x == -1)
+                    continue;
+                PutChar(m->MultiAt(WViewList[i].t->x, WViewList[i].t->y) ?
+                    GLYPH_VALUE(GLYPH_MULTI, WHITE) : WViewList[i].glyph);
+                Color(WViewList[i].color);
+                int code = WViewList[i].color == GREY ? 0 : NA_MONO;
+                int linesUsed =
+                    WrapWrite(2, y, WViewList[i].t->Name(code), 16,
                     1 + (spareLines > 0 ? spareLines : 0));
-              y += linesUsed;
-              spareLines -= (linesUsed - 1); 
+                y += linesUsed;
+                spareLines -= (linesUsed - 1);
             }
-          }
-         break;
+        }
 
-        case 1: /* Resists */
-          Write("\nResistances:\n");
-          y = 2; Color(GREY);
-          for (i=0;ResistsShown[i];i++)
-            if (j = p->ResistLevel(ResistsShown[i]))
-              {
-                nm = Lookup(DTypeNames,ResistsShown[i]);
+        break;
+    case 1: /* Resists */
+        Write("\nResistances:\n");
+        y = 2; Color(GREY);
+        for (i = 0; ResistsShown[i]; i++)
+            if (j = p->ResistLevel(ResistsShown[i])) {
+                nm = Lookup(DTypeNames, ResistsShown[i]);
                 if (nm.Right(6) == "Damage")
-                  nm = nm.Left(nm.GetLength() - 7);
+                    nm = nm.Left(nm.GetLength() - 7);
                 if (j == -1)
-                  Write(Format("  %s (Immune)\n", (const char*)nm).Left(WinSizeX()-1));
+                    Write(Format("  %s (Immune)\n", (const char*)nm).Left(WinSizeX() - 1));
                 else
-                  Write(Format("  %s %d\n", (const char*)nm,j).Left(WinSizeX()-1));
+                    Write(Format("  %s %d\n", (const char*)nm, j).Left(WinSizeX() - 1));
                 y++;
                 if (y > activeWin->Bottom)
-                  break;
-              }
-          if (y == 2)
+                    break;
+            }
+        if (y == 2)
             Write("  None\n");
-         break;
-        case 2: /* Pack */
-          Write("\nIn your Pack:\n");
-          y = 2; Color(GREY);
-          pack = (Container*) p->InSlot(SL_PACK);
-          if (!pack || !pack->isType(T_CONTAIN))
-            { Write("  (No Pack Equipped)"); break; }
-          for(i=0;(*pack)[i];i++) {
-            Write(Format("  %s",(const char*)(((*pack)[i])->Name(0))).Left(WinSizeX()-1));
+        break;
+    case 2: /* Pack */
+        Write("\nIn your Pack:\n");
+        y = 2; Color(GREY);
+        pack = (Container*)p->InSlot(SL_PACK);
+        if (!pack || !pack->isType(T_CONTAIN)) {
+            Write("  (No Pack Equipped)"); break;
+        }
+        for (i = 0; (*pack)[i]; i++) {
+            Write(Format("  %s", (const char*)(((*pack)[i])->Name(0))).Left(WinSizeX() - 1));
             Write("\n");
             y++;
             if (y > activeWin->Bottom)
-              break;
-            }
-          if (y == 2)
+                break;
+        }
+        if (y == 2)
             Write("  Pack Empty.\n");
-         break;   
-        case 3: /* Equipment */
-          Write("\nEquipment:\n");
-          y = 2; Color(GREY);
-          for(i=0;i!=SL_LAST;i++) 
+        break;
+    case 3: /* Equipment */
+        Write("\nEquipment:\n");
+        y = 2; Color(GREY);
+        for (i = 0; i != SL_LAST; i++)
             if (p->InSlot((int8)i) && p->InSlot((int8)i)->activeSlot(i)) {
-              Write(Format("  %s",(const char*)p->InSlot((int8)i)->Name(0)).Left(WinSizeX()-1));
-              Write("\n");
-              y++;
-              if (y > activeWin->Bottom)
-                break;
-              }
-          if (y == 2)
+                Write(Format("  %s", (const char*)p->InSlot((int8)i)->Name(0)).Left(WinSizeX() - 1));
+                Write("\n");
+                y++;
+                if (y > activeWin->Bottom)
+                    break;
+            }
+        if (y == 2)
             Write("  Nothing.\n");
-         break;   
-        case 4: /* Party */
-          Write("\nParty:\n");
-          y = 2; Color(GREY);
-          Write("  None");
-         break;
-        case 5: /* Quickkeys */
-          Write("\nQuick Keys:\n");
-          y = 2; Color(GREY);
-          Write("  None Set.\n");
-         break;
-        case 6: /* Spellkeys */
-          Write("\nSpellkeys:\n");
-          y = 2; Color(GREY);
-          for(i=0;i!=10;i++) 
+        break;
+    case 4: /* Party */
+        Write("\nParty:\n");
+        y = 2; Color(GREY);
+        Write("  None");
+        break;
+    case 5: /* Quickkeys */
+        Write("\nQuick Keys:\n");
+        y = 2; Color(GREY);
+        Write("  None Set.\n");
+        break;
+    case 6: /* Spellkeys */
+        Write("\nSpellkeys:\n");
+        y = 2; Color(GREY);
+        for (i = 0; i != 10; i++)
             if (p->SpellKeys[i] >= 0) {
-              Write(Format("%c%c%c %s",-SKYBLUE,'0'+i,-GREY,
-                NAME(theGame->SpellID(p->SpellKeys[i]))).TrueLeft(WinSizeX()-1));
-              Write("\n");
+                Write(Format("%c%c%c %s", -SKYBLUE, '0' + i, -GREY,
+                    NAME(theGame->SpellID(p->SpellKeys[i]))).TrueLeft(WinSizeX() - 1));
+                Write("\n");
 
-              y++;
-              if (y > activeWin->Bottom)
-                break;
-              }
-          if (y == 2)
+                y++;
+                if (y > activeWin->Bottom)
+                    break;
+            }
+        if (y == 2)
             Write("  None Set.\n");
-         break;
-      }
+        break;
+    }
 }
 
 void TextTerm::ResetWViewList() {
-  WViewListCount=0;
-  return;
+    WViewListCount = 0;
+    return;
 }
 
 void TextTerm::WViewThing(Thing *t, int32 dist, bool assertSeen) {
-  int itemCount = 0;
-  int chestCount = 0;
-  Glyph chestGlyph = 0; 
-  Thing *tt;
+    int itemCount = 0;
+    int chestCount = 0;
+    Glyph chestGlyph = 0;
+    Thing *tt;
 
-  // we need to know if there is a pile or a chest here before we display
-  // the first item
-  for (tt = t; tt; tt = oThing(tt->Next))
-    if (tt->isItem()) {
-      itemCount++;
-      if (tt->isType(T_CHEST)) {
-        if (!chestGlyph) chestGlyph = tt->Image; 
-        chestCount++;
-    } 
-    } 
-  if (t) {
-    int per = p->Perceives(t,assertSeen);
-    if (!(per & ~PER_SHADOW)) 
-      return; 
-  } 
+    // we need to know if there is a pile or a chest here before we display
+    // the first item
+    for (tt = t; tt; tt = oThing(tt->Next))
+        if (tt->isItem()) {
+            itemCount++;
+            if (tt->isType(T_CHEST)) {
+                if (!chestGlyph) chestGlyph = tt->Image;
+                chestCount++;
+            }
+        }
 
-  // yeah, I'm sorry about the gotos as well ...
-look_again: 
-  if (!t)
-    return;
-  
-  if (t == p ) 
-    goto look_at_next; 
-  if (t->isFeature()) {
-	  uint16 tg = GLYPH_ID_VALUE(t->Image);
-	  if (tg == GLYPH_TREE ||
-		  tg == GLYPH_BULK ||
-		  tg == GLYPH_PILLAR1 ||
-		  tg == GLYPH_PILLAR2 ||
-		  tg == GLYPH_HEDGE ||
-		  tg == GLYPH_FLOOR2 ||
-		  tg == GLYPH_FLOOR)
-		  goto look_at_next;
-  }
-  
-  if (t->isMonster()) {
-    p->JournalNoteMonster((Monster *)t);
-    ((Monster *)t)->ts.Retarget((Creature *)t); // ww: help out the AI
-  }
+    if (t) {
+        int per = p->Perceives(t, assertSeen);
+        if (!(per & ~PER_SHADOW))
+            return;
+    }
 
-  {
-    int big_dist = -1;  // index into WViewList w/ most distant Thing
-    int big_idx = -1;
-    // ww: find somewhere to put it in this list ...
-    // we have to scan through the whole thing anyway for duplicates, so
-    // we'll just remember the least important one and replace it
-    for (int i=0;i<WViewListCount;i++) {
-      if (WViewList[i].t == t)
+    // yeah, I'm sorry about the gotos as well ...
+look_again:
+    if (!t)
+        return;
+
+    if (t == p)
         goto look_at_next;
-      if (WViewList[i].dist > big_dist) {
-        big_dist = WViewList[i].dist;
-        big_idx = i;
-      } 
-    } 
-    if (WViewListCount < 16) 
-      big_idx = WViewListCount++; 
-    if (big_idx == -1) // not good enough to make the list, sorry!
-      return; // and nothing else at this distance can be good enough ...
-    int color ; 
-    color = GREY;
-    // Green for 'good' things, like sleeping monsters and magic items
-    // Red for 'bad' things, like tough monsters
-    // GREY (or whatever Name() gives) for the rest
-    if (t->isCreature()) {
-      Hostility h = ((Creature *)t)->ts.SpecificHostility((Creature *)t,p);
-      switch (h.quality) {
-        case Enemy: color = RED; break;
-        case Ally: color = GREEN; break; 
-        default: color = YELLOW; break; 
-      }
-    } else if (t->isItem())  {
-      bool good = false;
-      if (p->onPlane() != PHASE_MATERIAL)
-        good = ((Item*)t)->isGhostTouch();
-      else if (((Item*)t)->ItemLevel() > 0)
-        good = true;
-      if (good)  
-        color = GREEN;
-    } 
-    // String name = t->Name(0); 
-    Glyph g ; 
-    if (itemCount > 1) {
-      if (chestCount > 0)
-        g = chestGlyph;
-      else
-		  g = GLYPH_VALUE('*', GREY);
-    } else g = t->Image;
-    WViewList[big_idx].color = color; 
-    WViewList[big_idx].glyph = g  ;
-    WViewList[big_idx].dist = dist;
-    WViewList[big_idx].t = t; 
-  }
 
-look_at_next: 
-  t = oThing(t->Next);
-  goto look_again;
+    /* TODO(rmtew): This should not be done based off the glyph used. */
+    if (t->isFeature()) {
+        uint16 tg = GLYPH_ID_VALUE(t->Image);
+        if (tg == GLYPH_TREE ||
+            tg == GLYPH_BULK ||
+            tg == GLYPH_PILLAR1 ||
+            tg == GLYPH_PILLAR2 ||
+            tg == GLYPH_HEDGE ||
+            tg == GLYPH_FLOOR2 ||
+            tg == GLYPH_FLOOR)
+            goto look_at_next;
+    }
+
+    if (t->isMonster()) {
+        p->JournalNoteMonster((Monster *)t);
+        ((Monster *)t)->ts.Retarget((Creature *)t); // ww: help out the AI
+    }
+
+    {
+        int big_dist = -1;  // index into WViewList w/ most distant Thing
+        int big_idx = -1;
+        // ww: find somewhere to put it in this list ...
+        // we have to scan through the whole thing anyway for duplicates, so
+        // we'll just remember the least important one and replace it
+        for (int i = 0; i < WViewListCount; i++) {
+            if (WViewList[i].t == t)
+                goto look_at_next;
+            if (WViewList[i].dist > big_dist) {
+                big_dist = WViewList[i].dist;
+                big_idx = i;
+            }
+        }
+        if (WViewListCount < 16)
+            big_idx = WViewListCount++;
+        if (big_idx == -1) // not good enough to make the list, sorry!
+            return; // and nothing else at this distance can be good enough ...
+
+        int color = GREY;
+        // Green for 'good' things, like sleeping monsters and magic items
+        // Red for 'bad' things, like tough monsters
+        // GREY (or whatever Name() gives) for the rest
+        if (t->isCreature()) {
+            Hostility h = ((Creature *)t)->ts.SpecificHostility((Creature *)t, p);
+
+            switch (h.quality) {
+            case Enemy:
+                color = RED;
+                break;
+            case Ally:
+                color = GREEN;
+                break;
+            default:
+                color = YELLOW;
+                break;
+            }
+        } else if (t->isItem())  {
+            bool good = false;
+            if (p->onPlane() != PHASE_MATERIAL)
+                good = ((Item*)t)->isGhostTouch();
+            else if (((Item*)t)->ItemLevel() > 0)
+                good = true;
+            if (good)
+                color = GREEN;
+        }
+
+        // String name = t->Name(0); 
+        Glyph g;
+        if (itemCount > 1) {
+            if (chestCount > 0)
+                g = chestGlyph;
+            else
+                g = GLYPH_VALUE('*', GREY);
+        } else
+            g = t->Image;
+        WViewList[big_idx].color = color;
+        WViewList[big_idx].glyph = g;
+        WViewList[big_idx].dist = dist;
+        WViewList[big_idx].t = t;
+    }
+
+look_at_next:
+    t = oThing(t->Next);
+    goto look_again;
 }
 
 
