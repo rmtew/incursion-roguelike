@@ -4045,7 +4045,7 @@ EvReturn Creature::Ascend(EventInfo &e)
           }
         if (SkillLevel(SK_CLIMB) < 8 && !HasFeat(FT_BRACHIATION))
           {
-            IPrint("You don't feel confidant enough in your climbing "
+            IPrint("You don't feel confident enough in your climbing "
               "ability to climb the <Res>.", m->TerrainAt(x,y));
             return ABORT;
           }
