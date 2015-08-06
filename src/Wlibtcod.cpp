@@ -146,125 +146,126 @@ TCOD_color_t RGBSofter[MAX_COLOURS] = {
 char __buffer[1600];
 char __buff2[80];
 
-class libtcodTerm: public TextTerm
-  {
-    friend void Error(const char*fmt,...);
-    friend void Fatal(const char*fmt,...);
+class libtcodTerm : public TextTerm {
+    friend void Error(const char* fmt, ...);
+    friend void Fatal(const char* fmt, ...);
 
-    private:
-      bool isWindowed, showCursor, cursorPulse;
-      TCOD_console_t bScreen, bSave, bScroll, bCurrent;
-      TCOD_color_t Colors[MAX_COLOURS];
-      int16 resX, resY, fontX, fontY, ocx, ocy;
-      uint32 ticks_blink_last;
-      int oldResX, oldResY;
-      String debugText;
-      /* File I/O Stuff */
-      String CurrentDirectory;
-      String CurrentFileName; 
-      FILE *fp;
-      TCOD_list_t alf;
-      int32 *alf_it;
-    public:
-      /* Low-Level Read/Write */
-      virtual void Update();
-      virtual void Redraw();
-      virtual void CursorOn();
-      virtual void CursorOff();
-      virtual void BlinkCursor();
-      virtual int16 CursorX() { return cx; }
-      virtual int16 CursorY() { return cy; }
-      virtual void Save();
-      virtual void Restore();
-      virtual void PutChar(Glyph g);
-      virtual void APutChar(int16 x, int16 y, Glyph g);
-      virtual void PutChar(int16 x, int16 y, Glyph g);
-      virtual Glyph AGetChar(int16 x, int16 y);
-      virtual void GotoXY(int16 x, int16 y);
-      virtual void Clear();
-      virtual void Color(uint16 _attr);
-      virtual void StopWatch(int16 milli);
-      virtual uint32 GetElapsedMilli();
-	  virtual int32 ConvertChar(Glyph g, char **out); 
+private:
+    bool initialised = false;
+    bool isWindowed, showCursor, cursorPulse;
+    TCOD_console_t bScreen, bSave, bScroll, bCurrent;
+    TCOD_color_t Colors[MAX_COLOURS];
+    int16 resX, resY, fontX, fontY, ocx, ocy;
+    uint32 ticks_blink_last;
+    int oldResX, oldResY;
+    String debugText;
+    /* File I/O Stuff */
+    String CurrentDirectory;
+    String CurrentFileName;
+    FILE *fp;
+    TCOD_list_t alf;
+    int32 *alf_it;
 
-      /* Input Functions */
-      virtual int16 GetCharRaw();
-      virtual int16 GetCharCmd();
-      virtual int16 GetCharCmd(KeyCmdMode mode);
-      virtual bool CheckEscape();
-      virtual void ClearKeyBuff();
-      virtual void PrePrompt();
-      
-      /* General Functions */
-      virtual void Initialize();
-      virtual void ShutDown();
-      virtual void Reset();
-      virtual bool hideOption(int16 opt) { return false; }
-      virtual void SetDebugText(const char *text);
-      virtual void Title();
-      
-      /* Scroll Buffer */
-      virtual void SPutChar(int16 x, int16 y, Glyph g);
-      virtual uint16 SGetChar(int16 x, int16 y);
-      virtual void SPutColor(int16 x, int16 y, uint16 col);
-      virtual uint16 SGetColor(int16 x, int16 y);
-      virtual void SClear();
-      virtual void  BlitScrollLine(int16 wn, int32 buffline, int32 winline);
-      
-      /* System-Independant File I/O */
-      virtual const char* SaveSubDir()    { return "save"; } 
-      virtual const char* ModuleSubDir()  { return "mod"; } 
-      virtual const char* LibraryPath() {
-          char *envLibPath;
-          static char s[MAX_PATH_LENGTH] = "";
-          if (strlen(s) == 0) {
-              envLibPath = getenv("INCURSIONLIBPATH");
-              if (envLibPath != NULL && strlen(envLibPath)) {
-                  if (strcat(s, envLibPath)) {
-                      if (s[strlen(s) - 1] == '\\')
-                          s[strlen(s) - 1] = '\0';
-                  }
-              }
-              if (strlen(s) == 0) {
-                  strcat(s, IncursionDirectory);
-                  strcat(s, "lib");
-              }
-          }
-          return s;
-      }
-      virtual const char* LogSubDir()     { return "logs"; } 
-      virtual const char* ManualSubDir()  { return "man"; } 
-      virtual const char* OptionsSubDir() { return "."; } 
-      virtual void ChangeDirectory(const char * c, bool set) { 
-          if (set)
-              CurrentDirectory = c;
-          else {
-              CurrentDirectory = (const char*)IncursionDirectory;
-              if (CurrentDirectory != c)
-                  CurrentDirectory += c;
-          }
-          if (chdir(CurrentDirectory))
-              Fatal("Unable to locate directory '%s'.", (const char*)CurrentDirectory);
-      }
-      virtual bool Exists(const char* fn);
-      virtual void Delete(const char* fn);
-      virtual void OpenRead(const char* fn);
-      virtual void OpenWrite(const char* fn);
-      virtual void OpenUpdate(const char* fn);
-      virtual void Close();
-      virtual void FRead(void*,size_t sz);
-      virtual void FWrite(const void*,size_t sz);
-      virtual void Seek(int32,int8);
-      virtual void Cut(int32);
-      virtual bool FirstFile(char * filespec);
-      virtual bool NextFile();
-      virtual char * MenuListFiles(const char * filespec, 
-          uint16 flags, const char *title);
-      virtual const char* GetFileName()
-        { return CurrentFileName; }      
-      virtual int32 Tell();
+public:
+    /* Low-Level Read/Write */
+    virtual void Update();
+    virtual void Redraw();
+    virtual void CursorOn();
+    virtual void CursorOff();
+    virtual void BlinkCursor();
+    virtual int16 CursorX() { return cx; }
+    virtual int16 CursorY() { return cy; }
+    virtual void Save();
+    virtual void Restore();
+    virtual void PutChar(Glyph g);
+    virtual void APutChar(int16 x, int16 y, Glyph g);
+    virtual void PutChar(int16 x, int16 y, Glyph g);
+    virtual Glyph AGetChar(int16 x, int16 y);
+    virtual void GotoXY(int16 x, int16 y);
+    virtual void Clear();
+    virtual void Color(uint16 _attr);
+    virtual void StopWatch(int16 milli);
+    virtual uint32 GetElapsedMilli();
+    virtual int32 ConvertChar(Glyph g, char **out);
 
-      void SetIncursionDirectory(const char *s);
+    /* Input Functions */
+    virtual int16 GetCharRaw();
+    virtual int16 GetCharCmd();
+    virtual int16 GetCharCmd(KeyCmdMode mode);
+    virtual bool CheckEscape();
+    virtual void ClearKeyBuff();
+    virtual void PrePrompt();
+
+    /* General Functions */
+    virtual void Initialize();
+    virtual void ShutDown();
+    virtual void Reset();
+    virtual bool hideOption(int16 opt) { return false; }
+    virtual void SetDebugText(const char *text);
+    virtual void Title();
+
+    /* Scroll Buffer */
+    virtual void SPutChar(int16 x, int16 y, Glyph g);
+    virtual uint16 SGetChar(int16 x, int16 y);
+    virtual void SPutColor(int16 x, int16 y, uint16 col);
+    virtual uint16 SGetColor(int16 x, int16 y);
+    virtual void SClear();
+    virtual void  BlitScrollLine(int16 wn, int32 buffline, int32 winline);
+
+    /* System-Independant File I/O */
+    virtual const char* SaveSubDir()    { return "save"; }
+    virtual const char* ModuleSubDir()  { return "mod"; }
+    virtual const char* LibraryPath() {
+        char *envLibPath;
+        static char s[MAX_PATH_LENGTH] = "";
+        if (strlen(s) == 0) {
+            envLibPath = getenv("INCURSIONLIBPATH");
+            if (envLibPath != NULL && strlen(envLibPath)) {
+                if (strcat(s, envLibPath)) {
+                    if (s[strlen(s) - 1] == '\\')
+                        s[strlen(s) - 1] = '\0';
+                }
+            }
+            if (strlen(s) == 0) {
+                strcat(s, IncursionDirectory);
+                strcat(s, "lib");
+            }
+        }
+        return s;
+    }
+    virtual const char* LogSubDir()     { return "logs"; }
+    virtual const char* ManualSubDir()  { return "man"; }
+    virtual const char* OptionsSubDir() { return "."; }
+    virtual void ChangeDirectory(const char * c, bool set) {
+        if (set)
+            CurrentDirectory = c;
+        else {
+            CurrentDirectory = (const char*)IncursionDirectory;
+            if (CurrentDirectory != c)
+                CurrentDirectory += c;
+        }
+        if (chdir(CurrentDirectory))
+            Fatal("Unable to locate directory '%s'.", (const char*)CurrentDirectory);
+    }
+    virtual bool Exists(const char* fn);
+    virtual void Delete(const char* fn);
+    virtual void OpenRead(const char* fn);
+    virtual void OpenWrite(const char* fn);
+    virtual void OpenUpdate(const char* fn);
+    virtual void Close();
+    virtual void FRead(void*, size_t sz);
+    virtual void FWrite(const void*, size_t sz);
+    virtual void Seek(int32, int8);
+    virtual void Cut(int32);
+    virtual bool FirstFile(char * filespec);
+    virtual bool NextFile();
+    virtual char * MenuListFiles(const char * filespec, uint16 flags, const char *title);
+    virtual const char* GetFileName() {
+        return CurrentFileName;
+    }
+    virtual int32 Tell();
+
+    void SetIncursionDirectory(const char *s);
 };
   
 static int16 kbStandard[][3] = {
@@ -760,12 +761,16 @@ int32 libtcodTerm::ConvertChar(Glyph g, char **out) {
 
 
 void Fatal(const char*fmt,...) {
-	va_list argptr; 
+	va_list argptr;
 	va_start(argptr, fmt);
-	if (!T1)
-		{ printf(__buffer); exit(1); }
-	T1->Clear();
-	vsprintf(__buffer, fmt, argptr);
+
+    vsprintf(__buffer, fmt, argptr);
+    if (!T1 || !((libtcodTerm *)T1)->initialised) {
+        printf(__buffer);
+        exit(1);
+    }
+
+    T1->Clear();
 	va_end(argptr);
 	sprintf(__buff2, "Fatal Error: %s\nPress [ENTER] to exit...",__buffer);
 	((libtcodTerm*)T1)->Box(WIN_SCREEN,BOX_NOPAUSE|BOX_NOSAVE,RED,PINK,__buff2);
@@ -775,7 +780,8 @@ void Fatal(const char*fmt,...) {
 	BREAKOUT;
 #endif
 	T1->ShutDown();
-	exit(1);
+
+    exit(1);
 }
 
 void Error(const char*fmt,...) {
@@ -785,9 +791,9 @@ void Error(const char*fmt,...) {
     int attempts = 0;
 
     vsprintf(__buffer, fmt, argptr);
-	if (!T1) {
+    if (!T1 || !((libtcodTerm *)T1)->initialised) {
         printf(__buffer);
-        exit(1);
+        return;
     }
 
 #ifdef USE_BREAKPAD
@@ -1000,7 +1006,9 @@ RetryFont:
 
 
 void libtcodTerm::Initialize() {
-    p = NULL; m = NULL; isHelp = false;
+    p = NULL;
+    m = NULL;
+    isHelp = false;
     ActionsSinceLastAutoSave = 0;
     cx = cy = 0;
     showCursor = false;
@@ -1022,6 +1030,7 @@ void libtcodTerm::Initialize() {
     
 	TCOD_sys_startup();
 
+    initialised = true;
 	Reset();
     
     InitWindows();   
