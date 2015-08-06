@@ -368,364 +368,367 @@ void Map::VisionThing(int16 pn, Creature *c, bool do_clear)
   } 
 }
 
-bool Player::Seen(int16 x,int16 y)
-  {
-    return m->At(x,y).Memory != 0;
-  }
+bool Player::Seen(int16 x, int16 y) {
+    return m->At(x, y).Memory != 0;
+}
 
 // If 'assertLOS' is true, we are sure that 'this' can see the square that
 // 't' is standing on ... but 't' might still be hiding or invisible or
 // something. 
-uint16 Creature::Perceives(Thing *t, bool assertLOS)
-{
-  int16 i, tx, ty; 
-  uint16 Per; bool isBlind;
-  static int16 limit = 0; 
-  // ww: somewhat like a mutex to prevent infinite recursion
+uint16 Creature::Perceives(Thing *t, bool assertLOS) {
+    int16 i, tx, ty;
+    uint16 Per;
+    bool isBlind;
+    // ww: somewhat like a mutex to prevent infinite recursion
+    static int16 limit = 0;
 
-  //return PER_VISUAL;
+    if (!t)
+        return 0;
 
-  if (!t)
-    return 0;
-    
-  if (t->HasStati(MOUNT))
-    return (Perceives(t->GetStatiObj(MOUNT),assertLOS));
-    
-  if (m && t->m && (t->m != m))
-    return 0;
+    if (t->HasStati(MOUNT))
+        return (Perceives(t->GetStatiObj(MOUNT), assertLOS));
 
-  tx = t->x;
-  ty = t->y;
+    if (m && t->m && (t->m != m))
+        return 0;
 
-    
-  if (t->isCreature() && ((Monster*)t)->HasMFlag(M_SELLER))
-    if (isPlayer() && !t->isDead() && !t->m)
-      return PER_VISUAL;
-    
-  /* This is a horrid kludge to allow summoners and party-builders
-     to have a remotely enjoyable game despite the fact that the
-     monster AI is currently abysmally stupid, to the point that
-     pets constantly get lost. */
-  if (isMonster() && t->isPlayer())
-    if (getLeader() == t || ts.hasTargetOfType(OrderWalkNearMe))
-      Per |= PER_VISUAL;
-    
-  if (isIllusion())
-    {
-      Creature *cr;
-      cr = (Creature*) GetStatiObj(ILLUSION);
-      return cr->Perceives(t,assertLOS);
-    } 
-   
-
-  theGame->inPerceive++;
-
-  if (HasStati(SLEEPING)) 
-    { theGame->inPerceive--; return 0; } 
-  
-  if (t->HasStati(ENGULFED))
-    {
-      if (t->GetStatiObj(ENGULFED) == this)
-        { theGame->inPerceive--; return PER_VISUAL; }
-      theGame->inPerceive--;
-      return 0;
-    }
-  
-  const bool HasStati_ENGULFED = HasStati(ENGULFED);  
-  const bool HasStati_BLIND = HasStati(BLIND);
-  const bool HasStati_SEE_INVIS = HasStati(SEE_INVIS);
-  const int  StatiVal_PERCEPTION = GetStatiVal(PERCEPTION); 
-  Creature *anim = (Creature *)GetStatiObj(HAS_ANIMAL); 
-  Creature *druid = (Creature *)GetStatiObj(ANIMAL_COMPANION); 
-  Creature *focus = (Creature *)GetStatiObj(DWARVEN_FOCUS); 
-  int16 detectingMAType[32];
-  int16 detectingMARange[32];
-  rID   detectingMAeID[32];
-  int16 detectingMAMax = 0; 
-  int16 detectingType[32];
-  int16 detectingRange[32];
-  rID   detectingEID[32];
-  int16 detectingMax = 0; 
-
-  Per = 0;
-
-  
-  StatiIterNature(this,DETECTING)
-      detectingMAType[detectingMAMax] = S->Val; 
-      detectingMARange[detectingMAMax] = S->Mag; 
-      detectingMAeID[detectingMAMax] = S->eID;
-      detectingMAMax++; 
-      if (detectingMAMax > 31)
-        break;
-  StatiIterEnd(this)
-  ASSERT(detectingMAMax <= 32); 
-  StatiIterNature(this,DETECTING_TYPE)
-      detectingType[detectingMax] = S->Val; 
-      detectingRange[detectingMax] = S->Mag; 
-      detectingEID[detectingMax] = S->eID;
-      detectingMax++; 
-      if (detectingMAMax > 31)
-        break;
-  StatiIterEnd(this)
-  ASSERT(detectingMax <= 32); 
-
-  /* You always perceive yourself */
-  if (t == this)
-    Per |= PER_VISUAL;
-  if (HasStati_ENGULFED)
-    if (t == GetStatiObj(ENGULFED))
-      Per |= PER_VISUAL;
-  
-  
-  if (!theGame->InPlay())
-    { theGame->inPerceive--; return Per; }
-
-
-  if (t->Flags & F_DELETE)
-    {
-      tx = t->GetStatiVal(DEATH_LOC) % 256;
-      ty = t->GetStatiVal(DEATH_LOC) / 256;
-      if ((!m) || (t->GetStatiMag(DEATH_LOC) != m->Depth))
-        { theGame->inPerceive--; return 0; }
-    }
-  else {
     tx = t->x;
     ty = t->y;
+
+    if (t->isCreature() && ((Monster*)t)->HasMFlag(M_SELLER))
+        if (isPlayer() && !t->isDead() && !t->m)
+            return PER_VISUAL;
+
+    /* This is a horrid kludge to allow summoners and party-builders
+       to have a remotely enjoyable game despite the fact that the
+       monster AI is currently abysmally stupid, to the point that
+       pets constantly get lost. */
+    if (isMonster() && t->isPlayer())
+        if (getLeader() == t || ts.hasTargetOfType(OrderWalkNearMe))
+            Per |= PER_VISUAL;
+
+    if (isIllusion()) {
+        Creature *cr = (Creature*)GetStatiObj(ILLUSION);
+        return cr->Perceives(t, assertLOS);
     }
 
-  const int16 Dist = max(1,dist(x,y,tx,ty));
+    theGame->inPerceive++;
 
-  if (!HasStati_ENGULFED)
-    StatiIterNature(this,TRACKING)
-        if (S->h == t->myHandle && Dist <= S->Mag)
-        Per |= PER_TRACK; 
-    StatiIterEnd(this)
+    if (HasStati(SLEEPING)) {
+        theGame->inPerceive--;
+        return 0;
+    }
 
-
-  if (t->HasStati(TELEPORTED)) { theGame->inPerceive--; return 0; } 
-  const bool t_HasStati_PARALYSIS = t->HasStati(PARALYSIS);
-  const bool t_HasStati_HIDING = t->HasStati(HIDING);
-  const bool t_HasStati_INVIS = t->HasStati(INVIS) || 
-              ((t->onPlane() == PHASE_ETHEREAL) && (onPlane() != PHASE_ETHEREAL)
-                 && !HasStati(MANIFEST));
-  const bool t_HasStati_INVIS_TO = t->HasStati(INVIS_TO);
-  const bool t_HasStati_ILLUMINATED = t->HasStati(ILLUMINATED);
-  const bool t_isCreature = t->isCreature(); 
-  const int16 NonDet = t->XORStatiVal(NONDETECTION);
-
-  if (t_isCreature && !(NonDet & PER_DETECT)) {
-    for (i=0; i<detectingMAMax; i++) 
-      if (Dist <= detectingMARange[i] &&
-          (detectingMAType[i] == 0 || 
-           ((Creature *)t)->isMType(detectingMAType[i])))
-        if ((!detectingMAeID[i]) || TEFF(detectingMAeID[i])->
-                      PEvent(EV_ISDETECT,t,detectingMAeID[i]) != -1)
-          Per |= PER_DETECT; 
-  } else if (!t_isCreature && !(NonDet & PER_DETECT)) {
-    for (i=0; i<detectingMax; i++) 
-      if (Dist <= detectingRange[i] &&
-          (detectingType[i] == 0 || 
-           t->isType(detectingType[i])))
-        if (TEFF(detectingEID[i])->PEvent(EV_ISDETECT,t,detectingEID[i]) != -1)
-          Per |= PER_DETECT; 
-  } 
-
-
-  if (t->m != m && t->isItem()) {
-    if (((Item*)t)->Owner() == this)
-      { theGame->inPerceive--; return PER_VISUAL; }
-    if (((Item*)t)->Owner() == NULL)
-      { theGame->inPerceive--; return PER_VISUAL; }
-    if (Per |= Perceives(((Item*)t)->Owner()))
-      { theGame->inPerceive--; return Per; }
-    theGame->inPerceive--; return 0;
-  }
-
-  if (Dist > 30)
-    { theGame->inPerceive--; return Per; }
-
-
-  /* Check Telepathy, Tremorsense, etc. */
-  if (t->isType(T_DOOR))
-    if (((Door*)t)->DoorFlags & DF_SECRET)
-      { theGame->inPerceive--; return Per & (~PER_DETECT); }
-  if (t->isType(T_TRAP))
-    if (!(((Trap*)t)->TrapFlags & TS_FOUND))
-      { theGame->inPerceive--; return Per & (~PER_DETECT); }
-
-
-  if (!HasStati_ENGULFED)
-    if (TremorRange >= Dist && !(NonDet & PER_TREMOR)) {
-      if (t_isCreature) {
-        if (!t_HasStati_PARALYSIS && !((Creature*)t)->isAerial())
-          {
-            int16 lv;
-            if (((Creature*)t)->HasSkill(SK_BALANCE) && (lv = 
-                   ((Creature*)t)->SkillLevel(SK_BALANCE)) >= 20)
-              if (t->HasStati(HIDING) || lv >= 30)
-                goto InvisToTremor;
-            Per |= PER_TREMOR;
-            InvisToTremor:;
-          }
+    if (t->HasStati(ENGULFED)) {
+        if (t->GetStatiObj(ENGULFED) == this) {
+            theGame->inPerceive--;
+            return PER_VISUAL;
         }
-      else 
-        Per |= PER_TREMOR;
+
+        theGame->inPerceive--;
+        return 0;
     }
 
-  if (!HasStati_ENGULFED)
-    if (BlindRange >= Dist && !(NonDet & PER_BLIND)) 
-      if (!m->FieldAt(tx,ty,FI_SILENCE)) {
-        int tPlane = t->isCreature() ? ((Creature *)t)->onPlane() :
-          PHASE_MATERIAL;
-        if (onPlane() == tPlane)
-          if (assertLOS || (m->LineOfFire(x,y,tx,ty,this)))
-            if (!t_HasStati_HIDING || (SkillLevel(SK_LISTEN) >= 
-                  ((Creature*)t)->SkillLevel(SK_MOVE_SIL)))
-              Per |= PER_BLIND;
-      }
+    const bool HasStati_ENGULFED = HasStati(ENGULFED);
+    const bool HasStati_BLIND = HasStati(BLIND);
+    const bool HasStati_SEE_INVIS = HasStati(SEE_INVIS);
+    const int  StatiVal_PERCEPTION = GetStatiVal(PERCEPTION);
+    Creature *anim = (Creature *)GetStatiObj(HAS_ANIMAL);
+    Creature *druid = (Creature *)GetStatiObj(ANIMAL_COMPANION);
+    Creature *focus = (Creature *)GetStatiObj(DWARVEN_FOCUS);
+    int16 detectingMAType[32];
+    int16 detectingMARange[32];
+    rID   detectingMAeID[32];
+    int16 detectingMAMax = 0;
+    int16 detectingType[32];
+    int16 detectingRange[32];
+    rID   detectingEID[32];
+    int16 detectingMax = 0;
 
-  /* No engulfed -- Penetrating Sight lets you see through the
-     creature's stomach, so works normally. */
-  if (PercepRange >= Dist && !(NonDet & PER_PERCEPT))
-    if (StatiVal_PERCEPTION)
-      Per |= PER_PERCEPT;
+    Per = 0;
 
-  if (isPlayer()) {
-    if (anim && !(anim->isDead()) && !limit) {
-      limit = 1;
-      uint16 res = anim->Perceives(t);
-      if (res) Per |= res | PER_SHARED; 
-      limit = 0;
-    }
-    if (t == focus || t == anim)
-      Per |= PER_TRACK | PER_TELE;
+    StatiIterNature(this, DETECTING)
+        detectingMAType[detectingMAMax] = S->Val;
+        detectingMARange[detectingMAMax] = S->Mag;
+        detectingMAeID[detectingMAMax] = S->eID;
+        detectingMAMax++;
+        if (detectingMAMax > 31)
+            break;
+    StatiIterEnd(this)
+    ASSERT(detectingMAMax <= 32);
 
-    if (thisp->Opt(OPT_WIZ_SIGHT))
-      if (Dist < 30)
+    StatiIterNature(this, DETECTING_TYPE)
+        detectingType[detectingMax] = S->Val;
+        detectingRange[detectingMax] = S->Mag;
+        detectingEID[detectingMax] = S->eID;
+        detectingMax++;
+        if (detectingMAMax > 31)
+            break;
+    StatiIterEnd(this)
+    ASSERT(detectingMax <= 32);
+
+    /* You always perceive yourself */
+    if (t == this)
         Per |= PER_VISUAL;
 
-  } else {
-    if (druid && !(druid->isDead()) && !limit)  {
-      limit = 1;
-      uint16 res = druid->Perceives(t);
-      if (res) Per |= res | PER_SHARED; 
-      limit = 0;
+    if (HasStati_ENGULFED)
+        if (t == GetStatiObj(ENGULFED))
+            Per |= PER_VISUAL;
+
+    if (!theGame->InPlay()) {
+        theGame->inPerceive--;
+        return Per;
     }
-  }
 
-  if (TelepRange >= Dist && !(NonDet & PER_TELE))
-    if (t_isCreature)
-      if (!((Creature*)t)->HasMFlag(M_MINDLESS))
-        if (!((Creature*)t)->isMType(MA_UNDEAD))
-          Per |= PER_TELE;
-
-  /* Later, you should have to 'turn on' scent, and it should
-     slow you to half-movement through its use. */
-  if (HasStati_ENGULFED)
-    if (ScentRange >= Dist && !(NonDet & PER_SCENT))
-      /*if (HasStati(SCENT_ON))*/
-      if (t_isCreature)
-        if (assertLOS || (m->LineOfFire(x,y,tx,ty,this)))
-          if (onPlane() == ((Creature*)t)->onPlane()) 
-            Per |= PER_SCENT;
-
-  if (isMonster() && this == thism->CurrAI)
-    isBlind = thism->isBlind;
-  else
-    isBlind = HasMFlag(M_BLIND) || HasStati_BLIND;
-
-  if (isBlind && (Dist > BlindRange))
-    { theGame->inPerceive--; return Per; }
-
-  if (max(abs(x-tx),abs(y-ty)) > max(SightRange,BlindRange))
-    { theGame->inPerceive--; return Per; }
-
-  // ww: we need InBounds here to avoid crashes
-  /* ww: I disagree with this logic on game-annoyance reasons :-). A
-   * player with a ring of invisibility can see a Shadow in the middle
-   * of a room, but as soon as the shadow moves into the wall and starts
-   * attacking the player, the player cannot see the shadow. The player
-   * can, however, attack the shadow, and can get messages like "you're
-   * about to leave a threatened area, confirm?", so what actually
-   * happens is that you just try all 8 directions until you find the
-   * right one. 
-   if (!m || !m->InBounds(t->x,t->y) || 
-   (m->At(t->x,t->y).Opaque && !t->isFeature()))
-   goto SkipVisual;
-   */
-
-  if (HasStati_ENGULFED)
-    goto SkipVisual;
-
-  if (t_HasStati_HIDING && t_isCreature)
-    if (((Creature*)t)->SkillLevel(SK_HIDE) +
-        ((Creature*)t)->HideVal > SkillLevel(SK_SPOT)) {
-      /* ww: in isHostileTo, a hiding player is never hostile!
-       * thus, enemies always saw through the PC's Hide In Shadows! */
-      if (!((Creature*)t)->isLedBy(this) ||
-          t->isPlayer())
-        goto SkipVisual;
-    } 
-
-  if (t_HasStati_INVIS && !HasStati_SEE_INVIS)    /* later, update */
-    goto SkipVisual;
-  if (t_HasStati_INVIS_TO && !HasStati_SEE_INVIS)
-    StatiIterNature(t,INVIS_TO) {
-      if (S->Mag == 0 && S->eID) 
-        { EventInfo xe;
-          xe.Clear();
-          xe.EActor = this;
-          xe.ETarget = t;
-          xe.eID = S->eID;
-          if (isTarget(xe,t))
-            StatiIterBreakout(t,goto SkipVisual)
+    if (t->Flags & F_DELETE) {
+        tx = t->GetStatiVal(DEATH_LOC) % 256;
+        ty = t->GetStatiVal(DEATH_LOC) / 256;
+        if ((!m) || (t->GetStatiMag(DEATH_LOC) != m->Depth)) {
+            theGame->inPerceive--; return 0;
         }
-      else if (isMType(S->Mag))
-        StatiIterBreakout(t,goto SkipVisual)
-      }
-    StatiIterEnd(t)
-
-
-  if (isPlayer()) {
-    if (Dist <= SightRange) { 
-      if (m->At(tx,ty).Visibility & VI_VISIBLE)
-        Per |= PER_VISUAL | PER_SHADOW;
-      else if (m->At(tx,ty).Visibility & VI_DEFINED)
-        Per |= ( t_HasStati_ILLUMINATED ? PER_VISUAL : 0 ) | PER_SHADOW;
+    } else {
+        tx = t->x;
+        ty = t->y;
     }
-  } else {
-    if (assertLOS || 
-        (assertLOS = m->LineOfVisualSight(x,y,tx,ty,this)))
-      Per |= PER_VISUAL | PER_SHADOW;
-  }
-  if (Dist > (LightRange*2) && !m->At(tx,ty).Lit && !m->At(tx,ty).mLight &&
-       t != this) {
-    Per &= ~(PER_VISUAL|PER_SHADOW);
-  }          
 
-  /* For now, we are treating "infravision" as darkvision rather
-     than heat-sight. This may change later, depending on human/
-     demihuman balance and power levels. */
-  if (Dist <= InfraRange &&
-      (assertLOS || 
-       (assertLOS = m->LineOfVisualSight(x,y,tx,ty,this))
-      ))
-    Per |= PER_INFRA;
+    const int16 Dist = max(1, dist(x, y, tx, ty));
 
-  if (!t->isShadowShape())
-    Per &= ~PER_SHADOW;
+    if (!HasStati_ENGULFED)
+        StatiIterNature(this, TRACKING)
+            if (S->h == t->myHandle && Dist <= S->Mag)
+                Per |= PER_TRACK;
+        StatiIterEnd(this)
+
+    if (t->HasStati(TELEPORTED)) {
+        theGame->inPerceive--;
+        return 0;
+    }
+
+    const bool t_HasStati_PARALYSIS = t->HasStati(PARALYSIS);
+    const bool t_HasStati_HIDING = t->HasStati(HIDING);
+    const bool t_HasStati_INVIS = t->HasStati(INVIS) ||
+        ((t->onPlane() == PHASE_ETHEREAL) && (onPlane() != PHASE_ETHEREAL)
+        && !HasStati(MANIFEST));
+    const bool t_HasStati_INVIS_TO = t->HasStati(INVIS_TO);
+    const bool t_HasStati_ILLUMINATED = t->HasStati(ILLUMINATED);
+    const bool t_isCreature = t->isCreature();
+    const int16 NonDet = t->XORStatiVal(NONDETECTION);
+
+    if (t_isCreature && !(NonDet & PER_DETECT)) {
+        for (i = 0; i < detectingMAMax; i++)
+            if (Dist <= detectingMARange[i] && (detectingMAType[i] == 0 || ((Creature *)t)->isMType(detectingMAType[i])))
+                if ((!detectingMAeID[i]) || TEFF(detectingMAeID[i])->PEvent(EV_ISDETECT, t, detectingMAeID[i]) != -1)
+                    Per |= PER_DETECT;
+    } else if (!t_isCreature && !(NonDet & PER_DETECT)) {
+        for (i = 0; i < detectingMax; i++)
+            if (Dist <= detectingRange[i] && (detectingType[i] == 0 || t->isType(detectingType[i])))
+                if (TEFF(detectingEID[i])->PEvent(EV_ISDETECT, t, detectingEID[i]) != -1)
+                    Per |= PER_DETECT;
+    }
+
+    if (t->m != m && t->isItem()) {
+        if (((Item*)t)->Owner() == this) {
+            theGame->inPerceive--;
+            return PER_VISUAL;
+        }
+
+        if (((Item*)t)->Owner() == NULL) {
+            theGame->inPerceive--;
+            return PER_VISUAL;
+        }
+
+        if (Per |= Perceives(((Item*)t)->Owner())) {
+            theGame->inPerceive--;
+            return Per;
+        }
+
+        theGame->inPerceive--;
+        return 0;
+    }
+
+    if (Dist > 30) {
+        theGame->inPerceive--;
+        return Per;
+    }
+
+    /* Check Telepathy, Tremorsense, etc. */
+    if (t->isType(T_DOOR))
+        if (((Door*)t)->DoorFlags & DF_SECRET) {
+            theGame->inPerceive--;
+            return Per & (~PER_DETECT);
+        }
+
+    if (t->isType(T_TRAP))
+        if (!(((Trap*)t)->TrapFlags & TS_FOUND)) {
+            theGame->inPerceive--;
+            return Per & (~PER_DETECT);
+        }
+
+
+    if (!HasStati_ENGULFED)
+        if (TremorRange >= Dist && !(NonDet & PER_TREMOR)) {
+            if (t_isCreature) {
+                if (!t_HasStati_PARALYSIS && !((Creature*)t)->isAerial()) {
+                    int16 lv;
+                    if (((Creature*)t)->HasSkill(SK_BALANCE) && (lv =
+                        ((Creature*)t)->SkillLevel(SK_BALANCE)) >= 20)
+                        if (t->HasStati(HIDING) || lv >= 30)
+                            goto InvisToTremor;
+                    Per |= PER_TREMOR;
+InvisToTremor:;
+                }
+            } else
+                Per |= PER_TREMOR;
+        }
+
+    if (!HasStati_ENGULFED)
+        if (BlindRange >= Dist && !(NonDet & PER_BLIND))
+            if (!m->FieldAt(tx, ty, FI_SILENCE)) {
+                int tPlane = t->isCreature() ? ((Creature *)t)->onPlane() : PHASE_MATERIAL;
+                if (onPlane() == tPlane)
+                    if (assertLOS || (m->LineOfFire(x, y, tx, ty, this)))
+                        if (!t_HasStati_HIDING || (SkillLevel(SK_LISTEN) >=
+                            ((Creature*)t)->SkillLevel(SK_MOVE_SIL)))
+                            Per |= PER_BLIND;
+            }
+
+    /* No engulfed -- Penetrating Sight lets you see through the
+       creature's stomach, so works normally. */
+    if (PercepRange >= Dist && !(NonDet & PER_PERCEPT))
+        if (StatiVal_PERCEPTION)
+            Per |= PER_PERCEPT;
+
+    if (isPlayer()) {
+        if (anim && !(anim->isDead()) && !limit) {
+            limit = 1;
+            uint16 res = anim->Perceives(t);
+            if (res) Per |= res | PER_SHARED;
+            limit = 0;
+        }
+
+        if (t == focus || t == anim)
+            Per |= PER_TRACK | PER_TELE;
+
+        if (thisp->Opt(OPT_WIZ_SIGHT))
+            if (Dist < 30)
+                Per |= PER_VISUAL;
+    } else {
+        if (druid && !(druid->isDead()) && !limit)  {
+            limit = 1;
+            uint16 res = druid->Perceives(t);
+            if (res) Per |= res | PER_SHARED;
+            limit = 0;
+        }
+    }
+
+    if (TelepRange >= Dist && !(NonDet & PER_TELE))
+        if (t_isCreature)
+            if (!((Creature*)t)->HasMFlag(M_MINDLESS))
+                if (!((Creature*)t)->isMType(MA_UNDEAD))
+                    Per |= PER_TELE;
+
+    /* Later, you should have to 'turn on' scent, and it should
+       slow you to half-movement through its use. */
+    if (HasStati_ENGULFED)
+        if (ScentRange >= Dist && !(NonDet & PER_SCENT))
+            /*if (HasStati(SCENT_ON))*/
+            if (t_isCreature)
+                if (assertLOS || (m->LineOfFire(x, y, tx, ty, this)))
+                    if (onPlane() == ((Creature*)t)->onPlane())
+                        Per |= PER_SCENT;
+
+    if (isMonster() && this == thism->CurrAI)
+        isBlind = thism->isBlind;
+    else
+        isBlind = HasMFlag(M_BLIND) || HasStati_BLIND;
+
+    if (isBlind && (Dist > BlindRange)) {
+        theGame->inPerceive--;
+        return Per;
+    }
+
+    if (max(abs(x - tx), abs(y - ty)) > max(SightRange, BlindRange)) {
+        theGame->inPerceive--;
+        return Per;
+    }
+
+    // ww: we need InBounds here to avoid crashes
+    /* ww: I disagree with this logic on game-annoyance reasons :-). A
+     * player with a ring of invisibility can see a Shadow in the middle
+     * of a room, but as soon as the shadow moves into the wall and starts
+     * attacking the player, the player cannot see the shadow. The player
+     * can, however, attack the shadow, and can get messages like "you're
+     * about to leave a threatened area, confirm?", so what actually
+     * happens is that you just try all 8 directions until you find the
+     * right one.
+     if (!m || !m->InBounds(t->x,t->y) ||
+     (m->At(t->x,t->y).Opaque && !t->isFeature()))
+     goto SkipVisual;
+     */
+
+    if (HasStati_ENGULFED)
+        goto SkipVisual;
+
+    if (t_HasStati_HIDING && t_isCreature)
+        if (((Creature*)t)->SkillLevel(SK_HIDE) +
+            ((Creature*)t)->HideVal > SkillLevel(SK_SPOT)) {
+            /* ww: in isHostileTo, a hiding player is never hostile!
+             * thus, enemies always saw through the PC's Hide In Shadows! */
+            if (!((Creature*)t)->isLedBy(this) || t->isPlayer())
+                goto SkipVisual;
+        }
+
+    if (t_HasStati_INVIS && !HasStati_SEE_INVIS)    /* later, update */
+        goto SkipVisual;
+
+    if (t_HasStati_INVIS_TO && !HasStati_SEE_INVIS)
+        StatiIterNature(t, INVIS_TO) {
+            if (S->Mag == 0 && S->eID) {
+                EventInfo xe;
+                xe.Clear();
+                xe.EActor = this;
+                xe.ETarget = t;
+                xe.eID = S->eID;
+                if (isTarget(xe, t))
+                    StatiIterBreakout(t, goto SkipVisual)
+            } else if (isMType(S->Mag))
+                StatiIterBreakout(t, goto SkipVisual)
+            }
+        StatiIterEnd(t)
+
+    if (isPlayer()) {
+        if (Dist <= SightRange) {
+            if (m->At(tx, ty).Visibility & VI_VISIBLE)
+                Per |= PER_VISUAL | PER_SHADOW;
+            else if (m->At(tx, ty).Visibility & VI_DEFINED)
+                Per |= (t_HasStati_ILLUMINATED ? PER_VISUAL : 0) | PER_SHADOW;
+        }
+    } else {
+        if (assertLOS || (assertLOS = m->LineOfVisualSight(x, y, tx, ty, this)))
+            Per |= PER_VISUAL | PER_SHADOW;
+    }
+
+    if (Dist > (LightRange * 2) && !m->At(tx, ty).Lit && !m->At(tx, ty).mLight && t != this) {
+        Per &= ~(PER_VISUAL | PER_SHADOW);
+    }
+
+    /* For now, we are treating "infravision" as darkvision rather
+       than heat-sight. This may change later, depending on human/
+       demihuman balance and power levels. */
+    if (Dist <= InfraRange && (assertLOS || (assertLOS = m->LineOfVisualSight(x, y, tx, ty, this))))
+        Per |= PER_INFRA;
+
+    if (!t->isShadowShape())
+        Per &= ~PER_SHADOW;
 
 SkipVisual:
-  /*
-     if (t->Flags & F_HILIGHT)
-     if (Dist <= DetectRange && !(NonDet & PER_DETECT))
-     Per |= (StatiVal_DETECTING & DET_VISIBLE) ? PER_DETECT : PER_SHADOW;
-   */
+    /*
+       if (t->Flags & F_HILIGHT)
+       if (Dist <= DetectRange && !(NonDet & PER_DETECT))
+       Per |= (StatiVal_DETECTING & DET_VISIBLE) ? PER_DETECT : PER_SHADOW;
+       */
 
-  { theGame->inPerceive--; return Per; }
+    {
+        theGame->inPerceive--;
+        return Per;
+    }
 }
-
-
-
-
-

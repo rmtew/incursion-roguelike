@@ -64,252 +64,251 @@
 \*****************************************************************************/
 
 void TextTerm::ShowStatus() {
-    int16 i,j, mColor, statiLen;
-		String LStatLine, MStatLine, SStatLine, Loc, *sp, add;
-    
-    if (Mode != MO_PLAY && Mode != MO_INV && Mode != MO_CREATE &&
-        Mode != MO_BARTER)
-      return;
-    
-    Color(AZURE); 
+    int16 i, j, mColor, statiLen;
+    String LStatLine, MStatLine, SStatLine, Loc, *sp, add;
+
+    if (Mode != MO_PLAY && Mode != MO_INV && Mode != MO_CREATE && Mode != MO_BARTER)
+        return;
+
+    Color(AZURE);
     SetWin(WIN_STATUS);
     Clear();
     SetWin(WIN_SCREEN);
-		for(i=0;i<=WinBottom();i++)
-      PutChar(WinRight()-15,i,GLYPH_VLINE);
+    for (i = 0; i <= WinBottom(); i++)
+        PutChar(WinRight() - 15, i, GLYPH_VLINE);
     SetWin(WIN_STATUS);
-		Color(GREY);
+    Color(GREY);
     if (!theGame->InPlay())
-      Write(0,0,Format("Character Generation: %s",p->Named.GetLength()==0 ? "unnamed" :
-                                            (const char*)p->Named));
+        Write(0, 0, Format("Character Generation: %s", p->Named.GetLength() == 0 ? "unnamed" :
+        (const char*)p->Named));
     else {
-      if (m->dID == m->RegionAt(p->x,p->y))
-        Loc = NAME(m->dID);
-      else
-		    Loc = Format("%s: %s",
-			    NAME(m->dID),
-          NAME(m->RegionAt(p->x,p->y)));
-      if (p->LightRange == 0 || p->isBlind())
-        ;
-      else if (TTER(m->PTerrainAt(p->x,p->y,p))->HasFlag(TF_SHOWNAME) && 
+        if (m->dID == m->RegionAt(p->x, p->y))
+            Loc = NAME(m->dID);
+        else
+            Loc = Format("%s: %s", NAME(m->dID), NAME(m->RegionAt(p->x, p->y)));
+        if (p->LightRange == 0 || p->isBlind())
+            ;
+        else if (TTER(m->PTerrainAt(p->x, p->y, p))->HasFlag(TF_SHOWNAME) &&
             (p->Next && p->Perceives(oThing(p->Next))))
-        Loc += Format(" (%s; %s)",NAME(m->PTerrainAt(p->x,p->y,p)), 
-          (const char*)oThing(p->Next)->Name(NA_INSC));
-      else if (TTER(m->PTerrainAt(p->x,p->y,p))->HasFlag(TF_SHOWNAME))
-       Loc += Format(" (%s)",NAME(m->PTerrainAt(p->x,p->y,p)));
-      else if (p->m->PileAt(p->x,p->y))
-        Loc += " (pile of objects)";
-      else if (p->Next && isValidHandle(p->Next))
-        Loc += Format(" (%s)",(const char*)oThing(p->Next)->Name(NA_INSC));
-      if (m->At(p->x,p->y).isSkylight && p->LightRange != 0 && p->isBlind())
-        Loc += " (open above)";
-      
-      if (p->HasStati(ENGULFED))
-        Loc = Format("%s: %s", p->GetStatiVal(ENGULFED) == EG_ENGULF ?
-                "Engulfed" : "Swallowed", (const char*) 
-                Capitalize(p->GetStatiObj(ENGULFED)->Name(0),true));
-      
-      if (Loc.GetLength() > WinRight()-4)
-        Loc = Loc.Left(WinRight()-8) + Format("...%c%s",-GREY,
-                   p->HasStati(ENGULFED) ? "" : ")");
-      Write(0,0,Loc);
+            Loc += Format(" (%s; %s)", NAME(m->PTerrainAt(p->x, p->y, p)),
+            (const char*)oThing(p->Next)->Name(NA_INSC));
+        else if (TTER(m->PTerrainAt(p->x, p->y, p))->HasFlag(TF_SHOWNAME))
+            Loc += Format(" (%s)", NAME(m->PTerrainAt(p->x, p->y, p)));
+        else if (p->m->PileAt(p->x, p->y))
+            Loc += " (pile of objects)";
+        else if (p->Next && isValidHandle(p->Next))
+            Loc += Format(" (%s)", (const char*)oThing(p->Next)->Name(NA_INSC));
+        if (m->At(p->x, p->y).isSkylight && p->LightRange != 0 && p->isBlind())
+            Loc += " (open above)";
 
-      if (p->m && p->m->Depth)
-		    Write(WinRight()-3,0,Format("%03dm",10 * p->m->Depth));
-      else
-        Write(WinRight()-4,0,"Study");
-      }
+        if (p->HasStati(ENGULFED))
+            Loc = Format("%s: %s", p->GetStatiVal(ENGULFED) == EG_ENGULF ?
+            "Engulfed" : "Swallowed", (const char*)
+            Capitalize(p->GetStatiObj(ENGULFED)->Name(0), true));
+
+        if (Loc.GetLength() > WinRight() - 4)
+            Loc = Loc.Left(WinRight() - 8) + Format("...%c%s", -GREY,
+            p->HasStati(ENGULFED) ? "" : ")");
+        Write(0, 0, Loc);
+
+        if (p->m && p->m->Depth)
+            Write(WinRight() - 3, 0, Format("%03dm", 10 * p->m->Depth));
+        else
+            Write(WinRight() - 4, 0, "Study");
+    }
     if (p->kcMana() + p->hMana >= p->ktMana())
-      mColor = EMERALD; /* Full Mana */
-    else if ((p->kcMana()+p->hMana)*2 >= p->ktMana())
-      mColor = YELLOW; /* Regenerating Mana */
+        mColor = EMERALD; /* Full Mana */
+    else if ((p->kcMana() + p->hMana) * 2 >= p->ktMana())
+        mColor = YELLOW; /* Regenerating Mana */
     else
-      mColor = RED; /* No Regen Till Rest */
-      
+        mColor = RED; /* No Regen Till Rest */
+
     statiLen = WinSizeX() - 3;
     if (!p->Opt(OPT_SIDEBAR)) {
-      String s;
-		  s = Format("HP:%d/%d Mana:%c%d%c/%d FP:%d/%d GP:%d",
-			  (int16)p->cHP+p->KAttr[A_THP]-p->Attr[A_THP],
-        (int16)p->mHP+p->Attr[A_THP],
-			  (int16)-mColor,
-        (int16)p->kcMana(),
-        (int16)-7,(int16)p->ktMana(),
-        p->cFP - (p->Attr[A_FAT] - p->KAttr[A_FAT]),
-        p->KAttr[A_FAT],
-        p->getTotalMoney()/100);
-      Write(0,1,s);
-      statiLen = WinRight() - (2 + s.TrueLength());
+        String s;
+        s = Format("HP:%d/%d Mana:%c%d%c/%d FP:%d/%d GP:%d",
+            (int16)p->cHP + p->KAttr[A_THP] - p->Attr[A_THP],
+            (int16)p->mHP + p->Attr[A_THP],
+            (int16)-mColor,
+            (int16)p->kcMana(),
+            (int16)-7, (int16)p->ktMana(),
+            p->cFP - (p->Attr[A_FAT] - p->KAttr[A_FAT]),
+            p->KAttr[A_FAT],
+            p->getTotalMoney() / 100);
+        Write(0, 1, s);
+        statiLen = WinRight() - (2 + s.TrueLength());
     }
 
     LStatLine.Empty();
     MStatLine.Empty();
     SStatLine.Empty();
 
-  rID shownIDs[1024];
-  int lastShown = 0; 
+    rID shownIDs[1024];
+    int lastShown = 0;
 
-  StatiIter(p)
-    if (S->eID && S->h == p->myHandle)
-      for (j=0;p->AutoBuffs[j];j++)
-        if (theGame->SpellID(p->AutoBuffs[j]) == S->eID)
-          goto SkipThisOne;
-        
-    if (LookupOnly(StatiLineStats,S->Nature)) {
-      if (S->Nature == FLAWLESS_DODGE)
-        if (!S->Val)
-          continue;
-      LStatLine += XPrint(Lookup(StatiLineStats,S->Nature));
-      MStatLine += XPrint(Lookup(StatiLineStats,S->Nature));
-      if (S->Nature == CHARGING && S->Mag) {
-        int32 bonus = p->ChargeBonus(); 
-        LStatLine += Format("%c%+d%c ", -PINK, bonus, -GREY);
-        MStatLine += Format("%c%+d%c ", -PINK, bonus, -GREY);
-    }
-      if (S->Nature == FLAWLESS_DODGE)
-        {
-          LStatLine += Format("%c(%d left)%c ",-EMERALD, p->AbilityLevel(CA_FLAWLESS_DODGE) + p->Mod(A_DEX) - S->Mag, -GREY);
-          MStatLine += Format("%c(%d)%c ", -EMERALD, p->AbilityLevel(CA_FLAWLESS_DODGE) + p->Mod(A_DEX) - S->Mag, -GREY);
-        }  
-      if (LookupOnly(StatiLineShorts,S->Nature)) {
-        SStatLine += XPrint(Lookup(StatiLineShorts,S->Nature));
-              }
-    } else if (S->eID && 
-        S->Nature != WEP_SKILL && S->Nature != TEMPLATE && 
-        S->Nature != SUSPEND_ATTK && 
-        (S->Duration > 0 || S->Duration < 0) && 
-        S->Source != SS_RACE &&
-        S->Source != SS_CLAS &&
-        S->Source != SS_TMPL &&
-        S->Source != SS_BODY &&
-        RES(S->eID)->Type == T_TEFFECT) {
-      TEffect * te = TEFF(S->eID); 
-      if (te->HasFlag(EF_SHOWNAME) || te->GetMessages(MSG_STATINAME)[0].GetLength()) {
-        bool found = false;
-        for (int j=0; !found && j<lastShown; j++)
-          if (S->eID == shownIDs[j])
-            found = true;
-        if (!found) { 
-          shownIDs[lastShown++] = S->eID; 
+    StatiIter(p)
+        if (S->eID && S->h == p->myHandle)
+            for (j = 0; p->AutoBuffs[j]; j++)
+                if (theGame->SpellID(p->AutoBuffs[j]) == S->eID)
+                    goto SkipThisOne;
 
-          bool isBad = !te->HasFlag(EF_NOTBAD);
+        if (LookupOnly(StatiLineStats, S->Nature)) {
+            if (S->Nature == FLAWLESS_DODGE)
+                if (!S->Val)
+                    continue;
 
-          String LS; 
-          String MS; 
-          String SS;
+            LStatLine += XPrint(Lookup(StatiLineStats, S->Nature));
+            MStatLine += XPrint(Lookup(StatiLineStats, S->Nature));
+            if (S->Nature == CHARGING && S->Mag) {
+                int32 bonus = p->ChargeBonus();
+                LStatLine += Format("%c%+d%c ", -PINK, bonus, -GREY);
+                MStatLine += Format("%c%+d%c ", -PINK, bonus, -GREY);
+            }
+            if (S->Nature == FLAWLESS_DODGE) {
+                LStatLine += Format("%c(%d left)%c ", -EMERALD, p->AbilityLevel(CA_FLAWLESS_DODGE) + p->Mod(A_DEX) - S->Mag, -GREY);
+                MStatLine += Format("%c(%d)%c ", -EMERALD, p->AbilityLevel(CA_FLAWLESS_DODGE) + p->Mod(A_DEX) - S->Mag, -GREY);
+            }
+            if (LookupOnly(StatiLineShorts, S->Nature)) {
+                SStatLine += XPrint(Lookup(StatiLineShorts, S->Nature));
+            }
+        } else if (S->eID &&
+            S->Nature != WEP_SKILL && S->Nature != TEMPLATE &&
+            S->Nature != SUSPEND_ATTK &&
+            (S->Duration > 0 || S->Duration < 0) &&
+            S->Source != SS_RACE &&
+            S->Source != SS_CLAS &&
+            S->Source != SS_TMPL &&
+            S->Source != SS_BODY &&
+            RES(S->eID)->Type == T_TEFFECT) {
+            TEffect * te = TEFF(S->eID);
+            if (te->HasFlag(EF_SHOWNAME) || te->GetMessages(MSG_STATINAME)[0].GetLength()) {
+                bool found = false;
+                for (int j = 0; !found && j < lastShown; j++)
+                    if (S->eID == shownIDs[j])
+                        found = true;
 
-          if (isBad) {
-            LS = MS = SS = XPrint(Format("<12>%s<7>",NAME(S->eID)));
-          } else {
-            sp = TEFF(S->eID)->GetMessages(MSG_STATINAME);
-            if (sp[0].GetLength()) {
-              LS = sp[0]; 
-              if (sp[1].GetLength()) {
-                MS = SS = sp[1];
-              } else {
-                MS = SS = sp[0];
-              } 
-            } else {
-              LS = MS = SS = NAME(S->eID); 
-            } 
-          } 
-          if (TEFF(S->eID)->HasFlag(EF_SHOWVAL)) {
-            add = Format(" (%d)",S->Val); 
-            LS += add;
-            MS += add;
-            SS += add; 
-          }
-          LStatLine += LS + " ";
-          MStatLine += MS + " ";
-          SStatLine += SS + " ";
+                if (!found) {
+                    shownIDs[lastShown++] = S->eID;
+
+                    bool isBad = !te->HasFlag(EF_NOTBAD);
+
+                    String LS;
+                    String MS;
+                    String SS;
+
+                    if (isBad) {
+                        LS = MS = SS = XPrint(Format("<12>%s<7>", NAME(S->eID)));
+                    } else {
+                        sp = TEFF(S->eID)->GetMessages(MSG_STATINAME);
+                        if (sp[0].GetLength()) {
+                            LS = sp[0];
+                            if (sp[1].GetLength()) {
+                                MS = SS = sp[1];
+                            } else {
+                                MS = SS = sp[0];
+                            }
+                        } else {
+                            LS = MS = SS = NAME(S->eID);
+                        }
+                    }
+                    if (TEFF(S->eID)->HasFlag(EF_SHOWVAL)) {
+                        add = Format(" (%d)", S->Val);
+                        LS += add;
+                        MS += add;
+                        SS += add;
+                    }
+                    LStatLine += LS + " ";
+                    MStatLine += MS + " ";
+                    SStatLine += SS + " ";
+                }
+            }
         }
-      } 
-    }
-    SkipThisOne:;
-  StatiIterEnd(p)
-  if (p->AutoBuffs[0])
-    {
-      bool all, some;
-      all = true; some = false;
-      for(j=0;p->AutoBuffs[j];j++) {
-        if (p->HasEffStati(-1,theGame->SpellID(p->AutoBuffs[j])) ||
-            p->HasEffField(theGame->SpellID(p->AutoBuffs[j])))
-          some = true;
-        else 
-          all = false;
+
+SkipThisOne:;
+    StatiIterEnd(p)
+
+    if (p->AutoBuffs[0]) {
+        bool all, some;
+        all = true; some = false;
+        for (j = 0; p->AutoBuffs[j]; j++) {
+            if (p->HasEffStati(-1, theGame->SpellID(p->AutoBuffs[j])) ||
+                p->HasEffField(theGame->SpellID(p->AutoBuffs[j])))
+                some = true;
+            else
+                all = false;
         }
-      if (all)
-        { LStatLine += XPrint("<10>Buffed<7> ");
-          MStatLine += XPrint("<10>Buffed<7> ");
-          SStatLine += XPrint("<10>Bufd<7> "); }
-      else if (some)
-        { LStatLine += XPrint("<14>Semibuffed<7> ");
-          MStatLine += XPrint("<14>Semibuffed<7> ");
-          SStatLine += XPrint("<14>Semi<7> "); }
-      else
-        { LStatLine += XPrint("<12>UNBUFFED<7> ");
-          MStatLine += XPrint("<12>UNBUFFED<7> ");
-          SStatLine += XPrint("<12>UNBUFF<7> "); }   
+        if (all) {
+            LStatLine += XPrint("<10>Buffed<7> ");
+            MStatLine += XPrint("<10>Buffed<7> ");
+            SStatLine += XPrint("<10>Bufd<7> ");
+        } else if (some) {
+            LStatLine += XPrint("<14>Semibuffed<7> ");
+            MStatLine += XPrint("<14>Semibuffed<7> ");
+            SStatLine += XPrint("<14>Semi<7> ");
+        } else {
+            LStatLine += XPrint("<12>UNBUFFED<7> ");
+            MStatLine += XPrint("<12>UNBUFFED<7> ");
+            SStatLine += XPrint("<12>UNBUFF<7> ");
+        }
     }
-  
+
     if (p->Flags & F_DELETE) {
-      LStatLine += XPrint("<4>Dead<7>");
-      MStatLine += XPrint("<4>Dead<7>");
-      }
+        LStatLine += XPrint("<4>Dead<7>");
+        MStatLine += XPrint("<4>Dead<7>");
+    }
     if (LStatLine.GetLength() == 0)
-      goto DoneStati;
-      
+        goto DoneStati;
+
     LStatLine = Trim(LStatLine);
     MStatLine = Trim(MStatLine);
     SStatLine = Trim(SStatLine);
-      
+
     {
-       
-      if (LStatLine.TrueLength() < statiLen)
-        Write(max(1,WinRight()-LStatLine.TrueLength()),1,LStatLine);
-      else if (MStatLine.TrueLength() < statiLen)
-        Write(max(1,WinRight()-MStatLine.TrueLength()),1,MStatLine);
-      else {
-        SStatLine = SStatLine.TrueLeft(statiLen);
-        Write(max(1,WinRight()-SStatLine.TrueLength()),1,SStatLine);
+        if (LStatLine.TrueLength() < statiLen)
+            Write(max(1, WinRight() - LStatLine.TrueLength()), 1, LStatLine);
+        else if (MStatLine.TrueLength() < statiLen)
+            Write(max(1, WinRight() - MStatLine.TrueLength()), 1, MStatLine);
+        else {
+            SStatLine = SStatLine.TrueLeft(statiLen);
+            Write(max(1, WinRight() - SStatLine.TrueLength()), 1, SStatLine);
         }
     }
-    DoneStati:
 
+DoneStati:
     if (theGame->InPlay()) {
-      if (p->ktMana() > p->kcMana()*3)
-        j = BACK_COLOUR(RED);
-      else
-        j = BACK_COLOUR(BLACK);
-      Color(WHITE | j);
-      PutChar(sizeX-15,0,'[');
-      PutChar(sizeX-1,0,']');
-      for(i=sizeX-14;i!=sizeX-1;i++) {
-        if (((p->hMana)*(14)/(p->ktMana())) > i-(sizeX-14))
-          Color(BROWN|j);        
-        else if (((p->ktMana()-p->cMana())*(13)/
-                       p->ktMana()) > i-(sizeX-14))
-          Color(EMERALD|j);
+        if (p->ktMana() > p->kcMana() * 3)
+            j = BACK_COLOUR(RED);
         else
-          Color(GREY|j);
-        PutChar(i,0,'*');
+            j = BACK_COLOUR(BLACK);
+        Color(WHITE | j);
+        PutChar(sizeX - 15, 0, '[');
+        PutChar(sizeX - 1, 0, ']');
+        for (i = sizeX - 14; i != sizeX - 1; i++) {
+            if (((p->hMana)*(14) / (p->ktMana())) > i - (sizeX - 14))
+                Color(BROWN | j);
+            else if (((p->ktMana() - p->cMana())*(13) /
+                p->ktMana()) > i - (sizeX - 14))
+                Color(EMERALD | j);
+            else
+                Color(GREY | j);
+            PutChar(i, 0, '*');
         }
-      
-      if ((p->mHP+p->Attr[A_THP]) > p->cHP*3)
-        j = BACK_COLOUR(RED) | BRIGHT_MASK;
-      else
-        j = BACK_COLOUR(BLACK);
-      Color(WHITE | j);
-      PutChar(sizeX-15,1,'[');
-      PutChar(sizeX-1,1,']');
-      for(i=sizeX-14;i!=sizeX-1;i++) {
-        if ((((p->mHP+p->Attr[A_THP])-p->cHP)*(14)/(p->mHP+p->Attr[A_THP])) > i-(sizeX-14))
-          Color(RED | j);
+
+        if ((p->mHP + p->Attr[A_THP]) > p->cHP * 3)
+            j = BACK_COLOUR(RED) | BRIGHT_MASK;
         else
-          Color(GREY | j);
-        PutChar(i,1,'*');
+            j = BACK_COLOUR(BLACK);
+        Color(WHITE | j);
+        PutChar(sizeX - 15, 1, '[');
+        PutChar(sizeX - 1, 1, ']');
+        for (i = sizeX - 14; i != sizeX - 1; i++) {
+            if ((((p->mHP + p->Attr[A_THP]) - p->cHP)*(14) / (p->mHP + p->Attr[A_THP])) > i - (sizeX - 14))
+                Color(RED | j);
+            else
+                Color(GREY | j);
+            PutChar(i, 1, '*');
         }
-      }
+    }
 }
 
 void TextTerm::ShowTraits() {
@@ -868,77 +867,79 @@ DoOverlay:
 }
 
 void TextTerm::ShowMap() {
-  int16 x,y;
-  Glyph g;
-  if (Mode != MO_PLAY || !p->m) 
-    return; 
-  
-  if (p->HasStati(ENGULFED))
-    {
-      Creature *en = (Creature*) p->GetStatiObj(ENGULFED);
-      ASSERT(en && en->isCreature());
-      Glyph col = en->Image & GLYPH_COLOUR_MASK;
-      SetWin(WIN_MAP);
-      Clear();
-    
-      /* Draw the player */
-      PutGlyph(p->x,p->y,p->Image);
-      
-      /* Draw the creature around the player */
-      PutChar(p->x  -XOff,p->y-1-YOff,'-' | col);
-      PutChar(p->x  -XOff,p->y+1-YOff,'-' | col);
-      PutChar(p->x-1-XOff,p->y  -YOff,'|' | col);
-      PutChar(p->x+1-XOff,p->y  -YOff,'|' | col);
-      PutChar(p->x+1-XOff,p->y+1-YOff,'/' | col);
-      PutChar(p->x+1-XOff,p->y-1-YOff,'\\' | col);
-      PutChar(p->x-1-XOff,p->y+1-YOff,'\\' | col);
-      PutChar(p->x-1-XOff,p->y-1-YOff,'/' | col);
-      
-      /* Later, draw other creature perceived by 
-         telepathy, etc -- but get this working
-         first! */
-      return;
+    int16 x, y;
+    Glyph g;
+
+    if (Mode != MO_PLAY || !p->m)
+        return;
+
+    if (p->HasStati(ENGULFED)) {
+        Creature *en = (Creature*)p->GetStatiObj(ENGULFED);
+        ASSERT(en && en->isCreature());
+        Glyph col = en->Image & GLYPH_COLOUR_MASK;
+        SetWin(WIN_MAP);
+        Clear();
+
+        /* Draw the player */
+        PutGlyph(p->x, p->y, p->Image);
+
+        /* Draw the creature around the player */
+        PutChar(p->x - XOff, p->y - 1 - YOff, '-' | col);
+        PutChar(p->x - XOff, p->y + 1 - YOff, '-' | col);
+        PutChar(p->x - 1 - XOff, p->y - YOff, '|' | col);
+        PutChar(p->x + 1 - XOff, p->y - YOff, '|' | col);
+        PutChar(p->x + 1 - XOff, p->y + 1 - YOff, '/' | col);
+        PutChar(p->x + 1 - XOff, p->y - 1 - YOff, '\\' | col);
+        PutChar(p->x - 1 - XOff, p->y + 1 - YOff, '\\' | col);
+        PutChar(p->x - 1 - XOff, p->y - 1 - YOff, '/' | col);
+
+        /* Later, draw other creature perceived by
+           telepathy, etc -- but get this working
+           first! */
+        return;
     }
-  Check(m,"Null Map in ShowMap?!");
-  Color(GREY);
-  if (p->UpdateMap)
-    p->CalcVision();
-  p->UpdateMap = 0;
-  SetWin(WIN_MAP);
-  //const int16 sx = min(MSizeX(),m->SizeX() - XOff);
-  //const int16 sy = min(MSizeY(),m->SizeY() - YOff);
-  const int16 sx = MSizeX();
-  const int16 sy = MSizeY();
-  const int16 msx= m->SizeX();
-  ResetWViewList(); 
-  for(y=0;y<sy;y++)
-    for(x=0;x<sx;x++)
-    {
-      if (!m->InBounds(x+XOff,y+YOff))
-        {
-          PutChar(x,y,' ');
-          continue;
+
+    Check(m, "Null Map in ShowMap?!");
+    Color(GREY);
+    if (p->UpdateMap)
+        p->CalcVision();
+    p->UpdateMap = 0;
+    SetWin(WIN_MAP);
+
+    const int16 sx = MSizeX();
+    const int16 sy = MSizeY();
+    const int16 msx = m->SizeX();
+
+    ResetWViewList();
+    for (y = 0; y < sy; y++)
+        for (x = 0; x < sx; x++) {
+            if (!m->InBounds(x + XOff, y + YOff)) {
+                PutChar(x, y, ' ');
+                continue;
+            }
+
+            LocationInfo & mAt = m->At(x + XOff, y + YOff);
+            if (mAt.Visibility & VI_EXTERIOR) /*later, >> player*4 */
+                PutGlyph(x + XOff, y + YOff, GLYPH_VALUE(GLYPH_WALL, GREY));
+            else if (mAt.Visibility & VI_VISIBLE) { /*later, >> player*4 */
+                PutGlyph(x + XOff, y + YOff, gr[(y + YOff)*msx + (x + XOff)].Glyph);
+                WViewThing(m->FirstAt(x + XOff, y + YOff),
+                    dist(x + XOff, y + YOff, p->x, p->y), true);
+            } else {
+                g = (Glyph)mAt.Memory;
+                if (g) {
+                    PutGlyph(x + XOff, y + YOff, g);
+                    WViewThing(m->FirstAt(x + XOff, y + YOff),
+                        dist(x + XOff, y + YOff, p->x, p->y), false);
+                } else
+                    PutGlyph(x + XOff, y + YOff, GLYPH_UNSEEN);
+            }
         }
-      LocationInfo & mAt = m->At(x+XOff,y+YOff); 
-      if(mAt.Visibility & VI_EXTERIOR) /*later, >> player*4 */
-        PutGlyph(x+XOff, y+YOff, GLYPH_VALUE(GLYPH_WALL, GREY));
-      else if(mAt.Visibility & VI_VISIBLE) { /*later, >> player*4 */
-        PutGlyph(x+XOff, y+YOff, gr[(y+YOff)*msx + (x+XOff)].Glyph);
-        WViewThing(m->FirstAt(x+XOff,y+YOff) , 
-            dist(x+XOff,y+YOff,p->x,p->y), true);
-      } else {
-        g = (Glyph)mAt.Memory;
-        if (g) {
-          PutGlyph(x+XOff,y+YOff,g);
-          WViewThing(m->FirstAt(x+XOff,y+YOff), 
-                dist(x+XOff,y+YOff,p->x,p->y), false);
-        } else
-          PutGlyph(x+XOff,y+YOff,GLYPH_UNSEEN);
-      }
-    }
-  ShowThings();
-  if(m->ov.Active)
-    m->ov.ShowGlyphs();
+
+    ShowThings();
+
+    if (m->ov.Active)
+        m->ov.ShowGlyphs();
 }
 
 void TextTerm::AdjustMap(int16 vx, int16 vy,bool newmap) {
@@ -1496,56 +1497,52 @@ static int16 ViewListPriorityMod(Thing *t) {
 }
 
 static int WViewListSortA(const void *a, const void *b) {
-  WViewListElt *aa = (WViewListElt *)a,
-               *bb = (WViewListElt *)b;
- 
-  /* Creatures first */
-  if (aa->t->isCreature() && !bb->t->isCreature())
-    return aa->dist - (bb->dist+10);
-  if (!aa->t->isCreature() && bb->t->isCreature())
-    return (aa->dist+10) - bb->dist; 
+    WViewListElt *aa = (WViewListElt *)a, *bb = (WViewListElt *)b;
 
-  return (aa->dist + ViewListPriorityMod(aa->t)) - 
-         (bb->dist + ViewListPriorityMod(bb->t)); 
+    /* Creatures first */
+    if (aa->t->isCreature() && !bb->t->isCreature())
+        return aa->dist - (bb->dist + 10);
+    if (!aa->t->isCreature() && bb->t->isCreature())
+        return (aa->dist + 10) - bb->dist;
+
+    return (aa->dist + ViewListPriorityMod(aa->t)) - (bb->dist + ViewListPriorityMod(bb->t));
 }
 
 static int WViewListSortB(const void *a, const void *b) {
-  WViewListElt *aa = (WViewListElt *)a,
-               *bb = (WViewListElt *)b;
-
-    return aa->dist - bb->dist; 
+    WViewListElt *aa = (WViewListElt *)a, *bb = (WViewListElt *)b;
+    return aa->dist - bb->dist;
 }
 
 void TextTerm::ShowViewList() {
     int8 ResistsShown[] = {
-      AD_FIRE, AD_COLD, AD_SONI, 
-      AD_ACID, AD_ELEC, AD_TOXI, AD_NECR, AD_PSYC, AD_MAGC,
-      AD_SLEE, AD_STUN, AD_PLYS, AD_STON, AD_POLY, AD_CHRM,
-      AD_DISN, AD_CRIT, AD_DISE, AD_FEAR, 0 
-      };
-    int16 y,i,j; 
-    String nm;  
+        AD_FIRE, AD_COLD, AD_SONI,
+        AD_ACID, AD_ELEC, AD_TOXI, AD_NECR, AD_PSYC, AD_MAGC,
+        AD_SLEE, AD_STUN, AD_PLYS, AD_STON, AD_POLY, AD_CHRM,
+        AD_DISN, AD_CRIT, AD_DISE, AD_FEAR, 0
+    };
+    int16 y, i, j;
+    String nm;
     Container *pack;
+
     /*if (GetMode() != MO_PLAY)
       return;
-    ListChanged = false;*/
+      ListChanged = false;*/
     ShowMap();
     SetWin(WIN_VIEWLIST);
     Clear();
     Color(YELLOW);
-    switch (p->Opt(OPT_LOWERSCREEN))
-      {
-        case 0: /* View List */
-          {
+    switch (p->Opt(OPT_LOWERSCREEN)) {
+    case 0: /* View List */
+        {
             int linesWeCanUse = activeWin->Bottom - activeWin->Top;
             Write("Things in View:");
             if (p->HasStati(ENGULFED)) {
-              Color(RED);
-              PutChar(0,1,p->GetStatiObj(ENGULFED)->Image & ~GLYPH_BACK_MASK);
-              WrapWrite(2,1,p->GetStatiObj(ENGULFED)->Name(NA_MONO),16,
+                Color(RED);
+                PutChar(0, 1, p->GetStatiObj(ENGULFED)->Image & ~GLYPH_BACK_MASK);
+                WrapWrite(2, 1, p->GetStatiObj(ENGULFED)->Name(NA_MONO), 16,
                     linesWeCanUse - 2);
-              break;
-              }            
+                break;
+            }
             /* 1st Priority: display all WViewListCount things in view,
              *               giving everything at least 1 line
              * 2nd Priority: if we have extra lines, give all of them
@@ -1554,216 +1551,228 @@ void TextTerm::ShowViewList() {
              */
             y = 1;
             //#ifdef WEIMER_LIST
-            qsort(WViewList,WViewListCount,sizeof(WViewList[0]),WViewListSortA);
+            qsort(WViewList, WViewListCount, sizeof(WViewList[0]), WViewListSortA);
             //#else
             //qsort(WViewList,WViewListCount,sizeof(WViewList[0]),WViewListSortB);
             //#endif
-            int spareLines = linesWeCanUse - WViewListCount; 
-            for (i=0;i<WViewListCount;i++) {
-              if (y > linesWeCanUse)
-                return;
-              GotoXY(0,y);
-              if (WViewList[i].t->x == -1)
-                continue;
-              PutChar(m->MultiAt( WViewList[i].t->x, WViewList[i].t->y ) ?
-                GLYPH_VALUE(GLYPH_MULTI, WHITE) : WViewList[i].glyph);
-              Color(WViewList[i].color);
-              int code = WViewList[i].color == GREY ? 0 : NA_MONO;
-              int linesUsed = 
-                WrapWrite(2,y,WViewList[i].t->Name(code),16,
+            int spareLines = linesWeCanUse - WViewListCount;
+            for (i = 0; i < WViewListCount; i++) {
+                if (y > linesWeCanUse)
+                    return;
+                GotoXY(0, y);
+                if (WViewList[i].t->x == -1)
+                    continue;
+                PutChar(m->MultiAt(WViewList[i].t->x, WViewList[i].t->y) ?
+                    GLYPH_VALUE(GLYPH_MULTI, WHITE) : WViewList[i].glyph);
+                Color(WViewList[i].color);
+                int code = WViewList[i].color == GREY ? 0 : NA_MONO;
+                int linesUsed =
+                    WrapWrite(2, y, WViewList[i].t->Name(code), 16,
                     1 + (spareLines > 0 ? spareLines : 0));
-              y += linesUsed;
-              spareLines -= (linesUsed - 1); 
+                y += linesUsed;
+                spareLines -= (linesUsed - 1);
             }
-          }
-         break;
+        }
 
-        case 1: /* Resists */
-          Write("\nResistances:\n");
-          y = 2; Color(GREY);
-          for (i=0;ResistsShown[i];i++)
-            if (j = p->ResistLevel(ResistsShown[i]))
-              {
-                nm = Lookup(DTypeNames,ResistsShown[i]);
+        break;
+    case 1: /* Resists */
+        Write("\nResistances:\n");
+        y = 2; Color(GREY);
+        for (i = 0; ResistsShown[i]; i++)
+            if (j = p->ResistLevel(ResistsShown[i])) {
+                nm = Lookup(DTypeNames, ResistsShown[i]);
                 if (nm.Right(6) == "Damage")
-                  nm = nm.Left(nm.GetLength() - 7);
+                    nm = nm.Left(nm.GetLength() - 7);
                 if (j == -1)
-                  Write(Format("  %s (Immune)\n", (const char*)nm).Left(WinSizeX()-1));
+                    Write(Format("  %s (Immune)\n", (const char*)nm).Left(WinSizeX() - 1));
                 else
-                  Write(Format("  %s %d\n", (const char*)nm,j).Left(WinSizeX()-1));
+                    Write(Format("  %s %d\n", (const char*)nm, j).Left(WinSizeX() - 1));
                 y++;
                 if (y > activeWin->Bottom)
-                  break;
-              }
-          if (y == 2)
+                    break;
+            }
+        if (y == 2)
             Write("  None\n");
-         break;
-        case 2: /* Pack */
-          Write("\nIn your Pack:\n");
-          y = 2; Color(GREY);
-          pack = (Container*) p->InSlot(SL_PACK);
-          if (!pack || !pack->isType(T_CONTAIN))
-            { Write("  (No Pack Equipped)"); break; }
-          for(i=0;(*pack)[i];i++) {
-            Write(Format("  %s",(const char*)(((*pack)[i])->Name(0))).Left(WinSizeX()-1));
+        break;
+    case 2: /* Pack */
+        Write("\nIn your Pack:\n");
+        y = 2; Color(GREY);
+        pack = (Container*)p->InSlot(SL_PACK);
+        if (!pack || !pack->isType(T_CONTAIN)) {
+            Write("  (No Pack Equipped)"); break;
+        }
+        for (i = 0; (*pack)[i]; i++) {
+            Write(Format("  %s", (const char*)(((*pack)[i])->Name(0))).Left(WinSizeX() - 1));
             Write("\n");
             y++;
             if (y > activeWin->Bottom)
-              break;
-            }
-          if (y == 2)
+                break;
+        }
+        if (y == 2)
             Write("  Pack Empty.\n");
-         break;   
-        case 3: /* Equipment */
-          Write("\nEquipment:\n");
-          y = 2; Color(GREY);
-          for(i=0;i!=SL_LAST;i++) 
+        break;
+    case 3: /* Equipment */
+        Write("\nEquipment:\n");
+        y = 2; Color(GREY);
+        for (i = 0; i != SL_LAST; i++)
             if (p->InSlot((int8)i) && p->InSlot((int8)i)->activeSlot(i)) {
-              Write(Format("  %s",(const char*)p->InSlot((int8)i)->Name(0)).Left(WinSizeX()-1));
-              Write("\n");
-              y++;
-              if (y > activeWin->Bottom)
-                break;
-              }
-          if (y == 2)
+                Write(Format("  %s", (const char*)p->InSlot((int8)i)->Name(0)).Left(WinSizeX() - 1));
+                Write("\n");
+                y++;
+                if (y > activeWin->Bottom)
+                    break;
+            }
+        if (y == 2)
             Write("  Nothing.\n");
-         break;   
-        case 4: /* Party */
-          Write("\nParty:\n");
-          y = 2; Color(GREY);
-          Write("  None");
-         break;
-        case 5: /* Quickkeys */
-          Write("\nQuick Keys:\n");
-          y = 2; Color(GREY);
-          Write("  None Set.\n");
-         break;
-        case 6: /* Spellkeys */
-          Write("\nSpellkeys:\n");
-          y = 2; Color(GREY);
-          for(i=0;i!=10;i++) 
+        break;
+    case 4: /* Party */
+        Write("\nParty:\n");
+        y = 2; Color(GREY);
+        Write("  None");
+        break;
+    case 5: /* Quickkeys */
+        Write("\nQuick Keys:\n");
+        y = 2; Color(GREY);
+        Write("  None Set.\n");
+        break;
+    case 6: /* Spellkeys */
+        Write("\nSpellkeys:\n");
+        y = 2; Color(GREY);
+        for (i = 0; i != 10; i++)
             if (p->SpellKeys[i] >= 0) {
-              Write(Format("%c%c%c %s",-SKYBLUE,'0'+i,-GREY,
-                NAME(theGame->SpellID(p->SpellKeys[i]))).TrueLeft(WinSizeX()-1));
-              Write("\n");
+                Write(Format("%c%c%c %s", -SKYBLUE, '0' + i, -GREY,
+                    NAME(theGame->SpellID(p->SpellKeys[i]))).TrueLeft(WinSizeX() - 1));
+                Write("\n");
 
-              y++;
-              if (y > activeWin->Bottom)
-                break;
-              }
-          if (y == 2)
+                y++;
+                if (y > activeWin->Bottom)
+                    break;
+            }
+        if (y == 2)
             Write("  None Set.\n");
-         break;
-      }
+        break;
+    }
 }
 
 void TextTerm::ResetWViewList() {
-  WViewListCount=0;
-  return;
+    WViewListCount = 0;
+    return;
 }
 
 void TextTerm::WViewThing(Thing *t, int32 dist, bool assertSeen) {
-  int itemCount = 0;
-  int chestCount = 0;
-  Glyph chestGlyph = 0; 
-  Thing *tt;
+    int itemCount = 0;
+    int chestCount = 0;
+    Glyph chestGlyph = 0;
+    Thing *tt;
 
-  // we need to know if there is a pile or a chest here before we display
-  // the first item
-  for (tt = t; tt; tt = oThing(tt->Next))
-    if (tt->isItem()) {
-      itemCount++;
-      if (tt->isType(T_CHEST)) {
-        if (!chestGlyph) chestGlyph = tt->Image; 
-        chestCount++;
-    } 
-    } 
-  if (t) {
-    int per = p->Perceives(t,assertSeen);
-    if (!(per & ~PER_SHADOW)) 
-      return; 
-  } 
+    // we need to know if there is a pile or a chest here before we display
+    // the first item
+    for (tt = t; tt; tt = oThing(tt->Next))
+        if (tt->isItem()) {
+            itemCount++;
+            if (tt->isType(T_CHEST)) {
+                if (!chestGlyph) chestGlyph = tt->Image;
+                chestCount++;
+            }
+        }
 
-  // yeah, I'm sorry about the gotos as well ...
-look_again: 
-  if (!t)
-    return;
-  
-  if (t == p ) 
-    goto look_at_next; 
-  if (t->isFeature()) {
-	  uint16 tg = GLYPH_ID_VALUE(t->Image);
-	  if (tg == GLYPH_TREE ||
-		  tg == GLYPH_BULK ||
-		  tg == GLYPH_PILLAR1 ||
-		  tg == GLYPH_PILLAR2 ||
-		  tg == GLYPH_HEDGE ||
-		  tg == GLYPH_FLOOR2 ||
-		  tg == GLYPH_FLOOR)
-		  goto look_at_next;
-  }
-  
-  if (t->isMonster()) {
-    p->JournalNoteMonster((Monster *)t);
-    ((Monster *)t)->ts.Retarget((Creature *)t); // ww: help out the AI
-  }
+    if (t) {
+        int per = p->Perceives(t, assertSeen);
+        if (!(per & ~PER_SHADOW))
+            return;
+    }
 
-  {
-    int big_dist = -1;  // index into WViewList w/ most distant Thing
-    int big_idx = -1;
-    // ww: find somewhere to put it in this list ...
-    // we have to scan through the whole thing anyway for duplicates, so
-    // we'll just remember the least important one and replace it
-    for (int i=0;i<WViewListCount;i++) {
-      if (WViewList[i].t == t)
+    // yeah, I'm sorry about the gotos as well ...
+look_again:
+    if (!t)
+        return;
+
+    if (t == p)
         goto look_at_next;
-      if (WViewList[i].dist > big_dist) {
-        big_dist = WViewList[i].dist;
-        big_idx = i;
-      } 
-    } 
-    if (WViewListCount < 16) 
-      big_idx = WViewListCount++; 
-    if (big_idx == -1) // not good enough to make the list, sorry!
-      return; // and nothing else at this distance can be good enough ...
-    int color ; 
-    color = GREY;
-    // Green for 'good' things, like sleeping monsters and magic items
-    // Red for 'bad' things, like tough monsters
-    // GREY (or whatever Name() gives) for the rest
-    if (t->isCreature()) {
-      Hostility h = ((Creature *)t)->ts.SpecificHostility((Creature *)t,p);
-      switch (h.quality) {
-        case Enemy: color = RED; break;
-        case Ally: color = GREEN; break; 
-        default: color = YELLOW; break; 
-      }
-    } else if (t->isItem())  {
-      bool good = false;
-      if (p->onPlane() != PHASE_MATERIAL)
-        good = ((Item*)t)->isGhostTouch();
-      else if (((Item*)t)->ItemLevel() > 0)
-        good = true;
-      if (good)  
-        color = GREEN;
-    } 
-    // String name = t->Name(0); 
-    Glyph g ; 
-    if (itemCount > 1) {
-      if (chestCount > 0)
-        g = chestGlyph;
-      else
-		  g = GLYPH_VALUE('*', GREY);
-    } else g = t->Image;
-    WViewList[big_idx].color = color; 
-    WViewList[big_idx].glyph = g  ;
-    WViewList[big_idx].dist = dist;
-    WViewList[big_idx].t = t; 
-  }
 
-look_at_next: 
-  t = oThing(t->Next);
-  goto look_again;
+    /* TODO(rmtew): This should not be done based off the glyph used. */
+    if (t->isFeature()) {
+        uint16 tg = GLYPH_ID_VALUE(t->Image);
+        if (tg == GLYPH_TREE ||
+            tg == GLYPH_BULK ||
+            tg == GLYPH_PILLAR1 ||
+            tg == GLYPH_PILLAR2 ||
+            tg == GLYPH_HEDGE ||
+            tg == GLYPH_FLOOR2 ||
+            tg == GLYPH_FLOOR)
+            goto look_at_next;
+    }
+
+    if (t->isMonster()) {
+        p->JournalNoteMonster((Monster *)t);
+        ((Monster *)t)->ts.Retarget((Creature *)t); // ww: help out the AI
+    }
+
+    {
+        int big_dist = -1;  // index into WViewList w/ most distant Thing
+        int big_idx = -1;
+        // ww: find somewhere to put it in this list ...
+        // we have to scan through the whole thing anyway for duplicates, so
+        // we'll just remember the least important one and replace it
+        for (int i = 0; i < WViewListCount; i++) {
+            if (WViewList[i].t == t)
+                goto look_at_next;
+            if (WViewList[i].dist > big_dist) {
+                big_dist = WViewList[i].dist;
+                big_idx = i;
+            }
+        }
+        if (WViewListCount < 16)
+            big_idx = WViewListCount++;
+        if (big_idx == -1) // not good enough to make the list, sorry!
+            return; // and nothing else at this distance can be good enough ...
+
+        int color = GREY;
+        // Green for 'good' things, like sleeping monsters and magic items
+        // Red for 'bad' things, like tough monsters
+        // GREY (or whatever Name() gives) for the rest
+        if (t->isCreature()) {
+            Hostility h = ((Creature *)t)->ts.SpecificHostility((Creature *)t, p);
+
+            switch (h.quality) {
+            case Enemy:
+                color = RED;
+                break;
+            case Ally:
+                color = GREEN;
+                break;
+            default:
+                color = YELLOW;
+                break;
+            }
+        } else if (t->isItem())  {
+            bool good = false;
+            if (p->onPlane() != PHASE_MATERIAL)
+                good = ((Item*)t)->isGhostTouch();
+            else if (((Item*)t)->ItemLevel() > 0)
+                good = true;
+            if (good)
+                color = GREEN;
+        }
+
+        // String name = t->Name(0); 
+        Glyph g;
+        if (itemCount > 1) {
+            if (chestCount > 0)
+                g = chestGlyph;
+            else
+                g = GLYPH_VALUE('*', GREY);
+        } else
+            g = t->Image;
+        WViewList[big_idx].color = color;
+        WViewList[big_idx].glyph = g;
+        WViewList[big_idx].dist = dist;
+        WViewList[big_idx].t = t;
+    }
+
+look_at_next:
+    t = oThing(t->Next);
+    goto look_again;
 }
 
 

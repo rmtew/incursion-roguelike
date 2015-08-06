@@ -433,7 +433,7 @@ TextVal PositiveAdj[] = {
   { A_CHA, "beautiful" },
   { A_MOV, "fleet" },
   { A_SPD, "skillful" },
-  //{ "confidant", A_
+  //{ "confident", A_
   //{ "graceful", A_
   { A_DEF, "protected" },
   { A_DMG, "lethal" },
