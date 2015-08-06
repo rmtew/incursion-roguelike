@@ -85,9 +85,7 @@ void TextTerm::ShowStatus() {
         if (m->dID == m->RegionAt(p->x, p->y))
             Loc = NAME(m->dID);
         else
-            Loc = Format("%s: %s",
-            NAME(m->dID),
-            NAME(m->RegionAt(p->x, p->y)));
+            Loc = Format("%s: %s", NAME(m->dID), NAME(m->RegionAt(p->x, p->y)));
         if (p->LightRange == 0 || p->isBlind())
             ;
         else if (TTER(m->PTerrainAt(p->x, p->y, p))->HasFlag(TF_SHOWNAME) &&
