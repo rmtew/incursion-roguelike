@@ -244,8 +244,11 @@ public:
             if (CurrentDirectory != c)
                 CurrentDirectory += c;
         }
-        if (chdir(CurrentDirectory))
-            Fatal("Unable to locate directory '%s'.", (const char*)CurrentDirectory);
+        if (chdir(CurrentDirectory)) {
+            char path[MAX_PATH_LENGTH];
+            _getcwd(path, MAX_PATH_LENGTH);
+            Fatal("Unable to locate directory: '%s' (cwd: '%s').", (const char*)CurrentDirectory, path);
+        }
     }
     virtual bool Exists(const char* fn);
     virtual void Delete(const char* fn);
@@ -1047,7 +1050,8 @@ void libtcodTerm::ShutDown() {
 void libtcodTerm::SetIncursionDirectory(const char *s) {
     char tmp[MAX_PATH_LENGTH] = "";
     IncursionDirectory = (const char *)s;
-    IncursionDirectory += "\\";
+    if (IncursionDirectory.Right(1) != "\\")
+        IncursionDirectory += "\\";
 
     strcpy(tmp, s);
     strcat(tmp, "\\mod");
