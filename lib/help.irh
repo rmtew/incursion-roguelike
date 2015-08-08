@@ -682,29 +682,29 @@ Text "help::interface"
      __In normal Incursion gameplay, the screen is divided into five distinct
      areas. The largest area is the map, which displays an overhead view of
      the area your character is exploring as represented by symbolic ASCII
-     characters. This area is essentially self-explanatory. The other four
-     areas are as follows:\n
+     characters (your character is represented by the '@' symbol. The other 
+     four areas are as follows:\n
      __<13>Traits Window:<5> The rightmost strip of the screen is called
-     the Traits Window, and is seperated from the map by a blue line. Here
+     the Traits Window, and is separated from the map by a blue line. Here
      you see several different pieces of information about your character
      for quick reference: your name, race, classes and levels, experience
      total and attributes. The current time is also displayed here, as are
-     several status conditions: your readyness (Exploring, Fighting or
+     several status conditions: your readiness (Exploring, Fighting or
      performing an extended action), hunger state, method of locomotion,
      health state and fatigue state. Attributes are shown in bright green 
      if increased by magic, brown if decreased by a spell effect or fatigue
      penalty and red if damaged by an attribute-damage attack.\n
-     __Beneath your attributes are listed your combat values: combat mode,
+     __Beneath your attributes are your combat values: combat mode,
      to-hit bonus, damage, attack speed, encumbrance level, defense class
      (and armour coverage, if applicable), armour ratings and movement rate.
-     The meaning of all these terms is defined in depth in the combat 
+     The meaning of all these terms is defined in-depth in the combat 
      chapter. Beneath the combat values is displayed a legend of all the
      creatures and objects currently within your line of sight, showing
      you exactly what each symbolic character on screen represents. If there
      are many things in your field of view, their names may be truncated to
      allow more to be shown.\n
-     __The final two lines of the Traits Window show two 'video game life
-     meter' style gauges for your current mana and current hit points as
+     __The final two lines of the Traits Window show two horizontal
+	 gauges representing your current mana and current hit points as
      proportional to their totals. When you cast spells that drain mana for
      as long as they remain active, that lost mana is shown as brown on the
      mana meter. When you cast spells costing mana that can be regenerated,
@@ -712,19 +712,19 @@ Text "help::interface"
      meter in red.\n
      __Several options allow you to customize what information is displayed
      in the Traits Window, suppressing common information that rarely changes
-     or replacing the list of object in view with other kinds of quick
-     referance data.\n
+     or replacing the list of objects in view with other kinds of quick
+     reference data.\n
      __<13>Status Window:<5> The two-line status window is shown at the bottom
      of the screen. The lowest line shows your current and total hit points,
      mana and fatigue points, as well as the total value in gold pieces of all
      the coins (of any type) you possess. After this, the line lists any spell
      effects currently affecting you or any other status conditions not shown
-     in the Traits Window. If you have a number of protective spells is your
-     AutoBuff list, they won't all be listed seperately here when active; instead,
+     in the Traits Window. If you have a number of protective spells in your
+     AutoBuff list, they won't all be listed separately here when active; instead,
      the status line will simply read BUFFED (to indicate all protective or
      augmentation spells have been cast), SEMIBUFF (to indicate some such spells
      are active but not others) and UNBUFFED (to indicate that none of your
-     listed spells are active on you at this time.\n
+     listed spells are active on you at this time).\n
      __The line immediately above the lowest line shows your current location: 
      the name of the area you inhabit, the current region in that area, the
      terrain and objects in the square your character is standing in and the
@@ -739,7 +739,7 @@ Text "help::interface"
      user to press [SPACE] before the remaining messages are displayed. This
      behaviour can be turned off using the Options Manager, causing new batches
      of messages to automatically overwrite old ones; this can be useful in the
-     later game when combats involve many creatures and a great deal of text is
+     later game when combat involves many creatures and a great deal of text is
      shown for every turn. The 'v' command can be used to review recent messages 
      if any are missed.\n
      __Beneath the Message Window is the one-line prompt window, which is normally
@@ -750,14 +750,14 @@ Text "help::interface"
      include attack rolls (either your attacks against other creatures or their
      attacks against you), damage rolls, saving throws, skill checks and other, 
      less common rolls such as magic resistance checks. There are two, two-line  
-     number windows; one for rolls your character makes and and for rolls made
+     number windows; one for rolls your character makes and one for rolls made
      by other creatures as a result of your spells or attacks. Both of these windows
      can be turned off in the Options Manager; their screen-space is then used to
      display more of the map.\n
      __Some rolls are not shown, either because they happen very frequently or
      because they would give away information the player should not have. In
      other cases, the numbers shown will not match the actual result of an
-     action in game -- for example, if a player is wearing an unidentified magical
+     action in-game -- for example, if a player is wearing an unidentified magical
      item that grants her a +4 bonus to Strength (and thus a +2 bonus to melee
      attack rolls), a perceived attack roll result of 13 will hit a monster with
      a defense class of 15 -- the increased Strength will be taken into account
@@ -767,7 +767,7 @@ Text "help::interface"
      __When a roll needs to be displayed, the number window it should be displayed
      in will automatically be cleared, even if there is another roll there that
      the player has not yet had a chance to see. This is a fairly frequent 
-     occurance in Incursion; the overwritten rolls can be examined using the 'v'
+     occurrence in Incursion; the overwritten rolls can be examined using the 'v'
      command. Additionally, sometimes all the modifiers for a roll cause its
      listing to be longer than the width of the numbers window it is displayed in;
      in this case its text will simply be truncated, but again the full roll can
@@ -870,13 +870,12 @@ Text "help::interface"
       __Four different types of input can be given using the selection
 	  prompt. By pressing the associated keys, you can input a direction,
 	  location, target or inventory item. Not all of these types of input
-	  are accepted by every selection prompt, depending upon what spawned
+	  are accepted by every selection prompt, it depends upon what triggered
 	  it. For example, the spell <9>bless<5> can be cast on either an
 	  inventory item or a location, but the spell <9>hideous laughter<5>
-	  can specifically be cast only on a living creature. You can press
-	  [ENTER] at any time to confirm the selection of a target, or [ESC]
-	  to cancel the selection prompt completely. The selection modes are 
-	  as follows:\n
+	  can be cast only on a living creature. You can press [ENTER] at any 
+      time to confirm the selection of a target, or [ESC] to cancel the selection 
+      prompt completely. The selection modes are as follows:\n
 	  __<13>Select a Direction ('d'):<5> Wands, breath weapons, some tactical
 	  options and spells which produce a beam, bolt or ball can be fired
 	  in a specific cardinal direction. When selecting a direction, pressing
@@ -886,17 +885,17 @@ Text "help::interface"
 	  polymorphed character's breath weapon) can <13>only<5> be fired in a
 	  cardinal direction. You can press '*' to aim a bolt or beam at yourself.\n
 	  __<13>Select a Location ('l'):<5> This selection mode allows you to select
-	  a given map square as a target for a spell or ability, irregardless
+	  a given map square as a target for a spell or ability, regardless
 	  of whether there is anything in it or not. This can be useful for
 	  spells like <9>dispel magic<5>, which have a circular area of effect 
 	  that you are choosing the center point of. By carefully choosing the
 	  focus of such effects, you can hit a maximum number of desired targets
-	  while avoiding hitting targets you don't desire to affect.\n
+	  while avoiding hitting targets you don't want to affect.\n
 	  __<13>Select a Target ('t'):<5> You can select a monster or unattended
 	  item as a target using this method. The arrow keys are used to jump to
 	  the nearest item in question in the direction chosen. If you can't manage
-	  to reach the target you want, you can also always use the 'l' location
- 	  selection mode to select a target, even if	the game won't let you select
+	  to reach the target you want, you can always use the 'l' location
+ 	  selection mode to select a target, even if the game won't let you select
 	  an empty square in response to this specific prompt.\n
 	  __<13>Select from Inventory ('i'):<5> Some spells can effect either
 	  external targets or items you are carrying. Pressing 'i' presents you
@@ -905,18 +904,17 @@ Text "help::interface"
 	  target by pressing [ESC].\n\n 
 
 	  <13>Looking<5>\n
-	  __The prompt for the Look ('l') command is simply the standard selection
+	  __The prompt for the Look ('l') command is the standard selection
 	  prompt, but the game ignores whatever you select. In other words, 'l'
-	  brings up the selection prompt just so that you can examine things around
+	  brings up the selection prompt so that you can examine things around
 	  you. In addition, four other keystroke options are explicitly listed under
 	  the Look command prompt to allow you to examine things more carefully, but
 	  are available from any effect prompt as well.\n
 	  __<13>Examine Target ('x'):<5> This option displays a window describing the
 	  target you have currently selected in greater detail, or a list of all the
-	  examinable things in the square. For monsters, this
-	  shows the monster memory entry in question; for weapons, it lists the weapon's
-	  combat statistics. Descriptions of things will be more fleshed out in later
-	  releases of Incursion.\n
+	  examinable things in the square. For monsters, this shows the monster memory 
+      entry in question; for weapons, it lists the weapon's combat statistics. Descriptions 
+      of things will be more fleshed out in later releases of Incursion.\n
 	  __<13>Examine Region ('r'):<5> This option displays the descriptive text for
 	  the room, corridor or sub-area the cursor is currently positioned over.\n
 	  __<13>Examine Terrain ('f'):<5> This option displays a more detailed description
@@ -931,7 +929,7 @@ Text "help::interface"
    
      <13>Other Selection Keys<5>\n
      __<13>Next Target ('n'):<5> On a square that contains more than one object,
-     the 'n' command can be used to cycle through them sequentially, for example
+     the 'n' command can be used to cycle through them sequentially. For example,
      to target a <9>magic missile<5> at a specific creature in a square with more
      than one creature in it.\n
      __<13>Target Mount ('h'):<5> When the currently displayed target is mounted,
@@ -943,15 +941,15 @@ Text "help::interface"
      defaults the command to giving orders.\n
      __<13>Wizard View ('w'):<5> The wizard view command brings up a pop-up window 
      listing all of the debug information for the currently selected object; it is
-     obviously available only in Wizard Mode.\n\n
+     available only in Wizard Mode.\n\n
    
      <13>THE INVENTORY MANAGER {IM}\n
          =====================\n
-     <5>__Using the inventory manager is fairly straightforward and 
-     self-explanatory. You can move the <12>>><5> cursor by pressing the
-     up or down arrow keys, or jump immediately to the slot you want to
-     alter by typing the letter listed beside it. Pressing [SPACE] will
-     swap the item currently in that slot with the item 'in the air'.\n
+     <5>__Using the inventory manager is fairly straightforward. 
+     You can move the <12>>><5> cursor by pressing the up or down arrow keys, 
+     or jump immediately to the slot you want to alter by typing the letter listed 
+     beside it. Pressing [SPACE] will swap the item currently in that slot with the 
+     item 'in the air'.\n
      __You can type 'x' to examine the currently selected item, or 'd'
      to drop it on the ground where you are standing. Examining a weapon
      will describe its full combat statistics and the effects of any
@@ -970,14 +968,14 @@ Text "help::interface"
      can flip between them by pressing [TAB]. This switches the listing
      to the next container available to you sequentially. If you opened
      the inventory screen by electing to loot a chest, that chest will be
-     one of the containers you can flip to, even though it isn't truly in
+     one of the containers you can flip to, even though it isn't in
      your inventory.\n
      __Containers have different properties. It takes more time to remove
      an item from some containers than it does from others. Specialized
      containers (like the ivory scroll case) generally offer much faster
      access to items than the backpack, which can store anything but takes
      more time to sort through.\n
-     __<13>Wielding Weapons:<5> You can wield any weapon on your own size
+     __<13>Wielding Weapons:<5> You can wield any weapon of your own size
      category or less in one hand, unless that weapon is of a type that
      specifically requires two hands regardless of size, like a long bow.
      If you use both hands, you can wield a weapon of one size category
@@ -1077,7 +1075,7 @@ Text "help::interface"
      to be reincarnated when they die.\n
      __When a character dies before reaching character level 5 and before
      having descended below the 5th level of the dungeon, that character is
-     eligable for reincarnation. Selecting the Reincarnate a Character
+     eligible for reincarnation. Selecting the Reincarnate a Character
      option from the main splash screen will restart the game with an exact
      copy of the selected character, including random perks, store contents,
      known alchemical formulas and random starting equipment. The character
