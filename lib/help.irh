@@ -4,7 +4,7 @@ Text "help::mainmenu"
        \n=======================================
        \n<5>__The manual for Incursion is divided into the following
        different sections. Use [TAB] and [ENTER] to select one of
-       the links below, or simply type the number of the chapter
+       the links below, or type the number of the chapter
        that you want to view.\n\n
 
        \n<15>__THE INCURSION MANUAL<5>
@@ -17,7 +17,7 @@ Text "help::mainmenu"
        \n__*_{7:magic} Magic and Spellcasting
        \n__*_{8:overland} The Overland Map
        
-       \n\n<15>__REFERANCE LISTS<5>
+       \n\n<15>__REFERENCE LISTS<5>
        \n__*_{M:custom} My Character
        \n__*_{R:races} Races and Subraces
        \n__*_{C:classes} Class and Prestige Classes
@@ -1127,7 +1127,7 @@ Text "help::commands"
      <15>Display Character Sheet ('<13>d<15>')<6> {D}
      \n__Takes you to the character sheet screen, where you can examine
      your character's traits in more detail than the main game screen
-     lists. The character sheet gives breakdowns of your statistics,
+     lists. The character sheet displays breakdowns of your statistics,
      showing the different types of modifiers which stack to form each
      value, as well as listing all your feats and special abilities.
      \n__There are options at the bottom of the character sheet screen
@@ -1139,26 +1139,26 @@ Text "help::commands"
      \n__This command allows you to eat any object in your inventory that
      is edible to you in your current form, as chosen from the menu it
      presents listing such items. Note that eating takes time, and thus
-     it isn't wise to do in combat.\n\n     
+     it isn't wise to do during combat.\n\n     
 
      <15>Fire Ranged Weapon ('<13>f<15>')<6> {F}
-     \n__Uses whatever ranged weapon you have the most easily accessible
-     to attack in a direction that you select. The weapon used in the
+     \n__Uses the most easily accessible ranged weapon that you have
+     to attack in a direction that you select. The weapon used is the
      one that is currently in the inventory slot closest to the top on
      the inventory screen. In the case of archery, you must wield the
-     projector (bow or crossbow) in your hands before you can use it to
-     fire arrows or bolts.\n\n
+     ranged weapon (bow or crossbow) in your hands before you can use 
+     it to fire arrows or bolts.\n\n
 
      <15>Get Item ('<13>g<15>')<6> {G}
      \n__Causes your character to pick up an item on the floor, immediately
-     bringing up the inventory screen and allowing you to place it where
-     you want. You much occupy the square where an item rests in order to
+     bringing up the inventory screen and allowing you to place the item where
+     you want. You must occupy the square where an item rests in order to
      be able to pick it up. If there is more than one item in your square,
      the game will display a menu allowing you to choose which one you want
      to pick up.\n\n
 
      <15>Hide in Shadows ('<13>h<15>')<6> {H}
-     \n__This command is simply a shortcut to allow you to 'u'se the Hide in
+     \n__This command is a shortcut to allow you to 'u'se the Hide in
      Shadows skill, as per the Use Ability command.\n\n
 
      <15>Inventory ('<13>i<15>')<6> {I}
@@ -1174,42 +1174,40 @@ Text "help::commands"
      be very cautious of inventory manipulation in combat!\n\n
 
      <15>Jump ('<13>j<15>')<6> {J}
-     \n__This command is simply a shortcut to allow you to 'u'se the Jump
+     \n__This command is a shortcut to allow you to 'u'se the Jump
      skill, as per the Use Ability command.\n\n
 
      <15>Kick Something ('<13>k<15>')<6> {K}
      \n__This command allows you to kick a door or monster. Against an enemy,
      kicking is like punching, but it's slower and allows you to apply 1.5
      times your Strength modifier to damage. Its primary use, however, is
-     for opening locked doors.\n\n
+     for forcing open locked doors.\n\n
 
      <15>Look Around ('<13>l<15>')<6> {L}
      \n__Brings up an object selection prompt, allowing you to examine anything
-     nearby you. Type '?' at this prompt for a more detailed description of
+     near you. Type '?' at this prompt for a more detailed description of
      how to use the look command's various options.\n\n
 
      <15>Cast Magic Spell ('<13>m<15>')<6> {M}
      \n__This command brings up the Spell Manager window, which lists all of the
      spells you know along with their success rate, mana cost and other parameters.
      This window can be used to select a spell to cast, turn Metamagic Feats on or
-     off, and attack spells to Spellkeys for quick use.\n\n
+     off, and bind attack spells to Spellkeys for quick use.\n\n
 
      <15>Name an Object ('<13>n<15>')<6> {N}
      \n__This command allows you to assign any proper name of your choice to any
-     item in your inventory, or object (monster, item or dungeon feature) of your
-     choice currently visible on the map board. You can use it to rename your 
-     character, assign a suspected effect to an unidentified item (i.e., metallic
-     blue potion named Healing) or give your pets or followers a personal identity.
-     The latter is recommended, otherwise it becomes very difficult to tell the
-     kobold ally you hit with <9>charm monster<6> from the enemy kobolds that are
-     attacking you in messages.\n\n
+     item in your inventory or object (monster, item or dungeon feature) currently 
+     visible on the map board. You can use it to rename your character, assign a 
+     suspected effect to an unidentified item (i.e., metallic blue potion named Healing) 
+     or give your pets or followers a personal identity. The latter is recommended, otherwise 
+     it becomes difficult to tell the kobold ally you hit with <9>charm monster<6> from the 
+     enemy kobolds that are attacking you in messages.\n\n
 
      <15>Open/Close Something ('<13>o<15>')<6> {O}
      \n__This command is used to open or close a door that is within one square of
      you. If there is more than one door nearby, the command will prompt you to
      choose a direction. It can also be used to open a chest in the square that
-     you are currently in, taking items out of it (or putting new ones in) using
-     the Inventory Manager.\n\n
+     you are currently in.\n\n
 
      <15>Pray to your God ('<13>p<15>')<6> {P}
      \n__This command allows you to receive aid from your god when in dire
@@ -1252,14 +1250,14 @@ Text "help::commands"
      or the special ability of a monster you have polymorphed into. If
      an ability requires an active choice to use on the player's part and
      is inherent to the character rather than coming from an item, it
-     will be listen here.\n\n
+     will be listed here.\n\n
 
      <15>View Recent Messages ('<13>v<15>')<6> {V}
      \n__This command brings up a window displaying a history of all the
      messages recently shown in the upper message window. This can be
-     useful if you want to review the recent events in a combat, or if
+     useful if you want to review the recent events in a battle, or if
      you accidentally struck a few keys and messages flashed by too quickly
-     for you to read properly.\n\n
+     for you to read.\n\n
 
      <15>Wizard Mode Options ('<13>w<15>')<6> {W}
      \n__If you are not in wizard mode, this command brings up a prompt
@@ -1278,19 +1276,18 @@ Text "help::commands"
      item effect or ability on your character that you can stop at will.
      Most spells have a set duration and can't be shut off, but a few
      can. Use this command to get your druid to shapeshift back to his
-     natural form, you bard to stop singing or your psionicist to turn
+     natural form, your bard to stop singing or your psionicist to turn
      off one of his active powers.\n\n
      
      <15>'Yuse' an Item ('<13>y<15>')<6> {Y}
      \n__This command allows you to access the nonstandard functions 
-     of an item in your
-     inventory. It can be used to apply a mundane item such as using
-     rope to climb down a chasm or filling your lantern with oil, or
-     to perform an unusual secondary action with a magical item --
-     breaking a wand, pouring a potion over another object, dipping
-     an item in a fountain you are standing over, and hopefully many
-     other applications.\n
-     \n__The command brings up a list of every single item in your
+     of an item in your inventory. It can be used to apply a mundane 
+     item such as using rope to climb down a chasm or filling your 
+     lantern with oil, or to perform an unusual secondary action with 
+     a magical item -- breaking a wand, pouring a potion over another 
+     object, dipping an item in a fountain you are standing over, and 
+     many other applications.\n
+     \n__The command brings up a list of every item in your
      inventory, whether or not they have secondary functions, because
      it is not the intent of the game design to reveal all the possible
      secondary functions of items without experimentation. When you
@@ -1299,11 +1296,10 @@ Text "help::commands"
      any are even available.\n\n
      
      <15>Rest and Recover ('<13>z<15>')<6> {Z}
-     \n__This command allows you character to rest in a relatively safe
+     \n__This command allows your character to rest in a relatively safe
      place in order to recover lost mana points and fatigue points, and 
-     heal a few hit points worth of injuries as well. Resting has many
-     advantages, requirements and dangers, and is described in full
-     detail in the introduction.\n\n
+     heal a few hit points worth of injuries. Resting has many advantages, 
+     requirements and dangers, and is described in full detail in the introduction.\n\n
 
      <15>Move or Attack ([CURSOR KEY])<6>
      \n__The arrow keys allow you to move your character in any horizontal,
@@ -1312,7 +1308,7 @@ Text "help::commands"
 
      <15>Move Only ([CTRL] + [CURSOR KEY])<6>
      \n__Using [CTRL] with the cursor keys, you can cause your character to
-     move without attacking, such as when you want to close with a creature
+     move without attacking, such as when you want to near a creature
      that you could hit with a reach weapon. To move <14>past<6> a hostile
      creature, you must use the Bull Rush tactical option.\n\n
 
@@ -1347,7 +1343,7 @@ Text "help::commands"
      allowing you to save or quit the game.\n\n
 
      <15>Online Help ('<13>?<15>')<6>
-     \n__Pressing '?' brings up the online help window, showing a quick
+     \n__Pressing '?' displays the online help window, showing a quick
      reference to the Incursion keybindings and also offering you a menu
      of further help topics to choose from.\n\n
 
