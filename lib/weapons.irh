@@ -829,7 +829,7 @@ Item "sap" : T_WEAPON
       intended for attacking from surprise, and has the potential
       to render a humanoid target unconscious in a single shot.
       (The victim must make a Fortitude save to resist being knocked
-      out is attacked by surprise or while flat-footed.)";
+      out is attacked by surprise or while off-guard.)";
     On Event POST(EV_HIT) {
       int16 SaveDC;
       if (EVictim->HasMFlag(M_HUMANOID) && EVictim->isMType(MA_NLIVING))

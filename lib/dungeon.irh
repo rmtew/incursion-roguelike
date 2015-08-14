@@ -3751,7 +3751,7 @@ Region "Armoury" : RF_ROOM
     };
   }
 
-Region "Abatoir" : RF_ROOM
+Region "Abattoir" : RF_ROOM
   {
     Walls: $"Dungeon Wall"; Floor: $"Floor"; 
     Door: $"oak door";

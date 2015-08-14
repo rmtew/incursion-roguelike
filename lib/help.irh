@@ -42,8 +42,8 @@ Text "help::mainmenu"
 Text "help::intro"
   { "<6>__Welcome to <7>Incursion: Halls of the Goblin King<6>,
      a promo game for the upcoming roguelike epic <7>Incursion: Return of
-     the Forsaken<6>. This version of Incursion is still in alpha testing,
-     and has limited character advancement and some unimplemented skills and
+     the Forsaken<6>. This version of Incursion is still in testing, and has 
+     limited character advancement and some unimplemented skills and
      features, but remains a fully playable roguelike game.
      \n__<14>You can type '?' at any time to bring up Incursion's online
      help system.\n
@@ -51,7 +51,7 @@ Text "help::intro"
 
      <14>THE GOAL OF THE GAME\n
      ====================<6>\n
-     __The Forsaken -- primordial mage-lords who made pacts with things
+     __The Forsaken -- primordial mage-lords who made pacts with beings
      beyond the edge of creation -- were sealed into a ceaseless, ageless
      slumber eons ago during the sorcery wars. Now, their sleep grows
      restless and troubled, and the thirteen signs and omens the holy
@@ -59,22 +59,22 @@ Text "help::intro"
      trees grow warped and crooked, seven nations fall to the hand
      of one, and a crimson fire rains from the sky for three days and
      three nights over the town of Akrenstone. The fourth sign is a great
-     goblin horde boiling forth from the bowels of the Earth to overwhelm
-     a good king. In efforts to preempt this overturn, many would-be adventurers are making
-     the long and harsh journey to war-torn Mohandi, which holds the one
-     known entrance to the labyrinthine underground citadel known as the
-     Goblin Caves.\n 
+     goblin horde boiling forth from the bowels of the earth to overwhelm
+     a beneficent king. In efforts to preempt this overturn, many would-be 
+     adventurers are making the long and harsh journey to war-torn Mohandi, 
+     which holds the one known entrance to the labyrinthine underground citadel
+     known as the Goblin Caves.\n 
      __In order to win Incursion, you must create a character and advance
      him (or her) from 1st to 11th level, accumulating enough class abilities 
      and magical items to be able to delve down to the tenth and final level
      of the Goblin Caves, wherein can be found the fortress of Murgash, the
      Goblin King. Slay Murgash, and the hordes of goblinoids will disperse
-     on their own. Fail, and they will spread across the surface of Therya like
-     a plague upon the land. Even should you succeed, you must escape with
-     your life and return to the surface world. Do these things and you will
-     receive the fame and glory of a hero of legend, but beware! Rumours claim
-     Murgash is dealing with things far fouler than just goblinoids in the
-     shadowed caverns deep beneath the stone...\n\n
+     on their own. Fail, and they will spread despair and destruction across the 
+     surface of Therya like a plague upon the land. Even should you succeed, you 
+     must escape with your life to the surface world. 
+     __Do these things and you will receive the fame and glory of a hero of legend, 
+     but beware! Rumours claim Murgash is tampering with forces and creatures far fouler 
+     than goblinoids.\n\n
 
      <14>NOTES ON GAMEPLAY\n
      =================<6>\n
@@ -83,40 +83,37 @@ Text "help::intro"
      one other roguelike game before trying Incursion. Beyond this, some
      basic recommendations include playing a physically tough character to
      get a handle on the game before adventuring into the more nuanced
-     classes. Orcs, lizardmen, dwarves, druids, rangers and paladins
+     classes. Orcs, Lizardmen, Dwarves, Druids, Rangers and Paladins
      all make ideal choices for a new player. Halflings begin with a lot
-     of food, which can be useful to a newbie who finds they keep running
-     out due to resting frequently.\n
+     of food, which can be useful to a newbie who keeps running out due 
+     to resting frequently.\n
      __It is wise to map out a single level fully before diving lower, and
      ideally a character's level should equal or exceed the dungeon level
-     he's currently in. Note that in Incursion, 'scumming' serves very 
-     little purpose; good items are only generated at the same time as new 
-     dungeon levels.\n\n
+     he's currently in.\n\n
           
      <7>Ten Points for Experienced Roguelike Players<6>\n
-     __Players who have experience with other roguelike games would do well
-     to take the following points of divergence into account:\n
-     __<14>1. <6> Characters in Incursion do not heal simply by the passage
-     of game turns -- instead, they must use the Rest command ('z') to rest
-     and recover, which means finding a way to be safe from encounters while 
-     you sleep. The design intent behind this is to make hit point loss a
-     serious detriment to a player, rather than simply a nuisance. The time
+     __Players experienced with other roguelike games would do well
+     to take the following unique qualities of Incursion into account:\n
+     __<14>1. <6> Characters in Incursion do not heal by the passage
+     of game turns -- instead, they must use the Rest command ('z') to
+     recover, which means finding a way to be safe from encounters while 
+     you sleep. The design intent behind this is to make Hit Point loss a
+     serious detriment to a player, rather than a nuisance. The time
      cycle in Incursion is different from that found in games like NetHack
-     and Crawl, where every turn bleeds off valuable food. Players can take
-     the time to explore and experiment, because individual turns are not
-     that valuable, but whenever you rest, more monsters are generated in
-     the dungeon (until it reaches equilibrium), so there is a definite 
-     pressure to accomplish as much as possible in a day.\n
-     __Finding safe ways to rest is a prominent goal of any character in
-     Incursion. Initially, a character can rest safely by returning to the
+     and Crawl, where every turn contributes to hunger. Because individual turns 
+     are not that valuable, players can take the time to explore and experiment,
+     but whenever you rest, more monsters are generated in the dungeon (until it 
+     reaches equilibrium), so there is a definite pressure to accomplish as much 
+     as possible in a day.\n
+     __Initially, a character can rest safely by returning to the
      surface world, and in the mid-levels of the dungeon there are special
      areas where one can rest safely -- but eventually a character will need
      to rest in unsafe locales, and should strive to find a means to survive
      doing so.\n
-      __<14>2. <6> List your special abilities. Most characters in Incursion 
+      __<14>2. <6> List your special abilities. Most characters in Incursion
       have a lot of them, and they can be complex. Forgetting you have them
-     will get you killed. They're all useful if used right. The design of 
-     Incursion is that character abilities matter more than magic items, 
+     will get you killed. They're all useful if used right. The design of
+     Incursion is that character abilities matter more than magic items,
      though the latter still matter. Every ability has advantages and costs;
      determine how frequently you can use it and which problems it is best
      suited to.\n
@@ -130,10 +127,9 @@ Text "help::intro"
       with a Luck bonus of +2 or higher can use a fountain without risking
       truly dire and irresistible consequences, though it can still provoke
       several dangerous effects. Characters with lower Luck will risk effects that
-      can lead to ruination in the long term, especially in the
-      late game.\n
+      can lead to ruination in the long term, especially in the late game.\n
       __<14>4. <6> Set up shortcuts. You can designate a default melee weapon, 
-      ranged weapon and ammo, and switch between them with '-'. Once you
+      ranged weapon and ammo, and switch between them with the '-' key. Once you
       have done this, you can fire in a cardinal direction with SHIFT+Arrow. 
       This makes ranged combat much less tedious. Likewise, Incursion spellcasters
       typically operate with a wide variety of defensive spells active at any
@@ -142,35 +138,34 @@ Text "help::intro"
       and other functions you repeat frequently. All these features are discussed
       extensively in the Interface section.\n
       __<14>5. <6> Incursion opposes scumming by design. This isn't meant as any
-      kind of contempt against people who enjoy patience gaming, but it's worth
-      being aware of -- we had to cater to /some/ tastes over others, after all.
-      When you rest, more monsters are generated, but no new treasure is generated
-      beyond occasional items given to monsters to make them more of a threat. If
-      you clean out dungeon levels 1-3, and have sufficient experience to move on,
-      it's in your benefit to do so -- you aren't going to keep getting more items
-      treading water.\n
+      kind of contempt against people who enjoy patience gaming. When you rest, more
+      monsters are generated, but no new treasure is generated beyond occasional items 
+      given to monsters to make them more of a threat. If you clean out dungeon levels 
+      1-3, and have sufficient Experience to move on, it's in your benefit to do so -- 
+      you aren't going to keep getting more items by reentering dungeon levels or staying
+      behind.\n
       __<14>6. <6> The early game stage of Incursion can be very difficult -- you will
-      probably die frequently -- and character generation is quite detailed. The
+      die frequently -- and character generation is quite detailed. The
       design intent behind the character generation system is that every character,
       even of the same race and class, will be different in some non-trivial way
-      from others. The counterpoint of this is that it's very unfair to get a really
-      nice character (or just a truly /unique/ one), and then die to random chance
+      from others. The counterpoint of this is that it's unfair to get a
+      nice character (or a truly unique one), and then die to random chance
       right away. Likewise, much can be learned from repetition under controlled
       circumstances.\n
       __To accommodate this while preserving the intent for character uniqueness,
       Incursion implements the ability to 'reincarnate' your character after you
-      die, starting again at level 1 with exactly the same stats, perks and
+      die, starting again at level 1 with the same stats, perks and
       random equipment you had at the beginning of the last game. A character
       can only be reincarnated if they died before reaching character level 5 and
       before descending to dungeon level 5.\n
       __<14>7. <6> Armour and shields both work differently than they
       do in any of Incursion's parent systems. Armour gives a character truly 
       significant protection, but has significant costs associated with it.
-      Shields are /very/ strong, but occupy a character's active hand, which
+      Shields are very strong, but occupy a character's active hand, which
       prevents two-weapon fighting or wielding a weapon two-handed for increased
-      damage. When you create a Warrior, consider very carefully what /kind/ of
-      warrior you want to create. Incursion automatically starts very Dexterity-
-      dependant characters with light armour, and very Strength-dependent ones with
+      damage. When you create a Warrior, consider very carefully what kind of
+      Warrior you want to create. Incursion automatically starts very Dexterity-
+      dependent characters with light armour, and very Strength-dependent ones with
       heavier armour.\n
       __Read the combat chapter in the manual carefully to understand all the
       implications of the armour system.\n
@@ -178,29 +173,26 @@ Text "help::intro"
       one in the early game will strongly help you in the later game, both in
       terms of the permanent forms of blessings and bonuses you receive from your
       deity, and in terms of being able to pray for divine aid if you ever find
-      yourself in a truly difficult situation. Understand the religion system,
-      and remember that in Incursion, a few quality sacrifices count a great deal,
-      whereas quantity accomplishes nothing.\n
-      __<14>9. <6> Monsters are not always what they seem in Incursion. Humanoids
-      can have classes (a dwarf rogue, for example) that aren't apparent when you
+      yourself in a dire situation. Understand the religion system, and remember 
+      that a few quality sacrifices count a great deal, whereas quantity accomplishes
+      nothing.\n
+      __<14>9. <6> Monsters are not always what they seem. Humanoids
+      can have classes (a Dwarf Rogue, for example) that aren't apparent when you
       first meet them; likewise, very similar or easily confused monsters cannot
       be told apart without special knowledge -- for example, the Knowledge (Nature)
       skill is used to tell different breeds of dangerous fungus apart, and Sense
-      Motive helps you determine a character's profession and skills. A 'human'
-      might very well be a 'human scarlet disciple', and the game isn't going to
+      Motive helps you determine a character's profession and skills. A 'Human'
+      might very well be a 'Human Scarlet Disciple', and the game isn't going to
       tell you that until he does something to make it obvious.\n
       __The overall most dangerous and dynamic monsters in Incursion are probably 
       your fellow humanoid adventurers -- some of them are evil mercenaries serving 
       the Goblin King, while others may provide aid to a respectable hero.\n 
-      __<14>10. <6> Plan your character build ahead of time. Choosing the right
+      __<14>10. <6> Plan your character build in advance. Choosing the right
       feats, spells and combination of class levels can be key to success in
-      Incursion. We often compare Incursion to a custom-car racing game, and the
-      analogy is apt: success depends as much on how you build your character as
-      what you do with the character once built. Before you choose to advance in
-      level (which you must actively do -- it doesn't just happen when you get 
-      enough experience), you should already know where any feats and skill points
-      you will receive will be placed. If you don't, you're either still learning
-      the game, or you haven't thought ahead enough.\n\n
+      Incursion. Before you choose to advance in level (which you must actively do -- 
+      it doesn't just happen when you get enough Experience), you should already know 
+      where any feats and Skill Points you will receive will be placed. If you don't,
+      you're either still learning the game, or you haven't thought ahead enough.\n\n
      
 	 <7>A Note on Balance and Stability<6>\n
 	   __Truthfully, Incursion is still very much a game in development and
@@ -249,13 +241,8 @@ Text "help::intro"
      which are possible for players to try and do, and the cost of
      doing business is that these interactions sometimes cause
      unexpected problems.\n
-<<<<<<< HEAD
-     __<14>Is Incursion open-source?<6> Yes, google the following phrase
-     "bitbucket incursion rmtew" and you will find the repository.\n
-=======
      __<14>Is Incursion open-source?<6> Yes, google the following words
      'bitbucket incursion rmtew' and you will find the repository.\n
->>>>>>> e4871e2c12d802e8adc0c7f545696e79ce3730bb
      __<14>Where can I reach the author?<6> The current maintainer is
      Richard Tew, and he can be reached at richard.m.tew@gmail.com.\n
      __<14>Where can I post messages about Incursion?<6> Development related
@@ -366,23 +353,23 @@ Text "help::chargen"
      unique advantages and disadvantages in gameplay. A character's race
      alters four types of traits:\n
      __<13>Attribute Modifiers:<5> Each race has a set of modifiers to
-     their attribute scores. For example, dwarves are more hardy than
-     humans, orcs stronger and elves more charismatic. These modifiers
-     stack with all other bonus types, and are permanent and always in
+     their attribute scores. For example, Dwarves are more hardy than
+     Humans, Orcs stronger and Elves more charismatic. These modifiers
+     stack with all other bonus types and are permanent and always in
      effect.\n
      __<13>Racial Skills:<5> Each race has certain skills that they have
      a particular aptitude for. These skills are treated as if they were
      class skills for every class the character has. Some races also grant
      racial bonuses to certain skills.\n
-     __<13>Favoured Classes:<5> Each race (except humans) have two classes
+     __<13>Favoured Classes:<5> Each race (except Humans) have two classes
      as their favoured classes. If a multiclass character's highest class
      (or one of his equally high classes) is not a racially favoured class, then
-     she receives a 20~ penalty to all experience points earned.\n
+     she receives a 20~ penalty to all Experience Points earned.\n
      __Humans treat all classes as favoured classes, and thus never receive
-     an experience penalty for multiclassing.\n
+     an Experience penalty for multiclassing.\n
      __<13>Special Abilities:<5> Each race offers a few unique powers or
-     abilities; examples include a gnome's innate illusion magic, an elf's
-     ability to meditate instead of sleeping, or an orc's ability to take
+     abilities; examples include a Gnome's innate illusion magic, an Elf's
+     ability to meditate instead of sleeping, or an Orc's ability to take
      an enemy's power by devouring his corpse. Some of these can be actively 
      used in the game by pressing 'u' and choosing the relevant ability
      from the menu, while others are always active, thus altering the
@@ -402,26 +389,26 @@ Text "help::chargen"
      class that all other levels will by default be invested into if you do
      not choose the 'M'ulticlass option on the character sheet screen.\n
      __Classes grant a wide variety of different abilities as the character
-     advances in level, including bonus feats, skill points and class features.
+     advances in level, including bonus feats, Skill Points and class features.
      These are described in more detail under each individual class's description.\n
-     __<13>Experience:<5> You gain experience points for killing monsters and
-     overcoming other challenges; the amount of experience that overcoming
+     __<13>Experience:<5> You gain Experience Points for killing monsters and
+     overcoming other challenges; the amount of Experience that overcoming
      a challenge grants is determined by the toughness of the challenge in
-     relation to your own power. When you have achieved enough experience
+     relation to your own power. When you have achieved enough Experience
      to gain a new level, the game will notify you of this with a special
      message. Your character is not yet changed in any way. When you want to
      level up, you can do so from the character sheet screen. If you have
      more than one class, the game will ask you which of your classes you
      want to invest the level into.\n
      __Note that when two classes offer the same ability, that ability
-     stacks between them. For example, both the rogue and the barbarian
+     stacks between them. For example, both the Rogue and the Barbarian
      gain the Uncanny Dodge class feature, and so levels of that feature
      gained from each class add together. <13>In Incursion, the same is
-     true of spellcasting chart levels.<5> For example, a mage gains one
-     arcane casting chart level for every class level, while a bard gains
+     true of spellcasting chart levels.<5> For example, a Mage gains one
+     arcane casting chart level for every class level, while a Bard gains
      one arcane casting chart level for every second class level. Thus, a
      Mage 3 / Bard 4 casts arcane spells identically to a 5th level pure
-     mage.
+     Mage.
      \n<7> See Also: <5> -- {CD:classes} Class Descriptions
   
      \n\n
@@ -435,7 +422,7 @@ Text "help::chargen"
      a +1 inherent bonus to increase a single attribute as you wish. Your god might
      increase attributes related to his portfolio if you've been a loyal follower. 
 	 Powerful magic-users can amplify their attributes with
-     the <9>wish<5> spell, activities which train an attribute will
+     the <9>Wish<5> spell, activities which train an attribute will
      increase it over time and many uncommon magical items and effects can amplify
      your character's attributes. However, all these methods are considered
      to be <13>inherent<5> bonuses, and any given attribute can have
@@ -456,11 +443,11 @@ Text "help::chargen"
      <7>Strength<5> {ST}
      \n__Strength is the most straightforward of the attributes, determining
      your raw physical power. It increases your ability to hit with melee
-     weapons, and high strength improves the damage you inflict with all
+     weapons, and high Strength improves the damage you inflict with all
      weapons (other than firearms, of course). Strength also determines the
      amount by which armour reduces damage from your blows -- higher Strength
      means greater penetration and more damage. Strength also determines the
-     level of encumbrance you face from a given load. Encumbrance causes a wide variety 
+     level of Encumbrance you face from a given load. Encumbrance causes a wide variety 
 	 of penalties and contributes to determining how quickly you get hungry. Finally,
      Strength impacts your chance of breaking down doors, your facility
      with mining and other feats of raw physical power.\n
@@ -484,26 +471,26 @@ Text "help::chargen"
      <7>Constitution<5> {CO}
      \n__Constitution rates your character's overall toughness, resilience,
      ability to withstand damage, health and susceptibility to diseases.
-     It factors into your character's hit points, and also modifies
+     It factors into your character's Hit Points, and also modifies
      your Fortitude saving throw, which is rolled against such
-     attacks as breath weapons, petrification, polymorph and paralysis.
+     attacks as breath weapons, Petrification, Polymorph and Paralysis.
      Constitution also helps in casting spells that tremendously
-     strain the body, or using the blood magic abilities of a witch
-     or druid.\n
+     strain the body, or using the blood magic abilities of a Witch
+     or Druid.\n
      <13>Primary:<5>___Hit Points\n 
      <13>Secondary:<5> Everything Else\n\n
 
      <7>Intelligence<5> {IN}
      \n__Intelligence governs a character's mental acuity, ability to learn,
      academic prowess and general reasoning ability. It influences
-	 the number of skill points gained every level, and some
-     combat Feats have intelligence prerequisites -- the highest forms of
+	 the number of Skill Points gained every level, and some
+     combat feats have Intelligence prerequisites -- the highest forms of
      martial skill are as much mental as physical. Intelligence is
      valuable to spellcasters, as bonus spells are granted based on
      it, and it influences spell failure rates as well. Finally, Intelligence
      is a factor in the successful use of magical devices, and many
      non-physical skills are based on Intelligence. A character
-     with a high intelligence is very flexible, having more skills and
+     with a high Intelligence is very flexible, having more skills and
      spells to choose from than otherwise possible.\n
      <13>Primary:<5>___Skill Points, Spell Failure\n 
      <13>Secondary:<5> Everything Else\n\n
@@ -529,12 +516,12 @@ Text "help::chargen"
      and is used for calculating the save DC for mind-affecting spells and
      magic effects. More importantly, however, it is used in the calculation
      of the maximum amount of allies of any type a character may have --
-     whether they are a ranger's animal companions, a fighter's followers,
-     a sorceror's summoned creatures or a necromancer's undead minions does
-     not matter. Charisma also influences the chance that a party member
-     will do what they are told when the protagonist gives them an order.
-     Finally, it determines the chance that an ally -- whether summoned
-     creature, pet or party member -- will betray the hero.\n
+     whether they are a Ranger's animal companions, a Warrior's followers,
+     a Mage's summoned creatures or undead minions does not matter. Charisma 
+     also influences the chance that a party member will do what they are told 
+     when the protagonist gives them an order. Finally, it determines the chance 
+     that an ally -- whether summoned creature, pet or party member -- will betray 
+     the hero.\n
      <13>Primary:<5>___Allies & Reaction\n 
      <13>Secondary:<5> Shopkeepers, Everything Else\n\n
 
@@ -547,7 +534,7 @@ Text "help::chargen"
      even the luckiest character will meet difficult monsters, and a very 
      unlucky character will still find a reasonable share of magic. Luck 
      also plays into the effects of chaotic magic, making it highly valuable 
-     to sorcerors -- their wild magic surges are strongly influenced by Luck.\n
+     to Sorcerors -- their wild magic surges are strongly influenced by Luck.\n
      <13>Primary:<5>___Items\n 
      <13>Secondary:<5> Monsters, Wild Magic
   
@@ -576,49 +563,49 @@ Text "help::chargen"
          ==================<5>\n
      __A character's starting equipment is defined by her race, class and perks.
      Characters proficient with armour begin with armour suitable to their character
-     build -- a Dexterity-based finesse warrior will receive light armour despite
+     build -- a Dexterity-based finesse Warrior will receive light armour despite
      being proficient with all armour. Characters that take two-weapon fighting
      feats will receive an offhand weapon, and those with shield-related feats
      will start with a kite shield. If a character's perks grant her a powerful
      weapon, that may subsume some of the abilities of her class-based initial
-     weapons -- for example, a paladin starting with the Perk: +3 scimitar of
-     accuracy will start with a +3 holy scimitar of accuracy rather than a
+     weapons -- for example, a Paladin starting with the Perk: +3 scimitar of
+     accuracy will start with a +3 Holy Scimitar of Accuracy rather than a
      separate additional holy sword.\n\n
      
      <13>CALCULATED TRAITS {CT}\n
      =================<5>\n
-     __Your character has a number of values that are calculated based upon the
+     __Your character has a number of values that are calculated based on the
      choices you have made, as follows:\n
      __<13>Hit Points:<5> In Incursion, all player characters and pre-named NPCs start 
-     off with a base of 20 hit points, just for the virtue of being hardy, skilled, daring and lucky.
+     off with a base of 20 Hit Points, just for the virtue of being hardy, skilled, daring and lucky.
      To this is added the result of a single die roll, plus your primary Constitution
      modifier, for every level you possess. The size of the die rolled is determined
-     by the class you invested the given level in -- barbarians receive a 1d12 hit
-     die, for example, while bards receive only 1d6. Options on the options panel allow
-     a player to set maximum hit points, always average hit points or reroll if below
-     average for hit points.\n
-     __<13>Mana Points:<5> Mana is determined in the same way as hit points,
-     but the base value is 10, not 20, and the mana die types for every class are
-     different from the hit die types. All mana gained from the dice alone is then
+     by the class you invested the given level in -- Barbarians receive a 1d12 hit
+     die, for example, while Bards receive only 1d6. Options on the options panel allow
+     a player to set maximum Hit Points, always average Hit Points or reroll if below
+     average for Hit Points.\n
+     __<13>Mana Points:<5> Mana is determined in the same way as Hit Points,
+     but the base value is 10, not 20, and the Mana die types for every class are
+     different from the Hit Point die types. All Mana gained from the dice alone is then
      multiplied by a fixed multiplier based on total character level. These multipliers
      are listed on the level table under Experience and Advancement in the Adventuring
      chapter.\n
-     __<13>Fatigue Points:<5> A character's total number of fatigue points is equal
+     __<13>Fatigue Points:<5> A character's total number of Fatigue Points is equal
      to 3 plus her Constitution bonus, plus a bonus for each class level she has
-     of +1 for every 12 accumulated 'sides' of hit dice; thus, a barbarian 3 with 
-     3d12 HD would have (3 x 12 / 12 =) +3 FP, and a mage 3 with 3d4 HD would have 
+     of +1 for every 12 accumulated 'sides' of hit dice; thus, a Barbarian 3 with 
+     3d12 HD would have (3 x 12 / 12 =) +3 FP, and a Mage 3 with 3d4 HD would have 
      (3 x 4 / 12 =) +1 FP.\n
      __<13>Encumbrance:<5> The amount of equipment and treasure a character can carry
-     is determined by her Strength; the higher a character's strength, the lower her
-     encumbrance level will be when carrying a certain mass of equipment.
-     There are four levels of encumbrance in Incursion. Light encumbrance makes your 
-	 movement rate 90~ of normal. Moderate encumbrance makes your movement 80~ of normal, 
-	 lowers your maximum fatigue by one and gives you a -1 penalty to defense class.
-     Heavy encumbrance gives you 70~ normal movement, 90~ normal speed and a
-     -2 encumbrance penalty to defense class, Reflex saves, and maximum
-     fatigue points. Extreme encumbrance gives you 50~ movement, 75~ speed,
-     a -4 encumbrance penalty to defense class and reflex saves and a -3
-     encumbrance penalty to maximum fatigue.
+     is determined by her Strength; the higher a character's Strength, the lower her
+     Encumbrance level will be when carrying a certain mass of equipment.
+     There are four levels of Encumbrance in Incursion. Light Encumbrance makes your 
+	 movement rate 90~ of normal. Moderate Encumbrance makes your movement 80~ of normal, 
+	 lowers your maximum Fatigue by one and gives you a -1 penalty to Defense Class.
+     Heavy Encumbrance gives you 70~ normal Movement, 90~ normal Speed and a
+     -2 Encumbrance penalty to Defense Class, Reflex saves, and maximum
+     Fatigue Points. Extreme Encumbrance gives you 50~ Movement, 75~ Speed,
+     a -4 Encumbrance penalty to Defense Class and Reflex saves and a -3
+     Encumbrance penalty to maximum Fatigue.
 
      \n\n
      <13>THE CHARACTER SHEET {CS}\n
@@ -632,14 +619,14 @@ Text "help::chargen"
      your skills  ('<15>S<5>').
      __<13>Bonus Types:<5> All bonuses in Incursion have a type assigned to them,
      even if that type is 'base' -- i.e., a class gives your base bonus to attack
-     rolls, saving throws and so forth. For example, the clerical spell <9>bless<5>
+     rolls, saving throws and so forth. For example, the Clerical spell <9>bless<5>
      gives you a +1 sacred bonus to hit, a +2 sword gives you a +2 magic bonus to
      hit and damage, and a Cloak of Resistance +3 gives you a +3 resistance bonus to
      all your saving throws. Bonuses of different types almost never stack with the only
      exception being bonuses of the types 'base', 'dodge' or 'circumstance'. Thus,
      for example, you can't cast bless four times in a row to get a +4 sacred bonus
      to hit, but the +1 dodge bonus from the Dodge feat stacks with a +4 dodge bonus
-     dwarves get when fighting giants. More significantly, since base bonuses all
+     Dwarves get when fighting giants. More significantly, since base bonuses all
      stack, a Paladin 3 / Mage 2 has a base bonus to his Reflex saving throw equal
      to the base bonus of a 3rd-level Paladin plus the base bonus of a 2nd-level
      Mage.\n
@@ -647,8 +634,8 @@ Text "help::chargen"
      base, attribute, magic (a.k.a. enhancement), sacred, morale, insight, artifact,
      feat, weapon, negative (i.e., negative levels), competence, size, deflection,
      damage (i.e., attribute damage penalty), rage, status, inherent, grace, dodge,
-     armour, natural, skill, dual, fatigue, template, circumstance, shield, luck,
-     encumbrance and resistance."; }
+     armour, natural, skill, dual, Fatigue, template, circumstance, shield, Luck,
+     Encumbrance and resistance."; }
 
 Text "help::interface"
   { "<5>__Incursion uses a window and menu-based user interface for most functions,
@@ -687,15 +674,15 @@ Text "help::interface"
      __<13>Traits Window:<5> The rightmost strip of the screen is called
      the Traits Window, and is separated from the map by a blue line. Here
      you see several different pieces of information about your character
-     for quick reference: your name, race, classes and levels, experience
+     for quick reference: your name, race, classes and levels, Experience
      total and attributes. The current time is also displayed here, as are
      several status conditions: your readiness (Exploring, Fighting or
      performing an extended action), hunger state, method of locomotion,
-     health state and fatigue state. Attributes are shown in bright green 
-     if increased by magic, brown if decreased by a spell effect or fatigue
+     health state and Fatigue state. Attributes are shown in bright green 
+     if increased by magic, brown if decreased by a spell effect or Fatigue
      penalty and red if damaged by an attribute-damage attack.\n
      __Beneath your attributes are your combat values: combat mode,
-     to-hit bonus, damage, attack speed, encumbrance level, defense class
+     to-hit bonus, damage, attack speed, Encumbrance level, Defense Class
      (and armour coverage, if applicable), armour ratings and movement rate.
      The meaning of all these terms is defined in-depth in the combat 
      chapter. Beneath the combat values is displayed a legend of all the
@@ -704,19 +691,19 @@ Text "help::interface"
      are many things in your field of view, their names may be truncated to
      allow more to be shown.\n
      __The final two lines of the Traits Window show two horizontal
-	 gauges representing your current mana and current hit points as
-     proportional to their totals. When you cast spells that drain mana for
-     as long as they remain active, that lost mana is shown as brown on the
-     mana meter. When you cast spells costing mana that can be regenerated,
-     that lost mana is shown in green. Injuries are always shown in the life
+	 gauges representing your current Mana and current Hit Points as
+     proportional to their totals. When you cast spells that drain Mana for
+     as long as they remain active, that lost Mana is shown as brown on the
+     Mana meter. When you cast spells costing Mana that can be regenerated,
+     that lost Mana is shown in green. Injuries are always shown in the life
      meter in red.\n
      __Several options allow you to customize what information is displayed
      in the Traits Window, suppressing common information that rarely changes
      or replacing the list of objects in view with other kinds of quick
      reference data.\n
      __<13>Status Window:<5> The two-line status window is shown at the bottom
-     of the screen. The lowest line shows your current and total hit points,
-     mana and fatigue points, as well as the total value in gold pieces of all
+     of the screen. The lowest line shows your current and total Hit Points,
+     Mana and Fatigue Points, as well as the total value in gold pieces of all
      the coins (of any type) you possess. After this, the line lists any spell
      effects currently affecting you or any other status conditions not shown
      in the Traits Window. If you have a number of protective spells in your
@@ -760,7 +747,7 @@ Text "help::interface"
      action in-game -- for example, if a player is wearing an unidentified magical
      item that grants her a +4 bonus to Strength (and thus a +2 bonus to melee
      attack rolls), a perceived attack roll result of 13 will hit a monster with
-     a defense class of 15 -- the increased Strength will be taken into account
+     a Defense Class of 15 -- the increased Strength will be taken into account
      by the game even though the character is unaware of it. This information 
      might be useful to character seeking to determine the function of unknown 
      magical items.\n
@@ -798,7 +785,7 @@ Text "help::interface"
      __The hyperlinks can be used to quickly navigate long help pages. For example,
      the Wizard Spells chapter of the help has hyperlinks named according to school
      and spell level -- typing '3N' will automatically navigate to the third-level
-     necromancy spells, and '2V' will send you to the 2nd-level evocation spells.
+     Necromancy spells, and '2V' will send you to the 2nd-level evocation spells.
      Likewise, the feats are listed in alphabetical order, so typing the first two
      letters in any feat's name will scroll to the first feat with those two letters
      as the first letters in its name.\n\n
@@ -806,9 +793,9 @@ Text "help::interface"
      <13>MY CHARACTER<5>\n
      The 'My Character' chapter of the manual is special in that it is customized to
      display only the help pertinent to the character you are currently playing. For
-     example, if you are playing a chaotic neutral dwarven barbarian with the Power
-     Attack feat, this chapter of the manual will contain the descriptions of dwarves, 
-     barbarians, the chaotic neutral alignment and the Power Attack feat. Multiclass 
+     example, if you are playing a chaotic neutral Dwarven barbarian with the Power
+     Attack feat, this chapter of the manual will contain the descriptions of Dwarves, 
+     Barbarians, the chaotic neutral alignment and the Power Attack feat. Multiclass 
      spellcasters will find this chapter useful, because it lists all the spells they 
      have access to in a neat, ordered list.\n\n
 
@@ -981,7 +968,7 @@ Text "help::interface"
      If you use both hands, you can wield a weapon of one size category
      larger than you are.\n
      __<13>Locked Slots:<5> When your character has changed shape (as from
-     a <9>polymorph self<5> spell or the druid's Wild Shape ability) you
+     a <9>polymorph self<5> spell or the Druid's Wild Shape ability) you
      may not have access to some of your inventory slots; an eagle has no
      hands, for example. These slots appear in dark blue. If there is an
      item in the slot in question, it has merged into your body and, while
@@ -1015,7 +1002,7 @@ Text "help::interface"
      __If you type the appropriate letter over a weapon that is currently set
      as the default already, that will blank the default slot in question. This
      might be useful if you don't want the [SHIFT] + [DIR] command to work (to
-     avoid dangerous typos) or if as a monk you want to set your default melee
+     avoid dangerous typos) or if as a Monk you want to set your default melee
      weapon to nothing, allowing you to use the Swap Weapons command to toggle
      between ranged and unarmed combat.\n\n
 
@@ -1131,7 +1118,7 @@ Text "help::commands"
      showing the different types of modifiers which stack to form each
      value, as well as listing all your feats and special abilities.
      \n__There are options at the bottom of the character sheet screen
-     for developing your character. When you have enough experience to
+     for developing your character. When you have enough Experience to
      level up, you do so from here. The character sheet screen also
      allows you to learn spells and select similar options.\n\n
      
@@ -1190,7 +1177,7 @@ Text "help::commands"
 
      <15>Cast Magic Spell ('<13>m<15>')<6> {M}
      \n__This command brings up the Spell Manager window, which lists all of the
-     spells you know along with their success rate, mana cost and other parameters.
+     spells you know along with their success rate, Mana cost and other parameters.
      This window can be used to select a spell to cast, turn Metamagic Feats on or
      off, and bind attack spells to Spellkeys for quick use.\n\n
 
@@ -1275,7 +1262,7 @@ Text "help::commands"
      \n__This command allows you to turn off any standing power, spell,
      item effect or ability on your character that you can stop at will.
      Most spells have a set duration and can't be shut off, but a few
-     can. Use this command to get your druid to shapeshift back to his
+     can. Use this command to get your Druid to shapeshift back to his
      natural form, your bard to stop singing or your psionicist to turn
      off one of his active powers.\n\n
      
@@ -1297,9 +1284,9 @@ Text "help::commands"
      
      <15>Rest and Recover ('<13>z<15>')<6> {Z}
      \n__This command allows your character to rest in a relatively safe
-     place in order to recover lost mana points and fatigue points, and 
-     heal a few hit points worth of injuries. Resting has many advantages, 
-     requirements and dangers, and is described in full detail in the introduction.\n\n
+     place in order to recover lost Mana Points and Fatigue Points, and 
+     heal a few Hit Points worth of injuries. Resting has many advantages, 
+     requirements and dangers.\n\n
 
      <15>Move or Attack ([CURSOR KEY])<6>
      \n__The arrow keys allow you to move your character in any horizontal,
@@ -1308,7 +1295,7 @@ Text "help::commands"
 
      <15>Move Only ([CTRL] + [CURSOR KEY])<6>
      \n__Using [CTRL] with the cursor keys, you can cause your character to
-     move without attacking, such as when you want to near a creature
+     move without attacking, such as when you want to approach a creature
      that you could hit with a reach weapon. To move <14>past<6> a hostile
      creature, you must use the Bull Rush tactical option.\n\n
 
@@ -1370,22 +1357,22 @@ Text "help::adventuring"
          
          <9>EXPERIENCE AND ADVANCEMENT {EA}\n
             ==========================\n<1>
-         __Much like in all roguelikes, an Incursion character starts out as a
-         competant but comparatively weak young adventurer and develops through
+         __Much like all roguelikes, an Incursion character starts out as a
+         competent but comparatively weak young adventurer and develops through
          experience over time into a very powerful, legendary hero -- provided
          she can stay alive for that long! Incursion differs from many roguelikes
          in that an Incursion character's inherent abilities are more significant
          to her overall power level than her magical equipment, which is more
-         transient. A character's overall inherent competance is reffered to as 
+         transient. A character's overall inherent competence is referred to as 
          her <9>level<1>, which begins at 1 and increases over time.\n
          __Creating an Incursion character has already been discussed in the
          previous chapter. Once a character has been created, he is placed into 
          the Goblin Caves to fight against the many menaces therein. Whenever
-         the character overcomes a challenge, he gains experience points to
+         the character overcomes a challenge, he gains Experience Points to
          represent what he learned. Overcoming a challenge can be killing a
-         monster, but in Incursion in can also include resolving a conflict
+         monster, but in Incursion it can also include resolving a conflict
          socially, disarming a trap, picking a lock and so forth. Characters
-         need a certain number of experience points in order to attain each
+         need a certain number of Experience Points in order to attain each
          level above the 1st, as per the following chart:\n
          
          <15>_Character_Experience_Base__Attribute_Mana\n  
@@ -1404,8 +1391,8 @@ Text "help::adventuring"
              
          __The highest character level that can be attained in this version of
          Incursion is 11; <9>Return of the Forsaken<1> will feature character
-         advancement all the way up to level 20. When you attain enough experience
-         points to qualify for a higher level, you do not immediately advance to
+         advancement all the way up to level 20. When you attain enough Experience
+         Points to qualify for a higher level, you do not immediately advance to
          that level. Instead, you must go to the character sheet and press 'G' to
          invoke the Gain Level command.\n
          __<9>Think very carefully about your character before advancing a level.<1>
@@ -1413,7 +1400,7 @@ Text "help::adventuring"
          choices (such as feat selection, attribute gains, which class to invest the
          level in, etc.) required to gain a level. Not only are these choices
          permanent, you cannot even abort the selection prompt if you change your
-         mind as you can most other prompts in Incursion.\n
+         mind as you can with most other prompts in Incursion.\n
          __The choices you make in designing your character will play a strong part
          in your success in the game. Think about them carefully before advancing
          -- a skillful Incursion player will already know what feats she wants and 
@@ -1422,17 +1409,17 @@ Text "help::adventuring"
 
         <9>RESTING AND FATIGUE {RF}\n
            ===================<1>\n
-        __In Incursion, the simple passage of time does not restore lost hit
-        points, mana points or fatigue points. Instead, the player must use
+        __In Incursion, the passage of time does not restore lost Hit
+        Points, Mana Points or Fatigue Points. Instead, the player must use
         the rest ('z') command to achieve this. However, resting has a wide
         variety of consequences, and so it's important that it be done
         tactically. Resting has the following effects:\n
-        __<9>*<1>_Your character recovers all of his mana points.\n
-        __<9>*<1>_Your character heals a number of hit points of damage equal to
+        __<9>*<1>_Your character recovers all of his Mana Points.\n
+        __<9>*<1>_Your character heals a number of Hit Points of damage equal to
         [(character level + 3) x Constitution] / 8.\n
-        __<9>*<1>_Your character recovers all of his fatigue points unless
+        __<9>*<1>_Your character recovers all of his Fatigue Points unless
         he is exhausted, in which case resting once only causes him to
-        recover his Constitution modifier (minimum 1) worth of fatigue points.\n
+        recover his Constitution modifier (minimum 1) worth of Fatigue Points.\n
         __<9>*<1>_You may have an encounter. The chance of this is strongly
         influenced by how many monsters are nearby, how close they are, and
         how many doors are closed (and preferably locked) between you and them.
@@ -1459,7 +1446,7 @@ Text "help::adventuring"
         the monsters have time to attack before the player does. Deeper into the
         dungeon, this can be lethal.\n
         __If a character has an encounter when resting, the full normal number of
-        hit points and mana points are not restored. Instead, only a fraction are
+        Hit Points and Mana Points are not restored. Instead, only a fraction are
         regained, based on the number of hours that character was able to rest for
         peacefully before the encounter occurred.\n\n
         
@@ -1481,7 +1468,7 @@ Text "help::adventuring"
         Sanctuary, allow a character to rest safely in them with no chance of
         an encounter occuring. Unfortunately, these rooms do not occur frequently
         enough to cover all the resting a character will need to do, /unless/ a
-        character can user her expendable resources (hit points, mana, fatigue)
+        character can user her expendable resources (Hit Points, Mana, Fatigue)
         very efficiantly and sparingly.\n
         __<3>*<1> Some spells -- <9>rope trick<1> and <9>alarm<1>, notably, allow
         safe or safer resting.\n
@@ -1492,7 +1479,7 @@ Text "help::adventuring"
         __<3>*<1> Characters with the Diplomacy skill can [R]equest that neutral
         NPCs take watches with them just as allies would, persuading them to act
         in an agreement of mutual benefit.\n
-        __<3>*<1> The Uncanny Dodge ability allows barbarians and rogues of
+        __<3>*<1> The Uncanny Dodge ability allows Barbarians and Rogues of
         sufficient level to wake instantly when threatened -- it does not prevent
         enocunters from happening, but does prevent monsters from using the
         Coup de Grace maneuver on the sleeping player, or getting rounds of
@@ -1503,22 +1490,22 @@ Text "help::adventuring"
         supply of one-use magical items that allow guaranteed safe resting.\n\n
         
         <9>Losing Fatigue<1>\n
-        __Characters spend or lose fatigue for a wide variety of reasons. 
-        Performing the special maneuvers, berserking, using metamagic feats
+        __Characters spend or lose Fatigue for a wide variety of reasons. 
+        Performing the special maneuvers, berserking, using Matamagic feats
         and getting poisoned or diseased all cost a character Fatigue Points.
-        Some spells and supernatural abilities also drain fatigue.\n
-        __Further, characters also lose fatigue gradually over time as a result
+        Some spells and supernatural abilities also drain Fatigue.\n
+        __Further, characters also lose Fatigue gradually over time as a result
         of swinging a weapon in combat. An unarmoured character loses
-        a fraction of a fatigue point equal to [(10 + weapon weight) /
+        a fraction of a Fatigue Point equal to [(10 + weapon weight) /
         10000] with every swing; when the total loss adds up to a whole
-        fatigue point, a message will be displayed stating that your
+        Fatigue Point, a message will be displayed stating that your
         character feels more fatigued from fighting.
-          Armoured characters gain fatigue much more quickly based on
-        the type of armour they wear; instead of the fatigue point
+          Armoured characters gain Fatigue much more quickly based on
+        the type of armour they wear; instead of the Fatigue Point
         fraction having a denominator of 10000, the denominator is
         specified by the armour. Armour with the featherlight quality
         has a denominator three times greater than normal, meaning
-        characters in featherlight armour gain fatigue three times
+        characters in featherlight armour gain Fatigue three times
         more slowly.\n\n
 
          <9>TERRAIN AND MOVEMENT {TM}\n
@@ -1526,9 +1513,9 @@ Text "help::adventuring"
         __All Incursion characters have a base percentile movement rate determined 
         by their Size: Small races have a base 75~, while Medium races have a base
         100~ movement. Dwarves are the exception, having the base movement of a 
-        Small race even though they are Medium-sized. Barbarians and monks both
+        Small race even though they are Medium-sized. Barbarians and Monks both
         gain inherent increases to their movement rate; there are also spells and
-        magical items that affect movement rate, and encumbrance and fatigue can
+        magical items that affect movement rate, and Encumbrance and Fatigue can
         both lessen it. The exact manner in which your current movement rate has
         been calculated is shown on the character sheet, as with all other
         calculated values.\n
@@ -1555,7 +1542,7 @@ Text "help::adventuring"
         of using the Bull Rush maneuver to force a character into a chasm.\n
         __A character suffers 3d6 points of damage per dungeon level she falls, if
         she lands on a hard surface. The Balance skill, the Slow Fall ability possessed
-        by monks and the <9>feather fall<1> spell all help to reduce falling damage.\n
+        by Monks and the <9>feather fall<1> spell all help to reduce falling damage.\n
         __If the area of the level directly above the character corresponding to her
         location on her current level has a chasm, normal floor squares will be coloured
         light cyan to indicate this, and the Location line will include the text 
@@ -1584,14 +1571,14 @@ Text "help::adventuring"
         
         <9>Tight Spaces<1>\n
         __Some areas of the dungeon, such as the warrens wherein kobolds live, can
-        be very constricting to human-sized characters. When such characters enter
+        be very constricting to Human-sized characters. When such characters enter
         a confined space, they receive a message warning them of such, and then
-        lose their Dexterity bonus to their defense class. In addition to losing
+        lose their Dexterity bonus to their Defense Class. In addition to losing
         their bonus, such characters are subject to the Sneak Attack special ability
-        of rogues and some monsters. This penalty ends as soon as the character
+        of Rogues and some monsters. This penalty ends as soon as the character
         leaves the confined space.\n
         __Large-sized creatures such as ogres suffer similar confinement in tunnels that
-        are comfortable for human-sized creatures, and cannot even enter areas that
+        are comfortable for Human-sized creatures, and cannot even enter areas that
         are sized for kobolds, halflings and their kin.\n\n
         
          <9>DUNGEON HAZARDS {DH}\n
@@ -1615,10 +1602,10 @@ Text "help::adventuring"
         instead reducing an attribute to a minimum of 1.\n
         __<9>Attribute Damage:<1> Some spells and special attacks of monsters damage
         an attribute. These effects have a normal damage roll, but instead of
-        subtracting hit points, they remove points from an attribute. If an attribute
+        subtracting Hit Points, they remove points from an attribute. If an attribute
         is reduced to zero or lower as a result of attribute damage, the subject dies.
         Normal healing spells and potions do not heal damaged attributes, but the
-        clerical spell <9>restoration<1> and certain specific potions can heal
+        Clerical spell <9>restoration<1> and certain specific potions can heal
         attribute damage. Most characters heal one point of attribute damage every
         night of undisturbed rest, as well. Halflings heal attribute damage more
         quickly, and the Heal skill can also be used to treat attribute damage.\n
@@ -1721,16 +1708,16 @@ Text "help::adventuring"
         one (-6 Dexterity, -50~ Mov/Spd, -50~ spell success) and is additionally unable
         to make attacks until the nausea passes, barring an exceptional Concentration
         score allowing this to be bypassed.\n
-        __<9>Fatigued:<1> A fatigued character has spent or lost all their fatigue 
-        points. Such a character suffers a -2 fatigue penalty to Strength, Dexterity
+        __<9>Fatigued:<1> A fatigued character has spent or lost all their Fatigue 
+        Points. Such a character suffers a -2 Fatigue penalty to Strength, Dexterity
         and Charisma, as well as a -10~ penalty to attack speed and movement rate.\n
         __<9>Exhausted:<1> Exhausted is the next stage beyond fatigued; an exhausted
-        character has reached a negative total of current fatigue points equal to or
-        exceeding their normal positive maximum. Such a character suffers a -6 fatigue
+        character has reached a negative total of current Fatigue Points equal to or
+        exceeding their normal positive maximum. Such a character suffers a -6 Fatigue
         penalty to Strength, Dexterity and Charisma, as well as a -25~ penalty to
         attack speed and movement rate.\n 
         __<9>Prone:<1> A prone character has been knocked from his feet. He suffers a
-        -4 status penalty to his attack rolls and defense class, and he must stand up
+        -4 status penalty to his attack rolls and Defense Class, and he must stand up
         before he is able to move; standing up takes about as much time as making an
         attack, modified by Dexterity -- 25 segments for a character with Dexterity 10.\n
         __<9>Afraid:<1> Afraid characters are unable to make any attacks, and may not
@@ -1738,7 +1725,7 @@ Text "help::adventuring"
         they would otherwise be.\n 
         __<9>Shaken:<1> Being shaken is a lesser form of fear. Shaken characters can
         move and attack freely, but suffer a morale penalty (often -2, but not always)
-        to attack rolls, defense class and saving throws.\n\n
+        to attack rolls, Defense Class and saving throws.\n\n
         
         <9>Vaults and Complexes<1>\n
         __Some areas of the dungeon are notably more dangerous than others. Complexes
@@ -1767,7 +1754,7 @@ Text "help::adventuring"
         be both very beneficial and very risky. When a character drinks, a roll 
         of (1d20 + Luck modifier) is made, with various random, useful or 
         debilitating results; the higher the roll, the more positive the result.
-        A high roll can, in increasing order of unlikelyness, restore fatigue, 
+        A high roll can, in increasing order of unlikelyness, restore Fatigue, 
         heal wounds, cure diseases, neatralize poisons, restore attribute damage 
         and even remove curses. Low rolls can have very bad effects -- the worst 
         possible effect being possible only if a character has a Luck modifier 
@@ -1796,7 +1783,7 @@ Text "help::adventuring"
         __A light source allows you to see creatures within a certain 
         radius (e.g., 40 feet for a torch or minor magical light,
         60 for a brass lantern). Your light range is increased by
-        your lowlight vision, if any (e.g., elves start with 20
+        your lowlight vision, if any (e.g., Elves start with 20
         feet of lowlight vision).\n\n 
 
         <9>Shadow Range<1>\n     
@@ -1819,7 +1806,7 @@ Text "help::adventuring"
         <9>Infravision<1>\n     
         __Your infravision range is determined by your race (usually
         60 feet for most races that have it, or 120 feet for deep
-        dwellers like dark elves and gray dwarves). Within this
+        dwellers like Dark Elves and Gray Dwarves). Within this
         range you can see creatures, items and dungeon features
         perfectly. In Incursion, infravision is 'darksight' rather
         than 'heatsight'. Infravision does not automatically
@@ -1883,7 +1870,7 @@ Text "help::adventuring"
         <9>Detection<1>\n     
         __You may also have the ability to detect all creatures or
         (more commonly) a certain creature type within a given
-        range. For example, a 1st level paladin can detect evil
+        range. For example, a 1st level Paladin can detect evil
         creatures within about 250 feet. It is also possible to
         detect all items or (less commonly) all items of a certain
         type within a given range.\n\n
@@ -1901,8 +1888,8 @@ Text "help::adventuring"
         detection from sensing you. Some monsters have natural
         nondetection abilities -- darkmantles cannot be sensed by
         Scent and dark nagas are immune to Telepathy, for example.
-        Non-Detection can be very valuable to rogues, because it
-        allows them to sneak up on creatures (such as orcs with
+        Non-Detection can be very valuable to Rogues, because it
+        allows them to sneak up on creatures (such as Orcs with
         Scent) they could not otherwise surprise.\n\n
 
         __The option 'Show Perception Modes' will reveal the combination of
@@ -1913,7 +1900,7 @@ Text "help::adventuring"
         monsters. The exception: monsters with no hands for torches and no other
         perception modes get 60 feet of infravision for free. This usually applies
         to mundane animals (e.g., bison, boa constrictors, ...) that really have no
-        place in the dark dungeon but are there for variety and to give druids and
+        place in the dark dungeon but are there for variety and to give Druids and
         animal spells something to do. The lack of symmetry is that if you, the
         player, polymorph or wildshape into such a creature you do not get the free
         infravision.\n\n
@@ -1931,8 +1918,8 @@ Text "help::adventuring"
          capabilities; once gained, they are permanent and nonmagical. Inherent
          attribute bonuses cannot be dispelled or stolen by circumstance.\n
          __There are several ways to gain inherent bonuses. Rare magical tomes
-         might grant them when read, barbarians gain them just for being
-         barbarians and advancing in level, and orcs can sometimes gain them
+         might grant them when read, Barbarians gain them just for being
+         Barbarians and advancing in level, and Orcs can sometimes gain them
          by devouring the bodies of slain foes. However, the most reliable
          way to gain them is simply through adventuring and development -- as
          a character performs actions which strain and push her attributes,
@@ -1941,7 +1928,7 @@ Text "help::adventuring"
          can gain a large inherent bonus from a mixture of training, tomes,
          class features and eating monster corpses. However, there is an
          absolute limit on how high the inherent bonus to a single attribute can
-         reach; this limit is +5 for most characters, and +8 for humans.\n\n
+         reach; this limit is +5 for most characters, and +8 for Humans.\n\n
          
          <9>Percentile Attributes<1>\n
          __To represent the continued pushing and development of an attribute,
@@ -2003,7 +1990,7 @@ Text "help::adventuring"
          very heavily.\n
          __<3>*<1>_Tearing free once you become stuck (in some types of terrain or the
          effects of a <9>web<1> spell, for example) trains Strength.\n
-         __<3>*<1>_Adventuring while your encumbrance is Heavy trains strength; doing so
+         __<3>*<1>_Adventuring while your Encumbrance is heavy trains Strength; doing so
          while it is Extreme trains it even further.\n
          __<3>*<1>_Adventuring while wearing heavy armour trains both Strength and
          Constitution, but abuses Dexterity.\n
@@ -2025,7 +2012,7 @@ Text "help::adventuring"
          __<3>*<1>_Staying Content or Peckish trains Constitution weakly. Staying Hungry trains
          Constitution if you have the Fasting class ability. However, starvation abuses
          Constitution, as does being Satiated (weakly) or Bloated (strongly).\n
-         __<3>*<1>_Spending fatigue points through conscious actions trains Constitution.\n
+         __<3>*<1>_Spending Fatigue Points through conscious actions trains Constitution.\n
          __<3>*<1>_Adventuring while wearing heavy armour trains both Strength and
          Constitution, but abuses Dexterity.\n
          \n
@@ -2033,8 +2020,8 @@ Text "help::adventuring"
          __<3>*<1>_Successfully casting a spell with a base success chance of 60~ while
          threatened trains Intelligence; if the base chance is 30~ or lower, Intelligence 
          is trained more strongly.\n
-         __<3>*<1>_Successfully using metamagic while threatened also trains Intelligence,
-         based on the number of metamagic levels used.\n
+         __<3>*<1>_Successfully using Matamagic while threatened also trains Intelligence,
+         based on the number of Matamagic levels used.\n
          __<3>*<1>_Identifying items via experimentation trains Intelligence.\n
          __<3>*<1>_Identifying monsters with Sense Motive trains Intelligence.\n
          __<3>*<1>_Doing research in a library trains Intelligence strongly.\n
@@ -2049,7 +2036,7 @@ Text "help::adventuring"
          __<3>*<1>_Angering your god or violating his edicts abuses Wisdom.\n
          __<3>*<1>_Trying to resolve conflict with other creatures trains Wisdom, whether
          it is successful or not.\n
-         __<3>*<1>_Donating money to priests or charity (in the cities in the full release
+         __<3>*<1>_Donating money to Priests or charity (in the cities in the full release
          game) trains Wisdom for a good-aligned character and abuses it for an evil
          character.\n
          __<3>*<1>_Creating magical items trains Wisdom.\n
@@ -2197,11 +2184,11 @@ Text "help::adventuring"
          capable of good in mind, and lawful evil characters preserve the laws
          of society because they recognize them as the root of their own power.
          The dominant society of Theyra emphasizes a code of conduct based on 
-         chivalty, warrior's honour, respect for the structure of the class system 
+         chivalty, Warrior's honour, respect for the structure of the class system 
          and support for the community as a whole, as strongly influenced by the f
          aith of Immotian.\n
          __The following actions contravene a Lawful alignment:\n
-         __<3>*<1> Poison can fell even the strongest warrior, and thus has the
+         __<3>*<1> Poison can fell even the strongest Warrior, and thus has the
          potential to disrupt the hierarchy of power; as such, its use is an
          unlawful act. Drow are an exempt from this stricture, as poisonings are
          considered to be part of the proper order of their society.\n
@@ -2212,7 +2199,7 @@ Text "help::adventuring"
          __<3>*<1> Attacking creatures who have surrendered to you is also a
          deeply treacherous act that goes against the law of war.\n
          __<3>*<1> Attacking prone, paralyzed or stuck characters is similarly
-         considered to be base behaviour. Characters with rogue levels are
+         considered to be base behaviour. Characters with Rogue levels are
          exempt from this restriction.\n
          __<3>*<1> Eating the flesh of humanoid creatures is considered to be
          an unlawful act, even if the victim is a goblinoid or other kind of
@@ -2235,13 +2222,13 @@ Text "help::adventuring"
          stuck or blinded opponents. The rules of chivalry do not apply to all
          combatants -- the Theyran nobility would never hobble their armies that
          way. Instead, they only apply to characters considered to be knights or
-         participants in noble combat under law: paladins, worshippers of Erich
+         participants in noble combat under law: Paladins, worshippers of Erich
          and characters who are either mounted or wearing heavy armour (which is
          traditionally reserved for nobles).\n
          
          <3>The Applicability of Law<1>\n
          __Most of Theyra has different standards as to who is awarded the protection
-         of law. In the mainstream human/halfling dominated society, demihumans are considered
+         of law. In the mainstream Human/Halfling dominated society, demihumans are considered
          people by law; goblinoids are not. Lawful Neutral and Lawful Evil characters
          follow the law as it is, the latter interpreting it more in the benefit of
          keeping the peasants down and the former more impartially. Lawful Good
@@ -2282,7 +2269,7 @@ Text "help::adventuring"
          __<3>*<1> Chaotic characters should not coerce non-evil creatures by using the
          Intimidate skill to Cow or Issue Requests. They are free to negotiate with
          them using Diplomacy or to trick them with Bluff, however. Barbarians and
-         orcs are exempt from the Cow restriction of the chaotic alignment.\n\n
+         Orcs are exempt from the Cow restriction of the chaotic alignment.\n\n
          
          <9>CHANGING ALIGNMENT<1>\n
          __When you desire to change alignment and have stated a new alignment,
@@ -2313,7 +2300,7 @@ Text "help::adventuring"
          degree of self-discipline and focus than other
          characters, allowing them to devote their will more
          fully to improving themselves -- they receive a small
-         bonus to experience gained upon reaching character 
+         bonus to Experience gained upon reaching character 
          level 3.\n
          __Chaotic characters believe in the freedom of the
          individual and the sacred value of liberty, and these
@@ -2349,11 +2336,11 @@ Text "help::adventuring"
          is the one who will answer any prayers they make when they are
          not standing over an altar; to receive aid or blessings from any
          other god requires access to the appropriate altar.\n
-         __Certain classes -- priests, paladins and monks -- begin
+         __Certain classes -- Priests, Paladins and Monks -- begin
          play devoted to a specific god which they will be allowed to choose
-         at character creation. All gods have priests, whereas paladins and 
-         monks may follow only a subset of the available gods in the game;
-         druids also have a restricted selection of gods available, even
+         at character creation. All gods have Priests, whereas Paladins and 
+         Monks may follow only a subset of the available gods in the game;
+         Druids also have a restricted selection of gods available, even
          though they do not start play devoted to a diety.        
          Converting in play to a different religion will prevent the player
          from advancing further in these classes until he switches back to a
@@ -2363,7 +2350,7 @@ Text "help::adventuring"
          may follow Ekliazeh, Erich, Immotian, Kysul, Mara, Semirath or
          Xavias.\n
          __Characters from other classes normally do not start affiliated with
-         a god, having to convert in gameplay. However, dwarves and orcs have
+         a god, having to convert in gameplay. However, Dwarves and Orcs have
          the elective of worshipping Ekliazeh or Khasrach respectively if they
          choose a class that does not offer a choice of gods. Elves begin play
          worshipping Maeve if they choose an irreligious class; if they receive
@@ -2389,12 +2376,12 @@ Text "help::adventuring"
          where they are invited. A god can exercise divine power in the world in
          only one of two circumstances: through an altar or through a petitioner
          (or ex-petitioner) who has interacted with them using an altar. This
-         makes praying at an altar a very dangerous choice: a paladin, for example,
+         makes praying at an altar a very dangerous choice: a Paladin, for example,
          can slaughter the followers of an evil god and the god will be impotent
-         to act directly, but if the paladin prays to that evil god and then turns
-         away, the god will be considered involved in the paladin's life; the link
-         is forged and the god can send negative interventions to the paladin
-         forevermore. Maeve is always considered to be 'involved' with elves, who
+         to act directly, but if the Paladin prays to that evil god and then turns
+         away, the god will be considered involved in the Paladin's life; the link
+         is forged and the god can send negative interventions to the Paladin
+         forevermore. Maeve is always considered to be 'involved' with Elves, who
          are taught to pray at her altars from early childhood. Certain methods of
          breaking this involvement exist, such as the <9>contact other plane<1>
          spell.\n\n
@@ -2404,10 +2391,10 @@ Text "help::adventuring"
          question. However, altars are not always easily available; for this reason,
          an adventurer may want to convert an altar discovered in the dungeon into
          an altar to her own god. Doing this requires a complex theological ritual
-         that takes 4 hours and drains 2 faitgue points.\n
+         that takes 4 hours and drains 2 Fatigue Points.\n
          __Converting an altar requires two rolls. The first in a Knowledge (Theology)
          check against DC 15 to see if the ritual is performed correctly. If this
-         check is failed, the time and fatigue is lost, but nothing else occurs and
+         check is failed, the time and Fatigue is lost, but nothing else occurs and
          the attempt may be made again. The second roll represents a contest of the
          petitioner's faith against the altar's current god, and is represented in
          the game by a 1d20 roll, to which is added the petitioner's Favour Level
@@ -2426,8 +2413,8 @@ Text "help::adventuring"
          <9>Sacrifice and Favour<1>\n
          __A character's stature in their god's eyes is measured by a quantity
          called favour. The player cannot directly see her character's favour rating,
-         but internally to the game it functions in much the same way as experience
-         points do. Favour can be gained in a number of ways specific to a given
+         but internally to the game it functions in much the same way as Experience
+         Points do. Favour can be gained in a number of ways specific to a given
          god -- Asherath appreuciates winning difficult fights, Erich approves of
          the slaughter of goblinoids, Hesani likes characters resolving conflicts
          -- but the most common way to gain favour with a diety is to offer
@@ -2483,7 +2470,7 @@ Text "help::adventuring"
          __<9>Favour Levels and Permanent Blessings:<1> When characters make sacrifices 
          (or gain favour, for gods that do not accept sacrifices), their total favour 
          is recalculated and compared to an internal favour table specific to each god. 
-         This table works much like the experience table, determining a character's 
+         This table works much like the Experience Table, determining a character's 
          favour level. If the total is enough for them to be at a higher favour level
          than they are, the god in question will grant them a permanent blessing. This
          works in many ways like gaining a level in a prestige class: the character
@@ -2614,10 +2601,10 @@ Text "help::adventuring"
          menaced by them, while
          <9>purifying the body<1> refers to curing poison, disease, petrificaton
          and paralysis. <9>Replenishing your spirit<1>, conversely, restores all
-         drained experience and heals all attribute damage. <9>Deflecting lethal
+         drained Experience and heals all attribute damage. <9>Deflecting lethal
          blows<1> indicates that the god will intercede automatically to lessen
          the damage from a critical hit that would kill the player or leave her
-         with less than 1/5th of her normal hit points. This reduces the hit to
+         with less than 1/5th of her normal Hit Points. This reduces the hit to
          non-critical damage level, but does not add to prayer timeout.\n
          __Divine aid comes with a price, however; the gods help those who help
          themselves, and bless most highly those servants who call upon their
@@ -2637,7 +2624,7 @@ Text "help::adventuring"
          period varies from god to god; a player can determine if they currently
          are in a prayer timeout using the seek insight option. Prayer timeout is
          measured in 'XP clicks' -- individual instances of the character gaining
-         (any amount of) experience -- and as a result it cannot be 'waited out'; 
+         (any amount of) Experience -- and as a result it cannot be 'waited out'; 
          the player will have to continue adventuring to run out the prayer 
          timeout and again be eligable to receive divine aid.\n
          __<9>Resurrection:<1> For an especially favoured servant, the gods will
@@ -2734,23 +2721,23 @@ Text "help::adventuring"
           <3>The Commanded Undead Pool<1>\n
           __Characters with the Rebuke/Command Undead gain a pool specifically
           for commanded undead equal to their level in the Rebuke/Command Undead
-          ability -- in other words, their priest level. Any excess commanded undead
+          ability -- in other words, their Priest level. Any excess commanded undead
           bleed over into the Party CR pool normally. Rebuked undead are not allies,
           merely afraid, and thus do not count toward any pool.\n\n
           
           <3>The Undead Horde Pool<1>\n
-          __In addition to the magic pool, specialist necromancers receive a second
+          __In addition to the magic pool, specialist Necromancers receive a second
           pool that applies only to animated undead. This pool has a CR equal to 
           the character's Mage level. Animated undead subtract PCR first from this
           pool, then from the magic pool, and finally from the general party pool.
-          As a result, a necromancer can control a quite substantial number of
+          As a result, a Necromancer can control a quite substantial number of
           undead creatures...\n\n
           
           <3>The Animal Companion Pool<1>\n
           __Characters with the Animal Companion ability receive a pool that can
           only be used for animal companions; this pool is equal in CR to the
           character's rating in the Animal Companion ability -- usually the sum
-          of the character's ranger and druid levels.\n
+          of the character's ranger and Druid levels.\n
           __This pool applies to any non-magical animal allies of the character, 
           whether they are the actual single animal companion granted by the
           Animal Companion ability, or other animals befriended and recruited
@@ -2764,11 +2751,11 @@ Text "help::adventuring"
           +15 increases it by +4, and so forth.\n\n
 
           <3>That Special Heroic Quality<1>\n
-          __Incursion does not currently include a monster experience system
+          __Incursion does not currently include a monster Experience system
           -- allies do not advance. Thus, to make companions gained with the
           Diplomacy skill viable medium-term allies, they receive the same
           'heroic quality' that player characters have, giving them 20 base
-          hit points in addition to those gained from Hit Dice and Constitution
+          Hit Points in addition to those gained from Hit Dice and Constitution
           bonus. This benefit only applies to races that can receive class
           templates, not to monsterous creatures, and does not apply to
           animal companions, summoned creatures, illusions, animated dead,
@@ -2804,7 +2791,7 @@ Text "help::adventuring"
          much the same reasons your own character is.\n\n
          
          <9>Service Spells<1>\n
-         __NPC spellcasters such as priests, dragons or nagas can also sell 
+         __NPC spellcasters such as Priests, dragons or nagas can also sell 
          services in the form of spells they are capable of casting. Most
          spells are difficult to pass on in this way, but some, especially
          curatives and abjurations like <9>neutralize poison<1>, <9>remove
@@ -2987,7 +2974,7 @@ Text "help::combat"
       <3>__*_Placing items in or taking items out of other 
       containers has a timecost in segments that varies with the
       container. Special purpose containers, such as the ivory
-      scroll case that mages begin play with, are often much
+      scroll case that Mages begin play with, are often much
       faster in this regard than the leather backpack.\n
 
       \n<11>
@@ -3002,13 +2989,13 @@ Text "help::combat"
       number of rounds a character remains alert is based on his Wisdom score.\n
       __A character who is attacked while Exploring is said to have been
       caught <11>flat-footed<3>. Such a character loses their Dexterity
-      bonus to their defense class, as the attack caught them partially
+      bonus to their Defense Class, as the attack caught them partially
       unexpectedly and they did not have time to fully ready themselves
       for combat. Essentially, a minor advantage goes to whichever characters
       strike the first blow in a given combat, and against those who are
       struck before they can strike.\n
       __This may seem like a trivial penalty, and usually it is. It can be
-      much more deadly when fighting rogues or other characters with the
+      much more deadly when fighting Rogues or other characters with the
       Sneak Attack ability, however, as they gain significant amounts of
       bonus damage when attacking flat-footed characters.\n\n
       
@@ -3026,8 +3013,8 @@ Text "help::combat"
       attacker can substitute her Dexterity for Strength when determining
       damage, if doing so benefits her. The victim is also denied her
       Dexterity bonus to defense, as with being flat-footed above --
-      thus allowing a rogue to gain Sneak Attack damage. Obviously,
-      setting up surprise attacks is very valuable especially to rogues,
+      thus allowing a Rogue to gain Sneak Attack damage. Obviously,
+      setting up surprise attacks is very valuable especially to Rogues,
       but also to any high-Dexterity character.\n 
 
       \n<11>
@@ -3057,7 +3044,7 @@ Text "help::combat"
       __<11>Stacking Armour:<3> Armour and resistances can be gained from multiple
       sources in Incursion -- for example, a lizardman in a chainmail hauberk 
       has both his natural armour rating and the armour values of the chainmail.
-      Similarly, a mage might have fire resistance both from an amulet he wears
+      Similarly, a Mage might have fire resistance both from an amulet he wears
       and from a spell he just cast. In these cases, the final applicable value
       is determined by taking the largest armour or resistance value and adding 
       to it half of the second largest value, a third of the third largest, a
@@ -3068,16 +3055,16 @@ Text "help::combat"
       spell, potion or scroll granting that resistance. Thus, the fire resistance
       of a Ring of Fire Resistance does not stack with a second ring, but it
       would stack with a Resist Fire spell.\n
-      __<11>Coverage:<3> Coverage is an addition to defense class that describes
+      __<11>Coverage:<3> Coverage is an addition to Defense Class that describes
       the amount of the body covered by armour. Every suit of armour has a coverage
       rating, and coverage can be increased by wearing protective items such as
       armoured helmets and boots. If an attack roll exceeds the sum of the armour
-      wearer's defense class and coverage, that attack has bypassed the armour
+      wearer's Defense Class and coverage, that attack has bypassed the armour
       completely, and the armour ratings from physical armour are ignored when 
       calculating damage. Natural armour and other sources of resistance to physical
       damage still apply normally, however.\n
       __<11>Penetration:<3> While energy is energy, weapons are driven by their
-      wielder's strength, and a powerful blow can cleave through armour's protection.
+      wielder's Strength, and a powerful blow can cleave through armour's protection.
       In game terms, a positive secondary Strength modifier reduces armour's effective
       protection by its magnitude, to a maximum reduction of half. For example, if a
       character with 20 Strength (secondary modifier +4) strikes a character with 5
@@ -3090,12 +3077,12 @@ Text "help::combat"
       
       <11>Armour vs. Special Attacks<3>\n
       __If a physical attack (a claw or sting, for example) carries with it
-      a special form of damage or deleterious effect (such as poison, experience
+      a special form of damage or deleterious effect (such as poison, Experience
       or attribute draining or so forth -- but not elemental damage), the
       victim will only suffer that damage if the attacker's attack roll is
       higher than the victim's Defense Class + (Coverage - 4). If the attack
       roll is higher than DC but not DC + (Coverage - 4), then the attack
-      will inflict only hit point damage.\n
+      will inflict only Hit Point damage.\n
       __If a character has armour with the <11>sacred<3> quality, that armour
       will block touch attacks with special effects the same way it blocks
       claws and other physical attacks.
@@ -3105,40 +3092,40 @@ Text "help::combat"
       ==============<3>\n
       __Adventurers consistently attempt difficult and tiring actions, not the
       least of which is brutal combat. Some activities strain the body and spirit
-      even more than these trials, however. The berserk fury of a barbarian, a
-      priest's ability to channel sacred energies from the positive material
+      even more than these trials, however. The berserk fury of a Barbarian, a
+      Priest's ability to channel sacred energies from the positive material
       plane through his own body to drive off the undead, or even the titanic
-      strike of a warrior praying to down a terrible foe with a single mighty
+      strike of a Warrior praying to down a terrible foe with a single mighty
       blow -- all these things place strain on an adventurer far beyond what
       they normally experience.\n
-      __This strain is represented by fatigue points. A number of different actions
-      cost fatigue, as shown on the table below. If a character drops below 0
-      fatigue points, they are considered to be fatigued, and will suffer a
+      __This strain is represented by Fatigue Points. A number of different actions
+      cost Fatigue, as shown on the table below. If a character drops below 0
+      Fatigue Points, they are considered to be fatigued, and will suffer a
       reduction in effective Strength and Constitution. If they continue to
-      expend fatigue until they reach negative fatigue points equal to their
+      expend Fatigue until they reach negative Fatigue Points equal to their
       normal positive maximum, they are considered to be exhausted. Spending
-      any further fatigue points when exhausted entails a risk of passing out
+      any further Fatigue Points when exhausted entails a risk of passing out
       for several turns, leaving the character effectively helpless. If this
       risk is accepted, a Fortitude save is made to determine whether the
-      character can remain conscious whenever more fatigue points are spent.\n
+      character can remain conscious whenever more Fatigue Points are spent.\n
       __<11>Recovering Fatigue<3>: Normal magical healing does nothing to
-      restore lost fatigue; the primary way to recover it is simply to rest.
-      A character who is not fatigued when they rest regains all of their
-      fatigue points immediately. A character who is fatigued recovers all
-      of their fatigue points only if the night passes uneventfully; in the
-      case of an encounter, only a portion of the fatigue points lost will
-      be recovered. An exhausted character recovers only one fatigue point
+      restore lost Fatigue; the primary way to recover it is simply to rest.
+      A character who is not Fatigued when they rest regains all of their
+      Fatigue Points immediately. A character who is fatigued recovers all
+      of their Fatigue Points only if the night passes uneventfully; in the
+      case of an encounter, only a portion of the Fatigue Points lost will
+      be recovered. An exhausted character recovers only one Fatigue point
       when resting, requiring several nights to fully recover from the
       effects.\n
       __<11>Fatigue Costs:<3> The following actions all cause a character to
-      expend fatigue. Actions marked with an asterisk are not currently
+      expend Fatigue. Actions marked with an asterisk are not currently
       implemented in this version of Incursion, but will appear in a future
       release.\n
       <15>__Action__________________________Fatigue Cost<1>\n
       __Turn or Command Undead__________2 FP\n
       __Use Berserk Rage________________3 FP\n
-      ____(as an orc)___________________2 FP\n
-      __Cast a metamagicked spell_______(MM Levels) FP\n
+      ____(as an Orc)___________________2 FP\n
+      __Cast a Matamagicked spell_______(MM Levels) FP\n
       __Perform a Great Blow____________1 FP\n
       __Being Stunned___________________1 FP\n
       __Being Poisoned__________________1 FP\n
@@ -3165,7 +3152,7 @@ Text "help::combat"
       influence exactly what bonus is granted based on Strength, however:\n      
       __<15>*<3>_If a character wields a weapon in both hands, they are able to
       place greater force behind their attacks, and receive 1.5 times their
-      normal strength bonus to attack.\n
+      normal Strength bonus to attack.\n
       __<15>*<3>_If a character is fighting with two weapons, the weapon in their
       off hand receives only half of the character's normal Strength bonus
       to damage.\n
@@ -3184,9 +3171,9 @@ Text "help::combat"
       =============<3>\n
       __Every attack in Incursion has the potential to be a critical hit. When
       the attack roll scores very high before any modifiers are applied to the
-      roll, and hits the creature's defense class, a second identical attack roll 
+      roll, and hits the creature's Defense Class, a second identical attack roll 
       is immediately made to see if the attack is a critical hit. If the second
-      attack roll also hits the creature's defense class, the attack is considered
+      attack roll also hits the creature's Defense Class, the attack is considered
       to be a critical hit.\n
       __<11>Threat Range:<3> The threat range of a weapon or attack determines
       what must be rolled on the first attack roll before any modifiers are
@@ -3211,7 +3198,7 @@ Text "help::combat"
       __The damage multiplier affects all the damage a weapon inflicts, including
       damage bonuses due to skill, magic and Strength. The only exception to this
       is that bonus dice of damage -- such as those from a flaming sword or a
-      rogue's sneak attack ability -- are not multiplied by a critical hit, though
+      Rogue's sneak attack ability -- are not multiplied by a critical hit, though
       they are added in once normally.\n
       __<11>Crit Immunity:<3> Critical hits most often depend upon striking a
       vital area or landing a particularly solid blow. Creatures with no
@@ -3247,7 +3234,7 @@ Text "help::combat"
       from each creature whose threatened area they are leaving.\n
       __<15>*<3>_When a creature is held or paralyzed, they provoke one attack of
       opportunity from every creature whose threat range they are in every round.\n
-      __<15>*<3>_When a creature without the Martial Mastery feat (or the monk's 
+      __<15>*<3>_When a creature without the Martial Mastery feat (or the Monk's 
       Unarmed Strike class feature, which supercedes the feat) punches or kicks
       an enemy, they provoke an attack of opportunity from that specific enemy.\n
       __<15>*<3>_When a creature uses certain tactical options (such as Bull Rush
@@ -3383,7 +3370,7 @@ Text "help::combat"
       to make an immediate Disarm attempt against you, without it costing them an action. 
       A Disarm attempt normally provokes an attack of opportunity.\n
       __<11>Fight Defensively:<3> By devoting your full attention to defense, you can 
-      gain a +4 circumstance bonus to your defense class  at the expense of suffering a -4 
+      gain a +4 circumstance bonus to your Defense Class  at the expense of suffering a -4 
       circumstance penalty to attack rolls,  -2 to damage, 75~ normal movement rate and a 
       -20% spell success chance.  Once fighting defensively, you can stop by using the 
       'x' command.\n
@@ -3396,11 +3383,11 @@ Text "help::combat"
       __<11>Great Blow:<3> You execute a titanically powerful blow with your weapon, 
       allowing you to double your Strength modifier to attack and damage, and lowering 
       the threat range of your attack by 3 (i.e., 19-20 becomes 16-20). However, a 
-      great blow takes 1 1/2 times as long as a normal attack, costs two Fatigue points 
+      great blow takes 1 1/2 times as long as a normal attack, costs two Fatigue Points 
       and leaves you off-balance and Exposed for a full round after you finish it.\n
       __<11>Sprint:<3> You put on a desperate burst of speed, and increase you movement 
       rate by 50% for [1 + Constitution modifier] rounds (minimum 1) at the cost of two 
-      fatigue points. Since you are running full out, Sprint also decreases your defense 
+      Fatigue Points. Since you are running full out, Sprint also decreases your defense 
       class by two.\n
       __<11>Sunder Weapon:<3> You strike an opponent's weapon (or, at your option, any 
       unattended object) and attempt to damage or destroy it. This provokes an attack 
@@ -3458,8 +3445,8 @@ Text "help::combat"
       mount takes the fire damage from brimstone. If your mount has the Woodland
       Stride ability, it carries you through safely even if you don't. Note that
       some magical items (e.g., girdles of the inferno) specifically say that
-      they protect both you and your mount. If your mount is a paladin's sacred
-      mount or a ranger or druid's animal companion, spells you cast on yourself
+      they protect both you and your mount. If your mount is a Paladin's sacred
+      mount or a ranger or Druid's animal companion, spells you cast on yourself
       (e.g., resist fire, resist water) will also affect it, which may make some
       terrain easier.\n
       __If you would be knocked prone while you are mounted, you can made a Ride
@@ -3471,9 +3458,9 @@ Text "help::combat"
       have to survive the water somehow. If you are OK with water but your mount
       is not (e.g., lizardfolk riding a horse), your mount will still need swim
       checks and may drown out from under you. If your mount does not need to
-      breathe air but you do (e.g., human riding a giant shark), you can still
+      breathe air but you do (e.g., Human riding a giant shark), you can still
       drown. If you both don't care about the water, however, everything is fine
-      (e.g., graveborn necromancer riding a zombie warhorse).  Finally, if your
+      (e.g., Graveborn Necromancer riding a Zombie Warhorse).  Finally, if your
       mount carries you completely above the water (e.g., because it is flying or
       has water-walking) then you don't even need to make the swim checks and
       will not drown.\n\n
@@ -3495,7 +3482,7 @@ Text "help::combat"
       charge in and the two directions immediately next to that direction
       -- for example, if you charge north, you can only move north, northeast
       or northwest; any other direction will cause you to break off the
-      charge and lose any existing charge bonus.\n
+      charge and lose any existing Charge Bonus.\n
       __While you are charging you move at 150~ of your normal rate, but suffer
       a -2 penalty to Defense. You can Charge and Sprint at the same time, but
       thde higher Sprint movement bonus replaces the Charge movement bonus rather 
@@ -3506,7 +3493,7 @@ Text "help::combat"
       calculated internally from a table inside the game, and ca become quite
       substantial with a long charge on a heavy, fast mount.\n
       __While you are charging you do not get to make attacks of opportunity. You
-      are denied your dexterity bonus to your defense class. You are subject to
+      are denied your Dexterity bonus to your Defense Class. You are subject to
       sneak attacks as if you were flat footed or flanked. After your first step,
       every step you take while charging provokes an attack of opportunity
       (movement) from all nearby foes. If you attempt mounted archery, your
@@ -3590,7 +3577,7 @@ Text "help::magic"
      ===============<3>\n
      __You can learn spells by typing 'L' or 'E' on the character
      sheet screen. This brings up a menu with all the possible spells you could
-     learn at the moment; for clerics and druids, this is every unlearned spell
+     learn at the moment; for Clerics and Druids, this is every unlearned spell
      of a level for which you currently have a free spell slot. For wizards, however,
      this list shows only the spells that you have a spellbook for somewhere in your
      inventory. If, after surveying the list, you don't find a spell you want, you
@@ -3607,16 +3594,16 @@ Text "help::magic"
      and pressing either [ENTER] or the letter in the box causes the spell
      selected to be cast. Pressing [ESC] causes the spell manager window to
      vanish without casting a spell.\n
-     __<11>Metamagic:<3> You can toggle the on/off state of any metamagic feat
+     __<11>Metamagic:<3> You can toggle the on/off state of any Matamagic feat
      you have learned with regard to a single spell by typing the capital
      letter shown associated with it in the legend at the bottom of the spell
-     manager window. The game remembers which metamagic feats you have turned
+     manager window. The game remembers which Matamagic feats you have turned
      on for any given spell between castings, so if you turn on Maximize Spell
      for a <9>fireball<3>, you need to turn it back off again on your next 
-     casting if you don't want it. The total number of metamagic levels
+     casting if you don't want it. The total number of Matamagic Levels
      currently associated with a given spell are shown in square brackets beside
      the feat list, and the spell success rate is recalculated dynamically as
-     you add or remove metamagic feats, to help you decide if you want to cast
+     you add or remove Matamagic feats, to help you decide if you want to cast
      the spell that way or not.\n
      __<11>Spellkeys:<3> By pressing a number key (0-9) while a given spell is
      selected, you can assign that key to the spell in question as a keyboard
@@ -3626,7 +3613,7 @@ Text "help::magic"
      confirm the assignment of the spellkey.\n
      __<11>Casting Requisites:<3> In order to cast a spell, some classes need to
      have a certain item. Mages must have a spellbook that contains the spell in
-     question somewhere in their inventory, while priests must have their holy
+     question somewhere in their inventory, while Priests must have their holy
      symbol equipped in their amulet slot in order to cast spells. In addition,
      a caster must have one hand free in order to perform the somatic components
      of spellcasting, and since spells also have verbal incantations, they cannot
@@ -3649,57 +3636,57 @@ Text "help::magic"
      <11>MANA {MA}\n
      ====<3>\n
      __Incursion differs from its parent system (but hews to roguelike convention)
-     in that spells are cast by spending mana -- a form of magical energy -- rather
+     in that spells are cast by spending Mana -- a form of magical energy -- rather
      than depending on spell preparation and spells per day. Mana is measured in a
-     manner similar to hit points, with a permanent maximum and a current total.
-     Characters gain new mana every level; mages also begin with a magical item that
-     increases the size of their maximum mana pool, because they have to depend on
+     manner similar to Hit Points, with a permanent maximum and a current total.
+     Characters gain new Mana every level; Mages also begin with a magical item that
+     increases the size of their maximum Mana pool, because they have to depend on
      spellcasting more than other character types. Casting spells, using innate
-     spell-like abilities and blasting wands all consume a character's mana supply.
-     Every spell has a mana cost associated with it, and most characters simply pay
-     that cost whenever they cast that spell. Mages, however, find the mana cost of
+     spell-like abilities and blasting wands all consume a character's Mana supply.
+     Every spell has a Mana cost associated with it, and most characters simply pay
+     that cost whenever they cast that spell. Mages, however, find the Mana cost of
      spells adjusted by their specialty school modifiers, as described under Schools
      of Magic, below.\n
      __Mana normally replenishes fully when characters rest for the night. Further,
-     mana may regenerate slowly over time. If a character's mana pool is half or
+     Mana may regenerate slowly over time. If a character's Mana pool is half or
      more empty, it will not regenerate at all until she rests. If it is more than
-     half full, however, the character will regain mana over time at a speed based 
-     on the proportion of her total mana she has spent. In other words, a character
-     down only a little mana will recover quickly, whereas one down more will take
+     half full, however, the character will regain Mana over time at a speed based 
+     on the proportion of her total Mana she has spent. In other words, a character
+     down only a little Mana will recover quickly, whereas one down more will take
      exponentially longer to recover. The AutoRest macro can be used to rest until
-     mana is recovered safety -- holding down the Rest key risks being attacked by
+     Mana is recovered safety -- holding down the Rest key risks being attacked by
      surprise and being unable to respond, resulting in seemingly random death.\n
-     __Some spells, such as <9>resist fire<3> and <9>bull's strength<3>, offer
+     __Some spells, such as <9>Resist Fire<3> and <9>Bull's Strength<3>, offer
      protection or enhancement that lasts a full day. Mana spent on these spells
-     is referred to as <11>held mana<3> and never regenerates, and the character's 
+     is referred to as <11>Held Mana<3> and never regenerates, and the character's 
      total pool is counted as being that many points lower for determining if and 
-     how quickly a character regenerates mana. For example, if a character with 100 
-     mana spends thirty points on self-enhancement spells, she can spend another 35 
-     mana points on attack or miscellaneous spells before her pool reaches the point 
-     it will no longer regenerate, because her total mana pool not counting held 
-     mana is 70. On the mana bar in the traits window, held mana is shown in brown.
+     how quickly a character regenerates Mana. For example, if a character with 100 
+     Mana spends thirty points on self-enhancement spells, she can spend another 35 
+     Mana Points on attack or miscellaneous spells before her pool reaches the point 
+     it will no longer regenerate, because her total Mana pool not counting held 
+     Mana is 70. On the Mana bar in the traits window, held Mana is shown in brown.
      \n\n
 
      <11>METAMAGIC {ME}\n
      =========<3>\n
      __Metamagic allows the hero to modify the effects of spells that she casts. The
-     first step to using metamagic is to learn one or more of the metamagic feats.
-     All of the metamagic feats end in 'Spell' (Maximize Spell, Still Spell, Warp
-     Spell, etc.), so they are easy to recognize in the feat list. Every metamagic
-     feat added to a spell costs a certain number of metamagic levels, as shown on 
+     first step to using Matamagic is to learn one or more of the Matamagic feats.
+     All of the Matamagic feats end in 'Spell' (Maximize Spell, Still Spell, Warp
+     Spell, etc.), so they are easy to recognize in the feat list. Every Matamagic
+     feat added to a spell costs a certain number of Matamagic levels, as shown on 
      the table below. Metamagic levels stack for multiple feats, and have the
      following effects:\n
-     __<7>*<3>_Every metamagic level a spell has attached to it costs the caster 
-     one fatigue point whenever the spell is cast.\n
+     __<7>*<3>_Every Matamagic level a spell has attached to it costs the caster 
+     one Fatigue Point whenever the spell is cast.\n
      __<7>*<3>_The spell success rate for a given spell is decreased by 10~ for every
-     metamagic level placed on it. This is done before the adjustment for spell
+     Matamagic level placed on it. This is done before the adjustment for spell
      success rates above 90~ is made, so a spell that shows a 94~ spell success
-     rate in the spell manager window can afford to have 4 metamagic levels attached
+     rate in the spell manager window can afford to have 4 Matamagic levels attached
      to it without dropping the adjusted success rate below 90~.\n
-     __<7>*<3>_The mana cost for casting a spell increases by 50~ or 3 points,
-     whichever is higher, for every metamagic level attached to the spell.\n
-     __High rating in the Metamagic skill can reduce the mana increase and the fatigue
-     cost of metamagicked spells. The number of metamagic levels that each feat adds
+     __<7>*<3>_The Mana cost for casting a spell increases by 50~ or 3 points,
+     whichever is higher, for every Matamagic level attached to the spell.\n
+     __High rating in the Metamagic skill can reduce the Mana increase and the Fatigue
+     cost of Matamagicked spells. The number of Matamagic levels that each feat adds
      are shown in the following table:<15>
      \n__Metamagic Feat_________Lev__Metamagic Feat_________Lev<1>
      \n__Amplify Spell___________2___Inherent Spell__________1
@@ -3742,12 +3729,12 @@ Text "help::magic"
     \n<7>Weaver______<1>+15~_+10~_+10~_-10~_---__---__-15~_-15~_+25~_
     \n\n__<3>In addition to affecting the spell success chance, the school
     modifiers have two other impacts on casting. A positive modifier
-    decreases the mana cost by 5~ for every 5~ of the modifier, but a
-    negative modifier increases the mana cost by <11>50~<3> for every
+    decreases the Mana cost by 5~ for every 5~ of the modifier, but a
+    negative modifier increases the Mana cost by <11>50~<3> for every
     five percent of the modifier. Thus, a Thaumaturge suffers doubled
-    mana costs when casting Illusion spells. Furthermore, a negative
+    Mana costs when casting Illusion spells. Furthermore, a negative
     school modifier acts as a percentile chance that casting the spell
-    in question will be draining, costing the caster a point of fatigue
+    in question will be draining, costing the caster a point of Fatigue
     in the process of casting.
     
     \n\n
@@ -3756,9 +3743,9 @@ Text "help::magic"
     good specialty for those who want a highly defensive, cautious style
     of play. High-level Abjurers tend to be nearly impossible to harm,
     but lack the powerful offensive and miscellanea spells that other
-    mages typically have. Abjurers are often also called White Wizards,
+    Mages typically have. Abjurers are often also called White Wizards,
     given the benevolent nature of their magic, and are the most trusted
-    of mages by the common people. Spells which best represent the nature 
+    of Mages by the common people. Spells which best represent the nature 
     of this school include <9>dispel magic<3>, <9>resist fire<3>, 
     <9>banishment<3> and <9>globe of invulnerability<3>.\n
     __Abjurers are also strong in the schools of Weavecraft, Divination
@@ -3767,7 +3754,7 @@ Text "help::magic"
     __<11>Specialist Bonus:<3> Abjurers gain a +1 insight bonus to all
     three of their saving throws at 4th, 8th, 12th, 16th and 20th levels.
     Additionally, because of the defensive and protective nature of their
-    magic, Abjurers receive access to several spells from the priest spell
+    magic, Abjurers receive access to several spells from the Priest spell
     list: <9>sanctuary<3>, <9>detect evil<3>, <9>shield other<3>, <9>glyph
     of warding<3>, <9>remove curse<3> (as a 3rd-level spell), <9>negative
     plane protection<3>, <9>death ward<3>, <9>free action<3>, <9>spell
@@ -3781,7 +3768,7 @@ Text "help::magic"
     those spells which manipulate the environment or change the parameters
     of a situation indirectly. Arcana spells are rarely powerful
     per se, but they are highly useful; Arcanists are the generalists
-    of the mage world, with a number of unusual tricks up their sleeves.
+    of the Mage world, with a number of unusual tricks up their sleeves.
     Archetypical Arcana spells include <9>wall of fog<3>, <9>web<3>, 
     <9>animate objects<3> and <9>major creation<3>.\n
     __Arcanists are also mildly above average performing spells from
@@ -3803,10 +3790,10 @@ Text "help::magic"
     __Diviners also excel at spells of Weavecraft, Arcana and Thaumaturgy, 
     but are mediocre when handling Evocations and Illusions.\n
     __<11>Specialist Bonus:<3> Drawn from the ranks of sages and scholars,
-    Diviners receive three extra skill points at every mage level, and gain
+    Diviners receive three extra Skill Points at every Mage level, and gain
     a +1 insight bonus to Intelligence at 4th, 8th, 12th, 16th and 20th
     levels. They gain access to the spell <9>detect monsters<3> as a 2nd,
-    not 3rd, level spell. (Once more priestly Divinations are implemented, the
+    not 3rd, level spell. (Once more Priestly Divinations are implemented, the
     Diviners will also have access to spells like <9>augury<3> and of course
     <9>divination<3>, just like Abjurers do now.)\n\n
 
@@ -3827,7 +3814,7 @@ Text "help::magic"
     of their mind-affecting spells. They also gain Diplomacy as a bonus
     class skill, allowing them to convince creatures they charm into doing
     things to serve their agenda.\n
-    __Enchanters also have access to the priest spell <9>enthrall<3>, which
+    __Enchanters also have access to the Priest spell <9>enthrall<3>, which
     they cast as arcane magic.\n\n
 
     <11>Evocation<3> {EV}\n
@@ -3841,10 +3828,10 @@ Text "help::magic"
     and Enchantment difficult to manage, but are very comfortable with
     the powerful and direct spells of Abjuration and Thaumaturgy.\n
     __<11>Specialist Ability:<3> Evokers channel raw magical energies
-    through their bodies far more frequently than other mages, relying
-    on draining metamagic feats like Empower, Quicken and Maximize. To
+    through their bodies far more frequently than other Mages, relying
+    on draining Matamagic feats like Empower, Quicken and Maximize. To
     support this penchant, their maximum total Fatigue Points increases
-    by one every even mage level.\n\n
+    by one every even Mage level.\n\n
 
     <11>Illusion<3> {IL}\n
     __Illusion magic is indirect and deceptive, creating images of things
@@ -3853,15 +3840,15 @@ Text "help::magic"
     Weavers in that they fight indirectly, relying on keeping their enemy
     occupied at a distance. The illusionist gains some very powerful
     miscellanea spells, but lacks the direct power of the evoker or the
-    necromancer. Its a choice best suited to a patient and tactical
+    Necromancer. Its a choice best suited to a patient and tactical
     player. Spells typical of the Illusion school include <9>invisibility<3>,
     <9>phantasmal force<3> and <9>shadow monsters<3>.\n
     __Illusionists excel at Weavecraft, Divination, Arcana and Enchantment, 
     but are weaker in the schools of Evocation, Necromancy and Thaumaturgy.\n
     __<11>Specialist Ability:<3> To complement their penchant for trickery and
     ability to utilize <9>invisibility<3>, Illusionists receive Bluff, Move
-    Silently, Pick Pockets and Disguise as bonus mage class skills. They also
-    receive a +1 competence bonus to the Illusioncraft skill every even mage
+    Silently, Pick Pockets and Disguise as bonus Mage class skills. They also
+    receive a +1 competence bonus to the Illusioncraft skill every even Mage
     level.\n\n
 
     <11>Necromancy<3> {NE}\n
@@ -3878,14 +3865,14 @@ Text "help::magic"
     in Enchantment, Illusion and Abjuration.\n
     __<11>Specialist Bonus:<3> Necromancers receive a bonus pool of hit dice
     worth of created undead they can control that do not count toward the
-    normal maximum of summoned/charmed/animated/etc. creatures a mage may
+    normal maximum of summoned/charmed/animated/etc. creatures a Mage may
     have under his control before they start to break free. Necromancers
     also receive a +1 bonus to save vs. death magic at every 3rd level, gain
     a +2 bonus to save vs. fear at 1st level (due to the exceptionally...
     grim situations they are exposed to and treat Poison Use as a bonus 
     class skill.\n
     __Finally, Necromancers gain access to certain signature spells at
-    lower levels than other mages: <9>animate dead<3> as a 3rd level
+    lower levels than other Mages: <9>animate dead<3> as a 3rd level
     spell, <9>create corporeal undead<3> at 5th and <9>create spectral
     undead<3> at 6th.\n\n
 
@@ -3899,11 +3886,11 @@ Text "help::magic"
     Weavecraft and Necromancy, but find the magics of Evocation, Illusion and
     Divination more difficult to grasp.\n
     __<11>Specialist Bonus:<3> Thaumaturges embrace life in all its splendour,
-    shattering the stereotype of the mage as an ivory tower academic. Their
-    penchant for physical combat and hardier lifestyle give them 1d8 hit points
-    every mage level instead of 1d4. Furthermore, they are proficient with all
+    shattering the stereotype of the Mage as an ivory tower academic. Their
+    penchant for physical combat and hardier lifestyle give them 1d8 Hit Points
+    every Mage level instead of 1d4. Furthermore, they are proficient with all
     light weapons, instead of the normal, more limited choices available to
-    mages.\n\n
+    Mages.\n\n
 
     <11>Weavecraft<3> {WE}\n
     __Weavecraft spells deal with distance, location and the innate nature
@@ -3923,7 +3910,7 @@ Text "help::magic"
     <15>Multiclass Spellcasters {MU}\n
     =======================\n    
     __<3>Incursion handles multiclass spellcasters in a somewhat more nuanced
-    way than its parent game system. To single-classed mages, clerics or druids,
+    way than its parent game system. To single-classed Mages, Clerics or Druids,
     these differences are effectively invisible, but when playing a spellcaster
     with more than one class, understanding how to use them effectively becomes
     very important. To understand this, it's important to distinguish between
@@ -3931,17 +3918,17 @@ Text "help::magic"
     classed spellcasters, but significant to multiclassed ones.\n
     __<15>Caster Levels:<3> A caster level represents one stage of skill in
     spellcasting, abstract of any specific kind of spellcasting (such as bardic
-    magic, paladin magic, etc.) Different classes gain caster levels at a
-    different rate -- a mage gains one caster level for every mage level,
-    while a paladin gains one caster level for every even paladin level
+    magic, Paladin magic, etc.) Different classes gain caster levels at a
+    different rate -- a Mage gains one caster level for every Mage level,
+    while a Paladin gains one caster level for every even Paladin level
     starting at 4th. Caster levels, once gained, are independant of whatever
     class they were gained from, and caster levels from different classes
-    always stack. Thus, for example, a mage 5 / paladin 4 has six total
-    caster levels; 5 from mage and one from paladin. The Intensive Study
+    always stack. Thus, for example, a Mage 5 / Paladin 4 has six total
+    caster levels; 5 from Mage and one from Paladin. The Intensive Study
     feat can be used to gain more caster levels in some circumstances.\n
     __Caster levels determine two things: the power of a caster's spells
     and the spell slots she has access to. For example, the spell <9>fireball<3>
-    inflicts 1d6 points of damage per caster level -- thus, the mage/paladin
+    inflicts 1d6 points of damage per caster level -- thus, the Mage/Paladin
     example above would be able to throw a <9>fireball<3> inflicting 6d6
     points of damage (saving throw abiding, of course). Caster levels also
     affect most spells' range and duration. Secondly, caster levels determine
@@ -3972,7 +3959,7 @@ Text "help::magic"
         ____20___________8_8_8_8_8_8_7_6_4\n
     __<3>This table is modified by bonus slots gained from Intelligence and
     other factors, and does not include bones slots gained from the Mage
-    Magical Diversity class feature or the free domain spells clerics gain.
+    Magical Diversity class feature or the free domain spells Clerics gain.
     Regardless of Intelligence, however, note that no character can begin
     casting spells of a given level until they have enough caster levels to
     gain their first slot for that spell level on the above chart -- thus,
@@ -3986,46 +3973,46 @@ Text "help::magic"
     a given class. Paladin magic is different from bardic magic; every class
     has associated with it a list of spells that its members gain access to.
     Paladins have spells associated with righteous might, bards with knowledge,
-    trickery and social influence, clerics with protection and community, and
+    trickery and social influence, Clerics with protection and community, and
     so forth. A single spell's level can vary on different spell lists -- for
-    example, <9>call light<3> is a first-level priest spell and a second-level
-    mage spell.\n
+    example, <9>call light<3> is a first-level Priest spell and a second-level
+    Mage spell.\n
     __Mages are a special case -- because their spell list is so huge and broad,
     and represents such a major element of their class abilities, it is broken
     up into to parts to determine spell access. Mages gain access to all the
-    spells from their specialty school at a mage class level equal to the level
+    spells from their specialty school at a Mage class level equal to the level
     of the spell in question. They then gain access to all the rest of their
-    spells at the mage class level that equals the caster level when they first
+    spells at the Mage class level that equals the caster level when they first
     gain a slot for a spell of that level. Thus, a 5th-level Thaumaturge has
     access to all first through fifth-level Thaumaturgy spells as well as all
     other 1st, 2nd and 3rd-level arcane spells.\n
-    __Bards, clerics and druids gain access to the spells on their class spell 
+    __Bards, Clerics and Druids gain access to the spells on their class spell 
     lists at a rate of one spell level per class level; this is basically the
     standard approach, and applies to most prestige classes with their own spell
-    list as well. Thus, a fifth-level druid has access to all first through
-    fifth level druid spells, even though a <11>single-classed<3> fifth-level
-    druid will only have the spell slots to learn spells from the first through
-    third spell levels. The 'minor casters' - paladins and rangers - gain access
+    list as well. Thus, a fifth-level Druid has access to all first through
+    fifth level Druid spells, even though a <11>single-classed<3> fifth-level
+    Druid will only have the spell slots to learn spells from the first through
+    third spell levels. The 'minor casters' - Paladins and rangers - gain access
     to their spell lists at a rate of one spell level per class level starting at
     third level -- so a fifth level ranger has access to 1st, 2nd and 3rd-level
     ranger spells, despite only having enough caster levels from ranger to be
     able to cast 1st-level spells.\n
     __In addition to determining what spells a character can place in her spell
     slots, spell access determines what restrictions a character has on casting
-    those spells. For example, clerics must have a holy symbol to cast a spell,
-    but can cast spells in armour, while mages suffer severe penalties for casting
+    those spells. For example, Clerics must have a holy symbol to cast a spell,
+    but can cast spells in armour, while Mages suffer severe penalties for casting
     spells in armour, have their success chances adjusted by specialist modifiers
     and must possess a spellbook with the spell in it to cast it. So consider the
-    cast of a priest 1/mage 1 who knows <9>chromatic orb<3>, <9>bless<3> and
-    <9>magic weapon<3>. <9>Chromatic orb<3> is a mage spell, so she must have a spellbook
+    cast of a Priest 1/Mage 1 who knows <9>chromatic orb<3>, <9>bless<3> and
+    <9>magic weapon<3>. <9>Chromatic orb<3> is a Mage spell, so she must have a spellbook
     to cast it, gains the specialist modifier regardless of whether it's good or
     bad and suffers penalties to her casting if she does it in armour. When she
     casts <9>bless<3>, however, she gains no specialist bonus or penalty, is
     able to cast freely in armour and needs a holy symbol.\n
-    __<9>Magic weapon<3> is an odd case, since it is on both the mage and priest
+    __<9>Magic weapon<3> is an odd case, since it is on both the Mage and Priest
     spell lists as a 1st-level spell. When this is the case, the caster gains
     the best of both (or all) worlds -- she can cast the spell in armour without
-    penalty, gains either her mage specialist modifier or a 0~ modifier (whichever
+    penalty, gains either her Mage specialist modifier or a 0~ modifier (whichever
     favours her more) and can choose to use either a spellbook or a holy symbol as
     her focus for the spell.\n\n
     
@@ -4034,34 +4021,34 @@ Text "help::magic"
     function in practice in Incursion.\n
     __<11>Dominus, Mage (Necromancer) 3 / Priest 4:<3> Dominus has 7 caster levels,
     so according to the chart above he knows 5 1st level spells, 4 2nd leve, 3 3rd
-    level and 1 4th level. Since his level as a priest is 4th, he has access to the
-    priest spell list up to 4th level. As a 3rd-level mage, he has access to all
+    level and 1 4th level. Since his level as a Priest is 4th, he has access to the
+    Priest spell list up to 4th level. As a 3rd-level Mage, he has access to all
     arcane Necromancy spells up to 3rd spell level, as well as all other arcane
-    spells up to 2nd level (because a 3rd-level single class mage could cast only
+    spells up to 2nd level (because a 3rd-level single class Mage could cast only
     1st and 2nd level spells). Therefore, he chooses his 1st and 2nd level spells
-    from the full combined mage and priest lists, and he can choose his 3rd-level
-    spells from both the mage Necromancy spells or any priest spells. His single
-    4th-level spell must be chosen from the priest list, however, unless he wants
-    to save the slot until he goes up another level as a mage, in which case he
-    could also place a 4th-level Necromantic mage spell in that level.\n
+    from the full combined Mage and Priest lists, and he can choose his 3rd-level
+    spells from both the Mage Necromancy spells or any Priest spells. His single
+    4th-level spell must be chosen from the Priest list, however, unless he wants
+    to save the slot until he goes up another level as a Mage, in which case he
+    could also place a 4th-level Necromantic Mage spell in that level.\n
     __Despite this tremendous flexibility, however, Dominus certainly does pay a
     price for his multiclassing -- it's important to remember that class features
     are determined only by class level, not by caster level or character level. So,
     Dominus only has the ability to cast 1st and 2nd level domain spells -- he'll
-    gain third-level domain spells when he takes his 5th priest level. Likewise,
-    he has the 2 bonus slots mages get only for 1st and 2nd level spells (though
-    he can use them for any spells he wants, including priest spells), and he does
-    not gain the bonus metamagic feat a single-classed mage would have gained at
-    mage class level 5.\n
+    gain third-level domain spells when he takes his 5th Priest level. Likewise,
+    he has the 2 bonus slots Mages get only for 1st and 2nd level spells (though
+    he can use them for any spells he wants, including Priest spells), and he does
+    not gain the bonus Matamagic feat a single-classed Mage would have gained at
+    Mage class level 5.\n
     __<11>Lady Sarah, Thaumaturge 3 / Warrior 5:<3> In order to enhance her
     ability as a spellcaster, Lady Sarah has bought the Intensive Study feat
     three times to increase her caster levels, giving her six total caster
     levels. However, this feat does not affect her spell access at all. As
     such, she has 4/3/2 known spells. As a Thaumaturge 3, she can choose the
-    1st and 2nd level spells from the full mage list, but she can only choose
+    1st and 2nd level spells from the full Mage list, but she can only choose
     Thaumaturgy spells for her third-level slots. Note that she's effectively
     reached the point of diminishing returns with Intensive Study -- she could
-    take more warrior levels and buy the feat again,and it would give her a
+    take more Warrior levels and buy the feat again,and it would give her a
     fourth-level spell slot -- but because she has no spell access to fourth
     level spells of any kind, the slot would remain unspent and useless to her.\n
     __Likewise, a character design of Mage 3 / Priest 3 / Druid 3 would be highly
@@ -4182,37 +4169,37 @@ Text "help::magic"
     several of them.\n\n
     
      <15>Staves<3>\n
-     <3>__Staves are typically the province of higher-level mages,
+     <3>__Staves are typically the province of higher-level Mages,
      and are one of the more powerful classes of items found in the
      game. Normally, a character must have a certain minimum number
-     of levels as a mage before they can access the powers of a
-     given staff, ranging from a single mage level (for weaker staves
+     of levels as a Mage before they can access the powers of a
+     given staff, ranging from a single Mage level (for weaker staves
      like the <9>staff of size alteration<3>) to a maximum of seven
-     mage levels (to access the full powers of a <9>staff of the 
+     Mage levels (to access the full powers of a <9>staff of the 
      magi<3>). Some staves, notably the <9>staff of the woodlands<3>,
-     are attuned to other classes (in this case the druid). As always,
-     rogues of sufficient level can use the Trick Magic ability to
+     are attuned to other classes (in this case the Druid). As always,
+     Rogues of sufficient level can use the Trick Magic ability to
      handle staves effectively.    
      <3>__A staff's most common power is granting access to a number
      of spells, often tied to a theme related to the staff in question.
      If the staff-bearer does not actually know these spells, she may
-     cast them just as if she did -- the normal mana cost applies, but
+     cast them just as if she did -- the normal Mana cost applies, but
      like the innate magical abilities of certain monsters, there is
      no chance of failure. Casting spells from a staff in this manner
      does consume charges from the staff, however. The caster level is
      the better of the wielder's own or the staff's item level.\n
      <3>__If the staff-bearer is normally able to cast a spell granted
      by a staff, however, the staff augments the casting. The bearer
-     has a 100% success chance with that spell, even if metamagic feats
-     are applied to it (though it does not remove the increased mana
-     cost or fatigue cost of the metamagic), and casting the spell does
+     has a 100% success chance with that spell, even if Matamagic feats
+     are applied to it (though it does not remove the increased Mana
+     cost or Fatigue cost of the Matamagic), and casting the spell does
      not consume charges from the staff, nor require any somatic action.\n
      <3>__Spells can be cast from a staff using the Spell Manager the
      same way that a spellcaster normally casts them. Spells from a staff
      appear in the listing in green -- dark green if granted exclusively
      by the staff, or bright green if the staff augments existing
      knowledge of the spell. In order to make effective use of a staff's
-     spells (and other powers), however, a mage must have it in his hands
+     spells (and other powers), however, a Mage must have it in his hands
      -- in the Weapon Hand or Ready Hand slots (or both) in the Inventory
      Manager. Fortunately, most staves are magical weapons in their own
      right, acting as a cudgel or quarterstaff with a magical bonus to
@@ -4244,15 +4231,15 @@ Text "help::magic"
      can be read using the Activate ('a') command. Tomes may only be
      read once, and vanish once read. However, they are much treasured
      because they grant permanent benefit to a character in the form
-     of innate abilities, free experience points, or most commonly
+     of innate abilities, free Experience Points, or most commonly
      inherent bonuses to an attribute. Any given attribute cannot have
      an inherent bonus exceeding +5, regardless of the number of tomes
-     read -- unless the reader is human, in which case the maximum
+     read -- unless the reader is Human, in which case the maximum
      bonus rises to +8.\n\n
      
      <15>Wonderous Items<3>\n
      __Some items defy all attempts to characterize them -- bowls which
-     summon elementals, beads that aid a priest in his spellcasting,
+     summon elementals, beads that aid a Priest in his spellcasting,
      carpets that fly through the sky... the possibilities are endless.
      These items typically need to be identified to be used, and some
      are subject to the Activate ('a') command -- check the specific
@@ -4288,8 +4275,8 @@ Text "help::feats"
       =====\n
       -- {MM:mainmenu} Return to the Main Help Menu\n
       <5>__Feats represent the extraordinary abilities of a legendary hero.
-      A warrior who can strike down all the foes around him at once, a wizard
-      who can cast his spells without making a sound, or a rogue whose reflexes
+      A Warrior who can strike down all the foes around him at once, a wizard
+      who can cast his spells without making a sound, or a Rogue whose reflexes
       are just fast enough to give him an unbeatable edge -- all of these
       characters benefit from feats.\n
       __Choosing a combination of feats that make for an effective character
@@ -4418,8 +4405,8 @@ Text "help::feats"
       ===================\n<5>
       __Item creation feats allow a spellcaster to craft minor magical
       items. Crafting such items requires the character to have a certain 
-      threshold level, and to expend both gold and life energy (experience 
-      points) in the enchantment process.\n\n
+      threshold level, and to expend both gold and life energy (Experience 
+      Points) in the enchantment process.\n\n
       <7>* Artificer\n
       * Brew Potion\n
       * Scribe Scroll\n\n
@@ -4627,7 +4614,7 @@ Text "help::feats"
       
       <13>THE 'RANGED FIGHTER' TREE\n
       =========================\n<5>
-      __Also called the archer's tree, these feats grant a warrior additional
+      __Also called the archer's tree, these feats grant a Warrior additional
       proficiency and abilities when using bows, crossbows or other ranged
       weapons.<7>\n\n
 
@@ -4704,11 +4691,11 @@ Text "help::skills"
 
      <14>Skill Ranks and Points<6>\n
      __For every level a character has in
-     a class, they receive an alottment of skill points that may be distributed
+     a class, they receive an alottment of Skill Points that may be distributed
      among the skills of that class, or any class-independant skills the
      character has from race or feats. The base number of available skill
      points gained per level in a class is then adjusted by the character's
-     Intelligence modifier; if the character gains 8 or more skill points
+     Intelligence modifier; if the character gains 8 or more Skill Points
      per class level, the Intelligence modifier is doubled (if positive).
      A point invested in a skill becomes a rank in
      that skill; the maximum number of ranks a character can have in any
@@ -4732,7 +4719,7 @@ Text "help::skills"
      __<6>When a character is initially created, all the points gained for the
      first level in their chosen class must be spent before play begins.
      Thereafter, however, any additional levels gained give additional
-     skill points that can be saved and spent at any time the player
+     Skill Points that can be saved and spent at any time the player
      desires. Points from different classes are stored in different totals,
      because they can only be spent on skills associated with the class
      that granted them.\n\n
@@ -4861,7 +4848,7 @@ Text "help::skills"
 Text "help::pantheon"
   { "__<7>There are many gods and spirits worshipped across the different
      lands of Therya. The thirteen true gods listed here form the primary
-     pantheon which was first worshipped by the Vanyir, the human subrace
+     pantheon which was first worshipped by the Vanyir, the Human subrace
      that first settled in the Kinlands and has since spread to every
      corner of the land. Other pantheons exist, governing the far-off lands
      of Angla Maua, Arasaki, Kinsith Raegil and Koryama. There are alien

@@ -152,7 +152,7 @@ struct FeatInfoStruct FeatInfo[] = {
 
   { FT_BACKSTAB, 0, "Backstab",
     "You are adept at making surprise attacks. You gain a +4 bonus on attack rolls when "
-    "making a surprise attack (e.g., because the enemy is surprised, flat-footed, flanked, "
+    "making a surprise attack (e.g., because the enemy is surprised, off-guard, flanked, "
     "exposed, charging, grappled, stuck or stunned).",
     {{{FP_ABILITY,CA_SNEAK_ATTACK,0,
       FP_BAB, S_MELEE, 2},

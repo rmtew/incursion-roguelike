@@ -1911,7 +1911,7 @@ Monster "deadly nettle" : MA_PLANT
     in the wilderness. It possesses an uncanny insight into the vulnerable
     spots of living creatures, and it stining thorns always seem to catch
     foes unware. Victims without the Uncanny Dodge ability or Improved
-    Initiative feat are always considered flat-footed when attacked by a
+    Initiative feat are always considered off-guard when attacked by a
     deadly nettle. Its thin, sinewy stalks are all but impossible to
     hurt with piercing attacks and are quite resistant to bludgeoning.";
     Stati[NONDETECTION,(PER_TREMOR)];
