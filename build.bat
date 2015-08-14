@@ -56,7 +56,7 @@ set UV_PACKAGES_DIRNAME=packages
 set UV_PACKAGES_PATH=!BUILD_PATH!\packages
 
 REM Set to yes to get the buggy curses executables packaged as well.
-set UV_PACKAGE_CURSES=yes
+set UV_PACKAGE_CURSES=no
 
 REM Allow the user to specify the path to their Git 'git' executable.  It may have to be accessed via absolute path.
 if not defined PYTHON_EXE (
