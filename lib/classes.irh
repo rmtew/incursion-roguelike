@@ -35,7 +35,7 @@ Class "Barbarian"
       Constitution, a +20% bonus to Speed and a +2 bonus to Will saves. The 
       rage lasts for a base duration of 10 rounds, plus three rounds per 
       barbarian level -- provided that the barbarian remains in combat. If a 
-      barbarian is out of combat long enough to become flat-footed, their rage 
+      barbarian is out of combat long enough to become off-guard, their rage 
       ceases.\n 
       __This battle rage requires a certain purity of mind, and thus multiclass
       barbarians with fewer than 3 barbarian levels halve the modifiers (+2
@@ -105,11 +105,11 @@ Class "Barbarian"
       barbarians have the weakest starting equipment of an class.)\n
       __*_<7>Uncanny Dodge<2> -- Like the rogue, the barbarian is possessed
       of preternatural agility and instincts that allow her to avoid harm.
-      Starting at 2nd level and beyond, the barbarian is never caught flat-
-      footed -- no matter how many rounds have passed since her last combat
+      Starting at 2nd level and beyond, the barbarian is never caught foff-guard 
+      -- no matter how many rounds have passed since her last combat
       exchange, she is always alert. At 4th level, her uncanny instincts allow
       her to wake alert if she has an encounter while resting, avoiding being
-      flat-footed, vulnerable to Coup de Grace attacks and being able to act
+      off-guard, vulnerable to Coup de Grace attacks and being able to act
       immediately as the encounter begins. At 5th level and above, she suffers no
       ill effects from having enemies on either side and is effectively
       immune to flanking. Starting at 6th level and above, the barbarian
@@ -141,7 +141,7 @@ Class "Barbarian"
       <10>THE BARBARIAN<15>\n
       __Level__Def__Fort_Refl_Will_Move_Special Abilities<1>\n
       ____1____+0____+2___+0___+0___--__Rage (+4/+20~/+2)   \n
-      ____2____+1____+3___+0___+0__+10~_Never Flat-Footed \n
+      ____2____+1____+3___+0___+0__+10~_Never Off-Guard  \n
       ____3____+1____+3___+1___+1__+10~_Mighty Stroke I   \n
       ____4____+2____+4___+1___+1__+20~_Rage (Less Fat.),\n
       __________________________________Wake Alert_______\n
@@ -2351,7 +2351,7 @@ Class "Rogue"
       surprise -- that is, the target is unaware of the rogue's presence,
       usually due to her using Hide and Move Silently -- then she can
       perform a sneak attack.\n
-      __<10>Flat-Footed:<2> If a rogue can catch her enemy flat-footed
+      __<10>Off-Guard:<2> If a rogue can catch her enemy off-guard
       (i.e., strike the first blow against a given enemy that has been
       out of combat for several rounds before it can respond and attempt
       to strike her), she gets her sneak attack damage.\n
@@ -2374,11 +2374,11 @@ Class "Rogue"
       __Levels of this ability from the monk and rogue classes stack.\n
       __*_<7>Uncanny Dodge<2> -- Like the barbarian, the rogue is possessed
       of preternatural agility and instincts that allow her to avoid harm.
-      Starting at 3rd level and beyond, the rogue is never caught flat-
-      footed -- no matter how many rounds have passed since her last combat
+      Starting at 3rd level and beyond, the rogue is never caught off-guard 
+      -- no matter how many rounds have passed since her last combat
       exchange, she is always alert. At 5th level, her uncanny instincts allow
       her to wake alert if she has an encounter while resting, avoiding being
-      flat-footed, vulnerable to Coup de Grace attacks and being able to act
+      off-guard, vulnerable to Coup de Grace attacks and being able to act
       immediately as the encounter begins. At 6th level and above, she suffers no
       ill effects from having enemies on either side and is effectively
       immune to flanking. Starting at 9th level and above, the rogue receives
@@ -2488,7 +2488,7 @@ Class "Rogue"
       __Level__Def__Fort_Refl_Will_Special Abilities<1>\n
       ____1____+0____+0___+2___+0__Sneak Attack +1d6 \n
       ____2____+1____+0___+3___+0__Evasion           \n
-      ____3____+1____+1___+3___+1__Never Flat-Footed,\n
+      ____3____+1____+1___+3___+1__Never Off-Guard,\n
       _____________________________Sneak Attack +2d6 \n
       ____4____+2____+1___+4___+1____________________\n
       ____5____+2____+1___+4___+1__Sneak Attack +3d6,\n
