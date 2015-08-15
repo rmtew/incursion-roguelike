@@ -1,4 +1,5 @@
-/* STATUS.CPP -- Copyright (c) 1999-2003 Julian Mensch
+/* STATUS.CPP -- See the Incursion LICENSE file for copyright information.
+
      Code which governs the Stati possessed by creatures, items
    and other Things. Code for managing Fields (which are basically
    Stati for maps) are aqlso included here.

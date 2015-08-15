@@ -1,4 +1,5 @@
-/* MAIN.CPP -- Copyright (c) 1999-2003 Julian Mensch
+/* MAIN.CPP -- See the Incursion LICENSE file for copyright information.
+
      This file implements the main game loop, and also contains
    functions to handle gamestates other than normal play, such
    as the gravestone screen at the end and the opening menu.

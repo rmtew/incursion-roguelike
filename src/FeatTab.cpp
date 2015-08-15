@@ -1,4 +1,6 @@
-/* Possible Feat Prereq Elements:
+/* See the Incursion LICENSE file for copyright information.
+ *
+ * Possible Feat Prereq Elements:
  *
  * -> can it be duplicated (exotic weapon, weapon focus, skill focus,
  * school focus, weapon prof)

@@ -1,4 +1,5 @@
-/* MAGIC.CPP -- Copyright (c) 1999-2003 Julian Mensch
+/* MAGIC.CPP -- See the Incursion LICENSE file for copyright information.
+
      This file implements the core system for handling magical effects
    in Incursion; the specific precoded effect archetypes are handled
    in Effects.Cpp. All code general to all effects goes here, as does

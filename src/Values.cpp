@@ -1,4 +1,5 @@
-/* VALUES.CPP -- Copyright (c) 1999-2003 Julian Mensch
+/* VALUES.CPP -- See the Incursion LICENSE file for copyright information.
+
      Contains all the code for calculating a Creature's attributes
    and associated values, like resist levels, hit points, monster
    groupings and hostilities. For players, will calculate either

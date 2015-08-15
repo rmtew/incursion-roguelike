@@ -1,4 +1,5 @@
-/* CREATE.CPP -- Copyright 1999-2003 (c) Julian Mensch
+/* CREATE.CPP -- See the Incursion LICENSE file for copyright information.
+
 Routines describing character creation, attribute determination,
 feat selection and the advancement of class-based and racial abilities.
 Also, general functions relating specifically to the Character class

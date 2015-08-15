@@ -1,4 +1,5 @@
-/* RCOMP.H -- Copyright (c) 1999-2003 Julian Mensch
+/* See the Incursion LICENSE file for copyright information.
+
      This file contains class definitions and constants
    related solely to the IncursionScript compiler. 
 */

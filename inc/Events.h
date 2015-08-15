@@ -1,4 +1,5 @@
-/* EVENTS.H -- Copyright (c) 1999-2003 Julian Mensch
+/* See the Incursion LICENSE file for copyright information.
+
      This file contains class definitions for EventInfo,
    and certain other definitions and macros relating to
    Incursion's event system.

@@ -1,4 +1,5 @@
-/* SOCIAL.CPP -- Copyright (c) 1999-2006 Julian Mensch
+/* SOCIAL.CPP -- See the Incursion LICENSE file for copyright information.
+
      Includes all the code governing talking to creatures, including
    fast talk, barter, service spells, party dynamics, PHD, companions,
    etc.

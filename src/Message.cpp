@@ -1,4 +1,5 @@
-/* MESSAGE.CPP -- Copyright (c) 1999-2003 Julian Mensch
+/* MESSAGE.CPP -- See the Incursion LICENSE file for copyright information.
+
      Includes all of the code for formatting and dispatching
    messages to different objects, and for handling grammar
    issues. Also implements the message queue system.

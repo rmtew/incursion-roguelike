@@ -1,4 +1,5 @@
-/* FEATURE.CPP -- Copyright 1999-2003 (c) Julian Mensch
+/* FEATURE.CPP -- See the Incursion LICENSE file for copyright information.
+
      All of the member functions of Feature and its derived classes
    Door, Portal and Trap. By thematic extension, this file also
    includes many of the functions governing moving from level to

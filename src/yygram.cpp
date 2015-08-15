@@ -1,6 +1,6 @@
 #line 1 "../lang/grammar.acc"
 
-/* GRAMMAR.ACC -- Copyright (c) 1999-2003 Julian Mensch
+/* GRAMMAR.ACC -- See the Incursion LICENSE file for copyright information.
 
      Contains the BNF+ grammar for the IncursionScript compiler,
 

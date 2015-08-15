@@ -1,4 +1,5 @@
-/* MAKELEV.CPP -- Copyright (c) 1999-2003 Julian Mensch
+/* MAKELEV.CPP -- See the Incursion LICENSE file for copyright information.
+
      This file contains the dungeon generator and all the functions used (almost) exclusively by it.
 
      inline void Map::calcLight(Rect &r)

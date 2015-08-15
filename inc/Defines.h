@@ -1,7 +1,8 @@
 #ifndef INCURSION_DEFINES_H
 #define INCURSION_DEFINES_H
 
-/* DEFINES.H -- Copyright (c) 1999-2003 Julian Mensch
+/* See the Incursion LICENSE file for copyright information.
+
      This file contains definitions of all the constants,
    bitflags, data types and macros used in Incursion. It 
    is a source file for both C++ and IncursionScript, 

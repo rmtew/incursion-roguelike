@@ -1,4 +1,5 @@
-/* EFFECTS.CPP -- Copyright (c) 1999-2003 Julian Mensch
+/* EFFECTS.CPP -- See the Incursion LICENSE file for copyright information.
+
      Code implementing the various specific prebuilt magical
    effect archetypes of the Incursion engine. The code for
    executing spells and items in general is contained in 

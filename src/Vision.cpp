@@ -1,4 +1,5 @@
-/* VISION.CPP -- Copyright (c) 1999-2003 Julian Mensch
+/* VISION.CPP -- See the Incursion LICENSE file for copyright information.
+
      Includes all the code governing vision, perception and line
    of sight/fire, for both monsters and players.
 

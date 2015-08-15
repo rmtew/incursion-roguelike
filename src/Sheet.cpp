@@ -1,4 +1,5 @@
-/* SHEET.CPP -- Copyright (c) 1999-2003 Julian Mensch
+/* SHEET.CPP -- See the Incursion LICENSE file for copyright information.
+
      This file contains the functions for composing the character
    sheet as an abstract memory structure, and for dumping the
    character to a file.

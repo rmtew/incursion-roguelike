@@ -1,4 +1,5 @@
-/* REGISTRY.CPP -- Copyright (c) 1999-2003 Julian Mensch
+/* REGISTRY.CPP -- See the Incursion LICENSE file for copyright information.
+
      Implements the object registry, data block registry and all of
    the functionality of saving and loading related groups of objects.
    Also includes the higher-level functions for saving and loading

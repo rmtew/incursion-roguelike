@@ -1,4 +1,5 @@
-/* TABLES.CPP -- Copyright (c) 1999-2003 Julian Mensch
+/* TABLES.CPP -- See the Incursion LICENSE file for copyright information.
+
      Contains all of the static data used by Incursion that is
    hard-coded into the game rather than being user-definable
    in modules. There are no functions or active code in this
