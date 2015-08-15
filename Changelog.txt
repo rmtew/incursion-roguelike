@@ -1,3 +1,5 @@
+Incursion (open source) 0.6.9Y20: 2015-??-??
+
 Incursion (open source) 0.6.9Y19: 2015-08-14
 * https://bitbucket.org/rmtew/incursion-roguelike/issues/207/: Incursion domain names finished transferring from Julian.
 * https://bitbucket.org/rmtew/incursion-roguelike/issues/209/: Make a standalone module compiler.  This is as done as it can be, and it is now possible to invoke the debug Incursion executable with the '-compile' argument to get it to build the default core module 'main.irc'.  '-compile <modulename.irc>' can be used instead to build other modules.
