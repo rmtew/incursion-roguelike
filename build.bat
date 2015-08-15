@@ -73,7 +73,6 @@ REM variable: %V_LINK_PARTS% - The link data.
 REM variable: %DEPENDENCY_PATH% - The absolute path of the dependencies directory.
 REM variable: %V_DIRNAME% - The relative directory name the dependency can be found in.
 REM variable: %V_SKIPPED% - 'yes' or 'no', depending on whether the archive was already extracted.
-set V_LABEL_RETURN_ufpd=!V_LABEL_RETURN!
 
 cd !DEPENDENCY_PATH!
 
@@ -92,20 +91,20 @@ if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
     ) else if "!V_LINK_PARTS[%HTTP_FILENAME%]!" EQU "pdcurs34.zip" (
         cd !V_DIRNAME!\win32\
         
-        if not exist !DEPENDENCY_PATH!\pdcurses_d.lib (
+        if not exist "!DEPENDENCY_PATH!\pdcurses_d.lib" (
             echo Building: [pdcurses/Debug]
             nmake -f vcwin32.mak clean
             nmake -f vcwin32.mak DEBUG=1 WIDE=1 DLLOPT=/MTd pdcurses.lib
-            copy pdcurses.lib !DEPENDENCY_PATH!\pdcurses_d.lib
+            copy pdcurses.lib "!DEPENDENCY_PATH!\pdcurses_d.lib"
         ) else (
             echo Building: [pdcurses/Debug] .. skipped
         )
 
-        if not exist !DEPENDENCY_PATH!\pdcurses.lib (
+        if not exist "!DEPENDENCY_PATH!\pdcurses.lib" (
             echo Building: [pdcurses/Release]
             nmake -f vcwin32.mak clean
             nmake -f vcwin32.mak WIDE=1 DLLOPT=/MT pdcurses.lib
-            copy pdcurses.lib !DEPENDENCY_PATH!\pdcurses.lib
+            copy pdcurses.lib "!DEPENDENCY_PATH!\pdcurses.lib"
         ) else (
             echo Building: [pdcurses/Release] .. skipped
         )
@@ -126,7 +125,7 @@ if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
 
         cd !V_DIRNAME!
 
-        if not exist !DEPENDENCY_PATH!\SDL2_d.dll (
+        if not exist "!DEPENDENCY_PATH!\SDL2_d.dll" (
             echo Building: [SDL2/Debug]
 
             REM SDL2 in theory requires the DirectX SDK to be installed, but in practice it's absence
@@ -140,9 +139,9 @@ if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
             set /A L_SDL2_ATTEMPTS=!L_SDL2_ATTEMPTS!+1
 
             if exist VisualC\SDL\Win32\Debug\SDL2.dll (
-                copy VisualC\SDL\Win32\Debug\SDL2.dll !DEPENDENCY_PATH!\SDL2_d.dll
-                copy VisualC\SDL\Win32\Debug\SDL2.lib !DEPENDENCY_PATH!\SDL2_d.lib
-                copy VisualC\SDL\Win32\Debug\SDL2.pdb !DEPENDENCY_PATH!\SDL2_d.pdb
+                copy VisualC\SDL\Win32\Debug\SDL2.dll "!DEPENDENCY_PATH!\SDL2_d.dll"
+                copy VisualC\SDL\Win32\Debug\SDL2.lib "!DEPENDENCY_PATH!\SDL2_d.lib"
+                copy VisualC\SDL\Win32\Debug\SDL2.pdb "!DEPENDENCY_PATH!\SDL2_d.pdb"
             ) else (
                 REM Only try and recover from the DirectX problem, and if that don't work, give up.
                 if "!L_ERROR_MSG!" NEQ "" (
@@ -163,14 +162,14 @@ if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
             echo Building: [SDL2/Debug] .. skipped
         )
 
-        if not exist !DEPENDENCY_PATH!\SDL2.dll (
+        if not exist "!DEPENDENCY_PATH!\SDL2.dll" (
             echo Building: [SDL2/Release]
 
             msbuild /nologo VisualC\SDL_VS2013.sln /p:Configuration=Release /p:Platform=Win32 /t:SDL2,SDL2main
             if exist VisualC\SDL\Win32\Debug\SDL2.dll (
-                copy VisualC\SDL\Win32\Release\SDL2.dll !DEPENDENCY_PATH!\SDL2.dll
-                copy VisualC\SDL\Win32\Release\SDL2.lib !DEPENDENCY_PATH!\SDL2.lib
-                copy VisualC\SDL\Win32\Release\SDL2.pdb !DEPENDENCY_PATH!\SDL2.pdb
+                copy VisualC\SDL\Win32\Release\SDL2.dll "!DEPENDENCY_PATH!\SDL2.dll"
+                copy VisualC\SDL\Win32\Release\SDL2.lib "!DEPENDENCY_PATH!\SDL2.lib"
+                copy VisualC\SDL\Win32\Release\SDL2.pdb "!DEPENDENCY_PATH!\SDL2.pdb"
             ) else (
                 echo ERROR.. SDL2.dll did not successfully build for some reason.
                 goto internal_function_exit
@@ -184,32 +183,32 @@ if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
     ) else if "!L_VCS_NAME!" EQU "libtcod" (
         set BASEPATH=!DEPENDENCY_PATH!\!V_DIRNAME!
         set BASEOBJPATH=!DEPENDENCY_PATH!\!V_DIRNAME!\build
-        if not exist !BASEOBJPATH! mkdir !BASEOBJPATH!
+        if not exist "!BASEOBJPATH!" mkdir "!BASEOBJPATH!"
 
-        if not exist !DEPENDENCY_PATH!\libtcod_d.dll (
+        if not exist "!DEPENDENCY_PATH!\libtcod_d.dll" (
             echo Building: [libtcod/Debug]
             set CONFIG=Debug
             set BASENAME_SUFFIX=_d
             nmake /nologo -f ..\makefile-libtcod
-            copy !BASEOBJPATH!\!CONFIG!\libtcod_d.lib libtcod_d.lib
-            copy !BASEOBJPATH!\!CONFIG!\libtcod_d.dll libtcod_d.dll
-            copy !BASEOBJPATH!\!CONFIG!\libtcod_d.pdb libtcod_d.pdb
+            copy "!BASEOBJPATH!\!CONFIG!\libtcod_d.lib" libtcod_d.lib
+            copy "!BASEOBJPATH!\!CONFIG!\libtcod_d.dll" libtcod_d.dll
+            copy "!BASEOBJPATH!\!CONFIG!\libtcod_d.pdb" libtcod_d.pdb
         ) else (
             echo Building: [libtcod/Debug] .. skipped
         )
 
-        if not exist !DEPENDENCY_PATH!\libtcod.dll (
+        if not exist "!DEPENDENCY_PATH!\libtcod.dll" (
             echo Building: [libtcod/Release]
             set CONFIG=Release
             nmake /nologo -f ..\makefile-libtcod
-            copy !BASEOBJPATH!\!CONFIG!\libtcod.lib libtcod.lib
-            copy !BASEOBJPATH!\!CONFIG!\libtcod.dll libtcod.dll
-            copy !BASEOBJPATH!\!CONFIG!\libtcod.pdb libtcod.pdb
+            copy "!BASEOBJPATH!\!CONFIG!\libtcod.lib" libtcod.lib
+            copy "!BASEOBJPATH!\!CONFIG!\libtcod.dll" libtcod.dll
+            copy "!BASEOBJPATH!\!CONFIG!\libtcod.pdb" libtcod.pdb
         ) else (
             echo Building: [libtcod/Release] .. skipped
         )
 
-        set UV_INCLUDE_COMMANDS[%UV_INCLUDE_COMMAND_COUNT%]=!V_DIRNAME!\include\*.h
+		set UV_INCLUDE_COMMANDS[%UV_INCLUDE_COMMAND_COUNT%]=!V_DIRNAME!\include\*.h
         set /A UV_INCLUDE_COMMAND_COUNT=%UV_INCLUDE_COMMAND_COUNT%+1
     ) else if "!L_VCS_NAME!" EQU "gyp" (
         REM gyp is built using Python, so no building is required.
@@ -229,7 +228,7 @@ if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
         if "!L_FAILED!" EQU "yes" (
             REM Use gyp to produce VS2013 solution and project files.
             set GYP_MSVS_VERSION=2013
-            CALL !DEPENDENCY_PATH!\gyp\gyp.bat --no-circular-check client\windows\breakpad_client.gyp --depth .
+            CALL "!DEPENDENCY_PATH!\gyp\gyp.bat" --no-circular-check client\windows\breakpad_client.gyp --depth .
 
             REM TODO: The current revision breaks on missing files, and produces partial results, but enough.  Build them piecemeal.
             msbuild /nologo client\Windows\common.vcxproj /p:Configuration=Release /p:Platform=Win32
@@ -238,7 +237,7 @@ if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
             REM Verify that the required static libraries were produced as a result.
             set L_FAILED=no
             for %%A in (!L_LIBS!) do (
-                if not exist !L_LIBRELPATH!\%%A (
+                if not exist "!L_LIBRELPATH!\%%A" (
                     echo ERROR.. google-breakpad compilation failed to produce '%%A'
                     set L_FAILED=yes
                 )
@@ -251,11 +250,10 @@ if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
 
             REM Copy all the required static libraries.
             for %%A in (!L_LIBS!) do (
-                copy !L_LIBRELPATH!\%%A !DEPENDENCY_PATH!\
+                copy "!L_LIBRELPATH!\%%A" "!DEPENDENCY_PATH!\"
             )
 
             echo SUCCESS.. Enough of google-breakpad was compiled to produce the required static libraries.
-            REM goto cannot be done within a nested scope, so need to embed it below.
             goto user_function_prepare_dependency_breakpad_includes
         ) else (
             echo Building: [google-breakpad] .. skipped
@@ -267,6 +265,7 @@ if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
 )
 
 goto exit_from_user_function_prepare_dependency
+
 :user_function_prepare_dependency_breakpad_includes
 
 cd "!DEPENDENCY_PATH!\google-breakpad"
@@ -294,13 +293,12 @@ set /A L_IDX=!L_IDX!+1
 if !L_IDX! LSS !L_PATH_COUNT! goto user_function_make_release_loop1
 
 :exit_from_user_function_prepare_dependency
-goto !V_LABEL_RETURN_ufpd!
+goto:eof REM return
 
 REM --- FUNCTION: user_function_prepare_dependencies -------------------------
 :user_function_prepare_dependencies
 REM description: This is called as a final step after all dependencies have been prepared.
 REM variable: %DEPENDENCY_PATH% - The absolute path of the dependencies directory.
-set V_LABEL_RETURN_ufpds=!V_LABEL_RETURN!
 
 if exist !UV_INCLUDE_PATH! goto exit_from_user_function_prepare_dependencies
 
@@ -309,18 +307,17 @@ set /A L_COUNT=0
 
 if %L_COUNT% LSS %UV_INCLUDE_COMMAND_COUNT% (
     echo Copying includes: !UV_INCLUDE_COMMANDS[%L_COUNT%]!
-    xcopy /Q /Y !DEPENDENCY_PATH!\!UV_INCLUDE_COMMANDS[%L_COUNT%]! %UV_INCLUDE_PATH%\
+    xcopy /Q /Y "!DEPENDENCY_PATH!\!UV_INCLUDE_COMMANDS[%L_COUNT%]!" "%UV_INCLUDE_PATH%\"
 
     set /A L_COUNT=%L_COUNT%+1
     goto loop_user_function_prepare_dependencies
 )
 
 :exit_from_user_function_prepare_dependencies
-goto !V_LABEL_RETURN_ufpds!
+goto:eof REM return
 
 REM --- FUNCTION: user_function_detect_incursion_version ---------------------
 :user_function_detect_incursion_version
-set V_LABEL_RETURN_ufdiv=!V_LABEL_RETURN!
 
 if "!UV_VERSION!" EQU "" (
     REM Set up the environment so that we can run Incursion piecemeal.
@@ -338,16 +335,12 @@ if "!UV_VERSION!" EQU "" (
     )
 )
 
-:exit_from_user_function_detect_incursion_version
-goto !V_LABEL_RETURN_ufdiv!
+goto:eof REM return
 
 REM --- FUNCTION: user_function_make_release ---------------------------------
 :user_function_make_release
-set V_LABEL_RETURN_ufmr=!V_LABEL_RETURN!
 
-set V_LABEL_RETURN=return_to_user_function_make_release1
-goto user_function_detect_incursion_version
-:return_to_user_function_make_release1
+call :user_function_detect_incursion_version
 
 echo Compiling 'Incursion.Mod' ...
 
@@ -430,15 +423,12 @@ copy >nul "!DEPENDENCY_PATH!\*.dll" "!L_DEPENDENCIES_PATH!\"
 copy >nul "!DEPENDENCY_PATH!\*.exe" "!L_DEPENDENCIES_PATH!\"
 
 :exit_from_user_function_make_release
-goto !V_LABEL_RETURN_ufmr!
+goto:eof REM return
 
 REM --- FUNCTION: user_function_package_release ------------------------------
 :user_function_package_release
-set V_LABEL_RETURN_ufpr=!V_LABEL_RETURN!
 
-set V_LABEL_RETURN=return_to_user_function_package_release1
-goto user_function_detect_incursion_version
-:return_to_user_function_package_release1
+call :user_function_detect_incursion_version
 
 cd "!BUILD_PATH!"
 
@@ -490,7 +480,7 @@ for /f "tokens=2-4 delims=/ " %%a in ('date /t') do (set L_DATE=%%c%%a%%b)
 cd "!BUILD_PATH!"
 
 :exit_from_user_function_package_release
-goto !V_LABEL_RETURN_ufpr!
+goto:eof REM return
 
 REM --- FUNCTION: user_function_teardown -------------------------------------
 :user_function_teardown
@@ -543,8 +533,8 @@ if not defined 7Z_EXE (
     )
 )
 
-if not exist "%DEPENDENCY_PATH%" mkdir %DEPENDENCY_PATH%
-cd %DEPENDENCY_PATH%
+if not exist "%DEPENDENCY_PATH%" mkdir "%DEPENDENCY_PATH%"
+cd "%DEPENDENCY_PATH%"
 
 REM These variables are used to index the LINKS array entries.
 REM
@@ -641,65 +631,46 @@ if "!V_COMMAND[release]!" EQU "yes" (
 
 REM Do the selected general commands.
 if "!V_COMMAND[fetch-dependencies]!" EQU "yes" (
-    set V_LABEL_RETURN=return_to_internal_function_main_FD
-    goto internal_function_fetch_dependencies
+    call :internal_function_fetch_dependencies
 )
-:return_to_internal_function_main_FD
 
 if "!V_COMMAND[prepare-dependencies]!" EQU "yes" (
-    set V_LABEL_RETURN=return_to_internal_function_main_PD
-    goto internal_function_prepare_dependencies
+    call :internal_function_prepare_dependencies
 )
-:return_to_internal_function_main_PD
 
 if "!V_COMMAND[make-release]!" EQU "yes" (
-    REM TODO TODO
-    set V_LABEL_RETURN=return_to_internal_function_main_MR
-    goto internal_function_make_release
+    call :internal_function_make_release
 )
-:return_to_internal_function_main_MR
 
 if "!V_COMMAND[package-release]!" EQU "yes" (
-    REM TODO TODO
-    set V_LABEL_RETURN=return_to_internal_function_main_PR
-    goto internal_function_package_release
+    call :internal_function_package_release
 )
-:return_to_internal_function_main_PR
 
 goto internal_function_teardown
 
 REM --- FUNCTION: internal_function_make_release -----------------------------
 :internal_function_make_release
-set V_LABEL_RETURN_ifmr=!V_LABEL_RETURN!
 
-cd %DEPENDENCY_PATH%
-set V_LABEL_RETURN=return_to_internal_function_make_release
-goto user_function_make_release
-:return_to_internal_function_make_release
+cd "%DEPENDENCY_PATH%"
+call :user_function_make_release
 
-:exit_from_internal_function_make_release
-goto !V_LABEL_RETURN_ifmr!
+goto:eof REM return
 
 REM --- FUNCTION: internal_function_package_release --------------------------
 :internal_function_package_release
-set V_LABEL_RETURN_ifpr=!V_LABEL_RETURN!
 
 if "!7Z_EXE!" EQU "" (
     echo ERROR: Packaging a release requires 7zip to be installed.
     goto internal_function_teardown
 )
 
-set V_LABEL_RETURN=return_to_internal_function_package_release
-goto user_function_package_release
-:return_to_internal_function_package_release
+call :user_function_package_release
 
-:exit_from_internal_function_package_release
-goto !V_LABEL_RETURN_ifpr!
+goto:eof REM return
 
 REM --- FUNCTION: internal_function_prepare_dependencies ---------------------
 :internal_function_prepare_dependencies
 REM input argument:  V_LINKS   - The user defined links.
-set V_LABEL_RETURN_ifpds=!V_LABEL_RETURN!
 
 set /A IDX_PDS=0
 :loop_internal_function_prepare_dependencies
@@ -707,31 +678,23 @@ set V_LINK=!LINKS[%IDX_PDS%]!
 if "!V_LINK!" EQU "" goto loop_internal_function_prepare_dependencies_break
 
 REM function call: V_LINK_PARTS = split_link(V_LINK)
-set V_LABEL_RETURN=return_to_internal_function_prepare_dependencies1
-goto internal_function_split_link
-:return_to_internal_function_prepare_dependencies1
+call :internal_function_split_link
 
 REM function call: prepare_dependency(V_LINK_PARTS)
-set V_LABEL_RETURN=return_to_internal_function_prepare_dependencies2
-goto internal_function_prepare_dependency
-:return_to_internal_function_prepare_dependencies2
+call :internal_function_prepare_dependency
 
 set /A IDX_PDS=!IDX_PDS!+1
 goto loop_internal_function_prepare_dependencies
 
 :loop_internal_function_prepare_dependencies_break
-set V_LABEL_RETURN=exit_from_internal_function_prepare_dependencies
-goto user_function_prepare_dependencies
+call :user_function_prepare_dependencies
 
-:exit_from_internal_function_prepare_dependencies
-goto !V_LABEL_RETURN_ifpds!
+goto:eof REM return
 
 REM --- FUNCTION: internal_function_prepare_dependency -----------------------
 :internal_function_prepare_dependency
 REM input argument:  V_LINK_PARTS   - The processed link parts to make use of.
-REM input argument:  V_LABEL_RETURN - The name of the label to return to when finished.
 REM output argument: V_LINK_PARTS   - The array of elements that make up the given link text.
-set V_LABEL_RETURN_iffd=!V_LABEL_RETURN!
 
 REM               0    1     2      3          4          5
 REM HTTP link:   HTTP <url> <NAME> <FILENAME>
@@ -742,8 +705,8 @@ REM ............ Attempt 2: Download <ZIPDLURL><REVISION>.zip as a normal link.
 if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
     REM Environment variables for powershell script.
     set fn=Archive-Extract
-    set fnp0=%DEPENDENCY_PATH%\!V_LINK_PARTS[%HTTP_FILENAME%]!
-    set fnp1=%DEPENDENCY_PATH%
+    set "fnp0=%DEPENDENCY_PATH%\!V_LINK_PARTS[%HTTP_FILENAME%]!"
+    set "fnp1=%DEPENDENCY_PATH%"
     REM Environment variables for function 'user_function_prepare_dependency'.
     set V_DIRNAME=
     set V_SKIPPED=no
@@ -770,19 +733,14 @@ if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
     set V_DIRNAME=!V_LINK_PARTS[%VCS_NAME%]!
     REM Stop errors from nothing being here.
 )
-set V_LABEL_RETURN=return_to_internal_function_prepare_dependency
-goto user_function_prepare_dependency
-:return_to_internal_function_prepare_dependency
+call :user_function_prepare_dependency
 cd %DEPENDENCY_PATH%
 
-:exit_from_internal_function_prepare_dependency
-goto !V_LABEL_RETURN_iffd!
+goto:eof REM return
 
 REM --- FUNCTION: internal_function_fetch_dependencies --------------------------
 :internal_function_fetch_dependencies
 REM input argument:  V_LINKS        - The processed link parts to make use of.
-REM input argument:  V_LABEL_RETURN - The name of the label to return to when finished.
-set V_LABEL_RETURN_ifdls=!V_LABEL_RETURN!
 
 set /A V_IDX_FD=0
 :loop_internal_function_fetch_dependencies
@@ -790,28 +748,22 @@ set V_LINK=!LINKS[%V_IDX_FD%]!
 if "!V_LINK!" EQU "" goto exit_from_internal_function_fetch_dependencies
 
 REM function call: V_LINK_PARTS = split_link(V_LINK)
-set V_LABEL_RETURN=return_to_internal_function_fetch_dependencies1
-goto internal_function_split_link
-:return_to_internal_function_fetch_dependencies1
+call :internal_function_split_link
 
 REM function call: download_link(V_LINK_PARTS)
-set V_LABEL_RETURN=return_to_internal_function_fetch_dependencies2
-goto internal_function_fetch_dependency
-:return_to_internal_function_fetch_dependencies2
+call :internal_function_fetch_dependency
 
 set /A V_IDX_FD=!V_IDX_FD!+1
 goto loop_internal_function_fetch_dependencies
 
 :exit_from_internal_function_fetch_dependencies
-goto !V_LABEL_RETURN_ifdls!
+goto:eof REM return
 
 REM --- FUNCTION: internal_function_fetch_dependency ---------------------------
 :internal_function_fetch_dependency
 REM input argument:  V_LINK_PARTS   - The processed link parts to make use of.
 REM input argument:  V_IDX_FD       - The index into the links array of the current dependency.
-REM input argument:  V_LABEL_RETURN - The name of the label to return to when finished.
 REM output argument: V_LINK_PARTS   - The array of elements that make up the given link text.
-set V_LABEL_RETURN_iffd=!V_LABEL_RETURN!
 
 :loop_internal_function_fetch_dependency
 cd %DEPENDENCY_PATH%
@@ -911,9 +863,7 @@ if not exist "!V_LINK_PARTS[%HTTP_NAME%]!" (
 )
 set /A L_ATTEMPTS=!L_ATTEMPTS!+1
 
-set V_LABEL_RETURN=return_to_internal_function_fetch_dependency1
-goto internal_function_checksum
-:return_to_internal_function_fetch_dependency1
+call :internal_function_checksum
 
 if "!V_PASSED!" EQU "yes" (
     echo .. MD5 checksum [!V_CHECKSUM!] correct
@@ -936,17 +886,15 @@ if "!V_PASSED!" EQU "yes" (
 )
 
 :exit_from_internal_function_fetch_dependency
-goto !V_LABEL_RETURN_iffd!
+goto:eof REM return
 
 REM --- FUNCTION: internal_function_checksum ---------------------------------
 
 :internal_function_checksum
 REM input argument:  V_LINK_PARTS   - The array of elements relating to the link in question.
-REM input argument:  V_LABEL_RETURN - The name of the label to return to when finished.
 REM output argument: V_CHECKSUM     - The calculated checksum for the given file.
 REM output argument: V_PASSED       - If there is one to match, "yes" for correct and "no" for incorrect.
 REM                                   If there is not one to match, "".
-set V_LABEL_RETURN_ifc=!V_LABEL_RETURN!
 
 set fn=MD5-Checksum
 set fnp0=!V_LINK_PARTS[%HTTP_FILENAME%]!
@@ -974,20 +922,16 @@ for /F "usebackq tokens=*" %%i in (`more "%BUILD_SCRIPT_PATH%%BUILD_SCRIPT_FILEN
 )
 
 :exit_from_internal_function_checksum
-goto !V_LABEL_RETURN_ifc!
+goto:eof REM return
 
 REM --- FUNCTION: internal_function_verify_link ------------------------------
 
 :internal_function_verify_link
 REM input argument:  V_LINK         - The link text to verify.
-REM input argument:  V_LABEL_RETURN - The name of the label to return to when finished.
 REM output argument: V_LINK_PARTS   - The array of elements that make up the given link text.
-set V_LABEL_RETURN_ifvl=!V_LABEL_RETURN!
 
 REM function call: V_LINK_PARTS = split_link(V_LINK)
-set V_LABEL_RETURN=return_to_internal_function_verify_link
-goto internal_function_split_link
-:return_to_internal_function_verify_link
+call :internal_function_split_link
 
 if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
     if /I "!V_LINK_PARTS[%HTTP_URL%]:~0,4!" NEQ "http" goto internal_function_verify_link__valid
@@ -1001,14 +945,12 @@ echo Invalid link: %V_LINK%
 goto internal_function_exit
 
 :internal_function_verify_link__valid
-goto !V_LABEL_RETURN_ifvl!
+goto:eof REM return
 
 REM --- FUNCTION: internal_function_split_link -------------------------------
 :internal_function_split_link
 REM input argument:  V_LINK         - The link text to verify.
-REM input argument:  V_LABEL_RETURN - The name of the label to return to when finished.
 REM output argument: V_LINK_PARTS   - The array of elements that make up the given link text.
-set V_LABEL_RETURN_ifsl=!V_LABEL_RETURN!
 
 set V_LINK_PARTS[%LINK_CLASSIFIER%]=
 for /F "tokens=1,2,3,4,5,6" %%A in ("!V_LINK!") do (
@@ -1018,8 +960,10 @@ for /F "tokens=1,2,3,4,5,6" %%A in ("!V_LINK!") do (
         set V_LINK_PARTS[%HTTP_URL%]=!V_LINK_PARTS[%%A]!
 
         REM .. V_LINK_PARTS[%HTTP_NAME%], V_LINK_PARTS[%HTTP_FILENAME%] = get_urlfilename(V_LINK)
-        set V_LABEL_RETURN=return_to_internal_function_split_link
-        goto internal_function_get_urlfilename
+        call :internal_function_get_urlfilename
+		
+		set V_LINK_PARTS[%HTTP_NAME%]=!V_RESULT!
+		set V_LINK_PARTS[%HTTP_FILENAME%]=!V_RESULT!
     ) else (
         set V_LINK_PARTS[%LINK_CLASSIFIER%]=%%A
         set V_LINK_PARTS[%VCS_SYSTEM%]=%%B
@@ -1027,23 +971,15 @@ for /F "tokens=1,2,3,4,5,6" %%A in ("!V_LINK!") do (
         set V_LINK_PARTS[%VCS_REVISION%]=%%D
         set V_LINK_PARTS[%VCS_CLONEURL%]=%%E
         set V_LINK_PARTS[%VCS_ZIPDLURL%]=%%F
-        goto exit_from_internal_function_split_link
     )
 )
 
-:return_to_internal_function_split_link
-set V_LINK_PARTS[%HTTP_NAME%]=!V_RESULT!
-set V_LINK_PARTS[%HTTP_FILENAME%]=!V_RESULT!
+goto:eof REM return
 
-:exit_from_internal_function_split_link
-goto !V_LABEL_RETURN_ifsl!
-
-REM --- FUNCTION: internal_function_split_link -------------------------------
+REM --- FUNCTION: internal_function_get_urlfilename -------------------------------
 :internal_function_get_urlfilename
 REM input argument:  V_LINK         - The link text to verify.
-REM input argument:  V_LABEL_RETURN - The name of the label to return to when finished.
 REM output argument: V_RESULT       - The base filename the URL exposes for download.
-set V_LABEL_RETURN_ifgu=!V_LABEL_RETURN!
 
 set L_LINK=!V_LINK!
 :loop_internal_function_get_urlfilename_1
@@ -1063,7 +999,7 @@ goto loop_internal_function_get_urlfilename_1
 REM We have the trailing string after the last path separator, or the file name.
 set V_RESULT=!L_SUBSTRING!
 
-goto !V_LABEL_RETURN_ifgu!
+goto:eof REM return
 
 REM --- Everything is done, exit back to the user ----------------------------
 
