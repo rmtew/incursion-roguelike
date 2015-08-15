@@ -1,4 +1,5 @@
-/* VMACHINE.CPP -- Copyright (c) 1999-2003 Julian Mensch
+/* VMACHINE.CPP -- See the Incursion LICENSE file for copyright information.
+
      Contains the virtual machine that executes compiled IncursionScript
    bytecode. This file includes the file "dispatch.h", which is generated
    by Incursion based on the IncursionScript file API.H. This is the core

@@ -1,4 +1,5 @@
-/* PLAYER.CPP -- Copyright (c) 1999-2003 Julian Mensch
+/* PLAYER.CPP -- See the Incursion LICENSE file for copyright information.
+
      Contains miscellaneous functions of the Player class,
    including the huge function that accepts the player's
    input and turn it into event calls. Also has the code

@@ -195,23 +195,19 @@ Text "help::intro"
       you're either still learning the game, or you haven't thought ahead enough.\n\n
      
 	 <7>A Note on Balance and Stability<6>\n
-	   __Truthfully, Incursion is still very much a game in development and
-     has not yet found its equilibrium in regard to game balance. For all
-     I know at present, it could be nearly unbeatable without cheating, or
-     it could become trivially easy when certain unforeseen combinations are
-     exploited. As the developer, I welcome any feedback on how the balance
-     issues can be addressed to produce a better game. I can be reached at
-     incursion@shaw.ca. My life is very busy at various times, however, and
-	   I cannot promise to respond to all e-mail in a timely fashion.\n
+	   __Incursion is still very much a game in development and
+     has not yet found its equilibrium in regard to game balance. At this time
+     it could be trivially easy when certain unforeseen combinations are
+     exploited.\n
 	    __As it stands, if this version of Incursion proves difficult or
 	    unplayably hard due to game balance limitations, the wizard mode can
 	    be used to adjust the difficulty of gameplay by obtaining needed items 
 	    or otherwise skewing the game in favour of the player. The primary intent
 	    of this release is not to be a fully polished game, but to stand as a
 	    proof of concept for Incursion's overall design, and to provide a
-	    teaser for what's to come in the future. I encourage players to 
+	    teaser for what's to come in the future. Players are encouraged to 
 	    experiment with the game, try out the features and get in touch with
-	    me to offer suggestions for any future versions.\n
+	    the development team to offer suggestions for any future versions.\n
 	    __<6>Incursion is still in very early alpha testing. It has several known
 	    game stability bugs that cause it to crash -- hopefully gracefully enough to
 	    bring up a registry error dialog box, but sometimes badly enough to crash

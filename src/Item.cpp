@@ -1,4 +1,5 @@
-/* ITEM.CPP -- Copyright (c) 1999-2003 Julian Mensch
+/* ITEM.CPP -- See the Incursion LICENSE file for copyright information.
+
      Contains all the member functions for the Item class that
    do not thematically fit elsewhere (GenItem in Encounter.Cpp),
    as well as the member functions for derived classes Weapon,

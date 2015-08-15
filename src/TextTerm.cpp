@@ -1,4 +1,5 @@
-/* TEXTTERM.CPP -- Copyright (c) 1999-2003 Julian Mensch
+/* TEXTTERM.CPP -- See the Incursion LICENSE file for copyright information.
+
      Lower-level functions for interacting with a character-based
    terminal.
 

@@ -28,17 +28,16 @@ REM      LINKS[n]=vcs <vcs-system> <name> <revision-id> <repo-path> <snapshot-ur
 REM        <revision-id>: This can be a URL, or it can be a filesystem path to an existing local clone.
 
 set LINKS[0]=http://jaist.dl.sf.net/pub/sourceforge/w/wi/winflexbison/win_flex_bison-latest.zip
-set LINKS[1]=vcs hg SDL2 704a0bfecf75 http://hg.libsdl.org/SDL http://hg.libsdl.org/SDL/archive/REV.zip
-set LINKS[2]=vcs hg libtcod 7a8b072365b5 https://bitbucket.org/jice/libtcod https://bitbucket.org/jice/libtcod/get/REV.zip
-set LINKS[3]=http://jaist.dl.sf.net/pub/sourceforge/p/pd/pdcurses/pdcurses/3.4/pdcurs34.zip
-set LINKS[4]=vcs git gyp dd831fd https://chromium.googlesource.com/external/gyp https://chromium.googlesource.com/external/gyp/REV.tar.gz
-set LINKS[5]=vcs git google-breakpad 0a0ad99 https://chromium.googlesource.com/external/google-breakpad/src/ https://chromium.googlesource.com/external/google-breakpad/src/REV.tar.gz
+set LINKS[1]=vcs hg libtcod 7a8b072365b5 https://bitbucket.org/jice/libtcod https://bitbucket.org/jice/libtcod/get/REV.zip
+set LINKS[2]=http://jaist.dl.sf.net/pub/sourceforge/p/pd/pdcurses/pdcurses/3.4/pdcurs34.zip
+set LINKS[3]=vcs git gyp dd831fd https://chromium.googlesource.com/external/gyp https://chromium.googlesource.com/external/gyp/REV.tar.gz
+set LINKS[4]=vcs git google-breakpad 0a0ad99 https://chromium.googlesource.com/external/google-breakpad/src/ https://chromium.googlesource.com/external/google-breakpad/src/REV.tar.gz
+set LINKS[5]=0
 
 REM TODO: Comment out local git repositories and replace with remote ones before committing.
-REM set LINKS[1]=vcs hg SDL2 704a0bfecf75 C:\RMT\VCS\HG\libraries\SDL http://hg.libsdl.org/SDL/archive/
-REM set LINKS[2]=vcs hg libtcod 7a8b072365b5 C:\RMT\VCS\HG\libraries\libtcod https://bitbucket.org/jice/libtcod/get/
-REM set LINKS[4]=vcs git gyp dd831fd C:\RMT\VCS\GIT\Tools\gyp ???
-REM set LINKS[5]=vcs git google-breakpad 0a0ad99 C:\RMT\VCS\GIT\Libraries\google-breakpad ???
+set LINKS[1]=vcs hg libtcod default C:\RMT\VCS\HG\libraries\libtcod-bitbucket https://bitbucket.org/jice/libtcod/get/
+set LINKS[3]=vcs git gyp dd831fd C:\RMT\VCS\GIT\Tools\gyp ???
+set LINKS[4]=vcs git google-breakpad 0a0ad99 C:\RMT\VCS\GIT\Libraries\google-breakpad ???
 
 REM __ MD5CHECKSUMS entries are the MD5 checksum for the download in the matching LINKS position
 REM      To get the checksum for a newly added download to add to an entry here, simply run the script and when
@@ -56,7 +55,7 @@ set UV_PACKAGES_DIRNAME=packages
 set UV_PACKAGES_PATH=!BUILD_PATH!\packages
 
 REM Set to yes to get the buggy curses executables packaged as well.
-set UV_PACKAGE_CURSES=yes
+set UV_PACKAGE_CURSES=no
 
 REM Allow the user to specify the path to their Git 'git' executable.  It may have to be accessed via absolute path.
 if not defined PYTHON_EXE (
@@ -64,8 +63,28 @@ if not defined PYTHON_EXE (
     python.exe --help >nul 2>&1 && (set PYTHON_EXE=python.exe) || (set PYTHON_EXE=)
 )
 
+REM Long argument / short argument / internal argument / <before|after> / function name to call
+set UV_COMMANDS[0]=compile-scripts -cs build-project after user_function_compile_scripts
+set UV_COMMANDS[1]=
+
+set UV_COMMAND_DESCS[compile-scripts]=compile Incursion script module
+
 REM Process the user data, calling event functions when applicable.
 goto internal_function_main
+
+REM --- FUNCTION: user_function_fetch_dependencies --------------------------------
+:user_function_fetch_dependencies
+(
+    setlocal EnableDelayedExpansion
+	
+	cd !DEPENDENCY_PATH!
+	REM set SDL2LINK=vcs hg SDL2 704a0bfecf75 C:\RMT\VCS\HG\libraries\SDL http://hg.libsdl.org/SDL/archive/
+	CALL libtcod\build.bat -fd
+)
+(
+    endlocal
+    exit /b
+)
 
 REM --- FUNCTION: user_function_prepare_dependency --------------------------------
 :user_function_prepare_dependency
@@ -73,424 +92,464 @@ REM variable: %V_LINK_PARTS% - The link data.
 REM variable: %DEPENDENCY_PATH% - The absolute path of the dependencies directory.
 REM variable: %V_DIRNAME% - The relative directory name the dependency can be found in.
 REM variable: %V_SKIPPED% - 'yes' or 'no', depending on whether the archive was already extracted.
-set V_LABEL_RETURN_ufpd=!V_LABEL_RETURN!
+(
+    setlocal EnableDelayedExpansion
 
-cd !DEPENDENCY_PATH!
+	cd !DEPENDENCY_PATH!
 
-set /A L_SDL2_ATTEMPTS=0
-:user_function_prepare_dependency_retry
+	if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
+		if "!V_LINK_PARTS[%HTTP_FILENAME%]!" EQU "win_flex_bison-latest.zip" (
+			REM Extract the pre-built executable and put in the right location.
+			if "%V_SKIPPED%" equ "no" (
+				if exist flex.exe del flex.exe        
+			)
+			if not exist flex.exe (
+				copy !V_DIRNAME!\win_flex.exe .\flex.exe
+			)
+		) else if "!V_LINK_PARTS[%HTTP_FILENAME%]!" EQU "pdcurs34.zip" (
+			cd !V_DIRNAME!\win32\
+			
+			for %%P in (Win32) do (
+				if not exist "!DEPENDENCY_PATH!\%%P" mkdir "!DEPENDENCY_PATH!\%%P"
+				for %%C in (Debug Release) do (
+					if not exist "!DEPENDENCY_PATH!\%%P\%%C" mkdir "!DEPENDENCY_PATH!\%%P\%%C"
+					if not exist "!DEPENDENCY_PATH!\%%P\%%C\pdcurses.lib" (
+						echo Building: [pdcurses^|%%C^|%%P]
+						nmake -f vcwin32.mak clean
+						if "%%C" equ "Debug" (
+							nmake -f vcwin32.mak DEBUG=1 WIDE=1 DLLOPT=/MTd pdcurses.lib
+						) else if "%%C" equ "Release" (
+							nmake -f vcwin32.mak WIDE=1 DLLOPT=/MT pdcurses.lib
+						) else (
+							echo ERROR
+						)
+						copy pdcurses.lib "!DEPENDENCY_PATH!\%%P\%%C\pdcurses.lib"
+					) else (
+						echo Building: [pdcurses^|%%C^|%%P] .. skipped
+					)
+				)
+			)
 
-if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
-    if "!V_LINK_PARTS[%HTTP_FILENAME%]!" EQU "win_flex_bison-latest.zip" (
-        REM Extract the pre-built executable and put in the right location.
-        if "%V_SKIPPED%" equ "no" (
-            if exist flex.exe del flex.exe        
-        )
-        if not exist flex.exe (
-            copy !V_DIRNAME!\win_flex.exe .\flex.exe
-        )
-    ) else if "!V_LINK_PARTS[%HTTP_FILENAME%]!" EQU "pdcurs34.zip" (
-        cd !V_DIRNAME!\win32\
-        
-        if not exist !DEPENDENCY_PATH!\pdcurses_d.lib (
-            echo Building: [pdcurses/Debug]
-            nmake -f vcwin32.mak clean
-            nmake -f vcwin32.mak DEBUG=1 WIDE=1 DLLOPT=/MTd pdcurses.lib
-            copy pdcurses.lib !DEPENDENCY_PATH!\pdcurses_d.lib
-        ) else (
-            echo Building: [pdcurses/Debug] .. skipped
-        )
+			set UV_INCLUDE_COMMANDS[%UV_INCLUDE_COMMAND_COUNT%]=!V_DIRNAME!\*.h
+			set /A UV_INCLUDE_COMMAND_COUNT=%UV_INCLUDE_COMMAND_COUNT%+1
 
-        if not exist !DEPENDENCY_PATH!\pdcurses.lib (
-            echo Building: [pdcurses/Release]
-            nmake -f vcwin32.mak clean
-            nmake -f vcwin32.mak WIDE=1 DLLOPT=/MT pdcurses.lib
-            copy pdcurses.lib !DEPENDENCY_PATH!\pdcurses.lib
-        ) else (
-            echo Building: [pdcurses/Release] .. skipped
-        )
+			cd !DEPENDENCY_PATH!
+		) else (
+			echo ERROR.. !V_LINK_PARTS[%HTTP_FILENAME%]! not handled by user who wrote the build amendments.
+			goto internal_function_exit
+		)
+	) else if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "vcs" (
+		set L_VCS_NAME=!V_LINK_PARTS[%VCS_NAME%]!
+		if "!L_VCS_NAME!" EQU "libtcod" (
+			REM Delegate libtcod compilation to it's 'build.bat' script.
+			cd "!DEPENDENCY_PATH!"
+			CALL libtcod\build.bat -pd
+			CALL libtcod\build.bat -p
 
-        set UV_INCLUDE_COMMANDS[%UV_INCLUDE_COMMAND_COUNT%]=!V_DIRNAME!\*.h
-        set /A UV_INCLUDE_COMMAND_COUNT=%UV_INCLUDE_COMMAND_COUNT%+1
+			REM Copy compiled litcod dependency binaries.
+			REM Copy compiled litcod binaries.
+			for %%P in (Win32 x64) do (
+				if not exist %%P mkdir %%P
+				for %%C in (Debug Release) do (
+					if not exist %%P\%%C mkdir %%P\%%C
+					for %%S in (dll pdb lib) do (
+						copy >nul libtcod\build\dependencies\%%P\%%C\SDL2.%%S %%P\%%C\
+						copy >nul libtcod\build\msvs\libtcod\%%P\%%C\libtcod.%%S %%P\%%C\
+					)
+				)
+			)
 
-        cd !DEPENDENCY_PATH!
-    ) else (
-        echo ERROR.. !V_LINK_PARTS[%HTTP_FILENAME%]! not handled by user who wrote the build amendments.
-        goto internal_function_exit
-    )
-) else if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "vcs" (
-    set L_VCS_NAME=!V_LINK_PARTS[%VCS_NAME%]!
-    if "!L_VCS_NAME!" EQU "SDL2" (
-        REM This variable is required by the libtcod makefile.
-        set SDL2PATH=!DEPENDENCY_PATH!\!V_DIRNAME!
+			REM Mark the gathered libtcod dependency includes to be copied.
+			set UV_INCLUDE_COMMANDS[%UV_INCLUDE_COMMAND_COUNT%]=libtcod\build\dependencies\include\*.h
+			set /A UV_INCLUDE_COMMAND_COUNT=%UV_INCLUDE_COMMAND_COUNT%+1
 
-        cd !V_DIRNAME!
+			REM Mark the libtcod includes to be copied.
+			set UV_INCLUDE_COMMANDS[%UV_INCLUDE_COMMAND_COUNT%]=libtcod\include\*.h
+			set /A UV_INCLUDE_COMMAND_COUNT=%UV_INCLUDE_COMMAND_COUNT%+1
 
-        if not exist !DEPENDENCY_PATH!\SDL2_d.dll (
-            echo Building: [SDL2/Debug]
+			) else if "!L_VCS_NAME!" EQU "gyp" (
+			REM gyp is built using Python, so no building is required.
+			echo Building: [gyp] .. skipped
+		) else if "!L_VCS_NAME!" EQU "google-breakpad" (
+			set L_LIBS=exception_handler.lib crash_generation_client.lib common.lib
 
-            REM SDL2 in theory requires the DirectX SDK to be installed, but in practice it's absence
-            REM can be worked around by putting a dummy include file in place, and then only XAudio2
-            REM support is lost.
-            set L_ERROR_MSG=
-            for /F "usebackq tokens=*" %%i in (`msbuild /nologo VisualC\SDL_VS2013.sln /p:Configuration^=Debug /p:Platform^=Win32 /t:SDL2^,SDL2main`) do (
-                set L_LINE=%%i
-                if "!L_LINE:fatal error=!" NEQ "!L_LINE!" set L_ERROR_MSG=%%i
-            )
-            set /A L_SDL2_ATTEMPTS=!L_SDL2_ATTEMPTS!+1
+			REM gyp is a bit flakey, and requires at least at this time, we be at the right directory level and provide a depth.
+			cd !DEPENDENCY_PATH!\google-breakpad
+			set L_FAILED=no
+			for %%A in (!L_LIBS!) do (
+				for %%P in (Win32 x64) do (			
+					for %%C in (Debug Release) do (			
+						if not exist "!DEPENDENCY_PATH!\%%P\%%C\%%A" set L_FAILED=yes
+					)
+				)
+			)
+			
+			if "!L_FAILED!" EQU "yes" (
+				REM Use gyp to produce VS2013 solution and project files.
+				set GYP_MSVS_VERSION=2013
+				CALL >nul "!DEPENDENCY_PATH!\gyp\gyp.bat" --no-circular-check client\windows\breakpad_client.gyp --depth .
 
-            if exist VisualC\SDL\Win32\Debug\SDL2.dll (
-                copy VisualC\SDL\Win32\Debug\SDL2.dll !DEPENDENCY_PATH!\SDL2_d.dll
-                copy VisualC\SDL\Win32\Debug\SDL2.lib !DEPENDENCY_PATH!\SDL2_d.lib
-                copy VisualC\SDL\Win32\Debug\SDL2.pdb !DEPENDENCY_PATH!\SDL2_d.pdb
-            ) else (
-                REM Only try and recover from the DirectX problem, and if that don't work, give up.
-                if "!L_ERROR_MSG!" NEQ "" (
-                    if !L_SDL2_ATTEMPTS! EQU 1 (
-                        if "!L_ERROR_MSG:dxsdkver=!" NEQ "!L_ERROR_MSG!" (
-                            echo WARNING: Trying to make up for lack of installed DirectX SDK.
-                            type nul > include\dxsdkver.h
-                            cd !DEPENDENCY_PATH!
-                            goto user_function_prepare_dependency_retry
-                        )
-                    )
-                )
-            
-                echo ERROR.. SDL2.dll did not successfully build for some reason.
-                goto internal_function_exit
-            )
-        ) else (
-            echo Building: [SDL2/Debug] .. skipped
-        )
+				for %%P in (Win32 x64) do (			
+					for %%C in (Debug Release) do (
+						set L_FAILED=no
+						for %%A in (!L_LIBS!) do (
+							if not exist "!DEPENDENCY_PATH!\%%P\%%C\%%A" set L_FAILED=yes
+						)
+					
+						if "!L_FAILED!" EQU "yes" (
+							echo Building: [google-breakpad^|%%C^|%%P]
 
-        if not exist !DEPENDENCY_PATH!\SDL2.dll (
-            echo Building: [SDL2/Release]
+							REM TODO: The current revision breaks on missing files, and produces partial results, but enough.  Build them piecemeal.
+							DEL >nul /S /Q client\Windows\%%C
+							set L_ERROR_MSG=
+							for /F "usebackq tokens=*" %%i in (`msbuild /nologo client\Windows\common.vcxproj /p:Configuration^=%%C /p:Platform^=%%P`) do (
+								set L_LINE=%%i
+								if "!L_LINE:fatal error=!" NEQ "!L_LINE!" set L_ERROR_MSG=%%i
+							)
+							set L_ERROR_MSG=
+							for /F "usebackq tokens=*" %%i in (`msbuild /nologo client\Windows\breakpad_client.sln /p:Configuration^=%%C /p:Platform^=%%P /t:build_all`) do (
+								set L_LINE=%%i
+								if "!L_LINE:fatal error=!" NEQ "!L_LINE!" set L_ERROR_MSG=%%i
+							)
 
-            msbuild /nologo VisualC\SDL_VS2013.sln /p:Configuration=Release /p:Platform=Win32 /t:SDL2,SDL2main
-            if exist VisualC\SDL\Win32\Debug\SDL2.dll (
-                copy VisualC\SDL\Win32\Release\SDL2.dll !DEPENDENCY_PATH!\SDL2.dll
-                copy VisualC\SDL\Win32\Release\SDL2.lib !DEPENDENCY_PATH!\SDL2.lib
-                copy VisualC\SDL\Win32\Release\SDL2.pdb !DEPENDENCY_PATH!\SDL2.pdb
-            ) else (
-                echo ERROR.. SDL2.dll did not successfully build for some reason.
-                goto internal_function_exit
-            )
-        ) else (
-            echo Building: [SDL2/Release] .. skipped
-        )
+							REM Verify that the required static libraries were produced as a result.
+							set L_FAILED=no
+							for %%A in (!L_LIBS!) do (
+								if not exist "client\Windows\%%C\lib\%%A" (
+									echo Checking [google-breakpad^|%%P]: .. ERROR, failed to produce '%%A'
+									set L_FAILED=yes
+								)
+							)
+							REM If one or more libraries were not produced, the user will have been told about each, so now exit.
+							if "!L_FAILED!" EQU "yes" (
+								echo ERROR.. Giving up as these libraries are required for google-breakpad to work.
+								goto internal_function_exit
+							)
+							
+							for %%A in (!L_LIBS!) do (
+								if not exist "!DEPENDENCY_PATH!\%%P\%%C\%%A" copy >nul "client\Windows\%%C\lib\%%A" "!DEPENDENCY_PATH!\%%P\%%C\"
+							)
+						)
+					)
+				)
+			) else (
+				echo Building: [google-breakpad] .. skipped
+			)
 
-        set UV_INCLUDE_COMMANDS[%UV_INCLUDE_COMMAND_COUNT%]=!V_DIRNAME!\include\*.h
-        set /A UV_INCLUDE_COMMAND_COUNT=%UV_INCLUDE_COMMAND_COUNT%+1
-    ) else if "!L_VCS_NAME!" EQU "libtcod" (
-        set BASEPATH=!DEPENDENCY_PATH!\!V_DIRNAME!
-        set BASEOBJPATH=!DEPENDENCY_PATH!\!V_DIRNAME!\build
-        if not exist !BASEOBJPATH! mkdir !BASEOBJPATH!
-
-        if not exist !DEPENDENCY_PATH!\libtcod_d.dll (
-            echo Building: [libtcod/Debug]
-            set CONFIG=Debug
-            set BASENAME_SUFFIX=_d
-            nmake /nologo -f ..\makefile-libtcod
-            copy !BASEOBJPATH!\!CONFIG!\libtcod_d.lib libtcod_d.lib
-            copy !BASEOBJPATH!\!CONFIG!\libtcod_d.dll libtcod_d.dll
-            copy !BASEOBJPATH!\!CONFIG!\libtcod_d.pdb libtcod_d.pdb
-        ) else (
-            echo Building: [libtcod/Debug] .. skipped
-        )
-
-        if not exist !DEPENDENCY_PATH!\libtcod.dll (
-            echo Building: [libtcod/Release]
-            set CONFIG=Release
-            nmake /nologo -f ..\makefile-libtcod
-            copy !BASEOBJPATH!\!CONFIG!\libtcod.lib libtcod.lib
-            copy !BASEOBJPATH!\!CONFIG!\libtcod.dll libtcod.dll
-            copy !BASEOBJPATH!\!CONFIG!\libtcod.pdb libtcod.pdb
-        ) else (
-            echo Building: [libtcod/Release] .. skipped
-        )
-
-        set UV_INCLUDE_COMMANDS[%UV_INCLUDE_COMMAND_COUNT%]=!V_DIRNAME!\include\*.h
-        set /A UV_INCLUDE_COMMAND_COUNT=%UV_INCLUDE_COMMAND_COUNT%+1
-    ) else if "!L_VCS_NAME!" EQU "gyp" (
-        REM gyp is built using Python, so no building is required.
-        echo Building: [gyp] .. skipped
-    ) else if "!L_VCS_NAME!" EQU "google-breakpad" (
-        set L_LIBS=exception_handler.lib crash_generation_client.lib common.lib
-        set L_LIBRELPATH=client\Windows\Release\lib
-        set L_FAILED=no
-        REM gyp is a bit flakey, and requires at least at this time, we be at the right directory level and provide a depth.
-        cd !DEPENDENCY_PATH!\google-breakpad
-        for %%A in (!L_LIBS!) do (
-            if not exist !L_LIBRELPATH!\%%A (
-                set L_FAILED=yes
-            )
-        )
-        
-        if "!L_FAILED!" EQU "yes" (
-            REM Use gyp to produce VS2013 solution and project files.
-            set GYP_MSVS_VERSION=2013
-            CALL !DEPENDENCY_PATH!\gyp\gyp.bat --no-circular-check client\windows\breakpad_client.gyp --depth .
-
-            REM TODO: The current revision breaks on missing files, and produces partial results, but enough.  Build them piecemeal.
-            msbuild /nologo client\Windows\common.vcxproj /p:Configuration=Release /p:Platform=Win32
-            msbuild /nologo client\Windows\breakpad_client.sln /p:Configuration=Release /p:Platform=Win32 /t:build_all
-
-            REM Verify that the required static libraries were produced as a result.
-            set L_FAILED=no
-            for %%A in (!L_LIBS!) do (
-                if not exist !L_LIBRELPATH!\%%A (
-                    echo ERROR.. google-breakpad compilation failed to produce '%%A'
-                    set L_FAILED=yes
-                )
-            )
-            REM If one or more libraries were not produced, the user will have been told about each, so now exit.
-            if "!L_FAILED!" EQU "yes" (
-                echo ERROR.. Giving up as these libraries are required for google-breakpad to work.
-                goto internal_function_exit
-            )
-
-            REM Copy all the required static libraries.
-            for %%A in (!L_LIBS!) do (
-                copy !L_LIBRELPATH!\%%A !DEPENDENCY_PATH!\
-            )
-
-            echo SUCCESS.. Enough of google-breakpad was compiled to produce the required static libraries.
-            REM goto cannot be done within a nested scope, so need to embed it below.
-            goto user_function_prepare_dependency_breakpad_includes
-        ) else (
-            echo Building: [google-breakpad] .. skipped
-        )
-    ) else (
-        echo ERROR.. !V_LINK_PARTS[%VCS_NAME%]! not handled by user who wrote the build amendments.
-        goto internal_function_exit
-    )
+			REM Copy all the required static libraries.
+		) else (
+			echo ERROR.. !V_LINK_PARTS[%VCS_NAME%]! not handled by user who wrote the build amendments.
+			goto internal_function_exit
+		)
+	)
+)
+( 
+    endlocal
+    exit /b
 )
 
-goto exit_from_user_function_prepare_dependency
 :user_function_prepare_dependency_breakpad_includes
+(
+    setlocal EnableDelayedExpansion
 
-cd "!DEPENDENCY_PATH!\google-breakpad"
-set L_PATHS[0]=client\windows
-set L_PATHS[1]=common
-set L_PATHS[2]=google_breakpad
-set /A L_PATH_COUNT=3
-set /A L_IDX=0
+	cd "!DEPENDENCY_PATH!\google-breakpad"
 
-:user_function_make_release_loop1
-set L_DIR_PATH=!L_PATHS[%L_IDX%]!
-for /F "delims=" %%W in ('dir /B "!L_DIR_PATH!\*.h" 2^>^&1') do (
-    if "%%W" NEQ "File Not Found" (
-        xcopy /Y /Q >nul "!L_DIR_PATH!\%%W" "!DEPENDENCY_PATH!\include\!L_DIR_PATH!\"
-    )
-)    
-for /F %%V in ('dir /A:D /B "!L_DIR_PATH!"') do (
-    if "%%V" NEQ "Release" (
-        set L_SUBDIR_PATH=!L_DIR_PATH!\%%V
-        set L_PATHS[!L_PATH_COUNT!]=!L_SUBDIR_PATH!
-        set /A L_PATH_COUNT=!L_PATH_COUNT!+1
-    )
+	set L_PATHS[0]=client\windows
+	set L_PATHS[1]=common
+	set L_PATHS[2]=google_breakpad
+	REM The code below will extend the array.
+	set /A L_PATH_COUNT=3
+	set /A L_IDX=0
+
+	REM Ensure L_IDX is usable by jumping into the loop. o_O
+	goto uf_loop_pdbi
+
+	REM Recursively copy the subset of the directory tree that is include file locations (and of course the include files there).
+:uf_loop_pdbi
+	set "L_DIR_PATH=!L_PATHS[%L_IDX%]!"
+	echo L_PATHS[!L_IDX!] !L_DIR_PATH!
+	REM Copy this directory, if there are include files present.
+	for /F "delims=" %%W in ('dir /B "!L_DIR_PATH!\*.h" 2^>^&1') do (
+		if "%%W" NEQ "File Not Found" (
+			xcopy /Y /Q >nul "!L_DIR_PATH!\%%W" "!DEPENDENCY_PATH!\include\!L_DIR_PATH!\"
+		)
+	)    
+	REM Index subdirectories of this directory for subsequent processing.
+	for /F %%V in ('dir /A:D /B "!L_DIR_PATH!"') do (
+		if "%%V" NEQ "Release" (
+			set L_SUBDIR_PATH=!L_DIR_PATH!\%%V
+			set L_PATHS[!L_PATH_COUNT!]=!L_SUBDIR_PATH!
+			set /A L_PATH_COUNT=!L_PATH_COUNT!+1
+		)
+	)
+	
+	set /A L_IDX=!L_IDX!+1
+	if !L_IDX! LSS !L_PATH_COUNT! goto uf_loop_pdbi
 )
-set /A L_IDX=!L_IDX!+1
-if !L_IDX! LSS !L_PATH_COUNT! goto user_function_make_release_loop1
-
-:exit_from_user_function_prepare_dependency
-goto !V_LABEL_RETURN_ufpd!
+( 
+    endlocal
+    exit /b
+)
 
 REM --- FUNCTION: user_function_prepare_dependencies -------------------------
 :user_function_prepare_dependencies
 REM description: This is called as a final step after all dependencies have been prepared.
 REM variable: %DEPENDENCY_PATH% - The absolute path of the dependencies directory.
-set V_LABEL_RETURN_ufpds=!V_LABEL_RETURN!
 
-if exist !UV_INCLUDE_PATH! goto exit_from_user_function_prepare_dependencies
+REM Generic
+if exist "!UV_INCLUDE_PATH!" goto exit_from_user_function_prepare_dependencies
+
+call :user_function_prepare_dependency_breakpad_includes
 
 set /A L_COUNT=0
 :loop_user_function_prepare_dependencies
 
 if %L_COUNT% LSS %UV_INCLUDE_COMMAND_COUNT% (
     echo Copying includes: !UV_INCLUDE_COMMANDS[%L_COUNT%]!
-    xcopy /Q /Y !DEPENDENCY_PATH!\!UV_INCLUDE_COMMANDS[%L_COUNT%]! %UV_INCLUDE_PATH%\
+    xcopy /Q /Y "!DEPENDENCY_PATH!\!UV_INCLUDE_COMMANDS[%L_COUNT%]!" "%UV_INCLUDE_PATH%\"
 
     set /A L_COUNT=%L_COUNT%+1
     goto loop_user_function_prepare_dependencies
 )
 
 :exit_from_user_function_prepare_dependencies
-goto !V_LABEL_RETURN_ufpds!
+goto:eof REM return
 
-REM --- FUNCTION: user_function_detect_incursion_version ---------------------
-:user_function_detect_incursion_version
-set V_LABEL_RETURN_ufdiv=!V_LABEL_RETURN!
+REM --- FUNCTION: user_function_build_project --------------------------------
+:user_function_build_project
+(
+    setlocal EnableDelayedExpansion
 
-if "!UV_VERSION!" EQU "" (
-    REM Set up the environment so that we can run Incursion piecemeal.
-    REM TODO(rmtew): Do this locally, so it doesn't pollute the environment.
-    set "PATH=%PATH%;!BUILD_PATH!\dependencies"
-    cd "!BUILD_PATH!\run"
+	REM Compile incursion.
 
-    for /F "usebackq tokens=*" %%M in (`..\Win32\Debug\exe_libtcod\Incursion.exe -version`) do (
-        set UV_VERSION=%%M
-    )
+	REM TODO: Add %%P entry x64
+	for %%N in (exe_libtcod exe_curses) do (
+		for %%P in (Win32) do (
+			REM pdcurses only has Win32 support.
+			if "%%P%%N" neq "x64exe_curses" (
+				for %%C in (Debug Release) do (
+					echo Building: [%%N^|%%C^|%%P]
 
-    if "!UV_VERSION!" EQU "" (
-        echo ERROR: unable to auto-detect the version of Incursion.
-        goto internal_function_teardown
-    )
+					set L_ERROR_MSG=
+					for /F "usebackq tokens=*" %%i in (`msbuild /nologo msvs\libtcod.sln /p:Configuration^=%%C /p:Platform^=%%P /t:%%N`) do (
+						set L_LINE=%%i
+						if "!L_LINE:fatal error=!" NEQ "!L_LINE!" set L_ERROR_MSG=%%i
+					)
+
+					if not exist "!BUILD_PATH!\%%P\%%C\%%N\Incursion.exe" (
+						echo ERROR.. '%%P\%%C\%%N\Incursion.exe' did not successfully build for some reason.
+						goto internal_function_exit
+					)
+				)
+			)
+		)
+	)
+)
+( 
+    endlocal
+    exit /b
 )
 
-:exit_from_user_function_detect_incursion_version
-goto !V_LABEL_RETURN_ufdiv!
+REM --- FUNCTION: user_function_compile_scripts ----------------------------------------
+:user_function_compile_scripts
+(   
+    setlocal EnableDelayedExpansion
+
+	REM Script compiling needs to know where to locate the dependency dlls.
+	set "PATH=%PATH%;!BUILD_PATH!\dependencies\Win32\Debug"
+	REM Script compiling will write to a 'mod' directory here.
+	set "INCURSIONPATH=!BUILD_PATH!\run"
+	REM Script compiling will read the scripts it needs to compile.
+	set "INCURSIONLIBPATH=!BUILD_SCRIPT_PATH!lib"
+	REM Not sure this is needed.
+	cd "!BUILD_PATH!\run"
+
+	echo Compiling Incursion scripts..
+
+	del >nul /Q "!BUILD_PATH!\run\mod\Incursion.Mod"
+
+	for /F "usebackq tokens=*" %%M in (`..\Win32\Debug\exe_libtcod\Incursion.exe -compile`) do (
+		set LAST_LINE=%%M
+		echo !LAST_LINE!
+	)
+
+	REM Error handling.
+	if !ERRORLEVEL! NEQ 0 (
+		echo ERROR: 'Incursion.exe -compile' exited with error level !ERRORLEVEL!
+		goto internal_function_teardown
+	)
+	
+	if not exist "!BUILD_PATH!\run\mod\Incursion.Mod" (
+		echo ERROR: failed compiling Incursion script files..
+		goto internal_function_teardown
+	)
+)
+( 
+    endlocal
+    exit /b
+)
+
+REM --- FUNCTION: user_function_detect_incursion_version ---------------------
+:user_function_detect_incursion_version <returnVal>
+(   
+    setlocal EnableDelayedExpansion
+
+	if "!UV_VERSION!" EQU "" (
+		REM Set up the environment so that we can run Incursion piecemeal.
+		set "PATH=%PATH%;!BUILD_PATH!\dependencies\Win32\Debug"
+		cd "!BUILD_PATH!\run"
+
+		for /F "usebackq tokens=*" %%M in (`..\Win32\Debug\exe_libtcod\Incursion.exe -version`) do (
+			set UV_VERSION=%%M
+		)
+
+		if "!UV_VERSION!" EQU "" (
+			echo ERROR: unable to auto-detect the version of Incursion.
+			goto internal_function_teardown
+		)
+	)
+)
+( 
+    endlocal
+    set "%~1=%UV_VERSION%"
+    exit /b
+)
 
 REM --- FUNCTION: user_function_make_release ---------------------------------
 :user_function_make_release
-set V_LABEL_RETURN_ufmr=!V_LABEL_RETURN!
+(   
+    setlocal EnableDelayedExpansion
 
-set V_LABEL_RETURN=return_to_user_function_make_release1
-goto user_function_detect_incursion_version
-:return_to_user_function_make_release1
+	call :user_function_detect_incursion_version UV_VERSION
 
-echo Compiling 'Incursion.Mod' ...
+	cd "!BUILD_PATH!"
 
-cd "!BUILD_PATH!\run"
+	if not exist "!BUILD_PATH!\run\mod\Incursion.Mod" (
+		echo ERROR: Please compile the Incursion scripts first..
+		goto internal_function_teardown
+	)
+	
+	if exist "!UV_PACKAGES_DIRNAME!" rmdir /S /Q "!UV_PACKAGES_DIRNAME!"
+	if not exist "!UV_PACKAGES_DIRNAME!" mkdir "!UV_PACKAGES_DIRNAME!"
 
-set INCURSIONPATH=!BUILD_PATH!\run\
-set INCURSIONLIBPATH=!BUILD_PATH!\..\lib
-for /F "usebackq tokens=*" %%M in (`..\Win32\Debug\exe_libtcod\Incursion.exe -compile`) do (
-    set L_LINE=%%M
-	echo %%M
+	REM The naming is important and is dynamically used to determine which files to copy.
+	for %%A in (release-with-pdbs debug-with-pdbs release) do (
+		set L_ARCHIVENAME=Incursion-!UV_VERSION!
+		set L_NAME=%%A
+		echo Making '%%A' package directory
+		set L_PDBS=!L_NAME:~-4,4!
+		if "!L_NAME:~0,1!" EQU "r" (
+			set L_CONFIG=Release
+			if "!L_PDBS!" EQU "pdbs" set L_ARCHIVENAME=!L_ARCHIVENAME!-release-with-pdbs
+		) else (
+			set L_CONFIG=Debug
+			if "!L_PDBS!" EQU "pdbs" set L_ARCHIVENAME=!L_ARCHIVENAME!-debug-with-pdbs
+		)
+		set L_NAME=!L_ARCHIVENAME!
+
+		REM Set up the game directory structure.
+		mkdir "!UV_PACKAGES_DIRNAME!\!L_NAME!"
+		mkdir "!UV_PACKAGES_DIRNAME!\!L_NAME!\logs"
+		mkdir "!UV_PACKAGES_DIRNAME!\!L_NAME!\save"
+
+		xcopy /I /E >nul "run\mod" "!UV_PACKAGES_DIRNAME!\!L_NAME!\mod\"
+		xcopy /I /E >nul "!BUILD_SCRIPT_PATH!\fonts" "!UV_PACKAGES_DIRNAME!\!L_NAME!\fonts\"
+
+		copy >nul "!BUILD_SCRIPT_PATH!\LICENSE" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
+		copy >nul "!BUILD_SCRIPT_PATH!\Incursion.txt" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
+		copy >nul "!BUILD_SCRIPT_PATH!\Changelog.txt" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
+		copy >nul "!BUILD_SCRIPT_PATH!\README.md" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
+
+		REM Copy built binaries and dependencies into place.
+		copy >nul "!DEPENDENCY_PATH!\Win32\!L_CONFIG!\libtcod.dll" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
+		if "!L_PDBS!" EQU "pdbs" copy >nul "!DEPENDENCY_PATH!\Win32\!L_CONFIG!\libtcod.pdb" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
+
+		copy >nul "!DEPENDENCY_PATH!\Win32\!L_CONFIG!\SDL2.dll" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
+		if "!L_PDBS!" EQU "pdbs" copy >nul "!DEPENDENCY_PATH!\Win32\!L_CONFIG!\SDL2.pdb" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
+		
+		if "!UV_PACKAGE_CURSES!" EQU "yes" (
+			copy >nul "Win32\!L_CONFIG!\exe_curses\Incursion.exe" "!UV_PACKAGES_DIRNAME!\!L_NAME!\IncursionCurses.exe"
+			if "!L_PDBS!" EQU "pdbs" copy >nul "Win32\!L_CONFIG!\exe_curses\Incursion.pdb" "!UV_PACKAGES_DIRNAME!\!L_NAME!\IncursionCurses.pdb"
+		)
+
+		copy >nul "Win32\!L_CONFIG!\exe_libtcod\Incursion.exe" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
+		if "!L_PDBS!" EQU "pdbs" copy >nul "Win32\!L_CONFIG!\exe_libtcod\Incursion.pdb" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
+	)
+
+	REM Collect the dependencies
+	echo Making 'dependencies' package directory
+	set "L_DEPENDENCIES_PATH=!UV_PACKAGES_DIRNAME!\dependencies"
+	mkdir "!L_DEPENDENCIES_PATH!"
+	xcopy /I /E  >nul "!DEPENDENCY_PATH!\include" "!L_DEPENDENCIES_PATH!\include\"
+	xcopy /I /E  >nul "!DEPENDENCY_PATH!\Win32" "!L_DEPENDENCIES_PATH!\Win32\"
+	REM xcopy /I /E  >nul "!DEPENDENCY_PATH!\x64" "!L_DEPENDENCIES_PATH!\x64\"
+	copy >nul "!BUILD_SCRIPT_PATH!\LICENSE" "!L_DEPENDENCIES_PATH!\"
+	copy >nul "!DEPENDENCY_PATH!\*.exe" "!L_DEPENDENCIES_PATH!\"
 )
-set INCURSIONPATH=
-set INCURSIONLIBPATH=
-
-if !ERRORLEVEL! NEQ 0 (
-    echo ERROR: 'Incursion.exe -compile' exited with error level !ERRORLEVEL!
-    goto internal_function_teardown
+( 
+    endlocal
+    exit /b
 )
-
-cd "!BUILD_PATH!"
-if not exist "run\mod\Incursion.mod" (
-    echo "ERROR: Failed building 'Incursion.mod'"
-    goto internal_function_teardown
-)
-
-if exist "!UV_PACKAGES_DIRNAME!" rmdir /S /Q "!UV_PACKAGES_DIRNAME!"
-if not exist "!UV_PACKAGES_DIRNAME!" mkdir "!UV_PACKAGES_DIRNAME!"
-
-REM The naming is important and is dynamically used to determine which files to copy.
-for %%A in (release-with-pdbs debug-with-pdbs release) do (
-    set L_ARCHIVENAME=Incursion-!UV_VERSION!
-    set L_NAME=%%A
-    echo Making '%%A' package directory
-    set L_PDBS=!L_NAME:~-4,4!
-    if "!L_NAME:~0,1!" EQU "r" (
-        set L_CONFIG=Release
-        if "!L_PDBS!" EQU "pdbs" set L_ARCHIVENAME=!L_ARCHIVENAME!-release-with-pdbs
-    ) else (
-        set L_CONFIG=Debug
-        if "!L_PDBS!" EQU "pdbs" set L_ARCHIVENAME=!L_ARCHIVENAME!-debug-with-pdbs
-    )
-    set L_NAME=!L_ARCHIVENAME!
-
-    mkdir "!UV_PACKAGES_DIRNAME!\!L_NAME!"
-    mkdir "!UV_PACKAGES_DIRNAME!\!L_NAME!\logs"
-    mkdir "!UV_PACKAGES_DIRNAME!\!L_NAME!\save"
-
-    xcopy /I /E >nul "run\mod" "!UV_PACKAGES_DIRNAME!\!L_NAME!\mod\"
-    xcopy /I /E >nul "!BUILD_SCRIPT_PATH!\fonts" "!UV_PACKAGES_DIRNAME!\!L_NAME!\fonts\"
-
-    copy >nul "!BUILD_SCRIPT_PATH!\LICENSE" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
-    copy >nul "!BUILD_SCRIPT_PATH!\Incursion.txt" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
-    copy >nul "!BUILD_SCRIPT_PATH!\Changelog.txt" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
-    copy >nul "!BUILD_SCRIPT_PATH!\README.md" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
-    
-    copy >nul "!DEPENDENCY_PATH!\libtcod\build\!L_CONFIG!\libtcod.dll" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
-    if "!L_PDBS!" EQU "pdbs" copy >nul "!DEPENDENCY_PATH!\libtcod\build\!L_CONFIG!\libtcod.pdb" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
-
-    copy >nul "!DEPENDENCY_PATH!\SDL2\VisualC\SDL\Win32\!L_CONFIG!\SDL2.dll" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
-    if "!L_PDBS!" EQU "pdbs" copy >nul "!DEPENDENCY_PATH!\SDL2\VisualC\SDL\Win32\!L_CONFIG!\SDL2.pdb" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
-    
-    if "!UV_PACKAGE_CURSES!" EQU "yes" (
-        copy >nul "Win32\!L_CONFIG!\exe_curses\Incursion.exe" "!UV_PACKAGES_DIRNAME!\!L_NAME!\IncursionCurses.exe"
-        if "!L_PDBS!" EQU "pdbs" copy >nul "Win32\!L_CONFIG!\exe_curses\Incursion.pdb" "!UV_PACKAGES_DIRNAME!\!L_NAME!\IncursionCurses.pdb"
-    )
-
-    copy >nul "Win32\!L_CONFIG!\exe_libtcod\Incursion.exe" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
-    if "!L_PDBS!" EQU "pdbs" copy >nul "Win32\!L_CONFIG!\exe_libtcod\Incursion.pdb" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
-)
-
-REM Collect the dependencies
-echo Making 'dependencies' package directory
-set "L_DEPENDENCIES_PATH=!UV_PACKAGES_DIRNAME!\dependencies"
-mkdir "!L_DEPENDENCIES_PATH!"
-xcopy /I /E  >nul "!DEPENDENCY_PATH!\include" "!L_DEPENDENCIES_PATH!\include\"
-copy >nul "!BUILD_SCRIPT_PATH!\LICENSE" "!L_DEPENDENCIES_PATH!\"
-copy >nul "!DEPENDENCY_PATH!\*.lib" "!L_DEPENDENCIES_PATH!\"
-copy >nul "!DEPENDENCY_PATH!\*.pdb" "!L_DEPENDENCIES_PATH!\"
-copy >nul "!DEPENDENCY_PATH!\*.dll" "!L_DEPENDENCIES_PATH!\"
-copy >nul "!DEPENDENCY_PATH!\*.exe" "!L_DEPENDENCIES_PATH!\"
-
-:exit_from_user_function_make_release
-goto !V_LABEL_RETURN_ufmr!
 
 REM --- FUNCTION: user_function_package_release ------------------------------
 :user_function_package_release
-set V_LABEL_RETURN_ufpr=!V_LABEL_RETURN!
+(   
+    setlocal EnableDelayedExpansion
 
-set V_LABEL_RETURN=return_to_user_function_package_release1
-goto user_function_detect_incursion_version
-:return_to_user_function_package_release1
+	call :user_function_detect_incursion_version UV_VERSION
 
-cd "!BUILD_PATH!"
+	cd "!BUILD_PATH!"
 
-REM Verify that the directories exist.
-set /A L_FLAG=0
-for %%A in (release-with-pdbs debug-with-pdbs release) do (
-    set L_ARCHIVENAME=Incursion-!UV_VERSION!
-    set L_NAME=%%A
-    set L_PDBS=!L_NAME:~-4,4!
-    if "!L_PDBS!" EQU "pdbs" (
-        if "!L_NAME:~0,1!" EQU "r" (
-            set L_ARCHIVENAME=!L_ARCHIVENAME!-release-with-pdbs
-        ) else (
-            set L_ARCHIVENAME=!L_ARCHIVENAME!-debug-with-pdbs
-        )
-    )
+	REM Verify that the directories exist.
+	set /A L_FLAG=0
+	for %%A in (release-with-pdbs debug-with-pdbs release) do (
+		set L_ARCHIVENAME=Incursion-!UV_VERSION!
+		set L_NAME=%%A
+		set L_PDBS=!L_NAME:~-4,4!
+		if "!L_PDBS!" EQU "pdbs" (
+			if "!L_NAME:~0,1!" EQU "r" (
+				set L_ARCHIVENAME=!L_ARCHIVENAME!-release-with-pdbs
+			) else (
+				set L_ARCHIVENAME=!L_ARCHIVENAME!-debug-with-pdbs
+			)
+		)
 
-    if not exist "!UV_PACKAGES_PATH!\!L_ARCHIVENAME!" (
-        echo ERROR: Release directory '!L_ARCHIVENAME!' does not exist.
-        set /A L_FLAG=1
-    )
+		if not exist "!UV_PACKAGES_PATH!\!L_ARCHIVENAME!" (
+			echo ERROR: Release directory '!L_ARCHIVENAME!' does not exist.
+			set /A L_FLAG=1
+		)
+	)
+	if !L_FLAG! EQU 1 (
+		echo Aborting packaging process.
+		goto internal_function_teardown
+	)
+
+	REM Archive
+	cd "!UV_PACKAGES_PATH!"
+	for %%A in (release-with-pdbs debug-with-pdbs release) do (
+		set L_ARCHIVENAME=Incursion-!UV_VERSION!
+		set L_NAME=%%A
+		set L_PDBS=!L_NAME:~-4,4!
+		if "!L_PDBS!" EQU "pdbs" (
+			if "!L_NAME:~0,1!" EQU "r" (
+				set L_ARCHIVENAME=!L_ARCHIVENAME!-release-with-pdbs
+			) else (
+				set L_ARCHIVENAME=!L_ARCHIVENAME!-debug-with-pdbs
+			)
+		)
+
+		!7Z_EXE! a -r -t7z -mx9 !L_ARCHIVENAME!.7z !L_ARCHIVENAME!
+	)
+
+	REM Archive the dependencies collection.
+	for /f "tokens=2-4 delims=/ " %%a in ('date /t') do (set L_DATE=%%c%%a%%b)
+	!7Z_EXE! a -r -t7z -mx9 build_dependencies-!L_DATE!-only-needed-for-development.7z dependencies\*
 )
-if !L_FLAG! EQU 1 (
-    echo Aborting packaging process.
-    goto internal_function_teardown
+( 
+    endlocal
+	cd "!BUILD_PATH!"
+    exit /b
 )
-
-REM Archive
-cd "!UV_PACKAGES_PATH!"
-for %%A in (release-with-pdbs debug-with-pdbs release) do (
-    set L_ARCHIVENAME=Incursion-!UV_VERSION!
-    set L_NAME=%%A
-    set L_PDBS=!L_NAME:~-4,4!
-    if "!L_PDBS!" EQU "pdbs" (
-        if "!L_NAME:~0,1!" EQU "r" (
-            set L_ARCHIVENAME=!L_ARCHIVENAME!-release-with-pdbs
-        ) else (
-            set L_ARCHIVENAME=!L_ARCHIVENAME!-debug-with-pdbs
-        )
-    )
-
-    !7Z_EXE! a -r -t7z -mx9 !L_ARCHIVENAME!.7z !L_ARCHIVENAME!
-)
-
-REM Archive the dependencies collection.
-for /f "tokens=2-4 delims=/ " %%a in ('date /t') do (set L_DATE=%%c%%a%%b)
-!7Z_EXE! a -r -t7z -mx9 build_dependencies-!L_DATE!-only-needed-for-development.7z dependencies\*
-
-cd "!BUILD_PATH!"
-
-:exit_from_user_function_package_release
-goto !V_LABEL_RETURN_ufpr!
 
 REM --- FUNCTION: user_function_teardown -------------------------------------
 :user_function_teardown
@@ -543,8 +602,8 @@ if not defined 7Z_EXE (
     )
 )
 
-if not exist "%DEPENDENCY_PATH%" mkdir %DEPENDENCY_PATH%
-cd %DEPENDENCY_PATH%
+if not exist "%DEPENDENCY_PATH%" mkdir "%DEPENDENCY_PATH%"
+cd "%DEPENDENCY_PATH%"
 
 REM These variables are used to index the LINKS array entries.
 REM
@@ -568,51 +627,89 @@ goto user_function_setup
 
 REM --- FUNCTION: internal_function_main -------------------------------------
 :internal_function_main
-REM input argument:  V_LINKS   - The user defined links.
+REM input argument:  V_LINKS     - The user defined links.
+REM input argument:  UV_COMMANDS - The user defined script arguments / function handlers.
+
+REM Unit commands.
+set V_COMMANDS[fetch-dependencies]=fetch-dependencies
+set V_COMMANDS[prepare-dependencies]=prepare-dependencies
+set V_COMMANDS[build-project]=build-project
+set V_COMMANDS[make-release]=make-release
+set V_COMMANDS[package-release]=package-release
+REM Composite commands.
+set V_COMMANDS[dependencies]=dependencies
+set V_COMMANDS[release]=release
+
+REM Unit commands.
+set V_COMMANDS[-fd]=fetch-dependencies
+set V_COMMANDS[-pd]=prepare-dependencies
+set V_COMMANDS[-bp]=build-project
+set V_COMMANDS[-mr]=make-release
+set V_COMMANDS[-pr]=package-release
+REM Composite commands.
+set V_COMMANDS[-d]=dependencies
+set V_COMMANDS[-r]=release
+
+REM Iterable list of unit command names.
+set V_FUNCTION_COMMANDS=fetch-dependencies prepare-dependencies make-release package-release build-project
+
+REM Map unit command names to function names.
+set V_FUNCTIONS[fetch-dependencies]=internal_function_fetch_dependencies
+set V_FUNCTIONS[prepare-dependencies]=internal_function_prepare_dependencies
+set V_FUNCTIONS[make-release]=internal_function_make_release
+set V_FUNCTIONS[package-release]=internal_function_package_release
+set V_FUNCTIONS[build-project]=internal_function_build_project
+
+REM Add in the user commands.
+call :internal_func_index_user_commands
 
 if "%1" EQU "" (
     echo Usage: !BUILD_SCRIPT_FILENAME! [OPTION]
     echo.
     echo     -fd, fetch-dependencies    download if necessary
     echo     -pd, prepare-dependencies  extract and/or build, ready for project build
+    echo     -bp, build-project         build this project using the dependencies
     echo     -mr, make-release          construct release directory for packaging
     echo     -pr, package-release       compress and archive release directory
     echo.
     echo     -d, dependencies           fetch and prepare the dependencies
-    echo     -p, project                build this project using the dependencies
     echo     -r, release                construct/compress/archive built project
-    echo.
+	REM List user defined commands last.
+	if "!V_USER_COMMANDS!" NEQ "" (
+	echo.
+		for %%C in (!V_USER_COMMANDS!) do (
+			set V_LONG=%%C
+			set V_DESC=!UV_COMMAND_DESCS[%%C]!
+			set V_SHORT=!V_USER_COMMAND_SHORT_NAME[%%C]!
+			REM Everything following up to the echo is formatting the output line.
+			call :internal_function_strlen V_DESCLEN V_DESC
+			call :internal_function_strlen V_SHORTLEN V_SHORT
+			call :internal_function_strlen V_LONGLEN V_LONG
+			REM 27 is the width of the composite argument name column
+			set /A "V_SPACE_USED=!V_SHORTLEN!+!V_LONGLEN!"
+			set /A "V_SPACE_WASTED=27-2-!V_SPACE_USED!"
+			set V_SPACER=
+			for /L %%I in (1,1,!V_SPACE_WASTED!) do set V_SPACER= !V_SPACER!
+	echo     !V_SHORT!, %%C!V_SPACER!!V_DESC!
+		)
+	)
     if not defined HG_EXE (
-    echo WARNING: 'hg.exe' cannot be located.  Mercurial may not be installed.
-    echo   This script can operate without it, but that mode is less supported.
-    echo   If Mercurial is not in PATH, you can set HG_EXE to full filename of 'hg.exe'
-    echo.
+	echo.
+	echo WARNING: 'hg.exe' cannot be located.  Mercurial may not be installed.
+	echo   This script can operate without it, but that mode is less supported.
+	echo   If Mercurial is not in PATH, you can set HG_EXE to full filename of 'hg.exe'
     )
     if not defined GIT_EXE (
-    echo WARNING: 'git.exe' cannot be located.  Git may not be installed.
-    echo   This script can operate without it, but that mode is less supported.
-    echo   If Git is not in PATH, you can set GIT_EXE to full filename of 'git.exe'
-    echo.
+	echo.
+	echo WARNING: 'git.exe' cannot be located.  Git may not be installed.
+	echo   This script can operate without it, but that mode is less supported.
+	echo   If Git is not in PATH, you can set GIT_EXE to full filename of 'git.exe'
     )
 
     goto internal_function_teardown
 )
 
-set V_COMMANDS[fetch-dependencies]=fetch-dependencies
-set V_COMMANDS[prepare-dependencies]=prepare-dependencies
-set V_COMMANDS[make-release]=make-release
-set V_COMMANDS[package-release]=package-release
-set V_COMMANDS[dependencies]=dependencies
-set V_COMMANDS[project]=project
-set V_COMMANDS[release]=release
-set V_COMMANDS[-fd]=fetch-dependencies
-set V_COMMANDS[-pd]=prepare-dependencies
-set V_COMMANDS[-mr]=make-release
-set V_COMMANDS[-pr]=package-release
-set V_COMMANDS[-d]=dependencies
-set V_COMMANDS[-p]=project
-set V_COMMANDS[-r]=release
-
+REM Compare the user given arguments to those we have indexed.
 :parse_args
 if "%~1" EQU "" goto parse_args_end
 set L_COMMAND=!V_COMMANDS[%~1]!
@@ -639,67 +736,110 @@ if "!V_COMMAND[release]!" EQU "yes" (
     set V_COMMAND[package-release]=yes
 )
 
-REM Do the selected general commands.
-if "!V_COMMAND[fetch-dependencies]!" EQU "yes" (
-    set V_LABEL_RETURN=return_to_internal_function_main_FD
-    goto internal_function_fetch_dependencies
+REM Set up the user command handlers.
+for %%C in (!V_USER_COMMANDS!) do (
+	if "!V_COMMAND[%%C]!" NEQ "" (
+		set V_LINK_KEY=!V_USER_COMMAND_LINK[%%C]!-!V_USER_COMMAND_WHEN[%%C]!
+		set V_LINK_VALUE=!V_USER_COMMAND_FUNCTION[%%C]!
+		if "!V_COMMAND_LINK[%V_LINK_KEY%]!" EQU "" (
+			set V_COMMAND_LINK[!V_LINK_KEY!]=!V_LINK_VALUE!
+		) else (
+			set V_COMMAND_LINK[!V_LINK_KEY!]=!V_COMMAND_LINK[%V_LINK_KEY%]! !V_LINK_VALUE!
+		)
+	)
 )
-:return_to_internal_function_main_FD
 
-if "!V_COMMAND[prepare-dependencies]!" EQU "yes" (
-    set V_LABEL_RETURN=return_to_internal_function_main_PD
-    goto internal_function_prepare_dependencies
+REM Handle the internal arguments and linked user command handlers.
+for %%C in (!V_FUNCTION_COMMANDS!) do (
+	REM Call linked user command handlers for before this internal argument stage.
+	for %%L in (!V_COMMAND_LINK[%%C-before]!) do call :%%L
+	REM If an internal argument is given, call it's associated function.
+	if "!V_COMMAND[%%C]!" EQU "yes" call :!V_FUNCTIONS[%%C]!
+	REM Call linked user command handlers for after this internal argument stage.
+	for %%L in (!V_COMMAND_LINK[%%C-after]!) do call :%%L
 )
-:return_to_internal_function_main_PD
-
-if "!V_COMMAND[make-release]!" EQU "yes" (
-    REM TODO TODO
-    set V_LABEL_RETURN=return_to_internal_function_main_MR
-    goto internal_function_make_release
-)
-:return_to_internal_function_main_MR
-
-if "!V_COMMAND[package-release]!" EQU "yes" (
-    REM TODO TODO
-    set V_LABEL_RETURN=return_to_internal_function_main_PR
-    goto internal_function_package_release
-)
-:return_to_internal_function_main_PR
 
 goto internal_function_teardown
 
+REM --- FUNCTION: internal_func_index_user_commands -----------------------------
+:internal_func_index_user_commands
+
+set /A IDX_UV=0
+:loop_uv_commands
+
+set V_UV_COMMAND_DEFN=!UV_COMMANDS[%IDX_UV%]!
+if "!V_UV_COMMAND_DEFN!" EQU "" goto loop_uv_commands_break
+call :internal_func_index_user_command  !UV_COMMANDS[%IDX_UV%]!
+set /A IDX_UV=!IDX_UV!+1
+goto loop_uv_commands
+
+:loop_uv_commands_break
+goto:eof REM return
+
+REM --- FUNCTION: internal_func_index_user_command ------------------------------
+:internal_func_index_user_command
+REM %1: long argument
+REM %2: short argument
+REM %3: internal long argument
+REM %4: whether to handle <before|after> internal long argument
+REM %5: user function name to call
+
+REM Detect if the user argument clashes with an internal one.
+if "!V_COMMANDS[%1]!" NEQ "" (
+	echo ERROR.. User command name %1 not suitable.
+	goto internal_function_exit	
+)
+
+REM Enter the user arguments as valid arguments.
+set V_COMMANDS[%1]=%1
+set V_COMMANDS[%2]=%1
+
+REM Construct an iterable list of user argument names.
+if "!V_USER_COMMANDS!" EQU "" (
+	set V_USER_COMMANDS=%1
+) else (
+	set V_USER_COMMANDS=!V_USER_COMMANDS! %1
+)
+
+REM Index the other pieces of information to the given user command name.
+set V_USER_COMMAND_LINK[%1]=%3
+set V_USER_COMMAND_WHEN[%1]=%4
+set V_USER_COMMAND_FUNCTION[%1]=%5
+set V_USER_COMMAND_SHORT_NAME[%1]=%2
+
+goto:eof REM return
+
+REM --- FUNCTION: internal_function_build_project ----------------------------
+:internal_function_build_project
+
+cd "!BUILD_PATH!"
+call :user_function_build_project
+
+goto:eof REM return
+
 REM --- FUNCTION: internal_function_make_release -----------------------------
 :internal_function_make_release
-set V_LABEL_RETURN_ifmr=!V_LABEL_RETURN!
 
-cd %DEPENDENCY_PATH%
-set V_LABEL_RETURN=return_to_internal_function_make_release
-goto user_function_make_release
-:return_to_internal_function_make_release
+cd "%DEPENDENCY_PATH%"
+call :user_function_make_release
 
-:exit_from_internal_function_make_release
-goto !V_LABEL_RETURN_ifmr!
+goto:eof REM return
 
 REM --- FUNCTION: internal_function_package_release --------------------------
 :internal_function_package_release
-set V_LABEL_RETURN_ifpr=!V_LABEL_RETURN!
 
 if "!7Z_EXE!" EQU "" (
     echo ERROR: Packaging a release requires 7zip to be installed.
     goto internal_function_teardown
 )
 
-set V_LABEL_RETURN=return_to_internal_function_package_release
-goto user_function_package_release
-:return_to_internal_function_package_release
+call :user_function_package_release
 
-:exit_from_internal_function_package_release
-goto !V_LABEL_RETURN_ifpr!
+goto:eof REM return
 
 REM --- FUNCTION: internal_function_prepare_dependencies ---------------------
 :internal_function_prepare_dependencies
 REM input argument:  V_LINKS   - The user defined links.
-set V_LABEL_RETURN_ifpds=!V_LABEL_RETURN!
 
 set /A IDX_PDS=0
 :loop_internal_function_prepare_dependencies
@@ -707,31 +847,23 @@ set V_LINK=!LINKS[%IDX_PDS%]!
 if "!V_LINK!" EQU "" goto loop_internal_function_prepare_dependencies_break
 
 REM function call: V_LINK_PARTS = split_link(V_LINK)
-set V_LABEL_RETURN=return_to_internal_function_prepare_dependencies1
-goto internal_function_split_link
-:return_to_internal_function_prepare_dependencies1
+call :internal_function_split_link
 
 REM function call: prepare_dependency(V_LINK_PARTS)
-set V_LABEL_RETURN=return_to_internal_function_prepare_dependencies2
-goto internal_function_prepare_dependency
-:return_to_internal_function_prepare_dependencies2
+call :internal_function_prepare_dependency
 
 set /A IDX_PDS=!IDX_PDS!+1
 goto loop_internal_function_prepare_dependencies
 
 :loop_internal_function_prepare_dependencies_break
-set V_LABEL_RETURN=exit_from_internal_function_prepare_dependencies
-goto user_function_prepare_dependencies
+call :user_function_prepare_dependencies
 
-:exit_from_internal_function_prepare_dependencies
-goto !V_LABEL_RETURN_ifpds!
+goto:eof REM return
 
 REM --- FUNCTION: internal_function_prepare_dependency -----------------------
 :internal_function_prepare_dependency
 REM input argument:  V_LINK_PARTS   - The processed link parts to make use of.
-REM input argument:  V_LABEL_RETURN - The name of the label to return to when finished.
 REM output argument: V_LINK_PARTS   - The array of elements that make up the given link text.
-set V_LABEL_RETURN_iffd=!V_LABEL_RETURN!
 
 REM               0    1     2      3          4          5
 REM HTTP link:   HTTP <url> <NAME> <FILENAME>
@@ -742,8 +874,8 @@ REM ............ Attempt 2: Download <ZIPDLURL><REVISION>.zip as a normal link.
 if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
     REM Environment variables for powershell script.
     set fn=Archive-Extract
-    set fnp0=%DEPENDENCY_PATH%\!V_LINK_PARTS[%HTTP_FILENAME%]!
-    set fnp1=%DEPENDENCY_PATH%
+    set "fnp0=%DEPENDENCY_PATH%\!V_LINK_PARTS[%HTTP_FILENAME%]!"
+    set "fnp1=%DEPENDENCY_PATH%"
     REM Environment variables for function 'user_function_prepare_dependency'.
     set V_DIRNAME=
     set V_SKIPPED=no
@@ -770,19 +902,14 @@ if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
     set V_DIRNAME=!V_LINK_PARTS[%VCS_NAME%]!
     REM Stop errors from nothing being here.
 )
-set V_LABEL_RETURN=return_to_internal_function_prepare_dependency
-goto user_function_prepare_dependency
-:return_to_internal_function_prepare_dependency
+call :user_function_prepare_dependency
 cd %DEPENDENCY_PATH%
 
-:exit_from_internal_function_prepare_dependency
-goto !V_LABEL_RETURN_iffd!
+goto:eof REM return
 
 REM --- FUNCTION: internal_function_fetch_dependencies --------------------------
 :internal_function_fetch_dependencies
 REM input argument:  V_LINKS        - The processed link parts to make use of.
-REM input argument:  V_LABEL_RETURN - The name of the label to return to when finished.
-set V_LABEL_RETURN_ifdls=!V_LABEL_RETURN!
 
 set /A V_IDX_FD=0
 :loop_internal_function_fetch_dependencies
@@ -790,28 +917,25 @@ set V_LINK=!LINKS[%V_IDX_FD%]!
 if "!V_LINK!" EQU "" goto exit_from_internal_function_fetch_dependencies
 
 REM function call: V_LINK_PARTS = split_link(V_LINK)
-set V_LABEL_RETURN=return_to_internal_function_fetch_dependencies1
-goto internal_function_split_link
-:return_to_internal_function_fetch_dependencies1
+call :internal_function_split_link
 
 REM function call: download_link(V_LINK_PARTS)
-set V_LABEL_RETURN=return_to_internal_function_fetch_dependencies2
-goto internal_function_fetch_dependency
-:return_to_internal_function_fetch_dependencies2
+call :internal_function_fetch_dependency
 
 set /A V_IDX_FD=!V_IDX_FD!+1
 goto loop_internal_function_fetch_dependencies
 
 :exit_from_internal_function_fetch_dependencies
-goto !V_LABEL_RETURN_ifdls!
+
+call :user_function_fetch_dependencies
+
+goto:eof REM return
 
 REM --- FUNCTION: internal_function_fetch_dependency ---------------------------
 :internal_function_fetch_dependency
 REM input argument:  V_LINK_PARTS   - The processed link parts to make use of.
 REM input argument:  V_IDX_FD       - The index into the links array of the current dependency.
-REM input argument:  V_LABEL_RETURN - The name of the label to return to when finished.
 REM output argument: V_LINK_PARTS   - The array of elements that make up the given link text.
-set V_LABEL_RETURN_iffd=!V_LABEL_RETURN!
 
 :loop_internal_function_fetch_dependency
 cd %DEPENDENCY_PATH%
@@ -911,9 +1035,7 @@ if not exist "!V_LINK_PARTS[%HTTP_NAME%]!" (
 )
 set /A L_ATTEMPTS=!L_ATTEMPTS!+1
 
-set V_LABEL_RETURN=return_to_internal_function_fetch_dependency1
-goto internal_function_checksum
-:return_to_internal_function_fetch_dependency1
+call :internal_function_checksum
 
 if "!V_PASSED!" EQU "yes" (
     echo .. MD5 checksum [!V_CHECKSUM!] correct
@@ -936,17 +1058,15 @@ if "!V_PASSED!" EQU "yes" (
 )
 
 :exit_from_internal_function_fetch_dependency
-goto !V_LABEL_RETURN_iffd!
+goto:eof REM return
 
 REM --- FUNCTION: internal_function_checksum ---------------------------------
 
 :internal_function_checksum
 REM input argument:  V_LINK_PARTS   - The array of elements relating to the link in question.
-REM input argument:  V_LABEL_RETURN - The name of the label to return to when finished.
 REM output argument: V_CHECKSUM     - The calculated checksum for the given file.
 REM output argument: V_PASSED       - If there is one to match, "yes" for correct and "no" for incorrect.
 REM                                   If there is not one to match, "".
-set V_LABEL_RETURN_ifc=!V_LABEL_RETURN!
 
 set fn=MD5-Checksum
 set fnp0=!V_LINK_PARTS[%HTTP_FILENAME%]!
@@ -974,20 +1094,16 @@ for /F "usebackq tokens=*" %%i in (`more "%BUILD_SCRIPT_PATH%%BUILD_SCRIPT_FILEN
 )
 
 :exit_from_internal_function_checksum
-goto !V_LABEL_RETURN_ifc!
+goto:eof REM return
 
 REM --- FUNCTION: internal_function_verify_link ------------------------------
 
 :internal_function_verify_link
 REM input argument:  V_LINK         - The link text to verify.
-REM input argument:  V_LABEL_RETURN - The name of the label to return to when finished.
 REM output argument: V_LINK_PARTS   - The array of elements that make up the given link text.
-set V_LABEL_RETURN_ifvl=!V_LABEL_RETURN!
 
 REM function call: V_LINK_PARTS = split_link(V_LINK)
-set V_LABEL_RETURN=return_to_internal_function_verify_link
-goto internal_function_split_link
-:return_to_internal_function_verify_link
+call :internal_function_split_link
 
 if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
     if /I "!V_LINK_PARTS[%HTTP_URL%]:~0,4!" NEQ "http" goto internal_function_verify_link__valid
@@ -1001,14 +1117,12 @@ echo Invalid link: %V_LINK%
 goto internal_function_exit
 
 :internal_function_verify_link__valid
-goto !V_LABEL_RETURN_ifvl!
+goto:eof REM return
 
 REM --- FUNCTION: internal_function_split_link -------------------------------
 :internal_function_split_link
 REM input argument:  V_LINK         - The link text to verify.
-REM input argument:  V_LABEL_RETURN - The name of the label to return to when finished.
 REM output argument: V_LINK_PARTS   - The array of elements that make up the given link text.
-set V_LABEL_RETURN_ifsl=!V_LABEL_RETURN!
 
 set V_LINK_PARTS[%LINK_CLASSIFIER%]=
 for /F "tokens=1,2,3,4,5,6" %%A in ("!V_LINK!") do (
@@ -1018,8 +1132,10 @@ for /F "tokens=1,2,3,4,5,6" %%A in ("!V_LINK!") do (
         set V_LINK_PARTS[%HTTP_URL%]=!V_LINK_PARTS[%%A]!
 
         REM .. V_LINK_PARTS[%HTTP_NAME%], V_LINK_PARTS[%HTTP_FILENAME%] = get_urlfilename(V_LINK)
-        set V_LABEL_RETURN=return_to_internal_function_split_link
-        goto internal_function_get_urlfilename
+        call :internal_function_get_urlfilename
+		
+		set V_LINK_PARTS[%HTTP_NAME%]=!V_RESULT!
+		set V_LINK_PARTS[%HTTP_FILENAME%]=!V_RESULT!
     ) else (
         set V_LINK_PARTS[%LINK_CLASSIFIER%]=%%A
         set V_LINK_PARTS[%VCS_SYSTEM%]=%%B
@@ -1027,23 +1143,15 @@ for /F "tokens=1,2,3,4,5,6" %%A in ("!V_LINK!") do (
         set V_LINK_PARTS[%VCS_REVISION%]=%%D
         set V_LINK_PARTS[%VCS_CLONEURL%]=%%E
         set V_LINK_PARTS[%VCS_ZIPDLURL%]=%%F
-        goto exit_from_internal_function_split_link
     )
 )
 
-:return_to_internal_function_split_link
-set V_LINK_PARTS[%HTTP_NAME%]=!V_RESULT!
-set V_LINK_PARTS[%HTTP_FILENAME%]=!V_RESULT!
+goto:eof REM return
 
-:exit_from_internal_function_split_link
-goto !V_LABEL_RETURN_ifsl!
-
-REM --- FUNCTION: internal_function_split_link -------------------------------
+REM --- FUNCTION: internal_function_get_urlfilename -------------------------------
 :internal_function_get_urlfilename
 REM input argument:  V_LINK         - The link text to verify.
-REM input argument:  V_LABEL_RETURN - The name of the label to return to when finished.
 REM output argument: V_RESULT       - The base filename the URL exposes for download.
-set V_LABEL_RETURN_ifgu=!V_LABEL_RETURN!
 
 set L_LINK=!V_LINK!
 :loop_internal_function_get_urlfilename_1
@@ -1063,7 +1171,27 @@ goto loop_internal_function_get_urlfilename_1
 REM We have the trailing string after the last path separator, or the file name.
 set V_RESULT=!L_SUBSTRING!
 
-goto !V_LABEL_RETURN_ifgu!
+goto:eof REM return
+
+REM --- FUNCTION: internal_function_strlen -------------------------------
+REM Taken from http://stackoverflow.com/a/5841587/3954464
+:internal_function_strlen <resultVar> <stringVar>
+(   
+    setlocal EnableDelayedExpansion
+    set "s=!%~2!#"
+    set "len=0"
+    for %%P in (4096 2048 1024 512 256 128 64 32 16 8 4 2 1) do (
+        if "!s:~%%P,1!" NEQ "" ( 
+            set /a "len+=%%P"
+            set "s=!s:~%%P!"
+        )
+    )
+)
+( 
+    endlocal
+    set "%~1=%len%"
+    exit /b
+)
 
 REM --- Everything is done, exit back to the user ----------------------------
 
@@ -1073,7 +1201,7 @@ goto user_function_teardown
 
 :internal_function_exit
 REM Leave the user in the directory they were in to begin with.
-cd %BUILD_SCRIPT_PATH%
+cd "%BUILD_SCRIPT_PATH%"
 
 REM endlocal: Ensure environment variables are left the same as when the script started.
 REM exit /b:  Exit the script, but do not close any DOS window it was run from within.

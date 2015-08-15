@@ -1,4 +1,5 @@
-/* Wlibtcod.CPP -- Copyright (c) 2014 Richard Tew
+/* Wlibtcod.CPP -- See the Incursion LICENSE file for copyright information.
+
    Derived from WALLEGRO.CPP -- Copyright (c) 1999-2003 Julian Mensch
      Contains the class definition and member functions for the
    libtcodTerm class, which is the only part of Incursion which

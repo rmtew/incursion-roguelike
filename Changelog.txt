@@ -1,4 +1,7 @@
-Incursion (open source) 0.6.9Y19: 2015-03-??
+Incursion (open source) 0.6.9Y20: 2015-??-??
+* https://bitbucket.org/rmtew/incursion-roguelike/issues/246/: The build.bat script has been upgraded significantly. It now supports 'build-project'/'-bp' which replaces the old never implemented 'project'/'-p'.  And it also supports user functions, which are dynamically handled along with the standard ones, and it's used for 'compile-scripts'/'-cs' which can of course be used to compile 'Incursion.mod'.  This might currently be the only way to compile the scripts.
+
+Incursion (open source) 0.6.9Y19: 2015-08-14
 * https://bitbucket.org/rmtew/incursion-roguelike/issues/207/: Incursion domain names finished transferring from Julian.
 * https://bitbucket.org/rmtew/incursion-roguelike/issues/209/: Make a standalone module compiler.  This is as done as it can be, and it is now possible to invoke the debug Incursion executable with the '-compile' argument to get it to build the default core module 'main.irc'.  '-compile <modulename.irc>' can be used instead to build other modules.
 * https://bitbucket.org/rmtew/incursion-roguelike/issues/217/: When Google Breakpad minidumping was first added, it was promptly removed when people started complaining that Error() would crash trying to do a minidump.  Now in release builds, which are the only ones with Breakpad support, the Error() function allows the user to choose to try and drop a minidump.
@@ -9,6 +12,7 @@ Incursion (open source) 0.6.9Y19: 2015-03-??
 * https://bitbucket.org/rmtew/incursion-roguelike/issues/236/: Moving between levels crashes when an illusion stops as days pass and then the UI is refreshed but the 'between levels' coordinates of -1, -1 choke everything that consumes them.  Reported by Esran Zarnath.
 * https://bitbucket.org/rmtew/incursion-roguelike/issues/239/: Secondary skill kit bonuses should be one per item type, not one per each of item type held by player.  This is not ideal as there may be multiple different visual item types for instance, but at least it no longer exploitable by holding 20 viewing lenses.
 * https://bitbucket.org/rmtew/incursion-roguelike/issues/240/: Your best type of rope in your inventory should add a given bonus to climbing attempts.  However, the wrong value is looked up and all ropes give +2 bonus (which is less than any rope bonus).
+* https://bitbucket.org/rmtew/incursion-roguelike/issues/243/: Remove reference to Julian, and feedback on game design.  Reported by Dave Duckett.
 * Spelling fix: ressurrection/ressurection -> resurrection.
 * Documented script constants, noting which were unused.  These are used for dungeon creation, defining how gods interact with players, and more.
 

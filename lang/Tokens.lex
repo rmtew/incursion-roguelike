@@ -1,7 +1,8 @@
 %x com
 %x string
 %{
-/* TOKENS.LEX -- Copyright (c) 1999-2003 Julian Mensch
+/* TOKENS.LEX -- See the Incursion LICENSE file for copyright information.
+
      Contains the lexical analyzer for the IncursionScript resource
 	 compiler. Designed to be fed into FLex (a GNU Lex clone) to produce
 	 tokens.cpp.

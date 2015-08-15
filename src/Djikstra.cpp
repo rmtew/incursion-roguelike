@@ -1,4 +1,5 @@
-/* DJIKSTRA.CPP -- Copyright (c) 1999-2003 Julian Mensch
+/* DJIKSTRA.CPP -- See the Incursion LICENSE file for copyright information.
+
      An implementation of Djikstra's algorithm used for the
    running code, but available for any other (AI?) purposes
    that it might be needed as well.

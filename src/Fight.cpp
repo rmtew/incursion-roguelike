@@ -1,4 +1,5 @@
-/* FIGHT.CPP -- Copyright 1999-2003 (c) Julian Mensch
+/* FIGHT.CPP -- See the Incursion LICENSE file for copyright information.
+
      Massive file. All of the functions related to direct melee
    and missile combat are here. (Attack spells are handled in
    Magic.Cpp).

@@ -1,4 +1,5 @@
-/* DEBUG.CPP -- Copyright (c) 1999-2003 Julian Mensch
+/* DEBUG.CPP -- See the Incursion LICENSE file for copyright information.
+
      Implements the wizard mode functions and options, along with
    all other code used explicitly for debugging purposes.
 

@@ -1,4 +1,5 @@
-/* MANAGERS.CPP -- Copyright (c) 1999-2003 Julian Mensch
+/* MANAGERS.CPP -- See the Incursion LICENSE file for copyright information.
+
      Includes the higher-level GUI functions for a TextTerm,
    including the Character Sheet and Managers (Spell Manager,
    Skill Manager, Inventory Manager, Barter Manager, Option

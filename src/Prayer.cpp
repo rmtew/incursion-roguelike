@@ -1,4 +1,5 @@
-/* PRAYER.CPP -- Copyright (c) 1999-2003 Julian Mensch
+/* PRAYER.CPP -- See the Incursion LICENSE file for copyright information.
+
      Includes all of the code for prayer, sacrifice, divine
    intervention, divine blessings, crowning, etc. */
    

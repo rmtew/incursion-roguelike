@@ -1,4 +1,5 @@
-/* RES.CPP -- Copyright (c) 1999-2003 Julian Mensch
+/* RES.CPP -- See the Incursion LICENSE file for copyright information.
+
      Implements the resource system, and the code used to change 
    resource IDs (rID) into pointers to the relevant derived type 
    of Resource object. Also, code for selecting a random resource

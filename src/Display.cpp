@@ -1,4 +1,5 @@
-/* DISPLAY.CPP -- Copyright (c) 1999-2003 Julian Mensch
+/* DISPLAY.CPP -- See the Incursion LICENSE file for copyright information.
+
      Includes all functions governing the placement of Things
    on a Map, and moving them about once they're placed. Also, 
    miscellaneous Map functions that do not relate to dungeon 

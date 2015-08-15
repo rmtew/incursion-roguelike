@@ -1,4 +1,5 @@
-/* Wcurses.CPP -- Copyright (c) 2015 Richard Tew
+/* Wcurses.CPP -- See the Incursion LICENSE file for copyright information.
+
    Derived from WALLEGRO.CPP -- Copyright (c) 1999-2003 Julian Mensch
      Contains the class definition and member functions for the
    cursesTerm class, which is the only part of Incursion which

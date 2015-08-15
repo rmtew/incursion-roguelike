@@ -1,4 +1,6 @@
 /*
+  See the Incursion LICENSE file for copyright information.
+
  * ww: Revised Incursion Targeting System ... 
  */
 

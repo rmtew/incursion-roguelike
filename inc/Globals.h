@@ -1,4 +1,5 @@
-/* GLOBALS.H -- Copyright (c) 1999-2003 Julian Mensch
+/* See the Incursion LICENSE file for copyright information.
+
      This file contains declarations for all of the global
    variables and functions used in Incursion. 
 */

@@ -1,4 +1,5 @@
-/* ANNOT.CPP -- Copyright 1999-2003 (c) Julian Mensch
+/* ANNOT.CPP -- See the Incursion LICENSE file for copyright information.
+
      Contains all of the code and functions for creating and
    manipulating resource annotations, including dungeon design
    constant lists, race and monster equipment lists, map tile

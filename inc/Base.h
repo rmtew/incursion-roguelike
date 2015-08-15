@@ -1,4 +1,5 @@
-/* BASE.H -- Copyright (c) 1999-2003 Julian Mensch
+/* BASE.H -- See the Incursion LICENSE file for copyright information.
+
      This file contains class definitions for Array, NArray,
    OArray, Dice, String, MVal, Rect, Dictionary, Fraction,
    Object and Registry. 

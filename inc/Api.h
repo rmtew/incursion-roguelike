@@ -1,4 +1,5 @@
-/* API.H -- Copyright (c) 1999-2003 Julian Mensch
+/* API.H -- See the Incursion LICENSE file for copyright information.
+
      This file contains declarations for all of the publically
    accessible IncursionScript API calls and variables. */
 

@@ -1,5 +1,6 @@
 #ifdef DEBUG
-/* RCOMP.CPP -- Copyright (c) 1999-2003 Julian Mensch
+/* RCOMP.CPP -- See the Incursion LICENSE file for copyright information.
+
      Contains all the support and wrapper functions for the
    IncursionScript resource compiler; the bulk of the actual
    compiler is built into the ACCENT parser file Grammar.Acc.

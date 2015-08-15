@@ -22,7 +22,33 @@
 	  <div class="mainheader"><a name="covered-genres">News</a></div>
 	  <div class="mainbody">
 		<p>
-		2015-04-15: <a name="20150415">A licensing update from Julian.</a>
+		<u>2015-08-15: <a name="20150815">Incursion 0.6.9Y19 released.</a></u>
+		</p>
+		<p>
+		An updated download is available <a href="https://bitbucket.org/rmtew/incursion-roguelike/downloads]on bitbucket</a>: 0.6.9Y19.
+		</p>
+		<p>
+		Changes:
+		<ul>
+		<li><a href="https://bitbucket.org/rmtew/incursion-roguelike/issue/207/">Issue 207</a>: Incursion domain names finished transferring from Julian.</li>
+		<li><a href="https://bitbucket.org/rmtew/incursion-roguelike/issue/209/">Issue 209</a>: Make a standalone module compiler.  This is as done as it can be, and it is now possible to invoke the debug Incursion executable with the '-compile' argument to get it to build the default core module 'main.irc'.  '-compile <modulename.irc>' can be used instead to build other modules.</li>
+		<li><a href="https://bitbucket.org/rmtew/incursion-roguelike/issue/217/">Issue 217</a>: When Google Breakpad minidumping was first added, it was promptly removed when people started complaining that Error() would crash trying to do a minidump.  Now in release builds, which are the only ones with Breakpad support, the Error() function allows the user to choose to try and drop a minidump.</li>
+		<li><a href="https://bitbucket.org/rmtew/incursion-roguelike/issue/222/">Issue 222</a>: Spelling and grammar fixes.  Pull request from Carl Minden.</li>
+		<li><a href="https://bitbucket.org/rmtew/incursion-roguelike/issue/231/">Issue 231</a>: Help menu entries were present for content which was not present.  Reported by Vornag.</li>
+		<li><a href="https://bitbucket.org/rmtew/incursion-roguelike/issue/233/">Issue 233</a>: Cancelling crashed when fields were encountered with no associated effect. Reported by Vornag.</li>
+		<li><a href="https://bitbucket.org/rmtew/incursion-roguelike/issue/235/">Issue 235</a>: Typo in text displayed when attempting to climb.  Reported by Vornag.</li>
+		<li><a href="https://bitbucket.org/rmtew/incursion-roguelike/issue/236/">Issue 236</a>: Moving between levels crashes when an illusion stops as days pass and then the UI is refreshed but the 'between levels' coordinates of -1, -1 choke everything that consumes them.  Reported by Esran Zarnath.</li>
+		<li><a href="https://bitbucket.org/rmtew/incursion-roguelike/issue/239/">Issue 239</a>: Secondary skill kit bonuses should be one per item type, not one per each of item type held by player.  This is not ideal as there may be multiple different visual item types for instance, but at least it no longer exploitable by holding 20 viewing lenses.</li>
+		<li><a href="https://bitbucket.org/rmtew/incursion-roguelike/issue/240/">Issue 240</a>: Your best type of rope in your inventory should add a given bonus to climbing attempts.  However, the wrong value is looked up and all ropes give +2 bonus (which is less than any rope bonus).</li>
+		<li><a href="https://bitbucket.org/rmtew/incursion-roguelike/issue/243/">Issue 243</a>: Remove reference to Julian, and feedback on game design.  Reported by Dave Duckett.</li>
+		<li>Spelling fix: ressurrection/ressurection -> resurrection.</li>
+		<li>Documented script constants, noting which were unused.  These are used for dungeon creation, defining how gods interact with players, and more.</li>
+		</ul>		
+		<br/>
+		</p>
+
+		<p>
+		<u>2015-04-15: <a name="20150415">A licensing update from Julian.</a></u>
 		</p>
 		<p>
 Hi, folks, this is Julian Mensch writing though the website is now being maintained by Richard Tew. I wanted to make one final official statement about Incursion. It's been brought to my attention that the Creative Commons licenses are not very suitable for software, so I'm offering all the code that I originally offered under other licenses as well.

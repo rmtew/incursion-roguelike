@@ -1,4 +1,5 @@
-/* MONSTER.CPP -- Copyright (c) 1999-2003 Julian Mensch
+/* MONSTER.CPP -- See the Incursion LICENSE file for copyright information.
+
      The monster AI, in all its ungainly glory. Everything
    relating to monster behaviour, including monster spell-
    casting and monster inventory, is here. This file is thus
