@@ -76,12 +76,17 @@ goto internal_function_main
 
 REM --- FUNCTION: user_function_fetch_dependencies --------------------------------
 :user_function_fetch_dependencies
-
-cd !DEPENDENCY_PATH!
-REM set SDL2LINK=vcs hg SDL2 704a0bfecf75 C:\RMT\VCS\HG\libraries\SDL http://hg.libsdl.org/SDL/archive/
-CALL libtcod\build.bat -fd
-
-goto:eof REM return
+(
+    setlocal EnableDelayedExpansion
+	
+	cd !DEPENDENCY_PATH!
+	REM set SDL2LINK=vcs hg SDL2 704a0bfecf75 C:\RMT\VCS\HG\libraries\SDL http://hg.libsdl.org/SDL/archive/
+	CALL libtcod\build.bat -fd
+)
+(
+    endlocal
+    exit /b
+)
 
 REM --- FUNCTION: user_function_prepare_dependency --------------------------------
 :user_function_prepare_dependency
@@ -243,32 +248,47 @@ if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
 goto:eof REM return
 
 :user_function_prepare_dependency_breakpad_includes
+(
+    setlocal EnableDelayedExpansion
 
-cd "!DEPENDENCY_PATH!\google-breakpad"
-set L_PATHS[0]=client\windows
-set L_PATHS[1]=common
-set L_PATHS[2]=google_breakpad
-set /A L_PATH_COUNT=3
-set /A L_IDX=0
+	cd "!DEPENDENCY_PATH!\google-breakpad"
 
-:user_function_make_release_loop1
-set L_DIR_PATH=!L_PATHS[%L_IDX%]!
-for /F "delims=" %%W in ('dir /B "!L_DIR_PATH!\*.h" 2^>^&1') do (
-    if "%%W" NEQ "File Not Found" (
-        xcopy /Y /Q >nul "!L_DIR_PATH!\%%W" "!DEPENDENCY_PATH!\include\!L_DIR_PATH!\"
-    )
-)    
-for /F %%V in ('dir /A:D /B "!L_DIR_PATH!"') do (
-    if "%%V" NEQ "Release" (
-        set L_SUBDIR_PATH=!L_DIR_PATH!\%%V
-        set L_PATHS[!L_PATH_COUNT!]=!L_SUBDIR_PATH!
-        set /A L_PATH_COUNT=!L_PATH_COUNT!+1
-    )
+	set L_PATHS[0]=client\windows
+	set L_PATHS[1]=common
+	set L_PATHS[2]=google_breakpad
+	REM The code below will extend the array.
+	set /A L_PATH_COUNT=3
+	set /A L_IDX=0
+
+	REM Ensure L_IDX is usable by jumping into the loop. o_O
+	goto uf_loop_pdbi
+
+	REM Recursively copy the subset of the directory tree that is include file locations (and of course the include files there).
+:uf_loop_pdbi
+	set "L_DIR_PATH=!L_PATHS[%L_IDX%]!"
+	echo L_PATHS[!L_IDX!] !L_DIR_PATH!
+	REM Copy this directory, if there are include files present.
+	for /F "delims=" %%W in ('dir /B "!L_DIR_PATH!\*.h" 2^>^&1') do (
+		if "%%W" NEQ "File Not Found" (
+			xcopy /Y /Q >nul "!L_DIR_PATH!\%%W" "!DEPENDENCY_PATH!\include\!L_DIR_PATH!\"
+		)
+	)    
+	REM Index subdirectories of this directory for subsequent processing.
+	for /F %%V in ('dir /A:D /B "!L_DIR_PATH!"') do (
+		if "%%V" NEQ "Release" (
+			set L_SUBDIR_PATH=!L_DIR_PATH!\%%V
+			set L_PATHS[!L_PATH_COUNT!]=!L_SUBDIR_PATH!
+			set /A L_PATH_COUNT=!L_PATH_COUNT!+1
+		)
+	)
+	
+	set /A L_IDX=!L_IDX!+1
+	if !L_IDX! LSS !L_PATH_COUNT! goto uf_loop_pdbi
 )
-set /A L_IDX=!L_IDX!+1
-if !L_IDX! LSS !L_PATH_COUNT! goto user_function_make_release_loop1
-
-goto:eof REM return
+( 
+    endlocal
+    exit /b
+)
 
 REM --- FUNCTION: user_function_prepare_dependencies -------------------------
 :user_function_prepare_dependencies
@@ -296,219 +316,239 @@ goto:eof REM return
 
 REM --- FUNCTION: user_function_build_project --------------------------------
 :user_function_build_project
+(
+    setlocal EnableDelayedExpansion
 
-REM Compile incursion.
+	REM Compile incursion.
 
-REM TODO: Add %%P entry x64
-for %%N in (exe_libtcod exe_curses) do (
-	for %%P in (Win32) do (
-		REM pdcurses only has Win32 support.
-		if "%%P%%N" neq "x64exe_curses" (
-			for %%C in (Debug Release) do (
-				echo Building: [%%N^|%%C^|%%P]
+	REM TODO: Add %%P entry x64
+	for %%N in (exe_libtcod exe_curses) do (
+		for %%P in (Win32) do (
+			REM pdcurses only has Win32 support.
+			if "%%P%%N" neq "x64exe_curses" (
+				for %%C in (Debug Release) do (
+					echo Building: [%%N^|%%C^|%%P]
 
-				set L_ERROR_MSG=
-				for /F "usebackq tokens=*" %%i in (`msbuild /nologo msvs\libtcod.sln /p:Configuration^=%%C /p:Platform^=%%P /t:%%N`) do (
-					set L_LINE=%%i
-					if "!L_LINE:fatal error=!" NEQ "!L_LINE!" set L_ERROR_MSG=%%i
-				)
+					set L_ERROR_MSG=
+					for /F "usebackq tokens=*" %%i in (`msbuild /nologo msvs\libtcod.sln /p:Configuration^=%%C /p:Platform^=%%P /t:%%N`) do (
+						set L_LINE=%%i
+						if "!L_LINE:fatal error=!" NEQ "!L_LINE!" set L_ERROR_MSG=%%i
+					)
 
-				if not exist "!BUILD_PATH!\%%P\%%C\%%N\Incursion.exe" (
-					echo ERROR.. '%%P\%%C\%%N\Incursion.exe' did not successfully build for some reason.
-					goto internal_function_exit
+					if not exist "!BUILD_PATH!\%%P\%%C\%%N\Incursion.exe" (
+						echo ERROR.. '%%P\%%C\%%N\Incursion.exe' did not successfully build for some reason.
+						goto internal_function_exit
+					)
 				)
 			)
 		)
 	)
 )
-
-goto:eof REM return
+( 
+    endlocal
+    exit /b
+)
 
 REM --- FUNCTION: user_function_compile_scripts ----------------------------------------
 :user_function_compile_scripts
+(   
+    setlocal EnableDelayedExpansion
 
-REM Script compiling needs to know where to locate the dependency dlls.
-set "PATH=%OLD_PATH%;!BUILD_PATH!\dependencies\Win32\Debug"
-REM Script compiling will write to a 'mod' directory here.
-set "INCURSIONPATH=!BUILD_PATH!\run"
-REM Script compiling will read the scripts it needs to compile.
-set "INCURSIONLIBPATH=!BUILD_SCRIPT_PATH!lib"
-REM Not sure this is needed.
-cd "!BUILD_PATH!\run"
+	REM Script compiling needs to know where to locate the dependency dlls.
+	set "PATH=%OLD_PATH%;!BUILD_PATH!\dependencies\Win32\Debug"
+	REM Script compiling will write to a 'mod' directory here.
+	set "INCURSIONPATH=!BUILD_PATH!\run"
+	REM Script compiling will read the scripts it needs to compile.
+	set "INCURSIONLIBPATH=!BUILD_SCRIPT_PATH!lib"
+	REM Not sure this is needed.
+	cd "!BUILD_PATH!\run"
 
-echo Compiling Incursion scripts..
+	echo Compiling Incursion scripts..
 
-for /F "usebackq tokens=*" %%M in (`..\Win32\Debug\exe_libtcod\Incursion.exe -compile`) do (
-	set LAST_LINE=%%M
-	echo !LAST_LINE!
+	del >nul /Q "!BUILD_PATH!\run\mod\Incursion.Mod"
+
+	for /F "usebackq tokens=*" %%M in (`..\Win32\Debug\exe_libtcod\Incursion.exe -compile`) do (
+		set LAST_LINE=%%M
+		echo !LAST_LINE!
+	)
+
+	REM Error handling.
+	if !ERRORLEVEL! NEQ 0 (
+		echo ERROR: 'Incursion.exe -compile' exited with error level !ERRORLEVEL!
+		goto internal_function_teardown
+	)
+	
+	if not exist "!BUILD_PATH!\run\mod\Incursion.Mod" (
+		echo ERROR: failed compiling Incursion script files..
+		goto internal_function_teardown
+	)
 )
-
-goto:eof REM return
+( 
+    endlocal
+    exit /b
+)
 
 REM --- FUNCTION: user_function_detect_incursion_version ---------------------
-:user_function_detect_incursion_version
+:user_function_detect_incursion_version <returnVal>
+(   
+    setlocal EnableDelayedExpansion
 
-if "!UV_VERSION!" EQU "" (
-    REM Set up the environment so that we can run Incursion piecemeal.
-    set "PATH=%OLD_PATH%;!BUILD_PATH!\dependencies\Win32\Debug"
-    cd "!BUILD_PATH!\run"
+	if "!UV_VERSION!" EQU "" (
+		REM Set up the environment so that we can run Incursion piecemeal.
+		set "PATH=%OLD_PATH%;!BUILD_PATH!\dependencies\Win32\Debug"
+		cd "!BUILD_PATH!\run"
 
-    for /F "usebackq tokens=*" %%M in (`..\Win32\Debug\exe_libtcod\Incursion.exe -version`) do (
-        set UV_VERSION=%%M
-    )
+		for /F "usebackq tokens=*" %%M in (`..\Win32\Debug\exe_libtcod\Incursion.exe -version`) do (
+			set UV_VERSION=%%M
+		)
 
-    if "!UV_VERSION!" EQU "" (
-        echo ERROR: unable to auto-detect the version of Incursion.
-        goto internal_function_teardown
-    )
+		if "!UV_VERSION!" EQU "" (
+			echo ERROR: unable to auto-detect the version of Incursion.
+			goto internal_function_teardown
+		)
+	)
 )
-
-goto:eof REM return
+( 
+    endlocal
+    set "%~1=%UV_VERSION%"
+    exit /b
+)
 
 REM --- FUNCTION: user_function_make_release ---------------------------------
 :user_function_make_release
+(   
+    setlocal EnableDelayedExpansion
 
-call :user_function_detect_incursion_version
+	call :user_function_detect_incursion_version UV_VERSION
 
-echo Compiling 'Incursion.Mod' ...
+	cd "!BUILD_PATH!"
 
-cd "!BUILD_PATH!\run"
+	if not exist "!BUILD_PATH!\run\mod\Incursion.Mod" (
+		echo ERROR: Please compile the Incursion scripts first..
+		goto internal_function_teardown
+	)
+	
+	if exist "!UV_PACKAGES_DIRNAME!" rmdir /S /Q "!UV_PACKAGES_DIRNAME!"
+	if not exist "!UV_PACKAGES_DIRNAME!" mkdir "!UV_PACKAGES_DIRNAME!"
 
-set INCURSIONPATH=!BUILD_PATH!\run\
-set INCURSIONLIBPATH=!BUILD_PATH!\..\lib
-for /F "usebackq tokens=*" %%M in (`..\Win32\Debug\exe_libtcod\Incursion.exe -compile`) do (
-    set L_LINE=%%M
-	echo %%M
+	REM The naming is important and is dynamically used to determine which files to copy.
+	for %%A in (release-with-pdbs debug-with-pdbs release) do (
+		set L_ARCHIVENAME=Incursion-!UV_VERSION!
+		set L_NAME=%%A
+		echo Making '%%A' package directory
+		set L_PDBS=!L_NAME:~-4,4!
+		if "!L_NAME:~0,1!" EQU "r" (
+			set L_CONFIG=Release
+			if "!L_PDBS!" EQU "pdbs" set L_ARCHIVENAME=!L_ARCHIVENAME!-release-with-pdbs
+		) else (
+			set L_CONFIG=Debug
+			if "!L_PDBS!" EQU "pdbs" set L_ARCHIVENAME=!L_ARCHIVENAME!-debug-with-pdbs
+		)
+		set L_NAME=!L_ARCHIVENAME!
+
+		REM Set up the game directory structure.
+		mkdir "!UV_PACKAGES_DIRNAME!\!L_NAME!"
+		mkdir "!UV_PACKAGES_DIRNAME!\!L_NAME!\logs"
+		mkdir "!UV_PACKAGES_DIRNAME!\!L_NAME!\save"
+
+		xcopy /I /E >nul "run\mod" "!UV_PACKAGES_DIRNAME!\!L_NAME!\mod\"
+		xcopy /I /E >nul "!BUILD_SCRIPT_PATH!\fonts" "!UV_PACKAGES_DIRNAME!\!L_NAME!\fonts\"
+
+		copy >nul "!BUILD_SCRIPT_PATH!\LICENSE" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
+		copy >nul "!BUILD_SCRIPT_PATH!\Incursion.txt" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
+		copy >nul "!BUILD_SCRIPT_PATH!\Changelog.txt" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
+		copy >nul "!BUILD_SCRIPT_PATH!\README.md" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
+
+		REM Copy built binaries and dependencies into place.
+		copy >nul "!DEPENDENCY_PATH!\Win32\!L_CONFIG!\libtcod.dll" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
+		if "!L_PDBS!" EQU "pdbs" copy >nul "!DEPENDENCY_PATH!\Win32\!L_CONFIG!\libtcod.pdb" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
+
+		copy >nul "!DEPENDENCY_PATH!\Win32\!L_CONFIG!\SDL2.dll" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
+		if "!L_PDBS!" EQU "pdbs" copy >nul "!DEPENDENCY_PATH!\Win32\!L_CONFIG!\SDL2.pdb" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
+		
+		if "!UV_PACKAGE_CURSES!" EQU "yes" (
+			copy >nul "Win32\!L_CONFIG!\exe_curses\Incursion.exe" "!UV_PACKAGES_DIRNAME!\!L_NAME!\IncursionCurses.exe"
+			if "!L_PDBS!" EQU "pdbs" copy >nul "Win32\!L_CONFIG!\exe_curses\Incursion.pdb" "!UV_PACKAGES_DIRNAME!\!L_NAME!\IncursionCurses.pdb"
+		)
+
+		copy >nul "Win32\!L_CONFIG!\exe_libtcod\Incursion.exe" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
+		if "!L_PDBS!" EQU "pdbs" copy >nul "Win32\!L_CONFIG!\exe_libtcod\Incursion.pdb" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
+	)
+
+	REM Collect the dependencies
+	echo Making 'dependencies' package directory
+	set "L_DEPENDENCIES_PATH=!UV_PACKAGES_DIRNAME!\dependencies"
+	mkdir "!L_DEPENDENCIES_PATH!"
+	xcopy /I /E  >nul "!DEPENDENCY_PATH!\include" "!L_DEPENDENCIES_PATH!\include\"
+	xcopy /I /E  >nul "!DEPENDENCY_PATH!\Win32" "!L_DEPENDENCIES_PATH!\Win32\"
+	REM xcopy /I /E  >nul "!DEPENDENCY_PATH!\x64" "!L_DEPENDENCIES_PATH!\x64\"
+	copy >nul "!BUILD_SCRIPT_PATH!\LICENSE" "!L_DEPENDENCIES_PATH!\"
+	copy >nul "!DEPENDENCY_PATH!\*.exe" "!L_DEPENDENCIES_PATH!\"
 )
-set INCURSIONPATH=
-set INCURSIONLIBPATH=
-
-if !ERRORLEVEL! NEQ 0 (
-    echo ERROR: 'Incursion.exe -compile' exited with error level !ERRORLEVEL!
-    goto internal_function_teardown
+( 
+    endlocal
+    exit /b
 )
-
-cd "!BUILD_PATH!"
-if not exist "run\mod\Incursion.mod" (
-    echo "ERROR: Failed building 'Incursion.mod'"
-    goto internal_function_teardown
-)
-
-if exist "!UV_PACKAGES_DIRNAME!" rmdir /S /Q "!UV_PACKAGES_DIRNAME!"
-if not exist "!UV_PACKAGES_DIRNAME!" mkdir "!UV_PACKAGES_DIRNAME!"
-
-REM The naming is important and is dynamically used to determine which files to copy.
-for %%A in (release-with-pdbs debug-with-pdbs release) do (
-    set L_ARCHIVENAME=Incursion-!UV_VERSION!
-    set L_NAME=%%A
-    echo Making '%%A' package directory
-    set L_PDBS=!L_NAME:~-4,4!
-    if "!L_NAME:~0,1!" EQU "r" (
-        set L_CONFIG=Release
-        if "!L_PDBS!" EQU "pdbs" set L_ARCHIVENAME=!L_ARCHIVENAME!-release-with-pdbs
-    ) else (
-        set L_CONFIG=Debug
-        if "!L_PDBS!" EQU "pdbs" set L_ARCHIVENAME=!L_ARCHIVENAME!-debug-with-pdbs
-    )
-    set L_NAME=!L_ARCHIVENAME!
-
-    mkdir "!UV_PACKAGES_DIRNAME!\!L_NAME!"
-    mkdir "!UV_PACKAGES_DIRNAME!\!L_NAME!\logs"
-    mkdir "!UV_PACKAGES_DIRNAME!\!L_NAME!\save"
-
-    xcopy /I /E >nul "run\mod" "!UV_PACKAGES_DIRNAME!\!L_NAME!\mod\"
-    xcopy /I /E >nul "!BUILD_SCRIPT_PATH!\fonts" "!UV_PACKAGES_DIRNAME!\!L_NAME!\fonts\"
-
-    copy >nul "!BUILD_SCRIPT_PATH!\LICENSE" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
-    copy >nul "!BUILD_SCRIPT_PATH!\Incursion.txt" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
-    copy >nul "!BUILD_SCRIPT_PATH!\Changelog.txt" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
-    copy >nul "!BUILD_SCRIPT_PATH!\README.md" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
-    
-    copy >nul "!DEPENDENCY_PATH!\libtcod\build\!L_CONFIG!\libtcod.dll" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
-    if "!L_PDBS!" EQU "pdbs" copy >nul "!DEPENDENCY_PATH!\libtcod\build\!L_CONFIG!\libtcod.pdb" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
-
-    copy >nul "!DEPENDENCY_PATH!\SDL2\VisualC\SDL\Win32\!L_CONFIG!\SDL2.dll" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
-    if "!L_PDBS!" EQU "pdbs" copy >nul "!DEPENDENCY_PATH!\SDL2\VisualC\SDL\Win32\!L_CONFIG!\SDL2.pdb" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
-    
-    if "!UV_PACKAGE_CURSES!" EQU "yes" (
-        copy >nul "Win32\!L_CONFIG!\exe_curses\Incursion.exe" "!UV_PACKAGES_DIRNAME!\!L_NAME!\IncursionCurses.exe"
-        if "!L_PDBS!" EQU "pdbs" copy >nul "Win32\!L_CONFIG!\exe_curses\Incursion.pdb" "!UV_PACKAGES_DIRNAME!\!L_NAME!\IncursionCurses.pdb"
-    )
-
-    copy >nul "Win32\!L_CONFIG!\exe_libtcod\Incursion.exe" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
-    if "!L_PDBS!" EQU "pdbs" copy >nul "Win32\!L_CONFIG!\exe_libtcod\Incursion.pdb" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
-)
-
-REM Collect the dependencies
-echo Making 'dependencies' package directory
-set "L_DEPENDENCIES_PATH=!UV_PACKAGES_DIRNAME!\dependencies"
-mkdir "!L_DEPENDENCIES_PATH!"
-xcopy /I /E  >nul "!DEPENDENCY_PATH!\include" "!L_DEPENDENCIES_PATH!\include\"
-copy >nul "!BUILD_SCRIPT_PATH!\LICENSE" "!L_DEPENDENCIES_PATH!\"
-copy >nul "!DEPENDENCY_PATH!\*.lib" "!L_DEPENDENCIES_PATH!\"
-copy >nul "!DEPENDENCY_PATH!\*.pdb" "!L_DEPENDENCIES_PATH!\"
-copy >nul "!DEPENDENCY_PATH!\*.dll" "!L_DEPENDENCIES_PATH!\"
-copy >nul "!DEPENDENCY_PATH!\*.exe" "!L_DEPENDENCIES_PATH!\"
-
-:exit_from_user_function_make_release
-goto:eof REM return
 
 REM --- FUNCTION: user_function_package_release ------------------------------
 :user_function_package_release
+(   
+    setlocal EnableDelayedExpansion
 
-call :user_function_detect_incursion_version
+	call :user_function_detect_incursion_version UV_VERSION
 
-cd "!BUILD_PATH!"
+	cd "!BUILD_PATH!"
 
-REM Verify that the directories exist.
-set /A L_FLAG=0
-for %%A in (release-with-pdbs debug-with-pdbs release) do (
-    set L_ARCHIVENAME=Incursion-!UV_VERSION!
-    set L_NAME=%%A
-    set L_PDBS=!L_NAME:~-4,4!
-    if "!L_PDBS!" EQU "pdbs" (
-        if "!L_NAME:~0,1!" EQU "r" (
-            set L_ARCHIVENAME=!L_ARCHIVENAME!-release-with-pdbs
-        ) else (
-            set L_ARCHIVENAME=!L_ARCHIVENAME!-debug-with-pdbs
-        )
-    )
+	REM Verify that the directories exist.
+	set /A L_FLAG=0
+	for %%A in (release-with-pdbs debug-with-pdbs release) do (
+		set L_ARCHIVENAME=Incursion-!UV_VERSION!
+		set L_NAME=%%A
+		set L_PDBS=!L_NAME:~-4,4!
+		if "!L_PDBS!" EQU "pdbs" (
+			if "!L_NAME:~0,1!" EQU "r" (
+				set L_ARCHIVENAME=!L_ARCHIVENAME!-release-with-pdbs
+			) else (
+				set L_ARCHIVENAME=!L_ARCHIVENAME!-debug-with-pdbs
+			)
+		)
 
-    if not exist "!UV_PACKAGES_PATH!\!L_ARCHIVENAME!" (
-        echo ERROR: Release directory '!L_ARCHIVENAME!' does not exist.
-        set /A L_FLAG=1
-    )
+		if not exist "!UV_PACKAGES_PATH!\!L_ARCHIVENAME!" (
+			echo ERROR: Release directory '!L_ARCHIVENAME!' does not exist.
+			set /A L_FLAG=1
+		)
+	)
+	if !L_FLAG! EQU 1 (
+		echo Aborting packaging process.
+		goto internal_function_teardown
+	)
+
+	REM Archive
+	cd "!UV_PACKAGES_PATH!"
+	for %%A in (release-with-pdbs debug-with-pdbs release) do (
+		set L_ARCHIVENAME=Incursion-!UV_VERSION!
+		set L_NAME=%%A
+		set L_PDBS=!L_NAME:~-4,4!
+		if "!L_PDBS!" EQU "pdbs" (
+			if "!L_NAME:~0,1!" EQU "r" (
+				set L_ARCHIVENAME=!L_ARCHIVENAME!-release-with-pdbs
+			) else (
+				set L_ARCHIVENAME=!L_ARCHIVENAME!-debug-with-pdbs
+			)
+		)
+
+		!7Z_EXE! a -r -t7z -mx9 !L_ARCHIVENAME!.7z !L_ARCHIVENAME!
+	)
+
+	REM Archive the dependencies collection.
+	for /f "tokens=2-4 delims=/ " %%a in ('date /t') do (set L_DATE=%%c%%a%%b)
+	!7Z_EXE! a -r -t7z -mx9 build_dependencies-!L_DATE!-only-needed-for-development.7z dependencies\*
 )
-if !L_FLAG! EQU 1 (
-    echo Aborting packaging process.
-    goto internal_function_teardown
+( 
+    endlocal
+	cd "!BUILD_PATH!"
+    exit /b
 )
-
-REM Archive
-cd "!UV_PACKAGES_PATH!"
-for %%A in (release-with-pdbs debug-with-pdbs release) do (
-    set L_ARCHIVENAME=Incursion-!UV_VERSION!
-    set L_NAME=%%A
-    set L_PDBS=!L_NAME:~-4,4!
-    if "!L_PDBS!" EQU "pdbs" (
-        if "!L_NAME:~0,1!" EQU "r" (
-            set L_ARCHIVENAME=!L_ARCHIVENAME!-release-with-pdbs
-        ) else (
-            set L_ARCHIVENAME=!L_ARCHIVENAME!-debug-with-pdbs
-        )
-    )
-
-    !7Z_EXE! a -r -t7z -mx9 !L_ARCHIVENAME!.7z !L_ARCHIVENAME!
-)
-
-REM Archive the dependencies collection.
-for /f "tokens=2-4 delims=/ " %%a in ('date /t') do (set L_DATE=%%c%%a%%b)
-!7Z_EXE! a -r -t7z -mx9 build_dependencies-!L_DATE!-only-needed-for-development.7z dependencies\*
-
-cd "!BUILD_PATH!"
-
-:exit_from_user_function_package_release
-goto:eof REM return
 
 REM --- FUNCTION: user_function_teardown -------------------------------------
 :user_function_teardown
@@ -586,7 +626,8 @@ goto user_function_setup
 
 REM --- FUNCTION: internal_function_main -------------------------------------
 :internal_function_main
-REM input argument:  V_LINKS   - The user defined links.
+REM input argument:  V_LINKS     - The user defined links.
+REM input argument:  UV_COMMANDS - The user defined script arguments / function handlers.
 
 REM Unit commands.
 set V_COMMANDS[fetch-dependencies]=fetch-dependencies
@@ -632,16 +673,18 @@ if "%1" EQU "" (
     echo.
     echo     -d, dependencies           fetch and prepare the dependencies
     echo     -r, release                construct/compress/archive built project
+	REM List user defined commands last.
 	if "!V_USER_COMMANDS!" NEQ "" (
 	echo.
 		for %%C in (!V_USER_COMMANDS!) do (
 			set V_LONG=%%C
 			set V_DESC=!UV_COMMAND_DESCS[%%C]!
 			set V_SHORT=!V_USER_COMMAND_SHORT_NAME[%%C]!
+			REM Everything following up to the echo is formatting the output line.
 			call :internal_function_strlen V_DESCLEN V_DESC
 			call :internal_function_strlen V_SHORTLEN V_SHORT
 			call :internal_function_strlen V_LONGLEN V_LONG
-			REM 27
+			REM 27 is the width of the composite argument name column
 			set /A "V_SPACE_USED=!V_SHORTLEN!+!V_LONGLEN!"
 			set /A "V_SPACE_WASTED=27-2-!V_SPACE_USED!"
 			set V_SPACER=
