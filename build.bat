@@ -63,8 +63,6 @@ if not defined PYTHON_EXE (
     python.exe --help >nul 2>&1 && (set PYTHON_EXE=python.exe) || (set PYTHON_EXE=)
 )
 
-set "OLD_PATH=!PATH!"
-
 REM Long argument / short argument / internal argument / <before|after> / function name to call
 set UV_COMMANDS[0]=compile-scripts -cs build-project after user_function_compile_scripts
 set UV_COMMANDS[1]=
@@ -94,158 +92,161 @@ REM variable: %V_LINK_PARTS% - The link data.
 REM variable: %DEPENDENCY_PATH% - The absolute path of the dependencies directory.
 REM variable: %V_DIRNAME% - The relative directory name the dependency can be found in.
 REM variable: %V_SKIPPED% - 'yes' or 'no', depending on whether the archive was already extracted.
+(
+    setlocal EnableDelayedExpansion
 
-cd !DEPENDENCY_PATH!
+	cd !DEPENDENCY_PATH!
 
-:user_function_prepare_dependency_retry
-
-if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
-    if "!V_LINK_PARTS[%HTTP_FILENAME%]!" EQU "win_flex_bison-latest.zip" (
-        REM Extract the pre-built executable and put in the right location.
-        if "%V_SKIPPED%" equ "no" (
-            if exist flex.exe del flex.exe        
-        )
-        if not exist flex.exe (
-            copy !V_DIRNAME!\win_flex.exe .\flex.exe
-        )
-    ) else if "!V_LINK_PARTS[%HTTP_FILENAME%]!" EQU "pdcurs34.zip" (
-        cd !V_DIRNAME!\win32\
-        
-		for %%P in (Win32) do (
-			if not exist "!DEPENDENCY_PATH!\%%P" mkdir "!DEPENDENCY_PATH!\%%P"
-			for %%C in (Debug Release) do (
-				if not exist "!DEPENDENCY_PATH!\%%P\%%C" mkdir "!DEPENDENCY_PATH!\%%P\%%C"
-				if not exist "!DEPENDENCY_PATH!\%%P\%%C\pdcurses.lib" (
-					echo Building: [pdcurses^|%%C^|%%P]
-					nmake -f vcwin32.mak clean
-					if "%%C" equ "Debug" (
-						nmake -f vcwin32.mak DEBUG=1 WIDE=1 DLLOPT=/MTd pdcurses.lib
-					) else if "%%C" equ "Release" (
-						nmake -f vcwin32.mak WIDE=1 DLLOPT=/MT pdcurses.lib
-					) else (
-						echo ERROR
-					)
-					copy pdcurses.lib "!DEPENDENCY_PATH!\%%P\%%C\pdcurses.lib"
-				) else (
-					echo Building: [pdcurses^|%%C^|%%P] .. skipped
-				)
+	if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
+		if "!V_LINK_PARTS[%HTTP_FILENAME%]!" EQU "win_flex_bison-latest.zip" (
+			REM Extract the pre-built executable and put in the right location.
+			if "%V_SKIPPED%" equ "no" (
+				if exist flex.exe del flex.exe        
 			)
-		)
-
-        set UV_INCLUDE_COMMANDS[%UV_INCLUDE_COMMAND_COUNT%]=!V_DIRNAME!\*.h
-        set /A UV_INCLUDE_COMMAND_COUNT=%UV_INCLUDE_COMMAND_COUNT%+1
-
-        cd !DEPENDENCY_PATH!
-    ) else (
-        echo ERROR.. !V_LINK_PARTS[%HTTP_FILENAME%]! not handled by user who wrote the build amendments.
-        goto internal_function_exit
-    )
-) else if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "vcs" (
-    set L_VCS_NAME=!V_LINK_PARTS[%VCS_NAME%]!
-    if "!L_VCS_NAME!" EQU "libtcod" (
-		REM Delegate libtcod compilation to it's 'build.bat' script.
-		cd "!DEPENDENCY_PATH!"
-		CALL libtcod\build.bat -pd
-		CALL libtcod\build.bat -p
-
-		REM Copy compiled litcod dependency binaries.
-		REM Copy compiled litcod binaries.
-		for %%P in (Win32 x64) do (
-			if not exist %%P mkdir %%P
-			for %%C in (Debug Release) do (
-				if not exist %%P\%%C mkdir %%P\%%C
-				for %%S in (dll pdb lib) do (
-					copy >nul libtcod\build\dependencies\%%P\%%C\SDL2.%%S %%P\%%C\
-					copy >nul libtcod\build\msvs\libtcod\%%P\%%C\libtcod.%%S %%P\%%C\
-				)
+			if not exist flex.exe (
+				copy !V_DIRNAME!\win_flex.exe .\flex.exe
 			)
-		)
-
-		REM Mark the gathered libtcod dependency includes to be copied.
-		set UV_INCLUDE_COMMANDS[%UV_INCLUDE_COMMAND_COUNT%]=libtcod\build\dependencies\include\*.h
-		set /A UV_INCLUDE_COMMAND_COUNT=%UV_INCLUDE_COMMAND_COUNT%+1
-
-		REM Mark the libtcod includes to be copied.
-		set UV_INCLUDE_COMMANDS[%UV_INCLUDE_COMMAND_COUNT%]=libtcod\include\*.h
-		set /A UV_INCLUDE_COMMAND_COUNT=%UV_INCLUDE_COMMAND_COUNT%+1
-
-		) else if "!L_VCS_NAME!" EQU "gyp" (
-        REM gyp is built using Python, so no building is required.
-        echo Building: [gyp] .. skipped
-    ) else if "!L_VCS_NAME!" EQU "google-breakpad" (
-        set L_LIBS=exception_handler.lib crash_generation_client.lib common.lib
-
-        REM gyp is a bit flakey, and requires at least at this time, we be at the right directory level and provide a depth.
-        cd !DEPENDENCY_PATH!\google-breakpad
-        set L_FAILED=no
-        for %%A in (!L_LIBS!) do (
-			for %%P in (Win32 x64) do (			
-				for %%C in (Debug Release) do (			
-					if not exist "!DEPENDENCY_PATH!\%%P\%%C\%%A" set L_FAILED=yes
-				)
-			)
-		)
-        
-        if "!L_FAILED!" EQU "yes" (
-            REM Use gyp to produce VS2013 solution and project files.
-            set GYP_MSVS_VERSION=2013
-            CALL >nul "!DEPENDENCY_PATH!\gyp\gyp.bat" --no-circular-check client\windows\breakpad_client.gyp --depth .
-
-			for %%P in (Win32 x64) do (			
+		) else if "!V_LINK_PARTS[%HTTP_FILENAME%]!" EQU "pdcurs34.zip" (
+			cd !V_DIRNAME!\win32\
+			
+			for %%P in (Win32) do (
+				if not exist "!DEPENDENCY_PATH!\%%P" mkdir "!DEPENDENCY_PATH!\%%P"
 				for %%C in (Debug Release) do (
-					set L_FAILED=no
-					for %%A in (!L_LIBS!) do (
+					if not exist "!DEPENDENCY_PATH!\%%P\%%C" mkdir "!DEPENDENCY_PATH!\%%P\%%C"
+					if not exist "!DEPENDENCY_PATH!\%%P\%%C\pdcurses.lib" (
+						echo Building: [pdcurses^|%%C^|%%P]
+						nmake -f vcwin32.mak clean
+						if "%%C" equ "Debug" (
+							nmake -f vcwin32.mak DEBUG=1 WIDE=1 DLLOPT=/MTd pdcurses.lib
+						) else if "%%C" equ "Release" (
+							nmake -f vcwin32.mak WIDE=1 DLLOPT=/MT pdcurses.lib
+						) else (
+							echo ERROR
+						)
+						copy pdcurses.lib "!DEPENDENCY_PATH!\%%P\%%C\pdcurses.lib"
+					) else (
+						echo Building: [pdcurses^|%%C^|%%P] .. skipped
+					)
+				)
+			)
+
+			set UV_INCLUDE_COMMANDS[%UV_INCLUDE_COMMAND_COUNT%]=!V_DIRNAME!\*.h
+			set /A UV_INCLUDE_COMMAND_COUNT=%UV_INCLUDE_COMMAND_COUNT%+1
+
+			cd !DEPENDENCY_PATH!
+		) else (
+			echo ERROR.. !V_LINK_PARTS[%HTTP_FILENAME%]! not handled by user who wrote the build amendments.
+			goto internal_function_exit
+		)
+	) else if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "vcs" (
+		set L_VCS_NAME=!V_LINK_PARTS[%VCS_NAME%]!
+		if "!L_VCS_NAME!" EQU "libtcod" (
+			REM Delegate libtcod compilation to it's 'build.bat' script.
+			cd "!DEPENDENCY_PATH!"
+			CALL libtcod\build.bat -pd
+			CALL libtcod\build.bat -p
+
+			REM Copy compiled litcod dependency binaries.
+			REM Copy compiled litcod binaries.
+			for %%P in (Win32 x64) do (
+				if not exist %%P mkdir %%P
+				for %%C in (Debug Release) do (
+					if not exist %%P\%%C mkdir %%P\%%C
+					for %%S in (dll pdb lib) do (
+						copy >nul libtcod\build\dependencies\%%P\%%C\SDL2.%%S %%P\%%C\
+						copy >nul libtcod\build\msvs\libtcod\%%P\%%C\libtcod.%%S %%P\%%C\
+					)
+				)
+			)
+
+			REM Mark the gathered libtcod dependency includes to be copied.
+			set UV_INCLUDE_COMMANDS[%UV_INCLUDE_COMMAND_COUNT%]=libtcod\build\dependencies\include\*.h
+			set /A UV_INCLUDE_COMMAND_COUNT=%UV_INCLUDE_COMMAND_COUNT%+1
+
+			REM Mark the libtcod includes to be copied.
+			set UV_INCLUDE_COMMANDS[%UV_INCLUDE_COMMAND_COUNT%]=libtcod\include\*.h
+			set /A UV_INCLUDE_COMMAND_COUNT=%UV_INCLUDE_COMMAND_COUNT%+1
+
+			) else if "!L_VCS_NAME!" EQU "gyp" (
+			REM gyp is built using Python, so no building is required.
+			echo Building: [gyp] .. skipped
+		) else if "!L_VCS_NAME!" EQU "google-breakpad" (
+			set L_LIBS=exception_handler.lib crash_generation_client.lib common.lib
+
+			REM gyp is a bit flakey, and requires at least at this time, we be at the right directory level and provide a depth.
+			cd !DEPENDENCY_PATH!\google-breakpad
+			set L_FAILED=no
+			for %%A in (!L_LIBS!) do (
+				for %%P in (Win32 x64) do (			
+					for %%C in (Debug Release) do (			
 						if not exist "!DEPENDENCY_PATH!\%%P\%%C\%%A" set L_FAILED=yes
 					)
-				
-					if "!L_FAILED!" EQU "yes" (
-						echo Building: [google-breakpad^|%%C^|%%P]
+				)
+			)
+			
+			if "!L_FAILED!" EQU "yes" (
+				REM Use gyp to produce VS2013 solution and project files.
+				set GYP_MSVS_VERSION=2013
+				CALL >nul "!DEPENDENCY_PATH!\gyp\gyp.bat" --no-circular-check client\windows\breakpad_client.gyp --depth .
 
-						REM TODO: The current revision breaks on missing files, and produces partial results, but enough.  Build them piecemeal.
-						DEL >nul /S /Q client\Windows\%%C
-						set L_ERROR_MSG=
-						for /F "usebackq tokens=*" %%i in (`msbuild /nologo client\Windows\common.vcxproj /p:Configuration^=%%C /p:Platform^=%%P`) do (
-							set L_LINE=%%i
-							if "!L_LINE:fatal error=!" NEQ "!L_LINE!" set L_ERROR_MSG=%%i
-						)
-						set L_ERROR_MSG=
-						for /F "usebackq tokens=*" %%i in (`msbuild /nologo client\Windows\breakpad_client.sln /p:Configuration^=%%C /p:Platform^=%%P /t:build_all`) do (
-							set L_LINE=%%i
-							if "!L_LINE:fatal error=!" NEQ "!L_LINE!" set L_ERROR_MSG=%%i
-						)
-
-						REM Verify that the required static libraries were produced as a result.
+				for %%P in (Win32 x64) do (			
+					for %%C in (Debug Release) do (
 						set L_FAILED=no
 						for %%A in (!L_LIBS!) do (
-							if not exist "client\Windows\%%C\lib\%%A" (
-								echo Checking [google-breakpad^|%%P]: .. ERROR, failed to produce '%%A'
-								set L_FAILED=yes
-							)
+							if not exist "!DEPENDENCY_PATH!\%%P\%%C\%%A" set L_FAILED=yes
 						)
-						REM If one or more libraries were not produced, the user will have been told about each, so now exit.
+					
 						if "!L_FAILED!" EQU "yes" (
-							echo ERROR.. Giving up as these libraries are required for google-breakpad to work.
-							goto internal_function_exit
-						)
-						
-						for %%A in (!L_LIBS!) do (
-							if not exist "!DEPENDENCY_PATH!\%%P\%%C\%%A" copy >nul "client\Windows\%%C\lib\%%A" "!DEPENDENCY_PATH!\%%P\%%C\"
+							echo Building: [google-breakpad^|%%C^|%%P]
+
+							REM TODO: The current revision breaks on missing files, and produces partial results, but enough.  Build them piecemeal.
+							DEL >nul /S /Q client\Windows\%%C
+							set L_ERROR_MSG=
+							for /F "usebackq tokens=*" %%i in (`msbuild /nologo client\Windows\common.vcxproj /p:Configuration^=%%C /p:Platform^=%%P`) do (
+								set L_LINE=%%i
+								if "!L_LINE:fatal error=!" NEQ "!L_LINE!" set L_ERROR_MSG=%%i
+							)
+							set L_ERROR_MSG=
+							for /F "usebackq tokens=*" %%i in (`msbuild /nologo client\Windows\breakpad_client.sln /p:Configuration^=%%C /p:Platform^=%%P /t:build_all`) do (
+								set L_LINE=%%i
+								if "!L_LINE:fatal error=!" NEQ "!L_LINE!" set L_ERROR_MSG=%%i
+							)
+
+							REM Verify that the required static libraries were produced as a result.
+							set L_FAILED=no
+							for %%A in (!L_LIBS!) do (
+								if not exist "client\Windows\%%C\lib\%%A" (
+									echo Checking [google-breakpad^|%%P]: .. ERROR, failed to produce '%%A'
+									set L_FAILED=yes
+								)
+							)
+							REM If one or more libraries were not produced, the user will have been told about each, so now exit.
+							if "!L_FAILED!" EQU "yes" (
+								echo ERROR.. Giving up as these libraries are required for google-breakpad to work.
+								goto internal_function_exit
+							)
+							
+							for %%A in (!L_LIBS!) do (
+								if not exist "!DEPENDENCY_PATH!\%%P\%%C\%%A" copy >nul "client\Windows\%%C\lib\%%A" "!DEPENDENCY_PATH!\%%P\%%C\"
+							)
 						)
 					)
 				)
+			) else (
+				echo Building: [google-breakpad] .. skipped
 			)
-        ) else (
-            echo Building: [google-breakpad] .. skipped
-        )
 
-		REM Copy all the required static libraries.
-    ) else (
-        echo ERROR.. !V_LINK_PARTS[%VCS_NAME%]! not handled by user who wrote the build amendments.
-        goto internal_function_exit
-    )
+			REM Copy all the required static libraries.
+		) else (
+			echo ERROR.. !V_LINK_PARTS[%VCS_NAME%]! not handled by user who wrote the build amendments.
+			goto internal_function_exit
+		)
+	)
 )
-
-goto:eof REM return
+( 
+    endlocal
+    exit /b
+)
 
 :user_function_prepare_dependency_breakpad_includes
 (
@@ -355,7 +356,7 @@ REM --- FUNCTION: user_function_compile_scripts --------------------------------
     setlocal EnableDelayedExpansion
 
 	REM Script compiling needs to know where to locate the dependency dlls.
-	set "PATH=%OLD_PATH%;!BUILD_PATH!\dependencies\Win32\Debug"
+	set "PATH=%PATH%;!BUILD_PATH!\dependencies\Win32\Debug"
 	REM Script compiling will write to a 'mod' directory here.
 	set "INCURSIONPATH=!BUILD_PATH!\run"
 	REM Script compiling will read the scripts it needs to compile.
@@ -395,7 +396,7 @@ REM --- FUNCTION: user_function_detect_incursion_version ---------------------
 
 	if "!UV_VERSION!" EQU "" (
 		REM Set up the environment so that we can run Incursion piecemeal.
-		set "PATH=%OLD_PATH%;!BUILD_PATH!\dependencies\Win32\Debug"
+		set "PATH=%PATH%;!BUILD_PATH!\dependencies\Win32\Debug"
 		cd "!BUILD_PATH!\run"
 
 		for /F "usebackq tokens=*" %%M in (`..\Win32\Debug\exe_libtcod\Incursion.exe -version`) do (
