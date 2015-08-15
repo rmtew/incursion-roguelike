@@ -63,6 +63,14 @@ if not defined PYTHON_EXE (
     python.exe --help >nul 2>&1 && (set PYTHON_EXE=python.exe) || (set PYTHON_EXE=)
 )
 
+set "OLD_PATH=!PATH!"
+
+REM Long argument / short argument / internal argument / <before|after> / function name to call
+set UV_COMMANDS[0]=compile-scripts -cs build-project after user_function_compile_scripts
+set UV_COMMANDS[1]=
+
+set UV_COMMAND_DESCS[compile-scripts]=compile Incursion script module
+
 REM Process the user data, calling event functions when applicable.
 goto internal_function_main
 
@@ -70,7 +78,7 @@ REM --- FUNCTION: user_function_fetch_dependencies -----------------------------
 :user_function_fetch_dependencies
 
 cd !DEPENDENCY_PATH!
-set SDL2LINK=vcs hg SDL2 704a0bfecf75 C:\RMT\VCS\HG\libraries\SDL http://hg.libsdl.org/SDL/archive/
+REM set SDL2LINK=vcs hg SDL2 704a0bfecf75 C:\RMT\VCS\HG\libraries\SDL http://hg.libsdl.org/SDL/archive/
 CALL libtcod\build.bat -fd
 
 goto:eof REM return
@@ -289,32 +297,24 @@ goto:eof REM return
 REM --- FUNCTION: user_function_build_project --------------------------------
 :user_function_build_project
 
-echo NOT YET IMPLEMENTED
-pause & exit /b
-
 REM Compile incursion.
 
-set TCOD_SLN_PATH=!BUILD_PATH!\msvs
-
-for %%P in (Win32 x64) do (
-	for %%C in (Debug Release) do (
-		for %%N in (libtcod libtcod-gui) do (
-			set "TCOD_BUILD_PATH=!TCOD_SLN_PATH!\%%N\%%P\%%C"
-
-			if exist "!TCOD_BUILD_PATH!\%%N.dll" (
-				echo Building: [%%N^|%%C^|%%P] .. skipped
-			) else (
+REM TODO: Add %%P entry x64
+for %%N in (exe_libtcod exe_curses) do (
+	for %%P in (Win32) do (
+		REM pdcurses only has Win32 support.
+		if "%%P%%N" neq "x64exe_curses" (
+			for %%C in (Debug Release) do (
 				echo Building: [%%N^|%%C^|%%P]
-				
+
 				set L_ERROR_MSG=
 				for /F "usebackq tokens=*" %%i in (`msbuild /nologo msvs\libtcod.sln /p:Configuration^=%%C /p:Platform^=%%P /t:%%N`) do (
 					set L_LINE=%%i
 					if "!L_LINE:fatal error=!" NEQ "!L_LINE!" set L_ERROR_MSG=%%i
 				)
-				set /A L_SDL2_ATTEMPTS=!L_SDL2_ATTEMPTS!+1
 
-				if not exist "!TCOD_BUILD_PATH!\%%N.dll" (
-					echo ERROR.. %%N.dll did not successfully build for some reason.
+				if not exist "!BUILD_PATH!\%%P\%%C\%%N\Incursion.exe" (
+					echo ERROR.. '%%P\%%C\%%N\Incursion.exe' did not successfully build for some reason.
 					goto internal_function_exit
 				)
 			)
@@ -324,13 +324,33 @@ for %%P in (Win32 x64) do (
 
 goto:eof REM return
 
+REM --- FUNCTION: user_function_compile_scripts ----------------------------------------
+:user_function_compile_scripts
+
+REM Script compiling needs to know where to locate the dependency dlls.
+set "PATH=%OLD_PATH%;!BUILD_PATH!\dependencies\Win32\Debug"
+REM Script compiling will write to a 'mod' directory here.
+set "INCURSIONPATH=!BUILD_PATH!\run"
+REM Script compiling will read the scripts it needs to compile.
+set "INCURSIONLIBPATH=!BUILD_SCRIPT_PATH!lib"
+REM Not sure this is needed.
+cd "!BUILD_PATH!\run"
+
+echo Compiling Incursion scripts..
+
+for /F "usebackq tokens=*" %%M in (`..\Win32\Debug\exe_libtcod\Incursion.exe -compile`) do (
+	set LAST_LINE=%%M
+	echo !LAST_LINE!
+)
+
+goto:eof REM return
+
 REM --- FUNCTION: user_function_detect_incursion_version ---------------------
 :user_function_detect_incursion_version
 
 if "!UV_VERSION!" EQU "" (
     REM Set up the environment so that we can run Incursion piecemeal.
-    REM TODO(rmtew): Do this locally, so it doesn't pollute the environment.
-    set "PATH=%PATH%;!BUILD_PATH!\dependencies"
+    set "PATH=%OLD_PATH%;!BUILD_PATH!\dependencies\Win32\Debug"
     cd "!BUILD_PATH!\run"
 
     for /F "usebackq tokens=*" %%M in (`..\Win32\Debug\exe_libtcod\Incursion.exe -version`) do (
@@ -568,49 +588,84 @@ REM --- FUNCTION: internal_function_main -------------------------------------
 :internal_function_main
 REM input argument:  V_LINKS   - The user defined links.
 
+REM Unit commands.
+set V_COMMANDS[fetch-dependencies]=fetch-dependencies
+set V_COMMANDS[prepare-dependencies]=prepare-dependencies
+set V_COMMANDS[build-project]=build-project
+set V_COMMANDS[make-release]=make-release
+set V_COMMANDS[package-release]=package-release
+REM Composite commands.
+set V_COMMANDS[dependencies]=dependencies
+set V_COMMANDS[release]=release
+
+REM Unit commands.
+set V_COMMANDS[-fd]=fetch-dependencies
+set V_COMMANDS[-pd]=prepare-dependencies
+set V_COMMANDS[-bp]=build-project
+set V_COMMANDS[-mr]=make-release
+set V_COMMANDS[-pr]=package-release
+REM Composite commands.
+set V_COMMANDS[-d]=dependencies
+set V_COMMANDS[-r]=release
+
+REM Iterable list of unit command names.
+set V_FUNCTION_COMMANDS=fetch-dependencies prepare-dependencies make-release package-release build-project
+
+REM Map unit command names to function names.
+set V_FUNCTIONS[fetch-dependencies]=internal_function_fetch_dependencies
+set V_FUNCTIONS[prepare-dependencies]=internal_function_prepare_dependencies
+set V_FUNCTIONS[make-release]=internal_function_make_release
+set V_FUNCTIONS[package-release]=internal_function_package_release
+set V_FUNCTIONS[build-project]=internal_function_build_project
+
+REM Add in the user commands.
+call :internal_func_index_user_commands
+
 if "%1" EQU "" (
     echo Usage: !BUILD_SCRIPT_FILENAME! [OPTION]
     echo.
     echo     -fd, fetch-dependencies    download if necessary
     echo     -pd, prepare-dependencies  extract and/or build, ready for project build
+    echo     -bp, build-project         build this project using the dependencies
     echo     -mr, make-release          construct release directory for packaging
     echo     -pr, package-release       compress and archive release directory
     echo.
     echo     -d, dependencies           fetch and prepare the dependencies
-    echo     -p, project                build this project using the dependencies
     echo     -r, release                construct/compress/archive built project
-    echo.
+	if "!V_USER_COMMANDS!" NEQ "" (
+	echo.
+		for %%C in (!V_USER_COMMANDS!) do (
+			set V_LONG=%%C
+			set V_DESC=!UV_COMMAND_DESCS[%%C]!
+			set V_SHORT=!V_USER_COMMAND_SHORT_NAME[%%C]!
+			call :internal_function_strlen V_DESCLEN V_DESC
+			call :internal_function_strlen V_SHORTLEN V_SHORT
+			call :internal_function_strlen V_LONGLEN V_LONG
+			REM 27
+			set /A "V_SPACE_USED=!V_SHORTLEN!+!V_LONGLEN!"
+			set /A "V_SPACE_WASTED=27-2-!V_SPACE_USED!"
+			set V_SPACER=
+			for /L %%I in (1,1,!V_SPACE_WASTED!) do set V_SPACER= !V_SPACER!
+	echo     !V_SHORT!, %%C!V_SPACER!!V_DESC!
+		)
+	)
     if not defined HG_EXE (
-    echo WARNING: 'hg.exe' cannot be located.  Mercurial may not be installed.
-    echo   This script can operate without it, but that mode is less supported.
-    echo   If Mercurial is not in PATH, you can set HG_EXE to full filename of 'hg.exe'
-    echo.
+	echo.
+	echo WARNING: 'hg.exe' cannot be located.  Mercurial may not be installed.
+	echo   This script can operate without it, but that mode is less supported.
+	echo   If Mercurial is not in PATH, you can set HG_EXE to full filename of 'hg.exe'
     )
     if not defined GIT_EXE (
-    echo WARNING: 'git.exe' cannot be located.  Git may not be installed.
-    echo   This script can operate without it, but that mode is less supported.
-    echo   If Git is not in PATH, you can set GIT_EXE to full filename of 'git.exe'
-    echo.
+	echo.
+	echo WARNING: 'git.exe' cannot be located.  Git may not be installed.
+	echo   This script can operate without it, but that mode is less supported.
+	echo   If Git is not in PATH, you can set GIT_EXE to full filename of 'git.exe'
     )
 
     goto internal_function_teardown
 )
 
-set V_COMMANDS[fetch-dependencies]=fetch-dependencies
-set V_COMMANDS[prepare-dependencies]=prepare-dependencies
-set V_COMMANDS[make-release]=make-release
-set V_COMMANDS[package-release]=package-release
-set V_COMMANDS[dependencies]=dependencies
-set V_COMMANDS[project]=project
-set V_COMMANDS[release]=release
-set V_COMMANDS[-fd]=fetch-dependencies
-set V_COMMANDS[-pd]=prepare-dependencies
-set V_COMMANDS[-mr]=make-release
-set V_COMMANDS[-pr]=package-release
-set V_COMMANDS[-d]=dependencies
-set V_COMMANDS[-p]=project
-set V_COMMANDS[-r]=release
-
+REM Compare the user given arguments to those we have indexed.
 :parse_args
 if "%~1" EQU "" goto parse_args_end
 set L_COMMAND=!V_COMMANDS[%~1]!
@@ -637,33 +692,78 @@ if "!V_COMMAND[release]!" EQU "yes" (
     set V_COMMAND[package-release]=yes
 )
 
-if "!V_COMMAND[project]!" EQU "yes" (
-    set V_COMMAND[build-project]=yes
+REM Set up the user command handlers.
+for %%C in (!V_USER_COMMANDS!) do (
+	if "!V_COMMAND[%%C]!" NEQ "" (
+		set V_LINK_KEY=!V_USER_COMMAND_LINK[%%C]!-!V_USER_COMMAND_WHEN[%%C]!
+		set V_LINK_VALUE=!V_USER_COMMAND_FUNCTION[%%C]!
+		if "!V_COMMAND_LINK[%V_LINK_KEY%]!" EQU "" (
+			set V_COMMAND_LINK[!V_LINK_KEY!]=!V_LINK_VALUE!
+		) else (
+			set V_COMMAND_LINK[!V_LINK_KEY!]=!V_COMMAND_LINK[%V_LINK_KEY%]! !V_LINK_VALUE!
+		)
+	)
 )
 
-REM Do the selected general commands.
-if "!V_COMMAND[fetch-dependencies]!" EQU "yes" (
-    call :internal_function_fetch_dependencies
-	call :user_function_fetch_dependencies
-)
-
-if "!V_COMMAND[prepare-dependencies]!" EQU "yes" (
-    call :internal_function_prepare_dependencies
-)
-
-if "!V_COMMAND[build-project]!" EQU "yes" (
-    call :internal_function_build_project
-)
-
-if "!V_COMMAND[make-release]!" EQU "yes" (
-    call :internal_function_make_release
-)
-
-if "!V_COMMAND[package-release]!" EQU "yes" (
-    call :internal_function_package_release
+REM Handle the internal arguments and linked user command handlers.
+for %%C in (!V_FUNCTION_COMMANDS!) do (
+	REM Call linked user command handlers for before this internal argument stage.
+	for %%L in (!V_COMMAND_LINK[%%C-before]!) do call :%%L
+	REM If an internal argument is given, call it's associated function.
+	if "!V_COMMAND[%%C]!" EQU "yes" call :!V_FUNCTIONS[%%C]!
+	REM Call linked user command handlers for after this internal argument stage.
+	for %%L in (!V_COMMAND_LINK[%%C-after]!) do call :%%L
 )
 
 goto internal_function_teardown
+
+REM --- FUNCTION: internal_func_index_user_commands -----------------------------
+:internal_func_index_user_commands
+
+set /A IDX_UV=0
+:loop_uv_commands
+
+set V_UV_COMMAND_DEFN=!UV_COMMANDS[%IDX_UV%]!
+if "!V_UV_COMMAND_DEFN!" EQU "" goto loop_uv_commands_break
+call :internal_func_index_user_command  !UV_COMMANDS[%IDX_UV%]!
+set /A IDX_UV=!IDX_UV!+1
+goto loop_uv_commands
+
+:loop_uv_commands_break
+goto:eof REM return
+
+REM --- FUNCTION: internal_func_index_user_command ------------------------------
+:internal_func_index_user_command
+REM %1: long argument
+REM %2: short argument
+REM %3: internal long argument
+REM %4: whether to handle <before|after> internal long argument
+REM %5: user function name to call
+
+REM Detect if the user argument clashes with an internal one.
+if "!V_COMMANDS[%1]!" NEQ "" (
+	echo ERROR.. User command name %1 not suitable.
+	goto internal_function_exit	
+)
+
+REM Enter the user arguments as valid arguments.
+set V_COMMANDS[%1]=%1
+set V_COMMANDS[%2]=%1
+
+REM Construct an iterable list of user argument names.
+if "!V_USER_COMMANDS!" EQU "" (
+	set V_USER_COMMANDS=%1
+) else (
+	set V_USER_COMMANDS=!V_USER_COMMANDS! %1
+)
+
+REM Index the other pieces of information to the given user command name.
+set V_USER_COMMAND_LINK[%1]=%3
+set V_USER_COMMAND_WHEN[%1]=%4
+set V_USER_COMMAND_FUNCTION[%1]=%5
+set V_USER_COMMAND_SHORT_NAME[%1]=%2
+
+goto:eof REM return
 
 REM --- FUNCTION: internal_function_build_project ----------------------------
 :internal_function_build_project
@@ -782,6 +882,9 @@ set /A V_IDX_FD=!V_IDX_FD!+1
 goto loop_internal_function_fetch_dependencies
 
 :exit_from_internal_function_fetch_dependencies
+
+call :user_function_fetch_dependencies
+
 goto:eof REM return
 
 REM --- FUNCTION: internal_function_fetch_dependency ---------------------------
@@ -1025,6 +1128,26 @@ REM We have the trailing string after the last path separator, or the file name.
 set V_RESULT=!L_SUBSTRING!
 
 goto:eof REM return
+
+REM --- FUNCTION: internal_function_strlen -------------------------------
+REM Taken from http://stackoverflow.com/a/5841587/3954464
+:internal_function_strlen <resultVar> <stringVar>
+(   
+    setlocal EnableDelayedExpansion
+    set "s=!%~2!#"
+    set "len=0"
+    for %%P in (4096 2048 1024 512 256 128 64 32 16 8 4 2 1) do (
+        if "!s:~%%P,1!" NEQ "" ( 
+            set /a "len+=%%P"
+            set "s=!s:~%%P!"
+        )
+    )
+)
+( 
+    endlocal
+    set "%~1=%len%"
+    exit /b
+)
 
 REM --- Everything is done, exit back to the user ----------------------------
 
