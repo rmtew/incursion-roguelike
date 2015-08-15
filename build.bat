@@ -28,17 +28,16 @@ REM      LINKS[n]=vcs <vcs-system> <name> <revision-id> <repo-path> <snapshot-ur
 REM        <revision-id>: This can be a URL, or it can be a filesystem path to an existing local clone.
 
 set LINKS[0]=http://jaist.dl.sf.net/pub/sourceforge/w/wi/winflexbison/win_flex_bison-latest.zip
-set LINKS[1]=vcs hg SDL2 704a0bfecf75 http://hg.libsdl.org/SDL http://hg.libsdl.org/SDL/archive/REV.zip
-set LINKS[2]=vcs hg libtcod 7a8b072365b5 https://bitbucket.org/jice/libtcod https://bitbucket.org/jice/libtcod/get/REV.zip
-set LINKS[3]=http://jaist.dl.sf.net/pub/sourceforge/p/pd/pdcurses/pdcurses/3.4/pdcurs34.zip
-set LINKS[4]=vcs git gyp dd831fd https://chromium.googlesource.com/external/gyp https://chromium.googlesource.com/external/gyp/REV.tar.gz
-set LINKS[5]=vcs git google-breakpad 0a0ad99 https://chromium.googlesource.com/external/google-breakpad/src/ https://chromium.googlesource.com/external/google-breakpad/src/REV.tar.gz
+set LINKS[1]=vcs hg libtcod 7a8b072365b5 https://bitbucket.org/jice/libtcod https://bitbucket.org/jice/libtcod/get/REV.zip
+set LINKS[2]=http://jaist.dl.sf.net/pub/sourceforge/p/pd/pdcurses/pdcurses/3.4/pdcurs34.zip
+set LINKS[3]=vcs git gyp dd831fd https://chromium.googlesource.com/external/gyp https://chromium.googlesource.com/external/gyp/REV.tar.gz
+set LINKS[4]=vcs git google-breakpad 0a0ad99 https://chromium.googlesource.com/external/google-breakpad/src/ https://chromium.googlesource.com/external/google-breakpad/src/REV.tar.gz
+set LINKS[5]=0
 
 REM TODO: Comment out local git repositories and replace with remote ones before committing.
-REM set LINKS[1]=vcs hg SDL2 704a0bfecf75 C:\RMT\VCS\HG\libraries\SDL http://hg.libsdl.org/SDL/archive/
-REM set LINKS[2]=vcs hg libtcod 7a8b072365b5 C:\RMT\VCS\HG\libraries\libtcod https://bitbucket.org/jice/libtcod/get/
-REM set LINKS[4]=vcs git gyp dd831fd C:\RMT\VCS\GIT\Tools\gyp ???
-REM set LINKS[5]=vcs git google-breakpad 0a0ad99 C:\RMT\VCS\GIT\Libraries\google-breakpad ???
+set LINKS[1]=vcs hg libtcod default C:\RMT\VCS\HG\libraries\libtcod-bitbucket https://bitbucket.org/jice/libtcod/get/
+set LINKS[3]=vcs git gyp dd831fd C:\RMT\VCS\GIT\Tools\gyp ???
+set LINKS[4]=vcs git google-breakpad 0a0ad99 C:\RMT\VCS\GIT\Libraries\google-breakpad ???
 
 REM __ MD5CHECKSUMS entries are the MD5 checksum for the download in the matching LINKS position
 REM      To get the checksum for a newly added download to add to an entry here, simply run the script and when
@@ -67,6 +66,15 @@ if not defined PYTHON_EXE (
 REM Process the user data, calling event functions when applicable.
 goto internal_function_main
 
+REM --- FUNCTION: user_function_fetch_dependencies --------------------------------
+:user_function_fetch_dependencies
+
+cd !DEPENDENCY_PATH!
+set SDL2LINK=vcs hg SDL2 704a0bfecf75 C:\RMT\VCS\HG\libraries\SDL http://hg.libsdl.org/SDL/archive/
+CALL libtcod\build.bat -fd
+
+goto:eof REM return
+
 REM --- FUNCTION: user_function_prepare_dependency --------------------------------
 :user_function_prepare_dependency
 REM variable: %V_LINK_PARTS% - The link data.
@@ -76,7 +84,6 @@ REM variable: %V_SKIPPED% - 'yes' or 'no', depending on whether the archive was 
 
 cd !DEPENDENCY_PATH!
 
-set /A L_SDL2_ATTEMPTS=0
 :user_function_prepare_dependency_retry
 
 if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
@@ -91,23 +98,26 @@ if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
     ) else if "!V_LINK_PARTS[%HTTP_FILENAME%]!" EQU "pdcurs34.zip" (
         cd !V_DIRNAME!\win32\
         
-        if not exist "!DEPENDENCY_PATH!\pdcurses_d.lib" (
-            echo Building: [pdcurses/Debug]
-            nmake -f vcwin32.mak clean
-            nmake -f vcwin32.mak DEBUG=1 WIDE=1 DLLOPT=/MTd pdcurses.lib
-            copy pdcurses.lib "!DEPENDENCY_PATH!\pdcurses_d.lib"
-        ) else (
-            echo Building: [pdcurses/Debug] .. skipped
-        )
-
-        if not exist "!DEPENDENCY_PATH!\pdcurses.lib" (
-            echo Building: [pdcurses/Release]
-            nmake -f vcwin32.mak clean
-            nmake -f vcwin32.mak WIDE=1 DLLOPT=/MT pdcurses.lib
-            copy pdcurses.lib "!DEPENDENCY_PATH!\pdcurses.lib"
-        ) else (
-            echo Building: [pdcurses/Release] .. skipped
-        )
+		for %%P in (Win32) do (
+			if not exist "!DEPENDENCY_PATH!\%%P" mkdir "!DEPENDENCY_PATH!\%%P"
+			for %%C in (Debug Release) do (
+				if not exist "!DEPENDENCY_PATH!\%%P\%%C" mkdir "!DEPENDENCY_PATH!\%%P\%%C"
+				if not exist "!DEPENDENCY_PATH!\%%P\%%C\pdcurses.lib" (
+					echo Building: [pdcurses^|%%C^|%%P]
+					nmake -f vcwin32.mak clean
+					if "%%C" equ "Debug" (
+						nmake -f vcwin32.mak DEBUG=1 WIDE=1 DLLOPT=/MTd pdcurses.lib
+					) else if "%%C" equ "Release" (
+						nmake -f vcwin32.mak WIDE=1 DLLOPT=/MT pdcurses.lib
+					) else (
+						echo ERROR
+					)
+					copy pdcurses.lib "!DEPENDENCY_PATH!\%%P\%%C\pdcurses.lib"
+				) else (
+					echo Building: [pdcurses^|%%C^|%%P] .. skipped
+				)
+			)
+		)
 
         set UV_INCLUDE_COMMANDS[%UV_INCLUDE_COMMAND_COUNT%]=!V_DIRNAME!\*.h
         set /A UV_INCLUDE_COMMAND_COUNT=%UV_INCLUDE_COMMAND_COUNT%+1
@@ -119,152 +129,110 @@ if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
     )
 ) else if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "vcs" (
     set L_VCS_NAME=!V_LINK_PARTS[%VCS_NAME%]!
-    if "!L_VCS_NAME!" EQU "SDL2" (
-        REM This variable is required by the libtcod makefile.
-        set SDL2PATH=!DEPENDENCY_PATH!\!V_DIRNAME!
+    if "!L_VCS_NAME!" EQU "libtcod" (
+		REM Delegate libtcod compilation to it's 'build.bat' script.
+		cd "!DEPENDENCY_PATH!"
+		CALL libtcod\build.bat -pd
+		CALL libtcod\build.bat -p
 
-        cd !V_DIRNAME!
+		REM Copy compiled litcod dependency binaries.
+		REM Copy compiled litcod binaries.
+		for %%P in (Win32 x64) do (
+			if not exist %%P mkdir %%P
+			for %%C in (Debug Release) do (
+				if not exist %%P\%%C mkdir %%P\%%C
+				for %%S in (dll pdb lib) do (
+					copy >nul libtcod\build\dependencies\%%P\%%C\SDL2.%%S %%P\%%C\
+					copy >nul libtcod\build\msvs\libtcod\%%P\%%C\libtcod.%%S %%P\%%C\
+				)
+			)
+		)
 
-        if not exist "!DEPENDENCY_PATH!\SDL2_d.dll" (
-            echo Building: [SDL2/Debug]
+		REM Mark the gathered libtcod dependency includes to be copied.
+		set UV_INCLUDE_COMMANDS[%UV_INCLUDE_COMMAND_COUNT%]=libtcod\build\dependencies\include\*.h
+		set /A UV_INCLUDE_COMMAND_COUNT=%UV_INCLUDE_COMMAND_COUNT%+1
 
-            REM SDL2 in theory requires the DirectX SDK to be installed, but in practice it's absence
-            REM can be worked around by putting a dummy include file in place, and then only XAudio2
-            REM support is lost.
-            set L_ERROR_MSG=
-            for /F "usebackq tokens=*" %%i in (`msbuild /nologo VisualC\SDL_VS2013.sln /p:Configuration^=Debug /p:Platform^=Win32 /t:SDL2^,SDL2main`) do (
-                set L_LINE=%%i
-                if "!L_LINE:fatal error=!" NEQ "!L_LINE!" set L_ERROR_MSG=%%i
-            )
-            set /A L_SDL2_ATTEMPTS=!L_SDL2_ATTEMPTS!+1
+		REM Mark the libtcod includes to be copied.
+		set UV_INCLUDE_COMMANDS[%UV_INCLUDE_COMMAND_COUNT%]=libtcod\include\*.h
+		set /A UV_INCLUDE_COMMAND_COUNT=%UV_INCLUDE_COMMAND_COUNT%+1
 
-            if exist VisualC\SDL\Win32\Debug\SDL2.dll (
-                copy VisualC\SDL\Win32\Debug\SDL2.dll "!DEPENDENCY_PATH!\SDL2_d.dll"
-                copy VisualC\SDL\Win32\Debug\SDL2.lib "!DEPENDENCY_PATH!\SDL2_d.lib"
-                copy VisualC\SDL\Win32\Debug\SDL2.pdb "!DEPENDENCY_PATH!\SDL2_d.pdb"
-            ) else (
-                REM Only try and recover from the DirectX problem, and if that don't work, give up.
-                if "!L_ERROR_MSG!" NEQ "" (
-                    if !L_SDL2_ATTEMPTS! EQU 1 (
-                        if "!L_ERROR_MSG:dxsdkver=!" NEQ "!L_ERROR_MSG!" (
-                            echo WARNING: Trying to make up for lack of installed DirectX SDK.
-                            type nul > include\dxsdkver.h
-                            cd !DEPENDENCY_PATH!
-                            goto user_function_prepare_dependency_retry
-                        )
-                    )
-                )
-            
-                echo ERROR.. SDL2.dll did not successfully build for some reason.
-                goto internal_function_exit
-            )
-        ) else (
-            echo Building: [SDL2/Debug] .. skipped
-        )
-
-        if not exist "!DEPENDENCY_PATH!\SDL2.dll" (
-            echo Building: [SDL2/Release]
-
-            msbuild /nologo VisualC\SDL_VS2013.sln /p:Configuration=Release /p:Platform=Win32 /t:SDL2,SDL2main
-            if exist VisualC\SDL\Win32\Debug\SDL2.dll (
-                copy VisualC\SDL\Win32\Release\SDL2.dll "!DEPENDENCY_PATH!\SDL2.dll"
-                copy VisualC\SDL\Win32\Release\SDL2.lib "!DEPENDENCY_PATH!\SDL2.lib"
-                copy VisualC\SDL\Win32\Release\SDL2.pdb "!DEPENDENCY_PATH!\SDL2.pdb"
-            ) else (
-                echo ERROR.. SDL2.dll did not successfully build for some reason.
-                goto internal_function_exit
-            )
-        ) else (
-            echo Building: [SDL2/Release] .. skipped
-        )
-
-        set UV_INCLUDE_COMMANDS[%UV_INCLUDE_COMMAND_COUNT%]=!V_DIRNAME!\include\*.h
-        set /A UV_INCLUDE_COMMAND_COUNT=%UV_INCLUDE_COMMAND_COUNT%+1
-    ) else if "!L_VCS_NAME!" EQU "libtcod" (
-        set BASEPATH=!DEPENDENCY_PATH!\!V_DIRNAME!
-        set BASEOBJPATH=!DEPENDENCY_PATH!\!V_DIRNAME!\build
-        if not exist "!BASEOBJPATH!" mkdir "!BASEOBJPATH!"
-
-        if not exist "!DEPENDENCY_PATH!\libtcod_d.dll" (
-            echo Building: [libtcod/Debug]
-            set CONFIG=Debug
-            set BASENAME_SUFFIX=_d
-            nmake /nologo -f ..\makefile-libtcod
-            copy "!BASEOBJPATH!\!CONFIG!\libtcod_d.lib" libtcod_d.lib
-            copy "!BASEOBJPATH!\!CONFIG!\libtcod_d.dll" libtcod_d.dll
-            copy "!BASEOBJPATH!\!CONFIG!\libtcod_d.pdb" libtcod_d.pdb
-        ) else (
-            echo Building: [libtcod/Debug] .. skipped
-        )
-
-        if not exist "!DEPENDENCY_PATH!\libtcod.dll" (
-            echo Building: [libtcod/Release]
-            set CONFIG=Release
-            nmake /nologo -f ..\makefile-libtcod
-            copy "!BASEOBJPATH!\!CONFIG!\libtcod.lib" libtcod.lib
-            copy "!BASEOBJPATH!\!CONFIG!\libtcod.dll" libtcod.dll
-            copy "!BASEOBJPATH!\!CONFIG!\libtcod.pdb" libtcod.pdb
-        ) else (
-            echo Building: [libtcod/Release] .. skipped
-        )
-
-		set UV_INCLUDE_COMMANDS[%UV_INCLUDE_COMMAND_COUNT%]=!V_DIRNAME!\include\*.h
-        set /A UV_INCLUDE_COMMAND_COUNT=%UV_INCLUDE_COMMAND_COUNT%+1
-    ) else if "!L_VCS_NAME!" EQU "gyp" (
+		) else if "!L_VCS_NAME!" EQU "gyp" (
         REM gyp is built using Python, so no building is required.
         echo Building: [gyp] .. skipped
     ) else if "!L_VCS_NAME!" EQU "google-breakpad" (
         set L_LIBS=exception_handler.lib crash_generation_client.lib common.lib
-        set L_LIBRELPATH=client\Windows\Release\lib
-        set L_FAILED=no
+
         REM gyp is a bit flakey, and requires at least at this time, we be at the right directory level and provide a depth.
         cd !DEPENDENCY_PATH!\google-breakpad
+        set L_FAILED=no
         for %%A in (!L_LIBS!) do (
-            if not exist !L_LIBRELPATH!\%%A (
-                set L_FAILED=yes
-            )
-        )
+			for %%P in (Win32 x64) do (			
+				for %%C in (Debug Release) do (			
+					if not exist "!DEPENDENCY_PATH!\%%P\%%C\%%A" set L_FAILED=yes
+				)
+			)
+		)
         
         if "!L_FAILED!" EQU "yes" (
             REM Use gyp to produce VS2013 solution and project files.
             set GYP_MSVS_VERSION=2013
-            CALL "!DEPENDENCY_PATH!\gyp\gyp.bat" --no-circular-check client\windows\breakpad_client.gyp --depth .
+            CALL >nul "!DEPENDENCY_PATH!\gyp\gyp.bat" --no-circular-check client\windows\breakpad_client.gyp --depth .
 
-            REM TODO: The current revision breaks on missing files, and produces partial results, but enough.  Build them piecemeal.
-            msbuild /nologo client\Windows\common.vcxproj /p:Configuration=Release /p:Platform=Win32
-            msbuild /nologo client\Windows\breakpad_client.sln /p:Configuration=Release /p:Platform=Win32 /t:build_all
+			for %%P in (Win32 x64) do (			
+				for %%C in (Debug Release) do (
+					set L_FAILED=no
+					for %%A in (!L_LIBS!) do (
+						if not exist "!DEPENDENCY_PATH!\%%P\%%C\%%A" set L_FAILED=yes
+					)
+				
+					if "!L_FAILED!" EQU "yes" (
+						echo Building: [google-breakpad^|%%C^|%%P]
 
-            REM Verify that the required static libraries were produced as a result.
-            set L_FAILED=no
-            for %%A in (!L_LIBS!) do (
-                if not exist "!L_LIBRELPATH!\%%A" (
-                    echo ERROR.. google-breakpad compilation failed to produce '%%A'
-                    set L_FAILED=yes
-                )
-            )
-            REM If one or more libraries were not produced, the user will have been told about each, so now exit.
-            if "!L_FAILED!" EQU "yes" (
-                echo ERROR.. Giving up as these libraries are required for google-breakpad to work.
-                goto internal_function_exit
-            )
+						REM TODO: The current revision breaks on missing files, and produces partial results, but enough.  Build them piecemeal.
+						DEL >nul /S /Q client\Windows\%%C
+						set L_ERROR_MSG=
+						for /F "usebackq tokens=*" %%i in (`msbuild /nologo client\Windows\common.vcxproj /p:Configuration^=%%C /p:Platform^=%%P`) do (
+							set L_LINE=%%i
+							if "!L_LINE:fatal error=!" NEQ "!L_LINE!" set L_ERROR_MSG=%%i
+						)
+						set L_ERROR_MSG=
+						for /F "usebackq tokens=*" %%i in (`msbuild /nologo client\Windows\breakpad_client.sln /p:Configuration^=%%C /p:Platform^=%%P /t:build_all`) do (
+							set L_LINE=%%i
+							if "!L_LINE:fatal error=!" NEQ "!L_LINE!" set L_ERROR_MSG=%%i
+						)
 
-            REM Copy all the required static libraries.
-            for %%A in (!L_LIBS!) do (
-                copy "!L_LIBRELPATH!\%%A" "!DEPENDENCY_PATH!\"
-            )
-
-            echo SUCCESS.. Enough of google-breakpad was compiled to produce the required static libraries.
-            goto user_function_prepare_dependency_breakpad_includes
+						REM Verify that the required static libraries were produced as a result.
+						set L_FAILED=no
+						for %%A in (!L_LIBS!) do (
+							if not exist "client\Windows\%%C\lib\%%A" (
+								echo Checking [google-breakpad^|%%P]: .. ERROR, failed to produce '%%A'
+								set L_FAILED=yes
+							)
+						)
+						REM If one or more libraries were not produced, the user will have been told about each, so now exit.
+						if "!L_FAILED!" EQU "yes" (
+							echo ERROR.. Giving up as these libraries are required for google-breakpad to work.
+							goto internal_function_exit
+						)
+						
+						for %%A in (!L_LIBS!) do (
+							if not exist "!DEPENDENCY_PATH!\%%P\%%C\%%A" copy >nul "client\Windows\%%C\lib\%%A" "!DEPENDENCY_PATH!\%%P\%%C\"
+						)
+					)
+				)
+			)
         ) else (
             echo Building: [google-breakpad] .. skipped
         )
+
+		REM Copy all the required static libraries.
     ) else (
         echo ERROR.. !V_LINK_PARTS[%VCS_NAME%]! not handled by user who wrote the build amendments.
         goto internal_function_exit
     )
 )
 
-goto exit_from_user_function_prepare_dependency
+goto:eof REM return
 
 :user_function_prepare_dependency_breakpad_includes
 
@@ -292,7 +260,6 @@ for /F %%V in ('dir /A:D /B "!L_DIR_PATH!"') do (
 set /A L_IDX=!L_IDX!+1
 if !L_IDX! LSS !L_PATH_COUNT! goto user_function_make_release_loop1
 
-:exit_from_user_function_prepare_dependency
 goto:eof REM return
 
 REM --- FUNCTION: user_function_prepare_dependencies -------------------------
@@ -300,7 +267,10 @@ REM --- FUNCTION: user_function_prepare_dependencies -------------------------
 REM description: This is called as a final step after all dependencies have been prepared.
 REM variable: %DEPENDENCY_PATH% - The absolute path of the dependencies directory.
 
-if exist !UV_INCLUDE_PATH! goto exit_from_user_function_prepare_dependencies
+REM Generic
+if exist "!UV_INCLUDE_PATH!" goto exit_from_user_function_prepare_dependencies
+
+call :user_function_prepare_dependency_breakpad_includes
 
 set /A L_COUNT=0
 :loop_user_function_prepare_dependencies
@@ -314,6 +284,44 @@ if %L_COUNT% LSS %UV_INCLUDE_COMMAND_COUNT% (
 )
 
 :exit_from_user_function_prepare_dependencies
+goto:eof REM return
+
+REM --- FUNCTION: user_function_build_project --------------------------------
+:user_function_build_project
+
+echo NOT YET IMPLEMENTED
+pause & exit /b
+
+REM Compile incursion.
+
+set TCOD_SLN_PATH=!BUILD_PATH!\msvs
+
+for %%P in (Win32 x64) do (
+	for %%C in (Debug Release) do (
+		for %%N in (libtcod libtcod-gui) do (
+			set "TCOD_BUILD_PATH=!TCOD_SLN_PATH!\%%N\%%P\%%C"
+
+			if exist "!TCOD_BUILD_PATH!\%%N.dll" (
+				echo Building: [%%N^|%%C^|%%P] .. skipped
+			) else (
+				echo Building: [%%N^|%%C^|%%P]
+				
+				set L_ERROR_MSG=
+				for /F "usebackq tokens=*" %%i in (`msbuild /nologo msvs\libtcod.sln /p:Configuration^=%%C /p:Platform^=%%P /t:%%N`) do (
+					set L_LINE=%%i
+					if "!L_LINE:fatal error=!" NEQ "!L_LINE!" set L_ERROR_MSG=%%i
+				)
+				set /A L_SDL2_ATTEMPTS=!L_SDL2_ATTEMPTS!+1
+
+				if not exist "!TCOD_BUILD_PATH!\%%N.dll" (
+					echo ERROR.. %%N.dll did not successfully build for some reason.
+					goto internal_function_exit
+				)
+			)
+		)
+	)
+)
+
 goto:eof REM return
 
 REM --- FUNCTION: user_function_detect_incursion_version ---------------------
@@ -629,13 +637,22 @@ if "!V_COMMAND[release]!" EQU "yes" (
     set V_COMMAND[package-release]=yes
 )
 
+if "!V_COMMAND[project]!" EQU "yes" (
+    set V_COMMAND[build-project]=yes
+)
+
 REM Do the selected general commands.
 if "!V_COMMAND[fetch-dependencies]!" EQU "yes" (
     call :internal_function_fetch_dependencies
+	call :user_function_fetch_dependencies
 )
 
 if "!V_COMMAND[prepare-dependencies]!" EQU "yes" (
     call :internal_function_prepare_dependencies
+)
+
+if "!V_COMMAND[build-project]!" EQU "yes" (
+    call :internal_function_build_project
 )
 
 if "!V_COMMAND[make-release]!" EQU "yes" (
@@ -647,6 +664,14 @@ if "!V_COMMAND[package-release]!" EQU "yes" (
 )
 
 goto internal_function_teardown
+
+REM --- FUNCTION: internal_function_build_project ----------------------------
+:internal_function_build_project
+
+cd "!BUILD_PATH!"
+call :user_function_build_project
+
+goto:eof REM return
 
 REM --- FUNCTION: internal_function_make_release -----------------------------
 :internal_function_make_release
@@ -1009,7 +1034,7 @@ goto user_function_teardown
 
 :internal_function_exit
 REM Leave the user in the directory they were in to begin with.
-cd %BUILD_SCRIPT_PATH%
+cd "%BUILD_SCRIPT_PATH%"
 
 REM endlocal: Ensure environment variables are left the same as when the script started.
 REM exit /b:  Exit the script, but do not close any DOS window it was run from within.
