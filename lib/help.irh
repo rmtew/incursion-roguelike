@@ -54,8 +54,8 @@ Text "help::intro"
      __The Forsaken -- primordial mage-lords who made pacts with beings
      beyond the edge of creation -- were sealed into a ceaseless, ageless
      slumber eons ago during the sorcery wars. Now, their sleep grows
-     restless and troubled, and the thirteen signs and omens the holy
-     texts claim will presage their awakening have befallen:
+     restless and troubled, and the thirteen signs and omens that the 
+     holy texts claim will presage their awakening have befallen:
      trees grow warped and crooked, seven nations fall to the hand
      of one, and a crimson fire rains from the sky for three days and
      three nights over the town of Akrenstone. The fourth sign is a great
@@ -72,7 +72,7 @@ Text "help::intro"
      on their own. Fail, and they will spread despair and destruction across the 
      surface of Therya like a plague upon the land. Even should you succeed, you 
      must escape with your life to the surface world. 
-     __Do these things and you will receive the fame and glory of a hero of legend, 
+     __Do these things and you will receive the fame and glory of a hero of legend... 
      but beware! Rumours claim Murgash is tampering with forces and creatures far fouler 
      than goblinoids.\n\n
 
@@ -2988,7 +2988,7 @@ Text "help::combat"
       and will remain that way for several rounds thereafter -- the exact
       number of rounds a character remains alert is based on his Wisdom score.\n
       __A character who is attacked while Exploring is said to have been
-      caught <11>flat-footed<3>. Such a character loses their Dexterity
+      caught <11>off-guard<3>. Such a character loses their Dexterity
       bonus to their Defense Class, as the attack caught them partially
       unexpectedly and they did not have time to fully ready themselves
       for combat. Essentially, a minor advantage goes to whichever characters
@@ -2997,7 +2997,7 @@ Text "help::combat"
       __This may seem like a trivial penalty, and usually it is. It can be
       much more deadly when fighting Rogues or other characters with the
       Sneak Attack ability, however, as they gain significant amounts of
-      bonus damage when attacking flat-footed characters.\n\n
+      bonus damage when attacking off-guard characters.\n\n
       
       \n<11>SURPRISE ATTACKS {SA}\n
         ================<3>\n
@@ -3012,7 +3012,7 @@ Text "help::combat"
       __Surprise attacks receive a +4 surprise bonus to hit, and the
       attacker can substitute her Dexterity for Strength when determining
       damage, if doing so benefits her. The victim is also denied her
-      Dexterity bonus to defense, as with being flat-footed above --
+      Dexterity bonus to defense, as with being off-guard above --
       thus allowing a Rogue to gain Sneak Attack damage. Obviously,
       setting up surprise attacks is very valuable especially to Rogues,
       but also to any high-Dexterity character.\n 
@@ -3246,8 +3246,8 @@ Text "help::combat"
       __<15>*<3>_When a creature attacks an enemy who is wielding a weapon two or more
       size categories larger than her own, the enemy receives an attack of opportunity
       -- it is hard to fight a sword-wielder with a dagger! This does not apply if the
-      attacker uses a martial arts weapon, or the defender is surprised, caught flat-
-      footed or unable to perceive the attacker.
+      attacker uses a martial arts weapon, or the defender is surprised, caught off-guard 
+      or unable to perceive the attacker.
       __Note that Incursion is slightly nicer about attacks of opportunity than its
       parent system: using magic items generally does not provoke an attack of
       opportunity, nor does moving around within another creature's threatened area,
@@ -3494,7 +3494,7 @@ Text "help::combat"
       substantial with a long charge on a heavy, fast mount.\n
       __While you are charging you do not get to make attacks of opportunity. You
       are denied your Dexterity bonus to your Defense Class. You are subject to
-      sneak attacks as if you were flat footed or flanked. After your first step,
+      sneak attacks as if you were off-guard or flanked. After your first step,
       every step you take while charging provokes an attack of opportunity
       (movement) from all nearby foes. If you attempt mounted archery, your
       penalty is doubled while charging.\n 
