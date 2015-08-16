@@ -179,7 +179,7 @@ Text "help::bluff"
       from her and slip into the shadows even when surrounded by foes.
       If the character beats a given observer's distraction DC by 10
       or more, that observer is so distracted that they are considered
-      flat-footed against the Bluff user's attacks for a full round, in
+      off-guard against the Bluff user's attacks for a full round, in
       addition to the normal effect.\n
       __Every previous distraction attempt against the same creature
       increases the DC of future attempts by +2 if successful, or +5 if
@@ -900,7 +900,7 @@ Text "help::handle device"
     concealed or spring-loaded blades, whether the primary blade of
     the weapon or a secondary edge. On one in three attacks, the
     wielder can use this function to surprise an opponent, treating
-    them as flat-footed if they can beat them on an opposed Handle
+    them as off-guard if they can beat them on an opposed Handle
     Device vs. Spot check.\n
     __<7>Bows:<3> Mechanical conventional bows feature elaborate balances
     and pulley systems to direct force and channel torque, allowing

@@ -249,7 +249,7 @@ class Creature: public Thing, public Magic
         return normal_timeout;
       } 
 
-      // WW: this counts everything except Flat-Footedness, Surprise,
+      // WW: this counts everything except being off-guard, surprised by
       // unseen attackers, etc. Those are checked inside fight.cpp
       bool noDexDefense();
 

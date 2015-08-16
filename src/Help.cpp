@@ -2055,7 +2055,7 @@ String & Monster::Describe(Player *p) {
         { CA_TREMORSENSE, "It has tremorsense to a range of %d0 ft. " },
         { CA_TUNNEL, "It can burrow through earth and stone. " },
         { CA_TURNING, "It can turn undead as a level %d cleric would. " },
-        { CA_UNCANNY_DODGE, "It avoids being caught flat-footed or flanked. " },
+        { CA_UNCANNY_DODGE, "It avoids being caught off-guard or flanked. " },
         { CA_WALLWALK, "It can walk along walls and ceilings. " },
         { CA_WEAPON_IMMUNITY, "It is unaffected by weapons with a plus less than %d. " },
         { CA_WOODLAND_STRIDE, "It is unaffected by adverse terrain like webs or brimstone. " },

@@ -3862,7 +3862,7 @@ AI_BRACERS Effect "Springblade Bracers" : EA_GENERIC
       these weapons because they often allow them to get in a
       second sneak attack after a fight has begun -- the first
       attack made with a springblade within a single round of their
-      deployment automatically treats a foe as flat-footed.\n
+      deployment automatically treats a foe as off-guard.\n
       __This particular set of springblade bracers contains a pair
       of <11>+2 keen springblades<7>.";
     On Event EV_MAGIC_HIT {

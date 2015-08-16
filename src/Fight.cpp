@@ -2513,7 +2513,7 @@ SkipRepeat:;
 }
 
 
-// doesn't handle Flat-Footed, unseen attacker, surprise round, etc. 
+// doesn't handle off-guard, unseen attacker, surprise round, etc. 
 bool Creature::noDexDefense()
 {
   if (HasStati(ENGULFED))
@@ -3777,7 +3777,7 @@ EvReturn Creature::PreStrike(EventInfo &e) /* this == EActor */
        other stealth-based fighters who are often Small. Dex
        can replace Str when modifying damage if A) the weapon
        is smaller than the target, B) Dex > Str, C) it is a
-       surprise attack against a flat-footed foe. */
+       surprise attack against an off-guard foe. */
     if (e.isSurprise && e.isFlatFoot)
       if (e.AType == A_SWNG || e.AType == A_FIRE ||
           e.AType == A_THRU || e.AType == A_LUNG ||
@@ -8088,9 +8088,9 @@ SkipDamage:
     } else if (e.isFlatFoot) {
         /* Kludge, but it works (for single player). */
         if (e.EVictim->isPlayer())
-            prelude = "Catching you flat-footed, ";
+            prelude = "Catching you off-guard, ";
         else
-            prelude = XPrint("Catching <him:Obj> flat-footed, ",e.EVictim);
+            prelude = XPrint("Catching <him:Obj> off-guard, ",e.EVictim);
     } else if (e.isBypass) {
         /* Kludge, but it works (for single player). */
         if (e.EVictim->isPlayer())

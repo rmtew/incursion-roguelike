@@ -3935,7 +3935,7 @@ Wizard / Scroll Spell "Stinking Cloud" : EA_GENERIC
       vapors, causing all breathing creatures within the cloud to make a
       Fortitude save (DC 20) every round or suffer nausea for 2d4
       additional rounds.  Nauseated creatures cannot attack or cast spells
-      and are considered flat-footed for the purposes of sneak attacks. The
+      and are considered off-guard for the purposes of sneak attacks. The
       caster is not immune!";
     On Event EV_MAGIC_STRIKE {
       if (EVictim->onPlane() == PHASE_MATERIAL &&
@@ -4733,7 +4733,7 @@ Wizard Spell "Illusory Stance" : EA_INFLICT
       legs and the location of her melee attacks. She gains a
       +2 bonus to hit, and for every melee attack foes must
       make a successful opposed Spot test against her Illusioncraft
-      skill or be treated as flat-footed. \n
+      skill or be treated as off-guard. \n
       __Possessing true sight negates these bonuses in regard
       to any true-seeing opponent, and they do not apply against
       mindless or blind opponents.";

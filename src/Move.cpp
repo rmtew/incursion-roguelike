@@ -889,7 +889,7 @@ RepeatPrompt:
     *
     * FJM: This proved to swing the other direction, ending up massively
     * unfair to players because they could never get the "first hit" on
-    * monsters, thus being struck flat-footed by a kind of spring attack
+    * monsters, thus being struck off-guard by a kind of spring attack
     * innate ability all monsters had. To fix this while retaining the
     * fix to the above problem, monsters can not only store up to 
     * (Timeout - 12) segments of movement, and thus slow monsters must

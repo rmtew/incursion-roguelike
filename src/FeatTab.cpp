@@ -154,7 +154,7 @@ struct FeatInfoStruct FeatInfo[] = {
 
   { FT_BACKSTAB, 0, "Backstab",
     "You are adept at making surprise attacks. You gain a +4 bonus on attack rolls when "
-    "making a surprise attack (e.g., because the enemy is surprised, flat-footed, flanked, "
+    "making a surprise attack (e.g., because the enemy is surprised, off-guard, flanked, "
     "exposed, charging, grappled, stuck or stunned).",
     {{{FP_ABILITY,CA_SNEAK_ATTACK,0,
       FP_BAB, S_MELEE, 2},
@@ -177,7 +177,7 @@ struct FeatInfoStruct FeatInfo[] = {
     "you sleep, waking on a hair trigger and ready to respond to threats. In "
     "game terms, if you have an encounter while resting, the monsters will "
     "not get free actions ahead of you, you will not be subject to the Coup "
-    "de Grace maneuver and you will not be flat-footed.",
+    "de Grace maneuver, and you will not be off-guard.",
     {{{FP_FEAT,FT_ALERTNESS,0},
       {FP_ATTR,A_WIS,13}}}},
 
@@ -272,7 +272,7 @@ struct FeatInfoStruct FeatInfo[] = {
       "sequence, you suffer only a -2 penalty, rather than a -5.",
     {{{FP_ATTACK, A_CLAW, 0}}}},
   { FT_POUNCE,       FF_MONSTER, "Pounce",
-    "When you attack a flat-footed enemy, you may make all of the attacks "
+    "When you attack an off-guard enemy, you may make all of the attacks "
     "in your natural attack sequence at your full base attack bonus. Normally "
     "the subsequent attacks in a natural attacks are at a -5 penalty (or a -2 penalty"
     " with the Multiattack feat)." },
@@ -1121,7 +1121,7 @@ struct FeatInfoStruct FeatInfo[] = {
        FP_FEAT, FT_COMBAT_REFLEXES, 0}}} },
   { FT_MISSILE_PROOF, 0, "Missile Proof",
     "You may block projectiles easily with your shield. If you are attacked by a "
-    "ranged weapon and you are not surprised or flat-footed, you may make a Reflex "
+    "ranged weapon and you are not surprised or off-guard, you may make a Reflex "
     "save against DC 20. The DC is lowered by the armour bonus of your shield and "
     "raised by the magical plus, if any, of the missile weapon. If you succeed, you "
     "deflect the attack. Deflecting a missile attack in this manner uses one of your "
@@ -1320,7 +1320,7 @@ struct FeatInfoStruct FeatInfo[] = {
 
   { FT_EXPERT_TACTICIAN, FF_SMART|FF_WARRIOR, "Expert Tactician", 
     "When you attack an opponent who is surprised or denied her dexterity bonus to "
-    "defense (for any reason except being flat-footed or not being able to see you), "
+    "defense (for any reason except being off-guard or not being able to see you), "
     "the attack takes no time. This only applies to normal melee, ranged and brawl "
     "attacks, as well as magical touch attacks. It does not apply to great blows or "
     "trip attempts (for example). You may only make one \"free\" Expert Tactician "
@@ -1345,7 +1345,7 @@ struct FeatInfoStruct FeatInfo[] = {
     
   { FT_GUARDED_STANCE, FF_SMART|FF_WARRIOR, "Guarded Stance",
     "You are able to position yourself and your polearm intelligently in combat "
-    "situations. If you are wielding a reach weapon, you are not flat-footed, and an "
+    "situations. If you are wielding a reach weapon, you are not off-guard, and an "
     "opponent fails to close with you, you may make an attack of opportunity on that "
     "opponent. In addition, if you are making an attack of opportunity because an "
     "opponent is charging you, you gain a +8 bonus to hit." ,
@@ -1413,7 +1413,7 @@ struct FeatInfoStruct FeatInfo[] = {
     "a <9>magic missile<7>, <9>searing light<7>, <9>ray of enfeeblement<7> or "
     "<9>disintegrate<7> spell. This costs you one of your attacks of opportunity "
     "for the current round, and you must be able to perceive the attacker and "
-    "must not be flat-footed.\n",
+    "must not be off-guard.\n",
     {{{FP_ATTR, A_DEX, 13,
        FP_ATTR, A_WIS, 13,
        FP_FEAT, FT_DEFLECT_ARROWS, 0 }}}},
@@ -1438,9 +1438,9 @@ struct FeatInfoStruct FeatInfo[] = {
 
   { FT_IMPROVED_INITIATIVE, FF_WARRIOR|FF_INTUITIVE, "Improved Initiative",
     "Others are rarely able to act before you are ready "
-      "to respond to their action. If you are attacked while flat-footed, "
+      "to respond to their action. If you are attacked while off-guard, "
       "you may make a Dexterity check (DC 15). If successful, you negate "
-      "the condition of flat-footedness and ready your defenses before "
+      "the condition of being off-guard and ready your defenses before "
       "the attack lands.",
       {{{FP_ATTR, A_WIS, 13}}} },
 
