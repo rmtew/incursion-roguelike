@@ -2,25 +2,37 @@
 @echo off
 setlocal EnableDelayedExpansion
 
-REM TODO: INCURSION USER
-REM TODO: FETCH
-REM TODO: - The top level prepared dependencies should be bundled for release, as a quick cheat pack.
-REM TODO: -- Add to make-release/package-release steps.
-REM TODO: -- Also support downloading and using them with a command-line argument if bitbucket allows.
-REM TODO: PREPARE
-REM TODO: - The version control archived zip.  How well does it work?  Should I even bother to support it?
-REM TODO: -- What if someone installs hg after downloading and using the snapshot?
-REM TODO: RELEASE
+REM ** This script is intended to automate all parts of the following:
+REM - Fetching, extracting and building all dependencies.
+REM - Building the solution.
+REM - Making and packaging the releases.
+
+REM ** Dependencies:
+REM - Git, if any of the dependencies are fetched from a git repository.
+REM - Mercurial, if any of the dependencies are fetched from a mercurial repository.
+
+REM TODO:
+REM - fetch-dependencies:
+REM -- Download the 'make-release'/'package-release' dependencies from bitbucket.
+REM - prepare-dependencies:
+REM -- Take the downloaded dependencies and extract them in the right location.
 
 REM Divert to the internal setup code, it will return to the user setup.
 goto internal_function_setup
 
 REM --- FUNCTION: user_function_setup ----------------------------------------
+REM This function allows the user to define global variables, check for their own
+REM dependencies and set internal script values which need to be initialised before
+REM the script starts work.
 :user_function_setup
 
-REM This function is provided for the user to define what resources this script should
-REM fetch and help prepare.  How they are actually prepared, the user specifies by
-REM adding support below in 'user_function_prepare_dependency'.
+REM So I can have this fetch from local repositories, rather than use expensive bandwidth.
+set UV_RMTEW_DEVMODE=no
+
+REM Internal variable: LINKS
+REM
+REM This variable defines what dependencies the script should download on behalf the user.
+REM The user is responsible for preparing these dependencies in 'user_function_prepare_dependency'.
 REM
 REM __ LINKS entries are either URLs to ZIP archives, or a collection of version control (vcs) information.
 REM      LINKS[n]=<url to zip>
@@ -34,42 +46,64 @@ set LINKS[3]=vcs git gyp dd831fd https://chromium.googlesource.com/external/gyp 
 set LINKS[4]=vcs git google-breakpad 0a0ad99 https://chromium.googlesource.com/external/google-breakpad/src/ https://chromium.googlesource.com/external/google-breakpad/src/REV.tar.gz
 set LINKS[5]=0
 
-REM TODO: Comment out local git repositories and replace with remote ones before committing.
-set LINKS[1]=vcs hg libtcod default C:\RMT\VCS\HG\libraries\libtcod-bitbucket https://bitbucket.org/jice/libtcod/get/
-set LINKS[3]=vcs git gyp dd831fd C:\RMT\VCS\GIT\Tools\gyp ???
-set LINKS[4]=vcs git google-breakpad 0a0ad99 C:\RMT\VCS\GIT\Libraries\google-breakpad ???
+if "!UV_RMTEW_DEVMODE!" equ "yes" (
+	set LINKS[1]=vcs hg libtcod default C:\RMT\VCS\HG\libraries\libtcod-bitbucket INVALID
+	set LINKS[3]=vcs git gyp dd831fd C:\RMT\VCS\GIT\Tools\gyp INVALID
+	set LINKS[4]=vcs git google-breakpad 0a0ad99 C:\RMT\VCS\GIT\Libraries\google-breakpad INVALID
+)
 
-REM __ MD5CHECKSUMS entries are the MD5 checksum for the download in the matching LINKS position
-REM      To get the checksum for a newly added download to add to an entry here, simply run the script and when
-REM      the download is processed, the calculated checksum will be printed and noted as unchecked.
+REM Internal variable: MD5CHECKSUMS
+REM
+REM This variable is used to specify known MD5 checksums for dependency file downloads.  If you do
+REM not provide it, then when the downloaded file is checked, the calculated checksum will be
+REM displayed and noted as unchecked.  The checksum can then be entered here, and it will ensure all
+REM later copies of the file are the expected file.
 
 set MD5CHECKSUMS[0]=BB-C5-10-F0-91-34-2F-CF-5B-A7-A2-BC-A3-97-FD-A1
 set MD5CHECKSUMS[3]=D6-3A-85-FD-5D-E9-60-11-71-02-87-4C-AB-5A-EB-90
 
 set UV_INCLUDE_PATH=!DEPENDENCY_PATH!\include
 
+REM Our user handling of the 'prepare-dependencies' command indexes all the include files from
+REM the range of dependencies we prepare, and as a post step in 'user_function_prepare_dependencies'
+REM we copy them into our dependency folder.
 set UV_INCLUDE_COMMANDS[0]=
 set /A UV_INCLUDE_COMMAND_COUNT=0
 
+REM Where the 'make-release'/'package-release' command outputs are placed.
 set UV_PACKAGES_DIRNAME=packages
 set UV_PACKAGES_PATH=!BUILD_PATH!\packages
 
-REM Set to yes to get the buggy curses executables packaged as well.
+REM The pdcurses dependency is used to build a Curses-based UI for the game.  It generally works,
+REM but the reason we do not distribute it is that the console font lacks the range of characters
+REM which we currently use.  Until that can be rectified, this is sidelined.
 set UV_PACKAGE_CURSES=no
 
-REM Allow the user to specify the path to their Git 'git' executable.  It may have to be accessed via absolute path.
+REM Allow the user to specify the path to their Python 'python' executable.  It may have to be
+REM accessed via absolute path.  This is required for running gyp, which is used to generate
+REM solutions and projects for Google Breakpad.  Note that the building of Breakpad on Windows is
+REM broken and has been for a long time, see the prepare code for details.
 if not defined PYTHON_EXE (
     set "PATH=C:\Python27;%PATH%"
     python.exe --help >nul 2>&1 && (set PYTHON_EXE=python.exe) || (set PYTHON_EXE=)
 )
 
+REM Internal variable: UV_COMMANDS
+REM
+REM Entries in this list are used by the internal functions to handle user arguments to the
+REM script.  We use it to have the script automate compiling the scripts.
+REM
 REM Long argument / short argument / internal argument / <before|after> / function name to call
 set UV_COMMANDS[0]=compile-scripts -cs build-project after user_function_compile_scripts
 set UV_COMMANDS[1]=
 
+REM Internal variable: UV_COMMAND_DESCS
+REM
+REM Provides a short description for each user argument.  These are injected into the command
+REM listing that is displayed when the user just types 'build'.
 set UV_COMMAND_DESCS[compile-scripts]=compile Incursion script module
 
-REM Process the user data, calling event functions when applicable.
+REM We are done.
 goto internal_function_main
 
 REM --- FUNCTION: user_function_fetch_dependencies --------------------------------
@@ -78,7 +112,9 @@ REM --- FUNCTION: user_function_fetch_dependencies -----------------------------
     setlocal EnableDelayedExpansion
 	
 	cd !DEPENDENCY_PATH!
-	REM set SDL2LINK=vcs hg SDL2 704a0bfecf75 C:\RMT\VCS\HG\libraries\SDL http://hg.libsdl.org/SDL/archive/
+	if "!UV_RMTEW_DEVMODE!" equ "yes" (
+		set SDL2LINK=vcs hg SDL2 704a0bfecf75 C:\RMT\VCS\HG\libraries\SDL http://hg.libsdl.org/SDL/archive/
+	)
 	CALL libtcod\build.bat -fd
 )
 (
@@ -93,7 +129,7 @@ REM variable: %DEPENDENCY_PATH% - The absolute path of the dependencies director
 REM variable: %V_DIRNAME% - The relative directory name the dependency can be found in.
 REM variable: %V_SKIPPED% - 'yes' or 'no', depending on whether the archive was already extracted.
 (
-    setlocal EnableDelayedExpansion
+REM    setlocal EnableDelayedExpansion
 
 	cd !DEPENDENCY_PATH!
 
@@ -130,8 +166,8 @@ REM variable: %V_SKIPPED% - 'yes' or 'no', depending on whether the archive was 
 				)
 			)
 
-			set UV_INCLUDE_COMMANDS[%UV_INCLUDE_COMMAND_COUNT%]=!V_DIRNAME!\*.h
-			set /A UV_INCLUDE_COMMAND_COUNT=%UV_INCLUDE_COMMAND_COUNT%+1
+			set UV_INCLUDE_COMMANDS[!UV_INCLUDE_COMMAND_COUNT!]=!V_DIRNAME!\*.h
+			set /A UV_INCLUDE_COMMAND_COUNT=!UV_INCLUDE_COMMAND_COUNT!+1
 
 			cd !DEPENDENCY_PATH!
 		) else (
@@ -160,14 +196,13 @@ REM variable: %V_SKIPPED% - 'yes' or 'no', depending on whether the archive was 
 			)
 
 			REM Mark the gathered libtcod dependency includes to be copied.
-			set UV_INCLUDE_COMMANDS[%UV_INCLUDE_COMMAND_COUNT%]=libtcod\build\dependencies\include\*.h
-			set /A UV_INCLUDE_COMMAND_COUNT=%UV_INCLUDE_COMMAND_COUNT%+1
+			set UV_INCLUDE_COMMANDS[!UV_INCLUDE_COMMAND_COUNT!]=libtcod\build\dependencies\include\*.h
+			set /A UV_INCLUDE_COMMAND_COUNT=!UV_INCLUDE_COMMAND_COUNT!+1
 
 			REM Mark the libtcod includes to be copied.
-			set UV_INCLUDE_COMMANDS[%UV_INCLUDE_COMMAND_COUNT%]=libtcod\include\*.h
-			set /A UV_INCLUDE_COMMAND_COUNT=%UV_INCLUDE_COMMAND_COUNT%+1
-
-			) else if "!L_VCS_NAME!" EQU "gyp" (
+			set UV_INCLUDE_COMMANDS[!UV_INCLUDE_COMMAND_COUNT!]=libtcod\include\*.h
+			set /A UV_INCLUDE_COMMAND_COUNT=!UV_INCLUDE_COMMAND_COUNT!+1
+		) else if "!L_VCS_NAME!" EQU "gyp" (
 			REM gyp is built using Python, so no building is required.
 			echo Building: [gyp] .. skipped
 		) else if "!L_VCS_NAME!" EQU "google-breakpad" (
@@ -235,8 +270,6 @@ REM variable: %V_SKIPPED% - 'yes' or 'no', depending on whether the archive was 
 			) else (
 				echo Building: [google-breakpad] .. skipped
 			)
-
-			REM Copy all the required static libraries.
 		) else (
 			echo ERROR.. !V_LINK_PARTS[%VCS_NAME%]! not handled by user who wrote the build amendments.
 			goto internal_function_exit
@@ -244,7 +277,7 @@ REM variable: %V_SKIPPED% - 'yes' or 'no', depending on whether the archive was 
 	)
 )
 ( 
-    endlocal
+    REM endlocal
     exit /b
 )
 
@@ -267,7 +300,6 @@ REM variable: %V_SKIPPED% - 'yes' or 'no', depending on whether the archive was 
 	REM Recursively copy the subset of the directory tree that is include file locations (and of course the include files there).
 :uf_loop_pdbi
 	set "L_DIR_PATH=!L_PATHS[%L_IDX%]!"
-	echo L_PATHS[!L_IDX!] !L_DIR_PATH!
 	REM Copy this directory, if there are include files present.
 	for /F "delims=" %%W in ('dir /B "!L_DIR_PATH!\*.h" 2^>^&1') do (
 		if "%%W" NEQ "File Not Found" (
@@ -295,25 +327,23 @@ REM --- FUNCTION: user_function_prepare_dependencies -------------------------
 :user_function_prepare_dependencies
 REM description: This is called as a final step after all dependencies have been prepared.
 REM variable: %DEPENDENCY_PATH% - The absolute path of the dependencies directory.
+(
+    setlocal EnableDelayedExpansion
 
-REM Generic
-if exist "!UV_INCLUDE_PATH!" goto exit_from_user_function_prepare_dependencies
+	if not exist "!UV_INCLUDE_PATH!" (
+		call :user_function_prepare_dependency_breakpad_includes
 
-call :user_function_prepare_dependency_breakpad_includes
-
-set /A L_COUNT=0
-:loop_user_function_prepare_dependencies
-
-if %L_COUNT% LSS %UV_INCLUDE_COMMAND_COUNT% (
-    echo Copying includes: !UV_INCLUDE_COMMANDS[%L_COUNT%]!
-    xcopy /Q /Y "!DEPENDENCY_PATH!\!UV_INCLUDE_COMMANDS[%L_COUNT%]!" "%UV_INCLUDE_PATH%\"
-
-    set /A L_COUNT=%L_COUNT%+1
-    goto loop_user_function_prepare_dependencies
+		set /A L_END=!UV_INCLUDE_COMMAND_COUNT!-1
+		for /L %%I in (0, 1, !L_END!) do (
+			echo Copying: includes #%%I "!UV_INCLUDE_COMMANDS[%%I]!"
+			xcopy >nul /Q /Y "!DEPENDENCY_PATH!\!UV_INCLUDE_COMMANDS[%%I]!" "%UV_INCLUDE_PATH%\"
+		)
+	)
 )
-
-:exit_from_user_function_prepare_dependencies
-goto:eof REM return
+( 
+    endlocal
+    exit /b
+)
 
 REM --- FUNCTION: user_function_build_project --------------------------------
 :user_function_build_project
@@ -811,19 +841,29 @@ goto:eof REM return
 
 REM --- FUNCTION: internal_function_build_project ----------------------------
 :internal_function_build_project
+(   
+    setlocal EnableDelayedExpansion
 
-cd "!BUILD_PATH!"
-call :user_function_build_project
-
-goto:eof REM return
+	cd "!BUILD_PATH!"
+	call :user_function_build_project
+)
+( 
+    endlocal
+    exit /b
+)
 
 REM --- FUNCTION: internal_function_make_release -----------------------------
 :internal_function_make_release
+(   
+    setlocal EnableDelayedExpansion
 
-cd "%DEPENDENCY_PATH%"
-call :user_function_make_release
-
-goto:eof REM return
+	cd "%DEPENDENCY_PATH%"
+	call :user_function_make_release
+)
+( 
+    endlocal
+    exit /b
+)
 
 REM --- FUNCTION: internal_function_package_release --------------------------
 :internal_function_package_release
