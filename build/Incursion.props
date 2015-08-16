@@ -10,7 +10,8 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
-      <TargetMachine>MachineX86</TargetMachine>
+      <TargetMachine>
+      </TargetMachine>
       <MinimumRequiredVersion>5.01</MinimumRequiredVersion>
       <AdditionalLibraryDirectories>dependencies\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
