@@ -818,7 +818,7 @@ Domain "Time" : 0
   {
     Desc: "__<15>Granted Power:<7> You have a limited insight into the future,
       granting you premonitions that have a 50~ chance of negating
-      surprise or being off-guard on any attack made against you.";
+      surprise or being caught off-guard on any attack made against you.";
     Grants:
       Ability[CA_PREMONITION] at 1st level;
     Spells:

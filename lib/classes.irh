@@ -105,10 +105,10 @@ Class "Barbarian"
       barbarians have the weakest starting equipment of an class.)\n
       __*_<7>Uncanny Dodge<2> -- Like the rogue, the barbarian is possessed
       of preternatural agility and instincts that allow her to avoid harm.
-      Starting at 2nd level and beyond, the barbarian is never caught foff-guard 
+      Starting at 2nd level and beyond, the barbarian is never caught off-guard 
       -- no matter how many rounds have passed since her last combat
       exchange, she is always alert. At 4th level, her uncanny instincts allow
-      her to wake alert if she has an encounter while resting, avoiding being
+      her to wake alert if she has an encounter while resting, while
       off-guard, vulnerable to Coup de Grace attacks and being able to act
       immediately as the encounter begins. At 5th level and above, she suffers no
       ill effects from having enemies on either side and is effectively
@@ -2377,7 +2377,7 @@ Class "Rogue"
       Starting at 3rd level and beyond, the rogue is never caught off-guard 
       -- no matter how many rounds have passed since her last combat
       exchange, she is always alert. At 5th level, her uncanny instincts allow
-      her to wake alert if she has an encounter while resting, avoiding being
+      her to wake alert if she has an encounter while resting, while
       off-guard, vulnerable to Coup de Grace attacks and being able to act
       immediately as the encounter begins. At 6th level and above, she suffers no
       ill effects from having enemies on either side and is effectively
