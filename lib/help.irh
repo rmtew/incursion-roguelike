@@ -2020,8 +2020,8 @@ Text "help::adventuring"
          __<3>*<1>_Successfully casting a spell with a base success chance of 60~ while
          threatened trains Intelligence; if the base chance is 30~ or lower, Intelligence 
          is trained more strongly.\n
-         __<3>*<1>_Successfully using Matamagic while threatened also trains Intelligence,
-         based on the number of Matamagic levels used.\n
+         __<3>*<1>_Successfully using Metamagic while threatened also trains Intelligence,
+         based on the number of Metamagic levels used.\n
          __<3>*<1>_Identifying items via experimentation trains Intelligence.\n
          __<3>*<1>_Identifying monsters with Sense Motive trains Intelligence.\n
          __<3>*<1>_Doing research in a library trains Intelligence strongly.\n
@@ -3125,7 +3125,7 @@ Text "help::combat"
       __Turn or Command Undead__________2 FP\n
       __Use Berserk Rage________________3 FP\n
       ____(as an Orc)___________________2 FP\n
-      __Cast a Matamagicked spell_______(MM Levels) FP\n
+      __Cast a Metamagic spell_______(MM Levels) FP\n
       __Perform a Great Blow____________1 FP\n
       __Being Stunned___________________1 FP\n
       __Being Poisoned__________________1 FP\n
@@ -3594,16 +3594,16 @@ Text "help::magic"
      and pressing either [ENTER] or the letter in the box causes the spell
      selected to be cast. Pressing [ESC] causes the spell manager window to
      vanish without casting a spell.\n
-     __<11>Metamagic:<3> You can toggle the on/off state of any Matamagic feat
+     __<11>Metamagic:<3> You can toggle the on/off state of any Metamagic feat
      you have learned with regard to a single spell by typing the capital
      letter shown associated with it in the legend at the bottom of the spell
-     manager window. The game remembers which Matamagic feats you have turned
+     manager window. The game remembers which Metamagic feats you have turned
      on for any given spell between castings, so if you turn on Maximize Spell
      for a <9>Fireball<3>, you need to turn it back off again on your next 
-     casting if you don't want it. The total number of Matamagic Levels
+     casting if you don't want it. The total number of Metamagic Levels
      currently associated with a given spell are shown in square brackets beside
      the feat list, and the spell success rate is recalculated dynamically as
-     you add or remove Matamagic feats, to help you decide if you want to cast
+     you add or remove Metamagic feats, to help you decide if you want to cast
      the spell that way or not.\n
      __<11>Spellkeys:<3> By pressing a number key (0-9) while a given spell is
      selected, you can assign that key to the spell in question as a keyboard
@@ -3670,23 +3670,23 @@ Text "help::magic"
      <11>METAMAGIC {ME}\n
      =========<3>\n
      __Metamagic allows the hero to modify the effects of spells that she casts. The
-     first step to using Matamagic is to learn one or more of the Matamagic feats.
-     All of the Matamagic feats end in 'Spell' (Maximize Spell, Still Spell, Warp
-     Spell, etc.), so they are easy to recognize in the feat list. Every Matamagic
-     feat added to a spell costs a certain number of Matamagic levels, as shown on 
+     first step to using Metamagic is to learn one or more of the Metamagic feats.
+     All of the Metamagic feats end in 'Spell' (Maximize Spell, Still Spell, Warp
+     Spell, etc.), so they are easy to recognize in the feat list. Every Metamagic
+     feat added to a spell costs a certain number of Metamagic levels, as shown on 
      the table below. Metamagic levels stack for multiple feats, and have the
      following effects:\n
-     __<7>*<3>_Every Matamagic level a spell has attached to it costs the caster 
+     __<7>*<3>_Every Metamagic level a spell has attached to it costs the caster 
      one Fatigue Point whenever the spell is cast.\n
      __<7>*<3>_The spell success rate for a given spell is decreased by 10~ for every
-     Matamagic level placed on it. This is done before the adjustment for spell
+     Metamagic level placed on it. This is done before the adjustment for spell
      success rates above 90~ is made, so a spell that shows a 94~ spell success
-     rate in the spell manager window can afford to have 4 Matamagic levels attached
+     rate in the spell manager window can afford to have 4 Metamagic levels attached
      to it without dropping the adjusted success rate below 90~.\n
      __<7>*<3>_The Mana cost for casting a spell increases by 50~ or 3 points,
-     whichever is higher, for every Matamagic level attached to the spell.\n
+     whichever is higher, for every Metamagic level attached to the spell.\n
      __High rating in the Metamagic skill can reduce the Mana increase and the Fatigue
-     cost of Matamagicked spells. The number of Matamagic levels that each feat adds
+     cost of Metamagicked spells. The number of Metamagic levels that each feat adds
      are shown in the following table:<15>
      \n__Metamagic Feat_________Lev__Metamagic Feat_________Lev<1>
      \n__Amplify Spell___________2___Inherent Spell__________1
@@ -3829,7 +3829,7 @@ Text "help::magic"
     the powerful and direct spells of Abjuration and Thaumaturgy.\n
     __<11>Specialist Ability:<3> Evokers channel raw magical energies
     through their bodies far more frequently than other Mages, relying
-    on draining Matamagic feats like Empower, Quicken and Maximize. To
+    on draining Metamagic feats like Empower, Quicken and Maximize. To
     support this penchant, their maximum total Fatigue Points increases
     by one every even Mage level.\n\n
 
@@ -4038,7 +4038,7 @@ Text "help::magic"
     gain third-level domain spells when he takes his 5th Priest level. Likewise,
     he has the 2 bonus slots Mages get only for 1st and 2nd level spells (though
     he can use them for any spells he wants, including Priest spells), and he does
-    not gain the bonus Matamagic feat a single-classed Mage would have gained at
+    not gain the bonus Metamagic feat a single-classed Mage would have gained at
     Mage class level 5.\n
     __<11>Lady Sarah, Thaumaturge 3 / Warrior 5:<3> In order to enhance her
     ability as a spellcaster, Lady Sarah has bought the Intensive Study feat
@@ -4190,9 +4190,9 @@ Text "help::magic"
      the better of the wielder's own or the staff's item level.\n
      <3>__If the staff-bearer is normally able to cast a spell granted
      by a staff, however, the staff augments the casting. The bearer
-     has a 100% success chance with that spell, even if Matamagic feats
+     has a 100% success chance with that spell, even if Metamagic feats
      are applied to it (though it does not remove the increased Mana
-     cost or Fatigue cost of the Matamagic), and casting the spell does
+     cost or Fatigue cost of the Metamagic), and casting the spell does
      not consume charges from the staff, nor require any somatic action.\n
      <3>__Spells can be cast from a staff using the Spell Manager the
      same way that a spellcaster normally casts them. Spells from a staff
