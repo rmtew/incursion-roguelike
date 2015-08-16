@@ -61,7 +61,6 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>dependencies\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderOutputFile>$(IntDir)$(SolutionName).pch</PrecompiledHeaderOutputFile>
       <ProgramDataBaseFileName>$(IntDir)$(SolutionName).pdb</ProgramDataBaseFileName>
       <PreprocessorDefinitions>_UNICODE;LIBTCOD_TERM;TCOD_SDL2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -69,8 +68,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>dependencies;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libtcod_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libtcod.lib</AdditionalDependencies>
       <ProgramDatabaseFile>$(OutDir)$(TargetName).pdb</ProgramDatabaseFile>
     </Link>
     <CustomBuildStep>
@@ -88,7 +86,6 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>dependencies\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderOutputFile>$(IntDir)$(SolutionName).pch</PrecompiledHeaderOutputFile>
       <ProgramDataBaseFileName>$(IntDir)$(SolutionName).pdb</ProgramDataBaseFileName>
       <PreprocessorDefinitions>_UNICODE;LIBTCOD_TERM;TCOD_SDL2;USE_BREAKPAD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -96,8 +93,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
-      <AdditionalLibraryDirectories>dependencies;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>libtcod.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libtcod.lib</AdditionalDependencies>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <CustomBuildStep>

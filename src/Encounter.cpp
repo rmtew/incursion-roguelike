@@ -1,4 +1,5 @@
-/* ENCOUNTER.CPP -- Copyright (c) 1999-2003 Julian Mensch
+/* ENCOUNTER.CPP -- See the Incursion LICENSE file for copyright information.
+
      Contains the code for generating groups of monsters or random
      items within a given set of specifications; this is used by 
      both summoning effects and the dungeon generator.

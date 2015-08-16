@@ -1,4 +1,5 @@
-/* INV.CPP -- Copyright (c) 1999-2003 Julian Mensch
+/* INV.CPP -- See the Incursion LICENSE file for copyright information.
+
      This file contains all of the routines for manipulating
    both Character inventory (using slots) and Monster inventory
    (uasing a linked list), along with routines for handling

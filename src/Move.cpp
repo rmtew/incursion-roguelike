@@ -1,4 +1,5 @@
-/* MOVE.CPP -- Copyright (c) 1 999-2003 Julian Mensch
+/* MOVE.CPP -- See the Incursion LICENSE file for copyright information.
+
      Contains two *long* functions that handle all the specifics
    of creatures moving from square to square on the map, whether
    by walking, jumping or being pushed.

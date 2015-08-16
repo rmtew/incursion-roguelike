@@ -1,4 +1,5 @@
-/* EVENT.CPP -- Copyright (c) 1999-2003 Julian Mensch
+/* EVENT.CPP -- See the Incursion LICENSE file for copyright information.
+
      Contains all the code that governs the dispatch of events,
    functions for throwing events and sending them to the proper
    handlers according to the rules of Incursion's event-based

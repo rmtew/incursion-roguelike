@@ -1,4 +1,5 @@
-/* CREATURE.CPP -- Copyright (c) 1999-2003 Julian Mensch
+/* CREATURE.CPP -- See the Incursion LICENSE file for copyright information.
+
      General repository for member functions of the Creature class,
    including functions which govern stati (which were initially
    exclusive to Creatures, then extended to apply to all Things),

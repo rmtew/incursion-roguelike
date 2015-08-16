@@ -1,4 +1,5 @@
-/* SKILLS.CPP -- Copyright (c) 1999-2003 Julian Mensch
+/* SKILLS.CPP -- See the Incursion LICENSE file for copyright information.
+
      Implements the skill and special ability menu, the cancel
    active function command and the effects of all of the ind-
    ividual actively-used skills, racial powers and class

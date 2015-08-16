@@ -1,4 +1,5 @@
-/* BASE.CPP -- Copyright 1999-2003 (c) Julian Mensch
+/* BASE.CPP -- See the Incursion LICENSE file for copyright information.
+
      Defines the fundamental low-level data structures of Incursion,
   including classes like String, Dice, OArray, NArray and Fraction. 
   Also includes miscellaneous non-system dependant functions that do 

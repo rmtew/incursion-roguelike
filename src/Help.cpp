@@ -1,4 +1,5 @@
-/* HELP.CPP -- Copyright (c) 1999-2003 Julian Mensch
+/* HELP.CPP -- See the Incursion LICENSE file for copyright information.
+
      Contains the implementation of the online help system,
    as well as any functions which provide descriptions of
    things in plain English, such as the monster memory. */

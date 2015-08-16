@@ -6,6 +6,7 @@
 
 # Windows build & dependencies
 build/dependencies
+build/packages
 build/run
 build/Win32
 *.vcxproj.user

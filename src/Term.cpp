@@ -1,4 +1,5 @@
-/* TERM.CPP -- Copyright (c) 1999-2003 Julian Mensch
+/* TERM.CPP -- See the Incursion LICENSE file for copyright information.
+
      This file contains all the member functions for the TextTerm
    class, which describes in a platform-independant manner any
    terminal which can display IBM extended ASCII characters in a

@@ -1,4 +1,6 @@
 /*
+ * See the Incursion LICENSE file for copyright information.
+ *
  * ww: Revised Incursion Targeting System ... 
  * Since Targeting is so important (e.g., we might want to attach special
  * debug information to targeting information) and since we scan though all

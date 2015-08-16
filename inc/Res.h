@@ -1,4 +1,5 @@
-/* RES.H -- Copyright (c) 1999-2003 Julian Mensch
+/* See the Incursion LICENSE file for copyright information.
+
      This file contains class definitions for Resource and
    its derived classes, Module, Game, Annotation and VMachine,
    as well as a host of macros used fo accessing resources in
