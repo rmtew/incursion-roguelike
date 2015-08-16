@@ -30,28 +30,28 @@ Links
 Windows build instructions
 --------------------------
 
-*Recommended compiler:*
+**Recommended compiler:**
 
   * Visual Studio Express 2013: [web-based installer](http://www.visualstudio.com/en-us/downloads/download-visual-studio-vs#d-community).
 
-*Dependencies:*
+**Dependencies:**
 
-The simple option is to download the following dependencies archive.  It contains all the pre-built files required to get Incursion to build.  It just needs to be downloaded and extracted in the right location within the source code -- the compilation instructions below detail this further.
+The *simplest option* is to download the following dependencies archive.  It contains all the pre-built files required to get Incursion to build.  It just needs to be downloaded and extracted in the right location within the source code -- the compilation instructions below detail this further.
 
   * `build_dependencies-*.7z`: Available from the bitbucket [project downloads page](https://bitbucket.org/rmtew/incursion-roguelike/downloads).
 
-The advanced option, which someone who knows about debugging and stepping into linked library code would be interested in, is to use the `build.bat` batch script which is located with the source code.
+The *automated option*, which someone who knows about debugging and stepping into linked library code would be interested in, is to use the `build.bat` batch script which is located with the source code.
 
-The simple option is the downloadable archive of pre-built dependencies mentioned above, and the advanced option is a script that will download them and compile them for you.  If you choose to ignore both of these and go your own way, it is going to be difficult for you to compile them yourself, unless you know what you are doing, and you are willing to sort out problems yourself.
+To reiterate, the simplest option is the downloadable archive of pre-built dependencies mentioned above, and the automated option is a script that will download them and compile them for you.  If you choose to ignore both of these and go your own way, it is going to be difficult for you to compile them yourself, unless you know what you are doing, and you are willing to sort out problems yourself.  This will also be the case if you are trying to compile Incursion for a platform other than Windows.
 
-Download these dependencies if you wish to compile everything yourself, and to skip both the simple and advanced option.  Otherwise, you do not need to download any of them.
+The *go your own way option* where you compile everything yourself requires you to obtain the following dependencies, and to skip both the simple and automated option (neither of which require you to obtain these yourselves).  Some of them like `flex` and `curses` are easily obtained on Unix derived platforms.
 
   * `libtcod`: [libtcod@bitbucket](https://bitbucket.org/jice/libtcod/) (note this is the default branch, not 1.5.x).
   * `SDL2`: [SDL2@libsdl.org](https://www.libsdl.org/hg.php) (can be optional).
   * `flex.exe`: [winflexbison@sourceforge](http://sourceforge.net/projects/winflexbison/) 660 KB (extract and rename `win_flex.exe` to `flex.exe`).
   * `pdcurses`: [pdcurses@sourceforge](http://pdcurses.sourceforge.net) 384 KB
 
-*Compilation instructions:*
+**Compilation instructions:**
 
 These instructions are intended to allow you to get Incursion to the point where you can debug it within Visual Studio.
 
@@ -65,30 +65,35 @@ These instructions are intended to allow you to get Incursion to the point where
       1. Select the Online entry from the left-hand side list.
       1. Search for and install EditorConfig.
       1. Exit Visual Studio.
-  1. If you are going to take the simple approach to obtaining the dependencies:
+  1. If you are going to take the *simplest approach* to obtaining the dependencies:
       1. Ensure you have downloaded the build dependencies archive mentioned above, from the bitbucket [project downloads page](https://bitbucket.org/rmtew/incursion-roguelike/downloads).
-      1. Open the archive and look inside it.  There is only one entry there, a directory named `dependencies`, and within that there is a selection of files and directories inside it like `include`, `libtcod.dll` and so forth.
+      1. Open the archive and look inside it.  There is only one entry there, a directory named `dependencies`, and within that there is a selection of files and directories inside it like `include`, `Win32` and within that `libtcod.dll` and so forth.
       1. Enter the `build` subdirectory within the source code.
       1. Extract the contents of the archive here.
-      1. You should now be able to locate the `build\dependencies\include` directory.  You should now be able to locate `build\dependencies\libtcod.lib`.  If this is not the case, then you did not extract the contents of the archive into the `build` subdirectory.  Please try again.
-  1. Otherwise if you are going to do take the advanced approach to obtaining the dependencies:
-      1. Download and install the mercurial command line tools.  This is used to obtain the SDL2 and libtcod source code.
+      1. You should now be able to locate the `build\dependencies\include` directory.  You should now be able to locate `build\dependencies\Win32` and `build\dependencies\include`.  If this is not the case, then you did not extract the contents of the archive into the `build` subdirectory.  Please try again.
+  1. Otherwise if you are going to do take the *automated approach* to obtaining the dependencies:
+      1. Download and install the Mercurial command line tools.  This is used to obtain the SDL2 and libtcod source code.
 	  1. If you want to build releases, then do the following:
         1. Download and install [7zip](http://www.7-zip.org/).
       1. If you want Google Breakpad support, then do the following:
-        1. Download and install the [Git command line tools](http://git-scm.com/).  This is only necessary if you do not have the git command already installed, and available in your PATH.
+        1. Download and install the [Git command line tools](http://git-scm.com/).  This is only necessary if you do not have the git command already installed, and available in your `PATH` environment variable.
         1. Download and install [Python 2.7](https://www.python.org/downloads/windows/).
       1. Open a DOS console window, and ensure you are in the top-level directory of the Incursion source code.
       1. Type `build.bat -d` and hit enter.
-      1. Lots of text will scroll past and eventually you will have compiled source code, or this script will error and you will have to ask for help.
-        1. Note that Google Breakpad will error, but will get far enough to produce the required libraries.
-  1. If you have reached here, you have obtained the dependencies.
+      1. Lots of text will scroll past and eventually you will have had the dependencies downloaded and compiled for you, or this script will error and you will have to ask for help.
+  1. If you have reached here, you have obtained the dependencies and they are compiled.  This will give you not only the same set of files from the simplest approach, but also the accompanying source code.
   1. Open `Incursion.sln`.
   1. Ensure the `Debug` configuration is selected.
   1. Look at the Solution Explorer window.  You will see four entries: `exe_curses`, `exe_libtcod`, `lib_incursion` and `modaccent`.  One will be darker than the others.  This is the one which runs when you start debugging.  If the darker entry is not `exe_libtcod`, then right click on `exe_libtcod` and choose the `Set as Startup Project` option to make it darker.
-  1. Build the solution.
-  1. You need to run `Incursion.exe -compile` to compile the scripts.  It has to be the `Debug` build of the executable, for this to work.
+  1. Build the solution.  Everything must compile successfully.
+  1. Now type `build -cs`.  This will compile the Incursion script library, which defines most of the wonderful gameplay that brought you here.
 
 At this point, you are ready to do some development, or just play the latest version of the source code by debugging it within Visual Studio.  Congratulations!
 
-Note that all the files which `Incursion.exe` requires to run are scattered in a variety of directories, and you cannot just copy the executable somewhere and expect it to work.  If you wish to collect the correct set of files, then run `build.bat -r`.  It should create various distribution packages (and archives if you have 7zip installed) under `build\packages`.  You will be asked for a version number to be used for the directory and archive naming, but you could enter any text as it is not processed otherwise.
+**Running the game:**
+
+Note that all the files which `Incursion.exe` requires to run are scattered in a variety of directories, and you cannot just copy the executable somewhere and expect it to work.  If you wish to collect the correct set of files, then run `build.bat -r`.  It should create various distribution packages (and archives if you have 7zip installed) under `build\packages`.
+
+**x64 support:**
+
+You can compile an x64 build of Incursion. It won't be easy, but it will run without crashing.  Will it allow someone to play without crashing any more than the Win32 version does?  No idea!  Note that the build will fail unless you can work out a way to get it to use the Win32 build of modaccent which will crash when run as an x64 binary.  Incursion gives a lot of compilation warnings when compiled for the x64 platform, as it is an older project.  But modaccent is even older source code which uses approaches to C programmers that probably predate K&R! :-p  You're on your own with x64 builds at this time.  Frankly, you're lucky it has even been added.
