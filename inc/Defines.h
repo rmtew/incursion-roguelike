@@ -73,7 +73,7 @@ typedef signed long       hObj;
 #endif
 
 #ifdef WIN32
-  #define BREAKOUT __asm int 3;
+  #define BREAKOUT __debugbreak();
 #else
   #define BREAKOUT asm("int $3");
 #endif
