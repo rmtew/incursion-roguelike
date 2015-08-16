@@ -619,7 +619,7 @@ Text "help::chargen"
      your skills  ('<15>S<5>').
      __<13>Bonus Types:<5> All bonuses in Incursion have a type assigned to them,
      even if that type is 'base' -- i.e., a class gives your base bonus to attack
-     rolls, saving throws and so forth. For example, the Clerical spell <9>bless<5>
+     rolls, saving throws and so forth. For example, the Clerical spell <9>Bless<5>
      gives you a +1 sacred bonus to hit, a +2 sword gives you a +2 magic bonus to
      hit and damage, and a Cloak of Resistance +3 gives you a +3 resistance bonus to
      all your saving throws. Bonuses of different types almost never stack with the only
@@ -793,7 +793,7 @@ Text "help::interface"
      <13>MY CHARACTER<5>\n
      The 'My Character' chapter of the manual is special in that it is customized to
      display only the help pertinent to the character you are currently playing. For
-     example, if you are playing a chaotic neutral Dwarven barbarian with the Power
+     example, if you are playing a chaotic neutral Dwarven Barbarian with the Power
      Attack feat, this chapter of the manual will contain the descriptions of Dwarves, 
      Barbarians, the chaotic neutral alignment and the Power Attack feat. Multiclass 
      spellcasters will find this chapter useful, because it lists all the spells they 
@@ -858,8 +858,8 @@ Text "help::interface"
 	  prompt. By pressing the associated keys, you can input a direction,
 	  location, target or inventory item. Not all of these types of input
 	  are accepted by every selection prompt, it depends upon what triggered
-	  it. For example, the spell <9>bless<5> can be cast on either an
-	  inventory item or a location, but the spell <9>hideous laughter<5>
+	  it. For example, the spell <9>Bless<5> can be cast on either an
+	  inventory item or a location, but the spell <9>Hideous Laughter<5>
 	  can be cast only on a living creature. You can press [ENTER] at any 
       time to confirm the selection of a target, or [ESC] to cancel the selection 
       prompt completely. The selection modes are as follows:\n
@@ -867,14 +867,14 @@ Text "help::interface"
 	  options and spells which produce a beam, bolt or ball can be fired
 	  in a specific cardinal direction. When selecting a direction, pressing
 	  an arrow key is considered to be making a choice, and the spell is
-	  fired in that direction. Some abilities (such as <9>magic missile<5>)
+	  fired in that direction. Some abilities (such as <9>Magic Missile<5>)
 	  can also be targeted at a specific creature, while others (such as a
 	  polymorphed character's breath weapon) can <13>only<5> be fired in a
 	  cardinal direction. You can press '*' to aim a bolt or beam at yourself.\n
 	  __<13>Select a Location ('l'):<5> This selection mode allows you to select
 	  a given map square as a target for a spell or ability, regardless
 	  of whether there is anything in it or not. This can be useful for
-	  spells like <9>dispel magic<5>, which have a circular area of effect 
+	  spells like <9>Dispel Magic<5>, which have a circular area of effect 
 	  that you are choosing the center point of. By carefully choosing the
 	  focus of such effects, you can hit a maximum number of desired targets
 	  while avoiding hitting targets you don't want to affect.\n
@@ -917,7 +917,7 @@ Text "help::interface"
      <13>Other Selection Keys<5>\n
      __<13>Next Target ('n'):<5> On a square that contains more than one object,
      the 'n' command can be used to cycle through them sequentially. For example,
-     to target a <9>magic missile<5> at a specific creature in a square with more
+     to target a <9>Magic Missile<5> at a specific creature in a square with more
      than one creature in it.\n
      __<13>Target Mount ('h'):<5> When the currently displayed target is mounted,
      this option can be used to target an effect at the creature's mount rather
@@ -968,7 +968,7 @@ Text "help::interface"
      If you use both hands, you can wield a weapon of one size category
      larger than you are.\n
      __<13>Locked Slots:<5> When your character has changed shape (as from
-     a <9>polymorph self<5> spell or the Druid's Wild Shape ability) you
+     a <9>Polymorph Self<5> spell or the Druid's Wild Shape ability) you
      may not have access to some of your inventory slots; an eagle has no
      hands, for example. These slots appear in dark blue. If there is an
      item in the slot in question, it has merged into your body and, while
@@ -1187,7 +1187,7 @@ Text "help::commands"
      visible on the map board. You can use it to rename your character, assign a 
      suspected effect to an unidentified item (i.e., metallic blue potion named Healing) 
      or give your pets or followers a personal identity. The latter is recommended, otherwise 
-     it becomes difficult to tell the kobold ally you hit with <9>charm monster<6> from the 
+     it becomes difficult to tell the kobold ally you hit with <9>Charm Monster<6> from the 
      enemy kobolds that are attacking you in messages.\n\n
 
      <15>Open/Close Something ('<13>o<15>')<6> {O}
@@ -1470,7 +1470,7 @@ Text "help::adventuring"
         enough to cover all the resting a character will need to do, /unless/ a
         character can user her expendable resources (Hit Points, Mana, Fatigue)
         very efficiantly and sparingly.\n
-        __<3>*<1> Some spells -- <9>rope trick<1> and <9>alarm<1>, notably, allow
+        __<3>*<1> Some spells -- <9>Rope Trick<1> and <9>Alarm<1>, notably, allow
         safe or safer resting.\n
         __<3>*<1> Characters with allies or animal companions can take watches
         when they rest. An alert group is much less likely to be attacked than
@@ -1542,7 +1542,7 @@ Text "help::adventuring"
         of using the Bull Rush maneuver to force a character into a chasm.\n
         __A character suffers 3d6 points of damage per dungeon level she falls, if
         she lands on a hard surface. The Balance skill, the Slow Fall ability possessed
-        by Monks and the <9>feather fall<1> spell all help to reduce falling damage.\n
+        by Monks and the <9>Feather Fall<1> spell all help to reduce falling damage.\n
         __If the area of the level directly above the character corresponding to her
         location on her current level has a chasm, normal floor squares will be coloured
         light cyan to indicate this, and the Location line will include the text 
@@ -1605,7 +1605,7 @@ Text "help::adventuring"
         subtracting Hit Points, they remove points from an attribute. If an attribute
         is reduced to zero or lower as a result of attribute damage, the subject dies.
         Normal healing spells and potions do not heal damaged attributes, but the
-        Clerical spell <9>restoration<1> and certain specific potions can heal
+        Clerical spell <9>Restoration<1> and certain specific potions can heal
         attribute damage. Most characters heal one point of attribute damage every
         night of undisturbed rest, as well. Halflings heal attribute damage more
         quickly, and the Heal skill can also be used to treat attribute damage.\n
@@ -1614,7 +1614,7 @@ Text "help::adventuring"
         a damage roll just like attribute damage, and if any attribute reaches zero
         from any combination of drain and damage, the character dies. However,
         attribute drain does not heal naturally. Instead, it is essentially a curse,
-        and lasts until a <9>remove curse<1> spell or any equivalent magical effect
+        and lasts until a <9>Remove Curse<1> spell or any equivalent magical effect
         is applied to the character. Attribute drain can also be cured by magical
         effects designed specifically designed to restore attributes, such as a
         <9>Potion of Restore Intelligence<1>.\n\n
@@ -1989,7 +1989,7 @@ Text "help::adventuring"
          __<3>*<1>_Digging tunnels in the dungeon with the Mining skill trains Strength
          very heavily.\n
          __<3>*<1>_Tearing free once you become stuck (in some types of terrain or the
-         effects of a <9>web<1> spell, for example) trains Strength.\n
+         effects of a <9>Web<1> spell, for example) trains Strength.\n
          __<3>*<1>_Adventuring while your Encumbrance is heavy trains Strength; doing so
          while it is Extreme trains it even further.\n
          __<3>*<1>_Adventuring while wearing heavy armour trains both Strength and
@@ -2056,7 +2056,7 @@ Text "help::adventuring"
          <3>Luck<1>\n
          __<3>*<1>_Adventuring at a dungeon depth higher than your character level trains
          luck -- it's dangerous and involves great risk-taking!\n
-         __<3>*<1>_Using an item with a random effect (such as a <9>wand of wonder<1>) and
+         __<3>*<1>_Using an item with a random effect (such as a <9>Wand of Wonder<1>) and
          getting a beneficial effect trains Luck.\n
          __<3>*<1>_Using a magical fountain and gaining a beneficial effect trains Luck.\n
          __<3>*<1>_Surviving a critical hit from an enemy trains Luck.\n\n
@@ -2256,7 +2256,7 @@ Text "help::adventuring"
          along the law/chaos axis:\n
          __<3>*<1> Chaotic characters should not use magic with the Compulsion
          descriptor against sapient creatures under any circumstances. This includes
-         spells like <9>dominate person<1> and magical items like the <9>Medallion
+         spells like <9>Dominate Person<1> and magical items like the <9>Medallion
          of Mental Domination<1>.\n
          __<3>*<1> The trade guilds and merchant cartels on Theyra are deeply
          corrupt, imposing and economic tyrrany that reinforces the class system by
@@ -2383,7 +2383,7 @@ Text "help::adventuring"
          is forged and the god can send negative interventions to the Paladin
          forevermore. Maeve is always considered to be 'involved' with Elves, who
          are taught to pray at her altars from early childhood. Certain methods of
-         breaking this involvement exist, such as the <9>contact other plane<1>
+         breaking this involvement exist, such as the <9>Contact Other Plane<1>
          spell.\n\n
          __<9>Altar Conversion:<1> Having an altar to one's patron god close by is
          a powerful advantage: it allows a character to bless items, create holy
@@ -2595,14 +2595,14 @@ Text "help::adventuring"
          your diety would be willing to give you now, at your current level of
          favour.\n 
          __There are many different forms of divine aid; most are self-explanatory
-         based on their message in the seek insight results. <9>Clearing you mind<1>
+         based on their message in the seek insight results. <9>Clearing Your Mind<1>
          refers to removing stunning, confusion, enchantment and paralysis, and also
          allowing the character to see invisible creatures if she is currently being
          menaced by them, while
-         <9>purifying the body<1> refers to curing poison, disease, petrificaton
-         and paralysis. <9>Replenishing your spirit<1>, conversely, restores all
-         drained Experience and heals all attribute damage. <9>Deflecting lethal
-         blows<1> indicates that the god will intercede automatically to lessen
+         <9>Purifying the Body<1> refers to curing poison, disease, petrificaton
+         and paralysis. <9>Replenishing Your Spirit<1>, conversely, restores all
+         drained Experience and heals all attribute damage. <9>Deflecting Lethal
+         Blows<1> indicates that the god will intercede automatically to lessen
          the damage from a critical hit that would kill the player or leave her
          with less than 1/5th of her normal Hit Points. This reduces the hit to
          non-critical damage level, but does not add to prayer timeout.\n
@@ -2794,8 +2794,8 @@ Text "help::adventuring"
          __NPC spellcasters such as Priests, dragons or nagas can also sell 
          services in the form of spells they are capable of casting. Most
          spells are difficult to pass on in this way, but some, especially
-         curatives and abjurations like <9>neutralize poison<1>, <9>remove
-         curse<1>, <9>identify<1> and <9>cure disease<1> can make very
+         curatives and abjurations like <9>Neutralize Poison<1>, <9>Remove
+         Curse<1>, <9>Identify<1> and <9>Cure Disease<1> can make very
          useful commodities.\n
          __When an NPC is able to cast such a spell, that spell will appear
          along with their gear in the bartering window, and can be purchased
@@ -2931,7 +2931,7 @@ Text "help::combat"
       notify you of a miss that is due to a percentile miss chance by telling
       you that you missed 'wildly'.
       \n__There are some magical effects that also grant a percentile miss chance,
-      such as the <9>blink<3> spell or a Cloak of Displacement. If more than one
+      such as the <9>Blink<3> spell or a Cloak of Displacement. If more than one
       miss chance applies, each is rolled separately.\n
 
 
@@ -3599,7 +3599,7 @@ Text "help::magic"
      letter shown associated with it in the legend at the bottom of the spell
      manager window. The game remembers which Matamagic feats you have turned
      on for any given spell between castings, so if you turn on Maximize Spell
-     for a <9>fireball<3>, you need to turn it back off again on your next 
+     for a <9>Fireball<3>, you need to turn it back off again on your next 
      casting if you don't want it. The total number of Matamagic Levels
      currently associated with a given spell are shown in square brackets beside
      the feat list, and the spell success rate is recalculated dynamically as
@@ -3625,7 +3625,7 @@ Text "help::magic"
      and +2~ for every caster level you have above the minimum caster level required
      to cast the given spell. The spell success chance for arcane spells is heavily
      penalized by wearing armour, and conditions that make it difficult to concentrate
-     (such as being grappled, or being inside the area of effect of an <9>insect plague<3>
+     (such as being grappled, or being inside the area of effect of an <9>Insect Plague<3>
      spell) penalize spellcasting of all types.\n
      __If the final chance of spell success is above 90~, it is adjusted downward.
      Every 10~ above 90~ becomes an additional +1~ chance of spell success, so a
@@ -3746,8 +3746,8 @@ Text "help::magic"
     Mages typically have. Abjurers are often also called White Wizards,
     given the benevolent nature of their magic, and are the most trusted
     of Mages by the common people. Spells which best represent the nature 
-    of this school include <9>dispel magic<3>, <9>resist fire<3>, 
-    <9>banishment<3> and <9>globe of invulnerability<3>.\n
+    of this school include <9>Dispel Magic<3>, <9>Resist Fire<3>, 
+    <9>Banishment<3> and <9>Globe of Invulnerability<3>.\n
     __Abjurers are also strong in the schools of Weavecraft, Divination
     and Arcana, but are weaker than average wielding spells of Evocation,
     Necromancy and Thaumaturgy.\n
@@ -3755,11 +3755,11 @@ Text "help::magic"
     three of their saving throws at 4th, 8th, 12th, 16th and 20th levels.
     Additionally, because of the defensive and protective nature of their
     magic, Abjurers receive access to several spells from the Priest spell
-    list: <9>sanctuary<3>, <9>detect evil<3>, <9>shield other<3>, <9>glyph
-    of warding<3>, <9>remove curse<3> (as a 3rd-level spell), <9>negative
-    plane protection<3>, <9>death ward<3>, <9>free action<3>, <9>spell
-    immunity<3>, <9>magic resistance<3>, <9>dispel evil<3>, <9>antilife
-    shell<3> and <9>glyph of warding, greater<3>. They cast these spells
+    list: <9>Sanctuary<3>, <9>Detect Evil<3>, <9>Shield Other<3>, <9>Glyph
+    of Warding<3>, <9>Remove Curse<3> (as a 3rd-level spell), <9>Negative
+    Plane Protection<3>, <9>Death Ward<3>, <9>Free Action<3>, <9>Spell
+    Immunity<3>, <9>Magic Resistance<3>, <9>Dispel Evil<3>, <9>Antilife
+    Shell<3> and <9>Glyph of Warding, Greater<3>. They cast these spells
     as arcane spells, receiving a special spellbook containing them at the
     beginning of the game.\n\n
 
@@ -3769,8 +3769,8 @@ Text "help::magic"
     of a situation indirectly. Arcana spells are rarely powerful
     per se, but they are highly useful; Arcanists are the generalists
     of the Mage world, with a number of unusual tricks up their sleeves.
-    Archetypical Arcana spells include <9>wall of fog<3>, <9>web<3>, 
-    <9>animate objects<3> and <9>major creation<3>.\n
+    Archetypical Arcana spells include <9>Wall of Fog<3>, <9>Web<3>, 
+    <9>Animate Objects<3> and <9>Major Creation<3>.\n
     __Arcanists are also mildly above average performing spells from
     the schools of Illusion, Divination and Weavecraft, but their
     greatest edge is that they are not <11>below<3> average in any of the
@@ -3785,17 +3785,17 @@ Text "help::magic"
     much, much easier in many places. A Diviner is able to track down
     powerful magic items, avoid encounters she feels she can't win, and
     mystically discern what form of attacks will be the most effective
-    against any given threat. Typical spells include <9>detect monsters<3>,
-    <9>perception<3>, <9>clairvoyance<3> and <9>true seeing<3>.\n
+    against any given threat. Typical spells include <9>Detect Monsters<3>,
+    <9>Perception<3>, <9>Clairvoyance<3> and <9>True Seeing<3>.\n
     __Diviners also excel at spells of Weavecraft, Arcana and Thaumaturgy, 
     but are mediocre when handling Evocations and Illusions.\n
     __<11>Specialist Bonus:<3> Drawn from the ranks of sages and scholars,
     Diviners receive three extra Skill Points at every Mage level, and gain
     a +1 insight bonus to Intelligence at 4th, 8th, 12th, 16th and 20th
-    levels. They gain access to the spell <9>detect monsters<3> as a 2nd,
+    levels. They gain access to the spell <9>Detect Monsters<3> as a 2nd,
     not 3rd, level spell. (Once more Priestly Divinations are implemented, the
-    Diviners will also have access to spells like <9>augury<3> and of course
-    <9>divination<3>, just like Abjurers do now.)\n\n
+    Diviners will also have access to spells like <9>Augury<3> and of course
+    <9>Divination<3>, just like Abjurers do now.)\n\n
 
     <11>Enchantment<3> {EN}\n
     __These spells imbue a target's internal nature with magic -- either
@@ -3804,8 +3804,8 @@ Text "help::magic"
     physical nature. An Enchanter is very effective in turning enemies
     into allies, boosting his weapons and convincing others to fight
     for his cause, but is in grave danger when facing undead and mindless
-    creatures. Typical spells include <9>charm person<3>, <9>hold monster<3>, 
-    <9>minor malison<3> and <9>eyebite<3>.\n
+    creatures. Typical spells include <9>Charm Person<3>, <9>Hold Monster<3>, 
+    <9>Minor Malison<3> and <9>Eyebite<3>.\n
     __Enchanters find that Illusion, Thaumaturgy and Abjuration are
     natural compliments to their chosen school, but lack skill with the
     more blunt magics of Evocation and Arcana.\n
@@ -3814,7 +3814,7 @@ Text "help::magic"
     of their mind-affecting spells. They also gain Diplomacy as a bonus
     class skill, allowing them to convince creatures they charm into doing
     things to serve their agenda.\n
-    __Enchanters also have access to the Priest spell <9>enthrall<3>, which
+    __Enchanters also have access to the Priest spell <9>Enthrall<3>, which
     they cast as arcane magic.\n\n
 
     <11>Evocation<3> {EV}\n
@@ -3822,8 +3822,8 @@ Text "help::magic"
     has the most powerful offensive spells in the game, it grants a very
     straightforward playing style, making it a good choice for players
     new to Incursion. Evocations manipulate or create energy and natural
-    forces; infamous Evocation spells include <9>magic missile<3>, <9>fireball<3>,
-    <9>wall of force<3> and <9>shield<3>.\n
+    forces; infamous Evocation spells include <9>Magic Missile<3>, <9>Fireball<3>,
+    <9>Wall of Force<3> and <9>Shield<3>.\n
     __Evokers find the subtler magics of Divination, Illusion, Necromancy
     and Enchantment difficult to manage, but are very comfortable with
     the powerful and direct spells of Abjuration and Thaumaturgy.\n
@@ -3841,12 +3841,12 @@ Text "help::magic"
     occupied at a distance. The illusionist gains some very powerful
     miscellanea spells, but lacks the direct power of the evoker or the
     Necromancer. Its a choice best suited to a patient and tactical
-    player. Spells typical of the Illusion school include <9>invisibility<3>,
-    <9>phantasmal force<3> and <9>shadow monsters<3>.\n
+    player. Spells typical of the Illusion school include <9>Invisibility<3>,
+    <9>Phantasmal Force<3> and <9>Shadow Monsters<3>.\n
     __Illusionists excel at Weavecraft, Divination, Arcana and Enchantment, 
     but are weaker in the schools of Evocation, Necromancy and Thaumaturgy.\n
     __<11>Specialist Ability:<3> To complement their penchant for trickery and
-    ability to utilize <9>invisibility<3>, Illusionists receive Bluff, Move
+    ability to utilize <9>Invisibility<3>, Illusionists receive Bluff, Move
     Silently, Pick Pockets and Disguise as bonus Mage class skills. They also
     receive a +1 competence bonus to the Illusioncraft skill every even Mage
     level.\n\n
@@ -3859,8 +3859,8 @@ Text "help::magic"
     is performed by raised undead, no matter how much the Church of Immotian
     might protest. Thus, like the mortician that came before him, the 
     Necromancer is a scorned but nonetheless essential element of modern 
-    society. Spells typical of the school of Necromancy include <9>chill touch<3>,
-    <9>horrid wilting<3> and of course, <9>animate dead<3>.\n
+    society. Spells typical of the school of Necromancy include <9>Chill Touch<3>,
+    <9>Horrid Wilting<3> and of course, <9>Animate Dead<3>.\n
     __Necromancers are strong in Thaumaturgy and Divination, and weaker only
     in Enchantment, Illusion and Abjuration.\n
     __<11>Specialist Bonus:<3> Necromancers receive a bonus pool of hit dice
@@ -3872,16 +3872,16 @@ Text "help::magic"
     grim situations they are exposed to and treat Poison Use as a bonus 
     class skill.\n
     __Finally, Necromancers gain access to certain signature spells at
-    lower levels than other Mages: <9>animate dead<3> as a 3rd level
-    spell, <9>create corporeal undead<3> at 5th and <9>create spectral
-    undead<3> at 6th.\n\n
+    lower levels than other Mages: <9>Animate Dead<3> as a 3rd level
+    spell, <9>Create Corporeal Undead<3> at 5th and <9>Create Spectral
+    Undead<3> at 6th.\n\n
 
     <11>Thaumaturgy<3> {TH}\n
     __Thaumaturgy is magic that alters the composition or properties of 
     living creatures. Because so many of its spells focus on physical
     self-empowerment, it makes an ideal specialization for multi-classed
-    Warrior-Mages. Spells typical of the school include <9>bull's strength<3>,
-    <9>polymorph self<3>, <9>enlarge<3> and <9>Tenser's transformation<3>.\n
+    Warrior-Mages. Spells typical of the school include <9>Bull's Strength<3>,
+    <9>Polymorph Self<3>, <9>Enlarge<3> and <9>Tenser's Transformation<3>.\n
     __Thaumaturges are also skilled with the schools of Abjuration, Enchantment,
     Weavecraft and Necromancy, but find the magics of Evocation, Illusion and
     Divination more difficult to grasp.\n
@@ -3897,13 +3897,13 @@ Text "help::magic"
     of magic; they can summon creatures or augment other spells. The school
     lends itself to a 'cheap tricks' style of play, so players may choose
     or avoid it based on whether they prefer such to a more normal game.
-    Definitive spells include <9>monster summoning<3> (any one), <9>teleport<3>, 
-    <9>rope trick<3> and <9>contingency<3>.\n
+    Definitive spells include <9>Monster Summoning<3> (any one), <9>Teleport<3>, 
+    <9>Rope Trick<3> and <9>Contingency<3>.\n
     __Weavers are strong with Abjuration, Arcana and Divination, but not 
     as skilled using Enchantment, Necromancy or Thaumaturgy.\n
     __<11>Specialist Bonus:<3> Weavers are able to control their destination
-    when they cast teleportation spells like <9>phase door<3>, <9>dimension
-    door<3> or <9>teleport<3>, just as if they had used the Control Magic
+    when they cast teleportation spells like <9>Phase Door<3>, <9>Dimension
+    Door<3> or <9>Teleport<3>, just as if they had used the Control Magic
     feat.\n\n
     
     
@@ -3927,9 +3927,9 @@ Text "help::magic"
     caster levels; 5 from Mage and one from Paladin. The Intensive Study
     feat can be used to gain more caster levels in some circumstances.\n
     __Caster levels determine two things: the power of a caster's spells
-    and the spell slots she has access to. For example, the spell <9>fireball<3>
+    and the spell slots she has access to. For example, the spell <9>Fireball<3>
     inflicts 1d6 points of damage per caster level -- thus, the Mage/Paladin
-    example above would be able to throw a <9>fireball<3> inflicting 6d6
+    example above would be able to throw a <9>Fireball<3> inflicting 6d6
     points of damage (saving throw abiding, of course). Caster levels also
     affect most spells' range and duration. Secondly, caster levels determine
     the number of spell slots characters have which they can spend to learn
@@ -3975,7 +3975,7 @@ Text "help::magic"
     Paladins have spells associated with righteous might, bards with knowledge,
     trickery and social influence, Clerics with protection and community, and
     so forth. A single spell's level can vary on different spell lists -- for
-    example, <9>call light<3> is a first-level Priest spell and a second-level
+    example, <9>Call Light<3> is a first-level Priest spell and a second-level
     Mage spell.\n
     __Mages are a special case -- because their spell list is so huge and broad,
     and represents such a major element of their class abilities, it is broken
@@ -4003,13 +4003,13 @@ Text "help::magic"
     but can cast spells in armour, while Mages suffer severe penalties for casting
     spells in armour, have their success chances adjusted by specialist modifiers
     and must possess a spellbook with the spell in it to cast it. So consider the
-    cast of a Priest 1/Mage 1 who knows <9>chromatic orb<3>, <9>bless<3> and
-    <9>magic weapon<3>. <9>Chromatic orb<3> is a Mage spell, so she must have a spellbook
+    cast of a Priest 1/Mage 1 who knows <9>Chromatic Orb<3>, <9>Bless<3> and
+    <9>Magic Weapon<3>. <9>Chromatic Orb<3> is a Mage spell, so she must have a spellbook
     to cast it, gains the specialist modifier regardless of whether it's good or
     bad and suffers penalties to her casting if she does it in armour. When she
-    casts <9>bless<3>, however, she gains no specialist bonus or penalty, is
+    casts <9>Bless<3>, however, she gains no specialist bonus or penalty, is
     able to cast freely in armour and needs a holy symbol.\n
-    __<9>Magic weapon<3> is an odd case, since it is on both the Mage and Priest
+    __<9>Magic Weapon<3> is an odd case, since it is on both the Mage and Priest
     spell lists as a 1st-level spell. When this is the case, the caster gains
     the best of both (or all) worlds -- she can cast the spell in armour without
     penalty, gains either her Mage specialist modifier or a 0~ modifier (whichever
@@ -4174,9 +4174,9 @@ Text "help::magic"
      game. Normally, a character must have a certain minimum number
      of levels as a Mage before they can access the powers of a
      given staff, ranging from a single Mage level (for weaker staves
-     like the <9>staff of size alteration<3>) to a maximum of seven
-     Mage levels (to access the full powers of a <9>staff of the 
-     magi<3>). Some staves, notably the <9>staff of the woodlands<3>,
+     like the <9>Staff of Size Alteration<3>) to a maximum of seven
+     Mage levels (to access the full powers of a <9>Staff of the 
+     Magi<3>). Some staves, notably the <9>Staff of the Woodlands<3>,
      are attuned to other classes (in this case the Druid). As always,
      Rogues of sufficient level can use the Trick Magic ability to
      handle staves effectively.    
@@ -4209,7 +4209,7 @@ Text "help::magic"
      boosts or the ability to see invisible creatures just by being
      held. Others grant completely unique magical abilities that work
      like spells, but are on no class's spell list (such as the
-     <9>whirlwind<3> ability of the <9>staff of power<3>). A few
+     <9>Whirlwind<3> ability of the <9>Staff of Power<3>). A few
      staves can also be activated for some kind of unique effect,
      such as the infamous, catastrophic Retributive Strike.\n\n
      
