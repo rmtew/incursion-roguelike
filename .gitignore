@@ -9,6 +9,7 @@ build/dependencies
 build/packages
 build/run
 build/Win32
+build/x64
 *.vcxproj.user
 *.suo
 *.sdf
