@@ -1,5 +1,6 @@
-There are 6 sets of licenses that apply to the files that come as part of either
-the Incursion source code, or a binary distribution made from it.
+There are 7 sets of licenses that apply to the files that may apply to any derivative
+material created from either Incursion's source code, or anything created from it.
+Read below to find out if they do..
 
  1. Additional Incursion license (applies to changes after v0.6.9Y)
  2. Base Incursion license statement
@@ -34,50 +35,22 @@ the Incursion source code, or a binary distribution made from it.
 
 -- LICENSE 2: Base Incursion license statement
 
-	 This is a public statement of licensing for the Incursion source code. 
-	It can be copied and included with any other versions of Incursion or
-	derived works that are made.
+	All of the Incursion source released by Julian Mensch to date is hereby
+	dual-licensed under the BSD 3-Clause License, and the Apache 2.0 License
+	and the Expat License.
 
-	  Incursion is released under the Open Game License included in its
-	online help. Effective immediately, the definition of what constitutes
-	original product identity in Incursion is altered to nothing. Every part 
-	of the distributed Incursion game (excluding the Allegro graphics library), 
-	including the RPG game mechanics, implied setting, manual, world 
-	generator, source code, algorithms, monsters, classes, races, flavor 
-	text and so forth are to be considered Open Game Content.
+	Incursion is also released under the Open Game License (which is included in its
+	in-game help and also quoted above). The definition of what constitutes
+	original product identity in Incursion is altered to nothing.
 
-	  All parts of Incursion which are the original work of Julian Mensch
-	and are not derivative works (as defined by law) of material owned by
-	Wizards of the Coast or the authors of components like the Allegro
-	graphics library, the ACCENT compiler-compiler or any similar item
-	of distinct source are hereby released under the Creative Commons
-	Attribution 3.0 Unported license; they are thus dual-licensed as Open
-	Game Content and Creative Commons content.
+	[NOTE: The above is an abbrieviated form of Julian Mensch's licensing
+	       announcement.  It is the reader's responsibility to ensure that
+	       this abbrieviated form is a true representation of Julian's
+	       own words.  At the time of writing, those words can be found here:
 
-	  Any legal responsibility for interpreting the above paragraph falls to
-	the individuals or groups wishing to make use of this content outside
-	the OGL. The text above should be understood to release as CC-BY
-	only the material that Julian Mensch has the legal right to release,
-	and not any content owned by other parties, which Julian Mensch
-	does not assert any ownership over.
+	       http://www.incursion-roguelike.net/news.html#20150415]
 
-	  Developing Incursion is aided by the ACCENT compiler compiler,
-	which is not part of Incursion -- merely a tool used in its build process.
-	I have altered ACCENT to produce C++ source code rather than C.
-	ACCENT is licensed as GNU software; therefore my changes must
-	retain the same license. ACCENT is not part of the Incursion package,
-	merely a related tool which is not subject to binary linkage with
-	Incursion -- it is instead a distinct executable which is called as part
-	of the automated build process, which is permitted by the GNU license.
-	When my altered ACCENT is released, it will include the source code
-	under GNU as that license requires.
-
-	  I am issuing a polite and non-legally-binding request not to use copyleft
-	or anti-commercial licenses for derivative works composed primarily of 
-	Incursion unless licensing conflicts make your project unworkable otherwise.
-	This should not be misconstrued as any kind of legal requirement.
-
--- LICENSE : OPEN GAME LICENSE
+-- LICENSE 3: OPEN GAME LICENSE
 
 	OPEN GAME LICENSE Version 1.0a
 
@@ -193,19 +166,6 @@ the Incursion source code, or a binary distribution made from it.
 		System Reference Document Copyright 2000, Wizards of the Coast, Inc.;
 	Authors Jonathan Tweet, Monte Cook, Skip Williams, based on original
 	material by E. Gary Gygax and Dave Arneson.
-
-	-----------
-
-	All of the game mechanics used in Incursion, along with the names
-	of monsters, items and spells, are designated as open game content.
-	The setting, plot and flavour text, as well as the computer code used to
-	intrepret and apply the game mechanics, are considered to be Product
-	Identity of Incursion and are not released under the OGL.
-
-	All Incursion Product Identity may be freely distributed provided
-	that it is unaltered, but is otherwise in the majority copyright
-	1999-2007 Julian Mensch, with some portions copyright 1999-2003
-	Westley Weimer.
 
 -- LICENSE 4: libtcod license (libtcod.dll)
 
