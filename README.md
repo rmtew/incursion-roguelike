@@ -81,7 +81,7 @@ These instructions are intended to allow you to get Incursion to the point where
       1. Open a DOS console window, and ensure you are in the top-level directory of the Incursion source code.
       1. Type `build.bat -d` and hit enter.
       1. Lots of text will scroll past and eventually you will have had the dependencies downloaded and compiled for you, or this script will error and you will have to ask for help.
-  1. If you have reached here, you have obtained the dependencies and they are compiled.  This will give you not only the same set of files from the simplest approach, but also the accompanying source code.
+      1. If you have reached here, you have obtained the dependencies and they are compiled.  This will give you not only the same set of files from the simplest approach, but also the accompanying source code.
   1. Open `Incursion.sln`.
   1. Ensure the `Debug` configuration is selected.
   1. Look at the Solution Explorer window.  You will see four entries: `exe_curses`, `exe_libtcod`, `lib_incursion` and `modaccent`.  One will be darker than the others.  This is the one which runs when you start debugging.  If the darker entry is not `exe_libtcod`, then right click on `exe_libtcod` and choose the `Set as Startup Project` option to make it darker.
