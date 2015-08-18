@@ -572,7 +572,7 @@ REM --- FUNCTION: user_function_package_release ------------------------------
 	)
 
 	REM Archive the dependencies collection.
-	for /f "tokens=2-4 delims=/ " %%a in ('date /t') do (set L_DATE=%%c%%a%%b)
+	for /f "tokens=2-4 delims=/ " %%a in ('date /t') do (set L_DATE=%%c%%b%%a)
 	!7Z_EXE! a -r -t7z -mx9 build_dependencies-!L_DATE!-only-needed-for-development.7z dependencies\*
 )
 ( 
