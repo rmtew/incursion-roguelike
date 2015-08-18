@@ -81,12 +81,27 @@
     <IntDir>$(OutDir)</IntDir>
     <CustomBuildBeforeTargets>
     </CustomBuildBeforeTargets>
+    <LocalDebuggerEnvironment>PATH=%PATH%;$(SolutionDir)dependencies\$(Platform)\$(Configuration)
+INCURSIONFONTPATH=$(SolutionDir)..\fonts
+INCURSIONLIBPATH=$(SolutionDir)..\lib
+$(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)run</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerCommandArguments>
+    </LocalDebuggerCommandArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <CustomBuildBeforeTargets />
     <TargetName>$(SolutionName)</TargetName>
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName)\</OutDir>
     <IntDir>$(OutDir)</IntDir>
+    <LocalDebuggerEnvironment>PATH=%PATH%;$(SolutionDir)dependencies\$(Platform)\$(Configuration)
+INCURSIONFONTPATH=$(SolutionDir)..\fonts
+INCURSIONLIBPATH=$(SolutionDir)..\lib
+$(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)run</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerCommandArguments />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <TargetName>$(SolutionName)</TargetName>
@@ -94,12 +109,27 @@
     <IntDir>$(OutDir)</IntDir>
     <CustomBuildBeforeTargets>
     </CustomBuildBeforeTargets>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerEnvironment>PATH=%PATH%;$(SolutionDir)dependencies
+INCURSIONFONTPATH=$(SolutionDir)..\fonts
+INCURSIONLIBPATH=$(SolutionDir)..\lib
+$(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)run</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerCommandArguments>
+    </LocalDebuggerCommandArguments>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <CustomBuildBeforeTargets />
     <TargetName>$(SolutionName)</TargetName>
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\$(ProjectName)\</OutDir>
     <IntDir>$(OutDir)</IntDir>
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerEnvironment>PATH=%PATH%;$(SolutionDir)dependencies\$(Platform)\$(Configuration)
+INCURSIONFONTPATH=$(SolutionDir)..\fonts
+INCURSIONLIBPATH=$(SolutionDir)..\lib
+$(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)run</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerCommandArguments />
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
