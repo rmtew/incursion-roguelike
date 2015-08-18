@@ -77,7 +77,7 @@ These instructions are intended to allow you to get Incursion to the point where
       1. Download and install the [Mercurial command line tools](https://mercurial.selenic.com/wiki/Download#Windows).  This is used to obtain the SDL2 and libtcod source code.
 	  1. If you want to build releases, then do the following:
         1. Download and install [7zip](http://www.7-zip.org/).
-      1. If you want Google Breakpad support, then do the following:
+      1. If you want [Google Breakpad](https://code.google.com/p/google-breakpad/wiki/GettingStartedWithBreakpad) support, then do the following:
         1. Download and install the [Git command line tools](http://git-scm.com/).  This is only necessary if you do not have the git command already installed, and available in your `PATH` environment variable.
         1. Download and install [Python 2.7](https://www.python.org/downloads/windows/).
       1. Open a DOS console window, and ensure you are in the top-level directory of the Incursion source code.
