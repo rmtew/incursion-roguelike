@@ -72,7 +72,7 @@ These instructions are intended to allow you to get Incursion to the point where
       1. Extract the contents of the archive here.
       1. You should now be able to locate the `build\dependencies\include` directory.  You should now be able to locate `build\dependencies\Win32` and `build\dependencies\include`.  If this is not the case, then you did not extract the contents of the archive into the `build` subdirectory.  Please try again.
   1. Otherwise if you are going to do take the *automated approach* to obtaining the dependencies:
-      1. Download and install the Mercurial command line tools.  This is used to obtain the SDL2 and libtcod source code.
+      1. Download and install the [Mercurial command line tools](https://mercurial.selenic.com/wiki/Download#Windows).  This is used to obtain the SDL2 and libtcod source code.
 	  1. If you want to build releases, then do the following:
         1. Download and install [7zip](http://www.7-zip.org/).
       1. If you want Google Breakpad support, then do the following:
