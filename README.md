@@ -57,6 +57,8 @@ These instructions are intended to allow you to get Incursion to the point where
 
   1. Download and install Visual Studio 2013 Community Edition.
   1. Download and extract the Incursion source code.
+     * You can [download a snapshot](https://bitbucket.org/rmtew/incursion-roguelike/downloads), click on the `Branches` tab, and download a snapshot of the `master` branch.  This will mean you will need to get the source again to get any changes after the point in time you downloaded your snapshot.
+     * You can [install Git in some fashion](https://www.atlassian.com/git/tutorials/) and clone the repository, and pull any changes made after the point in time your clone was made.
   1. Enter the `build` subdirectory within the Incursion source code.
   1. Ensure that you have the EditorConfig extension installed by doing the following:
       1. It is important you do this if you plan to contribute back changes to me, as it ensures the files are have correct indentation.
