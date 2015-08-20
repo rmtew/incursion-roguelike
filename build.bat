@@ -396,20 +396,15 @@ REM --- FUNCTION: user_function_compile_scripts --------------------------------
 
 	echo Compiling Incursion scripts..
 
-	del >nul /Q "!BUILD_PATH!\run\mod\Incursion.Mod"
+	set "L_MODFILE_PATH=!BUILD_PATH!\run\mod\Incursion.Mod"
+	if exist "!L_MODFILE_PATH!" del >nul /Q "!L_MODFILE_PATH!"
 
 	for /F "usebackq tokens=*" %%M in (`..\Win32\Debug\exe_libtcod\Incursion.exe -compile`) do (
 		set LAST_LINE=%%M
 		echo !LAST_LINE!
 	)
-
-	REM Error handling.
-	if !ERRORLEVEL! NEQ 0 (
-		echo ERROR: 'Incursion.exe -compile' exited with error level !ERRORLEVEL!
-		goto internal_function_teardown
-	)
 	
-	if not exist "!BUILD_PATH!\run\mod\Incursion.Mod" (
+	if not exist "!L_MODFILE_PATH!" (
 		echo ERROR: failed compiling Incursion script files..
 		goto internal_function_teardown
 	)
