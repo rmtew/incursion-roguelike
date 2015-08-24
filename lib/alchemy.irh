@@ -1275,7 +1275,7 @@ AI_MACRO Effect "AutoLoot" : EA_GENERIC
             continue;
           if (it->GetParent() != NULL_OBJ && it->GetParent()->isType(T_CONTAIN)) {
             Throw(EV_TAKEOUT,EActor,NULL_OBJ,it->GetParent(),it);
-            if (it->GetParent())
+            if (it->GetParent() != NULL_OBJ && it->GetParent()->isType(T_CONTAIN))
               { 
                 EActor->IPrint("Cannot take out <hObj>.", it);
                 it->GainTempStati(EFF_FLAG1,EActor,-2,SS_MISC,0,0,$"AutoLoot");
