@@ -1385,6 +1385,9 @@ EvReturn Container::TakeOut(EventInfo &e)
       }
     }
     e.EActor->Timeout += FE(TITEM(iID)->u.c.Timeout);
+    /* Set the item's new owner, with the assumption that the item is moving
+     * from the container to the actor's inventory. */
+    e.EItem2->SetOwner(e.EActor->myHandle);
     if (e.EActor->isPlayer())
       e.EPActor->LegendIdent(e.EItem2);
     Sort(NULL);
