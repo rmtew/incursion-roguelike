@@ -1338,7 +1338,7 @@ struct FeatInfoStruct FeatInfo[] = {
     {{{FP_FEAT,FT_EXPERTISE}}}},
     
   { FT_MASTER_GRAPPLE, FF_SMART|FF_WARRIOR, "Master Grapple",
-    "You do not provoke an attack of opportunity when yo umake a touch attack to start "
+    "You do not provoke an attack of opportunity when you make a touch attack to start "
     "a grapple. In addition, you gain a +4 bonus on all grapple checks, regardless of "
     "whether you started the grapple.", 
     {{{FP_ATTR,A_DEX,13}}}},

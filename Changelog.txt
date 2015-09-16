@@ -4,6 +4,7 @@ Incursion (open source) 0.6.9Y20: 2015-??-??
 * https://bitbucket.org/rmtew/incursion-roguelike/issues/248/: Incursion now has an x64 configuration and with minor complications compiles and starts up.  Note that there are a lot of compilation warnings, so stability is questionable.  The x64 compilation requires some finessing, as modaccent is a very dated codebase that crashes hard when run as an x64 executable.  But the Win32 binary does exactly the same thing.  The exe_curses project is disabled for x64, as it only comes able to compile for Win32.  As it's not really usable, this isn't much of a loss.
 * https://bitbucket.org/rmtew/incursion-roguelike/issues/249/: Dropping part of a stack would result in the non-dropped portion disappearing.  Reported and fixed by cadmal@Bitbucket.
 * https://bitbucket.org/rmtew/incursion-roguelike/issues/252/: The goddess Mara was displeased when corpses were eaten.  This wasn't, it just wasn't documented.  Reported by Daniel Rubin, fix provided via pull request by Dave Duckett.
+* https://bitbucket.org/rmtew/incursion-roguelike/issues/256/: Typo in Master Grapple description, along the lines of "... yo umake ..." Reported by Vornag@Bitbucket.
 
 Incursion (open source) 0.6.9Y19: 2015-08-14
 * https://bitbucket.org/rmtew/incursion-roguelike/issues/207/: Incursion domain names finished transferring from Julian.
