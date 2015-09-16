@@ -2534,7 +2534,7 @@ Monster "fire toad" : MA_BEAST, MA_REPTILIAN
            M_PSYCHO, M_NATURAL, M_FIRE, M_HOSTILE,
            M_NOLIMBS;
     Desc: "Irascible and voracious, fire toads are as hyperactive
-      as ice toads are sedentry. Their accelerated metabolism gives
+      as ice toads are sedentary. Their accelerated metabolism gives
       them great reflexes, but also makes them always hungry. They
       most often live near volcanos or other sources of intense
       natural heat.";
@@ -2780,7 +2780,7 @@ Monster "osquip" : MA_RODENT, MA_ANIMAL, MA_BURROW
     Desc: "A distant cousin of rats, the osquip is a six-legged
       rodent the size of a pit bull, with a leathery yellow hide
       and huge, blunt foreteeth that hang out of its mouth over
-      its upper lip. The osquip is a sedentry creature, rarely
+      its upper lip. The osquip is a sedentary creature, rarely
       aggressive, and most often content to collect trinkets and
       feed on smaller creatures -- but it will fight visciously
       if it is starved or cornered.";

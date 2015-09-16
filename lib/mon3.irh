@@ -195,7 +195,7 @@ Monster "magori" : MA_ABERRATION, MA_ADVENTURER
            SK_HIDE, SK_INTIMIDATE, SK_LISTEN, SK_SPOT, SK_SWIM;
     Flags: M_HOSTILE, M_GROUP, M_AMPHIB, M_WATER,
            M_CHAOTIC, M_EVIL, M_HUMANOID, M_CARNI,
-           M_LIGHT_AVERSE;
+           M_LIGHT_AVERSE, M_NOTTALKABLE;
     Desc: "This hideous bipedal creature resembles a ten-foot-tall
     crayfish with a bundle of five alien red eyes on stalks, and a long
     flexible snout filled with many jagged rows of fangs. Magori are

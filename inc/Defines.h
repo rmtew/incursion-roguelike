@@ -1354,7 +1354,8 @@ typedef signed long       hObj;
 #define M_PLAYER          110
 #define M_MAGE            111
 #define M_RIDER           112
-#define M_LAST            113  
+#define M_NOTTALKABLE     113
+#define M_LAST            114
 
 #define TT_SURFACE    0x0001 /* Never in a dungeon */
 #define TT_FOREST     0x0002

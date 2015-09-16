@@ -1359,8 +1359,7 @@ Monster "grimlock" : MA_HUMANOID, MA_ADVENTURER
     Feats: 
       FT_ALERTNESS, FT_BLIND_FIGHT,
       SK_CLIMB, SK_HIDE, FT_SKILL_FOCUS, SK_LISTEN, SK_SPOT;
-    Flags: M_CARNI, M_HUMANOID, M_EVIL, M_BLIND, 
-      M_NEUTER;
+    Flags: M_CARNI, M_HUMANOID, M_EVIL, M_BLIND, M_NEUTER, M_NOTTALKABLE;
     Gear: 
       50% $"battleaxe" else random T_WEAPON;
     Desc: "These primevil, eyeless humanoids dwell deep beneath

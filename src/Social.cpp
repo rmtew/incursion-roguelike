@@ -217,32 +217,54 @@ EvReturn Creature::PreTalk(EventInfo &e) {
     return NOTHING;
 }
 
+// TODO: MA_LYCANTHROPE should be talkable if the form is human.
 bool Creature::canTalk(Creature *to) {
     if (!isMType(MA_SAPIENT))
         return false;
     if (isMType(MA_PLANT))
         if (to && to->SkillLevel(SK_KNOW_NATURE) >= 10)
             return true;
+
+    // Anything explicitly talkable overrides any of it's types matching below, or lack of a head (fungi for instance).
     if (HasMFlag(M_TALKABLE))
         return true;
+    // Anything explicitly non-talkable overrides the MA_ADVENTURER type wildcard.
+    if (HasMFlag(M_NOTTALKABLE))
+        return false;
+    // Anything with this type is generally talkable, unless explicitly marked otherwise.
+    if (isMType(MA_ADVENTURER))
+        return true;
+    // Anything without a head or exceptions above, is non-talkable.
     if (TMON(mID)->HasFlag(M_NOHEAD))
         return false;
-    switch (TMON(mID)->MType[0]) {
-    case MA_BAT: case MA_CAT:
-    case MA_DOG: case MA_ANIMAL:
-    case MA_MIMIC: case MA_QUADRUPED:
-    case MA_RODENT:
-    case MA_SNAKE: case MA_TRAPPER:
-    case MA_PLANT: case MA_SPIDER:
-    case MA_VORTEX: case MA_WORM:
-    case MA_ELEMENTAL: case MA_FUNGI:
-    case MA_CONSTRUCT: case MA_PUDDING:
-    case MA_QUYLTHULG:
-    case MA_JELLY: case MA_NIGHTSHADE:
-        return false;
-    default:
-        return true;
+
+    for (int i = 0; i < 3; i++) {
+        switch (TMON(mID)->MType[i]) {
+        case MA_ANIMAL: // Checked.
+        case MA_BAT: // Checked.
+        case MA_BEAST: // Checked.
+        case MA_CAT: // Checked, MA_ADVENTURER and MA_LYCANTHROPE exceptions.
+        case MA_CONSTRUCT: // Checked, Modron and Duodron exceptions via M_TALKABLE
+        case MA_DOG: // Checked, MA_LYCANTHROPE todo above.
+        case MA_ELEMENTAL: // Checked.
+        case MA_FUNGI: // Checked, M_TALKABLE -> myconid
+        case MA_JELLY: // Checked.
+        case MA_NIGHTSHADE: // Not used.
+        case MA_MIMIC: // Not used.
+        case MA_PLANT: // Checked.
+        case MA_PUDDING: // Not used.
+        case MA_RODENT: // TODO: MA_DEMON? uridezu
+        case MA_SNAKE: // TODO: MA_CELESTIAL? lillend MA_NAGA?
+        case MA_SPIDER: // TODO: drider?
+        case MA_TRAPPER: // Checked.
+        case MA_VORTEX: // Checked.
+        case MA_WORM: // Checked.
+        case MA_QUADRUPED: // Checked, MA_ADVENTURER exception
+        case MA_QUYLTHULG: // Checked.
+            return false;
+        }
     }
+    return true;
 }
 
 EvReturn Creature::Barter(EventInfo &e) {
