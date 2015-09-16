@@ -1,7 +1,7 @@
-/* Mon1.Irc -- Monsterous Beasts       Mon2.Irc -- Peoples of Therya
+/* Mon1.Irc -- Monstrous Beasts       Mon2.Irc -- Peoples of Therya
      Dragons and Kin                     Humanoid Races
      Mythic Hybrids                      Giants and Faeries
-     Magical Beasts                      Monsterous Societies
+     Magical Beasts                      Monstrous Societies
      Other Beasts                        Learned Templates
      Natural Animals                     Townsfolk
    Mon3.Irc -- The Wierd Stuff         Mon4.Irc -- Planar Creatures
@@ -3220,7 +3220,7 @@ Template "of Legend" : TM_NATURE for MA_NLIVING
     Desc: "A monster of legend is a creature chosen by a god to perform
       a stated legendary task (such as guarding a locale or slaying a
       given type of creature) and imbued with legendary abilities to aid
-      it in that endeavour. Such creatures act as the monsterous champions
+      it in that endeavour. Such creatures act as the monstrous champions
       of a given diety, much as saints and priests do in human society.";
     HD: +6; Def: +5; Arm: +5; Size: +1; CR: +3; Power: +4;
     Feats: FT_IMPROVED_INITIATIVE, FT_MULTIATTACK;
@@ -5160,7 +5160,7 @@ Monster "plague of centipedes" : MA_SWARM, MA_VERMIN
          M_MINDLESS, M_AMORPH,
          M_HIDE_UNDER, 
          M_LAYS_EGGS, M_NOHANDS, M_NOLIMBS, M_HOSTILE; 
-  Poison: $"monsterous centipede venom";
+  Poison: $"monstrous centipede venom";
   On Event PRE(EV_DAMAGE) {
     if (e.DType == AD_SPE1) { 
       if (!EVictim->isDead())

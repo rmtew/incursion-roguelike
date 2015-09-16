@@ -960,7 +960,7 @@ Encounter "lone template undead"
            5 $"ghost" $"death knight";
   }
   
-Encounter "monsterous animated corpse"
+Encounter "monstrous animated corpse"
   {
     Weight: 10;
     CR: 1+;
@@ -991,7 +991,7 @@ Encounter "mixed corporeal undead"
     Lists:
       * MON_LIST1
           10 ANY(MA_UNDEAD)
-             $"monsterous animated corpse"
+             $"monstrous animated corpse"
           30 $"lone template undead";
     Constants:
       * MIN_XCR_MULT 2;

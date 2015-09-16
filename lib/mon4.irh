@@ -1,7 +1,7 @@
-/* Mon1.Irc -- Monsterous Beasts       Mon2.Irc -- Peoples of Therya
+/* Mon1.Irc -- Monstrous Beasts       Mon2.Irc -- Peoples of Therya
      Dragons and Kin                     Humanoid Races
      Mythic Hybrids                      Giants and Faeries
-     Magical Beasts                      Monsterous Societies
+     Magical Beasts                      Monstrous Societies
      Other Beasts                        Learned Templates
      Natural Animals                     Townsfolk
    Mon3.Irc -- The Wierd Stuff         Mon4.Irc -- Planar Creatures
@@ -15,14 +15,14 @@
 Monster "fiend" : MA_DRAGON
   {
     Image: red GLYPH_FIEND; Size: SZ_MEDIUM;
-    Desc: "Fiends are sadistic and monsterous creatures from worlds far
+    Desc: "Fiends are sadistic and monstrous creatures from worlds far
       beyond Theyra. Some, demons, are aligned with chaos, while others
       (devils) are lawful in temperment, but all are inherenty evil, and
       in fact are the living personification of all-consuming darkness.
       Destroying a fiend is a good act for a creature aspiring to a good
       alignment, though there are plenty of selfish reasons to kill them
       too -- such as avoiding being tortured, corrupted or eaten.\n
-      __Fiends come in a wide variety of monsterous forms, and only a
+      __Fiends come in a wide variety of monstrous forms, and only a
       skilled demonologist can identify them all. Learning the specific
       species of a fiend is based on the Knowledge (Infernal) skill.";
     Flags: M_UNKNOWN, M_NOGEN;
@@ -4191,9 +4191,9 @@ Template "half-fiend" : TM_DESCENT for MA_NLIVING
     Desc: "Fiends are infamous for using sexuality to corrupt humans --
       especially succubi and erinyes -- but any fiend can have congress
       with a human victim, and due to the fiend's metaphyical nature,
-      these unions can produce children. Half-fiends are monsterous
+      these unions can produce children. Half-fiends are monstrous
       things, resembling their mortal parent's species but with claws,
-      fangs and other monsterous traits, and instinctually driven to acts
+      fangs and other monstrous traits, and instinctually driven to acts
       of violence and general psychopathic conduct.";
     Immune: DF_POIS; Resists: DF_ACID, DF_COLD, DF_FIRE, DF_ELEC;
     Flags: !M_GOOD, M_EVIL;

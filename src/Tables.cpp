@@ -838,7 +838,7 @@ int16 FavEnemies[] = {
   MA_HUMAN, MA_ELF, MA_DWARF, MA_HALFLING, MA_GNOME, MA_DROW,
   MA_ORC, MA_KOBOLD, MA_GOBLIN, MA_TROLL,
   
-  /* Monsterous Races */
+  /* Monstrous Races */
   MA_YUAN_TI, MA_GENIE, MA_ILLITHID, MA_NAGA, MA_FAERIE,
   MA_QUYLTHULG, MA_GOLEM,
 

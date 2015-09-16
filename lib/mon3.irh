@@ -1,7 +1,7 @@
-/* Mon1.Irc -- Monsterous Beasts       Mon2.Irc -- Peoples of Therya
+/* Mon1.Irc -- Monstrous Beasts       Mon2.Irc -- Peoples of Therya
      Dragons and Kin                     Humanoid Races
      Mythic Hybrids                      Giants and Faeries
-     Magical Beasts                      Monsterous Societies
+     Magical Beasts                      Monstrous Societies
      Other Beasts                        Learned Templates
      Natural Animals                     Townsfolk
    Mon3.Irc -- The Wierd Stuff         Mon4.Irc -- Planar Creatures
@@ -1767,7 +1767,7 @@ Template "celeritous" : TM_SKILL for MA_CONSTRUCT {
       };
   }
 
-Template "monsterous clockwork" : TM_NATURE for MA_NLIVING { 
+Template "monstrous clockwork" : TM_NATURE for MA_NLIVING { 
   // drow:      0 -> 6
   // bugbear:   2 -> 6
   // leopard:   3 -> 5
@@ -2642,7 +2642,7 @@ Monster "bloodsucker" : MA_JELLY
           EMap->WriteTerra(EVictim->x,EVictim->y,$"bloodstain");
       }
     }; 
-    Desc: "This monsterous relative of the bloodbloater appears to be
+    Desc: "This monstrous relative of the bloodbloater appears to be
       a crimson sack of blood covered with a thick, filmy resin. Its touch
       drains vitality from its victims and it can project a ray that
       chills the blood of its enemies. It can detect creatures with blood
@@ -2944,7 +2944,7 @@ Monster "giant praying mantis" : MA_VERMIN
       It remains perfectly still while stalking its prey.";
   }
 
-Monster "small monsterous centipede" : MA_VERMIN, MA_FORCE_D4
+Monster "small monstrous centipede" : MA_VERMIN, MA_FORCE_D4
   {
     Image: red 'x'; Size: SZ_SMALL;  Arm: 3;
     CR: OPT_CR(-4,1/4); HD: 1; Def: 12; Hit: +1; Mov: 100%; Spd: 60%;
@@ -2954,14 +2954,14 @@ Monster "small monsterous centipede" : MA_VERMIN, MA_FORCE_D4
 	ABILITY(CA_INFRAVISION,6);
     Feats: FT_SNEAKY, SK_HIDE, SK_CLIMB, SK_SPOT;
     Immune: DF_MIND; 
-    Poison: $"monsterous centipede venom";
+    Poison: $"monstrous centipede venom";
     Flags: M_CARNI, M_THICK_HIDE, M_NOHANDS, M_NATURAL,
       M_MINDLESS, M_NEUTER, M_GROUP;
     Desc: "This centipede is about the size of a hunting dog.
       It has a shiny maroon carapice.";
   }
 
-Monster "monsterous centipede" : MA_VERMIN
+Monster "monstrous centipede" : MA_VERMIN
   {
     Image: bright red 'x'; Size: SZ_LARGE;  Arm: 6;
     CR: OPT_CR(3,4); HD: 4; Def: 10; Hit: +3; Mov: 100%; Spd: 200%;
@@ -2971,7 +2971,7 @@ Monster "monsterous centipede" : MA_VERMIN
 	ABILITY(CA_INFRAVISION,6);
     Feats: FT_SNEAKY, SK_HIDE, SK_CLIMB, SK_SPOT;
     Immune: DF_MIND; 
-    Poison: $"monsterous centipede venom";
+    Poison: $"monstrous centipede venom";
     Flags: M_CARNI, M_THICK_HIDE, M_NOHANDS, M_NATURAL,
       M_MINDLESS, M_NEUTER, M_MOUNTABLE, M_GROUP;
     Desc: "This centipede is larger than a human. It attacks by rearing
@@ -2979,7 +2979,7 @@ Monster "monsterous centipede" : MA_VERMIN
     it can do this quite rapidly. It has a bright maroon carapice.";
   }
 
-Poison "monsterous centipede venom" : EA_DRAIN
+Poison "monstrous centipede venom" : EA_DRAIN
   {
     Level: 1;
     /*Iteration*/   cval: 5;

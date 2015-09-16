@@ -845,7 +845,7 @@ void Character::UseSkill(uint8 sk) {
             { MA_PLANT, "the rustling of vines" },
             { MA_CELESTIAL, "faint, glorious music" },
             { MA_CONSTRUCT, "heavy grinding noises" },
-            { MA_BEAST, "monsterous growling" },
+            { MA_BEAST, "monstrous growling" },
             { MA_YUAN_TI, "sibilant voices" },
             { MA_NAGA, "sibilant voices" },
             { MA_SNAKE, "hissing" },
