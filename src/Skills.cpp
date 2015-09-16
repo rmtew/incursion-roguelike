@@ -1082,12 +1082,11 @@ FailedRestListen:
         StatiIterBreakout(this,goto ValidTarget) }
         StatiIterEnd(this)
 
-            if (e.EVictim->isMType(MA_ANIMAL) && SkillLevel(SK_ANIMAL_EMP))
-                goto ValidTarget;
+        if (e.EVictim->isMType(MA_ANIMAL) && SkillLevel(SK_ANIMAL_EMP))
+            goto ValidTarget;
         if (e.EVictim->isMType(MA_BEAST) && HasFeat(FT_BEASTIAL_EMPATHY) && SkillRanks[SK_ANIMAL_EMP])
             goto ValidTarget;
-        if ((e.EVictim->isMType(MA_PLANT) || e.EVictim->isMType(MA_FUNGI)) &&
-            HasFeat(FT_PLANT_EMPATHY) && SkillRanks[SK_ANIMAL_EMP])
+        if ((e.EVictim->isMType(MA_PLANT) || e.EVictim->isMType(MA_FUNGI)) && HasFeat(FT_PLANT_EMPATHY) && SkillRanks[SK_ANIMAL_EMP])
             goto ValidTarget;
         IPrint("You have no primal link to that sort of creature.");
         return /*ABORT*/;

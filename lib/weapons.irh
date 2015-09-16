@@ -120,7 +120,7 @@ Item "great lance" : T_WEAPON
     Mat: MAT_ADAMANT; Size: SZ_LARGE; Weight: 500; Cost: OPT_COST(77,90) GOLD;
     SDmg: 1d10; LDmg: 1d20; Acc: +0; Crit: x3; Threat: 1; Spd: 70%;
     Flags: WT_REACH, WT_CHARGE, WT_KNOCKDOWN, WT_STR1, WT_STR2, WT_MOUNTED_ONLY;
-    Desc: "The great lance is a monsterous weapon usually associated with
+    Desc: "The great lance is a monstrous weapon usually associated with
       demonic hordes and mythic tales of knights riding dragons. The
       typical great lance is as long as a pike but non-trivially thicker:
       it is the fullblade of the lance world.  In order to survive the

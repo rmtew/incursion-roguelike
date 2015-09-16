@@ -3476,7 +3476,7 @@ typedef signed long       hObj;
 #define NA_THE   0x0020  /* the long sword    the kobold     Asmodeus         */
 #define NA_INSC   0x0040 /* sword {blinky}     kobold          Asmodeus       */
 #define NA_SINGLE 0x0080 /* The flaming sheaf arrow inflicts                  */
-#define NA_SHADOW 0x0100 /* an unclearly seen monsterous form                 */
+#define NA_SHADOW 0x0100 /* an unclearly seen monstrous form                 */
 #define NA_STATI  0x0200 /* A terrified paralyzed male kobold                 */
 #define NA_XCAPS  0x0400 /* The Long Sword [2d4/4d5]                          */
 #define NA_MONO   0x0800 /* Monochrome (don't highlight blessed/cursed)       */

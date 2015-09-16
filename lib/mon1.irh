@@ -64,7 +64,7 @@
      the "Vermin" appendix of the first 3.0 Monster Manual. In other words, giant
      versions of scorpions, spiders, ants, beetles and so forth. Thus, NVermin 
      are never magical or extraplanar.
-   MA_CONSTRUCTS
+   MA_CONSTRUCT
        Constructs are mindless statues or other inanimate objects given motion
      by magic. They are not "alive", have no biology, cannot reproduce, and do
      not breathe. They are mindless, fearless and immune to many spells.
@@ -2846,7 +2846,7 @@ Monster "remorhaz" : MA_WORM, MA_BEAST
     Flags: M_CARNI, M_NOHANDS, M_NEUTER, M_NATURAL, M_THICK_HIDE,
            M_COLD, M_FIRE, M_BURROW, M_HOSTILE;
     Desc: "The remorhaz, or polar worm, resembles a cross between
-      a centepede and a manta ray, crawling on hundreds of legs
+      a centipede and a manta ray, crawling on hundreds of legs
       and encased in a thick chitinous shell. Its body is like a
       furnace, generating internal tempratures great enough to
       slag steel instantly. Remorhazes are aggressive predators,
@@ -2956,7 +2956,7 @@ Monster "shocker lizard" : MA_REPTILE, MA_BEAST
       };
   }
 
-Monster "stirge" : MA_BAT, MA_ANIMAL
+Monster "stirge" : MA_ANIMAL, MA_BAT 
   {
     Image: red 'b'; Size: SZ_TINY; 
     CR: OPT_CR(-4,1/2); HD: 1; Hit: 1; Def: 12; Mov: 130%; Spd: 100%;
@@ -3877,7 +3877,7 @@ Monster "badger" : MA_ANIMAL
       are used in the manufacture of shaving and other types of brushes."; 
   }
 
-Monster "bat" : MA_BAT, MA_ANIMAL
+Monster "bat" : MA_ANIMAL, MA_BAT
 {
   Image: brown 'b'; Size: SZ_TINY; 
   CR: OPT_CR(-6,1/8); HD: 1; Hit: +0; Def: 10; Mov: 150%; Spd: 100%;
@@ -5108,7 +5108,7 @@ Monster "elephant" : MA_QUADRUPED, MA_ANIMAL
 
 /*** ANIMAL SWARMS ***/
 
-Monster "plague of bats" : MA_SWARM, MA_BAT, MA_ANIMAL
+Monster "plague of bats" : MA_BAT, MA_SWARM, MA_ANIMAL
 {
   Image: brown 'S'; Size: SZ_MINISCULE; 
   CR: OPT_CR(3,2); HD: 3; Hit: +2; Def: 10; Mov: 150%; Spd: 100%; 
@@ -5314,7 +5314,7 @@ Monster "plague of spiders" : MA_SWARM, MA_SPIDER, MA_VERMIN
 } 
 
 
-Monster "plague of stirges" : MA_SWARM, MA_BAT, MA_ANIMAL
+Monster "plague of stirges" : MA_ANIMAL, MA_BAT, MA_SWARM
 {
   Image: bright brown 'S'; Size: SZ_MINISCULE; 
   CR: OPT_CR(4,4); HD: 6; Hit: +4; Def: 10; Mov: 130%; Spd: 100%; 

@@ -5,6 +5,7 @@ Incursion (open source) 0.6.9Y20: 2015-??-??
 * https://bitbucket.org/rmtew/incursion-roguelike/issues/249/: Dropping part of a stack would result in the non-dropped portion disappearing.  Reported and fixed by cadmal@Bitbucket.
 * https://bitbucket.org/rmtew/incursion-roguelike/issues/252/: The goddess Mara was displeased when corpses were eaten.  This wasn't, it just wasn't documented.  Reported by Daniel Rubin, fix provided via pull request by Dave Duckett.
 * https://bitbucket.org/rmtew/incursion-roguelike/issues/256/: Typo in Master Grapple description, along the lines of "... yo umake ..." Reported by Vornag@Bitbucket.
+* https://bitbucket.org/rmtew/incursion-roguelike/issues/258/: Typo in various files, with "monsterous" used instead of "monstrous".
 
 Incursion (open source) 0.6.9Y19: 2015-08-14
 * https://bitbucket.org/rmtew/incursion-roguelike/issues/207/: Incursion domain names finished transferring from Julian.

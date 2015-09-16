@@ -1,7 +1,7 @@
-/* Mon1.Irc -- Monsterous Beasts       Mon2.Irc -- Peoples of Therya
+/* Mon1.Irc -- Monstrous Beasts       Mon2.Irc -- Peoples of Therya
      Dragons and Kin                     Humanoid Races
      Mythic Hybrids                      Giants and Faeries
-     Magical Beasts                      Monsterous Societies
+     Magical Beasts                      Monstrous Societies
      Other Beasts                        Learned Templates
      Natural Animals                     Townsfolk
    Mon3.Irc -- The Wierd Stuff         Mon4.Irc -- Planar Creatures
@@ -212,7 +212,7 @@ Monster "dwarf" : MA_DWARF, MA_ADVENTURER
     Desc: "Stubborn, driven, stoic and devoted -- these are the traits
       the dwarven people are most known for. A warrior race, dwarves
       have fought for millenia against the giants, orcs, aberrations
-      and other monsterous threats that plague civilization.";
+      and other monstrous threats that plague civilization.";
     On Event EV_INITIALIZE {
       hObj h;
       for(h=EActor->FirstInv();h;h=EActor->NextInv()) {
@@ -493,7 +493,7 @@ Monster "kobold" : MA_KOBOLD, MA_ADVENTURER
           $"celestial" $"cave cricket"
           $"celestial" $"giant soldier ant"
           $"celestial" $"giant dragonfly"
-          $"celestial" $"monsterous centipede"
+          $"celestial" $"monstrous centipede"
           $"celestial" $"giant blue beetle"
           $"celestial" $"giant praying mantis"
           $"celestial" $"grick"
@@ -504,7 +504,7 @@ Monster "kobold" : MA_KOBOLD, MA_ADVENTURER
           $"cave cricket"
           $"giant soldier ant"
           $"giant dragonfly"
-          $"monsterous centipede"
+          $"monstrous centipede"
           $"giant blue beetle"
           $"giant praying mantis"
           $"grick"
@@ -3349,7 +3349,7 @@ Template "half-fey" : TM_DESCENT for MA_HUMANOID
 
 /*****************************************************************************
  *****************************************************************************
- ***                         MONSTEROUS SOCIETIES                          ***
+ ***                          MONSTROUS SOCIETIES                          ***
  *****************************************************************************
  *****************************************************************************/
 
@@ -3708,7 +3708,7 @@ Monster "azmyth" : MA_BAT
       predators.";
   }
 
-Monster "firebat" : MA_BAT, MA_BEAST
+Monster "firebat" : MA_BEAST, MA_BAT
 {
   Image: bright red 'b'; Size: SZ_TINY; 
   CR: OPT_CR(-4,1/8); HD: 1; Hit: +0; Def: 10; Mov: 150%; Spd: 100%;
@@ -3729,7 +3729,7 @@ Monster "firebat" : MA_BAT, MA_BEAST
   surrounds it."; 
 }
 
-Monster "night hunter" : MA_BAT, MA_ANIMAL
+Monster "night hunter" : MA_ANIMAL, MA_BAT
 {
   Image: blue 'b'; Size: SZ_LARGE; 
   CR: OPT_CR(0,1); HD: 2; Hit: +1; Def: 11; Mov: 150%; Spd: 100%;
@@ -3955,7 +3955,7 @@ Monster "jackal lord" : MA_DOG, MA_HUMANOID, MA_LYCANTHROPE
     Stati[ALLY_TO,MA_DOG]; 
     Spells: $"cat's grace", $"spectral force", $"charm person",
             $"detect monsters", $"summon jackals", $"dimension door";
-    Flags: M_HUMANOID, M_CARNI, M_EVIL, M_LAWFUL, M_IALIGN, M_SOLITARY;
+    Flags: M_HUMANOID, M_CARNI, M_EVIL, M_LAWFUL, M_IALIGN, M_SOLITARY, M_TALKABLE;
     Desc: "Aristocratic, mysterious and learned, jackal lords are nothing if 
       not civilized. Nurturing destructive cults and wielding Machiavellian
       schemes like swords, the jackal lords are among the last remaining
@@ -4049,7 +4049,7 @@ Monster "wererat" : MA_LYCANTHROPE, MA_RODENT
       1d3 $"potion" of $"healing";
     Desc: "Nimble and venomous, wererats are the weakest of the true
       lycanthropes. They are able to take three forms: that of a human,
-      a rat and their natural form, a monsterous hybrid of the two.
+      a rat and their natural form, a monstrous hybrid of the two.
       Wererats are viscious creatures, enjoying stalking those weaker
       than them and destroying anything that others find beautiful.";
     Lists:

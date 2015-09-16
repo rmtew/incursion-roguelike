@@ -947,7 +947,7 @@ String & Creature::Name(int16 Flags) {
         else if (isMType(MA_REPTILIAN))
             s += "reptillian ";
         else
-            s += "monsterous ";
+            s += "monstrous ";
         s += "form";
         goto Done;
     } else {
