@@ -928,125 +928,116 @@ void Creature::Planeshift()
     if (HasStati(MOUNTED) && !HasStati(MANIFEST))
       if (onPlane() != ((Creature*)GetStatiObj(MOUNTED))->onPlane())
         ThrowVal(EV_DISMOUNT,DSM_INCOR,this);
-  }
+}
 
-void Creature::Shapeshift(rID _mID, bool merge, Item* PolySource)
-  {
+void Creature::Shapeshift(rID _mID, bool merge, Item* PolySource) {
     TMonster *c, *n; Item *it;
-    
-  if (tmID != mID && tmID != _mID) {
-    SetSilence();
-    RemoveStati(POLYMORPH);
-    UnsetSilence();
-  }
-  
-  if (HasStati(MOUNTED)) {
-    IPrint("You are thrown from your mount as you change shape!");
-    ThrowVal(EV_DISMOUNT,DSM_THROWN,this);
-    if (isDead()) return; 
+
+    if (tmID != mID && tmID != _mID) {
+        SetSilence();
+        RemoveStati(POLYMORPH);
+        UnsetSilence();
     }
-    
-  if (HasStati(DISGUISED)) {
-    IPrint("Your transformation ruins your disguise!");
-    RemoveStati(DISGUISED);
-    } 
-  
 
-  GainStatiFromBody(_mID);
-
-  if (_mID == mID) /* New Self... */
-  {
-    /* New Self... */
-
-    return;
-  }
-  n = TMON(_mID); // new
-  c = TMON(mID);
-
-  if (n->Size > c->Size)
-  {
-    static int8 SizedSlots[] =
-    { SL_ARMOUR, SL_GAUNTLETS, SL_BRACERS, SL_BOOTS, 0 };
-    /* If In Armour, either
-     * It Breaks
-     * It Sizes Automatically
-     * It "phases away" (artifacts)
-     * You take damage/die
-     */
-  }
-  if (n->Size < c->Size)
-  {
-
-  }
-  
-  bool incor_msg = false;
-  if (n->HasFlag(M_INCOR) && !merge) {
-    for(int8 i=0;i!=SL_LAST;i++)
-      if (it=InSlot(i))
-        if (it!=PolySource)
-        {
-          if (it->isGhostTouch())
-            continue;
-          if (!incor_msg) {
-
-            IDPrint("Your equipment falls through your body!",
-                "<Obj1>'s equipment falls through <his:Obj1> body!",this);
-            incor_msg = true;
-          }
-          Throw(EV_DROP,this,NULL,it);
-        }
-        else if (n->HasFlag(M_AMORPH) && !merge)
-          for(int8 i=0;i!=SL_LAST;i++)
-            if (InSlot(i))
-              if (InSlot(i) != PolySource)
-              {
-                if (!incor_msg) {
-                  IDPrint("Your equipment flows off your body!",
-                      "<Obj1>'s equipment flows off <his:Obj1> body!",this);
-                  incor_msg = true;
-                }
-                Throw(EV_DROP,this,NULL,InSlot(i));
-              }
-    Planeshift();
+    if (HasStati(MOUNTED)) {
+        IPrint("You are thrown from your mount as you change shape!");
+        ThrowVal(EV_DISMOUNT, DSM_THROWN, this);
+        if (isDead())
+            return;
     }
-  
-  /* Effects of being an ooze/slime/fungi and touching your gear... */
+
+    if (HasStati(DISGUISED)) {
+        IPrint("Your transformation ruins your disguise!");
+        RemoveStati(DISGUISED);
+    }
 
 
-  /* An array listing the MFlag you must have in order to be able
-     to have an item in the slot of the index. Negative values mean
-     you must *not* have the flag in question. */
-  
-  for(int8 i=0;i!=SL_LAST;i++)
-    if (InSlot(i) && !n->HasSlot(i))
+    GainStatiFromBody(_mID);
+
+    if (_mID == mID) {
+        /* New Self... */
+        return;
+    }
+
+    n = TMON(_mID); // new
+    c = TMON(mID);
+
+    if (n->Size > c->Size) {
+        static int8 SizedSlots[] =
+        { SL_ARMOUR, SL_GAUNTLETS, SL_BRACERS, SL_BOOTS, 0 };
+        /* If In Armour, either
+         * It Breaks
+         * It Sizes Automatically
+         * It "phases away" (artifacts)
+         * You take damage/die
+         */
+    }
+    if (n->Size < c->Size)
     {
-      it = InSlot(i);
-      if (it == PolySource || merge || it->isType(T_LIGHT)) {
-        IDPrint("Your <Obj1> merge<s:Obj1> with your new form.",
-            "The <Obj2>'s <Obj1> merge<s:Obj1> with <his:Obj2> new form.",
-            it,this);
-      }
-      else {
-        IDPrint("Your <Obj1> fall<str3> free.",
-            "The <Obj2>'s <Obj1> fall<str3> free.",it,this,
-            it->isPlural() ? "" : "s");
-        Throw(EV_LOSEITEM,this,NULL,it);
-        Throw(EV_DROP,this,NULL,it);
-      }
+
     }
-  
-  if (isMonster())
-    if (theGame->GetPlayer(0)->Perceives(this))
-      StateFlags |= MS_POLY_KNOWN;
-  
-  
-  mID = _mID;
-  SetImage();
-  cHP = (cHP*100)/max(1,mHP+Attr[A_THP]);
-  CalcHP();
-  cHP = max((cHP*(mHP+Attr[A_THP]))/100,1);
-  if (m && m->InBounds(x,y)) // ww: bugfix! 
-    m->Update(x,y);
+
+    bool incor_msg = false;
+    if (n->HasFlag(M_INCOR) && !merge) {
+        for (int8 i = 0; i != SL_LAST; i++)
+            if (it = InSlot(i))
+                if (it != PolySource) {
+                    if (it->isGhostTouch())
+                        continue;
+                    if (!incor_msg) {
+                        IDPrint("Your equipment falls through your body!",
+                            "<Obj1>'s equipment falls through <his:Obj1> body!", this);
+                        incor_msg = true;
+                    }
+                    Throw(EV_DROP, this, NULL, it);
+                } else if (n->HasFlag(M_AMORPH) && !merge)
+                    for (int8 i = 0; i != SL_LAST; i++)
+                        if (InSlot(i))
+                            if (InSlot(i) != PolySource) {
+                                if (!incor_msg) {
+                                    IDPrint("Your equipment flows off your body!",
+                                        "<Obj1>'s equipment flows off <his:Obj1> body!", this);
+                                    incor_msg = true;
+                                }
+                                Throw(EV_DROP, this, NULL, InSlot(i));
+                            }
+        Planeshift();
+    }
+
+    /* Effects of being an ooze/slime/fungi and touching your gear... */
+
+
+    /* An array listing the MFlag you must have in order to be able
+       to have an item in the slot of the index. Negative values mean
+       you must *not* have the flag in question. */
+
+    for (int8 i = 0; i != SL_LAST; i++)
+        if (InSlot(i) && !n->HasSlot(i)) {
+            it = InSlot(i);
+            if (it == PolySource || merge || it->isType(T_LIGHT)) {
+                IDPrint("Your <Obj1> merge<s:Obj1> with your new form.",
+                    "The <Obj2>'s <Obj1> merge<s:Obj1> with <his:Obj2> new form.",
+                    it, this);
+            } else {
+                IDPrint("Your <Obj1> fall<str3> free.",
+                    "The <Obj2>'s <Obj1> fall<str3> free.", it, this,
+                    it->isPlural() ? "" : "s");
+                Throw(EV_LOSEITEM, this, NULL, it);
+                Throw(EV_DROP, this, NULL, it);
+            }
+        }
+
+    if (isMonster())
+        if (theGame->GetPlayer(0)->Perceives(this))
+            StateFlags |= MS_POLY_KNOWN;
+
+    mID = _mID;
+    SetImage();
+    cHP = (cHP * 100) / max(1, mHP + Attr[A_THP]);
+    CalcHP();
+    cHP = max((cHP*(mHP + Attr[A_THP])) / 100, 1);
+    if (m && m->InBounds(x, y)) // ww: bugfix! 
+        m->Update(x, y);
 }
 
 /* HACKFIX */
