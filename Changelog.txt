@@ -5,6 +5,8 @@ Incursion (open source) 0.6.9Y20: 2015-??-??
 * https://bitbucket.org/rmtew/incursion-roguelike/issues/249/: Dropping part of a stack would result in the non-dropped portion disappearing.  Reported and fixed by cadmal@Bitbucket.
 * https://bitbucket.org/rmtew/incursion-roguelike/issues/252/: The goddess Mara was displeased when corpses were eaten.  This wasn't, it just wasn't documented.  Reported by Daniel Rubin, fix provided via pull request by Dave Duckett.
 * https://bitbucket.org/rmtew/incursion-roguelike/issues/256/: Typo in Master Grapple description, along the lines of "... yo umake ..." Reported by Vornag@Bitbucket.
+* https://bitbucket.org/rmtew/incursion-roguelike/issues/257/: Imagine if any given monster could have three different types, and it didn't matter what order they were in.  But the logic which decided if they could be talked to, judged them on the first of these types.  And of course, some who had the misfortune of having a designated non-talkative first type, were special cases like smart talking mushrooms.  Now all the types are checked, and some get a pass with a MA_TALKABLE flag, and others get their pass revoked with a MA_NOTTALKABLE flag.  In theory, this constitutes a correct by manual validation system so it's not ideal, but what's the alternative?  Reported by Vornag@Bitbucket.
+* https://bitbucket.org/rmtew/incursion-roguelike/issues/257/: Typo in various files, with "sedentry" used instead of "sendentary".
 * https://bitbucket.org/rmtew/incursion-roguelike/issues/258/: Typo in various files, with "monsterous" used instead of "monstrous".
 
 Incursion (open source) 0.6.9Y19: 2015-08-14
