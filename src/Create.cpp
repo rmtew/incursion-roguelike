@@ -95,6 +95,7 @@ bool isExploreMode(Player *p) {
 void Player::Create(bool reincarnate) {
     rID xID, endID; int16 i, q, rv; char ch;
     static rID Choices[32]; bool b; time_t tm;
+
     ClassID[0] = ClassID[1] = ClassID[2] = 0;
     RaceID = 0; BAttr[A_STR] = -1;
     Level[0] = 1; Level[1] = Level[2] = 0;
