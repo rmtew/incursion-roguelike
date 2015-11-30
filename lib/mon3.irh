@@ -2230,7 +2230,7 @@ Monster "aether sponge" : MA_FUNGI, MA_ABERRATION, MA_OUTSIDER
       that it exists partially phased into the Elemental Plane of
       Water, and is thus supported by the water on that plane.)
       It can 'swim' by expanding and contracting its body to
-      expel nonexistant water behind it, creating thrust, and
+      expel non-existent water behind it, creating thrust, and
       produces bioelectricity which it can use to stun attackers.";
   }
   

@@ -1321,7 +1321,7 @@ BuyItem:
 
 BuySpell:
     if (curr > lSpell) {
-        Error("Buying non-existant wares entry!");
+        Error("Buying non-existent wares entry!");
         SetMode(MO_PLAY);
         return;
     }
