@@ -60,7 +60,7 @@ REM displayed and noted as unchecked.  The checksum can then be entered here, an
 REM later copies of the file are the expected file.
 
 set MD5CHECKSUMS[0]=BB-C5-10-F0-91-34-2F-CF-5B-A7-A2-BC-A3-97-FD-A1
-set MD5CHECKSUMS[3]=D6-3A-85-FD-5D-E9-60-11-71-02-87-4C-AB-5A-EB-90
+set MD5CHECKSUMS[2]=D6-3A-85-FD-5D-E9-60-11-71-02-87-4C-AB-5A-EB-90
 
 set UV_INCLUDE_PATH=!DEPENDENCY_PATH!\include
 
@@ -115,6 +115,7 @@ REM --- FUNCTION: user_function_fetch_dependencies -----------------------------
 	if "!UV_RMTEW_DEVMODE!" equ "yes" (
 		set SDL2LINK=vcs hg SDL2 704a0bfecf75 C:\RMT\VCS\HG\libraries\SDL http://hg.libsdl.org/SDL/archive/
 	)
+	SET BYPASS_VS_CHECK=yes
 	CALL libtcod\build.bat -fd
 )
 (
@@ -179,11 +180,12 @@ REM    setlocal EnableDelayedExpansion
 		if "!L_VCS_NAME!" EQU "libtcod" (
 			REM Delegate libtcod compilation to it's 'build.bat' script.
 			cd "!DEPENDENCY_PATH!"
-			CALL libtcod\build.bat -pd
-			CALL libtcod\build.bat -p
 
-			REM Copy compiled litcod dependency binaries.
-			REM Copy compiled litcod binaries.
+			REM This is guarded to be able to invoke another build script.
+			call :user_function_prepare_libtcod
+
+			REM Copy compiled libtcod dependency binaries.
+			REM Copy compiled libtcod binaries.
 			for %%P in (Win32 x64) do (
 				if not exist %%P mkdir %%P
 				for %%C in (Debug Release) do (
@@ -220,8 +222,8 @@ REM    setlocal EnableDelayedExpansion
 			)
 
 			if "!L_FAILED!" EQU "yes" (
-				REM Use gyp to produce VS2013 solution and project files.
-				set GYP_MSVS_VERSION=2013
+				REM Use gyp to produce VS2015 solution and project files.
+				set GYP_MSVS_VERSION=2015
 				CALL >nul "!DEPENDENCY_PATH!\gyp\gyp.bat" --no-circular-check client\windows\breakpad_client.gyp --depth .
 
 				for %%P in (Win32 x64) do (
@@ -278,6 +280,21 @@ REM    setlocal EnableDelayedExpansion
 )
 (
     REM endlocal
+    exit /b
+)
+
+REM --- FUNCTION: user_function_prepare_libtcod --------------------------------
+:user_function_prepare_libtcod
+(
+    setlocal EnableDelayedExpansion
+
+	SET BYPASS_VS_CHECK=yes
+	SET CI=True
+	CALL libtcod\build.bat -pd 1> output-1-pd.msg 2>&1
+	CALL libtcod\build.bat -p 1> output-2-p.msg 2>&1
+)
+(
+    endlocal
     exit /b
 )
 
@@ -586,16 +603,27 @@ REM --- FUNCTION: internal_function_setup ------------------------------------
 :internal_function_setup
 
 REM Ensure that we have a properly set up developer console with access to things like msbuild and devenv.
-if not exist "%VS120COMNTOOLS%VsDevCmd.bat" (
-    echo You do not appear to have Visual Studio 2013 installed.
-    echo The community edition is free, download it and install it.
-    pause & exit /b
+if "%BYPASS_VS_CHECK%" NEQ "yes" (
+	REM Ensure that we have a properly set up developer console with access to things like msbuild and devenv.
+	if not exist "%VS140COMNTOOLS%VsDevCmd.bat" (
+		echo You do not appear to have Visual Studio 2015 installed.
+		echo The community edition is free, download it and install it.
+		pause & exit /b
+	)
+
+	if "%VisualStudioVersion%" NEQ "" (
+		echo Your console window has already run the setup for Visual Studio %VisualStudioVersion%.
+		echo Open a fresh window and run this script there.  It will run the correct setup.
+		pause & exit /b
+	)
+	CALL "%VS140COMNTOOLS%VsDevCmd.bat"
 )
-if "%VisualStudioVersion%" EQU "" CALL "%VS120COMNTOOLS%VsDevCmd.bat"
-if "%VisualStudioVersion%" NEQ "12.0" (
-    echo Your console window has already run the setup for Visual Studio %VisualStudioVersion%.
-    echo Open a fresh window and run this script there.  It will run the correct setup.
-    pause & exit /b
+
+if "%VisualStudioVersion%" NEQ "14.0" (
+	echo Visual Studio incorrect.
+	echo Expected: "14.0"
+	echo Got: "%VisualStudioVersion%"
+	pause & exit /b
 )
 
 REM The top-level directory.
@@ -1063,6 +1091,8 @@ if not exist "!V_LINK_PARTS[%HTTP_NAME%]!" (
 
     if not exist !V_LINK_PARTS[%HTTP_FILENAME%]! (
         echo Failed to download !V_LINK_PARTS[%HTTP_FILENAME%]!
+		echo Interrupt the script ^(press Control-C^) and get someone to fix this.
+		pause
         goto internal_function_exit
     )
 ) else (
@@ -1090,6 +1120,7 @@ if "!V_PASSED!" EQU "yes" (
     goto internal_function_exit
 ) else (
     echo .. MD5 checksum [!V_CHECKSUM!] unknown
+	echo .. Expected: [!MD5CHECKSUMS[%V_IDX_FD%]!]
 )
 
 :exit_from_internal_function_fetch_dependency
@@ -1162,9 +1193,9 @@ REM output argument: V_LINK_PARTS   - The array of elements that make up the giv
 set V_LINK_PARTS[%LINK_CLASSIFIER%]=
 for /F "tokens=1,2,3,4,5,6" %%A in ("!V_LINK!") do (
     set L_FIRST=%%A
-    if /I "!L_FIRST:~0,7!" EQU "http://" (
+    if /I "!L_FIRST:~0,4!" EQU "http" (
         set V_LINK_PARTS[%LINK_CLASSIFIER%]=http
-        set V_LINK_PARTS[%HTTP_URL%]=!V_LINK_PARTS[%%A]!
+        set V_LINK_PARTS[%HTTP_URL%]=%%A
 
         REM .. V_LINK_PARTS[%HTTP_NAME%], V_LINK_PARTS[%HTTP_FILENAME%] = get_urlfilename(V_LINK)
         call :internal_function_get_urlfilename
@@ -1242,6 +1273,8 @@ REM endlocal: Ensure environment variables are left the same as when the script 
 REM exit /b:  Exit the script, but do not close any DOS window it was run from within.
 endlocal & exit /b
 #>
+Add-type -AssemblyName "System.IO.Compression.FileSystem";
+Import-Module BitsTransfer
 
 function MD5-Checksum([string]$path, [string]$discard) {
     # $fullPath = Resolve-Path $path;
@@ -1257,7 +1290,6 @@ function Archive-Extract([string]$zipFilePath, [string]$destinationPath) {
     # This will get added when paths are joined, and path comparison will need it to be absent.
     $destinationPath = $destinationPath.TrimEnd("\");
 
-    [Reflection.Assembly]::LoadWithPartialName('System.IO.Compression.FileSystem') > $null;
     $zipfile = [IO.Compression.ZipFile]::OpenRead($zipFilePath);
 
     # Determine how many top level entries there are.
