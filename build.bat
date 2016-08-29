@@ -40,7 +40,7 @@ REM      LINKS[n]=vcs <vcs-system> <name> <revision-id> <repo-path> <snapshot-ur
 REM        <revision-id>: This can be a URL, or it can be a filesystem path to an existing local clone.
 
 set LINKS[0]=http://sourceforge.mirrorservice.org/w/wi/winflexbison/win_flex_bison-latest.zip
-set LINKS[1]=vcs hg libtcod 7a8b072365b5 https://bitbucket.org/jice/libtcod https://bitbucket.org/jice/libtcod/get/REV.zip
+set LINKS[1]=vcs hg libtcod default https://bitbucket.org/jice/libtcod https://bitbucket.org/jice/libtcod/get/REV.zip
 set LINKS[2]=https://www.nano-editor.org/dist/win32-support/pdcurs34.zip
 set LINKS[3]=vcs git gyp dd831fd https://chromium.googlesource.com/external/gyp https://chromium.googlesource.com/external/gyp/REV.tar.gz
 set LINKS[4]=vcs git google-breakpad 0a0ad99 https://chromium.googlesource.com/external/google-breakpad/src/ https://chromium.googlesource.com/external/google-breakpad/src/REV.tar.gz
