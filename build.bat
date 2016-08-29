@@ -1,4 +1,4 @@
-<# : 
+<# :
 @echo off
 setlocal EnableDelayedExpansion
 
@@ -39,9 +39,9 @@ REM      LINKS[n]=<url to zip>
 REM      LINKS[n]=vcs <vcs-system> <name> <revision-id> <repo-path> <snapshot-url>
 REM        <revision-id>: This can be a URL, or it can be a filesystem path to an existing local clone.
 
-set LINKS[0]=http://jaist.dl.sf.net/pub/sourceforge/w/wi/winflexbison/win_flex_bison-latest.zip
+set LINKS[0]=http://sourceforge.mirrorservice.org/w/wi/winflexbison/win_flex_bison-latest.zip
 set LINKS[1]=vcs hg libtcod 7a8b072365b5 https://bitbucket.org/jice/libtcod https://bitbucket.org/jice/libtcod/get/REV.zip
-set LINKS[2]=http://jaist.dl.sf.net/pub/sourceforge/p/pd/pdcurses/pdcurses/3.4/pdcurs34.zip
+set LINKS[2]=https://www.nano-editor.org/dist/win32-support/pdcurs34.zip
 set LINKS[3]=vcs git gyp dd831fd https://chromium.googlesource.com/external/gyp https://chromium.googlesource.com/external/gyp/REV.tar.gz
 set LINKS[4]=vcs git google-breakpad 0a0ad99 https://chromium.googlesource.com/external/google-breakpad/src/ https://chromium.googlesource.com/external/google-breakpad/src/REV.tar.gz
 set LINKS[5]=0
@@ -110,7 +110,7 @@ REM --- FUNCTION: user_function_fetch_dependencies -----------------------------
 :user_function_fetch_dependencies
 (
     setlocal EnableDelayedExpansion
-	
+
 	cd !DEPENDENCY_PATH!
 	if "!UV_RMTEW_DEVMODE!" equ "yes" (
 		set SDL2LINK=vcs hg SDL2 704a0bfecf75 C:\RMT\VCS\HG\libraries\SDL http://hg.libsdl.org/SDL/archive/
@@ -137,14 +137,14 @@ REM    setlocal EnableDelayedExpansion
 		if "!V_LINK_PARTS[%HTTP_FILENAME%]!" EQU "win_flex_bison-latest.zip" (
 			REM Extract the pre-built executable and put in the right location.
 			if "%V_SKIPPED%" equ "no" (
-				if exist flex.exe del flex.exe        
+				if exist flex.exe del flex.exe
 			)
 			if not exist flex.exe (
 				copy !V_DIRNAME!\win_flex.exe .\flex.exe
 			)
 		) else if "!V_LINK_PARTS[%HTTP_FILENAME%]!" EQU "pdcurs34.zip" (
 			cd !V_DIRNAME!\win32\
-			
+
 			for %%P in (Win32) do (
 				if not exist "!DEPENDENCY_PATH!\%%P" mkdir "!DEPENDENCY_PATH!\%%P"
 				for %%C in (Debug Release) do (
@@ -212,25 +212,25 @@ REM    setlocal EnableDelayedExpansion
 			cd !DEPENDENCY_PATH!\google-breakpad
 			set L_FAILED=no
 			for %%A in (!L_LIBS!) do (
-				for %%P in (Win32 x64) do (			
-					for %%C in (Debug Release) do (			
+				for %%P in (Win32 x64) do (
+					for %%C in (Debug Release) do (
 						if not exist "!DEPENDENCY_PATH!\%%P\%%C\%%A" set L_FAILED=yes
 					)
 				)
 			)
-			
+
 			if "!L_FAILED!" EQU "yes" (
 				REM Use gyp to produce VS2013 solution and project files.
 				set GYP_MSVS_VERSION=2013
 				CALL >nul "!DEPENDENCY_PATH!\gyp\gyp.bat" --no-circular-check client\windows\breakpad_client.gyp --depth .
 
-				for %%P in (Win32 x64) do (			
+				for %%P in (Win32 x64) do (
 					for %%C in (Debug Release) do (
 						set L_FAILED=no
 						for %%A in (!L_LIBS!) do (
 							if not exist "!DEPENDENCY_PATH!\%%P\%%C\%%A" set L_FAILED=yes
 						)
-					
+
 						if "!L_FAILED!" EQU "yes" (
 							echo Building: [google-breakpad^|%%C^|%%P]
 
@@ -260,7 +260,7 @@ REM    setlocal EnableDelayedExpansion
 								echo ERROR.. Giving up as these libraries are required for google-breakpad to work.
 								goto internal_function_exit
 							)
-							
+
 							for %%A in (!L_LIBS!) do (
 								if not exist "!DEPENDENCY_PATH!\%%P\%%C\%%A" copy >nul "client\Windows\%%C\lib\%%A" "!DEPENDENCY_PATH!\%%P\%%C\"
 							)
@@ -276,7 +276,7 @@ REM    setlocal EnableDelayedExpansion
 		)
 	)
 )
-( 
+(
     REM endlocal
     exit /b
 )
@@ -305,7 +305,7 @@ REM    setlocal EnableDelayedExpansion
 		if "%%W" NEQ "File Not Found" (
 			xcopy /Y /Q >nul "!L_DIR_PATH!\%%W" "!DEPENDENCY_PATH!\include\!L_DIR_PATH!\"
 		)
-	)    
+	)
 	REM Index subdirectories of this directory for subsequent processing.
 	for /F %%V in ('dir /A:D /B "!L_DIR_PATH!"') do (
 		if "%%V" NEQ "Release" (
@@ -314,11 +314,11 @@ REM    setlocal EnableDelayedExpansion
 			set /A L_PATH_COUNT=!L_PATH_COUNT!+1
 		)
 	)
-	
+
 	set /A L_IDX=!L_IDX!+1
 	if !L_IDX! LSS !L_PATH_COUNT! goto uf_loop_pdbi
 )
-( 
+(
     endlocal
     exit /b
 )
@@ -340,7 +340,7 @@ REM variable: %DEPENDENCY_PATH% - The absolute path of the dependencies director
 		)
 	)
 )
-( 
+(
     endlocal
     exit /b
 )
@@ -375,14 +375,14 @@ REM --- FUNCTION: user_function_build_project --------------------------------
 		)
 	)
 )
-( 
+(
     endlocal
     exit /b
 )
 
 REM --- FUNCTION: user_function_compile_scripts ----------------------------------------
 :user_function_compile_scripts
-(   
+(
     setlocal EnableDelayedExpansion
 
 	REM Script compiling needs to know where to locate the dependency dlls.
@@ -403,20 +403,20 @@ REM --- FUNCTION: user_function_compile_scripts --------------------------------
 		set LAST_LINE=%%M
 		echo !LAST_LINE!
 	)
-	
+
 	if not exist "!L_MODFILE_PATH!" (
 		echo ERROR: failed compiling Incursion script files..
 		goto internal_function_teardown
 	)
 )
-( 
+(
     endlocal
     exit /b
 )
 
 REM --- FUNCTION: user_function_detect_incursion_version ---------------------
 :user_function_detect_incursion_version <returnVal>
-(   
+(
     setlocal EnableDelayedExpansion
 
 	if "!UV_VERSION!" EQU "" (
@@ -434,7 +434,7 @@ REM --- FUNCTION: user_function_detect_incursion_version ---------------------
 		)
 	)
 )
-( 
+(
     endlocal
     set "%~1=%UV_VERSION%"
     exit /b
@@ -442,7 +442,7 @@ REM --- FUNCTION: user_function_detect_incursion_version ---------------------
 
 REM --- FUNCTION: user_function_make_release ---------------------------------
 :user_function_make_release
-(   
+(
     setlocal EnableDelayedExpansion
 
 	call :user_function_detect_incursion_version UV_VERSION
@@ -453,7 +453,7 @@ REM --- FUNCTION: user_function_make_release ---------------------------------
 		echo ERROR: Please compile the Incursion scripts first..
 		goto internal_function_teardown
 	)
-	
+
 	if exist "!UV_PACKAGES_DIRNAME!" rmdir /S /Q "!UV_PACKAGES_DIRNAME!"
 	if not exist "!UV_PACKAGES_DIRNAME!" mkdir "!UV_PACKAGES_DIRNAME!"
 
@@ -491,7 +491,7 @@ REM --- FUNCTION: user_function_make_release ---------------------------------
 
 		copy >nul "!DEPENDENCY_PATH!\Win32\!L_CONFIG!\SDL2.dll" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
 		if "!L_PDBS!" EQU "pdbs" copy >nul "!DEPENDENCY_PATH!\Win32\!L_CONFIG!\SDL2.pdb" "!UV_PACKAGES_DIRNAME!\!L_NAME!\"
-		
+
 		if "!UV_PACKAGE_CURSES!" EQU "yes" (
 			copy >nul "Win32\!L_CONFIG!\exe_curses\Incursion.exe" "!UV_PACKAGES_DIRNAME!\!L_NAME!\IncursionCurses.exe"
 			if "!L_PDBS!" EQU "pdbs" copy >nul "Win32\!L_CONFIG!\exe_curses\Incursion.pdb" "!UV_PACKAGES_DIRNAME!\!L_NAME!\IncursionCurses.pdb"
@@ -511,14 +511,14 @@ REM --- FUNCTION: user_function_make_release ---------------------------------
 	copy >nul "!BUILD_SCRIPT_PATH!\LICENSE" "!L_DEPENDENCIES_PATH!\"
 	copy >nul "!DEPENDENCY_PATH!\*.exe" "!L_DEPENDENCIES_PATH!\"
 )
-( 
+(
     endlocal
     exit /b
 )
 
 REM --- FUNCTION: user_function_package_release ------------------------------
 :user_function_package_release
-(   
+(
     setlocal EnableDelayedExpansion
 
 	call :user_function_detect_incursion_version UV_VERSION
@@ -570,7 +570,7 @@ REM --- FUNCTION: user_function_package_release ------------------------------
 	for /f "tokens=2-4 delims=/ " %%a in ('date /t') do (set L_DATE=%%c%%b%%a)
 	!7Z_EXE! a -r -t7z -mx9 build_dependencies-!L_DATE!-only-needed-for-development.7z dependencies\*
 )
-( 
+(
     endlocal
 	cd "!BUILD_PATH!"
     exit /b
@@ -648,7 +648,7 @@ set VCS_REVISION=3
 set VCS_CLONEURL=4
 set VCS_ZIPDLURL=5
 
-goto user_function_setup 
+goto user_function_setup
 
 REM --- FUNCTION: internal_function_main -------------------------------------
 :internal_function_main
@@ -812,7 +812,7 @@ REM %5: user function name to call
 REM Detect if the user argument clashes with an internal one.
 if "!V_COMMANDS[%1]!" NEQ "" (
 	echo ERROR.. User command name %1 not suitable.
-	goto internal_function_exit	
+	goto internal_function_exit
 )
 
 REM Enter the user arguments as valid arguments.
@@ -836,26 +836,26 @@ goto:eof REM return
 
 REM --- FUNCTION: internal_function_build_project ----------------------------
 :internal_function_build_project
-(   
+(
     setlocal EnableDelayedExpansion
 
 	cd "!BUILD_PATH!"
 	call :user_function_build_project
 )
-( 
+(
     endlocal
     exit /b
 )
 
 REM --- FUNCTION: internal_function_make_release -----------------------------
 :internal_function_make_release
-(   
+(
     setlocal EnableDelayedExpansion
 
 	cd "%DEPENDENCY_PATH%"
 	call :user_function_make_release
 )
-( 
+(
     endlocal
     exit /b
 )
@@ -1058,9 +1058,9 @@ set /A L_ATTEMPTS=0
 :internal_function_fetch_dependency_retry
 
 if not exist "!V_LINK_PARTS[%HTTP_NAME%]!" (
-    echo Downloading: [!V_LINK_PARTS[%HTTP_NAME%]!] 
+    echo Downloading: [!V_LINK_PARTS[%HTTP_NAME%]!]
     powershell -c "Start-BitsTransfer -source !V_LINK_PARTS[%HTTP_URL%]!"
-    
+
     if not exist !V_LINK_PARTS[%HTTP_FILENAME%]! (
         echo Failed to download !V_LINK_PARTS[%HTTP_FILENAME%]!
         goto internal_function_exit
@@ -1085,7 +1085,7 @@ if "!V_PASSED!" EQU "yes" (
             goto internal_function_fetch_dependency_retry
         )
     )
-    
+
     echo ERROR: Failed to obtain valid copy of [!V_LINK_PARTS[%HTTP_FILENAME%]!]
     goto internal_function_exit
 ) else (
@@ -1168,7 +1168,7 @@ for /F "tokens=1,2,3,4,5,6" %%A in ("!V_LINK!") do (
 
         REM .. V_LINK_PARTS[%HTTP_NAME%], V_LINK_PARTS[%HTTP_FILENAME%] = get_urlfilename(V_LINK)
         call :internal_function_get_urlfilename
-		
+
 		set V_LINK_PARTS[%HTTP_NAME%]=!V_RESULT!
 		set V_LINK_PARTS[%HTTP_FILENAME%]=!V_RESULT!
     ) else (
@@ -1211,18 +1211,18 @@ goto:eof REM return
 REM --- FUNCTION: internal_function_strlen -------------------------------
 REM Taken from http://stackoverflow.com/a/5841587/3954464
 :internal_function_strlen <resultVar> <stringVar>
-(   
+(
     setlocal EnableDelayedExpansion
     set "s=!%~2!#"
     set "len=0"
     for %%P in (4096 2048 1024 512 256 128 64 32 16 8 4 2 1) do (
-        if "!s:~%%P,1!" NEQ "" ( 
+        if "!s:~%%P,1!" NEQ "" (
             set /a "len+=%%P"
             set "s=!s:~%%P!"
         )
     )
 )
-( 
+(
     endlocal
     set "%~1=%len%"
     exit /b
@@ -1285,7 +1285,7 @@ function Archive-Extract([string]$zipFilePath, [string]$destinationPath) {
         return 2; # Failure
     }
     Write-Host "MSG: EXTRACTING";
-    
+
     $zipfile.Entries | foreach {
         $extractFilePath = Join-Path -Path $destinationPath -ChildPath $_.FullName;
         $extractFileDirPath = Split-Path -Parent $extractFilePath;
