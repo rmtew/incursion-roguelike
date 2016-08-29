@@ -2044,166 +2044,152 @@ uint16 Creature::ShadowRange()
 
 */
 
-bool Creature::LoseFatigue(int16 amt,bool avoid)
-  {
-    int16 oFP = cFP; bool stat_change = false;
-    
-    if ((isPlayer() && thisp->Opt(OPT_NO_FATIGUE)) ||
-         isMType(MA_UNDEAD) || isMType(MA_CONSTRUCT))
+bool Creature::LoseFatigue(int16 amt, bool avoid) {
+    int16 oFP = cFP;
+    bool stat_change = false;
+
+    if ((isPlayer() && thisp->Opt(OPT_NO_FATIGUE)) || isMType(MA_UNDEAD) || isMType(MA_CONSTRUCT))
         return true;
-    
+
     if (avoid && cFP < -Attr[A_FAT])
-      if (!yn("You are in danger of passing out! Proceed?",true))  
-        return false;
-    
+        if (!yn("You are in danger of passing out! Proceed?", true))
+            return false;
+
     if (avoid)
-      Exercise(A_CON,random(amt)+1,ECON_FATIGUE,35);
+        Exercise(A_CON, random(amt) + 1, ECON_FATIGUE, 35);
 
     if (cFP < -Attr[A_FAT])
-      if (!SavingThrow(FORT,10 - (cFP/2)))
-        {
-          IDPrint("You pass out... ",
-            "The <Obj> keels over unconscious.",this);
-          GainTempStati(ASLEEP,NULL,Dice::Roll(2,10),SS_ENCH,SLEEP_FATIGUE);
-          return false;
+        if (!SavingThrow(FORT, 10 - (cFP / 2))) {
+            IDPrint("You pass out... ", "The <Obj> keels over unconscious.", this);
+            GainTempStati(ASLEEP, NULL, Dice::Roll(2, 10), SS_ENCH, SLEEP_FATIGUE);
+            return false;
         }
 
     cFP -= amt;
-    
+
     /* Hardcoded Essiah Fatigue Clause */
     if (avoid && cFP < 0 && isCharacter() && isThreatened() && isMType(MA_GOOD))
-      thisc->gainFavour(FIND("Essiah"),25 * abs(cFP - min(0,oFP)));
-    
+        thisc->gainFavour(FIND("Essiah"), 25 * abs(cFP - min(0, oFP)));
+
     if (cFP <= 0 && oFP > 0)
-      stat_change = true;
+        stat_change = true;
     if (cFP < -Attr[A_FAT] && oFP >= -Attr[A_FAT])
-      stat_change = true;
+        stat_change = true;
     if (stat_change)
-      CalcValues();
+        CalcValues();
     if (isPlayer())
-      thisp->MyTerm->ShowStatus();
+        thisp->MyTerm->ShowStatus();
     return true;
-  }
+}
 
-int16 Creature::onPlane()
-  {
-    if (HasStati(PHASED))       
-      return GetStatiVal(PHASED);
-    if (HasMFlag(M_INCOR)) {
-      if (isMType(MA_SPIRIT))
-        return PHASE_ETHEREAL;
-      if (isMType(MA_UNDEAD))
-        return PHASE_NEGATIVE;
-      if (HasMFlag(M_ASTRAL))
-        return PHASE_ASTRAL;
-      if (isMType(MA_VORTEX))
-        return PHASE_VORTEX;
-      return PHASE_ETHEREAL;
-      }
-    return PHASE_MATERIAL;
-  }
-  
-int16 Thing::onPlane()
-  {
+int16 Creature::onPlane() {
     if (HasStati(PHASED))
-      return GetStatiVal(PHASED);
+        return GetStatiVal(PHASED);
+    if (HasMFlag(M_INCOR)) {
+        if (isMType(MA_SPIRIT))
+            return PHASE_ETHEREAL;
+        if (isMType(MA_UNDEAD))
+            return PHASE_NEGATIVE;
+        if (HasMFlag(M_ASTRAL))
+            return PHASE_ASTRAL;
+        if (isMType(MA_VORTEX))
+            return PHASE_VORTEX;
+        return PHASE_ETHEREAL;
+    }
+    return PHASE_MATERIAL;
+}
+  
+int16 Thing::onPlane() {
+    if (HasStati(PHASED))
+        return GetStatiVal(PHASED);
     if (isType(T_ITEM))
-      if (thisi->Owner())
-        return thisi->Owner()->onPlane();
-    return PHASE_MATERIAL; 
-  } 
+        if (thisi->Owner())
+            return thisi->Owner()->onPlane();
+    return PHASE_MATERIAL;
+}
 
-bool Creature::isAerial()
-  {
-    if (HasMFlag(M_FLYER) || HasMFlag(M_MFLYER) || HasAbility(CA_FLIGHT) || 
-         HasStati(LEVITATION) || HasMFlag(M_INCOR) || HasStati(ELEVATED) ||
-         HasStati(PHASED))
-      return true;
+bool Creature::isAerial() {
+    if (HasMFlag(M_FLYER) || HasMFlag(M_MFLYER) || HasAbility(CA_FLIGHT) ||
+        HasStati(LEVITATION) || HasMFlag(M_INCOR) || HasStati(ELEVATED) ||
+        HasStati(PHASED))
+        return true;
     Creature * mount = (Creature *)GetStatiObj(MOUNTED);
-    if (mount && mount->isAerial()) 
-      return true; 
+    if (mount && mount->isAerial())
+        return true;
     return false;
-  }
+}
   
-bool Creature::isSpecialistIn(uint32 School)
-  {
+bool Creature::isSpecialistIn(uint32 School) {
     int16 i;
-    for(i=0;i!=16;i++)
-      if (XBIT(i) & School)
-        if (HasStati(SPECIALTY_SCHOOL,i))
-          return true;
+    for (i = 0; i != 16; i++)
+        if (XBIT(i) & School)
+            if (HasStati(SPECIALTY_SCHOOL, i))
+                return true;
     return false;
-  }
+}
 
-bool Creature::isInvisTo(Creature *watcher)
-  {
+bool Creature::isInvisTo(Creature *watcher) {
     if (HasStati(INVIS) || onPlane() != PHASE_MATERIAL)
-      return true;
+        return true;
     if (HasStati(INVIS_TO))
-      StatiIter(this)
+        StatiIter(this)
         if (watcher->isMType(S->Mag))
-          StatiIterBreakout(this,return true)
-      StatiIterEnd(this)
+            StatiIterBreakout(this, return true)
+        StatiIterEnd(this)
     return false;
-  }
+}
   
-bool Thing::isRealTo(Creature *watcher)
-  {
+bool Thing::isRealTo(Creature *watcher) {
     Status *s = GetStati(ILLUSION);
     if (!s)
-      return true;
-    
+        return true;
+
     /* If you disbelieve the illusionary kobold, you
        disbelieve his illusionary sword, too. */
     if (s->h && oThing(s->h)->isIllusion())
-      return oThing(s->h)->isRealTo(watcher);
-    
+        return oThing(s->h)->isRealTo(watcher);
+
     if (watcher->HasStati(TRUE_SIGHT))
-      return false;
+        return false;
     if (watcher->HasMFlag(M_MINDLESS))
-      return false;
-      
-    if (!(s->Val & IL_IMPROVED))
-      {
+        return false;
+
+    if (!(s->Val & IL_IMPROVED)) {
         int32 P;
         P = watcher->Perceives(this);
-        
-        if (P & (PER_SCENT|PER_BLIND|PER_TREMOR))
-          return false;
+
+        if (P & (PER_SCENT | PER_BLIND | PER_TREMOR))
+            return false;
         if (watcher->HasAbility(CA_SHARP_SENSES))
-          return false;
-      }
-    if (watcher->HasStati(DISBELIEVED,-1,this))
-      return false;
+            return false;
+    }
+    if (watcher->HasStati(DISBELIEVED, -1, this))
+        return false;
     return true;
-  }
-  
-uint16 Thing::getIllusionFlags()
-  {
+}
+ 
+uint16 Thing::getIllusionFlags() {
     Status *s = GetStati(ILLUSION);
     ASSERT(s);
     TEffect *te = TEFF(s->eID);
     return te->ef.yval;
-  }
+}
   
-int16 Thing::getIllusioncraft()
-  {
+int16 Thing::getIllusioncraft() {
     Thing *t = GetStatiObj(ILLUSION);
     if (t->isIllusion())
-      return t->getIllusioncraft();
+        return t->getIllusioncraft();
     else
-      return ((Creature*)t)->SkillLevel(SK_ILLUSION);
-  }
+        return ((Creature*)t)->SkillLevel(SK_ILLUSION);
+}
   
-void Thing::DisbeliefCheck(Creature *watcher)
-  {
+void Thing::DisbeliefCheck(Creature *watcher) {
     int16 i; uint32 saveFlags;
     uint16 fl = getIllusionFlags();
     Status *s = GetStati(ILLUSION);
     ASSERT(s);
     
-    if (!watcher)
-      {
+    if (!watcher) {
         MapIterate(m,watcher,i)
           if (watcher->isCreature())
             if (watcher != this)
@@ -2211,7 +2197,7 @@ void Thing::DisbeliefCheck(Creature *watcher)
                 if (watcher->Perceives(this))
                   DisbeliefCheck(watcher);
         return;
-      }
+    }
     
     saveFlags = SA_ILLUS | SA_MAGIC;
     if (s->eID) {
@@ -2225,16 +2211,14 @@ void Thing::DisbeliefCheck(Creature *watcher)
         saveFlags |= SA_EVIL;
       if (TEFF(s->eID)->Schools & SC_NEC)
         saveFlags |= SA_NECRO;
-      }
+    }
     if (watcher->HasStati(DISBELIEVED,-1,this))
       return;  
-    if (watcher->SavingThrow(WILL,s->Val,SA_ILLUS))
-      {
+    if (watcher->SavingThrow(WILL,s->Val,SA_ILLUS)) {
         watcher->IPrint("You realize that the <Obj> is an illusion.", this);
         if (s->h && oThing(s->h)->isCreature())
           if (oCreature(s->h)->Perceives(watcher))
-            oCreature(s->h)->IPrint("The <Obj> disbelieves your <Obj>.",
-              watcher, this);
+            oCreature(s->h)->IPrint("The <Obj> disbelieves your <Obj>.", watcher, this);
         watcher->GainTempStati(DISBELIEVED, this, -2, SS_MISC);
         
         /* Later, add here "Hey everyone, the <Obj> is an illusion!"
@@ -2253,13 +2237,10 @@ void Thing::DisbeliefCheck(Creature *watcher)
     
  }
  
-void Map::TerrainDisbelief(int16 x, int16 y, Creature * watcher)
-  {
+void Map::TerrainDisbelief(int16 x, int16 y, Creature * watcher) {
     int16 i; Status *s; uint32 saveFlags;
      
-       
-    if (!watcher)
-      {
+    if (!watcher) {
         MapIterate(this,watcher,i)
           if (watcher->isCreature())
             if (LineOfSight(watcher->x,watcher->y,x,y,watcher))
@@ -2268,10 +2249,8 @@ void Map::TerrainDisbelief(int16 x, int16 y, Creature * watcher)
       }
     
     for (i=0;Fields[i];i++)
-      if (Fields[i]->FType & FI_ITERRAIN)
-        {
-          s = oCreature(Fields[i]->Creator)->
-                GetEffStati(EFF_FLAG1, Fields[i]->eID);
+      if (Fields[i]->FType & FI_ITERRAIN) {
+          s = oCreature(Fields[i]->Creator)->GetEffStati(EFF_FLAG1, Fields[i]->eID);
 
           saveFlags = SA_ILLUS | SA_MAGIC;
           if (s->eID) {
@@ -2285,29 +2264,24 @@ void Map::TerrainDisbelief(int16 x, int16 y, Creature * watcher)
               saveFlags |= SA_EVIL;
             if (TEFF(s->eID)->Schools & SC_NEC)
               saveFlags |= SA_NECRO;
-            }
+          }
           if (watcher->HasStati(DISB_TERRAIN,-1,oCreature(Fields[i]->Creator)))
             return;  
-          if (watcher->SavingThrow(WILL,s->Mag,SA_ILLUS))
-            {
-              watcher->IPrint("You realize that the <Res> is an illusion.", 
-                                PTerrainAt(x,y,NULL));
+          if (watcher->SavingThrow(WILL,s->Mag,SA_ILLUS)) {
+              watcher->IPrint("You realize that the <Res> is an illusion.", PTerrainAt(x,y,NULL));
               if (s->h && oThing(s->h)->isCreature())
                 if (oCreature(s->h)->Perceives(watcher))
-                  oCreature(s->h)->IPrint("The <Obj> disbelieves your <Res>.",
-                    watcher, PTerrainAt(x,y,NULL));
-              watcher->GainTempStati(DISB_TERRAIN, 
-                oCreature(Fields[i]->Creator), -2, SS_MISC);
+                  oCreature(s->h)->IPrint("The <Obj> disbelieves your <Res>.", watcher, PTerrainAt(x,y,NULL));
+              watcher->GainTempStati(DISB_TERRAIN, oCreature(Fields[i]->Creator), -2, SS_MISC);
             
               /* Later, add here "Hey everyone, the <Obj> is an illusion!"
                  and have all the watcher's party members make a disbelief
                  check as well. */
             }  
         }  
-   }
+}
 
-bool Thing::IllusionLOSCheck(bool test, int16 ix, int16 iy, int16 cx, int16 cy)
-  {
+bool Thing::IllusionLOSCheck(bool test, int16 ix, int16 iy, int16 cx, int16 cy) {
     Creature *cr;
     if (!isIllusion())
       return false;
