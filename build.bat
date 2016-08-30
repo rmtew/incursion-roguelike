@@ -42,14 +42,14 @@ REM        <revision-id>: This can be a URL, or it can be a filesystem path to a
 set LINKS[0]=http://sourceforge.mirrorservice.org/w/wi/winflexbison/win_flex_bison-latest.zip
 set LINKS[1]=vcs hg libtcod default https://bitbucket.org/jice/libtcod https://bitbucket.org/jice/libtcod/get/REV.zip
 set LINKS[2]=https://www.nano-editor.org/dist/win32-support/pdcurs34.zip
-set LINKS[3]=vcs git gyp dd831fd https://chromium.googlesource.com/external/gyp https://chromium.googlesource.com/external/gyp/REV.tar.gz
-set LINKS[4]=vcs git google-breakpad 0a0ad99 https://chromium.googlesource.com/external/google-breakpad/src/ https://chromium.googlesource.com/external/google-breakpad/src/REV.tar.gz
+set LINKS[3]=vcs git gyp 702ac58 https://chromium.googlesource.com/external/gyp https://chromium.googlesource.com/external/gyp/REV.tar.gz
+set LINKS[4]=vcs git google-breakpad 3f5c13e https://chromium.googlesource.com/external/google-breakpad/src/ https://chromium.googlesource.com/external/google-breakpad/src/REV.tar.gz
 set LINKS[5]=0
 
 if "!UV_RMTEW_DEVMODE!" equ "yes" (
 	set LINKS[1]=vcs hg libtcod default C:\RMT\VCS\HG\libraries\libtcod-bitbucket INVALID
-	set LINKS[3]=vcs git gyp dd831fd C:\RMT\VCS\GIT\Tools\gyp INVALID
-	set LINKS[4]=vcs git google-breakpad 0a0ad99 C:\RMT\VCS\GIT\Libraries\google-breakpad INVALID
+	set LINKS[3]=vcs git gyp 702ac58 C:\RMT\VCS\GIT\Tools\gyp INVALID
+	set LINKS[4]=vcs git google-breakpad 3f5c13e C:\RMT\VCS\GIT\Libraries\google-breakpad INVALID
 )
 
 REM Internal variable: MD5CHECKSUMS
@@ -132,6 +132,9 @@ REM variable: %V_SKIPPED% - 'yes' or 'no', depending on whether the archive was 
 (
 REM    setlocal EnableDelayedExpansion
 
+	set /A L_BP_ATTEMPTS=0
+
+:user_function_prepare_dependency_retry
 	cd !DEPENDENCY_PATH!
 
 	if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
@@ -222,9 +225,37 @@ REM    setlocal EnableDelayedExpansion
 			)
 
 			if "!L_FAILED!" EQU "yes" (
+				echo Building: [google-breakpad]
+
+				REM Prevent gyp from treating warnings as errors.
+				echo NOTE: Preventing breakpad from treating warnings as errors
+				set "L_SEARCH='WarnAsError': 'true'"
+				set "L_REPLACE='WarnAsError': 'false'"
+				call :internal_function_file_sar build\common.gypi L_SEARCH L_REPLACE
+
 				REM Use gyp to produce VS2015 solution and project files.
 				set GYP_MSVS_VERSION=2015
-				CALL >nul "!DEPENDENCY_PATH!\gyp\gyp.bat" --no-circular-check client\windows\breakpad_client.gyp --depth .
+				set L_MISSING_FILES=no
+				for /F "usebackq tokens=*" %%i in (`"!DEPENDENCY_PATH!\gyp\gyp.bat" --no-circular-check client\windows\breakpad_client.gyp --depth .`) do (
+					set L_LINE=%%i
+					if "!L_LINE:Warning: Missing input files=!" NEQ "!L_LINE!" (
+						echo WARNING: Gyp reported missing files.
+						set L_MISSING_FILES=yes
+					)
+					if "!L_MISSING_FILES!" EQU "yes" (
+						if "!L_LINE:~-3!" EQU ".cc" (
+							echo WORKAROUND: Substituting empty file for missing file '!L_LINE!'
+							pushd "!DEPENDENCY_PATH!\!L_VCS_NAME!"
+							for %%a in (!L_LINE!) do (
+								REM Make any missing directories in the now absolute directory path.
+								if not exist "%%~dpa" mkdir "%%~dpa"
+								REM Create the empty file using the now absolute file path.
+								type nul > "%%~fa"
+							)
+							popd
+						)
+					)
+				)
 
 				for %%P in (Win32 x64) do (
 					for %%C in (Debug Release) do (
@@ -237,7 +268,7 @@ REM    setlocal EnableDelayedExpansion
 							echo Building: [google-breakpad^|%%C^|%%P]
 
 							REM TODO: The current revision breaks on missing files, and produces partial results, but enough.  Build them piecemeal.
-							DEL >nul /S /Q client\Windows\%%C
+							DEL 2>nul /S /Q client\Windows\%%C
 							set L_ERROR_MSG=
 							for /F "usebackq tokens=*" %%i in (`msbuild /nologo client\Windows\common.vcxproj /p:Configuration^=%%C /p:Platform^=%%P`) do (
 								set L_LINE=%%i
@@ -378,7 +409,7 @@ REM --- FUNCTION: user_function_build_project --------------------------------
 					echo Building: [%%N^|%%C^|%%P]
 
 					set L_ERROR_MSG=
-					for /F "usebackq tokens=*" %%i in (`msbuild /nologo msvs\libtcod.sln /p:Configuration^=%%C /p:Platform^=%%P /t:%%N`) do (
+					for /F "usebackq tokens=*" %%i in (`msbuild /nologo Incursion.sln /p:Configuration^=%%C /p:Platform^=%%P /t:%%N`) do (
 						set L_LINE=%%i
 						if "!L_LINE:fatal error=!" NEQ "!L_LINE!" set L_ERROR_MSG=%%i
 					)
@@ -939,6 +970,7 @@ if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "http" (
     set fn=Archive-Extract
     set "fnp0=%DEPENDENCY_PATH%\!V_LINK_PARTS[%HTTP_FILENAME%]!"
     set "fnp1=%DEPENDENCY_PATH%"
+	set fnp2=discard
     REM Environment variables for function 'user_function_prepare_dependency'.
     set V_DIRNAME=
     set V_SKIPPED=no
@@ -1137,6 +1169,7 @@ REM                                   If there is not one to match, "".
 set fn=MD5-Checksum
 set fnp0=!V_LINK_PARTS[%HTTP_FILENAME%]!
 set fnp1=discard
+set fnp2=discard
 
 set V_PASSED=
 
@@ -1239,6 +1272,43 @@ set V_RESULT=!L_SUBSTRING!
 
 goto:eof REM return
 
+REM --- FUNCTION: internal_function_file_sar -------------------------------
+REM Adapted from http://stackoverflow.com/a/20227248/3954464
+:internal_function_file_sar <filePath> <findTextVar> <replaceTextVar>
+(
+    setlocal EnableDelayedExpansion
+
+	set fn=File-SAR
+	set "fnp0=%~1"
+	set "fnp1=!%~2!"
+	set "fnp2=!%~3!"
+
+	set V_PASSED=
+
+	REM Iterate over the lines of output.
+	for /F "usebackq tokens=*" %%i in (`more "%BUILD_SCRIPT_PATH%%BUILD_SCRIPT_FILENAME%" ^| powershell -c -`) do (
+		set L_LINE=%%i
+		if "!L_LINE:~0,4!" EQU "MSG:" (
+			set V_CHECKSUM=!L_LINE:~5!
+			set L_CHECKSUM=!MD5CHECKSUMS[%V_IDX_FD%]!
+			if "!L_CHECKSUM!" NEQ "" (
+				if "!L_CHECKSUM!" EQU "!V_CHECKSUM!" (
+					set V_PASSED=yes
+				) else (
+					set V_PASSED=no
+				)
+			)
+		) else (
+			echo Unexpected result in checksum function: !L_LINE!
+			goto internal_function_exit
+		)
+	)
+)
+(
+    endlocal
+    exit /b
+)
+
 REM --- FUNCTION: internal_function_strlen -------------------------------
 REM Taken from http://stackoverflow.com/a/5841587/3954464
 :internal_function_strlen <resultVar> <stringVar>
@@ -1276,7 +1346,12 @@ endlocal & exit /b
 Add-type -AssemblyName "System.IO.Compression.FileSystem";
 Import-Module BitsTransfer
 
-function MD5-Checksum([string]$path, [string]$discard) {
+function File-SAR([string]$path, [string]$findString, [string]$replaceString) {
+	(Get-Content $path).replace($findString, $replaceString) | Set-Content $path
+	return 0;
+}
+
+function MD5-Checksum([string]$path, [string]$discard1, [string]$discard2) {
     # $fullPath = Resolve-Path $path;
     $md5 = new-object -TypeName System.Security.Cryptography.MD5CryptoServiceProvider;
     $file = [System.IO.File]::Open($path, [System.IO.Filemode]::Open, [System.IO.FileAccess]::Read);
@@ -1286,7 +1361,7 @@ function MD5-Checksum([string]$path, [string]$discard) {
     return 0;
 }
 
-function Archive-Extract([string]$zipFilePath, [string]$destinationPath) {
+function Archive-Extract([string]$zipFilePath, [string]$destinationPath, [string]$discard2) {
     # This will get added when paths are joined, and path comparison will need it to be absent.
     $destinationPath = $destinationPath.TrimEnd("\");
 
@@ -1344,5 +1419,6 @@ function Archive-Extract([string]$zipFilePath, [string]$destinationPath) {
 $fn = (Get-ChildItem Env:fn).Value;
 $arg0 = (Get-ChildItem Env:fnp0).Value;
 $arg1 = (Get-ChildItem Env:fnp1).Value;
-$err = & $fn $arg0 $arg1;
+$arg2 = (Get-ChildItem Env:fnp2).Value
+$err = & $fn $arg0 $arg1 $arg2;
 exit $err;
