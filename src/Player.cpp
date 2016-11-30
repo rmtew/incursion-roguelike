@@ -226,7 +226,7 @@ void Player::ChooseAction() {
     if (Opt(OPT_AUTOHIDE) && HasSkill(SK_HIDE) && !HasStati(HIDING) && !m->BrightAt(x, y) && !HasStati(ILLUMINATED)
         && !(TTER(m->TerrainAt(x, y))->HasFlag(TF_WATER) || HasFeat(FT_FEATHERFOOT)) && !HasStati(MANIFEST)) {
         Creature *cr; int32 i;
-        /* Replacement isThreatened() prevents you from AutoHiding when obsreved by enemies you can't see. */
+        /* Replacement isThreatened() prevents you from AutoHiding when observed by enemies you can't see. */
         MapIterate(m, cr, i)
             if (cr->isCreature() && cr->DistFrom(this) <= 16)
                 if (cr->isHostileTo(this))
