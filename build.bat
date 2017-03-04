@@ -40,7 +40,7 @@ REM      LINKS[n]=vcs <vcs-system> <name> <revision-id> <repo-path> <snapshot-ur
 REM        <revision-id>: This can be a URL, or it can be a filesystem path to an existing local clone.
 
 set LINKS[0]=http://sourceforge.mirrorservice.org/w/wi/winflexbison/win_flex_bison-latest.zip
-set LINKS[1]=vcs hg libtcod default https://bitbucket.org/jice/libtcod https://bitbucket.org/jice/libtcod/get/REV.zip
+set LINKS[1]=vcs hg libtcod default https://bitbucket.org/libtcod/libtcod https://bitbucket.org/libtcod/libtcod/get/REV.zip
 set LINKS[2]=https://www.nano-editor.org/dist/win32-support/pdcurs34.zip
 set LINKS[3]=vcs git gyp 702ac58 https://chromium.googlesource.com/external/gyp https://chromium.googlesource.com/external/gyp/REV.tar.gz
 set LINKS[4]=vcs git google-breakpad 3f5c13e https://chromium.googlesource.com/external/google-breakpad/src/ https://chromium.googlesource.com/external/google-breakpad/src/REV.tar.gz
@@ -1042,7 +1042,7 @@ if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "vcs" (
         set L_VCS_TEST_NAME=.hg
         set L_VCS_EXE=!HG_EXE!
         set L_VCS_CMD_CLONE=!HG_EXE! clone "!V_LINK_PARTS[%VCS_CLONEURL%]!" !V_LINK_PARTS[%VCS_NAME%]!
-        set L_VCS_CMD_PULL=!HG_EXE! pull
+        set L_VCS_CMD_PULL=!HG_EXE! pull !V_LINK_PARTS[%VCS_CLONEURL%]!
         set L_VCS_CMD_UPDATE=!HG_EXE! update -r "!V_LINK_PARTS[%VCS_REVISION%]!" -C
     ) else if "!V_LINK_PARTS[%VCS_SYSTEM%]!" EQU "git" (
         set L_VCS_DESC=Git
@@ -1072,21 +1072,23 @@ if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "vcs" (
             echo Fetching: [!V_LINK_PARTS[%VCS_NAME%]!] !L_VCS_DESC! repository.
             if not exist "!V_LINK_PARTS[%VCS_NAME%]!" (
                 REM Does not exist, fetch it.
+                echo .. !L_VCS_CMD_CLONE!
                 for /F "usebackq tokens=*" %%i in (`!L_VCS_CMD_CLONE!`) do (
-                    echo .. %L_VCS_EXE%: %%i
+                    echo .. !L_VCS_EXE!: %%i
                 )
                 REM The subsequent VCS update needs to be within the repository directory.
                 cd !V_LINK_PARTS[%VCS_NAME%]!
             ) else (
                 REM The VCS pull and subsequent update needs to be within the repository directory.
+                echo .. !L_VCS_CMD_PULL!
                 cd !V_LINK_PARTS[%VCS_NAME%]!
                 for /F "usebackq tokens=*" %%i in (`!L_VCS_CMD_PULL!`) do (
-                    echo .. %L_VCS_EXE%: %%i
+                    echo .. !L_VCS_EXE!: %%i
                 )
             )
             echo Updating: [!V_LINK_PARTS[%VCS_NAME%]!] !L_VCS_DESC! repository to revision [!V_LINK_PARTS[%VCS_REVISION%]!].
             for /F "usebackq tokens=*" %%i in (`!L_VCS_CMD_UPDATE!`) do (
-                echo .. %L_VCS_EXE%: %%i
+                echo .. !L_VCS_EXE!: %%i
             )
             goto exit_from_internal_function_fetch_dependency
         ) else (
