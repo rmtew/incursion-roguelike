@@ -486,6 +486,12 @@
     <Text Include="..\Changelog.txt" />
     <Text Include="..\Incursion.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="modaccent.vcxproj">
+      <Project>{8cbf1412-2722-4fc4-9801-44943cc0bcb2}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

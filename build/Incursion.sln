@@ -1,11 +1,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lib_incursion", "Incursion.vcxproj", "{9040FAAA-3DBF-41E9-BF70-4FACC525DC84}"
-	ProjectSection(ProjectDependencies) = postProject
-		{8CBF1412-2722-4FC4-9801-44943CC0BCB2} = {8CBF1412-2722-4FC4-9801-44943CC0BCB2}
-	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "modaccent", "modaccent.vcxproj", "{8CBF1412-2722-4FC4-9801-44943CC0BCB2}"
 EndProject
