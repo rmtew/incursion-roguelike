@@ -134,7 +134,7 @@ struct FeatInfoStruct FeatInfo[] = {
   { FT_LANDED_NOBLE, 0, "Landed Noble", "You grew up amidst the aristocracy, "
     "and thus gain a +3 feat bonus to Ride and Seneschal, as well as a +2 "
     "social modifier versus other aristocrats." },
-  { FT_DECIEVER, 0, "Deciever", "You have a natural flair for deception, and "
+  { FT_DECIEVER, 0, "Deceiver", "You have a natural flair for deception, and "
     "gain a +3 feat bonus to Bluff, Disguise and Illusioncraft." },
   
   
