@@ -382,12 +382,12 @@ Text "help::chargen"
      __A character enters play at level one and gains more levels throughout
      the game. These levels can be distributed among any 3 of Incursion's
      classes in any amounts the player desires. For example, a level 7
-     character -- the highest that can be achieved in the current version of
-     the game -- could be a Fighter 7, a Fighter 3 / Mage 4 or even a Monk 1 /
+     character could be a Fighter 7, a Fighter 3 / Mage 4 or even a Monk 1 /
      Paladin 2 / Fighter 4. The class you choose at the beginning of the game
      is the class that your first level will be invested into, as well as the
      class that all other levels will by default be invested into if you do
-     not choose the 'M'ulticlass option on the character sheet screen.\n
+     not choose the 'M'ulticlass option on the character sheet screen. The
+     maximum character level that can be achieved within the game is 11.\n
      __Classes grant a wide variety of different abilities as the character
      advances in level, including bonus feats, Skill Points and class features.
      These are described in more detail under each individual class's description.\n
