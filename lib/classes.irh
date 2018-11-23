@@ -610,6 +610,10 @@ Class "Druid"
       these hit dice worth of animals do not count toward the total hit dice 
       of the party for purposes of party loyalty checks or gaining new party 
       members.\n
+      __In addition, up to once per day, the druid may activate this ability
+      to summon an animal of their choice from a list of options that improves
+      with the ability's level as a permanent companion. They cannot have more
+      than one such summoned animal companion at the same time.\n
       __Levels of this ability from the druid and ranger classes stack.\n
       __*_<7>Woodland Stride<2> -- Starting at 3rd level, a druid's movement
       rate is never modified negatively by the terrain she is standing on (as
@@ -1972,6 +1976,10 @@ Class "Ranger"
       these hit dice worth of animals do not count toward the total hit dice 
       of the party for purposes of party loyalty checks or gaining new party 
       members.\n
+      __In addition, up to once per day, the ranger may activate this ability
+      to summon an animal of their choice from a list of options that improves
+      with the ability's level as a permanent companion. They cannot have more
+      than one such summoned animal companion at the same time.\n
       __Levels of this ability from the druid and ranger classes stack.\n
       __*_<7>Tracking<2> -- The ranger's tracking ability is a combination
       of mundane tracking skill, keenly honed intuition and a mystical kind
