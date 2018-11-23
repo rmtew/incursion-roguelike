@@ -2618,7 +2618,7 @@ Monster "giant tortoise" : MA_BEAST, MA_REPTILE, MA_ANIMAL
     MSG_SPECABIL
       "75~ of missile attacks deflect off of its shell.";
     Desc: "Here lives a creature who has probably seen centuries pass.
-      A giant tortiose resembles smaller turtles, but has a thick, hard
+      A giant tortoise resembles smaller turtles, but has a thick, hard
       shell more than two meters in diameter. It is a slow-moving,
       temperate creature and prefers to avoid conflict where possible.";
   }
@@ -2969,7 +2969,7 @@ Monster "stirge" : MA_ANIMAL, MA_BAT
     Flags: M_NOHANDS, M_LIGHT_AVERSE, M_POISON, M_FLYER, 
            M_HOSTILE, M_CARNI, M_CLOSEID, M_GROUP;
     Desc: "A twisted cross between a bat and a mosquito, the stirge
-      (or archaically, 'ghoulstirge') is a winged subterranian predator 
+      (or archaically, 'ghoulstirge') is a winged subterranean predator 
       that latches onto victims, pierces them with its probiscis and
       drains their blood to sustain itself.";
   }
@@ -5344,7 +5344,7 @@ Monster "plague of stirges" : MA_ANIMAL, MA_BAT, MA_SWARM
   } ,
   MSG_SPE1DESC "to nauseate (DC 11)"; 
   Desc: "A stirge swarm seeks to surround and attack any warm-blooded prey it
-  encounters. Lake a solitary ghoulstirge, the swarm has a mosquiteo-like
+  encounters. Lake a solitary ghoulstirge, the swarm has a mosquito-like
   ability to drain the blood of its victims."; 
 } 
 
