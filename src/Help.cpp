@@ -2059,7 +2059,7 @@ String & Monster::Describe(Player *p) {
         { CA_WALLWALK, "It can walk along walls and ceilings. " },
         { CA_WEAPON_IMMUNITY, "It is unaffected by weapons with a plus less than %d. " },
         { CA_WOODLAND_STRIDE, "It is unaffected by adverse terrain like webs or brimstone. " },
-        { -M_AMORPH, "It is amorphious. " },
+        { -M_AMORPH, "It is amorphous. " },
         { -M_AMPHIB, "It is amphibious, crossing freely from land to water. " },
         { -M_AQUATIC, "It is an aquatic creature and breathes water naturally. " },
         { -M_AVOID_MELEE, "It avoids melee when possible, prefering to fight at range. " },
