@@ -27,6 +27,7 @@ String & HostilityWhy::Dump()
     case HostilityDefendLeader: s = "because it protects its leader"; break;
     case HostilityYourLeaderHatesMe: 
           s = "because it fears malicious orders"; break;
+    case HostilityYourLeaderIsOK: s = "because it wants to avoid conflict with the other's leader"; break;
     case HostilityEID: s = Format("because of %s",NAME(data.eid.eid)); break;
     case HostilityTarget: s = "because of personal feelings"; break; 
     case HostilityFood: s = "because it needs food"; break; 
@@ -575,23 +576,29 @@ try_self_love:
     return h;
   }
 
-  if (me->HasMFlag(M_CARNI) && t->isPMType(MA_ANIMAL,me) &&
-      !me->isPlayer() && 
+  if (me->HasMFlag(M_CARNI) && t->isPMType(MA_ANIMAL, me) &&
+      !me->isPlayer() &&
       me->ChallengeRating() >= t->ChallengeRating()) {
-    h.why.type = HostilityFood;
-    h.quality = Enemy;
-    h.quantity = Tiny;
-    return h;
-  } 
+      // If I'm smart enough to grasp what a summon is, I don't
+      // try to eat one - it's not going to be filling.
+      if (!(t->HasStati(SUMMONED) && me->GetAttr(A_INT) >= 6)) {
+          h.why.type = HostilityFood;
+          h.quality = Enemy;
+          h.quantity = Tiny;
+          return h;
+      }
+  }
 
-  if (me->HasMFlag(M_HERBI) && t->isPMType(MA_PLANT,me) &&
-      !me->isPlayer() && 
+  if (me->HasMFlag(M_HERBI) && t->isPMType(MA_PLANT, me) &&
+      !me->isPlayer() &&
       me->ChallengeRating() >= t->ChallengeRating()) {
-    h.why.type = HostilityFood;
-    h.quality = Enemy;
-    h.quantity = Tiny;
-    return h;
-  } 
+      if (!(t->HasStati(SUMMONED) && me->GetAttr(A_INT) >= 6)) {
+          h.why.type = HostilityFood;
+          h.quality = Enemy;
+          h.quantity = Tiny;
+          return h;
+      }
+  }
 
   if (me->isMType(MA_GOOD) && t->isPMType(MA_GOOD,me) &&
        !hasTargetOfType(OrderAttackNeutrals)) {
@@ -601,8 +608,9 @@ try_self_love:
   }
 
   if (me->isMType(MA_GOOD) && t->isPMType(MA_EVIL,me) &&
-        !(t->Flags & MS_PEACEFUL)) {
+        !(t->StateFlags & MS_PEACEFUL)) {
     h.why.type = HostilitySmite;
+    h.quality = Enemy;
     h.quantity = Weak;
     return h;
     }
@@ -761,13 +769,24 @@ Hostility TargetSystem::SpecificHostility(Creature *me, Creature *t)
   else if (me_leader && me_leader != me) {
     // does it hate our leader? 
     Hostility hl = t->ts.SpecificHostility(t,me_leader);
-    if (hl.quality == Enemy) {
+    if (!t->isPlayer() && hl.quality == Enemy) {
       hl.why.type = HostilityDefendLeader; 
       return hl; 
       } 
     
     hl = me_leader->ts.SpecificHostility(me_leader,t);
-    if (hl.quality != Neutral || (me_leader->isCharacter() && 
+    /* If my leader is the player, I don't attack the target just
+    because the player's character would normally be hostile towards
+    it, I go neutral until I get an order to attack instead. */
+    if (me_leader->isPlayer() && hl.quality == Enemy) {
+        if (!hasTargetOfType(OrderAttackNeutrals)) {
+            h.quality = Neutral;
+            h.quantity = Apathy;
+            h.why.type = HostilityLeader;
+            return h;
+        }
+    }
+    else if (hl.quality != Neutral || (me_leader->isCharacter() && 
          !hasTargetOfType(OrderAttackNeutrals))) {
       hl.why.type = HostilityLeader; 
       return hl; 
@@ -797,6 +816,19 @@ Hostility TargetSystem::SpecificHostility(Creature *me, Creature *t)
     h.quantity = Strong;
     return h;
   } 
+
+  // I won't attack the target if I don't want to fight its leader.
+  if (t_leader && t_leader != t) {
+      Hostility hl = SpecificHostility(me, t_leader);
+      if (hl.quality != Enemy) {
+          // TODO: If I'm fine with the target's leader, I'll still like the
+          // target if the target is the kind of thing I like.
+          h.quality = Neutral;
+          h.quantity = Apathy;
+          h.why.type = HostilityYourLeaderIsOK;
+          return h;
+      }
+  }
 
   // we repeat this thrice, because otherwise if you have the ring of agg
   // monsters and the amulet of undead friendship, you'll get something

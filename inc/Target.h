@@ -31,6 +31,7 @@ typedef enum {
     HostilityMount,
     HostilityDefendLeader,
     HostilityYourLeaderHatesMe,
+    HostilityYourLeaderIsOK,
     HostilityParty,
     HostilityFlag,      // M_HOSTILE
     HostilitySolidarity, // elves get along with elves, undead with undead
