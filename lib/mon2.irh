@@ -2718,7 +2718,7 @@ Monster "saqualaminoi" : MA_GIANT, MA_ADVENTURER
 
 /*** THE ELEMENTAL FAE ***/
 
-Monster "slyph" : MA_FAERIE, MA_ELEMENTALKIN, MA_SYLVAN
+Monster "sylph" : MA_FAERIE, MA_ELEMENTALKIN, MA_SYLVAN
   {
     Image: white 'f'; Size: SZ_SMALL; Mana: 125; 
     CR: OPT_CR(4,5); HD: 3; Hit: +2; Def: 21; Mov: 175%; Spd: 150%;
@@ -2737,11 +2737,11 @@ Monster "slyph" : MA_FAERIE, MA_ELEMENTALKIN, MA_SYLVAN
            SK_HIDE, SK_MOVE_SIL;
     Flags: M_HUMANOID, M_AIR, M_FRIENDLY, M_FOREST, M_PLAINS,
            M_ALL_FEMALE;
-    Desc: "Fae creatures tied to the elemental aspect of air, slyphs
+    Desc: "Fae creatures tied to the elemental aspect of air, sylphs
       are playful, curious and insightful. They are generally friendly,
       especially to males, and love to travel and learn -- but they can
       be vicious to orcs and other creatures which despoil the natural
-      splendour they so adore. Slyphs appear as small, beautiful women
+      splendour they so adore. Sylphs appear as small, beautiful women
       with translucent, brightly coloured wings.";
   }
 
