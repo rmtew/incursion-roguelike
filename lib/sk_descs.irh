@@ -200,7 +200,7 @@ Text "help::bluff"
       enough in her behaviour and activities that other creatures will
       not easily be able to perceive her alignment. Such a character
       suffers alignment-based penalties or hostility only if the subject
-      creature's Sense Motive skill exceeds her Bluff skill. If it does
+      creature's Appraise skill exceeds her Bluff skill. If it does
       not, creatures perceive her as whatever alignment favours her most
       -- devils will perceive her as Lawful Evil, for example, and thus
       be non-hostile to her and eager to deal.\n
@@ -225,7 +225,7 @@ Text "help::bluff"
       of the Diplomacy skill is considered to be deceptive, and it thus
       requires the Bluff skill to support it. In these cases, the 
       Diplomacy skill check suffers a -1 penalty for every point by
-      which the target's Sense Motive skill exceeds the skill user's
+      which the target's Appraise skill exceeds the skill user's
       Bluff skill.\n
       __<15>* <11>Taunt (Talking):<3> The Bluff skill can be used to taunt other
       characters, causing them to run up and attack you in melee as if
@@ -1066,7 +1066,7 @@ Text "help::jump"
      the dungeon while missing a square in between. This skill will let you get 
      past a monster without bull-rushing it, or to avoid a trap or pit. Beware, 
      though -- if you try to jump too far, you may not end up where you want! A 
-     typical jumping DC is 10 for 1 square, +7 per extra square! Jumping provokes
+     typical jumping DC is 15 for 1 square, +5 per extra square! Jumping provokes
      an attack of opportunity.";
   }
 
@@ -1117,7 +1117,7 @@ Text "help::knowledge (magic)"
       as a class skill to research curses.\n
       __<15>* <11>Identify Monsters (Passive):<3> The Knowledge (Magic) skill
       can be used to identify inherently magical monsters as well as those whose
-      origins lie with magical experimentation, as described under Sense Motive.\n
+      origins lie with magical experimentation, as described under Appraise.\n
       __<15>* <11>Identify Scrolls (Passive):<3> When your character successfully
       reads an unknown scroll (using the Decipher Script skill), and the effect
       is not immediately obvious, a Knowledge (Magic) check is allowed against a
@@ -1156,7 +1156,7 @@ Text "help::knowledge (theology)"
       you are able to add a third of your Knowledge (Theology) skill rating to
       the DC of these spells.\n
       __<15>* <11>Identify Monsters (Passive):<3> The Knowledge (Theology) skill
-      can be used to identify celestials, as described under Sense Motive.";
+      can be used to identify celestials, as described under Appraise.";
   }
 
 Text "help::knowledge (mythology)"
@@ -1175,7 +1175,7 @@ Text "help::knowledge (mythology)"
     bonus to their hit points.\n
     __<15>* <11>Identify Monsters (Passive):<3> The Knowledge (Mythology) skill
     can be used to identify mythic hybrids, lycanthropes, nagas, dragons and
-    fae, as described under Sense Motive.";
+    fae, as described under Appraise.";
   }
   
 Text "help::knowledge (nature)"
@@ -1198,7 +1198,7 @@ Text "help::knowledge (nature)"
     of these alien creatures too distant to understand.\n
     __<15>* <11>Identify Monsters (Passive):<3> The Knowledge (Nature) skill
     can be used to identify plants and fungi, natural animals, sylvan creatures 
-    and wilderness beasts, as described under Sense Motive.";
+    and wilderness beasts, as described under Appraise.";
   }
   
 Text "help::knowledge (Infernal)"
@@ -1222,7 +1222,7 @@ Text "help::knowledge (Infernal)"
     skill works just like Knowledge (Theyra) when the character is on
     a wilderness map in the Lower Planes.\n
     __<15>* <11>Identify Monsters (Passive):<3> The Knowledge (Infernal) skill
-    can be used to identify demons and devils, as described under Sense Motive.";
+    can be used to identify demons and devils, as described under Appraise.";
   }
 
 Text "help::knowledge (oceans)"
@@ -1234,7 +1234,7 @@ Text "help::knowledge (oceans)"
     map-memory of oceanic areas in a manner similar to what Knowledge (Theyra)
     gives for more conventional wilderness locales.\n
     __<15>* <11>Aquatic Creatures (Passive): <3> This Knowledge also aids 
-    an adventurer in fighting aquatic threats. By using a thourogh 
+    an adventurer in fighting aquatic threats. By using a thorough 
     knowledge of their behaviour, biology and weaknesses, this skill 
     allows a character the following bonuses when fighting aquatic or 
     amphibious creatures: his effective DC is increased by [Skill Rating / 3] 
@@ -1244,7 +1244,7 @@ Text "help::knowledge (oceans)"
     aquatic creatures summoned by such a caster have a [Skill Rating x 5]~
     bonus to their hit points.\n
     __<15>* <11>Identify Monsters (Passive):<3> The Knowledge (Oceans) skill
-    can be used to identify aquatic creatures, as described under Sense Motive.";
+    can be used to identify aquatic creatures, as described under Appraise.";
   }
   
 Text "help::knowledge (planes)"
@@ -1270,7 +1270,7 @@ Text "help::knowledge (planes)"
     bonus to their hit points.\n
     __<15>* <11>Identify Monsters (Passive):<3> The Knowledge (Planes) skill
     can be used to identify outsiders (other than celestials, demons and 
-    devils), as described under Sense Motive.";
+    devils), as described under Appraise.";
   }
 
 Text "help::knowledge (undead)"
@@ -1287,12 +1287,12 @@ Text "help::knowledge (undead)"
     against their attacks, and his understanding of their banes and 
     biology increases the threat ratings of his attacks against them 
     by [Skill Rating / 9]. He can also summon them more effectively; 
-    aquatic creatures summoned by such a caster have a [Skill Rating x 5]~ 
+    undead creatures summoned by such a caster have a [Skill Rating x 5]~ 
     bonus to their hit points. Note that undead are not normally 
     subject to critical hits, but with this skill they can be struck
     for such with the threat range it provides alone.\n
     __<15>* <11>Identify Monsters (Passive):<3>  The Knowledge (Undead) skill
-    can be used to identify all undead, as described under Sense Motive.";
+    can be used to identify all undead, as described under Appraise.";
   }
   
 Text "help::listen"
