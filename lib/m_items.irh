@@ -3489,7 +3489,7 @@ AI_STAFF Effect "Winter" : EA_GRANT
       enhancement bonus to Charisma and a +4 enhancement
       bonus to Intimidate, but numbs her ability to 
       understand the feelings of others, granting a -6
-      penalty to the Sense Motive skill.\n
+      penalty to the Appraise skill.\n
       __These staves are Lawful Evil in temperment, and
       using them is an evil act.";
   }
@@ -7112,7 +7112,7 @@ AI_WEAPON Effect "Wit" : EA_GRANT
       Lady Rachel a blast at parties, this has a distinct combat
       application -- whenever the user attacks a living humanoid, 
       a Bluff check is made for the user opposed by the foe's 
-      Sense Motive. Success allows the wielder to get under the
+      Appraise. Success allows the wielder to get under the
       foe's skin, distracting them and causing them to be denied
       their Dexterity bonus to AC; this also makes them subject
       to the Sneak Attack damage of Rogues.";

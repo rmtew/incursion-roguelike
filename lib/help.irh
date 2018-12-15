@@ -1481,7 +1481,7 @@ Text "help::adventuring"
         in an agreement of mutual benefit.\n
         __<3>*<1> The Uncanny Dodge ability allows Barbarians and Rogues of
         sufficient level to wake instantly when threatened -- it does not prevent
-        enocunters from happening, but does prevent monsters from using the
+        encounters from happening, but does prevent monsters from using the
         Coup de Grace maneuver on the sleeping player, or getting rounds of
         free attacks.\n
         __<3>*<1> Elves have a racial ability called Reverie that allows them to
@@ -1616,7 +1616,7 @@ Text "help::adventuring"
         attribute drain does not heal naturally. Instead, it is essentially a curse,
         and lasts until a <9>Remove Curse<1> spell or any equivalent magical effect
         is applied to the character. Attribute drain can also be cured by magical
-        effects designed specifically designed to restore attributes, such as a
+        effects specifically designed to restore attributes, such as a
         <9>Potion of Restore Intelligence<1>.\n\n
         
         <9>Poison and Disease<1>\n
@@ -2023,7 +2023,7 @@ Text "help::adventuring"
          __<3>*<1>_Successfully using Metamagic while threatened also trains Intelligence,
          based on the number of Metamagic levels used.\n
          __<3>*<1>_Identifying items via experimentation trains Intelligence.\n
-         __<3>*<1>_Identifying monsters with Sense Motive trains Intelligence.\n
+         __<3>*<1>_Identifying monsters with Appraise trains Intelligence.\n
          __<3>*<1>_Doing research in a library trains Intelligence strongly.\n
          __<3>*<1>_Reading scrolls successfully trains Intelligence.\n
          __<3>*<1>_Creating magical, alchemical or mundane items, or repairing
@@ -3290,9 +3290,8 @@ Text "help::combat"
       to 10 + half the wielder's BAB (melee or brawl, as suitable), plus her Dexterity 
       modifier, plus the parry modifier of the weapon used, if any. If the save is 
       successful, the movement is completed normally. If the save fails, however, the 
-      movement is halted, the creature attempting to move is delayed for 30 segments 
-      and provokes an attack of opportunity from the creature he was attempting to 
-      close with.\n
+      movement is halted and the creature attempting to move is delayed for 30 
+      segments.\n
       __<11>Natural Reach:<3> Some creatures -- usually giants -- are born with natural
       reach as a result of the length of their arms. They can attack as if with a
       reach weapon regardless of what (if anything) they are wielding. Creatures with
@@ -4777,14 +4776,14 @@ Text "help::skills"
      the original skill. All of the synergy bonuses in Incursion are
      listed in the table below:\n
      <15>__Skill_____________Synergy Bonus Granted<1>\n
-     __Bluff_____________[Sense Motive Ranks / 3]\n
+     __Bluff_____________[Appraise Ranks / 3]\n
      __Climb_____________[Athletics Ranks / 4],\n
      ____________________[Balance Ranks / 3]\n
-     __Diplomacy_________[Sense Motive Ranks / 3]\n
+     __Diplomacy_________[Appraise Ranks / 3]\n
      __Disguise__________[Bluff Ranks / 3]\n
      __Handle Device_____[Concentration Ranks / 3]\n
      __Heal______________[Wilderness Lore Ranks / 5]\n
-     __Intimidate________[Sense Motive Ranks / 3]\n
+     __Intimidate________[Appraise Ranks / 3]\n
      __Jump______________[Athletics Ranks / 4],\n
      ____________________[Tumble Ranks / 5]\n
      __Know. (Infernal)__[Know. (Planes) Ranks / 3]\n
@@ -4795,7 +4794,7 @@ Text "help::skills"
      ____________________[Handle Device Ranks / 3]\n
      __Listen____________[Concentration Ranks / 4]\n
      __Metamagic_________[Know. (Magic) Ranks / 4]\n
-     __Perform___________[Sense Motive Ranks / 3]\n
+     __Perform___________[Appraise Ranks / 3]\n
      __Pick Pocket_______[Bluff Ranks / 4]\n
      __Ride______________[Animal Empathy Ranks / 3]\n
      __Spellcraft________[Know. (Magic) Ranks / 5]\n
