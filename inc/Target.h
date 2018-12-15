@@ -31,6 +31,7 @@ typedef enum {
     HostilityMount,
     HostilityDefendLeader,
     HostilityYourLeaderHatesMe,
+    HostilityYourLeaderIsOK,
     HostilityParty,
     HostilityFlag,      // M_HOSTILE
     HostilitySolidarity, // elves get along with elves, undead with undead
@@ -205,6 +206,11 @@ public:
   /* Specific Hostility also takes into account Stati and abilities and
    * other personal feelings (e.g., CHARMED, FRIEND, you hit me, partyID) */
   Hostility     SpecificHostility(Creature *me, Creature *t);
+
+  /* LowPriorityStatiHostility contains stati-related hostility checks that
+   * come after SpecificHostility, but before RacialHostility in the standard
+   * evaluation order. */
+  Hostility     LowPriorityStatiHostility(Creature * me, Creature * t);
 
   /* RateAsTarget is used when you are seeing something for the first 
    * time and you're not sure if you like it or not. */

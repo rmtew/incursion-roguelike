@@ -27,6 +27,7 @@ String & HostilityWhy::Dump()
     case HostilityDefendLeader: s = "because it protects its leader"; break;
     case HostilityYourLeaderHatesMe: 
           s = "because it fears malicious orders"; break;
+    case HostilityYourLeaderIsOK: s = "because it wants to avoid conflict with the other's leader"; break;
     case HostilityEID: s = Format("because of %s",NAME(data.eid.eid)); break;
     case HostilityTarget: s = "because of personal feelings"; break; 
     case HostilityFood: s = "because it needs food"; break; 
@@ -575,23 +576,29 @@ try_self_love:
     return h;
   }
 
-  if (me->HasMFlag(M_CARNI) && t->isPMType(MA_ANIMAL,me) &&
-      !me->isPlayer() && 
+  if (me->HasMFlag(M_CARNI) && t->isPMType(MA_ANIMAL, me) &&
+      !me->isPlayer() &&
       me->ChallengeRating() >= t->ChallengeRating()) {
-    h.why.type = HostilityFood;
-    h.quality = Enemy;
-    h.quantity = Tiny;
-    return h;
-  } 
+      // If I'm smart enough to grasp what a summon is, I don't
+      // try to eat one - it's not going to be filling.
+      if (!(t->HasStati(SUMMONED) && me->GetAttr(A_INT) >= 6)) {
+          h.why.type = HostilityFood;
+          h.quality = Enemy;
+          h.quantity = Tiny;
+          return h;
+      }
+  }
 
-  if (me->HasMFlag(M_HERBI) && t->isPMType(MA_PLANT,me) &&
-      !me->isPlayer() && 
+  if (me->HasMFlag(M_HERBI) && t->isPMType(MA_PLANT, me) &&
+      !me->isPlayer() &&
       me->ChallengeRating() >= t->ChallengeRating()) {
-    h.why.type = HostilityFood;
-    h.quality = Enemy;
-    h.quantity = Tiny;
-    return h;
-  } 
+      if (!(t->HasStati(SUMMONED) && me->GetAttr(A_INT) >= 6)) {
+          h.why.type = HostilityFood;
+          h.quality = Enemy;
+          h.quantity = Tiny;
+          return h;
+      }
+  }
 
   if (me->isMType(MA_GOOD) && t->isPMType(MA_GOOD,me) &&
        !hasTargetOfType(OrderAttackNeutrals)) {
@@ -601,8 +608,9 @@ try_self_love:
   }
 
   if (me->isMType(MA_GOOD) && t->isPMType(MA_EVIL,me) &&
-        !(t->Flags & MS_PEACEFUL)) {
+        !(t->StateFlags & MS_PEACEFUL)) {
     h.why.type = HostilitySmite;
+    h.quality = Enemy;
     h.quantity = Weak;
     return h;
     }
@@ -656,147 +664,186 @@ try_self_love:
 \**************************************************************************/
 Hostility TargetSystem::SpecificHostility(Creature *me, Creature *t)
 {
-  Hostility h;
-  Creature * me_leader = getLeader();
-    
-  h.quality = Neutral;
-  h.quantity = Apathy;
-  h.why.type = HostilityDefault;
-  
-  if (me->isPlayer() && t->isPlayer())
-    return h;
+    Hostility h;
+    Creature * me_leader = getLeader();
 
-  if (me == t) {
-    h.quality = Ally;
-    h.quantity = Strong;
-    return h; 
-  }
-  
-  if (me->HasStati(CHARMED,CH_DOMINATE,t)) {
-    h.quality = Ally;
-    h.quantity = Strong;
-    h.why.type = HostilityEID;
-    h.why.data.eid.eid = me->GetStatiEID(CHARMED,CH_DOMINATE,t);
-    return h;
-    }
-  if (me->HasStati(CHARMED,CH_COMMAND,t)) {
-    h.quality = Ally;
-    h.quantity = Strong;
-    h.why.type = HostilityCommanded;
-    return h;
-    }
-  if (me->HasStati(CHARMED,CH_CHARM,t)) {
     h.quality = Neutral;
-    h.quantity = Strong;
-    if (me->GetStatiEID(CHARMED,CH_CHARM,t)) {
-      h.why.type = HostilityEID;
-      h.why.data.eid.eid = me->GetStatiEID(CHARMED,CH_CHARM,t);
-      }
-    else
-      h.why.type = HostilityCharmed;
-    return h;
-    }  
-  
-  if (t->isIllusion() && !t->isShade())
-    if (!t->isRealTo(me))
-      return h;
+    h.quantity = Apathy;
+    h.why.type = HostilityDefault;
 
-  
+    if (me->isPlayer() && t->isPlayer())
+        return h;
 
-  Target * targ;
-  /*
-    if (HasStati(ANIMAL_COMPANION,TA_LEADER)) {
-      Creature * druid = (Creature *)GetStatiObj(ANIMAL_COMPANION,TA_LEADER);
-      if (c == druid) return false;
-      else if (c->isHostileTo(druid) ||
-               c->HasStati(TARGET,TA_ENEMY,c))
-        return true; 
+    if (me == t) {
+        h.quality = Ally;
+        h.quantity = Strong;
+        return h;
     }
-    if (isMType(MA_REPTILE) && HasAbility(CA_ANCESTRAL_MEMORY))
-      if (c->HasAbility(CA_ANCESTRAL_MEMORY))
-        return false;
-    */
 
-  if (targ = GetTarget(t)) {
-    // we have a specific memory of 't' (probably that it hit us!) 
-    switch (targ->type) {
-      case TargetInvalid: 
-      case TargetArea: 
-      case TargetWander: 
-      case TargetItem: 
-        Fatal("SpecificHostility: bad Target type");
-        break; 
-
-      case TargetEnemy:
-        h.why.type = HostilityTarget;
-        h.quality = Enemy;
-        h.quantity = Strong;
-        return h;
-
-      case TargetAlly:
-        h.why.type = HostilityTarget;
+    if (me->HasStati(CHARMED, CH_DOMINATE, t)) {
         h.quality = Ally;
         h.quantity = Strong;
+        h.why.type = HostilityEID;
+        h.why.data.eid.eid = me->GetStatiEID(CHARMED, CH_DOMINATE, t);
         return h;
+    }
+    if (me->HasStati(CHARMED, CH_COMMAND, t)) {
+        h.quality = Ally;
+        h.quantity = Strong;
+        h.why.type = HostilityCommanded;
+        return h;
+    }
+    if (me->HasStati(CHARMED, CH_CHARM, t)) {
+        h.quality = Neutral;
+        h.quantity = Strong;
+        if (me->GetStatiEID(CHARMED, CH_CHARM, t)) {
+            h.why.type = HostilityEID;
+            h.why.data.eid.eid = me->GetStatiEID(CHARMED, CH_CHARM, t);
+        }
+        else
+            h.why.type = HostilityCharmed;
+        return h;
+    }
 
-      case TargetLeader:
-      case TargetSummoner:
-      case TargetMaster: 
-      case TargetMount:
+    if (t->isIllusion() && !t->isShade())
+        if (!t->isRealTo(me))
+            return h;
+
+
+
+    Target * targ;
+    /*
+      if (HasStati(ANIMAL_COMPANION,TA_LEADER)) {
+        Creature * druid = (Creature *)GetStatiObj(ANIMAL_COMPANION,TA_LEADER);
+        if (c == druid) return false;
+        else if (c->isHostileTo(druid) ||
+                 c->HasStati(TARGET,TA_ENEMY,c))
+          return true;
+      }
+      if (isMType(MA_REPTILE) && HasAbility(CA_ANCESTRAL_MEMORY))
+        if (c->HasAbility(CA_ANCESTRAL_MEMORY))
+          return false;
+      */
+
+    if (targ = GetTarget(t)) {
+        // we have a specific memory of 't' (probably that it hit us!) 
+        switch (targ->type) {
+        case TargetInvalid:
+        case TargetArea:
+        case TargetWander:
+        case TargetItem:
+            Fatal("SpecificHostility: bad Target type");
+            break;
+
+        case TargetEnemy:
+            h.why.type = HostilityTarget;
+            h.quality = Enemy;
+            h.quantity = Strong;
+            return h;
+
+        case TargetAlly:
+            h.why.type = HostilityTarget;
+            h.quality = Ally;
+            h.quantity = Strong;
+            return h;
+
+        case TargetLeader:
+        case TargetSummoner:
+        case TargetMaster:
+        case TargetMount:
+            h.why.type = HostilityLeader;
+            h.quality = Ally;
+            h.quantity = Strong;
+            return h;
+        }
+    }
+
+    // does our leader have an opinion about it? 
+
+    if (me_leader == t) {
+        h.quality = Ally;
+        h.quantity = Strong;
         h.why.type = HostilityLeader;
+        return h;
+    }
+    else if (me_leader && me_leader != me) {
+        // does it hate our leader? 
+        Hostility hl = t->ts.SpecificHostility(t, me_leader);
+        if (!t->isPlayer() && hl.quality == Enemy) {
+            hl.why.type = HostilityDefendLeader;
+            return hl;
+        }
+
+        hl = me_leader->ts.SpecificHostility(me_leader, t);
+        /* If my leader is the player, I don't attack the target just
+        because the player's character would normally be hostile towards
+        it, I go neutral until I get an order to attack instead. */
+        if (me_leader->isPlayer() && hl.quality == Enemy) {
+            if (!hasTargetOfType(OrderAttackNeutrals)) {
+                h.quality = Neutral;
+                h.quantity = Apathy;
+                h.why.type = HostilityLeader;
+                return h;
+            }
+        }
+        else if (hl.quality != Neutral || (me_leader->isCharacter() &&
+            !hasTargetOfType(OrderAttackNeutrals))) {
+            hl.why.type = HostilityLeader;
+            return hl;
+        }
+    }
+
+    // does it have a leader? 
+    Creature * t_leader = t->ts.getLeader();
+    if (t_leader == me) {
+        // I like my underlings!
+        h.why.type = HostilityParty;
         h.quality = Ally;
         h.quantity = Strong;
         return h;
-    } 
-  } 
+    }
+    else if (t_leader && !t_leader->isPlayer()) {
+        Hostility hl = t_leader->ts.SpecificHostility(t_leader, me);
+        if (hl.quality == Enemy) {
+            // WW: TODO, fix this up
+            hl.why.type = HostilityYourLeaderHatesMe;
+            return hl;
+        }
+    }
 
-  // does our leader have an opinion about it? 
-  
-  if (me_leader == t) {
-    h.quality = Ally;
-    h.quantity = Strong;
-    h.why.type = HostilityLeader; 
-    return h; 
-    } 
-  else if (me_leader && me_leader != me) {
-    // does it hate our leader? 
-    Hostility hl = t->ts.SpecificHostility(t,me_leader);
-    if (hl.quality == Enemy) {
-      hl.why.type = HostilityDefendLeader; 
-      return hl; 
-      } 
-    
-    hl = me_leader->ts.SpecificHostility(me_leader,t);
-    if (hl.quality != Neutral || (me_leader->isCharacter() && 
-         !hasTargetOfType(OrderAttackNeutrals))) {
-      hl.why.type = HostilityLeader; 
-      return hl; 
-      } 
-    } 
+    if (me->PartyID && me->PartyID == t->PartyID) {
+        h.why.type = HostilityParty;
+        h.quality = Ally;
+        h.quantity = Strong;
+        return h;
+    }
 
-  // does it have a leader? 
-  Creature * t_leader = t->ts.getLeader();
-  if (t_leader == me) {
-    // I like my underlings!
-    h.why.type = HostilityParty;
-    h.quality = Ally;
-    h.quantity = Strong;
-    return h;
-  } else if (t_leader && !t_leader->isPlayer()) {
-    Hostility hl = t_leader->ts.SpecificHostility(t_leader,me);
-    if (hl.quality == Enemy) {
-      // WW: TODO, fix this up
-      hl.why.type = HostilityYourLeaderHatesMe; 
-      return hl; 
-    } 
-  } 
+    // I won't attack the target if I don't want to fight its leader.
+    if (t_leader && t_leader != t) {
+        Hostility hl = SpecificHostility(me, t_leader);
+        if (hl.quality != Enemy) {
+            // If I'm fine with the target's leader, I'll still like the
+            // target if the target is the kind of thing I like.
+            Hostility withoutTargetLeader = LowPriorityStatiHostility(me, t);
+            if (withoutTargetLeader.quality != Enemy) {
+                return withoutTargetLeader;
+            }
+            h.quality = Neutral;
+            h.quantity = Apathy;
+            h.why.type = HostilityYourLeaderIsOK;
+            return h;
+        }
+    }
+    return LowPriorityStatiHostility(me, t);
+}
 
-  if (me->PartyID && me->PartyID == t->PartyID) {
-    h.why.type = HostilityParty;
-    h.quality = Ally;
-    h.quantity = Strong;
-    return h;
-  } 
+Hostility TargetSystem::LowPriorityStatiHostility(Creature *me, Creature *t)
+{
+    Hostility h;
+
+    h.quality = Neutral;
+    h.quantity = Apathy;
+    h.why.type = HostilityDefault;
 
   // we repeat this thrice, because otherwise if you have the ring of agg
   // monsters and the amulet of undead friendship, you'll get something
