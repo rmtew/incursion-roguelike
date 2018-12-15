@@ -648,8 +648,8 @@ Race "Stoutheart Halfling;race" : $"halfling;race"
       traits, except as noted below.\n 
       \n 
       <10>STOUTHEART HALFLING RACIAL SKILLS<2>\n
-      __Stoutheart Halflings treat Diplomacy, Hide, Intuition, Ride, 
-      Sense Motive and Theology as racial skills. They gain a +2 racial
+      __Stoutheart Halflings treat Appraise, Diplomacy, Hide, Intuition, Ride, 
+      and Theology as racial skills. They gain a +2 racial
       bonus to Hide and Ride skill checks (the Hide bonus stacks with 
       their +2 small size bonus). 
       \n\n
