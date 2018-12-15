@@ -3290,9 +3290,8 @@ Text "help::combat"
       to 10 + half the wielder's BAB (melee or brawl, as suitable), plus her Dexterity 
       modifier, plus the parry modifier of the weapon used, if any. If the save is 
       successful, the movement is completed normally. If the save fails, however, the 
-      movement is halted, the creature attempting to move is delayed for 30 segments 
-      and provokes an attack of opportunity from the creature he was attempting to 
-      close with.\n
+      movement is halted and the creature attempting to move is delayed for 30 
+      segments.\n
       __<11>Natural Reach:<3> Some creatures -- usually giants -- are born with natural
       reach as a result of the length of their arms. They can attack as if with a
       reach weapon regardless of what (if anything) they are wielding. Creatures with
