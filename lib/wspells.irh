@@ -2859,6 +2859,7 @@ Potion / Wizard / Scroll Spell "Invisibility" : EA_INFLICT
     xval: INVIS; yval: INV_NORMAL; pval: LEVEL_1PER1;
     Flags: EF_DLONG, EF_NOTBAD; Purpose: EP_BUFF | EP_STEALTH;
     Desc: "Renders a chosen character unseen by others. The
+      the effect is cancelled if the character attacks. The
       magic creates a faint shimmering effect around the
       character's location that might be spotted by powerful
       (CR 5+) creatures when the invisible creature moves
