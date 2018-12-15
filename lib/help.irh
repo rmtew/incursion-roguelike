@@ -1481,7 +1481,7 @@ Text "help::adventuring"
         in an agreement of mutual benefit.\n
         __<3>*<1> The Uncanny Dodge ability allows Barbarians and Rogues of
         sufficient level to wake instantly when threatened -- it does not prevent
-        enocunters from happening, but does prevent monsters from using the
+        encounters from happening, but does prevent monsters from using the
         Coup de Grace maneuver on the sleeping player, or getting rounds of
         free attacks.\n
         __<3>*<1> Elves have a racial ability called Reverie that allows them to
@@ -1616,7 +1616,7 @@ Text "help::adventuring"
         attribute drain does not heal naturally. Instead, it is essentially a curse,
         and lasts until a <9>Remove Curse<1> spell or any equivalent magical effect
         is applied to the character. Attribute drain can also be cured by magical
-        effects designed specifically designed to restore attributes, such as a
+        effects specifically designed to restore attributes, such as a
         <9>Potion of Restore Intelligence<1>.\n\n
         
         <9>Poison and Disease<1>\n
