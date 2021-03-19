@@ -1190,7 +1190,7 @@ EvReturn Character::Convert(EventInfo &e)
     /* Lose favour with the god you convert away from -- later, if
        the god is friendly, just halve it. */
     if (GodID) {
-      setGodFlags(e.eID,GS_ABANDONED);
+      setGodFlags(GodID,GS_ABANDONED);
       e.godNum = theGame->GodNum(GodID);
       for (i=0;i!=10;i++)
         SacVals[e.godNum][i] = 0;
