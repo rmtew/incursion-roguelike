@@ -209,6 +209,7 @@ Race "Grey Dwarf;race" : $"dwarf;race"
       __*_<7>Orc Slayer<2> -- Grey Dwarves have quite a bit to worry about
       in the Underdark, and have not developed a culture of hatred and war
       with Orcs. Grey Dwarves have no racial enemies. \n
+      __*_<7>Armour Use<2> -- Grey dwarves lack this ability.\n
       __*_<7>Racial Weapons<2> -- Grey Dwarves treat the battleaxe and
       warhammer as Simple weapons, and gain proficiency with the (normally
       exotic) dwarven waraxe and pickaxe if they are proficient with
@@ -239,6 +240,29 @@ Race "Grey Dwarf;race" : $"dwarf;race"
       $"battleaxe",
       $"warhammer",
       $"pickaxe";
+    On Event EV_ADVANCE {
+      /*EActor->Proficiencies |= WG_HARMOUR;
+      if ((EActor->LevelAs($"paladin") || EActor->LevelAs($"priest") ||
+          EActor->LevelAs($"warrior")) && !EActor->HasFeat(FT_ARMOUR_OPTIMIZATION))
+        EActor->GainFeat(FT_ARMOUR_OPTIMIZATION);*/
+    
+      if (EActor->Proficiencies & WG_AXES)
+        if (EActor->WepSkill($"dwarven waraxe") == WS_NOT_PROF)
+          EActor->GainPermStati(WEP_SKILL,NULL,SS_RACE,WS_PROFICIENT,
+                                  0, $"dwarven waraxe", 0);
+        if (EActor->WepSkill($"pickaxe") == WS_NOT_PROF)
+          EActor->GainPermStati(WEP_SKILL,NULL,SS_RACE,WS_PROFICIENT,
+                                  0, $"pickaxe", 0);
+      if (EActor->Proficiencies & WG_SIMPLE) {
+        if (EActor->WepSkill($"warhammer") == WS_NOT_PROF)
+          EActor->GainPermStati(WEP_SKILL,NULL,SS_RACE,WS_PROFICIENT,
+                                  0, $"warhammer", 0);
+        if (EActor->WepSkill($"battleaxe") == WS_NOT_PROF)
+          EActor->GainPermStati(WEP_SKILL,NULL,SS_RACE,WS_PROFICIENT,
+                                  0, $"battleaxe", 0);
+        }
+      return NOTHING;
+      };
   }
 
 /***********************************************************************
