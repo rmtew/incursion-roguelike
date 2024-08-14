@@ -21,6 +21,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{74143DA4-9FB7-49A5-A2E1-9D98E7A52742}</ProjectGuid>
     <RootNamespace>exe_libtcod</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -32,7 +33,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140_xp</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -162,6 +163,7 @@ $(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
       <PrecompiledHeaderOutputFile>$(IntDir)$(SolutionName).pch</PrecompiledHeaderOutputFile>
       <ProgramDataBaseFileName>$(IntDir)$(SolutionName).pdb</ProgramDataBaseFileName>
       <PreprocessorDefinitions>_UNICODE;LIBTCOD_TERM;TCOD_SDL2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>..\inc;..\dependencies\libtcod-1.7.0-x86_64-msvc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -169,6 +171,7 @@ $(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
       <AdditionalDependencies>libtcod.lib</AdditionalDependencies>
       <ProgramDatabaseFile>$(OutDir)$(TargetName).pdb</ProgramDatabaseFile>
       <TargetMachine>MachineX64</TargetMachine>
+      <AdditionalLibraryDirectories>..\dependencies\libtcod-1.7.0-x86_64-msvc;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <CustomBuildStep>
       <Command>

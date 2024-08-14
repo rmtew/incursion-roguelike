@@ -32,7 +32,8 @@ Windows build instructions
 
 **Recommended compiler:**
 
-  * Visual Studio Express 2013: [web-based installer](http://www.visualstudio.com/en-us/downloads/download-visual-studio-vs#d-community).
+  * Visual Studio Community 2022: [web-based installer](http://www.visualstudio.com/en-us/downloads/download-visual-studio-vs#d-community).
+    * Microsoft Build Tools 2015: [page for download](https://www.microsoft.com/en-us/download/details.aspx?id=48159).
 
 **Dependencies:**
 

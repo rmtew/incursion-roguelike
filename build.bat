@@ -26,9 +26,6 @@ REM dependencies and set internal script values which need to be initialised bef
 REM the script starts work.
 :user_function_setup
 
-REM So I can have this fetch from local repositories, rather than use expensive bandwidth.
-set UV_RMTEW_DEVMODE=no
-
 REM Internal variable: LINKS
 REM
 REM This variable defines what dependencies the script should download on behalf the user.
@@ -40,17 +37,11 @@ REM      LINKS[n]=vcs <vcs-system> <name> <revision-id> <repo-path> <snapshot-ur
 REM        <revision-id>: This can be a URL, or it can be a filesystem path to an existing local clone.
 
 set LINKS[0]=http://sourceforge.mirrorservice.org/w/wi/winflexbison/win_flex_bison-latest.zip
-set LINKS[1]=vcs hg libtcod default https://bitbucket.org/libtcod/libtcod https://bitbucket.org/libtcod/libtcod/get/REV.zip
+set LINKS[1]=vcs git libtcod main https://github.com/libtcod/libtcod https://github.com/libtcod/libtcod/archive/REV.zip
 set LINKS[2]=https://www.nano-editor.org/dist/win32-support/pdcurs34.zip
 set LINKS[3]=vcs git gyp 702ac58 https://chromium.googlesource.com/external/gyp https://chromium.googlesource.com/external/gyp/REV.tar.gz
 set LINKS[4]=vcs git google-breakpad 3f5c13e https://chromium.googlesource.com/external/google-breakpad/src/ https://chromium.googlesource.com/external/google-breakpad/src/REV.tar.gz
 set LINKS[5]=0
-
-if "!UV_RMTEW_DEVMODE!" equ "yes" (
-	set LINKS[1]=vcs hg libtcod default C:\RMT\VCS\HG\libraries\libtcod-bitbucket INVALID
-	set LINKS[3]=vcs git gyp 702ac58 C:\RMT\VCS\GIT\Tools\gyp INVALID
-	set LINKS[4]=vcs git google-breakpad 3f5c13e C:\RMT\VCS\GIT\Libraries\google-breakpad INVALID
-)
 
 REM Internal variable: MD5CHECKSUMS
 REM
@@ -112,9 +103,9 @@ REM --- FUNCTION: user_function_fetch_dependencies -----------------------------
     setlocal EnableDelayedExpansion
 
 	cd !DEPENDENCY_PATH!
-	if "!UV_RMTEW_DEVMODE!" equ "yes" (
-		set SDL2LINK=vcs hg SDL2 704a0bfecf75 C:\RMT\VCS\HG\libraries\SDL http://hg.libsdl.org/SDL/archive/
-	)
+	REM if "!UV_RMTEW_DEVMODE!" equ "yes" (
+	REM	set SDL2LINK=vcs hg SDL2 704a0bfecf75 C:\RMT\VCS\HG\libraries\SDL http://hg.libsdl.org/SDL/archive/
+	REM )
 	SET BYPASS_VS_CHECK=yes
 	CALL libtcod\build.bat -fd
 )
@@ -636,23 +627,23 @@ REM --- FUNCTION: internal_function_setup ------------------------------------
 REM Ensure that we have a properly set up developer console with access to things like msbuild and devenv.
 if "%BYPASS_VS_CHECK%" NEQ "yes" (
 	REM Ensure that we have a properly set up developer console with access to things like msbuild and devenv.
-	if not exist "%VS140COMNTOOLS%VsDevCmd.bat" (
-		echo You do not appear to have Visual Studio 2015 installed.
+	if not exist "%VS170COMNTOOLS%VsDevCmd.bat" (
+		echo You do not appear to have Visual Studio 2022 installed.
 		echo The community edition is free, download it and install it.
 		pause & exit /b
 	)
 
-	if "%VisualStudioVersion%" NEQ "" (
-		echo Your console window has already run the setup for Visual Studio %VisualStudioVersion%.
-		echo Open a fresh window and run this script there.  It will run the correct setup.
-		pause & exit /b
-	)
-	CALL "%VS140COMNTOOLS%VsDevCmd.bat"
+REM	if "%VisualStudioVersion%" NEQ "" (
+REM		echo Your console window has already run the setup for Visual Studio %VisualStudioVersion%.
+REM		echo Open a fresh window and run this script there.  It will run the correct setup.
+REM		pause & exit /b
+REM	)
+	CALL "%VS170COMNTOOLS%VsDevCmd.bat"
 )
 
-if "%VisualStudioVersion%" NEQ "14.0" (
+if "%VisualStudioVersion%" NEQ "17.0" (
 	echo Visual Studio incorrect.
-	echo Expected: "14.0"
+	echo Expected: "17.0"
 	echo Got: "%VisualStudioVersion%"
 	pause & exit /b
 )
@@ -666,11 +657,6 @@ set BUILD_PATH=%BUILD_SCRIPT_PATH%%BUILD_DIRNAME%
 REM The dependencies sub-directory.
 set DEPENDENCY_DIRNAME=%BUILD_DIRNAME%\dependencies
 set DEPENDENCY_PATH=%BUILD_SCRIPT_PATH%%DEPENDENCY_DIRNAME%
-
-REM Allow the user to specify the path to their Mercurial 'hg' executable.  It may have to be accessed via absolute path.
-if not defined HG_EXE (
-    hg.exe >nul 2>&1 && (set HG_EXE=hg.exe) || (set HG_EXE=)
-)
 
 REM Allow the user to specify the path to their Git 'git' executable.  It may have to be accessed via absolute path.
 if not defined GIT_EXE (
@@ -777,12 +763,6 @@ if "%1" EQU "" (
 	echo     !V_SHORT!, %%C!V_SPACER!!V_DESC!
 		)
 	)
-    if not defined HG_EXE (
-	echo.
-	echo WARNING: 'hg.exe' cannot be located.  Mercurial may not be installed.
-	echo   This script can operate without it, but that mode is less supported.
-	echo   If Mercurial is not in PATH, you can set HG_EXE to full filename of 'hg.exe'
-    )
     if not defined GIT_EXE (
 	echo.
 	echo WARNING: 'git.exe' cannot be located.  Git may not be installed.
@@ -1037,14 +1017,7 @@ cd %DEPENDENCY_PATH%
 
 if "!V_LINK_PARTS[%LINK_CLASSIFIER%]!" EQU "vcs" (
     set L_VCS_DESC=
-    if "!V_LINK_PARTS[%VCS_SYSTEM%]!" EQU "hg" (
-        set L_VCS_DESC=Mercurial
-        set L_VCS_TEST_NAME=.hg
-        set L_VCS_EXE=!HG_EXE!
-        set L_VCS_CMD_CLONE=!HG_EXE! clone "!V_LINK_PARTS[%VCS_CLONEURL%]!" !V_LINK_PARTS[%VCS_NAME%]!
-        set L_VCS_CMD_PULL=!HG_EXE! pull !V_LINK_PARTS[%VCS_CLONEURL%]!
-        set L_VCS_CMD_UPDATE=!HG_EXE! update -r "!V_LINK_PARTS[%VCS_REVISION%]!" -C
-    ) else if "!V_LINK_PARTS[%VCS_SYSTEM%]!" EQU "git" (
+    if "!V_LINK_PARTS[%VCS_SYSTEM%]!" EQU "git" (
         set L_VCS_DESC=Git
         set L_VCS_TEST_NAME=.git
         set L_VCS_EXE=!GIT_EXE!

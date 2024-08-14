@@ -5,6 +5,7 @@
 *.obj
 
 # Windows build & dependencies
+.vs
 build/dependencies
 build/packages
 build/run
@@ -18,6 +19,8 @@ Incursion.opensdf
 # Incursion specific temporary files.
 lib/dispatch.h
 lib/program.i
+Options.dat
+save
 
 # Local nonsense.
 _external

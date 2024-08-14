@@ -37,7 +37,7 @@
 #include "Incursion.h"
 
 #ifdef WIN32
-#include <typeinfo.h>
+//#include <typeinfo.h>
 #endif
 
 rID Candidates[2048]; 

@@ -25,17 +25,17 @@
 #ifndef ICOMP
 #define __MINMAX_DEFINED
 
-typedef signed char       int8;
-typedef signed short      int16;
-typedef unsigned char     uint8;
-typedef unsigned short    uint16;
-typedef unsigned long     uint32;
-typedef signed long       int32;
-typedef unsigned long     rID;
-typedef signed char       Dir;
-typedef void*             Param;
-typedef uint32            Glyph;
-typedef int8              EvReturn;
+typedef signed char         int8;
+typedef signed short        int16;
+typedef unsigned char       uint8;
+typedef unsigned short      uint16;
+typedef unsigned long       uint32;
+typedef signed long         int32;
+typedef unsigned long       rID;
+typedef signed char         Dir;
+typedef void*               Param;
+typedef uint32              Glyph;
+typedef int8                EvReturn;
 
 typedef signed long       hText;
 typedef signed long       hCode;

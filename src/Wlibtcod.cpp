@@ -74,17 +74,6 @@
 #undef EV_BREAK
 #undef MOUSE_MOVED
 
-#ifdef USE_BREAKPAD
-#pragma comment(lib, "common")
-#pragma comment(lib, "exception_handler")
-#pragma comment(lib, "crash_generation_client")
-#include "client/windows/handler/exception_handler.h"
-#undef ERROR
-#undef MIN
-#undef MAX
-#undef EV_BREAK
-#endif
-
 #include "Incursion.h"
 #undef ERROR
 #undef MIN
@@ -99,10 +88,6 @@
 
 #define CURSOR_BLINK_MS 300
 #define INPUT_IDLE_MS 50
-
-#ifdef USE_BREAKPAD
-using google_breakpad::ExceptionHandler;
-#endif
 
 
 TCOD_color_t RGBValues[MAX_COLOURS] = {
@@ -165,7 +150,7 @@ private:
     String CurrentFileName;
     FILE *fp;
     TCOD_list_t alf;
-    int32 *alf_it;
+    intptr_t *alf_it;
 
 public:
     /* Low-Level Read/Write */
@@ -341,10 +326,6 @@ static int16 kbPolish[][3] = {
 Term *T1;
 libtcodTerm *AT1;
 
-#ifdef USE_BREAKPAD
-ExceptionHandler* crashdumpHandler;
-#endif
-
 /*****************************************************************************\
 *                                 libtcodTerm                                *
 *                              main() Function                               *
@@ -382,22 +363,6 @@ int main(int argc, char *argv[]) {
         if (!_getcwd(executablePath, MAX_PATH_LENGTH))
             Error("Failed to locate Incursion directory under debugger (error 23)");
     }
-
-    /* Google Breakpad is only compiled into Release builds, which get distributed.
-     * Debug builds get the option to break out into the debugger, which makes it
-     * superfluous in that case. */
-
-#ifndef DEBUG
-#ifdef USE_BREAKPAD
-    std::wstring wsExecutablePath(strlen(executablePath), 0);
-    mbstowcs(&wsExecutablePath[0],executablePath,strlen(executablePath));
-    crashdumpHandler = new ExceptionHandler(wsExecutablePath,
-                           NULL, /* &filter */
-                           NULL /* &callback */,
-                           NULL,
-                           ExceptionHandler::HANDLER_ALL);
-#endif
-#endif
 
     theGame = new Game();
     AT1 = new libtcodTerm;
@@ -800,22 +765,12 @@ void Error(const char*fmt,...) {
         return;
     }
 
-#ifdef USE_BREAKPAD
-retry:
-#endif
     attempts += 1;
 
 #ifdef DEBUG
 	sprintf(__buff2, "Error: %s\n[B]reak, [E]xit or [C]ontinue?",__buffer);
 #else
-#ifdef USE_BREAKPAD
-    if (attempts > 1)
-        sprintf(__buff2, "Error: %s\n[E]xit or [C]ontinue?", __buffer);
-    else
-        sprintf(__buff2, "Error: %s\n[M]inidump, [E]xit or [C]ontinue?", __buffer);
-#else
     sprintf(__buff2, "Error: %s\n[E]xit or [C]ontinue?", __buffer);
-#endif
 #endif
 	((libtcodTerm*)T1)->Save();
 	((libtcodTerm*)T1)->Box(WIN_SCREEN,BOX_NOPAUSE|BOX_NOSAVE,RED,PINK,__buff2);
@@ -826,21 +781,8 @@ retry:
     } while (ch != 'C' && ch != 'E'
 #ifdef DEBUG
 		&& ch != 'B'
-#else
-#ifdef USE_BREAKPAD
-        && ch != 'M'
-#endif
 #endif
 		);
-#ifdef USE_BREAKPAD
-    if (ch == 'M') {
-        /* This causes problems for some people apparently.  See Issue #215. */
-        crashdumpHandler->WriteMinidump();
-        ((libtcodTerm*)T1)->Restore();
-
-        goto retry;
-    }
-#endif
     if (ch == 'E') {
         T1->ShutDown();
         exit(1);
@@ -1539,7 +1481,7 @@ bool libtcodTerm::FirstFile(char * filespec) {
     alf = TCOD_sys_get_directory_content(CurrentDirectory, filespec);
     if (TCOD_list_size(alf) == 0)
         return false;
-    alf_it = (int32 *)TCOD_list_begin(alf);
+    alf_it = (intptr_t *)TCOD_list_begin(alf);
     try {
         OpenRead((const char *)*alf_it);
     } catch (int) {
@@ -1552,7 +1494,8 @@ bool libtcodTerm::FirstFile(char * filespec) {
 bool libtcodTerm::NextFile() {
 Retry:
     alf_it += 1;
-    if (alf_it == (int32 *)TCOD_list_end(alf)) {
+    intptr_t *le = (intptr_t *)TCOD_list_end(alf);
+    if (alf_it == (intptr_t *)TCOD_list_end(alf)) {
         TCOD_list_clear_and_delete(alf);
         return false;
     }
