@@ -15,7 +15,7 @@ Read 'Changelog.txt'.  The version accompanying any source code should reflect t
 Support the development
 -----------------------
 
-Want to support development?  Want to encourage work on certain aspects? Offer me money if you really want, this is not a project I work on these days. Or chip in and help out with pull requests!
+Want to support development?  Want to encourage work on certain aspects? Offer me money if you really want, this is not a project I work on these days. Or chip in and help out with pull requests! Or fork it and release something it with a name that does not confuse your builds with this project.
 
 Links
 -----

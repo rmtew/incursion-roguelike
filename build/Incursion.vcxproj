@@ -439,7 +439,6 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\src\yygram.cpp;..\inc\yygram.h;%(Outputs)</Outputs>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </CustomBuild>
     <CustomBuild Include="..\lang\tokens.lex">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">dependencies\flex.exe --wincompat -B -i -o..\src\tokens.cpp ..\lang\Tokens.Lex</Command>
@@ -452,7 +451,6 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\src\tokens.cpp;%(Outputs)</Outputs>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </CustomBuild>
     <None Include="..\lib\module-example.irc" />
     <None Include="..\lib\program.i" />
