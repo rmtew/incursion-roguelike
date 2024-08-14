@@ -52,7 +52,7 @@ Note that all the files which `Incursion.exe` requires to run are scattered in a
 
 **x64 support:**
 
-You can compile an x64 build of Incursion. It won't be easy, but it will run without crashing.  Will it allow someone to play without crashing any more than the Win32 version does?  No idea!
+Yes, you can compile an x64 build of Incursion. It will runs and enters a new game without crashing.  Will it allow someone to play without crashing any more than the Win32 version does?  No idea!
 
 Note that the build will fail unless you can work out a way to get it to use the Win32 build of modaccent, which crashes when run as an x64 binary.  Incursion gives a lot of compilation warnings when compiled for the x64 platform, as it is an older project.  But `modaccent` is even older source code which uses some arcane parts of the original C programming standard!  Anyone wanting to use x64 builds should not expect any bugs filed about it to be resolved.
 
