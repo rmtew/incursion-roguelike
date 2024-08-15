@@ -341,7 +341,7 @@
     <None Include="..\lib\wspells.irh">
       <Filter>World Files</Filter>
     </None>
-    <None Include="..\LICENSE">
+    <None Include="..\LICENSE.md">
       <Filter>Notes</Filter>
     </None>
     <None Include="..\README.md">

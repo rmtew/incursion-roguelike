@@ -484,7 +484,7 @@
     <None Include="..\lib\threats.irh" />
     <None Include="..\lib\weapons.irh" />
     <None Include="..\lib\wspells.irh" />
-    <None Include="..\LICENSE" />
+    <None Include="..\LICENSE.md" />
     <None Include="..\README.md" />
   </ItemGroup>
   <ItemGroup>
