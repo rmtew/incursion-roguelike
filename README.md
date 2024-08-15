@@ -59,9 +59,19 @@ At this point, you are ready to do some development, or just play the latest ver
 
 **Running the game:**
 
-Note that all the files which `Incursion.exe` requires to run are scattered in a variety of directories, and you cannot just copy the executable somewhere and expect it to work.  If you wish to collect the correct set of files, look at the code for `build.bat -r`. Or keep running it and providing what it says it is missing! A pull request might define the files needed and where, if you want to make one.
+The following directory structure is required to have a running game installation:
 
-This will be documented more clearly at some later point.
+```
+Incursion.exe
+libtcod.dll
+SDL2.dll
+fonts\12x16.png
+fonts\16x12.png
+fonts\16x16.png
+fonts\8x8.png
+mod\Incursion.Mod
+```
+
 
 **x64 support:**
 
