@@ -7,9 +7,7 @@ name: MSBuild
 
 on:
   push:
-    branches: [ "master" ]
   pull_request:
-    branches: [ "master" ]
 
 env:
   # Path to the solution file relative to the root of the project.
@@ -22,31 +20,84 @@ jobs:
   build:
     strategy:
       matrix:
-        configuration: [ "Release", "Debug" ]
-        platform: [ "Win32", "x64" ]
-    runs-on: windows-latest
+        configuration: ["Release", "Debug"]
+        platform: ["Win32", "x64"]
+    runs-on: windows-2022
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Add MSBuild to PATH
-      uses: microsoft/setup-msbuild@v1.0.2
+      - name: Add MSBuild to PATH
+        uses: microsoft/setup-msbuild@v2
 
-    - name: Obtain external dependencies
-      working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: |
-        pushd dependencies
-        curl -L -O https://github.com/libtcod/libtcod/releases/download/1.7.0/libtcod-1.7.0-x86-msvc.zip
-        7z x libtcod-1.7.0-x86-msvc.zip
-        curl -L -O https://github.com/libtcod/libtcod/releases/download/1.7.0/libtcod-1.7.0-x86_64-msvc.zip
-        7z x libtcod-1.7.0-x86_64-msvc.zip
-        popd
-      shell: cmd
+      - name: Obtain external dependencies
+        run: |
+          pushd dependencies
+          curl -L -O https://github.com/libtcod/libtcod/releases/download/1.7.0/libtcod-1.7.0-${{ matrix.platform == 'Win32' && 'x86' || 'x86_64' }}-msvc.zip
+          7z x libtcod-*.zip
+          popd
 
-    - name: Build
-      working-directory: ${{env.GITHUB_WORKSPACE}}
-      # Add additional options to the MSBuild command line here (like platform or verbosity level).
-      # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
-      run: msbuild /m /p:Configuration=${{matrix.configuration}} /p:Platform=${{matrix.platform}} ${{env.SOLUTION_FILE_PATH}}
+      - name: Build
+        # Add additional options to the MSBuild command line here (like platform or verbosity level).
+        # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
+        run: msbuild /m /p:Configuration=${{matrix.configuration}} /p:Platform=${{matrix.platform}} ${{env.SOLUTION_FILE_PATH}}
 
+      - name: Copy binaries to project root
+        shell: bash
+        run: cp -v build/*/*/exe_libtcod/Incursion.exe dependencies/libtcod-*/libtcod.dll dependencies/libtcod-*/SDL2.dll .
 
+      - name: Compile mod
+        if: matrix.configuration == 'Debug'
+        shell: bash
+        run: ./Incursion.exe -compile
+
+      - name: Upload mod
+        if: matrix.configuration == 'Debug' && matrix.platform == 'Win32'
+        uses: actions/upload-artifact@v4
+        with:
+          name: mod
+          path: mod
+          retention-days: 1
+
+      - name: Upload binaries
+        uses: actions/upload-artifact@v4
+        with:
+          name: direct-binaries-${{matrix.configuration}}-${{matrix.platform}}
+          path: |
+            *.exe
+            *.dll
+          retention-days: 1
+
+  package:
+    needs: [build]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        platform: ["Win32", "x64"]
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch mod
+        uses: actions/download-artifact@v4
+        with:
+          name: mod
+          path: mod
+      - name: Fetch binaries
+        uses: actions/download-artifact@v4
+        with:
+          name: direct-binaries-Release-${{matrix.platform}}
+          path: .
+      - name: Package Incursion
+        uses: actions/upload-artifact@v4
+        with:
+          name: Incursion-${{matrix.platform}}
+          path: |
+            *.exe
+            *.dll
+            *.md
+            *.txt
+            fonts
+            docs
+            mod
+          retention-days: 30
+          compression-level: 9
