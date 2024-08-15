@@ -255,17 +255,17 @@ struct GroupNode
 
 struct Rect
   {
-    uint8 x1,x2,y1,y2;
-    Rect() {}
+    uint8 x1{}, x2{}, y1{}, y2{};
+    Rect() = default;
     Rect(uint8 _x1, uint8 _y1, uint8 _x2, uint8 _y2)
-      { x1 = min(_x1,_x2); y1 = min(_y1,_y2);
-        x2 = max(_x1,_x2); y2 = max(_y1,_y2); }
+      : x1{min(_x1, _x2)}, y1{min(_y1, _y2)},
+        x2{max(_x1, _x2)}, y2{max(_y1, _y2)} {}
     void Set(uint8 _x1, uint8 _y1, uint8 _x2, uint8 _y2)
       { x1 = min(_x1,_x2); y1 = min(_y1,_y2);
         x2 = max(_x1,_x2); y2 = max(_y1,_y2); }
-     Rect& PlaceWithin(uint8 sx, uint8 sy)
+    Rect PlaceWithin(uint8 sx, uint8 sy) const
       { 
-        static Rect r;
+        Rect r{};
         if (sx>=(x2-x1))
           { r.x1 = x1+1; r.x2 = x2-1; }
         else
@@ -282,9 +282,9 @@ struct Rect
           }
         return r;
       }
-    Rect& PlaceWithinSafely(uint8 sx, uint8 sy)
+    Rect PlaceWithinSafely(uint8 sx, uint8 sy) const
       { 
-        static Rect r;
+        Rect r{};
         r.x1 = x1 + random(max(0,((x2-x1)-1)-sx));
         r.x2 = r.x1 + sx;
         r.y1 = y1 + random(max(0,((y2-y1)-1)-sy));
@@ -296,14 +296,14 @@ struct Rect
         r.y2 = min(r.y2, y2 - 2);
         return r;
       }
-    bool Within(uint8 x,uint8 y)
+    bool Within(uint8 x, uint8 y) const
       { return (x >= x1 && x <= x2 && y >= y1 && y <= y2); }
-    uint16 Volume()
+    uint16 Volume() const
       { return (x2 - x1) * (y2 - y1); }
-    bool Overlaps(Rect &r)
+    bool Overlaps(const Rect& r) const
       {
         if (((x1 >= r.x1) == (x2 <= r.x2)) && 
-          ((y1 >= r.y1) == (y2 <= r.y2)))
+            ((y1 >= r.y1) == (y2 <= r.y2)))
           return false;
         if (Within(r.x1,r.y1)) return true;
         if (Within(r.x1,r.y2)) return true;
