@@ -42,13 +42,26 @@ These are optional extras, for the unsupported pdcurses-based console version or
 
 These instructions are intended to allow you to get Incursion to the point where you can debug it within Visual Studio.
 
-A pull request will fill in the instructions, if you want to. But maybe look at [this commit](https://github.com/rmtew/incursion-roguelike/commit/d55c5ace9fc1e26350a2ab0d142a6060421196b9) for now.
+1. Download the following two binary releases for [libtcod 1.7.0](https://github.com/libtcod/libtcod/releases/tag/1.7.0):
+   * `libtcod-1.7.0-x86-msvc.zip`.
+   * `libtcod-1.7.0-x86_64-msvc.zip`.
+2. Extract each to the top-level `dependencies` directory.
+   * `dependencies\libtcod-1.7.0-x86-msvc`.
+   * `dependencies\libtcod-1.7.0-x86_64-msvc`.
+3. Open `build\Incursion.sln` in Visual Studio 2022.
+4. Ensure `exe_libtcod` is the default project. If it is not, right click on it and select "Set as Startup Project".
+5. Build a Debug solution.
+6. Run the built `Incursion.exe` with the command-line `Incursion.exe -compile` with a current directory of the top-level source directory. The module compilation code is not built into Release builds. It should generate a `mod\Incursion.mod` file which provides the game rules, setting and other things.
+
+Note that there are custom build steps in Debug configurations that update this resource compiler, under the "Language Files" folder within Visual Studio. `tokens.lex` is parsed by `flex.exe`. `grammar.acc` is parsed by `modaccent.exe`. These steps may need to be disabled to compile the x64 Debug build as `modaccent.exe` is based on old external code that is not 64-bit compatible at this time. The output files of both steps are checked in and only deleted by rerunning these steps, so running them is not necessary and if it is, it can be done in Win32 Debug configuration.
 
 At this point, you are ready to do some development, or just play the latest version of the source code by debugging it within Visual Studio.  Congratulations!
 
 **Running the game:**
 
 Note that all the files which `Incursion.exe` requires to run are scattered in a variety of directories, and you cannot just copy the executable somewhere and expect it to work.  If you wish to collect the correct set of files, look at the code for `build.bat -r`. Or keep running it and providing what it says it is missing! A pull request might define the files needed and where, if you want to make one.
+
+This will be documented more clearly at some later point.
 
 **x64 support:**
 
