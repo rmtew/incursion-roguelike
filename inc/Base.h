@@ -251,64 +251,87 @@ struct GroupNode
     bool     Needed;
   };
 
-
-
+/// <summary>
+/// A rectangle with uint8 coordinates.
+///
+/// Has an assumed but not fully enforced invariant where the 1st coordinates
+/// must have values equal or lower than the 2nd coordinates.
+/// </summary>
 struct Rect
   {
     uint8 x1{}, x2{}, y1{}, y2{};
     Rect() = default;
-    Rect(uint8 _x1, uint8 _y1, uint8 _x2, uint8 _y2)
+    /// <summary>Initialize a Rect respecting the invariant.</summary>
+    Rect(uint8 _x1, uint8 _y1, uint8 _x2, uint8 _y2) noexcept
       : x1{min(_x1, _x2)}, y1{min(_y1, _y2)},
         x2{max(_x1, _x2)}, y2{max(_y1, _y2)} {}
-    void Set(uint8 _x1, uint8 _y1, uint8 _x2, uint8 _y2)
-      { x1 = min(_x1,_x2); y1 = min(_y1,_y2);
-        x2 = max(_x1,_x2); y2 = max(_y1,_y2); }
-    Rect PlaceWithin(uint8 sx, uint8 sy) const
-      { 
-        Rect r{};
-        if (sx>=(x2-x1))
-          { r.x1 = x1+1; r.x2 = x2-1; }
-        else
-          {
-            r.x1 = x1 + 1 + random(max(0,((x2-x1)-2)-sx));
-            r.x2 = r.x1 + sx;
-          }
-        if (sy >= (y2-y1)) 
-          { r.y1 = y1+1; r.y2 = y2-1; }
-        else
-          {
-            r.y1 = y1 + 1 + random(max(0,((y2-y1)-2)-sy));
-            r.y2 = r.y1 + sy;
-          }
-        return r;
-      }
-    Rect PlaceWithinSafely(uint8 sx, uint8 sy) const
-      { 
-        Rect r{};
-        r.x1 = x1 + random(max(0,((x2-x1)-1)-sx));
-        r.x2 = r.x1 + sx;
-        r.y1 = y1 + random(max(0,((y2-y1)-1)-sy));
-        r.y2 = r.y1 + sy;
-
-        r.x1 = max(r.x1, x1 + 2);
-        r.y1 = max(r.y1, y1 + 2);
-        r.x2 = min(r.x2, x2 - 2);
-        r.y2 = min(r.y2, y2 - 2);
-        return r;
-      }
-    bool Within(uint8 x, uint8 y) const
-      { return (x >= x1 && x <= x2 && y >= y1 && y <= y2); }
-    uint16 Volume() const
-      { return (x2 - x1) * (y2 - y1); }
-    bool Overlaps(const Rect& r) const
+    /// <summary>Set this Rect's values respecting the invariant.</summary>
+    void Set(uint8 _x1, uint8 _y1, uint8 _x2, uint8 _y2) noexcept
+      { *this = Rect{_x1, _y1, _x2, _y2}; }
+    /// <summary>
+    /// Return a rect randomly placed within this rect with the desired size.
+    /// The returned rect will not touch the borders of this rect (inclusive).
+    /// The desired `width` and `height` will be clipped if they are too big to fit.
+    /// </summary>
+    Rect PlaceWithin(uint8 width, uint8 height) const
       {
-        if (((x1 >= r.x1) == (x2 <= r.x2)) && 
-            ((y1 >= r.y1) == (y2 <= r.y2)))
+        Rect inner{};
+        if (width>=(x2-x1))
+          {
+            inner.x1 = x1+1;
+            inner.x2 = x2-1;
+          }
+        else
+          {
+            inner.x1 = x1 + 1 + random(max(0,((x2-x1)-2)-width));
+            inner.x2 = inner.x1 + width;
+          }
+        if (height >= (y2-y1))
+          {
+            inner.y1 = y1+1;
+            inner.y2 = y2-1;
+          }
+        else
+          {
+            inner.y1 = y1 + 1 + random(max(0,((y2-y1)-2)-height));
+            inner.y2 = inner.y1 + height;
+          }
+        return inner;
+      }
+    /// <summary>
+    /// Same as PlaceWithin but with 2 units of border padding instead of 1.
+    /// Likely to clip the desired sizes when placed near the border.
+    /// </summary>
+    Rect PlaceWithinSafely(uint8 width, uint8 height) const
+      {
+        Rect inner{};
+        inner.x1 = x1 + random(max(0,((x2-x1)-1)-width));
+        inner.x2 = inner.x1 + width;
+        inner.y1 = y1 + random(max(0,((y2-y1)-1)-height));
+        inner.y2 = inner.y1 + height;
+
+        inner.x1 = max(inner.x1, x1 + 2);
+        inner.y1 = max(inner.y1, y1 + 2);
+        inner.x2 = min(inner.x2, x2 - 2);
+        inner.y2 = min(inner.y2, y2 - 2);
+        return inner;
+      }
+    /// <summary>Return true if `x` and `y` are within this rect (inclusive).</summary>
+    bool Within(uint8 x, uint8 y) const noexcept
+      { return (x >= x1 && x <= x2 && y >= y1 && y <= y2); }
+    /// <summary>Return the area of this rect (exclusive).</summary>
+    uint16 Volume() const noexcept
+      { return (x2 - x1) * (y2 - y1); }
+    /// <summary>Return true if this rect overlaps with `other`.</summary>
+    bool Overlaps(const Rect& other) const noexcept
+      {
+        if (((x1 >= other.x1) == (x2 <= other.x2)) &&
+            ((y1 >= other.y1) == (y2 <= other.y2)))
           return false;
-        if (Within(r.x1,r.y1)) return true;
-        if (Within(r.x1,r.y2)) return true;
-        if (Within(r.x2,r.y1)) return true;
-        if (Within(r.x2,r.y2)) return true;
+        if (Within(other.x1,other.y1)) return true;
+        if (Within(other.x1,other.y2)) return true;
+        if (Within(other.x2,other.y1)) return true;
+        if (Within(other.x2,other.y2)) return true;
         return false;
       }
   };
