@@ -1,7 +1,7 @@
 /* BASE.H -- See the Incursion LICENSE file for copyright information.
 
      This file contains class definitions for Array, NArray,
-   OArray, Dice, String, MVal, Rect, Dictionary, Fraction,
+   OArray, Dice, String, MVal, Rect, Fraction,
    Object and Registry. 
 */
 
@@ -323,27 +323,6 @@ struct DictNode
 		DictNode *Lower;
 		DictNode *Higher;
 	};
-class Dictionary
-	{
-		private:
-			DictNode Head;
-			int16 Size;
-			int16 RealSize;
-			const char** IDs;
-			bool Loaded;
-			void PlaceWord(const char*,int16);
-			void Enlarge();
-		public:
-			Dictionary();
-			int16* ProcessName(const char*Name);
-			void Parse(const char*line);
-			bool Read(const char*filename);
-			const char* Word(int16 ID);
-			int16 NewID() {return Size+1;}
-			int16 ID(const char *);
-			int16 InsertWord(char*word);
-	};
-extern Dictionary Dict;
 
 struct Dice
 	{
