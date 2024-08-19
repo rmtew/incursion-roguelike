@@ -378,35 +378,6 @@ class Win32Term;
 class Term;
 class MsDosTerm;
 
-class Parser
-	{
-		private:
-			int16 w[40];
-			int16 n[20];
-			int16 FoundWith; //Which NF_ flags noun actually fell under.
-			Thing* Match;
-			int8 MatchScore;
-			Dir DirMatch;
-			Dictionary* d;
-			Player *p;
-			Object * P1, * P2;
-			char ErrMsg[80];
-		public:
-      Parser() {}
-			Parser(Player*_p,Dictionary*_d)
-				{ p=_p; d=_d; }
-			void Parse(const char* Line);
-			bool CheckMatch(ParseArch&a);
-			void RemoveFluff();
-			void BadNoun(int16 NF, int8 Type);
-			bool Tokenize(const char* Line);
-			int8 MatchNoun(Thing*t);
-			bool MatchNounWord(Thing*,int16);
-			bool HandleNoun(int16 NF, int8 Type);
-			bool ValidLoc(int16 Flags, Thing*n);
-
-	};
-
 struct Option
   {
     int16       Val;
