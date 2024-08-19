@@ -214,7 +214,7 @@ tm:
         AttrAdj[at][BONUS_TEMP] = 0;                                                    \
     } else if (tm.VType == MVAL_PERCENT && percent_attr(at))                            \
         AttrAdj[at][BONUS_TEMP] = (int8)(((((AttrAdj[at][BONUS_TEMP]*5+100L)*           \
-                                  ((long)tm.Adjust(100))) / 100L) - 100) / 5);          \
+                                  ((int)tm.Adjust(100))) / 100L) - 100) / 5);           \
      else                                                                               \
          AttrAdj[at][BONUS_TEMP] = tm.Adjust(AttrAdj[at][BONUS_BASE]                    \
        + AttrAdj[at][BONUS_TEMP]) - (AttrAdj[at][BONUS_BASE] /*+ AttrAdj[at][BONUS_TEMP]*/);  

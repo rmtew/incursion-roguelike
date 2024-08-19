@@ -164,9 +164,9 @@ void Registry::Block(void **Block, size_t sz)
     ASSERT(theRegistry->Get(hCurrent));
 
     if (saveMode)
-      *((long*)Block) = RegisterBlock(*Block,hCurrent,sz);
+      *((int*)Block) = RegisterBlock(*Block,hCurrent,sz);
      else
-      *Block = GetData(*((long*)Block));
+      *Block = GetData(*((int*)Block));
   } 
 
 

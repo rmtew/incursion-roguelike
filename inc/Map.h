@@ -646,9 +646,9 @@ class Thing: public Object
 	{
     ARCHIVE_CLASS(Thing,Object,r)
       if (isSave)
-        *((long*)&hm) = m ? m->myHandle : 0; 
+        hm = m ? m->myHandle : 0;
       else
-        m = oMap((long)hm);
+        m = oMap(hm);
       Named.Serialize(r);
       __Stati.Serialize(r);
       backRefs.Serialize(r); 
