@@ -9,8 +9,8 @@ class String;
 void Fatal(const char*,...);
 void Error(const char*,...);
 
-void init_genrand(unsigned long s);
-unsigned long genrand_int32(void);
+void init_genrand(uint32_t s);
+uint32_t genrand_int32(void);
 
 int16 strcatf(char*,const char*,...);
 inline int16 random(int16 mx);

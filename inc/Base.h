@@ -44,7 +44,7 @@ template<class S, int32 Initial, int32 Delta>
       void Clear() { Count = 0; }; 
 	};
 
-extern long ZeroValue;
+extern int ZeroValue;
 
 template<class S,int32 Initial,int32 Delta>
   class NArray : public Array<S,Initial,Delta>

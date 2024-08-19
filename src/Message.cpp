@@ -501,7 +501,7 @@ PutName:
             str = Tag1;
             if (((int)(Subject)) < 0x000FFFFF) {
                 Error("Probable parameter mismatch in __XPrint; msg = \"%s\","
-                    " POV=%d, Subject=%d", msg, (long)POV, (long)Subject);
+                    " POV=%p, Subject=%p", msg, POV, Subject);
                 Error("Probable parameter mismatch in __XPrint; msg = \"%s\","
                     " POV=%s, Subject=%s", msg, (const char*)POV->Name(0), (const char*)Subject->Name(0));
                 return msg;

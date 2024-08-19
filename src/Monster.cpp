@@ -2354,7 +2354,7 @@ void Monster::PreBuff()
           */
     if ( (Effs[i].Purpose & EP_BUFF) && 
         !(Effs[i].Purpose & EP_PLAYER_ONLY) &&
-         ((long)Effs[i].Source <= 1) && 
+         ((intptr_t)Effs[i].Source <= 1) &&
         (te->HasFlag(EF_DXLONG) || te->HasFlag(EF_PERSISTANT) ||
           ( te->HasFlag(EF_DLONG) && random(100) < 25)) &&
         (te->PEvent(EV_ISTARGET,this,eID) == SHOULD_CAST_IT) &&
@@ -2370,7 +2370,7 @@ void Monster::PreBuff()
       e.EActor = this; 
       e.EVictim = this; 
       e.EMap = this->m;
-      if ((long)Effs[nEff].Source == 1)       e.Event = EV_INVOKE;
+      if ((intptr_t)Effs[nEff].Source == 1)       e.Event = EV_INVOKE;
       else                                    e.Event = EV_CAST;
       Magic::MagicEvent(e); 
     } 

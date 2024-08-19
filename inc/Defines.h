@@ -25,22 +25,24 @@
 #ifndef ICOMP
 #define __MINMAX_DEFINED
 
-typedef signed char         int8;
-typedef signed short        int16;
-typedef unsigned char       uint8;
-typedef unsigned short      uint16;
-typedef unsigned long       uint32;
-typedef signed long         int32;
-typedef unsigned long       rID;
-typedef signed char         Dir;
-typedef void*               Param;
-typedef uint32              Glyph;
-typedef int8                EvReturn;
+#include <cstdint>
 
-typedef signed long       hText;
-typedef signed long       hCode;
-typedef signed long       hData;
-typedef signed long       hObj;
+typedef int8_t int8;
+typedef int16_t int16;
+typedef uint8_t uint8;
+typedef uint16_t uint16;
+typedef uint32_t uint32;
+typedef int32_t int32;
+typedef uint32_t rID;
+typedef int8_t Dir;
+typedef void* Param;
+typedef uint32_t Glyph;
+typedef int8_t EvReturn;
+
+typedef signed long hText;
+typedef signed long hCode;
+typedef int hData;
+typedef signed long hObj;
 
 #define OBJ_TABLE_SIZE   65536
 /* ww: was 4096, but a recent profile revealed Registry::Get() to be 

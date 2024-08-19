@@ -1218,7 +1218,7 @@ int16 cursesTerm::GetCharCmd(KeyCmdMode mode) {
     for(;;) {
 		uint32 ticks0 = GetElapsedMilli(), ticks1;
         int key = readkey(0);
-		unsigned long key_modifiers = PDC_get_key_modifiers();
+		uint32_t key_modifiers = PDC_get_key_modifiers();
 
         if (Mode == MO_PLAY && p->UpdateMap)
             RefreshMap();

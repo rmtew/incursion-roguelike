@@ -2222,7 +2222,7 @@ void Player::WildShape() {
     }
     rID mid = MyTerm->LMenu(MENU_ESC|MENU_DESC|MENU_3COLS|MENU_SORTED,
         "Wild Shape Into What Type of Creature?", WIN_MAP,0);
-    if (mid == (unsigned long)-1) return;
+    if (mid == (uint32_t)-1) return;
 
     IPrint("You turn into a <Res>.",mid);
     Shapeshift(mid,true,NULL);   
@@ -2271,7 +2271,7 @@ void Player::SummonDruidAnimal() {
     }
     rID mid = MyTerm->LMenu(MENU_ESC|MENU_DESC|MENU_3COLS|MENU_SORTED,
         "What Type of Animal Companion?", WIN_MAP,0);
-    if (mid == (unsigned long)-1) return;
+    if (mid == (uint32_t)-1) return;
 
     // have we already done this today? 
     if (HasStati(TRIED,(int8)HAS_DRUID_ANIMAL,NULL)) {

@@ -3851,7 +3851,7 @@ void Character::RecalcCraftFormulas() {
 	//if (outOfFormulas)
 	//  IPrint("Out of formulas!");
 	time(&t);
-	srand((unsigned long)t);
+	srand((uint32_t)t);
 }
 
 int16 Creature::getFavEnemyBonus(Creature *cr)
@@ -5096,7 +5096,7 @@ void Player::WildShape()
 		}
 	}
 	mID = MyTerm->LMenu(MENU_ESC | MENU_DESC | MENU_3COLS | MENU_SORTED, "Wild Shape Into What Type of Creature?", WIN_MAP, 0);
-	if ((long)mID <= 0 || mID == (rID)-1) return;
+	if ((int)mID <= 0 || mID == (rID)-1) return;
 
 	if (!LoseFatigue(1, true))
 		return;

@@ -178,7 +178,7 @@ Resurrected:
     pp->MyTerm->RefreshMap();
 
     time(&tm);
-    srand((unsigned long)tm);
+    srand((uint32_t)tm);
 
     /* NOTE(rmtew): This is the main game loop.  Once we're in here, we have to
                     pretty much die or save and exit the game, to exit the
