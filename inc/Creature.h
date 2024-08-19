@@ -809,8 +809,6 @@ class Character: public Creature
     END_ARCHIVE
 	};
 
-class Parser;
-
 class History
   {
 	  protected:
@@ -965,7 +963,6 @@ class Player: public Character
     friend void HelpCustom(String &helpText, Player *p);
     friend class TextTerm; 
     private:
-	 	  /* Parser Par; */
       /* History Hist; */
 	 	  int16 MapMemoryMask;
 	 	  int16 GallerySlot;

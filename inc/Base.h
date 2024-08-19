@@ -1,7 +1,7 @@
 /* BASE.H -- See the Incursion LICENSE file for copyright information.
 
      This file contains class definitions for Array, NArray,
-   OArray, Dice, String, MVal, Rect, Dictionary, Fraction,
+   OArray, Dice, String, MVal, Rect, Fraction,
    Object and Registry. 
 */
 
@@ -346,27 +346,6 @@ struct DictNode
 		DictNode *Lower;
 		DictNode *Higher;
 	};
-class Dictionary
-	{
-		private:
-			DictNode Head;
-			int16 Size;
-			int16 RealSize;
-			const char** IDs;
-			bool Loaded;
-			void PlaceWord(const char*,int16);
-			void Enlarge();
-		public:
-			Dictionary();
-			int16* ProcessName(const char*Name);
-			void Parse(const char*line);
-			bool Read(const char*filename);
-			const char* Word(int16 ID);
-			int16 NewID() {return Size+1;}
-			int16 ID(const char *);
-			int16 InsertWord(char*word);
-	};
-extern Dictionary Dict;
 
 struct Dice
 	{
@@ -400,35 +379,6 @@ class Object;
 class Win32Term;
 class Term;
 class MsDosTerm;
-
-class Parser
-	{
-		private:
-			int16 w[40];
-			int16 n[20];
-			int16 FoundWith; //Which NF_ flags noun actually fell under.
-			Thing* Match;
-			int8 MatchScore;
-			Dir DirMatch;
-			Dictionary* d;
-			Player *p;
-			Object * P1, * P2;
-			char ErrMsg[80];
-		public:
-      Parser() {}
-			Parser(Player*_p,Dictionary*_d)
-				{ p=_p; d=_d; }
-			void Parse(const char* Line);
-			bool CheckMatch(ParseArch&a);
-			void RemoveFluff();
-			void BadNoun(int16 NF, int8 Type);
-			bool Tokenize(const char* Line);
-			int8 MatchNoun(Thing*t);
-			bool MatchNounWord(Thing*,int16);
-			bool HandleNoun(int16 NF, int8 Type);
-			bool ValidLoc(int16 Flags, Thing*n);
-
-	};
 
 struct Option
   {
