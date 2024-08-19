@@ -46,12 +46,10 @@ long  array_index(long x,long y);
 #define realloc _realloc
 #define calloc(a,b) _malloc((a)*(b))
 #define I(x,y)  array_index(x,y)
-#define array(a,i,s) array_access((void*)a,sizeof(a[0]),i,s)
 
 #else
 
 #define I(x,y) x
-#define array(array,index,size) array[index]
 
 #endif
 
