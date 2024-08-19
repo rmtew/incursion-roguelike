@@ -27,7 +27,7 @@
 #define TBEV(l) ( (TBehaviour*) theGame->Get(l) )
 #define TENC(l) ( (TEncounter*) theGame->Get(l) )
 
-#define NAME(l) ( (const char*) (l ? RES(l)->GetName(0) : "{null}") )
+#define NAME(l) ( (l ? (const char*)(RES(l)->GetName(0)) : (const char*)"{null}") )
 #define DESC(l) ( l ? theGame->GetDesc(l) : "{null}" )
 
 #define FIND(str)  ( theGame->Find(str) )
