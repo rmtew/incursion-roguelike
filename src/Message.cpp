@@ -1503,7 +1503,7 @@ String & Feature::Name(int16 Flags) {
     s = NAME(fID);
 
     if (cHP > 0 && (Flags & NA_LONG))
-        switch ((cHP * 10) / max(1, mHP))
+        switch ((cHP * 10) / max<int>(1, mHP))
     {
         case 10: break;
         case 9:

@@ -213,8 +213,8 @@ int16 AdjustCR(int16 BaselineCR) {
     if (BaselineCR < 0)
         return BaselineCR;
     switch (theGame->GetPlayer(0)->Opt(OPT_DIFFICULTY)) {
-    case DIFF_EXPLORE:   return ExploreCR[min(20, BaselineCR)];
-    case DIFF_TRAINING:  return ExploreCR[min(20, BaselineCR)];
+    case DIFF_EXPLORE:   return ExploreCR[min<int>(20, BaselineCR)];
+    case DIFF_TRAINING:  return ExploreCR[min<int>(20, BaselineCR)];
     case DIFF_NIGHTMARE: return BaselineCR + 2;
     default: return BaselineCR;
     }
@@ -2359,7 +2359,7 @@ Reselect:
     // Sum up all the room type weightings.
     weighting_sum = 0;
     for (i = 0; RM_Weights[i * 2 + 1]; i++)
-        weighting_sum += max(0, (int16)RM_Weights[i * 2 + 1]);
+        weighting_sum += max<int16_t>(0, (int16)RM_Weights[i * 2 + 1]);
 
     // If all room types are used up, free them all up for reuse.
     if (weighting_sum == 0) {
@@ -2379,7 +2379,7 @@ Reselect:
     // Pick a room type, leave the selection index in 'i'.
     c = random(weighting_sum);
     for (i = 0; RM_Weights[i * 2 + 1]; i++) {
-        weight = max(0, (int16)RM_Weights[i * 2 + 1]);
+        weight = max<int16_t>(0, (int16)RM_Weights[i * 2 + 1]);
         ASSERT(weight != -1)
             if (c < weight) {
                 RM_WeightIndex = i * 2;
@@ -2628,8 +2628,8 @@ DoBasicRoom:
     case RM_OCTAGON:
         sx = (int16)(Con[ROOM_MINX] + random((int16)(Con[ROOM_MAXX] - Con[ROOM_MINX])) + 3);
         sy = (int16)(Con[ROOM_MINY] + random((int16)(Con[ROOM_MAXY] - Con[ROOM_MINY])) + 3);
-        sx = max(sx, 9);
-        sy = max(sy, 9);
+        sx = max<int>(sx, 9);
+        sy = max<int>(sy, 9);
         if (TREG(regID)->HasFlag(RF_ODD_WIDTH) && !(sx % 2)) { if (sx == Con[ROOM_MAXX]) sx--; else sx++; }
         if (TREG(regID)->HasFlag(RF_ODD_HEIGHT) && !(sy % 2)) { if (sx == Con[ROOM_MAXY]) sy--; else sy++; }
         r = cPanel.PlaceWithinSafely((uint8)sx, (uint8)sy);

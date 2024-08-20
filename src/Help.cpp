@@ -248,7 +248,7 @@ void HelpSpellIndex(String &helpText) {
                             continue;
                         it->iID = iID;
                         if (it->HasSpell(theGame->SpellNum(Spells[j]))) {
-                            dlev = min(TITEM(iID)->Level, dlev);
+                            dlev = min<int>(TITEM(iID)->Level, dlev);
                             s = *TITEM(it->iID)->GetMessages(MSG_STATINAME);
                             if (!s.GetLength()) {
                                 s = it->Name(0);
@@ -2120,7 +2120,7 @@ String & Monster::Describe(Player *p) {
         Format("<5>The <Str><Str><7> ('<%d>%c%c%c<7>')\n__", GLYPH_COLOUR_VALUE(tm->Image), LITERAL_CHAR, LITERAL_CHAR1(gid), LITERAL_CHAR2(gid)),
         isMType(MA_DRAGON) ? "(Adult) " : "", NAME(xID));
     for (i = 1; i != str.GetLength(); i++)
-        if (isalpha_(max(1, str[i])) && str[i - 1] == ' ')
+        if (isalpha_(max<int>(1, str[i])) && str[i - 1] == ' ')
             str.SetAt(i, toupper(str[i]));
 
     if (tm->Desc) {
@@ -2309,7 +2309,7 @@ String & Monster::Describe(Player *p) {
             if (sv & XBIT(i)) {
                 str += SaveNames[i];
                 if (mm->Kills > 50) {
-                    n = max(CR, 0) * 3 / 2;
+                    n = max<int>(CR, 0) * 3 / 2;
                     n += (tm->Attr[SaveAttrs[i]] - 10) / 2;
                     str += Format(" (%+d)", n);
                 }
@@ -2328,7 +2328,7 @@ String & Monster::Describe(Player *p) {
             if (!(sv & XBIT(i))) {
                 str += SaveNames[i];
                 if (mm->Kills > 50) {
-                    n = max(CR, 0) * 3 / 4;
+                    n = max<int>(CR, 0) * 3 / 4;
                     n += (tm->Attr[SaveAttrs[i]] - 10) / 2;
                     str += Format(" (%+d)", n);
                 }

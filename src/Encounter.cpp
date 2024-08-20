@@ -765,7 +765,7 @@ EvReturn Map::enGenerate(EventInfo &e) {
       e.enXCR += (e.enDesAmt / 3) * (e.enXCR/2);   
       if (!(e.enFlags & EN_NOSLEEP))
         for (i=0;i!=(e.enDesAmt / 3);i++)
-          e.enSleep = max(e.enSleep,random(100)+1);
+          e.enSleep = max<int>(e.enSleep,random(100)+1);
       }
     e.enXCR = max(e.enXCR, XCR(e.enCR) * (int32)te->GetConst(MIN_XCR_MULT));
     e.enXCR = max(e.enXCR, (int32)te->GetConst(MIN_XCR));
@@ -913,7 +913,7 @@ EvReturn Map::enGenerate(EventInfo &e) {
       }
     Deviance = (int16)((abs(e.enXCR-totXCR) * 100L) / e.enXCR);
     if (e.enDesAmt)
-      Deviance += (int16)max(0,((abs(e.enDesAmt-cEncMem)*100L)/e.enDesAmt)-50);
+      Deviance += max<int16_t>(0,((abs(e.enDesAmt-cEncMem)*100L)/e.enDesAmt)-50);
     if (cEncMem > maxAmtByCR(e.enCR))
       Deviance += (cEncMem - maxAmtByCR(e.enCR))*100 / maxAmtByCR(e.enCR);
     if (Deviance > 50 && e.enTries < 5)
@@ -943,7 +943,7 @@ EvReturn Map::enGenerate(EventInfo &e) {
     /* Cap # of creatures at CR max */
     cEncMem = min(cEncMem,maxAmtByCR(e.enCR));
     /* HACKFIX */
-    cEncMem = min(cEncMem,5);
+    cEncMem = min<int>(cEncMem,5);
     
     if (e.enFlags & EN_DUMP)
       {
@@ -1326,7 +1326,7 @@ RetryPart:
             e.ep_pID = 0;
 
         if (te->HasFlag(NF_FREAKY) || ep->Flags & EP_FREAKY)
-            e.epFreaky = min(e.enFreaky, random(10) + 1);
+            e.epFreaky = min<int>(e.enFreaky, random(10) + 1);
         else
             e.epFreaky = 0;
 
@@ -1480,9 +1480,9 @@ EvReturn Map::enChooseMID(EventInfo &e) {
       
       
     if (e.enConstraint > 0x01000000)
-      maxCR = max(maxCR,min(e.enCR,TMON(e.enConstraint)->CR));
+      maxCR = max<int>(maxCR,min<int>(e.enCR,TMON(e.enConstraint)->CR));
       
-    maxCR = max(1,maxCR);
+    maxCR = max<int>(1,maxCR);
     
     /* If we have mandatory templates, keep lowering the maxCR
        on consecutive tries until we have room for all of them. */
@@ -1513,7 +1513,7 @@ EvReturn Map::enChooseMID(EventInfo &e) {
           for(i=0;i!=theGame->Modules[q]->szMon;i++)
             {
               TMonster *tm = &theGame->Modules[q]->QMon[i];
-              if (tm->CR > max(1,maxCR) && !e.isGetMinCR)
+              if (tm->CR > max<int>(1,maxCR) && !e.isGetMinCR)
                 continue;
               if (tm->HasFlag(M_NOGEN) && e.enConstraint < 0x01000000)
                 continue;
@@ -1786,7 +1786,7 @@ EvReturn Map::enGenMount(EventInfo &e)
     
     enCalcCurrPartXCR(e);
     maxCR = XCRtoCR(e.eimXCR - e.epCurrXCR);
-    maxCR = max(1,maxCR);
+    maxCR = max<int>(1,maxCR);
     lowCR = 36; lowIdx = -1;
     highCR = -6; highIdx = -1;
     
@@ -2544,7 +2544,7 @@ EvReturn Map::enBuildMon(EventInfo &e)
           goto PlaceAtSpot;
       
       rID Terrains[256];
-      for (int i=0;i!=min(256,OpenC);i++)
+      for (int i=0;i!=min<int>(256,OpenC);i++)
         Terrains[i] = TerrainAt(OpenX[i],OpenY[i]);
       
       Retry:
@@ -2639,7 +2639,7 @@ EvReturn Map::enBuildMon(EventInfo &e)
     mn->GainPermStati(ENCOUNTER,NULL,SS_MISC,e.cPart,e.enDesAmt,e.enID);
     
     Player *p;
-    if (mn->ChallengeRating() > max(2,e.enCR))
+    if (mn->ChallengeRating() > max<int>(2,e.enCR))
       if (p = theGame->GetPlayer(0)) {
         String str;
         str = XPrint("OOD monster <Obj> (CR <Num>) generated on "
@@ -2987,7 +2987,7 @@ static void MakeMagicWeaponArmour(Item *it, int _plusLevel,
   ASSERT(plusLevel >= 0); 
 
   if (plusLevel > 0) 
-    it->MakeMagical(0, max(1,min(5,plusLevel)));
+    it->MakeMagical(0, std::max(1,min(5,plusLevel)));
 
   return; 
 }
@@ -3035,11 +3035,11 @@ Item* Item::GenItem(uint16 Flags, rID xID, int16 Depth, int8 Luck, ItemGen *Gen)
        Wes, let me know if this is making characters way too powerful
        too early, or if it's even noticable, or what.
        */
-    maxlev = max(3, Depth);
+    maxlev = max<int>(3, Depth);
 
     if (random(5) && Luck <= 9) {
         maxlev += (Luck - 11) / 2;
-        maxlev = max(min(1, Depth), maxlev);
+        maxlev = max<int>(min<int>(1, Depth), maxlev);
     }
 
     /* For high-luck characters, 20% of items are adjusted by luck
@@ -3074,8 +3074,8 @@ Item* Item::GenItem(uint16 Flags, rID xID, int16 Depth, int8 Luck, ItemGen *Gen)
         minlev = 0;
     }
 
-    maxlev = max(maxlev, 1);
-    Depth = max(Depth, 1);
+    maxlev = max<int>(maxlev, 1);
+    Depth = max<int>(Depth, 1);
     minlev = max(maxlev - 4, 0);
     restart_count = 0;
     /* To prevent the "1000 restarts" message, minlev MUST be
@@ -3141,7 +3141,7 @@ Got_iID:
 
     if (theItem->isType(T_COIN)) {
         int32 val;
-        val = WealthByLevel[max(0, min(20, Depth))] / 4;
+        val = WealthByLevel[max(0, min<int>(20, Depth))] / 4;
         val *= 50 + random(100); // 50% to 150%
         val /= TITEM(iID)->Cost;
         theItem->Quantity = val;
@@ -3316,7 +3316,7 @@ SkipMagic:
             ((QItem *)theItem)->KnownQualities = 0xff;
     }
 
-    if (random(100) < max(maxlev, 5) && !theItem->isType(T_TOOL) &&
+    if (random(100) < max<int>(maxlev, 5) && !theItem->isType(T_TOOL) &&
         !theItem->isType(T_COIN)) {
         theItem->IFlags &= ~IF_CURSED;
         theItem->IFlags |= IF_BLESSED;

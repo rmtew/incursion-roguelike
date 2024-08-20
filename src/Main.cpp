@@ -2026,11 +2026,11 @@ void Game::ListItemsByLevel()
                     (const char*)ItemNameFromEffect(r[i]) );
               else
                 list[c] = Format("  [%2d/%2d/%2d/%2d/%2d] %s\n",
-                    max(1,LevelAdjust(te->Level,0,1)),
-                    max(1,LevelAdjust(te->Level,0,2)),
-                    max(1,LevelAdjust(te->Level,0,3)),
-                    max(1,LevelAdjust(te->Level,0,4)),
-                    max(1,LevelAdjust(te->Level,0,5)),
+                    max<int>(1,LevelAdjust(te->Level,0,1)),
+                    max<int>(1,LevelAdjust(te->Level,0,2)),
+                    max<int>(1,LevelAdjust(te->Level,0,3)),
+                    max<int>(1,LevelAdjust(te->Level,0,4)),
+                    max<int>(1,LevelAdjust(te->Level,0,5)),
                     (const char*)ItemNameFromEffect(r[i]) );
 
               c++;

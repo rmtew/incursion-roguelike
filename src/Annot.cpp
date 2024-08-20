@@ -730,7 +730,7 @@ void Resource::GrantGear(Creature *c, rID xID, bool doRanged)
                 // ww: if you play a super-lucky character, you will find
                 // that all of your opponents have powerful items
                 if (theGame->GetPlayer(0))
-                  luck = max(luck,theGame->GetPlayer(0)->GetAttr(A_LUC));
+                  luck = max<int>(luck,theGame->GetPlayer(0)->GetAttr(A_LUC));
                 it = Item::GenItem(IG_MONEQUIP,iID,the_lev,luck,MonsterItems);
                 if (!it)
                   continue;

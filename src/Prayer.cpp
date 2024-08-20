@@ -677,7 +677,7 @@ int16* Creature::getTroubles()
     /* Mana is CRITICAL to mages, priests & druids, somewhat critical
        to fighter-mages and less significant to everyone else, so
        adjust accordingly. */   
-    man = ((man * 30L) + ((man * 70L * CasterLev()) / max(1,ChallengeRating()))) / 100;
+    man = ((man * 30L) + ((man * 70L * CasterLev()) / max<int>(1,ChallengeRating()))) / 100;
     
     n = 0;
     
@@ -1353,7 +1353,7 @@ EvReturn Character::GodDeflect(EventInfo &e)
     if (FavPenalty[e.godNum] + TGOD(GodID)->GetConst(INTERVENTION_COST) > 100)
       return NOTHING;
       
-    if (Anger[e.godNum] > max(3,(int16)TGOD(GodID)->GetConst(TOLERANCE_VAL)))
+    if (Anger[e.godNum] > max<int>(3,(int16)TGOD(GodID)->GetConst(TOLERANCE_VAL)))
       return NOTHING;
       
     if (getGodFlags(GodID) & (GS_ANATHEMA|GS_FORSAKEN))
@@ -1400,7 +1400,7 @@ EvReturn Player::GodRaise(EventInfo &e)
     if (FavPenalty[e.godNum] + TGOD(e.eID)->GetConst(RESURRECTION_COST) > 100)
       return NOTHING;
       
-    if (Anger[e.godNum] > max(3,(int16)TGOD(e.eID)->GetConst(TOLERANCE_VAL)))
+    if (Anger[e.godNum] > max<int>(3,(int16)TGOD(e.eID)->GetConst(TOLERANCE_VAL)))
       return NOTHING;
       
     if (getGodFlags(e.eID) & (GS_ANATHEMA|GS_FORSAKEN))
@@ -1448,7 +1448,7 @@ EvReturn Player::GodRaise(EventInfo &e)
     
     /* You have enough XP for the level right below the one you are
        currently at -- simulate losing a level. */
-    XP = max(0,min(XP-2000,(XP*85L)/100L));
+    XP = max(0,min<int>(XP-2000,(XP*85L)/100L));
     
     /* Reduce Con by one permanently */
     BAttr[A_CON]--;
@@ -1648,7 +1648,7 @@ void Character::Forsake()
         if (Anger[theGame->GodNum(GodID)] > 30)
           goto realForsake;
         GodMessage(GodID,MSG_PENANCE);
-        Anger[theGame->GodNum(GodID)] = max(10 +
+        Anger[theGame->GodNum(GodID)] = max<int>(10 +
           (int16)TGOD(GodID)->GetConst(TOLERANCE_VAL),
           Anger[theGame->GodNum(GodID)]);
         
@@ -1658,7 +1658,7 @@ void Character::Forsake()
       
     realForsake:
     GodMessage(GodID,MSG_FORSAKE);
-    Anger[theGame->GodNum(GodID)] = max(10 +
+    Anger[theGame->GodNum(GodID)] = max<int>(10 +
       (int16)TGOD(GodID)->GetConst(TOLERANCE_VAL),
       Anger[theGame->GodNum(GodID)]);
     setGodFlags(GodID, GS_FORSAKEN);    
@@ -2032,7 +2032,7 @@ EvReturn Character::AlignedAct(EventInfo &e)
       else if (e.EParam & AL_GOOD)
         alignGE -= (int16)e.vMag;
       if (!(dAlign & AL_GOOD))
-        alignGE = max(-30, alignGE);
+        alignGE = max<int>(-30, alignGE);
       }
     else if (cAlign & AL_EVIL) {
       if (e.EParam & AL_NONEVIL) {
@@ -2042,12 +2042,12 @@ EvReturn Character::AlignedAct(EventInfo &e)
       else if (e.EParam & AL_EVIL)
         alignGE += (int16)e.vMag;
       if (!(dAlign & AL_EVIL))
-        alignGE = min(30, alignGE);
+        alignGE = min<int>(30, alignGE);
       }
     else if (e.EParam & AL_GOOD) {
       alignGE -= (int16)e.vMag;
       if (!(dAlign & AL_GOOD))
-        alignGE = max(alignGE,0);
+        alignGE = max<int>(alignGE,0);
       }
     else if (e.EParam & AL_EVIL)
       alignGE += (int16)e.vMag;
@@ -2073,7 +2073,7 @@ EvReturn Character::AlignedAct(EventInfo &e)
       else if (e.EParam & AL_LAWFUL)
         alignLC -= (int16)e.vMag;
       if (!(dAlign & AL_LAWFUL))
-        alignLC = max(-30, alignLC);
+        alignLC = max<int>(-30, alignLC);
       }
     else if (cAlign & AL_CHAOTIC) {
       if (e.EParam & AL_NONCHAOTIC) {
@@ -2086,21 +2086,21 @@ EvReturn Character::AlignedAct(EventInfo &e)
       else if (e.EParam & AL_CHAOTIC)
         alignLC += (int16)e.vMag;
       if (!(dAlign & AL_CHAOTIC))
-        alignLC = max(30, alignLC);
+        alignLC = max<int>(30, alignLC);
       }
     else if (e.EParam & AL_LAWFUL) {
       alignLC -= (int16)e.vMag;
       if (!(dAlign & AL_LAWFUL))
-        alignLC = max(alignLC,0);
+        alignLC = max<int>(alignLC,0);
       }
     else if (e.EParam & AL_CHAOTIC) {
       alignLC -= (int16)e.vMag;
       if (!(dAlign & AL_CHAOTIC))
-        alignLC = min(alignLC,0);
+        alignLC = min<int>(alignLC,0);
       }
     
-    alignLC = max(-70,min(70,alignLC));
-    alignGE = max(-70,min(70,alignGE));
+    alignLC = max(-70,min<int>(70,alignLC));
+    alignGE = max(-70,min<int>(70,alignGE));
       
     if (alignLC > -20)
       nAlign &= (~AL_LAWFUL);

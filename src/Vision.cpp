@@ -278,11 +278,11 @@ void Map::VisionThing(int16 pn, Creature *c, bool do_clear)
   const int16 sy = c->y; 
   const int16 LightRange = max(c->LightRange,c->InfraRange);
   const int16 SightRange = c->SightRange;
-  const int16 ShadowRange = max(c->ShadowRange,LightRange); 
+  const int16 ShadowRange = max<int>(c->ShadowRange,LightRange);
   const int16 BlindRange = c->BlindRange; 
   const int16 PercepRange = c->PercepRange; 
   const int16 TremorRange = 
-    max(c->TremorRange, c->AbilityLevel(CA_STONEWORK_SENSE)); 
+    max<int>(c->TremorRange, c->AbilityLevel(CA_STONEWORK_SENSE));
 
   const int16 x1 = max(p->MyTerm->OffsetX()-5,0);
   const int16 y1 = max(p->MyTerm->OffsetY()-5,0);
@@ -491,7 +491,7 @@ uint16 Creature::Perceives(Thing *t, bool assertLOS) {
         ty = t->y;
     }
 
-    const int16 Dist = max(1, dist(x, y, tx, ty));
+    const int16 Dist = max<int>(1, dist(x, y, tx, ty));
 
     if (!HasStati_ENGULFED)
         StatiIterNature(this, TRACKING)

@@ -55,7 +55,7 @@ void TextTerm::CreateCharSheet(CharSheet &cs)
     cs.Basics += Format("%cFaith  %c%s\n",-WHITE,-PURPLE,
         NAME(p->GodID));
   cs.Basics += Format("%cXP     %c%d\n",-WHITE,-PURPLE,
-      max(0,p->XP - p->XP_Drained));
+      max<int>(0,p->XP - p->XP_Drained));
   if (p->XP_Drained) 
     cs.Basics += Format("%c Drain %c%d\n",-WHITE,-PURPLE,
         p->XP_Drained);
@@ -529,11 +529,11 @@ void TextTerm::CreateCharSheet(CharSheet &cs)
           break;
 
         case CA_WEAPON_SKILL:
-          str += Format(":\n  %s",WSkillLevels[min(k,6)]);
+          str += Format(":\n  %s",WSkillLevels[min<int>(k,6)]);
          break;
         case CA_LORE_OF_ARMS:
-          str += Format(" (%d hit%s)",NeededSwings[ min(9,k) ],
-            NeededSwings[ min(9,k) ] > 1 ? "s" : "");
+          str += Format(" (%d hit%s)",NeededSwings[ min<int>(9,k) ],
+            NeededSwings[ min<int>(9,k) ] > 1 ? "s" : "");
          break; 
         case CA_INFRAVISION: case CA_LOWLIGHT:
         case CA_TELEPATHY:   case CA_BLINDSIGHT:

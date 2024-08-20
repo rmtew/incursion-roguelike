@@ -1941,7 +1941,7 @@ int attack_entry ()
 
                                  if (at == A_ABIL)
 
-                                   theMon->Attk[CurrAttk].u.a.DC = max(
+                                   theMon->Attk[CurrAttk].u.a.DC = std::max(
 
                                         theMon->Attk[CurrAttk].u.a.DC, 1);
 
@@ -5057,7 +5057,7 @@ int domain_entry ()
          case 805: {
             res_ref(&rr);
 #line 907 "../lang/grammar.acc"
- theDom->Spells[min(sp,8)] = rr; sp++; 
+ theDom->Spells[std::min<int>(sp,8)] = rr; sp++; 
 # line 5062 "../src/yygram.cpp"
             switch (yyselect()) {
             case 804: {
@@ -5190,7 +5190,7 @@ int god_entry ()
          case 813: {
             res_ref(&rr);
 #line 926 "../lang/grammar.acc"
- theGod->Domains[min(dm,5)] = rr; dm++; 
+ theGod->Domains[std::min<int>(dm,5)] = rr; dm++; 
 # line 5195 "../src/yygram.cpp"
             switch (yyselect()) {
             case 812: {
@@ -6548,7 +6548,7 @@ int temp_attack_entry ()
 
                                  if (at == A_ABIL)
 
-                                   theTemp->NewAttk[CurrAttk].u.a.DC = max(
+                                   theTemp->NewAttk[CurrAttk].u.a.DC = std::max(
 
                                         theTemp->NewAttk[CurrAttk].u.a.DC, 1);
 
@@ -9604,7 +9604,7 @@ int param_list (pBSysFunc b, YYSTYPE fn, VBlock *bl, int *narg)
         if (PStorage[i] == RT_REGISTER)
           FreeRegister((int16)PValue[i]);
         }
-      *narg = max(*narg,b->ParamCount);
+      *narg = std::max<int>(*narg,b->ParamCount);
       Done:;
       
 # line 9611 "../src/yygram.cpp"
@@ -27147,7 +27147,7 @@ int yycoordinate[] = {
 /* 3968 */ 907011,
 /* 3969 */ 9999,
 /* 3970 */ 907018,
-/* 3971 */ 907072,
+/* 3971 */ 907082,
 /* 3972 */ 907024,
 /* 3973 */ 9999,
 /* 3974 */ 907024,
@@ -27157,10 +27157,10 @@ int yycoordinate[] = {
 /* 3978 */ 9999,
 /* 3979 */ 9999,
 /* 3980 */ 9999,
-/* 3981 */ 907073,
+/* 3981 */ 907083,
 /* 3982 */ 9999,
 /* 3983 */ 9999,
-/* 3984 */ 907073,
+/* 3984 */ 907083,
 /* 3985 */ 9999,
 /* 3986 */ 9999,
 /* 3987 */ 9999,
@@ -27261,7 +27261,7 @@ int yycoordinate[] = {
 /* 4082 */ 926012,
 /* 4083 */ 9999,
 /* 4084 */ 926019,
-/* 4085 */ 926074,
+/* 4085 */ 926084,
 /* 4086 */ 926025,
 /* 4087 */ 9999,
 /* 4088 */ 926025,
@@ -27271,10 +27271,10 @@ int yycoordinate[] = {
 /* 4092 */ 9999,
 /* 4093 */ 9999,
 /* 4094 */ 9999,
-/* 4095 */ 926075,
+/* 4095 */ 926085,
 /* 4096 */ 9999,
 /* 4097 */ 9999,
-/* 4098 */ 926075,
+/* 4098 */ 926085,
 /* 4099 */ 9999,
 /* 4100 */ 9999,
 /* 4101 */ 9999,

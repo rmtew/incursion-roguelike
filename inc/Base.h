@@ -199,16 +199,16 @@ struct MVal
         case MBOUND_NONE:
           break;
         case MBOUND_MIN:
-          nval = max(Bound,nval);
+          nval = max<int16_t>(Bound,nval);
          break;
         case MBOUND_MAX:
-          nval = min(Bound,nval);
+          nval = min<int16_t>(Bound,nval);
          break;
         case MBOUND_NEAR:
           if (nval >= oval)
-            nval = max(nval,(nval+Bound*2)/3);
+            nval = max<int16_t>(nval,(nval+Bound*2)/3);
           else
-            nval = max(nval,(nval+Bound*2)/3);
+            nval = max<int16_t>(nval,(nval+Bound*2)/3);
          break;
         default:
           Error("MVal::Adjust -- illegal BType!");
@@ -319,10 +319,10 @@ struct Rect
         inner.y1 = y1 + random(max(0,((y2-y1)-1)-height));
         inner.y2 = inner.y1 + height;
 
-        inner.x1 = max(inner.x1, x1 + 2);
-        inner.y1 = max(inner.y1, y1 + 2);
-        inner.x2 = min(inner.x2, x2 - 2);
-        inner.y2 = min(inner.y2, y2 - 2);
+        inner.x1 = max<int>(inner.x1, x1 + 2);
+        inner.y1 = max<int>(inner.y1, y1 + 2);
+        inner.x2 = min<int>(inner.x2, x2 - 2);
+        inner.y2 = min<int>(inner.y2, y2 - 2);
         return inner;
       }
     /// <summary>Return true if `x` and `y` are within this rect (inclusive).</summary>

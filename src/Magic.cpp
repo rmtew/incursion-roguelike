@@ -127,7 +127,7 @@ int16 Creature::SpellDmgBonus(rID eID)
           that has AI_WIZARDRY/AI_SORCERY as a spell, even if it's,
           say, a staff spell or cleric spell. Not technically
           correct, but not a huge deal. */
-        db += max(0,Mod(A_WIS));
+        db += max<int>(0,Mod(A_WIS));
       }
     return db;
   } 
@@ -475,7 +475,7 @@ bool Magic::isTarget(EventInfo &_e, Thing *t) {
       else if (te->ef.aval == AR_POISON || te->ef.aval == AR_DISEASE)
           e.vCasterLev = te->Level;
       else if (sp_flags & SP_INNATE) 
-          e.vCasterLev = max(1,e.EActor->ChallengeRating());
+          e.vCasterLev = max<int>(1,e.EActor->ChallengeRating());
       else
           e.vCasterLev = (int8)e.EActor->CasterLev();
 
@@ -493,7 +493,7 @@ bool Magic::isTarget(EventInfo &_e, Thing *t) {
       }
 
       if (e.EItem && e.EItem->isItem())
-          e.vAlchemy = max(10,e.EItem->GetStatiMag(ALCHEMY_LEV));
+          e.vAlchemy = max<int>(10,e.EItem->GetStatiMag(ALCHEMY_LEV));
 
       if (e.effIllusion && !(e.illFlags & IL_SHADE))
           if (e.EActor->isPlayer())
@@ -560,7 +560,7 @@ bool Magic::isTarget(EventInfo &_e, Thing *t) {
       }
 
       if (e.MM & MM_MAXIMIZE)
-          e.vDmg = max(0,e.Dmg.Number) * abs(e.Dmg.Sides) + e.Dmg.Bonus;
+          e.vDmg = max<int>(0,e.Dmg.Number) * abs(e.Dmg.Sides) + e.Dmg.Bonus;
       else {
           if (e.Dmg.Sides < 0)
               e.Dmg.Sides = -e.Dmg.Sides;
@@ -698,7 +698,7 @@ Nothing:
 
           e.isFirstBlastXY = true;
 
-          if (e.isActivation != te->HasFlag(EF_ACTIVATE+min(e.efNum,4)))
+          if (e.isActivation != te->HasFlag(EF_ACTIVATE+min<int>(e.efNum,4)))
               { e.efNum++; continue; }
 
           if (te->HasFlag(EF_PERIODIC) && !e.isPeriodic) {                                         
@@ -1017,7 +1017,7 @@ DisbeliefMessageDone:
         /* Set EMagic to the current effect component */
         e.EMagic = te->Vals(e.efNum);
 
-        if (e.isActivation != te->HasFlag(EF_ACTIVATE+min(e.efNum,4)))
+        if (e.isActivation != te->HasFlag(EF_ACTIVATE+min<int>(e.efNum,4)))
             goto SkipSegment;
 
         e.Immune = e.MagicRes || doResistDeath || !isTarget(e,e.ETarget);
@@ -1412,7 +1412,7 @@ EvReturn Magic::ABarrier(EventInfo &e)
     if (e.MM & MM_ENLARGE)
       lim = max(e.vRadius*2,20);
     else
-      lim = max(e.vRadius,10);
+      lim = max<int>(e.vRadius,10);
 
     while ((!stop1) || (!stop2)) {
       if (!stop1) {
@@ -1644,7 +1644,7 @@ EvReturn Magic::ABallBeamBolt(EventInfo &e)
   // minimum range for wand beams ...
   if (isBeam && e.EItem && 
       (e.EItem->isType(T_WAND) || e.EItem->isType(T_POTION)))
-    e.vRange = max(5,e.vRange);
+    e.vRange = max<int>(5,e.vRange);
   
   // map overlay 
   Map &m = *(e.EActor->m);
@@ -2114,7 +2114,7 @@ void Magic::PredictVictimsOfBallBeamBolt(EventInfo &e,
   // minimum range for wand beams ...
   if (isBeam && e.EItem && 
       (e.EItem->isType(T_WAND) || e.EItem->isType(T_POTION)))
-    e.vRange = max(5,e.vRange);
+    e.vRange = max<int>(5,e.vRange);
 
   // map overlay 
   Map &m = *(e.EActor->m);
@@ -3070,7 +3070,7 @@ int16 Creature::SpellRating(rID eID, uint32 mm, bool perceived)
     if (Chance > 50 && (mm & MM_SURE))
       return 100;
 
-    return max(2,min((uint16)98,Chance));
+    return max(2,min<int>((uint16)98,Chance));
   }
 
 int16 p_base, p_int, p_lev, p_conc,
@@ -3155,7 +3155,7 @@ int16 Character::SpellRating(rID eID, uint32 mm, bool perceived)
          schools that the spell belongs to. */
       for(j = 0;j!=9;j++)
         if (TEFF(eID)->Schools & XBIT(j))
-          p_spec = max(p_spec,SpecialistTable[i][j]);
+          p_spec = max<int>(p_spec,SpecialistTable[i][j]);
 
       if (p_spec == -50)
         p_spec = 0;
@@ -3166,7 +3166,7 @@ int16 Character::SpellRating(rID eID, uint32 mm, bool perceived)
        druidic Evocations when you become an Illusionist, but you do
        get better at shared mage/druid illusions. */
     if (Spells[sp] & (SP_DIVINE|SP_BARDIC|SP_PRIMAL|SP_SORCERY))
-      p_spec = max(p_spec,0);
+      p_spec = max<int>(p_spec,0);
     
 
     int16 *at;
@@ -3215,13 +3215,13 @@ int16 Character::SpellRating(rID eID, uint32 mm, bool perceived)
 
     Chance = p_base + p_int + p_lev + p_meta + p_spec + p_calc + p_circ + p_conc;
 
-    if (Chance > max(90,p_base))
-      Chance = max(90,p_base) + ((Chance - max(90,p_base)) / 5);
+    if (Chance > max<int>(90,p_base))
+      Chance = max<int>(90,p_base) + ((Chance - max<int>(90,p_base)) / 5);
 
     if (Chance > 50 && (mm & MM_SURE))
       return 100;
 
-    return max(2,min((uint16)100,Chance));
+    return max(2,min<int>((uint16)100,Chance));
 
   }
   
@@ -3270,7 +3270,7 @@ int16 Creature::getSpellDC(rID spID, bool isTrick, bool isHeight)
     dc_beguile = 0;
     if (HasAbility(CA_BEGUILING_MAGIC))
       if (TEFF(spID)->HasFlag(EF_MENTAL))
-        dc_beguile = max(0,Mod(A_CHA));
+        dc_beguile = max<int>(0,Mod(A_CHA));
       
     dc_trick = isTrick ? 8 : 0;
     dc_height = isHeight ? 4 : 0;
@@ -3313,7 +3313,7 @@ int16 Creature::getSpellMana(rID spID, uint32 MM, int16 *specMod2)
       {
         mult = 2 + MMFeatLevels(MM);
         mCost = (mCost * mult + 1) / 2;
-        mCost = max(mCost,TEFF(spID)->ManaCost + (3*(mult-2)));
+        mCost = max<int>(mCost,TEFF(spID)->ManaCost + (3*(mult-2)));
       }
 
     /* New rule -- specialist wizards suffer more for casting from thier
@@ -3332,14 +3332,14 @@ int16 Creature::getSpellMana(rID spID, uint32 MM, int16 *specMod2)
            schools that the spell belongs to. */
         for(j = 0;j!=9;j++)
           if (TEFF(spID)->Schools & XBIT(j)) 
-            specMod = max(specMod,SpecialistTable[sch][j]);
+            specMod = max<int>(specMod,SpecialistTable[sch][j]);
               
         if (specMod == -50)
           specMod = 0;
         }     
     if (isPlayer() && (thisp->Spells[sp] & 
           (SP_DIVINE|SP_BARDIC|SP_PRIMAL|SP_SORCERY)))
-      specMod = max(specMod,0);
+      specMod = max<int>(specMod,0);
 
     
     if (TEFF(spID)->Purpose & EP_BUFF)
@@ -3739,7 +3739,7 @@ EvReturn Item::ZapWand(EventInfo &e)
          schools that the spell belongs to. */
       for(int j = 0;j!=9;j++)
         if (TEFF(eID)->Schools & XBIT(j))
-          m = max(m,SpecialistTable[i][j]);
+          m = max<int>(m,SpecialistTable[i][j]);
 
       if (m > 0)
         SpecBonus = m / 5;

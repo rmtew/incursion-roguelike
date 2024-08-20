@@ -426,7 +426,7 @@ DoneAB:
                 p->QuickKeys[sp-'0'].Type = QKY_SPELL;
                 goto ProcessSpells;
             }
-            if (sp >= 'a' && sp <= min('z',ch-1)) {
+            if (sp >= 'a' && sp <= min<int>('z',ch-1)) {
                 Restore();
                 SetMode(oldMode);
                 return Spells[sp - 'a'];
@@ -1692,7 +1692,7 @@ Recount:
                 PutChar(0, sl + ln, '>');
                 break;
             case KY_CMD_SOUTH:
-                if (ln >= min(j, SKILLS_SHOWN)) {
+                if (ln >= min<int>(j, SKILLS_SHOWN)) {
                     if (offset + SKILLS_SHOWN < (SK_LAST - 1)) {
                         offset++;
                         goto ReDraw;
@@ -1887,7 +1887,7 @@ void TextTerm::OptionManager(int16 start_cat) {
             }
         } else if (!n)
             Write(4, 4, "[No Options Yet]");
-        else for (i = Off; i < min(Off + (WinSizeY() - 13), n); i++) {
+        else for (i = Off; i < min<int>(Off + (WinSizeY() - 13), n); i++) {
             Color(i == c ? EMERALD : GREY);
             Write(4, 4 + (i - Off), OptionList[OptsShown[i]].Name);
             Color(YELLOW);

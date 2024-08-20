@@ -230,7 +230,7 @@ class Creature: public Thing, public Magic
       virtual int16 getDef() {
           if (StateFlags & MS_STILL_CAST) {
               CalcValues();
-              return Attr[A_CDEF] + max(0, AttrAdj[A_DEF][BONUS_WEAPON]);
+              return Attr[A_CDEF] + max<int16_t>(0, AttrAdj[A_DEF][BONUS_WEAPON]);
           }
           return (StateFlags & MS_CASTING) ? Attr[A_CDEF] : Attr[A_DEF];
       }
@@ -426,7 +426,7 @@ class Creature: public Thing, public Magic
       virtual uint16 getSpellFlags(rID spID) // horrid kludge used for counterspells
          { return CasterLev() >= SAL(TEFF(spID)->Level) ? SP_KNOWN : 0; }
       virtual int16 CasterLev()
-        { return max(ChallengeRating(),1); }
+        { return max<int16_t>(ChallengeRating(),1); }
       virtual uint32 MMFeats(uint32 sp) { return 0; }
       virtual void getBuffInfo(int16 *pBuffCount, int16 *pManaCost, rID **pBuffList);
       virtual bool isSpecialistIn(uint32 School);
@@ -729,7 +729,7 @@ class Character: public Creature
       int8 WepSkill(Item * it) ;
       virtual int16 LevelAs(rID cID);
       rID GetRaceID() { return RaceID; }
-      rID GetClassID(int16 cl) { return ClassID[max(0,min(cl,2))]; }
+      rID GetClassID(int16 cl) { return ClassID[max<int>(0,min<int>(cl,2))]; }
       int16 TotalLevel() { return Level[0] + Level[1] + Level[2]; }
       virtual int16 CasterLev();
       int16 PsionicLev() { return Abilities[CA_PSIONICS]; }
@@ -802,7 +802,7 @@ class Character: public Creature
       int16 getGodAnger(rID gID) /* HACKFIX */
         { int16 ang = Anger[theGame->GodNum(gID)];
           ang -= (int16)TGOD(gID)->GetConst(TOLERANCE_VAL);
-          return max(0,ang); }
+          return max<int16_t>(0,ang); }
       
 
     ARCHIVE_CLASS(Character,Creature,r)

@@ -1966,7 +1966,7 @@ EvReturn Player::Rest(EventInfo &e) {
 
         ASSERT(dID);
 
-        int32 maxDepthHere = min(MAX_DUNGEON_LEVELS,
+        int32 maxDepthHere = min<int>(MAX_DUNGEON_LEVELS,
             TDUN(dID)->GetConst(DUN_DEPTH) + 1);
         int32 depth;
 
@@ -2102,17 +2102,17 @@ EvReturn Player::Rest(EventInfo &e) {
                                 // point back per rest, and resting 10 times is *way*
                                 // boring. New theory: a full night's sleep always gets
                                 // you back to at least 1 point of fatigue. 
-                                t->cFP = (min(t->Attr[A_FAT], t->cFP + max(1, t->Mod((int8)a_hp))));
+                                t->cFP = (min<int>(t->Attr[A_FAT], t->cFP + max<int>(1, t->Mod((int8)a_hp))));
                         } else {                          /* Exhausted */
                             if (Percent == 100)
-                                t->cFP = max(min(t->Attr[A_FAT], t->cFP + max(1, t->Mod((int8)a_hp))), 1);
+                                t->cFP = max(min<int>(t->Attr[A_FAT], t->cFP + max<int>(1, t->Mod((int8)a_hp))), 1);
                             else
                                 t->cFP += 1;
                         }
                         if (t->InSlot(SL_ARMOUR) && t->InSlot(SL_ARMOUR)->isCursed())
                         {
                             t->IPrint("Resting in your cursed armour prevents decent sleep.");
-                            t->cFP = min(t->cFP, -1);
+                            t->cFP = min<int>(t->cFP, -1);
                         }
 
                         // ww: just before you wake up they all cast Stoneskin ...
@@ -2836,13 +2836,13 @@ void Character::Exercise(int16 at, int16 amt, int16 col, int16 cap) {
     case A_STR:
     case A_DEX:
     case A_CON:
-        needed = 100 - max(0, SkillLevel(SK_ATHLETICS));
+        needed = 100 - max<int>(0, SkillLevel(SK_ATHLETICS));
         break;
     case A_WIS:
-        needed = 100 - max(0, SkillLevel(SK_CONCENT));
+        needed = 100 - max<int>(0, SkillLevel(SK_CONCENT));
         break;
     case A_CHA:
-        needed = 100 - max(0, SkillLevel(SK_PERFORM));
+        needed = 100 - max<int>(0, SkillLevel(SK_PERFORM));
         break;
     case A_INT:
         sk = 0;
@@ -2860,7 +2860,7 @@ void Character::Exercise(int16 at, int16 amt, int16 col, int16 cap) {
     for (i = 0; i != 15; i++)
         total += GainAttr[at][i];
 
-    adding = min(cap - GainAttr[at][col], amt);
+    adding = min<int>(cap - GainAttr[at][col], amt);
 
     if (total + adding > needed) {
         adding = amt - (needed - total);

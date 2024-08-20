@@ -135,7 +135,7 @@ void Creature::AddBonus(int8 btype,int8 attr,int16 bonus) {
     // The problem here is that adding the positive bonus just takes the
     // max, so max(3,-3) = 3 instead of foo(3,-3) = 0. 
     // Thus:
-#define WESMAX(attr,bonus) ((attr < 0) ? attr + bonus : max(attr,bonus))
+#define WESMAX(attr,bonus) ((attr < 0) ? attr + bonus : max<int>(attr,bonus))
     // This doesn't completely fix it, because
     //  Spell1 = -4 STR
     //  Spell2 = +3 STR
@@ -405,19 +405,19 @@ Restart:
         tsav = MonGoodSaves((int8)TMON(mID)->MType[0]) | MonGoodSaves((int8)TMON(mID)->MType[1]) | MonGoodSaves((int8)TMON(mID)->MType[2]);
 
         if (tsav & XBIT(FORT))
-            AddBonus(BONUS_BASE,A_SAV_FORT, GoodSave[max(ChallengeRating(),0)]);
+            AddBonus(BONUS_BASE,A_SAV_FORT, GoodSave[max<int>(ChallengeRating(),0)]);
         else 
-            AddBonus(BONUS_BASE,A_SAV_FORT, PoorSave[max(ChallengeRating(),0)]);
+            AddBonus(BONUS_BASE,A_SAV_FORT, PoorSave[max<int>(ChallengeRating(),0)]);
 
         if (tsav & XBIT(REF))
-            AddBonus(BONUS_BASE,A_SAV_REF, GoodSave[max(ChallengeRating(),0)]);
+            AddBonus(BONUS_BASE,A_SAV_REF, GoodSave[max<int>(ChallengeRating(),0)]);
         else 
-            AddBonus(BONUS_BASE,A_SAV_REF, PoorSave[max(ChallengeRating(),0)]);
+            AddBonus(BONUS_BASE,A_SAV_REF, PoorSave[max<int>(ChallengeRating(),0)]);
 
         if (tsav & XBIT(WILL))
-            AddBonus(BONUS_BASE,A_SAV_WILL, GoodSave[max(ChallengeRating(),0)]);
+            AddBonus(BONUS_BASE,A_SAV_WILL, GoodSave[max<int>(ChallengeRating(),0)]);
         else 
-            AddBonus(BONUS_BASE,A_SAV_WILL, PoorSave[max(ChallengeRating(),0)]);
+            AddBonus(BONUS_BASE,A_SAV_WILL, PoorSave[max<int>(ChallengeRating(),0)]);
 
         // mMana = TMON(mID)->Mana;
     }
@@ -443,7 +443,7 @@ Restart:
                 { AddBonus(BONUS_BASE+i,A_FAT,amt); }
             } 
     } else {
-        int amt = max( ChallengeRating(), 0) / 2; 
+        int amt = max<int>( ChallengeRating(), 0) / 2;
         AddBonus(BONUS_BASE,A_FAT,amt); 
     } 
 
@@ -863,7 +863,7 @@ Restart:
         // deflection bonus equal to its Charisma bonus (always at least +1,
         // even if the creature's Charisma score does not normally provide a
         // bonus).
-        StackBonus(BONUS_CIRC,A_DEF, max(1,Mod2(A_CHA)));
+        StackBonus(BONUS_CIRC,A_DEF, max<int>(1,Mod2(A_CHA)));
     } 
 
     switch (Encumbrance()) {
@@ -1029,7 +1029,7 @@ Restart:
         AddBonus(BONUS_ATTR,A_HIT_OFFHAND,XMod(A_STR));
 
     if (HasFeat(FT_WEAPON_FINESSE))
-        AddBonus(BONUS_ATTR,A_DMG_BRAWL,max(0,XMod(A_STR)));
+        AddBonus(BONUS_ATTR,A_DMG_BRAWL,max<int>(0,XMod(A_STR)));
     else
         AddBonus(BONUS_ATTR,A_DMG_BRAWL,XMod(A_STR));
 
@@ -1045,7 +1045,7 @@ Restart:
         AddBonus(BONUS_ATTR,A_DMG_MELEE,XMod(A_STR));
 
     /* Figure out WT_NO_STRENGTH at attack time */
-    AddBonus(BONUS_ATTR,A_DMG_THROWN,max(0,XMod(A_STR)));
+    AddBonus(BONUS_ATTR,A_DMG_THROWN,max<int>(0,XMod(A_STR)));
     if (missileWep && missileWep->useStrength())
         AddBonus(BONUS_ATTR,A_DMG_ARCHERY,XMod(A_STR));
 
@@ -1070,7 +1070,7 @@ Restart:
         }
 
     if (HasFeat(FT_LIGHTNING_FISTS)) //  && !HasStati(POLYMORPH))
-        AddBonus(BONUS_FEAT,A_SPD_BRAWL,max(0,XMod(A_DEX)));
+        AddBonus(BONUS_FEAT,A_SPD_BRAWL,max<int>(0,XMod(A_DEX)));
     if (HasFeat(FT_FISTS_OF_IRON)) 
         AddBonus(BONUS_FEAT,A_DMG_BRAWL,1); 
 
@@ -1236,9 +1236,9 @@ Restart:
 
     if (HasStati(POLYMORPH))
         for (i=A_STR; i<=A_CON; i++) {
-            AttrAdj[i][BONUS_ENHANCE] = min(0,AttrAdj[i][BONUS_ENHANCE]);
-            AttrAdj[i][BONUS_FEAT] = min(0,AttrAdj[i][BONUS_FEAT]);
-            AttrAdj[i][BONUS_INHERANT] = min(0,AttrAdj[i][BONUS_INHERANT]);
+            AttrAdj[i][BONUS_ENHANCE] = min<int>(0,AttrAdj[i][BONUS_ENHANCE]);
+            AttrAdj[i][BONUS_FEAT] = min<int>(0,AttrAdj[i][BONUS_FEAT]);
+            AttrAdj[i][BONUS_INHERANT] = min<int>(0,AttrAdj[i][BONUS_INHERANT]);
         }
 
     if (HasFeat(FT_LION_HEART)) {
@@ -1275,7 +1275,7 @@ Restart:
             if (percent_attr(i)) {
                 for (j=0;j!=BONUS_LAST;j++)
                     if (bonus_is_mult(i,j)) {
-                        thisc->KAttr[i] = ((((thisc->KAttr[i]*5 + 100) * (max(-16,AttrAdj[i][j])*5 + 100) ) / 100)-100)/5;          
+                        thisc->KAttr[i] = ((((thisc->KAttr[i]*5 + 100) * (max<int>(-16,AttrAdj[i][j])*5 + 100) ) / 100)-100)/5;
 
                         if (i == A_MOV && AttrAdj[i][j] <= -20 && !isPlayer())
                             isHalted = true;
@@ -1283,7 +1283,7 @@ Restart:
             }
 
             thisc->KAttr[A_CDEF] = thisc->KAttr[A_DEF] - 
-                (max(0,AttrAdj[A_DEF][BONUS_WEAPON]) + max(0,AttrAdj[A_DEF][BONUS_INSIGHT]) + max(0,AttrAdj[A_DEF][BONUS_DODGE]) + (HasFeat(FT_COMBAT_CASTING) ? 2 : 4));
+                (max<int>(0,AttrAdj[A_DEF][BONUS_WEAPON]) + max<int>(0,AttrAdj[A_DEF][BONUS_INSIGHT]) + max<int>(0,AttrAdj[A_DEF][BONUS_DODGE]) + (HasFeat(FT_COMBAT_CASTING) ? 2 : 4));
         } 
     } else {
         for(i=0; i!=ATTR_LAST; i++) {
@@ -1317,7 +1317,7 @@ Restart:
             }
 
             Attr[A_CDEF] = Attr[A_DEF] -
-                (max(0,AttrAdj[A_DEF][BONUS_WEAPON]) + max(0,AttrAdj[A_DEF][BONUS_INSIGHT]) + max(0,AttrAdj[A_DEF][BONUS_DODGE]) + (HasFeat(FT_COMBAT_CASTING) ? 2 : 4));
+                (max<int>(0,AttrAdj[A_DEF][BONUS_WEAPON]) + max<int>(0,AttrAdj[A_DEF][BONUS_INSIGHT]) + max<int>(0,AttrAdj[A_DEF][BONUS_DODGE]) + (HasFeat(FT_COMBAT_CASTING) ? 2 : 4));
         }
     }
 
@@ -1349,14 +1349,14 @@ Restart:
             thisp->KAttr[A_FAT] = 1;
 
         if (!isHalted)
-            thisp->KAttr[A_MOV]       = max(min(-15,TMON(mID)->Mov),thisp->KAttr[A_MOV]);
+            thisp->KAttr[A_MOV]       = max<int>(min<int>(-15,TMON(mID)->Mov),thisp->KAttr[A_MOV]);
         else
             thisp->KAttr[A_MOV]       = -20;
-        thisp->KAttr[A_SPD_MELEE]   = max(-15,thisp->KAttr[A_SPD_MELEE]);
-        thisp->KAttr[A_SPD_BRAWL]   = max(-15,thisp->KAttr[A_SPD_BRAWL]);
-        thisp->KAttr[A_SPD_ARCHERY] = max(-15,thisp->KAttr[A_SPD_ARCHERY]);
-        thisp->KAttr[A_SPD_THROWN]  = max(-15,thisp->KAttr[A_SPD_THROWN]);
-        thisp->KAttr[A_SPD_OFFHAND] = max(-15,thisp->KAttr[A_SPD_OFFHAND]);
+        thisp->KAttr[A_SPD_MELEE]   = max<int>(-15,thisp->KAttr[A_SPD_MELEE]);
+        thisp->KAttr[A_SPD_BRAWL]   = max<int>(-15,thisp->KAttr[A_SPD_BRAWL]);
+        thisp->KAttr[A_SPD_ARCHERY] = max<int>(-15,thisp->KAttr[A_SPD_ARCHERY]);
+        thisp->KAttr[A_SPD_THROWN]  = max<int>(-15,thisp->KAttr[A_SPD_THROWN]);
+        thisp->KAttr[A_SPD_OFFHAND] = max<int>(-15,thisp->KAttr[A_SPD_OFFHAND]);
     } else {
         /* If you do not naturally have an attribute of 0, and are not about
         to die as a result of having that attribute at 0, set it to a minimum
@@ -1374,14 +1374,14 @@ Restart:
             Attr[A_FAT] = 1;
 
         if (!isHalted)
-            thisp->Attr[A_MOV]       = max(min(-15,TMON(mID)->Mov),thisp->Attr[A_MOV]);
+            thisp->Attr[A_MOV]       = max<int>(min<int>(-15,TMON(mID)->Mov),thisp->Attr[A_MOV]);
         else
             thisp->Attr[A_MOV]       = -20;
-        thisp->Attr[A_SPD_MELEE]   = max(-15,thisp->Attr[A_SPD_MELEE]);
-        thisp->Attr[A_SPD_BRAWL]   = max(-15,thisp->Attr[A_SPD_BRAWL]);
-        thisp->Attr[A_SPD_ARCHERY] = max(-15,thisp->Attr[A_SPD_ARCHERY]);
-        thisp->Attr[A_SPD_THROWN]  = max(-15,thisp->Attr[A_SPD_THROWN]);
-        thisp->Attr[A_SPD_OFFHAND] = max(-15,thisp->Attr[A_SPD_OFFHAND]);
+        thisp->Attr[A_SPD_MELEE]   = max<int>(-15,thisp->Attr[A_SPD_MELEE]);
+        thisp->Attr[A_SPD_BRAWL]   = max<int>(-15,thisp->Attr[A_SPD_BRAWL]);
+        thisp->Attr[A_SPD_ARCHERY] = max<int>(-15,thisp->Attr[A_SPD_ARCHERY]);
+        thisp->Attr[A_SPD_THROWN]  = max<int>(-15,thisp->Attr[A_SPD_THROWN]);
+        thisp->Attr[A_SPD_OFFHAND] = max<int>(-15,thisp->Attr[A_SPD_OFFHAND]);
 
         Creature *lead;
         if ((lead = getLeader()) && !isHalted)
@@ -1393,9 +1393,9 @@ Restart:
 
         LightRange = EInSlot(SL_LIGHT) ? EInSlot(SL_LIGHT)->GetLightRange() : 0;
         if (InSlot(SL_WEAPON) && InSlot(SL_WEAPON)->HasQuality(WQ_GLOWING))
-            LightRange = max(LightRange,InSlot(SL_WEAPON)->GetPlus()*3);
+            LightRange = max<int>(LightRange,InSlot(SL_WEAPON)->GetPlus()*3);
         if (InSlot(SL_READY) && InSlot(SL_READY)->HasQuality(WQ_GLOWING))
-            LightRange = max(LightRange,InSlot(SL_READY)->GetPlus()*3);
+            LightRange = max<int>(LightRange,InSlot(SL_READY)->GetPlus()*3);
         if (LightRange)
             LightRange += AbilityLevel(CA_LOWLIGHT);
 
@@ -1437,7 +1437,7 @@ Restart:
                         BlindRange -= pen; 
                 }
             }
-            BlindRange = max(1,BlindRange);
+            BlindRange = max<int>(1,BlindRange);
         }
         NatureSight  = HasAbility(CA_NATURE_SENSE);
         PercepRange  = (uint8)HighStatiMag(PERCEPTION);
@@ -1445,7 +1445,7 @@ Restart:
         that they can exist in the dungeon as effective companions to
         druids and rangers. */
         if (!isPlayer() && InfraRange + LightRange + TelepRange + TremorRange + BlindRange + ScentRange == 0)
-            InfraRange = max(6,InfraRange);
+            InfraRange = max<int>(6,InfraRange);
     }
 
     if (Attr[A_FAT] != oFP) {
@@ -1463,7 +1463,7 @@ Restart:
     enough to put them equal to or lower than the new maximum
     hit points. */       
     if (oHP > cHP)
-        cHP = min (mHP+Attr[A_THP], oHP);
+        cHP = min<int>(mHP+Attr[A_THP], oHP);
 
     SetImage();
     if (m && x != -1)
@@ -1630,7 +1630,7 @@ void Character::CalcValues(bool KnownOnly, Item *thrown)
 
 
   if (HasAbility(CA_TOUGH_AS_HELL))
-    mHP += AbilityLevel(CA_TOUGH_AS_HELL) * max(0,Mod(a_hp));
+    mHP += AbilityLevel(CA_TOUGH_AS_HELL) * max<int>(0,Mod(a_hp));
   if (HasFeat(FT_TOUGHNESS))
     mHP += (mHP / 4);
 
@@ -1717,8 +1717,8 @@ void Character::CalcValues(bool KnownOnly, Item *thrown)
     
     /* Scale slots for spell levels 2-9 */
     for (i=1;i<9;i++) { 
-      BonusSlots[i] = min( BonusSpells[intScaled][i] ,
-                               max( SpellSlots[i] ,
+      BonusSlots[i] = min<int>( BonusSpells[intScaled][i] ,
+                               max<int>( SpellSlots[i] ,
                                CasterLev() - SAL(i+1) ) ) ; 
 
       // back to auto-learning domain spells.
@@ -1800,7 +1800,7 @@ int16 Creature::ResistLevel(int16 DType, bool bypass_armour)
       if (!S->Dis)
           if (S->Val == DType)
             StatiResists[S->Source] = 
-              max(StatiResists[S->Source],S->Mag);
+              max<int>(StatiResists[S->Source],S->Mag);
     StatiIterEnd(this)
     
     for(i=0;i!=16;i++)
@@ -1837,7 +1837,7 @@ int16 Creature::ResistLevel(int16 DType, bool bypass_armour)
     
     if (is_wepdmg(DType)) {
       if (Attr[A_ARM] && !bypass_armour)
-        Resists[ResistCount++] = max(0,Attr[A_ARM]);
+        Resists[ResistCount++] = max<int>(0,Attr[A_ARM]);
       if ((it = EInSlot(SL_ARMOUR)) && !bypass_armour)
         Resists[ResistCount++] = ((Armour *)it)->ArmVal(DType - AD_SLASH);
       }
@@ -2042,7 +2042,7 @@ void Creature::CalcHP()
     case SZ_GARGANTUAN:     mHP = (mHP*16)/10; break;
     case SZ_COLLOSAL:       mHP = (mHP*20)/10; break;
   }
-  mHP = max(1,mHP);
+  mHP = max<int>(1,mHP);
   
   /* Knowledge skills give bonuses to summoned creatures'
      hit points. */
@@ -2577,8 +2577,8 @@ int16 Character::GetBAB(int16 mode)
       if (TCLASS(ClassID[i])->AttkVal[mode] >= 100)
         warriorLevels += Level[i];
       }
-    sBAB = min(TotalLevel(), BAB + 
-      min(warriorLevels,IntStudy[STUDY_BAB]));
+    sBAB = min<int>(TotalLevel(), BAB +
+      min<int>(warriorLevels,IntStudy[STUDY_BAB]));
     return max(BAB,sBAB);
   }
 

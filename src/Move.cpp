@@ -867,7 +867,7 @@ SkipConfirms:
 						crHit = max((int8)cr->Attr[A_HIT_BRAWL], (int8)cr->Attr[A_HIT_MELEE]);
 						if (myHit + (random(20) + 1) >= crHit + 11)
 							/* Give the player a hope of actually escaping. */
-							cr->Timeout = max(cr->Timeout, 15);
+							cr->Timeout = max<int>(cr->Timeout, 15);
 						else {
 							if (!failed)
 								DPrint(e, "You fail to break off melee safely.",

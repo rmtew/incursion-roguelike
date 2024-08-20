@@ -545,7 +545,7 @@ rID Game::GetTempID(uint16 Types, rID mID, int8 maxCR)
                     */
 
           for (spread = 0; 
-               spread < max(Modules[q]->QTem[i].CR.Adjust(tm->CR),1);
+               spread < max<int>(Modules[q]->QTem[i].CR.Adjust(tm->CR),1);
                spread++)
                 Candidates[n++] = Modules[q]->TemplateID(i);
         }

@@ -1115,7 +1115,7 @@ void CreatePerk(PerkSet& Perks, int i, PerkType type, Player *p)
                     */
                     // redo = 1;
 
-                    it->SetInherentPlus(min(3,it->GetInherentPlus()));
+                    it->SetInherentPlus(min<int8_t>(3,it->GetInherentPlus()));
 
                     while ((!it->eID) && it->ItemLevel() <= 5 &&
                         it->GetPlus() < 5)
@@ -1847,7 +1847,7 @@ void Character::GainXP(uint32 _XP)
 
     _XP -= (((int32)_XP) * XPPenalty()) / 100;
 
-    XP += max(0,_XP);
+    XP += max<int>(0,_XP);
     xpTicks++;
     for (i=0;i!=MAX_GODS;i++)
         if (PrayerTimeout[i])
@@ -1977,7 +1977,7 @@ void Character::KillXP(Creature *kill, int16 percent)
     int16 ECL;
     ECL = ChallengeRating();
     if (HasStati(POLYMORPH))
-        ECL += max(0,TMON(mID)->CR);
+        ECL += max<int16_t>(0,TMON(mID)->CR);
     s = kill->ChallengeRating() - ECL;
     if (s > 10)
         s = 10;
@@ -1985,7 +1985,7 @@ void Character::KillXP(Creature *kill, int16 percent)
         s = -9;
     nXP = (nXP * Scale[s+9]) / 100;
 
-    nXP = (nXP * 100) / SlowAdvance[min(ChallengeRating(),6)];
+    nXP = (nXP * 100) / SlowAdvance[min<int>(ChallengeRating(),6)];
 
     if (kill->HasStati(WAS_FRIENDLY,-1,this))
         nXP /= 3;
@@ -2127,7 +2127,7 @@ void Creature::ThiefXP(rID regID)
     if (foundTreasure && foundMon) {
         IDPrint("You slip out like a thief in the night!", "The <Obj> slips out like a thief in the night!",this);
         percent = (AbilityLevel(CA_THIEF_IN_THE_NIGHT) * 
-            100) / max(1,ChallengeRating());
+            100) / max<int>(1,ChallengeRating());
         for (i=0;i!=mc;i++)
             KillXP(ml[i],percent);
     }
@@ -2958,7 +2958,7 @@ void Player::GainAbility(int16 ab, uint32 pa, rID sourceID, int16 statiSource) {
     int16 i,j;
 
     if (ab != CA_SMITE)
-        pa = max(pa,1);
+        pa = max(pa,1u);
 
     switch (ab) {
     case CA_AURA_OF_VALOUR:
@@ -3423,7 +3423,7 @@ int8 Character::WepSkill(rID wID, bool ignore_str)
 
     StatiIterNature(this,WEP_SKILL)
         if (S->eID == wID)
-            best = max(best,S->Val);
+            best = max<int8_t>(best,S->Val);
     StatiIterEnd(this)
         if (best) return best; 
     if (wID == 0) return WS_NOT_PROF; 
@@ -3557,14 +3557,14 @@ int16 Character::MaxRanks(int16 sk)
     mr += ClassLevelRanks[lv];
 
     if (isFamiliar(sk))
-        mr = max(mr,min(TotalLevel(),5));
+        mr = max<int>(mr,min<int>(TotalLevel(),5));
 
     /* Each Intensive Study (Sneak Attack & Stealth) increases
     your maximum Hide and Move Silently ranks by 2, up to a
     maximum of what a rogue of your character level would have. */
     if (sk == SK_HIDE || sk == SK_MOVE_SIL)
         if (mr < ClassLevelRanks[TotalLevel()])
-            mr = min(mr + IntStudy[STUDY_SNEAK]*2,
+            mr = min<int>(mr + IntStudy[STUDY_SNEAK]*2,
             ClassLevelRanks[TotalLevel()]);
 
     StatiIter(this)
@@ -3613,7 +3613,7 @@ bool Character::HasSkill(int16 sk, bool check_allies)
 
 int16 Character::LevelAs(rID cl)
 {
-    if (ClassID[0] == cl) return max(1,Level[0]);
+    if (ClassID[0] == cl) return max<int>(1,Level[0]);
     if (ClassID[1] == cl) return Level[1];
     if (ClassID[2] == cl) return Level[2];
     return 0;
@@ -3631,7 +3631,7 @@ int16 Character::CasterLev()
     int16 ab = AbilityLevel(CA_SPELLCASTING);
     /* Hack for 1st level bards */
     if (HasStati(BONUS_SLOTS))
-        ab = max(ab,1);
+        ab = max<int>(ab,1);
     return ab;
 }
 
@@ -3742,7 +3742,7 @@ int16 Creature::SkillLevel(int16 sk)
         if (HasStati(ANC_MEM,sk))
         {
             int16 mr = thisp->MaxRanks(sk);
-            s_ins = max(s_ins,4 - abs(mr-sr));
+            s_ins = max<int>(s_ins,4 - abs(mr-sr));
             sr = mr;
         }
         if (thisp->RaceID)
@@ -3758,11 +3758,11 @@ int16 Creature::SkillLevel(int16 sk)
     }
     else if (HasFeat(sk)) {
         // assume monsters get Level+3 for class skills like we do!
-        sr = max(1,ChallengeRating()) + 3;
+        sr = max<int>(1,ChallengeRating()) + 3;
         for (i=0;Synergies[i][0];i++)
             if (Synergies[i][0] == sk)
                 if (HasFeat(Synergies[i][1]))
-                    s_syn += (max(1,ChallengeRating())+3) /
+                    s_syn += (max<int>(1,ChallengeRating())+3) /
                     Synergies[i][2];
         TMonster *tm = TMON(tmID);
         TTemplate *tt;
@@ -3795,24 +3795,24 @@ FoundFocus:
         if (S->Val == sk || S->Val == -1)
             switch (S->Source) {
           case SS_CLAS:
-              s_feat = max(s_feat,S->Mag);
+              s_feat = max<int>(s_feat,S->Mag);
               break;
           case SS_BODY:
           case SS_TMPL:
           case SS_RACE:
-              s_racial = max(s_racial,S->Mag);
+              s_racial = max<int>(s_racial,S->Mag);
               break;
           case SS_DOMA:
-              s_domain = max(s_domain,S->Mag);
+              s_domain = max<int>(s_domain,S->Mag);
               break;
           case SS_ITEM:
-              s_item = max(s_item,S->Mag);
+              s_item = max<int>(s_item,S->Mag);
               break;
           case SS_PERM:
-              s_focus = max(s_focus,S->Mag);
+              s_focus = max<int>(s_focus,S->Mag);
               break;
           default:
-              s_enhance = max(s_enhance,S->Mag);
+              s_enhance = max<int>(s_enhance,S->Mag);
               break;
         }
         StatiIterEnd(this)
@@ -3942,16 +3942,16 @@ int8 Creature::rateMeleeWeapon() {
                 continue;
             if (it->isGroup(WG_THROWN))
                 continue;
-            rating = max(1,rating);
+            rating = max<int>(1,rating);
             if (!it->isGroup(WG_SIMPLE) &&
                 !it->isGroup(WG_DAGGERS) &&
                 !it->isGroup(WG_LIGHT) &&
                 stricmp("knife",NAME(it->iID)) &&
                 (stricmp("short sword",NAME(it->iID))
                 || isSmallRace()))
-                rating = max(2,rating);
+                rating = max<int>(2,rating);
             if (WepSkill(it->iID) >= WS_FOCUSED)
-                rating = max(3,rating);
+                rating = max<int>(3,rating);
         }
         return rating;
 }
@@ -3962,13 +3962,13 @@ int8 Creature::rateRangedWeapon()
     for (it=FirstInv();it;it=NextInv())
         if (it->isType(T_BOW))
         {
-            rating = max(1,rating);
+            rating = max<int>(1,rating);
             if (it->iID == FIND("cranquin") ||
                 it->iID == FIND("long bow") ||
                 it->iID == FIND("composite long bow"))
-                rating = max(2,rating);
+                rating = max<int>(2,rating);
             if (WepSkill(it->iID) >= WS_FOCUSED)
-                rating = max(3,rating);
+                rating = max<int>(3,rating);
         }
         return rating;
 }  
@@ -4076,7 +4076,7 @@ LearnableSpell* Character::CalcSpellAccess() {
     if (ls[k].spID == sp)                     \
     if (ls[k].Type == typ)                  \
         {                                     \
-    ls[k].Level = min(ls[k].Level,lv);  \
+    ls[k].Level = min<int>(ls[k].Level,lv);  \
     added = true;                       \
         }                                     \
     if (!added) {                               \
@@ -4244,7 +4244,7 @@ void Player::LearnSpell(bool left) {
         /* Do we have the chart level to even consider this
         spell as an option? */
         if ((SAL(ls[i].Level) > AbilityLevel(CA_SPELLCASTING))
-            && !HasStati(BONUS_SLOTS,min(9,max(1,ls[i].Level))))
+            && !HasStati(BONUS_SLOTS,min(9,max<int>(1,ls[i].Level))))
             continue;
 
         /* Can't learn a spell you've already learned */

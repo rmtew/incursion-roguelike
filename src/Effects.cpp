@@ -740,7 +740,7 @@ EvReturn Magic::Polymorph(EventInfo &e)
       {
         int16 best, bestCR, n;
         rID Candidates[40];
-        n = 3 + max(0,e.EActor->Mod(A_INT));
+        n = 3 + max<int>(0,e.EActor->Mod(A_INT));
         for (i=0;i!=n;i++)
           Candidates[i] = theGame->GetMonID(PUR_POLY,max(0,
             e.EVictim->ChallengeRating()-4)/2,max(1,e.EVictim->ChallengeRating()/2),100,e.EMagic->yval);
@@ -1451,7 +1451,7 @@ EvReturn Magic::Summon(EventInfo &e) {
               cr->GainPermStati(ADJUST,e.EActor,SS_ENCH,A_STR,+4,e.eID,e.vCasterLev);
               cr->GainPermStati(ADJUST,e.EActor,SS_ENCH,A_CON,+4,e.eID,e.vCasterLev);
               cr->GainPermStati(ADJUST,e.EActor,SS_ENCH,A_THP,
-                    10 + max(1,TEFF(e.eID)->Level)*5,e.eID,e.vCasterLev);
+                    10 + max<int>(1,TEFF(e.eID)->Level)*5,e.eID,e.vCasterLev);
             } 
         }
     if (e.EItem && e.EItem->isItem())
@@ -2115,7 +2115,7 @@ EvReturn Magic::Detect(EventInfo &e)
 EvReturn Magic::Travel(EventInfo &e)
   {
     int16 i, _x, _y;
-    e.vDmg = max(e.vDmg,7);
+    e.vDmg = max<int>(e.vDmg,7);
 
     if (!e.EActor || e.EActor->isDead() || !e.EActor->m)
       return ABORT; 
@@ -2272,7 +2272,7 @@ EvReturn Magic::Healing(EventInfo &e)
           return DONE; 
           }         
        
-        amt = min(max(0,(e.EVictim->mHP+e.EVictim->Attr[A_THP]) - e.EVictim->cHP),amt);
+        amt = min<int>(max(0,(e.EVictim->mHP+e.EVictim->Attr[A_THP]) - e.EVictim->cHP),amt);
         e.EVictim->cHP += amt;
         VPrint(e,"Your wounds heal<Str>!", "The <EVictim>'s wounds heal<Str>!",
           e.EVictim->cHP == (e.EVictim->mHP+e.EVictim->Attr[A_THP]) ? " fully" : "");
@@ -2298,7 +2298,7 @@ EvReturn Magic::Healing(EventInfo &e)
 
     if (e.EMagic->xval & HEAL_FATIGUE)
       if (e.EVictim->cFP < e.EVictim->GetAttr(A_FAT)) {
-        e.EVictim->cFP = min(e.EVictim->GetAttr(A_FAT),
+        e.EVictim->cFP = min<int>(e.EVictim->GetAttr(A_FAT),
           e.EVictim->cFP + e.vDmg);
         e.EVictim->IPrint("You feel <Str>refreshed!",
           e.EVictim->cFP == e.EVictim->GetAttr(A_FAT) ? "fully " : "");

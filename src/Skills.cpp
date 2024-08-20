@@ -1548,7 +1548,7 @@ bool Creature::SkillCheck(int16 sk, int16 DC, bool show, int16 mod1, const char*
 		rID rogueID = FIND("rogue");
 		ASSERT(rogueID);
 		if (TCLASS(rogueID)->HasSkill(sk))
-			roll = max(roll, min(15, 7 + Mod(A_INT)));
+			roll = max<int>(roll, min(15, 7 + Mod(A_INT)));
 	}
 
 
@@ -1579,7 +1579,7 @@ bool Creature::SkillCheck(int16 sk, int16 DC, bool show, int16 mod1, const char*
 				if (vic->ResistLevel(AD_MIND) == -1)
 					sk -= HighStatiMag(SKILL_BONUS, sk);
 				else
-					sk -= min(HighStatiMag(SKILL_BONUS, sk),
+					sk -= min<int>(HighStatiMag(SKILL_BONUS, sk),
 						vic->ResistLevel(AD_MIND) +
 						vic->HighStatiMag(SAVE_BONUS, SN_ENCH));
 			}
@@ -2018,12 +2018,12 @@ void Character::UseAbility(uint8 ab, int16 pa) {
 			return;
 		Timeout += 15;
 
-		bonus = max(1, Mod(A_CHA));
+		bonus = max<int>(1, Mod(A_CHA));
 		if (isCharacter())
 			if (thisp->Level[1] || thisp->Level[2])
 				bonus = max(bonus, thisp->LevelAs(FIND("bard")));
 
-		GainTempStati(SINGING, NULL, 5 + (max(0, Mod(A_CON)) + SkillLevel(SK_PERFORM)) * 3, SS_MISC, song, range, 0);
+		GainTempStati(SINGING, NULL, 5 + (max<int>(0, Mod(A_CON)) + SkillLevel(SK_PERFORM)) * 3, SS_MISC, song, range, 0);
 
 		switch (song) {
 		case BARD_COURAGE:
@@ -2206,7 +2206,7 @@ void Character::UseAbility(uint8 ab, int16 pa) {
 		}
 		if (!LoseFatigue(1, true))
 			return;
-		GainTempStati(FLURRYING, NULL, 10 + max(0, Mod(A_CON)), SS_MISC);
+		GainTempStati(FLURRYING, NULL, 10 + max<int>(0, Mod(A_CON)), SS_MISC);
 		return;
 	case CA_WILD_SHAPE:
 		if (isPlayer())
@@ -2298,7 +2298,7 @@ bool Creature::UseLimitedFA()
 	if (HasFeat(FT_RESIST_PARALYSIS))
 		i += Mod(A_CON) * 2;
 	j = GetStatiVal(LFA_COUNT);
-	if (max(j, 0) >= i)
+	if (max<int>(j, 0) >= i)
 		return false;
 	IDPrint("You overcome the paralysis effect. (<Num> left).",
 		"The <Obj2> overcomes the paralysis effect.",
@@ -2989,7 +2989,7 @@ MA_MYTHIC,        // 1 hobbit: 18
 		StatiIterEnd(this)
 
 		if (TMON(tmID)->Res & BIT(Resists[i]))
-			curr = max(curr, 7 + (ChallengeRating() * 2) / 3);
+			curr = max<int>(curr, 7 + (ChallengeRating() * 2) / 3);
 		if (TMON(tmID)->Imm & BIT(Resists[i]))
 			curr = -1;
 
@@ -3513,7 +3513,7 @@ Create:
 		if (it->eID)
 			minSkill = max(minSkill, (int16)TITEM(it->eID)->GetConst(MIN_CRAFT_LEVEL));
 		if (it->isMetallic()) {
-			minSkill = max(minSkill, 10);
+			minSkill = max<int>(minSkill, 10);
 			if (!foundForge) {
 				delete it;
 				IPrint("You need a forge to create metallic items.");
@@ -3526,7 +3526,7 @@ Create:
 				minSkill, SkillLevel(SK_CRAFT)));
 			return ABORT;
 		}
-		craftDC = max(craftDC, minSkill + 7);
+		craftDC = max<int>(craftDC, minSkill + 7);
 	}
 
 	quan = 1;
@@ -3556,7 +3556,7 @@ Create:
 	else
 		craftDC += it->ItemLevel();
 
-	XPCost = XPCostTable[min(20, max(it->ItemLevel(), 1))];
+	XPCost = XPCostTable[min(20, max<int>(it->ItemLevel(), 1))];
 	rID icList[10];
 	if (it->eID && TEFF(it->eID)->GetList(ITEM_COST, icList, 9))
 		XPCost = icList[max(0, it->GetInherentPlus() - 1)] / 25;
@@ -4846,7 +4846,7 @@ void Character::LegendIdent(Item *it) {
 					"you discern that it is in fact <str>!",
 					it, (const char*)it->Name(NA_A | NA_IDENT));
 				it->MakeKnown(KN_MAGIC | KN_CURSE | KN_PLUS);
-				Exercise(A_INT, random(6) + max(1, it->ItemLevel()), EINT_IDENT, 75);
+				Exercise(A_INT, random(6) + max<int>(1, it->ItemLevel()), EINT_IDENT, 75);
 			}
 			else
 				IPrint("You fail to translate the runes covering the <Obj>.", it);
@@ -4859,7 +4859,7 @@ void Character::LegendIdent(Item *it) {
 	if (it->isType(T_MUSH) || it->isType(T_HERB))
 		if (HasAbility(CA_NATURE_SENSE)) {
 			it->MakeKnown(0xFF);
-			Exercise(A_INT, random(6) + max(1, it->ItemLevel()), EINT_IDENT, 60);
+			Exercise(A_INT, random(6) + max<int>(1, it->ItemLevel()), EINT_IDENT, 60);
 			IPrint("With your flawless knowledge of nature, you immediately "
 				"recognize this <Str> as an <Obj>.", it->isType(T_HERB) ? "herb" :
 				"mushroom", it);
@@ -5279,7 +5279,7 @@ void Player::SummonAnimalCompanion(bool mount)
 			else {
 				if (okAnimalComp(lev, mID, 0)) {
 					Monster *mon = new Monster(mID);
-					int diff = ((1 + lev + ft_bonus) - max(mon->ChallengeRating(), 0));
+					int diff = ((1 + lev + ft_bonus) - max<int>(mon->ChallengeRating(), 0));
 					if (diff < 1) diff = 1;
 					else if (diff > 12) diff = 12;
 					rID tid = FIND(Format("companion;%d", diff));
@@ -5313,7 +5313,7 @@ void Player::SummonAnimalCompanion(bool mount)
 MountMade:
 	mn->PlaceAt(m, x, y);
 	if (!mount) {
-		int diff = ((1 + lev + ft_bonus) - max(mn->ChallengeRating(), 0));
+		int diff = ((1 + lev + ft_bonus) - max<int>(mn->ChallengeRating(), 0));
 		if (diff < 1) diff = 1;
 		else if (diff > 12) diff = 12;
 		rID tid = FIND(Format("companion;%d", diff));
@@ -5580,7 +5580,7 @@ bool Creature::ItemPrereq(rID xID, int16 ReqLevel, int16 TrickDC)
 		StatiIterNature(this, SPELL_ACCESS)
 			for (j = 0; types[j]; j++)
 				if (S->Val & (xID - CLEV_VAL) & types[j])
-					clev[j] = max(clev[j], S->Mag);
+					clev[j] = max<int>(clev[j], S->Mag);
 		StatiIterEnd(this);
 		return (clev[0] + clev[1] + clev[2] +
 			clev[3] + clev[4]) >= ReqLevel;

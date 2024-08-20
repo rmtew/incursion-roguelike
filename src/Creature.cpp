@@ -1781,7 +1781,7 @@ void Creature::GetHungrier(int16 amt)
     else
       hunger_val -= max((amt*fast_percent)/100,1);
     
-    hunger_val = max(0,hunger_val);
+    hunger_val = max<int>(0,hunger_val);
     
     SetStatiDur(HUNGER,-1,NULL,hunger_val);
   }
@@ -1861,7 +1861,7 @@ void Creature::GainInherentBonus(int16 at, int16 mag, bool msg)
       }
 
     if (HasStati(ADJUST_INH,at))
-      SetStatiMag(ADJUST_INH,at,NULL,min(MaxBonus,CurrBonus+mag));
+      SetStatiMag(ADJUST_INH,at,NULL,min<int>(MaxBonus,CurrBonus+mag));
     else
       GainPermStati(ADJUST_INH,NULL,SS_MISC,at,min(MaxBonus,mag),0);
 
@@ -2014,7 +2014,7 @@ int16 Creature::ChallengeRating(bool allow_neg)
     
     if (allow_neg)
       return CR;
-    return max(0,CR);
+    return max<int>(0,CR);
   }
 
 
@@ -2069,7 +2069,7 @@ bool Creature::LoseFatigue(int16 amt, bool avoid) {
 
     /* Hardcoded Essiah Fatigue Clause */
     if (avoid && cFP < 0 && isCharacter() && isThreatened() && isMType(MA_GOOD))
-        thisc->gainFavour(FIND("Essiah"), 25 * abs(cFP - min(0, oFP)));
+        thisc->gainFavour(FIND("Essiah"), 25 * abs(cFP - min<int>(0, oFP)));
 
     if (cFP <= 0 && oFP > 0)
         stat_change = true;
@@ -2602,7 +2602,7 @@ TAttack* Creature::GetAttk(int8 typ)
       SacredAura.DType = AD_HOLY;
       SacredAura.u.a.DC = 0;
       SacredAura.u.a.Dmg.Set(
-        (int8)AbilityLevel(CA_SACRED_AURA),4,(int8)max(0,Mod(A_CHA)));
+        (int8)AbilityLevel(CA_SACRED_AURA),4,max<int8_t>(0,Mod(A_CHA)));
       //Fatal("ww: returning the address of a local stack variable");
       return &SacredAura;
       }
@@ -2791,25 +2791,25 @@ int16 Creature::AbilityLevel(int16 n)
       if (n == CA_SPELLCASTING)
         lv += thisp->IntStudy[STUDY_CASTING];
       if (n == CA_SNEAK_ATTACK)
-        lv = max(lv,min(lv + thisp->IntStudy[STUDY_SNEAK],
+        lv = max<int>(lv,min(lv + thisp->IntStudy[STUDY_SNEAK],
               min(lv*2,((thisp->TotalLevel()*4+4)/10))));
       if (n == CA_TURNING || n == CA_COMMAND)
-        lv = max(lv,min(lv + thisp->IntStudy[STUDY_TURNING]*2,
+        lv = max<int>(lv,min(lv + thisp->IntStudy[STUDY_TURNING]*2,
               min(lv*2,((thisp->TotalLevel()*4+4)/5))));
       if (n == CA_WILD_SHAPE)
-        lv = max(lv,min(lv + thisp->IntStudy[STUDY_SHAPES]*2,
+        lv = max<int>(lv,min(lv + thisp->IntStudy[STUDY_SHAPES]*2,
               min(lv*2,((thisp->TotalLevel()*4+4)/5))));
       if (n == CA_SACRED_MOUNT)
-        lv = max(lv,min(lv + thisp->IntStudy[STUDY_MOUNT]*3,
+        lv = max<int>(lv,min(lv + thisp->IntStudy[STUDY_MOUNT]*3,
               min(lv*2,((thisp->TotalLevel()*4+4)/5))));
       if (n == CA_SMITE)
-        lv = max(lv,min(lv + thisp->IntStudy[STUDY_SMITE]*4,
+        lv = max<int>(lv,min(lv + thisp->IntStudy[STUDY_SMITE]*4,
               min(lv*2,((thisp->TotalLevel()*4+4)/5))));
       if (n == CA_UNARMED_STRIKE || n == CA_STUN_ATTACK)
-        lv = max(lv,min(lv + thisp->IntStudy[STUDY_UNARMED]*2,
+        lv = max<int>(lv,min(lv + thisp->IntStudy[STUDY_UNARMED]*2,
               min(lv*2,((thisp->TotalLevel()*4+4)/5))));
       if (n == CA_LEGEND_LORE || n == CA_BARDIC_MUSIC || n == CA_STORYCRAFT)
-        lv = max(lv,min(lv + thisp->IntStudy[STUDY_BARDIC]*2,
+        lv = max<int>(lv,min(lv + thisp->IntStudy[STUDY_BARDIC]*2,
               min(lv*2,((thisp->TotalLevel()*4+4)/5))));
       
         if (HasStati(POLYMORPH))
@@ -2836,20 +2836,20 @@ int16 Creature::AbilityLevel(int16 n)
       StatiIterEnd(this)
       }
 
-    return max(0,lv);
+    return max<int>(0,lv);
   }
 
 
 int16 Creature::Mod(int8 a)  { 
   int res = Attr[a] ? (Attr[a]-10)/2 : 0; 
   if (a == A_DEX && InSlot(SL_ARMOUR) && InSlot(SL_ARMOUR)->Type == T_ARMOUR) 
-    res = min(res, ((Armour *)InSlot(SL_ARMOUR))->MaxDexBonus(this));
+    res = min<int>(res, ((Armour *)InSlot(SL_ARMOUR))->MaxDexBonus(this));
   return res;
 } 
 int16 Creature::Mod2(int8 a) { 
   int res = Attr[a] ? (Attr[a]-11)/2 : 0; 
   if (a == A_DEX && InSlot(SL_ARMOUR) && InSlot(SL_ARMOUR)->Type == T_ARMOUR) 
-    res = min(res, ((Armour *)InSlot(SL_ARMOUR))->MaxDexBonus(this));
+    res = min<int>(res, ((Armour *)InSlot(SL_ARMOUR))->MaxDexBonus(this));
   return res;
 }
 
@@ -2859,13 +2859,13 @@ int16 Creature::KMod2(int8 a)  { return Mod2(a); }
 int16 Character::KMod(int8 a)  { 
   int res = Attr[a] ? (KAttr[a]-10)/2 : 0; 
   if (a == A_DEX && InSlot(SL_ARMOUR)) 
-    res = min(res, ((Armour *)InSlot(SL_ARMOUR))->MaxDexBonus(this));
+    res = min<int>(res, ((Armour *)InSlot(SL_ARMOUR))->MaxDexBonus(this));
   return res;
 } 
 int16 Character::KMod2(int8 a) { 
   int res = Attr[a] ? (KAttr[a]-11)/2 : 0; 
   if (a == A_DEX && InSlot(SL_ARMOUR)) 
-    res = min(res, ((Armour *)InSlot(SL_ARMOUR))->MaxDexBonus(this));
+    res = min<int>(res, ((Armour *)InSlot(SL_ARMOUR))->MaxDexBonus(this));
   return res;
 }
 
@@ -2982,7 +2982,7 @@ int32 Creature::ChargeBonus()
       
       bonus = max(0,min(10, bonus / 2)-1);
       
-      return ChargeBonusTable[bonus][min(29,GetStatiMag(CHARGING))];
+      return ChargeBonusTable[bonus][min<int>(29,GetStatiMag(CHARGING))];
 }
 
 bool Creature::canMoveThrough(EventInfo *e, int16 tx, int16 ty, 

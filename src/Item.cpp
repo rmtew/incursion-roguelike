@@ -1546,7 +1546,7 @@ EvReturn Item::Damage(EventInfo &e) {
                     2500, 5000 };
                 int16 Factor;
                 Factor = (ItemLevel() + 2) - e.EPActor->TotalLevel();
-                Factor = min(Factor,10);
+                Factor = min<int>(Factor,10);
                 if (Factor >= 0) {
                     if (isType(T_POTION) || isType(T_SCROLL))
                         e.EActor->GainXP((GainedXP[Factor] * Percent) / 1000);
@@ -1831,7 +1831,7 @@ int16 Corpse::noDiseaseDC() {
     
     StatiIterNature(this,TEMPLATE)
         if (TTEM(S->eID)->TType & TM_UNDEAD)
-            baseDC = max(baseDC,25);
+            baseDC = max<int>(baseDC,25);
     StatiIterEnd(this)
         
     hours = (theGame->Turn - TurnCreated) / HOUR_TURNS;
@@ -2223,7 +2223,7 @@ int16 Weapon::ItemLevel(bool bounded)
     // 10, otherwise high-bonus swords are too easy for
     // dwarves and bards to make.
     if (bounded)
-      base = max(base,Plus*2);
+      base = max<int>(base,Plus*2);
     
     return base;
   }
@@ -2257,7 +2257,7 @@ int16 Armour::ItemLevel(bool bounded)
     // 10, otherwise high-bonus swords are too easy for
     // dwarves and bards to make.
     if (bounded)
-      base = max(base,Plus*2);
+      base = max<int>(base,Plus*2);
     
     return base;
   }
@@ -2834,7 +2834,7 @@ int16 Weapon::RangeInc(Creature *cr)
     if (!(TITEM(iID)->Group & WG_THROWN))
       if (!isType(T_BOW))
         return 0;      
-    rinc = max ( TITEM(iID)->u.w.RangeInc, 1 ) ;
+    rinc = max<int>( TITEM(iID)->u.w.RangeInc, 1 ) ;
     if (HasQuality(WQ_DISTANCE))
       rinc *= 2; 
     switch (cr->WepSkill(this)) {

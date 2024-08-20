@@ -587,7 +587,7 @@ foundGroup:
     CFile *cf = new CFile(&t);
     cf->LoadCompressed(t.Tell(), gh.compSize, gh.groupSize, use_lz);
 
-    LastUsedHandle = max(LastUsedHandle, gh.LastHandle);
+    LastUsedHandle = max<hObj>(LastUsedHandle, gh.LastHandle);
     for (i=0; i != gh.objCount; i++) {
         /* What type of object is this? */
         cf->FRead(&oType,1);                   
@@ -734,7 +734,7 @@ bool Game::SaveGame(Player &p) {
             { p.MyTerm->Message("Save File Backup: Failed (#3)"); goto failed; }
           off_t sofar;
           for (sofar = 0; sofar < statbuf.st_size;) {
-              size_t this_read = fread(buf,1,min(sizeof(buf),statbuf.st_size - sofar),fin);
+              size_t this_read = fread(buf,1,min<int>(sizeof(buf),statbuf.st_size - sofar),fin);
               if (this_read == 0) 
                 { p.MyTerm->Message("Save File Backup: Failed (#4)"); goto failed; }
               size_t this_write ;

@@ -465,7 +465,7 @@ EvReturn Creature::OfferTerms(EventInfo &e) {
                         BestCR = cr->ChallengeRating();
                     cr->GainPermStati(TRIED, this, SS_MISC, SK_INTIMIDATE + EV_COW * 100, 0, 0, 0);
                 }
-            CheckDC += max(0, BestCR);
+            CheckDC += max<int>(0, BestCR);
         }
 
     if (!doGroup) {
@@ -548,7 +548,7 @@ EvReturn Creature::Dismiss(EventInfo &e) {
     if (HasStati(TRIED, SK_DIPLOMACY + EV_DISMISS * 100, e.EActor))
         result = true;
     else {
-        CheckDC = 7 + max(0, e.EVictim->ChallengeRating()) + m->Depth;
+        CheckDC = 7 + max<int>(0, e.EVictim->ChallengeRating()) + m->Depth;
         result = SkillCheck(SK_DIPLOMACY, CheckDC, true);
     }
 
@@ -655,7 +655,7 @@ EvReturn Creature::Enlist(EventInfo &e) {
     }
 
 
-    Total = max(0, thisp->MaxGroupCR(PHD_PARTY)) - thisp->GetGroupCR(PHD_PARTY, e.EVictim->ChallengeRating());
+    Total = max<int>(0, thisp->MaxGroupCR(PHD_PARTY)) - thisp->GetGroupCR(PHD_PARTY, e.EVictim->ChallengeRating());
     if (Total < 0) {
         IPrint("You don't have enough PHD to add that creature to your "
             "party. Dismiss some other party members, raise your Charisma "
@@ -863,7 +863,7 @@ EvReturn Creature::Greet(EventInfo &e) {
         case 4:
             IPrint("You share some heartening war stories with the <Obj>, "
                 "and you feel like you have a second wind!", e.EVictim);
-            cFP = min(GetAttr(A_FAT), cFP + 2);
+            cFP = min<int>(GetAttr(A_FAT), cFP + 2);
             break;
     }
     e.EVictim->GainPermStati(TRIED, e.EActor, SS_MISC, SK_DIPLOMACY + EV_GREET * 100);
@@ -1083,7 +1083,7 @@ EvReturn Creature::Quell(EventInfo &e) {
         e.EActor->Transgress(FIND("Essiah"),5,false,"exploitation");
     }
 
-    CheckDC = 15 + max(0,e.EVictim->ChallengeRating())*3;
+    CheckDC = 15 + max<int>(0,e.EVictim->ChallengeRating())*3;
     if (wasDamaged)
         CheckDC += 5 + ((dmg*10) / e.EVictim->mHP);
 
@@ -1092,7 +1092,7 @@ EvReturn Creature::Quell(EventInfo &e) {
         e.EVictim->isMType(MA_ILLITHID) ||
         e.EVictim->isMType(MA_DRAGON)) &&
         e.EVictim->isMType(MA_EVIL) &&
-        e.EActor->RandGoodInv(100 + max(1,e.EVictim->ChallengeRating()))) {
+        e.EActor->RandGoodInv(100 + max<int>(1,e.EVictim->ChallengeRating()))) {
             CheckDC -= 7;
             wantsTribute = true;
     } else
@@ -1106,7 +1106,7 @@ EvReturn Creature::Quell(EventInfo &e) {
                     "him you have nothing appropriate to give.",e.EVictim);
                 goto Success;
             }
-            it = e.EActor->RandGoodInv(100 + max(1,e.EVictim->ChallengeRating()));
+            it = e.EActor->RandGoodInv(100 + max<int>(1,e.EVictim->ChallengeRating()));
             if (!it) {
                 TPrint(e,"The <EVictim> wants tribute, but you have nothing "
                     "of sufficient value to offer.", "You demand tribute, "
@@ -2042,15 +2042,15 @@ int32 Item::getShopCost(Creature *Buyer, Creature *Seller) {
                 1000000, 1500000, 2000000 };
             if (isType(T_WEAPON) || isType(T_ARMOUR) ||
                 isType(T_SHIELD) || isType(T_BOW))
-                cost += defCost[max(0, min(20, ItemLevel(false)))] * (eID ? 400L : 160L);
+                cost += defCost[max(0, min<int>(20, ItemLevel(false)))] * (eID ? 400L : 160L);
             else
-                cost += defCost[max(0, min(20, ItemLevel(false)))] * 70L;
+                cost += defCost[max(0, min<int>(20, ItemLevel(false)))] * 70L;
         }
     }
 
     if (cost) {
         cost *= Quantity;
-        cost = max(1, cost / 100);
+        cost = max(1.0, cost / 100);
     }
 
     cost /= 3;
@@ -2123,7 +2123,7 @@ int32 Item::getShopCost(Creature *Buyer, Creature *Seller) {
         cost *= BarterPrices[min(index + 10, 40)];
     }
 
-    cost = max(1, cost / 100.0);
+    cost = max(1.0, cost / 100.0);
 
 
     return (int32)cost;
@@ -2494,15 +2494,15 @@ int32 Player::GetGroupXCR(int16 CompType, int16 AddCR) {
        3 fewer HD worth of party members. */
 
     if (CompType == PHD_PARTY) {
-        if (GetGroupCR(PHD_ANIMAL) > max(0, MaxGroupCR(PHD_ANIMAL))) {
+        if (GetGroupCR(PHD_ANIMAL) > max<int>(0, MaxGroupCR(PHD_ANIMAL))) {
             CRCubed += GetGroupXCR(PHD_ANIMAL);
             CRCubed -= MaxGroupXCR(PHD_ANIMAL);
         }
-        if (GetGroupCR(PHD_MAGIC) > max(0, MaxGroupCR(PHD_MAGIC))) {
+        if (GetGroupCR(PHD_MAGIC) > max<int>(0, MaxGroupCR(PHD_MAGIC))) {
             CRCubed += GetGroupXCR(PHD_MAGIC);
             CRCubed -= MaxGroupXCR(PHD_MAGIC);
         }
-        if (GetGroupCR(PHD_COMMAND) > max(0, MaxGroupCR(PHD_COMMAND))) {
+        if (GetGroupCR(PHD_COMMAND) > max<int>(0, MaxGroupCR(PHD_COMMAND))) {
             CRCubed += GetGroupXCR(PHD_COMMAND);
             CRCubed -= MaxGroupXCR(PHD_COMMAND);
         }
@@ -2514,7 +2514,7 @@ int32 Player::GetGroupXCR(int16 CompType, int16 AddCR) {
        bonus undead pool and the normal magic pool to control created
        undead. */
     if (CompType == PHD_MAGIC)
-        if (GetGroupCR(PHD_UNDEAD) > max(0, MaxGroupCR(PHD_UNDEAD))) {
+        if (GetGroupCR(PHD_UNDEAD) > max<int>(0, MaxGroupCR(PHD_UNDEAD))) {
             CRCubed += GetGroupXCR(PHD_UNDEAD);
             CRCubed -= MaxGroupXCR(PHD_UNDEAD);
         }
@@ -2531,18 +2531,18 @@ int16 Player::MaxGroupCR(int16 CompType) {
     switch (CompType) {
     case PHD_PARTY:
         bonus = ((SkillLevel(SK_DIPLOMACY) - 5) / 5) * 2;
-        bonus = max(0, bonus);
+        bonus = max<int>(0, bonus);
         return TotalLevel() + Mod(A_CHA) + bonus + (HasFeat(FT_LEADERSHIP) ? 3 : 0) + HighStatiMag(BONUS_PHD, CompType);
     case PHD_MAGIC:
         return max(0, (CasterLev() + TotalLevel()) / 2) + AbilityLevel(CA_COMMAND_AUTHORITY) + HighStatiMag(BONUS_PHD, CompType);
     case PHD_ANIMAL:
         if (!HasAbility(CA_ANIMAL_COMP))
             return -10;
-        return max(1, AbilityLevel(CA_ANIMAL_COMP)) + HighStatiMag(BONUS_PHD, CompType);
+        return max<int>(1, AbilityLevel(CA_ANIMAL_COMP)) + HighStatiMag(BONUS_PHD, CompType);
     case PHD_COMMAND:
         if (!HasAbility(CA_COMMAND))
             return -10;
-        return max(1, HighStatiMag(COMMAND_ABILITY)) + AbilityLevel(CA_COMMAND_AUTHORITY) + HighStatiMag(BONUS_PHD, CompType);
+        return max<int>(1, HighStatiMag(COMMAND_ABILITY)) + AbilityLevel(CA_COMMAND_AUTHORITY) + HighStatiMag(BONUS_PHD, CompType);
     case PHD_UNDEAD:
         return HighStatiMag(BONUS_PHD, CompType);
     default:

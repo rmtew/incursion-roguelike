@@ -366,7 +366,7 @@ void TextTerm::ShowTraits() {
       Color(RED);
     else 
       Color(SKYBLUE);
-    Write(Format("%ld/%ld",max(0,p->XP - p->XP_Drained), p->NextLevXP()));
+    Write(Format("%ld/%ld",max<int>(0,p->XP - p->XP_Drained), p->NextLevXP()));
     Color (GREY);
     Write(" XP\n");
     if (!p->Opt(OPT_SIDEBAR))
@@ -1020,7 +1020,7 @@ void TextTerm::AdjustMap(int16 vx, int16 vy,bool newmap) {
 
 void TextTerm::ShowThings() {
     int16 i, fx, fy, Per; Thing *t;
-    Rect ViewRange(max(XOff - 15, 0), max(YOff - 15, 0), min(XOff + MSizeX() + 15, m->SizeX()), min(YOff + MSizeY() + 15, m->SizeY()));
+    Rect ViewRange(max(XOff - 15, 0), max(YOff - 15, 0), min<int>(XOff + MSizeX() + 15, m->SizeX()), min<int>(YOff + MSizeY() + 15, m->SizeY()));
     Rect ScreenRect((uint8)XOff, (uint8)YOff, (uint8)(XOff + MSizeX()), (uint8)(YOff + MSizeY()));
 
     /* TODO: Allow Selection of Offscreen Glyphs with EffectPrompt:
@@ -1043,8 +1043,8 @@ void TextTerm::ShowThings() {
         m->Update(OffscreenX[i], OffscreenY[i]);
     OffscreenC = 0;
 
-    int16 sx = min(MSizeX(), m->SizeX() - XOff);
-    int16 sy = min(MSizeY(), m->SizeY() - YOff);
+    int16 sx = min<int>(MSizeX(), m->SizeX() - XOff);
+    int16 sy = min<int>(MSizeY(), m->SizeY() - YOff);
     for (int16 y = 0; y < sy; y++)
         for (int16 x = 0; x < sx; x++) {
             if (!m->InBounds(x + XOff, y + YOff))

@@ -495,7 +495,7 @@ attack_entry:                  { uint8 dt = AD_NORM; dam.Set(0,0,0);
                                  theMon->Attk[CurrAttk].DType = dt;
                                  /*
                                  if (at == A_ABIL)
-                                   theMon->Attk[CurrAttk].u.a.DC = max(
+                                   theMon->Attk[CurrAttk].u.a.DC = std::max(
                                         theMon->Attk[CurrAttk].u.a.DC, 1);
                                         */
                                  CurrAttk++;
@@ -904,7 +904,7 @@ domain_def: DOMAIN LITERAL<name> ':' cexpr3<type>
 
 domain_entry:
   { int8 sp = 0; }
-  SPELLS (':')? (res_ref<rr> { theDom->Spells[min(sp,8)] = rr; sp++; } (',')?)* ';'
+  SPELLS (':')? (res_ref<rr> { theDom->Spells[std::min<int>(sp,8)] = rr; sp++; } (',')?)* ';'
   { if (sp > 9) 
       { yyerror(Format("Error: Domain %s has %d spells; must have at most nine.",
         theModule->QTextSeg + theDom->Name,sp)); } }
@@ -923,7 +923,7 @@ god_def: GOD LITERAL<name>  { theRes = theGod; theGod->Name = name; }
 
 god_entry:
   { int8 dm = 0; }
-  DOMAINS (':')? (res_ref<rr> { theGod->Domains[min(dm,5)] = rr; dm++; } (',')?)* ';'
+  DOMAINS (':')? (res_ref<rr> { theGod->Domains[std::min<int>(dm,5)] = rr; dm++; } (',')?)* ';'
   { if (dm < 3 || dm > 6) 
       { yyerror(Format("Error: God %s has %d domains; must have between 3 and 6.",
         theModule->QTextSeg + theGod->Name,dm)); } }
@@ -1078,7 +1078,7 @@ temp_attack_entry:             { uint8 dt = AD_NORM; dam.Set(0,0,0);
                                  theTemp->NewAttk[CurrAttk].DType = dt;
                                  /*
                                  if (at == A_ABIL)
-                                   theTemp->NewAttk[CurrAttk].u.a.DC = max(
+                                   theTemp->NewAttk[CurrAttk].u.a.DC = std::max(
                                         theTemp->NewAttk[CurrAttk].u.a.DC, 1);
                                         */
                                  CurrAttk++;
@@ -2296,7 +2296,7 @@ param_list<%in pBSysFunc b, YYSTYPE fn %out VBlock bl, int narg>:
         if (PStorage[i] == RT_REGISTER)
           FreeRegister((int16)PValue[i]);
         }
-      *narg = max(*narg,b->ParamCount);
+      *narg = std::max<int>(*narg,b->ParamCount);
       Done:;
       }
             

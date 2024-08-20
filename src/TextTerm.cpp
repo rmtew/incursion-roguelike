@@ -137,8 +137,8 @@ void TextTerm::SizeWin(int16 wn, int16 x1, int16 y1, int16 x2, int16 y2)
     ASSERT(x1 >= 0  || x1 == -1)
     ASSERT(x2 <= sizeX || x2 == -1)
     ASSERT(y2 <= sizeY || y2 == -1)
-    if (y1 != -1) Windows[wn].Top =    max(0,y1);
-    if (x1 != -1) Windows[wn].Left =   max(0,x1);
+    if (y1 != -1) Windows[wn].Top =    max<int>(0,y1);
+    if (x1 != -1) Windows[wn].Left =   max<int>(0,x1);
     if (y2 != -1) Windows[wn].Bottom = min(y2,Windows[WIN_SCREEN].Bottom);
     if (x2 != -1) Windows[wn].Right =  min(x2,Windows[WIN_SCREEN].Right);
   }
@@ -716,7 +716,7 @@ void TextTerm::SWrite(const char *text, int16 wn)
   {
     int32 oColor; bool isLink = false; int16 c;
     const char *ch;
-    ScrollLines = max(scy+1,ScrollLines);
+    ScrollLines = max<int>(scy+1,ScrollLines);
     if (scx > min(SCROLL_WIDTH,Windows[wn].Right-Windows[wn].Left))
       { scx = 0; scy++; }
     if (scy >= MAX_SCROLL_LINES)
@@ -734,14 +734,14 @@ void TextTerm::SWrite(const char *text, int16 wn)
             ASSERT(!isLink)
             scy++; ch++; scx = 0;
             cWrap = 0;
-            ScrollLines = max(scy+1,ScrollLines);
+            ScrollLines = max<int>(scy+1,ScrollLines);
             if (scy > MAX_SCROLL_LINES)
               return;
             continue;
           }
         if (scx > min(SCROLL_WIDTH,Windows[wn].Right-Windows[wn].Left))
           { scy++; scx = 0;
-            ScrollLines = max(scy+1,ScrollLines);
+            ScrollLines = max<int>(scy+1,ScrollLines);
             /*
             if (scy > activeWin->Bottom)
               return;
@@ -839,7 +839,7 @@ int16 TextTerm::SWrapWrite(int16 x, int16 y, const char* _s, int16 x2, int16 wn)
     
     int pos, lines;
     
-    x2 = min(SCROLL_WIDTH,x2);
+    x2 = min<int>(SCROLL_WIDTH,x2);
     
     /* Trim Trailing Returns */
     while (s.GetLength() && s[s.GetLength()-1] == '\n')
@@ -923,8 +923,8 @@ int32 TextTerm::LMenu(uint16 fl, const char*_title,int8 MWin,const char*help, in
         (theGame->Opt(OPT_ROGUELIKE)) ? 
         "acdefgimopqrstvwxzACDEFGIMOPQRSTVWXZ                  " :
         "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ  ";
-    int16 ch, i,c,p,qk, szCol, Rows, Cols, Width, Height, DY;
-    char let[5]; int16 vStart, vRows;
+    int ch, i,c,p,qk, szCol, Rows, Cols, Width, Height, DY;
+    char let[5]; int vStart, vRows;
     String title = _title;
     if (Mode == MO_RECREATE) {
         ASSERT(strncmp(RInf.Rsp[RInf.cRsp].Question,title,31) == 0);
@@ -981,7 +981,7 @@ Restart:
         } else if (!title)
             Width = 4 + szCol * Cols;
         else
-            Width = 2 + max(min(45,(int16)strlen(title)),szCol*Cols);
+            Width = 2 + max(min<int>(45,strlen(title)),szCol*Cols);
         Height = vRows + (title ? DY+1 : 0) + 1;
         if (fl & MENU_LARGEBOX) {
             SetWin(WIN_SCREEN);
@@ -1055,7 +1055,7 @@ Restart:
             vStart = c; 
 
         SetWin(MWin);
-        for (i = vStart; i != min(OptionCount, vStart + vRows*Cols); i++) {
+        for (i = vStart; i != min<int>(OptionCount, vStart + vRows*Cols); i++) {
             GotoXY(((i - vStart) / vRows)*szCol, ((i - vStart) % vRows) + DY);
             let[0] = MenuLetters[min(53, i)];
             let[1] = 0;
@@ -1228,7 +1228,7 @@ bool TextTerm::LMultiSelect(uint16 fl, const char* _title,int8 MWin,const char*h
 
     barlen = 5;
     for (i=0;i!=OptionCount;i++)
-        barlen = max(barlen,(int16)Option[i].Text.GetTrueLength()+6);
+        barlen = max<int>(barlen,(int16)Option[i].Text.GetTrueLength()+6);
 
 
     if (fl & MENU_SORTED)
@@ -1253,7 +1253,7 @@ Restart:
     if (Cols > 1)
         if (OptionCount % Cols)
             Rows++;
-    vRows = min((fl & MENU_BORDER) ? 36 : 38,Rows);
+    vRows = min<int>((fl & MENU_BORDER) ? 36 : 38,Rows);
     vStart = 0;
 
 
@@ -1286,7 +1286,7 @@ Restart:
         else if (!title)
             Width = 4 + szCol * Cols;
         else
-            Width = 2 + max(min(45,(int16)strlen(title)),szCol*Cols);
+            Width = 2 + max(min<int>(45,strlen(title)),szCol*Cols);
         Height = vRows + (title ? DY+1 : 0) + 1;
         if (fl & MENU_LARGEBOX) {
             SetWin(WIN_SCREEN);
@@ -1367,7 +1367,7 @@ Restart:
             vStart = c; 
 
         SetWin(MWin);
-        for(i=vStart;i!=min(OptionCount,vStart+vRows*Cols);i++) {
+        for(i=vStart;i!=min<int>(OptionCount,vStart+vRows*Cols);i++) {
             GotoXY(((i-vStart)/vRows)*szCol,((i-vStart)%vRows)+DY);
             Color(WHITE);
             Write(Format("  [%c%c%c] %.*s",-PINK,Option[i].isMarked ? '*' : ' ',-GREY,

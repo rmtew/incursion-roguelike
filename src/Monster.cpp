@@ -311,7 +311,7 @@ void Monster::ChooseAction()
   
   if (!m || (x==-1))
     {
-      Timeout = max(Timeout,30);
+      Timeout = max<int>(Timeout,30);
       return;
     }
 
@@ -352,7 +352,7 @@ void Monster::ChooseAction()
 
   if (!m || (x==-1))
   {
-    Timeout = max(Timeout,30);
+    Timeout = max<int>(Timeout,30);
     return;
   }
 
@@ -1700,7 +1700,7 @@ RetryTargets:
         he instead becomes a strongly /negative/ gravity, repulsing the
         monster until it's back at a safe distance for it's favoured
         tactic of ranged combat. */
-        d = max(1, ts.t[i].DistanceFrom(this));
+        d = max<int>(1, ts.t[i].DistanceFrom(this));
         if (ts.t[i].type == TargetWander)
             d = 1;
         else if ((ts.t[i].type == TargetEnemy ||
@@ -2770,7 +2770,7 @@ int16 Monster::RateAsTarget(Thing *t)
          Magical Aura on them, but not others. */
       Shiny:
       lev = ((Item*)t)->PItemLevel(this) + 1;
-      rat = (10 * min(lev,max(25,t->GetStatiMag(MAGIC_AURA)))) / max(1,ChallengeRating()/3);
+      rat = (10 * min<int>(lev,max<int>(25,t->GetStatiMag(MAGIC_AURA)))) / max(1,ChallengeRating()/3);
       if (rat <= 0)
         return  0;
 
@@ -2781,7 +2781,7 @@ int16 Monster::RateAsTarget(Thing *t)
       else if (HasMFlag(M_COVETOUS))
         rat *= 2;
       
-      rat = min(126,rat);
+      rat = min<int>(126,rat);
       
       ASSERT(rat >= 0 && rat <= 127) 
       return rat;

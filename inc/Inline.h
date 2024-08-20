@@ -79,10 +79,10 @@ inline int16 LevelAdjust(int16 val, int16 level, int16 spec=1)
         case LEVEL_2EVERY4: return ((level+3)/4)*2;  
         case LEVEL_2EVERY5: return ((level+4)/5)*2;  
 
-        case LEVEL_MAX5:    return min(5,level);  
-        case LEVEL_MAX10:   return min(10,level);  
-        case LEVEL_MAX15:   return min(15,level);  
-        case LEVEL_MAX20:   return min(20,level);  
+        case LEVEL_MAX5:    return min<int16_t>(5,level);
+        case LEVEL_MAX10:   return min<int16_t>(10,level);
+        case LEVEL_MAX15:   return min<int16_t>(15,level);
+        case LEVEL_MAX20:   return min<int16_t>(20,level);
 
         case LEVEL_SCALED:
           if (level <= 9)
@@ -118,9 +118,9 @@ inline int16 LevelAdjust(int16 val, int16 level, int16 spec=1)
         case PLUS_MINUS2: return max(spec-2,0);
         case PLUS_MINUS3: return max(spec-3,0);
 
-        case LEVEL_MIN3: return max(3,level);
-        case LEVEL_MIN5: return max(5,level);
-        case LEVEL_MIN10: return max(10,level);
+        case LEVEL_MIN3: return max<int16_t>(3,level);
+        case LEVEL_MIN5: return max<int16_t>(5,level);
+        case LEVEL_MIN10: return max<int16_t>(10,level);
 
         case PLUS_ADD1:  return spec+1;
         case PLUS_ADD2:  return spec+2;
@@ -684,7 +684,7 @@ inline int16 Thing::HighStatiMag(int16 n,int16 Val, Thing *t)
     StatiIterNature(this,n)
         if (S->Val == Val || Val == -1) 
           if (!t || S->h == t->myHandle)
-            m = max(m,S->Mag);
+            m = max<int16_t>(m,S->Mag);
     StatiIterEnd(this)
     return m; 
   }
@@ -714,7 +714,7 @@ inline int16 Thing::HighSourceCLev(uint8 src)
     int16 clev = 0;
     StatiIter(this)
       if (S->Source == src)
-        clev = max(0,clev);
+        clev = max<int16_t>(0,clev);
     StatiIterEnd(this)
     return clev;
   }
