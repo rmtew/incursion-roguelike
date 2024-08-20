@@ -12,11 +12,6 @@
 #define Check(a,b) { if (!(a)) Fatal(b);  }
 #define iswhite(ch) ((ch) == 13 || (ch) == ' ' || (ch) == '\t' || \
                        (ch) == 10)
-                       
-#define isspace(ch) isspace(max(ch,1))
-#define isalpha(ch) isalpha(max(ch,1))
-#define isalnum(ch) isalnum(max(ch,1))
-#define isdigit(ch) isdigit(max(ch,1))
 
 #define SC(xx) (*tmpstr((const char*)xx))
 
