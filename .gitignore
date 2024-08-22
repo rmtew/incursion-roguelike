@@ -16,6 +16,9 @@ build/x64
 *.sdf
 Incursion.opensdf
 
+# Vcpkg
+vcpkg_installed/
+
 # Incursion specific temporary files.
 lib/dispatch.h
 lib/program.i

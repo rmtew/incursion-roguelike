@@ -1,0 +1,18 @@
+{
+    "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+    "builtin-baseline": "509f71e53f45e46c13fa7935d2f6a45803580c07",
+    "dependencies": [
+        "breakpad",
+        {
+            "name": "libtcod",
+            "default-features": false,
+            "features": [
+                "png",
+                "sdl",
+                "unicode"
+            ]
+        },
+        "pdcurses",
+        "sdl2"
+    ]
+}
