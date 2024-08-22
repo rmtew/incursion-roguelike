@@ -87,7 +87,7 @@ INCURSIONFONTPATH=$(SolutionDir)..\fonts
 INCURSIONLIBPATH=$(SolutionDir)..\lib
 $(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerWorkingDirectory>$(SolutionDir)run</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)\..</LocalDebuggerWorkingDirectory>
     <LocalDebuggerCommandArguments>
     </LocalDebuggerCommandArguments>
   </PropertyGroup>
@@ -101,7 +101,7 @@ INCURSIONFONTPATH=$(SolutionDir)..\fonts
 INCURSIONLIBPATH=$(SolutionDir)..\lib
 $(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-    <LocalDebuggerWorkingDirectory>$(SolutionDir)run</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)\..</LocalDebuggerWorkingDirectory>
     <LocalDebuggerCommandArguments />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -115,7 +115,7 @@ $(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
 INCURSIONFONTPATH=$(SolutionDir)..\fonts
 INCURSIONLIBPATH=$(SolutionDir)..\lib
 $(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
-    <LocalDebuggerWorkingDirectory>$(SolutionDir)run</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)\..</LocalDebuggerWorkingDirectory>
     <LocalDebuggerCommandArguments>
     </LocalDebuggerCommandArguments>
   </PropertyGroup>
@@ -129,7 +129,7 @@ $(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
 INCURSIONFONTPATH=$(SolutionDir)..\fonts
 INCURSIONLIBPATH=$(SolutionDir)..\lib
 $(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
-    <LocalDebuggerWorkingDirectory>$(SolutionDir)run</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerWorkingDirectory>$(SolutionDir)\..</LocalDebuggerWorkingDirectory>
     <LocalDebuggerCommandArguments />
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -154,7 +154,6 @@ $(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
       </Command>
     </CustomBuildStep>
     <PostBuildEvent>
-      <Command>if not exist "$(SolutionDir)run" mkdir "$(SolutionDir)run"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -180,7 +179,6 @@ $(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
       </Command>
     </CustomBuildStep>
     <PostBuildEvent>
-      <Command>if not exist "$(SolutionDir)run" mkdir "$(SolutionDir)run"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -207,7 +205,6 @@ $(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
       </Command>
     </CustomBuildStep>
     <PostBuildEvent>
-      <Command>if not exist "$(SolutionDir)run" mkdir "$(SolutionDir)run"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -235,7 +232,6 @@ $(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
       </Command>
     </CustomBuildStep>
     <PostBuildEvent>
-      <Command>if not exist "$(SolutionDir)run" mkdir "$(SolutionDir)run"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

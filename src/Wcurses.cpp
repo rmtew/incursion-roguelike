@@ -397,35 +397,8 @@ ExceptionHandler* crashdumpHandler;
 int main(int argc, char *argv[]) {
     /* This path code is currently present in libtcod and curses code. */
     char executablePath[MAX_PATH_LENGTH] = "";
-    char *envPath = getenv("INCURSIONPATH");
-
-    if (envPath != NULL) {
-        if (strlen(envPath) > 0 && strcat(executablePath, envPath)) {
-            if (executablePath[strlen(executablePath) - 1] != '\\')
-                strncat(executablePath, "\\", 1);
-        }
-    }
-
-    if (strlen(executablePath) == 0) {
-        /* If run normally, check to see from which directory, and if there is one, use it. */
-        if (!IsDebuggerPresent() && argc >= 1) {
-            /* argv[0] is the filename and maybe the path before it, if the path is there grab it. */
-            const char *str = strrchr(argv[0], '\\');
-            if (str != NULL) {
-                int16 n = str - argv[0]; /* Copy the separator too. */
-                if (!strncpy(executablePath, argv[0], n))
-                    Error("Failed to locate Incursion directory for '%s'", argv[0]);
-                executablePath[n] = '\0';
-            }
-        }
-    }
-
-    /* If run under the debugger, or from within the current directory, or if
-    something went wrong above, get and use the current directory path. */
-    if (strlen(executablePath) == 0) {
-        if (!_getcwd(executablePath, MAX_PATH_LENGTH))
-            Error("Failed to locate Incursion directory under debugger (error 23)");
-    }
+    _getcwd(executablePath, sizeof(executablePath));
+    const char *envPath = getenv("INCURSIONPATH");
 
     /* Google Breakpad is only compiled into Release builds, which get distributed.
      * Debug builds get the option to break out into the debugger, which makes it
@@ -444,7 +417,7 @@ int main(int argc, char *argv[]) {
 
 	theGame = new Game();
     AT1 = new cursesTerm;
-	AT1->SetIncursionDirectory(executablePath);
+	AT1->SetIncursionDirectory(envPath ? envPath : executablePath);
     T1 = AT1;
     int retval = 0;
 
