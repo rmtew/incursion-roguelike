@@ -18,6 +18,7 @@
 #include "Incursion.h"
 
 #include <time.h>
+#include <vector>
 
 #ifdef WIN32
   #define OPT_FILE "\\Options.Dat"
@@ -2240,7 +2241,7 @@ void Map::DaysPassed() {
     Item *it;
     Player *p[MAX_PLAYERS];
     Creature *cr;
-    Thing *list[2048];
+    auto list = std::vector<Thing*>(Things.Total());
     int8 DepthCR = (int8)(TDUN(dID)->GetConst(INITIAL_CR)) + (Depth * (int8)(TDUN(dID)->GetConst(DUN_SPEED))) / 100 - 1;
 
     if (Day == theGame->Day)
@@ -2251,10 +2252,10 @@ void Map::DaysPassed() {
     pc = 0;
 
     MapIterate(this, t, c)
-        list[c] = t;
+        list.at(c) = t;
 
     for (j = 0; j != c; j++) {
-        t = list[j];
+        t = list.at(j);
 Restart1:
         StatiIter(t)
             if (S->Nature == HUNGER)
