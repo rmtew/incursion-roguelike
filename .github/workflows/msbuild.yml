@@ -42,6 +42,9 @@ jobs:
         # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
         run: msbuild /m /p:Configuration=${{matrix.configuration}} /p:Platform=${{matrix.platform}} ${{env.SOLUTION_FILE_PATH}}
 
+      - name: Verify generated files
+        run: git diff --exit-code src/tokens.cpp src/yygram.cpp inc/yygram.h
+
       - name: Copy binaries to project root
         shell: bash
         run: cp -v build/*/*/exe_libtcod/Incursion.exe dependencies/libtcod-*/libtcod.dll dependencies/libtcod-*/SDL2.dll .
