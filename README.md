@@ -51,7 +51,7 @@ These instructions are intended to allow you to get Incursion to the point where
 3. Open `build\Incursion.sln` in Visual Studio 2022.
 4. Ensure `exe_libtcod` is the default project. If it is not, right click on it and select "Set as Startup Project".
 5. Build a Debug solution.
-6. Run the built `Incursion.exe` with the command-line `Incursion.exe -compile` with a current directory of the top-level source directory. The module compilation code is not built into Release builds. It should generate a `mod\Incursion.mod` file which provides the game rules, setting and other things.
+6. Run the built `Incursion.exe` with the command-line `build/Win32/Debug/exe_libtcod/Incursion.exe -compile` with a current directory of the top-level source directory. The module compilation code is not built into Release builds. It should generate a `mod\Incursion.mod` file which provides the game rules, setting and other things.
 
 Note that there are custom build steps in Debug configurations that update this resource compiler, under the "Language Files" folder within Visual Studio. `tokens.lex` is parsed by `flex.exe`. `grammar.acc` is parsed by `modaccent.exe`. These steps may need to be disabled to compile the x64 Debug build as `modaccent.exe` is based on old external code that is not 64-bit compatible at this time. The output files of both steps are checked in and only deleted by rerunning these steps, so running them is not necessary and if it is, it can be done in Win32 Debug configuration.
 
