@@ -430,26 +430,28 @@
   <ItemGroup>
     <CustomBuild Include="..\lang\grammar.acc">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">cd "$(ProjectDir)"
-"$(SolutionDir)$(Platform)\$(Configuration)\modaccent\modaccent.exe" %(Identity) "$(SolutionDir)\..\src" "$(SolutionDir)\..\inc"</Command>
+"$(SolutionDir)$(Platform)\$(Configuration)\modaccent\modaccent.exe" %(Identity) "..\src" "..\inc"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">cd "$(ProjectDir)"
-"$(SolutionDir)$(Platform)\$(Configuration)\modaccent\modaccent.exe" %(Identity) "$(SolutionDir)\..\src" "$(SolutionDir)\..\inc"</Command>
+"$(SolutionDir)$(Platform)\$(Configuration)\modaccent\modaccent.exe" %(Identity) "..\src" "..\inc"</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\src\yygram.cpp;..\inc\yygram.h;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\src\yygram.cpp;..\inc\yygram.h;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">cd "$(ProjectDir)"
-"$(SolutionDir)$(Platform)\$(Configuration)\modaccent\modaccent.exe" %(Identity) "$(SolutionDir)\..\src" "$(SolutionDir)\..\inc"</Command>
+"$(SolutionDir)$(Platform)\$(Configuration)\modaccent\modaccent.exe" %(Identity) "..\src" "..\inc"</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">cd "$(ProjectDir)"
-"$(SolutionDir)$(Platform)\$(Configuration)\modaccent\modaccent.exe" %(Identity) "$(SolutionDir)\..\src" "$(SolutionDir)\..\inc"</Command>
+"$(SolutionDir)$(Platform)\$(Configuration)\modaccent\modaccent.exe" %(Identity) "..\src" "..\inc"</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\src\yygram.cpp;..\inc\yygram.h;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\src\yygram.cpp;..\inc\yygram.h;%(Outputs)</Outputs>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </CustomBuild>
     <CustomBuild Include="..\lang\tokens.lex">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)..\dependencies\flex.exe --wincompat -B -i -o..\src\tokens.cpp ..\lang\Tokens.Lex</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)..\dependencies\flex.exe --wincompat -B -i -o..\src\tokens.cpp ..\lang\Tokens.Lex
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)..\dependencies\flex.exe --wincompat -B -i -o..\src\tokens.cpp ..\lang\Tokens.Lex</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\src\tokens.cpp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\src\tokens.cpp;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)..\dependencies\flex.exe --wincompat -B -i -o..\src\tokens.cpp ..\lang\Tokens.Lex</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)..\dependencies\flex.exe --wincompat -B -i -o..\src\tokens.cpp ..\lang\Tokens.Lex
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)..\dependencies\flex.exe --wincompat -B -i -o..\src\tokens.cpp ..\lang\Tokens.Lex</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\src\tokens.cpp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\src\tokens.cpp;%(Outputs)</Outputs>
