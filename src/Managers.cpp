@@ -695,7 +695,7 @@ ResetCurrCon:
         ClearKeyBuff();
         ch = (uint8)GetCharRaw();
         PurgeStrings();
-        if (!isdigit(ch))
+        if (!isdigit_(ch))
             digit = 0;
 
         switch (ch) {
@@ -1001,7 +1001,7 @@ default_label:
             if (strchr(SlotLetters, ch))
                 CurrSlot = (strchr(SlotLetters, ch) - SlotLetters) + 1;
 
-            if (isdigit(ch) && currCon) {
+            if (isdigit_(ch) && currCon) {
                 if (p->Inv[SL_INAIR]) {
                     Message("You need the 'in air' slot free to do that.");
                     break;
@@ -1209,7 +1209,7 @@ PartialRedraw:
         ClearKeyBuff();
         ch = GetCharRaw();
         PurgeStrings();
-        if (!isdigit(ch))
+        if (!isdigit_(ch))
             digit = 0;
 
         switch (ch) {
@@ -1269,7 +1269,7 @@ PartialRedraw:
             SizeWin(WIN_CUSTOM, WinLeft(), WinTop() + 4, WinRight(), WinBottom() - 3);
             goto PartialRedraw;
         default:
-            if (isdigit(ch)) {
+            if (isdigit_(ch)) {
                 if (digit == 0)
                     digit = ch;
                 else {

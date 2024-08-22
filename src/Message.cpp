@@ -135,7 +135,7 @@ Repeat:
             }
             cc++;
 
-            if (isdigit(Tag1[0])) {
+            if (isdigit_(Tag1[0])) {
                 *p++ = -atoi(Tag1);
                 continue;
             }
@@ -197,7 +197,7 @@ Repeat:
             }
 
             if (Tag1[0] == 'h' && Tag1[1] == 't') {
-                for (j = 0; isalpha(Tag1[j]); j++)
+                for (j = 0; isalpha_(Tag1[j]); j++)
                     ;
 
                 if (!Tag1[j])
@@ -876,11 +876,11 @@ String & GetFirstName(const char* _Fullname) {
 
     c = 0;
     for (i = 0; Fullname[i]; i++) {
-        if (!isspace(Fullname[i]))
+        if (!isspace_(Fullname[i]))
             NameSegs[c] += Fullname[i];
         else {
             if (NameSegs[c].GetLength())
-                if (i && !isspace(Fullname[i - 1]))
+                if (i && !isspace_(Fullname[i - 1]))
                     c++;
         }
         if (c == 3)

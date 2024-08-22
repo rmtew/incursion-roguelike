@@ -758,7 +758,7 @@ failed:
       if (!base.GetLength())
           base = "Unnamed";
       for(i=0;i!=base.GetLength();i++)
-          if (!isalpha(base[i]))
+          if (!isalpha_(base[i]))
               base.SetAt(i,'_');
       fn = Format("%s.sav",(const char*)base);
       SaveFile = fn; 

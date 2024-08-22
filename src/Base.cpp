@@ -308,9 +308,9 @@ String & String::Trim()
     int32 s,e;
     if (!Length)
       return *tmpstr(Buffer);
-    for(s=0;isspace(Buffer[s]) && Length>s;s++)
+    for(s=0;isspace_(Buffer[s]) && Length>s;s++)
       ;
-    for(e=Length-1;e>0 && isspace(Buffer[e]);e--)
+    for(e=Length-1;e>0 && isspace_(Buffer[e]);e--)
       ;
     if (s>e)
       return *tmpstr("");
@@ -343,7 +343,7 @@ String & String::Capitalize(bool all)
     s.Buffer[0] = toupper(s.Buffer[0]);
     if (all && Length >= 1)
       for(int16 i=1;i!=Length;i++)
-        if (isalpha(s.Buffer[i]) && !isalpha(s.Buffer[i-1]) && s.Buffer[i-1] != '\'')
+        if (isalpha_(s.Buffer[i]) && !isalpha_(s.Buffer[i-1]) && s.Buffer[i-1] != '\'')
           s.Buffer[i] = toupper(s.Buffer[i]);
     return *tmpstr(s); 
   }

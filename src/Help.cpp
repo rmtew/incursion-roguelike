@@ -1478,7 +1478,7 @@ static void DescribeKeys(String &s) {
                     Keys[n] += "C-";
                 if (ks[j].raw_key_flags & KY_FLAG_ALT)
                     Keys[n] += "A-";
-                if (isalpha(ks[j].raw_key)) {
+                if (isalpha_(ks[j].raw_key)) {
                     if (ks[j].raw_key_flags & KY_FLAG_SHIFT)
                         Keys[n] += Format("%c", toupper(ks[j].raw_key));
                     else
@@ -1799,7 +1799,7 @@ NewTopic:
           DoneJump:
           break;    
         default:
-          if (isalnum(ch) && LinkCount)
+          if (isalnum_(ch) && LinkCount)
             {
               int16 i;
               ln[0] = ln[1];
@@ -1956,14 +1956,14 @@ void Game::WriteHTMLHelp()
                 //case '>': stemp = "]" ; break;
                 case '~': stemp = "%"; break;
                 case '{':
-                  ASSERT(isalnum(hs[1]));
+                  ASSERT(isalnum_(hs[1]));
                   link = ""; dest = ""; stemp = "";
                   hs++;
                   while (*hs != ':' && *hs != '}')
                     link += *hs++;
                   if (*hs == ':') { // cross-file link
                       hs++;
-                      while (isalnum(*hs) || iswhite(*hs))
+                      while (isalnum_(*hs) || iswhite(*hs))
                         dest += *hs++;
                       for (j=0;HFs[j].fn;j++)
                         if (stricmp(HFs[j].topic,dest)==0)
@@ -2120,7 +2120,7 @@ String & Monster::Describe(Player *p) {
         Format("<5>The <Str><Str><7> ('<%d>%c%c%c<7>')\n__", GLYPH_COLOUR_VALUE(tm->Image), LITERAL_CHAR, LITERAL_CHAR1(gid), LITERAL_CHAR2(gid)),
         isMType(MA_DRAGON) ? "(Adult) " : "", NAME(xID));
     for (i = 1; i != str.GetLength(); i++)
-        if (isalpha(max(1, str[i])) && str[i - 1] == ' ')
+        if (isalpha_(max(1, str[i])) && str[i - 1] == ' ')
             str.SetAt(i, toupper(str[i]));
 
     if (tm->Desc) {
@@ -2884,7 +2884,7 @@ SkipMonsterStats:
             s3 += ")\n__";
 
             for (i = 1; i != s3.GetLength(); i++)
-                if (isalpha(s3[i]) && s3[i - 1] == ' ')
+                if (isalpha_(s3[i]) && s3[i - 1] == ' ')
                     s3.SetAt(i, toupper(s3[i]));
             str += XPrint(s3);
 
