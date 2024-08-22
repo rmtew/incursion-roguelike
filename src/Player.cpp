@@ -1126,7 +1126,7 @@ FindNonReachVictim:
                 ThrowVal(EV_REST, REST_DUNGEON, this);
             break;
         default:
-            if (isdigit(ch)) {
+            if (isdigit_(ch)) {
                 switch (QuickKeys[ch - '0'].Type) {
                 case QKY_SKILL:
                     UseMenu(QuickKeys[ch - '0'].Value);

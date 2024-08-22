@@ -13,6 +13,20 @@
 #define iswhite(ch) ((ch) == 13 || (ch) == ' ' || (ch) == '\t' || \
                        (ch) == 10)
 
+/// Clamp char's which are liketly to be negative numbers for isX functions.
+static inline int clamp_char(int ch) {
+    if (ch < 0) return 0;
+    return ch;
+}
+/// Same as isspace but supresses expected negative numbers.
+static inline int isspace_(int ch) { return isspace(clamp_char(ch)); }
+/// Same as isalpha but supresses expected negative numbers.
+static inline int isalpha_(int ch) { return isalpha(clamp_char(ch)); }
+/// Same as isalnum but supresses expected negative numbers.
+static inline int isalnum_(int ch) { return isalnum(clamp_char(ch)); }
+/// Same as isdigit but supresses expected negative numbers.
+static inline int isdigit_(int ch) { return isdigit(clamp_char(ch)); }
+
 #define SC(xx) (*tmpstr((const char*)xx))
 
 template<class S, int32 Initial, int32 Delta>

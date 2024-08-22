@@ -464,7 +464,7 @@ void CatLiteral(const char*str)
               }
           else {      
             if (i)
-              if (isspace(str[i]) && isspace(str[i-1]))
+              if (isspace_(str[i]) && isspace_(str[i-1]))
                 continue;
             /*if (str[i] == '_')
               { LBuff[lpos++] = ' '; }*/

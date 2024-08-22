@@ -1469,7 +1469,7 @@ EvReturn Item::Damage(EventInfo &e) {
 
         /* Get the item name, but cut off the initial number */
         oname = name = strdup(Name());
-        while(isdigit(name[0]) || name[0] == ' ')
+        while(isdigit_(name[0]) || name[0] == ' ')
             name++;
 
         if (destroyed)

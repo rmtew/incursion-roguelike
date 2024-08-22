@@ -757,7 +757,7 @@ void TextTerm::SWrite(const char *text, int16 wn)
             HL[LinkCount].Text[0] = 0;
 			SPutChar(scx, scy, GLYPH_VALUE('<',attr));
             scx++;
-            ASSERT(isalnum(*(ch+1)));
+            ASSERT(isalnum_(*(ch+1)));
             if (*(ch+1) && *(ch+2) && *(ch+3) && *(ch+4))
               if (*(ch+1)=='B' && *(ch+2)=='K' && *(ch+3)=='S' && *(ch+4)=='P')
                 {
@@ -766,7 +766,7 @@ void TextTerm::SWrite(const char *text, int16 wn)
                   goto LinkNameRead;
                 }
             HL[LinkCount].Link[0] = *(ch+1);
-            if (isalnum(*(ch+2)))
+            if (isalnum_(*(ch+2)))
               HL[LinkCount].Link[1] = *(ch+2);
             else
               HL[LinkCount].Link[1] = 0;
@@ -780,7 +780,7 @@ void TextTerm::SWrite(const char *text, int16 wn)
           {
             ch++;
             c = 0;
-            while(isalnum(*ch) || isspace(*ch))
+            while(isalnum_(*ch) || isspace_(*ch))
               {
                 if (c < 38)
                   HL[LinkCount].Text[c] = *ch;
@@ -1183,7 +1183,7 @@ InvalidChar:
         case ' ':
             break;
         default:
-            if (isdigit(ch)) {
+            if (isdigit_(ch)) {
                 if (!(fl & MENU_QKEY))
                     break;
                 QuickKeys[ch - '0'].Type  = QKeyType;

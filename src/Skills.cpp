@@ -1602,13 +1602,13 @@ bool Creature::SkillCheck(int16 sk, int16 DC, bool show, int16 mod1, const char*
 		String modStr;
 		modStr = "";
 		if (mod1Str && strlen(mod1Str) != 0 && mod1) {
-			if (isalpha(mod1Str[0]))
+			if (isalpha_(mod1Str[0]))
 				modStr += Format(" %+d %s", mod1, mod1Str);
 			else
 				modStr += mod1Str;
 		}
 		if (mod2Str && strlen(mod2Str) != 0 && mod2) {
-			if (isalpha(mod2Str[0]))
+			if (isalpha_(mod2Str[0]))
 				modStr += Format(" %+d %s", mod2, mod2Str);
 			else
 				modStr += mod2Str;
