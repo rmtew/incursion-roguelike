@@ -4,7 +4,7 @@
    OArray, Dice, String, MVal, Rect, Fraction,
    Object and Registry. 
 */
-
+#include <algorithm>
 
 #define BIT(bitnum) (1 << (bitnum - 1))
 #define XBIT(a)     (1 << (a))
@@ -184,7 +184,7 @@ struct MVal
           nval = oval;
          break;
         case MVAL_ADD:
-          nval = max(0,oval+Value);
+          nval = std::max(0,oval+Value);
          break;
         case MVAL_SET:
           nval = Value;
@@ -199,16 +199,16 @@ struct MVal
         case MBOUND_NONE:
           break;
         case MBOUND_MIN:
-          nval = max<int16_t>(Bound,nval);
+          nval = std::max<int16_t>(Bound,nval);
          break;
         case MBOUND_MAX:
-          nval = min<int16_t>(Bound,nval);
+          nval = std::min<int16_t>(Bound,nval);
          break;
         case MBOUND_NEAR:
           if (nval >= oval)
-            nval = max<int16_t>(nval,(nval+Bound*2)/3);
+            nval = std::max<int16_t>(nval,(nval+Bound*2)/3);
           else
-            nval = max<int16_t>(nval,(nval+Bound*2)/3);
+            nval = std::max<int16_t>(nval,(nval+Bound*2)/3);
          break;
         default:
           Error("MVal::Adjust -- illegal BType!");
@@ -272,8 +272,8 @@ struct Rect
     Rect() = default;
     /// <summary>Initialize a Rect respecting the invariant.</summary>
     Rect(uint8 _x1, uint8 _y1, uint8 _x2, uint8 _y2) noexcept
-      : x1{min(_x1, _x2)}, y1{min(_y1, _y2)},
-        x2{max(_x1, _x2)}, y2{max(_y1, _y2)} {}
+      : x1{std::min(_x1, _x2)}, y1{std::min(_y1, _y2)},
+        x2{std::max(_x1, _x2)}, y2{std::max(_y1, _y2)} {}
     /// <summary>Set this Rect's values respecting the invariant.</summary>
     void Set(uint8 _x1, uint8 _y1, uint8 _x2, uint8 _y2) noexcept
       { *this = Rect{_x1, _y1, _x2, _y2}; }
@@ -292,7 +292,7 @@ struct Rect
           }
         else
           {
-            inner.x1 = x1 + 1 + random(max(0,((x2-x1)-2)-width));
+            inner.x1 = x1 + 1 + random(std::max(0,((x2-x1)-2)-width));
             inner.x2 = inner.x1 + width;
           }
         if (height >= (y2-y1))
@@ -302,7 +302,7 @@ struct Rect
           }
         else
           {
-            inner.y1 = y1 + 1 + random(max(0,((y2-y1)-2)-height));
+            inner.y1 = y1 + 1 + random(std::max(0,((y2-y1)-2)-height));
             inner.y2 = inner.y1 + height;
           }
         return inner;
@@ -314,15 +314,15 @@ struct Rect
     Rect PlaceWithinSafely(uint8 width, uint8 height) const
       {
         Rect inner{};
-        inner.x1 = x1 + random(max(0,((x2-x1)-1)-width));
+        inner.x1 = x1 + random(std::max(0,((x2-x1)-1)-width));
         inner.x2 = inner.x1 + width;
-        inner.y1 = y1 + random(max(0,((y2-y1)-1)-height));
+        inner.y1 = y1 + random(std::max(0,((y2-y1)-1)-height));
         inner.y2 = inner.y1 + height;
 
-        inner.x1 = max<int>(inner.x1, x1 + 2);
-        inner.y1 = max<int>(inner.y1, y1 + 2);
-        inner.x2 = min<int>(inner.x2, x2 - 2);
-        inner.y2 = min<int>(inner.y2, y2 - 2);
+        inner.x1 = std::max<int>(inner.x1, x1 + 2);
+        inner.y1 = std::max<int>(inner.y1, y1 + 2);
+        inner.x2 = std::min<int>(inner.x2, x2 - 2);
+        inner.y2 = std::min<int>(inner.y2, y2 - 2);
         return inner;
       }
     /// <summary>Return true if `x` and `y` are within this rect (inclusive).</summary>

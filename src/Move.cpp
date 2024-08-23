@@ -92,8 +92,8 @@ EvReturn Creature::Walk(EventInfo &e) {
 			}
 			if (isPlayer())
 				if (!yn(Format("You have a %d~ chance of convincing your mount and a %d~ chance of making the jump. Jump?",
-					100 - max(0, (DC - SkillLevel(SK_RIDE)) * 5),
-					100 - max(0, (DC - mount->SkillLevel(SK_JUMP)) * 5)
+					100 - std::max(0, (DC - SkillLevel(SK_RIDE)) * 5),
+					100 - std::max(0, (DC - mount->SkillLevel(SK_JUMP)) * 5)
 				)))
 					return ABORT;
 
@@ -111,7 +111,7 @@ EvReturn Creature::Walk(EventInfo &e) {
 			}
 			if (isPlayer())
 				if (!yn(Format("You have a %d~ chance of success. Jump?",
-					100 - max(0, (DC - SkillLevel(SK_JUMP)) * 5))))
+					100 - std::max(0, (DC - SkillLevel(SK_JUMP)) * 5))))
 					return ABORT;
 			jcheck = (SkillCheck(SK_JUMP, DC));
 		}
@@ -324,7 +324,7 @@ EvReturn Creature::Walk(EventInfo &e) {
 						dis = cr;
 						goto IgnoreCreature;
 					}
-					else if (ChallengeRating() >= min(6, cr->ChallengeRating() + 5))
+					else if (ChallengeRating() >= std::min(6, cr->ChallengeRating() + 5))
 						if (isMonster() && cr->isMonster())
 							if (GetAttr(A_STR) >= cr->GetAttr(A_STR) + 4)
 								if (cr->GetAttr(A_MOV)) {
@@ -814,7 +814,7 @@ SkipConfirms:
 	that the player understand when they are entering or leaving
 	a monster's threatened area, and vice versa. Hence, we use this
 	macro instead of dist(). */
-#define sdist(vx,vy,t) max(MYABS(vx - t->x),MYABS(vy - t->y))
+#define sdist(vx,vy,t) std::max(MYABS(vx - t->x),MYABS(vy - t->y))
 
 	bool failed = false;
 	int8 myHit, crHit; ch = 0;
@@ -861,13 +861,13 @@ SkipConfirms:
 						}
 					}
 					else {
-						myHit = max((int8)Attr[A_HIT_BRAWL], (int8)Attr[A_HIT_MELEE]);
+						myHit = std::max((int8)Attr[A_HIT_BRAWL], (int8)Attr[A_HIT_MELEE]);
 						if (HasFeat(FT_TACTICAL_WITHDRAWL))
 							myHit += 8;
-						crHit = max((int8)cr->Attr[A_HIT_BRAWL], (int8)cr->Attr[A_HIT_MELEE]);
+						crHit = std::max((int8)cr->Attr[A_HIT_BRAWL], (int8)cr->Attr[A_HIT_MELEE]);
 						if (myHit + (random(20) + 1) >= crHit + 11)
 							/* Give the player a hope of actually escaping. */
-							cr->Timeout = max<int>(cr->Timeout, 15);
+							cr->Timeout = std::max<int>(cr->Timeout, 15);
 						else {
 							if (!failed)
 								DPrint(e, "You fail to break off melee safely.",
@@ -1094,7 +1094,7 @@ SkipConfirms:
 	case EV_MOVE:
 	{
 		int32 needed_timeout = MoveTimeout(ox, oy);
-		needed_timeout = min(needed_timeout, max(12, needed_timeout - StoredMovementTimeout));
+		needed_timeout = std::min(needed_timeout, std::max(12, needed_timeout - StoredMovementTimeout));
 		Timeout += (int16)needed_timeout;
 		StoredMovementTimeout = 0;
 	}

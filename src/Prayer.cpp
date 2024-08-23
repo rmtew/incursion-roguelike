@@ -431,7 +431,7 @@ EvReturn Character::Sacrifice(EventInfo &e)
     if (e.EVictim) {
       if (sacVal > SacVals[e.godNum][sacCat])
         isImpressed = true;
-      newVal = max(SacVals[e.godNum][sacCat],sacVal);
+      newVal = std::max(SacVals[e.godNum][sacCat],sacVal);
       }
     else {
       newVal = SacVals[e.godNum][sacCat] + (sacVal / 3);
@@ -460,7 +460,7 @@ EvReturn Character::Sacrifice(EventInfo &e)
             return DONE;
           }
         */
-        Anger[e.godNum] = max(0,Anger[e.godNum]-3);
+        Anger[e.godNum] = std::max(0,Anger[e.godNum]-3);
         if (Anger[e.godNum] > 0)
           GodMessage(e.eID,MSG_LESSENED);
         else
@@ -469,7 +469,7 @@ EvReturn Character::Sacrifice(EventInfo &e)
       }
     
     SacVals[e.godNum][sacCat] = 
-      max(newVal,SacVals[e.godNum][sacCat]);
+        std::max(newVal,SacVals[e.godNum][sacCat]);
     
     if (isImpressed) {
       GodMessage(e.eID,MSG_IMPRESSED);
@@ -517,7 +517,7 @@ void Character::lowerAnger(rID gID, int16 amt)
       return;
     if (Anger[gn] && amt)
       {
-        Anger[gn] = max(0,Anger[gn] - amt);
+        Anger[gn] = std::max(0,Anger[gn] - amt);
         if (Anger[gn] > 0)
           GodMessage(gID,MSG_LESSENED);
         else
@@ -568,7 +568,7 @@ EvReturn Character::Jealousy(EventInfo &e)
       return DONE;
         
         
-    if (doWrath || EventStack[max(0,EventSP-1)].Event == EV_CONVERT)
+    if (doWrath || EventStack[std::max(0,EventSP-1)].Event == EV_CONVERT)
       Transgress(GodID,mag,true,"divine jealousy");
     else
       Transgress(GodID,mag,false,"divine jealousy");
@@ -581,7 +581,7 @@ void Character::gainFavour(rID gID, int32 amt, bool advance, bool stack)
     if (stack)
       SacVals[theGame->GodNum(gID)][MAX_SAC_CATS+1] += amt;
     else
-      SacVals[theGame->GodNum(gID)][MAX_SAC_CATS] = max(amt,
+      SacVals[theGame->GodNum(gID)][MAX_SAC_CATS] = std::max(amt,
         SacVals[theGame->GodNum(gID)][MAX_SAC_CATS]);
     
     if (advance && gID == GodID)
@@ -672,12 +672,12 @@ int16* Creature::getTroubles()
       }
       
     int32 inj = (((mHP+Attr[A_THP])-cHP)*100)/(mHP+Attr[A_THP]),
-         man = (cMana()*100L)/max(nhMana(),1);
+         man = (cMana()*100L) / std::max(nhMana(),1);
     
     /* Mana is CRITICAL to mages, priests & druids, somewhat critical
        to fighter-mages and less significant to everyone else, so
        adjust accordingly. */   
-    man = ((man * 30L) + ((man * 70L * CasterLev()) / max<int>(1,ChallengeRating()))) / 100;
+    man = ((man * 30L) + ((man * 70L * CasterLev()) / std::max<int>(1,ChallengeRating()))) / 100;
     
     n = 0;
     
@@ -1169,7 +1169,7 @@ EvReturn Character::Convert(EventInfo &e)
     
     neededFavour = (int16)TGOD(e.eID)->GetConst(MIN_CONVERT_FAVOUR);    
     if (getGodFlags(e.eID) & GS_FORSAKEN)
-      neededFavour = max(neededFavour*5,5000);
+      neededFavour = std::max(neededFavour*5,5000);
     
     if (!GodID)
       neededFavour /= 10;
@@ -1210,7 +1210,7 @@ EvReturn Character::Convert(EventInfo &e)
          array, but this may change in the future when I come up with
          a method that's both in-game logical and OOC balanced.
          */
-      FavPenalty[e.godNum] = max(FavPenalty[e.godNum],
+      FavPenalty[e.godNum] = std::max(FavPenalty[e.godNum],
              FavPenalty[theGame->GodNum(GodID)]);
 
       }
@@ -1353,7 +1353,7 @@ EvReturn Character::GodDeflect(EventInfo &e)
     if (FavPenalty[e.godNum] + TGOD(GodID)->GetConst(INTERVENTION_COST) > 100)
       return NOTHING;
       
-    if (Anger[e.godNum] > max<int>(3,(int16)TGOD(GodID)->GetConst(TOLERANCE_VAL)))
+    if (Anger[e.godNum] > std::max<int>(3,(int16)TGOD(GodID)->GetConst(TOLERANCE_VAL)))
       return NOTHING;
       
     if (getGodFlags(GodID) & (GS_ANATHEMA|GS_FORSAKEN))
@@ -1400,7 +1400,7 @@ EvReturn Player::GodRaise(EventInfo &e)
     if (FavPenalty[e.godNum] + TGOD(e.eID)->GetConst(RESURRECTION_COST) > 100)
       return NOTHING;
       
-    if (Anger[e.godNum] > max<int>(3,(int16)TGOD(e.eID)->GetConst(TOLERANCE_VAL)))
+    if (Anger[e.godNum] > std::max<int>(3,(int16)TGOD(e.eID)->GetConst(TOLERANCE_VAL)))
       return NOTHING;
       
     if (getGodFlags(e.eID) & (GS_ANATHEMA|GS_FORSAKEN))
@@ -1441,14 +1441,14 @@ EvReturn Player::GodRaise(EventInfo &e)
         return DONE;
       }
          
-    resChance -= max(0,(10 - Mod(A_CON)));
+    resChance -= std::max(0,(10 - Mod(A_CON)));
     
     /* Intervention Penalty */
     FavPenalty[e.godNum] += (int16)TGOD(GodID)->GetConst(RESURRECTION_COST);
     
     /* You have enough XP for the level right below the one you are
        currently at -- simulate losing a level. */
-    XP = max(0,min<int>(XP-2000,(XP*85L)/100L));
+    XP = std::max(0, std::min<int>(XP-2000,(XP*85L)/100L));
     
     /* Reduce Con by one permanently */
     BAttr[A_CON]--;
@@ -1648,7 +1648,7 @@ void Character::Forsake()
         if (Anger[theGame->GodNum(GodID)] > 30)
           goto realForsake;
         GodMessage(GodID,MSG_PENANCE);
-        Anger[theGame->GodNum(GodID)] = max<int>(10 +
+        Anger[theGame->GodNum(GodID)] = std::max<int>(10 +
           (int16)TGOD(GodID)->GetConst(TOLERANCE_VAL),
           Anger[theGame->GodNum(GodID)]);
         
@@ -1658,7 +1658,7 @@ void Character::Forsake()
       
     realForsake:
     GodMessage(GodID,MSG_FORSAKE);
-    Anger[theGame->GodNum(GodID)] = max<int>(10 +
+    Anger[theGame->GodNum(GodID)] = std::max<int>(10 +
       (int16)TGOD(GodID)->GetConst(TOLERANCE_VAL),
       Anger[theGame->GodNum(GodID)]);
     setGodFlags(GodID, GS_FORSAKEN);    
@@ -2032,7 +2032,7 @@ EvReturn Character::AlignedAct(EventInfo &e)
       else if (e.EParam & AL_GOOD)
         alignGE -= (int16)e.vMag;
       if (!(dAlign & AL_GOOD))
-        alignGE = max<int>(-30, alignGE);
+        alignGE = std::max<int>(-30, alignGE);
       }
     else if (cAlign & AL_EVIL) {
       if (e.EParam & AL_NONEVIL) {
@@ -2042,12 +2042,12 @@ EvReturn Character::AlignedAct(EventInfo &e)
       else if (e.EParam & AL_EVIL)
         alignGE += (int16)e.vMag;
       if (!(dAlign & AL_EVIL))
-        alignGE = min<int>(30, alignGE);
+        alignGE = std::min<int>(30, alignGE);
       }
     else if (e.EParam & AL_GOOD) {
       alignGE -= (int16)e.vMag;
       if (!(dAlign & AL_GOOD))
-        alignGE = max<int>(alignGE,0);
+        alignGE = std::max<int>(alignGE,0);
       }
     else if (e.EParam & AL_EVIL)
       alignGE += (int16)e.vMag;
@@ -2073,7 +2073,7 @@ EvReturn Character::AlignedAct(EventInfo &e)
       else if (e.EParam & AL_LAWFUL)
         alignLC -= (int16)e.vMag;
       if (!(dAlign & AL_LAWFUL))
-        alignLC = max<int>(-30, alignLC);
+        alignLC = std::max<int>(-30, alignLC);
       }
     else if (cAlign & AL_CHAOTIC) {
       if (e.EParam & AL_NONCHAOTIC) {
@@ -2086,21 +2086,21 @@ EvReturn Character::AlignedAct(EventInfo &e)
       else if (e.EParam & AL_CHAOTIC)
         alignLC += (int16)e.vMag;
       if (!(dAlign & AL_CHAOTIC))
-        alignLC = max<int>(30, alignLC);
+        alignLC = std::max<int>(30, alignLC);
       }
     else if (e.EParam & AL_LAWFUL) {
       alignLC -= (int16)e.vMag;
       if (!(dAlign & AL_LAWFUL))
-        alignLC = max<int>(alignLC,0);
+        alignLC = std::max<int>(alignLC,0);
       }
     else if (e.EParam & AL_CHAOTIC) {
       alignLC -= (int16)e.vMag;
       if (!(dAlign & AL_CHAOTIC))
-        alignLC = min<int>(alignLC,0);
+        alignLC = std::min<int>(alignLC,0);
       }
     
-    alignLC = max(-70,min<int>(70,alignLC));
-    alignGE = max(-70,min<int>(70,alignGE));
+    alignLC = std::max(-70, std::min<int>(70,alignLC));
+    alignGE = std::max(-70, std::min<int>(70,alignGE));
       
     if (alignLC > -20)
       nAlign &= (~AL_LAWFUL);
@@ -2215,7 +2215,7 @@ void Creature::AlignedAct(uint16 type, int16 mag, const char *reason,Creature *v
         }
           
       Complicity:
-      getLeader()->AlignedAct(type,max(1,mag/2),
+      getLeader()->AlignedAct(type, std::max(1,mag/2),
         Format ("complicity to %s",reason));
       }
     else {

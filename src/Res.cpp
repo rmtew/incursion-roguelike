@@ -328,7 +328,7 @@ rID Game::Find(const char*str)
         if (xID = Modules[q]->FindResource(str))
           {
             memmove(&FindCache[1],&FindCache[0],sizeof(__FindCache)*127);
-            szFindCache = min(127,szFindCache+1);
+            szFindCache = std::min(127,szFindCache+1);
             strncpy(FindCache[0].str,str,31);
             FindCache[0].xID = xID;
             return xID;
@@ -545,7 +545,7 @@ rID Game::GetTempID(uint16 Types, rID mID, int8 maxCR)
                     */
 
           for (spread = 0; 
-               spread < max<int>(Modules[q]->QTem[i].CR.Adjust(tm->CR),1);
+               spread < std::max<int>(Modules[q]->QTem[i].CR.Adjust(tm->CR),1);
                spread++)
                 Candidates[n++] = Modules[q]->TemplateID(i);
         }
@@ -622,7 +622,7 @@ rID Game::GetEffectID(int16 Purpose, int8 minlev, int8 maxlev, int8 Source) {
                     continue;
 
                 if (TEFF(effID)->ef.aval == AR_POISON) {
-                    if (p->HasSkill(SK_ALCHEMY) && p->HasSkill(SK_POISON_USE) && (min(p->SkillLevel(SK_ALCHEMY), p->SkillLevel(SK_POISON_USE)) >= TEFF(effID)->ef.sval))
+                    if (p->HasSkill(SK_ALCHEMY) && p->HasSkill(SK_POISON_USE) && (std::min(p->SkillLevel(SK_ALCHEMY), p->SkillLevel(SK_POISON_USE)) >= TEFF(effID)->ef.sval))
                         ;
                     else
                         continue;

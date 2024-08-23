@@ -1640,7 +1640,7 @@ void Player::IntuitItem(Item *it) {
         it->Inscrip = levels[0];
     else
         it->Inscrip = levels[1 +
-        min(min(it->PItemLevel(this) / 3, (precision / 4)), 6)];
+        std::min(std::min(it->PItemLevel(this) / 3, (precision / 4)), 6)];
     // itemlevel ranges from around 0 to 25
 
     it->Inscrip = XPrint(it->Inscrip);
@@ -1827,7 +1827,7 @@ EvReturn Player::SpendHours(int16 minHours, int16 maxHours, int16 &hoursSpent, b
         return ABORT;
     }
 
-    hoursSpent = min(maxHours, (int16)((AllowedTime - AwakeTime) / HOUR_TURNS));
+    hoursSpent = std::min(maxHours, (int16)((AllowedTime - AwakeTime) / HOUR_TURNS));
 
     theGame->Turn += hoursSpent * HOUR_TURNS;
     if (hoursSpent == 1)
@@ -1944,7 +1944,7 @@ EvReturn Player::Rest(EventInfo &e) {
                 IPrint(msg);
             }
             oChance = Chance;
-            Chance = max(0, Chance - sumSpot);
+            Chance = std::max(0, Chance - sumSpot);
             if (Roll < oChance && !(e.EParam & REST_SAFE))
                 if (Roll >= Chance)
                     IPrint("Your feel you are evaluated, but your " \
@@ -1966,7 +1966,7 @@ EvReturn Player::Rest(EventInfo &e) {
 
         ASSERT(dID);
 
-        int32 maxDepthHere = min<int>(MAX_DUNGEON_LEVELS,
+        int32 maxDepthHere = std::min<int>(MAX_DUNGEON_LEVELS,
             TDUN(dID)->GetConst(DUN_DEPTH) + 1);
         int32 depth;
 
@@ -2040,7 +2040,7 @@ EvReturn Player::Rest(EventInfo &e) {
                                 a_hp = A_WIS;
 
                             if (!(t->isMType(MA_UNDEAD) || t->isMType(MA_CONSTRUCT))) {
-                                t->cHP = min(t->mHP + t->Attr[A_THP], t->cHP +
+                                t->cHP = std::min(t->mHP + t->Attr[A_THP], t->cHP +
                                     ((t->ChallengeRating() + 3) * t->Attr[a_hp] * Percent) /
                                     800);
                                 if (t->cHP < t->mHP + t->Attr[A_THP] && t->HasSkill(SK_HEAL, true)) {
@@ -2050,7 +2050,7 @@ EvReturn Player::Rest(EventInfo &e) {
                                         t->IPrint("You tend your wounds with your skill as a healer.");
                                     else
                                         t->IPrint("The <Obj1> tends your wounds with <his:Obj1> skill as a healer.", healer);
-                                    t->cHP = min(t->mHP + t->Attr[A_THP], t->cHP +
+                                    t->cHP = std::min(t->mHP + t->Attr[A_THP], t->cHP +
                                         ((healer->SkillLevel(SK_HEAL)) * t->Attr[a_hp] * Percent) /
                                         500);
                                 }
@@ -2102,17 +2102,17 @@ EvReturn Player::Rest(EventInfo &e) {
                                 // point back per rest, and resting 10 times is *way*
                                 // boring. New theory: a full night's sleep always gets
                                 // you back to at least 1 point of fatigue. 
-                                t->cFP = (min<int>(t->Attr[A_FAT], t->cFP + max<int>(1, t->Mod((int8)a_hp))));
+                                t->cFP = (std::min<int>(t->Attr[A_FAT], t->cFP + std::max<int>(1, t->Mod((int8)a_hp))));
                         } else {                          /* Exhausted */
                             if (Percent == 100)
-                                t->cFP = max(min<int>(t->Attr[A_FAT], t->cFP + max<int>(1, t->Mod((int8)a_hp))), 1);
+                                t->cFP = std::max(std::min<int>(t->Attr[A_FAT], t->cFP + std::max<int>(1, t->Mod((int8)a_hp))), 1);
                             else
                                 t->cFP += 1;
                         }
                         if (t->InSlot(SL_ARMOUR) && t->InSlot(SL_ARMOUR)->isCursed())
                         {
                             t->IPrint("Resting in your cursed armour prevents decent sleep.");
-                            t->cFP = min<int>(t->cFP, -1);
+                            t->cFP = std::min<int>(t->cFP, -1);
                         }
 
                         // ww: just before you wake up they all cast Stoneskin ...
@@ -2413,7 +2413,7 @@ RestartTerra:
                             the player can't "scum" a level for items through
                             repetition. */
                             for (it = cr->FirstInv(); it; it = cr->NextInv())
-                                if (it->isMagic() && it->ItemLevel() > min(Depth / 2, Depth - 4)) {
+                                if (it->isMagic() && it->ItemLevel() > std::min(Depth / 2, Depth - 4)) {
                                     if (it->isType(T_WEAPON) || it->isType(T_ARMOUR) ||
                                         it->isType(T_SHIELD) || it->isType(T_MISSILE) ||
                                         it->isType(T_CONTAIN))
@@ -2836,13 +2836,13 @@ void Character::Exercise(int16 at, int16 amt, int16 col, int16 cap) {
     case A_STR:
     case A_DEX:
     case A_CON:
-        needed = 100 - max<int>(0, SkillLevel(SK_ATHLETICS));
+        needed = 100 - std::max<int>(0, SkillLevel(SK_ATHLETICS));
         break;
     case A_WIS:
-        needed = 100 - max<int>(0, SkillLevel(SK_CONCENT));
+        needed = 100 - std::max<int>(0, SkillLevel(SK_CONCENT));
         break;
     case A_CHA:
-        needed = 100 - max<int>(0, SkillLevel(SK_PERFORM));
+        needed = 100 - std::max<int>(0, SkillLevel(SK_PERFORM));
         break;
     case A_INT:
         sk = 0;
@@ -2860,7 +2860,7 @@ void Character::Exercise(int16 at, int16 amt, int16 col, int16 cap) {
     for (i = 0; i != 15; i++)
         total += GainAttr[at][i];
 
-    adding = min<int>(cap - GainAttr[at][col], amt);
+    adding = std::min<int>(cap - GainAttr[at][col], amt);
 
     if (total + adding > needed) {
         adding = amt - (needed - total);

@@ -960,13 +960,13 @@ bool TargetSystem::addTarget(Target &newT)
     ;;
   if (i != NUM_TARGETS) {
     t[i] = newT;
-    tCount = max<int>(tCount, i+1);
+    tCount = std::max<int>(tCount, i+1);
     return true; 
     }
   for (i=tCount-1; i>=0; i--) 
     if (t[i].priority <= newT.priority) {
       t[i] = newT;
-      tCount = max<int>(tCount, i+1);
+      tCount = std::max<int>(tCount, i+1);
       return true;
     } 
   return false; 

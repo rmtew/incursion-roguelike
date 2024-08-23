@@ -127,7 +127,7 @@ int16 Creature::SpellDmgBonus(rID eID)
           that has AI_WIZARDRY/AI_SORCERY as a spell, even if it's,
           say, a staff spell or cleric spell. Not technically
           correct, but not a huge deal. */
-        db += max<int>(0,Mod(A_WIS));
+        db += std::max<int>(0,Mod(A_WIS));
       }
     return db;
   } 
@@ -464,7 +464,7 @@ bool Magic::isTarget(EventInfo &_e, Thing *t) {
           e.saveDC = (int8)e.EActor->getSpellDC(e.eID, e.isArcaneTrickery,(e.MM & MM_HEIGHTEN) == MM_HEIGHTEN);
 
       if (e.isItem && e.EItem && e.EItem->isType(T_SCROLL))
-          e.vCasterLev = max(TEFF(e.EItem->eID)->Level*2-1,e.EActor->SkillLevel(SK_DECIPHER) - 2); 
+          e.vCasterLev = std::max(TEFF(e.EItem->eID)->Level*2-1,e.EActor->SkillLevel(SK_DECIPHER) - 2);
 
       if (e.isItem && e.EItem && e.EItem->isItem())
           e.vCasterLev = (int8)e.EItem->ItemLevel();
@@ -475,7 +475,7 @@ bool Magic::isTarget(EventInfo &_e, Thing *t) {
       else if (te->ef.aval == AR_POISON || te->ef.aval == AR_DISEASE)
           e.vCasterLev = te->Level;
       else if (sp_flags & SP_INNATE) 
-          e.vCasterLev = max<int>(1,e.EActor->ChallengeRating());
+          e.vCasterLev = std::max<int>(1,e.EActor->ChallengeRating());
       else
           e.vCasterLev = (int8)e.EActor->CasterLev();
 
@@ -493,7 +493,7 @@ bool Magic::isTarget(EventInfo &_e, Thing *t) {
       }
 
       if (e.EItem && e.EItem->isItem())
-          e.vAlchemy = max<int>(10,e.EItem->GetStatiMag(ALCHEMY_LEV));
+          e.vAlchemy = std::max<int>(10,e.EItem->GetStatiMag(ALCHEMY_LEV));
 
       if (e.effIllusion && !(e.illFlags & IL_SHADE))
           if (e.EActor->isPlayer())
@@ -560,7 +560,7 @@ bool Magic::isTarget(EventInfo &_e, Thing *t) {
       }
 
       if (e.MM & MM_MAXIMIZE)
-          e.vDmg = max<int>(0,e.Dmg.Number) * abs(e.Dmg.Sides) + e.Dmg.Bonus;
+          e.vDmg = std::max<int>(0,e.Dmg.Number) * abs(e.Dmg.Sides) + e.Dmg.Bonus;
       else {
           if (e.Dmg.Sides < 0)
               e.Dmg.Sides = -e.Dmg.Sides;
@@ -698,7 +698,7 @@ Nothing:
 
           e.isFirstBlastXY = true;
 
-          if (e.isActivation != te->HasFlag(EF_ACTIVATE+min<int>(e.efNum,4)))
+          if (e.isActivation != te->HasFlag(EF_ACTIVATE+ std::min<int>(e.efNum,4)))
               { e.efNum++; continue; }
 
           if (te->HasFlag(EF_PERIODIC) && !e.isPeriodic) {                                         
@@ -1009,7 +1009,7 @@ DisbeliefMessageDone:
                     doResistDeath = true;
                     TPrint(e,"The <EVictim> shrugs off your death magic with sheer toughness!",
                         "You shrug off the <EActor>'s death magic with sheer toughness! (<Num> left).", 
-                        NULL, max(0,e.EVictim->Mod(A_CON)*2 - (count+1)));
+                        NULL, std::max(0,e.EVictim->Mod(A_CON)*2 - (count+1)));
                 }
             }
 
@@ -1017,7 +1017,7 @@ DisbeliefMessageDone:
         /* Set EMagic to the current effect component */
         e.EMagic = te->Vals(e.efNum);
 
-        if (e.isActivation != te->HasFlag(EF_ACTIVATE+min<int>(e.efNum,4)))
+        if (e.isActivation != te->HasFlag(EF_ACTIVATE + std::min<int>(e.efNum,4)))
             goto SkipSegment;
 
         e.Immune = e.MagicRes || doResistDeath || !isTarget(e,e.ETarget);
@@ -1410,9 +1410,9 @@ EvReturn Magic::ABarrier(EventInfo &e)
 
     stop1 = stop2 = false;
     if (e.MM & MM_ENLARGE)
-      lim = max(e.vRadius*2,20);
+      lim = std::max(e.vRadius*2,20);
     else
-      lim = max<int>(e.vRadius,10);
+      lim = std::max<int>(e.vRadius,10);
 
     while ((!stop1) || (!stop2)) {
       if (!stop1) {
@@ -1512,7 +1512,7 @@ EvReturn Magic::AField(EventInfo &e)
     if (e.MM & MM_ENLARGE)
       e.vRadius *= 2;
     else if (e.MM & MM_FOCUS)
-      e.vRadius = max(1,e.vRadius/2);
+      e.vRadius = std::max(1,e.vRadius/2);
     
     for(x = tx-e.vRadius; x <= tx+e.vRadius; x++)
       for(y = ty-e.vRadius; y <= ty+e.vRadius; y++)
@@ -1602,7 +1602,7 @@ EvReturn Magic::ABallBeamBolt(EventInfo &e)
   // ww: WarpCount 
   int16 WarpCount;
   if (e.MM & MM_WARP)
-    WarpCount = max(2,3+e.EActor->Mod(A_INT));
+    WarpCount = std::max(2,3+e.EActor->Mod(A_INT));
   else
     WarpCount = 0;
 
@@ -1644,7 +1644,7 @@ EvReturn Magic::ABallBeamBolt(EventInfo &e)
   // minimum range for wand beams ...
   if (isBeam && e.EItem && 
       (e.EItem->isType(T_WAND) || e.EItem->isType(T_POTION)))
-    e.vRange = max<int>(5,e.vRange);
+    e.vRange = std::max<int>(5,e.vRange);
   
   // map overlay 
   Map &m = *(e.EActor->m);
@@ -1927,7 +1927,7 @@ EvReturn Magic::ABallBeamBolt(EventInfo &e)
           e.EXVal = best->x;
           e.EYVal = best->y;
           e.isDir = false;
-          ti = max(0,tc-1);
+          ti = std::max(0,tc-1);
           goto NextChain;
         }
     }
@@ -2076,7 +2076,7 @@ void Magic::PredictVictimsOfBallBeamBolt(EventInfo &e,
   // ww: WarpCount 
   int16 WarpCount;
   if (e.MM & MM_WARP)
-    WarpCount = max(2,3+e.EActor->Mod(A_INT));
+    WarpCount = std::max(2,3+e.EActor->Mod(A_INT));
   else
     WarpCount = 0;
 
@@ -2114,7 +2114,7 @@ void Magic::PredictVictimsOfBallBeamBolt(EventInfo &e,
   // minimum range for wand beams ...
   if (isBeam && e.EItem && 
       (e.EItem->isType(T_WAND) || e.EItem->isType(T_POTION)))
-    e.vRange = max<int>(5,e.vRange);
+    e.vRange = std::max<int>(5,e.vRange);
 
   // map overlay 
   Map &m = *(e.EActor->m);
@@ -2296,7 +2296,7 @@ EvReturn Creature::Cast(EventInfo &e) {
     EvReturn res; Item *it; bool dmgFail, wasThreatened;
     int16 i, j, oHP, fc, sc; Creature *c; String MMStr;
     int16 castingTimeout = 
-        3000 / max(25,100+10*(1 + e.EActor->Mod(A_INT) -
+        3000 / std::max(25,100+10*(1 + e.EActor->Mod(A_INT) -
         TEFF(e.eID)->Level));
     int16 specMod; 
     Counterspeller csp[64]; int16 cc; EvReturn csr;
@@ -2702,7 +2702,7 @@ ContinueCasting:
     dmg_pen = 0;
     if (oHP > cHP) {
         dmg_pen = ((oHP-cHP)*300) / (mHP+GetAttr(A_THP));
-        dmg_pen = max(0,dmg_pen - ((ConcentBuffer() - (concentUsed + p_conc))*5));
+        dmg_pen = std::max(0,dmg_pen - ((ConcentBuffer() - (concentUsed + p_conc))*5));
         rating -= dmg_pen;
     }  
 
@@ -2850,7 +2850,7 @@ EvReturn Creature::Invoke(EventInfo &e)
 
 
     if (TEFF(e.eID)->Purpose & EP_BUFF && HasFeat(FT_MYSTIC_PREPARATION)) {
-      mCost = max( (mCost-2), 1);
+      mCost = std::max( (mCost-2), 1);
     }
     LoseMana(mCost,TEFF(e.eID)->HasFlag(EF_LOSEMANA));
     } 
@@ -2957,12 +2957,12 @@ EvReturn Creature::Counterspell(EventInfo &e, Counterspeller *csp) {
                 if (TEFF(xID)->Level >= lv)
                     if (TEFF(xID)->Schools & TEFF(e.eID)->Schools & (SC_ABJ|SC_ARC|SC_DIV|SC_ENC|SC_EVO|SC_ILL|SC_NEC|SC_THA|SC_WEA))
                         if (csID == 0 || TEFF(xID)->ManaCost < TEFF(csID)->ManaCost) {
-                            csID = xID; mCost = max(TEFF(csID)->ManaCost, TEFF(e.eID)->ManaCost);
+                            csID = xID; mCost = std::max(TEFF(csID)->ManaCost, TEFF(e.eID)->ManaCost);
                         }
 
         if (!csID)
             if ((csp[i].cr->getSpellFlags(dispID) & SP_KNOWN)) {
-                isDispel = true; mCost = max(TEFF(dispID)->ManaCost, TEFF(e.eID)->ManaCost);
+                isDispel = true; mCost = std::max(TEFF(dispID)->ManaCost, TEFF(e.eID)->ManaCost);
             }
 
         if (!csID)
@@ -3021,7 +3021,7 @@ Counterspelled:
         "The <EActor> counters your spell with <9><Res><7>.",
         "The <EActor> mutters a quick counterspell!", csID);
 
-    csp[i].cr->Timeout += max(3, (isDispel ? 20 : 15) - csp[i].cr->SkillLevel(SK_SPELLCRAFT));
+    csp[i].cr->Timeout += std::max(3, (isDispel ? 20 : 15) - csp[i].cr->SkillLevel(SK_SPELLCRAFT));
     LoseMana(mCost);
 
     if (csp[i].cr->HasFeat(FT_REFLECTIVE_COUNTERSPELL))
@@ -3060,7 +3060,7 @@ int16 Creature::SpellRating(rID eID, uint32 mm, bool perceived)
        close enough for now. */
     if ( TEFF(eID)->HasSource(AI_THEURGY) || 
          TEFF(eID)->HasSource(AI_DRUIDIC) )
-      Chance += max(Attr[A_ARC],Attr[A_DIV])*5;
+      Chance += std::max(Attr[A_ARC],Attr[A_DIV])*5;
     else
       Chance += Attr[A_ARC]*5;
 
@@ -3070,7 +3070,7 @@ int16 Creature::SpellRating(rID eID, uint32 mm, bool perceived)
     if (Chance > 50 && (mm & MM_SURE))
       return 100;
 
-    return max(2,min<int>((uint16)98,Chance));
+    return std::max(2, std::min<int>((uint16)98,Chance));
   }
 
 int16 p_base, p_int, p_lev, p_conc,
@@ -3155,7 +3155,7 @@ int16 Character::SpellRating(rID eID, uint32 mm, bool perceived)
          schools that the spell belongs to. */
       for(j = 0;j!=9;j++)
         if (TEFF(eID)->Schools & XBIT(j))
-          p_spec = max<int>(p_spec,SpecialistTable[i][j]);
+          p_spec = std::max<int>(p_spec,SpecialistTable[i][j]);
 
       if (p_spec == -50)
         p_spec = 0;
@@ -3166,7 +3166,7 @@ int16 Character::SpellRating(rID eID, uint32 mm, bool perceived)
        druidic Evocations when you become an Illusionist, but you do
        get better at shared mage/druid illusions. */
     if (Spells[sp] & (SP_DIVINE|SP_BARDIC|SP_PRIMAL|SP_SORCERY))
-      p_spec = max<int>(p_spec,0);
+      p_spec = std::max<int>(p_spec,0);
     
 
     int16 *at;
@@ -3207,21 +3207,21 @@ int16 Character::SpellRating(rID eID, uint32 mm, bool perceived)
         { p_circ = -40; ps_circ += "terrain/"; }
       }
     if (HasStati(MOUNTED) && isThreatened())
-      { p_circ -= max(0,40 - SkillLevel(SK_RIDE)*2);
+      { p_circ -= std::max(0,40 - SkillLevel(SK_RIDE)*2);
         ps_circ += "mounted/"; }
     
     concentLeft = ConcentBuffer() - concentUsed;
-    p_conc = min(abs(p_circ),concentLeft*5);
+    p_conc = std::min(abs(p_circ),concentLeft*5);
 
     Chance = p_base + p_int + p_lev + p_meta + p_spec + p_calc + p_circ + p_conc;
 
-    if (Chance > max<int>(90,p_base))
-      Chance = max<int>(90,p_base) + ((Chance - max<int>(90,p_base)) / 5);
+    if (Chance > std::max<int>(90,p_base))
+      Chance = std::max<int>(90,p_base) + ((Chance - std::max<int>(90,p_base)) / 5);
 
     if (Chance > 50 && (mm & MM_SURE))
       return 100;
 
-    return max(2,min<int>((uint16)100,Chance));
+    return std::max(2, std::min<int>((uint16)100,Chance));
 
   }
   
@@ -3270,7 +3270,7 @@ int16 Creature::getSpellDC(rID spID, bool isTrick, bool isHeight)
     dc_beguile = 0;
     if (HasAbility(CA_BEGUILING_MAGIC))
       if (TEFF(spID)->HasFlag(EF_MENTAL))
-        dc_beguile = max<int>(0,Mod(A_CHA));
+        dc_beguile = std::max<int>(0,Mod(A_CHA));
       
     dc_trick = isTrick ? 8 : 0;
     dc_height = isHeight ? 4 : 0;
@@ -3313,7 +3313,7 @@ int16 Creature::getSpellMana(rID spID, uint32 MM, int16 *specMod2)
       {
         mult = 2 + MMFeatLevels(MM);
         mCost = (mCost * mult + 1) / 2;
-        mCost = max<int>(mCost,TEFF(spID)->ManaCost + (3*(mult-2)));
+        mCost = std::max<int>(mCost,TEFF(spID)->ManaCost + (3*(mult-2)));
       }
 
     /* New rule -- specialist wizards suffer more for casting from thier
@@ -3332,14 +3332,14 @@ int16 Creature::getSpellMana(rID spID, uint32 MM, int16 *specMod2)
            schools that the spell belongs to. */
         for(j = 0;j!=9;j++)
           if (TEFF(spID)->Schools & XBIT(j)) 
-            specMod = max<int>(specMod,SpecialistTable[sch][j]);
+            specMod = std::max<int>(specMod,SpecialistTable[sch][j]);
               
         if (specMod == -50)
           specMod = 0;
         }     
     if (isPlayer() && (thisp->Spells[sp] & 
           (SP_DIVINE|SP_BARDIC|SP_PRIMAL|SP_SORCERY)))
-      specMod = max<int>(specMod,0);
+      specMod = std::max<int>(specMod,0);
 
     
     if (TEFF(spID)->Purpose & EP_BUFF)
@@ -3347,16 +3347,16 @@ int16 Creature::getSpellMana(rID spID, uint32 MM, int16 *specMod2)
         if (AbilityLevel(CA_PREPATORY_MAGIC))          
           {
             int16 percent = 100 - AbilityLevel(CA_PREPATORY_MAGIC)*5;
-            mCost = max( (mCost*percent)/100 , 1);
+            mCost = std::max( (mCost*percent)/100 , 1);
           }
         if (HasFeat(FT_MYSTIC_PREPARATION))
-          mCost = max( (mCost-2), 1);
+          mCost = std::max( (mCost-2), 1);
       }
       
     if (specMod < 0)
       mCost += (mCost * abs(specMod)) / 10;
     else if (specMod > 0)
-      mCost = max (1, mCost - ((mCost * abs(specMod)) / 50));
+      mCost = std::max(1, mCost - ((mCost * abs(specMod)) / 50));
 
     if (specMod2)
       *specMod2 = specMod;
@@ -3595,7 +3595,7 @@ EvReturn Item::ReadScroll(EventInfo &e)
         e.EActor->IdentByTrial(e.EItem);
 
 Failed:
-    e.EActor->Timeout += max(10,50 - cLevel*2);
+    e.EActor->Timeout += std::max(10,50 - cLevel*2);
 
     if (e.EActor->SpellRating(eID) <= 0)
       {
@@ -3672,7 +3672,7 @@ EvReturn Item::ZapWand(EventInfo &e)
       goto Nothing;
 
     int16 zappingTimeout = 
-            2000 / max(25,100+e.EActor->Mod(A_INT)*5);  
+            2000 / std::max(25,100+e.EActor->Mod(A_INT)*5);
     // ww: let's bring that INT mod into play here
     e.EActor->Timeout += zappingTimeout;
     e.EActor->AccessTime(e.EItem);
@@ -3692,7 +3692,7 @@ EvReturn Item::ZapWand(EventInfo &e)
           e.EActor->IPrint("You don't have enough mana.");
           return ABORT;
           }
-        if (e.EActor->cMana() >= max(1,Cost/2))
+        if (e.EActor->cMana() >= std::max(1,Cost/2))
           if ((e.EItem->isKnown(KN_PLUS|KN_MAGIC)) && e.EActor->yn("Fire it anyway?",true))
             {
               ThrowDmg(EV_DAMAGE,AD_NORM,Dice::Roll(TEFF(e.eID)->ManaCost - 
@@ -3721,8 +3721,8 @@ EvReturn Item::ZapWand(EventInfo &e)
         rollC = Dice::Roll(1,20);
     StatiIterEnd(e.EActor)
     
-    roll   = max(rollA,rollB);
-    roll   = max(roll ,rollC);
+    roll   = std::max(rollA,rollB);
+    roll   = std::max(roll ,rollC);
     Lev    = e.EItem->ItemLevel();
     SpecBonus = 0; 
     if (TEFF(eID)->HasFlag(EF_STAPLE))
@@ -3739,7 +3739,7 @@ EvReturn Item::ZapWand(EventInfo &e)
          schools that the spell belongs to. */
       for(int j = 0;j!=9;j++)
         if (TEFF(eID)->Schools & XBIT(j))
-          m = max<int>(m,SpecialistTable[i][j]);
+          m = std::max<int>(m,SpecialistTable[i][j]);
 
       if (m > 0)
         SpecBonus = m / 5;

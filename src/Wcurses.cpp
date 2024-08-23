@@ -59,11 +59,14 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 
+// Prevent <windows.h> min/max definitions
+#define NOMINMAX
+
 #undef TRACE
-#undef MIN
-#undef MAX
 #undef ERROR
 #undef EV_BREAK
+
+#include <algorithm>
 
 #include <direct.h>
 #include <stdarg.h>
@@ -81,23 +84,17 @@
 #pragma comment(lib, "crash_generation_client")
 #include "client/windows/handler/exception_handler.h"
 #undef ERROR
-#undef MIN
-#undef MAX
 #undef EV_BREAK
 #endif
 
 #include "Incursion.h"
 #undef ERROR
-#undef MIN
-#undef MAX
 
 #define PDC_WIDE
 #include "curses.h"
 //#define TCOD_NOBASETYPES
 //#include "libtcod.h"
 //#undef ERROR
-//#undef MIN
-//#undef MAX
 
 //#define SDL_MAIN_HANDLED
 //#include "SDL.h"
@@ -935,8 +932,8 @@ RetryFont:
 	}
 
     if (sizeX < 80 || sizeY < 48) {
-		desiredSizeX = max(sizeX, 80);
-		desiredSizeY = max(sizeY, 48);
+		desiredSizeX = std::max<int>(sizeX, 80);
+		desiredSizeY = std::max<int>(sizeY, 48);
 		resize_term(desiredSizeY, desiredSizeX);
 	    goto RetryFont;
     }
@@ -1114,7 +1111,7 @@ void cursesTerm::SClear() {
 }
 
 void cursesTerm::BlitScrollLine(int16 wn, int32 buffline, int32 winline) {
-	size_t copy_width = min(SCROLL_WIDTH, WinSizeX());
+	size_t copy_width = std::min<int>(SCROLL_WIDTH, WinSizeX());
 	int32 src_yindex = buffline * SCROLL_WIDTH;
 
 	for (size_t i = 0; i < copy_width; i++) {

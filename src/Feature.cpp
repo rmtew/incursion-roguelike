@@ -81,7 +81,7 @@ EvReturn Feature::Event(EventInfo &e) {
         if (e.EItem && e.EItem->isWeapon()) {
             ((Weapon *)e.EItem)->DoQualityDmgSingle(e);
         }
-        e.EActor->MakeNoise(max(10 - (e.EActor->SkillLevel(SK_MOVE_SIL) / 2), 1));
+        e.EActor->MakeNoise(std::max(10 - (e.EActor->SkillLevel(SK_MOVE_SIL) / 2), 1));
         if (isDead())
             e.Died = true;
         if (res != NOTHING)
@@ -947,7 +947,7 @@ void Player::MoveDepth(int16 NewDepth, bool safe) {
             if (c->isPlayer())
                 c->Timeout = 0;
             else if (c->isCreature())
-                c->Timeout = max<int>(c->Timeout, 1);
+                c->Timeout = std::max<int>(c->Timeout, 1);
     }
 }
   
@@ -984,8 +984,8 @@ Map* Game::GetDungeonMap(rID dID, int16 Depth, Player *pl, Map*TownLevel) {
         Fatal("Too deep in dungeon; MAX_DUNGEON_LEVELS is %d.", MAX_DUNGEON_LEVELS);
 
     DungeonID[i] = dID;
-    DungeonSize[i] = min<int>(MAX_DUNGEON_LEVELS, (int16)(RES(dID)->GetConst(DUN_DEPTH)));
-    DungeonLevels[i] = (hObj*)malloc(sizeof(hObj)*min<int>(MAX_DUNGEON_LEVELS, RES(dID)->GetConst(DUN_DEPTH) + 1));
+    DungeonSize[i] = std::min<int>(MAX_DUNGEON_LEVELS, (int16)(RES(dID)->GetConst(DUN_DEPTH)));
+    DungeonLevels[i] = (hObj*)malloc(sizeof(hObj) * std::min<int>(MAX_DUNGEON_LEVELS, RES(dID)->GetConst(DUN_DEPTH) + 1));
     memset(DungeonLevels[i], 0, sizeof(hObj)*(RES(dID)->GetConst(DUN_DEPTH) + 1));
 Found:
     n = i;

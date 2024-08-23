@@ -783,12 +783,12 @@ int8 Creature::SkillKitMod(int16 sk) {
 		}
 
 		if (sk == SK_CLIMB && it->HasIFlag(IT_ROPE))
-			rope_mod = max(rope_mod, (int16)TITEM(it->iID)->GetConst(ROPE_MOD));
+			rope_mod = std::max(rope_mod, (int16)TITEM(it->iID)->GetConst(ROPE_MOD));
 	next_item:;
 	}
 
 	if (HasStati(INNATE_KIT, sk))
-		best = max(best, GetStatiMag(INNATE_KIT, sk));
+		best = std::max(best, GetStatiMag(INNATE_KIT, sk));
 
 	return best + sec + rope_mod;
 }
@@ -957,7 +957,7 @@ void Character::UseSkill(uint8 sk) {
 							DirToGroup[j] = DirTo(
 								posse[i]->x, posse[i]->y) + 10;
 						if (Nearest[j])
-							Nearest[j] = min(Nearest[j],
+							Nearest[j] = std::min(Nearest[j],
 								dist(x, y, posse[i]->x, posse[i]->y));
 						else
 							Nearest[j] =
@@ -1103,7 +1103,7 @@ void Character::UseSkill(uint8 sk) {
 		StatiIterNature(this, SPECIES_AFFINITY)
 			if (e.EVictim->isMType(S->Val))
 			{
-				e.EParam = max(e.EParam, S->Mag);
+				e.EParam = std::max(e.EParam, S->Mag);
 				StatiIterBreakout(this, goto ValidTarget)
 			}
 		StatiIterEnd(this)
@@ -1352,7 +1352,7 @@ void Character::UseSkill(uint8 sk) {
 			else if (GetStatiDur(BLINDNESS) < -1) /* Days */
 				healDC = 25;
 			else
-				healDC = min(10 + GetStatiDur(BLINDNESS) / 3, 20);
+				healDC = std::min(10 + GetStatiDur(BLINDNESS) / 3, 20);
 			if (SkillCheck(SK_HEAL, healDC, true)) {
 				RemoveStati(BLINDNESS);
 				IPrint("You manage to restore your sight.");
@@ -1539,8 +1539,8 @@ bool Creature::SkillCheck(int16 sk, int16 DC, bool show, int16 mod1, const char*
 			rollC = Dice::Roll(1, 20);
 	StatiIterEnd(this)
 
-	roll = max(rollA, rollB);
-	roll = max(roll, rollC);
+	roll = std::max(rollA, rollB);
+	roll = std::max(roll, rollC);
 
 	if (HasAbility(CA_SKILL_MASTERY))
 	{
@@ -1548,7 +1548,7 @@ bool Creature::SkillCheck(int16 sk, int16 DC, bool show, int16 mod1, const char*
 		rID rogueID = FIND("rogue");
 		ASSERT(rogueID);
 		if (TCLASS(rogueID)->HasSkill(sk))
-			roll = max<int>(roll, min(15, 7 + Mod(A_INT)));
+			roll = std::max<int>(roll, std::min(15, 7 + Mod(A_INT)));
 	}
 
 
@@ -1579,7 +1579,7 @@ bool Creature::SkillCheck(int16 sk, int16 DC, bool show, int16 mod1, const char*
 				if (vic->ResistLevel(AD_MIND) == -1)
 					sk -= HighStatiMag(SKILL_BONUS, sk);
 				else
-					sk -= min<int>(HighStatiMag(SKILL_BONUS, sk),
+					sk -= std::min<int>(HighStatiMag(SKILL_BONUS, sk),
 						vic->ResistLevel(AD_MIND) +
 						vic->HighStatiMag(SAVE_BONUS, SN_ENCH));
 			}
@@ -1712,7 +1712,7 @@ bool Creature::SkillCheck(int16 sk, int16 DC, bool show, int16 mod1, const char*
 								goto OnTheList;
 						continue;
 					OnTheList:
-						gainFavour(GodIDList[i], max(0, 10 * (sr + roll + mod1 +
+						gainFavour(GodIDList[i], std::max(0, 10 * (sr + roll + mod1 +
 							mod2 + armPen - 15)), false, true);
 					}
 				}
@@ -1806,13 +1806,13 @@ void Character::UseAbility(uint8 ab, int16 pa) {
 		if (e.EVictim->isMType(MA_UNDEAD)) {
 			VPrint(e, "Holy energy sears you!",
 				"Holy energy sears the <EVictim>!");
-			ThrowDmg(EV_DAMAGE, AD_HOLY, Dice::Roll(2, 6) + max(1, 2 + Mod(A_CHA))*AbilityLevel(CA_LAY_ON_HANDS),
+			ThrowDmg(EV_DAMAGE, AD_HOLY, Dice::Roll(2, 6) + std::max(1, 2 + Mod(A_CHA))*AbilityLevel(CA_LAY_ON_HANDS),
 				"a paladin's touch", this, e.EVictim);
 		}
 		else if (e.EVictim->isMType(MA_LIVING) &&
 			e.EVictim->cHP != (e.EVictim->mHP + e.EVictim->Attr[A_THP])) {
-			e.EVictim->cHP = min(e.EVictim->mHP + e.EVictim->Attr[A_THP],
-				e.EVictim->cHP + Dice::Roll(2, 6) + max(1, 2 + Mod(A_CHA))*AbilityLevel(CA_LAY_ON_HANDS));
+			e.EVictim->cHP = std::min(e.EVictim->mHP + e.EVictim->Attr[A_THP],
+				e.EVictim->cHP + Dice::Roll(2, 6) + std::max(1, 2 + Mod(A_CHA))*AbilityLevel(CA_LAY_ON_HANDS));
 			VPrint(e, "Your wounds heal<Str>!", "The <EVictim>'s wounds heal<Str>!",
 				e.EVictim->cHP == e.EVictim->mHP + e.EVictim->Attr[A_THP] ? " fully" : "");
 		}
@@ -1873,7 +1873,7 @@ void Character::UseAbility(uint8 ab, int16 pa) {
 			"The <Obj> flies into a killing fury!", this);
 		break;
 	case CA_TRACKING:
-		j = max(1, Mod(A_WIS) + 1 + (AbilityLevel(CA_TRACKING) / 5));
+		j = std::max(1, Mod(A_WIS) + 1 + (AbilityLevel(CA_TRACKING) / 5));
 		k = 0;
 		StatiIter(this)
 			if (S->Nature == TRACKING)
@@ -1886,7 +1886,7 @@ void Character::UseAbility(uint8 ab, int16 pa) {
 		targ = thisp->MyTerm->ChooseTarget();
 		if (targ == NULL || targ == this)
 			break;
-		GainPermStati(TRACKING, targ, SS_MISC, 0, min(125, 40 + AbilityLevel(CA_TRACKING) * 5));
+		GainPermStati(TRACKING, targ, SS_MISC, 0, std::min(125, 40 + AbilityLevel(CA_TRACKING) * 5));
 		m->Update(targ->x, targ->y);
 		break;
 	case CA_MANIFESTATION:
@@ -1921,7 +1921,7 @@ void Character::UseAbility(uint8 ab, int16 pa) {
 		DPrint(e, "You invoke the liberating power of <Str>!",
 			"<Obj2> invokes the power of <Str> to free the enslaved!",
 			isCharacter() ? NAME(thisp->GodID) : "Semirath", this);
-		i = max(1, AbilityLevel(CA_UNBIND) + Mod(A_CHA));
+		i = std::max(1, AbilityLevel(CA_UNBIND) + Mod(A_CHA));
 
 		if (PossiblyPause(T1, x, y, 0)) {
 			for (cx = x - i; cx <= x + i; cx++)
@@ -2018,12 +2018,12 @@ void Character::UseAbility(uint8 ab, int16 pa) {
 			return;
 		Timeout += 15;
 
-		bonus = max<int>(1, Mod(A_CHA));
+		bonus = std::max<int>(1, Mod(A_CHA));
 		if (isCharacter())
 			if (thisp->Level[1] || thisp->Level[2])
-				bonus = max(bonus, thisp->LevelAs(FIND("bard")));
+				bonus = std::max(bonus, thisp->LevelAs(FIND("bard")));
 
-		GainTempStati(SINGING, NULL, 5 + (max<int>(0, Mod(A_CON)) + SkillLevel(SK_PERFORM)) * 3, SS_MISC, song, range, 0);
+		GainTempStati(SINGING, NULL, 5 + (std::max<int>(0, Mod(A_CON)) + SkillLevel(SK_PERFORM)) * 3, SS_MISC, song, range, 0);
 
 		switch (song) {
 		case BARD_COURAGE:
@@ -2194,7 +2194,7 @@ void Character::UseAbility(uint8 ab, int16 pa) {
 		}
 		if (!LoseFatigue(1, true))
 			return;
-		cHP = min(mHP + Attr[A_THP], cHP + TotalLevel() * 3);
+		cHP = std::min(mHP + Attr[A_THP], cHP + TotalLevel() * 3);
 		IPrint("Your wounds heal<Str>.", (cHP == mHP + Attr[A_THP]) ? " fully" : "");
 		IDPrint(NULL, "The <Obj>'s wounds heal<Str>.", this,
 			(cHP == mHP + Attr[A_THP]) ? " fully" : "");
@@ -2206,7 +2206,7 @@ void Character::UseAbility(uint8 ab, int16 pa) {
 		}
 		if (!LoseFatigue(1, true))
 			return;
-		GainTempStati(FLURRYING, NULL, 10 + max<int>(0, Mod(A_CON)), SS_MISC);
+		GainTempStati(FLURRYING, NULL, 10 + std::max<int>(0, Mod(A_CON)), SS_MISC);
 		return;
 	case CA_WILD_SHAPE:
 		if (isPlayer())
@@ -2298,7 +2298,7 @@ bool Creature::UseLimitedFA()
 	if (HasFeat(FT_RESIST_PARALYSIS))
 		i += Mod(A_CON) * 2;
 	j = GetStatiVal(LFA_COUNT);
-	if (max<int>(j, 0) >= i)
+	if (std::max<int>(j, 0) >= i)
 		return false;
 	IDPrint("You overcome the paralysis effect. (<Num> left).",
 		"The <Obj2> overcomes the paralysis effect.",
@@ -2512,7 +2512,7 @@ EvReturn Creature::Research(EventInfo &e)
 		cCount = 0; cLevel = 0;
 		StatiIter(this)
 			if (S->Source == SS_CURS) {
-				cLevel = max(cLevel, (int16)S->CLev);
+				cLevel = std::max(cLevel, (int16)S->CLev);
 				cCount++;
 			}
 		StatiIterEnd(this)
@@ -2684,7 +2684,7 @@ EvReturn Creature::PickPocket(EventInfo &e) {
 			Candidates[c++] = it->myHandle;
 			if (isPlayer())
 			{
-				mod = max(0, (it->Size() - SZ_SMALL) * 3);
+				mod = std::max(0, (it->Size() - SZ_SMALL) * 3);
 				if (it->IFlags & IF_WORN)
 					mod += 10;
 				if (e.EVictim->HasStati(DISTRACTED))
@@ -2721,7 +2721,7 @@ EvReturn Creature::PickPocket(EventInfo &e) {
 		h = Candidates[random(c)];
 	it = oItem(h);
 
-	mod = max(0, (it->Size() - SZ_SMALL) * 3);
+	mod = std::max(0, (it->Size() - SZ_SMALL) * 3);
 	if (it->IFlags & IF_WORN)
 		mod += 10;
 	if (e.EVictim->HasStati(DISTRACTED))
@@ -2975,9 +2975,9 @@ MA_MYTHIC,        // 1 hobbit: 18
 		lev = m->ResistLevel(Resists[i]);
 		// ResistLevel tends to give values like 7+CR/2
 		if (lev == -1) // immunity
-			lev = max(CR, 0) + 3;
+			lev = std::max(CR, 0) + 3;
 		else if (lev > 0)
-			lev = max(CR, 0) + 1;
+			lev = std::max(CR, 0) + 1;
 		else
 			continue;
 
@@ -2989,7 +2989,7 @@ MA_MYTHIC,        // 1 hobbit: 18
 		StatiIterEnd(this)
 
 		if (TMON(tmID)->Res & BIT(Resists[i]))
-			curr = max<int>(curr, 7 + (ChallengeRating() * 2) / 3);
+			curr = std::max<int>(curr, 7 + (ChallengeRating() * 2) / 3);
 		if (TMON(tmID)->Imm & BIT(Resists[i]))
 			curr = -1;
 
@@ -3176,7 +3176,7 @@ EvReturn Character::CraftItem(int16 abil) {
 			useSkill = SK_POISON_USE;
 		else
 			useSkill = SK_ALCHEMY;
-		max_lev = min(SkillLevel(SK_POISON_USE), SkillLevel(SK_ALCHEMY));
+		max_lev = std::min(SkillLevel(SK_POISON_USE), SkillLevel(SK_ALCHEMY));
 		goto Create;
 	case FT_SCRIBE_SCROLL + FEAT_VAL:
 		itemType = T_SCROLL;
@@ -3443,7 +3443,7 @@ Augment:
 
 
 		if (HasAbility(CA_MASTER_ARTISAN))
-			gpCost = (gpCost * max(4, 20 - AbilityLevel(CA_MASTER_ARTISAN))) / 20;
+			gpCost = (gpCost * std::max(4, 20 - AbilityLevel(CA_MASTER_ARTISAN))) / 20;
 
 		if (getTotalMoney() / 100 < gpCost) {
 			IPrint(Format("That would cost %d gp in materials, but you only have %d gp.",
@@ -3451,7 +3451,7 @@ Augment:
 			return ABORT;
 		}
 
-		hours = min(10, 2 + (new_lev - old_lev) * 2);
+		hours = std::min(10, 2 + (new_lev - old_lev) * 2);
 		if (HasFeat(FT_ARTIFICER))
 			XPCost = (XPCost * 2) / 3;
 		if (!yn(Format("That will cost %d XP, %d gp and take %d hours. Proceed?",
@@ -3509,11 +3509,11 @@ Create:
 
 	if (acqVal == ACQ_CRAFT) {
 		minSkill = 0;
-		minSkill = max(minSkill, (int16)TITEM(it->iID)->GetConst(MIN_CRAFT_LEVEL));
+		minSkill = std::max(minSkill, (int16)TITEM(it->iID)->GetConst(MIN_CRAFT_LEVEL));
 		if (it->eID)
-			minSkill = max(minSkill, (int16)TITEM(it->eID)->GetConst(MIN_CRAFT_LEVEL));
+			minSkill = std::max(minSkill, (int16)TITEM(it->eID)->GetConst(MIN_CRAFT_LEVEL));
 		if (it->isMetallic()) {
-			minSkill = max<int>(minSkill, 10);
+			minSkill = std::max<int>(minSkill, 10);
 			if (!foundForge) {
 				delete it;
 				IPrint("You need a forge to create metallic items.");
@@ -3526,7 +3526,7 @@ Create:
 				minSkill, SkillLevel(SK_CRAFT)));
 			return ABORT;
 		}
-		craftDC = max<int>(craftDC, minSkill + 7);
+		craftDC = std::max<int>(craftDC, minSkill + 7);
 	}
 
 	quan = 1;
@@ -3556,10 +3556,10 @@ Create:
 	else
 		craftDC += it->ItemLevel();
 
-	XPCost = XPCostTable[min(20, max<int>(it->ItemLevel(), 1))];
+	XPCost = XPCostTable[std::min(20, std::max<int>(it->ItemLevel(), 1))];
 	rID icList[10];
 	if (it->eID && TEFF(it->eID)->GetList(ITEM_COST, icList, 9))
-		XPCost = icList[max(0, it->GetInherentPlus() - 1)] / 25;
+		XPCost = icList[std::max(0, it->GetInherentPlus() - 1)] / 25;
 
 	if (itemType == T_MISSILE)
 		XPCost /= 20;
@@ -3603,7 +3603,7 @@ Create:
 	}
 
 	if (HasAbility(CA_MASTER_ARTISAN))
-		gpCost = (gpCost * max(4, 20 - AbilityLevel(CA_MASTER_ARTISAN))) / 20;
+		gpCost = (gpCost * std::max(4, 20 - AbilityLevel(CA_MASTER_ARTISAN))) / 20;
 
 	if (getTotalMoney() / 100 < gpCost) {
 		IPrint(Format("That would cost %d gp in materials, but you only have %d gp.",
@@ -3703,7 +3703,7 @@ Repair:
 	gpCost /= 30;
 
 	if (HasAbility(CA_MASTER_ARTISAN))
-		gpCost = (gpCost * max(4, 20 - AbilityLevel(CA_MASTER_ARTISAN))) / 20;
+		gpCost = (gpCost * std::max(4, 20 - AbilityLevel(CA_MASTER_ARTISAN))) / 20;
 
 	if (getTotalMoney() / 100 < gpCost) {
 		IPrint(Format("That would cost %d gp in materials, but you only have %d gp.", gpCost, getTotalMoney() / 100));
@@ -3861,7 +3861,7 @@ int16 Creature::getFavEnemyBonus(Creature *cr)
 	StatiIterNature(this, FAV_ENEMY)
 		if (cr->isMType(S->Val)) {
 			v = S->Mag;
-			bonus = max(bonus, CalcFEBonus(S->Val, S->Mag));
+			bonus = std::max(bonus, CalcFEBonus(S->Val, S->Mag));
 		}
 	StatiIterEnd(this)
 	return bonus;
@@ -4243,7 +4243,7 @@ EvReturn Creature::Mount(EventInfo &e) {
 			 * hostilities.*/
 			IPrint("The <Obj1> will not let you ride <him:Obj1>, at least not yet.", e.EVictim); return ABORT;
 		}
-		else if (e.EVictim->ChallengeRating() > 2 && e.EVictim->ChallengeRating() > max(1, SkillLevel(SK_RIDE) / 2) && !(e.EVictim->GetStatiObj(ANIMAL_COMPANION) == this)) {
+		else if (e.EVictim->ChallengeRating() > 2 && e.EVictim->ChallengeRating() > std::max(1, SkillLevel(SK_RIDE) / 2) && !(e.EVictim->GetStatiObj(ANIMAL_COMPANION) == this)) {
 			IPrint("You fear that creature is too mighty to be handled well with your current degree of riding skill.");
 			return ABORT;
 		}
@@ -4510,7 +4510,7 @@ HasComponent:
 					printed = false;
 					e.EVictim = c;
 					int roll = Dice::Roll(1, 20);
-					int resist = (max(e.EVictim->ChallengeRating() + e.EVictim->AbilityLevel(CA_TURN_RESISTANCE), 1));
+					int resist = (std::max(e.EVictim->ChallengeRating() + e.EVictim->AbilityLevel(CA_TURN_RESISTANCE), 1));
 
 					mag = ((e.vDmg + roll) * 750) / (resist * 100);
 
@@ -4711,7 +4711,7 @@ DoDig:
 	percent = 100 / SkillLevel(SK_MINING);
 	if (m->PercentSI + percent > 100)
 		if (!yn(Format("There is a %d~ chance of collapse! Continue?",
-			min(100, (m->PercentSI + percent) - 100))))
+            std::min(100, (m->PercentSI + percent) - 100))))
 			return ABORT;
 
 	if (Dice::Roll(1, 20) <= fat)
@@ -4737,7 +4737,7 @@ DoDig:
 	}
 	m->PercentSI += percent;
 
-	Exercise(A_STR, Dice::Roll(1, 12) + max(0, hard - 10) / 2, ESTR_MINING, 50);
+	Exercise(A_STR, Dice::Roll(1, 12) + std::max(0, hard - 10) / 2, ESTR_MINING, 50);
 
 	if (feat = m->FFeatureAt(tx, ty))
 	{
@@ -4767,7 +4767,7 @@ DoDig:
 	m->At(tx, ty).Memory = 0;
 	m->VUpdate(tx, ty);
 	IPrint("Done. (<Num>~ structural integrity remaining.)",
-		max(0, 100 - m->PercentSI));
+        std::max(0, 100 - m->PercentSI));
 	return DONE; // ww: previously no return value 
 
 }
@@ -4846,7 +4846,7 @@ void Character::LegendIdent(Item *it) {
 					"you discern that it is in fact <str>!",
 					it, (const char*)it->Name(NA_A | NA_IDENT));
 				it->MakeKnown(KN_MAGIC | KN_CURSE | KN_PLUS);
-				Exercise(A_INT, random(6) + max<int>(1, it->ItemLevel()), EINT_IDENT, 75);
+				Exercise(A_INT, random(6) + std::max<int>(1, it->ItemLevel()), EINT_IDENT, 75);
 			}
 			else
 				IPrint("You fail to translate the runes covering the <Obj>.", it);
@@ -4859,7 +4859,7 @@ void Character::LegendIdent(Item *it) {
 	if (it->isType(T_MUSH) || it->isType(T_HERB))
 		if (HasAbility(CA_NATURE_SENSE)) {
 			it->MakeKnown(0xFF);
-			Exercise(A_INT, random(6) + max<int>(1, it->ItemLevel()), EINT_IDENT, 60);
+			Exercise(A_INT, random(6) + std::max<int>(1, it->ItemLevel()), EINT_IDENT, 60);
 			IPrint("With your flawless knowledge of nature, you immediately "
 				"recognize this <Str> as an <Obj>.", it->isType(T_HERB) ? "herb" :
 				"mushroom", it);
@@ -5126,7 +5126,7 @@ void Player::SummonAnimalCompanion(bool mount)
 	int16 lev = AbilityLevel(mount ? CA_SACRED_MOUNT : CA_ANIMAL_COMP);
 	if (lev <= 0) return;
 	int16 ft_bonus = HasFeat(mount ? FT_IMPROVED_MOUNT : FT_ANIMAL_BOND) ?
-		max(0, Mod(A_CHA) / 3) : (mount ? 0 : -2);
+        std::max(0, Mod(A_CHA) / 3) : (mount ? 0 : -2);
 	int16 i, n, j;
 	Creature *c;
 	rID tID = mount ? FIND("celestial") : FIND("dire");
@@ -5279,7 +5279,7 @@ void Player::SummonAnimalCompanion(bool mount)
 			else {
 				if (okAnimalComp(lev, mID, 0)) {
 					Monster *mon = new Monster(mID);
-					int diff = ((1 + lev + ft_bonus) - max<int>(mon->ChallengeRating(), 0));
+					int diff = ((1 + lev + ft_bonus) - std::max<int>(mon->ChallengeRating(), 0));
 					if (diff < 1) diff = 1;
 					else if (diff > 12) diff = 12;
 					rID tid = FIND(Format("companion;%d", diff));
@@ -5313,7 +5313,7 @@ void Player::SummonAnimalCompanion(bool mount)
 MountMade:
 	mn->PlaceAt(m, x, y);
 	if (!mount) {
-		int diff = ((1 + lev + ft_bonus) - max<int>(mn->ChallengeRating(), 0));
+		int diff = ((1 + lev + ft_bonus) - std::max<int>(mn->ChallengeRating(), 0));
 		if (diff < 1) diff = 1;
 		else if (diff > 12) diff = 12;
 		rID tid = FIND(Format("companion;%d", diff));
@@ -5422,7 +5422,7 @@ bool Creature::okWildShape(int16 lev, rID mID, rID tID)
 #endif
 
 	if (tm->isMType(mID, MA_ELEMENTAL))
-		if (lev >= 12 + max(0, tm->Size - SZ_MEDIUM) * 4)
+		if (lev >= 12 + std::max(0, tm->Size - SZ_MEDIUM) * 4)
 			goto typeOk;
 
 	return false;
@@ -5580,7 +5580,7 @@ bool Creature::ItemPrereq(rID xID, int16 ReqLevel, int16 TrickDC)
 		StatiIterNature(this, SPELL_ACCESS)
 			for (j = 0; types[j]; j++)
 				if (S->Val & (xID - CLEV_VAL) & types[j])
-					clev[j] = max<int>(clev[j], S->Mag);
+					clev[j] = std::max<int>(clev[j], S->Mag);
 		StatiIterEnd(this);
 		return (clev[0] + clev[1] + clev[2] +
 			clev[3] + clev[4]) >= ReqLevel;
@@ -5628,23 +5628,23 @@ int16 Creature::getBestKnowSkill(Creature *cr, bool isCombat)
 	int16 best;
 	best = 0;
 	if (cr->isMType(MA_UNDEAD) && HasSkill(SK_KNOW_UNDEAD))
-		best = max(best, SkillLevel(SK_KNOW_UNDEAD));
+		best = std::max(best, SkillLevel(SK_KNOW_UNDEAD));
 	if (cr->isMType(MA_AQUATIC) && HasSkill(SK_KNOW_OCEANS))
-		best = max(best, SkillLevel(SK_KNOW_OCEANS));
+		best = std::max(best, SkillLevel(SK_KNOW_OCEANS));
 	if (cr->isMType(MA_OUTSIDER) && HasSkill(SK_KNOW_PLANES))
 		if (!(cr->isMType(MA_DEMON) || cr->isMType(MA_DEVIL) ||
 			cr->isMType(MA_CELESTIAL)))
-			best = max(best, SkillLevel(SK_KNOW_PLANES));
+			best = std::max(best, SkillLevel(SK_KNOW_PLANES));
 	if ((cr->isMType(MA_DEMON) || cr->isMType(MA_DEVIL)) &&
 		HasSkill(SK_KNOW_INF))
-		best = max(best, SkillLevel(SK_KNOW_INF));
+		best = std::max(best, SkillLevel(SK_KNOW_INF));
 	if ((cr->isMType(MA_PLANT) || cr->isMType(MA_ANIMAL)) &&
 		HasSkill(SK_KNOW_NATURE))
-		best = max(best, SkillLevel(SK_KNOW_NATURE));
+		best = std::max(best, SkillLevel(SK_KNOW_NATURE));
 	if (cr->isMType(MA_MYTHIC) && HasSkill(SK_KNOW_MYTH))
-		best = max(best, SkillLevel(SK_KNOW_MYTH));
+		best = std::max(best, SkillLevel(SK_KNOW_MYTH));
 	if (cr->isMType(MA_NLIVING) && cr->HasMFlag(M_HUMANOID))
 		if (HasSkill(SK_FIND_WEAKNESS) && isCombat)
-			best = max(best, SkillLevel(SK_FIND_WEAKNESS));
+			best = std::max(best, SkillLevel(SK_FIND_WEAKNESS));
 	return best;
 }

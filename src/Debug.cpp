@@ -167,7 +167,7 @@ long array_index(long index, long size) {
     ASSERT(index >= 0)
     ASSERT(size  >  0)
     ASSERT(size > index)
-    return max(0,min(index,size));
+    return std::max(0, std::min(index,size));
 }
 
 #endif
@@ -2324,7 +2324,7 @@ void TextTerm::TraceWindow(rID xID, int16 Event, VMachine *VM, hCode CP, bool ru
     
     /* Now, display the bytecode dump */
     int16 mid_screen = (sy-8)/2;
-    int16 first_line = (int16)max(0,trace_cursor - mid_screen);
+    int16 first_line = (int16)std::max(0,trace_cursor - mid_screen);
     int16 watch_size = (int16)(cLocals ? (cLocals+2) : 0);
     for(y=2;y!=(sy-(4+watch_size));y++)
       {

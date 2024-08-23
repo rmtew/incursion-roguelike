@@ -51,7 +51,7 @@ int16 TextTerm::SpellManager(int16 Purpose) {
     }
 Redraw:
     Save();
-    SizeWin(WIN_SPELLS,-1,5,-1,5+min(11 + NumSpells,(sizeY*39)/50));
+    SizeWin(WIN_SPELLS,-1,5,-1,5+std::min(11 + NumSpells,(sizeY*39)/50));
     SetWin(WIN_SPELLS); 
     SizeWin(WIN_CUSTOM,2,WinBottom()-8,WinSizeX()-2,WinBottom()-3);
 
@@ -162,7 +162,7 @@ ProcessSpells:
                     String save_string;
                     int KY_color = Key ? -YELLOW : -GREY; 
                     int name_color = ((p->Spells[i] & SP_DOMAIN) ? -PURPLE : -GREY);
-                    int time_cost = 3000 / max(25,100+10*(1 + e.EActor->Mod(A_INT) -
+                    int time_cost = 3000 / std::max(25,100+10*(1 + e.EActor->Mod(A_INT) -
                         TEFF(e.eID)->Level));
 
 
@@ -197,13 +197,13 @@ ProcessSpells:
 
                     int savedc = 10 + TEFF(e.eID)->Level;
                     if ((p->Spells[i] & (SP_ARCANE|SP_INNATE))) 
-                        savedc = max(savedc,10+TEFF(e.eID)->Level+e.EActor->Mod(A_INT));
+                        savedc = std::max(savedc,10+TEFF(e.eID)->Level+e.EActor->Mod(A_INT));
                     if ((p->Spells[i] & (SP_DIVINE|SP_INNATE))) 
-                        savedc = max(savedc,10+TEFF(e.eID)->Level+e.EActor->Mod(A_WIS));
+                        savedc = std::max(savedc,10+TEFF(e.eID)->Level+e.EActor->Mod(A_WIS));
                     if ((p->Spells[i] & (SP_PRIMAL|SP_INNATE))) 
-                        savedc = max(savedc,10+TEFF(e.eID)->Level+e.EActor->Mod(A_WIS));
+                        savedc = std::max(savedc,10+TEFF(e.eID)->Level+e.EActor->Mod(A_WIS));
                     if ((p->Spells[i] & (SP_SORCERY|SP_INNATE))) 
-                        savedc = max(savedc,10+TEFF(e.eID)->Level+e.EActor->Mod(A_CHA));
+                        savedc = std::max(savedc,10+TEFF(e.eID)->Level+e.EActor->Mod(A_CHA));
 
 
                     int save_color = (e.saveDC > savedc ? -GREEN :
@@ -213,7 +213,7 @@ ProcessSpells:
                         save_string = "       ";
                     } else {
                         save_string = Format("%4s %2d",
-                            SaveNames[min(3,TEFF(theGame->SpellID(i))->ef.sval % 10)],
+                            SaveNames[std::min(3,TEFF(theGame->SpellID(i))->ef.sval % 10)],
                             e.saveDC);
                     } 
 
@@ -426,7 +426,7 @@ DoneAB:
                 p->QuickKeys[sp-'0'].Type = QKY_SPELL;
                 goto ProcessSpells;
             }
-            if (sp >= 'a' && sp <= min<int>('z',ch-1)) {
+            if (sp >= 'a' && sp <= std::min<int>('z',ch-1)) {
                 Restore();
                 SetMode(oldMode);
                 return Spells[sp - 'a'];
@@ -913,9 +913,9 @@ ResetCurrCon:
                 int16 o_off = offset;
                 SetWin(WIN_INVEN);
                 if (offset > yContents[CurrSlot - NUM_SLOTS])
-                    offset = max(0, yContents[CurrSlot - NUM_SLOTS] - 4);
+                    offset = std::max(0, yContents[CurrSlot - NUM_SLOTS] - 4);
                 else if (offset + (WinSizeY() - (NUM_SLOTS)) < yContents[CurrSlot - NUM_SLOTS] + 4)
-                    offset = max(0, (yContents[CurrSlot - NUM_SLOTS] + 4) - (WinSizeY() - (NUM_SLOTS)));
+                    offset = std::max(0, (yContents[CurrSlot - NUM_SLOTS] + 4) - (WinSizeY() - (NUM_SLOTS)));
                 if (offset != o_off)
                     UpdateScrollArea(offset);
             }
@@ -934,9 +934,9 @@ ResetCurrCon:
                 int16 o_off = offset;
                 SetWin(WIN_INVEN);
                 if (offset > yContents[CurrSlot - NUM_SLOTS])
-                    offset = max(0, yContents[CurrSlot - NUM_SLOTS] - 4);
+                    offset = std::max(0, yContents[CurrSlot - NUM_SLOTS] - 4);
                 else if (offset + (WinSizeY() - (NUM_SLOTS)) < yContents[CurrSlot - NUM_SLOTS])
-                    offset = max(0, (yContents[CurrSlot - NUM_SLOTS] + 4) - (WinSizeY() - (NUM_SLOTS)));
+                    offset = std::max(0, (yContents[CurrSlot - NUM_SLOTS] + 4) - (WinSizeY() - (NUM_SLOTS)));
                 if (offset != o_off)
                     UpdateScrollArea(offset);
             } else if (currCon && conCursor && CurrSlot == SL_PACK)
@@ -1018,9 +1018,9 @@ default_label:
                             int16 o_off = offset;
                             SetWin(WIN_INVEN);
                             if (offset > yContents[CurrSlot - NUM_SLOTS])
-                                offset = max(0, yContents[CurrSlot - NUM_SLOTS] - 4);
+                                offset = std::max(0, yContents[CurrSlot - NUM_SLOTS] - 4);
                             else if (offset + (WinSizeY() - (NUM_SLOTS)) < yContents[CurrSlot - NUM_SLOTS])
-                                offset = max(0, (yContents[CurrSlot - NUM_SLOTS] + 4) - (WinSizeY() - (NUM_SLOTS)));
+                                offset = std::max(0, (yContents[CurrSlot - NUM_SLOTS] + 4) - (WinSizeY() - (NUM_SLOTS)));
                             if (offset != o_off)
                                 UpdateScrollArea(offset);
                         }
@@ -1447,7 +1447,7 @@ SellItem:
         return;
     }
 
-    if (!yn(XPrint("<Obj> offers <Num> gp for that. Accept?", Seller, min(Seller->getTotalMoney(), it->getShopCost(Seller, p))))) {
+    if (!yn(XPrint("<Obj> offers <Num> gp for that. Accept?", Seller, std::min(Seller->getTotalMoney(), it->getShopCost(Seller, p))))) {
         p->GainItem(it, false);
         SetWin(WIN_INVEN);
         Clear();
@@ -1457,7 +1457,7 @@ SellItem:
 
     it->Remove(false);
     Seller->GainItem(it, false);
-    Seller->LoseMoneyTo(min(Seller->getTotalMoney(),
+    Seller->LoseMoneyTo(std::min(Seller->getTotalMoney(),
         it->getShopCost(Seller, p)), p);
     p->IPrint("You sell the <Obj> a <Obj>.", Seller, it);
     SetWin(WIN_INVEN);
@@ -1692,7 +1692,7 @@ Recount:
                 PutChar(0, sl + ln, '>');
                 break;
             case KY_CMD_SOUTH:
-                if (ln >= min<int>(j, SKILLS_SHOWN)) {
+                if (ln >= std::min<int>(j, SKILLS_SHOWN)) {
                     if (offset + SKILLS_SHOWN < (SK_LAST - 1)) {
                         offset++;
                         goto ReDraw;
@@ -1875,7 +1875,7 @@ void TextTerm::OptionManager(int16 start_cat) {
 
         Color(GREY);
         if (Sec == OPC_MACROS) {
-            for (i = Off; i < min(Off + (WinSizeY() - 13), MAX_MACROS); i++) {
+            for (i = Off; i < std::min(Off + (WinSizeY() - 13), MAX_MACROS); i++) {
                 Color(pp->Macros[i] ? EMERALD : GREY);
                 Write(4, 3 + (i - Off), Format(i <= 12 ? "F%d" :
                     i <= 24 ? "CTRL+F%d" :
@@ -1887,7 +1887,7 @@ void TextTerm::OptionManager(int16 start_cat) {
             }
         } else if (!n)
             Write(4, 4, "[No Options Yet]");
-        else for (i = Off; i < min<int>(Off + (WinSizeY() - 13), n); i++) {
+        else for (i = Off; i < std::min<int>(Off + (WinSizeY() - 13), n); i++) {
             Color(i == c ? EMERALD : GREY);
             Write(4, 4 + (i - Off), OptionList[OptsShown[i]].Name);
             Color(YELLOW);
@@ -2093,7 +2093,7 @@ void TextTerm::DisplayCharSheet() {
         for (i = 0; i < 7; i++) {
             y2 += SWrapWrite(24, y2, cs.sAttr[i], 79, WIN_CSHEET);
         }
-        y = max(y1, y2) + 1;
+        y = std::max(y1, y2) + 1;
 
         for (i = 0; i < 3; i++)
             y += SWrapWrite(1, y, cs.sSaves[i], 79, WIN_CSHEET);

@@ -357,10 +357,10 @@ bool Resource::GetList(int16 ln, rID *lv,int16 max) {
 DoDefaults:
     switch(ln) {
     case RM_WEIGHTS: 
-        memcpy(lv,RM_Weights,min(max*sizeof(rID),sizeof(RM_Weights)));
+        memcpy(lv,RM_Weights,std::min(max*sizeof(rID),sizeof(RM_Weights)));
         return true;
     case RC_WEIGHTS:
-        memcpy(lv,RC_Weights,min(max*sizeof(rID),sizeof(RC_Weights)));
+        memcpy(lv,RC_Weights,std::min(max*sizeof(rID),sizeof(RC_Weights)));
         return true;
     case ROOM_WEIGHTS:
         for (q=0;q!=MAX_MODULES;q++)
@@ -425,7 +425,7 @@ DoDefaults:
         *lv++ = 0; *lv++ = 0; *lv++ = 0; 
         return true;
     default:
-        memcpy(lv,EmptyList,min(max*sizeof(rID),sizeof(EmptyList)));
+        memcpy(lv,EmptyList,std::min(max*sizeof(rID),sizeof(EmptyList)));
         return false;
     }
 }
@@ -730,7 +730,7 @@ void Resource::GrantGear(Creature *c, rID xID, bool doRanged)
                 // ww: if you play a super-lucky character, you will find
                 // that all of your opponents have powerful items
                 if (theGame->GetPlayer(0))
-                  luck = max<int>(luck,theGame->GetPlayer(0)->GetAttr(A_LUC));
+                  luck = std::max<int>(luck,theGame->GetPlayer(0)->GetAttr(A_LUC));
                 it = Item::GenItem(IG_MONEQUIP,iID,the_lev,luck,MonsterItems);
                 if (!it)
                   continue;

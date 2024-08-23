@@ -129,7 +129,7 @@ void Thing::GainTempStati(int16 n, Thing *t, int16 Duration, int8 Cause, int16 V
                 else {
                     __Stati.Removed--;  
                     ASSERT (__Stati.Removed >= 0);
-                    __Stati.Removed = max<int>(0,
+                    __Stati.Removed = std::max<int>(0,
                     __Stati.Removed);
                 }
                 break;
@@ -158,7 +158,7 @@ void Thing::GainTempStati(int16 n, Thing *t, int16 Duration, int8 Cause, int16 V
             ASSERT(__Stati.Allocated <= 256); 
         }
 
-        __max = max<int>(__max,__Stati.Allocated);
+        __max = std::max<int>(__max,__Stati.Allocated);
         ASSERT(__Stati.Last < __Stati.Allocated);
         s = & __Stati.S[__Stati.Last];
         __Stati.Last++;
@@ -267,7 +267,7 @@ void Thing::_FixupStati() {
         if (!num)
             goto SkipMerge;
 
-        newSize = max<int>(2,__Stati.Allocated);
+        newSize = std::max<int>(2,__Stati.Allocated);
         while (newSize <= (__Stati.Last + num + 1))
             newSize *= 2;
 
@@ -887,7 +887,7 @@ void Creature::StatiOff(Status s, bool elapsed) {
             T = ts.GetTarget(oCreature(s.h));
             if (T) {
                 T->why.type = TargetResents;
-                T->priority = max<int>(T->priority,5);
+                T->priority = std::max<int>(T->priority,5);
                 T->type = TargetEnemy;
             }
         } 
@@ -980,7 +980,7 @@ RestartDropItems:
         }
         break;
     case ILLUS_DMG:
-        cHP = max(cHP + s.Mag, mHP + GetAttr(A_THP));
+        cHP = std::max(cHP + s.Mag, mHP + GetAttr(A_THP));
         break;
     case ENRAGED:
     case CONFLICT:
@@ -1356,8 +1356,8 @@ void Map::RemoveField(Field *f) {
         if (f == Fields[i]) {
             Fields.Remove(i);
 
-            for(ix = max(0,cf.cx - cf.rad);ix!=min<int>(sizeX,cf.cx + cf.rad + 1);ix++)
-                for(iy = max(0,cf.cy - cf.rad);iy!=min<int>(sizeY,cf.cy + cf.rad + 1);iy++)
+            for(ix = std::max(0,cf.cx - cf.rad); ix != std::min<int>(sizeX,cf.cx + cf.rad + 1); ix++)
+                for(iy = std::max(0,cf.cy - cf.rad); iy != std::min<int>(sizeY,cf.cy + cf.rad + 1); iy++)
                     if (InBounds(ix,iy)) {
                         At(ix,iy).hasField = FieldAt(ix,iy);
                         if (cf.FType & FI_DARKNESS)
@@ -1426,8 +1426,8 @@ void Map::NewField(int32 FType, int16 x, int16 y, uint8 rad,Glyph Img, int16 Dur
     else
         f->Creator = 0;
 
-    for(ix = max(0,x - rad);ix!=min<int>(sizeX,x + rad + 1);ix++)
-        for(iy = max(0,y - rad);iy!=min<int>(sizeY,y + rad + 1);iy++)
+    for(ix = std::max(0,x - rad); ix != std::min<int>(sizeX,x + rad + 1); ix++)
+        for(iy = std::max(0,y - rad); iy != std::min<int>(sizeY,y + rad + 1); iy++)
             if (f->inArea(ix,iy)) {
                 if (FType & FI_DARKNESS)
                     At(ix,iy).Dark = true;
@@ -1508,8 +1508,8 @@ Restart:
         bool hasMeld = me->HasAbility(CA_EARTHMELD);
         ASSERT(me); 
         n = 0;
-        for(ix = max(0,_cx - f->rad);ix!=min<int>(sizeX,_cx + f->rad + 1);ix++)
-            for(iy = max(0,_cy - f->rad);iy!=min<int>(sizeY,_cy + f->rad + 1);iy++)
+        for(ix = std::max(0,_cx - f->rad); ix != std::min<int>(sizeX,_cx + f->rad + 1); ix++)
+            for(iy = std::max(0,_cy - f->rad); iy != std::min<int>(sizeY,_cy + f->rad + 1); iy++)
                 if ((dist(ix,iy,_cx,_cy) <= f->rad) && !(me->canMoveThrough(NULL,ix,iy,blocked_by))) {
                     if (dist(_cx,_cy,ix,iy) == f->rad) {
                         if (blocked_by && blocked_by->isCreature()) {
@@ -1574,8 +1574,8 @@ Restart:
     f->cx = (uint8)_cx; f->cy = (uint8)_cy;
 
     /* Remove the old field markers... */
-    for(ix = max(0,ox - f->rad);ix!=min<int>(sizeX,ox + f->rad + 1);ix++)
-        for(iy = max(0,oy - f->rad);iy!=min<int>(sizeY,oy + f->rad + 1);iy++)
+    for(ix = std::max(0,ox - f->rad);ix != std::min<int>(sizeX,ox + f->rad + 1); ix++)
+        for(iy = std::max(0,oy - f->rad);iy != std::min<int>(sizeY,oy + f->rad + 1); iy++)
             if (InBounds(ix,iy)) {
                 At(ix,iy).hasField = FieldAt(ix,iy);
                 if (f->FType & FI_DARKNESS)
@@ -1587,8 +1587,8 @@ Restart:
             }
 
     /* And establish new markers. */
-    for(ix = max(0,f->cx - f->rad);ix!=min<int>(sizeX,f->cx + f->rad + 1);ix++)
-        for(iy = max(0,f->cy - f->rad);iy!=min<int>(sizeY,f->cy + f->rad + 1);iy++)
+    for(ix = std::max(0,f->cx - f->rad);ix != std::min<int>(sizeX,f->cx + f->rad + 1); ix++)
+        for(iy = std::max(0,f->cy - f->rad);iy != std::min<int>(sizeY,f->cy + f->rad + 1); iy++)
             if (f->inArea(ix,iy)) {
                 if (f->FType & FI_DARKNESS)
                     At(ix,iy).Dark = true;

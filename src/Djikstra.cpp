@@ -139,7 +139,7 @@ bool Map::ShortestPath(uint8 sx, uint8 sy, uint8 tx, uint8 ty,
 
           if (Dist[x][y] + baseCost < Dist[nx][ny])
             {
-              Dist[nx][ny] = min(30000,Dist[x][y] + baseCost);
+              Dist[nx][ny] = std::min(30000,Dist[x][y] + baseCost);
               Parent[nx][ny] = x+y*256;
               PQInsert(nx+ny*256,Dist[nx][ny]);
             }
@@ -152,8 +152,8 @@ bool Map::ShortestPath(uint8 sx, uint8 sy, uint8 tx, uint8 ty,
 
     if (Dist[tx][ty] == 30000) {
       #ifdef DEBUG_DJIKSTRA
-      for (x = min(0,sx-30);x!=max(127,sx+30);x++)
-        for (y = min(0,sx-30);y!=max(127,sy+30);y++)
+      for (x = std::min(0,sx-30);x!=std::max(127,sx+30);x++)
+        for (y = std::min(0,sx-30);y!=std::max(127,sy+30);y++)
           if (Dist[x][y] != 30000)
             {
               At(x,y).Glyph =

@@ -462,8 +462,8 @@ void Creature::Multiply(int16 val, bool split, bool msg)
         // ww: we had forgotten this important call ...
         mn->Initialize(true);
 
-        mn->mHP = max(1,mHP / (split ? 2 : 1));
-        mn->cHP = max(1,mHP / (split ? 2 : 1));        
+        mn->mHP = std::max(1,mHP / (split ? 2 : 1));
+        mn->cHP = std::max(1,mHP / (split ? 2 : 1));
       }
     if (!msg)
       ;
@@ -778,7 +778,7 @@ EvReturn Creature::Event(EventInfo &e) {
         * -- certainly in character for priests of pain! */
         if (HasAbility(CA_FEED_UPON_PAIN))
             if ((e.aDmg + e.xDmg)> 10 && cHP < mHP + Attr[A_THP])
-                cHP = min(mHP + Attr[A_THP],cHP + (e.aDmg + e.xDmg) / 10);
+                cHP = std::min(mHP + Attr[A_THP],cHP + (e.aDmg + e.xDmg) / 10);
 
         break;
     case EV_HIT:
@@ -1252,7 +1252,7 @@ void Creature::DoTurn() {
 
     /* This should really be the saving throw DC of the effect,
     but that's a lot of extra work, so for now... */
-    if (HasStati(PARALYSIS) && max(SkillLevel(SK_CONCENT),SkillLevel(SK_ESCAPE_ART)) >= 15)
+    if (HasStati(PARALYSIS) && std::max(SkillLevel(SK_CONCENT),SkillLevel(SK_ESCAPE_ART)) >= 15)
         if (SavingThrow(FORT,18,SA_MAGIC|SA_PARA)) {
             IPrint("You break the paralysis with Concentration!");
             RemoveStati(PARALYSIS);
@@ -1300,7 +1300,7 @@ void Creature::DoTurn() {
 
         if (HasSkill(SK_ESCAPE_ART))
             if (!(HasStati(PARALYSIS) || HasStati(AFRAID) || HasStati(STUNNED) || HasStati(ASLEEP)))
-                if (SkillCheck(SK_ESCAPE_ART, max(10 + cr->ChallengeRating()*2, 10 + cr->GetAttr(A_STR) ),true,false)) {
+                if (SkillCheck(SK_ESCAPE_ART, std::max(10 + cr->ChallengeRating()*2, 10 + cr->GetAttr(A_STR) ),true,false)) {
                     // better messages later
                     IPrint("You escape the <Obj>!",cr);
                     cr->DropEngulfed(this);
@@ -1481,7 +1481,7 @@ DoIntervention:
                 between sacrificing sapients for penance and being drained
                 by an increasingly angry Xel until she dies. */ 
                 if (isAnger && (gID != thisp->GodID)) {
-                    thisp->Anger[gNum] = max(0, thisp->Anger[gNum] - 2);
+                    thisp->Anger[gNum] = std::max(0, thisp->Anger[gNum] - 2);
                     if (!thisp->Anger[gNum])
                         thisp->GodMessage(gID,MSG_EXPENDED);
                 }
@@ -1519,7 +1519,7 @@ NoIntervention:;
         } else  FFCount = 30;
     } 
 
-    AoO = HasFeat(FT_COMBAT_REFLEXES) ? max(1,1 + Mod2(A_DEX)) : 1;
+    AoO = HasFeat(FT_COMBAT_REFLEXES) ? std::max(1,1 + Mod2(A_DEX)) : 1;
     if (HasFeat(FT_MOBILITY))
         AoO++; 
     if (HasAttk(A_GAZE))
@@ -1531,7 +1531,7 @@ NoIntervention:;
         // ww: currently the monster AI is not smart enough to conserve mana,
         // so monster mages almost always run out of it fighting each other
         // before you arrive ...
-        if (!isPlayer() || cMana() >= ((nhMana()*min(35+SkillLevel(SK_CONCENT)*2,80))/100)) {
+        if (!isPlayer() || cMana() >= ((nhMana()* std::min(35+SkillLevel(SK_CONCENT)*2,80))/100)) {
             /* 
             * Before it took about 60 turns to get 1 point back if you were
             * down one, and 60X turns if you were down X points. 
@@ -1555,8 +1555,8 @@ NoIntervention:;
             } else {
                 uMana--; 
                 // if you are down 5*N%, it takes you N turns to get back 1%
-                int N = (tMana() - (cMana() + hMana)) * 20 / max(1,tMana());
-                ManaPulse = N * 100 / max(1,tMana()); 
+                int N = (tMana() - (cMana() + hMana)) * 20 / std::max(1,tMana());
+                ManaPulse = N * 100 / std::max(1,tMana());
             } 
         } 
     }
@@ -1676,7 +1676,7 @@ NoIntervention:;
     StatiIterNature(this,REGEN)
         if (cHP < mHP+Attr[A_THP])
             if (S->Mag > random(100))
-                cHP = min(mHP+Attr[A_THP],cHP + max(1,GetStati(REGEN)->Mag/100));
+                cHP = std::min(mHP+Attr[A_THP],cHP + std::max(1,GetStati(REGEN)->Mag/100));
     StatiIterEnd(this)
 
     StatiIterNature(this,PERIODIC)
@@ -1705,7 +1705,7 @@ NoIntervention:;
         // ww: constant regeneration makes you hungry!
         int old_cHP = cHP;
         if (AbilityLevel(CA_REGEN) > 0) { 
-            cHP = min(mHP+Attr[A_THP],cHP+AbilityLevel(CA_REGEN));
+            cHP = std::min(mHP+Attr[A_THP],cHP+AbilityLevel(CA_REGEN));
 
             if (old_cHP < cHP) {
                 int curHunger = GetStatiDur(HUNGER);
@@ -1779,9 +1779,9 @@ void Creature::GetHungrier(int16 amt)
           hunger_val -= amt;
       }
     else
-      hunger_val -= max((amt*fast_percent)/100,1);
+      hunger_val -= std::max((amt*fast_percent)/100,1);
     
-    hunger_val = max<int>(0,hunger_val);
+    hunger_val = std::max<int>(0,hunger_val);
     
     SetStatiDur(HUNGER,-1,NULL,hunger_val);
   }
@@ -1861,9 +1861,9 @@ void Creature::GainInherentBonus(int16 at, int16 mag, bool msg)
       }
 
     if (HasStati(ADJUST_INH,at))
-      SetStatiMag(ADJUST_INH,at,NULL,min<int>(MaxBonus,CurrBonus+mag));
+      SetStatiMag(ADJUST_INH,at,NULL,std::min<int>(MaxBonus,CurrBonus+mag));
     else
-      GainPermStati(ADJUST_INH,NULL,SS_MISC,at,min(MaxBonus,mag),0);
+      GainPermStati(ADJUST_INH,NULL,SS_MISC,at,std::min(MaxBonus,mag),0);
 
     if (msg) switch (at) {
       case A_STR: IPrint("You feel stronger."); break;
@@ -2014,7 +2014,7 @@ int16 Creature::ChallengeRating(bool allow_neg)
     
     if (allow_neg)
       return CR;
-    return max<int>(0,CR);
+    return std::max<int>(0,CR);
   }
 
 
@@ -2024,7 +2024,7 @@ uint16 Creature::SightRange()
   {
     uint16 sr;
 
-    sr = max(3,4 + Mod(A_WIS));
+    sr = std::max(3,4 + Mod(A_WIS));
     if (HasAbility(CA_SHARP_SENSES))
       sr += AbilityLevel(CA_SHARP_SENSES);
 
@@ -2069,7 +2069,7 @@ bool Creature::LoseFatigue(int16 amt, bool avoid) {
 
     /* Hardcoded Essiah Fatigue Clause */
     if (avoid && cFP < 0 && isCharacter() && isThreatened() && isMType(MA_GOOD))
-        thisc->gainFavour(FIND("Essiah"), 25 * abs(cFP - min<int>(0, oFP)));
+        thisc->gainFavour(FIND("Essiah"), 25 * abs(cFP - std::min<int>(0, oFP)));
 
     if (cFP <= 0 && oFP > 0)
         stat_change = true;
@@ -2602,7 +2602,7 @@ TAttack* Creature::GetAttk(int8 typ)
       SacredAura.DType = AD_HOLY;
       SacredAura.u.a.DC = 0;
       SacredAura.u.a.Dmg.Set(
-        (int8)AbilityLevel(CA_SACRED_AURA),4,max<int8_t>(0,Mod(A_CHA)));
+        (int8)AbilityLevel(CA_SACRED_AURA),4,std::max<int8_t>(0,Mod(A_CHA)));
       //Fatal("ww: returning the address of a local stack variable");
       return &SacredAura;
       }
@@ -2791,26 +2791,26 @@ int16 Creature::AbilityLevel(int16 n)
       if (n == CA_SPELLCASTING)
         lv += thisp->IntStudy[STUDY_CASTING];
       if (n == CA_SNEAK_ATTACK)
-        lv = max<int>(lv,min(lv + thisp->IntStudy[STUDY_SNEAK],
-              min(lv*2,((thisp->TotalLevel()*4+4)/10))));
+        lv = std::max<int>(lv,std::min(lv + thisp->IntStudy[STUDY_SNEAK],
+            std::min(lv*2,((thisp->TotalLevel()*4+4)/10))));
       if (n == CA_TURNING || n == CA_COMMAND)
-        lv = max<int>(lv,min(lv + thisp->IntStudy[STUDY_TURNING]*2,
-              min(lv*2,((thisp->TotalLevel()*4+4)/5))));
+        lv = std::max<int>(lv,std::min(lv + thisp->IntStudy[STUDY_TURNING]*2,
+            std::min(lv*2,((thisp->TotalLevel()*4+4)/5))));
       if (n == CA_WILD_SHAPE)
-        lv = max<int>(lv,min(lv + thisp->IntStudy[STUDY_SHAPES]*2,
-              min(lv*2,((thisp->TotalLevel()*4+4)/5))));
+        lv = std::max<int>(lv,std::min(lv + thisp->IntStudy[STUDY_SHAPES]*2,
+            std::min(lv*2,((thisp->TotalLevel()*4+4)/5))));
       if (n == CA_SACRED_MOUNT)
-        lv = max<int>(lv,min(lv + thisp->IntStudy[STUDY_MOUNT]*3,
-              min(lv*2,((thisp->TotalLevel()*4+4)/5))));
+        lv = std::max<int>(lv,std::min(lv + thisp->IntStudy[STUDY_MOUNT]*3,
+            std::min(lv*2,((thisp->TotalLevel()*4+4)/5))));
       if (n == CA_SMITE)
-        lv = max<int>(lv,min(lv + thisp->IntStudy[STUDY_SMITE]*4,
-              min(lv*2,((thisp->TotalLevel()*4+4)/5))));
+        lv = std::max<int>(lv,std::min(lv + thisp->IntStudy[STUDY_SMITE]*4,
+            std::min(lv*2,((thisp->TotalLevel()*4+4)/5))));
       if (n == CA_UNARMED_STRIKE || n == CA_STUN_ATTACK)
-        lv = max<int>(lv,min(lv + thisp->IntStudy[STUDY_UNARMED]*2,
-              min(lv*2,((thisp->TotalLevel()*4+4)/5))));
+        lv = std::max<int>(lv,std::min(lv + thisp->IntStudy[STUDY_UNARMED]*2,
+            std::min(lv*2,((thisp->TotalLevel()*4+4)/5))));
       if (n == CA_LEGEND_LORE || n == CA_BARDIC_MUSIC || n == CA_STORYCRAFT)
-        lv = max<int>(lv,min(lv + thisp->IntStudy[STUDY_BARDIC]*2,
-              min(lv*2,((thisp->TotalLevel()*4+4)/5))));
+        lv = std::max<int>(lv,std::min(lv + thisp->IntStudy[STUDY_BARDIC]*2,
+            std::min(lv*2,((thisp->TotalLevel()*4+4)/5))));
       
         if (HasStati(POLYMORPH))
           if (n == CA_SPELLCASTING ||
@@ -2836,20 +2836,20 @@ int16 Creature::AbilityLevel(int16 n)
       StatiIterEnd(this)
       }
 
-    return max<int>(0,lv);
+    return std::max<int>(0,lv);
   }
 
 
 int16 Creature::Mod(int8 a)  { 
   int res = Attr[a] ? (Attr[a]-10)/2 : 0; 
   if (a == A_DEX && InSlot(SL_ARMOUR) && InSlot(SL_ARMOUR)->Type == T_ARMOUR) 
-    res = min<int>(res, ((Armour *)InSlot(SL_ARMOUR))->MaxDexBonus(this));
+    res = std::min<int>(res, ((Armour *)InSlot(SL_ARMOUR))->MaxDexBonus(this));
   return res;
 } 
 int16 Creature::Mod2(int8 a) { 
   int res = Attr[a] ? (Attr[a]-11)/2 : 0; 
   if (a == A_DEX && InSlot(SL_ARMOUR) && InSlot(SL_ARMOUR)->Type == T_ARMOUR) 
-    res = min<int>(res, ((Armour *)InSlot(SL_ARMOUR))->MaxDexBonus(this));
+    res = std::min<int>(res, ((Armour *)InSlot(SL_ARMOUR))->MaxDexBonus(this));
   return res;
 }
 
@@ -2859,13 +2859,13 @@ int16 Creature::KMod2(int8 a)  { return Mod2(a); }
 int16 Character::KMod(int8 a)  { 
   int res = Attr[a] ? (KAttr[a]-10)/2 : 0; 
   if (a == A_DEX && InSlot(SL_ARMOUR)) 
-    res = min<int>(res, ((Armour *)InSlot(SL_ARMOUR))->MaxDexBonus(this));
+    res = std::min<int>(res, ((Armour *)InSlot(SL_ARMOUR))->MaxDexBonus(this));
   return res;
 } 
 int16 Character::KMod2(int8 a) { 
   int res = Attr[a] ? (KAttr[a]-11)/2 : 0; 
   if (a == A_DEX && InSlot(SL_ARMOUR)) 
-    res = min<int>(res, ((Armour *)InSlot(SL_ARMOUR))->MaxDexBonus(this));
+    res = std::min<int>(res, ((Armour *)InSlot(SL_ARMOUR))->MaxDexBonus(this));
   return res;
 }
 
@@ -2978,11 +2978,11 @@ int32 Creature::ChargeBonus()
        * just started charging. 
        */
       
-      bonus = min(bonus,wep_hardness); 
+      bonus = std::min(bonus,wep_hardness);
       
-      bonus = max(0,min(10, bonus / 2)-1);
+      bonus = std::max(0,std::min(10, bonus / 2)-1);
       
-      return ChargeBonusTable[bonus][min<int>(29,GetStatiMag(CHARGING))];
+      return ChargeBonusTable[bonus][std::min<int>(29,GetStatiMag(CHARGING))];
 }
 
 bool Creature::canMoveThrough(EventInfo *e, int16 tx, int16 ty, 

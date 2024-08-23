@@ -119,7 +119,7 @@ typedef signed long hObj;
 #define COPPER    4
 #define ELECTRUM  5
 
-#define SAL(a) (__SAL[min<int>((a),9)])
+#define SAL(a) (__SAL[std::min<int>((a),9)])
 
 /* These constants can appear in dice values rolled with the
    LRoll function. They allow level-based dice rolls. */
@@ -4636,11 +4636,6 @@ typedef signed long hObj;
 #define TC_WCHOICE   0xFF000007 // '60%'
 
 #define MAX_OVERLAY_GLYPHS 250
-
-#include <algorithm>
-
-using std::max;
-using std::min;
 
 class Object;
 class Map;

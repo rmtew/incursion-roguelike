@@ -869,7 +869,7 @@ EvReturn Item::Event(EventInfo &e) {
                 ((Weapon *)e.EItem2)->DoQualityDmgSingle(e);
             if (e.EItem && e.EItem->isWeapon())  
                 ((Weapon *)e.EItem)->DoQualityDmgSingle(e);
-            e.EActor->MakeNoise(max(10 - (e.EActor->SkillLevel(SK_MOVE_SIL) / 2),1));
+            e.EActor->MakeNoise(std::max(10 - (e.EActor->SkillLevel(SK_MOVE_SIL) / 2),1));
             if (cHP <= 0) {
                 e.Died = true; 
                 e.EActor->RemoveStati(ACTING); 
@@ -948,7 +948,7 @@ void Player::IdentByTrial(Item *it, int16 Quality)
       IPrint("These must be <Str>!",(const char*)it->Name());
     else
       IPrint("This must be <Str>!",(const char*)it->Name(NA_A));
-    Exercise(A_INT,random(6)+max(1,it->ItemLevel()/2),EINT_IDENT,60);
+    Exercise(A_INT,random(6) + std::max(1,it->ItemLevel()/2),EINT_IDENT,60);
   }
 
 bool Item::allowedSlot(int16 slot, Creature *me)
@@ -1546,7 +1546,7 @@ EvReturn Item::Damage(EventInfo &e) {
                     2500, 5000 };
                 int16 Factor;
                 Factor = (ItemLevel() + 2) - e.EPActor->TotalLevel();
-                Factor = min<int>(Factor,10);
+                Factor = std::min<int>(Factor,10);
                 if (Factor >= 0) {
                     if (isType(T_POTION) || isType(T_SCROLL))
                         e.EActor->GainXP((GainedXP[Factor] * Percent) / 1000);
@@ -1694,7 +1694,7 @@ EvReturn Food::Eat(EventInfo &e)
     if (e.EActor->HasStati(HUNGER)) {
       full = e.EActor->GetStatiDur(HUNGER);
       if (e.EActor->HasAbility(CA_SLOW_METABOLISM))
-        e.EActor->SetStatiDur(HUNGER,-1,NULL,full + max(nut / 3,1));
+        e.EActor->SetStatiDur(HUNGER,-1,NULL,full + std::max(nut / 3,1));
       else  
         e.EActor->SetStatiDur(HUNGER,-1,NULL,full + nut);
       }
@@ -1710,7 +1710,7 @@ EvReturn Food::Eat(EventInfo &e)
         {
           DPrint(e,"You vomit!",
                    "The <EActor> vomits!");
-          e.EActor->SetStatiDur(HUNGER,-1,NULL,min(full/2,HUNGRY));
+          e.EActor->SetStatiDur(HUNGER,-1,NULL,std::min(full/2,HUNGRY));
           if (!confirm && e.EActor->yn("Stop eating?"))
                   goto StopEating;
           confirm = true; 
@@ -1831,7 +1831,7 @@ int16 Corpse::noDiseaseDC() {
     
     StatiIterNature(this,TEMPLATE)
         if (TTEM(S->eID)->TType & TM_UNDEAD)
-            baseDC = max<int>(baseDC,25);
+            baseDC = std::max<int>(baseDC,25);
     StatiIterEnd(this)
         
     hours = (theGame->Turn - TurnCreated) / HOUR_TURNS;
@@ -1935,8 +1935,8 @@ int16 Weapon::ParryVal(Creature *c, bool knownOnly)
     val += (sk-WS_PROFICIENT) * 2; /* if you're a grand master, do expect 'em */
   /* WW: Important: no matter how amazing you are, you're not going to be
    * parrying bullets with a rock in your hand. */
-  val = min(ti->u.w.ParryMod * 2,val); 
-  return max(0,val);
+  val = std::min(ti->u.w.ParryMod * 2,val);
+  return std::max(0,val);
 }
 
 bool Weapon::isBaneOf(Creature *c)
@@ -2001,7 +2001,7 @@ int16 Armour::ArmVal(int16 typ, bool knownOnly)
     else if (GetGroup() & WG_LARMOUR) val += 1; 
   } 
   if (HasQuality(IQ_ORCISH) || HasQuality(IQ_DWARVEN)) val += 1;
-  return max(0,val);
+  return std::max(0,val);
 }
 
 int16 Armour::CovVal(Creature *c, bool knownOnly) 
@@ -2084,7 +2084,7 @@ int16 Armour::PenaltyVal(Creature * c, bool for_skills)
     val = 0;
   if (for_skills && c && c->HasFeat(FT_ARMOUR_OPTIMIZATION))
     val = (val-2)/3; 
-  return min(0,val);
+  return std::min(0,val);
 }
 
 // ww: since things like adamant affect this and multiple places (e.g.,
@@ -2118,7 +2118,7 @@ int32 Item::GetGroup(void)
 int16 Armour::MaxDexBonus(Creature * c)
 {
   int pen = PenaltyVal(c,false);
-  return max(0, 9 + pen);
+  return std::max(0, 9 + pen);
 }
 
 uint32 Creature::ArmourType() {
@@ -2161,7 +2161,7 @@ int16 Item::PItemLevel(Creature *cr)
   {
     if (cr->HasStati(TRUE_SIGHT))
       return ItemLevel();
-    return max(ItemLevel(),GetStatiMag(MAGIC_AURA));
+    return std::max(ItemLevel(),GetStatiMag(MAGIC_AURA));
   }
 
 int16 Item::ItemLevel(bool bounded)
@@ -2181,7 +2181,7 @@ int16 Item::ItemLevel(bool bounded)
     else
       eff_lev = 0; 
 
-    return max(eff_lev,cost_lev);
+    return std::max(eff_lev,cost_lev);
   }
 
 int16 Weapon::ItemLevel(bool bounded)
@@ -2214,16 +2214,16 @@ int16 Weapon::ItemLevel(bool bounded)
             QPlus += QualityMods[j][1];
         }
 
-    //base += PlusLevels[min(22,QPlus)];
-    //base += min(22,(QPlus*150)/100);
-    base = min(22,(QPlus*100)/100);
+    //base += PlusLevels[std::min(22,QPlus)];
+    //base += std::min(22,(QPlus*150)/100);
+    base = std::min(22,(QPlus*100)/100);
     
     // a +5 sword with no other qualities should be level
     // 10, even though a +5 flaming sword is also level
     // 10, otherwise high-bonus swords are too easy for
     // dwarves and bards to make.
     if (bounded)
-      base = max<int>(base,Plus*2);
+      base = std::max<int>(base,Plus*2);
     
     return base;
   }
@@ -2249,15 +2249,15 @@ int16 Armour::ItemLevel(bool bounded)
             QPlus += AQualityMods[j][1];
         }
 
-    // base += PlusLevels[min(22,QPlus)];
-    base += min(22,(QPlus*150)/100);
+    // base += PlusLevels[std::min(22,QPlus)];
+    base += std::min(22,(QPlus*150)/100);
     
     // a +5 sword with no other qualities should be level
     // 10, even though a +5 flaming sword is also level
     // 10, otherwise high-bonus swords are too easy for
     // dwarves and bards to make.
     if (bounded)
-      base = max<int>(base,Plus*2);
+      base = std::max<int>(base,Plus*2);
     
     return base;
   }
@@ -2279,8 +2279,8 @@ int16 QItem::ItemLevel(bool bounded)
             QPlus += AQualityMods[j][1];
         }
 
-    // base += PlusLevels[min(22,QPlus)];
-    base += min(22,(QPlus*150)/100);
+    // base += PlusLevels[std::min(22,QPlus)];
+    base += std::min(22,(QPlus*150)/100);
     return base;
   }
 
@@ -2797,12 +2797,12 @@ int16 Weapon::Size(Creature * wield)
   {
     int sofar = TITEM(iID)->Size; 
     if (HasQuality(IQ_FEATHERLIGHT) && wield)
-      sofar = max(SZ_TINY,sofar - 1);
+      sofar = std::max(SZ_TINY,sofar - 1);
     if (wield && wield->HasFeat(FT_SPEAR_AND_SHIELD) && 
         wield->InSlot(SL_READY) &&
         wield->InSlot(SL_READY)->isType(T_SHIELD) && 
         isGroup(WG_SPEARS|WG_LANCES|WG_POLEARMS))
-      sofar = max(SZ_TINY,sofar - 1);
+      sofar = std::max(SZ_TINY,sofar - 1);
     return sofar; 
   }
 
@@ -2834,7 +2834,7 @@ int16 Weapon::RangeInc(Creature *cr)
     if (!(TITEM(iID)->Group & WG_THROWN))
       if (!isType(T_BOW))
         return 0;      
-    rinc = max<int>( TITEM(iID)->u.w.RangeInc, 1 ) ;
+    rinc = std::max<int>( TITEM(iID)->u.w.RangeInc, 1 ) ;
     if (HasQuality(WQ_DISTANCE))
       rinc *= 2; 
     switch (cr->WepSkill(this)) {

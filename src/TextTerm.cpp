@@ -137,10 +137,10 @@ void TextTerm::SizeWin(int16 wn, int16 x1, int16 y1, int16 x2, int16 y2)
     ASSERT(x1 >= 0  || x1 == -1)
     ASSERT(x2 <= sizeX || x2 == -1)
     ASSERT(y2 <= sizeY || y2 == -1)
-    if (y1 != -1) Windows[wn].Top =    max<int>(0,y1);
-    if (x1 != -1) Windows[wn].Left =   max<int>(0,x1);
-    if (y2 != -1) Windows[wn].Bottom = min(y2,Windows[WIN_SCREEN].Bottom);
-    if (x2 != -1) Windows[wn].Right =  min(x2,Windows[WIN_SCREEN].Right);
+    if (y1 != -1) Windows[wn].Top = std::max<int>(0,y1);
+    if (x1 != -1) Windows[wn].Left = std::max<int>(0,x1);
+    if (y2 != -1) Windows[wn].Bottom = std::min(y2,Windows[WIN_SCREEN].Bottom);
+    if (x2 != -1) Windows[wn].Right = std::min(x2,Windows[WIN_SCREEN].Right);
   }
 
 void TextTerm::SizeWin(int16 wn, int16 sx, int16 sy)
@@ -294,8 +294,8 @@ NextSeg:
     }
 
     /* Find a good place to break off the segment */
-    len = max(space, (int16)Msg.TrueLeft(space).GetLength());
-    for (; len != max(0, space - 15); len--)
+    len = std::max(space, (int16)Msg.TrueLeft(space).GetLength());
+    for (; len != std::max(0, space - 15); len--)
         if (len > Msg.GetLength() || Msg[len] == ' ' || Msg[len] == '\n')
             break;
     /* No good place, so we have to break a word. */
@@ -434,9 +434,9 @@ void TextTerm::Box(int16 win, int16 flags, int16 cbor, int16 ctxt, const char*te
 	strcat(lbuff, "\n");
 	ch = lbuff; LineLength = BoxLength = Lines = SpaceAt = 0;
 	if (flags & BOX_WIDEBOX)
-		Avail = max((activeWin->Right - activeWin->Left) - 10, 20);
+		Avail = std::max((activeWin->Right - activeWin->Left) - 10, 20);
 	else
-		Avail = max(min((activeWin->Right - activeWin->Left) - 10, 50), 20);
+		Avail = std::max(std::min((activeWin->Right - activeWin->Left) - 10, 50), 20);
 	while (*ch) {
 		if (*ch >= 0)
 			LineLength++;
@@ -475,7 +475,7 @@ FoundSpace:;
 		Save();
 
 	SetWin(WIN_SCREEN);
-	SizeWin(WIN_CUSTOM, BoxLength - 1, min(40, Lines - 2));
+	SizeWin(WIN_CUSTOM, BoxLength - 1, std::min(40, Lines - 2));
 
 	DrawBorder(WIN_CUSTOM, cbor);
 	ClearScroll(true);
@@ -553,12 +553,12 @@ int16 TextTerm::WrapWrite(int16 x, int16 y, const char* _s, int16 x2, int16 maxl
 		s = s.Left(s.GetLength() - 1);
 	GotoXY(x, y); lines = 0; cWrap = 0;
 	while (1) {
-		int space_left_on_this_line = (x2 ? x2 : WinSizeX()) - max(x, cWrap);
+		int space_left_on_this_line = (x2 ? x2 : WinSizeX()) - std::max(x, cWrap);
 		int trueLength = s.GetTrueLength();
 		if (space_left_on_this_line > trueLength) {
 			if (trueLength > 0) { lines++; }
 			Write(s);
-			GotoXY(max(x, cWrap), y + lines);
+			GotoXY(std::max(x, cWrap), y + lines);
 			return lines;
 		}
 		pos = (s.TrueLeft(space_left_on_this_line)).GetLength() - 1;
@@ -577,7 +577,7 @@ int16 TextTerm::WrapWrite(int16 x, int16 y, const char* _s, int16 x2, int16 maxl
 			l = s.Left(pos);
 		}
 		s = s.Right((s.GetLength() - l.GetLength()));
-		lines++; Write(l); GotoXY(max(x, cWrap), y + lines);
+		lines++; Write(l); GotoXY(std::max(x, cWrap), y + lines);
 		if ((y + lines) >= WinSizeY() || lines >= maxlines)
 			return lines;
 		while (s.GetLength() && s[0] == ' ')
@@ -596,7 +596,7 @@ void TextTerm::UpdateScrollArea(int16 _offset, int16 wn) {
 	Clear();
 	offset = _offset == -2 ? offset : _offset;
 	if (offset > ScrollLines - WinSizeY())
-		offset = max(0, ScrollLines - WinSizeY());
+		offset = std::max(0, ScrollLines - WinSizeY());
 	if (offset < 0)
 		offset = 0;
 	for (y = 0; y != WinSizeY(); y++) {
@@ -629,7 +629,7 @@ void TextTerm::HyperTab(int16 wn) {
       return;
 
     /* Get Scroll Win Dimensions */
-    sx = min(SCROLL_WIDTH,Windows[wn].Right - Windows[wn].Left);
+    sx = std::min(SCROLL_WIDTH,Windows[wn].Right - Windows[wn].Left);
     sy = Windows[wn].Bottom - Windows[wn].Top;
 
     /* Where "are we" on the page? */
@@ -716,8 +716,8 @@ void TextTerm::SWrite(const char *text, int16 wn)
   {
     int32 oColor; bool isLink = false; int16 c;
     const char *ch;
-    ScrollLines = max<int>(scy+1,ScrollLines);
-    if (scx > min(SCROLL_WIDTH,Windows[wn].Right-Windows[wn].Left))
+    ScrollLines = std::max<int>(scy+1,ScrollLines);
+    if (scx > std::min(SCROLL_WIDTH,Windows[wn].Right-Windows[wn].Left))
       { scx = 0; scy++; }
     if (scy >= MAX_SCROLL_LINES)
       return;
@@ -734,14 +734,14 @@ void TextTerm::SWrite(const char *text, int16 wn)
             ASSERT(!isLink)
             scy++; ch++; scx = 0;
             cWrap = 0;
-            ScrollLines = max<int>(scy+1,ScrollLines);
+            ScrollLines = std::max<int>(scy+1,ScrollLines);
             if (scy > MAX_SCROLL_LINES)
               return;
             continue;
           }
-        if (scx > min(SCROLL_WIDTH,Windows[wn].Right-Windows[wn].Left))
+        if (scx > std::min(SCROLL_WIDTH,Windows[wn].Right-Windows[wn].Left))
           { scy++; scx = 0;
-            ScrollLines = max<int>(scy+1,ScrollLines);
+            ScrollLines = std::max<int>(scy+1,ScrollLines);
             /*
             if (scy > activeWin->Bottom)
               return;
@@ -839,7 +839,7 @@ int16 TextTerm::SWrapWrite(int16 x, int16 y, const char* _s, int16 x2, int16 wn)
     
     int pos, lines;
     
-    x2 = min<int>(SCROLL_WIDTH,x2);
+    x2 = std::min<int>(SCROLL_WIDTH,x2);
     
     /* Trim Trailing Returns */
     while (s.GetLength() && s[s.GetLength()-1] == '\n')
@@ -848,11 +848,11 @@ int16 TextTerm::SWrapWrite(int16 x, int16 y, const char* _s, int16 x2, int16 wn)
     SGotoXY(x,y); lines = 0; cWrap = 0;
     while(1) {
       PurgeStrings();
-      pos = (x2 ? x2 : min(SCROLL_WIDTH,Windows[wn].Right-Windows[wn].Left)) - max(cWrap,x);
+      pos = (x2 ? x2 : std::min(SCROLL_WIDTH,Windows[wn].Right-Windows[wn].Left)) - std::max(cWrap,x);
       if (pos > s.GetTrueLength() && !s.strchr('\n'))
         {
           lines++; SWrite(s,wn);
-          SGotoXY(max(x,cWrap),y+lines);
+          SGotoXY(std::max(x,cWrap),y+lines);
           return lines;
         }
       pos = (s.TrueLeft(pos)).GetLength()-1;
@@ -870,7 +870,7 @@ int16 TextTerm::SWrapWrite(int16 x, int16 y, const char* _s, int16 x2, int16 wn)
         l = l.Right(l.GetLength()-1);
       lines++; SWrite(l,wn); 
       if (cr) cWrap = 0;
-      SGotoXY(max(x,cWrap),y+lines);
+      SGotoXY(std::max(x,cWrap),y+lines);
       if ((y + lines) >= MAX_SCROLL_LINES)
         return lines;
       }  
@@ -950,11 +950,11 @@ Restart:
         (fl & MENU_2COLS) ? 2 : 1;
 
     Save();
-    Rows = max(1,OptionCount / Cols);
+    Rows = std::max(1,OptionCount / Cols);
     if (Cols > 1)
         if (OptionCount % Cols)
             Rows++;
-    vRows = min((fl & MENU_BORDER) ? 32 : 34,Rows);
+    vRows = std::min((fl & MENU_BORDER) ? 32 : 34,Rows);
     vStart = 0;
 
     DY = 0;
@@ -981,7 +981,7 @@ Restart:
         } else if (!title)
             Width = 4 + szCol * Cols;
         else
-            Width = 2 + max(min<int>(45,strlen(title)),szCol*Cols);
+            Width = 2 + std::max(std::min<int>(45,strlen(title)),szCol*Cols);
         Height = vRows + (title ? DY+1 : 0) + 1;
         if (fl & MENU_LARGEBOX) {
             SetWin(WIN_SCREEN);
@@ -1014,7 +1014,7 @@ Restart:
     tcol -= (activeWin->Bottom - activeWin->Top)+1;
     ASSERT(tcol>1);
     }
-    vRows = min(vRows,tcol);
+    vRows = std::min(vRows,tcol);
     */
 
     do {            
@@ -1045,7 +1045,7 @@ Restart:
         }
         if (fl & MENU_DESC) {
             SetWin(MWin);
-            SizeWin(WIN_MENUDESC, WinLeft(),min(WinTop()+vRows+DY+1,WinBottom()-5),WinRight(),WinBottom());
+            SizeWin(WIN_MENUDESC, WinLeft(), std::min(WinTop()+vRows+DY+1,WinBottom()-5),WinRight(),WinBottom());
         }
 
         /* center things nicely */ 
@@ -1055,9 +1055,9 @@ Restart:
             vStart = c; 
 
         SetWin(MWin);
-        for (i = vStart; i != min<int>(OptionCount, vStart + vRows*Cols); i++) {
+        for (i = vStart; i != std::min<int>(OptionCount, vStart + vRows*Cols); i++) {
             GotoXY(((i - vStart) / vRows)*szCol, ((i - vStart) % vRows) + DY);
-            let[0] = MenuLetters[min(53, i)];
+            let[0] = MenuLetters[std::min(53, i)];
             let[1] = 0;
             if (fl & MENU_QKEY)
                 for (qk=0;qk!=MAX_QKEYS;qk++)
@@ -1142,7 +1142,7 @@ InvalidChar:
                 c -= vRows;
             break;
         case KY_CMD_EAST:
-            if (c + vRows <= min(OptionCount-1,vStart+(vRows*Cols-1)))
+            if (c + vRows <= std::min(OptionCount-1,vStart+(vRows*Cols-1)))
                 c += vRows;
             break;   
         case KY_ENTER:
@@ -1228,7 +1228,7 @@ bool TextTerm::LMultiSelect(uint16 fl, const char* _title,int8 MWin,const char*h
 
     barlen = 5;
     for (i=0;i!=OptionCount;i++)
-        barlen = max<int>(barlen,(int16)Option[i].Text.GetTrueLength()+6);
+        barlen = std::max<int>(barlen,(int16)Option[i].Text.GetTrueLength()+6);
 
 
     if (fl & MENU_SORTED)
@@ -1249,11 +1249,11 @@ Restart:
         (fl & MENU_3COLS) ? 3 :
         (fl & MENU_2COLS) ? 2 : 1;
     Save();
-    Rows = max(1,OptionCount / Cols);
+    Rows = std::max(1,OptionCount / Cols);
     if (Cols > 1)
         if (OptionCount % Cols)
             Rows++;
-    vRows = min<int>((fl & MENU_BORDER) ? 36 : 38,Rows);
+    vRows = std::min<int>((fl & MENU_BORDER) ? 36 : 38,Rows);
     vStart = 0;
 
 
@@ -1286,7 +1286,7 @@ Restart:
         else if (!title)
             Width = 4 + szCol * Cols;
         else
-            Width = 2 + max(min<int>(45,strlen(title)),szCol*Cols);
+            Width = 2 + std::max(std::min<int>(45,strlen(title)),szCol*Cols);
         Height = vRows + (title ? DY+1 : 0) + 1;
         if (fl & MENU_LARGEBOX) {
             SetWin(WIN_SCREEN);
@@ -1323,7 +1323,7 @@ Restart:
     tcol -= (activeWin->Bottom - activeWin->Top)+1;
     ASSERT(tcol>1);
     }
-    vRows = min(vRows,tcol);
+    vRows = std::min(vRows,tcol);
     */
 
 
@@ -1357,7 +1357,7 @@ Restart:
         }
         if (fl & MENU_DESC) {
             SetWin(MWin);
-            SizeWin(WIN_MENUDESC, WinLeft(),min(WinTop()+vRows+DY+1,WinBottom()-5),WinRight(),WinBottom());
+            SizeWin(WIN_MENUDESC, WinLeft(), std::min(WinTop()+vRows+DY+1,WinBottom()-5),WinRight(),WinBottom());
         }
 
         /* center things nicely */ 
@@ -1367,7 +1367,7 @@ Restart:
             vStart = c; 
 
         SetWin(MWin);
-        for(i=vStart;i!=min<int>(OptionCount,vStart+vRows*Cols);i++) {
+        for(i=vStart;i!=std::min<int>(OptionCount,vStart+vRows*Cols);i++) {
             GotoXY(((i-vStart)/vRows)*szCol,((i-vStart)%vRows)+DY);
             Color(WHITE);
             Write(Format("  [%c%c%c] %.*s",-PINK,Option[i].isMarked ? '*' : ' ',-GREY,
@@ -1375,7 +1375,7 @@ Restart:
                 (const char*) Option[i].Text
                 ));
             for (j=((i-vStart)/vRows)*szCol+1+activeWin->Left;
-                j!=((i-vStart)/vRows)*szCol+1+min(barlen,szCol)+activeWin->Left;j++)
+                j!=((i-vStart)/vRows)*szCol+1+std::min(barlen,szCol)+activeWin->Left;j++)
                 APutChar(j,((i-vStart)%vRows)+DY+activeWin->Top,
                 (AGetChar(j,((i-vStart)%vRows)+DY+activeWin->Top) & 0x0FFF) | 
                 ((c == i) ? 0x1000 : 0x0000));
@@ -1434,7 +1434,7 @@ InvalidChar:
                 c -= vRows;
             break;
         case KY_CMD_EAST:
-            if (c + vRows <= min(OptionCount-1,vStart+(vRows*Cols-1)))
+            if (c + vRows <= std::min(OptionCount-1,vStart+(vRows*Cols-1)))
                 c += vRows;
             break;   
         case KY_SPACE:

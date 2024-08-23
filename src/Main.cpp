@@ -15,6 +15,9 @@
 
 */
 
+// Prevent <windows.h> min/max definitions
+#define NOMINMAX
+
 #ifdef UNDEF_WIN32
 #include <windows.h>
 #include <Winbase.h>
@@ -309,7 +312,7 @@ FauxContinue:
         cDestroyQueue is emptied. */
         bool skip_delete = Opt(OPT_NO_FREE) != 0;
         while(DestroyCount && !skip_delete) {
-            memcpy(cDestroyQueue,DestroyQueue,sizeof(Thing*)*min(20048,DestroyCount+1));
+            memcpy(cDestroyQueue,DestroyQueue,sizeof(Thing*) * std::min(20048,DestroyCount+1));
             cDestroyCount = DestroyCount;
             DestroyCount = 0;            
             while (cDestroyCount) {
@@ -704,7 +707,7 @@ void Game::MonsterEvaluation(void)
               if(t->isCreature()) {
                 ((Creature*)t)->AoO =
                   ((Creature*)t)->HasFeat(FT_COMBAT_REFLEXES) ?
-                  max(1,1 + ((Creature*)t)->Mod2(A_DEX)) : 1;
+                    std::max(1,1 + ((Creature*)t)->Mod2(A_DEX)) : 1;
                 if (((Creature*)t)->HasAttk(A_GAZE))
                   ((Creature*)t)->DoGazeAttack();
                 if (((Creature*)t)->HasAttk(A_PROX) || 
@@ -1117,7 +1120,7 @@ void Game::MonsterEvaluationCR(void)
               if(t->isCreature()) {
                 ((Creature*)t)->AoO =
                   ((Creature*)t)->HasFeat(FT_COMBAT_REFLEXES) ?
-                  max(1,1 + ((Creature*)t)->Mod2(A_DEX)) : 1;
+                    std::max(1,1 + ((Creature*)t)->Mod2(A_DEX)) : 1;
                 if (((Creature*)t)->HasAttk(A_GAZE))
                   ((Creature*)t)->DoGazeAttack();
                 if (((Creature*)t)->HasAttk(A_PROX) || 
@@ -1542,7 +1545,7 @@ void Game::WeaponEvaluation(void)
               if(t->isCreature()) {
                 ((Creature*)t)->AoO =
                   ((Creature*)t)->HasFeat(FT_COMBAT_REFLEXES) ?
-                  max(1,1 + ((Creature*)t)->Mod2(A_DEX)) : 1;
+                    std::max(1,1 + ((Creature*)t)->Mod2(A_DEX)) : 1;
                 if (((Creature*)t)->HasAttk(A_GAZE))
                   ((Creature*)t)->DoGazeAttack();
                 if (((Creature*)t)->HasAttk(A_PROX) || 
@@ -2018,19 +2021,19 @@ void Game::ListItemsByLevel()
               
               if (IType[t] == AI_WAND)               
                 list[c] = Format("  [%2d/%2d/%2d/%2d/%2d] %s\n",
-                    max(1,LevelAdjust(te->Level,0,1)-2),
-                    max(1,LevelAdjust(te->Level,0,2)-2),
-                    max(1,LevelAdjust(te->Level,0,3)-2),
-                    max(1,LevelAdjust(te->Level,0,4)-2),
-                    max(1,LevelAdjust(te->Level,0,5)-2),
+                    std::max(1,LevelAdjust(te->Level,0,1)-2),
+                    std::max(1,LevelAdjust(te->Level,0,2)-2),
+                    std::max(1,LevelAdjust(te->Level,0,3)-2),
+                    std::max(1,LevelAdjust(te->Level,0,4)-2),
+                    std::max(1,LevelAdjust(te->Level,0,5)-2),
                     (const char*)ItemNameFromEffect(r[i]) );
               else
                 list[c] = Format("  [%2d/%2d/%2d/%2d/%2d] %s\n",
-                    max<int>(1,LevelAdjust(te->Level,0,1)),
-                    max<int>(1,LevelAdjust(te->Level,0,2)),
-                    max<int>(1,LevelAdjust(te->Level,0,3)),
-                    max<int>(1,LevelAdjust(te->Level,0,4)),
-                    max<int>(1,LevelAdjust(te->Level,0,5)),
+                    std::max<int>(1,LevelAdjust(te->Level,0,1)),
+                    std::max<int>(1,LevelAdjust(te->Level,0,2)),
+                    std::max<int>(1,LevelAdjust(te->Level,0,3)),
+                    std::max<int>(1,LevelAdjust(te->Level,0,4)),
+                    std::max<int>(1,LevelAdjust(te->Level,0,5)),
                     (const char*)ItemNameFromEffect(r[i]) );
 
               c++;
