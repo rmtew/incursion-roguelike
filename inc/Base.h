@@ -83,9 +83,17 @@ template<class S,int32 Initial,int32 Delta>
               { this->Remove(i); goto Restart; } }
   };
 
-
-#define MapIterate(m,t,i) \
-    for (i = 0, t = (Creature*)oThing(m->Things[0]); m && m->Things[i]; i++, (t = m ? (Creature*)oThing(m->Things[i]) : NULL))
+/// <summary>
+/// Iterate (for-each) over all things on a Map.
+/// If `map` is NULL then nothing is performed.
+/// </summary>
+/// <param name="map">The `Map*` pointer, can be NULL.</param>
+/// <param name="tmp">Temporary variable to hold each `Creature*` pointer. May not actually be a `Creature` type and must be checked first.</param>
+/// <param name="i">Temporary index variable, should be int.</param>
+#define MapIterate(map, tmp, i) \
+    for ((i) = 0, (tmp) = ((map) ? static_cast<Creature*>(oThing((map)->Things[0])) : nullptr); \
+         (map) && (map)->Things[(i)]; \
+         ++(i), (tmp) = ((map) ? static_cast<Creature*>(oThing((map)->Things[(i)])) : nullptr))
 
 void* x_realloc(void *block, size_t unit, size_t sz, size_t osz);
 
