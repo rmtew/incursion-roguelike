@@ -988,7 +988,7 @@ String & Creature::Name(int16 Flags) {
         else
             s = SC("male ") + s;
 
-        switch ((cHP * 10) / max(1, (mHP + Attr[A_THP]))) {
+        switch ((cHP * 10) / std::max(1, (mHP + Attr[A_THP]))) {
         case 10: s = SC("uninjured ") + s; break;
         case 9:
         case 8:  s = SC("mildly injured ") + s; break;
@@ -1240,7 +1240,7 @@ String & Item::Name(int16 Flags) {
         ofWords[i].Empty();
 
     if (!(eID && TEFF(eID)->HasFlag(EF_HIDEQUAL)))
-        for (i = 1; i < max(WQ_TRUELAST, AQ_TRUELAST); i++)
+        for (i = 1; i < std::max(WQ_TRUELAST, AQ_TRUELAST); i++)
             if (KnownQuality(i) || (HasQuality(i) && Flags & NA_IDENT)) {
                 if (LookupOnly(GenericPreQualNames, i)) {
                     xe.nPrequal += Lookup(GenericPreQualNames, i); xe.nPrequal += " ";
@@ -1503,7 +1503,7 @@ String & Feature::Name(int16 Flags) {
     s = NAME(fID);
 
     if (cHP > 0 && (Flags & NA_LONG))
-        switch ((cHP * 10) / max(1, mHP))
+        switch ((cHP * 10) / std::max<int>(1, mHP))
     {
         case 10: break;
         case 9:

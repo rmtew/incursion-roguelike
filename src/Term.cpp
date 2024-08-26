@@ -266,12 +266,12 @@ SkipThisOne:;
 
     {
         if (LStatLine.TrueLength() < statiLen)
-            Write(max(1, WinRight() - LStatLine.TrueLength()), 1, LStatLine);
+            Write(std::max(1, WinRight() - LStatLine.TrueLength()), 1, LStatLine);
         else if (MStatLine.TrueLength() < statiLen)
-            Write(max(1, WinRight() - MStatLine.TrueLength()), 1, MStatLine);
+            Write(std::max(1, WinRight() - MStatLine.TrueLength()), 1, MStatLine);
         else {
             SStatLine = SStatLine.TrueLeft(statiLen);
-            Write(max(1, WinRight() - SStatLine.TrueLength()), 1, SStatLine);
+            Write(std::max(1, WinRight() - SStatLine.TrueLength()), 1, SStatLine);
         }
     }
 
@@ -366,7 +366,7 @@ void TextTerm::ShowTraits() {
       Color(RED);
     else 
       Color(SKYBLUE);
-    Write(Format("%ld/%ld",max(0,p->XP - p->XP_Drained), p->NextLevXP()));
+    Write(Format("%ld/%ld", std::max<int>(0,p->XP - p->XP_Drained), p->NextLevXP()));
     Color (GREY);
     Write(" XP\n");
     if (!p->Opt(OPT_SIDEBAR))
@@ -957,8 +957,8 @@ void TextTerm::AdjustMap(int16 vx, int16 vy,bool newmap) {
 		oy=YOff;
 		rx=vx-XOff;
 		ry=vy-YOff;
-		lx = min(6,MSizeX() / 6);
-    ly = min(5,MSizeY() / 5);
+		lx = std::min(6,MSizeX() / 6);
+    ly = std::min(5,MSizeY() / 5);
     
     if (newmap)
       {
@@ -1020,7 +1020,7 @@ void TextTerm::AdjustMap(int16 vx, int16 vy,bool newmap) {
 
 void TextTerm::ShowThings() {
     int16 i, fx, fy, Per; Thing *t;
-    Rect ViewRange(max(XOff - 15, 0), max(YOff - 15, 0), min(XOff + MSizeX() + 15, m->SizeX()), min(YOff + MSizeY() + 15, m->SizeY()));
+    Rect ViewRange(std::max(XOff - 15, 0), std::max(YOff - 15, 0), std::min<int>(XOff + MSizeX() + 15, m->SizeX()), std::min<int>(YOff + MSizeY() + 15, m->SizeY()));
     Rect ScreenRect((uint8)XOff, (uint8)YOff, (uint8)(XOff + MSizeX()), (uint8)(YOff + MSizeY()));
 
     /* TODO: Allow Selection of Offscreen Glyphs with EffectPrompt:
@@ -1043,8 +1043,8 @@ void TextTerm::ShowThings() {
         m->Update(OffscreenX[i], OffscreenY[i]);
     OffscreenC = 0;
 
-    int16 sx = min(MSizeX(), m->SizeX() - XOff);
-    int16 sy = min(MSizeY(), m->SizeY() - YOff);
+    int16 sx = std::min<int>(MSizeX(), m->SizeX() - XOff);
+    int16 sy = std::min<int>(MSizeY(), m->SizeY() - YOff);
     for (int16 y = 0; y < sy; y++)
         for (int16 x = 0; x < sx; x++) {
             if (!m->InBounds(x + XOff, y + YOff))
@@ -1272,10 +1272,10 @@ void TextTerm::ShowMapOverview() {
                     }
 
                 if ((onmap && seen) || force) {
-                    x1 = min(x1, mx);
-                    x2 = max(x2, mx);
-                    y1 = min(y1, my);
-                    y2 = max(y2, my);
+                    x1 = std::min(x1, mx);
+                    x2 = std::max(x2, mx);
+                    y1 = std::min(y1, my);
+                    y2 = std::max(y2, my);
                 }
 
                 if (p->x >= mx && p->y >= my && p->x < mx + mag && p->y < my + mag)
@@ -1485,7 +1485,7 @@ static int16 ViewListPriorityMod(Thing *t) {
       return 5;
       }
     else if (t->isCreature())
-      return max(0,-((Creature*)t)->ChallengeRating()/3);
+      return std::max(0,-((Creature*)t)->ChallengeRating()/3);
     else if (t->isFeature())
       {
         if ((t->isType(T_DOOR)) ||
@@ -2971,12 +2971,12 @@ void TextTerm::Title() {
     int16 i, ox, oy;
     
     ox = (sizeX - 80) / 2;
-    oy = max(0,sizeY - 50) / 2;
+    oy = std::max(0,sizeY - 50) / 2;
     
     SetWin(WIN_SCREEN); Clear();
     for(i=0;IntroScreen[i];i++)
       Write(ox,oy+i,XPrint(IntroScreen[i]));
-    SizeWin(WIN_CUSTOM,WinLeft(),min(i+2,WinBottom()-8),WinRight(),WinBottom());
+    SizeWin(WIN_CUSTOM,WinLeft(), std::min(i+2,WinBottom()-8),WinRight(),WinBottom());
     SetWin(WIN_CUSTOM);
     Clear();
 }
@@ -3145,14 +3145,14 @@ void CFile::FWrite(const void *vp, size_t write_size) {
         data = realloc(data, alloc);
     }
     memcpy(&bytes[pos], vp, write_size);
-    size = max(size, pos + (int32)write_size);
+    size = std::max(size, pos + (int32)write_size);
     pos += write_size;
 }
   
 void CFile::FRead(void *vp, size_t read_size) {
     memset(vp, 0, read_size);
-    memcpy(vp, &bytes[pos], min((int32)read_size, size - pos));
-    pos = min(size, pos + (int32)read_size);
+    memcpy(vp, &bytes[pos], std::min((int32)read_size, size - pos));
+    pos = std::min(size, pos + (int32)read_size);
 }
 
 void CFile::Seek(int32 val, int8 seek_type) {
@@ -3165,7 +3165,7 @@ void CFile::Seek(int32 val, int8 seek_type) {
         alloc = (((pos - 1) / CFILE_DELTA) + 1) * CFILE_DELTA;
         realloc(data, alloc);
     }
-    size = max(pos, size);
+    size = std::max(pos, size);
 }
       
 int32 CFile::CommitCompressed(int32 offset, bool use_lz) {

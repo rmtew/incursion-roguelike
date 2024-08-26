@@ -276,18 +276,18 @@ void Map::VisionThing(int16 pn, Creature *c, bool do_clear)
 
   const int16 sx = c->x;
   const int16 sy = c->y; 
-  const int16 LightRange = max(c->LightRange,c->InfraRange);
+  const int16 LightRange = std::max(c->LightRange,c->InfraRange);
   const int16 SightRange = c->SightRange;
-  const int16 ShadowRange = max(c->ShadowRange,LightRange); 
+  const int16 ShadowRange = std::max<int>(c->ShadowRange,LightRange);
   const int16 BlindRange = c->BlindRange; 
   const int16 PercepRange = c->PercepRange; 
   const int16 TremorRange = 
-    max(c->TremorRange, c->AbilityLevel(CA_STONEWORK_SENSE)); 
+      std::max<int>(c->TremorRange, c->AbilityLevel(CA_STONEWORK_SENSE));
 
-  const int16 x1 = max(p->MyTerm->OffsetX()-5,0);
-  const int16 y1 = max(p->MyTerm->OffsetY()-5,0);
-  const int16 x2 = min(x1 + p->MyTerm->MSizeX()+10,sizeX-1);
-  const int16 y2 = min(y1 + p->MyTerm->MSizeY()+10,sizeY-1);
+  const int16 x1 = std::max(p->MyTerm->OffsetX()-5,0);
+  const int16 y1 = std::max(p->MyTerm->OffsetY()-5,0);
+  const int16 x2 = std::min(x1 + p->MyTerm->MSizeX()+10,sizeX-1);
+  const int16 y2 = std::min(y1 + p->MyTerm->MSizeY()+10,sizeY-1);
 
   if (do_clear) 
     for (cx=x1;cx<=x2;cx++)
@@ -491,7 +491,7 @@ uint16 Creature::Perceives(Thing *t, bool assertLOS) {
         ty = t->y;
     }
 
-    const int16 Dist = max(1, dist(x, y, tx, ty));
+    const int16 Dist = std::max<int>(1, dist(x, y, tx, ty));
 
     if (!HasStati_ENGULFED)
         StatiIterNature(this, TRACKING)
@@ -647,7 +647,7 @@ InvisToTremor:;
         return Per;
     }
 
-    if (max(abs(x - tx), abs(y - ty)) > max(SightRange, BlindRange)) {
+    if (std::max(abs(x - tx), abs(y - ty)) > std::max(SightRange, BlindRange)) {
         theGame->inPerceive--;
         return Per;
     }

@@ -342,11 +342,11 @@ EvReturn Creature::Cow(EventInfo &e) {
                     cr->GainPermStati(TRIED, this, SS_MISC,
                         SK_INTIMIDATE + EV_COW * 100, 0, 0, 0);
                 }
-            CheckDC += max(0, BestCR * 3);
+            CheckDC += std::max(0, BestCR * 3);
 
         }
     if (!doGroup) {
-        CheckDC += max(0, e.EVictim->ChallengeRating() * 3);
+        CheckDC += std::max(0, e.EVictim->ChallengeRating() * 3);
         e.EVictim->GainPermStati(TRIED, this, SS_MISC,
             SK_INTIMIDATE + EV_COW * 100, 0, 0, 0);
     }
@@ -465,11 +465,11 @@ EvReturn Creature::OfferTerms(EventInfo &e) {
                         BestCR = cr->ChallengeRating();
                     cr->GainPermStati(TRIED, this, SS_MISC, SK_INTIMIDATE + EV_COW * 100, 0, 0, 0);
                 }
-            CheckDC += max(0, BestCR);
+            CheckDC += std::max<int>(0, BestCR);
         }
 
     if (!doGroup) {
-        CheckDC += max(0, e.EVictim->ChallengeRating() * 2);
+        CheckDC += std::max(0, e.EVictim->ChallengeRating() * 2);
         e.EVictim->GainPermStati(TRIED, this, SS_MISC, SK_DIPLOMACY + EV_TERMS * 100, 0, 0, 0);
     }
     Timeout += 30;
@@ -548,7 +548,7 @@ EvReturn Creature::Dismiss(EventInfo &e) {
     if (HasStati(TRIED, SK_DIPLOMACY + EV_DISMISS * 100, e.EActor))
         result = true;
     else {
-        CheckDC = 7 + max(0, e.EVictim->ChallengeRating()) + m->Depth;
+        CheckDC = 7 + std::max<int>(0, e.EVictim->ChallengeRating()) + m->Depth;
         result = SkillCheck(SK_DIPLOMACY, CheckDC, true);
     }
 
@@ -584,7 +584,7 @@ EvReturn Creature::Distract(EventInfo &e) {
             if (cr == e.EActor)
                 continue;
             c++;
-            Res = max(cr->SkillLevel(SK_CONCENT), cr->GetAttr(A_SAV_WILL));
+            Res = std::max(cr->SkillLevel(SK_CONCENT), cr->GetAttr(A_SAV_WILL));
             Res += GetStatiMag(TRIED, SK_BLUFF + EV_DISTRACT * 100, e.EActor);
             if (cr == e.EVictim)
                 sRes = Res;
@@ -655,7 +655,7 @@ EvReturn Creature::Enlist(EventInfo &e) {
     }
 
 
-    Total = max(0, thisp->MaxGroupCR(PHD_PARTY)) - thisp->GetGroupCR(PHD_PARTY, e.EVictim->ChallengeRating());
+    Total = std::max<int>(0, thisp->MaxGroupCR(PHD_PARTY)) - thisp->GetGroupCR(PHD_PARTY, e.EVictim->ChallengeRating());
     if (Total < 0) {
         IPrint("You don't have enough PHD to add that creature to your "
             "party. Dismiss some other party members, raise your Charisma "
@@ -695,7 +695,7 @@ EvReturn Creature::Enlist(EventInfo &e) {
         else
             CheckDC = 25;
 
-        CheckDC += max(0, e.EVictim->ChallengeRating() * 3);
+        CheckDC += std::max(0, e.EVictim->ChallengeRating() * 3);
 
         IPrint("You invite the <Obj> to join your party.", e.EVictim);
 
@@ -759,7 +759,7 @@ EvReturn Creature::FastTalk(EventInfo &e) {
     }
 
     BluffDC = 10 + e.EVictim->ChallengeRating() +
-        max(e.EVictim->SkillLevel(SK_APPRAISE),
+        std::max(e.EVictim->SkillLevel(SK_APPRAISE),
         e.EVictim->SkillLevel(SK_CONCENT));
 
     e.EVictim->GainTempStati(TRIED, e.EActor, 30, SS_MISC,
@@ -818,7 +818,7 @@ EvReturn Creature::Greet(EventInfo &e) {
         IDPrint("You chat with the <Obj>.", "The <Obj2> chats with you.", e.EVictim, e.EActor);
 
     if (e.EActor->isPlayer() && e.EVictim->isMonster() && !e.EVictim->HasStati(TRIED, SK_DIPLOMACY + EV_GREET * 100, e.EActor))
-        switch (random(300) / max(1, (e.EActor->SkillLevel(SK_DIPLOMACY) + getSocialMod(e.EVictim, false)))) {
+        switch (random(300) / std::max(1, (e.EActor->SkillLevel(SK_DIPLOMACY) + getSocialMod(e.EVictim, false)))) {
         case 1:
             IPrint("The <Obj> tells you a bit about the local dungeon layout.",
                 e.EVictim);
@@ -863,7 +863,7 @@ EvReturn Creature::Greet(EventInfo &e) {
         case 4:
             IPrint("You share some heartening war stories with the <Obj>, "
                 "and you feel like you have a second wind!", e.EVictim);
-            cFP = min(GetAttr(A_FAT), cFP + 2);
+            cFP = std::min<int>(GetAttr(A_FAT), cFP + 2);
             break;
     }
     e.EVictim->GainPermStati(TRIED, e.EActor, SS_MISC, SK_DIPLOMACY + EV_GREET * 100);
@@ -1083,7 +1083,7 @@ EvReturn Creature::Quell(EventInfo &e) {
         e.EActor->Transgress(FIND("Essiah"),5,false,"exploitation");
     }
 
-    CheckDC = 15 + max(0,e.EVictim->ChallengeRating())*3;
+    CheckDC = 15 + std::max<int>(0,e.EVictim->ChallengeRating())*3;
     if (wasDamaged)
         CheckDC += 5 + ((dmg*10) / e.EVictim->mHP);
 
@@ -1092,7 +1092,7 @@ EvReturn Creature::Quell(EventInfo &e) {
         e.EVictim->isMType(MA_ILLITHID) ||
         e.EVictim->isMType(MA_DRAGON)) &&
         e.EVictim->isMType(MA_EVIL) &&
-        e.EActor->RandGoodInv(100 + max(1,e.EVictim->ChallengeRating()))) {
+        e.EActor->RandGoodInv(100 + std::max<int>(1,e.EVictim->ChallengeRating()))) {
             CheckDC -= 7;
             wantsTribute = true;
     } else
@@ -1106,7 +1106,7 @@ EvReturn Creature::Quell(EventInfo &e) {
                     "him you have nothing appropriate to give.",e.EVictim);
                 goto Success;
             }
-            it = e.EActor->RandGoodInv(100 + max(1,e.EVictim->ChallengeRating()));
+            it = e.EActor->RandGoodInv(100 + std::max<int>(1,e.EVictim->ChallengeRating()));
             if (!it) {
                 TPrint(e,"The <EVictim> wants tribute, but you have nothing "
                     "of sufficient value to offer.", "You demand tribute, "
@@ -1300,7 +1300,7 @@ EvReturn Creature::Request(EventInfo &e) {
         
         }
     if (!doGroup)
-      DC += max(0,(e.EVictim->ChallengeRating() + (sk != SK_INTIMIDATE ? 0 :
+      DC += std::max(0,(e.EVictim->ChallengeRating() + (sk != SK_INTIMIDATE ? 0 :
                     e.EVictim->GetStatiMag(SAVE_BONUS,SN_FEAR)))*2);
     
     DC += e.EVictim->GetStatiMag(RETRY_BONUS,EV_REQUEST*100,this);
@@ -1750,9 +1750,9 @@ DoneRaceMod:
           if (cr->ResistLevel(AD_MIND) == -1)
             continue;
           if (mag > 0)
-            mag = max(0, mag - cr->HighStatiMag(SAVE_BONUS,SN_ENCH));
+            mag = std::max(0, mag - cr->HighStatiMag(SAVE_BONUS,SN_ENCH));
           else
-            mag = min(0, mag +  cr->HighStatiMag(SAVE_BONUS,SN_ENCH));
+            mag = std::min(0, mag +  cr->HighStatiMag(SAVE_BONUS,SN_ENCH));
         }
       if (mag)
         {
@@ -2019,7 +2019,7 @@ int32 Item::getShopCost(Creature *Buyer, Creature *Seller) {
         cost = 0;
         for (i = 0; i != MAX_SPELLS; i++)
             if (HasSpell(i))
-                cost += max(200, 150 * TEFF(theGame->SpellID(i))->Level);
+                cost += std::max(200, 150 * TEFF(theGame->SpellID(i))->Level);
     }
 
     if (isType(T_SCROLL) || isType(T_POTION)) {
@@ -2042,15 +2042,15 @@ int32 Item::getShopCost(Creature *Buyer, Creature *Seller) {
                 1000000, 1500000, 2000000 };
             if (isType(T_WEAPON) || isType(T_ARMOUR) ||
                 isType(T_SHIELD) || isType(T_BOW))
-                cost += defCost[max(0, min(20, ItemLevel(false)))] * (eID ? 400L : 160L);
+                cost += defCost[std::max(0, std::min<int>(20, ItemLevel(false)))] * (eID ? 400L : 160L);
             else
-                cost += defCost[max(0, min(20, ItemLevel(false)))] * 70L;
+                cost += defCost[std::max(0, std::min<int>(20, ItemLevel(false)))] * 70L;
         }
     }
 
     if (cost) {
         cost *= Quantity;
-        cost = max(1, cost / 100);
+        cost = std::max(1.0, cost / 100);
     }
 
     cost /= 3;
@@ -2112,18 +2112,18 @@ int32 Item::getShopCost(Creature *Buyer, Creature *Seller) {
     index = Buyer->SkillLevel(SK_DIPLOMACY);
 
     index += Buyer->getSocialMod(Seller, false);
-    index = max(index, -10);
-    index = min(index, +30);
+    index = std::max(index, -10);
+    index = std::min(index, +30);
 
     if (Seller->HasMFlag(M_SELLER))
         cost *= ShopPrices[index + 10];
     else {
         if (Seller->getLeader() == Buyer)
             index += 10;
-        cost *= BarterPrices[min(index + 10, 40)];
+        cost *= BarterPrices[std::min(index + 10, 40)];
     }
 
-    cost = max(1, cost / 100.0);
+    cost = std::max(1.0, cost / 100.0);
 
 
     return (int32)cost;
@@ -2201,8 +2201,8 @@ void Player::WildShape() {
                 continue;
             /* new way: big sizes count as "more hit dice" */
             if (mod->QMon[idx].HitDice +
-                max(mod->QMon[idx].Size - SZ_MEDIUM,0) +
-                max(SZ_SMALL - mod->QMon[idx].Size,0) 
+                std::max(mod->QMon[idx].Size - SZ_MEDIUM,0) +
+                std::max(SZ_SMALL - mod->QMon[idx].Size,0)
         > lev) 
         continue;
             /* old way: you need to be a certain level to get big sizes ...
@@ -2259,7 +2259,7 @@ void Player::SummonDruidAnimal() {
             // ww: later restrict this to animals we have seen at least once
             rID mid = mod->MonsterID(idx);
             Monster *mon = new Monster(mid);
-            int diff = ((1 + lev + ft_bonus) - max(mon->ChallengeRating(),0));
+            int diff = ((1 + lev + ft_bonus) - std::max(mon->ChallengeRating(),0));
             if (diff < 1) diff = 1;
             else if (diff > 12) diff = 12;
             rID tid = FIND(Format("companion;%d",diff));
@@ -2296,7 +2296,7 @@ void Player::SummonDruidAnimal() {
 
     Monster *mn = new Monster(mid);
     mn->PlaceAt(m,x,y);
-    int diff = ((1 + lev + ft_bonus) - max(mn->ChallengeRating(),0));
+    int diff = ((1 + lev + ft_bonus) - std::max(mn->ChallengeRating(),0));
     if (diff < 1) diff = 1;
     else if (diff > 12) diff = 12;
     rID tid = FIND(Format("companion;%d",diff));
@@ -2340,7 +2340,7 @@ void Player::InitCompanions() {
 #if 0
     if (HasAbility(CA_ANIMAL_COMP)) {
         MaxCR = MaxGroupCR(PHD_ANIMAL);
-        MaxCR = max(1,min(TotalLevel()+1,MaxCR));
+        MaxCR = std::max(1, std::min(TotalLevel()+1,MaxCR));
         mID = theGame->GetMonID(PUR_SUMMON,0,MaxCR,MaxCR,MA_ANIMAL);
         if (!mID)
             return;
@@ -2374,7 +2374,7 @@ bool Monster::MakeCompanion(Player *p, int16 CompType) {
     if (CompType != PHD_PARTY)
         Total = XCRtoCR(
         XCR(Total) +
-        max(0, XCR(p->MaxGroupCR(PHD_PARTY)) -
+        std::max(0, XCR(p->MaxGroupCR(PHD_PARTY)) -
         XCR(p->GetGroupCR(PHD_PARTY))));
     if (Total < 0) {
         switch (CompType) {
@@ -2480,12 +2480,12 @@ int32 Player::GetGroupXCR(int16 CompType, int16 AddCR) {
             if (ct != CompType)
                 continue;
             j = c->ChallengeRating();
-            CRCubed += max(10, ((j + 2)*(j + 2)*(j + 2)));
+            CRCubed += std::max(10, ((j + 2)*(j + 2)*(j + 2)));
         }
     }
 
     if (AddCR)
-        CRCubed += max(0, (AddCR + 2) * (AddCR + 2) * (AddCR + 2));
+        CRCubed += std::max(0, (AddCR + 2) * (AddCR + 2) * (AddCR + 2));
 
     /* The CR of party HD includes the CRs of groups that
        overflow into it. For example, a ranger has a 2 HD
@@ -2494,15 +2494,15 @@ int32 Player::GetGroupXCR(int16 CompType, int16 AddCR) {
        3 fewer HD worth of party members. */
 
     if (CompType == PHD_PARTY) {
-        if (GetGroupCR(PHD_ANIMAL) > max(0, MaxGroupCR(PHD_ANIMAL))) {
+        if (GetGroupCR(PHD_ANIMAL) > std::max<int>(0, MaxGroupCR(PHD_ANIMAL))) {
             CRCubed += GetGroupXCR(PHD_ANIMAL);
             CRCubed -= MaxGroupXCR(PHD_ANIMAL);
         }
-        if (GetGroupCR(PHD_MAGIC) > max(0, MaxGroupCR(PHD_MAGIC))) {
+        if (GetGroupCR(PHD_MAGIC) > std::max<int>(0, MaxGroupCR(PHD_MAGIC))) {
             CRCubed += GetGroupXCR(PHD_MAGIC);
             CRCubed -= MaxGroupXCR(PHD_MAGIC);
         }
-        if (GetGroupCR(PHD_COMMAND) > max(0, MaxGroupCR(PHD_COMMAND))) {
+        if (GetGroupCR(PHD_COMMAND) > std::max<int>(0, MaxGroupCR(PHD_COMMAND))) {
             CRCubed += GetGroupXCR(PHD_COMMAND);
             CRCubed -= MaxGroupXCR(PHD_COMMAND);
         }
@@ -2514,7 +2514,7 @@ int32 Player::GetGroupXCR(int16 CompType, int16 AddCR) {
        bonus undead pool and the normal magic pool to control created
        undead. */
     if (CompType == PHD_MAGIC)
-        if (GetGroupCR(PHD_UNDEAD) > max(0, MaxGroupCR(PHD_UNDEAD))) {
+        if (GetGroupCR(PHD_UNDEAD) > std::max<int>(0, MaxGroupCR(PHD_UNDEAD))) {
             CRCubed += GetGroupXCR(PHD_UNDEAD);
             CRCubed -= MaxGroupXCR(PHD_UNDEAD);
         }
@@ -2531,18 +2531,18 @@ int16 Player::MaxGroupCR(int16 CompType) {
     switch (CompType) {
     case PHD_PARTY:
         bonus = ((SkillLevel(SK_DIPLOMACY) - 5) / 5) * 2;
-        bonus = max(0, bonus);
+        bonus = std::max<int>(0, bonus);
         return TotalLevel() + Mod(A_CHA) + bonus + (HasFeat(FT_LEADERSHIP) ? 3 : 0) + HighStatiMag(BONUS_PHD, CompType);
     case PHD_MAGIC:
-        return max(0, (CasterLev() + TotalLevel()) / 2) + AbilityLevel(CA_COMMAND_AUTHORITY) + HighStatiMag(BONUS_PHD, CompType);
+        return std::max(0, (CasterLev() + TotalLevel()) / 2) + AbilityLevel(CA_COMMAND_AUTHORITY) + HighStatiMag(BONUS_PHD, CompType);
     case PHD_ANIMAL:
         if (!HasAbility(CA_ANIMAL_COMP))
             return -10;
-        return max(1, AbilityLevel(CA_ANIMAL_COMP)) + HighStatiMag(BONUS_PHD, CompType);
+        return std::max<int>(1, AbilityLevel(CA_ANIMAL_COMP)) + HighStatiMag(BONUS_PHD, CompType);
     case PHD_COMMAND:
         if (!HasAbility(CA_COMMAND))
             return -10;
-        return max(1, HighStatiMag(COMMAND_ABILITY)) + AbilityLevel(CA_COMMAND_AUTHORITY) + HighStatiMag(BONUS_PHD, CompType);
+        return std::max<int>(1, HighStatiMag(COMMAND_ABILITY)) + AbilityLevel(CA_COMMAND_AUTHORITY) + HighStatiMag(BONUS_PHD, CompType);
     case PHD_UNDEAD:
         return HighStatiMag(BONUS_PHD, CompType);
     default:

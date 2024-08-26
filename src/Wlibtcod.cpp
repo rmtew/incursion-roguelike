@@ -58,32 +58,31 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 
+// Prevent <windows.h> min/max definitions
+#define NOMINMAX
+
 #undef TRACE
-#undef MIN
-#undef MAX
 #undef ERROR
 #undef EV_BREAK
+
+#include <algorithm>
 
 #include <direct.h>
 #include <stdarg.h>
 #include <ctype.h> 
 #include <time.h>
 #include <malloc.h>
-#include <Windows.h>
+#include <windows.h>
 #undef ERROR
 #undef EV_BREAK
 #undef MOUSE_MOVED
 
 #include "Incursion.h"
 #undef ERROR
-#undef MIN
-#undef MAX
 
 #define TCOD_NOBASETYPES
 #include "libtcod.h"
 #undef ERROR
-#undef MIN
-#undef MAX
 
 
 #define CURSOR_BLINK_MS 300
@@ -1076,7 +1075,7 @@ void libtcodTerm::SClear() {
 }
 
 void  libtcodTerm::BlitScrollLine(int16 wn, int32 buffline, int32 winline) {
-    TCOD_console_blit(bScroll,0,buffline,min(SCROLL_WIDTH,WinSizeX()),1,bScreen,Windows[wn].Left,winline+Windows[wn].Top,1.0f,1.0f);
+    TCOD_console_blit(bScroll,0,buffline,std::min<int>(SCROLL_WIDTH,WinSizeX()),1,bScreen,Windows[wn].Left,winline+Windows[wn].Top,1.0f,1.0f);
 }
 
 /*****************************************************************************\

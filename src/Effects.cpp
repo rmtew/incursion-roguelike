@@ -232,7 +232,7 @@ SkipSave:
           (e.DType == AD_FIRE && e.EActor->HasFeat(FT_LORE_OF_FLAMES)) ||
           (e.DType == AD_NECR && e.EActor->HasFeat(FT_LORE_OF_DEATH)) ||
           (e.DType == AD_ELEC && e.EActor->HasFeat(FT_LORE_OF_STORMS))) {
-        int16 bonus = max((e.vDmg * 20) / 100,1);
+        int16 bonus = std::max((e.vDmg * 20) / 100,1);
         e.strDmg += Format(" +%d Lore",bonus);
         e.vDmg += bonus; 
       } 
@@ -653,7 +653,7 @@ NotImmune:
     }
 
     if (e.EMagic->xval == AFRAID || e.EMagic->xval == CHARMED)
-        e.EActor->Exercise(A_CHA,max(0,random(4)+e.EVictim->ChallengeRating()-e.EActor->ChallengeRating()),ECHA_CHARM,45);
+        e.EActor->Exercise(A_CHA,std::max(0,random(4)+e.EVictim->ChallengeRating()-e.EActor->ChallengeRating()),ECHA_CHARM,45);
 
     if (e.eID && (TEFF(e.eID)->Schools & SC_ENC))
         if (e.EVictim->isCreature() && (e.EMagic->sval == WILL))
@@ -740,10 +740,10 @@ EvReturn Magic::Polymorph(EventInfo &e)
       {
         int16 best, bestCR, n;
         rID Candidates[40];
-        n = 3 + max(0,e.EActor->Mod(A_INT));
+        n = 3 + std::max<int>(0,e.EActor->Mod(A_INT));
         for (i=0;i!=n;i++)
-          Candidates[i] = theGame->GetMonID(PUR_POLY,max(0,
-            e.EVictim->ChallengeRating()-4)/2,max(1,e.EVictim->ChallengeRating()/2),100,e.EMagic->yval);
+          Candidates[i] = theGame->GetMonID(PUR_POLY,std::max(0,
+            e.EVictim->ChallengeRating()-4)/2,std::max(1,e.EVictim->ChallengeRating()/2),100,e.EMagic->yval);
         if (e.EActor->isMonster()) {
           bestCR = 0;
           best = 0;
@@ -762,8 +762,8 @@ EvReturn Magic::Polymorph(EventInfo &e)
         mID = Candidates[best];
       }
     else
-      mID = theGame->GetMonID(PUR_POLY,max(0,e.EVictim->ChallengeRating()-4)/2,
-                                       max(1,e.EVictim->ChallengeRating()/2),
+      mID = theGame->GetMonID(PUR_POLY,std::max(0,e.EVictim->ChallengeRating()-4)/2,
+                                       std::max(1,e.EVictim->ChallengeRating()/2),
                                              100,e.EMagic->yval);
     if (!mID)
       return ABORT;
@@ -1033,9 +1033,9 @@ void Creature::Shapeshift(rID _mID, bool merge, Item* PolySource) {
 
     mID = _mID;
     SetImage();
-    cHP = (cHP * 100) / max(1, mHP + Attr[A_THP]);
+    cHP = (cHP * 100) / std::max(1, mHP + Attr[A_THP]);
     CalcHP();
-    cHP = max((cHP*(mHP + Attr[A_THP])) / 100, 1);
+    cHP = std::max((cHP*(mHP + Attr[A_THP])) / 100, 1);
     if (m && m->InBounds(x, y)) // ww: bugfix! 
         m->Update(x, y);
 }
@@ -1451,7 +1451,7 @@ EvReturn Magic::Summon(EventInfo &e) {
               cr->GainPermStati(ADJUST,e.EActor,SS_ENCH,A_STR,+4,e.eID,e.vCasterLev);
               cr->GainPermStati(ADJUST,e.EActor,SS_ENCH,A_CON,+4,e.eID,e.vCasterLev);
               cr->GainPermStati(ADJUST,e.EActor,SS_ENCH,A_THP,
-                    10 + max(1,TEFF(e.eID)->Level)*5,e.eID,e.vCasterLev);
+                    10 + std::max<int>(1,TEFF(e.eID)->Level)*5,e.eID,e.vCasterLev);
             } 
         }
     if (e.EItem && e.EItem->isItem())
@@ -1986,7 +1986,7 @@ EvReturn Magic::Creation(EventInfo &e)
               return ABORT;
             if (e.EActor->onPlane() != PHASE_MATERIAL)
               ((Item *)t)->GainPermStati(PHASED,NULL,SS_MISC,e.EActor->onPlane());
-            ((Item*)t)->MakeMagical(0,min(5,e.vDmg/3));
+            ((Item*)t)->MakeMagical(0,std::min(5,e.vDmg/3));
             if (e.EMagic->xval & CREA_MANY)
               ((Item *)t)->SetQuantity(LevelAdjust(e.EMagic->yval,
                                                    e.vCasterLev));
@@ -2009,7 +2009,7 @@ EvReturn Magic::Creation(EventInfo &e)
                   t = Item::Create(iID);
                   if (!t)
                     return ABORT;
-                  ((Item*)t)->MakeMagical(xID,max(5,e.vDmg/3));
+                  ((Item*)t)->MakeMagical(xID,std::max(5,e.vDmg/3));
                   break;
                 }
               if (!t)
@@ -2115,7 +2115,7 @@ EvReturn Magic::Detect(EventInfo &e)
 EvReturn Magic::Travel(EventInfo &e)
   {
     int16 i, _x, _y;
-    e.vDmg = max(e.vDmg,7);
+    e.vDmg = std::max<int>(e.vDmg,7);
 
     if (!e.EActor || e.EActor->isDead() || !e.EActor->m)
       return ABORT; 
@@ -2245,7 +2245,7 @@ EvReturn Magic::Healing(EventInfo &e)
     if ((e.EMagic->xval & HEAL_XP) && e.EVictim->XPDrained()) {
       e.EVictim->IPrint("Your vital force is renewed!");
       if (e.vDmg == 0) e.vDmg = 6; // ww:mysteriously, sometimes this happens
-      e.EVictim->RestoreXP(min((int)e.EVictim->XPDrained(),e.vDmg*500));
+      e.EVictim->RestoreXP(std::min((int)e.EVictim->XPDrained(),e.vDmg*500));
       /* ww: it's not uncommon to be down 6000 XP after a battle with 6
        * wraiths. 300 per potion doesn't cut it.  */ 
       id = true;
@@ -2258,7 +2258,7 @@ EvReturn Magic::Healing(EventInfo &e)
           amt = (int16)((e.EActor->cMana()*e.EMagic->yval)/10);
         else
           amt = 5000;
-        amt = min(e.vDmg,amt);
+        amt = std::min(e.vDmg,amt);
         if (!amt)
           goto SkipHeal;
         if (e.EMagic->yval)
@@ -2272,7 +2272,7 @@ EvReturn Magic::Healing(EventInfo &e)
           return DONE; 
           }         
        
-        amt = min(max(0,(e.EVictim->mHP+e.EVictim->Attr[A_THP]) - e.EVictim->cHP),amt);
+        amt = std::min<int>(std::max(0,(e.EVictim->mHP+e.EVictim->Attr[A_THP]) - e.EVictim->cHP),amt);
         e.EVictim->cHP += amt;
         VPrint(e,"Your wounds heal<Str>!", "The <EVictim>'s wounds heal<Str>!",
           e.EVictim->cHP == (e.EVictim->mHP+e.EVictim->Attr[A_THP]) ? " fully" : "");
@@ -2298,7 +2298,7 @@ EvReturn Magic::Healing(EventInfo &e)
 
     if (e.EMagic->xval & HEAL_FATIGUE)
       if (e.EVictim->cFP < e.EVictim->GetAttr(A_FAT)) {
-        e.EVictim->cFP = min(e.EVictim->GetAttr(A_FAT),
+        e.EVictim->cFP = std::min<int>(e.EVictim->GetAttr(A_FAT),
           e.EVictim->cFP + e.vDmg);
         e.EVictim->IPrint("You feel <Str>refreshed!",
           e.EVictim->cFP == e.EVictim->GetAttr(A_FAT) ? "fully " : "");

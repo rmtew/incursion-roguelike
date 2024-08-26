@@ -449,7 +449,7 @@ void* x_realloc(void *block, size_t unit, size_t sz, size_t osz)
     void *vp;
     vp = malloc(sz*unit);
     memset(vp,0,sz*unit);
-    memcpy(vp,block,min(sz,osz)*unit);
+    memcpy(vp,block,std::min(sz,osz)*unit);
     free(block);
     return vp;
   }
@@ -546,9 +546,9 @@ template<class S,int32 Initial,int32 Delta>
 		if (Count+Delta+10 < Size)
 			return;
     if (!Items) {
-      Items = (S*) malloc(max(Initial,Delta)*sizeof(S));
-      memset(Items,0,max(Initial,Delta)*sizeof(S));
-      Size = max(Initial,Delta);
+      Items = (S*) malloc(std::max(Initial,Delta)*sizeof(S));
+      memset(Items,0, std::max(Initial,Delta)*sizeof(S));
+      Size = std::max(Initial,Delta);
       return;
       }
     Items = (S*) x_realloc(Items,sizeof(S),Size+Delta,Size);
@@ -577,7 +577,7 @@ template<class S,int32 Initial, int32 Delta>
     ASSERT(idx >= 0)
     while(Size <= idx+1)
       Enlarge();
-    Count = max(Count,idx+1);
+    Count = std::max(Count,idx+1);
     Items[I(idx,Size)] = s;
     if (Count)
       Items[0] = Items[0];
@@ -631,9 +631,9 @@ int16 Dice::Roll()
     else
       n+=Bonus;
     if (Number > 0)
-		  return max(n,0);
+		  return std::max(n,0);
     else if (Number < 0)
-      return min(n,0);
+      return std::min(n,0);
     else
       return n;
 	}
@@ -647,7 +647,7 @@ int16 Dice::Roll(int8 Number, int8 Sides, int8 Bonus,int8 e)
 		for(i=0;i!=Number;i++)
 			n+=(random(Sides)+1);
 		n+=Bonus;
-		return max(n,0);
+		return std::max(n,0);
 	}
 
 

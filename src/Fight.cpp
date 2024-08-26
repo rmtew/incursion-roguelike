@@ -544,12 +544,12 @@ SkipThisTarget:;
       // attack takes no time
     } else  if (isTWF) {
       Timeout += 
-          3000 / max((100 + min(Attr[A_SPD_MELEE],Attr[A_SPD_OFFHAND])*5),10) +
-          3000 / max((100 + max(Attr[A_SPD_MELEE],Attr[A_SPD_OFFHAND])*5),10) / 2;
+          3000 / std::max((100 + std::min(Attr[A_SPD_MELEE],Attr[A_SPD_OFFHAND])*5),10) +
+          3000 / std::max((100 + std::max(Attr[A_SPD_MELEE],Attr[A_SPD_OFFHAND])*5),10) / 2;
       }
     else
       Timeout += 3000 / 
-          max((100 + Attr[A_SPD_MELEE]*5),10);
+        std::max((100 + Attr[A_SPD_MELEE]*5),10);
     if (startedAfraid)
       Timeout *= 2;
     
@@ -691,7 +691,7 @@ EvReturn Creature::RAttack(EventInfo &e)
     return ABORT; 
     } 
 
-  e.vRange = max(1,(e.EItem ? e.EItem : e.EItem2)->RangeInc(e.EActor));
+  e.vRange = std::max<int>(1,(e.EItem ? e.EItem : e.EItem2)->RangeInc(e.EActor));
 
   if (e.EActor->HasFeat(FT_FAR_SHOT))
     e.vRange *= 2;
@@ -974,10 +974,10 @@ SkipAttack:
     // attack takes no time
   } else if (e.EItem)
     Timeout += 3000 / 
-        max((100 + Attr[A_SPD_ARCHERY]*5),10);
+      std::max((100 + Attr[A_SPD_ARCHERY]*5),10);
   else
     Timeout += 3000 / 
-        max((100 + Attr[A_SPD_THROWN]*5),10);
+      std::max((100 + Attr[A_SPD_THROWN]*5),10);
   if (startedAfraid)
     Timeout *= 2;
 
@@ -1182,7 +1182,7 @@ EvReturn Creature::NAttack(EventInfo &e) /* this == EActor */
         && !e.EActor->HasStati(TRIED,FT_EXPERT_TACTICIAN,e.EVictim)) { 
         e.EActor->GainTempStati(TRIED,e.EVictim,1,SS_MISC,FT_EXPERT_TACTICIAN);
       // attack takes no time
-    } else Timeout += 2000 / max((100 + Attr[A_SPD_BRAWL]*5),10);
+    } else Timeout += 2000 / std::max((100 + Attr[A_SPD_BRAWL]*5),10);
     /* Touch Attacks are quicker */
     return res; 
   }
@@ -1193,7 +1193,7 @@ EvReturn Creature::NAttack(EventInfo &e) /* this == EActor */
     { buf[0].AType = A_PUNC;
       buf[0].DType = AD_BLUNT;
       buf[0].u.a.Dmg =
-        MonkDamage[max(1,e.EActor->
+        MonkDamage[std::max<int>(1,e.EActor->
           AbilityLevel(CA_UNARMED_STRIKE))];
       max = 1; }
   else 
@@ -1374,7 +1374,7 @@ DoneSequence:
       && !e.EActor->HasStati(TRIED,FT_EXPERT_TACTICIAN,e.EVictim)) { 
     e.EActor->GainTempStati(TRIED,e.EVictim,1,SS_MISC,FT_EXPERT_TACTICIAN);
     // takes no time
-  } else Timeout += 3000 / max((100 + Attr[A_SPD_BRAWL]*5),10);
+  } else Timeout += 3000 / std::max((100 + Attr[A_SPD_BRAWL]*5),10);
 
   if (startedAfraid)
     Timeout *= 2;
@@ -1516,7 +1516,7 @@ OvercomeNausea:
 
         te->ef.pval = ta->u.a.Dmg;
         te->ef.pval.Number += e.EActor->GetPower(0)*2;
-        te->ef.pval.Number = max(1,e.Dmg.Number);
+        te->ef.pval.Number = std::max<int>(1,e.Dmg.Number);
         e.Dmg = te->ef.pval;
         te->ef.lval = 3 + e.EActor->ChallengeRating()/2;
         e.vRange = te->ef.lval;
@@ -1600,7 +1600,7 @@ OvercomeNausea:
                             e.EMap->SetQueue(QUEUE_DAMAGE_MSG);
                             do {
                                 e.Dmg    = ta->u.a.Dmg;
-                                e.vDmg   = max(1,e.Dmg.Roll());
+                                e.vDmg   = std::max<int>(1,e.Dmg.Roll());
                                 e.DType  = ta->DType;
                                 e.saveDC = (int8)e.EActor->GetPower(ta->u.a.DC);
                                 e.isHit = true; 
@@ -1638,7 +1638,7 @@ SkipSoundAttack:
                     e.EActor->Reveal(true);
                     EventInfo e2 = e; 
                     e2.Dmg    = ta->u.a.Dmg;
-                    e2.vDmg   = max(1,e2.Dmg.Roll());
+                    e2.vDmg   = std::max<int>(1,e2.Dmg.Roll());
                     e2.strDmg = Format(" (%d) (proximity)",e2.vDmg);
                     e2.DType  = ta->DType;
                     e2.saveDC = (int8)e2.EActor->GetPower(ta->u.a.DC);
@@ -1683,7 +1683,7 @@ SkipSoundAttack:
                 TAttack * ta = &buf[i]; 
                 if (ta->AType == A_GAZE) {
                     e.Dmg    = ta->u.a.Dmg;
-                    e.vDmg   = max(1,e.Dmg.Roll());
+                    e.vDmg   = std::max<int>(1,e.Dmg.Roll());
                     e.DType  = ta->DType;
                     e.saveDC = (int8)e.EActor->GetPower(ta->u.a.DC);
                     e.strDmg = ""; 
@@ -1821,7 +1821,7 @@ SkipSoundAttack:
             IPrint("You're still off balance from the last great blow.");
             return ABORT;
         }
-        fc = max(0,2 - e.EActor->AbilityLevel(CA_MIGHTY_STROKE));
+        fc = std::max(0,2 - e.EActor->AbilityLevel(CA_MIGHTY_STROKE));
         if (fc && !e.EActor->LoseFatigue(fc,true))
             return ABORT;
 
@@ -1854,10 +1854,10 @@ SkipSoundAttack:
             return ABORT;
 
         if (e.EActor->HasFeat(FT_MASTER_GREAT_BLOW)) {
-            e.EActor->Timeout += 3000 / max((100 + e.EActor->Attr[e.EItem ? A_SPD_MELEE : A_SPD_BRAWL]*5),10);
+            e.EActor->Timeout += 3000 / std::max((100 + e.EActor->Attr[e.EItem ? A_SPD_MELEE : A_SPD_BRAWL]*5),10);
             e.EActor->GainTempStati(EXPOSED,NULL,1,SS_MISC,0,2);
         } else {
-            e.EActor->Timeout += 5000 / max((100 + e.EActor->Attr[e.EItem ? A_SPD_MELEE : A_SPD_BRAWL]*5),10);
+            e.EActor->Timeout += 5000 / std::max((100 + e.EActor->Attr[e.EItem ? A_SPD_MELEE : A_SPD_BRAWL]*5),10);
             e.EActor->GainTempStati(EXPOSED,NULL,2,SS_MISC,0,2);
         }
         if (startedAfraid)
@@ -1910,7 +1910,7 @@ SkipSoundAttack:
         e.isPrecision = true;
         if (ReThrow(EV_STRIKE, e) == ABORT)
             return ABORT;
-        e.EActor->Timeout += 3000 / max((100 + e.EActor->Attr[e.EItem ? A_SPD_MELEE : A_SPD_BRAWL]*5),10);
+        e.EActor->Timeout += 3000 / std::max((100 + e.EActor->Attr[e.EItem ? A_SPD_MELEE : A_SPD_BRAWL]*5),10);
         e.EActor->Timeout += 45;
         if (startedAfraid)
             e.EActor->Timeout *= 2;
@@ -1955,7 +1955,7 @@ SkipSoundAttack:
         if (ReThrow(EV_STRIKE,e) == ABORT)
             return ABORT;
 
-        e.EActor->Timeout += 3000 / max((100 + min(e.EActor->Attr[A_SPD_BRAWL],e.EActor->Attr[A_MOV])*5), 10);
+        e.EActor->Timeout += 3000 / std::max((100 + std::min(e.EActor->Attr[A_SPD_BRAWL],e.EActor->Attr[A_MOV])*5), 10);
         if (startedAfraid)
             e.EActor->Timeout *= 2;
         return DONE;
@@ -2006,9 +2006,9 @@ SkipSoundAttack:
         if (e.isCounterTrip)
             return DONE;
         if (e.EActor->AttackMode() == S_MELEE) 
-            e.EActor->Timeout = 3000 / max((100 + e.EActor->Attr[A_SPD_MELEE]*5),10);
+            e.EActor->Timeout = 3000 / std::max((100 + e.EActor->Attr[A_SPD_MELEE]*5),10);
         else
-            e.EActor->Timeout = 3000 / max((100 + e.EActor->Attr[A_SPD_BRAWL]*5),10);
+            e.EActor->Timeout = 3000 / std::max((100 + e.EActor->Attr[A_SPD_BRAWL]*5),10);
         if (startedAfraid)
             e.EActor->Timeout *= 2;
 
@@ -2058,9 +2058,9 @@ SkipSoundAttack:
             return DONE;
 
         if (e.EActor->AttackMode() == S_MELEE) 
-            e.EActor->Timeout += 3000 / max((100 + e.EActor->Attr[A_SPD_MELEE]*5),10);
+            e.EActor->Timeout += 3000 / std::max((100 + e.EActor->Attr[A_SPD_MELEE]*5),10);
         else
-            e.EActor->Timeout += 3000 / max((100 + e.EActor->Attr[A_SPD_BRAWL]*5),10);
+            e.EActor->Timeout += 3000 / std::max((100 + e.EActor->Attr[A_SPD_BRAWL]*5),10);
         if (startedAfraid)
             e.EActor->Timeout *= 2;
         return DONE;      
@@ -2098,7 +2098,7 @@ SkipSoundAttack:
             return ABORT;
 
         if (!e.isHit)
-            e.EActor->Timeout += 3000 / max((100 + e.EActor->Attr[A_SPD_BRAWL]*5),10);
+            e.EActor->Timeout += 3000 / std::max((100 + e.EActor->Attr[A_SPD_BRAWL]*5),10);
         else
             e.EActor->Timeout += 30;
         if (startedAfraid)
@@ -2182,7 +2182,7 @@ SkipRepeat:;
         e.saveDC = -1;
         e.Dmg = DmgVal(S_BRAWL, (!e.ETarget->isCreature()) || 
             (e.EVictim->GetAttr(A_SIZ) > SZ_MEDIUM));
-        e.Dmg.Bonus += max(0,(Mod(A_STR)+1)/2);
+        e.Dmg.Bonus += std::max(0,(Mod(A_STR)+1)/2);
         if (ReThrow(EV_STRIKE,e) == ABORT)
             return ABORT;
         // wow, I don't know what this massive timeout is about, but here's
@@ -2191,10 +2191,10 @@ SkipRepeat:;
         // submission while you can't react! 
         if (e.ETarget->isCreature())
             Timeout += 5000 / 
-            max((100 + Attr[A_SPD_BRAWL]*5),10);
+            std::max((100 + Attr[A_SPD_BRAWL]*5),10);
         else
             Timeout += 1000 / 
-            max((100 + Attr[A_SPD_BRAWL]*5),10);
+            std::max((100 + Attr[A_SPD_BRAWL]*5),10);
         if (startedAfraid)
             e.EActor->Timeout *= 2;
         break;
@@ -2209,7 +2209,7 @@ SkipRepeat:;
             }
         }  
         if (e.EVictim->HasStati(SLEEPING) || 
-            (e.EVictim->HasStati(PARALYSIS,PARA_HELD) && !(max(e.EVictim->SkillLevel(SK_CONCENT),e.EVictim->SkillLevel(SK_ESCAPE_ART)) >= 15)) ||
+            (e.EVictim->HasStati(PARALYSIS,PARA_HELD) && !(std::max(e.EVictim->SkillLevel(SK_CONCENT),e.EVictim->SkillLevel(SK_ESCAPE_ART)) >= 15)) ||
             (e.EVictim->HasStati(STUCK) && e.EVictim->HasStati(PRONE) && e.EActor->SkillLevel(SK_FIND_WEAKNESS) >= 20))
             ; // OK, victim cannot defend
         else {
@@ -2302,12 +2302,12 @@ SkipRepeat:;
         e.vHit = (int8)e.EActor->Attr[A_HIT_BRAWL];
         e.vDef = e.ETarget->isCreature() ? e.EVictim->getDef() : 0;
         e.DType = AD_KNOC; e.saveDC = -1;
-        e.Dmg.Set(1,max(1,e.EActor->Mod(A_STR) + 1),0);
+        e.Dmg.Set(1, std::max(1,e.EActor->Mod(A_STR) + 1),0);
 
         if (ReThrow(EV_STRIKE,e) == ABORT)
             return ABORT;
 
-        e.EActor->Timeout += 3000 / max((100 + e.EActor->Attr[A_SPD_BRAWL]*5),10);
+        e.EActor->Timeout += 3000 / std::max((100 + e.EActor->Attr[A_SPD_BRAWL]*5),10);
         if (startedAfraid)
             e.EActor->Timeout *= 2;
         return DONE;
@@ -2367,7 +2367,7 @@ SkipRepeat:;
             IPrint("But there's nobody nearby!");
             return ABORT;
         }
-        e.EActor->Timeout += 5000 / max((100 + e.EActor->Attr[EInSlot(SL_WEAPON) ? A_SPD_MELEE : A_SPD_BRAWL]*5),10);
+        e.EActor->Timeout += 5000 / std::max((100 + e.EActor->Attr[EInSlot(SL_WEAPON) ? A_SPD_MELEE : A_SPD_BRAWL]*5),10);
         if (startedAfraid)
             e.EActor->Timeout *= 2;
         break;  
@@ -2456,7 +2456,7 @@ SkipRepeat:;
         e.vCrit   = (int8)e.EItem->CritMult(e.EActor);
         if (ReThrow(EV_STRIKE,e) == ABORT)
             return ABORT;
-        Timeout += 3000 / max((100 + Attr[A_SPD_MELEE]*5),10);
+        Timeout += 3000 / std::max((100 + Attr[A_SPD_MELEE]*5),10);
         if (startedAfraid)
             e.EActor->Timeout *= 2;
         break;
@@ -2491,7 +2491,7 @@ SkipRepeat:;
         }
         if (!LoseFatigue(1,true))
             return ABORT;
-        GainTempStati(SPRINTING,NULL,1 + max(0,Mod(A_CON)),SS_MISC);
+        GainTempStati(SPRINTING,NULL,1 + std::max<int>(0,Mod(A_CON)),SS_MISC);
         IDPrint("You push yourself to the limit!",
             "The <Obj> puts on a burst of speed!",this);
         return DONE;    
@@ -2602,7 +2602,7 @@ EvReturn Creature::OAttack(EventInfo &e)
         e.vicHeld = true;
 
     e.isAoO = true; /* Attack of Opportunity flag */
-    e.EActor->AoO = max(0,e.EActor->AoO - 1);
+    e.EActor->AoO = std::max(0,e.EActor->AoO - 1);
 
     if (e.EVictim && e.EVictim->isCreature())
       if (!e.EVictim->HasStati(AFRAID) ||
@@ -2974,7 +2974,7 @@ EvReturn Creature::PreStrike(EventInfo &e) /* this == EActor */
                !e.EActor->HasFeat(FT_POWER_DOUBLE_WEAPON))
         e.modStr /= 2;
       }
-    e.modStr = max(0,e.modStr);
+    e.modStr = std::max<int>(0,e.modStr);
      
     e.subStr = false;
 
@@ -3130,14 +3130,14 @@ EvReturn Creature::PreStrike(EventInfo &e) /* this == EActor */
       
       /* Victim is denied Dex bonus. */
       int loss = e.EVictim->AttrAdj[A_DEF][BONUS_ATTR]; 
-      e.vDef -= max(0,loss); 
+      e.vDef -= std::max(0,loss);
       if (loss > 0)
         e.strDef += Format(" -%d noDex",loss);
 
       loss = e.EVictim->AttrAdj[A_DEF][BONUS_DODGE];
       if (e.EVictim->StateFlags & MS_CASTING)
         loss = 0; 
-      e.vDef -= max(0,loss); 
+      e.vDef -= std::max(0,loss);
       if (loss > 0)
         e.strDef += Format(" -%d noDodge",loss);
 
@@ -3145,7 +3145,7 @@ EvReturn Creature::PreStrike(EventInfo &e) /* this == EActor */
       loss = e.EVictim->AttrAdj[A_DEF][BONUS_WEAPON]; 
       if (e.EVictim->StateFlags & MS_CASTING)
         loss = 0; 
-      e.vDef -= max(0,loss); 
+      e.vDef -= std::max(0,loss);
       if (loss > 0)
         e.strDef += Format(" -%d noWep",loss);
       } 
@@ -3178,10 +3178,10 @@ EvReturn Creature::PreStrike(EventInfo &e) /* this == EActor */
     
     if (TMON(e.EActor->tmID)->isMType(e.EActor->tmID, MA_HALFLING) && 
           e.AType == A_FIRE && e.EItem->iID == FIND("sling"))
-      e.vThreat -= max(0,e.EActor->Mod(A_LUC));
+      e.vThreat -= std::max<int>(0,e.EActor->Mod(A_LUC));
     if (TMON(e.EActor->tmID)->isMType(e.EActor->tmID, MA_HALFLING) && 
           e.AType == A_HURL && e.EItem2->iID == FIND("rock"))
-      e.vThreat -= max(0,e.EActor->Mod(A_LUC));  
+      e.vThreat -= std::max<int>(0,e.EActor->Mod(A_LUC));
       
     
     if (e.EItem && e.EItem->HasStati(MASTERWORK))
@@ -3437,7 +3437,7 @@ EvReturn Creature::PreStrike(EventInfo &e) /* this == EActor */
             int16 bon, cha;
             bon = e.EActor->SumStatiMag(SAVE_BONUS,SN_FEAR);
             cha = e.EVictim->Mod(A_CHA);
-            if (cha > max(0,bon))
+            if (cha > std::max<int>(0,bon))
               { e.strDmg += Format(" %+d mein", -(cha - bon));
                 e.bDmg   -= (cha - bon); }
           }
@@ -3454,7 +3454,7 @@ EvReturn Creature::PreStrike(EventInfo &e) /* this == EActor */
       e.vHit += 2;
       e.bDmg += 2;
       if (e.isGhostTouch || !e.vicIncor)
-        e.Dmg.Bonus += max(0,e.EActor->Mod(A_STR));
+        e.Dmg.Bonus += std::max<int>(0,e.EActor->Mod(A_STR));
       e.strHit += " +2 GB";
       e.strDmg += " +2 GB";
       if (e.EActor->HasStati(SMITE_ABILITY)) {
@@ -3498,13 +3498,13 @@ EvReturn Creature::PreStrike(EventInfo &e) /* this == EActor */
     if (e.EActor->HasAbility(CA_RETRIBUTIVE_STRIKE))
       if (e.EActor->HasStati(WOUNDED_BY,0,e.EVictim))
         if (e.EActor->GetStatiMag(WOUNDED_BY,0,e.EVictim) >= 
-              max(1,e.EActor->mHP / 10) )
+            std::max(1,e.EActor->mHP / 10) )
           {
             int16 i;
             //e.vThreat -= 2;
             i = ((e.EActor->GetStatiMag(WOUNDED_BY,0,e.EVictim) * 10) /
                   e.EActor->mHP);
-            i = max(1,AbilityLevel(CA_RETRIBUTIVE_STRIKE));
+            i = std::max<int>(1,AbilityLevel(CA_RETRIBUTIVE_STRIKE));
             e.strHit += Format(" + %d Ret",i);
             e.strDmg += Format(" + %d Ret",i*2);
             e.vHit += i;
@@ -3563,10 +3563,10 @@ EvReturn Creature::PreStrike(EventInfo &e) /* this == EActor */
     if (e.AType != A_FIRE && e.AType != A_HURL) {
       int bonus = 0; 
       if (e.EActor->HasStati(CHARGING))
-        bonus = max(bonus, e.EActor->ChargeBonus());
+        bonus = std::max(bonus, e.EActor->ChargeBonus());
       Creature * rider = (Creature *)e.EActor->GetStatiObj(MOUNT);
       if (rider && rider->HasStati(CHARGING))
-        bonus = max(bonus, rider->ChargeBonus());
+        bonus = std::max(bonus, rider->ChargeBonus());
       // in Hit(), we double the damage of a charging lance and handle
       // FT_SPIRITED_CHARGE
       if (bonus) { 
@@ -3578,7 +3578,7 @@ EvReturn Creature::PreStrike(EventInfo &e) /* this == EActor */
         e.strDmg += Format (" %+d charge",bonus);
       }
 #if 0
-      int8 cb = ChargeBonus[min(29,GetStatiMag(CHARGING))], mult = 1;
+      int8 cb = ChargeBonus[std::min(29,GetStatiMag(CHARGING))], mult = 1;
       // ww: the textual description given to the user would lead one to
       // believe that these things stack ... and why not? 
       if (HasFeat(FT_POWER_CHARGE))
@@ -3608,7 +3608,7 @@ EvReturn Creature::PreStrike(EventInfo &e) /* this == EActor */
       e.vDef += 4;
       }
     if (e.isAoO && e.isMoveAoO && e.EVictim->HasStati(CHARGING)) {
-      int32 bonus = max(e.EVictim->ChargeBonus(),1); 
+      int32 bonus = std::max(e.EVictim->ChargeBonus(),1);
       if (bonus) { 
         e.bDmg += (int16)bonus;
         e.strDmg += Format (" %+d charge",bonus);
@@ -4128,7 +4128,7 @@ EvReturn Creature::Strike(EventInfo &e) /* this == EActor */
               e.EVictim->IPrint("You fail to catch the thrown <Obj>!", e.EItem2);
           }                                  
                             
-    if ((e.vHit + e.vRoll >= max(e.vDef,
+    if ((e.vHit + e.vRoll >= std::max<int>(e.vDef,
           (e.vRideCheck ? e.vRideCheck : -40))) || e.vRoll == 20)
       e.isHit = true;
     else
@@ -4157,7 +4157,7 @@ EvReturn Creature::Strike(EventInfo &e) /* this == EActor */
 
     if (!e.isHit && e.vRoll == 1 && (e.vHit + e.vtRoll) < e.vDef)
       e.isFumble = true;
-    if (e.isHit && (e.vRoll >= e.vThreat) && ((e.vHit + e.vtRoll) >= max(e.vRideCheck,e.vDef)))
+    if (e.isHit && (e.vRoll >= e.vThreat) && ((e.vHit + e.vtRoll) >= std::max(e.vRideCheck,e.vDef)))
       e.isCrit = true;
     else
       e.isCrit = false;  
@@ -4365,7 +4365,7 @@ EvReturn Creature::Strike(EventInfo &e) /* this == EActor */
          (e.EActor->HasStati(HIDING)) ) 
       ; // shoot from cover -- noise already covered
     else if (e.AType != A_COUP)
-      e.EActor->MakeNoise(max(10 - (e.EActor->SkillLevel(SK_MOVE_SIL) / 2),1));        
+      e.EActor->MakeNoise(std::max(10 - (e.EActor->SkillLevel(SK_MOVE_SIL) / 2),1));
     
     if (e.EActor->isCharacter())
       {
@@ -4389,7 +4389,7 @@ EvReturn Creature::Strike(EventInfo &e) /* this == EActor */
           L = 5000;
         
         if (ar && ar->HasQuality(IQ_FEATHERLIGHT))
-          L = min(10000,L*3);
+          L = std::min(10000,L*3);
           
         e.EPActor->fracFatigue += N;
         if (e.EPActor->fracFatigue >= L)
@@ -4425,7 +4425,7 @@ bool Creature::ManeuverCheck(EventInfo &e)
       v1 = (int8)e.EActor->GetBAB(S_MELEE);
     
     if (e.EVictim->InSlot(SL_WEAPON))
-      v2 = (int8)max(e.EVictim->GetBAB(S_MELEE),e.EVictim->GetBAB(S_BRAWL));
+      v2 = (int8)std::max(e.EVictim->GetBAB(S_MELEE),e.EVictim->GetBAB(S_BRAWL));
     else
       v2 = (int8)e.EVictim->GetBAB(S_BRAWL);
 
@@ -4706,7 +4706,7 @@ EvReturn Creature::Hit(EventInfo &e) /* this == EVictim!! */
       i /= 2;
       else
       i /= 3;
-      i = min(i,e.EActor->Mod2(A_STR));  
+      i = std::min(i,e.EActor->Mod2(A_STR));
       if (i) {
         e.bDmg += i;
         e.strDmg += Format(" %+d PA",i);
@@ -4722,7 +4722,7 @@ EvReturn Creature::Hit(EventInfo &e) /* this == EVictim!! */
       i /= 3;
       if (e.EActor->HasFeat(FT_ZEN_ARCHERY))
         limit += e.EActor->Mod2(A_WIS);
-      i = min(i,limit);
+      i = std::min(i,limit);
       if (i) {
         e.bDmg += i;
         e.strDmg += Format(" %+d AS",i);
@@ -4738,7 +4738,7 @@ EvReturn Creature::Hit(EventInfo &e) /* this == EVictim!! */
       vb = e.Dmg.Bonus;
       vn = vn * (5 + e.vCrit*5);
       vb = vb * (5 + e.vCrit*5);
-      e.Dmg.Number = (int8)max(2,vn/10);
+      e.Dmg.Number = (int8)std::max(2,vn/10);
       e.Dmg.Bonus  = (int8)(vb / 10);
       }
     else {
@@ -4751,7 +4751,7 @@ EvReturn Creature::Hit(EventInfo &e) /* this == EVictim!! */
   else
     e.vDmg = e.Dmg.Roll() + e.bDmg;
   
-  e.vDmg = max(1,e.vDmg);
+  e.vDmg = std::max<int>(1,e.vDmg);
   ASSERT(e.vDmg > 0)
 
 
@@ -5058,7 +5058,7 @@ AfterEffects:
             single-classed barbarians are unrestricted. */
           if (e.EActor->isCharacter())
             if (e.EPActor->Level[1])
-              pen = min(pen,e.EActor->AbilityLevel(CA_BERSERK_RAGE));
+              pen = std::min(pen,e.EActor->AbilityLevel(CA_BERSERK_RAGE));
           
           e.EVictim->RemoveStati(ADJUST_CIRC,SS_ATTK,A_AID);
           e.EVictim->GainTempStati(ADJUST_CIRC,NULL,dur,SS_ATTK,A_AID,-pen,0,0);
@@ -5088,7 +5088,7 @@ AfterEffects:
               saDmg.Sides = TITEM(e.EItem2->iID)->HasFlag(WT_SUPER_SNEAK) ? 8 : 6;
         if (e.EItem)
           if (e.EItem->isType(T_WEAPON) || e.EItem->isType(T_BOW))
-            saDmg.Sides = max(saDmg.Sides,TITEM(e.EItem->iID)->HasFlag(WT_SUPER_SNEAK) ? 8 : 6);
+            saDmg.Sides = std::max<int>(saDmg.Sides,TITEM(e.EItem->iID)->HasFlag(WT_SUPER_SNEAK) ? 8 : 6);
         i = saDmg.Roll(); 
         i -= e.EVictim->AbilityLevel(CA_NOBLE_AEGIS)*2;
         if (e.EVictim->AbilityLevel(CA_NOBLE_AEGIS))
@@ -5202,7 +5202,7 @@ AfterEffects:
             e.EActor->GainPermStati(PRONE,NULL,SS_ATTK);
             if (!e.EActor->SavingThrow(FORT,15 + e.EVictim->Mod(A_STR) + 
                                             e.EVictim->GetBAB(S_MELEE)))
-              e.EActor->GainTempStati(STUNNED,NULL,max(1,e.EVictim->Mod(A_STR)),SS_ATTK);          
+              e.EActor->GainTempStati(STUNNED,NULL, std::max<int>(1,e.EVictim->Mod(A_STR)),SS_ATTK);
           }
     
 
@@ -5211,7 +5211,7 @@ AfterEffects:
               !e.EItem->isKnown(KN_MAGIC|KN_CURSE|KN_PLUS)) 
         if (e.EActor->HasAbility(CA_LORE_OF_ARMS))
         {
-          int8 nSwings = NeededSwings [ min(9,
+          int8 nSwings = NeededSwings[std::min<int>(9,
             e.EActor->AbilityLevel(CA_LORE_OF_ARMS)) ];
           e.EItem->swingCount++;
           if (e.EItem->swingCount > nSwings)
@@ -5231,7 +5231,7 @@ AfterEffects:
               !e.EItem2->isKnown(KN_MAGIC|KN_CURSE|KN_PLUS)) 
         if (e.EActor->HasAbility(CA_LORE_OF_ARMS))
         {
-          int8 nSwings = NeededSwings [ min(9,
+          int8 nSwings = NeededSwings [std::min<int>(9,
             e.EActor->AbilityLevel(CA_LORE_OF_ARMS)) ];
           e.EItem2->swingCount++;
           if (e.remainingAmmo)
@@ -5259,7 +5259,7 @@ AfterEffects:
       if (ar && ar->swingCount < 30 && !ar->isKnown(KN_MAGIC|KN_CURSE|KN_PLUS)) 
         if (e.EVictim->AbilityLevel(CA_LORE_OF_ARMS) >= 3)
         {
-          int8 nSwings = NeededSwings [ min(9,
+          int8 nSwings = NeededSwings [std::min(9,
             e.EVictim->AbilityLevel(CA_LORE_OF_ARMS) - 2) ];
           
           ar->swingCount++;
@@ -5280,7 +5280,7 @@ AfterEffects:
       if (sh && sh->swingCount < 30 && sh->isType(T_SHIELD) && !sh->isKnown(KN_MAGIC|KN_CURSE|KN_PLUS)) 
         if (e.EVictim->AbilityLevel(CA_LORE_OF_ARMS) >= 3)
         {
-          int8 nSwings = NeededSwings [ min(9,
+          int8 nSwings = NeededSwings [std::min(9,
             e.EVictim->AbilityLevel(CA_LORE_OF_ARMS) - 2) ];
           
           sh->swingCount++;
@@ -5301,14 +5301,14 @@ AfterEffects:
       {
         if (e.EItem && (e.EItem->isGroup(WG_LIGHT|WG_DAGGERS|WG_FLEXIBLE) ||
               e.AType == A_FIRE || e.AType == A_HURL))
-          Exercise(A_DEX,random(6)+max(0,e.EVictim->ChallengeRating() - 
+          Exercise(A_DEX,random(6) + std::max(0,e.EVictim->ChallengeRating() -
                                         e.EActor->ChallengeRating()),EDEX_CRIT,75);
         if (e.EItem && e.EItem->Size() > GetAttr(A_SIZ))
-          Exercise(A_STR,random(8)+max(0,e.EVictim->ChallengeRating() - 
+          Exercise(A_STR,random(8) + std::max(0,e.EVictim->ChallengeRating() -
                                         e.EActor->ChallengeRating()),ESTR_CRIT,75);
         else if (e.EItem && e.EItem->Size() == GetAttr(A_SIZ) && !e.EItem->isGroup(WG_LIGHT)
                   && !(InSlot(SL_READY) && InSlot(SL_READY)->isType(T_WEAPON)))
-          Exercise(A_STR,random(4)+max(0,e.EVictim->ChallengeRating() - 
+          Exercise(A_STR,random(4) + std::max(0,e.EVictim->ChallengeRating() -
                                         e.EActor->ChallengeRating()),ESTR_CRIT,75);
       }
     if (e.AType == A_HURL && e.EItem2 && e.EItem2->Size() <= SZ_SMALL && !random(3))
@@ -5360,7 +5360,7 @@ EvReturn Creature::Miss(EventInfo &e)
 	                e.EVictim->HasFeat(FT_GREAT_THROW) &&
 	                !e.EActor->isDead())
 	              ThrowDmg(EV_DAMAGE,AD_KNOC,Dice::Roll(1,3,
-	                max(0,e.EVictim->Mod(A_STR))), "Great Throw", e.EVictim, e.EActor);
+                      std::max<int>(0,e.EVictim->Mod(A_STR))), "Great Throw", e.EVictim, e.EActor);
   	        }
 
 		return DONE;
@@ -5421,7 +5421,7 @@ EvReturn Creature::Damage(EventInfo &e) {
         /* Allowance for clipping people with area spells for tactical reasons. */
         coll = false;
         if (e.EMagic && (e.EMagic->aval == AR_BALL || e.EMagic->aval == AR_BEAM || e.EMagic->aval == AR_BREATH || e.EMagic->aval == AR_GLOBE || e.EMagic->aval == AR_CHAIN)) {
-            mag = max(1, mag/2);
+            mag = std::max(1, mag/2);
             coll = true;
         }
 
@@ -5482,9 +5482,9 @@ IgnoreMorality:;
             {
                 int16 mod, percent;
                 Armour *ar = (Armour*) e.EVictim->InSlot(SL_ARMOUR);
-                mod = max(0,e.EVictim->Mod(A_CON));
+                mod = std::max<int>(0,e.EVictim->Mod(A_CON));
                 percent = (e.EVictim->AbilityLevel(CA_TOUGH_AS_HELL) * 100) /
-                    (max(1,e.EVictim->ChallengeRating()) + ((!ar) ? 0 :
+                    (std::max<int>(1,e.EVictim->ChallengeRating()) + ((!ar) ? 0 :
                     ar->isGroup(WG_HARMOUR) ? 9 :
                     (ar->isGroup(WG_MARMOUR) ? 6 : 3)));
                 mod = (mod * percent) / 100;
@@ -5492,7 +5492,7 @@ IgnoreMorality:;
                 {
                     e.strDmg += Format(" %+d TaH", -mod);
                     e.bDmg   -= mod;
-                    e.vDmg   = max(1, e.vDmg - mod);
+                    e.vDmg   = std::max(1, e.vDmg - mod);
                 }
             }
 
@@ -5741,7 +5741,7 @@ NotWImmune:
                                         /* ww: replaced for now by the weimer alternate penetration system 
                                         if (is_wepdmg(e.DType)) {
                                         if (e.EActor->Mod2(A_STR) > 0)
-                                        e.vPen = min(e.EActor->Mod2(A_STR),e.vArm/2);
+                                        e.vPen = std::min(e.EActor->Mod2(A_STR),e.vArm/2);
                                         else
                                         e.vPen = 0;
                                         if (e.EItem && e.EItem->isItem() && e.EItem->HasIFlag(WT_PENETRATING))
@@ -5784,7 +5784,7 @@ NotWImmune:
                                             // so that armour can absorb small and medium blows instead of
                                             // just small blows. I think that's still in the realm of
                                             // believability.
-                                            Percent = AbsorbTable[min(e.vArm,16)][Col];
+                                            Percent = AbsorbTable[std::min<int>(e.vArm,16)][Col];
                                             int minAmount = 10 + e.vArm*2;
                                             if ((e.EItem && e.EItem->isItem() && 
                                                 e.EItem->HasIFlag(WT_PENETRATING)) ||
@@ -5815,7 +5815,7 @@ Absorbed:
                                                 return DONE;
                                             }
 
-                                            Percent = ArmourTable[min(e.vArm,32)][Col];
+                                            Percent = ArmourTable[std::min<int>(e.vArm,32)][Col];
                                             if (e.EItem && e.EItem->isItem() && 
                                                 e.EItem->HasIFlag(WT_PENETRATING))
                                                 Percent /= 2;
@@ -5860,9 +5860,9 @@ Absorbed:
                                                     if (e.vDef > e.vHit + 19)
                                                         e.vDefRoll -= 1;
 
-                                                    e.vDefRoll = max(1,e.vDefRoll);
+                                                    e.vDefRoll = std::max<int>(1,e.vDefRoll);
 
-                                                    e.aDmg = max(1, (e.aDmg*e.vDefRoll)/6);
+                                                    e.aDmg = std::max(1, (e.aDmg*e.vDefRoll)/6);
                                                     e.isDefRoll = true;
                                                     e.strXDmg = Format(" x (%d/6)",e.vDefRoll) + e.strXDmg;
                                                     /* People that benefit from Defensive Roll are going
@@ -5946,7 +5946,7 @@ WoundIgnored:
                                                                 SetStatiMag(WOUNDED_BY,0,e.EActor,
                                                                     GetStatiMag(WOUNDED_BY,0,e.EActor) + e.aDmg );
                                                                 SetStatiDur(WOUNDED_BY,0,e.EActor,
-                                                                    max(GetStatiDur(WOUNDED_BY,0,e.EActor) + e.aDmg*2, e.aDmg*2+10) );
+                                                                    std::max(GetStatiDur(WOUNDED_BY,0,e.EActor) + e.aDmg*2, e.aDmg*2+10) );
                                                             }
                                                             else
                                                                 GainTempStati(WOUNDED_BY,e.EActor,e.aDmg*2+10,SS_MISC,0,e.aDmg,0,0);
@@ -5978,7 +5978,7 @@ WoundIgnored:
 
                                                             if ((e.DType == AD_SLASH || e.DType == AD_PIERCE ||
                                                                 e.DType == AD_BLUNT) && HasStati(LEVITATION) && !isDead())
-                                                                ThrowDmg(EV_DAMAGE,AD_KNOC,e.vDmg / max(1,mHP/20),
+                                                                ThrowDmg(EV_DAMAGE,AD_KNOC,e.vDmg / std::max(1,mHP/20),
                                                                 "aerial damage knockback", e.EActor, e.EVictim, e.EItem, e.EItem2);
 
 
@@ -6250,7 +6250,7 @@ WoundIgnored:
                                         }
                                         if (e.AType == A_BITE && e.EActor && !e.EActor->isMType(MA_UNDEAD))
                                             subtype |= SA_POISON;
-                                        e.vDmg =  max(1,e.Dmg.Roll());
+                                        e.vDmg = std::max<int>(1,e.Dmg.Roll());
                                         e.vDmg -= AbilityLevel(CA_STRONG_SOUL);
 
                                         if (e.vDmg <= 0) {
@@ -6261,12 +6261,12 @@ WoundIgnored:
 
                                         if (e.EVictim->SavingThrow(FORT,e.saveDC,subtype)) 
                                         {
-                                            e.vDmg = max(1,e.vDmg/2);
+                                            e.vDmg = std::max(1,e.vDmg/2);
                                             e.Resist = true;
                                         }
 
                                         if (e.EVictim->HasStati(SUSTAIN,at))
-                                            e.vDmg = max(0,e.vDmg - e.EVictim->SumStatiMag(SUSTAIN,at));
+                                            e.vDmg = std::max(0,e.vDmg - e.EVictim->SumStatiMag(SUSTAIN,at));
                                         if (!e.vDmg || Attr[at] <= 0) {
                                             e.Immune = true;
                                             break;
@@ -6330,14 +6330,14 @@ WoundIgnored:
                                         else {
                                             if (e.EVictim->HasStati(ADJUST_DMG,A_AID))
                                                 e.EVictim->GetStati(ADJUST_DMG,A_AID)->Mag -= 
-                                                e.vDmg / max(1,e.EVictim->ChallengeRating() * 5);
+                                                e.vDmg / std::max(1,e.EVictim->ChallengeRating() * 5);
                                             else
                                                 // ww: the signs were reversed here, so one hit from a
                                                 // spectre actually gave another creature a +1 neglev bonus
                                                 // ... :-) 
                                                 e.EVictim->GainPermStati(ADJUST_DMG,NULL,SS_ATTK,A_AID,
-                                                -(max(1,e.vDmg / max(1,e.EVictim->ChallengeRating() * 5))));
-                                            lv = max(1,e.EVictim->ChallengeRating());
+                                                -(std::max(1,e.vDmg / std::max(1,e.EVictim->ChallengeRating() * 5))));
+                                            lv = std::max<int>(1,e.EVictim->ChallengeRating());
                                             lv += e.EVictim->SumStatiMag(ADJUST_DMG,A_AID);
                                             if (lv <= 0)
                                                 ReThrow(EV_DEATH,e);
@@ -6809,7 +6809,7 @@ EvReturn Creature::PDamage(EventInfo &e)
            comes from hallucinatory terrain -- but it's still good because
            GetStatiVal will return -1, which includes IL_SPECTRAL, and all
            terrain illusions are assumed to be spectral by default. */
-        e.EVictim->SetStatiDur(ILLUS_DMG,-1,e.EActor, max(
+        e.EVictim->SetStatiDur(ILLUS_DMG,-1,e.EActor, std::max<int>(
            e.EVictim->GetStatiMag(ILLUS_DMG,-1,e.EActor), Dice::Roll(3,6) *
            ( e.EActor->GetStatiVal(ILLUSION) & IL_SPECTRAL ? 100 : 1 ) ) );    
         e.EVictim->cHP -= e.aDmg;
@@ -7080,7 +7080,7 @@ EvReturn Creature::Death(EventInfo &e)
                     curDur = cr->GetEffStatiDur(ADJUST_MOR,eID,-1,e.EActor);
                     curMod = cr->GetEffStatiMag(ADJUST_MOR,eID,-1,e.EActor);
                     cr->SetEffStatiDur(ADJUST_MOR,eID,curDur + dur,-1,e.EActor);
-                    cr->SetEffStatiMag(ADJUST_MOR,eID,max(curMod,mod),-1,e.EActor);
+                    cr->SetEffStatiMag(ADJUST_MOR,eID,std::max(curMod,mod),-1,e.EActor);
                   }
                 else
                   cr->GainTempStati(ADJUST_MOR,e.EActor,dur,SS_MISC,A_AID,mod,eID);
@@ -7175,8 +7175,8 @@ EvReturn Player::Death(EventInfo &e)
             XPCost = TotalXP();
             XPCost *= 15;
             XPCost /= 100;
-            XPCost = max(750,XPCost);
-            IPrint("You lose <Num> xp.", min(TotalXP(),XPCost));
+            XPCost = std::max(750,XPCost);
+            IPrint("You lose <Num> xp.", std::min(TotalXP(),XPCost));
             LoseXP(XPCost);
           }
         if (AttrDeath) {
@@ -7227,7 +7227,7 @@ void Weapon::QualityDmgSingle(EventInfo &e, int32 q)
         if (e.EActor->cHP < e.EActor->mHP+e.EActor->Attr[A_THP]) 
           /* ww: this logic was backwards before! */
         {
-          e.EActor->cHP = min(e.EActor->cHP + e.vDmg / 4,
+          e.EActor->cHP = std::min(e.EActor->cHP + e.vDmg / 4,
               e.EActor->mHP+e.EActor->Attr[A_THP]);
           DPrint(e,"Your wounds heal<str>!",
               "The <EActor>'s wounds heal<Str>!",
@@ -7683,7 +7683,7 @@ int16 Creature::WeaponSaveDC(Item *wp, int16 at)
       break;
       case WT_STUNNING: 
       case WT_KNOCKDOWN:
-        DC += Mod2(A_STR) + (int16)(min(wp->Weight() / (40 * wp->Quantity), 5) + ((ti->Size - SZ_MEDIUM) * 2));
+        DC += Mod2(A_STR) + std::min<int16_t>(wp->Weight() / (40 * wp->Quantity), 5) + ((ti->Size - SZ_MEDIUM) * 2);
         break; 
       default:  
         Error("Unknown type of Weapon Save DC");

@@ -248,7 +248,7 @@ void HelpSpellIndex(String &helpText) {
                             continue;
                         it->iID = iID;
                         if (it->HasSpell(theGame->SpellNum(Spells[j]))) {
-                            dlev = min(TITEM(iID)->Level, dlev);
+                            dlev = std::min<int>(TITEM(iID)->Level, dlev);
                             s = *TITEM(it->iID)->GetMessages(MSG_STATINAME);
                             if (!s.GetLength()) {
                                 s = it->Name(0);
@@ -2120,7 +2120,7 @@ String & Monster::Describe(Player *p) {
         Format("<5>The <Str><Str><7> ('<%d>%c%c%c<7>')\n__", GLYPH_COLOUR_VALUE(tm->Image), LITERAL_CHAR, LITERAL_CHAR1(gid), LITERAL_CHAR2(gid)),
         isMType(MA_DRAGON) ? "(Adult) " : "", NAME(xID));
     for (i = 1; i != str.GetLength(); i++)
-        if (isalpha_(max(1, str[i])) && str[i - 1] == ' ')
+        if (isalpha_(std::max<int>(1, str[i])) && str[i - 1] == ' ')
             str.SetAt(i, toupper(str[i]));
 
     if (tm->Desc) {
@@ -2195,7 +2195,7 @@ String & Monster::Describe(Player *p) {
         str += List[lc - 1];
 
     if (!tm->HasFlag(M_NOGEN))
-        str += Format("%sat depths of %dm in an average dungeon", lc ? ", as well as " : "", max(10, CR * 10));
+        str += Format("%sat depths of %dm in an average dungeon", lc ? ", as well as " : "", std::max(10, CR * 10));
     else if (!lc)
         str += "only in very specific places";
 
@@ -2309,7 +2309,7 @@ String & Monster::Describe(Player *p) {
             if (sv & XBIT(i)) {
                 str += SaveNames[i];
                 if (mm->Kills > 50) {
-                    n = max(CR, 0) * 3 / 2;
+                    n = std::max<int>(CR, 0) * 3 / 2;
                     n += (tm->Attr[SaveAttrs[i]] - 10) / 2;
                     str += Format(" (%+d)", n);
                 }
@@ -2328,7 +2328,7 @@ String & Monster::Describe(Player *p) {
             if (!(sv & XBIT(i))) {
                 str += SaveNames[i];
                 if (mm->Kills > 50) {
-                    n = max(CR, 0) * 3 / 4;
+                    n = std::max<int>(CR, 0) * 3 / 4;
                     n += (tm->Attr[SaveAttrs[i]] - 10) / 2;
                     str += Format(" (%+d)", n);
                 }
@@ -3693,8 +3693,8 @@ String & Armour::Describe(Player *p) {
             Desc += Format("__<13>%s %+d<7>: On average, <11>%d%%<7> of attacks will be absorbed completely. Other blows will have <11>%d%%<7> of their damage pentrate on average.\n",
                 dmg_types[i],
                 val,
-                AbsorbTable[min(val,16)][2],
-                ArmourTable[min(val,32)][2]);
+                AbsorbTable[std::min(val,16)][2],
+                ArmourTable[std::min(val,32)][2]);
         }
 #endif
 

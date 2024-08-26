@@ -133,9 +133,9 @@ void Creature::AddBonus(int8 btype,int8 attr,int16 bonus) {
     // the results are random. 
     //
     // The problem here is that adding the positive bonus just takes the
-    // max, so max(3,-3) = 3 instead of foo(3,-3) = 0. 
+    // max, so std::max(3,-3) = 3 instead of foo(3,-3) = 0. 
     // Thus:
-#define WESMAX(attr,bonus) ((attr < 0) ? attr + bonus : max(attr,bonus))
+#define WESMAX(attr,bonus) ((attr < 0) ? attr + bonus : std::max<int>(attr,bonus))
     // This doesn't completely fix it, because
     //  Spell1 = -4 STR
     //  Spell2 = +3 STR
@@ -363,11 +363,11 @@ Restart:
             StackBonus(BONUS_BASE+i,A_HIT_THROWN, (TCLASS(thisc->ClassID[i])->AttkVal[S_THROWN] * thisc->Level[i])/100);
             StackBonus(BONUS_BASE+i,A_HIT_OFFHAND, (TCLASS(thisc->ClassID[i])->AttkVal[S_MELEE] * thisc->Level[i])/100);
 
-            StackBonus(BONUS_BASE+i,A_SPD_ARCHERY, max(0,AttrAdj[A_HIT_ARCHERY][BONUS_BASE+i] - (thisc->Level[i]/2)));
-            StackBonus(BONUS_BASE+i,A_SPD_BRAWL, max(0,AttrAdj[A_HIT_ARCHERY][BONUS_BASE+i] - (thisc->Level[i]/2)));
-            StackBonus(BONUS_BASE+i,A_SPD_MELEE, max(0,AttrAdj[A_HIT_ARCHERY][BONUS_BASE+i] - (thisc->Level[i]/2)));
-            StackBonus(BONUS_BASE+i,A_SPD_THROWN, max(0,AttrAdj[A_HIT_ARCHERY][BONUS_BASE+i] - (thisc->Level[i]/2)));
-            StackBonus(BONUS_BASE+i,A_SPD_OFFHAND, max(0,AttrAdj[A_HIT_ARCHERY][BONUS_BASE+i] - (thisc->Level[i]/2)));
+            StackBonus(BONUS_BASE+i,A_SPD_ARCHERY, std::max(0,AttrAdj[A_HIT_ARCHERY][BONUS_BASE+i] - (thisc->Level[i]/2)));
+            StackBonus(BONUS_BASE+i,A_SPD_BRAWL, std::max(0,AttrAdj[A_HIT_ARCHERY][BONUS_BASE+i] - (thisc->Level[i]/2)));
+            StackBonus(BONUS_BASE+i,A_SPD_MELEE, std::max(0,AttrAdj[A_HIT_ARCHERY][BONUS_BASE+i] - (thisc->Level[i]/2)));
+            StackBonus(BONUS_BASE+i,A_SPD_THROWN, std::max(0,AttrAdj[A_HIT_ARCHERY][BONUS_BASE+i] - (thisc->Level[i]/2)));
+            StackBonus(BONUS_BASE+i,A_SPD_OFFHAND, std::max(0,AttrAdj[A_HIT_ARCHERY][BONUS_BASE+i] - (thisc->Level[i]/2)));
 
             StackBonus(BONUS_BASE+i,A_SAV_FORT, TCLASS(thisc->ClassID[i])->HasFlag(CF_GOOD_FORT) ? GoodSave[thisc->Level[i]] : PoorSave[thisc->Level[i]]);
             StackBonus(BONUS_BASE+i,A_SAV_REF, TCLASS(thisc->ClassID[i])->HasFlag(CF_GOOD_REF) ? GoodSave[thisc->Level[i]] : PoorSave[thisc->Level[i]]);
@@ -395,7 +395,7 @@ Restart:
                 AddBonus(BONUS_BASE,i,TMON(mID)->Attr[i]);
         } else {
             for (i = 0; i != 7; i++) 
-                AddBonus(BONUS_BASE,i,max(TMON(tmID)->Attr[i],TMON(mID)->Attr[i]));
+                AddBonus(BONUS_BASE,i, std::max(TMON(tmID)->Attr[i],TMON(mID)->Attr[i]));
         }
 
         AddBonus(BONUS_BASE,A_HIT,TMON(mID)->Hit);
@@ -405,19 +405,19 @@ Restart:
         tsav = MonGoodSaves((int8)TMON(mID)->MType[0]) | MonGoodSaves((int8)TMON(mID)->MType[1]) | MonGoodSaves((int8)TMON(mID)->MType[2]);
 
         if (tsav & XBIT(FORT))
-            AddBonus(BONUS_BASE,A_SAV_FORT, GoodSave[max(ChallengeRating(),0)]);
+            AddBonus(BONUS_BASE,A_SAV_FORT, GoodSave[std::max<int>(ChallengeRating(),0)]);
         else 
-            AddBonus(BONUS_BASE,A_SAV_FORT, PoorSave[max(ChallengeRating(),0)]);
+            AddBonus(BONUS_BASE,A_SAV_FORT, PoorSave[std::max<int>(ChallengeRating(),0)]);
 
         if (tsav & XBIT(REF))
-            AddBonus(BONUS_BASE,A_SAV_REF, GoodSave[max(ChallengeRating(),0)]);
+            AddBonus(BONUS_BASE,A_SAV_REF, GoodSave[std::max<int>(ChallengeRating(),0)]);
         else 
-            AddBonus(BONUS_BASE,A_SAV_REF, PoorSave[max(ChallengeRating(),0)]);
+            AddBonus(BONUS_BASE,A_SAV_REF, PoorSave[std::max<int>(ChallengeRating(),0)]);
 
         if (tsav & XBIT(WILL))
-            AddBonus(BONUS_BASE,A_SAV_WILL, GoodSave[max(ChallengeRating(),0)]);
+            AddBonus(BONUS_BASE,A_SAV_WILL, GoodSave[std::max<int>(ChallengeRating(),0)]);
         else 
-            AddBonus(BONUS_BASE,A_SAV_WILL, PoorSave[max(ChallengeRating(),0)]);
+            AddBonus(BONUS_BASE,A_SAV_WILL, PoorSave[std::max<int>(ChallengeRating(),0)]);
 
         // mMana = TMON(mID)->Mana;
     }
@@ -443,7 +443,7 @@ Restart:
                 { AddBonus(BONUS_BASE+i,A_FAT,amt); }
             } 
     } else {
-        int amt = max( ChallengeRating(), 0) / 2; 
+        int amt = std::max<int>( ChallengeRating(), 0) / 2;
         AddBonus(BONUS_BASE,A_FAT,amt); 
     } 
 
@@ -693,13 +693,13 @@ Restart:
 		int16 n_add = 0, n_div = 1;
         // Concentration cancels pain as does Pain Tolerance
 		if (HasSkill(SK_CONCENT))
-			n_add = max(((SkillLevel(SK_CONCENT) - 8) / 2), 0);
+			n_add = std::max(((SkillLevel(SK_CONCENT) - 8) / 2), 0);
         if (this->HasFeat(FT_PAIN_TOLERANCE))
             n_div = 2;
 		if (n_add > 0 || n_div != 1)
 			for (i = 0; i != ATTR_LAST; i++)
 				if (AttrAdj[i][BONUS_PAIN] < 0) {
-					AttrAdj[i][BONUS_PAIN] = min(0, AttrAdj[i][BONUS_PAIN] + n_add);
+					AttrAdj[i][BONUS_PAIN] = std::min(0, AttrAdj[i][BONUS_PAIN] + n_add);
 					AttrAdj[i][BONUS_PAIN] = AttrAdj[i][BONUS_PAIN] / n_div;
 				}
     }
@@ -789,7 +789,7 @@ Restart:
         AddBonus(BONUS_ELEV,A_DEF,SkillLevel(SK_CLIMB)/6+2);
         AddBonus(BONUS_ELEV,A_HIT,SkillLevel(SK_CLIMB)/6+2);
         if (GetStatiVal(ELEVATED) == ELEV_CEILING)
-            AddBonus(BONUS_ELEV,A_MOV, -14 + max(0,SkillLevel(SK_CLIMB)-20));
+            AddBonus(BONUS_ELEV,A_MOV, -14 + std::max(0,SkillLevel(SK_CLIMB)-20));
         else if (HasFeat(FT_BRACHIATION))
             ;
         else
@@ -863,7 +863,7 @@ Restart:
         // deflection bonus equal to its Charisma bonus (always at least +1,
         // even if the creature's Charisma score does not normally provide a
         // bonus).
-        StackBonus(BONUS_CIRC,A_DEF, max(1,Mod2(A_CHA)));
+        StackBonus(BONUS_CIRC,A_DEF, std::max<int>(1,Mod2(A_CHA)));
     } 
 
     switch (Encumbrance()) {
@@ -947,8 +947,8 @@ Restart:
     }
 
     if (HasSkill(SK_ATHLETICS)) {
-        AddBonus(BONUS_SKILL, A_MOV, max(0,SkillLevel(SK_ATHLETICS)/2)); 
-        AddBonus(BONUS_SKILL,A_FAT,max(0,SkillLevel(SK_ATHLETICS)/3));
+        AddBonus(BONUS_SKILL, A_MOV, std::max(0,SkillLevel(SK_ATHLETICS)/2));
+        AddBonus(BONUS_SKILL,A_FAT, std::max(0,SkillLevel(SK_ATHLETICS)/3));
     }
 
     if (isMType(MA_UNDEAD) || isMType(MA_CONSTRUCT) || isMType(MA_PLANT)) {
@@ -998,8 +998,8 @@ Restart:
         Attr[A_FAT] = 1;
 
     if (HasFeat(FT_ONE_BODY_ONE_SOUL) || (Attr[A_CON] == 0)) {
-        int16 one_mod = max(XMod(A_CON),XMod(A_WIS));
-        int16 best = max(IAttr(A_CON),IAttr(A_WIS));
+        int16 one_mod = std::max(XMod(A_CON),XMod(A_WIS));
+        int16 best = std::max(IAttr(A_CON),IAttr(A_WIS));
         AddBonus(BONUS_ATTR,A_SAV_FORT, one_mod);
         AddBonus(BONUS_ATTR,A_SAV_WILL, one_mod);
         AddBonus(BONUS_ATTR,A_FAT,(best-11)/2); 
@@ -1014,22 +1014,22 @@ Restart:
     AddBonus(BONUS_ATTR,A_HIT_THROWN,  XMod(A_DEX));
 
     if (HasFeat(FT_WEAPON_FINESSE))
-        AddBonus(BONUS_ATTR,A_HIT_BRAWL,max(XMod(A_STR),XMod(A_DEX)));
+        AddBonus(BONUS_ATTR,A_HIT_BRAWL, std::max(XMod(A_STR),XMod(A_DEX)));
     else
         AddBonus(BONUS_ATTR,A_HIT_BRAWL,XMod(A_STR));
 
     if (HasFeat(FT_WEAPON_FINESSE) && meleeWep && meleeWep->canFinesse()) 
-        AddBonus(BONUS_ATTR,A_HIT_MELEE,max(XMod(A_STR),XMod(A_DEX))); 
+        AddBonus(BONUS_ATTR,A_HIT_MELEE, std::max(XMod(A_STR),XMod(A_DEX)));
     else
         AddBonus(BONUS_ATTR,A_HIT_MELEE,XMod(A_STR));
 
     if (HasFeat(FT_WEAPON_FINESSE) && offhandWep && offhandWep->canFinesse()) 
-        AddBonus(BONUS_ATTR,A_HIT_OFFHAND,max(XMod(A_STR),XMod(A_DEX)));
+        AddBonus(BONUS_ATTR,A_HIT_OFFHAND, std::max(XMod(A_STR),XMod(A_DEX)));
     else
         AddBonus(BONUS_ATTR,A_HIT_OFFHAND,XMod(A_STR));
 
     if (HasFeat(FT_WEAPON_FINESSE))
-        AddBonus(BONUS_ATTR,A_DMG_BRAWL,max(0,XMod(A_STR)));
+        AddBonus(BONUS_ATTR,A_DMG_BRAWL, std::max<int>(0,XMod(A_STR)));
     else
         AddBonus(BONUS_ATTR,A_DMG_BRAWL,XMod(A_STR));
 
@@ -1040,12 +1040,12 @@ Restart:
     if (meleeWep && !meleeWep->useStrength())
         ;
     else if (meleeWep && (EInSlot(SL_WEAPON) == EInSlot(SL_READY)) && !meleeWep->HasIFlag(WT_DOUBLE))      
-        AddBonus(BONUS_ATTR,A_DMG_MELEE,max(0,((XMod(A_STR)*3)+1)/2));
+        AddBonus(BONUS_ATTR,A_DMG_MELEE, std::max(0,((XMod(A_STR)*3)+1)/2));
     else if (XMod(A_STR) >= 0 || !HasFeat(FT_WEAPON_FINESSE) || (meleeWep && !meleeWep->canFinesse()))
         AddBonus(BONUS_ATTR,A_DMG_MELEE,XMod(A_STR));
 
     /* Figure out WT_NO_STRENGTH at attack time */
-    AddBonus(BONUS_ATTR,A_DMG_THROWN,max(0,XMod(A_STR)));
+    AddBonus(BONUS_ATTR,A_DMG_THROWN, std::max<int>(0,XMod(A_STR)));
     if (missileWep && missileWep->useStrength())
         AddBonus(BONUS_ATTR,A_DMG_ARCHERY,XMod(A_STR));
 
@@ -1070,7 +1070,7 @@ Restart:
         }
 
     if (HasFeat(FT_LIGHTNING_FISTS)) //  && !HasStati(POLYMORPH))
-        AddBonus(BONUS_FEAT,A_SPD_BRAWL,max(0,XMod(A_DEX)));
+        AddBonus(BONUS_FEAT,A_SPD_BRAWL, std::max<int>(0,XMod(A_DEX)));
     if (HasFeat(FT_FISTS_OF_IRON)) 
         AddBonus(BONUS_FEAT,A_DMG_BRAWL,1); 
 
@@ -1113,9 +1113,9 @@ Restart:
 
         // ww: this logic was reversed! ouch!
         if (!HasFeat(FT_DEFENSIVE_SYNERGY))
-            AddBonus(BONUS_WEAPON,A_DEF,max(a,b));
+            AddBonus(BONUS_WEAPON,A_DEF, std::max(a,b));
         else
-            AddBonus(BONUS_WEAPON,A_DEF,max(a,b) + min(a,b)/2);
+            AddBonus(BONUS_WEAPON,A_DEF, std::max(a,b) + std::min(a,b)/2);
     } 
 
     if (meleeWep && meleeWep->HasQuality(WQ_DEFENDING))
@@ -1148,7 +1148,7 @@ Restart:
         AddBonus(BONUS_GRACE, A_SAV, XMod(A_CHA));
 
     if (isMType(MA_CHAOTIC) && isCharacter())
-        AddBonus(BONUS_MORALE, A_SAV_WILL, max(0,(thisc->alignLC - 35) / 5));
+        AddBonus(BONUS_MORALE, A_SAV_WILL, std::max(0,(thisc->alignLC - 35) / 5));
     else if (isMType(MA_CHAOTIC))
         AddBonus(BONUS_MORALE, A_SAV_WILL, HasMFlag(M_IALIGN) ? 6 : 3);
 
@@ -1207,7 +1207,7 @@ Restart:
         { AddBonus(BONUS_WEAPON, A_DEF, TITEM(offhandWep->iID)->Def +
         TITEM(meleeWep->iID)->Def) }
         else
-        {AddBonus(BONUS_WEAPON, A_DEF, max(TITEM(offhandWep->iID)->Def,
+        {AddBonus(BONUS_WEAPON, A_DEF, std::max(TITEM(offhandWep->iID)->Def,
         TITEM(meleeWep->iID)->Def)); }
         */
     }
@@ -1236,9 +1236,9 @@ Restart:
 
     if (HasStati(POLYMORPH))
         for (i=A_STR; i<=A_CON; i++) {
-            AttrAdj[i][BONUS_ENHANCE] = min(0,AttrAdj[i][BONUS_ENHANCE]);
-            AttrAdj[i][BONUS_FEAT] = min(0,AttrAdj[i][BONUS_FEAT]);
-            AttrAdj[i][BONUS_INHERANT] = min(0,AttrAdj[i][BONUS_INHERANT]);
+            AttrAdj[i][BONUS_ENHANCE] = std::min<int>(0,AttrAdj[i][BONUS_ENHANCE]);
+            AttrAdj[i][BONUS_FEAT] = std::min<int>(0,AttrAdj[i][BONUS_FEAT]);
+            AttrAdj[i][BONUS_INHERANT] = std::min<int>(0,AttrAdj[i][BONUS_INHERANT]);
         }
 
     if (HasFeat(FT_LION_HEART)) {
@@ -1275,7 +1275,7 @@ Restart:
             if (percent_attr(i)) {
                 for (j=0;j!=BONUS_LAST;j++)
                     if (bonus_is_mult(i,j)) {
-                        thisc->KAttr[i] = ((((thisc->KAttr[i]*5 + 100) * (max(-16,AttrAdj[i][j])*5 + 100) ) / 100)-100)/5;          
+                        thisc->KAttr[i] = ((((thisc->KAttr[i]*5 + 100) * (std::max<int>(-16,AttrAdj[i][j])*5 + 100) ) / 100)-100)/5;
 
                         if (i == A_MOV && AttrAdj[i][j] <= -20 && !isPlayer())
                             isHalted = true;
@@ -1283,7 +1283,7 @@ Restart:
             }
 
             thisc->KAttr[A_CDEF] = thisc->KAttr[A_DEF] - 
-                (max(0,AttrAdj[A_DEF][BONUS_WEAPON]) + max(0,AttrAdj[A_DEF][BONUS_INSIGHT]) + max(0,AttrAdj[A_DEF][BONUS_DODGE]) + (HasFeat(FT_COMBAT_CASTING) ? 2 : 4));
+                (std::max<int>(0,AttrAdj[A_DEF][BONUS_WEAPON]) + std::max<int>(0,AttrAdj[A_DEF][BONUS_INSIGHT]) + std::max<int>(0,AttrAdj[A_DEF][BONUS_DODGE]) + (HasFeat(FT_COMBAT_CASTING) ? 2 : 4));
         } 
     } else {
         for(i=0; i!=ATTR_LAST; i++) {
@@ -1317,7 +1317,7 @@ Restart:
             }
 
             Attr[A_CDEF] = Attr[A_DEF] -
-                (max(0,AttrAdj[A_DEF][BONUS_WEAPON]) + max(0,AttrAdj[A_DEF][BONUS_INSIGHT]) + max(0,AttrAdj[A_DEF][BONUS_DODGE]) + (HasFeat(FT_COMBAT_CASTING) ? 2 : 4));
+                (std::max<int>(0,AttrAdj[A_DEF][BONUS_WEAPON]) + std::max<int>(0,AttrAdj[A_DEF][BONUS_INSIGHT]) + std::max<int>(0,AttrAdj[A_DEF][BONUS_DODGE]) + (HasFeat(FT_COMBAT_CASTING) ? 2 : 4));
         }
     }
 
@@ -1349,14 +1349,14 @@ Restart:
             thisp->KAttr[A_FAT] = 1;
 
         if (!isHalted)
-            thisp->KAttr[A_MOV]       = max(min(-15,TMON(mID)->Mov),thisp->KAttr[A_MOV]);
+            thisp->KAttr[A_MOV]       = std::max<int>(std::min<int>(-15,TMON(mID)->Mov),thisp->KAttr[A_MOV]);
         else
             thisp->KAttr[A_MOV]       = -20;
-        thisp->KAttr[A_SPD_MELEE]   = max(-15,thisp->KAttr[A_SPD_MELEE]);
-        thisp->KAttr[A_SPD_BRAWL]   = max(-15,thisp->KAttr[A_SPD_BRAWL]);
-        thisp->KAttr[A_SPD_ARCHERY] = max(-15,thisp->KAttr[A_SPD_ARCHERY]);
-        thisp->KAttr[A_SPD_THROWN]  = max(-15,thisp->KAttr[A_SPD_THROWN]);
-        thisp->KAttr[A_SPD_OFFHAND] = max(-15,thisp->KAttr[A_SPD_OFFHAND]);
+        thisp->KAttr[A_SPD_MELEE]   = std::max<int>(-15,thisp->KAttr[A_SPD_MELEE]);
+        thisp->KAttr[A_SPD_BRAWL]   = std::max<int>(-15,thisp->KAttr[A_SPD_BRAWL]);
+        thisp->KAttr[A_SPD_ARCHERY] = std::max<int>(-15,thisp->KAttr[A_SPD_ARCHERY]);
+        thisp->KAttr[A_SPD_THROWN]  = std::max<int>(-15,thisp->KAttr[A_SPD_THROWN]);
+        thisp->KAttr[A_SPD_OFFHAND] = std::max<int>(-15,thisp->KAttr[A_SPD_OFFHAND]);
     } else {
         /* If you do not naturally have an attribute of 0, and are not about
         to die as a result of having that attribute at 0, set it to a minimum
@@ -1374,14 +1374,14 @@ Restart:
             Attr[A_FAT] = 1;
 
         if (!isHalted)
-            thisp->Attr[A_MOV]       = max(min(-15,TMON(mID)->Mov),thisp->Attr[A_MOV]);
+            thisp->Attr[A_MOV]       = std::max<int>(std::min<int>(-15,TMON(mID)->Mov),thisp->Attr[A_MOV]);
         else
             thisp->Attr[A_MOV]       = -20;
-        thisp->Attr[A_SPD_MELEE]   = max(-15,thisp->Attr[A_SPD_MELEE]);
-        thisp->Attr[A_SPD_BRAWL]   = max(-15,thisp->Attr[A_SPD_BRAWL]);
-        thisp->Attr[A_SPD_ARCHERY] = max(-15,thisp->Attr[A_SPD_ARCHERY]);
-        thisp->Attr[A_SPD_THROWN]  = max(-15,thisp->Attr[A_SPD_THROWN]);
-        thisp->Attr[A_SPD_OFFHAND] = max(-15,thisp->Attr[A_SPD_OFFHAND]);
+        thisp->Attr[A_SPD_MELEE]   = std::max<int>(-15,thisp->Attr[A_SPD_MELEE]);
+        thisp->Attr[A_SPD_BRAWL]   = std::max<int>(-15,thisp->Attr[A_SPD_BRAWL]);
+        thisp->Attr[A_SPD_ARCHERY] = std::max<int>(-15,thisp->Attr[A_SPD_ARCHERY]);
+        thisp->Attr[A_SPD_THROWN]  = std::max<int>(-15,thisp->Attr[A_SPD_THROWN]);
+        thisp->Attr[A_SPD_OFFHAND] = std::max<int>(-15,thisp->Attr[A_SPD_OFFHAND]);
 
         Creature *lead;
         if ((lead = getLeader()) && !isHalted)
@@ -1389,13 +1389,13 @@ Restart:
                 if (lead->HasFeat(FT_COORDINATED_TACTICS))
                     Attr[A_MOV] = lead->GetAttr(A_MOV);
 
-        SightRange = max(12,15+Mod(A_WIS)*3) + AbilityLevel(CA_SHARP_SENSES)*2;
+        SightRange = std::max(12,15+Mod(A_WIS)*3) + AbilityLevel(CA_SHARP_SENSES)*2;
 
         LightRange = EInSlot(SL_LIGHT) ? EInSlot(SL_LIGHT)->GetLightRange() : 0;
         if (InSlot(SL_WEAPON) && InSlot(SL_WEAPON)->HasQuality(WQ_GLOWING))
-            LightRange = max(LightRange,InSlot(SL_WEAPON)->GetPlus()*3);
+            LightRange = std::max<int>(LightRange,InSlot(SL_WEAPON)->GetPlus()*3);
         if (InSlot(SL_READY) && InSlot(SL_READY)->HasQuality(WQ_GLOWING))
-            LightRange = max(LightRange,InSlot(SL_READY)->GetPlus()*3);
+            LightRange = std::max<int>(LightRange,InSlot(SL_READY)->GetPlus()*3);
         if (LightRange)
             LightRange += AbilityLevel(CA_LOWLIGHT);
 
@@ -1437,7 +1437,7 @@ Restart:
                         BlindRange -= pen; 
                 }
             }
-            BlindRange = max(1,BlindRange);
+            BlindRange = std::max<int>(1,BlindRange);
         }
         NatureSight  = HasAbility(CA_NATURE_SENSE);
         PercepRange  = (uint8)HighStatiMag(PERCEPTION);
@@ -1445,14 +1445,14 @@ Restart:
         that they can exist in the dungeon as effective companions to
         druids and rangers. */
         if (!isPlayer() && InfraRange + LightRange + TelepRange + TremorRange + BlindRange + ScentRange == 0)
-            InfraRange = max(6,InfraRange);
+            InfraRange = std::max<int>(6,InfraRange);
     }
 
     if (Attr[A_FAT] != oFP) {
         if (restart_count++ < 10) 
             goto Restart;
         // ww: you lose! 
-        Attr[A_FAT] = min(Attr[A_FAT],oFP);
+        Attr[A_FAT] = std::min(Attr[A_FAT],oFP);
         // ww: fixme, this is hideous! 
     }
 
@@ -1463,7 +1463,7 @@ Restart:
     enough to put them equal to or lower than the new maximum
     hit points. */       
     if (oHP > cHP)
-        cHP = min (mHP+Attr[A_THP], oHP);
+        cHP = std::min<int>(mHP+Attr[A_THP], oHP);
 
     SetImage();
     if (m && x != -1)
@@ -1597,22 +1597,22 @@ void Character::CalcValues(bool KnownOnly, Item *thrown)
 
     if (templateHD > 0) {
       if (isPlayer() && thisp->Opt(OPT_MAX_HP) == 2) // max hp
-        mHP += templateHD * max(1, Mod(a_hp) + HDType);
+        mHP += templateHD * std::max(1, Mod(a_hp) + HDType);
       else 
-        mHP += templateHD * max(1, Mod(a_hp) + HDType/2);
+        mHP += templateHD * std::max(1, Mod(a_hp) + HDType/2);
     }
 
     if (HDType > 8) {
       if (isPlayer() && thisp->Opt(OPT_MAX_HP) == 2) // max hp
-        mHP += lev * max(1, Mod(a_hp) + HDType);
+        mHP += lev * std::max(1, Mod(a_hp) + HDType);
       else 
-        mHP += lev * max(1, Mod(a_hp) + HDType/2);
+        mHP += lev * std::max(1, Mod(a_hp) + HDType/2);
     } else {
       for (i=0;i!=3;i++)
         if (Level[i])
         {
           for (j=0;j!=Level[i];j++)
-            mHP += max(1,Mod(a_hp) + thisp->hpRolls[i][j]);
+            mHP += std::max(1,Mod(a_hp) + thisp->hpRolls[i][j]);
         }
     } 
   } else {
@@ -1623,14 +1623,14 @@ void Character::CalcValues(bool KnownOnly, Item *thrown)
 
     // sadly, we can't really "roll" here 
     if (isPlayer() && thisp->Opt(OPT_MAX_HP) == 2) // max hp
-      mHP += numHD * max(1, Mod(a_hp) + HDType);
+      mHP += numHD * std::max(1, Mod(a_hp) + HDType);
     else 
-      mHP += numHD * max(1, Mod(a_hp) + HDType/2);
+      mHP += numHD * std::max(1, Mod(a_hp) + HDType/2);
   } 
 
 
   if (HasAbility(CA_TOUGH_AS_HELL))
-    mHP += AbilityLevel(CA_TOUGH_AS_HELL) * max(0,Mod(a_hp));
+    mHP += AbilityLevel(CA_TOUGH_AS_HELL) * std::max<int>(0,Mod(a_hp));
   if (HasFeat(FT_TOUGHNESS))
     mHP += (mHP / 4);
 
@@ -1685,7 +1685,7 @@ void Character::CalcValues(bool KnownOnly, Item *thrown)
   // ww: calculate bonus spell slots ... this used to be in GainAbility,
   // but players can get frustrated if they read a Tome of Super Int +2 and
   // don't immediately get those bonus spells!
-  uint8 intScaled = min(max(IAttr(A_INT)-9,0),21);
+  uint8 intScaled = std::min(std::max(IAttr(A_INT)-9,0),21);
   // while were here, change the logic a bit (I know, I know ...) so that
   // your maximum number of bonus spells for spell level X is equal to the
   // number of normal spells you could get for level X (unless level 1, at
@@ -1701,7 +1701,7 @@ void Character::CalcValues(bool KnownOnly, Item *thrown)
   // two levels. 
   // fjm: Slight tweak here -- it's very possible to get more bonus spells
   //      at a level than you will ever get of regular spell. Change this
-  //      to bonus slots == max(normal slots, number of levels you've
+  //      to bonus slots == std::max(normal slots, number of levels you've
   //      advanced since first getting access to that specific slot.
   
     for (i=1;i<9;i++)
@@ -1717,8 +1717,8 @@ void Character::CalcValues(bool KnownOnly, Item *thrown)
     
     /* Scale slots for spell levels 2-9 */
     for (i=1;i<9;i++) { 
-      BonusSlots[i] = min( BonusSpells[intScaled][i] ,
-                               max( SpellSlots[i] ,
+      BonusSlots[i] = std::min<int>( BonusSpells[intScaled][i] ,
+                               std::max<int>( SpellSlots[i] ,
                                CasterLev() - SAL(i+1) ) ) ; 
 
       // back to auto-learning domain spells.
@@ -1800,7 +1800,7 @@ int16 Creature::ResistLevel(int16 DType, bool bypass_armour)
       if (!S->Dis)
           if (S->Val == DType)
             StatiResists[S->Source] = 
-              max(StatiResists[S->Source],S->Mag);
+              std::max<int>(StatiResists[S->Source],S->Mag);
     StatiIterEnd(this)
     
     for(i=0;i!=16;i++)
@@ -1837,7 +1837,7 @@ int16 Creature::ResistLevel(int16 DType, bool bypass_armour)
     
     if (is_wepdmg(DType)) {
       if (Attr[A_ARM] && !bypass_armour)
-        Resists[ResistCount++] = max(0,Attr[A_ARM]);
+        Resists[ResistCount++] = std::max<int>(0,Attr[A_ARM]);
       if ((it = EInSlot(SL_ARMOUR)) && !bypass_armour)
         Resists[ResistCount++] = ((Armour *)it)->ArmVal(DType - AD_SLASH);
       }
@@ -2011,7 +2011,7 @@ void Creature::CalcHP()
     HasAbility(CA_SPELLCASTING) ? 12 : 4; 
 
   int effectiveManaLevel = 
-    max(ChallengeRating() ,
+      std::max(ChallengeRating() ,
         AbilityLevel(CA_SPELLCASTING));
 
   for (i=0; i<effectiveManaLevel; i++) {
@@ -2026,7 +2026,7 @@ void Creature::CalcHP()
   if (one_body && Mod(A_WIS) > Mod(A_CON))
     a_hp = A_WIS;
 
-  mHP = max(mHP/2,mHP + (HD * Mod(a_hp)));
+  mHP = std::max(mHP/2,mHP + (HD * Mod(a_hp)));
   if (HasAbility(CA_TOUGH_AS_HELL))
     mHP += Mod(a_hp) * AbilityLevel(CA_TOUGH_AS_HELL);
   if (HasFeat(FT_TOUGHNESS))
@@ -2042,7 +2042,7 @@ void Creature::CalcHP()
     case SZ_GARGANTUAN:     mHP = (mHP*16)/10; break;
     case SZ_COLLOSAL:       mHP = (mHP*20)/10; break;
   }
-  mHP = max(1,mHP);
+  mHP = std::max<int>(1,mHP);
   
   /* Knowledge skills give bonuses to summoned creatures'
      hit points. */
@@ -2073,9 +2073,9 @@ void Character::CalcSP()
       TClass *tc = TCLASS(ClassID[i]);
       if (tc) {
         if (tc->SkillPoints >= 8)
-          TotalSP[i] = max(1, (tc->SkillPoints) + ((IAttr(A_INT)-10)/2)*2);
+          TotalSP[i] = std::max(1, (tc->SkillPoints) + ((IAttr(A_INT)-10)/2)*2);
         else      
-          TotalSP[i] = max(1, (tc->SkillPoints) + ((IAttr(A_INT)-10)/2));
+          TotalSP[i] = std::max(1, (tc->SkillPoints) + ((IAttr(A_INT)-10)/2));
         }
       else
         TotalSP[i] = 0;
@@ -2577,9 +2577,9 @@ int16 Character::GetBAB(int16 mode)
       if (TCLASS(ClassID[i])->AttkVal[mode] >= 100)
         warriorLevels += Level[i];
       }
-    sBAB = min(TotalLevel(), BAB + 
-      min(warriorLevels,IntStudy[STUDY_BAB]));
-    return max(BAB,sBAB);
+    sBAB = std::min<int>(TotalLevel(), BAB +
+        std::min<int>(warriorLevels,IntStudy[STUDY_BAB]));
+    return std::max(BAB,sBAB);
   }
 
 uint32 Creature::getArmourType(bool count_shield)

@@ -126,7 +126,7 @@ class Item: public Thing, public Magic
       Item* TryStack(Item *i);
       Item* TryStack(Map *m, int16 x, int16 y);
       int16 MaxHP();
-      void  MendHP(int16 hp) { cHP = min(MaxHP(),cHP+hp); }
+      void  MendHP(int16 hp) { cHP = std::min<int16_t>(MaxHP(),cHP+hp); }
       int16 GetHP() { return cHP; }
       virtual bool operator==(Item &i);
 
@@ -144,7 +144,7 @@ class Item: public Thing, public Magic
           return 0;
           */
         else
-          return max(Plus,HighStatiMag(BOOST_PLUS));
+          return std::max<int16_t>(Plus,HighStatiMag(BOOST_PLUS));
       }
       int8 GetInherentPlus() { return Plus; }
       void SetInherentPlus(int8 i) { int32 dmg;

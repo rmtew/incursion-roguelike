@@ -40,7 +40,7 @@ extern String & EventName(int16 Ev);
 //#define VERIFY(h,ty,str) ;
 #define MEMORY(a)       (*getMemorySafe(a))
 #define STACK(a)        (*getStackSafe(Regs[63] - a))
-#define VSTACK(a)       (*getStackSafe(max(0,Regs[63]-(a))))
+#define VSTACK(a)       (*getStackSafe(std::max(0,Regs[63]-(a))))
 #define MEMORY_ADDR(a)  (getMemorySafe(a))
 #define STACK_ADDR(a)   (getStackSafe(Regs[63] - a))
 #define GETSTR(ht)      (getStringSafe(ht))
@@ -51,11 +51,11 @@ extern String & EventName(int16 Ev);
 #define REGS(a)   (Regs[a])
 #define MEMORY(a) (Memory[a])
 #define STACK(a)  (Stack[Regs[63]-(a)])
-#define VSTACK(a) (Stack[max(0,Regs[63]-(a))])
+#define VSTACK(a) (Stack[std::max(0,Regs[63]-(a))])
 #define MEMORY_ADDR(a) (Memory + (a))
 #define STACK_ADDR(a)  (Stack + (Regs[63]-(a))) 
 #define GETSTR(ht)      (getStringSafe(ht))
-//#define GETSTR(ht) ((ht) == 0 ? NULL : ( ht < 0 ? SRegs[max(0,-ht)] :       \
+//#define GETSTR(ht) ((ht) == 0 ? NULL : ( ht < 0 ? SRegs[std::max(0,-ht)] :       \
 //                               (theGame->Modules[mn]->QTextSeg + (ht))))
 #endif
 */
@@ -454,8 +454,8 @@ int32 VMachine::Execute(EventInfo *e, rID _xID, hCode CP)
           case INC: *LValue1(vc) += Value2(vc); break;
           case DEC: *LValue1(vc) -= Value2(vc); break;
           case ROLL: REGS(0) = Dice::Roll((int8)Value1(vc),(int8)Value2(vc)); break;
-          case MIN:  REGS(0) = min(Value1(vc),Value2(vc)); break;
-          case MAX:  REGS(0) = max(Value1(vc),Value2(vc)); break;
+          case MIN:  REGS(0) = std::min(Value1(vc),Value2(vc)); break;
+          case MAX:  REGS(0) = std::max(Value1(vc),Value2(vc)); break;
           case MOV: *LValue1(vc) = Value2(vc);         break;
           case BSHL: REGS(0) = Value1(vc) >> Value2(vc); break;
           case BSHR: REGS(0) = Value1(vc) << Value2(vc); break;

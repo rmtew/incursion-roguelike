@@ -311,7 +311,7 @@ void Monster::ChooseAction()
   
   if (!m || (x==-1))
     {
-      Timeout = max(Timeout,30);
+      Timeout = std::max<int>(Timeout,30);
       return;
     }
 
@@ -352,13 +352,13 @@ void Monster::ChooseAction()
 
   if (!m || (x==-1))
   {
-    Timeout = max(Timeout,30);
+    Timeout = std::max<int>(Timeout,30);
     return;
   }
 
   charmer = (Creature*)GetStatiObj(CHARMED,CH_CHARM);
 
-#define sdist(vx,vy,tx,ty) max(MYABS(vx - tx),MYABS(vy - ty))
+#define sdist(vx,vy,tx,ty) std::max(MYABS(vx - tx),MYABS(vy - ty))
 
   if (ts.shouldRetarget) ts.Retarget(this,true);
 
@@ -731,7 +731,7 @@ SkipShifting:
                   best = j;
                 }
       if (bc)
-        AddAct(ACT_CAST,max(0,(best / 256) - HasMFlag(M_EVIL))-1,bc,
+        AddAct(ACT_CAST, std::max(0,(best / 256) - HasMFlag(M_EVIL))-1,bc,
             EP_FIX_TROUBLE + ((best & 0xFF)<<16));
     }
     /* Later, add support for buffing allies as well. */
@@ -1700,7 +1700,7 @@ RetryTargets:
         he instead becomes a strongly /negative/ gravity, repulsing the
         monster until it's back at a safe distance for it's favoured
         tactic of ranged combat. */
-        d = max(1, ts.t[i].DistanceFrom(this));
+        d = std::max<int>(1, ts.t[i].DistanceFrom(this));
         if (ts.t[i].type == TargetWander)
             d = 1;
         else if ((ts.t[i].type == TargetEnemy ||
@@ -2301,7 +2301,7 @@ void Monster::AddEffect(TEffect *te, rID eID, Item *src) {
         if (te->ManaCost > cMana())
           return;
 
-        i = (int16)((te->ManaCost*100) / max(1,cMana()));
+        i = (int16)((te->ManaCost*100) / std::max(1,cMana()));
         rat -= (i*rat)/100;    
       }
     
@@ -2382,7 +2382,7 @@ uint32 Monster::SetMetamagic(rID eID, Thing *tar, uint16 Pur)
     uint32 MM; TEffect *te = TEFF(eID);
     // ww: Fri Jan 16 20:19:03 PST 2004
     // I got a division by 0 on the next line. 
-    int16 pMana = (int16)((cMana()*100) / max(tMana(),1));
+    int16 pMana = (int16)((cMana()*100) / std::max(tMana(),1));
 
     /* Right now, this can lead to monsters with lots of different
        MM feats using many at once, wasting mana and casting spells
@@ -2770,7 +2770,7 @@ int16 Monster::RateAsTarget(Thing *t)
          Magical Aura on them, but not others. */
       Shiny:
       lev = ((Item*)t)->PItemLevel(this) + 1;
-      rat = (10 * min(lev,max(25,t->GetStatiMag(MAGIC_AURA)))) / max(1,ChallengeRating()/3);
+      rat = (10 * std::min<int>(lev, std::max<int>(25,t->GetStatiMag(MAGIC_AURA)))) / std::max(1,ChallengeRating()/3);
       if (rat <= 0)
         return  0;
 
@@ -2781,7 +2781,7 @@ int16 Monster::RateAsTarget(Thing *t)
       else if (HasMFlag(M_COVETOUS))
         rat *= 2;
       
-      rat = min(126,rat);
+      rat = std::min<int>(126,rat);
       
       ASSERT(rat >= 0 && rat <= 127) 
       return rat;
@@ -2909,7 +2909,7 @@ int16 Monster::RateAsTarget(Thing *t)
 
       rat += 5;
       // ww: favour close things
-      rat += max(min(30 - dist(x,y,t->x,t->y),30),0);
+      rat += std::max(std::min(30 - dist(x,y,t->x,t->y),30),0);
       ASSERT(rat >= 0 && rat <= 127)
       return rat;
       }
@@ -2920,12 +2920,12 @@ int16 Monster::RateAsTarget(Thing *t)
 int8 Creature::BestHDType()
 {
   TMonster * tm = TMON(mID);
-  int8 b = max(max(MonHDType((int8)tm->MType[0]), MonHDType((int8)tm->MType[1])),
+  int8 b = std::max(std::max(MonHDType((int8)tm->MType[0]), MonHDType((int8)tm->MType[1])),
               MonHDType((int8)tm->MType[2]));
   // ww: now check all templates! 
   StatiIterNature(this,TEMPLATE)
       int8 newType = (int8)TTEM(S->eID)->AddMType;
-      if (newType) b = max(b, MonHDType(newType));
+      if (newType) b = std::max(b, MonHDType(newType));
   StatiIterEnd(this)
   return (b % 100); 
 } 
@@ -2945,7 +2945,7 @@ int16* Creature::getTroubles()
     if (CurrAI != this)
       return Creature::WorstTrouble();
     int16 i, inj = ((mHP+Attr[A_THP]-cHP)*100)/(mHP+Attr[A_THP]),
-         man = (cMana()*100L)/max(nhMana(),1);
+         man = (cMana()*100L) / std::max(nhMana(),1);
     
     if (isStoning)
       Troubles[n++] = TROUBLE_STONING + P_CRITICAL*256;

@@ -191,19 +191,19 @@ class Creature: public Thing, public Magic
     public:
       /* General Stuff */
 		  Creature(rID mID,int16 _Type);
-		  int32 cMana() { return max(0,(mMana+(GetAttr(A_MAN)*5)-(uMana+hMana))); }
+		  int32 cMana() { return std::max(0,(mMana+(GetAttr(A_MAN)*5)-(uMana+hMana))); }
 	    int32 tMana() { return mMana + GetAttr(A_MAN)*5; }
       void  LoseMana(int32 amt, bool hold=false)
         { if (hold)
             hMana += amt;
           else
-            uMana = min(tMana() - hMana,uMana + amt); }
+            uMana = std::min(tMana() - hMana,uMana + amt); }
       void GainMana(int32 amt)
-        { uMana = max(0,uMana - amt); } 
+        { uMana = std::max(0,uMana - amt); }
       bool hasMana(int32 amt)
         { return cMana() > amt; }
       int32 nhMana()
-        { return max(0,tMana() - hMana); }
+        { return std::max(0,tMana() - hMana); }
       void GainStatiFromBody(rID _mID);
       void GainStatiFromTemplate(rID _tID, bool turn_on);
       /* Use of an attribute can lead to gains. */
@@ -230,7 +230,7 @@ class Creature: public Thing, public Magic
       virtual int16 getDef() {
           if (StateFlags & MS_STILL_CAST) {
               CalcValues();
-              return Attr[A_CDEF] + max(0, AttrAdj[A_DEF][BONUS_WEAPON]);
+              return Attr[A_CDEF] + std::max<int16_t>(0, AttrAdj[A_DEF][BONUS_WEAPON]);
           }
           return (StateFlags & MS_CASTING) ? Attr[A_CDEF] : Attr[A_DEF];
       }
@@ -245,7 +245,7 @@ class Creature: public Thing, public Magic
 
       int32 MoveTimeout(int from_x, int from_y) {
         int32 Mov = MoveAttr(from_x,from_y);
-        int32 normal_timeout = max(1,1000 / max(Mov,1));
+        int32 normal_timeout = std::max(1,1000 / std::max(Mov,1));
         return normal_timeout;
       } 
 
@@ -389,7 +389,7 @@ class Creature: public Thing, public Magic
       virtual int16 SkillLevel(int16 n);
       virtual int16 ConcentBuffer() {
           int16 cc = SkillLevel(SK_CONCENT);
-          return max(cc-5,0);
+          return std::max(cc-5,0);
       }
       virtual int8 WepSkill(rID wep, bool ignore_str=false);
       int8 WepSkill(Item * it) ;
@@ -426,7 +426,7 @@ class Creature: public Thing, public Magic
       virtual uint16 getSpellFlags(rID spID) // horrid kludge used for counterspells
          { return CasterLev() >= SAL(TEFF(spID)->Level) ? SP_KNOWN : 0; }
       virtual int16 CasterLev()
-        { return max(ChallengeRating(),1); }
+        { return std::max<int16_t>(ChallengeRating(),1); }
       virtual uint32 MMFeats(uint32 sp) { return 0; }
       virtual void getBuffInfo(int16 *pBuffCount, int16 *pManaCost, rID **pBuffList);
       virtual bool isSpecialistIn(uint32 School);
@@ -560,7 +560,7 @@ class Creature: public Thing, public Magic
       bool okBondedMount(int16 lev, rID mID, rID tID);
 
       bool isFlatFooted()
-        { return FFCount > min(5,10+Mod(A_WIS)); }
+        { return FFCount > std::min(5,10+Mod(A_WIS)); }
       bool isFlanking(Creature *c);
       int8 BestHDType(); // ww: includes all types, templates, etc. 
       virtual int16 SpellDmgBonus(rID eID);
@@ -657,9 +657,9 @@ class Character: public Creature
       uint32 SpellKnown(int16 spNum) { return Spells[spNum]; }
       virtual void RecalcStaffSpells();
       virtual void RecalcCraftFormulas();
-      int32 kcMana() { return max(0,(mMana+(KAttr[A_MAN]*5)-(uMana+hMana))); }
+      int32 kcMana() { return std::max(0,(mMana+(KAttr[A_MAN]*5)-(uMana+hMana))); }
 	    int32 ktMana() { return mMana + KAttr[A_MAN]*5; }
-	    int16 UnspentSP(int16 cl) { return max(0,TotalSP[cl] - SpentSP[cl]); }
+	    int16 UnspentSP(int16 cl) { return std::max(0,TotalSP[cl] - SpentSP[cl]); }
 	    int16 UnspentCSP(rID clID) { for (int16 i=0;i!=6;i++)
 	                                  if (clID == ClassID[i])
 	                                    return UnspentSP(i);
@@ -668,7 +668,7 @@ class Character: public Creature
         {
           // ww: taking the Creature challenge rating ends up having
           // undesired effects with wild shaped druids
-          return // max(Creature::ChallengeRating()-1,0) + 
+          return // std::max(Creature::ChallengeRating()-1,0) +
             ((int16)(Level[0]+Level[1]+Level[2]));
         }
 	    EvReturn Event(EventInfo &ev);
@@ -729,7 +729,7 @@ class Character: public Creature
       int8 WepSkill(Item * it) ;
       virtual int16 LevelAs(rID cID);
       rID GetRaceID() { return RaceID; }
-      rID GetClassID(int16 cl) { return ClassID[max(0,min(cl,2))]; }
+      rID GetClassID(int16 cl) { return ClassID[std::max<int>(0, std::min<int>(cl,2))]; }
       int16 TotalLevel() { return Level[0] + Level[1] + Level[2]; }
       virtual int16 CasterLev();
       int16 PsionicLev() { return Abilities[CA_PSIONICS]; }
@@ -802,7 +802,7 @@ class Character: public Creature
       int16 getGodAnger(rID gID) /* HACKFIX */
         { int16 ang = Anger[theGame->GodNum(gID)];
           ang -= (int16)TGOD(gID)->GetConst(TOLERANCE_VAL);
-          return max(0,ang); }
+          return std::max<int16_t>(0,ang); }
       
 
     ARCHIVE_CLASS(Character,Creature,r)

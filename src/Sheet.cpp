@@ -55,7 +55,7 @@ void TextTerm::CreateCharSheet(CharSheet &cs)
     cs.Basics += Format("%cFaith  %c%s\n",-WHITE,-PURPLE,
         NAME(p->GodID));
   cs.Basics += Format("%cXP     %c%d\n",-WHITE,-PURPLE,
-      max(0,p->XP - p->XP_Drained));
+      std::max<int>(0,p->XP - p->XP_Drained));
   if (p->XP_Drained) 
     cs.Basics += Format("%c Drain %c%d\n",-WHITE,-PURPLE,
         p->XP_Drained);
@@ -529,11 +529,11 @@ void TextTerm::CreateCharSheet(CharSheet &cs)
           break;
 
         case CA_WEAPON_SKILL:
-          str += Format(":\n  %s",WSkillLevels[min(k,6)]);
+          str += Format(":\n  %s",WSkillLevels[std::min<int>(k,6)]);
          break;
         case CA_LORE_OF_ARMS:
-          str += Format(" (%d hit%s)",NeededSwings[ min(9,k) ],
-            NeededSwings[ min(9,k) ] > 1 ? "s" : "");
+          str += Format(" (%d hit%s)",NeededSwings[std::min<int>(9,k) ],
+            NeededSwings[std::min<int>(9,k) ] > 1 ? "s" : "");
          break; 
         case CA_INFRAVISION: case CA_LOWLIGHT:
         case CA_TELEPATHY:   case CA_BLINDSIGHT:
@@ -614,7 +614,7 @@ void TextTerm::CreateCharSheet(CharSheet &cs)
           if (k) str += Format(" (%d%%)",k*5);
           break;
         case CA_UNBIND:
-          str += Format(" (%d feet)", max(1,k+p->Mod(A_CHA))*10);
+          str += Format(" (%d feet)", std::max(1,k+p->Mod(A_CHA))*10);
         default: 
           ;
 
@@ -1143,7 +1143,7 @@ void TextTerm::CreateCharSheet(CharSheet &cs)
       if (favPen + TGOD(gID)->GetConst(INTERVENTION_COST) > 100)
         cs.sSpiritual += XPrint("<Res> will aid you no further.",gID);
       else
-        cs.sSpiritual += XPrint(FavourPen[min(10,(favPen+9)/10)],gID);
+        cs.sSpiritual += XPrint(FavourPen[std::min(10,(favPen+9)/10)],gID);
       cs.sSpiritual += Format("\n____(Favour %d, Lev %d, Pen %d~)",
                               fv, p->getGodLevel(gID), favPen);
       cs.sSpiritual += "\n";
@@ -1161,12 +1161,12 @@ void TextTerm::CreateCharSheet(CharSheet &cs)
     }
   
   cs.sSpiritual += "__";
-  cs.sSpiritual += XPrint(AlignStrength[min(17,abs(p->alignGE)/4)],
+  cs.sSpiritual += XPrint(AlignStrength[std::min(17,abs(p->alignGE)/4)],
         p->alignGE > 0 ? "Evil" : "Good",
         p->alignGE > 0 ? "Evil" : "Good",
         "Good and Evil");
   cs.sSpiritual += "\n__";
-  cs.sSpiritual += XPrint(AlignStrength[min(17,abs(p->alignLC)/4)],
+  cs.sSpiritual += XPrint(AlignStrength[std::min(17,abs(p->alignLC)/4)],
         p->alignLC > 0 ? "Chaotic" : "Lawful",
         p->alignLC > 0 ? "Chaos" : "Law",
         "Law and Chaos");   
@@ -1258,7 +1258,7 @@ String & Detable(const char*_s, int8 mode)
     String s, s2; int32 i;
     s = _s;
     Again:
-    i = max(s.strchr(WRAP_INDENT),s.strchr(WRAP_BREAK));
+    i = std::max(s.strchr(WRAP_INDENT),s.strchr(WRAP_BREAK));
 
     if (!i)
       return *tmpstr(s);

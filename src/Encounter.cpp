@@ -542,16 +542,16 @@ EvReturn Map::enGenerate(EventInfo &e) {
       e.enDesAmt = 1;
     else if (e.enFlags & EN_ANYOPEN) {
       if (e.enDepth > 2)
-        e.enDesAmt = max(1,OpenC / 30);
+        e.enDesAmt = std::max(1,OpenC / 30);
       else if (e.enDepth == 2)
-        e.enDesAmt = max(1,OpenC / 50);
+        e.enDesAmt = std::max(1,OpenC / 50);
       else
-        e.enDesAmt = max(1,OpenC / 75);
+        e.enDesAmt = std::max(1,OpenC / 75);
       }
     else if (e.enFlags & EN_MULTIPLE)
       e.enDesAmt = 4 + random(5);
 
-    e.enDesAmt = min(e.enDesAmt, maxAmtByCR(e.enCR));
+    e.enDesAmt = std::min(e.enDesAmt, maxAmtByCR(e.enCR));
 
     if (e.enConstraint == MA_AQUATIC ||
         (e.enConstraint > 0x01000000 &&
@@ -765,10 +765,10 @@ EvReturn Map::enGenerate(EventInfo &e) {
       e.enXCR += (e.enDesAmt / 3) * (e.enXCR/2);   
       if (!(e.enFlags & EN_NOSLEEP))
         for (i=0;i!=(e.enDesAmt / 3);i++)
-          e.enSleep = max(e.enSleep,random(100)+1);
+          e.enSleep = std::max<int>(e.enSleep,random(100)+1);
       }
-    e.enXCR = max(e.enXCR, XCR(e.enCR) * (int32)te->GetConst(MIN_XCR_MULT));
-    e.enXCR = max(e.enXCR, (int32)te->GetConst(MIN_XCR));
+    e.enXCR = std::max(e.enXCR, XCR(e.enCR) * (int32)te->GetConst(MIN_XCR_MULT));
+    e.enXCR = std::max(e.enXCR, (int32)te->GetConst(MIN_XCR));
     
     tWeight = 0;
     for(i=0;i!=nParts;i++)
@@ -913,7 +913,7 @@ EvReturn Map::enGenerate(EventInfo &e) {
       }
     Deviance = (int16)((abs(e.enXCR-totXCR) * 100L) / e.enXCR);
     if (e.enDesAmt)
-      Deviance += (int16)max(0,((abs(e.enDesAmt-cEncMem)*100L)/e.enDesAmt)-50);
+      Deviance += std::max<int16_t>(0,((abs(e.enDesAmt-cEncMem)*100L)/e.enDesAmt)-50);
     if (cEncMem > maxAmtByCR(e.enCR))
       Deviance += (cEncMem - maxAmtByCR(e.enCR))*100 / maxAmtByCR(e.enCR);
     if (Deviance > 50 && e.enTries < 5)
@@ -941,9 +941,9 @@ EvReturn Map::enGenerate(EventInfo &e) {
       e.enIsFormation = true;
     
     /* Cap # of creatures at CR max */
-    cEncMem = min(cEncMem,maxAmtByCR(e.enCR));
+    cEncMem = std::min(cEncMem,maxAmtByCR(e.enCR));
     /* HACKFIX */
-    cEncMem = min(cEncMem,5);
+    cEncMem = std::min<int>(cEncMem,5);
     
     if (e.enFlags & EN_DUMP)
       {
@@ -1135,8 +1135,8 @@ bool okDesAmt(TEncounter *te, int16 des)
           { A = ep->Amt.Roll();
             B = ep->Amt.Roll();
             C = ep->Amt.Roll();
-            mn += min(A,min(B,C));
-            mx += max(A,max(B,C)); }
+            mn += std::min(A, std::min(B,C));
+            mx += std::max(A, std::max(B,C)); }
         else if (ep->Amt.Number && ep->Amt.Bonus)
           { mn += ep->Amt.Number;
             mx += ep->Amt.Bonus; }
@@ -1247,8 +1247,8 @@ EvReturn Map::enGenPart(EventInfo &e) {
         C = RNDAMT;
         D = RNDAMT;
         E = RNDAMT;
-        uBound = max(A, max(B, max(C, max(D, E))));
-        lBound = min(A, min(B, min(C, min(D, E))));
+        uBound = std::max({ A, B, C, D, E });
+        lBound = std::min({ A, B, C, D, E });
     }
 
     if (ep->Flags & EP_NOXCR) {
@@ -1257,16 +1257,16 @@ EvReturn Map::enGenPart(EventInfo &e) {
         else
             e.epAmt = 1;
     } else if (e.epMinAmt != 0 && e.epMinAmt == e.epMaxAmt) {
-        e.eimXCR = min(XCR(e.enCR), e.epXCR / e.epMinAmt);
+        e.eimXCR = std::min(XCR(e.enCR), e.epXCR / e.epMinAmt);
         e.epAmt = e.epMinAmt;
     } else {
         int16 minCR, maxCR;
         minCR = getMinCR(e);
         maxCR = getMaxCR(e);
-        maxCR = min(maxCR, e.enCR);
+        maxCR = std::min(maxCR, e.enCR);
         if (minCR == maxCR) {
             e.eimXCR = XCR(minCR);
-            e.epAmt = (int16)max(1, e.epXCR / e.eimXCR);
+            e.epAmt = (int16)std::max(1, e.epXCR / e.eimXCR);
             if (e.epMaxAmt)
                 if (e.epAmt > e.epMaxAmt)
                     e.epAmt = e.epMaxAmt;
@@ -1280,8 +1280,8 @@ EvReturn Map::enGenPart(EventInfo &e) {
                 e.eimXCR = (XCR(minCR) * 1 + XCR(maxCR) * 4) / 4;
             else
                 e.eimXCR = (XCR(minCR) * 2 + XCR(maxCR) * 2) / 4;
-            e.eimXCR = min(XCR(e.enCR), e.eimXCR);
-            e.epAmt = (int16)max(1, e.epXCR / e.eimXCR);
+            e.eimXCR = std::min(XCR(e.enCR), e.eimXCR);
+            e.epAmt = (int16)std::max(1, e.epXCR / e.eimXCR);
 
             if (e.epMaxAmt)
                 if (e.epAmt > e.epMaxAmt) {
@@ -1301,7 +1301,7 @@ EvReturn Map::enGenPart(EventInfo &e) {
                     if (e.eimXCR < XCR(minCR))
                         e.eimXCR = XCR(minCR);
                 }
-            e.eimXCR = min(XCR(e.enCR), e.eimXCR);
+            e.eimXCR = std::min(XCR(e.enCR), e.eimXCR);
         }
     }
 
@@ -1326,7 +1326,7 @@ RetryPart:
             e.ep_pID = 0;
 
         if (te->HasFlag(NF_FREAKY) || ep->Flags & EP_FREAKY)
-            e.epFreaky = min(e.enFreaky, random(10) + 1);
+            e.epFreaky = std::min<int>(e.enFreaky, random(10) + 1);
         else
             e.epFreaky = 0;
 
@@ -1476,18 +1476,18 @@ EvReturn Map::enChooseMID(EventInfo &e) {
     
     /* Kludge: leave room for class template! */
     if (ep->Flags & EP_CLASSED)
-      maxCR = max(1,maxCR-2);
+      maxCR = std::max(1,maxCR-2);
       
       
     if (e.enConstraint > 0x01000000)
-      maxCR = max(maxCR,min(e.enCR,TMON(e.enConstraint)->CR));
+      maxCR = std::max<int>(maxCR,std::min<int>(e.enCR,TMON(e.enConstraint)->CR));
       
-    maxCR = max(1,maxCR);
+    maxCR = std::max<int>(1,maxCR);
     
     /* If we have mandatory templates, keep lowering the maxCR
        on consecutive tries until we have room for all of them. */
     if (e.epTries > 5)
-      maxCR = max(0,maxCR - (e.epTries-5)/2);
+      maxCR = std::max(0,maxCR - (e.epTries-5)/2);
     
       
     if (ep->xID >= 0x01000000)
@@ -1513,7 +1513,7 @@ EvReturn Map::enChooseMID(EventInfo &e) {
           for(i=0;i!=theGame->Modules[q]->szMon;i++)
             {
               TMonster *tm = &theGame->Modules[q]->QMon[i];
-              if (tm->CR > max(1,maxCR) && !e.isGetMinCR)
+              if (tm->CR > std::max<int>(1,maxCR) && !e.isGetMinCR)
                 continue;
               if (tm->HasFlag(M_NOGEN) && e.enConstraint < 0x01000000)
                 continue;
@@ -1786,7 +1786,7 @@ EvReturn Map::enGenMount(EventInfo &e)
     
     enCalcCurrPartXCR(e);
     maxCR = XCRtoCR(e.eimXCR - e.epCurrXCR);
-    maxCR = max(1,maxCR);
+    maxCR = std::max<int>(1,maxCR);
     lowCR = 36; lowIdx = -1;
     highCR = -6; highIdx = -1;
     
@@ -1824,8 +1824,8 @@ EvReturn Map::enGenMount(EventInfo &e)
                   break;
                 theCR = TTEM(wtList[j])->CR.Adjust(theCR);
               }
-            lowCR = min(theCR,lowCR);
-            highCR = max(theCR,highCR);
+            lowCR = std::min(theCR,lowCR);
+            highCR = std::max(theCR,highCR);
             if (theCR == lowCR)
               lowIdx = i;
             if (theCR == highCR)
@@ -2420,7 +2420,7 @@ EvReturn Map::enBuildMon(EventInfo &e)
       mn->GainPermStati(SLEEPING,NULL,SS_MISC,SLEEP_NATURAL);
     /* LATER...
     if (mGroups[i].Flags & MGF_POISON) {
-      xID = theGame->GetEffectID(PUR_POISON,0,max(3,enCR));
+      xID = theGame->GetEffectID(PUR_POISON,0,std::max(3,enCR));
       for(it = mn->FirstInv();it;it = mn->NextInv())
         if (it->isType(T_WEAPON) || it->isType(T_MISSILE))
           if (it->HasIFlag(WT_PIERCING) || it->HasIFlag(WT_SLASHING)) 
@@ -2544,7 +2544,7 @@ EvReturn Map::enBuildMon(EventInfo &e)
           goto PlaceAtSpot;
       
       rID Terrains[256];
-      for (int i=0;i!=min(256,OpenC);i++)
+      for (int i=0;i!=std::min<int>(256,OpenC);i++)
         Terrains[i] = TerrainAt(OpenX[i],OpenY[i]);
       
       Retry:
@@ -2639,7 +2639,7 @@ EvReturn Map::enBuildMon(EventInfo &e)
     mn->GainPermStati(ENCOUNTER,NULL,SS_MISC,e.cPart,e.enDesAmt,e.enID);
     
     Player *p;
-    if (mn->ChallengeRating() > max(2,e.enCR))
+    if (mn->ChallengeRating() > std::max<int>(2,e.enCR))
       if (p = theGame->GetPlayer(0)) {
         String str;
         str = XPrint("OOD monster <Obj> (CR <Num>) generated on "
@@ -2912,7 +2912,7 @@ int16 MaxItemPlus(int16 MaxLev,rID eID)
     while (i != 6 && LevelAdjust(l,0,i) <= MaxLev)
       i++;
 
-    return max(1,i - 1);
+    return std::max(1,i - 1);
   }
 
 /* ww: currently we generate really horrible random-looking magical weapons
@@ -2987,7 +2987,7 @@ static void MakeMagicWeaponArmour(Item *it, int _plusLevel,
   ASSERT(plusLevel >= 0); 
 
   if (plusLevel > 0) 
-    it->MakeMagical(0, max(1,min(5,plusLevel)));
+    it->MakeMagical(0, std::max(1, std::min(5,plusLevel)));
 
   return; 
 }
@@ -3035,11 +3035,11 @@ Item* Item::GenItem(uint16 Flags, rID xID, int16 Depth, int8 Luck, ItemGen *Gen)
        Wes, let me know if this is making characters way too powerful
        too early, or if it's even noticable, or what.
        */
-    maxlev = max(3, Depth);
+    maxlev = std::max<int>(3, Depth);
 
     if (random(5) && Luck <= 9) {
         maxlev += (Luck - 11) / 2;
-        maxlev = max(min(1, Depth), maxlev);
+        maxlev = std::max<int>(std::min<int>(1, Depth), maxlev);
     }
 
     /* For high-luck characters, 20% of items are adjusted by luck
@@ -3060,9 +3060,9 @@ Item* Item::GenItem(uint16 Flags, rID xID, int16 Depth, int8 Luck, ItemGen *Gen)
        IG_GOOD and IG_GREAT flags as well, decreasing exponentially with
        the number of artifacts already generated. */
     if (Flags & IG_GREAT)
-        minlev = max(0, maxlev - 2);
+        minlev = std::max(0, maxlev - 2);
     else if (Flags & IG_GOOD)
-        minlev = max(0, maxlev - 4);
+        minlev = std::max(0, maxlev - 4);
     else {
         if (xID && RES(xID)->Type == T_TDUNGEON)
             if (random(100) + 1 < (int16)TDUN(xID)->GetConst(CURSED_CHANCE)) {
@@ -3074,9 +3074,9 @@ Item* Item::GenItem(uint16 Flags, rID xID, int16 Depth, int8 Luck, ItemGen *Gen)
         minlev = 0;
     }
 
-    maxlev = max(maxlev, 1);
-    Depth = max(Depth, 1);
-    minlev = max(maxlev - 4, 0);
+    maxlev = std::max<int>(maxlev, 1);
+    Depth = std::max<int>(Depth, 1);
+    minlev = std::max(maxlev - 4, 0);
     restart_count = 0;
     /* To prevent the "1000 restarts" message, minlev MUST be
        zero, because most staple items are very low level! */
@@ -3141,7 +3141,7 @@ Got_iID:
 
     if (theItem->isType(T_COIN)) {
         int32 val;
-        val = WealthByLevel[max(0, min(20, Depth))] / 4;
+        val = WealthByLevel[std::max(0, std::min<int>(20, Depth))] / 4;
         val *= 50 + random(100); // 50% to 150%
         val /= TITEM(iID)->Cost;
         theItem->Quantity = val;
@@ -3200,7 +3200,7 @@ Got_iID:
 NoSpecificWeaponFound:
         int isArmour = IType == T_ARMOUR || IType == T_SHIELD;
         int isShield = IType == T_SHIELD;
-        magicLevel = max(random(1 + maxlev - minlev) + minlev, random(1 + maxlev - minlev) + minlev);
+        magicLevel = std::max(random(1 + maxlev - minlev) + minlev, random(1 + maxlev - minlev) + minlev);
         //magicLevel += random(4) + random(4) - 3; // fake std dev ...
         //magicLevel *= 100;
         //magicLevel /= 150;
@@ -3316,7 +3316,7 @@ SkipMagic:
             ((QItem *)theItem)->KnownQualities = 0xff;
     }
 
-    if (random(100) < max(maxlev, 5) && !theItem->isType(T_TOOL) &&
+    if (random(100) < std::max<int>(maxlev, 5) && !theItem->isType(T_TOOL) &&
         !theItem->isType(T_COIN)) {
         theItem->IFlags &= ~IF_CURSED;
         theItem->IFlags |= IF_BLESSED;
