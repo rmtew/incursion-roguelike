@@ -12,6 +12,8 @@ on:
 env:
   # Path to the solution file relative to the root of the project.
   SOLUTION_FILE_PATH: build\Incursion.sln
+  # Generated files to clean and check
+  GENERATED_FILES: src/tokens.cpp src/yygram.cpp inc/yygram.h
 
 permissions:
   contents: read
@@ -37,13 +39,18 @@ jobs:
           7z x libtcod-*.zip
           popd
 
+      - name: Clean generated files
+        if: matrix.platform == 'Win32' && matrix.configuration == 'Debug'
+        shell: bash
+        run: rm -v ${{env.GENERATED_FILES}}
+
       - name: Build
         # Add additional options to the MSBuild command line here (like platform or verbosity level).
         # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
         run: msbuild /m /p:Configuration=${{matrix.configuration}} /p:Platform=${{matrix.platform}} ${{env.SOLUTION_FILE_PATH}}
 
       - name: Verify generated files
-        run: git diff --exit-code src/tokens.cpp src/yygram.cpp inc/yygram.h
+        run: git diff --exit-code ${{env.GENERATED_FILES}}
 
       - name: Copy binaries to project root
         shell: bash
