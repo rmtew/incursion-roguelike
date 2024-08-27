@@ -1,11 +1,17 @@
 Incursion
 =========
 
-Incursion is a roguelike developed by Julian Mensch.  He has kindly released the source he has for some of the later versions.  This file is intended for people viewing the project repository where the source code can be obtained.
+Incursion is a roguelike developed by Julian Mensch.  He has kindly released the source he has for some of the later versions.
 
 At this time building is only supported on Windows, using Visual Studio 2022.  You should be able to substitute other versions of Visual Studio, or write a makefile if you plan to compile on another platform.
 
-The Incursion website used to be [found here](http://incursion-roguelike.net) once. Maybe the internet archive has it for now?
+The Incursion website is [found here](http://incursion-roguelike.net).
+
+Frequently asked questions
+==========================
+
+ Q. When I press a movement key, it sends two keypresses?
+ A. Turn off numlock. You are using a keypad on a full keyboard.  SDL2 does not support differentiating between number keypad presses, and number key presses. This means we cannot either.
 
 Recent Changes
 --------------
@@ -21,9 +27,14 @@ Links
 -----
 
  * Page on [Rogue Basin](https://www.roguebasin.com/index.php?title=Incursion).
+ * Discuss things with us in [our discussion area](https://github.com/rmtew/incursion-roguelike/discussions).
+ * Report a bug on [our issues tracker](https://github.com/rmtew/incursion-roguelike/issues).
+ * Find the source code in the [Incursion repository](https://github.com/rmtew/incursion-roguelike).
 
 Windows build instructions
 --------------------------
+
+If you 
 
 **Recommended compiler:**
 
@@ -31,7 +42,7 @@ Windows build instructions
 
 **Dependencies:**
 
-  * libtcod 1.7.0 binaries: [Github release page](https://github.com/libtcod/libtcod/releases/tag/1.7.0).
+  * libtcod 1.6.0 and matching SDL2 binaries: [dependencies-20240827.zip](https://github.com/rmtew/incursion-roguelike/releases/download/v0.6.9Y19/dependencies-20240827.zip).
 
 These are optional extras, for the unsupported pdcurses-based console version or making changes to the module language. The links may be stale.
 
@@ -42,12 +53,11 @@ These are optional extras, for the unsupported pdcurses-based console version or
 
 These instructions are intended to allow you to get Incursion to the point where you can debug it within Visual Studio.
 
-1. Download the following two binary releases for [libtcod 1.7.0](https://github.com/libtcod/libtcod/releases/tag/1.7.0):
-   * `libtcod-1.7.0-x86-msvc.zip`.
-   * `libtcod-1.7.0-x86_64-msvc.zip`.
-2. Extract each to the top-level `dependencies` directory.
-   * `dependencies\libtcod-1.7.0-x86-msvc`.
-   * `dependencies\libtcod-1.7.0-x86_64-msvc`.
+1. Download the archive of the matching binary dependencies and headers: [dependencies-20240827.zip](https://github.com/rmtew/incursion-roguelike/releases/download/v0.6.9Y19/dependencies-20240827.zip):
+2. Extract within the top-level `dependencies` directory. This should result in the following three folders being present:
+   * `dependencies\include`.
+   * `dependencies\Win32`.
+   * `dependencies\x64`.
 3. Open `build\Incursion.sln` in Visual Studio 2022.
 4. Ensure `exe_libtcod` is the default project. If it is not, right click on it and select "Set as Startup Project".
 5. Build a Debug solution.
