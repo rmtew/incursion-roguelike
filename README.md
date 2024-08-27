@@ -1,11 +1,17 @@
 Incursion
 =========
 
-Incursion is a roguelike developed by Julian Mensch.  He has kindly released the source he has for some of the later versions.  This file is intended for people viewing the project repository where the source code can be obtained.
+Incursion is a roguelike developed by Julian Mensch.  He has kindly released the source he has for some of the later versions.
 
 At this time building is only supported on Windows, using Visual Studio 2022.  You should be able to substitute other versions of Visual Studio, or write a makefile if you plan to compile on another platform.
 
-The Incursion website used to be [found here](http://incursion-roguelike.net) once. Maybe the internet archive has it for now?
+The Incursion website is [found here](http://incursion-roguelike.net).
+
+Frequently asked questions
+==========================
+
+ Q. When I press a movement key, it sends two keypresses?
+ A. Turn off numlock. You are using a keypad on a full keyboard.  SDL2 does not support differentiating between number keypad presses, and number key presses. This means we cannot either.
 
 Recent Changes
 --------------
@@ -21,6 +27,9 @@ Links
 -----
 
  * Page on [Rogue Basin](https://www.roguebasin.com/index.php?title=Incursion).
+ * Discuss things with us in [our discussion area](https://github.com/rmtew/incursion-roguelike/discussions).
+ * Report a bug on [our issues tracker](https://github.com/rmtew/incursion-roguelike/issues).
+ * Find the source code in the [Incursion repository](https://github.com/rmtew/incursion-roguelike).
 
 Windows build instructions
 --------------------------
