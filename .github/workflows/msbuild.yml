@@ -33,8 +33,8 @@ jobs:
       - name: Obtain external dependencies
         run: |
           pushd dependencies
-          curl -L -O https://github.com/libtcod/libtcod/releases/download/1.7.0/libtcod-1.7.0-${{ matrix.platform == 'Win32' && 'x86' || 'x86_64' }}-msvc.zip
-          7z x libtcod-*.zip
+          curl -L -O https://github.com/rmtew/incursion-roguelike/releases/download/v0.6.9Y19/dependencies-20240827.zip
+          7z x dependencies-20240827.zip
           popd
 
       - name: Build
@@ -47,7 +47,7 @@ jobs:
 
       - name: Copy binaries to project root
         shell: bash
-        run: cp -v build/*/*/exe_libtcod/Incursion.exe dependencies/libtcod-*/libtcod.dll dependencies/libtcod-*/SDL2.dll .
+        run: cp -v build/*/*/exe_libtcod/Incursion.exe dependencies/${{matrix.platform}}/${{matrix.configuration}}/*.dll .
 
       - name: Compile mod
         if: matrix.configuration == 'Debug'
