@@ -51,12 +51,12 @@ These are optional extras, for the unsupported pdcurses-based console version or
 
 These instructions are intended to allow you to get Incursion to the point where you can debug it within Visual Studio.
 
-1. Download the following two binary releases for [libtcod 1.7.0](https://github.com/libtcod/libtcod/releases/tag/1.7.0):
-   * `libtcod-1.7.0-x86-msvc.zip`.
-   * `libtcod-1.7.0-x86_64-msvc.zip`.
-2. Extract each to the top-level `dependencies` directory.
-   * `dependencies\libtcod-1.7.0-x86-msvc`.
-   * `dependencies\libtcod-1.7.0-x86_64-msvc`.
+1. Setup Vcpkg for your platform:
+  * Clone the [microsoft/vcpkg](https://github.com/microsoft/vcpkg) repo.
+    * `git clone https://github.com/microsoft/vcpkg.git`
+  * Run the bootstrap script for your platform.
+  * Run `vcpkg integrate install` for your platform.
+    * On Windows: `vcpkg.exe integrate install` from a terminal in the Vcpkg repo.
 3. Open `build\Incursion.sln` in Visual Studio 2022.
 4. Ensure `exe_libtcod` is the default project. If it is not, right click on it and select "Set as Startup Project".
 5. Build a Debug solution.

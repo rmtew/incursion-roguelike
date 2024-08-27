@@ -124,6 +124,9 @@ $(LocalDebuggerEnvironment)</LocalDebuggerEnvironment>
     <LocalDebuggerWorkingDirectory>$(SolutionDir)\..</LocalDebuggerWorkingDirectory>
     <LocalDebuggerCommandArguments />
   </PropertyGroup>
+  <PropertyGroup Label="Vcpkg">
+    <VcpkgEnableManifest>true</VcpkgEnableManifest>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PreprocessorDefinitions>_UNICODE;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
