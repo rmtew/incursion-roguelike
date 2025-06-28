@@ -546,7 +546,7 @@ class TRace: public Resource
     bool HasFlag(uint16 fl)   { return (Flags[fl/8] & (1 << (fl % 8))) != 0; }
     bool HasSkill(int16 sk) 
       { int16 i;
-        for(i=0;i!=6;i++)
+        for(i=0;i<(sizeof(Skills)/sizeof(Skills[0]));i++)
           if (Skills[i] == sk)
             return true;
         return false; }
