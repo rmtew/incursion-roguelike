@@ -36,7 +36,21 @@ For recompiling Incursion itself:
 Linux/MacOS build instructions
 ------------------------------
 
-You are on your own for now.
+Incursion was developed a long time ago and for primarily for Windows. While it was coded
+appropriately for the time and is an even more impressive project for that, the code is now dated.
+And worse, the code it incorporated is even more dated. ACCENT dates from 1999 at best and
+produces 1980's C code. The CPP compiler it includes is actually from the 1980's.
+
+If you run `modaccent` you may find that it produces corrupt "# line" directives in `yygram.cpp`.
+This is a sporadic problem and seems to relate to dated code and certain specific values.
+
+I almost got it to build an Incursion executable. It just failed to find exported symbols it should
+have been able to find (libtcod and SDL2), and symbols it couldn't know it wouldn't find (no
+function declarations in CPP/modaccent code?).
+
+If an executable were produced, then there are the other problems. Like Incursion was written with
+code that never conceived of having to deal with a 64-bit architecture. But then, Windows has
+this problem as well.
 
 No save game, no bug fix
 ------------------------
