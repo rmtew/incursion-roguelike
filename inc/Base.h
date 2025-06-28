@@ -175,13 +175,13 @@ struct MVal
           nval = oval;
          break;
         case MVAL_ADD:
-          nval = max(0,oval+Value);
+          nval = (int16)max(0,oval+Value);
          break;
         case MVAL_SET:
           nval = Value;
          break;
         case MVAL_PERCENT:
-          nval = (oval*Value)/100;
+          nval = (int16)(oval*Value)/100;
          break;
         default:
           Error("MVal::Adjust -- illegal VType!");
@@ -190,16 +190,16 @@ struct MVal
         case MBOUND_NONE:
           break;
         case MBOUND_MIN:
-          nval = max(Bound,nval);
+          nval = (int16)max(Bound,nval);
          break;
         case MBOUND_MAX:
-          nval = min(Bound,nval);
+          nval = (int16)min(Bound,nval);
          break;
         case MBOUND_NEAR:
           if (nval >= oval)
-            nval = max(nval,(nval+Bound*2)/3);
+            nval = (int16)max(nval,(nval+Bound*2)/3);
           else
-            nval = max(nval,(nval+Bound*2)/3);
+            nval = (int16)max(nval,(nval+Bound*2)/3);
          break;
         default:
           Error("MVal::Adjust -- illegal BType!");
@@ -270,14 +270,14 @@ struct Rect
           { r.x1 = x1+1; r.x2 = x2-1; }
         else
           {
-            r.x1 = x1 + 1 + random(max(0,((x2-x1)-2)-sx));
+            r.x1 = (uint8)(x1 + 1 + random(max(0,((x2-x1)-2)-sx)));
             r.x2 = r.x1 + sx;
           }
         if (sy >= (y2-y1)) 
           { r.y1 = y1+1; r.y2 = y2-1; }
         else
           {
-            r.y1 = y1 + 1 + random(max(0,((y2-y1)-2)-sy));
+            r.y1 = (uint8)(y1 + 1 + random(max(0,((y2-y1)-2)-sy)));
             r.y2 = r.y1 + sy;
           }
         return r;
@@ -285,9 +285,9 @@ struct Rect
     Rect& PlaceWithinSafely(uint8 sx, uint8 sy)
       { 
         static Rect r;
-        r.x1 = x1 + random(max(0,((x2-x1)-1)-sx));
+        r.x1 = (uint8)(x1 + random(max(0,((x2-x1)-1)-sx)));
         r.x2 = r.x1 + sx;
-        r.y1 = y1 + random(max(0,((y2-y1)-1)-sy));
+        r.y1 = (uint8)(y1 + random(max(0,((y2-y1)-1)-sy)));
         r.y2 = r.y1 + sy;
 
         r.x1 = max(r.x1, x1 + 2);
@@ -464,7 +464,7 @@ class Object
   {
     public:
     Object(int16 _Type); 
-    Object(Registry *r) {}
+    Object(Registry *) {}
     ~Object();
     virtual String & Name(int16 Flags=0) { return *tmpstr("<object>"); }
     int16 Type;

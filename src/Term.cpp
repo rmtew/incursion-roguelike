@@ -1824,8 +1824,8 @@ Reprompt:
                 fl & Q_ALL ? "a" : "", -GREY);
             mod = Q_TAR; cr = p;
         } else if (typ == Q_INV) {
-            Thing **things = NULL;
 SelectItem:
+            Thing **things = NULL;
             things = p->GetEnumeratedInv();
             for (i=0, j=0; th = things[j]; j++)
                 if (ThrowEff(EV_RATETARG,e.eID,th,th,th,th) != ABORT) {

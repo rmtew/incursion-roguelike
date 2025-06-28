@@ -2880,7 +2880,7 @@ Term * Creature::ShowCombatNumbers() {
     return ((Player *)druid)->MyTerm;
   if (theGame->GetPlayer(0)->Opt(OPT_ALL_ROLLS))
     return theGame->GetPlayer(0)->MyTerm; 
-  return false; 
+  return NULL; 
 } 
 
 int32 Creature::Weight(bool includeEquipment)

@@ -38,7 +38,7 @@
 inline int16 random(int16 mx)
   {
     if (!mx) return 0;
-    return (genrand_int32() % mx);
+    return (int16)(genrand_int32() % mx);
   }
   
 #define srand(n) init_genrand(n)

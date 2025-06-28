@@ -64,20 +64,32 @@
 #undef ERROR
 #undef EV_BREAK
 
+#ifdef _WIN32
 #include <direct.h>
+#else
+#include <cstdint>
+#include <unistd.h>
+#define _chdir chdir
+#define _getcwd getcwd
+#include <sys/stat.h>
+#include <sys/types.h>
+#define _mkdir(A) mkdir(A, 0755)
+#endif
 #include <stdarg.h>
 #include <ctype.h> 
 #include <time.h>
 #include <malloc.h>
+#ifdef _WIN32
 #include <Windows.h>
+#endif
 #undef ERROR
 #undef EV_BREAK
 #undef MOUSE_MOVED
 
 #ifdef USE_BREAKPAD
-#pragma comment(lib, "common")
-#pragma comment(lib, "exception_handler")
-#pragma comment(lib, "crash_generation_client")
+// #pragma comment(lib, "common")
+// #pragma comment(lib, "exception_handler")
+// #pragma comment(lib, "crash_generation_client")
 #include "client/windows/handler/exception_handler.h"
 #undef ERROR
 #undef MIN
@@ -165,7 +177,7 @@ private:
     String CurrentFileName;
     FILE *fp;
     TCOD_list_t alf;
-    int32 *alf_it;
+    intptr_t *alf_it;
 
 public:
     /* Low-Level Read/Write */
@@ -364,11 +376,15 @@ int main(int argc, char *argv[]) {
 
     if (strlen(executablePath) == 0) {
         /* If run normally, check to see from which directory, and if there is one, use it. */
+#ifdef _WIN32
         if (!IsDebuggerPresent() && argc >= 1) {
+#else
+        if (argc >= 1) {
+#endif
             /* argv[0] is the filename and maybe the path before it, if the path is there grab it. */
             const char *str = strrchr(argv[0], '\\');
             if (str != NULL) {
-                int16 n = str - argv[0]; /* Copy the separator too. */
+                size_t n = str - argv[0]; /* Copy the separator too. */
                 if (!strncpy(executablePath, argv[0], n))
                     Error("Failed to locate Incursion directory for '%s'", argv[0]);
                 executablePath[n] = '\0';
@@ -856,7 +872,8 @@ retry:
 }
 
 void libtcodTerm::Reset() {
-    int16 optRes, optFont, i;
+    int16 optRes, optFont;
+    size_t i;
     char *envFontPath;
     char fontName[MAX_PATH_LENGTH] = "";
     bool scaled_res, scaled_font;
@@ -1509,12 +1526,12 @@ void libtcodTerm::Cut(int32 amt) {
 }
 
 char * libtcodTerm::MenuListFiles(const char * filespec, uint16 flags, const char * title) {
-    static char persistent_retval[MAX_PATH];
+    static char persistent_retval[MAX_PATH_LENGTH];
     TCOD_list_t l = TCOD_sys_get_directory_content(CurrentDirectory, filespec);
     char *file_names[MAX_MENU_OPTIONS];
     int option_count = -1;
 
-    for (int *iterator = (int *)TCOD_list_begin(l); iterator != (int *)TCOD_list_end(l); iterator++) {
+    for (intptr_t *iterator = (intptr_t *)TCOD_list_begin(l); iterator != (intptr_t *)TCOD_list_end(l); iterator++) {
         const char *fileName = (const char *)(*iterator);
 
         option_count++;
@@ -1539,7 +1556,7 @@ bool libtcodTerm::FirstFile(char * filespec) {
     alf = TCOD_sys_get_directory_content(CurrentDirectory, filespec);
     if (TCOD_list_size(alf) == 0)
         return false;
-    alf_it = (int32 *)TCOD_list_begin(alf);
+    alf_it = (intptr_t *)TCOD_list_begin(alf);
     try {
         OpenRead((const char *)*alf_it);
     } catch (int) {
@@ -1552,7 +1569,7 @@ bool libtcodTerm::FirstFile(char * filespec) {
 bool libtcodTerm::NextFile() {
 Retry:
     alf_it += 1;
-    if (alf_it == (int32 *)TCOD_list_end(alf)) {
+    if (alf_it == (intptr_t *)TCOD_list_end(alf)) {
         TCOD_list_clear_and_delete(alf);
         return false;
     }

@@ -1,6 +1,6 @@
-#line 2 "..\\src\\tokens.cpp"
+#line 2 "src\\Tokens.cpp"
 
-#line 4 "..\\src\\tokens.cpp"
+#line 4 "src\\Tokens.cpp"
 
 #define  YY_INT_ALIGNED short int
 
@@ -563,10 +563,10 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "..\\lang\\Tokens.Lex"
+#line 1 "lang\\Tokens.Lex"
 
 
-#line 4 "..\\lang\\Tokens.Lex"
+#line 4 "lang\\Tokens.Lex"
 /* TOKENS.LEX -- See the Incursion LICENSE file for copyright information.
 
      Contains the lexical analyzer for the IncursionScript resource
@@ -795,7 +795,7 @@ YYSTYPE DoKeywords(const char *text)
       }
   }
 
-#line 799 "..\\src\\tokens.cpp"
+#line 799 "src\\Tokens.cpp"
 
 #define INITIAL 0
 #define com 1
@@ -976,10 +976,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 233 "..\\lang\\Tokens.Lex"
+#line 233 "lang\\Tokens.Lex"
 
 
-#line 983 "..\\src\\tokens.cpp"
+#line 983 "src\\Tokens.cpp"
 
 	if ( !(yy_init) )
 		{
@@ -1060,7 +1060,7 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 235 "..\\lang\\Tokens.Lex"
+#line 235 "lang\\Tokens.Lex"
 { sscanf(yytext,"#line \"%s %d",preprocFilename,&yypos);
                       yypos --; /* we'll read the \n next */
                       for (int16 i=0;preprocFilename[i] && i != 1022;i++)
@@ -1074,18 +1074,18 @@ YY_RULE_SETUP
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 246 "..\\lang\\Tokens.Lex"
+#line 246 "lang\\Tokens.Lex"
 { return 'd'; }
 	YY_BREAK
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 252 "..\\lang\\Tokens.Lex"
+#line 252 "lang\\Tokens.Lex"
 { yylval = yytext[1]; return CHAR_CONST; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 254 "..\\lang\\Tokens.Lex"
+#line 254 "lang\\Tokens.Lex"
 { 
                      for (int32 i=0;yytext[i];i++)
                        if (islower(yytext[i]))
@@ -1095,7 +1095,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 261 "..\\lang\\Tokens.Lex"
+#line 261 "lang\\Tokens.Lex"
 { for (int32 i=0;yytext[i];i++)
                        if (islower(yytext[i]))
                          return DoKeywords(yytext);
@@ -1104,7 +1104,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 269 "..\\lang\\Tokens.Lex"
+#line 269 "lang\\Tokens.Lex"
 { char ch1, ch2; int16 MapPos = 0, sz = -1, szl = 0; long ln = yypos;
          bool warned = false; char *c, *g;
          while ((ch1 = yyinput()) != ':' && ch1!=EOF) {
@@ -1161,247 +1161,247 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 323 "..\\lang\\Tokens.Lex"
+#line 323 "lang\\Tokens.Lex"
 { if (brace_level >= 2 || decl_state)
            return DoKeywords("x1");
          yylval = 1; return NUMBER; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 326 "..\\lang\\Tokens.Lex"
+#line 326 "lang\\Tokens.Lex"
 { if (brace_level >= 2 || decl_state)
            return DoKeywords("x2");
          yylval = 2; return NUMBER; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 329 "..\\lang\\Tokens.Lex"
+#line 329 "lang\\Tokens.Lex"
 { if (brace_level >= 2 || decl_state)
            return DoKeywords("x3");
          yylval = 3; return NUMBER; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 332 "..\\lang\\Tokens.Lex"
+#line 332 "lang\\Tokens.Lex"
 { if (brace_level >= 2 || decl_state)
            return DoKeywords("x4");
          yylval = 4; return NUMBER; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 335 "..\\lang\\Tokens.Lex"
+#line 335 "lang\\Tokens.Lex"
 { if (brace_level >= 2 || decl_state)
            return DoKeywords("x5");
          yylval = 5; return NUMBER; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 339 "..\\lang\\Tokens.Lex"
+#line 339 "lang\\Tokens.Lex"
 { return SCOPE_OPER; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 340 "..\\lang\\Tokens.Lex"
+#line 340 "lang\\Tokens.Lex"
 { return INCREMENT_OP; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 341 "..\\lang\\Tokens.Lex"
+#line 341 "lang\\Tokens.Lex"
 { return DECREMENT_OP; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 342 "..\\lang\\Tokens.Lex"
+#line 342 "lang\\Tokens.Lex"
 { return RSHIFT_OP; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 343 "..\\lang\\Tokens.Lex"
+#line 343 "lang\\Tokens.Lex"
 { return LSHIFT_OP; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 344 "..\\lang\\Tokens.Lex"
+#line 344 "lang\\Tokens.Lex"
 { return GE_OP; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 345 "..\\lang\\Tokens.Lex"
+#line 345 "lang\\Tokens.Lex"
 { return LE_OP; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 346 "..\\lang\\Tokens.Lex"
+#line 346 "lang\\Tokens.Lex"
 { return EQ_OP; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 347 "..\\lang\\Tokens.Lex"
+#line 347 "lang\\Tokens.Lex"
 { return NE_OP; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 348 "..\\lang\\Tokens.Lex"
+#line 348 "lang\\Tokens.Lex"
 { return AND_OP; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 349 "..\\lang\\Tokens.Lex"
+#line 349 "lang\\Tokens.Lex"
 { return OR_OP; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 350 "..\\lang\\Tokens.Lex"
+#line 350 "lang\\Tokens.Lex"
 { return ASSIGN_MULT; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 351 "..\\lang\\Tokens.Lex"
+#line 351 "lang\\Tokens.Lex"
 { return ASSIGN_ADD; }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 352 "..\\lang\\Tokens.Lex"
+#line 352 "lang\\Tokens.Lex"
 { return ASSIGN_SUB; }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 353 "..\\lang\\Tokens.Lex"
+#line 353 "lang\\Tokens.Lex"
 { return ASSIGN_DIV; }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 354 "..\\lang\\Tokens.Lex"
+#line 354 "lang\\Tokens.Lex"
 { return ASSIGN_MOD; }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 355 "..\\lang\\Tokens.Lex"
+#line 355 "lang\\Tokens.Lex"
 { return ASSIGN_AND; }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 356 "..\\lang\\Tokens.Lex"
+#line 356 "lang\\Tokens.Lex"
 { return ASSIGN_OR; }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 357 "..\\lang\\Tokens.Lex"
+#line 357 "lang\\Tokens.Lex"
 { return ASSIGN_NEG; }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 358 "..\\lang\\Tokens.Lex"
+#line 358 "lang\\Tokens.Lex"
 { return ASSIGN_LSHIFT; }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 359 "..\\lang\\Tokens.Lex"
+#line 359 "lang\\Tokens.Lex"
 { return ASSIGN_RSHIFT; }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 360 "..\\lang\\Tokens.Lex"
+#line 360 "lang\\Tokens.Lex"
 { return ELLIPSIS; } 
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 361 "..\\lang\\Tokens.Lex"
+#line 361 "lang\\Tokens.Lex"
 { return MEMBER_OP; }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 363 "..\\lang\\Tokens.Lex"
+#line 363 "lang\\Tokens.Lex"
 { return ':'; }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 364 "..\\lang\\Tokens.Lex"
+#line 364 "lang\\Tokens.Lex"
 { brace_level++; return '{'; }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 365 "..\\lang\\Tokens.Lex"
+#line 365 "lang\\Tokens.Lex"
 { brace_level--; return '}'; }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 366 "..\\lang\\Tokens.Lex"
+#line 366 "lang\\Tokens.Lex"
 { decl_state = false; return ';'; }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 367 "..\\lang\\Tokens.Lex"
+#line 367 "lang\\Tokens.Lex"
 { return '+'; }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 368 "..\\lang\\Tokens.Lex"
+#line 368 "lang\\Tokens.Lex"
 { return '-'; }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 369 "..\\lang\\Tokens.Lex"
+#line 369 "lang\\Tokens.Lex"
 { return ','; }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 370 "..\\lang\\Tokens.Lex"
+#line 370 "lang\\Tokens.Lex"
 { return '%'; }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 371 "..\\lang\\Tokens.Lex"
+#line 371 "lang\\Tokens.Lex"
 { return '/'; }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 372 "..\\lang\\Tokens.Lex"
+#line 372 "lang\\Tokens.Lex"
 { return '|'; }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 373 "..\\lang\\Tokens.Lex"
+#line 373 "lang\\Tokens.Lex"
 { return '!'; }
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 374 "..\\lang\\Tokens.Lex"
+#line 374 "lang\\Tokens.Lex"
 { return '@'; }
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 375 "..\\lang\\Tokens.Lex"
+#line 375 "lang\\Tokens.Lex"
 { return '#'; }
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 376 "..\\lang\\Tokens.Lex"
+#line 376 "lang\\Tokens.Lex"
 { return '$'; }
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 377 "..\\lang\\Tokens.Lex"
+#line 377 "lang\\Tokens.Lex"
 { return '^'; }
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 378 "..\\lang\\Tokens.Lex"
+#line 378 "lang\\Tokens.Lex"
 { return '&'; }
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 379 "..\\lang\\Tokens.Lex"
+#line 379 "lang\\Tokens.Lex"
 { return '*'; }
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 380 "..\\lang\\Tokens.Lex"
+#line 380 "lang\\Tokens.Lex"
 { paren_level++; return '('; }
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 381 "..\\lang\\Tokens.Lex"
+#line 381 "lang\\Tokens.Lex"
 { paren_level--; 
          if (!paren_level) 
            if_cond = 0;
@@ -1409,94 +1409,94 @@ YY_RULE_SETUP
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 385 "..\\lang\\Tokens.Lex"
+#line 385 "lang\\Tokens.Lex"
 { return '['; }
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 386 "..\\lang\\Tokens.Lex"
+#line 386 "lang\\Tokens.Lex"
 { return ']'; }
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 387 "..\\lang\\Tokens.Lex"
+#line 387 "lang\\Tokens.Lex"
 { return '.'; }
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 388 "..\\lang\\Tokens.Lex"
+#line 388 "lang\\Tokens.Lex"
 { return '<'; }
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 389 "..\\lang\\Tokens.Lex"
+#line 389 "lang\\Tokens.Lex"
 { return '>'; }
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 390 "..\\lang\\Tokens.Lex"
+#line 390 "lang\\Tokens.Lex"
 { return '~'; }
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 391 "..\\lang\\Tokens.Lex"
+#line 391 "lang\\Tokens.Lex"
 { return '?'; }
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 392 "..\\lang\\Tokens.Lex"
+#line 392 "lang\\Tokens.Lex"
 { return '='; }
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 394 "..\\lang\\Tokens.Lex"
+#line 394 "lang\\Tokens.Lex"
 { if(sscanf(yytext,"%x",&yylval)!=1)
                        Fatal("Error reading hex value in lexer!");
                      return NUMBER; }
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 398 "..\\lang\\Tokens.Lex"
+#line 398 "lang\\Tokens.Lex"
 { BEGIN(com); }
 	YY_BREAK
 case 64:
 /* rule 64 can match eol */
 YY_RULE_SETUP
-#line 399 "..\\lang\\Tokens.Lex"
+#line 399 "lang\\Tokens.Lex"
 { yypos++; }
 	YY_BREAK
 case 65:
 /* rule 65 can match eol */
 YY_RULE_SETUP
-#line 400 "..\\lang\\Tokens.Lex"
+#line 400 "lang\\Tokens.Lex"
 { }
 	YY_BREAK
 case 66:
 /* rule 66 can match eol */
 YY_RULE_SETUP
-#line 401 "..\\lang\\Tokens.Lex"
+#line 401 "lang\\Tokens.Lex"
 { }
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
-#line 402 "..\\lang\\Tokens.Lex"
+#line 402 "lang\\Tokens.Lex"
 { BEGIN(INITIAL); }
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
-#line 404 "..\\lang\\Tokens.Lex"
+#line 404 "lang\\Tokens.Lex"
 { BEGIN(string); lpos = 0; ht = textSeg.GetLength(); }
 	YY_BREAK
 case 69:
 /* rule 69 can match eol */
 YY_RULE_SETUP
-#line 405 "..\\lang\\Tokens.Lex"
+#line 405 "lang\\Tokens.Lex"
 { yypos++; }
 	YY_BREAK
 case 70:
 /* rule 70 can match eol */
 YY_RULE_SETUP
-#line 406 "..\\lang\\Tokens.Lex"
+#line 406 "lang\\Tokens.Lex"
 { /* We use string concatenation legitamately in mon4.irh.
                               Elsewhere, it's probably a typo in a message list. */
                            /*if (!strstr(preprocFilename,"mon4"))
@@ -1504,18 +1504,18 @@ YY_RULE_SETUP
 	YY_BREAK
 case 71:
 YY_RULE_SETUP
-#line 410 "..\\lang\\Tokens.Lex"
+#line 410 "lang\\Tokens.Lex"
 { CatLiteral("\\\""); }
 	YY_BREAK
 case 72:
 /* rule 72 can match eol */
 YY_RULE_SETUP
-#line 411 "..\\lang\\Tokens.Lex"
+#line 411 "lang\\Tokens.Lex"
 { CatLiteral(yytext); }
 	YY_BREAK
 case 73:
 YY_RULE_SETUP
-#line 412 "..\\lang\\Tokens.Lex"
+#line 412 "lang\\Tokens.Lex"
 { LBuff[lpos++] = 1;
                            LBuff[lpos] = 0;
                            textSeg += LBuff;
@@ -1525,67 +1525,67 @@ YY_RULE_SETUP
 	YY_BREAK
 case 74:
 YY_RULE_SETUP
-#line 419 "..\\lang\\Tokens.Lex"
+#line 419 "lang\\Tokens.Lex"
 { yylval = atoi(yytext); return NUMBER; }
 	YY_BREAK
 case 75:
 YY_RULE_SETUP
-#line 420 "..\\lang\\Tokens.Lex"
+#line 420 "lang\\Tokens.Lex"
 { yylval = atoi(yytext); return NUMBER; }
 	YY_BREAK
 case 76:
 YY_RULE_SETUP
-#line 421 "..\\lang\\Tokens.Lex"
+#line 421 "lang\\Tokens.Lex"
 { yylval = atoi(yytext); return NUMBER; }
 	YY_BREAK
 case 77:
 YY_RULE_SETUP
-#line 422 "..\\lang\\Tokens.Lex"
+#line 422 "lang\\Tokens.Lex"
 { yylval = atoi(yytext); return NUMBER; }
 	YY_BREAK
 case 78:
 YY_RULE_SETUP
-#line 423 "..\\lang\\Tokens.Lex"
+#line 423 "lang\\Tokens.Lex"
 { yylval = atoi(yytext); return NUMBER; }
 	YY_BREAK
 case 79:
 YY_RULE_SETUP
-#line 425 "..\\lang\\Tokens.Lex"
+#line 425 "lang\\Tokens.Lex"
 { /* skip blank */ }
 	YY_BREAK
 case 80:
 YY_RULE_SETUP
-#line 426 "..\\lang\\Tokens.Lex"
+#line 426 "lang\\Tokens.Lex"
 { /* skip blank */ }
 	YY_BREAK
 case 81:
 /* rule 81 can match eol */
 YY_RULE_SETUP
-#line 427 "..\\lang\\Tokens.Lex"
+#line 427 "lang\\Tokens.Lex"
 { yypos++; /* adjust linenumber and skip newline */ }
 	YY_BREAK
 case 82:
 YY_RULE_SETUP
-#line 430 "..\\lang\\Tokens.Lex"
+#line 430 "lang\\Tokens.Lex"
 { return DoKeywords(yytext); }
 	YY_BREAK
 case 83:
 YY_RULE_SETUP
-#line 431 "..\\lang\\Tokens.Lex"
+#line 431 "lang\\Tokens.Lex"
 { return DoKeywords(yytext); }
 	YY_BREAK
 case 84:
 YY_RULE_SETUP
-#line 434 "..\\lang\\Tokens.Lex"
+#line 434 "lang\\Tokens.Lex"
 { yyerror(Format("Illegal token '%s'\n", yytext));
          Errors++; if (Errors >= 4) yyterminate(); }
 	YY_BREAK
 case 85:
 YY_RULE_SETUP
-#line 438 "..\\lang\\Tokens.Lex"
+#line 438 "lang\\Tokens.Lex"
 ECHO;
 	YY_BREAK
-#line 1589 "..\\src\\tokens.cpp"
+#line 1589 "src\\Tokens.cpp"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(com):
 case YY_STATE_EOF(string):
@@ -2582,7 +2582,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 437 "..\\lang\\Tokens.Lex"
+#line 437 "lang\\Tokens.Lex"
 
 
   

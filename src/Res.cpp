@@ -36,9 +36,9 @@
 
 #include "Incursion.h"
 
-#ifdef WIN32
-#include <typeinfo.h>
-#endif
+// #ifdef WIN32
+// #include <typeinfo.h>
+// #endif
 
 rID Candidates[2048]; 
 int16 nCandidates;

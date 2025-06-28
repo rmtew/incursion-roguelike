@@ -54,7 +54,6 @@
     
 */
 
-#define CURSES_TERM
 #ifdef CURSES_TERM
 
 #define _CRT_SECURE_NO_WARNINGS
@@ -76,9 +75,9 @@
 #undef MOUSE_MOVED
 
 #ifdef USE_BREAKPAD
-#pragma comment(lib, "common")
-#pragma comment(lib, "exception_handler")
-#pragma comment(lib, "crash_generation_client")
+// #pragma comment(lib, "common")
+// #pragma comment(lib, "exception_handler")
+// #pragma comment(lib, "crash_generation_client")
 #include "client/windows/handler/exception_handler.h"
 #undef ERROR
 #undef MIN

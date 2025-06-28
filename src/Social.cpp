@@ -2306,7 +2306,7 @@ void Player::SummonDruidAnimal() {
     mn->RemoveStati(TARGET);
     mn->ts.addCreatureTarget(this,TargetMaster);
     mn->GainPermStati(IS_DRUID_ANIMAL,this,SS_MONI,TA_LEADER,0,0);
-    RemoveStati(HAS_DRUID_ANIMAL,SS_MONI,TA_LEADER,0,false);
+    RemoveStati(HAS_DRUID_ANIMAL,SS_MONI,TA_LEADER,0,NULL);
     GainPermStati(HAS_DRUID_ANIMAL,mn,SS_MONI,TA_LEADER,0,0);
     GainPermStati(TRIED,mn,SS_MONI,HAS_DRUID_ANIMAL,0,0);
     mn->PartyID = PartyID;

@@ -33,6 +33,7 @@
 
 #include "Incursion.h"
 #include <stdarg.h>
+#include <stdint.h>
 
 static int16 xprint_lev = 0;
 char  XPrintBuff1[130000];
@@ -499,11 +500,9 @@ PutName:
             }
 
             str = Tag1;
-            if (((int)(Subject)) < 0x000FFFFF) {
+            if ((intptr_t)Subject < 0x000FFFFF) {
                 Error("Probable parameter mismatch in __XPrint; msg = \"%s\","
-                    " POV=%d, Subject=%d", msg, (long)POV, (long)Subject);
-                Error("Probable parameter mismatch in __XPrint; msg = \"%s\","
-                    " POV=%s, Subject=%s", msg, (const char*)POV->Name(0), (const char*)Subject->Name(0));
+                    " POV=%d, Subject=%d", msg, (intptr_t)POV, (intptr_t)Subject);
                 return msg;
             }
 

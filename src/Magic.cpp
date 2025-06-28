@@ -2053,7 +2053,7 @@ EvReturn Magic::ABallBeamBolt(EventInfo &e)
     
   if (wasEngulfed && !e.EActor->HasStati(ENGULFED)) {
     wasEngulfed = false;
-    e.EVictim = false;
+    e.EVictim = NULL;
     goto NextChain;
     }
 

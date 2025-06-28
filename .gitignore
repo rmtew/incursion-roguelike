@@ -3,21 +3,22 @@
 *.lo
 *.o
 *.obj
+*.exp
+*.ilk
+*.suo
+*.sdf
+vc140.pdb
+
+# Raddbg
+*.rdi
 
 # Windows build & dependencies
 build/dependencies
-build/packages
-build/run
-build/Win32
-build/x64
-*.vcxproj.user
-*.suo
-*.sdf
 Incursion.opensdf
+Win32_Debug
+Win32_Release
+x64_Debug
+x64_Release
 
 # Incursion specific temporary files.
-lib/dispatch.h
 lib/program.i
-
-# Local nonsense.
-_external

@@ -5331,7 +5331,7 @@ MountMade:
 	mn->Initialize(true);
 	mn->Named = NAME(getAnimalName());
 	mn->GainPermStati(ANIMAL_COMPANION, this, SS_MONI, TA_LEADER, 0, 0);
-	RemoveStati(HAS_ANIMAL, SS_MONI, TA_LEADER, 0, false);
+	RemoveStati(HAS_ANIMAL, SS_MONI, TA_LEADER, 0, NULL);
 	GainPermStati(HAS_ANIMAL, mn, SS_MONI, TA_LEADER, 0, 0);
 	GainPermStati(TRIED, NULL, SS_MONI, ANIMAL_COMPANION, 0, 0);
 	if (!mn->MakeCompanion(this, PHD_ANIMAL))
