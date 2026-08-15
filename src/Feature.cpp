@@ -852,7 +852,11 @@ void Thing::MoveDepth(int16 NewDepth, bool safe) {
 }
 
 void Player::MoveDepth(int16 NewDepth, bool safe) {
-    static Thing *GoWith[64]; Creature *c;
+    /* Not static: this function re-enters itself. PlaceAt below fires the new
+       square's terrain, and terrain can move the player another level. One
+       shared array means the inner call refills it while the outer call still
+       holds a count of its own contents. */
+    Thing *GoWith[64]; Creature *c;
     rID mID; Map *new_m = NULL; int16 nx, ny, i, gwc;
     StoreLevelStats((uint8)m->Depth);
     theGame->SaveGame(*this);
@@ -906,6 +910,10 @@ void Player::MoveDepth(int16 NewDepth, bool safe) {
         MapIterate(m, c, i)
             if (c->isMonster())
                 if (c->ts.isLeader(this)) {
+                    /* A player with more than 64 followers leaves the rest
+                       behind rather than writing past the array. */
+                    if (gwc >= (int16)(sizeof(GoWith)/sizeof(GoWith[0])))
+                        break;
                     GoWith[gwc++] = c;
                     c->Remove(false);
                 }
